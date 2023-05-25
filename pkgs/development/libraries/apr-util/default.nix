@@ -48,6 +48,8 @@ stdenv.mkDerivation rec {
     lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
       substituteInPlace Makefile \
         --replace "-ldb-6.9" "-ldb"
+      substituteInPlace apu-1-config \
+        --replace "-ldb-6.9" "-ldb"
   '';
 
   propagatedBuildInputs = [ apr expat libiconv libxcrypt ]

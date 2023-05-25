@@ -3,28 +3,19 @@
 , fetchFromGitHub
 , cmake
 , gtest
-, fetchpatch
 , pkg-config
 }:
 
 stdenv.mkDerivation rec {
-  pname = "microsoft_gsl";
-  version = "3.1.0";
+  pname = "microsoft-gsl";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "GSL";
     rev = "v${version}";
-    sha256 = "sha256-gIpyuNlp3mvR8r1Azs2r76ElEodykRLGAwMN4BDJez0=";
+    hash = "sha256-cXDFqt2KgMFGfdh6NGE+JmP4R0Wm9LNHM0eIblYe6zU=";
   };
-
-  patches = [
-    # Search for GoogleTest via pkg-config first, ref: https://github.com/NixOS/nixpkgs/pull/130525
-    (fetchpatch {
-      url = "https://github.com/microsoft/GSL/commit/f5cf01083baf7e8dc8318db3648bc6098dc32d67.patch";
-      sha256 = "sha256-HJxG87nVFo1CGNivCqt/JhjTj2xLzQe8bF5Km7/KG+Y=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ gtest ];

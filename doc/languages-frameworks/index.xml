@@ -14,6 +14,7 @@
  <xi:include href="crystal.section.xml" />
  <xi:include href="cuda.section.xml" />
  <xi:include href="cuelang.section.xml" />
+ <xi:include href="dart.section.xml" />
  <xi:include href="dhall.section.xml" />
  <xi:include href="dotnet.section.xml" />
  <xi:include href="emscripten.section.xml" />
@@ -25,6 +26,7 @@
  <xi:include href="ios.section.xml" />
  <xi:include href="java.section.xml" />
  <xi:include href="javascript.section.xml" />
+ <xi:include href="lisp.section.xml" />
  <xi:include href="lua.section.xml" />
  <xi:include href="maven.section.xml" />
  <xi:include href="nim.section.xml" />

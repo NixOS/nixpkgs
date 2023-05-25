@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "gql";
-  version = "3.4.0";
+  version = "3.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -31,8 +31,14 @@ buildPythonPackage rec {
     owner = "graphql-python";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-yr8IyAwZ6y2MPTe6bHRW+CIp19R3ZJWHuqdN5qultnQ=";
+    hash = "sha256-/uPaRju2AJCjMCfA29IKQ4Hu71RBu/Yz8jHwk9EE1Eg=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py --replace \
+      "websockets>=10,<11;python_version>'3.6'" \
+      "websockets>=10,<12;python_version>'3.6'"
+  '';
 
   propagatedBuildInputs = [
     backoff

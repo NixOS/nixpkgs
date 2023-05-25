@@ -45,6 +45,11 @@ let
   '';
 in
 {
+  imports = [
+    # https://github.com/zedeus/nitter/pull/772
+    (mkRemovedOptionModule [ "services" "nitter" "replaceInstagram" ] "Nitter no longer supports this option as Bibliogram has been discontinued.")
+  ];
+
   options = {
     services.nitter = {
       enable = mkEnableOption (lib.mdDoc "Nitter");
@@ -155,6 +160,22 @@ in
           description = lib.mdDoc "Use base64 encoding for proxied media URLs.";
         };
 
+        enableRSS = mkEnableOption (lib.mdDoc "RSS feeds") // { default = true; };
+
+        enableDebug = mkEnableOption (lib.mdDoc "request logs and debug endpoints");
+
+        proxy = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = lib.mdDoc "URL to a HTTP/HTTPS proxy.";
+        };
+
+        proxyAuth = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = lib.mdDoc "Credentials for proxy.";
+        };
+
         tokenCount = mkOption {
           type = types.int;
           default = 10;
@@ -190,12 +211,6 @@ in
           default = "";
           example = "teddit.net";
           description = lib.mdDoc "Replace Reddit links with links to this instance (blank to disable).";
-        };
-
-        replaceInstagram = mkOption {
-          type = types.str;
-          default = "";
-          description = lib.mdDoc "Replace Instagram links with links to this instance (blank to disable).";
         };
 
         mp4Playback = mkOption {
@@ -274,6 +289,12 @@ in
           type = types.bool;
           default = false;
           description = lib.mdDoc "Hide tweet replies.";
+        };
+
+        squareAvatars = mkOption {
+          type = types.bool;
+          default = false;
+          description = lib.mdDoc "Square profile pictures.";
         };
       };
 

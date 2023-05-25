@@ -80,7 +80,7 @@ buildPythonPackage rec {
   pname = "matplotlib";
   format = "pyproject";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -135,7 +135,6 @@ buildPythonPackage rec {
     libX11
     tcl
     tk
-    tkinter
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
   ];
@@ -167,6 +166,8 @@ buildPythonPackage rec {
     tornado
   ] ++ lib.optionals enableNbagg [
     ipykernel
+  ] ++ lib.optionals enableTk [
+    tkinter
   ];
 
   passthru.config = {

@@ -74,5 +74,8 @@ buildPythonPackage rec {
     changelog = "https://github.com/kvesteri/sqlalchemy-continuum/blob/${version}/CHANGES.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
+
+    # https://github.com/kvesteri/sqlalchemy-continuum/issues/326
+    broken = versionAtLeast sqlalchemy.version "2";
   };
 }

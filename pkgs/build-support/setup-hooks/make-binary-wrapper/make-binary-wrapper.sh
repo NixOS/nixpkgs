@@ -67,7 +67,7 @@ wrapProgramBinary() {
       hidden="${hidden}_"
     done
     mv "$prog" "$hidden"
-    makeWrapper "$hidden" "$prog" --inherit-argv0 "${@:2}"
+    makeBinaryWrapper "$hidden" "$prog" --inherit-argv0 "${@:2}"
 }
 
 # Generate source code for the wrapper in such a way that the wrapper inputs

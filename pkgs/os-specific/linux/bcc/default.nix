@@ -40,6 +40,7 @@ python.pkgs.buildPythonApplication rec {
     "-DENABLE_USDT=ON"
     "-DENABLE_CPP_API=ON"
     "-DCMAKE_USE_LIBBPF_PACKAGE=ON"
+    "-DENABLE_LIBDEBUGINFOD=OFF"
   ];
 
   # to replace this executable path:

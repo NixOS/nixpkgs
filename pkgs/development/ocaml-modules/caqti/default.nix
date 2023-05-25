@@ -8,6 +8,7 @@ buildDunePackage rec {
   version = "1.9.1";
 
   minimalOCamlVersion = "4.04";
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/paurkedal/ocaml-caqti/releases/download/v${version}/caqti-v${version}.tbz";

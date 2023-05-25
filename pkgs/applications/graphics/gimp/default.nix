@@ -44,6 +44,7 @@
 , libheif
 , libgudev
 , openexr
+, desktopToDarwinBundle
 , AppKit
 , Cocoa
 , gtk-mac-integration-gtk2
@@ -84,6 +85,8 @@ in stdenv.mkDerivation (finalAttrs: {
     gettext
     makeWrapper
     gtk-doc
+  ] ++ lib.optionals stdenv.isDarwin [
+    desktopToDarwinBundle
   ];
 
   buildInputs = [

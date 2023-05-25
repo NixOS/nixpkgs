@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+  # Lacks dependencies:
+  #   mkdir ...-libelf-0.8.13/lib
+  #   mkdir ...-libelf-0.8.13/lib
+  # mkdir: cannot create directory '...-libelf-0.8.13/lib': File exists
+  enableParallelInstalling = false;
 
   doCheck = true;
 

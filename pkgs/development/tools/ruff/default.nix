@@ -4,27 +4,26 @@
 , installShellFiles
 , stdenv
 , darwin
+  # tests
+, ruff-lsp
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.0.260";
+  version = "0.0.269";
 
   src = fetchFromGitHub {
     owner = "charliermarsh";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-n/b1L0qMyGzcDwXTLgiPrd4YgFDtxYyUKrgykkdBQWU=";
+    hash = "sha256-3W5nCtZJ1ej96c4BEbI7OPfxxyIyp7anWD1zhJqG0OE=";
   };
 
-  # We have to use importCargoLock here because `cargo vendor` currently doesn't support workspace
-  # inheritance within Git dependencies, but importCargoLock does.
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "libcst-0.1.0" = "sha256-jG9jYJP4reACkFLrQBWOYH6nbKniNyFVItD0cTZ+nW0=";
-      "pep440_rs-0.2.0" = "sha256-wDJGz7SbHItYsg0+EgIoH48WFdV6MEg+HkeE07JE6AU=";
-      "rustpython-ast-0.2.0" = "sha256-0SHtycgDVOtiz7JZwd1v9lv2exxemcntm9lciih+pgc=";
+      "ruff_text_size-0.0.0" = "sha256-mfD5RXRCaRfnV7RZrN88rTPkSZ3ITNLTRtCuos14hwE=";
       "unicode_names2-0.6.0" = "sha256-eWg9+ISm/vztB0KIdjhq5il2ZnwGJQCleCYfznCI3Wg=";
     };
   };
@@ -52,6 +51,10 @@ rustPlatform.buildRustPackage rec {
       --fish <($out/bin/ruff generate-shell-completion fish) \
       --zsh <($out/bin/ruff generate-shell-completion zsh)
   '';
+
+  passthru.tests = {
+    inherit ruff-lsp;
+  };
 
   meta = with lib; {
     description = "An extremely fast Python linter";

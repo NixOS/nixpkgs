@@ -13,7 +13,7 @@ checking for entire option trees, it is only recommended for use in
 submodules.
 
 ::: {#ex-freeform-module .example}
-**Example: Freeform submodule**
+### Freeform submodule
 
 The following shows a submodule assigning a freeform type that allows
 arbitrary attributes with `str` values below `settings`, but also

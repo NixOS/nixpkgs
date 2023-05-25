@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-edit";
-  version = "0.11.9";
+  version = "0.11.11";
 
   src = fetchFromGitHub {
     owner = "killercup";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-2anmuenywCdmPncsof2nD0xrerMFMP3yhTMXs+Qux0s=";
+    hash = "sha256-pxlwCeGOH0uqPdDJ7zIXFIRBuHwyByZ5r1VWzluvz10=";
   };
 
   cargoLock = {

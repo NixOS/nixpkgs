@@ -4,7 +4,6 @@
 , substituteAll
 , meson
 , ninja
-, python3
 , rsync
 , pkg-config
 , glib
@@ -44,13 +43,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gdm";
-  version = "43.0";
+  version = "44.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdm/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "lNcNbtffWfp/3k/QL+0RaFk6itzhD87hE8FI1Ss5IpQ=";
+    sha256 = "aCZrOr59KPxGnQBnqsnF2rsMp5UswffCOKBJUfPcWw0=";
   };
 
   mesonFlags = [
@@ -71,7 +70,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     rsync
     gobject-introspection
   ];
@@ -126,8 +124,6 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs build-aux/meson_post_install.py
-
     # Upstream checks some common paths to find an `X` binary. We already know it.
     echo #!/bin/sh > build-aux/find-x-server.sh
     echo "echo ${lib.getBin xorg.xorgserver}/bin/X" >> build-aux/find-x-server.sh

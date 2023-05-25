@@ -4,8 +4,8 @@ with skawarePackages;
 
 buildPackage {
   pname = "s6-portable-utils";
-  version = "2.2.5.1";
-  sha256 = "RXMd0uZ0QNEk55sIRDGh66jC0SN/Fyi2l35TOv93ra4=";
+  version = "2.3.0.2";
+  sha256 = "hxQmkTTwEmUNqsBA5WRjct6lZYucDYmnygO7Kr7E0eg=";
 
   description = "A set of tiny general Unix utilities optimized for simplicity and small size";
 

@@ -1,21 +1,21 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, rustPlatform
+{ stdenv, lib, fetchFromGitHub, cargo, pkg-config, rustPlatform
 , bzip2, curl, zlib, zstd, libiconv, CoreServices
 }:
 
 stdenv.mkDerivation rec {
   pname = "git-cinnabar";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "glandium";
     repo = "git-cinnabar";
     rev = version;
-    sha256 = "IV7K/49IN2HMek247GWr5ybZRozHsnCm8RItC9sqFXc=";
+    sha256 = "VvfoMypiFT68YJuGpEyPCxGOjdbDoF6FXtzLWlw0uxY=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
-    pkg-config rustPlatform.cargoSetupHook rustPlatform.rust.cargo
+    pkg-config rustPlatform.cargoSetupHook cargo
   ];
 
   buildInputs = [ bzip2 curl zlib zstd ]
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    sha256 = "YWhGAp64GAlySgUvDrD6qaNlc09swe1xCkvEpFR1ytg=";
+    sha256 = "GApYgE7AezKmcGWNY+dF1Yp1TZmEeUdq3CsjvMvo/Rw=";
   };
 
   ZSTD_SYS_USE_PKG_CONFIG = true;

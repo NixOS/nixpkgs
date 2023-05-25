@@ -4,6 +4,8 @@
 , unibilium, gperf
 , libvterm-neovim
 , tree-sitter
+, fetchurl
+, treesitter-parsers ? import ./treesitter-parsers.nix { inherit fetchurl; }
 , CoreServices
 , glibcLocales ? null, procps ? null
 
@@ -35,13 +37,13 @@ let
 in
   stdenv.mkDerivation rec {
     pname = "neovim-unwrapped";
-    version = "0.8.3";
+    version = "0.9.0";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      hash = "sha256-ItJ8aX/WUfcAovxRsXXyWKBAI92hFloYIZiv7viPIdQ=";
+      hash = "sha256-4uCPWnjSMU7ac6Q3LT+Em8lVk1MuSegxHMLGQRtFqAs=";
     };
 
     patches = [
@@ -49,12 +51,13 @@ in
       # necessary so that nix can handle `UpdateRemotePlugins` for the plugins
       # it installs. See https://github.com/neovim/neovim/issues/9413.
       ./system_rplugin_manifest.patch
-      # make the build reproducible, rebased version of
-      # https://github.com/neovim/neovim/pull/21586
+
+      # fix bug with the gsub directive
+      # https://github.com/neovim/neovim/pull/23015
       (fetchpatch {
-        name = "neovim-build-make-generated-source-files-reproducible.patch";
-        url = "https://github.com/raboof/neovim/commit/485dd2af3efbfd174163583c46e0bb2a01ff04f1.patch";
-        hash = "sha256-9aRVK4lDkL/W4RVjeKptrZFY7rYYBx6/RGR4bQSbCsM=";
+        name = "use-the-correct-replacement-args-for-gsub-directive.patch";
+        url = "https://github.com/neovim/neovim/commit/ccc0980f86c6ef9a86b0e5a3a691f37cea8eb776.patch";
+        hash = "sha256-sZWM6M8jCL1e72H0bAc51a6FrH0mFFqTV1gGLwKT7Zo=";
       })
     ];
 
@@ -126,11 +129,24 @@ in
       )
     '' + lib.optionalString stdenv.isDarwin ''
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
-    '';
+    '' + ''
+      mkdir -p $out/lib/nvim/parser
+    '' + lib.concatStrings (lib.mapAttrsToList
+      (language: src: ''
+        ln -s \
+          ${tree-sitter.buildGrammar {
+            inherit language src;
+            version = "neovim-${version}";
+          }}/parser \
+          $out/lib/nvim/parser/${language}.so
+      '')
+      treesitter-parsers);
 
     shellHook=''
       export VIMRUNTIME=$PWD/runtime
     '';
+
+    separateDebugInfo = true;
 
     meta = with lib; {
       description = "Vim text editor fork focused on extensibility and agility";

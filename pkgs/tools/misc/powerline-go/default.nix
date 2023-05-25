@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "powerline-go";
-  version = "1.22.1";
+  version = "1.23";
 
   src = fetchFromGitHub {
     owner = "justjanne";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-7QhW0Vn1u63N0fzSiX/vu0HNhFkoSFHXteJCrcFX+4Q=";
+    hash = "sha256-qEVsJsDvqcMVxLz81kNybEO/TwCvhi8E/laci8ry/dw=";
   };
 
-  vendorSha256 = "sha256-+R+UwoYJ+KsV+jQj8+wfEsCAvezolsoPDNzCnGLzOEc=";
+  vendorHash = "sha256-W7Lf9s689oJy4U5sQlkLt3INJwtvzU2pot3EFimp7Jw=";
 
   meta = with lib; {
     description = "A Powerline like prompt for Bash, ZSH and Fish";

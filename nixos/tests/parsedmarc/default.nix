@@ -84,8 +84,6 @@ in
             };
           };
 
-          services.elasticsearch.package = pkgs.elasticsearch-oss;
-
           environment.systemPackages = [
             (sendEmail "dmarc@localhost")
             pkgs.jq
@@ -157,8 +155,6 @@ in
                   password = "${pkgs.writeText "imap-password" "foobar"}";
                 };
               };
-
-              services.elasticsearch.package = pkgs.elasticsearch-oss;
 
               environment.systemPackages = [
                 pkgs.jq

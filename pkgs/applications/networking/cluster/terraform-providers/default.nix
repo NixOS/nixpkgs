@@ -95,6 +95,7 @@ let
       b2 = removed "b2" "2022/06";
       checkpoint = removed "checkpoint" "2022/11";
       dome9 = removed "dome9" "2022/08";
+      ksyun = removed "ksyun" "2023/04";
       logicmonitor = license "logicmonitor" "2022/11";
       ncloud = removed "ncloud" "2022/08";
       nsxt = license "nsxt" "2022/11";

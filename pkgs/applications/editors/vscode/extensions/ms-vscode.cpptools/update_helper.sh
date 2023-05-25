@@ -14,7 +14,7 @@ set -euo pipefail
 #  -  run their '--version' and call 'ldd'
 #  -  print the version of the runtime deps nix replacements.
 #
-# TODO: Print to a properly formated nix file all the required information to fetch everything (extension + runtime deps).
+# TODO: Print to a properly formatted nix file all the required information to fetch everything (extension + runtime deps).
 # TODO: Print x86 and maybe darwin runtime dependencies.
 #
 

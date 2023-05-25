@@ -6,7 +6,7 @@
 , libarchive
 , pv
 , squashfsTools
-, buildFHSUserEnv
+, buildFHSEnv
 , pkgs
 }:
 
@@ -43,7 +43,7 @@ rec {
     extraPkgs,
     meta ? {},
     ...
-  }: buildFHSUserEnv
+  }: buildFHSEnv
     (defaultFhsEnvArgs // {
       inherit name;
 

@@ -3,23 +3,15 @@
 , makeWrapper
 , emptty-unwrapped
 , additionalPathEntries ? [ ]
-, util-linuxMinimal
-, getent
 , dbus
-, xorg
 , lib
 , systemPath ? null
 , ...
 }:
 let
-  runtimePath = lib.makeBinPath ([
-    getent
-    util-linuxMinimal
-    dbus
-    xorg.xauth
-  ]
-  ++ (lib.lists.optionals (systemPath != null) [ systemPath ])
-  ++ additionalPathEntries);
+  runtimePath = lib.makeBinPath ([ dbus ]
+    ++ (lib.lists.optionals (systemPath != null) [ systemPath ])
+    ++ additionalPathEntries);
 in
 stdenvNoCC.mkDerivation {
   pname = "emptty";
@@ -30,8 +22,12 @@ stdenvNoCC.mkDerivation {
   buildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -r $src/* $out
+
+    runHook postInstall
   '';
 
   postFixup = ''

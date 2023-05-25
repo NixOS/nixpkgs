@@ -43,6 +43,7 @@ Below is a short excerpt of some points in there:
   * Not start with the package name.
     * More generally, it should not refer to the package name.
   * Not end with a period (or any punctuation for that matter).
+  * Aim to inform while avoiding subjective language.
 * `meta.license` must be set and fit the upstream license.
   * If there is no upstream license, `meta.license` should default to `lib.licenses.unfree`.
   * If in doubt, try to contact the upstream developers for clarification.

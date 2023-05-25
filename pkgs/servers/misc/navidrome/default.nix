@@ -1,7 +1,9 @@
-{ callPackage
-, buildGoModule
+{ buildGoModule
 , fetchFromGitHub
+, fetchNpmDeps
 , lib
+, nodejs
+, npmHooks
 , pkg-config
 , stdenv
 , ffmpeg-headless
@@ -9,11 +11,12 @@
 , zlib
 , makeWrapper
 , nixosTests
+, nix-update-script
 , ffmpegSupport ? true
 }:
 
-let
-
+buildGoModule rec {
+  pname = "navidrome";
   version = "0.49.3";
 
   src = fetchFromGitHub {
@@ -23,23 +26,32 @@ let
     hash = "sha256-JBvY+0QAouEc0im62aVSJ27GAB7jt0qVnYtc6VN2qTA=";
   };
 
-  ui = callPackage ./ui {
-    inherit src version;
+  vendorHash = "sha256-C8w/qCts8VqNDTQVXtykjmSbo5uDrvS9NOu3SHpAlDE=";
+
+  npmRoot = "ui";
+
+  npmDeps = fetchNpmDeps {
+    inherit src;
+    sourceRoot = "source/ui";
+    hash = "sha256-qxwTiXLmZnTnmTSBmWPjeFCP7qzvTFN0xXp5lFkWFog=";
   };
 
-in
+  nativeBuildInputs = [
+    makeWrapper
+    nodejs
+    npmHooks.npmConfigHook
+    pkg-config
+  ];
 
-buildGoModule {
+  overrideModAttrs = oldAttrs: {
+    nativeBuildInputs = lib.filter (drv: drv != npmHooks.npmConfigHook) oldAttrs.nativeBuildInputs;
+    preBuild = null;
+  };
 
-  pname = "navidrome";
-
-  inherit src version;
-
-  vendorSha256 = "sha256-C8w/qCts8VqNDTQVXtykjmSbo5uDrvS9NOu3SHpAlDE=";
-
-  nativeBuildInputs = [ makeWrapper pkg-config ];
-
-  buildInputs = [ taglib zlib ];
+  buildInputs = [
+    taglib
+    zlib
+  ];
 
   ldflags = [
     "-X github.com/navidrome/navidrome/consts.gitSha=${src.rev}"
@@ -48,8 +60,8 @@ buildGoModule {
 
   CGO_CFLAGS = lib.optionals stdenv.cc.isGNU [ "-Wno-return-local-addr" ];
 
-  prePatch = ''
-    cp -r ${ui}/* ui/build
+  preBuild = ''
+    make buildjs
   '';
 
   postFixup = lib.optionalString ffmpegSupport ''
@@ -58,9 +70,8 @@ buildGoModule {
   '';
 
   passthru = {
-    inherit ui;
     tests.navidrome = nixosTests.navidrome;
-    updateScript = callPackage ./update.nix {};
+    updateScript = nix-update-script { };
   };
 
   meta = {

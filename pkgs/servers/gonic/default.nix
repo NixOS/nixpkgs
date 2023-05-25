@@ -1,4 +1,5 @@
 { lib, stdenv, buildGoModule, fetchFromGitHub
+, nixosTests
 , pkg-config, taglib, zlib
 
 # Disable on-the-fly transcoding,
@@ -39,6 +40,10 @@ buildGoModule rec {
         '"mpv"' \
         '"${lib.getBin mpv}/bin/mpv"'
   '';
+
+  passthru = {
+    tests.gonic = nixosTests.gonic;
+  };
 
   meta = {
     homepage = "https://github.com/sentriz/gonic";

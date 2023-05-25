@@ -31,10 +31,7 @@ let
     };
 
     installPhase = ''
-      cd Library/Developer/CommandLineTools/SDKs/MacOSX11.1.sdk
-
-      mkdir $out
-      cp -r System usr $out/
+      mv Library/Developer/CommandLineTools/SDKs/MacOSX11.1.sdk $out
     '';
   };
 
@@ -49,10 +46,7 @@ let
     };
 
     installPhase = ''
-      cd Library/Developer/CommandLineTools
-
-      mkdir $out
-      cp -r Library usr $out/
+      mv Library/Developer/CommandLineTools $out
     '';
   };
 
@@ -76,7 +70,7 @@ let
     stdenv = mkStdenv stdenv;
   } // builtins.listToAttrs (map
     (v: { name = "clang${v}Stdenv"; value = mkStdenv pkgs."llvmPackages_${v}".stdenv; })
-    [ "12" "13" "14" "15" ]
+    [ "12" "13" "14" "15" "16" ]
   );
 
   callPackage = newScope (packages // pkgs.darwin // { inherit MacOSX-SDK; });

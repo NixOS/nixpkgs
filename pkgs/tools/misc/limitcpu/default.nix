@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "limitcpu";
-  version = "2.8";
+  version = "2.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/limitcpu/cpulimit-${version}.tar.gz";
-    sha256 = "sha256-fjGbCR9QEVTmAFxd+WoEAGbuhtsiAdWDXQq9mOO2t/8=";
+    sha256 = "sha256-W7fbTscqArOy0SfViQaGTgE1iw81pvGQuAlwN4ovjPY=";
   };
 
   buildFlags = with stdenv; [ (

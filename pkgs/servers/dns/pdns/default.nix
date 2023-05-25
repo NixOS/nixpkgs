@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pdns";
-  version = "4.7.3";
+  version = "4.7.4";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-${version}.tar.bz2";
-    hash = "sha256-i601Gy4JQm9tT7A0aIGlFV/lVUl8PYUHHlMefHr+PnY=";
+    hash = "sha256-dGndgft98RGX9JY4+knO/5+XMiX8j5xxYLC/wAoudHE=";
   };
   # redact configure flags from version output to reduce closure size
   patches = [ ./version.patch ];

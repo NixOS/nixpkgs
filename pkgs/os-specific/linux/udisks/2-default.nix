@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, pkg-config, gnused, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, substituteAll, fetchpatch, pkg-config, gnused, autoreconfHook
 , gtk-doc, acl, systemd, glib, libatasmart, polkit, coreutils, bash, which
 , expat, libxslt, docbook_xsl, util-linux, mdadm, libgudev, libblockdev, parted
 , gobject-introspection, docbook_xml_dtd_412, docbook_xml_dtd_43
@@ -39,6 +39,11 @@ stdenv.mkDerivation rec {
         btrfs-progs coreutils dosfstools e2fsprogs exfat f2fs-tools nilfs-utils
         xfsprogs ntfs3g parted util-linux
       ];
+    })
+    # Fix crash on exit, remove on upgrade to 2.10.
+    (fetchpatch {
+      url = "https://github.com/storaged-project/udisks/commit/6464e3083c27b9e4d97848b9e69e862f265511d5.patch";
+      hash = "sha256-XGprXjJLIL8l4P5MRTHV8GOQR1hpaaFiLgexGnO9Lvg=";
     })
   ];
 

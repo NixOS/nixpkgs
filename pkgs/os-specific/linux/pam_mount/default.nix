@@ -18,9 +18,22 @@ stdenv.mkDerivation rec {
       --replace @@NIX_UTILLINUX@@ ${util-linux}/bin
   '';
 
-  nativeBuildInputs = [ autoreconfHook libtool pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    libtool
+    perl
+    pkg-config
+  ];
 
-  buildInputs = [ pam libHX util-linux libxml2 pcre2 perl openssl cryptsetup ];
+  buildInputs = [
+    cryptsetup
+    libHX
+    libxml2
+    openssl
+    pam
+    pcre2
+    util-linux
+  ];
 
   enableParallelBuilding = true;
 

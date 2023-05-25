@@ -6,7 +6,9 @@
 , matrix-sdk-crypto-nodejs
 , mkYarnPackage
 , rust
+, cargo
 , rustPlatform
+, rustc
 , napi-rs-cli
 , nodejs
 }:
@@ -44,8 +46,8 @@ mkYarnPackage rec {
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.cargo
-    rustPlatform.rust.rustc
+    cargo
+    rustc
     napi-rs-cli
     makeWrapper
   ];

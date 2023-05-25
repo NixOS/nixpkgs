@@ -90,7 +90,7 @@
 , withCoredump ? true
 , withCryptsetup ? true
 , withDocumentation ? true
-, withEfi ? stdenv.hostPlatform.isEfi && !stdenv.hostPlatform.isMusl
+, withEfi ? stdenv.hostPlatform.isEfi
 , withFido2 ? true
 , withHomed ? !stdenv.hostPlatform.isMusl
 , withHostnamed ? true
@@ -98,8 +98,12 @@
 , withImportd ? !stdenv.hostPlatform.isMusl
 , withKmod ? true
 , withLibBPF ? lib.versionAtLeast buildPackages.llvmPackages.clang.version "10.0"
-    && stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6" # assumes hard floats
+    && (stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6") # assumes hard floats
     && !stdenv.hostPlatform.isMips64   # see https://github.com/NixOS/nixpkgs/pull/194149#issuecomment-1266642211
+    # buildPackages.targetPackages.llvmPackages is the same as llvmPackages,
+    # but we do it this way to avoid taking llvmPackages as an input, and
+    # risking making it too easy to ignore the above comment about llvmPackages.
+    && lib.meta.availableOn stdenv.hostPlatform buildPackages.targetPackages.llvmPackages.compiler-rt
 , withLibidn2 ? true
 , withLocaled ? true
 , withLogind ? true
@@ -117,6 +121,7 @@
 , withTimedated ? true
 , withTimesyncd ? true
 , withTpm2Tss ? true
+, withUkify ? false  # adds python to closure which is too much by default
 , withUserDb ? true
 , withUtmp ? !stdenv.hostPlatform.isMusl
   # tests assume too much system access for them to be feasible for us right now
@@ -135,11 +140,12 @@ assert withImportd -> withCompression;
 assert withCoredump -> withCompression;
 assert withHomed -> withCryptsetup;
 assert withHomed -> withPam;
+assert withUkify -> withEfi;
 
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "253.1";
+  version = "253.3";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
@@ -156,7 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    hash = "sha256-PyAhkLxDkT5gVocCXh8bst6PBgguASjnA82xinQOtjw=";
+    hash = "sha256-iy1kyqiVeXIhFJAQ+nYorrXm/xb2gfakyrEfMyNR5l8=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -168,50 +174,52 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
     ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
     ./0003-Fix-NixOS-containers.patch
-    ./0004-Look-for-fsck-in-the-right-place.patch
+    ./0004-fsck-look-for-fsck-binary-not-just-in-sbin.patch
     ./0005-Add-some-NixOS-specific-unit-directories.patch
     ./0006-Get-rid-of-a-useless-message-in-user-sessions.patch
-    ./0007-Fix-hwdb-paths.patch
-    ./0008-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
-    ./0009-localectl-use-etc-X11-xkb-for-list-x11.patch
-    ./0010-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
-    ./0011-add-rootprefix-to-lookup-dir-paths.patch
-    ./0012-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
-    ./0013-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
-    ./0014-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0015-pkg-config-derive-prefix-from-prefix.patch
-    ./0016-inherit-systemd-environment-when-calling-generators.patch
-    ./0017-core-don-t-taint-on-unmerged-usr.patch
-    ./0018-tpm2_context_init-fix-driver-name-checking.patch
+    ./0007-hostnamed-localed-timedated-disable-methods-that-cha.patch
+    ./0008-Fix-hwdb-paths.patch
+    ./0009-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
+    ./0010-localectl-use-etc-X11-xkb-for-list-x11.patch
+    ./0011-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
+    ./0012-add-rootprefix-to-lookup-dir-paths.patch
+    ./0013-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
+    ./0014-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
+    ./0015-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0016-pkg-config-derive-prefix-from-prefix.patch
+    ./0017-inherit-systemd-environment-when-calling-generators.patch
+    ./0018-core-don-t-taint-on-unmerged-usr.patch
+    ./0019-tpm2_context_init-fix-driver-name-checking.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
-        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-cccd4bcaf381c2729adc000381bd89906003e72a.tar.gz";
-        sha256 = "2CFZEzWqUy6OOF3c+LN4Zmy3RqMzfdRHp+B5zlWJsoE=";
+        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-f34f6ab04b443608497b73668365819343d0c2fe.tar.gz";
+        sha256 = "DFcLPvjQIxGEDADpP232ZRd7cOEKt6B48Ah29nIGTt4=";
       };
       musl-patches = oe-core + "/meta/recipes-core/systemd/systemd";
     in
     [
-      (musl-patches + "/0003-missing_type.h-add-comparison_fn_t.patch")
-      (musl-patches + "/0004-add-fallback-parse_printf_format-implementation.patch")
-      (musl-patches + "/0005-src-basic-missing.h-check-for-missing-strndupa.patch")
-      (musl-patches + "/0007-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch")
-      (musl-patches + "/0008-add-missing-FTW_-macros-for-musl.patch")
-      (musl-patches + "/0010-Use-uintmax_t-for-handling-rlim_t.patch")
-      (musl-patches + "/0011-test-sizeof.c-Disable-tests-for-missing-typedefs-in-.patch")
-      (musl-patches + "/0012-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch")
-      (musl-patches + "/0013-Define-glibc-compatible-basename-for-non-glibc-syste.patch")
-      (musl-patches + "/0014-Do-not-disable-buffering-when-writing-to-oom_score_a.patch")
-      (musl-patches + "/0015-distinguish-XSI-compliant-strerror_r-from-GNU-specif.patch")
-      (musl-patches + "/0018-avoid-redefinition-of-prctl_mm_map-structure.patch")
-      (musl-patches + "/0022-do-not-disable-buffer-in-writing-files.patch")
-      (musl-patches + "/0025-Handle-__cpu_mask-usage.patch")
-      (musl-patches + "/0026-Handle-missing-gshadow.patch")
-      (musl-patches + "/0028-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch")
-      (musl-patches + "/0001-pass-correct-parameters-to-getdents64.patch")
-      (musl-patches + "/0002-Add-sys-stat.h-for-S_IFDIR.patch")
       (musl-patches + "/0001-Adjust-for-musl-headers.patch")
-      (musl-patches + "/0001-test-bus-error-strerror-is-assumed-to-be-GNU-specifi.patch")
+      (musl-patches + "/0005-pass-correct-parameters-to-getdents64.patch")
+      (musl-patches + "/0006-test-bus-error-strerror-is-assumed-to-be-GNU-specifi.patch")
+      (musl-patches + "/0007-Add-sys-stat.h-for-S_IFDIR.patch")
+      (musl-patches + "/0009-missing_type.h-add-comparison_fn_t.patch")
+      (musl-patches + "/0010-add-fallback-parse_printf_format-implementation.patch")
+      (musl-patches + "/0011-src-basic-missing.h-check-for-missing-strndupa.patch")
+      (musl-patches + "/0012-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch")
+      (musl-patches + "/0013-add-missing-FTW_-macros-for-musl.patch")
+      (musl-patches + "/0014-Use-uintmax_t-for-handling-rlim_t.patch")
+      (musl-patches + "/0015-test-sizeof.c-Disable-tests-for-missing-typedefs-in-.patch")
+      (musl-patches + "/0016-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch")
+      (musl-patches + "/0017-Define-glibc-compatible-basename-for-non-glibc-syste.patch")
+      (musl-patches + "/0018-Do-not-disable-buffering-when-writing-to-oom_score_a.patch")
+      (musl-patches + "/0019-distinguish-XSI-compliant-strerror_r-from-GNU-specif.patch")
+      (musl-patches + "/0020-avoid-redefinition-of-prctl_mm_map-structure.patch")
+      (musl-patches + "/0021-do-not-disable-buffer-in-writing-files.patch")
+      (musl-patches + "/0022-Handle-__cpu_mask-usage.patch")
+      (musl-patches + "/0023-Handle-missing-gshadow.patch")
+      (musl-patches + "/0024-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch")
+      (musl-patches + "/0026-src-boot-efi-efi-string.c-define-wchar_t-from-__WCHA.patch")
     ]
   );
 
@@ -349,7 +357,7 @@ stdenv.mkDerivation (finalAttrs: {
   # when cross-compiling.
   + ''
     shopt -s extglob
-    patchShebangs tools test src/!(rpm|kernel-install) src/kernel-install/test-kernel-install.sh
+    patchShebangs tools test src/!(rpm|kernel-install|ukify) src/kernel-install/test-kernel-install.sh
   '';
 
   outputs = [ "out" "man" "dev" ];
@@ -414,6 +422,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (withHomed || withCryptsetup) [ libfido2 ]
     ++ lib.optionals withLibBPF [ libbpf ]
     ++ lib.optional withTpm2Tss tpm2-tss
+    ++ lib.optional withUkify (python3Packages.python.withPackages (ps: with ps; [ pefile ]))
   ;
 
   #dontAddPrefix = true;
@@ -510,11 +519,10 @@ stdenv.mkDerivation (finalAttrs: {
     # more frequent development builds
     "-Dman=true"
 
-    # Temporary disable the ukify tool. see https://github.com/NixOS/nixpkgs/pull/216826#issuecomment-1465228824
-    "-Dukify=false"
-
     "-Defi=${lib.boolToString withEfi}"
     "-Dgnu-efi=${lib.boolToString withEfi}"
+
+    "-Dukify=${lib.boolToString withUkify}"
   ] ++ lib.optionals withEfi [
     "-Defi-libdir=${toString gnu-efi}/lib"
     "-Defi-includedir=${toString gnu-efi}/include/efi"
@@ -734,7 +742,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     tests = {
       inherit (nixosTests) switchTest;
-      cross = pkgsCross.aarch64-multiplatform.systemd;
+      cross = pkgsCross.${if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform"}.systemd;
     };
   };
 

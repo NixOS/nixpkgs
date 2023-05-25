@@ -6,7 +6,7 @@
 , cppunit
 , swig
 , boost
-, log4cpp
+, logLib
 , python
 , libosmocore
 , osmosdr
@@ -32,7 +32,7 @@ mkDerivation {
 
   buildInputs = [
     cppunit
-    log4cpp
+    logLib
     boost
     libosmocore
     osmosdr

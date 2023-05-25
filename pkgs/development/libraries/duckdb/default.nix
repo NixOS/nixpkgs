@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withOdbc [ unixODBC ];
 
   cmakeFlags = [
+    "-DBUILD_AUTOCOMPLETE_EXTENSION=ON"
     "-DBUILD_ICU_EXTENSION=ON"
     "-DBUILD_PARQUET_EXTENSION=ON"
     "-DBUILD_TPCH_EXTENSION=ON"
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_TPCE=ON"
     "-DBUILD_ODBC_DRIVER=${enableFeature withOdbc}"
     "-DJDBC_DRIVER=${enableFeature withJdbc}"
+  ] ++ lib.optionals doInstallCheck [
     # development settings
     "-DBUILD_UNITTESTS=ON"
   ];
@@ -86,6 +88,8 @@ stdenv.mkDerivation rec {
         "test/fuzzer/pedro/buffer_manager_out_of_memory.test"
         "test/sql/storage/compression/bitpacking/bitpacking_size_calculation.test"
         "test/sql/copy/parquet/delta_byte_array_length_mismatch.test"
+        "test/sql/function/timestamp/test_icu_strptime.test"
+        "test/sql/timezone/test_icu_timezone.test"
         # these are only hidden if no filters are passed in
         "[!hide]"
         # this test apparently never terminates

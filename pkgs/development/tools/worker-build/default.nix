@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "worker-build";
-  version = "0.0.14";
+  version = "0.0.16";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-rs";
     rev = "v${version}";
-    sha256 = "sha256-e0nnemaAcgy5tHaAZFIKJCa2c6763Vynlj34j+qjMdk=";
+    sha256 = "sha256-8+ifSCfHYrS5iAa4fsujmofzicbwk/00VRNZvIkIc+E=";
   };
 
-  cargoHash = "sha256-GtX46K99Il+KBQV6jbQYz0ba2HDaAUS4ZGa0fMUUO1s=";
+  cargoHash = "sha256-fj/l53AdgJXYz+IA45yfNYgSw7DKbBrGVyFCfbqxxq0=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 

@@ -17,7 +17,7 @@ outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
 , version
 , nginxVersion ? version
 , src ? null # defaults to upstream nginx ${version}
-, sha256 ? null # when not specifying src
+, hash ? null # when not specifying src
 , configureFlags ? []
 , nativeBuildInputs ? []
 , buildInputs ? []
@@ -55,7 +55,7 @@ stdenv.mkDerivation {
 
   src = if src != null then src else fetchurl {
     url = "https://nginx.org/download/nginx-${version}.tar.gz";
-    inherit sha256;
+    inherit hash;
   };
 
   nativeBuildInputs = [ removeReferencesTo ]
@@ -176,7 +176,7 @@ stdenv.mkDerivation {
     in noSourceRefs + postInstall;
 
   passthru = {
-    modules = modules;
+    inherit modules;
     tests = {
       inherit (nixosTests) nginx nginx-auth nginx-etag nginx-globalredirect nginx-http3 nginx-pubhtml nginx-sandbox nginx-sso;
       variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
@@ -187,7 +187,8 @@ stdenv.mkDerivation {
   meta = if meta != null then meta else with lib; {
     description = "A reverse proxy and lightweight webserver";
     homepage    = "http://nginx.org";
-    license     = licenses.bsd2;
+    license     = [ licenses.bsd2 ]
+      ++ concatMap (m: m.meta.license) modules;
     platforms   = platforms.all;
     maintainers = with maintainers; [ thoughtpolice raskin fpletz globin ajs124 ];
   };

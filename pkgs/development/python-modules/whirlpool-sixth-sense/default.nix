@@ -7,13 +7,14 @@
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , websockets
 }:
 
 buildPythonPackage rec {
   pname = "whirlpool-sixth-sense";
-  version = "0.18.2";
-  format = "setuptools";
+  version = "0.18.3";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
@@ -21,8 +22,12 @@ buildPythonPackage rec {
     owner = "abmantis";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-6vmevL/VDuBnsPeYxtBZkCi9SVuINpM6jVlNR1Y6AuA=";
+    hash = "sha256-GvebWPO+jKDJk7yuMgEctlvKLXeo95GlJUSuI+FMCRU=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aioconsole

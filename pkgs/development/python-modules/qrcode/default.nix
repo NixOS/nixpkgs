@@ -7,6 +7,8 @@
 , typing-extensions
 , mock
 , pytestCheckHook
+, testers
+, qrcode
 }:
 
 buildPythonPackage rec {
@@ -26,6 +28,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     typing-extensions
     pypng
+    # imports pkg_resouces in console_scripts.py
+    setuptools
   ];
 
   passthru.optional-dependencies.pil = [
@@ -36,6 +40,13 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
   ] ++ passthru.optional-dependencies.pil;
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = qrcode;
+      command = "qr --version";
+    };
+  };
 
   meta = with lib; {
     description = "Python QR Code image generator";

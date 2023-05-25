@@ -194,5 +194,5 @@ in
     (mkRenamedOptionModule [ "services" "unifi" "openPorts" ] [ "services" "unifi" "openFirewall" ])
   ];
 
-  meta.maintainers = with lib.maintainers; [ erictapen pennae ];
+  meta.maintainers = with lib.maintainers; [ pennae ];
 }

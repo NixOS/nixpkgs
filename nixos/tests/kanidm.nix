@@ -44,7 +44,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
         };
       };
 
-      networking.hosts."${nodes.server.config.networking.primaryIPAddress}" = [ serverDomain ];
+      networking.hosts."${nodes.server.networking.primaryIPAddress}" = [ serverDomain ];
 
       security.pki.certificateFiles = [ certs.ca.cert ];
     };
@@ -56,7 +56,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
         # We need access to the config file in the test script.
         filteredConfig = pkgs.lib.converge
           (pkgs.lib.filterAttrsRecursive (_: v: v != null))
-          nodes.server.config.services.kanidm.serverSettings;
+          nodes.server.services.kanidm.serverSettings;
         serverConfigFile = (pkgs.formats.toml { }).generate "server.toml" filteredConfig;
 
       in

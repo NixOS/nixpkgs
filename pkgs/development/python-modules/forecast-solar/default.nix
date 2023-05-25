@@ -5,17 +5,20 @@
 , aiodns
 , aiohttp
 , backports-zoneinfo
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "forecast-solar";
-  version = "2.3.0";
+  version = "3.0.0";
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "forecast_solar";
     rev = "refs/tags/${version}";
-    hash = "sha256-1xRbTOeBHzLmf0FJwsrg/4+Z2Fs7uwbQwS2Tm41mNRk=";
+    hash = "sha256-Go0DF2qyVyGVYEeoEEuxsSR9Ge8Pg4S77zM1HL83ELc=";
   };
 
   PACKAGE_VERSION = version;
@@ -27,10 +30,11 @@ buildPythonPackage rec {
     backports-zoneinfo
   ];
 
-  # no unit tests implemented
-  doCheck = false;
-
   pythonImportsCheck = [ "forecast_solar" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Asynchronous Python client for getting forecast solar information";

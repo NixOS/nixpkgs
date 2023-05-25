@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , pkg-config
 , meson
@@ -22,23 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-mail";
-  version = "7.0.1";
+  version = "7.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "mail";
     rev = version;
-    sha256 = "sha256-IY+ml/ftLSk0A3Emi0ZL2wxIDIngNU6QKbHErRAaaMA=";
+    sha256 = "sha256-dvDlvn8KvFmiP/NClRtHNEs5gPTUjlzgTYmgIaCfoLw=";
   };
-
-  patches = [
-    # MessageListItem: avoid crashing on empty Mime
-    # https://github.com/elementary/mail/pull/828
-    (fetchpatch {
-      url = "https://github.com/elementary/mail/commit/7cb412dee4cc8c0bfab55057c47d5ecce6918788.patch";
-      sha256 = "sha256-7rYvgFeVmV/rVYzC/xt/lioRlveM0d8ORqZdMYkm/d4=";
-    })
-  ];
 
   nativeBuildInputs = [
     libxml2

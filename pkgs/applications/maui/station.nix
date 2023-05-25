@@ -2,6 +2,7 @@
 , mkDerivation
 , cmake
 , extra-cmake-modules
+, kconfig
 , kcoreaddons
 , ki18n
 , kirigami2
@@ -19,6 +20,7 @@ mkDerivation {
   ];
 
   buildInputs = [
+    kconfig
     kcoreaddons
     ki18n
     kirigami2

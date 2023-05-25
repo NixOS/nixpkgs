@@ -18,7 +18,7 @@
 
 let
   pname = "trainer";
-  version = "0.0.24";
+  version = "0.0.25";
 in
 buildPythonPackage {
   inherit pname version;
@@ -28,7 +28,7 @@ buildPythonPackage {
     owner = "coqui-ai";
     repo = "Trainer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+Wr8kmHo3rWxknSN/jJVzXow95hNgth/j4OSj96gScE=";
+    hash = "sha256-XhE3CbcbCZjuUI6dx1gNNpQrxycqCgmOgjkaQ8MtL9E=";
   };
 
   postPatch = ''

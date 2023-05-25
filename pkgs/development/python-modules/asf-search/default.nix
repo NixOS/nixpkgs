@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "asf-search";
-  version = "6.2.0";
+  version = "6.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "asfadmin";
     repo = "Discovery-asf_search";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4RFGhA9xzc1kxSni6rAbevoDkc1bLdQD1II/2xq/uKM=";
+    hash = "sha256-9mhb8PEpRdFjbPBZ/B8he/UcRSLryBQU0Dgjcii7LGY=";
   };
 
   propagatedBuildInputs = [

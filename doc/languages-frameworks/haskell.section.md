@@ -108,7 +108,7 @@ haskell.compiler.ghcjs                   ghcjs-8.10.7
 Each of those compiler versions has a corresponding attribute set built using
 it. However, the non-standard package sets are not tested regularly and, as a
 result, contain fewer working packages. The corresponding package set for GHC
-9.4.4 is `haskell.packages.ghc944`. In fact `haskellPackages` is just an alias
+9.4.5 is `haskell.packages.ghc945`. In fact `haskellPackages` is just an alias
 for `haskell.packages.ghc927`:
 
 ```console

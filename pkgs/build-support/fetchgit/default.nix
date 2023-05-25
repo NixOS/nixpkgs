@@ -10,6 +10,7 @@
     appendShort = lib.optionalString ((builtins.match "[a-f0-9]*" rev) != null) "-${short}";
   in "${if matched == null then base else builtins.head matched}${appendShort}";
 in
+lib.makeOverridable (
 { url, rev ? "HEAD", md5 ? "", sha256 ? "", hash ? "", leaveDotGit ? deepClone
 , fetchSubmodules ? true, deepClone ? false
 , branchName ? null
@@ -66,7 +67,7 @@ lib.warnIf (builtins.isString sparseCheckout)
 stdenvNoCC.mkDerivation {
   inherit name;
   builder = ./builder.sh;
-  fetcher = ./nix-prefetch-git;  # This must be a string to ensure it's called with bash.
+  fetcher = ./nix-prefetch-git;
 
   nativeBuildInputs = [ git ]
     ++ lib.optionals fetchLFS [ git-lfs ];
@@ -107,3 +108,4 @@ stdenvNoCC.mkDerivation {
     gitRepoUrl = url;
   };
 }
+)

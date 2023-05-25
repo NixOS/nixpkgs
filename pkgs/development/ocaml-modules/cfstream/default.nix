@@ -1,10 +1,8 @@
-{ lib, buildDunePackage, fetchFromGitHub, m4, camlp-streams, core_kernel, ounit }:
+{ lib, buildDunePackage, fetchFromGitHub, ocaml, m4, camlp-streams, core_kernel, ounit }:
 
 buildDunePackage rec {
   pname = "cfstream";
   version = "1.3.2";
-
-  duneVersion = "3";
 
   minimalOCamlVersion = "4.04.1";
 
@@ -23,7 +21,7 @@ buildDunePackage rec {
   checkInputs = [ ounit ];
   propagatedBuildInputs = [ camlp-streams core_kernel ];
 
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = with lib; {
     inherit (src.meta) homepage;

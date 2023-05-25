@@ -112,12 +112,12 @@ let
   };
 
   self = mkDerivation rec {
-    version = "8.1.0";
+    version = "8.2.0";
     pname = "octave";
 
     src = fetchurl {
       url = "mirror://gnu/octave/${pname}-${version}.tar.gz";
-      sha256 = "sha256-gFIHTRew72Q9A33oqziWcsdSuyAe6c6k36aYWPtqIT8=";
+      sha256 = "sha256-V9F/kYqUDTjKM0ghHhELNNc1oyKofbccF3xGkqSanIQ=";
     };
 
     buildInputs = [

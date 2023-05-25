@@ -63,36 +63,36 @@ in
             # Same for musl: https://github.com/NixOS/nixpkgs/issues/78805
             "-Wno-error=missing-attributes"
           ])
+          (lib.optionals (stdenv.hostPlatform.isPower64) [
+            # Do not complain about the Processor Specific ABI (i.e. the
+            # choice to use IEEE-standard `long double`).  We pass this
+            # flag in order to mute a `-Werror=psabi` passed by glibc;
+            # hopefully future glibc releases will not pass that flag.
+            "-Wno-error=psabi"
+          ])
         ]);
     };
 
-    # When building glibc from bootstrap-tools, we need libgcc_s at RPATH for
-    # any program we run, because the gcc will have been placed at a new
-    # store path than that determined when built (as a source for the
-    # bootstrap-tools tarball)
-    # Building from a proper gcc staying in the path where it was installed,
-    # libgcc_s will now be at {gcc}/lib, and gcc's libgcc will be found without
-    # any special hack.
-    # TODO: remove this hack. Things that rely on this hack today:
-    # - dejagnu: during linux bootstrap tcl SIGSEGVs
-    # - clang-wrapper in cross-compilation
-    # Last attempt: https://github.com/NixOS/nixpkgs/pull/36948
-    preInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
-      if [ -f ${lib.getLib stdenv.cc.cc}/lib/libgcc_s.so.1 ]; then
-          mkdir -p $out/lib
-          cp ${lib.getLib stdenv.cc.cc}/lib/libgcc_s.so.1 $out/lib/libgcc_s.so.1
-          # the .so It used to be a symlink, but now it is a script
-          cp -a ${lib.getLib stdenv.cc.cc}/lib/libgcc_s.so $out/lib/libgcc_s.so
-          # wipe out reference to previous libc it was built against
-          chmod +w $out/lib/libgcc_s.so.1
-          # rely on default RUNPATHs of the binary and other libraries
-          # Do no force-pull wrong glibc.
-          patchelf --remove-rpath $out/lib/libgcc_s.so.1
-          # 'patchelf' does not remove the string itself. Wipe out
-          # string reference to avoid possible link to bootstrapTools
-          ${buildPackages.nukeReferences}/bin/nuke-refs $out/lib/libgcc_s.so.1
-      fi
-    '';
+    # glibc needs to `dlopen()` `libgcc_s.so` but does not link
+    # against it.  Furthermore, glibc doesn't use the ordinary
+    # `dlopen()` call to do this; instead it uses one which ignores
+    # most paths:
+    #
+    #   https://sourceware.org/legacy-ml/libc-help/2013-11/msg00026.html
+    #
+    # In order to get it to not ignore `libgcc_s.so`, we have to add its path to
+    # `user-defined-trusted-dirs`:
+    #
+    #   https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/Makefile;h=b509b3eada1fb77bf81e2a0ca5740b94ad185764#l1355
+    #
+    # Conveniently, this will also inform Nix of the fact that glibc depends on
+    # gcc.libgcc, since the path will be embedded in the resulting binary.
+    #
+    makeFlags =
+      (previousAttrs.makeFlags or [])
+      ++ lib.optionals (stdenv.cc.cc?libgcc) [
+        "user-defined-trusted-dirs=${stdenv.cc.cc.libgcc}/lib"
+      ];
 
     postInstall = (if stdenv.hostPlatform == stdenv.buildPlatform then ''
       echo SUPPORTED-LOCALES=C.UTF-8/UTF-8 > ../glibc-2*/localedata/SUPPORTED
@@ -163,6 +163,12 @@ in
     '';
 
     separateDebugInfo = true;
+
+    passthru =
+      (previousAttrs.passthru or {})
+      // lib.optionalAttrs (stdenv.cc.cc?libgcc) {
+        inherit (stdenv.cc.cc) libgcc;
+      };
 
   meta = (previousAttrs.meta or {}) // { description = "The GNU C Library"; };
 })

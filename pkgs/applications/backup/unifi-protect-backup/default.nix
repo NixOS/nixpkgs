@@ -5,7 +5,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "unifi-protect-backup";
-  version = "0.8.8";
+  version = "0.9.1";
 
   format = "pyproject";
 
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "ep1cman";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Z8qK7LprMyXl5irx9Xrs/RgqvNcFVBqLBSljovr6oiE=";
+    hash = "sha256-L7uM5v2CYGFHYxzBUKlMF+ChtjBM24GZ8NuyoQaOU6U=";
   };
 
   pythonRelaxDeps = [
@@ -21,10 +21,6 @@ python3.pkgs.buildPythonApplication rec {
     "aiosqlite"
     "click"
     "pyunifiprotect"
-  ];
-
-  pythonRemoveDeps = [
-    "pylint"
   ];
 
   nativeBuildInputs = with python3.pkgs; [
@@ -36,7 +32,10 @@ python3.pkgs.buildPythonApplication rec {
     aiocron
     aiorun
     aiosqlite
+    apprise
     click
+    expiring-dict
+    python-dateutil
     pyunifiprotect
   ];
 

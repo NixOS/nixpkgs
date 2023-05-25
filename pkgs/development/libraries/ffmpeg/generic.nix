@@ -52,6 +52,7 @@
 , withIlbc ? withFullDeps
 , withJack ? withFullDeps && !stdenv.isDarwin # Jack audio
 , withLadspa ? withFullDeps # LADSPA audio filtering
+, withLibplacebo ? withFullDeps && !stdenv.isDarwin # libplacebo video processing library
 , withLzma ? withHeadlessDeps # xz-utils
 , withMfx ? withFullDeps && (with stdenv.targetPlatform; isLinux && !isAarch) # Hardware acceleration via intel-media-sdk/libmfx
 , withModplug ? withFullDeps && !stdenv.isDarwin # ModPlug support
@@ -79,6 +80,7 @@
 , withSsh ? withHeadlessDeps # SFTP protocol
 , withSvg ? withFullDeps # SVG protocol
 , withSvtav1 ? withFullDeps && !stdenv.isAarch64 # AV1 encoder/decoder (focused on speed and correctness)
+, withTensorflow ? false # Tensorflow dnn backend support
 , withTheora ? withHeadlessDeps # Theora encoder
 , withV4l2 ? withFullDeps && !stdenv.isDarwin # Video 4 Linux support
 , withV4l2M2m ? withV4l2
@@ -209,8 +211,10 @@
 , libogg
 , libopenmpt
 , libopus
+, libplacebo
 , librsvg
 , libssh
+, libtensorflow
 , libtheora
 , libv4l
 , libva
@@ -288,7 +292,7 @@
  */
 
 let
-  inherit (lib) optional optionals optionalString enableFeature;
+  inherit (lib) optional optionals optionalString enableFeature versionAtLeast;
 in
 
 
@@ -469,9 +473,11 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withModplug "libmodplug")
     (enableFeature withMysofa "libmysofa")
     (enableFeature withOpus "libopus")
+    (optionalString (versionAtLeast version "5.0" && withLibplacebo) "--enable-libplacebo")
     (enableFeature withSvg "librsvg")
     (enableFeature withSrt "libsrt")
     (enableFeature withSsh "libssh")
+    (enableFeature withTensorflow "libtensorflow")
     (enableFeature withTheora "libtheora")
     (enableFeature withV4l2 "libv4l2")
     (enableFeature withV4l2M2m "v4l2-m2m")
@@ -571,6 +577,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withIconv [ libiconv ] # On Linux this should be in libc, do we really need it?
   ++ optionals withJack [ libjack2 ]
   ++ optionals withLadspa [ ladspaH ]
+  ++ optionals withLibplacebo [ libplacebo vulkan-headers ]
   ++ optionals withLzma [ xz ]
   ++ optionals withMfx [ intel-media-sdk ]
   ++ optionals withModplug [ libmodplug ]
@@ -596,6 +603,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withSsh [ libssh ]
   ++ optionals withSvg [ librsvg ]
   ++ optionals withSvtav1 [ svt-av1 ]
+  ++ optionals withTensorflow [ libtensorflow ]
   ++ optionals withTheora [ libtheora ]
   ++ optionals withVaapi [ (if withSmallDeps then libva else libva-minimal) ]
   ++ optionals withVdpau [ libvdpau ]

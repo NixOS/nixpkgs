@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rbspy";
-  version = "0.16.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-yM3bE79flvFSZvpkHXhhEh1MJrSSJzqZcX9aVRmz1ew=";
+    hash = "sha256-NshDX7sbXnmK6k/EDD5thUcNKvSV4bNdJ5N2hNLlsnA=";
   };
 
-  cargoHash = "sha256-qvx5zPEIwvh2AIFCGNbVMNIRFtVjSLR9+exbSeQ9oXI=";
+  cargoHash = "sha256-JzspNL4T28awa/1Uajw0gLM3bYyUBYTjnfCXn9qG7SY=";
   doCheck = true;
 
   # The current implementation of rbspy fails to detect the version of ruby

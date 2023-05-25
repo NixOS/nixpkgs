@@ -41,7 +41,7 @@ buildPythonPackage rec {
   ];
 
   # Test fixtures require a running keycloak instance
-  doTest = false;
+  doCheck = false;
 
   pythonImportsCheck = [
     "keycloak"

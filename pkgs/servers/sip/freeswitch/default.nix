@@ -151,7 +151,7 @@ stdenv.mkDerivation rec {
     description = "Cross-Platform Scalable FREE Multi-Protocol Soft Switch";
     homepage = "https://freeswitch.org/";
     license = lib.licenses.mpl11;
-    maintainers = with lib.maintainers; [ misuzu ];
+    maintainers = with lib.maintainers; [ ];
     platforms = with lib.platforms; unix;
     broken = stdenv.isDarwin;
   };

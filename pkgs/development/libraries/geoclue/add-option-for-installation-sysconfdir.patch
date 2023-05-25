@@ -1,8 +1,16 @@
-diff --git a/data/meson.build b/data/meson.build
-index a1fc61f..7c03882 100644
---- a/data/meson.build
-+++ b/data/meson.build
-@@ -7,7 +7,7 @@ if get_option('enable-backend')
+diff --git i/data/meson.build w/data/meson.build
+index 6ac2a11..73f433b 100644
+--- i/data/meson.build
++++ w/data/meson.build
+@@ -1,6 +1,6 @@
+ if get_option('enable-backend')
+     conf = configuration_data()
+-    conf.set('sysconfdir', sysconfdir)
++    conf.set('sysconfdir', sysconfdir_install)
+ 
+     if get_option('demo-agent')
+         conf.set('demo_agent', 'geoclue-demo-agent;')
+@@ -8,7 +8,7 @@ if get_option('enable-backend')
          conf.set('demo_agent', '')
      endif
  
@@ -11,16 +19,16 @@ index a1fc61f..7c03882 100644
      configure_file(output: 'geoclue.conf',
                     input: 'geoclue.conf.in',
                     configuration: conf,
-@@ -16,7 +16,7 @@ if get_option('enable-backend')
+@@ -17,7 +17,7 @@ if get_option('enable-backend')
      conf = configuration_data()
      conf.set('libexecdir', libexecdir)
      conf.set('dbus_srv_user', get_option('dbus-srv-user'))
 -    conf.set('sysconfdir', sysconfdir)
 +    conf.set('sysconfdir', sysconfdir_install)
  
-     service_dir = join_paths(datadir, 'dbus-1', 'system-services')
-     configure_file(output: 'org.freedesktop.GeoClue2.service',
-@@ -33,7 +33,7 @@ if get_option('enable-backend')
+     confd_dir = join_paths(conf_dir, 'conf.d')
+     install_emptydir(confd_dir)
+@@ -37,7 +37,7 @@ if get_option('enable-backend')
      # DBus Service policy file
      dbus_service_dir = get_option('dbus-sys-dir')
      if dbus_service_dir == ''
@@ -29,10 +37,10 @@ index a1fc61f..7c03882 100644
      endif
      configure_file(output: 'org.freedesktop.GeoClue2.conf',
                     input: 'org.freedesktop.GeoClue2.conf.in',
-diff --git a/demo/meson.build b/demo/meson.build
+diff --git i/demo/meson.build w/demo/meson.build
 index 1427fbe..2623f16 100644
---- a/demo/meson.build
-+++ b/demo/meson.build
+--- i/demo/meson.build
++++ w/demo/meson.build
 @@ -54,7 +54,7 @@ if get_option('demo-agent')
                                     install_dir: desktop_dir)
  
@@ -42,10 +50,10 @@ index 1427fbe..2623f16 100644
      meson.add_install_script('install-file.py',
                               desktop_file.full_path(),
                               autostart_dir)
-diff --git a/meson.build b/meson.build
-index 8aa5c31..b011879 100644
---- a/meson.build
-+++ b/meson.build
+diff --git i/meson.build w/meson.build
+index 220ae2b..dbf6458 100644
+--- i/meson.build
++++ w/meson.build
 @@ -12,7 +12,11 @@ gclue_api_version='2.0'
  datadir = join_paths(get_option('prefix'), get_option('datadir'))
  includedir = join_paths(get_option('prefix'), get_option('includedir'))
@@ -61,17 +69,17 @@ index 8aa5c31..b011879 100644
  header_dir = 'libgeoclue-' + gclue_api_version
 @@ -29,7 +33,7 @@ conf.set_quoted('PACKAGE_URL', 'https://gitlab.freedesktop.org/geoclue/geoclue/w
  conf.set_quoted('PACKAGE_BUGREPORT', 'https://gitlab.freedesktop.org/geoclue/geoclue/issues/new')
- conf.set_quoted('TEST_SRCDIR', meson.source_root() + '/data/')
+ conf.set_quoted('TEST_SRCDIR', meson.project_source_root() + '/data/')
  conf.set_quoted('LOCALEDIR', localedir)
 -conf.set_quoted('SYSCONFDIR', sysconfdir)
 +conf.set_quoted('SYSCONFDIR', get_option('sysconfdir'))
  conf.set_quoted('MOZILLA_API_KEY', get_option('mozilla-api-key'))
  conf.set10('GCLUE_USE_3G_SOURCE', get_option('3g-source'))
  conf.set10('GCLUE_USE_CDMA_SOURCE', get_option('cdma-source'))
-diff --git a/meson_options.txt b/meson_options.txt
+diff --git i/meson_options.txt w/meson_options.txt
 index 5b8c42d..945dfd5 100644
---- a/meson_options.txt
-+++ b/meson_options.txt
+--- i/meson_options.txt
++++ w/meson_options.txt
 @@ -40,6 +40,9 @@ option('systemd-system-unit-dir',
  option('dbus-srv-user',
         type: 'string', value: 'root',

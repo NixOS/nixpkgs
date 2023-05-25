@@ -6,6 +6,10 @@
    e.g.
 
    $ nix-build pkgs/top-level/release-cross.nix -A crossMingw32.nixUnstable --arg supportedSystems '[builtins.currentSystem]'
+
+   To build all of the bootstrapFiles bundles on every enabled platform, use:
+
+   $ nix-build --expr 'with import ./pkgs/top-level/release-cross.nix {supportedSystems = [builtins.currentSystem];}; builtins.mapAttrs (k: v: v.build) bootstrapTools'
 */
 
 { # The platforms *from* which we cross compile.
@@ -186,6 +190,9 @@ in
   riscv64 = mapTestOnCross lib.systems.examples.riscv64 linuxCommon;
   riscv32 = mapTestOnCross lib.systems.examples.riscv32 linuxCommon;
 
+  /* Linux on LoongArch */
+  loongarch64-linux = mapTestOnCross lib.systems.examples.loongarch64-linux linuxCommon;
+
   m68k = mapTestOnCross lib.systems.examples.m68k linuxCommon;
   s390x = mapTestOnCross lib.systems.examples.s390x linuxCommon;
 
@@ -220,6 +227,7 @@ in
   riscv32-embedded = mapTestOnCross lib.systems.examples.riscv32-embedded embedded;
   rx-embedded = mapTestOnCross lib.systems.examples.rx-embedded embedded;
 
+  x86_64-freebsd = mapTestOnCross lib.systems.examples.x86_64-freebsd common;
   x86_64-netbsd = mapTestOnCross lib.systems.examples.x86_64-netbsd common;
 
   # we test `embedded` instead of `linuxCommon` because very few packages
@@ -239,8 +247,9 @@ in
     # so it will fail unless buildPlatform.canExecute hostPlatform.
     # Unfortunately `bootstrapTools` also clobbers its own `system`
     # attribute, so there is no way to detect this -- we must add it
-    # as a special case.
-    (builtins.removeAttrs tools ["bootstrapTools"]);
+    # as a special case.  We filter the "test" attribute (only from
+     # *cross*-built bootstrapTools) for the same reason.
+    (builtins.mapAttrs (_: v: builtins.removeAttrs v ["bootstrapTools" "test"]) tools);
 
   # Cross-built nixStatic for platforms for enabled-but-unsupported platforms
   mips64el-nixCrossStatic = mapTestOnCross lib.systems.examples.mips64el-linux-gnuabi64 nixCrossStatic;

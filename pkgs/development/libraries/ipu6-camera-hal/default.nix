@@ -14,14 +14,14 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "ipu6-camera-hal";
-  version = "unstable-2023-01-09";
+  pname = "${ipu6-camera-bin.ipuVersion}-camera-hal";
+  version = "unstable-2023-02-08";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "ipu6-camera-hal";
-    rev = "37292891c73367d22ba1fc96ea9b6e4546903037";
-    hash = "sha256-dJvTZt85rt5/v2JXOsfbSY933qffyXW74L0nWdIlqug=";
+    rev = "884b81aae0ea19a974eb8ccdaeef93038136bdd4";
+    hash = "sha256-AePL7IqoOhlxhfPRLpCman5DNh3wYS4MUcLgmgBUcCM=";
   };
 
   nativeBuildInputs = [
@@ -52,15 +52,19 @@ stdenv.mkDerivation {
     gst_all_1.gst-plugins-base
   ];
 
-  preFixup = ''
-    ls -lah $out/lib/pkgconfig/
-    sed -Ei \
-      -e "s,^prefix=.*,prefix=$out," \
-      -e "s,^exec_prefix=.*,exec_prefix=''${prefix}," \
-      -e "s,^libdir=.*,libdir=''${prefix}/lib," \
-      -e "s,^includedir=.*,includedir=''${prefix}/include/libcamhal," \
-      $out/lib/pkgconfig/libcamhal.pc
+  postPatch = ''
+    substituteInPlace src/platformdata/PlatformData.h \
+      --replace '/usr/share/' "${placeholder "out"}/share/"
   '';
+
+  postFixup = ''
+    substituteInPlace $out/lib/pkgconfig/libcamhal.pc \
+      --replace 'prefix=/usr' "prefix=$out"
+  '';
+
+  passthru = {
+    inherit (ipu6-camera-bin) ipuVersion;
+  };
 
   meta = with lib; {
     description = "HAL for processing of images in userspace";

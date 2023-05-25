@@ -218,6 +218,13 @@ in
 
     systemd.services = dhcpdService "4" cfg4 // dhcpdService "6" cfg6;
 
+    warnings = [
+      ''
+        The dhcpd4 and dhcpd6 modules will be removed from NixOS 23.11, because ISC DHCP reached its end of life.
+        See https://www.isc.org/blogs/isc-dhcp-eol/ for details.
+        Please switch to a different implementation like kea, systemd-networkd or dnsmasq.
+      ''
+    ];
   };
 
 }

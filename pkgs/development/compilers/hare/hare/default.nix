@@ -12,20 +12,16 @@
 let
   inherit (harePackages) harec;
 in
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hare";
-  version = "unstable-2023-02-10";
+  version = "unstable-2023-03-15";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "hare";
-    rev = "52b3f2d0c7a85e04a79666a954101e527b7f1272";
-    hash = "sha256-/zP8LbZ113Ar06MZF1zP20LKMGko+4HcOXSntLVAQAU=";
+    rev = "488771bc8cef15557a44815eb6f7808df40a09f7";
+    hash = "sha256-1cSXWD8jpW1VJZDTDOkIabczqbaDCOWsyaUSGtsKsUM=";
   };
-
-  patches = [
-    ./000-disable-failing-test-cases.diff
-  ];
 
   nativeBuildInputs = [
     binutils-unwrapped

@@ -19,6 +19,9 @@ pandoc_flags = --extract-media=$(pandoc_media_dir) \
 .PHONY: all
 all: validate format out/html/index.html out/epub/manual.epub
 
+.PHONY: render-md
+render-md: ${MD_TARGETS}
+
 .PHONY: debug
 debug:
 	nix-shell --run "xmloscopy --docbook5 ./manual.xml ./manual-full.xml"

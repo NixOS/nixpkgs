@@ -2,28 +2,34 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, python
-, mock
+, twisted
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "python-mpd2";
-  version = "3.0.5";
+  version = "3.1.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bxv/2TuaMvwBipu/NIdQW1Lg11fsNAZpBcYKkS1JI4Q=";
+    hash = "sha256-8zws2w1rqnSjZyTzjBxKCZp84sjsSiu3GSFQpYVd9HY=";
   };
 
-  buildInputs = [ mock ];
+  passthru.optional-dependencies = {
+    twisted = [
+      twisted
+    ];
+  };
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest mpd.tests
-  '';
+  nativeCheckInputs = [
+    unittestCheckHook
+  ] ++ passthru.optional-dependencies.twisted;
 
   meta = with lib; {
+    changelog = "https://github.com/Mic92/python-mpd2/blob/v${version}/doc/changes.rst";
     description = "A Python client module for the Music Player Daemon";
     homepage = "https://github.com/Mic92/python-mpd2";
     license = licenses.lgpl3Plus;

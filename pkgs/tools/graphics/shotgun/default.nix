@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "shotgun";
-  version = "2.3.1";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "neXromancers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hu8UYia2tu6I6Ii9aZ6vfpbrcDz4yeEDkljGFa5s6VY=";
+    sha256 = "sha256-fcb+eZXzpuEPFSZexbgDpoBX85gsiIqPlcPXruNGenk=";
   };
 
-  cargoSha256 = "sha256-UOchXeBX+sDuLhwWQRVFCj9loJUyr4IltiAKsQoh5/c=";
+  cargoSha256 = "sha256-n5HPl2h0fr0MyGBivNVrrs23HAllIYtwaw1aaKWHCe4=";
 
   nativeBuildInputs = [ pkg-config ];
 

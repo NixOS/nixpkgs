@@ -43,6 +43,11 @@
     "http://bioconductor.jp/packages/"
   ];
 
+  # CRAN mirrors
+  cran = [
+    "https://cran.r-project.org/src/contrib/"
+  ];
+
   # BitlBee mirrors, see https://www.bitlbee.org/main.php/mirrors.html
   bitlbee = [
     "https://get.bitlbee.org/"

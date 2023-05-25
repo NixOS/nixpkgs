@@ -1,4 +1,14 @@
-{ borgbackup, coreutils, lib, python3Packages, systemd, installShellFiles, borgmatic, testers }:
+{ lib
+, stdenv
+, borgbackup
+, coreutils
+, python3Packages
+, systemd
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, installShellFiles
+, borgmatic
+, testers
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
@@ -31,7 +41,7 @@ python3Packages.buildPythonApplication rec {
   postInstall = ''
     installShellCompletion --cmd borgmatic \
       --bash <($out/bin/borgmatic --bash-completion)
-
+  '' + lib.optionalString enableSystemd ''
     mkdir -p $out/lib/systemd/system
     cp sample/systemd/borgmatic.timer $out/lib/systemd/system/
     # there is another "sleep", so choose the one with the space after it

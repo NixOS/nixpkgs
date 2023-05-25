@@ -67,7 +67,7 @@ let
     ghc925
     ghc926
     ghc927
-    ghc944
+    ghc945
     ghc961
   ];
 
@@ -497,8 +497,6 @@ let
       haskell-language-server = lib.subtractLists [
         # Support ceased as of 1.9.0.0
         compilerNames.ghc884
-        # https://github.com/haskell/haskell-language-server/issues/3502
-        compilerNames.ghc961
       ] released;
       hoogle = lib.subtractLists [
         compilerNames.ghc961
@@ -535,7 +533,7 @@ let
         compilerNames.ghc925
         compilerNames.ghc926
         compilerNames.ghc927
-        compilerNames.ghc944
+        compilerNames.ghc945
       ];
       weeder = [
         compilerNames.ghc8107
@@ -544,7 +542,7 @@ let
         compilerNames.ghc925
         compilerNames.ghc926
         compilerNames.ghc927
-        compilerNames.ghc944
+        compilerNames.ghc945
       ];
     })
     {

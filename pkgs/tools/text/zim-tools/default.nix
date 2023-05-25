@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zim-tools";
-  version = "3.1.1";
+  version = "3.1.3";
 
   src = fetchFromGitHub {
     owner = "openzim";
     repo = "zim-tools";
     rev = version;
-    sha256 = "sha256-xZae1o4L9AdGDqBnFDZniWNM/dLsYRcS0OLWw9+Wecs=";
+    sha256 = "sha256-dFZd+vr/PnC7WKTFitwBe1zd/1TUnCznI/eS+Q0ZZPg=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];

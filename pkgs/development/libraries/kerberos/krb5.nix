@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, perl, bison, bootstrap_cmds
-, openssl, openldap, libedit, keyutils
+, openssl, openldap, libedit, keyutils, libverto
 
 # for passthru.tests
 , bind
@@ -14,6 +14,7 @@
 # This is called "staticOnly" because krb5 does not support
 # builting both static and shared, see below.
 , staticOnly ? false
+, withVerto ? false
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
     # krb5's ./configure does not allow passing --enable-shared and --enable-static at the same time.
     # See https://bbs.archlinux.org/viewtopic.php?pid=1576737#p1576737
     ++ lib.optionals staticOnly [ "--enable-static" "--disable-shared" ]
+    ++ lib.optional withVerto "--with-system-verto"
     ++ lib.optional stdenv.isFreeBSD ''WARN_CFLAGS=""''
     ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
        [ "krb5_cv_attr_constructor_destructor=yes,yes"
@@ -53,7 +55,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.libc != "bionic" && !(stdenv.hostPlatform.useLLVM or false)) [ keyutils ]
-    ++ lib.optionals (!libOnly) [ openldap libedit ];
+    ++ lib.optionals (!libOnly) [ openldap libedit ]
+    ++ lib.optionals withVerto [ libverto ];
 
   sourceRoot = "krb5-${version}/src";
 

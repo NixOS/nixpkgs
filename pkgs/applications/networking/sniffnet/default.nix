@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pkg-config
 , libpcap
+, openssl
 , stdenv
 , alsa-lib
 , expat
@@ -14,21 +15,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sniffnet";
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "gyulyvgc";
     repo = "sniffnet";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QEMd/vOi0DFCq7AJHhii7rnBAHS89XP3/b2UIewAgLc=";
+    hash = "sha256-hZK+lLH9fCEvujLuvAqkVVmRCRM9DfhCUv7JbirTIu4=";
   };
 
-  cargoHash = "sha256-VcmiM7prK5l8Ow8K9TGUR2xfx9648IoU6i40hOGAqGQ=";
+  cargoHash = "sha256-hAxIS9gc5EBDy00U1JSnLZYifCzJAEcwhaalzrUjT9M=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libpcap
+    openssl
   ] ++ lib.optionals stdenv.isLinux [
     alsa-lib
     expat
@@ -41,6 +43,11 @@ rustPlatform.buildRustPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
     rustPlatform.bindgenHook
+  ];
+
+  # requires internet access
+  checkFlags = [
+    "--skip=secondary_threads::check_updates::tests::fetch_latest_release_from_github"
   ];
 
   postFixup = lib.optionalString stdenv.isLinux ''

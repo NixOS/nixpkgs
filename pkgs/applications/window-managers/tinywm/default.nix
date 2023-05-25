@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib;{
-    description = "A tiny window manger for X11";
+    description = "A tiny window manager for X11";
     longDescription = ''
 
       TinyWM is a tiny window manager that I created as an exercise in

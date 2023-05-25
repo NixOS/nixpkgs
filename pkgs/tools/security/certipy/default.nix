@@ -5,15 +5,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "certipy";
-  version = "4.3.0";
+  version = "4.4.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ly4k";
     repo = "Certipy";
     rev = "refs/tags/${version}";
-    hash = "sha256-vwlWAbA4ExYAPRInhEsjRCNuL2wqMhAmYKO78Vi4OGo=";
+    hash = "sha256-llLGr9IpuXQYIN2WaOkvfE2dAZb3PMVlNmketUpuyDI=";
   };
+
+  postPatch = ''
+    # pin does not apply because our ldap3 contains a patch to fix pyasn1 compability
+    substituteInPlace setup.py \
+      --replace "pyasn1==0.4.8" "pyasn1"
+  '';
 
   propagatedBuildInputs = with python3.pkgs; [
     asn1crypto

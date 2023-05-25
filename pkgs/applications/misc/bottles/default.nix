@@ -1,6 +1,6 @@
 { lib
 , fetchFromGitHub
-, fetchFromGitLab
+, fetchpatch
 , gitUpdater
 , python3Packages
 , blueprint-compiler
@@ -38,7 +38,15 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-8VF/CD0Wu2eV6wOpj/M6peKDthFWlcg+1NzzTSIH4S8=";
   };
 
-  patches = [ ./vulkan_icd.patch ];
+  patches = [
+    ./vulkan_icd.patch
+
+    # Remove next version
+    (fetchpatch {
+      url = "https://github.com/bottlesdevs/Bottles/commit/7cb284f9bac0b71bf632bfc70d94f7a53bc51267.patch";
+      hash = "sha256-mRF+BtQ0qM7Yvx7SONeH2wc04F87fEyNRlBuyQrzN8Y=";
+    })
+  ];
 
   # https://github.com/bottlesdevs/Bottles/wiki/Packaging
   nativeBuildInputs = [

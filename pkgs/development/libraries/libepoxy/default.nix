@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     description = "A library for handling OpenGL function pointer management";
     homepage = "https://github.com/anholt/libepoxy";
     license = licenses.mit;
-    maintainers = with maintainers; [ goibhniu erictapen ];
+    maintainers = with maintainers; [ goibhniu ];
     platforms = platforms.unix;
   };
 }

@@ -87,8 +87,8 @@ let
   fundamental-source = fetchFromGitHub {
     owner = "VCVRack";
     repo = "Fundamental";
-    rev = "f80e1a0e78dc043a0ff0b777ef98a36b91063622"; # tip of branch v2
-    sha256 = "0hnwrr1xhf7dpkw1v63f633x5dlrvijgbah4aj5h5xr2jchip9nx";
+    rev = "v2.3.1"; # tip of branch v2
+    sha256 = "1rd5yvdr6k03mc3r2y7wxhmiqd69jfvqmpqagxb83y1mn0zfv0pr";
   };
   vcv-rtaudio = stdenv.mkDerivation rec {
     pname = "vcv-rtaudio";
@@ -115,7 +115,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "VCV-Rack";
-  version = "2.2.1";
+  version = "2.3.0";
 
   desktopItems = [
     (makeDesktopItem {
@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
     owner = "VCVRack";
     repo = "Rack";
     rev = "v${version}";
-    sha256 = "079alr6y0101k92v5lrnycljcbifh0hsvklbf4w5ax2zrxnyplq8";
+    sha256 = "1aj7pcvks1da5ydagyxsdksp31rf8dn0bixw55kn34k0g4ky5jiw";
   };
 
   patches = [

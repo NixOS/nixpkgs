@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "mpd-mpris";
-  version = "0.4.0";
+  version = "0.4.0-2";
 
   src = fetchFromGitHub {
     owner = "natsukagami";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ryLqGH81Z+5GQ1ROHpCWmCHKSfS8g35b0wCmr8aokWk=";
+    sha256 = "sha256-RGuscED0RvA1+5Aj+Kcnk1h/whU4npJ6hPq8GHWwxPU=";
   };
 
   vendorHash = "sha256-GmdD/4VYp3KeblNGgltFWHdOnK5qsBa2ygIYOBrH+b0=";

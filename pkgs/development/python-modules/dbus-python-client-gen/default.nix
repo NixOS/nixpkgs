@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "dbus-python-client-gen";
-  version = "0.8.2";
+  version = "0.8.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "stratis-storage";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-RYgS4RNLLCtp+5gS/LlzdH7rlub48TSSSKhykkkBcuo=";
+    hash = "sha256-4Y4cL254ZlZKF6d6cStIOya3J4ZfypuumwKOdDNzuNc=";
   };
 
   propagatedBuildInputs = [

@@ -6,13 +6,13 @@ else
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-ctypes";
-  version = "0.20.1";
+  version = "0.20.2";
 
   src = fetchFromGitHub {
     owner = "ocamllabs";
     repo = "ocaml-ctypes";
     rev = version;
-    sha256 = "sha256-H1QR0MJCqRdXxRufCA663wzTNWQ8MYYAy2nz/XHCn0Y=";
+    hash = "sha256-LzUrR8K88CjY/R5yUK3y6KG85hUMjbzuebHGqI8KhhM=";
   };
 
   nativeBuildInputs = [ pkg-config ocaml findlib ];
@@ -21,14 +21,22 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+  preConfigure = ''
+    substituteInPlace META --replace ' bytes ' ' '
+  '';
+
   buildPhase = ''
+    runHook preBuild
     make XEN=false libffi.config ctypes-base ctypes-stubs
     make XEN=false ctypes-foreign
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs
     make install XEN=false
+    runHook postInstall
   '';
 
   meta = with lib; {

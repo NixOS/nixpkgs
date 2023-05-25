@@ -8,15 +8,15 @@
 
 buildGoModule rec {
   pname = "trezord-go";
-  version = "2.0.32";
-  commit = "9aa6576";
+  version = "2.0.33";
+  commit = "2680d5e";
 
   src = fetchFromGitHub {
     owner = "trezor";
     repo = "trezord-go";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-T7YoHi2sA22nfNbgX2WB5NIFIwxBkxn0CsSXyQTxgJc=";
+    sha256 = "sha256-3I6NOzDMhzRyVSOURl7TjJ1Z0P0RcKrSs5rNaZ0Ho9M=";
   };
 
   vendorSha256 = "sha256-wXgAmZEXdM4FcMCQbAs+ydXshCAMu7nl/yVv/3sqaXE=";

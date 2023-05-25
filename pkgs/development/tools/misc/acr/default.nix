@@ -3,14 +3,14 @@
 , fetchFromGitHub
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "acr";
   version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "radareorg";
     repo = "acr";
-    rev = self.version;
+    rev = finalAttrs.version;
     hash = "sha256-JReYgIqQISQuLPd4pUbqbKtBOXT0/YJCn9czz2VTVBs=";
   };
 

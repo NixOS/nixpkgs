@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "returns";
-  version = "0.19.0";
+  version = "0.20.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dry-python";
     repo = "returns";
     rev = "refs/tags/${version}";
-    hash = "sha256-yKlW5M7LlK9xF4GiCKtUVrZwwSmFVjCnDhnzaNFcAsU=";
+    hash = "sha256-28WYjrjmu3hQ8+Snuvl3ykTd86eWYI97AE60p6SVwDQ=";
   };
 
   nativeBuildInputs = [

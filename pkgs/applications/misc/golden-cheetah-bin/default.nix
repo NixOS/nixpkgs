@@ -2,11 +2,11 @@
 let
 
   pname = "golden-cheetah";
-  version = "3.6-RC3";
+  version = "3.6-RC4";
 
   src = fetchurl {
     url = "https://github.com/GoldenCheetah/GoldenCheetah/releases/download/v${version}/GoldenCheetah_v3.6-DEV_x64.AppImage";
-    hash = "sha256-Bp1IFql96tHc5ssg9nhTrFQqNtaM+5iYJguPGkguvns=";
+    hash = "sha256-I5GafK/W1djSx67xrjcMyPqMSqGW9AfrcPYcGcf0Pag=";
   };
 
   appimageContents = appimageTools.extract { inherit pname src version; };

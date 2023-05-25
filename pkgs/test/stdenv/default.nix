@@ -142,6 +142,21 @@ in
     '';
   };
 
+  test-inputDerivation = let
+    inherit (stdenv.mkDerivation {
+      dep1 = derivation { name = "dep1"; builder = "/bin/sh"; args = [ "-c" ": > $out" ]; system = builtins.currentSystem; };
+      dep2 = derivation { name = "dep2"; builder = "/bin/sh"; args = [ "-c" ": > $out" ]; system = builtins.currentSystem; };
+      passAsFile = [ "dep2" ];
+    }) inputDerivation;
+  in
+    runCommand "test-inputDerivation" {
+      exportReferencesGraph = [ "graph" inputDerivation ];
+    } ''
+      grep ${inputDerivation.dep1} graph
+      grep ${inputDerivation.dep2} graph
+      touch $out
+    '';
+
   test-prepend-append-to-var = testPrependAndAppendToVar {
     name = "test-prepend-append-to-var";
     stdenv' = bootStdenv;

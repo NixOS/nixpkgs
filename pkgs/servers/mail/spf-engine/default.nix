@@ -2,11 +2,12 @@
 
 buildPythonApplication rec {
   pname = "spf-engine";
-  version = "2.9.3";
+  version = "3.0.4";
+  format = "flit";
 
   src = fetchurl {
     url = "https://launchpad.net/${pname}/${lib.versions.majorMinor version}/${version}/+download/${pname}-${version}.tar.gz";
-    sha256 = "sha256-w0Nb+L/Os3KPApENoylxCVaCD4FvgmvpfVvwCkt2IDE=";
+    sha256 = "sha256-Gcw7enNIb/TrZEYa0Z04ezHUmfMmc1J+aEH6FlXbhTo=";
   };
 
   propagatedBuildInputs = [ pyspf dnspython authres pymilter ];
@@ -16,10 +17,6 @@ buildPythonApplication rec {
     "spf_engine.milter_spf"
     "spf_engine.policyd_spf"
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py --replace "'/etc'" "'$out/etc'"
-  '';
 
   meta = with lib; {
     homepage = "https://launchpad.net/spf-engine/";

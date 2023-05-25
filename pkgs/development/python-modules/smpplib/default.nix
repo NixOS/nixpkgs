@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "smpplib";
-  version = "2.2.2";
+  version = "2.2.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-8hkec7JNupTyiJvy6hpgru9r1Dr9Pdu8Yy1+QdnzDkc=";
+    sha256 = "sha256-UhWpWwU40m8YlgDgmCsx2oKB90U81uKGLFsh4+EAIzE=";
   };
 
   propagatedBuildInputs = [

@@ -3,8 +3,10 @@
 , fetchFromGitHub
 , pythonOlder
 
+# build-system
+, poetry-core
+
 # runtime
-, cached-property
 , click
 , peewee
 
@@ -15,25 +17,27 @@
 
 buildPythonPackage rec {
   pname = "peewee-migrate";
-  version = "1.6.6";
-  format = "setuptools";
+  version = "1.7.1";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "klen";
     repo = "peewee_migrate";
     rev = "refs/tags/${version}";
-    hash = "sha256-gUtxsvPj8pwzijia313d553j9U2LP5vKJHxVU1SqsV8=";
+    hash = "sha256-s7/Ev4nAKUr5OBgziETVCtjlxvBoeoZXriUBuAUi4eE=";
   };
 
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
   postPatch = ''
-    sed -i '/addopts/d' setup.cfg
+    sed -i '/addopts/d' pyproject.toml
   '';
 
   propagatedBuildInputs = [
     peewee
     click
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    cached-property
   ];
 
   pythonImportsCheck = [

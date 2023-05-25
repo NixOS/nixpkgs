@@ -4,6 +4,7 @@
 { fetchNuGet }: [
   (fetchNuGet { pname = "Cake.Scripting.Abstractions"; version = "0.9.0"; sha256 = "15nqr100crclha0lzgil25j1wn45517gb34059qypj05j8psfmjx"; })
   (fetchNuGet { pname = "Cake.Scripting.Transport"; version = "0.9.0"; sha256 = "1gpbvframx4dx4mzfh44cib6dfd26q7878vf073m9gv3y43sws7b"; })
+  (fetchNuGet { pname = "Cake.Tool"; version = "1.1.0"; sha256 = "1arxq0pcz17c0jzrd1z2z5zcgb0aw6120p2zp6yap0qg5g54hy46"; })
   (fetchNuGet { pname = "Dotnet.Script.DependencyModel"; version = "1.4.0"; sha256 = "08269f79r3a7iwf3i661k6vzi9xk21f0z21997dpyl2qhl5igndg"; })
   (fetchNuGet { pname = "Dotnet.Script.DependencyModel.NuGet"; version = "1.4.0"; sha256 = "0mhbxvcf9p48zzc3f2x25ihh1lxzzn63mwld5lkny5m1bx1fp198"; })
   (fetchNuGet { pname = "Humanizer.Core"; version = "2.14.1"; sha256 = "1ai7hgr0qwd7xlqfd92immddyi41j3ag91h3594yzfsgsy6yhyqi"; })

@@ -31,7 +31,8 @@ stdenv.mkDerivation rec {
   patches = [ ./xmlcatalog_patch.patch ];
 
   preConfigure = ''
-    ./autogen.sh
+    substituteInPlace ./autogen.sh --replace pkg-config '$PKG_CONFIG'
+    NOCONFIGURE=1 ./autogen.sh
   '';
 
   configureFlags = [ "--enable-man"

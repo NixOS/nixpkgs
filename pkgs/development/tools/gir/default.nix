@@ -1,20 +1,23 @@
 { lib, fetchFromGitHub, rustPlatform }:
 
-rustPlatform.buildRustPackage rec {
+let
+  version = "0.17.1";
+in
+rustPlatform.buildRustPackage {
   pname = "gir";
-  version = "unstable-2021-11-21";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "gtk-rs";
     repo = "gir";
-    rev = "a69abbe5ee1a745e554cac9433c65d2ac26a7688";
-    sha256 = "16ygy1bcbcj69x6ss72g9n62qlsd1bacr5hz91f8whw6qm9am46m";
+    rev = version;
+    sha256 = "sha256-WpTyT62bykq/uwzBFQXeJ1HxR1a2vKmtid8YAzk7J+Q=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "rustdoc-stripper-0.1.18" = "sha256-eQxAS76kV01whXK21PN5U+nkpvpn6r4VOoe9/pkuAQY=";
+      "rustdoc-stripper-0.1.18" = "sha256-b+RRXJDGULEvkIZDBzU/ZchVF63pX0S9hBupeP12CkU=";
     };
   };
 

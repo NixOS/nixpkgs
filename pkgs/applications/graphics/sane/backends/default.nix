@@ -128,6 +128,10 @@ stdenv.mkDerivation {
   ''
   + lib.concatStrings (builtins.map installFirmware compatFirmware);
 
+  # parallel install creates a bad symlink at $out/lib/sane/libsane.so.1 which prevents finding plugins
+  # https://github.com/NixOS/nixpkgs/issues/224569
+  enableParallelInstalling = false;
+
   meta = with lib; {
     description = "SANE (Scanner Access Now Easy) backends";
     longDescription = ''

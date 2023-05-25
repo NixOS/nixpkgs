@@ -8,6 +8,7 @@
 , qtxmlpatterns
 , qtwebengine
 , qca-qt5
+, qtnetworkauth
 # KDE
 , ki18n
 , kxmlgui
@@ -28,13 +29,13 @@
 
 mkDerivation rec {
   pname = "kbibtex";
-  version = "0.9.3.2";
+  version = "0.10.0";
 
   src = let
     majorMinorPatch = lib.concatStringsSep "." (lib.take 3 (lib.splitVersion version));
   in fetchurl {
     url = "mirror://kde/stable/KBibTeX/${majorMinorPatch}/kbibtex-${version}.tar.xz";
-    hash = "sha256-BzPCTKMiMnzz2S+jbk4ZbEudyJX5EaTDVY59te/AxFc=";
+    hash = "sha256-sSeyQKfNd8U4YZ3IgqOZs8bM13oEQopJevkG8U0JuMQ=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +47,7 @@ mkDerivation rec {
     qtxmlpatterns
     qtwebengine
     qca-qt5
+    qtnetworkauth
     # TODO qtoauth
     ki18n
     kxmlgui
@@ -72,5 +74,6 @@ mkDerivation rec {
     changelog = "https://invent.kde.org/office/kbibtex/-/raw/v${version}/ChangeLog";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dotlambda ];
+    platforms = platforms.linux;
   };
 }

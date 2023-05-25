@@ -1,15 +1,20 @@
-{ lib, stdenv, fetchurl, dpkg, makeWrapper, buildFHSUserEnv
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, makeWrapper
+, buildFHSEnv
 , extraPkgs ? pkgs: [ ]
 , extraLibs ? pkgs: [ ]
 }:
 
 stdenv.mkDerivation rec {
   pname = "unityhub";
-  version = "3.4.1";
+  version = "3.4.2";
 
   src = fetchurl {
     url = "https://hub-dist.unity3d.com/artifactory/hub-debian-prod-local/pool/main/u/unity/unityhub_amd64/unityhub-amd64-${version}.deb";
-    sha256 = "sha256-/P6gPLSRGfwEN801cyNrZTpHyZKO+4tU6cFvLz8ERuo=";
+    sha256 = "sha256-I1qtrD94IpMut0a6JUHErHaksoZ+z8/dDG8U68Y5zJE=";
   };
 
   nativeBuildInputs = [
@@ -17,12 +22,9 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  fhsEnv = buildFHSUserEnv {
+  fhsEnv = buildFHSEnv {
     name = "${pname}-fhs-env";
     runScript = "";
-
-    # Seems to be needed for GTK filepickers to work in FHSUserEnv
-    profile = "XDG_DATA_DIRS=\"\$XDG_DATA_DIRS:/usr/share/\"";
 
     targetPkgs = pkgs: with pkgs; [
       xorg.libXrandr
@@ -65,7 +67,7 @@ stdenv.mkDerivation rec {
 
       # Unity Hub additional dependencies
       libva
-      openssl_1_1
+      openssl
       cairo
       xdg-utils
       libnotify
@@ -118,6 +120,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Official Unity3D app to download and manage Unity Projects and installations";

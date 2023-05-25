@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "ndindex";
-  version = "1.6";
+  version = "1.7";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Quansight-Labs";
     repo = "ndindex";
     rev = "refs/tags/${version}";
-    hash = "sha256-QLWGgbF5nNTa1SsSkupo+fAs9K7eTexTK9n9yDLVgrQ=";
+    hash = "sha256-JP0cEuxXfPTWc1EIUtMsy5Hx6eIo9vDzD0IUXm1lFME=";
   };
 
   nativeBuildInputs = [

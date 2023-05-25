@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg   = config.services.minetest-server;
-  flag  = val: name: if val != null then "--${name} ${toString val} " else "";
+  flag  = val: name: optionalString (val != null) "--${name} ${toString val} ";
   flags = [
     (flag cfg.gameId "gameid")
     (flag cfg.world "world")

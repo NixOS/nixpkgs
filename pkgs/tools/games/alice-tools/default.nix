@@ -1,8 +1,8 @@
 { stdenv
 , lib
 , gitUpdater
+, testers
 , fetchFromGitHub
-, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -20,37 +20,25 @@
 
 assert withGUI -> qtbase != null && wrapQtAppsHook != null;
 
-stdenv.mkDerivation rec {
-  pname = "alice-tools";
-  version = "0.12.1";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "alice-tools" + lib.optionalString withGUI "-qt${lib.versions.major qtbase.version}";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "nunuhara";
     repo = "alice-tools";
-    rev = version;
+    rev = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-uXiNNneAOTDupgc+ZvaeRNbEQFJBv4ppdEc3kZeUsg8=";
+    hash = "sha256-DazWnBeI5XShkIx41GFZLP3BbE0O8T9uflvKIZUXCHo=";
   };
 
-  patches = [
-    # These two patches (one to alice-tools, one to a subproject) improve DCF & PCF parsing
-    # Remove them when version > 0.12.1
-    (fetchpatch {
-      url = "https://github.com/nunuhara/alice-tools/commit/c800e85b37998d7a47060f5da4b1782d7201a042.patch";
-      excludes = [ "subprojects/libsys4" ];
-      hash = "sha256-R5ckFHqUWHdAPkFa53UbVeLgxJg/8qGLTQWwj5YRJc4=";
-    })
-    (fetchpatch {
-      url = "https://github.com/nunuhara/libsys4/commit/cff2b826d1618fb17616cdd288ab0c50f35e8032.patch";
-      stripLen = 1;
-      extraPrefix = "subprojects/libsys4/";
-      hash = "sha256-CmetiVP2kGL+MwuE9OoEDrDFxzwWvv1TtZuq1li1uIw=";
-    })
-  ];
-
   postPatch = lib.optionalString (withGUI && lib.versionAtLeast qtbase.version "6.0") ''
+    # Use Meson's Qt6 module
     substituteInPlace src/meson.build \
       --replace qt5 qt6
+
+    # For some reason Meson uses QMake instead of pkg-config detection method for Qt6 on Darwin, which gives wrong search paths for tools
+    export PATH=${qtbase.dev}/libexec:$PATH
   '';
 
   mesonFlags = lib.optionals (withGUI && lib.versionAtLeast qtbase.version "6.0") [
@@ -93,7 +81,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru = {
+    updateScript = gitUpdater { };
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = lib.optionalString withGUI "env QT_QPA_PLATFORM=minimal " + "${lib.getExe finalAttrs.finalPackage} --version";
+    };
+  };
 
   meta = with lib; {
     description = "Tools for extracting/editing files from AliceSoft games";
@@ -103,4 +97,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ OPNA2608 ];
     mainProgram = if withGUI then "galice" else "alice";
   };
-}
+})

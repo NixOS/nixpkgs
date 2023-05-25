@@ -49,10 +49,10 @@ let
     merge = lib.mergeOneOption;
   };
 
-  pkgsType = mkOptionType {
-    name = "nixpkgs";
+  pkgsType = types.pkgs // {
+    # This type is only used by itself, so let's elaborate the description a bit
+    # for the purpose of documentation.
     description = "An evaluation of Nixpkgs; the top level attribute set of packages";
-    check = builtins.isAttrs;
   };
 
   # Whether `pkgs` was constructed by this module - not if nixpkgs.pkgs or

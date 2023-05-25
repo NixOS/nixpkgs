@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     description = "Public domain cross-platform semantic versioning in C99";
     homepage = "https://github.com/uael/sv";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ candyc1oud ];
+    maintainers = [];
     platforms = platforms.unix;
   };
 }

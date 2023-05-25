@@ -1,4 +1,5 @@
 { buildGoModule
+, cargo
 , cmake
 , fetchFromGitHub
 , go
@@ -14,6 +15,7 @@
 , qttools
 , qtwebsockets
 , rustPlatform
+, rustc
 , stdenv
 , wireguard-tools
 , wrapQtAppsHook
@@ -77,8 +79,8 @@ stdenv.mkDerivation {
     python3.pkgs.pyyaml
     python3.pkgs.setuptools
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.cargo
-    rustPlatform.rust.rustc
+    cargo
+    rustc
     wrapQtAppsHook
   ];
 

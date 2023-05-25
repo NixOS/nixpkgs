@@ -61,6 +61,12 @@ in {
         # https://www.home-assistant.io/integrations/frontend/
         frontend = {};
 
+        # include some popular integrations, that absolutely shouldn't break
+        esphome = {};
+        knx = {};
+        shelly = {};
+        zha = {};
+
         # set up a wake-on-lan switch to test capset capability required
         # for the ping suid wrapper
         # https://www.home-assistant.io/integrations/wake_on_lan/
@@ -107,7 +113,7 @@ in {
     # Cause a configuration change that requires a service restart as we added a new runtime dependency
     specialisation.newFeature = {
       inheritParentConfig = true;
-      configuration.services.home-assistant.config.esphome = {};
+      configuration.services.home-assistant.config.backup = {};
     };
   };
 

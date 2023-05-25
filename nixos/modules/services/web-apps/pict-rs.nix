@@ -34,8 +34,8 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.pict-rs = {
       environment = {
-        PICTRS_PATH = cfg.dataDir;
-        PICTRS_ADDR = "${cfg.address}:${toString cfg.port}";
+        PICTRS__PATH = cfg.dataDir;
+        PICTRS__ADDR = "${cfg.address}:${toString cfg.port}";
       };
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {

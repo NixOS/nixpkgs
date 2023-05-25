@@ -4,18 +4,16 @@
 , ninja
 , gettext
 , fetchurl
-, fetchpatch
 , pkg-config
-, gtk3
+, gtk4
 , glib
 , icu
-, wrapGAppsHook
+, wrapGAppsHook4
 , gnome
-, libportal-gtk3
+, libportal-gtk4
 , libxml2
-, libxslt
 , itstool
-, webkitgtk_4_1
+, webkitgtk_6_0
 , libsoup_3
 , glib-networking
 , libsecret
@@ -23,55 +21,42 @@
 , libarchive
 , p11-kit
 , sqlite
-, gcr
+, gcr_4
 , isocodes
 , desktop-file-utils
 , nettle
 , gdk-pixbuf
 , gst_all_1
 , json-glib
-, libdazzle
-, libhandy
+, libadwaita
 , buildPackages
 , withPantheon ? false
+, pantheon
 }:
 
 stdenv.mkDerivation rec {
   pname = "epiphany";
-  version = "43.1";
+  version = "44.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "6G6tJ8uZgoFRUGZN478g+vN193uAZbArMRgMZba767Q=";
+    sha256 = "sfbfFftqYX/t1hmLLcqr1EENJYNECdpRVwndd8/FazM=";
   };
-
-  patches = lib.optionals withPantheon [
-    # Pantheon specific patches for epiphany
-    # https://github.com/elementary/browser
-    #
-    # Patch to unlink nav buttons
-    # https://github.com/elementary/browser/pull/18
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/elementary/browser/cc17559a7ac6effe593712b4f3d0bbefde6e3b62/navigation-buttons.patch";
-      sha256 = "sha256-G1/JUjn/8DyO9sgL/5Kq205KbTOs4EMi4Vf3cJ8FHXU=";
-    })
-  ];
 
   nativeBuildInputs = [
     desktop-file-utils
     gettext
     itstool
-    libxslt
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
     buildPackages.glib
-    buildPackages.gtk3
+    buildPackages.gtk4
   ];
 
   buildInputs = [
-    gcr
+    gcr_4
     gdk-pixbuf
     glib
     glib-networking
@@ -82,13 +67,12 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-ugly
     gst_all_1.gstreamer
-    gtk3
+    gtk4
     icu
     isocodes
     json-glib
-    libdazzle
-    libhandy
-    libportal-gtk3
+    libadwaita
+    libportal-gtk4
     libarchive
     libsecret
     libsoup_3
@@ -96,12 +80,16 @@ stdenv.mkDerivation rec {
     nettle
     p11-kit
     sqlite
-    webkitgtk_4_1
+    webkitgtk_6_0
+  ] ++ lib.optionals withPantheon [
+    pantheon.granite7
   ];
 
   # Tests need an X display
   mesonFlags = [
     "-Dunit_tests=disabled"
+  ] ++ lib.optionals withPantheon [
+    "-Dgranite=enabled"
   ];
 
   passthru = {

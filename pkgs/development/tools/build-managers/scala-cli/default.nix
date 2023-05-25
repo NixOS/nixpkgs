@@ -12,7 +12,7 @@
 
 let
   pname = "scala-cli";
-  sources = builtins.fromJSON (builtins.readFile ./sources.json);
+  sources = lib.importJSON ./sources.json;
   inherit (sources) version assets;
 
   platforms = builtins.attrNames assets;

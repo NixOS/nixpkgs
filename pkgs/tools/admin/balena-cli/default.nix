@@ -12,17 +12,15 @@ let
     x86_64-darwin = "macOS-x64";
     # Balena only packages for x86 so we rely on Rosetta for Apple Silicon
     aarch64-darwin = "macOS-x64";
-    x86_64-windows = "windows-x64";
   }.${system} or throwSystem;
 
   sha256 = {
-    x86_64-linux = "0gxki6w8p7ihv0zy02978hg8i242algiw0wpcajrvbx1ncbcb7yn";
-    x86_64-darwin = "1ihxyf35px3s6q2yk4p3dy03rcj93hy96bj3pxqlv0rp05gnsf02";
-    aarch64-darwin = "1ihxyf35px3s6q2yk4p3dy03rcj93hy96bj3pxqlv0rp05gnsf02";
-    x86_64-windows = "104hc3qvs04l2hmjmp0bcjr5g5scp4frhprk1fpszziqhdmhwa40";
+    x86_64-linux = "sha256-nvLQDMCm/w1NVSUOMlOKi6GX3R5KoA5pQ63sfhAwn2M=";
+    x86_64-darwin = "sha256-UxEcn1cD5ITg6YLSY/cp9ylimv1Pxee1kBW5SP9ux4E=";
+    aarch64-darwin = "sha256-UxEcn1cD5ITg6YLSY/cp9ylimv1Pxee1kBW5SP9ux4E=";
   }.${system} or throwSystem;
 
-  version = "15.1.1";
+  version = "16.0.0";
   src = fetchzip {
     url = "https://github.com/balena-io/balena-cli/releases/download/v${version}/balena-cli-v${version}-${plat}-standalone.zip";
     inherit sha256;
@@ -103,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/balena-io/balena-cli/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = [ maintainers.kalebpace ];
-    platforms = platforms.linux ++ platforms.darwin ++ platforms.cygwin ++ platforms.windows;
+    platforms = platforms.linux ++ platforms.darwin;
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
     mainProgram = "balena";
   };

@@ -9,7 +9,7 @@
 , enableGStreamer ? false, gst_all_1
 , enableEigen ? true, eigen
 , enableUnfree ? false
-, AVFoundation, Cocoa, QTKit
+, AVFoundation, Cocoa, QTKit, Accelerate
 }:
 
 let
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
     ++ lib.optional enableEigen eigen
-    ++ lib.optionals stdenv.isDarwin [ AVFoundation Cocoa QTKit ]
+    ++ lib.optionals stdenv.isDarwin [ AVFoundation Cocoa QTKit Accelerate ]
     ;
 
   nativeBuildInputs = [ cmake pkg-config unzip ];

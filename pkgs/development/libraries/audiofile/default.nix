@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     sha256 = "0rb927zknk9kmhprd8rdr4azql4gn2dp75a36iazx2xhkbqhvind";
   };
 
+  outputs = [ "out" "dev" "man" ];
+
   # fix build with gcc9
   NIX_CFLAGS_LINK = lib.optional (stdenv.system == "i686-linux") "-lgcc";
 

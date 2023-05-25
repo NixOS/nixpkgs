@@ -2,7 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 
-, llvmPackages_13
+, clang
 , pkg-config
 
 , zlib
@@ -14,20 +14,17 @@
 , tracee
 }:
 
-let
-  inherit (llvmPackages_13) clang;
-in
 buildGoModule rec {
   pname = "tracee";
-  version = "0.11.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-fAbii/DEXx9WJpolc7amqF9TQj4oE5x0TCiNOtVasGo=";
+    hash = "sha256-YO5u/hE5enoqh8niV4Zi+NFUsU+UXCCxdqvxolZImGk=";
   };
-  vendorSha256 = "sha256-eenhIsiJhPLgwJo2spIGURPkcsec3kO4L5UJ0FWniQc=";
+  vendorHash = "sha256-swMvJe+Dz/kwPIStPlQ7d6U/UwXSMcJ3eONxjzebXCc=";
 
   patches = [
     ./use-our-libbpf.patch
@@ -59,15 +56,16 @@ buildGoModule rec {
   # see passthru.tests.integration
   doCheck = false;
 
+  outputs = [ "out" "lib" "share" ];
+
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,share/tracee}
+    mkdir -p $out/bin $lib/lib/tracee $share/share/tracee
 
-    mv ./dist/tracee-{ebpf,rules} $out/bin/
-
-    mv ./dist/rules $out/share/tracee/
-    mv ./cmd/tracee-rules/templates $out/share/tracee/
+    mv ./dist/tracee $out/bin/
+    mv ./dist/tracee.bpf.core.o $lib/lib/tracee/
+    mv ./cmd/tracee-rules/templates $share/share/tracee/
 
     runHook postInstall
   '';
@@ -76,10 +74,8 @@ buildGoModule rec {
   installCheckPhase = ''
     runHook preInstallCheck
 
-    $out/bin/tracee-ebpf --help
-    $out/bin/tracee-ebpf --version | grep "v${version}"
-
-    $out/bin/tracee-rules --help
+    $out/bin/tracee --help
+    $out/bin/tracee --version | grep "v${version}"
 
     runHook postInstallCheck
   '';
@@ -89,7 +85,7 @@ buildGoModule rec {
     version = testers.testVersion {
       package = tracee;
       version = "v${version}";
-      command = "tracee-ebpf --version";
+      command = "tracee --version";
     };
   };
 
@@ -111,6 +107,7 @@ buildGoModule rec {
       gpl2Plus
     ];
     maintainers = with maintainers; [ jk ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    outputsToInstall = [ "out" "share" ];
   };
 }

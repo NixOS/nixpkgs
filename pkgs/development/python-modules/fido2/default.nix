@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, poetry-core
 , six
 , cryptography
 , mock
@@ -10,12 +11,15 @@
 
 buildPythonPackage rec {
   pname = "fido2";
-  version = "1.1.0";
+  version = "1.1.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-K0tOYgwhAEQsIGeODpUa1tHvs7pcqOu3IMTI1UMpNnQ=";
+    hash = "sha256-XcSVyoxZwcM3ODtLjDFNRrktXG/GUOcZhMbX+VQHn8M=";
   };
+
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [ six cryptography ];
 

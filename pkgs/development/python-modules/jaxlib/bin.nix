@@ -39,7 +39,7 @@ assert cudaSupport -> lib.versionAtLeast cudatoolkit.version "11.1";
 assert cudaSupport -> lib.versionAtLeast cudnn.version "8.2";
 
 let
-  version = "0.3.22";
+  version = "0.4.4";
 
   pythonVersion = python.pythonVersion;
 
@@ -50,21 +50,21 @@ let
   cpuSrcs = {
     "x86_64-linux" = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/nocuda/jaxlib-${version}-cp310-cp310-manylinux2014_x86_64.whl";
-      hash = "sha256-w2wo0jk+1BdEkNwfSZRQbebdI4Ac8Kgn0MB0cIMcWU4=";
+      hash = "sha256-4VT909AB+ti5HzQvsaZWNY6MS/GItlVEFH9qeZnUuKQ=";
     };
     "aarch64-darwin" = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/mac/jaxlib-${version}-cp310-cp310-macosx_11_0_arm64.whl";
-      hash = "sha256-7Ir55ZhBkccqfoa56WVBF8QwFAC2ws4KFHDkfVw6zm0=";
+      hash = "sha256-wuOmoCeTldslSa0MommQeTe+RYKhUMam1ZXrgSov+8U=";
     };
     "x86_64-darwin" = fetchurl {
       url = "https://storage.googleapis.com/jax-releases/mac/jaxlib-${version}-cp310-cp310-macosx_10_14_x86_64.whl";
-      hash = "sha256-bOoQI+T+YsTUNA+cDu6wwYTcq9fyyzCpK9qrdCrNVoA=";
+      hash = "sha256-arfiTw8yafJwjRwJhKby2O7y3+4ksh3PjaKW9JgJ1ok=";
     };
   };
 
   gpuSrc = fetchurl {
     url = "https://storage.googleapis.com/jax-releases/cuda11/jaxlib-${version}+cuda11.cudnn82-cp310-cp310-manylinux2014_x86_64.whl";
-    hash = "sha256-rabU62p4fF7Tu/6t8LNYZdf6YO06jGry/JtyFZeamCs=";
+    hash = "sha256-bJ62DdzuPSV311ZI2R/LJQ3fOkDibtz2+8wDKw31FLk=";
   };
 in
 buildPythonPackage rec {
@@ -77,7 +77,13 @@ buildPythonPackage rec {
   # python version.
   disabled = !(pythonVersion == "3.10");
 
-  src = if !cudaSupport then cpuSrcs."${stdenv.hostPlatform.system}" else gpuSrc;
+  # See https://discourse.nixos.org/t/ofborg-does-not-respect-meta-platforms/27019/6.
+  src =
+    if !cudaSupport then
+      (
+        cpuSrcs."${stdenv.hostPlatform.system}"
+          or (throw "jaxlib-bin is not supported on ${stdenv.hostPlatform.system}")
+      ) else gpuSrc;
 
   # Prebuilt wheels are dynamically linked against things that nix can't find.
   # Run `autoPatchelfHook` to automagically fix them.

@@ -7,6 +7,9 @@
 , packaging
 , appdirs
 , requests
+, tqdm
+, paramiko
+, xxhash
 }:
 
 buildPythonPackage rec {
@@ -43,6 +46,14 @@ buildPythonPackage rec {
     "processor"
     "integration"
   ];
+
+  passthru = {
+    optional-dependencies = {
+      progress = [ tqdm ];
+      sftp = [ paramiko ];
+      xxhash = [ xxhash ];
+    };
+  };
 
   meta = with lib; {
     description = "A friend to fetch your data files.";

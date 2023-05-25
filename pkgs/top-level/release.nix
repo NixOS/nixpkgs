@@ -16,7 +16,19 @@
   # Strip most of attributes when evaluating to spare memory usage
 , scrubJobs ? true
   # Attributes passed to nixpkgs. Don't build packages marked as unfree.
-, nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
+, nixpkgsArgs ? { config = {
+    allowUnfree = false;
+    inHydra = true;
+    permittedInsecurePackages = [
+      # *Exceptionally*, those packages will be cached with their *secure* dependents
+      # because they will reach EOL in the middle of the 23.05 release
+      # and it will be too much painful for our users to recompile them
+      # for no real reason.
+      # Remove them for 23.11.
+      "nodejs-16.20.0"
+      "openssl-1.1.1t"
+    ];
+  }; }
 }:
 
 with import ./release-lib.nix { inherit supportedSystems scrubJobs nixpkgsArgs; };
@@ -217,7 +229,6 @@ let
       perlPackages = { };
 
       darwin = packagePlatforms pkgs.darwin // {
-        cf-private = {};
         xcode = {};
       };
     } ));

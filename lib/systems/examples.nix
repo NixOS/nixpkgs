@@ -135,6 +135,10 @@ rec {
     libc = "newlib";
   };
 
+  loongarch64-linux = {
+    config = "loongarch64-unknown-linux-gnu";
+  };
+
   mmix = {
     config = "mmix-unknown-mmixware";
     libc = "newlib";

@@ -29,9 +29,9 @@ let
   configFile = if (cfg.configFile != null) then cfg.configFile else configFile';
 
   preStart = ''
-    install ${configFile} /run/${RuntimeDirectory}/ddclient.conf
+    install --mode=600 --owner=$USER ${configFile} /run/${RuntimeDirectory}/ddclient.conf
     ${lib.optionalString (cfg.configFile == null) (if (cfg.protocol == "nsupdate") then ''
-      install ${cfg.passwordFile} /run/${RuntimeDirectory}/ddclient.key
+      install --mode=600 --owner=$USER ${cfg.passwordFile} /run/${RuntimeDirectory}/ddclient.key
     '' else if (cfg.passwordFile != null) then ''
       "${pkgs.replace-secret}/bin/replace-secret" "@password_placeholder@" "${cfg.passwordFile}" "/run/${RuntimeDirectory}/ddclient.conf"
     '' else ''

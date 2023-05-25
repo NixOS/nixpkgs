@@ -93,7 +93,7 @@ in {
             `true`.
 
             It does NOT apply to the daemon port nor the web UI port. To access those
-            ports secuerly check the documentation
+            ports securely check the documentation
             <https://dev.deluge-torrent.org/wiki/UserGuide/ThinClient#CreateSSHTunnel>
             or use a VPN or configure certificates for deluge.
           '';

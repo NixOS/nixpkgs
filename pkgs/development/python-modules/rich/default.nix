@@ -7,6 +7,7 @@
 , pygments
 , typing-extensions
 , pytestCheckHook
+, setuptools
 
 # for passthru.tests
 , enrich
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "rich";
-  version = "13.3.1";
+  version = "13.3.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,14 +27,17 @@ buildPythonPackage rec {
     owner = "Textualize";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-1soeb3aD4wB4stILvfOga/YZtyH6jd0XvnxkLmbW4G0=";
+    hash = "sha256-PnyO5u0gxfYKT6xr0k3H0lbLl9wKPl6oxR1mM9A0Hys=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     markdown-it-py
     pygments
+    setuptools
   ] ++ lib.optionals (pythonOlder "3.9") [
     typing-extensions
   ];
@@ -42,7 +46,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "rich" ];
+  pythonImportsCheck = [
+    "rich"
+  ];
 
   passthru.tests = {
     inherit enrich httpie rich-rst textual;

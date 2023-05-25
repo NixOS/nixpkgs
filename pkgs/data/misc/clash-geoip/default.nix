@@ -26,6 +26,6 @@ stdenvNoCC.mkDerivation rec {
     description = "A GeoLite2 data created by MaxMind";
     homepage = "https://github.com/Dreamacro/maxmind-geoip";
     license = licenses.unfree;
-    maintainers = with maintainers; [ candyc1oud ];
+    maintainers = [];
   };
 }

@@ -1,8 +1,8 @@
 { lib
-, stdenv
 , buildPythonPackage
 , pythonOlder
 , isPy27
+, isPyPy
 , cython
 , distlib
 , fetchPypi
@@ -12,7 +12,6 @@
 , hatchling
 , importlib-metadata
 , importlib-resources
-, pathlib2
 , platformdirs
 , pytest-freezegun
 , pytest-mock
@@ -76,6 +75,13 @@ buildPythonPackage rec {
     "test_seed_link_via_app_data"
     # Permission Error
     "test_bad_exe_py_info_no_raise"
+  ] ++ lib.optionals (isPyPy) [
+    # encoding problems
+    "test_bash"
+    # permission error
+    "test_can_build_c_extensions"
+    # fails to detect pypy version
+    "test_discover_ok"
   ];
 
   pythonImportsCheck = [

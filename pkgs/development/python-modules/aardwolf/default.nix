@@ -6,6 +6,7 @@
 , asyauth
 , asysocks
 , buildPythonPackage
+, cargo
 , colorama
 , fetchFromGitHub
 , iconv
@@ -14,6 +15,7 @@
 , pyperclip
 , pythonOlder
 , rustPlatform
+, rustc
 , setuptools-rust
 , tqdm
 , unicrypto
@@ -46,10 +48,9 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     setuptools-rust
-  ] ++ (with rustPlatform.rust; [
     cargo
     rustc
-  ]);
+  ];
 
   propagatedBuildInputs = [
     arc4

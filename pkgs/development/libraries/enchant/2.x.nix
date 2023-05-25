@@ -1,6 +1,8 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , aspell
+, groff
 , pkg-config
 , glib
 , hunspell
@@ -11,16 +13,17 @@
 
 stdenv.mkDerivation rec {
   pname = "enchant";
-  version = "2.3.3";
+  version = "2.3.4";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://github.com/AbiWord/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-PaEhA/Ec9Jw88v0s4wF1dcUyGkieW5v6gd2R7EE/OJE=";
+    sha256 = "sha256-H34mdE2xyaD+ph0hafTlwc5DXPjCcxw34+QFQRnplKA=";
   };
 
   nativeBuildInputs = [
+    groff
     pkg-config
   ];
 
@@ -46,6 +49,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-relocatable" # needed for tests
+    "--with-aspell"
+    "--with-hspell"
+    "--with-hunspell"
+    "--with-nuspell"
   ];
 
   meta = with lib; {

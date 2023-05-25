@@ -32,6 +32,8 @@ pkgs.releaseTools.sourceTarball {
     echo "git-revision is $(cat .git-revision)"
   '';
 
+  requiredSystemFeatures = [ "big-parallel" ]; # 1 thread but ~36G RAM (!) see #227945
+
   nixpkgs-basic-release-checks = import ./nixpkgs-basic-release-checks.nix
    { inherit nix pkgs nixpkgs supportedSystems; };
 

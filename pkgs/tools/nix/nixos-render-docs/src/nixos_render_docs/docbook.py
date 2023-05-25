@@ -218,11 +218,15 @@ class DocBookRenderer(Renderer):
             result += f"<partintro{maybe_id}>"
         return result
     def example_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        if id := token.attrs.get('id'):
-            return f"<anchor xml:id={quoteattr(cast(str, id))} />"
-        return ""
+        if id := cast(str, token.attrs.get('id', '')):
+            id = f'xml:id={quoteattr(id)}' if id else ''
+        return f'<example {id}>'
     def example_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        return ""
+        return "</example>"
+    def example_title_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "<title>"
+    def example_title_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "</title>"
 
     def _close_headings(self, level: Optional[int]) -> str:
         # we rely on markdown-it producing h{1..6} tags in token.tag for this to work

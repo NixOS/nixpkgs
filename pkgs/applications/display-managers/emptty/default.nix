@@ -12,13 +12,13 @@
 }:
 buildGoModule rec {
   pname = "emptty-unwrapped";
-  version = "0.9.1";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "tvrzna";
     repo = pname;
-    rev = "18de1cefcbff00e3468abe5573a2af2d848e7553";
-    sha256 = "0jzhcbw1ckpsmmxm2g51lvkspsrl7lkn9xfifkk97mvm22qs4p49";
+    rev = "v${version}";
+    hash = "sha256-8JVF3XNNzmcaJCINnv8B6l2IB5c8q/AvGOzwAlIFYq8=";
   };
 
   buildInputs =

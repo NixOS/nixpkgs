@@ -2,7 +2,7 @@
 , stdenv
 , pkgs
 , fetchFromGitHub
-, fetchpatch
+, fetchurl
 , which
 , openssh
 , gcc
@@ -23,35 +23,44 @@
 assert blas.isILP64 == lapack.isILP64;
 
 let
-  versionGA = "5.7.2"; # Fixed by nwchem
+  versionGA = "5.8.2"; # Fixed by nwchem
 
-  ga_src = fetchFromGitHub {
+  gaSrc = fetchFromGitHub {
     owner = "GlobalArrays";
     repo = "ga";
     rev = "v${versionGA}";
-    sha256 = "0c1y9a5jpdw9nafzfmvjcln1xc2gklskaly0r1alm18ng9zng33i";
+    hash = "sha256-2ffQIg9topqKX7ygnWaa/UunL9d0Lj9qr9xucsjLuoY=";
+  };
+
+  dftd3Src = fetchurl {
+    url = "https://www.chemiebn.uni-bonn.de/pctc/mulliken-center/software/dft-d3/dftd3.tgz";
+    hash = "sha256-2Xz5dY9hqoH9hUJUSPv0pujOB8EukjZzmDGjrzKID1k=";
+  };
+
+  versionLibxc = "6.1.0";
+  libxcSrc = fetchurl {
+    url = "https://gitlab.com/libxc/libxc/-/archive/${versionLibxc}/libxc-${versionLibxc}.tar.gz";
+    hash = "sha256-9ZN0X6R+v7ndxGeqr9wvoSdfDXJQxpLOl2E4mpDdjq8=";
+  };
+
+  plumedSrc = fetchFromGitHub {
+    owner = "edoapra";
+    repo = "plumed2";
+    rev = "e7c908da50bde1c6399c9f0e445d6ea3330ddd9b";
+    hash = "sha256-CNlb6MTEkD977hj3xonYqZH1/WlQ1EdVD7cvL//heRM=";
   };
 
 in
 stdenv.mkDerivation rec {
   pname = "nwchem";
-  version = "7.0.2";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "nwchemgit";
     repo = "nwchem";
     rev = "v${version}-release";
-    sha256 = "1ckhcjaw1hzdsmm1x2fva27c4rs3r0h82qivg72v53idz880hbp3";
+    hash = "sha256-/biwHOSMGpdnYRGrGlDounKKLVaG2XkBgCmpE0IKR/Y=";
   };
-
-  patches = [
-    # Fix Python 3.10 compatibility
-    (fetchpatch {
-      name = "python3.10";
-      url = "https://github.com/nwchemgit/nwchem/commit/638401361c6f294164a4f820ff867a62ac836fd5.patch";
-      sha256 = "sha256-yUZb3wWYZm1dX0HwvffksFwhVdb7ix1p8ooJnqiSgEg=";
-    })
-  ];
 
   nativeBuildInputs = [
     perl
@@ -73,8 +82,17 @@ stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ mpi ];
 
   postUnpack = ''
-    cp -r ${ga_src}/ source/src/tools/ga-${versionGA}
+    # These run 'configure' in source tree and
+    # require a writable directory
+    cp -r ${gaSrc}/ source/src/tools/ga-${versionGA}
     chmod -R u+w source/src/tools/ga-${versionGA}
+
+    cp -r ${plumedSrc} source/src/libext/plumed/plumed2
+    chmod -R u+w source/src/libext/plumed/plumed2
+
+    # Provide tarball in expected location
+    ln -s ${dftd3Src} source/src/nwpw/nwpwlib/nwpwxc/dftd3.tgz
+    ln -s ${libxcSrc} source/src/libext/libxc/libxc-${versionLibxc}.tar.gz
   '';
 
   postPatch = ''
@@ -119,6 +137,8 @@ stdenv.mkDerivation rec {
     export EACCSD="y"
     export IPCCSD="y"
 
+    export CCSDTQ="y"
+
     export NWCHEM_TOP="$(pwd)"
 
     runHook postConfigure
@@ -127,7 +147,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   preBuild = ''
-    ln -s ${ga_src} src/tools/ga-${versionGA}.tar.gz
+    ln -s ${gaSrc} src/tools/ga-${versionGA}.tar.gz
     cd src
     make nwchem_config
     ${lib.optionalString (!blas.isILP64) "make 64_to_32"}

@@ -14,18 +14,18 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "peertube";
-  version = "5.0.0";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "Chocobozzz";
     repo = "PeerTube";
     rev = "v${version}";
-    hash = "sha256-Z2l0I/vVEx4ivC87N26QaUnQjySU/XRFW3biEwl7Od0=";
+    hash = "sha256-C9mBF+QymGXyBB3IFX6MNgsZpHk739qv1/DLuvzrTaU=";
   };
 
   yarnOfflineCacheServer = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-EVviTrgSZYsi68hJIlSC9ArQS3aVp6EQNKbkVx12WJk=";
+    hash = "sha256-W+pX2XO27j6qAVxvo+Xf1h7g3V0LUMtwNf+meZmkgwE=";
   };
 
   yarnOfflineCacheTools = fetchYarnDeps {
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
 
   yarnOfflineCacheClient = fetchYarnDeps {
     yarnLock = "${src}/client/yarn.lock";
-    hash = "sha256-ehA1W1bDXzApTpkWH7MEAQ9Ek73q3En76/LdvJhxh2Q=";
+    hash = "sha256-TAv8QAAfT3q28jUo26h0uCGsoqBzAn8lybIaqNAApU8=";
   };
 
   nativeBuildInputs = [ brotli fixup_yarn_lock jq nodejs which yarn ];
@@ -123,6 +123,6 @@ in stdenv.mkDerivation rec {
     license = licenses.agpl3Plus;
     homepage = "https://joinpeertube.org/";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ immae izorkin matthiasbeyer mohe2015 stevenroose ];
+    maintainers = with maintainers; [ immae izorkin mohe2015 stevenroose ];
   };
 }

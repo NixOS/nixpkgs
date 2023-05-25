@@ -1,12 +1,9 @@
 { lib, stdenv, fetchurl, buildPackages, perl, coreutils, fetchFromGitHub
+, makeWrapper
 , withCryptodev ? false, cryptodev
 , enableSSL2 ? false
 , enableSSL3 ? false
 , static ? stdenv.hostPlatform.isStatic
-# Used to avoid cross compiling perl, for example, in darwin bootstrap tools.
-# This will cause c_rehash to refer to perl via the environment, but otherwise
-# will produce a perfectly functional openssl binary and library.
-, withPerl ? stdenv.hostPlatform == stdenv.buildPlatform
 , removeReferencesTo
 }:
 
@@ -52,11 +49,8 @@ stdenv.mkDerivation rec {
     !(stdenv.hostPlatform.useLLVM or false) &&
     stdenv.cc.isGNU;
 
-  nativeBuildInputs = [ perl removeReferencesTo ];
-  buildInputs = lib.optional withCryptodev cryptodev
-    # perl is included to allow the interpreter path fixup hook to set the
-    # correct interpreter in c_rehash.
-    ++ lib.optional withPerl perl;
+  nativeBuildInputs = [ makeWrapper perl removeReferencesTo ];
+  buildInputs = lib.optional withCryptodev cryptodev;
 
   # TODO(@Ericson2314): Improve with mass rebuild
   configurePlatforms = [];
@@ -140,22 +134,17 @@ stdenv.mkDerivation rec {
     if [ -n "$(echo $out/lib/*.so $out/lib/*.dylib $out/lib/*.dll)" ]; then
         rm "$out/lib/"*.a
     fi
-  '') + lib.optionalString (!stdenv.hostPlatform.isWindows)
-    # Fix bin/c_rehash's perl interpreter line
-    #
-    # - openssl 1_0_2: embeds a reference to buildPackages.perl
-    # - openssl 1_1:   emits "#!/usr/bin/env perl"
-    #
-    # In the case of openssl_1_0_2, reset the invalid reference and let the
-    # interpreter hook take care of it.
-    #
-    # In both cases, if withPerl = false, the intepreter line is expected be
-    # "#!/usr/bin/env perl"
-  ''
-    substituteInPlace $out/bin/c_rehash --replace ${buildPackages.perl}/bin/perl "/usr/bin/env perl"
-  '' + ''
+  '') + ''
     mkdir -p $bin
     mv $out/bin $bin/bin
+
+    # c_rehash is a legacy perl script with the same functionality
+    # as `openssl rehash`
+    # this wrapper script is created to maintain backwards compatibility without
+    # depending on perl
+    makeWrapper $bin/bin/openssl $bin/bin/c_rehash \
+      --add-flags "rehash"
+
     mkdir $dev
     mv $out/include $dev/
     # remove dependency on Perl at runtime

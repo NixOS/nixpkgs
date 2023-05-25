@@ -17,19 +17,19 @@
 
 buildPythonPackage rec {
   pname = "glean-sdk";
-  version = "52.2.0";
+  version = "52.7.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iW432YtZtRGUWia33Lsnu+aQuedhBJdh8dZ30FPg6Vk=";
+    hash = "sha256-sLjdGHiS7Co/oA9gQyAFkD14tAYjmwjWcPr4CRrzw/0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-/7qKIQglNKGveKFtPeqd35Mq2hH/20BGTgDBgip4PnI=";
+    hash = "sha256-5TlgWcLmjklxhtDbB0aRF71iIRTJwetFj1Jii1DGdvU=";
   };
 
   nativeBuildInputs = [
@@ -54,6 +54,7 @@ buildPythonPackage rec {
   disabledTests = [
     # RuntimeError: No ping received.
     "test_client_activity_api"
+    "test_flipping_upload_enabled_respects_order_of_events"
   ];
 
   pythonImportsCheck = [

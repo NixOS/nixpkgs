@@ -1,16 +1,16 @@
 { lib
+, authlib
 , buildPythonPackage
 , fetchFromGitHub
 , pkce
 , pytestCheckHook
 , pythonOlder
-, requests-oauthlib
 , simplejson
 }:
 
 buildPythonPackage rec {
   pname = "pyvicare";
-  version = "2.25.0";
+  version = "2.28.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,27 +18,27 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "somm15";
     repo = "PyViCare";
-    rev = version;
-    hash = "sha256-OZvYl8wl8kOIOfsWVn74XFKMX/jAmtoMTIEQpAZmTeo=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-6tyFSKD8Igai9A5wn7vRJdTryy+lv2MkxaskNpCwqV8=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  propagatedBuildInputs = [
-    requests-oauthlib
-    simplejson
-    pkce
-  ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "version_config=True," 'version="${version}",' \
       --replace "'setuptools-git-versioning<1.8.0'" ""
   '';
+
+  propagatedBuildInputs = [
+    authlib
+    pkce
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    simplejson
+  ];
 
   pythonImportsCheck = [
     "PyViCare"

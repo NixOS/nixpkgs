@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Dobiasd/FunctionalPlus";
     license = licenses.boost;
     platforms = platforms.all;
-    maintainers = with maintainers; [ candyc1oud ];
+    maintainers = [];
   };
 }

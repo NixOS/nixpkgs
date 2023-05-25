@@ -23,6 +23,10 @@ buildPythonPackage rec {
       url = "https://github.com/bayespy/bayespy/commit/9be53bada763e19c2b6086731a6aa542ad33aad0.patch";
       hash = "sha256-KYt/0GcaNWR9K9/uS2OXgK7g1Z+Bayx9+IQGU75Mpuo=";
     })
+
+    # Fix deprecated numpy types
+    # https://sources.debian.org/src/python-bayespy/0.5.22-5/debian/patches/pr127-Fix-deprecated-numpy-types.patch/
+    ./pr127-Fix-deprecated-numpy-types.patch
   ];
 
   nativeCheckInputs = [ pytestCheckHook nose glibcLocales ];

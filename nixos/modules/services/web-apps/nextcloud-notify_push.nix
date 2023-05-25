@@ -2,6 +2,7 @@
 
 let
   cfg = config.services.nextcloud.notify_push;
+  cfgN = config.services.nextcloud;
 in
 {
   options.services.nextcloud.notify_push = {
@@ -25,6 +26,16 @@ in
       default = "error";
       description = lib.mdDoc "Log level";
     };
+
+    bendDomainToLocalhost = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Whether to add an entry to `/etc/hosts` for the configured nextcloud domain to point to `localhost` and add `localhost `to nextcloud's `trusted_proxies` config option.
+
+        This is useful when nextcloud's domain is not a static IP address and when the reverse proxy cannot be bypassed because the backend connection is done via unix socket.
+      '';
+    };
   } // (
     lib.genAttrs [
       "dbtype"
@@ -44,11 +55,14 @@ in
 
   config = lib.mkIf cfg.enable {
     systemd.services.nextcloud-notify_push = let
-      nextcloudUrl = "http${lib.optionalString config.services.nextcloud.https "s"}://${config.services.nextcloud.hostName}";
+      nextcloudUrl = "http${lib.optionalString cfgN.https "s"}://${cfgN.hostName}";
     in {
       description = "Push daemon for Nextcloud clients";
       documentation = [ "https://github.com/nextcloud/notify_push" ];
-      after = [ "phpfpm-nextcloud.service" ];
+      after = [
+        "phpfpm-nextcloud.service"
+        "redis-nextcloud.service"
+      ];
       wantedBy = [ "multi-user.target" ];
       environment = {
         NEXTCLOUD_URL = nextcloudUrl;
@@ -57,7 +71,7 @@ in
         LOG = cfg.logLevel;
       };
       postStart = ''
-        ${config.services.nextcloud.occ}/bin/nextcloud-occ notify_push:setup ${nextcloudUrl}/push
+        ${cfgN.occ}/bin/nextcloud-occ notify_push:setup ${nextcloudUrl}/push
       '';
       script = let
         dbType = if cfg.dbtype == "pgsql" then "postgresql" else cfg.dbtype;
@@ -76,7 +90,7 @@ in
         export DATABASE_PASSWORD="$(<"${cfg.dbpassFile}")"
       '' + ''
         export DATABASE_URL="${dbUrl}"
-        ${cfg.package}/bin/notify_push --glob-config '${config.services.nextcloud.datadir}/config/config.php'
+        ${cfg.package}/bin/notify_push '${cfgN.datadir}/config/config.php'
       '';
       serviceConfig = {
         User = "nextcloud";
@@ -87,10 +101,23 @@ in
       };
     };
 
-    services.nginx.virtualHosts.${config.services.nextcloud.hostName}.locations."^~ /push/" = {
-      proxyPass = "http://unix:${cfg.socketPath}";
-      proxyWebsockets = true;
-      recommendedProxySettings = true;
+    networking.hosts = lib.mkIf cfg.bendDomainToLocalhost {
+      "127.0.0.1" = [ cfgN.hostName ];
+      "::1" = [ cfgN.hostName ];
     };
+
+    services = lib.mkMerge [
+      {
+        nginx.virtualHosts.${cfgN.hostName}.locations."^~ /push/" = {
+          proxyPass = "http://unix:${cfg.socketPath}";
+          proxyWebsockets = true;
+          recommendedProxySettings = true;
+        };
+      }
+
+      (lib.mkIf cfg.bendDomainToLocalhost {
+        nextcloud.extraOptions.trusted_proxies = [ "127.0.0.1" "::1" ];
+      })
+    ];
   };
 }

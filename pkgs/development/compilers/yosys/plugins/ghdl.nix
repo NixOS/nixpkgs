@@ -12,6 +12,7 @@ stdenv.mkDerivation {
   pname = "yosys-ghdl";
   # This is not the latest commit, but it's the latest that builds with current stable ghdl 2.0.0
   version = "2022.01.11";
+  plugin = "ghdl";
 
   src = fetchFromGitHub {
     owner  = "ghdl";

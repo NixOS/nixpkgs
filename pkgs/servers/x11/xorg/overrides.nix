@@ -164,6 +164,7 @@ self: super:
   });
 
   xdm = super.xdm.overrideAttrs (attrs: {
+    patches = (attrs.patches or []) ++ [ ./xdm-fix-header-inclusion.patch ];
     buildInputs = attrs.buildInputs ++ [ libxcrypt ];
     configureFlags = attrs.configureFlags or [] ++ [
       "ac_cv_path_RAWCPP=${stdenv.cc.targetPrefix}cpp"
@@ -331,6 +332,13 @@ self: super:
   });
 
   libpciaccess = super.libpciaccess.overrideAttrs (attrs: {
+    patches = attrs.patches or [] ++ [
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/xorg/lib/libpciaccess/-/commit/833c86ce15cee2a84a37ae71015f236fd32615d9.patch";
+        hash = "sha256-6koQV+Vse7/OWwuWYrWmBUebHBT+5F32Kkn9V9j+m+Q=";
+      })
+    ];
+
     buildInputs = lib.optionals stdenv.hostPlatform.isNetBSD (with netbsd; [ libarch libpci ]);
 
     meta = attrs.meta // {
@@ -762,7 +770,14 @@ self: super:
             sha256 = "0zm9g0g1jvy79sgkvy0rjm6ywrdba2xjd1nsnjbxjccckbr6i396";
             name = "revert-fb-changes-2.patch";
           })
+          ./darwin/bundle_main.patch
+          ./darwin/stub.patch
         ];
+
+        postPatch = attrs.postPatch + ''
+          substituteInPlace hw/xquartz/mach-startup/stub.c \
+            --subst-var-by XQUARTZ_APP "$out/Applications/XQuartz.app"
+        '';
 
         configureFlags = [
           # note: --enable-xquartz is auto
@@ -773,6 +788,9 @@ self: super:
           "--with-apple-applications-dir=\${out}/Applications"
           "--with-bundle-id-prefix=org.nixos.xquartz"
           "--with-sha1=CommonCrypto"
+          "--with-xkb-bin-directory=${xorg.xkbcomp}/bin"
+          "--with-xkb-path=${xorg.xkeyboardconfig}/share/X11/xkb"
+          "--with-xkb-output=$out/share/X11/xkb/compiled"
           "--without-dtrace" # requires Command Line Tools for Xcode
         ];
         preConfigure = ''

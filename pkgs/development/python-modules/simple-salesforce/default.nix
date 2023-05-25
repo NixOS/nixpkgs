@@ -4,6 +4,7 @@
 , authlib
 , requests
 , nose
+, pyjwt
 , pythonOlder
 , pytz
 , responses
@@ -26,6 +27,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     authlib
+    pyjwt
     requests
     zeep
   ];
@@ -42,9 +44,14 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+  pythonImportsCheck = [
+    "simple_salesforce"
+  ];
+
   meta = with lib; {
     description = "A very simple Salesforce.com REST API client for Python";
     homepage = "https://github.com/simple-salesforce/simple-salesforce";
+    changelog = "https://github.com/simple-salesforce/simple-salesforce/blob/v${version}/CHANGES";
     license = licenses.asl20;
     maintainers = with maintainers; [ costrouc ];
   };

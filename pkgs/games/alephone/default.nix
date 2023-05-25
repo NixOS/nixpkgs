@@ -39,6 +39,7 @@ let
     ];
 
     configureFlags = [ "--with-boost=${boost}" ];
+    makeFlags = [ "AR:=$(AR)" ];
 
     enableParallelBuilding = true;
 

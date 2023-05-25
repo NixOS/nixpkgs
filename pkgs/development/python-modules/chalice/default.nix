@@ -16,6 +16,7 @@
 , requests
 , setuptools
 , six
+, typing-extensions
 , watchdog
 , websocket-client
 , wheel
@@ -23,21 +24,22 @@
 
 buildPythonPackage rec {
   pname = "chalice";
-  version = "1.27.3";
+  version = "1.28.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-izzoYxzkaQqcEM5e8BhZeZIxtAGRDNH/qvqwvrx250s=";
+    hash = "sha256-m3pSD4fahBW6Yt/w07Co4fTZD7k6as5cPwoK5QSry6M=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "attrs>=19.3.0,<21.5.0" "attrs" \
       --replace "inquirer>=2.7.0,<3.0.0" "inquirer" \
-      --replace "pip>=9,<22.3" "pip" \
+      --replace "pip>=9,<23.1" "pip" \
   '';
 
   propagatedBuildInputs = [
@@ -51,6 +53,7 @@ buildPythonPackage rec {
     pyyaml
     setuptools
     six
+    typing-extensions
     wheel
     watchdog
   ];
@@ -87,13 +90,20 @@ buildPythonPackage rec {
     # https://github.com/aws/chalice/issues/1850
     "test_resolve_endpoint"
     "test_endpoint_from_arn"
+    # Tests require dist
+    "test_setup_tar_gz_hyphens_in_name"
+    "test_both_tar_gz"
+    "test_both_tar_bz2"
   ];
 
-  pythonImportsCheck = [ "chalice" ];
+  pythonImportsCheck = [
+    "chalice"
+  ];
 
   meta = with lib; {
     description = "Python Serverless Microframework for AWS";
     homepage = "https://github.com/aws/chalice";
+    changelog = "https://github.com/aws/chalice/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ costrouc ];
   };

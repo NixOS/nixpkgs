@@ -254,6 +254,11 @@ rec {
     meta = with lib; {
       homepage = "https://www.docker.com/";
       description = "An open source project to pack, ship and run any application as a lightweight container";
+      longDescription = ''
+        Docker is a platform designed to help developers build, share, and run modern applications.
+
+        To enable the docker daemon on NixOS, set the `virtualisation.docker.enable` option to `true`.
+      '';
       license = licenses.asl20;
       maintainers = with maintainers; [ offline tailhook vdemeester periklis mikroskeem maxeaubrey ];
     };

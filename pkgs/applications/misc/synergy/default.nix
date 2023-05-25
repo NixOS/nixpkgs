@@ -37,13 +37,13 @@
 
 stdenv.mkDerivation rec {
   pname = "synergy";
-  version = "1.14.5.22";
+  version = "1.14.6.19-stable";
 
   src = fetchFromGitHub {
     owner = "symless";
     repo = "synergy-core";
     rev = version;
-    sha256 = "sha256-rqQ4n8P8pZSWRCxaQLa2PuduXMt2XeaFs051qcT3/o8=";
+    sha256 = "sha256-0QqklfSsvcXh7I2jaHk82k0nY8gQOj9haA4WOjGqBqY=";
     fetchSubmodules = true;
   };
 

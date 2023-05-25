@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , makeWrapper
 , meson
 , ninja
@@ -21,21 +20,14 @@
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-wlr";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-UztkfvMIbslPd/d262NZFb6WfESc9nBsSSH96BA4Aqw=";
+    sha256 = "sha256-EwBHkXFEPAEgVUGC/0e2Bae/rV5lec1ttfbJ5ce9cKw=";
   };
-
-  # scdoc: mark as build-time dependency
-  # https://github.com/emersion/xdg-desktop-portal-wlr/pull/248
-  patches = [(fetchpatch {
-    url = "https://github.com/emersion/xdg-desktop-portal-wlr/commit/92ccd62428082ba855e359e83730c4370cd1aac7.patch";
-    hash = "sha256-mU1whfp7BoSylaS3y+YwfABImZFOeuItSXCon0C7u20=";
-  })];
 
   strictDeps = true;
   depsBuildBuild = [ pkg-config ];

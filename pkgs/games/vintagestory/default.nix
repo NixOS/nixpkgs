@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "vintagestory";
-  version = "1.17.10";
+  version = "1.17.11";
 
   src = fetchurl {
     url = "https://cdn.vintagestory.at/gamefiles/stable/vs_archive_${version}.tar.gz";
-    sha256 = "sha256-1HsWby4Jf+ndE9xsDrS+vELymDedRwSgNiCDLoiPBec=";
+    sha256 = "sha256-iIQRwnJX+7GJcOqXJutInqpSX2fKlPmwFFAq6TqNWWY=";
   };
 
   nativeBuildInputs = [ makeWrapper copyDesktopItems ];

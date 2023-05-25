@@ -11,13 +11,17 @@
 , java-service-wrapper
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "i2p";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchurl {
-    url = "https://files.i2p-projekt.de/${version}/i2psource_${version}.tar.bz2";
-    sha256 = "sha256-gwmMEncgTFVpKEsys37xN2VrJ7/hXvkD7KLafCaSiNE=";
+    urls = map (mirror: "${mirror}/${finalAttrs.version}/i2psource_${finalAttrs.version}.tar.bz2") [
+      "https://download.i2p2.de/releases"
+      "https://files.i2p-projekt.de"
+      "https://download.i2p2.no/releases"
+    ];
+    sha256 = "sha256-5LoGpuKTWheZDwV6crjXnkUqJVamzv5QEtXdY0Zv7r8=";
   };
 
   buildInputs = [ jdk ant gettext which ];
@@ -64,4 +68,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ joelmo ];
   };
-}
+})

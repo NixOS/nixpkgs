@@ -6,6 +6,7 @@
 , swiftpm2nix
 , Foundation
 , XCTest
+, pkg-config
 , sqlite
 , ncurses
 , CryptoKit
@@ -31,6 +32,7 @@ stdenv.mkDerivation {
   buildInputs = [
     Foundation
     XCTest
+    pkg-config
     sqlite
     ncursesInput
   ]

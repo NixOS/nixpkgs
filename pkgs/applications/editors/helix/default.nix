@@ -1,27 +1,33 @@
-{ fetchzip, lib, rustPlatform, installShellFiles, makeWrapper }:
+{ fetchFromGitHub, lib, rustPlatform, installShellFiles, makeWrapper, callPackage }:
 
-rustPlatform.buildRustPackage rec {
-  pname = "helix";
-  version = "22.12";
+let
+  version = "23.05";
 
-  # This release tarball includes source code for the tree-sitter grammars,
-  # which is not ordinarily part of the repository.
-  src = fetchzip {
-    url = "https://github.com/helix-editor/helix/releases/download/${version}/helix-${version}-source.tar.xz";
-    sha256 = "sha256-En6SOyAPNPPzDGdm2XTjbGG0NQFGBVzjjoyCbdnHFao=";
-    stripRoot = false;
+  src = fetchFromGitHub {
+    owner = "helix-editor";
+    repo = "helix";
+    rev = "${version}";
+    hash = "sha256-Ws9uWtZLvTwL5HNonFr4YwyPoTU8QlCvhs6IJ92aLDw=";
   };
 
-  cargoSha256 = "sha256-oSS0LkLg2JSRLYoF0+FVQzFUJtFuVKtU2MWYenmFC0s=";
+  grammars = callPackage ./grammars.nix { };
+in rustPlatform.buildRustPackage {
+  inherit src version;
+
+  pname = "helix";
+  # This release tarball includes source code for the tree-sitter grammars,
+  # which is not ordinarily part of the repository.
+  cargoSha256 = "sha256-/LCtfyDAA2JuioBD/CDMv6OOxM0B9A3PpuVP/YY5oF0=";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
   postInstall = ''
-    # not needed at runtime
-    rm -r runtime/grammars/sources
+    # We self build the grammar files
+    rm -r runtime/grammars
 
     mkdir -p $out/lib
     cp -r runtime $out/lib
+    ln -s ${grammars} $out/lib/runtime/grammars
     installShellCompletion contrib/completion/hx.{bash,fish,zsh}
     mkdir -p $out/share/{applications,icons/hicolor/256x256/apps}
     cp contrib/Helix.desktop $out/share/applications
@@ -31,11 +37,16 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/hx --set HELIX_RUNTIME $out/lib/runtime
   '';
 
+  # disable fetching and building of tree-sitter grammars in favor of the custom build process in ./grammars.nix
+  env.HELIX_DISABLE_AUTO_GRAMMAR_BUILD = "1";
+
+  passthru.updateScript = ./update.py;
+
   meta = with lib; {
     description = "A post-modern modal text editor";
     homepage = "https://helix-editor.com";
     license = licenses.mpl20;
     mainProgram = "hx";
-    maintainers = with maintainers; [ danth yusdacra ];
+    maintainers = with maintainers; [ danth yusdacra zowoq ];
   };
 }

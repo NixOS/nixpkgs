@@ -1,5 +1,6 @@
 { lib, fetchgit, fetchzip }:
 
+lib.makeOverridable (
 { owner, repo, rev, name ? "source"
 , fetchSubmodules ? false, leaveDotGit ? null
 , deepClone ? false, private ? false, forceFetchGit ? false
@@ -60,3 +61,4 @@ let
 in
 
 fetcher fetcherArgs // { meta = newMeta; inherit rev owner repo; }
+)

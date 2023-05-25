@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ libdeflate libpng libtiff zlib lcms2 ]
+  buildInputs = [ libpng libtiff zlib lcms2 ]
     ++ lib.optionals jpipServerSupport [ curl fcgi ]
     ++ lib.optional (jpipLibSupport) jdk;
 

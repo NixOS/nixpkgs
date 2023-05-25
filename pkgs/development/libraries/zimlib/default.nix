@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zimlib";
-  version = "7.2.2";
+  version = "8.2.0";
 
   src = fetchFromGitHub {
     owner = "openzim";
     repo = "libzim";
     rev = version;
-    sha256 = "sha256-AEhhjinnnMA4NbYL7NVHYeRZX/zfNiidbY/VeFjZuQs=";
+    sha256 = "sha256-ab7UUF+I0/xaGChvdjylEQRHLOjmtg/wk+/JEGehGLE=";
   };
 
   testData = fetchzip rec {
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     description = "Library for reading and writing ZIM files";
     homepage =  "https://www.openzim.org/wiki/Zimlib";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ajs124 ];
+    maintainers = with maintainers; [ greg ];
     platforms = platforms.linux;
   };
 }

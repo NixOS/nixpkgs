@@ -245,7 +245,7 @@ in
 
             rm -f www
             ${optionalString cfg.web-ui.enable ''
-              ln -s ${cfg.web-ui.package}/lib/dist www
+              ln -s ${cfg.web-ui.package}/ www
             ''}
           '';
       };

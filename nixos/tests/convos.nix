@@ -1,14 +1,12 @@
 import ./make-test-python.nix ({ lib, pkgs, ... }:
 
-with lib;
+
 let
   port = 3333;
 in
 {
   name = "convos";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ sgo ];
-  };
+  meta.maintainers = with lib.maintainers; [ sgo ];
 
   nodes = {
     machine =

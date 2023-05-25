@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     zlib
     liblangtag
   ];
-  # Boost 1.59 compatability fix
+  # Boost 1.59 compatibility fix
   # Attempt removing when updating
   postPatch = ''
     sed -i 's,^CPPFLAGS.*,\0 -DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED,' src/lib/Makefile.in

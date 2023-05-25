@@ -21,29 +21,20 @@ let
     in
     nodesList ++ lib.optional (lib.length nodesList == 1 && !lib.elem "machine" nodesList) "machine";
 
-  # TODO: This is an implementation error and needs fixing
-  # the testing famework cannot legitimately restrict hostnames further
-  # beyond RFC1035
-  invalidNodeNames = lib.filter
-    (node: builtins.match "^[A-z_]([A-z0-9_]+)?$" node == null)
-    nodeHostNames;
+  pythonizeName = name:
+    let
+      head = lib.substring 0 1 name;
+      tail = lib.substring 1 (-1) name;
+    in
+      (if builtins.match "[A-z_]" head == null then "_" else head) +
+      lib.stringAsChars (c: if builtins.match "[A-z0-9_]" c == null then "_" else c) tail;
 
   uniqueVlans = lib.unique (builtins.concatLists vlans);
   vlanNames = map (i: "vlan${toString i}: VLan;") uniqueVlans;
-  machineNames = map (name: "${name}: Machine;") nodeHostNames;
+  pythonizedNames = map pythonizeName nodeHostNames;
+  machineNames = map (name: "${name}: Machine;") pythonizedNames;
 
-  withChecks =
-    if lib.length invalidNodeNames > 0 then
-      throw ''
-        Cannot create machines out of (${lib.concatStringsSep ", " invalidNodeNames})!
-        All machines are referenced as python variables in the testing framework which will break the
-        script when special characters are used.
-
-        This is an IMPLEMENTATION ERROR and needs to be fixed. Meanwhile,
-        please stick to alphanumeric chars and underscores as separation.
-      ''
-    else
-      lib.warnIf config.skipLint "Linting is disabled";
+  withChecks = lib.warnIf config.skipLint "Linting is disabled";
 
   driver =
     hostPkgs.runCommand "nixos-test-driver-${config.name}"
@@ -87,7 +78,7 @@ let
         ${testDriver}/bin/generate-driver-symbols
         ${lib.optionalString (!config.skipLint) ''
           PYFLAKES_BUILTINS="$(
-            echo -n ${lib.escapeShellArg (lib.concatStringsSep "," nodeHostNames)},
+            echo -n ${lib.escapeShellArg (lib.concatStringsSep "," pythonizedNames)},
             < ${lib.escapeShellArg "driver-symbols"}
           )" ${hostPkgs.python3Packages.pyflakes}/bin/pyflakes $out/test-script
         ''}

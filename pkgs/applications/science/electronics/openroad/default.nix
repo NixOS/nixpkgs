@@ -9,13 +9,20 @@
 , python3
 , swig4
 , boost17x
+, cbc       # for clp
 , cimg
+, clp       # for or-tools
 , eigen
+, glpk
+, gtest
 , lcov
 , lemon-graph
 , libjpeg
+, or-tools
 , pcre
+, pkg-config
 , qtbase
+, re2       # for or-tools
 , readline
 , spdlog
 , tcl
@@ -27,14 +34,14 @@
 
 mkDerivation rec {
   pname = "openroad";
-  version = "unstable-2022-07-19";
+  version = "unstable-2023-03-31";
 
   src = fetchFromGitHub {
     owner = "The-OpenROAD-Project";
     repo = "OpenROAD";
-    rev = "2610b3953ef62651825d89fb96917cf5d20af0f1";
+    rev = "cd03c5cf8a8eb78c0e07fe33a56b8e9d64672efe";
     fetchSubmodules = true;
-    sha256 = "sha256-BP0JSnxl1XyqHzDY4eITaGHevqd+rbjWZy/LAfDfELs=";
+    hash = "sha256-BWUvFCuWKWQpifErpak03J+A7ni0jZWIrCMhMdKIbD0=";
   };
 
   nativeBuildInputs = [
@@ -43,19 +50,25 @@ mkDerivation rec {
     doxygen
     flex
     git
+    pkg-config
     swig4
   ];
 
   buildInputs = [
     boost17x
+    cbc
     cimg
+    clp
     eigen
+    glpk
     lcov
     lemon-graph
     libjpeg
+    or-tools
     pcre
     python3
     qtbase
+    re2
     readline
     spdlog
     tcl
@@ -63,6 +76,11 @@ mkDerivation rec {
     yosys
     xorg.libX11
     zlib
+  ];
+
+  patches = [
+    ./0001-Fix-string-formatting-in-tests.patch
+    ./0002-Ignore-warning-on-stderr.patch
   ];
 
   postPatch = ''
@@ -74,18 +92,22 @@ mkDerivation rec {
     "-DUSE_SYSTEM_BOOST=ON"
     "-DUSE_CIMG_LIB=ON"
     "-DOPENROAD_VERSION=${src.rev}"
+
+    # 2023-03-31: see discussion on fmt workaround in
+    # https://github.com/The-OpenROAD-Project/OpenROAD/pull/2696
+    "-DCMAKE_CXX_FLAGS=-DFMT_DEPRECATED_OSTREAM"
   ];
 
   # Resynthesis needs access to the Yosys binaries.
   qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ yosys ]}" ];
 
+  checkInputs = [ gtest ];
+
   # Upstream uses vendored package versions for some dependencies, so regression testing is prudent
   # to see if there are any breaking changes in unstable that should be vendored as well.
-  doCheck = false; # Disabled pending upstream release with fix for rcx log file creation.
+  doCheck = true;
   checkPhase = ''
-    # Regression tests must be run from the project root not from within the CMake build directory.
-    cd ..
-    test/regression
+    ../test/regression
   '';
 
   doInstallCheck = true;
