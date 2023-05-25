@@ -283,6 +283,15 @@ in
     meta.mainProgram = "rbprettier";
   };
 
+  prometheus-client-mmap = attrs: {
+    dontBuild = false;
+    postPatch = let
+      getconf = if stdenv.hostPlatform.isGnu then stdenv.cc.libc else getconf;
+    in ''
+      substituteInPlace lib/prometheus/client/page_size.rb --replace "getconf" "${lib.getBin getconf}/bin/getconf"
+    '';
+  };
+
   glib2 = attrs: {
     nativeBuildInputs = [ pkg-config ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
