@@ -14,7 +14,7 @@ import ./make-test-python.nix ({ lib, ... }@args: let
   # Every VS Code server build corresponds to a specific commit of VS Code, so we
   # want this to match the commit of VS Code in Nixpkgs.
   # e.g. git rev-parse 1.77.0
-  rev = "7f329fe6c66b0f86ae1574c2911b681ad5a45d63";
+  rev = "b3e4e68a0bc097f0ae7907b217c1119af9e03435";
   shortRev = builtins.substring 0 8 rev;
 
   # Our tests run without networking so the remote-ssh extension will always fail to
@@ -24,7 +24,7 @@ import ./make-test-python.nix ({ lib, ... }@args: let
     src = pkgs.fetchurl {
       name = "vscode-server-${shortRev}.tar.gz";
       url = "https://update.code.visualstudio.com/commit:${rev}/server-linux-x64/stable";
-      sha256 = "11g234lwl3jn5q3637n9sxz5ghhzqvq137lk42vl2nbb57hgyqgq";
+      sha256 = "1gpsxlv4p3v3kh7b7b2i1lvm5g30xrq1vb7csqwhs4zjlbwfhdb2";
     };
   };
 in {
@@ -39,7 +39,7 @@ in {
       networking.interfaces.eth1.ipv4.addresses = [ { address = serverAddress; prefixLength = 24; } ];
       services.openssh.enable = true;
       users.users.root.openssh.authorizedKeys.keys = [ snakeOilPublicKey ];
-      virtualisation.additionalPaths = [ pkgs.nodejs-14_x pkgs.nodejs-16_x ];
+      virtualisation.additionalPaths = with pkgs; [ patchelf bintools stdenv.cc.cc.lib ];
     };
     client = { ... }: {
       imports = [ ./common/x11.nix ./common/user-account.nix ];
@@ -98,6 +98,8 @@ in {
         # Close the error dialog
         client.send_key("esc")
 
+      # Don't send Ctrl-q too quickly otherwise it might not get sent to VS Code
+      client.sleep(1)
       client.send_key("ctrl-q")
       client.wait_until_fails("pidof code")
 
@@ -123,25 +125,13 @@ in {
     # Move the mouse out of the way
     client.succeed("${pkgs.xdotool}/bin/xdotool mousemove 0 0")
 
-    with subtest("fails to connect when Node is broken"):
-      server.fail("node -v")
+    with subtest("fails to connect when nixpkgs isn't available"):
+      server.fail("nix-build '<nixpkgs>' -A hello")
       connect_with_remote_ssh(screenshot="no_node_installed", should_succeed=False)
-      server.succeed("test -e ~/.vscode-server/bin/*/node")
-      server.fail("~/.vscode-server/bin/*/node -v")
+      server.succeed("test -e ~/.vscode-server/bin/${rev}/node")
+      server.fail("~/.vscode-server/bin/${rev}/node -v")
 
-    with subtest("fails to connect when server has the wrong Node installed"):
-      server.succeed("nix-env -i ${pkgs.nodejs-14_x}")
-      connect_with_remote_ssh(screenshot="wrong_node_installed", should_succeed=False)
-      server.fail("~/.vscode-server/bin/*/node -v")
-
-    with subtest("connects when server has the correct Node installed"):
-      server.succeed("nix-env -i ${pkgs.nodejs-16_x}")
-      connect_with_remote_ssh(screenshot="correct_node_installed", should_succeed=True)
-      server.succeed("~/.vscode-server/bin/*/node -v")
-      server.succeed("kill $(pgrep -f [v]scode-server)")
-      server.succeed("nix-env -e nodejs")
-
-    with subtest("connects when server can build Node from Nixpkgs"):
+    with subtest("connects when server can patch Node"):
       server.succeed("mkdir -p /nix/var/nix/profiles/per-user/root/channels")
       server.succeed("ln -s ${pkgs.path} /nix/var/nix/profiles/per-user/root/channels/nixos")
       connect_with_remote_ssh(screenshot="build_node_with_nix", should_succeed=True)
