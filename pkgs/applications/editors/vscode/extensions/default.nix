@@ -1716,6 +1716,23 @@ let
         };
       };
 
+      julialang.language-julia = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "language-julia";
+          publisher = "julialang";
+          version = "1.47.2";
+          sha246 = "sha256-e8HneuSGO+QVdQgC6TxJkb+igf5te7M7opMGUE8fq5M=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/julialang.language-julia/changelog";
+          description = "Julia Language Support";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=julialang.language-julia";
+          homepage = "https://www.julia-vscode.org";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.hervyqa ];
+        };
+      };
+
       justusadam.language-haskell = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "language-haskell";
