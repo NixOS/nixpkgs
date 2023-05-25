@@ -1101,6 +1101,9 @@ self: super: {
       cp -v embeddedfiles/*.info* $out/share/info/
     '';
   }) super.hledger;
+  hledger_1_29_2 = doDistribute (super.hledger_1_29_2.override {
+    hledger-lib = self.hledger-lib_1_29_2;
+  });
   hledger-ui = overrideCabal (drv: {
     postInstall = ''
       for i in $(seq 1 9); do
