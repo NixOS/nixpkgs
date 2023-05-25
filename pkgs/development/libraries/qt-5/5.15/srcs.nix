@@ -22,6 +22,18 @@ let
 in
 lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
 // {
+  # qtpim has no official releases
+  qtpim = {
+    version = "unstable-2020-11-02";
+    src = fetchFromGitHub {
+      owner = "qt";
+      repo = "qtpim";
+      # Last commit before Qt5 support was broken
+      rev = "f9a8f0fc914c040d48bbd0ef52d7a68eea175a98";
+      hash = "sha256-/1g+vvHjuRLB1vsm41MrHbBZ+88Udca0iEcbz0Q1BNQ=";
+    };
+  };
+
   # Has no kde/5.15 branch
   qtpositioning = rec {
     version = "5.15.2";
