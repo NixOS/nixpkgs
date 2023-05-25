@@ -35211,11 +35211,13 @@ with pkgs;
 
   westonLite = weston.override {
     demoSupport = false;
+    hdrSupport = false;
     pangoSupport = false;
     pipewireSupport = false;
     rdpSupport = false;
     remotingSupport = false;
     vaapiSupport = false;
+    vncSupport = false;
     webpSupport = false;
     xwaylandSupport = false;
   };
