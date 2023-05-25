@@ -5,14 +5,15 @@
 , go
 }:
 
-{ name ? "${args'.pname}-${args'.version}"
-, src
+rattrs:
+
+(stdenv.mkDerivation (finalAttrs: (
+{ src
 , nativeBuildInputs ? [ ]
 , passthru ? { }
-, patches ? [ ]
 
   # A function to override the go-modules derivation
-, overrideModAttrs ? (_oldAttrs: { })
+, overrideModAttrs ? (_finalAttrs: _previousAttrs: { })
 
   # path to go.mod and go.sum directory
 , modRoot ? "./"
@@ -48,52 +49,78 @@
 , goPackagePath ? ""
 
   # needed for buildFlags{,Array} warning
-, buildFlags ? ""
-, buildFlagsArray ? ""
+, buildFlags ? null
+, buildFlagsArray ? null
 
 , ...
-}@args':
+}@args:
+  let
+    hasAnyVendorHash = finalAttrs.vendorHash != null && finalAttrs.vendorHash != "_unset" || finalAttrs.vendorSha256 != null && finalAttrs.vendorSha256 != "_unset";
+  in
+  (removeAttrs args [
+    # These arguments won't be passed down to later overlays
 
-assert goPackagePath != "" -> throw "`goPackagePath` is not needed with `buildGoModule`";
-assert (vendorSha256 == "_unset" && vendorHash == "_unset") -> throw "either `vendorHash` or `vendorSha256` is required";
-assert (vendorSha256 != "_unset" && vendorHash != "_unset") -> throw "both `vendorHash` and `vendorSha256` set. only one can be set.";
+    "overrideModAttrs"
 
-let
-  hasAnyVendorHash = (vendorSha256 != null && vendorSha256 != "_unset") || (vendorHash != null && vendorHash != "_unset");
-  vendorHashType =
-    if hasAnyVendorHash then
-      if vendorSha256 != null && vendorSha256 != "_unset" then
-        "sha256"
-      else
-        "sri"
-    else
-      null;
+    # Syntax sugar to manually specify the corresponding phases
+    # of the `go-modules` sub-derivation.
+    "modConfigurePhase"
+    "modBuildPhase"
+    "modeInstallPhase"
+  ]) // {
+    inherit
+      modRoot
+      vendorHash
+      vendorSha256
+      deleteVendor
+      proxyVendor
+      ;
 
-  args = removeAttrs args' [ "overrideModAttrs" "vendorSha256" "vendorHash" ];
+    # These phases will be shared with the 'go-modules` sub-derivation
+    # so we give them default values if not specified.
+    preUnpack = args.preUnpack or null;
+    unpackPhase = args.unapckPhase or null;
+    postUnpack = args.postUnpack or null;
+    sourceRoot = args.sourceRoot or null;
+    prePatch = args.prePatch or null;
+    patches = args.patches or [ ];
+    patchFlags = args.patchFlags or [ ];
+    patchPhase = args.patchPhase or null;
+    postPatch = args.postPatch or null;
+    preBuild = args.preBuild or null;
+    postBuild = args.postBuild or null;
 
-  go-modules =
-    if (!hasAnyVendorHash) then "" else
-    (stdenv.mkDerivation {
+    # `configurePhase`, `buildPhase` and `checkPhase` attributes can be set,
+    # but their default values are the implementation of this builder,
+    # so leave them unset unless you need to overwrite them.
+    #
+    # If you would like to use `stdenv.mkDerivation`-provided phases,
+    # set the corresponding phases to `null`.
 
-      name = "${name}-go-modules";
+    # Fixed output derivation containing Go modules
+    go-modules = if (!hasAnyVendorHash) then "" else
+    (stdenv.mkDerivation (finalModAttrs: {
 
-      nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ go git cacert ];
+      nativeBuildInputs = finalAttrs.nativeBuildInputs or [ ] ++ [ cacert git go ];
 
-      inherit (args) src;
-      inherit (go) GOOS GOARCH;
+      inherit (finalAttrs) src;
 
       # The following inheritence behavior is not trivial to expect, and some may
       # argue it's not ideal. Changing it may break vendor hashes in Nixpkgs and
       # out in the wild. In anycase, it's documented in:
       # doc/languages-frameworks/go.section.md
-      prePatch = args.prePatch or "";
-      patches = args.patches or [ ];
-      patchFlags = args.patchFlags or [ ];
-      postPatch = args.postPatch or "";
-      preBuild = args.preBuild or "";
-      postBuild = args.modPostBuild or "";
-      sourceRoot = args.sourceRoot or "";
+      inherit (finalAttrs)
+        prePatch
+        patches
+        patchFlags
+        postPatch
+        preBuild
+        sourceRoot
+        ;
 
+      postBuild = args.modPostBuild or null;
+
+      inherit (go) GOOS GOARCH;
       GO111MODULE = "on";
 
       impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
@@ -106,13 +133,13 @@ let
         runHook preConfigure
         export GOCACHE=$TMPDIR/go-cache
         export GOPATH="$TMPDIR/go"
-        cd "${modRoot}"
+        cd "${finalAttrs.modRoot}"
         runHook postConfigure
       '';
 
       buildPhase = args.modBuildPhase or (''
         runHook preBuild
-      '' + lib.optionalString deleteVendor ''
+      '' + lib.optionalString finalAttrs.deleteVendor ''
         if [ ! -d vendor ]; then
           echo "vendor folder does not exist, 'deleteVendor' is not needed"
           exit 10
@@ -125,7 +152,7 @@ let
           exit 10
         fi
 
-        ${if proxyVendor then ''
+        ${if finalAttrs.proxyVendor then ''
           mkdir -p "''${GOPATH}/pkg/mod/cache/download"
           go mod download
         '' else ''
@@ -143,7 +170,7 @@ let
       installPhase = args.modInstallPhase or ''
         runHook preInstall
 
-        ${if proxyVendor then ''
+        ${if finalAttrs.proxyVendor then ''
           rm -rf "''${GOPATH}/pkg/mod/cache/download/sumdb"
           cp -r --reflink=auto "''${GOPATH}/pkg/mod/cache/download" $out
         '' else ''
@@ -161,18 +188,23 @@ let
       dontFixup = true;
 
       outputHashMode = "recursive";
-      outputHashAlgo = if vendorHashType == "sha256" then "sha256" else null;
-      outputHash = if vendorHashType == "sha256" then vendorSha256 else vendorHash;
-    }).overrideAttrs overrideModAttrs;
+      outputHashAlgo = if finalAttrs.vendorSha256 != "_unset" then "sha256" else null;
+      outputHash = if finalAttrs.vendorHash != "_unset" then finalAttrs.vendorHash else finalAttrs.vendorSha256;
+    }
+    // (if (args ? pname && args.pname != "" && args ? version) then {
+      pname = "go-modules-${finalAttrs.pname}";
+      inherit (finalAttrs) version;
+    } else {
+      name = "go-modules-${finalAttrs.name}";
+    }))).overrideAttrs overrideModAttrs;
 
-  package = stdenv.mkDerivation (args // {
-    nativeBuildInputs = [ go ] ++ nativeBuildInputs;
+    nativeBuildInputs = [ go ] ++ args.nativeBuildInputs or [ ];
 
     inherit (go) GOOS GOARCH;
 
     GO111MODULE = "on";
-    GOFLAGS = lib.optionals (!proxyVendor) [ "-mod=vendor" ] ++ lib.optionals (!allowGoReference) [ "-trimpath" ];
     inherit CGO_ENABLED enableParallelBuilding;
+    GOFLAGS = lib.optionals (!finalAttrs.proxyVendor) [ "-mod=vendor" ] ++ lib.optionals (!finalAttrs.allowGoReference) [ "-trimpath" ];
 
     configurePhase = args.configurePhase or (''
       runHook preConfigure
@@ -183,11 +215,11 @@ let
       export GOSUMDB=off
       cd "$modRoot"
     '' + lib.optionalString hasAnyVendorHash ''
-      ${if proxyVendor then ''
-        export GOPROXY=file://${go-modules}
+      ${if finalAttrs.proxyVendor then ''
+        export GOPROXY=file://${finalAttrs.go-modules}
       '' else ''
         rm -rf vendor
-        cp -r --reflink=auto ${go-modules} vendor
+        cp -r --reflink=auto ${finalAttrs.go-modules} vendor
       ''}
     '' + ''
 
@@ -307,16 +339,36 @@ let
 
     strictDeps = true;
 
-    disallowedReferences = lib.optional (!allowGoReference) go;
+    inherit allowGoReference;
+    disallowedReferences = lib.optional (!finalAttrs.allowGoReference) go;
 
-    passthru = passthru // { inherit go go-modules vendorSha256 vendorHash; };
+    passthru = {
+      inherit go;
+    } // passthru;
 
     meta = {
       # Add default meta information
       platforms = go.meta.platforms or lib.platforms.all;
     } // meta;
-  });
-in
-lib.warnIf (buildFlags != "" || buildFlagsArray != "")
-  "Use the `ldflags` and/or `tags` attributes instead of `buildFlags`/`buildFlagsArray`"
-  package
+
+    # For assertions
+    inherit
+      buildFlags
+      buildFlagsArray
+      goPackagePath
+      ;
+  }
+) (if lib.isFunction rattrs then rattrs finalAttrs else rattrs)
+
+)).overrideAttrs (finalAttrs: previousAttrs: {
+  # Assertions
+  go-modules =
+    # Assert that either vendorHash or vendorSha256 is set.
+    assert finalAttrs.vendorHash == "_unset" && finalAttrs.vendorSha256 == "_unset" -> throw
+      "both `vendorHash` and `vendorSha256` set. only one can be set.";
+    assert finalAttrs.goPackagePath != "" -> throw
+      "`goPackagePath` is not needed with `buildGoModule`";
+    lib.warnIf (finalAttrs.buildFlags != null || finalAttrs.buildFlagsArray != null)
+      "Use the `ldflags` and/or `tags` attributes instead of `buildFlags`/`buildFlagsArray`"
+      previousAttrs.go-modules;
+})
