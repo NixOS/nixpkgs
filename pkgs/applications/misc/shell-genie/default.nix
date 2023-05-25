@@ -1,6 +1,6 @@
 { lib
 , python3
-, fetchFromGitHub
+, fetchPypi
 }:
 
 with python3.pkgs;
