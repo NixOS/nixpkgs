@@ -32689,7 +32689,7 @@ with pkgs;
 
   mpvpaper = callPackage ../tools/wayland/mpvpaper { };
 
-  mpvScripts = recurseIntoAttrs {
+  mpvScripts = recurseIntoAttrs ({
     acompressor = callPackage ../applications/video/mpv/scripts/acompressor.nix {};
     autocrop = callPackage ../applications/video/mpv/scripts/autocrop.nix { };
     autodeint = callPackage ../applications/video/mpv/scripts/autodeint.nix { };
@@ -32708,7 +32708,7 @@ with pkgs;
     webtorrent-mpv-hook = callPackage ../applications/video/mpv/scripts/webtorrent-mpv-hook.nix { };
     youtube-quality = callPackage ../applications/video/mpv/scripts/youtube-quality.nix { };
     cutter = callPackage ../applications/video/mpv/scripts/cutter.nix { };
-  };
+  } // (callPackage ../applications/video/mpv/scripts/occivink.nix {}));
 
   open-in-mpv = callPackage ../applications/video/open-in-mpv { };
 
