@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ dpkg makeWrapper autoPatchelfHook wrapGAppsHook ];
 
-  unpackCmd = "mkdir root ; dpkg-deb -x $curSrc root";
-
   dontBuild    = true;
   dontWrapGApps = true; # we only want $gappsWrapperArgs here
 

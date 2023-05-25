@@ -89,8 +89,6 @@ stdenv.mkDerivation rec {
   runtimeDependencies =
     [ (lib.getLib systemd) libnotify libdbusmenu xdg-utils ];
 
-  unpackPhase = "dpkg-deb -x $src .";
-
   installPhase = ''
     runHook preInstall
 

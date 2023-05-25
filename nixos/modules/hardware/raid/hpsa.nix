@@ -17,8 +17,6 @@ let
 
     nativeBuildInputs = [ pkgs.dpkg ];
 
-    unpackPhase = "dpkg -x $src ./";
-
     installPhase = ''
       mkdir -p $out/bin $out/share/doc $out/share/man
       mv opt/hp/hpssacli/bld/{hpssascripting,hprmstr,hpssacli} $out/bin/

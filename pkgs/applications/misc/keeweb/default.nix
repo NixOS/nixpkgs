@@ -90,16 +90,13 @@ else stdenv.mkDerivation {
   inherit pname version src meta;
 
   nativeBuildInputs = [
+    dpkg
     autoPatchelfHook
     wrapGAppsHook
     makeWrapper
   ];
 
   buildInputs = libraries;
-
-  unpackPhase = ''
-    ${dpkg}/bin/dpkg-deb --fsys-tarfile $src | tar --extract
-  '';
 
   installPhase = ''
     runHook preInstall

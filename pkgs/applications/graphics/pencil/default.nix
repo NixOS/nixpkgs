@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, makeWrapper, wrapGAppsHook,
+{ stdenv, fetchurl, lib, makeWrapper, wrapGAppsHook, dpkg,
   # build dependencies
   alsa-lib, atk, at-spi2-atk, at-spi2-core, cairo, cups, dbus, expat, fontconfig,
   freetype, gdk-pixbuf, glib, glibc, gtk3, libuuid, nspr, nss, pango,
@@ -50,15 +50,9 @@ in stdenv.mkDerivation rec {
     sha256 = "01ae54b1a1351b909eb2366c6ec00816e1deba370e58f35601cf7368f10aaba3";
   };
 
-  sourceRoot = ".";
-
-  unpackCmd = ''
-    ar p "$src" data.tar.gz | tar xz
-  '';
-
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook dpkg ];
 
   buildInputs = deps;
 

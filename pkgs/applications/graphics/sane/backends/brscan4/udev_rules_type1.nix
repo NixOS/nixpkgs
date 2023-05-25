@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libsaneUDevRuleNumber ? "49" }:
+{ lib, stdenv, fetchurl, dpkg, libsaneUDevRuleNumber ? "49" }:
 
 stdenv.mkDerivation rec {
   pname = "brother-udev-rule-type1";
@@ -11,10 +11,7 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  unpackPhase = ''
-    ar x $src
-    tar xfvz data.tar.gz
-  '';
+  nativeBuildInputs = [ dpkg ];
 
   /*
     Fix the following error:

@@ -36,8 +36,6 @@ stdenv.mkDerivation rec {
     xorg.libXtst
   ];
 
-  unpackPhase = "dpkg-deb -x $src .";
-
   runtimeDependencies = [
     (lib.getLib systemd)
     # TODO: check if they are required

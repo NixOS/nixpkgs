@@ -43,7 +43,6 @@ stdenv.mkDerivation rec {
     sdcv
     SDL2
   ];
-  unpackCmd = "dpkg-deb -x ${src} .";
 
   dontConfigure = true;
   dontBuild = true;

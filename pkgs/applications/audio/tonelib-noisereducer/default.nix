@@ -43,8 +43,6 @@ stdenv.mkDerivation rec {
     libjack2
   ];
 
-  unpackCmd = "dpkg -x $curSrc source";
-
   installPhase = ''
     mv usr $out
  '';

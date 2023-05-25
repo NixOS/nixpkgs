@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openjdk, glib, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, openjdk, glib, wrapGAppsHook, dpkg }:
 
 stdenv.mkDerivation rec {
   pname = "bluej";
@@ -12,22 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-tOb15wU9OjUt0D8l/JkaGYj84L7HV4FUnQQB5cRAxG0=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook dpkg ];
   buildInputs = [ glib ];
-
-  sourceRoot = ".";
-
-  preUnpack = ''
-    unpackCmdHooks+=(_tryDebData)
-    _tryDebData() {
-      if ! [[ "$1" =~ \.deb$ ]]; then return 1; fi
-      ar xf "$1"
-      if ! [[ -e data.tar.xz ]]; then return 1; fi
-      unpackFile data.tar.xz
-    }
-  '';
-
-  dontWrapGApps = true;
 
   installPhase = ''
     runHook preInstall

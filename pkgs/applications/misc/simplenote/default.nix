@@ -70,8 +70,6 @@ let
 
     buildInputs = atomEnv.packages;
 
-    unpackPhase = "dpkg-deb -x $src .";
-
     installPhase = ''
       mkdir -p "$out/bin"
       cp -R "opt" "$out"

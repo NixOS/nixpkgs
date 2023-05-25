@@ -1,4 +1,4 @@
-{ lib, stdenv, makeDesktopItem, fetchurl, jdk19, wrapGAppsHook, glib }:
+{ lib, stdenv, makeDesktopItem, fetchurl, jdk19, dpkg, wrapGAppsHook, glib }:
 
 stdenv.mkDerivation rec {
   pname = "pdfsam-basic";
@@ -9,12 +9,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-NST5d5dzO26ifKStbgD7qNbumUMQhfUFNE472LR1z5k=";
   };
 
-  unpackPhase = ''
-    ar vx ${src}
-    tar xvf data.tar.gz
-  '';
-
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ dpkg wrapGAppsHook ];
   buildInputs = [ glib ];
 
   preFixup = ''

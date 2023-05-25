@@ -69,12 +69,6 @@ mkDerivation rec {
 
   dontBuild = true;
 
-  unpackPhase = ''
-    # deb file contains a setuid binary, so 'dpkg -x' doesn't work here
-    mkdir deb
-    dpkg --fsys-tarfile ${src} | tar --extract -C deb
-  '';
-
   installPhase =''
     runHook preInstall
 

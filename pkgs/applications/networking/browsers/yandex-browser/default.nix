@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, dpkg
 , autoPatchelfHook
 , wrapGAppsHook
 , flac
@@ -59,6 +60,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    dpkg
     autoPatchelfHook
     wrapGAppsHook
   ];
@@ -110,14 +112,10 @@ stdenv.mkDerivation rec {
     libqt5pas
   ];
 
-  unpackPhase = ''
-    mkdir $TMP/ya/ $out/bin/ -p
-    ar vx $src
-    tar --no-overwrite-dir -xvf data.tar.xz -C $TMP/ya/
-  '';
-
   installPhase = ''
-    cp $TMP/ya/{usr/share,opt} $out/ -R
+    mkdir -p $out
+    cp usr/share/ opt/ $out/ -R
+
     substituteInPlace $out/share/applications/yandex-browser-beta.desktop --replace /usr/ $out/
     ln -sf $out/opt/yandex/browser-beta/yandex_browser $out/bin/yandex-browser
     ln -sf $out/opt/yandex/browser-beta/yandex_browser $out/bin/yandex-browser-beta
@@ -139,8 +137,8 @@ stdenv.mkDerivation rec {
 
     knownVulnerabilities = [
       ''
-      Trusts a Russian government issued CA certificate for some websites.
-      See https://habr.com/en/company/yandex/blog/655185/ (Russian) for details.
+        Trusts a Russian government issued CA certificate for some websites.
+        See https://habr.com/en/company/yandex/blog/655185/ (Russian) for details.
       ''
     ];
   };
