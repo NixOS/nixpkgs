@@ -815,6 +815,36 @@ rec {
         writeDirectReferencesToFile (writeText "string-file" string);
 
 
+  /**
+   * Write the references (i.e. the runtime dependencies in the Nix store) of the elements in `paths' to a file.
+   */
+  writeMultipleReferencesToFile = paths:
+    let
+      # Dump the string content / output paths of all the member of `paths` into a file
+      pathListFile = writeText "path-list" ((builtins.concatStringsSep "\n"
+        # Uniquely sort to prevent unnessesary rebuilds
+        # Use string interpolation instead of `toString`
+        # to interpolate path values and path-like expressions.
+        (lib.unique (builtins.sort builtins.lessThan (map (p: "${p}") paths)))
+      ) + "\n");
+    in
+    # Get the referenecs of pathListFile, but
+    # remove the line containing the path to pathListFile
+    (writeReferencesToFile pathListFile).overrideAttrs (previousAttrs: {
+      name = "multiple-runtime-deps";
+      # Remove the line referencing the `pathListFile`
+      # Add a line feed at the bottom of the string to be replaced
+      # to remove the whole line instead of leaving an empty line.
+      buildCommand = previousAttrs.buildCommand + ''
+        substituteInPlace "$out" --replace ${lib.escapeShellArg "${pathListFile}\n"} ""
+      '';
+      passthru = previousAttrs.passthru or { } // {
+        # For debugging only
+        inherit pathListFile;
+      };
+    });
+
+
   /* Print an error message if the file with the specified name and
     hash doesn't exist in the Nix store. This function should only
     be used by non-redistributable software with an unfree license
