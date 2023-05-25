@@ -15,9 +15,6 @@ stdenvNoCC.mkDerivation rec {
     })
   ];
 
-  # Multiple packages are download in srcs folder
-  # -> need to specify where the unpack phase will `cd` into
-  # use the `srcs` folder as the Root of the unpack phase
   sourceRoot = ".";
 
   nativeBuildInputs = [
