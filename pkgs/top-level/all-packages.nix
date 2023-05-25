@@ -1904,7 +1904,6 @@ with pkgs;
   git-annex-remote-dbx = callPackage ../applications/version-management/git-annex-remote-dbx {
     inherit (python3Packages)
     buildPythonApplication
-    fetchPypi
     dropbox
     annexremote
     humanfriendly;
@@ -1913,7 +1912,6 @@ with pkgs;
   git-annex-remote-googledrive = callPackage ../applications/version-management/git-annex-remote-googledrive {
     inherit (python3Packages)
     buildPythonApplication
-    fetchPypi
     annexremote
     drivelib
     gitpython
@@ -10122,13 +10120,7 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  mirakurun = callPackage ../applications/video/mirakurun {
-    yarn = yarn.override { nodejs = nodejs_16; };
-    inherit (callPackage ../development/tools/yarn2nix-moretea/yarn2nix {
-      nodejs = nodejs_16;
-      yarn = yarn.override { nodejs = nodejs_16; };
-    }) mkYarnPackage;
-  };
+  mirakurun = callPackage ../applications/video/mirakurun { };
 
   miredo = callPackage ../tools/networking/miredo { };
 
@@ -22948,6 +22940,10 @@ with pkgs;
 
   toml-f = callPackage ../development/libraries/toml-f { };
 
+  fypp = python3Packages.callPackage ../development/python-modules/fypp { };
+
+  dbcsr = callPackage ../development/libraries/science/math/dbcsr { };
+
   ## libGL/libGLU/Mesa stuff
 
   # Default libGL implementation, should provide headers and
@@ -28316,6 +28312,8 @@ with pkgs;
     fonts = [ "Inconsolata" ];
   };
 
+  intel-one-mono = callPackage ../data/fonts/intel-one-mono {};
+
   input-fonts = callPackage ../data/fonts/input-fonts { };
 
   inriafonts = callPackage ../data/fonts/inriafonts { };
@@ -32686,7 +32684,7 @@ with pkgs;
 
   mpvpaper = callPackage ../tools/wayland/mpvpaper { };
 
-  mpvScripts = recurseIntoAttrs {
+  mpvScripts = recurseIntoAttrs ({
     acompressor = callPackage ../applications/video/mpv/scripts/acompressor.nix {};
     autocrop = callPackage ../applications/video/mpv/scripts/autocrop.nix { };
     autodeint = callPackage ../applications/video/mpv/scripts/autodeint.nix { };
@@ -32705,7 +32703,7 @@ with pkgs;
     webtorrent-mpv-hook = callPackage ../applications/video/mpv/scripts/webtorrent-mpv-hook.nix { };
     youtube-quality = callPackage ../applications/video/mpv/scripts/youtube-quality.nix { };
     cutter = callPackage ../applications/video/mpv/scripts/cutter.nix { };
-  };
+  } // (callPackage ../applications/video/mpv/scripts/occivink.nix {}));
 
   open-in-mpv = callPackage ../applications/video/open-in-mpv { };
 

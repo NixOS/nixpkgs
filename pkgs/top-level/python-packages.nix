@@ -6082,7 +6082,7 @@ self: super: with self; {
   maya = callPackage ../development/python-modules/maya { };
 
   mayavi = pkgs.libsForQt5.callPackage ../development/python-modules/mayavi {
-    inherit buildPythonPackage pythonOlder fetchPypi;
+    inherit buildPythonPackage pythonOlder;
     inherit (self) pyface pygments numpy packaging vtk traitsui envisage apptools pyqt5;
   };
 

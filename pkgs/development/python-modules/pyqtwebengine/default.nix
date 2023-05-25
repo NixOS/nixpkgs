@@ -1,11 +1,11 @@
-{ lib, stdenv, pythonPackages, pkg-config
+{ lib, stdenv, pythonPackages, fetchPypi, pkg-config
 , qmake, qtbase, qtsvg, qtwebengine
 , wrapQtAppsHook
 , darwin
 }:
 
 let
-  inherit (pythonPackages) buildPythonPackage python isPy27 pyqt5 enum34 sip pyqt-builder;
+  inherit (pythonPackages) buildPythonPackage python isPy27 pyqt5 sip pyqt-builder;
   inherit (darwin) autoSignDarwinBinariesHook;
 in buildPythonPackage rec {
   pname = "PyQtWebEngine";
@@ -14,7 +14,7 @@ in buildPythonPackage rec {
 
   disabled = isPy27;
 
-  src = pythonPackages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "06fc35hzg346a9c86dk7vzm1fakkgzn5l52jfq3bix3587sjip6f";
   };

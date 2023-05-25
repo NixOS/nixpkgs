@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     homepage = "https://owncloud.org";
     maintainers = with maintainers; [ qknight hellwolf ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
     license = licenses.gpl2Plus;
     changelog = "https://github.com/owncloud/client/releases/tag/v${version}";
   };

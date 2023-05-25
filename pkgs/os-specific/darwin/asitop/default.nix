@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchPypi
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -9,7 +10,7 @@ python3.pkgs.buildPythonApplication rec {
 
   disabled = python3.pythonOlder "3.7";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash = "sha256-BNncgQRNAd6Pgur5D1xVQi3LSsijSAYIYvhsuiVyi9Q=";
   };

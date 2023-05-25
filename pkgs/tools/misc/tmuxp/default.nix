@@ -1,4 +1,4 @@
-{ lib, python3Packages, installShellFiles }:
+{ lib, python3Packages, fetchPypi, installShellFiles }:
 
 let
   pypkgs = python3Packages;
@@ -8,7 +8,7 @@ pypkgs.buildPythonApplication rec {
   pname = "tmuxp";
   version = "1.27.0";
 
-  src = pypkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-QAk+rcNYjhAgkJX2fa0bl3dHrB4yyYQ/oNlUX3IQMR8=";
   };

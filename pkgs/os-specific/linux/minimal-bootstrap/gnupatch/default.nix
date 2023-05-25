@@ -95,7 +95,7 @@ kaem.runCommand "${pname}-${version}" {
   ${lib.concatMapStringsSep "\n" (f: "CC -c ${f}") sources}
 
   # Link
-  CC -static -o patch ${lib.concatStringsSep " " objects}
+  CC -o patch ${lib.concatStringsSep " " objects}
 
   # Check
   ./patch --version

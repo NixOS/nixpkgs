@@ -59,7 +59,7 @@ bash.runCommand "${pname}-${version}" {
   ${lib.concatMapStringsSep "\n" (f: "patch -Np0 -i ${f}") patches}
 
   # Configure
-  export CC="tcc -static -B ${tinycc.libs}/lib"
+  export CC="tcc -B ${tinycc.libs}/lib"
   export ac_cv_func_getpgrp_void=yes
   export ac_cv_func_tzset=yes
   bash ./configure \

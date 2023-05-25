@@ -46,7 +46,7 @@ bash.runCommand "${pname}-${version}" {
   cd gzip-${version}
 
   # Configure
-  export CC="tcc -static -B ${tinycc.libs}/lib -Dstrlwr=unused"
+  export CC="tcc -B ${tinycc.libs}/lib -Dstrlwr=unused"
   bash ./configure --prefix=$out
 
   # Build

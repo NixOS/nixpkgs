@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , python3
+, fetchPypi
 , fetchFromBitbucket
 , fetchpatch
 , substituteAll
@@ -12,7 +13,7 @@ let
     packageOverrides = self: super: {
       shapely = super.shapely.overridePythonAttrs (old: rec {
         version = "1.8.4";
-        src = self.fetchPypi {
+        src = fetchPypi {
           pname = "Shapely";
           inherit version;
           hash = "sha256-oZXlHKr6IYKR8suqP+9p/TNTyT7EtlsqRyLEz0DDGYw=";
@@ -30,7 +31,8 @@ let
       });
     };
   };
-in python.pkgs.buildPythonApplication rec {
+in
+python.pkgs.buildPythonApplication rec {
   pname = "flatcam";
   version = "8.5";
 

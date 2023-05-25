@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchPypi
 , fetchFromGitHub
 , withE2BE ? true
 }:
@@ -10,7 +11,7 @@ let
       tulir-telethon = self.telethon.overridePythonAttrs (oldAttrs: rec {
         version = "1.28.0a3";
         pname = "tulir-telethon";
-        src = super.fetchPypi {
+        src = fetchPypi {
           inherit pname version;
           hash = "sha256-N1XQGpjfyUqcT+bsSBxC5Purvnd/+4NzVzMhiaq5yDo=";
         };
