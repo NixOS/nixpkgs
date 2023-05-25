@@ -1,12 +1,16 @@
 { lib, stdenv, fetchurl
 , meson, ninja, pkg-config, python3, wayland-scanner
-, cairo, dbus, lcms2, libdrm, libevdev, libinput, libjpeg, seatd, libxkbcommon
-, mesa, wayland, wayland-protocols
-, pipewire ? null, pango ? null, freerdp ? null
-, libXcursor ? null, libva ? null, libwebp ? null, xwayland ? null
-# beware of null defaults, as the parameters *are* supplied by callPackage by default
-, buildDemo ? true
-, buildRemoting ? true, gst_all_1
+, cairo, dbus, lcms2, libdrm, libevdev, libinput, libjpeg, libxkbcommon, mesa
+, seatd, wayland, wayland-protocols
+
+, demoSupport ? true
+, pangoSupport ? true, pango
+, pipewireSupport ? true, pipewire
+, rdpSupport ? true, freerdp
+, remotingSupport ? true, gst_all_1
+, vaapiSupport ? true, libva
+, webpSupport ? true, libwebp
+, xwaylandSupport ? true, libXcursor, xwayland
 }:
 
 stdenv.mkDerivation rec {
@@ -21,25 +25,28 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ meson ninja pkg-config python3 wayland-scanner ];
   buildInputs = [
-    cairo dbus freerdp lcms2 libXcursor libdrm libevdev libinput libjpeg seatd
-    libva libwebp libxkbcommon mesa pango pipewire wayland wayland-protocols
-  ] ++ lib.optionals buildRemoting [
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-  ];
+    cairo dbus lcms2 libdrm libevdev libinput libjpeg libxkbcommon mesa seatd
+    wayland wayland-protocols
+  ] ++ lib.optional pangoSupport pango
+    ++ lib.optional pipewireSupport pipewire
+    ++ lib.optional rdpSupport freerdp
+    ++ lib.optionals remotingSupport [ gst_all_1.gstreamer gst_all_1.gst-plugins-base ]
+    ++ lib.optional vaapiSupport libva
+    ++ lib.optional webpSupport libwebp
+    ++ lib.optionals xwaylandSupport [ libXcursor xwayland ];
 
   mesonFlags= [
-    "-Dbackend-drm-screencast-vaapi=${lib.boolToString (libva != null)}"
-    "-Dbackend-rdp=${lib.boolToString (freerdp != null)}"
-    "-Dxwayland=${lib.boolToString (xwayland != null)}" # Default is true!
-    (lib.mesonBool "remoting" buildRemoting)
-    "-Dpipewire=${lib.boolToString (pipewire != null)}"
-    "-Dimage-webp=${lib.boolToString (libwebp != null)}"
-    (lib.mesonBool "demo-clients" buildDemo)
-    "-Dsimple-clients="
-    "-Dtest-junit-xml=false"
-  ] ++ lib.optionals (xwayland != null) [
-    "-Dxwayland-path=${xwayland.out}/bin/Xwayland"
+    (lib.mesonBool "backend-drm-screencast-vaapi" vaapiSupport)
+    (lib.mesonBool "backend-rdp" rdpSupport)
+    (lib.mesonBool "demo-clients" demoSupport)
+    (lib.mesonBool "image-webp" webpSupport)
+    (lib.mesonBool "pipewire" pipewireSupport)
+    (lib.mesonBool "remoting" remotingSupport)
+    (lib.mesonOption "simple-clients" "")
+    (lib.mesonBool "test-junit-xml" false)
+    (lib.mesonBool "xwayland" xwaylandSupport)
+  ] ++ lib.optionals xwaylandSupport [
+    (lib.mesonOption "xwayland-path" "${xwayland.out}/bin/Xwayland")
   ];
 
   passthru.providedSessions = [ "weston" ];
