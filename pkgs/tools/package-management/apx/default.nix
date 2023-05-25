@@ -27,6 +27,10 @@ buildGoModule rec {
     installShellFiles
   ];
 
+  postPatch = ''
+    sed -i "s#/etc/apx#$out/etc/apx#g" $(find . -name "*.go")
+  '';
+
   postInstall = ''
     mkdir -p $out/etc/apx
 
