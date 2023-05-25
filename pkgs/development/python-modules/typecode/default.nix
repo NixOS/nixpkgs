@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "typecode";
-  version = "30.0.0";
+  version = "30.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pRGLU/xzQQqDZMIsrq1Fy7VgGIpFjnHtpmO+yL7t4g8=";
+    hash = "sha256-Glc5QiTVr//euymeNTxGN+FVaOEa6cUxHGyGo9bQrJc=";
   };
 
   postPatch = ''
