@@ -16,9 +16,9 @@ import ./make-test-python.nix ({ lib, ... }: {
       };
 
       specialisation.encrypted-root.configuration = {
-        virtualisation.bootDevice = "/dev/mapper/root";
+        virtualisation.rootDevice = "/dev/mapper/root";
         boot.initrd.luks.devices = lib.mkVMOverride {
-          root.device = "/dev/vdc";
+          root.device = "/dev/vdb";
         };
         boot.initrd.systemd.enable = true;
         boot.initrd.network = {
@@ -63,7 +63,7 @@ import ./make-test-python.nix ({ lib, ... }: {
 
     server.wait_for_unit("multi-user.target")
     server.succeed(
-        "echo somepass | cryptsetup luksFormat --type=luks2 /dev/vdc",
+        "echo somepass | cryptsetup luksFormat --type=luks2 /dev/vdb",
         "bootctl set-default nixos-generation-1-specialisation-encrypted-root.conf",
         "sync",
     )
