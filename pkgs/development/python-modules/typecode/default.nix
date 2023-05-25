@@ -25,12 +25,6 @@ buildPythonPackage rec {
     hash = "sha256-Glc5QiTVr//euymeNTxGN+FVaOEa6cUxHGyGo9bQrJc=";
   };
 
-  postPatch = ''
-    # PEP440 support was removed in newer setuptools, https://github.com/nexB/typecode/pull/31
-    substituteInPlace setup.cfg \
-      --replace ">=3.6.*" ">=3.6"
-  '';
-
   dontConfigure = true;
 
   nativeBuildInputs = [
@@ -67,6 +61,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/nexB/typecode";
     changelog = "https://github.com/nexB/typecode/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ];
   };
 }
