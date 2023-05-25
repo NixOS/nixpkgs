@@ -15305,6 +15305,13 @@
     githubId = 20063502;
     name = "Sybrand Aarnoutse";
   };
+  syboxez = {
+    email = "syboxez@gmail.com";
+    matrix = "@Syboxez:matrix.org";
+    github = "syboxez";
+    githubId = 12841859;
+    name = "Syboxez Blank";
+  };
   symphorien = {
     email = "symphorien_nixpkgs@xlumurb.eu";
     matrix = "@symphorien:xlumurb.eu";

@@ -383,7 +383,6 @@ with lib.maintainers; {
     members = [
       cleeyv
       ryantm
-      yuka
     ];
     scope = "Maintain Jitsi.";
     shortName = "Jitsi";
@@ -594,7 +593,6 @@ with lib.maintainers; {
       lilyinstarlight
       marsam
       winter
-      yuka
     ];
     scope = "Maintain Node.js runtimes and build tooling.";
     shortName = "Node.js";

@@ -15,6 +15,7 @@
 , geoip
 , libbsd
 , libiconv
+, libkrb5
 , libmaxminddb
 , libmodsecurity
 , libuuid
@@ -782,6 +783,8 @@ let self = {
       rev = "72c8ee04c81f929ec84d5a6d126f789b77781a8c";
       sha256 = "05rw3a7cv651951li995r5l1yzz6kwkm2xpbd59jsfzd74bw941i";
     };
+
+    inputs = [ libkrb5 ];
 
     meta = with lib; {
       description = "SPNEGO HTTP Authentication Module";

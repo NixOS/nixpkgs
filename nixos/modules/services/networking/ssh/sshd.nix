@@ -569,7 +569,10 @@ in
       '';
 
     assertions = [{ assertion = if cfg.settings.X11Forwarding then cfgc.setXAuthLocation else true;
-                    message = "cannot enable X11 forwarding without setting xauth location";}]
+                    message = "cannot enable X11 forwarding without setting xauth location";}
+                  { assertion = lib.lists.unique (map (x: lib.strings.toLower x) (attrNames cfg.settings))
+                      == (map (x: lib.strings.toLower x) (attrNames cfg.settings));
+                    message = "Duplicate sshd config key; does your capitalization match the option's?"; } ]
       ++ forEach cfg.listenAddresses ({ addr, ... }: {
         assertion = addr != null;
         message = "addr must be specified in each listenAddresses entry";
