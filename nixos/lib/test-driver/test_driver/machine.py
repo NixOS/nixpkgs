@@ -514,7 +514,11 @@ class Machine:
         return "".join(output_buffer)
 
     def execute(
-        self, command: str, check_return: bool = True, timeout: Optional[int] = 900
+        self,
+        command: str,
+        check_return: bool = True,
+        check_output: bool = True,
+        timeout: Optional[int] = 900,
     ) -> Tuple[int, str]:
         self.run_callbacks()
         self.connect()
@@ -534,6 +538,9 @@ class Machine:
 
         assert self.shell
         self.shell.send(out_command.encode())
+
+        if not check_output:
+            return (-2, "")
 
         # Get the output
         output = base64.b64decode(self._next_newline_closed_block_from_shell())
