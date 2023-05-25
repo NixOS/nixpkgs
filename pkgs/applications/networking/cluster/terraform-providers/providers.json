@@ -428,11 +428,11 @@
     "vendorHash": null
   },
   "gitlab": {
-    "hash": "sha256-QH47lBtwlpW9Trb7EAmE9eNEme6PDyKUJ50QevD5GBs=",
+    "hash": "sha256-zNwjTIt7ngDkHd3VpHkA4xKDjsxQ7vJaWtLH4pMl3S0=",
     "homepage": "https://registry.terraform.io/providers/gitlabhq/gitlab",
     "owner": "gitlabhq",
     "repo": "terraform-provider-gitlab",
-    "rev": "v16.0.2",
+    "rev": "v16.0.3",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-KD9X7EOH1btgLtssuz1FFOGtmfNao8HBcKJDty1wtpY="
   },
@@ -810,11 +810,11 @@
     "vendorHash": "sha256-LRIfxQGwG988HE5fftGl6JmBG7tTknvmgpm4Fu1NbWI="
   },
   "oci": {
-    "hash": "sha256-TnCRDWmlyBYOY1lpYP0evguM6wFszZdOdmFsztdbRrc=",
+    "hash": "sha256-RMWKzIsZg9h5COgt1IlpmQQGDpFHwH4ugPZmMULcxgg=",
     "homepage": "https://registry.terraform.io/providers/oracle/oci",
     "owner": "oracle",
     "repo": "terraform-provider-oci",
-    "rev": "v4.121.0",
+    "rev": "v4.122.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
