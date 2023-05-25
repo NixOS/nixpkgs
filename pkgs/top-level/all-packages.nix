@@ -35210,15 +35210,14 @@ with pkgs;
   weechatScripts = recurseIntoAttrs (callPackage ../applications/networking/irc/weechat/scripts { });
 
   westonLite = weston.override {
-    pango = null;
-    freerdp = null;
-    libXcursor = null;
-    libva = null;
-    libwebp = null;
-    xwayland = null;
-    pipewire = null;
-    buildDemo = false;
-    buildRemoting = false;
+    demoSupport = false;
+    pangoSupport = false;
+    pipewireSupport = false;
+    rdpSupport = false;
+    remotingSupport = false;
+    vaapiSupport = false;
+    webpSupport = false;
+    xwaylandSupport = false;
   };
 
   chatterino2 = libsForQt5.callPackage ../applications/networking/instant-messengers/chatterino2 {
