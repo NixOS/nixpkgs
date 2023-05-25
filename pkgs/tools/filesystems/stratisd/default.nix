@@ -76,6 +76,8 @@ stdenv.mkDerivation rec {
     lvm2
   ];
 
+  outputs = ["out" "initrd"];
+
   EXECUTABLES_PATHS = lib.makeBinPath ([
     xfsprogs
     thin-provisioning-tools
@@ -97,6 +99,14 @@ stdenv.mkDerivation rec {
 
   # remove files for supporting dracut
   postInstall = ''
+    mkdir -p "$initrd/bin"
+    cp "dracut/90stratis/stratis-rootfs-setup" "$initrd/bin"
+    mkdir -p "$initrd/lib/systemd/system"
+    substitute "dracut/90stratis/stratisd-min.service" "$initrd/lib/systemd/system/stratisd-min.service" \
+      --replace /usr "$out" \
+      --replace mkdir "${coreutils}/bin/mkdir"
+    mkdir -p "$initrd/lib/udev/rules.d"
+    cp udev/61-stratisd.rules "$initrd/lib/udev/rules.d"
     rm -r "$out/lib/dracut"
     rm -r "$out/lib/systemd/system-generators"
   '';
