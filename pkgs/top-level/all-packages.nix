@@ -35212,8 +35212,7 @@ with pkgs;
   westonLite = weston.override {
     pango = null;
     freerdp = null;
-    libunwind = null;
-    vaapi = null;
+    libXcursor = null;
     libva = null;
     libwebp = null;
     xwayland = null;

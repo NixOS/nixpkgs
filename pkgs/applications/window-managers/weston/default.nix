@@ -1,10 +1,9 @@
 { lib, stdenv, fetchurl
 , meson, ninja, pkg-config, python3, wayland-scanner
-, cairo, colord, dbus, lcms2, libGL, libXcursor, libdrm, libevdev, libinput
-, libjpeg, seatd, libxcb, libxkbcommon, mesa, mtdev, pam, udev, wayland
-, wayland-protocols
-, pipewire ? null, pango ? null, libunwind ? null, freerdp ? null, vaapi ? null
-, libva ? null, libwebp ? null, xwayland ? null
+, cairo, dbus, lcms2, libdrm, libevdev, libinput, libjpeg, seatd, libxkbcommon
+, mesa, wayland, wayland-protocols
+, pipewire ? null, pango ? null, freerdp ? null
+, libXcursor ? null, libva ? null, libwebp ? null, xwayland ? null
 # beware of null defaults, as the parameters *are* supplied by callPackage by default
 , buildDemo ? true
 , buildRemoting ? true, gst_all_1
@@ -22,16 +21,15 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ meson ninja pkg-config python3 wayland-scanner ];
   buildInputs = [
-    cairo colord dbus freerdp lcms2 libGL libXcursor libdrm libevdev libinput
-    libjpeg seatd libunwind libva libwebp libxcb libxkbcommon mesa mtdev pam
-    pango pipewire udev vaapi wayland wayland-protocols
+    cairo dbus freerdp lcms2 libXcursor libdrm libevdev libinput libjpeg seatd
+    libva libwebp libxkbcommon mesa pango pipewire wayland wayland-protocols
   ] ++ lib.optionals buildRemoting [
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
   ];
 
   mesonFlags= [
-    "-Dbackend-drm-screencast-vaapi=${lib.boolToString (vaapi != null)}"
+    "-Dbackend-drm-screencast-vaapi=${lib.boolToString (libva != null)}"
     "-Dbackend-rdp=${lib.boolToString (freerdp != null)}"
     "-Dxwayland=${lib.boolToString (xwayland != null)}" # Default is true!
     (lib.mesonBool "remoting" buildRemoting)
