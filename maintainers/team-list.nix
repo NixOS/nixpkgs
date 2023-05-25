@@ -213,7 +213,7 @@ with lib.maintainers; {
 
   dhall = {
     members = [
-      Gabriel439
+      Gabriella439
       ehmry
     ];
     scope = "Maintain Dhall and related packages.";
@@ -554,6 +554,15 @@ with lib.maintainers; {
     ];
     scope = "Maintain the minimal-bootstrap toolchain and related packages.";
     shortName = "Minimal Bootstrap";
+  };
+
+  mercury = {
+    members = [
+      _9999years
+      Gabriella439
+    ];
+    scope = "Group registry for packages maintained by Mercury";
+    shortName = "Mercury Employees";
   };
 
   mobile = {
