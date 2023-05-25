@@ -3,24 +3,24 @@
 , llvmPackages
 , boost
 , cmake
-, gtest
 , spdlog
 , libxml2
 , libffi
 , Foundation
+, testers
 }:
 
 let
   stdenv = llvmPackages.stdenv;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wasmedge";
   version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "WasmEdge";
     repo = "WasmEdge";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-pBaa90jvR4tLgVOBZEJOEUY2+VnBmdSN5kkJMB8wdUA=";
   };
 
@@ -46,6 +46,16 @@ stdenv.mkDerivation rec {
     "-DWASMEDGE_FORCE_DISABLE_LTO=ON"
   ];
 
+  postPatch = ''
+    echo -n $version > VERSION
+  '';
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+  };
+
   meta = with lib; {
     homepage = "https://wasmedge.org/";
     license = with licenses; [ asl20 ];
@@ -54,4 +64,4 @@ stdenv.mkDerivation rec {
     # error: no member named 'utimensat' in the global namespace
     broken = stdenv.isDarwin && stdenv.isx86_64;
   };
-}
+})
