@@ -1,10 +1,10 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, fetchPypi }:
 
 python3Packages.buildPythonApplication rec {
   pname = "onlykey-cli";
   version = "1.2.9";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit version;
     pname = "onlykey";
     sha256 = "sha256-92CzDZgtmww0eABtjeBo6HNQ00sijWakjXLPJiOXY/A=";

@@ -1,10 +1,10 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, fetchPypi }:
 
 python3Packages.buildPythonApplication rec {
   pname = "FanFicFare";
   version = "4.8.0";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "0h20cw9z6k3z42fhl48pfxcqrk3i45zp4f4xm6pz7jqjzi17h9fk";
   };
