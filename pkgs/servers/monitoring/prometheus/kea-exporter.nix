@@ -1,11 +1,11 @@
-{ lib, python3Packages, nixosTests }:
+{ lib, python3Packages, fetchPypi, nixosTests }:
 
 python3Packages.buildPythonApplication rec {
   pname = "kea-exporter";
   version = "0.5.1";
   format = "pyproject";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash = "sha256-rNGA5XEx9xVUP1SeDPgXcaqgDhgX6JFhRX9GM454P5A=";
   };
