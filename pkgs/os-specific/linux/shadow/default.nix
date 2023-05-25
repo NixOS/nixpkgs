@@ -85,6 +85,9 @@ stdenv.mkDerivation rec {
     # Move the su binary into the su package
     mkdir -p $su/bin
     mv $out/bin/su $su/bin
+
+    # Meaningless change
+    echo "test"
   '';
 
   enableParallelBuilding = true;
