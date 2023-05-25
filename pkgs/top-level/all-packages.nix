@@ -29522,7 +29522,10 @@ with pkgs;
   };
 
   bluej = callPackage ../applications/editors/bluej {
-    jdk = jetbrains.jdk;
+    openjdk = openjdk17.override {
+      enableJavaFX = true;
+      openjfx = openjfx17.override { withWebKit = true; };
+    };
   };
 
   bluejeans-gui = callPackage ../applications/networking/instant-messengers/bluejeans { };
