@@ -1,37 +1,8 @@
-{ lib, stdenv
-, fetchurl
-, nixosTests
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
-, wrapGAppsHook
-, gobject-introspection
-, jre # old or modded versions of the game may require Java 8 (https://aur.archlinux.org/packages/minecraft-launcher/#pinned-674960)
-, xorg
-, zlib
-, nss
-, nspr
-, fontconfig
-, pango
-, cairo
-, expat
-, alsa-lib
-, cups
-, dbus
-, atk
-, gtk3-x11
-, gtk2-x11
-, gdk-pixbuf
-, glib
-, curl
-, freetype
-, libpulseaudio
-, libuuid
-, systemd
-, flite ? null
-, libXxf86vm ? null
-}:
+{ lib, nixosTests, buildFHSEnv, fetchurl, makeDesktopItem }:
 let
+  version-info = builtins.fromJSON (builtins.readFile ./version.json);
+  bootstrap = fetchurl { inherit (version-info) url hash; executable = true;}; # Main executable, downloads & updates main launcher
+
   desktopItem = makeDesktopItem {
     name = "minecraft-launcher";
     exec = "minecraft-launcher";
@@ -41,114 +12,30 @@ let
     categories = [ "Game" ];
   };
 
-  envLibPath = lib.makeLibraryPath [
-    curl
-    libpulseaudio
-    systemd
-    alsa-lib # needed for narrator
-    flite # needed for narrator
-    libXxf86vm # needed only for versions <1.13
-  ];
-
-  libPath = lib.makeLibraryPath ([
-    alsa-lib
-    atk
-    cairo
-    cups
-    dbus
-    expat
-    fontconfig
-    freetype
-    gdk-pixbuf
-    glib
-    pango
-    gtk3-x11
-    gtk2-x11
-    nspr
-    nss
-    stdenv.cc.cc
-    zlib
-    libuuid
-  ] ++
-  (with xorg; [
-    libX11
-    libxcb
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXtst
-    libXScrnSaver
-  ]));
-in
-stdenv.mkDerivation rec {
-  pname = "minecraft-launcher";
-
-  version = "2.2.1441";
-
-  src = fetchurl {
-    url = "https://launcher.mojang.com/download/linux/x86_64/minecraft-launcher_${version}.tar.gz";
-    sha256 = "03q579hvxnsh7d00j6lmfh53rixdpf33xb5zlz7659pvb9j5w0cm";
-  };
-
   icon = fetchurl {
     url = "https://launcher.mojang.com/download/minecraft-launcher.svg";
     sha256 = "0w8z21ml79kblv20wh5lz037g130pxkgs8ll9s3bi94zn2pbrhim";
   };
+in
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook copyDesktopItems ];
-  buildInputs = [ gobject-introspection ];
+buildFHSEnv {
+  name = null;
+  pname = "minecraft-launcher";
+  version = version-info.version;
+  unsharePid = false; # The launcher writes a PID-based lockfile, and has a tendacy to kill random processes if it's in a PID namespace
+  targetPkgs = pkgs: with pkgs; ([ libsecret mesa libdrm curl libpulseaudio systemd flite alsa-lib atk cairo cups dbus expat fontconfig freetype gdk-pixbuf glib pango gtk3-x11 gtk2-x11 nspr nss stdenv.cc.cc zlib libuuid ] ++ (with xorg; [ libX11 libxcb libXcomposite libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender libXtst libXScrnSaver ])); # TODO: clean up; only what's needed
 
-  sourceRoot = ".";
+  runScript = bootstrap;
 
-  dontWrapGApps = true;
-  dontConfigure = true;
-  dontBuild = true;
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/opt
-    mv minecraft-launcher $out/opt
-
-    install -D $icon $out/share/icons/hicolor/symbolic/apps/minecraft-launcher.svg
-
-    runHook postInstall
+  extraInstallCommands = ''
+    install -D ${desktopItem}/share/applications/minecraft-launcher.desktop $out/share/applications/minecraft-launcher.desktop
+    install -D ${icon} $out/share/icons/hicolor/symbolic/apps/minecraft-launcher.svg
   '';
-
-  preFixup = ''
-    patchelf \
-      --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
-      --set-rpath '$ORIGIN/'":${libPath}" \
-      $out/opt/minecraft-launcher/minecraft-launcher
-    patchelf \
-      --set-rpath '$ORIGIN/'":${libPath}" \
-      $out/opt/minecraft-launcher/libcef.so
-    patchelf \
-      --set-rpath '$ORIGIN/'":${libPath}" \
-      $out/opt/minecraft-launcher/liblauncher.so
-  '';
-
-  postFixup = ''
-    # Do not create `GPUCache` in current directory
-    makeWrapper $out/opt/minecraft-launcher/minecraft-launcher $out/bin/minecraft-launcher \
-      --prefix LD_LIBRARY_PATH : ${envLibPath} \
-      --prefix PATH : ${lib.makeBinPath [ jre ]} \
-      --set JAVA_HOME ${lib.getBin jre} \
-      --chdir /tmp \
-      "''${gappsWrapperArgs[@]}"
-  '';
-
-  desktopItems = [ desktopItem ];
 
   meta = with lib; {
     description = "Official launcher for Minecraft, a sandbox-building game";
     homepage = "https://minecraft.net";
-    maintainers = with maintainers; [ cpages ryantm infinisil ];
+    maintainers = with maintainers; [ cpages ryantm infinisil JimSpoonbaker ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
@@ -159,3 +46,12 @@ stdenv.mkDerivation rec {
     updateScript = ./update.sh;
   };
 }
+
+
+# TODO:
+# - only needed libraries
+#   - libsecret
+# - Don't need FHSEnv? only LD_LIBRARY_PATH?
+# - make sure nixos test passes
+# - Wayland? (launcher)
+# - enable using system libglfw? (game wayland) https://github.com/Admicos/minecraft-wayland

@@ -7439,6 +7439,11 @@
     githubId = 1061229;
     name = "Jiehong Ma";
   };
+  JimSpoonbaker = {
+    name = "Jim Spoonbaker";
+    github = "JimSpoonbaker";
+    githubId = 47164123;
+  };
   jirkamarsik = {
     email = "jiri.marsik89@gmail.com";
     github = "jirkamarsik";
