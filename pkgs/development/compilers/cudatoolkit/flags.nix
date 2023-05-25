@@ -8,7 +8,7 @@
 #   - See the documentation in ./gpus.nix.
 
 let
-  inherit (lib) attrsets lists strings trivial versions;
+  inherit (lib) lists strings;
 
   # Flags are determined based on your CUDA toolkit by default.  You may benefit
   # from improved performance, reduced file size, or greater hardware support by
@@ -136,7 +136,7 @@ let
         base = gencodeMapper "sm" cudaCapabilities;
         forward = gencodeMapper "compute" [ (lists.last cudaCapabilities) ];
       in
-      base ++ lib.optionals enableForwardCompat forward;
+      base ++ lists.optionals enableForwardCompat forward;
   };
 
 in
@@ -161,6 +161,11 @@ assert (formatCapabilities { cudaCapabilities = [ "7.5" "8.6" ]; }) == {
 
   # cudaComputeCapabilityToName :: String => String
   inherit cudaComputeCapabilityToName;
+
+  # Note: Rather than enforce cudaSupportedCapabilities be non-empty here with an assert, we mark
+  #   the packages in cudaPackages as broken.
+  # cudaSupportedCapabilities :: List Capability
+  cudaSupportedCapabilities = supportedCapabilities;
 
   # dropDot :: String -> String
   inherit dropDot;

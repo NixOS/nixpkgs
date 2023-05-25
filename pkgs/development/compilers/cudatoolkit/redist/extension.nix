@@ -1,7 +1,7 @@
 final: prev: let
-
   inherit (final) callPackage;
-  inherit (prev) cudaVersion lib;
+  inherit (prev) cudaVersion;
+  inherit (prev.lib) attrsets trivial;
 
   ### Cuda Toolkit Redist
 
@@ -18,17 +18,24 @@ final: prev: let
   };
 
   # Function to build a single cudatoolkit redist package
-  buildCudaToolkitRedistPackage = callPackage ./build-cuda-redist-package.nix { };
+  buildCudaToolkitRedistPackage = callPackage ./build-cuda-redist-package.nix {};
 
   # Function that builds all cudatoolkit redist packages given a cuda version and manifest file
-  buildCudaToolkitRedistPackages = { version, manifest }: let
-    attrs = lib.filterAttrs (key: value: key != "release_date") (lib.importJSON manifest);
-  in lib.mapAttrs buildCudaToolkitRedistPackage attrs;
+  buildCudaToolkitRedistPackages = {
+    manifest,
+    version,
+  }: let
+    attrs = attrsets.filterAttrs (key: _: key != "release_date") (trivial.importJSON manifest);
+  in
+    attrsets.mapAttrs buildCudaToolkitRedistPackage attrs;
 
   # All cudatoolkit redist packages for the current cuda version
-  cudaToolkitRedistPackages = if
-    lib.hasAttr cudaVersion cudaToolkitRedistManifests
-  then buildCudaToolkitRedistPackages { version = cudaVersion; manifest = cudaToolkitRedistManifests.${cudaVersion}; }
-  else {};
-
-in cudaToolkitRedistPackages
+  cudaToolkitRedistPackages = let
+    isSupported = attrsets.hasAttr cudaVersion cudaToolkitRedistManifests;
+  in
+    attrsets.optionalAttrs isSupported (buildCudaToolkitRedistPackages {
+      manifest = cudaToolkitRedistManifests.${cudaVersion};
+      version = cudaVersion;
+    });
+in
+  cudaToolkitRedistPackages
