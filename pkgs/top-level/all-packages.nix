@@ -6119,8 +6119,6 @@ with pkgs;
 
   buku = callPackage ../applications/misc/buku { };
 
-  bukut = callPackage ../applications/misc/bukut { };
-
   byzanz = callPackage ../applications/video/byzanz { };
 
   algolia-cli = callPackage ../development/tools/algolia-cli { };
@@ -7766,7 +7764,7 @@ with pkgs;
     foundationdb71
   ;
 
-  foundationdb = foundationdb61;
+  foundationdb = foundationdb71;
 
   fuse-7z-ng = callPackage ../tools/filesystems/fuse-7z-ng { };
 
@@ -7920,6 +7918,8 @@ with pkgs;
   };
 
   gitlab-clippy = callPackage ../development/tools/rust/gitlab-clippy { };
+
+  gitlab-container-registry = callPackage ../applications/version-management/gitlab/gitlab-container-registry { };
 
   gitlab-pages = callPackage ../applications/version-management/gitlab/gitlab-pages { };
 
@@ -20720,7 +20720,11 @@ with pkgs;
   glibcInfo = callPackage ../development/libraries/glibc/info.nix { };
 
   glibc_multi = callPackage ../development/libraries/glibc/multi.nix {
-    glibc32 = pkgsi686Linux.glibc;
+    # The buildPackages is required for cross-compilation. The pkgsi686Linux set
+    # has target and host always set to the same value based on target platform
+    # of the current set. We need host to be same as build to correctly get i686
+    # variant of glibc.
+    glibc32 = pkgsi686Linux.buildPackages.glibc;
   };
 
   glm = callPackage ../development/libraries/glm { };
@@ -29541,7 +29545,10 @@ with pkgs;
   };
 
   bluej = callPackage ../applications/editors/bluej {
-    jdk = jetbrains.jdk;
+    openjdk = openjdk17.override {
+      enableJavaFX = true;
+      openjfx = openjfx17.override { withWebKit = true; };
+    };
   };
 
   bluejeans-gui = callPackage ../applications/networking/instant-messengers/bluejeans { };
@@ -38394,7 +38401,9 @@ with pkgs;
 
   librepcb = libsForQt5.callPackage ../applications/science/electronics/librepcb { };
 
-  ngspice = callPackage ../applications/science/electronics/ngspice { };
+  ngspice = libngspice.override {
+    withNgshared = false;
+  };
 
   nvc = darwin.apple_sdk_11_0.callPackage ../applications/science/electronics/nvc { };
 
