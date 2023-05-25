@@ -65,10 +65,10 @@ assert !cudaSupport || magma.cudaPackages.cudatoolkit == cudatoolkit;
 let
   setBool = v: if v then "1" else "0";
 
-  # https://github.com/pytorch/pytorch/blob/v1.13.1/torch/utils/cpp_extension.py#L1751
+  # https://github.com/pytorch/pytorch/blob/v2.0.1/torch/utils/cpp_extension.py#L1744
   supportedTorchCudaCapabilities =
     let
-      real = ["3.5" "3.7" "5.0" "5.2" "5.3" "6.0" "6.1" "6.2" "7.0" "7.2" "7.5" "8.0" "8.6"];
+      real = ["3.5" "3.7" "5.0" "5.2" "5.3" "6.0" "6.1" "6.2" "7.0" "7.2" "7.5" "8.0" "8.6" "8.9" "9.0"];
       ptx = lists.map (x: "${x}+PTX") real;
     in
     real ++ ptx;
