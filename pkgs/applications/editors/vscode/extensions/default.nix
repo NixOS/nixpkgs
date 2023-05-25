@@ -2451,6 +2451,23 @@ let
         };
       };
 
+      quarto.quarto = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "quarto";
+          publisher = "quarto";
+          version = "1.85.0";
+          sha246 = "sha256-VnEqqS/2eQxdvq1DzOylNpb3fo2lmAcBJ8BxDj1JArs=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/quarto.quarto/changelog";
+          description = "Extension for the Quarto scientific and technical publishing system";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=quarto.quarto";
+          homepage = "https://github.com/quarto-dev/quarto/tree/main/apps/vscode";
+          license = lib.licenses.agpl3Only;
+          maintainers = [ lib.maintainers.hervyqa ];
+        };
+      };
+
       rebornix.ruby = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "ruby";
