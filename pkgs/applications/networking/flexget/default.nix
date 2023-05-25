@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchPypi
 , fetchFromGitHub
 }:
 
@@ -8,7 +9,7 @@ let
     packageOverrides = self: super: {
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (old: rec {
         version = "1.4.48";
-        src = self.fetchPypi {
+        src = fetchPypi {
           pname = "SQLAlchemy";
           inherit version;
           hash = "sha256-tHvChwltmJoIOM6W99jpZpFKJNqHftQadTHUS1XNuN8=";
