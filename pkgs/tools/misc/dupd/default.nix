@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dupd";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "jvirkki";
     repo  = "dupd";
     rev   = version;
-    sha256 = "sha256-jDFPvJqIUEu0/8bvq2PaaA1NnWakApegW8bxn+NKffs=";
+    sha256 = "sha256-Jl95Ke1AntYeTKARQTXm5qMhwISEw4Pvnr6I2WEFlP4=";
   };
 
   postPatch = ''
