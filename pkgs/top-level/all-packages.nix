@@ -25697,6 +25697,8 @@ with pkgs;
 
   nix-tour = callPackage ../applications/misc/nix-tour { };
 
+  noseyparker = callPackage ../tools/security/noseyparker { };
+
   nosqli = callPackage ../tools/security/nosqli { };
 
   nsd = callPackage ../servers/dns/nsd (config.nsd or {});
