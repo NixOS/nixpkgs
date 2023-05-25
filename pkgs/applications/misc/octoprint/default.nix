@@ -4,6 +4,7 @@
 , lib
 , fetchFromGitHub
 , python3
+, fetchPypi
 , substituteAll
 , nix-update-script
 , nixosTests
@@ -31,7 +32,7 @@ let
             });
             flask-babel = super.flask-babel.overridePythonAttrs (oldAttrs: rec {
               version = "2.0.0";
-              src = super.fetchPypi {
+              src = fetchPypi {
                 pname = "Flask-Babel";
                 inherit version;
                 sha256 = "sha256-+fr0XNsuGjLqLsFEA1h9QpUQjzUBenghorGsuM/ZJX0=";
@@ -44,7 +45,7 @@ let
             # downgrade needed for flask-babel 2.0.0
             babel = super.babel.overridePythonAttrs (oldAttrs: rec {
               version = "2.11.0";
-              src = super.fetchPypi {
+              src = fetchPypi {
                 pname = "Babel";
                 inherit version;
                 hash = "sha256-XvSzImsBgN7d7UIpZRyLDho6aig31FoHMnLzE+TPl/Y=";

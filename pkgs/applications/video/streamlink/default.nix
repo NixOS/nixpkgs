@@ -1,7 +1,7 @@
 { lib
 , python3Packages
+, fetchPypi
 , ffmpeg
-, fetchpatch
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
   version = "5.3.0";
   format = "pyproject";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash = "sha256-+9MSSzPYZ8gwOeQLehR41SklfdcUn8Pa6TI//lh9twE=";
   };
