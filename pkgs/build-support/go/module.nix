@@ -68,7 +68,8 @@ let
 
   args = removeAttrs args' [ "overrideModAttrs" "vendorSha256" "vendorHash" ];
 
-  go-modules = if hasAnyVendorHash then stdenv.mkDerivation (let modArgs = {
+  go-modules = if (!hasAnyVendorHash) then "" else
+    (stdenv.mkDerivation {
 
     name = "${name}-go-modules";
 
@@ -152,18 +153,11 @@ let
     '';
 
     dontFixup = true;
-  }; in modArgs // (
-      {
-        outputHashMode = "recursive";
-      } // (if (vendorHashType == "sha256") then {
-        outputHashAlgo = "sha256";
-        outputHash = vendorSha256;
-      } else {
-        outputHash = vendorHash;
-      }) // (lib.optionalAttrs (vendorHashType == "sri" && vendorHash == "") {
-        outputHashAlgo = "sha256";
-      })
-  ) // overrideModAttrs modArgs) else "";
+
+    outputHashMode = "recursive";
+    outputHashAlgo = if vendorHashType == "sha256" then "sha256" else null;
+    outputHash = if vendorHashType == "sha256" then vendorSha256 else vendorHash;
+  }).overrideAttrs overrideModAttrs;
 
   package = stdenv.mkDerivation (args // {
     nativeBuildInputs = [ go ] ++ nativeBuildInputs;
