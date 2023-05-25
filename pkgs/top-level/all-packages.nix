@@ -22950,6 +22950,8 @@ with pkgs;
 
   toml-f = callPackage ../development/libraries/toml-f { };
 
+  fypp = python3Packages.callPackage ../development/python-modules/fypp { };
+
   ## libGL/libGLU/Mesa stuff
 
   # Default libGL implementation, should provide headers and
