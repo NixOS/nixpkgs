@@ -1860,7 +1860,7 @@
   bddvlpr = {
     email = "luna@bddvlpr.com";
     github = "bddvlpr";
-    githubid = 17461028;
+    githubId = 17461028;
     name = "Luna Simons";
   };
   bdesham = {
