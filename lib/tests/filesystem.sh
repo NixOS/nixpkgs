@@ -41,7 +41,7 @@ checkPathType() {
     local actualPathType=$(nix-instantiate --eval --strict --json 2>&1 \
         -E '{ path }: let lib = import <nixpkgs/lib>; in lib.filesystem.pathType path' \
         --argstr path "$path")
-    if [[ "$actualPathType" != "$expectedPathType" ]]; then
+    if [[ ! "$actualPathType" =~ $expectedPathType ]]; then
         die "lib.filesystem.pathType \"$path\" == $actualPathType, but $expectedPathType was expected"
     fi
 }
@@ -51,7 +51,8 @@ checkPathType "$PWD/directory" '"directory"'
 checkPathType "$PWD/regular" '"regular"'
 checkPathType "$PWD/symlink" '"symlink"'
 checkPathType "$PWD/fifo" '"unknown"'
-checkPathType "$PWD/non-existent" "error: evaluation aborted with the following error message: 'lib.filesystem.pathType: Path $PWD/non-existent does not exist.'"
+# Different errors depending on whether the builtins.readFilePath primop is available or not
+checkPathType "$PWD/non-existent" "error: (evaluation aborted with the following error message: 'lib.filesystem.pathType: Path $PWD/non-existent does not exist.'|getting status of '$PWD/non-existent': No such file or directory)"
 
 checkPathIsDirectory() {
     local path=$1
