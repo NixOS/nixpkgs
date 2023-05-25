@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchPypi
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -7,7 +8,7 @@ python3.pkgs.buildPythonApplication rec {
   version = "0.35.2";
   format = "wheel";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     pname = "cloudsmith_cli";
     inherit format version;
     hash = "sha256-+M4CPveS9dltMI291Atm84T/cf4dPOO3wPvPI15E73Y=";
