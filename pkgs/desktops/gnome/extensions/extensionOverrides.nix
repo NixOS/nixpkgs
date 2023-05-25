@@ -1,18 +1,20 @@
 { lib
 , ddcutil
+, easyeffects
 , gjs
+, glib
 , gnome
 , gobject-introspection
 , gsound
 , hddtemp
 , libgda
+, libgtop
 , liquidctl
 , lm_sensors
 , netcat-gnu
 , nvme-cli
 , procps
 , pulseaudio
-, libgtop
 , python3
 , smartmontools
 , substituteAll
@@ -59,6 +61,16 @@ super: lib.trivial.pipe super [
     postPatch = ''
       substituteInPlace "extension.js" --replace "/usr/bin/ddcutil" "${ddcutil}/bin/ddcutil"
     '';
+  }))
+
+  (patchExtension "eepresetselector@ulville.github.io" (old: {
+    patches = [
+      # Needed to find the currently set preset
+      (substituteAll {
+        src = ./extensionOverridesPatches/eepresetselector_at_ulville.github.io.patch;
+        easyeffects_gsettings_path = "${glib.getSchemaPath easyeffects}";
+      })
+    ];
   }))
 
   (patchExtension "freon@UshakovVasilii_Github.yahoo.com" (old: {
