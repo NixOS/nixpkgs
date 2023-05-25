@@ -6276,6 +6276,16 @@
     githubId = 1401179;
     name = "Guanpeng Xu";
   };
+  hervyqa = {
+    email = "hervyqa@proton.me";
+    matrix = "@hervyqa:matrix.org";
+    github = "hervyqa";
+    githubId = 45872139;
+    name = "Hervy Qurrotul Ainur Rozi";
+    keys = [{
+      fingerprint = "BD76 C87F BB70 F811 F3AB  6E15 65AA 5771 8516 1EB8";
+    }];
+  };
   hexa = {
     email = "hexa@darmstadt.ccc.de";
     matrix = "@hexa:lossy.network";

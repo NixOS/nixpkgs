@@ -2498,6 +2498,23 @@ let
         };
       };
 
+      reditorsupport.r = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "r";
+          publisher = "REditorSupport";
+          version = "2.8.0";
+          sha246 = "sha256-vapZKVBoDln12aBTUG9ipW425FXTWBqhjX2mQf+BAZw=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/REditorSupport.r/changelog";
+          description = "R Extension for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=REditorSupport.r";
+          homepage = "https://github.com/REditorSupport/vscode-R";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.hervyqa ];
+        };
+      };
+
       richie5um2.snake-trail = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "snake-trail";
