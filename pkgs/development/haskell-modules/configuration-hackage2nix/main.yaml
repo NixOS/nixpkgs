@@ -568,6 +568,7 @@ unsupported-platforms:
   bytelog:                                      [ platforms.darwin ] # due to posix-api
   camfort:                                      [ aarch64-linux ]
   charsetdetect:                                [ aarch64-linux ] # not supported by vendored lib / not configured properly https://github.com/batterseapower/libcharsetdetect/issues/3
+  coinor-clp:                                   [ aarch64-linux ] # aarch64-linux is not supported by required system dependency clp
   cut-the-crap:                                 [ platforms.darwin ]
   essence-of-live-coding-PortMidi:              [ platforms.darwin ]
   Euterpea:                                     [ platforms.darwin ]
