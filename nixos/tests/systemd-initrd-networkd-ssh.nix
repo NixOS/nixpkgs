@@ -10,6 +10,8 @@ import ./make-test-python.nix ({ lib, ... }: {
       virtualisation = {
         emptyDiskImages = [ 4096 ];
         useBootLoader = true;
+        # Booting off the encrypted disk requires an available init script from the Nix store
+        mountHostNixStore = true;
         useEFIBoot = true;
       };
 
