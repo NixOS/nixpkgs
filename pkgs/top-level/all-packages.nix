@@ -35212,6 +35212,8 @@ with pkgs;
   westonLite = weston.override {
     demoSupport = false;
     hdrSupport = false;
+    jpegSupport = false;
+    lcmsSupport = false;
     pangoSupport = false;
     pipewireSupport = false;
     rdpSupport = false;
