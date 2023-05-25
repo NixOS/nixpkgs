@@ -38406,7 +38406,9 @@ with pkgs;
 
   librepcb = libsForQt5.callPackage ../applications/science/electronics/librepcb { };
 
-  ngspice = callPackage ../applications/science/electronics/ngspice { };
+  ngspice = libngspice.override {
+    withNgshared = false;
+  };
 
   nvc = darwin.apple_sdk_11_0.callPackage ../applications/science/electronics/nvc { };
 
