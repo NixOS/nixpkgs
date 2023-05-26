@@ -7,23 +7,20 @@ let
   opt = options.services.syncthing;
   defaultUser = "syncthing";
   defaultGroup = defaultUser;
+  settingsFormat = pkgs.formats.json { };
+  cleanedExtraConfig = converge (filterAttrsRecursive (_: v: v != null && v != {})) cfg.extraOptions;
 
-  devices = mapAttrsToList (name: device: {
+  devices = mapAttrsToList (name: device: device // {
     deviceID = device.id;
-    inherit (device) name addresses introducer autoAcceptFolders;
   }) cfg.devices;
 
-  folders = mapAttrsToList ( _: folder: {
-    inherit (folder) path id label type;
+  folders = mapAttrsToList ( _: folder: folder //
+    throwIf (folder?rescanInterval || folder?watch || folder?watchDelay) ''
+      The options services.syncthing.settings.folders.<name>.{rescanInterval,watch,watchDelay}
+      were removed. Please use, respectively, {rescanIntervalS,fsWatcherEnabled,fsWatcherDelayS} instead.
+  '' {
     devices = map (device: { deviceId = cfg.devices.${device}.id; }) folder.devices;
-    rescanIntervalS = folder.rescanInterval;
-    fsWatcherEnabled = folder.watch;
-    fsWatcherDelayS = folder.watchDelay;
-    ignorePerms = folder.ignorePerms;
-    ignoreDelete = folder.ignoreDelete;
-    versioning = folder.versioning;
-  }) (filterAttrs (
-    _: folder:
+  }) (filterAttrs (_: folder:
     folder.enable
   ) cfg.folders);
 
@@ -57,7 +54,7 @@ let
     new_cfg=$(printf '%s\n' "$old_cfg" | ${pkgs.jq}/bin/jq -c '. * {
         "devices": (${builtins.toJSON devices}${optionalString (cfg.devices == {} || ! cfg.overrideDevices) " + .devices"}),
         "folders": (${builtins.toJSON folders}${optionalString (cfg.folders == {} || ! cfg.overrideFolders) " + .folders"})
-    } * ${builtins.toJSON cfg.extraOptions}')
+    } * ${builtins.toJSON cleanedExtraConfig}')
 
     # send the new config
     curl -X PUT -d "$new_cfg" ${cfg.guiAddress}/rest/config
@@ -121,6 +118,7 @@ in {
           };
         };
         type = types.attrsOf (types.submodule ({ name, ... }: {
+          freeformType = settingsFormat.type;
           options = {
 
             name = mkOption {
@@ -199,6 +197,7 @@ in {
           }
         '';
         type = types.attrsOf (types.submodule ({ name, ... }: {
+          freeformType = settingsFormat.type;
           options = {
 
             enable = mkOption {
@@ -324,7 +323,7 @@ in {
               });
             };
 
-            rescanInterval = mkOption {
+            rescanIntervalS = mkOption {
               type = types.int;
               default = 3600;
               description = lib.mdDoc ''
@@ -342,7 +341,7 @@ in {
               '';
             };
 
-            watch = mkOption {
+            fsWatcherEnabled = mkOption {
               type = types.bool;
               default = true;
               description = lib.mdDoc ''
@@ -350,7 +349,7 @@ in {
               '';
             };
 
-            watchDelay = mkOption {
+            fsWatcherDelayS = mkOption {
               type = types.int;
               default = 10;
               description = lib.mdDoc ''
@@ -379,7 +378,6 @@ in {
       };
 
       extraOptions = mkOption {
-        type = types.addCheck (pkgs.formats.json {}).type isAttrs;
         default = {};
         description = mdDoc ''
           Extra configuration options for Syncthing.
@@ -411,6 +409,25 @@ in {
         example = {
           options.localAnnounceEnabled = false;
           gui.theme = "black";
+        };
+        type = types.submodule {
+          freeformType = settingsFormat.type;
+          options = {
+            options.globalAnnounceEnabled = mkOption {
+              type = types.nullOr types.bool;
+              default = null;
+              description = lib.mdDoc ''
+                Whether to announce this device to the global discovery server.
+              '';
+            };
+            gui.password = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = lib.mdDoc ''
+                The password to access the web interface.
+              '';
+            };
+          };
         };
       };
 
@@ -616,7 +633,7 @@ in {
         };
       };
       syncthing-init = mkIf (
-        cfg.devices != {} || cfg.folders != {} || cfg.extraOptions != {}
+        cfg.devices != {} || cfg.folders != {} || cleanedExtraConfig != {}
       ) {
         description = "Syncthing configuration updater";
         requisite = [ "syncthing.service" ];
