@@ -22,6 +22,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-EoRCmEe9SAySZCm+QhaR4ngik4Arnm4SZjgDM5fSRmk=";
 
+  prePatch = ''sed -i "s,ExecStart=.*/bin,ExecStart=$out/bin," etc/below.service'';
+  postInstall = ''
+    install -d $out/lib/systemd/system
+    install -t $out/lib/systemd/system etc/below.service
+  '';
+
   # bpf code compilation
   hardeningDisable = [ "stackprotector" ];
 
