@@ -6,6 +6,7 @@
 , dbus
 , dejavu_fonts
 , fetchurl
+, fetchpatch
 , fontconfig
 , gawk
 , ghostscript
@@ -39,6 +40,14 @@ stdenv.mkDerivation rec {
     url = "https://openprinting.org/download/cups-filters/${pname}-${version}.tar.xz";
     sha256 = "sha256-qQfsdp+7cu+/v5tUCyUKCOM7bjc6inw0P5hA+6TQR4s=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-24805.patch";
+      url = "https://github.com/OpenPrinting/cups-filters/commit/93e60d3df358c0ae6f3dba79e1c9684657683d89.patch";
+      hash = "sha256-KgWTYFr2uShL040azzE+KaNyBPy7Gs/hCnEgQmmPCys=";
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 

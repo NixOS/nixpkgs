@@ -230,7 +230,7 @@ rec {
 
 
   */
-  writeScriptBin = name: text: writeTextFile {inherit name text; executable = true; destination = "/bin/${name}";};
+  writeScriptBin = name: text: writeTextFile {inherit name text; executable = true; destination = "/bin/${name}"; meta.mainProgram = name;};
 
   /*
     Similar to writeScript. Writes a Shell script and checks its syntax.
@@ -288,6 +288,7 @@ rec {
       checkPhase = ''
         ${stdenv.shellDryRun} "$target"
       '';
+      meta.mainProgram = name;
     };
 
   /*
