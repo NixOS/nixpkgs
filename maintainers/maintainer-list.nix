@@ -17353,10 +17353,10 @@
   };
   yayayayaka = {
     email = "nixpkgs@uwu.is";
-    matrix = "@lara:uwu.is";
+    matrix = "@yaya:uwu.is";
     github = "yayayayaka";
     githubId = 73759599;
-    name = "Lara A.";
+    name = "Yaya";
   };
   ydlr = {
     name = "ydlr";
