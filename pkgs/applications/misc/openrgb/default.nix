@@ -10,6 +10,7 @@
 , mbedtls_2
 , qtbase
 , qttools
+, qtwayland
 , symlinkJoin
 , openrgb
 }:
@@ -26,12 +27,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ qmake pkg-config wrapQtAppsHook ];
-  buildInputs = [ libusb1 hidapi mbedtls_2 qtbase qttools ];
+  buildInputs = [ libusb1 hidapi mbedtls_2 qtbase qttools qtwayland ];
 
   postPatch = ''
     patchShebangs scripts/build-udev-rules.sh
     substituteInPlace scripts/build-udev-rules.sh \
       --replace /bin/chmod "${coreutils}/bin/chmod"
+    substituteInPlace OpenRGB.pro \
+      --replace "lrelease" "${qttools.dev}/bin/lrelease"
   '';
 
   doInstallCheck = true;
