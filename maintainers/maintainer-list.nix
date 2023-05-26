@@ -1857,6 +1857,12 @@
     githubId = 11135;
     name = "Berk D. Demir";
   };
+  bddvlpr = {
+    email = "luna@bddvlpr.com";
+    github = "bddvlpr";
+    githubId = 17461028;
+    name = "Luna Simons";
+  };
   bdesham = {
     email = "benjamin@esham.io";
     github = "bdesham";
