@@ -13922,6 +13922,10 @@ with pkgs;
 
   urlwatch = callPackage ../tools/networking/urlwatch { };
 
+  urlwatch-full = callPackage ../tools/networking/urlwatch {
+    variant = "full";
+  };
+
   vals = callPackage ../tools/security/vals { };
 
   valum = callPackage ../development/web/valum { };

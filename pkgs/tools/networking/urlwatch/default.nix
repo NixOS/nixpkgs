@@ -1,7 +1,23 @@
 { lib
 , fetchFromGitHub
 , python3Packages
+, tesseract
+
+, variant ? "small"
+
+, withPushbulletReporter ? variant == "full"
+, withMatrixReporter ? variant == "full"
+, withColoredStdoutReporter ? variant == "full"
+, withXMPPReporter ? variant == "full"
+
+, withOCRFilter ? variant == "full"
+, withPdf2textFilter ? variant == "full"
+, withHtml2textFilter ? variant == "full"
+, withBeautifyFilter ? variant == "full"
+, withJqFilter ? variant == "full"
 }:
+
+assert lib.elem variant [ "full" "small" ];
 
 python3Packages.buildPythonApplication rec {
   pname = "urlwatch";
@@ -14,21 +30,26 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-dGohG2+HrsuKegPAn1fmpLYPpovEEUsx+C/0sp2/cX0=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  buildInputs = lib.optional withOCRFilter tesseract;
+
+  propagatedBuildInputs = (with python3Packages; [
     appdirs
     cssselect
-    jq
     keyring
     lxml
-    markdown2
-    matrix-client
     minidb
-    pushbullet-py
-    pycodestyle
     pyppeteer
     pyyaml
     requests
-  ];
+  ] ++ lib.optionals withOCRFilter [ pytesseract pillow ]
+    ++ lib.optional withPdf2textFilter pdftotext
+    ++ lib.optional (withHtml2textFilter || withBeautifyFilter) beautifulsoup4
+    ++ lib.optional withJqFilter jq
+    ++ lib.optional withPushbulletReporter pushbullet-py
+    ++ lib.optionals withMatrixReporter [ markdown2 matrix-client ]
+    ++ lib.optional withColoredStdoutReporter colorama
+    ++ lib.optional withXMPPReporter aioxmpp
+  );
 
   # no tests
   doCheck = false;
