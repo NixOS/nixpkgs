@@ -149,6 +149,24 @@ in /* No rec! Add dependencies on this file at the top. */ {
           ${subpathInvalidReason subpath}'';
     path + ("/" + subpath);
 
+  /*
+    Test whether one path is a child of another.
+    This is just based on the string values of the provided paths.
+    It does not access the filesystem.
+
+    Type: sourceLike -> Path|String -> Path|String -> bool
+
+    Examples:
+      path.hasPrefix "foo" "foo/bar" # => true
+      path.hasPrefix "foo" "foo" # => true
+      path.hasPrefix "food" "foo" => false
+      path.hasPrefix "foo/bar" "foo" # => false
+   */
+  hasPrefix = parent: child:
+    assert lib.isPath parent;
+    assert lib.isPath child;
+    lib.hasPrefix "${toString parent}/" "${toString child}/";
+
   /* Whether a value is a valid subpath string.
 
   - The value is a string
