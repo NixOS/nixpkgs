@@ -8,12 +8,12 @@
 }:
 stdenv.mkDerivation rec {
   pname = "frink";
-  version = "2023-01-31";
+  version = "2023-05-22";
 
   src = fetchurl {
     # Upstream does not provide versioned download links
-    url = "https://web.archive.org/web/20230202134810/https://frinklang.org/frinkjar/frink.jar";
-    sha256 = "sha256-xs1FQvFPgeAxscAiwBBP8N8aYe0OlsYbH/vbzzCbYZc=";
+    url = "https://web.archive.org/web/20230526123219/https://frinklang.org/frinkjar/frink.jar";
+    sha256 = "sha256-IgINJvt9G5f1HELKhV5BHIu9NoA8STDqNg/dVTFzK0Y=";
   };
 
   dontUnpack = true;
