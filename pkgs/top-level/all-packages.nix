@@ -675,6 +675,8 @@ with pkgs;
 
   erosmb = callPackage ../tools/security/erosmb { };
 
+  eslint_d = callPackage ../development/tools/eslint_d { };
+
   oauth2c = callPackage ../tools/security/oauth2c { };
 
   octosuite = callPackage ../tools/security/octosuite { };
