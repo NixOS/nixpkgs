@@ -1109,8 +1109,8 @@ in
         bash
         gawk
         gnugrep
-        gnugrep.pcre2.out
         patch
+        gnugrep.pcre2.out
         gettext
         binutils.bintools
         binutils.bintools.lib
