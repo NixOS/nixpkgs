@@ -1,5 +1,11 @@
-{ lib, stdenv, buildPackages, fetchurl, pciutils
-, gitUpdater }:
+{ lib
+, stdenv
+, buildPackages
+, fetchurl
+, fetchpatch
+, pciutils
+, gitUpdater
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnu-efi";
@@ -9,6 +15,15 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/gnu-efi/${pname}-${version}.tar.bz2";
     sha256 = "sha256-eAfpAzSTQ6ehQuu5NHA6KHIjXolojPWGwDKwoQh7yvQ=";
   };
+
+  patches = [
+    # riscv64: fix efibind.h missing/duplicate types
+    # https://sourceforge.net/p/gnu-efi/patches/88
+    (fetchpatch {
+      url = "https://sourceforge.net/p/gnu-efi/patches/88/attachment/riscv64-fix-efibind.h-missing-duplicate-types.patch";
+      hash = "sha256-fUAxj1/U9J2A1zMEdnh62+WnVmQ9hrrYwMFppBz1Y1g=";
+    })
+  ];
 
   buildInputs = [ pciutils ];
 
