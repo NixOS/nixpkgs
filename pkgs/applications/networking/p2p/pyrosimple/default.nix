@@ -71,14 +71,13 @@ in buildPythonPackage {
     };
   };
 
-  meta = let inherit (lib) licenses platforms maintainers;
-  in {
+  meta = with lib; {
     homepage = "https://kannibalox.github.io/pyrosimple/";
     description = "A rTorrent client and Python 3 fork of the pyrocore tools";
     license = licenses.gpl3Plus;
     changelog = "https://github.com/kannibalox/pyrosimple/blob/v${version}/CHANGELOG.md";
     platforms = platforms.all;
-    maintainers = builtins.attrValues { inherit (maintainers) ne9z; };
+    maintainers = with maintainers; [ ne9z vamega ];
   };
 
 }
