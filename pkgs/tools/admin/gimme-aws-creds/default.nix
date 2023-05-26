@@ -1,6 +1,7 @@
 { lib
 , installShellFiles
 , python3
+, fetchPypi
 , fetchFromGitHub
 , nix-update-script
 , testers
@@ -13,7 +14,7 @@ let
       fido2 = super.fido2.overridePythonAttrs (oldAttrs: rec {
         version = "0.9.3";
         format = "setuptools";
-        src = self.fetchPypi {
+        src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-tF6JphCc/Lfxu1E3dqotZAjpXEgi+DolORi5RAg0Zuw=";
@@ -23,7 +24,7 @@ let
       okta = super.okta.overridePythonAttrs (oldAttrs: rec {
         version = "0.0.4";
         format = "setuptools";
-        src = self.fetchPypi {
+        src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-U+eSxo02hP9BQLTLHAKvOCEJA2j4EQ/eVMC9tjhEkzI=";

@@ -74,7 +74,6 @@ rec {
           -B ${prev.libs}/lib \
           -g \
           -v \
-          -static \
           -o ''${out}/bin/tcc \
           -D BOOTSTRAP=1 \
           ${options} \

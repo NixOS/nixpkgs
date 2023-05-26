@@ -3,7 +3,6 @@
 , callPackage
 , fetchFromGitHub
 , fetchPypi
-, fetchpatch
 , python3
 , substituteAll
 , ffmpeg-headless
@@ -17,9 +16,6 @@
 
 # Additional packages to add to propagatedBuildInputs
 , extraPackages ? ps: []
-
-# Write out info about included extraComponents and extraPackages
-, writeText
 
 # Override Python packages using
 # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
@@ -47,7 +43,7 @@ let
       astral = super.astral.overridePythonAttrs (oldAttrs: rec {
         pname = "astral";
         version = "2.2";
-        src = self.fetchPypi {
+        src = fetchPypi {
           inherit pname version;
           hash = "sha256-5B2ZZ9XEi+QhNGVS8PTe2tQ/85qDV09f8q0ytmJ7b74=";
         };
@@ -141,7 +137,7 @@ let
       # Pinned due to API changes in 0.1.0
       poolsense = super.poolsense.overridePythonAttrs (oldAttrs: rec {
         version = "0.0.8";
-        src = super.fetchPypi {
+        src = fetchPypi {
           pname = "poolsense";
           inherit version;
           hash = "sha256-17MHrYRmqkH+1QLtgq2d6zaRtqvb9ju9dvPt9gB2xCc=";
@@ -200,7 +196,7 @@ let
       python-slugify = super.python-slugify.overridePythonAttrs (oldAttrs: rec {
         pname = "python-slugify";
         version = "4.0.1";
-        src = super.fetchPypi {
+        src = fetchPypi {
           inherit pname version;
           hash = "sha256-aaUXdm4AwSaOW7/A0BCgqFCN4LGNMK1aH/NX+K5yQnA=";
         };
@@ -247,7 +243,7 @@ let
 
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
         version = "2.0.12";
-        src = super.fetchPypi {
+        src = fetchPypi {
           pname = "SQLAlchemy";
           inherit version;
           hash = "sha256-vd/FvR3uXbD93J2rJvgAwoPzJD5ygbvxByAP7TASX5w=";

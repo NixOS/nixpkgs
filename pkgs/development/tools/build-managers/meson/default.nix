@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchPypi
 , fetchpatch
 , installShellFiles
 , ninja
@@ -19,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "meson";
   version = "1.1.0";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash = "sha256-2WFsRM1sU2if+PBfxpWKaT8uF8NHKo2vg87lXav/gp8=";
   };

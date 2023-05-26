@@ -1,10 +1,10 @@
-{ lib, fetchurl, python3Packages }:
+{ lib, python3Packages, fetchPypi }:
 
 python3Packages.buildPythonPackage rec {
   pname = "hyp-server";
   version = "1.2.0";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "1lafjdcn9nnq6xc3hhyizfwh6l69lc7rixn6dx65aq71c913jc15";
   };

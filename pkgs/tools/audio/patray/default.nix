@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchPypi
 , qt5
 }:
 
@@ -7,7 +8,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "patray";
   version = "0.1.1";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit version pname;
     sha256 = "0vaapn2p4257m1d5nbnwnh252b7lhl00560gr9pqh2b7xqm1bh6g";
   };
