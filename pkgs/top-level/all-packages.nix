@@ -34290,6 +34290,8 @@ with pkgs;
 
   pb_cli = callPackage ../tools/misc/pb_cli { };
 
+  pbincli = callPackage ../tools/misc/pbincli { };
+
   capture = callPackage ../tools/misc/capture { };
 
   pbrt = callPackage ../applications/graphics/pbrt { };
