@@ -13,7 +13,8 @@ buildDunePackage rec {
 
   postPatch = lib.optionalString (lib.versionAtLeast ocaml.version "5.0") ''
     substituteInPlace src/dune \
-      --replace "libraries ocplib_endian bigarray" "libraries ocplib_endian"
+      --replace "(libraries bytes)" "" \
+      --replace "libraries ocplib_endian bigarray bytes" "libraries ocplib_endian"
   '';
 
   minimalOCamlVersion = "4.03";
