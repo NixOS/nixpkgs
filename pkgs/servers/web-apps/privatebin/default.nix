@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -22,6 +23,10 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) privatebin;
+  };
 
   meta = with lib; {
     description = "Minimalist, open source online pastebin where the server has zero knowledge of pasted data";
