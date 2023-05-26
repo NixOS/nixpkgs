@@ -14,7 +14,7 @@
 , vips
 , nlohmann_json
 , libsixel
-, microsoft_gsl
+, microsoft-gsl
 , opencv
 , xorg
 , withOpencv ? stdenv.isLinux
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     vips
     nlohmann_json
     libsixel
-    microsoft_gsl
+    microsoft-gsl
   ] ++ lib.optionals withOpencv [
     opencv
   ] ++ lib.optionals withX11 [
