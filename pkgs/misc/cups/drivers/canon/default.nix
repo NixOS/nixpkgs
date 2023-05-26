@@ -19,7 +19,7 @@
 , gnome2
 , libxml2
 , runtimeShell
-, proot
+, libredirect
 , ghostscript
 , pkgs
 , pkgsi686Linux
@@ -27,11 +27,11 @@
 }:
 
 let
+  system =
+    if stdenv.targetPlatform.system == "x86_64-linux" then "intel"
+    else if stdenv.targetPlatform.system == "aarch64-linux" then "arm"
+    else throw "Unsupported platform for Canon UFR2 Drivers: ${stdenv.targetPlatform.system}";
   i686_NIX_GCC = pkgsi686Linux.callPackage ({ gcc }: gcc) { };
-  ld32 =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "${stdenv.cc}/nix-support/dynamic-linker-m32"
-    else if stdenv.hostPlatform.system == "i686-linux" then "${stdenv.cc}/nix-support/dynamic-linker"
-    else throw "Unsupported platform for Canon UFR2 Drivers: ${stdenv.hostPlatform.system}";
   ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
   libs = pkgs: lib.makeLibraryPath buildInputs;
 
@@ -99,6 +99,7 @@ stdenv.mkDerivation rec {
       mkdir -p $out/share/cups/model
       install -m 644 ppd/*.ppd $out/share/cups/model/
     )
+    '' + lib.optionalString (system == "intel") ''
     (
       cd lib
       mkdir -p $out/lib32
@@ -113,33 +114,37 @@ stdenv.mkDerivation rec {
       install -m 755 libs32/intel/libcnlbcmr.so.1.0 $out/lib32
       install -m 755 libs32/intel/libcnncapcmr.so.1.0 $out/lib32
       install -m 755 libs32/intel/libufr2filterr.so.1.0.0 $out/lib32
-
+    )
+    '' + ''
+    (
+      cd lib
       mkdir -p $out/lib
-      install -m 755 libs64/intel/libColorGearCufr2.so.2.0.0 $out/lib
-      install -m 755 libs64/intel/libcaepcmufr2.so.1.0 $out/lib
-      install -m 755 libs64/intel/libcaiocnpkbidir.so.1.0.0 $out/lib
-      install -m 755 libs64/intel/libcaiousb.so.1.0.0 $out/lib
-      install -m 755 libs64/intel/libcaiowrapufr2.so.1.0.0 $out/lib
-      install -m 755 libs64/intel/libcanon_slimufr2.so.1.0.0 $out/lib
-      install -m 755 libs64/intel/libcanonufr2r.so.1.0.0 $out/lib
-      install -m 755 libs64/intel/libcnaccm.so.1.0 $out/lib
-      install -m 755 libs64/intel/libcnlbcmr.so.1.0 $out/lib
-      install -m 755 libs64/intel/libcnncapcmr.so.1.0 $out/lib
-      install -m 755 libs64/intel/libufr2filterr.so.1.0.0 $out/lib
+      install -m 755 libs64/${system}/libColorGearCufr2.so.2.0.0 $out/lib
+      install -m 755 libs64/${system}/libcaepcmufr2.so.1.0 $out/lib
+      install -m 755 libs64/${system}/libcaiocnpkbidir.so.1.0.0 $out/lib
+      install -m 755 libs64/${system}/libcaiousb.so.1.0.0 $out/lib
+      install -m 755 libs64/${system}/libcaiowrapufr2.so.1.0.0 $out/lib
+      install -m 755 libs64/${system}/libcanon_slimufr2.so.1.0.0 $out/lib
+      install -m 755 libs64/${system}/libcanonufr2r.so.1.0.0 $out/lib
+      install -m 755 libs64/${system}/libcnaccm.so.1.0 $out/lib
+      install -m 755 libs64/${system}/libcnlbcmr.so.1.0 $out/lib
+      install -m 755 libs64/${system}/libcnncapcmr.so.1.0 $out/lib
+      install -m 755 libs64/${system}/libufr2filterr.so.1.0.0 $out/lib
 
-      install -m 755 libs64/intel/cnpdfdrv $out/bin
-      install -m 755 libs64/intel/cnpkbidir $out/bin
-      install -m 755 libs64/intel/cnpkmoduleufr2r $out/bin
-      install -m 755 libs64/intel/cnrsdrvufr2 $out/bin
-      install -m 755 libs64/intel/cnsetuputil2 $out/bin/cnsetuputil2
+      install -m 755 libs64/${system}/cnpdfdrv $out/bin
+      install -m 755 libs64/${system}/cnpkbidir $out/bin
+      install -m 755 libs64/${system}/cnpkmoduleufr2r $out/bin
+      install -m 755 libs64/${system}/cnrsdrvufr2 $out/bin
+      install -m 755 libs64/${system}/cnsetuputil2 $out/bin/cnsetuputil2
 
       mkdir -p $out/share/cnpkbidir
-      install -m 644 libs64/intel/cnpkbidir_info* $out/share/cnpkbidir
+      install -m 644 libs64/${system}/cnpkbidir_info* $out/share/cnpkbidir
 
       mkdir -p $out/share/ufr2filter
-      install -m 644 libs64/intel/ThLB* $out/share/ufr2filter
+      install -m 644 libs64/${system}/ThLB* $out/share/ufr2filter
     )
 
+    '' + lib.optionalString (system == "intel") ''
     (
       cd $out/lib32
       ln -sf libcaepcmufr2.so.1.0 libcaepcmufr2.so
@@ -155,6 +160,7 @@ stdenv.mkDerivation rec {
       patchelf --set-rpath "$(cat ${i686_NIX_GCC}/nix-support/orig-cc)/lib:${libs pkgsi686Linux}:${pkgsi686Linux.stdenv.cc.libc}/lib" libcaepcmufr2.so.1.0
       patchelf --set-rpath "$(cat ${i686_NIX_GCC}/nix-support/orig-cc)/lib:${libs pkgsi686Linux}:${pkgsi686Linux.stdenv.cc.libc}/lib" libColorGearCufr2.so.2.0.0
     )
+    '' + ''
 
     (
       cd $out/lib
@@ -179,10 +185,9 @@ stdenv.mkDerivation rec {
       patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64:$out/lib" cnpkbidir
       patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64:$out/lib" cnrsdrvufr2
 
-      mv cnsetuputil2 cnsetuputil2.wrapped
-      echo "#!${runtimeShell} -e" > cnsetuputil2
-      echo "exec ${proot}/bin/proot -b $out/usr/share/cnsetuputil2:/usr/share/cnsetuputil2 -b ${coreutils}/bin/ls:/bin/ls -b ${cups}/share:/usr/share/cups $out/bin/cnsetuputil2.wrapped" > cnsetuputil2
-      chmod +x cnsetuputil2
+      wrapProgram $out/bin/cnsetuputil2 \
+        --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
+        --set NIX_REDIRECTS /usr/share/cnsetuputil2=$out/usr/share/cnsetuputil2
     )
 
     (
