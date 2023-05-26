@@ -2767,6 +2767,8 @@ with pkgs;
 
   twine = with python3Packages; toPythonApplication twine;
 
+  abracadabra = qt6Packages.callPackage ../applications/radio/abracadabra { };
+
   accelergy = callPackage ../applications/science/computer-architecture/accelergy { };
 
   aldo = callPackage ../applications/radio/aldo { };
