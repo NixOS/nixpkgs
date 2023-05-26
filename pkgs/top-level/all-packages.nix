@@ -27214,6 +27214,10 @@ with pkgs;
   minimal-bootstrap = recurseIntoAttrs (import ../os-specific/linux/minimal-bootstrap {
     inherit (stdenv) buildPlatform hostPlatform;
     inherit lib config;
+    fetchurl = import ../build-support/fetchurl/boot.nix {
+      inherit (stdenv.buildPlatform) system;
+    };
+    checkMeta = callPackage ../stdenv/generic/check-meta.nix { };
   });
 
   mingetty = callPackage ../os-specific/linux/mingetty { };
