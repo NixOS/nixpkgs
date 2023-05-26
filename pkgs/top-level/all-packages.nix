@@ -1627,6 +1627,8 @@ with pkgs;
 
   kubevirt = callPackage ../tools/virtualization/kubevirt { };
 
+  licenseclassifier = callPackage ../development/tools/misc/licenseclassifier { };
+
   license-cli = callPackage ../tools/misc/license-cli { };
 
   license-generator = callPackage ../tools/misc/license-generator { };
