@@ -16,6 +16,8 @@
 , libsixel
 , microsoft-gsl
 , chafa
+, libuuid
+, libossp_uuid
 , withOpencv ? stdenv.isLinux
 , opencv
 , withX11 ? stdenv.isLinux
@@ -26,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ueberzugpp";
-  version = "2.8.4";
+  version = "2.8.5";
 
   src = fetchFromGitHub {
     owner = "jstkdng";
     repo = "ueberzugpp";
     rev = "v${version}";
-    hash = "sha256-XWT6dFZx6kn6BAv7CV0YIiAuKSBOAfZr72gC9zrSxus=";
+    hash = "sha256-WnrKwbh7m84xlKMuixkB8LLw8Pzb8+mZV9cHWiI6cBY=";
   };
 
   # error: no member named 'ranges' in namespace 'std'
@@ -64,6 +66,7 @@ stdenv.mkDerivation rec {
     libsixel
     microsoft-gsl
     chafa
+    (if stdenv.isLinux then libuuid else libossp_uuid)
   ] ++ lib.optionals withOpencv [
     opencv
   ] ++ lib.optionals withX11 [
