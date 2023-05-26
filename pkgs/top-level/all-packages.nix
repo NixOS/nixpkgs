@@ -1781,8 +1781,6 @@ with pkgs;
 
   xrootd = callPackage ../tools/networking/xrootd { };
 
-  xtrt = callPackage ../tools/archivers/xtrt { };
-
   yabridge = callPackage ../tools/audio/yabridge {
     wine = wineWowPackages.staging;
   };
@@ -22994,7 +22992,7 @@ with pkgs;
 
   mhddfs = callPackage ../tools/filesystems/mhddfs { };
 
-  microsoft_gsl = callPackage ../development/libraries/microsoft_gsl { };
+  microsoft-gsl = callPackage ../development/libraries/microsoft-gsl { };
 
   microsoft-edge = callPackage (import ../applications/networking/browsers/microsoft-edge).stable { };
   microsoft-edge-beta = callPackage (import ../applications/networking/browsers/microsoft-edge).beta { };
@@ -27214,6 +27212,10 @@ with pkgs;
   minimal-bootstrap = recurseIntoAttrs (import ../os-specific/linux/minimal-bootstrap {
     inherit (stdenv) buildPlatform hostPlatform;
     inherit lib config;
+    fetchurl = import ../build-support/fetchurl/boot.nix {
+      inherit (stdenv.buildPlatform) system;
+    };
+    checkMeta = callPackage ../stdenv/generic/check-meta.nix { };
   });
 
   mingetty = callPackage ../os-specific/linux/mingetty { };
@@ -27685,6 +27687,7 @@ with pkgs;
     withTimesyncd = false;
     withTpm2Tss = false;
     withUserDb = false;
+    withUkify = false;
   };
   systemdStage1 = systemdMinimal.override {
     pname = "systemd-stage-1";

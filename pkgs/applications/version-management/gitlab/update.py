@@ -250,21 +250,19 @@ def update_gitlab_pages():
 
 def get_container_registry_version() -> str:
     """Returns the version attribute of gitlab-container-registry"""
-    return str(
-        subprocess.check_output(
-            [
-                "nix",
-                "--experimental-features",
-                "nix-command",
-                "eval",
-                "-f",
-                ".",
-                "--raw",
-                "gitlab-container-registry.version",
-            ],
-            cwd=NIXPKGS_PATH,
-        )
-    )
+    return subprocess.check_output(
+        [
+            "nix",
+            "--experimental-features",
+            "nix-command",
+            "eval",
+            "-f",
+            ".",
+            "--raw",
+            "gitlab-container-registry.version",
+        ],
+        cwd=NIXPKGS_PATH,
+    ).decode("utf-8")
 
 
 @cli.command("update-gitlab-shell")
@@ -287,16 +285,25 @@ def update_gitlab_workhorse():
 
 @cli.command("update-gitlab-container-registry")
 @click.option("--rev", default="latest", help="The rev to use (vX.Y.Z-ee), or 'latest'")
-def update_gitlab_container_registry(rev: str):
+@click.option(
+    "--commit", is_flag=True, default=False, help="Commit the changes for you"
+)
+def update_gitlab_container_registry(rev: str, commit: bool):
     """Update gitlab-container-registry"""
     logger.info("Updading gitlab-container-registry")
     repo = GitLabRepo(repo="container-registry")
+    old_container_registry_version = get_container_registry_version()
 
     if rev == "latest":
         rev = next(filter(lambda x: not ("rc" in x or x.endswith("pre")), repo.tags))
 
     version = repo.rev2version(rev)
     _call_nix_update("gitlab-container-registry", version)
+    if commit:
+        new_container_registry_version = get_container_registry_version()
+        commit_container_registry(
+            old_container_registry_version, new_container_registry_version
+        )
 
 
 @cli.command("update-all")

@@ -163,5 +163,6 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ offline RaghavSood ];
     license = licenses.isc;
     platforms = [ "x86_64-linux" ];
+    knownVulnerabilities = [ "CVE-2022-29077" ];
   };
 }
