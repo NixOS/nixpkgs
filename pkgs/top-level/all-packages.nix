@@ -1721,6 +1721,8 @@ with pkgs;
 
   supermin = callPackage ../tools/virtualization/supermin { };
 
+  svp-bin = libsForQt5.callPackage ../applications/video/svp-bin { };
+
   sx-go = callPackage ../tools/security/sx-go { };
 
   systeroid = callPackage ../tools/system/systeroid { };
