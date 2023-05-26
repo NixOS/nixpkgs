@@ -13,12 +13,13 @@ let
   mkDisableOption = n: mkOption {
     type = types.bool;
     default = true;
-    description = "Whether to enable ${n}.";
+    description = mdDoc "Whether to enable ${n}.";
   };
-  optionalType = ty: x: mkOption ({
+  optionalType = ty: x: mkOption (x // {
+    description = mdDoc x.description;
     type = (types.nullOr ty);
     default = null;
-  } // x);
+  });
   optionalPath = optionalType types.path;
   optionalStr = optionalType types.str;
   optionalInt = optionalType types.int;
@@ -33,13 +34,13 @@ in {
       };
       collect = {
         diskStats = mkDisableOption "dist_stat collection";
-        ioStats   = mkEnableOption "io.stat collection for cgroups";
+        ioStats   = mkEnableOption (mdDoc "io.stat collection for cgroups");
         exitStats = mkDisableOption "eBPF-based exitstats";
       };
-      compression.enable = mkEnableOption "data compression";
+      compression.enable = mkEnableOption (mdDoc "data compression");
       retention = {
         size = optionalInt {
-          description = mdDoc ''
+          description = ''
             Size limit for below's data, in bytes. Data is deleted oldest-first, in 24h 'shards'.
 
             ::: {.note}
@@ -50,7 +51,7 @@ in {
           '';
         };
         time = optionalInt {
-          description = mdDoc ''
+          description = ''
             Retention time, in seconds.
 
             ::: {.note}
