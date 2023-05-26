@@ -282,6 +282,12 @@ self: super: ({
     '' + drv.postPatch or "";
   }) super.http-client-tls;
 
+  http2 = super.http2.overrideAttrs (drv: {
+    # Allow access to local networking when the Darwin sandbox is enabled, so http2 can run tests
+    # that access localhost.
+    __darwinAllowLocalNetworking = true;
+  });
+
   foldl = overrideCabal (drv: {
     postPatch = ''
       # This comment has been inserted, so the derivation hash changes, forcing
