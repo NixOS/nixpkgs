@@ -1,15 +1,15 @@
-{ python3Packages, lib, nrfutil, libnitrokey }:
+{ lib, python3Packages, fetchPypi, nrfutil, libnitrokey }:
 
 with python3Packages;
 
 buildPythonApplication rec {
   pname = "pynitrokey";
-  version = "0.4.36";
+  version = "0.4.37";
   format = "flit";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Y+6T1iUp9TVYbAjpXVHozC6WT061r0VYv/ifu8lcN6E=";
+    hash = "sha256-KoZym1b+E0P3kRt0PTm9wCX4nO31isDIwEq38xMgDDU=";
   };
 
   propagatedBuildInputs = [

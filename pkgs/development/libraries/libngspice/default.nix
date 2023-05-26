@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
     "--enable-cider"
   ];
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     description = "The Next Generation Spice (Electronic Circuit Simulator)";
     homepage = "http://ngspice.sourceforge.net";

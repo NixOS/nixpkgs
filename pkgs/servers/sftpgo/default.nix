@@ -2,6 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -38,7 +39,13 @@ buildGoModule rec {
       --bash <($out/bin/sftpgo gen completion bash) \
       --zsh <($out/bin/sftpgo gen completion zsh) \
       --fish <($out/bin/sftpgo gen completion fish)
+
+    shareDirectory="$out/share/sftpgo"
+    mkdir -p "$shareDirectory"
+    cp -r ./{openapi,static,templates} "$shareDirectory"
   '';
+
+  passthru.tests = nixosTests.sftpgo;
 
   meta = with lib; {
     homepage = "https://github.com/drakkan/sftpgo";
@@ -52,6 +59,6 @@ buildGoModule rec {
       Google Cloud Storage, Azure Blob Storage, SFTP.
     '';
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ thenonameguy ];
+    maintainers = with maintainers; [ thenonameguy yayayayaka ];
   };
 }
