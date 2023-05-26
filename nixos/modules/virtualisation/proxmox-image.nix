@@ -187,20 +187,20 @@ with lib;
           guestAgentSupport = false;
         }).overrideAttrs ( super: rec {
 
-          version = "7.0.0";
+          version = "7.2.1";
           src = pkgs.fetchurl {
             url= "https://download.qemu.org/qemu-${version}.tar.xz";
-            sha256 = "sha256-9rN1x5UfcoQCeYsLqrsthkeMpT1Eztvvq74cRr9G+Dk=";
+            sha256 = "sha256-jIVpms+dekOl/immTN1WNwsMLRrQdLr3CYqCTReq1zs=";
           };
           patches = [
             # Proxmox' VMA tool is published as a particular patch upon QEMU
             (pkgs.fetchpatch {
               url =
                 let
-                  rev = "1976ca460796f28447b41e3618e5c1e234035dd5";
-                  path = "debian/patches/pve/0026-PVE-Backup-add-vma-backup-format-code.patch";
+                  rev = "abb04bb6272c1202ca9face0827917552b9d06f6";
+                  path = "debian/patches/pve/0027-PVE-Backup-add-vma-backup-format-code.patch";
                 in "https://git.proxmox.com/?p=pve-qemu.git;a=blob_plain;hb=${rev};f=${path}";
-              hash = "sha256-2Dz+ceTwrcyYYxi76RtyY3v15/2pwGcDhFuoZWlgbjc=";
+              hash = "sha256-3d0HHdvaExCry6zcULnziYnWIAnn24vECkI4sjj2BMg=";
             })
 
             # Proxmox' VMA tool uses O_DIRECT which fails on tmpfs
@@ -220,6 +220,7 @@ with lib;
           ];
 
           buildInputs = super.buildInputs ++ [ pkgs.libuuid ];
+          nativeBuildInputs = super.nativeBuildInputs ++ [ pkgs.perl ];
 
         });
       in
