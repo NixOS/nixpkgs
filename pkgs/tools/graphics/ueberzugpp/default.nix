@@ -18,9 +18,13 @@
 , chafa
 , libuuid
 , libossp_uuid
-, withOpencv ? stdenv.isLinux
+, enableOpencv ? stdenv.isLinux
 , opencv
-, withX11 ? stdenv.isLinux
+, enableSway ? stdenv.isLinux
+, extra-cmake-modules
+, wayland
+, wayland-protocols
+, enableX11 ? stdenv.isLinux
 , xorg
 , withoutStdRanges ? stdenv.isDarwin
 , range-v3
@@ -47,10 +51,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
     pkg-config
-    cli11
   ];
 
   buildInputs = [
@@ -66,19 +71,26 @@ stdenv.mkDerivation rec {
     libsixel
     microsoft-gsl
     chafa
+    cli11
     (if stdenv.isLinux then libuuid else libossp_uuid)
-  ] ++ lib.optionals withOpencv [
+  ] ++ lib.optionals enableOpencv [
     opencv
-  ] ++ lib.optionals withX11 [
+  ] ++ lib.optionals enableSway [
+    extra-cmake-modules
+    wayland
+    wayland-protocols
+  ] ++ lib.optionals enableX11 [
     xorg.libX11
     xorg.xcbutilimage
   ] ++ lib.optionals withoutStdRanges [
     range-v3
   ];
 
-  cmakeFlags = lib.optionals (!withOpencv) [
+  cmakeFlags = lib.optionals (!enableOpencv) [
     "-DENABLE_OPENCV=OFF"
-  ] ++ lib.optionals (!withX11) [
+  ] ++ lib.optionals enableSway [
+    "-DENABLE_SWAY=ON"
+  ] ++ lib.optionals (!enableX11) [
     "-DENABLE_X11=OFF"
   ];
 
