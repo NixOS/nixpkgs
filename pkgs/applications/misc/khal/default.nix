@@ -37,7 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     icalendar
     lxml
     pkginfo
-    pkgs.vdirsyncer
+    vdirsyncer
     python-dateutil
     pytz
     pyxdg
