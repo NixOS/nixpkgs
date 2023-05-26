@@ -16,7 +16,6 @@
 , coreutils
 , atk
 , pkg-config
-, gnome2
 , libxml2
 , runtimeShell
 , libredirect
@@ -44,7 +43,7 @@ let
     hash = "sha256-d5VHlPpUPAr3RWVdQRdn42YLuVekOw1IaMFLVt1Iu7o=";
   };
 
-  buildInputs = [ cups zlib jbigkit glib gtk3 gnome2.libglade libxml2 gdk-pixbuf pango cairo atk ];
+  buildInputs = [ cups zlib jbigkit glib gtk3 libxml2 gdk-pixbuf pango cairo atk ];
 in
 stdenv.mkDerivation rec {
   pname = "canon-cups-ufr2";
