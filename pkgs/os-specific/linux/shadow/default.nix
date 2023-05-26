@@ -51,6 +51,16 @@ stdenv.mkDerivation rec {
       url = "https://github.com/shadow-maint/shadow/commit/a281f241b592aec636d1b93a99e764499d68c7ef.patch";
       sha256 = "sha256-GJWg/8ggTnrbIgjI+HYa26DdVbjTHTk/IHhy7GU9G5w=";
     })
+    # CVE-2023-29383 (initial patch: https://github.com/shadow-maint/shadow/pull/687)
+    (fetchpatch {
+      url = "https://github.com/shadow-maint/shadow/commit/e5905c4b84d4fb90aefcd96ee618411ebfac663d.patch";
+      sha256 = "sha256-OV9S+nBy5kPqrsjxiL5/a/KAhLoCDqlERtiwgTn1568=";
+    })
+    # CVE-2023-29383 (fix to PR#687: https://github.com/shadow-maint/shadow/pull/695)
+    (fetchpatch {
+      url = "https://github.com/shadow-maint/shadow/commit/2eaea70111f65b16d55998386e4ceb4273c19eb4.patch";
+      sha256 = "sha256-4cr/Ft64A8d/KGSSbmPKJUOtY8oBjUBn/DUfD/9MrgU=";
+    })
   ];
 
   # The nix daemon often forbids even creating set[ug]id files.
