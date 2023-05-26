@@ -6,6 +6,31 @@
 with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
 {
+  bind = makeTest {
+    name = "non-default-filesystem-bind";
+
+    nodes.machine = { ... }: {
+      virtualisation.writableStore = false;
+
+      virtualisation.fileSystems."/test-bind-dir/bind" = {
+        device = "/";
+        neededForBoot = true;
+        options = [ "bind" ];
+      };
+
+      virtualisation.fileSystems."/test-bind-file/bind" = {
+        depends = [ "/nix/store" ];
+        device = builtins.toFile "empty" "";
+        neededForBoot = true;
+        options = [ "bind" ];
+      };
+    };
+
+    testScript = ''
+      machine.wait_for_unit("multi-user.target")
+    '';
+  };
+
   btrfs = makeTest
     {
       name = "non-default-filesystems-btrfs";
