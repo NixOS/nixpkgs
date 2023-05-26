@@ -24,11 +24,11 @@
 , libbladeRF
 , mbelib
 , ninja
-, ocl-icd
 , opencv3
 , pkg-config
 , qtcharts
 , qtdeclarative
+, qtgamepad
 , qtgraphicaleffects
 , qtlocation
 , qtmultimedia
@@ -50,13 +50,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sdrangel";
-  version = "7.13.0";
+  version = "7.14.1";
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "sdrangel";
     rev = "v${version}";
-    hash = "sha256-xG41FNlMfqH5MaGVFFENP0UFEkZYiWhtpNSPh2s4Irk=";
+    hash = "sha256-AsKjsoIyGjGpRGA+pYQsO4x2C5Rb7xaG+Q0cS3xANcM=";
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config wrapQtAppsHook ];
@@ -86,6 +86,7 @@ stdenv.mkDerivation rec {
     opencv3
     qtcharts
     qtdeclarative
+    qtgamepad
     qtgraphicaleffects
     qtlocation
     qtmultimedia
@@ -111,8 +112,6 @@ stdenv.mkDerivation rec {
     "-DSOAPYSDR_DIR=${soapysdr-with-plugins}"
     "-Wno-dev"
   ];
-
-  LD_LIBRARY_PATH = "${ocl-icd}/lib";
 
   meta = with lib; {
     description = "Software defined radio (SDR) software";
