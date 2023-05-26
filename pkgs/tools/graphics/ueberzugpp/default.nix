@@ -99,11 +99,14 @@ stdenv.mkDerivation rec {
     export MACOSX_DEPLOYMENT_TARGET=10.14
   '';
 
+  postInstall = ''
+    ln -s $out/bin/ueberzug $out/bin/ueberzugpp
+  '';
+
   meta = with lib; {
     description = "Drop in replacement for ueberzug written in C++";
     homepage = "https://github.com/jstkdng/ueberzugpp";
     license = licenses.gpl3Plus;
-    mainProgram = "ueberzug";
     maintainers = with maintainers; [ aleksana wegank ];
     platforms = platforms.unix;
   };
