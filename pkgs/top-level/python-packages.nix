@@ -11799,6 +11799,11 @@ self: super: with self; {
 
   tabview = callPackage ../development/python-modules/tabview { };
 
+  taco = toPythonModule (pkgs.taco.override {
+    inherit (self) python;
+    enablePython = true;
+  });
+
   tadasets = callPackage ../development/python-modules/tadasets { };
 
   tag-expressions = callPackage ../development/python-modules/tag-expressions { };

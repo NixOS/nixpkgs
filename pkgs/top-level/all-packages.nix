@@ -22959,6 +22959,8 @@ with pkgs;
 
   dbcsr = callPackage ../development/libraries/science/math/dbcsr { };
 
+  taco = callPackage ../development/libraries/taco { };
+
   ## libGL/libGLU/Mesa stuff
 
   # Default libGL implementation, should provide headers and
