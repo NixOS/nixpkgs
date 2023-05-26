@@ -24186,6 +24186,8 @@ with pkgs;
 
   tdlib = callPackage ../development/libraries/tdlib { };
 
+  tdom = callPackage ../development/libraries/tdom { };
+
   tecla = callPackage ../development/libraries/tecla { };
 
   tectonic = callPackage ../tools/typesetting/tectonic {
