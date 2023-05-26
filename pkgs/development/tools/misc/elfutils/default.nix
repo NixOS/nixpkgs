@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs tests/*.sh
+  '' + lib.optionalString enableDebuginfod ''
+    sed -i '1i DESTDIR=$(debuginfod)' debuginfod/Makefile.in
   '' + lib.optionalString stdenv.hostPlatform.isRiscV ''
     # disable failing test:
     #
@@ -48,7 +50,10 @@ stdenv.mkDerivation rec {
     sed -i s/run-backtrace-dwarf.sh//g tests/Makefile.in
   '';
 
-  outputs = [ "bin" "dev" "out" "man" ];
+  # debuginfod goes in its own output, as it increases closure size
+  # significantly by depending on gcc. Many uses, such as libbpf
+  # (depended on by systemd), don't need debuginfod.
+  outputs = [ "bin" "dev" "out" "man" ] ++ lib.optional enableDebuginfod "debuginfod";
 
   # We need bzip2 in NativeInputs because otherwise we can't unpack the src,
   # as the host-bzip2 will be in the path.
