@@ -1,9 +1,21 @@
-{ fetchFromGitHub, lib, sway-unwrapped }:
-
+{ lib
+, stdenv
+, fetchFromGitHub
+, sway-unwrapped
+, # Used by the NixOS module:
+  isNixOS ? false
+, enableXWayland ? true
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd
+, dbusSupport ? true
+, trayEnabled ? systemdSupport && dbusSupport
+,
+}:
 sway-unwrapped.overrideAttrs (oldAttrs: rec {
   pname = "swayfx";
   version = "0.3";
 
+  inherit isNixOS enableXWayland systemdSupport dbusSupport trayEnabled;
   src = fetchFromGitHub {
     owner = "WillPower3309";
     repo = "swayfx";

@@ -31456,7 +31456,8 @@ with pkgs;
 
   swaycons = callPackage ../applications/window-managers/sway/swaycons.nix { };
 
-  swayfx = callPackage ../applications/window-managers/sway/fx.nix { };
+  swayfx-unwrapped = callPackage ../applications/window-managers/sway/fx.nix { };
+  swayfx = callPackage ../applications/window-managers/sway/wrapper.nix { sway-unwrapped=swayfx-unwrapped; };
 
   swaylock-fancy = callPackage ../applications/window-managers/sway/lock-fancy.nix { };
 
