@@ -3,16 +3,9 @@
 , callPackage
 , kaem
 , mescc-tools-extra
+, checkMeta
 }:
-
-let
-  checkMeta = callPackage ../../../stdenv/generic/check-meta.nix { };
-in
 rec {
-  fetchurl = import ../../../build-support/fetchurl/boot.nix {
-    inherit (buildPlatform) system;
-  };
-
   derivationWithMeta = attrs:
     let
       passthru = attrs.passthru or {};

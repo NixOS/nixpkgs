@@ -251,7 +251,7 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.isLinux [
     # Same as above
     "tests/pytest_tests/unit_tests/test_artifacts/test_storage.py"
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  ] ++ lib.optionals stdenv.isDarwin [
     # Same as above
     "tests/pytest_tests/unit_tests/test_lib/test_filesystem.py"
   ];
