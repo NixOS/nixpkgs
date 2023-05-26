@@ -1805,6 +1805,7 @@ mapAliases ({
     "from nixpkgs. Users are urged to switch to 'xone'."
   ); # Added 2022-08-02
   xpraGtk3 = throw "'xpraGtk3' has been renamed to/replaced by 'xpra'"; # Converted to throw 2022-02-22
+  xtrt = throw "xtrt has been removed due to being abandoned"; # Added 2023-05-25
   xv = xxv; # Added 2020-02-22
   xvidcap = throw "'xvidcap' has been removed because of a broken dependency"; # Added 2022-11-08
   xvfb_run = xvfb-run; # Added 2021-05-07
