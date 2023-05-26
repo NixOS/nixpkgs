@@ -1857,6 +1857,12 @@
     githubId = 11135;
     name = "Berk D. Demir";
   };
+  bddvlpr = {
+    email = "luna@bddvlpr.com";
+    github = "bddvlpr";
+    githubId = 17461028;
+    name = "Luna Simons";
+  };
   bdesham = {
     email = "benjamin@esham.io";
     github = "bdesham";
@@ -17353,10 +17359,10 @@
   };
   yayayayaka = {
     email = "nixpkgs@uwu.is";
-    matrix = "@lara:uwu.is";
+    matrix = "@yaya:uwu.is";
     github = "yayayayaka";
     githubId = 73759599;
-    name = "Lara A.";
+    name = "Yaya";
   };
   ydlr = {
     name = "ydlr";

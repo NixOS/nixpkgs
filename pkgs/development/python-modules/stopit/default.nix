@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
+
 }:
 
 buildPythonPackage rec {
@@ -14,6 +16,10 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-uXJUA70JOGWT2NmS6S7fPrTWAJZ0mZ/hICahIUzjfbw=";
   };
+
+  propagatedBuildInputs = [
+    setuptools # for pkg_resources
+  ];
 
   pythonImportsCheck = [ "stopit" ];
 

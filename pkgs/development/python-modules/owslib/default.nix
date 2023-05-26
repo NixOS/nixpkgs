@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "owslib";
-  version = "0.28.1";
+  version = "0.29.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "geopython";
     repo = "OWSLib";
     rev = "refs/tags/${version}";
-    hash = "sha256-qiH6teCJ/4oftSRyBTtiJdlmJn02VwacU72dWi6OXdc=";
+    hash = "sha256-dbL4VdnPszwiDO+UjluuyqeBRMKojTnZPEFKEYiIWS0=";
   };
 
   postPatch = ''
@@ -61,6 +61,7 @@ buildPythonPackage rec {
     "test_wfs_200_remotemd"
     "test_wms_130_remotemd"
     "test_wmts_example_informatievlaanderen"
+    "test_opensearch_creodias"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_ogcapi_records_pygeoapi"
     "test_wms_getfeatureinfo_130"
@@ -71,6 +72,6 @@ buildPythonPackage rec {
     homepage = "https://www.osgeo.org/projects/owslib/";
     changelog = "https://github.com/geopython/OWSLib/blob/${version}/CHANGES.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = teams.geospatial.members;
   };
 }
