@@ -119,7 +119,7 @@ let
       hiPrioSet getLicenseFromSpdxId getExe;
     inherit (self.filesystem) pathType pathIsDirectory pathIsRegularFile;
     inherit (self.sources) cleanSourceFilter
-      cleanSource sourceByRegex sourceFilesBySuffices
+      cleanSource sourceByRegex sourceFilesBySuffices sourceSubdirs
       commitIdFromGitRepo cleanSourceWith pathHasContext
       canCleanSource pathIsGitRepo;
     inherit (self.modules) evalModules setDefaultModuleLocation

@@ -156,6 +156,27 @@ let
       in type == "directory" || lib.any (ext: lib.hasSuffix ext base) exts;
     in cleanSourceWith { inherit filter src; };
 
+  /*
+    Filter a source directory down to only a specified list of
+    subdirectories.
+
+    Type: sourceLike -> [String] -> Source
+
+    Example:
+      sourceSubdirs src [ "host/rootfs" "scripts" ]
+  */
+  sourceSubdirs = src: subdirs: lib.cleanSourceWith {
+    filter = path: _type:
+      lib.any (subdir:
+        let
+          subdir' = lib.path.append (src.origSrc or src) subdir;
+          path' = /. + path;
+        in
+          lib.path.hasPrefix path' subdir' || lib.path.hasPrefix subdir' path'
+      ) subdirs;
+    inherit src;
+  };
+
   pathIsGitRepo = path: (_commitIdFromGitRepoOrError path)?value;
 
   /*
@@ -286,6 +307,7 @@ in {
 
     sourceByRegex
     sourceFilesBySuffices
+    sourceSubdirs
 
     trace
     ;
