@@ -42,6 +42,21 @@ buildPythonPackage rec {
       url = "https://github.com/lmcinnes/umap/commit/949abd082524fce8c45dfb147bcd8e8ef49eade3.patch";
       hash = "sha256-8/1k8iYeF77FIaUApNtY07auPJkrt3vNRR/HTYRvq+0=";
     })
+    # Fix tests with numpy>=1.24
+    # https://github.com/lmcinnes/umap/pull/952
+    (fetchpatch {
+      url = "https://github.com/lmcinnes/umap/commit/588e1f724c9f5de528eb1500b0c85a1a609fe947.patch";
+      hash = "sha256-B50eyMs3CRuzOAq+jxz56XMJPdiUofUxCL0Vqolaafo=";
+    })
+    # https://github.com/lmcinnes/umap/pull/1010
+    (fetchpatch {
+      url = "https://github.com/lmcinnes/umap/commit/848396c762c894e666aaf3d0bcfe1e041b529ea6.patch";
+      hash = "sha256-ir0Pxfr2c0oSuFGXQqHjkj7nzvlpTXCYbaI9qAiLun0=";
+    })
+    (fetchpatch {
+      url = "https://github.com/lmcinnes/umap/commit/30e39938f4627f327223245dfe2c908af6b7e304.patch";
+      hash = "sha256-7Divrym05wIPa7evgrNYXGm44/EOWG8sIYV8fmtuzJ4=";
+    })
   ];
 
   propagatedBuildInputs = [
