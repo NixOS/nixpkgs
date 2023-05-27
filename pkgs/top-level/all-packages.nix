@@ -38652,6 +38652,8 @@ with pkgs;
     stdenv = if stdenv.cc.isClang then llvmPackages_5.stdenv else stdenv;
   });
 
+  rinetd = callPackage ../servers/rinetd { };
+
   rink = callPackage ../applications/science/misc/rink {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
