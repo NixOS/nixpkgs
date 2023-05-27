@@ -31,6 +31,7 @@
 , pluginsSupport ? !stdenv.hostPlatform.isStatic
 , enableDocs ? true
 , enableTools ? true
+, enableBlobs ? true
 , hostCpuOnly ? false
 , hostCpuTargets ? (if hostCpuOnly
                     then (lib.optional stdenv.isx86_64 "i386-softmmu"
@@ -182,7 +183,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional uringSupport "--enable-linux-io-uring"
     ++ lib.optional canokeySupport "--enable-canokey"
     ++ lib.optional capstoneSupport "--enable-capstone"
-    ++ lib.optional (!pluginsSupport) "--disable-plugins";
+    ++ lib.optional (!pluginsSupport) "--disable-plugins"
+    ++ lib.optional (!enableBlobs) "--disable-install-blobs";
 
   dontWrapGApps = true;
 
