@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
       # Make sure we are re-creating a symbolic link here
       test -L "$lib/lib/liblowdown.so"
       ln -s "$darwinDylib" "$lib/lib/liblowdown.dylib"
+      rm "$lib/lib/liblowdown.so"
     '';
 
   doInstallCheck = true;
