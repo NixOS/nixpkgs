@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "dominate";
-  version = "2.7.0";
+  version = "2.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UgEBNgiS6/nQVT9n0341n/kkA9ih4zgUAwUDCIoF2kk=";
+    hash = "sha256-TJDDvvr4jmErcfSzmve8vviXes+oVc7JVyJaj79QQAc=";
   };
 
   nativeCheckInputs = [
