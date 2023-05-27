@@ -123,41 +123,36 @@ in {
 
   };
 
-  config = mkIf cfg.enable {
-    assertions = [
+  config = mkIf cfg.enable
+    (mkMerge [
       {
-        assertion = cfg.extraSessionCommands != "" -> cfg.wrapperFeatures.base;
-        message = ''
-          The extraSessionCommands for Sway will not be run if
-          wrapperFeatures.base is disabled.
-        '';
-      }
-    ];
-    environment = {
-      systemPackages = optional (cfg.package != null) cfg.package ++ cfg.extraPackages;
-      # Needed for the default wallpaper:
-      pathsToLink = optionals (cfg.package != null) [ "/share/backgrounds/sway" ];
-      etc = {
-        "sway/config.d/nixos.conf".source = pkgs.writeText "nixos.conf" ''
-          # Import the most important environment variables into the D-Bus and systemd
-          # user environments (e.g. required for screen sharing and Pinentry prompts):
-          exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
-        '';
-      } // optionalAttrs (cfg.package != null) {
-        "sway/config".source = mkOptionDefault "${cfg.package}/etc/sway/config";
-      };
-    };
-    security.polkit.enable = true;
-    security.pam.services.swaylock = {};
-    hardware.opengl.enable = mkDefault true;
-    fonts.enableDefaultFonts = mkDefault true;
-    programs.dconf.enable = mkDefault true;
-    # To make a Sway session available if a display manager like SDDM is enabled:
-    services.xserver.displayManager.sessionPackages = optionals (cfg.package != null) [ cfg.package ];
-    programs.xwayland.enable = mkDefault true;
-    # For screen sharing (this option only has an effect with xdg.portal.enable):
-    xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-wlr ];
-  };
+        assertions = [
+          {
+            assertion = cfg.extraSessionCommands != "" -> cfg.wrapperFeatures.base;
+            message = ''
+              The extraSessionCommands for Sway will not be run if
+              wrapperFeatures.base is disabled.
+            '';
+          }
+        ];
+        environment = {
+          systemPackages = optional (cfg.package != null) cfg.package ++ cfg.extraPackages;
+          # Needed for the default wallpaper:
+          pathsToLink = optionals (cfg.package != null) [ "/share/backgrounds/sway" ];
+          etc = {
+            "sway/config.d/nixos.conf".source = pkgs.writeText "nixos.conf" ''
+              # Import the most important environment variables into the D-Bus and systemd
+              # user environments (e.g. required for screen sharing and Pinentry prompts):
+              exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
+            '';
+          } // optionalAttrs (cfg.package != null) {
+            "sway/config".source = mkOptionDefault "${cfg.package}/etc/sway/config";
+          };
+        };
+        # To make a Sway session available if a display manager like SDDM is enabled:
+        services.xserver.displayManager.sessionPackages = optionals (cfg.package != null) [ cfg.package ]; }
+      (import ./wayland-session.nix { inherit lib pkgs; })
+    ]);
 
   meta.maintainers = with lib.maintainers; [ primeos colemickens ];
 }
