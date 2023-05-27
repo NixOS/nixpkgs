@@ -998,6 +998,31 @@ let
         machine.fail("ip address show wlan0 | grep -q ${testMac}")
       '';
     };
+    naughtyInterfaceNames = let
+      ifnames = [
+        # flags of ip-address
+        "home" "temporary" "optimistic"
+        "bridge_slave" "flush"
+        # flags of ip-route
+        "up" "type" "nomaster" "address"
+        # other
+        "very_loong_name" "lowerUpper" "-"
+      ];
+    in {
+      name = "naughtyInterfaceNames";
+      nodes.machine = { pkgs, ... }: {
+        networking.useNetworkd = networkd;
+        networking.bridges = listToAttrs
+          (flip map ifnames
+             (name: { inherit name; value.interfaces = []; }));
+      };
+      testScript = ''
+        machine.start()
+        machine.wait_for_unit("network.target")
+        for ifname in ${builtins.toJSON ifnames}:
+            machine.wait_until_succeeds(f"ip link show dev '{ifname}' | grep -q '{ifname}'")
+      '';
+    };
     caseSensitiveRenaming = {
       name = "CaseSensitiveRenaming";
       nodes.machine = { pkgs, ... }: {
