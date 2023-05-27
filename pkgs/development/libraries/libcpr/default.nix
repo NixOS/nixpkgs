@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, curl }:
 
-let version = "1.10.3"; in
+let version = "1.10.4"; in
 stdenv.mkDerivation {
   pname = "libcpr";
   inherit version;
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     owner = "libcpr";
     repo = "cpr";
     rev = version;
-    hash = "sha256-NueZPBiICrh8GXXdCqNtVaB7PfqwtQ0WolvRij8SYbE=";
+    hash = "sha256-8qRNlZgBB71t/FSFPnxFhr02OuD2erLVeoc6wAx3LKk=";
   };
 
   nativeBuildInputs = [ cmake ];
