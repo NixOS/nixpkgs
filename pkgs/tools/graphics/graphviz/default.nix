@@ -10,7 +10,6 @@
 , fontconfig
 , gd
 , gts
-, libdevil
 , libjpeg
 , libpng
 , libtool
@@ -54,7 +53,6 @@ stdenv.mkDerivation rec {
     fontconfig
     gd
     gts
-    libdevil
     pango
     bash
   ] ++ optionals withXorg (with xorg; [ libXrender libXaw libXpm ])
