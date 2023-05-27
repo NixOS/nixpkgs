@@ -36252,6 +36252,8 @@ with pkgs;
 
   vnstat = callPackage ../applications/networking/vnstat { };
 
+  vocabsieve = libsForQt5.callPackage ../games/vocabsieve { };
+
   vocal = callPackage ../applications/audio/vocal { };
 
   volnoti = callPackage ../applications/misc/volnoti { };
