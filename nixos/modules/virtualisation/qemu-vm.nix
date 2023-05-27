@@ -893,7 +893,13 @@ in
                   The address must be in the default VLAN (10.0.2.0/24).
               '';
           }
-        ]));
+        ])) ++ [
+          { assertion = pkgs.stdenv.hostPlatform.is32bit -> cfg.memorySize < 2047;
+            message = ''
+              virtualisation.memorySize is above 2047, but qemu is only able to allocate 2047MB RAM on 32bit max.
+            '';
+          }
+        ];
 
     warnings =
       optional (

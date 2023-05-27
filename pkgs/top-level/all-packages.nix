@@ -2152,6 +2152,8 @@ with pkgs;
 
   legit = callPackage ../applications/version-management/legit { };
 
+  legit-web = callPackage ../applications/version-management/legit-web { };
+
   lucky-commit = callPackage ../applications/version-management/lucky-commit {
     inherit (darwin.apple_sdk.frameworks) OpenCL;
   };
@@ -34270,6 +34272,8 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) CoreServices CoreMIDI;
   };
 
+  sharpsat-td = callPackage ../applications/science/logic/sharpsat-td { };
+
   shntool = callPackage ../applications/audio/shntool { };
 
   sipp = callPackage ../development/tools/misc/sipp { };
@@ -35207,16 +35211,16 @@ with pkgs;
   weechatScripts = recurseIntoAttrs (callPackage ../applications/networking/irc/weechat/scripts { });
 
   westonLite = weston.override {
-    pango = null;
-    freerdp = null;
-    libunwind = null;
-    vaapi = null;
-    libva = null;
-    libwebp = null;
-    xwayland = null;
-    pipewire = null;
-    buildDemo = false;
-    buildRemoting = false;
+    demoSupport = false;
+    hdrSupport = false;
+    pangoSupport = false;
+    pipewireSupport = false;
+    rdpSupport = false;
+    remotingSupport = false;
+    vaapiSupport = false;
+    vncSupport = false;
+    webpSupport = false;
+    xwaylandSupport = false;
   };
 
   chatterino2 = libsForQt5.callPackage ../applications/networking/instant-messengers/chatterino2 {
@@ -39559,7 +39563,7 @@ with pkgs;
 
   rauc = callPackage ../tools/misc/rauc { };
 
-  rbspy = callPackage ../development/tools/rbspy { };
+  rbspy = darwin.apple_sdk_11_0.callPackage ../development/tools/rbspy { };
 
   redprl = callPackage ../applications/science/logic/redprl { };
 
