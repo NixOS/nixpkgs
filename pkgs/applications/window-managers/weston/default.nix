@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "test-junit-xml" false)
     (lib.mesonBool "xwayland" xwaylandSupport)
   ] ++ lib.optionals xwaylandSupport [
-    (lib.mesonOption "xwayland-path" "${xwayland.out}/bin/Xwayland")
+    (lib.mesonOption "xwayland-path" (lib.getExe xwayland))
   ];
 
   passthru.providedSessions = [ "weston" ];
