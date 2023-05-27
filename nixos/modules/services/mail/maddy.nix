@@ -335,12 +335,13 @@ in {
       };
 
       secrets = lib.mkOption {
-        type = lib.types.path;
+        type = with types; nullOr path;
         description = lib.mdDoc ''
           A file containing the various secrets. Should be in the format
           expected by systemd's `EnvironmentFile` directory. Secrets can be
           referenced in the format `{env:VAR}`.
         '';
+        default = null;
       };
 
     };
