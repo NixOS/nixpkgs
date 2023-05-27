@@ -44,15 +44,21 @@ stdenv.mkDerivation rec {
     "install_static"
   ];
 
-  # Fix lib extension so that fixDarwinDylibNames detects it, see
-  # <https://github.com/kristapsdz/lowdown/issues/87#issuecomment-1532243650>.
   postInstall =
     let
       inherit (stdenv.hostPlatform.extensions) sharedLibrary;
       soVersion = "2";
     in
 
-    lib.optionalString (enableShared && stdenv.isDarwin) ''
+    # Check that soVersion is up to date even if we are not on darwin
+    lib.optionalString (enableShared && !stdenv.isDarwin) ''
+      set -x
+      test -f $lib/lib/liblowdown.so.${soVersion}
+      set +x
+    ''
+    # Fix lib extension so that fixDarwinDylibNames detects it, see
+    # <https://github.com/kristapsdz/lowdown/issues/87#issuecomment-1532243650>.
+    + lib.optionalString (enableShared && stdenv.isDarwin) ''
       darwinDylib="$lib/lib/liblowdown.${soVersion}.dylib"
       mv "$lib/lib/liblowdown.so.${soVersion}" "$darwinDylib"
 
