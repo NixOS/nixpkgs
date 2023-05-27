@@ -1,5 +1,3 @@
-{ version, hash }:
-
 { stdenv, lib, fetchurl, fetchpatch
 , meson, pkg-config, ninja
 , intltool, bison, flex, file, python3Packages, wayland-scanner
@@ -87,6 +85,9 @@
 */
 
 let
+  version = "23.0.3";
+  hash = "sha256-OGNipdgN87CWY2tn80Dhzme3BbRHZ9W90R0u0QNxktU=";
+
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
   branch = lib.versions.major version;
