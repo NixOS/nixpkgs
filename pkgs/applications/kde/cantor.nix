@@ -87,7 +87,7 @@ mkDerivation {
   ++ lib.optional withQalculate libqalculate
   ++ lib.optional withLua luajit
   ++ lib.optional withPython python3
-  ++ lib.optional withR R
+  ++ lib.optional withR "${R}/lib/R" # Required for build system to automatically link ${R}/lib/R/lib/libR.so
   ++ lib.optional withSage sage-with-env
   ;
 
