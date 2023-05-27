@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = false; # fails
 
   meta = {
-    description = "GNU implementation of the `tar' archiver";
+    description = "GNU implementation of the `tar` archiver";
     longDescription = ''
       The Tar program provides the ability to create tar archives, as
       well as various other kinds of manipulation.  For example, you
