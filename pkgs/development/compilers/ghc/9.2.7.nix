@@ -108,6 +108,8 @@ let
   '' + lib.optionalString (targetPlatform != hostPlatform) ''
     Stage1Only = ${if targetPlatform.system == hostPlatform.system then "NO" else "YES"}
     CrossCompilePrefix = ${targetPrefix}
+  '' + lib.optionalString (!enableTerminfo) ''
+    WITH_TERMINFO = NO
   '' + lib.optionalString (!enableProfiledLibs) ''
     GhcLibWays = "v dyn"
   '' +
@@ -228,6 +230,10 @@ stdenv.mkDerivation (rec {
   # GHC is a bit confused on its cross terminology.
   # TODO(@sternenseemann): investigate coreutils dependencies and pass absolute paths
   preConfigure = ''
+    substituteInPlace ghc.mk \
+      --replace 'PACKAGES_STAGE0 += terminfo' "" \
+      --replace 'PACKAGES_STAGE1 += terminfo' ""
+
     for env in $(env | grep '^TARGET_' | sed -E 's|\+?=.*||'); do
       export "''${env#TARGET_}=''${!env}"
     done
