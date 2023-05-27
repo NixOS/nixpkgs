@@ -6,7 +6,7 @@
 , ninja
 , yasm
 , libjpeg
-, openssl_1_1
+, openssl
 , libopus
 , ffmpeg_4
 , protobuf
@@ -74,7 +74,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [
     libjpeg
-    openssl_1_1
+    openssl
     libopus
     ffmpeg_4
     protobuf
