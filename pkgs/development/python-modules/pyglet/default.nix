@@ -106,6 +106,6 @@ buildPythonPackage rec {
     homepage = "http://www.pyglet.org/";
     description = "A cross-platform windowing and multimedia library";
     license = licenses.bsd3;
-    platforms = platforms.mesaPlatforms;
+    platforms = platforms.all;
   };
 }

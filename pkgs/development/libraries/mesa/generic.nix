@@ -369,7 +369,7 @@ self = stdenv.mkDerivation {
     homepage = "https://www.mesa3d.org/";
     changelog = "https://www.mesa3d.org/relnotes/${version}.html";
     license = licenses.mit; # X11 variant, in most files
-    platforms = platforms.mesaPlatforms;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ primeos vcunat ]; # Help is welcome :)
   };
 };

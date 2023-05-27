@@ -57,10 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://glew.sourceforge.net/";
     license = with licenses; [ /* modified bsd */ free mit gpl2Only ]; # For full details, see https://github.com/nigels-com/glew#copyright-and-licensing
     pkgConfigModules = [ "glew" ];
-    platforms = with platforms;
-      if enableEGL then
-        subtractLists darwin mesaPlatforms
-      else
-        mesaPlatforms;
+    platforms = platforms.all;
   };
 })

@@ -58,7 +58,7 @@ buildPythonPackage rec {
       liberal BSD-style Open-Source license.
     '';
     license = "BSD-style";
-    platforms = platforms.mesaPlatforms;
+    platforms = platforms.all;
   };
 
 

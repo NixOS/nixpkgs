@@ -276,7 +276,7 @@ python3.pkgs.buildPythonApplication {
       or even practicing guitar chords!
     '';
     license = licenses.agpl3Plus;
-    platforms = platforms.mesaPlatforms;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ oxij Profpatsch euank ];
   };
 }
