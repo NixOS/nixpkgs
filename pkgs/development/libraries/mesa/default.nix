@@ -372,6 +372,9 @@ self = stdenv.mkDerivation {
     license = licenses.mit; # X11 variant, in most files
     platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ primeos vcunat ]; # Help is welcome :)
+
+    # https://gitlab.freedesktop.org/mesa/mesa/-/issues/8634
+    broken = stdenv.isDarwin;
   };
 };
 
