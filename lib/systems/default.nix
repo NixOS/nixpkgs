@@ -296,6 +296,10 @@ let
       in {
         emulatorAvailable = pkgs: (selectEmulator pkgs) != null;
 
+        # whether final.emulator pkgs.pkgsStatic works
+        staticEmulatorAvailable = pkgs: final.emulatorAvailable pkgs
+          && (final.isLinux || final.isWasi || final.isMmix);
+
         emulator = pkgs:
           if (final.emulatorAvailable pkgs)
           then selectEmulator pkgs
