@@ -31,6 +31,7 @@
 , uringSupport ? stdenv.isLinux, liburing
 , canokeySupport ? !toolsOnly, canokey-qemu
 , capstoneSupport ? !toolsOnly, capstone
+, pluginsSupport ? !stdenv.hostPlatform.isStatic
 , enableDocs ? true
 , hostCpuOnly ? false
 , hostCpuTargets ? (if toolsOnly
@@ -183,7 +184,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional smbdSupport "--smbd=${samba}/bin/smbd"
     ++ lib.optional uringSupport "--enable-linux-io-uring"
     ++ lib.optional canokeySupport "--enable-canokey"
-    ++ lib.optional capstoneSupport "--enable-capstone";
+    ++ lib.optional capstoneSupport "--enable-capstone"
+    ++ lib.optional (!pluginsSupport) "--disable-plugins";
 
   dontWrapGApps = true;
 
