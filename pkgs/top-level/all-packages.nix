@@ -34246,6 +34246,8 @@ with pkgs;
     toolsOnly = true;
   };
 
+  qemu-user-static = callPackage ../applications/virtualization/qemu/user-static.nix { };
+
   canokey-qemu = callPackage ../applications/virtualization/qemu/canokey-qemu.nix { };
 
   wrapQemuBinfmtP = callPackage ../applications/virtualization/qemu/binfmt-p-wrapper.nix { };
