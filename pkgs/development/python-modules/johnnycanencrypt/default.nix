@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , buildPythonPackage
 , rustPlatform
-, llvmPackages
 , pkg-config
 , pcsclite
 , nettle
@@ -35,16 +34,14 @@ buildPythonPackage rec {
 
   format = "pyproject";
 
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
-
   propagatedBuildInputs = [
     httpx
   ];
 
   nativeBuildInputs = [
-    llvmPackages.clang
     pkg-config
   ] ++ (with rustPlatform; [
+    bindgenHook
     cargoSetupHook
     maturinBuildHook
   ]);
