@@ -6218,6 +6218,8 @@ self: super: with self; {
 
   migen = callPackage ../development/python-modules/migen { };
 
+  mike = callPackage ../development/python-modules/mike { };
+
   milc = callPackage ../development/python-modules/milc { };
 
   milksnake = callPackage ../development/python-modules/milksnake { };
