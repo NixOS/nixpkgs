@@ -73,6 +73,12 @@ let
       rm test/unit/test_quadrature.py
       rm test/unit/test_reference_element.py
       rm test/unit/test_fiat.py
+
+      # Fix `np.float` deprecation in Numpy 1.20
+      grep -lr 'np.float(' test/ | while read -r fn; do
+        substituteInPlace "$fn" \
+          --replace "np.float(" "np.float64("
+      done
     '';
     checkPhase = ''
       runHook preCheck
