@@ -54,8 +54,8 @@ let
     intelmetool = generic {
       pname = "intelmetool";
       meta.description = "Dump interesting things about Management Engine";
-      buildInputs = [ pciutils zlib ];
       meta.platforms = [ "x86_64-linux" "i686-linux" ];
+      buildInputs = [ pciutils zlib ];
     };
     cbfstool = generic {
       pname = "cbfstool";
@@ -68,6 +68,7 @@ let
     superiotool = generic {
       pname = "superiotool";
       meta.description = "User-space utility to detect Super I/O of a mainboard and provide detailed information about the register contents of the Super I/O";
+      meta.platforms = [ "x86_64-linux" "i686-linux" ];
       buildInputs = [ pciutils zlib ];
     };
     ectool = generic {
@@ -79,8 +80,8 @@ let
     inteltool = generic {
       pname = "inteltool";
       meta.description = "Provides information about Intel CPU/chipset hardware configuration (register contents, MSRs, etc)";
-      buildInputs = [ pciutils zlib ];
       meta.platforms = [ "x86_64-linux" "i686-linux" ];
+      buildInputs = [ pciutils zlib ];
     };
     amdfwtool = generic {
       pname = "amdfwtool";
@@ -119,7 +120,7 @@ in
 utils // {
   coreboot-utils = (buildEnv {
     name = "coreboot-utils-${version}";
-    paths = lib.attrValues utils;
+    paths = lib.filter (lib.meta.availableOn stdenv.hostPlatform) (lib.attrValues utils);
     postBuild = "rm -rf $out/sbin";
   }) // {
     inherit version;
