@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "Terminal multiplexer with window manager and session sharing";
     homepage = "https://vtm.netxs.online/";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.all;
     maintainers = with maintainers; [ ahuzik ];
   };
 }
