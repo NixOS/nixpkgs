@@ -2,51 +2,52 @@
 
 { name ? "${args'.pname}-${args'.version}"
 , src
-, nativeBuildInputs ? []
-, passthru ? {}
-, patches ? []
+, nativeBuildInputs ? [ ]
+, passthru ? { }
+, patches ? [ ]
 
-# Go tags, passed to go via -tag
-, tags ? []
+  # Go tags, passed to go via -tag
+, tags ? [ ]
 
-# A function to override the go-modules derivation
-, overrideModAttrs ? (_oldAttrs : {})
+  # A function to override the go-modules derivation
+, overrideModAttrs ? (_oldAttrs: { })
 
-# path to go.mod and go.sum directory
+  # path to go.mod and go.sum directory
 , modRoot ? "./"
 
-# vendorHash is the SRI hash of the vendored dependencies
-#
-# if vendorHash is null, then we won't fetch any dependencies and
-# rely on the vendor folder within the source.
+  # vendorHash is the SRI hash of the vendored dependencies
+  #
+  # if vendorHash is null, then we won't fetch any dependencies and
+  # rely on the vendor folder within the source.
 , vendorHash ? args'.vendorSha256 or (throw "buildGoModule: vendorHash is missing")
-# Whether to delete the vendor folder supplied with the source.
+  # Whether to delete the vendor folder supplied with the source.
 , deleteVendor ? false
-# Whether to fetch (go mod download) and proxy the vendor directory.
-# This is useful if your code depends on c code and go mod tidy does not
-# include the needed sources to build or if any dependency has case-insensitive
-# conflicts which will produce platform dependant `vendorHash` checksums.
+  # Whether to fetch (go mod download) and proxy the vendor directory.
+  # This is useful if your code depends on c code and go mod tidy does not
+  # include the needed sources to build or if any dependency has case-insensitive
+  # conflicts which will produce platform dependant `vendorHash` checksums.
 , proxyVendor ? false
 
-# We want parallel builds by default
+  # We want parallel builds by default
 , enableParallelBuilding ? true
 
-# Do not enable this without good reason
-# IE: programs coupled with the compiler
+  # Do not enable this without good reason
+  # IE: programs coupled with the compiler
 , allowGoReference ? false
 
 , CGO_ENABLED ? go.CGO_ENABLED
 
-, meta ? {}
+, meta ? { }
 
-# Not needed with buildGoModule
+  # Not needed with buildGoModule
 , goPackagePath ? ""
 
-# needed for buildFlags{,Array} warning
+  # needed for buildFlags{,Array} warning
 , buildFlags ? ""
 , buildFlagsArray ? ""
 
-, ... }@args':
+, ...
+}@args':
 
 assert goPackagePath != "" -> throw "`goPackagePath` is not needed with `buildGoModule`";
 assert (args' ? vendorHash && args' ? vendorSha256) -> throw "both `vendorHash` and `vendorSha256` set. only one can be set.";
@@ -55,11 +56,10 @@ let
   args = removeAttrs args' [ "overrideModAttrs" "vendorSha256" "vendorHash" ];
 
   go-modules = if (vendorHash == null) then "" else
-    (stdenv.mkDerivation {
-
+  (stdenv.mkDerivation {
     name = "${name}-go-modules";
 
-    nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ go git cacert ];
+    nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ go git cacert ];
 
     inherit (args) src;
     inherit (go) GOOS GOARCH;
@@ -69,8 +69,8 @@ let
     # out in the wild. In anycase, it's documented in:
     # doc/languages-frameworks/go.section.md
     prePatch = args.prePatch or "";
-    patches = args.patches or [];
-    patchFlags = args.patchFlags or [];
+    patches = args.patches or [ ];
+    patchFlags = args.patchFlags or [ ];
     postPatch = args.postPatch or "";
     preBuild = args.preBuild or "";
     postBuild = args.modPostBuild or "";
@@ -79,7 +79,9 @@ let
     GO111MODULE = "on";
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-      "GIT_PROXY_COMMAND" "SOCKS_SERVER" "GOPROXY"
+      "GIT_PROXY_COMMAND"
+      "SOCKS_SERVER"
+      "GOPROXY"
     ];
 
     configurePhase = args.modConfigurePhase or ''
@@ -105,15 +107,15 @@ let
         exit 10
       fi
 
-    ${if proxyVendor then ''
-      mkdir -p "''${GOPATH}/pkg/mod/cache/download"
-      go mod download
-    '' else ''
-      if (( "''${NIX_DEBUG:-0}" >= 1 )); then
-        goModVendorFlags+=(-v)
-      fi
-      go mod vendor "''${goModVendorFlags[@]}"
-    ''}
+      ${if proxyVendor then ''
+        mkdir -p "''${GOPATH}/pkg/mod/cache/download"
+        go mod download
+      '' else ''
+        if (( "''${NIX_DEBUG:-0}" >= 1 )); then
+          goModVendorFlags+=(-v)
+        fi
+        go mod vendor "''${goModVendorFlags[@]}"
+      ''}
 
       mkdir -p vendor
 
@@ -123,12 +125,12 @@ let
     installPhase = args.modInstallPhase or ''
       runHook preInstall
 
-    ${if proxyVendor then ''
-      rm -rf "''${GOPATH}/pkg/mod/cache/download/sumdb"
-      cp -r --reflink=auto "''${GOPATH}/pkg/mod/cache/download" $out
-    '' else ''
-      cp -r --reflink=auto vendor $out
-    ''}
+      ${if proxyVendor then ''
+        rm -rf "''${GOPATH}/pkg/mod/cache/download/sumdb"
+        cp -r --reflink=auto "''${GOPATH}/pkg/mod/cache/download" $out
+      '' else ''
+        cp -r --reflink=auto vendor $out
+      ''}
 
       if ! [ "$(ls -A $out)" ]; then
         echo "vendor folder is empty, please set 'vendorHash = null;' in your expression"
