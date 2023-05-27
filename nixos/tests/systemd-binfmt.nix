@@ -87,4 +87,27 @@ in {
       ).lower()
     '';
   };
+
+  chroot = makeTest {
+    name = "systemd-binfmt-chroot";
+    nodes.machine = { pkgs, ... }: {
+      boot.binfmt.emulatedSystems = [
+        "aarch64-linux"
+      ];
+      boot.binfmt.preferStaticEmulators = true;
+
+      environment.systemPackages = [
+        (pkgs.writeShellScriptBin "test-chroot" ''
+          set -euo pipefail
+          mkdir -p /tmp/chroot
+          cp ${pkgs.pkgsCross.aarch64-multiplatform.pkgsStatic.busybox}/bin/busybox /tmp/chroot/busybox
+          chroot /tmp/chroot /busybox uname -m | grep aarch64
+        '')
+      ];
+    };
+    testScript = ''
+      machine.start()
+      machine.succeed("test-chroot")
+    '';
+  };
 }
