@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lowdown";
-  version = "1.0.1";
+  version = "1.0.2";
 
   outputs = [ "out" "lib" "dev" "man" ];
 
   src = fetchurl {
     url = "https://kristaps.bsd.lv/lowdown/snapshots/lowdown-${version}.tar.gz";
-    sha512 = "2jsskdrx035vy5kyb371swcn23vj7ww1fmrsalmyp1jc3459vgh2lk4nlvrw74r93z9yyzsq9vra2sspx173cpjlr8lyyqdw5h91lms";
+    sha512 = "1cizrzmldi7lrgdkpn4b6skp1b5hz2jskkbcbv9k6lmz08clm02gyifh7fgd8j2rklqsim34n5ifyg83xhsjzd57xqjys1ccjdn3a5m";
   };
 
   nativeBuildInputs = [ which ]
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   postInstall =
     let
       inherit (stdenv.hostPlatform.extensions) sharedLibrary;
-      soVersion = "2";
+      soVersion = "3";
     in
 
     # Check that soVersion is up to date even if we are not on darwin
