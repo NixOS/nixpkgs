@@ -254,7 +254,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
   postInstall = lib.optionalString (!toolsOnly) ''
-    ln -s $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} $out/bin/qemu-kvm
+    if [ -f $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} ]; then
+      ln -s $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} $out/bin/qemu-kvm
+    fi
   '';
 
   passthru = {
