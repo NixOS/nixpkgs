@@ -15400,6 +15400,12 @@
     githubId = 1891350;
     name = "Michael Raskin";
   };
+  rasmusrendal = {
+    email = "rasmus@rend.al";
+    github = "rasmusrendal";
+    githubId = 19538856;
+    name = "Rasmus Rendal";
+  };
   ratsclub = {
     email = "victor@freire.dev.br";
     github = "ratsclub";
