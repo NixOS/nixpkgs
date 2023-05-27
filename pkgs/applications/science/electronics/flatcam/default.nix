@@ -68,6 +68,10 @@ python.pkgs.buildPythonApplication rec {
     ./release.patch
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py --replace "'shapely>=1.3'" "'shapely>=1.3',"
+  '';
+
   # Only non-GUI tests can be run deterministically in the Nix build environment.
   checkPhase = ''
     python -m unittest tests.test_excellon

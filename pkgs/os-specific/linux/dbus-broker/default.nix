@@ -11,7 +11,7 @@
 }:
 
 let
-  dep = { pname, version, hash, rev ? version, buildInputs ? [ ] }:
+  dep = { pname, version, hash, rev ? "v${version}", buildInputs ? [ ] }:
     stdenv.mkDerivation {
       inherit pname version;
       src = fetchFromGitHub {
@@ -27,14 +27,14 @@ let
   #
   # If that changes, we can always break them out, but they are essentially
   # part of the dbus-broker project, just in separate repositories.
-  c-dvar = dep { pname = "c-dvar"; version = "v1.0.0"; hash = "sha256-P7y7gUHXQn2eyS6IcV7m7yGy4VGtQ2orgBkS7Y729ZY="; buildInputs = [ c-stdaux c-utf8 ]; };
-  c-ini = dep { pname = "c-ini"; version = "v1.0.0"; hash = "sha256-VKxoGexMcquakMmiH5IJt0382TjkV1FLncTSyEqf4X0="; buildInputs = [ c-list c-rbtree c-stdaux c-utf8 ]; };
-  c-list = dep { pname = "c-list"; version = "v3.1.0"; hash = "sha256-fp3EAqcbFCLaT2EstLSzwP2X13pi2EFpFAullhoCtpw="; };
+  c-dvar = dep { pname = "c-dvar"; version = "1.0.0"; hash = "sha256-P7y7gUHXQn2eyS6IcV7m7yGy4VGtQ2orgBkS7Y729ZY="; buildInputs = [ c-stdaux c-utf8 ]; };
+  c-ini = dep { pname = "c-ini"; version = "1.0.0"; hash = "sha256-VKxoGexMcquakMmiH5IJt0382TjkV1FLncTSyEqf4X0="; buildInputs = [ c-list c-rbtree c-stdaux c-utf8 ]; };
+  c-list = dep { pname = "c-list"; version = "3.1.0"; hash = "sha256-fp3EAqcbFCLaT2EstLSzwP2X13pi2EFpFAullhoCtpw="; };
   # TODO: Fetch c-rbtree from a tag after its next release
   c-rbtree = dep { pname = "c-rbtree"; version = "unstable-2022-07-07"; rev = "431a4746705223673e43940ca1ad9b5f52473a4b"; hash = "sha256-ExSPgNqhTjSwRgYfZOAyoaehOpFNHKFqPYkcCfptkrs="; buildInputs = [ c-stdaux ]; };
-  c-shquote = dep { pname = "c-shquote"; version = "v1.0.0"; hash = "sha256-Ze1enX0VJ6Xi5e4EhWzaiHc7PnuaifrUP+JuJnauv5c="; buildInputs = [ c-stdaux ]; };
-  c-stdaux = dep { pname = "c-stdaux"; version = "v1.2.0"; hash = "sha256-/D+IFdqn1XHDfdOsDnLMO5IHQ5B4P4ELyMpRcPBg/4s="; };
-  c-utf8 = dep { pname = "c-utf8"; version = "v1.0.0"; hash = "sha256-QEnjmfQ6kxJdsHfyRgXAlP+oGrKLYQ0m9r+D2L+pizI="; buildInputs = [ c-stdaux ]; };
+  c-shquote = dep { pname = "c-shquote"; version = "1.0.0"; hash = "sha256-Ze1enX0VJ6Xi5e4EhWzaiHc7PnuaifrUP+JuJnauv5c="; buildInputs = [ c-stdaux ]; };
+  c-stdaux = dep { pname = "c-stdaux"; version = "1.2.0"; hash = "sha256-/D+IFdqn1XHDfdOsDnLMO5IHQ5B4P4ELyMpRcPBg/4s="; };
+  c-utf8 = dep { pname = "c-utf8"; version = "1.0.0"; hash = "sha256-QEnjmfQ6kxJdsHfyRgXAlP+oGrKLYQ0m9r+D2L+pizI="; buildInputs = [ c-stdaux ]; };
 
 in
 stdenv.mkDerivation rec {

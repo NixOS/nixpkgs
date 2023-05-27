@@ -7,7 +7,7 @@
 , boost
 , fetchFromGitHub
 , pkg-config
-, microsoft_gsl
+, microsoft-gsl
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     meson
-    microsoft_gsl
+    microsoft-gsl
   ];
 
   buildInputs = [

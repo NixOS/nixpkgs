@@ -1627,6 +1627,8 @@ with pkgs;
 
   kubevirt = callPackage ../tools/virtualization/kubevirt { };
 
+  licenseclassifier = callPackage ../development/tools/misc/licenseclassifier { };
+
   license-cli = callPackage ../tools/misc/license-cli { };
 
   license-generator = callPackage ../tools/misc/license-generator { };
@@ -1778,8 +1780,6 @@ with pkgs;
   xpaste = callPackage ../tools/text/xpaste { };
 
   xrootd = callPackage ../tools/networking/xrootd { };
-
-  xtrt = callPackage ../tools/archivers/xtrt { };
 
   yabridge = callPackage ../tools/audio/yabridge {
     wine = wineWowPackages.staging;
@@ -6852,12 +6852,12 @@ with pkgs;
 
   diction = callPackage ../tools/text/diction { };
 
-  diffoscopeMinimal = callPackage ../tools/misc/diffoscope {
+  diffoscope = callPackage ../tools/misc/diffoscope {
     jdk = jdk8;
   };
 
-  diffoscope = diffoscopeMinimal.override {
-    enableBloat = !stdenv.isDarwin;
+  diffoscopeMinimal = diffoscope.override {
+    enableBloat = false;
   };
 
   diffr = callPackage ../tools/text/diffr {
@@ -12037,6 +12037,8 @@ with pkgs;
 
   rund = callPackage ../development/tools/rund { };
 
+  runme = callPackage ../development/tools/misc/runme { };
+
   runzip = callPackage ../tools/archivers/runzip { };
 
   unzoo = callPackage ../tools/archivers/unzoo { };
@@ -12247,8 +12249,6 @@ with pkgs;
   screenfetch = callPackage ../tools/misc/screenfetch { };
 
   sg3_utils = callPackage ../tools/system/sg3_utils { };
-
-  sget = callPackage ../tools/security/sget { };
 
   sha1collisiondetection = callPackage ../tools/security/sha1collisiondetection { };
 
@@ -22959,6 +22959,8 @@ with pkgs;
 
   dbcsr = callPackage ../development/libraries/science/math/dbcsr { };
 
+  taco = callPackage ../development/libraries/taco { };
+
   ## libGL/libGLU/Mesa stuff
 
   # Default libGL implementation, should provide headers and
@@ -22994,7 +22996,7 @@ with pkgs;
 
   mhddfs = callPackage ../tools/filesystems/mhddfs { };
 
-  microsoft_gsl = callPackage ../development/libraries/microsoft_gsl { };
+  microsoft-gsl = callPackage ../development/libraries/microsoft-gsl { };
 
   microsoft-edge = callPackage (import ../applications/networking/browsers/microsoft-edge).stable { };
   microsoft-edge-beta = callPackage (import ../applications/networking/browsers/microsoft-edge).beta { };
@@ -27214,6 +27216,10 @@ with pkgs;
   minimal-bootstrap = recurseIntoAttrs (import ../os-specific/linux/minimal-bootstrap {
     inherit (stdenv) buildPlatform hostPlatform;
     inherit lib config;
+    fetchurl = import ../build-support/fetchurl/boot.nix {
+      inherit (stdenv.buildPlatform) system;
+    };
+    checkMeta = callPackage ../stdenv/generic/check-meta.nix { };
   });
 
   mingetty = callPackage ../os-specific/linux/mingetty { };
@@ -27685,6 +27691,7 @@ with pkgs;
     withTimesyncd = false;
     withTpm2Tss = false;
     withUserDb = false;
+    withUkify = false;
   };
   systemdStage1 = systemdMinimal.override {
     pname = "systemd-stage-1";
@@ -34789,7 +34796,7 @@ with pkgs;
 
   ueberzug = with python3Packages; toPythonApplication ueberzug;
 
-  ueberzugpp = callPackage ../tools/graphics/ueberzugpp { };
+  ueberzugpp = darwin.apple_sdk_11_0.callPackage ../tools/graphics/ueberzugpp { };
 
   uefi-run = callPackage ../tools/virtualization/uefi-run { };
 
