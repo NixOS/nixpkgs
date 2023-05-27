@@ -209,6 +209,22 @@ self: super: {
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
 
+  # basement is broken on some 32-bit systems due to missing imports
+  # See: https://github.com/haskell-foundation/foundation/issues/565
+  # This patch is taken from a PR to fix the above issue. See:
+  # https://github.com/haskell-foundation/foundation/issues/573
+  # However, that PR doesn't work completely, because it doesn't apply to
+  # all the GHC versions we want to fix. So the actual patch file is modified
+  # to also affect those other versions.
+  #
+  # The patch applies, but does not compile, on non-32-bit systems.
+  #
+  # This patch can be removed once the above issue is closed and the fix is
+  # available on Hackage (and Nixpkgs.)
+  basement = if pkgs.stdenv.isi686
+    then appendPatch ./patches/basement-fix-32-bit.patch super.basement
+    else super.basement;
+
   vector = overrideCabal (old: {
     # Too strict bounds on doctest which isn't used, but is part of the configuration
     jailbreak = true;
