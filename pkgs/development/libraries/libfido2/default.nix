@@ -35,7 +35,9 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DUDEV_RULES_DIR=${placeholder "out"}/etc/udev/rules.d"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_LIBDIR=${placeholder "lib"}/lib"
+    "-DBUILD_SHARED=ON"
+    "-DBUILD_STATIC=OFF"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DUSE_HIDAPI=1"
   ] ++ lib.optionals stdenv.isLinux [
@@ -43,6 +45,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (stdenv.isLinux && withPcsclite) [
     "-DUSE_PCSC=1"
   ];
+
+  outputs = [ "out" "lib" "dev" ];
 
   meta = with lib; {
     description = ''
