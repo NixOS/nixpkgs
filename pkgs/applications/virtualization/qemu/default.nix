@@ -30,6 +30,7 @@
 , capstoneSupport ? true, capstone
 , pluginsSupport ? !stdenv.hostPlatform.isStatic
 , enableDocs ? true
+, enableTools ? true
 , hostCpuOnly ? false
 , hostCpuTargets ? (if hostCpuOnly
                     then (lib.optional stdenv.isx86_64 "i386-softmmu"
@@ -153,7 +154,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-strip" # We'll strip ourselves after separating debug info.
     (lib.enableFeature enableDocs "docs")
-    "--enable-tools"
+    (lib.enableFeature enableTools "tools")
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     # Always use our Meson, not the bundled version, which doesn't
