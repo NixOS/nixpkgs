@@ -43,5 +43,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/pacak/cargo-show-asm";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ figsoda oxalica ];
+    mainProgram = "cargo-asm";
   };
 }
