@@ -1,4 +1,5 @@
 { fetchurl
+, fetchpatch
 , runCommand
 , lib
 , stdenv
@@ -74,6 +75,13 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
     sha256 = "lzrq+rQvBvk0oJlPyEh4lYzbTSdmpMhnpczcVH3VcFY=";
   };
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/3ac82a58c51a5c8db6b49e89a1232f99c79644cc.patch";
+      hash = "sha256-L8GGEFHE566yvpAAVXA8bn2hvDfFAO8S/MqPM3Oki90=";
+      revert = true;
+    })
+  ];
 
   mesonFlags = [
     "-Degl_device=true"
