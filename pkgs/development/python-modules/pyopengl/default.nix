@@ -1,8 +1,10 @@
 { lib, stdenv
 , buildPythonPackage
 , fetchPypi
-, pkgs
 , pillow
+, libGL
+, libGLU
+, freeglut
 }:
 
 buildPythonPackage rec {
@@ -22,12 +24,12 @@ buildPythonPackage rec {
     # Theses lines are patching the name of dynamic libraries
     # so pyopengl can find them at runtime.
     substituteInPlace OpenGL/platform/glx.py \
-      --replace "'GL'" "'${pkgs.libGL}/lib/libGL${ext}'" \
-      --replace "'GLU'" "'${pkgs.libGLU}/lib/libGLU${ext}'" \
-      --replace "'glut'" "'${pkgs.freeglut}/lib/libglut${ext}'"
+      --replace "'GL'" "'${libGL}/lib/libGL${ext}'" \
+      --replace "'GLU'" "'${libGLU}/lib/libGLU${ext}'" \
+      --replace "'glut'" "'${freeglut}/lib/libglut${ext}'"
     substituteInPlace OpenGL/platform/darwin.py \
-      --replace "'OpenGL'" "'${pkgs.libGL}/lib/libGL${ext}'" \
-      --replace "'GLUT'" "'${pkgs.freeglut}/lib/libglut${ext}'"
+      --replace "'OpenGL'" "'${libGL}/lib/libGL${ext}'" \
+      --replace "'GLUT'" "'${freeglut}/lib/libglut${ext}'"
 
     # https://github.com/NixOS/nixpkgs/issues/76822
     # pyopengl introduced a new "robust" way of loading libraries in 3.1.4.
