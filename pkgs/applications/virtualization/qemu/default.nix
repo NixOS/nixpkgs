@@ -34,6 +34,7 @@
 , pluginsSupport ? !stdenv.hostPlatform.isStatic
 , enableDocs ? true
 , enableTools ? true
+, enableBlobs ? true
 , hostCpuOnly ? false
 , hostCpuTargets ? (if toolsOnly
                     then [ ]
@@ -186,7 +187,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional uringSupport "--enable-linux-io-uring"
     ++ lib.optional canokeySupport "--enable-canokey"
     ++ lib.optional capstoneSupport "--enable-capstone"
-    ++ lib.optional (!pluginsSupport) "--disable-plugins";
+    ++ lib.optional (!pluginsSupport) "--disable-plugins"
+    ++ lib.optional (!enableBlobs) "--disable-install-blobs";
 
   dontWrapGApps = true;
 
