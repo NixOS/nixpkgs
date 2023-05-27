@@ -293,6 +293,10 @@ let
           then selectEmulator pkgs
           else throw "Don't know how to run ${final.config} executables.";
 
+        staticEmulator = pkgs:
+          if builtins.elem final.system pkgs.qemu-user-static.passthru.qemuUserPlatforms then
+            "${pkgs.qemu-user-static}/bin/qemu-${final.qemuArch}"
+          else null;
     }) // mapAttrs (n: v: v final.parsed) inspect.predicates
       // mapAttrs (n: v: v final.gcc.arch or "default") architectures.predicates
       // args // {
