@@ -247,7 +247,9 @@ stdenv.mkDerivation rec {
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
   postInstall = ''
-    ln -s $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} $out/bin/qemu-kvm
+    if [ -f $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} ]; then
+      ln -s $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} $out/bin/qemu-kvm
+    fi
   '';
 
   passthru = {
