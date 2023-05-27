@@ -33,6 +33,7 @@
 , capstoneSupport ? !toolsOnly, capstone
 , pluginsSupport ? !stdenv.hostPlatform.isStatic
 , enableDocs ? true
+, enableTools ? true
 , hostCpuOnly ? false
 , hostCpuTargets ? (if toolsOnly
                     then [ ]
@@ -162,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--disable-strip" # We'll strip ourselves after separating debug info.
     (lib.enableFeature enableDocs "docs")
-    "--enable-tools"
+    (lib.enableFeature enableTools "tools")
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--cross-prefix=${stdenv.cc.targetPrefix}"
