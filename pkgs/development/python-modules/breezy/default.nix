@@ -115,6 +115,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Friendly distributed version control system";
     homepage = "https://www.breezy-vcs.org/";
+    changelog = "https://github.com/breezy-team/breezy/blob/brz-${version}/doc/en/release-notes/brz-${versions.majorMinor version}.txt";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.marsam ];
     mainProgram = "brz";
