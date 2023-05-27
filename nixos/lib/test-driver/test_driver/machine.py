@@ -855,17 +855,30 @@ class Machine:
         with self.nested(f"waiting for {regex} to appear on screen"):
             retry(screen_matches)
 
-    def wait_for_console_text(self, regex: str) -> None:
+    def wait_for_console_text(self, regex: str, timeout: float | None = None) -> None:
+        """
+            Wait for the provided regex to appear on console.
+            For each reads,
+
+            If timeout is None, timeout is infinite.
+
+            `timeout` is in seconds.
+        """
         with self.nested(f"waiting for {regex} to appear on console"):
             # Buffer the console output, this is needed
             # to match multiline regexes.
             console = io.StringIO()
+            start = time.time()
             while True:
                 try:
-                    console.write(self.last_lines.get())
+                    # This will return as soon as possible and
+                    # sleep 1 second.
+                    console.write(self.last_lines.get(block=False))
                 except queue.Empty:
-                    self.sleep(1)
-                    continue
+                    time.sleep(1)
+                    if timeout is not None and time.time() - start >= timeout:
+                        # If we reached here, we didn't honor our timeout constraint.
+                        raise Exception(f"`wait_for_console_text` did not match `{regex}` after {timeout} seconds")
                 console.seek(0)
                 matches = re.search(regex, console.read())
                 if matches is not None:
