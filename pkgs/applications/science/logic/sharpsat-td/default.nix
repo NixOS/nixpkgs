@@ -1,10 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, fetchzip, cmake, gmp, mpfr }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchzip
+, cmake
+, gmp
+, mpfr
+}:
 
 let
   satlib-bmc = fetchzip {
     url = "https://www.cs.ubc.ca/~hoos/SATLIB/Benchmarks/SAT/BMC/bmc.tar.gz";
     stripRoot = false;
     sha256 = "sha256-F1Jfrj4iMMf/3LFCShIDMs4JfLkJ51Z4wkL1FDT9b/A=";
+  };
+
+  # needed for mpfr 4.2.0+ support
+  mpreal = fetchFromGitHub {
+    owner = "advanpix";
+    repo = "mpreal";
+    rev = "mpfrc++-3.6.9";
+    sha256 = "sha256-l61SKEx4pBocADrEGPVacQ6F2ep9IuvNZ8W08dKeZKg=";
   };
 
 in stdenv.mkDerivation rec {
@@ -27,6 +42,10 @@ in stdenv.mkDerivation rec {
       --replace '"../../../flow-cutter-pace17/flow_cutter_pace17"' '"'"$out"'/bin/flow_cutter_pace17"'
     substituteInPlace src/preprocessor/treewidth.cpp \
       --replace '"./flow_cutter_pace17"' '"'"$out"'/bin/flow_cutter_pace17"'
+
+    # replace bundled version of mpreal/mpfrc++
+    rm -r src/mpfr
+    cp -r ${mpreal} src/mpfr
   '';
 
   nativeBuildInputs = [ cmake ];
