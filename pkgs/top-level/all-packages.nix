@@ -4859,6 +4859,8 @@ with pkgs;
 
   fd = callPackage ../tools/misc/fd { };
 
+  fdroidcl = pkgs.callPackage ../development/mobile/fdroidcl { };
+
   fdroidserver = python3Packages.callPackage ../development/tools/fdroidserver { };
 
   fetch-scm = callPackage ../tools/misc/fetch-scm { };
