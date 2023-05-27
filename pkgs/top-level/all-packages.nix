@@ -3158,6 +3158,8 @@ with pkgs;
 
   bklk = callPackage ../applications/misc/bklk { };
 
+  bkt = callPackage ../tools/misc/bkt {  };
+
   bkyml = callPackage ../tools/misc/bkyml { };
 
   blockbench-electron = callPackage ../applications/graphics/blockbench-electron { };
