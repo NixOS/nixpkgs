@@ -211,6 +211,7 @@ in buildPythonApplication rec {
     homepage = "https://xpra.org/";
     downloadPage = "https://xpra.org/src/";
     description = "Persistent remote applications for X";
+    changelog = "https://github.com/Xpra-org/xpra/releases/tag/v${version}";
     platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = with maintainers; [ offline numinit mvnetbiz ];
