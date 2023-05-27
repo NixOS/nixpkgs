@@ -5,6 +5,7 @@
 , gnumake
 , gnupatch
 , gzip
+, live-bootstrap
 }:
 let
   pname = "bzip2";
@@ -15,14 +16,19 @@ let
     sha256 = "0s92986cv0p692icqlw1j42y9nld8zd83qwhzbqd61p1dqbh6nmb";
   };
 
+  # Thanks to the live-bootstrap project!
+  # See https://github.com/fosslinux/live-bootstrap/blob/87e9d7db9d22b400d1c05247254ac39ee2577e80/sysa/bzip-1.0.8/bzip-1.0.8.kaem
+  lbf = live-bootstrap.packageFiles {
+    commit = "87e9d7db9d22b400d1c05247254ac39ee2577e80";
+    parent = "sysa";
+    inherit pname version;
+  };
+
   patches = [
     # mes libc has no time support, so we remove that.
     # It also does not have fch{own,mod}, which we don't care about in the bootstrap
     # anyway, so we can null-op those calls.
-    (fetchurl {
-      url = "https://github.com/fosslinux/live-bootstrap/raw/87e9d7db9d22b400d1c05247254ac39ee2577e80/sysa/bzip2-1.0.8/patches/mes-libc.patch";
-      sha256 = "14dciwib28h413skzfkh7samzh8x87dmwhldyxxphff04pvl1j3c";
-    })
+    lbf."patches/mes-libc.patch"
   ];
 in
 bash.runCommand "${pname}-${version}" {

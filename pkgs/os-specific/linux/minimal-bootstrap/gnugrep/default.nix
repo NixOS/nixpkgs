@@ -3,6 +3,7 @@
 , bash
 , tinycc
 , gnumake
+, live-bootstrap
 }:
 let
   pname = "gnugrep";
@@ -14,11 +15,15 @@ let
   };
 
   # Thanks to the live-bootstrap project!
-  # See https://github.com/fosslinux/live-bootstrap/blob/1bc4296091c51f53a5598050c8956d16e945b0f5/sysa/grep-2.4
-  makefile = fetchurl {
-    url = "https://github.com/fosslinux/live-bootstrap/raw/1bc4296091c51f53a5598050c8956d16e945b0f5/sysa/grep-2.4/mk/main.mk";
-    sha256 = "08an9ljlqry3p15w28hahm6swnd3jxizsd2188przvvsj093j91k";
+  # See https://github.com/fosslinux/live-bootstrap/blob/1bc4296091c51f53a5598050c8956d16e945b0f5/sysa/grep-2.4/grep-2.4.kaem
+  lbf = live-bootstrap.packageFiles {
+    commit = "1bc4296091c51f53a5598050c8956d16e945b0f5";
+    parent = "sysa";
+    pname = "grep";
+    inherit version;
   };
+
+  makefile = lbf."mk/main.mk";
 in
 bash.runCommand "${pname}-${version}" {
   inherit pname version;

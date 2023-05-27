@@ -4,6 +4,7 @@
 , tinycc
 , gnumake
 , gnupatch
+, live-bootstrap
 }:
 let
   pname = "coreutils";
@@ -16,58 +17,35 @@ let
 
   # Thanks to the live-bootstrap project!
   # See https://github.com/fosslinux/live-bootstrap/blob/a8752029f60217a5c41c548b16f5cdd2a1a0e0db/sysa/coreutils-5.0/coreutils-5.0.kaem
-  liveBootstrap = "https://github.com/fosslinux/live-bootstrap/raw/a8752029f60217a5c41c548b16f5cdd2a1a0e0db/sysa/coreutils-5.0";
-
-  makefile = fetchurl {
-    url = "${liveBootstrap}/mk/main.mk";
-    sha256 = "0njg4xccxfqrslrmlb8ls7h6hlnfmdx42nvxwmca8flvczwrplfd";
+  lbf = live-bootstrap.packageFiles {
+    commit = "a8752029f60217a5c41c548b16f5cdd2a1a0e0db";
+    parent = "sysa";
+    inherit pname version;
   };
+
+  makefile = lbf."mk/main.mk";
 
   patches = [
     # modechange.h uses functions defined in sys/stat.h, so we need to move it to
     # after sys/stat.h include.
-    (fetchurl {
-      url = "${liveBootstrap}/patches/modechange.patch";
-      sha256 = "04xa4a5w2syjs3xs6qhh8kdzqavxnrxpxwyhc3qqykpk699p3ms5";
-    })
+    lbf."patches/modechange.patch"
     # mbstate_t is a struct that is required. However, it is not defined by mes libc.
-    (fetchurl {
-      url = "${liveBootstrap}/patches/mbstate.patch";
-      sha256 = "0rz3c0sflgxjv445xs87b83i7gmjpl2l78jzp6nm3khdbpcc53vy";
-    })
+    lbf."patches/mbstate.patch"
     # strcoll() does not exist in mes libc, change it to strcmp.
-    (fetchurl {
-      url = "${liveBootstrap}/patches/ls-strcmp.patch";
-      sha256 = "0lx8rz4sxq3bvncbbr6jf0kyn5bqwlfv9gxyafp0541dld6l55p6";
-    })
+    lbf."patches/ls-strcmp.patch"
     # getdate.c is pre-compiled from getdate.y
     # At this point we don't have bison yet and in any case getdate.y does not
     # compile when generated with modern bison.
-    (fetchurl {
-      url = "${liveBootstrap}/patches/touch-getdate.patch";
-      sha256 = "1xd3z57lvkj7r8vs5n0hb9cxzlyp58pji7d335snajbxzwy144ma";
-    })
+    lbf."patches/touch-getdate.patch"
     # touch: add -h to change symlink timestamps, where supported
-    (fetchurl {
-      url = "${liveBootstrap}/patches/touch-dereference.patch";
-      sha256 = "0wky5r3k028xwyf6g6ycwqxzc7cscgmbymncjg948vv4qxsxlfda";
-    })
+    lbf."patches/touch-dereference.patch"
     # strcoll() does not exist in mes libc, change it to strcmp.
-    (fetchurl {
-      url = "${liveBootstrap}/patches/expr-strcmp.patch";
-      sha256 = "19f31lfsm1iwqzvp2fyv97lmqg4730prfygz9zip58651jf739a9";
-    })
+    lbf."patches/expr-strcmp.patch"
     # strcoll() does not exist in mes libc, change it to strcmp.
     # hard_LC_COLLATE is used but not declared when HAVE_SETLOCALE is unset.
-    (fetchurl {
-      url = "${liveBootstrap}/patches/sort-locale.patch";
-      sha256 = "0bdch18mpyyxyl6gyqfs0wb4pap9flr11izqdyxccx1hhz0a2i6c";
-    })
+    lbf."patches/sort-locale.patch"
     # don't assume fopen cannot return stdin or stdout.
-    (fetchurl {
-      url = "${liveBootstrap}/patches/uniq-fopen.patch";
-      sha256 = "0qs6shyxl9j4h34v5j5sgpxrr4gjfljd2hxzw416ghwc3xzv63fp";
-    })
+    lbf."patches/uniq-fopen.patch"
   ];
 in
 kaem.runCommand "${pname}-${version}" {
