@@ -5311,6 +5311,10 @@ with pkgs;
 
   languagetool = callPackage ../tools/text/languagetool {  };
 
+  languagetool-rust = callPackage ../tools/text/languagetool-rust {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   ldtk = callPackage ../applications/editors/ldtk { };
 
   lepton = callPackage ../tools/graphics/lepton { };
