@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch, nixosTests }:
 
 buildGoModule rec {
   pname = "VictoriaMetrics";
@@ -12,6 +12,19 @@ buildGoModule rec {
   };
 
   vendorHash = null;
+
+  patches = [
+    (fetchpatch {
+      name = "vmctl-fix-tests.patch";
+      url = "https://github.com/VictoriaMetrics/VictoriaMetrics/commit/4060f3f261cb41d97df719e6c60b71be19829301.patch";
+      hash = "sha256-SCeSdSLzZZodMiL7Kts0L8R5XD7TbOc5+/oidmithCY=";
+    })
+    (fetchpatch {
+      name = "graphite-fixes-tests-for-arm.patch";
+      url = "https://github.com/VictoriaMetrics/VictoriaMetrics/commit/228ea03bda0eda3507d782cb627d946843f29c30.patch";
+      hash = "sha256-FnN5O9H1tNtBs5Fr4tXrnyted8SZwX82ZdBmeHlIQ2Y=";
+    })
+  ];
 
   postPatch = ''
     # main module (github.com/VictoriaMetrics/VictoriaMetrics) does not contain package
