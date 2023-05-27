@@ -112,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals capstoneSupport [ capstone ];
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
+  dontAddStaticConfigureFlags = true;
 
   outputs = [ "out" ] ++ lib.optional guestAgentSupport "ga";
   # On aarch64-linux we would shoot over the Hydra's 2G output limit.
@@ -140,7 +141,10 @@ stdenv.mkDerivation (finalAttrs: {
       revert = true;
     })
   ]
-  ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
+  ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch
+
+  # Remove for QEMU 8.1
+  ++ lib.optional stdenv.hostPlatform.isStatic ./aio-find-static-library.patch;
 
   postPatch = ''
     # Otherwise tries to ensure /var/run exists.
@@ -190,7 +194,10 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional canokeySupport "--enable-canokey"
     ++ lib.optional capstoneSupport "--enable-capstone"
     ++ lib.optional (!pluginsSupport) "--disable-plugins"
-    ++ lib.optional (!enableBlobs) "--disable-install-blobs";
+    ++ lib.optional (!enableBlobs) "--disable-install-blobs"
+
+    # FIXME: "multiple definition of `strtoll'" with libnbcompat
+    ++ lib.optional stdenv.hostPlatform.isStatic "--static --extra-ldflags=-Wl,--allow-multiple-definition";
 
   dontWrapGApps = true;
 
