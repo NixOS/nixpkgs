@@ -34273,6 +34273,8 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) CoreServices CoreMIDI;
   };
 
+  sharpsat-td = callPackage ../applications/science/logic/sharpsat-td { };
+
   shntool = callPackage ../applications/audio/shntool { };
 
   sipp = callPackage ../development/tools/misc/sipp { };
