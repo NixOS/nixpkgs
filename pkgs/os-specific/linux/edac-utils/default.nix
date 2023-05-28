@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, perl, makeWrapper
+{ lib, stdenv, fetchFromGitHub, perl
 , sysfsutils, dmidecode, kmod }:
 
 stdenv.mkDerivation {
@@ -12,7 +12,20 @@ stdenv.mkDerivation {
     hash = "sha256-jZGRrZ1sa4x0/TBJ5GsNVuWakmPNOU+oiOoXdhARunk=";
   };
 
-  nativeBuildInputs = [ perl makeWrapper ];
+  # Hard-code program paths instead of using PATH lookups. Also, labels.d and
+  # mainboard are for user-configurable data, so do not look for them in Nix
+  # store.
+  dmidecodeProgram = lib.getExe' dmidecode "dmidecode";
+  modprobeProgram = lib.getExe' kmod "modprobe";
+  postPatch = ''
+    substituteInPlace src/util/edac-ctl.in \
+      --replace-fail 'find_prog ("dmidecode")' "\"$dmidecodeProgram\"" \
+      --replace-fail 'find_prog ("modprobe")  or exit (1)' "\"$modprobeProgram\"" \
+      --replace-fail '"$sysconfdir/edac/labels.d"' '"/etc/edac/labels.d"' \
+      --replace-fail '"$sysconfdir/edac/mainboard"' '"/etc/edac/mainboard"'
+  '';
+
+  nativeBuildInputs = [ perl ];
   buildInputs = [ perl sysfsutils ];
 
   configureFlags = [
@@ -23,11 +36,6 @@ stdenv.mkDerivation {
   installFlags = [
     "sysconfdir=\${out}/etc"
   ];
-
-  postInstall = ''
-    wrapProgram "$out/sbin/edac-ctl" \
-      --set PATH ${lib.makeBinPath [ dmidecode kmod ]}
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/grondo/edac-utils";
