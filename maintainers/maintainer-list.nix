@@ -9390,6 +9390,12 @@
     githubId = 59375051;
     name = "Lucas Ransan";
   };
+  LucaGuerra = {
+    email = "luca@guerra.sh";
+    github = "LucaGuerra";
+    githubId = 35580196;
+    name = "Luca Guerra";
+  };
   lucasew = {
     email = "lucas59356@gmail.com";
     github = "lucasew";
