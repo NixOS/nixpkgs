@@ -4776,6 +4776,8 @@ with pkgs;
 
   enca = callPackage ../tools/text/enca { };
 
+  encpipe = callPackage ../tools/misc/encpipe { };
+
   engage = callPackage ../tools/misc/engage { };
 
   ent = callPackage ../tools/misc/ent { };
