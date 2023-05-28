@@ -438,8 +438,8 @@ let
               ;
             };
 
-            haskell.packages.native-bignum.ghc927 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc927)
+            haskell.packages.native-bignum.ghc928 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc928)
                 hello
                 lens
                 random
@@ -650,7 +650,7 @@ let
         };
         constituents = accumulateDerivations [
           jobs.pkgsStatic.haskellPackages
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc927
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc928
         ];
       };
     }
