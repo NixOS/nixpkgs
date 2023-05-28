@@ -33,5 +33,6 @@ buildNimPackage rec {
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ ehmry ];
     mainProgram = "eriscmd";
+    badPlatforms = lib.platforms.darwin;
   };
 }
