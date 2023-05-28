@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ perl makeWrapper ];
-  buildInputs = [ sysfsutils ];
+  buildInputs = [ perl sysfsutils ];
 
   configureFlags = [
     "--sysconfdir=/etc"
