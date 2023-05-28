@@ -331,7 +331,6 @@ let
         nvfetcher
         ormolu
         pandoc
-        pakcs
         petrinizer
         place-cursor-at
         pinboard-notes-backup
