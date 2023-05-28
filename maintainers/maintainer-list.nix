@@ -9332,6 +9332,12 @@
     githubId = 5624721;
     name = "Ben Wolsieffer";
   };
+  lord-valen = {
+    name = "Lord Valen";
+    matrix = "@lord-valen:matrix.org";
+    github = "Lord-Valen";
+    githubId = 46138807;
+  };
   lorenz = {
     name = "Lorenz Brun";
     email = "lorenz@brun.one";
