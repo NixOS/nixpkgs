@@ -741,6 +741,8 @@ with pkgs;
 
   docui = callPackage ../tools/misc/docui { };
 
+  done = callPackage ../applications/misc/done { };
+
   dotfiles = callPackage ../applications/misc/dotfiles { };
 
   # Dotnet
@@ -1666,6 +1668,8 @@ with pkgs;
   nominatim = callPackage ../servers/nominatim { };
 
   ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
+
+  openbugs = pkgsi686Linux.callPackage ../applications/science/machine-learning/openbugs { };
 
   paperview = callPackage ../tools/X11/paperview { };
 
@@ -4872,6 +4876,8 @@ with pkgs;
   fdroidserver = python3Packages.callPackage ../development/tools/fdroidserver { };
 
   fetch-scm = callPackage ../tools/misc/fetch-scm { };
+
+  fiano = callPackage ../tools/misc/fiano { };
 
   filebench = callPackage ../tools/misc/filebench { };
 
@@ -17605,17 +17611,17 @@ with pkgs;
   ansible = ansible_2_15;
   ansible_2_15 = python3Packages.toPythonApplication python3Packages.ansible-core;
   ansible_2_14 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
-    version = "2.14.5";
+    version = "2.14.6";
     src = oldAttrs.src.override {
       inherit version;
-      hash = "sha256-jE7tds5Fi0o3M0oIAt8pSI7Pn4rzjDERBpyWsXsgVTA=";
+      hash = "sha256-DN2w30VFYZgfHFQdt6xTmNXp3kUuofAYR6y9Ax/X0rI=";
     };
   }));
   ansible_2_13 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
-    version = "2.13.9";
+    version = "2.13.10";
     src = oldAttrs.src.override {
       inherit version;
-      hash = "sha256-nDGeygqcU83m8XSBLd1xFO2x5dDrXh30e9DY/v7ax2w=";
+      hash = "sha256-1LQKSq+GDe9sLJ6K1SAfhoPj59fY4hRjxtWepPixLfc=";
     };
   }));
 
@@ -22112,6 +22118,14 @@ with pkgs;
 
   librem = callPackage ../development/libraries/librem { };
 
+  libremidi = callPackage ../development/libraries/libremidi {
+      inherit (darwin.apple_sdk.frameworks)
+        CoreAudio
+        CoreFoundation
+        CoreMIDI
+        CoreServices;
+  };
+
   librelp = callPackage ../development/libraries/librelp { };
 
   librepo = callPackage ../tools/package-management/librepo {
@@ -25379,6 +25393,8 @@ with pkgs;
   felix_remoteshell = callPackage ../servers/felix/remoteshell.nix { };
 
   inherit (callPackages ../servers/firebird { }) firebird_4 firebird_3 firebird_2_5 firebird;
+
+  flashmq = callPackage ../servers/mqtt/flashmq { };
 
   freeradius = callPackage ../servers/freeradius { };
 

@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation rec {
   pname = "iaito";
-  version = "5.8.4";
+  version = "5.8.6";
 
   srcs = [
     (fetchFromGitHub rec {
       owner = "radareorg";
       repo = "iaito";
       rev = version;
-      hash = "sha256-pt2vq+JN+Ccv+9o8s2y87xTVeQp2WJ0UfKdoWGsBkUI=";
+      hash = "sha256-rl8bOIR0oS6YvZA5pr8oSj7HcKK4YeCjAEi7saVdvk8=";
       name = repo;
     })
     (fetchFromGitHub rec {
