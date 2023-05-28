@@ -468,6 +468,8 @@ self: super: with self; {
 
   androidtv = callPackage ../development/python-modules/androidtv { };
 
+  androidtvremote2 = callPackage ../development/python-modules/androidtvremote2 { };
+
   androguard = callPackage ../development/python-modules/androguard { };
 
   angr = callPackage ../development/python-modules/angr { };

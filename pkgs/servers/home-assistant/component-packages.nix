@@ -150,7 +150,8 @@
     ++ androidtv.optional-dependencies.async
     ++ pure-python-adb.optional-dependencies.async;
     "androidtv_remote" = ps: with ps; [
-    ]; # missing inputs: androidtvremote2
+      androidtvremote2
+    ];
     "anel_pwrctrl" = ps: with ps; [
     ]; # missing inputs: anel_pwrctrl-homeassistant
     "anova" = ps: with ps; [
@@ -4732,6 +4733,7 @@
     "analytics"
     "android_ip_webcam"
     "androidtv"
+    "androidtv_remote"
     "apache_kafka"
     "apcupsd"
     "api"
