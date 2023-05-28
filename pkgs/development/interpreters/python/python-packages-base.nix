@@ -22,16 +22,20 @@ let
     in
     mirrorArgs (origArgs:
     let
-      args = lib.fix (lib.extends
+      argsRecursive = lib.extends
         (_: previousAttrs: {
           passthru = (previousAttrs.passthru or { }) // {
             inherit overridePythonAttrs;
           };
         })
-        (_: origArgs));
+        (lib.toFunction origArgs);
+
+      args = if lib.isFunction origArgs then argsRecursive else lib.fix argsRecursive;
+
       result = f args;
 
-      overrideWith = newArgs: args // lib.toFunction newArgs args;
+      overrideWithRecursive = newArgs: finalAttrs: argsRecursive finalAttrs // lib.toFunction newArgs (argsRecursive finalAttrs);
+      overrideWith = if lib.isFunction origArgs then overrideWithRecursive else lib.fix (lib.flip overrideWithRecursive);
       overridePythonAttrs = mirrorArgs (newArgs: makeOverridablePythonPackage f (overrideWith newArgs));
 
       # Change the result of the function call by applying g to it
