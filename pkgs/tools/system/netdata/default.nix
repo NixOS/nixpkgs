@@ -121,6 +121,7 @@ stdenv.mkDerivation rec {
     broken = stdenv.isDarwin || stdenv.buildPlatform != stdenv.hostPlatform;
     description = "Real-time performance monitoring tool";
     homepage = "https://www.netdata.cloud/";
+    changelog = "https://github.com/netdata/netdata/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ raitobezarius ];
