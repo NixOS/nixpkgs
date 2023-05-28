@@ -70,5 +70,6 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ pstn vrthra ];
     platforms = platforms.gnu ++ platforms.linux;
+    changelog = "https://git.gnunet.org/gnunet.git/tree/ChangeLog?h=v${version}";
   };
 }
