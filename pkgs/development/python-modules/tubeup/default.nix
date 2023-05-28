@@ -6,6 +6,7 @@
 , docopt
 , pythonOlder
 , urllib3
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
@@ -20,18 +21,21 @@ buildPythonPackage rec {
     sha256 = "sha256-wsYap8OspTPW3BBtFF3a2oyRgmu3W/dywbkFuNjvzhg=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "internetarchive==3.0.2" "internetarchive" \
-      --replace "urllib3==1.26.13" "urllib3" \
-      --replace "docopt==0.6.2" "docopt"
-  '';
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = [
     internetarchive
     docopt
     urllib3
     yt-dlp
+  ];
+
+  pythonRelaxDeps = [
+    "internetarchive"
+    "urllib3"
+    "docopt"
   ];
 
   pythonImportsCheck = [
