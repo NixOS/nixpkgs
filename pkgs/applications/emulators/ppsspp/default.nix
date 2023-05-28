@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       runHook preInstall
 
-      mkdir -p $out/share/{applications,ppsspp}
+      mkdir -p $out/share/{applications,ppsspp,icons}
     '' + (if enableQt then ''
       install -Dm555 PPSSPPQt $out/bin/ppsspp
       wrapProgram $out/bin/ppsspp \
@@ -110,6 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
         --prefix LD_LIBRARY_PATH : ${vulkanPath} \
     '' + "\n" + ''
       mv assets $out/share/ppsspp
+      mv ../icons/hicolor $out/share/icons
 
       runHook postInstall
     '';
