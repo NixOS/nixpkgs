@@ -8609,6 +8609,8 @@ with pkgs;
 
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
 
+  httprobe = callPackage ../tools/networking/httprobe { };
+
   httpstat = callPackage ../tools/networking/httpstat { };
 
   httptunnel = callPackage ../tools/networking/httptunnel { };
