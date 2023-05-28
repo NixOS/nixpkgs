@@ -3,6 +3,7 @@
 
 , cmake
 , extra-cmake-modules
+, fetchpatch
 , makeWrapper
 , shared-mime-info
 
@@ -45,6 +46,15 @@
 
 mkDerivation {
   pname = "cantor";
+
+  patches = [
+    # remove the dependency on Julia's executable
+    (fetchpatch {
+      url = "https://invent.kde.org/education/cantor/-/commit/5c038e422c8fe2fcc14ddca2f8ec8d8c6fbca592.patch";
+      includes = ["src/*"]; # The patch fails on the changelog.md. But we only really need src for building
+      sha256 = "sha256-iYfL8NwDuO0SRotWvx6wipA5l58deuR2g2nJSN20uEQ=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
