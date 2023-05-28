@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonAtLeast
 , isPy27
 , futures ? null
 , gevent
@@ -14,6 +15,10 @@ buildPythonPackage rec {
   pname = "opentracing";
   version = "2.4.0";
   format = "setuptools";
+
+  # incompatible with asyncio changes in 3.11 and deprecated
+  # https://github.com/opentracing/specification/issues/163
+  disabled = pythonAtLeast "3.11";
 
   src = fetchPypi {
     inherit pname version;
