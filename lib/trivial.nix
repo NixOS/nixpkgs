@@ -449,6 +449,40 @@ rec {
     (f ? __functor && isFunction (f.__functor f));
 
   /*
+    `mirrorFunctionArgs f g` creates a new function `g'` with the same behavior as `g` (`g' x == g x`)
+    but its function arguments mirroring `f` (`lib.functionArgs g' == lib.functionArgs f`).
+
+    Type:
+      mirrorFunctionArgs :: (a -> b) -> (a -> c) -> (a -> c)
+
+    Example:
+      addab = {a, b}: a + b
+      addab { a = 2; b = 4; }
+      => 6
+      lib.functionArgs addab
+      => { a = false; b = false; }
+      addab1 = attrs: addab attrs + 1
+      addab1 { a = 2; b = 4; }
+      => 7
+      lib.functionArgs addab1
+      => { }
+      addab1' = lib.mirrorFunctionArgs addab addab1
+      addab1' { a = 2; b = 4; }
+      => 7
+      lib.functionArgs addab1'
+      => { a = false; b = false; }
+  */
+  mirrorFunctionArgs =
+    # Function to provide the argument metadata
+    f:
+    let
+      fArgs = functionArgs f;
+    in
+    # Function to set the argument metadata to
+    g:
+    setFunctionArgs g fArgs;
+
+  /*
     Turns any non-callable values into constant functions.
     Returns callable values as is.
 
