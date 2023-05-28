@@ -2,7 +2,7 @@
 , makeWrapper
 , fetchFromGitHub
 , nixosTests
-, gradle_6
+, gradle
 , perl
 , jre
 , libpulseaudio
@@ -10,16 +10,18 @@
 
 let
   pname = "shattered-pixel-dungeon";
-  version = "1.1.2";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "00-Evan";
     repo = "shattered-pixel-dungeon";
-    # NOTE: always use the commit sha, not the tag. Tags _will_ disappear!
-    # https://github.com/00-Evan/shattered-pixel-dungeon/issues/596
-    rev = "5d1a2dce6b554b40f6737ead45d411fd98f4c67d";
-    sha256 = "sha256-Vu7K0NnqFY298BIQV9AwNEahV0eJl14tAeq+rw6KrtM=";
+    rev = "v${version}";
+    sha256 = "sha256-gg8FHLkw964mYejXvK5GClTvTLGK3FyXR8Kkxjl/pRs=";
   };
+
+  patches = [
+    ./disable-beryx.patch
+  ];
 
   postPatch = ''
     # disable gradle plugins with native code and their targets
@@ -32,8 +34,8 @@ let
   # fake build to pre-download deps into fixed-output derivation
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
-    inherit version src postPatch;
-    nativeBuildInputs = [ gradle_6 perl ];
+    inherit version src patches postPatch;
+    nativeBuildInputs = [ gradle perl ];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
       # https://github.com/gradle/gradle/issues/4426
@@ -47,13 +49,13 @@ let
         | sh
     '';
     outputHashMode = "recursive";
-    outputHash = "sha256-UI5/ZJbUtEz1Fr+qn6a8kzi9rrP+lVrpBbuDv8TG5y0=";
+    outputHash = "sha256-ojwvs6j3R31723lfRlKdeyR5+txnetyK3foJTLqy28Q=";
   };
 
 in stdenv.mkDerivation rec {
-  inherit pname version src postPatch;
+  inherit pname version src patches postPatch;
 
-  nativeBuildInputs = [ gradle_6 perl makeWrapper ];
+  nativeBuildInputs = [ gradle perl makeWrapper ];
 
   buildPhase = ''
     export GRADLE_USER_HOME=$(mktemp -d)
