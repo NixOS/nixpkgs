@@ -72,22 +72,41 @@ rec {
      injects `override` attribute which can be used to override arguments of
      the function.
 
+     Aside from attrset-to-attrset function decoration, `makeOverridable`
+     can also decorate a fixed-point-function-to-attrset function, such as
+     build helpers with fixed-point arguments.
+
      Please refer to  documentation on [`<pkg>.overrideDerivation`](#sec-pkg-overrideDerivation) to learn about `overrideDerivation` and caveats
      related to its use.
 
      Example:
-       nix-repl> x = {a, b}: { result = a + b; }
+       nix-repl> x1 = {a, b}: { result = a + b; }
 
-       nix-repl> y = lib.makeOverridable x { a = 1; b = 2; }
+       nix-repl> y1 = lib.makeOverridable x1 { a = 1; b = 2; }
 
-       nix-repl> y
+       nix-repl> y1
        { override = «lambda»; overrideDerivation = «lambda»; result = 3; }
 
-       nix-repl> y.override { a = 10; }
+       nix-repl> y1.override { a = 10; }
+       { override = «lambda»; overrideDerivation = «lambda»; result = 12; }
+
+       nix-repl> x2 = fpargs: lib.fix (lib.extends (finalAttrs: {a, b}: {result = a + b; }) fpargs)
+
+       nix-repl> x2 (finalAttrs: { a = 1; b = 2; })
+       { a = 1; b = 2; result = 3; }
+
+       nix-repl> y2 = lib.makeOverridable x2 (finalAttrs: { a = 1; b = 2; })
+
+       nix-repl> y2
+       { override = «lambda»; overrideDerivation = «lambda»; result = 3; }
+
+       nix-repl> y2.override (finalAttrs: { a = 10; })
        { override = «lambda»; overrideDerivation = «lambda»; result = 12; }
 
      Type:
-       makeOverridable :: (AttrSet -> a) -> AttrSet -> a
+       makeOverridable ::
+         ((AttrSet | (AttrSet -> AttrSet)) -> a)
+         -> (AttrSet | (AttrSet -> AttrSet)) -> a
   */
   makeOverridable = f:
     let
@@ -98,8 +117,18 @@ rec {
     let
       result = f origArgs;
 
-      # Changes the original arguments with (potentially a function that returns) a set of new attributes
-      overrideWith = newArgs: origArgs // (if isFunction newArgs then newArgs origArgs else newArgs);
+      # Changes the original arguments with (potentially a function that returns) a set of new attributes.
+      #
+      # When newArgs is a plain set, it overrides to the original argument set directly.
+      # If newArgs is a function (AttrSet -> AttrSet), it is applied to the original argument set.
+      # If origArgs is a function (AttrSet -> AttrSet) instead of a set, generate a new function from origArgs
+      # with newArgs apply to its resulting attribute set.
+      overrideWithRecursive = newArgs: finalAttrs:
+      let
+        origArgsFixed = toFunction origArgs finalAttrs;
+      in
+      origArgsFixed // toFunction newArgs origArgsFixed;
+      overrideWith = if isFunction origArgs then overrideWithRecursive else (flip overrideWithRecursive null);
 
       # Re-call the function but with different arguments
       overrideArgs = mirrorArgs (newArgs: makeOverridable f (overrideWith newArgs));
