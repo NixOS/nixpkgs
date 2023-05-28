@@ -931,6 +931,12 @@
     githubId = 123550;
     name = "André Silva";
   };
+  andresnav = {
+    email = "nix@andresnav.com";
+    github = "andres-nav";
+    githubId = 118762770;
+    name = "Andres Navarro";
+  };
   andrestylianos = {
     email = "andre.stylianos@gmail.com";
     github = "andrestylianos";
@@ -7526,6 +7532,12 @@
     github = "magnusjonsson";
     githubId = 8900;
     name = "Johan Magnus Jonsson";
+  };
+  jmbaur = {
+    email = "jaredbaur@fastmail.com";
+    github = "jmbaur";
+    githubId = 45740526;
+    name = "Jared Baur";
   };
   jmc-figueira = {
     email = "business+nixos@jmc-figueira.dev";
