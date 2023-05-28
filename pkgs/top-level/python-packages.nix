@@ -7773,6 +7773,8 @@ self: super: with self; {
 
   pyzbar = callPackage ../development/python-modules/pyzbar { };
 
+  pyzipper = callPackage ../development/python-modules/pyzipper { };
+
   pkutils = callPackage ../development/python-modules/pkutils { };
 
   plac = callPackage ../development/python-modules/plac { };
