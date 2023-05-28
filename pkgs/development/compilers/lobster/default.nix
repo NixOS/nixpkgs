@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, unstableGitUpdater
 , cmake
 , callPackage
 
@@ -8,7 +9,7 @@
 , xorg
 
 # Darwin deps
-, CoreFoundation
+, cf-private
 , Cocoa
 , AudioToolbox
 , OpenGL
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = if stdenv.isDarwin
     then [
-      CoreFoundation
+      cf-private
       Cocoa
       AudioToolbox
       OpenGL

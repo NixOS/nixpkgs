@@ -229,6 +229,7 @@ let
       perlPackages = { };
 
       darwin = packagePlatforms pkgs.darwin // {
+        cf-private = {};
         xcode = {};
       };
     } ));

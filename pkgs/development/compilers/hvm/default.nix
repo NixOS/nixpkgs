@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.IOKit
+    darwin.apple_sdk_11_1.frameworks.IOKit
   ];
 
   # tests are broken

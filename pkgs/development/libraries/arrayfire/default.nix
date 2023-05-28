@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals buildDocs [
     doxygen
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.Accelerate
+    darwin.apple_sdk_11_1.frameworks.Accelerate
   ];
 
   meta = with lib; {

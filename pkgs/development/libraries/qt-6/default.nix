@@ -25,7 +25,7 @@ let
     let
       callPackage = self.newScope ({
         inherit qtModule srcs;
-        stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+        stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_1.stdenv else stdenv;
       });
     in
     {
@@ -38,7 +38,7 @@ let
         withGtk3 = true;
         inherit (srcs.qtbase) src version;
         inherit developerBuild;
-        inherit (darwin.apple_sdk_11_0.frameworks)
+        inherit (darwin.apple_sdk_11_1.frameworks)
           AGL AVFoundation AppKit Contacts CoreBluetooth EventKit GSS MetalKit;
         patches = [
           ./patches/0001-qtbase-qmake-always-use-libname-instead-of-absolute-.patch
@@ -94,7 +94,7 @@ let
       qt5compat = callPackage ./modules/qt5compat.nix { };
       qtcharts = callPackage ./modules/qtcharts.nix { };
       qtconnectivity = callPackage ./modules/qtconnectivity.nix {
-        inherit (darwin.apple_sdk_11_0.frameworks) IOBluetooth PCSC;
+        inherit (darwin.apple_sdk_11_1.frameworks) IOBluetooth PCSC;
       };
       qtdatavis3d = callPackage ./modules/qtdatavis3d.nix { };
       qtdeclarative = callPackage ./modules/qtdeclarative.nix { };
@@ -107,7 +107,7 @@ let
       qtlottie = callPackage ./modules/qtlottie.nix { };
       qtmultimedia = callPackage ./modules/qtmultimedia.nix {
         inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-libav gst-vaapi;
-        inherit (darwin.apple_sdk_11_0.frameworks) VideoToolbox;
+        inherit (darwin.apple_sdk_11_1.frameworks) VideoToolbox;
       };
       qtmqtt = callPackage ./modules/qtmqtt.nix { };
       qtnetworkauth = callPackage ./modules/qtnetworkauth.nix { };
@@ -117,7 +117,7 @@ let
       qtserialport = callPackage ./modules/qtserialport.nix { };
       qtshadertools = callPackage ./modules/qtshadertools.nix { };
       qtspeech = callPackage ./modules/qtspeech.nix {
-        inherit (darwin.apple_sdk_11_0.frameworks) Cocoa;
+        inherit (darwin.apple_sdk_11_1.frameworks) Cocoa;
       };
       qtquick3d = callPackage ./modules/qtquick3d.nix { };
       qtquick3dphysics = callPackage ./modules/qtquick3dphysics.nix { };
@@ -133,9 +133,9 @@ let
       qtwebchannel = callPackage ./modules/qtwebchannel.nix { };
       qtwebengine = callPackage ./modules/qtwebengine.nix {
         inherit (darwin) bootstrap_cmds cctools xnu;
-        inherit (darwin.apple_sdk_11_0) libpm libunwind;
-        inherit (darwin.apple_sdk_11_0.libs) sandbox;
-        inherit (darwin.apple_sdk_11_0.frameworks)
+        inherit (darwin.apple_sdk_11_1) libpm libunwind;
+        inherit (darwin.apple_sdk_11_1.libs) sandbox;
+        inherit (darwin.apple_sdk_11_1.frameworks)
           AGL AVFoundation Accelerate Cocoa CoreLocation CoreML ForceFeedback
           GameController ImageCaptureCore LocalAuthentication
           MediaAccessibility MediaPlayer MetalKit Network OpenDirectory Quartz
@@ -146,7 +146,7 @@ let
       };
       qtwebsockets = callPackage ./modules/qtwebsockets.nix { };
       qtwebview = callPackage ./modules/qtwebview.nix {
-        inherit (darwin.apple_sdk_11_0.frameworks) WebKit;
+        inherit (darwin.apple_sdk_11_1.frameworks) WebKit;
       };
 
       wrapQtAppsHook = makeSetupHook

@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
     xorg.libxcb
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.AppKit
+    darwin.apple_sdk_11_1.frameworks.AppKit
   ];
 
   postInstall = ''

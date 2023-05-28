@@ -59,7 +59,7 @@ let
       TARGET = setTarget "VORTEX";
       DYNAMIC_ARCH = setDynamicArch true;
       USE_OPENMP = false;
-      MACOSX_DEPLOYMENT_TARGET = "11.0";
+      MACOSX_DEPLOYMENT_TARGET = "11.1";
     };
 
     aarch64-linux = {

@@ -45,8 +45,8 @@ let
   sha256 = "sha256-pYbnEF8MgF7fCBf/MOPT//UCeOQj9tuIkDj8UIVFz3E=";
   cargoSha256 = "sha256-n9nuBiKV3FCgq5fJ5BuqIIAp1yZ6IO+zHjrMaUBfgzs=";
 
-  inherit (darwin.apple_sdk_11_0) Libsystem;
-  inherit (darwin.apple_sdk_11_0.frameworks) System IOKit AppKit Security;
+  inherit (darwin.apple_sdk_11_1) Libsystem;
+  inherit (darwin.apple_sdk_11_1.frameworks) System IOKit AppKit Security;
 in
 rustPlatform.buildRustPackage rec {
   pname = "solana-cli";

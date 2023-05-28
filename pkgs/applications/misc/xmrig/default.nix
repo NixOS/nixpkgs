@@ -11,7 +11,7 @@
 }:
 
 let
-  inherit (darwin.apple_sdk_11_0.frameworks) Carbon CoreServices OpenCL;
+  inherit (darwin.apple_sdk_11_1.frameworks) Carbon CoreServices OpenCL;
 in
 stdenv.mkDerivation rec {
   pname = "xmrig";

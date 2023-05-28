@@ -1,0 +1,110 @@
+{
+    "11.1.0": {
+        "CLTools_Executables": {
+            "hash": "sha256-gN6c/9g5Q5EdrXhHSH0oluXy9F1vc0QZFzQgejoOa1s=",
+            "url": "https://swcdn.apple.com/content/downloads/46/21/001-89745-A_56FM390IW5/v1um2qppgfdnam2e9cdqcqu2r6k8aa3lis/CLTools_Executables.pkg"
+        },
+        "CLTools_macOSLMOS_SDK": {
+            "hash": "sha256-7bTIxlSR37Saz/fb2ArGy93MtJCFZ81c6flRPlSb5/o=",
+            "url": "https://swcdn.apple.com/content/downloads/46/21/001-89745-A_56FM390IW5/v1um2qppgfdnam2e9cdqcqu2r6k8aa3lis/CLTools_macOSLMOS_SDK.pkg"
+        },
+        "CLTools_macOSNMOS_SDK": {
+            "hash": "sha256-TnPoC4WEMIQEFwMbg/Ba37shxrT8O6T+6jtgIqsuglg=",
+            "url": "https://swcdn.apple.com/content/downloads/46/21/001-89745-A_56FM390IW5/v1um2qppgfdnam2e9cdqcqu2r6k8aa3lis/CLTools_macOSNMOS_SDK.pkg"
+        },
+        "CLTools_macOS_SDK": {
+            "hash": "sha256-3UebaqiC1Zms/cDkABAOAnJSh7gLEhrK5gVudCS76ms=",
+            "url": "https://swcdn.apple.com/content/downloads/46/21/001-89745-A_56FM390IW5/v1um2qppgfdnam2e9cdqcqu2r6k8aa3lis/CLTools_macOS_SDK.pkg"
+        }
+    },
+    "11.3.0": {
+        "CLTools_Executables": {
+            "hash": "sha256-e1c0aeLBjc2R3iI0jMA9fdUxu7bmqcWd7J23qcnOwiw=",
+            "url": "https://swcdn.apple.com/content/downloads/02/62/071-54303-A_EU2CL1YVT7/943i95dpeyi2ghlnj2mgyq3t202t5gf18b/CLTools_Executables.pkg"
+        },
+        "CLTools_macOSLMOS_SDK": {
+            "hash": "sha256-1FmuhJjet38pD3863Jmpj7SIRBgYqQBCCR7nu3jIF8M=",
+            "url": "https://swcdn.apple.com/content/downloads/02/62/071-54303-A_EU2CL1YVT7/943i95dpeyi2ghlnj2mgyq3t202t5gf18b/CLTools_macOSLMOS_SDK.pkg"
+        },
+        "CLTools_macOSNMOS_SDK": {
+            "hash": "sha256-7A5w3jWsjAmGju4KiLUsHGmS+z7YJd5eMFTIDqW7NIE=",
+            "url": "https://swcdn.apple.com/content/downloads/02/62/071-54303-A_EU2CL1YVT7/943i95dpeyi2ghlnj2mgyq3t202t5gf18b/CLTools_macOSNMOS_SDK.pkg"
+        },
+        "CLTools_macOS_SDK": {
+            "hash": "sha256-COFyeNKFXeSKhWJ5RoXtxUWYU0uR7HpsCHhZSZ2rt2Q=",
+            "url": "https://swcdn.apple.com/content/downloads/02/62/071-54303-A_EU2CL1YVT7/943i95dpeyi2ghlnj2mgyq3t202t5gf18b/CLTools_macOS_SDK.pkg"
+        }
+    },
+    "12.1.0": {
+        "CLTools_Executables": {
+            "hash": "sha256-O6+Cy5aCz7RDadgVuGmqmyIPbrnsf7EzxCqmGZ2gp4o=",
+            "url": "https://swcdn.apple.com/content/downloads/52/17/002-41708-A_E8MFK7B2PK/6p55tbmh0qttgbt4cy94uuvnacy6tkw435/CLTools_Executables.pkg"
+        },
+        "CLTools_macOSLMOS_SDK": {
+            "hash": "sha256-sHXT0vOwZmByCaW7989yekC5j+ZWKcW2q8F/FWiXr0o=",
+            "url": "https://swcdn.apple.com/content/downloads/52/17/002-41708-A_E8MFK7B2PK/6p55tbmh0qttgbt4cy94uuvnacy6tkw435/CLTools_macOSLMOS_SDK.pkg"
+        },
+        "CLTools_macOSNMOS_SDK": {
+            "hash": "sha256-mRKXvWd6v1+tIsUsMNS8C8XS/Zvpb6y675VW0KPW9S8=",
+            "url": "https://swcdn.apple.com/content/downloads/52/17/002-41708-A_E8MFK7B2PK/6p55tbmh0qttgbt4cy94uuvnacy6tkw435/CLTools_macOSNMOS_SDK.pkg"
+        },
+        "CLTools_macOS_SDK": {
+            "hash": "sha256-+ziqXrQKUNWyTypSx5r8g5ZDAbW2xkn565mL5HH2p3w=",
+            "url": "https://swcdn.apple.com/content/downloads/52/17/002-41708-A_E8MFK7B2PK/6p55tbmh0qttgbt4cy94uuvnacy6tkw435/CLTools_macOS_SDK.pkg"
+        }
+    },
+    "12.3.0": {
+        "CLTools_Executables": {
+            "hash": "sha256-XlxHwCq+rtBF3Yyfdob3UEHN7YKzb7JF84lRmZbB/50=",
+            "url": "https://swcdn.apple.com/content/downloads/24/42/002-83793-A_74JRE8GVAT/rlnkct919wgc5c0pjq986z5bb9h62uvni2/CLTools_Executables.pkg"
+        },
+        "CLTools_macOSLMOS_SDK": {
+            "hash": "sha256-mY9YTlyTujV6R89WaNmkJrfOQatXnoSW8gKxnawQz5Q=",
+            "url": "https://swcdn.apple.com/content/downloads/24/42/002-83793-A_74JRE8GVAT/rlnkct919wgc5c0pjq986z5bb9h62uvni2/CLTools_macOSLMOS_SDK.pkg"
+        },
+        "CLTools_macOSNMOS_SDK": {
+            "hash": "sha256-Tr9VCeCP5udmh09U/zPQG2c4ky1LXscBwPfgpRy8uds=",
+            "url": "https://swcdn.apple.com/content/downloads/24/42/002-83793-A_74JRE8GVAT/rlnkct919wgc5c0pjq986z5bb9h62uvni2/CLTools_macOSNMOS_SDK.pkg"
+        },
+        "CLTools_macOS_SDK": {
+            "hash": "sha256-2xwYLfiYuEdck7/8NY3iqiPKvoG9HAjXt8Ewyp9c0Es=",
+            "url": "https://swcdn.apple.com/content/downloads/24/42/002-83793-A_74JRE8GVAT/rlnkct919wgc5c0pjq986z5bb9h62uvni2/CLTools_macOS_SDK.pkg"
+        }
+    },
+    "13.1.0": {
+        "CLTools_Executables": {
+            "hash": "sha256-gcTtNayaLczhBsnSZpZlPOuTN7lJIGgCiG4l0T+bPxo=",
+            "url": "https://swcdn.apple.com/content/downloads/03/28/012-92431-A_FKICGWU4EK/eflw1v4c64sgmvux4ljc083cfjj663wu9g/CLTools_Executables.pkg"
+        },
+        "CLTools_macOSLMOS_SDK": {
+            "hash": "sha256-ageXj/3mW/NHLBpSYakWbebPuMYxEfZBTGspTLzOgYM=",
+            "url": "https://swcdn.apple.com/content/downloads/03/28/012-92431-A_FKICGWU4EK/eflw1v4c64sgmvux4ljc083cfjj663wu9g/CLTools_macOSLMOS_SDK.pkg"
+        },
+        "CLTools_macOSNMOS_SDK": {
+            "hash": "sha256-86zr69+g5b3t8wR6Kb3LdsAf9EnQQUBrdlveo9w+yGY=",
+            "url": "https://swcdn.apple.com/content/downloads/03/28/012-92431-A_FKICGWU4EK/eflw1v4c64sgmvux4ljc083cfjj663wu9g/CLTools_macOSNMOS_SDK.pkg"
+        },
+        "CLTools_macOS_SDK": {
+            "hash": "sha256-92t/8/7KuvGr+5cjwCK3XaaF//+nFyArEksmTNy5Nqs=",
+            "url": "https://swcdn.apple.com/content/downloads/03/28/012-92431-A_FKICGWU4EK/eflw1v4c64sgmvux4ljc083cfjj663wu9g/CLTools_macOS_SDK.pkg"
+        }
+    },
+    "13.3.0": {
+        "CLTools_Executables": {
+            "hash": "sha256-XkP7RpegWmo3uHG35/imevV+06EU/VE6cNrBEaQThSk=",
+            "url": "https://swcdn.apple.com/content/downloads/38/61/032-64167-A_F8LL7XSTW6/k3kg0uip4kxd3qupgy6y8fzp27mnxdpt6y/CLTools_Executables.pkg"
+        },
+        "CLTools_macOSLMOS_SDK": {
+            "hash": "sha256-LwXeA9K8yfSPul5kOayvGlyerJ//q6oB8nbO9LSg+Og=",
+            "url": "https://swcdn.apple.com/content/downloads/38/61/032-64167-A_F8LL7XSTW6/k3kg0uip4kxd3qupgy6y8fzp27mnxdpt6y/CLTools_macOSLMOS_SDK.pkg"
+        },
+        "CLTools_macOSNMOS_SDK": {
+            "hash": "sha256-/Wb2uVOutiz5Y19LQjzu6YWi0lQFxTBjBuSRArJrtJs=",
+            "url": "https://swcdn.apple.com/content/downloads/38/61/032-64167-A_F8LL7XSTW6/k3kg0uip4kxd3qupgy6y8fzp27mnxdpt6y/CLTools_macOSNMOS_SDK.pkg"
+        },
+        "CLTools_macOS_SDK": {
+            "hash": "sha256-BLq657B+T7FFv0/xl6dAIvxPdJPBTW6quBwO8K4P9ws=",
+            "url": "https://swcdn.apple.com/content/downloads/38/61/032-64167-A_F8LL7XSTW6/k3kg0uip4kxd3qupgy6y8fzp27mnxdpt6y/CLTools_macOS_SDK.pkg"
+        }
+    }
+}

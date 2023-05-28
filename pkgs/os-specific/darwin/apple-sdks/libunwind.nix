@@ -1,13 +1,16 @@
-{ stdenvNoCC, buildPackages, MacOSX-SDK }:
-
+{
+  stdenvNoCC,
+  buildPackages,
+  MacOSX-SDK,
+}:
 stdenvNoCC.mkDerivation {
+  inherit (MacOSX-SDK) version;
   pname = "libunwind";
-  version = MacOSX-SDK.version;
 
   dontUnpack = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ buildPackages.darwin.checkReexportsHook ];
+  nativeBuildInputs = [buildPackages.darwin.checkReexportsHook];
 
   installPhase = ''
     mkdir -p $out/include/mach-o

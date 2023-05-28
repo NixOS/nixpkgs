@@ -13,7 +13,7 @@ let
 
     # Current versions of Swift on Darwin require macOS SDK 10.15 at least.
     # Re-export this so we can rely on the minimum Swift SDK elsewhere.
-    apple_sdk = pkgs.darwin.apple_sdk_11_0;
+    apple_sdk = pkgs.darwin.apple_sdk_11_1;
 
     # Swift builds its own Clang for internal use. We wrap that clang with a
     # cc-wrapper derived from the clang configured below. Because cc-wrapper
@@ -33,7 +33,7 @@ let
 
     # Overrides that create a useful environment for swift packages, allowing
     # packaging with `swiftPackages.callPackage`. These are similar to
-    # `apple_sdk_11_0.callPackage`, with our clang on top.
+    # `apple_sdk_11_1.callPackage`, with our clang on top.
     inherit (clang) bintools;
     stdenv = overrideCC pkgs.stdenv clang;
     darwin = pkgs.darwin.overrideScope (_: prev: {
