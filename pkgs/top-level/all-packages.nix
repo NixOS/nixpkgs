@@ -40624,4 +40624,6 @@ with pkgs;
   isolate = callPackage ../tools/security/isolate { };
 
   reindeer = callPackage ../development/tools/reindeer { };
+
+  charasay = callPackage ../tools/misc/charasay { };
 }
