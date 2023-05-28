@@ -371,8 +371,8 @@ class Machine:
     @staticmethod
     def create_startcommand(args: Dict[str, str]) -> StartCommand:
         rootlog.warning(
-            "Using legacy create_startcommand(),"
-            "please use proper nix test vm instrumentation, instead"
+            "Using legacy create_startcommand(), "
+            "please use proper nix test vm instrumentation, instead "
             "to generate the appropriate nixos test vm qemu startup script"
         )
         hda = None
