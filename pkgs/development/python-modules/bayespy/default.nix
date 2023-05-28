@@ -4,7 +4,7 @@
 
 buildPythonPackage rec {
   pname = "bayespy";
-  version = "0.5.22";
+  version = "0.5.26";
 
   # Python 2 not supported and not some old Python 3 because MPL doesn't support
   # them properly.
@@ -12,22 +12,8 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ed0057dc22bd392df4b3bba23536117e1b2866e3201b12c5a37428d23421a5ba";
+    sha256 = "sha256-NOvuqPKioRIqScd2jC7nakonDEovTo9qKp/uTk9z1BE=";
   };
-
-  patches = [
-    # Change from scipy to locally defined epsilon
-    # https://github.com/bayespy/bayespy/pull/126
-    (fetchpatch {
-      name = "locally-defined-epsilon.patch";
-      url = "https://github.com/bayespy/bayespy/commit/9be53bada763e19c2b6086731a6aa542ad33aad0.patch";
-      hash = "sha256-KYt/0GcaNWR9K9/uS2OXgK7g1Z+Bayx9+IQGU75Mpuo=";
-    })
-
-    # Fix deprecated numpy types
-    # https://sources.debian.org/src/python-bayespy/0.5.22-5/debian/patches/pr127-Fix-deprecated-numpy-types.patch/
-    ./pr127-Fix-deprecated-numpy-types.patch
-  ];
 
   nativeCheckInputs = [ pytestCheckHook nose glibcLocales ];
 

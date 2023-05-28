@@ -5,18 +5,23 @@
 
 stdenv.mkDerivation rec {
   pname = "liblxi";
-  version = "1.19";
+  version = "1.20";
 
   src = fetchFromGitHub {
     owner = "lxi-tools";
     repo = "liblxi";
     rev = "v${version}";
-    sha256 = "sha256-TdIUPAXBogGT9OQrX4wkSmPFjR9McdS9gnQ7c24U4qs=";
+    hash = "sha256-jS0huNkbyKrsJ3NkenrYtjkzLakOsTJpwlgSo98ribE=";
   };
 
   nativeBuildInputs = [ meson ninja cmake pkg-config rpcsvc-proto ];
 
-  buildInputs = [ libtirpc avahi libxml2 ];
+  buildInputs = lib.optionals (!stdenv.isDarwin) [
+    libtirpc
+    avahi
+  ] ++ [
+    libxml2
+  ];
 
   meta = with lib; {
     description = "Library for communicating with LXI compatible instruments";
@@ -28,7 +33,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://lxi-tools.github.io/";
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.vq ];
   };
 }

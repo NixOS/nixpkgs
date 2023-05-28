@@ -94,6 +94,16 @@ python.pkgs.buildPythonApplication rec {
       --replace "/media/frigate" "/var/lib/frigate" \
       --replace "/tmp/cache" "/var/cache/frigate"
 
+    substituteInPlace frigate/http.py \
+      --replace "/opt/frigate" "${placeholder "out"}/${python.sitePackages}" \
+      --replace "/tmp/cache/" "/var/cache/frigate"
+
+    substituteInPlace frigate/output.py \
+      --replace "/opt/frigate" "${placeholder "out"}/${python.sitePackages}"
+
+    substituteInPlace frigate/record.py \
+      --replace "/tmp/cache" "/var/cache/frigate"
+
     substituteInPlace frigate/detectors/detector_config.py \
       --replace "/labelmap.txt" "${placeholder "out"}/share/frigate/labelmap.txt"
 

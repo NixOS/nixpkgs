@@ -2,6 +2,7 @@
 , buildPythonPackage
 , lib
 , python
+, fetchPypi
 , systemd
 , pytest
 , mock
@@ -10,7 +11,7 @@
 buildPythonPackage rec {
   pname = "pystemd";
   version = "0.10.0";
-  src = python.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash = "sha256-10qBS/2gEIXbGorZC+PLJ9ryOlGrawPn4p7IEfoq6Fk=";
   };

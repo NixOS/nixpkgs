@@ -2,23 +2,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmtime";
-  version = "9.0.0";
+  version = "9.0.2";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-9ga7BKJoaw7naX8t4o+zNnWkjIvSII5oVRM0dYMrseo=";
+    hash = "sha256-Fnc3iepxHr7WjorFoabHE6ZM/zK1T5W/gkxL+AEcVgU=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-GkL78aAIGdSlcxeRTIVp1jcXIg1ZtvB2LNIoPEViNcs=";
+  cargoHash = "sha256-7Q5aJU0sYzRLgjiSNLIrydYRJ3ozABjDo4VtmexS3po=";
 
   cargoBuildFlags = [ "--package" "wasmtime-cli" "--package" "wasmtime-c-api" ];
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
   # SIMD tests are only executed on platforms that support all
   # required processor features (e.g. SSE3, SSSE3 and SSE4.1 on x86_64):
@@ -41,9 +41,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description =
       "Standalone JIT-style runtime for WebAssembly, using Cranelift";
-    homepage = "https://github.com/bytecodealliance/wasmtime";
+    homepage = "https://wasmtime.dev/";
     license = licenses.asl20;
     maintainers = with maintainers; [ ereslibre matthewbauer ];
     platforms = platforms.unix;
+    changelog = "https://github.com/bytecodealliance/wasmtime/blob/v${version}/RELEASES.md";
   };
 }

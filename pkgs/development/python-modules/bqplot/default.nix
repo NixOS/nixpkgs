@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "bqplot";
-  version = "0.12.36";
+  version = "0.12.39";
 
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-alU+Vf28xPYuBWeb10slSdHvvkPhIK07C8sDplx5Ia8=";
+    hash = "sha256-FNjeb5pNGUW76mwTIOpNHJMlb3JoN3T24AINzFefPdI=";
   };
 
   nativeBuildInputs = [

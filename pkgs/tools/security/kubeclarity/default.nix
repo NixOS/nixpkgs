@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "kubeclarity";
-  version = "2.18.0";
+  version = "2.18.1";
 
   src = fetchFromGitHub {
     owner = "openclarity";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-qXBD3JurBU7RBemj+gr/tBGpfqKhwk5VPBKaTuM4URg=";
+    hash = "sha256-hSVxhXaRSIKw1/14BS+mzDkdds6LurWTNNwHpKIXZxM=";
   };
 
-  vendorHash = "sha256-L7g48EH3cuhgSZ87JoMVvv5nGDzjUpOufsikINCdhao=";
+  vendorHash = "sha256-vAR/RqPL4PWvCC3QevaLFtA9JEIy/DuCIrIN5Ilb3Ko=";
 
   nativeBuildInputs = [
     pkg-config

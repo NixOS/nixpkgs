@@ -2,13 +2,15 @@
 , config
 , buildPlatform
 , hostPlatform
+, fetchurl
+, checkMeta
 }:
 
 lib.makeScope
   # Prevent using top-level attrs to protect against introducing dependency on
   # non-bootstrap packages by mistake. Any top-level inputs must be explicitly
   # declared here.
-  (extra: lib.callPackageWith ({ inherit lib config buildPlatform hostPlatform; } // extra))
+  (extra: lib.callPackageWith ({ inherit lib config buildPlatform hostPlatform fetchurl checkMeta; } // extra))
   (self: with self; {
 
     bash_2_05 = callPackage ./bash/2.nix { tinycc = tinycc-mes; };
@@ -61,7 +63,7 @@ lib.makeScope
     tinycc-bootstrappable = lib.recurseIntoAttrs (callPackage ./tinycc/bootstrappable.nix { });
     tinycc-mes = lib.recurseIntoAttrs (callPackage ./tinycc/mes.nix { });
 
-    inherit (callPackage ./utils.nix { }) fetchurl derivationWithMeta writeTextFile writeText;
+    inherit (callPackage ./utils.nix { }) derivationWithMeta writeTextFile writeText;
 
     test = kaem.runCommand "minimal-bootstrap-test" {} ''
       echo ${bash_2_05.tests.get-version}

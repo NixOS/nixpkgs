@@ -10,7 +10,7 @@
 , fmt
 , hidrd
 , inih
-, microsoft_gsl
+, microsoft-gsl
 , spdlog
 , systemd
 }:
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     fmt
     hidrd
     inih
-    microsoft_gsl
+    microsoft-gsl
     spdlog
     systemd
   ];

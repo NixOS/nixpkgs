@@ -12,7 +12,7 @@
 , ocl-icd
 , opencl-headers
 , boost
-, gpuSupport ? true
+, gpuSupport ? stdenv.isLinux
 }:
 
 buildPythonPackage rec {
@@ -48,7 +48,11 @@ buildPythonPackage rec {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     ${python.pythonForBuild.interpreter} setup.py bdist_wheel ${lib.optionalString gpuSupport "--gpu"}
+
+    runHook postBuild
   '';
 
   postConfigure = ''

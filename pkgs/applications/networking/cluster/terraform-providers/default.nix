@@ -19,8 +19,8 @@ let
      , rev
      , spdx ? "UNSET"
      , version ? lib.removePrefix "v" rev
-     , hash ? throw "use hash instead of sha256" # added 2202/09
-     , vendorHash ? throw "use vendorHash instead of vendorSha256" # added 2202/09
+     , hash
+     , vendorHash
      , deleteVendor ? false
      , proxyVendor ? false
      , mkProviderFetcher ? fetchFromGitHub
@@ -88,22 +88,10 @@ let
   removed-providers =
     let
       archived = name: date: throw "the ${name} terraform provider has been archived by upstream on ${date}";
-      license = name: date: throw "the ${name} terraform provider removed from nixpkgs on ${date} because of unclear licensing";
       removed = name: date: throw "the ${name} terraform provider removed from nixpkgs on ${date}";
     in
     lib.optionalAttrs config.allowAliases {
-      b2 = removed "b2" "2022/06";
-      checkpoint = removed "checkpoint" "2022/11";
-      dome9 = removed "dome9" "2022/08";
       ksyun = removed "ksyun" "2023/04";
-      logicmonitor = license "logicmonitor" "2022/11";
-      ncloud = removed "ncloud" "2022/08";
-      nsxt = license "nsxt" "2022/11";
-      opc = archived "opc" "2022/05";
-      oraclepaas = archived "oraclepaas" "2022/05";
-      panos = removed "panos" "2022/05";
-      template = archived "template" "2022/05";
-      vercel = license "vercel" "2022/11";
     };
 
   # excluding aliases, used by terraform-full

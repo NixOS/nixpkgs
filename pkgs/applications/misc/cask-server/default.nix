@@ -8,13 +8,13 @@
 
 mkDerivation rec {
   pname = "cask-server";
-  version = "0.5.6";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "Nitrux";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-/dDrJcyp6+r6G3E0KPOEH0hEY9C5XIg1z2gRZV3GZcg=";
+    sha256 = "sha256-XUgLtZMcvzGewtUcgu7FbBCn/1zqOjWvw2AI9gUwWkc=";
   };
 
   nativeBuildInputs = [

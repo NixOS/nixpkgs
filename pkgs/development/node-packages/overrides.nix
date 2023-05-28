@@ -502,16 +502,6 @@ final: prev: {
     '';
   };
 
-  thelounge = prev.thelounge.override (oldAttrs: {
-    buildInputs = [ final.node-pre-gyp ];
-    postInstall = ''
-      echo /var/lib/thelounge > $out/lib/node_modules/thelounge/.thelounge_home
-      patch -d $out/lib/node_modules/thelounge -p1 < ${./thelounge-packages-path.patch}
-    '';
-    passthru.tests = { inherit (nixosTests) thelounge; };
-    meta = oldAttrs.meta // { maintainers = with lib.maintainers; [ winter ]; };
-  });
-
   thelounge-plugin-closepms = prev.thelounge-plugin-closepms.override {
     nativeBuildInputs = [ final.node-pre-gyp ];
   };

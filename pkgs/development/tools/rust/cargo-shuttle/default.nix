@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
 , pkg-config
 , curl
 , libgit2_1_5
@@ -13,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-shuttle";
-  version = "0.16.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "shuttle-hq";
     repo = "shuttle";
     rev = "v${version}";
-    hash = "sha256-lDRT3M6LfQrts9X2erRVyqTFWVqOwWQ/JFB1ZlK6Lo8=";
+    hash = "sha256-w2PkrkHMthGRqWW8PQIoRY41S3qPib5JDKDV6I6ESAw=";
   };
 
   cargoLock = {
@@ -29,17 +28,6 @@ rustPlatform.buildRustPackage rec {
       "tokiotest-httpserver-0.2.1" = "sha256-IPUaglIDwCUoczCCnX+R1IBqtc0s8b8toKEL8zN3/i8=";
     };
   };
-
-  patches = [
-    # make sure to have only one revision of hyper-reverse-proxy
-    # necessary to make `importCargoLock` work
-    # https://github.com/shuttle-hq/shuttle/pull/921
-    (fetchpatch {
-      name = "chore-promote-hyper-reverse-proxy-to-a-workspace-dependency.patch";
-      url = "https://github.com/shuttle-hq/shuttle/commit/5c398427229f1358bd26ec81a2a22d01adf11b3d.patch";
-      hash = "sha256-fJBz/0StMALtJYh/Ec/KGCwCGLtch+HH/oYlibE8xcw=";
-    })
-  ];
 
   nativeBuildInputs = [
     curl
@@ -62,6 +50,11 @@ rustPlatform.buildRustPackage rec {
     # other tests are failing for different reasons
     "init::shuttle_init_tests::"
   ];
+
+  # Cargo.lock is outdated
+  preConfigure = ''
+    cargo metadata --offline
+  '';
 
   meta = with lib; {
     description = "A cargo command for the shuttle platform";

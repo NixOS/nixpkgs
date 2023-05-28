@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , python3
+, fetchPypi
 , openssl
   # Many Salt modules require various Python modules to be installed,
   # passing them in this array enables Salt to find them.
@@ -11,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "salt";
   version = "3006.1";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash = "sha256-lVh71hHepq/7aQjQ7CaGy37bhMFBRLSFF3bxJ6YOxbk=";
   };
