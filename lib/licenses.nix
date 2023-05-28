@@ -215,6 +215,12 @@ in mkLicense lset) ({
     url = "https://opensource.org/licenses/CAL-1.0";
   };
 
+  caldera = {
+    spdxId = "Caldera";
+    fullName = "Caldera License";
+    url = "http://www.lemis.com/grog/UNIX/ancient-source-all.pdf";
+  };
+
   capec = {
     fullName = "Common Attack Pattern Enumeration and Classification";
     url = "https://capec.mitre.org/about/termsofuse.html";
@@ -554,6 +560,12 @@ in mkLicense lset) ({
   imlib2 = {
     spdxId = "Imlib2";
     fullName = "Imlib2 License";
+  };
+
+  info-zip = {
+    spdxId = "Info-ZIP";
+    fullName = "Info-ZIP License";
+    url = "http://www.info-zip.org/pub/infozip/license.html";
   };
 
   inria-compcert = {
