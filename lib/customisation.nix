@@ -8,6 +8,7 @@ let
     optionalAttrs attrNames filter elemAt concatStringsSep sortOn take length
     filterAttrs optionalString flip pathIsDirectory head pipe isDerivation listToAttrs
     mapAttrs seq flatten deepSeq warnIf isInOldestRelease extends
+    toFunction
     ;
   inherit (lib.strings) levenshtein levenshteinAtMost;
 
@@ -520,4 +521,171 @@ rec {
       };
     in self;
 
+  /*
+    Define a `mkDerivation`-like function based on another `mkDerivation`-like
+    function.
+
+    `mkDerivation` gives access to its final set of derivation attributes when
+    it is passed a function, or when it is passed an overlay-style function in
+    `overrideAttrs`.
+
+    Instead of composing new `mkDerivation`-like build helpers using normal
+    function composition, `extendMkDerivation` makes sure that the returned
+    build helper supports such first class recursion like `mkDerivation` does.
+
+    Type:
+      extendMkDerivation ::
+        ((FixedPointArgs | AttrSet) -> a)
+        -> (AttrSet -> AttrSet -> AttrSet)
+        -> (FixedPointArgs | AttrSet) -> a
+
+      FixedPointArgs = AttrSet -> AttrSet
+      # a == Derivation when defining a build helper
+
+    Example:
+      mkLocalDerivation = lib.extendMkDerivation pkgs.stdenv.mkDerivation (finalAttrs:
+        args@{ preferLocalBuild ? true, allowSubstitute ? false, ... }:
+        { inherit preferLocalBuild allowSubstitute; })
+
+      mkLocalDerivation.__functionArgs
+      => { allowSubstitute = true; preferLocalBuild = true; }
+
+      mkLocalDerivation { inherit (pkgs.hello) pname version src; }
+      => «derivation /nix/store/xirl67m60ahg6jmzicx43a81g635g8z8-hello-2.12.1.drv»
+
+      mkLocalDerivation (finalAttrs: { inherit (pkgs.hello) pname version src; })
+      => «derivation /nix/store/xirl67m60ahg6jmzicx43a81g635g8z8-hello-2.12.1.drv»
+
+      (mkLocalDerivation (finalAttrs: { inherit (pkgs.hello) pname version src; passthru = { foo = "a"; bar = "${finalAttrs.passthru.foo}b"; } })).bar
+      => "ab"
+  */
+  extendMkDerivation =
+    # Base build helper, the mkDerivation-like build helper to extend.
+    mkDerivationBase:
+    # An overlay of attribute set, like the one taken by <pkg>.overrideAttrs.
+    # This act as the implementation detail of the result build helper.
+    attrsOverlay:
+    mirrorFunctionArgs
+      # Make the __functionArgs looks like one from a build helper accepting plain attribute set.
+      (attrsOverlay { })
+      # Adds the fixed-point style support.
+      (fpargs: (mkDerivationBase fpargs).overrideAttrs attrsOverlay)
+    // {
+      # Passthru attributes attached to the result build helper.
+      inherit attrsOverlay;
+    };
+
+  /*
+    Like extendMkDerivation, but accept an argument set adapter instead of an
+    attribute overlay.
+
+    The argument set adapter returns the fixed attribute set to pass to the base
+    build helper, instead of a subet of attributes to update. This allows
+    removing arguments that we don't want to pass to the base build helper.
+
+    Type:
+      adaptMkDerivation ::
+        ((FixedPointArgs | AttrSet) -> a)
+        -> (AttrSet -> AttrSet -> AttrSet)
+        -> (FixedPointArgs | AttrSet) -> a
+
+      FixedPointArgs = AttrSet -> AttrSet
+      # a == Derivation when defining a build helper
+
+    Example:
+      mkLocalDerivation = lib.adaptMkDerivation pkgs.stdenv.mkDerivation (finalAttrs:
+        args@{ preferLocalBuild ? true, allowSubstitute ? false, specialArg ? (_: false), ... }:
+        removeAttrs args [ "specialArg" ] // { inherit preferLocalBuild allowSubstitute; })
+
+      mkLocalDerivation.__functionArgs
+      => { allowSubstitute = true; specialArg = true; preferLocalBuild = true; }
+
+      mkLocalDerivation { inherit (pkgs.hello) pname version src; specialArg = _: false; }
+      => «derivation /nix/store/xirl67m60ahg6jmzicx43a81g635g8z8-hello-2.12.1.drv»
+
+      mkLocalDerivation (finalAttrs: { inherit (pkgs.hello) pname version src; specialArg = _: false; })
+      => «derivation /nix/store/xirl67m60ahg6jmzicx43a81g635g8z8-hello-2.12.1.drv»
+
+      (mkLocalDerivation (finalAttrs: { inherit (pkgs.hello) pname version src; passthru = { foo = "a"; bar = "${finalAttrs.passthru.foo}b"; } })).bar
+      => "ab"
+  */
+
+  adaptMkDerivation =
+    # Base build helper, the mkDerivation-like build helper to extend.
+    mkDerivationBase:
+    # Argument set adapter, a function in the form `finalAttrs: args: { ... }`
+    # which turns the argument set of the result build helper into that for the
+    # base build helper.
+    # This acts as the implementation detail of the result build helper.
+    adaptArgs:
+    mirrorFunctionArgs
+      # Make the __functionArgs looks like one from a build helper accepting plain attribute set.
+      (adaptArgs { })
+      # Adds the fixed-point style support
+      (fpargs: mkDerivationBase (finalAttrs:
+        adaptArgs finalAttrs (lib.toFunction fpargs finalAttrs)
+      ));
+
+  /*
+    Like `extendMkDerivation`, but additionally accepts a function to be applied
+    to the result derivation.
+
+    :::{.note}
+    The derivation modification function *modify* should take care of
+    existing attributes that perform overriding (e.g. `<pkg>.overrideAttrs`),
+    to make the overriding functionality of the result derivation work
+    as expected.
+
+    Modifications that do not respect such attributes include
+    direct [attribute set update](https://nixos.org/manual/nix/stable/language/operators#update)
+    and [`lib.extendDerivation`](#function-library-lib.customisation.extendDerivation).
+    :::
+
+    Type:
+      extendMkDerivationModified ::
+        (a -> a)
+        -> ((FixedPointArgs | AttrSet) -> a)
+        -> (AttrSet -> AttrSet -> AttrSet)
+        -> (FixedPointArgs | AttrSet) -> a
+
+      FixedPointArgs = AttrSet -> AttrSet
+      # a == Derivation when defining a build helper
+  */
+  extendMkDerivationModified =
+    # Function to modify the result derivation.
+    modify:
+    mkDerivationBase:
+    attrsOverlay:
+    mirrorFunctionArgs
+      # Make the __functionArgs looks like one from a build helper accepting plain attribute set.
+      (attrsOverlay { })
+      (fpargs: modify (extendMkDerivation mkDerivationBase attrsOverlay fpargs));
+
+  /*
+    Like `extendMkDerivation`, but additionally accepts a function to be applied
+    to the result derivation.
+
+    Care must be taken to existing overriders. See
+    [`extendMkDerivationModified`](#function-library-lib.customisation.extendMkDerivationModified)
+    for detail.
+
+    Type:
+      adaptMkDerivationModified ::
+        (a -> a)
+        -> ((FixedPointArgs | AttrSet) -> a)
+        -> (AttrSet -> AttrSet -> AttrSet)
+        -> (FixedPointArgs | AttrSet) -> a
+
+      FixedPointArgs = AttrSet -> AttrSet
+      # a == Derivation when defining a build helper
+  */
+  adaptMkDerivationModified =
+    # Function to modify the result derivation.
+    modify:
+    mkDerivationBase:
+    adaptArgs:
+    mirrorFunctionArgs
+      # Make the __functionArgs looks like one from a build helper accepting plain attribute set.
+      (adaptArgs { })
+      (fpargs: modify (adaptMkDerivation mkDerivationBase adaptArgs fpargs));
 }
