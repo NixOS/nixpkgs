@@ -6243,6 +6243,8 @@ with pkgs;
 
   cicero-tui = callPackage ../tools/misc/cicero-tui { };
 
+  cilium = callPackage ../servers/cilium { };
+
   cilium-cli = callPackage ../applications/networking/cluster/cilium { };
 
   cjdns = callPackage ../tools/networking/cjdns { };
