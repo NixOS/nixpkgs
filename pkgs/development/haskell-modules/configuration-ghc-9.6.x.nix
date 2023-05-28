@@ -77,8 +77,8 @@ self: super: {
   aeson = doDistribute self.aeson_2_1_2_1;
   memory = doDistribute self.memory_0_18_0;
 
-  ghc-lib = doDistribute self.ghc-lib_9_6_1_20230312;
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_6_1_20230312;
+  ghc-lib = doDistribute self.ghc-lib_9_6_2_20230523;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_6_2_20230523;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_6_0_0;
 
   # allows mtl, template-haskell, text and transformers
