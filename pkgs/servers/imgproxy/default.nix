@@ -28,5 +28,8 @@ buildGoModule rec {
     homepage = "https://imgproxy.net";
     license = licenses.mit;
     maintainers = with maintainers; [ paluh ];
+    knownVulnerabilities = [
+      "CVE-2023-30019"
+    ];
   };
 }
