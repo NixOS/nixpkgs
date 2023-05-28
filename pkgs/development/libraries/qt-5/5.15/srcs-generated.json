@@ -16,8 +16,8 @@
   },
   "qtbase": {
     "url": "https://invent.kde.org/qt/qt/qtbase.git",
-    "rev": "d3b21bc8b70eaa1af848371dc1d34c4617c1f73c",
-    "sha256": "11yww09fgcqsxv4sk4cflxdsdpdqc0x9b3qw63asfpwrnv9qry0a"
+    "rev": "a196623892558623e467f20b67edb78794252a09",
+    "sha256": "0yna2k1w595xwh9bk268h31fjl2ff8cm185dmm0v5gr4w8h9yr4g"
   },
   "qtcharts": {
     "url": "https://invent.kde.org/qt/qt/qtcharts.git",
@@ -26,8 +26,8 @@
   },
   "qtconnectivity": {
     "url": "https://invent.kde.org/qt/qt/qtconnectivity.git",
-    "rev": "0f9e49cde3b7ca40cd94e63d2f5d29f5b586d3d6",
-    "sha256": "1iwqa98ihzqqpqgwsj0lm4zkfwgag9k634sxjnx6gxvfq0h6d4nx"
+    "rev": "e6d37133affc71451129d84790c6c22227e64aff",
+    "sha256": "1bc1d0h2f1q0xfvr8p5fq1580bl8cs0qhdncm600v590z56cyika"
   },
   "qtdatavis3d": {
     "url": "https://invent.kde.org/qt/qt/qtdatavis3d.git",
@@ -36,8 +36,8 @@
   },
   "qtdeclarative": {
     "url": "https://invent.kde.org/qt/qt/qtdeclarative.git",
-    "rev": "0e1bed3c3e27d44d86d6f68a8b93b96a4821575c",
-    "sha256": "0v4c3pls67ww6ffiscbp05yb2vv583zrxj8p4jcy3yxa06khniy5"
+    "rev": "039ce261b0f8061f8485f9c2eaf497a4d4395baa",
+    "sha256": "1kp2pnwfcwsxhy2w1sdg722d0kb1i6kx3a9r42gl1i9d73k8afi2"
   },
   "qtdoc": {
     "url": "https://invent.kde.org/qt/qt/qtdoc.git",
@@ -61,8 +61,8 @@
   },
   "qtlocation": {
     "url": "https://invent.kde.org/qt/qt/qtlocation.git",
-    "rev": "2a8a48e9101236f118c2c4f0d79fae9c9d7b3f2a",
-    "sha256": "0ajvlqkm2641ahms34kg6a2hykvql1hxlm5nsaba7233hnfv3nsy"
+    "rev": "30fb93cf8521f2c0b3803903153d9034b7d7bcc2",
+    "sha256": "1b027hfc1m2nz0v906w08srmpyci3362arxc18cin334yhgghbx1"
   },
   "qtlottie": {
     "url": "https://invent.kde.org/qt/qt/qtlottie.git",
@@ -101,8 +101,8 @@
   },
   "qtquickcontrols2": {
     "url": "https://invent.kde.org/qt/qt/qtquickcontrols2.git",
-    "rev": "86a84eaa74c4071e5750f23b6e9911762880d391",
-    "sha256": "1zywq3ll49bzzvl6rzn4zpp96a4mdx0b9l5ic0x6zc4dr8c8jk5m"
+    "rev": "68a48018e34322edaf611639710b3edbe389e8c2",
+    "sha256": "04hswsamjmwgn63gs3rhxygvwjfqx5f0qifzp3gp6q4fw8lkgwpf"
   },
   "qtquicktimeline": {
     "url": "https://invent.kde.org/qt/qt/qtquicktimeline.git",
@@ -146,8 +146,8 @@
   },
   "qtsvg": {
     "url": "https://invent.kde.org/qt/qt/qtsvg.git",
-    "rev": "9b5ab29cbba1908fd4928e2bda2b93e418e36187",
-    "sha256": "0vnwhbkk40wj9rfy3fhjm9slra3y3j1mk67n3vnrzvmzrmpl4443"
+    "rev": "837b5163e17edbd3a9f098e9a1ab73febab419b4",
+    "sha256": "082i9q36d44g5a3jbw3ahvmmxikfai50wd2yq8xvkh8kr8xr7n5z"
   },
   "qttools": {
     "url": "https://invent.kde.org/qt/qt/qttools.git",
