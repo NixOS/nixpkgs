@@ -13577,7 +13577,7 @@ with pkgs;
   };
 
   vtm = callPackage ../tools/misc/vtm {
-    stdenv = if stdenv.isDarwin then clang16Stdenv else stdenv;
+    stdenv = if stdenv.isDarwin then llvmPackages_16.stdenv else stdenv;
   };
 
   witness = callPackage ../tools/security/witness { };

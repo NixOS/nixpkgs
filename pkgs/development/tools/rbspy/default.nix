@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , ruby
 , which
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -45,6 +46,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ ruby which ]
     ++ lib.optional stdenv.isDarwin rustPlatform.bindgenHook;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://rbspy.github.io/";
