@@ -31,6 +31,11 @@ stdenv.mkDerivation {
     "sysconfdir=\${out}/etc"
   ];
 
+  # SysV init script is not relevant.
+  postFixup = ''
+    rm -r $out/etc/init.d
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/grondo/edac-utils";
     description = "Handles the reporting of hardware-related memory errors";
