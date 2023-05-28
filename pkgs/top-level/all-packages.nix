@@ -17782,6 +17782,8 @@ with pkgs;
 
   verible = callPackage ../development/tools/language-servers/verible { };
 
+  vscode-langservers-extracted = callPackage ../development/tools/language-servers/vscode-langservers-extracted { };
+
   zls = callPackage ../development/tools/language-servers/zls {
     zig = buildPackages.zig_0_10;
   };

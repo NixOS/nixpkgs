@@ -46,4 +46,5 @@ mapAliases {
   manta = pkgs.node-manta; # Added 2023-05-06
   thelounge = pkgs.thelounge; # Added 2023-05-22
   triton = pkgs.triton; # Added 2023-05-06
+  vscode-langservers-extracted = pkgs.vscode-langservers-extracted; # Added 2023-05-27
 }
