@@ -109,7 +109,6 @@ let
       SystemCallArchitectures = "native";
 
       # The following options are redundant when confinement is enabled
-      RootDirectory = "/var/empty";
       TemporaryFileSystem = "/";
       PrivateMounts = true;
       MountAPIVFS = true;
