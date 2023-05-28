@@ -305,3 +305,10 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/build-support/ocaml           @romildo @ulrikstrid
 /pkgs/development/compilers/ocaml   @romildo @ulrikstrid
 /pkgs/development/ocaml-modules     @romildo @ulrikstrid
+
+# ZFS
+pkgs/os-specific/linux/zfs                @raitobezarius
+nixos/lib/make-single-disk-zfs-image.nix  @raitobezarius
+nixos/lib/make-multi-disk-zfs-image.nix   @raitobezarius
+nixos/modules/tasks/filesystems/zfs.nix   @raitobezarius
+nixos/tests/zfs.nix                       @raitobezarius
