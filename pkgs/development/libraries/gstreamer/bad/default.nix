@@ -183,8 +183,6 @@ stdenv.mkDerivation rec {
     libwebp
     xvidcore
     gnutls
-    libGL
-    libGLU
     game-music-emu
     openssl
     libxml2
@@ -235,6 +233,9 @@ stdenv.mkDerivation rec {
     serd
     sord
     sratom
+
+    libGL
+    libGLU
   ] ++ lib.optionals guiSupport [
     gtk3
   ] ++ lib.optionals (stdenv.isLinux && guiSupport) [
