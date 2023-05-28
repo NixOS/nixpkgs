@@ -21,6 +21,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "A tiny markup language for terminal output";
     homepage = "https://github.com/liamg/tml";
+    changelog = "https://github.com/liamg/tml/releases/tag/v${version}";
     license = licenses.unlicense;
     maintainers = with maintainers; [ figsoda ];
   };
