@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     # fixes pkgsMusl.intel-gpu-tools
+    # https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/issues/138
     (fetchpatch {
       url = "https://raw.githubusercontent.com/void-linux/void-packages/111918317d06598fe1459dbe139923404f3f4b9d/srcpkgs/igt-gpu-tools/patches/musl.patch";
       hash = "sha256-cvtwZg7js7O/Ww7puBTfVzLRji2bHTyV91+PvpH8qrg=";
