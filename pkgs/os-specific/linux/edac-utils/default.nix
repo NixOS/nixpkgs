@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation {
   pname = "edac-utils";
-  version = "unstable-2015-01-07";
+  version = "unstable-2023-01-30";
 
   src = fetchFromGitHub {
     owner = "grondo";
     repo = "edac-utils";
-    rev = "f9aa96205f610de39a79ff43c7478b7ef02e3138";
-    sha256 = "1dmfqb15ffldl5zirbmwiqzpxbcc2ny9rpfvxcfvpmh5b69knvdg";
+    rev = "8fdc1d40e30f65737fef6c3ddcd1d2cd769f6277";
+    hash = "sha256-jZGRrZ1sa4x0/TBJ5GsNVuWakmPNOU+oiOoXdhARunk=";
   };
 
   nativeBuildInputs = [ perl makeWrapper ];
