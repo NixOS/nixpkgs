@@ -741,6 +741,8 @@ with pkgs;
 
   docui = callPackage ../tools/misc/docui { };
 
+  done = callPackage ../applications/misc/done { };
+
   dotfiles = callPackage ../applications/misc/dotfiles { };
 
   # Dotnet
