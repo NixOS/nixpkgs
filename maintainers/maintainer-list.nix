@@ -7533,6 +7533,12 @@
     githubId = 8900;
     name = "Johan Magnus Jonsson";
   };
+  jmbaur = {
+    email = "jaredbaur@fastmail.com";
+    github = "jmbaur";
+    githubId = 45740526;
+    name = "Jared Baur";
+  };
   jmc-figueira = {
     email = "business+nixos@jmc-figueira.dev";
     github = "jmc-figueira";
