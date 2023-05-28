@@ -6,20 +6,21 @@
 , python3
 , makeWrapper
 , darwin
+, which
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pylyzer";
-  version = "0.0.27";
+  version = "0.0.28";
 
   src = fetchFromGitHub {
     owner = "mtshiba";
     repo = "pylyzer";
     rev = "v${version}";
-    hash = "sha256-RtfRYycHSDaOE71tTtChdMJKyRyTqracHw4p94heFwU=";
+    hash = "sha256-+i35dkYtvGrjN3KWtCfr6W4TkNmV0T8CF+WcaodPbX4=";
   };
 
-  cargoHash = "sha256-Ggvcg96j9LlhDy0BMJzNDXE1Qtf04svt2ezXmkq3aUA=";
+  cargoHash = "sha256-y/CZDh7TURi6VBko+/3U2HQ41asn1IWJF/1WPD0DyT4=";
 
   nativeBuildInputs = [
     git
@@ -41,6 +42,10 @@ rustPlatform.buildRustPackage rec {
     mkdir -p $out/lib
     cp -r $HOME/.erg/ $out/lib/erg
   '';
+
+  nativeCheckInputs = [
+    which
+  ];
 
   checkFlags = [
     # this test causes stack overflow
