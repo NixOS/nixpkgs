@@ -857,16 +857,17 @@ class Machine:
 
     def wait_for_console_text(self, regex: str, timeout: int | None = None) -> None:
         """
-            Wait for the provided regex to appear on console.
-            For each reads,
+        Wait for the provided regex to appear on console.
+        For each reads,
 
-            If timeout is None, timeout is infinite.
+        If timeout is None, timeout is infinite.
 
-            `timeout` is in seconds.
+        `timeout` is in seconds.
         """
         # Buffer the console output, this is needed
         # to match multiline regexes.
         console = io.StringIO()
+
         def console_matches() -> bool:
             nonlocal console
             try:
@@ -877,7 +878,7 @@ class Machine:
                 pass
             console.seek(0)
             matches = re.search(regex, console.read())
-            return (matches is not None)
+            return matches is not None
 
         with self.nested(f"waiting for {regex} to appear on console"):
             if timeout is not None:
