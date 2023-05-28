@@ -47,4 +47,5 @@ mapAliases {
   readability-cli = pkgs.readability-cli; # Added 2023-06-12
   thelounge = pkgs.thelounge; # Added 2023-05-22
   triton = pkgs.triton; # Added 2023-05-06
+  vscode-langservers-extracted = pkgs.vscode-langservers-extracted; # Added 2023-05-27
 }
