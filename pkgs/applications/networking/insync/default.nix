@@ -1,7 +1,7 @@
 { lib
 , writeShellScript
 , buildFHSEnv
-, stdenv
+, stdenvNoCC
 , fetchurl
 , autoPatchelfHook
 , dpkg
@@ -15,7 +15,7 @@
 
 let
   pname = "insync";
-  version = "3.8.5.50499";
+  version = "3.8.6.50504";
   meta = with lib; {
     platforms = ["x86_64-linux"];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
@@ -37,13 +37,14 @@ let
      2) libqtvirtualkeyboardplugin does not have necessary Qt library shipped from vendor.
     '';
   };
-  insync-pkg = stdenv.mkDerivation {
-    inherit pname version;
+
+  insync-pkg = stdenvNoCC.mkDerivation {
+    inherit pname version meta;
 
     src = fetchurl {
       # Find a binary from https://www.insynchq.com/downloads/linux#ubuntu.
       url = "https://cdn.insynchq.com/builds/linux/${pname}_${version}-lunar_amd64.deb";
-      sha256 = "sha256-mpMJe8LAmO9OrqRIEWuxfVNeh5ANvjZIEHFz8cXYObY=";
+      sha256 = "sha256-BxTFtQ1rAsOuhKnH5vsl3zkM7WOd+vjA4LKZGxl4jk0=";
     };
 
     buildInputs = [
@@ -68,7 +69,7 @@ let
       cp -R usr/* $out/
 
       # use system glibc
-      rm -f $out/lib/insync/{libgcc_s.so.1,libstdc++.so.6}
+      rm $out/lib/insync/{libgcc_s.so.1,libstdc++.so.6}
 
       # remove badly packaged plugins
       rm $out/lib/insync/PySide2/plugins/platforminputcontexts/libqtvirtualkeyboardplugin.so
@@ -76,35 +77,43 @@ let
       runHook postInstall
     '';
 
-    dontConfigure = true;
-    dontBuild = true;
-
     # NB! This did the trick, otherwise it segfaults! However I don't understand why!
     dontStrip = true;
-
-    inherit meta;
   };
-in buildFHSEnv { # ref: pkgs/build-support/build-fhsenv-bubblewrap/default.nix
-  name = "${pname}-${version}";
-  inherit meta;
 
-  # for including insync's xdg data dirs
-  extraOutputsToInstall = [ "share" ];
+  insync-fhsenv = buildFHSEnv {
+    name = "${pname}-${version}";
+    inherit meta;
 
-  targetPkgs = pkgs: [
-    insync-pkg
-  ];
+    # for including insync's xdg data dirs
+    extraOutputsToInstall = [ "share" ];
 
-  multiPkgs = pkgs: with pkgs; [
-    # apparently only package needed for the FHS :)
-    libudev0-shim
-  ];
+    targetPkgs = pkgs: [
+      insync-pkg
+    ];
 
-  runScript = writeShellScript "insync-wrapper.sh" ''
+    multiPkgs = pkgs: with pkgs; [
+      # apparently only package needed for the FHS :)
+      libudev0-shim
+    ];
+
+    runScript = writeShellScript "insync-wrapper.sh" ''
     # QT_STYLE_OVERRIDE was used to suppress a QT warning, it should have no actual effect for this binary.
     export QT_STYLE_OVERRIDE=Fusion
     exec "${insync-pkg.outPath}/lib/insync/insync" "$@"
+    '';
+
+    # "insync start" command starts a daemon.
+    dieWithParent = false;
+  };
+
+in stdenvNoCC.mkDerivation {
+  inherit pname version meta;
+
+  dontUnpack = true;
+  installPhase = ''
+    mkdir -p $out/bin
+    ln -s ${insync-fhsenv}/bin/${insync-fhsenv.name} $out/bin/insync
+    ln -s ${insync-pkg}/share $out/share
   '';
-  # "insync start" command starts a daemon.
-  dieWithParent = false;
 }

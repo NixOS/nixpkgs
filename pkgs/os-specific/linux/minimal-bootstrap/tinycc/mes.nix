@@ -25,19 +25,28 @@ let
     mkdir -p ''${out}
     cd ''${out}
     untar --file ''${NIX_BUILD_TOP}/tinycc.tar
+
+    # Patch
+    cd tinycc-${builtins.substring 0 7 rev}
+    # Static link by default
+    replace --file libtcc.c --output libtcc.c --match-on "s->ms_extensions = 1;" --replace-with "s->ms_extensions = 1; s->static_link = 1;"
   '') + "/tinycc-${builtins.substring 0 7 rev}";
 
   meta = with lib; {
     description = "Small, fast, and embeddable C compiler and interpreter";
     homepage = "https://repo.or.cz/w/tinycc.git";
     license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = teams.minimal-bootstrap.members;
     platforms = [ "i686-linux" ];
   };
 
   tccdefs = kaem.runCommand "tccdefs-${version}" {} ''
     mkdir ''${out}
-    ${tinycc-bootstrappable}/bin/tcc -static -DC2STR -o c2str ${src}/conftest.c
+    ${tinycc-bootstrappable.compiler}/bin/tcc \
+      -B ${tinycc-bootstrappable.libs}/lib \
+      -DC2STR \
+      -o c2str \
+      ${src}/conftest.c
     ./c2str ${src}/include/tccdefs.h ''${out}/tccdefs_.h
   '';
 

@@ -291,6 +291,10 @@ backendStdenv.mkDerivation rec {
   '' + lib.optionalString (lib.versionOlder version "8.0") ''
     # Hack to fix building against recent Glibc/GCC.
     echo "NIX_CFLAGS_COMPILE+=' -D_FORCE_INLINES'" >> $out/nix-support/setup-hook
+  ''
+  # 11.8 includes a broken symlink, include/include, pointing to targets/x86_64-linux/include
+  + lib.optionalString (lib.versions.majorMinor version == "11.8") ''
+    rm $out/include/include
   '' + ''
     runHook postInstall
   '';

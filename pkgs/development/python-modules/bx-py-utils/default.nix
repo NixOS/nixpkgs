@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "bx-py-utils";
-  version = "78";
+  version = "80";
 
   disabled = pythonOlder "3.9";
 
@@ -23,8 +23,12 @@ buildPythonPackage rec {
     owner = "boxine";
     repo = "bx_py_utils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dMcbv/qf+8Qzu47MVFU2QUviT/vjKsHp+45F/6NOlWo=";
+    hash = "sha256-ih0tqT+3fTTgncXz4bneo4OGT0jVhybdADTy1de5VqI=";
   };
+
+  postPatch = ''
+    rm bx_py_utils_tests/publish.py
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -58,6 +62,12 @@ buildPythonPackage rec {
     pdoc
     pytestCheckHook
     requests-mock
+  ];
+
+  disabledTests = [
+    # too closely affected by bs4 updates
+    "test_pretty_format_html"
+    "test_assert_html_snapshot_by_css_selector"
   ];
 
   disabledTestPaths = [

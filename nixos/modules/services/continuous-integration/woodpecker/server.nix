@@ -28,7 +28,7 @@ in
               WOODPECKER_GITEA_URL = "https://git.example.com";
             }
           '';
-        description = lib.mdDoc "woodpecker-server config envrionment variables, for other options read the [documentation](https://woodpecker-ci.org/docs/administration/server-config)";
+        description = lib.mdDoc "woodpecker-server config environment variables, for other options read the [documentation](https://woodpecker-ci.org/docs/administration/server-config)";
       };
       environmentFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;

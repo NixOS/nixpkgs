@@ -39,7 +39,6 @@ python3Packages.buildPythonApplication rec {
     --replace pytest-runner ""
 
     substituteInPlace src/vorta/assets/metadata/com.borgbase.Vorta.desktop \
-    --replace Exec=vorta "Exec=$out/bin/vorta" \
     --replace com.borgbase.Vorta "com.borgbase.Vorta-symbolic"
   '';
 

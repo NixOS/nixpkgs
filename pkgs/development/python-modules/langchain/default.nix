@@ -52,13 +52,17 @@
 , duckduckgo-search
 , lark
 , jq
-, protobuf
 , steamship
 , pdfminer-six
+, lxml
+, chardet
+, requests-toolbelt
+, neo4j
   # test dependencies
 , pytest-vcr
 , pytest-asyncio
 , pytest-mock
+, pytest-socket
 , pandas
 , toml
 , freezegun
@@ -69,7 +73,7 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.0.168";
+  version = "0.0.180";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -78,7 +82,7 @@ buildPythonPackage rec {
     owner = "hwchase17";
     repo = "langchain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2L5yFkXr6dioEP1QAMXWX6x+IRbGUIW3cxLLxJJjkMI=";
+    hash = "sha256-5ZA5CXS9+NCyOXGbjgGk+iNCF/B2Wm4xRpR6t5uJ+yg=";
   };
 
   postPatch = ''
@@ -128,8 +132,14 @@ buildPythonPackage rec {
     openai = [
       openai
     ];
+    text_helpers = [
+      chardet
+    ];
     cohere = [
       cohere
+    ];
+    docarray = [
+      # docarray
     ];
     embeddings = [
       sentence-transformers
@@ -188,16 +198,22 @@ buildPythonPackage rec {
       # clickhouse-connect
       azure-cosmos
       # lancedb
+      # langkit
       lark
       pexpect
       # pyvespa
       # O365
       jq
       # docarray
-      protobuf
-      # hnswlib
       steamship
       pdfminer-six
+      lxml
+      requests-toolbelt
+      neo4j
+      # openlm
+      # azure-ai-formrecognizer
+      # azure-ai-vision
+      # azure-cognitiveservices-speech
     ];
   };
 
@@ -205,6 +221,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-vcr
     pytest-mock
+    pytest-socket
     pytest-asyncio
     pandas
     toml
@@ -221,6 +238,9 @@ buildPythonPackage rec {
     # these tests have db access
     "test_table_info"
     "test_sql_database_run"
+
+    # these tests have network access
+    "test_socket_disabled"
   ];
 
   meta = with lib; {

@@ -1,4 +1,4 @@
-{ lib, python3, fetchFromGitHub, fetchurl }:
+{ lib, python3, fetchFromGitHub, fetchPypi }:
 let
   python = python3.override {
     # override resolvelib due to
@@ -24,13 +24,13 @@ in
 with python.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "2.5.2";
+  version = "2.6.1";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MIy7dmfPju+x9gB3Hgke4BAC9UVagwTsBLql21HMvMc=";
+    hash = "sha256-EFlYhJovjZqp7yGDosUOrp60rEf8gScs1QT92ckO3qI=";
   };
 
   nativeBuildInputs = [
@@ -68,6 +68,7 @@ buildPythonApplication rec {
     pytest-mock
     pytest-rerunfailures
     pytest-xdist
+    pytest-httpserver
   ];
 
   pytestFlagsArray = [

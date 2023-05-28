@@ -309,8 +309,8 @@ let
         mktplcRef = {
           name = "astro-vscode";
           publisher = "astro-build";
-          version = "0.29.7";
-          sha256 = "sha256-hr8opkNnYpnc8ZRd8tkO8GgMN2lK0YwCETDNe4QnUNQ=";
+          version = "1.0.6";
+          sha256 = "sha256-/gpZtOO8MA/MJ1o9eG4qmPqhWRZ5E+elA9Rr/kpOprI=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/astro-build.astro-vscode/changelog";
@@ -612,8 +612,8 @@ let
         mktplcRef = {
           name = "chatgpt-reborn";
           publisher = "chris-hayes";
-          version = "3.16.1";
-          sha256 = "sha256-RVPA+O0QOtFArWzcuwXMZSpwB3zrPAzVCbEjOzUNH4I=";
+          version = "3.16.3";
+          sha256 = "wkitG5gmYKYKXRw/zVW04HN1dePiTjbnynFOY/bwxfI=";
         };
       };
 
@@ -757,8 +757,8 @@ let
         mktplcRef = {
           name = "vscode-markdownlint";
           publisher = "DavidAnson";
-          version = "0.49.0";
-          sha256 = "sha256-Mh/OoRK410aXEr3sK2CYFDsXGSqFT+JOWi9jHOdK01Y=";
+          version = "0.50.0";
+          sha256 = "sha256-F+lryIhSudDz68t1eGrfqI8EuoUUOWU5LfWj0IRCQyY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DavidAnson.vscode-markdownlint/changelog";
@@ -1069,8 +1069,8 @@ let
         mktplcRef = {
           name = "elixir-ls";
           publisher = "JakeBecker";
-          version = "0.13.0";
-          sha256 = "sha256-1uaLFTMvkcYrYAt9qDdISJneKxHo9qsris70iowGW2s=";
+          version = "0.14.7";
+          sha256 = "sha256-RkwgQqasBKMA+0293QhbZhgyGSqhJSic5DuIpBB+OEA=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/JakeBecker.elixir-ls/changelog";
@@ -1132,8 +1132,8 @@ let
         mktplcRef = {
           name = "prettier-vscode";
           publisher = "esbenp";
-          version = "9.12.0";
-          sha256 = "sha256-b7EaYYJNZQBqhyKJ04tytmD9DDRcvA68HTo5JHTr9Fo=";
+          version = "9.13.0";
+          sha256 = "sha256-Iqz1O6odSzAfojCgGDwDA1YtnWU5Ei7vx9Qt25/1SLw=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/esbenp.prettier-vscode/changelog";
@@ -1331,8 +1331,8 @@ let
         mktplcRef = {
           name = "chatgpt-vscode";
           publisher = "genieai";
-          version = "0.0.7";
-          sha256 = "sha256-dWp9OYj9OCsNdZiYbgAWWo/OXMjBSlB7sIupdqnQTiU=";
+          version = "0.0.8";
+          sha256 = "RKvmZkegFs4y+sEVaamPRO1F1E+k4jJyI0Q9XqKowrQ=";
         };
       };
 
@@ -1340,8 +1340,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "codespaces";
-          version = "1.14.1";
-          sha256 = "sha256-oiAn/tW4jfccsY8zH6L7UzldeM7sV9tllSvgZD8c9aY=";
+          version = "1.14.7";
+          sha256 = "pcZGMxTVnMeD6rnNV0d9Wysk6MrYiYcJ+byuH9VR0ds=";
         };
         meta = { license = lib.licenses.unfree; };
       };
@@ -1350,8 +1350,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot";
-          version = "1.78.9758";
-          sha256 = "sha256-qIaaM72SenMv+vtkTMBodD2JsroZLpw8qEttr5aIDQk=";
+          version = "1.86.82";
+          sha256 = "isaqjrAmu/08gnNKQPeMV4Xc8u0Hx8gB2c78WE54kYQ=";
         };
         meta = {
           description = "GitHub Copilot uses OpenAI Codex to suggest code and entire functions in real-time right from your editor.";
@@ -1404,8 +1404,8 @@ let
           # the VSCode Marketplace and use a calver scheme. We should avoid
           # using preview versions, because they can require insider versions
           # of VS Code
-          version = "0.60.0";
-          sha256 = "sha256-VAoKNRYrzUXUQSDAX8NM17aknCUxMRsTRd5adQu+w/s=";
+          version = "0.64.0";
+          sha256 = "tgQD3o5uMbWofVx7FPyWT1yaeu2e4aPxterN4yXA33U=";
         };
         meta = { license = lib.licenses.mit; };
       };
@@ -1581,8 +1581,8 @@ let
         mktplcRef = {
           name = "Ionide-fsharp";
           publisher = "Ionide";
-          version = "7.5.2";
-          sha256 = "sha256-v2fd2vGaGwRnebKiyjyd/2pgWit0H5lhJT+PXWQq0h4=";
+          version = "7.5.4";
+          sha256 = "sha256-cM3ssUzQnqt5WL8UaLYkrmfHscVa2sGa7/UWLXMIHGg=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Ionide.Ionide-fsharp/changelog";
@@ -1614,8 +1614,8 @@ let
         mktplcRef = {
           name = "latex-workshop";
           publisher = "James-Yu";
-          version = "9.8.1";
-          sha256 = "sha256-89jP/kd5A6UQOcln9mb6DGvWQD8CiKcg+YYRpzZIDJQ=";
+          version = "9.10.0";
+          sha256 = "s0+8952svPSA69M4H29zuIxUWV6xNRpIqLNd8pzGJhY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/James-Yu.latex-workshop/changelog";
@@ -1924,8 +1924,8 @@ let
         mktplcRef = {
           name = "caddyfile-support";
           publisher = "matthewpi";
-          version = "0.2.4";
-          sha256 = "sha256-7D7fNlI55MxD6M8ml/dzBAMwCGCEkC+9aKhreZCVMv4=";
+          version = "0.3.0";
+          sha256 = "sha256-1yiOnvC2w33kiPRdQYskee38Cid/GOj9becLadP1fUY=";
         };
         meta = {
           description = "Rich Caddyfile support for Visual Studio Code";
@@ -2312,8 +2312,8 @@ let
         mktplcRef = {
           name = "typst-lsp";
           publisher = "nvarner";
-          version = "0.4.1";
-          sha256 = "sha256-NZejUb99JDcnqjihLTPkNzVCgpqDkbiwAySbBVZ0esY=";
+          version = "0.5.0";
+          sha256 = "sha256-4bZbjbcd/EjSRBMkzMs1pD00qyQb5W6gePh4xfoU6Ug=";
         };
 
         nativeBuildInputs = [ jq moreutils ];
@@ -2837,8 +2837,8 @@ let
         mktplcRef = {
           name = "svelte-vscode";
           publisher = "svelte";
-          version = "107.2.5";
-          sha256 = "sha256-IsZFIk+jOIxzACaZagL64I8Cs0NLI0aWwUPy6xwAmlQ=";
+          version = "107.4.3";
+          sha256 = "sha256-z1foIJXVKmJ0G4FfO9xsjiQgmq/ZtoB3b6Ch8Nyj1zY=";
         };
         meta = {
           changelog = "https://github.com/sveltejs/language-tools/releases";

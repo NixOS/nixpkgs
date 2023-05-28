@@ -202,6 +202,7 @@ in mkLicense lset) ({
     fullName = "Business Source License 1.1";
     url = "https://mariadb.com/bsl11";
     free = false;
+    redistributable = true;
   };
 
   caossl = {
@@ -616,6 +617,12 @@ in mkLicense lset) ({
   lal13 = {
     spdxId = "LAL-1.3";
     fullName = "Licence Art Libre 1.3";
+  };
+
+  lens = {
+    fullName = "Lens Terms of Service Agreement";
+    url = "https://k8slens.dev/licenses/tos";
+    free = false;
   };
 
   lgpl2Only = {

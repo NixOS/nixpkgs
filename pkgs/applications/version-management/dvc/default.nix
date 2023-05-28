@@ -10,14 +10,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dvc";
-  version = "2.56.0";
+  version = "2.58.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-IpdlNwOuUNWgfphRH2UTQ/IvBHo39PafCqyioju8miI=";
+    hash = "sha256-n6tX7sHzyeIWnpFM08QosQ7y27SB9OKMuQeSB25lJRU=";
   };
 
   pythonRelaxDeps = [

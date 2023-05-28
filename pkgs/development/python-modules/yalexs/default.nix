@@ -4,6 +4,7 @@
 , aioresponses
 , aiounittest
 , buildPythonPackage
+, ciso8601
 , fetchFromGitHub
 , pubnub
 , pyjwt
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "yalexs";
-  version = "1.3.3";
+  version = "1.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -25,12 +26,13 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-dUiaz1adXsiVji1YZYkYN6NCFGzAWIBPjVTeyvUaiqU=";
+    hash = "sha256-8aOLDjWZOqAsnldxUtUBcuT7pBbZHPnPSmQCF/oqNYw=";
   };
 
   propagatedBuildInputs = [
     aiofiles
     aiohttp
+    ciso8601
     pubnub
     pyjwt
     python-dateutil

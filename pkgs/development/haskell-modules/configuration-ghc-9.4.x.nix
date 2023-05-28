@@ -81,8 +81,8 @@ in {
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
   ghc-byteorder = doJailbreak super.ghc-byteorder;
-  ghc-lib = doDistribute self.ghc-lib-parser_9_4_4_20221225;
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_4_4_20221225;
+  ghc-lib = doDistribute self.ghc-lib_9_4_5_20230430;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_4_5_20230430;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_4_0_0;
   hackage-security = doJailbreak super.hackage-security;
   hashable-time = doJailbreak super.hashable-time;
@@ -187,7 +187,8 @@ in {
   servant-swagger = doJailbreak super.servant-swagger;
   servant-client-core = doJailbreak super.servant-client-core;
   servant-client = doJailbreak super.servant-client;
-  relude = doJailbreak super.relude;
+  # https://github.com/kowainik/relude/issues/436
+  relude = dontCheck (doJailbreak super.relude);
 
   # Fixes compilation failure with GHC >= 9.4 on aarch64-* due to an API change
   cborg = appendPatch (pkgs.fetchpatch {

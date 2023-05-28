@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "archspec";
-  version = "0.2.0";
+  version = "0.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     repo = pname;
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-Zu7/zx3FTVJVGpAdRDdnLBokeodspZg6ou/GBaqz4XY=";
+    hash = "sha256-2rMsxSAnPIVqvsbAUtBbHLb3AvrZFjGzxYO6A/1qXnY=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for detecting, labeling, and reasoning about microarchitectures";
     homepage = "https://archspec.readthedocs.io/";
-    changelog = "https://github.com/archspec/archspec/releases/tag/v0.2.0";
+    changelog = "https://github.com/archspec/archspec/releases/tag/v0.2.1";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ atila ];
   };

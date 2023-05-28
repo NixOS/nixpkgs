@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchPypi
 , nix-update-script
 }:
 
@@ -8,7 +9,7 @@ python3.pkgs.buildPythonApplication rec {
   version = "0.9.0";
   format = "pyproject";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-KzW9yI1TGG2hFKeXHFqqYCLw/PB9+lJoTgyWrXxCHpo=";
   };

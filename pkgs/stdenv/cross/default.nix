@@ -9,7 +9,7 @@ let
     crossSystem = localSystem;
     crossOverlays = [];
 
-    # Ignore custom stdenvs when cross compiling for compatability
+    # Ignore custom stdenvs when cross compiling for compatibility
     config = builtins.removeAttrs config [ "replaceStdenv" ];
   };
 

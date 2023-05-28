@@ -2,6 +2,7 @@
 , aiobotocore
 , boto3
 , buildPythonPackage
+, dvc-objects
 , fetchPypi
 , flatten-dict
 , pythonRelaxDepsHook
@@ -29,13 +30,13 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools-scm pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [
-    aiobotocore boto3 flatten-dict s3fs
+    aiobotocore boto3 dvc-objects flatten-dict s3fs
   ];
 
   # Network access is needed for tests
   doCheck = false;
 
-  pythonCheckImports = [ "dvc_s3" ];
+  pythonImportsCheck = [ "dvc_s3" ];
 
   meta = with lib; {
     description = "s3 plugin for dvc";

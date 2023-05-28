@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "angle-grinder";
-  version = "0.19.0";
+  version = "0.19.2";
 
   src = fetchFromGitHub {
     owner = "rcoh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-CAfbV5WKDMjKv2TSdnxpDEqdAwGWME/9PXLcU/TtM2U=";
+    sha256 = "sha256-/OYIG4s0hH/bkAPxt/x5qHopDIoMN9AJLQ8Sx8USgsM=";
   };
 
-  cargoHash = "sha256-EDU+8sbCz4eyBwByHJwQc1Z0ftTZakGcYePbpl8sp08=";
+  cargoHash = "sha256-pOW2jFQxaf2zQWL5+URvHVeCAvSI0u8iALPO5fCoqmI=";
 
   meta = with lib; {
     description = "Slice and dice logs on the command line";

@@ -1,10 +1,10 @@
-{ lib, python3Packages, mopidy }:
+{ lib, python3Packages, fetchPypi, mopidy }:
 
 python3Packages.buildPythonApplication rec {
   pname = "Mopidy-Scrobbler";
   version = "2.0.1";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "11vxgax4xgkggnq4fr1rh2rcvzspkkimck5p3h4phdj3qpnj0680";
   };

@@ -6,9 +6,8 @@
 , fixDarwinDylibNames
 , genBytecode ? false
 , bqn-path ? null
-, mbqn-source ? null
+, mbqn-source
 , enableReplxx ? false
-, enableSingeli ? stdenv.hostPlatform.avx2Support
 , enableLibcbqn ? ((stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin) && !enableReplxx)
 , libffi
 , pkg-config
@@ -24,13 +23,13 @@ assert genBytecode -> ((bqn-path != null) && (mbqn-source != null));
 
 stdenv.mkDerivation rec {
   pname = "cbqn" + lib.optionalString (!genBytecode) "-standalone";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "dzaima";
     repo = "CBQN";
     rev = "v${version}";
-    hash = "sha256-M9GTsm65DySLcMk9QDEhImHnUvWtYGPwiG657wHg3KA=";
+    hash = "sha256-LoxwNxuadbYJgIkr1+bZoErTc9WllN2siAsKnxoom3Y=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +41,7 @@ stdenv.mkDerivation rec {
   ];
 
   dontConfigure = true;
+  doInstallCheck = true;
 
   postPatch = ''
     sed -i '/SHELL =.*/ d' makefile
@@ -54,8 +54,11 @@ stdenv.mkDerivation rec {
 
   buildFlags = [
     # interpreter binary
-    (lib.flatten (if enableSingeli then ["o3n-singeli" "f='-mavx2'"] else ["o3"]))
+    "o3"
+    "notui=1" # display build progress in a plain-text format
     "REPLXX=${if enableReplxx then "1" else "0"}"
+  ] ++ lib.optionals stdenv.hostPlatform.avx2Support [
+    "has=avx2"
   ] ++ lib.optionals enableLibcbqn [
     # embeddable interpreter as a shared lib
     "shared-o3"
@@ -64,6 +67,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     # Purity: avoids git downloading bytecode files
     mkdir -p build/bytecodeLocal/gen
+    cp -r ${singeli-submodule}/dev/* build/singeliLocal/
   '' + (if genBytecode then ''
     ${bqn-path} ./build/genRuntime ${mbqn-source} build/bytecodeLocal/
   '' else ''
@@ -71,10 +75,7 @@ stdenv.mkDerivation rec {
   '')
   + lib.optionalString enableReplxx ''
     cp -r ${replxx-submodule}/dev/* build/replxxLocal/
-  ''
-  + lib.optionalString enableSingeli ''
-    cp -r ${singeli-submodule}/dev/* build/singeliLocal/
- '';
+  '';
 
   outputs = [
     "out"
@@ -100,6 +101,26 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    # main test suite from mlochbaum/BQN
+    $out/bin/BQN ${mbqn-source}/test/this.bqn
+
+    # CBQN tests that do not require compiling with test-only flags
+    $out/bin/BQN test/cmp.bqn
+    $out/bin/BQN test/equal.bqn
+    $out/bin/BQN test/copy.bqn
+    $out/bin/BQN test/bit.bqn
+    $out/bin/BQN test/hash.bqn
+    $out/bin/BQN test/squeezeValid.bqn
+    $out/bin/BQN test/squeezeExact.bqn
+    $out/bin/BQN test/various.bqn
+    $out/bin/BQN test/random.bqn
+
+    runHook postInstallCheck
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/dzaima/CBQN/";
     description = "BQN implementation in C";
@@ -108,4 +129,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-# TODO: test suite

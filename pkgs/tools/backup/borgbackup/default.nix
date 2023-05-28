@@ -12,6 +12,7 @@
 , installShellFiles
 , nixosTests
 , fetchpatch
+, fetchPypi
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -19,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
   version = "1.2.3";
   format = "pyproject";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash = "sha256-4yQY+GM8lvqWgTUqVutjuY4pQgNHLBFKUkJwnTaWZ4U=";
   };

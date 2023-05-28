@@ -23,7 +23,6 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = [ maintainers.ahrzb ];
     mainProgram = "v2ray-plugin";
-    broken = true; # build fails with go > 1.17
   };
 }
 

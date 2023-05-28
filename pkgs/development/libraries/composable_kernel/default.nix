@@ -76,6 +76,9 @@ let
 
     passthru.updateScript = unstableGitUpdater { };
 
+    # Times out otherwise
+    requiredSystemFeatures = [ "big-parallel" ];
+
     meta = with lib; {
       description = "Performance portable programming model for machine learning tensor operators";
       homepage = "https://github.com/ROCmSoftwarePlatform/composable_kernel";
@@ -89,7 +92,7 @@ let
     cp -a ${ck}/bin/ckProfiler $out
   '';
 in stdenv.mkDerivation {
-  inherit (ck) pname version outputs src passthru meta;
+  inherit (ck) pname version outputs src passthru requiredSystemFeatures meta;
 
   dontUnpack = true;
   dontPatch = true;

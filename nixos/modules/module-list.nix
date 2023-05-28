@@ -241,7 +241,6 @@
   ./programs/starship.nix
   ./programs/steam.nix
   ./programs/streamdeck-ui.nix
-  ./programs/sway.nix
   ./programs/sysdig.nix
   ./programs/system-config-printer.nix
   ./programs/systemtap.nix
@@ -256,7 +255,9 @@
   ./programs/usbtop.nix
   ./programs/vim.nix
   ./programs/wavemon.nix
-  ./programs/waybar.nix
+  ./programs/wayland/river.nix
+  ./programs/wayland/sway.nix
+  ./programs/wayland/waybar.nix
   ./programs/weylus.nix
   ./programs/wireshark.nix
   ./programs/xastir.nix
@@ -911,6 +912,7 @@
   ./services/networking/knot.nix
   ./services/networking/kresd.nix
   ./services/networking/lambdabot.nix
+  ./services/networking/legit.nix
   ./services/networking/libreswan.nix
   ./services/networking/lldpd.nix
   ./services/networking/logmein-hamachi.nix
@@ -1150,6 +1152,8 @@
   ./services/ttys/gpm.nix
   ./services/ttys/kmscon.nix
   ./services/video/epgstation/default.nix
+  ./services/video/go2rtc/default.nix
+  ./services/video/frigate.nix
   ./services/video/mirakurun.nix
   ./services/video/replay-sorcery.nix
   ./services/video/mediamtx.nix
@@ -1214,6 +1218,7 @@
   ./services/web-apps/nifi.nix
   ./services/web-apps/node-red.nix
   ./services/web-apps/onlyoffice.nix
+  ./services/web-apps/openvscode-server.nix
   ./services/web-apps/openwebrx.nix
   ./services/web-apps/outline.nix
   ./services/web-apps/peering-manager.nix
@@ -1227,6 +1232,7 @@
   ./services/web-apps/powerdns-admin.nix
   ./services/web-apps/prosody-filer.nix
   ./services/web-apps/restya-board.nix
+  ./services/web-apps/sftpgo.nix
   ./services/web-apps/rss-bridge.nix
   ./services/web-apps/selfoss.nix
   ./services/web-apps/shiori.nix
@@ -1305,7 +1311,6 @@
   ./services/x11/window-managers/default.nix
   ./services/x11/window-managers/fluxbox.nix
   ./services/x11/window-managers/icewm.nix
-  ./services/x11/window-managers/bspwm.nix
   ./services/x11/window-managers/katriawm.nix
   ./services/x11/window-managers/metacity.nix
   ./services/x11/window-managers/nimdow.nix
@@ -1342,6 +1347,7 @@
   ./system/boot/loader/raspberrypi/raspberrypi.nix
   ./system/boot/loader/systemd-boot/systemd-boot.nix
   ./system/boot/luksroot.nix
+  ./system/boot/stratisroot.nix
   ./system/boot/modprobe.nix
   ./system/boot/networkd.nix
   ./system/boot/plymouth.nix

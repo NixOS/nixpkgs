@@ -209,9 +209,6 @@ self: super: {
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
 
-  # Remove when Stackage LTS advances to this version, should be LTS-20.20
-  utility-ht = doDistribute self.utility-ht_0_0_17;
-
   vector = overrideCabal (old: {
     # Too strict bounds on doctest which isn't used, but is part of the configuration
     jailbreak = true;
@@ -731,6 +728,14 @@ self: super: {
   # https://github.com/haskell-works/tasty-discover/issues/9
   # https://github.com/commercialhaskell/stackage/issues/6584#issuecomment-1326522815
   tasty-discover = assert super.tasty-discover.version == "4.2.2"; dontCheck super.tasty-discover;
+
+  # Too strict lower bound on tasty-hedgehog
+  # https://github.com/qfpl/tasty-hedgehog/issues/70
+  tasty-sugar = doJailbreak super.tasty-sugar;
+
+  # Too strict lower bound on aeson
+  # https://github.com/input-output-hk/hedgehog-extras/issues/39
+  hedgehog-extras = doJailbreak super.hedgehog-extras;
 
   # Known issue with nondeterministic test suite failure
   # https://github.com/nomeata/tasty-expected-failure/issues/21
@@ -1717,9 +1722,6 @@ self: super: {
   servant-swagger-ui-core = doJailbreak super.servant-swagger-ui-core;
 
   hercules-ci-agent = lib.pipe super.hercules-ci-agent [
-    (pkg: pkg.override (_: {
-      cachix = super.cachix_1_3_3;
-    }))
     (self.generateOptparseApplicativeCompletions [ "hercules-ci-agent" ])
   ];
 
@@ -2642,7 +2644,7 @@ self: super: {
   tomland = doJailbreak super.tomland;
 
   # 2023-04-05: The last version to support libsoup-2.4, required for
-  # compatability with other gi- packages.
+  # compatibility with other gi- packages.
   # Take another look when gi-webkit2 updates as it may have become compatible with libsoup-3
   gi-soup = assert versions.major self.gi-webkit2.version == "4"; self.gi-soup_2_4_28;
 
@@ -2661,4 +2663,12 @@ self: super: {
     parsec = lself.parsec_3_1_16_1;
     text = lself.text_2_0_2;
   }));
+
+  # Merged upstream, but never released. Allows both intel and aarch64 darwin to build.
+  # https://github.com/vincenthz/hs-gauge/pull/106
+  gauge = appendPatch (pkgs.fetchpatch {
+    name = "darwin-aarch64-fix.patch";
+    url = "https://github.com/vincenthz/hs-gauge/commit/3d7776f41187c70c4f0b4517e6a7dde10dc02309.patch";
+    hash = "sha256-4osUMo0cvTvyDTXF8lY9tQbFqLywRwsc3RkHIhqSriQ=";
+  }) super.gauge;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

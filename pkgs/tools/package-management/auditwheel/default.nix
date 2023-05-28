@@ -2,6 +2,7 @@
 , bzip2
 , patchelf
 , python3
+, fetchPypi
 , gnutar
 , unzip
 }:
@@ -11,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   version = "5.1.2";
   format = "setuptools";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash = "sha256-PuWDABSTHqhK9c0GXGN7ZhTvoD2biL2Pv8kk5+0B1ro=";
   };

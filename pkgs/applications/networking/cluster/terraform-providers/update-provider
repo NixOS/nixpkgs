@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p coreutils curl git jq moreutils nix nix-prefetch
+#! nix-shell -i bash -p coreutils curl git jq moreutils nix nurl
 # shellcheck shell=bash
 # vim: ft=sh
 #
@@ -90,8 +90,7 @@ update_attr() {
 repo_root=$(git rev-parse --show-toplevel)
 
 generate_hash() {
-  nix-prefetch -I nixpkgs="${repo_root}" \
-    "{ sha256 }: (import ${repo_root} {}).terraform-providers.${provider}.$1.overrideAttrs (_: { inherit sha256; })"
+  nurl --expr "(import ${repo_root} {}).terraform-providers.${provider}.$1"
 }
 
 echo_provider() {

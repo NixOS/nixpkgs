@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "nats-server";
-  version = "2.9.16";
+  version = "2.9.17";
 
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-tkOhPa163hiuk2sbfhHL6JTD7do3rrDZTkLYvwuue+o=";
+    hash = "sha256-tWCZq6OwcjVaeaL4CrxSPwGaCKNZ2eN5s3vOoU9oT1I=";
   };
 
-  vendorHash = "sha256-OixJhKaPZ58L+eN/cZnsXUPuGhYhFxfMKtqiV/mWLak=";
+  vendorHash = "sha256-Qn1FkZLo3EC7KX7ZsQLDu26fbMFiwvy7cjlsFlgMtmo=";
 
   doCheck = false;
 

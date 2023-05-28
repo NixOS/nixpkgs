@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dinstalled_tests=false" # TODO: enable these
     "-Dwayland_eglstream=true"
     "-Dprofiler=true"
-    "-Dxwayland_path=${xwayland}/bin/Xwayland"
+    "-Dxwayland_path=${lib.getExe xwayland}"
     # This should be auto detected, but it looks like it manages a false
     # positive.
     "-Dxwayland_initfd=disabled"

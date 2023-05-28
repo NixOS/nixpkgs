@@ -4,7 +4,6 @@
 , pkg-config
 , fontconfig
 , freetype
-, libclang
 }:
 let
   inherit (rustPlatform) buildRustPackage bindgenHook;
@@ -24,15 +23,15 @@ buildRustPackage {
 
   cargoSha256 = "sha256-Gc94Uk/Ikxjnb541flQL7AeblgU/yS6zQ/187ZGRYco=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    bindgenHook
+  ];
 
   buildInputs = [
     fontconfig
     freetype
-    bindgenHook
   ];
-
-  LIBCLANG_PATH = "${libclang.lib}/lib";
 
   doCheck = true;
 

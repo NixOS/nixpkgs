@@ -15,13 +15,12 @@ buildGoModule rec {
   };
   # there is a nested go.mod
   sourceRoot = "source/cmd/otelcorecol";
-  vendorHash = "sha256-M1fLrQFrcfCRCcunkgEzUicVfi5Mz/Or6tFpcGfWf4E=";
+  vendorHash = "sha256-CXXv0GnMpebw2BWJz7Vvx7JfzPUIZ/zCrsmTgtMuvEw=";
 
-  patches = [
-    # remove when fixed upstream
-    # https://github.com/open-telemetry/opentelemetry-collector/issues/7668
-    ./update_go-m1cpu_fix_aarch64-darwin.patch
-  ];
+  # upstream strongly recommends disabling CGO
+  # additionally dependencies have had issues when GCO was enabled that weren't caught upstream
+  # https://github.com/open-telemetry/opentelemetry-collector/blob/main/CONTRIBUTING.md#using-cgo
+  CGO_ENABLED = 0;
 
   preBuild = ''
     # set the build version, can't be done via ldflags

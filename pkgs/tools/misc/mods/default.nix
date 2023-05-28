@@ -1,6 +1,9 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, gitUpdater
+, testers
+, mods
 }:
 
 buildGoModule rec {
@@ -17,6 +20,17 @@ buildGoModule rec {
   vendorHash = "sha256-+0yGFCGd/9bIBjXYp8UPGqKum2di5O1ALMyDSxcVujg=";
 
   ldflags = [ "-s" "-w" "-X=main.version=${version}" ];
+
+  passthru = {
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+      ignoredVersions = ".(rc|beta).*";
+    };
+
+    tests.version = testers.testVersion {
+      package = mods;
+    };
+  };
 
   meta = with lib; {
     description = "AI on the command line";

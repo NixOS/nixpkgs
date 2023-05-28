@@ -24,10 +24,17 @@ in stdenv.mkDerivation rec {
   src =
     if stdenv.isDarwin
     then
-    fetchurl {
-      url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos.tar.gz";
-      sha256 = "1xxg79rlf7li9f73wdbwif1dyy4hnzpypy6wx4zbnvap53habq9f";
-    }
+      (if stdenv.isAarch64
+      then
+      fetchurl {
+        url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos-arm64.tar.gz";
+        sha256 = "16ci26pgrw0zmnyn1zj129y9624cqwzrhqglc8mgfg4k7rxvqy2a";
+      }
+      else
+      fetchurl {
+        url = "https://123.github.com/${pname}/${pname}/releases/download/v${version}/macos.tar.gz";
+        sha256 = "1xxg79rlf7li9f73wdbwif1dyy4hnzpypy6wx4zbnvap53habq9f";
+      })
     else
     fetchurl {
       url = "https://github.com/${pname}/${pname}/releases/download/v${version}/linux64.tar.gz";
@@ -63,7 +70,7 @@ in stdenv.mkDerivation rec {
     license = licenses.bsd3;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ justinwoo mbbx6spp cdepillabout ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "purs";
     changelog = "https://github.com/purescript/purescript/releases/tag/v${version}";
   };

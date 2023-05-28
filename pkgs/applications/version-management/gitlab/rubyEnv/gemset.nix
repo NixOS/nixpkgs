@@ -4218,15 +4218,14 @@ src:
     version = "1.3.0";
   };
   openssl = {
-    dependencies = ["ipaddr"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0xx01in25q31rpxmq2qlimi44zarsp4px7046xnc6in0pa127xsk";
+      sha256 = "0mcg47zz4w902cq6c8cdj62npawgwq68sfh7n7aqy7vm3pgvls9h";
       type = "gem";
     };
-    version = "2.2.2";
+    version = "3.0.2";
   };
   openssl-signature_algorithm = {
     dependencies = ["openssl"];

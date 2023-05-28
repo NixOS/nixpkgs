@@ -261,7 +261,8 @@ in {
 
     services.xserver.libinput = {
       enable = mkEnableOption (lib.mdDoc "libinput") // {
-        default = true;
+        default = config.services.xserver.enable;
+        defaultText = lib.literalExpression "config.services.xserver.enable";
       };
       mouse = mkConfigForDevice "mouse";
       touchpad = mkConfigForDevice "touchpad";

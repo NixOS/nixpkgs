@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "pyquil";
-  version = "3.3.4";
+  version = "3.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-iHyYX9e3O611OzBMafqn4V+yR1y8y4twiJehYDYlvdg=";
+    hash = "sha256-Fr9SnAzDHaSKp0AYra/gCZOJ5Fzcx1EO56ahZQZP2Ss=";
   };
 
   pythonRelaxDeps = [

@@ -27,7 +27,7 @@
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
 , bundler, libsass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
 , CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libmaxminddb, libyaml
-, autoSignDarwinBinariesHook
+, autoSignDarwinBinariesHook, fetchpatch
 }@args:
 
 let
@@ -516,7 +516,7 @@ in
 
   openssl = attrs: {
     # https://github.com/ruby/openssl/issues/369
-    buildInputs = [ openssl_1_1 ];
+    buildInputs = [ (if (lib.versionAtLeast attrs.version "3.0.0") then openssl else openssl_1_1) ];
   };
 
   opus-ruby = attrs: {
@@ -530,6 +530,15 @@ in
 
   ovirt-engine-sdk = attrs: {
     buildInputs = [ curl libxml2 ];
+    dontBuild = false;
+    patches = [
+      # fix ruby 3.1 https://github.com/oVirt/ovirt-engine-sdk-ruby/pull/3
+      (fetchpatch {
+        url = "https://github.com/oVirt/ovirt-engine-sdk-ruby/pull/3/commits/b596b919bc7857fdc0fc1c61a8cb7eab32cfc2db.patch";
+        hash = "sha256-AzGTQaD/e6X4LOMuXhy/WhbayhWKYCGHXPFlzLRWyPM=";
+        stripLen = 1;
+      })
+    ];
   };
 
   pango = attrs: {
@@ -649,6 +658,13 @@ in
       "--with-cflags=-I${ncurses.dev}/include"
       "--with-ldflags=-L${ncurses.out}/lib"
     ];
+    dontBuild = false;
+    postPatch = ''
+      substituteInPlace extconf.rb --replace 'rubyio.h' 'ruby/io.h'
+      substituteInPlace terminfo.c \
+        --replace 'rubyio.h' 'ruby/io.h' \
+        --replace 'rb_cData' 'rb_cObject'
+    '';
   };
 
   ruby-vips = attrs: {

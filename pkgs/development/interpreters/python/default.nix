@@ -197,9 +197,9 @@ in {
       major = "3";
       minor = "12";
       patch = "0";
-      suffix = "a7";
+      suffix = "b1";
     };
-    hash = "sha256-oZrk3Fr+vf9eExI0bxYAYqEeDb1fnmimqYHqN7IWCOE=";
+    hash = "sha256-i6dspkrNdFur37hGeCCWTfmIWO5qlXe/HZNEcle+WB4=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
