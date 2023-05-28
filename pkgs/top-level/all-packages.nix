@@ -30381,6 +30381,8 @@ with pkgs;
 
   f1viewer = callPackage ../applications/video/f1viewer { };
 
+  falcoctl = callPackage ../applications/networking/cluster/falcoctl { };
+
   faircamp = callPackage ../applications/misc/faircamp { };
 
   famistudio = callPackage ../applications/audio/famistudio { };
