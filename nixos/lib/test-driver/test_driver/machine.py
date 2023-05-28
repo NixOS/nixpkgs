@@ -17,6 +17,7 @@ import tempfile
 import threading
 import time
 
+from test_driver.efi import EfiVariable
 from test_driver.logger import rootlog
 
 CHAR_TO_KEY = {
@@ -1018,6 +1019,33 @@ class Machine:
         Useful during interactive testing.
         """
         self.send_monitor_command(f"hostfwd_add tcp::{host_port}-:{guest_port}")
+
+    def running_under_uefi(self) -> bool:
+        """
+        Returns True if the current environment is running under UEFI, False otherwise.
+        This is achieved by inspecting by the existence of /sys/firmware/efi.
+        """
+        rc, _ = self.execute("test -d /sys/firmware/efi")
+        return (rc == 0)
+
+
+    def read_efi_variable_from_sysfs(self, guid: str, variable_name: str) -> EfiVariable | None:
+        """
+        Read an EFI variable located in efivars sysfs if available.
+        Returns None if the EFI variable does not exist.
+        Raises an assertion error if we are not running under an UEFI environment.
+        """
+        assert self.running_under_uefi(), "This machine is not detected under an UEFI environment"
+        rc, raw_attributes_and_value = self.execute(f"base64 /sys/firmware/efi/efivars/{variable_name}-{guid}")
+        if rc != 0: return None
+        # The return value is a string which is in reality a disguised bytes, we re-encode it properly
+        # using raw_unicode_escape keeping all the escapes properly.
+        # This is not guaranteed to work for all the cases but is good enough for UTF-8/UTF-16 usecases.
+        attributes_and_value = base64.b64decode(raw_attributes_and_value)
+        # First 4 bytes are attributes: https://www.kernel.org/doc/html/latest/filesystems/efivarfs.html
+        attributes = attributes_and_value[:4]
+        value = attributes_and_value[4:]
+        return EfiVariable(value=value, attributes=attributes)
 
     def block(self) -> None:
         """Make the machine unreachable by shutting down eth1 (the multicast
