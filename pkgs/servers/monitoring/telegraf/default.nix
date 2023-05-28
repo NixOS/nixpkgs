@@ -19,7 +19,10 @@ buildGoModule rec {
   proxyVendor = true;
 
   ldflags = [
-    "-w" "-s" "-X main.version=${version}"
+    "-s"
+    "-w"
+    "-X=github.com/influxdata/telegraf/internal.Commit=${src.rev}"
+    "-X=github.com/influxdata/telegraf/internal.Version=${version}"
   ];
 
   passthru.tests = { inherit (nixosTests) telegraf; };
