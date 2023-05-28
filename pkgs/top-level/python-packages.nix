@@ -13090,6 +13090,8 @@ self: super: with self; {
 
   xknx = callPackage ../development/python-modules/xknx { };
 
+  xknxproject = callPackage ../development/python-modules/xknxproject { };
+
   xlib = callPackage ../development/python-modules/xlib { };
 
   xlrd = callPackage ../development/python-modules/xlrd { };
