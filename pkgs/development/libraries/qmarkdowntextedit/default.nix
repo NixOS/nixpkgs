@@ -2,21 +2,22 @@
 , stdenv
 , fetchFromGitHub
 , qmake
-, wrapQtAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "qmarkdowntextedit";
-  version = "unstable-2022-08-24";
+  version = "unstable-2023-04-02";
 
   src = fetchFromGitHub {
     owner = "pbek";
     repo = pname;
-    rev = "f7ddc0d520407405b9b132ca239f4a927e3025e6";
-    sha256 = "sha256-TEb2w48MZ8U1INVvUiS1XohdvnVLBCTba31AwATd/oE=";
+    rev = "a23cc53e7e40e9dcfd0f815b2b3b6a5dc7304405";
+    hash = "sha256-EYBX2SJa8o4R/zEjSFbmFxhLI726WY21XmCkWIqPeFc=";
   };
 
-  nativeBuildInputs = [ qmake wrapQtAppsHook ];
+  nativeBuildInputs = [ qmake ];
+
+  dontWrapQtApps = true;
 
   qmakeFlags = [
     "qmarkdowntextedit-lib.pro"

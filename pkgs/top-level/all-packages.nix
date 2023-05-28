@@ -2816,6 +2816,8 @@ with pkgs;
 
   android-tools = lowPrio (darwin.apple_sdk_11_0.callPackage ../tools/misc/android-tools { });
 
+  anew = callPackage ../tools/text/anew { };
+
   anewer = callPackage ../tools/text/anewer { };
 
   angle-grinder = callPackage ../tools/text/angle-grinder { };
@@ -4773,6 +4775,8 @@ with pkgs;
   elpa = callPackage ../development/libraries/elpa { };
 
   enca = callPackage ../tools/text/enca { };
+
+  encpipe = callPackage ../tools/misc/encpipe { };
 
   engage = callPackage ../tools/misc/engage { };
 
@@ -8605,6 +8609,8 @@ with pkgs;
   httplz = callPackage ../tools/networking/httplz { };
 
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
+
+  httprobe = callPackage ../tools/networking/httprobe { };
 
   httpstat = callPackage ../tools/networking/httpstat { };
 
@@ -12963,7 +12969,7 @@ with pkgs;
 
   theharvester = callPackage ../tools/security/theharvester { };
 
-  inherit (nodePackages) thelounge;
+  thelounge = callPackage ../applications/networking/irc/thelounge { };
 
   theLoungePlugins = with lib; let
     pkgs = filterAttrs (name: _: hasPrefix "thelounge-" name) nodePackages;
@@ -13382,6 +13388,8 @@ with pkgs;
   unetbootin = libsForQt5.callPackage ../tools/cd-dvd/unetbootin { };
 
   unfs3 = callPackage ../servers/unfs3 { };
+
+  unfurl = callPackage ../tools/text/unfurl { };
 
   unixbench = callPackage ../development/tools/misc/unixbench { };
 
@@ -35415,6 +35423,8 @@ with pkgs;
   xdg-desktop-portal-hyprland = callPackage ../applications/window-managers/hyprwm/xdg-desktop-portal-hyprland { };
 
   xdg-desktop-portal-wlr = callPackage ../development/libraries/xdg-desktop-portal-wlr { };
+
+  xdg-desktop-portal-xapp = callPackage ../development/libraries/xdg-desktop-portal-xapp { };
 
   xdg-user-dirs = callPackage ../tools/X11/xdg-user-dirs { };
 
