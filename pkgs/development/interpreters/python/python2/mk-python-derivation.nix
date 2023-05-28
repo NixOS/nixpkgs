@@ -29,6 +29,23 @@
 , eggInstallHook
 }:
 
+let
+  modify = drv: lib.pipe drv [
+    toPythonModule
+    (drv: lib.extendDerivation
+      (drv.passthru.pythonUnsupported -> throw "${drv.name} not supported for interpreter ${python.executable}")
+      {
+        updateScript =
+          let
+            filename = builtins.head (lib.splitString ":" drv.meta.position);
+          in
+          drv.passthru.updateScript or [ update-python-libraries filename ];
+      } drv
+    )
+  ];
+in
+lib.extendMkDerivationModified modify stdenv.mkDerivation (finalAttrs:
+
 { name ? "${attrs.pname}-${attrs.version}"
 
 # Build-time dependencies for the package
@@ -162,10 +179,10 @@ let
     in inputs: builtins.map (checkDrv) inputs;
 
   # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
-  self = toPythonModule (stdenv.mkDerivation ((builtins.removeAttrs attrs [
+  resultAttrs = builtins.removeAttrs attrs [
     "disabled" "checkPhase" "checkInputs" "nativeCheckInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "format"
     "disabledTestPaths" "outputs"
-  ]) // {
+  ] // {
 
     name = namePrefix + name_;
 
@@ -231,6 +248,10 @@ let
 
     outputs = outputs ++ lib.optional withDistOutput "dist";
 
+    passthru =  {
+      pythonUnsupported = disabled;
+    } // attrs.passthru or { };
+
     meta = {
       # default to python's platforms
       platforms = python.meta.platforms;
@@ -242,12 +263,7 @@ let
     installCheckPhase = attrs.checkPhase;
   } //  lib.optionalAttrs (disabledTestPaths != []) {
       disabledTestPaths = lib.escapeShellArgs disabledTestPaths;
-  }));
+  };
 
-  passthru.updateScript = let
-      filename = builtins.head (lib.splitString ":" self.meta.position);
-    in attrs.passthru.updateScript or [ update-python-libraries filename ];
-in lib.extendDerivation
-  (disabled -> throw "${name} not supported for interpreter ${python.executable}")
-  passthru
-  self
+in
+resultAttrs)
