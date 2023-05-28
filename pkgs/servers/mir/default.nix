@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
     # Fix Xwayland default
     substituteInPlace src/miral/x11_support.cpp \
-      --replace '/usr/bin/Xwayland' '${xwayland}/bin/Xwayland'
+      --replace '/usr/bin/Xwayland' '${lib.getExe xwayland}'
 
     # Fix paths for generating drm-formats
     substituteInPlace src/platform/graphics/CMakeLists.txt \

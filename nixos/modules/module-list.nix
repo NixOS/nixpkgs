@@ -241,7 +241,6 @@
   ./programs/starship.nix
   ./programs/steam.nix
   ./programs/streamdeck-ui.nix
-  ./programs/sway.nix
   ./programs/sysdig.nix
   ./programs/system-config-printer.nix
   ./programs/systemtap.nix
@@ -256,7 +255,9 @@
   ./programs/usbtop.nix
   ./programs/vim.nix
   ./programs/wavemon.nix
-  ./programs/waybar.nix
+  ./programs/wayland/river.nix
+  ./programs/wayland/sway.nix
+  ./programs/wayland/waybar.nix
   ./programs/weylus.nix
   ./programs/wireshark.nix
   ./programs/xastir.nix
@@ -911,6 +912,7 @@
   ./services/networking/knot.nix
   ./services/networking/kresd.nix
   ./services/networking/lambdabot.nix
+  ./services/networking/legit.nix
   ./services/networking/libreswan.nix
   ./services/networking/lldpd.nix
   ./services/networking/logmein-hamachi.nix
@@ -1309,7 +1311,6 @@
   ./services/x11/window-managers/default.nix
   ./services/x11/window-managers/fluxbox.nix
   ./services/x11/window-managers/icewm.nix
-  ./services/x11/window-managers/bspwm.nix
   ./services/x11/window-managers/katriawm.nix
   ./services/x11/window-managers/metacity.nix
   ./services/x11/window-managers/nimdow.nix
