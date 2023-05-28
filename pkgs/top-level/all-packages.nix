@@ -9371,7 +9371,7 @@ with pkgs;
   };
 
   meilisearch = callPackage ../servers/search/meilisearch {
-    inherit (darwin.apple_sdk.frameworks) Security DiskArbitration Foundation;
+    inherit (darwin.apple_sdk_11_0.frameworks) DiskArbitration Foundation Security;
   };
 
   memtester = callPackage ../tools/system/memtester { };
