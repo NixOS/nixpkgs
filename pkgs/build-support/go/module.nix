@@ -54,7 +54,8 @@ assert (args' ? vendorHash && args' ? vendorSha256) -> throw "both `vendorHash` 
 let
   args = removeAttrs args' [ "overrideModAttrs" "vendorSha256" "vendorHash" ];
 
-  go-modules = if (vendorHash != null) then stdenv.mkDerivation (let modArgs = {
+  go-modules = if (vendorHash == null) then "" else
+    (stdenv.mkDerivation {
 
     name = "${name}-go-modules";
 
@@ -138,13 +139,11 @@ let
     '';
 
     dontFixup = true;
-  }; in modArgs // (
-      {
-        outputHashMode = "recursive";
-        outputHash = vendorHash;
-        outputHashAlgo = if args' ? vendorSha256 || vendorHash == "" then "sha256" else null;
-      }
-  ) // overrideModAttrs modArgs) else "";
+
+    outputHashMode = "recursive";
+    outputHash = vendorHash;
+    outputHashAlgo = if args' ? vendorSha256 || vendorHash == "" then "sha256" else null;
+  }).overrideAttrs overrideModAttrs;
 
   package = stdenv.mkDerivation (args // {
     nativeBuildInputs = [ go ] ++ nativeBuildInputs;
