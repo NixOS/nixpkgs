@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, perl, makeWrapper
+{ lib, stdenv, fetchFromGitHub, perl
 , sysfsutils, dmidecode, kmod }:
 
 stdenv.mkDerivation {
@@ -12,7 +12,14 @@ stdenv.mkDerivation {
     hash = "sha256-jZGRrZ1sa4x0/TBJ5GsNVuWakmPNOU+oiOoXdhARunk=";
   };
 
-  nativeBuildInputs = [ perl makeWrapper ];
+  patches = [ ./edac-ctl.patch ];
+  postPatch = ''
+    substituteInPlace src/util/edac-ctl.in \
+      --subst-var-by dmidecode ${dmidecode}/bin/dmidecode \
+      --subst-var-by modprobe ${kmod}/bin/modprobe
+  '';
+
+  nativeBuildInputs = [ perl ];
   buildInputs = [ perl sysfsutils ];
 
   configureFlags = [
@@ -23,11 +30,6 @@ stdenv.mkDerivation {
   installFlags = [
     "sysconfdir=\${out}/etc"
   ];
-
-  postInstall = ''
-    wrapProgram "$out/sbin/edac-ctl" \
-      --set PATH ${lib.makeBinPath [ dmidecode kmod ]}
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/grondo/edac-utils";

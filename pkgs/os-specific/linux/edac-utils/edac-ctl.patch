@@ -1,0 +1,15 @@
+diff --git a/src/util/edac-ctl.in b/src/util/edac-ctl.in
+index ededffc..21f81d0 100755
+--- a/src/util/edac-ctl.in
++++ b/src/util/edac-ctl.in
+@@ -32,8 +32,8 @@ use POSIX;
+ 
+ my $prefix      = "@prefix@";
+ my $sysconfdir  = "@sysconfdir@";
+-my $dmidecode   = find_prog ("dmidecode");
+-my $modprobe    = find_prog ("modprobe")  or exit (1);
++my $dmidecode   = "@dmidecode@";
++my $modprobe    = "@modprobe@";
+ 
+ my %conf        = ();
+ my %bus         = ();
