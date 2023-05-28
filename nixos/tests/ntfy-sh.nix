@@ -19,5 +19,7 @@ import ./make-test-python.nix {
     notif = json.loads(machine.succeed("curl -s localhost:80/test/json?poll=1"))
 
     assert msg == notif["message"], "Wrong message"
+
+    machine.succeed("ntfy user list")
   '';
 }
