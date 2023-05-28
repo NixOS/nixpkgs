@@ -11050,6 +11050,11 @@
     githubId = 1009523;
     name = "Ashijit Pramanik";
   };
+  name-snrl = {
+    github = "name-snrl";
+    githubId = 72071763;
+    name = "Yusup Urazaev";
+  };
   namore = {
     email = "namor@hemio.de";
     github = "namore";

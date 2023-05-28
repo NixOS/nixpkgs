@@ -2290,6 +2290,8 @@ with pkgs;
 
   flix = callPackage ../development/compilers/flix { };
 
+  fleng = callPackage ../development/compilers/fleng { };
+
   fsrx = callPackage ../tools/misc/fsrx { };
 
   fsuae = callPackage ../applications/emulators/fs-uae { };
@@ -4861,6 +4863,8 @@ with pkgs;
 
   fd = callPackage ../tools/misc/fd { };
 
+  fdroidcl = pkgs.callPackage ../development/mobile/fdroidcl { };
+
   fdroidserver = python3Packages.callPackage ../development/tools/fdroidserver { };
 
   fetch-scm = callPackage ../tools/misc/fetch-scm { };
@@ -5312,6 +5316,10 @@ with pkgs;
   lcdproc = callPackage ../servers/monitoring/lcdproc { };
 
   languagetool = callPackage ../tools/text/languagetool {  };
+
+  languagetool-rust = callPackage ../tools/text/languagetool-rust {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   ldtk = callPackage ../applications/editors/ldtk { };
 
@@ -6332,8 +6340,6 @@ with pkgs;
   u3-tool = callPackage ../tools/filesystems/u3-tool { };
 
   unifdef = callPackage ../development/tools/misc/unifdef { };
-
-  uniffi-bindgen = callPackage ../development/tools/uniffi-bindgen { };
 
   unify = with python3Packages; toPythonApplication unify;
 
@@ -25312,7 +25318,7 @@ with pkgs;
 
   ergochat = callPackage ../servers/irc/ergochat { };
 
-  etcd = etcd_3_3;
+  etcd = etcd_3_5;
   etcd_3_3 = callPackage ../servers/etcd/3.3.nix { };
   etcd_3_4 = callPackage ../servers/etcd/3.4.nix { };
   etcd_3_5 = callPackage ../servers/etcd/3.5.nix { };
