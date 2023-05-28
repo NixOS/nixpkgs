@@ -8,7 +8,7 @@ buildGoModule rec {
 		owner = "StefanSchroeder";
 		repo = "ttfsample";
 		rev = "${version}";
-		sha256 = "sha256-qB6n0xaBvjmBOOId4SLjc5Oi59DbtvLdSUw98AZcn0o=";
+		hash = "sha256-qB6n0xaBvjmBOOId4SLjc5Oi59DbtvLdSUw98AZcn0o=";
 
 	};
 	vendorSha256 = "sha256-7kse3MYIj3Q0WL/fgR6TFmMGNQUSKuJM7+IqB83rwFY=";
