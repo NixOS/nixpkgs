@@ -31,6 +31,8 @@ let
     flatten
     deepSeq
     extends
+    toFunction
+    id
     ;
   inherit (lib.strings) levenshtein levenshteinAtMost;
 
@@ -730,4 +732,126 @@ rec {
     in
     self;
 
+  /**
+    Define a `mkDerivation`-like function based on another `mkDerivation`-like function.
+
+    [`stdenv.mkDerivation`](#part-stdenv) gives access to
+    its final set of derivation attributes when it is passed a function,
+    or when it is passed an overlay-style function in `overrideAttrs`.
+
+    Instead of composing new `stdenv.mkDerivation`-like build helpers
+    using normal function composition,
+    `extendMkDerivation` makes sure that the returned build helper
+    supports such first class recursion like `mkDerivation` does.
+
+    `extendMkDerivation` takes an extra attribute set to configure its behaviour.
+    One can optionally specify
+    `transformDrv` to specify a function to apply to the result derivation,
+    or `inheritFunctionArgs` to decide whether to inherit the `__functionArgs`
+    from the base build helper.
+
+    # Inputs
+
+    `extendMkDerivation`-specific configurations
+    : `constructDrv`: Base build helper, the `mkDerivation`-like build helper to extend.
+    : `excludeDrvArgNames`: Argument names not to pass from the input fixed-point arguments to `constructDrv`. Note: It doesn't apply to the updating arguments returned by `extendDrvArgs`.
+    : `extendDrvArgs` : An extension (overlay) of the argument set, like the one taken by [overrideAttrs](#sec-pkg-overrideAttrs) but applied before passing to `constructDrv`.
+    : `inheritFunctionArgs`: Whether to inherit `__functionArgs` from the base build helper (default to `true`).
+    : `transformDrv`: Function to apply to the result derivation (default to `lib.id`).
+
+    # Type
+
+    ```
+    extendMkDerivation ::
+      {
+        constructDrv :: ((FixedPointArgs | AttrSet) -> a)
+        excludeDrvArgNames :: [ String ],
+        extendDrvArgs :: (AttrSet -> AttrSet -> AttrSet)
+        inheritFunctionArgs :: Bool,
+        transformDrv :: a -> a,
+      }
+      -> (FixedPointArgs | AttrSet) -> a
+
+    FixedPointArgs = AttrSet -> AttrSet
+    a = Derivation when defining a build helper
+    ```
+
+    # Examples
+
+    :::{.example}
+    ## `lib.customisation.extendMkDerivation` usage example
+    ```nix-repl
+    mkLocalDerivation = lib.extendMkDerivation {
+      constructDrv = pkgs.stdenv.mkDerivation;
+      excludeDrvArgNames = [ "specialArg" ];
+      extendDrvArgs =
+        finalAttrs: args@{ preferLocalBuild ? true, allowSubstitute ? false, specialArg ? (_: false), ... }:
+        { inherit preferLocalBuild allowSubstitute; passthru = { inherit specialArg; } // args.passthru or { }; };
+    }
+
+    mkLocalDerivation.__functionArgs
+    => { allowSubstitute = true; preferLocalBuild = true; specialArg = true; }
+
+    mkLocalDerivation { inherit (pkgs.hello) pname version src; specialArg = _: false; }
+    => «derivation /nix/store/xirl67m60ahg6jmzicx43a81g635g8z8-hello-2.12.1.drv»
+
+    mkLocalDerivation (finalAttrs: { inherit (pkgs.hello) pname version src; specialArg = _: false; })
+    => «derivation /nix/store/xirl67m60ahg6jmzicx43a81g635g8z8-hello-2.12.1.drv»
+
+    (mkLocalDerivation (finalAttrs: { inherit (pkgs.hello) pname version src; passthru = { foo = "a"; bar = "${finalAttrs.passthru.foo}b"; }; })).bar
+    => "ab"
+    ```
+    :::
+
+    :::{.note}
+    If `transformDrv` is specified,
+    it should take care of existing attributes that perform overriding
+    (e.g., [`overrideAttrs`](#sec-pkg-overrideAttrs))
+    to ensure that the overriding functionality of the result derivation
+    work as expected.
+    Modifications that breaks the overriding include
+    direct [attribute set update](https://nixos.org/manual/nix/stable/language/operators#update)
+    and [`lib.extendDerivation`](#function-library-lib.customisation.extendDerivation).
+    :::
+  */
+  extendMkDerivation =
+    let
+      extendsWithExclusion =
+        excludedNames: g: f: final:
+        let
+          previous = f final;
+        in
+        removeAttrs previous excludedNames // g final previous;
+    in
+    {
+      constructDrv,
+      excludeDrvArgNames ? [ ],
+      extendDrvArgs,
+      inheritFunctionArgs ? true,
+      transformDrv ? id,
+    }:
+    setFunctionArgs
+      # Adds the fixed-point style support
+      (
+        fpargs:
+        transformDrv (
+          constructDrv (extendsWithExclusion excludeDrvArgNames extendDrvArgs (toFunction fpargs))
+        )
+      )
+      # Add __functionArgs
+      (
+        # Inherit the __functionArgs from the base build helper
+        optionalAttrs inheritFunctionArgs (removeAttrs (functionArgs constructDrv) excludeDrvArgNames)
+        # Recover the __functionArgs from the derived build helper
+        // functionArgs (extendDrvArgs { })
+      )
+    // {
+      inherit
+        # Expose to the result build helper.
+        constructDrv
+        excludeDrvArgNames
+        extendDrvArgs
+        transformDrv
+        ;
+    };
 }
