@@ -23,7 +23,7 @@ let
         })
         (_: origArgs));
       result = f args;
-      overrideWith = newArgs: args // (if pkgs.lib.isFunction newArgs then newArgs args else newArgs);
+      overrideWith = newArgs: args // (if lib.isFunction newArgs then newArgs args else newArgs);
     in
       if builtins.isAttrs result then result
       else if builtins.isFunction result then {
