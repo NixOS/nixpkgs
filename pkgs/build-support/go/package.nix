@@ -7,9 +7,6 @@
 , preFixup ? ""
 , shellHook ? ""
 
-# Go linker flags, passed to go via -ldflags
-, ldflags ? []
-
 # Go tags, passed to go via -tag
 , tags ? []
 
@@ -48,9 +45,6 @@
 , buildFlagsArray ? ""
 
 , meta ? {}, ... } @ args:
-
-
-with builtins;
 
 let
   dep2src = goDep:
