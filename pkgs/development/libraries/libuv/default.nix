@@ -1,4 +1,27 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, autoconf, automake, libtool, pkg-config, ApplicationServices, CoreServices, pkgsStatic }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, autoconf
+, automake
+, libtool
+, pkg-config
+, ApplicationServices
+, CoreServices
+, pkgsStatic
+
+# for passthru.tests
+, bind
+, cmake
+, knot-resolver
+, lispPackages
+, luajitPackages
+, mosquitto
+, neovim
+, nodejs
+, ocamlPackages
+, python3
+}:
 
 stdenv.mkDerivation rec {
   version = "1.44.2";
@@ -85,7 +108,16 @@ stdenv.mkDerivation rec {
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  passthru.tests.static = pkgsStatic.libuv;
+  passthru.tests = {
+    inherit bind cmake knot-resolver mosquitto neovim nodejs;
+    inherit (lispPackages) cl-libuv;
+    luajit-libluv = luajitPackages.libluv;
+    luajit-luv = luajitPackages.luv;
+    ocaml-luv = ocamlPackages.luv;
+    python-pyuv = python3.pkgs.pyuv;
+    python-uvloop = python3.pkgs.uvloop;
+    static = pkgsStatic.libuv;
+  };
 
   meta = with lib; {
     description = "A multi-platform support library with a focus on asynchronous I/O";
