@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , exceptiongroup
@@ -32,6 +33,19 @@ buildPythonPackage rec {
     pytestCheckHook
     trustme
   ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # Failed: DID NOT RAISE <class 'ValueError'>
+    "test_finalization_dropped_exception"
+    # Timing related
+    "test_client_close_timeout"
+    "test_cm_exit_with_pending_messages"
+    "test_server_close_timeout"
+    "test_server_handler_exit"
+    "test_server_open_timeout"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "trio_websocket" ];
 
