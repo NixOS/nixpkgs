@@ -25698,7 +25698,7 @@ with pkgs;
   cockroachdb = callPackage ../servers/sql/cockroachdb { };
 
   conky = callPackage ../os-specific/linux/conky ({
-    lua = lua5_3_compat;
+    lua = lua5_4;
     inherit (linuxPackages.nvidia_x11.settings) libXNVCtrl;
   } // config.conky or {});
 
