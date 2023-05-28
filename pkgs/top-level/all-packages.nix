@@ -2056,6 +2056,8 @@ with pkgs;
 
   git-series = callPackage ../applications/version-management/git-series { };
 
+  git-sim = callPackage ../applications/version-management/git-sim { };
+
   git-sizer = callPackage ../applications/version-management/git-sizer { };
 
   git-stack = callPackage ../applications/version-management/git-stack {
@@ -31009,7 +31011,7 @@ with pkgs;
 
   m32edit = callPackage ../applications/audio/midas/m32edit.nix { };
 
-  manim = callPackage ../applications/video/manim { };
+  manim = python3Packages.toPythonApplication python3Packages.manim;
 
   manuskript = libsForQt5.callPackage ../applications/editors/manuskript { };
 
