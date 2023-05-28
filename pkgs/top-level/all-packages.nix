@@ -31728,6 +31728,8 @@ with pkgs;
 
   irssi = callPackage ../applications/networking/irc/irssi { };
 
+  filebrowser = callPackage ../applications/networking/filebrowser { };
+
   fish-irssi = callPackage ../applications/networking/irc/irssi/fish { };
 
   kirc = callPackage ../applications/networking/irc/kirc { };
