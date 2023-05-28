@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-Rn3aXwez/WUGpuRvA6lkuECchpYek8KDMh6xzZOV9v0=";
   };
 
-  vendorSha256 = "sha256-EkLeB2zUJkKCWsJxMiYHSDgr0/8X24MT0Jp0nuYebds=";
+  patches = [
+    ./1.16.5-CVE-2023-30844.patch
+  ];
+
+  vendorSha256 = "sha256-LhZlwWVb3Xix7h6ja1UTBr/4Py6tNEZT/lMgBeUmrHA=";
 
   doCheck = false;
 
