@@ -31,6 +31,26 @@ let
         expr = ((stdenvNoCC.mkDerivation { pname = "hello-no-final-attrs"; }).overrideAttrs { pname = "hello-no-final-attrs-overridden"; }).pname == "hello-no-final-attrs-overridden";
         expected = true;
       })
+      ({
+        name = "extendMkDerivation-helloLocal-imp-arguments";
+        expr = helloLocal.preferLocalBuild;
+        expected = true;
+      })
+      ({
+        name = "extendMkDerivation-helloLocal-plain-equivalence";
+        expr = helloLocal.drvPath == helloLocalPlain.drvPath;
+        expected = true;
+      })
+      ({
+        name = "extendMkDerivation-helloLocal-finalAttrs";
+        expr = helloLocal.bar == "ab";
+        expected = true;
+      })
+      ({
+        name = "extendMkDerivation-helloLocal-finalPackage";
+        expr = lib.stringLength helloLocal.passthru.tests.run.outPath > 0;
+        expected = true;
+      })
     ];
 
   addEntangled = origOverrideAttrs: f:
@@ -55,6 +75,40 @@ let
   overrides1 = example.overrideAttrs (_: super: { pname = "a-better-${super.pname}"; });
 
   repeatedOverrides = overrides1.overrideAttrs (_: super: { pname = "${super.pname}-with-blackjack"; });
+
+  mkLocalDerivation =
+    lib.extendMkDerivation pkgs.stdenv.mkDerivation (finalAttrs:
+      { preferLocalBuild ? true
+      , allowSubstitute ? false
+      , impassablePredicate ? (_: false)
+      , ...
+      }@args:
+      removeAttrs args [ "impassablePredicate" ] // {
+        inherit preferLocalBuild allowSubstitute;
+      });
+
+  helloLocalPlainAttrs = {
+    inherit (pkgs.hello) pname version src;
+    impassablePredicate = throw "impassiblePredicate: not implemented";
+  };
+
+  helloLocalPlain = mkLocalDerivation helloLocalPlainAttrs;
+
+  helloLocal = mkLocalDerivation (finalAttrs: helloLocalPlainAttrs // {
+    passthru = pkgs.hello.passthru or { } // {
+      foo = "a";
+      bar = "${finalAttrs.passthru.foo}b";
+      tests = pkgs.hello.passthru.tests or { } // {
+        run = pkgs.runCommandLocal "test-hello-run" {
+          nativeBuildInputs = [ finalAttrs.finalPackage ];
+        } ''
+          set -eu -o pipefail
+          RESULT="$(hello | tee "$out")"
+          [[ "$RESULT" == "Hello, world!" ]]
+        '';
+      };
+    };
+  });
 in
 
 stdenvNoCC.mkDerivation {
