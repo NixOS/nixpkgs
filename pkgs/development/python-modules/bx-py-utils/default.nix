@@ -82,6 +82,7 @@ buildPythonPackage rec {
   meta = {
     description = "Various Python utility functions";
     homepage = "https://github.com/boxine/bx_py_utils";
+    changelog = "https://github.com/boxine/bx_py_utils/releases/tag/${src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
