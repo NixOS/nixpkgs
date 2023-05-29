@@ -1,4 +1,4 @@
-{ delve, autoPatchelfHook, stdenv, lib, glibc, gcc-unwrapped }:
+{ delve, autoPatchelfHook, stdenv, lib, glibc, gcc-unwrapped, codeium }:
 # This is a list of plugins that need special treatment. For example, the go plugin (id is 9568) comes with delve, a
 # debugger, but that needs various linking fixes. The changes here replace it with the system one.
 {
@@ -60,4 +60,13 @@
       fix_offset PRELUDE_POSITION
     '';
   };
+  "20540" = {
+    nativeBuildInputs = [ autoPatchelfHook ];
+    buildInputs = [ stdenv.cc.cc.lib codeium ];
+    postInstall = ''
+      mkdir -p $out/bin
+      ln -s ${codeium}/bin/codeium_language_server $out/bin/language_server_linux_x64
+    '';
+  };
 }
+

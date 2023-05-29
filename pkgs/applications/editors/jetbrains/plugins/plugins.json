@@ -405,6 +405,33 @@
         "232.8660.197": "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip"
       },
       "name": "netbeans-6-5-keymap"
+    },
+    "20540": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "webstorm"
+      ],
+      "builds": {
+        "223.8836.1185": "https://plugins.jetbrains.com/files/20540/351195/codeium-1.2.40.zip",
+        "231.9011.31": "https://plugins.jetbrains.com/files/20540/351195/codeium-1.2.40.zip",
+        "231.9011.34": "https://plugins.jetbrains.com/files/20540/351195/codeium-1.2.40.zip",
+        "231.9011.35": "https://plugins.jetbrains.com/files/20540/351195/codeium-1.2.40.zip",
+        "231.9011.38": "https://plugins.jetbrains.com/files/20540/351195/codeium-1.2.40.zip",
+        "231.9011.39": "https://plugins.jetbrains.com/files/20540/351195/codeium-1.2.40.zip",
+        "231.9011.41": "https://plugins.jetbrains.com/files/20540/351195/codeium-1.2.40.zip",
+        "231.9161.38": "https://plugins.jetbrains.com/files/20540/351195/codeium-1.2.40.zip"
+      },
+      "name": "codeium-ai-autocomplete-for-python-js-ts-java-go-and-more"
     }
   },
   "files": {
@@ -439,6 +466,7 @@
     "https://plugins.jetbrains.com/files/8182/367438/intellij-rust-0.4.199.5415-232.zip": "sha256-qa7R+YfVWu/x5p8t28tDtRtMH6dZCGZzMXycpK+epQo=",
     "https://plugins.jetbrains.com/files/8554/365482/featuresTrainer-232.8660.129.zip": "sha256-SCxqar6a7Q6sOFuZWNXtLRiSd7/34ydhWpL8groKT0U=",
     "https://plugins.jetbrains.com/files/8607/318851/NixIDEA-0.4.0.9.zip": "sha256-byShwSfnAG8kXhoNu7CfOwvy4Viav784NT0UmzKY6hQ=",
-    "https://plugins.jetbrains.com/files/9568/366117/go-plugin-232.8660.142.zip": "sha256-MPeTPoSUvfjwdWifKxlYHmmVNr+nOD22Hp4srRQbG/o="
+    "https://plugins.jetbrains.com/files/9568/366117/go-plugin-232.8660.142.zip": "sha256-MPeTPoSUvfjwdWifKxlYHmmVNr+nOD22Hp4srRQbG/o=",
+    "https://plugins.jetbrains.com/files/20540/351195/codeium-1.2.40.zip": "sha256-B5WuaZJWoXhQk4CBRFOGt6yF7C6beLhvcGkMwLAoZL4="
   }
 }
