@@ -30,11 +30,12 @@ makeScopeWithSplicing (generateSplicesForMkScope "darwin") (_: {}) (spliced: spl
     inherit (self) darwin-stubs;
   };
 
-  # macOS 11.0 SDK
+  # macOS 11 SDK
   apple_sdk_11_0 = pkgs.callPackage ../os-specific/darwin/apple-sdk-11.0 { };
+  apple_sdk_11 = apple_sdk_11_0;
 
   # Pick an SDK
-  apple_sdk = if stdenv.hostPlatform.isAarch64 then apple_sdk_11_0 else apple_sdk_10_12;
+  apple_sdk = if stdenv.hostPlatform.isAarch64 then apple_sdk_11 else apple_sdk_10_12;
 
   # Pick the source of libraries: either Apple's open source releases, or the
   # SDK.
@@ -62,7 +63,8 @@ in
 
 impure-cmds // appleSourcePackages // chooseLibs // {
 
-  inherit apple_sdk apple_sdk_10_12 apple_sdk_11_0;
+  inherit apple_sdk apple_sdk_10_12 apple_sdk_11;
+  inherit apple_sdk_11_0;
 
   stdenvNoCF = stdenv.override {
     extraBuildInputs = [];
@@ -162,16 +164,16 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   lsusb = callPackage ../os-specific/darwin/lsusb { };
 
-  moltenvk = pkgs.darwin.apple_sdk_11_0.callPackage ../os-specific/darwin/moltenvk {
-    inherit (apple_sdk_11_0.frameworks) AppKit Foundation Metal QuartzCore;
-    inherit (apple_sdk_11_0) MacOSX-SDK Libsystem;
+  moltenvk = pkgs.darwin.apple_sdk_11.callPackage ../os-specific/darwin/moltenvk {
+    inherit (apple_sdk_11.frameworks) AppKit Foundation Metal QuartzCore;
+    inherit (apple_sdk_11) MacOSX-SDK Libsystem;
     inherit (pkgs.darwin) cctools sigtool;
   };
 
   opencflite = callPackage ../os-specific/darwin/opencflite { };
 
-  openwith = pkgs.darwin.apple_sdk_11_0.callPackage ../os-specific/darwin/openwith {
-    inherit (apple_sdk_11_0.frameworks) AppKit Foundation UniformTypeIdentifiers;
+  openwith = pkgs.darwin.apple_sdk_11.callPackage ../os-specific/darwin/openwith {
+    inherit (apple_sdk_11.frameworks) AppKit Foundation UniformTypeIdentifiers;
   };
 
   stubs = pkgs.callPackages ../os-specific/darwin/stubs { };
@@ -192,7 +194,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication { };
 
-  # TODO: make swift-corefoundation build with apple_sdk_11_0.Libsystem
+  # TODO: make swift-corefoundation build with apple_sdk_11.Libsystem
   CF = if useAppleSDKLibs
     then
       # This attribute (CF) is included in extraBuildInputs in the stdenv. This
