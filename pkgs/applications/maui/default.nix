@@ -63,6 +63,7 @@ let
       mauikit-calendar = callPackage ./mauikit-calendar { };
       mauikit-filebrowsing = callPackage ./mauikit-filebrowsing.nix { };
       mauikit-imagetools = callPackage ./mauikit-imagetools.nix { };
+      mauikit-terminal = callPackage ./mauikit-terminal.nix { };
       mauikit-texteditor = callPackage ./mauikit-texteditor.nix { };
       mauiman = callPackage ./mauiman.nix { };
 
