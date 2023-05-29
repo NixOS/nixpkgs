@@ -35,6 +35,10 @@ stdenv.mkDerivation rec {
       extraPrefix = "OpenEXR/IlmImf/";
       sha256 = "sha256-DrpldpNgN5pWKzIuuPIrynGX3EpP8YhJlu+lLfNFGxQ=";
     })
+
+    # Backport gcc-13 fix:
+    #   https://github.com/AcademySoftwareFoundation/openexr/pull/1264
+    ./gcc-13.patch
   ];
 
   # tests are determined to use /var/tmp on unix
