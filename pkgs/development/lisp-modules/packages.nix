@@ -296,6 +296,32 @@ let
     };
   };
 
+  prompter = build-asdf-system {
+    pname = "prompter";
+    version = "0.1.0";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "atlas-engineer";
+      repo = "prompter";
+      rev = "0.1.0";
+      sha256 = "sha256-Duv7L2lMjr3VXsoujQDOMNHCbdUDX4RWoncVm9LDCZE=";
+    };
+
+    lispLibs = [
+      self.cl-containers
+      self.nclasses_0_5_0
+      super.alexandria
+      super.calispel
+      super.closer-mop
+      super.lparallel
+      super.moptilities
+      super.serapeum
+      super.str
+      super.trivial-package-local-nicknames
+    ];
+
+  };
+
   nasdf-unstable = build-asdf-system {
     inherit (super.nasdf) pname systems;
     version = "20230524-git";
