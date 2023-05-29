@@ -33,6 +33,14 @@ stdenv.mkDerivation (finalAttrs: {
       "$out/share/vulkan/implicit_layer.d/vkBasalt32.json"
   '';
 
+  # We need to give the different layers separate names or else the loader
+  # might try the 32-bit one first, fail and not attempt to load the 64-bit
+  # layer under the same name.
+  postFixup = ''
+    substituteInPlace "$out/share/vulkan/implicit_layer.d/vkBasalt.json" \
+      --replace "VK_LAYER_VKBASALT_post_processing" "VK_LAYER_VKBASALT_post_processing_${toString stdenv.hostPlatform.parsed.cpu.bits}"
+  '';
+
   meta = with lib; {
     description = "A Vulkan post processing layer for Linux";
     homepage = "https://github.com/DadSchoorse/vkBasalt";

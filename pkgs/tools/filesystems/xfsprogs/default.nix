@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, fetchurl, autoconf, automake, gettext, libtool, pkg-config
+{ lib, stdenv, buildPackages, fetchurl, gettext, pkg-config
 , icu, libuuid, readline, inih, liburcu
 , nixosTests
 }:
@@ -16,8 +16,9 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
-    autoconf automake libtool gettext pkg-config
+    gettext pkg-config
     libuuid # codegen tool uses libuuid
+    liburcu # required by crc32selftest
   ];
   buildInputs = [ readline icu inih liburcu ];
   propagatedBuildInputs = [ libuuid ]; # Dev headers include <uuid/uuid.h>
@@ -33,7 +34,6 @@ stdenv.mkDerivation rec {
       substituteInPlace "$file" \
         --replace '@sbindir@' '/run/current-system/sw/bin'
     done
-    make configure
     patchShebangs ./install-sh
   '';
 

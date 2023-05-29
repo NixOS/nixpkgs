@@ -51,7 +51,7 @@ buildDotnetModule rec {
 
   # Required for OneClick
   makeWrapperArgs = [
-    ''--prefix PATH : "${lib.makeBinPath [ xdg-utils ]}"''
+    ''--suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"''
   ];
 
   meta = with lib; {
