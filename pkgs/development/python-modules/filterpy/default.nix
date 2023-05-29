@@ -4,13 +4,15 @@
 , numpy
 , scipy
 , matplotlib
-, pytest
+, pytestCheckHook
 , isPy3k
 }:
 
 buildPythonPackage {
-  version = "unstable-2022-08-23";
   pname = "filterpy";
+  version = "unstable-2022-08-23";
+  format = "setuptools";
+
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
@@ -20,14 +22,15 @@ buildPythonPackage {
     hash = "sha256-KuuVu0tqrmQuNKYmDmdy+TU6BnnhDxh4G8n9BGzjGag=";
   };
 
-  nativeCheckInputs = [ pytest ];
-  propagatedBuildInputs = [ numpy scipy matplotlib ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  # single test fails (even on master branch of repository)
-  # project does not use CI
-  checkPhase = ''
-    pytest --ignore=filterpy/common/tests/test_discretization.py
-  '';
+  propagatedBuildInputs = [
+    numpy
+    scipy
+    matplotlib
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/rlabbe/filterpy";
