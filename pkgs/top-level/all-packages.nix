@@ -483,6 +483,8 @@ with pkgs;
 
   conserver = callPackage ../tools/misc/conserver { };
 
+  containerlab = callPackage ../tools/networking/containerlab { };
+
   containerpilot = callPackage ../applications/networking/cluster/containerpilot { };
 
   coost = callPackage ../development/libraries/coost { };
@@ -2152,6 +2154,8 @@ with pkgs;
 
   lab = callPackage ../applications/version-management/lab { };
 
+  labctl = callPackage ../tools/networking/labctl { };
+
   lefthook = callPackage ../applications/version-management/lefthook { };
 
   legit = callPackage ../applications/version-management/legit { };
@@ -3277,6 +3281,8 @@ with pkgs;
   cosign = callPackage ../tools/security/cosign {
     inherit (darwin.apple_sdk.frameworks) PCSC;
   };
+
+  coze = callPackage ../tools/security/coze { } ;
 
   cozy = callPackage ../applications/audio/cozy { };
 
@@ -32023,6 +32029,8 @@ with pkgs;
   kubelogin = callPackage ../applications/networking/cluster/kubelogin { };
 
   kubelogin-oidc = callPackage ../applications/networking/cluster/kubelogin-oidc { };
+
+  k8sgpt = callPackage ../applications/networking/cluster/k8sgpt { };
 
   k9s = callPackage ../applications/networking/cluster/k9s { };
 
