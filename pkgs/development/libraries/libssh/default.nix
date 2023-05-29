@@ -22,7 +22,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-tg4v9/Nnue7itWNNOmMwPd/t4OahjfyojESodw5+QjQ=";
   };
 
-  outputs = [ "out" "dev" ];
+  # Do not split 'dev' output until lib/cmake/libssh/libssh-config.cmake
+  # is fixed to point INTERFACE_INCLUDE_DIRECTORIES to .dev output.
+  # Otherwise it breaks `plasma5Packages.kio-extras`:
+  #   https://hydra.nixos.org/build/221540008/nixlog/3/tail
+  #outputs = [ "out" "dev" ];
 
   postPatch = ''
     # Fix headers to use libsodium instead of NaCl
