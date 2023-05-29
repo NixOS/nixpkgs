@@ -30,7 +30,7 @@ import ./make-test-python.nix {
           else "fsck.ext4.*/dev/vda"}'")
 
     with subtest("mnt fs is fsckd"):
-        machine.succeed("journalctl -b | grep 'fsck.*/dev/vdb.*clean'")
+        machine.succeed("journalctl -b | grep 'fsck.*vdb.*clean'")
         machine.succeed(
             "grep 'Requires=systemd-fsck@dev-vdb.service' /run/systemd/generator/mnt.mount"
         )

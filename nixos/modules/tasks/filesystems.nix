@@ -112,12 +112,9 @@ let
       };
 
       formatOptions = mkOption {
-        default = "";
-        type = types.str;
-        description = lib.mdDoc ''
-          If {option}`autoFormat` option is set specifies
-          extra options passed to mkfs.
-        '';
+        visible = false;
+        type = types.unspecified;
+        default = null;
       };
 
       autoResize = mkOption {
@@ -139,22 +136,11 @@ let
 
     };
 
-    config = let
-      defaultFormatOptions =
-        # -F needed to allow bare block device without partitions
-        if (builtins.substring 0 3 config.fsType) == "ext" then "-F"
-        # -q needed for non-interactive operations
-        else if config.fsType == "jfs" then "-q"
-        # (same here)
-        else if config.fsType == "reiserfs" then "-q"
-        else null;
-    in {
-      options = mkMerge [
-        (mkIf config.autoResize [ "x-nixos.autoresize" ])
-        (mkIf (utils.fsNeededForBoot config) [ "x-initrd.mount" ])
-      ];
-      formatOptions = mkIf (defaultFormatOptions != null) (mkDefault defaultFormatOptions);
-    };
+    config.options = mkMerge [
+      (mkIf config.autoResize [ "x-nixos.autoresize" ])
+      (mkIf config.autoFormat [ "x-systemd.makefs" ])
+      (mkIf (utils.fsNeededForBoot config) [ "x-initrd.mount" ])
+    ];
 
   };
 
@@ -216,8 +202,7 @@ let
     initrdFstab = pkgs.writeText "initrd-fstab" (makeFstabEntries (filter utils.fsNeededForBoot fileSystems) {
       rootPrefix = "/sysroot";
       extraOpts = fs:
-        (optional fs.autoResize "x-systemd.growfs")
-        ++ (optional fs.autoFormat "x-systemd.makefs");
+        (optional fs.autoResize "x-systemd.growfs");
     });
 
 in
@@ -330,6 +315,16 @@ in
         in
           "Mountpoint '${fs.mountPoint}': 'autoResize = true' is not supported for 'fsType = \"${fs.fsType}\"':${optionalString (fs.fsType == "auto") " fsType has to be explicitly set and"} only the ext filesystems and f2fs support it.";
       }
+      {
+        assertion = ! (any (fs: fs.formatOptions != null) fileSystems);
+        message = let
+          fs = head (filter (fs: fs.formatOptions != null) fileSystems);
+        in ''
+          'fileSystems.<name>.formatOptions' has been removed, since
+          systemd-makefs does not support any way to provide formatting
+          options.
+        '';
+      }
     ];
 
     # Export for use in other modules
@@ -377,37 +372,7 @@ in
         wants = [ "local-fs.target" "remote-fs.target" ];
       };
 
-    systemd.services =
-
-    # Emit systemd services to format requested filesystems.
-      let
-        formatDevice = fs:
-          let
-            mountPoint' = "${escapeSystemdPath fs.mountPoint}.mount";
-            device'  = escapeSystemdPath fs.device;
-            device'' = "${device'}.device";
-          in nameValuePair "mkfs-${device'}"
-          { description = "Initialisation of Filesystem ${fs.device}";
-            wantedBy = [ mountPoint' ];
-            before = [ mountPoint' "systemd-fsck@${device'}.service" ];
-            requires = [ device'' ];
-            after = [ device'' ];
-            path = [ pkgs.util-linux ] ++ config.system.fsPackages;
-            script =
-              ''
-                if ! [ -e "${fs.device}" ]; then exit 1; fi
-                # FIXME: this is scary.  The test could be more robust.
-                type=$(blkid -p -s TYPE -o value "${fs.device}" || true)
-                if [ -z "$type" ]; then
-                  echo "creating ${fs.fsType} filesystem on ${fs.device}..."
-                  mkfs.${fs.fsType} ${fs.formatOptions} "${fs.device}"
-                fi
-              '';
-            unitConfig.RequiresMountsFor = [ "${dirOf fs.device}" ];
-            unitConfig.DefaultDependencies = false; # needed to prevent a cycle
-            serviceConfig.Type = "oneshot";
-          };
-      in listToAttrs (map formatDevice (filter (fs: fs.autoFormat && !(utils.fsNeededForBoot fs)) fileSystems)) // {
+    systemd.services = {
     # Mount /sys/fs/pstore for evacuating panic logs and crashdumps from persistent storage onto the disk using systemd-pstore.
     # This cannot be done with the other special filesystems because the pstore module (which creates the mount point) is not loaded then.
         "mount-pstore" = {
