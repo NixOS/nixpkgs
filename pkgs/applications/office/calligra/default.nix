@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchpatch, fetchurl, extra-cmake-modules, kdoctools
+{ mkDerivation, lib, fetchpatch, fetchFromGitLab, extra-cmake-modules, kdoctools
 , boost, qtwebkit, qtx11extras, shared-mime-info
 , breeze-icons, kactivities, karchive, kcodecs, kcompletion, kconfig, kconfigwidgets
 , kcoreaddons, kdbusaddons, kdiagram, kguiaddons, khtml, ki18n
@@ -14,28 +14,17 @@
 
 mkDerivation rec {
   pname = "calligra";
-  version = "3.2.1";
+  version = "3.2.1-unstable-2023-05-28";
 
-  src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/${pname}-${version}.tar.xz";
-    sha256 = "0iqi6z6gkck2afgy200dacgcspq7i7887alcj0pklm08hbmsdy5i";
+  src = fetchFromGitLab {
+    domain = "invent.kde.org";
+    owner = "office";
+    repo = "calligra";
+    rev = "2301b2c49f7ec99214a42bdde0b3aadaf05adc6a";
+    hash = "sha256-gQUSL7k34HNZ3O65RO+wb+C4MEcq1U577p40QDyGPKs=";
   };
 
   patches = [
-    # Fix fontconfig underlinking: https://github.com/NixOS/nixpkgs/issues/137794
-    # Can be dropped on next release.
-    (fetchpatch {
-      name = "fix-fontconfig-linking.patch";
-      url = "https://github.com/KDE/calligra/commit/62f510702ef9c34ac50f8d8601a4290ab558464c.patch";
-      sha256 = "11dzrp9q05dmvnwp4vk4ihcibqcf4xyr0ijscpi716cyy730flma";
-      excludes = [ "CMakeLists.txt" ];
-    })
-    # Fixes for building calligra with gcc11/c++17
-    (fetchpatch {
-      name = "build_c++17_poppler.patch";
-      url = "https://github.com/archlinux/svntogit-packages/raw/bbbe35f97eb1033798f1cf95d427890168598199/trunk/068cd9ae.patch";
-      sha256 = "sha256-d9/ILwSeW+ov11DF191hzIaUafO/rjQrAeONwqDSKbA=";
-    })
     # Fixes for building calligra with modern poppler[-qt5]
     (fetchpatch {
       name = "calligra-poppler-22.03.patch";
