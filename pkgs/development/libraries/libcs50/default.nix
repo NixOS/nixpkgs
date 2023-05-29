@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcs50";
   version = "11.0.2";
 
   src = fetchFromGitHub {
     owner = "cs50";
     repo = "libcs50";
-    rev = "v${version}";
+    rev = finalAttrs.version;
     hash = "sha256-A4CEU5wfwykVTDIsKZnQ8co+6RwBGYGZEZxRFzQTKBI=";
   };
 
@@ -23,4 +23,4 @@ stdenv.mkDerivation rec {
     description = "CS50 Library for C";
     license = licenses.gpl3Only;
   };
-}
+})
