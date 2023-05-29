@@ -815,3 +815,7 @@ dont-distribute-packages:
 
   # Output exceeds Hydra's maximum allowable size
   - stripeapi
+
+  # Packages that (transitively) depend on insecure packages
+  - hzk # depends on zookeeper_mt, which depends on openssl-1.1
+  - zoovisitor # depends on zookeeper_mt, which depends on openssl-1.1
