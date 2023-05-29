@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "remote-touchpad";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "unrud";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3P72DWwDvmlWM73nzbj1UceWv/CNuCu7+LnBDlCDlgo=";
+    sha256 = "sha256-uydt95mK0395dHvEno2SCnmKMJSkQ4TL7k7gnyoXlO0=";
   };
 
   buildInputs = [ libXi libXrandr libXt libXtst ];

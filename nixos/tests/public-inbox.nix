@@ -201,7 +201,7 @@ in
 
       This is a testing mail.
     ''}")
-    machine.sleep(5)
+    machine.sleep(10)
     machine.succeed("curl -L 'https://machine.${domain}/inbox/repo1/repo1@root-1/T/#u' | grep 'This is a testing mail.'")
 
     # Read a mail through public-inbox-imapd

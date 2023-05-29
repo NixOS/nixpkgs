@@ -15,12 +15,12 @@ let
   }.${system} or throwSystem;
 
   sha256 = {
-    x86_64-linux = "sha256-nvLQDMCm/w1NVSUOMlOKi6GX3R5KoA5pQ63sfhAwn2M=";
-    x86_64-darwin = "sha256-UxEcn1cD5ITg6YLSY/cp9ylimv1Pxee1kBW5SP9ux4E=";
-    aarch64-darwin = "sha256-UxEcn1cD5ITg6YLSY/cp9ylimv1Pxee1kBW5SP9ux4E=";
+    x86_64-linux = "sha256-DrPV1TSoWACk9331lYznLZbkPvx124XWrtCet4uSroo=";
+    x86_64-darwin = "sha256-UDovorRWOAEP8zugtd7iXmJe2YusH0ShBr8Hz4bc9Qk=";
+    aarch64-darwin = "sha256-UDovorRWOAEP8zugtd7iXmJe2YusH0ShBr8Hz4bc9Qk=";
   }.${system} or throwSystem;
 
-  version = "16.0.0";
+  version = "16.2.7";
   src = fetchzip {
     url = "https://github.com/balena-io/balena-cli/releases/download/v${version}/balena-cli-v${version}-${plat}-standalone.zip";
     inherit sha256;

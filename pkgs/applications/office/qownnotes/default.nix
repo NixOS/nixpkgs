@@ -11,6 +11,8 @@
 , qt5compat
 , makeWrapper
 , wrapQtAppsHook
+, botan2
+, pkg-config
 }:
 
 let
@@ -30,6 +32,7 @@ stdenv.mkDerivation {
     qmake
     qttools
     wrapQtAppsHook
+    pkg-config
   ] ++ lib.optionals stdenv.isDarwin [ makeWrapper ];
 
   buildInputs = [
@@ -38,7 +41,12 @@ stdenv.mkDerivation {
     qtsvg
     qtwebsockets
     qt5compat
+    botan2
   ] ++ lib.optionals stdenv.isLinux [ qtwayland ];
+
+  qmakeFlags = [
+    "USE_SYSTEM_BOTAN=1"
+  ];
 
   postInstall =
   # Create a lowercase symlink for Linux
