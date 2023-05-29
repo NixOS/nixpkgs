@@ -6,6 +6,7 @@
 , testers
 , fetchPypi
 , buildPythonPackage
+, poetry-core
 , bencode-py
 , apscheduler
 , jinja2
@@ -25,13 +26,14 @@
 
 let
   pname = "pyrosimple";
-  version = "2.7.0";
+  version = "2.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SMqzvTbWFHwnbMQ+6K0m1v+PybceQK5EHEuN8FB6SaU=";
+    hash = "sha256-K0QjEcGzROlSWuUHWqUbcOdKccrHex2SlwPAmsmIbaQ=";
   };
 
+  nativeBuildInputs = [ poetry-core ];
   propagatedBuildInputs = [
     bencode-py
     apscheduler
@@ -49,7 +51,9 @@ let
   ] ++ lib.optional withInotify inotify;
 
 in buildPythonPackage {
-  inherit pname version src propagatedBuildInputs;
+  inherit pname version src nativeBuildInputs propagatedBuildInputs;
+
+  format = "pyproject";
 
   passthru = {
     updateScript = nix-update-script { };
