@@ -322,19 +322,35 @@ let
     };
     buildScript = pkgs.writeText "build-stumpwm.lisp" ''
       (load "${super.stumpwm.asdfFasl}/asdf.${super.stumpwm.faslExt}")
-      (asdf:load-system 'stumpwm/build)
+
+      (asdf:load-system 'stumpwm)
+
+      ;; Prevents package conflict error
+      (when (uiop:version<= "3.1.5" (asdf:asdf-version))
+        (uiop:symbol-call '#:asdf '#:register-immutable-system :stumpwm)
+        (dolist (system-name (uiop:symbol-call '#:asdf
+                                               '#:system-depends-on
+                                               (asdf:find-system :stumpwm)))
+          (uiop:symbol-call '#:asdf '#:register-immutable-system system-name)))
+
+      ;; Prevents "cannot create /homeless-shelter" error
+      (asdf:disable-output-translations)
+
       (sb-ext:save-lisp-and-die
         "stumpwm"
         :executable t
+        :purify t
         #+sb-core-compression :compression
         #+sb-core-compression t
-        :toplevel #'stumpwm:main)
+        :toplevel #'stumpwm:stumpwm)
     '';
     installPhase = ''
       mkdir -p $out/bin
       cp -v stumpwm $out/bin
     '';
   });
+
+  stumpwm-unwrapped = super.stumpwm;
 
   ltk = super.ltk.overrideLispAttrs (o: {
     src = pkgs.fetchzip {
