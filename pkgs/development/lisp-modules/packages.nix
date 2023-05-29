@@ -396,15 +396,76 @@ let
 
   nyxt-gtk = build-asdf-system {
     inherit (super.nyxt) pname;
-    version = "2.2.4";
+    version = "3.1.0";
 
-    lispLibs = super.nyxt.lispLibs ++ (with super; [
-      cl-cffi-gtk cl-webkit2 mk-string-metrics cl-css
-    ]);
+    lispLibs = with super; [
+      self.nasdf-unstable
+      self.prompter
+      self.cl-colors2_0_5_3
+      self.njson_1_0_0
+      self.nsymbols_0_3_1
+      self.nclasses_0_5_0
+      self.nfiles_1_1_2
+      self.quri_7_0
+      self.cl-webkit2_3_5_8
+      self.swank
+      alexandria
+      bordeaux-threads
+      calispel
+      cl-base64
+      cl-gopher
+      cl-html-diff
+      cl-json
+      cl-ppcre
+      cl-ppcre-unicode
+      cl-prevalence
+      cl-qrencode
+      cl-tld
+      closer-mop
+      cl-containers
+      dissect
+      moptilities
+      dexador
+      enchant
+      flexi-streams
+      history-tree
+      idna
+      iolib
+      lass
+      local-time
+      lparallel
+      log4cl
+      montezuma
+      ndebug
+      nhooks
+      nkeymaps
+      osicat
+      parenscript
+      py-configparser
+      serapeum
+      str
+      phos
+      plump
+      clss
+      spinneret
+      slynk
+      trivia
+      trivial-clipboard
+      trivial-features
+      trivial-garbage
+      trivial-package-local-nicknames
+      trivial-types
+      unix-opts
+      cluffer
+      cl-cffi-gtk
+      cl-gobject-introspection
+    ];
 
-    src = pkgs.fetchzip {
-      url = "https://github.com/atlas-engineer/nyxt/archive/2.2.4.tar.gz";
-      sha256 = "12l7ir3q29v06jx0zng5cvlbmap7p709ka3ik6x29lw334qshm9b";
+    src = pkgs.fetchFromGitHub {
+      owner = "atlas-engineer";
+      repo = "nyxt";
+      rev = "3.1.0";
+      sha256 = "sha256-H3AlslECb/VvIC6zAGkLNTaGJ/nb97J6RXAN8sEgAgY=";
     };
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -417,24 +478,23 @@ let
       pkgs.gnome.adwaita-icon-theme
     ];
 
-    buildScript = pkgs.writeText "build-nyxt.lisp" ''
-      (load "${super.nyxt.asdfFasl}/asdf.${super.nyxt.faslExt}")
-      (asdf:load-system :nyxt/gi-gtk-application)
-      (sb-ext:save-lisp-and-die "nyxt" :executable t
-                                       #+sb-core-compression :compression
-                                       #+sb-core-compression t
-                                       :toplevel #'nyxt:entry-point)
+    # This is needed since asdf:make tries to write in the directory of the .asd file of the system it's compiling
+    postConfigure = ''
+      export CL_SOURCE_REGISTRY=$CL_SOURCE_REGISTRY:$(pwd)//
     '';
 
-    # Run with WEBKIT_FORCE_SANDBOX=0 if getting a runtime error
-    # See https://github.com/atlas-engineer/nyxt/issues/1781
+    buildScript = pkgs.writeText "build-nyxt.lisp" ''
+      (load "${super.nyxt.asdfFasl}/asdf.${super.nyxt.faslExt}")
+      ;; There's a weird error while copy/pasting in Nyxt that manifests with sb-ext:save-lisp-and-die, so we use asdf:make instead
+      (asdf:make :nyxt/gi-gtk-application)
+    '';
+
     # TODO(kasper): use wrapGAppsHook
     installPhase = super.nyxt.installPhase + ''
       rm -v $out/nyxt
       mkdir -p $out/bin
       cp -v nyxt $out/bin
       wrapProgram $out/bin/nyxt \
-        --set WEBKIT_FORCE_SANDBOX 0 \
         --prefix LD_LIBRARY_PATH : $LD_LIBRARY_PATH \
         --prefix XDG_DATA_DIRS : $XDG_ICON_DIRS \
         --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
