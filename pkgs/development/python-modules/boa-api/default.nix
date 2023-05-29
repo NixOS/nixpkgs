@@ -1,23 +1,29 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "boa-api";
   version = "0.1.14";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "boalang";
     repo = "api-python";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     sha256 = "sha256-8tt68NLi5ewSKiHdu3gDawTBPylbDmB4zlUUqa7EQuY=";
   };
 
   # upstream has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "boaapi" ];
+  pythonImportsCheck = [
+    "boaapi"
+  ];
 
   meta = {
     homepage = "https://github.com/boalang/api-python";
