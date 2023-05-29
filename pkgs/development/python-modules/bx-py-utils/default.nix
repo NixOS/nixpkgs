@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
@@ -72,6 +73,10 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     "bx_py_utils_tests/tests/test_project_setup.py"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # processify() doesn't work under darwin
+    # https://github.com/boxine/bx_py_utils/issues/80
+    "bx_py_utils_tests/tests/test_processify.py"
   ];
 
   meta = {
