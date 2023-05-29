@@ -156,19 +156,6 @@ self: super: {
       hash = "sha256-n2vuzGbdvhW6I8c7Q22SuNIKSX2LwGNBTVyLLHJIsiU=";
     }) super.hls-floskell-plugin) else super.hls-floskell-plugin;
 
-  hls-stylish-haskell-plugin = if lib.versionAtLeast super.ghc.version "9.4" then overrideCabal
-    (drv: {
-      prePatch = drv.prePatch or "" + ''
-        "${pkgs.buildPackages.dos2unix}/bin/dos2unix" *.cabal
-      '';
-    })
-    (appendPatch (fetchpatch {
-      name = "hls-stylish-haskell-ghc-9.4-compat.patch";
-      url = "https://github.com/haskell/haskell-language-server/commit/ddc67b2d4d719623b657aa54db20bf58c58a5d4a.patch";
-      relative = "plugins/hls-stylish-haskell-plugin";
-      hash = "sha256-GtN9t5zMOROCDSLiscLZ5GmqDV+ql9R2z/+W++C2h2Q=";
-    }) super.hls-stylish-haskell-plugin) else super.hls-stylish-haskell-plugin;
-
   hie-compat = if lib.versionAtLeast super.ghc.version "9.6" then overrideCabal
     (drv: {
       prePatch = drv.prePatch or "" + ''
