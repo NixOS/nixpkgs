@@ -154,13 +154,22 @@ self: super: {
 
   # 2023-04-03: plugins disabled for hls 1.10.0.0 based on
   #
-  haskell-language-server = super.haskell-language-server.override {
-    hls-ormolu-plugin = null;
-    hls-floskell-plugin = null;
-    hls-fourmolu-plugin = null;
-    hls-hlint-plugin = null;
-    hls-stylish-haskell-plugin = null;
-  };
+  haskell-language-server =
+    let
+      # TODO: HLS-2.0.0.0 added support for the foumolu plugin for ghc-9.6.
+      # However, putting together all the overrides to get the latest
+      # version of fourmolu compiling together with ghc-9.6 and HLS is a
+      # little annoying, so currently fourmolu has been disabled.  We should
+      # try to enable this at some point in the future.
+      hlsWithFlags = disableCabalFlag "fourmolu" super.haskell-language-server;
+    in
+    hlsWithFlags.override {
+      hls-ormolu-plugin = null;
+      hls-floskell-plugin = null;
+      hls-fourmolu-plugin = null;
+      hls-hlint-plugin = null;
+      hls-stylish-haskell-plugin = null;
+    };
 
   MonadRandom = super.MonadRandom_0_6;
   unix-compat = super.unix-compat_0_7;
