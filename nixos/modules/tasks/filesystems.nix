@@ -130,22 +130,10 @@ let
 
     };
 
-    config = let
-      defaultFormatOptions =
-        # -F needed to allow bare block device without partitions
-        if (builtins.substring 0 3 config.fsType) == "ext" then "-F"
-        # -q needed for non-interactive operations
-        else if config.fsType == "jfs" then "-q"
-        # (same here)
-        else if config.fsType == "reiserfs" then "-q"
-        else null;
-    in {
-      options = mkMerge [
-        (mkIf config.autoResize [ "x-nixos.autoresize" ])
-        (mkIf (utils.fsNeededForBoot config) [ "x-initrd.mount" ])
-      ];
-      formatOptions = mkIf (defaultFormatOptions != null) (mkDefault defaultFormatOptions);
-    };
+    config.options = mkMerge [
+      (mkIf config.autoResize [ "x-systemd.growfs" ])
+      (mkIf (utils.fsNeededForBoot config) [ "x-initrd.mount" ])
+    ];
 
   };
 
@@ -192,23 +180,20 @@ let
       skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck || isBindMount fs;
       # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
       escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
-    in fstabFileSystems: { rootPrefix ? "", extraOpts ? (fs: []) }: concatMapStrings (fs:
+    in fstabFileSystems: { rootPrefix ? "" }: concatMapStrings (fs:
       (optionalString (isBindMount fs) (escape rootPrefix))
       + (if fs.device != null then escape fs.device
          else if fs.label != null then "/dev/disk/by-label/${escape fs.label}"
          else throw "No device specified for mount point ‘${fs.mountPoint}’.")
       + " " + escape fs.mountPoint
       + " " + fs.fsType
-      + " " + escape (builtins.concatStringsSep "," (fs.options ++ (extraOpts fs)))
+      + " " + escape (builtins.concatStringsSep "," fs.options)
       + " 0 " + (if skipCheck fs then "0" else if fs.mountPoint == "/" then "1" else "2")
       + "\n"
     ) fstabFileSystems;
 
     initrdFstab = pkgs.writeText "initrd-fstab" (makeFstabEntries (filter utils.fsNeededForBoot fileSystems) {
       rootPrefix = "/sysroot";
-      extraOpts = fs:
-        (optional fs.autoResize "x-systemd.growfs")
-        ++ (optional fs.autoFormat "x-systemd.makefs");
     });
 
 in
@@ -310,7 +295,13 @@ in
 
     assertions = let
       ls = sep: concatMapStringsSep sep (x: x.mountPoint);
-      notAutoResizable = fs: fs.autoResize && !(hasPrefix "ext" fs.fsType || fs.fsType == "f2fs");
+      resizableFSes = [
+        "ext3"
+        "ext4"
+        "btrfs"
+        "xfs"
+      ];
+      notAutoResizable = fs: fs.autoResize && !(builtins.elem fs.fsType resizableFSes);
     in [
       { assertion = ! (fileSystems' ? cycle);
         message = "The ‘fileSystems’ option can't be topologically sorted: mountpoint dependency path ${ls " -> " fileSystems'.cycle} loops to ${ls ", " fileSystems'.loops}";
@@ -318,8 +309,11 @@ in
       { assertion = ! (any notAutoResizable fileSystems);
         message = let
           fs = head (filter notAutoResizable fileSystems);
-        in
-          "Mountpoint '${fs.mountPoint}': 'autoResize = true' is not supported for 'fsType = \"${fs.fsType}\"':${optionalString (fs.fsType == "auto") " fsType has to be explicitly set and"} only the ext filesystems and f2fs support it.";
+        in ''
+          Mountpoint '${fs.mountPoint}': 'autoResize = true' is not supported for 'fsType = "${fs.fsType}"'
+          ${optionalString (fs.fsType == "auto") "fsType has to be explicitly set and"}
+          only the following support it: ${lib.concatStringsSep ", " resizableFSes}.
+        '';
       }
     ];
 
