@@ -130,13 +130,6 @@ self: super: {
     apply-refact = self.apply-refact_0_11_0_0;
   };
 
-  hls-test-utils = appendPatch (fetchpatch {
-    name = "hls-test-utils-ghcide-1.10-compat.patch";
-    url = "https://github.com/haskell/haskell-language-server/commit/014c8f90249f11a8dfa1286e67d452ccfb42b2d0.patch";
-    relative = "hls-test-utils";
-    hash = "sha256-sBuqSmgCQSgbXV6KPEZcIP09wbx81q5xjSg7/slH2HQ=";
-  }) super.hls-test-utils;
-
   hls-rename-plugin = if lib.versionAtLeast super.ghc.version "9.4" then overrideCabal
     (drv: {
       prePatch = drv.prePatch or "" + ''
