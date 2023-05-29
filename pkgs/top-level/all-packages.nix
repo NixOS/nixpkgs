@@ -483,6 +483,8 @@ with pkgs;
 
   conserver = callPackage ../tools/misc/conserver { };
 
+  containerlab = callPackage ../tools/networking/containerlab { };
+
   containerpilot = callPackage ../applications/networking/cluster/containerpilot { };
 
   coost = callPackage ../development/libraries/coost { };
