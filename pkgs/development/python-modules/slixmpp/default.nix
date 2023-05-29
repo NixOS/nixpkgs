@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "slixmpp";
-  version = "1.8.3";
+  version = "1.8.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rJtZqq7tZ/VFk4fMpDZYyTQRa1Pokmn2aw6LA+FBGXw=";
+    hash = "sha256-QG8fS6t+dXPdVZpEECfT3jPRe7o1S88g3caq+6JyKGs=";
   };
 
   propagatedBuildInputs = [
@@ -39,8 +39,6 @@ buildPythonPackage rec {
       src = ./hardcode-gnupg-path.patch;
       inherit gnupg;
     })
-    # Upstream MR: https://lab.louiz.org/poezio/slixmpp/-/merge_requests/198
-    ./0001-xep_0030-allow-extra-args-in-get_info_from_domain.patch
   ];
 
   disabledTestPaths = [
@@ -56,6 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for XMPP";
     homepage = "https://slixmpp.readthedocs.io/";
+    changelog = "https://lab.louiz.org/poezio/slixmpp/-/tags/slix-${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

@@ -9457,7 +9457,7 @@ with pkgs;
   };
 
   meilisearch = callPackage ../servers/search/meilisearch {
-    inherit (darwin.apple_sdk.frameworks) Security DiskArbitration Foundation;
+    inherit (darwin.apple_sdk_11_0.frameworks) Security;
   };
 
   memtester = callPackage ../tools/system/memtester { };
@@ -13064,6 +13064,8 @@ with pkgs;
   tmate = callPackage ../tools/misc/tmate { };
 
   tmate-ssh-server = callPackage ../servers/tmate-ssh-server { };
+
+  tml = callPackage ../tools/text/tml { };
 
   tmpwatch = callPackage ../tools/misc/tmpwatch  { };
 
@@ -23082,6 +23084,8 @@ with pkgs;
 
   mqtt-benchmark = callPackage ../tools/networking/mqtt-benchmark { };
 
+  mqttmultimeter = callPackage ../tools/networking/mqttmultimeter { };
+
   mqttui = callPackage ../tools/networking/mqttui {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -25025,15 +25029,15 @@ with pkgs;
     pkg = callPackage ../development/compilers/sbcl/bootstrap.nix {};
     faslExt = "fasl";
   };
-  sbcl_2_3_2 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.2"; };
-    faslExt = "fasl";
-  };
   sbcl_2_3_4 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.4"; };
     faslExt = "fasl";
   };
-  sbcl = sbcl_2_3_4;
+  sbcl_2_3_5 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.5"; };
+    faslExt = "fasl";
+  };
+  sbcl = sbcl_2_3_5;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
@@ -32114,7 +32118,7 @@ with pkgs;
   ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
 
   ladybird = qt6Packages.callPackage ../applications/networking/browsers/ladybird {
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.clang14Stdenv else stdenv;
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.llvmPackages_14.stdenv else stdenv;
   };
 
   lazpaint = callPackage ../applications/graphics/lazpaint { };
@@ -34365,6 +34369,8 @@ with pkgs;
 
   stumpwm = sbclPackages.stumpwm;
 
+  stumpwm-unwrapped = sbclPackages.stumpwm-unwrapped;
+
   sublime = callPackage ../applications/editors/sublime/2 { };
 
   sublime3Packages = recurseIntoAttrs (callPackage ../applications/editors/sublime/3/packages.nix { });
@@ -36249,6 +36255,7 @@ with pkgs;
   airstrike = callPackage ../games/airstrike { };
 
   alephone = callPackage ../games/alephone { };
+  alephone-apotheosis-x = callPackage ../games/alephone/apotheosis-x { };
   alephone-durandal = callPackage ../games/alephone/durandal { };
   alephone-eternal = callPackage ../games/alephone/eternal { };
   alephone-evil = callPackage ../games/alephone/evil { };
@@ -36259,6 +36266,8 @@ with pkgs;
   alephone-rubicon-x = callPackage ../games/alephone/rubicon-x { };
   alephone-pathways-into-darkness =
     callPackage ../games/alephone/pathways-into-darkness { };
+  alephone-yuge =
+    callPackage ../games/alephone/yuge { };
 
   alienarena = callPackage ../games/alienarena { };
 
