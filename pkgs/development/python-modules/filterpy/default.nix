@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , numpy
 , scipy
 , matplotlib
@@ -8,15 +8,16 @@
 , isPy3k
 }:
 
-buildPythonPackage rec {
-  version = "1.4.5";
+buildPythonPackage {
+  version = "unstable-2022-08-23";
   pname = "filterpy";
   disabled = !isPy3k;
 
-  src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    sha256 = "4f2a4d39e4ea601b9ab42b2db08b5918a9538c168cff1c6895ae26646f3d73b1";
+  src = fetchFromGitHub {
+    owner = "rlabbe";
+    repo = "filterpy";
+    rev = "3b51149ebcff0401ff1e10bf08ffca7b6bbc4a33";
+    hash = "sha256-KuuVu0tqrmQuNKYmDmdy+TU6BnnhDxh4G8n9BGzjGag=";
   };
 
   nativeCheckInputs = [ pytest ];
