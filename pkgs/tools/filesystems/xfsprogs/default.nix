@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     gettext pkg-config
     libuuid # codegen tool uses libuuid
+    liburcu # required by crc32selftest
   ];
   buildInputs = [ readline icu inih liburcu ];
   propagatedBuildInputs = [ libuuid ]; # Dev headers include <uuid/uuid.h>
