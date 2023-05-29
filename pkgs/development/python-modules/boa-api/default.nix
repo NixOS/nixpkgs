@@ -14,6 +14,9 @@ buildPythonPackage rec {
     sha256 = "sha256-8tt68NLi5ewSKiHdu3gDawTBPylbDmB4zlUUqa7EQuY=";
   };
 
+  # upstream has no tests
+  doCheck = false;
+
   pythonImportsCheck = [ "boaapi" ];
 
   meta = {
