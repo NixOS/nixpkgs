@@ -57,8 +57,8 @@
 
   # GCC
   gcc = [
-    "https://bigsearcher.com/mirrors/gcc/"
     "https://mirror.koddos.net/gcc/"
+    "https://bigsearcher.com/mirrors/gcc/"
     "ftp://ftp.nluug.nl/mirror/languages/gcc/"
     "ftp://ftp.fu-berlin.de/unix/languages/gcc/"
     "ftp://ftp.irisa.fr/pub/mirrors/gcc.gnu.org/gcc/"
