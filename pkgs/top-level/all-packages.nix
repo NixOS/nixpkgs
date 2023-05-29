@@ -28398,6 +28398,8 @@ with pkgs;
 
   hetzner-kube = callPackage ../applications/networking/cluster/hetzner-kube { };
 
+  hetzner-api-dyndns = callPackage ../applications/networking/dyndns/hetzner-api-dyndns { };
+
   hicolor-icon-theme = callPackage ../data/icons/hicolor-icon-theme { };
 
   hannom = callPackage ../data/fonts/hannom { };
