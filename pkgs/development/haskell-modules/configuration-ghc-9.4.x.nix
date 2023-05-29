@@ -190,14 +190,6 @@ in {
   # https://github.com/kowainik/relude/issues/436
   relude = dontCheck (doJailbreak super.relude);
 
-  # Fixes compilation failure with GHC >= 9.4 on aarch64-* due to an API change
-  cborg = appendPatch (pkgs.fetchpatch {
-    name = "cborg-support-ghc-9.4.patch";
-    url = "https://github.com/well-typed/cborg/pull/304.diff";
-    sha256 = "sha256-W4HldlESKOVkTPhz9nkFrvbj9akCOtF1SbIt5eJqtj8=";
-    relative = "cborg";
-  }) super.cborg;
-
   ormolu = doDistribute self.ormolu_0_5_3_0;
   # https://github.com/tweag/ormolu/issues/941
   fourmolu = overrideCabal (drv: {
