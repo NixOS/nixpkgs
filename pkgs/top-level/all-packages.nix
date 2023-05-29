@@ -40710,4 +40710,6 @@ with pkgs;
   isolate = callPackage ../tools/security/isolate { };
 
   reindeer = callPackage ../development/tools/reindeer { };
+
+  libcs50 = callPackage ../development/libraries/libcs50 { };
 }
