@@ -64,6 +64,6 @@ buildPythonPackage rec {
     license = "GPL";
     homepage = "http://www.riverbankcomputing.co.uk";
     maintainers = [ maintainers.sander ];
-    platforms = platforms.mesaPlatforms;
+    platforms = platforms.all;
   };
 }

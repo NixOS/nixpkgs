@@ -71,7 +71,7 @@ buildPythonPackage rec {
     description = "Python bindings for Qt6 QtCharts";
     homepage = "https://riverbankcomputing.com/";
     license = licenses.gpl3Only;
-    platforms = platforms.mesaPlatforms;
+    platforms = platforms.all;
     maintainers = with maintainers; [ dandellion ];
   };
 }

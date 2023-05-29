@@ -3,8 +3,7 @@
 , config
 , fetchurl
 , pkg-config
-, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
-, openglSupport ? libGLSupported
+, openglSupport ? lib.meta.availableOn stdenv.hostPlatform libGL
 , libGL
 , alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
 , alsa-lib

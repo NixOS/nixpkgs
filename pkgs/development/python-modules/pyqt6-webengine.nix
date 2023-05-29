@@ -83,7 +83,7 @@ buildPythonPackage rec {
     description = "Python bindings for Qt6 WebEngine";
     homepage = "https://riverbankcomputing.com/";
     license = licenses.gpl3Only;
-    platforms = platforms.mesaPlatforms;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ LunNova nrdxp ];
   };
 }

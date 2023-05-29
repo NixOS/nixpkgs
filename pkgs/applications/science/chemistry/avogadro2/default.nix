@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
     description = "Molecule editor and visualizer";
     maintainers = with maintainers; [ sheepforce ];
     homepage = "https://github.com/OpenChemistry/avogadroapp";
-    platforms = platforms.mesaPlatforms;
+    platforms = platforms.all;
     license = licenses.bsd3;
   };
 }

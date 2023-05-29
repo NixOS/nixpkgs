@@ -50,6 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.free; # different files under different licenses
       #["BSD" "GLX" "SGI-B" "GPL2"]
     pkgConfigModules = [ "glew" ];
-    platforms = platforms.mesaPlatforms;
+    platforms = platforms.all;
   };
 })

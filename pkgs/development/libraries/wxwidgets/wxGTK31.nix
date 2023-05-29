@@ -17,7 +17,7 @@
 , compat30 ? true
 , unicode ? true
 , withEGL ? true
-, withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
+, withMesa ? lib.meta.availableOn stdenv.hostPlatform libGLU
 , withWebKit ? stdenv.isDarwin
 , webkitgtk
 , setfile

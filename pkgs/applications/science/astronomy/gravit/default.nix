@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       view in 3D and zoom in and out.
     '';
 
-    platforms = lib.platforms.mesaPlatforms;
+    platforms = lib.platforms.unix;
     hydraPlatforms = lib.platforms.linux; # darwin times out
   };
 }

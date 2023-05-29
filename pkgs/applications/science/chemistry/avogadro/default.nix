@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Molecule editor and visualizer";
     maintainers = with maintainers; [ danielbarter ];
-    platforms = platforms.mesaPlatforms;
+    platforms = platforms.all;
   };
 }

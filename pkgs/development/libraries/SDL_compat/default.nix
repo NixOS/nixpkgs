@@ -7,8 +7,7 @@
 , libiconv
 , Cocoa
 , autoSignDarwinBinariesHook
-, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
-, openglSupport ? libGLSupported
+, openglSupport ? lib.meta.availableOn stdenv.hostPlatform libGL
 , libGL
 , libGLU
 }:

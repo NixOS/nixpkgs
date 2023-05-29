@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     description = "An OpenGL test suite, and test-suite runner";
     homepage = "https://gitlab.freedesktop.org/mesa/piglit";
     license = licenses.free; # custom license. See COPYING in the source repo.
-    platforms = platforms.mesaPlatforms;
+    platforms = platforms.all;
     maintainers = with maintainers; [ Flakebi ];
   };
 }
