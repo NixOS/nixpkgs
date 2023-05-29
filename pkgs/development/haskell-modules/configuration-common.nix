@@ -130,19 +130,6 @@ self: super: {
     apply-refact = self.apply-refact_0_11_0_0;
   };
 
-  hls-rename-plugin = if lib.versionAtLeast super.ghc.version "9.4" then overrideCabal
-    (drv: {
-      prePatch = drv.prePatch or "" + ''
-        "${pkgs.buildPackages.dos2unix}/bin/dos2unix" *.cabal
-      '';
-    })
-    (appendPatch (fetchpatch {
-      name = "hls-rename-ghc-9.4-compat.patch";
-      url = "https://github.com/haskell/haskell-language-server/commit/472947cdb9e711f6ef889bba3b83b0dd44a1b6bc.patch";
-      relative = "plugins/hls-rename-plugin";
-      hash = "sha256-WPhCQmn3rjCOiQFJz23QQ84zfm43FNll0BfsNK5pkG0=";
-    }) super.hls-rename-plugin) else super.hls-rename-plugin;
-
   hie-compat = if lib.versionAtLeast super.ghc.version "9.6" then overrideCabal
     (drv: {
       prePatch = drv.prePatch or "" + ''
