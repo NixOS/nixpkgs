@@ -970,6 +970,14 @@ in
     };
   };
 
+  twenty-fortyeight = mkLibretroCore {
+    core = "2048";
+    meta = {
+      description = "Port of 2048 puzzle game to the libretro API";
+      license = lib.licenses.unlicense;
+    };
+  };
+
   vba-m = mkLibretroCore {
     core = "vbam";
     src = getCoreSrc "vba-m";
