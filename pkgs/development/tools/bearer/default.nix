@@ -1,6 +1,8 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, testers
+, bearer
 }:
 
 buildGoModule rec {
@@ -25,6 +27,13 @@ buildGoModule rec {
     "-w"
     "-X=github.com/bearer/bearer/cmd/bearer/build.Version=${version}"
   ];
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = bearer;
+      command = "bearer version";
+    };
+  };
 
   meta = with lib; {
     description = "Code security scanning tool (SAST) to discover, filter and prioritize security and privacy risks";
