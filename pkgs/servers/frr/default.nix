@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 
 # build time
 , autoreconfHook
@@ -40,6 +41,14 @@ stdenv.mkDerivation rec {
     rev = "${pname}-${version}";
     hash = "sha256-dK6eVYj9OIVChnR90FDTB7ow93nLLNRaOG8YEXxh8UQ=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-31490.patch";
+      url = "https://github.com/FRRouting/frr/commit/06431bfa7570f169637ebb5898f0b0cc3b010802.patch";
+      hash = "sha256-Ix+xOWXIjkbeIPGtddi4F2BNesx+U9uXP4b6LtCPYdM=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
