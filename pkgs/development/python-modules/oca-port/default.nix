@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "oca-port";
-  version = "0.12";
+  version = "0.13";
   format = "pyproject";
 
   src = fetchPypi {
     inherit version;
     pname = "oca_port";
-    hash = "sha256-adwqnhe5BLo5tsjaLb0XHlTFxSKNutsb6hlTXjA4Wio=";
+    hash = "sha256-9ihqjnGdBPasiRD2pZeaiibwzFQKI9t+s/zMzvyLLHQ=";
   };
 
   nativeBuildInputs = [
