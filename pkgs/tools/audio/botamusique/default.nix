@@ -60,7 +60,8 @@ stdenv.mkDerivation rec {
     # configuration.default.ini, which is in the installation directory
     # after all. So we need to counter-patch it here so it can find it absolutely
     substituteInPlace mumbleBot.py \
-      --replace "configuration.default.ini" "$out/share/botamusique/configuration.default.ini"
+      --replace "configuration.default.ini" "$out/share/botamusique/configuration.default.ini" \
+      --replace "version = 'git'" "version = '${version}'"
   '';
 
   NODE_OPTIONS = "--openssl-legacy-provider";
