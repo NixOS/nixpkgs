@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook
+{ mkDerivation, config, lib, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook
 
 # For `digitaglinktree`
 , perl, sqlite
@@ -52,6 +52,9 @@
 
 , breeze-icons
 , oxygen
+
+, cudaSupport ? config.cudaSupport or false
+, cudaPackages ? {}
 }:
 
 mkDerivation rec {
@@ -63,7 +66,15 @@ mkDerivation rec {
     sha256 = "sha256-o/MPAbfRttWFgivNXr+N9p4P8CRWOnJGLr+AadvaIuE=";
   };
 
-  nativeBuildInputs = [ cmake doxygen extra-cmake-modules kdoctools wrapGAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    extra-cmake-modules
+    kdoctools
+    wrapGAppsHook
+  ] ++ lib.optionals cudaSupport (with cudaPackages; [
+    cuda_nvcc
+  ]);
 
   buildInputs = [
     bison
@@ -109,7 +120,9 @@ mkDerivation rec {
     marble
     oxygen
     threadweaver
-  ];
+  ] ++ lib.optionals cudaSupport (with cudaPackages; [
+    cuda_cudart
+  ]);
 
   cmakeFlags = [
     "-DENABLE_MYSQLSUPPORT=1"
