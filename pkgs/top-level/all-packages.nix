@@ -13114,6 +13114,8 @@ with pkgs;
 
   toml2nix = callPackage ../development/tools/toml2nix { };
 
+  topfew = callPackage ../tools/text/topfew { };
+
   topfew-rs = callPackage ../tools/text/topfew-rs { };
 
   topgrade = callPackage ../tools/misc/topgrade {
