@@ -8,18 +8,19 @@ let
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
 
-  suffix = {
-    x86_64-linux = "AppImage";
-    x86_64-darwin = "dmg";
-  }.${system} or throwSystem;
+  src = rec {
+    x86_64-linux = fetchurl {
+      url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}.AppImage";
+      sha256 = "sha256-oo3li8w1uem9lyFqwnrZ7Fl1R7Hrd8W+PHcIiaL2/+U=";
+    };
 
-  src = fetchurl {
-    url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}.${suffix}";
-    sha256 = {
-      x86_64-linux = "sha256-oo3li8w1uem9lyFqwnrZ7Fl1R7Hrd8W+PHcIiaL2/+U=";
-      x86_64-darwin = "sha256-xYNp6WW8uPBrfuUgE5LI+1PuQK+vTA11eOtkz2ogpk0=";
-    }.${system} or throwSystem;
-  };
+    x86_64-darwin = fetchurl {
+      url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}.dmg";
+      sha256 = "sha256-xYNp6WW8uPBrfuUgE5LI+1PuQK+vTA11eOtkz2ogpk0=";
+    };
+
+    aarch64-darwin = x86_64-darwin;
+  }.${system} or throwSystem;
 
   appimageContents = appimageTools.extractType2 {
     inherit name src;
@@ -37,7 +38,7 @@ let
     homepage = "https://joplinapp.org";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ hugoreeves ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin"];
   };
 
   linux = appimageTools.wrapType2 rec {
