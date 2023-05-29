@@ -191,36 +191,41 @@ stdenv.mkDerivation rec {
     gradle --offline --no-daemon server:dist -Pbuildversion=${buildVersion}
   '';
 
-  installPhase = with lib; ''
+  installPhase = with lib; let
+    installClient = ''
+      install -Dm644 desktop/build/libs/Mindustry.jar $out/share/mindustry.jar
+      mkdir -p $out/bin
+      makeWrapper ${jdk}/bin/java $out/bin/mindustry \
+        --add-flags "-jar $out/share/mindustry.jar" \
+        --suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath [libpulseaudio alsa-lib libjack2]} \
+        --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib/'' + optionalString enableWayland '' \
+        --set SDL_VIDEODRIVER wayland \
+        --set SDL_VIDEO_WAYLAND_WMCLASS Mindustry
+      '' + ''
+
+      # Retain runtime depends to prevent them from being cleaned up.
+      # Since a jar is a compressed archive, nix can't figure out that the dependency is actually in there,
+      # and will assume that it's not actually needed.
+      # This can cause issues.
+      # See https://github.com/NixOS/nixpkgs/issues/109798.
+      echo "# Retained runtime dependencies: " >> $out/bin/mindustry
+      for dep in ${SDL2.out} ${alsa-lib.out} ${selectedGlew.out}; do
+        echo "# $dep" >> $out/bin/mindustry
+      done
+
+      install -Dm644 core/assets/icons/icon_64.png $out/share/icons/hicolor/64x64/apps/mindustry.png
+    '';
+    installServer = ''
+      install -Dm644 server/build/libs/server-release.jar $out/share/mindustry-server.jar
+      mkdir -p $out/bin
+      makeWrapper ${jdk}/bin/java $out/bin/mindustry-server \
+        --add-flags "-jar $out/share/mindustry-server.jar"
+    '';
+  in ''
     runHook preInstall
-  '' + optionalString enableClient ''
-    install -Dm644 desktop/build/libs/Mindustry.jar $out/share/mindustry.jar
-    mkdir -p $out/bin
-    makeWrapper ${jdk}/bin/java $out/bin/mindustry \
-      --add-flags "-jar $out/share/mindustry.jar" \
-      --suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath [libpulseaudio alsa-lib libjack2]} \
-      --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib/'' + optionalString enableWayland '' \
-      --set SDL_VIDEODRIVER wayland \
-      --set SDL_VIDEO_WAYLAND_WMCLASS Mindustry
-    '' + ''
-
-    # Retain runtime depends to prevent them from being cleaned up.
-    # Since a jar is a compressed archive, nix can't figure out that the dependency is actually in there,
-    # and will assume that it's not actually needed.
-    # This can cause issues.
-    # See https://github.com/NixOS/nixpkgs/issues/109798.
-    echo "# Retained runtime dependencies: " >> $out/bin/mindustry
-    for dep in ${SDL2.out} ${alsa-lib.out} ${selectedGlew.out}; do
-      echo "# $dep" >> $out/bin/mindustry
-    done
-
-    install -Dm644 core/assets/icons/icon_64.png $out/share/icons/hicolor/64x64/apps/mindustry.png
-  '' + optionalString enableServer ''
-    install -Dm644 server/build/libs/server-release.jar $out/share/mindustry-server.jar
-    mkdir -p $out/bin
-    makeWrapper ${jdk}/bin/java $out/bin/mindustry-server \
-      --add-flags "-jar $out/share/mindustry-server.jar"
-  '' + ''
+  '' + optionalString enableClient installClient
+     + optionalString enableServer installServer
+     + ''
     runHook postInstall
   '';
 
