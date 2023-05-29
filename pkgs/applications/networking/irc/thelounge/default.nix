@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchYarnDeps, yarn, fixup_yarn_lock, nodejs, npmHooks, nixosTests }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, nodejs
+, yarn
+, fixup_yarn_lock
+, npmHooks
+, nixosTests
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "thelounge";
