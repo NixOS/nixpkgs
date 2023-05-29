@@ -8,14 +8,14 @@
 
 beamPackages.mixRelease rec {
   pname = "pleroma";
-  version = "2.5.1";
+  version = "2.5.2";
 
   src = fetchFromGitLab {
     domain = "git.pleroma.social";
     owner = "pleroma";
     repo = "pleroma";
     rev = "v${version}";
-    sha256 = "sha256-3iG2s7jVEnhq1kLLgtaHnFmLYBO2Xr5M5jjZfSNA9z4=";
+    sha256 = "sha256-5qxop/hJj1hIsEcK6vJnI2RnAcLf3tO43B0e0FcNZcA=";
   };
 
   mixNixDeps = import ./mix.nix {
@@ -159,13 +159,6 @@ beamPackages.mixRelease rec {
           mkdir config
           cp ${cfgFile} config/config.exs
         '';
-      };
-
-      crypt = let
-        version = prev.crypt.version;
-      in prev.crypt.override {
-        buildInputs = [ libxcrypt-legacy ];
-        postInstall = "mv $out/lib/erlang/lib/crypt-${version}/priv/{hex-source-crypt-${version},crypt}.so";
       };
     });
   };
