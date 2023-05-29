@@ -261,6 +261,113 @@ let
     lispLibs = super.mathkit.lispLibs ++ [ super.sb-cga ];
   };
 
+  quri_7_0 = build-asdf-system {
+    inherit (super.quri) pname systems lispLibs;
+    version = "0.7.0";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "fukamachi";
+      repo = "quri";
+      rev = "0.7.0";
+      sha256 = "sha256-/9p67rfbkdrx5nn4kXEUAM9MzV7NYUsRcKsrP/e2MlA=";
+    };
+  };
+
+  cl-colors2_0_5_3 = build-asdf-system {
+    inherit (super.cl-colors2) pname systems lispLibs;
+    version = "0.5.3";
+
+    src = pkgs.fetchgit {
+      url = "https://notabug.org/cage/cl-colors2";
+      rev = "refs/tags/v0.5.3";
+      sha256 = "sha256-anYkLJoNOVBQoXzWVBgbEusQDdud0RA8nZzedl8V93w=";
+    };
+  };
+
+  cl-webkit2_3_5_8 = build-asdf-system {
+    inherit (super.cl-webkit2) pname systems nativeLibs lispLibs;
+    version = "3.5.8";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "joachifm";
+      repo = "cl-webkit";
+      rev = "3.5.8";
+      sha256 = "sha256-wZ/zRRJlTiOIny4BsU+wsFtxtS5YKx3WalwpCVQPFSY=";
+    };
+  };
+
+  nasdf-unstable = build-asdf-system {
+    inherit (super.nasdf) pname systems;
+    version = "20230524-git";
+    src = pkgs.fetchFromGitHub {
+      owner = "atlas-engineer";
+      repo = "ntemplate";
+      rev = "51a884f388ec526c32914093fcad6bb2434e3c14";
+      sha256 = "sha256-bjQPkiHAxhjsHCnWpCGMsmQlGDJFGtQEdevnhK2k+kY=";
+    };
+  };
+
+  njson_1_0_0 = build-asdf-system {
+    inherit (super.njson) pname;
+    version = "1.0.0";
+    src = pkgs.fetchFromGitHub {
+      owner = "atlas-engineer";
+      repo = "njson";
+      rev = "1.0.0";
+      sha256 = "sha256-zeOxkoi5cPl1sw1oEOaMsKhhs3Pb8EzzKTjvuDNj/Ko=";
+    };
+    lispLibs = [ self.nasdf-unstable super.cl-json ];
+    systems = [ "njson" "njson/cl-json" ];
+  };
+
+  nsymbols_0_3_1 = build-asdf-system {
+    inherit (super.nsymbols) pname;
+    version = "0.3.1";
+    src = pkgs.fetchFromGitHub {
+      owner = "atlas-engineer";
+      repo = "nsymbols";
+      rev = "0.3.1";
+      sha256 = "sha256-KcrE06bG5Khp5/807wb/TbPG3nWTlNWHrDpmK6bm7ZM=";
+    };
+    lispLibs = [ super.closer-mop ];
+    systems = [ "nsymbols" "nsymbols/star" ];
+
+  };
+
+  nclasses_0_5_0 = build-asdf-system {
+    inherit (super.nclasses) pname systems;
+    version = "0.5.0";
+    src = pkgs.fetchFromGitHub {
+      owner = "atlas-engineer";
+      repo = "nclasses";
+      rev = "0.5.0";
+      sha256 = "sha256-UcavZ0fCA2hkVU/CqUZfyCqJ8gXKPpXTCP0WLUIF1Ss=";
+    };
+    lispLibs = [ self.nasdf-unstable super.moptilities ];
+  };
+
+  nfiles_1_1_2 = build-asdf-system {
+    inherit (super.nfiles) pname systems;
+    version = "1.1.2";
+    src = pkgs.fetchFromGitHub {
+      owner = "atlas-engineer";
+      repo = "nfiles";
+      rev = "1.1.2";
+      sha256 = "sha256-YsVcCFrJIFL9Z4wQNAv6chiz6wB/eB8v/EUMXPLs3fw=";
+    };
+    lispLibs = [
+      self.nasdf-unstable
+      self.nclasses_0_5_0
+      self.quri_7_0
+      super.alexandria
+      super.iolib
+      super.serapeum
+      super.trivial-garbage
+      super.trivial-package-local-nicknames
+      super.trivial-types
+    ];
+  };
+
   nyxt-gtk = build-asdf-system {
     inherit (super.nyxt) pname;
     version = "2.2.4";
