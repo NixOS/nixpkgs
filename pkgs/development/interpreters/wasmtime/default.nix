@@ -36,6 +36,10 @@ rustPlatform.buildRustPackage rec {
     install -m0644 $src/crates/c-api/include/*.h $dev/include
     install -m0644 $src/crates/c-api/include/wasmtime/*.h $dev/include/wasmtime
     install -m0644 $src/crates/c-api/wasm-c-api/include/* $dev/include
+  '' + lib.optionalString stdenv.isDarwin ''
+    install_name_tool -id \
+      $dev/lib/libwasmtime.dylib \
+      $dev/lib/libwasmtime.dylib
   '';
 
   meta = with lib; {
