@@ -23,9 +23,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
+    "-X=github.com/bearer/bearer/cmd/bearer/build.Version=${version}"
   ];
-
-#  doCheck = false;
 
   meta = with lib; {
     description = "Code security scanning tool (SAST) to discover, filter and prioritize security and privacy risks";
