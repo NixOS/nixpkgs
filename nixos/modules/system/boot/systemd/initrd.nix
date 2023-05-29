@@ -56,7 +56,6 @@ let
     "systemd-ask-password-console.path"
     "systemd-ask-password-console.service"
     "systemd-fsck@.service"
-    "systemd-growfs@.service"
     "systemd-halt.service"
     "systemd-hibernate-resume@.service"
     "systemd-journald-audit.socket"
@@ -93,7 +92,6 @@ let
   fileSystems = filter utils.fsNeededForBoot config.system.build.fileSystems;
 
   needMakefs = lib.any (fs: fs.autoFormat) fileSystems;
-  needGrowfs = lib.any (fs: fs.autoResize) fileSystems;
 
   kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
   modulesTree = config.system.modulesTree.override { name = kernel-name + "-modules"; };
@@ -400,7 +398,6 @@ in {
       storePaths = [
         # systemd tooling
         "${cfg.package}/lib/systemd/systemd-fsck"
-        (lib.mkIf needGrowfs "${cfg.package}/lib/systemd/systemd-growfs")
         "${cfg.package}/lib/systemd/systemd-hibernate-resume"
         "${cfg.package}/lib/systemd/systemd-journald"
         (lib.mkIf needMakefs "${cfg.package}/lib/systemd/systemd-makefs")
