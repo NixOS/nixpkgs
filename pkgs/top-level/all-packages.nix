@@ -588,6 +588,7 @@ with pkgs;
   gpick = callPackage ../tools/misc/gpick { };
 
   gridlock = callPackage ../tools/nix/gridlock { };
+  inherit (gridlock) nyarr;
 
   hwatch = callPackage ../tools/misc/hwatch { };
 
