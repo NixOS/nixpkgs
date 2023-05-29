@@ -15222,7 +15222,7 @@ with pkgs;
   inherit (let
       num =
         if (with stdenv.targetPlatform; isVc4 || libc == "relibc") then 6
-        else 12;
+        else 13;
       numS = toString num;
     in {
       gcc = pkgs.${"gcc${numS}"};
