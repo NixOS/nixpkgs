@@ -3278,6 +3278,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) PCSC;
   };
 
+  coze = callPackage ../tools/security/coze { } ;
+
   cozy = callPackage ../applications/audio/cozy { };
 
   cpptoml = callPackage ../development/libraries/cpptoml { };
