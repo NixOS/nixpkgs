@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, jdk, maven, javaPackages }:
 
 let
-  version = "0.9.6";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "gephi";
     repo = "gephi";
     rev = "v${version}";
-    sha256 = "sha256-3+tOwcE7TUeexJCugFsx9SgsKeb7ApNqbMEIi9QaKPE=";
+    sha256 = "sha256-ZNSEaiD32zFfF2ISKa1CmcT9Nq6r5i2rNHooQAcVbn4=";
   };
 
   # perform fake build to make a fixed-output derivation out of the files downloaded from maven central (120MB)
@@ -24,7 +24,7 @@ let
     installPhase = ''find $out/.m2 -type f -regex '.+\(\.lastUpdated\|resolver-status\.properties\|_remote\.repositories\)' -delete'';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-kIPsZN0alRAgiMbckQnMWKOKtCZ37D/6MgT17VYcr+s=";
+    outputHash = "sha256-OdW4M5nGEkYkmHpRLM4cBQtk4SJII2uqM8TXb6y4eXk=";
   };
 in
 stdenv.mkDerivation {
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     cp ${javaPackages.jogl_2_3_2}/share/java/jogl*.jar $out/gephi/modules/ext/org.gephi.visualization/org-jogamp-jogl/
     cp ${javaPackages.jogl_2_3_2}/share/java/glue*.jar $out/gephi/modules/ext/org.gephi.visualization/org-jogamp-gluegen/
 
-    echo "jdkhome=${jdk}" >> $out/etc/gephi.conf
+    printf "\njdkhome=${jdk}" >> $out/etc/gephi.conf
   '';
 
   meta = with lib; {
