@@ -843,7 +843,6 @@ broken-packages:
   - conferer-provider-json
   - conferer-snap
   - conferer-source-json
-  - conferer-warp
   - confide
   - ConfigFileTH
   - config-parser
