@@ -19470,6 +19470,8 @@ with pkgs;
 
   tweak = callPackage ../applications/editors/tweak { };
 
+  typical = callPackage ../development/tools/misc/typical { };
+
   uddup = callPackage ../tools/security/uddup { };
 
   udis86 = callPackage  ../development/tools/udis86 { };
