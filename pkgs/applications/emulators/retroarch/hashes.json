@@ -1,4 +1,10 @@
 {
+    "2048": {
+      "owner": "libretro",
+      "repo": "libretro-2048",
+      "rev": "331c1de588ed8f8c370dcbc488e5434a3c09f0f2",
+      "sha256": "gPrAmoBnfuTnW6t699pqS43vE6t0ca3jZcqTNRaJipA="
+    },
     "atari800": {
         "owner": "libretro",
         "repo": "libretro-atari800",
