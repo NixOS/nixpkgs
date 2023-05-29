@@ -42,6 +42,7 @@ CORES = {
     "flycast": {"repo": "flycast"},
     "fmsx": {"repo": "fmsx-libretro"},
     "freeintv": {"repo": "freeintv"},
+    "fuse": {"repo": "fuse-libretro"},
     "gambatte": {"repo": "gambatte-libretro"},
     "genesis-plus-gx": {"repo": "Genesis-Plus-GX"},
     "gpsp": {"repo": "gpsp"},
