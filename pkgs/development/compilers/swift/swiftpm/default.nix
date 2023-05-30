@@ -365,12 +365,12 @@ in stdenv.mkDerivation (commonAttrs // {
   pname = "swiftpm";
 
   nativeBuildInputs = commonAttrs.nativeBuildInputs ++ [
+    pkg-config
     swift
     swiftpm-bootstrap
   ];
   buildInputs = [
     ncursesInput
-    pkg-config
     sqlite
     XCTest
   ]

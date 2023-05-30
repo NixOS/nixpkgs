@@ -1265,7 +1265,6 @@ dont-distribute-packages:
  - distributed-process-systest
  - distributed-process-task
  - distributed-process-tests
- - distributed-process-zookeeper
  - distributed-static
  - distribution-plot
  - dixi
@@ -1514,7 +1513,7 @@ dont-distribute-packages:
  - fpnla-examples
  - frame-markdown
  - freckle-app
- - freckle-app_1_9_0_1
+ - freckle-app_1_9_0_2
  - free-functors
  - free-game
  - free-theorems-counterexamples
@@ -1541,7 +1540,6 @@ dont-distribute-packages:
  - functor-combo
  - funflow
  - funflow-nix
- - fungll-combinators
  - funion
  - funnyprint
  - funsat
@@ -1934,6 +1932,8 @@ dont-distribute-packages:
  - hakyll-ogmarkup
  - hakyll-shortcut-links
  - halberd
+ - halide-JuicyPixels
+ - halide-arrayfire
  - hall-symbols
  - halma-gui
  - halma-telegram-bot
@@ -3004,7 +3004,7 @@ dont-distribute-packages:
  - padKONTROL
  - pairing
  - panda
- - pandoc-crossref_0_3_15_2
+ - pandoc-crossref_0_3_16_0
  - pandoc-highlighting-extensions
  - pandoc-japanese-filters
  - pandora-io
@@ -3119,13 +3119,13 @@ dont-distribute-packages:
  - plugins-auto
  - png-file
  - pngload
- - pocket-dns
  - point-octree
  - pointless-lenses
  - pointless-rewrite
  - poker
  - polh-lexicon
  - polydata
+ - polyglot
  - polysemy-RandomFu
  - polysemy-account
  - polysemy-account-api
@@ -3570,6 +3570,7 @@ dont-distribute-packages:
  - servant-openapi3
  - servant-postgresql
  - servant-pushbullet-client
+ - servant-queryparam-openapi3
  - servant-rate-limit
  - servant-reason
  - servant-server-namedargs
@@ -3740,7 +3741,6 @@ dont-distribute-packages:
  - stackage-setup
  - stackage-upload
  - stackage2nix
- - stackctl
  - stan
  - starrover2
  - stateful-mtl
@@ -4308,5 +4308,4 @@ dont-distribute-packages:
  - zoom-cache
  - zoom-cache-pcm
  - zoom-cache-sndfile
- - zoovisitor
  - zuramaru
