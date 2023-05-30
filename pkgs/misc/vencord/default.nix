@@ -8,13 +8,13 @@
 }:
 buildNpmPackage rec {
   pname = "vencord";
-  version = "1.1.6";
+  version = "1.2.5";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     rev = "v${version}";
-    sha256 = "sha256-V9fzSoRqVlk9QqpzzR2x+aOwGHhQhQiSjXZWMC0uLnQ=";
+    sha256 = "sha256-AqzhTzfqbYotQxLrkhkjvSPB4irL/q2fxXusWgCibpI=";
   };
 
   ESBUILD_BINARY_PATH = lib.getExe (esbuild.override {
@@ -33,7 +33,7 @@ buildNpmPackage rec {
   # Supresses an error about esbuild's version.
   npmRebuildFlags = [ "|| true" ];
 
-  npmDepsHash = "sha256-jKSdeyQ8oHw7ZGby0XzDg4O8mtH276ykVuBcw7dU/Ls=";
+  npmDepsHash = "sha256-Sj74qx9Tdz1EsoOVqk4ZdXTXxB4ShrFl3VRCWJ6/KcQ=";
   npmFlags = [ "--legacy-peer-deps" ];
   npmBuildScript = if buildWebExtension then "buildWeb" else "build";
 
@@ -49,7 +49,7 @@ buildNpmPackage rec {
   ];
 
   installPhase = if buildWebExtension then ''
-    cp -r dist/extension-unpacked/ $out
+    cp -r dist/chromium-unpacked/ $out
   '' else ''
     cp -r dist/ $out
   '';

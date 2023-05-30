@@ -126,6 +126,8 @@ self: super: with self; {
 
   aioairzone = callPackage ../development/python-modules/aioairzone { };
 
+  aioairzone-cloud = callPackage ../development/python-modules/aioairzone-cloud { };
+
   aioairq = callPackage ../development/python-modules/aioairq { };
 
   aioaladdinconnect = callPackage ../development/python-modules/aioaladdinconnect { };
@@ -7784,6 +7786,8 @@ self: super: with self; {
 
   pyzbar = callPackage ../development/python-modules/pyzbar { };
 
+  pyzipper = callPackage ../development/python-modules/pyzipper { };
+
   pkutils = callPackage ../development/python-modules/pkutils { };
 
   plac = callPackage ../development/python-modules/plac { };
@@ -13107,6 +13111,8 @@ self: super: with self; {
   xkcdpass = callPackage ../development/python-modules/xkcdpass { };
 
   xknx = callPackage ../development/python-modules/xknx { };
+
+  xknxproject = callPackage ../development/python-modules/xknxproject { };
 
   xlib = callPackage ../development/python-modules/xlib { };
 
