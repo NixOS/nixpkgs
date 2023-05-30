@@ -22,6 +22,7 @@ stdenvNoCC.mkDerivation rec  {
     hicolor-icon-theme
   ];
 
+  dontFixup = true;
   dontDropIconThemeCache = true;
 
   installPhase = ''
@@ -31,6 +32,8 @@ stdenvNoCC.mkDerivation rec  {
     for theme in $out/share/icons/*; do
       gtk-update-icon-cache $theme
     done
+    symlinkParentIconThemes
+    recordPropagatedDependencies
   '';
 
   meta = with lib; {
