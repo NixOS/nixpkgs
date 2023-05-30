@@ -126,6 +126,8 @@ self: super: with self; {
 
   aioairzone = callPackage ../development/python-modules/aioairzone { };
 
+  aioairzone-cloud = callPackage ../development/python-modules/aioairzone-cloud { };
+
   aioairq = callPackage ../development/python-modules/aioairq { };
 
   aioaladdinconnect = callPackage ../development/python-modules/aioaladdinconnect { };
