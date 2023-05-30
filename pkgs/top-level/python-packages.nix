@@ -1609,6 +1609,8 @@ self: super: with self; {
 
   calmjs-parse = callPackage ../development/python-modules/calmjs-parse { };
 
+  calplot = callPackage ../development/python-modules/calplot { };
+
   calysto = callPackage ../development/python-modules/calysto { };
 
   calysto-scheme = callPackage ../development/python-modules/calysto-scheme { };
@@ -7229,7 +7231,9 @@ self: super: with self; {
 
   panasonic-viera = callPackage ../development/python-modules/panasonic-viera { };
 
-  pandas = callPackage ../development/python-modules/pandas { };
+  pandas = callPackage ../development/python-modules/pandas {
+    inherit (pkgs.darwin) adv_cmds;
+  };
 
   pandas-datareader = callPackage ../development/python-modules/pandas-datareader { };
 
