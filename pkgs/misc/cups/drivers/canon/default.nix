@@ -21,7 +21,6 @@
 , libredirect
 , ghostscript
 , pkgs
-, pkgsi686Linux
 , zlib
 }:
 
@@ -30,7 +29,6 @@ let
     if stdenv.targetPlatform.system == "x86_64-linux" then "intel"
     else if stdenv.targetPlatform.system == "aarch64-linux" then "arm"
     else throw "Unsupported platform for Canon UFR2 Drivers: ${stdenv.targetPlatform.system}";
-  i686_NIX_GCC = pkgsi686Linux.callPackage ({ gcc }: gcc) { };
   ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
   libs = pkgs: lib.makeLibraryPath buildInputs;
 
@@ -98,23 +96,7 @@ stdenv.mkDerivation rec {
       mkdir -p $out/share/cups/model
       install -m 644 ppd/*.ppd $out/share/cups/model/
     )
-    '' + lib.optionalString (system == "intel") ''
-    (
-      cd lib
-      mkdir -p $out/lib32
-      install -m 755 libs32/intel/libColorGearCufr2.so.2.0.0 $out/lib32
-      install -m 755 libs32/intel/libcaepcmufr2.so.1.0 $out/lib32
-      install -m 755 libs32/intel/libcaiocnpkbidir.so.1.0.0 $out/lib32
-      install -m 755 libs32/intel/libcaiousb.so.1.0.0 $out/lib32
-      install -m 755 libs32/intel/libcaiowrapufr2.so.1.0.0 $out/lib32
-      install -m 755 libs32/intel/libcanon_slimufr2.so.1.0.0 $out/lib32
-      install -m 755 libs32/intel/libcanonufr2r.so.1.0.0 $out/lib32
-      install -m 755 libs32/intel/libcnaccm.so.1.0 $out/lib32
-      install -m 755 libs32/intel/libcnlbcmr.so.1.0 $out/lib32
-      install -m 755 libs32/intel/libcnncapcmr.so.1.0 $out/lib32
-      install -m 755 libs32/intel/libufr2filterr.so.1.0.0 $out/lib32
-    )
-    '' + ''
+
     (
       cd lib
       mkdir -p $out/lib
@@ -142,24 +124,6 @@ stdenv.mkDerivation rec {
       mkdir -p $out/share/ufr2filter
       install -m 644 libs64/${system}/ThLB* $out/share/ufr2filter
     )
-
-    '' + lib.optionalString (system == "intel") ''
-    (
-      cd $out/lib32
-      ln -sf libcaepcmufr2.so.1.0 libcaepcmufr2.so
-      ln -sf libcaepcmufr2.so.1.0 libcaepcmufr2.so.1
-      ln -sf libcaiowrapufr2.so.1.0.0 libcaiowrapufr2.so
-      ln -sf libcaiowrapufr2.so.1.0.0 libcaiowrapufr2.so.1
-      ln -sf libcanon_slimufr2.so.1.0.0 libcanon_slimufr2.so
-      ln -sf libcanon_slimufr2.so.1.0.0 libcanon_slimufr2.so.1
-      ln -sf libufr2filterr.so.1.0.0 libufr2filterr.so
-      ln -sf libufr2filterr.so.1.0.0 libufr2filterr.so.1
-
-      patchelf --set-rpath "$(cat ${i686_NIX_GCC}/nix-support/orig-cc)/lib:${libs pkgsi686Linux}:${pkgsi686Linux.stdenv.cc.libc}/lib:${pkgsi686Linux.libxml2.out}/lib:$out/lib32" libcanonufr2r.so.1.0.0
-      patchelf --set-rpath "$(cat ${i686_NIX_GCC}/nix-support/orig-cc)/lib:${libs pkgsi686Linux}:${pkgsi686Linux.stdenv.cc.libc}/lib" libcaepcmufr2.so.1.0
-      patchelf --set-rpath "$(cat ${i686_NIX_GCC}/nix-support/orig-cc)/lib:${libs pkgsi686Linux}:${pkgsi686Linux.stdenv.cc.libc}/lib" libColorGearCufr2.so.2.0.0
-    )
-    '' + ''
 
     (
       cd $out/lib
