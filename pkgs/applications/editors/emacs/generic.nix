@@ -89,11 +89,11 @@
 , withMotif ? false
 , withNS ? stdenv.isDarwin && !(variant == "macport" || noGui)
 , withPgtk ? false
-, withSQLite3 ? false
+, withSQLite3 ? lib.versionAtLeast version "29"
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , withToolkitScrollBars ? true
 , withTreeSitter ? lib.versionAtLeast version "29"
-, withWebP ? false
+, withWebP ? lib.versionAtLeast version "29"
 , withX ? !(stdenv.isDarwin || noGui || withPgtk)
 , withXinput2 ? withX && lib.versionAtLeast version "29"
 , withXwidgets ? false
