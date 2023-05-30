@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , aiohttp
 , async-timeout
 , buildPythonPackage
@@ -9,6 +10,7 @@
 , paho-mqtt
 , poetry-core
 , pycryptodome
+, pycryptodomex
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -40,6 +42,8 @@ buildPythonPackage rec {
     dacite
     paho-mqtt
     pycryptodome
+  ] ++ lib.optionals stdenv.isDarwin [
+    pycryptodomex
   ];
 
   nativeCheckInputs = [
