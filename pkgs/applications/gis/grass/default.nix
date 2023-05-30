@@ -17,7 +17,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config bison flex makeWrapper wrapGAppsHook
-    gdal geos libmysqlclient netcdf
+    gdal # for `gdal-config`
+    geos # for `geos-config`
+    netcdf # for `nc-config`
+    libmysqlclient # for `mysql_config`
     pdal # for `pdal-config`; remove with next version, see https://github.com/OSGeo/grass/pull/2851
   ] ++ (with python3Packages; [ python-dateutil numpy wxPython_4_2 ]);
 
@@ -25,6 +28,10 @@ stdenv.mkDerivation rec {
     cairo zlib proj libtiff libpng fftw sqlite
     readline ffmpeg postgresql blas wxGTK32
     proj-datumgrid zstd
+    gdal
+    geos
+    netcdf
+    libmysqlclient
     pdal
   ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
