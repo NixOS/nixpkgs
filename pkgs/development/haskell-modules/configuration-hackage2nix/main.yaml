@@ -202,7 +202,7 @@ package-maintainers:
     - vulkan-utils
   erictapen:
     - hakyll
-  Gabriel439:
+  Gabriella439:
     - annah
     - bench
     - break
@@ -568,6 +568,7 @@ unsupported-platforms:
   bytelog:                                      [ platforms.darwin ] # due to posix-api
   camfort:                                      [ aarch64-linux ]
   charsetdetect:                                [ aarch64-linux ] # not supported by vendored lib / not configured properly https://github.com/batterseapower/libcharsetdetect/issues/3
+  coinor-clp:                                   [ aarch64-linux ] # aarch64-linux is not supported by required system dependency clp
   cut-the-crap:                                 [ platforms.darwin ]
   essence-of-live-coding-PortMidi:              [ platforms.darwin ]
   Euterpea:                                     [ platforms.darwin ]
@@ -814,3 +815,10 @@ dont-distribute-packages:
 
   # Output exceeds Hydra's maximum allowable size
   - stripeapi
+
+  # Packages that (transitively) depend on insecure packages
+  - distributed-process-zookeeper # depends on hzk
+  - hzk # depends on zookeeper_mt, which depends on openssl-1.1
+  - persistent-zookeper # depends on hzk
+  - pocket-dns # depends on persistent-zookeeper
+  - zoovisitor # depends on zookeeper_mt, which depends on openssl-1.1
