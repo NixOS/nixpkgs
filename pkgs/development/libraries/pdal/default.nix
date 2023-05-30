@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , cmake
@@ -22,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pdal";
-  version = "2.4.3";
+  version = "2.5.4";
 
   src = fetchFromGitHub {
     owner = "PDAL";
     repo = "PDAL";
     rev = version;
-    sha256 = "sha256-9TQlhuGSTnHsTlJos9Hwnyl1CxI0tXLZdqsaGdp6WIE=";
+    hash = "sha256-WP74YMKYJ0VqsPkOzSfuFhSKM/aY5ynVVmDTP6/DmgA=";
   };
 
   nativeBuildInputs = [
