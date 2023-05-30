@@ -25750,6 +25750,7 @@ with pkgs;
   prometheus-flow-exporter = callPackage ../servers/monitoring/prometheus/flow-exporter.nix { };
   prometheus-fritzbox-exporter = callPackage ../servers/monitoring/prometheus/fritzbox-exporter.nix { };
   prometheus-gitlab-ci-pipelines-exporter = callPackage ../servers/monitoring/prometheus/gitlab-ci-pipelines-exporter.nix { };
+  prometheus-graphite-exporter = callPackage ../servers/monitoring/prometheus/graphite-exporter.nix { };
   prometheus-haproxy-exporter = callPackage ../servers/monitoring/prometheus/haproxy-exporter.nix { };
   prometheus-influxdb-exporter = callPackage ../servers/monitoring/prometheus/influxdb-exporter.nix { };
   prometheus-ipmi-exporter = callPackage ../servers/monitoring/prometheus/ipmi-exporter.nix { };
