@@ -126,7 +126,6 @@
 , withMultithread ? true # Multithreading via pthreads/win32 threads
 , withNetwork ? withHeadlessDeps # Network support
 , withPixelutils ? withHeadlessDeps # Pixel utils in libavutil
-, withLTO ? false # build with link-time optimization
 /*
  *  Program options
  */
@@ -384,7 +383,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     (enableFeature withSmallBuild "small")
     (enableFeature withRuntimeCPUDetection "runtime-cpudetect")
-    (enableFeature withLTO "lto")
     (enableFeature withGrayscale "gray")
     (enableFeature withSwscaleAlpha "swscale-alpha")
     (enableFeature withHardcodedTables "hardcoded-tables")
