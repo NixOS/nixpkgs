@@ -426,18 +426,8 @@ self: super: builtins.intersectAttrs super {
     '';
   }) super.leksah);
 
-  dyre =
-    appendPatch
-      # Dyre needs special support for reading the NIX_GHC env var.  This is
-      # available upstream in https://github.com/willdonnelly/dyre/pull/43, but
-      # hasn't been released to Hackage as of dyre-0.9.1.  Likely included in
-      # next version.
-      (pkgs.fetchpatch {
-        url = "https://github.com/willdonnelly/dyre/commit/c7f29d321aae343d6b314f058812dffcba9d7133.patch";
-        sha256 = "10m22k35bi6cci798vjpy4c2l08lq5nmmj24iwp0aflvmjdgscdb";
-      })
-      # dyre's tests appear to be trying to directly call GHC.
-      (dontCheck super.dyre);
+  # dyre's tests appear to be trying to directly call GHC.
+  dyre = dontCheck super.dyre;
 
   # https://github.com/edwinb/EpiVM/issues/13
   # https://github.com/edwinb/EpiVM/issues/14
@@ -1023,6 +1013,7 @@ self: super: builtins.intersectAttrs super {
         (super.cachix.override {
           fsnotify = dontCheck super.fsnotify_0_4_1_0;
           hnix-store-core = super.hnix-store-core_0_6_1_0;
+          nix = self.hercules-ci-cnix-store.nixPackage;
         })
         [
          (addBuildTool self.hercules-ci-cnix-store.nixPackage)

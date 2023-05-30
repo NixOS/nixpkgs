@@ -16,8 +16,6 @@
 , libsixel
 , microsoft-gsl
 , chafa
-, libuuid
-, libossp_uuid
 , enableOpencv ? stdenv.isLinux
 , opencv
 , enableSway ? stdenv.isLinux
@@ -72,7 +70,6 @@ stdenv.mkDerivation rec {
     microsoft-gsl
     chafa
     cli11
-    (if stdenv.isLinux then libuuid else libossp_uuid)
   ] ++ lib.optionals enableOpencv [
     opencv
   ] ++ lib.optionals enableSway [

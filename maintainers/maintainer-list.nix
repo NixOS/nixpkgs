@@ -5536,17 +5536,17 @@
     githubId = 606000;
     name = "Gabriel Adomnicai";
   };
-  Gabriel439 = {
-    email = "Gabriel439@gmail.com";
-    github = "Gabriella439";
-    githubId = 1313787;
-    name = "Gabriel Gonzalez";
-  };
   GabrielDougherty = {
     email = "contact@gabrieldougherty.com";
     github = "GabrielDougherty";
     githubId = 10541219;
     name = "Gabriel Dougherty";
+  };
+  Gabriella439 = {
+    email = "GenuineGabriella@gmail.com";
+    github = "Gabriella439";
+    githubId = 1313787;
+    name = "Gabriella Gonzalez";
   };
   gador = {
     email = "florian.brandes@posteo.de";
@@ -11460,6 +11460,16 @@
     github = "NilsIrl";
     githubId = 26231126;
     name = "Nils ANDRÉ-CHANG";
+  };
+  nim65s = {
+    email = "guilhem.saurel@laas.fr";
+    matrix = "@gsaurel:laas.fr";
+    github = "nim65s";
+    githubId = 131929;
+    name = "Guilhem Saurel";
+    keys = [{
+      fingerprint = "9B1A 7906 5D2F 2B80 6C8A  5A1C 7D2A CDAF 4653 CF28";
+    }];
   };
   ninjatrappeur = {
     email = "felix@alternativebit.fr";

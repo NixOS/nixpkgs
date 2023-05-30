@@ -122,7 +122,6 @@ self: super: {
 
   # 2023-04-03: https://github.com/haskell/haskell-language-server/issues/3546#issuecomment-1494139751
   # There will probably be a new revision soon.
-  hls-tactics-plugin = assert super.hls-tactics-plugin.version == "1.8.0.0"; doJailbreak super.hls-tactics-plugin;
   hls-brittany-plugin = assert super.hls-brittany-plugin.version == "1.1.0.0"; doJailbreak super.hls-brittany-plugin;
 
   hls-hlint-plugin = super.hls-hlint-plugin.override {
@@ -130,65 +129,6 @@ self: super: {
     hlint = enableCabalFlag "ghc-lib" super.hlint;
     apply-refact = self.apply-refact_0_11_0_0;
   };
-
-  hls-test-utils = appendPatch (fetchpatch {
-    name = "hls-test-utils-ghcide-1.10-compat.patch";
-    url = "https://github.com/haskell/haskell-language-server/commit/014c8f90249f11a8dfa1286e67d452ccfb42b2d0.patch";
-    relative = "hls-test-utils";
-    hash = "sha256-sBuqSmgCQSgbXV6KPEZcIP09wbx81q5xjSg7/slH2HQ=";
-  }) super.hls-test-utils;
-
-  hls-rename-plugin = if lib.versionAtLeast super.ghc.version "9.4" then overrideCabal
-    (drv: {
-      prePatch = drv.prePatch or "" + ''
-        "${pkgs.buildPackages.dos2unix}/bin/dos2unix" *.cabal
-      '';
-    })
-    (appendPatch (fetchpatch {
-      name = "hls-rename-ghc-9.4-compat.patch";
-      url = "https://github.com/haskell/haskell-language-server/commit/472947cdb9e711f6ef889bba3b83b0dd44a1b6bc.patch";
-      relative = "plugins/hls-rename-plugin";
-      hash = "sha256-WPhCQmn3rjCOiQFJz23QQ84zfm43FNll0BfsNK5pkG0=";
-    }) super.hls-rename-plugin) else super.hls-rename-plugin;
-
-  hls-floskell-plugin = if lib.versionAtLeast super.ghc.version "9.4" then overrideCabal
-    (drv: {
-      prePatch = drv.prePatch or "" + ''
-        "${pkgs.buildPackages.dos2unix}/bin/dos2unix" *.cabal
-      '';
-    })
-    (appendPatch (fetchpatch {
-      name = "hls-floskell-ghc-9.4-compat.patch";
-      url = "https://github.com/haskell/haskell-language-server/commit/ddc67b2d4d719623b657aa54db20bf58c58a5d4a.patch";
-      relative = "plugins/hls-floskell-plugin";
-      hash = "sha256-n2vuzGbdvhW6I8c7Q22SuNIKSX2LwGNBTVyLLHJIsiU=";
-    }) super.hls-floskell-plugin) else super.hls-floskell-plugin;
-
-  hls-stylish-haskell-plugin = if lib.versionAtLeast super.ghc.version "9.4" then overrideCabal
-    (drv: {
-      prePatch = drv.prePatch or "" + ''
-        "${pkgs.buildPackages.dos2unix}/bin/dos2unix" *.cabal
-      '';
-    })
-    (appendPatch (fetchpatch {
-      name = "hls-stylish-haskell-ghc-9.4-compat.patch";
-      url = "https://github.com/haskell/haskell-language-server/commit/ddc67b2d4d719623b657aa54db20bf58c58a5d4a.patch";
-      relative = "plugins/hls-stylish-haskell-plugin";
-      hash = "sha256-GtN9t5zMOROCDSLiscLZ5GmqDV+ql9R2z/+W++C2h2Q=";
-    }) super.hls-stylish-haskell-plugin) else super.hls-stylish-haskell-plugin;
-
-  hie-compat = if lib.versionAtLeast super.ghc.version "9.6" then overrideCabal
-    (drv: {
-      prePatch = drv.prePatch or "" + ''
-        "${pkgs.buildPackages.dos2unix}/bin/dos2unix" *.cabal
-      '';
-    })
-    (appendPatch (fetchpatch {
-      name = "hie-compat-9.6-compat.patch";
-      url = "https://github.com/haskell/haskell-language-server/commit/191bda61fef34696a793503e639a53003ff70660.patch";
-      relative = "hie-compat";
-      hash = "sha256-z81+fwxwZ8BQWGRqTnh3XlQ6AG7EiaahdKjT+0lFu1Q=";
-    }) super.hie-compat) else super.hie-compat;
 
   # For -f-auto see cabal.project in haskell-language-server.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser (disableCabalFlag "auto" super.ghc-lib-parser-ex);
@@ -1102,6 +1042,9 @@ self: super: {
       cp -v embeddedfiles/*.info* $out/share/info/
     '';
   }) super.hledger;
+  hledger_1_29_2 = doDistribute (super.hledger_1_29_2.override {
+    hledger-lib = self.hledger-lib_1_29_2;
+  });
   hledger-ui = overrideCabal (drv: {
     postInstall = ''
       for i in $(seq 1 9); do
@@ -2515,7 +2458,7 @@ self: super: {
   # 2022-11-15: Needs newer witch package and brick 1.3 which in turn works with text-zipper 0.12
   # Other dependencies are resolved with doJailbreak for both swarm and brick_1_3
   swarm = doJailbreak (super.swarm.override {
-    brick = doJailbreak (dontCheck super.brick_1_7);
+    brick = doJailbreak (dontCheck super.brick_1_9);
   });
 
   # Too strict upper bound on bytestring
@@ -2659,7 +2602,7 @@ self: super: {
   # https://github.com/fourmolu/fourmolu/issues/231
   fourmolu_0_12_0_0 = dontCheck (super.fourmolu_0_12_0_0.overrideScope (lself: lsuper: {
     Cabal-syntax = lself.Cabal-syntax_3_10_1_0;
-    ghc-lib-parser = lself.ghc-lib-parser_9_6_1_20230312;
+    ghc-lib-parser = lself.ghc-lib-parser_9_6_2_20230523;
     parsec = lself.parsec_3_1_16_1;
     text = lself.text_2_0_2;
   }));

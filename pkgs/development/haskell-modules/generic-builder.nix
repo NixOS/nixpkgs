@@ -31,6 +31,7 @@ in
 , doBenchmark ? false
 , doHoogle ? true
 , doHaddockQuickjump ? doHoogle && lib.versionAtLeast ghc.version "8.6"
+, doInstallIntermediates ? false
 , editedCabalFile ? null
 # aarch64 outputs otherwise exceed 2GB limit
 , enableLibraryProfiling ? !(ghc.isGhcjs or stdenv.targetPlatform.isAarch64 or false)
@@ -84,6 +85,7 @@ in
 , enableSeparateBinOutput ? false
 , enableSeparateDataOutput ? false
 , enableSeparateDocOutput ? doHaddock
+, enableSeparateIntermediatesOutput ? false
 , # Don't fail at configure time if there are multiple versions of the
   # same package in the (recursive) dependencies of the package being
   # built. Will delay failures, if any, to compile time.
@@ -93,6 +95,10 @@ in
   # This can make it slightly faster to load this library into GHCi, but takes
   # extra disk space and compile time.
   enableLibraryForGhci ? false
+  # Set this to a previous build of this same package to reuse the intermediate
+  # build products from that prior build as a starting point for accelerating
+  # this build
+, previousIntermediates ? null
 } @ args:
 
 assert editedCabalFile != null -> revision != null;
@@ -240,6 +246,8 @@ let
     "--ghc-options=-haddock"
   ];
 
+  postPhases = optional doInstallIntermediates [ "installIntermediatesPhase" ];
+
   setupCompileFlags = [
     (optionalString (!coreSetup) "-${nativePackageDbFlag}=$setupPackageConfDir")
     (optionalString enableParallelBuilding (parallelBuildingFlags))
@@ -306,6 +314,8 @@ let
       continue
     fi
   '';
+
+  intermediatesDir = "share/haskell/${ghc.version}/${pname}-${version}/dist";
 in lib.fix (drv:
 
 assert allPkgconfigDepends != [] -> pkg-config != null;
@@ -316,7 +326,9 @@ stdenv.mkDerivation ({
   outputs = [ "out" ]
          ++ (optional enableSeparateDataOutput "data")
          ++ (optional enableSeparateDocOutput "doc")
-         ++ (optional enableSeparateBinOutput "bin");
+         ++ (optional enableSeparateBinOutput "bin")
+         ++ (optional enableSeparateIntermediatesOutput "intermediates");
+
   setOutputFlags = false;
 
   pos = builtins.unsafeGetAttrPos "pname" args;
@@ -393,7 +405,13 @@ stdenv.mkDerivation ({
   # only use the links hack if we're actually building dylibs. otherwise, the
   # "dynamic-library-dirs" point to nonexistent paths, and the ln command becomes
   # "ln -s $out/lib/links", which tries to recreate the links dir and fails
-  + (optionalString (stdenv.isDarwin && (enableSharedLibraries || enableSharedExecutables)) ''
+  #
+  # Note: We need to disable this work-around when using intermediate build
+  # products from a prior build because otherwise Nix will change permissions on
+  # the `$out/lib/links` directory to read-only when the build is done after the
+  # dist directory has already been exported, which triggers an unnecessary
+  # rebuild of modules included in the exported dist directory.
+  + (optionalString (stdenv.isDarwin && (enableSharedLibraries || enableSharedExecutables) && !enableSeparateIntermediatesOutput) ''
     # Work around a limit in the macOS Sierra linker on the number of paths
     # referenced by any one dynamic library:
     #
@@ -471,11 +489,22 @@ stdenv.mkDerivation ({
     runHook postConfigure
   '';
 
-  buildPhase = ''
-    runHook preBuild
-    ${setupCommand} build ${buildTarget}${crossCabalFlagsString}${buildFlagsString}
-    runHook postBuild
-  '';
+  buildPhase =
+      ''
+      runHook preBuild
+      ''
+    + lib.optionalString (previousIntermediates != null)
+        ''
+        mkdir -p dist;
+        rm -r dist/build
+        cp -r ${previousIntermediates}/${intermediatesDir}/build dist/build
+        find dist/build -exec chmod u+w {} +
+        find dist/build -exec touch -d '1970-01-01T00:00:00Z' {} +
+        ''
+    + ''
+      ${setupCommand} build ${buildTarget}${crossCabalFlagsString}${buildFlagsString}
+      runHook postBuild
+      '';
 
   inherit doCheck;
 
@@ -556,6 +585,15 @@ stdenv.mkDerivation ({
     ${optionalString enableSeparateDataOutput "mkdir -p $data"}
 
     runHook postInstall
+  '';
+
+  ${if doInstallIntermediates then "installIntermediatesPhase" else null} = ''
+    runHook preInstallIntermediates
+    intermediatesOutput=${if enableSeparateIntermediatesOutput then "$intermediates" else "$out"}
+    installIntermediatesDir="$intermediatesOutput/${intermediatesDir}"
+    mkdir -p "$installIntermediatesDir"
+    cp -r dist/build "$installIntermediatesDir"
+    runHook postInstallIntermediates
   '';
 
   passthru = passthru // rec {
@@ -719,6 +757,7 @@ stdenv.mkDerivation ({
 // optionalAttrs (args ? preFixup)               { inherit preFixup; }
 // optionalAttrs (args ? postFixup)              { inherit postFixup; }
 // optionalAttrs (args ? dontStrip)              { inherit dontStrip; }
+// optionalAttrs (postPhases != [])              { inherit postPhases; }
 // optionalAttrs (stdenv.buildPlatform.libc == "glibc"){ LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive"; }
 )
 )

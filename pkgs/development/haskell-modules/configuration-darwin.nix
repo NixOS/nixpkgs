@@ -117,6 +117,12 @@ self: super: ({
 
   yesod-bin = addBuildDepend darwin.apple_sdk.frameworks.Cocoa super.yesod-bin;
 
+  yesod-core = super.yesod-core.overrideAttrs (drv: {
+    # Allow access to local networking when the Darwin sandbox is enabled, so yesod-core can
+    # run tests that access localhost.
+    __darwinAllowLocalNetworking = true;
+  });
+
   hmatrix = addBuildDepend darwin.apple_sdk.frameworks.Accelerate super.hmatrix;
 
   blas-hs = overrideCabal (drv: {
@@ -275,6 +281,12 @@ self: super: ({
       # full haskellPackages rebuild.
     '' + drv.postPatch or "";
   }) super.http-client-tls;
+
+  http2 = super.http2.overrideAttrs (drv: {
+    # Allow access to local networking when the Darwin sandbox is enabled, so http2 can run tests
+    # that access localhost.
+    __darwinAllowLocalNetworking = true;
+  });
 
   foldl = overrideCabal (drv: {
     postPatch = ''
