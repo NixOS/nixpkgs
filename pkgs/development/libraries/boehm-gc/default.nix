@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-# doc: https://github.com/ivmai/bdwgc/blob/v8.2.2/doc/README.macros (LARGE_CONFIG)
+# doc: https://github.com/ivmai/bdwgc/blob/v8.2.4/doc/README.macros (LARGE_CONFIG)
 , enableLargeConfig ? false
 , enableMmap ? true
 , enableStatic ? false
@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "boehm-gc";
-  version = "8.2.2";
+  version = "8.2.4";
 
   src = fetchurl {
     urls = [
       # "https://www.hboehm.info/gc/gc_source/gc-${finalAttrs.version}.tar.gz"
       "https://github.com/ivmai/bdwgc/releases/download/v${finalAttrs.version}/gc-${finalAttrs.version}.tar.gz"
     ];
-    sha256 = "sha256-8wEHvLBi4JIKeQ//+lbZUSNIVGhZNkwjoUviZLOINqA=";
+    sha256 = "sha256-PQ082+B3QD0xBrtA8Mu1Y0E9bv27Kn4c1ohlld7Ej8I=";
   };
 
   outputs = [ "out" "dev" "doc" ];
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   # not fix the problem the test failure will be a reminder to
   # extend the set of versions requiring the workaround).
   makeFlags = lib.optionals (stdenv.hostPlatform.isPower64 &&
-                  finalAttrs.version == "8.2.2")
+                  finalAttrs.version == "8.2.4")
     [
       # do not use /proc primitives to track dirty bits; see:
       # https://github.com/ivmai/bdwgc/issues/479#issuecomment-1279687537
