@@ -5,13 +5,12 @@
 
 buildGoModule rec {
   pname = "zgrab2";
-  version = "20230323-${lib.strings.substring 0 7 rev}";
-  rev = "911c86f13080ceae98f8d63d1ae0e85c4a8f7f61";
+  version = "unstable-2023-03-23";
 
   src = fetchFromGitHub {
     owner = "zmap";
     repo = pname;
-    inherit rev;
+    rev = "911c86f13080ceae98f8d63d1ae0e85c4a8f7f61";
     hash = "sha256-VOWkBM/SziY3jiIaYYWq+LRzG4vKitiscqdIDfRUkYY=";
   };
 
@@ -24,7 +23,9 @@ buildGoModule rec {
     ./fix-go-version-error.patch
   ];
 
-  subPackages = [ "cmd/zgrab2" ];
+  subPackages = [
+    "cmd/zgrab2"
+  ];
 
   meta = with lib; {
     description = "Web application scanner";
