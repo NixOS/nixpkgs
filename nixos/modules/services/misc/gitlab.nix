@@ -553,6 +553,20 @@ in {
           default = false;
           description = lib.mdDoc "Enable GitLab container registry.";
         };
+        package = mkOption {
+          type = types.package;
+          default =
+            if versionAtLeast config.system.stateVersion "23.11"
+            then pkgs.gitlab-container-registry
+            else pkgs.docker-distribution;
+          defaultText = literalExpression "pkgs.docker-distribution";
+          description = lib.mdDoc ''
+            Container registry package to use.
+
+            External container registries such as `pkgs.docker-distribution` are not supported
+            anymore since GitLab 16.0.0.
+          '';
+        };
         host = mkOption {
           type = types.str;
           default = config.services.gitlab.host;
@@ -1210,6 +1224,7 @@ in {
     services.dockerRegistry = optionalAttrs cfg.registry.enable {
       enable = true;
       enableDelete = true; # This must be true, otherwise GitLab won't manage it correctly
+      package = cfg.package;
       extraConfig = {
         auth.token = {
           realm = "http${optionalString (cfg.https == true) "s"}://${cfg.host}/jwt/auth";
