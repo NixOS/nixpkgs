@@ -9623,6 +9623,8 @@ with pkgs;
 
   kea = callPackage ../tools/networking/kea { };
 
+  keama = callPackage ../tools/networking/keama { };
+
   iredis = callPackage ../tools/admin/iredis { };
 
   ispell = callPackage ../tools/text/ispell { };
