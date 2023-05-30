@@ -141,11 +141,11 @@ rec {
     runCommand name
       { inherit text executable checkPhase allowSubstitutes preferLocalBuild;
         passAsFile = [ "text" ];
-        meta = lib.optionalAttrs (toString executable != "" && matches != null) {
+        meta = lib.optionalAttrs (executable && matches != null) {
           mainProgram = lib.head matches;
         } // meta;
       }
-      ''
+      (''
         target=$out${lib.escapeShellArg destination}
         mkdir -p "$(dirname "$target")"
 
@@ -154,13 +154,11 @@ rec {
         else
           echo -n "$text" > "$target"
         fi
-
-        if [ -n "$executable" ]; then
-          chmod +x "$target"
-        fi
-
+      '' + lib.optionalString executable ''
+        chmod +x "$target"
+      '' + ''
         eval "$checkPhase"
-      '';
+      '');
 
   /*
    Writes a text file to nix store with no optional parameters available.
