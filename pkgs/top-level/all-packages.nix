@@ -18040,6 +18040,8 @@ with pkgs;
 
   cadre = callPackage ../development/tools/cadre { };
 
+  catnip = callPackage ../tools/audio/catnip { };
+
   cbrowser = callPackage ../development/tools/misc/cbrowser { };
 
   cc-tool = callPackage ../development/embedded/cc-tool { };
