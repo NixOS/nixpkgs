@@ -6112,6 +6112,8 @@ self: super: with self; {
 
   mdformat-tables = callPackage ../development/python-modules/mdformat-tables { };
 
+  mdformat-toc = callPackage ../development/python-modules/mdformat-toc { };
+
   mdit-py-plugins = callPackage ../development/python-modules/mdit-py-plugins { };
 
   mdurl = callPackage ../development/python-modules/mdurl { };
