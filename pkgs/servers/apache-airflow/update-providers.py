@@ -13,7 +13,7 @@ from urllib.request import urlopen
 from urllib.error import HTTPError
 import yaml
 
-PKG_SET = "pkgs.python3Packages"
+PKG_SET = "apache-airflow.pythonPackages"
 
 # If some requirements are matched by multiple or no Python packages, the
 # following can be used to choose the correct one
