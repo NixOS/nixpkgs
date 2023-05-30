@@ -2422,6 +2422,8 @@ with pkgs;
 
   stella = callPackage ../applications/emulators/stella { };
 
+  tamatool = callPackage ../applications/emulators/tamatool { };
+
   termtekst = callPackage ../applications/emulators/termtekst { };
 
   tilem = callPackage ../applications/emulators/tilem { };
