@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "amazon-ecr-credential-helper";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "amazon-ecr-credential-helper";
     rev = "v${version}";
-    sha256 = "sha256-jkS3JAHgIci/5HrcM6a5LjGitl4SLHQNmUIMLWrkUUc=";
+    sha256 = "sha256-Q+YAfCsq4/PoSzYMFhLDAsAfxlU7XR/vouHo42/D2eM=";
   };
 
   vendorHash = null;
