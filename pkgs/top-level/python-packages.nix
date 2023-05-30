@@ -12440,6 +12440,8 @@ self: super: with self; {
 
   types-decorator = callPackage ../development/python-modules/types-decorator { };
 
+  types-deprecated = callPackage ../development/python-modules/types-deprecated { };
+
   types-docutils = callPackage ../development/python-modules/types-docutils { };
 
   types-enum34 = callPackage ../development/python-modules/types-enum34 { };
