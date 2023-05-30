@@ -1,12 +1,14 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , docopt
 , fastavro
 , fetchFromGitHub
-, lib
 , nose
+, pandas
 , pytestCheckHook
 , pythonOlder
 , requests
+, requests-kerberos
 , six
 }:
 
@@ -24,11 +26,33 @@ buildPythonPackage rec {
     hash = "sha256-94Q3IUoX1Cb+uRqvsfpVZJ1koJSx5cQ3/XpYJ0gkQNU=";
   };
 
-  propagatedBuildInputs = [ docopt requests six ];
+  propagatedBuildInputs = [
+    docopt
+    requests
+    six
+  ];
 
-  nativeCheckInputs = [ fastavro nose pytestCheckHook ];
+  passthru.optional-dependencies = {
+    avro = [
+      fastavro
+    ];
+    kerberos = [
+      requests-kerberos
+    ];
+    dataframe = [
+      fastavro
+      pandas
+    ];
+  };
 
-  pythonImportsCheck = [ "hdfs" ];
+  nativeCheckInputs = [
+    nose
+    pytestCheckHook
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+
+  pythonImportsCheck = [
+    "hdfs"
+  ];
 
   meta = with lib; {
     description = "Python API and command line interface for HDFS";
