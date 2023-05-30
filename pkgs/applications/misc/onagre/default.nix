@@ -4,9 +4,18 @@
 , cmake
 , pkgconf
 , freetype
+, fontconfig
 , expat
+, pop-launcher
+, libGL
+, libglvnd
+, libxkbcommon
+, xorg
+, makeWrapper
+, vulkan-loader
+, papirus-icon-theme
+, wayland
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "onagre";
   version = "1.0.0-alpha.0";
@@ -25,10 +34,43 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  cargoSha256 = "sha256-IOhAGrAiT2mnScNP7k7XK9CETUr6BjGdQVdEUvTYQT4=";
+  nativeBuildInputs = [
+    cmake
+    pkgconf
+    makeWrapper
+  ];
+  buildInputs =
+    [
+      freetype
+      fontconfig
+      expat
+      libGL
+      libglvnd
+      libxkbcommon
+    ]
+    ++ (
+      with xorg; [
+        libX11
+        libXcursor
+        libXi
+        libXrandr
+        libxcb
+      ]
+    );
 
-  nativeBuildInputs = [ cmake pkgconf ];
-  buildInputs = [ freetype expat ];
+  postInstall = ''
+    wrapProgram "$out/bin/${pname}" \
+      --prefix PATH : "${lib.makeBinPath [ pop-launcher ]}" \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          wayland
+          libxkbcommon
+          vulkan-loader
+          libGL
+        ]
+      } \
+      --suffix XDG_DATA_DIRS : "${papirus-icon-theme}/share"
+  '';
 
   meta = with lib; {
     description = "A general purpose application launcher for X and wayland inspired by rofi/wofi and alfred";
