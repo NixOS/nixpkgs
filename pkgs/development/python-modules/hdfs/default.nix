@@ -5,6 +5,7 @@
 , lib
 , nose
 , pytestCheckHook
+, pythonOlder
 , requests
 , six
 }:
@@ -12,6 +13,9 @@
 buildPythonPackage rec {
   pname = "hdfs";
   version = "2.5.8";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mtth";
