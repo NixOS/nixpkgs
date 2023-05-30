@@ -58,13 +58,9 @@
 /maintainers/scripts/db-to-md.sh @jtojnar @ryantm
 /maintainers/scripts/doc @jtojnar @ryantm
 
-/doc/* @fricklerhandwerk
 /doc/build-aux/pandoc-filters @jtojnar
-/doc/builders/trivial-builders.chapter.md @fricklerhandwerk
 /doc/contributing/ @fricklerhandwerk
 /doc/contributing/contributing-to-documentation.chapter.md @jtojnar @fricklerhandwerk
-/doc/stdenv @fricklerhandwerk
-/doc/using @fricklerhandwerk
 
 # NixOS Internals
 /nixos/default.nix                                    @infinisil
