@@ -725,9 +725,6 @@ self: super: {
   # vector dependency < 0.12
   imagemagick = doJailbreak super.imagemagick;
 
-  # https://github.com/liyang/thyme/issues/36
-  thyme = dontCheck super.thyme;
-
   # Elm is no longer actively maintained on Hackage: https://github.com/NixOS/nixpkgs/pull/9233.
   Elm = markBroken super.Elm;
   elm-build-lib = markBroken super.elm-build-lib;
