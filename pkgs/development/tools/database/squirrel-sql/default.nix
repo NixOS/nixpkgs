@@ -1,9 +1,13 @@
 # To enable specific database drivers, override this derivation and pass the
 # driver packages in the drivers argument (e.g. mysql_jdbc, postgresql_jdbc).
 { lib, stdenv, fetchurl, makeDesktopItem, makeWrapper, unzip
-, jre
+# Squirrel SQL 4.5.1 supports JRE's through version 17
+, jdk17
 , drivers ? []
 }:
+let
+  jre = jdk17;
+in
 stdenv.mkDerivation rec {
   pname = "squirrel-sql";
   version = "4.5.1";
