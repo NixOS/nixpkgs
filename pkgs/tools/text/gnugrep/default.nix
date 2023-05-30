@@ -16,6 +16,11 @@ stdenv.mkDerivation {
     hash = "sha256-HbKu3eidDepCsW2VKPiUyNFdrk4ZC1muzHj1qVEnbqs=";
   };
 
+  # Some gnulib tests fail on Musl: https://github.com/NixOS/nixpkgs/pull/228714
+  postPatch = if stdenv.hostPlatform.isMusl then ''
+    sed -i 's:gnulib-tests::g' Makefile.in
+  '' else null;
+
   nativeCheckInputs = [ perl glibcLocales ];
   outputs = [ "out" "info" ]; # the man pages are rather small
 

@@ -3408,7 +3408,9 @@ with pkgs;
 
   flavours = callPackage ../applications/misc/flavours { };
 
-  flirc = libsForQt5.callPackage ../applications/video/flirc { };
+  flirc = libsForQt5.callPackage ../applications/video/flirc {
+    readline = readline63;
+  };
 
   flood = nodePackages.flood;
 
@@ -9621,6 +9623,8 @@ with pkgs;
   kcollectd = libsForQt5.callPackage ../tools/misc/kcollectd { };
 
   kea = callPackage ../tools/networking/kea { };
+
+  keama = callPackage ../tools/networking/keama { };
 
   iredis = callPackage ../tools/admin/iredis { };
 
@@ -18038,6 +18042,8 @@ with pkgs;
   byacc = callPackage ../development/tools/parsing/byacc { };
 
   cadre = callPackage ../development/tools/cadre { };
+
+  catnip = callPackage ../tools/audio/catnip { };
 
   cbrowser = callPackage ../development/tools/misc/cbrowser { };
 
