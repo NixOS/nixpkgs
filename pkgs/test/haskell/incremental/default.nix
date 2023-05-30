@@ -9,26 +9,26 @@ let
   inherit (haskell.lib.compose) overrideCabal;
 
   # Incremental builds work with GHC >=9.4.
-  turtle = haskell.packages.ghc944.turtle;
+  temporary = haskell.packages.ghc944.temporary;
 
-  # This will do a full build of `turtle`, while writing the intermediate build products
+  # This will do a full build of `temporary`, while writing the intermediate build products
   # (compiled modules, etc.) to the `intermediates` output.
-  turtle-full-build-with-incremental-output = overrideCabal (drv: {
+  temporary-full-build-with-incremental-output = overrideCabal (drv: {
     doInstallIntermediates = true;
     enableSeparateIntermediatesOutput = true;
-  }) turtle;
+  }) temporary;
 
-  # This will do an incremental build of `turtle` by copying the previously
+  # This will do an incremental build of `temporary` by copying the previously
   # compiled modules and intermediate build products into the source tree
   # before running the build.
   #
   # GHC will then naturally pick up and reuse these products, making this build
   # complete much more quickly than the previous one.
-  turtle-incremental-build = overrideCabal (drv: {
-    previousIntermediates = turtle-full-build-with-incremental-output.intermediates;
-  }) turtle;
+  temporary-incremental-build = overrideCabal (drv: {
+    previousIntermediates = temporary-full-build-with-incremental-output.intermediates;
+  }) temporary;
 in
-  turtle-incremental-build.overrideAttrs (old: {
+  temporary-incremental-build.overrideAttrs (old: {
     meta = {
       maintainers = lib.teams.mercury.members;
     };
