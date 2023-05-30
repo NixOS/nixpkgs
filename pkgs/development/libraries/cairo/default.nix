@@ -63,6 +63,14 @@ in {
       sha256 = "sha256-8G98nsPz3MLEWPDX9F0jKgXC4hC4NNdFQLSpmW3ay2s=";
     })
 
+    # Fix clang build failures on newer LLVM versions
+    # Upstream PR: https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/119
+    (fetchpatch {
+      name = "fix-types.patch";
+      url = "https://gitlab.freedesktop.org/cairo/cairo/-/commit/38e486b34d435130f2fb38c429e6016c3c82cd53.patch";
+      sha256 = "sha256-vmluOJSuTRiQHmbBBVCxOIkZ0O0ZEo0J4mgrUPn0SIo=";
+    })
+
     # Fix unexpected color addition on grayscale images (usually text).
     # Upstream fix: https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/114
     # Can be removed after 1.18 release
@@ -71,6 +79,7 @@ in {
       url = "https://gitlab.freedesktop.org/cairo/cairo/-/commit/4f4d89506f58a64b4829b1bb239bab9e46d63727.diff";
       sha256 = "sha256-mbTg67e7APfdELsuMAgXdY3xokWbGtHF7VDD5UyYqKM=";
     })
+
   ];
 
   outputs = [ "out" "dev" "devdoc" ];
