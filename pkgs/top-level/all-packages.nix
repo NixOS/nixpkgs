@@ -21127,6 +21127,8 @@ with pkgs;
 
   hound = callPackage ../development/tools/misc/hound { };
 
+  hpp-fcl = callPackage ../development/libraries/hpp-fcl { };
+
   hpx = callPackage ../development/libraries/hpx {
     boost = boost17x;
     asio = asio.override { boost = boost17x; };

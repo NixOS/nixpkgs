@@ -4627,6 +4627,11 @@ self: super: with self; {
 
   hpccm = callPackage ../development/python-modules/hpccm { };
 
+  hpp-fcl = toPythonModule (pkgs.hpp-fcl.override {
+    pythonSupport = true;
+    python3Packages = self;
+  });
+
   hs-dbus-signature = callPackage ../development/python-modules/hs-dbus-signature { };
 
   hsaudiotag3k = callPackage ../development/python-modules/hsaudiotag3k { };
