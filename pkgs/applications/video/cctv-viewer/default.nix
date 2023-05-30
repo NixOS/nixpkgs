@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
   };
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release" 
+    "-DCMAKE_BUILD_TYPE=Release"
   ];
 
-  nativeBuildInputs = [ 
-    cmake 
+  nativeBuildInputs = [
+    cmake
     makeWrapper
     wrapQtAppsHook
   ];
