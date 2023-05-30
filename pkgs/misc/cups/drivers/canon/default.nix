@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
       sed -ie "s@_prefix=/usr@_prefix=$out@" cnrdrvcups-common-${version}/allgen.sh
       sed -ie "s@_libdir=/usr/lib@_libdir=$out/lib@" cnrdrvcups-common-${version}/allgen.sh
       sed -ie "s@_bindir=/usr/bin@_bindir=$out/bin@" cnrdrvcups-common-${version}/allgen.sh
-      sed -ie "s@/usr@$out@" cnrdrvcups-common-${version}/{backend,rasterfilter}/Makefile.am
+      sed -ie "s@/usr@$out@" cnrdrvcups-common-${version}/{{backend,rasterfilter}/Makefile.am,rasterfilter/cnrasterproc.h}
       sed -ie "s@etc/cngplp@$out/etc/cngplp@" cnrdrvcups-common-${version}/cngplp/Makefile.am
       sed -ie "s@usr/share/cngplp@$out/usr/share/cngplp@" cnrdrvcups-common-${version}/cngplp/src/Makefile.am
       patchShebangs cnrdrvcups-common-${version}
@@ -87,8 +87,8 @@ stdenv.mkDerivation rec {
     )
     (
       cd cnrdrvcups-common-${version}/Rule
-      mkdir -p $out/share/usb
-      install -m 644 *.usb-quirks $out/share/usb
+      mkdir -p $out/share/cups/usb
+      install -m 644 *.usb-quirks $out/share/cups/usb
     )
     (
       cd cnrdrvcups-lb-${version}
@@ -163,14 +163,25 @@ stdenv.mkDerivation rec {
 
     (
       cd $out/lib
+
+      ln -sf libColorGearCufr2.so.2.0.0 libColorGearCufr2.so
+      ln -sf libColorGearCufr2.so.2.0.0 libColorGearCufr2.so.2
       ln -sf libcaepcmufr2.so.1.0 libcaepcmufr2.so
       ln -sf libcaepcmufr2.so.1.0 libcaepcmufr2.so.1
+      ln -sf libcaiocnpkbidir.so.1.0.0 libcaiocnpkbidir.so
+      ln -sf libcaiocnpkbidir.so.1.0.0 libcaiocnpkbidir.so.1
       ln -sf libcaiowrapufr2.so.1.0.0 libcaiowrapufr2.so
       ln -sf libcaiowrapufr2.so.1.0.0 libcaiowrapufr2.so.1
       ln -sf libcanon_slimufr2.so.1.0.0 libcanon_slimufr2.so
       ln -sf libcanon_slimufr2.so.1.0.0 libcanon_slimufr2.so.1
+      ln -sf libcanonufr2r.so.1.0.0 libcanonufr2r.so
+      ln -sf libcanonufr2r.so.1.0.0 libcanonufr2r.so.1
+      ln -sf libcnlbcmr.so.1.0 libcnlbcmr.so
+      ln -sf libcnlbcmr.so.1.0 libcnlbcmr.so.1
       ln -sf libufr2filterr.so.1.0.0 libufr2filterr.so
       ln -sf libufr2filterr.so.1.0.0 libufr2filterr.so.1
+      ln -sf libuictlufr2r.so.1.0.0 libuictlufr2r.so
+      ln -sf libuictlufr2r.so.1.0.0 libuictlufr2r.so.1
 
       patchelf --set-rpath "$(cat $NIX_CC/nix-support/orig-cc)/lib:${libs pkgs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64:$out/lib" libcanonufr2r.so.1.0.0
       patchelf --set-rpath "$(cat $NIX_CC/nix-support/orig-cc)/lib:${libs pkgs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64" libcaepcmufr2.so.1.0
@@ -179,10 +190,13 @@ stdenv.mkDerivation rec {
 
     (
       cd $out/bin
-      patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64" cnsetuputil2
-      patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64" cnpdfdrv
-      patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64:$out/lib" cnpkbidir
-      patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64:$out/lib" cnrsdrvufr2
+      patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64" cnsetuputil2 cnpdfdrv
+      patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64:$out/lib" cnpkbidir cnrsdrvufr2 cnpkmoduleufr2r cnjbigufr2
+
+      wrapProgram $out/bin/cnrsdrvufr2 \
+        --prefix LD_LIBRARY_PATH ":" "$out/lib" \
+        --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
+        --set NIX_REDIRECTS /usr/bin/cnpkmoduleufr2r=$out/bin/cnpkmoduleufr2r:/usr/bin/cnjbigufr2=$out/bin/cnjbigufr2
 
       wrapProgram $out/bin/cnsetuputil2 \
         --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
