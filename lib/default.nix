@@ -32,7 +32,7 @@ let
     # module system
     modules = callLibs ./modules.nix;
     options = callLibs ./options.nix;
-    simple-options = callLibs ./simple-options.nix;
+    simpleOptions = callLibs ./simple-options.nix;
     types = callLibs ./types.nix;
 
     # constants
