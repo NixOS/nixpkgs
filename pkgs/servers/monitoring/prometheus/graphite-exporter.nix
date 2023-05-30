@@ -25,6 +25,8 @@ buildGoModule rec {
     buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
   '';
 
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) graphite; };
+
   meta = {
     description = "An exporter for metrics exported in the Graphite plaintext protocol";
     homepage = "https://github.com/prometheus/graphite_exporter";

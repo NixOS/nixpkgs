@@ -284,6 +284,29 @@ let
       '';
     };
 
+    graphite = {
+      exporterConfig = {
+        enable = true;
+        port = 9108;
+        graphitePort = 9109;
+        mappingSettings.mappings = [{
+          match = "test.*.*";
+          name = "testing";
+          labels = {
+            protocol = "$1";
+            author = "$2";
+          };
+        }];
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-graphite-exporter.service")
+        wait_for_open_port(9108)
+        wait_for_open_port(9109)
+        succeed("echo test.tcp.foo-bar 1234 $(date +%s) | nc -w1 localhost 9109")
+        succeed("curl -sSf http://localhost:9108/metrics | grep 'testing{author=\"foo-bar\",protocol=\"tcp\"} 1234'")
+      '';
+    };
+
     influxdb = {
       exporterConfig = {
         enable = true;
