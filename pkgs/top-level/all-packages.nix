@@ -483,6 +483,8 @@ with pkgs;
 
   conserver = callPackage ../tools/misc/conserver { };
 
+  containerlab = callPackage ../tools/networking/containerlab { };
+
   containerpilot = callPackage ../applications/networking/cluster/containerpilot { };
 
   coost = callPackage ../development/libraries/coost { };
@@ -2152,6 +2154,8 @@ with pkgs;
 
   lab = callPackage ../applications/version-management/lab { };
 
+  labctl = callPackage ../tools/networking/labctl { };
+
   lefthook = callPackage ../applications/version-management/lefthook { };
 
   legit = callPackage ../applications/version-management/legit { };
@@ -3277,6 +3281,8 @@ with pkgs;
   cosign = callPackage ../tools/security/cosign {
     inherit (darwin.apple_sdk.frameworks) PCSC;
   };
+
+  coze = callPackage ../tools/security/coze { } ;
 
   cozy = callPackage ../applications/audio/cozy { };
 
@@ -11270,6 +11276,8 @@ with pkgs;
 
   phosh-mobile-settings = callPackage ../applications/window-managers/phosh/phosh-mobile-settings.nix { };
 
+  piknik = callPackage ../tools/networking/piknik { };
+
   pinentry = libsForQt5.callPackage ../tools/security/pinentry { };
 
   pinentry-curses = (lib.getOutput "curses" pinentry);
@@ -13105,6 +13113,8 @@ with pkgs;
   toml2json = callPackage ../development/tools/toml2json { };
 
   toml2nix = callPackage ../development/tools/toml2nix { };
+
+  topfew = callPackage ../tools/text/topfew { };
 
   topfew-rs = callPackage ../tools/text/topfew-rs { };
 
@@ -23094,6 +23104,8 @@ with pkgs;
 
   mqtt-benchmark = callPackage ../tools/networking/mqtt-benchmark { };
 
+  mqttmultimeter = callPackage ../tools/networking/mqttmultimeter { };
+
   mqttui = callPackage ../tools/networking/mqttui {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -30064,6 +30076,8 @@ with pkgs;
 
   amazon-ecr-credential-helper = callPackage ../tools/admin/amazon-ecr-credential-helper { };
 
+  dk = callPackage ../applications/window-managers/dk { };
+
   docker-credential-gcr = callPackage ../tools/admin/docker-credential-gcr { };
 
   docker-credential-helpers = callPackage ../tools/admin/docker-credential-helpers { };
@@ -32025,6 +32039,8 @@ with pkgs;
 
   kubelogin-oidc = callPackage ../applications/networking/cluster/kubelogin-oidc { };
 
+  k8sgpt = callPackage ../applications/networking/cluster/k8sgpt { };
+
   k9s = callPackage ../applications/networking/cluster/k9s { };
 
   kubecm = callPackage ../applications/networking/cluster/kubecm { };
@@ -32127,7 +32143,7 @@ with pkgs;
   ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
 
   ladybird = qt6Packages.callPackage ../applications/networking/browsers/ladybird {
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.clang14Stdenv else stdenv;
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.llvmPackages_14.stdenv else stdenv;
   };
 
   lazpaint = callPackage ../applications/graphics/lazpaint { };
@@ -34378,6 +34394,8 @@ with pkgs;
 
   stumpwm = sbclPackages.stumpwm;
 
+  stumpwm-unwrapped = sbclPackages.stumpwm-unwrapped;
+
   sublime = callPackage ../applications/editors/sublime/2 { };
 
   sublime3Packages = recurseIntoAttrs (callPackage ../applications/editors/sublime/3/packages.nix { });
@@ -36262,6 +36280,7 @@ with pkgs;
   airstrike = callPackage ../games/airstrike { };
 
   alephone = callPackage ../games/alephone { };
+  alephone-apotheosis-x = callPackage ../games/alephone/apotheosis-x { };
   alephone-durandal = callPackage ../games/alephone/durandal { };
   alephone-eternal = callPackage ../games/alephone/eternal { };
   alephone-evil = callPackage ../games/alephone/evil { };
@@ -36272,6 +36291,8 @@ with pkgs;
   alephone-rubicon-x = callPackage ../games/alephone/rubicon-x { };
   alephone-pathways-into-darkness =
     callPackage ../games/alephone/pathways-into-darkness { };
+  alephone-yuge =
+    callPackage ../games/alephone/yuge { };
 
   alienarena = callPackage ../games/alienarena { };
 
@@ -40703,4 +40724,6 @@ with pkgs;
   isolate = callPackage ../tools/security/isolate { };
 
   reindeer = callPackage ../development/tools/reindeer { };
+
+  charasay = callPackage ../tools/misc/charasay { };
 }

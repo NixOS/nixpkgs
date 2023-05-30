@@ -12003,6 +12003,8 @@ self: super: with self; {
 
   tflearn = callPackage ../development/python-modules/tflearn { };
 
+  tftpy = callPackage ../development/python-modules/tftpy { };
+
   tgcrypto = callPackage ../development/python-modules/tgcrypto { };
 
   theano-pymc = callPackage ../development/python-modules/theano-pymc { };

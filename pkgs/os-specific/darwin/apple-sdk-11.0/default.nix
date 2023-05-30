@@ -71,7 +71,12 @@ let
   stdenvs = {
     stdenv = mkStdenv stdenv;
   } // builtins.listToAttrs (map
-    (v: { name = "clang${v}Stdenv"; value = mkStdenv pkgs."llvmPackages_${v}".stdenv; })
+    (v: {
+      name = "llvmPackages_${v}";
+      value = pkgs."llvmPackages_${v}" // {
+        stdenv = mkStdenv pkgs."llvmPackages_${v}".stdenv;
+      };
+    })
     [ "12" "13" "14" "15" "16" ]
   );
 
