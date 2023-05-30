@@ -1081,6 +1081,13 @@ in {
   };
 
   config = mkIf cfg.enable {
+    warnings = [
+      (mkIf
+        (cfg.registry.enable && versionAtLeast (getVersion cfg.packages.gitlab) "16.0.0" && cfg.registry.package == pkgs.docker-distribution)
+        ''Support for container registries other than gitlab-container-registry has ended since GitLab 16.0.0 and is scheduled for removal in a future release.
+          Please back up your data and migrate to the gitlab-container-registry package.''
+      )
+    ];
 
     assertions = [
       {
