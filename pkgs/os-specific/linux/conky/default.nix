@@ -76,11 +76,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-a0RGgX325NztDcQwg9+ibxOstU0MSS3eSTaljgt9qPQ=";
   };
 
-  # For some reason -Werror is on by default, causing the project to fail compilation.
-  buildPhase = ''
-    make
-  '';
-  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   postPatch = ''
     sed -i -e '/include.*CheckIncludeFile)/i include(CheckIncludeFiles)' \
@@ -91,7 +86,11 @@ stdenv.mkDerivation rec {
     cp ${catch2}/include/catch2/catch.hpp tests/catch2/catch.hpp
   '';
 
-  NIX_LDFLAGS = "-lgcc_s";
+  env = {
+    # For some reason -Werror is on by default, causing the project to fail compilation.
+    NIX_CFLAGS_COMPILE = "-Wno-error";
+    NIX_LDFLAGS = "-lgcc_s";
+  };
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ glib libXinerama ]
