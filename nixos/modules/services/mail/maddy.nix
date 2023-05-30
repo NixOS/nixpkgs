@@ -335,12 +335,13 @@ in {
       };
 
       secrets = lib.mkOption {
-        type = lib.types.path;
+        type = with types; listOf path;
         description = lib.mdDoc ''
-          A file containing the various secrets. Should be in the format
+          A list of files containing the various secrets. Should be in the format
           expected by systemd's `EnvironmentFile` directory. Secrets can be
           referenced in the format `{env:VAR}`.
         '';
+        default = [ ];
       };
 
     };
@@ -379,7 +380,7 @@ in {
             User = cfg.user;
             Group = cfg.group;
             StateDirectory = [ "maddy" ];
-            EnvironmentFile = lib.mkIf (cfg.secrets != null) "${cfg.secrets}";
+            EnvironmentFile = cfg.secrets;
           };
           restartTriggers = [ config.environment.etc."maddy/maddy.conf".source ];
           wantedBy = [ "multi-user.target" ];
