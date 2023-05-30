@@ -106,17 +106,17 @@ git push origin feature --force-with-lease
 
 Follow these steps to backport a change into a release branch in compliance with the [commit policy](https://nixos.org/nixpkgs/manual/#submitting-changes-stable-release-branches).
 
-You can add a label such as `backport release-22.11` to a PR, so that merging it will
+You can add a label such as `backport release-23.05` to a PR, so that merging it will
 automatically create a backport (via [a GitHub Action](.github/workflows/backport.yml)).
-This also works for PR's that have already been merged, and might take a couple of minutes to trigger.
+This also works for pull requests that have already been merged, and might take a couple of minutes to trigger.
 
 You can also create the backport manually:
 
 1. Take note of the commits in which the change was introduced into `master` branch.
-2. Check out the target _release branch_, e.g. `release-22.11`. Do not use a _channel branch_ like `nixos-22.11` or `nixpkgs-22.11-darwin`.
+2. Check out the target _release branch_, e.g. `release-23.05`. Do not use a _channel branch_ like `nixos-23.05` or `nixpkgs-23.05-darwin`.
 3. Create a branch for your change, e.g. `git checkout -b backport`.
 4. When the reason to backport is not obvious from the original commit message, use `git cherry-pick -xe <original commit>` and add a reason. Otherwise use `git cherry-pick -x <original commit>`. That's fine for minor version updates that only include security and bug fixes, commits that fixes an otherwise broken package or similar. Please also ensure the commits exists on the master branch; in the case of squashed or rebased merges, the commit hash will change and the new commits can be found in the merge message at the bottom of the master pull request.
-5. Push to GitHub and open a backport pull request. Make sure to select the release branch (e.g. `release-22.11`) as the target branch of the pull request, and link to the pull request in which the original change was committed to `master`. The pull request title should be the commit title with the release version as prefix, e.g. `[22.11]`.
+5. Push to GitHub and open a backport pull request. Make sure to select the release branch (e.g. `release-23.05`) as the target branch of the pull request, and link to the pull request in which the original change was committed to `master`. The pull request title should be the commit title with the release version as prefix, e.g. `[23.05]`.
 6. When the backport pull request is merged and you have the necessary privileges you can also replace the label `9.needs: port to stable` with `8.has: port to stable` on the original pull request. This way maintainers can keep track of missing backports easier.
 
 ## Criteria for Backporting changes
@@ -128,7 +128,7 @@ Anything that does not cause user or downstream dependency regressions can be ba
 - Services which require a client to be up-to-date regardless. (E.g. `spotify`, `steam`, or `discord`)
 - Security critical applications (E.g. `firefox`)
 
-## Generating 23.05 Release Notes
+## Generating 23.11 Release Notes
 <!--
 note: title unchanged even though we don't need regeneration because extant
 PRs will link here. definitely change the title for 23.11 though.
@@ -136,10 +136,10 @@ PRs will link here. definitely change the title for 23.11 though.
 
 Documentation in nixpkgs is transitioning to a markdown-centric workflow. In the past release notes required a translation step to convert from markdown to a compatible docbook document, but this is no longer necessary.
 
-Steps for updating 23.05 Release notes:
+Steps for updating 23.11 Release notes:
 
-1. Edit `nixos/doc/manual/release-notes/rl-2305.section.md` with the desired changes
-2. Commit changes to `rl-2305.section.md`.
+1. Edit `nixos/doc/manual/release-notes/rl-2311.section.md` with the desired changes
+2. Commit changes to `rl-2311.section.md`.
 
 ## Reviewing contributions
 
