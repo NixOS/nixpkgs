@@ -607,6 +607,7 @@ in {
   plotinus = handleTest ./plotinus.nix {};
   podgrab = handleTest ./podgrab.nix {};
   podman = handleTestOn ["aarch64-linux" "x86_64-linux"] ./podman/default.nix {};
+  podman-py = handleTest ./podman-py.nix {};
   podman-tls-ghostunnel = handleTestOn ["aarch64-linux" "x86_64-linux"] ./podman/tls-ghostunnel.nix {};
   polaris = handleTest ./polaris.nix {};
   pomerium = handleTestOn ["x86_64-linux"] ./pomerium.nix {};

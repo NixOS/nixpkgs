@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, nixosTests
 , fixtures
 , pytestCheckHook
 , pyxdg
@@ -8,7 +9,6 @@
 , requests-mock
 , sphinx
 , tomli
-, tox
 , urllib3
 }:
 
@@ -36,7 +36,6 @@ buildPythonPackage rec {
     fixtures
     pytestCheckHook
     requests-mock
-    tox
   ];
 
   disabledTestPaths = [
@@ -47,6 +46,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "podman"
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) podman-py;
+  };
 
   meta = with lib; {
     description = "This python package is a library of bindings to use the RESTful API of Podman";
