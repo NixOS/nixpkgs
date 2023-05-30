@@ -6,6 +6,8 @@ appleDerivation {
   patchPhase = ''
     substituteInPlace adv_cmds.xcodeproj/project.pbxproj \
       --replace '/usr/lib/libtermcap.dylib' 'libncurses.dylib'
+    substituteInPlace colldef/scan.l \
+      --replace 'static orderpass = 0;' 'static int orderpass = 0;'
   '';
 
   # pkill requires special private headers that are unavailable in
