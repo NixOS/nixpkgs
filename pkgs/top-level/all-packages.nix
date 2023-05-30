@@ -11275,6 +11275,8 @@ with pkgs;
 
   phosh-mobile-settings = callPackage ../applications/window-managers/phosh/phosh-mobile-settings.nix { };
 
+  piknik = callPackage ../tools/networking/piknik { };
+
   pinentry = libsForQt5.callPackage ../tools/security/pinentry { };
 
   pinentry-curses = (lib.getOutput "curses" pinentry);
@@ -13110,6 +13112,8 @@ with pkgs;
   toml2json = callPackage ../development/tools/toml2json { };
 
   toml2nix = callPackage ../development/tools/toml2nix { };
+
+  topfew = callPackage ../tools/text/topfew { };
 
   topfew-rs = callPackage ../tools/text/topfew-rs { };
 
@@ -30061,6 +30065,8 @@ with pkgs;
 
   amazon-ecr-credential-helper = callPackage ../tools/admin/amazon-ecr-credential-helper { };
 
+  dk = callPackage ../applications/window-managers/dk { };
+
   docker-credential-gcr = callPackage ../tools/admin/docker-credential-gcr { };
 
   docker-credential-helpers = callPackage ../tools/admin/docker-credential-helpers { };
@@ -40707,4 +40713,6 @@ with pkgs;
   isolate = callPackage ../tools/security/isolate { };
 
   reindeer = callPackage ../development/tools/reindeer { };
+
+  charasay = callPackage ../tools/misc/charasay { };
 }

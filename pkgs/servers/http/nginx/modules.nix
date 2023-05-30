@@ -1004,15 +1004,15 @@ let self = {
       name = "vts";
       owner = "vozlt";
       repo = "nginx-module-vts";
-      rev = "v0.2.1";
-      sha256 = "sha256-x4ry5ljPeJQY+7Mp04/xYIGf22d6Nee7CSqHezdK4gQ=";
+      rev = "v0.2.2";
+      sha256 = "sha256-ReTmYGVSOwtnYDMkQDMWwxw09vT4iHYfYZvgd8iBotk=";
     };
 
     meta = with lib; {
       description = "Virtual host traffic status module";
       homepage = "https://github.com/vozlt/nginx-module-vts";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = with maintainers; [ SuperSandro2000 ];
     };
   };
 
@@ -1032,7 +1032,7 @@ let self = {
       description = "Nginx modules for the Zstandard compression";
       homepage = "https://github.com/tokers/zstd-nginx-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = with maintainers; [ SuperSandro2000 ];
     };
   };
 }; in self // lib.optionalAttrs config.allowAliases {
