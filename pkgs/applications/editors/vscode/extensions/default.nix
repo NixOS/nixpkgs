@@ -2185,6 +2185,21 @@ let
         };
       };
 
+      ms-vscode.live-server = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "live-server";
+          publisher = "ms-vscode";
+          version = "0.4.8";
+          sha256 = "sha256-/IrLq+nNxwQB1S1NIGYkv24DOY7Mc25eQ+orUfh42pg=";
+        };
+        meta = {
+          description = "Launch a development local Server with live reload feature for static & dynamic pages";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode.live-server";
+          homepage = "https://github.com/microsoft/vscode-livepreview";
+          license = lib.licenses.mit;
+        };
+      };
+
       ms-vscode.makefile-tools = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "makefile-tools";
