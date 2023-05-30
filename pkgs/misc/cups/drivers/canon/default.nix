@@ -194,8 +194,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.canon.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [
-      # please consider maintaining if you are updating this package
-    ];
+    maintainers = with maintainers; [ lluchs ];
   };
 }
