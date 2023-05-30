@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchPypi
 , pkgsCross
 , avrdude
 , dfu-programmer
@@ -14,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
   version = "1.1.2";
   format = "pyproject";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash = "sha256-+HH4jxoMoxujGgCdcWQX5GvFOKT4347eaoAckHbCKZg=";
   };

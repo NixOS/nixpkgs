@@ -1,6 +1,7 @@
 { lib
 , fetchpatch
 , python3
+, fetchPypi
 , docutils
 , sphinx
 , postfix

@@ -3,8 +3,6 @@
 , rustPlatform
 , fetchFromGitHub
 , Security
-, DiskArbitration
-, Foundation
 , nixosTests
 , nix-update-script
 }:
@@ -41,8 +39,6 @@ rustPlatform.buildRustPackage {
 
   buildInputs = lib.optionals stdenv.isDarwin [
     Security
-    DiskArbitration
-    Foundation
   ];
 
   passthru = {
@@ -61,6 +57,6 @@ rustPlatform.buildRustPackage {
     changelog = "https://github.com/meilisearch/meilisearch/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];
-    platforms = [ "aarch64-darwin" "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "aarch64-linux" "aarch64-darwin" "x86_64-linux" "x86_64-darwin" ];
   };
 }

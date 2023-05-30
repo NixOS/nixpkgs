@@ -1,6 +1,5 @@
 { lib
 , fetchurl
-, writeText
 , callPackage
 , kaem
 , m2libc

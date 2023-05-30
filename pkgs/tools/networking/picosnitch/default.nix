@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchPypi
 , bcc
 }:
 
@@ -7,7 +8,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "picosnitch";
   version = "0.12.0";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "b87654b4b92e28cf5418388ba1d3165b9fa9b17ba91af2a1a942f059128f68bc";
   };

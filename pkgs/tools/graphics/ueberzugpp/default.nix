@@ -14,28 +14,46 @@
 , vips
 , nlohmann_json
 , libsixel
-, microsoft_gsl
+, microsoft-gsl
+, chafa
+, enableOpencv ? stdenv.isLinux
 , opencv
+, enableSway ? stdenv.isLinux
+, extra-cmake-modules
+, wayland
+, wayland-protocols
+, enableX11 ? stdenv.isLinux
 , xorg
-, withOpencv ? stdenv.isLinux
-, withX11 ? stdenv.isLinux
+, withoutStdRanges ? stdenv.isDarwin
+, range-v3
 }:
 
 stdenv.mkDerivation rec {
   pname = "ueberzugpp";
-  version = "2.8.3";
+  version = "2.8.6";
 
   src = fetchFromGitHub {
     owner = "jstkdng";
     repo = "ueberzugpp";
     rev = "v${version}";
-    hash = "sha256-U6jw1VQmc/E/vXBCVvjBsmLjhVf0MFuK+FK8jnEEl1M=";
+    hash = "sha256-FNDFNPNiTLAB90dRpVX3XmbzB5pkkJmnhENmsPRldVE=";
   };
+
+  # error: no member named 'ranges' in namespace 'std'
+  postPatch = lib.optionalString withoutStdRanges ''
+    for f in src/canvas/chafa.cpp src/canvas/iterm2/iterm2.cpp; do
+      sed -i "1i #include <range/v3/algorithm/for_each.hpp>" $f
+      substituteInPlace $f \
+        --replace "#include <ranges>" "" \
+        --replace "std::ranges" "ranges"
+    done
+  '';
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    cli11
   ];
 
   buildInputs = [
@@ -49,17 +67,27 @@ stdenv.mkDerivation rec {
     vips
     nlohmann_json
     libsixel
-    microsoft_gsl
-  ] ++ lib.optionals withOpencv [
+    microsoft-gsl
+    chafa
+    cli11
+  ] ++ lib.optionals enableOpencv [
     opencv
-  ] ++ lib.optionals withX11 [
+  ] ++ lib.optionals enableSway [
+    extra-cmake-modules
+    wayland
+    wayland-protocols
+  ] ++ lib.optionals enableX11 [
     xorg.libX11
     xorg.xcbutilimage
+  ] ++ lib.optionals withoutStdRanges [
+    range-v3
   ];
 
-  cmakeFlags = lib.optionals (!withOpencv) [
+  cmakeFlags = lib.optionals (!enableOpencv) [
     "-DENABLE_OPENCV=OFF"
-  ] ++ lib.optionals (!withX11) [
+  ] ++ lib.optionals enableSway [
+    "-DENABLE_SWAY=ON"
+  ] ++ lib.optionals (!enableX11) [
     "-DENABLE_X11=OFF"
   ];
 
@@ -68,11 +96,14 @@ stdenv.mkDerivation rec {
     export MACOSX_DEPLOYMENT_TARGET=10.14
   '';
 
+  postInstall = ''
+    ln -s $out/bin/ueberzug $out/bin/ueberzugpp
+  '';
+
   meta = with lib; {
     description = "Drop in replacement for ueberzug written in C++";
     homepage = "https://github.com/jstkdng/ueberzugpp";
     license = licenses.gpl3Plus;
-    mainProgram = "ueberzug";
     maintainers = with maintainers; [ aleksana wegank ];
     platforms = platforms.unix;
   };

@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-asm";
-  version = "0.2.0";
+  version = "0.2.18";
 
   src = fetchFromGitHub {
     owner = "pacak";
     repo = "cargo-show-asm";
     rev = version;
-    hash = "sha256-qsr28zuvu+i7P/MpwhDKQFFXTyFFo+vWrjBrpD1V8PY=";
+    hash = "sha256-K7hWXRS6bb9XZxIgZQeu22Gtt3WmXI63Xd97Unm6mHs=";
   };
 
-  cargoHash = "sha256-IL+BB08uZr5fm05ITxpm66jTb+pYYlLKOwQ8uf5rKSs=";
+  cargoHash = "sha256-PJ5v8uuRZZV2jcVS+a8/CAABekdsB+nvSJWI4cUHq0A=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -43,5 +43,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/pacak/cargo-show-asm";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ figsoda oxalica ];
+    mainProgram = "cargo-asm";
   };
 }

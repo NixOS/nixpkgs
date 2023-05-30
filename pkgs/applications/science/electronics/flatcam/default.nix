@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , python3
+, fetchPypi
 , fetchFromBitbucket
 , fetchpatch
 , substituteAll
@@ -12,7 +13,7 @@ let
     packageOverrides = self: super: {
       shapely = super.shapely.overridePythonAttrs (old: rec {
         version = "1.8.4";
-        src = self.fetchPypi {
+        src = fetchPypi {
           pname = "Shapely";
           inherit version;
           hash = "sha256-oZXlHKr6IYKR8suqP+9p/TNTyT7EtlsqRyLEz0DDGYw=";
@@ -30,7 +31,8 @@ let
       });
     };
   };
-in python.pkgs.buildPythonApplication rec {
+in
+python.pkgs.buildPythonApplication rec {
   pname = "flatcam";
   version = "8.5";
 
@@ -65,6 +67,10 @@ in python.pkgs.buildPythonApplication rec {
     packaging_fix_pull_request_patch
     ./release.patch
   ];
+
+  postPatch = ''
+    substituteInPlace setup.py --replace "'shapely>=1.3'" "'shapely>=1.3',"
+  '';
 
   # Only non-GUI tests can be run deterministically in the Nix build environment.
   checkPhase = ''

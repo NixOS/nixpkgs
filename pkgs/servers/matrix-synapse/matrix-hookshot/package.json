@@ -1,6 +1,6 @@
 {
   "name": "matrix-hookshot",
-  "version": "3.2.0",
+  "version": "4.0.0",
   "description": "A bridge between Matrix and multiple project management services, such as GitHub, GitLab and JIRA.",
   "main": "lib/app.js",
   "repository": "https://github.com/matrix-org/matrix-hookshot",
@@ -10,7 +10,7 @@
     "name": "matrix-hookshot-rs"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
   "scripts": {
     "build:web": "vite build",
@@ -30,11 +30,13 @@
     "start:app": "node --require source-map-support/register lib/App/BridgeApp.js",
     "start:webhooks": "node --require source-map-support/register lib/App/GithubWebhookApp.js",
     "start:matrixsender": "node --require source-map-support/register lib/App/MatrixSenderApp.js",
+    "start:resetcrypto": "node --require source-map-support/register lib/App/ResetCryptoStore.js",
     "test": "mocha -r ts-node/register tests/init.ts tests/*.ts  tests/**/*.ts",
     "test:cover": "nyc --reporter=lcov --reporter=text yarn test",
     "lint": "yarn run lint:js && yarn run lint:rs",
     "lint:js": "eslint -c .eslintrc.js 'src/**/*.ts' 'tests/**/*.ts' 'web/**/*.ts' 'web/**/*.tsx'",
     "lint:rs": "cargo fmt --all -- --check",
+    "lint:rs:apply": "cargo fmt --all",
     "generate-default-config": "ts-node src/Config/Defaults.ts --config > config.sample.yml",
     "validate-config": "ts-node src/Config/Config.ts"
   },
@@ -53,8 +55,8 @@
     "ioredis": "^5.2.3",
     "jira-client": "^8.0.0",
     "markdown-it": "^12.3.2",
-    "matrix-appservice-bridge": "^6.0.0",
-    "matrix-bot-sdk": "npm:@vector-im/matrix-bot-sdk@^0.6.3-element.0",
+    "matrix-appservice-bridge": "^9.0.0",
+    "matrix-bot-sdk": "npm:@vector-im/matrix-bot-sdk@^0.6.6-element.1",
     "matrix-widget-api": "^1.0.0",
     "micromatch": "^4.0.4",
     "mime": "^3.0.0",
@@ -63,20 +65,19 @@
     "p-queue": "^6.6.2",
     "prom-client": "^14.0.1",
     "reflect-metadata": "^0.1.13",
-    "rss-parser": "^3.12.0",
     "source-map-support": "^0.5.21",
     "string-argv": "^0.3.1",
     "tiny-typed-emitter": "^2.1.0",
-    "vm2": "^3.9.11",
+    "vm2": "^3.9.17",
     "winston": "^3.3.3",
-    "xml2js": "^0.4.23",
-    "yaml": "^1.10.2"
+    "xml2js": "^0.5.0",
+    "yaml": "^2.2.2"
   },
   "devDependencies": {
     "@codemirror/lang-javascript": "^6.0.2",
     "@napi-rs/cli": "^2.2.0",
     "@preact/preset-vite": "^2.2.0",
-    "@tsconfig/node16": "^1.0.3",
+    "@tsconfig/node18": "^2.0.0",
     "@types/ajv": "^1.0.0",
     "@types/chai": "^4.2.22",
     "@types/cors": "^2.8.12",
@@ -86,10 +87,10 @@
     "@types/micromatch": "^4.0.1",
     "@types/mime": "^2.0.3",
     "@types/mocha": "^9.0.0",
-    "@types/node": "^16",
     "@types/node-emoji": "^1.8.1",
     "@types/uuid": "^8.3.3",
     "@types/xml2js": "^0.4.11",
+    "@types/node": "18",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "@uiw/react-codemirror": "^4.12.3",
@@ -102,8 +103,8 @@
     "preact": "^10.5.15",
     "rimraf": "^3.0.2",
     "sass": "^1.51.0",
-    "ts-node": "^10.4.0",
-    "typescript": "^4.5.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4",
     "vite": "^4.1.4",
     "vite-svg-loader": "^4.0.0"
   }

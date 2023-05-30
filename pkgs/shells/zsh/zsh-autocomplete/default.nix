@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "zsh-autocomplete";
-  version = "23.05.02";
+  version = "23.05.24";
 
   src = fetchFromGitHub {
     owner = "marlonrichert";
     repo = "zsh-autocomplete";
     rev = version;
-    sha256 = "sha256-HVt7JGkNxg9Kb29x95mxq/vtQ1dBbNeQlb9lK2qTBSI=";
+    sha256 = "sha256-/6V6IHwB5p0GT1u5SAiUa20LjFDSrMo731jFBq/bnpw=";
   };
 
   strictDeps = true;

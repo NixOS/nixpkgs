@@ -61,7 +61,7 @@ bash.runCommand "${pname}-${version}" {
 
   # Build
   make \
-    CC="tcc -static -B ${tinycc.libs}/lib -I ." \
+    CC="tcc -B ${tinycc.libs}/lib -I ." \
     AR="tcc -ar" \
     bzip2 bzip2recover
 

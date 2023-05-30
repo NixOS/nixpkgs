@@ -144,7 +144,7 @@ mkDerivation {
   ];
 
   CXXFLAGS = [
-    ''-DNIXPKGS_XWAYLAND=\"${lib.getBin xwayland}/bin/Xwayland\"''
+    ''-DNIXPKGS_XWAYLAND=\"${lib.getExe xwayland}\"''
   ];
 
   postInstall = ''

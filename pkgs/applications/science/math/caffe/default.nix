@@ -27,7 +27,7 @@ let
   # Earlier versions of cudatoolkit use pre-8.x CUDNN, so we use the default.
   cudnn = if lib.versionOlder cudatoolkit.version "10.1"
     then cudaPackages.cudnn
-    else cudaPackages.cudnn_7_6_5;
+    else cudaPackages.cudnn_7_6;
 in
 
 assert leveldbSupport -> (leveldb != null && snappy != null);

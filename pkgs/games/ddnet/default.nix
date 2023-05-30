@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cargo
 , cmake
 , ninja
@@ -35,19 +34,19 @@
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "16.9";
+  version = "17.0.2";
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = pname;
     rev = version;
-    hash = "sha256-DOP2v82346YQtL55Ix0gn9cTpvbO1ooeCIGRpgEMFpA=";
+    hash = "sha256-+k+QiRSFvaGhifN/SKf6bKtooRbnArV2M9o64X5GckE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
     inherit src;
-    hash = "sha256-xTB8wg4PIdg7MB3545zN83/41fUsqFE2Sk5aTXrGhps=";
+    hash = "sha256-kbVHeavCIrLq9ImA2Z7H2O0NXNPjA+3qiba5LoADyG0=";
   };
 
   nativeBuildInputs = [

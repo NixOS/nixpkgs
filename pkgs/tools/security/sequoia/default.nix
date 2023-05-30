@@ -6,13 +6,10 @@
 , git
 , nettle
 , nix-update-script
-# Use the same llvmPackages version as Rust
-, llvmPackages_12
 , cargo
 , rustc
 , rustPlatform
 , pkg-config
-, glib
 , openssl
 , sqlite
 , capnproto
@@ -50,8 +47,7 @@ rustPlatform.buildRustPackage rec {
     cargo
     rustc
     git
-    llvmPackages_12.libclang.lib
-    llvmPackages_12.clang
+    rustPlatform.bindgenHook
     ensureNewerSourcesForZipFilesHook
     capnproto
   ] ++
@@ -80,8 +76,6 @@ rustPlatform.buildRustPackage rec {
   buildFlags = [
     "build-release"
   ];
-
-  LIBCLANG_PATH = "${llvmPackages_12.libclang.lib}/lib";
 
   # Sometimes, tests fail on CI (ofborg) & hydra without this
   checkFlags = [

@@ -20,6 +20,7 @@ let
     "ghc925"
     "ghc926"
     "ghc927"
+    "ghc928"
     "ghc92"
     "ghc942"
     "ghc943"
@@ -39,6 +40,7 @@ let
     "ghc925"
     "ghc926"
     "ghc927"
+    "ghc928"
     "ghc94"
     "ghc942"
     "ghc943"
@@ -231,7 +233,24 @@ in {
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
     };
-    ghc92 = ghc927;
+    ghc928 = callPackage ../development/compilers/ghc/9.2.8.nix {
+      bootPkgs =
+        # aarch64 ghc8107Binary exceeds max output size on hydra
+        if stdenv.hostPlatform.isAarch then
+          packages.ghc8107BinaryMinimal
+        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+          packages.ghc810
+        else
+          packages.ghc8107Binary;
+      inherit (buildPackages.python3Packages) sphinx;
+      # Need to use apple's patched xattr until
+      # https://github.com/xattr/xattr/issues/44 and
+      # https://github.com/xattr/xattr/issues/55 are solved.
+      inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
+      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
+      llvmPackages = pkgs.llvmPackages_12;
+    };
+    ghc92 = ghc928;
     ghc942 = callPackage ../development/compilers/ghc/9.4.2.nix {
       bootPkgs =
         # Building with 9.2 is broken due to
@@ -485,7 +504,12 @@ in {
       ghc = bh.compiler.ghc927;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
     };
-    ghc92 = ghc927;
+    ghc928 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc928;
+      ghc = bh.compiler.ghc928;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
+    };
+    ghc92 = ghc928;
     ghc942 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc942;
       ghc = bh.compiler.ghc942;

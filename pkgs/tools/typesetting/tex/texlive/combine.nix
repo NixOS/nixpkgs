@@ -339,6 +339,10 @@ in (buildEnv {
   # and other non-deterministic diagnostics.
   ''
     find "$TEXMFSYSVAR"/web2c -name '*.log' -delete
+  '' +
+  # link TEXMFDIST in $out/share for backward compatibility
+  ''
+    ln -s "$TEXMFDIST" "$out"/share/texmf
   ''
   ;
 }).overrideAttrs (_: { allowSubstitutes = true; })
