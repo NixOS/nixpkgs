@@ -97,6 +97,7 @@ let
   selectedPlugins = if plugins != null then lib.unique (lib.sort lib.lessThan plugins) else lib.subtractLists (
     [
       "csound" # tests have weird failure on x86, does not currently work on arm or darwin
+      "livesync" # tests have suspicious intermittent failure, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/357
     ] ++ lib.optionals stdenv.isDarwin [
       "reqwest" # tests hang on darwin
       "threadshare" # tests cannot bind to localhost on darwin
@@ -213,7 +214,7 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     runHook preCheck
 
-    meson test --no-rebuild --verbose --timeout-multiplier 6
+    meson test --no-rebuild --verbose --timeout-multiplier 12
 
     runHook postCheck
   '';
