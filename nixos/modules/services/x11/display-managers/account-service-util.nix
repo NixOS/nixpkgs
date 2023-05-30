@@ -4,6 +4,7 @@
 , python3
 , wrapGAppsHook
 , lib
+, mypy
 }:
 
 python3.pkgs.buildPythonApplication {
@@ -32,10 +33,16 @@ python3.pkgs.buildPythonApplication {
     ordered-set
   ];
 
+  checkInputs = [
+    mypy
+  ];
+
   installPhase = ''
-    mkdir -p $out/bin
-    cp $src $out/bin/set-session
-    chmod +x $out/bin/set-session
+    install -m755 -D $src $out/bin/set-session
+  '';
+
+  checkPhase = ''
+    mypy --ignore-missing-imports $src
   '';
 
   meta = with lib; {
