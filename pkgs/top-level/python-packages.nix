@@ -6106,6 +6106,8 @@ self: super: with self; {
 
   mdformat = callPackage ../development/python-modules/mdformat { };
 
+  mdformat-frontmatter = callPackage ../development/python-modules/mdformat-frontmatter { };
+
   mdformat-gfm = callPackage ../development/python-modules/mdformat-gfm { };
 
   mdformat-tables = callPackage ../development/python-modules/mdformat-tables { };
