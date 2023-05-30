@@ -817,5 +817,8 @@ dont-distribute-packages:
   - stripeapi
 
   # Packages that (transitively) depend on insecure packages
+  - distributed-process-zookeeper # depends on hzk
   - hzk # depends on zookeeper_mt, which depends on openssl-1.1
+  - persistent-zookeper # depends on hzk
+  - pocket-dns # depends on persistent-zookeeper
   - zoovisitor # depends on zookeeper_mt, which depends on openssl-1.1
