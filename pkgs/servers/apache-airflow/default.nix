@@ -12,6 +12,7 @@ let
       flask-appbuilder = pySuper.flask-appbuilder.overridePythonAttrs (o: {
         meta.broken = false;
       });
+      # a knock-on effect from overriding the sqlalchemy version
       flask-sqlalchemy = pySuper.flask-sqlalchemy.overridePythonAttrs (o: {
         src = fetchPypi {
           pname = "Flask-SQLAlchemy";
@@ -31,9 +32,19 @@ let
           hash = "sha256-qyD3uoxEnD2pdVvwpUlSqHB3drD4Zg/+ov4CzLFIlLs=";
         };
       });
+
+      apache-airflow = pySelf.callPackage ./python-package.nix { };
     };
   };
 in
-# See note in pkgs/development/python-modules/apache-airflow/default.nix for
+# See note in ./python-package.nix for
 # instructions on manually testing the web UI
-with python.pkgs; toPythonApplication apache-airflow
+with python.pkgs; (toPythonApplication apache-airflow).overrideAttrs (_:{
+  # Provide access to airflow's modified python package set
+  # for the cases where external scripts need to import
+  # airflow modules, though *caveat emptor* because many of
+  # these packages will not be built by hydra and many will
+  # not work at all due to the unexpected version overrides
+  # here.
+  passthru.pythonPackages = python.pkgs;
+})

@@ -300,7 +300,7 @@ buildPythonPackage rec {
   # Note on testing the web UI:
   # You can (manually) test the web UI as follows:
   #
-  #   nix shell .#python3Packages.apache-airflow
+  #   nix shell .#apache-airflow
   #   airflow db reset  # WARNING: this will wipe any existing db state you might have!
   #   airflow db init
   #   airflow standalone
