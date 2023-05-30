@@ -1,0 +1,16 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.google.code.findbugs:jsr305:3.0.2=classpath
+com.google.errorprone:error_prone_annotations:2.2.0=classpath
+com.google.gradle:osdetector-gradle-plugin:1.6.2=classpath
+com.google.guava:failureaccess:1.0.1=classpath
+com.google.guava:guava:27.0.1-jre=classpath
+com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava=classpath
+com.google.j2objc:j2objc-annotations:1.1=classpath
+com.google.protobuf:protobuf-gradle-plugin:0.8.11=classpath
+commons-lang:commons-lang:2.6=classpath
+kr.motd.maven:os-maven-plugin:1.6.2=classpath
+org.checkerframework:checker-qual:2.5.2=classpath
+org.codehaus.mojo:animal-sniffer-annotations:1.17=classpath
+empty=

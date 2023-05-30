@@ -1,0 +1,10 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+ca.coglinc.javacc:ca.coglinc.javacc.gradle.plugin:2.4.0=classpath
+ca.coglinc:javacc-gradle-plugin:2.4.0=classpath
+com.google.guava:guava-jdk5:17.0=classpath
+commons-io:commons-io:2.4=classpath
+org.apache.commons:commons-collections4:4.1=classpath
+org.apache.commons:commons-lang3:3.4=classpath
+empty=

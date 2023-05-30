@@ -1,0 +1,6 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.github.javaparser:javaparser-core:3.14.14=testRuntimeClasspath
+com.github.libgdx.gdx-jnigen:gdx-jnigen:28dd11fa4c33a7ae9e58897912b52ba7d53d54fe=testCompileClasspath,testRuntimeClasspath
+empty=annotationProcessor,compileClasspath,runtimeClasspath,testAnnotationProcessor

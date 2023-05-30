@@ -1,0 +1,9 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+de.jflex:cup_runtime:11b
+de.jflex:jflex:1.7.0
+gradle.plugin.org.xbib.gradle.plugin:gradle-plugin-jflex:1.2.1
+org.apache.ant:ant-launcher:1.9.7
+org.apache.ant:ant:1.9.7
+org.xbib.gradle.plugin.jflex:org.xbib.gradle.plugin.jflex.gradle.plugin:1.2.1

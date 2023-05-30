@@ -1,0 +1,6 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.github.Anuken.Arc:arc-core:d8cd7a6003=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.squareup:javapoet:1.12.1=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+empty=annotationProcessor,testAnnotationProcessor

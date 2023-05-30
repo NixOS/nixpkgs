@@ -1,0 +1,15 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+junit:junit:4.12=integrationTestArtifacts,integrationTestCompileClasspath,integrationTestRuntimeClasspath,pcodeTestCompileClasspath,pcodeTestRuntimeClasspath,screenShotsCompileClasspath,screenShotsRuntimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.hamcrest:hamcrest-core:1.3=integrationTestArtifacts,integrationTestCompileClasspath,integrationTestRuntimeClasspath,pcodeTestCompileClasspath,pcodeTestRuntimeClasspath,screenShotsCompileClasspath,screenShotsRuntimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.hamcrest:hamcrest:2.2=integrationTestArtifacts,integrationTestCompileClasspath,integrationTestRuntimeClasspath,screenShotsCompileClasspath,screenShotsRuntimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.jacoco:org.jacoco.agent:0.8.8=jacocoAgent,jacocoAnt
+org.jacoco:org.jacoco.ant:0.8.8=jacocoAnt
+org.jacoco:org.jacoco.core:0.8.8=jacocoAnt
+org.jacoco:org.jacoco.report:0.8.8=jacocoAnt
+org.ow2.asm:asm-analysis:9.2=jacocoAnt
+org.ow2.asm:asm-commons:9.2=jacocoAnt
+org.ow2.asm:asm-tree:9.2=jacocoAnt
+org.ow2.asm:asm:9.2=jacocoAnt
+empty=annotationProcessor,archives,compileClasspath,default,integrationTestAnnotationProcessor,pcodeTestAnnotationProcessor,runtimeClasspath,screenShotsAnnotationProcessor,scriptsAnnotationProcessor,scriptsCompileClasspath,scriptsRuntimeClasspath,testAnnotationProcessor,testArtifacts

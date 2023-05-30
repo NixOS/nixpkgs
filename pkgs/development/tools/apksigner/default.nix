@@ -1,17 +1,19 @@
 { lib
-, stdenv
 , fetchgit
 , openjdk17_headless
 , gradle_7
-, perl
 , makeWrapper
 }:
 let
   gradle = gradle_7;
 in
-stdenv.mkDerivation rec {
+gradle.buildPackage rec {
   pname = "apksigner";
   version = "33.0.1";
+
+  gradleOpts.depsHash = "sha256-LB5gSK7CSU/qTMWFaB6N9fDRkhuE9SFXuIcc/xDIeEw=";
+  gradleOpts.lockfile = ./gradle.lockfile;
+  gradleOpts.buildscriptLockfile = ./buildscript-gradle.lockfile;
 
   src = fetchgit {
     # use pname here because the final jar uses this as the filename
@@ -40,43 +42,7 @@ stdenv.mkDerivation rec {
     sed -i -e '/conscrypt/s/testImplementation/implementation/' build.gradle
   '';
 
-  # fake build to pre-download deps into fixed-output derivation
-  deps = stdenv.mkDerivation {
-    pname = "${pname}-deps";
-    inherit src version postPatch;
-    nativeBuildInputs = [ gradle perl ];
-    buildPhase = ''
-      export GRADLE_USER_HOME=$(mktemp -d)
-      gradle --no-daemon build
-    '';
-    # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
-    installPhase = ''
-      find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
-        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/''${\($5 =~ s/okio-jvm/okio/r)}" #e' \
-        | sh
-    '';
-    # Don't move info to share/
-    forceShare = [ "dummy" ];
-    outputHashMode = "recursive";
-    # Downloaded jars differ by platform
-    outputHash = "sha256-cs95YI0SpvzCo5x5trMXlVUGepNKIH9oZ95AfLErKIU=";
-  };
-
-  preBuild = ''
-    # Use the local packages from -deps
-    sed -i -e '/repositories {/a maven { url uri("${deps}") }' build.gradle
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-
-    export GRADLE_USER_HOME=$(mktemp -d)
-    gradle --offline --no-daemon build
-
-    runHook postBuild
-  '';
-
-  nativeBuildInputs = [ gradle makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     install -Dm444 build/libs/apksigner.jar -t $out/lib

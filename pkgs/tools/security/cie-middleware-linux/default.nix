@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , fetchFromGitHub
 , makeWrapper
 , strip-nondeterminism
@@ -34,39 +33,20 @@ let
   # Shared libraries needed by the Java application
   libraries = lib.makeLibraryPath [ ghostscript ];
 
-  # Fixed-output derivation that fetches the Java dependencies
-  javaDeps = stdenv.mkDerivation {
-    pname = "cie-java-deps";
-    inherit src version;
-
-    nativeBuildInputs = [ gradle ];
-
-    buildPhase = ''
-      # Run the fetchDeps task
-      export GRADLE_USER_HOME=$(mktemp -d)
-      gradle --no-daemon -b cie-java/build.gradle fetchDeps
-    '';
-
-    installPhase = ''
-      # Build a tree compatible with the maven repository format
-      pushd "$GRADLE_USER_HOME/caches/modules-2/files-2.1"
-      find -type f | awk -F/ -v OFS=/ -v out="$out" '{
-        infile = $0
-        gsub(/\./, "/", $2)
-        system("install -m644 -D "infile" "out"/"$2"/"$3"/"$4"/"$6)
-      }'
-      popd
-    '';
-
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-WzT5vYF9yCMU2A7EkLZyjgWrN3gD7pnkPXc3hDFqpD8=";
-  };
-
 in
 
-stdenv.mkDerivation {
+gradle.buildPackage {
   inherit pname src version;
+
+  gradleOpts = {
+    depsHash = "sha256-cdssAdKN5riOT6kTMYzBa+r4NmFdRjhdeX/Id0Xv0eM=";
+    lockfileTree = ./lockfiles;
+    flags = [
+      "--parallel"
+      "-Dorg.gradle.java.home=${jre}"
+      "--build-file" "cie-java/build.gradle"
+    ];
+  };
 
   hardeningDisable = [ "format" ];
 
@@ -77,7 +57,6 @@ stdenv.mkDerivation {
     meson
     ninja
     pkg-config
-    gradle
     strip-nondeterminism
   ];
 
@@ -101,25 +80,12 @@ stdenv.mkDerivation {
   # libraries and the Java application builds.
   preConfigure = "pushd libs";
 
-  postBuild = ''
+  preBuild = ''
+    ninjaBuildPhase
     popd
+  '';
 
-    # Use the packages in javaDeps for both plugins and dependencies
-    localRepo="maven { url uri('${javaDeps}') }"
-    sed -i cie-java/settings.gradle -e "1i \
-      pluginManagement { repositories { $localRepo } }"
-    substituteInPlace cie-java/build.gradle \
-      --replace 'mavenCentral()' "$localRepo"
-
-    # Build the Java application
-    export GRADLE_USER_HOME=$(mktemp -d)
-    gradle standalone \
-      --no-daemon \
-      --offline \
-      --parallel \
-      --info -Dorg.gradle.java.home=${jre} \
-      --build-file cie-java/build.gradle
-
+  postBuild = ''
     pushd libs/build
   '';
 
@@ -152,8 +118,6 @@ stdenv.mkDerivation {
     strip-nondeterminism "$out/share/cieid/cieid.jar"
   '';
 
-  passthru = { inherit javaDeps; };
-
   meta = with lib; {
     homepage = "https://github.com/M0Rf30/cie-middleware-linux";
     description = "Middleware for the Italian Electronic Identity Card (CIE)";
@@ -170,5 +134,7 @@ stdenv.mkDerivation {
     # Note: fails due to a lot of broken type conversions
     badPlatforms = platforms.darwin;
     maintainers = with maintainers; [ rnhmjoj ];
+    # segfaults during build
+    broken = true;
   };
 }

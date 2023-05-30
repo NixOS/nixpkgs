@@ -1,0 +1,5 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.google.code.gson:gson:2.9.0=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+empty=annotationProcessor,archives,testAnnotationProcessor

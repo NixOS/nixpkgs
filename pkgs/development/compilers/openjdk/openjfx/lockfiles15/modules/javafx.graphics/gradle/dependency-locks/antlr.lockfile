@@ -1,0 +1,10 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.ibm.icu:icu4j:61.1
+org.abego.treelayout:org.abego.treelayout.core:1.0.3
+org.antlr:ST4:4.1
+org.antlr:antlr-runtime:3.5.2
+org.antlr:antlr4-runtime:4.7.2
+org.antlr:antlr4:4.7.2
+org.glassfish:javax.json:1.0.4

@@ -1,4 +1,4 @@
-{ jdk8, jdk11, jdk17 }:
+{ jdk8, jdk11, jdk17, callPackage }:
 
 rec {
   gen =
@@ -36,7 +36,7 @@ rec {
       javaToolchains ? [ ]
     }:
 
-    stdenv.mkDerivation rec {
+    let self = stdenv.mkDerivation rec {
       pname = "gradle";
       inherit version;
 
@@ -120,7 +120,9 @@ rec {
         license = licenses.asl20;
         maintainers = with maintainers; [ lorenzleutgeb liff ];
       };
-    };
+
+      passthru.buildPackage = callPackage ../../../../build-support/gradle/build.nix { gradle = self; };
+    }; in self;
 
   # NOTE: Default JDKs that are hardcoded below must be LTS versions
   # and respect the compatibility matrix at

@@ -5,7 +5,6 @@
 , fetchFromGitHub
 , gradle
 , jdk
-, perl
 
 # for arc
 , SDL2
@@ -107,40 +106,62 @@ let
     sed -i '/robo(vm|VM)/d' Mindustry/build.gradle
     rm Mindustry/ios/build.gradle
   '';
-
-  # fake build to pre-download deps into fixed-output derivation
-  deps = stdenv.mkDerivation {
-    pname = "${pname}-deps";
-    inherit version unpackPhase patches;
-    postPatch = cleanupMindustrySrc;
-
-    nativeBuildInputs = [ gradle perl ];
-    # Here we download dependencies for both the server and the client so
-    # we only have to specify one hash for 'deps'. Deps can be garbage
-    # collected after the build, so this is not really an issue.
-    buildPhase = ''
-      pushd Mindustry
-      export GRADLE_USER_HOME=$(mktemp -d)
-      gradle --no-daemon resolveDependencies
-      popd
-    '';
-    # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
-    installPhase = ''
-      find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
-        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
-        | sh
-    '';
-    outputHashMode = "recursive";
-    outputHash = "sha256-vZc8T7Hk1DLHYgqj8zxKUP2NPXumRxuheMk21Sh2TZY=";
-  };
-
 in
 assert lib.assertMsg (enableClient || enableServer)
   "mindustry: at least one of 'enableClient' and 'enableServer' must be true";
-stdenv.mkDerivation rec {
+gradle.buildPackage {
   inherit pname version unpackPhase patches;
 
-  postPatch = cleanupMindustrySrc;
+  gradleOpts = {
+    depsHash = "sha256-4PoM8dfDc7KGViPN+9jora/0b4Mh2O8XDbCt7+J1Zp4=";
+    lockfileTree = ./lockfiles;
+    flags = [ "-Pbuildversion=${buildVersion}" ];
+    depsAttrs.initialBuildPhase = ''
+      runHook preBuild
+    '' + lib.optionalString enableServer ''
+      pushd Mindustry
+      "''${gradle[@]}" --write-locks nixSupport_downloadDeps
+      popd
+    '' + lib.optionalString enableClient ''
+      pushd Arc
+      "''${gradle[@]}" --write-locks nixSupport_downloadDeps
+      popd
+    '' + ''
+      rm -rf $GRADLE_USER_HOME
+      export GRADLE_USER_HOME=$(mktemp -d)
+    '' + lib.optionalString enableServer ''
+      pushd Mindustry
+      "''${gradle[@]}" nixSupport_downloadDeps
+      popd
+    '' + lib.optionalString enableClient ''
+      pushd Arc
+      "''${gradle[@]}" nixSupport_downloadDeps
+      popd
+    '' + ''
+      runHook postBuild
+    '';
+    depsAttrs.buildPhase = ''
+      runHook preBuild
+    '' + lib.optionalString enableServer ''
+      pushd Mindustry
+      "''${gradle[@]}" nixSupport_downloadDeps
+      popd
+    '' + lib.optionalString enableClient ''
+      pushd Arc
+      "''${gradle[@]}" nixSupport_downloadDeps
+      popd
+    '' + ''
+      runHook postBuild
+    '';
+  };
+  doCheck = false;
+
+  postPatch = cleanupMindustrySrc + ''
+    # point to offline repo
+    sed -ie "s#wget.*freetype.* -O #cp ${freetypeSource} #" Arc/extensions/freetype/build.gradle
+    sed -ie "/curl.*glew/{;s#curl -o #cp ${glewSource} #;s# -L http.*\.zip##;}" Arc/backends/backend-sdl/build.gradle
+    sed -ie "/curl.*sdlmingw/{;s#curl -o #cp ${SDLmingwSource} #;s# -L http.*\.tar.gz##;}" Arc/backends/backend-sdl/build.gradle
+  '';
 
   buildInputs = lib.optionals enableClient [
     SDL2
@@ -149,7 +170,6 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [
     pkg-config
-    gradle
     makeWrapper
     jdk
   ] ++ lib.optionals enableClient [
@@ -159,23 +179,14 @@ stdenv.mkDerivation rec {
 
   desktopItems = lib.optional enableClient desktopItem;
 
-  buildPhase = with lib; ''
-    export GRADLE_USER_HOME=$(mktemp -d)
-
-    # point to offline repo
-    sed -ie "1ipluginManagement { repositories { maven { url '${deps}' } } }; " Mindustry/settings.gradle
-    sed -ie "s#mavenLocal()#mavenLocal(); maven { url '${deps}' }#g" Mindustry/build.gradle
-    sed -ie "s#mavenCentral()#mavenCentral(); maven { url '${deps}' }#g" Arc/build.gradle
-    sed -ie "s#wget.*freetype.* -O #cp ${freetypeSource} #" Arc/extensions/freetype/build.gradle
-    sed -ie "/curl.*glew/{;s#curl -o #cp ${glewSource} #;s# -L http.*\.zip##;}" Arc/backends/backend-sdl/build.gradle
-    sed -ie "/curl.*sdlmingw/{;s#curl -o #cp ${SDLmingwSource} #;s# -L http.*\.tar.gz##;}" Arc/backends/backend-sdl/build.gradle
-
-    pushd Mindustry
-  '' + optionalString enableClient ''
-
+  buildPhase = ''
+    runHook preBuild
+    cd Mindustry
+  '' + lib.optionalString enableClient ''
+    pwd
     pushd ../Arc
-    gradle --offline --no-daemon jnigenBuild -Pbuildversion=${buildVersion}
-    gradle --offline --no-daemon jnigenJarNativesDesktop -Pbuildversion=${buildVersion}
+    ''${gradle[@]} jnigenBuild
+    ''${gradle[@]} jnigenJarNativesDesktop
     glewlib=${lib.getLib selectedGlew}/lib/libGLEW.so
     sdllib=${lib.getLib SDL2}/lib/libSDL2.so
     patchelf backends/backend-sdl/libs/linux64/libsdl-arc*.so \
@@ -183,12 +194,14 @@ stdenv.mkDerivation rec {
       --add-needed $sdllib
     # Put the freshly-built libraries where the pre-built libraries used to be:
     cp arc-core/libs/*/* natives/natives-desktop/libs/
-    cp extensions/freetype/libs/*/* natives/natives-freetype-desktop/libs/
+    p extensions/freetype/libs/*/* natives/natives-freetype-desktop/libs/
     popd
 
-    gradle --offline --no-daemon desktop:dist -Pbuildversion=${buildVersion}
-  '' + optionalString enableServer ''
-    gradle --offline --no-daemon server:dist -Pbuildversion=${buildVersion}
+    ''${gradle[@]} desktop:dist
+  '' + lib.optionalString enableServer ''
+    ''${gradle[@]} server:dist
+  '' + ''
+    runHook postBuild
   '';
 
   installPhase = with lib; ''
@@ -241,6 +254,8 @@ stdenv.mkDerivation rec {
     platforms = platforms.x86_64;
     # Hash mismatch on darwin:
     # https://github.com/NixOS/nixpkgs/pull/105590#issuecomment-737120293
-    broken = stdenv.isDarwin;
+    # ---
+    # Arc natives aren't being built, so the build phase fails
+    broken = true;
   };
 }

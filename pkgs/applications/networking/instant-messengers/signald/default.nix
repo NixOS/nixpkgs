@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, fetchFromGitLab, jdk17_headless, coreutils, gradle, git, perl
-, makeWrapper, fetchpatch, substituteAll, jre_minimal
+{ lib, stdenv, fetchFromGitLab, jdk17_headless, coreutils, gradle, git
+, makeWrapper, jre_minimal
 }:
 
 # NOTE: when updating the package, please check if some of the hacks in `deps.installPhase`
@@ -34,76 +34,54 @@ let
       "jdk.unsupported"
     ];
   };
-
-  # fake build to pre-download deps into fixed-output derivation
-  deps = stdenv.mkDerivation {
-    pname = "${pname}-deps";
-    inherit src version;
-    nativeBuildInputs = [ gradle perl ];
-    patches = [ ./0001-Fetch-buildconfig-during-gradle-build-inside-Nix-FOD.patch ];
-    buildPhase = ''
-      export GRADLE_USER_HOME=$(mktemp -d)
-      gradle --no-daemon build
-    '';
-    installPhase = ''
-      find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
-        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
-        | sh -x
-
-      # WARNING: don't try this at home and wear safety-goggles while working with this!
-      # We patch around in the dependency tree to resolve some spurious dependency resolution errors.
-      # Whenever this package gets updated, please check if some of these hacks are obsolete!
-
-      # Mimic existence of okio-3.2.0.jar. Originally known as okio-jvm-3.2.0 (and renamed),
-      # but gradle doesn't detect such renames, only fetches the latter and then fails
-      # in `signald.buildPhase` because it cannot find `okio-3.2.0.jar`.
-      pushd $out/com/squareup/okio/okio/3.2.0 &>/dev/null
-        cp -v ../../okio-jvm/3.2.0/okio-jvm-3.2.0.jar okio-3.2.0.jar
-      popd &>/dev/null
-
-      # For some reason gradle fetches 2.14.1 instead of 2.14.0 here even though 2.14.0 is required
-      # according to `./gradlew -q dependencies`, so we pretend to have 2.14.0 available here.
-      # According to the diff in https://github.com/FasterXML/jackson-dataformats-text/compare/jackson-dataformats-text-2.14.0...jackson-dataformats-text-2.14.1
-      # the only relevant change is in the code itself (and in the tests/docs), so this seems
-      # binary-compatible.
-      cp -v \
-        $out/com/fasterxml/jackson/dataformat/jackson-dataformat-toml/2.14.1/jackson-dataformat-toml-2.14.1.jar \
-        $out/com/fasterxml/jackson/dataformat/jackson-dataformat-toml/2.14.0/jackson-dataformat-toml-2.14.0.jar
-    '';
-    # Don't move info to share/
-    forceShare = [ "dummy" ];
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    # Downloaded jars differ by platform
-    outputHash = {
-      x86_64-linux = "sha256-9DHykkvazVBN2kfw1Pbejizk/R18v5w8lRBHZ4aXL5Q=";
-      aarch64-linux = "sha256-RgAiRbUojBc+9RN/HpAzzpTjkjZ6q+jebDsqvah5XBw=";
-    }.${stdenv.system} or (throw "Unsupported platform");
-  };
-
-in stdenv.mkDerivation {
+  info = {
+    # lockfiles, hashes and targets differ per system
+    # because of a native dependency on libsignal-service-java
+    x86_64-linux = {
+      SIGNALD_TARGET = "x86_64-unknown-linux-gnu";
+      depsHash = "sha256-lOXh3Fk0/DGq8C6zFYmQgANW6x9OHwxErtozpnQ/81s=";
+      lockfile = ./x86_64-linux/gradle.lockfile;
+      buildscriptLockfile = ./x86_64-linux/buildscript-gradle.lockfile;
+    };
+    # targets supported by upstream
+    # (see https://gitlab.com/signald/libraries/libsignal-service-java/-/packages)
+    # aarch64-linux = {
+    #   SIGNALD_TARGET = "aarch64-unknown-linux-gnu";
+    # };
+    # x86_64-darwin = {
+    #   SIGNALD_TARGET = "x86_64-apple-darwin";
+    # };
+    # aarch64-darwin = {
+    #   SIGNALD_TARGET = "aarch64-apple-darwin";
+    # };
+    # SIGNALD_TARGET = "arm-unknown-linux-gnueabi";
+    # SIGNALD_TARGET = "armv7-unknown-linux-gnueabihf";
+    # SIGNALD_TARGET = "arm-unknown-linux-gnueabihf";
+    # SIGNALD_TARGET = "unknown-linux-musl";
+  }.${stdenv.system} or (throw "Unsupported platform");
+in gradle.buildPackage {
   inherit pname src version;
+  VERSION = version;
 
-  patches = [
-    (substituteAll {
-      src = ./0002-buildconfig-local-deps-fixes.patch;
-      inherit deps;
-    })
-  ];
+  gradleOpts.buildSubcommand = "distTar";
 
-  passthru = {
-    # Mostly for debugging purposes.
-    inherit deps;
+  inherit (info) SIGNALD_TARGET;
+
+  gradleOpts = {
+    inherit (info) depsHash lockfile buildscriptLockfile;
   };
 
-  buildPhase = ''
-    runHook preBuild
+  # WARNING: don't try this at home and wear safety-goggles while working with this!
+  # We patch around in the dependency tree to resolve some spurious dependency resolution errors.
+  # Whenever this package gets updated, please check if some of these hacks are obsolete!
 
-    export GRADLE_USER_HOME=$(mktemp -d)
-
-    gradle --offline --no-daemon distTar
-
-    runHook postBuild
+  # Mimic existence of okio-3.2.0.jar. Originally known as okio-jvm-3.2.0 (and renamed),
+  # but gradle doesn't detect such renames, only fetches the latter and then fails
+  # in `signald.buildPhase` because it cannot find `okio-3.2.0.jar`.
+  gradleOpts.depsAttrs.postInstall = ''
+    pushd $out/com/squareup/okio/okio/3.2.0 &>/dev/null
+    cp -v ../../okio-jvm/3.2.0/okio-jvm-3.2.0.jar okio-3.2.0.jar
+    popd &>/dev/null
   '';
 
   installPhase = ''
@@ -118,9 +96,7 @@ in stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  nativeBuildInputs = [ git gradle makeWrapper ];
-
-  doCheck = true;
+  nativeBuildInputs = [ git makeWrapper ];
 
   meta = with lib; {
     description = "Unofficial daemon for interacting with Signal";

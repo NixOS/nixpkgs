@@ -1,0 +1,37 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.android.tools.build:builder-model:0.9.2=classpath
+com.android.tools.build:builder-test-api:0.9.2=classpath
+com.android.tools.build:builder:0.9.2=classpath
+com.android.tools.build:gradle:0.9.2=classpath
+com.android.tools.build:manifest-merger:22.7.2=classpath
+com.android.tools.ddms:ddmlib:22.7.2=classpath
+com.android.tools.external.lombok:lombok-ast:0.2.2=classpath
+com.android.tools.layoutlib:layoutlib-api:22.7.2=classpath
+com.android.tools.lint:lint-api:22.7.2=classpath
+com.android.tools.lint:lint-checks:22.7.2=classpath
+com.android.tools.lint:lint:22.7.2=classpath
+com.android.tools:common:22.7.2=classpath
+com.android.tools:dvlib:22.7.2=classpath
+com.android.tools:sdk-common:22.7.2=classpath
+com.android.tools:sdklib:22.7.2=classpath
+com.google.guava:guava:15.0=classpath
+com.squareup:javawriter:2.2.1=classpath
+commons-codec:commons-codec:1.4=classpath
+commons-logging:commons-logging:1.1.1=classpath
+kxml2:kxml2:2.3.0=classpath
+net.sf.kxml:kxml2:2.3.0=classpath
+net.sf.proguard:proguard-base:4.10=classpath
+net.sf.proguard:proguard-gradle:4.10=classpath
+org.apache.commons:commons-compress:1.0=classpath
+org.apache.httpcomponents:httpclient:4.1.1=classpath
+org.apache.httpcomponents:httpcore:4.1=classpath
+org.apache.httpcomponents:httpmime:4.1=classpath
+org.bouncycastle:bcpkix-jdk15on:1.48=classpath
+org.bouncycastle:bcprov-jdk15on:1.48=classpath
+org.eclipse.jdt.core.compiler:ecj:4.2.2=classpath
+org.ow2.asm:asm-analysis:4.0=classpath
+org.ow2.asm:asm-tree:4.0=classpath
+org.ow2.asm:asm:4.0=classpath
+empty=

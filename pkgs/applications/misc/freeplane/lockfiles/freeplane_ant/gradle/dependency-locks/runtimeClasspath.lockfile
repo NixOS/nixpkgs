@@ -1,0 +1,5 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+org.apache.ant:ant-launcher:1.10.9
+org.apache.ant:ant:1.10.9

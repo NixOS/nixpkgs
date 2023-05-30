@@ -1,0 +1,32 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+commons-io:commons-io:1.3.1
+commons-logging:commons-logging:1.0.4
+org.apache.pdfbox:fontbox:2.0.23
+org.apache.xmlgraphics:batik-anim:1.14
+org.apache.xmlgraphics:batik-awt-util:1.14
+org.apache.xmlgraphics:batik-bridge:1.14
+org.apache.xmlgraphics:batik-codec:1.14
+org.apache.xmlgraphics:batik-constants:1.14
+org.apache.xmlgraphics:batik-css:1.14
+org.apache.xmlgraphics:batik-dom:1.14
+org.apache.xmlgraphics:batik-ext:1.14
+org.apache.xmlgraphics:batik-gui-util:1.14
+org.apache.xmlgraphics:batik-gvt:1.14
+org.apache.xmlgraphics:batik-i18n:1.14
+org.apache.xmlgraphics:batik-parser:1.14
+org.apache.xmlgraphics:batik-script:1.14
+org.apache.xmlgraphics:batik-shared-resources:1.14
+org.apache.xmlgraphics:batik-svg-dom:1.14
+org.apache.xmlgraphics:batik-svggen:1.14
+org.apache.xmlgraphics:batik-swing:1.14
+org.apache.xmlgraphics:batik-transcoder:1.14
+org.apache.xmlgraphics:batik-util:1.14
+org.apache.xmlgraphics:batik-xml:1.14
+org.apache.xmlgraphics:fop-core:2.6
+org.apache.xmlgraphics:fop-events:2.6
+org.apache.xmlgraphics:fop-util:2.6
+org.apache.xmlgraphics:xmlgraphics-commons:2.6
+xml-apis:xml-apis-ext:1.3.04
+xml-apis:xml-apis:1.4.01

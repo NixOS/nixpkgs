@@ -1,0 +1,16 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.badlogicgames.gdx:gdx-backend-lwjgl3:1.10.0
+com.badlogicgames.gdx:gdx-freetype-platform:1.10.0
+com.badlogicgames.gdx:gdx-freetype:1.10.0
+com.badlogicgames.gdx:gdx-platform:1.10.0
+com.badlogicgames.gdx:gdx:1.10.0
+com.badlogicgames.jlayer:jlayer:1.0.1-gdx
+org.jcraft:jorbis:0.0.17
+org.lwjgl:lwjgl-glfw:3.2.3
+org.lwjgl:lwjgl-jemalloc:3.2.3
+org.lwjgl:lwjgl-openal:3.2.3
+org.lwjgl:lwjgl-opengl:3.2.3
+org.lwjgl:lwjgl-tinyfd:3.2.3
+org.lwjgl:lwjgl:3.2.3

@@ -1,0 +1,14 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+ch.qos.logback:logback-classic:1.2.3=default,runtimeClasspath,testRuntimeClasspath
+ch.qos.logback:logback-core:1.2.3=default,runtimeClasspath,testRuntimeClasspath
+commons-collections:commons-collections:3.2.2=default,runtimeClasspath,testRuntimeClasspath
+junit:junit:4.12=testCompileClasspath,testRuntimeClasspath
+net.java.dev.jna:jna-platform:5.5.0=compileClasspath,comprise
+net.java.dev.jna:jna:5.5.0=compileClasspath,comprise
+org.hamcrest:hamcrest-core:1.3=testCompileClasspath,testRuntimeClasspath
+org.jmdns:jmdns:3.5.5=default,runtimeClasspath,testRuntimeClasspath
+org.osgi:osgi.core:8.0.0=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.slf4j:slf4j-api:1.7.36=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+empty=annotationProcessor,archives,baseline,testAnnotationProcessor

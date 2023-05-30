@@ -1,0 +1,7 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.github.javaparser:javaparser-core:3.14.14=classpath
+com.github.libgdx.gdx-jnigen:gdx-jnigen-gradle:dffc32eecbf77aad264991ea44f1767a58cbee9d=classpath
+com.github.libgdx.gdx-jnigen:gdx-jnigen:28dd11fa4c33a7ae9e58897912b52ba7d53d54fe=classpath
+empty=

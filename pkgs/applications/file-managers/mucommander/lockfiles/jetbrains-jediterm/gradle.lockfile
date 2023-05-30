@@ -1,0 +1,26 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.google.code.findbugs:jsr305:3.0.2=compileClasspath,comprise
+com.google.errorprone:error_prone_annotations:2.11.0=compileClasspath,comprise
+com.google.guava:failureaccess:1.0.1=compileClasspath,comprise
+com.google.guava:guava:31.1-jre=compileClasspath,comprise
+com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava=compileClasspath,comprise
+com.google.j2objc:j2objc-annotations:1.3=compileClasspath,comprise
+log4j:log4j:1.2.17=compileClasspath,comprise,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+net.java.dev.jna:jna-platform:5.10.0=compileClasspath,comprise
+net.java.dev.jna:jna:5.10.0=compileClasspath,comprise
+org.checkerframework:checker-qual:3.12.0=comprise
+org.checkerframework:checker-qual:3.24.0=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.jetbrains.intellij.deps:trove4j:1.0.20200330=default,runtimeClasspath,testRuntimeClasspath
+org.jetbrains.jediterm:jediterm-pty:2.69=compileClasspath,comprise
+org.jetbrains.jediterm:jediterm-typeahead:2.69=compileClasspath,comprise
+org.jetbrains.kotlin:kotlin-stdlib-common:1.7.10=compileClasspath,comprise
+org.jetbrains.kotlin:kotlin-stdlib:1.7.10=compileClasspath,comprise
+org.jetbrains.pty4j:pty4j:0.12.3=compileClasspath,comprise
+org.jetbrains.pty4j:purejavacomm:0.0.11.1=compileClasspath,comprise
+org.jetbrains:annotations:20.1.0=comprise
+org.jetbrains:annotations:23.0.0=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.osgi:osgi.core:8.0.0=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.slf4j:slf4j-api:1.7.36=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+empty=annotationProcessor,archives,baseline,testAnnotationProcessor

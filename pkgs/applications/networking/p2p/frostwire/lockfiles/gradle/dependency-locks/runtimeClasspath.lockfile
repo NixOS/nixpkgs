@@ -1,0 +1,12 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.frostwire:jlibtorrent:1.2.0.18-RC5
+com.google.code.gson:gson:2.8.4
+com.google.re2j:re2j:1.2
+com.googlecode.gettext-commons:gettext-commons:0.9.8
+com.h2database:h2:1.4.193
+com.squareup.okhttp3:okhttp:3.10.0
+com.squareup.okio:okio:1.14.0
+net.jthink:jaudiotagger:2.2.5
+org.apache.lucene:lucene-core:3.6.2

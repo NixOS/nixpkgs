@@ -1,0 +1,10 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.google.protobuf:protobuf-javalite:3.8.0=compileClasspath,compileProtoPath,default,runtimeClasspath,testCompileClasspath,testCompileProtoPath,testRuntimeClasspath
+com.google.protobuf:protoc:3.8.0=protobufToolsLocator_protoc
+junit:junit:4.13=testCompileClasspath,testCompileProtoPath,testRuntimeClasspath
+org.bouncycastle:bcprov-jdk15on:1.68=testCompileClasspath,testCompileProtoPath,testRuntimeClasspath
+org.conscrypt:conscrypt-openjdk-uber:2.5.1=compileClasspath,compileProtoPath,default,runtimeClasspath,testCompileClasspath,testCompileProtoPath,testRuntimeClasspath
+org.hamcrest:hamcrest-core:1.3=testCompileClasspath,testCompileProtoPath,testRuntimeClasspath
+empty=annotationProcessor,archives,protobuf,testAnnotationProcessor,testProtobuf

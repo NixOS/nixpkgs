@@ -1,0 +1,39 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.diffplug.durian:durian-collect:1.2.0=classpath
+com.diffplug.durian:durian-core:1.2.0=classpath
+com.diffplug.durian:durian-io:1.2.0=classpath
+com.diffplug.spotless:com.diffplug.spotless.gradle.plugin:6.10.0=classpath
+com.diffplug.spotless:spotless-lib-extra:2.29.0=classpath
+com.diffplug.spotless:spotless-lib:2.29.0=classpath
+com.diffplug.spotless:spotless-plugin-gradle:6.10.0=classpath
+com.fasterxml.jackson.core:jackson-annotations:2.11.2=classpath
+com.fasterxml.jackson.core:jackson-core:2.11.2=classpath
+com.fasterxml.jackson.core:jackson-databind:2.11.2=classpath
+com.github.johnrengelman.shadow:com.github.johnrengelman.shadow.gradle.plugin:7.1.2=classpath
+com.googlecode.concurrent-trees:concurrent-trees:2.6.1=classpath
+com.googlecode.javaewah:JavaEWAH:1.1.12=classpath
+commons-io:commons-io:2.11.0=classpath
+gradle.plugin.com.github.johnrengelman:shadow:7.1.2=classpath
+gradle.plugin.org.mikeneck:graalvm-native-image-plugin:1.4.1=classpath
+org.apache.ant:ant-launcher:1.10.11=classpath
+org.apache.ant:ant:1.10.11=classpath
+org.apache.logging.log4j:log4j-api:2.17.1=classpath
+org.apache.logging.log4j:log4j-core:2.17.1=classpath
+org.codehaus.groovy:groovy-xml:3.0.10=classpath
+org.codehaus.groovy:groovy:3.0.10=classpath
+org.codehaus.plexus:plexus-utils:3.4.1=classpath
+org.eclipse.jgit:org.eclipse.jgit:5.13.0.202109080827-r=classpath
+org.jdom:jdom2:2.0.6=classpath
+org.jetbrains.kotlin:kotlin-stdlib-common:1.3.21=classpath
+org.jetbrains.kotlin:kotlin-stdlib:1.3.21=classpath
+org.jetbrains:annotations:13.0=classpath
+org.mikeneck.graalvm-native-image:org.mikeneck.graalvm-native-image.gradle.plugin:1.4.1=classpath
+org.ow2.asm:asm-analysis:9.2=classpath
+org.ow2.asm:asm-commons:9.2=classpath
+org.ow2.asm:asm-tree:9.2=classpath
+org.ow2.asm:asm:9.2=classpath
+org.slf4j:slf4j-api:1.7.30=classpath
+org.vafer:jdependency:2.7.0=classpath
+empty=

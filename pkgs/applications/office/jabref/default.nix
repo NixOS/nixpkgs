@@ -9,22 +9,16 @@
 , gtk3
 , jdk
 , gradle
-, perl
 }:
-
 let
-  versionReplace = {
-    easybind = {
-      snapshot = "2.2.1-SNAPSHOT";
-      pin = "2.2.1-20230117.075740-16";
-    };
-    afterburner = {
-      snapshot = "testmoduleinfo-SNAPSHOT";
-      pin = "0e337d8773";
-    };
-  };
+  info = if stdenv.isx86_64 then {
+    platformFlag = "-Dos.arch=amd64";
+    depsHash = "sha256-zjvcnK3ssWXoGZtc0sgwWRhygIJ5bapFNFh1F9Ewe9k=";
+    lockfileTree = ./amd64;
+    # -Dos.arch=aarch64
+  } else (throw "Unsupported platform");
 in
-stdenv.mkDerivation rec {
+gradle.buildPackage rec {
   version = "5.9";
   pname = "jabref";
 
@@ -49,74 +43,31 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  deps = stdenv.mkDerivation {
-    pname = "${pname}-deps";
-    inherit src version postPatch;
-
-    nativeBuildInputs = [ gradle perl ];
-    buildPhase = ''
-      export GRADLE_USER_HOME=$(mktemp -d)
-      gradle --no-daemon downloadDependencies -Dos.arch=amd64
-      gradle --no-daemon downloadDependencies -Dos.arch=aarch64
-    '';
-    # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
-    installPhase = ''
-      find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
-        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/''${\($5 =~ s/-jvm//r)}" #e' \
-        | sh
-      mv $out/com/tobiasdiez/easybind/${versionReplace.easybind.pin} \
-        $out/com/tobiasdiez/easybind/${versionReplace.easybind.snapshot}
-    '';
-    # Don't move info to share/
-    forceShare = [ "dummy" ];
-    outputHashMode = "recursive";
-    outputHash = "sha256-s6GA8iT3UEVuELBgpBvzPJlVX+9DpfOQrEd3KIth8eA=";
+  gradleOpts = {
+    inherit (info) depsHash lockfileTree;
+    flags = [
+      info.platformFlag
+      "-PprojVersion=${version}"
+      "-PprojVersionInfo=${version} NixOS"
+      "-Dorg.gradle.java.home=${jdk}"
+      "--debug"
+    ];
+    buildSubcommand = "assemble";
   };
-
-  postPatch = ''
-    # Pin the version
-    substituteInPlace build.gradle \
-      --replace 'com.github.JabRef:afterburner.fx:${versionReplace.afterburner.snapshot}' \
-        'com.github.JabRef:afterburner.fx:${versionReplace.afterburner.pin}' \
-      --replace 'com.tobiasdiez:easybind:${versionReplace.easybind.snapshot}' \
-        'com.tobiasdiez:easybind:${versionReplace.easybind.pin}'
-  '';
 
   preBuild = ''
     # Include CSL styles and locales in our build
     cp -r buildres/csl/* src/main/resources/
-
-    # Use the local packages from -deps
-    sed -i -e '/repositories {/a maven { url uri("${deps}") }' \
-      build.gradle \
-      buildSrc/build.gradle \
-      settings.gradle
   '';
 
   nativeBuildInputs = [
     jdk
-    gradle
     wrapGAppsHook
     copyDesktopItems
     unzip
   ];
 
   buildInputs = [ gtk3 ];
-
-  buildPhase = ''
-    runHook preBuild
-
-    export GRADLE_USER_HOME=$(mktemp -d)
-    gradle \
-      --offline \
-      --no-daemon \
-      -PprojVersion="${version}" \
-      -PprojVersionInfo="${version} NixOS" \
-      -Dorg.gradle.java.home=${jdk} \
-      assemble
-
-    runHook postBuild
-  '';
 
   dontWrapGApps = true;
 
@@ -169,5 +120,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ gebner linsui ];
+    broken = true;
   };
 }

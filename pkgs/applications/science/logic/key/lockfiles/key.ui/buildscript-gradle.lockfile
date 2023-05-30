@@ -1,0 +1,18 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.github.johnrengelman.shadow:com.github.johnrengelman.shadow.gradle.plugin:7.1.0=classpath
+commons-io:commons-io:2.11.0=classpath
+gradle.plugin.com.github.johnrengelman:shadow:7.1.0=classpath
+org.apache.ant:ant-launcher:1.10.11=classpath
+org.apache.ant:ant:1.10.11=classpath
+org.apache.logging.log4j:log4j-api:2.17.1=classpath
+org.apache.logging.log4j:log4j-core:2.17.1=classpath
+org.codehaus.plexus:plexus-utils:3.4.1=classpath
+org.jdom:jdom2:2.0.6=classpath
+org.ow2.asm:asm-analysis:9.2=classpath
+org.ow2.asm:asm-commons:9.2=classpath
+org.ow2.asm:asm-tree:9.2=classpath
+org.ow2.asm:asm:9.2=classpath
+org.vafer:jdependency:2.7.0=classpath
+empty=

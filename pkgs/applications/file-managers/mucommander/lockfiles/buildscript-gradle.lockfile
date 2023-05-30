@@ -1,0 +1,38 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+biz.aQute.bnd:biz.aQute.bnd.embedded-repo:6.4.0=classpath
+biz.aQute.bnd:biz.aQute.bnd.gradle:6.4.0=classpath
+biz.aQute.bnd:biz.aQute.bnd.util:6.4.0=classpath
+biz.aQute.bnd:biz.aQute.bndlib:6.4.0=classpath
+biz.aQute.bnd:biz.aQute.repository:6.4.0=classpath
+biz.aQute.bnd:biz.aQute.resolve:6.4.0=classpath
+com.athaydes.osgi-run:com.athaydes.osgi-run.gradle.plugin:1.6.0=classpath
+com.formdev:flatlaf:1.0=classpath
+com.googlecode.javaewah:JavaEWAH:1.1.13=classpath
+com.thoughtworks.xstream:xstream:1.4.19=classpath
+commons-beanutils:commons-beanutils:1.9.4=classpath
+commons-logging:commons-logging:1.2=classpath
+edu.sc.seis.launch4j:edu.sc.seis.launch4j.gradle.plugin:2.5.4=classpath
+edu.sc.seis.launch4j:launch4j:2.5.4=classpath
+gradle.plugin.com.athaydes.gradle.osgi:osgi-run-core:1.6.0=classpath
+io.github.x-stream:mxparser:1.2.2=classpath
+net.sf.launch4j:launch4j:3.14=classpath
+org.ajoberstar.grgit:grgit-core:5.0.0=classpath
+org.ajoberstar.grgit:grgit-gradle:5.0.0=classpath
+org.ajoberstar.grgit:org.ajoberstar.grgit.gradle.plugin:5.0.0=classpath
+org.eclipse.jgit:org.eclipse.jgit:6.0.0.202111291000-r=classpath
+org.osgi:org.osgi.dto:1.0.0=classpath
+org.osgi:org.osgi.framework:1.8.0=classpath
+org.osgi:org.osgi.resource:1.0.0=classpath
+org.osgi:org.osgi.service.coordinator:1.0.2=classpath
+org.osgi:org.osgi.service.log:1.3.0=classpath
+org.osgi:org.osgi.service.repository:1.1.0=classpath
+org.osgi:org.osgi.service.resolver:1.1.1=classpath
+org.osgi:org.osgi.util.function:1.2.0=classpath
+org.osgi:org.osgi.util.promise:1.2.0=classpath
+org.osgi:org.osgi.util.tracker:1.5.4=classpath
+org.osgi:osgi.annotation:8.0.1=classpath
+org.slf4j:slf4j-api:1.7.30=classpath
+xmlpull:xmlpull:1.1.3.1=classpath
+empty=

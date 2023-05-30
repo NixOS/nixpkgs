@@ -1,0 +1,45 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+ch.qos.logback:logback-classic:1.2.3=default,runtimeClasspath,testRuntimeClasspath
+ch.qos.logback:logback-core:1.2.3=default,runtimeClasspath,testRuntimeClasspath
+com.conversantmedia:disruptor:1.2.19=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.dorkbox:Executor:3.1=default,runtimeClasspath,testRuntimeClasspath
+com.dorkbox:Notify:3.7=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.dorkbox:ObjectPool:4.0=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.dorkbox:PropertyLoader:1.0=default,runtimeClasspath,testRuntimeClasspath
+com.dorkbox:ShellExecutor:1.1=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.dorkbox:SwtJavaFx:1.1=default,runtimeClasspath,testRuntimeClasspath
+com.dorkbox:SystemTray:4.1=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.dorkbox:TweenEngine:8.3=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.dorkbox:Updates:1.1=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.dorkbox:Utilities:1.9=default,runtimeClasspath,testRuntimeClasspath
+com.google.code.gson:gson:2.9.1=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.hierynomus:asn-one:0.4.0=default,runtimeClasspath,testRuntimeClasspath
+com.hierynomus:sshj:0.30.0=default,runtimeClasspath,testRuntimeClasspath
+com.jcraft:jzlib:1.1.3=default,runtimeClasspath,testRuntimeClasspath
+com.jgoodies:jgoodies-common:1.8.1=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.jgoodies:jgoodies-forms:1.9.0=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+commons-io:commons-io:2.11.0=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+commons-logging:commons-logging:1.2=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+io.github.microutils:kotlin-logging-jvm:2.0.6=default,runtimeClasspath,testRuntimeClasspath
+io.github.microutils:kotlin-logging:2.0.6=default,runtimeClasspath,testRuntimeClasspath
+net.i2p.crypto:eddsa:0.3.0=default,runtimeClasspath,testRuntimeClasspath
+net.java.dev.jna:jna-platform:5.12.1=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+net.java.dev.jna:jna:5.12.1=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.apache.pdfbox:fontbox:2.0.27=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.apache.pdfbox:pdfbox:2.0.27=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.bouncycastle:bcpkix-jdk15on:1.66=default,runtimeClasspath,testRuntimeClasspath
+org.bouncycastle:bcprov-jdk15on:1.66=default,runtimeClasspath,testRuntimeClasspath
+org.javassist:javassist:3.29.2-GA=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.10=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.jetbrains.kotlin:kotlin-stdlib:1.6.10=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.6.0=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.0=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.jetbrains:annotations:13.0=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.slf4j:slf4j-api:2.0.3=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.tukaani:xz:1.9=default,runtimeClasspath,testRuntimeClasspath
+empty=annotationProcessor,archives,testAnnotationProcessor

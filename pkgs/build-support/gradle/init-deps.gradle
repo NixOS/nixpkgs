@@ -1,0 +1,18 @@
+gradle.projectsLoaded {
+  rootProject.allprojects {
+    dependencyLocking {
+      lockAllConfigurations()
+    }
+    buildscript {
+      dependencyLocking {
+        lockAllConfigurations()
+      }
+    }
+    task nixSupport_downloadDeps {
+      doLast {
+        configurations.findAll{it.canBeResolved}.each{it.resolve()}
+        buildscript.configurations.findAll{it.canBeResolved}.each{it.resolve()}
+      }
+    }
+  }
+}

@@ -1,0 +1,5 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.badlogicgames.gdx:gdx-freetype:1.10.0
+com.badlogicgames.gdx:gdx:1.10.0

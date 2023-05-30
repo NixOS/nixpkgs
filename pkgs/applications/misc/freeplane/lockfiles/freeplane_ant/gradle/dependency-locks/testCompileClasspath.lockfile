@@ -1,0 +1,13 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+junit:junit:4.13.2
+net.bytebuddy:byte-buddy-agent:1.10.20
+net.bytebuddy:byte-buddy:1.10.20
+org.apache.ant:ant-launcher:1.10.9
+org.apache.ant:ant:1.10.9
+org.assertj:assertj-core:3.19.0
+org.hamcrest:hamcrest-all:1.3
+org.hamcrest:hamcrest-core:1.3
+org.mockito:mockito-core:3.9.0
+org.objenesis:objenesis:3.2

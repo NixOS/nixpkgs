@@ -1,0 +1,49 @@
+logger.lifecycle 'Replacing Maven repositories with @deps@...'
+settingsEvaluated { settings ->
+  settings.pluginManagement {
+    repositories {
+      clear()
+      maven {
+        url '@deps@';
+        metadataSources {
+          mavenPom();
+          artifact();
+        };
+      }
+    }
+  }
+}
+gradle.projectsLoaded {
+  rootProject.allprojects {
+    dependencyLocking {
+      lockMode = LockMode.LENIENT
+      lockAllConfigurations()
+    }
+    buildscript {
+      dependencyLocking {
+        lockMode = LockMode.LENIENT
+        lockAllConfigurations()
+      }
+      repositories {
+        clear()
+        maven {
+          url '@deps@';
+          metadataSources {
+            mavenPom();
+            artifact();
+          };
+        }
+      }
+    }
+    repositories {
+      clear()
+      maven {
+        url '@deps@';
+        metadataSources {
+          mavenPom();
+          artifact();
+        };
+      }
+    }
+  }
+}

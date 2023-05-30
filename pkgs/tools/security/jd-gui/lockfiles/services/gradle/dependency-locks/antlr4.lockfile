@@ -1,0 +1,8 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+org.abego.treelayout:org.abego.treelayout.core:1.0.1
+org.antlr:ST4:4.0.8
+org.antlr:antlr-runtime:3.5.2
+org.antlr:antlr4-runtime:4.5
+org.antlr:antlr4:4.5

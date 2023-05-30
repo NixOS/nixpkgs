@@ -1,0 +1,9 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+org.apache.lucene:lucene-core:7.1.0=lucene
+org.apache.lucene:lucene-grouping:7.1.0=lucene
+org.apache.lucene:lucene-queries:7.1.0=lucene
+org.apache.lucene:lucene-queryparser:7.1.0=lucene
+org.apache.lucene:lucene-sandbox:7.1.0=lucene
+empty=

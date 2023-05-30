@@ -1,0 +1,24 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.adarshr.test-logger:com.adarshr.test-logger.gradle.plugin:3.2.0=classpath
+com.adarshr:gradle-test-logger-plugin:3.2.0=classpath
+com.github.andygoossens.modernizer:com.github.andygoossens.modernizer.gradle.plugin:1.7.0=classpath
+com.github.andygoossens:gradle-modernizer-plugin:1.7.0=classpath
+com.google.code.findbugs:jsr305:3.0.2=classpath
+com.google.gradle:osdetector-gradle-plugin:1.7.0=classpath
+kr.motd.maven:os-maven-plugin:1.7.0=classpath
+me.champeau.gradle.jmh:me.champeau.gradle.jmh.gradle.plugin:0.5.3=classpath
+me.champeau.gradle:jmh-gradle-plugin:0.5.3=classpath
+net.sf.jopt-simple:jopt-simple:4.6=classpath
+org.apache.commons:commons-math3:3.2=classpath
+org.beryx.jlink:org.beryx.jlink.gradle.plugin:2.26.0=classpath
+org.beryx:badass-jlink-plugin:2.26.0=classpath
+org.fusesource.jansi:jansi:2.4.0=classpath
+org.javamodularity.moduleplugin:org.javamodularity.moduleplugin.gradle.plugin:1.8.12=classpath
+org.javamodularity:moduleplugin:1.8.12=classpath
+org.jooq:joor:0.9.13=classpath
+org.openjdk.jmh:jmh-core:1.27=classpath
+org.openjfx.javafxplugin:org.openjfx.javafxplugin.gradle.plugin:0.0.13=classpath
+org.openjfx:javafx-plugin:0.0.13=classpath
+empty=

@@ -1,0 +1,24 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.github.hierynomus.license-base:com.github.hierynomus.license-base.gradle.plugin:0.15.0=classpath
+com.github.hierynomus.license-report:com.github.hierynomus.license-report.gradle.plugin:0.15.0=classpath
+com.mycila.xmltool:xmltool:3.3=classpath
+com.mycila:license-maven-plugin:3.0=classpath
+com.mycila:mycila-xmltool:4.4.ga=classpath
+commons-logging:commons-logging:1.1.1=classpath
+gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin:0.15.0=classpath
+org.apache.commons:commons-pool2:2.2=classpath
+org.apache.maven:maven-settings-builder:3.0.4=classpath
+org.apache.maven:maven-settings:3.0.4=classpath
+org.codehaus.plexus:plexus-component-annotations:1.5.5=classpath
+org.codehaus.plexus:plexus-interpolation:1.14=classpath
+org.codehaus.plexus:plexus-utils:2.0.6=classpath
+org.sonarqube:org.sonarqube.gradle.plugin:3.0=classpath
+org.sonarsource.scanner.api:sonar-scanner-api:2.15.0.2182=classpath
+org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.0=classpath
+org.sonatype.plexus:plexus-cipher:1.4=classpath
+org.sonatype.plexus:plexus-sec-dispatcher:1.3=classpath
+org.springframework:spring-asm:3.1.3.RELEASE=classpath
+org.springframework:spring-core:3.1.3.RELEASE=classpath
+empty=

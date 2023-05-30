@@ -1,0 +1,14 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.beust:jcommander:1.64=testCompileClasspath,testRuntimeClasspath
+com.github.junrar:junrar:7.5.4=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+commons-collections:commons-collections:3.2.2=default,runtimeClasspath,testRuntimeClasspath
+commons-logging:commons-logging:1.2=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+net.sf.sevenzipjbinding:sevenzipjbinding:16.02-2.01=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.apache.commons:commons-vfs2:2.3=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.osgi:osgi.core:8.0.0=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.slf4j:slf4j-api:1.7.36=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.testng:testng:6.11=testCompileClasspath,testRuntimeClasspath
+org.yaml:snakeyaml:1.17=testCompileClasspath,testRuntimeClasspath
+empty=annotationProcessor,archives,baseline,comprise,library,testAnnotationProcessor

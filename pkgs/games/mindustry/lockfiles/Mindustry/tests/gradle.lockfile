@@ -1,0 +1,14 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.github.Anuken:rhino:73a812444ac388ac2d94013b5cadc8f70b7ea027=testCompileClasspath,testRuntimeClasspath
+org.apiguardian:apiguardian-api:1.1.0=testCompileClasspath,testRuntimeClasspath
+org.junit.jupiter:junit-jupiter-api:5.7.1=testCompileClasspath,testRuntimeClasspath
+org.junit.jupiter:junit-jupiter-engine:5.7.1=testRuntimeClasspath
+org.junit.jupiter:junit-jupiter-params:5.7.1=testCompileClasspath,testRuntimeClasspath
+org.junit.platform:junit-platform-commons:1.7.1=testCompileClasspath,testRuntimeClasspath
+org.junit.platform:junit-platform-engine:1.7.1=testRuntimeClasspath
+org.junit:junit-bom:5.7.1=testCompileClasspath,testRuntimeClasspath
+org.lz4:lz4-java:1.8.0=testCompileClasspath,testRuntimeClasspath
+org.opentest4j:opentest4j:1.2.0=testCompileClasspath,testRuntimeClasspath
+empty=annotationProcessor,compileClasspath,runtimeClasspath,testAnnotationProcessor

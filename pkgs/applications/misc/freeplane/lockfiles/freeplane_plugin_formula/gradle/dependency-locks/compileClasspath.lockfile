@@ -1,0 +1,42 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.formdev:flatlaf:2.0-rc1
+com.github.robtimus:data-url:2.0
+com.jgoodies:jgoodies-common:1.8.1
+com.jgoodies:jgoodies-forms:1.9.0
+com.sun.activation:javax.activation:1.2.0
+com.twelvemonkeys.common:common-image:3.6.4
+com.twelvemonkeys.common:common-io:3.6.4
+com.twelvemonkeys.common:common-lang:3.6.4
+com.twelvemonkeys.imageio:imageio-core:3.6.4
+com.twelvemonkeys.imageio:imageio-jpeg:3.6.4
+com.twelvemonkeys.imageio:imageio-metadata:3.6.4
+commons-codec:commons-codec:1.15
+commons-io:commons-io:2.8.0
+commons-lang:commons-lang:2.6
+de.sciss:syntaxpane:1.2.0
+org.apache.ivy:ivy:2.5.0
+org.codehaus.groovy:groovy-all:3.0.8
+org.codehaus.groovy:groovy-astbuilder:3.0.8
+org.codehaus.groovy:groovy-console:3.0.8
+org.codehaus.groovy:groovy-datetime:3.0.8
+org.codehaus.groovy:groovy-dateutil:3.0.8
+org.codehaus.groovy:groovy-groovysh:3.0.8
+org.codehaus.groovy:groovy-jmx:3.0.8
+org.codehaus.groovy:groovy-json:3.0.8
+org.codehaus.groovy:groovy-jsr223:3.0.8
+org.codehaus.groovy:groovy-macro:3.0.8
+org.codehaus.groovy:groovy-nio:3.0.8
+org.codehaus.groovy:groovy-servlet:3.0.8
+org.codehaus.groovy:groovy-sql:3.0.8
+org.codehaus.groovy:groovy-swing:3.0.8
+org.codehaus.groovy:groovy-templates:3.0.8
+org.codehaus.groovy:groovy-xml:3.0.8
+org.codehaus.groovy:groovy:3.0.8
+org.freeplane.dpolivaev.mnemonicsetter:mnemonicsetter:0.6
+org.freeplane.lightdev:simplyhtml:0.18.8
+org.knopflerfish.kf6:framework:8.0.11
+org.violetlib:jnr:11
+org.violetlib:vappearances:3
+org.violetlib:vaqua:10

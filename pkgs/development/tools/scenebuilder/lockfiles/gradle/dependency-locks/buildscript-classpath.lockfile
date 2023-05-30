@@ -1,0 +1,30 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.github.javaparser:javaparser-core:3.13.5
+com.github.javaparser:javaparser-symbol-solver-core:3.13.5
+com.github.javaparser:javaparser-symbol-solver-logic:3.13.5
+com.github.javaparser:javaparser-symbol-solver-model:3.13.5
+com.google.code.findbugs:jsr305:3.0.2
+com.google.errorprone:error_prone_annotations:2.2.0
+com.google.gradle:osdetector-gradle-plugin:1.6.1
+com.google.guava:failureaccess:1.0
+com.google.guava:guava:27.0-jre
+com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava
+com.google.j2objc:j2objc-annotations:1.1
+kr.motd.maven:os-maven-plugin:1.6.0
+org.beryx.runtime:org.beryx.runtime.gradle.plugin:1.11.4
+org.beryx:badass-runtime-plugin:1.11.4
+org.checkerframework:checker-qual:2.5.2
+org.codehaus.mojo:animal-sniffer-annotations:1.17
+org.javamodularity:moduleplugin:1.7.0
+org.javassist:javassist:3.24.0-GA
+org.jooq:joor:0.9.13
+org.openjfx.javafxplugin:org.openjfx.javafxplugin.gradle.plugin:0.0.9
+org.openjfx:javafx-plugin:0.0.9
+org.ow2.asm:asm-analysis:8.0.1
+org.ow2.asm:asm-commons:8.0.1
+org.ow2.asm:asm-tree:8.0.1
+org.ow2.asm:asm-util:8.0.1
+org.ow2.asm:asm:8.0.1
+org.slf4j:slf4j-api:1.7.25

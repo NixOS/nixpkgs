@@ -1,0 +1,16 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+io.pebbletemplates:pebble:3.1.5=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+junit:junit:4.12=testCompileClasspath,testRuntimeClasspath
+net.java.dev.jna:jna-platform:4.5.2=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+net.java.dev.jna:jna:4.5.2=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.bouncycastle:bcprov-jdk15on:1.59=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.freenetproject:freenet-ext:29=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.hamcrest:hamcrest-core:1.3=testCompileClasspath,testRuntimeClasspath
+org.hamcrest:hamcrest-library:1.3=testCompileClasspath,testRuntimeClasspath
+org.mockito:mockito-core:1.9.5=testCompileClasspath,testRuntimeClasspath
+org.objenesis:objenesis:1.0=testCompileClasspath,testRuntimeClasspath
+org.slf4j:slf4j-api:1.7.25=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.unbescape:unbescape:1.1.6.RELEASE=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+empty=annotationProcessor,archives,compile,provided,testAnnotationProcessor

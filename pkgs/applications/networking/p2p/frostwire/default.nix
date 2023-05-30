@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, gradle_6, perl, jre, makeWrapper, makeDesktopItem, mplayer }:
+{ lib, stdenv, fetchFromGitHub, gradle_6, jre, makeWrapper, makeDesktopItem, mplayer }:
 
 let
   version = "6.6.7-build-529";
@@ -20,61 +20,33 @@ let
     categories = [ "Network" "FileTransfer" "P2P" ];
   };
 
-  # fake build to pre-download deps into fixed-output derivation
-  deps = stdenv.mkDerivation {
-    pname = "frostwire-desktop-deps";
-    inherit version src;
-    buildInputs = [ gradle_6 perl ];
-    buildPhase = ''
-      export GRADLE_USER_HOME=$(mktemp -d)
-      ( cd desktop
-        gradle --no-daemon build
-      )
-    '';
-    # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
-    installPhase = ''
-      find $GRADLE_USER_HOME -type f -regex '.*\.\(jar\|pom\)' \
-        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
-        | sh
-    '';
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-r6YSrbSJbM3063JrX4tCVKFrJxTaLN4Trc+33jzpwcE=";
-  };
+  gradle = gradle_6;
 
-in stdenv.mkDerivation {
+in gradle.buildPackage {
   pname = "frostwire-desktop";
   inherit version src;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ gradle_6 ];
-
-  buildPhase = ''
-    export GRADLE_USER_HOME=$(mktemp -d)
-    ( cd desktop
-
-      # disable auto-update (anyway it won't update frostwire installed in nix store)
-      substituteInPlace src/com/frostwire/gui/updates/UpdateManager.java \
-        --replace 'um.checkForUpdates' '// um.checkForUpdates'
-
-      # fix path to mplayer
-      substituteInPlace src/com/frostwire/gui/player/MediaPlayerLinux.java \
-        --replace /usr/bin/mplayer ${mplayer}/bin/mplayer
-
-      substituteInPlace build.gradle \
-        --replace 'mavenCentral()' 'mavenLocal(); maven { url uri("${deps}") }'
-      gradle --offline --no-daemon build
-    )
+  gradleOpts.subdir = "desktop";
+  gradleOpts.depsHash = "sha256-VomNnry/MwTwwQMU4Z4pi9q6118JgXTqMeD8bl7qncI=";
+  gradleOpts.lockfileTree = ./lockfiles;
+  preBuild = ''
+    # disable auto-update (anyway it won't update frostwire installed in nix store)
+    substituteInPlace src/com/frostwire/gui/updates/UpdateManager.java \
+      --replace 'um.checkForUpdates' '// um.checkForUpdates'
+    # fix path to mplayer
+    substituteInPlace src/com/frostwire/gui/player/MediaPlayerLinux.java \
+      --replace /usr/bin/mplayer ${mplayer}/bin/mplayer
   '';
 
   installPhase = ''
     mkdir -p $out/lib $out/share/java
 
-    cp desktop/build/libs/frostwire.jar $out/share/java/frostwire.jar
+    cp build/libs/frostwire.jar $out/share/java/frostwire.jar
 
-    cp ${ { x86_64-darwin = "desktop/lib/native/*.dylib";
-            x86_64-linux  = "desktop/lib/native/lib{jlibtorrent,SystemUtilities}.so";
-            i686-linux    = "desktop/lib/native/lib{jlibtorrent,SystemUtilities}X86.so";
+    cp ${ { x86_64-darwin = "lib/native/*.dylib";
+            x86_64-linux  = "lib/native/lib{jlibtorrent,SystemUtilities}.so";
+            i686-linux    = "lib/native/lib{jlibtorrent,SystemUtilities}X86.so";
           }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}")
         } $out/lib
 
@@ -94,6 +66,5 @@ in stdenv.mkDerivation {
     license = licenses.gpl2;
     maintainers = with maintainers; [ gavin ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "i686-linux" ];
-    broken = true; # at 2022-09-30, errors with changing hash.
   };
 }

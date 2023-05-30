@@ -1,19 +1,14 @@
 { stdenv
-, fetchzip
-, fetchurl
 , fetchFromGitHub
 , lib
 , gradle_7
-, perl
 , makeWrapper
 , openjdk17
 , unzip
 , makeDesktopItem
-, autoPatchelfHook
 , icoutils
 , xcbuild
 , protobuf
-, libredirect
 }:
 
 let
@@ -58,86 +53,42 @@ protobuf {
 HERE
   '';
 
-  # Adds a gradle step that downloads all the dependencies to the gradle cache.
-  addResolveStep = ''
-    cat >>build.gradle <<HERE
-task resolveDependencies {
-  doLast {
-    project.rootProject.allprojects.each { subProject ->
-      subProject.buildscript.configurations.each { configuration ->
-        resolveConfiguration(subProject, configuration, "buildscript config \''${configuration.name}")
-      }
-      subProject.configurations.each { configuration ->
-        resolveConfiguration(subProject, configuration, "config \''${configuration.name}")
-      }
-    }
-  }
-}
-void resolveConfiguration(subProject, configuration, name) {
-  if (configuration.canBeResolved) {
-    logger.info("Resolving project {} {}", subProject.name, name)
-    configuration.resolve()
-  }
-}
-HERE
-  '';
-
-  # fake build to pre-download deps into fixed-output derivation
-  # Taken from mindustry derivation.
-  deps = stdenv.mkDerivation {
-    pname = "${pname}-deps";
-    inherit version src;
-
-    patches = [ ./0001-Use-protobuf-gradle-plugin.patch ];
-    postPatch = fixProtoc + addResolveStep;
-
-    nativeBuildInputs = [ gradle perl ] ++ lib.optional stdenv.isDarwin xcbuild;
-    buildPhase = ''
-      export HOME="$NIX_BUILD_TOP/home"
-      mkdir -p "$HOME"
-      export JAVA_TOOL_OPTIONS="-Duser.home='$HOME'"
-      export GRADLE_USER_HOME="$HOME/.gradle"
-
-      # First, fetch the static dependencies.
-      gradle --no-daemon --info -Dorg.gradle.java.home=${openjdk17} -I gradle/support/fetchDependencies.gradle init
-
-      # Then, fetch the maven dependencies.
-      gradle --no-daemon --info -Dorg.gradle.java.home=${openjdk17} resolveDependencies
-    '';
-    # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
-    installPhase = ''
-      find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
-        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/maven/$x/$3/$4/$5" #e' \
-        | sh
-      cp -r dependencies $out/dependencies
-    '';
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-HveS3f8XHpJqefc4djYmnYfd01H2OBFK5PLNOsHAqlc=";
-  };
-
-in stdenv.mkDerivation rec {
+in gradle.buildPackage {
   inherit pname version src;
 
+  gradleOpts = {
+    depsHash = "sha256-Tj3WznDcJxp6P6lLS1VUikcnSD3Vn4c+dRoIarS+Au0=";
+    lockfileTree = ./lockfiles;
+    flags = [
+      "-Dorg.gradle.java.home=${openjdk17}"
+    ];
+    buildSubcommand = "buildGhidra";
+    depsAttrs = {
+      preBuild = ''
+        ''${gradle[@]} -I gradle/support/fetchDependencies.gradle init
+      '';
+      postInstall = ''
+        cp -r dependencies $out/dependencies
+      '';
+    };
+  };
+
   nativeBuildInputs = [
-    gradle unzip makeWrapper icoutils
+    unzip makeWrapper icoutils
   ] ++ lib.optional stdenv.isDarwin xcbuild;
 
   dontStrip = true;
 
   patches = [ ./0001-Use-protobuf-gradle-plugin.patch ];
-  postPatch = fixProtoc;
-
-  buildPhase = ''
+  postPatch = fixProtoc + ''
     export HOME="$NIX_BUILD_TOP/home"
     mkdir -p "$HOME"
     export JAVA_TOOL_OPTIONS="-Duser.home='$HOME'"
+    export GRADLE_USER_HOME="$HOME/.gradle"
+  '';
 
-    ln -s ${deps}/dependencies dependencies
-
-    sed -i "s#mavenLocal()#mavenLocal(); maven { url '${deps}/maven' }#g" build.gradle
-
-    gradle --offline --no-daemon --info -Dorg.gradle.java.home=${openjdk17} buildGhidra
+  preBuild = ''
+    ln -s $deps/dependencies dependencies
   '';
 
   installPhase = ''

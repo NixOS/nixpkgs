@@ -1,0 +1,6 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+org.apache.commons:commons-lang3:3.12.0=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.bouncycastle:bcprov-jdk18on:1.71=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+empty=annotationProcessor,shadow,testAnnotationProcessor

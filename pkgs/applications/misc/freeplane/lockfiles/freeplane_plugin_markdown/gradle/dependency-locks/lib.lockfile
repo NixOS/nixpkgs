@@ -1,0 +1,5 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+io.github.gitbucket:markedj:1.0.16
+org.jsoup:jsoup:1.10.2

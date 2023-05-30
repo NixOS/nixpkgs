@@ -1,0 +1,10 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.fifesoft:rsyntaxtextarea:3.0.4
+junit:junit:4.12
+org.abego.treelayout:org.abego.treelayout.core:1.0.1
+org.antlr:antlr4-runtime:4.5
+org.hamcrest:hamcrest-core:1.3
+org.jd:jd-core:1.1.3
+org.ow2.asm:asm:7.1

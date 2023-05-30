@@ -1,0 +1,7 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.github.Anuken:rhino:73a812444ac388ac2d94013b5cadc8f70b7ea027=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+com.github.Anuken:steamworks4j:0b86023401880bb5e586bc404bedbaae9b1f1c94=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.lz4:lz4-java:1.8.0=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+empty=annotationProcessor,testAnnotationProcessor

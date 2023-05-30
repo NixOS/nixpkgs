@@ -1,0 +1,39 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+ch.qos.logback:logback-classic:1.2.3=default,runtimeClasspath,testRuntimeClasspath
+ch.qos.logback:logback-core:1.2.3=default,runtimeClasspath,testRuntimeClasspath
+com.beust:jcommander:1.64=testCompileClasspath,testRuntimeClasspath
+com.fasterxml.jackson.core:jackson-core:2.9.6=compileClasspath,comprise
+com.google.api-client:google-api-client:1.25.0=compileClasspath,comprise
+com.google.apis:google-api-services-drive:v3-rev197-1.25.0=compileClasspath,comprise
+com.google.code.findbugs:jsr305:3.0.2=compileClasspath,comprise
+com.google.code.gson:gson:2.9.0=compileClasspath,comprise
+com.google.errorprone:error_prone_annotations:2.11.0=compileClasspath,comprise
+com.google.guava:failureaccess:1.0.1=compileClasspath,comprise
+com.google.guava:guava:31.1-android=compileClasspath,comprise
+com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava=compileClasspath,comprise
+com.google.http-client:google-http-client-gson:1.41.8=compileClasspath,comprise
+com.google.http-client:google-http-client-jackson2:1.25.0=compileClasspath,comprise
+com.google.http-client:google-http-client:1.41.8=compileClasspath,comprise
+com.google.j2objc:j2objc-annotations:1.3=compileClasspath,comprise
+com.google.oauth-client:google-oauth-client-java6:1.34.0=compileClasspath,comprise
+com.google.oauth-client:google-oauth-client-jetty:1.34.0=compileClasspath,comprise
+com.google.oauth-client:google-oauth-client:1.34.0=compileClasspath,comprise
+commons-codec:commons-codec:1.11=compileClasspath,comprise
+commons-collections:commons-collections:3.2.2=default,runtimeClasspath,testRuntimeClasspath
+commons-logging:commons-logging:1.2=compileClasspath,comprise
+io.grpc:grpc-context:1.27.2=compileClasspath,comprise
+io.opencensus:opencensus-api:0.31.0=compileClasspath,comprise
+io.opencensus:opencensus-contrib-http-util:0.31.0=compileClasspath,comprise
+junit:junit:4.12=testCompileClasspath,testRuntimeClasspath
+org.apache.httpcomponents:httpclient:4.5.13=compileClasspath,comprise
+org.apache.httpcomponents:httpcore:4.4.15=compileClasspath,comprise
+org.checkerframework:checker-qual:3.12.0=compileClasspath,comprise
+org.hamcrest:hamcrest-core:1.3=testCompileClasspath,testRuntimeClasspath
+org.jmdns:jmdns:3.5.5=default,runtimeClasspath,testRuntimeClasspath
+org.osgi:osgi.core:8.0.0=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.slf4j:slf4j-api:1.7.36=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.testng:testng:6.11=testCompileClasspath,testRuntimeClasspath
+org.yaml:snakeyaml:1.17=testCompileClasspath,testRuntimeClasspath
+empty=annotationProcessor,archives,baseline,testAnnotationProcessor

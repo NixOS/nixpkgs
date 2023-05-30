@@ -1,0 +1,42 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.gluonhq:charm-down-core:3.8.0
+com.gluonhq:charm-down-plugin-display:3.8.0
+com.gluonhq:charm-down-plugin-lifecycle:3.8.0
+com.gluonhq:charm-down-plugin-statusbar:3.8.0
+com.gluonhq:charm-down-plugin-storage:3.8.0
+com.gluonhq:charm-glisten:5.0.0-jdk9
+com.google.guava:guava:18.0
+commons-codec:commons-codec:1.9
+commons-logging:commons-logging:1.2
+javax.json:javax.json-api:1.0
+org.apache.commons:commons-lang3:3.4
+org.apache.httpcomponents:httpclient:4.5.2
+org.apache.httpcomponents:httpcore:4.4.4
+org.apache.maven:maven-aether-provider:3.3.9
+org.apache.maven:maven-artifact:3.3.9
+org.apache.maven:maven-builder-support:3.3.9
+org.apache.maven:maven-model-builder:3.3.9
+org.apache.maven:maven-model:3.3.9
+org.apache.maven:maven-repository-metadata:3.3.9
+org.codehaus.plexus:plexus-component-annotations:1.6
+org.codehaus.plexus:plexus-interpolation:1.21
+org.codehaus.plexus:plexus-utils:3.0.22
+org.eclipse.aether:aether-api:1.1.0
+org.eclipse.aether:aether-connector-basic:1.1.0
+org.eclipse.aether:aether-impl:1.1.0
+org.eclipse.aether:aether-spi:1.1.0
+org.eclipse.aether:aether-transport-file:1.1.0
+org.eclipse.aether:aether-transport-http:1.1.0
+org.eclipse.aether:aether-util:1.1.0
+org.glassfish:javax.json:1.0.4
+org.openjfx:javafx-base:13
+org.openjfx:javafx-controls:13
+org.openjfx:javafx-fxml:13
+org.openjfx:javafx-graphics:13
+org.openjfx:javafx-media:13
+org.openjfx:javafx-swing:13
+org.openjfx:javafx-web:13
+org.slf4j:jcl-over-slf4j:1.6.2
+org.slf4j:slf4j-api:1.6.2

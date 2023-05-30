@@ -1,0 +1,17 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.github.jengelman.gradle.plugins:shadow:5.2.0
+com.github.johnrengelman.shadow:com.github.johnrengelman.shadow.gradle.plugin:5.2.0
+commons-io:commons-io:2.6
+org.apache.ant:ant-launcher:1.9.7
+org.apache.ant:ant:1.9.7
+org.apache.logging.log4j:log4j-api:2.17.0
+org.apache.logging.log4j:log4j-core:2.17.0
+org.codehaus.plexus:plexus-utils:3.0.24
+org.jdom:jdom2:2.0.6
+org.ow2.asm:asm-analysis:7.0-beta
+org.ow2.asm:asm-commons:7.0-beta
+org.ow2.asm:asm-tree:7.0-beta
+org.ow2.asm:asm:7.0-beta
+org.vafer:jdependency:2.1.1

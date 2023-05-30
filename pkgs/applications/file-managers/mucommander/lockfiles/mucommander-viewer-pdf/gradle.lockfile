@@ -1,0 +1,30 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+avalon-framework:avalon-framework:4.1.5=compileClasspath,comprise
+ch.qos.logback:logback-classic:1.2.3=default,runtimeClasspath,testRuntimeClasspath
+ch.qos.logback:logback-core:1.2.3=default,runtimeClasspath,testRuntimeClasspath
+com.github.pcorless.icepdf:icepdf-core:7.0.1=compileClasspath,comprise
+com.github.pcorless.icepdf:icepdf-viewer:7.0.1=compileClasspath,comprise
+com.twelvemonkeys.common:common-image:3.9.4=compileClasspath,comprise
+com.twelvemonkeys.common:common-io:3.9.4=compileClasspath,comprise
+com.twelvemonkeys.common:common-lang:3.9.4=compileClasspath,comprise
+com.twelvemonkeys.imageio:imageio-core:3.9.4=compileClasspath,comprise
+com.twelvemonkeys.imageio:imageio-metadata:3.9.4=compileClasspath,comprise
+com.twelvemonkeys.imageio:imageio-psd:3.9.4=compileClasspath,comprise
+com.twelvemonkeys.imageio:imageio-tiff:3.9.4=compileClasspath,comprise
+commons-collections:commons-collections:3.2.2=default,runtimeClasspath,testRuntimeClasspath
+commons-logging:commons-logging:1.2=compileClasspath,comprise
+junit:junit:4.12=testCompileClasspath,testRuntimeClasspath
+log4j:log4j:1.2.17=compileClasspath,comprise
+org.apache.pdfbox:fontbox:2.0.27=compileClasspath,comprise
+org.apache.pdfbox:jbig2-imageio:3.0.4=compileClasspath,comprise
+org.bouncycastle:bcpkix-jdk15on:1.70=compileClasspath,comprise
+org.bouncycastle:bcprov-ext-jdk15on:1.70=compileClasspath,comprise
+org.bouncycastle:bcprov-jdk15on:1.70=compileClasspath,comprise
+org.bouncycastle:bcutil-jdk15on:1.70=compileClasspath,comprise
+org.hamcrest:hamcrest-core:1.3=testCompileClasspath,testRuntimeClasspath
+org.jmdns:jmdns:3.5.5=default,runtimeClasspath,testRuntimeClasspath
+org.osgi:osgi.core:8.0.0=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.slf4j:slf4j-api:1.7.36=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+empty=annotationProcessor,archives,baseline,testAnnotationProcessor

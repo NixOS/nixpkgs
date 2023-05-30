@@ -1,0 +1,27 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.github.javaparser:javaparser-core:3.6.23=classpath
+com.github.javaparser:javaparser-symbol-solver-core:3.6.23=classpath
+com.github.javaparser:javaparser-symbol-solver-logic:3.6.23=classpath
+com.github.javaparser:javaparser-symbol-solver-model:3.6.23=classpath
+com.google.code.findbugs:jsr305:3.0.2=classpath
+com.google.errorprone:error_prone_annotations:2.0.18=classpath
+com.google.gradle:osdetector-gradle-plugin:1.6.1=classpath
+com.google.guava:guava:23.4-jre=classpath
+com.google.j2objc:j2objc-annotations:1.1=classpath
+kr.motd.maven:os-maven-plugin:1.6.0=classpath
+org.beryx.jlink:org.beryx.jlink.gradle.plugin:2.6.5=classpath
+org.beryx:badass-jlink-plugin:2.6.5=classpath
+org.codehaus.mojo:animal-sniffer-annotations:1.14=classpath
+org.javamodularity:moduleplugin:1.4.0=classpath
+org.javassist:javassist:3.23.1-GA=classpath
+org.openjfx.javafxplugin:org.openjfx.javafxplugin.gradle.plugin:0.0.7=classpath
+org.openjfx:javafx-plugin:0.0.7=classpath
+org.ow2.asm:asm-analysis:7.0=classpath
+org.ow2.asm:asm-commons:7.0=classpath
+org.ow2.asm:asm-tree:7.0=classpath
+org.ow2.asm:asm-util:7.0=classpath
+org.ow2.asm:asm:7.0=classpath
+org.slf4j:slf4j-api:1.7.25=classpath
+empty=

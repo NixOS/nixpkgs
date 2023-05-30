@@ -1,0 +1,36 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.beust:jcommander:1.82=buildScriptClasspath
+com.github.jnr:jffi:1.3.9=buildScriptClasspath,compileClasspath
+com.github.jnr:jnr-a64asm:1.0.0=buildScriptClasspath,compileClasspath
+com.github.jnr:jnr-constants:0.10.3=buildScriptClasspath,compileClasspath
+com.github.jnr:jnr-enxio:0.32.13=buildScriptClasspath,compileClasspath
+com.github.jnr:jnr-ffi:2.2.11=buildScriptClasspath,compileClasspath
+com.github.jnr:jnr-netdb:1.2.0=buildScriptClasspath,compileClasspath
+com.github.jnr:jnr-posix:3.1.15=buildScriptClasspath,compileClasspath
+com.github.jnr:jnr-unixsocket:0.38.17=buildScriptClasspath,compileClasspath
+com.github.jnr:jnr-x86asm:1.0.2=buildScriptClasspath,compileClasspath
+com.googlecode.javaewah:JavaEWAH:1.1.13=buildScriptClasspath,compileClasspath
+com.headius:backport9:1.12=buildScriptClasspath,compileClasspath
+com.headius:invokebinder:1.12=buildScriptClasspath,compileClasspath
+com.headius:options:1.6=buildScriptClasspath,compileClasspath
+com.jcraft:jzlib:1.1.3=buildScriptClasspath,compileClasspath
+joda-time:joda-time:2.10.10=buildScriptClasspath,compileClasspath
+me.qmx.jitescript:jitescript:0.4.1=buildScriptClasspath,compileClasspath
+org.asciidoctor:asciidoctorj-api:2.5.5=buildScriptClasspath,compileClasspath
+org.asciidoctor:asciidoctorj:2.5.5=buildScriptClasspath,compileClasspath
+org.eclipse.jgit:org.eclipse.jgit:5.13.1.202206130422-r=buildScriptClasspath,compileClasspath
+org.jruby.jcodings:jcodings:1.0.56=buildScriptClasspath,compileClasspath
+org.jruby.joni:joni:2.1.42=buildScriptClasspath,compileClasspath
+org.jruby:dirgra:0.3=buildScriptClasspath,compileClasspath
+org.jruby:jruby-base:9.3.4.0=buildScriptClasspath,compileClasspath
+org.jruby:jruby-stdlib:9.3.4.0=buildScriptClasspath,compileClasspath
+org.jruby:jruby:9.3.4.0=buildScriptClasspath,compileClasspath
+org.ow2.asm:asm-analysis:9.2=buildScriptClasspath,compileClasspath
+org.ow2.asm:asm-commons:9.2=buildScriptClasspath,compileClasspath
+org.ow2.asm:asm-tree:9.2=buildScriptClasspath,compileClasspath
+org.ow2.asm:asm-util:9.2=buildScriptClasspath,compileClasspath
+org.ow2.asm:asm:9.2=buildScriptClasspath,compileClasspath
+org.slf4j:slf4j-api:1.7.30=buildScriptClasspath,compileClasspath
+empty=annotationProcessor

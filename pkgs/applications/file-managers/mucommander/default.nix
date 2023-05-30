@@ -1,10 +1,7 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , gradle_7
-, perl
 , makeWrapper
-, writeText
 , jdk
 , gsettings-desktop-schemas
 }:
@@ -23,72 +20,18 @@ let
     # there is no .git anyway
     substituteInPlace build.gradle \
       --replace "git = grgit.open(dir: project.rootDir)" "" \
-      --replace "id 'org.ajoberstar.grgit' version '3.1.1'" "" \
       --replace "revision = git.head().id" "revision = '${version}'"
   '';
 
-  # fake build to pre-download deps into fixed-output derivation
-  deps = stdenv.mkDerivation {
-    pname = "mucommander-deps";
-    inherit version src postPatch;
-    nativeBuildInputs = [ gradle_7 perl ];
-    buildPhase = ''
-      export GRADLE_USER_HOME=$(mktemp -d)
-      gradle --no-daemon tgz
-    '';
-    # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
-    # reproducible by sorting
-    installPhase = ''
-      find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
-        | LC_ALL=C sort \
-        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
-        | sh
-      # copy maven-metadata.xml for commons-codec
-      # thankfully there is only one xml
-      cp $GRADLE_USER_HOME/caches/modules-2/resources-2.1/*/*/maven-metadata.xml $out/commons-codec/commons-codec/maven-metadata.xml
-    '';
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-T4UhEzkaYh237+ZsoQTv1RgqcAKY4dPc/3x+dEie4A8=";
-  };
-
+  gradle = gradle_7;
 in
-stdenv.mkDerivation rec {
+gradle.buildPackage {
   pname = "mucommander";
   inherit version src postPatch;
-  nativeBuildInputs = [ gradle_7 perl makeWrapper ];
-
-  # Point to our local deps repo
-  gradleInit = writeText "init.gradle" ''
-    logger.lifecycle 'Replacing Maven repositories with ${deps}...'
-    gradle.projectsLoaded {
-      rootProject.allprojects {
-        buildscript {
-          repositories {
-            clear()
-            maven { url '${deps}' }
-          }
-        }
-        repositories {
-          clear()
-          maven { url '${deps}' }
-        }
-      }
-    }
-    settingsEvaluated { settings ->
-      settings.pluginManagement {
-        repositories {
-          maven { url '${deps}' }
-        }
-      }
-    }
-  '';
-
-  buildPhase = ''
-    export GRADLE_USER_HOME=$(mktemp -d)
-
-    gradle --offline --init-script ${gradleInit} --no-daemon tgz
-  '';
+  nativeBuildInputs = [ makeWrapper ];
+  gradleOpts.buildSubcommand = "tgz";
+  gradleOpts.lockfileTree = ./lockfiles;
+  gradleOpts.depsHash = "sha256-LJzowmiR7hcwtYx4W70qymWH76ZlLcsc57D0RaA5wOw=";
 
   installPhase = ''
     mkdir -p $out/share/mucommander

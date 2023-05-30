@@ -1,0 +1,11 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+org.openjfx:javafx-base:11.0.2=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.openjfx:javafx-controls:11.0.2=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.openjfx:javafx-fxml:11.0.2=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.openjfx:javafx-graphics:11.0.2=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.openjfx:javafx-media:11.0.2=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.openjfx:javafx-swing:11.0.2=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+org.openjfx:javafx-web:11.0.2=compileClasspath,default,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+empty=annotationProcessor,archives,binTray,jdk,testAnnotationProcessor

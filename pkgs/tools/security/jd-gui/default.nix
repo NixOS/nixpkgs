@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , fetchpatch
 , jre
@@ -7,8 +6,6 @@
 , gradle_6
 , makeDesktopItem
 , copyDesktopItems
-, perl
-, writeText
 , runtimeShell
 }:
 
@@ -32,50 +29,6 @@ let
     })
   ];
 
-  deps = stdenv.mkDerivation {
-    name = "${pname}-deps";
-    inherit src patches;
-
-    nativeBuildInputs = [ jdk perl gradle_6 ];
-
-    buildPhase = ''
-      export GRADLE_USER_HOME=$(mktemp -d);
-      gradle --no-daemon jar
-    '';
-
-    # Mavenize dependency paths
-    # e.g. org.codehaus.groovy/groovy/2.4.0/{hash}/groovy-2.4.0.jar -> org/codehaus/groovy/groovy/2.4.0/groovy-2.4.0.jar
-    installPhase = ''
-      find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
-        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
-        | sh
-    '';
-
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-gqUyZE+MoZRYCcJx95Qc4dZIC3DZvxee6UQhpfveDI4=";
-  };
-
-  # Point to our local deps repo
-  gradleInit = writeText "init.gradle" ''
-    logger.lifecycle 'Replacing Maven repositories with ${deps}...'
-
-    gradle.projectsLoaded {
-      rootProject.allprojects {
-        buildscript {
-          repositories {
-            clear()
-            maven { url '${deps}' }
-          }
-        }
-        repositories {
-          clear()
-          maven { url '${deps}' }
-        }
-      }
-    }
-  '';
-
   desktopItem = makeDesktopItem {
     name = "jd-gui";
     exec = "jd-gui %F";
@@ -88,24 +41,26 @@ let
     startupWMClass = "org-jd-gui-App";
   };
 
-in stdenv.mkDerivation rec {
+  gradle = gradle_6;
+
+in gradle.buildPackage rec {
   inherit pname version src patches;
-  name = "${pname}-${version}";
 
-  nativeBuildInputs = [ jdk gradle_6 copyDesktopItems ];
+  gradleOpts = {
+    depsHash = "sha256-Dmol4TX88NjVFlKrEDhAmByitEdn+fQIReCMTLOCicQ=";
+    lockfileTree = ./lockfiles;
+    buildSubcommand = "jar";
+  };
 
-  buildPhase = ''
-    export GRADLE_USER_HOME=$(mktemp -d)
-    gradle --offline --no-daemon --info --init-script ${gradleInit} jar
-  '';
+  nativeBuildInputs = [ jdk copyDesktopItems ];
 
   installPhase = let
-    jar = "$out/share/jd-gui/${name}.jar";
+    jar = "$out/share/jd-gui/${pname}-${version}.jar";
   in ''
     runHook preInstall
 
     mkdir -p $out/bin $out/share/{jd-gui,icons/hicolor/128x128/apps}
-    cp build/libs/${name}.jar ${jar}
+    cp build/libs/${pname}-${version}.jar ${jar}
     cp src/linux/resources/jd_icon_128.png $out/share/icons/hicolor/128x128/apps/jd-gui.png
 
     cat > $out/bin/jd-gui <<EOF

@@ -1,0 +1,17 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+com.diffplug.durian:durian-collect:1.2.0=classpath
+com.diffplug.durian:durian-core:1.2.0=classpath
+com.diffplug.durian:durian-io:1.2.0=classpath
+com.diffplug.spotless:com.diffplug.spotless.gradle.plugin:6.11.0=classpath
+com.diffplug.spotless:spotless-lib-extra:2.30.0=classpath
+com.diffplug.spotless:spotless-lib:2.30.0=classpath
+com.diffplug.spotless:spotless-plugin-gradle:6.11.0=classpath
+com.googlecode.concurrent-trees:concurrent-trees:2.6.1=classpath
+com.googlecode.javaewah:JavaEWAH:1.1.13=classpath
+org.codehaus.groovy:groovy-xml:3.0.10=classpath
+org.codehaus.groovy:groovy:3.0.10=classpath
+org.eclipse.jgit:org.eclipse.jgit:5.13.1.202206130422-r=classpath
+org.slf4j:slf4j-api:1.7.30=classpath
+empty=
