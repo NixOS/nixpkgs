@@ -23560,6 +23560,8 @@ with pkgs;
 
   podofo = callPackage ../development/libraries/podofo { };
 
+  podofo010 = callPackage ../development/libraries/podofo/0.10.x.nix { };
+
   polkit = callPackage ../development/libraries/polkit { };
 
   poppler = callPackage ../development/libraries/poppler { lcms = lcms2; };
