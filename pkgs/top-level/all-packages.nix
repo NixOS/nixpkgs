@@ -3596,6 +3596,8 @@ with pkgs;
 
   lesspass-cli = callPackage ../tools/security/lesspass-cli { };
 
+  livebook = callPackage ../servers/web-apps/livebook { };
+
   lsix = callPackage ../tools/graphics/lsix { };
 
   mdr = callPackage ../tools/misc/mdr { };
