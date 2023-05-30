@@ -29455,6 +29455,8 @@ with pkgs;
 
   cadence = libsForQt5.callPackage ../applications/audio/cadence { };
 
+  cctv-viewer = callPackage ../applications/video/cctv-viewer { };
+
   cheesecutter = callPackage ../applications/audio/cheesecutter { };
 
   milkytracker = callPackage ../applications/audio/milkytracker { };
