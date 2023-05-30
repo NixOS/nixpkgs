@@ -1709,6 +1709,8 @@ with pkgs;
 
   simple-dlna-browser = callPackage ../tools/networking/simple-dlna-browser { };
 
+  sitespeed-io = callPackage ../tools/networking/sitespeed-io { };
+
   sorted-grep = callPackage ../tools/text/sorted-grep { };
 
   smbmap = callPackage ../tools/security/smbmap { };
