@@ -177,6 +177,12 @@
     githubId = 12578560;
     name = "Quinn Bohner";
   };
+  oposs = {
+    email = "brnnrlxndr@gmail.com";
+    github = "0poss";
+    githubId = 67114640;
+    name = "Alexandre Brenner";
+  };
   _9999years = {
     email = "rbt@fastmail.com";
     github = "9999years";

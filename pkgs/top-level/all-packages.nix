@@ -38685,6 +38685,10 @@ with pkgs;
 
   ns-3 = callPackage ../development/libraries/science/networking/ns-3 { python = python3; };
 
+  libtriton = callPackage ../development/libraries/libtriton { };
+
+  dynamorio = callPackage ../tools/security/dynamorio { };
+
   root = callPackage ../applications/science/misc/root {
     python = python3;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreSymbolication OpenGL;
