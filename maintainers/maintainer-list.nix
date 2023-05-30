@@ -10674,6 +10674,12 @@
     githubId = 708570;
     name = "Manuel Mendez";
   };
+  mmusnjak = {
+    email = "marko.musnjak@gmail.com";
+    github = "mmusnjak";
+    githubId = 668956;
+    name = "Marko Mušnjak";
+  };
   mnacamura = {
     email = "m.nacamura@gmail.com";
     github = "mnacamura";
