@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "hdfs";
-  version = "2.5.8";
+  version = "2.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "mtth";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-94Q3IUoX1Cb+uRqvsfpVZJ1koJSx5cQ3/XpYJ0gkQNU=";
+    hash = "sha256-r3zt0upD+wzHZh8ktFpztcz3agM5sjz+nb/19ErD3ko=";
   };
 
   propagatedBuildInputs = [
