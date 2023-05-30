@@ -390,7 +390,7 @@ in {
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
       llvmPackages = pkgs.llvmPackages_15;
     };
-    ghc96 = ghc961;
+    ghc96 = ghc962;
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
       bootPkgs =
         # For GHC 9.2 no armv7l bindists are available.
@@ -563,7 +563,7 @@ in {
       ghc = bh.compiler.ghc962;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.6.x.nix { };
     };
-    ghc96 = ghc961;
+    ghc96 = ghc962;
     ghcHEAD = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghcHEAD;
       ghc = bh.compiler.ghcHEAD;
