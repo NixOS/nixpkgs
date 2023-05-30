@@ -18884,6 +18884,8 @@ with pkgs;
       else llvmPackages.stdenv;
   };
 
+  moon = callPackage ../development/tools/build-managers/moon/default.nix { };
+
   msgpack-tools = callPackage ../development/tools/msgpack-tools { };
 
   msgpuck = callPackage ../development/libraries/msgpuck { };
