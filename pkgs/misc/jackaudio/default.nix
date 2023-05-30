@@ -66,6 +66,11 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/jack_control --set PYTHONPATH $PYTHONPATH
   '');
 
+  postFixup = ''
+    substituteInPlace "$dev/lib/pkgconfig/jack.pc" \
+      --replace "$out/include" "$dev/include"
+  '';
+
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
