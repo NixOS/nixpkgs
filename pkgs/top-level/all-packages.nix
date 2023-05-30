@@ -40064,6 +40064,8 @@ with pkgs;
 
   tuner = callPackage ../applications/audio/tuner { };
 
+  tidal-dl = python3Packages.callPackage ../tools/audio/tidal-dl { };
+
   locate-dominating-file = callPackage ../tools/misc/locate-dominating-file { };
 
   jfrog-cli = callPackage ../tools/misc/jfrog-cli { };
