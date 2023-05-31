@@ -1,6 +1,6 @@
 { source ? "default", callPackage, lib, stdenv, ncurses, pkg-config, gettext
 , writeText, config, glib, gtk2-x11, gtk3-x11, lua, python3, perl, tcl, ruby
-, libX11, libXext, libSM, libXpm, libXt, libXaw, libXau, libXmu
+, libX11, libXext, libSM, libXpm, libXt, libXaw, libXau, libXmu, libsodium
 , libICE
 , vimPlugins
 , makeWrapper
@@ -25,6 +25,7 @@
 , ximSupport        ? config.vim.xim or true        # less than 15KB, needed for deadkeys
 , darwinSupport     ? config.vim.darwin or false    # Enable Darwin support
 , ftNixSupport      ? config.vim.ftNix or true      # Add nix indentation support from vim-nix (not needed for basic syntax highlighting)
+, sodiumSupport     ? config.vim.sodium or true     # Enable sodium based encryption
 }:
 
 
@@ -125,7 +126,8 @@ in stdenv.mkDerivation {
   ++ lib.optional multibyteSupport    "--enable-multibyte"
   ++ lib.optional cscopeSupport       "--enable-cscope"
   ++ lib.optional netbeansSupport     "--enable-netbeans"
-  ++ lib.optional ximSupport          "--enable-xim";
+  ++ lib.optional ximSupport          "--enable-xim"
+  ++ lib.optional sodiumSupport       "--enable-sodium";
 
   nativeBuildInputs = [
     pkg-config
@@ -158,7 +160,8 @@ in stdenv.mkDerivation {
     ++ lib.optional luaSupport lua
     ++ lib.optional pythonSupport python3
     ++ lib.optional tclSupport tcl
-    ++ lib.optional rubySupport ruby;
+    ++ lib.optional rubySupport ruby
+    ++ lib.optional sodiumSupport libsodium;
 
   # error: '__declspec' attributes are not enabled; use '-fdeclspec' or '-fms-extensions' to enable support for __declspec attributes
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-fdeclspec";
