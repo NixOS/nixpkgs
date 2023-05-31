@@ -11,22 +11,7 @@ import ./make-test-python.nix ({ lib, ... }@args: let
 
   inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
 
-  # Every VS Code server build corresponds to a specific commit of VS Code, so we
-  # want this to match the commit of VS Code in Nixpkgs.
-  # e.g. git rev-parse 1.77.0
-  rev = "b3e4e68a0bc097f0ae7907b217c1119af9e03435";
-  shortRev = builtins.substring 0 8 rev;
-
-  # Our tests run without networking so the remote-ssh extension will always fail to
-  # download the VSCode server so we can copy it onto the server ourselves.
-  vscode-server = pkgs.srcOnly {
-    name = "vscode-server-${shortRev}";
-    src = pkgs.fetchurl {
-      name = "vscode-server-${shortRev}.tar.gz";
-      url = "https://update.code.visualstudio.com/commit:${rev}/server-linux-x64/stable";
-      sha256 = "1gpsxlv4p3v3kh7b7b2i1lvm5g30xrq1vb7csqwhs4zjlbwfhdb2";
-    };
-  };
+  inherit (pkgs.vscode.passthru) rev vscodeServer;
 in {
   name = "vscode-remote-ssh";
   meta.maintainers = with lib.maintainers; [ Enzime ];
@@ -61,12 +46,12 @@ in {
   testScript = let
     jq = "${pkgs.jq}/bin/jq";
 
-    ssh-config = builtins.toFile "ssh.conf" ''
+    sshConfig = builtins.toFile "ssh.conf" ''
       UserKnownHostsFile=/dev/null
       StrictHostKeyChecking=no
     '';
 
-    vscode-config = builtins.toFile "settings.json" ''
+    vscodeConfig = builtins.toFile "settings.json" ''
       {
         "window.zoomLevel": 1,
         "security.workspace.trust.startupPrompt": "always"
@@ -80,7 +65,7 @@ in {
         server.succeed("rm -r ~/.vscode-server")
 
       server.succeed("mkdir -p ~/.vscode-server/bin")
-      server.succeed("cp -r ${vscode-server} ~/.vscode-server/bin/${rev}")
+      server.succeed("cp -r ${vscodeServer} ~/.vscode-server/bin/${rev}")
 
       client.succeed("sudo -u alice code --remote=ssh-remote+root@server /root")
       client.wait_for_window("Visual Studio Code")
@@ -108,7 +93,7 @@ in {
     server.wait_for_open_port(22)
 
     VSCODE_COMMIT = server.execute("${jq} -r .commit ${pkgs.vscode}/lib/vscode/resources/app/product.json")[1].rstrip()
-    SERVER_COMMIT = server.execute("${jq} -r .commit ${vscode-server}/product.json")[1].rstrip()
+    SERVER_COMMIT = server.execute("${jq} -r .commit ${vscodeServer}/product.json")[1].rstrip()
 
     print(f"{VSCODE_COMMIT=} {SERVER_COMMIT=}")
     assert VSCODE_COMMIT == SERVER_COMMIT, "VSCODE_COMMIT and SERVER_COMMIT do not match"
@@ -116,8 +101,8 @@ in {
     client.wait_until_succeeds("ping -c1 server")
     client.succeed("sudo -u alice mkdir ~alice/.ssh")
     client.succeed("sudo -u alice install -Dm 600 ${snakeOilPrivateKey} ~alice/.ssh/id_ecdsa")
-    client.succeed("sudo -u alice install ${ssh-config} ~alice/.ssh/config")
-    client.succeed("sudo -u alice install -Dm 644 ${vscode-config} ~alice/.config/Code/User/settings.json")
+    client.succeed("sudo -u alice install ${sshConfig} ~alice/.ssh/config")
+    client.succeed("sudo -u alice install -Dm 644 ${vscodeConfig} ~alice/.config/Code/User/settings.json")
 
     client.wait_for_x()
     client.wait_for_file("~alice/.Xauthority")
