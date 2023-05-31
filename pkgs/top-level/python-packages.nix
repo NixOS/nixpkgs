@@ -10577,6 +10577,8 @@ self: super: with self; {
 
   rich-click = callPackage ../development/python-modules/rich-click { };
 
+  rich-pixels = callPackage ../development/python-modules/rich-pixels { };
+
   rich-rst = callPackage ../development/python-modules/rich-rst { };
 
   ring-doorbell = callPackage ../development/python-modules/ring-doorbell { };
