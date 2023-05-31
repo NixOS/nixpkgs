@@ -554,6 +554,11 @@ runTests {
     expected = 1000000;
   };
 
+  testFindFirstLazy = {
+    expr = findFirst (x: x == 1) 7 [ 1 (abort "list elements after the match must not be evaluated") ];
+    expected = 1;
+  };
+
 # ATTRSETS
 
   testConcatMapAttrs = {
