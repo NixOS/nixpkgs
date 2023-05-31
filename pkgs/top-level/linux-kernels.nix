@@ -46,10 +46,7 @@ let
           inherit sha256;
         };
         extraMeta = {
-          broken =
-            kernel.meta.broken ||
-            lib.versions.majorMinor version == "4.14" ||
-            (stdenv.isx86_64 && lib.versions.majorMinor version == "4.19");
+          broken = kernel.meta.broken;
         };
       };
       kernelPatches = kernel.kernelPatches ++ [
