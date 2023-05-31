@@ -82,6 +82,14 @@ in {
       '';
     };
 
+    localNetworkGameTransfers.openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mcDoc ''
+        Open ports for Steam Local Network Game Transfers.
+      '';
+    };
+
     gamescopeSession = mkOption {
       description = mdDoc "Run a GameScope driven Steam session from your display-manager";
       default = {};
@@ -147,6 +155,10 @@ in {
       (mkIf cfg.dedicatedServer.openFirewall {
         allowedTCPPorts = [ 27015 ]; # SRCDS Rcon port
         allowedUDPPorts = [ 27015 ]; # Gameplay traffic
+      })
+
+      mkIf cfg.localNetworkGameTransfers.openFirewall {
+        allowedTCPPorts = [ 24070 ]; # Local game transfers require port 24070 open, as shown here https://help.steampowered.com/en/faqs/view/46BD-6BA8-B012-CE43
       })
     ];
   };
