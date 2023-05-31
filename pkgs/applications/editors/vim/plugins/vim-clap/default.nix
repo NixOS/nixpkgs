@@ -62,5 +62,8 @@ vimUtils.buildVimPluginFrom2Nix {
 
   passthru = {
     inherit maple;
+    updateScript = nix-update-script {
+      attrPath = "vimPlugins.vim-clap.maple";
+    };
   };
 }
