@@ -140,7 +140,7 @@ let
       #   - Importing an empty directory wouldn't make much sense because our `base` is a file
       #   - Neither can we create a store path containing nothing at all
       #   - The only option is to throw an error that `base` should be a directory
-      # - Should `filter (file: file.name == "default.nix") ./default.nix` run the predicate on the ./default.nix file?
+      # - Should `fileFilter (file: file.name == "default.nix") ./default.nix` run the predicate on the ./default.nix file?
       #   - If no, should the result include or exclude ./default.nix? In any case, it would be confusing and inconsistent
       #   - If yes, it needs to consider ./. to have influence the filesystem result, so filter would change the necessary base
       _create (dirOf path)
@@ -837,7 +837,7 @@ in {
   - Potentially other attributes in the future
 
   Type:
-    filter ::
+    fileFilter ::
       ({
         name :: String,
         type :: String,
@@ -847,9 +847,9 @@ in {
       -> FileSet
       -> FileSet
   */
-  filter = predicate: maybeFileset:
+  fileFilter = predicate: maybeFileset:
     let
-      fileset = _coerce "filter" "second argument" maybeFileset;
+      fileset = _coerce "fileFilter" "second argument" maybeFileset;
       recurse = focusPath: tree:
         mapAttrs (name: subtree:
           if isAttrs subtree || subtree == "directory" then
@@ -861,7 +861,7 @@ in {
               ext = mapNullable head (match ".*\\.(.*)" name);
               # To ensure forwards compatibility with more arguments being added in the future,
               # adding an attribute which can't be deconstructed :)
-              "This attribute is passed to prevent fileFilter predicate functions from breaking when more attributes are added in the future. Please add `...` to the function to handle this and further arguments." = null;
+              "This attribute is passed to prevent `lib.fileset.fileFilter` predicate functions from breaking when more attributes are added in the future. Please add `...` to the function to handle this and future additional arguments." = null;
             }
           then
             subtree
@@ -875,19 +875,19 @@ in {
   A file set containing all files that are contained in a directory whose name satisfies the given predicate.
   Only directories under the given path are checked, this is to ensure that components outside of the given path cannot influence the result.
   Consequently this function does not accept a file set as an argument.
-  If you need to filter files in a file set based on components, use `intersect myFileSet (directoryMatches myPredicate myPath)` instead.
+  If you need to filter files in a file set based on components, use `intersect myFileSet (directoryFilter myPredicate myPath)` instead.
 
   Type:
-    directoryMatches :: (String -> Bool) -> Path -> FileSet
+    directoryFilter :: (String -> Bool) -> Path -> FileSet
 
   Example:
     # Select all files in hidden directories within ./.
-    directoryMatches (hasPrefix ".") ./.
+    directoryFilter (hasPrefix ".") ./.
 
     # Select all files in directories named `build` within ./src
-    directoryMatches (name: name == "build") ./src
+    directoryFilter (name: name == "build") ./src
   */
-  directoryMatches = predicate: path:
+  directoryFilter = predicate: path:
     let
       recurse = focusPath:
         mapAttrs (name: type:
@@ -902,12 +902,12 @@ in {
     in
     if path._type or null == "fileset" then
       throw ''
-        lib.fileset.directoryMatches: Expected second argument to be a path, but it's a file set.
-            If you need to filter files in a file set, use `intersect myFileSet (directoryMatches myPredicate myPath)` instead.''
+        lib.fileset.directoryFilter: Expected second argument to be a path, but it's a file set.
+            If you need to filter files in a file set, use `intersect myFileSet (directoryFilter myPredicate myPath)` instead.''
     else if ! isPath path then
-      throw "lib.fileset.directoryMatches: Expected second argument to be a path, but got a ${typeOf path}."
+      throw "lib.fileset.directoryFilter: Expected second argument to be a path, but got a ${typeOf path}."
     else if pathType path != "directory" then
-      throw "lib.fileset.directoryMatches: Expected second argument \"${toString path}\" to be a directory, but it's not."
+      throw "lib.fileset.directoryFilter: Expected second argument \"${toString path}\" to be a directory, but it's not."
     else
       _create path (recurse path);
 

@@ -91,10 +91,10 @@ difference
 - src (recursive directory)
 ```
 
-Another important function is [`filter`](#function-library-lib.fileset.filter), which filters out files based on a predicate function:
+Another important function is [`fileFilter`](#function-library-lib.fileset.fileFilter), which filters out files based on a predicate function:
 ```nix
 # Filter for C files contained in ./.
-filter
+fileFilter
   (file: file.ext == "c")
   ./.
 ```
