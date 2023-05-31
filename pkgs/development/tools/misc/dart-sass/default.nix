@@ -17,7 +17,7 @@ buildDartApplication rec {
   pubspecLockFile = ./pubspec.lock;
   vendorHash = "sha256-Atm7zfnDambN/BmmUf4BG0yUz/y6xWzf0reDw3Ad41s=";
 
-  dartCompileFlags = "--define=version=${version}";
+  dartCompileFlags = [ "--define=version=${version}" ];
 
   meta = with lib; {
     homepage = "https://github.com/sass/dart-sass";

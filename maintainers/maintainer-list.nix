@@ -5253,6 +5253,12 @@
     githubId = 2489598;
     name = "Felix Breidenstein";
   };
+  flemzord = {
+    email = "maxence@maireaux.fr";
+    github = "flemzord";
+    githubId = 1952914;
+    name = "Maxence Maireaux";
+  };
   flexagoon = {
     email = "flexagoon@pm.me";
     github = "flexagoon";
@@ -11460,6 +11466,16 @@
     github = "NilsIrl";
     githubId = 26231126;
     name = "Nils ANDRÉ-CHANG";
+  };
+  nim65s = {
+    email = "guilhem.saurel@laas.fr";
+    matrix = "@gsaurel:laas.fr";
+    github = "nim65s";
+    githubId = 131929;
+    name = "Guilhem Saurel";
+    keys = [{
+      fingerprint = "9B1A 7906 5D2F 2B80 6C8A  5A1C 7D2A CDAF 4653 CF28";
+    }];
   };
   ninjatrappeur = {
     email = "felix@alternativebit.fr";

@@ -60,7 +60,7 @@ let
 
 in
 stdenv.mkDerivation rec {
-  pname = "ghostscript${lib.optionalString (x11Support) "-with-X"}";
+  pname = "ghostscript${lib.optionalString x11Support "-with-X"}";
   version = "10.01.1";
 
   src = fetchurl {
@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals dynamicDrivers [
     "--enable-dynamic"
     "--disable-hidden-visibility"
-  ] ++ lib.optional x11Support [
+  ] ++ lib.optionals x11Support [
     "--with-x"
   ] ++ lib.optionals cupsSupport [
     "--enable-cups"

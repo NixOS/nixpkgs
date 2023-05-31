@@ -126,6 +126,8 @@ self: super: with self; {
 
   aioairzone = callPackage ../development/python-modules/aioairzone { };
 
+  aioairzone-cloud = callPackage ../development/python-modules/aioairzone-cloud { };
+
   aioairq = callPackage ../development/python-modules/aioairq { };
 
   aioaladdinconnect = callPackage ../development/python-modules/aioaladdinconnect { };
@@ -4090,7 +4092,9 @@ self: super: with self; {
 
   glean-parser = callPackage ../development/python-modules/glean-parser { };
 
-  glean-sdk = callPackage ../development/python-modules/glean-sdk { };
+  glean-sdk = callPackage ../development/python-modules/glean-sdk {
+    inherit (pkgs) lmdb;
+  };
 
   glfw = callPackage ../development/python-modules/glfw { };
 
@@ -4626,6 +4630,11 @@ self: super: with self; {
   hpack = callPackage ../development/python-modules/hpack { };
 
   hpccm = callPackage ../development/python-modules/hpccm { };
+
+  hpp-fcl = toPythonModule (pkgs.hpp-fcl.override {
+    pythonSupport = true;
+    python3Packages = self;
+  });
 
   hs-dbus-signature = callPackage ../development/python-modules/hs-dbus-signature { };
 
@@ -7776,6 +7785,8 @@ self: super: with self; {
   pyutil = callPackage ../development/python-modules/pyutil { };
 
   pyzbar = callPackage ../development/python-modules/pyzbar { };
+
+  pyzipper = callPackage ../development/python-modules/pyzipper { };
 
   pkutils = callPackage ../development/python-modules/pkutils { };
 
@@ -12429,6 +12440,8 @@ self: super: with self; {
 
   types-decorator = callPackage ../development/python-modules/types-decorator { };
 
+  types-deprecated = callPackage ../development/python-modules/types-deprecated { };
+
   types-docutils = callPackage ../development/python-modules/types-docutils { };
 
   types-enum34 = callPackage ../development/python-modules/types-enum34 { };
@@ -13100,6 +13113,8 @@ self: super: with self; {
   xkcdpass = callPackage ../development/python-modules/xkcdpass { };
 
   xknx = callPackage ../development/python-modules/xknx { };
+
+  xknxproject = callPackage ../development/python-modules/xknxproject { };
 
   xlib = callPackage ../development/python-modules/xlib { };
 
