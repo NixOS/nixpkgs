@@ -34,7 +34,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
       --replace "-Werror " ""
 
     substituteInPlace SETUP/kextsymboltool/Makefile \
-      --replace "-lstdc++" "-lc++"
+      --replace "-lstdc++" "-lc++ -lc++abi"
 
     substituteInPlace libsyscall/xcodescripts/mach_install_mig.sh \
       --replace "/usr/include" "/include" \
