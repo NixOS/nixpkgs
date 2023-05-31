@@ -4,6 +4,7 @@
 , pkg-config
 , stdenv
 , darwin
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -42,6 +43,10 @@ rustPlatform.buildRustPackage rec {
     "--skip commands::check::fs_error_infinite_symlink_exapansion"
     "--skip commands::check::fs_error_dereferenced_symlink"
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex" "cli%2Fv(.*)" ];
+  };
 
   meta = with lib; {
     description = "A formatter, linter, bundler, and more for JavaScript, TypeScript, JSON, HTML, Markdown, and CSS";
