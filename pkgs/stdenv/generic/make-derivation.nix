@@ -438,15 +438,22 @@ else let
 
       inherit outputs;
 
-      ${if attrs ? src._root && attrs.src ? _subpath then "src" else null} =
-        attrs.src._root;
+      ${if attrs ? src then "src" else null} =
+        if attrs ? src._root && attrs.src ? _subpath then
+          attrs.src._root
+        else
+          attrs.src;
 
       # TODO simplify by adding to unpackPhase instead.
       #      This wasn't done yet to avoid a mass rebuild while working on this.
-      ${if attrs ? src._root && attrs.src ? _subpath then "postUnpack" else null} = ''
-        sourceRoot="$sourceRoot"/${lib.escapeShellArg attrs.src._subpath}
-        ${attrs.postUnpack or ""}
-      '';
+      ${if attrs ? src then "postUnpack" else null} =
+        if attrs ? src._root && attrs.src ? _subpath then
+          ''
+            sourceRoot="$sourceRoot"/${lib.escapeShellArg attrs.src._subpath}
+            ${attrs.postUnpack or ""}
+          ''
+        else
+          attrs.postUnpack or null;
 
     } // lib.optionalAttrs (__contentAddressed) {
       inherit __contentAddressed;
