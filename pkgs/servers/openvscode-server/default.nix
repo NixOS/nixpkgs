@@ -107,6 +107,9 @@ in stdenv.mkDerivation rec {
 
     # set offline mirror to yarn cache we created in previous steps
     yarn --offline config set yarn-offline-mirror "${yarnCache}"
+
+    # set nodedir, so we can build binaries later
+    npm config set nodedir "${nodejs}"
   '';
 
   buildPhase = ''
@@ -143,7 +146,7 @@ in stdenv.mkDerivation rec {
     # rebuild binaries, we use npm here, as yarn does not provide an alternative
     # that would not attempt to try to reinstall everything and break our
     # patching attempts
-    npm --prefix ./remote rebuild --build-from-source --nodedir ${nodejs}
+    npm --prefix ./remote rebuild --build-from-source
 
     # run postinstall scripts after patching
     find . -path "*node_modules" -prune -o \
