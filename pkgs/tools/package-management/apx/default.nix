@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Vanilla-OS";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-nBhSl4r7LlgCA5/HCLpOleihE5n/JCJgf43KdCklQbg=";
   };
 
@@ -47,6 +47,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "The Vanilla OS package manager";
     homepage = "https://github.com/Vanilla-OS/apx";
+    changelog = "https://github.com/Vanilla-OS/apx/releases/tag/${version}";
     license = licenses.gpl3;
     maintainers = with maintainers; [ dit7ya ];
   };
