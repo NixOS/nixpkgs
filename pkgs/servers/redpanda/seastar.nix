@@ -33,8 +33,8 @@ llvmPackages_14.stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "redpanda-data";
     repo = "seastar";
-    rev = "30d3a28bde08d2228b4e560c173b89fdd94c3f05";
-    sha256 = "sha256-Xzu7AJMkvE++BGEqluod3fwMEIpDnbCczmlEad0/4v4=";
+    rev = "245e0ccfa6d58d7e0dca2b4034ce1bc43e39bdc5";
+    sha256 = "sha256-eYJ24KAuTUqaJ2CR4qcprAqQofVxoDScFr7tpbjgsdc=";
   };
   nativeBuildInputs = [
     cmake

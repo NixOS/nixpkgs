@@ -26,6 +26,8 @@
 , xxHash
 , zip
 , zstd
+, libxml2
+, re2
 }:
 let
   pname = "redpanda";
@@ -106,6 +108,8 @@ llvmPackages_14.stdenv.mkDerivation rec {
     snappy
     xxHash
     zstd
+    libxml2
+    re2
   ];
 
   meta = with lib; {
