@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxcrypt";
-  version = "4.4.33";
+  version = "4.4.35";
 
   src = fetchurl {
     url = "https://github.com/besser82/libxcrypt/releases/download/v${finalAttrs.version}/libxcrypt-${finalAttrs.version}.tar.xz";
-    hash = "sha256-6HrPnGUsVzpHE9VYIVn5jzBdVu1fdUzmT1fUGU1rOm8=";
+    hash = "sha256-qMk1UFtV8d8NF/i/1ZRox8Zwmh0xgxsPjj4EWrj9RV0=";
   };
 
   outputs = [
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     };
     enabledCryptSchemeIds = [
-      # https://github.com/besser82/libxcrypt/blob/v4.4.33/lib/hashes.conf
+      # https://github.com/besser82/libxcrypt/blob/v4.4.35/lib/hashes.conf
       "y"   # yescrypt
       "gy"  # gost_yescrypt
       "7"   # scrypt
@@ -58,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
+    changelog = "https://github.com/besser82/libxcrypt/blob/v${finalAttrs.version}/NEWS";
     description = "Extended crypt library for descrypt, md5crypt, bcrypt, and others";
     homepage = "https://github.com/besser82/libxcrypt/";
     platforms = platforms.all;
