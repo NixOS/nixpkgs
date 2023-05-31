@@ -100,7 +100,7 @@ There are several ways to tweak how Nix handles a package which has been marked 
     }
     ```
 
-    For a more useful example, try the following. This configuration only allows two specific unfree packages, "roon-server" and "vscode-fhs":
+    The following example only allows two specific unfree packages:
 
     ```nix
     {
