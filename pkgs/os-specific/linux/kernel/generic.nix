@@ -47,7 +47,7 @@
   # symbolic name and `patch' is the actual patch.  The patch may
   # optionally be compressed with gzip or bzip2.
   kernelPatches ? []
-, ignoreConfigErrors ? stdenv.hostPlatform.linux-kernel.name != "pc"
+, ignoreConfigErrors ? stdenv.hostPlatform.linux-kernel.name or "" != "pc"
 , extraMeta ? {}
 
 , isZen      ? false
@@ -55,7 +55,7 @@
 , isHardened ? false
 
 # easy overrides to stdenv.hostPlatform.linux-kernel members
-, autoModules ? stdenv.hostPlatform.linux-kernel.autoModules
+, autoModules ? stdenv.hostPlatform.linux-kernel.autoModules or true
 , preferBuiltin ? stdenv.hostPlatform.linux-kernel.preferBuiltin or false
 , kernelArch ? stdenv.hostPlatform.linuxArch
 , kernelTests ? []
@@ -128,11 +128,10 @@ let
       ++ lib.optionals (lib.versionAtLeast version "4.16") [ bison flex ]
       ++ lib.optional (lib.versionAtLeast version "5.2") pahole;
 
-    platformName = stdenv.hostPlatform.linux-kernel.name;
     # e.g. "defconfig"
-    kernelBaseConfig = if defconfig != null then defconfig else stdenv.hostPlatform.linux-kernel.baseConfig;
+    kernelBaseConfig = if defconfig != null then defconfig else stdenv.hostPlatform.linux-kernel.baseConfig or "defconfig";
     # e.g. "bzImage"
-    kernelTarget = stdenv.hostPlatform.linux-kernel.target;
+    kernelTarget = stdenv.hostPlatform.linux-kernel.target or "vmlinux";
 
     makeFlags = lib.optionals (stdenv.hostPlatform.linux-kernel ? makeFlags) stdenv.hostPlatform.linux-kernel.makeFlags
       ++ extraMakeFlags;

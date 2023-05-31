@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
 , writeText
 , rustPlatform
 , meson
@@ -27,11 +26,14 @@
 , Security
 , gst-plugins-good
 , nix-update-script
+# specifies a limited subset of plugins to build (the default `null` means all plugins supported on the stdenv platform)
+, plugins ? null
+# Checks meson.is_cross_build(), so even canExecute isn't enough.
+, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform && plugins == null
+, hotdoc
 # TODO: required for case-insensitivity hack below
 , yq
 , moreutils
-# specify a limited set of plugins to build if not all supported plugins
-, plugins ? null
 }:
 
 let
@@ -94,7 +96,6 @@ let
 
   selectedPlugins = if plugins != null then lib.unique (lib.sort lib.lessThan plugins) else lib.subtractLists (
     [
-      "audiofx" # tests have race-y failure, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/337
       "csound" # tests have weird failure on x86, does not currently work on arm or darwin
       "livesync" # tests have suspicious intermittent failure, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/357
     ] ++ lib.optionals stdenv.isDarwin [
@@ -162,6 +163,8 @@ stdenv.mkDerivation rec {
     cargo
     cargo-c
     nasm
+  ] ++ lib.optionals enableDocumentation [
+    hotdoc
   ];
 
   buildInputs = [
@@ -178,7 +181,7 @@ stdenv.mkDerivation rec {
     map (plugin: lib.mesonEnable plugin true) selectedPlugins
   ) ++ [
     (lib.mesonOption "sodium-source" "system")
-    (lib.mesonEnable "doc" false) # `hotdoc` not packaged in nixpkgs as of writing
+    (lib.mesonEnable "doc" enableDocumentation)
   ] ++ (let
     crossFile = writeText "cross-file.conf" ''
       [binaries]
@@ -188,7 +191,7 @@ stdenv.mkDerivation rec {
     "--cross-file=${crossFile}"
   ]);
 
-  # turn off all auto plugins if a list is specified
+  # turn off all auto plugins since we use a list of plugins we generate
   mesonAutoFeatures = "disabled";
 
   doCheck = true;

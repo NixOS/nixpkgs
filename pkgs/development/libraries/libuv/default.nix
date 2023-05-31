@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , autoconf
 , automake
 , libtool
@@ -24,26 +23,17 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.44.2";
+  version = "1.45.0";
   pname = "libuv";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-K6v+00basjI32ON27ZjC5spQi/zWCcslDwQwyosq2iY=";
+    sha256 = "sha256-qKw9QFR24Uw7pVA9isPH8Va+9/5DYuqXz6l6jWcXn+4=";
   };
 
   outputs = [ "out" "dev" ];
-
-  patches = [
-    # Fix tests for statically linked variant upstream PR is
-    # https://github.com/libuv/libuv/pull/3735
-    (fetchpatch {
-      url = "https://github.com/libuv/libuv/commit/9d898acc564351dde74e9ed9865144e5c41f5beb.patch";
-      sha256 = "sha256-6XsjrseD8a+ny887EKOX0NmHocLMXGf2YL13vkNHUZ0=";
-    })
-  ];
 
   postPatch = let
     toDisable = [
@@ -53,7 +43,7 @@ stdenv.mkDerivation rec {
       "getaddrinfo_fail" "getaddrinfo_fail_sync"
       "threadpool_multiple_event_loops" # times out on slow machines
       "get_passwd" # passed on NixOS but failed on other Linuxes
-      "tcp_writealot" "udp_multicast_join" "udp_multicast_join6" # times out sometimes
+      "tcp_writealot" "udp_multicast_join" "udp_multicast_join6" "metrics_pool_events" # times out sometimes
       "fs_fstat" # https://github.com/libuv/libuv/issues/2235#issuecomment-1012086927
 
       # Assertion failed in test/test-tcp-bind6-error.c on line 60: r == UV_EADDRINUSE
