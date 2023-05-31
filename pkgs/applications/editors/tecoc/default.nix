@@ -2,17 +2,18 @@
 , lib
 , fetchFromGitHub
 , ncurses
+, unstableGitUpdater
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tecoc";
-  version = "unstable-2020-11-03";
+  version = "unstable-2023-04-21";
 
   src = fetchFromGitHub {
     owner = "blakemcbride";
     repo = "TECOC";
-    rev = "79fcb6cfd6c5f9759f6ec46aeaf86d5806b13a0b";
-    hash = "sha256-JooLvoh9CxLHLOXXxE7zA7R9yglr9BGUwX4nrw2/vIw=";
+    rev = "021d1d15242b9d6c84d70c9ffcf1871793898f0a";
+    hash = "sha256-VGIO+uiAZkdzLYmJztmnKTS4HDIVow4AimaneHj7E1M=";
   };
 
   buildInputs = [ ncurses ];
@@ -49,6 +50,10 @@ stdenv.mkDerivation {
     popd
   '';
 
+  passthru.updateScript = unstableGitUpdater {
+    url = finalAttrs.meta.homepage;
+  };
+
   meta = {
     homepage = "https://github.com/blakemcbride/TECOC";
     description = "A clone of the good old TECO editor";
@@ -72,4 +77,4 @@ stdenv.mkDerivation {
     maintainers = [ lib.maintainers.AndersonTorres ];
     platforms = lib.platforms.unix;
   };
-}
+})
