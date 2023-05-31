@@ -109,7 +109,16 @@ stdenv.mkDerivation {
     url = "https://github.com/boostorg/math/commit/7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b.patch";
     relative = "include";
     sha256 = "sha256-KlmIbixcds6GyKYt1fx5BxDIrU7msrgDdYo9Va/KJR4=";
-  });
+  })
+  ++ lib.optionals (lib.versionOlder version "1.81") [
+    # libc++ 15 dropped support for `std::unary_function` and `std::binary_function` in C++17+.
+    # C++17 is the default for clang 16, but clang 15 is also affected in that language mode.
+    # This patch is for Boost 1.80, but it also applies to earlier versions.
+    (fetchpatch {
+      url = "https://www.boost.org/patches/1_80_0/0005-config-libcpp15.patch";
+      hash = "sha256-ULFMzKphv70unvPZ3o4vSP/01/xbSM9a2TlIV67eXDQ=";
+    })
+  ];
 
   meta = with lib; {
     homepage = "http://boost.org/";
