@@ -572,6 +572,7 @@ in {
       };
       components = removePrefix base entryPoint;
     in {
+      # TODO: Consider not exposing these properties and instead letting `mkDerivation` parse `src`, splitting the `outPath` itself. This would make this functionality more general.
       _root = root;
       _subpath = toSubpath components;
       outPath =
