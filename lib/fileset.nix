@@ -528,9 +528,9 @@ in {
     };
 
   /*
-  Coerce a value to a fileset:
+  Coerce a value to a file set:
 
-  - If the value is a fileset already, return it directly
+  - If the value is a file set already, return it directly
 
   - If the value is a path pointing to a file, return a file set with that single file
 
@@ -625,7 +625,7 @@ in {
   */
   union = lhs: rhs:
     let
-      normalised = _normaliseBase "intersect" [
+      normalised = _normaliseBase "union" [
         {
           context = "first argument";
           value = lhs;
