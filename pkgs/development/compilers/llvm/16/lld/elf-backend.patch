@@ -1,0 +1,299 @@
+From 8aef04fa69a2a78fecdbc4d57174d773a7e5f2df Mon Sep 17 00:00:00 2001
+From: Sam Clegg <sbc@chromium.org>
+Date: Mon, 6 Mar 2023 09:18:03 -0800
+Subject: [PATCH] [lld][WebAssembly] Implement --why-extract flag from the ELF
+ backend
+
+See https://reviews.llvm.org/D109572 for the original ELF version.
+
+Differential Revision: https://reviews.llvm.org/D145431
+---
+ test/wasm/why-extract.s | 87 +++++++++++++++++++++++++++++++++++++
+ wasm/Config.h           | 12 ++++-
+ wasm/Driver.cpp         | 44 ++++++++++++++++---
+ wasm/Options.td         |  2 +
+ wasm/SymbolTable.cpp    |  6 +++
+ 5 files changed, 143 insertions(+), 8 deletions(-)
+ create mode 100644 test/wasm/why-extract.s
+
+diff --git a/test/wasm/why-extract.s b/test/wasm/why-extract.s
+new file mode 100644
+index 0000000000000..88be4b3fcae51
+--- /dev/null
++++ b/test/wasm/why-extract.s
+@@ -0,0 +1,87 @@
++# RUN: rm -rf %t && split-file %s %t
++# RUN: llvm-mc -filetype=obj -triple=wasm32-unknown-unknown %t/main.s -o %t/main.o
++# RUN: llvm-mc -filetype=obj -triple=wasm32-unknown-unknown %t/a.s -o %t/a.o
++# RUN: llvm-mc -filetype=obj -triple=wasm32-unknown-unknown %t/a_b.s -o %t/a_b.o
++# RUN: llvm-mc -filetype=obj -triple=wasm32-unknown-unknown %t/b.s -o %t/b.o
++# RUN: llvm-ar rc %t/a.a %t/a.o
++# RUN: llvm-ar rc %t/a_b.a %t/a_b.o
++# RUN: llvm-ar rc %t/b.a %t/b.o
++# RUN: cd %t
++
++## Nothing is extracted from an archive. The file is created with just a header.
++# RUN: wasm-ld main.o a.o b.a -o /dev/null --why-extract=why1.txt
++# RUN: FileCheck %s --input-file=why1.txt --check-prefix=CHECK1 --match-full-lines --strict-whitespace
++
++#      CHECK1:reference	extracted	symbol
++#  CHECK1-NOT:{{.}}
++
++## Some archive members are extracted.
++# RUN: wasm-ld main.o a_b.a b.a -o /dev/null --why-extract=why2.txt
++# RUN: FileCheck %s --input-file=why2.txt --check-prefix=CHECK2 --match-full-lines --strict-whitespace
++
++#      CHECK2:reference	extracted	symbol
++# CHECK2-NEXT:main.o	a_b.a(a_b.o)	a
++# CHECK2-NEXT:a_b.a(a_b.o)	b.a(b.o)	b()
++
++## An undefined symbol error does not suppress the output.
++# RUN: not wasm-ld main.o a_b.a -o /dev/null --why-extract=why3.txt
++# RUN: FileCheck %s --input-file=why3.txt --check-prefix=CHECK3 --match-full-lines --strict-whitespace
++
++## Check that backward references are supported.
++## - means stdout.
++# RUN: wasm-ld b.a a_b.a main.o -o /dev/null --why-extract=- | FileCheck %s --check-prefix=CHECK4
++
++#      CHECK3:reference	extracted	symbol
++# CHECK3-NEXT:main.o	a_b.a(a_b.o)	a
++
++#      CHECK4:reference	extracted	symbol
++# CHECK4-NEXT:a_b.a(a_b.o)	b.a(b.o)	b()
++# CHECK4-NEXT:main.o	a_b.a(a_b.o)	a
++
++# RUN: wasm-ld main.o a_b.a b.a -o /dev/null --no-demangle --why-extract=- | FileCheck %s --check-prefix=MANGLED
++
++# MANGLED: a_b.a(a_b.o)	b.a(b.o)	_Z1bv
++
++# RUN: wasm-ld main.o a.a b.a -o /dev/null -u _Z1bv --why-extract=- | FileCheck %s --check-prefix=UNDEFINED
++
++## We insert -u symbol before processing other files, so its name is <internal>.
++## This is not ideal.
++# UNDEFINED: <internal>	b.a(b.o)	b()
++
++# RUN: wasm-ld main.o a.a b.a -o /dev/null -e _Z1bv --why-extract=- | FileCheck %s --check-prefix=ENTRY
++
++# ENTRY: --entry	b.a(b.o)	b()
++
++# SCRIPT: <internal>	b.a(b.o)	b()
++
++# RUN: not wasm-ld -shared main.o -o /dev/null --why-extract=/ 2>&1 | FileCheck %s --check-prefix=ERR
++
++# ERR: error: cannot open --why-extract= file /: {{.*}}
++
++#--- main.s
++.globl _start
++.functype a () -> ()
++_start:
++  .functype _start () -> ()
++  call a
++  end_function
++
++#--- a.s
++.globl a
++a:
++  .functype a () -> ()
++  end_function
++
++#--- a_b.s
++.functype _Z1bv () -> ()
++.globl a
++a:
++  .functype a () -> ()
++  call _Z1bv
++  end_function
++
++#--- b.s
++.globl _Z1bv
++_Z1bv:
++  .functype _Z1bv () -> ()
++  end_function
+diff --git a/wasm/Config.h b/wasm/Config.h
+index ea19a21172bb1..0161489562526 100644
+--- a/wasm/Config.h
++++ b/wasm/Config.h
+@@ -23,6 +23,9 @@ enum Level : int;
+ namespace lld {
+ namespace wasm {
+ 
++class InputFile;
++class Symbol;
++
+ // For --unresolved-symbols.
+ enum class UnresolvedPolicy { ReportError, Warn, Ignore, ImportDynamic };
+ 
+@@ -81,6 +84,7 @@ struct Configuration {
+   llvm::StringRef mapFile;
+   llvm::StringRef outputFile;
+   llvm::StringRef thinLTOCacheDir;
++  llvm::StringRef whyExtract;
+ 
+   llvm::StringSet<> allowUndefinedSymbols;
+   llvm::StringSet<> exportedSymbols;
+@@ -92,7 +96,8 @@ struct Configuration {
+   llvm::SmallVector<uint8_t, 0> buildIdVector;
+ 
+   // The following config options do not directly correspond to any
+-  // particular command line options.
++  // particular command line options, and should probably be moved to seperate
++  // Ctx struct as in ELF/Config.h
+ 
+   // True if we are creating position-independent code.
+   bool isPic;
+@@ -110,6 +115,11 @@ struct Configuration {
+   // Will be set to true if bss data segments should be emitted. In most cases
+   // this is not necessary.
+   bool emitBssSegments = false;
++
++  // A tuple of (reference, extractedFile, sym). Used by --why-extract=.
++  llvm::SmallVector<std::tuple<std::string, const InputFile *, const Symbol &>,
++                    0>
++      whyExtractRecords;
+ };
+ 
+ // The only instance of Configuration struct.
+diff --git a/wasm/Driver.cpp b/wasm/Driver.cpp
+index ea9299681d87f..e94a4bac72698 100644
+--- a/wasm/Driver.cpp
++++ b/wasm/Driver.cpp
+@@ -485,6 +485,7 @@ static void readConfigs(opt::InputArgList &args) {
+       parseCachePruningPolicy(args.getLastArgValue(OPT_thinlto_cache_policy)),
+       "--thinlto-cache-policy: invalid cache policy");
+   config->unresolvedSymbols = getUnresolvedSymbolPolicy(args);
++  config->whyExtract = args.getLastArgValue(OPT_why_extract);
+   errorHandler().verbose = args.hasArg(OPT_verbose);
+   LLVM_DEBUG(errorHandler().verbose = true);
+ 
+@@ -666,7 +667,7 @@ static const char *getReproduceOption(opt::InputArgList &args) {
+ }
+ 
+ // Force Sym to be entered in the output. Used for -u or equivalent.
+-static Symbol *handleUndefined(StringRef name) {
++static Symbol *handleUndefined(StringRef name, const char *option) {
+   Symbol *sym = symtab->find(name);
+   if (!sym)
+     return nullptr;
+@@ -675,8 +676,11 @@ static Symbol *handleUndefined(StringRef name) {
+   // eliminate it. Mark the symbol as "used" to prevent it.
+   sym->isUsedInRegularObj = true;
+ 
+-  if (auto *lazySym = dyn_cast<LazySymbol>(sym))
++  if (auto *lazySym = dyn_cast<LazySymbol>(sym)) {
+     lazySym->fetch();
++    if (!config->whyExtract.empty())
++      config->whyExtractRecords.emplace_back(option, sym->getFile(), *sym);
++  }
+ 
+   return sym;
+ }
+@@ -688,8 +692,31 @@ static void handleLibcall(StringRef name) {
+ 
+   if (auto *lazySym = dyn_cast<LazySymbol>(sym)) {
+     MemoryBufferRef mb = lazySym->getMemberBuffer();
+-    if (isBitcode(mb))
++    if (isBitcode(mb)) {
++      if (!config->whyExtract.empty())
++        config->whyExtractRecords.emplace_back("<libcall>", sym->getFile(),
++                                               *sym);
+       lazySym->fetch();
++    }
++  }
++}
++
++static void writeWhyExtract() {
++  if (config->whyExtract.empty())
++    return;
++
++  std::error_code ec;
++  raw_fd_ostream os(config->whyExtract, ec, sys::fs::OF_None);
++  if (ec) {
++    error("cannot open --why-extract= file " + config->whyExtract + ": " +
++          ec.message());
++    return;
++  }
++
++  os << "reference\textracted\tsymbol\n";
++  for (auto &entry : config->whyExtractRecords) {
++    os << std::get<0>(entry) << '\t' << toString(std::get<1>(entry)) << '\t'
++       << toString(std::get<2>(entry)) << '\n';
+   }
+ }
+ 
+@@ -1070,16 +1097,16 @@ void LinkerDriver::linkerMain(ArrayRef<const char *> argsArr) {
+ 
+   // Handle the `--undefined <sym>` options.
+   for (auto *arg : args.filtered(OPT_undefined))
+-    handleUndefined(arg->getValue());
++    handleUndefined(arg->getValue(), "<internal>");
+ 
+   // Handle the `--export <sym>` options
+   // This works like --undefined but also exports the symbol if its found
+   for (auto &iter : config->exportedSymbols)
+-    handleUndefined(iter.first());
++    handleUndefined(iter.first(), "--export");
+ 
+   Symbol *entrySym = nullptr;
+   if (!config->relocatable && !config->entry.empty()) {
+-    entrySym = handleUndefined(config->entry);
++    entrySym = handleUndefined(config->entry, "--entry");
+     if (entrySym && entrySym->isDefined())
+       entrySym->forceExport = true;
+     else
+@@ -1096,7 +1123,8 @@ void LinkerDriver::linkerMain(ArrayRef<const char *> argsArr) {
+       !WasmSym::callCtors->isUsedInRegularObj &&
+       WasmSym::callCtors->getName() != config->entry &&
+       !config->exportedSymbols.count(WasmSym::callCtors->getName())) {
+-    if (Symbol *callDtors = handleUndefined("__wasm_call_dtors")) {
++    if (Symbol *callDtors =
++            handleUndefined("__wasm_call_dtors", "<internal>")) {
+       if (auto *callDtorsFunc = dyn_cast<DefinedFunction>(callDtors)) {
+         if (callDtorsFunc->signature &&
+             (!callDtorsFunc->signature->Params.empty() ||
+@@ -1131,6 +1159,8 @@ void LinkerDriver::linkerMain(ArrayRef<const char *> argsArr) {
+   if (errorCount())
+     return;
+ 
++  writeWhyExtract();
++
+   // Do link-time optimization if given files are LLVM bitcode files.
+   // This compiles bitcode files into real object files.
+   symtab->compileBitcodeFiles();
+diff --git a/wasm/Options.td b/wasm/Options.td
+index 5fe1e7e5c55e7..9670e5fb00847 100644
+--- a/wasm/Options.td
++++ b/wasm/Options.td
+@@ -226,6 +226,8 @@ defm whole_archive: B<"whole-archive",
+     "Force load of all members in a static library",
+     "Do not force load of all members in a static library (default)">;
+ 
++def why_extract: JJ<"why-extract=">, HelpText<"Print to a file about why archive members are extracted">;
++
+ defm check_features: BB<"check-features",
+     "Check feature compatibility of linked objects (default)",
+     "Ignore feature compatibility of linked objects">;
+diff --git a/wasm/SymbolTable.cpp b/wasm/SymbolTable.cpp
+index d14e9d5c010f1..75fa948875619 100644
+--- a/wasm/SymbolTable.cpp
++++ b/wasm/SymbolTable.cpp
+@@ -524,6 +524,9 @@ Symbol *SymbolTable::addUndefinedFunction(StringRef name,
+       lazy->signature = sig;
+     } else {
+       lazy->fetch();
++      if (!config->whyExtract.empty())
++        config->whyExtractRecords.emplace_back(toString(file), s->getFile(),
++                                               *s);
+     }
+   } else {
+     auto existingFunction = dyn_cast<FunctionSymbol>(s);
+@@ -758,7 +761,10 @@ void SymbolTable::addLazy(ArchiveFile *file, const Archive::Symbol *sym) {
+   }
+ 
+   LLVM_DEBUG(dbgs() << "replacing existing undefined\n");
++  const InputFile *oldFile = s->getFile();
+   file->addMember(sym);
++  if (!config->whyExtract.empty())
++    config->whyExtractRecords.emplace_back(toString(oldFile), s->getFile(), *s);
+ }
+ 
+ bool SymbolTable::addComdat(StringRef name) {

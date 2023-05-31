@@ -26,6 +26,14 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./gnu-install-dirs.patch
+
+    # required for emscripten, backported from LLVM 17
+    # https://reviews.llvm.org/D145431
+    # Rebased from https://github.com/llvm/llvm-project/commit/8aef04fa69a2a78fecdbc4d57174d773a7e5f2df.patch
+    ./elf-backend.patch
+    # https://reviews.llvm.org/D145308
+    # Rebased from https://github.com/llvm/llvm-project/commit/3111784ff7d3d51a9e981b1a0bbc8f6511c34d25.patch
+    ./stub-libraries.patch
   ];
 
   nativeBuildInputs = [ cmake ninja ];

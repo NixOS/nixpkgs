@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     name = "emscripten-node-modules-${version}";
     inherit pname version src;
 
-    npmDepsHash = "sha256-NSpVXssXwx+94E1qhM3tt2fN2G0EuvPZSN+Xep2IRs8=";
+    npmDepsHash = "sha256-QlKm6UvPUa7+VJ9ZvXdxYZzK+U96Ju/oAHPhZ/hyv/I=";
 
     dontBuild = true;
 
@@ -32,8 +32,9 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    sha256 = "sha256-hgndNMx+hvXyLzn6ip8Fhs+LAw98P3cqL8dJ+92jJmU=";
+    sha256 = "sha256-bC4mw2nHOM2pcVdsa3PyUAKghwpYTlWOw/sCPCrFpZ4=";
     rev = version;
+    fetchSubmodules = true; # needed for test suite
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -57,9 +58,6 @@ stdenv.mkDerivation rec {
     # disables cache in user home, use installation directory instead
     sed -i '/^def/!s/root_is_writable()/True/' tools/config.py
     sed -i "/^def check_sanity/a\\  return" tools/shared.py
-
-    # required for wasm2c
-    ln -s ${nodeModules} node_modules
 
     echo "EMSCRIPTEN_ROOT = '$out/share/emscripten'" > .emscripten
     echo "LLVM_ROOT = '${llvmEnv}/bin'" >> .emscripten
@@ -100,9 +98,6 @@ stdenv.mkDerivation rec {
     pushd $TMPDIR
     echo 'int __main_argc_argv( int a, int b ) { return 42; }' >test.c
     for LTO in -flto ""; do
-      # wasm2c doesn't work with PIC
-      $out/bin/emcc -s WASM2C -s STANDALONE_WASM $LTO test.c
-
       for BIND in "" "--bind"; do
         # starting with emscripten 3.1.32+,
         # if pthreads and relocatable are both used,

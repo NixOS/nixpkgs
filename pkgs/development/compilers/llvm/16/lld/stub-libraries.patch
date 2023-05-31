@@ -1,0 +1,466 @@
+From 3111784ff7d3d51a9e981b1a0bbc8f6511c34d25 Mon Sep 17 00:00:00 2001
+From: Sam Clegg <sbc@chromium.org>
+Date: Tue, 6 Dec 2022 16:49:13 -0800
+Subject: [PATCH] [lld][WebAssembly] Initial support for stub libraries
+
+See the docs in lld/docs/WebAssembly.rst for more on this.
+
+This feature unlocks a lot of simplification in the emscripten toolchain
+since we can represent the JS libraries to wasm-ld as stub libraries.
+
+See https://github.com/emscripten-core/emscripten/issues/18875
+
+Differential Revision: https://reviews.llvm.org/D145308
+---
+ docs/WebAssembly.rst                    | 33 +++++++++++++
+ test/wasm/Inputs/libstub-missing-dep.so |  2 +
+ test/wasm/Inputs/libstub-missing-sym.so |  3 ++
+ test/wasm/Inputs/libstub.so             |  5 ++
+ test/wasm/stub_library.s                | 48 ++++++++++++++++++
+ wasm/Driver.cpp                         | 55 +++++++++++++++++++++
+ wasm/InputFiles.cpp                     | 43 ++++++++++++++++
+ wasm/InputFiles.h                       | 13 +++++
+ wasm/Relocations.cpp                    |  4 +-
+ wasm/SymbolTable.cpp                    |  7 +++
+ wasm/SymbolTable.h                      |  1 +
+ wasm/Symbols.cpp                        |  4 ++
+ wasm/Symbols.h                          |  7 ++-
+ wasm/Writer.cpp                         |  4 +-
+ 14 files changed, 224 insertions(+), 5 deletions(-)
+ create mode 100644 test/wasm/Inputs/libstub-missing-dep.so
+ create mode 100644 test/wasm/Inputs/libstub-missing-sym.so
+ create mode 100644 test/wasm/Inputs/libstub.so
+ create mode 100644 test/wasm/stub_library.s
+
+diff --git a/docs/WebAssembly.rst b/docs/WebAssembly.rst
+index c40d4b322080a..dad3177e2c7df 100644
+--- a/docs/WebAssembly.rst
++++ b/docs/WebAssembly.rst
+@@ -75,6 +75,11 @@ WebAssembly-specific options:
+   flag which corresponds to ``--unresolve-symbols=ignore`` +
+   ``--import-undefined``.
+ 
++.. option:: --allow-undefined-file=<filename>
++
++  Like ``--allow-undefined``, but the filename specified a flat list of
++  symbols, one per line, which are allowed to be undefined.
++
+ .. option:: --unresolved-symbols=<method>
+ 
+   This is a more full featured version of ``--allow-undefined``.
+@@ -182,11 +187,39 @@ Imports
+ By default no undefined symbols are allowed in the final binary.  The flag
+ ``--allow-undefined`` results in a WebAssembly import being defined for each
+ undefined symbol.  It is then up to the runtime to provide such symbols.
++``--allow-undefined-file`` is the same but allows a list of symbols to be
++specified.
+ 
+ Alternatively symbols can be marked in the source code as with the
+ ``import_name`` and/or ``import_module`` clang attributes which signals that
+ they are expected to be undefined at static link time.
+ 
++Stub Libraries
++~~~~~~~~~~~~~~
++
++Another way to specify imports and exports is via a "stub library".  This
++feature is inspired by the ELF stub objects which are supported by the Solaris
++linker.  Stub libraries are text files that can be passed as normal linker
++inputs, similar to how linker scripts can be passed to the ELF linker.  The stub
++library is a stand-in for a set of symbols that will be available at runtime,
++but doesn't contain any actual code or data.  Instead it contains just a list of
++symbols, one per line.  Each symbol can specify zero or more dependencies.
++These dependencies are symbols that must be defined, and exported, by the output
++module if the symbol is question is imported/required by the output module.
++
++For example, imagine the runtime provides an external symbol ``foo`` that
++depends on the ``malloc`` and ``free``.  This can be expressed simply as::
++
++  #STUB
++  foo: malloc,free
++
++Here we are saying that ``foo`` is allowed to be imported (undefined) but that
++if it is imported, then the output module must also export ``malloc`` and
++``free`` to the runtime.  If ``foo`` is imported (undefined), but the output
++module does not define ``malloc`` and ``free`` then the link will fail.
++
++Stub libraries must begin with ``#STUB`` on a line by itself.
++
+ Garbage Collection
+ ~~~~~~~~~~~~~~~~~~
+ 
+diff --git a/test/wasm/Inputs/libstub-missing-dep.so b/test/wasm/Inputs/libstub-missing-dep.so
+new file mode 100644
+index 0000000000000..f2345b766f099
+--- /dev/null
++++ b/test/wasm/Inputs/libstub-missing-dep.so
+@@ -0,0 +1,2 @@
++#STUB
++foo: missing_dep,missing_dep2
+diff --git a/test/wasm/Inputs/libstub-missing-sym.so b/test/wasm/Inputs/libstub-missing-sym.so
+new file mode 100644
+index 0000000000000..2120b948511e9
+--- /dev/null
++++ b/test/wasm/Inputs/libstub-missing-sym.so
+@@ -0,0 +1,3 @@
++#STUB
++# Symbol `foo` is missing from this file which causes stub_object.s to fail
++bar
+diff --git a/test/wasm/Inputs/libstub.so b/test/wasm/Inputs/libstub.so
+new file mode 100644
+index 0000000000000..57e61f632b101
+--- /dev/null
++++ b/test/wasm/Inputs/libstub.so
+@@ -0,0 +1,5 @@
++#STUB
++# This is a comment
++foo: foodep1,foodep2
++# This symbols as no dependencies
++bar
+diff --git a/test/wasm/stub_library.s b/test/wasm/stub_library.s
+new file mode 100644
+index 0000000000000..9cbf2505ea9e7
+--- /dev/null
++++ b/test/wasm/stub_library.s
+@@ -0,0 +1,48 @@
++# RUN: llvm-mc -filetype=obj -triple=wasm32-unknown-unknown -o %t.o %s
++# RUN: wasm-ld %t.o %p/Inputs/libstub.so -o %t.wasm
++# RUN: obj2yaml %t.wasm | FileCheck %s
++
++# When the dependencies are missing the link fails
++# RUN: not wasm-ld %t.o %p/Inputs/libstub-missing-dep.so -o %t.wasm 2>&1 | FileCheck --check-prefix=MISSING-DEP %s
++
++# When the dependencies are missing the link fails
++# RUN: not wasm-ld %t.o %p/Inputs/libstub-missing-sym.so -o %t.wasm 2>&1 | FileCheck --check-prefix=MISSING-SYM %s
++
++# MISSING-DEP: libstub-missing-dep.so: undefined symbol: missing_dep. Required by foo
++# MISSING-DEP: libstub-missing-dep.so: undefined symbol: missing_dep2. Required by foo
++
++# MISSING-SYM: undefined symbol: foo
++
++# The function foo is defined in libstub.so but depend on foodep1 and foodep2
++.functype foo () -> ()
++
++.globl foodep1
++foodep1:
++  .functype foodep1 () -> ()
++  end_function
++
++.globl foodep2
++foodep2:
++  .functype foodep2 () -> ()
++  end_function
++
++.globl _start
++_start:
++    .functype _start () -> ()
++    call foo
++    end_function
++
++# CHECK:       - Type:            EXPORT
++# CHECK-NEXT:    Exports:
++# CHECK-NEXT:      - Name:            memory
++# CHECK-NEXT:        Kind:            MEMORY
++# CHECK-NEXT:        Index:           0
++# CHECK-NEXT:      - Name:            foodep1
++# CHECK-NEXT:        Kind:            FUNCTION
++# CHECK-NEXT:        Index:           1
++# CHECK-NEXT:      - Name:            foodep2
++# CHECK-NEXT:        Kind:            FUNCTION
++# CHECK-NEXT:        Index:           2
++# CHECK-NEXT:      - Name:            _start
++# CHECK-NEXT:        Kind:            FUNCTION
++# CHECK-NEXT:        Index:           3
+diff --git a/wasm/Driver.cpp b/wasm/Driver.cpp
+index 310f9df2d5b68..68cd8cabbd7f2 100644
+--- a/wasm/Driver.cpp
++++ b/wasm/Driver.cpp
+@@ -279,6 +279,12 @@ void LinkerDriver::addFile(StringRef path) {
+   case file_magic::wasm_object:
+     files.push_back(createObjectFile(mbref));
+     break;
++  case file_magic::unknown:
++    if (mbref.getBuffer().starts_with("#STUB\n")) {
++      files.push_back(make<StubFile>(mbref));
++      break;
++    }
++    [[fallthrough]];
+   default:
+     error("unknown file type: " + mbref.getBufferIdentifier());
+   }
+@@ -868,6 +874,53 @@ static void createOptionalSymbols() {
+     WasmSym::tlsBase = createOptionalGlobal("__tls_base", false);
+ }
+ 
++static void processStubLibraries() {
++  log("-- processStubLibraries");
++  for (auto &stub_file : symtab->stubFiles) {
++    LLVM_DEBUG(llvm::dbgs()
++               << "processing stub file: " << stub_file->getName() << "\n");
++    for (auto [name, deps]: stub_file->symbolDependencies) {
++      auto* sym = symtab->find(name);
++      if (!sym || !sym->isUndefined() || !sym->isUsedInRegularObj ||
++          sym->forceImport) {
++        LLVM_DEBUG(llvm::dbgs() << "stub not in needed: " << name << "\n");
++        continue;
++      }
++      // The first stub library to define a given symbol sets this and
++      // definitions in later stub libraries are ignored.
++      sym->forceImport = true;
++      if (sym->traced)
++        message(toString(stub_file) + ": importing " + name);
++      else
++        LLVM_DEBUG(llvm::dbgs()
++                   << toString(stub_file) << ": importing " << name << "\n");
++      for (const auto dep : deps) {
++        auto* needed = symtab->find(dep);
++        if (!needed) {
++          error(toString(stub_file) + ": undefined symbol: " + dep +
++                ". Required by " + toString(*sym));
++        } else if (needed->isUndefined()) {
++          error(toString(stub_file) +
++                ": undefined symbol: " + toString(*needed) +
++                ". Required by " + toString(*sym));
++        } else {
++          LLVM_DEBUG(llvm::dbgs()
++                     << "force export: " << toString(*needed) << "\n");
++          needed->forceExport = true;
++          needed->isUsedInRegularObj = true;
++          if (auto *lazy = dyn_cast<LazySymbol>(needed)) {
++            lazy->fetch();
++            if (!config->whyExtract.empty())
++              config->whyExtractRecords.emplace_back(stub_file->getName(),
++                                                     sym->getFile(), *sym);
++          }
++        }
++      }
++    }
++  }
++  log("-- done processStubLibraries");
++}
++
+ // Reconstructs command line arguments so that so that you can re-run
+ // the same command with the same inputs. This is for --reproduce.
+ static std::string createResponseFile(const opt::InputArgList &args) {
+@@ -1166,6 +1219,8 @@ void LinkerDriver::linkerMain(ArrayRef<const char *> argsArr) {
+   if (errorCount())
+     return;
+ 
++  processStubLibraries();
++
+   createOptionalSymbols();
+ 
+   // Resolve any variant symbols that were created due to signature
+diff --git a/wasm/InputFiles.cpp b/wasm/InputFiles.cpp
+index 75760293bbaae..2d9768c768f29 100644
+--- a/wasm/InputFiles.cpp
++++ b/wasm/InputFiles.cpp
+@@ -12,6 +12,7 @@
+ #include "InputElement.h"
+ #include "OutputSegment.h"
+ #include "SymbolTable.h"
++#include "lld/Common/Args.h"
+ #include "lld/Common/CommonLinkerContext.h"
+ #include "lld/Common/Reproduce.h"
+ #include "llvm/Object/Binary.h"
+@@ -678,6 +679,48 @@ Symbol *ObjFile::createUndefined(const WasmSymbol &sym, bool isCalledDirectly) {
+   llvm_unreachable("unknown symbol kind");
+ }
+ 
++
++StringRef strip(StringRef s) {
++  while (s.starts_with(" ")) {
++    s = s.drop_front();
++  }
++  while (s.ends_with(" ")) {
++    s = s.drop_back();
++  }
++  return s;
++}
++
++void StubFile::parse() {
++  bool first = false;
++
++  for (StringRef line : args::getLines(mb)) {
++    // File must begin with #STUB
++    if (first) {
++      assert(line == "#STUB\n");
++      first = false;
++    }
++
++    // Lines starting with # are considered comments
++    if (line.startswith("#"))
++      continue;
++
++    StringRef sym;
++    StringRef rest;
++    std::tie(sym, rest) = line.split(':');
++    sym = strip(sym);
++    rest = strip(rest);
++
++    symbolDependencies[sym] = {};
++
++    while (rest.size()) {
++      StringRef first;
++      std::tie(first, rest) = rest.split(',');
++      first = strip(first);
++      symbolDependencies[sym].push_back(first);
++    }
++  }
++}
++
+ void ArchiveFile::parse() {
+   // Parse a MemoryBufferRef as an archive file.
+   LLVM_DEBUG(dbgs() << "Parsing library: " << toString(this) << "\n");
+diff --git a/wasm/InputFiles.h b/wasm/InputFiles.h
+index c72f64cb2bd04..11cee5405b657 100644
+--- a/wasm/InputFiles.h
++++ b/wasm/InputFiles.h
+@@ -47,6 +47,7 @@ class InputFile {
+     SharedKind,
+     ArchiveKind,
+     BitcodeKind,
++    StubKind,
+   };
+ 
+   virtual ~InputFile() {}
+@@ -183,6 +184,18 @@ class BitcodeFile : public InputFile {
+   static bool doneLTO;
+ };
+ 
++// Stub libray (See docs/WebAssembly.rst)
++class StubFile : public InputFile {
++public:
++  explicit StubFile(MemoryBufferRef m) : InputFile(StubKind, m) {}
++
++  static bool classof(const InputFile *f) { return f->kind() == StubKind; }
++
++  void parse();
++
++  llvm::DenseMap<StringRef, std::vector<StringRef>> symbolDependencies;
++};
++
+ inline bool isBitcode(MemoryBufferRef mb) {
+   return identify_magic(mb.getBuffer()) == llvm::file_magic::bitcode;
+ }
+diff --git a/wasm/Relocations.cpp b/wasm/Relocations.cpp
+index 2f6dd6af2d030..ce41cdcb3e07f 100644
+--- a/wasm/Relocations.cpp
++++ b/wasm/Relocations.cpp
+@@ -32,9 +32,9 @@ static bool requiresGOTAccess(const Symbol *sym) {
+ }
+ 
+ static bool allowUndefined(const Symbol* sym) {
+-  // Symbols with explicit import names are always allowed to be undefined at
++  // Symbols that are explicitly imported are always allowed to be undefined at
+   // link time.
+-  if (sym->importName)
++  if (sym->isImported())
+     return true;
+   if (isa<UndefinedFunction>(sym) && config->importUndefined)
+     return true;
+diff --git a/wasm/SymbolTable.cpp b/wasm/SymbolTable.cpp
+index 881b1231ffdf9..d33176a0fa54a 100644
+--- a/wasm/SymbolTable.cpp
++++ b/wasm/SymbolTable.cpp
+@@ -38,6 +38,13 @@ void SymbolTable::addFile(InputFile *file) {
+     return;
+   }
+ 
++  // stub file
++  if (auto *f = dyn_cast<StubFile>(file)) {
++    f->parse();
++    stubFiles.push_back(f);
++    return;
++  }
++
+   if (config->trace)
+     message(toString(file));
+ 
+diff --git a/wasm/SymbolTable.h b/wasm/SymbolTable.h
+index 5009e6039602b..ef2a023b68c44 100644
+--- a/wasm/SymbolTable.h
++++ b/wasm/SymbolTable.h
+@@ -102,6 +102,7 @@ class SymbolTable {
+   DefinedFunction *createUndefinedStub(const WasmSignature &sig);
+ 
+   std::vector<ObjFile *> objectFiles;
++  std::vector<StubFile *> stubFiles;
+   std::vector<SharedFile *> sharedFiles;
+   std::vector<BitcodeFile *> bitcodeFiles;
+   std::vector<InputFunction *> syntheticFunctions;
+diff --git a/wasm/Symbols.cpp b/wasm/Symbols.cpp
+index 8864e840dd585..567ff49dfa444 100644
+--- a/wasm/Symbols.cpp
++++ b/wasm/Symbols.cpp
+@@ -221,6 +221,10 @@ void Symbol::setHidden(bool isHidden) {
+     flags |= WASM_SYMBOL_VISIBILITY_DEFAULT;
+ }
+ 
++bool Symbol::isImported() const {
++  return isUndefined() && (importName.has_value() || forceImport);
++}
++
+ bool Symbol::isExported() const {
+   if (!isDefined() || isLocal())
+     return false;
+diff --git a/wasm/Symbols.h b/wasm/Symbols.h
+index 16f1b535876e0..34fff4b962bdc 100644
+--- a/wasm/Symbols.h
++++ b/wasm/Symbols.h
+@@ -114,6 +114,7 @@ class Symbol {
+   void setOutputSymbolIndex(uint32_t index);
+ 
+   WasmSymbolType getWasmType() const;
++  bool isImported() const;
+   bool isExported() const;
+   bool isExportedExplicit() const;
+ 
+@@ -135,7 +136,8 @@ class Symbol {
+   Symbol(StringRef name, Kind k, uint32_t flags, InputFile *f)
+       : name(name), file(f), symbolKind(k), referenced(!config->gcSections),
+         requiresGOT(false), isUsedInRegularObj(false), forceExport(false),
+-        canInline(false), traced(false), isStub(false), flags(flags) {}
++        forceImport(false), canInline(false), traced(false), isStub(false),
++        flags(flags) {}
+ 
+   StringRef name;
+   InputFile *file;
+@@ -160,6 +162,8 @@ class Symbol {
+   // -e/--export command line flag)
+   bool forceExport : 1;
+ 
++  bool forceImport : 1;
++
+   // False if LTO shouldn't inline whatever this symbol points to. If a symbol
+   // is overwritten after LTO, LTO shouldn't inline the symbol because it
+   // doesn't know the final contents of the symbol.
+@@ -661,6 +665,7 @@ T *replaceSymbol(Symbol *s, ArgT &&... arg) {
+   T *s2 = new (s) T(std::forward<ArgT>(arg)...);
+   s2->isUsedInRegularObj = symCopy.isUsedInRegularObj;
+   s2->forceExport = symCopy.forceExport;
++  s2->forceImport = symCopy.forceImport;
+   s2->canInline = symCopy.canInline;
+   s2->traced = symCopy.traced;
+   s2->referenced = symCopy.referenced;
+diff --git a/wasm/Writer.cpp b/wasm/Writer.cpp
+index 030ef7468791a..d9e87276b31b0 100644
+--- a/wasm/Writer.cpp
++++ b/wasm/Writer.cpp
+@@ -744,7 +744,7 @@ static bool shouldImport(Symbol *sym) {
+   if (config->allowUndefinedSymbols.count(sym->getName()) != 0)
+     return true;
+ 
+-  return sym->importName.has_value();
++  return sym->isImported();
+ }
+ 
+ void Writer::calculateImports() {
+@@ -1709,7 +1709,7 @@ void Writer::run() {
+       sym->forceExport = true;
+   }
+ 
+-  // Delay reporting error about explicit exports until after
++  // Delay reporting errors about explicit exports until after
+   // addStartStopSymbols which can create optional symbols.
+   for (auto &name : config->requiredExports) {
+     Symbol *sym = symtab->find(name);
