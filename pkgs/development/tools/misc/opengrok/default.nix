@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Source code search and cross reference engine";
     homepage = "https://opengrok.github.io/OpenGrok/";
+    changelog = "https://github.com/oracle/opengrok/releases/tag/${version}";
     license = licenses.cddl;
     maintainers = [ ];
     platforms = platforms.all;
