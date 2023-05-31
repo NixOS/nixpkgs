@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rome";
-  version = "12.1.0";
+  version = "12.1.3";
 
   src = fetchFromGitHub {
     owner = "rome";
     repo = "tools";
     rev = "cli/v${version}";
-    hash = "sha256-XORu6c/9jrRObdM3qAGszhiUjo88NTzrTyrITuHyd/4=";
+    hash = "sha256-BlHpdfbyx6nU44vasEw0gRZ0ickyD2eUXPfeFZHSCbI=";
   };
 
-  cargoHash = "sha256-75r280PMM1zDrqRmhuaU++5aZSCxeyqjHQls8pTzOgQ=";
+  cargoHash = "sha256-jHdoRymKPjBonT4TvAiTNzGBuTcNoPsvdFKEf33dpVc=";
 
   cargoBuildFlags = [ "--package" "rome_cli" ];
 
