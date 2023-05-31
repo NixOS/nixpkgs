@@ -25,7 +25,7 @@
 
 with lib;
 let
-  version = "23.0";
+  version = "23.2";
   majorVersion = versions.major version;
   desktop = fetchurl {
     url = "https://raw.githubusercontent.com/bitcoin-core/packaging/${majorVersion}.x/debian/bitcoin-qt.desktop";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       "https://bitcoincore.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
       "https://bitcoin.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
     ];
-    sha256 = "26748bf49d6d6b4014d0fedccac46bf2bcca42e9d34b3acfd9e3467c415acc05";
+    sha256 = "b254d316e4e783965ffda84b84beadf1a11184f50db5f00666d265867aaf1e7e";
   };
 
   nativeBuildInputs =
