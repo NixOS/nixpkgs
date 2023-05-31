@@ -5585,6 +5585,8 @@ with pkgs;
 
   photon = callPackage ../tools/networking/photon { };
 
+  photofield = callPackage ../servers/photofield { };
+
   photoprism = callPackage ../servers/photoprism { };
 
   piglit = callPackage ../tools/graphics/piglit { };
