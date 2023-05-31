@@ -94,6 +94,12 @@ in {
             CAFile = "/authorized-server-cert.crt";
             verifyHostname = "wronghostname";
           };
+          httpsClientWithMultipleSocketOptions = {
+            accept = "83";
+            connect = "server:443";
+            CAFile = "/authorized-server-cert.crt";
+            socket = [ "l:TCP_NODELAY=1" "r:TCP_NODELAY=1" ];
+          };
         };
       };
       server = {
@@ -121,6 +127,9 @@ in {
 
       client.fail("curl --fail http://localhost:82/ > out")
       client.succeed('[[ "$(< out)" == "" ]]')
+
+      client.succeed("curl --fail http://localhost:83/ > out")
+      client.succeed('[[ "$(< out)" == "hello there" ]]')
     '';
   };
 
