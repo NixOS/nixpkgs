@@ -8239,6 +8239,8 @@ with pkgs;
 
   gyb = callPackage ../tools/backup/gyb { };
 
+  halftone = callPackage ../applications/graphics/halftone { };
+
   harminv = callPackage ../development/libraries/science/chemistry/harminv { };
 
   igrep = callPackage ../tools/text/igrep {
