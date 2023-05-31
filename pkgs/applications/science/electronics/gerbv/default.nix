@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/gerbv/gerbv/releases/tag/v${version}";
     maintainers = with maintainers; [ mog ];
     platforms = platforms.unix;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
   };
 }
