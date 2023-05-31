@@ -775,12 +775,11 @@ in
         default = false;
         description =
           lib.mdDoc ''
-            If enabled, the virtual machine will be booted using the
-            regular boot loader (i.e., GRUB 1 or 2).  This allows
-            testing of the boot loader.  If
-            disabled (the default), the VM directly boots the NixOS
-            kernel and initial ramdisk, bypassing the boot loader
-            altogether.
+            Use a boot loader to boot the system.
+            This allows, among other things, testing the boot loader.
+
+            If disabled, the kernel and initrd are directly booted,
+            forgoing any bootloader.
           '';
       };
 
