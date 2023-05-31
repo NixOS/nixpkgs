@@ -587,6 +587,9 @@ with pkgs;
 
   gpick = callPackage ../tools/misc/gpick { };
 
+  gridlock = callPackage ../tools/nix/gridlock { };
+  inherit (gridlock) nyarr;
+
   hwatch = callPackage ../tools/misc/hwatch { };
 
   hobbes = callPackage ../development/tools/hobbes { stdenv = gcc10StdenvCompat; };
@@ -1302,6 +1305,8 @@ with pkgs;
   acct = callPackage ../tools/system/acct { };
 
   accuraterip-checksum = callPackage ../tools/audio/accuraterip-checksum { };
+
+  acme-dns = callPackage ../servers/dns/acme-dns/default.nix { };
 
   acme-sh = callPackage ../tools/admin/acme-sh { };
 
@@ -9304,6 +9309,8 @@ with pkgs;
   loc = callPackage ../development/misc/loc { };
 
   lockfileProgs = callPackage ../tools/misc/lockfile-progs { };
+
+  loganalyzer = libsForQt5.callPackage ../development/tools/loganalyzer { };
 
   logstash7 = callPackage ../tools/misc/logstash/7.x.nix {
     # https://www.elastic.co/support/matrix#logstash-and-jvm
@@ -19485,6 +19492,8 @@ with pkgs;
   };
 
   tweak = callPackage ../applications/editors/tweak { };
+
+  typical = callPackage ../development/tools/misc/typical { };
 
   uddup = callPackage ../tools/security/uddup { };
 
