@@ -157,8 +157,8 @@ in {
         allowedUDPPorts = [ 27015 ]; # Gameplay traffic
       })
 
-      mkIf cfg.localNetworkGameTransfers.openFirewall {
-        allowedTCPPorts = [ 24070 ]; # Local game transfers require port 24070 open, as shown here https://help.steampowered.com/en/faqs/view/46BD-6BA8-B012-CE43
+      (mkIf cfg.localNetworkGameTransfers.openFirewall {
+        allowedTCPPorts = [ 24070 ];
       })
     ];
   };
