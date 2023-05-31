@@ -1,12 +1,12 @@
 { fetchFromGitHub, buildGoModule, jq, buildNpmPackage, lib, makeWrapper }:
 
 let
-  version = "0.13.0";
+  version = "0.13.1";
   src = fetchFromGitHub {
     owner = "usememos";
     repo = "memos";
     rev = "v${version}";
-    sha256 = "7rMs1jFyGlCfc7LVZvsQ9tuBLsWP/S9DXYcEPZ86tKw=";
+    sha256 = "VUY81ir7cPtuHodJhkSz3bmnoIeQH20kbg+duDcjfwM=";
   };
 
   frontend = buildNpmPackage {
@@ -15,7 +15,7 @@ let
 
     src = "${src}/web";
 
-    npmDepsHash = "sha256-vgO5HWbV/oR1GenK9q5a1bhlTSJqtF4HBcQTZ3DqZq8=";
+    npmDepsHash = "sha256-36UcHE98dsGvYQWLIc/xgP8Q0IyJ7la0Qoo3lZqUcmw=";
 
     postPatch = ''
       cp ${./package-lock.json} package-lock.json
