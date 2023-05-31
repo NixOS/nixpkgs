@@ -3,7 +3,7 @@
 The [`lib.fileset`](#sec-functions-library-fileset) functions allow you to work with _file sets_.
 File sets efficiently represent a set of local files.
 They can easily be created and combined for complex behavior.
-Their files can also be imported into the store and used as a derivation source.
+Their files can also be added to the Nix store and used as a derivation source.
 
 The best way to experiment with file sets is to start a `nix repl` and load the file set functions:
 ```
@@ -104,9 +104,9 @@ fileFilter
   - main.c (regular)
 ```
 
-File sets can be imported into the store using the [`importToStore`](#function-library-lib.fileset.importToStore) function. This function requires the `entryPoint` argument to indicate where the resulting string (via `outPath`, see [`toString`](https://nixos.org/manual/nix/stable/language/builtins.html?highlight=outPath#builtins-toString)) should be focused on, meaning that when you `cd ${importToStore ...}`, the files will be available at paths relative to `entryPoint`:
+File sets can be added to the Nix store using the [`addToStore`](#function-library-lib.fileset.addToStore) function. This function requires the `entryPoint` argument to indicate where the resulting string (via `outPath`, see [`toString`](https://nixos.org/manual/nix/stable/language/builtins.html?highlight=outPath#builtins-toString)) should be focused on, meaning that when you `cd ${addToStore ...}`, the files will be available at paths relative to `entryPoint`:
 ```nix
-nix-repl> importToStore {
+nix-repl> addToStore {
             entryPoint = ./.;
             fileset = union ./Makefile ./src;
           }
@@ -129,7 +129,7 @@ $ find .
 Sometimes we also want to make files outside of the `entryPoint` accessible. This can be done using the optional `base` argument:
 
 ```nix
-nix-repl> importToStore {
+nix-repl> addToStore {
             base = ../.;
             entryPoint = ./.;
             fileset = unions [
@@ -163,7 +163,7 @@ As you can see, when changing to the `outPath` directory, we can still find the 
 Note however that the directory name `project` is included in the store path, meaning that the hashes will change when you rename that directory.
 Therefore `base` should not be set higher up than the current version control root directory, otherwise the result can change even when no files in the directory changed.
 
-Lastly, here's an example of how we can define derivation sources using file sets using [`importToStore`](#function-library-lib.fileset.importToStore):
+Lastly, here's an example of how we can define derivation sources using file sets using [`addToStore`](#function-library-lib.fileset.addToStore):
 ```nix
 # default.nix
 with import <nixpkgs> {};
@@ -177,7 +177,7 @@ in
 fs.trace {} sourceFiles
 stdenv.mkDerivation {
   name = "my-project";
-  src = fs.importToStore {
+  src = fs.addToStore {
     entryPoint = ./.;
     fileset = sourceFiles;
   };

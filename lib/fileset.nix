@@ -137,7 +137,7 @@ let
     else
       # Always coerce to a directory
       # If we don't do this we run into problems like:
-      # - What should `importToStore { base = ./default.nix; entryPoint = ./default.nix; fileset = difference ./default.nix ./default.nix; }` do?
+      # - What should `addToStore { base = ./default.nix; entryPoint = ./default.nix; fileset = difference ./default.nix ./default.nix; }` do?
       #   - Importing an empty directory wouldn't make much sense because our `base` is a file
       #   - Neither can we create a store path containing nothing at all
       #   - The only option is to throw an error that `base` should be a directory
@@ -482,7 +482,7 @@ in {
   If you need to ensure such directories exist in the result, consider creating and including a hidden file.
 
   Type:
-    importToStore :: {
+    addToStore :: {
       (optional) base :: Path,
       entryPoint :: Path,
       fileset :: FileSet,
@@ -492,9 +492,9 @@ in {
       _subpath :: String,
     }
   */
-  importToStore = { name ? "source", base ? entryPoint, entryPoint, fileset }@args:
+  addToStore = { name ? "source", base ? entryPoint, entryPoint, fileset }@args:
     let
-      actualFileset = _coerce "importToStore" "attribute `fileset`" fileset;
+      actualFileset = _coerce "addToStore" "attribute `fileset`" fileset;
 
       # Directories that recursively have no files in them will always be `null`
       sparseTree =
@@ -515,7 +515,7 @@ in {
             else
               tree;
           resultingTree = recurse actualFileset._base actualFileset._tree;
-          # The fileset's _base might be below the base of the `importToStore`, so we need to lift the tree up to `base`
+          # The fileset's _base might be below the base of the `addToStore`, so we need to lift the tree up to `base`
           extraBaseNesting = removePrefix base actualFileset._base;
         in _nestTree base extraBaseNesting resultingTree;
 
@@ -538,33 +538,33 @@ in {
         if ! isPath value then
           if value._isLibCleanSourceWith or false then
             throw ''
-              lib.fileset.importToStore: Expected attribute `${name}` to be a path, but it's a value produced by `lib.sources` instead.
+              lib.fileset.addToStore: Expected attribute `${name}` to be a path, but it's a value produced by `lib.sources` instead.
                   Such a value is only supported when converted to a file set using `lib.fileset.impureFromSource` and passed to the `fileset` attribute, where it may also be combined using other functions from `lib.fileset`.''
           else if isCoercibleToString value then
             throw ''
-              lib.fileset.importToStore: Expected attribute `${name}` to be a path, but it's a string-like value instead, possibly a Nix store path.
+              lib.fileset.addToStore: Expected attribute `${name}` to be a path, but it's a string-like value instead, possibly a Nix store path.
                   Such a value is not supported, `lib.fileset` only supports local file filtering.''
           else
-            throw "lib.fileset.importToStore: Expected attribute `${name}` to be a path, but it's a ${typeOf value} instead."
+            throw "lib.fileset.addToStore: Expected attribute `${name}` to be a path, but it's a ${typeOf value} instead."
         else if pathType value != "directory" then
           # This would also be caught by the `may be influenced` condition further down, because of how files always set their containing directories as the base
           # We can catch this earlier here for a better error message
-          throw "lib.fileset.importToStore: The `${name}` attribute \"${toString value}\" is expected to be a path pointing to a directory, but it's pointing to a file instead."
+          throw "lib.fileset.addToStore: The `${name}` attribute \"${toString value}\" is expected to be a path pointing to a directory, but it's pointing to a file instead."
         else true;
 
     in
     assert assertPath "entryPoint" entryPoint;
     assert assertPath "base" base;
     if ! hasPrefix base entryPoint then
-      throw "lib.fileset.importToStore: The `entryPoint` attribute \"${toString entryPoint}\" is expected to be under the `base` attribute \"${toString base}\", but it's not."
+      throw "lib.fileset.addToStore: The `entryPoint` attribute \"${toString entryPoint}\" is expected to be under the `base` attribute \"${toString base}\", but it's not."
     else if ! hasPrefix base actualFileset._base then
       throw ''
-        lib.fileset.importToStore: The file set may be influenced by files in "${toString actualFileset._base}", which is outside of the `base` attribute${optionalString (! args ? base) ", implicitly set to the same as the `entryPoint` attribute,"} "${toString base}". To resolve this:
+        lib.fileset.addToStore: The file set may be influenced by files in "${toString actualFileset._base}", which is outside of the `base` attribute${optionalString (! args ? base) ", implicitly set to the same as the `entryPoint` attribute,"} "${toString base}". To resolve this:
             - If "${toString actualFileset._base}" is inside your project directory, set the `base` attribute to the same value.
             - If "${toString actualFileset._base}" is outside your project directory and you do not want it to be able to influence the contents of the file set, make sure to not use file set operations on such a directory.''
     else if ! inSet (deconstruct entryPoint).components then
       # This likely indicates a mistake, catching this here also ensures we don't have to handle this special case of a potential empty directory
-      throw "lib.fileset.importToStore: The file set contains no files under the `entryPoint` attribute \"${toString entryPoint}\"."
+      throw "lib.fileset.addToStore: The file set contains no files under the `entryPoint` attribute \"${toString entryPoint}\"."
     else
     let
       # We're not using `lib.sources`, because sources with `_subpath` and `_root` can't be composed properly with those functions
