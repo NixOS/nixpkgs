@@ -251,4 +251,29 @@ in
           machine.succeed("test -e /boot/efi/nixos/.extra-files/efi/netbootxyz/netboot.xyz.efi")
     '';
   };
+
+  # See: [Firmware file size bug] in systemd/default.nix
+  uefiLargeFileWorkaround = makeTest {
+    name = "uefi-large-file-workaround";
+
+    nodes.machine = { pkgs, ... }: {
+      imports = [common];
+      virtualisation.efi.OVMF = pkgs.OVMF.overrideAttrs (old: {
+        # This patch deliberately breaks the FAT driver in EDK2 to
+        # exhibit (part of) the firmware bug that we are testing
+        # for. Files greater than 10MiB will fail to be read in a
+        # single Read() call, so systemd-boot will fail to load the
+        # initrd without a workaround. The number 10MiB was chosen
+        # because if it were smaller than the kernel size, even the
+        # LoadImage call would fail, which is not the failure mode
+        # we're testing for. It needs to be between the kernel size
+        # and the initrd size.
+        patches = old.patches or [] ++ [ ./systemd-boot-ovmf-broken-fat-driver.patch ];
+      });
+    };
+
+    testScript = ''
+      machine.wait_for_unit("multi-user.target")
+    '';
+  };
 }
