@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
       You can use super fast full text search feature against all languages by installing PGroonga into your PostgreSQL.
     '';
     homepage = "https://pgroonga.github.io/";
+    changelog = "https://github.com/pgroonga/pgroonga/releases/tag/${version}";
     license = licenses.postgresql;
     platforms = postgresql.meta.platforms;
     maintainers = with maintainers; [ DerTim1 ];
