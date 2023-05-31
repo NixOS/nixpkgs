@@ -110,6 +110,13 @@ stdenv.mkDerivation {
     relative = "include";
     sha256 = "sha256-KlmIbixcds6GyKYt1fx5BxDIrU7msrgDdYo9Va/KJR4=";
   })
+  # This fixes another issue regarding ill-formed constant expressions, which is a default error
+  # in clang 16 and will be a hard error in clang 17.
+  ++ lib.optional (lib.versionOlder version "1.80") (fetchpatch {
+    url = "https://github.com/boostorg/log/commit/77f1e20bd69c2e7a9e25e6a9818ae6105f7d070c.patch";
+    relative = "include";
+    hash = "sha256-6qOiGJASm33XzwoxVZfKJd7sTlQ5yd+MMFQzegXm5RI=";
+  })
   ++ lib.optionals (lib.versionOlder version "1.81") [
     # libc++ 15 dropped support for `std::unary_function` and `std::binary_function` in C++17+.
     # C++17 is the default for clang 16, but clang 15 is also affected in that language mode.
@@ -117,6 +124,12 @@ stdenv.mkDerivation {
     (fetchpatch {
       url = "https://www.boost.org/patches/1_80_0/0005-config-libcpp15.patch";
       hash = "sha256-ULFMzKphv70unvPZ3o4vSP/01/xbSM9a2TlIV67eXDQ=";
+    })
+    # This fixes another ill-formed contant expressions issue flagged by clang 16.
+    (fetchpatch {
+      url = "https://github.com/boostorg/numeric_conversion/commit/50a1eae942effb0a9b90724323ef8f2a67e7984a.patch";
+      relative = "include";
+      hash = "sha256-dq4SVgxkPJSC7Fvr59VGnXkM4Lb09kYDaBksCHo9C0s=";
     })
   ];
 
