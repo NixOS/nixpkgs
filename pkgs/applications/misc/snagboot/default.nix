@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchPypi
+, fetchFromGitHub
 , pythonRelaxDepsHook
 , python3
 , snagboot
@@ -13,9 +13,11 @@ python3.pkgs.buildPythonApplication rec {
   version = "1.0";
   format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-wtIcrd3s/ZfdYqi2a2+IvVYnJie5txJy6d2m+GjuhxU=";
+  src = fetchFromGitHub {
+    owner = "bootlin";
+    repo = "snagboot";
+    rev = "v${version}";
+    hash = "sha256-QqGeELm2seX3tIKQvuXp9VsNDah+m9FNcaEVk6TMP0U=";
   };
 
   passthru = {
