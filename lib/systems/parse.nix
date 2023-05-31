@@ -498,7 +498,15 @@ rec {
                           gnuNetBSDDefaultExecFormat cpu != kernel.execFormat)
         kernel.execFormat.name;
     optAbi = lib.optionalString (abi != abis.unknown) "-${abi.name}";
-  in "${cpu.name}-${vendor.name}-${kernelName kernel}${optExecFormat}${optAbi}";
+  in
+    # gnu-config considers "mingw32" and "cygwin" to be kernels.
+    # This is obviously bogus, which is why nixpkgs has historically
+    # parsed them differently.  However for regression testing
+    # reasons (see lib/tests/triples.nix) we need to replicate this
+    # quirk when unparsing in order to round-trip correctly.
+    if      abi == abis.cygnus        then "${cpu.name}-${vendor.name}-cygwin"
+    else if kernel == kernels.windows then "${cpu.name}-${vendor.name}-mingw32"
+    else "${cpu.name}-${vendor.name}-${kernelName kernel}${optExecFormat}${optAbi}";
 
   ################################################################################
 
