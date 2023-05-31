@@ -6848,6 +6848,8 @@ with pkgs;
 
   dhcping = callPackage ../tools/networking/dhcping { };
 
+  dotacat = callPackage ../tools/misc/dotacat { };
+
   di = callPackage ../tools/system/di { };
 
   diction = callPackage ../tools/text/diction { };
