@@ -124,6 +124,31 @@ let
     '';
   };
 
+  # Create a file set from a path
+  # Type: Path -> <fileset>
+  _singleton = path:
+    let
+      type = pathType path;
+    in
+    if type == "directory" then
+      _create path type
+    else
+      # Always coerce to a directory
+      # If we don't do this we run into problems like:
+      # - What should `importToStore { base = ./default.nix; entryPoint = ./default.nix; fileset = difference ./default.nix ./default.nix; }` do?
+      #   - Importing an empty directory wouldn't make much sense because our `base` is a file
+      #   - Neither can we create a store path containing nothing at all
+      #   - The only option is to throw an error that `base` should be a directory
+      # - Should `filter (file: file.name == "default.nix") ./default.nix` run the predicate on the ./default.nix file?
+      #   - If no, should the result include or exclude ./default.nix? In any case, it would be confusing and inconsistent
+      #   - If yes, it needs to consider ./. to have influence the filesystem result, so filter would change the necessary base
+      _create (dirOf path)
+        (_nestTree
+          (dirOf path)
+          [ (baseNameOf path) ]
+          type
+        );
+
   # Coerce a value to a fileset
   # Type: String -> String -> Any -> <fileset>
   _coerce = function: context: value:
@@ -134,27 +159,7 @@ let
     else if ! pathExists value then
       throw "lib.fileset.${function}: Expected ${context} \"${toString value}\" to be a path that exists, but it doesn't."
     else
-      let
-        type = pathType value;
-      in
-      if type == "directory" then
-        _create value type
-      else
-        # Always coerce to a directory
-        # If we don't do this we run into problems like:
-        # - What should `importToStore { base = ./default.nix; entryPoint = ./default.nix; fileset = difference ./default.nix ./default.nix; }` do?
-        #   - Importing an empty directory wouldn't make much sense because our `base` is a file
-        #   - Neither can we create a store path containing nothing at all
-        #   - The only option is to throw an error that `base` should be a directory
-        # - Should `filter (file: file.name == "default.nix") ./default.nix` run the predicate on the ./default.nix file?
-        #   - If no, should the result include or exclude ./default.nix? In any case, it would be confusing and inconsistent
-        #   - If yes, it needs to consider ./. to have influence the filesystem result, so filter would change the necessary base
-        _create (dirOf value)
-          (_nestTree
-            (dirOf value)
-            [ (baseNameOf value) ]
-            type
-          );
+      _singleton value;
 
   # Nest a tree under some further components
   # Type: Path -> [ String ] -> <tree> -> <tree>
@@ -537,6 +542,22 @@ in {
     coerce :: Any -> FileSet
   */
   coerce = value: _coerce "coerce" "argument" value;
+
+  /*
+  Create a file set containing all files contained in a path (see `coerce`), or no files if the path doesn't exist.
+
+  This is useful when you want to include a file only if it actually exists.
+
+  Type:
+    optional :: Path -> FileSet
+  */
+  optional = path:
+    if ! isPath path then
+      throw "lib.fileset.optional: Expected argument to be a path, but got a ${typeOf path}."
+    else if pathExists path then
+      _singleton path
+    else
+      _create path null;
 
   /*
   Incrementally evaluate and trace a file set in a pretty way.
