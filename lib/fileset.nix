@@ -39,6 +39,7 @@ let
 
   inherit (lib.strings)
     concatStringsSep
+    isCoercibleToString
     ;
 
   inherit (lib.attrsets)
@@ -149,13 +150,48 @@ let
           type
         );
 
+  # Turn a builtins.filterSource-based source filter on a root path into a file set containing only files included by the filter
+  # Type: Path -> (String -> String -> Bool) -> <fileset>
+  _fromSource = root: filter:
+    let
+      recurse = focusPath: type:
+        # FIXME: Generally we shouldn't use toString on paths, though it might be correct
+        # here since we're trying to mimic the impure behavior of `builtins.filterPath`
+        if ! filter (toString focusPath) type then
+          null
+        else if type == "directory" then
+          mapAttrs
+            (name: recurse (append focusPath name))
+            (readDir focusPath)
+        else
+          type;
+
+
+      rootPathType = pathType root;
+      tree =
+        if rootPathType == "directory" then
+          recurse root rootPathType
+        else
+          rootPathType;
+    in
+    _create root tree;
+
   # Coerce a value to a fileset
   # Type: String -> String -> Any -> <fileset>
   _coerce = function: context: value:
     if value._type or "" == "fileset" then
       value
     else if ! isPath value then
-      throw "lib.fileset.${function}: Expected ${context} to be a path, but got a ${typeOf value}."
+      if value._isLibCleanSourceWith or false then
+        throw ''
+          lib.fileset.${function}: Expected ${context} to be a path, but it's a value produced by `lib.sources` instead.
+              Such a value is only supported when converted to a file set using `lib.fileset.impureFromSource`.''
+      else if isCoercibleToString value then
+        throw ''
+          lib.fileset.${function}: Expected ${context} to be a path, but it's a string-coercible value instead, possibly a Nix store path.
+              Such a value is not supported, `lib.fileset` only supports local file filtering.''
+      else
+        throw "lib.fileset.${function}: Expected ${context} to be a path, but got a ${typeOf value}."
     else if ! pathExists value then
       throw "lib.fileset.${function}: Expected ${context} \"${toString value}\" to be a path that exists, but it doesn't."
     else
@@ -457,7 +493,7 @@ in {
   */
   importToStore = { name ? "source", base ? entryPoint, entryPoint, fileset }:
     let
-      actualFileset = _coerce "importToStore" "fileset attribute" fileset;
+      actualFileset = _coerce "importToStore" "attribute `fileset`" fileset;
 
       # Directories that recursively have no files in them will always be `null`
       sparseTree =
@@ -495,18 +531,36 @@ in {
             else
               localTree == "directory";
         in recurse baseComponentsLength sparseTree;
+
+
+      assertPath = name: value:
+        if ! isPath value then
+          if value._isLibCleanSourceWith or false then
+            throw ''
+              lib.fileset.importToStore: Expected attribute `${name}` to be a path, but it's a value produced by `lib.sources` instead.
+                  Such a value is only supported when converted to a file set using `lib.fileset.impureFromSource` and passed to the `fileset` attribute, where it may also be combined using other functions from `lib.fileset`.''
+          else if isCoercibleToString value then
+            throw ''
+              lib.fileset.importToStore: Expected attribute `${name}` to be a path, but it's a string-like value instead, possibly a Nix store path.
+                  Such a value is not supported, `lib.fileset` only supports local file filtering.''
+          else
+            throw "lib.fileset.importToStore: Expected attribute `${name}` to be a path, but it's a ${typeOf value} instead."
+        else if pathType value != "directory" then
+          # This would also be caught by the `may be influenced` condition further down, because of how files always set their containing directories as the base
+          # We can catch this earlier here for a better error message
+          throw "lib.fileset.importToStore: The `${name}` attribute \"${toString value}\" is expected to be a path pointing to a directory, but it's pointing to a file instead."
+        else true;
+
     in
-    if pathType entryPoint != "directory" then
-      # This would also be caught by the `may be influenced` condition further down, because of how files always set their containing directories as the base
-      # We can catch this earlier here for a better error message
-      throw "lib.fileset.importToStore: The entryPoint \"${toString entryPoint}\" is expected to be a path pointing to a directory, but it's pointing to a file instead."
-    else if ! hasPrefix base entryPoint then
-      throw "lib.fileset.importToStore: The entryPoint \"${toString entryPoint}\" is expected to be under the base \"${toString base}\", but it's not."
+    assert assertPath "entryPoint" entryPoint;
+    assert assertPath "base" base;
+    if ! hasPrefix base entryPoint then
+      throw "lib.fileset.importToStore: The `entryPoint` attribute \"${toString entryPoint}\" is expected to be under the `base` attribute \"${toString base}\", but it's not."
     else if ! hasPrefix base actualFileset._base then
-      throw "lib.fileset.importToStore: The fileset may be influenced by some files in \"${toString actualFileset._base}\", which is outside of the base directory \"${toString base}\"."
+      throw "lib.fileset.importToStore: The file set may be influenced by some files in \"${toString actualFileset._base}\", which is outside of the `base` attribute \"${toString base}\"."
     else if ! inSet (deconstruct entryPoint).components then
       # This likely indicates a mistake, catching this here also ensures we don't have to handle this special case of a potential empty directory
-      throw "lib.fileset.importToStore: The fileset contains no files under the entryPoint \"${toString entryPoint}\"."
+      throw "lib.fileset.importToStore: The file set contains no files under the `entryPoint` attribute \"${toString entryPoint}\"."
     else
     let
       # We're not using `lib.sources`, because sources with `_subpath` and `_root` can't be composed properly with those functions
@@ -542,6 +596,23 @@ in {
     coerce :: Any -> FileSet
   */
   coerce = value: _coerce "coerce" "argument" value;
+
+  /*
+  Create a file set from a filtered source as produced by the `lib.sources` functions.
+
+  This function may be impure because the `lib.sources`-based file filters have access to the absolute file paths, which can be altered without changing any files in the project.
+
+  Type:
+    impureFromSource :: SourceLike -> FileSet
+
+  Example:
+    impureFromSource (lib.sources.cleanSource ./.)
+  */
+  impureFromSource = source:
+    if ! source._isLibCleanSourceWith or false || ! source ? origSrc || ! source ? filter then
+      throw "lib.fileset.impureFromSource: Expected the argument to be a value produced from `lib.sources`, but got a ${typeOf source} instead."
+    else
+      _fromSource source.origSrc source.filter;
 
   /*
   Create a file set containing all files contained in a path (see `coerce`), or no files if the path doesn't exist.
