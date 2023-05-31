@@ -14,13 +14,6 @@ if [ ! -f "$ROOT/vscode.nix" ]; then
   exit 1
 fi
 
-NIXPKGS_ROOT="$(git rev-parse --show-toplevel)"
-
-if [ ! -f "$NIXPKGS_ROOT/nixos/tests/vscode-remote-ssh.nix" ]; then
-  echo "ERROR: cannot find nixos/tests/vscode-remote-ssh.nix"
-  exit 1
-fi
-
 # VSCode
 
 VSCODE_VER=$(curl --fail --silent https://api.github.com/repos/Microsoft/vscode/releases/latest | jq --raw-output .tag_name)
@@ -35,13 +28,13 @@ readarray -t VSCODE_X64_LINUX <<< $(nix-prefetch-url --print-path ${VSCODE_X64_L
 
 sed -i "s/x86_64-linux = \".\{52\}\"/x86_64-linux = \"${VSCODE_X64_LINUX[0]}\"/" "$ROOT/vscode.nix"
 
-tar xf $VSCODE_X64_LINUX[1] -C $TEMP_FOLDER
+tar xf ${VSCODE_X64_LINUX[1]} -C $TEMP_FOLDER
 VSCODE_COMMIT=$(jq --raw-output .commit $TEMP_FOLDER/VSCode-linux-x64/resources/app/product.json)
-sed -i "s/rev = \".\{40\}\"/rev = \"${VSCODE_COMMIT}\"/" "$NIXPKGS_ROOT/nixos/tests/vscode-remote-ssh.nix"
+sed -i "s/rev = \".\{40\}\"/rev = \"${VSCODE_COMMIT}\"/" "$ROOT/vscode.nix"
 
 SERVER_X64_LINUX_URL="https://update.code.visualstudio.com/commit:${VSCODE_COMMIT}/server-linux-x64/stable"
 SERVER_X64_LINUX_SHA256=$(nix-prefetch-url ${SERVER_X64_LINUX_URL})
-sed -i "s/sha256 = \".\{51,52\}\"/sha256 = \"${SERVER_X64_LINUX_SHA256}\"/" "$NIXPKGS_ROOT/nixos/tests/vscode-remote-ssh.nix"
+sed -i "s/sha256 = \".\{51,52\}\"/sha256 = \"${SERVER_X64_LINUX_SHA256}\"/" "$ROOT/vscode.nix"
 
 VSCODE_X64_DARWIN_URL="https://update.code.visualstudio.com/${VSCODE_VER}/darwin/stable"
 VSCODE_X64_DARWIN_SHA256=$(nix-prefetch-url ${VSCODE_X64_DARWIN_URL})

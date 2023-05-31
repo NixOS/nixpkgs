@@ -3,6 +3,7 @@
 , callPackage
 , fetchurl
 , nixosTests
+, srcOnly
 , isInsiders ? false
 , commandLineArgs ? ""
 , useVSCodeRipgrep ? stdenv.isDarwin
@@ -36,6 +37,9 @@ in
     version = "1.79.1";
     pname = "vscode";
 
+    # This is used for VS Code - Remote SSH test
+    rev = "b380da4ef1ee00e224a15c1d4d9793e27c2b6302";
+
     executableName = "code" + lib.optionalString isInsiders "-insiders";
     longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
     shortName = "Code" + lib.optionalString isInsiders " - Insiders";
@@ -51,6 +55,16 @@ in
     tests = {};
 
     sourceRoot = "";
+
+    # As tests run without networking, we need to download this for the Remote SSH server
+    vscodeServer = srcOnly {
+      name = "vscode-server-${rev}.tar.gz";
+      src = fetchurl {
+        name = "vscode-server-${rev}.tar.gz";
+        url = "https://update.code.visualstudio.com/commit:${rev}/server-linux-x64/stable";
+        sha256 = "0732wpl4fjknhn423k23zrcqz9psjj1iy8lqa0fc8970n1m7i58b";
+      };
+    };
 
     tests = { inherit (nixosTests) vscode-remote-ssh; };
 
