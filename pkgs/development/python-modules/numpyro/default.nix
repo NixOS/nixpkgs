@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "numpyro";
-  version = "0.11.0";
+  version = "0.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-01fdGgFZ+G1FwjNwitM6PT1TQx0FtLvs4dBorkFoqo4=";
+    hash = "sha256-TaNZ+k8bxo6l/A8W26ixEV4t1mrkQVrmYFVejDbHyKM=";
   };
 
   propagatedBuildInputs = [
@@ -58,6 +58,11 @@ buildPythonPackage rec {
     "test_zero_inflated_logits_probs_agree"
     # NameError: unbound axis name: _provenance
     "test_model_transformation"
+  ];
+
+  disabledTestPaths = [
+    # Missing dependency
+    "test/test_pickle.py"
   ];
 
   meta = with lib; {
