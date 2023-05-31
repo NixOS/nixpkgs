@@ -2607,6 +2607,7 @@ broken-packages:
   - http-rfc7807
   - http-server
   - http-shed
+  - httpstan # dependency missing in job https://hydra.nixos.org/build/221916023 at 2023-05-31
   - http-wget
   - htune
   - htvm

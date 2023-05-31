@@ -375,6 +375,8 @@ in {
 
     kvdo = callPackage ../os-specific/linux/kvdo {};
 
+    lenovo-legion-module = callPackage ../os-specific/linux/lenovo-legion { };
+
     liquidtux = callPackage ../os-specific/linux/liquidtux {};
 
     lkrg = callPackage ../os-specific/linux/lkrg {};
