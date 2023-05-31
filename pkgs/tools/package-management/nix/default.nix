@@ -182,6 +182,11 @@ in lib.makeExtensible (self: {
     hash = "sha256-o7bxsNeq2LF6/dTl+lT2k50bSItkID80/uoZYVtlxro=";
   };
 
+  nix_2_16 = common {
+    version = "2.16.0";
+    hash = "sha256-KjcQkI2HgbP7KOlHxb2DvyHISQXo2OExvvjqTyK7P0o=";
+  };
+
   stable = self.nix_2_13;
 
   unstable = self.nix_2_15;
