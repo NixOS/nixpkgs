@@ -38,6 +38,7 @@ let
     ;
 
   inherit (lib.strings)
+    optionalString
     concatStringsSep
     isCoercibleToString
     ;
@@ -491,7 +492,7 @@ in {
       _subpath :: String,
     }
   */
-  importToStore = { name ? "source", base ? entryPoint, entryPoint, fileset }:
+  importToStore = { name ? "source", base ? entryPoint, entryPoint, fileset }@args:
     let
       actualFileset = _coerce "importToStore" "attribute `fileset`" fileset;
 
@@ -557,7 +558,10 @@ in {
     if ! hasPrefix base entryPoint then
       throw "lib.fileset.importToStore: The `entryPoint` attribute \"${toString entryPoint}\" is expected to be under the `base` attribute \"${toString base}\", but it's not."
     else if ! hasPrefix base actualFileset._base then
-      throw "lib.fileset.importToStore: The file set may be influenced by some files in \"${toString actualFileset._base}\", which is outside of the `base` attribute \"${toString base}\"."
+      throw ''
+        lib.fileset.importToStore: The file set may be influenced by files in "${toString actualFileset._base}", which is outside of the `base` attribute${optionalString (! args ? base) ", implicitly set to the same as the `entryPoint` attribute,"} "${toString base}". To resolve this:
+            - If "${toString actualFileset._base}" is inside your project directory, set the `base` attribute to the same value.
+            - If "${toString actualFileset._base}" is outside your project directory and you do not want it to be able to influence the contents of the file set, make sure to not use file set operations on such a directory.''
     else if ! inSet (deconstruct entryPoint).components then
       # This likely indicates a mistake, catching this here also ensures we don't have to handle this special case of a potential empty directory
       throw "lib.fileset.importToStore: The file set contains no files under the `entryPoint` attribute \"${toString entryPoint}\"."
