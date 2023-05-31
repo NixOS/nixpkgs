@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-LKX8yNSLs60546ZcvLlQF3e++VxHmPsczui4cfrpia0=";
   };
 
+  patches = [
+    ./fix-launcher-version-check.patch
+  ];
+
   nativeBuildInputs = [ makeWrapper unzip ];
   buildInputs = [ jre ];
 

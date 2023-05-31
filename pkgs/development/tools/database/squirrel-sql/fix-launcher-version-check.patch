@@ -1,0 +1,27 @@
+Squirrel SQL 4.5.1 adds support for JDK 19, but the launcher scripts need to be
+updated to allow it.
+
+diff -ru a/squirrelsql-4.5.1-standard/squirrel-sql.bat b/squirrelsql-4.5.1-standard/squirrel-sql.bat
+--- a/squirrelsql-4.5.1-standard/squirrel-sql.bat	2022-11-13 01:40:04.000000000 -0800
++++ b/squirrelsql-4.5.1-standard/squirrel-sql.bat	2023-05-30 17:32:22.825494660 -0700
+@@ -23,7 +23,7 @@
+ if NOT "%removed%"=="\" goto strip
+ set SQUIRREL_SQL_HOME=%basedir%
+ 
+-"%LOCAL_JAVA%" -cp "%SQUIRREL_SQL_HOME%\lib\versioncheck.jar" JavaVersionChecker 11 12 13 14 15 16 17
++"%LOCAL_JAVA%" -cp "%SQUIRREL_SQL_HOME%\lib\versioncheck.jar" JavaVersionChecker 11 12 13 14 15 16 17 18 19
+ if ErrorLevel 1 goto ExitForWrongJavaVersion
+ 
+ :launchsquirrel
+diff -ru a/squirrelsql-4.5.1-standard/squirrel-sql.sh b/squirrelsql-4.5.1-standard/squirrel-sql.sh
+--- a/squirrelsql-4.5.1-standard/squirrel-sql.sh	2022-11-13 01:40:04.000000000 -0800
++++ b/squirrelsql-4.5.1-standard/squirrel-sql.sh	2023-05-30 17:29:27.487981752 -0700
+@@ -45,7 +45,7 @@
+ # should be able to be run by that version or higher. The arguments to JavaVersionChecker below specify the 
+ # minimum acceptable version (first arg) and any other acceptable subsequent versions.  <MAJOR>.<MINOR> should 
+ # be all that is necessary for the version form. 
+-$JAVACMD -cp "$UNIX_STYLE_HOME/lib/versioncheck.jar" JavaVersionChecker 11 12 13 14 15 16 17
++$JAVACMD -cp "$UNIX_STYLE_HOME/lib/versioncheck.jar" JavaVersionChecker 11 12 13 14 15 16 17 18 19
+ if [ "$?" != "0" ]; then
+   exit
+ fi
