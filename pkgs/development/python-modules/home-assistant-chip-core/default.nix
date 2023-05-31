@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-chip-core";
-  version = "2023.5.2";
+  version = "2023.5.3";
   format = "wheel";
 
   disabled = pythonOlder "3.7";
@@ -36,11 +36,11 @@ buildPythonPackage rec {
     system = {
       "aarch64-linux" = {
         name = "aarch64";
-        hash = "sha256-25TzM5UMkeGJe4NLUWQXeZ8TQvfdd9NAdsRIw870/0s=";
+        hash = "sha256-rGBlzYUydgFrt40UQTFlXMUOsEYlgGnvKrfT5WEZrAQ=";
       };
       "x86_64-linux" = {
         name = "x86_64";
-        hash = "sha256-KfQ/Ta+BqOHCrB+6ipaPWKkM7fH/ChtkrvtZdVrNpnI=";
+        hash = "sha256-8F5z1PAlfJidNeaiT0PN5odyTs99WN0rirXcUpH1mP0=";
       };
     }.${stdenv.system} or (throw "Unsupported system");
   in fetchPypi {
