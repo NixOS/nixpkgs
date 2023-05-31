@@ -85,7 +85,7 @@ in {
     localNetworkGameTransfers.openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mcDoc ''
+      description = lib.mdDoc ''
         Open ports for Steam Local Network Game Transfers.
       '';
     };
