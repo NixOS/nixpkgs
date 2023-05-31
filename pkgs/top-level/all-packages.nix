@@ -2552,6 +2552,8 @@ with pkgs;
 
   ### APPLICATIONS/FILE-MANAGERS
 
+  browsr = callPackage ../applications/file-managers/browsr { };
+
   cfm = callPackage ../applications/file-managers/cfm { };
 
   clex = callPackage ../applications/file-managers/clex { };
