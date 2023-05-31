@@ -18265,6 +18265,8 @@ with pkgs;
 
   karma-runner = callPackage ../development/tools/karma-runner { };
 
+  phpbench = callPackage ../development/tools/misc/phpbench { };
+
   phpunit = callPackage ../development/tools/misc/phpunit { };
 
   teller = callPackage ../development/tools/teller { };
