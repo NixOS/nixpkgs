@@ -26,11 +26,29 @@ stdenv.mkDerivation rec {
     owner = "paolostivanin";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-TklVOUkdhWDG9GqHl0Sz9fah+Xp/M8xgSuDB1q4mljM=";
+    hash = "sha256-TklVOUkdhWDG9GqHl0Sz9fah+Xp/M8xgSuDB1q4mljM=";
   };
 
-  buildInputs = [ gtk3 jansson libgcrypt libzip libpng libcotp zbar protobuf protobufc libsecret qrencode libuuid ];
-  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    gtk3
+    jansson
+    libcotp
+    libgcrypt
+    libpng
+    libsecret
+    libuuid
+    libzip
+    protobuf
+    protobufc
+    qrencode
+    zbar
+  ];
 
   meta = with lib; {
     description = "Highly secure and easy to use OTP client written in C/GTK that supports both TOTP and HOTP";
