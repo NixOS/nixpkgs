@@ -10718,6 +10718,8 @@ self: super: with self; {
 
   pyxattr = callPackage ../development/python-modules/pyxattr { };
 
+  pyxlsb = callPackage ../development/python-modules/pyxlsb { };
+
   pyworld = callPackage ../development/python-modules/pyworld { };
 
   pyx = callPackage ../development/python-modules/pyx { };
