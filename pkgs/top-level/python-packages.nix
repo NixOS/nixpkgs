@@ -1705,6 +1705,8 @@ self: super: with self; {
 
   certipy = callPackage ../development/python-modules/certipy { };
 
+  certipy-ad = callPackage ../development/python-modules/certipy-ad { };
+
   certomancer = callPackage ../development/python-modules/certomancer { };
 
   certvalidator = callPackage ../development/python-modules/certvalidator { };
