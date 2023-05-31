@@ -51,13 +51,11 @@ Below is a short excerpt of some points in there:
 
 See the nixpkgs manual for more details on [standard meta-attributes](https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes).
 
-## First Time contributors
+## Becoming a maintainer
 
-You will need to add yourself to [maintainers](https://nixos.org/manual/nixpkgs/unstable/#var-meta-maintainers)
+Being a nixpkgs maintainer means taking long-term responsibility for at least one package or module. First-time maintainers should start a pull request for a package by adding themselves to `maintainers/maintainer-list.nix` in a separate commit titled `maintainers: add alice`, before referencing themselves in the changes for the package.
 
-Your pr should have two commits:
-- `maintainers: add lizelive`
-- `starsector: 0.95.1a-RC6 -> 0.96a-RC7`
+See the nixpkgs manual on the [maintainers meta-attribute](https://nixos.org/nixpkgs/manual/#var-meta-maintainers).
 
 ## Writing good commit messages
 
