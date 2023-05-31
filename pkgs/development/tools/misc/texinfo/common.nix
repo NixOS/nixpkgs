@@ -1,7 +1,7 @@
 { version, sha256, patches ? [] }:
 
 { lib, stdenv, buildPackages, fetchurl, perl, xz, libintl, bash
-, gnulib
+, gnulib, perlPackages
 
 # we are a dependency of gcc, this simplifies bootstraping
 , interactive ? false, ncurses, procps
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
   # A native compiler is needed to build tools needed at build time
   depsBuildBuild = [ buildPackages.stdenv.cc perl ];
 
-  buildInputs = [ xz.bin bash libintl ]
+  buildInputs = [ xz.bin bash libintl perlPackages.ArchiveZip ]
     ++ optionals stdenv.isSunOS [ libiconv gawk ]
     ++ optional interactive ncurses;
 
