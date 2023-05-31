@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, gettext, libtool, automake, autoconf, cairo, gtk2-x11, autoreconfHook }:
+{ lib
+, stdenv
+, autoconf
+, automake
+, autoreconfHook
+, cairo
+, fetchFromGitHub
+, gettext
+, gtk2-x11
+, libtool
+, pkg-config
+}:
 
 stdenv.mkDerivation rec {
   pname = "gerbv";
@@ -7,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "gerbv";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-KxKNMWhWwmlIpueDOSWAWADEHFha8axywPJ6rRz0jIg=";
   };
 
@@ -15,17 +26,30 @@ stdenv.mkDerivation rec {
     sed -i '/AC_INIT/s/m4_esyscmd.*/${version}])/' configure.ac
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config automake autoconf ];
-  buildInputs = [ gettext libtool cairo gtk2-x11 ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    autoreconfHook
+    pkg-config
+  ];
 
-  configureFlags = ["--disable-update-desktop-database"];
+  buildInputs = [
+    cairo
+    gettext
+    gtk2-x11
+    libtool
+  ];
+
+  configureFlags = [
+    "--disable-update-desktop-database"
+  ];
 
   meta = with lib; {
     description = "A Gerber (RS-274X) viewer";
     homepage = "https://gerbv.github.io/";
     changelog = "https://github.com/gerbv/gerbv/releases/tag/v${version}";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ mog ];
     platforms = platforms.unix;
-    license = licenses.gpl2Plus;
   };
 }
