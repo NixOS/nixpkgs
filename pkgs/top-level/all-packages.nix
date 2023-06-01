@@ -26286,6 +26286,8 @@ with pkgs;
     buildGoModule = buildGo120Module;
   };
 
+  tailscale-systray = callPackage ../applications/misc/tailscale-systray { };
+
   tailspin = callPackage ../tools/misc/tailspin { };
 
   thanos = callPackage ../servers/monitoring/thanos {
