@@ -67,14 +67,22 @@ for module in $rootModules; do
 done
 
 copy_blob() {
-        mkdir -p "$out/lib/firmware/$(dirname "$i")"
-        echo "firmware for $module: $i"
-        for name in "$i" "$i.xz" ""; do
-            [ -z "$name" ] && echo "WARNING: missing firmware $i for module $module"
-            if cp "$firmware/lib/firmware/$name" "$out/lib/firmware/$name" 2>/dev/null; then
-                break
+    local sourcefile="$firmware/lib/firmware/$2"
+    local targetfile="$out/lib/firmware/$2"
+    mkdir -p "$out/lib/firmware/$(dirname "$2")"
+    echo "firmware for $1: $2"
+    if [ -e "$sourcefile" ]; then
+        cp -f "$sourcefile" "$targetfile"
+    else # if we already copied an uncompressed version there's no point also copying a compressed one
+        local found=0
+        for extension in "xz" "zstd"; do
+            if [ -e "$sourcefile.$extension" ]; then
+                found=1
+                cp -f "$sourcefile.$extension" "$targetfile.$extension"
             fi
         done
+        [ $found -eq 1 ] || echo "WARNING: missing firmware $2 for module $1"
+    fi
 }
 
 mkdir -p $out/lib/firmware
