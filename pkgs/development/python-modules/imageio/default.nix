@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.28.1";
+  version = "2.30.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XbUIe+XIFOz34sfTChoVyX7Kl9jCbzHdxU12fUpDvOg=";
+    hash = "sha256-f8atW1Z3yx5YB3h1pyUSqow5K21AiF7KCmqyUO+0uPQ=";
   };
 
   patches = [
