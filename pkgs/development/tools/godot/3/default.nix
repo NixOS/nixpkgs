@@ -79,9 +79,9 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p "$out/bin"
-    cp bin/godot.* $out/bin/godot
+    cp bin/godot.* $out/bin/godot3
 
-    wrapProgram "$out/bin/godot" \
+    wrapProgram "$out/bin/godot3" \
       --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib
 
     mkdir "$dev"
@@ -91,11 +91,12 @@ stdenv.mkDerivation rec {
     cp misc/dist/linux/godot.6 "$man/share/man/man6/"
 
     mkdir -p "$out"/share/{applications,icons/hicolor/scalable/apps}
-    cp misc/dist/linux/org.godotengine.Godot.desktop "$out/share/applications/"
+    cp misc/dist/linux/org.godotengine.Godot.desktop "$out/share/applications/org.godotengine.Godot3.desktop"
     cp icon.svg "$out/share/icons/hicolor/scalable/apps/godot.svg"
     cp icon.png "$out/share/icons/godot.png"
-    substituteInPlace "$out/share/applications/org.godotengine.Godot.desktop" \
-      --replace "Exec=godot" "Exec=$out/bin/godot"
+    substituteInPlace "$out/share/applications/org.godotengine.Godot3.desktop" \
+      --replace "Exec=godot" "Exec=$out/bin/godot3" \
+      --replace "Godot Engine" "Godot Engine 3"
   '';
 
   meta = with lib; {
