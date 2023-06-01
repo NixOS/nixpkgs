@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , python3Packages
 , ffmpeg
 , makeWrapper
@@ -53,6 +54,11 @@ stdenv.mkDerivation rec {
     # We can't update the package at runtime with NixOS, so this patch makes
     # the !update command mention that
     ./no-runtime-update.patch
+
+    # Fix passing of invalid "git" version into version.parse, which results
+    # in an InvalidVersion exception. The upstream fix is insufficient, so
+    # we carry the correct patch downstream for now.
+    ./catch-invalid-versions.patch
   ];
 
   postPatch = ''

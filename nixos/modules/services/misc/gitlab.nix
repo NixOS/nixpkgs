@@ -9,12 +9,10 @@ let
   toml = pkgs.formats.toml {};
   yaml = pkgs.formats.yaml {};
 
-  ruby = cfg.packages.gitlab.ruby;
-
   postgresqlPackage = if config.services.postgresql.enable then
                         config.services.postgresql.package
                       else
-                        pkgs.postgresql_12;
+                        pkgs.postgresql_13;
 
   gitlabSocket = "${cfg.statePath}/tmp/sockets/gitlab.socket";
   gitalySocket = "${cfg.statePath}/tmp/sockets/gitaly.socket";
@@ -46,9 +44,6 @@ let
 
     [git]
     bin_path = "${pkgs.git}/bin/git"
-
-    [gitaly-ruby]
-    dir = "${cfg.packages.gitaly.ruby}"
 
     [gitlab-shell]
     dir = "${cfg.packages.gitlab-shell}"
@@ -88,6 +83,9 @@ let
       channel_prefix = "gitlab_production";
     };
   };
+
+  # Redis configuration file
+  resqueYml = pkgs.writeText "resque.yml" (builtins.toJSON redisConfig);
 
   gitlabConfig = {
     # These are the default settings from config/gitlab.example.yml
@@ -172,7 +170,6 @@ let
     SCHEMA = "${cfg.statePath}/db/structure.sql";
     GITLAB_UPLOADS_PATH = "${cfg.statePath}/uploads";
     GITLAB_LOG_PATH = "${cfg.statePath}/log";
-    GITLAB_REDIS_CONFIG_FILE = pkgs.writeText "redis.yml" (builtins.toJSON redisConfig);
     prometheus_multiproc_dir = "/run/gitlab";
     RAILS_ENV = "production";
     MALLOC_ARENA_MAX = "2";
@@ -555,6 +552,20 @@ in {
           type = types.bool;
           default = false;
           description = lib.mdDoc "Enable GitLab container registry.";
+        };
+        package = mkOption {
+          type = types.package;
+          default =
+            if versionAtLeast config.system.stateVersion "23.11"
+            then pkgs.gitlab-container-registry
+            else pkgs.docker-distribution;
+          defaultText = literalExpression "pkgs.docker-distribution";
+          description = lib.mdDoc ''
+            Container registry package to use.
+
+            External container registries such as `pkgs.docker-distribution` are not supported
+            anymore since GitLab 16.0.0.
+          '';
         };
         host = mkOption {
           type = types.str;
@@ -1070,6 +1081,13 @@ in {
   };
 
   config = mkIf cfg.enable {
+    warnings = [
+      (mkIf
+        (cfg.registry.enable && versionAtLeast (getVersion cfg.packages.gitlab) "16.0.0" && cfg.registry.package == pkgs.docker-distribution)
+        ''Support for container registries other than gitlab-container-registry has ended since GitLab 16.0.0 and is scheduled for removal in a future release.
+          Please back up your data and migrate to the gitlab-container-registry package.''
+      )
+    ];
 
     assertions = [
       {
@@ -1101,8 +1119,8 @@ in {
         message = "services.gitlab.secrets.jwsFile must be set!";
       }
       {
-        assertion = versionAtLeast postgresqlPackage.version "12.0.0";
-        message = "PostgreSQL >=12 is required to run GitLab 14. Follow the instructions in the manual section for upgrading PostgreSQL here: https://nixos.org/manual/nixos/stable/index.html#module-services-postgres-upgrading";
+        assertion = versionAtLeast postgresqlPackage.version "13.6.0";
+        message = "PostgreSQL >=13.6 is required to run GitLab 16. Follow the instructions in the manual section for upgrading PostgreSQL here: https://nixos.org/manual/nixos/stable/index.html#module-services-postgres-upgrading";
       }
     ];
 
@@ -1213,6 +1231,7 @@ in {
     services.dockerRegistry = optionalAttrs cfg.registry.enable {
       enable = true;
       enableDelete = true; # This must be true, otherwise GitLab won't manage it correctly
+      package = cfg.package;
       extraConfig = {
         auth.token = {
           realm = "http${optionalString (cfg.https == true) "s"}://${cfg.host}/jwt/auth";
@@ -1315,6 +1334,7 @@ in {
           cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/db/* ${cfg.statePath}/db
           ln -sf ${extraGitlabRb} ${cfg.statePath}/config/initializers/extra-gitlab.rb
           ln -sf ${cableYml} ${cfg.statePath}/config/cable.yml
+          ln -sf ${resqueYml} ${cfg.statePath}/config/resque.yml
 
           ${cfg.packages.gitlab-shell}/bin/install
 
@@ -1462,10 +1482,7 @@ in {
       partOf = [ "gitlab.target" ];
       path = with pkgs; [
         openssh
-        procps  # See https://gitlab.com/gitlab-org/gitaly/issues/1562
         git
-        cfg.packages.gitaly.rubyEnv
-        cfg.packages.gitaly.rubyEnv.wrappedRuby
         gzip
         bzip2
       ];
