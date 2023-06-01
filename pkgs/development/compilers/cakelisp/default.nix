@@ -1,14 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, gcc }:
+{ lib, stdenv, fetchgit, gcc }:
 
 stdenv.mkDerivation rec {
   pname = "cakelisp";
   version = "0.1.0";
 
-  src = fetchFromGitHub {
-    owner = "makuto";
-    repo = "cakelisp";
+  src = fetchgit {
+    url = "https://macoy.me/code/macoy/cakelisp";
     rev = "v${version}";
-    sha256 = "126va59jy7rvy6c2wrf8j44m307f2d8jixqkc49s9wllxprj1dmg";
+    sha256 = "sha256-r7Yg8+2U8qQTYRP3KFET7oBRCZHIZS6Y8TsfL1NR24g=";
   };
 
   buildInputs = [ gcc ];
@@ -25,16 +24,20 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
+    runHook preBuild
     ./Build.sh
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     install -Dm755 bin/cakelisp -t $out/bin
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "A performance-oriented Lisp-like language";
-    homepage = "https://github.com/makuto/cakelisp";
+    homepage = "https://macoy.me/code/macoy/cakelisp";
     license = licenses.gpl3Plus;
     platforms = platforms.darwin ++ platforms.linux;
     maintainers = [ maintainers.sbond75 ];

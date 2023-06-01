@@ -46,6 +46,15 @@ stdenv.mkDerivation rec {
     ++ lib.optional (!enableDynarec) "-DDYNAREC=OFF"
     ++ lib.optional (!unfreeEnableDiscord) "-DDISCORD=OFF";
 
+  postInstall = lib.optional stdenv.isLinux ''
+    install -Dm644 -t $out/share/applications $src/src/unix/assets/net.86box.86Box.desktop
+
+    for size in 48 64 72 96 128 192 256 512; do
+      install -Dm644 -t $out/share/icons/hicolor/"$size"x"$size"/apps \
+        $src/src/unix/assets/"$size"x"$size"/net.86box.86Box.png
+    done;
+  '';
+
   # Some libraries are loaded dynamically, but QLibrary doesn't seem to search
   # the runpath, so use a wrapper instead.
   postFixup = let

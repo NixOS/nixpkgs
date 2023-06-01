@@ -95,6 +95,20 @@
     in checked;
 
   # See doc/builders/testers.chapter.md or
+  # https://nixos.org/manual/nixpkgs/unstable/#tester-runNixOSTest
+  runNixOSTest =
+    let nixos = import ../../../nixos/lib {};
+    in testModule:
+        nixos.runTest {
+          _file = "pkgs.runNixOSTest implementation";
+          imports = [
+            (lib.setDefaultModuleLocation "the argument that was passed to pkgs.runNixOSTest" testModule)
+          ];
+          hostPkgs = pkgs;
+          node.pkgs = pkgs;
+        };
+
+  # See doc/builders/testers.chapter.md or
   # https://nixos.org/manual/nixpkgs/unstable/#tester-invalidateFetcherByDrvHash
   nixosTest =
     let

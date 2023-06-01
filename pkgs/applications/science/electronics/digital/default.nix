@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   };
 
   # Fetching maven dependencies from "central" needs the network at build phase,
-  # we do that in this extra derivation that explicitely specifies its
+  # we do that in this extra derivation that explicitly specifies its
   # outputHash to ensure determinism.
   mavenDeps = stdenv.mkDerivation {
     name = "${pname}-${version}-maven-deps";

@@ -4,7 +4,7 @@
 , pythonOlder
 , docopt
 , pillow
-, scikitimage
+, scikit-image
 , aggdraw
 , pytestCheckHook
 , ipython
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     docopt
     ipython
     pillow
-    scikitimage
+    scikit-image
   ];
 
   nativeCheckInputs = [

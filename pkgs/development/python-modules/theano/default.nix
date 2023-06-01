@@ -100,5 +100,6 @@ in buildPythonPackage rec {
     description = "A Python library for large-scale array computation";
     license = licenses.bsd3;
     maintainers = [ ];
+    broken = true;
   };
 }

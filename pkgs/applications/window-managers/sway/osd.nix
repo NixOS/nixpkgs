@@ -2,7 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
-, gtk3
+, wrapGAppsHook
 , gtk-layer-shell
 , libpulseaudio
 }:
@@ -20,10 +20,12 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-ZcgrUcRQTcEYhw2mpJDuYDz3I/u/2Q+O60ajXYRMeow=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    wrapGAppsHook
+    pkg-config
+  ];
 
   buildInputs = [
-    gtk3
     gtk-layer-shell
     libpulseaudio
   ];

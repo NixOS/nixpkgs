@@ -35,8 +35,6 @@ in
 
   haskell-unicode-input-method = callPackage ./manual-packages/haskell-unicode-input-method { };
 
-  header-file-mode = callPackage ./manual-packages/header-file-mode { };
-
   helm-words = callPackage ./manual-packages/helm-words { };
 
   idris2-mode = callPackage ./manual-packages/idris2-mode { };
@@ -74,6 +72,8 @@ in
   sv-kalender = callPackage ./manual-packages/sv-kalender { };
 
   tree-sitter-langs = callPackage ./manual-packages/tree-sitter-langs { final = self; };
+
+  treesit-grammars = callPackage ./manual-packages/treesit-grammars { };
 
   tsc = callPackage ./manual-packages/tsc { };
 

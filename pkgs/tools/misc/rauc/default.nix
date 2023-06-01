@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config meson ninja ];
+  nativeBuildInputs = [ pkg-config meson ninja glib ];
 
   buildInputs = [ curl dbus glib json-glib openssl util-linux libnl systemd ];
 

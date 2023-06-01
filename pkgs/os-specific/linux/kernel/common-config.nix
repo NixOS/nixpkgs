@@ -77,6 +77,13 @@ let
       ACPI_APEI                        = (option yes);
       # APEI Generic Hardware Error Source
       ACPI_APEI_GHES                   = (option yes);
+
+      # Enable lazy RCUs for power savings:
+      # https://lore.kernel.org/rcu/20221019225138.GA2499943@paulmck-ThinkPad-P17-Gen-1/
+      # RCU_LAZY depends on RCU_NOCB_CPU depends on NO_HZ_FULL
+      # depends on HAVE_VIRT_CPU_ACCOUNTING_GEN depends on 64BIT,
+      # so we can't force-enable this
+      RCU_LAZY                         = whenAtLeast "6.2" (option yes);
     } // optionalAttrs (stdenv.hostPlatform.isx86) {
       INTEL_IDLE                       = yes;
       INTEL_RAPL                       = whenAtLeast "5.3" module;
@@ -124,7 +131,8 @@ let
 
     timer = {
       # Enable Full Dynticks System.
-      NO_HZ_FULL = mkIf stdenv.is64bit yes; # TODO: more precise condition?
+      # NO_HZ_FULL depends on HAVE_VIRT_CPU_ACCOUNTING_GEN depends on 64BIT
+      NO_HZ_FULL = mkIf stdenv.is64bit yes;
     };
 
     # Enable NUMA.
@@ -315,6 +323,7 @@ let
       DRM_AMD_DC_DCN2_1 = whenBetween "5.4" "5.6" yes;
       DRM_AMD_DC_DCN3_0 = whenBetween "5.9" "5.11" yes;
       DRM_AMD_DC_DCN = whenBetween "5.11" "6.4" yes;
+      DRM_AMD_DC_FP = whenAtLeast "6.4" yes;
       DRM_AMD_DC_HDCP = whenBetween "5.5" "6.4" yes;
       DRM_AMD_DC_SI = whenAtLeast "5.10" yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
@@ -678,10 +687,11 @@ let
     };
 
     zram = {
-      ZRAM     = module;
-      ZSWAP    = option yes;
-      ZBUD     = option yes;
-      ZSMALLOC = module;
+      ZRAM           = module;
+      ZRAM_WRITEBACK = option yes;
+      ZSWAP          = option yes;
+      ZBUD           = option yes;
+      ZSMALLOC       = module;
     };
 
     brcmfmac = {
@@ -1024,6 +1034,8 @@ let
       CROS_EC_ISHTP = module;
 
       CROS_KBD_LED_BACKLIGHT = module;
+
+      TCG_TIS_SPI_CR50 = whenAtLeast "5.5" yes;
     } // optionalAttrs (versionAtLeast version "5.4" && stdenv.hostPlatform.system == "x86_64-linux") {
       CHROMEOS_LAPTOP = module;
       CHROMEOS_PSTORE = module;

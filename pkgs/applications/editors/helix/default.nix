@@ -1,26 +1,20 @@
-{ fetchzip, lib, rustPlatform, installShellFiles, makeWrapper }:
+{ fetchzip, lib, rustPlatform, git, installShellFiles, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
   pname = "helix";
-  version = "23.03";
+  version = "23.05";
 
   # This release tarball includes source code for the tree-sitter grammars,
   # which is not ordinarily part of the repository.
   src = fetchzip {
     url = "https://github.com/helix-editor/helix/releases/download/${version}/helix-${version}-source.tar.xz";
-    hash = "sha256-FtY2V7za3WGeUaC2t2f63CcDUEg9zAS2cGUWI0YeGwk=";
+    hash = "sha256-3ZEToXwW569P7IFLqz6Un8rClnWrW5RiYKmRVFt7My8=";
     stripRoot = false;
   };
 
-  # should be removed, when tree-sitter is not used as a git checkout anymore
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tree-sitter-0.20.9" = "sha256-/PaFaASOT0Z8FpipX5uiRCjnv1kyZtg4B9+TnHA0yTY=";
-    };
-  };
+  cargoHash = "sha256-/LCtfyDAA2JuioBD/CDMv6OOxM0B9A3PpuVP/YY5oF0=";
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  nativeBuildInputs = [ git installShellFiles makeWrapper ];
 
   postInstall = ''
     # not needed at runtime
@@ -42,6 +36,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://helix-editor.com";
     license = licenses.mpl20;
     mainProgram = "hx";
-    maintainers = with maintainers; [ danth yusdacra ];
+    maintainers = with maintainers; [ danth yusdacra zowoq ];
   };
 }

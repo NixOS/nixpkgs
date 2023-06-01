@@ -1,4 +1,73 @@
 {
+  "d44b5a94c976fbb65815374f61ab5392a220b084" = {
+    "flutter_patched_sdk.zip" = "sha256-uLMzCF3dsBeSZnoY9YQ2bBQhw+hUAksoDKEWr3TCnhk=";
+    "flutter_patched_sdk_product.zip" = "sha256-0NbvAGSK0VgU6jSyboyhviP9H+wID7JoTS6xMqbZs2w=";
+    "android-arm" = {
+      "artifacts.zip" = "sha256-NZde8sVeknhR6bxchb/RURNIlKnJw6j5PZAWmmjiZvM=";
+    };
+    "android-arm-profile" = {
+      "artifacts.zip" = "sha256-BTs1tuSdjVP8zAGCxV+uQ7sAAbCt0dML4g7/85IOFEs=";
+      "linux-x64.zip" = "sha256-GpjP5omeAjHBLZjJQdUMUnPoEgYBLppicLPUTY0fHqM=";
+    };
+    "android-arm-release" = {
+      "artifacts.zip" = "sha256-ip2GnYkKq8aLWjVPk9no3aOf0c3k1h9foznhgLpZ17U=";
+      "linux-x64.zip" = "sha256-mGnmbraE98rqKRdO6keoITOaNCP0K3iYNRadihwOpxc=";
+    };
+    "android-arm64" = {
+      "artifacts.zip" = "sha256-Sl7S/TNZWrlM4Z9UGN5rgGfpKk4UWKz6CKlQbz1qcZ4=";
+    };
+    "android-arm64-profile" = {
+      "artifacts.zip" = "sha256-zNZtTxM8254y+KKSVYlBUYyIV2J04XN1cmnSjkQLJs8=";
+      "linux-x64.zip" = "sha256-M8AbEwFV2zedeqMoNeb+2UbR7i9I9rGh6LXBQcPO4iA=";
+    };
+    "android-arm64-release" = {
+      "artifacts.zip" = "sha256-PdnAIcYccdRs3r6M8rwmgl2x+TsBPMRF/iAEgwLbt/4=";
+      "linux-x64.zip" = "sha256-kmLkKXBj/70B3v5GJ50trTlV8epj16jOlQrh1U4/pVA=";
+    };
+    "android-x86" = {
+      "artifacts.zip" = "sha256-J1kgvNvdWo05HMHJMlVFECLMVnoCqUm1oP4K394w+xc=";
+    };
+    "android-x86-jit-release" = {
+      "artifacts.zip" = "sha256-Tz/veYh/73px0eH0FOXbN4G8fVjXmEHv7G8lRm3YLtY=";
+    };
+    "android-x64" = {
+      "artifacts.zip" = "sha256-+WT7oT31XwE+ykLbiAUvnKw+WVR0VeFXPGpcMUHbsTg=";
+    };
+    "android-x64-profile" = {
+      "artifacts.zip" = "sha256-f298VAJoZ2x+w0bxma7wu5h7Bn6+kCdrHh5qtjhhhhc=";
+      "linux-x64.zip" = "sha256-73Br9XgafwmagxAf61NSHn4BHn4q90pHJYEXCfAG8qY=";
+    };
+    "android-x64-release" = {
+      "artifacts.zip" = "sha256-63hQCvObPmIxTcKyBQlXgGY6FfKp9PrbBY0RkSr1D/U=";
+      "linux-x64.zip" = "sha256-i5WQeePNxUNAbVR06Lz2XCXvZZTJxaFB6txtpVn2h9I=";
+    };
+    "linux-arm64" = {
+      "artifacts.zip" = "sha256-LTdVexuy7cL6dJqdM14YteI7Jo/z5wYOHakbX/BiV38=";
+      "font-subset.zip" = "sha256-cqLjvl3maO6NpN47/e718xyuSL8L8cHqU6ybuwlD+fA=";
+    };
+    "linux-arm64-debug" = {
+      "linux-arm64-flutter-gtk.zip" = "sha256-SRlKQllg5UWHk2kOIQ6ZwbqG5FoeFGCl2F9tTI+XVOE=";
+    };
+    "linux-arm64-profile" = {
+      "linux-arm64-flutter-gtk.zip" = "sha256-4wERBO+eimsSKFt8/P6mQqgzv+HURK+O/YFHAUHpklA=";
+    };
+    "linux-arm64-release" = {
+      "linux-arm64-flutter-gtk.zip" = "sha256-1XHdFiW//1Yd+qOLrRlk0vma99HlGDC/RA0An8db/oY=";
+    };
+    "linux-x64" = {
+      "artifacts.zip" = "sha256-Bl0BRxUfVqNX6y7HdUXu5lIFzMLB2GUJauhOLEeInEE=";
+      "font-subset.zip" = "sha256-v02HV8QOqwdv30RiHpKu8ujTXOQmupGr9HCfpBUvrKM=";
+    };
+    "linux-x64-debug" = {
+      "linux-x64-flutter-gtk.zip" = "sha256-xjScsvWgPO8qeccw5BGzNrMLNzn5O+CvOpoPkvlrX0o=";
+    };
+    "linux-x64-profile" = {
+      "linux-x64-flutter-gtk.zip" = "sha256-52nMjoHQZ/ve7yJW9d8YK02U8mowe9xHZpkTwbGq9vU=";
+    };
+    "linux-x64-release" = {
+      "linux-x64-flutter-gtk.zip" = "sha256-SA7Th1Qasaj4Q5wFr89Rv8PNQx6s6zvHsDxT1EKKZV0=";
+    };
+  };
   "1a65d409c7a1438a34d21b60bf30a6fd5db59314" = {
     "flutter_patched_sdk.zip" = "sha256-Pvsjttm5OwpJ/pW4UQXvvEiJYCM5CoZZfVXz5jef37k=";
     "flutter_patched_sdk_product.zip" = "sha256-fhj2uUOrLwrzHrM6RNVpPNize5Qu6mLQDcSzLT2TbRA=";
@@ -44,7 +113,6 @@
     "linux-arm64" = {
       "artifacts.zip" = "sha256-xyKVaEFb5gVkVrPzDrOql5BmXGO0FnCSeXOoQ10ZFrw=";
       "font-subset.zip" = "sha256-Ulwb6q2SzB4suMJhAM3zAwWOzlEImlu9Ha+w5u4QqIU=";
-      "linux-arm64-flutter-gtk.zip" = "sha256-SiYOH++py4zeoD3BkNayqy/C9Zz9OiYQ5+u+pDLIpWg=";
     };
     "linux-arm64-debug" = {
       "linux-arm64-flutter-gtk.zip" = "sha256-SiYOH++py4zeoD3BkNayqy/C9Zz9OiYQ5+u+pDLIpWg=";
@@ -58,7 +126,6 @@
     "linux-x64" = {
       "artifacts.zip" = "sha256-+zIABFXUpiqn3OMoLcU4NDLxZ1y9z0r46iCTNRHAkz8=";
       "font-subset.zip" = "sha256-W4SRPvA4rraVqN1ehbY6MFL7ZIWDHVJhjlLtxyUJJKY=";
-      "linux-x64-flutter-gtk.zip" = "sha256-boICnuJF4zqGb7kaN5haO/df9hC9KeJidt3uIK06S7M=";
     };
     "linux-x64-debug" = {
       "linux-x64-flutter-gtk.zip" = "sha256-boICnuJF4zqGb7kaN5haO/df9hC9KeJidt3uIK06S7M=";

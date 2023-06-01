@@ -76,7 +76,9 @@ in
         ExecStart = "${pkgs.keyd}/bin/keyd";
         Restart = "always";
 
-        DynamicUser = true;
+        # TODO investigate why it doesn't work propeprly with DynamicUser
+        # See issue: https://github.com/NixOS/nixpkgs/issues/226346
+        # DynamicUser = true;
         SupplementaryGroups = [
           config.users.groups.input.name
           config.users.groups.uinput.name
@@ -96,6 +98,7 @@ in
         ProtectHostname = true;
         PrivateUsers = true;
         PrivateMounts = true;
+        PrivateTmp = true;
         RestrictNamespaces = true;
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
@@ -104,7 +107,18 @@ in
         MemoryDenyWriteExecute = true;
         RestrictRealtime = true;
         LockPersonality = true;
-        ProtectProc = "noaccess";
+        ProtectProc = "invisible";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "~@resources"
+        ];
+        RestrictAddressFamilies = [ "AF_UNIX" ];
+        RestrictSUIDSGID = true;
+        IPAddressDeny = [ "any" ];
+        NoNewPrivileges = true;
+        ProtectSystem = "strict";
+        ProcSubset = "pid";
         UMask = "0077";
       };
     };

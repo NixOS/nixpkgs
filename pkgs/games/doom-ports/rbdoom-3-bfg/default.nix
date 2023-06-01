@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rbdoom-3-bfg";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "RobertBeckebans";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-jO1+Evk17JUjvYl6QOVAn+pWwr/G8gWMae5CwMhgYZI=";
+    hash = "sha256-bjjeTdbQDWTibSrIWhCnr6F0Ef17efLgWGQAAwezjUw=";
     fetchSubmodules = true;
   };
 

@@ -33,13 +33,13 @@
 
 stdenv.mkDerivation rec {
   pname = "proxysql";
-  version = "2.5.1";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "sysown";
     repo = pname;
     rev = version;
-    hash = "sha256-Z85/oSV2TUKEoum09G6OHNw6K/Evt1wMCcleTcc96EY=";
+    hash = "sha256-KPTvFbEreWQBAs5ofcdVzlVqL0t5pM/mMLv4+E4lJ5M=";
   };
 
   patches = [

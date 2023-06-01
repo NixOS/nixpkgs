@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "0.15.1";
+  version = "0.26.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -31,17 +31,12 @@ buildPythonPackage rec {
     owner = "Textualize";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-UT+ApD/TTb5cxIdgK+n3B2J3z/nEwVXtuyPHpGCv6Tg=";
+    hash = "sha256-l4zSSROeI55hFnf0C64bbAB+1cATUkS59Uybf7ZmSfs=";
   };
 
   nativeBuildInputs = [
     poetry-core
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'importlib-metadata = "^4.11.3"' 'importlib-metadata = "*"'
-  '';
 
   propagatedBuildInputs = [
     rich
@@ -74,9 +69,12 @@ buildPythonPackage rec {
     "textual"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "TUI framework for Python inspired by modern web development";
     homepage = "https://github.com/Textualize/textual";
+    changelog = "https://github.com/Textualize/textual/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ joelkoen ];
   };

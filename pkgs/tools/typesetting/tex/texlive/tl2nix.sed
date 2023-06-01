@@ -15,10 +15,10 @@ $a}
 
 # form an attrmap per package
 # ignore packages whose name contains "." (such as binaries)
-/^name ([^.]+)$/,/^$/{
+:next-package
+/^name ([^.]+|texlive\.infra)$/,/^$/{
   # quote package names, as some start with a number :-/
   s/^name (.*)$/"\1" = {/p
-  /^$/,1i};
 
   # extract revision
   s/^revision ([0-9]*)$/  revision = \1;/p
@@ -27,7 +27,6 @@ $a}
   s/^containerchecksum (.*)/  sha512.run = "\1";/p
   s/^doccontainerchecksum (.*)/  sha512.doc = "\1";/p
   s/^srccontainerchecksum (.*)/  sha512.source = "\1";/p
-  /^runfiles /i\  hasRunfiles = true;
 
   # number of path components to strip, defaulting to 1 ("texmf-dist/")
   /^relocated 1/i\  stripPrefix = 0;
@@ -44,16 +43,40 @@ $a}
     # loop through following depend lines
     :next
       h ; N     # save & read next line
-      s/\ndepend (.+)\.(.+)$//
-      s/\ndepend (.+)$/\n    "\1"/
+      s/\ndepend ([^.]+|texlive\.infra)$/\n    "\1"/
+      s/\ndepend (.+)$//
       t next    # loop if the previous lines matched
 
     x; s/$/\n  ];/p ; x     # print saved deps
     s/^.*\n//   # remove deps, resume processing
   }
 
+  # detect presence of notable files
+  /^runfiles /{
+    s/^runfiles .*$//  # ignore the first line
+    :next-file
+      h ; N            # save to hold space & read next line
+      s!\n (.+)$! \1!  # save file name
+      t next-file      # loop if the previous lines matched
+
+    x                  # work on saved lines in hold space
+    / (RELOC|texmf-dist)\//i\  hasRunfiles = true;
+    / tlpkg\//i\  hasTlpkg = true;
+    x                  # restore pattern space
+    s/^.*\n//          # remove saved lines, resume processing
+  }
+
+  # extract postaction scripts (right now, at most one per package, so a string suffices)
+  s/^postaction script file=(.*)$/  postactionScript = "\1";/p
+
   # extract hyphenation patterns and formats
   # (this may create duplicate lines, use uniq to remove them)
   /^execute\sAddHyphen/i\  hasHyphens = true;
   /^execute\sAddFormat/i\  hasFormats = true;
+
+  # close attrmap
+  /^$/{
+    i};
+    b next-package
+  }
 }

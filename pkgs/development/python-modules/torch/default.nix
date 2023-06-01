@@ -1,11 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, buildPythonPackage, python,
+{ stdenv, lib, fetchFromGitHub, buildPythonPackage, python,
   cudaSupport ? false, cudaPackages, magma,
   useSystemNccl ? true,
   MPISupport ? false, mpi,
   buildDocs ? false,
 
   # Native build inputs
-  cmake, util-linux, linkFarm, symlinkJoin, which, pybind11, removeReferencesTo,
+  cmake, linkFarm, symlinkJoin, which, pybind11, removeReferencesTo,
   pythonRelaxDepsHook,
 
   # Build inputs
@@ -39,7 +39,7 @@
   # dependencies for torch.utils.tensorboard
   pillow, six, future, tensorboard, protobuf,
 
-  isPy3k, pythonOlder,
+  pythonOlder,
 
   # ROCm dependencies
   rocmSupport ? false,
@@ -55,6 +55,7 @@ let
   inherit (cudaPackages) cudatoolkit cudaFlags cudnn nccl;
 in
 
+assert cudaSupport -> stdenv.isLinux;
 assert cudaSupport -> (cudaPackages.cudaMajorVersion == "11");
 
 # confirm that cudatoolkits are sync'd across dependencies
@@ -64,10 +65,10 @@ assert !cudaSupport || magma.cudaPackages.cudatoolkit == cudatoolkit;
 let
   setBool = v: if v then "1" else "0";
 
-  # https://github.com/pytorch/pytorch/blob/v1.13.1/torch/utils/cpp_extension.py#L1751
+  # https://github.com/pytorch/pytorch/blob/v2.0.1/torch/utils/cpp_extension.py#L1744
   supportedTorchCudaCapabilities =
     let
-      real = ["3.5" "3.7" "5.0" "5.2" "5.3" "6.0" "6.1" "6.2" "7.0" "7.2" "7.5" "8.0" "8.6"];
+      real = ["3.5" "3.7" "5.0" "5.2" "5.3" "6.0" "6.1" "6.2" "7.0" "7.2" "7.5" "8.0" "8.6" "8.9" "9.0"];
       ptx = lists.map (x: "${x}+PTX") real;
     in
     real ++ ptx;
@@ -133,7 +134,7 @@ let
 in buildPythonPackage rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.0.0";
+  version = "2.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8.0";
@@ -149,7 +150,7 @@ in buildPythonPackage rec {
     repo = "pytorch";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-cSw7+AYBUcZLz3UyK/+JWWjQxKwVBXcFvBq0XAcL3tE=";
+    hash = "sha256-xUj77yKz3IQ3gd/G32pI4OhL3LoN1zS7eFg0/0nZp5I=";
   };
 
   patches = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
@@ -276,7 +277,6 @@ in buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
-    util-linux
     which
     ninja
     pybind11
@@ -414,7 +414,7 @@ in buildPythonPackage rec {
     homepage = "https://pytorch.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh thoughtpolice tscholak ]; # tscholak esp. for darwin-related builds
-    platforms = with platforms; linux ++ lib.optionals (!cudaSupport || !rocmSupport) darwin;
+    platforms = with platforms; linux ++ lib.optionals (!cudaSupport && !rocmSupport) darwin;
     broken = rocmSupport && cudaSupport; # CUDA and ROCm are mutually exclusive
   };
 }

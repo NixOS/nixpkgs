@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "guile-gnutls";
-  version = "3.7.11";
+  version = "3.7.12";
 
   src = fetchurl {
     url = "mirror://gnu/gnutls/guile-gnutls-${version}.tar.gz";
-    hash = "sha256-BY6qXHY+Gfv5PotO78ESgPgHBTXBOMmb4R8AzWhWE98=";
+    hash = "sha256-XTrxFXMJPeWfJYQVhy4sWxTMqd0lGosuwWQ9bpf+4zY=";
   };
 
   nativeBuildInputs = [ pkg-config ];

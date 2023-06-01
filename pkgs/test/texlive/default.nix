@@ -199,4 +199,15 @@
       {"$kpathsea","$schemeFull"/share/texmf-var}/web2c/fmtutil.cnf \
       | tee "$out/fmtutil.cnf.patch"
   '';
+
+  # verify that the restricted mode gets enabled when
+  # needed (detected by checking if it disallows --gscmd)
+  repstopdf = runCommand "texlive-test-repstopdf" {
+    nativeBuildInputs = [ (texlive.combine { inherit (texlive) scheme-infraonly epstopdf; }) ];
+  } ''
+    ! (epstopdf --gscmd echo /dev/null 2>&1 || true) | grep forbidden >/dev/null
+    (repstopdf --gscmd echo /dev/null 2>&1 || true) | grep forbidden >/dev/null
+    mkdir "$out"
+  '';
+
 }

@@ -323,7 +323,7 @@ let
             }
           fi
         '');
-      } // optionalAttrs (data.listenHTTP != null && toInt (elemAt (splitString ":" data.listenHTTP) 1) < 1024) {
+      } // optionalAttrs (data.listenHTTP != null && toInt (last (splitString ":" data.listenHTTP)) < 1024) {
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
       };

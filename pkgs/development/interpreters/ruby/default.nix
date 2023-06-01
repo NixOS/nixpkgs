@@ -2,7 +2,7 @@
 , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
 , zlib, gdbm, ncurses, readline, groff, libyaml, libffi, jemalloc, autoreconfHook, bison
 , autoconf, libiconv, libobjc, libunwind, Foundation
-, buildEnv, bundler, bundix, rustPlatform
+, buildEnv, bundler, bundix, cargo, rustPlatform, rustc
 , makeBinaryWrapper, buildRubyGem, defaultGemConfig, removeReferencesTo
 , openssl, openssl_1_1
 , linuxPackages, libsystemtap
@@ -14,6 +14,13 @@ let
   opString = lib.optionalString;
   config = import ./config.nix { inherit fetchFromSavannah; };
   rubygems = import ./rubygems { inherit stdenv lib fetchurl; };
+
+  openssl3Gem = fetchFromGitHub {
+    owner = "ruby";
+    repo = "openssl";
+    rev = "v3.0.2";
+    hash = "sha256-KhuKRP1JkMJv7CagGRQ0KKGOd5Oh0FP0fbj0VZ4utGo=";
+  };
 
   # Contains the ruby version heuristics
   rubyVersion = import ./ruby-version.nix { inherit lib; };
@@ -48,7 +55,7 @@ let
       #     $(nix-build -A ruby)/lib/ruby/2.6.0/x86_64-linux/rbconfig.rb
       # - In $out/lib/libruby.so and/or $out/lib/libruby.dylib
       , removeReferencesTo, jitSupport ? yjitSupport
-      , rustPlatform, yjitSupport ? yjitSupported
+      , cargo, rustPlatform, rustc, yjitSupport ? yjitSupported
       , autoreconfHook, bison, autoconf
       , buildEnv, bundler, bundix
       , libiconv, libobjc, libunwind, Foundation
@@ -78,14 +85,14 @@ let
         nativeBuildInputs = [ autoreconfHook bison ]
           ++ (op docSupport groff)
           ++ (ops (dtraceSupport && stdenv.isLinux) [ systemtap libsystemtap ])
-          ++ ops yjitSupport [ rustPlatform.cargoSetupHook rustPlatform.rust.cargo rustPlatform.rust.rustc ]
+          ++ ops yjitSupport [ rustPlatform.cargoSetupHook cargo rustc ]
           ++ op useBaseRuby baseRuby;
         buildInputs = [ autoconf ]
           ++ (op fiddleSupport libffi)
           ++ (ops cursesSupport [ ncurses readline ])
           ++ (op zlibSupport zlib)
-          ++ (op (lib.versionOlder ver.majMin "3.0" && opensslSupport) openssl_1_1)
-          ++ (op (atLeast30 && opensslSupport) openssl_1_1)
+          ++ (op (atLeast30 && opensslSupport) openssl)
+          ++ (op (!atLeast30 && opensslSupport) openssl_1_1)
           ++ (op gdbmSupport gdbm)
           ++ (op yamlSupport libyaml)
           # Looks like ruby fails to build on darwin without readline even if curses
@@ -113,7 +120,7 @@ let
               url = "https://github.com/ruby/ruby/commit/0acc05caf7518cd0d63ab02bfa036455add02346.patch";
               sha256 = "sha256-43hI9L6bXfeujgmgKFVmiWhg7OXvshPCCtQ4TxqK1zk=";
             })
-          ]
+         ]
           ++ ops (!atLeast30 && rubygemsSupport) [
             # We upgrade rubygems to a version that isn't compatible with the
             # ruby 2.7 installer. Backport the upstream fix.
@@ -149,6 +156,12 @@ let
           rm -rf $sourceRoot/{lib,test}/rubygems*
           cp -r ${rubygems}/lib/rubygems* $sourceRoot/lib
           cp -r ${rubygems}/test/rubygems $sourceRoot/test
+        '' + opString (ver.majMin == "3.0" && opensslSupport) ''
+          # Replace the Gem by a OpenSSL3-compatible one.
+          echo "Hotpatching the OpenSSL gem with a 3.x series for OpenSSL 3 support..."
+          cp -vr ${openssl3Gem}/ext/openssl $sourceRoot/ext/
+          cp -vr ${openssl3Gem}/lib/ $sourceRoot/ext/openssl/
+          cp -vr ${openssl3Gem}/{History.md,openssl.gemspec} $sourceRoot/ext/openssl/
         '';
 
         postPatch = ''
@@ -286,6 +299,7 @@ let
           license     = licenses.ruby;
           maintainers = with maintainers; [ vrthra manveru marsam ];
           platforms   = platforms.all;
+          knownVulnerabilities = op (lib.versionOlder ver.majMin "3.0") "This Ruby release has reached its end of life. See https://www.ruby-lang.org/en/downloads/branches/.";
         };
 
         passthru = rec {

@@ -276,6 +276,15 @@ Defaults to `true`.
 : Whether to generate an index for interactive navigation of the HTML documentation.
 Defaults to `true` if supported.
 
+`doInstallIntermediates`
+: Whether to install intermediate build products (files written to `dist/build`
+by GHC during the build process). With `enableSeparateIntermediatesOutput`,
+these files are instead installed to [a separate `intermediates`
+output.][multiple-outputs] The output can then be passed into a future build of
+the same package with the `previousIntermediates` argument to support
+incremental builds. See [“Incremental builds”](#haskell-incremental-builds) for
+more information. Defaults to `false`.
+
 `enableLibraryProfiling`
 : Whether to enable [profiling][profiling] for libraries contained in the
 package. Enabled by default if supported.
@@ -371,6 +380,12 @@ Defaults to `false`.
 : Whether to install documentation to a separate `doc` output.
 Is automatically enabled if `doHaddock` is `true`.
 
+`enableSeparateIntermediatesOutput`
+: When `doInstallIntermediates` is true, whether to install intermediate build
+products to a separate `intermediates` output. See [“Incremental
+builds”](#haskell-incremental-builds) for more information. Defaults to
+`false`.
+
 `allowInconsistentDependencies`
 : If enabled, allow multiple versions of the same Haskell package in the
 dependency tree at configure time. Often in such a situation compilation would
@@ -380,6 +395,11 @@ later fail because of type mismatches. Defaults to `false`.
 : Build and install a special object file for GHCi. This improves performance
 when loading the library in the REPL, but requires extra build time and
 disk space. Defaults to `false`.
+
+`previousIntermediates`
+: If non-null, intermediate build artifacts are copied from this input to
+`dist/build` before performing compiling. See [“Incremental
+builds”](#haskell-incremental-builds) for more information. Defaults to `null`.
 
 `buildTarget`
 : Name of the executable or library to build and install.
@@ -495,6 +515,54 @@ the [Meta-attributes section](#chap-meta) for their documentation.
     * `maintainers`
     * `broken`
     * `hydraPlatforms`
+
+### Incremental builds {#haskell-incremental-builds}
+
+`haskellPackages.mkDerivation` supports incremental builds for GHC 9.4 and
+newer with the `doInstallIntermediates`, `enableSeparateIntermediatesOutput`,
+and `previousIntermediates` arguments.
+
+The basic idea is to first perform a full build of the package in question,
+save its intermediate build products for later, and then copy those build
+products into the build directory of an incremental build performed later.
+Then, GHC will use those build artifacts to avoid recompiling unchanged
+modules.
+
+For more detail on how to store and use incremental build products, see
+[Gabriella Gonzalez’ blog post “Nixpkgs support for incremental Haskell
+builds”.][incremental-builds] motivation behind this feature.
+
+An incremental build for [the `turtle` package][turtle] can be performed like
+so:
+
+```nix
+let
+  pkgs = import <nixpkgs> {};
+  inherit (pkgs) haskell;
+  inherit (haskell.lib.compose) overrideCabal;
+
+  # Incremental builds work with GHC >=9.4.
+  turtle = haskell.packages.ghc944.turtle;
+
+  # This will do a full build of `turtle`, while writing the intermediate build products
+  # (compiled modules, etc.) to the `intermediates` output.
+  turtle-full-build-with-incremental-output = overrideCabal (drv: {
+    doInstallIntermediates = true;
+    enableSeparateIntermediatesOutput = true;
+  }) turtle;
+
+  # This will do an incremental build of `turtle` by copying the previously
+  # compiled modules and intermediate build products into the source tree
+  # before running the build.
+  #
+  # GHC will then naturally pick up and reuse these products, making this build
+  # complete much more quickly than the previous one.
+  turtle-incremental-build = overrideCabal (drv: {
+    previousIntermediates = turtle-full-build-with-incremental-output.intermediates;
+  }) turtle;
+in
+  turtle-incremental-build
+```
 
 ## Development environments {#haskell-development-environments}
 
@@ -1083,8 +1151,11 @@ on the issue linked above.
 [haskell.nix]: https://input-output-hk.github.io/haskell.nix/index.html
 [HLS user guide]: https://haskell-language-server.readthedocs.io/en/latest/configuration.html#configuring-your-editor
 [hoogle]: https://wiki.haskell.org/Hoogle
+[incremental-builds]: https://www.haskellforall.com/2022/12/nixpkgs-support-for-incremental-haskell.html
 [jailbreak-cabal]: https://github.com/NixOS/jailbreak-cabal/
+[multiple-outputs]: https://nixos.org/manual/nixpkgs/stable/#chap-multiple-output
 [optparse-applicative-completions]: https://github.com/pcapriotti/optparse-applicative/blob/7726b63796aa5d0df82e926d467f039b78ca09e2/README.md#bash-zsh-and-fish-completions
 [profiling-detail]: https://cabal.readthedocs.io/en/latest/cabal-project.html#cfg-field-profiling-detail
 [profiling]: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/profiling.html
 [search.nixos.org]: https://search.nixos.org
+[turtle]: https://hackage.haskell.org/package/turtle

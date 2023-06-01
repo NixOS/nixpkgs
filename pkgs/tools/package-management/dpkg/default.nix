@@ -71,6 +71,8 @@ stdenv.mkDerivation rec {
       cp -r scripts/t/origins $out/etc/dpkg
     '';
 
+  setupHook = ./setup-hook.sh;
+
   meta = with lib; {
     description = "The Debian package manager";
     homepage = "https://wiki.debian.org/Teams/Dpkg";

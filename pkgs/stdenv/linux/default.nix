@@ -127,8 +127,6 @@ let
     ''
       export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
       export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
-      ${lib.optionalString (system == "x86_64-linux") "NIX_LIB64_IN_SELF_RPATH=1"}
-      ${lib.optionalString (system == "mipsel-linux") "NIX_LIB32_IN_SELF_RPATH=1"}
     '';
 
 
@@ -639,7 +637,7 @@ in
           ]
         # Library dependencies
         ++ map getLib (
-            [ attr acl zlib pcre libidn2 libunistring ]
+            [ attr acl zlib gnugrep.pcre2 libidn2 libunistring ]
             ++ lib.optional (gawk.libsigsegv != null) gawk.libsigsegv
           )
         # More complicated cases
@@ -658,7 +656,8 @@ in
         inherit (prevStage)
           gzip bzip2 xz bash coreutils diffutils findutils gawk
           gnused gnutar gnugrep gnupatch patchelf
-          attr acl zlib pcre libunistring;
+          attr acl zlib libunistring;
+        inherit (prevStage.gnugrep) pcre2;
         ${localSystem.libc} = getLibc prevStage;
 
         # Hack: avoid libidn2.{bin,dev} referencing bootstrap tools.  There's a logical cycle.

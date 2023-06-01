@@ -2,14 +2,16 @@
 # Update the enabled crypt scheme ids in passthru when the enabled hashes change
 , enableHashes ? "strong"
 , nixosTests
+, runCommand
+, python3
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libxcrypt";
   version = "4.4.33";
 
   src = fetchurl {
-    url = "https://github.com/besser82/libxcrypt/releases/download/v${version}/libxcrypt-${version}.tar.xz";
+    url = "https://github.com/besser82/libxcrypt/releases/download/v${finalAttrs.version}/libxcrypt-${finalAttrs.version}.tar.xz";
     hash = "sha256-6HrPnGUsVzpHE9VYIVn5jzBdVu1fdUzmT1fUGU1rOm8=";
   };
 
@@ -37,6 +39,11 @@ stdenv.mkDerivation rec {
   passthru = {
     tests = {
       inherit (nixosTests) login shadow;
+
+      passthruMatches = runCommand "libxcrypt-test-passthru-matches" { } ''
+        ${python3.interpreter} "${./check_passthru_matches.py}" ${lib.escapeShellArgs ([ finalAttrs.src enableHashes "--" ] ++ finalAttrs.passthru.enabledCryptSchemeIds)}
+        touch "$out"
+      '';
     };
     enabledCryptSchemeIds = [
       # https://github.com/besser82/libxcrypt/blob/v4.4.33/lib/hashes.conf
@@ -57,4 +64,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ dottedmag hexa ];
     license = licenses.lgpl21Plus;
   };
-}
+})

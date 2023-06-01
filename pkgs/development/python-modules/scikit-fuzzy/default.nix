@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, isPy27
+, pythonOlder
 , fetchFromGitHub
 , matplotlib
 , networkx
@@ -13,7 +13,9 @@
 buildPythonPackage rec {
   pname = "scikit-fuzzy";
   version = "unstable-2022-11-07";
-  disabled = isPy27;
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
@@ -24,6 +26,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ networkx numpy scipy ];
   nativeCheckInputs = [ matplotlib nose pytestCheckHook ];
+
+  # numpy API breakage: "AttributeError: module 'numpy' has no attribute 'float'"
+  disabledTests = [ "test_fuzzy_compare" ];
 
   pythonImportsCheck = [ "skfuzzy" ];
 

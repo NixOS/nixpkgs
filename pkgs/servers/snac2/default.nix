@@ -10,19 +10,24 @@
 
 stdenv.mkDerivation rec {
   pname = "snac2";
-  version = "2.28";
+  version = "2.31";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "grunfink";
     repo = pname;
     rev = version;
-    hash = "sha256-VeywijUgLcSxaqlkFkZMqZQn2u2ZmCL1CcJ7eW+C9k4=";
+    hash = "sha256-zkeoj+l82aP3/rXn7JuNS4OvAGnHaVRz+xXxPEPMEs8=";
   };
 
   buildInputs = [ curl openssl ];
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+    "-Dst_mtim=st_mtimespec"
+    "-Dst_ctim=st_ctimespec"
+  ]);
 
   passthru = {
     tests.version = testers.testVersion {
@@ -38,7 +43,7 @@ stdenv.mkDerivation rec {
     changelog = "https://codeberg.org/grunfink/snac2/src/tag/${version}/RELEASE_NOTES.md";
     license = licenses.mit;
     maintainers = with maintainers; [ misuzu ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     mainProgram = "snac";
   };
 }

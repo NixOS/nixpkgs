@@ -186,14 +186,12 @@ stdenv.mkDerivation (finalAttrs: {
 
       # Fix references to the perl, sed, awk and various coreutil binaries used by
       # shell scripts that git calls (e.g. filter-branch)
-      # and completion scripts
       SCRIPT="$(cat <<'EOS'
         BEGIN{
           @a=(
             '${gnugrep}/bin/grep', '${gnused}/bin/sed', '${gawk}/bin/awk',
             '${coreutils}/bin/cut', '${coreutils}/bin/basename', '${coreutils}/bin/dirname',
-            '${coreutils}/bin/wc', '${coreutils}/bin/tr',
-            '${coreutils}/bin/ls'
+            '${coreutils}/bin/wc', '${coreutils}/bin/tr'
             ${lib.optionalString perlSupport ", '${perlPackages.perl}/bin/perl'"}
           );
         }
@@ -204,8 +202,7 @@ stdenv.mkDerivation (finalAttrs: {
       EOS
       )"
       perl -0777 -i -pe "$SCRIPT" \
-        $out/libexec/git-core/git-{sh-setup,filter-branch,merge-octopus,mergetool,quiltimport,request-pull,submodule,subtree,web--browse} \
-        $out/share/bash-completion/completions/{git,gitk}
+        $out/libexec/git-core/git-{sh-setup,filter-branch,merge-octopus,mergetool,quiltimport,request-pull,submodule,subtree,web--browse}
 
 
       # Also put git-http-backend into $PATH, so that we can use smart

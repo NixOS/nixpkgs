@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional (!usePulseAudio) "--without-pulseaudio";
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   postFixup = ''
     moveToOutput share/doc $dev

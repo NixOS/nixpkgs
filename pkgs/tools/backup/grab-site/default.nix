@@ -1,11 +1,11 @@
-{ lib, python38, fetchFromGitHub }:
+{ lib, python38, fetchPypi, fetchFromGitHub }:
 let
   python = python38.override {
     self = python;
     packageOverrides = self: super: {
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
         version = "1.3.24";
-        src = super.fetchPypi {
+        src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-67t3fL+TEjWbiXv4G6ANrg9ctp+6KhgmXcwYpvXvdRk=";

@@ -4,11 +4,11 @@
 , buildPythonPackage
 , fetchPypi
 , rustPlatform
+, cargo
+, rustc
 , setuptools-rust
 , openssl
 , Security
-, packaging
-, six
 , isPyPy
 , cffi
 , pkg-config
@@ -58,7 +58,9 @@ buildPythonPackage rec {
   ] ++ [
     rustPlatform.cargoSetupHook
     setuptools-rust
-  ] ++ (with rustPlatform; [ rust.cargo rust.rustc ]);
+    cargo
+    rustc
+  ];
 
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv ]

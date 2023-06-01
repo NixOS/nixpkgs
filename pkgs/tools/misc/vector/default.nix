@@ -1,10 +1,8 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , rustPlatform
 , pkg-config
-, llvmPackages
 , openssl
 , protobuf
 , rdkafka
@@ -24,7 +22,7 @@
   # TODO investigate adding "vrl-cli" and various "vendor-*"
   # "disk-buffer" is using leveldb TODO: investigate how useful
   # it would be, perhaps only for massive scale?
-, features ? ([ "api" "api-client" "enrichment-tables" "sinks" "sources" "transforms" "vrl-cli" ]
+, features ? ([ "api" "api-client" "enrichment-tables" "sinks" "sources" "sources-dnstap" "transforms" "vrl-cli" ]
     # the second feature flag is passed to the rdkafka dependency
     # building on linux fails without this feature flag (both x86_64 and AArch64)
     ++ lib.optionals enableKafka [ "rdkafka?/gssapi-vendored" ]
@@ -58,7 +56,7 @@ rustPlatform.buildRustPackage {
       "tracing-0.2.0" = "sha256-YAxeEofFA43PX2hafh3RY+C81a2v6n1fGzYz2FycC3M=";
     };
   };
-  nativeBuildInputs = [ pkg-config cmake perl git ];
+  nativeBuildInputs = [ pkg-config cmake perl git rustPlatform.bindgenHook ];
   buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
 
@@ -66,7 +64,6 @@ rustPlatform.buildRustPackage {
   PROTOC = "${protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
   RUSTONIG_SYSTEM_LIBONIG = true;
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   TZDIR = "${tzdata}/share/zoneinfo";
 

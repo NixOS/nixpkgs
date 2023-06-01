@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , appstream-glib
+, cargo
 , desktop-file-utils
 , glib
 , gst_all_1
@@ -14,6 +15,7 @@
 , ninja
 , pkg-config
 , rustPlatform
+, rustc
 , wayland
 , wrapGAppsHook4
 }:
@@ -42,8 +44,8 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.cargo
-    rustPlatform.rust.rustc
+    cargo
+    rustc
     wrapGAppsHook4
   ];
 

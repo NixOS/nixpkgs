@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
+, cargo
 , rustPlatform
+, rustc
 , setuptools
 , setuptools-rust
 , isPyPy
@@ -41,11 +43,10 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     setuptools-rust
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   # Remove when https://github.com/NixOS/nixpkgs/pull/190093 lands.
   buildInputs = lib.optional stdenv.isDarwin libiconv;

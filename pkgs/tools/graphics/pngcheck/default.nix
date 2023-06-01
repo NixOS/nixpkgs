@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, zlib }:
+{ lib, stdenv, fetchurl, zlib, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "pngcheck";
@@ -11,22 +11,27 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace Makefile.unx --replace "gcc" "clang"
+  postPatch = ''
+    substituteInPlace $makefile \
+      --replace "gcc" "$CC"
   '';
 
   makefile = "Makefile.unx";
   makeFlags = [ "ZPATH=${zlib.static}/lib" ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   buildInputs = [ zlib ];
 
   installPhase = ''
-    mkdir -p $out/bin/
-    cp pngcheck $out/bin/pngcheck
+    runHook preInstall
+    install -Dm555 -t $out/bin/ pngcheck
+    installManPage $pname.1
+    runHook postInstall
   '';
 
   meta = with lib; {
-    homepage = "http://pmt.sourceforge.net/pngcrush";
+    homepage = "https://pmt.sourceforge.net/pngcrush";
     description = "Verifies the integrity of PNG, JNG and MNG files";
     license = licenses.free;
     platforms = platforms.unix;

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, options, lib, pkgs, ... }:
 
 with lib;
 
@@ -12,13 +12,8 @@ let
     # Package set of targeted architecture
     if cfg.forcei686 then pkgs.pkgsi686Linux else pkgs;
 
-  realGrub = if cfg.version == 1 then grubPkgs.grub
-    else if cfg.zfsSupport then grubPkgs.grub2.override { zfsSupport = true; }
-    else if cfg.trustedBoot.enable
-         then if cfg.trustedBoot.isHPLaptop
-              then grubPkgs.trustedGrub-for-HP
-              else grubPkgs.trustedGrub
-         else grubPkgs.grub2;
+  realGrub = if cfg.zfsSupport then grubPkgs.grub2.override { zfsSupport = true; }
+    else grubPkgs.grub2;
 
   grub =
     # Don't include GRUB if we're only generating a GRUB menu (e.g.,
@@ -28,8 +23,7 @@ let
     else realGrub;
 
   grubEfi =
-    # EFI version of Grub v2
-    if cfg.efiSupport && (cfg.version == 2)
+    if cfg.efiSupport
     then realGrub.override { efiSupport = cfg.efiSupport; }
     else null;
 
@@ -52,24 +46,24 @@ let
       fullName = lib.getName realGrub;
       fullVersion = lib.getVersion realGrub;
       grubEfi = f grubEfi;
-      grubTargetEfi = optionalString (cfg.efiSupport && (cfg.version == 2)) (f (grubEfi.grubTarget or ""));
+      grubTargetEfi = optionalString cfg.efiSupport (f (grubEfi.grubTarget or ""));
       bootPath = args.path;
       storePath = config.boot.loader.grub.storePath;
       bootloaderId = if args.efiBootloaderId == null then "${config.system.nixos.distroName}${efiSysMountPoint'}" else args.efiBootloaderId;
       timeout = if config.boot.loader.timeout == null then -1 else config.boot.loader.timeout;
-      users = if cfg.users == {} || cfg.version != 1 then cfg.users else throw "GRUB version 1 does not support user accounts.";
       theme = f cfg.theme;
       inherit efiSysMountPoint;
       inherit (args) devices;
       inherit (efi) canTouchEfiVariables;
       inherit (cfg)
-        version extraConfig extraPerEntryConfig extraEntries forceInstall useOSProber
+        extraConfig extraPerEntryConfig extraEntries forceInstall useOSProber
         extraGrubInstallArgs
         extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels
-        default fsIdentifier efiSupport efiInstallAsRemovable gfxmodeEfi gfxmodeBios gfxpayloadEfi gfxpayloadBios;
+        default fsIdentifier efiSupport efiInstallAsRemovable gfxmodeEfi gfxmodeBios gfxpayloadEfi gfxpayloadBios
+        users;
       path = with pkgs; makeBinPath (
         [ coreutils gnused gnugrep findutils diffutils btrfs-progs util-linux mdadm ]
-        ++ optional (cfg.efiSupport && (cfg.version == 2)) efibootmgr
+        ++ optional cfg.efiSupport efibootmgr
         ++ optionals cfg.useOSProber [ busybox os-prober ]);
       font = if cfg.font == null then ""
         else (if lib.last (lib.splitString "." cfg.font) == "pf2"
@@ -109,14 +103,8 @@ in
       };
 
       version = mkOption {
-        default = 2;
-        example = 1;
+        visible = false;
         type = types.int;
-        description = lib.mdDoc ''
-          The version of GRUB to use: `1` for GRUB
-          Legacy (versions 0.9x), or `2` (the
-          default) for GRUB 2.
-        '';
       };
 
       device = mkOption {
@@ -682,39 +670,6 @@ in
         '';
       };
 
-      trustedBoot = {
-
-        enable = mkOption {
-          default = false;
-          type = types.bool;
-          description = lib.mdDoc ''
-            Enable trusted boot. GRUB will measure all critical components during
-            the boot process to offer TCG (TPM) support.
-          '';
-        };
-
-        systemHasTPM = mkOption {
-          default = "";
-          example = "YES_TPM_is_activated";
-          type = types.str;
-          description = lib.mdDoc ''
-            Assertion that the target system has an activated TPM. It is a safety
-            check before allowing the activation of 'trustedBoot.enable'. TrustedBoot
-            WILL FAIL TO BOOT YOUR SYSTEM if no TPM is available.
-          '';
-        };
-
-        isHPLaptop = mkOption {
-          default = false;
-          type = types.bool;
-          description = lib.mdDoc ''
-            Use a special version of TrustedGRUB that is needed by some HP laptops
-            and works only for the HP laptops.
-          '';
-        };
-
-      };
-
     };
 
   };
@@ -724,14 +679,7 @@ in
 
   config = mkMerge [
 
-    { boot.loader.grub.splashImage = mkDefault (
-        if cfg.version == 1 then pkgs.fetchurl {
-          url = "http://www.gnome-look.org/CONTENT/content-files/36909-soft-tux.xpm.gz";
-          sha256 = "14kqdx2lfqvh40h6fjjzqgff1mwk74dmbjvmqphi6azzra7z8d59";
-        }
-        # GRUB 1.97 doesn't support gzipped XPMs.
-        else defaultSplash);
-    }
+    { boot.loader.grub.splashImage = mkDefault defaultSplash; }
 
     (mkIf (cfg.splashImage == defaultSplash) {
       boot.loader.grub.backgroundColor = mkDefault "#2F302F";
@@ -789,10 +737,6 @@ in
 
       assertions = [
         {
-          assertion = !cfg.zfsSupport || cfg.version == 2;
-          message = "Only GRUB version 2 provides ZFS support";
-        }
-        {
           assertion = cfg.mirroredBoots != [ ];
           message = "You must set the option ‘boot.loader.grub.devices’ or "
             + "'boot.loader.grub.mirroredBoots' to make the system bootable.";
@@ -802,28 +746,16 @@ in
           message = "You cannot have duplicated devices in mirroredBoots";
         }
         {
-          assertion = !cfg.trustedBoot.enable || cfg.version == 2;
-          message = "Trusted GRUB is only available for GRUB 2";
-        }
-        {
-          assertion = !cfg.efiSupport || !cfg.trustedBoot.enable;
-          message = "Trusted GRUB does not have EFI support";
-        }
-        {
-          assertion = !cfg.zfsSupport || !cfg.trustedBoot.enable;
-          message = "Trusted GRUB does not have ZFS support";
-        }
-        {
-          assertion = !cfg.trustedBoot.enable || cfg.trustedBoot.systemHasTPM == "YES_TPM_is_activated";
-          message = "Trusted GRUB can break the system! Confirm that the system has an activated TPM by setting 'systemHasTPM'.";
-        }
-        {
           assertion = cfg.efiInstallAsRemovable -> cfg.efiSupport;
           message = "If you wish to to use boot.loader.grub.efiInstallAsRemovable, then turn on boot.loader.grub.efiSupport";
         }
         {
           assertion = cfg.efiInstallAsRemovable -> !config.boot.loader.efi.canTouchEfiVariables;
           message = "If you wish to to use boot.loader.grub.efiInstallAsRemovable, then turn off boot.loader.efi.canTouchEfiVariables";
+        }
+        {
+          assertion = !(options.boot.loader.grub.version.isDefined && cfg.version == 1);
+          message = "Support for version 0.9x of GRUB was removed after being unsupported upstream for around a decade";
         }
       ] ++ flip concatMap cfg.mirroredBoots (args: [
         {
@@ -844,6 +776,11 @@ in
       }));
     })
 
+    (mkIf options.boot.loader.grub.version.isDefined {
+      warnings = [ ''
+        The boot.loader.grub.version option does not have any effect anymore, please remove it from your configuration.
+      '' ];
+    })
   ];
 
 
@@ -855,6 +792,10 @@ in
       (mkRenamedOptionModule [ "boot" "grubDevice" ] [ "boot" "loader" "grub" "device" ])
       (mkRenamedOptionModule [ "boot" "bootMount" ] [ "boot" "loader" "grub" "bootDevice" ])
       (mkRenamedOptionModule [ "boot" "grubSplashImage" ] [ "boot" "loader" "grub" "splashImage" ])
+      (mkRemovedOptionModule [ "boot" "loader" "grub" "trustedBoot" ] ''
+        Support for Trusted GRUB has been removed, because the project
+        has been retired upstream.
+      '')
       (mkRemovedOptionModule [ "boot" "loader" "grub" "extraInitrd" ] ''
         This option has been replaced with the bootloader agnostic
         boot.initrd.secrets option. To migrate to the initrd secrets system,

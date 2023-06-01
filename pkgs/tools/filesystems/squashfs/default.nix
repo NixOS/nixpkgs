@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     "XZ_SUPPORT=1"
     "ZSTD_SUPPORT=1"
     "LZ4_SUPPORT=1"
+    "LZMA_XZ_SUPPORT=1"
     "LZO_SUPPORT=1"
   ];
 

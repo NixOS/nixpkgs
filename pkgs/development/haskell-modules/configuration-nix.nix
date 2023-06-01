@@ -426,18 +426,8 @@ self: super: builtins.intersectAttrs super {
     '';
   }) super.leksah);
 
-  dyre =
-    appendPatch
-      # Dyre needs special support for reading the NIX_GHC env var.  This is
-      # available upstream in https://github.com/willdonnelly/dyre/pull/43, but
-      # hasn't been released to Hackage as of dyre-0.9.1.  Likely included in
-      # next version.
-      (pkgs.fetchpatch {
-        url = "https://github.com/willdonnelly/dyre/commit/c7f29d321aae343d6b314f058812dffcba9d7133.patch";
-        sha256 = "10m22k35bi6cci798vjpy4c2l08lq5nmmj24iwp0aflvmjdgscdb";
-      })
-      # dyre's tests appear to be trying to directly call GHC.
-      (dontCheck super.dyre);
+  # dyre's tests appear to be trying to directly call GHC.
+  dyre = dontCheck super.dyre;
 
   # https://github.com/edwinb/EpiVM/issues/13
   # https://github.com/edwinb/EpiVM/issues/14
@@ -514,7 +504,8 @@ self: super: builtins.intersectAttrs super {
     libraryHaskellDepends =
       (drv.libraryHaskellDepends or [])
       ++ lib.optionals (!(pkgs.stdenv.hostPlatform.isAarch64
-                          || pkgs.stdenv.hostPlatform.isx86_64)) [
+                          || pkgs.stdenv.hostPlatform.isx86_64)
+                        || (self.ghc.isGhcjs or false)) [
         self.unbounded-delays
       ];
   }) super.tasty;
@@ -906,6 +897,9 @@ self: super: builtins.intersectAttrs super {
   # Pass the correct libarchive into the package.
   streamly-archive = super.streamly-archive.override { archive = pkgs.libarchive; };
 
+  # Pass the correct lmdb into the package.
+  streamly-lmdb = super.streamly-lmdb.override { lmdb = pkgs.lmdb; };
+
   hlint = overrideCabal (drv: {
     postInstall = ''
       install -Dm644 data/hlint.1 -t "$out/share/man/man1"
@@ -990,38 +984,44 @@ self: super: builtins.intersectAttrs super {
   # won't work (or would need to patch test suite).
   domaindriven-core = dontCheck super.domaindriven-core;
 
- cachix = overrideCabal (drv: {
-    version = "1.4.2";
+  cachix-api = overrideCabal (drv: {
+    version = "1.5";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      rev = "v1.4.2";
-      sha256 = "sha256-EjfBM5O+wXJhthRU/Nd9VFue7xo5O93nx0pMt3jx0Ow=";
+      rev = "v1.5";
+      sha256 = "sha256-bt8FFtDSJpBckx3dIjW5Xdvj8aVCm78R3VTpjK5F3Ac=";
+    };
+    postUnpack = "sourceRoot=$sourceRoot/cachix-api";
+    postPatch = ''
+      sed -i 's/1.4.2/1.5/' cachix-api.cabal
+    '';
+  }) super.cachix-api;
+  cachix = overrideCabal (drv: {
+    version = "1.5";
+    src = pkgs.fetchFromGitHub {
+      owner = "cachix";
+      repo = "cachix";
+      rev = "v1.5";
+      sha256 = "sha256-bt8FFtDSJpBckx3dIjW5Xdvj8aVCm78R3VTpjK5F3Ac=";
     };
     postUnpack = "sourceRoot=$sourceRoot/cachix";
     postPatch = ''
-      sed -i 's/1.4.1/1.4.2/' cachix.cabal
+      sed -i 's/1.4.2/1.5/' cachix.cabal
     '';
-  }) (super.cachix.override {
-    fsnotify = dontCheck super.fsnotify_0_4_1_0;
-    hnix-store-core = super.hnix-store-core_0_6_1_0;
-  });
-
-  cachix_1_3_3 = overrideCabal (drv: {
-    hydraPlatforms = pkgs.lib.platforms.all;
-  }) (super.cachix_1_3_3.override {
-    nix = self.hercules-ci-cnix-store.nixPackage;
-    fsnotify = dontCheck super.fsnotify_0_4_1_0;
-    hnix-store-core = super.hnix-store-core_0_6_1_0;
-  });
-
-  hercules-ci-api-core =
-    # 2023-05-02: Work around a corrupted file on cache.nixos.org. This is a hash for x86_64-linux. Remove when it has changed.
-    if super.hercules-ci-api-core.drvPath == "/nix/store/dgy3w43zypmdswc7a7zis0njgljqvnq0-hercules-ci-api-core-0.1.5.0.drv"
-    then super.hercules-ci-api-core.overrideAttrs (_: {
-        dummyAttr = 1;
-      })
-    else super.hercules-ci-api-core;
+  }) (lib.pipe
+        (super.cachix.override {
+          fsnotify = dontCheck super.fsnotify_0_4_1_0;
+          hnix-store-core = super.hnix-store-core_0_6_1_0;
+          nix = self.hercules-ci-cnix-store.nixPackage;
+        })
+        [
+         (addBuildTool self.hercules-ci-cnix-store.nixPackage)
+         (addBuildTool pkgs.pkg-config)
+         (addBuildDepend self.inline-c-cpp)
+         (addBuildDepend self.hercules-ci-cnix-store)
+        ]
+  );
 
   hercules-ci-agent = super.hercules-ci-agent.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; };
   hercules-ci-cnix-expr = addTestToolDepend pkgs.git (super.hercules-ci-cnix-expr.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; });
@@ -1233,5 +1233,8 @@ self: super: builtins.intersectAttrs super {
   emanote = addBuildDepend pkgs.stork super.emanote;
 
   keid-render-basic = addBuildTool pkgs.glslang super.keid-render-basic;
+
+  # Disable checks to break dependency loop with SCalendar
+  scalendar = dontCheck super.scalendar;
 
 }

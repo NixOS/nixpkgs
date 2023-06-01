@@ -2,14 +2,14 @@
 
 let
   pname = "psysh";
-  version = "0.11.16";
+  version = "0.11.17";
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/bobthecow/psysh/releases/download/v${version}/psysh-v${version}.tar.gz";
-    sha256 = "sha256-4FEjMtp7MRTjpdb1ZpKqCa0erxrW90JyGy1ZmMBVdZE=";
+    sha256 = "sha256-GQhX4vL059ztDb4eqcY1r3jdQS8gQkaQ7/+NMR4jH2M=";
   };
 
   dontUnpack = true;

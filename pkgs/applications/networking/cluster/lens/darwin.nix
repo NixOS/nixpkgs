@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "The Kubernetes IDE";
     homepage = "https://k8slens.dev/";
-    license = licenses.mit;
+    license = licenses.lens;
     maintainers = with maintainers; [ dbirks ];
     platforms = [ "aarch64-darwin" ];
   };

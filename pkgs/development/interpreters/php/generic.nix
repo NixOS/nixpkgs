@@ -9,7 +9,7 @@ let
     , nixosTests
     , tests
     , fetchurl
-    , makeWrapper
+    , makeBinaryWrapper
     , symlinkJoin
     , writeText
     , autoconf
@@ -141,7 +141,7 @@ let
           phpWithExtensions = symlinkJoin {
             name = "php-with-extensions-${version}";
             inherit (php) version;
-            nativeBuildInputs = [ makeWrapper ];
+            nativeBuildInputs = [ makeBinaryWrapper ];
             passthru = php.passthru // {
               buildEnv = mkBuildEnv allArgs allExtensionFunctions;
               withExtensions = mkWithExtensions allArgs allExtensionFunctions;

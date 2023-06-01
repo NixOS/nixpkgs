@@ -182,6 +182,11 @@ checkConfigOutput '^true$' config.enableAlias ./alias-with-priority.nix
 checkConfigOutput '^false$' config.enable ./alias-with-priority-can-override.nix
 checkConfigOutput '^false$' config.enableAlias ./alias-with-priority-can-override.nix
 
+# Check mkPackageOption
+checkConfigOutput '^"hello"$' config.package.pname ./declare-mkPackageOption.nix
+checkConfigError 'The option .undefinedPackage. is used but not defined' config.undefinedPackage ./declare-mkPackageOption.nix
+checkConfigOutput '^null$' config.nullablePackage ./declare-mkPackageOption.nix
+
 # submoduleWith
 
 ## specialArgs should work

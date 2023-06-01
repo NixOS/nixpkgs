@@ -202,6 +202,14 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
       url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=1009196;filename=reproducible_exception_strings.patch;msg=5";
       sha256 = "sha256-RNZoEeTcWnrLaltcYrhNIORh42fFdwMzBfxMRWVurbk=";
     })
+    # fixes a security-issue in luatex that allows arbitrary code execution even with shell-escape disabled, see https://tug.org/~mseven/luatex.html
+    (fetchpatch {
+      name = "CVE-2023-32700.patch";
+      url = "https://tug.org/~mseven/luatex-files/2022/patch";
+      hash = "sha256-o9ENLc1ZIIOMX6MdwpBIgrR/Jdw6tYLmAyzW8i/FUbY=";
+      excludes = [  "build.sh" ];
+      stripLen = 1;
+    })
   ];
 
   hardeningDisable = [ "format" ];
@@ -304,7 +312,8 @@ chktex = stdenv.mkDerivation {
   inherit (common) src;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ core/*kpathsea*/ ];
+  # perl used in shebang of script bin/deweb
+  buildInputs = [ core/*kpathsea*/ perl ];
 
   preConfigure = "cd texk/chktex";
 

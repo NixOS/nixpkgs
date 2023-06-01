@@ -14,6 +14,7 @@ in
     ./bspwm.nix
     ./cwm.nix
     ./clfswm.nix
+    ./dk.nix
     ./dwm.nix
     ./e16.nix
     ./evilwm.nix

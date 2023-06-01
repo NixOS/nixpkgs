@@ -1,31 +1,38 @@
 { lib
-, python
-, fetchFromGitHub
 , buildPythonPackage
+, fetchFromGitHub
+, python
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "icnsutil";
-  version = "1.0.1";
+  version = "1.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "relikd";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-TfQvAbP7iCpRQg2G+ejl245NCYo9DpYwMgiwY2BuJnY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-tiq8h6s2noWLBIOIWcj8jfSqJFN01ee2uoHN4aFwn7s=";
   };
-
-  doCheck = true;
 
   checkPhase = ''
     ${python.interpreter} tests/test_icnsutil.py
     ${python.interpreter} tests/test_cli.py
   '';
 
-  meta = {
+  pythonImportsCheck = [
+    "icnsutil"
+  ];
+
+  meta = with lib; {
+    description = "Create and extract .icns files";
     homepage = "https://github.com/relikd/icnsutil";
-    description = "Create and extract .icns files.";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.reckenrode ];
+    changelog = "https://github.com/relikd/icnsutil/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ reckenrode ];
   };
 }

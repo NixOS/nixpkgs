@@ -49,6 +49,20 @@ else # Only set up Qt once.
     }
     envBuildHostHooks+=(qmakePathHook)
 
+    export QTTOOLSPATH=
+
+    declare -Ag qttoolsPathSeen=()
+    qtToolsHook() {
+        # Skip this path if we have seen it before.
+        # MUST use 'if' because 'qttoolsPathSeen[$]' may be unset.
+        if [ -n "${qttoolsPathSeen[$1]-}" ]; then return; fi
+        qttoolsPathSeen[$1]=1
+        if [ -d "$1/libexec" ]; then
+            QTTOOLSPATH="${QTTOOLSPATH}${QTTOOLSPATH:+:}$1/libexec"
+        fi
+    }
+    addEnvHooks "$hostOffset" qtToolsHook
+
     postPatchMkspecs() {
         # Prevent this hook from running multiple times
         dontPatchMkspecs=1

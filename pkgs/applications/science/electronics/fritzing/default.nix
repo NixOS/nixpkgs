@@ -81,5 +81,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl3 cc-by-sa-30 ];
     maintainers = with maintainers; [ robberer muscaln ];
     platforms = platforms.linux;
+    mainProgram = "Fritzing";
   };
 }
