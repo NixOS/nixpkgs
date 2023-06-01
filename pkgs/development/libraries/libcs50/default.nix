@@ -7,7 +7,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cs50";
     repo = "libcs50";
-    rev = "refs/tags/v${finalAttrs.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-A4CEU5wfwykVTDIsKZnQ8co+6RwBGYGZEZxRFzQTKBI=";
   };
 
