@@ -417,6 +417,8 @@ with pkgs;
 
   certgraph = callPackage ../tools/security/certgraph { };
 
+  certsync = callPackage ../tools/security/certsync { };
+
   cewl = callPackage ../tools/security/cewl { };
 
   chatgpt-cli = callPackage ../tools/misc/chatgpt-cli { };
@@ -6878,6 +6880,8 @@ with pkgs;
 
   dhcping = callPackage ../tools/networking/dhcping { };
 
+  dotacat = callPackage ../tools/misc/dotacat { };
+
   di = callPackage ../tools/system/di { };
 
   diction = callPackage ../tools/text/diction { };
@@ -11922,6 +11926,8 @@ with pkgs;
 
   renderdoc = libsForQt5.callPackage ../development/tools/renderdoc { };
 
+  repgrep = callPackage ../tools/text/repgrep { };
+
   replace = callPackage ../tools/text/replace { };
 
   resvg = callPackage ../tools/graphics/resvg { };
@@ -12105,6 +12111,8 @@ with pkgs;
   };
 
   rustypaste = callPackage ../servers/rustypaste { };
+
+  rustypaste-cli = callPackage ../tools/misc/rustypaste-cli { };
 
   rw = callPackage ../tools/misc/rw { };
 
@@ -23566,6 +23574,8 @@ with pkgs;
 
   podofo = callPackage ../development/libraries/podofo { };
 
+  podofo010 = callPackage ../development/libraries/podofo/0.10.x.nix { };
+
   polkit = callPackage ../development/libraries/polkit { };
 
   poppler = callPackage ../development/libraries/poppler { lcms = lcms2; };
@@ -26369,6 +26379,8 @@ with pkgs;
     # Version 1.38.1 requires Go >= 1.20
     buildGoModule = buildGo120Module;
   };
+
+  tailscale-systray = callPackage ../applications/misc/tailscale-systray { };
 
   tailspin = callPackage ../tools/misc/tailspin { };
 
@@ -29269,6 +29281,8 @@ with pkgs;
 
   abaddon = callPackage ../applications/networking/instant-messengers/abaddon { };
 
+  adguardian = callPackage ../applications/networking/adguardian { };
+
   aeolus = callPackage ../applications/audio/aeolus { };
   aeolus-stops = callPackage ../applications/audio/aeolus/stops.nix { };
 
@@ -29705,7 +29719,9 @@ with pkgs;
 
   calculix = callPackage ../applications/science/math/calculix { };
 
-  calibre = qt6Packages.callPackage ../applications/misc/calibre { };
+  calibre = qt6Packages.callPackage ../applications/misc/calibre {
+    podofo = podofo010;
+  };
 
   calibre-web = callPackage ../servers/calibre-web { };
 
@@ -35255,6 +35271,8 @@ with pkgs;
   westonLite = weston.override {
     demoSupport = false;
     hdrSupport = false;
+    jpegSupport = false;
+    lcmsSupport = false;
     pangoSupport = false;
     pipewireSupport = false;
     rdpSupport = false;
