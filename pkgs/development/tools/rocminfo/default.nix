@@ -18,14 +18,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "5.4.4";
+  version = "5.5.1";
   pname = "rocminfo";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "rocminfo";
     rev = "rocm-${finalAttrs.version}";
-    sha256 = "sha256-4wZTm5AZgG8xEd6uYqxWq4bWZgcSYZ2WYA1z4RAPF8U=";
+    sha256 = "sha256-Rhm71MWRWRieJl6IARmBMRdEySovNCyPQzjPdLvfC5Q=";
   };
 
   nativeBuildInputs = [
