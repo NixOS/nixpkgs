@@ -5,7 +5,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nemo-emblems";
-  version = "5.6.0";
+  version = "5.8.0";
 
   format = "setuptools";
 
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "linuxmint";
     repo = "nemo-extensions";
     rev = version;
-    sha256 = "sha256-cxutiz5bc/dZ9D7XzvMWodWNYvNJPj+5IhJDPJwnb5I=";
+    sha256 = "sha256-tyRYPWJa93w05a0PcYvz1GA8/xX2kHLdIzz4tCcppiY=";
   };
 
   sourceRoot = "${src.name}/nemo-emblems";
