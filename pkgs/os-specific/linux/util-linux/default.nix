@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, zlib, shadow
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, zlib, shadow
 , capabilitiesSupport ? stdenv.isLinux
 , libcap_ng
 , libxcrypt
@@ -28,6 +28,16 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./rtcwake-search-PATH-for-shutdown.patch
+
+    # FIXME: backport mount fixes for older kernels, remove in next release
+    (fetchpatch {
+      url = "https://github.com/util-linux/util-linux/commit/f94a7760ed7ce81389a6059f020238981627a70d.diff";
+      hash = "sha256-UorqDeECK8pBePkmpo2x90p/jP3rCMshyPCyijSX1wo=";
+    })
+    (fetchpatch {
+      url = "https://github.com/util-linux/util-linux/commit/1bd85b64632280d6bf0e86b4ff29da8b19321c5f.diff";
+      hash = "sha256-dgu4de5ul/si7Vzwe8lr9NvsdI1CWfDQKuqvARaY6sE=";
+    })
   ];
 
   outputs = [ "bin" "dev" "out" "lib" "man" ];
