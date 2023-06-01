@@ -872,6 +872,7 @@
   ./services/networking/freenet.nix
   ./services/networking/freeradius.nix
   ./services/networking/frp-client.nix
+  ./services/networking/frp-server.nix
   ./services/networking/frr.nix
   ./services/networking/gateone.nix
   ./services/networking/gdomap.nix
