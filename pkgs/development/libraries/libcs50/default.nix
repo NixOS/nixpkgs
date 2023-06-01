@@ -7,15 +7,17 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cs50";
     repo = "libcs50";
-    rev = finalAttrs.version;
+    rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-A4CEU5wfwykVTDIsKZnQ8co+6RwBGYGZEZxRFzQTKBI=";
   };
 
   installPhase = ''
+    runHook preInstall
     mkdir $out
     cp -R build/lib $out/lib
     cp -R build/include $out/include
     ln -sf $out/lib/libcs50.so.11.0.2 $out/lib/libcs50.so.11
+    runHook postInstall
   '';
 
   meta = with lib; {
