@@ -32950,6 +32950,8 @@ with pkgs;
 
   nwg-dock = callPackage ../applications/misc/nwg-dock { };
 
+  nwg-dock-hyprland = callPackage ../applications/misc/nwg-dock-hyprland { };
+
   nwg-drawer = callPackage ../applications/misc/nwg-drawer { };
 
   nwg-launchers = callPackage ../applications/misc/nwg-launchers { };
