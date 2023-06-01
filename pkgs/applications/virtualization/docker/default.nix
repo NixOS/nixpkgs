@@ -97,7 +97,7 @@ rec {
 
       extraUserPath = lib.optionals (stdenv.isLinux && !clientOnly) (lib.makeBinPath [ rootlesskit slirp4netns fuse-overlayfs ]);
 
-      patches = [
+      patches = lib.optionals (lib.versionOlder version "23") [
         # This patch incorporates code from a PR fixing using buildkit with the ZFS graph driver.
         # It could be removed when a version incorporating this patch is released.
         (fetchpatch {
