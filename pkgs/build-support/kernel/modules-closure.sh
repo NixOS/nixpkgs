@@ -68,17 +68,7 @@ done
 
 mkdir -p $out/lib/firmware
 for module in $(cat closure); do
-    # for builtin modules, modinfo will reply with a wrong output looking like:
-    #   $ modinfo -F firmware unix
-    #   name:           unix
-    #
-    # There is a pending attempt to fix this:
-    #   https://github.com/NixOS/nixpkgs/pull/96153
-    #   https://lore.kernel.org/linux-modules/20200823215433.j5gc5rnsmahpf43v@blumerang/T/#u
-    #
-    # For now, the workaround is just to filter out the extraneous lines out
-    # of its output.
-    for i in $(modinfo -b $kernel --set-version "$version" -F firmware $module | grep -v '^name:'); do
+    for i in $(modinfo -b $kernel --set-version "$version" -F firmware $module); do
         mkdir -p "$out/lib/firmware/$(dirname "$i")"
         echo "firmware for $module: $i"
         for name in "$i" "$i.xz" ""; do
