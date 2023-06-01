@@ -1,15 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, cmake, flex, bison }:
-stdenv.mkDerivation rec {
+{ lib, stdenv, fetchFromGitHub, callPackage, jq, cmake, flex, bison, gecode, mpfr, cbc, zlib }:
+stdenv.mkDerivation (finalAttrs: {
   pname = "minizinc";
   version = "2.7.4";
 
-  nativeBuildInputs = [ cmake flex bison ];
+  nativeBuildInputs = [ cmake flex bison gecode mpfr cbc zlib ];
 
   src = fetchFromGitHub {
     owner = "MiniZinc";
     repo = "libminizinc";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-Zq5gAwe9IQmknSDilFyHhSk5ZCQ8EfBOiM6Oef2WxYg=";
+  };
+
+  postInstall = ''
+    mkdir -p $out/share/minizinc/solvers/
+    ${jq}/bin/jq \
+      '.version = "${gecode.version}"
+       | .mznlib = "${gecode}/share/gecode/mznlib"
+       | .executable = "${gecode}/bin/fzn-gecode"' \
+       ${./gecode.msc} \
+       >$out/share/minizinc/solvers/gecode.msc
+  '';
+
+  passthru.tests = {
+    simple = callPackage ./simple-test { };
   };
 
   meta = with lib; {
@@ -28,4 +42,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = [ maintainers.sheenobu ];
   };
-}
+})
