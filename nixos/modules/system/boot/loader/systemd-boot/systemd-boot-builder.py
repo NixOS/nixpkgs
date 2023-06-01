@@ -247,9 +247,6 @@ def main() -> None:
     if "@canTouchEfiVariables@" != "1":
         bootctl_flags.append("--no-variables")
 
-    if "@graceful@" == "1":
-        bootctl_flags.append("--graceful")
-
     if os.getenv("NIXOS_INSTALL_BOOTLOADER") == "1":
         # bootctl uses fopen() with modes "wxe" and fails if the file exists.
         if os.path.exists("@efiSysMountPoint@/loader/loader.conf"):

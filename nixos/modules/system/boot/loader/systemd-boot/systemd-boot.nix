@@ -26,7 +26,7 @@ let
 
     configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
 
-    inherit (cfg) consoleMode graceful;
+    inherit (cfg) consoleMode;
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
 
@@ -71,6 +71,12 @@ in {
 
   imports =
     [ (mkRenamedOptionModule [ "boot" "loader" "gummiboot" "enable" ] [ "boot" "loader" "systemd-boot" "enable" ])
+      (mkRemovedOptionModule [ "boot" "loader" "systemd-boot" "graceful" ] ''
+        The graceful option was added to handle failure of the `bootctl install` command.
+        However systemd doesn't support the --graceful flag for `bootctl install` and this
+        option was always silently ignored. If installing the boot loader is failing
+        try setting `boot.loader.efi.canTouchEfiVariables = false` instead.
+      '')
     ];
 
   options.boot.loader.systemd-boot = {
@@ -220,21 +226,6 @@ in {
         Each attribute name denotes the destination file name in
         {file}`/boot`, while the corresponding
         attribute value specifies the source file.
-      '';
-    };
-
-    graceful = mkOption {
-      default = false;
-
-      type = types.bool;
-
-      description = lib.mdDoc ''
-        Invoke `bootctl install` with the `--graceful` option,
-        which ignores errors when EFI variables cannot be written or when the EFI System Partition
-        cannot be found. Currently only applies to random seed operations.
-
-        Only enable this option if `systemd-boot` otherwise fails to install, as the
-        scope or implication of the `--graceful` option may change in the future.
       '';
     };
 
