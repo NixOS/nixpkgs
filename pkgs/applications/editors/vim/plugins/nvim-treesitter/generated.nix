@@ -1231,24 +1231,24 @@
   };
   ocaml = buildGrammar {
     language = "ocaml";
-    version = "0.0.0+rev=1155941";
+    version = "0.0.0+rev=2da4930";
     src = fetchFromGitHub {
       owner = "tree-sitter";
       repo = "tree-sitter-ocaml";
-      rev = "11559418d8de82a2313504dc5bec9983d17ea4e9";
-      hash = "sha256-QLZ+ukkYDZGi+hEzaoP98mQRZPXpAbVXt1RlQREafiw=";
+      rev = "2da49308381b91e19e5d270ec5117616d0e4b135";
+      hash = "sha256-seyVqMGRLM1aD+863AvGaDFAhFYLCbQx4eitBcohbWQ=";
     };
     location = "ocaml";
     meta.homepage = "https://github.com/tree-sitter/tree-sitter-ocaml";
   };
   ocaml_interface = buildGrammar {
     language = "ocaml_interface";
-    version = "0.0.0+rev=1155941";
+    version = "0.0.0+rev=2da4930";
     src = fetchFromGitHub {
       owner = "tree-sitter";
       repo = "tree-sitter-ocaml";
-      rev = "11559418d8de82a2313504dc5bec9983d17ea4e9";
-      hash = "sha256-QLZ+ukkYDZGi+hEzaoP98mQRZPXpAbVXt1RlQREafiw=";
+      rev = "2da49308381b91e19e5d270ec5117616d0e4b135";
+      hash = "sha256-seyVqMGRLM1aD+863AvGaDFAhFYLCbQx4eitBcohbWQ=";
     };
     location = "interface";
     meta.homepage = "https://github.com/tree-sitter/tree-sitter-ocaml";
