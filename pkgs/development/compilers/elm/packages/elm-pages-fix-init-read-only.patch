@@ -1,0 +1,40 @@
+diff --git a/generator/src/init.js b/generator/src/init.js
+index 3d8548c..90ee20d 100644
+--- a/generator/src/init.js
++++ b/generator/src/init.js
+@@ -3,6 +3,21 @@ const copySync = require("fs-extra").copySync;
+ const path = require("path");
+ const kleur = require("kleur");
+ 
++let walknDo = function(somePath, doStuff) {
++  doStuff(somePath, true);
++  const dir = fs.readdirSync(somePath)
++  dir.forEach((i) => {
++    let p = path.join(somePath, i);
++    const s = fs.statSync(p)
++    if (s.isDirectory()) {
++      walknDo(p, doStuff)
++    } else {
++      doStuff(p);
++    }
++  });
++}
++
++
+ /**
+  * @param {string} name
+  */
+@@ -15,6 +30,13 @@ async function run(name) {
+   if (!fs.existsSync(name)) {
+     try {
+       copySync(template, appRoot);
++      walknDo(appRoot, (file, isDir) => {
++        if (isDir) {
++          fs.chmodSync(file, 0o755);
++        } else {
++          fs.chmodSync(file, 0o644);
++        }
++      });
+       fs.renameSync(
+         path.resolve(appRoot, "gitignore"),
+         path.resolve(appRoot, ".gitignore")
