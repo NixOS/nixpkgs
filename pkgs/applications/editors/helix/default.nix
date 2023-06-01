@@ -1,33 +1,27 @@
-{ fetchFromGitHub, lib, rustPlatform, installShellFiles, makeWrapper, callPackage }:
+{ fetchzip, lib, rustPlatform, git, installShellFiles, makeWrapper }:
 
-let
+rustPlatform.buildRustPackage rec {
+  pname = "helix";
   version = "23.05";
 
-  src = fetchFromGitHub {
-    owner = "helix-editor";
-    repo = "helix";
-    rev = "${version}";
-    hash = "sha256-Ws9uWtZLvTwL5HNonFr4YwyPoTU8QlCvhs6IJ92aLDw=";
-  };
-
-  grammars = callPackage ./grammars.nix { };
-in rustPlatform.buildRustPackage {
-  inherit src version;
-
-  pname = "helix";
   # This release tarball includes source code for the tree-sitter grammars,
   # which is not ordinarily part of the repository.
-  cargoSha256 = "sha256-/LCtfyDAA2JuioBD/CDMv6OOxM0B9A3PpuVP/YY5oF0=";
+  src = fetchzip {
+    url = "https://github.com/helix-editor/helix/releases/download/${version}/helix-${version}-source.tar.xz";
+    hash = "sha256-3ZEToXwW569P7IFLqz6Un8rClnWrW5RiYKmRVFt7My8=";
+    stripRoot = false;
+  };
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  cargoHash = "sha256-/LCtfyDAA2JuioBD/CDMv6OOxM0B9A3PpuVP/YY5oF0=";
+
+  nativeBuildInputs = [ git installShellFiles makeWrapper ];
 
   postInstall = ''
-    # We self build the grammar files
-    rm -r runtime/grammars
+    # not needed at runtime
+    rm -r runtime/grammars/sources
 
     mkdir -p $out/lib
     cp -r runtime $out/lib
-    ln -s ${grammars} $out/lib/runtime/grammars
     installShellCompletion contrib/completion/hx.{bash,fish,zsh}
     mkdir -p $out/share/{applications,icons/hicolor/256x256/apps}
     cp contrib/Helix.desktop $out/share/applications
@@ -36,11 +30,6 @@ in rustPlatform.buildRustPackage {
   postFixup = ''
     wrapProgram $out/bin/hx --set HELIX_RUNTIME $out/lib/runtime
   '';
-
-  # disable fetching and building of tree-sitter grammars in favor of the custom build process in ./grammars.nix
-  env.HELIX_DISABLE_AUTO_GRAMMAR_BUILD = "1";
-
-  passthru.updateScript = ./update.py;
 
   meta = with lib; {
     description = "A post-modern modal text editor";
