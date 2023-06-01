@@ -15969,6 +15969,12 @@
     github = "TilCreator";
     githubId = 18621411;
   };
+  tillkruss = {
+    name = "Till Krüss";
+    email = "till@kruss.io";
+    github = "tillkruss";
+    githubId = 665029;
+  };
   tilpner = {
     name = "Till Höppner";
     email = "nixpkgs@tilpner.com";
