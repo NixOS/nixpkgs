@@ -66,9 +66,7 @@ for module in $rootModules; do
     fi
 done
 
-mkdir -p $out/lib/firmware
-for module in $(cat closure); do
-    for i in $(modinfo -b $kernel --set-version "$version" -F firmware $module); do
+copy_blob() {
         mkdir -p "$out/lib/firmware/$(dirname "$i")"
         echo "firmware for $module: $i"
         for name in "$i" "$i.xz" ""; do
@@ -77,8 +75,19 @@ for module in $(cat closure); do
                 break
             fi
         done
+}
+
+mkdir -p $out/lib/firmware
+# copy firmware for loadable modules
+for module in $(cat closure); do
+    for i in $(modinfo -b $kernel --set-version "$version" -F firmware $module); do
+        copy_blob $module "$i"
     done
 done
+# copy firmware for builtin modules
+while IFS=$'\035' read -d '' -r module i; do
+    copy_blob $module "$i"
+done < <(sed --quiet --null-data --regexp-extended 's/^([^=.]*)\.firmware=(.*)/\1\o035\2/p' $kernel/lib/modules/"$version"/modules.builtin.modinfo) # the file contains ~arbitrary strings so we use sed to parse it correctly
 
 # copy module hints for depmod
 cp $kernel/lib/modules/"$version"/modules.{order,builtin{,.modinfo}} -t $out/lib/modules/"$version"
