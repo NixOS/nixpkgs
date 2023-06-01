@@ -40,7 +40,7 @@ in
       settings = mkOption {
         description = lib.mdDoc ''
           Settings whose options overwrite fields in
-          `.config/transmission-daemon/settings.json`
+          `${settingsDir}/settings.json`
           (each time the service starts).
 
           See [Transmission's Wiki](https://github.com/transmission/transmission/wiki/Editing-Configuration-Files)
@@ -216,13 +216,13 @@ in
       };
 
       credentialsFile = mkOption {
-        type = types.path;
+        type = types.nullOr types.path;
         description = lib.mdDoc ''
           Path to a JSON file to be merged with the settings.
           Useful to merge a file which is better kept out of the Nix store
           to set secret config parameters like `rpc-password`.
         '';
-        default = "/dev/null";
+        default = null;
         example = "/var/lib/secrets/transmission/settings.json";
       };
 
@@ -264,13 +264,27 @@ in
     # because BindPaths= needs these directories before.
     system.activationScripts = mkIf (cfg.downloadDirPermissions != null)
       { transmission-daemon = ''
-        install -d -m 700 '${cfg.home}/${settingsDir}'
-        chown -R '${cfg.user}:${cfg.group}' ${cfg.home}/${settingsDir}
-        install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.download-dir}'
+        install -d -m 700 ${escapeShellArg cfg.home}/${settingsDir}
+        chown -R \
+          ${escapeShellArg cfg.user}:${escapeShellArg cfg.group} \
+          ${escapeShellArg cfg.home}/${settingsDir}
+        install -d \
+          -m ${escapeShellArg cfg.downloadDirPermissions} \
+          -o ${escapeShellArg cfg.user} \
+          -g ${escapeShellArg cfg.group} \
+          ${escapeShellArg cfg.settings.download-dir}
         '' + optionalString cfg.settings.incomplete-dir-enabled ''
-        install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.incomplete-dir}'
+        install -d \
+          -m ${escapeShellArg cfg.downloadDirPermissions} \
+          -o ${escapeShellArg cfg.user} \
+          -g ${escapeShellArg cfg.group} \
+          ${escapeShellArg cfg.settings.incomplete-dir}
         '' + optionalString cfg.settings.watch-dir-enabled ''
-        install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.watch-dir}'
+        install -d \
+          -m ${escapeShellArg cfg.downloadDirPermissions} \
+          -o ${escapeShellArg cfg.user} \
+          -g ${escapeShellArg cfg.group} \
+          ${escapeShellArg cfg.settings.watch-dir}
         '';
       };
 
@@ -282,14 +296,18 @@ in
       environment.CURL_CA_BUNDLE = etc."ssl/certs/ca-certificates.crt".source;
 
       serviceConfig = {
-        # Use "+" because credentialsFile may not be accessible to User= or Group=.
-        ExecStartPre = [("+" + pkgs.writeShellScript "transmission-prestart" ''
-          set -eu${lib.optionalString (cfg.settings.message-level >= 3) "x"}
-          ${pkgs.jq}/bin/jq --slurp add ${settingsFile} '${cfg.credentialsFile}' |
-          install -D -m 600 -o '${cfg.user}' -g '${cfg.group}' /dev/stdin \
-           '${cfg.home}/${settingsDir}/settings.json'
-        '')];
-        ExecStart="${cfg.package}/bin/transmission-daemon -f -g ${cfg.home}/${settingsDir} ${escapeShellArgs cfg.extraFlags}";
+        LoadCredential = mkIf (cfg.credentialsFile != null)
+          [ "settings.json:${cfg.credentialsFile}" ];
+        ExecStartPre = mkIf (cfg.credentialsFile != null) [
+          (pkgs.writeShellScript "transmission-prestart" ''
+            set -eu${lib.optionalString (cfg.settings.message-level >= 3) "x"}
+            ${pkgs.jq}/bin/jq --slurp add \
+              ${settingsFile} "$CREDENTIALS_DIRECTORY/settings.json" |
+              install -D -m 600 /dev/stdin \
+                ${escapeShellArg cfg.home}/${settingsDir}/settings.json
+          '')
+        ];
+        ExecStart = "${cfg.package}/bin/transmission-daemon -f -g ${escapeShellArg cfg.home}/${settingsDir} ${escapeShellArgs cfg.extraFlags}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         User = cfg.user;
         Group = cfg.group;
@@ -333,10 +351,10 @@ in
             cfg.settings.watch-dir;
         StateDirectory = [
           "transmission"
-          "transmission/.config/transmission-daemon"
-          "transmission/.incomplete"
-          "transmission/Downloads"
-          "transmission/watch-dir"
+          "transmission/${settingsDir}"
+          "transmission/${incompleteDir}"
+          "transmission/${downloadsDir}"
+          "transmission/${watchDir}"
         ];
         StateDirectoryMode = mkDefault 750;
         # The following options are only for optimizing:
