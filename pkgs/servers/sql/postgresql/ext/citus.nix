@@ -2,13 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname = "citus";
-  version = "11.0.6";
+  version = "11.3.0";
+  # version = "11.0.6";
 
   src = fetchFromGitHub {
     owner  = "citusdata";
     repo   = "citus";
     rev    = "v${version}";
-    sha256 = "zBygZLaFUnAkDEgrdeGwnWl1y+gIK4JWmB7gW482xx8=";
+    # sha256 = "zBygZLaFUnAkDEgrdeGwnWl1y+gIK4JWmB7gW482xx8=";
+    sha256 = "e+pkKFFFIATIoODRmOGFr0yFCYo2Q7mVJJ/zbtObJ30=";
   };
 
   buildInputs = [ postgresql curl lz4 ];
@@ -18,8 +20,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out
   '';
 
+  installPhase = ''
+    runHook preInstall
+  '';
+
   passthru = {
-    versionCheck = postgresql.compareVersion "11" >= 0 && postgresql.compareVersion "14" < 0;
+    versionCheck = postgresql.compareVersion "11" >= 0;
   };
 
   meta = with lib; {
