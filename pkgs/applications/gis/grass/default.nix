@@ -6,24 +6,33 @@
 
 stdenv.mkDerivation rec {
   pname = "grass";
-  version = "8.2.0";
+  version = "8.2.1";
 
   src = with lib; fetchFromGitHub {
     owner = "OSGeo";
     repo = "grass";
     rev = version;
-    sha256 = "sha256-VK9FCqIwHGmeJe5lk12lpAGcsC1aPRBiI+XjACXjDd4=";
+    hash = "sha256-U3PQd3u9i+9Bc7BSd0gK8Ss+iV9BT1xLBDrKydtl3Qk=";
   };
 
   nativeBuildInputs = [
     pkg-config bison flex makeWrapper wrapGAppsHook
-    gdal geos libmysqlclient netcdf pdal
+    gdal # for `gdal-config`
+    geos # for `geos-config`
+    netcdf # for `nc-config`
+    libmysqlclient # for `mysql_config`
+    pdal # for `pdal-config`; remove with next version, see https://github.com/OSGeo/grass/pull/2851
   ] ++ (with python3Packages; [ python-dateutil numpy wxPython_4_2 ]);
 
   buildInputs = [
     cairo zlib proj libtiff libpng fftw sqlite
     readline ffmpeg postgresql blas wxGTK32
     proj-datumgrid zstd
+    gdal
+    geos
+    netcdf
+    libmysqlclient
+    pdal
   ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   strictDeps = true;
