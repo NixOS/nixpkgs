@@ -2,8 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , fetchYarnDeps
-, fetchpatch
-, gitUpdater
 , yarn
 , fixup_yarn_lock
 , nodejs
@@ -101,10 +99,6 @@ in stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
-
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
 
   meta = with lib; {
     description = "A Native GOG and Epic Games Launcher for Linux, Windows and Mac";
