@@ -6,7 +6,7 @@
 , cairo
 , glib
 , readline
-, spidermonkey_78
+, spidermonkey_102
 , meson
 , dbus
 , ninja
@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cjs";
-  version = "5.6.1";
+  version = "5.8.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cjs";
     rev = version;
-    hash = "sha256-f9esbQi5WWSMAGlEs9HJFToOvmOrbP2lDW1gGh/48gw=";
+    hash = "sha256-DKCe8dKdYfdeWQ9Iqr0AmDU7YDN9QrQGdTkrBV/ywV0=";
   };
 
   outputs = [ "out" "dev" ];
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     cairo
     readline
-    spidermonkey_78
+    spidermonkey_102
     dbus # for dbus-run-session
   ];
 
