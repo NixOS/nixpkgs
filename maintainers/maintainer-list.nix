@@ -6157,6 +6157,13 @@
       fingerprint = "3F35 E4CA CBF4 2DE1 2E90  53E5 03A6 E6F7 8693 6619";
     }];
   };
+  hariamoor = {
+    email = "nixos@hariamoor.me";
+    github = "HariAmoor-professional";
+    name = "Hari Amoor";
+    matrix = "@hariamoor:matrix.org";
+    githubId = 99296920;
+  };
   harrisonthorne = {
     email = "harrisonthorne@proton.me";
     github = "muni-corn";

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Transparent, distributed sharding and replication for PostgreSQL";
     homepage    = "https://www.citusdata.com/";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ hariamoor ];
     platforms   = platforms.linux;
     license     = licenses.agpl3;
   };
