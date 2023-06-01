@@ -139,7 +139,7 @@ lib.simpleOptions {
   options.OPT.options.OPT-OPT.options.OPT-OPT-ATT.attrsOf     = lib.types.str;
   options.OPT.options.OPT-OPT.options.OPT-OPT-ATT.example     = {};
 
-  options.OPT.options.OPT-OPT.options.OPT-OPT-LST.default     = [];
+  options.OPT.options.OPT-OPT.options.OPT-OPT-LST.default     = [ "OPT-OPT-LST" ];
   options.OPT.options.OPT-OPT.options.OPT-OPT-LST.description = "Third level list of strings str";
   options.OPT.options.OPT-OPT.options.OPT-OPT-LST.listOf      = lib.types.str;
   options.OPT.options.OPT-OPT.options.OPT-OPT-LST.example     = [];

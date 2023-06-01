@@ -399,17 +399,16 @@ checkConfigOutput '^"pear\\npear"$' config.twice.raw ./merge-module-with-key.nix
 # simpleOptions helper
 checkConfigOutput '^"ATT"$'         config.ATT.test                     ./simple-options.nix
 checkConfigOutput '^"ATT-ATT"$'     config.ATT-ATT.foo.test             ./simple-options.nix '{ ATT-ATT.foo.test =          "ATT-ATT"; }'
-checkConfigOutput '^"ATT-LST"$'     config.ATT-LST.foo.0                ./simple-options.nix '{ ATT-LST.foo = [             "ATT-LST" ]; }'
-checkConfigOutput '^"ATT-OPT-TYP"$' config.ATT-OPT.foo.ATT-OPT-TYP      ./simple-options.nix '{ ATT-OPT.foo.ATT-OPT-TYP =   "ATT-OPT-TYP"; }'
+checkConfigOutput '^"ATT-LST"$'     config.ATT-LST.test.0               ./simple-options.nix '{ ATT-LST.test = [            "ATT-LST" ]; }'
+checkConfigOutput '^"ATT-OPT-TYP"$' config.ATT-OPT.test.ATT-OPT-TYP     ./simple-options.nix '{ ATT-OPT.test.ATT-OPT-TYP =  "ATT-OPT-TYP"; }'
 checkConfigOutput '^"LST"$'         config.LST.0                        ./simple-options.nix
 checkConfigOutput '^"LST-ATT"$'     config.LST-ATT.0.test               ./simple-options.nix '{ LST-ATT = [ { test =        "LST-ATT";} ]; }'
 checkConfigOutput '^"LST-LST"$'     config.LST-LST.0.0                  ./simple-options.nix '{ LST-LST = [ [               "LST-LST" ] ]; }'
 checkConfigOutput '^"LST-OPT-TYP"$' config.LST-OPT.0.LST-OPT-TYP        ./simple-options.nix '{ LST-OPT = [ { LST-OPT-TYP = "LST-OPT-TYP"; } ]; }'
 checkConfigOutput '^"OPT-ATT"$'     config.OPT.OPT-ATT.test             ./simple-options.nix
-checkConfigOutput '^"OPT-ATT"$'     config.OPT.OPT-ATT.test             ./simple-options.nix
 checkConfigOutput '^"OPT-LST"$'     config.OPT.OPT-LST.0                ./simple-options.nix
 checkConfigOutput '^"OPT-OPT-ATT"$' config.OPT.OPT-OPT.OPT-OPT-ATT.test ./simple-options.nix
-checkConfigOutput '^"OPT-OPT-LST"$' config.OPT.OPT-OPT.OPT-OPT-LST.0    ./simple-options.nix '{ OPT.OPT-OPT.OPT-OPT-LST = [ "OPT-OPT-LST" ]; }'
+checkConfigOutput '^"OPT-OPT-LST"$' config.OPT.OPT-OPT.OPT-OPT-LST.0    ./simple-options.nix
 checkConfigOutput '^"OPT-OPT-TYP"$' config.OPT.OPT-OPT.OPT-OPT-TYP      ./simple-options.nix
 checkConfigOutput '^"OPT-TYP"$'     config.OPT.OPT-TYP                  ./simple-options.nix
 checkConfigOutput '^"TYP"$'         config.TYP                          ./simple-options.nix
