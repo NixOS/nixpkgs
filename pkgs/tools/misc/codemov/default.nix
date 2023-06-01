@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage {
   pname = "codemov";
-  version = "unstable-2022-10-24";
+  version = "unstable-2023-05-28";
 
   src = fetchFromGitHub {
     owner = "sloganking";
     repo = "codemov";
-    rev = "d51e83246eafef32c3a3f54407fe49eb9801f5ea";
-    hash = "sha256-4Z3XASFlALCnX1guDqhBfvGNZ0V1XSruJvvSm0xr/t4=";
+    rev = "ab4b287c5cdb64f8a1f378c54070fde5a1f3be5b";
+    hash = "sha256-miW/s3Ox2Z5qyFZqAp/FqHhc5jC6s+4DzxlHQhzCc2w=";
   };
 
   cargoLock = {
