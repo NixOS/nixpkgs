@@ -1,25 +1,25 @@
 { lib, stdenv, fetchFromGitHub, cmake, libcifpp, libmcfp, zlib }:
 let
   libcifpp' = libcifpp.overrideAttrs (oldAttrs:  rec {
-    # dssp 4.2.2.1 requires specific version "5.0.8" of libcifpp
-    version = "5.0.8";
+    # dssp 4.3.1 requires specific version "5.1.0" of libcifpp
+    version = "5.1.0";
     src = fetchFromGitHub {
       inherit (oldAttrs.src) owner repo;
       rev = "v${version}";
-      sha256 = "sha256-KJGcopGhCWSl+ElG3BPJjBf/kvYJowOHxto6Ci1IMco=";
+      hash = "sha256-PUsi4T6huSqwaa6RnBP1Vj+0a1ePrvrHD0641Lkkc5s=";
     };
   });
 in
 
 stdenv.mkDerivation rec {
   pname = "dssp";
-  version = "4.2.2.1";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "PDB-REDO";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vmGvC5d8LTo+pcY9sxwj0d6JvH8Lyk+QSOZo5raBci4=";
+    hash = "sha256-TE2fus3KaGd9jo7cOWmJSooHjxTbcxEldR1Mui2SGP0=";
   };
 
   nativeBuildInputs = [ cmake ];
