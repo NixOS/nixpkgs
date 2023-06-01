@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "0.21.1";
 
   src = fetchurl {
-    url = "mirror://gnu/gettext/${pname}-${version}.tar.gz";
+    url = "https://ftp.gnu.org/pub/gnu/gettext/${pname}-${version}.tar.gz";
     sha256 = "sha256-6MNlDh2M7odcTzVWQjgsHfgwWL1aEe6FVcDPJ21kbUU=";
   };
   patches = [
