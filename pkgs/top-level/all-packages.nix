@@ -27254,6 +27254,8 @@ with pkgs;
 
   dstat = callPackage ../os-specific/linux/dstat { };
 
+  esdm = callPackage ../os-specific/linux/esdm { };
+
   evdev-proto = callPackage ../os-specific/bsd/freebsd/evdev-proto { };
 
   fscryptctl = callPackage ../os-specific/linux/fscryptctl { };
