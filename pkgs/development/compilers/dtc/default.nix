@@ -42,6 +42,12 @@ stdenv.mkDerivation rec {
       url = "https://github.com/dgibson/dtc/commit/3acde70714df3623e112cf3ec99fc9b5524220b8.patch";
       sha256 = "sha256-uLXL0Sjcn+bnMuF+A6PjUW1Rq6uNg1dQl58zbeYpP/U=";
     })
+
+    # meson: allow disabling tests
+    (fetchpatch {
+      url = "https://github.com/dgibson/dtc/commit/35f26d2921b68d97fefbd5a2b6e821a2f02ff65d.patch";
+      sha256 = "sha256-cO4f/jJX/pQL7kk4jpKUhsCVESW2ZuWaTr7z3BuvVkw=";
+    })
   ];
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -77,6 +83,7 @@ stdenv.mkDerivation rec {
   mesonAutoFeatures = "auto";
   mesonFlags = [
     (lib.mesonBool "static-build" stdenv.hostPlatform.isStatic)
+    (lib.mesonBool "tests" doCheck)
   ];
 
   postFixup = lib.optionalString stdenv.isDarwin ''
