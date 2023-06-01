@@ -36,6 +36,7 @@
 , curl
 , libffi
 , libepoxy
+, libevdev
 # postPatch:
 , glibc # gconv + locale
 
@@ -153,6 +154,8 @@ let
       curl
       libepoxy
       libffi
+    ] ++ lib.optionals (chromiumVersionAtLeast "114") [
+      libevdev
     ] ++ optional systemdSupport systemd
       ++ optionals cupsSupport [ libgcrypt cups ]
       ++ optional pulseSupport libpulseaudio;
@@ -166,6 +169,14 @@ let
       # (we currently package 1.26 in Nixpkgs while Chromium bundles 1.21):
       # Source: https://bugs.chromium.org/p/angleproject/issues/detail?id=7582#c1
       ./patches/angle-wayland-include-protocol.patch
+    ] ++ lib.optionals (chromiumVersionAtLeast "114") [
+      # We need to revert this patch to build M114+ with LLVM 16:
+      (githubPatch {
+        # Reland [clang] Disable autoupgrading debug info in ThinLTO builds
+        commit = "54969766fd2029c506befc46e9ce14d67c7ed02a";
+        sha256 = "sha256-Vryjg8kyn3cxWg3PmSwYRG6zrHOqYWBMSdEMGiaPg6M=";
+        revert = true;
+      })
     ];
 
     postPatch = ''
