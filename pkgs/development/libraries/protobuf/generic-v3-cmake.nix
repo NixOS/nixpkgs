@@ -81,6 +81,13 @@ let
     ] ++ lib.optionals (!stdenv.targetPlatform.isStatic) [
       "-Dprotobuf_BUILD_SHARED_LIBS=ON"
     ]
+    # Due to a bug in abseil, the tests fail to build from version 3.22
+    # Relevant issues:
+    #  - https://github.com/protocolbuffers/protobuf/issues/12201
+    #  - https://github.com/abseil/abseil-cpp/issues/1407
+    ++ lib.optionals (lib.versionAtLeast version "3.22") [
+      "-Dprotobuf_BUILD_TESTS=OFF"
+    ]
     # Tests fail to build on 32-bit platforms; fixed in 3.22
     # https://github.com/protocolbuffers/protobuf/issues/10418
     ++ lib.optional
