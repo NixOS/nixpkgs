@@ -1,12 +1,14 @@
 { stdenv
 , lib
 , buildPythonPackage
+, cargo
 , fetchFromGitHub
 , fetchpatch
 , h5py
 , numpy
 , pythonOlder
 , pytestCheckHook
+, rustc
 , rustPlatform
 , setuptools-rust
 , torch
@@ -45,11 +47,11 @@ buildPythonPackage rec {
 
   sourceRoot = "source/bindings/python";
 
-  nativeBuildInputs = with rustPlatform; [
+  nativeBuildInputs = [
     setuptools-rust
-    rust.cargo
-    rust.rustc
-    cargoSetupHook
+    cargo
+    rustc
+    rustPlatform.cargoSetupHook
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];

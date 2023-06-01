@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "anthropic";
-  version = "0.2.7";
+  version = "0.2.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2v3WF8eRIruXvFNjRRno3LoXt+dlpaI3LHf243RBJ+U=";
+    hash = "sha256-LURWTTYsztbo5mI2bk3n+U3NxsthNGpeUoNZsK/B8vM=";
   };
 
   nativeBuildInputs = [

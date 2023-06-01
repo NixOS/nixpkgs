@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     musl-obstack
   ];
 
+  patches = [ ./threading-reproducibility.patch ];
+
   # Put libraries in "lib" subdirectory, not top level of $out
   cmakeFlags = [ "-D__LIB=lib" "-DLIBBPF_EMBEDDED=OFF" ];
 

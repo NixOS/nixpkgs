@@ -476,6 +476,14 @@ rec {
       check = x: isDerivation x && hasAttr "shellPath" x;
     };
 
+    pkgs = addCheck
+      (unique { message = "A Nixpkgs pkgs set can not be merged with another pkgs set."; } attrs // {
+        name = "pkgs";
+        descriptionClass = "noun";
+        description = "Nixpkgs package set";
+      })
+      (x: (x._type or null) == "pkgs");
+
     path = mkOptionType {
       name = "path";
       descriptionClass = "noun";
@@ -767,9 +775,11 @@ rec {
           };
           binOp = lhs: rhs: {
             class =
-              if lhs.class == null then rhs.class
-              else if rhs.class == null then lhs.class
-              else if lhs.class == rhs.class then lhs.class
+              # `or null` was added for backwards compatibility only. `class` is
+              # always set in the current version of the module system.
+              if lhs.class or null == null then rhs.class or null
+              else if rhs.class or null == null then lhs.class or null
+              else if lhs.class or null == rhs.class then lhs.class or null
               else throw "A submoduleWith option is declared multiple times with conflicting class values \"${toString lhs.class}\" and \"${toString rhs.class}\".";
             modules = lhs.modules ++ rhs.modules;
             specialArgs =

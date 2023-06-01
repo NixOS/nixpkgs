@@ -1,9 +1,9 @@
 { lib
-, flutter
+, flutter37
 , fetchFromGitHub
 }:
 
-flutter.buildFlutterApplication {
+flutter37.buildFlutterApplication {
   pname = "firmware-updater";
   version = "unstable-2023-04-30";
 

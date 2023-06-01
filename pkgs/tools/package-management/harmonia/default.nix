@@ -6,20 +6,21 @@
 , pkg-config
 , rustPlatform
 , nix-update-script
+, nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "harmonia";
-  version = "0.6.3";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = pname;
     rev = "refs/tags/${pname}-v${version}";
-    hash = "sha256-erBmPXMyIYxRLbYG35vH67MypJoXomUEFOVu6IhmEWs=";
+    hash = "sha256-JH0tdUCadvovAJclpx7Fn1oD+POFpBFHdullRTcFaVQ=";
   };
 
-  cargoHash = "sha256-Gq7U+Uy3psuPVY0wGM90KA5u5Wc2s4hVJma7B11Ag5g=";
+  cargoHash = "sha256-Wa+7Vo5VWmx47Uf6YtlzHReoWY44SxdOnscSFu74OSM=";
 
   nativeBuildInputs = [
     pkg-config nix
@@ -35,12 +36,13 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script {
       extraArgs = [ "--version-regex" "harmonia-v(.*)" ];
     };
+    tests = { inherit (nixosTests) harmonia; };
   };
 
   meta = with lib; {
     description = "Nix binary cache";
-    homepage = "https://github.com/helsinki-systems/harmonia";
+    homepage = "https://github.com/nix-community/harmonia";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [ mic92 ];
   };
 }

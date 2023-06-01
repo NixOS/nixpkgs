@@ -54,7 +54,7 @@ let
     LIBTOOL = lib.optionalString stdenv.isDarwin "${cctools}/bin/libtool";
 
     fetchAttrs = {
-      sha256 = "sha256-kEiwwYAUABcINdSaAyRDSFKtKLPj3axdNvXvkI1k0Uo=";
+      sha256 = "sha256-tMiZsX5OyVw6VVImn4nWwEFdBw+TKKbE7oACibQC0oA=";
     };
 
     buildAttrs = {

@@ -73,7 +73,7 @@ buildGoModule {
     chmod -R u+w -- "$sourceRoot"
     cd $sourceRoot
 
-    runHook postUpack
+    runHook postUnpack
   '';
 
   # Same as above: can't use `patches` because that would

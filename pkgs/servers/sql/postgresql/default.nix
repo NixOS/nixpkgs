@@ -22,7 +22,7 @@ let
       # JIT
       , jitSupport ? false
       , nukeReferences, patchelf, llvmPackages
-      , makeRustPlatform, buildPgxExtension, rustPlatform
+      , makeRustPlatform, buildPgxExtension, cargo, rustc
 
       # detection of crypt fails when using llvm stdenv, so we add it manually
       # for <13 (where it got removed: https://github.com/postgres/postgres/commit/c45643d618e35ec2fe91438df15abd4f3c0d85ca)
@@ -215,7 +215,7 @@ let
             stdenv = stdenv';
             rustPlatform = makeRustPlatform {
               stdenv = stdenv';
-              inherit (rustPlatform.rust) rustc cargo;
+              inherit rustc cargo;
             };
           };
         };
@@ -290,45 +290,45 @@ let
 
   mkPackages = self: {
     postgresql_11 = self.callPackage generic {
-      version = "11.19";
+      version = "11.20";
       psqlSchema = "11.1"; # should be 11, but changing it is invasive
-      hash = "sha256-ExCeK3HxE5QFwnIB2jczphrOcu4cIo2cnwMg4GruFMI=";
+      hash = "sha256-PXyIgvZKfphTSgRCV9/uerrXelt9oSUI2F1yK5i1rM4=";
       this = self.postgresql_11;
       thisAttr = "postgresql_11";
       inherit self;
     };
 
     postgresql_12 = self.callPackage generic {
-      version = "12.14";
+      version = "12.15";
       psqlSchema = "12";
-      hash = "sha256-eFYQI304LIQtNW40cTjljAb/6uJA5swLUqxevMMNBD4=";
+      hash = "sha256-u1IG4oZMHEV5k4uW6mCW0VXyKr8tLMKqV1cePEyxKzY=";
       this = self.postgresql_12;
       thisAttr = "postgresql_12";
       inherit self;
     };
 
     postgresql_13 = self.callPackage generic {
-      version = "13.10";
+      version = "13.11";
       psqlSchema = "13";
-      hash = "sha256-W7z1pW2FxE86iwWPtGhi/0nLyRg00H4pXQLm3jwhbfI=";
+      hash = "sha256-SZL/ZHIDVmtnDU5U3FMXSZomhWyTV20OqVG99r7lC/s=";
       this = self.postgresql_13;
       thisAttr = "postgresql_13";
       inherit self;
     };
 
     postgresql_14 = self.callPackage generic {
-      version = "14.7";
+      version = "14.8";
       psqlSchema = "14";
-      hash = "sha256-zvYPAJj6gQHBVG9CVORbcir1QxM3lFs3ryBwB2MNszE=";
+      hash = "sha256-OdOPADBzftA4Nd6+7+47N9M1RizkmV4kl7w41iHr5Fo=";
       this = self.postgresql_14;
       thisAttr = "postgresql_14";
       inherit self;
     };
 
     postgresql_15 = self.callPackage generic {
-      version = "15.2";
+      version = "15.3";
       psqlSchema = "15";
-      hash = "sha256-maIXH8PWtbX1a3V6ejy4XVCaOOQnOAXe8jlB7SuEaMc=";
+      hash = "sha256-/8fUiR8A/79cP06rf7vO2EYLjA7mPFpRZxM7nmWZ2TI=";
       this = self.postgresql_15;
       thisAttr = "postgresql_15";
       inherit self;

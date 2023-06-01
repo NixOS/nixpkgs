@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , python3
+, fetchPypi
 , git
 }:
 
@@ -9,7 +10,7 @@ python3.pkgs.buildPythonApplication rec {
   version = "1.3.0";
   format = "setuptools";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash = "sha256-kNtybgv8j7t1tl6R5ZuC4vj5fnEcEenuNt0twA1kAh0=";
   };

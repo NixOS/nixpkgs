@@ -50,16 +50,18 @@ let
     '';
   };
 
-  mkStdenv = stdenv:
-    let
-      cc = stdenv.cc.override {
+  mkCc = cc:
+    if stdenv.isAarch64 then cc
+    else
+      cc.override {
         bintools = stdenv.cc.bintools.override { libc = packages.Libsystem; };
         libc = packages.Libsystem;
       };
-    in
+
+  mkStdenv = stdenv:
     if stdenv.isAarch64 then stdenv
     else
-      (overrideCC stdenv cc).override {
+      (overrideCC stdenv (mkCc stdenv.cc)).override {
         targetPlatform = stdenv.targetPlatform // {
           darwinMinVersion = "10.12";
           darwinSdkVersion = "11.0";
@@ -69,8 +71,13 @@ let
   stdenvs = {
     stdenv = mkStdenv stdenv;
   } // builtins.listToAttrs (map
-    (v: { name = "clang${v}Stdenv"; value = mkStdenv pkgs."llvmPackages_${v}".stdenv; })
-    [ "12" "13" "14" "15" ]
+    (v: {
+      name = "llvmPackages_${v}";
+      value = pkgs."llvmPackages_${v}" // {
+        stdenv = mkStdenv pkgs."llvmPackages_${v}".stdenv;
+      };
+    })
+    [ "12" "13" "14" "15" "16" ]
   );
 
   callPackage = newScope (packages // pkgs.darwin // { inherit MacOSX-SDK; });
@@ -104,6 +111,12 @@ let
     rustPlatform = pkgs.makeRustPlatform {
       inherit (pkgs.darwin.apple_sdk_11_0) stdenv;
       inherit (pkgs) rustc cargo;
+    } // {
+      inherit (pkgs.callPackage ../../../build-support/rust/hooks {
+        inherit (pkgs.darwin.apple_sdk_11_0) stdenv;
+        inherit (pkgs) cargo rustc;
+        clang = mkCc pkgs.clang;
+      }) bindgenHook;
     };
 
     callPackage = newScope (lib.optionalAttrs stdenv.isDarwin (stdenvs // rec {

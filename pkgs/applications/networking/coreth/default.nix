@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "coreth";
-  version = "0.12.1";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "ava-labs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Wf4abvBOX98A2IjALkMMOAqDvEtXtLddxhrV2LQM1dU=";
+    hash = "sha256-WkSZ+7ygg2dkotv3vwTrWaVsSQvgmPJ0xhPCqZdQit8=";
   };
 
   # go mod vendor has a bug, see: golang/go#57529

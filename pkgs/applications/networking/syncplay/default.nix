@@ -1,8 +1,19 @@
-{ lib, fetchFromGitHub, buildPythonApplication, pyside2, twisted, certifi, qt5, enableGUI ? true }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPythonApplication
+, fetchpatch
+, pyside6
+, twisted
+, certifi
+, qt6
+, appnope
+, enableGUI ? true
+}:
 
 buildPythonApplication rec {
   pname = "syncplay";
-  version = "1.6.9";
+  version = "1.7.0";
 
   format = "other";
 
@@ -10,14 +21,23 @@ buildPythonApplication rec {
     owner = "Syncplay";
     repo = "syncplay";
     rev = "v${version}";
-    sha256 = "0qm3qn4a1nahhs7q81liz514n9blsi107g9s9xfw2i8pzi7v9v0v";
+    sha256 = "sha256-Te81yOv3D6M6aMfC5XrM6/I6BlMdlY1yRk1RRJa9Mxg=";
   };
 
-  buildInputs = lib.optionals enableGUI [ qt5.qtwayland ];
+  patches = [
+    (fetchpatch {
+      name = "fix-typeerror.patch";
+      url = "https://github.com/Syncplay/syncplay/commit/b62b038cdf58c54205987dfc52ebf228505ad03b.patch";
+      hash = "sha256-pSP33Qn1I+nJBW8T1E1tSJKRh5OnZMRsbU+jr5z4u7c=";
+    })
+  ];
+
+  buildInputs = lib.optionals enableGUI [ (if stdenv.isLinux then qt6.qtwayland else qt6.qtbase) ];
   propagatedBuildInputs = [ twisted certifi ]
     ++ twisted.optional-dependencies.tls
-    ++ lib.optional enableGUI pyside2;
-  nativeBuildInputs = lib.optionals enableGUI [ qt5.wrapQtAppsHook ];
+    ++ lib.optional enableGUI pyside6
+    ++ lib.optional (stdenv.isDarwin && enableGUI) appnope;
+  nativeBuildInputs = lib.optionals enableGUI [ qt6.wrapQtAppsHook ];
 
   makeFlags = [ "DESTDIR=" "PREFIX=$(out)" ];
 
@@ -29,7 +49,7 @@ buildPythonApplication rec {
     homepage = "https://syncplay.pl/";
     description = "Free software that synchronises media players";
     license = licenses.asl20;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ Enzime ];
   };
 }

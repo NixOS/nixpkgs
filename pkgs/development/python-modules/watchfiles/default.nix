@@ -2,8 +2,10 @@
 , stdenv
 , anyio
 , buildPythonPackage
+, cargo
 , fetchFromGitHub
 , rustPlatform
+, rustc
 , setuptools-rust
 , pythonOlder
 , dirty-equals
@@ -41,12 +43,11 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
+    cargo
+    rustc
+  ];
 
   propagatedBuildInputs = [
     anyio

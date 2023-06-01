@@ -52,13 +52,13 @@ assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch64);
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
-  version = "1.22.2";
+  version = "1.22.3";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-fIzFlCXysjL2DKfRPlbt1hXaT3Eec90Bp8/6Rua8DN0=";
+    hash = "sha256-r4EVSzou8/TS/ro5XyVpb+6m/RPsYsktPHqXNHBxAnM=";
   };
 
   strictDeps = true;
@@ -190,6 +190,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = with maintainers; [ matthewbauer lilyinstarlight ];
   };
 }

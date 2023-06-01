@@ -1,12 +1,11 @@
 { lib, stdenv, fetchFromGitHub, buildGoModule, makeWrapper
 , cacert, moreutils, jq, git, pkg-config, yarn, python3
-, esbuild, nodejs_16, libsecret, xorg, ripgrep
-, AppKit, Cocoa, Security, cctools }:
+, esbuild, nodejs, libsecret, xorg, ripgrep
+, AppKit, Cocoa, Security, cctools, nixosTests }:
 
 let
   system = stdenv.hostPlatform.system;
 
-  nodejs = nodejs_16;
   yarn' = yarn.override { inherit nodejs; };
   defaultYarnOpts = [ "frozen-lockfile" "non-interactive" "no-progress"];
 
@@ -40,13 +39,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "openvscode-server";
-  version = "1.77.1";
+  version = "1.78.2";
 
   src = fetchFromGitHub {
     owner = "gitpod-io";
     repo = "openvscode-server";
     rev = "openvscode-server-v${version}";
-    sha256 = "i1AexC4EmVi7xSjdCfYmMIUU+CgKT48o03n39XQ0nVY=";
+    sha256 = "sha256-+Q/j3h7ZvNDxrjEk01QUOrVwcwGW4OBBpmfjEtHQj2o=";
   };
 
   yarnCache = stdenv.mkDerivation {
@@ -69,7 +68,7 @@ in stdenv.mkDerivation rec {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-Ca2qd9Q88BNUIT9avq1KiMwKcKkMX/NkU2q8DjGYQjg=";
+    outputHash = "sha256-XOFBXYP3c4vbvl0/uXsmo8FdO/2PudzJhm9L+9VArdI=";
   };
 
   nativeBuildInputs = [
@@ -163,6 +162,10 @@ in stdenv.mkDerivation rec {
     cp -R -T ../vscode-reh-web-${vsBuildTarget} $out
     ln -s ${nodejs}/bin/node $out
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) openvscode-server;
+  };
 
   meta = with lib; {
     description = "Run VS Code on a remote machine";

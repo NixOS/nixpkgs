@@ -24,12 +24,12 @@
 }:
 
 let
-  version = "6.1.2";
+  version = "6.2.0";
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-b7PuIv6fqG2C4XNXLVBMCJ8Qgl10lyVZJibgkLOMlnk=";
+    hash = "sha256-8ej3iGN6xXTUcdYZ0glrqsoEoZtXoDQ5ngeWM9tEGUU=";
   };
 
   # Update with
@@ -394,6 +394,7 @@ stdenv.mkDerivation rec {
       for wrapper in "''${wrappers[@]}"; do
         sed -i -e "s,/usr/bin/gcc,${stdenv.cc}/bin/clang,g" $wrapper
         sed -i -e "s,/usr/bin/install_name_tool,${cctools}/bin/install_name_tool,g" $wrapper
+        sed -i -e "s,/usr/bin/xcrun install_name_tool,${cctools}/bin/install_name_tool,g" $wrapper
       done
     '';
 

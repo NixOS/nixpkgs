@@ -15,6 +15,7 @@
 , alsa-lib
 , alsa-plugins
 , glew
+, glew-egl
 
 # for soloud
 , libpulseaudio ? null
@@ -30,24 +31,28 @@
 , makeBuildVersion ? (v: v)
 , enableClient ? true
 , enableServer ? true
+
+, enableWayland ? false
 }:
 
 let
   pname = "mindustry";
-  version = "143.1";
+  version = "144.3";
   buildVersion = makeBuildVersion version;
+
+  selectedGlew = if enableWayland then glew-egl else glew;
 
   Mindustry = fetchFromGitHub {
     owner = "Anuken";
     repo = "Mindustry";
     rev = "v${version}";
-    hash = "sha256-p6HxccLg+sjFW+ZGGTfo5ZvOIs6lKjub88kX/iaBres=";
+    hash = "sha256-IXwrBaj0gweaaHefO/LyqEW4a3fBLfySSYPHBhRMVo8=";
   };
   Arc = fetchFromGitHub {
     owner = "Anuken";
     repo = "Arc";
     rev = "v${version}";
-    hash = "sha256-fbFjelwqBRadcUmbW3/oDnhmNAjTj660qB5WwXugIIU=";
+    hash = "sha256-nH/sHRWMdX6ieh2EWfD0wAn87E2ZkqZX+9zt2vKYPcE=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
@@ -126,7 +131,7 @@ let
         | sh
     '';
     outputHashMode = "recursive";
-    outputHash = "sha256-uxnW5AqX6PazqHJYLuF/By5qpev8Se+992jCyacogSY=";
+    outputHash = "sha256-vZc8T7Hk1DLHYgqj8zxKUP2NPXumRxuheMk21Sh2TZY=";
   };
 
 in
@@ -139,7 +144,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optionals enableClient [
     SDL2
-    glew
+    selectedGlew
     alsa-lib
   ];
   nativeBuildInputs = [
@@ -171,7 +176,7 @@ stdenv.mkDerivation rec {
     pushd ../Arc
     gradle --offline --no-daemon jnigenBuild -Pbuildversion=${buildVersion}
     gradle --offline --no-daemon jnigenJarNativesDesktop -Pbuildversion=${buildVersion}
-    glewlib=${lib.getLib glew}/lib/libGLEW.so
+    glewlib=${lib.getLib selectedGlew}/lib/libGLEW.so
     sdllib=${lib.getLib SDL2}/lib/libSDL2.so
     patchelf backends/backend-sdl/libs/linux64/libsdl-arc*.so \
       --add-needed $glewlib \
@@ -186,33 +191,41 @@ stdenv.mkDerivation rec {
     gradle --offline --no-daemon server:dist -Pbuildversion=${buildVersion}
   '';
 
-  installPhase = with lib; ''
+  installPhase = with lib; let
+    installClient = ''
+      install -Dm644 desktop/build/libs/Mindustry.jar $out/share/mindustry.jar
+      mkdir -p $out/bin
+      makeWrapper ${jdk}/bin/java $out/bin/mindustry \
+        --add-flags "-jar $out/share/mindustry.jar" \
+        --suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath [libpulseaudio alsa-lib libjack2]} \
+        --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib/'' + optionalString enableWayland '' \
+        --set SDL_VIDEODRIVER wayland \
+        --set SDL_VIDEO_WAYLAND_WMCLASS Mindustry
+      '' + ''
+
+      # Retain runtime depends to prevent them from being cleaned up.
+      # Since a jar is a compressed archive, nix can't figure out that the dependency is actually in there,
+      # and will assume that it's not actually needed.
+      # This can cause issues.
+      # See https://github.com/NixOS/nixpkgs/issues/109798.
+      echo "# Retained runtime dependencies: " >> $out/bin/mindustry
+      for dep in ${SDL2.out} ${alsa-lib.out} ${selectedGlew.out}; do
+        echo "# $dep" >> $out/bin/mindustry
+      done
+
+      install -Dm644 core/assets/icons/icon_64.png $out/share/icons/hicolor/64x64/apps/mindustry.png
+    '';
+    installServer = ''
+      install -Dm644 server/build/libs/server-release.jar $out/share/mindustry-server.jar
+      mkdir -p $out/bin
+      makeWrapper ${jdk}/bin/java $out/bin/mindustry-server \
+        --add-flags "-jar $out/share/mindustry-server.jar"
+    '';
+  in ''
     runHook preInstall
-  '' + optionalString enableClient ''
-    install -Dm644 desktop/build/libs/Mindustry.jar $out/share/mindustry.jar
-    mkdir -p $out/bin
-    makeWrapper ${jdk}/bin/java $out/bin/mindustry \
-      --add-flags "-jar $out/share/mindustry.jar" \
-      --suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath [libpulseaudio alsa-lib libjack2]} \
-      --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib/
-
-    # Retain runtime depends to prevent them from being cleaned up.
-    # Since a jar is a compressed archive, nix can't figure out that the dependency is actually in there,
-    # and will assume that it's not actually needed.
-    # This can cause issues.
-    # See https://github.com/NixOS/nixpkgs/issues/109798.
-    echo "# Retained runtime dependencies: " >> $out/bin/mindustry
-    for dep in ${SDL2.out} ${alsa-lib.out} ${glew.out}; do
-      echo "# $dep" >> $out/bin/mindustry
-    done
-
-    install -Dm644 core/assets/icons/icon_64.png $out/share/icons/hicolor/64x64/apps/mindustry.png
-  '' + optionalString enableServer ''
-    install -Dm644 server/build/libs/server-release.jar $out/share/mindustry-server.jar
-    mkdir -p $out/bin
-    makeWrapper ${jdk}/bin/java $out/bin/mindustry-server \
-      --add-flags "-jar $out/share/mindustry-server.jar"
-  '' + ''
+  '' + optionalString enableClient installClient
+     + optionalString enableServer installServer
+     + ''
     runHook postInstall
   '';
 

@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , cmake
@@ -15,6 +16,7 @@
 , numpy
 , pandas
 , pillow
+, memorymappingHook
 }:
 let
   external = {
@@ -82,6 +84,8 @@ buildPythonPackage rec {
   buildInputs = [
     boost
     cairo
+  ] ++ lib.optionals (stdenv.system == "x86_64-darwin") [
+    memorymappingHook
   ];
 
   propagatedBuildInputs = [
@@ -149,7 +153,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Open source toolkit for cheminformatics";
-    maintainers = [ maintainers.rmcgibbo ];
+    maintainers = with maintainers; [ rmcgibbo natsukium ];
     license = licenses.bsd3;
     homepage = "https://www.rdkit.org";
   };

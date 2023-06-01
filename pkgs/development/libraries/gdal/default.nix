@@ -203,6 +203,8 @@ stdenv.mkDerivation rec {
     popd # ../autotest
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Translator library for raster geospatial data formats";
     homepage = "https://www.gdal.org/";

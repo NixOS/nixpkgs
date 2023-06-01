@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
     name = "${pname}-${version}.tar.gz";
   };
 
+  patches = [
+    ./makefile-install-dir.patch
+  ];
+
   buildInputs = [ libnfnetlink ];
 
   installFlags = [ "PREFIX=$(out)" "INSTALLPREFIX=$(out)" ];

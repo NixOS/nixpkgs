@@ -1,6 +1,6 @@
 { lib
-, runCommand
 , fetchurl
+, kaem
 , nyacc
 }:
 let
@@ -15,7 +15,7 @@ let
     sha256 = "065ksalfllbdrzl12dz9d9dcxrv97wqxblslngsc6kajvnvlyvpk";
   };
 in
-runCommand "${pname}-${version}" {
+kaem.runCommand "${pname}-${version}" {
   inherit pname version;
 
   passthru.guilePath = "${nyacc}/share/${pname}-${version}/module";
@@ -28,7 +28,7 @@ runCommand "${pname}-${version}" {
     '';
     homepage = "https://savannah.nongnu.org/projects/nyacc";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = teams.minimal-bootstrap.members;
     platforms = platforms.all;
   };
 } ''

@@ -99,6 +99,10 @@ merging is handled.
     problems.
     :::
 
+`types.pkgs`
+
+:   A type for the top level Nixpkgs package set.
+
 ### Numeric types {#sec-option-types-numeric}
 
 `types.int`

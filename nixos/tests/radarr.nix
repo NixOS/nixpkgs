@@ -1,10 +1,8 @@
 import ./make-test-python.nix ({ lib, ... }:
 
-with lib;
-
 {
   name = "radarr";
-  meta.maintainers = with maintainers; [ etu ];
+  meta.maintainers = with lib.maintainers; [ etu ];
 
   nodes.machine =
     { pkgs, ... }:

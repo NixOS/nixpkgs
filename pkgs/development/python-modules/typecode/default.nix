@@ -15,21 +15,15 @@
 
 buildPythonPackage rec {
   pname = "typecode";
-  version = "30.0.0";
+  version = "30.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pRGLU/xzQQqDZMIsrq1Fy7VgGIpFjnHtpmO+yL7t4g8=";
+    hash = "sha256-Glc5QiTVr//euymeNTxGN+FVaOEa6cUxHGyGo9bQrJc=";
   };
-
-  postPatch = ''
-    # PEP440 support was removed in newer setuptools, https://github.com/nexB/typecode/pull/31
-    substituteInPlace setup.cfg \
-      --replace ">=3.6.*" ">=3.6"
-  '';
 
   dontConfigure = true;
 
@@ -67,6 +61,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/nexB/typecode";
     changelog = "https://github.com/nexB/typecode/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ];
   };
 }

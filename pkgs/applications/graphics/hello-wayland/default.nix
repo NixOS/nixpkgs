@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub
-, imagemagick, pkg-config, wayland, wayland-protocols
+, imagemagick, pkg-config, wayland-scanner, wayland, wayland-protocols
 , unstableGitUpdater
 }:
 
@@ -14,7 +14,8 @@ stdenv.mkDerivation {
     sha256 = "NMQE2zU858b6OZhdS2oZnGvLK+eb7yU0nFaMAcpNw04=";
   };
 
-  nativeBuildInputs = [ imagemagick pkg-config ];
+  depsBuildBuild = [ pkg-config ];
+  nativeBuildInputs = [ imagemagick pkg-config wayland-scanner ];
   buildInputs = [ wayland wayland-protocols ];
 
   installPhase = ''

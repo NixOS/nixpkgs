@@ -19,18 +19,18 @@
 
 buildPythonPackage rec {
   pname = "django-markup";
-  version = "1.7";
+  version = "1.7.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bartTC";
     repo = "django-markup";
     rev = "refs/tags/v${version}";
-    hash = "sha256-P36DYOcjYAvzhSLe5CwzRaIm/KzrpUh0YZjzcwnSBG8=";
+    hash = "sha256-NvGlvrXOwDrwHhbFHrWf7Kz9sEzTTyq84/Z6jjRNy8Q=";
   };
 
   postPatch = ''
-    sed -i "/--cov/d" setup.cfg
+    sed -i "/--cov/d" pyproject.toml
   '';
 
   buildInputs = [

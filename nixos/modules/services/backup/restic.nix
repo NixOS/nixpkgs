@@ -145,6 +145,7 @@ in
           type = types.attrsOf unitOption;
           default = {
             OnCalendar = "daily";
+            Persistent = true;
           };
           description = lib.mdDoc ''
             When to run the backup. See {manpage}`systemd.timer(5)` for details.
@@ -152,6 +153,7 @@ in
           example = {
             OnCalendar = "00:05";
             RandomizedDelaySec = "5h";
+            Persistent = true;
           };
         };
 

@@ -43,6 +43,7 @@ in {
         enable = true;
         datadir = "/var/lib/nextcloud-data";
         hostName = "nextcloud";
+        database.createLocally = true;
         config = {
           # Don't inherit adminuser since "root" is supposed to be the default
           adminpassFile = "${pkgs.writeText "adminpass" adminpass}"; # Don't try this at home!

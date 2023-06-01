@@ -243,50 +243,36 @@ in
     # see https://mariadb.org/about/#maintenance-policy for EOLs
     mariadb_104 = self.callPackage generic {
       # Supported until 2024-06-18
-      version = "10.4.28";
-      hash = "sha256-AD/SPzxu5RYXbhtisLQ822zdPc1OMPhVwcWrK6r1qGw=";
+      version = "10.4.29";
+      hash = "sha256-Wy0zh5LnnmjWpUXisVYDu792GMc55fgg9XsdayIJITA=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_105 = self.callPackage generic {
       # Supported until 2025-06-24
-      version = "10.5.19";
-      hash = "sha256-JExKJCSQZBBmI8uEqm3lFN3xeH3oZmQHUoK7qOxXV/Q=";
+      version = "10.5.20";
+      hash = "sha256-sY+Q8NAR74e71VmtBDLN4Qfs21jqKCcQg7SJvf0e79s=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_106 = self.callPackage generic {
       # Supported until 2026-07-06
-      version = "10.6.12";
-      hash = "sha256-PtLrdCnC+uVCPKVcZhdC0QfjUkbxqwwQcJbwxLg5Rjo=";
-      inherit (self.darwin) cctools;
-      inherit (self.darwin.apple_sdk.frameworks) CoreServices;
-    };
-    mariadb_108 = self.callPackage generic {
-      # Supported until 2023-05-20. TODO: remove ahead of 23.05 branchoff
-      version = "10.8.7";
-      hash = "sha256-A6uqsKMvNTjqZZFbrUBBWf2mHEJE9HZJpC6xdUIGuAI=";
-      inherit (self.darwin) cctools;
-      inherit (self.darwin.apple_sdk.frameworks) CoreServices;
-    };
-    mariadb_109 = self.callPackage generic {
-      # Supported until 2023-08-22. TODO: remove ahead of 23.05 branchoff?
-      version = "10.9.5";
-      hash = "sha256-CXYrdcZEuUEukV0w4bJm3tc5ZRf8L9hrvmf+zDcGWtw=";
+      version = "10.6.13";
+      hash = "sha256-8IXzec9Z7S02VkT8XNhVj4gqiG7JZAcNZaKFMN27dbo=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_1010 = self.callPackage generic {
-      # Supported until 2023-11-17
-      version = "10.10.3";
-      hash = "sha256-DQxF/oUFnY0mxuIp8wQQqLj3KC7C1WVg/JqJMOFO130=";
+      # Supported until 2023-11-17. TODO: remove ahead of 23.11 branchoff
+      version = "10.10.4";
+      hash = "sha256-IX2Z47Ami5MizyicGEMnqHiYs/aGvS6eS5JpXqYRixk=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_1011 = self.callPackage generic {
-      # Supported until 2028-02-16
-      version = "10.11.2";
-      hash = "sha256-HIne4MrtD2i8Kh0gPrmKEjFQ5qF59u4PH8C6Pwjccdw=";
+      # Supported until 2028-02-16. TODO: make this the default, at some point
+      version = "10.11.3";
+      hash = "sha256-sGWw8ypun9R55Wb9ZnFFA3mIbY3aLZp++TCvHlwmwMc=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };

@@ -30,6 +30,11 @@ buildPythonPackage rec {
     sha256 = "sha256-s89gs3H//Dc3k6BLZUC4APyDgiWY9LetWAkI+kXQTf8=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "beautifulsoup4>=4.8,<4.12" "beautifulsoup4>=4.8"
+  '';
+
   propagatedBuildInputs = [
     django
     django-modelcluster

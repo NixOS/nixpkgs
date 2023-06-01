@@ -25,9 +25,11 @@ let
 
       sectionDHCPv4 = checkUnitConfig "DHCPv4" [
         (assertOnlyFields [
+          "ClientIdentifier"
           "DUIDType"
           "DUIDRawData"
         ])
+        (assertValueOneOf "ClientIdentifier" ["mac" "duid" "duid-only"])
       ];
 
       sectionDHCPv6 = checkUnitConfig "DHCPv6" [

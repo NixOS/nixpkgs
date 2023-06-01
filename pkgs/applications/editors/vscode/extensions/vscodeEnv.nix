@@ -19,7 +19,7 @@
 , keybindings                      ? {}
 , createKeybindingsIfDoesNotExists ? true
 , user-data-dir ? ''"''${TMP}''${name}"/vscode-data-dir''
-# if file exists will use it and import the extensions in it into this dervation else will use empty extensions list
+# if file exists will use it and import the extensions in it into this derivation else will use empty extensions list
 # this file will be created/updated by vscodeExts2nix when vscode exists
 , mutableExtensionsFile
 }:

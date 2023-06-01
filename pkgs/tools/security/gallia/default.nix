@@ -19,6 +19,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "aiofiles"
+    "argcomplete"
     "msgspec"
   ];
 

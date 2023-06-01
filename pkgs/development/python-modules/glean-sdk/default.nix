@@ -6,8 +6,11 @@
 , fetchPypi
 , glean-parser
 , iso8601
+, lmdb
+, pkg-config
 , pytest-localserver
 , pytestCheckHook
+, python
 , pythonOlder
 , rustc
 , rustPlatform
@@ -17,26 +20,31 @@
 
 buildPythonPackage rec {
   pname = "glean-sdk";
-  version = "52.6.0";
+  version = "52.7.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TTV6oydUP2znEOm7KZElugNDfROnlPmyC19Ig1H8/wM=";
+    hash = "sha256-sLjdGHiS7Co/oA9gQyAFkD14tAYjmwjWcPr4CRrzw/0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-Np2TfgKP3yfJqA4WZyyedGp9XtKJjDikUov5pvB/opk=";
+    hash = "sha256-5TlgWcLmjklxhtDbB0aRF71iIRTJwetFj1Jii1DGdvU=";
   };
 
   nativeBuildInputs = [
     cargo
+    pkg-config
     rustc
     rustPlatform.cargoSetupHook
     setuptools-rust
+  ];
+
+  buildInputs = [
+    lmdb
   ];
 
   propagatedBuildInputs = [
@@ -54,7 +62,12 @@ buildPythonPackage rec {
   disabledTests = [
     # RuntimeError: No ping received.
     "test_client_activity_api"
+    "test_flipping_upload_enabled_respects_order_of_events"
   ];
+
+  postInstallCheck = lib.optionalString (stdenv.hostPlatform.parsed.kernel.execFormat == lib.systems.parse.execFormats.elf) ''
+    readelf -a $out/${python.sitePackages}/glean/libglean_ffi.so | grep -F 'Shared library: [liblmdb.so'
+  '';
 
   pythonImportsCheck = [
     "glean"

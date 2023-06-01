@@ -13,7 +13,7 @@
 }:
 let
   pname = "grpclib";
-  version = "0.4.3";
+  version = "0.4.4";
 in
 buildPythonPackage {
   inherit pname version;
@@ -23,7 +23,7 @@ buildPythonPackage {
     owner = "vmagamedov";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-zjctvsuX5yJl1EXIAaiukWGYJbdgU7OZllgOYAmp1b4=";
+    hash = "sha256-bCLyBfsNdIGdpz9l/r2iYIQ5TitKmsctekeOthIkXhw=";
   };
 
   propagatedBuildInputs = [

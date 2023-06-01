@@ -3,7 +3,7 @@
 { pname, version, nativeBuildInputs ? [], enableParallelBuilding ? true, ... }@args:
 
 let Dune =
-  let dune-version = args.duneVersion or "2"; in
+  let dune-version = args.duneVersion or "3"; in
   { "1" = dune_1; "2" = dune_2; "3" = dune_3; }."${dune-version}"
 ; in
 

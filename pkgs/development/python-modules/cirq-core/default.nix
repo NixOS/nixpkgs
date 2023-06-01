@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
+, pythonAtLeast
 , pythonOlder
 , fetchFromGitHub
 , fetchpatch
@@ -34,7 +35,8 @@ buildPythonPackage rec {
   version = "1.1.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  # Upstream package is broken on Python 3.11 https://github.com/quantumlib/Cirq/issues/6018
+  disabled = pythonOlder "3.7" || pythonAtLeast "3.11";
 
   src = fetchFromGitHub {
     owner = "quantumlib";

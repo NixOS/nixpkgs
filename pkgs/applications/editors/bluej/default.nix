@@ -1,21 +1,22 @@
-{ lib, stdenv, fetchurl, jdk, glib, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, openjdk, glib, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "bluej";
-  version = "5.0.3";
+  version = "5.1.0";
 
   src = fetchurl {
     # We use the deb here. First instinct might be to go for the "generic" JAR
     # download, but that is actually a graphical installer that is much harder
     # to unpack than the deb.
     url = "https://www.bluej.org/download/files/BlueJ-linux-${builtins.replaceStrings ["."] [""] version}.deb";
-    sha256 = "sha256-OarqmptxZc7xEEYeoCVqHXkAvfzfSYx5nUp/iWPyoqw=";
+    sha256 = "sha256-tOb15wU9OjUt0D8l/JkaGYj84L7HV4FUnQQB5cRAxG0=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
   buildInputs = [ glib ];
 
   sourceRoot = ".";
+
   preUnpack = ''
     unpackCmdHooks+=(_tryDebData)
     _tryDebData() {
@@ -26,31 +27,21 @@ stdenv.mkDerivation rec {
     }
   '';
 
+  dontWrapGApps = true;
+
   installPhase = ''
     runHook preInstall
 
-    if [ -n "$prefix" ]; then
-        mkdir -p "$prefix"
-    fi
+    mkdir -p $out
+    cp -r usr/* $out
 
-    mkdir -p "$out"
-
-    if shopt -q dotglob; then dotglobOpt=$?; else dotglobOpt=$?; fi
-    shopt -s dotglob
-    for file in usr/*; do
-      cp -R "$file" "$out"
-    done
-    if (( !dotglobOpt )); then shopt -u dotglob; fi
+    makeWrapper ${openjdk}/bin/java $out/bin/bluej \
+      "''${gappsWrapperArgs[@]}" \
+      --add-flags "-Dawt.useSystemAAFontSettings=on -Xmx512M \
+                   --add-opens javafx.graphics/com.sun.glass.ui=ALL-UNNAMED \
+                   -jar $out/share/bluej/bluej.jar"
 
     runHook postInstall
-  '';
-
-  dontWrapGApps = true;
-
-  preFixup = ''
-    makeWrapper ${jdk}/bin/java $out/bin/bluej \
-      "''${gappsWrapperArgs[@]}" \
-      --add-flags "-Djavafx.embed.singleThread=true -Dawt.useSystemAAFontSettings=on -Xmx512M -cp $out/share/bluej/bluej.jar bluej.Boot"
   '';
 
   meta = with lib; {
@@ -59,6 +50,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl2ClasspathPlus;
     maintainers = with maintainers; [ chvp ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

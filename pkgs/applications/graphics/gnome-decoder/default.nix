@@ -1,11 +1,12 @@
 { lib
 , clangStdenv
 , fetchFromGitLab
-, libclang
 , rustPlatform
+, cargo
 , meson
 , ninja
 , pkg-config
+, rustc
 , glib
 , gtk4
 , libadwaita
@@ -46,11 +47,11 @@ clangStdenv.mkDerivation rec {
     wrapGAppsHook4
     appstream-glib
     desktop-file-utils
-  ] ++ (with rustPlatform; [
-    rust.cargo
-    rust.rustc
-    cargoSetupHook
-  ]);
+    cargo
+    rustc
+    rustPlatform.bindgenHook
+    rustPlatform.cargoSetupHook
+  ];
 
   buildInputs = [
     glib
@@ -64,8 +65,6 @@ clangStdenv.mkDerivation rec {
     gst-plugins-base
     gst-plugins-bad
   ];
-
-  LIBCLANG_PATH = "${libclang.lib}/lib";
 
   meta = with lib; {
     description = "Scan and Generate QR Codes";

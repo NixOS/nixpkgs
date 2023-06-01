@@ -4,6 +4,7 @@
   fetchFromGitHub,
   zig,
   testers,
+  installShellFiles,
   zf,
 }:
 stdenv.mkDerivation rec {
@@ -18,17 +19,33 @@ stdenv.mkDerivation rec {
     hash = "sha256-MzlSU5x2lb6PJZ/iNAi2aebfuClBprlfHMIG/4OPmuc=";
   };
 
-  nativeBuildInputs = [ zig ];
-
-  dontConfigure = true;
+  nativeBuildInputs = [ zig installShellFiles ];
 
   preBuild = ''
     export HOME=$TMPDIR
   '';
 
+  buildPhase = ''
+    runHook preBuild
+    zig build -Drelease-safe -Dcpu=baseline
+    runHook postBuild
+  '';
+
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+    zig build test
+    runHook postCheck
+  '';
+
   installPhase = ''
     runHook preInstall
     zig build -Drelease-safe -Dcpu=baseline --prefix $out install
+    installManPage doc/zf.1
+    installShellCompletion \
+      --bash complete/zf \
+      --fish complete/zf.fish \
+      --zsh complete/_zf
     runHook postInstall
   '';
 

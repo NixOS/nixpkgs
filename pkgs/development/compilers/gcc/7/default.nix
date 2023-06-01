@@ -65,6 +65,7 @@ let majorVersion = "7";
         })
 
         ../9/fix-struct-redefinition-on-glibc-2.36.patch
+        ../install-info-files-serially.patch
       ]
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optionals targetPlatform.isNetBSD [

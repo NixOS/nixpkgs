@@ -1,4 +1,4 @@
-{ useLua ? !stdenv.isDarwin
+{ useLua ? true
 , usePcre ? true
 , withPrometheusExporter ? true
 , stdenv, lib, fetchurl, nixosTests

@@ -123,7 +123,11 @@ rec {
          { x = "a"; y = "b"; }
        => { x = "a"; xa = "a"; y = "b"; yb = "b"; }
   */
-  concatMapAttrs = f: flip pipe [ (mapAttrs f) attrValues (foldl' mergeAttrs { }) ];
+  concatMapAttrs = f: v:
+    foldl' mergeAttrs { }
+      (attrValues
+        (mapAttrs f v)
+      );
 
 
   /* Update or set specific paths of an attribute set.

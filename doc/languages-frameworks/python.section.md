@@ -10,7 +10,7 @@ Several versions of the Python interpreter are available on Nix, as well as a
 high amount of packages. The attribute `python3` refers to the default
 interpreter, which is currently CPython 3.10. The attribute `python` refers to
 CPython 2.7 for backwards-compatibility. It is also possible to refer to
-specific versions, e.g. `python39` refers to CPython 3.9, and `pypy` refers to
+specific versions, e.g. `python311` refers to CPython 3.11, and `pypy` refers to
 the default PyPy interpreter.
 
 Python is used a lot, and in different ways. This affects also how it is
@@ -26,10 +26,10 @@ however, are in separate sets, with one set per interpreter version.
 The interpreters have several common attributes. One of these attributes is
 `pkgs`, which is a package set of Python libraries for this specific
 interpreter. E.g., the `toolz` package corresponding to the default interpreter
-is `python.pkgs.toolz`, and the CPython 3.9 version is `python39.pkgs.toolz`.
+is `python.pkgs.toolz`, and the CPython 3.11 version is `python311.pkgs.toolz`.
 The main package set contains aliases to these package sets, e.g.
-`pythonPackages` refers to `python.pkgs` and `python39Packages` to
-`python39.pkgs`.
+`pythonPackages` refers to `python.pkgs` and `python311Packages` to
+`python311.pkgs`.
 
 #### Installing Python and packages {#installing-python-and-packages}
 
@@ -54,7 +54,7 @@ with `python.buildEnv` or `python.withPackages` where the interpreter and other
 executables are wrapped to be able to find each other and all of the modules.
 
 In the following examples we will start by creating a simple, ad-hoc environment
-with a nix-shell that has `numpy` and `toolz` in Python 3.9; then we will create
+with a nix-shell that has `numpy` and `toolz` in Python 3.11; then we will create
 a re-usable environment in a single-file Python script; then we will create a
 full Python environment for development with this same environment.
 
@@ -70,10 +70,10 @@ temporary shell session with a Python and a *precise* list of packages (plus
 their runtime dependencies), with no other Python packages in the Python
 interpreter's scope.
 
-To create a Python 3.9 session with `numpy` and `toolz` available, run:
+To create a Python 3.11 session with `numpy` and `toolz` available, run:
 
 ```sh
-$ nix-shell -p 'python39.withPackages(ps: with ps; [ numpy toolz ])'
+$ nix-shell -p 'python311.withPackages(ps: with ps; [ numpy toolz ])'
 ```
 
 By default `nix-shell` will start a `bash` session with this interpreter in our
@@ -81,8 +81,7 @@ By default `nix-shell` will start a `bash` session with this interpreter in our
 
 ```Python console
 [nix-shell:~/src/nixpkgs]$ python3
-Python 3.9.12 (main, Mar 23 2022, 21:36:19)
-[GCC 11.3.0] on linux
+Python 3.11.3 (main, Apr  4 2023, 22:36:41) [GCC 12.2.0] on linux
 Type "help", "copyright", "credits" or "license" for more information.
 >>> import numpy; import toolz
 ```
@@ -102,16 +101,12 @@ will still get 1 wrapped Python interpreter. We can start the interpreter
 directly like so:
 
 ```sh
-$ nix-shell -p "python39.withPackages (ps: with ps; [ numpy toolz requests ])" --run python3
+$ nix-shell -p "python311.withPackages (ps: with ps; [ numpy toolz requests ])" --run python3
 this derivation will be built:
-  /nix/store/mpn7k6bkjl41fm51342rafaqfsl10qs4-python3-3.9.12-env.drv
-this path will be fetched (0.09 MiB download, 0.41 MiB unpacked):
-  /nix/store/5gaiacnzi096b6prc6aa1pwrhncmhc8b-python3.9-toolz-0.11.2
-copying path '/nix/store/5gaiacnzi096b6prc6aa1pwrhncmhc8b-python3.9-toolz-0.11.2' from 'https://cache.nixos.org'...
-building '/nix/store/mpn7k6bkjl41fm51342rafaqfsl10qs4-python3-3.9.12-env.drv'...
-created 279 symlinks in user environment
-Python 3.9.12 (main, Mar 23 2022, 21:36:19)
-[GCC 11.3.0] on linux
+  /nix/store/r19yf5qgfiakqlhkgjahbg3zg79549n4-python3-3.11.2-env.drv
+building '/nix/store/r19yf5qgfiakqlhkgjahbg3zg79549n4-python3-3.11.2-env.drv'...
+created 273 symlinks in user environment
+Python 3.11.2 (main, Feb  7 2023, 13:52:42) [GCC 12.2.0] on linux
 Type "help", "copyright", "credits" or "license" for more information.
 >>> import requests
 >>>
@@ -150,7 +145,7 @@ Executing this script requires a `python3` that has `numpy`. Using what we learn
 in the previous section, we could startup a shell and just run it like so:
 
 ```ShellSession
-$ nix-shell -p 'python39.withPackages(ps: with ps; [ numpy ])' --run 'python3 foo.py'
+$ nix-shell -p 'python311.withPackages (ps: with ps; [ numpy ])' --run 'python3 foo.py'
 The dot product of [1 2] and [3 4] is: 11
 ```
 
@@ -190,17 +185,17 @@ can make it fully reproducible by pinning the `nixpkgs` import:
 
 ```python
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p "python3.withPackages(ps: [ ps.numpy ])"
-#!nix-shell -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/d373d80b1207d52621961b16aa4a3438e4f98167.tar.gz
+#!nix-shell -i python3 -p "python3.withPackages (ps: [ ps.numpy ])"
+#!nix-shell -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/e51209796c4262bfb8908e3d6d72302fe4e96f5f.tar.gz
 import numpy as np
 a = np.array([1,2])
 b = np.array([3,4])
 print(f"The dot product of {a} and {b} is: {np.dot(a, b)}")
 ```
 
-This will execute with the exact same versions of Python 3.8, numpy, and system
+This will execute with the exact same versions of Python 3.10, numpy, and system
 dependencies a year from now as it does today, because it will always use
-exactly git commit `d373d80b1207d52621961b16aa4a3438e4f98167` of Nixpkgs for all
+exactly git commit `e51209796c4262bfb8908e3d6d72302fe4e96f5f` of Nixpkgs for all
 of the package versions.
 
 This is also a great way to ensure the script executes identically on different
@@ -213,12 +208,15 @@ create a single script with Python dependencies, but in the course of normal
 development we're usually working in an entire package repository.
 
 As explained in the Nix manual, `nix-shell` can also load an expression from a
-`.nix` file. Say we want to have Python 3.9, `numpy` and `toolz`, like before,
+`.nix` file. Say we want to have Python 3.11, `numpy` and `toolz`, like before,
 in an environment. We can add a `shell.nix` file describing our dependencies:
 
 ```nix
 with import <nixpkgs> {};
-(python39.withPackages (ps: [ps.numpy ps.toolz])).env
+(python311.withPackages (ps: with ps; [
+  numpy
+  toolz
+])).env
 ```
 
 And then at the command line, just typing `nix-shell` produces the same
@@ -232,7 +230,7 @@ What's happening here?
    imports the `<nixpkgs>` function, `{}` calls it and the `with` statement
    brings all attributes of `nixpkgs` in the local scope. These attributes form
    the main package set.
-2. Then we create a Python 3.9 environment with the `withPackages` function, as before.
+2. Then we create a Python 3.11 environment with the `withPackages` function, as before.
 3. The `withPackages` function expects us to provide a function as an argument
    that takes the set of all Python packages and returns a list of packages to
    include in the environment. Here, we select the packages `numpy` and `toolz`
@@ -243,7 +241,7 @@ To combine this with `mkShell` you can:
 ```nix
 with import <nixpkgs> {};
 let
-  pythonEnv = python39.withPackages (ps: [
+  pythonEnv = python311.withPackages (ps: [
     ps.numpy
     ps.toolz
   ]);
@@ -327,7 +325,7 @@ on NixOS.
 { # ...
 
   environment.systemPackages = with pkgs; [
-    (python38.withPackages(ps: with ps; [ numpy toolz ]))
+    (python310.withPackages(ps: with ps; [ numpy toolz ]))
   ];
 }
 ```
@@ -348,20 +346,32 @@ building Python libraries is `buildPythonPackage`. Let's see how we can build th
 `toolz` package.
 
 ```nix
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+}:
 
 buildPythonPackage rec {
   pname = "toolz";
   version = "0.10.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
   };
 
+  # has no tests
   doCheck = false;
 
+  pythonImportsCheck = [
+    "toolz.itertoolz"
+    "toolz.functoolz"
+    "toolz.dicttoolz"
+  ];
+
   meta = with lib; {
+    changelog = "https://github.com/pytoolz/toolz/releases/tag/${version}";
     homepage = "https://github.com/pytoolz/toolz";
     description = "List processing tools and functional utilities";
     license = licenses.bsd3;
@@ -376,13 +386,14 @@ arguments is the name of the package, which consists of a basename (generally
 following the name on PyPi) and a version. Another argument, `src` specifies the
 source, which in this case is fetched from PyPI using the helper function
 `fetchPypi`. The argument `doCheck` is used to set whether tests should be run
-when building the package. Furthermore, we specify some (optional) meta
+when building the package. Since there are no tests, we rely on `pythonImportsCheck`
+to test whether the package can be imported. Furthermore, we specify some meta
 information. The output of the function is a derivation.
 
 An expression for `toolz` can be found in the Nixpkgs repository. As explained
 in the introduction of this Python section, a derivation of `toolz` is available
-for each interpreter version, e.g. `python39.pkgs.toolz` refers to the `toolz`
-derivation corresponding to the CPython 3.9 interpreter.
+for each interpreter version, e.g. `python311.pkgs.toolz` refers to the `toolz`
+derivation corresponding to the CPython 3.11 interpreter.
 
 The above example works when you're directly working on
 `pkgs/top-level/python-packages.nix` in the Nixpkgs repository. Often though,
@@ -395,29 +406,35 @@ and adds it along with a `numpy` package to a Python environment.
 with import <nixpkgs> {};
 
 ( let
-    my_toolz = python39.pkgs.buildPythonPackage rec {
+    my_toolz = python311.pkgs.buildPythonPackage rec {
       pname = "toolz";
       version = "0.10.0";
+      format = "setuptools";
 
-      src = python39.pkgs.fetchPypi {
+      src = fetchPypi {
         inherit pname version;
         hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
       };
 
+      # has no tests
       doCheck = false;
 
       meta = {
         homepage = "https://github.com/pytoolz/toolz/";
         description = "List processing tools and functional utilities";
+        # [...]
       };
     };
 
-  in python38.withPackages (ps: [ps.numpy my_toolz])
+  in python311.withPackages (ps: with ps; [
+    numpy
+    my_toolz
+  ])
 ).env
 ```
 
 Executing `nix-shell` will result in an environment in which you can use
-Python 3.9 and the `toolz` package. As you can see we had to explicitly mention
+Python 3.11 and the `toolz` package. As you can see we had to explicitly mention
 for which Python version we want to build a package.
 
 So, what did we do here? Well, we took the Nix expression that we used earlier
@@ -442,21 +459,39 @@ The following example shows which arguments are given to `buildPythonPackage` in
 order to build [`datashape`](https://github.com/blaze/datashape).
 
 ```nix
-{ lib, buildPythonPackage, fetchPypi, numpy, multipledispatch, python-dateutil, pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+
+# dependencies
+, numpy, multipledispatch, python-dateutil
+
+# tests
+, pytest
+}:
 
 buildPythonPackage rec {
   pname = "datashape";
   version = "0.4.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-FLLvdm1MllKrgTGC6Gb0k0deZeVYvtCCLji/B7uhong=";
   };
 
-  nativeCheckInputs = [ pytest ];
-  propagatedBuildInputs = [ numpy multipledispatch python-dateutil ];
+  propagatedBuildInputs = [
+    multipledispatch
+    numpy
+    python-dateutil
+  ];
+
+  nativeCheckInputs = [
+    pytest
+  ];
 
   meta = with lib; {
+    changelog = "https://github.com/blaze/datashape/releases/tag/${version}";
     homepage = "https://github.com/ContinuumIO/datashape";
     description = "A data description language";
     license = licenses.bsd2;
@@ -466,9 +501,9 @@ buildPythonPackage rec {
 ```
 
 We can see several runtime dependencies, `numpy`, `multipledispatch`, and
-`python-dateutil`. Furthermore, we have one `nativeCheckInputs`, i.e. `pytest`. `pytest` is a
-test runner and is only used during the `checkPhase` and is therefore not added
-to `propagatedBuildInputs`.
+`python-dateutil`. Furthermore, we have `nativeCheckInputs` with `pytest`.
+`pytest` is a test runner and is only used during the `checkPhase` and is
+therefore not added to `propagatedBuildInputs`.
 
 In the previous case we had only dependencies on other Python packages to consider.
 Occasionally you have also system libraries to consider. E.g., `lxml` provides
@@ -476,20 +511,29 @@ Python bindings to `libxml2` and `libxslt`. These libraries are only required
 when building the bindings and are therefore added as `buildInputs`.
 
 ```nix
-{ lib, pkgs, buildPythonPackage, fetchPypi }:
+{ lib
+, pkgs
+, buildPythonPackage
+, fetchPypi
+}:
 
 buildPythonPackage rec {
   pname = "lxml";
   version = "3.4.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-s9NiusRxFydHzaNRMjjxFcvWxfi45jGb9ql6eJJyQJk=";
   };
 
-  buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
+  buildInputs = [
+    pkgs.libxml2
+    pkgs.libxslt
+  ];
 
   meta = with lib; {
+    changelog = "https://github.com/lxml/lxml/releases/tag/lxml-${version}";
     description = "Pythonic binding for the libxml2 and libxslt libraries";
     homepage = "https://lxml.de";
     license = licenses.bsd3;
@@ -509,30 +553,47 @@ The bindings don't expect to find each of them in a different folder, and
 therefore we have to set `LDFLAGS` and `CFLAGS`.
 
 ```nix
-{ lib, pkgs, buildPythonPackage, fetchPypi, numpy, scipy }:
+{ lib
+, pkgs
+, buildPythonPackage
+, fetchPypi
+
+# dependencies
+, numpy
+, scipy
+}:
 
 buildPythonPackage rec {
   pname = "pyFFTW";
   version = "0.9.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-9ru2r6kwhUCaskiFoaPNuJCfCVoUL01J40byvRt4kHQ=";
   };
 
-  buildInputs = [ pkgs.fftw pkgs.fftwFloat pkgs.fftwLongDouble];
+  buildInputs = [
+    pkgs.fftw
+    pkgs.fftwFloat
+    pkgs.fftwLongDouble
+  ];
 
-  propagatedBuildInputs = [ numpy scipy ];
-
-  # Tests cannot import pyfftw. pyfftw works fine though.
-  doCheck = false;
+  propagatedBuildInputs = [
+    numpy
+    scipy
+  ];
 
   preConfigure = ''
     export LDFLAGS="-L${pkgs.fftw.dev}/lib -L${pkgs.fftwFloat.out}/lib -L${pkgs.fftwLongDouble.out}/lib"
     export CFLAGS="-I${pkgs.fftw.dev}/include -I${pkgs.fftwFloat.dev}/include -I${pkgs.fftwLongDouble.dev}/include"
   '';
 
+  # Tests cannot import pyfftw. pyfftw works fine though.
+  doCheck = false;
+
   meta = with lib; {
+    changelog = "https://github.com/pyFFTW/pyFFTW/releases/tag/v${version}";
     description = "A pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
     homepage = "http://hgomersall.github.com/pyFFTW";
     license = with licenses; [ bsd2 bsd3 ];
@@ -590,7 +651,7 @@ To filter tests using pytest, one can do the following:
   checkPhase = ''
     runHook preCheck
 
-    pytest tests/ --ignore=tests/integration -k 'not download and not update'
+    pytest tests/ --ignore=tests/integration -k 'not download and not update' --ignore=tests/test_failing.py
 
     runHook postCheck
   '';
@@ -618,10 +679,15 @@ when a package may need many items disabled to run the test suite.
 Using the example above, the analogous `pytestCheckHook` usage would be:
 
 ```
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   # requires additional data
-  pytestFlagsArray = [ "tests/" "--ignore=tests/integration" ];
+  pytestFlagsArray = [
+    "tests/"
+    "--ignore=tests/integration"
+  ];
 
   disabledTests = [
     # touches network
@@ -663,7 +729,10 @@ To help ensure the package still works, `pythonImportsCheck` can attempt to impo
 the listed modules.
 
 ```
-  pythonImportsCheck = [ "requests" "urllib" ];
+  pythonImportsCheck = [
+    "requests"
+    "urllib"
+  ];
 ```
 
 roughly translates to:
@@ -704,9 +773,16 @@ pkg3>=1.0,<=2.0
 we can do:
 
 ```
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-  pythonRelaxDeps = [ "pkg1" "pkg3" ];
-  pythonRemoveDeps = [ "pkg2" ];
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+  pythonRelaxDeps = [
+    "pkg1"
+    "pkg3"
+  ];
+  pythonRemoveDeps = [
+    "pkg2"
+  ];
 ```
 
 which would result in the following `requirements.txt` file:
@@ -749,9 +825,13 @@ with the exception of `other` (see `format` in
 `unittestCheckHook` is a hook which will substitute the setuptools `test` command for a `checkPhase` which runs `python -m unittest discover`:
 
 ```
-  nativeCheckInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [
+    unittestCheckHook
+  ];
 
-  unittestFlagsArray = [ "-s" "tests" "-v" ];
+  unittestFlagsArray = [
+    "-s" "tests" "-v"
+  ];
 ```
 
 #### Using sphinxHook {#using-sphinxhook}
@@ -816,7 +896,7 @@ If we create a `shell.nix` file which calls `buildPythonPackage`, and if `src`
 is a local source, and if the local source has a `setup.py`, then development
 mode is activated.
 
-In the following example, we create a simple environment that has a Python 3.9
+In the following example, we create a simple environment that has a Python 3.11
 version of our package in it, as well as its dependencies and other packages we
 like to have in the environment, all specified with `propagatedBuildInputs`.
 Indeed, we can just add any package we like to have in our environment to
@@ -824,12 +904,16 @@ Indeed, we can just add any package we like to have in our environment to
 
 ```nix
 with import <nixpkgs> {};
-with python39Packages;
+with python311Packages;
 
 buildPythonPackage rec {
   name = "mypackage";
   src = ./path/to/package/source;
-  propagatedBuildInputs = [ pytest numpy pkgs.libsndfile ];
+  propagatedBuildInputs = [
+    pytest
+    numpy
+    pkgs.libsndfile
+  ];
 }
 ```
 
@@ -857,11 +941,14 @@ Let's split the package definition from the environment definition.
 We first create a function that builds `toolz` in `~/path/to/toolz/release.nix`
 
 ```nix
-{ lib, buildPythonPackage }:
+{ lib
+, buildPythonPackage
+}:
 
 buildPythonPackage rec {
   pname = "toolz";
   version = "0.10.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -869,6 +956,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
+    changelog = "https://github.com/pytoolz/toolz/releases/tag/${version}";
     homepage = "https://github.com/pytoolz/toolz/";
     description = "List processing tools and functional utilities";
     license = licenses.bsd3;
@@ -885,9 +973,13 @@ with import <nixpkgs> {};
 
 ( let
     toolz = callPackage /path/to/toolz/release.nix {
-      buildPythonPackage = python38Packages.buildPythonPackage;
+      buildPythonPackage = python310
+Packages.buildPythonPackage;
     };
-  in python38.withPackages (ps: [ ps.numpy toolz ])
+  in python310.withPackages (ps: [
+    ps.numpy
+    toolz
+  ])
 ).env
 ```
 
@@ -895,17 +987,17 @@ Important to remember is that the Python version for which the package is made
 depends on the `python` derivation that is passed to `buildPythonPackage`. Nix
 tries to automatically pass arguments when possible, which is why generally you
 don't explicitly define which `python` derivation should be used. In the above
-example we use `buildPythonPackage` that is part of the set `python38Packages`,
-and in this case the `python38` interpreter is automatically used.
+example we use `buildPythonPackage` that is part of the set `python3Packages`,
+and in this case the `python3` interpreter is automatically used.
 
 ## Reference {#reference}
 
 ### Interpreters {#interpreters}
 
-Versions 2.7, 3.7, 3.8, 3.9 and 3.10 of the CPython interpreter are available
-as respectively `python27`, `python37`, `python38`, `python39` and `python310`.
+Versions 2.7, 3.8, 3.9, 3.10 and 3.11 of the CPython interpreter are available
+as respectively `python27`, python38`, `python39`, `python310` and `python311`.
 The aliases `python2` and `python3` correspond to respectively `python27` and
-`python39`. The attribute `python` maps to `python2`. The PyPy interpreters
+`python310`. The attribute `python` maps to `python2`. The PyPy interpreters
 compatible with Python 2.7 and 3 are available as `pypy27` and `pypy3`, with
 aliases `pypy2` mapping to `pypy27` and `pypy` mapping to `pypy2`. The Nix
 expressions for the interpreters can be found in
@@ -928,7 +1020,7 @@ Each interpreter has the following attributes:
 - `buildEnv`. Function to build python interpreter environments with extra packages bundled together. See section *python.buildEnv function* for usage and documentation.
 - `withPackages`. Simpler interface to `buildEnv`. See section *python.withPackages function* for usage and documentation.
 - `sitePackages`. Alias for `lib/${libPrefix}/site-packages`.
-- `executable`. Name of the interpreter executable, e.g. `python3.8`.
+- `executable`. Name of the interpreter executable, e.g. `python3.10`.
 - `pkgs`. Set of Python packages for that specific interpreter. The package set can be modified by overriding the interpreter and passing `packageOverrides`.
 
 ### Optimizations {#optimizations}
@@ -968,7 +1060,7 @@ attribute set is created for each available Python interpreter. The available
 sets are
 
 * `pkgs.python27Packages`
-* `pkgs.python37Packages`
+* `pkgs.python3Packages`
 * `pkgs.python38Packages`
 * `pkgs.python39Packages`
 * `pkgs.python310Packages`
@@ -978,7 +1070,7 @@ sets are
 and the aliases
 
 * `pkgs.python2Packages` pointing to `pkgs.python27Packages`
-* `pkgs.python3Packages` pointing to `pkgs.python39Packages`
+* `pkgs.python3Packages` pointing to `pkgs.python310Packages`
 * `pkgs.pythonPackages` pointing to `pkgs.python2Packages`
 
 #### `buildPythonPackage` function {#buildpythonpackage-function}
@@ -990,11 +1082,28 @@ using setup hooks.
 The following is an example:
 
 ```nix
-{ lib, buildPythonPackage, fetchPypi, hypothesis, setuptools-scm, attrs, py, setuptools, six, pluggy }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+
+# build-system
+, setuptools-scm
+
+# dependencies
+, attrs
+, pluggy
+, py
+, setuptools
+, six
+
+# tests
+, hypothesis
+ }:
 
 buildPythonPackage rec {
   pname = "pytest";
   version = "3.3.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -1006,13 +1115,28 @@ buildPythonPackage rec {
     rm testing/test_argcomplete.py
   '';
 
-  nativeCheckInputs = [ hypothesis ];
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ attrs py setuptools six pluggy ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    attrs
+    py
+    setuptools
+    six
+    pluggy
+  ];
+
+  nativeCheckInputs = [
+    hypothesis
+  ];
 
   meta = with lib; {
-    maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
+    changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
     description = "Framework for writing tests";
+    homepage = "https://github.com/pytest-dev/pytest";
+    license = licenses.mit;
+    maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
   };
 }
 ```
@@ -1105,7 +1229,7 @@ with import <nixpkgs> {};
     packageOverrides = self: super: {
       pandas = super.pandas.overridePythonAttrs(old: rec {
         version = "0.19.1";
-        src =  super.fetchPypi {
+        src =  fetchPypi {
           pname = "pandas";
           inherit version;
           hash = "sha256-JQn+rtpy/OA2deLszSKEuxyttqBzcAil50H+JDHUdCE=";
@@ -1114,7 +1238,7 @@ with import <nixpkgs> {};
     };
   in pkgs.python3.override {inherit packageOverrides; self = python;};
 
-in python.withPackages(ps: [ps.blaze])).env
+in python.withPackages(ps: [ ps.blaze ])).env
 ```
 
 #### Optional extra dependencies {#python-optional-dependencies}
@@ -1160,18 +1284,25 @@ called with `callPackage` and passed `python` or `pythonPackages` (possibly
 specifying an interpreter version), like this:
 
 ```nix
-{ lib, python3 }:
+{ lib
+, python3
+, fetchPypi
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "luigi";
   version = "2.7.9";
+  format = "setuptools";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash  = "sha256-Pe229rT0aHwA98s+nTHQMEFKZPo/yw6sot8MivFDvAw=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [ tornado python-daemon ];
+  propagatedBuildInputs = with python3.pkgs; [
+    tornado
+    python-daemon
+  ];
 
   meta = with lib; {
     ...
@@ -1253,7 +1384,10 @@ running `nix-shell` with the following `shell.nix`
 with import <nixpkgs> {};
 
 (python3.buildEnv.override {
-  extraLibs = with python3Packages; [ numpy requests ];
+  extraLibs = with python3Packages; [
+    numpy
+    requests
+  ];
 }).env
 ```
 
@@ -1279,7 +1413,7 @@ example for the Pyramid Web Framework environment can be written like this:
 ```nix
 with import <nixpkgs> {};
 
-python.withPackages (ps: [ps.pyramid])
+python.withPackages (ps: [ ps.pyramid ])
 ```
 
 `withPackages` passes the correct package set for the specific interpreter
@@ -1289,7 +1423,7 @@ version as an argument to the function. In the above example, `ps` equals
 ```nix
 with import <nixpkgs> {};
 
-python3.withPackages (ps: [ps.pyramid])
+python3.withPackages (ps: [ ps.pyramid ])
 ```
 
 Now, `ps` is set to `python3Packages`, matching the version of the interpreter.
@@ -1301,7 +1435,10 @@ thus be also written like this:
 ```nix
 with import <nixpkgs> {};
 
-(python38.withPackages (ps: [ps.numpy ps.requests])).env
+(python3.withPackages (ps: with ps; [
+  numpy
+  requests
+])).env
 ```
 
 In contrast to `python.buildEnv`, `python.withPackages` does not support the
@@ -1393,7 +1530,7 @@ has security implications and is relevant for those using Python in a
 
 When the environment variable `DETERMINISTIC_BUILD` is set, all bytecode will
 have timestamp 1. The `buildPythonPackage` function sets `DETERMINISTIC_BUILD=1`
-and [PYTHONHASHSEED=0](https://docs.python.org/3.8/using/cmdline.html#envvar-PYTHONHASHSEED).
+and [PYTHONHASHSEED=0](https://docs.python.org/3.11/using/cmdline.html#envvar-PYTHONHASHSEED).
 Both are also exported in `nix-shell`.
 
 ### Automatic tests {#automatic-tests}
@@ -1408,22 +1545,27 @@ example of such a situation is when `py.test` is used.
 #### Common issues {#common-issues}
 
 * Non-working tests can often be deselected. By default `buildPythonPackage`
-  runs `python setup.py test`. Most Python modules follows the standard test
-  protocol where the pytest runner can be used instead. `py.test` supports a
-  `-k` parameter to ignore test methods or classes:
+  runs `python setup.py test`. which is deprecated. Most Python modules however
+  do follow the standard test protocol where the pytest runner can be used
+  instead. `pytest` supports the `-k` and `--ignore` parameters to ignore test
+  methods or classes as well as whole files. For `pytestCheckHook` these are
+  conveniently exposed as `disabledTests` and `disabledTestPaths` respectively.
 
   ```nix
   buildPythonPackage {
     # ...
-    # assumes the tests are located in tests
-    nativeCheckInputs = [ pytest ];
-    checkPhase = ''
-      runHook preCheck
+    nativeCheckInputs = [
+      pytestCheckHook
+    ];
 
-      py.test -k 'not function_name and not other_function' tests
+    disabledTests = [
+      "function_name"
+      "other_function"
+    ];
 
-      runHook postCheck
-    '';
+    disabledTestPaths = [
+      "this/file.py"
+    ];
   }
   ```
 
@@ -1451,9 +1593,13 @@ with import <nixpkgs> {};
     packageOverrides = self: super: {
       pandas = super.pandas.overridePythonAttrs(old: {name="foo";});
     };
-  in pkgs.python38.override {inherit packageOverrides;};
+  in pkgs.python310.override {
+    inherit packageOverrides;
+  };
 
-in python.withPackages(ps: [ps.pandas])).env
+in python.withPackages (ps: [
+  ps.pandas
+])).env
 ```
 
 Using `nix-build` on this expression will build an environment that contains the
@@ -1473,7 +1619,11 @@ with import <nixpkgs> {};
     packageOverrides = self: super: {
       scipy = super.scipy_0_17;
     };
-  in (pkgs.python38.override {inherit packageOverrides;}).withPackages (ps: [ps.blaze])
+  in (pkgs.python310.override {
+    inherit packageOverrides;
+  }).withPackages (ps: [
+    ps.blaze
+  ])
 ).env
 ```
 
@@ -1487,11 +1637,11 @@ If you want the whole of Nixpkgs to use your modifications, then you can use
 let
   pkgs = import <nixpkgs> {};
   newpkgs = import pkgs.path { overlays = [ (self: super: {
-    python38 = let
+    python310 = let
       packageOverrides = python-self: python-super: {
         numpy = python-super.numpy_1_18;
       };
-    in super.python38.override {inherit packageOverrides;};
+    in super.python310.override {inherit packageOverrides;};
   } ) ]; };
 in newpkgs.inkscape
 ```

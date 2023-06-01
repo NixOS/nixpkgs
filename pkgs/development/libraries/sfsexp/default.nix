@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sfsexp";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "mjsottile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-TCAxofSRbyIdwowhHhPn483UA+QOHkLMz0P2LIi0ncA=";
+    sha256 = "sha256-uAk/8Emf23J0D3D5+eUEpWLY2fIvdQ7a80eGe9i1WQ8=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

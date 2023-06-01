@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     libgudev
   ];
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform valgrind;
 
   mesonFlags = [
     "-Dtests=${if doCheck then "enabled" else "disabled"}"

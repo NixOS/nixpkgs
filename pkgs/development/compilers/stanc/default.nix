@@ -5,7 +5,7 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "stanc";
-  version = "2.32.1";
+  version = "2.32.2";
 
   minimalOCamlVersion = "4.12";
   duneVersion = "3";

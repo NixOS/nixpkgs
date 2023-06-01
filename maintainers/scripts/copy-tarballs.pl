@@ -162,12 +162,17 @@ elsif (defined $expr) {
     # Check every fetchurl call discovered by find-tarballs.nix.
     my $mirrored = 0;
     my $have = 0;
-    foreach my $fetch (sort { $a->{url} cmp $b->{url} } @{$fetches}) {
-        my $url = $fetch->{url};
+    foreach my $fetch (sort { $a->{urls}->[0] cmp $b->{urls}->[0] } @{$fetches}) {
+        my $urls = $fetch->{urls};
         my $algo = $fetch->{type};
         my $hash = $fetch->{hash};
         my $name = $fetch->{name};
         my $isPatch = $fetch->{isPatch};
+
+        if ($isPatch) {
+            print STDERR "skipping $urls->[0] (support for patches is missing)\n";
+            next;
+        }
 
         if ($hash =~ /^([a-z0-9]+)-([A-Za-z0-9+\/=]+)$/) {
             $algo = $1;
@@ -183,62 +188,60 @@ elsif (defined $expr) {
             chomp $hash;
         }
 
-        if (defined $ENV{DEBUG}) {
-            print "$url $algo $hash\n";
-            next;
-        }
-
-        if ($url !~ /^http:/ && $url !~ /^https:/ && $url !~ /^ftp:/ && $url !~ /^mirror:/) {
-            print STDERR "skipping $url (unsupported scheme)\n";
-            next;
-        }
-
-        if ($isPatch) {
-            print STDERR "skipping $url (support for patches is missing)\n";
-            next;
-        }
-
-        next if defined $exclude && $url =~ /$exclude/;
-
-        if (alreadyMirrored($algo, $hash)) {
-            $have++;
-            next;
-        }
-
         my $storePath = makeFixedOutputPath(0, $algo, $hash, $name);
 
-        print STDERR "mirroring $url ($storePath, $algo, $hash)...\n";
+        for my $url (@$urls) {
+            if (defined $ENV{DEBUG}) {
+                print "$url $algo $hash\n";
+                next;
+            }
 
-        if ($dryRun) {
+            if ($url !~ /^http:/ && $url !~ /^https:/ && $url !~ /^ftp:/ && $url !~ /^mirror:/) {
+                print STDERR "skipping $url (unsupported scheme)\n";
+                next;
+            }
+
+            next if defined $exclude && $url =~ /$exclude/;
+
+            if (alreadyMirrored($algo, $hash)) {
+                $have++;
+                last;
+            }
+
+            print STDERR "mirroring $url ($storePath, $algo, $hash)...\n";
+
+            if ($dryRun) {
+                $mirrored++;
+                last;
+            }
+
+            # Substitute the output.
+            if (!isValidPath($storePath)) {
+                system("nix-store", "-r", $storePath);
+            }
+
+            # Otherwise download the file using nix-prefetch-url.
+            if (!isValidPath($storePath)) {
+                $ENV{QUIET} = 1;
+                $ENV{PRINT_PATH} = 1;
+                my $fh;
+                my $pid = open($fh, "-|", "nix-prefetch-url", "--type", $algo, $url, $hash) or die;
+                waitpid($pid, 0) or die;
+                if ($? != 0) {
+                    print STDERR "failed to fetch $url: $?\n";
+                    next;
+                }
+                <$fh>; my $storePath2 = <$fh>; chomp $storePath2;
+                if ($storePath ne $storePath2) {
+                    warn "strange: $storePath != $storePath2\n";
+                    next;
+                }
+            }
+
+            uploadFile($storePath, $url);
             $mirrored++;
-            next;
+            last;
         }
-
-        # Substitute the output.
-        if (!isValidPath($storePath)) {
-            system("nix-store", "-r", $storePath);
-        }
-
-        # Otherwise download the file using nix-prefetch-url.
-        if (!isValidPath($storePath)) {
-            $ENV{QUIET} = 1;
-            $ENV{PRINT_PATH} = 1;
-            my $fh;
-            my $pid = open($fh, "-|", "nix-prefetch-url", "--type", $algo, $url, $hash) or die;
-            waitpid($pid, 0) or die;
-            if ($? != 0) {
-                print STDERR "failed to fetch $url: $?\n";
-                next;
-            }
-            <$fh>; my $storePath2 = <$fh>; chomp $storePath2;
-            if ($storePath ne $storePath2) {
-                warn "strange: $storePath != $storePath2\n";
-                next;
-            }
-        }
-
-        uploadFile($storePath, $url);
-        $mirrored++;
     }
 
     print STDERR "mirrored $mirrored files, already have $have files\n";

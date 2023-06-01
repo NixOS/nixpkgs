@@ -164,6 +164,26 @@ tests.fetchgit = testers.invalidateFetcherByDrvHash fetchgit {
 };
 ```
 
+## `runNixOSTest` {#tester-runNixOSTest}
+
+A helper function that behaves exactly like the NixOS `runTest`, except it also assigns this Nixpkgs package set as the `pkgs` of the test and makes the `nixpkgs.*` options read-only.
+
+If your test is part of the Nixpkgs repository, or if you need a more general entrypoint, see ["Calling a test" in the NixOS manual](https://nixos.org/manual/nixos/stable/index.html#sec-calling-nixos-tests).
+
+Example:
+
+```nix
+pkgs.testers.runNixOSTest ({ lib, ... }: {
+  name = "hello";
+  nodes.machine = { pkgs, ... }: {
+    environment.systemPackages = [ pkgs.hello ];
+  };
+  testScript = ''
+    machine.succeed("hello")
+  '';
+})
+```
+
 ## `nixosTest` {#tester-nixosTest}
 
 Run a NixOS VM network test using this evaluation of Nixpkgs.

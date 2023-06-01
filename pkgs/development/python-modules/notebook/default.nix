@@ -39,10 +39,22 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook glibcLocales ];
 
   propagatedBuildInputs = [
-    jinja2 tornado ipython_genutils traitlets jupyter-core send2trash
-    jupyter-client nbformat nbclassic
-    nbconvert ipykernel terminado requests pexpect
-    prometheus-client argon2-cffi
+    jinja2
+    tornado
+    ipython_genutils
+    traitlets
+    jupyter-core
+    send2trash
+    jupyter-client
+    nbformat
+    nbclassic
+    nbconvert
+    ipykernel
+    terminado
+    requests
+    pexpect
+    prometheus-client
+    argon2-cffi
   ];
 
   postPatch = ''
@@ -82,5 +94,6 @@ buildPythonPackage rec {
     homepage = "https://jupyter.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
+    mainProgram = "jupyter-notebook";
   };
 }

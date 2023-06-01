@@ -94,7 +94,7 @@ in
                 address = mkOption {
                   type = types.str;
                   description = mdDoc ''
-                    Wireguard address of this peer (a single IP address, multliple
+                    Wireguard address of this peer (a single IP address, multiple
                     addresses or address ranges are not supported).
                   '';
                   example = "10.0.0.42";

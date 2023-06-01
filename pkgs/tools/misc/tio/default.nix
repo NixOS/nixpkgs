@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-7mVLfzguQ7eNIFTJMLJyoM+/pveGO88j2JUEOqvnqvk=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config inih bash-completion ];
+  strictDeps = true;
+
+  buildInputs = [ inih ];
+
+  nativeBuildInputs = [ meson ninja pkg-config bash-completion ];
 
   meta = with lib; {
     description = "Serial console TTY";

@@ -8,10 +8,10 @@
 }:
 mkDerivation {
   pname = "cabal2nix";
-  version = "unstable-2023-04-11";
+  version = "unstable-2023-05-05";
   src = fetchzip {
-    url = "https://github.com/NixOS/cabal2nix/archive/010ff5c3b75d976d0f3a25b7caa0bc5bf2fdae9f.tar.gz";
-    sha256 = "1n38kmavdv6s1czqbiq6f6nagpv27s8xg0g0rvyh4l0x2my8wj4y";
+    url = "https://github.com/NixOS/cabal2nix/archive/078350047d358bb450d634d775493aba89b21212.tar.gz";
+    sha256 = "0rsdn2zyw0zr6pi3dg6cm3i310alppigdsv20iqpx0dzykkicywj";
   };
   postUnpack = "sourceRoot+=/cabal2nix; echo source root reset to $sourceRoot";
   isLibrary = true;

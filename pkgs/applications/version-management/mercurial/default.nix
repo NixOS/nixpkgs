@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchpatch, python3Packages, makeWrapper, gettext, installShellFiles
 , re2Support ? true
-, rustSupport ? stdenv.hostPlatform.isLinux, rustPlatform
+, rustSupport ? stdenv.hostPlatform.isLinux, cargo, rustPlatform, rustc
 , fullBuild ? false
 , gitSupport ? fullBuild
 , guiSupport ? fullBuild, tk
@@ -44,11 +44,11 @@ let
       ++ lib.optional gitSupport pygit2
       ++ lib.optional highlightSupport pygments;
     nativeBuildInputs = [ makeWrapper gettext installShellFiles ]
-      ++ lib.optionals rustSupport (with rustPlatform; [
-           cargoSetupHook
-           rust.cargo
-           rust.rustc
-         ]);
+      ++ lib.optionals rustSupport [
+           rustPlatform.cargoSetupHook
+           cargo
+           rustc
+         ];
     buildInputs = [ docutils ]
       ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
 

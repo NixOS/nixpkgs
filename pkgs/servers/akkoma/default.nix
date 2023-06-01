@@ -31,9 +31,6 @@ beamPackages.mixRelease rec {
     mix phx.digest --no-deps-check
   '';
 
-  # cf. https://github.com/whitfin/cachex/issues/205
-  stripDebug = false;
-
   mixNixDeps = import ./mix.nix {
     inherit beamPackages lib;
     overrides = (final: prev: {

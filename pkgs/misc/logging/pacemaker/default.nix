@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pacemaker";
-  version = "2.1.5";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
     owner = "ClusterLabs";
     repo = pname;
     rev = "Pacemaker-${version}";
-    sha256 = "sha256-vsHWNKCrHJIgXlJYyZZEUfuIUBnaejPrPCM1HrYOTKQ=";
+    sha256 = "sha256-3+eRQ3NqPusdFhKc0wE7UMMNKsDLRVvh+EhD6zYGoP0=";
   };
 
   nativeBuildInputs = [

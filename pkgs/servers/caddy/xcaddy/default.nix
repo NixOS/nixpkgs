@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "xcaddy";
-  version = "0.3.3";
+  version = "0.3.4";
 
   subPackages = [ "cmd/xcaddy" ];
 
@@ -10,7 +10,7 @@ buildGoModule rec {
     owner = "caddyserver";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-HDyHvHa8yCz59AifHxQ0LAuC/xPXQInuUYURx7bL3oE=";
+    hash = "sha256-CJzh1/rX9JjIiSyBReCt/lxUBQnXxY8NjRnSSqna9p4=";
   };
 
   patches = [
@@ -30,6 +30,6 @@ buildGoModule rec {
     homepage = "https://github.com/caddyserver/xcaddy";
     description = "Build Caddy with plugins";
     license = licenses.asl20;
-    maintainers = with maintainers; [ tjni indeednotjames ];
+    maintainers = with maintainers; [ tjni emilylange ];
   };
 }

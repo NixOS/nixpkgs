@@ -1,23 +1,30 @@
-{ lib, fetchFromSourcehut, rustPlatform }:
+{ lib, fetchFromSourcehut, rustPlatform, makeWrapper, withPulseaudio ? false, pulseaudio }:
 
 rustPlatform.buildRustPackage rec {
   pname = "swayrbar";
-  version = "0.3.5";
+  version = "0.3.6";
 
   src = fetchFromSourcehut {
     owner = "~tsdh";
     repo = "swayr";
     rev = "swayrbar-${version}";
-    sha256 = "sha256-uYQGwccSwqHJ1w8CyxXimmENnGx7e3EMA1MKZuZDTIk=";
+    sha256 = "sha256-Vv+Hw+iJAi2GnfkiYitDyH3H58tydUDa6GcWITok7Oc=";
   };
 
-  cargoHash = "sha256-PdPaUqJUycUhleaND6XwKkRvwO0MHbvw5lzz95bdfCQ=";
+  cargoHash = "sha256-5alzkHzwuymo6bXFgabYQ3LWJDib0+ESQCSIPmINViY=";
 
   # don't build swayr
   buildAndTestSubdir = pname;
 
+  nativeBuildInputs = [ makeWrapper ];
+
   preCheck = ''
     export HOME=$TMPDIR
+  '';
+
+  postInstall = lib.optionals withPulseaudio ''
+    wrapProgram "$out/bin/swayrbar" \
+      --prefix PATH : "$out/bin:${lib.makeBinPath [ pulseaudio ]}"
   '';
 
   meta = with lib; {
