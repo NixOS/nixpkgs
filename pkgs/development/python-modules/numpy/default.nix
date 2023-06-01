@@ -1,6 +1,5 @@
 { lib
 , fetchPypi
-, fetchpatch
 , python
 , buildPythonPackage
 , gfortran
