@@ -21,7 +21,7 @@ tcl.mkTclDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/${src.owner}/${src.repo}";
+    homepage = "https://github.com/mpcjanssen/tcl-fcgi";
     description = "Tcl interface for the FastCGI protocol";
     license = licenses.bsd2;
     platforms = tclx.meta.platforms;
