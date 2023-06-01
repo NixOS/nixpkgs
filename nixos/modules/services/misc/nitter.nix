@@ -165,14 +165,14 @@ in
         enableDebug = mkEnableOption (lib.mdDoc "request logs and debug endpoints");
 
         proxy = mkOption {
-          type = types.nullOr types.str;
-          default = null;
+          type = types.str;
+          default = "";
           description = lib.mdDoc "URL to a HTTP/HTTPS proxy.";
         };
 
         proxyAuth = mkOption {
-          type = types.nullOr types.str;
-          default = null;
+          type = types.str;
+          default = "";
           description = lib.mdDoc "Credentials for proxy.";
         };
 
