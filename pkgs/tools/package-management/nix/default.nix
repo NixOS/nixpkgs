@@ -187,6 +187,23 @@ in lib.makeExtensible (self: {
     hash = "sha256-KjcQkI2HgbP7KOlHxb2DvyHISQXo2OExvvjqTyK7P0o=";
   };
 
+  # The minimum Nix version supported by Nixpkgs
+  # Note that some functionality *might* have been backported into this Nix version,
+  # making this package an inaccurate representation of what features are available
+  # in the actual lowest minver.nix *patch* version.
+  minimum =
+    let
+      minver = import ../../../../lib/minver.nix;
+      major = lib.versions.major minver;
+      minor = lib.versions.minor minver;
+      attribute = "nix_${major}_${minor}";
+      nix = self.${attribute};
+    in
+    if ! self ? ${attribute} then
+      throw "The minimum supported Nix version is ${minver} (declared in lib/minver.nix), but pkgs.nixVersions.${attribute} does not exist."
+    else
+      nix;
+
   stable = self.nix_2_13;
 
   unstable = self.nix_2_16;
