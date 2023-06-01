@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , python3Packages
 , ffmpeg
 , makeWrapper
@@ -53,6 +54,11 @@ stdenv.mkDerivation rec {
     # We can't update the package at runtime with NixOS, so this patch makes
     # the !update command mention that
     ./no-runtime-update.patch
+
+    # Fix passing of invalid "git" version into version.parse, which results
+    # in an InvalidVersion exception. The upstream fix is insufficient, so
+    # we carry the correct patch downstream for now.
+    ./catch-invalid-versions.patch
   ];
 
   postPatch = ''
@@ -60,7 +66,8 @@ stdenv.mkDerivation rec {
     # configuration.default.ini, which is in the installation directory
     # after all. So we need to counter-patch it here so it can find it absolutely
     substituteInPlace mumbleBot.py \
-      --replace "configuration.default.ini" "$out/share/botamusique/configuration.default.ini"
+      --replace "configuration.default.ini" "$out/share/botamusique/configuration.default.ini" \
+      --replace "version = 'git'" "version = '${version}'"
   '';
 
   NODE_OPTIONS = "--openssl-legacy-provider";
