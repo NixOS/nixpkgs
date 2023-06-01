@@ -28,16 +28,16 @@ lib.simpleOptions {
   # Basic cases
 
   options.ATT.attrsOf     = lib.types.str;
-  options.ATT.default     = {};
+  options.ATT.default     = { test = "ATT"; };
   options.ATT.description = "attrset of strings";
   options.ATT.example     = {};
 
-  options.LST.default     = [];
+  options.LST.default     = [ "LST" ];
   options.LST.description = "list of string";
   options.LST.example     = [];
   options.LST.listOf      = lib.types.str;
 
-  options.TYP.default     = "";
+  options.TYP.default     = "TYP";
   options.TYP.description = "string option example";
   options.TYP.example     = "some string";
   options.TYP.type        = lib.types.str;
@@ -110,17 +110,17 @@ lib.simpleOptions {
   options.OPT.example     = {};
   options.OPT.description = "options holder";
 
-  options.OPT.options.OPT-TYP.default     = "";
+  options.OPT.options.OPT-TYP.default     = "OPT-TYP";
   options.OPT.options.OPT-TYP.description = "second level str";
   options.OPT.options.OPT-TYP.type        = lib.types.str;
   options.OPT.options.OPT-TYP.example     = "some string";
 
-  options.OPT.options.OPT-ATT.default     = {};
+  options.OPT.options.OPT-ATT.default     = { test = "OPT-ATT"; };
   options.OPT.options.OPT-ATT.description = "second level attrset of strings";
   options.OPT.options.OPT-ATT.attrsOf     = lib.types.str;
   options.OPT.options.OPT-ATT.example     = {};
 
-  options.OPT.options.OPT-LST.default     = [];
+  options.OPT.options.OPT-LST.default     = [ "OPT-LST" ];
   options.OPT.options.OPT-LST.description = "second level list of strings";
   options.OPT.options.OPT-LST.listOf      = lib.types.str;
   options.OPT.options.OPT-LST.example     = [];
@@ -129,12 +129,12 @@ lib.simpleOptions {
   options.OPT.options.OPT-OPT.example     = {};
   options.OPT.options.OPT-OPT.description = "second level options holder";
 
-  options.OPT.options.OPT-OPT.options.OPT-OPT-TYP.default     = "";
+  options.OPT.options.OPT-OPT.options.OPT-OPT-TYP.default     = "OPT-OPT-TYP";
   options.OPT.options.OPT-OPT.options.OPT-OPT-TYP.description = "third level str";
   options.OPT.options.OPT-OPT.options.OPT-OPT-TYP.type        = lib.types.str;
   options.OPT.options.OPT-OPT.options.OPT-OPT-TYP.example     = "some string";
 
-  options.OPT.options.OPT-OPT.options.OPT-OPT-ATT.default     = {};
+  options.OPT.options.OPT-OPT.options.OPT-OPT-ATT.default     =  { test = "OPT-OPT-ATT"; };
   options.OPT.options.OPT-OPT.options.OPT-OPT-ATT.description = "Third level hasmap of strings str";
   options.OPT.options.OPT-OPT.options.OPT-OPT-ATT.attrsOf     = lib.types.str;
   options.OPT.options.OPT-OPT.options.OPT-OPT-ATT.example     = {};
