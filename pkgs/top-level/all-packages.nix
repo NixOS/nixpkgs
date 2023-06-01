@@ -1705,8 +1705,14 @@ with pkgs;
 
   shell-genie = callPackage  ../applications/misc/shell-genie { };
 
+<<<<<<< HEAD
   subtitlr = callPackage  ../applications/audio/subtitlr { };
 
+||||||| parent of 4c1fb21f84a (snagboot: init at 1.0)
+=======
+  snagboot = python3.pkgs.callPackage  ../applications/misc/snagboot { };
+
+>>>>>>> 4c1fb21f84a (snagboot: init at 1.0)
   simple-dlna-browser = callPackage ../tools/networking/simple-dlna-browser { };
 
   sorted-grep = callPackage ../tools/text/sorted-grep { };
@@ -16631,6 +16637,8 @@ with pkgs;
 
   shmig = callPackage ../development/tools/database/shmig { };
 
+  sleek = callPackage ../development/tools/database/sleek { };
+
   smlfmt = callPackage ../development/tools/smlfmt { };
 
   # smlnjBootstrap should be redundant, now that smlnj works on Darwin natively
@@ -18877,6 +18885,8 @@ with pkgs;
       then llvmPackages_12.libcxxStdenv
       else llvmPackages.stdenv;
   };
+
+  moon = callPackage ../development/tools/build-managers/moon/default.nix { };
 
   msgpack-tools = callPackage ../development/tools/msgpack-tools { };
 
