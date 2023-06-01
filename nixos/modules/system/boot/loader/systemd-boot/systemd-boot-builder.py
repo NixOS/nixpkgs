@@ -254,34 +254,28 @@ def main() -> None:
 
         subprocess.check_call(["@systemd@/bin/bootctl", "--esp-path=@efiSysMountPoint@"] + bootctl_flags + ["install"])
     else:
+        is_installed = subprocess.check_output(["@systemd@/bin/bootctl", "--esp-path=@efiSysMountPoint@", "is-installed"])
+
+        if is_installed != "yes":
+            raise Exception("boot loader is not installed so can not update. Try setting NIXOS_INSTALL_BOOTLOADER=1")
+
         # Update bootloader to latest if needed
         available_out = subprocess.check_output(["@systemd@/bin/bootctl", "--version"], universal_newlines=True).split()[2]
-        installed_out = subprocess.check_output(["@systemd@/bin/bootctl", "--esp-path=@efiSysMountPoint@", "status"], universal_newlines=True)
-
-        # See status_binaries() in systemd bootctl.c for code which generates this
-        installed_match = re.search(r"^\W+File:.*/EFI/(?:BOOT|systemd)/.*\.efi \(systemd-boot ([\d.]+[^)]*)\)$",
-                      installed_out, re.IGNORECASE | re.MULTILINE)
 
         available_match = re.search(r"^\((.*)\)$", available_out)
-
-        if installed_match is None:
-            raise Exception("could not find any previously installed systemd-boot")
 
         if available_match is None:
             raise Exception("could not determine systemd-boot version")
 
-        installed_version = version.parse(installed_match.group(1))
         available_version = version.parse(available_match.group(1))
 
         # systemd 252 has a regression that leaves some machines unbootable, so we skip that update.
         # The fix is in 252.2
         # See https://github.com/systemd/systemd/issues/25363 and https://github.com/NixOS/nixpkgs/pull/201558#issuecomment-1348603263
-        if installed_version < available_version:
-            if version.parse('252') <= available_version < version.parse('252.2'):
-                print("skipping systemd-boot update to %s because of known regression" % available_version)
-            else:
-                print("updating systemd-boot from %s to %s" % (installed_version, available_version))
-                subprocess.check_call(["@systemd@/bin/bootctl", "--esp-path=@efiSysMountPoint@"] + bootctl_flags + ["update"])
+        if version.parse('252') <= available_version < version.parse('252.2'):
+            print("skipping systemd-boot update to %s because of known regression" % available_version)
+        else:
+            subprocess.check_call(["@systemd@/bin/bootctl", "--esp-path=@efiSysMountPoint@", "--graceful"] + bootctl_flags + ["update"])
 
     mkdir_p("@efiSysMountPoint@/efi/nixos")
     mkdir_p("@efiSysMountPoint@/loader/entries")
