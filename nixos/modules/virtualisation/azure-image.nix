@@ -2,7 +2,7 @@
 
 with lib;
 let
-  cfg = config.virtualisation.azureImage;
+  cfg = config.virtualisation.azure.image;
 in
 {
   imports = [
@@ -11,7 +11,7 @@ in
   ];
 
   options = {
-    virtualisation.azureImage.diskSize = mkOption {
+    virtualisation.azure.image.diskSize = mkOption {
       type = with types; either (enum [ "auto" ]) int;
       default = "auto";
       example = 2048;
