@@ -1699,6 +1699,8 @@ with pkgs;
 
   sdlookup = callPackage ../tools/security/sdlookup { };
 
+  sdkmanager = with python3Packages; toPythonApplication sdkmanager;
+
   sgrep = callPackage ../tools/text/sgrep { };
 
   shell-genie = callPackage  ../applications/misc/shell-genie { };
