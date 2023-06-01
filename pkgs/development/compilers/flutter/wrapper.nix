@@ -2,7 +2,9 @@
 , stdenv
 , callPackage
 , flutter
-, supportsLinuxDesktop ? stdenv.isLinux
+, supportsLinuxDesktop ? stdenv.hostPlatform.isLinux
+, supportsAndroid ? stdenv.hostPlatform.isx86_64
+, includedEngineArtifacts ? null
 , extraPkgConfigPackages ? [ ]
 , extraLibraries ? [ ]
 , extraIncludes ? [ ]
@@ -33,11 +35,27 @@
 }:
 
 let
+  flutterWithArtifacts = flutter.override {
+    includedEngineArtifacts = if includedEngineArtifacts != null then includedEngineArtifacts else {
+      common = [
+        "flutter_patched_sdk"
+        "flutter_patched_sdk_product"
+      ];
+      platform = {
+        android = lib.optionalAttrs supportsAndroid
+          ((lib.genAttrs [ "arm" "arm64" "x64" ] (architecture: [ "profile" "release" ])) // { x86 = [ "jit-release" ]; });
+        linux = lib.optionalAttrs supportsLinuxDesktop
+          (lib.genAttrs ((lib.optional stdenv.hostPlatform.isx86_64 "x64") ++ (lib.optional stdenv.hostPlatform.isAarch64 "arm64"))
+            (architecture: [ "debug" "profile" "release" ]));
+      };
+    };
+  };
+
   # By default, Flutter stores downloaded files (such as the Pub cache) in the SDK directory.
   # Wrap it to ensure that it does not do that, preferring home directories instead.
   immutableFlutter = writeShellScript "flutter_immutable" ''
     export PUB_CACHE=''${PUB_CACHE:-"$HOME/.pub-cache"}
-    ${flutter}/bin/flutter "$@"
+    ${flutterWithArtifacts}/bin/flutter "$@"
   '';
 
   # Tools that the Flutter tool depends on.
@@ -87,12 +105,12 @@ in
 {
   nativeBuildInputs = [ makeWrapper ];
 
-  passthru = flutter.passthru // {
-    inherit (flutter) version;
-    unwrapped = flutter;
+  passthru = flutterWithArtifacts.passthru // {
+    inherit (flutterWithArtifacts) version;
+    unwrapped = flutterWithArtifacts;
   };
 
-  inherit (flutter) meta;
+  inherit (flutterWithArtifacts) meta;
 } ''
   for path in ${builtins.concatStringsSep " " (builtins.foldl' (paths: pkg: paths ++ (map (directory: "'${pkg}/${directory}/pkgconfig'") ["lib" "share"])) [ ] pkgConfigPackages)}; do
     addToSearchPath FLUTTER_PKG_CONFIG_PATH "$path"
