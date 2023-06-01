@@ -1,12 +1,24 @@
 { lib
+, asn1crypto
+, buildPythonPackage
+, dnspython
+, dsinternals
 , fetchFromGitHub
-, python3
+, impacket
+, ldap3
+, pyasn1
+, pycryptodome
+, pyopenssl
+, pythonOlder
+, requests_ntlm
 }:
 
-python3.pkgs.buildPythonApplication rec {
-  pname = "certipy";
+buildPythonPackage rec {
+  pname = "certipy-ad";
   version = "4.4.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ly4k";
@@ -21,11 +33,12 @@ python3.pkgs.buildPythonApplication rec {
       --replace "pyasn1==0.4.8" "pyasn1"
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     asn1crypto
     dnspython
     dsinternals
     impacket
+    pyopenssl
     ldap3
     pyasn1
     pycryptodome
@@ -40,7 +53,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = "Tool to enumerate and abuse misconfigurations in Active Directory Certificate Services";
+    description = "Library and CLI tool to enumerate and abuse misconfigurations in Active Directory Certificate Services";
     homepage = "https://github.com/ly4k/Certipy";
     changelog = "https://github.com/ly4k/Certipy/releases/tag/${version}";
     license = with licenses; [ mit ];
