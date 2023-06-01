@@ -2639,6 +2639,27 @@ let
         };
       };
 
+      RoweWilsonFrederiskHolme.wikitext = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "wikitext";
+          publisher = "RoweWilsonFrederiskHolme";
+          version = "3.8.0";
+          sha256 = "30540a85163e797028eec9bc3db1866bbf473e98615bf6ade6d1d672017ebe52";
+        };
+        meta = {
+          description = "Extension that helps users view and write MediaWiki's Wikitext files";
+          longDescription = ''
+            With this extension, you can more easily discover your grammatical problems
+            through the marked and styled text. The plugin is based on MediaWiki's
+            Wikitext standard, but the rules are somewhat stricter, which helps users
+            write text that is easier to read and maintain.
+          '';
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=RoweWilsonFrederiskHolme.wikitext";
+          homepage = "https://github.com/Frederisk/Wikitext-VSCode-Extension";
+          license = lib.licenses.mit;
+        };
+      };
+
       rubbersheep.gi = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "gi";
