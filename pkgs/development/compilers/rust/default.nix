@@ -68,14 +68,17 @@ in
         patches = rustcPatches;
 
         # Use boot package set to break cycle
-        rustPlatform = bootRustPlatform;
+        inherit (bootstrapRustPackages) cargo rustc;
       } // lib.optionalAttrs (stdenv.cc.isClang && stdenv.hostPlatform == stdenv.buildPlatform) {
         stdenv = llvmBootstrapForDarwin.stdenv;
         pkgsBuildBuild = pkgsBuildBuild // { targetPackages.stdenv = llvmBootstrapForDarwin.stdenv; };
         pkgsBuildHost = pkgsBuildBuild // { targetPackages.stdenv = llvmBootstrapForDarwin.stdenv; };
         pkgsBuildTarget = pkgsBuildTarget // { targetPackages.stdenv = llvmBootstrapForDarwin.stdenv; };
       });
-      rustfmt = self.callPackage ./rustfmt.nix { inherit Security; };
+      rustfmt = self.callPackage ./rustfmt.nix {
+        inherit Security;
+        inherit (self.buildRustPackages) rustc;
+      };
       cargo = self.callPackage ./cargo.nix {
         # Use boot package set to break cycle
         rustPlatform = bootRustPlatform;
@@ -83,7 +86,7 @@ in
       };
       cargo-auditable = self.callPackage ./cargo-auditable.nix { };
       cargo-auditable-cargo-wrapper = self.callPackage ./cargo-auditable-cargo-wrapper.nix { };
-      clippy = callPackage ./clippy.nix {
+      clippy = self.callPackage ./clippy.nix {
         # We want to use self, not buildRustPackages, so that
         # buildPackages.clippy uses the cross compiler and supports
         # linting for the target platform.

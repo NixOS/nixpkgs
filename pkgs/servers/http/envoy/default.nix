@@ -80,8 +80,8 @@ buildBazelPackage rec {
 
   fetchAttrs = {
     sha256 = {
-      x86_64-linux = "sha256-jx8RavJKlBtZQtZf4GrUkOlhM6qI4LO5lK3HRgn1vzE=";
-      aarch64-linux = "sha256-toEPrGVh61sHsVbhsideMmnX8uXIN+2x8LuZpczTEdw=";
+      x86_64-linux = "sha256-mw3k2r4heoAcBdcc7uYdnotUBrF1nM5Vmqbay+2DkjI=";
+      aarch64-linux = "sha256-2gSxzm7SXvrGEgwZnp5KdEpbV/+zdosf8Z5lrkK3QiI=";
     }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;

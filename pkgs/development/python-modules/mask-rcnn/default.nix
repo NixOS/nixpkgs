@@ -11,7 +11,7 @@
 , numpy
 , opencv3
 , pillow
-, scikitimage
+, scikit-image
 , scipy
 , tensorflow
 }:
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     numpy
     opencv3
     pillow
-    scikitimage
+    scikit-image
     scipy
     tensorflow
   ];

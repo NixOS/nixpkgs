@@ -23,7 +23,7 @@ let
 
   # function for creating a working environment from a set of TL packages
   combine = import ./combine.nix {
-    inherit bin combinePkgs buildEnv lib makeWrapper writeText
+    inherit bin combinePkgs buildEnv lib makeWrapper writeText runCommand
       stdenv python3 ruby perl gnused gnugrep coreutils libfaketime makeFontsConf;
     ghostscript = ghostscript_headless;
   };
@@ -39,9 +39,8 @@ let
     overridden = orig // {
       # overrides of texlive.tlpdb
 
-      texlive-msg-translations = orig.texlive-msg-translations // {
-        hasRunfiles = false; # only *.po for tlmgr
-      };
+      # only *.po for tlmgr
+      texlive-msg-translations = builtins.removeAttrs orig.texlive-msg-translations [ "hasTlpkg" ];
 
       xdvi = orig.xdvi // { # it seems to need it to transform fonts
         deps = (orig.xdvi.deps or []) ++  [ "metafont" ];
@@ -82,8 +81,6 @@ let
     }; # overrides
 
     in lib.mapAttrs mkTLPkg overridden;
-    # TODO: texlive.infra for web2c config?
-
 
   # create a TeX package: an attribute set { pkgs = [ ... ]; ... } where pkgs is a list of derivations
   mkTLPkg = pname: attrs:
@@ -91,12 +88,12 @@ let
       version = attrs.version or (toString attrs.revision);
       mkPkgV = tlType: let
         pkg = attrs // {
-          sha512 = attrs.sha512.${tlType};
+          sha512 = attrs.sha512.${if tlType == "tlpkg" then "run" else tlType};
           inherit pname tlType version;
         };
         in mkPkg pkg;
     in {
-      # TL pkg contains lists of packages: runtime files, docs, sources, binaries
+      # TL pkg contains lists of packages: runtime files, docs, sources, tlpkg, binaries
       pkgs =
         # tarball of a collection/scheme itself only contains a tlobj file
         [( if (attrs.hasRunfiles or false) then mkPkgV "run"
@@ -111,6 +108,7 @@ let
         )]
         ++ lib.optional (attrs.sha512 ? doc) (mkPkgV "doc")
         ++ lib.optional (attrs.sha512 ? source) (mkPkgV "source")
+        ++ lib.optional (attrs.hasTlpkg or false) (mkPkgV "tlpkg")
         ++ lib.optional (bin ? ${pname})
             ( bin.${pname} // { tlType = "bin"; } );
     };
@@ -161,8 +159,8 @@ let
   mkPkg = { pname, tlType, revision, version, sha512, postUnpack ? "", stripPrefix ? 1, ... }@args:
     let
       # the basename used by upstream (without ".tar.xz" suffix)
-      urlName = pname + lib.optionalString (tlType != "run") ".${tlType}";
-      tlName = urlName + "-${version}";
+      urlName = pname + lib.optionalString (tlType != "run" && tlType != "tlpkg") ".${tlType}";
+      tlName = urlName + lib.optionalString (tlType == "tlpkg") ".tlpkg" + "-${version}";
       fixedHash = fixedHashes.${tlName} or null; # be graceful about missing hashes
 
       urls = args.urls or (if args ? url then [ args.url ] else
@@ -171,7 +169,7 @@ let
     in runCommand "texlive-${tlName}"
       ( {
           src = fetchurl { inherit urls sha512; };
-          inherit stripPrefix;
+          inherit stripPrefix tlType;
           # metadata for texlive.combine
           passthru = {
             inherit pname tlType version;
@@ -180,6 +178,8 @@ let
           } // lib.optionalAttrs (tlType == "run") {
             hasFormats = args.hasFormats or false;
             hasHyphens = args.hasHyphens or false;
+          } // lib.optionalAttrs (tlType == "tlpkg" && args ? postactionScript) {
+            postactionScript = args.postactionScript;
           };
         } // lib.optionalAttrs (fixedHash != null) {
           outputHash = fixedHash;
@@ -189,9 +189,16 @@ let
       )
       ( ''
           mkdir "$out"
-          tar -xf "$src" \
-          --strip-components="$stripPrefix" \
-          -C "$out" --anchored --exclude=tlpkg --keep-old-files
+          if [[ "$tlType"  == "tlpkg" ]]; then
+            tar -xf "$src" \
+              --strip-components=1 \
+              -C "$out" --anchored --exclude=tlpkg/tlpobj --exclude=tlpkg/installer --exclude=tlpkg/gpg --keep-old-files \
+              tlpkg
+          else
+            tar -xf "$src" \
+              --strip-components="$stripPrefix" \
+              -C "$out" --anchored --exclude=tlpkg --keep-old-files
+          fi
         '' + postUnpack
       );
 

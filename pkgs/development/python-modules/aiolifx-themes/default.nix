@@ -1,12 +1,12 @@
 { lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
 , aiolifx
+, async-timeout
+, buildPythonPackage
+, fetchFromGitHub
 , poetry-core
 , pytest-asyncio
 , pytestCheckHook
-, async-timeout
+, pythonOlder
 , typer
 }:
 
@@ -29,6 +29,11 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace " --cov=aiolifx_themes --cov-report=term-missing:skip-covered" "" \
       --replace "typer = " "# unused: typer = "
+  '';
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'aiolifx = "^0.8.6"' 'aiolifx = "*"'
   '';
 
   nativeBuildInputs = [

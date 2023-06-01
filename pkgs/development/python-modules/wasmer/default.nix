@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , rustPlatform
+, rustc
 , callPackage
 , fetchFromGitHub
 , buildPythonPackage
@@ -93,7 +94,7 @@ rec {
     pname = "wasmer-compiler-llvm";
     buildAndTestSubdir = "packages/compiler-llvm";
     cargoHash = "sha256-xawbf5gXXV+7I2F2fDSaMvjtFvGDBtqX7wL3c28TSbA=";
-    extraNativeBuildInputs = [ rustPlatform.rust.rustc.llvm ];
+    extraNativeBuildInputs = [ rustc.llvm ];
     extraBuildInputs = [ libffi libxml2.out ncurses zlib ];
   };
 

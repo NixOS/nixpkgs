@@ -486,6 +486,16 @@ in with passthru; stdenv.mkDerivation {
     # bytecode compilations for the same reason - we don't want bytecode generated.
     mkdir -p $out/share/gdb
     sed '/^#!/d' Tools/gdb/libpython.py > $out/share/gdb/libpython.py
+
+    # Disable system-wide pip installation. See https://peps.python.org/pep-0668/.
+    cat <<'EXTERNALLY_MANAGED' > $out/lib/${libPrefix}/EXTERNALLY-MANAGED
+    [externally-managed]
+    Error=This command has been disabled as it tries to modify the immutable
+     `/nix/store` filesystem.
+
+     To use Python with Nix and nixpkgs, have a look at the online documentation:
+     <https://nixos.org/manual/nixpkgs/stable/#python>.
+    EXTERNALLY_MANAGED
   '';
 
   preFixup = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''

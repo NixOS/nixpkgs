@@ -43,5 +43,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ mit bsd3 ];
     maintainers = [ maintainers.virusdave ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin" ];
+    mainProgram = "ucm";
   };
 }

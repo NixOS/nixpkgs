@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , alsa-lib
 , appstream-glib
+, cargo
 , cmake
 , desktop-file-utils
 , glib
@@ -16,6 +17,7 @@
 , poppler
 , python3
 , rustPlatform
+, rustc
 , shared-mime-info
 , wrapGAppsHook4
 , AudioUnit
@@ -51,8 +53,8 @@ stdenv.mkDerivation rec {
     python3 # For the postinstall script
     rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.cargo
-    rustPlatform.rust.rustc
+    cargo
+    rustc
     shared-mime-info # For update-mime-database
     wrapGAppsHook4
   ];

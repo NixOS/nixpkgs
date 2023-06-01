@@ -35,14 +35,14 @@ let
 
 in rustPlatform.buildRustPackage rec {
   pname = "rav1e";
-  version = "0.6.4";
+  version = "0.6.6";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-G7o82MAZmMOfs1wp3AVUgXxDW6Txuc0qTm5boRpXF6g=";
+    sha256 = "sha256-urYMT1sJUMBj1L/2Hi+hcYbWbi0ScSls0pm9gLj9H3o=";
   };
 
-  cargoHash = "sha256-12bePpI8z35gzCHGKDpaGUVvosQqijP60NCgElHDsyw=";
+  cargoHash = "sha256-qQfEpynhlIEKU1Ptq/jM1Wdtn+BVCZT1lmou2S1GL4I=";
 
   depsBuildBuild = [ pkg-config ];
 

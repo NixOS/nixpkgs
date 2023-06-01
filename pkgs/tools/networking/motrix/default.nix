@@ -4,11 +4,11 @@
 }:
 let
   pname = "motrix";
-  version = "1.8.14";
+  version = "1.8.19";
 
   src = fetchurl {
     url = "https://github.com/agalwood/Motrix/releases/download/v${version}/Motrix-${version}.AppImage";
-    hash = "sha256-h4TZzExl1zThwzlKBtL0u3V1jFjjNM2Cscy4hGir9Ts=";
+    hash = "sha256-oSO+VH3bZcjnXjECqZgOmsvlOONbfgOq50qVLvHdKfo=";
   };
 
   appimageContents = appimageTools.extractType2 {

@@ -48,6 +48,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./debug-info-from-env.patch
+
+    # Backport musl fix
+    (fetchpatch {
+      url = "https://sourceware.org/git/?p=binutils-gdb.git;a=patch;h=2e977d9901393ea1bacbe1896af0929e968bc811";
+      hash = "sha256-/+UYjiOxrszJy1x8xavs63/ptNZ+ISIAQhG+i86VDpA=";
+    })
   ] ++ lib.optionals stdenv.isDarwin [
     ./darwin-target-match.patch
   ];

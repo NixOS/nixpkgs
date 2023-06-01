@@ -7,6 +7,7 @@
 , isodate
 , nest-asyncio
 , pytestCheckHook
+, pythonOlder
 , mock
 , pyhamcrest
 , radish-bdd
@@ -14,14 +15,16 @@
 
 buildPythonPackage rec {
   pname = "gremlinpython";
-  version = "3.6.1";
+  version = "3.6.4";
+  format = "setuptools";
 
-  # pypi tarball doesn't include tests
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "apache";
     repo = "tinkerpop";
-    rev = version;
-    hash = "sha256-FMA9hJdq7gYkDtQO04Bwpjq2Q7nXGuN9wrBD4b9GgwY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-SQ+LcHeHDB1Hd5wXGDJBZmBG4KEZ3NsV4+4X9WgPb9E=";
   };
 
   sourceRoot = "source/gremlin-python/src/main/python";
@@ -30,7 +33,6 @@ buildPythonPackage rec {
     sed -i '/pytest-runner/d' setup.py
 
     substituteInPlace setup.py \
-      --replace 'aiohttp>=3.8.0,<=3.8.1' 'aiohttp' \
       --replace 'importlib-metadata<5.0.0' 'importlib-metadata' \
       --replace "os.getenv('VERSION', '?').replace('-SNAPSHOT', '.dev-%d' % timestamp)" '"${version}"'
   '';

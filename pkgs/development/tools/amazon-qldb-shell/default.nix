@@ -1,9 +1,7 @@
 { stdenv
 , lib
-, clang
 , cmake
 , fetchFromGitHub
-, llvmPackages
 , rustPlatform
 , testers
 , Security
@@ -22,9 +20,8 @@ let
       sha256 = "sha256-aXScqJ1LijMSAy9YkS5QyXtTqxd19lLt3BbyVXlbw8o=";
     };
 
-    nativeBuildInputs = [ clang cmake ];
-    buildInputs = [ llvmPackages.libclang ]
-      ++ lib.optional stdenv.isDarwin Security;
+    nativeBuildInputs = [ cmake rustPlatform.bindgenHook ];
+    buildInputs = lib.optional stdenv.isDarwin Security;
 
     cargoLock = {
       lockFile = ./Cargo.lock;
@@ -32,8 +29,6 @@ let
         "amazon-qldb-driver-0.1.0" = "sha256-az0rANBcryHHnpGWvo15TGGW4KMUULZHaj5msIHts14=";
       };
     };
-
-    LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
     passthru.tests.version = testers.testVersion { inherit package; };
 

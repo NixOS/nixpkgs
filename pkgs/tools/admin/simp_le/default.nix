@@ -1,10 +1,10 @@
-{ lib, python3Packages, bash }:
+{ lib, python3Packages, fetchPypi, bash }:
 
 python3Packages.buildPythonApplication rec {
   pname = "simp_le-client";
   version = "0.17.0";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "0m1jynar4calaffp2zdxr5yy9vnhw2qf2hsfxwzfwf8fqb5h7bjb";
   };

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "miniaudio";
-  version = "1.56";
+  version = "1.58";
 
   disabled = pythonOlder "3.6";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "irmen";
     repo = "pyminiaudio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vNh9BupU6T+Gfa8fdt8r3/vqtTtfVDyrxM9GkFUcDcI=";
+    hash = "sha256-uIjQerxMU4hMCJtpqYPt2kicql3s7jyho9r6/kRHTbk=";
   };
 
   postPatch = ''

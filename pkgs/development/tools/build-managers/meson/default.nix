@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchPypi
 , fetchpatch
 , installShellFiles
 , ninja
@@ -19,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "meson";
   version = "1.1.0";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash = "sha256-2WFsRM1sU2if+PBfxpWKaT8uF8NHKo2vg87lXav/gp8=";
   };
@@ -71,6 +72,13 @@ python3.pkgs.buildPythonApplication rec {
       excludes = [
         "docs/yaml/objects/dep.yaml"
       ];
+    })
+
+    # Fix regression in precomputing CMAKE_SIZEOF_VOID_P
+    # See https://github.com/mesonbuild/meson/pull/11761
+    (fetchpatch {
+      url = "https://github.com/mesonbuild/meson/commit/7c78c2b5a0314078bdabb998ead56925dc8b0fc0.patch";
+      sha256 = "sha256-vSnHhuOIXf/1X+bUkUmGND5b30ES0O8EDArwb4p2/w4=";
     })
   ];
 
@@ -138,7 +146,7 @@ python3.pkgs.buildPythonApplication rec {
       code.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ jtojnar mbe AndersonTorres ];
+    maintainers = with maintainers; [ mbe AndersonTorres ];
     inherit (python3.meta) platforms;
   };
 }

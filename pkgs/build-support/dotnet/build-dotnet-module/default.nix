@@ -261,6 +261,9 @@ stdenvNoCC.mkDerivation (args // {
         cd "$src"
         echo "Restoring project..."
 
+        ${dotnet-sdk}/bin/dotnet tool restore
+        mv $HOME/.nuget/packages/* $tmp/nuget_pkgs || true
+
         for rid in "${lib.concatStringsSep "\" \"" runtimeIds}"; do
             (( ''${#projectFiles[@]} == 0 )) && dotnetRestore "" "$rid"
 

@@ -78,7 +78,7 @@ let
 
       ${config.system.systemBuilderCommands}
 
-      echo -n "$extraDependencies" > $out/extra-dependencies
+      cp "$extraDependenciesPath" "$out/extra-dependencies"
 
       ${optionalString (!config.boot.isContainer && config.boot.bootspec.enable) ''
         ${config.boot.bootspec.writer}
@@ -98,6 +98,7 @@ let
     name = "nixos-system-${config.system.name}-${config.system.nixos.label}";
     preferLocalBuild = true;
     allowSubstitutes = false;
+    passAsFile = [ "extraDependencies" ];
     buildCommand = systemBuilder;
 
     inherit (pkgs) coreutils;
@@ -263,8 +264,23 @@ in
       default = [];
       description = lib.mdDoc ''
         A list of packages that should be included in the system
-        closure but not otherwise made available to users. This is
-        primarily used by the installation tests.
+        closure but generally not visible to users.
+
+        This option has also been used for build-time checks, but the
+        `system.checks` option is more appropriate for that purpose as checks
+        should not leave a trace in the built system configuration.
+      '';
+    };
+
+    system.checks = mkOption {
+      type = types.listOf types.package;
+      default = [];
+      description = lib.mdDoc ''
+        Packages that are added as dependencies of the system's build, usually
+        for the purpose of validating some part of the configuration.
+
+        Unlike `system.extraDependencies`, these store paths do not
+        become part of the built system configuration.
       '';
     };
 
@@ -363,13 +379,24 @@ in
           fi
         '';
 
-    system.systemBuilderArgs = lib.optionalAttrs (config.system.forbiddenDependenciesRegex != "") {
+    system.systemBuilderArgs = {
+      # Not actually used in the builder. `passedChecks` is just here to create
+      # the build dependencies. Checks are similar to build dependencies in the
+      # sense that if they fail, the system build fails. However, checks do not
+      # produce any output of value, so they are not used by the system builder.
+      # In fact, using them runs the risk of accidentally adding unneeded paths
+      # to the system closure, which defeats the purpose of the `system.checks`
+      # option, as opposed to `system.extraDependencies`.
+      passedChecks = concatStringsSep " " config.system.checks;
+    }
+    // lib.optionalAttrs (config.system.forbiddenDependenciesRegex != "") {
       inherit (config.system) forbiddenDependenciesRegex;
       closureInfo = pkgs.closureInfo { rootPaths = [
         # override to avoid  infinite recursion (and to allow using extraDependencies to add forbidden dependencies)
         (config.system.build.toplevel.overrideAttrs (_: { extraDependencies = []; closureInfo = null; }))
       ]; };
     };
+
 
     system.build.toplevel = if config.system.includeBuildDependencies then systemWithBuildDeps else system;
 

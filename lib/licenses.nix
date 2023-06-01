@@ -202,6 +202,12 @@ in mkLicense lset) ({
     fullName = "Business Source License 1.1";
     url = "https://mariadb.com/bsl11";
     free = false;
+    redistributable = true;
+  };
+
+  caossl = {
+    fullName = "Computer Associates Open Source Licence Version 1.0";
+    url = "http://jxplorer.org/licence.html";
   };
 
   cal10 = {
@@ -227,6 +233,12 @@ in mkLicense lset) ({
   cc-by-nc-nd-30 = {
     spdxId = "CC-BY-NC-ND-3.0";
     fullName = "Creative Commons Attribution Non Commercial No Derivative Works 3.0 Unported";
+    free = false;
+  };
+
+  cc-by-nc-nd-40 = {
+    spdxId = "CC-BY-NC-ND-4.0";
+    fullName = "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International";
     free = false;
   };
 
@@ -605,6 +617,12 @@ in mkLicense lset) ({
   lal13 = {
     spdxId = "LAL-1.3";
     fullName = "Licence Art Libre 1.3";
+  };
+
+  lens = {
+    fullName = "Lens Terms of Service Agreement";
+    url = "https://k8slens.dev/licenses/tos";
+    free = false;
   };
 
   lgpl2Only = {

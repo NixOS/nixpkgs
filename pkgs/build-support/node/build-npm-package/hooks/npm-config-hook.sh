@@ -3,10 +3,19 @@
 npmConfigHook() {
     echo "Executing npmConfigHook"
 
+    # Use npm patches in the nodejs package
+    export NIX_NODEJS_BUILDNPMPACKAGE=1
+    export prefetchNpmDeps="@prefetchNpmDeps@"
+
+    if [ -n "${npmRoot-}" ]; then
+      pushd "$npmRoot"
+    fi
+
     echo "Configuring npm"
 
     export HOME="$TMPDIR"
     export npm_config_nodedir="@nodeSrc@"
+    export npm_config_node_gyp="@nodeGyp@"
 
     if [ -z "${npmDeps-}" ]; then
         echo
@@ -93,27 +102,16 @@ npmConfigHook() {
 
     patchShebangs node_modules
 
-    local -r lockfileVersion="$(@jq@ .lockfileVersion package-lock.json)"
-
-    if (( lockfileVersion < 2 )); then
-      # This is required because npm consults a hidden lockfile in node_modules to figure out
-      # what to create bin links for. When using an old lockfile offline, this hidden lockfile
-      # contains insufficent data, making npm silently fail to create links. The hidden lockfile
-      # is bypassed when any file in node_modules is newer than it. Thus, we create a file when
-      # using an old lockfile, so bin links work as expected without having to downgrade Node or npm.
-      touch node_modules/.meow
-    fi
-
-    npm rebuild "${npmRebuildFlags[@]}" "${npmFlags[@]}"
-
-    if (( lockfileVersion < 2 )); then
-      rm node_modules/.meow
-    fi
+    npm rebuild $npmRebuildFlags "${npmRebuildFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}"
 
     patchShebangs node_modules
 
     rm "$CACHE_MAP_PATH"
     unset CACHE_MAP_PATH
+
+    if [ -n "${npmRoot-}" ]; then
+      popd
+    fi
 
     echo "Finished npmConfigHook"
 }

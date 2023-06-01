@@ -1,14 +1,14 @@
 diff --git a/app/index.js b/app/index.js
-index 20ccf43..b251f62 100644
+index ea89608..98f4a90 100644
 --- a/app/index.js
 +++ b/app/index.js
 @@ -1,4 +1,4 @@
 -const { app, ipcMain, desktopCapturer, systemPreferences, powerMonitor } = require('electron');
 +const { app, ipcMain, desktopCapturer, nativeImage, systemPreferences, powerMonitor } = require('electron');
  const path = require('path');
+ const fs = require('fs');
  const { LucidLog } = require('lucid-log');
- const isDev = require('electron-is-dev');
-@@ -93,7 +93,16 @@ if (!gotTheLock) {
+@@ -97,7 +97,16 @@ if (!gotTheLock) {
  	ipcMain.handle('getSystemIdleState', handleGetSystemIdleState);
  	ipcMain.handle('getZoomLevel', handleGetZoomLevel);
  	ipcMain.handle('saveZoomLevel', handleSaveZoomLevel);
@@ -23,6 +23,6 @@ index 20ccf43..b251f62 100644
 +			thumbnail: nativeImage.createEmpty()
 +		}])
 +		: desktopCapturer.getSources(opts));
+ 	ipcMain.handle('getCustomBGList', handleGetCustomBGList);
  	ipcMain.on('play-notification-sound', playNotificationSound);
- }
- 
+ 	ipcMain.on('user-status-changed', userStatusChangedHandler);

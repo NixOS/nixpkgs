@@ -1,6 +1,10 @@
 pkgs: lib: self: super:
 
 ### Deprecated aliases - for backward compatibility
+###
+### !!! NOTE !!!
+### Use `./remove-attr.py [attrname]` in this directory to remove your alias
+### from the `nodePackages` set without regenerating the entire file.
 
 with self;
 
@@ -39,5 +43,6 @@ mapAliases {
   "@google/clasp" = pkgs.google-clasp; # Added 2023-05-07
   "@nestjs/cli" = pkgs.nest-cli; # Added 2023-05-06
   manta = pkgs.node-manta; # Added 2023-05-06
+  thelounge = pkgs.thelounge; # Added 2023-05-22
   triton = pkgs.triton; # Added 2023-05-06
 }

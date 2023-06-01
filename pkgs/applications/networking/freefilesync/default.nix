@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchurl
 , fetchpatch
 , copyDesktopItems
 , pkg-config
@@ -12,20 +12,19 @@
 , libssh2
 , openssl
 , wxGTK32
-, gitUpdater
 , makeDesktopItem
 }:
 
 stdenv.mkDerivation rec {
   pname = "freefilesync";
-  version = "12.2";
+  version = "12.3";
 
-  src = fetchFromGitHub {
-    owner = "hkneptune";
-    repo = "FreeFileSync";
-    rev = "v${version}";
-    hash = "sha256-pCXMpK+NF06vgEgX31wyO24+kPhvPhdTeRk1j84nYd0=";
+  src = fetchurl {
+    url = "https://freefilesync.org/download/FreeFileSync_${version}_Source.zip";
+    hash = "sha256-s6jNWqqriL/ePFCUQvLeNxNjHz+nZevD2x1kkw1gDE8=";
   };
+
+  sourceRoot = ".";
 
   # Patches from Debian
   patches = [
@@ -111,10 +110,6 @@ stdenv.mkDerivation rec {
       categories = [ "Utility" "FileTools" ];
     })
   ];
-
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
 
   meta = with lib; {
     description = "Open Source File Synchronization & Backup Software";

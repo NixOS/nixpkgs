@@ -8,6 +8,7 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools-scm
+, six
 , typecode
 }:
 
@@ -40,6 +41,7 @@ buildPythonPackage rec {
     patch
     extractcode-libarchive
     extractcode-7z
+    six
   ];
 
   nativeCheckInputs = [

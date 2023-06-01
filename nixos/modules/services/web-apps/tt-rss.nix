@@ -534,7 +534,7 @@ let
     services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
       ${poolName} = {
         inherit (cfg) user;
-        phpPackage = pkgs.php80;
+        phpPackage = pkgs.php81;
         settings = mapAttrs (name: mkDefault) {
           "listen.owner" = "nginx";
           "listen.group" = "nginx";

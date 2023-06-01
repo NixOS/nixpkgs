@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "holidays";
-  version = "0.24";
+  version = "0.25";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "dr-prodigy";
     repo = "python-holidays";
     rev = "refs/tags/v.${version}";
-    hash = "sha256-1/rphnbzDlbay+yez/erF+WC+2aqeBEgdcHo2YR+ugc=";
+    hash = "sha256-D6MCLbuNnafWMDyEc/jeyfOs0VVV92AndtNsjyFDgEg=";
   };
 
   propagatedBuildInputs = [

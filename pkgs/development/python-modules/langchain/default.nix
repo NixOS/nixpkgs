@@ -31,6 +31,7 @@
 , azure-core
 , elasticsearch
 , opensearch-py
+, google-search-results
 , faiss
 , spacy
 , nltk
@@ -52,10 +53,17 @@
 , duckduckgo-search
 , lark
 , jq
+, steamship
+, pdfminer-six
+, lxml
+, chardet
+, requests-toolbelt
+, neo4j
   # test dependencies
 , pytest-vcr
 , pytest-asyncio
 , pytest-mock
+, pytest-socket
 , pandas
 , toml
 , freezegun
@@ -66,7 +74,7 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.0.163";
+  version = "0.0.184";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -75,7 +83,7 @@ buildPythonPackage rec {
     owner = "hwchase17";
     repo = "langchain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3oebRLMunzfz+fAS5h+HaabioIPXTJLJc0YAktLx4/U=";
+    hash = "sha256-DIPlOsV+s7KQF70stCE7M2UwfvAqp3LskR0UtuOnuCs=";
   };
 
   postPatch = ''
@@ -125,8 +133,14 @@ buildPythonPackage rec {
     openai = [
       openai
     ];
+    text_helpers = [
+      chardet
+    ];
     cohere = [
       cohere
+    ];
+    docarray = [
+      # docarray
     ];
     embeddings = [
       sentence-transformers
@@ -147,7 +161,7 @@ buildPythonPackage rec {
       manifest-ml
       elasticsearch
       opensearch-py
-      # google-search-results
+      google-search-results
       faiss
       sentence-transformers
       transformers
@@ -185,11 +199,22 @@ buildPythonPackage rec {
       # clickhouse-connect
       azure-cosmos
       # lancedb
+      # langkit
       lark
       pexpect
       # pyvespa
       # O365
       jq
+      # docarray
+      steamship
+      pdfminer-six
+      lxml
+      requests-toolbelt
+      neo4j
+      # openlm
+      # azure-ai-formrecognizer
+      # azure-ai-vision
+      # azure-cognitiveservices-speech
     ];
   };
 
@@ -197,6 +222,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-vcr
     pytest-mock
+    pytest-socket
     pytest-asyncio
     pandas
     toml
@@ -204,15 +230,18 @@ buildPythonPackage rec {
     responses
   ];
 
-  preCheck = ''
+  pytestFlagsArray = [
     # integration_tests have many network, db access and require `OPENAI_API_KEY`, etc.
-    rm -r tests/integration_tests
-  '';
+    "tests/unit_tests"
+  ];
 
   disabledTests = [
     # these tests have db access
     "test_table_info"
     "test_sql_database_run"
+
+    # these tests have network access
+    "test_socket_disabled"
   ];
 
   meta = with lib; {

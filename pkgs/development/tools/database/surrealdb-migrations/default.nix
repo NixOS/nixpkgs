@@ -24,13 +24,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-1+cvOhDeH9vx/8J1RwKLPdkBmqBKFmbNXv3H44pZfj0=";
 
-
-  # nativeBuildInputs = [
-  #   pkg-config
-  #   # needed on top of LIBCLANG_PATH to compile rquickjs
-  #   llvmPackages.clang
-  # ];
-
   buildInputs = [ ]
     ++ lib.optionals stdenv.isDarwin [ Security ];
 

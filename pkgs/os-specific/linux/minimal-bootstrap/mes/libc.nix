@@ -1,17 +1,15 @@
 { lib
-, runCommand
+, kaem
 , ln-boot
 , mes
 , mes-libc
 }:
 let
   pname = "mes-libc";
-  inherit (mes) version;
+  inherit (mes.compiler) version;
 
   sources = (import ./sources.nix).x86.linux.gcc;
   inherit (sources) libtcc1_SOURCES libc_gnu_SOURCES;
-
-  prefix = "${mes}/share/mes-${version}";
 
   # Concatenate all source files into a convenient bundle
   # "gcc" variants of source files (eg. "lib/linux/x86-mes-gcc") can also be
@@ -21,7 +19,8 @@ let
   # the operation in two
   firstLibc = lib.take 100 libc_gnu_SOURCES;
   lastLibc = lib.drop 100 libc_gnu_SOURCES;
-in runCommand "${pname}-${version}" {
+in
+kaem.runCommand "${pname}-${version}" {
   inherit pname version;
 
   nativeBuildInputs = [ ln-boot ];
@@ -32,15 +31,14 @@ in runCommand "${pname}-${version}" {
     description = "The Mes C Library";
     homepage = "https://www.gnu.org/software/mes";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = teams.minimal-bootstrap.members;
     platforms = [ "i686-linux" ];
   };
 } ''
-  cd ${prefix}
+  cd ${mes.srcPrefix}
 
   # mescc compiled libc.a
   mkdir -p ''${out}/lib/x86-mes
-  cp lib/x86-mes/libc.a ''${out}/lib/x86-mes
 
   # libc.c
   catm ''${TMPDIR}/first.c ${lib.concatStringsSep " " firstLibc}
@@ -58,5 +56,5 @@ in runCommand "${pname}-${version}" {
   cp lib/posix/getopt.c ''${out}/lib/libgetopt.c
 
   # Install headers
-  ln -s ${prefix}/include ''${out}/include
+  ln -s ${mes.srcPrefix}/include ''${out}/include
 ''

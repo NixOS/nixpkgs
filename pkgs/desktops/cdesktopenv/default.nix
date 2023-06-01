@@ -3,7 +3,7 @@
 , xorgproto, libX11, bison, ksh, perl, gnum4
 , libXinerama, libXt, libXext, libtirpc, motif, libXft, xbitmaps
 , libjpeg, libXmu, libXdmcp, libXScrnSaver, symlinkJoin, bdftopcf
-, ncompress, mkfontdir, tcl, libXaw, libxcrypt, gcc, glibcLocales
+, ncompress, mkfontdir, tcl-8_5, libXaw, libxcrypt, gcc, glibcLocales
 , autoPatchelfHook, libredirect, makeWrapper, xset, xrdb, fakeroot
 , rpcsvc-proto }:
 
@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     libX11 libXinerama libXt libXext libtirpc motif libXft xbitmaps
-    libjpeg libXmu libXdmcp libXScrnSaver tcl libXaw ksh libxcrypt
+    libjpeg libXmu libXdmcp libXScrnSaver tcl-8_5 libXaw ksh libxcrypt
   ];
   nativeBuildInputs = [
     bison ncompress autoPatchelfHook makeWrapper fakeroot
@@ -59,6 +59,9 @@ in stdenv.mkDerivation rec {
     "BOOTSTRAPCFLAGS=-I${xorgproto}/include/X11"
     "IMAKECPP=cpp"
     "LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive"
+    # Workaround for dtdocbook issue with tcl 8.6.13.
+    # TODO: this might be possible to remove when updating CDE
+    "TCLLIB=-ltcl8.5"
   ];
 
   preConfigure = ''

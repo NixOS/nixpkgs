@@ -1,6 +1,6 @@
 { lib
-, runCommand
 , fetchurl
+, kaem
 , tinycc
 }:
 let
@@ -67,16 +67,16 @@ let
 
   objects = map (x: lib.replaceStrings [".c"] [".o"] (builtins.baseNameOf x)) sources;
 in
-runCommand "${pname}-${version}" {
+kaem.runCommand "${pname}-${version}" {
   inherit pname version;
 
-  nativeBuildInputs = [ tinycc ];
+  nativeBuildInputs = [ tinycc.compiler ];
 
   meta = with lib; {
     description = "GNU Patch, a program to apply differences to files";
     homepage = "https://www.gnu.org/software/patch";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = teams.minimal-bootstrap.members;
     mainProgram = "patch";
     platforms = platforms.unix;
   };
@@ -91,11 +91,11 @@ runCommand "${pname}-${version}" {
   catm config.h
 
   # Build
-  alias CC="tcc ${lib.concatStringsSep " " CFLAGS}"
+  alias CC="tcc -B ${tinycc.libs}/lib ${lib.concatStringsSep " " CFLAGS}"
   ${lib.concatMapStringsSep "\n" (f: "CC -c ${f}") sources}
 
   # Link
-  CC -static -o patch ${lib.concatStringsSep " " objects}
+  CC -o patch ${lib.concatStringsSep " " objects}
 
   # Check
   ./patch --version

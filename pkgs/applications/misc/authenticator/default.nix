@@ -2,11 +2,13 @@
 , stdenv
 , fetchFromGitLab
 , appstream-glib
+, cargo
 , desktop-file-utils
 , meson
 , ninja
 , pkg-config
 , rustPlatform
+, rustc
 , wrapGAppsHook4
 , gdk-pixbuf
 , glib
@@ -45,12 +47,11 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     wrapGAppsHook4
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-    bindgenHook
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+    rustPlatform.bindgenHook
+  ];
 
   buildInputs = [
     gdk-pixbuf

@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , appstream-glib
+, cargo
 , dbus
 , desktop-file-utils
 , glib
@@ -16,6 +17,7 @@
 , ninja
 , pkg-config
 , rustPlatform
+, rustc
 , wrapGAppsHook4
 }:
 
@@ -43,11 +45,10 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     wrapGAppsHook4
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
     dbus

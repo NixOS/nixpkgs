@@ -508,7 +508,7 @@ in {
         type = with lib.types; listOf path;
         default = [];
         description = lib.mdDoc ''
-          Extra environment files to pass to all mastodon services. Useful for passing down environemntal secrets.
+          Extra environment files to pass to all mastodon services. Useful for passing down environmental secrets.
         '';
         example = [ "/etc/mastodon/s3config.env" ];
       };
@@ -588,11 +588,12 @@ in {
         '';
       }
       {
-        assertion = 1 == builtins.length
-          (lib.mapAttrsToList
-            (_: v: builtins.elem "scheduler" v.jobClasses || v.jobClasses == [ ])
-            cfg.sidekiqProcesses);
-        message = "There must be one and only one Sidekiq queue in services.mastodon.sidekiqProcesses with jobClass \"scheduler\".";
+        assertion = 1 ==
+          (lib.count (x: x)
+            (lib.mapAttrsToList
+              (_: v: builtins.elem "scheduler" v.jobClasses || v.jobClasses == [ ])
+              cfg.sidekiqProcesses));
+        message = "There must be exactly one Sidekiq queue in services.mastodon.sidekiqProcesses with jobClass \"scheduler\".";
       }
     ];
 

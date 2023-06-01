@@ -62,5 +62,6 @@ python3.pkgs.buildPythonPackage rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ anthonyroussel ];
+    mainProgram = "gns3";
   };
 }

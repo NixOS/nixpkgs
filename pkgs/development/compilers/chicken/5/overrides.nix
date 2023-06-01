@@ -1,5 +1,6 @@
 { stdenv, pkgs, lib, chickenEggs }:
 let
+  inherit (lib) addMetaAttrs;
   addToBuildInputs = pkg: old: {
     buildInputs = (old.buildInputs or [ ]) ++ lib.toList pkg;
   };
@@ -14,8 +15,8 @@ let
     (addPkgConfig old) // (addToBuildInputs pkg old);
   addToPropagatedBuildInputsWithPkgConfig = pkg: old:
     (addPkgConfig old) // (addToPropagatedBuildInputs pkg old);
-  broken = old: { meta = old.meta // { broken = true; }; };
-  brokenOnDarwin = old: { meta = old.meta // { broken = stdenv.isDarwin; }; };
+  broken = addMetaAttrs { broken = true; };
+  brokenOnDarwin = addMetaAttrs { broken = stdenv.isDarwin; };
 in {
   allegro = addToBuildInputsWithPkgConfig ([ pkgs.allegro5 pkgs.libglvnd ]
     ++ lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.OpenGL ]);
@@ -85,8 +86,8 @@ in {
   zstd = addToBuildInputs pkgs.zstd;
 
   # platform changes
-  pledge = old: { meta = old.meta // { platforms = lib.platforms.openbsd; }; };
-  unveil = old: { meta = old.meta // { platforms = lib.platforms.openbsd; }; };
+  pledge = addMetaAttrs { platforms = lib.platforms.openbsd; };
+  unveil = addMetaAttrs { platforms = lib.platforms.openbsd; };
 
   # mark broken
   "ephem-v1.1" = broken;

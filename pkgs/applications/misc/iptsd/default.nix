@@ -10,20 +10,20 @@
 , fmt
 , hidrd
 , inih
-, microsoft_gsl
+, microsoft-gsl
 , spdlog
 , systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "iptsd";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "linux-surface";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-8RE93pIg5fVAYOOq8zHlWy0uTxep7hrJlowPu48beTs=";
+    hash = "sha256-h2d31/0lT0GykFSjp59Gm+28zm3Z/RzdeGtPs0hGW5o=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     fmt
     hidrd
     inih
-    microsoft_gsl
+    microsoft-gsl
     spdlog
     systemd
   ];

@@ -65,5 +65,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/libfuse/pyfuse3";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ nyanloutre dotlambda ];
+    changelog = "https://github.com/libfuse/pyfuse3/blob/${version}/Changes.rst";
   };
 }

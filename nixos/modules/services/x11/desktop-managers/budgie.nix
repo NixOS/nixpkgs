@@ -45,10 +45,15 @@ in {
       enable = mkEnableOption (mdDoc "the Budgie desktop");
 
       sessionPath = mkOption {
-        description = mdDoc "Additional list of packages to be added to the session search path. Useful for GSettings-conditional autostart.";
-        type = with types; listOf package;
-        example = literalExpression "[ pkgs.budgie.budgie-desktop-view ]";
+        description = lib.mdDoc ''
+          Additional list of packages to be added to the session search path.
+          Useful for GSettings-conditional autostart.
+
+          Note that this should be a last resort; patching the package is preferred (see GPaste).
+        '';
+        type = types.listOf types.package;
         default = [];
+        example = literalExpression "[ pkgs.gnome.gpaste ]";
       };
 
       extraGSettingsOverrides = mkOption {
@@ -59,20 +64,21 @@ in {
 
       extraGSettingsOverridePackages = mkOption {
         description = mdDoc "List of packages for which GSettings are overridden.";
-        type = with types; listOf path;
+        type = types.listOf types.path;
         default = [];
       };
 
       extraPlugins = mkOption {
         description = mdDoc "Extra plugins for the Budgie desktop";
-        type = with types; listOf package;
+        type = types.listOf types.package;
         default = [];
+        example = literalExpression "[ pkgs.budgiePlugins.budgie-analogue-clock-applet ]";
       };
     };
 
     environment.budgie.excludePackages = mkOption {
       description = mdDoc "Which packages Budgie should exclude from the default environment.";
-      type = with types; listOf package;
+      type = types.listOf types.package;
       default = [];
       example = literalExpression "[ pkgs.mate-terminal ]";
     };

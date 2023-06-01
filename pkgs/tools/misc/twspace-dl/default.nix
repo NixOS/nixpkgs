@@ -1,4 +1,4 @@
-{ lib, python3Packages, ffmpeg }:
+{ lib, python3Packages, fetchPypi, ffmpeg }:
 
 python3Packages.buildPythonApplication rec {
   pname = "twspace-dl";
@@ -6,7 +6,7 @@ python3Packages.buildPythonApplication rec {
 
   format = "pyproject";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit version;
     pname = "twspace_dl";
     sha256 = "050e78b4583374351c288114e3b01ab34b0b19ad2d4971d15c5519521cf3f2f4";

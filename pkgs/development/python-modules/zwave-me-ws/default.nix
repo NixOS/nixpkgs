@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "zwave-me-ws";
-  version = "0.4.2";
+  version = "0.4.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "Z-Wave-Me";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Wo67G5jzNDl+70+pXEwCw4vck3Dlh7ClpPO6T7RYdBc=";
+    hash = "sha256-bTchtgr+UbHCpcXMaQA3bTrhasJ79TguvAqLNlpD/2c=";
   };
 
   nativeBuildInputs = [

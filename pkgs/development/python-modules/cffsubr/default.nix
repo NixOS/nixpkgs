@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "Standalone CFF subroutinizer based on AFDKO tx";
     homepage = "https://github.com/adobe-type-tools/cffsubr";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
   };
 }

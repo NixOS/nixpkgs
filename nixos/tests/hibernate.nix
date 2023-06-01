@@ -46,14 +46,14 @@ in makeTest {
 
   nodes = {
     # System configuration used for installing the installedConfig from above.
-    machine = { config, lib, pkgs, ... }: with lib; {
+    machine = { config, lib, pkgs, ... }: {
       imports = [
         ../modules/profiles/installation-device.nix
         ../modules/profiles/base.nix
       ];
 
       nix.settings = {
-        substituters = mkForce [];
+        substituters = lib.mkForce [];
         hashed-mirrors = null;
         connect-timeout = 1;
       };

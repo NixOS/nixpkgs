@@ -10,6 +10,7 @@
 , glibcLocales
 , testers
 , fzf
+, fetchpatch
 }:
 
 let
@@ -24,16 +25,24 @@ let
 in
 buildGoModule rec {
   pname = "fzf";
-  version = "0.40.0";
+  version = "0.41.1";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    hash = "sha256-1+s4AqvDfeTxZcM3w2VPUY1oSStNBXs0x//t3X7/zAw=";
+    hash = "sha256-YnWc+yStyoZoCKxEMhQC6Z4FZ/OVRaVsAJPtAzGiJVk=";
   };
 
-  vendorHash = "sha256-SSz4oHUgfMRbvpdIl1xepfckef1HDA1y646FWnyBp6o=";
+  patches = [
+    (fetchpatch {
+      name = "update-test-case.patch";
+      url = "https://github.com/junegunn/fzf/commit/448d7e0c5a717128d499f6a09a978b7addd1d925.patch";
+      hash = "sha256-54UYW8x78ZcjPwDWmGLVLxw2E910wme2TkBN7YAr1L8=";
+    })
+  ];
+
+  vendorHash = "sha256-O6OjBbrVAxDQd27ar2mmFkU1XyVM2C8SJWJ54rgaf2s=";
 
   outputs = [ "out" "man" ];
 

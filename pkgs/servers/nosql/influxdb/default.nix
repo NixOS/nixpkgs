@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, stdenv, pkg-config, rustPlatform, llvmPackages, libiconv, fetchpatch, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, stdenv, pkg-config, rustPlatform, libiconv, fetchpatch, nixosTests }:
 
 let
   libflux_version = "0.170.1";
@@ -25,9 +25,8 @@ let
     ];
     sourceRoot = "source/libflux";
     cargoSha256 = "sha256-kYiZ5ZRiFHRf1RQeeUGjIhnEkTvhNSZ0t4tidpRIDyk=";
-    nativeBuildInputs = [ llvmPackages.libclang ];
+    nativeBuildInputs = [ rustPlatform.bindgenHook ];
     buildInputs = lib.optional stdenv.isDarwin libiconv;
-    LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
     pkgcfg = ''
       Name: flux
       Version: ${libflux_version}

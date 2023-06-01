@@ -1,16 +1,17 @@
 { lib
-, copyDesktopItems
-, makeDesktopItem
 , python3
-, qtsvg
+, fetchPypi
+, copyDesktopItems
 , wrapQtAppsHook
+, qtsvg
+, makeDesktopItem
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pyspread";
   version = "2.0.2";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash = "sha256-rg2T9Y9FU2a+aWg0XM8jyQB9t8zDVlpad3TjUcx4//8=";
   };

@@ -52,7 +52,7 @@
 , libsysprof-capture
 , libpsl
 , brotli
-, microsoft_gsl
+, microsoft-gsl
 , rlottie
 , stdenv
 }:
@@ -161,7 +161,7 @@ stdenv.mkDerivation rec {
     libsysprof-capture
     libpsl
     brotli
-    microsoft_gsl
+    microsoft-gsl
     rlottie
   ];
 

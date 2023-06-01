@@ -173,7 +173,7 @@ let
             }
             {
               assertion = config.usersFile != null -> config.mergedConfig.useacl != false;
-              message = "${showPath [ "settings" "useacl" ]} is required when ${showPath [ "usersFile" ]} is set (Currently defiend as `${config.usersFile}' in ${showFiles options.usersFile.files}).";
+              message = "${showPath [ "settings" "useacl" ]} is required when ${showPath [ "usersFile" ]} is set (Currently defined as `${config.usersFile}' in ${showFiles options.usersFile.files}).";
             }
           ];
         })

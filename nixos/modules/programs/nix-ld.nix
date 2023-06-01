@@ -2,7 +2,7 @@
 let
   cfg = config.programs.nix-ld;
 
-  # TODO make glibc here configureable?
+  # TODO make glibc here configurable?
   nix-ld-so = pkgs.runCommand "ld.so" {} ''
     ln -s "$(cat '${pkgs.stdenv.cc}/nix-support/dynamic-linker')" $out
   '';

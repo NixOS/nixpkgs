@@ -989,4 +989,39 @@ in {
       )
     '';
   };
+} // optionalAttrs systemdStage1 {
+  stratisRoot = makeInstallerTest "stratisRoot" {
+    createPartitions = ''
+      machine.succeed(
+        "sgdisk --zap-all /dev/vda",
+        "sgdisk --new=1:0:+100M --typecode=0:ef00 /dev/vda", # /boot
+        "sgdisk --new=2:0:+1G --typecode=0:8200 /dev/vda", # swap
+        "sgdisk --new=3:0:+5G --typecode=0:8300 /dev/vda", # /
+        "udevadm settle",
+
+        "mkfs.vfat /dev/vda1",
+        "mkswap /dev/vda2 -L swap",
+        "swapon -L swap",
+        "stratis pool create my-pool /dev/vda3",
+        "stratis filesystem create my-pool nixos",
+        "udevadm settle",
+
+        "mount /dev/stratis/my-pool/nixos /mnt",
+        "mkdir -p /mnt/boot",
+        "mount /dev/vda1 /mnt/boot"
+      )
+    '';
+    bootLoader = "systemd-boot";
+    extraInstallerConfig = { modulesPath, ...}: {
+      config = {
+        services.stratis.enable = true;
+        environment.systemPackages = [
+          pkgs.stratis-cli
+          pkgs.thin-provisioning-tools
+          pkgs.lvm2.bin
+          pkgs.stratisd.initrd
+        ];
+      };
+    };
+  };
 }

@@ -2,7 +2,6 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, llvmPackages
 , sqlite
 , installShellFiles
 , Security
@@ -23,14 +22,11 @@ rustPlatform.buildRustPackage rec {
   };
   cargoSha256 = "sha256-qQ6yRI0rNxV/TRZHCR69h6kx6L2Wp75ziw+B2P8LZmE=";
 
-  nativeBuildInputs = with llvmPackages; [
-    llvm
-    clang
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
     installShellFiles
   ];
   buildInputs = [ sqlite ] ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
-
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   postInstall = ''
     installManPage doc/innernet-server.8.gz
