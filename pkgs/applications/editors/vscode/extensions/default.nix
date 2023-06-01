@@ -2879,6 +2879,23 @@ let
         };
       };
 
+      tailscale.vscode-tailscale = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-tailscale";
+          publisher = "tailscale";
+          version = "0.4.0";
+          sha256 = "sha256-c/BZHKHs2EKd37148dSxEeP1wBXv75HhDqzegmHPjOs=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/tailscale.vscode-tailscale/changelog";
+          description = "VSCode extension to share a port over the internet with Tailscale Funnel";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Tailscale.vscode-tailscale";
+          homepage = "https://github.com/tailscale-dev/vscode-tailscale";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.drupol ];
+        };
+      };
+
       takayama.vscode-qq = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "takayama";
