@@ -435,6 +435,8 @@ with pkgs;
 
   checkpwn = callPackage ../tools/misc/checkpwn { };
 
+  banana-vera = callPackage ../development/tools/analysis/banana-vera { };
+
   chrysalis = callPackage ../applications/misc/chrysalis { };
 
   ciel = callPackage ../tools/package-management/ciel { };
