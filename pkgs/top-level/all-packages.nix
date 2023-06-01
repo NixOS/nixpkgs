@@ -25458,9 +25458,7 @@ with pkgs;
   grafana = callPackage ../servers/monitoring/grafana { };
   grafanaPlugins = callPackages ../servers/monitoring/grafana/plugins { };
 
-  grafana-agent = callPackage ../servers/monitoring/grafana-agent {
-    buildGoModule = buildGo119Module; # nixosTests.grafana-agent go 1.20 failure
-  };
+  grafana-agent = callPackage ../servers/monitoring/grafana-agent { };
 
   grafana-loki = callPackage ../servers/monitoring/loki { };
   promtail = callPackage ../servers/monitoring/loki/promtail.nix { };
