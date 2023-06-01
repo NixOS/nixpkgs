@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "usnistgov";
     repo = "fipy";
     rev = version;
-    sha256 = "sha256-oTg/5fGXqknWBh1ShdAOdOwX7lVDieIoM5aALcOWFqY=";
+    hash = "sha256-oTg/5fGXqknWBh1ShdAOdOwX7lVDieIoM5aALcOWFqY=";
   };
 
   propagatedBuildInputs = [
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     openssh
   ] ++ lib.optionals (!stdenv.isDarwin) [ gmsh ];
 
-  checkInputs = lib.optionals (!stdenv.isDarwin) [ gmsh ];
+  nativeCheckInputs = lib.optionals (!stdenv.isDarwin) [ gmsh ];
 
   checkPhase = ''
     export OMPI_MCA_plm_rsh_agent=${openssh}/bin/ssh

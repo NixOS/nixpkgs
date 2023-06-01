@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hwatch";
-  version = "0.3.7";
+  version = "0.3.10";
 
   src = fetchFromGitHub {
     owner = "blacknon";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-FVqvwqsHkV/yK5okL1p6TiNUGDK2ZnzVNO4UDVkG+zM=";
+    sha256 = "sha256-RvsL6OajXwEY77W3Wj6GMijYwn7XDnKiJyDXbNG01ag=";
   };
 
-  cargoSha256 = "sha256-E4qh2cfpVNUa9OyJowSsaHU7pYiNu7IpxwISP0djVRA=";
+  cargoHash = "sha256-v7MvXnc9Xa+6QAyi2N9/WtqnvXf9M1SlR86kNjfu46Y=";
 
   nativeBuildInputs = [ installShellFiles ];
 

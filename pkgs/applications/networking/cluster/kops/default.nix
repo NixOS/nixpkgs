@@ -14,7 +14,7 @@ let
           inherit sha256;
         };
 
-        vendorSha256 = null;
+        vendorHash = null;
 
         nativeBuildInputs = [ installShellFiles ];
 
@@ -49,22 +49,21 @@ in
 rec {
   mkKops = generic;
 
-  kops_1_22 = mkKops rec {
-    version = "1.22.4";
-    sha256 = "sha256-osU7yI77ZALGrAGuP8qAgv+ogDRn+BSVmcjPbi/WEKE=";
-    rev = "v${version}";
-  };
-
-  kops_1_23 = mkKops rec {
-    version = "1.23.2";
-    sha256 = "sha256-9GANjGRS9QaJw+CEeMv/f+rEu37QV2YxMvSRSH6+3PM=";
-    rev = "v${version}";
-  };
-
   kops_1_24 = mkKops rec {
-    version = "1.24.2";
-    sha256 = "sha256-QEoaSkJ3fzUr2Fr3M2EOd/3iwq1ZX2YHEez2i0kjRmY=";
+    version = "1.24.5";
+    sha256 = "sha256-U5OSiU0t2gyvyNd07y68Fb+HaXp5wQN4t0CBPOOMd/M=";
     rev = "v${version}";
   };
 
+  kops_1_25 = mkKops rec {
+    version = "1.25.4";
+    sha256 = "sha256-Q40d62D+H7CpLmrjweCy75U3LgnHEV2pFZs2Ze+koqo=";
+    rev = "v${version}";
+  };
+
+  kops_1_26 = mkKops rec {
+    version = "1.26.3";
+    sha256 = "sha256-8IQbVFqH5r8H7z7U441Aox4yp3KF/sqs3+JpMru8qwQ=";
+    rev = "v${version}";
+  };
 }

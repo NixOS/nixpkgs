@@ -1,22 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, gettext, pkg-config, wxGTK30-gtk3,
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, gettext, pkg-config, wxGTK32,
   boost, icu, lucenepp, asciidoc, libxslt, xmlto, gtk3, gtkspell3, pugixml,
   nlohmann_json, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "poedit";
-  version = "3.1.1";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "vslavik";
     repo = "poedit";
     rev = "v${version}-oss";
-    sha256 = "sha256-kun1x1ql8KLS1+nh5+iItxYZnfvFcrx62cvX4OEczG4=";
+    hash = "sha256-xQDmBVALhtjc75JsjgqM5kyPR6UB05FbXnFPKWUY3ug=";
   };
 
   nativeBuildInputs = [ autoconf automake asciidoc wrapGAppsHook
     libxslt xmlto boost libtool pkg-config ];
 
-  buildInputs = [ lucenepp nlohmann_json wxGTK30-gtk3 icu pugixml gtk3 gtkspell3 hicolor-icon-theme ];
+  buildInputs = [ lucenepp nlohmann_json wxGTK32 icu pugixml gtk3 gtkspell3 hicolor-icon-theme ];
 
   propagatedBuildInputs = [ gettext ];
 
@@ -45,5 +45,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ dasj19 ];
+    # configure: error: GTK+ build of wxWidgets is required
+    broken = stdenv.isDarwin;
   };
 }

@@ -14,7 +14,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.8.0";
+  version = "0.12.2";
   pname = "heudiconv";
 
   disabled = isPy27;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     #sha256 = "0gzqqa4pzhywdbvks2qjniwhr89sgipl5k7h9hcjs7cagmy9gb05";
-    sha256 = "1r6y93125mc84c09970ifps5xysp8ffp62rwlzili3q2k1m3fh4v";
+    sha256 = "sha256-cYr74mw7tXRJRr8rXlu1UMZuU3YXXfDzhuc+vaa+7PQ=";
   };
 
   postPatch = ''
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     dcm2niix nibabel pydicom nipype dcmstack etelemetry filelock
   ];
 
-  checkInputs = [ dcm2niix pytest mock ];
+  nativeCheckInputs = [ dcm2niix pytest mock ];
 
   # test_monitor and test_dlad require 'inotify' and 'datalad' respectively,
   # and these aren't in Nixpkgs

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "vulture";
-  version = "2.5";
+  version = "2.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KDFpQFXrLjagnDt2gJNINxArm2wJaSBuOQLVE2Ehd8M=";
+    hash = "sha256-Z/uAoBTtn9tZndRLuWy1QxEDKhBBBvwucG73ptrYgDI=";
   };
 
   postPatch = ''
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     toml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pint
     pytestCheckHook
   ];

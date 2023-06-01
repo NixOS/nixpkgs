@@ -3,14 +3,14 @@
 
 buildPythonPackage rec {
   pname = "dkimpy";
-  version = "1.0.5";
+  version = "1.1.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9a2420bf09af686736773153fca32a02ae11ecbe24b540c26104628959f91121";
+    hash = "sha256-7bbng4OzpUx3K8n/eG5+7X12pXupRiCdmVG0P1BzqwI=";
 };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   propagatedBuildInputs =  [ openssl dnspython pynacl authres ];
 
   patchPhase = ''

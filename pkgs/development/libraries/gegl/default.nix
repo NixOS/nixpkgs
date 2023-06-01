@@ -10,6 +10,7 @@
 , glib
 , babl
 , libpng
+, llvmPackages
 , cairo
 , libjpeg
 , librsvg
@@ -36,14 +37,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gegl";
-  version = "0.4.38";
+  version = "0.4.44";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/gegl/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-5KM8hDClBC+6hDm1lTSOcYcPDZX7+IX/VT+QIMG+11A=";
+    sha256 = "CkzbQWNeQGoISc0NPwPK99l8q4qhPShwfVMtAInVYSY=";
   };
 
   nativeBuildInputs = [
@@ -77,7 +78,11 @@ stdenv.mkDerivation rec {
     luajit
     openexr
     suitesparse
-  ] ++ lib.optional stdenv.isDarwin OpenCL;
+  ] ++ lib.optionals stdenv.isDarwin [
+    OpenCL
+  ] ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ];
 
   # for gegl-4.0.pc
   propagatedBuildInputs = [
@@ -101,7 +106,7 @@ stdenv.mkDerivation rec {
 
   # TODO: Fix missing math symbols in gegl seamless clone.
   # It only appears when we use packaged poly2tri-c instead of vendored one.
-  NIX_CFLAGS_COMPILE = "-lm";
+  env.NIX_CFLAGS_COMPILE = "-lm";
 
   postPatch = ''
     chmod +x tests/opencl/opencl_test.sh

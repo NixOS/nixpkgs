@@ -3,6 +3,8 @@
 , unibilium, gperf
 , libvterm-neovim
 , tree-sitter
+, fetchurl
+, treesitter-parsers ? import ./treesitter-parsers.nix { inherit fetchurl; }
 , CoreServices
 , glibcLocales ? null, procps ? null
 
@@ -12,27 +14,35 @@
 , nodejs ? null, fish ? null, python3 ? null
 }:
 
-with lib;
-
 let
   neovimLuaEnv = lua.withPackages(ps:
     (with ps; [ lpeg luabitop mpack ]
-    ++ optionals doCheck [
+    ++ lib.optionals doCheck [
         nvim-client luv coxpcall busted luafilesystem penlight inspect
       ]
     ));
+  codegenLua =
+    if lua.pkgs.isLuaJIT
+      then
+        let deterministicLuajit =
+          lua.override {
+            deterministicStringIds = true;
+            self = deterministicLuajit;
+          };
+        in deterministicLuajit.withPackages(ps: [ ps.mpack ps.lpeg ])
+      else lua;
 
   pyEnv = python3.withPackages(ps: with ps; [ pynvim msgpack ]);
 in
   stdenv.mkDerivation rec {
     pname = "neovim-unwrapped";
-    version = "0.7.2";
+    version = "0.9.1";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "sha256-eKKQNM02Vhy+3yL2QV+0FSEpcniEa5Aq6hkAUIgLo1k=";
+      hash = "sha256-G51qD7GklEn0JrneKSSqDDx0Odi7W2FjdQc0ZDE9ZK4=";
     };
 
     patches = [
@@ -61,8 +71,8 @@ in
       neovimLuaEnv
       tree-sitter
       unibilium
-    ] ++ optionals stdenv.isDarwin [ libiconv CoreServices ]
-      ++ optionals doCheck [ glibcLocales procps ]
+    ] ++ lib.optionals stdenv.isDarwin [ libiconv CoreServices ]
+      ++ lib.optionals doCheck [ glibcLocales procps ]
     ;
 
     inherit doCheck;
@@ -80,19 +90,18 @@ in
     ];
 
     # extra programs test via `make functionaltest`
-    checkInputs = [
+    nativeCheckInputs = [
       fish
       nodejs
       pyEnv      # for src/clint.py
     ];
-
 
     # nvim --version output retains compilation flags and references to build tools
     postPatch = ''
       substituteInPlace src/nvim/version.c --replace NVIM_VERSION_CFLAGS "";
     '';
     # check that the above patching actually works
-    disallowedReferences = [ stdenv.cc ];
+    disallowedReferences = [ stdenv.cc ] ++ lib.optional (lua != codegenLua) codegenLua;
 
     cmakeFlags = [
       # Don't use downloaded dependencies. At the end of the configurePhase one
@@ -101,21 +110,36 @@ in
       # third-party/CMakeLists.txt is not read at all.
       "-DUSE_BUNDLED=OFF"
     ]
-    ++ optional (!lua.pkgs.isLuaJIT) "-DPREFER_LUA=ON"
+    ++ lib.optional (!lua.pkgs.isLuaJIT) "-DPREFER_LUA=ON"
     ;
 
-    # triggers on buffer overflow bug while running tests
-    hardeningDisable = [ "fortify" ];
-
-    preConfigure = lib.optionalString stdenv.isDarwin ''
+    preConfigure = lib.optionalString lua.pkgs.isLuaJIT ''
+      cmakeFlagsArray+=(
+        "-DLUAC_PRG=${codegenLua}/bin/luajit -b -s %s -"
+        "-DLUA_GEN_PRG=${codegenLua}/bin/luajit"
+      )
+    '' + lib.optionalString stdenv.isDarwin ''
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
-    '';
+    '' + ''
+      mkdir -p $out/lib/nvim/parser
+    '' + lib.concatStrings (lib.mapAttrsToList
+      (language: src: ''
+        ln -s \
+          ${tree-sitter.buildGrammar {
+            inherit language src;
+            version = "neovim-${version}";
+          }}/parser \
+          $out/lib/nvim/parser/${language}.so
+      '')
+      treesitter-parsers);
 
     shellHook=''
       export VIMRUNTIME=$PWD/runtime
     '';
 
-    meta = {
+    separateDebugInfo = true;
+
+    meta = with lib; {
       description = "Vim text editor fork focused on extensibility and agility";
       longDescription = ''
         Neovim is a project that seeks to aggressively refactor Vim in order to:

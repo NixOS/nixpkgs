@@ -71,11 +71,16 @@ let
     let
       name = last (builtins.split "/" nameOrPath);
     in
-    pkgs.runCommand name (if (types.str.check content) then {
+    pkgs.runCommand name ((if (types.str.check content) then {
       inherit content;
       passAsFile = [ "content" ];
     } else {
       contentPath = content;
+    }) // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) {
+      # post-link-hook expects codesign_allocate to be in PATH
+      # https://github.com/NixOS/nixpkgs/issues/154203
+      # https://github.com/NixOS/nixpkgs/issues/148189
+      nativeBuildInputs = [ stdenv.cc.bintools ];
     }) ''
       ${compileScript}
       ${lib.optionalString strip
@@ -101,7 +106,7 @@ let
     interpreter = "${pkgs.bash}/bin/bash";
   };
 
-  # Like writeScriptBIn but the first line is a shebang to bash
+  # Like writeScriptBin but the first line is a shebang to bash
   writeBashBin = name:
     writeBash "/bin/${name}";
 
@@ -118,6 +123,21 @@ let
   # Like writeScriptBin but the first line is a shebang to dash
   writeDashBin = name:
     writeDash "/bin/${name}";
+
+  # Like writeScript but the first line is a shebang to fish
+  #
+  # Example:
+  #   writeFish "example" ''
+  #     echo hello world
+  #   ''
+  writeFish = makeScriptWriter {
+    interpreter = "${pkgs.fish}/bin/fish --no-config";
+    check = "${pkgs.fish}/bin/fish --no-config --no-execute";  # syntax check only
+  };
+
+  # Like writeScriptBin but the first line is a shebang to fish
+  writeFishBin = name:
+    writeFish "/bin/${name}";
 
   # writeHaskell takes a name, an attrset with libraries and haskell version (both optional)
   # and some haskell source code and returns an executable.
@@ -192,7 +212,7 @@ let
     };
   in writeDash name ''
     export NODE_PATH=${node-env}/lib/node_modules
-    exec ${pkgs.nodejs}/bin/node ${pkgs.writeText "js" content}
+    exec ${pkgs.nodejs}/bin/node ${pkgs.writeText "js" content} "$@"
   '';
 
   # writeJSBin takes the same arguments as writeJS but outputs a directory (like writeScriptBin)

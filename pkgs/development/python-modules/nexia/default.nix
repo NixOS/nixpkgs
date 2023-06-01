@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "nexia";
-  version = "2.0.2";
+  version = "2.0.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-JbWKNM7fNhIuBnIHAvRegAxmE0OOwsTDQWaMtuDVQcc=";
+    hash = "sha256-VBK+h5K/irI0T0eUaYC1iouzMUo/lJshLTe0h5CtnAQ=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     requests-mock
     pytestCheckHook

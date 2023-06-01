@@ -11,6 +11,7 @@
 , pytestCheckHook
 , pythonOlder
 , pyyaml
+, setuptools
 , transitions
 , websockets
 }:
@@ -29,6 +30,12 @@ buildPythonPackage rec {
     hash = "sha256-8T1XhBSOiArlUQbQ41LsUogDgOurLhf+M8mjIrrAC4s=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'transitions = "^0.8.0"' 'transitions = "*"' \
+      --replace 'websockets = ">=9.0,<11.0"' 'websockets = "*"'
+  '';
+
   nativeBuildInputs = [
     poetry-core
   ];
@@ -37,11 +44,12 @@ buildPythonPackage rec {
     docopt
     passlib
     pyyaml
+    setuptools
     transitions
     websockets
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytest-logdog
     pytest-asyncio
@@ -49,7 +57,7 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "--asyncio-mode=legacy"
+    "--asyncio-mode=auto"
   ];
 
   disabledTestPaths = [

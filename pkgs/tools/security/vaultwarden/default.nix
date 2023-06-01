@@ -1,26 +1,26 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, fetchurl, nixosTests
+{ lib, stdenv, callPackage, rustPlatform, fetchFromGitHub, fetchurl, nixosTests
 , pkg-config, openssl
 , libiconv, Security, CoreServices
 , dbBackend ? "sqlite", libmysqlclient, postgresql }:
 
+let
+  webvault = callPackage ./webvault.nix {};
+in
+
 rustPlatform.buildRustPackage rec {
   pname = "vaultwarden";
-  version = "1.25.2";
+  version = "1.28.1";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = pname;
     rev = version;
-    sha256 = "sha256-6CpdvLCw7SUmWm9NHAxFAo454Rrp1FloDp67YAr0pjQ=";
+    hash = "sha256-YIR8if6lFJ+534qBN9k1ltFp5M7KBU5qYaI1KppTYwI=";
   };
 
-  cargoSha256 = "sha256-+rXQGZNUz6UDLFVNbyHF6dTe3nEm5/2ITmVI+MfY6nM=";
-
-  postPatch = ''
-    # Upstream specifies 1.57; nixpkgs has 1.56 which also produces a working
-    # vaultwarden when using RUSTC_BOOTSTRAP=1
-    sed -ri 's/^rust-version = .*//g' Cargo.toml
-  '';
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = with lib; [ openssl ]
@@ -28,18 +28,18 @@ rustPlatform.buildRustPackage rec {
     ++ optional (dbBackend == "mysql") libmysqlclient
     ++ optional (dbBackend == "postgresql") postgresql;
 
-  # vaultwarden depends on rocket v0.5.0-dev, which requires nightly features.
-  # This may be removed if https://github.com/dani-garcia/vaultwarden/issues/712 is fixed.
-  RUSTC_BOOTSTRAP = 1;
-
   buildFeatures = dbBackend;
 
-  passthru.tests = nixosTests.vaultwarden;
+  passthru = {
+    inherit webvault;
+    tests = nixosTests.vaultwarden;
+    updateScript = callPackage ./update.nix {};
+  };
 
   meta = with lib; {
     description = "Unofficial Bitwarden compatible server written in Rust";
     homepage = "https://github.com/dani-garcia/vaultwarden";
-    license = licenses.gpl3Only;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ msteen ivan ];
   };
 }

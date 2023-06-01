@@ -42,6 +42,7 @@ import ../../../../nixos/tests/make-test-python.nix ({ pkgs, ... }: {
   };
 
   testScript = ''
+    import os
     if os.waitstatus_to_exitcode(os.system("lsusb -d 16c0:05df")) != 0:
         print("No USB relay detected, skipping test")
         import sys

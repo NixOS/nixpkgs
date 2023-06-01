@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "1msvvdzk33sxzgyvs4fs8dlsrsi7fjj038z83s0yw5h8m8d78469";
   };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   checkPhase = "pytest";
   pythonImportsCheck = [ "mergedeep" ];
 

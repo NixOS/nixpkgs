@@ -46,15 +46,16 @@
 , systemd
 , at-spi2-atk
 , at-spi2-core
+, libqt5pas
 }:
 
 stdenv.mkDerivation rec {
   pname = "yandex-browser";
-  version = "22.1.3.907-1";
+  version = "23.3.1.906-1";
 
   src = fetchurl {
     url = "http://repo.yandex.ru/yandex-browser/deb/pool/main/y/${pname}-beta/${pname}-beta_${version}_amd64.deb";
-    sha256 = "sha256-7dbFqNzZP2CyseK0xD9zcvecIuueZfMy5KgN8gRRLEk=";
+    sha256 = "sha256-hQwAHtPUcGSDKD7SmWa8H1f/T4Imu9061tIvenw0KWQ=";
   };
 
   nativeBuildInputs = [
@@ -106,6 +107,7 @@ stdenv.mkDerivation rec {
     nss
     pango
     stdenv.cc.cc.lib
+    libqt5pas
   ];
 
   unpackPhase = ''
@@ -118,6 +120,7 @@ stdenv.mkDerivation rec {
     cp $TMP/ya/{usr/share,opt} $out/ -R
     substituteInPlace $out/share/applications/yandex-browser-beta.desktop --replace /usr/ $out/
     ln -sf $out/opt/yandex/browser-beta/yandex_browser $out/bin/yandex-browser
+    ln -sf $out/opt/yandex/browser-beta/yandex_browser $out/bin/yandex-browser-beta
   '';
 
   runtimeDependencies = map lib.getLib [
@@ -131,7 +134,7 @@ stdenv.mkDerivation rec {
     homepage = "https://browser.yandex.ru/";
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ dan4ik605743 ];
+    maintainers = with maintainers; [ dan4ik605743 ionutnechita ];
     platforms = [ "x86_64-linux" ];
 
     knownVulnerabilities = [

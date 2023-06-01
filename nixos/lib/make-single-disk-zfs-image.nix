@@ -131,15 +131,6 @@ let
       properties
   );
 
-  featuresToProperties = features:
-    lib.listToAttrs
-      (builtins.map
-        (feature: {
-          name = "feature@${feature}";
-          value = "enabled";
-        })
-        features);
-
   createDatasets =
     let
       datasetlist = lib.mapAttrsToList lib.nameValuePair datasets;
@@ -253,7 +244,7 @@ let
             ${if formatOpt == "raw" then ''
             mv $rootDiskImage $out/${rootFilename}
           '' else ''
-            ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${formatOpt} ${compress} $rootDiskImage $out/${rootFilename}
+            ${pkgs.qemu_kvm}/bin/qemu-img convert -f raw -O ${formatOpt} ${compress} $rootDiskImage $out/${rootFilename}
           ''}
             rootDiskImage=$out/${rootFilename}
             set -x

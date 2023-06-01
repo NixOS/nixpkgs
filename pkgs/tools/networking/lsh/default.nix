@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, gperf, guile, gmp, zlib, liboop, readline, gnum4, pam
-, nettools, lsof, procps }:
+, nettools, lsof, procps, libxcrypt }:
 
 stdenv.mkDerivation rec {
   pname = "lsh";
@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
   #   ld: liblsh.a(unix_user.o):/build/lsh-2.0.4/src/server_userauth.h:108: multiple definition of
   #     `server_userauth_none_preauth'; lshd.o:/build/lsh-2.0.4/src/server_userauth.h:108: first defined here
   # Should be present in upcoming 2.1 release.
-  NIX_CFLAGS_COMPILE = "-std=gnu90 -fcommon";
+  env.NIX_CFLAGS_COMPILE = "-std=gnu90 -fcommon";
 
-  buildInputs = [ gperf guile gmp zlib liboop readline gnum4 pam ];
+  buildInputs = [ gperf guile gmp zlib liboop readline gnum4 pam libxcrypt ];
 
   meta = {
     description = "GPL'd implementation of the SSH protocol";

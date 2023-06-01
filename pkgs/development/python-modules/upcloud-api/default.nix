@@ -8,20 +8,20 @@
 
 buildPythonPackage rec {
   pname = "upcloud-api";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "UpCloudLtd";
     repo = "upcloud-python-api";
-    rev = "v${version}";
-    sha256 = "1kkgrn97pw4k49ys97hjrvh2j8y2p2r9970v9csgrk5wci4562wm";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-thmrbCpGjlDkHIZwIjRgIVMplaypiKByFS/nS8F2LXA=";
   };
 
   propagatedBuildInputs = [
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     responses
   ];

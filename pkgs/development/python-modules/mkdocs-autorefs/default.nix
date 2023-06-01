@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchFromGitHub
 , markdown
 , mkdocs
@@ -8,7 +8,7 @@
 , pythonOlder
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "mkdocs-autorefs";
   version = "0.4.1";
   format = "pyproject";
@@ -19,7 +19,7 @@ buildPythonApplication rec {
     owner = "mkdocstrings";
     repo = "autorefs";
     rev = version;
-    sha256 = "sha256-kiHb/XSFw6yaUbLJHBvHaQAOVUM6UfyFeomgniDZqgU=";
+    hash = "sha256-kiHb/XSFw6yaUbLJHBvHaQAOVUM6UfyFeomgniDZqgU=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonApplication rec {
     mkdocs
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

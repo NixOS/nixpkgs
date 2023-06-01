@@ -10,10 +10,10 @@ container, so checking early whether it exists will fail.
  1 file changed, 2 insertions(+)
 
 diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
-index 4ce80bba70..bb149192bd 100644
+index a697ea5cb9..65d9e7e398 100644
 --- a/src/nspawn/nspawn.c
 +++ b/src/nspawn/nspawn.c
-@@ -5651,6 +5651,7 @@ static int run(int argc, char *argv[]) {
+@@ -5635,6 +5635,7 @@ static int run(int argc, char *argv[]) {
                                  goto finish;
                          }
                  } else {
@@ -21,7 +21,7 @@ index 4ce80bba70..bb149192bd 100644
                          _cleanup_free_ char *p = NULL;
  
                          if (arg_pivot_root_new)
-@@ -5665,6 +5666,7 @@ static int run(int argc, char *argv[]) {
+@@ -5649,6 +5650,7 @@ static int run(int argc, char *argv[]) {
                                                      "Directory %s doesn't look like it has an OS tree (/usr/ directory is missing). Refusing.", arg_directory);
                                  goto finish;
                          }

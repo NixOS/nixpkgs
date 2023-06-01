@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libuuid }:
+{ lib, stdenv, fetchFromGitHub, cmake, libuuid, unstableGitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "crossguid";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = lib.optional stdenv.isLinux libuuid;
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Lightweight cross platform C++ GUID/UUID library";

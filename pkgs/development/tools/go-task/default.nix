@@ -1,17 +1,23 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, testers
+, go-task
+}:
 
 buildGoModule rec {
   pname = "go-task";
-  version = "3.15.2";
+  version = "3.25.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "task";
-    rev = "v${version}";
-    sha256 = "sha256-UeKb+v9mHKCwQAGzaYQ0aRi7oCZOOIP1dal0ro3iwzI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-XeybiKK0VywVqRqJgnp2+ZwgqwgBDVM9wcB5Md5pzM0=";
   };
 
-  vendorSha256 = "sha256-xp1s1aixPyXq9oVD8IZYSlUiL8UkIx5c8gYJRpIRD7I=";
+  vendorHash = "sha256-irXCHPKQFcq2C84n9aFjKnV9f8AzBrIuuV1BkTrDK4s=";
 
   doCheck = false;
 
@@ -20,7 +26,9 @@ buildGoModule rec {
   subPackages = [ "cmd/task" ];
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version}"
+    "-s"
+    "-w"
+    "-X=github.com/go-task/task/v3/internal/version.version=${version}"
   ];
 
   postInstall = ''
@@ -29,9 +37,16 @@ buildGoModule rec {
     installShellCompletion completion/{bash,fish,zsh}/*
   '';
 
+  passthru.tests = {
+    version = testers.testVersion {
+      package = go-task;
+    };
+  };
+
   meta = with lib; {
     homepage = "https://taskfile.dev/";
     description = "A task runner / simpler Make alternative written in Go";
+    changelog = "https://github.com/go-task/task/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ parasrah ];
   };

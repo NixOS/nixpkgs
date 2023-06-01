@@ -43,13 +43,27 @@
 , copyDesktopItems
 }:
 
+let
+  dist = {
+    aarch64-linux = {
+      arch = "arm64";
+      sha256 = "sha256-ciQ9LqtaOosUAtcZiwOQ+8gB5dTut8pXHAjUsoQEEB8=";
+    };
+
+    x86_64-linux = {
+      arch = "64";
+      sha256 = "sha256-QaIj+SOQGR6teUIdLB3D5klRlYrna1MoE3c6UXYEoB4=";
+    };
+  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
+in
 stdenv.mkDerivation rec {
   inherit pname version meta;
 
   src = fetchurl {
-    url = "https://dl.pstmn.io/download/version/${version}/linux64";
-    sha256 = "118da102904cd7b04c50d3e2c2daac3fc1228f05e541eacef55e8ecbf73d3896";
-    name = "${pname}.tar.gz";
+    url = "https://dl.pstmn.io/download/version/${version}/linux${dist.arch}";
+    inherit (dist) sha256;
+    name = "${pname}-${version}.tar.gz";
   };
 
   dontConfigure = true;
@@ -124,6 +138,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     pushd $out/share/postman
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" postman
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" chrome_crashpad_handler
     for file in $(find . -type f \( -name \*.node -o -name postman -o -name \*.so\* \) ); do
       ORIGIN=$(patchelf --print-rpath $file); \
       patchelf --set-rpath "${lib.makeLibraryPath buildInputs}:$ORIGIN" $file

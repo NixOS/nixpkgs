@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "ecos";
-  version = "2.0.10";
+  version = "2.0.11";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "embotech";
     repo = "ecos-python";
-    rev = "v${version}";
-    sha256 = "sha256-TPxrTyVZ1KXgPoDbZZqXT5+NEIEndg9qepujqFQwK+Q=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-jflmXR7fuGRSyI6NoQrHFvkKqF/D4iq47StNSCdLbqQ=";
     fetchSubmodules = true;
   };
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
   ];
 
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Python package for ECOS: Embedded Cone Solver";
+    description = "Python interface for ECOS";
     homepage = "https://github.com/embotech/ecos-python";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ drewrisinger ];

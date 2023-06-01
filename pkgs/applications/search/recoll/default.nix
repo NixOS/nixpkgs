@@ -19,7 +19,9 @@
 , libwpd
 , libxslt
 , lyx
+, makeWrapper
 , perl
+, perlPackages
 , pkg-config
 , poppler_utils
 , python3Packages
@@ -35,25 +37,53 @@
 
 mkDerivation rec {
   pname = "recoll";
-  version = "1.32.7";
+  version = "1.33.4";
 
   src = fetchurl {
     url = "https://www.lesbonscomptes.com/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ygim9LsLUZv5FaBiqbeq3E80NHPMHweJVwggjWYzfbo=";
+    sha256 = "sha256-ffD49sGYWYEWAFPRtpyDU/CYFvkrEDL21Ddq3QsXCvc=";
   };
 
-  configureFlags = [ "--enable-recollq" "--disable-webkit" "--without-systemd" ]
-    ++ lib.optionals (!withGui) [ "--disable-qtgui" "--disable-x11mon" ]
-    ++ (if stdenv.isLinux then [ "--with-inotify" ] else [ "--without-inotify" ]);
+  configureFlags = [
+    "--enable-recollq"
+    "--disable-webkit"
+    "--without-systemd"
+  ] ++ lib.optionals (!withGui) [
+    "--disable-qtgui"
+    "--disable-x11mon"
+  ] ++ (if stdenv.isLinux then [
+    "--with-inotify"
+  ] else [
+    "--without-inotify"
+  ]);
+
+  env.NIX_CFLAGS_COMPILE = toString [ "-DNIXPKGS" ];
+
+  patches = [
+    # fix "No/bad main configuration file" error
+    ./fix-datadir.patch
+  ];
 
   nativeBuildInputs = [
-    file pkg-config python3Packages.setuptools which
+    file
+    pkg-config
+    python3Packages.setuptools
+    makeWrapper
+    which
   ];
 
   buildInputs = [
-    bison chmlib python3Packages.python xapian zlib
-  ] ++ lib.optional withGui qtbase
-    ++ lib.optional stdenv.isDarwin libiconv;
+    bison
+    chmlib
+    python3Packages.python
+    python3Packages.mutagen
+    xapian
+    zlib
+  ] ++ lib.optionals withGui [
+    qtbase
+  ] ++ lib.optionals stdenv.isDarwin [
+    libiconv
+  ];
 
   # the filters search through ${PATH} using a sh proc 'checkcmds' for the
   # filtering utils. Short circuit this by replacing the filtering command with
@@ -85,6 +115,10 @@ mkDerivation rec {
         substituteInPlace $f --replace /usr/bin/perl   ${lib.getBin perl}/bin/perl
       fi
     done
+    wrapProgram $out/share/recoll/filters/rclaudio.py \
+      --prefix PYTHONPATH : $PYTHONPATH
+    wrapProgram $out/share/recoll/filters/rclimg \
+      --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [ ImageExifTool ]}"
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace  $f --replace '"lyx"' '"${lib.getBin lyx}/bin/lyx"'
   '' + lib.optionalString (stdenv.isDarwin && withGui) ''
@@ -101,8 +135,9 @@ mkDerivation rec {
       members, email attachments.
     '';
     homepage = "https://www.lesbonscomptes.com/recoll/";
-    license = licenses.gpl2;
+    changelog = "https://www.lesbonscomptes.com/recoll/pages/release-${version}.html";
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ jcumming ];
+    maintainers = with maintainers; [ jcumming ehmry ];
   };
 }

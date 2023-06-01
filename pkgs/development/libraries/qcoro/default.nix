@@ -1,30 +1,34 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
 , libpthreadstubs
 , qtbase
+, qtwebsockets
+, wrapQtAppsHook
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qcoro";
-  version = "0.4.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "danvratil";
     repo = "qcoro";
     rev = "v${version}";
-    sha256 = "sha256-RVpyL+BklX8Wyk9Xj9UyuvNK5Vev8ZsrOSMxX1HtcHU=";
+    sha256 = "sha256-kf2W/WAZCpLkq1UIy7iZri4vNaqjGjotB/Xsb+byZV4=";
   };
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
+    wrapQtAppsHook
     cmake
   ];
 
   buildInputs = [
     qtbase
+    qtwebsockets
     libpthreadstubs
   ];
 
@@ -34,6 +38,5 @@ mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ smitop ];
     platforms = platforms.linux;
-    badPlatforms = platforms.aarch64;
   };
 }

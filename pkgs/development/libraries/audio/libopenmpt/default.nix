@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libopenmpt";
-  version = "0.6.4";
+  version = "0.6.10";
 
   outputs = [ "out" "dev" "bin" ];
 
   src = fetchurl {
     url = "https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-${version}+release.autotools.tar.gz";
-    sha256 = "4J+4RcMpJwCnrBPDsx1mns072+vL/hMo66I3bOvkAWI=";
+    sha256 = "wlvo3A2sI87AJUh+WPGV5NFPfZSu3dX+RrIcBPHOJ3Q=";
   };
 
   enableParallelBuilding = true;
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional (!usePulseAudio) "--without-pulseaudio";
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   postFixup = ''
     moveToOutput share/doc $dev

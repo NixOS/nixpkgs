@@ -6,28 +6,38 @@
 , openssl
 , CoreServices
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "rathole";
-  version = "0.4.3";
+  version = "0.4.8";
 
   src = fetchFromGitHub {
     owner = "rapiz1";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-gqWgx03mUk6+9K4Yw5PHEBwFxsOR+48wvngT+wQnN1k=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-yqZPs0rp3LD7n4+JGa55gZ4xMcumy+oazrxCqpDzIfQ=";
   };
 
-  cargoSha256 = "sha256-dafOgZtiszkoi97PpAVMtdvJd5O3EK9hDVNLJ32FYzE=";
+  cargoHash = "sha256-BZ6AgH/wnxrDLkyncR0pbayae9v5P7X7UnlJ48JR8sM=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin [ CoreServices ];
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreServices
+  ];
 
   __darwinAllowLocalNetworking = true;
 
+  doCheck = false; # https://github.com/rapiz1/rathole/issues/222
+
   meta = with lib; {
-    description = "A lightweight and high-performance reverse proxy for NAT traversal, written in Rust";
+    description = "Reverse proxy for NAT traversal";
     homepage = "https://github.com/rapiz1/rathole";
+    changelog = "https://github.com/rapiz1/rathole/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ dit7ya ];
   };

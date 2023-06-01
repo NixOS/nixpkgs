@@ -17,7 +17,7 @@ services.kubernetes = {
 };
 ```
 
-Another way is to assign cluster roles (\"master\" and/or \"node\") to
+Another way is to assign cluster roles ("master" and/or "node") to
 the host. This enables apiserver, controllerManager, scheduler,
 addonManager, kube-proxy and etcd:
 
@@ -42,14 +42,6 @@ Note: Assigning either role will also default both
 [](#opt-services.kubernetes.flannel.enable)
 and [](#opt-services.kubernetes.easyCerts)
 to true. This sets up flannel as CNI and activates automatic PKI bootstrapping.
-
-As of kubernetes 1.10.X it has been deprecated to open non-tls-enabled
-ports on kubernetes components. Thus, from NixOS 19.03 all plain HTTP
-ports have been disabled by default. While opening insecure ports is
-still possible, it is recommended not to bind these to other interfaces
-than loopback. To re-enable the insecure port on the apiserver, see options:
-[](#opt-services.kubernetes.apiserver.insecurePort) and
-[](#opt-services.kubernetes.apiserver.insecureBindAddress)
 
 ::: {.note}
 As of NixOS 19.03, it is mandatory to configure:

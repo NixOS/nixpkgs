@@ -1,16 +1,22 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-fetchzip {
-  name = "cooper-hewitt-2014-06-09";
+stdenvNoCC.mkDerivation rec {
+  pname = "cooper-hewitt";
+  version = "unstable-2014-06-09";
 
-  url = "https://www.cooperhewitt.org/wp-content/uploads/fonts/CooperHewitt-OTF-public.zip";
+  src = fetchzip {
+    url = "https://web.archive.org/web/20221004145117/https://www.cooperhewitt.org/wp-content/uploads/fonts/CooperHewitt-OTF-public.zip";
+    hash = "sha256-bTlEXQeYNNspvnNdvQhJn6CNBrcSKYWuNWF/N6+3Vb0=";
+  };
 
-  postFetch = ''
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/opentype
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype/
-  '';
+    mv *.otf $out/share/fonts/opentype
 
-  sha256 = "01iwqmjvqkc6fmc2r0486vk06s6f51n9wxzl1pf9z48n0igj4gqd";
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://www.cooperhewitt.org/open-source-at-cooper-hewitt/cooper-hewitt-the-typeface-by-chester-jenkins/";

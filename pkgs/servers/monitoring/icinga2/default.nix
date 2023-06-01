@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "icinga2${nameSuffix}";
-  version = "2.13.5";
+  version = "2.13.7";
 
   src = fetchFromGitHub {
     owner = "icinga";
     repo = "icinga2";
     rev = "v${version}";
-    sha256 = "sha256-XVA3VIGmj3mXfx2eIJ5X4hfjRrnZaAHYMPRyy9+9QGc=";
+    sha256 = "sha256-YLNzXdR54DA9araC7pxZmopAZB90j9sx4gb3hOVsu0I=";
   };
 
   patches = [
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake flex bison patchelf ];
 
   doCheck = true;
-  checkInputs = [ tzdata ]; # legacytimeperiod/dst needs this
+  nativeCheckInputs = [ tzdata ]; # legacytimeperiod/dst needs this
 
   postFixup = ''
     rm -r $out/etc/logrotate.d $out/etc/sysconfig $out/lib/icinga2/prepare-dirs
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     ''}
   '';
 
-  vim = runCommand "vim-icinga2-${version}" {} ''
+  vim = runCommand "vim-icinga2-${version}" { pname = "vim-icinga2"; } ''
     mkdir -p $out/share/vim-plugins
     cp -r "${src}/tools/syntax/vim" $out/share/vim-plugins/icinga2
   '';

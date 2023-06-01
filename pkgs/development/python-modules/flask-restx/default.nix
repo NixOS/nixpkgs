@@ -1,16 +1,16 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
+, pythonOlder
 , aniso8601
 , jsonschema
 , flask
 , werkzeug
 , pytz
 , faker
-, six
 , mock
 , blinker
+, py
 , pytest-flask
 , pytest-mock
 , pytest-benchmark
@@ -19,49 +19,32 @@
 
 buildPythonPackage rec {
   pname = "flask-restx";
-  version = "0.5.1";
+  version = "1.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   # Tests not included in PyPI tarball
   src = fetchFromGitHub {
     owner = "python-restx";
     repo = pname;
-    rev = version;
-    sha256 = "18vrmknyxw6adn62pz3kr9kvazfgjgl4pgimdf8527fyyiwcqy15";
+    rev = "refs/tags/${version}";
+    hash = "sha256-alXuo6TGDX2ko6VIKpAtyrg0EBkxEnC3DabH8GYqEs0=";
   };
-
-  patches = [
-    # Fixes werkzeug 2.1 compatibility
-    (fetchpatch {
-      # https://github.com/python-restx/flask-restx/pull/427
-      url = "https://github.com/python-restx/flask-restx/commit/bb72a51860ea8a42c928f69bdd44ad20b1f9ee7e.patch";
-      hash = "sha256-DRH3lI6TV1m0Dq1VyscL7GQS26OOra9g88dXZNrNpmQ=";
-    })
-    (fetchpatch {
-      # https://github.com/python-restx/flask-restx/pull/427
-      url = "https://github.com/python-restx/flask-restx/commit/bb3e9dd83b9d4c0d0fa0de7d7ff713fae71eccee.patch";
-      hash = "sha256-HJpjG4aQWzEPCMfbXfkw4mz5TH9d89BCvGH2dE6Jfv0=";
-    })
-    # Fixes werkzeug 2.2 compatibility
-    (fetchpatch {
-      # https://github.com/python-restx/flask-restx/pull/463
-      url = "https://github.com/python-restx/flask-restx/commit/82f7340ebb51e5c143b804bc0f20f785e96968c0.patch";
-      hash = "sha256-GA+UlFDu771ul3qplsukce/mjGvJ3E4Dw/IoJQLevNU=";
-    })
-  ];
 
   propagatedBuildInputs = [
     aniso8601
     flask
     jsonschema
     pytz
-    six
     werkzeug
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     blinker
     faker
     mock
+    py
     pytest-benchmark
     pytest-flask
     pytest-mock
@@ -75,11 +58,13 @@ buildPythonPackage rec {
     "--deselect=tests/test_logging.py::LoggingTest::test_override_app_level"
   ];
 
-  pythonImportsCheck = [ "flask_restx" ];
+  pythonImportsCheck = [
+    "flask_restx"
+  ];
 
   meta = with lib; {
-    homepage = "https://flask-restx.readthedocs.io/en/${version}/";
     description = "Fully featured framework for fast, easy and documented API development with Flask";
+    homepage = "https://github.com/python-restx/flask-restx";
     changelog = "https://github.com/python-restx/flask-restx/raw/${version}/CHANGELOG.rst";
     license = licenses.bsd3;
     maintainers = [ maintainers.marsam ];

@@ -59,10 +59,11 @@ def test_verbs(doc_en_core_web_trf):
     assert [
         token.lemma_ for token in doc_en_core_web_trf if token.pos_ == "VERB"] == [
         'start',
+        'work',
+        'drive',
         'take',
         'tell',
         'shake',
         'turn',
-        'be',
         'talk',
         'say']

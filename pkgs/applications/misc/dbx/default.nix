@@ -1,78 +1,93 @@
-{ buildPythonPackage
+{ lib
 , fetchFromGitHub
-, databricks-cli
-, scipy
-, path
-, pathspec
-, pydantic
-, protobuf
-, tqdm
-, mlflow
-, azure-identity
-, ruamel-yaml
-, emoji
-, cookiecutter
-, retry
-, azure-mgmt-datafactory
-, azure-mgmt-subscription
-, pytestCheckHook
-, pytest-asyncio
-, pytest-timeout
-, pytest-mock
-, lib
 , git
+, python3
 }:
 
-buildPythonPackage rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "dbx";
-  version = "0.6.8";
+  version = "0.8.11";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "databrickslabs";
     repo = "dbx";
-    rev = "v${version}";
-    sha256 = "sha256-Ou+VdHFVQzmsxJiyaeDd/+FqHvJZeNGB+OXyoagJwtk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-dArR1z3wkGDd3Y1WHK0sLjhuaKHAcsx6cCH2rgVdUGs=";
   };
 
-  propagatedBuildInputs = [
-    databricks-cli
-    scipy
-    path
-    pathspec
-    pydantic
-    protobuf
-    tqdm
-    mlflow
-    azure-identity
-    ruamel-yaml
-    emoji
-    cookiecutter
-    retry
-    azure-mgmt-datafactory
-    azure-mgmt-subscription
-  ];
-
-  checkInputs = [
-    pytestCheckHook
-    pytest-asyncio
-    pytest-timeout
-    pytest-mock
-    git
-  ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "mlflow-skinny>=1.28.0,<3.0.0" "mlflow" \
+      --replace "rich==12.6.0" "rich"
   '';
 
+  propagatedBuildInputs = with python3.pkgs; [
+    aiohttp
+    click
+    cookiecutter
+    cryptography
+    databricks-cli
+    jinja2
+    mlflow
+    pathspec
+    pydantic
+    pyyaml
+    requests
+    retry
+    rich
+    tenacity
+    typer
+    watchdog
+  ] ++ typer.optional-dependencies.all;
+
+  passthru.optional-dependencies = with python3.pkgs; {
+    aws = [
+      boto3
+    ];
+    azure = [
+      azure-storage-blob
+      azure-identity
+    ];
+    gcp = [
+      google-cloud-storage
+    ];
+  };
+
+  nativeCheckInputs = [
+    git
+  ] ++ (with python3.pkgs; [
+    pytest-asyncio
+    pytest-mock
+    pytest-timeout
+    pytestCheckHook
+  ]);
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+    export PATH="$PATH:$out/bin"
+  '';
+
+  pytestFlagsArray = [
+    "tests/unit"
+  ];
+
   disabledTests = [
-    # fails because of dbfs CLI wrong call
+    # Fails because of dbfs CLI wrong call
     "test_dbfs_unknown_user"
     "test_dbfs_no_root"
+    # Requires pylint, prospector, pydocstyle
+    "test_python_basic_sanity_check"
+  ];
+
+  pythonImportsCheck = [
+    "dbx"
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/databrickslabs/dbx";
     description = "CLI tool for advanced Databricks jobs management";
+    homepage = "https://github.com/databrickslabs/dbx";
+    changelog = "https://github.com/databrickslabs/dbx/blob/v${version}/CHANGELOG.md";
     license = licenses.databricks-dbx;
     maintainers = with maintainers; [ GuillaumeDesforges ];
   };

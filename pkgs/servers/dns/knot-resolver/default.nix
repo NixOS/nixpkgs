@@ -1,10 +1,9 @@
 { lib, stdenv, fetchurl
-, fetchpatch
 # native deps.
 , runCommand, pkg-config, meson, ninja, makeWrapper
 # build+runtime deps.
 , knot-dns, luajitPackages, libuv, gnutls, lmdb
-, systemd, libcap_ng, dns-root-data, nghttp2 # optionals, in principle
+, jemalloc, systemd, libcap_ng, dns-root-data, nghttp2 # optionals, in principle
 # test-only deps.
 , cmocka, which, cacert
 , extraFeatures ? false /* catch-all if defaults aren't enough */
@@ -18,27 +17,14 @@ lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "5.5.2";
+  version = "5.6.0";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "3f78aa69c3f28edc42b5900b9788fba39498d8bffda7fb9c772bb470865780cb";
+    sha256 = "0c82ae937b685dc477fb3176098e3dc106c898b7cd83553e5bc54dccb83c80d7";
   };
 
   outputs = [ "out" "dev" ];
-
-  patches = [
-    (fetchpatch {
-      name = "fix-config-tests-on-darwin.patch";
-      url = "https://gitlab.nic.cz/knot/knot-resolver/-/commit/48ad9d436cf80f58c107774c313a561d852148a0.diff";
-      sha256 = "CEX1XkeYLUSe31xUhNdMRMl1VUXtKFCs5noNJaqL5x0=";
-    })
-    (fetchpatch {
-      name = "fix-config-tests-on-aarch64-darwin.patch";
-      url = "https://gitlab.nic.cz/knot/knot-resolver/-/commit/adaac913c50a5db2f226a081ddc419b0d56d1757.diff";
-      sha256 = "1LrL74luzPTyJ7VBi7fskDga4lYAh7cSUmDcd1BNO78=";
-    })
-  ];
 
   # Path fixups for the NixOS service.
   postPatch = ''
@@ -77,7 +63,7 @@ unwrapped = stdenv.mkDerivation rec {
   # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
   buildInputs = [ knot-dns lua.lua libuv gnutls lmdb ]
     ++ optionals stdenv.isLinux [ /*lib*/systemd libcap_ng ]
-    ++ [ nghttp2 ]
+    ++ [ jemalloc nghttp2 ]
     ## optional dependencies; TODO: dnstap
     ;
 
@@ -85,6 +71,7 @@ unwrapped = stdenv.mkDerivation rec {
     "-Dkeyfile_default=${dns-root-data}/root.ds"
     "-Droot_hints=${dns-root-data}/root.hints"
     "-Dinstall_kresd_conf=disabled" # not really useful; examples are inside share/doc/
+    "-Dmalloc=jemalloc"
     "--default-library=static" # not used by anyone
   ]
   ++ optional doInstallCheck "-Dunit_tests=enabled"
@@ -101,9 +88,9 @@ unwrapped = stdenv.mkDerivation rec {
   '';
 
   doInstallCheck = with stdenv; hostPlatform == buildPlatform;
-  installCheckInputs = [ cmocka which cacert lua.cqueues lua.basexx lua.http ];
+  nativeInstallCheckInputs = [ cmocka which cacert lua.cqueues lua.basexx lua.http ];
   installCheckPhase = ''
-    meson test --print-errorlogs
+    meson test --print-errorlogs --no-suite snowflake
   '';
 
   meta = with lib; {
@@ -112,6 +99,7 @@ unwrapped = stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.vcunat /* upstream developer */ ];
+    mainProgram = "kresd";
   };
 };
 
@@ -126,6 +114,7 @@ wrapped-full = runCommand unwrapped.name
     ];
     preferLocalBuild = true;
     allowSubstitutes = false;
+    inherit (unwrapped) meta;
   }
   ''
     mkdir -p "$out"/bin

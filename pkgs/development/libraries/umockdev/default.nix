@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "umockdev";
-  version = "0.17.13";
+  version = "0.17.17";
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "https://github.com/martinpitt/umockdev/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-bG6/bmIJtqSXRuDZGkSNAntUJxurgu1woTLs8pTKE88=";
+    sha256 = "sha256-IOYhseRYsyADz+qZc5tngkuGZShUqLzjPiYSTjR/32w=";
   };
 
   patches = [
@@ -48,14 +48,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gobject-introspection
     glib
     systemd
     libgudev
     libpcap
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     python3
     which
     usbutils
@@ -83,6 +82,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    homepage = "https://github.com/martinpitt/umockdev";
+    changelog = "https://github.com/martinpitt/umockdev/releases/tag/${version}";
     description = "Mock hardware devices for creating unit tests";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ flokli ];

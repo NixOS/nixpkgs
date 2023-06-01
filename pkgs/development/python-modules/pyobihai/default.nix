@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, defusedxml
 , fetchPypi
 , pythonOlder
 , requests
@@ -7,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyobihai";
-  version = "1.3.2";
+  version = "1.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,10 +16,11 @@ buildPythonPackage rec {
   # GitHub release, https://github.com/dshokouhi/pyobihai/issues/10
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zhsnJyhXlugK0nJ7FJZZcrq2VDQt1a9uCgsJAIABZ28=";
+    hash = "sha256-L/AQy9IxsBDeSlu+45j+/86jjMFzTjAkPGwZoa1QYho=";
   };
 
   propagatedBuildInputs = [
+    defusedxml
     requests
   ];
 

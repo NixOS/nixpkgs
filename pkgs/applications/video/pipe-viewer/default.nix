@@ -6,7 +6,6 @@
 , wrapGAppsHook
 , withGtk3 ? false
 , ffmpeg
-, gtk3
 , wget
 , xdg-utils
 , youtube-dl
@@ -63,7 +62,7 @@ buildPerlModule rec {
     substituteInPlace Build.PL --replace 'my $gtk ' 'my $gtk = 1;#'
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     TestPod
   ];
 

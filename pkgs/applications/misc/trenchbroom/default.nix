@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , cmake, ninja, git, pandoc, pkg-config
-, libGL, libGLU, libXxf86vm, freeimage
+, libGL, libGLU, freeimage
 , catch2, fmt, glew, miniz, tinyxml-2, xorg
 , qtbase, wrapQtAppsHook
 , copyDesktopItems, makeDesktopItem
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake git pandoc wrapQtAppsHook copyDesktopItems pkg-config ];
   buildInputs = [
-    libGL libGLU libXxf86vm freeimage qtbase catch2 fmt glew miniz tinyxml-2
+    libGL libGLU xorg.libXxf86vm freeimage qtbase catch2 fmt glew miniz tinyxml-2
     xorg.libSM
   ];
   QT_PLUGIN_PATH = "${qtbase}/${qtbase.qtPluginPrefix}";

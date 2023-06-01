@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "python-socketio";
-  version = "5.7.1";
+  version = "5.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,18 +23,25 @@ buildPythonPackage rec {
     owner = "miguelgrinberg";
     repo = "python-socketio";
     rev = "v${version}";
-    sha256 = "sha256-KVaBSBWLeFJYiNJYTwoExExUmUaeNJ40c/WTgTc2Y/w=";
+    hash = "sha256-3Do3Ql48cmhvrFe14ZYvWH0xi3T8hJ2LP0FyyWin580=";
   };
 
   propagatedBuildInputs = [
-    aiohttp
     bidict
     python-engineio
-    requests
-    websocket-client
   ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    client = [
+      requests
+      websocket-client
+    ];
+    asyncio_client = [
+      aiohttp
+    ];
+  };
+
+  nativeCheckInputs = [
     mock
     msgpack
     pytestCheckHook
@@ -51,6 +58,7 @@ buildPythonPackage rec {
       bidirectional event-based communication between clients and a server.
     '';
     homepage = "https://github.com/miguelgrinberg/python-socketio/";
+    changelog = "https://github.com/miguelgrinberg/python-socketio/blob/v${version}/CHANGES.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ mic92 ];
   };

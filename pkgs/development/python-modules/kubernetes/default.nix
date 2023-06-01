@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "kubernetes";
-  version = "24.2.0";
+  version = "26.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "kubernetes-client";
     repo = "python";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-rRr73UGhLzpznpNKHCj8LReMk2wOpIoxrSzitl9J+Pg=";
+    hash = "sha256-2QkQGZ4Dho2PykH90ijosWWBzhQoCHoWhRL3ruOiDBg=";
   };
 
   propagatedBuildInputs = [
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     "kubernetes"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];

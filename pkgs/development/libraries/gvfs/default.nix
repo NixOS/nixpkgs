@@ -1,12 +1,14 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch2
 , meson
 , ninja
 , pkg-config
 , gettext
 , dbus
 , glib
+, udevSupport ? stdenv.isLinux
 , libgudev
 , udisks2
 , libgcrypt
@@ -43,12 +45,22 @@
 
 stdenv.mkDerivation rec {
   pname = "gvfs";
-  version = "1.50.2";
+  version = "1.50.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "A9crjBXvQ4EQ8M9Fe1ZVJmyLUV0EErMPTVXPoNoGrF4=";
+    sha256 = "q5BZpnalN+2+ohOIwqr+Gn4sjxrC39xtZFUCMwdUV/0=";
   };
+
+  patches = [
+    # Hardcode the ssh path again.
+    # https://gitlab.gnome.org/GNOME/gvfs/-/issues/465
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/gvfs/-/commit/8327383e262e1e7f32750a8a2d3dd708195b0f53.patch";
+      hash = "sha256-ReD7qkezGeiJHyo9jTqEQNBjECqGhV9nSD+dYYGZWJ8=";
+      revert = true;
+    })
+  ];
 
   postPatch = ''
     # patchShebangs requires executable file
@@ -72,26 +84,27 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    libgudev
-    udisks2
     libgcrypt
     dbus
     libgphoto2
     avahi
     libarchive
+    libimobiledevice
+    libbluray
+    libnfs
+    openssh
+    gsettings-desktop-schemas
+    libsoup_3
+  ] ++ lib.optionals udevSupport [
+    libgudev
+    udisks2
     fuse3
     libcdio
     samba
     libmtp
     libcap
     polkit
-    libimobiledevice
-    libbluray
     libcdio-paranoia
-    libnfs
-    openssh
-    gsettings-desktop-schemas
-    libsoup_3
   ] ++ lib.optionals gnomeSupport [
     gcr
     glib-networking # TLS support
@@ -103,6 +116,17 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
     "-Dtmpfilesdir=no"
+  ] ++ lib.optionals (!udevSupport) [
+    "-Dgudev=false"
+    "-Dudisks2=false"
+    "-Dfuse=false"
+    "-Dcdda=false"
+    "-Dsmb=false"
+    "-Dmtp=false"
+    "-Dadmin=false"
+    "-Dgphoto2=false"
+    "-Dlibusb=false"
+    "-Dlogind=false"
   ] ++ lib.optionals (!gnomeSupport) [
     "-Dgcr=false"
     "-Dgoa=false"
@@ -118,6 +142,8 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails with "ModuleNotFoundError: No module named 'gi'"
   doInstallCheck = doCheck;
 
+  separateDebugInfo = true;
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
@@ -128,7 +154,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Virtual Filesystem support library" + optionalString gnomeSupport " (full GNOME support)";
     license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ ] ++ teams.gnome.members;
+    platforms = platforms.unix;
+    maintainers = teams.gnome.members;
   };
 }

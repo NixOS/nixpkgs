@@ -60,16 +60,14 @@ self: let
         else super.org-transclusion;
       rcirc-menu = markBroken super.rcirc-menu; # Missing file header
       cl-lib = null; # builtin
+      cl-print = null; # builtin
       tle = null; # builtin
       advice = null; # builtin
       seq = if lib.versionAtLeast self.emacs.version "27"
             then null
             else super.seq;
-      project = if lib.versionAtLeast self.emacs.version "28"
-                then null
-                else super.project;
       # Compilation instructions for the Ada executables:
-      # https://www.nongnu.org/ada-mode/ada-mode.html#Ada-executables
+      # https://www.nongnu.org/ada-mode/
       ada-mode = super.ada-mode.overrideAttrs (old: {
         # actually unpack source of ada-mode and wisi
         # which are both needed to compile the tools
@@ -85,23 +83,53 @@ self: let
         nativeBuildInputs = [
           buildPackages.gnat
           buildPackages.gprbuild
-          buildPackages.lzip
+          buildPackages.dos2unix
+          buildPackages.re2c
         ];
 
         buildInputs = [
           pkgs.gnatcoll-xref
         ];
 
-        preInstall = ''
+        buildPhase = ''
+          runHook preBuild
           ./build.sh -j$NIX_BUILD_CORES
+          runHook postBuild
         '';
 
-        postInstall = ''
+        postInstall = (old.postInstall or "") + "\n" + ''
           ./install.sh --prefix=$out
         '';
 
         meta = old.meta // {
           maintainers = [ lib.maintainers.sternenseemann ];
+        };
+      });
+
+      jinx = super.jinx.overrideAttrs (old: let
+        libExt = pkgs.stdenv.targetPlatform.extensions.sharedLibrary;
+      in {
+        dontUnpack = false;
+
+        nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
+            pkgs.pkg-config
+        ];
+
+        buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.enchant2 ];
+
+        postBuild = ''
+          NIX_CFLAGS_COMPILE="$($PKG_CONFIG --cflags enchant-2) $NIX_CFLAGS_COMPILE"
+          $CC -shared -o jinx-mod${libExt} jinx-mod.c -lenchant-2
+        '';
+
+        postInstall = (old.postInstall or "") + "\n" + ''
+          outd=$out/share/emacs/site-lisp/elpa/jinx-*
+          install -m444 -t $outd jinx-mod${libExt}
+          rm $outd/jinx-mod.c $outd/emacs-module.h
+        '';
+
+        meta = old.meta // {
+          maintainers = [ lib.maintainers.DamienCassou ];
         };
       });
 

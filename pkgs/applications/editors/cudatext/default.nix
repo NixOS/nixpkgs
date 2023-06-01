@@ -38,13 +38,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cudatext";
-  version = "1.169.2";
+  version = "1.194.4";
 
   src = fetchFromGitHub {
     owner = "Alexey-T";
     repo = "CudaText";
     rev = version;
-    hash = "sha256-EQAoKft/L4sbdY8hOvyu+Cy+3I8Lt4g1KTxTlSYALac=";
+    hash = "sha256-suZROvrbi02jRnueoet2wT2+dxNuWgv8X6tIvlOPHPI=";
   };
 
   postPatch = ''
@@ -66,8 +66,12 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
 
   buildPhase = lib.concatStringsSep "\n" (lib.mapAttrsToList (name: dep: ''
-    ln -s ${dep} ${name}
+    cp -r ${dep} ${name}
   '') deps) + ''
+    # See https://wiki.freepascal.org/CudaText#How_to_compile_CudaText
+    substituteInPlace ATSynEdit/atsynedit/atsynedit_package.lpk \
+      --replace GTK2_IME_CODE _GTK2_IME_CODE
+
     lazbuild --lazarusdir=${lazarus}/share/lazarus --pcp=./lazarus --ws=${widgetset} \
       bgrabitmap/bgrabitmap/bgrabitmappack.lpk \
       EncConv/encconv/encconv_package.lpk \

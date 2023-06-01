@@ -8,14 +8,14 @@ discovery default udev rules. By adding `$out/lib` to the lookup paths
 we should again be able to discover the udev rules amongst other default
 files that I might have missed.
 ---
- src/basic/def.h | 6 ++++--
+ src/basic/constants.h | 6 ++++--
  1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/src/basic/def.h b/src/basic/def.h
-index 0a1ae023a3..cc00ff6c68 100644
---- a/src/basic/def.h
-+++ b/src/basic/def.h
-@@ -39,13 +39,15 @@
+diff --git a/src/basic/constants.h b/src/basic/constants.h
+index 5d68cc6332..33c06c1f65 100644
+--- a/src/basic/constants.h
++++ b/src/basic/constants.h
+@@ -73,13 +73,15 @@
          "/run/" n "\0"                          \
          "/usr/local/lib/" n "\0"                \
          "/usr/lib/" n "\0"                      \

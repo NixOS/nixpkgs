@@ -8,12 +8,12 @@ buildPythonPackage rec {
     owner = "appknox";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-NtAsO/I1jDEv676yhAgLguQnB/kHdAqPoLt2QFWbvmw=";
+    hash = "sha256-NtAsO/I1jDEv676yhAgLguQnB/kHdAqPoLt2QFWbvmw=";
   };
 
   propagatedBuildInputs = [ asn1crypto click lxml ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Python3 Parser for Android XML file and get Application Name without using Androguard";

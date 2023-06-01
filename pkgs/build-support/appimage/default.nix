@@ -6,7 +6,7 @@
 , libarchive
 , pv
 , squashfsTools
-, buildFHSUserEnv
+, buildFHSEnv
 , pkgs
 }:
 
@@ -43,7 +43,7 @@ rec {
     extraPkgs,
     meta ? {},
     ...
-  }: buildFHSUserEnv
+  }: buildFHSEnv
     (defaultFhsEnvArgs // {
       inherit name;
 
@@ -61,6 +61,14 @@ rec {
     (args // {
       inherit name extraPkgs;
       src = extract { inherit name src; };
+
+      # passthru src to make nix-update work
+      # hack to keep the origin position (unsafeGetAttrPos)
+      passthru = lib.pipe args [
+        lib.attrNames
+        (lib.remove "src")
+        (removeAttrs args)
+      ] // args.passthru or { };
     });
 
   defaultFhsEnvArgs = {
@@ -71,7 +79,6 @@ rec {
       gtk3
       bashInteractive
       gnome.zenity
-      python2
       xorg.xrandr
       which
       perl
@@ -156,11 +163,13 @@ rec {
       wayland
       mesa
       libxkbcommon
+      vulkan-loader
 
       flac
       freeglut
       libjpeg
       libpng12
+      libpulseaudio
       libsamplerate
       libmikmod
       libtheora

@@ -28,18 +28,18 @@
 
 mkDerivation rec {
   pname = "jellyfin-media-player";
-  version = "1.7.1";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-media-player";
     rev = "v${version}";
-    sha256 = "sha256-piMqI4qxcNUSNC+0JE2KZ/cvlNgtxUOnSfrcWnBVzC0=";
+    sha256 = "sha256-97/9UYXOsg8v7QoRqo5rh0UGhjjS85K9OvUwtlG249c=";
   };
 
   patches = [
-    # the webclient-files are not copied in the regular build script. Copy them just like the linux build
-    ./fix-osx-resources.patch
+    # fix the location of the jellyfin-web path
+    ./fix-web-path.patch
     # disable update notifications since the end user can't simply download the release artifacts to update
     ./disable-update-notifications.patch
   ];
@@ -79,9 +79,9 @@ mkDerivation rec {
     "-DLINUX_X11POWER=ON"
   ];
 
-  preBuild = ''
-    # link the jellyfin-web files to the expected "dist" directory
-    ln -s ${jellyfin-web}/share/jellyfin-web dist
+  preConfigure = ''
+    # link the jellyfin-web files to be copied by cmake (see fix-web-path.patch)
+    ln -s ${jellyfin-web}/share/jellyfin-web .
   '';
 
   postInstall = lib.optionalString stdenv.isDarwin ''

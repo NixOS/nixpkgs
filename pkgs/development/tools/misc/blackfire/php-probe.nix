@@ -12,59 +12,48 @@
 
 let
   phpMajor = lib.versions.majorMinor php.version;
-  soFile = {
-    "7.4" = "blackfire-20190902";
-    "8.0" = "blackfire-20200930";
-    "8.1" = "blackfire-20210902";
-  }.${phpMajor} or (throw "Unsupported PHP version.");
 
-  version = "1.77.0";
+  version = "1.86.8";
 
   hashes = {
     "x86_64-linux" = {
       system = "amd64";
-      sha256 = "oC4pANYT2XtF3ju+pT2TCb6iJSlNm6t+Xkawb88xWUo=";
+      sha256 = {
+        "8.0" = "zoT9f906lvMTyq+w7BAqwA3Wnadk0hEsc9KLYuffE8c=";
+        "8.1" = "KJB3/BlS8FCDg3CEaYf14RJk3xhda1K2XEPVylSRFTQ=";
+        "8.2" = "PrhPtYUkz+Zs4ctIJUsHlUqLHZDfXNMc7s6uA5RJNVI=";
+      };
     };
     "i686-linux" = {
       system = "i386";
-      sha256 = "zdebak5RWuPqCJ3eReKjtDLnCXtjtVFnSqvqC4U0+RE=";
+      sha256 = {
+        "8.0" = "IByOPOvzJZOR9hw6Ngn81XtXBczRPLswDA4Mvh8dQdQ=";
+        "8.1" = "Mob30xhKWaREiqw3cjlrz0jtAc9onERT6NxTz9bUSSY=";
+        "8.2" = "a7paFrgLfMLvcQRcHPi+sJ61XTjphcba+tewrJw0OnE=";
+      };
     };
     "aarch64-linux" = {
       system = "arm64";
-      sha256 = "5J1JcD/ZFxV0FWaySv037x1xjmCdM/zHiBfmRuCidjs=";
+      sha256 = {
+        "8.0" = "6ZhFRjjj/y3yyH2PXVnw+Mhkm2trfpysxfXocH5nx48=";
+        "8.1" = "x2TGaehSJmgJJcapr6xBO9Svo1HE66eVRHt/Ab+RSzQ=";
+        "8.2" = "YUs8h/DBwaNvmYA9TS7l0skg+X4yBzcHbPH4QXeSdCI=";
+      };
     };
     "aarch64-darwin" = {
       system = "arm64";
       sha256 = {
-        "7.4" = {
-          normal = "vKOH+yPDyf8KxX0DoEnrp2HXYfDAxVD708MZrRGMEEk=";
-          zts = "cpeOtDRhPA35utai8G1Dosuqhf76hiqvwe+Em9cFhDo=";
-        };
-        "8.0" = {
-          normal = "v6PD1+Ghvtoq1wzAXwqi9elyC9/NwzX0EDdtQtCfeL4=";
-          zts = "Dqs0P8X7ScDJCPYKuqlumnLz4kB7cEOnVbDACQ02sko=";
-        };
-        "8.1" = {
-          normal = "mCZ1avC8FsqYdGYNepeqWgSK2kqVo1E0VjhofxdaSyk=";
-          zts = "zliaM2VbaDEgNBr5ETe1GdYNyTZy5te92LedZiolx/8=";
-        };
+        "8.0" = "HZV7I8HOWvGwV9kMuSBW1/vgs+plxYLvbVs/d8aNNfE=";
+        "8.1" = "PsHDB/P/vbdpqbLl12UqelHfvHHt2WxiWEUCV7s5ZJg=";
+        "8.2" = "pEkFLhjWOLquBcxE06Gv7HUB/lPU8cPajhsFc0kcKlA=";
       };
     };
     "x86_64-darwin" = {
       system = "amd64";
       sha256 = {
-        "7.4" = {
-          normal = "nLsrpRnR9zo3d/a0+TFBlNcAebknpBQc101ysqPs+dU=";
-          zts = "o7R8zmhIOtiNDS8Se3Dog+cn9HyTHzS4jquXdzGQQOU=";
-        };
-        "8.0" = {
-          normal = "Pe2/GNDiS5DuSXCffO0jo5dRl0qkh1RgBVL3JzLwVkQ=";
-          zts = "zu7QgaKbBNQkby7bLv+NKLSIa79UXMONEf171EO+uNE=";
-        };
-        "8.1" = {
-          normal = "3SOlLeLCM4crWY6U+/zmtWmNYg2j0HC/3FWCmCi7lOo=";
-          zts = "GG8s+Pd0K6SEUzRV96Ba2mYfLgQMuGNzRoUtmz9m0NY=";
-        };
+        "8.0" = "VOi901nkVNjHSk02HNk6/z9q3avs+doHWL+Zxxruc6k=";
+        "8.1" = "TVV9Iysueo1M2WaaX6CF52WzMfJJ96gOIxuy1mIA6ao=";
+        "8.2" = "XOcjZes3JNfulJimdCTkipiRzrJ/237SSfqNAelVPNU=";
       };
     };
   };
@@ -73,57 +62,40 @@ let
     {
       system,
       phpMajor,
-      ztsSupport,
     }:
 
     let
       isLinux = builtins.match ".+-linux" system != null;
     in
-    assert !isLinux -> (phpMajor != null && ztsSupport != null);
+    assert !isLinux -> (phpMajor != null);
     fetchurl {
       url =
-        if isLinux
-        then "https://packages.blackfire.io/debian/pool/any/main/b/blackfire-php/blackfire-php_${version}_${hashes.${system}.system}.deb"
-        else "https://packages.blackfire.io/homebrew/blackfire-php_${version}-darwin_${hashes.${system}.system}-php${builtins.replaceStrings ["."] [""] phpMajor}${lib.optionalString ztsSupport "-zts"}.tar.gz";
-      sha256 =
-        if isLinux
-        then hashes.${system}.sha256
-        else hashes.${system}.sha256.${phpMajor}.${if ztsSupport then "zts" else "normal"};
+        "https://packages.blackfire.io/binaries/blackfire-php/${version}/blackfire-php-${if isLinux then "linux" else "darwin"}_${hashes.${system}.system}-php-${builtins.replaceStrings [ "." ] [ "" ] phpMajor}.so";
+      sha256 = hashes.${system}.sha256.${phpMajor};
     };
 self = stdenv.mkDerivation rec {
   pname = "php-blackfire";
+  extensionName = "blackfire";
   inherit version;
 
   src = makeSource {
     system = stdenv.hostPlatform.system;
     inherit phpMajor;
-    inherit (php) ztsSupport;
+    inherit (php);
   };
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [
-    dpkg
     autoPatchelfHook
   ];
 
-  setSourceRoot = if stdenv.isDarwin then "sourceRoot=`pwd`" else null;
+  setSourceRoot = "sourceRoot=`pwd`";
 
-  unpackPhase = if stdenv.isLinux then ''
-    runHook preUnpack
-    dpkg-deb -x $src pkg
-    sourceRoot=pkg
-
-    runHook postUnpack
-  '' else null;
+  dontUnpack = true;
 
   installPhase = ''
     runHook preInstall
 
-    if ${ lib.boolToString stdenv.isLinux }
-    then
-        install -D usr/lib/blackfire-php/*/${soFile}${lib.optionalString php.ztsSupport "-zts"}.so $out/lib/php/extensions/blackfire.so
-    else
-        install -D blackfire.so $out/lib/php/extensions/blackfire.so
-    fi
+    install -D ${src} $out/lib/php/extensions/blackfire.so
 
     runHook postInstall
   '';
@@ -167,11 +139,6 @@ self = stdenv.mkDerivation rec {
               if builtins.length rest == 0
               then null
               else builtins.head rest;
-            ztsSupport =
-              if builtins.length rest == 0
-              then null
-              else
-                builtins.head (builtins.tail rest) == "zts";
           };
 
           createUpdateable =
@@ -200,7 +167,7 @@ self = stdenv.mkDerivation rec {
     homepage = "https://blackfire.io/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ jtojnar shyim ];
+    maintainers = with maintainers; [ shyim ];
     platforms = [ "x86_64-linux" "aarch64-linux" "i686-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 };

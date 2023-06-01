@@ -1,9 +1,8 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
-, pytest
-, pytest-cov
 , flaky
 , numpy
 , pandas
@@ -16,24 +15,44 @@
 
 buildPythonPackage rec {
   pname = "skorch";
-  version = "0.11.0";
+  version = "0.13.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b35cb4e50045742f0ffcfad33044af691d5d36b50212573753a804483a947ca9";
+    hash = "sha256-k9Zs4uqskHLqVHOKK7dIOmBSUmbDpOMuPS9eSdxNjO0=";
   };
 
   propagatedBuildInputs = [ numpy torch scikit-learn scipy tabulate tqdm ];
-  checkInputs = [ pytest pytest-cov flaky pandas pytestCheckHook ];
+  nativeCheckInputs = [ flaky pandas pytestCheckHook ];
+
+  # patch out pytest-cov dep/invocation
+  postPatch = ''
+    substituteInPlace setup.cfg  \
+      --replace "--cov=skorch" ""  \
+      --replace "--cov-report=term-missing" ""  \
+      --replace "--cov-config .coveragerc" ""
+  '';
 
   disabledTests = [
     # on CPU, these expect artifacts from previous GPU run
     "test_load_cuda_params_to_cpu"
     # failing tests
     "test_pickle_load"
-    "test_grid_search_with_slds_"
-    "test_grid_search_with_dict_works"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # there is a problem with the compiler selection
+    "test_fit_and_predict_with_compile"
   ];
+
+  disabledTestPaths = [
+    # tries to import `transformers` and download HuggingFace data
+    "skorch/tests/test_hf.py"
+  ] ++ lib.optionals (stdenv.hostPlatform.system != "x86_64-linux") [
+    # torch.distributed is disabled by default in darwin
+    # aarch64-linux also failed these tests
+    "skorch/tests/test_history.py"
+  ];
+
+  pythonImportsCheck = [ "skorch" ];
 
   meta = with lib; {
     description = "Scikit-learn compatible neural net library using Pytorch";
@@ -41,7 +60,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/skorch-dev/skorch/blob/master/CHANGES.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
-    # TypeError: __init__() got an unexpected keyword argument 'iid'
-    broken = true;
   };
 }

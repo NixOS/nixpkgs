@@ -4,24 +4,41 @@ with lib;
 let
   cfg = config.services.gitlab-runner;
   hasDocker = config.virtualisation.docker.enable;
+
+  /* The whole logic of this module is to diff the hashes of the desired vs existing runners
+  The hash is recorded in the runner's name because we can't do better yet
+  See https://gitlab.com/gitlab-org/gitlab-runner/-/issues/29350 for more details
+  */
+  genRunnerName = name: service: let
+      hash = substring 0 12 (hashString "md5" (unsafeDiscardStringContext (toJSON service)));
+    in if service ? description && service.description != null
+    then "${hash} ${service.description}"
+    else "${name}_${config.networking.hostName}_${hash}";
+
   hashedServices = mapAttrs'
-    (name: service: nameValuePair
-      "${name}_${config.networking.hostName}_${
-        substring 0 12
-        (hashString "md5" (unsafeDiscardStringContext (toJSON service)))}"
-      service)
-    cfg.services;
-  configPath = "$HOME/.gitlab-runner/config.toml";
-  configureScript = pkgs.writeShellScriptBin "gitlab-runner-configure" (
-    if (cfg.configFile != null) then ''
-      mkdir -p $(dirname ${configPath})
+    (name: service: nameValuePair (genRunnerName name service) service) cfg.services;
+  configPath = ''"$HOME"/.gitlab-runner/config.toml'';
+  configureScript = pkgs.writeShellApplication {
+    name = "gitlab-runner-configure";
+    runtimeInputs = with pkgs; [
+        bash
+        gawk
+        jq
+        moreutils
+        remarshal
+        util-linux
+        cfg.package
+        perl
+        python3
+    ];
+    text = if (cfg.configFile != null) then ''
       cp ${cfg.configFile} ${configPath}
       # make config file readable by service
-      chown -R --reference=$HOME $(dirname ${configPath})
+      chown -R --reference="$HOME" "$(dirname ${configPath})"
     '' else ''
       export CONFIG_FILE=${configPath}
 
-      mkdir -p $(dirname ${configPath})
+      mkdir -p "$(dirname ${configPath})"
       touch ${configPath}
 
       # update global options
@@ -34,22 +51,43 @@ let
       # remove no longer existing services
       gitlab-runner verify --delete
 
-      # current and desired state
-      NEEDED_SERVICES=$(echo ${concatStringsSep " " (attrNames hashedServices)} | tr " " "\n")
-      REGISTERED_SERVICES=$(gitlab-runner list 2>&1 | grep 'Executor' | awk '{ print $1 }')
+      ${toShellVar "NEEDED_SERVICES" (lib.mapAttrs (name: value: 1) hashedServices)}
+
+      declare -A REGISTERED_SERVICES
+
+      while IFS="," read -r name token;
+      do
+        REGISTERED_SERVICES["$name"]="$token"
+      done < <(gitlab-runner --log-format json list 2>&1 | grep Token  | jq -r '.msg +"," + .Token')
+
+      echo "NEEDED_SERVICES: " "''${!NEEDED_SERVICES[@]}"
+      echo "REGISTERED_SERVICES:" "''${!REGISTERED_SERVICES[@]}"
 
       # difference between current and desired state
-      NEW_SERVICES=$(grep -vxF -f <(echo "$REGISTERED_SERVICES") <(echo "$NEEDED_SERVICES") || true)
-      OLD_SERVICES=$(grep -vxF -f <(echo "$NEEDED_SERVICES") <(echo "$REGISTERED_SERVICES") || true)
+      declare -A NEW_SERVICES
+      for name in "''${!NEEDED_SERVICES[@]}"; do
+        if [ ! -v 'REGISTERED_SERVICES[$name]' ]; then
+          NEW_SERVICES[$name]=1
+        fi
+      done
+
+      declare -A OLD_SERVICES
+      # shellcheck disable=SC2034
+      for name in "''${!REGISTERED_SERVICES[@]}"; do
+        if [ ! -v 'NEEDED_SERVICES[$name]' ]; then
+          OLD_SERVICES[$name]=1
+        fi
+      done
 
       # register new services
       ${concatStringsSep "\n" (mapAttrsToList (name: service: ''
-        if echo "$NEW_SERVICES" | grep -xq "${name}"; then
+        # TODO so here we should mention NEW_SERVICES
+        if [ -v 'NEW_SERVICES["${name}"]' ] ; then
           bash -c ${escapeShellArg (concatStringsSep " \\\n " ([
             "set -a && source ${service.registrationConfigFile} &&"
             "gitlab-runner register"
             "--non-interactive"
-            (if service.description != null then "--description \"${service.description}\"" else "--name '${name}'")
+            "--name '${name}'"
             "--executor ${service.executor}"
             "--limit ${toString service.limit}"
             "--request-concurrency ${toString service.requestConcurrency}"
@@ -92,22 +130,26 @@ let
         fi
       '') hashedServices)}
 
+      # check key is in array https://stackoverflow.com/questions/30353951/how-to-check-if-dictionary-contains-a-key-in-bash
+
+      echo "NEW_SERVICES: ''${NEW_SERVICES[*]}"
+      echo "OLD_SERVICES: ''${OLD_SERVICES[*]}"
       # unregister old services
-      for NAME in $(echo "$OLD_SERVICES")
+      for NAME in "''${!OLD_SERVICES[@]}"
       do
-        [ ! -z "$NAME" ] && gitlab-runner unregister \
+        [ -n "$NAME" ] && gitlab-runner unregister \
           --name "$NAME" && sleep 1
       done
 
       # make config file readable by service
-      chown -R --reference=$HOME $(dirname ${configPath})
-    '');
+      chown -R --reference="$HOME" "$(dirname ${configPath})"
+    '';
+  };
   startScript = pkgs.writeShellScriptBin "gitlab-runner-start" ''
     export CONFIG_FILE=${configPath}
     exec gitlab-runner run --working-directory $HOME
   '';
-in
-{
+in {
   options.services.gitlab-runner = {
     enable = mkEnableOption (lib.mdDoc "Gitlab Runner");
     configFile = mkOption {
@@ -141,7 +183,7 @@ in
       default = false;
       description = lib.mdDoc ''
         Finish all remaining jobs before stopping.
-        If not set gitlab-runner will stop immediatly without waiting
+        If not set gitlab-runner will stop immediately without waiting
         for jobs to finish, which will lead to failed builds.
       '';
     };
@@ -453,11 +495,48 @@ in
         };
       });
     };
+    clear-docker-cache = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Whether to periodically prune gitlab runner's Docker resources. If
+          enabled, a systemd timer will run {command}`clear-docker-cache` as
+          specified by the `dates` option.
+        '';
+      };
+
+      flags = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        example = [ "prune" ];
+        description = lib.mdDoc ''
+          Any additional flags passed to {command}`clear-docker-cache`.
+        '';
+      };
+
+      dates = mkOption {
+        default = "weekly";
+        type = types.str;
+        description = lib.mdDoc ''
+          Specification (in the format described by
+          {manpage}`systemd.time(7)`) of the time at
+          which the prune will occur.
+        '';
+      };
+
+      package = mkOption {
+        default = config.virtualisation.docker.package;
+        defaultText = literalExpression "config.virtualisation.docker.package";
+        example = literalExpression "pkgs.docker";
+        description = lib.mdDoc "Docker package to use for clearing up docker cache.";
+      };
+    };
   };
   config = mkIf cfg.enable {
-    warnings = (mapAttrsToList
+    warnings = mapAttrsToList
       (n: v: "services.gitlab-runner.services.${n}.`registrationConfigFile` points to a file in Nix Store. You should use quoted absolute path to prevent this.")
-      (filterAttrs (n: v: isStorePath v.registrationConfigFile) cfg.services));
+      (filterAttrs (n: v: isStorePath v.registrationConfigFile) cfg.services);
 
     environment.systemPackages = [ cfg.package ];
     systemd.services.gitlab-runner = {
@@ -491,11 +570,27 @@ in
         ExecStartPre = "!${configureScript}/bin/gitlab-runner-configure";
         ExecStart = "${startScript}/bin/gitlab-runner-start";
         ExecReload = "!${configureScript}/bin/gitlab-runner-configure";
-      } // optionalAttrs (cfg.gracefulTermination) {
+      } // optionalAttrs cfg.gracefulTermination {
         TimeoutStopSec = "${cfg.gracefulTimeout}";
         KillSignal = "SIGQUIT";
         KillMode = "process";
       };
+    };
+    # Enable periodic clear-docker-cache script
+    systemd.services.gitlab-runner-clear-docker-cache = mkIf (cfg.clear-docker-cache.enable && (any (s: s.executor == "docker") (attrValues cfg.services))) {
+      description = "Prune gitlab-runner docker resources";
+      restartIfChanged = false;
+      unitConfig.X-StopOnRemoval = false;
+
+      serviceConfig.Type = "oneshot";
+
+      path = [ cfg.clear-docker-cache.package pkgs.gawk ];
+
+      script = ''
+        ${pkgs.gitlab-runner}/bin/clear-docker-cache ${toString cfg.clear-docker-cache.flags}
+      '';
+
+      startAt = cfg.clear-docker-cache.dates;
     };
     # Enable docker if `docker` executor is used in any service
     virtualisation.docker.enable = mkIf (

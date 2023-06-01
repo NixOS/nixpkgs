@@ -6,16 +6,18 @@
 buildGoModule
 rec {
   pname = "eclint";
-  version = "0.3.4";
+  version = "0.3.8";
 
   src = fetchFromGitLab {
     owner = "greut";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-inO41C/Ompyfy4CHPK4ksNU19KIcGyPgF/ptZC0GWXg=";
+    sha256 = "sha256-wAT+lc8cFf9zOZ72EwIeE2z5mCjGN8vpRoS1k15X738=";
   };
 
-  vendorSha256 = "sha256-imVQnPoKOjed9XlikLWvudmlJklRrLFHKtNZoAmznZg=";
+  vendorHash = "sha256-6aIE6MyNDOLRxn+CYSCVNj4Q50HywSh/Q0WxnxCEtg8=";
+
+  ldflags = [ "-X main.version=${version}" ];
 
   meta = with lib; {
     homepage = "https://gitlab.com/greut/eclint";

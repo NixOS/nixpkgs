@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "siobrultech-protocols";
-  version = "0.6.0";
+  version = "0.9.0";
 
   disabled = pythonOlder "3.8";
 
@@ -18,11 +18,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sdwilsh";
     repo = "siobrultech-protocols";
-    rev = "v${version}";
-    hash = "sha256-d4zAwcSCyC78dJZtxFkpdYurxDRon2cRgzInllP2qJQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-8qhg7PX4u4vN2+hWXzFjC1ZzgCEhkSr9Fn58Lc4E76c=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
     pyyaml

@@ -1,5 +1,5 @@
 { lib
-, gccStdenv
+, stdenv
 , fetchFromGitHub
 , cmake
 , simdExtensions ? null
@@ -8,7 +8,7 @@
 with rec {
   # SIMD instruction sets to compile for. If none are specified by the user,
   # an appropriate one is selected based on the detected host system
-  isas = with gccStdenv.hostPlatform;
+  isas = with stdenv.hostPlatform;
     if simdExtensions != null then lib.toList simdExtensions
     else if avx2Support then [ "AVX2" ]
     else if sse4_1Support then [ "SSE41" ]
@@ -16,7 +16,7 @@ with rec {
     else if isAarch64 then [ "NEON" ]
     else [ "NONE" ];
 
-  archFlags = lib.optionals gccStdenv.hostPlatform.isAarch64 [ "-DARCH=aarch64" ];
+  archFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "-DARCH=aarch64" ];
 
   # CMake Build flags for the selected ISAs. For a list of flags, see
   # https://github.com/ARM-software/astc-encoder/blob/main/Docs/Building.md
@@ -24,26 +24,26 @@ with rec {
 
   # The suffix of the binary to link as 'astcenc'
   mainBinary = builtins.replaceStrings
-    [ "AVX2" "SSE41"  "SSE2" "NEON" "NONE" ]
-    [ "avx2" "sse4.1" "sse2" "neon" "none" ]
+    [ "AVX2" "SSE41"  "SSE2" "NEON" "NONE" "NATIVE" ]
+    [ "avx2" "sse4.1" "sse2" "neon" "none" "native" ]
     ( builtins.head isas );
 };
 
-gccStdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "astc-encoder";
-  version = "3.6";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "ARM-software";
     repo = "astc-encoder";
     rev = version;
-    sha256 = "sha256-TzVO2xQOuE87h8j4UwkpnAaFwkvy5dZge8zDNR/mVf0=";
+    sha256 = "sha256-pJmMquORG+vN2uLPywAZY1iZTuHB4SdMP/eriAjnyUU=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = isaFlags ++ archFlags ++ [
-    "-DCMAKE_BUILD_TYPE=Release"
+    "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
   ];
 
   # Set a fixed build year to display within help output (otherwise, it would be 1980)
@@ -52,9 +52,8 @@ gccStdenv.mkDerivation rec {
       --replace 'string(TIMESTAMP astcencoder_YEAR "%Y")' 'set(astcencoder_YEAR "2022")'
   '';
 
-  # Link binaries into environment and provide 'astcenc' link
+  # Provide 'astcenc' link to main executable
   postInstall = ''
-    mv $out/astcenc $out/bin
     ln -s $out/bin/astcenc-${mainBinary} $out/bin/astcenc
   '';
 
@@ -73,6 +72,6 @@ gccStdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.asl20;
     maintainers = with maintainers; [ dasisdormax ];
-    broken = !gccStdenv.is64bit;
+    broken = !stdenv.is64bit;
   };
 }

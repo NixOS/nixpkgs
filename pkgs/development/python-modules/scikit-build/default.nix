@@ -23,13 +23,19 @@
 
 buildPythonPackage rec {
   pname = "scikit-build";
-  version = "0.15.0";
+  version = "0.16.7";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-5yPNDzSJoEI3C56piLu5z9dyXoslsgyhx5gYIfz2X7k=";
+    hash = "sha256-qbnMdHm3HmyNQ0WW363gJSU6riOtsiqaLYWFD9Uc7P0=";
   };
+
+  # This line in the filterwarnings section of the pytest configuration leads to this error:
+  #  E   UserWarning: Distutils was imported before Setuptools, but importing Setuptools also replaces the `distutils` module in `sys.modules`. This may lead to undesirable behaviors or errors. To avoid these issues, avoid using distutils directly, ensure that setuptools is installed in the traditional way (e.g. not an editable install), and/or make sure that setuptools is always imported before distutils.
+  postPatch = ''
+    sed -i "/'error',/d" pyproject.toml
+  '';
 
   propagatedBuildInputs = [
     distro
@@ -39,7 +45,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cmake
     cython
     ninja

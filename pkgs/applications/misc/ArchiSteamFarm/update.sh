@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=../../../.. -i bash -p curl gnused jq common-updater-scripts
+#!nix-shell -I nixpkgs=./. -i bash -p curl gnused jq common-updater-scripts
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
@@ -15,15 +15,14 @@ if [[ "$new_version" == "$old_version" ]]; then
   fi
 fi
 
-asf_path=$(pwd)
-cd ../../../..
+asf_path=$PWD
+pushd ../../../..
 
-nixpkgs_path=$(pwd)
 if [[ "${1:-}" != "--deps-only" ]]; then
     update-source-version ArchiSteamFarm "$new_version"
 fi
 
 $(nix-build -A ArchiSteamFarm.fetch-deps --no-out-link) "$deps_file"
 
-cd "$asf_path"
-./web-ui/update.sh
+popd
+"$asf_path/web-ui/update.sh"

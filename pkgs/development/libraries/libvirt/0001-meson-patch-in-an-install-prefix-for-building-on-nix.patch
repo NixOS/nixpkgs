@@ -230,7 +230,7 @@ diff --git a/src/network/meson.build b/src/network/meson.build
 index b5eff0c3ab..a0f26d624e 100644
 --- a/src/network/meson.build
 +++ b/src/network/meson.build
-@@ -73,11 +73,11 @@ if conf.has('WITH_NETWORK')
+@@ -73,11 +73,11 @@ 'in_file': files('virtnetworkd.init.in'),
    }
  
    virt_install_dirs += [
@@ -247,7 +247,7 @@ index b5eff0c3ab..a0f26d624e 100644
    ]
  
    configure_file(
-@@ -85,12 +85,12 @@ if conf.has('WITH_NETWORK')
+@@ -85,12 +85,12 @@ input: 'default.xml.in',
      output: '@BASENAME@',
      copy: true,
      install: true,
@@ -256,7 +256,7 @@ index b5eff0c3ab..a0f26d624e 100644
    )
  
    meson.add_install_script(
-     meson_python_prog.path(), python3_prog.path(), meson_install_symlink_prog.path(),
+     meson_python_prog.full_path(), python3_prog.full_path(), meson_install_symlink_prog.full_path(),
 -    confdir / 'qemu' / 'networks' / 'autostart',
 +    install_prefix + confdir / 'qemu' / 'networks' / 'autostart',
      '../default.xml', 'default.xml',
@@ -305,7 +305,7 @@ diff --git a/src/qemu/meson.build b/src/qemu/meson.build
 index 39f0f615cc..5f6f30f82b 100644
 --- a/src/qemu/meson.build
 +++ b/src/qemu/meson.build
-@@ -175,24 +175,24 @@ if conf.has('WITH_QEMU')
+@@ -200,25 +200,25 @@ if conf.has('WITH_QEMU')
    endif
  
    virt_install_dirs += [
@@ -326,6 +326,7 @@ index 39f0f615cc..5f6f30f82b 100644
 -    localstatedir / 'log' / 'swtpm' / 'libvirt' / 'qemu',
 -    runstatedir / 'libvirt' / 'qemu',
 -    runstatedir / 'libvirt' / 'qemu' / 'dbus',
+-    runstatedir / 'libvirt' / 'qemu' / 'passt',
 -    runstatedir / 'libvirt' / 'qemu' / 'slirp',
 -    runstatedir / 'libvirt' / 'qemu' / 'swtpm',
 +    install_prefix + confdir / 'qemu',
@@ -345,6 +346,7 @@ index 39f0f615cc..5f6f30f82b 100644
 +    install_prefix + localstatedir / 'log' / 'swtpm' / 'libvirt' / 'qemu',
 +    install_prefix + runstatedir / 'libvirt' / 'qemu',
 +    install_prefix + runstatedir / 'libvirt' / 'qemu' / 'dbus',
++    install_prefix + runstatedir / 'libvirt' / 'qemu' / 'passt',
 +    install_prefix + runstatedir / 'libvirt' / 'qemu' / 'slirp',
 +    install_prefix + runstatedir / 'libvirt' / 'qemu' / 'swtpm',
    ]

@@ -1,31 +1,39 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib
+, stdenv
+, fetchFromGitHub
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell-extension-paperwm";
-  version = "38.1";
+  version = "44.0.0-beta.1";
 
   src = fetchFromGitHub {
     owner = "paperwm";
     repo = "PaperWM";
-    rev = version;
-    sha256 = "1jq15qrq3khqpjsjbcc17amdr1k53jkvambdacdf56xbqkycvlgs";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-YRIaSD22bvzXo/wla178GeXIhvIwW6xLacjAQDC2P40=";
   };
 
-  passthru.extensionUuid = "paperwm@hedning:matrix.org";
-
+  dontConfigure = true;
   dontBuild = true;
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p "$out/share/gnome-shell/extensions/paperwm@hedning:matrix.org"
     cp -r . "$out/share/gnome-shell/extensions/paperwm@hedning:matrix.org"
+
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "Tiled scrollable window management for Gnome Shell";
+  meta = {
     homepage = "https://github.com/paperwm/PaperWM";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ hedning ];
+    description = "Tiled scrollable window management for Gnome Shell";
+    changelog = "https://github.com/paperwm/PaperWM/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ hedning AndersonTorres ];
+    platforms = lib.platforms.all;
   };
-}
+
+  passthru.extensionUuid = "paperwm@hedning:matrix.org";
+})

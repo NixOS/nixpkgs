@@ -20,6 +20,7 @@
 , shared-mime-info
 , libgweather
 , librsvg
+, webp-pixbuf-loader
 , geoclue2
 , perl
 , docbook_xml_dtd_45
@@ -29,13 +30,13 @@
 , gobject-introspection
 , wrapGAppsHook
 , libxslt
-, gcr
+, gcr_4
 , accountsservice
 , gdk-pixbuf
 , gdm
 , upower
 , ibus
-, libnma
+, libnma-gtk4
 , libgnomekbd
 , gnome-desktop
 , gsettings-desktop-schemas
@@ -43,7 +44,7 @@
 , glib
 , gjs
 , mutter
-, evolution-data-server
+, evolution-data-server-gtk4
 , gtk3
 , gtk4
 , libadwaita
@@ -61,19 +62,18 @@
 , mesa
 }:
 
-# http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/gnome-base/gnome-shell/gnome-shell-3.10.2.1.ebuild?revision=1.3&view=markup
 let
   pythonEnv = python3.withPackages (ps: with ps; [ pygobject3 ]);
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "42.4";
+  version = "44.1";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "h1/ylw6p+3oFUG4yoNUNyRf0G0yjcTS0E3f5yChzxU4=";
+    sha256 = "C/vkOU0mdiUVTQjQFGe9vZnoFXUS/I30XVwC3bdVHKY=";
   };
 
   patches = [
@@ -127,7 +127,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gnome-keyring
     glib
-    gcr
+    gcr_4
     accountsservice
     libsecret
     polkit
@@ -138,7 +138,7 @@ stdenv.mkDerivation rec {
     gjs
     mutter
     libpulseaudio
-    evolution-data-server
+    evolution-data-server-gtk4
     libical
     gtk3
     gtk4
@@ -164,7 +164,7 @@ stdenv.mkDerivation rec {
 
     # not declared at build time, but typelib is needed at runtime
     libgweather
-    libnma
+    libnma-gtk4
 
     # for gnome-extension tool
     bash-completion
@@ -177,6 +177,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=true"
+    "-Dtests=false"
   ];
 
   postPatch = ''
@@ -185,6 +186,17 @@ stdenv.mkDerivation rec {
     # We can generate it ourselves.
     rm -f man/gnome-shell.1
     rm data/theme/gnome-shell.css
+  '';
+
+  postInstall = ''
+    # Pull in WebP support for gnome-backgrounds.
+    # In postInstall to run before gappsWrapperArgsHook.
+    export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+      extraLoaders = [
+        librsvg
+        webp-pixbuf-loader
+      ];
+    }}"
   '';
 
   preFixup = ''
@@ -201,6 +213,8 @@ stdenv.mkDerivation rec {
       wrapGApp $out/share/gnome-shell/$svc
     done
   '';
+
+  separateDebugInfo = true;
 
   passthru = {
     mozillaPlugin = "/lib/mozilla/plugins";

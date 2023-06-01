@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dump1090";
-  version = "7.1";
+  version = "8.2";
 
   src = fetchFromGitHub {
     owner = "flightaware";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1fD8ZMkTS/r+p1rrOfJhH2sz3sJCapQcvk8f8crGApw=";
+    sha256 = "sha256-SUvK9XTXIDimEMEnORnp/Af/F030TZTxLI43Jzz31Js=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     hackrf
   ] ++ lib.optional stdenv.isLinux limesuite;
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
     "-Wno-implicit-function-declaration -Wno-int-conversion";
 
   buildFlags = [ "dump1090" "view1090" ];
@@ -48,7 +48,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "A simple Mode S decoder for RTLSDR devices";
     homepage = "https://github.com/flightaware/dump1090";
     license = licenses.gpl2Plus;

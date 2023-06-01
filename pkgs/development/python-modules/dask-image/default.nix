@@ -7,20 +7,20 @@
 , pims
 , pytestCheckHook
 , pythonOlder
-, scikitimage
+, scikit-image
 , scipy
 }:
 
 buildPythonPackage rec {
   pname = "dask-image";
-  version = "2021.12.0";
+  version = "2022.9.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Nb5JYmvQHD44khKBJqJ9XuMmahmKjjx+MNWervcS/Pk=";
+    hash = "sha256-8SPf0Wp9FcdmYqasFHeFCe1e7ZtJT0Mi5ZRemxWSNUc=";
   };
 
   propagatedBuildInputs = [
@@ -30,9 +30,9 @@ buildPythonPackage rec {
     pims
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
-    scikitimage
+    scikit-image
   ];
 
   postPatch = ''

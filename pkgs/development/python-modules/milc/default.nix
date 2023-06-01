@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "clueboard";
     repo = "milc";
     rev = version;
-    sha256 = "sha256-aX6cTpIN9+9xuEGYHVlM5SjTPLcudJFEuOI4CiN3byE=";
+    hash = "sha256-aX6cTpIN9+9xuEGYHVlM5SjTPLcudJFEuOI4CiN3byE=";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     halo
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose2
     semver
   ];

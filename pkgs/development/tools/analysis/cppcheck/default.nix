@@ -1,45 +1,61 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, installShellFiles
 , pcre
 , python3
 , libxslt
 , docbook_xsl
 , docbook_xml_dtd_45
-, withZ3 ? true
-, z3
 , which
+, pkg-config
 }:
 
 stdenv.mkDerivation rec {
   pname = "cppcheck";
-  version = "2.9";
+  version = "2.10.3";
 
   src = fetchFromGitHub {
     owner = "danmar";
     repo = "cppcheck";
     rev = version;
-    sha256 = "sha256-UkmtW/3CLU9tFNjVLhQPhYkYflFLOBc/7Qc8lSBOo3I=";
+    hash = "sha256-M63uHhyEDmuWrEu7Y3Zks1Eq5WgenSlqWln2DMBj3fU=";
   };
 
-  buildInputs = [ pcre
-    (python3.withPackages (ps: [ps.pygments]))
-  ] ++ lib.optionals withZ3 [ z3 ];
-  nativeBuildInputs = [ libxslt docbook_xsl docbook_xml_dtd_45 which ];
+  strictDeps = true;
+  nativeBuildInputs = [ pkg-config installShellFiles libxslt docbook_xsl docbook_xml_dtd_45 which python3 ];
+  buildInputs = [ pcre (python3.withPackages (ps: [ps.pygments])) ];
 
-  makeFlags = [ "PREFIX=$(out)" "MATCHCOMPILER=yes" "FILESDIR=$(out)/share/cppcheck" "HAVE_RULES=yes" ]
-   ++ lib.optionals withZ3 [ "USE_Z3=yes" "CPPFLAGS=-DNEW_Z3=1" ];
+  makeFlags = [ "PREFIX=$(out)" "MATCHCOMPILER=yes" "FILESDIR=$(out)/share/cppcheck" "HAVE_RULES=yes" ];
 
   outputs = [ "out" "man" ];
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace 'PCRE_CONFIG = $(shell which pcre-config)' 'PCRE_CONFIG = $(PKG_CONFIG) libpcre'
+  '';
+
+  postBuild = ''
+    make DB2MAN=${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl man
+  '';
 
   postInstall = ''
-    make DB2MAN=${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl man
-    mkdir -p $man/share/man/man1
-    cp cppcheck.1 $man/share/man/man1/cppcheck.1
+    installManPage cppcheck.1
+  '';
+
+  # test/testcondition.cpp:4949(TestCondition::alwaysTrueContainer): Assertion failed.
+  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    echo 'int main() {}' > ./installcheck.cpp
+    $out/bin/cppcheck ./installcheck.cpp > /dev/null
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

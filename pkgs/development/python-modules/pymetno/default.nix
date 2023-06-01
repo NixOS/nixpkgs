@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "PyMetno";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-Do9RQS4gE2BapQtKQsnMzJ8EJzzxkCBA5r3z1zHXIsA=";
+    hash = "sha256-Do9RQS4gE2BapQtKQsnMzJ8EJzzxkCBA5r3z1zHXIsA=";
   };
 
   propagatedBuildInputs = [

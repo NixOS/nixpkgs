@@ -73,7 +73,7 @@ trap 'fail' 0
 
 # Print a greeting.
 info
-info "[1;32m<<< NixOS Stage 1 >>>[0m"
+info "[1;32m<<< @distroName@ Stage 1 >>>[0m"
 info
 
 # Make several required directories.
@@ -234,8 +234,7 @@ done
 mkdir -p /lib
 ln -s @modulesClosure@/lib/modules /lib/modules
 ln -s @modulesClosure@/lib/firmware /lib/firmware
-# see comment in stage-1.nix for explanation
-echo @extraUtils@/bin/modprobe-kernel > /proc/sys/kernel/modprobe
+echo @extraUtils@/bin/modprobe > /proc/sys/kernel/modprobe
 for i in @kernelModules@; do
     info "loading module $(basename $i)..."
     modprobe $i
@@ -294,6 +293,9 @@ checkFS() {
     # Skip fsck for inherently readonly filesystems.
     if [ "$fsType" = squashfs ]; then return 0; fi
 
+    # Skip fsck.erofs because it is still experimental.
+    if [ "$fsType" = erofs ]; then return 0; fi
+
     # If we couldn't figure out the FS type, then skip fsck.
     if [ "$fsType" = auto ]; then
         echo 'cannot check filesystem with type "auto"!'
@@ -342,6 +344,14 @@ checkFS() {
     return 0
 }
 
+escapeFstab() {
+    local original="$1"
+
+    # Replace space
+    local escaped="${original// /\\040}"
+    # Replace tab
+    echo "${escaped//$'\t'/\\011}"
+}
 
 # Function for mounting a file system.
 mountFS() {
@@ -403,6 +413,11 @@ mountFS() {
         n=$((n + 1))
     done
 
+    # For bind mounts, busybox has a tendency to ignore options, which can be a
+    # security issue (e.g. "nosuid"). Remounting the partition seems to fix the
+    # issue.
+    mount "/mnt-root$mountPoint" -o "remount,$optionsPrefixed"
+
     [ "$mountPoint" == "/" ] &&
         [ -f "/mnt-root/etc/NIXOS_LUSTRATE" ] &&
         lustrateRoot "/mnt-root"
@@ -414,7 +429,7 @@ lustrateRoot () {
     local root="$1"
 
     echo
-    echo -e "\e[1;33m<<< NixOS is now lustrating the root filesystem (cruft goes to /old-root) >>>\e[0m"
+    echo -e "\e[1;33m<<< @distroName@ is now lustrating the root filesystem (cruft goes to /old-root) >>>\e[0m"
     echo
 
     mkdir -m 0755 -p "$root/old-root.tmp"
@@ -430,7 +445,7 @@ lustrateRoot () {
         mv -v "$d" "$root/old-root.tmp"
     done
 
-    # Use .tmp to make sure subsequent invokations don't clash
+    # Use .tmp to make sure subsequent invocations don't clash
     mv -v "$root/old-root.tmp" "$root/old-root"
 
     mkdir -m 0755 -p "$root/etc"
@@ -555,6 +570,9 @@ while read -u 3 mountPoint; do
 
       umount /tmp-iso
       rmdir /tmp-iso
+      if [ -n "$isoPath" ] && [ $fsType = "iso9660" ] && mountpoint -q /findiso; then
+       umount /findiso
+      fi
       continue
     fi
 
@@ -566,7 +584,7 @@ while read -u 3 mountPoint; do
         continue
     fi
 
-    mountFS "$device" "$mountPoint" "$options" "$fsType"
+    mountFS "$device" "$(escapeFstab "$mountPoint")" "$(escapeFstab "$options")" "$fsType"
 done
 
 exec 3>&-

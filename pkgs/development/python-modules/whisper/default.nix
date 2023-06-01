@@ -14,14 +14,14 @@ buildPythonPackage rec {
     owner = "graphite-project";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-CnCbRmI2jc67mTtfupoE1uHtobrAiWoUXbfX8YeEV6A=";
+    hash = "sha256-CnCbRmI2jc67mTtfupoE1uHtobrAiWoUXbfX8YeEV6A=";
   };
 
   propagatedBuildInputs = [
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];

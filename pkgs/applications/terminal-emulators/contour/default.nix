@@ -11,9 +11,9 @@
 , boost
 , catch2
 , fmt
-, microsoft_gsl
+, microsoft-gsl
 , range-v3
-, libyamlcpp
+, yaml-cpp
 , ncurses
 , file
 , darwin
@@ -62,9 +62,9 @@ mkDerivation rec {
     boost
     catch2
     fmt
-    microsoft_gsl
+    microsoft-gsl
     range-v3
-    libyamlcpp
+    yaml-cpp
   ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.libs.utmp ];
 
   preConfigure = ''

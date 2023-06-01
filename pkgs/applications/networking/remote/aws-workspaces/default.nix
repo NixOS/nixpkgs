@@ -1,19 +1,19 @@
 { stdenv, lib
 , makeWrapper, dpkg, fetchurl, autoPatchelfHook
-, curl, libkrb5, lttng-ust, libpulseaudio, gtk3, openssl_1_1, icu70, webkitgtk, librsvg, gdk-pixbuf, libsoup, glib-networking, graphicsmagick_q16
+, curl, libkrb5, lttng-ust, libpulseaudio, gtk3, openssl_1_1, icu70, webkitgtk, librsvg, gdk-pixbuf, libsoup, glib-networking, graphicsmagick_q16, libva, libusb1, hiredis
 }:
 
 stdenv.mkDerivation rec {
   pname = "aws-workspaces";
-  version = "4.1.0.1523";
+  version = "4.5.0.2006";
 
   src = fetchurl {
-    # ref https://d3nt0h4h6pmmc4.cloudfront.net/ubuntu/dists/bionic/main/binary-amd64/Packages
+    # ref https://d3nt0h4h6pmmc4.cloudfront.net/ubuntu/dists/focal/main/binary-amd64/Packages
     urls = [
-      "https://d3nt0h4h6pmmc4.cloudfront.net/ubuntu/dists/bionic/main/binary-amd64/workspacesclient_${version}_amd64.deb"
-      "https://web.archive.org/web/20220709124028/https://d3nt0h4h6pmmc4.cloudfront.net/ubuntu/dists/bionic/main/binary-amd64/workspacesclient_${version}_amd64.deb"
+      "https://d3nt0h4h6pmmc4.cloudfront.net/ubuntu/dists/focal/main/binary-amd64/workspacesclient_${version}_amd64.deb"
+      "https://archive.org/download/workspacesclient_${version}_amd64/workspacesclient_${version}_amd64.deb"
     ];
-    sha256 = "sha256-nOrIOPZ0yOBGOQgNQxnm1cVR9NJ+BTEC12UB7Ux1yuk=";
+    sha256 = "sha256-1ysj020fYOmIRvZR27+7ZNqdzqkA2QbrCwDU18ouxaI=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +40,9 @@ stdenv.mkDerivation rec {
     libsoup
     glib-networking
     graphicsmagick_q16
+    hiredis
+    libusb1
+    libva
   ];
 
   unpackPhase = ''
@@ -49,6 +52,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so $out/lib/libcoreclrtraceptprovider.so
     patchelf --replace-needed libGraphicsMagick++-Q16.so.12 libGraphicsMagick++.so.12 $out/usr/lib/x86_64-linux-gnu/pcoip-client/vchan_plugins/libvchan-plugin-clipboard.so
+    patchelf --replace-needed libhiredis.so.0.14 libhiredis.so $out/lib/libpcoip_core.so
   '';
 
   installPhase = ''
@@ -70,6 +74,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ]; # TODO Mac support
-    maintainers = [ maintainers.mausch ];
+    maintainers = with maintainers; [ mausch dylanmtaylor ];
   };
 }

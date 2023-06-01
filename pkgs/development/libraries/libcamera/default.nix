@@ -5,8 +5,6 @@
 , ninja
 , pkg-config
 , makeFontsConf
-, boost
-, gnutls
 , openssl
 , libdrm
 , libevent
@@ -21,15 +19,17 @@
 , systemd # for libudev
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libcamera";
-  version = "unstable-2022-07-15";
+  version = "0.0.5";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
-    rev = "e9b6b362820338d0546563444e7b1767f5c7044c";
-    hash = "sha256-geqFcMBHcVe7dPdVOal8V2pVItYUdoC+5isISqRG4Wc=";
+    rev = "v${version}";
+    hash = "sha256-rd1YIEosg4+H/FJBYCoxdQlV9F0evU5fckHJrSdVPOE=";
   };
+
+  outputs = [ "out" "dev" "doc" ];
 
   postPatch = ''
     patchShebangs utils/
@@ -39,8 +39,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     # IPA and signing
-    gnutls
-    boost
+    openssl
 
     # gstreamer integration
     gst_all_1.gstreamer
@@ -80,13 +79,27 @@ stdenv.mkDerivation {
     "-Dv4l2=true"
     "-Dqcam=disabled"
     "-Dlc-compliance=disabled" # tries unconditionally to download gtest when enabled
+    # Avoid blanket -Werror to evade build failures on less
+    # tested compilers.
+    "-Dwerror=false"
     ];
 
   # Fixes error on a deprecated declaration
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   # Silence fontconfig warnings about missing config
   FONTCONFIG_FILE = makeFontsConf { fontDirectories = []; };
+
+  # libcamera signs the IPA module libraries at install time, but they are then
+  # modified by stripping and RPATH fixup. Therefore, we need to generate the
+  # signatures again ourselves.
+  #
+  # If this is not done, libcamera will still try to load them, but it will
+  # isolate them in separate processes, which can cause crashes for IPA modules
+  # that are not designed for this (notably ipa_rpi.so).
+  postFixup = ''
+    ../src/ipa/ipa-sign-install.sh src/ipa-priv-key.pem $out/lib/libcamera/ipa_*.so
+  '';
 
   meta = with lib; {
     description = "An open source camera stack and framework for Linux, Android, and ChromeOS";

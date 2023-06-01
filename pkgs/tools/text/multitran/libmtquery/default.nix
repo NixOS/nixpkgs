@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://multitran.sourceforge.net/";
+    homepage = "https://multitran.sourceforge.net/";
     description = "Multitran lib: main engine to query translations";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "spicetify-cli";
-  version = "2.13.1";
+  version = "2.19.0";
 
   src = fetchFromGitHub {
     owner = "spicetify";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-YgT4HlVqm58CEGoc/bNjo0xEzoNIcTpKGZkSdhcAgis=";
+    sha256 = "sha256-ax1e4M+BReVjudcmR1fatMzH/zTNCPG4BWoSNJPQFts=";
   };
 
-  vendorSha256 = "sha256-zYIbtcDM9iYSRHagvI9D284Y7w0ZxG4Ba1p4jqmQyng=";
+  vendorHash = "sha256-g0SuXDzYjg0mGzeDuB2tQnVnDmTiL5vw0r9QWSgIs3Q=";
 
   ldflags = [
     "-s -w"

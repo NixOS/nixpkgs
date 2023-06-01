@@ -29,9 +29,9 @@ let
   configFile = if (cfg.configFile != null) then cfg.configFile else configFile';
 
   preStart = ''
-    install ${configFile} /run/${RuntimeDirectory}/ddclient.conf
+    install --mode=600 --owner=$USER ${configFile} /run/${RuntimeDirectory}/ddclient.conf
     ${lib.optionalString (cfg.configFile == null) (if (cfg.protocol == "nsupdate") then ''
-      install ${cfg.passwordFile} /run/${RuntimeDirectory}/ddclient.key
+      install --mode=600 --owner=$USER ${cfg.passwordFile} /run/${RuntimeDirectory}/ddclient.key
     '' else if (cfg.passwordFile != null) then ''
       "${pkgs.replace-secret}/bin/replace-secret" "@password_placeholder@" "${cfg.passwordFile}" "/run/${RuntimeDirectory}/ddclient.conf"
     '' else ''
@@ -71,7 +71,7 @@ with lib;
       package = mkOption {
         type = package;
         default = pkgs.ddclient;
-        defaultText = "pkgs.ddclient";
+        defaultText = lib.literalExpression "pkgs.ddclient";
         description = lib.mdDoc ''
           The ddclient executable package run by the service.
         '';
@@ -200,6 +200,10 @@ with lib;
         type = lines;
         description = lib.mdDoc ''
           Extra configuration. Contents will be added verbatim to the configuration file.
+
+          ::: {.note}
+          `daemon` should not be added here because it does not work great with the systemd-timer approach the service uses.
+          :::
         '';
       };
     };
@@ -214,6 +218,7 @@ with lib;
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       restartTriggers = optional (cfg.configFile != null) cfg.configFile;
+      path = lib.optional (lib.hasPrefix "if," cfg.use) pkgs.iproute2;
 
       serviceConfig = {
         DynamicUser = true;

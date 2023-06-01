@@ -1,7 +1,8 @@
 # This builder is for FoundationDB CMake build system.
 
 { lib, fetchFromGitHub
-, cmake, ninja, boost, python3, openjdk, mono, libressl
+, cmake, ninja, python3, openjdk, mono, pkg-config
+, msgpack, toml11
 
 , gccStdenv, llvmPackages
 , useClang ? false
@@ -11,16 +12,23 @@
 let
   stdenv = if useClang then llvmPackages.libcxxStdenv else gccStdenv;
 
-  tests = with builtins;
-    builtins.replaceStrings [ "\n" ] [ " " ] (lib.fileContents ./test-list.txt);
+  tests = builtins.replaceStrings [ "\n" ] [ " " ] (lib.fileContents ./test-list.txt);
+
+  # Only even numbered versions compile on aarch64; odd numbered versions have avx enabled.
+  avxEnabled = version:
+    let
+      isOdd = n: lib.trivial.mod n 2 != 0;
+      patch = lib.toInt (lib.versions.patch version);
+    in isOdd patch;
 
   makeFdb =
     { version
-    , branch # unused
     , sha256
     , rev ? "refs/tags/${version}"
     , officialRelease ? true
     , patches ? []
+    , boost
+    , ssl
     }: stdenv.mkDerivation {
         pname = "foundationdb";
         inherit version;
@@ -31,23 +39,28 @@ let
           inherit rev sha256;
         };
 
-        buildInputs = [ libressl boost ];
-        nativeBuildInputs = [ cmake ninja python3 openjdk mono ]
-          ++ lib.optional useClang [ llvmPackages.lld ];
+        buildInputs = [ ssl boost ]
+          ++ lib.optionals (lib.versionAtLeast version "7.1.0") [ msgpack toml11 ];
+
+        nativeBuildInputs = [ pkg-config cmake ninja python3 openjdk mono ]
+          ++ lib.optionals useClang [ llvmPackages.lld ];
 
         separateDebugInfo = true;
         dontFixCmake = true;
 
         cmakeFlags =
-          [ "-DCMAKE_BUILD_TYPE=Release"
-            (lib.optionalString officialRelease "-DFDB_RELEASE=TRUE")
+          [ (lib.optionalString officialRelease "-DFDB_RELEASE=TRUE")
 
-            # FIXME: why can't libressl be found automatically?
-            "-DLIBRESSL_USE_STATIC_LIBS=FALSE"
-            "-DLIBRESSL_INCLUDE_DIR=${libressl.dev}"
-            "-DLIBRESSL_CRYPTO_LIBRARY=${libressl.out}/lib/libcrypto.so"
-            "-DLIBRESSL_SSL_LIBRARY=${libressl.out}/lib/libssl.so"
-            "-DLIBRESSL_TLS_LIBRARY=${libressl.out}/lib/libtls.so"
+            # Disable CMake warnings for project developers.
+            "-Wno-dev"
+
+            # CMake Error at fdbserver/CMakeLists.txt:332 (find_library):
+            # >   Could not find lz4_STATIC_LIBRARIES using the following names: liblz4.a
+            "-DSSD_ROCKSDB_EXPERIMENTAL=FALSE"
+
+            # FoundationDB's CMake is hardcoded to pull in jemalloc as an external
+            # project at build time.
+            "-DUSE_JEMALLOC=FALSE"
 
             # LTO brings up overall build time, but results in much smaller
             # binaries for all users and the cache.
@@ -58,35 +71,49 @@ let
             # Same with LLD when Clang is available.
             (lib.optionalString useClang    "-DUSE_LD=LLD")
             (lib.optionalString (!useClang) "-DUSE_LD=GOLD")
+          ] ++ lib.optionals (lib.versionOlder version "7.0.0")
+          [ # FIXME: why can't libressl be found automatically?
+            "-DLIBRESSL_USE_STATIC_LIBS=FALSE"
+            "-DLIBRESSL_INCLUDE_DIR=${ssl.dev}"
+            "-DLIBRESSL_CRYPTO_LIBRARY=${ssl.out}/lib/libcrypto.so"
+            "-DLIBRESSL_SSL_LIBRARY=${ssl.out}/lib/libssl.so"
+            "-DLIBRESSL_TLS_LIBRARY=${ssl.out}/lib/libtls.so"
+          ] ++ lib.optionals (lib.versionAtLeast version "7.1.0" && lib.versionOlder version "7.2.0")
+          [ # FIXME: why can't openssl be found automatically?
+            "-DOPENSSL_USE_STATIC_LIBS=FALSE"
+            "-DOPENSSL_CRYPTO_LIBRARY=${ssl.out}/lib/libcrypto.so"
+            "-DOPENSSL_SSL_LIBRARY=${ssl.out}/lib/libssl.so"
           ];
 
-        inherit patches;
+        hardeningDisable = [ "fortify" ];
 
-        # fix up the use of the very weird and custom 'fdb_install' command by just
-        # replacing it with cmake's ordinary version.
-        postPatch = ''
-          for x in bindings/c/CMakeLists.txt fdbserver/CMakeLists.txt fdbmonitor/CMakeLists.txt fdbbackup/CMakeLists.txt fdbcli/CMakeLists.txt; do
-            substituteInPlace $x --replace 'fdb_install' 'install'
-          done
-        '';
+        env.NIX_CFLAGS_COMPILE = toString [
+          # Needed with GCC 12
+          "-Wno-error=missing-template-keyword"
+          # Needed to compile on aarch64
+          (lib.optionalString stdenv.isAarch64 "-march=armv8-a+crc")
+        ];
+
+        inherit patches;
 
         # the install phase for cmake is pretty wonky right now since it's not designed to
         # coherently install packages as most linux distros expect -- it's designed to build
         # packaged artifacts that are shipped in RPMs, etc. we need to add some extra code to
         # cmake upstream to fix this, and if we do, i think most of this can go away.
-        postInstall = ''
-          mv $out/sbin/fdbserver $out/bin/fdbserver
-          rm -rf \
-            $out/lib/systemd $out/Library $out/usr $out/sbin \
-            $out/var $out/log $out/etc
-
+        postInstall = lib.optionalString (lib.versionOlder version "7.0.0") ''
           mv $out/fdbmonitor/fdbmonitor $out/bin/fdbmonitor && rm -rf $out/fdbmonitor
-
-          rm -rf $out/lib/foundationdb/
           mkdir $out/libexec && ln -sfv $out/bin/fdbbackup $out/libexec/backup_agent
-
+          rm -rf $out/Library
+          rm -rf $out/lib/foundationdb/
           mkdir $out/include/foundationdb && \
             mv $out/include/*.h $out/include/*.options $out/include/foundationdb
+        '' + lib.optionalString (lib.versionAtLeast version "7.0.0") ''
+          mv $out/sbin/fdbmonitor $out/bin/fdbmonitor
+          mkdir $out/libexec && mv $out/usr/lib/foundationdb/backup_agent/backup_agent $out/libexec/backup_agent
+        '' + ''
+          mv $out/sbin/fdbserver $out/bin/fdbserver
+
+          rm -rf $out/etc $out/lib/foundationdb $out/lib/systemd $out/log $out/sbin $out/usr $out/var
 
           # move results into multi outputs
           mkdir -p $dev $lib
@@ -108,12 +135,6 @@ let
           # java bindings
           mkdir -p $lib/share/java
           mv lib/fdb-java-*.jar $lib/share/java/fdb-java.jar
-
-          # include the tests
-          mkdir -p $out/share/test
-          (cd ../tests && for x in ${tests}; do
-            cp --parents $x $out/share/test
-          done)
         '';
 
         outputs = [ "out" "dev" "lib" "pythonsrc" ];
@@ -122,7 +143,8 @@ let
           description = "Open source, distributed, transactional key-value store";
           homepage    = "https://www.foundationdb.org";
           license     = licenses.asl20;
-          platforms   = [ "x86_64-linux" ];
+          platforms   = [ "x86_64-linux" ]
+            ++ lib.optionals (lib.versionAtLeast version "7.1.0" && !(avxEnabled version)) [ "aarch64-linux" ];
           maintainers = with maintainers; [ thoughtpolice lostnet ];
        };
     };

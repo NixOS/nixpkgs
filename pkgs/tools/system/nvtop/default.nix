@@ -1,12 +1,14 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , gtest
 , cudatoolkit
 , libdrm
 , ncurses
+, nvtop
+, testers
+, udev
 , addOpenGLRunpath
 , amd ? true
 , nvidia ? true
@@ -15,7 +17,7 @@
 let
   pname-suffix = if amd && nvidia then "" else if amd then "-amd" else "-nvidia";
   nvidia-postFixup = "addOpenGLRunpath $out/bin/nvtop";
-  libPath = lib.makeLibraryPath [ libdrm ncurses ];
+  libPath = lib.makeLibraryPath [ libdrm ncurses udev ];
   amd-postFixup = ''
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
@@ -25,26 +27,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nvtop" + pname-suffix;
-  version = "2.0.3";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "Syllo";
     repo = "nvtop";
     rev = version;
-    sha256 = "sha256-LhVgNU2OSM7fOUUQHYJhKhjE0fkFvYC3FIJFgu6T68Q=";
+    hash = "sha256-vLvt2sankpQWAVZBPo3OePs4LDy7YfVnMkZLfN6ERAc=";
   };
-
-  #this patch should be fine to remove with next version update
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/Syllo/nvtop/commit/663a69f1c9038eabdfc3155112fb9b8d662578aa.diff";
-      sha256 = "sha256-/EJlr5b+kZnHm9UxythYreJvO+Ma+1sUI3KLBQFCCmc=";
-    })
-  ];
 
   cmakeFlags = with lib; [
     "-DCMAKE_BUILD_TYPE=Release"
     "-DBUILD_TESTING=ON"
+    "-DUSE_LIBUDEV_OVER_LIBSYSTEMD=ON"
   ] ++ optional nvidia "-DNVML_INCLUDE_DIRS=${cudatoolkit}/include"
   ++ optional nvidia "-DNVML_LIBRARIES=${cudatoolkit}/targets/x86_64-linux/lib/stubs/libnvidia-ml.so"
   ++ optional (!amd) "-DAMDGPU_SUPPORT=OFF"
@@ -52,7 +47,7 @@ stdenv.mkDerivation rec {
   ++ optional amd "-DLibdrm_INCLUDE_DIRS=${libdrm}/lib/stubs/libdrm.so.2"
   ;
   nativeBuildInputs = [ cmake gtest ] ++ lib.optional nvidia addOpenGLRunpath;
-  buildInputs = with lib; [ ncurses ]
+  buildInputs = with lib; [ ncurses udev ]
     ++ optional nvidia cudatoolkit
     ++ optional amd libdrm
   ;
@@ -62,14 +57,24 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  passthru = {
+    tests.version = testers.testVersion {
+      inherit version;
+      package = nvtop;
+      command = "nvtop --version";
+    };
+  };
+
   meta = with lib; {
-    description = "A (h)top like task monitor for AMD and NVIDIA GPUs";
+    description = "A (h)top like task monitor for AMD, Intel and NVIDIA GPUs";
     longDescription = ''
-      Nvtop stands for Neat Videocard TOP, a (h)top like task monitor for AMD and NVIDIA GPUs. It can handle multiple GPUs and print information about them in a htop familiar way.
+      Nvtop stands for Neat Videocard TOP, a (h)top like task monitor for AMD, Intel and NVIDIA GPUs. It can handle multiple GPUs and print information about them in a htop familiar way.
     '';
     homepage = "https://github.com/Syllo/nvtop";
-    license = licenses.gpl3;
+    changelog = "https://github.com/Syllo/nvtop/releases/tag/${version}";
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ willibutz gbtb ];
+    maintainers = with maintainers; [ willibutz gbtb anthonyroussel ];
+    mainProgram = "nvtop";
   };
 }

@@ -1,7 +1,6 @@
 { lib
 , fetchFromGitHub
 , python3
-, anki
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -11,7 +10,8 @@ python3.pkgs.buildPythonApplication rec {
     owner = "ankicommunity";
     repo = "anki-sync-server";
     rev = version;
-    sha256 = "196xhd6vzp1ncr3ahz0bv0gp1ap2s37j8v48dwmvaywzayakqdab";
+    hash = "sha256-RXrdJGJ+HMSpDGQBuVPPqsh3+uwAgE6f7ZJ0yFRMI8I=";
+    fetchSubmodules = true;
   };
   format = "other";
 
@@ -21,6 +21,7 @@ python3.pkgs.buildPythonApplication rec {
     mkdir -p $out/${python3.sitePackages}
 
     cp -r ankisyncd utils ankisyncd.conf $out/${python3.sitePackages}
+    cp -r anki-bundled/anki $out/${python3.sitePackages}
     mkdir $out/share
     cp ankisyncctl.py $out/share/
 
@@ -28,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   fixupPhase = ''
-    PYTHONPATH="$PYTHONPATH:$out/${python3.sitePackages}:${anki}"
+    PYTHONPATH="$PYTHONPATH:$out/${python3.sitePackages}"
 
     makeWrapper "${python3.interpreter}" "$out/bin/ankisyncd" \
           --set PYTHONPATH $PYTHONPATH \
@@ -39,21 +40,21 @@ python3.pkgs.buildPythonApplication rec {
           --add-flags "$out/share/ankisyncctl.py"
   '';
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytest
     webtest
   ];
 
   buildInputs = [ ];
 
-  propagatedBuildInputs = [ anki ];
+  propagatedBuildInputs = with python3.pkgs; [
+    decorator
+    requests
+  ];
 
   checkPhase = ''
-    # Exclude tests that require sqlite's sqldiff command, since
-    # it isn't yet packaged for NixOS, although 2 PRs exist:
-    # - https://github.com/NixOS/nixpkgs/pull/69112
-    # - https://github.com/NixOS/nixpkgs/pull/75784
-    # Once this is merged, these tests can be run as well.
+    # skip these tests, our files are too young:
+    # tests/test_web_media.py::SyncAppFunctionalMediaTest::test_sync_mediaChanges ValueError: ZIP does not support timestamps before 1980
     pytest --ignore tests/test_web_media.py tests/
   '';
 

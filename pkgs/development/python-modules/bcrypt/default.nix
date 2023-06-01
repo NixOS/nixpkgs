@@ -1,32 +1,57 @@
 { lib
 , buildPythonPackage
+, cargo
+, rustPlatform
+, rustc
 , setuptools
+, setuptools-rust
 , isPyPy
 , fetchPypi
 , pythonOlder
 , cffi
 , pytestCheckHook
-, six
+, libiconv
+, stdenv
+  # for passthru.tests
+, asyncssh
+, django_4
+, fastapi
+, paramiko
+, twisted
 }:
 
 buildPythonPackage rec {
   pname = "bcrypt";
-  version = "3.2.2";
+  version = "4.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-QzxBDCF3BXcF2iqfLNAd0VdJOyp6wUyFk6FrPatra/s=";
+    hash = "sha256-J9N1kDrIJhz+QEf2cJ0W99GNObHskqr3KvmJVSplDr0=";
+  };
+
+  cargoRoot = "src/_bcrypt";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    sourceRoot = "${pname}-${version}/${cargoRoot}";
+    name = "${pname}-${version}";
+    hash = "sha256-lDWX69YENZFMu7pyBmavUZaalGvFqbHSHfkwkzmDQaY=";
   };
 
   nativeBuildInputs = [
     setuptools
+    setuptools-rust
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
   ];
 
+  # Remove when https://github.com/NixOS/nixpkgs/pull/190093 lands.
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
+
   propagatedBuildInputs = [
-    six
     cffi
   ];
 
@@ -34,13 +59,17 @@ buildPythonPackage rec {
     cffi
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
   pythonImportsCheck = [
     "bcrypt"
   ];
+
+  passthru.tests = {
+    inherit asyncssh django_4 fastapi paramiko twisted;
+  };
 
   meta = with lib; {
     description = "Modern password hashing for your software and your servers";

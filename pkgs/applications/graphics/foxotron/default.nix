@@ -25,21 +25,31 @@
 
 stdenv.mkDerivation rec {
   pname = "foxotron";
-  version = "2022-08-06";
+  version = "2023-02-23";
 
   src = fetchFromGitHub {
     owner = "Gargaj";
     repo = "Foxotron";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-IGLoiUeHcTlQ+WJTot3o5/Q+jRJcY52I3xHDAT0zuIU=";
+    sha256 = "sha256-sPIXLZdtVK3phfMsZrU8o9qisOC5RKvHH19ECXMV0t0=";
   };
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace "set(CMAKE_OSX_ARCHITECTURES x86_64)" ""
+  '';
 
   nativeBuildInputs = [ cmake pkg-config makeWrapper ];
 
   buildInputs = [ zlib ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 libXrandr libXinerama libXcursor libXi libXext alsa-lib fontconfig libGLU ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ AVFoundation Carbon Cocoa CoreAudio Kernel OpenGL ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=array-bounds"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -55,9 +65,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

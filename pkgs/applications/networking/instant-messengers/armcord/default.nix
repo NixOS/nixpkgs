@@ -4,6 +4,7 @@
 , autoPatchelfHook
 , dpkg
 , makeWrapper
+, wrapGAppsHook
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -32,26 +33,32 @@
 , systemd
 , xdg-utils
 , xorg
+, wayland
+, pipewire
 }:
 
 stdenv.mkDerivation rec {
   pname = "armcord";
-  version = "3.0.7";
+  version = "3.2.0";
 
-  src = let
-    base = "https://github.com/ArmCord/ArmCord/releases/download";
-  in {
-    x86_64-linux = fetchurl {
-      url = "${base}/v${version}/ArmCord_${version}_amd64.deb";
-      sha256 = "b2a583e6abbc6e5dc3f7370a33f21fc4e7963c6cbe7555e954156c77e9577261";
-    };
-    aarch64-linux = fetchurl {
-      url = "${base}/v${version}/ArmCord_${version}_arm64.deb";
-      sha256 = "8c32a14ab8e5bdf865a6523cb4b5cec8f3f870b95f99be9661a4dd0df33aae1d";
-    };
-  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  src =
+    let
+      base = "https://github.com/ArmCord/ArmCord/releases/download";
+    in
+      {
+        x86_64-linux = fetchurl {
+          url = "${base}/v${version}/ArmCord_${version}_amd64.deb";
+          sha256 = "sha256-7lT69fU7tGujhbDTX0tYpkEquoswMCZOGAUhk2Nr+C0=";
+        };
+        aarch64-linux = fetchurl {
+          url = "${base}/v${version}/ArmCord_${version}_arm64.deb";
+          sha256 = "sha256-a5qLK8WjrlmKF24U9SiEpY+SNWuHf6gHJBym5IM8HZ4=";
+        };
+      }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper ];
+  nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper wrapGAppsHook ];
+
+  dontWrapGApps = true;
 
   buildInputs = [
     alsa-lib
@@ -92,6 +99,8 @@ stdenv.mkDerivation rec {
     xorg.libXScrnSaver
     xorg.libxshmfence
     xorg.libXtst
+    wayland
+    pipewire
   ];
 
   sourceRoot = ".";
@@ -107,9 +116,11 @@ stdenv.mkDerivation rec {
 
     # Wrap the startup command
     makeWrapper $out/opt/ArmCord/armcord $out/bin/armcord \
+      "''${gappsWrapperArgs[@]}" \
+      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=UseOzonePlatform --enable-features=WebRTCPipeWireCapturer }}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath buildInputs}" \
-      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
-      "''${gappsWrapperArgs[@]}"
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
 
     # Fix desktop link
     substituteInPlace $out/share/applications/armcord.desktop \

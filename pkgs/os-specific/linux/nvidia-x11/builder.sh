@@ -1,8 +1,9 @@
+if [ -e .attrs.sh ]; then source .attrs.sh; fi
 source $stdenv/setup
 
 unpackManually() {
     skip=$(sed 's/^skip=//; t; d' $src)
-    tail -n +$skip $src | xz -d | tar xvf -
+    tail -n +$skip $src | bsdtar xvf -
     sourceRoot=.
 }
 
@@ -123,6 +124,10 @@ installPhase() {
         if [ -e nvngx.dll ] && [ -e _nvngx.dll ]; then
             install -Dm644 -t $i/lib/nvidia/wine/ nvngx.dll _nvngx.dll
         fi
+
+        if [ -e nvoptix.bin ]; then
+            install -Dm444 -t $i/share/nvidia/ nvoptix.bin
+        fi
     done
 
     if [ -n "$bin" ]; then
@@ -153,7 +158,7 @@ installPhase() {
 
     if [ -n "$firmware" ]; then
         # Install the GSP firmware
-        install -Dm644 firmware/gsp.bin $firmware/lib/firmware/nvidia/$version/gsp.bin
+        install -Dm644 -t $firmware/lib/firmware/nvidia/$version firmware/gsp*.bin
     fi
 
     # All libs except GUI-only are installed now, so fixup them.

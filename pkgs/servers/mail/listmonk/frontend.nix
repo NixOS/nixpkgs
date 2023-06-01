@@ -18,11 +18,18 @@ yarn2nix-moretea.mkYarnPackage rec {
   yarnLock = ./yarn.lock;
   yarnNix = ./yarn.nix;
 
+  # For Node.js v17+, this is necessary.
+  NODE_OPTIONS = "--openssl-legacy-provider";
+
   installPhase = ''
+    runHook preInstall
+
     cd deps/listmonk-frontend/frontend
     npm run build
 
     mv dist $out
+
+    runHook postInstall
   '';
 
   doDist = false;

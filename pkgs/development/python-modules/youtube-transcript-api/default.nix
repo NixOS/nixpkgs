@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "youtube-transcript-api";
-  version = "0.4.4";
+  version = "0.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,15 +18,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jdepoix";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-RNPWTgAOwS+tXGLQYyIyka36xS1E1499OAP84aT6m3A=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TJlyWO1knP07gHVgbz1K0pBtvkTYrNJWZsassllko+I=";
   };
 
   propagatedBuildInputs = [
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     httpretty
     pytestCheckHook

@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "4e5158d97583502a7e2739951553cbd88a72076f152b4b11b64b9a10c4c49409";
   };
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   # We specify the name of the test files to prevent
   # https://github.com/NixOS/nixpkgs/issues/14634

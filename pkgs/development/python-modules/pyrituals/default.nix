@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -17,6 +18,10 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "0ynjz7khp67bwxjp580w3zijxr9yn44nmnbvkxjxq9scyb2mjf6g";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [ aiohttp ];
 

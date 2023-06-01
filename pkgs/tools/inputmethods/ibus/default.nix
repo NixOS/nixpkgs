@@ -1,6 +1,7 @@
 { lib, stdenv
 , substituteAll
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , gettext
 , makeWrapper
@@ -34,8 +35,6 @@
 , nixosTests
 }:
 
-with lib;
-
 let
   python3Runtime = python3.withPackages (ps: with ps; [ pygobject3 ]);
   python3BuildEnv = python3.buildEnv.override {
@@ -52,19 +51,19 @@ let
     nativeBuildInputs = [ makeWrapper ];
   } ''
       makeWrapper ${dbus}/bin/dbus-launch $out/bin/dbus-launch \
-        --add-flags --config-file=${dbus.daemon}/share/dbus-1/session.conf
+        --add-flags --config-file=${dbus}/share/dbus-1/session.conf
   '';
 in
 
 stdenv.mkDerivation rec {
   pname = "ibus";
-  version = "1.5.27";
+  version = "1.5.28";
 
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus";
     rev = version;
-    sha256 = "sha256-DwX7SYRb18C0Lz2ySPS3yV99Q1xQezs0Ls2P7Rbtk5Q=";
+    sha256 = "sha256-zjV+QkhVkrHFs9Vt1FpbvmS4nRHxwKaKU3mQkSgyLaQ=";
   };
 
   patches = [
@@ -72,6 +71,13 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       pythonInterpreter = python3Runtime.interpreter;
       pythonSitePackages = python3.sitePackages;
+    })
+    ./build-without-dbus-launch.patch
+    # unicode and emoji input are broken before 1.5.29
+    # https://github.com/NixOS/nixpkgs/issues/226526
+    (fetchpatch {
+      url = "https://github.com/ibus/ibus/commit/7c8abbe89403c2fcb08e3fda42049a97187e53ab.patch";
+      hash = "sha256-59HzAdLq8ahrF7K+tFGLjTodwIiTkJGEkFe8quqIkhU=";
     })
   ];
 
@@ -88,16 +94,22 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-memconf"
-    (enableFeature (dconf != null) "dconf")
-    (enableFeature (libnotify != null) "libnotify")
-    (enableFeature withWayland "wayland")
-    (enableFeature enableUI "ui")
+    (lib.enableFeature (dconf != null) "dconf")
+    (lib.enableFeature (libnotify != null) "libnotify")
+    (lib.enableFeature withWayland "wayland")
+    (lib.enableFeature enableUI "ui")
     "--enable-gtk4"
     "--enable-install-tests"
     "--with-unicode-emoji-dir=${unicode-emoji}/share/unicode/emoji"
     "--with-emoji-annotation-dir=${cldr-annotations}/share/unicode/cldr/common/annotations"
     "--with-ucd-dir=${unicode-character-database}/share/unicode"
   ];
+
+  # missing make dependency
+  # https://github.com/NixOS/nixpkgs/pull/218120#issuecomment-1514027173
+  preBuild = ''
+    make -C src ibusenumtypes.h
+  '';
 
   makeFlags = [
     "test_execsdir=${placeholder "installedTests"}/libexec/installed-tests/ibus"
@@ -133,7 +145,7 @@ stdenv.mkDerivation rec {
     isocodes
     json-glib
     libnotify
-  ] ++ optionals withWayland [
+  ] ++ lib.optionals withWayland [
     libxkbcommon
     wayland
   ];
@@ -165,7 +177,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/ibus/ibus";
     description = "Intelligent Input Bus, input method framework";
     license = licenses.lgpl21Plus;

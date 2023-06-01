@@ -3,7 +3,7 @@ MD_TARGETS=$(addsuffix .xml, $(basename $(shell find . -type f -regex '.*\.md$$'
 PANDOC ?= pandoc
 
 pandoc_media_dir = media
-# NOTE: Keep in sync with NixOS manual (/nixos/doc/manual/md-to-db.sh) and conversion script (/maintainers/scripts/db-to-md.sh).
+# NOTE: Keep in sync with conversion script (/maintainers/scripts/db-to-md.sh).
 # TODO: Remove raw-attribute when we can get rid of DocBook altogether.
 pandoc_commonmark_enabled_extensions = +attributes+fenced_divs+footnotes+bracketed_spans+definition_lists+pipe_tables+raw_attribute
 # Not needed:
@@ -11,13 +11,16 @@ pandoc_commonmark_enabled_extensions = +attributes+fenced_divs+footnotes+bracket
 pandoc_flags = --extract-media=$(pandoc_media_dir) \
 	--lua-filter=$(PANDOC_LUA_FILTERS_DIR)/diagram-generator.lua \
 	--lua-filter=build-aux/pandoc-filters/myst-reader/roles.lua \
-	--lua-filter=build-aux/pandoc-filters/link-unix-man-references.lua \
+	--lua-filter=$(PANDOC_LINK_MANPAGES_FILTER) \
 	--lua-filter=build-aux/pandoc-filters/docbook-writer/rst-roles.lua \
 	--lua-filter=build-aux/pandoc-filters/docbook-writer/labelless-link-is-xref.lua \
 	-f commonmark$(pandoc_commonmark_enabled_extensions)+smart
 
 .PHONY: all
 all: validate format out/html/index.html out/epub/manual.epub
+
+.PHONY: render-md
+render-md: ${MD_TARGETS}
 
 .PHONY: debug
 debug:

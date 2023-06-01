@@ -1,18 +1,36 @@
-{ lib, fetchFromGitHub, stdenv, rustPlatform, darwin, pkg-config, openssl
-, libiconv, CoreServices }:
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, stdenv
+, rustPlatform
+, darwin
+, pkg-config
+, openssl
+, libiconv
+, CoreServices
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-plantuml";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "sytsereitsma";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1m53sp3k387injn6mwk2c6rkzw16b12m4j7q0p69fdb3fiqbkign";
+    hash = "sha256-26epwn6j/ZeMAphiFsrLjS0KIewvElr7V3p/EDr4Uqk=";
   };
 
-  cargoSha256 = "0xi14k86ym3rfz6901lmj444y814m7vp90bwsyjmcph3hdv6mjp0";
+  cargoPatches = [
+    # https://github.com/sytsereitsma/mdbook-plantuml/pull/60
+    (fetchpatch {
+      name = "update-mdbook-for-rust-1.64.patch";
+      url = "https://github.com/sytsereitsma/mdbook-plantuml/commit/a1c7fdaff65fbbcc086006f6d180b27e180739e7.patch";
+      hash = "sha256-KXFQxogR6SaoX8snsSYMA8gn1FrQVKMl5l8khxB09WE=";
+    })
+  ];
+
+  cargoHash = "sha256-3HlnhRexfFcAuk1RoatWORMJvYRrnoEft5ys6j3t9S0=";
 
   nativeBuildInputs = [ pkg-config ];
 

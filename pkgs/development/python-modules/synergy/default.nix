@@ -31,7 +31,7 @@ buildPythonPackage rec {
     pandas
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "synergy" ];
 
   meta = with lib; {

@@ -2,17 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "starfetch";
-  version = "0.0.2";
+  version = "0.0.4";
 
   src = fetchFromGitHub {
     owner = "Haruno19";
     repo = "starfetch";
     rev = version;
-    sha256 = "sha256-waJ1DbOqhZ3hHtqcODSXBC+O46S8RSxuBuoEqs8OfgI=";
+    sha256 = "sha256-I2M/FlLRkGtD2+GcK1l5+vFsb5tCb4T3UJTPxRx68Ww=";
   };
 
   postPatch = ''
     substituteInPlace src/starfetch.cpp --replace /usr/local/ $out/
+  '' + lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace makefile --replace g++ clang++
   '';
 
   installPhase = ''

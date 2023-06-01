@@ -46,7 +46,7 @@ buildPythonPackage rec {
     toposort
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     bson
     pytestCheckHook
   ];

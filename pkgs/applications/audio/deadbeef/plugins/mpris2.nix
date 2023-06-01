@@ -9,7 +9,7 @@
 
 let
   pname = "deadbeef-mpris2-plugin";
-  version = "1.14";
+  version = "1.16";
 in stdenv.mkDerivation {
   inherit pname version;
 
@@ -17,7 +17,7 @@ in stdenv.mkDerivation {
     owner = "DeaDBeeF-Player";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-w7ccIhcPjbjs18kb3ZdM9JtSail9ik3uyAc40T8lHho=";
+    hash = "sha256-f6iHgwLdzQJJEquyuUQGWFfOfpjH/Hxh9IqQ5HkYrog=";
   };
 
   nativeBuildInputs = [

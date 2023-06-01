@@ -8,12 +8,12 @@
 }:
 
 let
-  version = "1.9.1";
+  version = "1.10.8";
   pname = "session-desktop";
 
   src = fetchurl {
     url = "https://github.com/oxen-io/session-desktop/releases/download/v${version}/session-desktop-linux-x86_64-${version}.AppImage";
-    sha256 = "sha256-Zc3btkvN4ic47IGigeFJGx4dwbM+b7iuIOxpmcWmrRQ=";
+    sha256 = "sha256-r/MQlZ3dmQmQZ/FCYIIF2sh9+VXwG97PFfTIXIQijx8=";
   };
   appimage = appimageTools.wrapType2 {
     inherit version pname src;
@@ -50,7 +50,7 @@ stdenvNoCC.mkDerivation {
     cp -r bin $out/bin
 
     wrapProgram $out/bin/session-desktop \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 
     runHook postInstall
   '';
@@ -61,5 +61,6 @@ stdenvNoCC.mkDerivation {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ alexnortung ];
     platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

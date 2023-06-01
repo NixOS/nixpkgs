@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib ];
 
-  cmakeFlags = lib.optional stdenv.hostPlatform.isStatic [
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isStatic [
     "-DSTATIC_BUILD=ON"
     ];
   meta = with lib; {

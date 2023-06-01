@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-udeps";
-  version = "0.1.32";
+  version = "0.1.39";
 
   src = fetchFromGitHub {
     owner = "est31";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Ev7hLtE5/PqeM39nyWaMyIhFsEZnXbdyU8Q5PET98lQ=";
+    sha256 = "sha256-/TAgAwP4y3MBIvcgCi2SiMfQ61BrFYuUY2LTg8mJn7U=";
   };
 
-  cargoSha256 = "sha256-3+6hZCYiyG6fgyJpjCcY1dzDK0kwVjsyckPIq/8Zfm0=";
+  cargoHash = "sha256-RGIqFTi0CFiPLMI3K7hsWMJXDrjVNbGnS7ZfTeBTPn0=";
 
   nativeBuildInputs = [ pkg-config ];
 

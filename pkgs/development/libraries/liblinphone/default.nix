@@ -15,11 +15,12 @@
 , lib
 , stdenv
 , xercesc
+, zxing-cpp
 }:
 
 stdenv.mkDerivation rec {
   pname = "liblinphone";
-  version = "5.1.22";
+  version = "5.2.17";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -27,10 +28,14 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "sha256-hTyp/fUA1+7J1MtqX33kH8Vn1XNjx51Wy5REvrpdJTY=";
+    hash = "sha256-zxp+jcClfKm+VsylRtydF2rlDCkO+sa9vw8GpwAfKHM=";
   };
 
-  patches = [ ./use-normal-jsoncpp.patch ];
+  postPatch = ''
+    substituteInPlace src/CMakeLists.txt \
+      --replace "jsoncpp_object" "jsoncpp" \
+      --replace "jsoncpp_static" "jsoncpp"
+  '';
 
   cmakeFlags = [
     "-DENABLE_STATIC=NO" # Do not build static libraries
@@ -52,6 +57,7 @@ stdenv.mkDerivation rec {
     (python3.withPackages (ps: [ ps.pystache ps.six ]))
     sqlite
     xercesc
+    zxing-cpp
   ];
 
   nativeBuildInputs = [

@@ -14,7 +14,7 @@ buildGoModule rec {
   vendorSha256 = "sha256-xTYlfdijSo99ei+ZMX6N9gl+yw0DrPQ2wOhn6SS9S/E=";
 
   buildInputs = [ srt ];
-  checkInputs = [ ffmpeg ];
+  nativeCheckInputs = [ ffmpeg ];
 
   meta = with lib; {
     description = "Streaming-Relay for the SRT-protocol";

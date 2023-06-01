@@ -94,8 +94,9 @@ resholve.mkDerivation rec {
 
 ## Basic `resholve.writeScript` and `resholve.writeScriptBin` examples
 
-Both of these functions have the same basic API. This example is a little
-trivial for now. If you have a real usage that you find helpful, please PR it.
+Both of these functions have the same basic API. The examples are a little
+trivial, so I'll also link to some real-world examples:
+- [shell.nix from abathur/tdverpy](https://github.com/abathur/tdverpy/blob/e1f956df3ed1c7097a5164e0c85b178772e277f5/shell.nix#L6-L13)
 
 ```nix
 resholvedScript = resholve.writeScript "name" {
@@ -183,6 +184,7 @@ handle any potential problems it encounters with directives. There are currently
      scripts from using the latest current-system symlinks.)
    - resolve commands in a variable definition
    - resolve an absolute command path from inputs as if it were a bare reference
+   - force resholve to resolve known security wrappers
 3. `keep` directives tell resholve not to raise an error (i.e., ignore)
    something it would usually object to. Common examples:
    - variables used as/within the first word of a command
@@ -190,7 +192,7 @@ handle any potential problems it encounters with directives. There are currently
    - dynamic (variable) arguments to commands known to accept/run other commands
 
 > NOTE: resholve has a (growing) number of directives detailed in `man resholve`
-> via `nixpkgs.resholve`.
+> via `nixpkgs.resholve` (though protections against run-time use of python2 in nixpkgs mean you'll have to set `NIXPKGS_ALLOW_INSECURE=1` to pull resholve into nix-shell).
 
 Each of these 3 types is represented by its own attrset, where you can think
 of the key as a scope. The value should be:
@@ -250,8 +252,23 @@ with some rules (internal to resholve) for locating sub-executions in
 some of the more common commands.
 
 - "execer" lore identifies whether an executable can, cannot,
-  or might execute its arguments. Every "can" or "might" verdict requires
-  either built-in rules for finding the executable, or human triage.
+  or might execute its arguments. Every "can" or "might" verdict requires:
+  - an update to the matching rules in [binlore](https://github.com/abathur/binlore)
+    if there's absolutely no exec in the executable and binlore just lacks
+    rules for understanding this
+  - an override in [binlore](https://github.com/abathur/binlore) if there is
+    exec but it isn't actually under user control
+  - a parser in [resholve](https://github.com/abathur/resholve) capable of
+    isolating the exec'd words if the command does have exec under user
+    control
+  - overriding the execer lore for the executable if manual triage indicates
+    that all of the invocations in the current package don't include any
+    commands that the executable would exec
+  - if manual triage turns up any commands that would be exec'd, use some
+    non-resholve tool to patch/substitute/replace them before or after you
+    run resholve on them (if before, you may need to also add keep directives
+    for these absolute paths)
+
 - "wrapper" lore maps shell exec wrappers to the programs they exec so
   that resholve can substitute an executable's verdict for its wrapper's.
 

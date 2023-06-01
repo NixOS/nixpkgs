@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "aioridwell";
-  version = "2022.03.0";
+  version = "2023.01.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
-    rev = version;
-    hash = "sha256-UiHT1YbBb9UTughVw2oJxRtvhUDVqQWqEcXMEXwy2cI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-enNYzU65QBT/ryCUNwB08U+QiFvVb03fbYzZ5Qk6GTk=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     titlecase
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     freezegun
     pytest-aiohttp
@@ -66,6 +66,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for interacting with Ridwell waste recycling";
     homepage = "https://github.com/bachya/aioridwell";
+    changelog = "https://github.com/bachya/aioridwell/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

@@ -5,8 +5,6 @@
 , version ? null
 }:
 
-with lib;
-
 let compcert = mkCoqDerivation rec {
 
   pname = "compcert";
@@ -15,8 +13,8 @@ let compcert = mkCoqDerivation rec {
   inherit version;
   releaseRev = v: "v${v}";
 
-  defaultVersion =  with versions; switch coq.version [
-      { case = range "8.14" "8.15"; out = "3.11"; }
+  defaultVersion =  with lib.versions; lib.switch coq.version [
+      { case = range "8.14" "8.16"; out = "3.12"; }
       { case = isEq "8.13"        ; out = "3.10"; }
       { case = isEq "8.12"       ; out = "3.9"; }
       { case = range "8.8" "8.11"; out = "3.8"; }
@@ -27,10 +25,13 @@ let compcert = mkCoqDerivation rec {
     "3.9".sha256 = "1srcz2dqrvmbvv5cl66r34zqkm0hsbryk7gd3i9xx4slahc9zvdb";
     "3.10".sha256 = "sha256:19rmx8r8v46101ij5myfrz60arqjy7q3ra3fb8mxqqi3c8c4l4j6";
     "3.11".sha256 = "sha256-ZISs/ZAJVWtxp9+Sg5qV5Rss1gI9hK769GnBfawLa6A=";
+    "3.12".sha256 = "sha256-hXkQ8UnAx3k50OJGBmSm4hgrnRFCosu4+PEMrcKfmV0=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = with ocamlPackages; [ ocaml findlib menhir menhirLib ] ++ [ coq coq2html ];
+  strictDeps = true;
+
+  nativeBuildInputs = with ocamlPackages; [ makeWrapper ocaml findlib menhir coq coq2html ];
+  buildInputs = with ocamlPackages; [ menhirLib ];
   propagatedBuildInputs = [ flocq ];
 
   enableParallelBuilding = true;
@@ -84,7 +85,7 @@ let compcert = mkCoqDerivation rec {
 }; in
 compcert.overrideAttrs (o:
   {
-    patches = with versions; switch [ coq.version o.version ] [
+    patches = with lib.versions; lib.switch [ coq.version o.version ] [
       { cases = [ (range "8.12.2" "8.13.2") "3.8" ];
         out = [
           # Support for Coq 8.12.2
@@ -135,6 +136,20 @@ compcert.overrideAttrs (o:
           (fetchpatch {
             url = "https://github.com/AbsInt/CompCert/commit/283a5be7296c4c0a94d863b427c77007ab875733.patch";
             sha256 = "sha256:1s7hvb5ii3p8kkcjlzwldvk8xc3iiibxi9935qjbrh25xi6qs66k";
+          })
+        ];
+      }
+      { cases = [ (isEq "8.16") (range "3.11" "3.12") ];
+        out = [
+          # Support for Coq 8.16.0
+          (fetchpatch {
+            url = "https://github.com/AbsInt/CompCert/commit/34be08a23d18d56f2dde24fd24b6dbe3bcb01ec3.patch";
+            sha256 = "sha256-a5YnftGVadVypEqrOYRRxI7YtGOEWyKnO4GqakFhvzI=";
+          })
+          # Support for Coq 8.16.1
+          (fetchpatch {
+            url = "https://github.com/AbsInt/CompCert/commit/35531503b3493cb9b0ec8a8585e84928c85b4af9.patch";
+            hash = "sha256-DvtYi/eiPUe8tA0EFTcCjJA0JjtVKceUsX4ZDM0pWkE=";
           })
         ];
       }

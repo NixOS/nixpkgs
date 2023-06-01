@@ -30,6 +30,11 @@ wafConfigurePhase() {
         echo "waf: enabled parallel building"
     fi
 
+    if ! [[ -v enableParallelInstalling ]]; then
+        enableParallelInstalling=1
+        echo "waf: enabled parallel installing"
+    fi
+
     runHook postConfigure
 }
 
@@ -68,6 +73,7 @@ wafInstallPhase() {
     fi
 
     local flagsArray=(
+        ${enableParallelInstalling:+-j ${NIX_BUILD_CORES}}
         $wafFlags ${wafFlagsArray[@]}
         $installFlags ${installFlagsArray[@]}
         ${installTargets:-install}

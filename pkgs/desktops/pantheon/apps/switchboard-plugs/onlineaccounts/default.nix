@@ -10,21 +10,19 @@
 , glib
 , granite
 , gtk3
-, libgdata
 , libhandy
-, sqlite
 , switchboard
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-onlineaccounts";
-  version = "6.5.0";
+  version = "6.5.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Q/vvXKyeedn5o7HnL9F5ixSjJS3OWrvvHbzvx2fW2qY=";
+    sha256 = "sha256-IW6twvEbCzQbuNFnryHxer5rK5zYfbmilcLjHCV9ZsM=";
   };
 
   nativeBuildInputs = [
@@ -39,16 +37,12 @@ stdenv.mkDerivation rec {
     glib
     granite
     gtk3
-    libgdata
     libhandy
-    sqlite # needed for camel-1.2
     switchboard
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

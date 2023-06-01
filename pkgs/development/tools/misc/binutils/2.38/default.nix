@@ -90,14 +90,6 @@ stdenv.mkDerivation {
     ./deterministic-temp-prefixes.patch
   ]
   ++ lib.optional targetPlatform.isiOS ./support-ios.patch
-  # This patch was suggested by Nick Clifton to fix
-  # https://sourceware.org/bugzilla/show_bug.cgi?id=16177
-  # It can be removed when that 7-year-old bug is closed.
-  # This binutils bug causes GHC to emit broken binaries on armv7, and indeed
-  # GHC will refuse to compile with a binutils suffering from it. See this
-  # comment for more information:
-  # https://gitlab.haskell.org/ghc/ghc/issues/4210#note_78333
-  ++ lib.optional (targetPlatform.isAarch32 && hostPlatform.system != targetPlatform.system) ./R_ARM_COPY.patch
   ++ lib.optional stdenv.targetPlatform.isWindows ./windres-locate-gcc.patch
   ++ lib.optional stdenv.targetPlatform.isMips64n64
      # this patch is from debian:
@@ -160,7 +152,7 @@ stdenv.mkDerivation {
 
   # As binutils takes part in the stdenv building, we don't want references
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
-  NIX_CFLAGS_COMPILE =
+  env.NIX_CFLAGS_COMPILE =
     if hostPlatform.isDarwin
     then "-Wno-string-plus-int -Wno-deprecated-declarations"
     else "-static-libgcc";
@@ -179,7 +171,7 @@ stdenv.mkDerivation {
 
     # Turn on --enable-new-dtags by default to make the linker set
     # RUNPATH instead of RPATH on binaries.  This is important because
-    # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
+    # RUNPATH can be overridden using LD_LIBRARY_PATH at runtime.
     "--enable-new-dtags"
 
     # force target prefix. Some versions of binutils will make it empty if

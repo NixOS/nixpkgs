@@ -1,23 +1,25 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, paho-mqtt
 , pythonOlder
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "pyephember";
-  version = "0.3.1";
+  version = "0.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3eMdkP7u3TTg1AUK4OR7AGZkD0FxUUPp/etvZ2Rw74E=";
+    sha256 = "sha256-j3SftxXKs9EZwdio26W5U0y5owH4yTteS4RUmzkZkoE=";
   };
 
   propagatedBuildInputs = [
+    paho-mqtt
     requests
   ];
 

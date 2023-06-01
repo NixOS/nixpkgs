@@ -16,23 +16,24 @@
 , qtsvg
 , fftw
 , vid-stab
-, opencv3
+, opencv4
 , ladspa-sdk
 , gitUpdater
 , ladspaPlugins
+, rubberband
 , mkDerivation
 , which
 }:
 
 mkDerivation rec {
   pname = "mlt";
-  version = "7.8.0";
+  version = "7.14.0";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
     rev = "v${version}";
-    sha256 = "sha256-r8lvzz083WWlDtjvlsPwvOgplx2lPPkDDf3t0G9PqAQ=";
+    sha256 = "sha256-BmvgDj/zgGJNpTy5A9XPOl+9001Kc0qSFSqQ3gwZPmI=";
   };
 
   buildInputs = [
@@ -45,24 +46,25 @@ mkDerivation rec {
     libvorbis
     libxml2
     movit
-    pkg-config
     qtbase
     qtsvg
     sox
     fftw
     vid-stab
-    opencv3
+    opencv4
     ladspa-sdk
     ladspaPlugins
+    rubberband
   ];
 
-  nativeBuildInputs = [ cmake which ];
+  nativeBuildInputs = [ cmake which pkg-config ];
 
   outputs = [ "out" "dev" ];
 
   cmakeFlags = [
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
+    "-DMOD_OPENCV=ON"
   ];
 
   qtWrapperArgs = [
@@ -70,13 +72,16 @@ mkDerivation rec {
     "--prefix LADSPA_PATH : ${ladspaPlugins}/lib/ladspa"
   ];
 
+  postFixup = ''
+    substituteInPlace "$dev"/lib/pkgconfig/mlt-framework-7.pc \
+      --replace '=''${prefix}//' '=/'
+  '';
+
   passthru = {
     inherit ffmpeg;
   };
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
-    attrPath = "libsForQt5.mlt";
     rev-prefix = "v";
   };
 

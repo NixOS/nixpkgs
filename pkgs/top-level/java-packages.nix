@@ -9,11 +9,12 @@ let
   openjfx11 = callPackage ../development/compilers/openjdk/openjfx/11.nix { };
   openjfx15 = callPackage ../development/compilers/openjdk/openjfx/15.nix { };
   openjfx17 = callPackage ../development/compilers/openjdk/openjfx/17.nix { };
+  openjfx19 = callPackage ../development/compilers/openjdk/openjfx/19.nix { };
 
   mavenfod = callPackage ../development/java-modules/maven-fod.nix { };
 
 in {
-  inherit mavenbuild mavenfod fetchMaven openjfx11 openjfx15 openjfx17;
+  inherit mavenbuild mavenfod fetchMaven openjfx11 openjfx15 openjfx17 openjfx19;
 
   compiler = let
 
@@ -28,12 +29,12 @@ in {
     };
 
     mkAdoptopenjdk = path-linux: path-darwin: let
-      package-linux  = import path-linux { inherit lib; };
+      package-linux  = import path-linux { inherit stdenv lib; };
       package-darwin = import path-darwin { inherit lib; };
       package = if stdenv.isLinux
         then package-linux
         else package-darwin;
-    in rec {
+    in {
       inherit package-linux package-darwin;
 
       jdk-hotspot = callPackage package.jdk-hotspot {};
@@ -44,8 +45,12 @@ in {
 
     mkBootstrap = adoptopenjdk: path: args:
       /* adoptopenjdk not available for i686, so fall back to our old builds for bootstrapping */
-      if   adoptopenjdk.jdk-hotspot.meta.available
-      then adoptopenjdk.jdk-hotspot
+      if   !stdenv.hostPlatform.isi686
+      then
+        # only linux has the gtkSupport option
+        if stdenv.isLinux
+        then adoptopenjdk.jdk-hotspot.override { gtkSupport = false; }
+        else adoptopenjdk.jdk-hotspot
       else callPackage path args;
 
     mkOpenjdk = path-linux: path-darwin: args:
@@ -61,11 +66,7 @@ in {
       headless = openjdk.override { headless = true; };
     };
 
-    openjdkDarwinMissing = version:
-      abort "OpenJDK ${builtins.toString version} is currently not supported on Darwin by nixpkgs.";
-
   in rec {
-
     adoptopenjdk-8 = mkAdoptopenjdk
       ../development/compilers/adoptopenjdk-bin/jdk8-linux.nix
       ../development/compilers/adoptopenjdk-bin/jdk8-darwin.nix;
@@ -90,6 +91,10 @@ in {
       ../development/compilers/adoptopenjdk-bin/jdk16-linux.nix
       ../development/compilers/adoptopenjdk-bin/jdk16-darwin.nix;
 
+    adoptopenjdk-17 = mkAdoptopenjdk
+      ../development/compilers/adoptopenjdk-bin/jdk17-linux.nix
+      ../development/compilers/adoptopenjdk-bin/jdk17-darwin.nix;
+
     openjdk8-bootstrap = mkBootstrap adoptopenjdk-8
       ../development/compilers/openjdk/bootstrap.nix
       { version = "8"; };
@@ -101,6 +106,7 @@ in {
     openjdk13-bootstrap = mkBootstrap adoptopenjdk-13
       ../development/compilers/openjdk/12.nix
       (bootstrapArgs // {
+        inherit openjdk11-bootstrap;
         /* build segfaults with gcc9 or newer, so use gcc8 like Debian does */
         stdenv = gcc8Stdenv;
       });
@@ -123,10 +129,16 @@ in {
         inherit openjdk15-bootstrap;
       });
 
-    openjdk17-bootstrap = mkBootstrap adoptopenjdk-16
+    openjdk17-bootstrap = mkBootstrap adoptopenjdk-17
       ../development/compilers/openjdk/16.nix
       (bootstrapArgs // {
         inherit openjdk16-bootstrap;
+      });
+
+    openjdk18-bootstrap = mkBootstrap adoptopenjdk-17
+      ../development/compilers/openjdk/17.nix
+      (bootstrapArgs // {
+        inherit openjdk17-bootstrap;
       });
 
     openjdk8 = mkOpenjdk
@@ -175,6 +187,34 @@ in {
         inherit openjdk17-bootstrap;
         openjfx = openjfx17;
       };
+
+    openjdk18 = mkOpenjdk
+      ../development/compilers/openjdk/18.nix
+      ../development/compilers/openjdk/darwin/18.nix
+      {
+        inherit openjdk18-bootstrap;
+        openjfx = openjfx17;
+      };
+
+    openjdk19 = mkOpenjdk
+      ../development/compilers/openjdk/19.nix
+      ../development/compilers/openjdk/darwin/19.nix
+      {
+        openjdk19-bootstrap = temurin-bin.jdk-19;
+        openjfx = openjfx19;
+      };
+
+    temurin-bin = recurseIntoAttrs (callPackage (
+      if stdenv.isLinux
+      then ../development/compilers/temurin-bin/jdk-linux.nix
+      else ../development/compilers/temurin-bin/jdk-darwin.nix
+    ) {});
+
+    semeru-bin = recurseIntoAttrs (callPackage (
+      if stdenv.isLinux
+      then ../development/compilers/semeru-bin/jdk-linux.nix
+      else ../development/compilers/semeru-bin/jdk-darwin.nix
+    ) {});
   };
 
   mavenPlugins = recurseIntoAttrs (callPackage ../development/java-modules/mavenPlugins.nix { });

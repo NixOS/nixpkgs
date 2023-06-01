@@ -5,6 +5,7 @@ buildPythonPackage rec {
   pname = "pygtk";
   outputs = [ "out" "dev" ];
   version = "2.24.0";
+  format = "other";
 
   disabled = isPy3k;
 
@@ -36,7 +37,8 @@ buildPythonPackage rec {
 
   buildPhase = "buildPhase";
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-ObjC";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-ObjC"
+    + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) " -lpython2.7";
 
   installPhase = "installPhase";
 

@@ -2,16 +2,18 @@
 
 buildPythonPackage rec {
   pname = "PySDL2";
-  version = "0.9.11";
+  version = "0.9.15";
+
   # The tests use OpenGL using find_library, which would have to be
   # patched; also they seem to actually open X windows and test stuff
   # like "screensaver disabling", which would have to be cleverly
   # sandboxed. Disable for now.
   doCheck = false;
+  pythonImportsCheck = [ "sdl2" ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "93e51057d39fd583b80001d42b21d5a3f71e30d489d85924d944b2c7350e2da6";
+    hash = "sha256-kIp946iMKyKiwhppkXxTIVKJW9GkkFJ6Jw7hTK1A5kc=";
   };
 
   # Deliberately not in propagated build inputs; users can decide

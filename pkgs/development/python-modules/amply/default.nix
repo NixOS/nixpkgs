@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-rXF7SQtrcFWQn6oZXoKkQytwb4+VhUBQFy9Ckx5HhCY=";
+    hash = "sha256-rXF7SQtrcFWQn6oZXoKkQytwb4+VhUBQFy9Ckx5HhCY=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     docutils
     pyparsing
   ];
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "amply" ];
 

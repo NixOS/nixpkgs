@@ -1,19 +1,21 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "go-bindata";
-  version = "3.24.0";
-
-  goPackagePath = "github.com/kevinburke/go-bindata";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "kevinburke";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dEfD5oV2nXLVg+a7PlB6LqhEBosG7eTptqKKDWcQAss=";
+    hash = "sha256-3/1RqJrv1fsPKsZpurp2dHsMg8FJBcFlI/pwwCf5H6E=";
   };
 
+  vendorHash = null;
+
   subPackages = [ "go-bindata" ];
+
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     homepage = "https://github.com/kevinburke/go-bindata";

@@ -1,28 +1,39 @@
 { lib
 , buildPythonPackage
-, fetchurl
-, nose
+, fetchFromGitHub
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
-  version = "1.2.8";
   pname = "minimock";
+  version = "1.3.0";
+  format = "pyproject";
 
-  src = fetchurl {
-    url = "https://bitbucket.org/jab/minimock/get/${version}.zip";
-    sha256 = "c88fa8a7120623f23990a7f086a9657f6ced09025a55e3be8649a30b4945441a";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "lowks";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-Ut3iKc7Sr28uGgWCV3K3CS+gBta2icvbUPMjjo4fflU=";
   };
 
-  checkInputs = [ nose ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  checkPhase = ''
-    ./test
-  '';
+  # Module has no tests
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "minimock"
+  ];
 
   meta = with lib; {
-    description = "A minimalistic mocking library for python";
+    description = "A minimalistic mocking library";
     homepage = "https://pypi.python.org/pypi/MiniMock";
     license = licenses.mit;
+    maintainers = with maintainers; [ drewrisinger ];
   };
-
 }

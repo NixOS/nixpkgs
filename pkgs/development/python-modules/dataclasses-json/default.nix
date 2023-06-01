@@ -24,10 +24,16 @@ buildPythonPackage rec {
     marshmallow-enum
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     mypy
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # mypy_main(None, text_io, text_io, [__file__], clean_exit=True)
+    # TypeError: main() takes at most 4 arguments (5 given)
+    "test_type_hints"
   ];
 
   pythonImportsCheck = [ "dataclasses_json" ];

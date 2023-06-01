@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pgroonga";
-  version = "2.3.8";
+  version = "3.0.5";
 
   src = fetchurl {
     url = "https://packages.groonga.org/source/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-/xlnwnUMW7JuUcSnZUV4nqCFcrfGDvXToz7IJykHCGI=";
+    hash = "sha256-5cVfZk2bFop/EQjvfObiN/AF/iv3DqDIKb/BkbEyKbE=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
     install -D pgroonga.so -t $out/lib/
     install -D pgroonga.control -t $out/share/postgresql/extension
     install -D data/pgroonga-*.sql -t $out/share/postgresql/extension
+
+    install -D pgroonga_database.so -t $out/lib/
+    install -D pgroonga_database.control -t $out/share/postgresql/extension
+    install -D data/pgroonga_database-*.sql -t $out/share/postgresql/extension
   '';
 
   meta = with lib; {
@@ -29,6 +33,7 @@ stdenv.mkDerivation rec {
       You can use super fast full text search feature against all languages by installing PGroonga into your PostgreSQL.
     '';
     homepage = "https://pgroonga.github.io/";
+    changelog = "https://github.com/pgroonga/pgroonga/releases/tag/${version}";
     license = licenses.postgresql;
     platforms = postgresql.meta.platforms;
     maintainers = with maintainers; [ DerTim1 ];

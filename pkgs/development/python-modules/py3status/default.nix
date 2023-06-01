@@ -1,40 +1,48 @@
 { lib
 , buildPythonPackage
+, acpi
+, alsa-utils
+, coreutils
+, dbus-python
 , fetchPypi
-, requests
-, pytz
-, tzlocal
+, file
+, i3
 , i3ipc
+, libnotify
+, lm_sensors
+, procps
 , pydbus
 , pygobject3
 , pyserial
+, pytz
+, requests
 , setuptools
-, dbus-python
-
-, file
-, acpi
-, coreutils
-, alsa-utils
-, i3
-, procps
-, lm_sensors
-, libnotify
+, tzlocal
 , xorg
 }:
 
 buildPythonPackage rec {
   pname = "py3status";
-  version = "3.46";
+  version = "3.50";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-T7zaNepat9RQReCeww+kJOBK0vjfdahkjRgx27AWpcE=";
+    hash = "sha256-LUFLc7GNEoPIAsTQDhVTt0/NqhwaZHBRLoHF+2nqTUg=";
   };
 
-  doCheck = false;
   propagatedBuildInputs = [
-    pytz requests tzlocal i3ipc pydbus pygobject3 pyserial setuptools dbus-python file
+    pytz
+    requests
+    tzlocal
+    i3ipc
+    pydbus
+    pygobject3
+    pyserial
+    setuptools
+    dbus-python
+    file
   ];
+
   prePatch = ''
     sed -i -e "s|'file|'${file}/bin/file|" py3status/parse_config.py
     sed -i -e "s|\[\"acpi\"|\[\"${acpi}/bin/acpi\"|" py3status/modules/battery_level.py
@@ -48,10 +56,13 @@ buildPythonPackage rec {
     sed -i -e "s|'xset|'${xorg.xset}/bin/xset|" py3status/modules/keyboard_layout.py
   '';
 
+  doCheck = false;
+
   meta = with lib; {
     description = "Extensible i3status wrapper";
-    license = licenses.bsd3;
     homepage = "https://github.com/ultrabug/py3status";
+    changelog = "https://github.com/ultrabug/py3status/blob/${version}/CHANGELOG";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };
 }

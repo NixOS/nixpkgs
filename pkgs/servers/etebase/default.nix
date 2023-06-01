@@ -1,30 +1,43 @@
-{ lib, fetchFromGitHub, buildPythonPackage, aioredis, aiofiles, django_3
-, fastapi, msgpack, pynacl, typing-extensions
-, withLdap ? true, ldap }:
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, aiofiles
+, django_3
+, fastapi
+, msgpack
+, pynacl
+, redis
+, typing-extensions
+, withLdap ? true
+, python-ldap
+, withPostgres ? true
+, psycopg2
+}:
 
 buildPythonPackage rec {
   pname = "etebase-server";
-  version = "0.9.1";
+  version = "0.11.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "server";
-    rev = "v${version}";
-    sha256 = "sha256-mYXy0N7ohNk3K2XNB6JvULF6lhL5dV8yBvooR6RuV1E=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-+MSNX+CFmIQII+SFjM2TQKCgRMOTdsOIVAP8ur4WjQY=";
   };
 
   patches = [ ./secret.patch ];
 
   propagatedBuildInputs = [
-    aioredis
     aiofiles
     django_3
     fastapi
     msgpack
     pynacl
+    redis
     typing-extensions
-  ] ++ lib.optional withLdap ldap;
+  ] ++ lib.optional withLdap python-ldap
+    ++ lib.optional withPostgres psycopg2;
 
   installPhase = ''
     mkdir -p $out/bin $out/lib
@@ -36,7 +49,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/etesync/server";
-    description = "An Etebase (EteSync 2.0) server so you can run your own.";
+    description = "An Etebase (EteSync 2.0) server so you can run your own";
+    changelog = "https://github.com/etesync/server/blob/${version}/ChangeLog.md";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ felschr ];
   };

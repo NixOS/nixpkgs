@@ -11,11 +11,11 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-32ZtQwTat3Ti3J/rIIuxrI1x6lzuwS9MmeujD71kL/I=";
+    hash = "sha256-32ZtQwTat3Ti3J/rIIuxrI1x6lzuwS9MmeujD71kL/I=";
   };
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   checkPhase = ''
     pytest tests

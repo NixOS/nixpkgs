@@ -4,6 +4,7 @@ let
 in
 {
   discourse-assign = callPackage ./discourse-assign {};
+  discourse-bbcode-color = callPackage ./discourse-bbcode-color {};
   discourse-calendar = callPackage ./discourse-calendar {};
   discourse-canned-replies = callPackage ./discourse-canned-replies {};
   discourse-chat-integration = callPackage ./discourse-chat-integration {};
@@ -17,6 +18,7 @@ in
   discourse-oauth2-basic = callPackage ./discourse-oauth2-basic {};
   discourse-openid-connect = callPackage ./discourse-openid-connect {};
   discourse-prometheus = callPackage ./discourse-prometheus {};
+  discourse-reactions = callPackage ./discourse-reactions {};
   discourse-saved-searches = callPackage ./discourse-saved-searches {};
   discourse-solved = callPackage ./discourse-solved {};
   discourse-spoiler-alert = callPackage ./discourse-spoiler-alert {};

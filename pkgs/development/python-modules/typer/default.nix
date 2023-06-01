@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
+, colorama
 , fetchpatch
 , fetchPypi
 , flit-core
@@ -16,15 +17,20 @@
 
 buildPythonPackage rec {
   pname = "typer";
-  version = "0.6.1";
+  version = "0.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-LVcgpeY/c+rzHtqhX2q4fzXwaQ+MojMBfX0j10OpHXM=";
+    hash = "sha256-/3l4RleKnyogG1NEKu3rVDMZRmhw++HHAeq2bddoEWU=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "rich >=10.11.0,<13.0.0" "rich"
+  '';
 
   nativeBuildInputs = [
     flit-core
@@ -34,14 +40,20 @@ buildPythonPackage rec {
     click
   ];
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-xdist
-    pytest-sugar
-    shellingham
-    rich
+  passthru.optional-dependencies = {
+    all = [
+      colorama
+      shellingham
+      rich
+    ];
+  };
+
+  nativeCheckInputs = [
     coverage # execs coverage in tests
-  ];
+    pytest-sugar
+    pytest-xdist
+    pytestCheckHook
+  ] ++ passthru.optional-dependencies.all;
 
   preCheck = ''
     export HOME=$(mktemp -d);
@@ -54,10 +66,12 @@ buildPythonPackage rec {
     "test_install_completion"
   ];
 
-  pythonImportsCheck = [ "typer" ];
+  pythonImportsCheck = [
+    "typer"
+  ];
 
   meta = with lib; {
-    description = "Python library for building CLI applications";
+    description = "Library for building CLI applications";
     homepage = "https://typer.tiangolo.com/";
     license = licenses.mit;
     maintainers = with maintainers; [ winpat ];

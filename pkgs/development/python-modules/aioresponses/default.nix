@@ -1,24 +1,24 @@
 { lib
 , aiohttp
-, asynctest
 , buildPythonPackage
 , ddt
 , fetchPypi
 , pbr
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "aioresponses";
-  version = "0.7.3";
+  version = "0.7.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-LGTtVxDujLTpWMVpGE2tEvTJzVk5E1yzj4jGqCYczrM=";
+    hash = "sha256-m4wQizY1TARjO60Op1K1XZVqdgL+PjI0uTn8RK+W8dg=";
   };
 
   nativeBuildInputs = [
@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    setuptools
   ];
 
-  checkInputs = [
-    asynctest
+  nativeCheckInputs = [
     ddt
     pytestCheckHook
   ];

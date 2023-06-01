@@ -1,0 +1,11 @@
+--- libdatovka-v0.2.1/configure.ac	2021-11-03 13:33:03.000000000 +0100
++++ libdatovka-v0.2.1-patched/configure.ac	2023-01-18 11:44:25.647566474 +0100
+@@ -46,6 +46,8 @@
+                 [Define if you want include debugging code])
+       )
+ 
++CFLAGS="${CFLAGS} -Wno-error=deprecated-declarations"
++
+ AC_CHECK_DECL([_WIN32])
+ AM_CONDITIONAL([WIN32], [test "$ac_cv_have_decl__WIN32" = "yes"])
+ 

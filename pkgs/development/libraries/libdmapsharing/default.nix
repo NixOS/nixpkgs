@@ -12,19 +12,16 @@
 , gdk-pixbuf
 , gst_all_1
 , glib
-, gtk3
-, libgee
-, check
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_43
 , gobject-introspection
-, libsoup
+, libsoup_3
 }:
 
 stdenv.mkDerivation rec {
   pname = "libdmapsharing";
-  version = "3.9.10";
+  version = "3.9.12";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
@@ -34,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = pname;
     rev = "${lib.toUpper pname}_${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "04y1wjwnbw4pzg05h383d83p6an6ylwy4b4g32jmjxpfi388x33g";
+    sha256 = "tnQ25RR/bAZJKa8vTwzkGK1iPc7CMGFbyX8mBf6TKr4=";
   };
 
   nativeBuildInputs = [
@@ -60,30 +57,17 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     glib
-    libsoup
-  ];
-
-  checkInputs = [
-    libgee
-    check
-    gtk3
+    libsoup_3
   ];
 
   configureFlags = [
     "--enable-gtk-doc"
+    "--disable-tests" # Tests require mDNS server.
   ];
-
-  # Cannot disable tests here or `check` from checkInputs would not be included.
-  # Cannot disable building the tests or docs will not build:
-  # https://gitlab.gnome.org/GNOME/libdmapsharing/-/issues/49
-  doCheck = true;
 
   preConfigure = ''
     NOCONFIGURE=1 ./autogen.sh
   '';
-
-  # Tests require mDNS server.
-  checkPhase = ":";
 
   meta = with lib; {
     homepage = "https://www.flyn.org/projects/libdmapsharing/";

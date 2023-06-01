@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, makeWrapper, cmake, expat, openssl, zlib, db, curl, wxGTK }:
+{ lib, stdenv, fetchurl, makeWrapper, cmake, expat, openssl, zlib, db, curl, wxGTK32 }:
 
 stdenv.mkDerivation rec {
   pname = "tqsl";
-  version = "2.5.9";
+  version = "2.6.5";
 
   src = fetchurl {
     url = "https://www.arrl.org/files/file/LoTW%20Instructions/${pname}-${version}.tar.gz";
-    sha256 = "sha256-flv7tI/SYAxxJsHFa3QUgnO0glAAQF87EgP4wyTWnNU=";
+    sha256 = "sha256-UGPMp1mAarHWuLbZu2wWpjgCdf8ZKj0Mwkqp32U5/8w=";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     zlib
     db
     (curl.override { inherit openssl; })
-    wxGTK
+    wxGTK32
   ];
 
   meta = with lib; {

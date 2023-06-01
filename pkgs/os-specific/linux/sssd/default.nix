@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sssd";
-  version = "2.7.4";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "SSSD";
     repo = pname;
     rev = version;
-    sha256 = "sha256-tPrximWUeG3wcuZZNo8l4QqC9ZwcZupIBZGF7bm7hqQ=";
+    sha256 = "sha256-H9Snh2RzbnjGPqvC9fJHeZvAkGX/O/vmVsl143yb194=";
   };
 
   postPatch = ''
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
   '';
 
   # Something is looking for <libxml/foo.h> instead of <libxml2/libxml/foo.h>
-  NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
+  env.NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
   preConfigure = ''
     export SGML_CATALOG_FILES="${docbookFiles}"
-    export PYTHONPATH=$(find ${python3.pkgs.ldap} -type d -name site-packages)
+    export PYTHONPATH=$(find ${python3.pkgs.python-ldap} -type d -name site-packages)
     export PATH=$PATH:${openldap}/libexec
 
     configureFlagsArray=(
@@ -54,12 +54,15 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+  # Disable parallel install due to missing depends:
+  #   libtool:   error: error: relink '_py3sss.la' with the above command before installing i
+  enableParallelInstalling = false;
   nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config doxygen ];
   buildInputs = [ augeas dnsutils c-ares curl cyrus_sasl ding-libs libnl libunistring nss
                   samba nfs-utils p11-kit python3 popt
                   talloc tdb tevent ldb pam openldap pcre2 libkrb5
                   cifs-utils glib keyutils dbus fakeroot libxslt libxml2
-                  libuuid python3.pkgs.ldap systemd nspr check cmocka uid_wrapper
+                  libuuid python3.pkgs.python-ldap systemd nspr check cmocka uid_wrapper
                   nss_wrapper ncurses Po4a http-parser jansson jose ];
 
   makeFlags = [
@@ -101,6 +104,6 @@ stdenv.mkDerivation rec {
     changelog = "https://sssd.io/release-notes/sssd-${version}.html";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ e-user illustris ];
+    maintainers = with maintainers; [ illustris ];
   };
 }

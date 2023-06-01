@@ -8,10 +8,11 @@ buildDunePackage rec {
   version = "4.1.0";
 
   minimalOCamlVersion = "4.07";
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-channel/releases/download/v${version}/mirage-channel-${version}.tbz";
-    sha256 = "sha256-sBdoUdTd9ZeNcHK0IBGBeOYDDqULM7EYX+Pz2f2nIQA=";
+    hash = "sha256-sBdoUdTd9ZeNcHK0IBGBeOYDDqULM7EYX+Pz2f2nIQA=";
   };
 
   propagatedBuildInputs = [ cstruct logs lwt mirage-flow ];

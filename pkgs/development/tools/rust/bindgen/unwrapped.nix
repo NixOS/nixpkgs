@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, clang, rustfmt
+{ lib, fetchCrate, rustPlatform, clang, rustfmt
 , runtimeShell
 , bash
 }:
@@ -7,18 +7,15 @@ let
   rustfmt-nightly = rustfmt.override { asNightly = true; };
 in rustPlatform.buildRustPackage rec {
   pname = "rust-bindgen-unwrapped";
-  version = "0.59.2";
+  version = "0.65.1";
 
-  RUSTFLAGS = "--cap-lints warn"; # probably OK to remove after update
-
-  src = fetchFromGitHub {
-    owner = "rust-lang";
-    repo = "rust-bindgen";
-    rev = "v${version}";
-    sha256 = "sha256-bJYdyf5uZgWe7fQ80/3QsRV0qyExYn6P9UET3tzwPFs=";
+  src = fetchCrate {
+    pname = "bindgen-cli";
+    inherit version;
+    sha256 = "9JJXQQSbCxTh3fIbVSrc6WAYGivwomkoB8ZIquUNr9o=";
   };
 
-  cargoSha256 = "sha256-RKZY5vf6CSFaKweuuNkeFF0ZXlSUibAkcL/YhkE0MoQ=";
+  cargoSha256 = "Kz6Y+4F9Yu5oKYI9LgZKLh0AkQTwerPS4A758TZrkoc=";
 
   buildInputs = [ clang.cc.lib ];
 
@@ -27,7 +24,7 @@ in rustPlatform.buildRustPackage rec {
   '';
 
   doCheck = true;
-  checkInputs = [ clang ];
+  nativeCheckInputs = [ clang ];
 
   RUSTFMT = "${rustfmt-nightly}/bin/rustfmt";
 

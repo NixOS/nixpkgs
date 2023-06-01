@@ -3,7 +3,7 @@
 # Ideally, pkgs points to default.nix file of Nixpkgs official tree
 with pkgs;
 let
-  pyEnv = python3.withPackages (ps: [ ps.GitPython ]);
+  pyEnv = python3.withPackages (ps: [ ps.gitpython ]);
 in
 
 mkShell {

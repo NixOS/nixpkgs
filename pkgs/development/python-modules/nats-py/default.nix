@@ -1,4 +1,6 @@
 { lib
+, stdenv
+, aiohttp
 , buildPythonPackage
 , ed25519
 , fetchFromGitHub
@@ -10,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "nats-py";
-  version = "2.1.4";
+  version = "2.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,14 +21,15 @@ buildPythonPackage rec {
     owner = "nats-io";
     repo = "nats.py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gLNMKLkufy/+zS5quH/UYXBIBfkZUyHtB0TiPNEBw6I=";
+    hash = "sha256-w+YySX9RNXUttt7iLg/Efh8bNzmhIQTKMXcoPO1k4lI=";
   };
 
   propagatedBuildInputs = [
+    aiohttp
     ed25519
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nats-server
     pytestCheckHook
     uvloop
@@ -38,21 +41,14 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    # RuntimeError: Event loop is closed
-    "test_subscribe_no_echo"
-    "test_publish"
-    "test_publish_verbose"
-    "test_fetch_max_waiting_fetch_one"
+    # AssertionError: assert 5 == 0
+    "test_pull_subscribe_limits"
     "test_fetch_n"
-    "test_consumer_management"
-    "test_ephemeral_subscribe"
-    "test_queue_subscribe_deliver_group"
-    "test_subscribe_push_bound"
-    "test_double_acking_subscribe"
-    "test_flow_control"
-    "test_ordered_consumer"
-    "test_ordered_consumer_single_loss"
-    "test_kv_simple"
+    "test_subscribe_no_echo"
+    "test_stream_management"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_subscribe_iterate_next_msg"
+    "test_buf_size_force_flush_timeout"
   ];
 
   pythonImportsCheck = [
@@ -62,6 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for NATS.io";
     homepage = "https://github.com/nats-io/nats.py";
+    changelog = "https://github.com/nats-io/nats.py/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

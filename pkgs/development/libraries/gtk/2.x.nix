@@ -1,13 +1,12 @@
 { config, lib, substituteAll, stdenv, fetchurl, pkg-config, gettext, glib, atk, pango, cairo, perl, xorg
-, gdk-pixbuf, xlibsWrapper, gobject-introspection
+, gdk-pixbuf, gobject-introspection
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? config.gtk2.cups or stdenv.isLinux, cups
 , gdktarget ? if stdenv.isDarwin then "quartz" else "x11"
 , AppKit, Cocoa
 , fetchpatch, buildPackages
+, testers
 }:
-
-with lib;
 
 let
 
@@ -19,12 +18,12 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtk+";
   version = "2.24.33";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk+/2.24/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gtk+/2.24/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
     sha256 = "rCrHV/WULTGKMRpUsMgLXvKV8pnCpzxjL2v7H/Scxto=";
   };
 
@@ -39,43 +38,47 @@ stdenv.mkDerivation rec {
   ];
 
 
-  nativeBuildInputs = setupHooks ++ [ perl pkg-config gettext gobject-introspection ];
+  nativeBuildInputs = finalAttrs.setupHooks ++ [
+    perl pkg-config gettext gobject-introspection
+  ];
 
   patches = [
     ./patches/2.0-immodules.cache.patch
     ./patches/gtk2-theme-paths.patch
-  ] ++ optionals stdenv.isDarwin [
-    (fetchpatch {
-      url = "https://bug557780.bugzilla-attachments.gnome.org/attachment.cgi?id=306776";
-      sha256 = "0sp8f1r5c4j2nlnbqgv7s7nxa4cfwigvm033hvhb1ld652pjag4r";
-    })
+  ] ++ lib.optionals stdenv.isDarwin [
+    ./patches/2.0-gnome_bugzilla_557780_306776_freeciv_darwin.patch
     ./patches/2.0-darwin-x11.patch
   ];
 
   propagatedBuildInputs = with xorg;
     [ glib cairo pango gdk-pixbuf atk ]
-    ++ optionals (stdenv.isLinux || stdenv.isDarwin) [
+    ++ lib.optionals (stdenv.isLinux || stdenv.isDarwin) [
          libXrandr libXrender libXcomposite libXi libXcursor
        ]
-    ++ optionals stdenv.isDarwin [ xlibsWrapper libXdamage ]
-    ++ optional xineramaSupport libXinerama
-    ++ optionals cupsSupport [ cups ]
-    ++ optionals stdenv.isDarwin [ AppKit Cocoa ];
+    ++ lib.optionals stdenv.isDarwin [ libXdamage ]
+    ++ lib.optional xineramaSupport libXinerama
+    ++ lib.optionals cupsSupport [ cups ]
+    ++ lib.optionals stdenv.isDarwin [ AppKit Cocoa ];
 
   preConfigure = if (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin) then ''
     MACOSX_DEPLOYMENT_TARGET=10.16
   '' else null;
 
   configureFlags = [
+    "--sysconfdir=/etc"
     "--with-gdktarget=${gdktarget}"
     "--with-xinput=yes"
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     "--disable-glibtest"
     "--disable-introspection"
     "--disable-visibility"
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "ac_cv_path_GTK_UPDATE_ICON_CACHE=${buildPackages.gtk2}/bin/gtk-update-icon-cache"
     "ac_cv_path_GDK_PIXBUF_CSOURCE=${buildPackages.gdk-pixbuf.dev}/bin/gdk-pixbuf-csource"
+  ];
+
+  installFlags = [
+    "sysconfdir=${placeholder "out"}/etc"
   ];
 
   doCheck = false; # needs X11
@@ -92,13 +95,21 @@ stdenv.mkDerivation rec {
       $out/bin/gtk-query-immodules-2.0 $out/lib/gtk-2.0/2.10.0/immodules/*.so > $out/lib/gtk-2.0/2.10.0/immodules.cache
     ''; # workaround for bug of nix-mode for Emacs */ '';
     inherit gdktarget;
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
-  meta = {
+  meta = with lib; {
     description = "A multi-platform toolkit for creating graphical user interfaces";
     homepage    = "https://www.gtk.org/";
     license     = licenses.lgpl2Plus;
     maintainers = with maintainers; [ lovek323 raskin ];
+    pkgConfigModules = [
+      "gdk-2.0"
+      "gtk+-2.0"
+    ] ++ lib.optionals (gdktarget == "x11") [
+      "gdk-x11-2.0"
+      "gtk+-x11-2.0"
+    ];
     platforms   = platforms.all;
 
     longDescription = ''
@@ -113,4 +124,4 @@ stdenv.mkDerivation rec {
     '';
     changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${version}/NEWS";
   };
-}
+})

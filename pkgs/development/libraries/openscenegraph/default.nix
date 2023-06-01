@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkg-config, doxygen,
   libX11, libXinerama, libXrandr, libGLU, libGL,
   glib, ilmbase, libxml2, pcre, zlib,
-  AGL, Carbon, Cocoa, Foundation,
+  AGL, Accelerate, Carbon, Cocoa, Foundation,
   boost,
   jpegSupport ? true, libjpeg,
   exrSupport ? false, openexr,
@@ -23,7 +23,7 @@
   sdlSupport ? false, SDL2,
   restSupport ? false, asio,
   withApps ? false,
-  withExamples ? false, fltk, wxGTK,
+  withExamples ? false, fltk,
 }:
 
 stdenv.mkDerivation rec {
@@ -61,8 +61,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional luaSupport lua
     ++ lib.optional sdlSupport SDL2
     ++ lib.optional restSupport asio
-    ++ lib.optionals withExamples [ fltk wxGTK ]
-    ++ lib.optionals stdenv.isDarwin [ AGL Carbon Cocoa Foundation ]
+    ++ lib.optionals withExamples [ fltk ]
+    ++ lib.optionals stdenv.isDarwin [ AGL Accelerate Carbon Cocoa Foundation ]
     ++ lib.optional (restSupport || colladaSupport) boost
   ;
 

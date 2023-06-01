@@ -3,7 +3,6 @@
   dnsmasq,
   fetchFromGitHub,
   lib,
-  nixosTests,
   makeWrapper,
 }:
 
@@ -27,10 +26,6 @@ buildGoModule rec {
   subPackages = [ "plugins/meta/dnsname" ];
 
   doCheck = false; # NOTE: requires root privileges
-
-  passthru.tests = {
-    inherit (nixosTests) podman-dnsname;
-  };
 
   meta = with lib; {
     description = "DNS name resolution for containers";

@@ -26,8 +26,9 @@ let
 
     powerManagement.resumeCommands = "systemctl --no-block restart backdoor.service";
 
-    fileSystems = {
-      "/".device = "/dev/vda2";
+    fileSystems."/" = {
+      device = "/dev/vda2";
+      fsType = "ext3";
     };
     swapDevices = mkOverride 0 [ { device = "/dev/vda1"; } ];
     boot.resumeDevice = mkIf systemdStage1 "/dev/vda1";
@@ -45,14 +46,14 @@ in makeTest {
 
   nodes = {
     # System configuration used for installing the installedConfig from above.
-    machine = { config, lib, pkgs, ... }: with lib; {
+    machine = { config, lib, pkgs, ... }: {
       imports = [
         ../modules/profiles/installation-device.nix
         ../modules/profiles/base.nix
       ];
 
       nix.settings = {
-        substituters = mkForce [];
+        substituters = lib.mkForce [];
         hashed-mirrors = null;
         connect-timeout = 1;
       };
@@ -62,7 +63,7 @@ in makeTest {
         # Small root disk for installer
         512
       ];
-      virtualisation.bootDevice = "/dev/vdb";
+      virtualisation.rootDevice = "/dev/vdb";
     };
   };
 

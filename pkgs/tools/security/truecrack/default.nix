@@ -33,7 +33,7 @@ gccStdenv.mkDerivation rec {
   #     `t_rc'; CpuCore.o:/build/source/src/Crypto/CpuAes.h:1237: first defined here
   # TODO: remove on upstream fixes it:
   #   https://gitlab.com/kalilinux/packages/truecrack/-/issues/1
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   installFlags = [ "prefix=$(out)" ];
   enableParallelBuilding = true;

@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "pyadax";
     rev = version;
-    sha256 = "sha256-EMSX2acklwWOYiEeLHYG5mwdiGnWAUo5dGMiHCmZrko=";
+    hash = "sha256-EMSX2acklwWOYiEeLHYG5mwdiGnWAUo5dGMiHCmZrko=";
   };
 
   propagatedBuildInputs = [

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "go-swag";
-  version = "1.8.5";
+  version = "1.8.12";
 
   src = fetchFromGitHub {
     owner = "swaggo";
     repo = "swag";
     rev = "v${version}";
-    sha256 = "sha256-S+WhBenTMyN7nM/UQIuMH1t9I/DRzQWN6g6tOWT71uo=";
+    sha256 = "sha256-2rnaPN4C4pn9Whk5X2z1VVxm679EUpQdumJZx5uulr4=";
   };
 
-  vendorSha256 = "sha256-RqhGGIwruAlrif2FZ+tvsicns56Ifjpy2ZHovDyjdB4=";
+  vendorHash = "sha256-yQPmiK1CQNn3sr482OEkdRLK6YP8CvPMA/nPGdVJbMc=";
 
   subPackages = [ "cmd/swag" ];
 

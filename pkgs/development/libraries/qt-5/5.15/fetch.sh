@@ -10,7 +10,7 @@ srcs="${here}/srcs-generated.json"
 while read -r module; do
     if [[ -z "$module" ]]; then continue; fi
     url="https://invent.kde.org/qt/qt/${module}.git"
-    nix-prefetch-git --url $url --rev refs/heads/kde/5.15 \
+    nix-prefetch-git --url $url --rev refs/heads/kde/5.15 --fetch-submodules \
         | jq "{key: \"${module}\", value: {url,rev,sha256}}"
 done < "$modules" | jq -s 'from_entries' > "${srcs}.tmp"
 

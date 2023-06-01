@@ -9,7 +9,7 @@ let
     listToValue = concatMapStringsSep ", " (generators.mkValueStringDefault { });
   };
 
-  pkg = if isNull cfg.package then
+  pkg = if cfg.package == null then
     pkgs.radicale
   else
     cfg.package;
@@ -77,7 +77,7 @@ in {
         <https://radicale.org/3.0.html#documentation/authentication-and-rights>.
         This option only works in conjunction with {option}`settings`.
         Setting this will also set {option}`settings.rights.type` and
-        {option}`settings.rights.file` to approriate values.
+        {option}`settings.rights.file` to appropriate values.
       '';
       default = { };
       example = literalExpression ''
@@ -117,13 +117,13 @@ in {
       }
     ];
 
-    warnings = optional (isNull cfg.package && versionOlder config.system.stateVersion "17.09") ''
+    warnings = optional (cfg.package == null && versionOlder config.system.stateVersion "17.09") ''
       The configuration and storage formats of your existing Radicale
       installation might be incompatible with the newest version.
       For upgrade instructions see
       https://radicale.org/2.1.html#documentation/migration-from-1xx-to-2xx.
       Set services.radicale.package to suppress this warning.
-    '' ++ optional (isNull cfg.package && versionOlder config.system.stateVersion "20.09") ''
+    '' ++ optional (cfg.package == null && versionOlder config.system.stateVersion "20.09") ''
       The configuration format of your existing Radicale installation might be
       incompatible with the newest version.  For upgrade instructions see
       https://github.com/Kozea/Radicale/blob/3.0.6/NEWS.md#upgrade-checklist.
@@ -200,5 +200,5 @@ in {
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ aneeshusa infinisil dotlambda ];
+  meta.maintainers = with lib.maintainers; [ infinisil dotlambda ];
 }

@@ -9,7 +9,7 @@ let
     crossSystem = localSystem;
     crossOverlays = [];
 
-    # Ignore custom stdenvs when cross compiling for compatability
+    # Ignore custom stdenvs when cross compiling for compatibility
     config = builtins.removeAttrs config [ "replaceStdenv" ];
   };
 
@@ -72,7 +72,7 @@ in lib.init bootStages ++ [
            else if crossSystem.isDarwin
              then buildPackages.llvmPackages.libcxxClang
            else if crossSystem.useLLVM or false
-             then buildPackages.llvmPackages.clangUseLLVM
+             then buildPackages.llvmPackages.clang
            else buildPackages.gcc;
 
       extraNativeBuildInputs = old.extraNativeBuildInputs
@@ -83,9 +83,6 @@ in lib.init bootStages ++ [
              (let f = p: !p.isx86 || builtins.elem p.libc [ "musl" "wasilibc" "relibc" ] || p.isiOS || p.isGenode;
                in f hostPlatform && !(f buildPlatform) )
              buildPackages.updateAutotoolsGnuConfigScriptsHook
-           # without proper `file` command, libtool sometimes fails
-           # to recognize 64-bit DLLs
-        ++ lib.optional (hostPlatform.config == "x86_64-w64-mingw32") buildPackages.file
         ;
     }));
   })

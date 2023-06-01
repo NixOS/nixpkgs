@@ -1,5 +1,4 @@
-{ lib, fetchFromGitHub, python27Packages, python3Packages, wmctrl,
-  qtbase, mkDerivationWith }:
+{ lib, fetchFromGitHub, python3Packages, wmctrl, qtbase, mkDerivationWith }:
 
 {
   stable = throw "plover.stable was removed because it used Python 2. Use plover.dev instead."; # added 2022-06-05
@@ -26,7 +25,7 @@
     # sed on many of the platforms Plover builds for
     postPatch = "sed -i /PyQt5/d setup.cfg";
 
-    checkInputs           = [ pytest mock ];
+    nativeCheckInputs           = [ pytest mock ];
     propagatedBuildInputs = [ babel pyqt5 xlib pyserial appdirs wcwidth setuptools ];
 
     dontWrapQtApps = true;

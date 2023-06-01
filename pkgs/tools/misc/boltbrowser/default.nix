@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "boltbrowser";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "br0xen";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Obfhxe0AI5m4UTvs28PMOrBxWuwMW7FY4DMI80Ez0Ws=";
+    sha256 = "sha256-3t0U1bSJbo3RJZe+PwaUeuzSt23Gs++WRe/uehfa4cA=";
   };
 
-  vendorSha256 = "sha256-G47vTP2EBM0fa1lCma6gQGMlkb6xe620hYwZYcSpSPQ=";
+  vendorHash = "sha256-lLSjAO0sK2zwl+id/e15XWYbLPCa7qK8J6tdvaBMLPs=";
 
   meta = with lib; {
     description = "CLI Browser for BoltDB files";

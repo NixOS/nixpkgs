@@ -4,16 +4,15 @@
 , texlive
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "sagetex";
-  version = "3.6";
-  passthru.tlType = "run";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sagetex";
     rev = "v${version}";
-    sha256 = "8iHcJbaY/dh0vmvYyd6zj1ZbuJRaJGb6bUBK1v4gXWU=";
+    sha256 = "sha256-OfhbXHbGI+DaDHqZCOGiSHJPHjGuT7ZqSEjKweloW38=";
   };
 
   buildInputs = [
@@ -30,6 +29,11 @@ stdenv.mkDerivation rec {
     cp -va *.sty *.cfg *.def "$path/"
   '';
 
+  passthru = {
+    tlType = "run";
+    pkgs = [ finalAttrs.finalPackage ];
+  };
+
   meta = with lib; {
     description = "Embed code, results of computations, and plots from Sage into LaTeX documents";
     homepage = "https://github.com/sagemath/sagetex";
@@ -37,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ alexnortung ];
     platforms = platforms.all;
   };
-}
+})

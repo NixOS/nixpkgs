@@ -8,17 +8,19 @@
 , xmltodict
 , pytestCheckHook
 , pythonOlder
+, uritools
 }:
 
 buildPythonPackage rec {
   pname = "spdx-tools";
-  version = "0.7.0a3";
+  version = "0.7.1";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-afV1W1n5ubHhqfLFpPO5fxaIy5TaZdw9eDy3JYOJ1oE=";
+    hash = "sha256-l15tu6iPEFqKyyKr9T/pDw6dVjWiubH+SHeB6WliOxc=";
   };
 
   propagatedBuildInputs = [
@@ -26,10 +28,11 @@ buildPythonPackage rec {
     ply
     pyyaml
     rdflib
+    uritools
     xmltodict
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -40,7 +43,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "SPDX parser and tools";
     homepage = "https://github.com/spdx/tools-python";
+    changelog = "https://github.com/spdx/tools-python/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

@@ -2,20 +2,14 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, asttokens
-, typing-extensions
-, pytestCheckHook
-, yapf
-, docutils
-, pygments
-, dpcontracts
-, tabulate
-, py-cpuinfo
-, typeguard
 , astor
-, numpy
+, asttokens
 , asyncstdlib
 , deal
+, dpcontracts
+, numpy
+, pytestCheckHook
+, typing-extensions
 }:
 
 buildPythonPackage rec {
@@ -38,40 +32,39 @@ buildPythonPackage rec {
     export ICONTRACT_SLOW=1
   '';
 
-
   propagatedBuildInputs = [
     asttokens
     typing-extensions
   ];
 
-  checkInputs = [
-    pytestCheckHook
-    yapf
-    docutils
-    pygments
-    dpcontracts
-    tabulate
-    py-cpuinfo
-    typeguard
+  nativeCheckInputs = [
     astor
-    numpy
     asyncstdlib
     deal
+    dpcontracts
+    numpy
+    pytestCheckHook
   ];
 
   disabledTestPaths = [
-    # mypy decorator checks don't pass. For some reaseon mypy
+    # mypy decorator checks don't pass. For some reason mypy
     # doesn't check the python file provided in the test.
     "tests/test_mypy_decorators.py"
   ];
+
+  # Upstream adds some plain text files direct to the package's root directory
+  # https://github.com/Parquery/icontract/blob/master/setup.py#L63
+  postInstall = ''
+    rm -f $out/{LICENSE.txt,README.rst,requirements.txt}
+  '';
 
   pythonImportsCheck = [ "icontract" ];
 
   meta = with lib; {
     description = "Provide design-by-contract with informative violation messages";
     homepage = "https://github.com/Parquery/icontract";
-    changelog = "https://github.com/Parquery/icontract/blob/master/CHANGELOG.rst";
+    changelog = "https://github.com/Parquery/icontract/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ gador ];
+    maintainers = with maintainers; [ gador thiagokokada ];
   };
 }

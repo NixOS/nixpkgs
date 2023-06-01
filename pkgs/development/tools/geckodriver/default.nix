@@ -1,28 +1,23 @@
 { lib
-, fetchzip
+, fetchFromGitHub
 , rustPlatform
 , stdenv
 , Security
 , libiconv
 }:
 
-rustPlatform.buildRustPackage {
-  version = "0.30.0";
+rustPlatform.buildRustPackage rec {
+  version = "0.33.0";
   pname = "geckodriver";
-  sourceRoot = "source/testing/geckodriver";
 
-  # Source revisions are noted alongside the binary releases:
-  # https://github.com/mozilla/geckodriver/releases
-  src = (fetchzip {
-    url = "https://hg.mozilla.org/mozilla-central/archive/d372710b98a6ce5d1b2a9dffd53a879091c5c148.zip/testing";
-    sha256 = "0d27h9c8vw4rs9c2l9wms4lc931nbp2g5hacsh24zhc9y3v454i6";
-  }).overrideAttrs (_: {
-    # normally guessed by the url's file extension, force it to unpack properly
-    unpackCmd = "unzip $curSrc";
-  });
+  src = fetchFromGitHub {
+    owner = "mozilla";
+    repo = "geckodriver";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-IBzLxiqfXFiEaDmCVZjAJCPcVInBT1ZZ5fkCOHedZkA=";
+  };
 
-  cargoPatches = [ ./cargo-lock.patch ];
-  cargoSha256 = "08zcrhrmxh3c3iwd7kbnr19lfisikb779i2r7ir7b1i1ynmi4v6r";
+  cargoHash = "sha256-4/VmF8reY0pz8wswQn3IlTNt6SaVunr2v+hv+oM+G/s=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 

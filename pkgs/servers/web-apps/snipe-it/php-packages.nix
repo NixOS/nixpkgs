@@ -15,10 +15,10 @@ let
     "arietimmerman/laravel-scim-server" = {
       targetDir = "";
       src = composerEnv.buildZipPackage {
-        name = "arietimmerman-laravel-scim-server-d0e3d7c0b5da2ec76283b8a2fa2e672a91596509";
+        name = "arietimmerman-laravel-scim-server-9e8dd2d3958d3c3c05d0a99fe6475361ad9e9419";
         src = fetchurl {
-          url = "https://api.github.com/repos/grokability/laravel-scim-server/zipball/d0e3d7c0b5da2ec76283b8a2fa2e672a91596509";
-          sha256 = "0xznsbdph32q1nx5ibl90gfqa7j0bj0ikcvz8hfpxxk967k1ayfj";
+          url = "https://api.github.com/repos/grokability/laravel-scim-server/zipball/9e8dd2d3958d3c3c05d0a99fe6475361ad9e9419";
+          sha256 = "02if4yvnqagpwgrq8b0371nva24lsk0h3h06q51vjxyqjhqvc2nr";
         };
       };
     };
@@ -245,10 +245,10 @@ let
     "dompdf/dompdf" = {
       targetDir = "";
       src = composerEnv.buildZipPackage {
-        name = "dompdf-dompdf-79573d8b8a141ec8a17312515de8740eed014fa9";
+        name = "dompdf-dompdf-e8d2d5e37e8b0b30f0732a011295ab80680d7e85";
         src = fetchurl {
-          url = "https://api.github.com/repos/dompdf/dompdf/zipball/79573d8b8a141ec8a17312515de8740eed014fa9";
-          sha256 = "0glv4fhzk674jgk1v9rkhb4859x5h1aspr63qdn7ajls27c582l5";
+          url = "https://api.github.com/repos/dompdf/dompdf/zipball/e8d2d5e37e8b0b30f0732a011295ab80680d7e85";
+          sha256 = "0a2qk57c3qwg7j8gp1hwyd8y8dwm5pb8lg1npb49sijig8kyjlv3";
         };
       };
     };
@@ -705,10 +705,10 @@ let
     "masterminds/html5" = {
       targetDir = "";
       src = composerEnv.buildZipPackage {
-        name = "masterminds-html5-f640ac1bdddff06ea333a920c95bbad8872429ab";
+        name = "masterminds-html5-897eb517a343a2281f11bc5556d6548db7d93947";
         src = fetchurl {
-          url = "https://api.github.com/repos/Masterminds/html5-php/zipball/f640ac1bdddff06ea333a920c95bbad8872429ab";
-          sha256 = "1v9sn44z710wha5jrzy0alx1ayj3d0fcin1xpx6c6fdhlksbqc6z";
+          url = "https://api.github.com/repos/Masterminds/html5-php/zipball/897eb517a343a2281f11bc5556d6548db7d93947";
+          sha256 = "12fmcgsrmh0f0llnpcvk33mrs4067nw246ci5619rr79ijy3yc0k";
         };
       };
     };
@@ -838,7 +838,7 @@ let
         name = "onelogin-php-saml-a7328b11887660ad248ea10952dd67a5aa73ba3b";
         src = fetchurl {
           url = "https://api.github.com/repos/onelogin/php-saml/zipball/a7328b11887660ad248ea10952dd67a5aa73ba3b";
-          sha256 = "0ycj3n22k5i3h8p7gn0xff6a7smjypazl2k5qvyzg86fjr7s3vfv";
+          sha256 = "1df8mxmdh14y2scw80yhh1l90lvdnxq1pjlli3is1cakc0cdw90z";
         };
       };
     };
@@ -872,13 +872,13 @@ let
         };
       };
     };
-    "patchwork/utf8" = {
+    "paragonie/sodium_compat" = {
       targetDir = "";
       src = composerEnv.buildZipPackage {
-        name = "patchwork-utf8-e1fa4d4a57896d074c9a8d01742b688d5db4e9d5";
+        name = "paragonie-sodium_compat-cb15e403ecbe6a6cc515f855c310eb6b1872a933";
         src = fetchurl {
-          url = "https://api.github.com/repos/tchwork/utf8/zipball/e1fa4d4a57896d074c9a8d01742b688d5db4e9d5";
-          sha256 = "0rarkg8v23y58bc4n6j39wdi6is0p1rgqxnixqlgavcm35xjgnw0";
+          url = "https://api.github.com/repos/paragonie/sodium_compat/zipball/cb15e403ecbe6a6cc515f855c310eb6b1872a933";
+          sha256 = "01jxl868i8bkx5szgp2fp6mi438ani80bqkdcc7rnn9z22lrsm78";
         };
       };
     };
@@ -895,10 +895,10 @@ let
     "phenx/php-svg-lib" = {
       targetDir = "";
       src = composerEnv.buildZipPackage {
-        name = "phenx-php-svg-lib-4498b5df7b08e8469f0f8279651ea5de9626ed02";
+        name = "phenx-php-svg-lib-76876c6cf3080bcb6f249d7d59705108166a6685";
         src = fetchurl {
-          url = "https://api.github.com/repos/dompdf/php-svg-lib/zipball/4498b5df7b08e8469f0f8279651ea5de9626ed02";
-          sha256 = "01w65haq96sfyjl8ahm9nb95wasgl66ymv5lycx1cbagy653xdin";
+          url = "https://api.github.com/repos/dompdf/php-svg-lib/zipball/76876c6cf3080bcb6f249d7d59705108166a6685";
+          sha256 = "0bjynrs81das9f9jwd5jgsxx9gjv2m6c0mkvlgx4w1f4pgbvwsf5";
         };
       };
     };

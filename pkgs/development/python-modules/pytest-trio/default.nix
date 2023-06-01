@@ -21,7 +21,7 @@ buildPythonPackage rec {
     outcome
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     hypothesis
   ];

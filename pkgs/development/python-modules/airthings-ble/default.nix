@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "airthings-ble";
-  version = "0.5.0";
+  version = "0.5.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -18,12 +18,12 @@ buildPythonPackage rec {
     owner = "vincegio";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ihNy5Rme20fCO1tG7aqdVFhSF3DI9hAlge54+/nNGLs=";
+    hash = "sha256-A1YsYOquDUDGeEI4xzQSjEk1H92Jjlhsb5IPRt0lM2c=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'bleak = "^0.15.1"' 'bleak = "*"'
+      --replace 'bleak-retry-connector = "^0.15.1"' 'bleak = "*"'
   '';
 
   nativeBuildInputs = [
@@ -45,6 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for Airthings BLE devices";
     homepage = "https://github.com/vincegio/airthings-ble";
+    changelog = "https://github.com/vincegio/airthings-ble/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

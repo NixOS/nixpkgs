@@ -1,22 +1,26 @@
-{ absl-py
+{ lib
+, absl-py
 , buildPythonPackage
 , chex
 , fetchFromGitHub
 , jaxlib
-, lib
 , numpy
 , callPackage
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "optax";
-  version = "0.1.3";
+  version = "0.1.5";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-XAYztMBQpLBHNuNED/iodbwIMJSN/0GxdmTGQ5jD9Ws=";
+    hash = "sha256-vhPpynKq0dboSt+fQ4lvVv9ytDXnZKRrc7lF03Mm39g=";
   };
 
   outputs = [
@@ -24,7 +28,9 @@ buildPythonPackage rec {
     "testsout"
   ];
 
-  buildInputs = [ jaxlib ];
+  buildInputs = [
+    jaxlib
+  ];
 
   propagatedBuildInputs = [
     absl-py
@@ -49,8 +55,9 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "Optax is a gradient processing and optimization library for JAX.";
+    description = "Gradient processing and optimization library for JAX";
     homepage = "https://github.com/deepmind/optax";
+    changelog = "https://github.com/deepmind/optax/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];
   };

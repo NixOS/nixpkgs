@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "headset";
-  version = "4.0.0";
+  version = "4.2.1";
 
   src = fetchurl {
     url = "https://github.com/headsetapp/headset-electron/releases/download/v${version}/headset_${version}_amd64.deb";
-    hash = "sha256-M1HMZgYczZWFq0EGlCMEGOGUNoUcmq37J8Ycen72PhM=";
+    hash = "sha256-81gsIq74sggauE6g8pM6z05KTmsbe49CZa9aRQEDwMo=";
   };
 
   dontConfigure = true;

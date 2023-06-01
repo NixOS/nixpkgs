@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "pytools";
-  version = "2022.1.12";
+  version = "2022.1.14";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-TWKHXpoqsqJOOTqai3mUkvGnIb/6hArzgHv9Qocd0fQ=";
+    hash = "sha256-QQFzcWELsqA2hVl8UoUgXmWXx/F3OD2VyLhxJEsSwU4=";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

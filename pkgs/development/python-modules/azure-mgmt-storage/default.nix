@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-storage";
-  version = "20.1.0";
+  version = "21.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    hash = "sha256-IU8/3oyR4n1T8uZUoo0VADrT9vFchDioIF8MiKSNlFE=";
+    hash = "sha256-brE+7s+JGVsrX0e+Bnnj8niI79e9ITLux+vLznXLE3c=";
   };
 
   propagatedBuildInputs = [

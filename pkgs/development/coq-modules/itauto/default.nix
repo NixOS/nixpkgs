@@ -1,5 +1,4 @@
 { lib, mkCoqDerivation, coq, version ? null }:
-with lib;
 
 mkCoqDerivation rec {
   pname = "itauto";
@@ -11,7 +10,7 @@ mkCoqDerivation rec {
   release."8.14.0".sha256 = "sha256:1k6pqhv4dwpkwg81f2rlfg40wh070ks1gy9r0ravm2zhsbxqcfc9";
   release."8.13+no".sha256 = "sha256-gXoxtLcHPoyjJkt7WqvzfCMCQlh6kL2KtCGe3N6RC/A=";
   inherit version;
-  defaultVersion = with versions; switch coq.coq-version [
+  defaultVersion = with lib.versions; lib.switch coq.coq-version [
     { case = isEq "8.16"; out = "8.16.0"; }
     { case = isEq "8.15"; out = "8.15.0"; }
     { case = isEq "8.14"; out = "8.14.0"; }
@@ -22,7 +21,7 @@ mkCoqDerivation rec {
   nativeBuildInputs = (with coq.ocamlPackages; [ ocamlbuild ]);
   enableParallelBuilding = false;
 
-  meta = {
+  meta =  with lib; {
     description = "A reflexive SAT solver parameterised by a leaf tactic and Nelson-Oppen support";
     maintainers = with maintainers; [ siraben ];
     license = licenses.gpl3Plus;

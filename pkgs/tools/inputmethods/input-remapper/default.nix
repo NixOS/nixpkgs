@@ -29,49 +29,33 @@
   # failures when building. Override this to true to run tests anyway
   # See upstream issue: https://github.com/sezanzeb/input-remapper/issues/306
 , withDoCheck ? false
-  # Version and rev and hash are package arguments to allow overriding
-  # while ensuring the values in prePatch and src match
-  # https://discourse.nixos.org/t/avoid-rec-expresions-in-nixpkgs/8293/7
-  # The names are prefixed with input_remapper to avoid potential
-  # collisions with package names
-, input_remapper_version ? "1.4.2"
-, input_remapper_src_rev ? "af20f87a1298153e765b840a2164ba63b9ef937a"
-, input_remapper_src_hash ? "sha256-eG4Fx1z74Bq1HrfmzOuULQLziGdWnHLax8y2dymjWsI="
 }:
 
 let
   maybeXmodmap = lib.optional withXmodmap xmodmap;
 in
-buildPythonApplication {
+(buildPythonApplication {
   pname = "input-remapper";
-  version = input_remapper_version;
+  version = "1.5.0";
 
   src = fetchFromGitHub {
-    rev = input_remapper_src_rev;
+    rev = "e31a1b2bc5d23fe13130afcc242063196335399f";
     owner = "sezanzeb";
     repo = "input-remapper";
-    hash = input_remapper_src_hash;
+    hash = "sha256-KPQLgXSonuOgphagYN2JN+CMIpmjTIPUTCqOPDk0UYU=";
   };
 
-  # Fixes error
-  # Couldn’t recognize the image file format for file "*.svg"
-  # at startup, see https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
-
-  prePatch = ''
-    # set revision for --version output
-    echo "COMMIT_HASH = '${input_remapper_src_rev}'" > inputremapper/commit_hash.py
-
+  postPatch = ''
     # fix FHS paths
     substituteInPlace inputremapper/configs/data.py \
       --replace "/usr/share/input-remapper"  "$out/usr/share/input-remapper"
-  '' + (lib.optionalString (withDebugLogLevel) ''
+  '' + lib.optionalString withDebugLogLevel ''
     # if debugging
     substituteInPlace inputremapper/logger.py --replace "logger.setLevel(logging.INFO)"  "logger.setLevel(logging.DEBUG)"
-  '');
+  '';
 
   doCheck = withDoCheck;
-  checkInputs = [
+  nativeCheckInputs = [
     psutil
   ];
   pythonImportsCheck = [
@@ -161,4 +145,14 @@ buildPythonApplication {
     maintainers = with maintainers; [ LunNova ];
     mainProgram = "input-remapper-gtk";
   };
-}
+}).overrideAttrs (final: prev: {
+  # Set in an override as buildPythonApplication doesn't yet support
+  # the `final:` arg yet from #119942 'overlay style overridable recursive attributes'
+  # this ensures the rev matches the input src's rev after overriding
+  # See https://discourse.nixos.org/t/avoid-rec-expresions-in-nixpkgs/8293/7 for more
+  # discussion
+  postPatch = prev.postPatch or "" + ''
+    # set revision for --version output
+    echo "COMMIT_HASH = '${final.src.rev}'" > inputremapper/commit_hash.py
+  '';
+})

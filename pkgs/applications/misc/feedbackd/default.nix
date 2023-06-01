@@ -1,7 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch2
 , docbook-xsl-nons
+, docutils
+, gi-docgen
 , gobject-introspection
 , gtk-doc
 , libxslt
@@ -22,30 +25,40 @@ let
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = "feedbackd-device-themes";
-    rev = "v0.0.20220523";
-    sha256 = "sha256-RyUZj+tpJSYhyoK+E98CTIoHwXwBdB1YHVnO5821exo=";
+    rev = "v0.1.0";
+    sha256 = "sha256-YK9fJ3awmhf1FAhdz95T/POivSO93jsNApm+u4OOZ80=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "feedbackd";
-  # Not an actual upstream project release,
-  # only a Debian package release that is tagged in the upstream repo
-  version = "0.0.0+git20220520";
+  version = "0.1.0";
 
-  outputs = [ "out" "dev" ]
-    # remove if cross-compiling gobject-introspection works
-    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = "feedbackd";
     rev = "v${version}";
-    hash = "sha256-4ftPC6LnX0kKFYVyH85yCH43B3YjuaZM5rzr8TGgZvc=";
+    hash = "sha256-7H5Ah4zo+wLKd0WoKoOgtIm7HcUSw8PTf/KzBlY75oc=";
+    fetchSubmodules = true;
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://source.puri.sm/Librem5/feedbackd/-/merge_requests/109.patch";
+      hash = "sha256-z3Ud6P2GHYOaGA2vJDD3Sz47+M8p0VcYZ5gbYcGydMk=";
+    })
+  ];
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     docbook-xsl-nons
+    docutils # for rst2man
+    gi-docgen
     gobject-introspection
     gtk-doc
     libxslt
@@ -64,14 +77,11 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
+    "-Dgtk_doc=true"
     "-Dman=true"
-    # TODO(mindavi): introspection broken due to https://github.com/NixOS/nixpkgs/issues/72868
-    #                can be removed if cross-compiling gobject-introspection works.
-    "-Dintrospection=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "enabled" else "disabled"}"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
   ];
 
@@ -81,6 +91,17 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/udev/rules.d
     sed "s|/usr/libexec/|$out/libexec/|" < $src/debian/feedbackd.udev > $out/lib/udev/rules.d/90-feedbackd.rules
     cp ${themes}/data/* $out/share/feedbackd/themes/
+  '';
+
+  postFixup = ''
+    # Move developer documentation to devdoc output.
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    if [[ -d "$out/share/doc" ]]; then
+        find -L "$out/share/doc" -type f -regex '.*\.devhelp2?' -print0 \
+          | while IFS= read -r -d ''' file; do
+            moveToOutput "$(dirname "''${file/"$out/"/}")" "$devdoc"
+        done
+    fi
   '';
 
   meta = with lib; {

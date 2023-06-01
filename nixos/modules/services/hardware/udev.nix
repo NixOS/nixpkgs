@@ -16,16 +16,6 @@ let
   '';
 
 
-  # networkd link files are used early by udev to set up interfaces early.
-  # This must be done in stage 1 to avoid race conditions between udev and
-  # network daemons.
-  # TODO move this into the initrd-network module when it exists
-  initrdLinkUnits = pkgs.runCommand "initrd-link-units" {} ''
-    mkdir -p $out
-    ln -s ${udev}/lib/systemd/network/*.link $out/
-    ${lib.concatMapStringsSep "\n" (file: "ln -s ${file} $out/") (lib.mapAttrsToList (n: v: "${v.unit}/${n}") (lib.filterAttrs (n: _: hasSuffix ".link" n) config.systemd.network.units))}
-  '';
-
   extraUdevRules = pkgs.writeTextFile {
     name = "extra-udev-rules";
     text = cfg.extraRules;
@@ -44,6 +34,11 @@ let
 
     # Needed for gpm.
     SUBSYSTEM=="input", KERNEL=="mice", TAG+="systemd"
+  '';
+
+  nixosInitrdRules = ''
+    # Mark dm devices as db_persist so that they are kept active after switching root
+    SUBSYSTEM=="block", KERNEL=="dm-[0-9]*", ACTION=="add|change", OPTIONS+="db_persist"
   '';
 
   # Perform substitutions in all udev rules files.
@@ -165,16 +160,16 @@ let
 
       echo "Generating hwdb database..."
       # hwdb --update doesn't return error code even on errors!
-      res="$(${pkgs.buildPackages.udev}/bin/udevadm hwdb --update --root=$(pwd) 2>&1)"
+      res="$(${pkgs.buildPackages.systemd}/bin/systemd-hwdb --root=$(pwd) update 2>&1)"
       echo "$res"
       [ -z "$(echo "$res" | egrep '^Error')" ]
       mv etc/udev/hwdb.bin $out
     '';
 
-  compressFirmware = if config.boot.kernelPackages.kernelAtLeast "5.3" then
-    pkgs.compressFirmwareXz
+  compressFirmware = firmware: if (config.boot.kernelPackages.kernelAtLeast "5.3" && (firmware.compressFirmware or true)) then
+    pkgs.compressFirmwareXz firmware
   else
-    id;
+    id firmware;
 
   # Udev has a 512-character limit for ENV{PATH}, so create a symlink
   # tree to work around this.
@@ -192,7 +187,6 @@ in
   ###### interface
 
   options = {
-
     boot.hardwareScan = mkOption {
       type = types.bool;
       default = true;
@@ -205,6 +199,9 @@ in
     };
 
     services.udev = {
+      enable = mkEnableOption (lib.mdDoc "udev") // {
+        default = true;
+      };
 
       packages = mkOption {
         type = types.listOf types.path;
@@ -345,7 +342,7 @@ in
 
   ###### implementation
 
-  config = mkIf (!config.boot.isContainer) {
+  config = mkIf cfg.enable {
 
     services.udev.extraRules = nixosRules;
 
@@ -362,8 +359,10 @@ in
         EOF
       '';
 
+    boot.initrd.services.udev.rules = nixosInitrdRules;
+
     boot.initrd.systemd.additionalUpstreamUnits = [
-      # TODO: "initrd-udevadm-cleanup-db.service" is commented out because of https://github.com/systemd/systemd/issues/12953
+      "initrd-udevadm-cleanup-db.service"
       "systemd-udevd-control.socket"
       "systemd-udevd-kernel.socket"
       "systemd-udevd.service"
@@ -389,7 +388,6 @@ in
         systemd = config.boot.initrd.systemd.package;
         binPackages = config.boot.initrd.services.udev.binPackages ++ [ config.boot.initrd.systemd.contents."/bin".source ];
       };
-      "/etc/systemd/network".source = initrdLinkUnits;
     };
     # Insert initrd rules
     boot.initrd.services.udev.packages = [

@@ -54,7 +54,6 @@ stdenv.mkDerivation rec {
     libXtst
     libXv
     libXxf86vm
-    xlibsWrapper
     xorgproto
   ]);
 
@@ -69,7 +68,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://xine.sourceforge.net/";
+    homepage = "https://xine.sourceforge.net/";
     description = "Xlib-based frontend for Xine video player";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];

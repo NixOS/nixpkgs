@@ -18,24 +18,50 @@
 , pugixml
 , qtbase
 , qtmultimedia
+, discord-rpc
 , yajl
 }:
 
 let
-  luaEnv = lua.withPackages(ps: with ps; [
-    luazip luafilesystem lrexlib-pcre luasql-sqlite3 lua-yajl luautf8
+  overrideLua =
+    let
+      packageOverrides = self: super: {
+        # luasql-sqlite3 master branch broke compatibility with lua 5.1. Pin to
+        # an earlier commit.
+        # https://github.com/lunarmodules/luasql/issues/147
+        luasql-sqlite3 = super.luaLib.overrideLuarocks super.luasql-sqlite3
+          (drv: {
+            version = "2.6.0-1-custom";
+            src = fetchFromGitHub {
+              owner = "lunarmodules";
+              repo = "luasql";
+              rev = "8c58fd6ee32faf750daf6e99af015a31402578d1";
+              hash = "sha256-XlTB5O81yWCrx56m0cXQp7EFzeOyfNeqGbuiYqMrTUk=";
+            };
+          });
+      };
+    in
+    lua.override { inherit packageOverrides; };
+
+  luaEnv = overrideLua.withPackages (ps: with ps; [
+    luazip
+    luafilesystem
+    lrexlib-pcre
+    luasql-sqlite3
+    lua-yajl
+    luautf8
   ]);
 in
 stdenv.mkDerivation rec {
   pname = "mudlet";
-  version = "4.15.1";
+  version = "4.17.0";
 
   src = fetchFromGitHub {
     owner = "Mudlet";
     repo = "Mudlet";
     rev = "Mudlet-${version}";
     fetchSubmodules = true;
-    hash = "sha256-GnTQc0Jh4YaQnfy7fYsTCACczlzWCQ+auKYoU9ET83M=";
+    hash = "sha256-j0d37C1TTb6ggXk1wTaqEcBKwsxE/B7Io90gTkc2q0M=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +86,7 @@ stdenv.mkDerivation rec {
     qtbase
     qtmultimedia
     yajl
+    discord-rpc
   ];
 
   cmakeFlags = [
@@ -70,7 +97,7 @@ stdenv.mkDerivation rec {
   WITH_FONTS = "NO";
   WITH_UPDATER = "NO";
 
-  installPhase =  ''
+  installPhase = ''
     runHook preInstall
 
     mkdir -pv $out/lib
@@ -89,7 +116,7 @@ stdenv.mkDerivation rec {
     makeQtWrapper $out/mudlet $out/bin/mudlet \
       --set LUA_CPATH "${luaEnv}/lib/lua/${lua.luaversion}/?.so" \
       --prefix LUA_PATH : "$NIX_LUA_PATH" \
-      --prefix LD_LIBRARY_PATH : "${libsForQt5.qtkeychain}/lib/" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libsForQt5.qtkeychain discord-rpc ]}" \
       --chdir "$out";
 
     runHook postInstall
@@ -98,7 +125,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Crossplatform mud client";
     homepage = "https://www.mudlet.org/";
-    maintainers = [ maintainers.wyvie maintainers.pstn ];
+    maintainers = with maintainers; [ wyvie pstn cpu ];
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
   };

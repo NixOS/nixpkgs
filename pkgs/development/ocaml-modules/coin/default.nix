@@ -24,8 +24,6 @@ buildDunePackage rec {
   nativeBuildInputs = [ findlib ];
   buildInputs = [ re ];
 
-  strictDeps = true;
-
   doCheck = true;
 
   meta = {

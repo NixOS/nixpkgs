@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "eth-abi";
-  version = "3.0.0";
+  version = "3.0.1";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-abi";
     rev = "v${version}";
-    sha256 = "sha256-qiuyGVOy+n8l3jSqwMGnBXcDrOxIiJ0lNP4lq/EQEhU=";
+    hash = "sha256-xrZpT/9zwDtjSwSPDDse+Aq8plPm26OR/cIrliZUpLY=";
   };
 
   postPatch = ''
@@ -33,7 +33,10 @@ buildPythonPackage rec {
     parsimonious
   ];
 
-  checkInputs = [
+  # lots of: TypeError: isinstance() arg 2 must be a type or tuple of types
+  doCheck = false;
+
+  nativeCheckInputs = [
     hypothesis
     pytestCheckHook
   ] ++ eth-hash.optional-dependencies.pycryptodome;

@@ -8,7 +8,7 @@
 , namedlist
 , sqlalchemy
 , tornado
-, Yapsy
+, yapsy
 , pythonAtLeast
 }:
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     sha256 = "0j4dir0dgg8pkf4d1znicz6wyyi1wzij50r21z838cycsdr54j4c";
   };
 
-  propagatedBuildInputs = [ chardet dnspython html5-parser lxml namedlist sqlalchemy tornado Yapsy ];
+  propagatedBuildInputs = [ chardet dnspython html5-parser lxml namedlist sqlalchemy tornado yapsy ];
 
   # Test suite has tests that fail on all platforms
   doCheck = false;

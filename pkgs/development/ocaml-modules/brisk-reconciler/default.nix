@@ -4,6 +4,8 @@ buildDunePackage rec {
   pname = "brisk-reconciler";
   version = "unstable-2020-12-02";
 
+  duneVersion = "3";
+
   src = fetchFromGitHub {
     owner = "briskml";
     repo = "brisk-reconciler";
@@ -27,7 +29,7 @@ buildDunePackage rec {
       * stateful functions: Functions that maintain state over time. Imagine that you can take any variable in your function and manage its value over the function's invocation. Now, imagine that any function invocation really creates its own "instance" of the function which will track this state separately from other invocations of this function.
     '';
     homepage = "https://github.com/briskml/brisk-reconciler";
-    maintainers = with maintainers; [ superherointj ];
+    maintainers = with maintainers; [ ];
     license = licenses.mit;
   };
 }

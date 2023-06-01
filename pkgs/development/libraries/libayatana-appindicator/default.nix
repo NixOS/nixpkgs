@@ -1,15 +1,14 @@
 { stdenv, fetchFromGitHub, lib
-, pkg-config, autoreconfHook , gtk-doc
+, pkg-config, cmake
+, gtk-doc
+, gtk3, libayatana-indicator, libdbusmenu-gtk3
+, vala
 , gobject-introspection
-, gtkVersion ? "3"
-, gtk2, libayatana-indicator-gtk2, libdbusmenu-gtk2
-, gtk3, libayatana-indicator-gtk3, libdbusmenu-gtk3
-, dbus-glib,
 }:
 
 stdenv.mkDerivation rec {
-  pname = "libayatana-appindicator-gtk${gtkVersion}";
-  version = "0.5.5";
+  pname = "libayatana-appindicator";
+  version = "0.5.92";
 
   outputs = [ "out" "dev" ];
 
@@ -17,24 +16,18 @@ stdenv.mkDerivation rec {
     owner = "AyatanaIndicators";
     repo = "libayatana-appindicator";
     rev = version;
-    sha256 = "1sba0w455rdkadkhxrx4fr63m0d9blsbb1q1hcshxw1k1z2nh1gk";
+    sha256 = "sha256-NzaWQBb2Ez1ik23wCgW1ZQh1/rY7GcPlLvaSgV7uXrA=";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook gtk-doc gobject-introspection dbus-glib ];
+  nativeBuildInputs = [ pkg-config cmake gtk-doc vala gobject-introspection ];
 
-  buildInputs =
-    lib.optional (gtkVersion == "2") libayatana-indicator-gtk2
-    ++ lib.optional (gtkVersion == "3") libayatana-indicator-gtk3;
+  buildInputs = [ gtk3 ];
 
-  propagatedBuildInputs =
-    lib.optionals (gtkVersion == "2") [ gtk2 libdbusmenu-gtk2 ]
-    ++ lib.optionals (gtkVersion == "3") [ gtk3 libdbusmenu-gtk3 ];
+  propagatedBuildInputs = [ libayatana-indicator libdbusmenu-gtk3 ];
 
-  preAutoreconf = ''
-    gtkdocize
-  '';
-
-  configureFlags = [ "--with-gtk=${gtkVersion}" ];
+  cmakeFlags = [
+    "-DENABLE_BINDINGS_MONO=False"
+  ];
 
   meta = with lib; {
     description = "Ayatana Application Indicators Shared Library";

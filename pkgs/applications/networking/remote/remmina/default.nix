@@ -3,44 +3,48 @@
 , freerdp, libssh, libgcrypt, gnutls, vte
 , pcre2, libdbusmenu-gtk3, libappindicator-gtk3
 , libvncserver, libpthreadstubs, libXdmcp, libxkbcommon
-, libsecret, libsoup, spice-protocol, spice-gtk, libepoxy, at-spi2-core
-, openssl, gsettings-desktop-schemas, json-glib, libsodium, webkitgtk, harfbuzz
+, libsecret, libsoup_3, spice-protocol, spice-gtk, libepoxy, at-spi2-core
+, openssl, gsettings-desktop-schemas, json-glib, libsodium, webkitgtk_4_1, harfbuzz
 # The themes here are soft dependencies; only icons are missing without them.
 , gnome
+, withKf5Wallet ? true, libsForQt5
 , withLibsecret ? true
 , withVte ? true
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "remmina";
-  version = "1.4.27";
+  version = "1.4.30";
 
   src = fetchFromGitLab {
     owner  = "Remmina";
     repo   = "Remmina";
     rev    = "v${version}";
-    sha256 = "sha256-WIppHK4ucvKqgXB8VPy9ldbw22ZuDaEn1gNaLpyb4jA=";
+    sha256 = "sha256-VYBolB6VJ3lT/rNl87qMW5DU5rdFCNvKezSLzx5y1JI=";
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config wrapGAppsHook ];
+
   buildInputs = [
     gsettings-desktop-schemas
     glib gtk3 gettext libxkbfile libX11
     freerdp libssh libgcrypt gnutls
     pcre2 libdbusmenu-gtk3 libappindicator-gtk3
     libvncserver libpthreadstubs libXdmcp libxkbcommon
-    libsoup spice-protocol spice-gtk libepoxy at-spi2-core
-    openssl gnome.adwaita-icon-theme json-glib libsodium webkitgtk
+    libsoup_3 spice-protocol
+    spice-gtk
+    libepoxy at-spi2-core
+    openssl gnome.adwaita-icon-theme json-glib libsodium webkitgtk_4_1
     harfbuzz python3
-  ] ++ optionals withLibsecret [ libsecret ]
-    ++ optionals withVte [ vte ];
+  ] ++ lib.optionals withLibsecret [ libsecret ]
+    ++ lib.optionals withKf5Wallet [ libsForQt5.kwallet ]
+    ++ lib.optionals withVte [ vte ];
 
   cmakeFlags = [
     "-DWITH_VTE=${if withVte then "ON" else "OFF"}"
     "-DWITH_TELEPATHY=OFF"
     "-DWITH_AVAHI=OFF"
+    "-DWITH_KF5WALLET=${if withKf5Wallet then "ON" else "OFF"}"
     "-DWITH_LIBSECRET=${if withLibsecret then "ON" else "OFF"}"
     "-DFREERDP_LIBRARY=${freerdp}/lib/libfreerdp2.so"
     "-DFREERDP_CLIENT_LIBRARY=${freerdp}/lib/libfreerdp-client2.so"
@@ -48,13 +52,15 @@ stdenv.mkDerivation rec {
     "-DWINPR_INCLUDE_DIR=${freerdp}/include/winpr2"
   ];
 
+  dontWrapQtApps = true;
+
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "${libX11.out}/lib"
     )
   '';
 
-  meta = {
+  meta = with lib; {
     license = licenses.gpl2Plus;
     homepage = "https://gitlab.com/Remmina/Remmina";
     description = "Remote desktop client written in GTK";

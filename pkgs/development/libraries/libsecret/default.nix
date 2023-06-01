@@ -12,6 +12,8 @@
 , docbook_xml_dtd_42
 , libgcrypt
 , gobject-introspection
+, buildPackages
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , vala
 , gi-docgen
 , gnome
@@ -24,7 +26,7 @@ stdenv.mkDerivation rec {
   pname = "libsecret";
   version = "0.20.5";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -44,22 +46,22 @@ stdenv.mkDerivation rec {
     docbook-xsl-nons
     docbook_xml_dtd_42
     libintl
-    gobject-introspection
     vala
-    gi-docgen
     glib
+  ] ++ lib.optionals withIntrospection [
+    gi-docgen
+    gobject-introspection
   ];
 
   buildInputs = [
     libgcrypt
-    gobject-introspection
   ];
 
   propagatedBuildInputs = [
     glib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     python3
     python3.pkgs.dbus-python
     python3.pkgs.pygobject3
@@ -67,7 +69,12 @@ stdenv.mkDerivation rec {
     gjs
   ];
 
-  doCheck = stdenv.isLinux;
+  mesonFlags = [
+    (lib.mesonBool "introspection" withIntrospection)
+    (lib.mesonBool "gtk_doc" withIntrospection)
+  ];
+
+  doCheck = stdenv.isLinux && withIntrospection;
 
   postPatch = ''
     patchShebangs ./tool/test-*.sh
@@ -87,8 +94,8 @@ stdenv.mkDerivation rec {
     runHook preCheck
 
     dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
-      meson test --print-errorlogs
+      --config-file=${dbus}/share/dbus-1/session.conf \
+      meson test --print-errorlogs --timeout-multiplier 0
 
     runHook postCheck
   '';

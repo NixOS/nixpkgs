@@ -2,7 +2,6 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pythonOlder
 , setuptools
 , setuptools-scm
@@ -13,6 +12,7 @@
 , hypothesis
 , mock
 , pytest-mock
+, pytest-xdist
 , pytestCheckHook
 , trio
 , trustme
@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "3.5.0";
+  version = "3.6.2";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -29,16 +29,8 @@ buildPythonPackage rec {
     owner = "agronholm";
     repo = pname;
     rev = version;
-    sha256 = "sha256-AZ9M/NBCBlMIUpRJgKbJRL/oReZDUh2Jhwtoxoo0tMs=";
+    hash = "sha256-bootaulvx9zmobQGDirsMz5uxuLeCD9ggAvYkPaKnWo=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Pytest 7.0 compatibility
-      url = "https://github.com/agronholm/anyio/commit/fed7cc4f95e196f68251bcb9253da3b143ea8e7e.patch";
-      sha256 = "sha256-VmZmiQEmWJ4aPz0Wx+GTMZo7jXRDScnRYf2Hu2hiRVw=";
-    })
-  ];
 
   preBuild = ''
     export SETUPTOOLS_SCM_PRETEND_VERSION=${version}
@@ -56,10 +48,14 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  # trustme uses pyopenssl
+  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
+
+  nativeCheckInputs = [
     curio
     hypothesis
     pytest-mock
+    pytest-xdist
     pytestCheckHook
     trio
     trustme
@@ -68,9 +64,21 @@ buildPythonPackage rec {
     mock
   ];
 
+  pytestFlagsArray = [
+    "-W" "ignore::trio.TrioDeprecationWarning"
+  ];
+
   disabledTests = [
     # block devices access
     "test_is_block_device"
+    # INTERNALERROR> AttributeError: 'NonBaseMultiError' object has no attribute '_exceptions'. Did you mean: 'exceptions'?
+    "test_exception_group_children"
+    "test_exception_group_host"
+    "test_exception_group_filtering"
+    # regression in python 3.11.3 and 3.10.11
+    # https://github.com/agronholm/anyio/issues/550
+    "TestTLSStream"
+    "TestTLSListener"
   ];
 
   disabledTestPaths = [
@@ -84,6 +92,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "anyio" ];
 
   meta = with lib; {
+    changelog = "https://github.com/agronholm/anyio/blob/${src.rev}/docs/versionhistory.rst";
     description = "High level compatibility layer for multiple asynchronous event loop implementations on Python";
     homepage = "https://github.com/agronholm/anyio";
     license = licenses.mit;

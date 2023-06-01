@@ -4,16 +4,16 @@ let bins = [ "regbot" "regctl" "regsync" ]; in
 
 buildGoModule rec {
   pname = "regclient";
-  version = "0.4.4";
+  version = "0.4.8";
   tag = "v${version}";
 
   src = fetchFromGitHub {
     owner = "regclient";
     repo = "regclient";
     rev = tag;
-    sha256 = "sha256-jIdbSDUpSKlb6RES6hx+r+vZyny56aWyjAurCI3mywk=";
+    sha256 = "sha256-v8iWcgad5ku4/F3KfGOxh0A1t9qOOFzA6UDec0dYE3Y=";
   };
-  vendorSha256 = "sha256-QTeVgvjRw2wBd8QGoVpRVTTh+Wwu2NEZYR1Z9R52/p0=";
+  vendorHash = "sha256-xkb1XXNY+ZO+GtYyLpOQftcyq6rj3bJu5HCeGJYsMDQ=";
 
   outputs = [ "out" ] ++ bins;
 
@@ -33,7 +33,6 @@ buildGoModule rec {
     );
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Docker and OCI Registry Client in Go and tooling using those libraries";
     homepage = "https://github.com/regclient/regclient";
     license = licenses.asl20;

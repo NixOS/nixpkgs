@@ -32,7 +32,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [ astropy casa-formats-io radio_beam joblib six dask ];
-  checkInputs = [ pytestCheckHook aplpy pytest-astropy ];
+  nativeCheckInputs = [ pytestCheckHook aplpy pytest-astropy ];
 
   # On x86_darwin, this test fails with "Fatal Python error: Aborted"
   # when sandbox = true.
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ smaret ];
+    broken = true;
   };
 }
-

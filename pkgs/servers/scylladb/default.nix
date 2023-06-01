@@ -19,7 +19,7 @@
   protobuf,
   cryptopp,
   libxfs,
-  libyamlcpp,
+  yaml-cpp,
   libsystemtap,
   lksctp-tools,
   lz4,
@@ -64,7 +64,7 @@ gcc8Stdenv.mkDerivation {
    protobuf
    cryptopp
    libxfs
-   libyamlcpp
+   yaml-cpp
    libsystemtap
    lksctp-tools
    lz4

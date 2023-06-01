@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "qcengine";
-  version = "0.24.1";
+  version = "0.26.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KUOGbGQd1ffXNkQiW8yeUxValCOAfd8nBv9nnk9giVU=";
+    hash = "sha256-jBA3exH/qzEaKZeumvgKD0tKnDptZdlv1KykyUHs8Bg=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     qcelemental
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

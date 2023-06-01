@@ -1,4 +1,6 @@
-{ lib, stdenv, llvm_meta, version, fetch, cmake, python3, libllvm, libcxxabi }:
+{ lib, stdenv, llvm_meta, version, fetch, cmake, python3, libllvm, libcxxabi
+, doFakeLibgcc ? stdenv.hostPlatform.isFreeBSD
+}:
 
 let
 
@@ -16,7 +18,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake python3 libllvm.dev ];
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
   ];
 
@@ -28,6 +30,7 @@ stdenv.mkDerivation {
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
     "-DCOMPILER_RT_BUILD_XRAY=OFF"
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
+  ] ++ lib.optionals (useLLVM || bareMetal) [
     "-DCOMPILER_RT_BUILD_PROFILE=OFF"
   ] ++ lib.optionals (useLLVM || bareMetal) [
     "-DCMAKE_C_COMPILER_WORKS=ON"
@@ -86,6 +89,8 @@ stdenv.mkDerivation {
     ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/linux/crtend.o
     ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/linux/crtbeginS.o
     ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/linux/crtendS.o
+  '' + lib.optionalString doFakeLibgcc ''
+    ln -s $out/lib/freebsd/libclang_rt.builtins-*.a $out/lib/freebsd/libgcc.a
   '';
 
   meta = llvm_meta // {

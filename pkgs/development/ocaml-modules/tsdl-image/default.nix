@@ -9,13 +9,15 @@
 
 buildDunePackage rec {
   pname = "tsdl-image";
-  version = "0.3.2";
+  version = "0.5";
+
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "sanette";
     repo = pname;
     rev = version;
-    sha256 = "sha256-u6VYAwq+2oLn2Kw1+KQRVPswAqeKDSAaPfGLPrzn30s=";
+    hash = "sha256-khLhVJuiLNNWw76gTeg4W32v5XbkwAg11bIOWl67u2k=";
   };
 
   buildInputs = [
@@ -32,6 +34,6 @@ buildDunePackage rec {
     description = "OCaml SDL2_image bindings to go with Tsdl";
     homepage = "https://github.com/sanette/tsdl-image";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ superherointj ];
+    maintainers = with maintainers; [ ];
   };
 }

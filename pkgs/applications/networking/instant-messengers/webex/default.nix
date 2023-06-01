@@ -25,6 +25,7 @@
 , udev
 , libxcb
 , libxkbcommon
+, libxcrypt-legacy
 , lshw
 , mesa
 , nspr
@@ -48,18 +49,23 @@
 , xcbutilrenderutil
 , xcbutilwm
 , p7zip
+, tbb
 , wayland
 , libXScrnSaver
 }:
 
 stdenv.mkDerivation rec {
   pname = "webex";
-  version = "42.10.0.23251";
+  version = "43.5.0.26155";
 
   src = fetchurl {
-    url = "https://binaries.webex.com/WebexDesktop-Ubuntu-Blue/20220815132636/Webex_ubuntu.7z";
-    sha256 = "a30002585194a7cb01985184031ca6250f4f648590715376aa6f164bce8ed898";
+    url = "https://binaries.webex.com/WebexDesktop-Ubuntu-Gold/20230508235734/Webex_ubuntu.7z";
+    sha256 = "94ddd66be3a44eeb6f854d0e02feec2e010d494ff9fcc81663f30fca37da4774";
   };
+
+  nativeBuildInputs = [
+    p7zip
+  ];
 
   buildInputs = [
     alsa-lib
@@ -91,6 +97,7 @@ stdenv.mkDerivation rec {
     udev
     libxcb
     libxkbcommon
+    libxcrypt-legacy
     libX11
     libXcomposite
     libXcursor
@@ -108,7 +115,7 @@ stdenv.mkDerivation rec {
     xcbutilkeysyms
     xcbutilrenderutil
     xcbutilwm
-    p7zip
+    tbb
     wayland
   ];
 
@@ -154,7 +161,7 @@ stdenv.mkDerivation rec {
     #!nix-shell -i bash -p curl jq common-updater-scripts
     set -eou pipefail;
 
-    channel=blue
+    channel=gold # blue, green, gold
     manifest=$(curl -s "https://client-upgrade-a.wbx2.com/client-upgrade/api/v1/webexteamsdesktop/upgrade/@me?channel=$channel&model=ubuntu" | jq '.manifest')
 
     url=$(jq -r '.packageLocation' <<< "$manifest")

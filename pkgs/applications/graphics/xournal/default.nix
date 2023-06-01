@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, makeDesktopItem
 , ghostscript, atk, gtk2, glib, fontconfig, freetype
-, libgnomecanvas, libgnomeprint, libgnomeprintui
+, libgnomecanvas
 , pango, libX11, xorgproto, zlib, poppler
 , autoconf, automake, libtool, pkg-config}:
 
@@ -20,8 +20,6 @@ stdenv.mkDerivation rec {
     ghostscript atk gtk2 glib fontconfig freetype
     libgnomecanvas
     pango libX11 xorgproto zlib poppler
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    libgnomeprint libgnomeprintui
   ];
 
   nativeBuildInputs = [ autoconf automake libtool pkg-config ];
@@ -56,7 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://xournal.sourceforge.net/";
+    homepage = "https://xournal.sourceforge.net/";
     description = "Note-taking application (supposes stylus)";
     maintainers = [ maintainers.guibert ];
     license = licenses.gpl2;

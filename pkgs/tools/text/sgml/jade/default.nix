@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gnum4 ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-deprecated";
+  env.NIX_CFLAGS_COMPILE = "-Wno-deprecated";
 
   # Makefile is missing intra-library depends, fails build as:
   # ld: cannot find -lsp
@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     license = "custom";
     homepage = "http://www.jclark.com/jade/";
     platforms = with lib.platforms; linux;
-    maintainers = with lib.maintainers; [ e-user ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

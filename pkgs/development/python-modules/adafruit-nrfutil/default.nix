@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "adafruit";
     repo = "Adafruit_nRF52_nrfutil";
     rev = version;
-    sha256 = "sha256-mHHKOQE9AGBX8RAyaPOy+JS3fTs98+AFdq9qsVy7go4=";
+    hash = "sha256-mHHKOQE9AGBX8RAyaPOy+JS3fTs98+AFdq9qsVy7go4=";
   };
 
   patches = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "fix-tests.patch";
       url = "https://github.com/adafruit/Adafruit_nRF52_nrfutil/commit/e5fbcc8ee5958041db38c04139ba686bf7d1b845.patch";
-      sha256 = "sha256-0tbJldGtYcDdUzA3wZRv0lenXVn6dqV016U9nMpQ6/w=";
+      hash = "sha256-0tbJldGtYcDdUzA3wZRv0lenXVn6dqV016U9nMpQ6/w=";
     })
   ];
 
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     ecdsa
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     behave
     nose
   ];

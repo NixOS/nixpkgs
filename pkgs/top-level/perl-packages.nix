@@ -8,21 +8,22 @@
 { config
 , stdenv, lib, buildPackages, pkgs, darwin
 , fetchurl, fetchpatch, fetchFromGitHub, fetchFromGitLab
-, perl, overrides, buildPerl, shortenPerlShebang
+, perl, shortenPerlShebang
 , nixosTests
 }:
+
+self:
 
 # cpan2nix assumes that perl-packages.nix will be used only with perl 5.30.3 or above
 assert lib.versionAtLeast perl.version "5.30.3";
 let
   inherit (lib) maintainers teams;
-  self = _self // (overrides pkgs);
-  _self = with self; {
+
+in
+with self; {
 
   inherit perl;
   perlPackages = self;
-
-  callPackage = pkgs.newScope self;
 
   # Check whether a derivation provides a perl module.
   hasPerlModule = drv: drv ? perlModule ;
@@ -41,9 +42,7 @@ let
       };
     });
 
-  buildPerlPackage = callPackage ../development/perl-modules/generic {
-    inherit buildPerl;
-  };
+  buildPerlPackage = callPackage ../development/perl-modules/generic { };
 
   # Helper functions for packages that use Module::Build to build.
   buildPerlModule = args:
@@ -92,11 +91,11 @@ let
 
   ack = buildPerlPackage rec {
     pname = "ack";
-    version = "3.6.0";
+    version = "3.7.0";
 
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PETDANCE/ack-v${version}.tar.gz";
-      hash = "sha256-AxRNEHBknpL2obfSC9xTXiuxrCWNqr5ILpqoJ3tI8AU=";
+      hash = "sha256-6nyqFPdX3ggzEO0suimGYd3Mpd7gbsjxgEPqYlp53yA=";
     };
 
     outputs = ["out" "man"];
@@ -303,6 +302,8 @@ let
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-Libxml2-0.17.tar.gz";
       hash = "sha256-c7RSRPC1w25TMsM1abgqGrLDPiY/HQB4XSADvK7GjbM=";
     };
+    strictDeps = true;
+    nativeBuildInputs = [ pkgs.pkg-config ];
     propagatedBuildInputs = [ AlienBuild ];
     buildInputs = [ pkgs.libxml2 MojoDOM58 SortVersions Test2Suite URI ];
     meta = {
@@ -385,7 +386,11 @@ let
       url = "mirror://cpan/authors/id/M/MD/MDOOTSON/Alien-wxWidgets-0.69.tar.gz";
       hash = "sha256-UyJOS7vv/0z3tj7ZpiljiTuf/Ull1w2WcQNI+Gdt4kk=";
     };
-    propagatedBuildInputs = [ pkgs.pkg-config pkgs.gtk2 pkgs.wxGTK30 ModulePluggable ];
+    postPatch = ''
+      substituteInPlace Build.PL \
+        --replace "gtk+-2.0" "gtk+-3.0"
+    '';
+    propagatedBuildInputs = [ pkgs.pkg-config pkgs.gtk3 pkgs.wxGTK32 ModulePluggable ];
     buildInputs = [ LWPProtocolHttps ];
     meta = {
       description = "Building, finding and using wxWidgets binaries";
@@ -849,7 +854,7 @@ let
     };
     buildInputs = [ PodParser ];
     propagatedBuildInputs = [ AppPackager FileLoadLines IOString ImageInfo PDFAPI2 StringInterpolateNamed TextLayout ]
-      ++ lib.optional (!stdenv.isDarwin) [ Wx ];
+      ++ lib.optionals (!stdenv.isDarwin) [ Wx ];
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
     postInstall = lib.optionalString stdenv.isDarwin ''
       shortenPerlShebang $out/bin/chordpro
@@ -911,11 +916,11 @@ let
   };
 
   AppSqitch = buildPerlModule {
-    version = "1.1.0";
+    version = "1.3.1";
     pname = "App-Sqitch";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DW/DWHEELER/App-Sqitch-v1.1.0.tar.gz";
-      hash = "sha256-7hRs111jAIN+bKVZuwveJH1CEjyWssXUsoAPONPj0as=";
+      url = "mirror://cpan/authors/id/D/DW/DWHEELER/App-Sqitch-v1.3.1.tar.gz";
+      hash = "sha256-9edo0pjNQEfuKuQjGXgujCzaMSc3vL2/r1gL1H7+i5Q=";
     };
     buildInputs = [ CaptureTiny TestDeep TestDir TestException TestFile TestFileContents TestMockModule TestMockObject TestNoWarnings TestWarn ];
     propagatedBuildInputs = [ Clone ConfigGitLike DBI DateTime EncodeLocale HashMerge IOPager IPCRun3 IPCSystemSimple ListMoreUtils PathClass PerlIOutf8_strict PodParser StringFormatter StringShellQuote TemplateTiny Throwable TypeTiny URIdb libintl-perl ];
@@ -1143,7 +1148,7 @@ let
       hash = "sha256-gxJyAnHHrdxLvuwzEs3divS5kKxjYgSllsB5M61sY0o=";
     };
     buildInputs = [ pkgs.zlib TestWarn ];
-    NIX_CFLAGS_COMPILE = "-I${pkgs.zlib.dev}/include";
+    env.NIX_CFLAGS_COMPILE = "-I${pkgs.zlib.dev}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.zlib.out}/lib -lz";
     meta = {
       description = "Fast C metadata and tag reader for all common audio file formats";
@@ -1174,6 +1179,10 @@ let
       hash = "sha256-tfr0fj+UikUoEGzLiMxxBIz+WY5bAmpEQ2i8fjk0gGc=";
     };
     propagatedBuildInputs = [ ClassAccessor CryptPasswdMD5 DigestSHA1 IOLockedFile ];
+    # Remove test files that fail after DES support was removed from crypt()
+    postPatch = ''
+      rm t/04core.t t/05edit.t
+    '';
     meta = {
       description = "Interface to read and modify Apache .htpasswd files";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -1203,15 +1212,15 @@ let
       url = "mirror://cpan/authors/id/S/SJ/SJQUINNEY/Authen-Krb5-Admin-0.17.tar.gz";
       hash = "sha256-XdScrNmD79YajD8aVlcbtzeF6xVZCLXXvsl+7XjfDFQ=";
     };
-    propagatedBuildInputs = [ pkgs.krb5Full.dev AuthenKrb5 ];
+    propagatedBuildInputs = [ pkgs.krb5.dev AuthenKrb5 ];
     # The following ENV variables are required by Makefile.PL to find
-    # programs in krb5Full.dev. It is not enough to just specify the
-    # path to krb5-config as this tool returns the prefix of krb5Full,
+    # programs in krb5.dev. It is not enough to just specify the
+    # path to krb5-config as this tool returns the prefix of krb5,
     # which implies a working value for KRB5_LIBDIR, but not the others.
     perlPreHook = ''
-      export KRB5_CONFTOOL=${pkgs.krb5Full.dev}/bin/krb5-config
-      export KRB5_BINDIR=${pkgs.krb5Full.dev}/bin
-      export KRB5_INCDIR=${pkgs.krb5Full.dev}/include
+      export KRB5_CONFTOOL=${pkgs.krb5.dev}/bin/krb5-config
+      export KRB5_BINDIR=${pkgs.krb5.dev}/bin
+      export KRB5_INCDIR=${pkgs.krb5.dev}/include
     '';
     # Tests require working Kerberos infrastructure so replace with a
     # simple attempt to exercise the module.
@@ -1344,6 +1353,20 @@ let
       url = "mirror://cpan/authors/id/C/CH/CHANSEN/Authen-Simple-0.5.tar.gz";
       hash = "sha256-As3atH+L8aHL1Mm/jSWPbQURFJnDP4MV5yRIEvcmE6o=";
     };
+    # Our C crypt() doesn't support this weak "crypt" algorithm anymore.
+    postPatch = ''
+      patch -p1 <<-EOF
+        --- a/t/09password.t
+        +++ b/t/09password.t
+        @@ -10 +10 @@
+        -use Test::More tests => 16;
+        +use Test::More tests => 14;
+        @@ -14 +13,0 @@
+        -    [ 'crypt',     'lk9Mh5KHGjAaM',                          'crypt'        ],
+        @@ -18 +16,0 @@
+        -    [ 'crypt',     '{CRYPT}lk9Mh5KHGjAaM',                   '{CRYPT}'      ],
+      EOF
+    '';
     propagatedBuildInputs = [ ClassAccessor ClassDataInheritable CryptPasswdMD5 ParamsValidate ];
     meta = {
       description = "Simple Authentication";
@@ -1358,6 +1381,10 @@ let
       url = "mirror://cpan/authors/id/C/CH/CHANSEN/Authen-Simple-Passwd-0.6.tar.gz";
       hash = "sha256-z1W8NiWe3w/Wr5rSusgbMdxbVqFixmBZDsuWnHwWdLI=";
     };
+    # Our C crypt() doesn't support this weak "crypt" algorithm anymore.
+    postPatch = ''
+      sed -e 's/tests => 8/tests => 7/' -e "/'crypt'/d" -i t/04basic.t
+    '';
     propagatedBuildInputs = [ AuthenSimple ];
     meta = {
       description = "Simple Passwd authentication";
@@ -1540,7 +1567,7 @@ let
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${pname}-${version}.tar.gz";
       hash = "sha256-o/LKnSuu/BqqQJCLL5y5KS/aPn15fji7146rudna62s=";
     };
-    NIX_CFLAGS_COMPILE = "-I${pkgs.db4.dev}/include";
+    env.NIX_CFLAGS_COMPILE = "-I${pkgs.db4.dev}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.db4.out}/lib -ldb";
     buildInputs = [ pkgs.db4 ];
     propagatedBuildInputs = [ commonsense ];
@@ -1591,6 +1618,36 @@ let
       description = "Wrap OP check callbacks";
       homepage = "https://github.com/karenetheridge/B-Hooks-OP-Check";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  BioExtAlign = callPackage ../development/perl-modules/Bio-Ext-Align { };
+
+  BioDBHTS = buildPerlModule {
+    pname = "Bio-DB-HTS";
+    version = "3.01";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AV/AVULLO/Bio-DB-HTS-3.01.tar.gz";
+      sha256 = "12a6bc1f579513cac8b9167cce4e363655cc8eba26b7d9fe1170dfe95e044f42";
+    };
+
+    buildInputs = [ pkgs.htslib pkgs.zlib ];
+
+    propagatedBuildInputs = [ BioPerl ];
+    htslibStore = toString pkgs.htslib;
+
+    postPatch = ''
+      # -Wl,-rpath not recognized : replaced by -rpath=
+      sed -i 's/Wl,-rpath,/rpath=/' Build.PL
+    '';
+
+    preBuild = ''
+      export HTSLIB_DIR=${pkgs.htslib}
+    '';
+
+    meta = {
+      description = "Perl interface to HTS library for DNA sequencing";
+      license = lib.licenses.asl20;
     };
   };
 
@@ -1995,7 +2052,7 @@ let
     propagatedBuildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig ];
     meta = {
       description = "Perl interface to the cairo 2d vector graphics library";
-      homepage = "http://gtk2-perl.sourceforge.net";
+      homepage = "https://gtk2-perl.sourceforge.net";
       license = with lib.licenses; [ lgpl21Only ];
     };
   };
@@ -2011,7 +2068,7 @@ let
     propagatedBuildInputs = [ Cairo Glib ];
     meta = {
       description = "Integrate Cairo into the Glib type system";
-      homepage = "http://gtk2-perl.sourceforge.net";
+      homepage = "https://gtk2-perl.sourceforge.net";
       license = with lib.licenses; [ lgpl21Only ];
     };
   };
@@ -2226,6 +2283,9 @@ let
     };
     buildInputs = [ ModuleBuildTiny TestLongString TestSimple13 TestWWWMechanize TestWWWMechanizeCatalyst ];
     propagatedBuildInputs = [ AuthenHtpasswd CatalystPluginAuthentication ];
+    patches = [
+      ../development/perl-modules/CatalystAuthenticationStoreHtpasswd-test-replace-DES-hash-with-bcrypt.patch
+    ];
     meta = {
       description = "Authen::Htpasswd based user storage/authentication";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -3581,7 +3641,7 @@ let
       hash = "sha256-G9Q3Y8ajcxgwl6MOeH9dZxOw2ydRHFLVMyZrWdLPp4A=";
     };
     propagatedBuildInputs = [ ClassStd ];
-    checkInputs = [ TestPod TestPodCoverage ];
+    nativeCheckInputs = [ TestPod TestPodCoverage ];
     meta = {
       description = "Faster but less secure than Class::Std";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -4450,10 +4510,10 @@ let
 
   CpanelJSONXS = buildPerlPackage {
     pname = "Cpanel-JSON-XS";
-    version = "4.31";
+    version = "4.36";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.31.tar.gz";
-      hash = "sha256-AqZ6zuPeJKcow5ZIaADiojVZGlQ9B5REmtOI/j1c/yk=";
+      url = "mirror://cpan/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.36.tar.gz";
+      hash = "sha256-7OhHQhfLLt8E5PUaGM7aN4e1sd//7iyJGbLrEJpnJu0=";
     };
     meta = {
       description = "CPanel fork of JSON::XS, fast and correct serializing";
@@ -4720,7 +4780,7 @@ let
       hash = "sha256-UeekeuWUz1X2bAdi9mkhVIbn2LNGC9rf55NQzPJtrzg=";
     };
     buildInputs = [ pkgs.gmp DevelChecklib TestRequires ];
-    NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
+    env.NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
     meta = {
       description = "Crypt::DH Using GMP Directly";
@@ -5078,7 +5138,7 @@ let
       url = "mirror://cpan/authors/id/M/MG/MGREGORO/Crypt-Sodium-0.11.tar.gz";
       hash = "sha256-kHxzoQVs6gV9qYGa6kipKreG5qqq858c3ZZHsj8RbHg=";
     };
-    NIX_CFLAGS_COMPILE = "-I${pkgs.libsodium.dev}/include";
+    env.NIX_CFLAGS_COMPILE = "-I${pkgs.libsodium.dev}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.libsodium.out}/lib -lsodium";
     meta = {
       description = "Perl bindings for libsodium (NaCL)";
@@ -5138,7 +5198,7 @@ let
       url = "mirror://cpan/authors/id/T/TT/TTAR/Crypt-OpenSSL-AES-0.02.tar.gz";
       hash = "sha256-tm+rUU7fl/wy9Y2iV1gnBKIQwrNeKX1cMbf6L/0I6Qg=";
     };
-    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
+    env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
     NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
     meta = {
       description = "Perl wrapper around OpenSSL's AES library";
@@ -5153,7 +5213,7 @@ let
       url = "mirror://cpan/authors/id/K/KM/KMX/Crypt-OpenSSL-Bignum-0.09.tar.gz";
       hash = "sha256-I05y+4OW1FUn5v1F5DdZxcPzogjPjynmoiFhqZb9Qtw=";
     };
-    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
+    env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
     NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
     meta = {
       description = "OpenSSL's multiprecision integer arithmetic";
@@ -5182,26 +5242,27 @@ let
       url = "mirror://cpan/authors/id/R/RU/RURBAN/Crypt-OpenSSL-Random-0.15.tar.gz";
       hash = "sha256-8IdvqhujER45uGqnMMYDIR7/KQXkYMcqV7YejPR1zvQ=";
     };
-    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
+    env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
     NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
+    OPENSSL_PREFIX = pkgs.openssl;
     buildInputs = [ CryptOpenSSLGuess ];
     meta = {
       description = "OpenSSL/LibreSSL pseudo-random number generator access";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
-      broken = stdenv.isDarwin && stdenv.isAarch64; # errors with: 74366 Abort trap: 6
     };
   };
 
   CryptOpenSSLRSA = buildPerlPackage {
     pname = "Crypt-OpenSSL-RSA";
-    version = "0.31";
+    version = "0.33";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TODDR/Crypt-OpenSSL-RSA-0.31.tar.gz";
-      hash = "sha256-QXNAOtTPdnMhkgmfgz+/vzzYEE4CRrOEQYeuOE0sVDY=";
+      url = "mirror://cpan/authors/id/T/TO/TODDR/Crypt-OpenSSL-RSA-0.33.tar.gz";
+      hash = "sha256-vb5jD21vVAMldGrZmXcnKshmT/gb0Z8K2rptb0Xv2GQ=";
     };
     propagatedBuildInputs = [ CryptOpenSSLRandom ];
-    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl_1_1.dev}/include";
-    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl_1_1}/lib -lcrypto";
+    env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
+    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
+    OPENSSL_PREFIX = pkgs.openssl;
     buildInputs = [ CryptOpenSSLGuess ];
     meta = {
       description = "RSA encoding and decoding, using the openSSL libraries";
@@ -5216,8 +5277,9 @@ let
       url = "mirror://cpan/authors/id/J/JO/JONASBN/Crypt-OpenSSL-X509-1.914.tar.gz";
       hash = "sha256-ScV1JX5kCK1aiQEeW1gA1Zj5zK/fQucQBO2Byy9E7no=";
     };
-    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
+    env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
     NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
+    OPENSSL_PREFIX = pkgs.openssl;
     buildInputs = [ CryptOpenSSLGuess ];
     propagatedBuildInputs = [ ConvertASN1 ];
     meta = {
@@ -5252,7 +5314,7 @@ let
       url = "mirror://cpan/authors/id/F/FE/FELIPE/Crypt-Perl-0.34.tar.gz";
       hash = "sha256-DhyyI98AQfbZsBDxHm+XqXq1WhGKJzk460/oXUA/GxE=";
     };
-    checkInputs = [ pkgs.openssl MathBigIntGMP ];
+    nativeCheckInputs = [ pkgs.openssl MathBigIntGMP ];
     buildInputs = [ CallContext FileSlurp FileWhich TestClass TestDeep TestException TestFailWarnings TestNoWarnings ];
     propagatedBuildInputs = [ BytesRandomSecureTiny ClassAccessor ConvertASN1 CryptFormat MathProvablePrime SymbolGet TryTiny ];
     meta = {
@@ -5288,7 +5350,7 @@ let
       hash = "sha256-+OzKRch+uRMlmSsT8FlPgI5vG8TDuafxQbmoODhNJSw=";
     };
 
-    makeMakerFlags = "--libpath=${lib.getLib pkgs.openssl}/lib --incpath=${pkgs.openssl.dev}/include";
+    makeMakerFlags = [ "--libpath=${lib.getLib pkgs.openssl}/lib" "--incpath=${pkgs.openssl.dev}/include" ];
     buildInputs = [ PathClass ];
     propagatedBuildInputs = [ BytesRandomSecure LWPProtocolHttps ];
     meta = {
@@ -5321,7 +5383,6 @@ let
     meta = {
       description = "Perl extension for minifying CSS";
       license = with lib.licenses; [ artistic1 ];
-      maintainers = teams.determinatesystems.members;
     };
   };
 
@@ -6101,6 +6162,20 @@ let
     };
   };
 
+  DateRange = buildPerlPackage {
+    pname = "Date-Range";
+    version = "1.41";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TM/TMTM/Date-Range-1.41.tar.gz";
+      hash = "sha256-v5iXSSsQHAUDh50Up+fr6QJUQ4NgGufGmpXedcvZSLk=";
+    };
+    propagatedBuildInputs = [ DateSimple ];
+    meta = {
+      description = "work with a range of dates";
+      license = with lib.licenses; [ gpl2Plus ];
+    };
+  };
+
   DateSimple = buildPerlPackage {
     pname = "Date-Simple";
     version = "3.03";
@@ -6697,7 +6772,7 @@ let
       })
     ];
 
-    makeMakerFlags = "SQLITE_INC=${pkgs.sqlite.dev}/include SQLITE_LIB=${pkgs.sqlite.out}/lib";
+    makeMakerFlags = [ "SQLITE_INC=${pkgs.sqlite.dev}/include" "SQLITE_LIB=${pkgs.sqlite.out}/lib" ];
 
     postInstall = ''
       # Get rid of a pointless copy of the SQLite sources.
@@ -6786,7 +6861,7 @@ let
     buildInputs = [ pkgs.postgresql ];
     propagatedBuildInputs = [ DBI ];
 
-    makeMakerFlags = "POSTGRES_HOME=${pkgs.postgresql}";
+    makeMakerFlags = [ "POSTGRES_HOME=${pkgs.postgresql}" ];
 
     # tests freeze in a sandbox
     doCheck = false;
@@ -8307,6 +8382,20 @@ let
     };
   };
 
+  EncodeIMAPUTF7 = buildPerlPackage {
+    pname = "Encode-IMAPUTF7";
+    version = "1.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PM/PMAKHOLM/Encode-IMAPUTF7-1.05.tar.gz";
+      hash = "sha256-RwMF3cN0g8/o08FtE3cKKAEfYAv1V6y4w+B3OZl8N+E=";
+    };
+    nativeCheckInputs = [ TestNoWarnings ];
+    meta = {
+      description = "IMAP modified UTF-7 encoding";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   EncodeJIS2K = buildPerlPackage {
     pname = "Encode-JIS2K";
     version = "0.03";
@@ -9119,6 +9208,22 @@ let
     };
   };
 
+  FileDirList = buildPerlPackage {
+    version = "0.05";
+    pname = "File-DirList";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TP/TPABA/File-DirList/File-DirList-0.05.tar.gz";
+      sha256 = "sha256-mTt9dmLlV5hEih7azLmr0oHSvSO+fquZ9Wm44pYtO8M=";
+    };
+    preCheck = ''
+      export HOME="$TMPDIR"
+    '';
+    meta = {
+      description = "Provide a sorted list of directory content";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   FileFindIterator = buildPerlPackage {
     pname = "File-Find-Iterator";
     version = "0.4";
@@ -9310,7 +9415,7 @@ let
       hash = "sha256-Uuax3Hyy2HpM30OboUXguejPKMwmpIo8+Zd8g0Y5Z+4=";
     };
     buildInputs = [ pkgs.file ConfigAutoConf TestFatal ];
-    makeMakerFlags = "--lib=${pkgs.file}/lib";
+    makeMakerFlags = [ "--lib=${pkgs.file}/lib" ];
     preCheck = ''
       substituteInPlace t/oo-api.t \
         --replace "/usr/share/file/magic.mgc" "${pkgs.file}/share/misc/magic.mgc"
@@ -9752,17 +9857,18 @@ let
 
   FinanceQuote = buildPerlPackage {
     pname = "Finance-Quote";
-    version = "1.49";
+    version = "1.55";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EC/ECOCODE/Finance-Quote-1.49.tar.gz";
-      hash = "sha256-ldvERDumVjILNjxWYl0E83nJQ+IC9g9AoqNRUrVLv1M=";
+      url = "mirror://cpan/authors/id/B/BP/BPSCHUCK/Finance-Quote-1.55.tar.gz";
+      hash = "sha256-4uAAtnxmtq9Q1HYYWEkhEFEKVaAwqJEBfUDH3iGLdI8=";
     };
-    propagatedBuildInputs = [ CGI DateTimeFormatStrptime HTMLTableExtract JSON JSONParse LWPProtocolHttps StringUtil TextTemplate ];
-    buildInputs = [ TestPod ];
+    buildInputs = [ DateManip DateRange DateSimple DateTime DateTimeFormatISO8601 StringUtil TestKwalitee TestPerlCritic TestPod TestPodCoverage ];
+    propagatedBuildInputs = [ DateTimeFormatStrptime Encode HTMLTableExtract HTMLTokeParserSimple HTMLTree HTMLTreeBuilderXPath HTTPCookies JSON IOCompress LWPProtocolHttps Readonly StringUtil SpreadsheetXLSX TextTemplate TryTiny WebScraper XMLLibXML libwwwperl ];
     meta = {
-      homepage = "http://finance-quote.sourceforge.net/";
+      homepage = "https://finance-quote.sourceforge.net/";
       description = "Get stock and mutual fund quotes from various exchanges";
-      license = with lib.licenses; [gpl2 ];
+      license = with lib.licenses; [ gpl2Plus ];
+      maintainers = with lib.maintainers; [ nevivurn ];
     };
   };
 
@@ -9958,7 +10064,7 @@ let
     # otherwise "cc1: error: -Wformat-security ignored without -Wformat [-Werror=format-security]"
     hardeningDisable = [ "format" ];
 
-    makeMakerFlags = "--lib_png_path=${pkgs.libpng.out} --lib_jpeg_path=${pkgs.libjpeg.out} --lib_zlib_path=${pkgs.zlib.out} --lib_ft_path=${pkgs.freetype.out} --lib_fontconfig_path=${pkgs.fontconfig.lib} --lib_xpm_path=${pkgs.xorg.libXpm.out}";
+    makeMakerFlags = [ "--lib_png_path=${pkgs.libpng.out}" "--lib_jpeg_path=${pkgs.libjpeg.out}" "--lib_zlib_path=${pkgs.zlib.out}" "--lib_ft_path=${pkgs.freetype.out}" "--lib_fontconfig_path=${pkgs.fontconfig.lib}" "--lib_xpm_path=${pkgs.xorg.libXpm.out}" ];
 
     meta = {
       description = "Perl interface to the gd2 graphics library";
@@ -10017,7 +10123,7 @@ let
       url = "mirror://cpan/authors/id/M/MA/MAXMIND/Geo-IP-1.51.tar.gz";
       hash = "sha256-FjAgMV1cVEGDaseeCKd7Qo8nf9CQvqT6gNpwd7JDaro=";
     };
-    makeMakerFlags = "LIBS=-L${pkgs.geoip}/lib INC=-I${pkgs.geoip}/include";
+    makeMakerFlags = [ "LIBS=-L${pkgs.geoip}/lib" "INC=-I${pkgs.geoip}/include" ];
     doCheck = false; # seems to access the network
     meta = {
       description = "Look up location and network information by IP Address";
@@ -10188,7 +10294,7 @@ let
     propagatedBuildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig ];
     meta = {
       description = "Perl wrappers for the GLib utility and Object libraries";
-      homepage = "http://gtk2-perl.sourceforge.net";
+      homepage = "https://gtk2-perl.sourceforge.net";
       license = with lib.licenses; [ lgpl21Only ];
     };
   };
@@ -10200,7 +10306,7 @@ let
       url = "mirror://cpan/authors/id/X/XA/XAOC/Glib-Object-Introspection-0.049.tar.gz";
       hash = "sha256-RkYoy53QKLEEOMI4kt5vijAgI1Wk5OsBv9E7jP41r1c=";
     };
-    checkInputs = [ pkgs.cairo CairoGObject ];
+    nativeCheckInputs = [ pkgs.cairo CairoGObject ];
     propagatedBuildInputs = [ pkgs.gobject-introspection Glib ];
     preCheck = ''
       # Our gobject-introspection patches make the shared library paths absolute
@@ -10216,7 +10322,7 @@ let
     doCheck = !stdenv.isDarwin;
     meta = {
       description = "Dynamically create Perl language bindings";
-      homepage = "http://gtk2-perl.sourceforge.net";
+      homepage = "https://gtk2-perl.sourceforge.net";
       license = with lib.licenses; [ lgpl21Only ];
     };
   };
@@ -10232,7 +10338,7 @@ let
     propagatedBuildInputs = [ pkgs.gnome2.libgnomeui ];
     meta = {
       description = "(DEPRECATED) Perl interface to the 2.x series of the GNOME libraries";
-      homepage = "http://gtk2-perl.sourceforge.net";
+      homepage = "https://gtk2-perl.sourceforge.net";
       license = with lib.licenses; [ lgpl21Plus ];
       broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.Gnome2Canvas.x86_64-darwin
     };
@@ -10444,7 +10550,7 @@ let
     };
     buildInputs = [ pkgs.libtiff ExtUtilsDepends ExtUtilsPkgConfig ];
     propagatedBuildInputs = [ Readonly ];
-    checkInputs = [ TestRequires TestDeep pkgs.hexdump ];
+    nativeCheckInputs = [ TestRequires TestDeep pkgs.hexdump ];
     meta = {
       description = "Perl extension for the libtiff library";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -10509,8 +10615,8 @@ let
       url = "mirror://cpan/authors/id/A/AG/AGROLMS/GSSAPI-0.28.tar.gz";
       hash = "sha256-fY8se2F2L7TsctLsKBKQ8vh/nH0pgnPaRSVDKmXncNY=";
     };
-    propagatedBuildInputs = [ pkgs.krb5Full.dev ];
-    makeMakerFlags = "--gssapiimpl ${pkgs.krb5Full.dev}";
+    propagatedBuildInputs = [ pkgs.krb5.dev ];
+    makeMakerFlags = [ "--gssapiimpl" "${pkgs.krb5.dev}" ];
     meta = {
       description = "Perl extension providing access to the GSSAPIv2 library";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -10532,7 +10638,7 @@ let
     propagatedBuildInputs = [ Pango ];
     meta = {
       description = "Perl interface to the 2.x series of the Gimp Toolkit library";
-      homepage = "http://gtk2-perl.sourceforge.net";
+      homepage = "https://gtk2-perl.sourceforge.net";
       license = with lib.licenses; [ lgpl21Plus ];
     };
   };
@@ -10627,7 +10733,7 @@ let
     };
     buildInputs = [ pkgs.gtk3 ];
     propagatedBuildInputs = [ Readonly Gtk3 ];
-    checkInputs = [ TestDifferences TestDeep ImageMagick TryTiny TestMockObject CarpAlways pkgs.librsvg ];
+    nativeCheckInputs = [ TestDifferences TestDeep ImageMagick TryTiny TestMockObject CarpAlways pkgs.librsvg ];
     checkPhase = ''
       ${pkgs.xvfb-run}/bin/xvfb-run -s '-screen 0 800x600x24' \
         make test
@@ -11783,7 +11889,7 @@ let
       hash = "sha256-dNRNcBwfFPxLmE+toelVcmtQTC2LBtJl56hh+llDy0g=";
     };
     buildInputs = [ pkgs.freetype pkgs.fontconfig pkgs.libjpeg pkgs.libpng ];
-    makeMakerFlags = "--incpath ${pkgs.libjpeg.dev}/include --libpath ${pkgs.libjpeg.out}/lib --incpath ${pkgs.libpng.dev}/include --libpath ${pkgs.libpng.out}/lib";
+    makeMakerFlags = [ "--incpath ${pkgs.libjpeg.dev}/include" "--libpath ${pkgs.libjpeg.out}/lib" "--incpath" "${pkgs.libpng.dev}/include" "--libpath" "${pkgs.libpng.out}/lib" ];
     meta = {
       description = "Perl extension for Generating 24 bit Images";
       homepage = "http://imager.perl.org";
@@ -11844,7 +11950,7 @@ let
     };
     buildInputs = [ pkgs.libpng pkgs.libjpeg TestNoWarnings ];
     propagatedBuildInputs = [ pkgs.zlib ];
-    makeMakerFlags = "--with-jpeg-includes=${pkgs.libjpeg.dev}/include --with-jpeg-libs=${pkgs.libjpeg.out}/lib --with-png-includes=${pkgs.libpng.dev}/include --with-png-libs=${pkgs.libpng.out}/lib";
+    makeMakerFlags = [ "--with-jpeg-includes=${pkgs.libjpeg.dev}/include" "--with-jpeg-libs=${pkgs.libjpeg.out}/lib" "--with-png-includes=${pkgs.libpng.dev}/include" "--with-png-libs=${pkgs.libpng.out}/lib" ];
     meta = {
       description = "Fast, high-quality fixed-point image resizing";
       license = with lib.licenses; [ gpl2Plus ];
@@ -11982,10 +12088,10 @@ let
 
   IOAsync = buildPerlModule {
     pname = "IO-Async";
-    version = "0.801";
+    version = "0.802";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/IO-Async-0.801.tar.gz";
-      hash = "sha256-ieRZuhe3alcrsbS7EgMBVB6MyTJCQXFmI2tsbbDhybk=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/IO-Async-0.802.tar.gz";
+      hash = "sha256-5YJzFXd2fEfqxDXvKQRmPUp1Cw5oAqSmGJo38Mswhzg";
     };
     preCheck = "rm t/50resolver.t"; # this test fails with "Temporary failure in name resolution" in sandbox
     propagatedBuildInputs = [ Future StructDumb ];
@@ -12222,7 +12328,7 @@ let
     };
   };
 
-  IOSocketInet6 = buildPerlModule {
+  IOSocketINET6 = buildPerlModule {
     pname = "IO-Socket-INET6";
     version = "2.72";
     src = fetchurl {
@@ -12425,7 +12531,7 @@ let
       hash = "sha256-PYHDzBtc/2nMqTYeLG443wNSJRrntB4v8/68hQ5GNWU=";
     };
     meta = {
-      description = "Run a subprocess with input/ouput redirection";
+      description = "Run a subprocess with input/output redirection";
       license = with lib.licenses; [ artistic1 gpl1Plus bsd3 ];
     };
   };
@@ -12487,11 +12593,11 @@ let
 
   ImageExifTool = buildPerlPackage rec {
     pname = "Image-ExifTool";
-    version = "12.39";
+    version = "12.62";
 
     src = fetchurl {
       url = "https://exiftool.org/Image-ExifTool-${version}.tar.gz";
-      hash = "sha256-QDq1KTpEcl8EWj9a/bxF0TwghUulH30O5yDV0wsxy6I=";
+      hash = "sha256-SZCkbGm2VoiNfVcyuvQDnalkaI7d33ocLutRQEmZ7B0=";
     };
 
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
@@ -12513,9 +12619,9 @@ let
         Reconyx, Ricoh, Samsung, Sanyo, Sigma/Foveon and Sony.
       '';
       homepage = "https://exiftool.org/";
-
+      changelog = "https://exiftool.org/history.html";
       license = with lib.licenses; [ gpl1Plus /* or */ artistic2 ];
-      maintainers = [ maintainers.kiloreux ];
+      maintainers = with maintainers; [ kiloreux anthonyroussel ];
       mainProgram = "exiftool";
     };
   };
@@ -12574,7 +12680,7 @@ let
     propagatedBuildInputs = [ Inline ];
 
     # TODO: upgrade https://github.com/NixOS/nixpkgs/pull/89731
-    makeMakerFlags = "J2SDK=${pkgs.jdk8}";
+    makeMakerFlags = [ "J2SDK=${pkgs.jdk8}" ];
 
     # FIXME: Apparently tests want to access the network.
     doCheck = false;
@@ -12815,23 +12921,15 @@ let
 
   LaTeXML = buildPerlPackage rec {
     pname = "LaTeXML";
-    version = "0.8.6";
+    version = "0.8.7";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BR/BRMILLER/${pname}-${version}.tar.gz";
-      hash = "sha256-lSnGUbZ/Xo3e8f0YUvl051ahe3EcRtQRjwZ3rQ5um7E=";
+      hash = "sha256-JdqdlEB3newNrdTMLUIn6Oq4dDfAcZh3J03PuQakzHk=";
     };
-    patches = [
-      (fetchpatch {
-        # https://github.com/brucemiller/LaTeXML/issues/1669
-        name = "downgrade-security-FileTemp.patch";
-        url = "https://github.com/brucemiller/LaTeXML/commit/c3d6b9b88f9eafce6eee52b1634ea33085ba9ec6.patch";
-        hash = "sha256-p+boNhshvSZtygVZUawjeN38bJsfM95JrkLOBbazhos=";
-      })
-    ];
     outputs = [ "out" "tex" ];
     propagatedBuildInputs = [ ArchiveZip DBFile FileWhich IOString ImageMagick ImageSize JSONXS LWP ParseRecDescent PodParser TextUnidecode XMLLibXSLT ];
     nativeBuildInputs = [ pkgs.makeWrapper ] ++ lib.optional stdenv.isDarwin shortenPerlShebang;
-    makeMakerFlags = "TEXMF=\${tex} NOMKTEXLSR";
+    makeMakerFlags = [ "TEXMF=\${tex}" "NOMKTEXLSR" ];
     # shebangs need to be patched before executables are copied to $out
     preBuild = ''
       patchShebangs bin/
@@ -12899,17 +12997,23 @@ let
     };
   };
 
-  libapreq2 = buildPerlPackage {
+  libapreq2 = buildPerlPackage rec {
     pname = "libapreq2";
-    version = "2.16";
+    version = "2.17";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHAY/libapreq2-2.16.tar.gz";
-      hash = "sha256-4EyFWj6gcLiGNWn7rgL+go9TSsiHVbI+JNOGPMlZg0k=";
+      url = "mirror://apache/httpd/libapreq/${pname}-${version}.tar.gz";
+      hash = "sha256-BGSH8ITBL6HIIq/8X33lbv7ZtIkFpCbmMaa5ScEU2Gw=";
     };
     outputs = [ "out" ];
     buildInputs = [ pkgs.apacheHttpd pkgs.apr pkgs.aprutil ApacheTest ExtUtilsXSBuilder ];
     propagatedBuildInputs = [ (pkgs.apacheHttpdPackages.mod_perl.override { inherit perl; }) ];
-    makeMakerFlags = "--with-apache2-src=${pkgs.apacheHttpd.dev} --with-apache2-apxs=${pkgs.apacheHttpd.dev}/bin/apxs --with-apache2-httpd=${pkgs.apacheHttpd.out}/bin/httpd --with-apr-config=${pkgs.apr.dev}/bin/apr-1-config --with-apu-config=${pkgs.aprutil.dev}/bin/apu-1-config";
+    makeMakerFlags = [
+      "--with-apache2-src=${pkgs.apacheHttpd.dev}"
+      "--with-apache2-apxs=${pkgs.apacheHttpd.dev}/bin/apxs"
+      "--with-apache2-httpd=${pkgs.apacheHttpd.out}/bin/httpd"
+      "--with-apr-config=${pkgs.apr.dev}/bin/apr-1-config"
+      "--with-apu-config=${pkgs.aprutil.dev}/bin/apu-1-config"
+    ];
     preConfigure = ''
       # override broken prereq check
       substituteInPlace configure --replace "prereq_check=\"\$PERL \$PERL_OPTS build/version_check.pl\"" "prereq_check=\"echo\""
@@ -12994,6 +13098,22 @@ let
       description = "Add paths relative to the current file to @INC";
       homepage = "https://github.com/Grinnz/lib-relative";
       license = with lib.licenses; [ artistic2 ];
+    };
+  };
+
+  libwwwperl = buildPerlPackage {
+    pname = "libwww-perl";
+    version = "6.70";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SI/SIMBABQUE/libwww-perl-6.70.tar.gz";
+      hash = "sha256-NPANI0R1e5wLVa01gI1T6T19kvekZOyDf+anPFH7WWk=";
+    };
+    buildInputs = [ HTTPDaemon TestFatal TestNeeds TestRequiresInternet ];
+    propagatedBuildInputs = [ EncodeLocale FileListing HTMLParser HTTPCookieJar HTTPCookies HTTPDate HTTPMessage HTTPNegotiate LWPMediaTypes NetHTTP TryTiny URI WWWRobotRules ];
+    meta = {
+      homepage = "https://github.com/libwww-perl/libwww-perl";
+      description = "The World-Wide Web library for Perl";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -13873,7 +13993,8 @@ let
       url = "mirror://cpan/authors/id/L/LK/LKUNDRAK/Log-Journald-0.30.tar.gz";
       hash = "sha256-VZks+aHh+4M/QoMAUlv6fPftRrg+xBT4KgkXibN9CKM=";
     };
-    buildInputs = [ pkgs.pkg-config pkgs.systemd ];
+    nativeBuildInputs = [ pkgs.pkg-config ];
+    buildInputs = [ pkgs.systemd ];
     postPatch = ''
       substituteInPlace Build.PL \
         --replace "libsystemd-journal" "libsystemd"
@@ -13925,7 +14046,7 @@ let
       substituteInPlace Makefile.PL --replace 'if has_module' 'if 0; #'
     '';
     doCheck = !stdenv.isDarwin;
-    checkInputs = [ HTTPDaemon TestFatal TestNeeds TestRequiresInternet ];
+    nativeCheckInputs = [ HTTPDaemon TestFatal TestNeeds TestRequiresInternet ];
     meta = {
       description = "The World-Wide Web library for Perl";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -14417,7 +14538,7 @@ let
     };
     buildInputs = [ pkgs.gmp ];
     doCheck = false;
-    NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
+    env.NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
     propagatedBuildInputs = [ MathBigInt ];
     meta = {
@@ -14489,7 +14610,7 @@ let
       hash = "sha256-Ftpfge9SdChiuzyHhASq/bJM2rT4rL/KEoAzJIe8VV8=";
     };
     buildInputs = [ pkgs.gmp AlienGMP ];
-    NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
+    env.NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
     meta = {
       description = "High speed arbitrary size integer math";
@@ -14570,9 +14691,9 @@ let
     # Workaround build failure on -fno-common toolchains:
     #   ld: libPARI/libPARI.a(compat.o):(.bss+0x8): multiple definition of
     #   `overflow'; Pari.o:(.bss+0x80): first defined here
-    NIX_CFLAGS_COMPILE = "-fcommon";
+    env.NIX_CFLAGS_COMPILE = "-fcommon";
     preConfigure = "cp ${pari_tgz} pari-${pariversion}.tgz";
-    makeMakerFlags = "pari_tgz=pari-${pariversion}.tgz";
+    makeMakerFlags = [ "pari_tgz=pari-${pariversion}.tgz" ];
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IL/ILYAZ/modules/Math-Pari-2.030518.zip";
       hash = "sha256-3DiVWpaQvmuvqN4lJiEjd8Psn+jaXsAiY6nK+UtYu5E=";
@@ -14623,7 +14744,7 @@ let
       hash = "sha256-JpfH/Vx+Nf3sf1DtVqZ76Aei8iZXWJ5jfa01knRAA74=";
     };
     buildInputs = [ pkgs.gmp ];
-    NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
+    env.NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
     meta = {
       description = "Utilities related to prime numbers, using GMP";
@@ -15732,18 +15853,13 @@ let
 
   mod_perl2 = buildPerlPackage {
     pname = "mod_perl";
-    version = "2.0.11";
+    version = "2.0.12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHAY/mod_perl-2.0.11.tar.gz";
-      hash = "sha256-yiqeGM35D5xgI+eGNp1bp16NrCkuv+qZAMKb9C3Bb3Q=";
+      url = "mirror://cpan/authors/id/S/SH/SHAY/mod_perl-2.0.12.tar.gz";
+      hash = "sha256-9bghtZsP3JZw5G7Q/PMtiRHyUSYYmotowWUvkiHu4mk=";
     };
 
-    patches = [
-      # Fix build on perl-5.34.0, https://github.com/Perl/perl5/issues/18617
-      ../development/perl-modules/mod_perl2-PL_hash_seed.patch
-    ];
-
-    makeMakerFlags = "MP_AP_DESTDIR=$out";
+    makeMakerFlags = [ "MP_AP_DESTDIR=$out" ];
     buildInputs = [ pkgs.apacheHttpd ];
     doCheck = false; # would try to start Apache HTTP server
     passthru.tests = nixosTests.mod_perl;
@@ -16441,7 +16557,7 @@ let
     buildInputs = [ ModuleBuildTiny TestSharedFork pkgs.postgresql ];
     propagatedBuildInputs = [ DBDPg DBI FileWhich FunctionParameters Moo TieHashMethod TryTiny TypeTiny ];
 
-    makeMakerFlags = "POSTGRES_HOME=${pkgs.postgresql}";
+    makeMakerFlags = [ "POSTGRES_HOME=${pkgs.postgresql}" ];
 
     meta = {
       description = "PostgreSQL runner for tests";
@@ -17157,7 +17273,7 @@ let
     };
     buildInputs = [ ModuleBuildXSUtil TestException TestFatal TestLeakTrace TestOutput TestRequires TryTiny ];
     perlPreHook = "export LD=$CC";
-    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-fno-stack-protector";
+    env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-fno-stack-protector";
     hardeningDisable = lib.optional stdenv.isi686 "stackprotector";
     meta = {
       description = "Moose minus the antlers";
@@ -17450,6 +17566,22 @@ let
     };
   };
 
+  NetAsyncHTTPServer = buildPerlModule {
+    pname = "Net-Async-HTTP-Server";
+    version = "0.13";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Net-Async-HTTP-Server-0.13.tar.gz";
+      hash = "sha256-yk3kcfIieNI5PIqy7G56xO8hfbRjXS3Mi6KoynIhFO4=";
+    };
+    buildInputs = [ TestIdentity TestMetricsAny TestRefcount TestSimple13 ];
+    propagatedBuildInputs = [ HTTPMessage IOAsync MetricsAny ];
+    meta = {
+      description = "Serve HTTP with IO::Async";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.anoa ];
+    };
+  };
+
   NetAsyncPing = buildPerlPackage {
     pname = "Net-Async-Ping";
     version = "0.004001";
@@ -17582,7 +17714,7 @@ let
       hash = "sha256-hS1u6H6PDQFCIwJlgcu1aSS6jN3TzrKcYZHbthItQ8U=";
     };
     propagatedBuildInputs = [ DigestHMAC ];
-    makeMakerFlags = "--noonline-tests";
+    makeMakerFlags = [ "--noonline-tests" ];
     meta = {
       description = "Perl Interface to the Domain Name System";
       license = with lib.licenses; [ mit ];
@@ -17792,6 +17924,21 @@ let
     meta = {
       description = "Check and manipulate IPv6 addresses";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  NetIPXS = buildPerlPackage {
+    pname = "Net-IP-XS";
+    version = "0.22";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOMHRR/Net-IP-XS-0.22.tar.gz";
+      hash = "sha256-JZe0aDizgur3S6XJnD9gpqC1poHsNqFBchJL9E9LGSA=";
+    };
+    propagatedBuildInputs = [ IOCapture TieSimple ];
+    meta = {
+      homepage = "https://github.com/tomhrr/p5-Net-IP-XS";
+      description = "IPv4/IPv6 address library";
+      license = with lib.licenses; [ gpl2Plus ];
     };
   };
 
@@ -18011,7 +18158,7 @@ let
       rev = "5fccc0c270e25c65ef634304630af74b48807d21";
       hash = "sha256-pveVyFdEe/TQCEI83RrQTWr7aoYrgOGaNqc1wJeiAnw=";
     };
-    checkInputs = [ HTTPMessage LWP TestSharedFork HTTPServerSimple TestTCP TestUNIXSock ];
+    nativeCheckInputs = [ HTTPMessage LWP TestSharedFork HTTPServerSimple TestTCP TestUNIXSock ];
     buildInputs = [ ModuleInstall ];
     propagatedBuildInputs = [ NetServer ServerStarter ];
     meta = {
@@ -18567,7 +18714,7 @@ let
     # fix "error: format not a string literal and no format arguments [-Werror=format-security]"
     hardeningDisable = [ "format" ];
     # Make the async API accessible
-    NIX_CFLAGS_COMPILE = "-DTHREADED";
+    env.NIX_CFLAGS_COMPILE = "-DTHREADED";
     NIX_CFLAGS_LINK = "-L${pkgs.zookeeper_mt.out}/lib -lzookeeper_mt";
     # Most tests are skipped as no server is available in the sandbox.
     # `t/35_log.t` seems to suffer from a race condition; remove it.  See
@@ -18671,7 +18818,7 @@ let
     propagatedBuildInputs = [ Cairo Glib ];
     meta = {
       description = "Layout and render international text";
-      homepage = "http://gtk2-perl.sourceforge.net";
+      homepage = "https://gtk2-perl.sourceforge.net";
       license = with lib.licenses; [ lgpl21Plus ];
     };
   };
@@ -19115,7 +19262,7 @@ let
       url = "mirror://cpan/authors/id/P/PM/PMPERRY/PDF-Builder-3.022.tar.gz";
       hash = "sha256-SCskaQxxhfLn+7r5pIKz0SieJduAC/SPKVn1Epl3yjE=";
     };
-    checkInputs = [ TestException TestMemoryCycle ];
+    nativeCheckInputs = [ TestException TestMemoryCycle ];
     propagatedBuildInputs = [ FontTTF ];
     meta = {
       description = "Facilitates the creation and modification of PDF files";
@@ -19415,11 +19562,17 @@ let
 
   perlldap = buildPerlPackage {
     pname = "perl-ldap";
-    version = "0.66";
+    version = "0.68";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MARSCHAP/perl-ldap-0.66.tar.gz";
-      hash = "sha256-CSY85hZugMmNaJ1B0JmVuBM4n9Bpt4RgH23Ff44rQQI=";
+      url = "mirror://cpan/authors/id/M/MA/MARSCHAP/perl-ldap-0.68.tar.gz";
+      hash = "sha256-4vOJ/j56nkthSIaSkZrXI7mPO0ebUoj2ENqownmVs1E=";
     };
+    # ldapi socket location should match the one compiled into the openldap package
+    postPatch = ''
+      for f in lib/Net/LDAPI.pm lib/Net/LDAP/Util.pm lib/Net/LDAP.pod lib/Net/LDAP.pm; do
+        sed -i 's:/var/run/ldapi:/run/openldap/ldapi:g' "$f"
+      done
+    '';
     buildInputs = [ TextSoundex ];
     propagatedBuildInputs = [ ConvertASN1 ];
     meta = {
@@ -19433,10 +19586,10 @@ let
   PerlMagick = ImageMagick; # added 2021-08-02
   ImageMagick = buildPerlPackage rec {
     pname = "Image-Magick";
-    version = "7.0.11-1";
+    version = "7.1.0-0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JC/JCRISTY/Image-Magick-${version}.tar.gz";
-      hash = "sha256-c0vuFmVq9bypQABBnZElGIQrpkYKwtD/B+PloBAycuI=";
+      hash = "sha256-+QyXXL4hRFd3xA0ZwXt/eQI9MGTvj6vPNIz4JlS8Fus=";
     };
     buildInputs = [ pkgs.imagemagick ];
     preConfigure =
@@ -19507,6 +19660,9 @@ let
     };
     buildInputs = [ AuthenSimplePasswd CGIEmulatePSGI FileShareDirInstall HTTPRequestAsCGI HTTPServerSimplePSGI IOHandleUtil LWP LWPProtocolhttp10 LogDispatchArray MIMETypes TestMockTimeHiRes TestRequires TestSharedFork TestTCP ];
     propagatedBuildInputs = [ ApacheLogFormatCompiler CookieBaker DevelStackTraceAsHTML FileShareDir FilesysNotifySimple HTTPEntityParser HTTPHeadersFast HTTPMessage TryTiny ];
+    patches = [
+      ../development/perl-modules/Plack-test-replace-DES-hash-with-bcrypt.patch
+    ];
     meta = {
       description = "Perl Superglue for Web frameworks and Web Servers (PSGI toolkit)";
       homepage = "https://github.com/plack/Plack";
@@ -20610,7 +20766,7 @@ let
     propagatedBuildInputs = [ DigestSHA1 URI ];
     meta = {
       description = "Collaborative, content-based spam filtering network agent";
-      homepage = "http://razor.sourceforge.net/";
+      homepage = "https://razor.sourceforge.net/";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -20935,7 +21091,8 @@ let
       url = "mirror://cpan/authors/id/L/LK/LKUNDRAK/RPM2-1.4.tar.gz";
       hash = "sha256-XstCqmkyTm9AiKv64HMTkG5aq/L0bxIE8/HeWRVbtjY=";
     };
-    buildInputs = [ pkgs.pkg-config pkgs.rpm ];
+    nativeBuildInputs = [ pkgs.pkg-config ];
+    buildInputs = [ pkgs.rpm ];
     doCheck = false; # Tries to open /var/lib/rpm
     meta = {
       description = "Perl bindings for the RPM Package Manager API";
@@ -21314,7 +21471,7 @@ let
     };
     propagatedBuildInputs = [ ClassInspector IOSessionData LWPProtocolHttps TaskWeaken XMLParser ];
     buildInputs = [ TestWarn XMLParserLite ];
-    checkInputs = [ HTTPDaemon ];
+    nativeCheckInputs = [ HTTPDaemon ];
     meta = {
       description = "Perl's Web Services Toolkit";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -21482,6 +21639,22 @@ let
       description = "Write to a cross platform Excel binary file";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       mainProgram = "chartex";
+    };
+  };
+
+  SpreadsheetXLSX = buildPerlPackage {
+    pname = "Spreadsheet-XLSX";
+    version = "0.17";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AS/ASB/Spreadsheet-XLSX-0.17.tar.gz";
+      hash = "sha256-M7d4knz/FjCQZbdOuMRpawNxZg0szf5FvkYFCSrO6XY=";
+    };
+    buildInputs = [ TestNoWarnings TestWarnings ];
+    propagatedBuildInputs = [ ArchiveZip SpreadsheetParseExcel ];
+    meta = {
+      homepage = "https://github.com/asb-capfan/Spreadsheet-XLSX";
+      description = "Perl extension for reading MS Excel 2007 files;";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -22609,12 +22782,12 @@ let
 
   SysVirt = buildPerlModule rec {
     pname = "Sys-Virt";
-    version = "8.5.0";
+    version = "9.0.0";
     src = fetchFromGitLab {
       owner = "libvirt";
       repo = "libvirt-perl";
       rev = "v${version}";
-      hash = "sha256-VuM4rPrG15vXnF5e1MBSGB76zLI+8nkSiJmwWg8aJgE=";
+      hash = "sha256-QiaB272kxs/Y3/l8KbFy8f9iyOCxhzfA/h2FnfGzmE4=";
     };
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [ pkgs.libvirt CPANChanges TestPod TestPodCoverage XMLXPath ];
@@ -22731,8 +22904,8 @@ let
       pkgs.tk
     ] ++ lib.optionals stdenv.isDarwin [
       darwin.apple_sdk.frameworks.CoreServices ];
-    makeMakerFlags = lib.optionalString stdenv.isLinux
-      "--tclsh=${pkgs.tcl}/bin/tclsh --nousestubs";
+    makeMakerFlags = lib.optionals stdenv.isLinux
+      [ "--tclsh=${pkgs.tcl}/bin/tclsh" "--nousestubs" ];
     meta = {
       description = "Tcl extension module for Perl";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -22741,10 +22914,10 @@ let
 
   TclpTk = buildPerlPackage {
     pname = "Tcl-pTk";
-    version = "1.09";
+    version = "1.10";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CA/CAC/Tcl-pTk-1.09.tar.gz";
-      hash = "sha256-LR+YBlKS9+W7mBBy9/EkAOjxGVVe4MC5zToPr/pXl24=";
+      url = "mirror://cpan/authors/id/C/CA/CAC/Tcl-pTk-1.10.tar.gz";
+      hash = "sha256-sMb4KXzTL7KhkF17OSbWMb8p+iM/jYTNHtb+2J85/QQ=";
     };
     propagatedBuildInputs = [
       ClassISA
@@ -22870,10 +23043,10 @@ let
 
   TemplateToolkit = buildPerlPackage {
     pname = "Template-Toolkit";
-    version = "3.009";
+    version = "3.101";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AT/ATOOMIC/Template-Toolkit-3.009.tar.gz";
-      hash = "sha256-1q0ju/Y3pZtd/RrABkYN/LGFmC5IUs3ncVD70IXx9bY=";
+      url = "mirror://cpan/authors/id/A/AB/ABW/Template-Toolkit-3.101.tar.gz";
+      hash = "sha256-0qMt1sIeSzfGqT34CHyp6IDPrmE6Pl766jB7C9yu21g=";
     };
     doCheck = !stdenv.isDarwin;
     propagatedBuildInputs = [ AppConfig ];
@@ -22970,8 +23143,8 @@ let
 
     # use native libraries from the host when running build commands
     postConfigure = lib.optionalString cross (let
-      host_perl = buildPerl;
-      host_self = buildPerl.pkgs.TermReadKey;
+      host_perl = perl.perlOnBuild;
+      host_self = perl.perlOnBuild.pkgs.TermReadKey;
       perl_lib = "${host_perl}/lib/perl5/${host_perl.version}";
       self_lib = "${host_self}/lib/perl5/site_perl/${host_perl.version}";
     in ''
@@ -22980,7 +23153,7 @@ let
 
     # TermReadKey uses itself in the build process
     nativeBuildInputs = lib.optionals cross [
-      buildPerl.pkgs.TermReadKey
+      perl.perlOnBuild.pkgs.TermReadKey
     ];
     meta = {
       description = "A perl module for simple terminal control";
@@ -23000,7 +23173,7 @@ let
 
     # For some crazy reason Makefile.PL doesn't generate a Makefile if
     # AUTOMATED_TESTING is set.
-    AUTOMATED_TESTING = false;
+    env.AUTOMATED_TESTING = false;
 
     # Makefile.PL looks for ncurses in Glibc's prefix.
     preConfigure =
@@ -23171,7 +23344,7 @@ let
     };
     propagatedBuildInputs = [ TermVT102 ];
     meta = {
-      description = "A Term::VT102 that grows automatically to accomodate whatever you print to it";
+      description = "A Term::VT102 that grows automatically to accommodate whatever you print to it";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -24954,7 +25127,7 @@ let
     };
     propagatedBuildInputs = [ pkgs.aspell ];
     ASPELL_CONF = "dict-dir ${pkgs.aspellDicts.en}/lib/aspell";
-    NIX_CFLAGS_COMPILE = "-I${pkgs.aspell}/include";
+    env.NIX_CFLAGS_COMPILE = "-I${pkgs.aspell}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.aspell}/lib -laspell";
     meta = {
       description = "Perl interface to the GNU Aspell library";
@@ -25108,7 +25281,7 @@ let
     };
     meta = {
       description = "Various subroutines to format text";
-      homepage = "https://www.shlomifish.org/open-source/projects/Text-Format";
+      homepage = "https://github.com/shlomif/perl-Module-Format";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ bcdarwin ];
     };
@@ -25290,7 +25463,7 @@ let
       hash = "sha256-wZHG1ezrjLdcBWUZI2BmLSAtcWutB6IzxLMppChNxxs=";
     };
     nativeBuildInputs = [ shortenPerlShebang ];
-    checkInputs = [ ListMoreUtils TestDifferences TestException ];
+    nativeCheckInputs = [ ListMoreUtils TestDifferences TestException ];
     postInstall = ''
       shortenPerlShebang $out/bin/Markdown.pl
     '';
@@ -25653,7 +25826,7 @@ let
       hash = "sha256-J45u/Jsk82mclh77NuvmAqNAi1QVcgF97hMdFScocys=";
     };
     # https://rt.cpan.org/Public/Bug/Display.html?id=124815
-    NIX_CFLAGS_COMPILE = "-DHAS_VPRINTF";
+    env.NIX_CFLAGS_COMPILE = "-DHAS_VPRINTF";
     meta = {
       description = "Remove accents from a string";
       license = with lib.licenses; [ gpl2Only ];
@@ -25752,10 +25925,10 @@ let
       url = "mirror://cpan/authors/id/K/KU/KUBOTA/Text-WrapI18N-0.06.tar.gz";
       hash = "sha256-S9KaF/DCx5LRLBAFs8J28qsPrjnACFmuF0HXlBhGpIg=";
     };
-    buildInputs = [ pkgs.glibcLocales ];
+    buildInputs = lib.optionals (!stdenv.isDarwin) [ pkgs.glibcLocales ];
     propagatedBuildInputs = [ TextCharWidth ];
     preConfigure = ''
-      substituteInPlace WrapI18N.pm --replace '/usr/bin/locale' '${pkgs.glibc.bin}/bin/locale'
+      substituteInPlace WrapI18N.pm --replace '/usr/bin/locale' '${pkgs.unixtools.locale}/bin/locale'
     '';
     meta = {
       description = "Line wrapping module with support for multibyte, fullwidth, and combining characters and languages without whitespaces between words";
@@ -26112,13 +26285,13 @@ let
 
   Tirex = buildPerlPackage rec {
     pname = "Tirex";
-    version = "0.6.1";
+    version = "0.7.0";
 
     src = fetchFromGitHub {
       owner = "openstreetmap";
       repo = "tirex";
       rev = "v${version}";
-      hash = "sha256-8GXhF2v04ZSF0h0WNKPp4bgYcvPYCml6HtCbikFxUzc=";
+      hash = "sha256-0QbPfCPBdNBbUiZ8Ppg2zao98+Ddl3l+yX6y1/J50rg=";
     };
 
     buildInputs = [
@@ -26133,6 +26306,7 @@ let
     ];
 
     installPhase = ''
+      install -m 755 -d $out/usr/libexec
       make install DESTDIR=$out INSTALLOPTS=""
       mv $out/$out/lib $out/$out/share $out
       rmdir $out/$out $out/nix/store $out/nix
@@ -26148,12 +26322,12 @@ let
 
   Tk = buildPerlPackage {
     pname = "Tk";
-    version = "804.035";
+    version = "804.036";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SREZIC/Tk-804.035.tar.gz";
-      hash = "sha256-TSuAKRum3jTY7IhqCFptvSt5C5JgNaCH6ZAlYUxf/dQ=";
+      url = "mirror://cpan/authors/id/S/SR/SREZIC/Tk-804.036.tar.gz";
+      hash = "sha256-Mqpycaa9/twzMBGbOCXa3dCqS1yTb4StdOq7kyogCl4=";
     };
-    makeMakerFlags = "X11INC=${pkgs.xorg.libX11.dev}/include X11LIB=${pkgs.xorg.libX11.out}/lib";
+    makeMakerFlags = [ "X11INC=${pkgs.xorg.libX11.dev}/include" "X11LIB=${pkgs.xorg.libX11.out}/lib" ];
     buildInputs = [ pkgs.xorg.libX11 pkgs.libpng ];
     doCheck = false;            # Expects working X11.
     meta = {
@@ -26169,7 +26343,7 @@ let
       url = "mirror://cpan/authors/id/A/AS/ASB/Tk-ToolBar-0.12.tar.gz";
       hash = "sha256-Rj4oTsRxN+fEJclpGwKo3sXOJytY6h9jWa6AQaI53Q8=";
     };
-    makeMakerFlags = "X11INC=${pkgs.xorg.libX11.dev}/include X11LIB=${pkgs.xorg.libX11.out}/lib";
+    makeMakerFlags = [ "X11INC=${pkgs.xorg.libX11.dev}/include" "X11LIB=${pkgs.xorg.libX11.out}/lib" ];
     buildInputs = [ Tk ];
     doCheck = false;            # Expects working X11.
     meta = {
@@ -26468,10 +26642,10 @@ let
 
   URIdb = buildPerlModule {
     pname = "URI-db";
-    version = "0.19";
+    version = "0.20";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DW/DWHEELER/URI-db-0.19.tar.gz";
-      hash = "sha256-xJmd6vRRZSIWAyyOMn/25tZVU56sN5CVu2mww2nvplg=";
+      url = "mirror://cpan/authors/id/D/DW/DWHEELER/URI-db-0.20.tar.gz";
+      hash = "sha256-FMjaFawgljG445/BJFHJsTEa0LXKX5Aye9+peLfRPxQ=";
     };
     propagatedBuildInputs = [ URINested ];
     meta = {
@@ -26780,7 +26954,7 @@ let
         name = "WWWCurl-curl-7.71.0.patch";
       })
     ];
-    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-return-type";
+    env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-return-type";
     buildInputs = [ pkgs.curl ];
     doCheck = false; # performs network access
     meta = {
@@ -26920,6 +27094,25 @@ let
       url = "mirror://cpan/authors/id/M/MD/MDOOTSON/Wx-0.9932.tar.gz";
       hash = "sha256-HP22U1oPRnbm8aqyydjhbVd74+s7fMBMgHTWheZlG3A=";
     };
+    patches = [
+      (fetchpatch {
+        url = "https://sources.debian.org/data/main/libw/libwx-perl/1%3A0.9932-8/debian/patches/gtk3.patch";
+        hash = "sha256-CokmRzDTFmEMN/jTKw9ECCPvi0mHt5+h8Ojg4Jgd7D4=";
+      })
+      (fetchpatch {
+        url = "https://sources.debian.org/data/main/libw/libwx-perl/1%3A0.9932-8/debian/patches/wxWidgets_3.2_MakeMaker.patch";
+        hash = "sha256-kTJiCGv8yxQbgMych9yT2cOt+2bL1G4oJ0gehNcu0Rc=";
+      })
+      (fetchpatch {
+        url = "https://sources.debian.org/data/main/libw/libwx-perl/1%3A0.9932-8/debian/patches/wxWidgets_3.2_port.patch";
+        hash = "sha256-y9LMpcbm7p8+LZ2Hw3PA2jc7bHAFEu0QRa170XuseKw=";
+      })
+    ];
+    # DND.c:453:15: error: incompatible integer to pointer conversion assigning to 'NativeFormat' (aka 'const __CFString *') from 'wxDataFormatId'
+    postPatch = ''
+      substituteInPlace ext/dnd/XS/DataObject.xs \
+        --replace "#ifdef __WXGTK20__" "#if wxUSE_GUI"
+    '';
     propagatedBuildInputs = [ AlienWxWidgets ];
     # Testing requires an X server:
     #   Error: Unable to initialize GTK, is DISPLAY set properly?"
@@ -26969,8 +27162,6 @@ let
       url = "mirror://cpan/authors/id/S/SM/SMCCAM/X11-Protocol-0.56.tar.gz";
       hash = "sha256-3pbdbHwfJfMoeqevZJAr+ErKqo4MO7dqoWdjZ+BKCLc=";
     };
-    buildInputs = [ pkgs.xlibsWrapper ];
-    NIX_CFLAGS_LINK = "-lX11";
     doCheck = false; # requires an X server
     meta = {
       description = "Perl module for the X Window System Protocol, version 11";
@@ -27001,8 +27192,8 @@ let
       url = "mirror://cpan/authors/id/C/CT/CTRONDLP/X11-GUITest-0.28.tar.gz";
       hash = "sha256-3O7eU3AGEP/xQtydXE5M0DcMiKTysTcfnL9NjYzm9ks=";
     };
-    buildInputs = [ pkgs.xlibsWrapper pkgs.xorg.libXtst pkgs.xorg.libXi ];
-    NIX_CFLAGS_LINK = "-lX11 -lXext -lXtst";
+    buildInputs = [ pkgs.xorg.libX11 pkgs.xorg.libXi pkgs.xorg.libXt pkgs.xorg.libXtst ];
+    NIX_CFLAGS_LINK = "-lX11";
     doCheck = false; # requires an X server
     meta = {
       description = "Provides GUI testing/interaction routines";
@@ -27024,7 +27215,7 @@ let
         hash = "sha256-gxxY8549/ebS3QORjSs8IgdBs2aD05Tu+9Bn70gu7gQ=";
       })
     ];
-    AUTOMATED_TESTING = false;
+    env.AUTOMATED_TESTING = false;
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [ pkgs.xorg.libxcb pkgs.xorg.xcbproto pkgs.xorg.xcbutil pkgs.xorg.xcbutilwm ExtUtilsDepends ExtUtilsPkgConfig TestDeep TestException XSObjectMagic ];
     propagatedBuildInputs = [ DataDump MouseXNativeTraits XMLDescent XMLSimple ];
@@ -27230,7 +27421,8 @@ let
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/XML-LibXSLT-1.99.tar.gz";
       hash = "sha256-En4XqHf7YeR7nouHv42q0xM5pioAEh+XUdUitDiw9/A=";
     };
-    buildInputs = [ pkgs.pkg-config pkgs.zlib pkgs.libxml2 pkgs.libxslt ];
+    nativeBuildInputs = [ pkgs.pkg-config ];
+    buildInputs = [ pkgs.zlib pkgs.libxml2 pkgs.libxslt ];
     propagatedBuildInputs = [ XMLLibXML ];
     meta = {
       description = "Interface to the GNOME libxslt library";
@@ -27277,7 +27469,7 @@ let
     '' + lib.optionalString stdenv.isCygwin ''
       sed -i"" -e "s@my \$compiler = File::Spec->catfile(\$path, \$cc\[0\]) \. \$Config{_exe};@my \$compiler = File::Spec->catfile(\$path, \$cc\[0\]) \. (\$^O eq 'cygwin' ? \"\" : \$Config{_exe});@" inc/Devel/CheckLib.pm
     '';
-    makeMakerFlags = "EXPATLIBPATH=${pkgs.expat.out}/lib EXPATINCPATH=${pkgs.expat.dev}/include";
+    makeMakerFlags = [ "EXPATLIBPATH=${pkgs.expat.out}/lib" "EXPATINCPATH=${pkgs.expat.dev}/include" ];
     propagatedBuildInputs = [ LWP ];
     meta = {
       description = "A perl module for parsing XML documents";
@@ -27716,6 +27908,22 @@ let
     };
   };
 
+  WebScraper = buildPerlModule {
+    pname = "Web-Scraper";
+    version = "0.38";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Web-Scraper-0.38.tar.gz";
+      hash = "sha256-+VtuX41/7r4RbQW/WaK3zxpR7Z0wvKgBI0MOxFZ1Q78=";
+    };
+    buildInputs = [ ModuleBuildTiny TestBase TestRequires ];
+    propagatedBuildInputs = [ HTMLParser HTMLSelectorXPath HTMLTagset HTMLTree HTMLTreeBuilderXPath UNIVERSALrequire URI XMLXPathEngine YAML libwwwperl ];
+    meta = {
+      homepage = "https://github.com/miyagawa/web-scraper";
+      description = "Web Scraping Toolkit using HTML and CSS Selectors or XPath expressions";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   WebServiceLinode = buildPerlModule {
     pname = "WebService-Linode";
     version = "0.29";
@@ -27748,10 +27956,10 @@ let
 
   ZonemasterCLI = buildPerlPackage {
     pname = "Zonemaster-CLI";
-    version = "4.0.1";
+    version = "5.0.1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-CLI-v4.0.1.tar.gz";
-      hash = "sha256-7dNPe4E35JLmzoR0xFpVBXLcpQVqve/EXAdt+daWXKA=";
+      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-CLI-v5.0.1.tar.gz";
+      hash = "sha256-a/PPgavkaw9gCW44rj7+6AjOOSHKglg4H3kr6jXuRE4=";
     };
     propagatedBuildInputs = [
       JSONXS
@@ -27775,18 +27983,13 @@ let
 
   ZonemasterEngine = buildPerlPackage {
     pname = "Zonemaster-Engine";
-    version = "4.5.1";
+    version = "4.6.1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-Engine-v4.5.1.tar.gz";
-      hash = "sha256-RdIExtrXzZAXYIS/JCe6qM5QNoSlaZ6+sjbk0zvAuoY=";
+      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-Engine-v4.6.1.tar.gz";
+      hash = "sha256-4AXo3bZTOLnnPjjX5KNb/2O7MRqcAtlqpz5sPwNN9b0=";
     };
     buildInputs = [ PodCoverage TestDifferences TestException TestFatal TestNoWarnings TestPod ];
-    propagatedBuildInputs = [ ClassAccessor Clone EmailValid FileShareDir FileSlurp IOSocketInet6 ListMoreUtils ModuleFind Moose MooseXSingleton NetIP Readonly TextCSV ZonemasterLDNS libintl-perl ];
-
-    preCheck = ''
-      # disable dnssec test as it fails
-      rm -f t/Test-dnssec.t t/manifest.t
-    '';
+    propagatedBuildInputs = [ ClassAccessor Clone EmailValid FileShareDir FileSlurp IOSocketINET6 ListMoreUtils ModuleFind Moose MooseXSingleton NetIP NetIPXS Readonly TextCSV ZonemasterLDNS libintl-perl ];
 
     meta = {
       description = "A tool to check the quality of a DNS zone";
@@ -27796,17 +27999,18 @@ let
 
   ZonemasterLDNS = buildPerlPackage {
     pname = "Zonemaster-LDNS";
-    version = "2.2.2";
+    version = "3.1.0";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-LDNS-2.2.2.tar.gz";
-      hash = "sha256-4KccPjWqdhkJvjI9QQGCPX/B8vRUGw91eUUgxhHk788=";
+      url = "mirror://cpan/authors/id/Z/ZN/ZNMSTR/Zonemaster-LDNS-3.1.0.tar.gz";
+      hash = "sha256-Rr4uoQg5g9/ZLVnFQiLAz5MB+Uj39U24YWEa+o2+9HE=";
     };
-    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl_1_1.dev}/include -I${pkgs.libidn2}.dev}/include";
-    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl_1_1}/lib -L${lib.getLib pkgs.libidn2}/lib -lcrypto -lidn2";
+    env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include -I${pkgs.libidn2}.dev}/include";
+    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -L${lib.getLib pkgs.libidn2}/lib -lcrypto -lidn2";
 
-    makeMakerFlags = "--prefix-openssl=${pkgs.openssl_1_1.dev}";
+    makeMakerFlags = [ "--prefix-openssl=${pkgs.openssl.dev}" ];
 
-    buildInputs = [ DevelChecklib ModuleInstall ModuleInstallXSUtil TestFatal pkgs.ldns pkgs.libidn2 pkgs.openssl_1_1 pkgs.pkg-config ];
+    nativeBuildInputs = [ pkgs.pkg-config ];
+    buildInputs = [ DevelChecklib ModuleInstall ModuleInstallXSUtil TestFatal pkgs.ldns pkgs.libidn2 pkgs.openssl ];
     meta = {
       description = "Perl wrapper for the ldns DNS library";
       license = with lib.licenses; [ bsd3 ];
@@ -27891,6 +28095,7 @@ let
   DistZillaPluginNoTabsTests = self.DistZillaPluginTestNoTabs;
   EmailMIMEModifier = self.EmailMIME;
   ExtUtilsCommand = self.ExtUtilsMakeMaker;
+  IOSocketInet6 = self.IOSocketINET6;
   IOstringy = self.IOStringy;
   libintl_perl = self.libintl-perl;
   libintlperl = self.libintl-perl;
@@ -27910,4 +28115,4 @@ let
   version = self.Version;
 
   Gtk2GladeXML = throw "Gtk2GladeXML has been removed"; # 2022-01-15
-}; in self
+}

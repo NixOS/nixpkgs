@@ -6,5 +6,8 @@
   This chapter describes several special builders.
  </para>
  <xi:include href="special/fhs-environments.section.xml" />
+ <xi:include href="special/makesetuphook.section.xml" />
  <xi:include href="special/mkshell.section.xml" />
+ <xi:include href="special/darwin-builder.section.xml" />
+ <xi:include href="special/vm-tools.section.xml" />
 </chapter>

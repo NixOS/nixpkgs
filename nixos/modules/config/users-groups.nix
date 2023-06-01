@@ -35,7 +35,7 @@ let
   '';
 
   hashedPasswordDescription = ''
-    To generate a hashed password run `mkpasswd -m sha-512`.
+    To generate a hashed password run `mkpasswd`.
 
     If set to an empty string (`""`), this user will
     be able to log in without being asked for a password (but not via remote
@@ -90,7 +90,7 @@ let
           only has an effect if {option}`uid` is
           {option}`null`, in which case it determines whether
           the user's UID is allocated in the range for system users
-          (below 500) or in the range for normal users (starting at
+          (below 1000) or in the range for normal users (starting at
           1000).
           Exactly one of `isNormalUser` and
           `isSystemUser` must be true.
@@ -101,16 +101,13 @@ let
         type = types.bool;
         default = false;
         description = lib.mdDoc ''
-          Indicates whether this is an account for a “real” user. This
-          automatically sets {option}`group` to
-          `users`, {option}`createHome` to
-          `true`, {option}`home` to
-          {file}`/home/«username»`,
+          Indicates whether this is an account for a “real” user.
+          This automatically sets {option}`group` to `users`,
+          {option}`createHome` to `true`,
+          {option}`home` to {file}`/home/«username»`,
           {option}`useDefaultShell` to `true`,
-          and {option}`isSystemUser` to
-          `false`.
-          Exactly one of `isNormalUser` and
-          `isSystemUser` must be true.
+          and {option}`isSystemUser` to `false`.
+          Exactly one of `isNormalUser` and `isSystemUser` must be true.
         '';
       };
 
@@ -276,6 +273,9 @@ let
           {command}`passwd` command. Otherwise, it's
           equivalent to setting the {option}`hashedPassword` option.
 
+          Note that the {option}`hashedPassword` option will override
+          this option if both are set.
+
           ${hashedPasswordDescription}
         '';
       };
@@ -294,6 +294,9 @@ let
           is world-readable in the Nix store, so it should only be
           used for guest accounts or passwords that will be changed
           promptly.
+
+          Note that the {option}`password` option will override this
+          option if both are set.
         '';
       };
 
@@ -425,6 +428,8 @@ let
 
   uidsAreUnique = idsAreUnique (filterAttrs (n: u: u.uid != null) cfg.users) "uid";
   gidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) cfg.groups) "gid";
+  sdInitrdUidsAreUnique = idsAreUnique (filterAttrs (n: u: u.uid != null) config.boot.initrd.systemd.users) "uid";
+  sdInitrdGidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) config.boot.initrd.systemd.groups) "gid";
 
   spec = pkgs.writeText "users-groups.json" (builtins.toJSON {
     inherit (cfg) mutableUsers;
@@ -447,8 +452,8 @@ let
 
 in {
   imports = [
-    (mkAliasOptionModule [ "users" "extraUsers" ] [ "users" "users" ])
-    (mkAliasOptionModule [ "users" "extraGroups" ] [ "users" "groups" ])
+    (mkAliasOptionModuleMD [ "users" "extraUsers" ] [ "users" "users" ])
+    (mkAliasOptionModuleMD [ "users" "extraGroups" ] [ "users" "groups" ])
     (mkRenamedOptionModule ["security" "initialRootPassword"] ["users" "users" "root" "initialHashedPassword"])
   ];
 
@@ -531,12 +536,62 @@ in {
         WARNING: enabling this can lock you out of your system. Enable this only if you know what are you doing.
       '';
     };
+
+    # systemd initrd
+    boot.initrd.systemd.users = mkOption {
+      visible = false;
+      description = ''
+        Users to include in initrd.
+      '';
+      default = {};
+      type = types.attrsOf (types.submodule ({ name, ... }: {
+        options.uid = mkOption {
+          visible = false;
+          type = types.int;
+          description = ''
+            ID of the user in initrd.
+          '';
+          defaultText = literalExpression "config.users.users.\${name}.uid";
+          default = cfg.users.${name}.uid;
+        };
+        options.group = mkOption {
+          visible = false;
+          type = types.singleLineStr;
+          description = ''
+            Group the user belongs to in initrd.
+          '';
+          defaultText = literalExpression "config.users.users.\${name}.group";
+          default = cfg.users.${name}.group;
+        };
+      }));
+    };
+
+    boot.initrd.systemd.groups = mkOption {
+      visible = false;
+      description = ''
+        Groups to include in initrd.
+      '';
+      default = {};
+      type = types.attrsOf (types.submodule ({ name, ... }: {
+        options.gid = mkOption {
+          visible = false;
+          type = types.int;
+          description = ''
+            ID of the group in initrd.
+          '';
+          defaultText = literalExpression "config.users.groups.\${name}.gid";
+          default = cfg.groups.${name}.gid;
+        };
+      }));
+    };
   };
 
 
   ###### implementation
 
-  config = {
+  config = let
+    cryptSchemeIdPatternGroup = "(${lib.concatStringsSep "|" pkgs.libxcrypt.enabledCryptSchemeIds})";
+  in {
 
     users.users = {
       root = {
@@ -592,13 +647,34 @@ in {
       '';
     };
 
+    # Warn about user accounts with deprecated password hashing schemes
+    system.activationScripts.hashes = {
+      deps = [ "users" ];
+      text = ''
+        users=()
+        while IFS=: read -r user hash tail; do
+          if [[ "$hash" = "$"* && ! "$hash" =~ ^\''$${cryptSchemeIdPatternGroup}\$ ]]; then
+            users+=("$user")
+          fi
+        done </etc/shadow
+
+        if (( "''${#users[@]}" )); then
+          echo "
+        WARNING: The following user accounts rely on password hashing algorithms
+        that have been removed. They need to be renewed as soon as possible, as
+        they do prevent their users from logging in."
+          printf ' - %s\n' "''${users[@]}"
+        fi
+      '';
+    };
+
     # for backwards compatibility
     system.activationScripts.groups = stringAfter [ "users" ] "";
 
     # Install all the user shells
     environment.systemPackages = systemShells;
 
-    environment.etc = (mapAttrs' (_: { packages, name, ... }: {
+    environment.etc = mapAttrs' (_: { packages, name, ... }: {
       name = "profiles/per-user/${name}";
       value.source = pkgs.buildEnv {
         name = "user-environment";
@@ -606,16 +682,58 @@ in {
         inherit (config.environment) pathsToLink extraOutputsToInstall;
         inherit (config.system.path) ignoreCollisions postBuild;
       };
-    }) (filterAttrs (_: u: u.packages != []) cfg.users));
+    }) (filterAttrs (_: u: u.packages != []) cfg.users);
 
     environment.profiles = [
       "$HOME/.nix-profile"
       "/etc/profiles/per-user/$USER"
     ];
 
+    # systemd initrd
+    boot.initrd.systemd = lib.mkIf config.boot.initrd.systemd.enable {
+      contents = {
+        "/etc/passwd".text = ''
+          ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: { uid, group }: let
+            g = config.boot.initrd.systemd.groups.${group};
+          in "${n}:x:${toString uid}:${toString g.gid}::/var/empty:") config.boot.initrd.systemd.users)}
+        '';
+        "/etc/group".text = ''
+          ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: { gid }: "${n}:x:${toString gid}:") config.boot.initrd.systemd.groups)}
+        '';
+      };
+
+      users = {
+        root = {};
+        nobody = {};
+      };
+
+      groups = {
+        root = {};
+        nogroup = {};
+        systemd-journal = {};
+        tty = {};
+        dialout = {};
+        kmem = {};
+        input = {};
+        video = {};
+        render = {};
+        sgx = {};
+        audio = {};
+        video = {};
+        lp = {};
+        disk = {};
+        cdrom = {};
+        tape = {};
+        kvm = {};
+      };
+    };
+
     assertions = [
       { assertion = !cfg.enforceIdUniqueness || (uidsAreUnique && gidsAreUnique);
         message = "UIDs and GIDs must be unique!";
+      }
+      { assertion = !cfg.enforceIdUniqueness || (sdInitrdUidsAreUnique && sdInitrdGidsAreUnique);
+        message = "systemd initrd UIDs and GIDs must be unique!";
       }
       { # If mutableUsers is false, to prevent users creating a
         # configuration that locks them out of the system, ensure that
@@ -660,7 +778,7 @@ in {
           {
             assertion = let
               xor = a: b: a && !b || b && !a;
-              isEffectivelySystemUser = user.isSystemUser || (user.uid != null && user.uid < 500);
+              isEffectivelySystemUser = user.isSystemUser || (user.uid != null && user.uid < 1000);
             in xor isEffectivelySystemUser user.isNormalUser;
             message = ''
               Exactly one of users.users.${user.name}.isSystemUser and users.users.${user.name}.isNormalUser must be set.
@@ -676,7 +794,20 @@ in {
               users.groups.${user.name} = {};
             '';
           }
-        ]
+        ] ++ (map (shell: {
+            assertion = (user.shell == pkgs.${shell}) -> (config.programs.${shell}.enable == true);
+            message = ''
+              users.users.${user.name}.shell is set to ${shell}, but
+              programs.${shell}.enable is not true. This will cause the ${shell}
+              shell to lack the basic nix directories in its PATH and might make
+              logging in as that user impossible. You can fix it with:
+              programs.${shell}.enable = true;
+            '';
+          }) [
+          "fish"
+          "xonsh"
+          "zsh"
+        ])
     ));
 
     warnings =
@@ -693,11 +824,12 @@ in {
         let
           sep = "\\$";
           base64 = "[a-zA-Z0-9./]+";
-          id = "[a-z0-9-]+";
+          id = cryptSchemeIdPatternGroup;
+          name = "[a-z0-9-]+";
           value = "[a-zA-Z0-9/+.-]+";
-          options = "${id}(=${value})?(,${id}=${value})*";
+          options = "${name}(=${value})?(,${name}=${value})*";
           scheme  = "${id}(${sep}${options})?";
-          content = "${base64}${sep}${base64}";
+          content = "${base64}${sep}${base64}(${sep}${base64})?";
           mcf = "^${sep}${scheme}${sep}${content}$";
         in
         if (allowsLogin user.hashedPassword

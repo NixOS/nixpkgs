@@ -1,22 +1,21 @@
-{ clang
-, fetchFromGitHub
+{ fetchFromGitHub
 , lib
-, llvmPackages
 , protobuf
+, rocksdb
 , rustPlatform
 , stdenv
-, writeShellScriptBin
 , Security
+, SystemConfiguration
 }:
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "0.9.28";
+  version = "0.9.42";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot";
     rev = "v${version}";
-    sha256 = "sha256-PYPNbysk9jHGtAUGr8O/Ah0ArTNKQYYToR5djG+XujI=";
+    hash = "sha256-W7mD/PLrub5u9GIN8qiTWNsTfirx0aBF2Lu+2PMoxOg=";
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -32,19 +31,25 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoSha256 = "sha256-Dqcjt3yvZdaHp6sIQFo9wYH/icIInyXqKHE1Q/JjrwY=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "binary-merkle-tree-4.0.0-dev" = "sha256-PEPmG+39YqPQOzT8u1SNTCrVwNWErifBCVz+l8TvdyE=";
+      "sub-tokens-0.1.0" = "sha256-GvhgZhOIX39zF+TbQWtTCgahDec4lQjH+NqamLFLUxM=";
+    };
+  };
 
-  buildInputs = lib.optional stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
-  nativeBuildInputs = [ clang ];
+  nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
   preBuild = ''
     export SUBSTRATE_CLI_GIT_COMMIT_HASH=$(cat .git_commit)
     rm .git_commit
   '';
 
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
   PROTOC = "${protobuf}/bin/protoc";
+  ROCKSDB_LIB_DIR = "${rocksdb}/lib";
 
   # NOTE: We don't build the WASM runtimes since this would require a more
   # complicated rust environment setup and this is only needed for developer

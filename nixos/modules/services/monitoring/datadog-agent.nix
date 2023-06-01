@@ -49,13 +49,7 @@ let
   };
 in {
   options.services.datadog-agent = {
-    enable = mkOption {
-      description = lib.mdDoc ''
-        Whether to enable the datadog-agent v7 monitoring service
-      '';
-      default = false;
-      type = types.bool;
-    };
+    enable = mkEnableOption (lib.mdDoc "Datadog-agent v7 monitoring service");
 
     package = mkOption {
       default = pkgs.datadog-agent;
@@ -241,7 +235,7 @@ in {
 
     systemd.services = let
       makeService = attrs: recursiveUpdate {
-        path = [ datadogPkg pkgs.python pkgs.sysstat pkgs.procps pkgs.iproute2 ];
+        path = [ datadogPkg pkgs.sysstat pkgs.procps pkgs.iproute2 ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           User = "datadog";

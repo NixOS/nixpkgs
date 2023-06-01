@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-notifications";
-  version = "6.0.2";
+  version = "6.0.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "notifications";
     rev = version;
-    sha256 = "sha256-kM//T3P8gMGnCMDJ1caQQGgD6HBOQo0wp2wZGMUUPuU=";
+    sha256 = "sha256-B1wo1N4heG872klFJOBKOEds0+6aqtvkTGefi97bdU8=";
   };
 
   nativeBuildInputs = [
@@ -52,9 +52,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

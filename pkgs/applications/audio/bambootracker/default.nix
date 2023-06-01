@@ -1,39 +1,67 @@
-{ mkDerivation
-, stdenv
+{ stdenv
 , lib
 , fetchFromGitHub
-, qmake
 , pkg-config
-, qttools
+, qmake
+, qt5compat ? null
 , qtbase
+, qttools
 , rtaudio
 , rtmidi
+, wrapQtAppsHook
 }:
 
-mkDerivation rec {
+assert lib.versionAtLeast qtbase.version "6.0" -> qt5compat != null;
+
+stdenv.mkDerivation rec {
   pname = "bambootracker";
-  version = "0.5.2";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "BambooTracker";
     repo = "BambooTracker";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-+9PmpmsF08oU//pJOWaoGQzG7a2O13kYqKbGwVRAMlU=";
+    hash = "sha256-Ymi1tjJCgStF0Rtseelq/YuTtBs2PrbF898TlbjyYUw=";
   };
 
-  nativeBuildInputs = [ qmake qttools pkg-config ];
+  postPatch = lib.optionalString (lib.versionAtLeast qtbase.version "6.0") ''
+    # Work around lrelease finding in qmake being broken by using pre-Qt5.12 code path
+    # https://github.com/NixOS/nixpkgs/issues/214765
+    substituteInPlace BambooTracker/lang/lang.pri \
+      --replace 'equals(QT_MAJOR_VERSION, 5):lessThan(QT_MINOR_VERSION, 12)' 'if(true)'
+  '';
 
-  buildInputs = [ qtbase rtaudio rtmidi ];
+  nativeBuildInputs = [
+    pkg-config
+    qmake
+    qttools
+    wrapQtAppsHook
+  ];
 
-  qmakeFlags = [ "CONFIG+=system_rtaudio" "CONFIG+=system_rtmidi" ];
+  buildInputs = [
+    qtbase
+    rtaudio
+    rtmidi
+  ] ++ lib.optionals (lib.versionAtLeast qtbase.version "6.0") [
+    qt5compat
+  ];
+
+  qmakeFlags = [
+    "CONFIG+=system_rtaudio"
+    "CONFIG+=system_rtmidi"
+  ];
 
   postConfigure = "make qmake_all";
+
+  # Wrapping the inside of the app bundles, avoiding double-wrapping
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv $out/{bin,Applications}/BambooTracker.app
     ln -s $out/{Applications/BambooTracker.app/Contents/MacOS,bin}/BambooTracker
+    wrapQtApp $out/Applications/BambooTracker.app/Contents/MacOS/BambooTracker
   '';
 
   meta = with lib; {

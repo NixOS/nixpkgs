@@ -48,22 +48,24 @@
 
 stdenv.mkDerivation rec {
   pname = "unbound";
-  version = "1.16.2";
+  version = "1.17.1";
 
   src = fetchurl {
     url = "https://nlnetlabs.nl/downloads/unbound/unbound-${version}.tar.gz";
-    hash = "sha256-LjLyg4IMJMUcod2K/s/bdHxzhaE3q+hlyZ20sldANYE=";
+    hash = "sha256-7kCFzszhJYTmAPPYFKKPqCLfqs7B+UyEv9Z/ilVxpfQ=";
   };
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
 
-  nativeBuildInputs = [ makeWrapper ]
+  nativeBuildInputs = [ makeWrapper pkg-config ]
     ++ lib.optionals withPythonModule [ swig ];
 
   buildInputs = [ openssl nettle expat libevent ]
-    ++ lib.optionals withSystemd [ pkg-config systemd ]
+    ++ lib.optionals withSystemd [ systemd ]
     ++ lib.optionals withDoH [ libnghttp2 ]
     ++ lib.optionals withPythonModule [ python ];
+
+  enableParallelBuilding = true;
 
   configureFlags = [
     "--with-ssl=${openssl.dev}"
@@ -75,7 +77,7 @@ stdenv.mkDerivation rec {
     "--with-rootkey-file=${dns-root-data}/root.key"
     "--enable-pie"
     "--enable-relro-now"
-  ] ++ lib.optional stdenv.hostPlatform.isStatic [
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
     "--disable-flto"
   ] ++ lib.optionals withSystemd [
     "--enable-systemd"
@@ -108,7 +110,7 @@ stdenv.mkDerivation rec {
     sed -E '/CONFCMDLINE/ s;${storeDir}/[a-z0-9]{32}-;${storeDir}/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-;g' -i config.h
   '';
 
-  checkInputs = [ bison ];
+  nativeCheckInputs = [ bison ];
 
   doCheck = true;
 

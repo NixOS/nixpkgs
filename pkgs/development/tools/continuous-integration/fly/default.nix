@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "fly";
-  version = "7.8.2";
+  version = "7.9.1";
 
   src = fetchFromGitHub {
     owner = "concourse";
     repo = "concourse";
     rev = "v${version}";
-    sha256 = "sha256-Lgsn5k3ITJnRnOXXZjfjlEEG+OvTZjFq+LB3Us3DH8k=";
+    sha256 = "sha256-ySyarky92+VSo/KzQFrWeh35KDMTQDV34F5iFrARHJs=";
   };
 
-  vendorSha256 = "sha256-91N6AOxXFOI6AM28avlInseAeZkqE9IfybJAX31tPDg=";
+  vendorHash = "sha256-Oy1wP82ZhdpGHs/gpfdveOK/jI9yuo0D3JtxjLg+W/w=";
 
   subPackages = [ "fly" ];
 
@@ -23,7 +23,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd fly \
       --bash <($out/bin/fly completion --shell bash) \
       --fish <($out/bin/fly completion --shell fish) \

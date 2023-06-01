@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "23andMe";
     repo = pname;
     rev = version;
-    sha256 = "sha256-1GFvgfy3MDsJGKSEm0yaQoLM7VqIS2wphw16trNTUOc=";
+    hash = "sha256-1GFvgfy3MDsJGKSEm0yaQoLM7VqIS2wphw16trNTUOc=";
   };
 
   propagatedBuildInputs = [
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     ruamel-yaml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

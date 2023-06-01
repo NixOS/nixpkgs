@@ -31,7 +31,7 @@ buildPythonPackage rec {
       --replace "scipy>=0.16,<=1.7.3" "scipy>=0.16"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

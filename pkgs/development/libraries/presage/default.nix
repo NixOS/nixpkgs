@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://git.alpinelinux.org/aports/plain/community/presage/gcc6.patch";
+      name = "gcc6.patch";
+      url = "https://git.alpinelinux.org/aports/plain/community/presage/gcc6.patch?id=40e2044c9ecb36eacb3a1fd043f09548d210dc01";
       sha256 = "0243nx1ygggmsly7057vndb4pkjxg9rpay5gyqqrq9jjzjzh63dj";
     })
     ./fixed-cppunit-detection.patch
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
     tinyxml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cppunit
   ];
 

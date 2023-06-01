@@ -2,11 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "xmlbeans";
-  version = "5.0.2-20211014";
+  version = "5.1.1-20220819";
 
   src = fetchzip {
-    url = "https://dlcdn.apache.org/poi/xmlbeans/release/bin/xmlbeans-bin-${version}.zip";
-    sha256 = "sha256-1o0kfBMhka/Midtg+GzpVDDygixL6mrfxtY5WrjLN+0=";
+    # old releases are deleted from the cdn
+    url = "https://web.archive.org/web/20230313151507/https://dlcdn.apache.org/poi/xmlbeans/release/bin/xmlbeans-bin-${version}.zip";
+    sha256 = "sha256-TDnWo1uJWL6k6Z8/uaF2LBNzRVQMHYopYze/2Fb/0aI=";
   };
 
   postPatch = ''
@@ -34,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://xmlbeans.apache.org/";
     downloadPage = "https://dlcdn.apache.org/poi/xmlbeans/release/bin/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

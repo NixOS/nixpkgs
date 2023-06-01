@@ -2,19 +2,25 @@
 
 stdenv.mkDerivation rec {
   pname = "olm";
-  version = "3.2.12";
+  version = "3.2.15";
 
   src = fetchFromGitLab {
     domain = "gitlab.matrix.org";
     owner = "matrix-org";
     repo = pname;
     rev = version;
-    sha256 = "sha256-EvqQvg7khsJ2OrcoHBImd9fTgjA65pVRqbJuMV5MG80=";
+    sha256 = "sha256-1mT0mcwssqe+DN502ExkcC/q3w9uBmlTil2gVJsMvvc=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   doCheck = true;
+
+  postPatch = ''
+    substituteInPlace olm.pc.in \
+      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+  '';
 
   meta = with lib; {
     description = "Implements double cryptographic ratchet and Megolm ratchet";

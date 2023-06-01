@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "python-binance";
-  version = "1.0.16";
+  version = "1.0.17";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "sammchardy";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-2v3qeykjQR/CUOC6F0Xomm49Q+wrYJS8vmL3+u6ew0M=";
+    hash = "sha256-e88INUEkjOSVOD0KSs9LmstuQ7dQZdJk8K6VqFEusww=";
   };
 
   propagatedBuildInputs = [
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     websockets
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     requests-mock
   ];

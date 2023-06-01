@@ -4,16 +4,16 @@
 
 buildDunePackage rec {
   pname = "pgocaml";
-  version = "4.2.2-dev-20210111";
+  version = "4.3.0";
   src = fetchFromGitHub {
     owner = "darioteixeira";
     repo = "pgocaml";
-    rev = "1bb0025deeb3d14029afdcc69aaa7847026e243e";
-    sha256 = "11inbjf87gclc2xmpq56ag4cm4467y9q9hjgbdn69fa1bman2zn2";
+    rev = version;
+    hash = "sha256-W1fbRnU1l61qqxfVY2qiBnVpGD81xrBO8k0tWr+RXMY=";
   };
 
-  minimumOCamlVersion = "4.08";
-  useDune2 = true;
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   propagatedBuildInputs = [ calendar csv hex ppx_deriving ppx_sexp_conv re rresult sexplib ];
 

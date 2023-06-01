@@ -43,7 +43,7 @@ in (if !buildClient then stdenv.mkDerivation else mkDerivation) rec {
   };
 
   # Prevent ``undefined reference to `qt_version_tag''' in SSL check
-  NIX_CFLAGS_COMPILE = "-DQT_NO_VERSION_TAGGING=1";
+  env.NIX_CFLAGS_COMPILE = "-DQT_NO_VERSION_TAGGING=1";
 
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [ qtbase boost zlib ]
@@ -78,7 +78,7 @@ in (if !buildClient then stdenv.mkDerivation else mkDerivation) rec {
 
   meta = with lib; {
     homepage = "https://quassel-irc.org/";
-    description = "Qt/KDE distributed IRC client suppporting a remote daemon";
+    description = "Qt/KDE distributed IRC client supporting a remote daemon";
     longDescription = ''
       Quassel IRC is a cross-platform, distributed IRC client,
       meaning that one (or multiple) client(s) can attach to

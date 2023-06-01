@@ -1,44 +1,57 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, gettext, libnl, ncurses, pciutils
-, pkg-config, zlib, autoreconfHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, gettext
+, libnl
+, ncurses
+, pciutils
+, pkg-config
+, zlib
+, autoreconfHook
+, autoconf-archive
+, nix-update-script
+, testers
+, powertop
+, xorg
+}:
 
 stdenv.mkDerivation rec {
   pname = "powertop";
-  version = "2.14";
+  version = "2.15";
 
   src = fetchFromGitHub {
     owner = "fenrus75";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1zkr2y5nb1nr22nq8a3zli87iyfasfq6489p7h1k428pv8k45w4f";
+    hash = "sha256-53jfqt0dtMqMj3W3m6ravUTzApLQcljDHfdXejeZa4M=";
   };
-
-  patches = [
-    # Pull upstream patch for ncurses-6.3 compatibility
-    (fetchpatch {
-      name = "ncurses-6.3.patch";
-      url = "https://github.com/fenrus75/powertop/commit/9ef1559a1582f23d599c149601c3a8e06809296c.patch";
-      sha256 = "0qx69f3bwhxgsga9nas8lgrclf1rxvr7fq7fd2n8dv3x4lsb46j1";
-    })
-  ];
 
   outputs = [ "out" "man" ];
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook autoconf-archive ];
   buildInputs = [ gettext libnl ncurses pciutils zlib ];
-
-  NIX_LDFLAGS = [ "-lpthread" ];
 
   postPatch = ''
     substituteInPlace src/main.cpp --replace "/sbin/modprobe" "modprobe"
-    substituteInPlace src/calibrate/calibrate.cpp --replace "/usr/bin/xset" "xset"
+    substituteInPlace src/calibrate/calibrate.cpp --replace "/usr/bin/xset" "${lib.getExe xorg.xset}"
     substituteInPlace src/tuning/bluetooth.cpp --replace "/usr/bin/hcitool" "hcitool"
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = powertop;
+      command = "powertop --version";
+      inherit version;
+    };
+  };
+
   meta = with lib; {
+    inherit (src.meta) homepage;
+    changelog = "https://github.com/fenrus75/powertop/releases/tag/v${version}";
     description = "Analyze power consumption on Intel-based laptops";
-    homepage = "https://01.org/powertop";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz anthonyroussel ];
     platforms = platforms.linux;
   };
 }

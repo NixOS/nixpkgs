@@ -1,13 +1,13 @@
-{ lib, python3 }:
+{ lib, python3, fetchPypi }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fava";
-  version = "1.22.3";
+  version = "1.24.4";
   format = "pyproject";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-e8/VOn0WmrUO69x/4hKGtgKuj11U1Qv7OUhfOL/p5Ds=";
+    hash = "sha256-klRPe6NQMn3HVayfCGc05mB0afi3x4Wlj3EI0XdSkMc=";
   };
 
   nativeBuildInputs = with python3.pkgs; [ setuptools-scm ];
@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
     cheroot
     click
     flask
-    flaskbabel
+    flask-babel
     jaraco_functools
     jinja2
     markdown2
@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     werkzeug
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
 

@@ -34,11 +34,11 @@
 in
 stdenv.mkDerivation rec {
   pname = "suricata";
-  version = "6.0.6";
+  version = "6.0.12";
 
   src = fetchurl {
     url = "https://www.openinfosecfoundation.org/download/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ABc2NPp2ruY244qQscAmFskD5CFzEH1HtBFJYLX76Dk=";
+    sha256 = "sha256-BLIxYJNbAxl7CFwszJ2Ah1oz8RVYMFTRRgqw+2bYNLM=";
   };
 
   nativeBuildInputs = [
@@ -121,7 +121,7 @@ stdenv.mkDerivation rec {
 
   postConfigure = ''
     # Avoid unintended clousure growth.
-    sed -i 's|/nix/store/\(.\{8\}\)[^-]*-|/nix/store/\1...-|g' ./src/build-info.h
+    sed -i 's|${builtins.storeDir}/\(.\{8\}\)[^-]*-|${builtins.storeDir}/\1...-|g' ./src/build-info.h
   '';
 
   hardeningDisable = [ "stackprotector" ];
@@ -150,7 +150,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A free and open source, mature, fast and robust network threat detection engine";
-    homepage = "https://suricata-ids.org";
+    homepage = "https://suricata.io";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ magenbluten ];

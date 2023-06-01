@@ -2,23 +2,30 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, setuptools
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "tgcrypto";
-  version = "1.2.3";
+  version = "1.2.5";
 
   disabled = pythonOlder "3.6";
+
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pyrogram";
     repo = "tgcrypto";
-    rev = "v${version}";
-    sha256 = "06g1kv3skq2948h0sjf64s1cr2p1rhxnx5pf9nmvhxkmri1xmfzs";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-u+mXzkmM79NBi4oHnb32RbN9WPnba/cm1q2Ko0uNEZg=";
   };
 
-  checkInputs = [
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -38,7 +38,7 @@ self: super: {
   stm = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_5;
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
@@ -54,17 +54,8 @@ self: super: {
   # This build needs a newer version of Cabal.
   cabal2spec = super.cabal2spec.override { Cabal = self.Cabal_3_2_1_0; };
 
-  # cabal-install needs most recent versions of Cabal and Cabal-syntax
-  cabal-install = super.cabal-install.overrideScope (self: super: {
-    Cabal = self.Cabal_3_8_1_0;
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-    process = self.process_1_6_15_0;
-  });
-  cabal-install-solver = super.cabal-install-solver.overrideScope (self: super: {
-    Cabal = self.Cabal_3_8_1_0;
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-    process = self.process_1_6_15_0;
-  });
+  # Additionally depends on OneTuple for GHC < 9.0
+  base-compat-batteries = addBuildDepend self.OneTuple super.base-compat-batteries;
 
   # Ignore overly restrictive upper version bounds.
   aeson-diff = doJailbreak super.aeson-diff;
@@ -73,7 +64,7 @@ self: super: {
   chell = doJailbreak super.chell;
   Diff = dontCheck super.Diff;
   doctest = doJailbreak super.doctest;
-  hashable = doJailbreak super.hashable;
+  hashable = addBuildDepend self.base-orphans super.hashable;
   hashable-time = doJailbreak super.hashable-time;
   hledger-lib = doJailbreak super.hledger-lib;  # base >=4.8 && <4.13, easytest >=0.2.1 && <0.3
   integer-logarithms = doJailbreak super.integer-logarithms;
@@ -110,9 +101,6 @@ self: super: {
   # of issues with Cabal 3.x.
   darcs = dontDistribute super.darcs;
 
-  # cabal-fmt requires Cabal3
-  cabal-fmt = super.cabal-fmt.override { Cabal = self.Cabal_3_2_1_0; };
-
   # liquidhaskell does not support ghc version 8.8.x.
   liquid = markBroken super.liquid;
   liquid-base = markBroken super.liquid-base;
@@ -125,36 +113,25 @@ self: super: {
   liquid-vector = markBroken super.liquid-vector;
   liquidhaskell = markBroken super.liquidhaskell;
 
-  # This became a core library in ghc 8.10., so we don‘t have an "exception" attribute anymore.
-  exceptions = super.exceptions_0_10_5;
-
-  # ghc versions which don‘t match the ghc-lib-parser-ex version need the
-  # additional dependency to compile successfully.
-  ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser super.ghc-lib-parser-ex;
+  # This became a core library in ghc 8.10., so we don’t have an "exception" attribute anymore.
+  exceptions = super.exceptions_0_10_7;
 
   ormolu = super.ormolu_0_2_0_0;
 
-  # vector 0.12.2 indroduced doctest checks that don‘t work on older compilers
-  vector = dontCheck super.vector;
-
-  ghc-api-compat = doDistribute super.ghc-api-compat_8_6;
+  ghc-api-compat = doDistribute (unmarkBroken super.ghc-api-compat_8_6);
 
   mime-string = disableOptimization super.mime-string;
 
-  # Older compilers need the latest ghc-lib to build this package.
-  hls-hlint-plugin = addBuildDepend self.ghc-lib (overrideCabal (drv: {
-      # Workaround for https://github.com/haskell/haskell-language-server/issues/2728
-      postPatch = ''
-        sed -i 's/(GHC.RealSrcSpan x,/(GHC.RealSrcSpan x Nothing,/' src/Ide/Plugin/Hlint.hs
-      '';
-    })
-     super.hls-hlint-plugin);
+  haskell-language-server =  throw "haskell-language-server dropped support for ghc 8.8 in version 1.9.0.0 please use a newer ghc version or an older nixpkgs version";
 
-  haskell-language-server = appendConfigureFlags [
-      "-f-stylishhaskell"
-      "-f-brittany"
-    ]
-  super.haskell-language-server;
+  hlint = self.hlint_3_2_8;
+
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_8_10_7_20220219;
+  ghc-lib = doDistribute self.ghc-lib_8_10_7_20220219;
+
+  # ghc versions which don’t match the ghc-lib-parser-ex version need the
+  # additional dependency to compile successfully.
+  ghc-lib-parser-ex = doDistribute (addBuildDepend self.ghc-lib-parser self.ghc-lib-parser-ex_8_10_0_24);
 
   # has a restrictive lower bound on Cabal
   fourmolu = doJailbreak super.fourmolu;
@@ -178,4 +155,15 @@ self: super: {
 
   # doctest-parallel dependency requires newer Cabal
   regex-tdfa = dontCheck super.regex-tdfa;
+
+  # Unnecessarily strict lower bound on base
+  # https://github.com/mrkkrp/megaparsec/pull/485#issuecomment-1250051823
+  megaparsec = doJailbreak super.megaparsec;
+
+  # Needs OneTuple for ghc < 9.2
+  binary-orphans = addBuildDepends [ self.OneTuple ] super.binary-orphans;
+
+  # Later versions only support GHC >= 9.2
+  ghc-exactprint = self.ghc-exactprint_0_6_4;
+  apply-refact = self.apply-refact_0_9_3_0;
 }

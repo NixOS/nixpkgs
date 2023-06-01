@@ -1,17 +1,21 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let version = "4.202";
-in fetchzip {
-  name = "fira-mono-${version}";
+stdenvNoCC.mkDerivation rec {
+  pname = "fira-mono";
+  version = "4.202";
 
-  url = "https://github.com/mozilla/Fira/archive/${version}.zip";
+  src = fetchzip {
+    url = "https://github.com/mozilla/Fira/archive/${version}.zip";
+    hash = "sha256-HLReqgL0PXF5vOpwLN0GiRwnzkjGkEVEyOEV2Z4R0oQ=";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile Fira-${version}/otf/FiraMono\*.otf -d $out/share/fonts/opentype
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 otf/FiraMono*.otf -t $out/share/fonts/opentype
+
+    runHook postInstall
   '';
-
-  sha256 = "1ci3fxhdwabvfj4nl16pwcgqnh7s2slp8vblribk8zkpx8cbp1dj";
 
   meta = with lib; {
     homepage = "https://mozilla.github.io/Fira/";

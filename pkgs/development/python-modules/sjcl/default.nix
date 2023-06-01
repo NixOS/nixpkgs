@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pycryptodome ];
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [
     "sjcl"

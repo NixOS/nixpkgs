@@ -32,13 +32,13 @@
 
 stdenv.mkDerivation rec {
   pname = "frr";
-  version = "8.3.1";
+  version = "8.5.1";
 
   src = fetchFromGitHub {
     owner = "FRRouting";
     repo = pname;
     rev = "${pname}-${version}";
-    hash = "sha256-+M4xTdjCp5TJh0U8ZfUmw84Y7O0TZ9mmUXhh2J/QOE0=";
+    hash = "sha256-dK6eVYj9OIVChnR90FDTB7ow93nLLNRaOG8YEXxh8UQ=";
   };
 
   nativeBuildInputs = [
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     nettools
     python3.pkgs.pytest
   ];

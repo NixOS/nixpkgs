@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "grpc";
-  version = "1.48.1"; # N.B: if you change this, please update:
+  version = "1.54.2"; # N.B: if you change this, please update:
     # pythonPackages.grpcio-tools
     # pythonPackages.grpcio-status
 
@@ -29,29 +29,23 @@ stdenv.mkDerivation rec {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    hash = "sha256-It9oFenKoPDCOVxiKCGJc8i18zdDZCceR22HR5Tu1sw=";
+    hash = "sha256-OIRqH+h8Kjbw3X5slpdCfNN0f027WuvHG3q7KUuSWo8=";
     fetchSubmodules = true;
   };
 
   patches = [
-    # Fix build on armv6l (https://github.com/grpc/grpc/pull/21341)
     (fetchpatch {
-      url = "https://github.com/grpc/grpc/commit/2f4cf1d9265c8e10fb834f0794d0e4f3ec5ae10e.patch";
-      sha256 = "0ams3jmgh9yzwmxcg4ifb34znamr7pb4qm0609kvil9xqvkqz963";
-    })
-
-    # Revert gRPC C++ Mutex to be an alias of Abseil, because it breaks dependent packages
-    (fetchpatch {
-      url = "https://github.com/grpc/grpc/commit/931f91b745cd5b2864a0d1787815871d0bd844ae.patch";
-      sha256 = "0vc93g2i4982ys4gzyaxdv9ni25yk10sxq3n7fkz8dypy8sylck7";
-      revert = true;
+      # armv6l support, https://github.com/grpc/grpc/pull/21341
+      name = "grpc-link-libatomic.patch";
+      url = "https://github.com/lopsided98/grpc/commit/164f55260262c816e19cd2c41b564486097d62fe.patch";
+      hash = "sha256-d6kMyjL5ZnEnEz4XZfRgXJBH53gp1r7q1tlwh+HM6+Y=";
     })
   ];
 
   nativeBuildInputs = [ cmake pkg-config ]
     ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) grpc;
   propagatedBuildInputs = [ c-ares re2 zlib abseil-cpp ];
-  buildInputs = [ c-ares.cmake-config openssl protobuf ]
+  buildInputs = [ openssl protobuf ]
     ++ lib.optionals stdenv.isLinux [ libnsl ];
 
   cmakeFlags = [
@@ -62,13 +56,9 @@ stdenv.mkDerivation rec {
     "-DgRPC_PROTOBUF_PROVIDER=package"
     "-DgRPC_ABSL_PROVIDER=package"
     "-DBUILD_SHARED_LIBS=ON"
+    "-DCMAKE_CXX_STANDARD=${passthru.cxxStandard}"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
-  ] ++ lib.optionals ((stdenv.hostPlatform.useLLVM or false) && lib.versionOlder stdenv.cc.cc.version "11.0") [
-    # Needs to be compiled with -std=c++11 for clang < 11. Interestingly this is
-    # only an issue with the useLLVM stdenv, not the darwin stdenv…
-    # https://github.com/grpc/grpc/issues/26473#issuecomment-860885484
-    "-DCMAKE_CXX_STANDARD=11"
   ];
 
   # CMake creates a build directory by default, this conflicts with the
@@ -86,10 +76,21 @@ stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH=$(pwd)''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
   '';
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=unknown-warning-option"
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=unknown-warning-option"
     + lib.optionalString stdenv.isAarch64 "-Wno-error=format-security";
 
   enableParallelBuilds = true;
+
+  passthru.cxxStandard =
+    let
+      # Needs to be compiled with -std=c++11 for clang < 11. Interestingly this is
+      # only an issue with the useLLVM stdenv, not the darwin stdenv…
+      # https://github.com/grpc/grpc/issues/26473#issuecomment-860885484
+      useLLVMAndOldCC = (stdenv.hostPlatform.useLLVM or false) && lib.versionOlder stdenv.cc.cc.version "11.0";
+      # With GCC 9 (current aarch64-linux) it fails with c++17 but OK with c++14.
+      useOldGCC = !(stdenv.hostPlatform.useLLVM or false) && lib.versionOlder stdenv.cc.cc.version "10";
+    in
+    (if useLLVMAndOldCC then "11" else if useOldGCC then "14" else "17");
 
   passthru.tests = {
     inherit (python3.pkgs) grpcio-status grpcio-tools;

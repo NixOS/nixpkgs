@@ -1,15 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, tox, numpy }:
+{ lib, buildPythonPackage, fetchPypi, numpy }:
 
 buildPythonPackage rec {
   pname = "sgp4";
-  version = "2.21";
+  version = "2.22";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-YXm4dQRId+lBYzwgr3ci/SMaiNiomvAb8wvWTzPN7O8=";
+    hash = "sha256-F/Ci6q0tygZbbeJcHOqpQP98+ozGcSDLQRGgDxd7hvk=";
   };
 
-  checkInputs = [ tox numpy ];
+  nativeCheckInputs = [ numpy ];
 
   pythonImportsCheck = [ "sgp4" ];
 

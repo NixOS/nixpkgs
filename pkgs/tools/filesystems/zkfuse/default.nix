@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   # c++17 (gcc-11's default) breaks the build as:
   #   zkadapter.h:616:33: error: ISO C++17 does not allow dynamic exception specifications
-  NIX_CFLAGS_COMPILE = [ "-std=c++14" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-std=c++14" ];
 
   installPhase = ''
     mkdir -p $out/bin

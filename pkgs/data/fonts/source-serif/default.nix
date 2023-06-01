@@ -1,20 +1,23 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "source-serif";
   version = "4.004";
-in fetchzip {
-  name = "source-serif-${version}";
 
-  url = "https://github.com/adobe-fonts/source-serif/releases/download/${version}R/source-serif-${version}.zip";
+  src = fetchzip {
+    url = "https://github.com/adobe-fonts/source-serif/releases/download/${version}R/source-serif-${version}.zip";
+    hash = "sha256-tGSMOwYBEZat7MI78wkPr6lgJdsOdOaIZb+IAOoOlq4=";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/fonts/{opentype,truetype,variable}
-    unzip -j $downloadedFile "*/OTF/*.otf" -d $out/share/fonts/opentype
-    unzip -j $downloadedFile "*/TTF/*.ttf" -d $out/share/fonts/truetype
-    unzip -j $downloadedFile "*/VAR/*.otf" -d $out/share/fonts/variable
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm444 OTF/*.otf -t $out/share/fonts/opentype
+    install -Dm444 TTF/*.ttf -t $out/share/fonts/truetype
+    install -Dm444 VAR/*.otf -t $out/share/fonts/variable
+
+    runHook postInstall
   '';
-
-  sha256 = "06814hcp20abca6p0ii61f23g6h1ibqyhq30lsva59wbwx5iha0h";
 
   meta = with lib; {
     homepage = "https://adobe-fonts.github.io/source-serif/";

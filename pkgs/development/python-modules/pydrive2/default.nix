@@ -5,17 +5,20 @@
 , oauth2client
 , pyopenssl
 , pyyaml
-, six
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pydrive2";
-  version = "1.14.0";
+  version = "1.15.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "PyDrive2";
     inherit version;
-    sha256 = "sha256-212jvmcWMPVxynEAsoHYtdcv0His1CUkem0pLis9KEA=";
+    hash = "sha256-qPUNmWydx25RwAO8wHcP6XIi+gH7Dm6p0CfwrPfs564=";
   };
 
   propagatedBuildInputs = [
@@ -23,17 +26,19 @@ buildPythonPackage rec {
     oauth2client
     pyopenssl
     pyyaml
-    six
   ];
 
   doCheck = false;
 
-  pythonImportsCheck = [ "pydrive2" ];
+  pythonImportsCheck = [
+    "pydrive2"
+  ];
 
-  meta = {
-    description = "Google Drive API Python wrapper library. Maintained fork of PyDrive.";
+  meta = with lib; {
+    description = "Google Drive API Python wrapper library";
     homepage = "https://github.com/iterative/PyDrive2";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ sei40kr ];
+    changelog = "https://github.com/iterative/PyDrive2/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ sei40kr ];
   };
 }

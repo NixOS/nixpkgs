@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   # Workaround build failure on -fno-common toolchains:
   #   ld: bsdsocket.o:(.bss+0x0): multiple definition of
   #     `socketbases'; main.o:(.bss+0x2792c0): first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
   LDFLAGS = [ "-lm" ];
 
   meta = {

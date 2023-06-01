@@ -22,7 +22,7 @@ in
 # some may even be completely useless.
 config.security.apparmor.includes = {
   # This one is included by <tunables/global>
-  # which is usualy included before any profile.
+  # which is usually included before any profile.
   "abstractions/tunables/alias" = ''
     alias /bin -> /run/current-system/sw/bin,
     alias /lib/modules -> /run/current-system/kernel/lib/modules,

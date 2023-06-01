@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchurl }:
+{ lib
+, stdenv
+, fetchurl
+}:
 
 stdenv.mkDerivation rec {
   pname = "libomxil-bellagio";
@@ -15,6 +18,12 @@ stdenv.mkDerivation rec {
   patches = [
     ./fedora-fixes.patch
     ./fno-common.patch
+    # Fix stack overread: https://sourceforge.net/p/omxil/patches/8/
+    (fetchurl {
+      name = "no-overread.patch";
+      url = "https://sourceforge.net/p/omxil/patches/8/attachment/0001-src-base-omx_base_component.c-fix-stack-overread.patch";
+      hash = "sha256-ElpiDxU0Ii4Ou8ebVx4Ne9UnB6mesC8cRj77N7LdovA=";
+    })
   ];
 
   # Disable parallel build as it fails as:
@@ -23,14 +32,15 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails
 
-  # Fix for #40213, probably permanent, because upstream doesn't seem to be
-  # developed anymore. Alternatively, gcc7Stdenv could be used.
-  NIX_CFLAGS_COMPILE = "-Wno-error=array-bounds -Wno-error=stringop-overflow=8";
+  env.NIX_CFLAGS_COMPILE =
+    # stringop-truncation: see https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1028978
+    if stdenv.cc.isGNU then "-Wno-error=array-bounds -Wno-error=stringop-overflow=8 -Wno-error=stringop-truncation"
+    else "-Wno-error=absolute-value -Wno-error=enum-conversion -Wno-error=logical-not-parentheses -Wno-error=non-literal-null-conversion";
 
   meta = with lib; {
-    homepage = "https://sourceforge.net/projects/omxil/";
+    homepage = "https://omxil.sourceforge.net/";
     description = "An opensource implementation of the Khronos OpenMAX Integration Layer API to access multimedia components";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };
 }

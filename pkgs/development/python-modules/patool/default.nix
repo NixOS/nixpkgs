@@ -38,7 +38,7 @@ buildPythonPackage rec {
       --replace "path = None" 'path = os.environ["PATH"] + ":${lib.makeBinPath compression-utilities}"'
   '';
 
-  checkInputs = [ pytestCheckHook ] ++ compression-utilities;
+  nativeCheckInputs = [ pytestCheckHook ] ++ compression-utilities;
 
   disabledTests = [
     "test_unzip"

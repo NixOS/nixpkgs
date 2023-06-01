@@ -11,7 +11,6 @@
 , darwin
 }:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "moreutils";
   version = "0.67";
@@ -28,7 +27,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ makeWrapper perl libxml2 libxslt docbook-xsl docbook_xml_dtd_44 ];
-  buildInputs = optional stdenv.isDarwin darwin.cctools;
+  buildInputs = lib.optional stdenv.isDarwin darwin.cctools;
 
   propagatedBuildInputs = with perlPackages; [ perl IPCRun TimeDate TimeDuration ];
 
@@ -40,7 +39,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/ts --prefix PERL5LIB : $PERL5LIB
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Growing collection of the unix tools that nobody thought to write long ago when unix was young";
     homepage = "https://joeyh.name/code/moreutils/";
     maintainers = with maintainers; [ koral pSub ];

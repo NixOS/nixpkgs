@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitLab
+, cargo
 , dbus
 , desktop-file-utils
 , gdk-pixbuf
@@ -15,6 +16,7 @@
 , openssl
 , pkg-config
 , rustPlatform
+, rustc
 , sqlite
 , wrapGAppsHook4
 , cmake
@@ -23,20 +25,20 @@
 
 stdenv.mkDerivation rec {
   pname = "shortwave";
-  version = "3.0.0";
+  version = "3.2.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Shortwave";
     rev = version;
-    sha256 = "sha256-qwk63o9pfqpAm6l9ioj3RccacemQU8R6LF6El4yHkjQ";
+    sha256 = "sha256-ESZ1yD1IuBar8bv83xMczZbtPtHbWRpe2yMVyr7K5gQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-YrB322nv9CgZqt5//VMvVwjWA51ePlX2PI6raRJGBxA=";
+    hash = "sha256-8W46bGAitR2YbZbnsigAZMW5pSFTkDAe5JNaNOH5JfA=";
   };
 
   nativeBuildInputs = [
@@ -47,9 +49,9 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    rustPlatform.rust.cargo
+    cargo
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.rustc
+    rustc
     wrapGAppsHook4
     cmake
   ];

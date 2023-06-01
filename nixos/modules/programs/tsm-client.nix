@@ -6,7 +6,7 @@ let
   inherit (lib.attrsets) attrNames filterAttrs hasAttr mapAttrs mapAttrsToList optionalAttrs;
   inherit (lib.modules) mkDefault mkIf;
   inherit (lib.options) literalExpression mkEnableOption mkOption;
-  inherit (lib.strings) concatStringsSep optionalString toLower;
+  inherit (lib.strings) concatLines optionalString toLower;
   inherit (lib.types) addCheck attrsOf lines nonEmptyStr nullOr package path port str strMatching submodule;
 
   # Checks if given list of strings contains unique
@@ -164,7 +164,7 @@ let
         mkLine = k: v: k + optionalString (v!="") "  ${v}";
         lines = mapAttrsToList mkLine attrset;
       in
-        concatStringsSep "\n" lines;
+        concatLines lines;
     config.stanza = ''
       server  ${config.name}
       ${config.text}
@@ -223,7 +223,7 @@ let
       description = lib.mdDoc ''
         The TSM client derivation to be
         added to the system environment.
-        It will called with `.override`
+        It will be used with `.override`
         to add paths to the client system-options file.
       '';
     };
@@ -263,7 +263,7 @@ let
 
     ${optionalString (cfg.defaultServername!=null) "defaultserver  ${cfg.defaultServername}"}
 
-    ${concatStringsSep "\n" (mapAttrsToList (k: v: v.stanza) cfg.servers)}
+    ${concatLines (mapAttrsToList (k: v: v.stanza) cfg.servers)}
   '';
 
 in

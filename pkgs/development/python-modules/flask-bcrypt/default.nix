@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "maxcountryman";
     repo = pname;
     rev = version;
-    sha256 = "sha256-WlIholi/nzq6Ikc0LS6FhG0Q5Kz0kvvAlA2YJ7EksZ4=";
+    hash = "sha256-WlIholi/nzq6Ikc0LS6FhG0Q5Kz0kvvAlA2YJ7EksZ4=";
   };
 
   propagatedBuildInputs = [
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     bcrypt
   ];
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [
     "flask_bcrypt"

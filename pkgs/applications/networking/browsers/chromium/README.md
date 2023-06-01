@@ -29,7 +29,7 @@
 - Release updates: https://chromereleases.googleblog.com/
   - Available as Atom or RSS feed (filter for
     "Stable Channel Update for Desktop")
-  - Channel overview: https://omahaproxy.appspot.com/
+  - Release API: https://developer.chrome.com/docs/versionhistory/guide/
   - Release schedule: https://chromiumdash.appspot.com/schedule
 
 # Updating Chromium
@@ -38,6 +38,16 @@ Simply run `./pkgs/applications/networking/browsers/chromium/update.py` to
 update `upstream-info.json`. After updates it is important to test at least
 `nixosTests.chromium` (or basic manual testing) and `google-chrome` (which
 reuses `upstream-info.json`).
+
+Note: Due to the script downloading many large tarballs it might be
+necessary to adjust the available tmpfs size (it defaults to 10% of the
+systems memory)
+
+```nix
+services.logind.extraConfig = ''
+  RuntimeDirectorySize=4G
+'';
+```
 
 Note: The source tarball is often only available a few hours after the release
 was announced. The CI/CD status can be tracked here:

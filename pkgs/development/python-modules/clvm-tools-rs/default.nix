@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "clvm-tools-rs";
-  version = "0.1.19";
+  version = "0.1.30";
   disabled = pythonOlder "3.7";
   format = "pyproject";
 
@@ -15,13 +15,13 @@ buildPythonPackage rec {
     owner = "Chia-Network";
     repo = "clvm_tools_rs";
     rev = version;
-    sha256 = "sha256-LQbFBZBLUAjyqIAWIn+N8tUrBMskRoKvMMg5gfTyVU8=";
+    hash = "sha256-7eGOJgcZcSGmvLJc5BVfWarcu9kQb/uEcnG70JWXDSw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "sha256-LcDWpMM+PUElsXO82H6QVOp338+NduC/j3pXQKSni3I=";
+    hash = "sha256-46WEmp1FT6biM9A2M7z5onb45XhWjePKb6NSwLjuemc=";
   };
 
   nativeBuildInputs = with rustPlatform; [

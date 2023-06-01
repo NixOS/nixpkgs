@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libbutl";
-  version = "0.14.0";
+  version = "0.15.0";
 
   outputs = [ "out" "dev" "doc" ];
 
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/libbutl-${version}.tar.gz";
-    sha256 = "sha256-zKufrUsLZmjw6pNbOAv+dPyolWpgXgygEnW0Lka6zw8=";
+    sha256 = "sha256-yzs6DFt6peJPPaMQ3rtx+kiYu7H+bUuShcdnEN90WWI=";
   };
 
   nativeBuildInputs = [

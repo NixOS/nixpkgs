@@ -1,7 +1,7 @@
-{ buildGoModule
+{ stdenv
+, buildGoModule
 , fetchFromGitHub
 , lib
-
 , symlinkJoin
 }:
 
@@ -27,6 +27,14 @@ let p2 = buildGoModule rec {
     homepage = "https://github.com/gobuffalo/packr";
     license = licenses.mit;
     maintainers = with maintainers; [ mmahut ];
+
+    # golang.org/x/sys needs to be updated due to:
+    #
+    #   https://github.com/golang/go/issues/49219
+    #
+    # but this package is no longer maintained.
+    #
+    broken = stdenv.isDarwin;
   };
 };
 p1 = buildGoModule rec {
@@ -51,6 +59,14 @@ p1 = buildGoModule rec {
     homepage = "https://github.com/gobuffalo/packr";
     license = licenses.mit;
     maintainers = with maintainers; [ mmahut ];
+
+    # golang.org/x/sys needs to be updated due to:
+    #
+    #   https://github.com/golang/go/issues/49219
+    #
+    # but this package is no longer maintained.
+    #
+    broken = stdenv.isDarwin;
   };
 };
 in

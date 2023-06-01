@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   version = "1.3.0";
 
   src = fetchzip {
-    url = "http://www.amirrorclear.net/flowers/game/sil/Sil-130-src.zip";
+    url = "https://www.amirrorclear.net/flowers/game/sil/Sil-130-src.zip";
     sha256 = "1amp2mr3fxascra0k76sdsvikjh8g76nqh46kka9379zd35lfq8w";
     stripRoot = false;
   };
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: main.o:/build/source/Sil/src/externs.h:57: multiple definition of
   #     `mini_screenshot_char'; variable.o:/build/source/Sil/src/externs.h:57: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   installPhase = ''
     runHook preInstall

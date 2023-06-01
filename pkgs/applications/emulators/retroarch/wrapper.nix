@@ -1,41 +1,47 @@
-{ stdenv, lib, makeWrapper, retroarch, cores ? [ ] }:
+{ lib
+, stdenv
+, makeWrapper
+, retroarch
+, symlinkJoin
+, cores ? [ ]
+}:
 
-stdenv.mkDerivation {
-  pname = "retroarch";
-  version = lib.getVersion retroarch;
+let
+  # All cores should be located in the same path after symlinkJoin,
+  # but let's be safe here
+  coresPath = lib.lists.unique (map (c: c.libretroCore) cores);
+  wrapperArgs = lib.strings.escapeShellArgs
+    (lib.lists.flatten
+      (map (p: [ "--add-flags" "-L ${placeholder "out" + p}" ]) coresPath));
+in
+symlinkJoin {
+  name = "retroarch-with-cores-${lib.getVersion retroarch}";
+
+  paths = [ retroarch ] ++ cores;
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildCommand = ''
-    mkdir -p $out/lib
-    for coreDir in $cores; do
-      ln -s $coreDir/* $out/lib/.
-    done
+  passthru = {
+    inherit cores;
+    unwrapped = retroarch;
+  };
 
-    ln -s -t $out ${retroarch}/share
+  postBuild = ''
+    # remove core specific binaries
+    find $out/bin -name 'retroarch-*' -type l -delete
 
-    if [ -d ${retroarch}/Applications ]; then
-      ln -s -t $out ${retroarch}/Applications
-    fi
-
-    makeWrapper ${retroarch}/bin/retroarch $out/bin/retroarch \
-      --suffix-each LD_LIBRARY_PATH ':' "$cores" \
-      --add-flags "-L $out/lib/" \
+    # wrap binary to load cores from the proper location(s)
+    wrapProgram $out/bin/retroarch ${wrapperArgs}
   '';
-
-  cores = map (x: x + x.libretroCore) cores;
-  preferLocalBuild = true;
 
   meta = with retroarch.meta; {
     inherit changelog description homepage license maintainers platforms;
     longDescription = ''
       RetroArch is the reference frontend for the libretro API.
-
-      The following cores are included:
-      ${lib.concatStringsSep "\n" (map (x: "  - ${x.name}") cores)}
+    ''
+    + lib.optionalString (cores != [ ]) ''
+      The following cores are included: ${lib.concatStringsSep ", " (map (c: c.core) cores)}
     '';
-    # FIXME: exits with error on macOS:
-    # No Info.plist file in application bundle or no NSPrincipalClass in the Info.plist file, exiting
-    broken = stdenv.isDarwin;
+    mainProgram = "retroarch";
   };
 }

@@ -23,8 +23,6 @@
 , nixosTests
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   version = "1.12.0";
   pname = "tigervnc";
@@ -35,7 +33,6 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-77X+AvHFWfYYIio3c+EYf11jg/1IbYhNUweRIDHMOZw=";
   };
-
 
   patches = [
     (fetchpatch {
@@ -67,6 +64,10 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBEXECDIR=${placeholder "out"}/bin"
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=array-bounds"
+  ];
+
   postBuild = lib.optionalString stdenv.isLinux ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error=int-to-pointer-cast -Wno-error=pointer-to-int-cast"
     export CXXFLAGS="$CXXFLAGS -fpermissive"
@@ -92,7 +93,7 @@ stdenv.mkDerivation rec {
         --with-xkb-path=${xkeyboard_config}/share/X11/xkb \
         --with-xkb-bin-directory=${xorg.xkbcomp}/bin \
         --with-xkb-output=$out/share/X11/xkb/compiled
-    make TIGERVNC_SRC=$src TIGERVNC_BUILDDIR=`pwd`/../.. -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES
+    make TIGERVNC_SRC=$src TIGERVNC_BUILDDIR=`pwd`/../.. -j$NIX_BUILD_CORES
     popd
   '' + lib.optionalString stdenv.isDarwin ''
     make dmg

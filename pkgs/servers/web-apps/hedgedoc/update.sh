@@ -4,7 +4,7 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 if [ "$#" -gt 1 ] || [[ "$1" == -* ]]; then
-  echo "Regenerates packaging data for the element packages."
+  echo "Regenerates packaging data for the hedgedoc packages."
   echo "Usage: $0 [git release tag]"
   exit 1
 fi
@@ -16,11 +16,16 @@ if [ -z "$version" ]; then
 fi
 
 src="https://raw.githubusercontent.com/hedgedoc/hedgedoc/$version"
-wget "$src/package.json" -O package.json
 
-src_hash=$(nix-prefetch-github hedgedoc hedgedoc --rev "${version}" | jq -r .sha256)
+wget "$src/package.json" -O package.json
+wget "$src/yarn.lock" -O yarn.lock
+
+src_old_hash=$(nix-prefetch-url --unpack "https://github.com/hedgedoc/hedgedoc/releases/download/$version/hedgedoc-$version.tar.gz")
+src_hash=$(nix hash to-sri --type sha256 $src_old_hash)
 yarn_hash=$(prefetch-yarn-deps yarn.lock)
 
-sed -i "s/version = \".*\"/version = \"$version\"/" default.nix
-sed -i "s/hash = \".*\"/hash = \"$src_hash\"/" default.nix
-sed -i "s/sha256 = \".*\"/sha256 = \"$yarn_hash\"/" default.nix
+sed -i "s|version = \".*\"|version = \"$version\"|" default.nix
+sed -i "s|hash = \".*\"|hash = \"$src_hash\"|" default.nix
+sed -i "s|sha256 = \".*\"|sha256 = \"$yarn_hash\"|" default.nix
+
+rm yarn.lock

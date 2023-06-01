@@ -18,7 +18,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   propagatedBuildInputs = [ six ];
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
   checkPhase = ''
     nosetests

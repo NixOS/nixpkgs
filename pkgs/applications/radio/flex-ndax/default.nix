@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "flex-ndax";
-  version = "0.2-20220427";
+  version = "0.3-20230126.0";
 
   src = fetchFromGitHub {
     owner = "kc2g-flex-tools";
     repo = "nDAX";
     rev = "v${version}";
-    hash = "sha256-KmvTLfGC6xzXcWYAzmBYiYSF65lqMdsdMQjUEk3siqc=";
+    hash = "sha256-co2S3DrdGeoNneqNyifd+Z1z5TshyD+FgHkiSRqK3SQ=";
   };
 
   buildInputs = [ libpulseaudio ];
 
-  vendorSha256 = "sha256-u/5LiVo/ZOefprEKr/L1+3+OfYb0a4wq+CWoUjYNvzg=";
+  vendorHash = "sha256-eHy8oFYicVONQr31LQQ9b5auzeBoIzbszw2buKaBQbQ=";
 
   meta = with lib; {
     broken = stdenv.isDarwin;

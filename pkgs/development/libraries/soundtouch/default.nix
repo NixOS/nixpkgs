@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "soundtouch";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "soundtouch";
     repo = "soundtouch";
     rev = version;
-    sha256 = "10znckb8mrnmvwj7vq12732al873qhqw27fpb5f8r0bkjdpcj3vr";
+    sha256 = "sha256-+RprzCn0NCueHhDkk2Lgg7Ihw8JDzu25eIVoVZwF+BA=";
   };
 
   nativeBuildInputs = [ autoconf automake libtool ];

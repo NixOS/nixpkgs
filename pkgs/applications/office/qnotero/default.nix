@@ -26,12 +26,24 @@ python3Packages.buildPythonPackage rec {
     wrapQtApp "$out"/bin/qnotero
   '';
 
+  postInstall = ''
+    mkdir $out/share
+    mv $out/usr/share/applications $out/share/applications
+
+    substituteInPlace $out/share/applications/qnotero.desktop \
+      --replace "Icon=/usr/share/qnotero/resources/light/qnotero.png" "Icon=qnotero"
+
+    mkdir -p $out/share/icons/hicolor/64x64/apps
+    ln -s $out/usr/share/qnotero/resources/light/qnotero.png \
+      $out/share/icons/hicolor/64x64/apps/qnotero.png
+  '';
+
   # no tests executed
   doCheck = false;
 
   meta = {
     description = "Quick access to Zotero references";
-    homepage = "http://www.cogsci.nl/software/qnotero";
+    homepage = "https://www.cogsci.nl/software/qnotero";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.nico202 ];

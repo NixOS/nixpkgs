@@ -13,12 +13,12 @@ buildPythonPackage rec {
     owner = "neogeny";
     repo = "TatSu";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-cKEMRbH/xNtYM0lmNVazv3i0Q1tmVrVPrB6F2s02Sro=";
+    hash = "sha256-cKEMRbH/xNtYM0lmNVazv3i0Q1tmVrVPrB6F2s02Sro=";
   };
 
   nativeBuildInputs = [ pytest-runner ];
   propagatedBuildInputs = [ colorama regex ];
-  checkInputs = [ pytestCheckHook pytest-mypy ];
+  nativeCheckInputs = [ pytestCheckHook pytest-mypy ];
 
   pythonImportsCheck = [ "tatsu" ];
 

@@ -1,64 +1,60 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
 , cython
 , eventlet
-, futures ? null
-, iana-etc
+, fetchFromGitHub
 , geomet
+, gevent
+, gremlinpython
+, iana-etc
 , libev
+, libredirect
 , mock
 , nose
 , pytestCheckHook
+, pythonOlder
 , pytz
 , pyyaml
 , scales
 , six
 , sure
-, gremlinpython
-, gevent
 , twisted
-, libredirect
 }:
 
 buildPythonPackage rec {
   pname = "cassandra-driver";
-  version = "3.25.0";
+  version = "3.26.0";
+  format = "setuptools";
 
-  # pypi tarball doesn't include tests
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "datastax";
     repo = "python-driver";
-    rev = version;
-    sha256 = "1dn7iiavsrhh6i9hcyw0mk8j95r5ym0gbrvdca998hx2rnz5ark6";
+    rev = "refs/tags/${version}";
+    hash = "sha256-mLQEG41WyFtXY2PJzoM4uaI4Cm+0xSIAPGhijHHbTBk=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace 'geomet>=0.1,<0.3' 'geomet'
+    substituteInPlace setup.py \
+      --replace 'geomet>=0.1,<0.3' 'geomet'
   '';
 
-  nativeBuildInputs = [ cython ];
-  buildInputs = [ libev ];
-  propagatedBuildInputs = [ six geomet ]
-    ++ lib.optionals (pythonOlder "3.4") [ futures ];
+  nativeBuildInputs = [
+    cython
+  ];
 
-  # Make /etc/protocols accessible to allow socket.getprotobyname('tcp') in sandbox,
-  # also /etc/resolv.conf is referenced by some tests
-  preCheck = (lib.optionalString stdenv.isLinux ''
-    echo "nameserver 127.0.0.1" > resolv.conf
-    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
-    export LD_PRELOAD=${libredirect}/lib/libredirect.so
-  '') + ''
-    # increase tolerance for time-based test
-    substituteInPlace tests/unit/io/utils.py --replace 'delta=.15' 'delta=.3'
-  '';
-  postCheck = ''
-    unset NIX_REDIRECTS LD_PRELOAD
-  '';
+  buildInputs = [
+    libev
+  ];
 
-  checkInputs = [
+  propagatedBuildInputs = [
+    six
+    geomet
+  ];
+
+  nativeCheckInputs = [
     pytestCheckHook
     eventlet
     mock
@@ -72,13 +68,34 @@ buildPythonPackage rec {
     twisted
   ];
 
+  # Make /etc/protocols accessible to allow socket.getprotobyname('tcp') in sandbox,
+  # also /etc/resolv.conf is referenced by some tests
+  preCheck = (lib.optionalString stdenv.isLinux ''
+    echo "nameserver 127.0.0.1" > resolv.conf
+    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
+    export LD_PRELOAD=${libredirect}/lib/libredirect.so
+  '') + ''
+    # increase tolerance for time-based test
+    substituteInPlace tests/unit/io/utils.py --replace 'delta=.15' 'delta=.3'
+  '';
+
+  pythonImportsCheck = [
+    "cassandra"
+  ];
+
+  postCheck = ''
+    unset NIX_REDIRECTS LD_PRELOAD
+  '';
+
   pytestFlagsArray = [
     "tests/unit"
   ];
+
   disabledTestPaths = [
     # requires puresasl
     "tests/unit/advanced/test_auth.py"
   ];
+
   disabledTests = [
     # doesn't seem to be intended to be run directly
     "_PoolTests"
@@ -91,6 +108,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A Python client driver for Apache Cassandra";
     homepage = "http://datastax.github.io/python-driver";
+    changelog = "https://github.com/datastax/python-driver/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ turion ris ];
   };

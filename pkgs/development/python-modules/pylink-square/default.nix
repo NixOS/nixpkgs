@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pylink-square";
-  version = "0.14.2";
+  version = "1.1.0";
 
   format = "setuptools";
 
@@ -19,12 +19,12 @@ buildPythonPackage rec {
     owner = "square";
     repo = "pylink";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4jmFU8jlrEAYTAQH+uQCWrzqwKX4onb7Xk4iTYzx9dI=";
+    hash = "sha256-pICSU33n/oH+LRbWNYOdnTaa5qAGRRXWsO1NjO4ylzw=";
   };
 
   propagatedBuildInputs = [ psutil six future ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];

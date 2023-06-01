@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "cometblue-lite";
-  version = "0.5.2";
+  version = "0.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "neffs";
     repo = "python-cometblue_lite";
-    rev = version;
-    hash = "sha256-23HspTZ0kN3+geDnqdH6Vj5NfmmbVku2vPTdsy0XvRU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Cjd7PdZ2/neRr1jStDY5iJaGMJ/srnFmCea8aLNan6g=";
   };
 
   propagatedBuildInputs = [

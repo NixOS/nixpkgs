@@ -8,30 +8,33 @@
 # R as of writing does not support outputting both .so and .a files; it outputs:
 #     --enable-R-static-lib conflicts with --enable-R-shlib and will be ignored
 , static ? false
+, testers
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "R";
-  version = "4.2.1";
+  version = "4.2.3";
 
-  src = fetchurl {
+  src = let
+    inherit (finalAttrs) pname version;
+  in fetchurl {
     url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-TVLbSG0nhI5UYT1O6XetlS7AjOF4B+G1JbEM1ENsZD8=";
+    sha256 = "sha256-VeSpptQ74xTiwD0CZqb6VESv3OULMDv8O4Kzl5UW4HQ=";
   };
 
   dontUseImakeConfigure = true;
 
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     bzip2 gfortran libX11 libXmu libXt libXt libjpeg libpng libtiff ncurses
     pango pcre2 perl readline texLive xz zlib less texinfo graphviz icu
-    pkg-config bison imake which blas lapack curl tcl tk jdk
+    bison imake which blas lapack curl tcl tk jdk
   ] ++ lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ];
 
   patches = [
     ./no-usr-local-search-paths.patch
-    ./test-reg-packages.patch
   ];
 
   # Test of the examples for package 'tcltk' fails in Darwin sandbox. See:
@@ -70,6 +73,7 @@ stdenv.mkDerivation rec {
       FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
       JAVA_HOME="${jdk}"
       RANLIB=$(type -p ranlib)
+      r_cv_have_curl728=yes
       R_SHELL="${stdenv.shell}"
   '' + lib.optionalString stdenv.isDarwin ''
       --disable-R-framework
@@ -97,6 +101,8 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     homepage = "http://www.r-project.org/";
     description = "Free software environment for statistical computing and graphics";
@@ -121,8 +127,9 @@ stdenv.mkDerivation rec {
       user-defined recursive functions and input and output facilities.
     '';
 
+    pkgConfigModules = [ "libR" ];
     platforms = platforms.all;
 
     maintainers = with maintainers; [ jbedo ] ++ teams.sage.members;
   };
-}
+})

@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-optimization";
-  version = "0.4.0";
+  version = "0.5.0";
 
   disabled = pythonOlder "3.6";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "qiskit";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-7MksgbCID4x1qW06BCBzcbiS/eNHjZiDKIvKYTPx6cc=";
+    hash = "sha256-N4mf5ins0x+yUAIq+yyjSnUrHcaEhH/Jpid/QMhIjE0=";
   };
 
   postPatch = ''
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     ddt
     pylatexenc

@@ -58,6 +58,6 @@ stdenv.mkDerivation rec {
     homepage = "http://pan.rebelbase.com/";
     maintainers = [ maintainers.eelco ];
     platforms = platforms.linux;
-    license = with licenses; [ gpl2Only fdl11 ];
+    license = with licenses; [ gpl2Only fdl11Only ];
   };
 }

@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "celluloid";
-  version = "0.24";
+  version = "0.25";
 
   src = fetchFromGitHub {
     owner = "celluloid-player";
     repo = "celluloid";
     rev = "v${version}";
-    hash = "sha256-8Y/dCeoS29R1UHwmLOp0d+JNNC4JH5pLpiqfBZU+kLI=";
+    hash = "sha256-GCRpcC/olMUbMG2fadNcXTKF/Zl0+GY2+eSRLQhnWxI=";
   };
 
   nativeBuildInputs = [
@@ -51,9 +51,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/celluloid-player/celluloid";

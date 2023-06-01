@@ -12,14 +12,14 @@
 
 mkDerivation rec {
   pname = "kirigami-addons";
-  version = "21.05";
+  version = "0.8.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "libraries";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0pwkpag15mvzhd3hvdwx0a8ajwq9j30r6069vsx85bagnag3zanh";
+    hash = "sha256-ObbpM1gVVFhOIHOla5YS8YYe+JoPgdZ8kJ356wLTJq4=";
   };
 
   nativeBuildInputs = [

@@ -1,4 +1,4 @@
-{ lib, python3 }:
+{ lib, python3, fetchPypi }:
 
 let
   python = python3.override {
@@ -8,7 +8,7 @@ let
     };
   };
 
-  inherit (python.pkgs) buildPythonApplication fetchPypi iowait psutil pyzmq tornado mock six;
+  inherit (python.pkgs) buildPythonApplication iowait psutil pyzmq tornado mock six;
 in
 
 buildPythonApplication rec {
@@ -26,7 +26,7 @@ buildPythonApplication rec {
       --replace "pyzmq>=13.1.0,<17.0" "pyzmq>13.1.0"
   '';
 
-  checkInputs = [ mock ];
+  nativeCheckInputs = [ mock ];
 
   doCheck = false; # weird error
 

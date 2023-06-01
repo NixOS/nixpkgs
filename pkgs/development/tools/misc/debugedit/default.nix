@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config help2man ];
   buildInputs = [ elfutils ];
-  checkInputs = [ util-linux ]; # Tests use `rev`
+  nativeCheckInputs = [ util-linux ]; # Tests use `rev`
 
   src = fetchgit {
     url = "git://sourceware.org/git/debugedit.git";

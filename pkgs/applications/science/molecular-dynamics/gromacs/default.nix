@@ -19,11 +19,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "gromacs";
-  version = "2022.3";
+  version = "2023.1";
 
   src = fetchurl {
     url = "ftp://ftp.gromacs.org/pub/gromacs/gromacs-${version}.tar.gz";
-    sha256 = "sha256-FM+xMN2vj3WaOvZDwE9aDQ0ysJvDRIsWr6W2F/XjXa4=";
+    sha256 = "sha256-7vK7Smy2MUz52kfybfKg0nr0v3swmXI9Q2AQc6sKQvQ=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -63,8 +63,14 @@ in stdenv.mkDerivation rec {
      ]
   ) ++ lib.optional enableCuda "-DGMX_GPU=CUDA";
 
+  postFixup = ''
+    substituteInPlace "$out"/lib/pkgconfig/*.pc \
+      --replace '=''${prefix}//' '=/' \
+      --replace "$out/$out/" "$out/"
+  '';
+
   meta = with lib; {
-    homepage = "http://www.gromacs.org";
+    homepage = "https://www.gromacs.org";
     license = licenses.gpl2;
     description = "Molecular dynamics software package";
     longDescription = ''
@@ -84,7 +90,7 @@ in stdenv.mkDerivation rec {
       reference or manual for details), but there are also quite a
       few features that make it stand out from the competition.
 
-      See: http://www.gromacs.org/About_Gromacs for details.
+      See: https://www.gromacs.org/About_Gromacs for details.
     '';
     platforms = platforms.unix;
     maintainers = with maintainers; [ sheepforce markuskowa ];

@@ -14,27 +14,14 @@ assert withGTK -> withGUI;
 
 stdenv.mkDerivation rec {
   pname = "fontforge";
-  version = "20220308";
+  version = "20230101";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-q+71PDPODl5fEEy3d1icRl+rBGY7AhH+2dMUKeBWGgI=";
+    sha256 = "sha256-/RYhvL+Z4n4hJ8dmm+jbA1Ful23ni2DbCRZC5A3+pP0=";
   };
-
-  patches = [
-    # Allow installing contrib files (e.g. extras and tools).
-    # Taken from https://salsa.debian.org/fonts-team/fontforge/-/blob/master/debian/patches/0001-add-extra-cmake-install-rules.patch
-    (fetchpatch {
-      url = "https://salsa.debian.org/fonts-team/fontforge/raw/76bffe6ccf8ab20a0c81476a80a87ad245e2fd1c/debian/patches/0001-add-extra-cmake-install-rules.patch";
-      excludes = [
-        # Already handled upstream: https://github.com/fontforge/fontforge/commit/f97a2cd7b344ec8fcb9f8bfb908e1b6f36326d20
-        "contrib/cidmap/CMakeLists.txt"
-      ];
-      sha256 = "iQwaGeBHUais979hGVbU2NxKozQSQkpYXjApxPuLI/4=";
-    })
-  ];
 
   # use $SOURCE_DATE_EPOCH instead of non-deterministic timestamps
   postPatch = ''
@@ -46,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   # do not use x87's 80-bit arithmetic, rouding errors result in very different font binaries
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-msse2 -mfpmath=sse";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-msse2 -mfpmath=sse";
 
   nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [

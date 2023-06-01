@@ -53,6 +53,8 @@ let
         url = "https://github.com/protocolbuffers/protobuf/commit/a7324f88e92bc16b57f3683403b6c993bf68070b.patch";
         sha256 = "sha256-SmwaUjOjjZulg/wgNmR/F5b8rhYA2wkKAjHIOxjcQdQ=";
       })
+    ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+      ./static-executables-have-no-rpath.patch
     ];
 
     nativeBuildInputs = let
@@ -77,7 +79,12 @@ let
       "-Dprotobuf_ABSL_PROVIDER=package"
       ] ++ lib.optionals (!stdenv.targetPlatform.isStatic) [
       "-Dprotobuf_BUILD_SHARED_LIBS=ON"
-    ];
+    ]
+    # Tests fail to build on 32-bit platforms; fixed in 3.22
+    # https://github.com/protocolbuffers/protobuf/issues/10418
+    ++ lib.optional
+      (stdenv.targetPlatform.is32bit && lib.versionOlder version "3.22")
+      "-Dprotobuf_BUILD_TESTS=OFF";
 
     # unfortunately the shared libraries have yet to been patched by nix, thus tests will fail
     doCheck = false;
@@ -101,6 +108,7 @@ let
       platforms = lib.platforms.unix;
       homepage = "https://developers.google.com/protocol-buffers/";
       maintainers = with lib.maintainers; [ jonringer ];
+      mainProgram = "protoc";
     };
   };
 in

@@ -3,7 +3,7 @@
 , fetchPypi
 , pytestCheckHook
 , pythonOlder
-, APScheduler
+, apscheduler
 , hiredis
 , aioredis
 , ephem
@@ -20,11 +20,11 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-41qd+KPSrOrczkovwXht3irbcYlYehBZ1HZ44yZe4cM=";
+    hash = "sha256-41qd+KPSrOrczkovwXht3irbcYlYehBZ1HZ44yZe4cM=";
   };
 
   propagatedBuildInputs = [
-    APScheduler
+    apscheduler
     hiredis
     aioredis
     ephem
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

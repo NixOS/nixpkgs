@@ -2,13 +2,13 @@
 
 buildDunePackage rec {
   pname = "duration";
-  version = "0.2.0";
+  version = "0.2.1";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/hannesm/duration/releases/download/${version}/duration-${version}.tbz";
-    sha256 = "sha256-rRT7daWm9z//fvFyEXiSXuVVzw8jsj46sykYS8DBzmk=";
+    url = "https://github.com/hannesm/duration/releases/download/v${version}/duration-${version}.tbz";
+    hash = "sha256-xzjB84z7mYIMEhzT3fgZ3ksiKPDVDqy9HMPOmefHHis=";
   };
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";

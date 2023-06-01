@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pysigma-backend-insightidr";
-  version = "0.1.7";
+  version = "0.1.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "SigmaHQ";
     repo = "pySigma-backend-insightidr";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5uWSXUKLSJbkJHvMmFGrS/yukBO/ax8seg+0ZqAHdaE=";
+    hash = "sha256-/oHwWe8EcE1CS/hOmzJm9smfRLS/wShfbSGqOuvp8rU=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     "pysigma"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

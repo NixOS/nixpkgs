@@ -9,16 +9,16 @@
 
 buildPythonPackage rec {
   pname = "aggdraw";
-  version = "1.3.15";
+  version = "1.3.16";
 
   src = fetchFromGitHub {
     owner = "pytroll";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-w3HlnsHYB0R+HZOXtzygC2RST3gllPI7SYtwSCVXhTU=";
+    hash = "sha256-2yajhuRyQ7BqghbSgPClW3inpw4TW2DhgQbomcRFx94=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     numpy
     pillow
     pytest

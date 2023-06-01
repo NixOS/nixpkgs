@@ -30,8 +30,8 @@ in
   dropAttrs ? [],
   keepAttrs ? [],
   dropDerivationAttrs ? [],
-  useDune2ifVersion ? (x: false),
-  useDune2 ? false,
+  useDuneifVersion ? (x: false),
+  useDune ? false,
   opam-name ? (concatStringsSep "-" (namePrefix ++ [ pname ])),
   ...
 }@args:
@@ -44,7 +44,7 @@ let
     "extraBuildInputs" "extraNativeBuildInputs"
     "overrideBuildInputs" "overrideNativeBuildInputs"
     "namePrefix"
-    "meta" "useDune2ifVersion" "useDune2" "opam-name"
+    "meta" "useDuneifVersion" "useDune" "opam-name"
     "extraInstallFlags" "setCOQBIN" "mlPlugin"
     "dropAttrs" "dropDerivationAttrs" "keepAttrs" ] ++ dropAttrs) keepAttrs;
   fetch = import ../coq/meta-fetch/default.nix
@@ -52,7 +52,7 @@ let
       inherit release releaseRev;
       location = { inherit domain owner repo; };
     } // optionalAttrs (args?fetcher) {inherit fetcher;});
-  fetched = fetch (if !isNull version then version else defaultVersion);
+  fetched = fetch (if version != null then version else defaultVersion);
   display-pkg = n: sep: v:
     let d = displayVersion.${n} or (if sep == "" then ".." else true); in
     n + optionalString (v != "" && v != null) (switch d [
@@ -65,7 +65,7 @@ let
     ] "") + optionalString (v == null) "-broken";
   append-version = p: n: p + display-pkg n "" coqPackages.${n}.version + "-";
   prefix-name = foldl append-version "" namePrefix;
-  useDune2 = args.useDune2 or (useDune2ifVersion fetched.version);
+  useDune = args.useDune or (useDuneifVersion fetched.version);
   coqlib-flags = switch coq.coq-version [
     { case = v: versions.isLe "8.6" v && v != "dev" ;
       out = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ]; }
@@ -84,9 +84,9 @@ stdenv.mkDerivation (removeAttrs ({
   inherit (fetched) version src;
 
   nativeBuildInputs = args.overrideNativeBuildInputs
-    or ([ which coq.ocamlPackages.findlib ]
-        ++ optional useDune2 coq.ocamlPackages.dune_2
-        ++ optional (useDune2 || mlPlugin) coq.ocamlPackages.ocaml
+    or ([ which ]
+        ++ optional useDune coq.ocamlPackages.dune_3
+        ++ optionals (useDune || mlPlugin) [ coq.ocamlPackages.ocaml coq.ocamlPackages.findlib ]
         ++ (args.nativeBuildInputs or []) ++ extraNativeBuildInputs);
   buildInputs = args.overrideBuildInputs
     or ([ coq ] ++ (args.buildInputs or []) ++ extraBuildInputs);
@@ -107,7 +107,7 @@ stdenv.mkDerivation (removeAttrs ({
     coqlib-flags ++ docdir-flags ++
     extraInstallFlags;
 })
-// (optionalAttrs useDune2 {
+// (optionalAttrs useDune {
   buildPhase = ''
     runHook preBuild
     dune build -p ${opam-name} ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}

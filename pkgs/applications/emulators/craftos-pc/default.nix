@@ -14,29 +14,30 @@
 }:
 
 let
+  version = "2.7.4";
   craftos2-lua = fetchFromGitHub {
     owner = "MCJack123";
     repo = "craftos2-lua";
-    rev = "v2.6.6";
-    sha256 = "cCXH1GTRqJQ57/6sWIxik366YBx/ii3nzQwx4YpEh1w=";
+    rev = "v${version}";
+    sha256 = "sha256-JMBsSoO/yTLw7K1Ri3BzKr5bz5UirXiPr/Q0YoMumhY=";
   };
   craftos2-rom = fetchFromGitHub {
     owner = "McJack123";
     repo = "craftos2-rom";
-    rev = "v2.6.6";
-    sha256 = "VzIqvf83k121DxuH5zgZfFS9smipDonyqqhVgj2kgYw=";
+    rev = "v${version}";
+    sha256 = "sha256-BXTsBMlsymQHABWQCiv22Ia5jm2xv1jNy7Unwymtyp0=";
   };
 in
 
 stdenv.mkDerivation rec {
   pname = "craftos-pc";
-  version = "2.6.6";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "MCJack123";
     repo = "craftos2";
     rev = "v${version}";
-    sha256 = "9lpAWYFli3/OBfmu2dQxKi+/TaHaBQNpZsCURvl0h/E=";
+    sha256 = "sha256-9XMc7zmtPxlt3WgS93lUJNMFtUJ/llG9SFGtgdFqZEA=";
   };
 
   buildInputs = [ patchelf poco openssl SDL2 SDL2_mixer ncurses libpng pngpp libwebp ];
@@ -63,7 +64,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.craftos-pc.cc";
     license = with licenses; [ mit free ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.siraben ];
+    maintainers = with maintainers; [ siraben tomodachi94 ];
     mainProgram = "craftos";
   };
 }

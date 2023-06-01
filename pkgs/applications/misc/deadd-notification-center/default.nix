@@ -1,62 +1,57 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoPatchelfHook
-, wrapGAppsHook
-, hicolor-icon-theme
-, gtk3
-, gobject-introspection
-, libxml2
-, fetchpatch
-}:
-stdenv.mkDerivation rec {
+{ mkDerivation, haskellPackages, fetchFromGitHub, lib, writeText }:
+
+let
+  # deadd-notification-center.service
+  systemd-service = ''
+    [Unit]
+    Description=Deadd Notification Center
+    PartOf=graphical-session.target
+
+    [Service]
+    Type=dbus
+    BusName=org.freedesktop.Notifications
+    ExecStart=$out/bin/deadd-notification-center
+
+    [Install]
+    WantedBy=graphical-session.target
+  '';
+in mkDerivation rec {
   pname = "deadd-notification-center";
-  version = "2021-03-10";
+  version = "unstable-2022-11-07";
 
   src = fetchFromGitHub {
     owner = "phuhl";
     repo = "linux_notification_center";
-    rev = "640ce0f";
-    sha256 = "12ldr8vppylr90849g3mpjphmnr4lp0vsdkj01a5f4bv4ksx35fm";
+    rev = "f4b8e2b724d86def9e7b0e12ea624f95760352d5";
+    hash = "sha256-ClJfWqStULvmj5YRAUDAmn2WOSA2sVtyZsa+qSY51Gk=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/phuhl/linux_notification_center/commit/5244e1498574983322be97925e1ff7ebe456d974.patch";
-      sha256 = "sha256-hbqbgBmuewOhtx0na2tmFa5W128ZrBvDcyPme/mRzlI=";
-    })
+  isLibrary = false;
+
+  isExecutable = true;
+
+  libraryHaskellDepends = with haskellPackages; [
+    base bytestring ConfigFile containers dbus directory env-locale
+    filepath gi-cairo gi-gdk gi-gdkpixbuf gi-gio gi-glib gi-gobject
+    gi-gtk gi-pango haskell-gettext haskell-gi haskell-gi-base
+    hdaemonize here lens mtl process regex-tdfa setlocale split stm
+    tagsoup text time transformers tuple unix
   ];
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    wrapGAppsHook
-  ];
+  executableHaskellDepends = with haskellPackages; [ base ];
 
-  buildInputs = [
-    gtk3
-    gobject-introspection
-    libxml2
-    hicolor-icon-theme
-  ];
+  # Test suite does nothing.
+  doCheck = false;
 
-  buildFlags = [
-    # Exclude stack from `make all` to use the prebuilt binary from .out/
-    "service"
-  ];
+  # Add systemd user unit.
+  postInstall = ''
+    mkdir -p $out/lib/systemd/user
+    echo "${systemd-service}" > $out/lib/systemd/user/deadd-notification-center.service
+  '';
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-    "SERVICEDIR_SYSTEMD=${placeholder "out"}/etc/systemd/user"
-    "SERVICEDIR_DBUS=${placeholder "out"}/share/dbus-1/services"
-    # Override systemd auto-detection.
-    "SYSTEMD=1"
-  ];
-
-  meta = with lib; {
-    description = "A haskell-written notification center for users that like a desktop with style";
-    homepage = "https://github.com/phuhl/linux_notification_center";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.pacman99 ];
-    platforms = platforms.linux;
-  };
+  description = "A haskell-written notification center for users that like a desktop with style";
+  homepage = "https://github.com/phuhl/linux_notification_center";
+  license = lib.licenses.bsd3;
+  maintainers = with lib.maintainers; [ melkor333 sna ];
+  platforms = lib.platforms.linux;
 }

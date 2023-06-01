@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "scaleway-cli";
-  version = "2.5.6";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "scaleway";
     repo = "scaleway-cli";
     rev = "v${version}";
-    sha256 = "sha256-C7hCTDs6XLLQPUojqCJEkdSeANrW3XwfFJscSefe0OQ=";
+    sha256 = "sha256-NAo+nI4oaWTFqBfIHmkWGVYlFz5WjImvF3pfOFmw+cM=";
   };
 
-  vendorSha256 = "sha256-NUifjoMP3AmT7RjhkilGmQTMtl5wcuPJL5I32/M27a8=";
+  vendorHash = "sha256-iJLOkwXjfapZHGJ47raxmSW11HYsuB3ahEGDx2hFY10=";
 
   ldflags = [
     "-w"
@@ -30,6 +30,6 @@ buildGoModule rec {
     description = "Interact with Scaleway API from the command line";
     homepage = "https://github.com/scaleway/scaleway-cli";
     license = licenses.mit;
-    maintainers = with maintainers; [ nickhu ];
+    maintainers = with maintainers; [ nickhu techknowlogick ];
   };
 }

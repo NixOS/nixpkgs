@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "helm-secrets";
-  version = "3.8.3";
+  version = "4.4.2";
 
   src = fetchFromGitHub {
     owner = "jkroepke";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-FpF/d+e5T6nb0OENaYLY+3ATZ+qcAeih5/yKI+AtfKA=";
+    hash = "sha256-GpPgjRqzH4fcnaHs9SWfdaCZimwBleXnxQLjqy8SArs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
   # NOTE: helm-secrets is comprised of shell scripts.
   dontBuild = true;
 
-  # NOTE: Remove the install and upgrade hooks.
+  # NOTE: Fix version string
   postPatch = ''
-    sed -i '/^hooks:/,+2 d' plugin.yaml
+    sed -i 's/^version:.*/version: "${version}"/' plugin.yaml
   '';
 
   installPhase = ''

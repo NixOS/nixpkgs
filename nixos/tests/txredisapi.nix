@@ -12,7 +12,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
       {
         services.redis.servers."".enable = true;
 
-        environment.systemPackages = with pkgs; [ (python38.withPackages (ps: [ ps.twisted ps.txredisapi ps.mock ]))];
+        environment.systemPackages = with pkgs; [ (python3.withPackages (ps: [ ps.twisted ps.txredisapi ps.mock ]))];
       };
   };
 

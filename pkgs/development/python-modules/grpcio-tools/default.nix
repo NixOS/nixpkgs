@@ -2,12 +2,18 @@
 
 buildPythonPackage rec {
   pname = "grpcio-tools";
-  version = "1.48.1";
+  version = "1.54.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1178f2ea531f80cc2027ec64728df6ffc8e98cf1df61652a496eafd612127183";
+    hash = "sha256-4RwsKu5T80CZLo5NalkXLLu9AZPxNR3pjE+BClBB1co=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'protobuf>=4.21.6,<5.0dev' 'protobuf'
+  '';
 
   outputs = [ "out" "dev" ];
 

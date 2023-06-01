@@ -1,8 +1,8 @@
-{ lib, stdenv, appimageTools, fetchurl, undmg }:
+{ lib, stdenv, appimageTools, fetchurl, makeWrapper, undmg }:
 
 let
   pname = "joplin-desktop";
-  version = "2.8.8";
+  version = "2.10.18";
   name = "${pname}-${version}";
 
   inherit (stdenv.hostPlatform) system;
@@ -16,8 +16,8 @@ let
   src = fetchurl {
     url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}.${suffix}";
     sha256 = {
-      x86_64-linux = "0ivljlw6kdpg94q9syi11zmk54w06m8j3zicx9nppqg720fw4zv3";
-      x86_64-darwin = "0gpr3zi6z98pkg8hsvcmpck754cph53kmgl3bhp3zmmmfj0kxjhs";
+      x86_64-linux = "sha256-oo3li8w1uem9lyFqwnrZ7Fl1R7Hrd8W+PHcIiaL2/+U=";
+      x86_64-darwin = "sha256-xYNp6WW8uPBrfuUgE5LI+1PuQK+vTA11eOtkz2ogpk0=";
     }.${system} or throwSystem;
   };
 
@@ -35,7 +35,7 @@ let
       Markdown format.
     '';
     homepage = "https://joplinapp.org";
-    license = licenses.mit;
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ hugoreeves ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
@@ -51,11 +51,14 @@ let
     extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
     extraInstallCommands = ''
       mv $out/bin/{${name},${pname}}
+      source "${makeWrapper}/nix-support/setup-hook"
+      wrapProgram $out/bin/${pname} \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}"
       install -Dm444 ${appimageContents}/@joplinapp-desktop.desktop -t $out/share/applications
       install -Dm444 ${appimageContents}/@joplinapp-desktop.png -t $out/share/pixmaps
       substituteInPlace $out/share/applications/@joplinapp-desktop.desktop \
         --replace 'Exec=AppRun' 'Exec=${pname}' \
-        --replace 'Icon=joplin' "Icon=$out/share/pixmaps/@joplinapp-desktop.png"
+        --replace 'Icon=joplin' "Icon=@joplinapp-desktop"
     '';
   };
 

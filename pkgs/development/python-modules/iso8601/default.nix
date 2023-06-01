@@ -10,22 +10,23 @@
 
 buildPythonPackage rec {
   pname = "iso8601";
-  version = "1.0.2";
+  version = "1.1.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-J/UDIg5oRdnblU+yErlbA2LYt+bBsjJqhwYcPek1lLE=";
+    hash = "sha256-MoEee4He7iBj6m0ulPiBmobR84EeSdI2I6QfqDK+8D8=";
   };
 
   nativeBuildInputs = [
     poetry-core
   ];
 
-  checkInputs = [
-    hypothesis
+  nativeCheckInputs = [
+    # "hypothesis" indirectly depends on iso8601 to build its documentation
+    (hypothesis.override { enableDocumentation = false; })
     pytestCheckHook
     pytz
   ];

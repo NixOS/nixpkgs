@@ -11,25 +11,31 @@
 , gdk-pixbuf
 , desktop-file-utils
 , appstream-glib
-, wrapGAppsHook
+, wrapGAppsHook4
 , python3
 , gnome
 , libadwaita
 , librsvg
 , rustc
+, rust
+, writeText
 , cargo
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-tour";
-  version = "42.0";
+  version = "44.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-/PGsaJBX2oZZaXDsPag1VSHApy6VBj6wWdX+5N6oL08=";
+    hash = "sha256-Bt52d90cWQ0OozoDLJzPTDfGK8ViFbgjyHnkLuYwwrY=";
   };
 
   cargoVendorDir = "vendor";
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     appstream-glib
@@ -43,7 +49,7 @@ stdenv.mkDerivation rec {
     python3
     rustPlatform.cargoSetupHook
     rustc
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -53,6 +59,16 @@ stdenv.mkDerivation rec {
     libadwaita
     librsvg
   ];
+
+  mesonFlags =
+    let
+      # ERROR: 'rust' compiler binary not defined in cross or native file
+      crossFile = writeText "cross-file.conf" ''
+        [binaries]
+        rust = [ 'rustc', '--target', '${rust.toRustTargetSpec stdenv.hostPlatform}' ]
+      '';
+    in
+    lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--cross-file=${crossFile}" ];
 
   passthru = {
     updateScript = gnome.updateScript {

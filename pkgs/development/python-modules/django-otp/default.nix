@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "django-otp";
     repo = "django-otp";
     rev = "v${version}";
-    sha256 = "sha256-Ac9p7q9yaUr3WTTGxCY16Yo/Z8i1RtnD2g0Aj2pqSXY=";
+    hash = "sha256-Ac9p7q9yaUr3WTTGxCY16Yo/Z8i1RtnD2g0Aj2pqSXY=";
   };
 
   postPatch = ''
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     qrcode
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
   ];
 

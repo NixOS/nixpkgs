@@ -3,7 +3,7 @@ Shrink closure size by avoiding paths embedded from configure call.
 https://github.com/NixOS/nixpkgs/issues/175693
 --- a/daemon/buildinfo.c
 +++ b/daemon/buildinfo.c
-@@ -248,7 +248,9 @@ void print_build_info(void) {
+@@ -247,7 +247,9 @@ void print_build_info(void) {
      char *prebuilt_distro = NULL;
      get_install_type(&install_type, &prebuilt_arch, &prebuilt_distro);
  

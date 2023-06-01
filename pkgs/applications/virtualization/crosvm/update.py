@@ -27,6 +27,8 @@ with urlopen('https://chromiumdash.appspot.com/cros/download_serving_builds_csv?
     platform_version = []
 
     for line in reader:
+        if line[cr_stable_index] == "no update":
+            continue
         this_chrome_version = list(map(int, line[cr_stable_index].split('.')))
         this_platform_version = list(map(int, line[cros_stable_index].split('.')))
         chrome_version = max(chrome_version, this_chrome_version)
@@ -34,7 +36,7 @@ with urlopen('https://chromiumdash.appspot.com/cros/download_serving_builds_csv?
 
 chrome_major_version = chrome_version[0]
 chromeos_tip_build = platform_version[0]
-release_branch = f'release-R{chrome_major_version}-{chromeos_tip_build}.B-chromeos'
+release_branch = f'release-R{chrome_major_version}-{chromeos_tip_build}.B'
 
 # Determine the git revision.
 with urlopen(f'https://chromium.googlesource.com/chromiumos/platform/crosvm/+/refs/heads/{release_branch}?format=JSON') as resp:
@@ -50,16 +52,3 @@ with urlopen(f'https://chromium.googlesource.com/chromiumos/platform/crosvm/+log
 
 # Update the version, git revision, and hash in crosvm's default.nix.
 subprocess.run(['update-source-version', 'crosvm', f'--rev={rev}', version])
-
-# Find the path to crosvm's default.nix, so Cargo.lock can be written
-# into the same directory.
-argv = ['nix-instantiate', '--eval', '--json', '-A', 'crosvm.meta.position']
-position = json.loads(subprocess.check_output(argv).decode('utf-8'))
-filename = re.match(r'[^:]*', position)[0]
-
-# Generate a Cargo.lock
-run = ['.',
-       dirname(abspath(__file__)) + '/generate-cargo.sh',
-       dirname(filename) + '/Cargo.lock']
-expr = '(import ./. {}).crosvm.overrideAttrs (_: { dontCargoSetupPostUnpack = true; })'
-subprocess.run(['nix-shell', '-E', expr, '--run', shlex.join(run)])

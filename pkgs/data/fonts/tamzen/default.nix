@@ -1,4 +1,4 @@
-{ fetchFromGitHub, mkfontscale, lib, stdenv }:
+{ fetchFromGitHub, xorg, lib, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "tamzen-font";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "00x5fipzqimglvshhqwycdhaqslbvn3rl06jnswhyxfvz16ymj7s";
   };
 
-  nativeBuildInputs = [ mkfontscale ];
+  nativeBuildInputs = [ xorg.mkfontscale ];
 
   installPhase = ''
     install -m 644 -D otb/*.otb pcf/*.pcf -t "$out/share/fonts/misc"
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Bitmapped programming font based on Tamsyn";
     longDescription = ''
-    Tamzen is a monospace bitmap font. It is programatically forked
+    Tamzen is a monospace bitmap font. It is programmatically forked
     from Tamsyn version 1.11, which backports glyphs from older
     versions while deleting deliberately empty glyphs to allow
     secondary/fallback fonts to provide real glyphs at those codepoints.

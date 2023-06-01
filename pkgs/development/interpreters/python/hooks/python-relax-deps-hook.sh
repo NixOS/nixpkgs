@@ -22,6 +22,24 @@
 #     # pythonRemoveDeps = true;
 #     …
 #   }
+#
+# IMPLEMENTATION NOTES:
+#
+# The "Requires-Dist" dependency specification format is described in PEP 508.
+# Examples that the regular expressions in this hook needs to support:
+#
+# Requires-Dist: foo
+#   -> foo
+# Requires-Dist: foo[optional]
+#   -> foo[optional]
+# Requires-Dist: foo[optional]~=1.2.3
+#   -> foo[optional]
+# Requires-Dist: foo[optional, xyz] (~=1.2.3)
+#   -> foo[optional, xyz]
+# Requires-Dist: foo[optional]~=1.2.3 ; os_name = "posix"
+#   -> foo[optional] ; os_name = "posix"
+#
+# Currently unsupported: URL specs (foo @ https://example.com/a.zip).
 
 _pythonRelaxDeps() {
     local -r metadata_file="$1"
@@ -30,11 +48,11 @@ _pythonRelaxDeps() {
         return
     elif [[ "$pythonRelaxDeps" == 1 ]]; then
         sed -i "$metadata_file" -r \
-            -e 's/(Requires-Dist: \S*) \(.*\)/\1/'
+            -e 's/(Requires-Dist: [a-zA-Z0-9_.-]+\s*(\[[^]]+\])?)[^;]*(;.*)?/\1\3/'
     else
         for dep in $pythonRelaxDeps; do
             sed -i "$metadata_file" -r \
-                -e "s/(Requires-Dist: $dep) \(.*\)/\1/"
+                -e "s/(Requires-Dist: $dep\s*(\[[^]]+\])?)[^;]*(;.*)?/\1\3/"
         done
     fi
 }
@@ -79,6 +97,9 @@ pythonRelaxDepsHook() {
 
         @pythonInterpreter@ -m wheel pack "$unpack_dir/$pkg_name"
     done
+
+    # Remove the folder since it will otherwise be in the dist output.
+    rm -rf "$unpack_dir"
 
     popd
 }

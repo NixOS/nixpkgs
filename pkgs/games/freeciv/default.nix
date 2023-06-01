@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "freeciv";
-  version = "3.0.3";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
     owner = "freeciv";
     repo = "freeciv";
     rev = "R${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "sha256-WIp1R27UahbkLZZuF0nbX/XHVDc2OJukPKgoQ+qnjMc=";
+    sha256 = "sha256-hhX+aM/NHdqOM0qSKSJyW2FAWTsyAHrjaNhxtP2vbVA=";
   };
 
   postPatch = ''
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ autoreconfHook pkg-config ]
-    ++ lib.optional qtClient [ qt5.wrapQtAppsHook ]
-    ++ lib.optional gtkClient [ wrapGAppsHook ];
+    ++ lib.optionals qtClient [ qt5.wrapQtAppsHook ]
+    ++ lib.optionals gtkClient [ wrapGAppsHook ];
 
   buildInputs = [ lua5_3 zlib bzip2 curl xz gettext libiconv icu ]
     ++ [ SDL2 SDL2_mixer SDL2_image SDL2_ttf SDL2_gfx freetype fluidsynth ]

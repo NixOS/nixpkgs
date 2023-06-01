@@ -1,10 +1,10 @@
 { stdenv, lib, fetchurl, bash, pkg-config, autoconf, cpio, file, which, unzip
-, zip, perl, cups, freetype, alsa-lib, libjpeg, giflib, libpng, zlib, lcms2
+, zip, perl, cups, freetype, harfbuzz, alsa-lib, libjpeg, giflib, libpng, zlib, lcms2
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama
-, libXcursor, libXrandr, fontconfig, openjdk11, fetchpatch
+, libXcursor, libXrandr, fontconfig, openjdk11-bootstrap, fetchpatch
 , setJavaClassPath
 , headless ? false
-, enableJavaFX ? openjfx.meta.available, openjfx
+, enableJavaFX ? false, openjfx
 , enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
 }:
 
@@ -12,6 +12,9 @@ let
   major = "12";
   update = ".0.2";
   build = "ga";
+
+  # when building a headless jdk, also bootstrap it with a headless jdk
+  openjdk-bootstrap = openjdk11-bootstrap.override { gtkSupport = !headless; };
 
   openjdk = stdenv.mkDerivation rec {
     pname = "openjdk" + lib.optionalString headless "-headless";
@@ -24,9 +27,9 @@ let
 
     nativeBuildInputs = [ pkg-config autoconf unzip ];
     buildInputs = [
-      cpio file which zip perl zlib cups freetype alsa-lib libjpeg giflib
+      cpio file which zip perl zlib cups freetype harfbuzz alsa-lib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
-      libXi libXinerama libXcursor libXrandr fontconfig openjdk11
+      libXi libXinerama libXcursor libXrandr fontconfig openjdk-bootstrap
     ] ++ lib.optionals (!headless && enableGnome2) [
       gtk3 gnome_vfs GConf glib
     ];
@@ -59,10 +62,12 @@ let
     '';
 
     configureFlags = [
-      "--with-boot-jdk=${openjdk11.home}"
+      "--with-boot-jdk=${openjdk-bootstrap.home}"
       "--with-version-pre="
       "--enable-unlimited-crypto"
       "--with-native-debug-symbols=internal"
+      "--with-freetype=system"
+      "--with-harfbuzz=system"
       "--with-libjpeg=system"
       "--with-giflib=system"
       "--with-libpng=system"
@@ -75,7 +80,7 @@ let
 
     separateDebugInfo = true;
 
-    NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
+    env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error" ];
 
     NIX_LDFLAGS = lib.optionals (!headless) [
       "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
@@ -133,12 +138,12 @@ let
     postFixup = ''
       # Build the set of output library directories to rpath against
       LIBDIRS=""
-      for output in $outputs; do
+      for output in $(getAllOutputNames); do
         if [ "$output" = debug ]; then continue; fi
         LIBDIRS="$(find $(eval echo \$$output) -name \*.so\* -exec dirname {} \+ | sort | uniq | tr '\n' ':'):$LIBDIRS"
       done
       # Add the local library paths to remove dependencies on the bootstrap
-      for output in $outputs; do
+      for output in $(getAllOutputNames); do
         if [ "$output" = debug ]; then continue; fi
         OUTPUTDIR=$(eval echo \$$output)
         BINLIBS=$(find $OUTPUTDIR/bin/ -type f; find $OUTPUTDIR -name \*.so\*)
@@ -149,7 +154,7 @@ let
       done
     '';
 
-    disallowedReferences = [ openjdk11 ];
+    disallowedReferences = [ openjdk-bootstrap ];
 
     meta = import ./meta.nix lib version;
 

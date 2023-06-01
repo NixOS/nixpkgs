@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "Patrowl";
     repo = "Patrowl4py";
     rev = version;
-    sha256 = "sha256-ZGvntLbXIWmL0WoT+kQoNT6gDPgsSKwHQQjYlarvnKo=";
+    hash = "sha256-ZGvntLbXIWmL0WoT+kQoNT6gDPgsSKwHQQjYlarvnKo=";
   };
 
   propagatedBuildInputs = [

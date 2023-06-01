@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pineapple-pictures";
-  version = "0.6.3";
+  version = "0.6.9";
 
   src = fetchFromGitHub {
     owner = "BLumia";
     repo = "pineapple-pictures";
     rev = version;
-    sha256 = "sha256-9Nlrei3TxZr3tv0BtlfsKAvDJhQHgd21FzLnzitYF3U=";
+    sha256 = "sha256-QFKo4zMqhKzFseXMnZEBd2DPo0QObpelvYmI2tMyfRE=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     qtsvg
-    exiv2.lib
+    exiv2
+  ];
+
+  cmakeFlags = [
+    "-DPREFER_QT_5=OFF"
   ];
 
   meta = with lib; {

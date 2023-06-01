@@ -1,15 +1,15 @@
 { lib, stdenv, fetchurl, pkg-config, nixosTests
-, boost, libyamlcpp, libsodium, sqlite, protobuf, openssl, systemd
+, boost, yaml-cpp, libsodium, sqlite, protobuf, openssl, systemd
 , mariadb-connector-c, postgresql, lua, openldap, geoip, curl, unixODBC, lmdb, tinycdb
 }:
 
 stdenv.mkDerivation rec {
   pname = "pdns";
-  version = "4.6.3";
+  version = "4.7.4";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-${version}.tar.bz2";
-    hash = "sha256-rNBricoB0a32G5BmBGFPDh13oelO7srej/XVOhbbc4k=";
+    hash = "sha256-dGndgft98RGX9JY4+knO/5+XMiX8j5xxYLC/wAoudHE=";
   };
   # redact configure flags from version output to reduce closure size
   patches = [ ./version.patch ];
@@ -17,13 +17,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     boost mariadb-connector-c postgresql lua openldap sqlite protobuf geoip
-    libyamlcpp libsodium curl unixODBC openssl systemd lmdb tinycdb
+    yaml-cpp libsodium curl unixODBC openssl systemd lmdb tinycdb
   ];
 
   # Configure phase requires 64-bit time_t even on 32-bit platforms.
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.hostPlatform.is32bit [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.is32bit [
     "-D_TIME_BITS=64" "-D_FILE_OFFSET_BITS=64"
-  ];
+  ]);
 
   configureFlags = [
     "--disable-silent-rules"

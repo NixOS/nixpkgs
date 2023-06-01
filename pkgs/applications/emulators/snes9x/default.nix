@@ -1,23 +1,27 @@
 { lib
 , stdenv
 , alsa-lib
-, autoreconfHook
+, cmake
 , fetchFromGitHub
-, fetchpatch
 , gtkmm3
 , libepoxy
 , libpng
+, libselinux
 , libX11
-, libXv
+, libXdmcp
 , libXext
 , libXinerama
-, meson
+, libXrandr
+, libXv
 , minizip
 , ninja
+, pcre2
 , pkg-config
 , portaudio
 , pulseaudio
+, python3
 , SDL2
+, util-linuxMinimal
 , wrapGAppsHook
 , zlib
 , withGtk ? false
@@ -29,40 +33,28 @@ stdenv.mkDerivation rec {
       "snes9x-gtk"
     else
       "snes9x";
-  version = "1.61";
+  version = "1.62.3";
 
   src = fetchFromGitHub {
     owner = "snes9xgit";
     repo = "snes9x";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "1kay7aj30x0vn8rkylspdycydrzsc0aidjbs0dd238hr5hid723b";
+    hash = "sha256-+KHpvz7nfwGXjzDAK/V+2JDRT1sa0kXDkg7XcRyvSP8=";
   };
-
-  patches = [
-    # Fix cross-compilation, otherwise it fails to detect host compiler features
-    # Doesn't affect non CC builds
-    (fetchpatch {
-      url = "https://mirror.its.dal.ca/gentoo-portage/games-emulation/snes9x/files/snes9x-1.53-cross-compile.patch";
-      sha256 = "sha256-ZCmnprimz8PtDIXkB1dYD0oura9icW81yKvJ4coKaDg=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config
-  ]
-  ++ lib.optionals (!withGtk) [
-    autoreconfHook
+    python3
   ]
   ++ lib.optionals withGtk [
-    meson
+    cmake
     ninja
     wrapGAppsHook
   ];
 
   buildInputs = [
     libX11
-    libXext
     libXv
     minizip
     zlib
@@ -74,13 +66,19 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (!withGtk) [
     libpng
+    libXext
     libXinerama
   ]
   ++ lib.optionals withGtk [
     gtkmm3
     libepoxy
+    libselinux
+    libXdmcp
+    libXrandr
+    pcre2
     portaudio
     SDL2
+    util-linuxMinimal # provides libmount
   ];
 
   configureFlags =
@@ -98,8 +96,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  preAutoreconf = lib.optionalString (!withGtk) "cd unix";
-  preConfigure = lib.optionalString withGtk "cd gtk";
+  preConfigure = if withGtk then "cd gtk" else "cd unix";
 
   enableParallelBuilding = true;
 

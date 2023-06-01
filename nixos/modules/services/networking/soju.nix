@@ -120,5 +120,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ malvo ];
+  meta.maintainers = with maintainers; [ malte-v ];
 }

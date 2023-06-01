@@ -1,26 +1,35 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , buildPackages
+, callPackage
 , sqlite
 , libtiff
 , curl
 , gtest
 , nlohmann_json
+, python3
+, cacert
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "proj";
-  version = "9.0.0";
+  version = "9.2.0";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "PROJ";
     rev = version;
-    sha256 = "sha256-zMP+WzC65BFz8g8mF5t7toqxmxCJePysd6WJuqpe8yg=";
+    hash = "sha256-NC5H7ufIXit+PVDwNDhz5cv44fduTytsdmNOWyqDDYQ=";
   };
+
+  patches = [
+    # https://github.com/OSGeo/PROJ/pull/3252
+    ./only-add-curl-for-static-builds.patch
+  ];
 
   outputs = [ "out" "dev" ];
 
@@ -28,7 +37,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ sqlite libtiff curl nlohmann_json ];
 
-  checkInputs = [ gtest ];
+  nativeCheckInputs = [ cacert gtest ];
 
   cmakeFlags = [
     "-DUSE_EXTERNAL_GTEST=ON"
@@ -49,11 +58,17 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  passthru.tests = {
+    python = python3.pkgs.pyproj;
+    proj = callPackage ./tests.nix { proj = finalAttrs.finalPackage; };
+  };
+
   meta = with lib; {
+    changelog = "https://github.com/OSGeo/PROJ/blob/${src.rev}/docs/source/news.rst";
     description = "Cartographic Projections Library";
     homepage = "https://proj.org/";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ dotlambda ];
   };
-}
+})

@@ -2,6 +2,7 @@
 , stdenv
 , substituteAll
 , fetchurl
+, fetchpatch2
 , pkg-config
 , gettext
 , graphene
@@ -42,11 +43,13 @@
 , vulkan-headers
 , wayland
 , wayland-protocols
+, wayland-scanner
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux
 , cups
 , AppKit
 , Cocoa
+, libexecinfo
 , broadwaySupport ? true
 }:
 
@@ -62,7 +65,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gtk4";
-  version = "4.8.0";
+  version = "4.10.3";
 
   outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
@@ -74,8 +77,31 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    sha256 = "yNYgNDfR41nYMSTcWRVG1AP2fjsAVE5T3VCpuqzcvX8=";
+    sha256 = "RUVEGteeN3624KcFAm3HpGiG5GobA020CRKQnagBzqk=";
   };
+
+  patches = [
+    # https://github.com/NixOS/nixpkgs/pull/218143#issuecomment-1501059486
+    ./patches/4.0-fix-darwin-build.patch
+
+    # Fix deleting in Nautilus (part of 4.10.4)
+    # https://gitlab.gnome.org/GNOME/nautilus/-/issues/2945
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/4f47683710bbb4b56c286c6ee6a5c394fcf2b755.patch";
+      sha256 = "fU9SX8MH37ZN6Ffk/YhYmipTC7+uT9JXnWggArWNkqA=";
+    })
+    # Fix border/artifact appearing in applications (part of 4.10.4)
+    # https://gitlab.gnome.org/GNOME/mutter/-/issues/2805
+    # https://gitlab.gnome.org/GNOME/gnome-shell/-/issues/6696
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/b686ce1cb62dba505120e0f1116c516662a06e30.patch";
+      sha256 = "0zjY5s+T4CVe3WiowgWE58ruVvqBFUuY2juwBOzMRN4=";
+    })
+  ];
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     gettext
@@ -88,6 +114,8 @@ stdenv.mkDerivation rec {
     sassc
     gi-docgen
     libxml2 # for xmllint
+  ] ++ lib.optionals waylandSupport [
+    wayland-scanner
   ] ++ setupHooks;
 
   buildInputs = [
@@ -126,6 +154,8 @@ stdenv.mkDerivation rec {
     cups
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+    libexecinfo
   ];
   #TODO: colord?
 
@@ -156,7 +186,7 @@ stdenv.mkDerivation rec {
     "-Dvulkan=enabled"
   ] ++ lib.optionals (!cupsSupport) [
     "-Dprint-cups=disabled"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
     "-Dmedia-gstreamer=disabled" # requires gstreamer-gl
   ] ++ lib.optionals (!x11Support) [
     "-Dx11-backend=false"
@@ -168,11 +198,14 @@ stdenv.mkDerivation rec {
 
   # These are the defines that'd you'd get with --enable-debug=minimum (default).
   # See: https://developer.gnome.org/gtk3/stable/gtk-building.html#extra-configuration-options
-  NIX_CFLAGS_COMPILE = "-DG_ENABLE_DEBUG -DG_DISABLE_CAST_CHECKS";
+  env = {
+    NIX_CFLAGS_COMPILE = "-DG_ENABLE_DEBUG -DG_DISABLE_CAST_CHECKS";
+  } // lib.optionalAttrs stdenv.hostPlatform.isMusl {
+    NIX_LDFLAGS = "-lexecinfo";
+  };
 
   postPatch = ''
     files=(
-      build-aux/meson/post-install.py
       build-aux/meson/gen-demo-header.py
       demos/gtk-demo/geninclude.py
       gdk/broadway/gen-c-array.py
@@ -183,6 +216,7 @@ stdenv.mkDerivation rec {
 
     chmod +x ''${files[@]}
     patchShebangs ''${files[@]}
+
   '';
 
   preInstall = ''

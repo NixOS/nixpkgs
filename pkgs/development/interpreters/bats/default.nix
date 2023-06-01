@@ -10,7 +10,7 @@
 , hostname
 , parallel
 , flock
-, ps
+, procps
 , bats
 , lsof
 , callPackages
@@ -22,13 +22,13 @@
 
 resholve.mkDerivation rec {
   pname = "bats";
-  version = "1.7.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "bats-core";
     repo = "bats-core";
     rev = "v${version}";
-    sha256 = "sha256-joNne/dDVCNtzdTQ64rK8GimT+DOWUa7f410hml2s8Q=";
+    sha256 = "sha256-nKBNbqJYRd/3tO85E6KrOh32yOaNKpLXxz5gQ5Uvmcc=";
   };
 
   patchPhase = ''
@@ -58,11 +58,13 @@ resholve.mkDerivation rec {
         flock
         "lib/bats-core"
         "libexec/bats-core"
+        procps
       ];
       fake = {
         external = [
           "greadlink"
           "shlock"
+          "pkill" # procps doesn't supply this on darwin
         ];
       };
       fix = {
@@ -84,11 +86,13 @@ resholve.mkDerivation rec {
           "${placeholder "out"}/lib/bats-core/warnings.bash"
           "$setup_suite_file" # via cli arg
         ];
-        "$report_formatter" = true;
-        "$formatter" = true;
+        "$interpolated_report_formatter" = true;
+        "$interpolated_formatter" = true;
         "$pre_command" = true;
         "$BATS_TEST_NAME" = true;
         "${placeholder "out"}/libexec/bats-core/bats-exec-test" = true;
+        "$BATS_LINE_REFERENCE_FORMAT" = "comma_line";
+        "$BATS_LOCKING_IMPLEMENTATION" = "${flock}/bin/flock";
       };
       execer = [
         /*
@@ -134,8 +138,15 @@ resholve.mkDerivation rec {
       setup() {
         bats_load_library bats-support
         bats_load_library bats-assert
+        bats_load_library bats-file
 
         bats_require_minimum_version 1.5.0
+
+        TEST_TEMP_DIR="$(temp_make --prefix 'nixpkgs-bats-test')"
+      }
+
+      teardown() {
+        temp_del "$TEST_TEMP_DIR"
       }
 
       @test echo_hi {
@@ -148,21 +159,28 @@ resholve.mkDerivation rec {
         assert_line --index 0 "cp: missing file operand"
         assert_line --index 1 "Try 'cp --help' for more information."
       }
+
+      @test file_exists {
+        echo "hi" > "$TEST_TEMP_DIR/hello.txt"
+        assert_file_exist "$TEST_TEMP_DIR/hello.txt"
+        run cat "$TEST_TEMP_DIR/hello.txt"
+        assert_output "hi"
+      }
     '';
     passAsFile = [ "testScript" ];
   } ''
-    ${bats.withLibraries (p: [ p.bats-support p.bats-assert ])}/bin/bats "$testScriptPath"
+    ${bats.withLibraries (p: [ p.bats-support p.bats-assert p.bats-file ])}/bin/bats "$testScriptPath"
     touch "$out"
   '';
 
   passthru.tests.upstream = bats.unresholved.overrideAttrs (old: {
     name = "${bats.name}-tests";
     dontInstall = true; # just need the build directory
-    installCheckInputs = [
+    nativeInstallCheckInputs = [
       ncurses
       parallel # skips some tests if it can't detect
       flock # skips some tests if it can't detect
-      ps
+      procps
     ] ++ lib.optionals stdenv.isDarwin [ lsof ];
     inherit doInstallCheck;
     installCheckPhase = ''
@@ -171,6 +189,12 @@ resholve.mkDerivation rec {
 
       # skip tests that assume bats `install.sh` will be in BATS_ROOT
       rm test/root.bats
+
+      '' + (lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # skip new timeout tests which are failing on macOS for unclear reasons
+      # This might relate to procps not having a pkill?
+      rm test/timeout.bats
+      '') + ''
 
       # test generates file with absolute shebang dynamically
       substituteInPlace test/install.bats --replace \

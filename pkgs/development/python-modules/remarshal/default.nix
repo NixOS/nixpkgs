@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchFromGitHub
 
 # build deps
@@ -16,7 +16,7 @@
 , pytestCheckHook
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "remarshal";
   version = "0.14.0";
   format = "pyproject";
@@ -47,7 +47,7 @@ buildPythonApplication rec {
     u-msgpack-python
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

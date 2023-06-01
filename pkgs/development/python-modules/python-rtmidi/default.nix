@@ -2,7 +2,8 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, isPy27
+, pythonOlder
+, pythonAtLeast
 , pkg-config
 , alsa-lib
 , libjack2
@@ -17,7 +18,9 @@
 buildPythonPackage rec {
   pname = "python-rtmidi";
   version = "1.4.9";
-  disabled = isPy27;
+
+  # https://github.com/SpotlightKid/python-rtmidi/issues/115
+  disabled = pythonOlder "3.6" || pythonAtLeast "3.11";
 
   src = fetchPypi {
     inherit pname version;
@@ -34,7 +37,7 @@ buildPythonPackage rec {
     CoreMIDI
     CoreServices
   ];
-  checkInputs = [
+  nativeCheckInputs = [
     tox
     flake8
     alabaster
@@ -42,7 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python binding for the RtMidi C++ library implemented using Cython";
-    homepage = "https://chrisarndt.de/projects/python-rtmidi/";
+    homepage = "https://github.com/SpotlightKid/python-rtmidi";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

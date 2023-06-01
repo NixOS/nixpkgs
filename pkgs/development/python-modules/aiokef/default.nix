@@ -26,7 +26,7 @@ buildPythonPackage rec {
     tenacity
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-cov
     pytest-mypy
     pytestCheckHook

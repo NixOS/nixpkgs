@@ -1,25 +1,34 @@
 { lib
 , fetchFromGitHub
 , buildGoModule
+, installShellFiles
 }:
 
 buildGoModule rec {
   pname = "cirrus-cli";
-  version = "0.85.0";
+  version = "0.99.0";
 
   src = fetchFromGitHub {
     owner = "cirruslabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hFL7ImtaQrNeoxNLE/RL79SHRBHSit1dQ6Wn8gq8dns=";
+    sha256 = "sha256-ekNdifSAwB2w5xys1B4eexgqlXwpkkvxJ6FQNTkIQEw=";
   };
 
-  vendorSha256 = "sha256-GRCcKIUimPFdeAhnz6RC5arZ0E+z+SpaAC1uDaxpJkI=";
+  vendorHash = "sha256-BtcuqdVOOBG/yPdKaj+8nCvg050F/s/davblLUval+o=";
 
   ldflags = [
     "-X github.com/cirruslabs/cirrus-cli/internal/version.Version=v${version}"
     "-X github.com/cirruslabs/cirrus-cli/internal/version.Commit=v${version}"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
+  postInstall = ''
+    installShellCompletion --cmd cirrus \
+      --bash <($out/bin/cirrus completion bash) \
+      --zsh <($out/bin/cirrus completion zsh) \
+      --fish <($out/bin/cirrus completion fish)
+  '';
 
   # tests fail on read-only filesystem
   doCheck = false;

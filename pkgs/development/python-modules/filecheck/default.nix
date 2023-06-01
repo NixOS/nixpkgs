@@ -1,24 +1,39 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchFromGitHub
-, poetry
+, poetry-core
+, pytestCheckHook
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "filecheck";
-  version = "0.0.22";
+  version = "0.0.23";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "mull-project";
     repo = "FileCheck.py";
-    rev = "v${version}";
-    sha256 = "sha256-I2SypKkgcVuLyLiwNw5oWDb9qT56TbC6vbui8PEcziI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-R+e4Z1EX6Nk7INLar3gtkUpk+30xIJO7yiZbUvrhN74=";
   };
 
-  nativeBuildInputs = [ poetry ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "poetry>=0.12" "poetry-core" \
+      --replace "poetry.masonry.api" "poetry.core.masonry.api"
+  '';
 
-  pythonImportsCheck = [ "filecheck" ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "filecheck"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/mull-project/FileCheck.py";

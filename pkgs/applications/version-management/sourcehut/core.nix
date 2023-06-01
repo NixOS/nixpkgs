@@ -52,7 +52,7 @@ buildPythonPackage rec {
     patches/redis-socket/core/0001-Fix-Unix-socket-support-in-RedisQueueCollector.patch
   ];
 
-  nativeBuildInputs = [
+  propagatedNativeBuildInputs = [
     sassc
     nodejs
   ];

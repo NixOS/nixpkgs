@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , matchpy
 , pytestCheckHook
 , pythonOlder
@@ -9,21 +10,29 @@
 
 buildPythonPackage rec {
   pname = "pymbolic";
-  version = "2022.1";
+  version = "2022.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tS9FHdC5gD4D3jMgrzt85XIwcAYcbSMcACFvbaQlkBI=";
+    hash = "sha256-+Cd2lCuzy3Iyn6Hxqito7AnyN9uReMlc/ckqaup87Ik=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/inducer/pymbolic/commit/cb3d999e4788dad3edf053387b6064adf8b08e19.patch";
+      excludes = [ ".github/workflows/ci.yml" ];
+      hash = "sha256-P0YjqAo0z0LZMIUTeokwMkfP8vxBXi3TcV4BSFaO1lU=";
+    })
+  ];
 
   propagatedBuildInputs = [
     pytools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     matchpy
     pytestCheckHook
   ];

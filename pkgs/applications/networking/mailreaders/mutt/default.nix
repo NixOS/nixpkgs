@@ -12,19 +12,23 @@
 , gpgSupport   ? false
 , gpgmeSupport ? true
 , imapSupport  ? true
+, pop3Support  ? true
+, smtpSupport  ? true
 , withSidebar  ? true
 , gssSupport   ? true
 , writeScript
 }:
+assert smimeSupport -> sslSupport;
+assert gpgmeSupport -> sslSupport;
 
 stdenv.mkDerivation rec {
   pname = "mutt";
-  version = "2.2.7";
+  version = "2.2.10";
   outputs = [ "out" "doc" "info" ];
 
   src = fetchurl {
     url = "http://ftp.mutt.org/pub/mutt/${pname}-${version}.tar.gz";
-    sha256 = "6xOFj1i7Np9He/ZS2Q6baq3dDWEKy+o0VQSeXvrTbfE=";
+    sha256 = "sha256-TXc/IkIveQlve5S1e+5FZUrZolFl27NkY8WClbTNPYg=";
   };
 
   patches = lib.optional smimeSupport (fetchpatch {
@@ -44,9 +48,9 @@ stdenv.mkDerivation rec {
     (lib.enableFeature headerCache  "hcache")
     (lib.enableFeature gpgmeSupport "gpgme")
     (lib.enableFeature imapSupport  "imap")
+    (lib.enableFeature smtpSupport  "smtp")
+    (lib.enableFeature pop3Support  "pop")
     (lib.enableFeature withSidebar  "sidebar")
-    "--enable-smtp"
-    "--enable-pop"
     "--with-mailpath="
 
     # Look in $PATH at runtime, instead of hardcoding /usr/bin/sendmail

@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     description = "A library to help create and query binary XML blobs";
     homepage = "https://github.com/hughsie/libxmlb";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

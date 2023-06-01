@@ -3,14 +3,9 @@
 , fetchFromGitHub
 , desktop-file-utils
 , ffmpeg
-, gobject-introspection
 , granite
 , gtk
 , imagemagick
-, libgee
-, libhandy
-, libsecret
-, libsoup
 , meson
 , ninja
 , pkg-config

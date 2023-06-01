@@ -27,7 +27,7 @@ let
     ${cfg.extraConfig}
   '';
 
-  chronyFlags = "-n -m -u chrony -f ${configFile} ${toString cfg.extraFlags}";
+  chronyFlags = [ "-n" "-m" "-u" "chrony" "-f" "${configFile}" ] ++ cfg.extraFlags;
 in
 {
   options = {
@@ -147,9 +147,9 @@ in
     systemd.services.systemd-timedated.environment = { SYSTEMD_TIMEDATED_NTP_SERVICES = "chronyd.service"; };
 
     systemd.tmpfiles.rules = [
-      "d ${stateDir} 0755 chrony chrony - -"
-      "f ${driftFile} 0640 chrony chrony -"
-      "f ${keyFile} 0640 chrony chrony -"
+      "d ${stateDir} 0750 chrony chrony - -"
+      "f ${driftFile} 0640 chrony chrony - -"
+      "f ${keyFile} 0640 chrony chrony - -"
     ];
 
     systemd.services.chronyd =
@@ -164,15 +164,47 @@ in
         path = [ chronyPkg ];
 
         unitConfig.ConditionCapability = "CAP_SYS_TIME";
-        serviceConfig =
-          { Type = "simple";
-            ExecStart = "${chronyPkg}/bin/chronyd ${chronyFlags}";
+        serviceConfig = {
+          Type = "simple";
+          ExecStart = "${chronyPkg}/bin/chronyd ${builtins.toString chronyFlags}";
 
-            ProtectHome = "yes";
-            ProtectSystem = "full";
-            PrivateTmp = "yes";
-          };
-
+          # Proc filesystem
+          ProcSubset = "pid";
+          ProtectProc = "invisible";
+          # Access write directories
+          ReadWritePaths = [ "${stateDir}" ];
+          UMask = "0027";
+          # Capabilities
+          CapabilityBoundingSet = [ "CAP_CHOWN" "CAP_DAC_OVERRIDE" "CAP_NET_BIND_SERVICE" "CAP_SETGID" "CAP_SETUID" "CAP_SYS_RESOURCE" "CAP_SYS_TIME" ];
+          # Device Access
+          DeviceAllow = [ "char-pps rw" "char-ptp rw" "char-rtc rw" ];
+          DevicePolicy = "closed";
+          # Security
+          NoNewPrivileges = true;
+          # Sandboxing
+          ProtectSystem = "full";
+          ProtectHome = true;
+          PrivateTmp = true;
+          PrivateDevices = false;
+          PrivateUsers = false;
+          ProtectHostname = true;
+          ProtectClock = false;
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectKernelLogs = true;
+          ProtectControlGroups = true;
+          RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+          RestrictNamespaces = true;
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          RemoveIPC = true;
+          PrivateMounts = true;
+          # System Call Filtering
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [ "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @resources" "@clock" "@setuid" "capset" "@chown" ];
+        };
       };
   };
 }

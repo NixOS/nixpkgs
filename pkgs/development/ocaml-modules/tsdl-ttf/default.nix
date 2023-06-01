@@ -9,13 +9,15 @@
 
 buildDunePackage rec {
   pname = "tsdl-ttf";
-  version = "0.3.2";
+  version = "0.5";
+
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "sanette";
     repo = pname;
     rev = version;
-    sha256 = "sha256-COBLF9K8thRROJJGeg4wxqrjB3aBa4CGYkf8HdAQ2o0";
+    hash = "sha256-ai9ChsA3HZzTxT9AuHsY1UIA2Q3U3CcOA7jRSG4MDsQ=";
   };
 
   buildInputs = [
@@ -32,6 +34,6 @@ buildDunePackage rec {
     description = "SDL2_ttf bindings for Ocaml with Tsdl";
     homepage = "https://github.com/sanette/tsdl-ttf";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ superherointj ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,28 +1,29 @@
 { lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, gnome
-, gtk-doc, gtk2, python2Packages, lua, gobject-introspection
+, gtk-doc, gtk2, lua, gobject-introspection
 }:
 
-let
-  inherit (python2Packages) python pygtk;
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "keybinder";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "engla";
     repo = "keybinder";
     rev = "v${version}";
-    sha256 = "sha256-q/+hqhvXIknT+/5oENcWSr1OuF00kaZlXFUP1fdCMlk=";
+    sha256 = "sha256-elL6DZtzCwAtoyGZYP0jAma6tHPks2KAtrziWtBENGU=";
   };
 
   nativeBuildInputs = [ pkg-config autoconf automake ];
+
   buildInputs = [
     libtool gnome.gnome-common gtk-doc gtk2
-    python pygtk lua gobject-introspection
+    lua gobject-introspection
   ];
 
+  configureFlags = [ "--disable-python" ];
+
   preConfigure = ''
-    ./autogen.sh --prefix="$out"
+    ./autogen.sh --prefix="$out" $configureFlags
   '';
 
   meta = with lib; {
@@ -36,8 +37,6 @@ in stdenv.mkDerivation rec {
       * A C library, ``libkeybinder``
       * Gobject-Introspection (gir)  generated bindings
       * Lua bindings, ``lua-keybinder``
-      * Python bindings, ``python-keybinder``
-      * An ``examples`` directory with programs in C, Lua, Python and Vala.
     '';
     homepage = "https://github.com/engla/keybinder/";
     license = licenses.gpl2Plus;

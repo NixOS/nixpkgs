@@ -25,14 +25,20 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "3.10.0";
+  version = "7.2.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Y3ueicw6Hn6lw24hdPeJohGol6l7UlQFIefYsBVY6Hg=";
+    sha256 = "sha256-jtNPRsq33bIn3jy3F63UNrwrhaTBYbRYLDxyxgAXjIc=";
   };
+
+  patches = [
+    # Having a working nix packagekit backend will supersede this.
+    # https://github.com/NixOS/nixpkgs/issues/177946
+    ./disable-packagekit-backend.patch
+  ];
 
   nativeBuildInputs = [
     dbus # for pkg-config
@@ -70,9 +76,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

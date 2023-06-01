@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     substitutions = [
       ''--replace "convert" "${imagemagick}/bin/convert"''
       ''--replace "qrencode" "${qrencode.bin}/bin/qrencode"''
-    ] ++ lib.optional testQR [
+    ] ++ lib.optionals testQR [
       ''--replace "hash zbarimg" "true"'' # hash does not work on NixOS
       ''--replace "$(zbarimg --raw" "$(${zbar.out}/bin/zbarimg --raw"''
     ];

@@ -32,13 +32,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-settings-daemon";
-  version = "5.4.5";
+  version = "5.6.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-qjI1z1MuaI5JFqjHap/+aYDQ0YuP9VNnnY6vy/AaKqs=";
+    hash = "sha256-IqYfHMjKe7gVsM6HgihQMNkcXSYBOft1lamXOLa1Y8k=";
   };
 
   patches = [

@@ -15,7 +15,7 @@ buildPythonPackage rec {
     hash = "sha256-HAe3Qf3lLeVWw/tVkW0J+CfoxSoOnCcWDR2nEWZn7HM=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "shellescape" ];
 
   meta = with lib; {

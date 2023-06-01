@@ -7,14 +7,15 @@
 
 buildGoModule rec {
   pname = "ko";
-  version = "0.11.2";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
-    owner = "google";
+    owner = "ko-build";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-BwK49dSt3D2BrYvluDOBYIH5qEt59HC1hssHl1D2Heg=";
+    sha256 = "sha256-KVJqqvp46BAUscG5Xj/g4ThUXKFsuJdzEB++uBskFiw=";
   };
+
   vendorSha256 = null;
 
   nativeBuildInputs = [ installShellFiles ];
@@ -24,7 +25,7 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-X github.com/google/ko/pkg/commands.Version=${version}" ];
 
-  checkInputs = [ git ];
+  nativeCheckInputs = [ git ];
   preCheck = ''
     # Feed in all the tests for testing
     # This is because subPackages above limits what is built to just what we
@@ -36,6 +37,10 @@ buildGoModule rec {
     # resolves some complaints from ko
     export GOROOT="$(go env GOROOT)"
     git init
+
+    # ko tests will fail if any of those env are set, as ko tries
+    # to make sure it can build and target multiple GOOS/GOARCH
+    unset GOOS GOARCH GOARM
   '';
 
   postInstall = ''
@@ -46,8 +51,8 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/google/ko";
-    changelog = "https://github.com/google/ko/releases/tag/v${version}";
+    homepage = "https://github.com/ko-build/ko";
+    changelog = "https://github.com/ko-build/ko/releases/tag/v${version}";
     description = "Build and deploy Go applications on Kubernetes";
     longDescription = ''
       ko is a simple, fast container image builder for Go applications.
@@ -56,6 +61,6 @@ buildGoModule rec {
       ko also includes support for simple YAML templating which makes it a powerful tool for Kubernetes applications.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ nickcao jk ];
+    maintainers = with maintainers; [ nickcao jk vdemeester developer-guy ];
   };
 }

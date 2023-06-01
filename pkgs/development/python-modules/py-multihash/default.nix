@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "multiformats";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-z1lmSypGCMFWJNzNgV9hx/IStyXbpd5jvrptFpewuOA=";
+    hash = "sha256-z1lmSypGCMFWJNzNgV9hx/IStyXbpd5jvrptFpewuOA=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     varint
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

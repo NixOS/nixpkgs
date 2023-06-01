@@ -5,8 +5,7 @@
 , doxygen
 , graphviz
 , makeWrapper
-, cppcheck
-, boost16x
+, boost17x
 , SDL2
 , python3
 , freetype
@@ -24,18 +23,18 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.10.2";
   pname = "freeorion";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "freeorion";
     repo = "freeorion";
     rev = "v${version}";
-    sha256 = "sha256-k/YwTg0N2b70igfqRuFl/zwxMQhD2QjbapsazYbi0Ik=";
+    sha256 = "sha256-uJRDU0Xd+sHL2IDvMiElUSOhvchVMW9wYMSLSN7pYtQ=";
   };
 
   buildInputs = [
-    (boost16x.override { enablePython = true; python = python3; })
+    (boost17x.override { enablePython = true; python = python3; })
     (python3.withPackages (p: with p; [ pycodestyle ]))
     SDL2
     freetype
@@ -53,13 +52,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    cppcheck
     doxygen
     graphviz
     makeWrapper
   ];
 
-  # as of 0.4.10.2 FreeOrion doesn't work with "-DOpenGL_GL_PREFERENCE=GLVND"
+  # as of 0.5 FreeOrion doesn't work with "-DOpenGL_GL_PREFERENCE=GLVND"
   cmakeFlags = [ "-DOpenGL_GL_PREFERENCE=LEGACY" ];
 
   postInstall = ''
@@ -81,7 +79,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A free, open source, turn-based space empire and galactic conquest (4X) computer game";
-    homepage = "http://www.freeorion.org";
+    homepage = "https://www.freeorion.org/";
     license = with licenses; [ gpl2 cc-by-sa-30 ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ tex ];

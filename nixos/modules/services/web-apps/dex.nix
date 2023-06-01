@@ -58,7 +58,7 @@ in
       '';
       description = lib.mdDoc ''
         The available options can be found in
-        [the example configuration](https://github.com/dexidp/dex/blob/v${pkgs.dex.version}/config.yaml.dist).
+        [the example configuration](https://github.com/dexidp/dex/blob/v${pkgs.dex-oidc.version}/config.yaml.dist).
 
         It's also possible to refer to environment variables (defined in [services.dex.environmentFile](#opt-services.dex.environmentFile))
         using the syntax `$VARIABLE_NAME`.
@@ -83,11 +83,12 @@ in
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         BindReadOnlyPaths = [
           "/nix/store"
-          "-/etc/resolv.conf"
-          "-/etc/nsswitch.conf"
+          "-/etc/dex"
           "-/etc/hosts"
           "-/etc/localtime"
-          "-/etc/dex"
+          "-/etc/nsswitch.conf"
+          "-/etc/resolv.conf"
+          "-/etc/ssl/certs/ca-certificates.crt"
         ];
         BindPaths = optional (cfg.settings.storage.type == "postgres") "/var/run/postgresql";
         CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
@@ -119,7 +120,7 @@ in
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged @resources @setuid @keyring" ];
+        SystemCallFilter = [ "@system-service" "~@privileged @setuid @keyring" ];
         TemporaryFileSystem = "/:ro";
         # Does not work well with the temporary root
         #UMask = "0066";

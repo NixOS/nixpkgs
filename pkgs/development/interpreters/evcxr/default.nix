@@ -3,22 +3,29 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "evcxr";
-  version = "0.13.0";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "evcxr";
     rev = "v${version}";
-    sha256 = "sha256-n9wDO4HIWLINbqGVxaZyAEFVDLLnSpQLKlFf20jLq6o=";
+    sha256 = "sha256-gREAtCh4jerqxhwNslXIXRMLkoj0RlhbIwQXbb8LVws=";
   };
 
-  cargoSha256 = "sha256-zdIJb9fXRByyAJ32RL9lQh6oS1K78IlZfWdJyj+MMZM=";
+  cargoSha256 = "sha256-xuxWOVSUJVQvSDA5xhFBjdO/ODLA4fzEnzG9p0DRF2Q=";
 
   RUST_SRC_PATH = "${rustPlatform.rustLibSrc}";
 
   nativeBuildInputs = [ pkg-config makeWrapper cmake ];
   buildInputs = lib.optionals stdenv.isDarwin
     [ libiconv CoreServices Security ];
+
+  # test broken with rust 1.69:
+  # * https://github.com/evcxr/evcxr/issues/294
+  # * https://github.com/NixOS/nixpkgs/issues/229524
+  checkFlags = [
+    "--skip=check_for_errors"
+  ];
 
   postInstall = let
     wrap = exe: ''

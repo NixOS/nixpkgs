@@ -15,20 +15,20 @@
 
 buildGoModule rec {
   pname = "dsq";
-  version = "0.22.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "multiprocessio";
     repo = "dsq";
     rev = "v${version}";
-    hash = "sha256-aFSal+MDJ7W50ZMgBkkyLaJjJoNeSGubylaRK0tbAzY=";
+    hash = "sha256-FZBJe+2y4HV3Pgeap4yvD0a8M/j+6pAJEFpoQVVE1ec=";
   };
 
-  vendorSha256 = "sha256-RW6DdMQeuKVP4rFN13Azq+zAx6dVXmdnIA6aDMCygcI=";
+  vendorSha256 = "sha256-MbBR+OC1OGhZZGcZqc+Jzmabdc5ZfFEwzqP5YMrj6mY=";
 
   ldflags = [ "-X" "main.Version=${version}" ];
 
-  checkInputs = [ python3 curl jq p7zip ];
+  nativeCheckInputs = [ python3 curl jq p7zip ];
 
   preCheck = ''
     substituteInPlace scripts/test.py \
@@ -46,7 +46,7 @@ buildGoModule rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script { attrPath = pname; };
+    updateScript = nix-update-script { };
 
     tests.version = testers.testVersion { package = dsq; };
   };

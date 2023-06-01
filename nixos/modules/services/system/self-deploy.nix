@@ -18,7 +18,7 @@ let
     in
     lib.concatStrings (lib.mapAttrsToList toArg args);
 
-  isPathType = x: lib.strings.isCoercibleToString x && builtins.substring 0 1 (toString x) == "/";
+  isPathType = x: lib.types.path.check x;
 
 in
 {
@@ -132,7 +132,7 @@ in
 
       requires = lib.mkIf (!(isPathType cfg.repository)) [ "network-online.target" ];
 
-      environment.GIT_SSH_COMMAND = lib.mkIf (!(isNull cfg.sshKeyFile))
+      environment.GIT_SSH_COMMAND = lib.mkIf (cfg.sshKeyFile != null)
         "${pkgs.openssh}/bin/ssh -i ${lib.escapeShellArg cfg.sshKeyFile}";
 
       restartIfChanged = false;

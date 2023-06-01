@@ -26,11 +26,8 @@ buildDunePackage {
   pname = "ocamlformat";
   inherit src version;
 
-  minimumOCamlVersion = "4.08";
-
-  useDune2 = true;
-
-  strictDeps = true;
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   nativeBuildInputs = [
     menhir

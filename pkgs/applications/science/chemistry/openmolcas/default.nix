@@ -15,21 +15,19 @@ let
 
 in stdenv.mkDerivation {
   pname = "openmolcas";
-  version = "22.06";
+  version = "23.02";
 
   src = fetchFromGitLab {
     owner = "Molcas";
     repo = "OpenMolcas";
     # The tag keeps moving, fix a hash instead
-    rev = "17238da5c339c41ddf14ceb88f139d57143d7a14"; # 2022-06-17
-    sha256 = "0g17x5fp27b57f7j284xl3b3i9c4b909q504wpz0ipb0mrcvcpdp";
+    rev = "03265f62cd98b985712b063aea88313f984a8857"; # 2023-02-11
+    sha256 = "sha256-Kj2RDJq8PEvKclLrSYIOdl6g6lcRsTNZCjwxGOs3joY=";
   };
 
   patches = [
     # Required to handle openblas multiple outputs
     ./openblasPath.patch
-    # Required for MKL builds
-    ./MKL-MPICH.patch
   ];
 
   postPatch = ''

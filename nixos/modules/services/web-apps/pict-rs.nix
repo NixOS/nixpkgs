@@ -5,9 +5,7 @@ let
 in
 {
   meta.maintainers = with maintainers; [ happysalada ];
-  # Don't edit the docbook xml directly, edit the md and generate it:
-  # `pandoc pict-rs.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > pict-rs.xml`
-  meta.doc = ./pict-rs.xml;
+  meta.doc = ./pict-rs.md;
 
   options.services.pict-rs = {
     enable = mkEnableOption (lib.mdDoc "pict-rs server");
@@ -36,8 +34,8 @@ in
   config = lib.mkIf cfg.enable {
     systemd.services.pict-rs = {
       environment = {
-        PICTRS_PATH = cfg.dataDir;
-        PICTRS_ADDR = "${cfg.address}:${toString cfg.port}";
+        PICTRS__PATH = cfg.dataDir;
+        PICTRS__ADDR = "${cfg.address}:${toString cfg.port}";
       };
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {

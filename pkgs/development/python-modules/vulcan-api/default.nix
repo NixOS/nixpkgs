@@ -3,7 +3,7 @@
 , aiodns
 , aiohttp
 , buildPythonPackage
-, cchardet
+, faust-cchardet
 , fetchFromGitHub
 , pyopenssl
 , pythonOlder
@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "vulcan-api";
-  version = "2.2.0";
+  version = "2.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -25,14 +25,14 @@ buildPythonPackage rec {
     owner = "kapi2289";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-decp3wq/O4QTBE40iSkMaCTJYM6XPP7nLlSAEL1bemY=";
+    hash = "sha256-5Tj611p4wYn7GjoCtCTRhUZkKyAJglHcci76ciVFWik=";
   };
 
   propagatedBuildInputs = [
     aenum
     aiodns
     aiohttp
-    cchardet
+    faust-cchardet
     pyopenssl
     pytz
     related

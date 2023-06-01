@@ -72,7 +72,7 @@ in
         RuntimeDirectoryMode = "700";
         SystemCallFilter = [
           "@system-service"
-          "~@aio" "~@keyring" "~@memlock" "~@privileged" "~@resources" "~@setuid" "~@sync" "~@timer"
+          "~@aio" "~@keyring" "~@memlock" "~@privileged" "~@setuid" "~@sync" "~@timer"
         ];
         SystemCallArchitectures = "native";
         SystemCallErrorNumber = "EPERM";

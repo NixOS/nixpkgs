@@ -5,13 +5,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "rtw88";
-  version = "unstable-2022-06-03";
+  version = "unstable-2022-11-05";
 
   src = fetchFromGitHub {
     owner = "lwfinger";
     repo = "rtw88";
-    rev = "03da251c76ea1005b42625825c39181e12d75693";
-    sha256 = "0l5ysp4x5wzrn48sfjv3rciqhq5ldcmk86b9x6j9775zjj7yw8hw";
+    rev = "c0dfe571fd7b307e036f186ef5711b4c0d9f3f08";
+    sha256 = "1gc5nv5pyrfag826z36vsrbirg6iww99yx45pcgpp7rmrpbwamvg";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     license = with licenses; [ bsd3 gpl2Only ];
     maintainers = with maintainers; [ tvorog atila ];
     platforms = platforms.linux;
-    broken = kernel.kernelOlder "4.14";
+    broken = kernel.kernelOlder "4.20";
     priority = -1;
   };
 }

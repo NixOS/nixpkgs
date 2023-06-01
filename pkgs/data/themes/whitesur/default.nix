@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, gitUpdater
 , glib
 , gnome-shell
 , gnome-themes-extra
@@ -32,13 +33,13 @@ lib.checkListOfEnum "${pname}: panel size" [ "default" "smaller" "bigger" ] (sin
 
 stdenv.mkDerivation rec {
   pname = "whitesur-gtk-theme";
-  version = "2022-08-26";
+  version = "2023-02-07";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "sha256-kvu6Zv5vmyDasBt6eOBqexv0n5vi6OzpG5We1eSbW0o=";
+    sha256 = "sha256-RGYD2+ZTUTPyFbaHvXU9VD3W6WTNeg3ifY+DAR3MmtI=";
   };
 
   nativeBuildInputs = [
@@ -60,10 +61,10 @@ stdenv.mkDerivation rec {
     done
 
     # Do not provide `sudo`, as it is not needed in our use case of the install script
-    substituteInPlace lib-core.sh --replace '$(which sudo)' false
+    substituteInPlace shell/lib-core.sh --replace '$(which sudo)' false
 
     # Provides a dummy home directory
-    substituteInPlace lib-core.sh --replace 'MY_HOME=$(getent passwd "''${MY_USERNAME}" | cut -d: -f6)' 'MY_HOME=/tmp'
+    substituteInPlace shell/lib-core.sh --replace 'MY_HOME=$(getent passwd "''${MY_USERNAME}" | cut -d: -f6)' 'MY_HOME=/tmp'
   '';
 
   dontBuild = true;
@@ -83,10 +84,12 @@ stdenv.mkDerivation rec {
       ${lib.optionalString (panelSize != null) ("--panel-size " + panelSize)} \
       --dest $out/share/themes
 
-    jdupes --link-soft --recurse $out/share
+    jdupes --quiet --link-soft --recurse $out/share
 
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "MacOS Big Sur like theme for Gnome desktops";

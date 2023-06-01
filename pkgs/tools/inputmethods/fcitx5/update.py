@@ -11,6 +11,7 @@ REPOS = [
         "xcb-imdkit",
 
         "fcitx5",
+        "fcitx5-anthy",
         "fcitx5-chewing",
         "fcitx5-chinese-addons",
         "fcitx5-configtool",
@@ -20,6 +21,7 @@ REPOS = [
         "fcitx5-m17n",
         "fcitx5-qt",
         "fcitx5-rime",
+        "fcitx5-skk",
         "fcitx5-table-extra",
         "fcitx5-table-other",
         "fcitx5-unikey"

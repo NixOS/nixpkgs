@@ -37,7 +37,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cssselect
     jaraco-test
     lxml

@@ -3,7 +3,7 @@
 , fetchurl
 , makeWrapper
 , pkg-config
-, perl
+, libOnly ? false # whether to build only the library
 , withAlsa ? stdenv.hostPlatform.isLinux
 , alsa-lib
 , withPulse ? stdenv.hostPlatform.isLinux
@@ -14,29 +14,36 @@
 , withJack ? stdenv.hostPlatform.isUnix
 , jack
 , withConplay ? !stdenv.hostPlatform.isWindows
+, perl
 }:
 
+assert withConplay -> !libOnly;
+
 stdenv.mkDerivation rec {
-  pname = "mpg123";
-  version = "1.29.3";
+  pname = "${lib.optionalString libOnly "lib"}mpg123";
+  version = "1.31.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-ljiF2Mx3Ji8ot3GHx9GJ4yGV5kJE3iUwt5jd8yGD6Ec=";
+    url = "mirror://sourceforge/mpg123/mpg123-${version}.tar.bz2";
+    hash = "sha256-HKd9Omml/4RbegU294P+5VThBBE5prl49q/hT1gUrRo=";
   };
 
-  outputs = [ "out" ] ++ lib.optionals withConplay [ "conplay" ];
+  outputs = [ "out" "dev" "man" ] ++ lib.optional withConplay "conplay";
 
-  nativeBuildInputs = lib.optionals withConplay [ makeWrapper ]
-    ++ lib.optionals (withPulse || withJack) [ pkg-config ];
+  nativeBuildInputs = lib.optionals (!libOnly) (
+    lib.optionals withConplay [ makeWrapper ]
+    ++ lib.optionals (withPulse || withJack) [ pkg-config ]
+  );
 
-  buildInputs = lib.optionals withConplay [ perl ]
+  buildInputs = lib.optionals (!libOnly) (
+    lib.optionals withConplay [ perl ]
     ++ lib.optionals withAlsa [ alsa-lib ]
     ++ lib.optionals withPulse [ libpulseaudio ]
     ++ lib.optionals withCoreAudio [ AudioUnit AudioToolbox ]
-    ++ lib.optionals withJack [ jack ];
+    ++ lib.optionals withJack [ jack ]
+  );
 
-  configureFlags = [
+  configureFlags = lib.optionals (!libOnly) [
     "--with-audio=${lib.strings.concatStringsSep "," (
       lib.optional withJack "jack"
       ++ lib.optional withPulse "pulse"

@@ -18,19 +18,21 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-uNcaeTelFNfg+YjPYc7nK4TrFDxJsEuPhsF8x1cvIYQ=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
-    texinfo libXext xorgproto libX11 libXpm libXt libXcursor
-    alsa-lib zlib libpng libvorbis libXxf86dga libXxf86misc
-    libXxf86vm openal libGLU libGL
-    libjpeg flac
-    libXi libXfixes
-    enet libtheora freetype physfs libopus pkg-config gtk3 pcre libXdmcp
-    libpulseaudio libpthreadstubs
+    texinfo zlib libpng libvorbis openal libGLU libGL
+    libjpeg flac enet libtheora freetype physfs libopus
+    gtk3 pcre
+  ] ++ lib.optionals stdenv.isLinux [
+    libXext xorgproto libX11 libXpm libXt libXcursor alsa-lib
+    libXxf86dga libXxf86misc libXxf86vm libXi libXfixes
+    libXdmcp libpulseaudio libpthreadstubs
   ];
 
   postPatch = ''
     sed -e 's@/XInput2.h@/XI2.h@g' -i CMakeLists.txt "src/"*.c
+    sed -e 's@Kernel/IOKit/hidsystem/IOHIDUsageTables.h@IOKit/hid/IOHIDUsageTables.h@g' -i include/allegro5/platform/alosx.h
+    sed -e 's@OpenAL/@AL/@g' -i addons/audio/openal.c
   '';
 
   cmakeFlags = [ "-DCMAKE_SKIP_RPATH=ON" ];
@@ -40,6 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "https://liballeg.org/";
     license = licenses.zlib;
     maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

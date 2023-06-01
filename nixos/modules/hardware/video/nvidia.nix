@@ -21,17 +21,21 @@ let
   pCfg = cfg.prime;
   syncCfg = pCfg.sync;
   offloadCfg = pCfg.offload;
-  primeEnabled = syncCfg.enable || offloadCfg.enable;
+  reverseSyncCfg = pCfg.reverseSync;
+  primeEnabled = syncCfg.enable || reverseSyncCfg.enable || offloadCfg.enable;
   nvidiaPersistencedEnabled =  cfg.nvidiaPersistenced;
   nvidiaSettings = cfg.nvidiaSettings;
   busIDType = types.strMatching "([[:print:]]+[\:\@][0-9]{1,3}\:[0-9]{1,2}\:[0-9])?";
+
+  ibtSupport = cfg.open || (nvidia_x11.ibtSupport or false);
 in
 
 {
   imports =
     [
       (mkRenamedOptionModule [ "hardware" "nvidia" "optimus_prime" "enable" ] [ "hardware" "nvidia" "prime" "sync" "enable" ])
-      (mkRenamedOptionModule [ "hardware" "nvidia" "optimus_prime" "allowExternalGpu" ] [ "hardware" "nvidia" "prime" "sync" "allowExternalGpu" ])
+      (mkRenamedOptionModule [ "hardware" "nvidia" "optimus_prime" "allowExternalGpu" ] [ "hardware" "nvidia" "prime" "allowExternalGpu" ])
+      (mkRenamedOptionModule [ "hardware" "nvidia" "prime" "sync" "allowExternalGpu" ] [ "hardware" "nvidia" "prime" "allowExternalGpu" ])
       (mkRenamedOptionModule [ "hardware" "nvidia" "optimus_prime" "nvidiaBusId" ] [ "hardware" "nvidia" "prime" "nvidiaBusId" ])
       (mkRenamedOptionModule [ "hardware" "nvidia" "optimus_prime" "intelBusId" ] [ "hardware" "nvidia" "prime" "intelBusId" ])
     ];
@@ -104,16 +108,17 @@ in
       description = lib.mdDoc ''
         Enable NVIDIA Optimus support using the NVIDIA proprietary driver via PRIME.
         If enabled, the NVIDIA GPU will be always on and used for all rendering,
-        while enabling output to displays attached only to the integrated Intel GPU
-        without a multiplexer.
+        while enabling output to displays attached only to the integrated Intel/AMD
+        GPU without a multiplexer.
 
         Note that this option only has any effect if the "nvidia" driver is specified
         in {option}`services.xserver.videoDrivers`, and it should preferably
         be the only driver there.
 
-        If this is enabled, then the bus IDs of the NVIDIA and Intel GPUs have to be
-        specified ({option}`hardware.nvidia.prime.nvidiaBusId` and
-        {option}`hardware.nvidia.prime.intelBusId`).
+        If this is enabled, then the bus IDs of the NVIDIA and Intel/AMD GPUs have to
+        be specified ({option}`hardware.nvidia.prime.nvidiaBusId` and
+        {option}`hardware.nvidia.prime.intelBusId` or
+        {option}`hardware.nvidia.prime.amdgpuBusId`).
 
         If you enable this, you may want to also enable kernel modesetting for the
         NVIDIA driver ({option}`hardware.nvidia.modesetting.enable`) in order
@@ -125,11 +130,11 @@ in
       '';
     };
 
-    hardware.nvidia.prime.sync.allowExternalGpu = mkOption {
+    hardware.nvidia.prime.allowExternalGpu = mkOption {
       type = types.bool;
       default = false;
       description = lib.mdDoc ''
-        Configure X to allow external NVIDIA GPUs when using optimus.
+        Configure X to allow external NVIDIA GPUs when using Prime [Reverse] sync optimus.
       '';
     };
 
@@ -139,9 +144,54 @@ in
       description = lib.mdDoc ''
         Enable render offload support using the NVIDIA proprietary driver via PRIME.
 
-        If this is enabled, then the bus IDs of the NVIDIA and Intel GPUs have to be
-        specified ({option}`hardware.nvidia.prime.nvidiaBusId` and
-        {option}`hardware.nvidia.prime.intelBusId`).
+        If this is enabled, then the bus IDs of the NVIDIA and Intel/AMD GPUs have to
+        be specified ({option}`hardware.nvidia.prime.nvidiaBusId` and
+        {option}`hardware.nvidia.prime.intelBusId` or
+        {option}`hardware.nvidia.prime.amdgpuBusId`).
+      '';
+    };
+
+    hardware.nvidia.prime.offload.enableOffloadCmd = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Adds a `nvidia-offload` convenience script to {option}`environment.systemPackages`
+        for offloading programs to an nvidia device. To work, should have also enabled
+        {option}`hardware.nvidia.prime.offload.enable` or {option}`hardware.nvidia.prime.reverseSync.enable`.
+
+        Example usage `nvidia-offload sauerbraten_client`.
+      '';
+    };
+
+    hardware.nvidia.prime.reverseSync.enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Warning: This feature is relatively new, depending on your system this might
+        work poorly. AMD support, especially so.
+        See: https://forums.developer.nvidia.com/t/the-all-new-outputsink-feature-aka-reverse-prime/129828
+
+        Enable NVIDIA Optimus support using the NVIDIA proprietary driver via reverse
+        PRIME. If enabled, the Intel/AMD GPU will be used for all rendering, while
+        enabling output to displays attached only to the NVIDIA GPU without a
+        multiplexer.
+
+        Note that this option only has any effect if the "nvidia" driver is specified
+        in {option}`services.xserver.videoDrivers`, and it should preferably
+        be the only driver there.
+
+        If this is enabled, then the bus IDs of the NVIDIA and Intel/AMD GPUs have to
+        be specified ({option}`hardware.nvidia.prime.nvidiaBusId` and
+        {option}`hardware.nvidia.prime.intelBusId` or
+        {option}`hardware.nvidia.prime.amdgpuBusId`).
+
+        If you enable this, you may want to also enable kernel modesetting for the
+        NVIDIA driver ({option}`hardware.nvidia.modesetting.enable`) in order
+        to prevent tearing.
+
+        Note that this configuration will only be successful when a display manager
+        for which the {option}`services.xserver.displayManager.setupCommands`
+        option is supported is used.
       '';
     };
 
@@ -206,6 +256,13 @@ in
       }
 
       {
+        assertion = offloadCfg.enableOffloadCmd -> offloadCfg.enable || reverseSyncCfg.enable;
+        message = ''
+          Offload command requires offloading or reverse prime sync to be enabled.
+        '';
+      }
+
+      {
         assertion = primeEnabled -> pCfg.nvidiaBusId != "" && (pCfg.intelBusId != "" || pCfg.amdgpuBusId != "");
         message = ''
           When NVIDIA PRIME is enabled, the GPU bus IDs must configured.
@@ -218,8 +275,18 @@ in
       }
 
       {
+        assertion = (reverseSyncCfg.enable && pCfg.amdgpuBusId != "") -> versionAtLeast nvidia_x11.version "470.0";
+        message = "NVIDIA PRIME render offload for AMD APUs is currently only supported on versions >= 470 beta.";
+      }
+
+      {
         assertion = !(syncCfg.enable && offloadCfg.enable);
-        message = "Only one NVIDIA PRIME solution may be used at a time.";
+        message = "PRIME Sync and Offload cannot be both enabled";
+      }
+
+      {
+        assertion = !(syncCfg.enable && reverseSyncCfg.enable);
+        message = "PRIME Sync and PRIME Reverse Sync cannot be both enabled";
       }
 
       {
@@ -257,11 +324,13 @@ in
     # - Configure the display manager to run specific `xrandr` commands which will
     #   configure/enable displays connected to the Intel iGPU / AMD APU.
 
-    services.xserver.drivers = let
-    in optional primeEnabled {
+    # reverse sync implies offloading
+    hardware.nvidia.prime.offload.enable = mkDefault reverseSyncCfg.enable;
+
+    services.xserver.drivers = optional primeEnabled {
       name = igpuDriver;
       display = offloadCfg.enable;
-      modules = optional (igpuDriver == "amdgpu") [ pkgs.xorg.xf86videoamdgpu ];
+      modules = optionals (igpuDriver == "amdgpu") [ pkgs.xorg.xf86videoamdgpu ];
       deviceSection = ''
         BusID "${igpuBusId}"
         ${optionalString (syncCfg.enable && igpuDriver != "amdgpu") ''Option "AccelMethod" "none"''}
@@ -273,7 +342,7 @@ in
       deviceSection = optionalString primeEnabled
         ''
           BusID "${pCfg.nvidiaBusId}"
-          ${optionalString syncCfg.allowExternalGpu "Option \"AllowExternalGpus\""}
+          ${optionalString pCfg.allowExternalGpu "Option \"AllowExternalGpus\""}
         '';
       screenSection =
         ''
@@ -290,19 +359,22 @@ in
 
     services.xserver.serverLayoutSection = optionalString syncCfg.enable ''
       Inactive "Device-${igpuDriver}[0]"
+    '' + optionalString reverseSyncCfg.enable ''
+      Inactive "Device-nvidia[0]"
     '' + optionalString offloadCfg.enable ''
       Option "AllowNVIDIAGPUScreens"
     '';
 
     services.xserver.displayManager.setupCommands = let
-      sinkGpuProviderName = if igpuDriver == "amdgpu" then
+      gpuProviderName = if igpuDriver == "amdgpu" then
         # find the name of the provider if amdgpu
         "`${pkgs.xorg.xrandr}/bin/xrandr --listproviders | ${pkgs.gnugrep}/bin/grep -i AMD | ${pkgs.gnused}/bin/sed -n 's/^.*name://p'`"
       else
         igpuDriver;
-    in optionalString syncCfg.enable ''
+      providerCmdParams = if syncCfg.enable then "\"${gpuProviderName}\" NVIDIA-0" else "NVIDIA-G0 \"${gpuProviderName}\"";
+    in optionalString (syncCfg.enable || reverseSyncCfg.enable) ''
       # Added by nvidia configuration module for Optimus/PRIME.
-      ${pkgs.xorg.xrandr}/bin/xrandr --setprovideroutputsource "${sinkGpuProviderName}" NVIDIA-0
+      ${pkgs.xorg.xrandr}/bin/xrandr --setprovideroutputsource ${providerCmdParams}
       ${pkgs.xorg.xrandr}/bin/xrandr --auto
     '';
 
@@ -325,7 +397,16 @@ in
 
     environment.systemPackages = [ nvidia_x11.bin ]
       ++ optionals cfg.nvidiaSettings [ nvidia_x11.settings ]
-      ++ optionals nvidiaPersistencedEnabled [ nvidia_x11.persistenced ];
+      ++ optionals nvidiaPersistencedEnabled [ nvidia_x11.persistenced ]
+      ++ optionals offloadCfg.enableOffloadCmd [
+        (pkgs.writeShellScriptBin "nvidia-offload" ''
+          export __NV_PRIME_RENDER_OFFLOAD=1
+          export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
+          export __GLX_VENDOR_LIBRARY_NAME=nvidia
+          export __VK_LAYER_NV_optimus=NVIDIA_only
+          exec "$@"
+        '')
+      ];
 
     systemd.packages = optional cfg.powerManagement.enable nvidia_x11.out;
 
@@ -382,7 +463,8 @@ in
     # If requested enable modesetting via kernel parameter.
     boot.kernelParams = optional (offloadCfg.enable || cfg.modesetting.enable) "nvidia-drm.modeset=1"
       ++ optional cfg.powerManagement.enable "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
-      ++ optional cfg.open "nvidia.NVreg_OpenRmEnableUnsupportedGpus=1";
+      ++ optional cfg.open "nvidia.NVreg_OpenRmEnableUnsupportedGpus=1"
+      ++ optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2" && !ibtSupport) "ibt=off";
 
     services.udev.extraRules =
       ''

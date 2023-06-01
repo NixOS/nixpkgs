@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: svnclient.o:/build/svnfs-0.4/src/svnfs.h:40: multiple definition of
   #     `dirbuf'; svnfs.o:/build/svnfs-0.4/src/svnfs.h:40: first defined here
-  NIX_CFLAGS_COMPILE="-I ${subversion.dev}/include/subversion-1 -fcommon";
+  env.NIX_CFLAGS_COMPILE = "-I ${subversion.dev}/include/subversion-1 -fcommon";
   NIX_LDFLAGS="-lsvn_client-1 -lsvn_subr-1";
 
   meta = {
     description = "FUSE filesystem for accessing Subversion repositories";
-    homepage = "http://www.jmadden.eu/index.php/svnfs/";
+    homepage = "https://www.jmadden.eu/index.php/svnfs/";
     license = lib.licenses.gpl2Only;
     maintainers = [lib.maintainers.marcweber];
     platforms = lib.platforms.unix;

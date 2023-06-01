@@ -12,7 +12,7 @@ let
         version = "7.1.2";
         src = old.src.override {
           inherit version;
-          sha256 = "d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a";
+          hash = "sha256-0rUlXHxjSbwb0eWeCM0SrLvWPOZJ8liHVXg6qU37axo=";
         };
       });
     };
@@ -20,13 +20,15 @@ let
 in with python.pkgs; buildPythonApplication rec {
   pname = "csvs-to-sqlite";
   version = "1.2";
+  format = "setuptools";
+
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = pname;
     rev = version;
-    sha256 = "0p99cg76d3s7jxvigh5ad04dzhmr6g62qzzh4i6h7x9aiyvdhvk4";
+    hash = "sha256-ZG7Yto8q9QNNJPB/LMwzucLfCGiqwBd3l0ePZs5jKV0";
   };
 
   propagatedBuildInputs = [
@@ -37,7 +39,7 @@ in with python.pkgs; buildPythonApplication rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "gucci";
-  version = "1.5.4";
+  version = "1.6.6";
 
   src = fetchFromGitHub {
     owner = "noqcks";
     repo = "gucci";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-HJPNpLRJPnziSMvxLCiNDeCWO439ELSZs/4Cq1a7Amo=";
+    sha256 = "sha256-0ZVRjzU/KTqhaQC6zubbcNp1jX2pgFSGyyIYcWaHzeU=";
   };
 
-  vendorSha256 = "sha256-rAZCj5xtwTgd9/KDYnQTU1jbabtWJF5MCFgcmixDN/Q=";
+  vendorHash = "sha256-/4OnbtxxhXQnmSV6UbjgzXdL7szhL9rKiG5BR8FsyqI=";
 
   ldflags = [ "-s" "-w" "-X main.AppVersion=${version}" ];
 

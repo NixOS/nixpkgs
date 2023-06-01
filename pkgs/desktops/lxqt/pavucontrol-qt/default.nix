@@ -9,17 +9,18 @@
 , qtbase
 , qttools
 , qtx11extras
+, gitUpdater
 }:
 
 mkDerivation rec {
   pname = "pavucontrol-qt";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "zHV9tR5gDjKDbfhnhVnCnw7whJDugMAGARA3UNs/6aA=";
+    sha256 = "cXYJ9EMmZ1LHBvjRWM1TEv7ADdG69DTyb5DZN7q3NIQ=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +37,7 @@ mkDerivation rec {
     pcre
   ];
 
-  passthru.updateScript = lxqt.lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/pavucontrol-qt";

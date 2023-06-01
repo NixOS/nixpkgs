@@ -16,13 +16,13 @@
 , mock
 , scipy
 , wheel
+, jax
 , opt-einsum
 , backports_weakref
-, tensorflow-estimator
+, tensorflow-estimator-bin
 , tensorboard
 , cudaSupport ? false
 , cudaPackages ? {}
-, patchelfUnstable
 , zlib
 , python
 , keras-applications
@@ -49,12 +49,15 @@ in buildPythonPackage {
   inherit (packages) version;
   format = "wheel";
 
+  # Python 3.11 still unsupported
+  disabled = pythonAtLeast "3.11";
+
   src = let
     pyVerNoDot = lib.strings.stringAsChars (x: if x == "." then "" else x) python.pythonVersion;
     platform = if stdenv.isDarwin then "mac" else "linux";
     unit = if cudaSupport then "gpu" else "cpu";
     key = "${platform}_py_${pyVerNoDot}_${unit}";
-  in fetchurl packages.${key};
+  in fetchurl (packages.${key} or {});
 
   propagatedBuildInputs = [
     astunparse
@@ -64,6 +67,7 @@ in buildPythonPackage {
     protobuf
     numpy
     scipy
+    jax
     termcolor
     grpcio
     six
@@ -73,7 +77,7 @@ in buildPythonPackage {
     opt-einsum
     google-pasta
     wrapt
-    tensorflow-estimator
+    tensorflow-estimator-bin
     tensorboard
     keras-applications
     keras-preprocessing
@@ -81,8 +85,7 @@ in buildPythonPackage {
   ] ++ lib.optional (!isPy3k) mock
     ++ lib.optionals (pythonOlder "3.4") [ backports_weakref ];
 
-  # remove patchelfUnstable once patchelf 0.14 with https://github.com/NixOS/patchelf/pull/256 becomes the default
-  nativeBuildInputs = [ wheel ] ++ lib.optional cudaSupport [ addOpenGLRunpath patchelfUnstable ];
+  nativeBuildInputs = [ wheel ] ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
 
   preConfigure = ''
     unset SOURCE_DATE_EPOCH
@@ -98,16 +101,20 @@ in buildPythonPackage {
     (
       cd unpacked/tensorflow*
       # Adjust dependency requirements:
-      # - Relax flatbuffers, gast and tensorflow-estimator version requirements that don't match what we have packaged
+      # - Relax flatbuffers, gast, protobuf, tensorboard, and tensorflow-estimator version requirements that don't match what we have packaged
       # - The purpose of python3Packages.libclang is not clear at the moment and we don't have it packaged yet
       # - keras and tensorlow-io-gcs-filesystem will be considered as optional for now.
+      # - numpy was pinned to fix some internal tests: https://github.com/tensorflow/tensorflow/issues/60216
       sed -i *.dist-info/METADATA \
         -e "/Requires-Dist: flatbuffers/d" \
         -e "/Requires-Dist: gast/d" \
-        -e "/Requires-Dist: libclang/d" \
         -e "/Requires-Dist: keras/d" \
+        -e "/Requires-Dist: libclang/d" \
+        -e "/Requires-Dist: protobuf/d" \
+        -e "/Requires-Dist: tensorboard/d" \
         -e "/Requires-Dist: tensorflow-estimator/d" \
-        -e "/Requires-Dist: tensorflow-io-gcs-filesystem/d"
+        -e "/Requires-Dist: tensorflow-io-gcs-filesystem/d" \
+        -e "s/Requires-Dist: numpy (.*)/Requires-Dist: numpy/"
     )
     wheel pack ./unpacked/tensorflow*
     mv *.whl $orig_name # avoid changes to the _os_arch.whl suffix

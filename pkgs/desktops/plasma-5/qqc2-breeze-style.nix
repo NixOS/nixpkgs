@@ -1,5 +1,4 @@
 { mkDerivation
-, lib
 , extra-cmake-modules
 , kconfig
 , kconfigwidgets

@@ -1,21 +1,23 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, nixosTests
 }:
 
 stdenv.mkDerivation {
   pname = "apfsprogs";
-  version = "unstable-2022-07-21";
+  version = "unstable-2023-05-16";
 
   src = fetchFromGitHub {
     owner = "linux-apfs";
     repo = "apfsprogs";
-    rev = "8c5340bcc0a261ffe6e5ed85a1742fb60ee982f3";
-    sha256 = "sha256-cDxXWfXl1VxdpKBcU00ULWlidzg6kQFG4AGEu5DBCaw=";
+    rev = "7be75bcf1a533272bc69684b4b7d33c2adba315c";
+    hash = "sha256-WHAUrDiXy5HCwN876bZGc/OUHJITf6Fnpx4kAwAhcAs=";
   };
 
   buildPhase = ''
     runHook preBuild
+    make -C apfs-snap $makeFlags
     make -C apfsck $makeFlags
     make -C mkapfs $makeFlags
     runHook postBuild
@@ -23,10 +25,15 @@ stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
+    make -C apfs-snap install DESTDIR="$out" $installFlags
     make -C apfsck install DESTDIR="$out" $installFlags
     make -C mkapfs install DESTDIR="$out" $installFlags
     runHook postInstall
   '';
+
+  passthru.tests = {
+    apfs = nixosTests.apfs;
+  };
 
   meta = with lib; {
     description = "Experimental APFS tools for linux";

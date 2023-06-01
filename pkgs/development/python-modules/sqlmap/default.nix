@@ -1,17 +1,21 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , file
-, stdenv
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "sqlmap";
-  version = "1.6.9";
+  version = "1.7.5";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-azAhpt6Qo/arTYeJSeQdBnqOmg2m7h+1pTsV30/pAOc=";
+    hash = "sha256-PQk3uEY1gjvs5BerfEAEZe4v6uZYpCZqCo+Qc7mSUw8=";
   };
 
   postPatch = ''
@@ -26,7 +30,9 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  pythonImportsCheck = [ "sqlmap" ];
+  pythonImportsCheck = [
+    "sqlmap"
+  ];
 
   meta = with lib; {
     description = "Automatic SQL injection and database takeover tool";

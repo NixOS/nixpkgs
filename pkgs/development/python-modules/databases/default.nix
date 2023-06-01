@@ -1,43 +1,62 @@
 { lib
+, aiomysql
+, aiopg
+, aiosqlite
+, asyncmy
+, asyncpg
 , buildPythonPackage
 , fetchFromGitHub
-, sqlalchemy
-, aiocontextvars
-, aiopg
-, pythonOlder
 , pytestCheckHook
-, pymysql
-, asyncpg
-, aiomysql
-, aiosqlite
+, pythonOlder
+, sqlalchemy
 }:
 
 buildPythonPackage rec {
   pname = "databases";
-  version = "0.6.1";
+  version = "0.7.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
-    rev = version;
-    hash = "sha256-kHsA9XpolGmtuAGzRTj61igooLG9/LBQyv7TtuqiJ/A=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-3RRHXkM8/GoIcO6Y1EZGbnp/X5gzYkW/PV4bzGay6ZI=";
   };
 
   propagatedBuildInputs = [
-    aiopg
-    aiomysql
-    aiosqlite
-    asyncpg
-    pymysql
     sqlalchemy
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    aiocontextvars
   ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    postgresql = [
+      asyncpg
+    ];
+    asyncpg = [
+      asyncpg
+    ];
+    aiopg = [
+      aiopg
+    ];
+    mysql = [
+      aiomysql
+    ];
+    aiomysql = [
+      aiomysql
+    ];
+    asyncmy = [
+      asyncmy
+    ];
+    sqlite = [
+      aiosqlite
+    ];
+    aiosqlite = [
+      aiosqlite
+    ];
+  };
+
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -56,7 +75,10 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Async database support for Python";
     homepage = "https://github.com/encode/databases";
+    changelog = "https://github.com/encode/databases/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ costrouc ];
+    # https://github.com/encode/databases/issues/530
+    broken = lib.versionAtLeast sqlalchemy.version "2.0.0";
   };
 }

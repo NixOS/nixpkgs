@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rubygems";
-  version = "3.3.20";
+  version = "3.4.13";
 
   src = fetchurl {
     url = "https://rubygems.org/rubygems/rubygems-${version}.tgz";
-    sha256 = "sha256-VTUMZ2mqbszM7uXOYV6Grg7dkeGAGVXYjBX0hA/vOTg=";
+    sha256 = "sha256-s/7KCbf07zezuASA7E03t83UDY6W/fFw9bljOprXWls=";
   };
 
   patches = [
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Package management framework for Ruby";
+    changelog = "https://github.com/rubygems/rubygems/blob/v${version}/CHANGELOG.md";
     homepage = "https://rubygems.org/";
     license = with licenses; [ mit /* or */ ruby ];
     maintainers = with maintainers; [ zimbatm ];

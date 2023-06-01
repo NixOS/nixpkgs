@@ -11,15 +11,19 @@
 , libtool
 , openssl
 , systemdMinimal
+, libxcrypt
+
+# passthru
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "openldap";
-  version = "2.6.3";
+  version = "2.6.4";
 
   src = fetchurl {
     url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${pname}-${version}.tgz";
-    hash = "sha256-0qKh1x3z13OWscFq11AuZ030RuBgcrDlpOlBw9BsDUY=";
+    hash = "sha256-1RcE5QF4QwwGzz2KoXTaZrrfVZdHpH2SC7VLLUqkCZE=";
   };
 
   # TODO: separate "out" and "bin"
@@ -37,12 +41,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    cyrus_sasl
+    (cyrus_sasl.override {
+      inherit openssl;
+    })
     db
     libsodium
     libtool
     openssl
   ] ++ lib.optionals (stdenv.isLinux) [
+    libxcrypt # causes linking issues on *-darwin
     systemdMinimal
   ];
 
@@ -60,7 +67,7 @@ stdenv.mkDerivation rec {
     "ac_cv_func_memcmp_working=yes"
   ] ++ lib.optional stdenv.isFreeBSD "--with-pic";
 
-  NIX_CFLAGS_COMPILE = [ "-DLDAPI_SOCK=\"/run/openldap/ldapi\"" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-DLDAPI_SOCK=\"/run/openldap/ldapi\"" ];
 
   makeFlags= [
     "CC=${stdenv.cc.targetPrefix}cc"
@@ -112,6 +119,10 @@ stdenv.mkDerivation rec {
     done
     chmod +x "$out"/lib/*.{so,dylib}
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) openldap;
+  };
 
   meta = with lib; {
     homepage = "https://www.openldap.org/";

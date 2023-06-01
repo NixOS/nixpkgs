@@ -15,10 +15,10 @@ in
       services.lemmy = {
         enable = true;
         ui.port = uiPort;
+        database.createLocally = true;
         settings = {
           hostname = "http://${lemmyNodeName}";
           port = backendPort;
-          database.createLocally = true;
           # Without setup, the /feeds/* and /nodeinfo/* API endpoints won't return 200
           setup = {
             admin_username = "mightyiam";

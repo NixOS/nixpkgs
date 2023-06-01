@@ -3,6 +3,7 @@
 , fetchurl
 , autoPatchelfHook
 , wrapGAppsHook
+, makeWrapper
 , gnome
 , libsecret
 , git
@@ -15,20 +16,21 @@
 , cups
 , mesa
 , systemd
+, openssl
 }:
 
 stdenv.mkDerivation rec {
   pname = "github-desktop";
-  version = "3.0.5";
+  version = "3.2.1";
 
   src = fetchurl {
     url = "https://github.com/shiftkey/desktop/releases/download/release-${version}-linux1/GitHubDesktop-linux-${version}-linux1.deb";
-    sha256 = "sha256-7Sk2jDNZtOA04hkl/J+Up2yMGT8+FcXGPiUMcHhb7iY=";
+    hash = "sha256-OdvebRvOTyadgNjzrv6CGDPkljfpo4RVvVAc+X9hjSo=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
-    wrapGAppsHook
+    (wrapGAppsHook.override { inherit makeWrapper; })
   ];
 
   buildInputs = [
@@ -44,6 +46,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     cups
     mesa
+    openssl
   ];
 
   unpackPhase = ''
@@ -57,6 +60,12 @@ stdenv.mkDerivation rec {
     cp -R $TMP/${pname}/usr/share $out/
     cp -R $TMP/${pname}/usr/lib/${pname}/* $out/opt/
     ln -sf $out/opt/${pname} $out/bin/${pname}
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}"
+    )
   '';
 
   runtimeDependencies = [

@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "clhep";
-  version = "2.4.5.3";
+  version = "2.4.6.4";
 
   src = fetchurl {
     url = "https://proj-clhep.web.cern.ch/proj-clhep/dist1/clhep-${version}.tgz";
-    hash = "sha256-RfY+6wl/Av5nuGp9rb8Q1Am0AcKKGj4XLbNiUsMJfBM=";
+    hash = "sha256-SciTMPGQPvcH08XXnBanxabyyQ/CkOIDTuODSAlInlc=";
   };
 
   prePatch = ''

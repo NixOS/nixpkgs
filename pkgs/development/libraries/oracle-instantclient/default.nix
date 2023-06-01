@@ -22,25 +22,39 @@ let
 
   # determine the version number, there might be different ones per architecture
   version = {
-    x86_64-linux = "19.3.0.0.0";
-    x86_64-darwin = "19.3.0.0.0";
+    x86_64-linux = "21.9.0.0.0";
+    aarch64-linux = "19.10.0.0.0";
+    x86_64-darwin = "19.8.0.0.0";
+  }.${stdenv.hostPlatform.system} or throwSystem;
+
+  directory = {
+    x86_64-linux = "219000";
+    aarch64-linux = "191000";
+    x86_64-darwin = "198000";
   }.${stdenv.hostPlatform.system} or throwSystem;
 
   # hashes per component and architecture
   hashes = {
     x86_64-linux = {
-      basic = "1yk4ng3a9ka1mzgfph9br6rwclagbgfvmg6kja11nl5dapxdzaxy";
-      sdk = "115v1gqr0czy7dcf2idwxhc6ja5b0nind0mf1rn8iawgrw560l99";
-      sqlplus = "0zj5h84ypv4n4678kfix6jih9yakb277l9hc0819iddc0a5slbi5";
-      tools = "1q19blr0gz1c8bq0bnv1njzflrp03hf82ngid966xc6gwmqpkdsk";
-      odbc = "1g1z6pdn76dp440fh49pm8ijfgjazx4cvxdi665fsr62h62xkvch";
+      basic = "sha256-wiygUvZFYvjp5pndv3b9yTPxe8sC5HZkJ7jZqO1Mss8=";
+      sdk = "sha256-ehqHV52yLRe8ehrKqpLaN0HnN3zjHU7WrfjtqvQadgY=";
+      sqlplus = "sha256-tYvoG+7l5jXyTpxFUYZXaHCT0xGDeah78AinJ2qIsE8=";
+      tools = "sha256-6K2Ni0ZqqpqCrGFrBD06s0QNjNEDtNPrvDQ1U97lTKY=";
+      odbc = "sha256-yTANMLhaEqm9/ZEVqhEn1Gl8eJukgvqpqdaMRjxWxgs=";
+    };
+    aarch64-linux = {
+      basic = "sha256-DNntH20BAmo5kOz7uEgW2NXaNfwdvJ8l8oMnp50BOsY=";
+      sdk = "sha256-8VpkNyLyFMUfQwbZpSDV/CB95RoXfaMr8w58cRt/syw=";
+      sqlplus = "sha256-iHcyijHhAvjsAqN9R+Rxo2R47k940VvPbScc2MWYn0Q=";
+      tools = "sha256-4QY0EwcnctwPm6ZGDZLudOFM4UycLFmRIluKGXVwR0M=";
+      odbc = "sha256-T+RIIKzZ9xEg/E72pfs5xqHz2WuIWKx/oRfDrQbw3ms=";
     };
     x86_64-darwin = {
-      basic = "f4335c1d53e8188a3a8cdfb97494ff87c4d0f481309284cf086dc64080a60abd";
-      sdk = "b46b4b87af593f7cfe447cfb903d1ae5073cec34049143ad8cdc9f3e78b23b27";
-      sqlplus = "f7565c3cbf898b0a7953fbb0017c5edd9d11d1863781588b7caf3a69937a2e9e";
-      tools = "b2bc474f98da13efdbc77fd05f559498cd8c08582c5b9038f6a862215de33f2c";
-      odbc = "f91da40684abaa866aa059eb26b1322f2d527670a1937d678404c991eadeb725";
+      basic = "sha256-V+1BmPOhDYPNXdwkcsBY1MOwt4Yka66/a7/HORzBIIc=";
+      sdk = "sha256-D6iuTEQYqmbOh1z5LnKN16ga6vLmjnkm4QK15S/Iukw=";
+      sqlplus = "sha256-08uoiwoKPZmTxLZLYRVp0UbN827FXdhOukeDUXvTCVk=";
+      tools = "sha256-1xFFGZapFq9ogGQ6ePSv4PrXl5qOAgRZWAp4mJ5uxdU=";
+      odbc = "sha256-S6+5P4daK/+nXwoHmOkj4DIkHtwdzO5GOkCCI612bRY=";
     };
   }.${stdenv.hostPlatform.system} or throwSystem;
 
@@ -50,11 +64,13 @@ let
   # convert platform to oracle architecture names
   arch = {
     x86_64-linux = "linux.x64";
+    aarch64-linux = "linux.arm64";
     x86_64-darwin = "macos.x64";
   }.${stdenv.hostPlatform.system} or throwSystem;
 
   shortArch = {
     x86_64-linux = "linux";
+    aarch64-linux = "linux";
     x86_64-darwin = "mac";
   }.${stdenv.hostPlatform.system} or throwSystem;
 
@@ -62,12 +78,11 @@ let
   srcFilename = component: arch: version: rel:
     "instantclient-${component}-${arch}-${version}" +
     (optionalString (rel != "") "-${rel}") +
-    (optionalString (arch == "linux.x64" || arch == "macos.x64") "dbru") + # ¯\_(ツ)_/¯
-    ".zip";
+    "dbru.zip"; # ¯\_(ツ)_/¯
 
   # fetcher for the non clickthrough artifacts
   fetcher = srcFilename: hash: fetchurl {
-    url = "https://download.oracle.com/otn_software/${shortArch}/instantclient/193000/${srcFilename}";
+    url = "https://download.oracle.com/otn_software/${shortArch}/instantclient/${directory}/${srcFilename}";
     sha256 = hash;
   };
 
@@ -127,8 +142,8 @@ stdenv.mkDerivation {
     '';
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ flokli ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    maintainers = with maintainers; [ flokli dylanmtaylor ];
     hydraPlatforms = [ ];
   };
 }

@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitLab
-, nix-update-script
+, gitUpdater
 , pkg-config
 , itstool
 , gtk3
@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation rec {
   pname = "aisleriot";
-  version = "3.22.25";
+  version = "3.22.29";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
-    repo = pname;
+    repo = "aisleriot";
     rev = version;
-    sha256 = "sha256-ur29fKSYRGzQBv14L5efN+UuAdTE8e8ooop6DGvO+Rg=";
+    sha256 = "sha256-U6PQEGZkin2kAh6pjQK/R9mGlcCWMb1aUwN9yt2nxXM=";
   };
 
   nativeBuildInputs = [
@@ -60,8 +60,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "gnome.${pname}";
+    updateScript = gitUpdater {
     };
   };
 

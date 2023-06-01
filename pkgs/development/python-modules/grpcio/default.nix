@@ -1,6 +1,5 @@
 { lib, stdenv
 , buildPythonPackage
-, fetchpatch
 , grpc
 , six
 , protobuf
@@ -17,15 +16,7 @@
 buildPythonPackage rec {
   inherit (grpc) src version;
   pname = "grpcio";
-
-  patches = [
-    # Fix build on armv6l
-    # https://github.com/grpc/grpc/pull/30401
-    (fetchpatch {
-      url = "https://github.com/grpc/grpc/commit/65dc9f3edeee4c2d0e9b30d5a3ee63175437bea3.patch";
-      hash = "sha256-pS4FsCcSjmjSs3J5Y96UonkxqPwfpkyhrEM0t6HaMd0=";
-    })
-  ];
+  format = "setuptools";
 
   outputs = [ "out" "dev" ];
 
@@ -35,7 +26,14 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six protobuf ]
     ++ lib.optionals (isPy27) [ enum34 futures ];
 
-  preBuild = lib.optionalString stdenv.isDarwin "unset AR";
+  preBuild = ''
+    export GRPC_PYTHON_BUILD_EXT_COMPILER_JOBS="$NIX_BUILD_CORES"
+    if [ -z "$enableParallelBuilding" ]; then
+      GRPC_PYTHON_BUILD_EXT_COMPILER_JOBS=1
+    fi
+  '' + lib.optionalString stdenv.isDarwin ''
+    unset AR
+  '';
 
   GRPC_BUILD_WITH_BORING_SSL_ASM = "";
   GRPC_PYTHON_BUILD_SYSTEM_OPENSSL = 1;
@@ -44,6 +42,8 @@ buildPythonPackage rec {
 
   # does not contain any tests
   doCheck = false;
+
+  enableParallelBuilding = true;
 
   pythonImportsCheck = [ "grpc" ];
 

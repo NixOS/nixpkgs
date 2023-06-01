@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , git
-, jupyter_server
+, jupyter-server
 , jupyter-packaging
 , jupyterlab
 , nbdime
@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab-git";
-  version = "0.39.0";
+  version = "0.41.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "jupyterlab_git";
     inherit version;
-    sha256 = "sha256-2BMSbZ5ICISavg1JON7fiKd4e4vAyWW+geSgxbMowis=";
+    hash = "sha256-UXZ9qgAvCKfPCzchFOtwbv8vNPEtcLU0dwBGTmiHSD4=";
   };
 
   nativeBuildInputs = [
@@ -32,14 +32,14 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    jupyter_server
+    jupyter-server
     nbdime
     git
     nbformat
     pexpect
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     jupyterlab
     pytest-asyncio
     pytest-tornasync

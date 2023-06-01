@@ -30,12 +30,16 @@ buildPythonPackage rec {
     toml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 
   postPatch = ''
     patchShebangs tests/integration
+
+    # `np.float` was a deprecated alias of the builtin `float`
+    substituteInPlace tests/test_storage.py \
+      --replace 'dtype=np.float)' 'dtype=float)'
   '';
 
   checkPhase = ''

@@ -32,7 +32,7 @@ buildPythonPackage rec {
     siobrultech-protocols
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

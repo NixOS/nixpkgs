@@ -9,10 +9,12 @@
 , pycryptodomex
 , websockets
 , mutagen
+, secretstorage
 , atomicparsleySupport ? true
 , ffmpegSupport ? true
 , rtmpSupport ? true
 , withAlias ? false # Provides bin/youtube-dl for backcompat
+, update-python-libraries
 }:
 
 buildPythonPackage rec {
@@ -20,14 +22,21 @@ buildPythonPackage rec {
   # The websites yt-dlp deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2022.9.1";
+  version = "2023.3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-vHTuJVeQBD5FgZeq8lxsEE/vyfzaRFj2UmGUR6tK4Nc=";
+    sha256 = "sha256-Jl1dqXp2wV19mkCIpnt4rNXc9vjP2CV8UvWB/5lv9RU=";
   };
 
-  propagatedBuildInputs = [ brotli certifi mutagen pycryptodomex websockets ];
+  propagatedBuildInputs = [
+    brotli
+    certifi
+    mutagen
+    pycryptodomex
+    secretstorage  # "optional", as in not in requirements.txt, needed for `--cookies-from-browser`
+    websockets
+  ];
 
   # Ensure these utilities are available in $PATH:
   # - ffmpeg: post-processing & transcoding support
@@ -52,6 +61,8 @@ buildPythonPackage rec {
   postInstall = lib.optionalString withAlias ''
     ln -s "$out/bin/yt-dlp" "$out/bin/youtube-dl"
   '';
+
+  passthru.updateScript = [ update-python-libraries (toString ./.) ];
 
   meta = with lib; {
     homepage = "https://github.com/yt-dlp/yt-dlp/";

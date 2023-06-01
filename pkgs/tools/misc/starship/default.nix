@@ -3,9 +3,9 @@
 , fetchFromGitHub
 , rustPlatform
 , installShellFiles
-, libiconv
 , cmake
 , fetchpatch
+, git
 , nixosTests
 , Security
 , Foundation
@@ -14,22 +14,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
-  version = "1.10.3";
+  version = "1.14.2";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-6YpC6JDBYwP+RHQUYXmgOWUWa7DgvjowhGCpr2bNl4Q=";
+    hash = "sha256-t+Ur6QmemMz6WAZnii7f2O+9R7hPp+5oej4PuaifznE=";
   };
 
   nativeBuildInputs = [ installShellFiles cmake ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security Foundation Cocoa ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security Foundation Cocoa ];
 
-  buildNoDefaultFeatures = true;
-  # the "notify" feature is currently broken on darwin
-  buildFeatures = if stdenv.isDarwin then [ "battery" ] else [ "default" ];
+  NIX_LDFLAGS = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ "-framework" "AppKit" ];
 
   postInstall = ''
     installShellCompletion --cmd starship \
@@ -38,7 +36,9 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/starship completions zsh)
   '';
 
-  cargoSha256 = "sha256-skNvlifjRHTrJPMjpRv2E+M9/XA+3m6dHbb+gczaYoo=";
+  cargoHash = "sha256-NSUId0CXTRF1Qqo9XPDgxY2vMyMBuJtJYGGuQ0HHk90=";
+
+  nativeCheckInputs = [ git ];
 
   preCheck = ''
     HOME=$TMPDIR

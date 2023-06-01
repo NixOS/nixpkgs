@@ -88,7 +88,7 @@ let
       "-DENABLE_TOUCH=TRUE"
     ];
 
-    NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
+    env.NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
 
     nativeBuildInputs = [ cmake doxygen graphviz ninja ];
 
@@ -105,12 +105,17 @@ let
 
     postPatch = ''
       substituteInPlace src/filesys.cpp --replace "/bin/rm" "${coreutils}/bin/rm"
+    '' + lib.optionalString stdenv.isDarwin ''
+      sed -i '/pagezero_size/d;/fixup_bundle/d' src/CMakeLists.txt
     '';
 
-    postInstall = ''
+    postInstall = lib.optionalString stdenv.isLinux ''
       mkdir -pv $out/share/minetest/games/minetest_game/
       cp -rv ${sources.data}/* $out/share/minetest/games/minetest_game/
       patchShebangs $out
+    '' + lib.optionalString stdenv.isDarwin ''
+      mkdir -p $out/Applications
+      mv $out/minetest.app $out/Applications
     '';
 
     meta = with lib; {
@@ -118,18 +123,14 @@ let
       description = "Infinite-world block sandbox game";
       license = licenses.lgpl21Plus;
       platforms = platforms.linux ++ platforms.darwin;
-      maintainers = with maintainers; [ pyrolagus fpletz ];
-      # never built on Hydra
-      # https://hydra.nixos.org/job/nixpkgs/trunk/minetestclient_4.x86_64-darwin
-      # https://hydra.nixos.org/job/nixpkgs/trunk/minetestserver_4.x86_64-darwin
-      broken = (lib.versionOlder version "5.0.0") && stdenv.isDarwin;
+      maintainers = with maintainers; [ pyrolagus fpletz fgaz ];
     };
   };
 
   v5 = {
-    version = "5.6.0";
-    sha256 = "sha256-wcbYcVHs4L0etOwUBjKvzsmZtnpOxpFgLV8nx3UfJQI=";
-    dataSha256 = "sha256-TVaDHYstFEuT0nBExwLE1PtM1CZh71t9CRxC9rEYTd4=";
+    version = "5.7.0";
+    sha256 = "sha256-9AL6gTmy05yTeYfCq3EMK4gqpBWdHwvJ5Flpzj8hFAE=";
+    dataSha256 = "sha256-wWgeO8513N5jQdWvZrq357fPpAU5ik06mgZraWCQawo=";
   };
 
   mkClient = version: generic (version // { buildClient = true; buildServer = false; });

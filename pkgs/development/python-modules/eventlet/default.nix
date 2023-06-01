@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "eventlet";
-  version = "0.33.1";
+  version = "0.33.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "eventlet";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-8tIvvTTCcIG56VaPZMhdzAKnFRsYV3YC9xcf47nh838=";
+    hash = "sha256-iSSEZgPkK7RrZfU11z7hUk+JbFsCPH/SD16e+/f6TFU=";
   };
 
   propagatedBuildInputs = [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     monotonic
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     nose
   ];
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     "test_patcher_existing_locks_locked"
     # broken with pyopenssl 22.0.0
     "test_sendall_timeout"
-  ] ++ lib.optionals stdenv.isAarch64 [
+    # broken on aarch64 and when using march in gcc
     "test_fork_after_monkey_patch"
   ];
 

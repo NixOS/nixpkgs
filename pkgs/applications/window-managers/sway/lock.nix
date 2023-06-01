@@ -5,23 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "swaylock";
-  version = "1.6";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "swaylock";
-    rev = version;
-    sha256 = "sha256-VVGgidmSQWKxZNx9Cd6z52apxpxVfmX3Ut/G9kzfDcY=";
+    rev = "v${version}";
+    hash = "sha256-ZsOLDqmkyhel8QAezdVZ51utruJrBZWqaZ7NzimXWQ4=";
   };
-
-  patches = [
-    # remove once when updating to 1.7
-    # https://github.com/swaywm/swaylock/pull/235
-    (fetchpatch {
-      url = "https://github.com/swaywm/swaylock/commit/5a1e6ad79aa7d79b32d36cda39400f3e889b8f8f.diff";
-      sha256 = "sha256-ZcZVImUzvng7sluC6q2B5UL8sVunLe4PIfc+tyw48RQ=";
-    })
-  ];
 
   strictDeps = true;
   depsBuildBuild = [ pkg-config ];

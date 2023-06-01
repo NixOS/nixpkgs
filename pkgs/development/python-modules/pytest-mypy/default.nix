@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-mypy";
-  version = "0.9.1";
+  version = "0.10.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-n/o79AXBLFxr6ekuIr67arLJG5wy9FsPDJOvRzJpq1w=";
+    hash = "sha256-+EWPZCMj8Toso+LmFQn3dnlmtSe02K3M1QMsPntP09s=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

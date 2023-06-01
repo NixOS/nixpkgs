@@ -1,41 +1,37 @@
-{
-  # Nix
-  lib,
-  buildPythonApplication,
-  fetchPypi,
-
-  # Build inputs
-  altair,
-  blinker,
-  click,
-  cachetools,
-  GitPython,
-  importlib-metadata,
-  jinja2,
-  pillow,
-  pyarrow,
-  pydeck,
-  pympler,
-  protobuf,
-  requests,
-  rich,
-  semver,
-  setuptools,
-  toml,
-  tornado,
-  tzlocal,
-  validators,
-  watchdog,
+{ lib
+, altair
+, blinker
+, buildPythonApplication
+, cachetools
+, click
+, fetchPypi
+, gitpython
+, importlib-metadata
+, jinja2
+, pillow
+, protobuf3
+, pyarrow
+, pydeck
+, pympler
+, requests
+, rich
+, semver
+, setuptools
+, toml
+, tornado
+, tzlocal
+, validators
+, watchdog
 }:
 
 buildPythonApplication rec {
   pname = "streamlit";
-  version = "1.12.2";
-  format = "wheel";  # source currently requires pipenv
+  version = "1.21.0";
+  format = "wheel"; # source currently requires pipenv
 
   src = fetchPypi {
     inherit pname version format;
-    hash = "sha256-xW0Hdf6zkRb/kKiwHuFb4nIS7lCruIlDYHIF0m0dmSM=";
+    hash = "sha256-BYYlmJUqkSbhZlLKpbyI7u6nsnc68lLi2szxyEzqrvQ=";
   };
 
   propagatedBuildInputs = [
@@ -43,11 +39,11 @@ buildPythonApplication rec {
     blinker
     cachetools
     click
-    GitPython
+    gitpython
     importlib-metadata
     jinja2
     pillow
-    protobuf
+    protobuf3
     pyarrow
     pydeck
     pympler
@@ -63,7 +59,7 @@ buildPythonApplication rec {
   ];
 
   postInstall = ''
-      rm $out/bin/streamlit.cmd # remove windows helper
+    rm $out/bin/streamlit.cmd # remove windows helper
   '';
 
   meta = with lib; {

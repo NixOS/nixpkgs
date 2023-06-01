@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 # By default, jemalloc puts a je_ prefix onto all its symbols on OSX, which
 # then stops downstream builds (mariadb in particular) from detecting it. This
 # option should remove the prefix and give us a working jemalloc.
@@ -19,9 +20,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-LbgtHnEZ3z5xt2QCGbbf6EeJvAU3mDw7esT3GJrs/qo=";
   };
 
-  # see the comment on stripPrefix
-  configureFlags = []
-    ++ lib.optional stripPrefix "--with-jemalloc-prefix="
+  patches = [
+    # fix tests under --with-jemalloc-prefix=, see https://github.com/jemalloc/jemalloc/pull/2340
+    (fetchpatch {
+      url = "https://github.com/jemalloc/jemalloc/commit/d00ecee6a8dfa90afcb1bbc0858985c17bef6559.patch";
+      hash = "sha256-N5i4IxGJ4SSAgFiq5oGRnrNeegdk2flw9Sh2mP0yl4c=";
+    })
+  ];
+
+  configureFlags =
+    # see the comment on stripPrefix
+    lib.optional stripPrefix "--with-jemalloc-prefix="
     ++ lib.optional disableInitExecTls "--disable-initial-exec-tls"
     # jemalloc is unable to correctly detect transparent hugepage support on
     # ARM (https://github.com/jemalloc/jemalloc/issues/526), and the default
@@ -33,16 +42,19 @@ stdenv.mkDerivation rec {
     # AArch64 has configurable page size up to 64k. The default configuration
     # for jemalloc only supports 4k page sizes.
     ++ lib.optional stdenv.isAarch64 "--with-lg-page=16"
+    # See https://github.com/jemalloc/jemalloc/issues/1997
+    # Using a value of 48 should work on both emulated and native x86_64-darwin.
+    ++ lib.optional (stdenv.isDarwin && stdenv.isx86_64) "--with-lg-vaddr=48"
   ;
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-error=array-bounds";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-error=array-bounds";
 
   doCheck = true;
 
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = "http://jemalloc.net";
+    homepage = "https://jemalloc.net/";
     description = "General purpose malloc(3) implementation";
     longDescription = ''
       malloc(3)-compatible memory allocator that emphasizes fragmentation

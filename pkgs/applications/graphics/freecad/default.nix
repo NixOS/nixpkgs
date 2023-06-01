@@ -2,10 +2,9 @@
 , stdenv
 , mkDerivation
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , ninja
-, GitPython
+, gitpython
 , boost
 , coin3d
 , eigen
@@ -49,13 +48,13 @@
 
 mkDerivation rec {
   pname = "freecad";
-  version = "0.20.1";
+  version = "0.20.2";
 
   src = fetchFromGitHub {
     owner = "FreeCAD";
     repo = "FreeCAD";
     rev = version;
-    hash = "sha256-r2lhFv4ReASteoVxwwiW9TdSckpaju6QE8UegxeY4rE=";
+    hash = "sha256-v8hanhy0UE0o+XqqIH3ZUtVom3q0KGELcfXFRSDr0TA=";
   };
 
   nativeBuildInputs = [
@@ -69,7 +68,7 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    GitPython # for addon manager
+    gitpython # for addon manager
     boost
     coin3d
     eigen
@@ -135,6 +134,7 @@ mkDerivation rec {
   qtWrapperArgs = [
     "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
     "--prefix PATH : ${libredwg}/bin"
+    "--set QT_QPA_PLATFORM xcb"
   ];
 
   postFixup = ''

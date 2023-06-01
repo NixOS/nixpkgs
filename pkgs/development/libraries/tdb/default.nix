@@ -5,17 +5,18 @@
 , python3
 , readline
 , libxslt
+, libxcrypt
 , docbook-xsl-nons
 , docbook_xml_dtd_45
 }:
 
 stdenv.mkDerivation rec {
   pname = "tdb";
-  version = "1.4.6";
+  version = "1.4.8";
 
   src = fetchurl {
     url = "mirror://samba/tdb/${pname}-${version}.tar.gz";
-    sha256 = "sha256-1okr2L7+BKd2QqHdVuSoeTSb8c9bLAv1+4QQYZON7ws=";
+    sha256 = "sha256-hDTJyFfRPOP6hGb3VgHyXDaTZ2s2kZ8VngrWEhuvXOg=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +31,15 @@ stdenv.mkDerivation rec {
   buildInputs = [
     python3
     readline # required to build python
+    libxcrypt
   ];
+
+  # otherwise the configure script fails with
+  # PYTHONHASHSEED=1 missing! Don't use waf directly, use ./configure and make!
+  preConfigure = ''
+    export PKGCONFIG="$PKG_CONFIG"
+    export PYTHONHASHSEED=1
+  '';
 
   wafPath = "buildtools/bin/waf";
 

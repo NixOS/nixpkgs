@@ -7,7 +7,7 @@
 
 python.pkgs.buildPythonApplication rec {
   pname = "bcc";
-  version = "0.24.0";
+  version = "0.26.0";
 
   disabled = !stdenv.isLinux;
 
@@ -15,7 +15,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "iovisor";
     repo = "bcc";
     rev = "v${version}";
-    sha256 = "sha256-5Nq6LmphiyiiIyru/P2rCCmA25cwJIWn08oK1+eM3cQ=";
+    sha256 = "sha256-zx38tPwuuGU6px9pRNN5JtvBysK9fStOvoqe7cLo7LM=";
   };
   format = "other";
 
@@ -40,6 +40,7 @@ python.pkgs.buildPythonApplication rec {
     "-DENABLE_USDT=ON"
     "-DENABLE_CPP_API=ON"
     "-DCMAKE_USE_LIBBPF_PACKAGE=ON"
+    "-DENABLE_LIBDEBUGINFOD=OFF"
   ];
 
   # to replace this executable path:
@@ -52,6 +53,10 @@ python.pkgs.buildPythonApplication rec {
 
     substituteAll ${./absolute-ausyscall.patch} ./absolute-ausyscall.patch
     patch -p1 < absolute-ausyscall.patch
+
+    # https://github.com/iovisor/bcc/issues/3996
+    substituteInPlace src/cc/libbcc.pc.in \
+      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
   '';
 
   postInstall = ''

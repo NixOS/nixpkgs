@@ -1,19 +1,19 @@
 { fetchFromGitHub, lib, stdenv, libiconv, texlive, xercesc }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "blahtexml";
-  version = "0.9+date=2020-05-16";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "gvanas";
     repo = "blahtexml";
-    rev = "92f2c5ff1f2b00a541b2222facc51ec72e5f6559";
-    hash = "sha256-ts+2gWsp7+rQu1US2/qEdbttB2Ps12efTSrcioZYsmE=";
+    rev = "v${version}";
+    hash = "sha256-DL5DyfARHHbwWBVHSa/VwHzNaAx/v7EDdnw1GLOk+y0=";
   };
 
   outputs = [ "out" "doc" ];
 
-  nativeBuildInputs = [ texlive.combined.scheme-full ];
+  nativeBuildInputs = [ texlive.combined.scheme-full ]; # scheme-full needed for ucs package
   buildInputs = [ xercesc ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   buildFlags =

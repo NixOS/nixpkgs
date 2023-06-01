@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   pname = "nncp";
-  version = "8.8.0";
+  version = "8.8.3";
   outputs = [ "out" "doc" "info" ];
 
   src = fetchurl {
     url = "http://www.nncpgo.org/download/${pname}-${version}.tar.xz";
-    sha256 = "829E2FB2F1EED8AF7ACE4554405E56F0341BE2A01C234A34D01122382AA0794C";
+    hash = "sha256-IldQCEdH6XDYK+DW5lB/5HFFFGuq1nDkCwEaVo7vIvE=";
   };
 
   nativeBuildInputs = [ go redo-apenwarr ];
@@ -30,9 +30,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.updateScript = genericUpdater {
-    inherit pname version;
     versionLister = writeShellScript "nncp-versionLister" ''
-      echo "# Versions for $1:" >> "$2"
       ${curl}/bin/curl -s ${meta.downloadPage} | ${perl}/bin/perl -lne 'print $1 if /Release.*>([0-9.]+)</'
     '';
   };
@@ -56,6 +54,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.nncpgo.org/";
     downloadPage = "http://www.nncpgo.org/Tarballs.html";
+    changelog = "http://www.nncpgo.org/News.html";
     license = licenses.gpl3Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ ehmry woffs ];

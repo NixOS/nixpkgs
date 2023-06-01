@@ -1,24 +1,21 @@
 { lib, stdenv, fetchurl, buildPackages, perl, coreutils, fetchFromGitHub
+, makeWrapper
 , withCryptodev ? false, cryptodev
 , enableSSL2 ? false
 , enableSSL3 ? false
 , static ? stdenv.hostPlatform.isStatic
-# Used to avoid cross compiling perl, for example, in darwin bootstrap tools.
-# This will cause c_rehash to refer to perl via the environment, but otherwise
-# will produce a perfectly functional openssl binary and library.
-, withPerl ? stdenv.hostPlatform == stdenv.buildPlatform
 , removeReferencesTo
 }:
 
 stdenv.mkDerivation rec {
   pname = "quictls";
-  version = "3.0.5+quick_unstable-2022-07.05";
+  version = "3.0.8+quic";
 
   src = fetchFromGitHub {
     owner = "quictls";
     repo = "openssl";
-    rev = "75e940831d0570d6b020cfebf128ae500f424867";
-    sha256 = "sha256-1HBGKafcCbM0RZWLvyl3vpSfGBsAcGDgjz1Nm/qclWM=";
+    rev = "openssl-${version}";
+    sha256 = "sha256-6t23EY+Gk/MvLOcYpDbL5jEr0rMaaPYOsc+12WFgv1c=";
   };
 
   patches = [
@@ -52,11 +49,8 @@ stdenv.mkDerivation rec {
     !(stdenv.hostPlatform.useLLVM or false) &&
     stdenv.cc.isGNU;
 
-  nativeBuildInputs = [ perl removeReferencesTo ];
-  buildInputs = lib.optional withCryptodev cryptodev
-    # perl is included to allow the interpreter path fixup hook to set the
-    # correct interpreter in c_rehash.
-    ++ lib.optional withPerl perl;
+  nativeBuildInputs = [ makeWrapper perl removeReferencesTo ];
+  buildInputs = lib.optional withCryptodev cryptodev;
 
   # TODO(@Ericson2314): Improve with mass rebuild
   configurePlatforms = [];
@@ -102,12 +96,14 @@ stdenv.mkDerivation rec {
     "shared" # "shared" builds both shared and static libraries
     "--libdir=lib"
     "--openssldir=etc/ssl"
-    "enable-ktls"
   ] ++ lib.optionals withCryptodev [
     "-DHAVE_CRYPTODEV"
     "-DUSE_CRYPTODEV_DIGESTS"
   ] ++ lib.optional enableSSL2 "enable-ssl2"
     ++ lib.optional enableSSL3 "enable-ssl3"
+    # We select KTLS here instead of the configure-time detection (which we patch out).
+    # KTLS should work on FreeBSD 13+ as well, so we could enable it if someone tests it.
+    ++ lib.optional (stdenv.isLinux && lib.versionAtLeast version "3.0.0") "enable-ktls"
     ++ lib.optional stdenv.hostPlatform.isAarch64 "no-afalgeng"
     # OpenSSL needs a specific `no-shared` configure flag.
     # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
@@ -138,22 +134,17 @@ stdenv.mkDerivation rec {
     if [ -n "$(echo $out/lib/*.so $out/lib/*.dylib $out/lib/*.dll)" ]; then
         rm "$out/lib/"*.a
     fi
-  '') + lib.optionalString (!stdenv.hostPlatform.isWindows)
-    # Fix bin/c_rehash's perl interpreter line
-    #
-    # - openssl 1_0_2: embeds a reference to buildPackages.perl
-    # - openssl 1_1:   emits "#!/usr/bin/env perl"
-    #
-    # In the case of openssl_1_0_2, reset the invalid reference and let the
-    # interpreter hook take care of it.
-    #
-    # In both cases, if withPerl = false, the intepreter line is expected be
-    # "#!/usr/bin/env perl"
-  ''
-    substituteInPlace $out/bin/c_rehash --replace ${buildPackages.perl}/bin/perl "/usr/bin/env perl"
-  '' + ''
+  '') + ''
     mkdir -p $bin
     mv $out/bin $bin/bin
+
+    # c_rehash is a legacy perl script with the same functionality
+    # as `openssl rehash`
+    # this wrapper script is created to maintain backwards compatibility without
+    # depending on perl
+    makeWrapper $bin/bin/openssl $bin/bin/c_rehash \
+      --add-flags "rehash"
+
     mkdir $dev
     mv $out/include $dev/
     # remove dependency on Perl at runtime

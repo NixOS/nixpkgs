@@ -1,15 +1,15 @@
 { lib, appimageTools, fetchurl, nodePackages }: let
   pname = "flexoptix-app";
-  version = "5.12.2";
+  version = "5.13.4";
 
   src = fetchurl {
     name = "${pname}-${version}.AppImage";
     url = "https://flexbox.reconfigure.me/download/electron/linux/x64/FLEXOPTIX%20App.${version}.AppImage";
-    hash = "sha256-XVswjIXnuWLRiXFc38lDhSvxYTQtYjs4V/AGdiNLX0g=";
+    hash = "sha256-W+9KmKZ1bPfQfv1DXCJrIswriw4ivBVZPW81tfvRBc0=";
   };
 
   udevRules = fetchurl {
-    url = "https://www.flexoptix.net/skin/udev_rules/99-tprogrammer.rules";
+    url = "https://www.flexoptix.net/static/frontend/Flexoptix/default/en_US/files/99-tprogrammer.rules";
     hash = "sha256-OZe5dV50xq99olImbo7JQxPjRd7hGyBIVwFvtR9cIVc=";
   };
 
@@ -47,7 +47,7 @@ in appimageTools.wrapAppImage {
   '';
 
   meta = {
-    description = "Configure FLEXOPTIX Universal Transcievers in seconds";
+    description = "Configure FLEXOPTIX Universal Transceivers in seconds";
     homepage = "https://www.flexoptix.net";
     changelog = "https://www.flexoptix.net/en/flexoptix-app/?os=linux#flexapp__modal__changelog";
     license = lib.licenses.unfree;

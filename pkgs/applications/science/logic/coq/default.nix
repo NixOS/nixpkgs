@@ -7,7 +7,9 @@
 
 { lib, stdenv, fetchzip, writeText, pkg-config, gnumake42
 , customOCamlPackages ? null
-, ocamlPackages_4_05, ocamlPackages_4_09, ocamlPackages_4_10, ocamlPackages_4_12, ncurses
+, ocamlPackages_4_05, ocamlPackages_4_09, ocamlPackages_4_10, ocamlPackages_4_12
+, ocamlPackages_4_14
+, ncurses
 , buildIde ? null # default is true for Coq < 8.14 and false for Coq >= 8.14
 , glib, gnome, wrapGAppsHook, makeDesktopItem, copyDesktopItems
 , csdp ? null
@@ -50,6 +52,8 @@ let
    "8.15.1".sha256     = "sha256:1janvmnk3czimp0j5qmnfwx6509vhpjc2q7lcza1bc6dm6kn8n42";
    "8.15.2".sha256     = "sha256:0qibbvzrhsvs6w3zpkhyclndp29jnr6bs9i5skjlpp431jdjjfqd";
    "8.16.0".sha256   = "sha256-3V6kL9j2rn5FHBxq1mtmWWTZS9X5cAyvtUsS6DaM+is=";
+   "8.16.1".sha256   = "sha256-n7830+zfZeyYHEOGdUo57bH6bb2/SZs8zv8xJhV+iAc=";
+   "8.17.0".sha256   = "sha256-TGwm7S6+vkeZ8cidvp8pkiAd9tk008jvvPvYgfEOXhM=";
   };
   releaseRev = v: "V${v}";
   fetched = import ../../../../build-support/coq/meta-fetch/default.nix
@@ -62,17 +66,18 @@ let
   buildIde = args.buildIde or (!coqAtLeast "8.14");
   ideFlags = optionalString (buildIde && !coqAtLeast "8.10")
     "-lablgtkdir ${ocamlPackages.lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt";
-  csdpPatch = if csdp != null then ''
+  csdpPatch = lib.optionalString (csdp != null) ''
     substituteInPlace plugins/micromega/sos.ml --replace "; csdp" "; ${csdp}/bin/csdp"
     substituteInPlace plugins/micromega/coq_micromega.ml --replace "System.is_in_system_path \"csdp\"" "true"
-  '' else "";
-  ocamlPackages = if !isNull customOCamlPackages then customOCamlPackages
+  '';
+  ocamlPackages = if customOCamlPackages != null then customOCamlPackages
     else with versions; switch coq-version [
-      { case = range "8.14" "8.14"; out = ocamlPackages_4_12; }
+      { case = range "8.16" "8.17"; out = ocamlPackages_4_14; }
+      { case = range "8.14" "8.15"; out = ocamlPackages_4_12; }
       { case = range "8.11" "8.13"; out = ocamlPackages_4_10; }
       { case = range "8.7" "8.10";  out = ocamlPackages_4_09; }
       { case = range "8.5" "8.6";   out = ocamlPackages_4_05; }
-    ] ocamlPackages_4_12;
+    ] ocamlPackages_4_14;
   ocamlNativeBuildInputs = with ocamlPackages; [ ocaml findlib ]
     ++ optional (coqAtLeast "8.14") dune_2;
   ocamlPropagatedBuildInputs = [ ]
@@ -85,8 +90,8 @@ self = stdenv.mkDerivation {
 
   passthru = {
     inherit coq-version;
-    inherit ocamlPackages ocamlNativeNuildInputs;
-    inherit ocamlPropagatedBuildInputs ocamlPropagatedNativeBuildInputs;
+    inherit ocamlPackages ocamlNativeBuildInputs;
+    inherit ocamlPropagatedBuildInputs;
     # For compatibility
     inherit (ocamlPackages) ocaml camlp5 findlib num ;
     emacsBufferSetup = pkgs: ''
@@ -153,7 +158,7 @@ self = stdenv.mkDerivation {
     UNAME=$(type -tp uname)
     RM=$(type -tp rm)
     substituteInPlace tools/beautify-archive --replace "/bin/rm" "$RM"
-    ${if !coqAtLeast "8.7" then "substituteInPlace configure.ml --replace \"md5 -q\" \"md5sum\"" else ""}
+    ${lib.optionalString (!coqAtLeast "8.7") "substituteInPlace configure.ml --replace \"md5 -q\" \"md5sum\""}
     ${csdpPatch}
   '';
 
@@ -191,7 +196,7 @@ self = stdenv.mkDerivation {
     categories = [ "Development" "Science" "Math" "IDE" "GTK" ];
   });
 
-  postInstall = let suffix = if coqAtLeast "8.14" then "-core" else ""; in optionalString (!coqAtLeast "8.17") ''
+  postInstall = let suffix = optionalString (coqAtLeast "8.14") "-core"; in optionalString (!coqAtLeast "8.17") ''
     cp bin/votour $out/bin/
   '' + ''
     ln -s $out/lib/coq${suffix} $OCAMLFIND_DESTDIR/coq${suffix}
@@ -222,12 +227,12 @@ if coqAtLeast "8.17" then self.overrideAttrs(_: {
   buildPhase = ''
     runHook preBuild
     make dunestrap
-    dune build -p coq-core,coq-stdlib,coq,coqide-server${if buildIde then ",coqide" else ""} -j $NIX_BUILD_CORES
+    dune build -p coq-core,coq-stdlib,coq,coqide-server${lib.optionalString buildIde ",coqide"} -j $NIX_BUILD_CORES
     runHook postBuild
   '';
   installPhase = ''
     runHook preInstall
-    dune install --prefix $out coq-core coq-stdlib coq coqide-server${if buildIde then " coqide" else ""}
+    dune install --prefix $out coq-core coq-stdlib coq coqide-server${lib.optionalString buildIde " coqide"}
     runHook postInstall
   '';
 }) else self

@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "altair";
-  version = "4.2.0";
+  version = "4.2.2";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d87d9372e63b48cd96b2a6415f0cf9457f50162ab79dc7a31cd7e024dd840026";
+    hash = "sha256-OTmaJnxJsw0QLBBBHmerJjdBVqhLGuufzRUUBCm6ScU=";
   };
 
   propagatedBuildInputs = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     jinja2
   ] ++ lib.optionals (pythonOlder "3.5") [ typing ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     glibcLocales
     ipython
     pytestCheckHook

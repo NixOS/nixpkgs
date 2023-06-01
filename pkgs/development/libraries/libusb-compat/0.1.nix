@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libusb-compat";
-  version = "0.1.7";
+  version = "0.1.8";
 
   outputs = [ "out" "dev" ]; # get rid of propagating systemd closure
   outputBin = "dev";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "libusb";
     repo = "libusb-compat-0.1";
     rev = "v${version}";
-    sha256 = "1nybccgjs14b3phhaycq2jx1gym4nf6sghvnv9qdfmlqxacx0jz5";
+    sha256 = "sha256-pAPERYSxoc47gwpPUoMkrbK8TOXyx03939vlFN0hHRg=";
   };
 
   patches = lib.optional stdenv.hostPlatform.isMusl ./fix-headers.patch;

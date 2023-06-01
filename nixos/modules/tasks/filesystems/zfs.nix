@@ -97,10 +97,15 @@ let
     in
       map (x: "${mountPoint x}.mount") (getPoolFilesystems pool);
 
-  getKeyLocations = pool:
-    if isBool cfgZfs.requestEncryptionCredentials
-    then "${cfgZfs.package}/sbin/zfs list -rHo name,keylocation,keystatus ${pool}"
-    else "${cfgZfs.package}/sbin/zfs list -Ho name,keylocation,keystatus ${toString (filter (x: datasetToPool x == pool) cfgZfs.requestEncryptionCredentials)}";
+  getKeyLocations = pool: if isBool cfgZfs.requestEncryptionCredentials then {
+    hasKeys = cfgZfs.requestEncryptionCredentials;
+    command = "${cfgZfs.package}/sbin/zfs list -rHo name,keylocation,keystatus ${pool}";
+  } else let
+    keys = filter (x: datasetToPool x == pool) cfgZfs.requestEncryptionCredentials;
+  in {
+    hasKeys = keys != [];
+    command = "${cfgZfs.package}/sbin/zfs list -Ho name,keylocation,keystatus ${toString keys}";
+  };
 
   createImportService = { pool, systemd, force, prefix ? "" }:
     nameValuePair "zfs-import-${pool}" {
@@ -124,25 +129,26 @@ let
         RemainAfterExit = true;
       };
       environment.ZFS_FORCE = optionalString force "-f";
-      script = (importLib {
+      script = let
+        keyLocations = getKeyLocations pool;
+      in (importLib {
         # See comments at importLib definition.
         zpoolCmd = "${cfgZfs.package}/sbin/zpool";
         awkCmd = "${pkgs.gawk}/bin/awk";
         inherit cfgZfs;
       }) + ''
-        poolImported "${pool}" && exit
-        echo -n "importing ZFS pool \"${pool}\"..."
-        # Loop across the import until it succeeds, because the devices needed may not be discovered yet.
-        for trial in `seq 1 60`; do
-          poolReady "${pool}" && poolImport "${pool}" && break
-          sleep 1
-        done
-        poolImported "${pool}" || poolImport "${pool}"  # Try one last time, e.g. to import a degraded pool.
+        if ! poolImported "${pool}"; then
+          echo -n "importing ZFS pool \"${pool}\"..."
+          # Loop across the import until it succeeds, because the devices needed may not be discovered yet.
+          for trial in `seq 1 60`; do
+            poolReady "${pool}" && poolImport "${pool}" && break
+            sleep 1
+          done
+          poolImported "${pool}" || poolImport "${pool}"  # Try one last time, e.g. to import a degraded pool.
+        fi
         if poolImported "${pool}"; then
-          ${optionalString (if isBool cfgZfs.requestEncryptionCredentials
-                            then cfgZfs.requestEncryptionCredentials
-                            else cfgZfs.requestEncryptionCredentials != []) ''
-            ${getKeyLocations pool} | while IFS=$'\t' read ds kl ks; do
+          ${optionalString keyLocations.hasKeys ''
+            ${keyLocations.command} | while IFS=$'\t' read ds kl ks; do
               {
               if [[ "$ks" != unavailable ]]; then
                 continue
@@ -154,7 +160,7 @@ let
                   tries=3
                   success=false
                   while [[ $success != true ]] && [[ $tries -gt 0 ]]; do
-                    ${systemd}/bin/systemd-ask-password "Enter key for $ds:" | ${cfgZfs.package}/sbin/zfs load-key "$ds" \
+                    ${systemd}/bin/systemd-ask-password --timeout=${toString cfgZfs.passwordTimeout} "Enter key for $ds:" | ${cfgZfs.package}/sbin/zfs load-key "$ds" \
                       && success=true \
                       || tries=$((tries - 1))
                   done
@@ -224,6 +230,15 @@ in
           more likely to hit an undiscovered bug compared to running a released
           version of ZFS on Linux.
           '';
+      };
+
+      allowHibernation = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Allow hibernation support, this may be a unsafe option depending on your
+          setup. Make sure to NOT use Swap on ZFS.
+        '';
       };
 
       extraPools = mkOption {
@@ -296,6 +311,16 @@ in
           are requested. To only decrypt selected datasets supply a list of dataset
           names instead. For root pools the encryption key can be supplied via both
           an interactive prompt (keylocation=prompt) and from a file (keylocation=file://).
+        '';
+      };
+
+      passwordTimeout = mkOption {
+        type = types.int;
+        default = 0;
+        description = lib.mdDoc ''
+          Timeout in seconds to wait for password entry for decrypt at boot.
+
+          Defaults to 0, which waits forever.
         '';
       };
     };
@@ -494,10 +519,18 @@ in
           assertion = !cfgZfs.forceImportAll || cfgZfs.forceImportRoot;
           message = "If you enable boot.zfs.forceImportAll, you must also enable boot.zfs.forceImportRoot";
         }
+        {
+          assertion = cfgZfs.allowHibernation -> !cfgZfs.forceImportRoot && !cfgZfs.forceImportAll;
+          message = "boot.zfs.allowHibernation while force importing is enabled will cause data corruption";
+        }
       ];
 
       boot = {
         kernelModules = [ "zfs" ];
+        # https://github.com/openzfs/zfs/issues/260
+        # https://github.com/openzfs/zfs/issues/12842
+        # https://github.com/NixOS/nixpkgs/issues/106093
+        kernelParams = lib.optionals (!config.boot.zfs.allowHibernation) [ "nohibernate" ];
 
         extraModulePackages = [
           (if config.boot.zfs.enableUnstable then
@@ -548,7 +581,7 @@ in
               ''
               else concatMapStrings (fs: ''
                 zfs load-key -- ${escapeShellArg fs}
-              '') cfgZfs.requestEncryptionCredentials}
+              '') (filter (x: datasetToPool x == pool) cfgZfs.requestEncryptionCredentials)}
         '') rootPools));
 
         # Systemd in stage 1

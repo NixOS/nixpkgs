@@ -1,19 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, boost, cmake, }:
+{ lib, stdenv, fetchFromGitHub, boost, cmake, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "libcifpp";
-  version = "4.2.2";
+  version = "5.0.8";
 
   src = fetchFromGitHub {
     owner = "PDB-REDO";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0mhplcpni4p8lavrq4fz9qq8mbxhvpnlxzy55yrz8y07d76ajg6y";
+    sha256 = "sha256-KJGcopGhCWSl+ElG3BPJjBf/kvYJowOHxto6Ci1IMco=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ boost ];
+  # disable network access
+  cmakeFlags = [ "-DCIFPP_DOWNLOAD_CCD=OFF" ];
+
+  buildInputs = [ boost zlib ];
 
   meta = with lib; {
     description = "Manipulate mmCIF and PDB files";

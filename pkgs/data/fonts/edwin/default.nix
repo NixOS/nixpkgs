@@ -1,22 +1,21 @@
-{ lib, fetchurl }:
+{ lib, stdenvNoCC, fetchurl }:
 
-let
-  version = "0.52";
-in fetchurl {
-  name = "edwin-${version}";
+stdenvNoCC.mkDerivation rec {
+  pname = "edwin";
+  version = "0.54";
 
-  url = "https://github.com/MuseScoreFonts/Edwin/archive/refs/tags/v${version}.tar.gz";
+  src = fetchurl {
+    url = "https://github.com/MuseScoreFonts/Edwin/archive/refs/tags/v${version}.tar.gz";
+    hash = "sha256-F6BzwnrsaELegdo6Bdju1OG+RI9zKnn4tIASR3q6zYk=";
+  };
 
-  downloadToTemp = true;
+  installPhase = ''
+    runHook preInstall
 
-  recursiveHash = true;
-
-  sha256 = "sha256-e0ADK72ECl+QMvLWtFJfeHBmuEwzr9M+Kqvkd5Z2mmo=";
-
-  postFetch = ''
-    tar xzf $downloadedFile
     mkdir -p $out/share/fonts/opentype
-    install Edwin-${version}/*.otf $out/share/fonts/opentype
+    install *.otf $out/share/fonts/opentype
+
+    runHook postInstall
   '';
 
   meta = with lib; {

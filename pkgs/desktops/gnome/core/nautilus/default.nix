@@ -4,14 +4,15 @@
 , meson
 , ninja
 , pkg-config
+, gi-docgen
+, docbook-xsl-nons
 , gettext
 , libxml2
 , desktop-file-utils
-, python3
-, wrapGAppsHook
-, gtk3
-, libhandy
-, libportal-gtk3
+, wrapGAppsHook4
+, gtk4
+, libadwaita
+, libportal-gtk4
 , gnome
 , gnome-autoar
 , glib-networking
@@ -20,27 +21,30 @@
 , libexif
 , libseccomp
 , librsvg
+, webp-pixbuf-loader
 , tracker
 , tracker-miners
 , gexiv2
 , libselinux
+, libcloudproviders
 , gdk-pixbuf
 , substituteAll
 , gnome-desktop
 , gst_all_1
 , gsettings-desktop-schemas
+, gnome-user-share
 , gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
   pname = "nautilus";
-  version = "42.2";
+  version = "44.1";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "mSEtLrdZlvGBcorQSi4thvJXewZOaKNMi4GnA330zLI=";
+    sha256 = "NggCpZXj7brZYsjOo1O2K6qL5AdRO1FiyJyTPKU4eqk=";
   };
 
   patches = [
@@ -62,8 +66,9 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
-    wrapGAppsHook
+    gi-docgen
+    docbook-xsl-nons
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -72,21 +77,29 @@ stdenv.mkDerivation rec {
     gnome-desktop
     gnome.adwaita-icon-theme
     gsettings-desktop-schemas
+    gnome-user-share
     gst_all_1.gst-plugins-base
-    gtk3
-    libhandy
-    libportal-gtk3
+    gtk4
+    libadwaita
+    libportal-gtk4
     libexif
     libnotify
     libseccomp
     libselinux
+    gdk-pixbuf
+    libcloudproviders
     shared-mime-info
     tracker
     tracker-miners
+    gnome-autoar
   ];
 
   propagatedBuildInputs = [
-    gnome-autoar
+    gtk4
+  ];
+
+  mesonFlags = [
+    "-Ddocs=true"
   ];
 
   preFixup = ''
@@ -94,12 +107,14 @@ stdenv.mkDerivation rec {
       # Thumbnailers
       --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
+      --prefix XDG_DATA_DIRS : "${webp-pixbuf-loader}/share"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     )
   '';
 
-  postPatch = ''
-    patchShebangs build-aux/meson/postinstall.py
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {

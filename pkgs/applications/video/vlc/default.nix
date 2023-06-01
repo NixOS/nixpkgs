@@ -71,7 +71,7 @@
 , onlyLibVLC ? false
 , skins2Support ? !onlyLibVLC, freetype
 , waylandSupport ? true, wayland, wayland-protocols
-, withQt5 ? true, qtbase, qtsvg, qtwayland, qtx11extras, wrapQtAppsHook
+, withQt5 ? true, qtbase, qtsvg, qtwayland, qtx11extras, wrapQtAppsHook, wrapGAppsHook
 }:
 
 # chromecastSupport requires TCP port 8010 to be open for it to work.
@@ -83,11 +83,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "${optionalString onlyLibVLC "lib"}vlc";
-  version = "3.0.17.3";
+  version = "3.0.18";
 
   src = fetchurl {
     url = "http://get.videolan.org/vlc/${version}/vlc-${version}.tar.xz";
-    sha256 = "sha256-b36Q74lz0x2W3mTbgXFz40UVCClxepQISxu4MhzeIBQ=";
+    sha256 = "sha256-VwlEOcNl2KqLm0H6MIDMDu8r7+YCW7XO9yKszGJa7ew=";
   };
 
   # VLC uses a *ton* of libraries for various pieces of functionality, many of
@@ -152,11 +152,11 @@ stdenv.mkDerivation rec {
     zlib
   ]
   ++ (with xorg; [
+    libSM
     libXpm
     libXv
     libXvMC
     xcbutilkeysyms
-    xlibsWrapper
   ])
   ++ optional (!stdenv.hostPlatform.isAarch && !onlyLibVLC) live555
   ++ optional jackSupport libjack2
@@ -177,6 +177,7 @@ stdenv.mkDerivation rec {
     pkg-config
     removeReferencesTo
     unzip
+    wrapGAppsHook
   ]
   ++ optionals withQt5 [ wrapQtAppsHook ]
   ++ optionals waylandSupport [ wayland wayland-protocols ];
@@ -190,21 +191,31 @@ stdenv.mkDerivation rec {
   BUILDCC = "${stdenv.cc}/bin/gcc";
 
   patches = [
-    # patches to build with recent live555
+    # patch to build with recent live555
     # upstream issue: https://code.videolan.org/videolan/vlc/-/issues/25473
-    (fetchpatch {
-      url = "https://code.videolan.org/videolan/vlc/uploads/3c84ea58d7b94d7a8d354eaffe4b7d55/0001-Get-addr-by-ref.-from-getConnectionEndpointAddress.patch";
-      sha256 = "171d3qjl9a4dm13sqig3ra8s2zcr76wfnqz4ba4asg139cyc1axd";
-    })
     (fetchpatch {
       url = "https://code.videolan.org/videolan/vlc/uploads/eb1c313d2d499b8a777314f789794f9d/0001-Add-lssl-and-lcrypto-to-liblive555_plugin_la_LIBADD.patch";
       sha256 = "0kyi8q2zn2ww148ngbia9c7qjgdrijf4jlvxyxgrj29cb5iy1kda";
+    })
+    # patch to build with recent libplacebo
+    # https://code.videolan.org/videolan/vlc/-/merge_requests/3027
+    (fetchpatch {
+      url = "https://code.videolan.org/videolan/vlc/-/commit/65ea8d19d91ac1599a29e8411485a72fe89c45e2.patch";
+      hash = "sha256-Zz+g75V6X9OZI3sn614K9Uenxl3WtRHKSdLkWP3b17w=";
     })
   ];
 
   postPatch = ''
     substituteInPlace modules/text_renderer/freetype/platform_fonts.h --replace \
       /usr/share/fonts/truetype/freefont ${freefont_ttf}/share/fonts/truetype
+  '';
+
+
+  # to prevent double wrapping of Qtwrap and Gwrap
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   # - Touch plugins (plugins cache keyed off mtime and file size:

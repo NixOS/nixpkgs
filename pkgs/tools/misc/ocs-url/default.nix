@@ -1,7 +1,7 @@
 { lib, stdenv, fetchgit, libsForQt5 }:
 
 stdenv.mkDerivation rec {
-  name = "ocs-url";
+  pname = "ocs-url";
   version = "3.1.0";
 
   srcs = [

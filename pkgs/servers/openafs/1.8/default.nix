@@ -18,8 +18,10 @@
 , withDevdoc ? false
 , doxygen
 , dblatex # Extra developer documentation
+, withNcurses ? false
 , ncurses # Extra ncurses utilities. Needed for debugging and monitoring.
-, tsmbac ? null # Tivoli Storage Manager Backup Client from IBM
+, withTsm ? false
+, tsm-client # Tivoli Storage Manager Backup Client from IBM
 }:
 
 with (import ./srcs.nix { inherit fetchurl; });
@@ -43,9 +45,10 @@ stdenv.mkDerivation {
     bison
   ] ++ optionals withDevdoc [ doxygen dblatex ];
 
-  buildInputs = [ libkrb5 ncurses ];
+  buildInputs = [ libkrb5 ] ++ optional withNcurses ncurses;
 
-  patches = [ ./bosserver.patch ./cross-build.patch ] ++ optional (tsmbac != null) ./tsmbac.patch;
+  patches = [ ./bosserver.patch ./cross-build.patch ]
+    ++ optional withTsm ./tsmbac.patch;
 
   outputs = [ "out" "dev" "man" "doc" ] ++ optional withDevdoc "devdoc";
 
@@ -74,19 +77,18 @@ stdenv.mkDerivation {
 
 
     configureFlagsArray=(
-      "--with-gssapi"
+      "--with-krb5"
       "--sysconfdir=/etc"
       "--localstatedir=/var"
       "--disable-kernel-module"
       "--disable-fuse-client"
       "--with-docbook-stylesheets=${docbook_xsl}/share/xml/docbook-xsl"
-      ${optionalString (tsmbac != null) "--enable-tivoli-tsm"}
-      ${optionalString (ncurses == null) "--disable-gtx"}
+      ${optionalString withTsm "--enable-tivoli-tsm"}
+      ${optionalString (!withNcurses) "--disable-gtx"}
       "--disable-linux-d_splice-alias-extra-iput"
     )
-  '' + optionalString (tsmbac != null) ''
-    export XBSA_CFLAGS="-Dxbsa -DNEW_XBSA -I${tsmbac}/lib64/sample -DXBSA_TSMLIB=\\\"${tsmbac}/lib64/libApiTSM64.so\\\""
-    export XBSA_XLIBS="-ldl"
+  '' + optionalString withTsm ''
+    export XBSA_CFLAGS="-Dxbsa -DNEW_XBSA -I${tsm-client}/lib64/sample -DXBSA_TSMLIB=\\\"${tsm-client}/lib64/libApiTSM64.so\\\""
   '';
 
   buildFlags = [ "all_nolibafs" ];
@@ -105,6 +107,8 @@ stdenv.mkDerivation {
     for d in AdminGuide QuickStartUnix UserGuide ; do
       cp "doc/xml/''${d}"/*.html "$doc/share/doc/openafs/''${d}"
     done
+
+    cp src/tools/dumpscan/{afsdump_dirlist,afsdump_extract,afsdump_scan,dumptool} $out/bin
 
     rm -r $out/lib/openafs
   '' + optionalString withDevdoc ''

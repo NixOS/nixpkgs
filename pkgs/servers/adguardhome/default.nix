@@ -7,7 +7,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "adguardhome";
-  version = "0.107.12";
+  version = "0.107.29";
   src = sources.${system} or (throw "Source for ${pname} is not available for ${system}");
 
   installPhase = ''
@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = ./update.sh;
+    schema_version = 20;
     tests.adguardhome = nixosTests.adguardhome;
   };
 
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/AdguardTeam/AdGuardHome";
     description = "Network-wide ads & trackers blocking DNS server";
     platforms = builtins.attrNames sources;
-    maintainers = with maintainers; [ numkem iagoq ];
+    maintainers = with maintainers; [ numkem iagoq rhoriguchi ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Only;
   };

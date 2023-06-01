@@ -22,8 +22,8 @@ let
     import ./tests/all-tests.nix {
       inherit system;
       pkgs = import ./.. { inherit system; };
-      callTest = t: {
-        ${system} = hydraJob t.test;
+      callTest = config: {
+        ${system} = hydraJob config.test;
       };
     } // {
       # for typechecking of the scripts and evaluation of
@@ -32,8 +32,8 @@ let
         import ./tests/all-tests.nix {
         inherit system;
         pkgs = import ./.. { inherit system; };
-        callTest = t: {
-          ${system} = hydraJob t.test.driver;
+        callTest = config: {
+          ${system} = hydraJob config.driver;
         };
       };
     };
@@ -144,7 +144,6 @@ in rec {
   manual = manualHTML; # TODO(@oxij): remove eventually
   manualEpub = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualEpub));
   manpages = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manpages);
-  manualGeneratedSources = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.generatedSources);
   options = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.optionsJSON)).x86_64-linux;
 
 
@@ -169,23 +168,31 @@ in rec {
     inherit system;
   });
 
-  iso_plasma5 = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
+  iso_plasma5 = forMatchingSystems supportedSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-plasma5.nix;
     type = "plasma5";
     inherit system;
   });
 
-  iso_gnome = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
+  iso_gnome = forMatchingSystems supportedSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-gnome.nix;
     type = "gnome";
     inherit system;
   });
 
-  # A variant with a more recent (but possibly less stable) kernel
-  # that might support more hardware.
+  # A variant with a more recent (but possibly less stable) kernel that might support more hardware.
+  # This variant keeps zfs support enabled, hoping it will build and work.
   iso_minimal_new_kernel = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-minimal-new-kernel.nix;
     type = "minimal-new-kernel";
+    inherit system;
+  });
+
+  # A variant with a more recent (but possibly less stable) kernel that might support more hardware.
+  # ZFS support disabled since it is unlikely to support the latest kernel.
+  iso_minimal_new_kernel_no_zfs = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeIso {
+    module = ./modules/installer/cd-dvd/installation-cd-minimal-new-kernel-no-zfs.nix;
+    type = "minimal-new-kernel-no-zfs";
     inherit system;
   });
 
@@ -203,6 +210,14 @@ in rec {
         aarch64-linux = ./modules/installer/sd-card/sd-image-aarch64-new-kernel-installer.nix;
       }.${system};
     type = "minimal-new-kernel";
+    inherit system;
+  });
+
+  sd_image_new_kernel_no_zfs = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
+    module = {
+        aarch64-linux = ./modules/installer/sd-card/sd-image-aarch64-new-kernel-no-zfs-installer.nix;
+      }.${system};
+    type = "minimal-new-kernel-no-zfs";
     inherit system;
   });
 
@@ -388,6 +403,12 @@ in rec {
     pantheon = makeClosure ({ ... }:
       { services.xserver.enable = true;
         services.xserver.desktopManager.pantheon.enable = true;
+      });
+
+    deepin = makeClosure ({ ... }:
+      { services.xserver.enable = true;
+        services.xserver.displayManager.lightdm.enable = true;
+        services.xserver.desktopManager.deepin.enable = true;
       });
 
     # Linux/Apache/PostgreSQL/PHP stack.

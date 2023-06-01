@@ -4,7 +4,6 @@
 , cacert
 , cached-property
 , cffi
-, fetchpatch
 , fetchPypi
 , isPyPy
 , libgit2
@@ -15,24 +14,15 @@
 
 buildPythonPackage rec {
   pname = "pygit2";
-  version = "1.9.2";
+  version = "1.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IIlEM98RRkgarK434rDzu7/eoCbbL1UGEXC9mCPkCxk=";
+    hash = "sha256-6UQNCGZeNSeJiZOVkKU/N6k46tpPlEaESTCqLuMNc74=";
   };
-
-  patches = [
-    # libgit 2 fix
-    (fetchpatch {
-      url = "https://github.com/libgit2/pygit2/commit/14b1df84060ea4ab085202382e80672ec1a104e3.patch";
-      includes = [ "src/types.h" ];
-      sha256 = "sha256-2krkyAT30l/olSEl2ugWCsylvGuT7VvkuSFVshIXktA=";
-    })
-  ];
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
     export DYLD_LIBRARY_PATH="${libgit2}/lib"
@@ -45,15 +35,15 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cached-property
     pycparser
-  ] ++ lib.optional (!isPyPy) [
+  ] ++ lib.optionals (!isPyPy) [
     cffi
   ];
 
-  propagatedNativeBuildInputs = lib.optional (!isPyPy) [
+  propagatedNativeBuildInputs = lib.optionals (!isPyPy) [
     cffi
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

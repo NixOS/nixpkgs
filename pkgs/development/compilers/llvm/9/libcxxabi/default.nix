@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm) libunwind;
+  buildInputs = lib.optional (!stdenv.isDarwin && !stdenv.hostPlatform.isWasm) libunwind;
 
   cmakeFlags = lib.optionals (stdenv.hostPlatform.useLLVM or false) [
     "-DLLVM_ENABLE_LIBCXX=ON"
@@ -42,11 +42,23 @@ stdenv.mkDerivation {
 
   preInstall = lib.optionalString stdenv.isDarwin ''
     for file in lib/*.dylib; do
+      if [ -L "$file" ]; then continue; fi
+
+      # Fix up the install name. Preserve the basename, just replace the path.
+      installName="$out/lib/$(basename $(${stdenv.cc.targetPrefix}otool -D $file | tail -n 1))"
+
       # this should be done in CMake, but having trouble figuring out
       # the magic combination of necessary CMake variables
       # if you fancy a try, take a look at
       # https://gitlab.kitware.com/cmake/community/-/wikis/doc/cmake/RPATH-handling
-      install_name_tool -id $out/$file $file
+      ${stdenv.cc.targetPrefix}install_name_tool -id $installName $file
+
+      # cc-wrapper passes '-lc++abi' to all c++ link steps, but that causes
+      # libcxxabi to sometimes link against a different version of itself.
+      # Here we simply make that second reference point to ourselves.
+      for other in $(${stdenv.cc.targetPrefix}otool -L $file | awk '$1 ~ "/libc\\+\\+abi" { print $1 }'); do
+        ${stdenv.cc.targetPrefix}install_name_tool -change $other $installName $file
+      done
     done
   '';
 
@@ -54,6 +66,10 @@ stdenv.mkDerivation {
     mkdir -p "$dev/include"
     install -m 644 ../include/${if stdenv.isDarwin then "*" else "cxxabi.h"} "$dev/include"
   '';
+
+  passthru = {
+    libName = "c++abi";
+  };
 
   meta = llvm_meta // {
     homepage = "https://libcxxabi.llvm.org/";

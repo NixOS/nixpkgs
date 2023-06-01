@@ -27,21 +27,16 @@ python3Packages.buildPythonApplication rec {
     intltool
     wrapGAppsHook
     glibcLocales
+    gobject-introspection
   ];
-
-  # as of 2021-07, the gobject-introspection setup hook does not
-  # work with `strictDeps` enabled, thus for proper `wrapGAppsHook`
-  # it needs to be disabled explicitly. https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
 
   buildInputs = [
     python3
     gtk3
-    gobject-introspection
     gnome.adwaita-icon-theme
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     minimock
     pytest
     pytest-httpserver

@@ -2,48 +2,59 @@
 , stdenv
 , fetchPypi
 , python
+, pythonOlder
 , buildPythonPackage
 , cython
 , gfortran
+, meson-python
+, pkg-config
 , pythran
+, wheel
 , nose
 , pytest
 , pytest-xdist
 , numpy
 , pybind11
+, pooch
+, libxcrypt
 }:
 
 buildPythonPackage rec {
   pname = "scipy";
-  version = "1.8.1";
+  version = "1.10.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-nj+xsOiW8UqFqpoo1fdV2q7rVMiXt0bfelXMsCs0DzM=";
+    hash = "sha256-LPnfuAp7RYm6TEDOdYiYbW1c68VFfK0sKID2vC1C86U=";
   };
 
-  nativeBuildInputs = [ cython gfortran pythran ];
+  patches = [
+    # These tests require internet connection, currently impossible to disable
+    # them otherwise, see:
+    # https://github.com/scipy/scipy/pull/17965
+    ./disable-datasets-tests.patch
+  ];
 
-  buildInputs = [ numpy.blas pybind11 ];
+  nativeBuildInputs = [ cython gfortran meson-python pythran pkg-config wheel ];
+
+  buildInputs = [
+    numpy.blas
+    pybind11
+    pooch
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    libxcrypt
+  ];
 
   propagatedBuildInputs = [ numpy ];
 
-  checkInputs = [ nose pytest pytest-xdist ];
-
-  # Remove tests because of broken wrapper
-  prePatch = ''
-    rm scipy/linalg/tests/test_lapack.py
-  '';
+  nativeCheckInputs = [ nose pytest pytest-xdist ];
 
   doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
 
   preConfigure = ''
     sed -i '0,/from numpy.distutils.core/s//import setuptools;from numpy.distutils.core/' setup.py
     export NPY_NUM_BUILD_JOBS=$NIX_BUILD_CORES
-  '';
-
-  preBuild = ''
-    ln -s ${numpy.cfg} site.cfg
   '';
 
   # disable stackprotector on aarch64-darwin for now
@@ -58,11 +69,14 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    pushd dist
+    pushd "$out"
+    export OMP_NUM_THREADS=$(( $NIX_BUILD_CORES / 4 ))
     ${python.interpreter} -c "import scipy; scipy.test('fast', verbose=10, parallel=$NIX_BUILD_CORES)"
     popd
     runHook postCheck
   '';
+
+  requiredSystemFeatures = [ "big-parallel" ]; # the tests need lots of CPU time
 
   passthru = {
     blas = numpy.blas;

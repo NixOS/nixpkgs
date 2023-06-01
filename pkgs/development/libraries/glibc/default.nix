@@ -2,6 +2,7 @@
 , withLinuxHeaders ? true
 , profilingLibraries ? false
 , withGd ? false
+, withLibcrypt? false
 , buildPackages
 }:
 
@@ -13,16 +14,17 @@ let
   ];
 in
 
-callPackage ./common.nix { inherit stdenv; } {
-    pname = "glibc" + lib.optionalString withGd "-gd";
-
-    inherit withLinuxHeaders profilingLibraries withGd;
+(callPackage ./common.nix { inherit stdenv; } {
+  inherit withLinuxHeaders withGd profilingLibraries withLibcrypt;
+  pname = "glibc" + lib.optionalString withGd "-gd";
+}).overrideAttrs(previousAttrs: {
 
     # Note:
     # Things you write here override, and do not add to,
     # the values in `common.nix`.
     # (For example, if you define `patches = [...]` here, it will
-    # override the patches in `common.nix`.)
+    # override the patches in `common.nix` -- so instead you should
+    # write `patches = (previousAttrs.patches or []) ++ [ ... ]`.
 
     NIX_NO_SELF_RPATH = true;
 
@@ -38,6 +40,9 @@ callPackage ./common.nix { inherit stdenv; } {
 
       # Apparently --bindir is not respected.
       makeFlagsArray+=("bindir=$bin/bin" "sbindir=$bin/sbin" "rootsbindir=$bin/sbin")
+    '' + lib.optionalString stdenv.buildPlatform.isDarwin ''
+      # ld-wrapper will otherwise attempt to inject CoreFoundation into ld-linux's RUNPATH
+      export NIX_COREFOUNDATION_RPATH=
     '';
 
     # The pie, stackprotector and fortify hardening flags are autodetected by
@@ -45,43 +50,53 @@ callPackage ./common.nix { inherit stdenv; } {
     # invocation does not work.
     hardeningDisable = [ "fortify" "pie" "stackprotector" ];
 
-    NIX_CFLAGS_COMPILE = lib.concatStringsSep " "
-      (builtins.concatLists [
-        (lib.optionals withGd gdCflags)
-        # Fix -Werror build failure when building glibc with musl with GCC >= 8, see:
-        # https://github.com/NixOS/nixpkgs/pull/68244#issuecomment-544307798
-        (lib.optional stdenv.hostPlatform.isMusl "-Wno-error=attribute-alias")
-        (lib.optionals ((stdenv.hostPlatform != stdenv.buildPlatform) || stdenv.hostPlatform.isMusl) [
-          # Ignore "error: '__EI___errno_location' specifies less restrictive attributes than its target '__errno_location'"
-          # New warning as of GCC 9
-          # Same for musl: https://github.com/NixOS/nixpkgs/issues/78805
-          "-Wno-error=missing-attributes"
-        ])
-      ]);
+    env = (previousAttrs.env or { }) // {
+      NIX_CFLAGS_COMPILE = (previousAttrs.env.NIX_CFLAGS_COMPILE or "") + lib.concatStringsSep " "
+        (builtins.concatLists [
+          (lib.optionals withGd gdCflags)
+          # Fix -Werror build failure when building glibc with musl with GCC >= 8, see:
+          # https://github.com/NixOS/nixpkgs/pull/68244#issuecomment-544307798
+          (lib.optional stdenv.hostPlatform.isMusl "-Wno-error=attribute-alias")
+          (lib.optionals ((stdenv.hostPlatform != stdenv.buildPlatform) || stdenv.hostPlatform.isMusl) [
+            # Ignore "error: '__EI___errno_location' specifies less restrictive attributes than its target '__errno_location'"
+            # New warning as of GCC 9
+            # Same for musl: https://github.com/NixOS/nixpkgs/issues/78805
+            "-Wno-error=missing-attributes"
+          ])
+          (lib.optionals (stdenv.hostPlatform.isPower64) [
+            # Do not complain about the Processor Specific ABI (i.e. the
+            # choice to use IEEE-standard `long double`).  We pass this
+            # flag in order to mute a `-Werror=psabi` passed by glibc;
+            # hopefully future glibc releases will not pass that flag.
+            "-Wno-error=psabi"
+          ])
+        ]);
+    };
 
-    # When building glibc from bootstrap-tools, we need libgcc_s at RPATH for
-    # any program we run, because the gcc will have been placed at a new
-    # store path than that determined when built (as a source for the
-    # bootstrap-tools tarball)
-    # Building from a proper gcc staying in the path where it was installed,
-    # libgcc_s will now be at {gcc}/lib, and gcc's libgcc will be found without
-    # any special hack.
-    # TODO: remove this hack. Things that rely on this hack today:
-    # - dejagnu: during linux bootstrap tcl SIGSEGVs
-    # - clang-wrapper in cross-compilation
-    # Last attempt: https://github.com/NixOS/nixpkgs/pull/36948
-    preInstall = ''
-      if [ -f ${stdenv.cc.cc}/lib/libgcc_s.so.1 ]; then
-          mkdir -p $out/lib
-          cp ${stdenv.cc.cc}/lib/libgcc_s.so.1 $out/lib/libgcc_s.so.1
-          # the .so It used to be a symlink, but now it is a script
-          cp -a ${stdenv.cc.cc}/lib/libgcc_s.so $out/lib/libgcc_s.so
-      fi
-    '';
+    # glibc needs to `dlopen()` `libgcc_s.so` but does not link
+    # against it.  Furthermore, glibc doesn't use the ordinary
+    # `dlopen()` call to do this; instead it uses one which ignores
+    # most paths:
+    #
+    #   https://sourceware.org/legacy-ml/libc-help/2013-11/msg00026.html
+    #
+    # In order to get it to not ignore `libgcc_s.so`, we have to add its path to
+    # `user-defined-trusted-dirs`:
+    #
+    #   https://sourceware.org/git/?p=glibc.git;a=blob;f=elf/Makefile;h=b509b3eada1fb77bf81e2a0ca5740b94ad185764#l1355
+    #
+    # Conveniently, this will also inform Nix of the fact that glibc depends on
+    # gcc.libgcc, since the path will be embedded in the resulting binary.
+    #
+    makeFlags =
+      (previousAttrs.makeFlags or [])
+      ++ lib.optionals (stdenv.cc.cc?libgcc) [
+        "user-defined-trusted-dirs=${stdenv.cc.cc.libgcc}/lib"
+      ];
 
     postInstall = (if stdenv.hostPlatform == stdenv.buildPlatform then ''
       echo SUPPORTED-LOCALES=C.UTF-8/UTF-8 > ../glibc-2*/localedata/SUPPORTED
-      make -j''${NIX_BUILD_CORES:-1} -l''${NIX_BUILD_CORES:-1} localedata/install-locales
+      make -j''${NIX_BUILD_CORES:-1} localedata/install-locales
     '' else lib.optionalString stdenv.buildPlatform.isLinux ''
       # This is based on http://www.linuxfromscratch.org/lfs/view/development/chapter06/glibc.html
       # Instead of using their patch to build a build-native localedef,
@@ -149,5 +164,12 @@ callPackage ./common.nix { inherit stdenv; } {
 
     separateDebugInfo = true;
 
-    meta.description = "The GNU C Library";
-  }
+    passthru =
+      (previousAttrs.passthru or {})
+      // lib.optionalAttrs (stdenv.cc.cc?libgcc) {
+        inherit (stdenv.cc.cc) libgcc;
+      };
+
+  meta = (previousAttrs.meta or {}) // { description = "The GNU C Library"; };
+})
+

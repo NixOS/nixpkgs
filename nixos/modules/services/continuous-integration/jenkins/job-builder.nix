@@ -30,7 +30,7 @@ in {
       };
 
       accessUser = mkOption {
-        default = "";
+        default = "admin";
         type = types.str;
         description = lib.mdDoc ''
           User id in Jenkins used to reload config.
@@ -48,7 +48,8 @@ in {
       };
 
       accessTokenFile = mkOption {
-        default = "";
+        default = "${config.services.jenkins.home}/secrets/initialAdminPassword";
+        defaultText = literalExpression ''"''${config.services.jenkins.home}/secrets/initialAdminPassword"'';
         type = types.str;
         example = "/run/keys/jenkins-job-builder-access-token";
         description = lib.mdDoc ''
@@ -241,7 +242,7 @@ in {
                 jobdir="${jenkinsCfg.home}/$jenkinsjobname"
                 rm -rf "$jobdir"
             done
-          '' + (if cfg.accessUser != "" then reloadScript else "");
+          '' + (optionalString (cfg.accessUser != "") reloadScript);
       serviceConfig = {
         Type = "oneshot";
         User = jenkinsCfg.user;

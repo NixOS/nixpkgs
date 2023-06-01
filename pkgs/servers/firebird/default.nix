@@ -10,7 +10,7 @@ let base = {
     changelog = "https://github.com/FirebirdSQL/firebird/blob/master/CHANGELOG.md";
     license = [ "IDPL" "Interbase-1.0" ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ marcweber superherointj ];
+    maintainers = with maintainers; [ marcweber ];
   };
 
   nativeBuildInputs = [ autoreconfHook ];

@@ -5,20 +5,20 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0g4qsdq072fyrsa7r0sg456dhrb017jmzdbnnzl2c80ha40bbmhg";
+      sha256 = "1wdllcqlr81nzyf485ldv1p660xsi476p79ghbj7zsf3n9n86gwd";
       type = "gem";
     };
-    version = "2.1.1";
+    version = "2.2.0";
   };
   bcrypt = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1d2gqv8vry4ps0asb7nn1z4zxi3mcscy7yrim0npdd294ffyinvj";
+      sha256 = "0ai0m15jg3n0b22mimk09ppnga316dc7dyvz06w8rrqh5gy1lslp";
       type = "gem";
     };
-    version = "3.1.3";
+    version = "3.1.13";
   };
   ffi = {
     groups = ["default"];

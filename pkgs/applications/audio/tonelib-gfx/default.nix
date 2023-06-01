@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tonelib-gfx";
-  version = "4.7.5";
+  version = "4.7.8";
 
   src = fetchurl {
-    url = "https://www.tonelib.net/download/220214/ToneLib-GFX-amd64.deb";
-    hash = "sha256-GUSyarqG1V5O6ayAedeGqmOA+UABQDpAZ+dsorh7das=";
+    url = "https://tonelib.net/download/221222/ToneLib-GFX-amd64.deb";
+    hash = "sha256-1sTwHqQYqNloZ3XSwhryqlW7b1FHh4ymtj3rKUcVZIo=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook dpkg ];

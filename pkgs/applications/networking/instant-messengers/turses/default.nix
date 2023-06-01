@@ -1,6 +1,7 @@
 { lib
 , fetchpatch
 , fetchFromGitHub
+, fetchPypi
 , python3
 }:
 
@@ -45,7 +46,7 @@ buildPythonPackage rec {
     future
   ];
 
-  checkInputs = with py.pkgs; [
+  nativeCheckInputs = with py.pkgs; [
     mock
     pytest
     coverage

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "ntc-templates";
-  version = "3.0.0";
+  version = "3.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "networktocode";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0kijzmmvq2rw7ima19w7lyb2p26a5w52k70fzbkaqqw78qzw8178";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-uEGl245tmc+W/9G+IclSNu76VTJ7w3zw6BQkhmGgEnY=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     textfsm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     ruamel-yaml
     yamllint

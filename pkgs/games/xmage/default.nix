@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name    = "xmage";
+  pname   = "xmage";
   version = "1.4.42V6";
 
   src = fetchurl {

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, qttools, wrapQtAppsHook
 , alsa-lib, dssi, fluidsynth, ladspaH, lash, libinstpatch, libjack2, liblo
-, libsamplerate, libsndfile, lilv, lrdf, lv2, qtsvg, rtaudio, rubberband, sord
+, libsamplerate, libsndfile, lilv, lrdf, lv2, qtsvg, rtaudio, rubberband, sord, serd
 }:
 
 stdenv.mkDerivation rec {
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
     alsa-lib dssi fluidsynth ladspaH lash libinstpatch libjack2 liblo
     libsamplerate libsndfile lilv lrdf lv2 qtsvg rtaudio rubberband sord
   ];
+
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${lib.getDev serd}/include/serd-0" ];
 
   meta = with lib; {
     homepage = "https://muse-sequencer.github.io/";

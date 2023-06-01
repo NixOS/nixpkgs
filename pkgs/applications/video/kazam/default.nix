@@ -40,9 +40,6 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [ pygobject3 pyxdg pycairo dbus-python xlib ];
 
-  # workaround https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
-
   patches = [
     # Fix paths
     (substituteAll {

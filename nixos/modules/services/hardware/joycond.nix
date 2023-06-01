@@ -14,7 +14,7 @@ with lib;
     package = mkOption {
       type = types.package;
       default = pkgs.joycond;
-      defaultText = "pkgs.joycond";
+      defaultText = lib.literalExpression "pkgs.joycond";
       description = lib.mdDoc ''
         The joycond package to use.
       '';

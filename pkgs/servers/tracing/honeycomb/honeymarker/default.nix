@@ -1,13 +1,15 @@
-{ lib, buildGoModule, fetchurl }:
+{ lib, buildGoModule, fetchFromGitHub }:
 import ./versions.nix ({version, sha256}:
   buildGoModule {
   pname = "honeymarker";
   inherit version;
   vendorSha256 = "sha256-ZuDobjC/nizZ7G0o/zVTQmDfDjcdBhfPcmkhgwFc7VU=";
 
-  src = fetchurl {
-    url = "https://github.com/honeycombio/honeymarker/archive/refs/tags/v${version}.tar.gz";
-    inherit sha256;
+  src = fetchFromGitHub {
+    owner = "honeycombio";
+    repo = "honeymarker";
+    rev = "v${version}";
+    hash = sha256;
   };
   inherit (buildGoModule.go) GOOS GOARCH;
 

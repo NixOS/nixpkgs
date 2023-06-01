@@ -12,19 +12,19 @@
 
 buildPythonPackage rec {
   pname = "monai";
-  version = "0.9.1";
+  version = "1.1.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Project-MONAI";
     repo = "MONAI";
-    rev = version;
-    hash = "sha256-GU439svMHY1qIUZ0gM5c5tt6G1hh9eAHYV+38Munw9I=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-XTjZhynIiFtFjJSW6rRAnpErZvf6QHkuK4e2L6l3naM=";
   };
 
   # Ninja is not detected by setuptools for some reason even though it's present:
   postPatch = ''
-    substituteInPlace "setup.cfg" --replace "ninja" ""
+    substituteInPlace "setup.cfg" --replace "    ninja" ""
   '';
 
   preBuild = ''

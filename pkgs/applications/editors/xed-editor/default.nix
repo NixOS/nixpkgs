@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xed-editor";
-  version = "3.2.7";
+  version = "3.2.8";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xed";
     rev = version;
-    sha256 = "sha256-aO5ilmlkSAxlkWYdSLmrcm7pC8GbITpCitd4TXp5tfY=";
+    sha256 = "sha256-ax769qjV0oZ6tnEE5FsXNbHETI6KNgvh0WviBsPs9j8=";
   };
 
   nativeBuildInputs = [
@@ -63,6 +63,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxmint/xed";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tu-maurice ];
+    maintainers = with maintainers; [ tu-maurice bobby285271 ];
   };
 }

@@ -12,18 +12,18 @@
 , perl
 , xorg
 , autoPatchelfHook
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
   pname = "screengrab";
-  version = "2.4.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "EWmEbXY2EEUW2Hq7JwLW/KDgQ8KHs4DZzuGgFjNthPQ=";
+    sha256 = "ySC5bCOnen2bjhmLY4GnwiFaUrvGx93LJrLQo0pBUc4=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ mkDerivation rec {
     xorg.libXdmcp
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/screengrab";

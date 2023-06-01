@@ -1,96 +1,77 @@
 { lib
 , fetchFromGitHub
 , bash
-, cairo
 , glib
-, qt5
-, hicolor-icon-theme
 , gdk-pixbuf
+, gettext
 , imagemagick
-, desktop-file-utils
 , ninja
 , meson
 , sassc
-, ibus
-, usbutils
-, libxcb
 , python3Packages
 , gobject-introspection
-, gtk3
 , wrapGAppsHook
 , libappindicator-gtk3
+, libxcb
+, qt5
+, ibus
+, usbutils
 }:
 
 python3Packages.buildPythonApplication rec {
   name = "polychromatic";
-  version = "0.7.3";
-
+  version = "0.8.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "polychromatic";
     repo = "polychromatic";
     rev = "v${version}";
-    sha256 = "sha256-H++kQ3Fxw56avEsSE1ctu5p0s50s0eQ+jL5zXS3AA94=";
+    sha256 = "sha256-ym2pcGUWM5zCUx/lYs+WECj+wbyBtWnx04W/NRXNKlw=";
   };
 
   postPatch = ''
     patchShebangs scripts
-
     substituteInPlace scripts/build-styles.sh \
       --replace '$(which sassc 2>/dev/null)' '${sassc}/bin/sassc' \
       --replace '$(which sass 2>/dev/null)' '${sassc}/bin/sass'
-
-    substituteInPlace pylib/common.py --replace "/usr/share/polychromatic" "$out/share/polychromatic"
+    substituteInPlace polychromatic/paths.py \
+      --replace "/usr/share/polychromatic" "$out/share/polychromatic"
   '';
 
   preConfigure = ''
     scripts/build-styles.sh
   '';
-
-  buildInputs = [
-    cairo
-    hicolor-icon-theme
-  ];
-
-  pythonPath = with python3Packages; [
-    openrazer
-    pyqt5
-    pyqtwebengine
+  nativeBuildInputs = with python3Packages; [
+    gettext
+    gobject-introspection
+    meson
+    ninja
+    sassc
+    wrapGAppsHook
+    qt5.wrapQtAppsHook
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    libxcb
-    colour
     colorama
-    setproctitle
+    colour
     openrazer
-    openrazer-daemon
+    pyqt5
+    pyqtwebengine
     requests
+    setproctitle
+    libxcb
+    openrazer-daemon
+    libappindicator-gtk3
     ibus
     usbutils
-    pyqt5
-    libappindicator-gtk3
   ];
 
-  nativeBuildInputs = with python3Packages; [
-    pyqt5
-    desktop-file-utils
-    qt5.wrapQtAppsHook
-    wrapGAppsHook
-    ninja
-    meson
-    sassc
-  ];
-
-  propagatedNativeBuildInputs = [
-    gobject-introspection
-    gtk3
-    gdk-pixbuf
-    imagemagick
-  ];
+  dontWrapGapps = true;
+  dontWrapQtApps = true;
 
   makeWrapperArgs = [
+    "\${gappsWrapperArgs[@]}"
     "\${qtWrapperArgs[@]}"
   ];
 

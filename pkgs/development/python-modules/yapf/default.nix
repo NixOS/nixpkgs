@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPyPy
 , nose
 }:
 
@@ -13,7 +14,10 @@ buildPythonPackage rec {
     hash = "sha256-o/UIXTfvfj4ATEup+bPkDFT/GQHNER8FFFrjE6fGfRs=";
   };
 
-  checkInputs = [
+  # nose is unavailable on pypy
+  doCheck = !isPyPy;
+
+  nativeCheckInputs = [
     nose
   ];
 

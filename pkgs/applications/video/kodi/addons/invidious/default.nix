@@ -1,13 +1,18 @@
-{ lib, buildKodiAddon, fetchpatch, fetchzip, addonUpdateScript, requests, inputstream-adaptive, inputstreamhelper }:
+{ lib, buildKodiAddon, fetchFromGitHub, addonUpdateScript, requests, inputstream-adaptive, inputstreamhelper }:
 
 buildKodiAddon rec {
   pname = "invidious";
   namespace = "plugin.video.invidious";
-  version = "0.1.0+matrix.1";
+  version = "unstable-2022-11-28";
 
-  src = fetchzip {
-    url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
-    sha256 = "sha256-4z2/YTso5KV6JHS/DOXll2lKOoVnW1i5MnpmV6ESXbM=";
+  # video search doesn't work for the version on kodi.tv
+  # if the result contains channels
+  # https://github.com/TheAssassin/kodi-invidious-plugin/issues/17
+  src = fetchFromGitHub {
+    owner = "TheAssassin";
+    repo = "kodi-invidious-plugin";
+    rev = "85b66525632d94630c9301d9c490fc002a335d77";
+    hash = "sha256-DpsAQUOUYCs3rpWwsk82+00KME4J+Iocu/v781dyyws=";
   };
 
   propagatedBuildInputs = [
@@ -18,9 +23,6 @@ buildKodiAddon rec {
 
   passthru = {
     pythonPath = "resources/lib";
-    updateScript = addonUpdateScript {
-      attrPath = "kodi.packages.invidious";
-    };
   };
 
   meta = with lib; {

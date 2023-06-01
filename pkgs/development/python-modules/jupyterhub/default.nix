@@ -66,7 +66,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-3GGPZXwjukYoDjYlflCTGAZnS6Dp5kmK+wke/GIm1p0=";
+    hash = "sha256-3GGPZXwjukYoDjYlflCTGAZnS6Dp5kmK+wke/GIm1p0=";
   };
 
   # Most of this only applies when building from source (e.g. js/css assets are
@@ -133,7 +133,7 @@ buildPythonPackage rec {
       "'jupyterhub-singleuser'" "'$out/bin/jupyterhub-singleuser'"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     # https://github.com/jupyterhub/jupyterhub/blob/master/dev-requirements.txt
     beautifulsoup4
     cryptography
@@ -154,8 +154,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    # darwin: E   OSError: dlopen(/nix/store/43zml0mlr17r5jsagxr00xxx91hz9lky-openpam-20170430/lib/libpam.so, 6): image not found
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+    broken = lib.versionAtLeast sqlalchemy.version "2.0";
     description = "Serves multiple Jupyter notebook instances";
     homepage = "https://jupyter.org/";
     changelog = "https://github.com/jupyterhub/jupyterhub/blob/${version}/docs/source/changelog.md";

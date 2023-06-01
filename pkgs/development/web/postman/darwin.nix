@@ -11,12 +11,12 @@ let
   dist = {
     aarch64-darwin = {
       arch = "arm64";
-      sha256 = "62b4b3c63668fa4074b35afe08c212557437ff54c742a500087c74955cec9e04";
+      sha256 = "sha256-dJM85/6JCNqSXtrglEjP11cypGkj8+zHPo0qNANyylU=";
     };
 
     x86_64-darwin = {
       arch = "64";
-      sha256 = "42160a3c3011f43692fcb28b37dec5f708395318681de960f0cb932cea36021f";
+      sha256 = "sha256-36T7S/F35hRCmXXYA8DWwwLsuJiUVU9UBY7eAXjzx1s=";
     };
   }.${stdenvNoCC.hostPlatform.system} or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
 
@@ -32,6 +32,11 @@ stdenvNoCC.mkDerivation {
   };
 
   nativeBuildInputs = [ unzip ];
+
+  # Postman is notarized on macOS. Running the fixup phase will change the shell scripts embedded
+  # in the bundle, which causes the notarization check to fail on macOS 13+.
+  # See https://eclecticlight.co/2022/06/17/app-security-changes-coming-in-ventura/ for more information.
+  dontFixup = true;
 
   sourceRoot = appName;
 

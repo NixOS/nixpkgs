@@ -1,94 +1,104 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
-, pkg-config
-, automake
-, autoconf
-, libtool
-, ncurses
 , readline
-, which
-, python ? null
-, useMpi ? false
+, xorg
 , mpi
-, iv
+, cmake
+, bison
+, flex
+, git
+, perl
+, gsl
+, xcbuild
+, python3
+, useMpi ? false
+, useIv ? true
+, useCore ? false
+, useRx3d ? false
 }:
 
+
 stdenv.mkDerivation rec {
-  pname = "neuron${lib.optionalString useMpi "-mpi"}";
-  version = "7.5";
+  pname = "neuron";
+  version = "8.2.2";
 
-  nativeBuildInputs = [ which pkg-config automake autoconf libtool ];
-  buildInputs = [ ncurses readline python iv ]
-    ++ lib.optional useMpi mpi;
+  # format is for pythonModule conversion
+  format = "other";
 
-  src = fetchurl {
-    url = "https://www.neuron.yale.edu/ftp/neuron/versions/v${version}/nrn-${version}.tar.gz";
-    sha256 = "0f26v3qvzblcdjg7isq0m9j2q8q7x3vhmkfllv8lsr3gyj44lljf";
-  };
+  nativeBuildInputs = [
+    cmake
+    bison
+    flex
+    git
+  ] ++ lib.optionals useCore [ perl gsl ]
+  ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
-  patches = (lib.optional (stdenv.isDarwin) [ ./neuron-carbon-disable.patch ]);
+  buildInputs = lib.optionals useIv [
+    xorg.libX11.dev
+    xorg.libXcomposite.dev
+    xorg.libXext.dev
+  ];
 
-  # With LLVM 3.8 and above, clang (really libc++) gets upset if you attempt to redefine these...
-  postPatch = lib.optionalString stdenv.cc.isClang ''
-    substituteInPlace src/gnu/neuron_gnu_builtin.h \
-      --replace 'double abs(double arg);' "" \
-      --replace 'float abs(float arg);' "" \
-      --replace 'short abs(short arg);' "" \
-      --replace 'long abs(long arg);' ""
-  '' + lib.optionalString stdenv.isDarwin ''
-    # we are darwin, but we don't have all the quirks the source wants to compensate for
-    substituteInPlace src/nrnpython/setup.py.in --replace 'readline="edit"' 'readline="readline"'
-    for f in src/nrnpython/*.[ch] ; do
-      substituteInPlace $f --replace "<Python/Python.h>" "<Python.h>"
+  propagatedBuildInputs = [
+    readline
+    python3
+    python3.pkgs.wheel
+    python3.pkgs.setuptools
+    python3.pkgs.scikit-build
+    python3.pkgs.matplotlib
+  ] ++ lib.optionals useMpi [
+    mpi
+  ] ++ lib.optionals useMpi [
+    python3.pkgs.mpi4py
+  ] ++ lib.optionals useRx3d [
+    python3.pkgs.cython
+    python3.pkgs.numpy
+  ];
+
+  patches = [ ./neuron_darwin_rpath.patch ];
+
+  # Patch build shells for cmake (bin, src, cmake) and submodules (external)
+  postPatch = ''
+    patchShebangs ./bin ./src ./external ./cmake
+    sed -e 's#DESTDIR =#DESTDIR = '"$out"'#' -i external/coreneuron/extra/nrnivmodl_core_makefile.in
+  '';
+
+  cmakeFlags = [
+    "-DNRN_ENABLE_INTERVIEWS=${if useIv then "ON" else "OFF"}"
+    "-DNRN_ENABLE_MPI=${if useMpi then "ON" else "OFF"}"
+    "-DNRN_ENABLE_CORENEURON=${if useCore then "ON" else "OFF"}"
+    "-DNRN_ENABLE_RX3D=${if useRx3d then "ON" else "OFF"}"
+  ];
+
+  postInstall = ''
+    mkdir -p $out/${python3.sitePackages}
+    mv $out/lib/python/* $out/${python3.sitePackages}/
+    rm -rf $out/lib/python build
+    for entry in $out/lib/*.so; do
+      # remove references to build
+      patchelf --set-rpath $(patchelf --print-rpath $entry | tr ':' '\n' | sed '/^\/build/d' | tr '\n' ':') $entry
     done
   '';
 
-  enableParallelBuilding = true;
-
-  ## neuron install by default everything under prefix/${host_arch}/*
-  ## override this to support nix standard file hierarchy
-  ## without issues: install everything under prefix/
-  preConfigure = ''
-    ./build.sh
-    export prefix="''${prefix} --exec-prefix=''${out}"
-  '';
-
-  configureFlags = with lib;
-                    [ "--with-readline=${readline}" "--with-iv=${iv}" ]
-                    ++  optionals (python != null)  [ "--with-nrnpython=${python.interpreter}" ]
-                    ++ (if useMpi then ["--with-mpi" "--with-paranrn"]
-                        else ["--without-mpi"]);
-
-
-  postInstall = lib.optionalString (python != null) ''
-    ## standardise python neuron install dir if any
-    if [[ -d $out/lib/python ]]; then
-        mkdir -p ''${out}/${python.sitePackages}
-        mv ''${out}/lib/python/*  ''${out}/${python.sitePackages}/
-    fi
-  '';
-
-  propagatedBuildInputs = [ readline ncurses which libtool ];
+  src = fetchurl {
+    url = "https://github.com/neuronsimulator/nrn/releases/download/${version}/full-src-package-${version}.tar.gz";
+    sha256 = "sha256-orGeBxu3pu4AyAW5P1EGJv8G0dOUZcSOjpUaloqicZU=";
+  };
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Simulation environment for empirically-based simulations of neurons and networks of neurons";
-
-    longDescription = "NEURON is a simulation environment for developing and exercising models of
-                neurons and networks of neurons. It is particularly well-suited to problems where
-                cable properties of cells play an important role, possibly including extracellular
-                potential close to the membrane), and where cell membrane properties are complex,
-                involving many ion-specific channels, ion accumulation, and second messengers";
-
-    sourceProvenance = with sourceTypes; [
-      fromSource
-    ] ++ lib.optionals (python != null) [
-      binaryNativeCode  # "geometry3d" bundled libraries
-    ];
-    license     = licenses.bsd3;
-    homepage    = "http://www.neuron.yale.edu/neuron";
-    maintainers = [ maintainers.adev ];
-    # source claims it's only tested for x86 and powerpc
-    platforms   = platforms.x86_64 ++ platforms.i686;
+    longDescription = ''
+      NEURON is a simulation environment for developing and exercising models of
+      neurons and networks of neurons. It is particularly well-suited to problems where
+      cable properties of cells play an important role, possibly including extracellular
+      potential close to the membrane), and where cell membrane properties are complex,
+      involving many ion-specific channels, ion accumulation, and second messengers
+    '';
+    sourceProvenance = with sourceTypes; [ fromSource ];
+    license = licenses.bsd3;
+    homepage = "http://www.neuron.yale.edu/neuron";
+    maintainers = with maintainers; [ adev davidcromp ];
+    platforms = platforms.all;
   };
 }

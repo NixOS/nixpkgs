@@ -1,25 +1,35 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, unbound, openssl, boost
-, lmdb, miniupnpc, readline }:
+, lmdb, miniupnpc, readline, git, libsodium, rapidjson, cppzmq }:
 
 stdenv.mkDerivation rec {
   pname = "masari";
-  version = "0.1.4.0";
+  version = "unstable-2022-10-09";
 
   src = fetchFromGitHub {
     owner = "masari-project";
     repo = "masari";
-    rev = "v${version}";
-    sha256 = "0l6i21wkq5f6z8xr756i7vqgkzk7lixaa31ydy34fkfcqxppgxz3";
+    rev = "ff71f52220858b84a4403dab9a14339bcad57826";
+    sha256 = "sha256-GunNFqZNgpLfyAA9BiBC98axgTQuK76z3BUl5T0iJqs=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ boost miniupnpc openssl lmdb unbound readline ];
+  postPatch = ''
+    # remove vendored libraries
+    rm -r external/{miniupnpc,rapidjson}
+  '';
+
+  nativeBuildInputs = [ cmake pkg-config git ];
+
+  buildInputs = [
+    boost miniupnpc openssl unbound
+    readline libsodium
+    rapidjson cppzmq
+  ];
 
   meta = with lib; {
     description = "scalability-focused, untraceable, secure, and fungible cryptocurrency using the RingCT protocol";
     homepage = "https://www.getmasari.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ matthewcroughan ];
     platforms = platforms.linux;
   };
 }

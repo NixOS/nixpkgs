@@ -2,12 +2,11 @@ diff --git a/setup.py b/setup.py
 index 3616104..e9bbfda 100755
 --- a/setup.py
 +++ b/setup.py
-@@ -112,7 +112,7 @@ class InstallAndUpdateDataDirectory(DistUtilsExtra.auto.install_auto):
-         DistUtilsExtra.auto.install_auto.run(self)
- 
-         target_data = '/' + os.path.relpath(self.install_data, self.root) + '/'
+@@ -94,7 +94,7 @@
+         # Root is undefined if not installing into an alternate root
+         root = self.root or "/"
+         target_data = '/' + os.path.relpath(self.install_data, root) + '/'
 -        target_pkgdata = target_data + 'share/ulauncher/'
 +        target_pkgdata = '@out@/share/ulauncher/'
          target_scripts = '/' + os.path.relpath(self.install_scripts,
-                                                self.root) + '/'
- 
+                                                root) + '/'

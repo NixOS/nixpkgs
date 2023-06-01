@@ -1,20 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, libiconv }:
+{ lib, stdenv, fetchFromGitHub, gettext, autoreconfHook, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "wavpack";
-  version = "5.4.0";
+  version = "5.6.0";
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  buildInputs = [ libiconv ];
+
+  # autogen.sh:9
+  preAutoreconf = "cp ${gettext}/share/gettext/config.rpath .";
 
   src = fetchFromGitHub {
     owner = "dbry";
     repo = "WavPack";
     rev = version;
-    sha256 = "1b6szk2vmnqnv5w7h8yc1iazjlidlraq1lwjbmc3fi0snbn6qj44";
+    hash = "sha256-fWAGE87JTNTnYoxrkMf3I8C53kZrQiiBy3Zyg0cw8Og=";
   };
+
+  outputs = [ "out" "dev" "doc" "man" ];
 
   meta = with lib; {
     description = "Hybrid audio compression format";

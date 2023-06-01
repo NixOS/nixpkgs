@@ -4,6 +4,7 @@
 , substituteAll
 , runCommand
 , coreutils
+, gawk
 , dwarf-fortress
 , dwarf-therapist
 , enableDFHack ? false
@@ -16,18 +17,22 @@
 , twbt
 , themes ? { }
 , theme ? null
+, extraPackages ? [ ]
   # General config options:
 , enableIntro ? true
-, enableTruetype ? true
+, enableTruetype ? null # defaults to 24, see init.txt
 , enableFPS ? false
 , enableTextMode ? false
 , enableSound ? true
+# An attribute set of settings to override in data/init/*.txt.
+# For example, `init.FOO = true;` is translated to `[FOO:YES]` in init.txt
+, settings ? { }
+# TODO world-gen.txt, interface.txt require special logic
 }:
 
 let
   dfhack_ = dfhack.override {
     inherit enableStoneSense;
-    inherit enableTWBT;
   };
 
   ptheme =
@@ -35,27 +40,69 @@ let
     then builtins.getAttr theme themes
     else theme;
 
-  unBool = b: if b then "YES" else "NO";
+  baseEnv = buildEnv {
+    name = "dwarf-fortress-base-env-${dwarf-fortress.dfVersion}";
 
-  # These are in inverse order for first packages to override the next ones.
-  themePkg = lib.optional (theme != null) ptheme;
-  pkgs = lib.optional enableDFHack dfhack_
-    ++ lib.optional enableSoundSense soundSense
-    ++ lib.optional enableTWBT twbt.art
-    ++ [ dwarf-fortress ];
+    # These are in inverse order for first packages to override the next ones.
+    paths = extraPackages
+         ++ lib.optional (theme != null) ptheme
+         ++ lib.optional enableDFHack dfhack_
+         ++ lib.optional enableSoundSense soundSense
+         ++ lib.optionals enableTWBT [ twbt.lib twbt.art ]
+         ++ [ dwarf-fortress ];
 
-  fixup = lib.singleton (runCommand "fixup" { } (''
+    ignoreCollisions = true;
+  };
+
+  settings_ = lib.recursiveUpdate {
+    init = {
+      PRINT_MODE =
+        if enableTextMode then "TEXT"
+        else if enableTWBT then "TWBT"
+        else if stdenv.hostPlatform.isDarwin then "STANDARD" # https://www.bay12games.com/dwarves/mantisbt/view.php?id=11680
+        else null;
+      INTRO = enableIntro;
+      TRUETYPE = enableTruetype;
+      FPS = enableFPS;
+      SOUND = enableSound;
+    };
+  } settings;
+
+  forEach = attrs: f: lib.concatStrings (lib.mapAttrsToList f attrs);
+
+  toTxt = v:
+    if lib.isBool v then if v then "YES" else "NO"
+    else if lib.isInt v then toString v
+    else if lib.isString v then v
+    else throw "dwarf-fortress: unsupported configuration value ${toString v}";
+
+  config = runCommand "dwarf-fortress-config" {
+    nativeBuildInputs = [ gawk ];
+  } (''
     mkdir -p $out/data/init
-  '' + (if (theme != null) then ''
-    cp ${lib.head themePkg}/data/init/init.txt $out/data/init/init.txt
-  '' else ''
-    cp ${dwarf-fortress}/data/init/init.txt $out/data/init/init.txt
-  '') + lib.optionalString enableDFHack ''
+
+    edit_setting() {
+      v=''${v//'&'/'\&'}
+      if ! gawk -i inplace -v RS='\r?\n' '
+        { n += sub("\\[" ENVIRON["k"] ":[^]]*\\]", "[" ENVIRON["k"] ":" ENVIRON["v"] "]"); print }
+        END { exit(!n) }
+      ' "$out/$file"; then
+        echo "error: no setting named '$k' in $file" >&2
+        exit 1
+      fi
+    }
+  '' + forEach settings_ (file: kv: ''
+    file=data/init/${lib.escapeShellArg file}.txt
+    cp ${baseEnv}/"$file" "$out/$file"
+  '' + forEach kv (k: v: lib.optionalString (v != null) ''
+    export k=${lib.escapeShellArg k} v=${lib.escapeShellArg (toTxt v)}
+    edit_setting
+  '')) + lib.optionalString enableDFHack ''
     mkdir -p $out/hack
 
     # Patch the MD5
-    orig_md5=$(cat "${dwarf-fortress}/hash.md5.orig")
-    patched_md5=$(cat "${dwarf-fortress}/hash.md5")
+    orig_md5=$(< "${dwarf-fortress}/hash.md5.orig")
+    patched_md5=$(< "${dwarf-fortress}/hash.md5")
     input_file="${dfhack_}/hack/symbols.xml"
     output_file="$out/hack/symbols.xml"
 
@@ -66,30 +113,20 @@ let
     echo "  Replace: $patched_md5"
 
     substitute "$input_file" "$output_file" --replace "$orig_md5" "$patched_md5"
-  '' + lib.optionalString enableTWBT ''
-    substituteInPlace $out/data/init/init.txt \
-      --replace '[PRINT_MODE:2D]' '[PRINT_MODE:TWBT]'
-  '' +
-  lib.optionalString enableTextMode ''
-    substituteInPlace $out/data/init/init.txt \
-      --replace '[PRINT_MODE:2D]' '[PRINT_MODE:TEXT]'
-  '' + ''
-    substituteInPlace $out/data/init/init.txt \
-      --replace '[INTRO:YES]' '[INTRO:${unBool enableIntro}]' \
-      --replace '[TRUETYPE:YES]' '[TRUETYPE:${unBool enableTruetype}]' \
-      --replace '[FPS:NO]' '[FPS:${unBool enableFPS}]' \
-      --replace '[SOUND:YES]' '[SOUND:${unBool enableSound}]'
-  ''));
+  '');
 
+  # This is a separate environment because the config files to modify may come
+  # from any of the paths in baseEnv.
   env = buildEnv {
     name = "dwarf-fortress-env-${dwarf-fortress.dfVersion}";
-
-    paths = fixup ++ themePkg ++ pkgs;
-    pathsToLink = [ "/" "/hack" "/hack/scripts" ];
-
+    paths = [ config baseEnv ];
     ignoreCollisions = true;
   };
 in
+
+lib.throwIf (enableTWBT && !enableDFHack) "dwarf-fortress: TWBT requires DFHack to be enabled"
+lib.throwIf (enableStoneSense && !enableDFHack) "dwarf-fortress: StoneSense requires DFHack to be enabled"
+lib.throwIf (enableTextMode && enableTWBT) "dwarf-fortress: text mode and TWBT are mutually exclusive"
 
 stdenv.mkDerivation {
   pname = "dwarf-fortress";
@@ -114,7 +151,10 @@ stdenv.mkDerivation {
   runDFHack = ./dfhack.in;
   runSoundSense = ./soundSense.in;
 
-  passthru = { inherit dwarf-fortress dwarf-therapist; };
+  passthru = {
+    inherit dwarf-fortress dwarf-therapist twbt env;
+    dfhack = dfhack_;
+  };
 
   buildCommand = ''
     mkdir -p $out/bin
@@ -137,4 +177,6 @@ stdenv.mkDerivation {
   '';
 
   preferLocalBuild = true;
+
+  inherit (dwarf-fortress) meta;
 }

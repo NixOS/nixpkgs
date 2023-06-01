@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   # fix build on gcc7+ and gcc11+
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString ([
     "-std=c++11" # c++17+ has errors
     "-Wno-error=builtin-declaration-mismatch"
     "-Wno-error=deprecated-copy"
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     "-Wno-error=nonnull"
   ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") [
     "-Wno-error=mismatched-new-delete"
-  ];
+  ]);
 
   buildPhase = ''jam "-j$NIX_BUILD_CORES" '';
   installPhase = ''

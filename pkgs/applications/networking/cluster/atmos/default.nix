@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "atmos";
-  version = "1.7.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "cloudposse";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SZ/4QKO8PdbHWZ+urOqZPFUb9lFRP+HWbNff1fmwDqI=";
+    sha256 = "sha256-6NUuKU8KQBfHE6fcN3a9lBcUk7p5I9SuY9g+qJxGXmU=";
   };
 
-  vendorSha256 = "sha256-d2Eod1AK6Ei5Az9wPHVqij8K4CVj7Ptewd3dBJ9Wt3o=";
+  vendorSha256 = "sha256-vZwADD7fi9ZvJby9Ijdeueid8jRfUyyj6Nu4kgkO5Wo=";
 
   ldflags = [ "-s" "-w" "-X github.com/cloudposse/atmos/cmd.Version=v${version}" ];
 

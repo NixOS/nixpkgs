@@ -1,8 +1,13 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules,
-  kguiaddons, kidletime, kwayland, kwindowsystem, qtbase,
-  wayland-protocols, wayland-scanner, wayland
+{ mkDerivation
+, extra-cmake-modules
+, kguiaddons
+, kidletime
+, kwayland
+, kwindowsystem
+, qtbase
+, wayland-protocols
+, wayland-scanner
+, wayland
 }:
 
 mkDerivation {

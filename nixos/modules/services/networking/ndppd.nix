@@ -17,7 +17,7 @@ let
       ttl ${toString proxy.ttl}
       ${render proxy.rules (ruleNetworkName: rule: ''
       rule ${prefer rule.network ruleNetworkName} {
-        ${rule.method}${if rule.method == "iface" then " ${rule.interface}" else ""}
+        ${rule.method}${optionalString (rule.method == "iface") " ${rule.interface}"}
       }'')}
     }'')}
   '');
@@ -43,7 +43,7 @@ let
       timeout = mkOption {
         type = types.int;
         description = lib.mdDoc ''
-          Controls how long to wait for a Neighbor Advertisment Message before
+          Controls how long to wait for a Neighbor Advertisement Message before
           invalidating the entry, in milliseconds.
         '';
         default = 500;
@@ -74,7 +74,7 @@ let
         type = types.nullOr types.str;
         description = lib.mdDoc ''
           This is the target address is to match against. If no netmask
-          is provided, /128 is assumed. The addresses of serveral rules
+          is provided, /128 is assumed. The addresses of several rules
           may or may not overlap.
           Defaults to the name of the attrset.
         '';

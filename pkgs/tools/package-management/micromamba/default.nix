@@ -2,13 +2,14 @@
 , stdenv
 , fetchFromGitHub
 , fetchpatch
+, bzip2
 , cli11
 , cmake
 , curl
 , ghc_filesystem
 , libarchive
 , libsolv
-, libyamlcpp
+, yaml-cpp
 , nlohmann_json
 , python3
 , reproc
@@ -32,38 +33,30 @@ let
       })
     ];
   });
-
-  spdlog' = spdlog.overrideAttrs (oldAttrs: {
-    # Required for header files. See alse:
-    # https://github.com/gabime/spdlog/pull/1241 (current solution)
-    # https://github.com/gabime/spdlog/issues/1897 (previous solution)
-    cmakeFlags = oldAttrs.cmakeFlags ++ [
-      "-DSPDLOG_FMT_EXTERNAL=OFF"
-    ];
-  });
 in
 stdenv.mkDerivation rec {
   pname = "micromamba";
-  version = "0.25.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "mamba-org";
     repo = "mamba";
     rev = "micromamba-" + version;
-    sha256 = "sha256-aTScTM1jX1WIrAVkAvp37fMa+05teLJnVdyIwtYq7mY=";
+    sha256 = "sha256-KGlH5i/lI6c1Jj1ttAOrip8BKECaea5D202TJMcFDmM=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
+    bzip2
     cli11
     nlohmann_json
     curl
     libarchive
-    libyamlcpp
+    yaml-cpp
     libsolv'
     reproc
-    spdlog'
+    spdlog
     termcolor
     ghc_filesystem
     python3

@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "nickw444";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-zjUYdSHIMCB4cCAsOOQZ9YgmFTskzlTUs5z/xPFt01Q=";
+    hash = "sha256-zjUYdSHIMCB4cCAsOOQZ9YgmFTskzlTUs5z/xPFt01Q=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     click
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     asynctest
     pytest-asyncio
     pytestCheckHook

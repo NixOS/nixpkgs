@@ -14,6 +14,9 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   };
 
   testScript = ''
+    from base64 import b64encode
+    from urllib.parse import quote
+
     machine.start()
     machine.wait_for_open_port(80)
     machine.wait_for_unit("multi-user.target")
@@ -41,6 +44,29 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     assert task_name == "Test Task"
 
     machine.succeed("curl -sSI http://localhost/api/tasks 2>&1 | grep '401 Unauthorized'")
+
+    file_name = "test.txt"
+    file_name_base64 = b64encode(file_name.encode('ascii')).decode('ascii')
+    file_name_base64_urlencode = quote(file_name_base64)
+
+    machine.succeed(
+        f"echo Sample equipment manual > /tmp/{file_name}"
+    )
+
+    machine.succeed(
+        f"curl -sSf -X 'PUT' -b 'grocy_session={cookie}' "
+        + f" 'http://localhost/api/files/equipmentmanuals/{file_name_base64_urlencode}' "
+        + "  --header 'Accept: */*' "
+        + "  --header 'Content-Type: application/octet-stream' "
+        + f" --data-binary '@/tmp/{file_name}' "
+    )
+
+    machine.succeed(
+        f"curl -sSf -X 'GET' -b 'grocy_session={cookie}' "
+        + f" 'http://localhost/api/files/equipmentmanuals/{file_name_base64_urlencode}' "
+        + "  --header 'Accept: application/octet-stream' "
+        + f" | cmp /tmp/{file_name}"
+    )
 
     machine.shutdown()
   '';

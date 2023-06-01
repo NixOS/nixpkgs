@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "testssl.sh";
-  version = "3.0.7";
+  version = "3.0.8";
 
   src = fetchFromGitHub {
     owner = "drwetter";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SZfGiKSbLq81YdDMgG0C6LC/nE5NApqeWK/PqDzQNBU=";
+    sha256 = "sha256-gkDtJlAC7woM2HyYDXntD1+bEuqHTEipqrn2EZjxnH8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

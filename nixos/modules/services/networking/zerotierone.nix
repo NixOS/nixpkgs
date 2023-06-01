@@ -19,7 +19,7 @@ in
 
   options.services.zerotierone.port = mkOption {
     default = 9993;
-    type = types.int;
+    type = types.port;
     description = lib.mdDoc ''
       Network port used by ZeroTier.
     '';

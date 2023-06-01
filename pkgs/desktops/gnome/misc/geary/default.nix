@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
+, fetchpatch2
 , pkg-config
 , gtk3
 , vala
@@ -26,7 +26,7 @@
 , itstool
 , libgee
 , gnome
-, webkitgtk
+, webkitgtk_4_1
 , python3
 , gnutls
 , cacert
@@ -48,25 +48,23 @@
 
 stdenv.mkDerivation rec {
   pname = "geary";
-  version = "40.0";
+  version = "43.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "1c2nd35500ng28223y5pszc7fh8g16njj34f6p5xc9594lvj0mik";
+    sha256 = "SJFm+H3Z0pAR9eW3lpTyWItHP34ZHFnOkBPIyODjY+c=";
   };
 
   patches = [
-    # Fix accessibility issues with initializer of constants (Fix build with vala 0.56)
-    # https://gitlab.gnome.org/GNOME/geary/-/merge_requests/720
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/geary/-/commit/9bd4c82952a0a2c3308c5cc86c0b85650c1fb484.patch";
-      sha256 = "sha256-mSms0MOfw8xHxOrEQwrIv+d4h01xLPgyvX2oWmmFQVw=";
+    # Fix build with Vala 0.56.7 & 0.57+
+    # https://hydra.nixos.org/build/217892787
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/geary/-/commit/4a7ca820b1d3d6130fedf254dc5b4cd7efb58f2c.patch";
+      sha256 = "L63TMOkxTYu8jxX+IIc9owoa1TBmaeGXgW+8gfMtFw4=";
     })
-    # Util.Cache.Lru: Workaround missing generic type argument (Fix build with vala 0.56)
-    # https://gitlab.gnome.org/GNOME/geary/-/merge_requests/721
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/geary/-/commit/0f75e7a84a39492d0748cec2ba6028e08cae3644.patch";
-      sha256 = "sha256-1ADQqKm3DxtjDGPSThq3c7s5S+q/3u/qr9JQEsLaFMI=";
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/geary/-/commit/10f9c133a2ad515127d65f3bba13a0d91b75f4af.patch";
+      sha256 = "0yohy+FZyHW4MkImLQYNlcZyMekH7mXvO2yEuAm3fXw=";
     })
   ];
 
@@ -108,10 +106,10 @@ stdenv.mkDerivation rec {
     libstemmer
     libytnef
     sqlite
-    webkitgtk
+    webkitgtk_4_1
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
     gnutls # for certtool
     cacert # trust store for glib-networking
@@ -127,12 +125,9 @@ stdenv.mkDerivation rec {
   # NOTE: Remove `build-auxyaml_to_json.py` when no longer needed, see:
   # https://gitlab.gnome.org/GNOME/geary/commit/f7f72143e0f00ca5e0e6a798691805c53976ae31#0cc1139e3347f573ae1feee5b73dbc8a8a21fcfa
   postPatch = ''
-    chmod +x build-aux/post_install.py build-aux/git_version.py
+    chmod +x build-aux/git_version.py
 
-    patchShebangs build-aux/post_install.py build-aux/git_version.py
-
-    chmod +x build-aux/yaml_to_json.py
-    patchShebangs build-aux/yaml_to_json.py
+    patchShebangs build-aux/git_version.py
 
     chmod +x desktop/geary-attach
   '';
@@ -148,7 +143,7 @@ stdenv.mkDerivation rec {
     HOME=$TMPDIR \
     XDG_DATA_DIRS=$XDG_DATA_DIRS:${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${shared-mime-info}/share:${folks}/share/gsettings-schemas/${folks.name} \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       meson test -v --no-stdsplit
 
     runHook postCheck

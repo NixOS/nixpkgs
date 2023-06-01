@@ -38,7 +38,7 @@ buildPythonPackage rec {
     sparse
   ] ++ dask.optional-dependencies.array;
 
-  checkInputs = [
+  nativeCheckInputs = [
     sparse
     pytestCheckHook
   ];
@@ -52,6 +52,11 @@ buildPythonPackage rec {
     "dask_glm/tests/test_estimators.py"
     # Test tries to imort an obsolete method
     "dask_glm/tests/test_utils.py"
+  ];
+
+  disabledTests = [
+    # missing fixture with distributed>=2022.8.0
+    "test_determinism_distributed"
   ];
 
   meta = with lib; {

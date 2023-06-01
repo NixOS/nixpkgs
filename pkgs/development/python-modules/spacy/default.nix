@@ -27,18 +27,23 @@
 , typer
 , typing-extensions
 , wasabi
+, writeScript
+, stdenv
+, nix
+, git
+, nix-update
 }:
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.4.0";
+  version = "3.5.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PM0an1Z1nl8Pnv31cRmgZwKtWcBF3eCzgwtUclk+Ce8=";
+    hash = "sha256-IsH/qrKFt0dwA9S1sDhBTMMkaKaQ1HkBW5ppjFMcgTs=";
   };
 
   propagatedBuildInputs = [
@@ -63,16 +68,16 @@ buildPythonPackage rec {
     tqdm
     typer
     wasabi
-  ] ++ lib.optional (pythonOlder "3.8") [
+  ] ++ lib.optionals (pythonOlder "3.8") [
     typing-extensions
   ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "pydantic>=1.7.4,!=1.8,!=1.8.1,<1.9.0" "pydantic~=1.2"
+      --replace "typer>=0.3.0,<0.5.0" "typer>=0.3.0"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 
@@ -85,11 +90,24 @@ buildPythonPackage rec {
     "spacy"
   ];
 
-  passthru.tests.annotation = callPackage ./annotation-test { };
+  passthru = {
+    updateScript = writeScript "update-spacy" ''
+    #!${stdenv.shell}
+    set -eou pipefail
+    PATH=${lib.makeBinPath [ nix git nix-update ]}
+
+    nix-update python3Packages.spacy
+
+    # update spacy models as well
+    echo | nix-shell maintainers/scripts/update.nix --argstr package python3Packages.spacy_models.en_core_web_sm
+    '';
+    tests.annotation = callPackage ./annotation-test { };
+  };
 
   meta = with lib; {
     description = "Industrial-strength Natural Language Processing (NLP)";
     homepage = "https://github.com/explosion/spaCy";
+    changelog = "https://github.com/explosion/spaCy/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

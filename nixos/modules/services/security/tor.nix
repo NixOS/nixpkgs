@@ -146,7 +146,7 @@ let
     ]))];
     description = lib.mdDoc (descriptionGeneric optionName);
   };
-  optionBandwith = optionName: mkOption {
+  optionBandwidth = optionName: mkOption {
     type = with types; nullOr (either int str);
     default = null;
     description = lib.mdDoc (descriptionGeneric optionName);
@@ -205,7 +205,7 @@ in
     (mkRemovedOptionModule [ "services" "tor" "client" "transparentProxy" "isolationOptions" ] "Use services.tor.settings.TransPort instead.")
     (mkRemovedOptionModule [ "services" "tor" "client" "transparentProxy" "listenAddress" ] "Use services.tor.settings.TransPort instead.")
     (mkRenamedOptionModule [ "services" "tor" "controlPort" ] [ "services" "tor" "settings" "ControlPort" ])
-    (mkRemovedOptionModule [ "services" "tor" "extraConfig" ] "Plese use services.tor.settings instead.")
+    (mkRemovedOptionModule [ "services" "tor" "extraConfig" ] "Please use services.tor.settings instead.")
     (mkRenamedOptionModule [ "services" "tor" "hiddenServices" ] [ "services" "tor" "relay" "onionServices" ])
     (mkRenamedOptionModule [ "services" "tor" "relay" "accountingMax" ] [ "services" "tor" "settings" "AccountingMax" ])
     (mkRenamedOptionModule [ "services" "tor" "relay" "accountingStart" ] [ "services" "tor" "settings" "AccountingStart" ])
@@ -546,7 +546,7 @@ in
             };
           options.Address = optionString "Address";
           options.AssumeReachable = optionBool "AssumeReachable";
-          options.AccountingMax = optionBandwith "AccountingMax";
+          options.AccountingMax = optionBandwidth "AccountingMax";
           options.AccountingStart = optionString "AccountingStart";
           options.AuthDirHasIPv6Connectivity = optionBool "AuthDirHasIPv6Connectivity";
           options.AuthDirListBadExits = optionBool "AuthDirListBadExits";
@@ -559,8 +559,8 @@ in
             default = [".onion" ".exit"];
             example = [".onion"];
           };
-          options.BandwidthBurst = optionBandwith "BandwidthBurst";
-          options.BandwidthRate = optionBandwith "BandwidthRate";
+          options.BandwidthBurst = optionBandwidth "BandwidthBurst";
+          options.BandwidthRate = optionBandwidth "BandwidthRate";
           options.BridgeAuthoritativeDir = optionBool "BridgeAuthoritativeDir";
           options.BridgeRecordUsageByCountry = optionBool "BridgeRecordUsageByCountry";
           options.BridgeRelay = optionBool "BridgeRelay" // { default = false; };
@@ -709,7 +709,7 @@ in
           options.LogMessageDomains = optionBool "LogMessageDomains";
           options.LongLivedPorts = optionPorts "LongLivedPorts";
           options.MainloopStats = optionBool "MainloopStats";
-          options.MaxAdvertisedBandwidth = optionBandwith "MaxAdvertisedBandwidth";
+          options.MaxAdvertisedBandwidth = optionBandwidth "MaxAdvertisedBandwidth";
           options.MaxCircuitDirtiness = optionInt "MaxCircuitDirtiness";
           options.MaxClientCircuitsPending = optionInt "MaxClientCircuitsPending";
           options.NATDPort = optionIsolablePorts "NATDPort";
@@ -719,8 +719,8 @@ in
           options.OfflineMasterKey = optionBool "OfflineMasterKey";
           options.OptimisticData = optionBool "OptimisticData"; # default is null and like "auto"
           options.PaddingStatistics = optionBool "PaddingStatistics";
-          options.PerConnBWBurst = optionBandwith "PerConnBWBurst";
-          options.PerConnBWRate = optionBandwith "PerConnBWRate";
+          options.PerConnBWBurst = optionBandwidth "PerConnBWBurst";
+          options.PerConnBWRate = optionBandwidth "PerConnBWRate";
           options.PidFile = optionPath "PidFile";
           options.ProtocolWarnings = optionBool "ProtocolWarnings";
           options.PublishHidServDescriptors = optionBool "PublishHidServDescriptors";
@@ -732,8 +732,8 @@ in
           options.ReducedExitPolicy = optionBool "ReducedExitPolicy";
           options.RefuseUnknownExits = optionBool "RefuseUnknownExits"; # default is null and like "auto"
           options.RejectPlaintextPorts = optionPorts "RejectPlaintextPorts";
-          options.RelayBandwidthBurst = optionBandwith "RelayBandwidthBurst";
-          options.RelayBandwidthRate = optionBandwith "RelayBandwidthRate";
+          options.RelayBandwidthBurst = optionBandwidth "RelayBandwidthBurst";
+          options.RelayBandwidthRate = optionBandwidth "RelayBandwidthRate";
           #options.RunAsDaemon
           options.Sandbox = optionBool "Sandbox";
           options.ServerDNSAllowBrokenConfig = optionBool "ServerDNSAllowBrokenConfig";
@@ -816,13 +816,13 @@ in
         always create a container/VM with a separate Tor daemon instance.
       '' ++
       flatten (mapAttrsToList (n: o:
-        optional (o.settings.HiddenServiceVersion == 2) [
+        optionals (o.settings.HiddenServiceVersion == 2) [
           (optional (o.settings.HiddenServiceExportCircuitID != null) ''
             HiddenServiceExportCircuitID is used in the HiddenService: ${n}
             but this option is only for v3 hidden services.
           '')
         ] ++
-        optional (o.settings.HiddenServiceVersion != 2) [
+        optionals (o.settings.HiddenServiceVersion != 2) [
           (optional (o.settings.HiddenServiceAuthorizeClient != null) ''
             HiddenServiceAuthorizeClient is used in the HiddenService: ${n}
             but this option is only for v2 hidden services.

@@ -1,50 +1,110 @@
-{ fetchurl, stdenv, lib
-, cmake, libGLU, libGL
-, freetype, freeimage, zziplib, xorgproto, libXrandr
-, libXaw, freeglut, libXt, libpng, boost, ois
-, libX11, libXmu, libSM, pkg-config
-, libXxf86vm, libICE
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, cmake
+, pkg-config
+, boost
+, freeimage
+, freetype
+, libpng
+, ois
+, zziplib
+, freeglut
+, libGL
+, libGLU
+, libICE
+, libSM
+, libX11
+, libXaw
+, libXmu
+, libXrandr
 , libXrender
-, withNvidiaCg ? false, nvidia_cg_toolkit
-, withSamples ? false }:
+, libXt
+, libXxf86vm
+, xorgproto
+, darwin
+, withNvidiaCg ? false
+, nvidia_cg_toolkit
+, withSamples ? false
+}:
 
+let
+  inherit (darwin.apple_sdk.frameworks) AGL Cocoa;
+in
 stdenv.mkDerivation rec {
   pname = "ogre";
   version = "1.10.11";
 
   src = fetchurl {
-     url = "https://bitbucket.org/sinbad/ogre/get/v${lib.replaceStrings ["."] ["-"] version}.tar.gz";
-     sha256 = "1zwvlx5dz9nwjazhnrhzb0w8ilpa84r0hrxrmmy69pgr1p1yif5a";
+    url = "https://bitbucket.org/sinbad/ogre/get/v${lib.replaceStrings ["."] ["-"] version}.tar.gz";
+    sha256 = "1zwvlx5dz9nwjazhnrhzb0w8ilpa84r0hrxrmmy69pgr1p1yif5a";
   };
 
-  # fix for ARM. sys/sysctl.h has moved in later glibcs, and
-  # https://github.com/OGRECave/ogre-next/issues/132 suggests it isn't
-  # needed anyway.
-  postPatch = ''
-    substituteInPlace OgreMain/src/OgrePlatformInformation.cpp \
-      --replace '#include <sys/sysctl.h>' ""
-  '';
+  patches = [
+    # aarch64-darwin support
+    (fetchpatch {
+      url = "https://github.com/OGRECave/ogre/commit/bd5fbe3482c56e58c6c3b3bf439b1eab8c1be258.patch";
+      includes = [ "OgreMain/include/OgrePlatform*.h" ];
+      sha256 = "sha256-ELeCklQkltz7DeDaGl78Jk1H3Wdfu8fMUiMZaJM4s/Y=";
+    })
+    (fetchpatch {
+      url = "https://github.com/OGRECave/ogre/commit/0873244cc06b613ca2afbcb5522fe9ef89f111c5.patch";
+      sha256 = "sha256-xGvlMB55B2rdthxNMIM5iFf9p/6zuE8bGL9P04qtweQ=";
+    })
+    # aarch64-linux support
+    (fetchpatch {
+      name = "fix-build-on-aarch64-linux.patch";
+      url = "https://github.com/OGRECave/ogre/commit/8ec086e9bc2e24fab373b514c572483b69071d69.patch";
+      sha256 = "sha256-22wlJPZ7lRIPAMqvpI/2YI0neQjGi1UXt8y5zNSpxCw=";
+    })
+  ];
 
-  cmakeFlags = [ "-DOGRE_BUILD_SAMPLES=${toString withSamples}" ]
-    ++ map (x: "-DOGRE_BUILD_PLUGIN_${x}=on")
-           ([ "BSP" "OCTREE" "PCZ" "PFX" ] ++ lib.optional withNvidiaCg "CG")
-    ++ map (x: "-DOGRE_BUILD_RENDERSYSTEM_${x}=on") [ "GL" ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs =
-   [ libGLU libGL
-     freetype freeimage zziplib xorgproto libXrandr
-     libXaw freeglut libXt libpng boost ois
-     libX11 libXmu libSM
-     libXxf86vm libICE
-     libXrender
-   ] ++ lib.optional withNvidiaCg nvidia_cg_toolkit;
+  buildInputs = [
+    boost
+    freeimage
+    freetype
+    libpng
+    ois
+    zziplib
+  ] ++ lib.optionals stdenv.isLinux [
+    freeglut
+    libGL
+    libGLU
+    libICE
+    libSM
+    libX11
+    libXaw
+    libXmu
+    libXrandr
+    libXrender
+    libXt
+    libXxf86vm
+    xorgproto
+  ] ++ lib.optionals stdenv.isDarwin [
+    AGL
+    Cocoa
+  ] ++ lib.optionals withNvidiaCg [
+    nvidia_cg_toolkit
+  ];
+
+  cmakeFlags = [
+    "-DOGRE_BUILD_COMPONENT_OVERLAY_IMGUI=FALSE"
+    "-DOGRE_BUILD_SAMPLES=${toString withSamples}"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-DOGRE_BUILD_LIBS_AS_FRAMEWORKS=FALSE"
+  ];
 
   meta = {
-    description = "A 3D engine";
+    description = "3D Object-Oriented Graphics Rendering Engine";
     homepage = "https://www.ogre3d.org/";
-    maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ raskin wegank ];
+    platforms = lib.platforms.unix;
     license = lib.licenses.mit;
   };
 }

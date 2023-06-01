@@ -1,9 +1,13 @@
 { lib, stdenv, libgcrypt, fetchFromGitHub, ocamlPackages, perl }:
 stdenv.mkDerivation rec {
   pname = "obliv-c";
+
   version = "0.0pre20210621";
-  buildInputs = [ perl ]
+
+  strictDeps = true;
+  nativeBuildInputs = [ perl ]
   ++ (with ocamlPackages; [ ocaml findlib ocamlbuild ]);
+  buildInputs = [ ocamlPackages.num ];
   propagatedBuildInputs = [ libgcrypt ];
   src = fetchFromGitHub {
     owner = "samee";
@@ -15,6 +19,9 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "fortify" ];
 
   patches = [ ./ignore-complex-float128.patch ];
+
+  # https://github.com/samee/obliv-c/issues/76#issuecomment-438958209
+  env.OCAMLBUILD = "ocamlbuild -package num -ocamlopt 'ocamlopt -dontlink num' -ocamlc 'ocamlc -dontlink num'";
 
   preBuild = ''
     patchShebangs .

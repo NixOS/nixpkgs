@@ -1,5 +1,5 @@
-{ fetchFromGitHub, buildLuarocksPackage, lua, maintainers, pkg-config
-, substituteAll, zenity }:
+{ stdenv, fetchFromGitHub, buildLuarocksPackage, lua, pkg-config, lib
+, substituteAll, zenity, AppKit }:
 
 buildLuarocksPackage {
   pname = "nfd";
@@ -25,6 +25,8 @@ buildLuarocksPackage {
   extraVariables.LUA_LIBDIR = "${lua}/lib";
   nativeBuildInputs = [ pkg-config ];
 
+  buildInputs = lib.optionals stdenv.isDarwin [ AppKit ];
+
   fixupPhase = ''
     find $out -name nfd_zenity.so -execdir mv {} nfd.so \;
   '';
@@ -35,7 +37,7 @@ buildLuarocksPackage {
     description =
       "A tiny, neat lua library that portably invokes native file open and save dialogs.";
     homepage = "https://github.com/Alloyed/nativefiledialog/tree/master/lua";
-    license.fullName = "zlib";
-    maintainers = [ maintainers.scoder12 ];
+    license = lib.licenses.zlib;
+    maintainers = [ lib.maintainers.scoder12 ];
   };
 }

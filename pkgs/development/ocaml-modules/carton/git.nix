@@ -1,6 +1,6 @@
 { buildDunePackage, carton, carton-lwt
-, bigarray-compat, bigstringaf, lwt, fpath, result
-, mmap, fmt, decompress, astring
+, bigstringaf, lwt, fpath, result
+, fmt, decompress, astring
 , alcotest, alcotest-lwt, cstruct, logs
 , mirage-flow, rresult, ke
 }:
@@ -8,17 +8,16 @@
 buildDunePackage {
   pname = "carton-git";
 
-  inherit (carton) version src useDune2 postPatch;
+  inherit (carton) version src postPatch;
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     carton
     carton-lwt
-    bigarray-compat
     bigstringaf
     lwt
     fpath
     result
-    mmap
     fmt
     decompress
     astring

@@ -3,7 +3,7 @@
 Building software with Nix often requires downloading source code and other files from the internet.
 `nixpkgs` provides *fetchers* for different protocols and services. Fetchers are functions that simplify downloading files.
 
-## Caveats
+## Caveats {#chap-pkgs-fetchers-caveats}
 
 Fetchers create [fixed output derivations](https://nixos.org/manual/nix/stable/#fixed-output-drvs) from downloaded files.
 Nix can reuse the downloaded files via the hash of the resulting derivation.
@@ -14,7 +14,7 @@ For example, consider the following fetcher:
 ```nix
 fetchurl {
   url = "http://www.example.org/hello-1.0.tar.gz";
-  sha256 = "0v6r3wwnsk5pdjr188nip3pjgn1jrn5pc5ajpcfy6had6b3v4dwm";
+  hash = "sha256-lTeyxzJNQeMdu1IVdovNMtgn77jRIhSybLdMbTkf2Ww=";
 };
 ```
 
@@ -23,17 +23,17 @@ A common mistake is to update a fetcher’s URL, or a version parameter, without
 ```nix
 fetchurl {
   url = "http://www.example.org/hello-1.1.tar.gz";
-  sha256 = "0v6r3wwnsk5pdjr188nip3pjgn1jrn5pc5ajpcfy6had6b3v4dwm";
+  hash = "sha256-lTeyxzJNQeMdu1IVdovNMtgn77jRIhSybLdMbTkf2Ww=";
 };
 ```
 
 **This will reuse the old contents**.
-Remember to invalidate the hash argument, in this case by setting the `sha256` attribute to an empty string.
+Remember to invalidate the hash argument, in this case by setting the `hash` attribute to an empty string.
 
 ```nix
 fetchurl {
   url = "http://www.example.org/hello-1.1.tar.gz";
-  sha256 = "";
+  hash = "";
 };
 ```
 
@@ -42,14 +42,14 @@ Use the resulting error message to determine the correct hash.
 ```
 error: hash mismatch in fixed-output derivation '/path/to/my.drv':
          specified: sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
-            got:    sha256-RApQUm78dswhBLC/rfU9y0u6pSAzHceIJqgmetRD24E=
+            got:    sha256-lTeyxzJNQeMdu1IVdovNMtgn77jRIhSybLdMbTkf2Ww=
 ```
 
 A similar problem arises while testing changes to a fetcher's implementation. If the output of the derivation already exists in the Nix store, test failures can go undetected. The [`invalidateFetcherByDrvHash`](#tester-invalidateFetcherByDrvHash) function helps prevent reusing cached derivations.
 
 ## `fetchurl` and `fetchzip` {#fetchurl}
 
-Two basic fetchers are `fetchurl` and `fetchzip`. Both of these have two required arguments, a URL and a hash. The hash is typically `sha256`, although many more hash algorithms are supported. Nixpkgs contributors are currently recommended to use `sha256`. This hash will be used by Nix to identify your source. A typical usage of `fetchurl` is provided below.
+Two basic fetchers are `fetchurl` and `fetchzip`. Both of these have two required arguments, a URL and a hash. The hash is typically `hash`, although many more hash algorithms are supported. Nixpkgs contributors are currently recommended to use `hash`. This hash will be used by Nix to identify your source. A typical usage of `fetchurl` is provided below.
 
 ```nix
 { stdenv, fetchurl }:
@@ -58,7 +58,7 @@ stdenv.mkDerivation {
   name = "hello";
   src = fetchurl {
     url = "http://www.example.org/hello.tar.gz";
-    sha256 = "1111111111111111111111111111111111111111111111111111";
+    hash = "sha256-BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=";
   };
 }
 ```
@@ -71,23 +71,24 @@ The main difference between `fetchurl` and `fetchzip` is in how they store the c
 
 - `relative`: Similar to using `git-diff`'s `--relative` flag, only keep changes inside the specified directory, making paths relative to it.
 - `stripLen`: Remove the first `stripLen` components of pathnames in the patch.
+- `decode`: Pipe the downloaded data through this command before processing it as a patch.
 - `extraPrefix`: Prefix pathnames by this string.
 - `excludes`: Exclude files matching these patterns (applies after the above arguments).
 - `includes`: Include only files matching these patterns (applies after the above arguments).
 - `revert`: Revert the patch.
 
-Note that because the checksum is computed after applying these effects, using or modifying these arguments will have no effect unless the `sha256` argument is changed as well.
+Note that because the checksum is computed after applying these effects, using or modifying these arguments will have no effect unless the `hash` argument is changed as well.
 
 
 Most other fetchers return a directory rather than a single file.
 
 ## `fetchsvn` {#fetchsvn}
 
-Used with Subversion. Expects `url` to a Subversion directory, `rev`, and `sha256`.
+Used with Subversion. Expects `url` to a Subversion directory, `rev`, and `hash`.
 
 ## `fetchgit` {#fetchgit}
 
-Used with Git. Expects `url` to a Git repo, `rev`, and `sha256`. `rev` in this case can be full the git commit id (SHA1 hash) or a tag name like `refs/tags/v1.0`.
+Used with Git. Expects `url` to a Git repo, `rev`, and `hash`. `rev` in this case can be full the git commit id (SHA1 hash) or a tag name like `refs/tags/v1.0`.
 
 Additionally, the following optional arguments can be given: `fetchSubmodules = true` makes `fetchgit` also fetch the submodules of a repository. If `deepClone` is set to true, the entire repository is cloned as opposing to just creating a shallow clone. `deepClone = true` also implies `leaveDotGit = true` which means that the `.git` directory of the clone won't be removed after checkout.
 
@@ -100,36 +101,36 @@ stdenv.mkDerivation {
   name = "hello";
   src = fetchgit {
     url = "https://...";
-    sparseCheckout = ''
-      directory/to/be/included
-      another/directory
-    '';
-    sha256 = "0000000000000000000000000000000000000000000000000000";
+    sparseCheckout = [
+      "directory/to/be/included"
+      "another/directory"
+    ];
+    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 }
 ```
 
 ## `fetchfossil` {#fetchfossil}
 
-Used with Fossil. Expects `url` to a Fossil archive, `rev`, and `sha256`.
+Used with Fossil. Expects `url` to a Fossil archive, `rev`, and `hash`.
 
 ## `fetchcvs` {#fetchcvs}
 
-Used with CVS. Expects `cvsRoot`, `tag`, and `sha256`.
+Used with CVS. Expects `cvsRoot`, `tag`, and `hash`.
 
 ## `fetchhg` {#fetchhg}
 
-Used with Mercurial. Expects `url`, `rev`, and `sha256`.
+Used with Mercurial. Expects `url`, `rev`, and `hash`.
 
 A number of fetcher functions wrap part of `fetchurl` and `fetchzip`. They are mainly convenience functions intended for commonly used destinations of source code in Nixpkgs. These wrapper fetchers are listed below.
 
 ## `fetchFromGitea` {#fetchfromgitea}
 
-`fetchFromGitea` expects five arguments. `domain` is the gitea server name. `owner` is a string corresponding to the Gitea user or organization that controls this repository. `repo` corresponds to the name of the software repository. These are located at the top of every Gitea HTML page as `owner`/`repo`. `rev` corresponds to the Git commit hash or tag (e.g `v1.0`) that will be downloaded from Git. Finally, `sha256` corresponds to the hash of the extracted directory. Again, other hash algorithms are also available but `sha256` is currently preferred.
+`fetchFromGitea` expects five arguments. `domain` is the gitea server name. `owner` is a string corresponding to the Gitea user or organization that controls this repository. `repo` corresponds to the name of the software repository. These are located at the top of every Gitea HTML page as `owner`/`repo`. `rev` corresponds to the Git commit hash or tag (e.g `v1.0`) that will be downloaded from Git. Finally, `hash` corresponds to the hash of the extracted directory. Again, other hash algorithms are also available but `hash` is currently preferred.
 
 ## `fetchFromGitHub` {#fetchfromgithub}
 
-`fetchFromGitHub` expects four arguments. `owner` is a string corresponding to the GitHub user or organization that controls this repository. `repo` corresponds to the name of the software repository. These are located at the top of every GitHub HTML page as `owner`/`repo`. `rev` corresponds to the Git commit hash or tag (e.g `v1.0`) that will be downloaded from Git. Finally, `sha256` corresponds to the hash of the extracted directory. Again, other hash algorithms are also available, but `sha256` is currently preferred.
+`fetchFromGitHub` expects four arguments. `owner` is a string corresponding to the GitHub user or organization that controls this repository. `repo` corresponds to the name of the software repository. These are located at the top of every GitHub HTML page as `owner`/`repo`. `rev` corresponds to the Git commit hash or tag (e.g `v1.0`) that will be downloaded from Git. Finally, `hash` corresponds to the hash of the extracted directory. Again, other hash algorithms are also available, but `hash` is currently preferred.
 
 `fetchFromGitHub` uses `fetchzip` to download the source archive generated by GitHub for the specified revision. If `leaveDotGit`, `deepClone` or `fetchSubmodules` are set to `true`, `fetchFromGitHub` will use `fetchgit` instead. Refer to its section for documentation of these options.
 
@@ -156,10 +157,37 @@ This is used with repo.or.cz repositories. The arguments expected are very simil
 ## `fetchFromSourcehut` {#fetchfromsourcehut}
 
 This is used with sourcehut repositories. Similar to `fetchFromGitHub` above,
-it expects `owner`, `repo`, `rev` and `sha256`, but don't forget the tilde (~)
+it expects `owner`, `repo`, `rev` and `hash`, but don't forget the tilde (~)
 in front of the username! Expected arguments also include `vc` ("git" (default)
 or "hg"), `domain` and `fetchSubmodules`.
 
 If `fetchSubmodules` is `true`, `fetchFromSourcehut` uses `fetchgit`
 or `fetchhg` with `fetchSubmodules` or `fetchSubrepos` set to `true`,
 respectively. Otherwise, the fetcher uses `fetchzip`.
+
+## `requireFile` {#requirefile}
+
+`requireFile` allows requesting files that cannot be fetched automatically, but whose content is known.
+This is a useful last-resort workaround for license restrictions that prohibit redistribution, or for downloads that are only accessible after authenticating interactively in a browser.
+If the requested file is present in the Nix store, the resulting derivation will not be built, because its expected output is already available.
+Otherwise, the builder will run, but fail with a message explaining to the user how to provide the file. The following code, for example:
+
+```
+requireFile {
+  name = "jdk-${version}_linux-x64_bin.tar.gz";
+  url = "https://www.oracle.com/java/technologies/javase-jdk11-downloads.html";
+  sha256 = "94bd34f85ee38d3ef59e5289ec7450b9443b924c55625661fffe66b03f2c8de2";
+}
+```
+results in this error message:
+```
+***
+Unfortunately, we cannot download file jdk-11.0.10_linux-x64_bin.tar.gz automatically.
+Please go to https://www.oracle.com/java/technologies/javase-jdk11-downloads.html to download it yourself, and add it to the Nix store
+using either
+  nix-store --add-fixed sha256 jdk-11.0.10_linux-x64_bin.tar.gz
+or
+  nix-prefetch-url --type sha256 file:///path/to/jdk-11.0.10_linux-x64_bin.tar.gz
+
+***
+```

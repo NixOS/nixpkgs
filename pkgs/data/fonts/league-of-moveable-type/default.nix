@@ -1,35 +1,46 @@
-{lib, stdenv, fetchurl, unzip, raleway}:
+{ lib
+, symlinkJoin
+, the-neue-black
+, blackout
+, chunk
+, fanwood
+, goudy-bookletter-1911
+, junction-font
+, knewave
+, league-gothic
+, league-script-number-one
+, league-spartan
+, linden-hill
+, orbitron
+, ostrich-sans
+, prociono
+, raleway
+, sniglet
+, sorts-mill-goudy
+}:
 
-let
+symlinkJoin {
+  name = "league-of-moveable-type";
 
-  # TO UPDATE:
-  # ./update.sh > ./fonts.nix
-  # we use the extended version of raleway (same license).
-  fonts = [raleway]
-    ++ map fetchurl (builtins.filter (f: f.name != "raleway.zip") (import ./fonts.nix));
-
-in
-stdenv.mkDerivation rec {
-
-  baseName = "league-of-moveable-type";
-  version = "2016-10-15";
-  name="${baseName}-${version}";
-
-  srcs = fonts;
-
-  nativeBuildInputs = [ unzip ];
-  sourceRoot = ".";
-
-  installPhase = ''
-    mkdir -p $out/share/fonts/opentype
-    cp */*.otf $out/share/fonts/opentype
-    # for Raleway, where the fonts are already in /share/…
-    cp */share/fonts/opentype/*.otf $out/share/fonts/opentype
-  '';
-
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "1gy959qhhdwm1phbrkab9isi0dmxcy0yizzncb0k49w88mc13vd0";
+  paths = [
+    the-neue-black
+    blackout
+    chunk
+    fanwood
+    goudy-bookletter-1911
+    junction-font
+    knewave
+    league-gothic
+    league-script-number-one
+    league-spartan
+    linden-hill
+    orbitron
+    ostrich-sans
+    prociono
+    raleway
+    sniglet
+    sorts-mill-goudy
+  ];
 
   meta = {
     description = "Font Collection by The League of Moveable Type";
@@ -46,6 +57,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.ofl;
 
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ bergey Profpatsch ];
+    maintainers = with lib.maintainers; [ bergey minijackson Profpatsch ];
   };
 }

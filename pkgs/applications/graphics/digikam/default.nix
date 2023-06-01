@@ -24,7 +24,7 @@
 , boost
 , eigen
 , exiv2
-, ffmpeg
+, ffmpeg_4
 , flex
 , graphviz
 , imagemagick
@@ -56,11 +56,11 @@
 
 mkDerivation rec {
   pname   = "digikam";
-  version = "7.8.0";
+  version = "7.10.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/digiKam-${version}.tar.xz";
-    sha256 = "sha256-sIV3sLFe+ZhDaVcIqiwOmNVHMD2Fvio7OZBUhPLKts4=";
+    sha256 = "sha256-o/MPAbfRttWFgivNXr+N9p4P8CRWOnJGLr+AadvaIuE=";
   };
 
   nativeBuildInputs = [ cmake doxygen extra-cmake-modules kdoctools wrapGAppsHook ];
@@ -70,7 +70,7 @@ mkDerivation rec {
     boost
     eigen
     exiv2
-    ffmpeg
+    ffmpeg_4
     flex
     graphviz
     imagemagick

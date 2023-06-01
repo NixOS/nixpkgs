@@ -8,7 +8,7 @@
 , gdk-pixbuf
 , atk
 , gtk4
-, wrapGAppsHook
+, wrapGAppsHook4
 , gobject-introspection
 , xvfb-run
 , testers
@@ -17,20 +17,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "czkawka";
-  version = "5.0.2";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "qarmin";
     repo = "czkawka";
     rev = version;
-    sha256 = "sha256-+Z4R6eRYNU0/wmrrTCLabY1zgxGbdSkgrfJd8rI5fZo=";
+    hash = "sha256-3nHsdCndZx7TIbRXhuGdQx8fh8Ff7gYBQyNXIkJ2zPc=";
   };
 
-  cargoSha256 = "sha256-hkqGOl6ew3GBMPem8bPRy0PYphHhXJVv6iQiH6lK0kE=";
+  cargoHash = "sha256-jBl7+ElK+SEe92qygTocd6R1sgdHf+RpTVJZymhf3mQ=";
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
     gobject-introspection
   ];
 
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
     gtk4
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     xvfb-run
   ];
 
@@ -59,6 +59,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
+    changelog = "https://github.com/qarmin/czkawka/raw/${version}/Changelog.md";
     description = "A simple, fast and easy to use app to remove unnecessary files from your computer";
     homepage = "https://github.com/qarmin/czkawka";
     license = with licenses; [ mit ];

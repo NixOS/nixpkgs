@@ -7,22 +7,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "zim";
-  version = "0.74.3";
+  version = "0.75.1";
 
   src = fetchurl {
     url = "https://zim-wiki.org/downloads/zim-${version}.tar.gz";
-    sha256 = "sha256-3ehPIkhsf1JnC9Qx3kQ6ilvRaBB7auBm2C1HOuNGzRU=";
+    sha256 = "sha256-iOF11/fhQYlvnpWJidJS1yJVavF7xLxvBl59VCh9A4U=";
   };
 
-  buildInputs = [ gtk3 gobject-introspection gnome.adwaita-icon-theme ];
+  buildInputs = [ gtk3 gnome.adwaita-icon-theme ];
   propagatedBuildInputs = with python3Packages; [ pyxdg pygobject3 ];
-  # see https://github.com/NixOS/nixpkgs/issues/56943#issuecomment-1131643663
   nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
 
   dontWrapGApps = true;
 
   preFixup = ''
     makeWrapperArgs+=(--prefix XDG_DATA_DIRS : $out/share)
+    makeWrapperArgs+=(--prefix XDG_DATA_DIRS : ${gnome.adwaita-icon-theme}/share)
     makeWrapperArgs+=(--argv0 $out/bin/.zim-wrapped)
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';

@@ -6,6 +6,7 @@
 , poetry-core
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , tomli
 , typing-extensions
 }:
@@ -21,11 +22,12 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = pname;
     rev = version;
-    sha256 = "sha256-6MWUkvZp5CYUWsbMGXM2gudjn5075j5FIuaNnCrgRNs=";
+    hash = "sha256-6MWUkvZp5CYUWsbMGXM2gudjn5075j5FIuaNnCrgRNs=";
   };
 
   nativeBuildInputs = [
     poetry-core
+    setuptools
   ];
 
   propagatedBuildInputs = [
@@ -37,7 +39,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

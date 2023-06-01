@@ -9,14 +9,14 @@ let
   }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   hash = {
-    x64-linux_hash = "sha256-3oxCBg+lxN8eGaS1kmIK0kL2qUNOLHhLnkMPmPlZcyw=";
-    arm64-linux_hash = "sha256-OaCI2neL8bMFf/QuZEZXKuZgJBnUT+Q2XMChfSqF5Bc=";
-    x64-osx_hash = "sha256-vv3ds5BE2PDA94Hkr//MB0a7CF3dnk7r7wYF9SAzL48=";
+    x64-linux_hash = "sha256-BJKEl75VNr2dN/P1NeYuOYmrDJEIc8pGS2rszibVGbQ=";
+    arm64-linux_hash = "sha256-1qGx3rM8sjLhzCNnyUjTWs+EGLzmm12h/o08QmvXxts=";
+    x64-osx_hash = "sha256-+afi+BQGrJb+i91IDKZEqRS6xAMvU1C5XmZs6H5rgoI=";
   }."${arch}-${os}_hash";
 
 in stdenv.mkDerivation rec {
   pname = "radarr";
-  version = "4.1.0.6175";
+  version = "4.5.2.7388";
 
   src = fetchurl {
     url = "https://github.com/Radarr/Radarr/releases/download/v${version}/Radarr.master.${version}.${os}-core-${arch}.tar.gz";
@@ -47,6 +47,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A Usenet/BitTorrent movie downloader";
     homepage = "https://radarr.video/";
+    changelog = "https://github.com/Radarr/Radarr/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ edwtjo purcell ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];

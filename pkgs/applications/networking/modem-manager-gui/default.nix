@@ -9,7 +9,7 @@
 , gtkspell3
 , ofono
 , itstool
-, libayatana-appindicator-gtk3
+, libayatana-appindicator
 , perlPackages
 , meson
 , ninja
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     gdbm
     gtkspell3
     ofono
-    libayatana-appindicator-gtk3
+    libayatana-appindicator
   ];
 
   patches = [

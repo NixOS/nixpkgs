@@ -1,17 +1,29 @@
 { lib, stdenv, fetchurl, lvm2, json_c, asciidoctor
-, openssl, libuuid, pkg-config, popt }:
+, openssl, libuuid, pkg-config, popt, nixosTests
+
+  # The release tarballs contain precomputed manpage files, so we don't need
+  # to run asciidoctor on the man sources. By avoiding asciidoctor, we make
+  # the bare NixOS build hash independent of changes to the ruby ecosystem,
+  # saving mass-rebuilds.
+, rebuildMan ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "cryptsetup";
-  version = "2.5.0";
+  version = "2.6.1";
 
   outputs = [ "bin" "out" "dev" "man" ];
   separateDebugInfo = true;
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/cryptsetup/v2.5/${pname}-${version}.tar.xz";
-    sha256 = "sha256-kYSm672c5+shEVLn90GmyC8tHMDiSoTsnFKTnu4PBUI=";
+    url = "mirror://kernel/linux/utils/cryptsetup/v${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    hash = "sha256-QQ3tZaEHKrnI5Brd7Te5cpwIf+9NLbArtO9SmtbaRpM=";
   };
+
+  patches = [
+    # Allow reading tokens from a relative path, see #167994
+    ./relative-token-path.patch
+  ];
 
   postPatch = ''
     patchShebangs tests
@@ -28,6 +40,8 @@ stdenv.mkDerivation rec {
     "--enable-cryptsetup-reencrypt"
     "--with-crypto_backend=openssl"
     "--disable-ssh-token"
+  ] ++ lib.optionals (!rebuildMan) [
+    "--disable-asciidoc"
   ] ++ lib.optionals stdenv.hostPlatform.isStatic [
     "--disable-external-tokens"
     # We have to override this even though we're removing token
@@ -36,7 +50,7 @@ stdenv.mkDerivation rec {
     "--with-luks2-external-tokens-path=/"
   ];
 
-  nativeBuildInputs = [ pkg-config asciidoctor ];
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals rebuildMan [ asciidoctor ];
   buildInputs = [ lvm2 json_c openssl libuuid popt ];
 
   # The test [7] header backup in compat-test fails with a mysterious
@@ -44,9 +58,23 @@ stdenv.mkDerivation rec {
   # Issue filed upstream: https://gitlab.com/cryptsetup/cryptsetup/-/issues/763
   doCheck = !stdenv.hostPlatform.isMusl;
 
+  passthru = {
+    tests = {
+      nixos =
+        lib.optionalAttrs stdenv.hostPlatform.isLinux (
+          lib.recurseIntoAttrs (
+            lib.filterAttrs
+              (name: _value: lib.hasPrefix "luks" name)
+              nixosTests.installer
+          )
+        );
+    };
+  };
+
   meta = {
     homepage = "https://gitlab.com/cryptsetup/cryptsetup/";
     description = "LUKS for dm-crypt";
+    changelog = "https://gitlab.com/cryptsetup/cryptsetup/-/raw/v${version}/docs/v${version}-ReleaseNotes";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ ];
     platforms = with lib.platforms; linux;

@@ -4,6 +4,11 @@
 with import ../default.nix;
 
 let
+  testingThrow = expr: {
+    expr = (builtins.tryEval (builtins.seq expr "didn't throw"));
+    expected = { success = false; value = false; };
+  };
+  testingDeepThrow = expr: testingThrow (builtins.deepSeq expr expr);
 
   testSanitizeDerivationName = { name, expected }:
   let
@@ -153,6 +158,11 @@ runTests {
     expected = "a,b,c";
   };
 
+  testConcatLines = {
+    expr = concatLines ["a" "b" "c"];
+    expected = "a\nb\nc\n";
+  };
+
   testSplitStringsSimple = {
     expr = strings.splitString "." "a.b.c.d";
     expected = [ "a" "b" "c" "d" ];
@@ -210,6 +220,21 @@ runTests {
   testSplitVersionTriple = {
     expr = versions.splitVersion "1.2.3";
     expected = [ "1" "2" "3" ];
+  };
+
+  testPadVersionLess = {
+    expr = versions.pad 3 "1.2";
+    expected = "1.2.0";
+  };
+
+  testPadVersionLessExtra = {
+    expr = versions.pad 3 "1.3-rc1";
+    expected = "1.3.0-rc1";
+  };
+
+  testPadVersionMore = {
+    expr = versions.pad 3 "1.2.3.4";
+    expected = "1.2.3";
   };
 
   testIsStorePath =  {
@@ -312,6 +337,105 @@ runTests {
     expected = true;
   };
 
+  testNormalizePath = {
+    expr = strings.normalizePath "//a/b//c////d/";
+    expected = "/a/b/c/d/";
+  };
+
+  testCharToInt = {
+    expr = strings.charToInt "A";
+    expected = 65;
+  };
+
+  testEscapeC = {
+    expr = strings.escapeC [ " " ] "Hello World";
+    expected = "Hello\\x20World";
+  };
+
+  testEscapeURL = testAllTrue [
+    ("" == strings.escapeURL "")
+    ("Hello" == strings.escapeURL "Hello")
+    ("Hello%20World" == strings.escapeURL "Hello World")
+    ("Hello%2FWorld" == strings.escapeURL "Hello/World")
+    ("42%25" == strings.escapeURL "42%")
+    ("%20%3F%26%3D%23%2B%25%21%3C%3E%23%22%7B%7D%7C%5C%5E%5B%5D%60%09%3A%2F%40%24%27%28%29%2A%2C%3B" == strings.escapeURL " ?&=#+%!<>#\"{}|\\^[]`\t:/@$'()*,;")
+  ];
+
+  testToInt = testAllTrue [
+    # Naive
+    (123 == toInt "123")
+    (0 == toInt "0")
+    # Whitespace Padding
+    (123 == toInt " 123")
+    (123 == toInt "123 ")
+    (123 == toInt " 123 ")
+    (123 == toInt "   123   ")
+    (0 == toInt " 0")
+    (0 == toInt "0 ")
+    (0 == toInt " 0 ")
+    (-1 == toInt "-1")
+    (-1 == toInt " -1 ")
+  ];
+
+  testToIntFails = testAllTrue [
+    ( builtins.tryEval (toInt "") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt "123 123") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt "0 123") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt " 0d ") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt " 1d ") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt " d0 ") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt "00") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt "01") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt "002") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt " 002 ") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt " foo ") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt " foo 123 ") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt " foo123 ") == { success = false; value = false; } )
+  ];
+
+  testToIntBase10 = testAllTrue [
+    # Naive
+    (123 == toIntBase10 "123")
+    (0 == toIntBase10 "0")
+    # Whitespace Padding
+    (123 == toIntBase10 " 123")
+    (123 == toIntBase10 "123 ")
+    (123 == toIntBase10 " 123 ")
+    (123 == toIntBase10 "   123   ")
+    (0 == toIntBase10 " 0")
+    (0 == toIntBase10 "0 ")
+    (0 == toIntBase10 " 0 ")
+    # Zero Padding
+    (123 == toIntBase10 "0123")
+    (123 == toIntBase10 "0000123")
+    (0 == toIntBase10 "000000")
+    # Whitespace and Zero Padding
+    (123 == toIntBase10 " 0123")
+    (123 == toIntBase10 "0123 ")
+    (123 == toIntBase10 " 0123 ")
+    (123 == toIntBase10 " 0000123")
+    (123 == toIntBase10 "0000123 ")
+    (123 == toIntBase10 " 0000123 ")
+    (0 == toIntBase10 " 000000")
+    (0 == toIntBase10 "000000 ")
+    (0 == toIntBase10 " 000000 ")
+    (-1 == toIntBase10 "-1")
+    (-1 == toIntBase10 " -1 ")
+  ];
+
+  testToIntBase10Fails = testAllTrue [
+    ( builtins.tryEval (toIntBase10 "") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 "123 123") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 "0 123") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 " 0d ") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 " 1d ") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 " d0 ") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 " foo ") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 " foo 123 ") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 " foo 00123 ") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 " foo00123 ") == { success = false; value = false; } )
+  ];
+
 # LISTS
 
   testFilter = {
@@ -369,6 +493,11 @@ runTests {
     expected = [2 30 40 42];
   };
 
+  testReplicate = {
+    expr = replicate 3 "a";
+    expected = ["a" "a" "a"];
+  };
+
   testToIntShouldConvertStringToInt = {
     expr = toInt "27";
     expected = 27;
@@ -391,6 +520,54 @@ runTests {
 
 
 # ATTRSETS
+
+  testConcatMapAttrs = {
+    expr = concatMapAttrs
+      (name: value: {
+        ${name} = value;
+        ${name + value} = value;
+      })
+      {
+        foo = "bar";
+        foobar = "baz";
+      };
+    expected = {
+      foo = "bar";
+      foobar = "baz";
+      foobarbaz = "baz";
+    };
+  };
+
+  # code from example
+  testFoldlAttrs = {
+    expr = {
+      example = foldlAttrs
+        (acc: name: value: {
+          sum = acc.sum + value;
+          names = acc.names ++ [ name ];
+        })
+        { sum = 0; names = [ ]; }
+        {
+          foo = 1;
+          bar = 10;
+        };
+      # should just return the initial value
+      emptySet = foldlAttrs (throw "function not needed") 123 { };
+      # should just evaluate to the last value
+      accNotNeeded = foldlAttrs (_acc: _name: v: v) (throw "accumulator not needed") { z = 3; a = 2; };
+      # the accumulator doesnt have to be an attrset it can be as trivial as being just a number or string
+      trivialAcc = foldlAttrs (acc: _name: v: acc * 10 + v) 1 { z = 1; a = 2; };
+    };
+    expected = {
+      example = {
+        sum = 11;
+        names = [ "bar" "foo" ];
+      };
+      emptySet = 123;
+      accNotNeeded = 3;
+      trivialAcc = 121;
+    };
+  };
 
   # code from the example
   testRecursiveUpdateUntil = {
@@ -624,7 +801,7 @@ runTests {
       float = 0.1337;
       bool = true;
       emptystring = "";
-      string = ''fno"rd'';
+      string = "fn\${o}\"r\\d";
       newlinestring = "\n";
       path = /. + "/foo";
       null_ = null;
@@ -632,16 +809,16 @@ runTests {
       functionArgs = { arg ? 4, foo }: arg;
       list = [ 3 4 function [ false ] ];
       emptylist = [];
-      attrs = { foo = null; "foo bar" = "baz"; };
+      attrs = { foo = null; "foo b/ar" = "baz"; };
       emptyattrs = {};
       drv = deriv;
     };
     expected = rec {
       int = "42";
-      float = "~0.133700";
+      float = "0.1337";
       bool = "true";
       emptystring = ''""'';
-      string = ''"fno\"rd"'';
+      string = ''"fn\''${o}\"r\\d"'';
       newlinestring = "\"\\n\"";
       path = "/foo";
       null_ = "null";
@@ -649,9 +826,9 @@ runTests {
       functionArgs = "<function, args: {arg?, foo}>";
       list = "[ 3 4 ${function} [ false ] ]";
       emptylist = "[ ]";
-      attrs = "{ foo = null; \"foo bar\" = \"baz\"; }";
+      attrs = "{ foo = null; \"foo b/ar\" = \"baz\"; }";
       emptyattrs = "{ }";
-      drv = "<derivation ${deriv.drvPath}>";
+      drv = "<derivation ${deriv.name}>";
     };
   };
 
@@ -696,8 +873,8 @@ runTests {
       newlinestring = "\n";
       multilinestring = ''
         hello
-        there
-        test
+        ''${there}
+        te'''st
       '';
       multilinestring' = ''
         hello
@@ -724,8 +901,8 @@ runTests {
       multilinestring = ''
         '''
           hello
-          there
-          test
+          '''''${there}
+          te''''st
         ''''';
       multilinestring' = ''
         '''
@@ -742,6 +919,131 @@ runTests {
     expected  = "«foo»";
   };
 
+  testToPlist =
+    let
+      deriv = derivation { name = "test"; builder = "/bin/sh"; system = "aarch64-linux"; };
+    in {
+    expr = mapAttrs (const (generators.toPlist { })) {
+      value = {
+        nested.values = rec {
+          int = 42;
+          float = 0.1337;
+          bool = true;
+          emptystring = "";
+          string = "fn\${o}\"r\\d";
+          newlinestring = "\n";
+          path = /. + "/foo";
+          null_ = null;
+          list = [ 3 4 "test" ];
+          emptylist = [];
+          attrs = { foo = null; "foo b/ar" = "baz"; };
+          emptyattrs = {};
+        };
+      };
+    };
+    expected = { value = builtins.readFile ./test-to-plist-expected.plist; };
+  };
+
+  testToLuaEmptyAttrSet = {
+    expr = generators.toLua {} {};
+    expected = ''{}'';
+  };
+
+  testToLuaEmptyList = {
+    expr = generators.toLua {} [];
+    expected = ''{}'';
+  };
+
+  testToLuaListOfVariousTypes = {
+    expr = generators.toLua {} [ null 43 3.14159 true ];
+    expected = ''
+      {
+        nil,
+        43,
+        3.14159,
+        true
+      }'';
+  };
+
+  testToLuaString = {
+    expr = generators.toLua {} ''double-quote (") and single quotes (')'';
+    expected = ''"double-quote (\") and single quotes (')"'';
+  };
+
+  testToLuaAttrsetWithLuaInline = {
+    expr = generators.toLua {} { x = generators.mkLuaInline ''"abc" .. "def"''; };
+    expected = ''
+      {
+        ["x"] = ("abc" .. "def")
+      }'';
+  };
+
+  testToLuaAttrsetWithSpaceInKey = {
+    expr = generators.toLua {} { "some space and double-quote (\")" = 42; };
+    expected = ''
+      {
+        ["some space and double-quote (\")"] = 42
+      }'';
+  };
+
+  testToLuaWithoutMultiline = {
+    expr = generators.toLua { multiline = false; } [ 41 43 ];
+    expected = ''{ 41, 43 }'';
+  };
+
+  testToLuaEmptyBindings = {
+    expr = generators.toLua { asBindings = true; } {};
+    expected = "";
+  };
+
+  testToLuaBindings = {
+    expr = generators.toLua { asBindings = true; } { x1 = 41; _y = { a = 43; }; };
+    expected = ''
+      _y = {
+        ["a"] = 43
+      }
+      x1 = 41
+    '';
+  };
+
+  testToLuaPartialTableBindings = {
+    expr = generators.toLua { asBindings = true; } { "x.y" = 42; };
+    expected = ''
+      x.y = 42
+    '';
+  };
+
+  testToLuaIndentedBindings = {
+    expr = generators.toLua { asBindings = true; indent = "  "; } { x = { y = 42; }; };
+    expected = "  x = {\n    [\"y\"] = 42\n  }\n";
+  };
+
+  testToLuaBindingsWithSpace = testingThrow (
+    generators.toLua { asBindings = true; } { "with space" = 42; }
+  );
+
+  testToLuaBindingsWithLeadingDigit = testingThrow (
+    generators.toLua { asBindings = true; } { "11eleven" = 42; }
+  );
+
+  testToLuaBasicExample = {
+    expr = generators.toLua {} {
+      cmd = [ "typescript-language-server" "--stdio" ];
+      settings.workspace.library = generators.mkLuaInline ''vim.api.nvim_get_runtime_file("", true)'';
+    };
+    expected = ''
+      {
+        ["cmd"] = {
+          "typescript-language-server",
+          "--stdio"
+        },
+        ["settings"] = {
+          ["workspace"] = {
+            ["library"] = (vim.api.nvim_get_runtime_file("", true))
+          }
+        }
+      }'';
+  };
 
 # CLI
 
@@ -1205,5 +1507,111 @@ runTests {
   testLevenshteinAtMostThreeTrue = {
     expr = strings.levenshteinAtMost 3 "hello" "Holla";
     expected = true;
+  };
+
+  # lazyDerivation
+
+  testLazyDerivationIsLazyInDerivationForAttrNames = {
+    expr = attrNames (lazyDerivation {
+      derivation = throw "not lazy enough";
+    });
+    # It's ok to add attribute names here when lazyDerivation is improved
+    # in accordance with its inline comments.
+    expected = [ "drvPath" "meta" "name" "out" "outPath" "outputName" "outputs" "system" "type" ];
+  };
+
+  testLazyDerivationIsLazyInDerivationForPassthruAttr = {
+    expr = (lazyDerivation {
+      derivation = throw "not lazy enough";
+      passthru.tests = "whatever is in tests";
+    }).tests;
+    expected = "whatever is in tests";
+  };
+
+  testLazyDerivationIsLazyInDerivationForPassthruAttr2 = {
+    # passthru.tests is not a special case. It works for any attr.
+    expr = (lazyDerivation {
+      derivation = throw "not lazy enough";
+      passthru.foo = "whatever is in foo";
+    }).foo;
+    expected = "whatever is in foo";
+  };
+
+  testLazyDerivationIsLazyInDerivationForMeta = {
+    expr = (lazyDerivation {
+      derivation = throw "not lazy enough";
+      meta = "whatever is in meta";
+    }).meta;
+    expected = "whatever is in meta";
+  };
+
+  testLazyDerivationReturnsDerivationAttrs = let
+    derivation = {
+      type = "derivation";
+      outputs = ["out"];
+      out = "test out";
+      outPath = "test outPath";
+      outputName = "out";
+      drvPath = "test drvPath";
+      name = "test name";
+      system = "test system";
+      meta = "test meta";
+    };
+  in {
+    expr = lazyDerivation { inherit derivation; };
+    expected = derivation;
+  };
+
+  testTypeDescriptionInt = {
+    expr = (with types; int).description;
+    expected = "signed integer";
+  };
+  testTypeDescriptionListOfInt = {
+    expr = (with types; listOf int).description;
+    expected = "list of signed integer";
+  };
+  testTypeDescriptionListOfListOfInt = {
+    expr = (with types; listOf (listOf int)).description;
+    expected = "list of list of signed integer";
+  };
+  testTypeDescriptionListOfEitherStrOrBool = {
+    expr = (with types; listOf (either str bool)).description;
+    expected = "list of (string or boolean)";
+  };
+  testTypeDescriptionEitherListOfStrOrBool = {
+    expr = (with types; either (listOf bool) str).description;
+    expected = "(list of boolean) or string";
+  };
+  testTypeDescriptionEitherStrOrListOfBool = {
+    expr = (with types; either str (listOf bool)).description;
+    expected = "string or list of boolean";
+  };
+  testTypeDescriptionOneOfListOfStrOrBool = {
+    expr = (with types; oneOf [ (listOf bool) str ]).description;
+    expected = "(list of boolean) or string";
+  };
+  testTypeDescriptionOneOfListOfStrOrBoolOrNumber = {
+    expr = (with types; oneOf [ (listOf bool) str number ]).description;
+    expected = "(list of boolean) or string or signed integer or floating point number";
+  };
+  testTypeDescriptionEitherListOfBoolOrEitherStringOrNumber = {
+    expr = (with types; either (listOf bool) (either str number)).description;
+    expected = "(list of boolean) or string or signed integer or floating point number";
+  };
+  testTypeDescriptionEitherEitherListOfBoolOrStringOrNumber = {
+    expr = (with types; either (either (listOf bool) str) number).description;
+    expected = "(list of boolean) or string or signed integer or floating point number";
+  };
+  testTypeDescriptionEitherNullOrBoolOrString = {
+    expr = (with types; either (nullOr bool) str).description;
+    expected = "null or boolean or string";
+  };
+  testTypeDescriptionEitherListOfEitherBoolOrStrOrInt = {
+    expr = (with types; either (listOf (either bool str)) int).description;
+    expected = "(list of (boolean or string)) or signed integer";
+  };
+  testTypeDescriptionEitherIntOrListOrEitherBoolOrStr = {
+    expr = (with types; either int (listOf (either bool str))).description;
+    expected = "signed integer or list of (boolean or string)";
   };
 }

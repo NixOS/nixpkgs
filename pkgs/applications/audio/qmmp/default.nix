@@ -1,22 +1,18 @@
-{ lib, mkDerivation, fetchurl, cmake, pkg-config, xlibsWrapper
-, qtbase, qttools, qtmultimedia, qtx11extras
+{ lib, stdenv, fetchurl, cmake, pkg-config
+, qtbase, qttools, qtmultimedia, wrapQtAppsHook
 # transports
 , curl, libmms
 # input plugins
 , libmad, taglib, libvorbis, libogg, flac, libmpcdec, libmodplug, libsndfile
-, libcdio, cdparanoia, libcddb, faad2, ffmpeg, wildmidi
+, libcdio, cdparanoia, libcddb, faad2, ffmpeg, wildmidi, libbs2b, game-music-emu
+, libarchive, opusfile, soxr, wavpack
 # output plugins
-, alsa-lib, libpulseaudio
+, alsa-lib, libpulseaudio, pipewire, libjack2
 # effect plugins
 , libsamplerate
 }:
 
 # Additional plugins that can be added:
-#  wavpack (https://www.wavpack.com/)
-#  gme (Game music support)
-#  Ogg Opus support
-#  BS2B effect plugin (http://bs2b.sourceforge.net/)
-#  JACK audio support
 #  ProjectM visualization plugin
 
 # To make MIDI work we must tell Qmmp what instrument configuration to use (and
@@ -28,26 +24,28 @@
 # Qmmp installs working .desktop file(s) all by itself, so we don't need to
 # handle that.
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qmmp";
-  version = "1.4.4";
+  version = "2.1.3";
 
   src = fetchurl {
-    url = "https://qmmp.ylsoftware.com/files/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-sZRZVhCf2ceETuV4AULA0kVkuIMn3C+aYdKThqvPnVQ=";
+    url = "https://qmmp.ylsoftware.com/files/qmmp/2.1/${pname}-${version}.tar.bz2";
+    hash = "sha256-+bHnvwXUmdBbQcO3Unybqou/MZgcf6CXhlAcBjNFCNQ=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
+
   buildInputs =
     [ # basic requirements
-      qtbase qttools qtmultimedia qtx11extras xlibsWrapper
+      qtbase qttools qtmultimedia
       # transports
       curl libmms
       # input plugins
       libmad taglib libvorbis libogg flac libmpcdec libmodplug libsndfile
-      libcdio cdparanoia libcddb faad2 ffmpeg wildmidi
+      libcdio cdparanoia libcddb faad2 ffmpeg wildmidi libbs2b game-music-emu
+      libarchive opusfile soxr wavpack
       # output plugins
-      alsa-lib libpulseaudio
+      alsa-lib libpulseaudio pipewire libjack2
       # effect plugins
       libsamplerate
     ];

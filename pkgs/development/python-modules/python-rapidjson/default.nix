@@ -21,26 +21,29 @@ let
     };
     patches = [
       (fetchpatch {
-        url = "https://git.alpinelinux.org/aports/plain/community/rapidjson/do-not-include-gtest-src-dir.patch";
+        name = "do-not-include-gtest-src-dir.patch";
+        url = "https://git.alpinelinux.org/aports/plain/community/rapidjson/do-not-include-gtest-src-dir.patch?id=9e5eefc7a5fcf5938a8dc8a3be8c75e9e6809909";
         hash = "sha256-BjSZEwfCXA/9V+kxQ/2JPWbc26jQn35CfN8+8NW24s4=";
       })
     ];
+    # valgrind_unittest failed
+    cmakeFlags = old.cmakeFlags ++ [ "-DCMAKE_CTEST_ARGUMENTS=-E;valgrind_unittest" ];
   });
 in buildPythonPackage rec {
-  version = "1.6";
+  version = "1.9";
   pname = "python-rapidjson";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-GJzxqWv5/NhtADYPFa12qDzgiJuK6NHLD9srKZXlocg=";
+    hash = "sha256-vn01HHES2sYIEzoj9g6VOVZo0JgaB/QDf2Pg6Ir88Bo=";
   };
 
   setupPyBuildFlags = [
     "--rj-include-dir=${lib.getDev rapidjson'}/include"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytz
   ];

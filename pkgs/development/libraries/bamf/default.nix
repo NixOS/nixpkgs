@@ -76,10 +76,9 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   # Ignore deprecation errors
-  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
+  env.NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
     ignoredVersions = ".ubuntu.*";
   };
 

@@ -1,40 +1,56 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, cmake
+, pythonOlder
+, awkward-cpp
+, hatch-fancy-pypi-readme
+, hatchling
 , numba
 , numpy
+, packaging
+, typing-extensions
 , pytestCheckHook
-, pyyaml
-, rapidjson
-, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "1.9.0";
+  version = "2.2.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-yteZI35DcLUPd+cW543TVlp7P9gvzVpBp2qhUS1RB10=";
+    sha256 = "653e5b69f1c8e32d1d59445a8414d03f850d327eb933f45aad163f0778861dc2";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ pyyaml rapidjson ];
-  propagatedBuildInputs = [ numpy setuptools ]; # https://github.com/scikit-hep/awkward/blob/main/requirements.txt
+  nativeBuildInputs = [
+    hatch-fancy-pypi-readme
+    hatchling
+  ];
+
+  propagatedBuildInputs = [
+    awkward-cpp
+    numpy
+    packaging
+  ]  ++ lib.optionals (pythonOlder "3.11") [
+    typing-extensions
+  ];
 
   dontUseCmakeConfigure = true;
 
-  checkInputs = [ pytestCheckHook numba ];
-
-  disabledTests = [
-    # incomatible with numpy 1.23
-    "test_numpyarray"
+  nativeCheckInputs = [
+    pytestCheckHook
+    numba
   ];
 
-  disabledTestPaths = [ "tests-cuda" ];
+  disabledTestPaths = [
+    "tests-cuda"
+  ];
 
-  pythonImportsCheck = [ "awkward" ];
+  pythonImportsCheck = [
+    "awkward"
+  ];
 
   meta = with lib; {
     description = "Manipulate JSON-like data with NumPy-like idioms";

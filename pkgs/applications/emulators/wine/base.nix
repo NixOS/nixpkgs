@@ -1,10 +1,9 @@
 { stdenv, lib, pkgArches, callPackage, makeSetupHook,
   pname, version, src, mingwGccs, monos, geckos, platforms,
   bison, flex, fontforge, makeWrapper, pkg-config,
-  autoconf, hexdump, perl, nixosTests,
+  nixosTests,
   supportFlags,
   patches,
-  vkd3dArches,
   moltenvk,
   buildScript ? null, configureFlags ? [], mainProgram ? "wine"
 }:
@@ -44,7 +43,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
 }) // rec {
   inherit version src;
 
-  pname = prevName + lib.optionalString supportFlags.waylandSupport "wayland";
+  pname = prevName + lib.optionalString supportFlags.waylandSupport "-wayland";
 
   # Fixes "Compiler cannot create executables" building wineWow with mingwSupport
   strictDeps = true;
@@ -55,11 +54,6 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
     fontforge
     makeWrapper
     pkg-config
-
-    # Required by staging
-    autoconf
-    hexdump
-    perl
   ]
   ++ lib.optionals supportFlags.mingwSupport (mingwGccs
     ++ lib.optional stdenv.isDarwin setupHookDarwin);
@@ -71,7 +65,6 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optional cupsSupport            pkgs.cups
   ++ lib.optional gettextSupport         pkgs.gettext
   ++ lib.optional dbusSupport            pkgs.dbus
-  ++ lib.optional openalSupport          pkgs.openal
   ++ lib.optional cairoSupport           pkgs.cairo
   ++ lib.optional odbcSupport            pkgs.unixODBC
   ++ lib.optional netapiSupport          pkgs.samba4
@@ -82,7 +75,6 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optional saneSupport            pkgs.sane-backends
   ++ lib.optional gphoto2Support         pkgs.libgphoto2
   ++ lib.optional krb5Support            pkgs.libkrb5
-  ++ lib.optional ldapSupport            pkgs.openldap
   ++ lib.optional fontconfigSupport      pkgs.fontconfig
   ++ lib.optional alsaSupport            pkgs.alsa-lib
   ++ lib.optional pulseaudioSupport      pkgs.libpulseaudio
@@ -91,7 +83,6 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optional vulkanSupport          (if stdenv.isDarwin then moltenvk else pkgs.vulkan-loader)
   ++ lib.optional sdlSupport             pkgs.SDL2
   ++ lib.optional usbSupport             pkgs.libusb1
-  ++ vkd3dArches
   ++ lib.optionals gstreamerSupport      (with pkgs.gst_all_1;
     [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-ugly gst-libav
     (gst-plugins-bad.override { enableZbar = false; }) ])
@@ -101,25 +92,29 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optionals (openglSupport && !stdenv.isDarwin) [ pkgs.libGLU pkgs.libGL pkgs.mesa.osmesa pkgs.libdrm ]
   ++ lib.optionals stdenv.isDarwin (with pkgs.buildPackages.darwin.apple_sdk.frameworks; [
      CoreServices Foundation ForceFeedback AppKit OpenGL IOKit DiskArbitration Security
-     ApplicationServices AudioToolbox CoreAudio AudioUnit CoreMIDI OpenAL OpenCL Cocoa Carbon
+     ApplicationServices AudioToolbox CoreAudio AudioUnit CoreMIDI OpenCL Cocoa Carbon
   ])
   ++ lib.optionals (stdenv.isLinux && !waylandSupport) (with pkgs.xorg; [
      libX11 libXi libXcursor libXrandr libXrender libXxf86vm libXcomposite libXext
   ])
   ++ lib.optionals waylandSupport (with pkgs; [
      wayland libxkbcommon wayland-protocols wayland.dev libxkbcommon.dev
+     mesa # for libgbm
   ])));
 
   patches = [ ]
-    # Wine requires `MTLDevice.registryID` for `winemac.drv`, but that property is not available
-    # in the 10.12 SDK (current SDK on x86_64-darwin). Work around that by using selector syntax.
-    ++ lib.optional stdenv.isDarwin ./darwin-metal-compat.patch
+    ++ lib.optionals stdenv.isDarwin [
+      # Wine requires `MTLDevice.registryID` for `winemac.drv`, but that property is not available
+      # in the 10.12 SDK (current SDK on x86_64-darwin). Work around that by using selector syntax.
+      ./darwin-metal-compat.patch
+      # Wine requires `qos.h`, which is not included by default on the 10.12 SDK in nixpkgs.
+      ./darwin-qos.patch
+    ]
     ++ patches';
 
   configureFlags = prevConfigFlags
     ++ lib.optionals supportFlags.waylandSupport [ "--with-wayland" ]
     ++ lib.optionals supportFlags.vulkanSupport [ "--with-vulkan" ]
-    ++ lib.optionals supportFlags.vkd3dSupport [ "--with-vkd3d" ]
     ++ lib.optionals (stdenv.isDarwin && !supportFlags.xineramaSupport) [ "--without-x" ];
 
   # Wine locates a lot of libraries dynamically through dlopen().  Add
@@ -185,6 +180,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
 
   passthru = {
     inherit pkgArches;
+    inherit (src) updateScript;
     tests = { inherit (nixosTests) wine; };
   };
   meta = {

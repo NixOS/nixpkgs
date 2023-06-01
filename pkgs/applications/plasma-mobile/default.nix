@@ -28,9 +28,6 @@ See also `pkgs/applications/kde` as this is what this is based on.
 }:
 
 let
-  minQtVersion = "5.15";
-  broken = lib.versionOlder libsForQt5.qtbase.version minQtVersion;
-
   mirror = "mirror://kde";
   srcs = import ./srcs.nix { inherit fetchurl mirror; };
 
@@ -51,33 +48,18 @@ let
           meta // {
             homepage = meta.homepage or "https://www.plasma-mobile.org/";
             platforms = meta.platforms or lib.platforms.linux;
-            broken = meta.broken or broken;
           };
       });
 
-  packages = self: with self;
+  packages = self:
     let
       callPackage = self.newScope {
         inherit mkDerivation;
       };
     in {
-      alligator = callPackage ./alligator.nix {};
-      angelfish = callPackage ./angelfish.nix { inherit srcs; };
-      audiotube = callPackage ./audiotube.nix {};
-      calindori = callPackage ./calindori.nix {};
-      kalk = callPackage ./kalk.nix {};
-      kasts = callPackage ./kasts.nix {};
-      kclock = callPackage ./kclock.nix {};
-      keysmith = callPackage ./keysmith.nix {};
-      koko = callPackage ./koko.nix {};
-      krecorder = callPackage ./krecorder.nix {};
-      ktrip = callPackage ./ktrip.nix {};
-      kweather = callPackage ./kweather.nix {};
-      neochat = callPackage ./neochat.nix {};
       plasma-dialer = callPackage ./plasma-dialer.nix {};
       plasma-phonebook = callPackage ./plasma-phonebook.nix {};
       plasma-settings = callPackage ./plasma-settings.nix {};
-      plasmatube = callPackage ./plasmatube.nix {};
       spacebar = callPackage ./spacebar.nix {};
     };
 

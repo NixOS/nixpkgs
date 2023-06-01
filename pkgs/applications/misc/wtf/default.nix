@@ -8,16 +8,17 @@
 
 buildGoModule rec {
   pname = "wtf";
-  version = "0.41.0";
+  version = "0.43.0";
 
   src = fetchFromGitHub {
     owner = "wtfutil";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Y8Vdh6sMMX8pS4zIuOfcejfsOB5z5mXEpRskJXQgU1Y=";
+    sha256 = "sha256-DFrA4bx+wSOxmt1CVA1oNiYVmcWeW6wpfR5F1tnhyDY=";
   };
 
-  vendorSha256 = "sha256-UE7BYal8ycU7mM1TLJMhoNxQKZjtsO9rJ+YXmLiOSk0=";
+  vendorHash = "sha256-9uuLidieBMoKz/FLcBnp9wenyveOIzB0IvRBRasulZk=";
+  proxyVendor = true;
 
   doCheck = false;
 
@@ -40,6 +41,5 @@ buildGoModule rec {
     maintainers = with maintainers; [ kalbasit ];
     mainProgram = "wtfutil";
     platforms = platforms.linux ++ platforms.darwin;
-    broken = stdenv.isDarwin;
   };
 }

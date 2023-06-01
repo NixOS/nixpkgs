@@ -136,7 +136,7 @@ while (( "${#norm[@]}" )); do
                 norm=("${norm[@]:1}")
             else
                 echo "ld-wrapper: Internal Error: Invalid normalized argument" >&2
-                exit -1
+                exit 255
             fi
             ;;
     esac

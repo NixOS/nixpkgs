@@ -1,122 +1,190 @@
-{ stdenv
-, lib
-, fetchpatch
-, pkg-config
-, cmake
-, bluez
-, ffmpeg
-, libao
-, gtk2
-, glib
-, libGLU
-, libGL
-, gettext
-, libpthreadstubs
-, libXrandr
-, libXext
-, readline
-, openal
-, libXdmcp
-, portaudio
+{ lib
+, stdenv
 , fetchFromGitHub
-, libusb1
-, libevdev
-, wxGTK30
-, soundtouch
-, miniupnpc
-, mbedtls
+, cmake
+, pkg-config
+, wrapQtAppsHook
+, alsa-lib
+, bluez
+, bzip2
+, cubeb
 , curl
-, lzo
+, enet
+, ffmpeg
+, fmt_8
+, hidapi
+, libevdev
+, libGL
+, libiconv
+, libpulseaudio
+, libspng
+, libusb1
+, libXdmcp
+, libXext
+, libXrandr
+, mbedtls_2
+, mgba
+, miniupnpc
+, minizip-ng
+, openal
+, pugixml
+, qtbase
 , sfml
-, libpulseaudio ? null
+, soundtouch
+, udev
+, vulkan-loader
+, xxHash
+, xz
+
+  # Used in passthru
+, common-updater-scripts
+, dolphin-emu
+, jq
+, testers
+, writeShellScript
+
+  # Darwin-only dependencies
+, CoreBluetooth
+, ForceFeedback
+, IOBluetooth
+, IOKit
+, moltenvk
+, OpenGL
+, VideoToolbox
 }:
 
 stdenv.mkDerivation rec {
   pname = "dolphin-emu";
-  version = "5.0";
+  version = "5.0-19368";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = version;
-    sha256 = "07mlfnh0hwvk6xarcg315x7z2j0qbg9g7cm040df9c8psiahc3g6";
+    rev = "dadbeb4bae7e7fa23af2b46e0add4143094dc107";
+    sha256 = "sha256-XLtFn2liONPizvrKyySZx0mY7qC2fpwhAWaRZLlEzh8=";
+    fetchSubmodules = true;
   };
 
-  patches = [
-    # Fix build with soundtouch 2.1.2
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/dolphin-emu/raw/a1b91fdf94981e12c8889a02cba0ec2267d0f303/f/dolphin-emu-5.0-soundtouch-exception-fix.patch";
-      name = "dolphin-emu-5.0-soundtouch-exception-fix.patch";
-      sha256 = "0yd3l46nja5qiknnl30ryad98f3v8911jwnr67hn61dzx2kwbbaw";
-    })
-    # Fix build with gcc 8
-    (fetchpatch {
-      url = "https://salsa.debian.org/games-team/dolphin-emu/raw/9b7b4aeac1b60dcf28bdcafbed6bc498b2aeb0ad/debian/patches/03_gcc8.patch";
-      name = "03_gcc8.patch";
-      sha256 = "1da95gb8c95kd5cjhdvg19cv2z863lj3va5gx3bqc7g8r36glqxr";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace Source/Core/VideoBackends/OGL/RasterFont.cpp \
-      --replace " CHAR_WIDTH " " CHARWIDTH "
-  '';
-
-  cmakeFlags = [
-    "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
-    "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"
-    "-DGTK2_INCLUDE_DIRS=${gtk2.dev}/include/gtk-2.0"
-    "-DENABLE_LTO=True"
-  ];
-
   nativeBuildInputs = [
-    pkg-config
     cmake
+    pkg-config
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    bluez
-    ffmpeg
-    libao
-    libGLU
-    libGL
-    gtk2
-    glib
-    gettext
-    libpthreadstubs
-    libXrandr
-    libXext
-    readline
-    openal
-    libevdev
-    libXdmcp
-    portaudio
-    libpulseaudio
-    libevdev
-    libXdmcp
-    portaudio
-    libusb1
-    libpulseaudio
-    wxGTK30
-    soundtouch
-    miniupnpc
-    mbedtls
+    bzip2
+    cubeb
     curl
-    lzo
+    enet
+    ffmpeg
+    fmt_8
+    hidapi
+    libGL
+    libiconv
+    libpulseaudio
+    libspng
+    libusb1
+    libXdmcp
+    mbedtls_2
+    miniupnpc
+    minizip-ng
+    openal
+    pugixml
+    qtbase
     sfml
+    soundtouch
+    xxHash
+    xz
+  ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib
+    bluez
+    libevdev
+    libXext
+    libXrandr
+    # FIXME: Remove comment on next mgba version
+    #mgba # Derivation doesn't support Darwin
+    udev
+    vulkan-loader
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreBluetooth
+    ForceFeedback
+    IOBluetooth
+    IOKit
+    moltenvk
+    OpenGL
+    VideoToolbox
   ];
+
+  cmakeFlags = [
+    "-DDISTRIBUTOR=NixOS"
+    "-DUSE_SHARED_ENET=ON"
+    "-DDOLPHIN_WC_REVISION=${src.rev}"
+    "-DDOLPHIN_WC_DESCRIBE=${version}"
+    "-DDOLPHIN_WC_BRANCH=master"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-DOSX_USE_DEFAULT_SEARCH_PATH=True"
+    "-DUSE_BUNDLED_MOLTENVK=OFF"
+    # Bundles the application folder into a standalone executable, so we cannot devendor libraries
+    "-DSKIP_POSTPROCESS_BUNDLE=ON"
+    # Needs xcode so compilation fails with it enabled. We would want the version to be fixed anyways.
+    # Note: The updater isn't available on linux, so we don't need to disable it there.
+    "-DENABLE_AUTOUPDATE=OFF"
+  ];
+
+  qtWrapperArgs = lib.optionals stdenv.isLinux [
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}"
+    # https://bugs.dolphin-emu.org/issues/11807
+    # The .desktop file should already set this, but Dolphin may be launched in other ways
+    "--set QT_QPA_PLATFORM xcb"
+  ];
+
+  # Use nix-provided libraries instead of submodules
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace CMakeLists.txt \
+      --replace "if(NOT APPLE)" "if(true)" \
+      --replace "if(LIBUSB_FOUND AND NOT APPLE)" "if(LIBUSB_FOUND)"
+  '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     install -D $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Only gets installed automatically if the standalone executable is used
+    mkdir -p $out/Applications
+    cp -r ./Binaries/Dolphin.app $out/Applications
+    ln -s $out/Applications/Dolphin.app/Contents/MacOS/Dolphin $out/bin
   '';
 
+  passthru = {
+    tests.version = testers.testVersion {
+      package = dolphin-emu;
+      command = "dolphin-emu-nogui --version";
+    };
+
+    updateScript = writeShellScript "dolphin-update-script" ''
+      set -eou pipefail
+      export PATH=${lib.makeBinPath [ curl jq common-updater-scripts ]}
+
+      json="$(curl -s https://dolphin-emu.org/update/latest/beta)"
+      version="$(jq -r '.shortrev' <<< "$json")"
+      rev="$(jq -r '.hash' <<< "$json")"
+      update-source-version dolphin-emu "$version" --rev="$rev"
+    '';
+  };
+
   meta = with lib; {
-    homepage = "https://dolphin-emu.org/";
+    homepage = "https://dolphin-emu.org";
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
+    mainProgram = if stdenv.hostPlatform.isDarwin then "Dolphin" else "dolphin-emu";
+    branch = "master";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ MP2E ashkitten ];
-    # x86_32 is an unsupported platform.
-    # Enable generic build if you really want a JIT-less binary.
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+      MP2E
+      ashkitten
+      xfix
+      ivar
+    ];
+    # Requires both LLVM and SDK bump
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

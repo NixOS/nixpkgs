@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pytest-runner ];
-  checkInputs = [ pytest requests-mock ];
+  nativeCheckInputs = [ pytest requests-mock ];
   propagatedBuildInputs = [ requests beautifulsoup4 ];
 
   checkPhase = ''

@@ -63,7 +63,7 @@ let
 
 in stdenv.mkDerivation rec {
 
-  pname = "vim_configurable";
+  pname = "vim-full";
 
   inherit (common) version postPatch hardeningDisable enableParallelBuilding meta;
 
@@ -109,7 +109,7 @@ in stdenv.mkDerivation rec {
   ++ lib.optionals luaSupport [
     "--with-lua-prefix=${lua}"
     "--enable-luainterp"
-  ] ++ lib.optional lua.pkgs.isLuaJIT [
+  ] ++ lib.optionals lua.pkgs.isLuaJIT [
     "--with-luajit"
   ]
   ++ lib.optionals pythonSupport [
@@ -159,6 +159,9 @@ in stdenv.mkDerivation rec {
     ++ lib.optional pythonSupport python3
     ++ lib.optional tclSupport tcl
     ++ lib.optional rubySupport ruby;
+
+  # error: '__declspec' attributes are not enabled; use '-fdeclspec' or '-fms-extensions' to enable support for __declspec attributes
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-fdeclspec";
 
   preConfigure = "" + lib.optionalString ftNixSupport ''
       cp ${vimPlugins.vim-nix.src}/ftplugin/nix.vim runtime/ftplugin/nix.vim

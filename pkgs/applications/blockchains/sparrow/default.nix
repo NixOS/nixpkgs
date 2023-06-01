@@ -5,7 +5,7 @@
 , makeDesktopItem
 , copyDesktopItems
 , autoPatchelfHook
-, openjdk17
+, openjdk
 , gtk3
 , gsettings-desktop-schemas
 , writeScript
@@ -16,15 +16,16 @@
 , openimajgrabber
 , hwi
 , imagemagick
+, gzip
 }:
 
 let
   pname = "sparrow";
-  version = "1.6.5";
+  version = "1.7.6";
 
   src = fetchurl {
-    url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0zk33w664fky3ir6cqm6walc80fjhg9s0hnrllrc2hrxrqnrn88p";
+    url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-x86_64.tar.gz";
+    sha256 = "01ksl790i8swvj8nvl2r27bbd8kad80shsbw3di39925841dp8z3";
   };
 
   launcher = writeScript "sparrow" ''
@@ -60,7 +61,7 @@ let
       -m com.sparrowwallet.sparrow
     )
 
-    XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS ${openjdk17}/bin/java ''${params[@]} $@
+    XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS ${openjdk}/bin/java ''${params[@]} $@
   '';
 
   torWrapper = writeScript "tor-wrapper" ''
@@ -71,14 +72,14 @@ let
 
   jdk-modules = stdenv.mkDerivation {
     name = "jdk-modules";
-    nativeBuildInputs = [ openjdk17 ];
+    nativeBuildInputs = [ openjdk ];
     dontUnpack = true;
 
     buildPhase = ''
       # Extract the JDK's JIMAGE and generate a list of modules.
       mkdir modules
       pushd modules
-      jimage extract ${openjdk17}/lib/openjdk/lib/modules
+      jimage extract ${openjdk}/lib/openjdk/lib/modules
       ls | xargs -d " " -- echo > ../manifest.txt
       popd
     '';
@@ -93,7 +94,7 @@ let
   sparrow-modules = stdenv.mkDerivation {
     pname = "sparrow-modules";
     inherit version src;
-    nativeBuildInputs = [ makeWrapper gnugrep openjdk17 autoPatchelfHook stdenv.cc.cc.lib zlib ];
+    nativeBuildInputs = [ makeWrapper gzip gnugrep openjdk autoPatchelfHook stdenv.cc.cc.lib zlib ];
 
     buildPhase = ''
       # Extract Sparrow's JIMAGE and generate a list of them.
@@ -143,9 +144,9 @@ let
 
       # Replace the embedded Tor binary (which is in a Tar archive)
       # with one from Nixpkgs.
-      cp ${torWrapper} ./tor
-      tar -cJf tor.tar.xz tor
-      cp tor.tar.xz modules/netlayer.jpms/native/linux/x64/tor.tar.xz
+      gzip -c ${torWrapper}  > tor.gz
+      cp tor.gz modules/kmp.tor.binary.linuxx64/kmptor/linux/x64/tor.gz
+      find modules
     '';
 
     installPhase = ''
@@ -156,27 +157,10 @@ let
       ln -s ${hwi}/bin/hwi $out/modules/com.sparrowwallet.sparrow/native/linux/x64/hwi
     '';
   };
-
-  # To use the udev rules for connected hardware wallets,
-  # add "pkgs.sparrow" to "services.udev.packages" and add user accounts to the user group "plugdev".
-  udev-rules = stdenv.mkDerivation {
-    name = "sparrow-udev";
-
-    src = let version = "2.0.2"; in
-      fetchurl {
-        url = "https://github.com/bitcoin-core/HWI/releases/download/${version}/hwi-${version}.tar.gz";
-        sha256 = "sha256-di1fRsMbwpHcBFNTCVivfxpwhUoUKLA3YTnJxKq/jHM=";
-      };
-
-    installPhase = ''
-      mkdir -p $out/etc/udev/rules.d
-      cp -a hwilib/udev/* $out/etc/udev/rules.d
-      rm $out/etc/udev/rules.d/README.md
-    '';
-  };
 in
 stdenv.mkDerivation rec {
-  inherit pname version src;
+  inherit version src;
+  pname = "sparrow-unwrapped";
   nativeBuildInputs = [ makeWrapper copyDesktopItems ];
 
   desktopItems = [
@@ -186,7 +170,9 @@ stdenv.mkDerivation rec {
       icon = pname;
       desktopName = "Sparrow Bitcoin Wallet";
       genericName = "Bitcoin Wallet";
-      categories = [ "Finance" ];
+      categories = [ "Finance" "Network" ];
+      mimeTypes = [ "application/psbt" "application/bitcoin-transaction" "x-scheme-handler/bitcoin" "x-scheme-handler/auth47" "x-scheme-handler/lightning" ];
+      startupWMClass = "Sparrow";
     })
   ];
 
@@ -216,11 +202,13 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/icons
     ln -s ${sparrow-icons}/hicolor $out/share/icons
 
-    mkdir -p $out/etc/udev
-    ln -s ${udev-rules}/etc/udev/rules.d $out/etc/udev/rules.d
+    mkdir -p $out/etc/udev/rules.d
+    cp ${hwi}/lib/python*/site-packages/hwilib/udev/*.rules $out/etc/udev/rules.d
 
     runHook postInstall
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "A modern desktop Bitcoin wallet application supporting most hardware wallets and built on common standards such as PSBT, with an emphasis on transparency and usability.";

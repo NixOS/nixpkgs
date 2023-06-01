@@ -5,21 +5,20 @@
 , glib
 , gobject-introspection
 , pkg-config
-, go
 }:
 
 buildGoModule rec {
   pname = "gotktrix";
-  version = "0.1.4";
+  version = "unstable-2023-04-05";
 
   src = fetchFromGitHub {
     owner = "diamondburned";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-ZaE7L43fA9L5WbTAsBiIxlwYgjl1hMrtfrraAROz+7k=";
+    rev = "a8f876a383cc34dac18edddbe22be2dd494b8d0c"; # compound
+    hash = "sha256-BuiA9UajdMhSrEfaXdu5DZlVhC4GVUdUpQDLMvKGrEk=";
   };
 
-  vendorSha256 = "sha256-k6T44aH1NogyrbUnflfEHkp0zpOOH1YFly/X2kwbMzs=";
+  vendorHash = "sha256-oo/j6i7slXILqyvj/EHojsyCZzJMGd10PTZaLvI1xoc=";
 
   buildInputs = [
     gtk4
@@ -32,8 +31,12 @@ buildGoModule rec {
   # Checking requires a working display
   doCheck = false;
 
-  postInstall = ''
+  postPatch = ''
+    sed -i '/DBusActivatable/d' .nix/com.github.diamondburned.gotktrix.desktop
     echo 'X-Purism-FormFactor=Workstation;Mobile;' >> .nix/com.github.diamondburned.gotktrix.desktop
+  '';
+
+  postInstall = ''
     install -Dm444 .nix/com.github.diamondburned.gotktrix.desktop -t $out/share/applications/
     install -Dm444 .github/logo-256.png -T $out/share/icons/hicolor/256x256/apps/gotktrix.png
   '';

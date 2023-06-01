@@ -1,16 +1,18 @@
-{ lib, stdenv, fetchhg
+{ lib, stdenv, fetchFromSourcehut
 , meson, pkg-config, ninja
 , wayland, obs-studio, libX11
 }:
 
 stdenv.mkDerivation {
   pname = "wlrobs";
-  version = "unstable-2021-05-13";
+  version = "unstable-2022-10-06";
 
-  src = fetchhg {
-    url = "https://hg.sr.ht/~scoopta/wlrobs";
-    rev = "4184a4a8ea7dc054c993efa16007f3a75b2c6f51";
-    sha256 = "146xirzd3nw1sd216y406v1riky9k08b6a0j4kwxrif5zyqa3adc";
+  src = fetchFromSourcehut {
+    vc = "hg";
+    owner = "~scoopta";
+    repo = "wlrobs";
+    rev = "78be323b25e1365f5c8f9dcba6938063ca10f71f";
+    sha256 = "sha256-/VemJkk695BdSDsODmYIPdhPwggzIhBi/0m6P+AYfx0=";
   };
 
   nativeBuildInputs = [ meson pkg-config ninja ];

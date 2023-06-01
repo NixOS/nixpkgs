@@ -40,10 +40,10 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   maintainers = lib.teams.pantheon.members;
 
-  mutter = pkgs.gnome.mutter338;
+  mutter = pkgs.gnome.mutter43;
 
-  # Using 3.38 to match Mutter used in Pantheon
-  gnome-settings-daemon = pkgs.gnome.gnome-settings-daemon338;
+  # Using 43 to match Mutter used in Pantheon
+  gnome-settings-daemon = pkgs.gnome.gnome-settings-daemon43;
 
   elementary-gsettings-schemas = callPackage ./desktop/elementary-gsettings-schemas { };
 
@@ -66,6 +66,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   elementary-files = callPackage ./apps/elementary-files { };
 
   elementary-feedback = callPackage ./apps/elementary-feedback { };
+
+  elementary-iconbrowser = callPackage ./apps/elementary-iconbrowser { };
 
   elementary-mail = callPackage ./apps/elementary-mail { };
 

@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/cbarrete/tree-sitter-ledger",
-  "rev": "47b8971448ce5e9abac865f450c1b14fb3b6eee9",
-  "date": "2022-07-09T09:40:08-04:00",
-  "path": "/nix/store/qzp0n5gcw7hakcv3ahxf1nrqrk8j2l3w-tree-sitter-ledger",
-  "sha256": "0j5fsgmmvc8z0ihsifc38qbvx8xdwd25bxq2a0k6kb8mbbmzk30f",
+  "rev": "8a841fb20ce683bfbb3469e6ba67f2851cfdf94a",
+  "date": "2023-05-07T23:13:39-04:00",
+  "path": "/nix/store/hdf6hzhb4h9p28hx26iqqz0cwf471aq8-tree-sitter-ledger",
+  "sha256": "12mfn42nhn0i8gf39aqbqfkccqc1mbn5z1vw5gh98pc9392jccq4",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

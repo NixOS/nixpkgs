@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "blockdiag";
     repo = "blockdiag";
     rev = version;
-    sha256 = "sha256-j8FoNUIJJOaahaol1MRPyY2jcPCEIlaAD4bmM2QKFFI=";
+    hash = "sha256-j8FoNUIJJOaahaol1MRPyY2jcPCEIlaAD4bmM2QKFFI=";
   };
 
   propagatedBuildInputs = [
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     docutils
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ephem
     nose
     pytestCheckHook

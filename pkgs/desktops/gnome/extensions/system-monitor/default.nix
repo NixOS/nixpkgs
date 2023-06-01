@@ -1,14 +1,14 @@
-{ lib, stdenv, substituteAll, fetchFromGitHub, glib, glib-networking, libgtop, gnome }:
+{ lib, stdenv, substituteAll, fetchFromGitHub, fetchpatch, glib, glib-networking, libgtop, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-system-monitor";
-  version = "unstable-2022-02-04";
+  version = "unstable-2023-01-21";
 
   src = fetchFromGitHub {
     owner = "paradoxxxzero";
     repo = "gnome-shell-system-monitor-applet";
-    rev = "2c6eb0a447bfc9f1a07c61956c92a55c874baf16";
-    hash = "sha256-JuRRlvqlqneqUdgezKGl2yg7wFYGCCo51q9CBwrxTBY=";
+    rev = "21d7b4e7a03ec8145b0b90c4f0b15c27d6f53788";
+    hash = "sha256-XDqWxTyaFEWPdXMTklcNQxqql73ESXAIF6TjMFHaj7g=";
   };
 
   nativeBuildInputs = [
@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
+    # GNOME 44 compatibility
+    (fetchpatch {
+      url = "https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet/pull/788/commits/e69349942791140807c01d472dfe5e0ddf5c73c0.patch";
+      hash = "sha256-g5Ocpvp7eO/pBkDBZsxgXH7e8rdPBUUxDSwK2hJHKbY=";
+    })
     (substituteAll {
       src = ./paths_and_nonexisting_dirs.patch;
       clutter_path = gnome.mutter.libdir; # only needed for GNOME < 40.

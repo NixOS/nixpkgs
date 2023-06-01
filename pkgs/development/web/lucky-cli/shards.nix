@@ -1,8 +1,8 @@
 {
   ameba = {
     url = "https://github.com/crystal-ameba/ameba.git";
-    rev = "v1.0.0";
-    sha256 = "01cgapdpk8dg7sdgnq6ql42g3kv5z2fmsc90z07d9zvjp9vs2idp";
+    rev = "v1.1.0";
+    sha256 = "0famv413myrshgv6y24mr84ny53rcsr777x323jlaf2isnhdd0b8";
   };
   lucky_task = {
     url = "https://github.com/luckyframework/lucky_task.git";
@@ -11,8 +11,8 @@
   };
   nox = {
     url = "https://github.com/matthewmcgarvey/nox.git";
-    rev = "v0.2.0";
-    sha256 = "041wh7nbi8jxg314p5s4080ll9ywc48knpxmrzwj5h4rgmk7g231";
+    rev = "v0.2.2";
+    sha256 = "1dfq0aknrxwp9wc0glri4w5j8pfbc6b1xrsxkahci109p6dhcna5";
   };
   teeplate = {
     url = "https://github.com/luckyframework/teeplate.git";

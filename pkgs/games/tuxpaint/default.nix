@@ -4,12 +4,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.27";
+  version = "0.9.28";
   pname = "tuxpaint";
 
   src = fetchurl {
-    url = "mirror://sourceforge/tuxpaint/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-qyuA6J34gijNDsCmyQtJ1UPLFXqjj7kMvTop8AFAVXo=";
+    url = "mirror://sourceforge/tuxpaint/${version}/${pname}-${version}-sdl1.tar.gz";
+    sha256 = "sha256-b4Ru9GqyGf2jMmM24szGXO2vbSxCwvPmA6tgEUWhhos=";
   };
 
   nativeBuildInputs = [
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
 
   # stamps
   stamps = fetchurl {
-    url = "mirror://sourceforge/project/tuxpaint/tuxpaint-stamps/2021-11-25/tuxpaint-stamps-2021.11.25.tar.gz";
-    sha256 = "sha256-y1XuIbLSW0QO4has+rC7jZBq8cma28d+jbEe7DBYnVI=";
+    url = "mirror://sourceforge/project/tuxpaint/tuxpaint-stamps/2022-06-04/tuxpaint-stamps-2022.06.04.tar.gz";
+    sha256 = "sha256-hCBlV2+uVUNY4A5R1xpJJhamSQsStZIigGdHfCh6C/g=";
   };
 
   postInstall = ''

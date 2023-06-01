@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libglibutil";
-  version = "1.0.67";
+  version = "1.0.69";
 
   src = fetchFromGitHub {
     owner = "sailfishos";
     repo = pname;
     rev = version;
-    sha256 = "sha256-SXyMmkyC1RZLIYhrG2TDcH/PDCHfrJOVZOX1PC3EDLg=";
+    sha256 = "sha256-+4aAujSmdrcRMnTd6wHHbyQBfC1LRskZ+8MA2d3hDnI=";
   };
 
   outputs = [ "out" "dev" ];
@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
   ];
+
+  postPatch = ''
+    # Fix pkg-config name for cross-compilation
+    substituteInPlace Makefile --replace "pkg-config" "$PKG_CONFIG"
+  '';
 
   makeFlags = [
     "LIBDIR=$(out)/lib"

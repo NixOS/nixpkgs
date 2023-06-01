@@ -10,6 +10,7 @@
 , pydocstyle
 , pyflakes
 , vulture
+, setuptools
 , isort
 , pylint
 , pytestCheckHook
@@ -43,13 +44,14 @@ let pylama = buildPythonPackage rec {
     pycodestyle
     pydocstyle
     pyflakes
+    setuptools
     vulture
   ];
 
   # escape infinite recursion pylint -> isort -> pylama
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pylint
     pytestCheckHook
   ];

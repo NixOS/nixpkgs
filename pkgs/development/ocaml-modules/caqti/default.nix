@@ -1,19 +1,18 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml
+{ lib, fetchurl, buildDunePackage, ocaml
 , cppo, logs, ptime, uri, bigstringaf
-, re, cmdliner, alcotest }:
+, re, cmdliner, alcotest
+}:
 
 buildDunePackage rec {
   pname = "caqti";
-  version = "1.8.0";
-  useDune2 = true;
+  version = "1.9.1";
 
-  minimumOCamlVersion = "4.04";
+  minimalOCamlVersion = "4.04";
+  duneVersion = "3";
 
-  src = fetchFromGitHub {
-    owner = "paurkedal";
-    repo = "ocaml-${pname}";
-    rev = "v${version}";
-    sha256 = "sha256-8uKlrq9j1Z3QzkCyoRIn2j6wCdGyo7BY7XlbFHN1xVE=";
+  src = fetchurl {
+    url = "https://github.com/paurkedal/ocaml-caqti/releases/download/v${version}/caqti-v${version}.tbz";
+    sha256 = "sha256-PQBgJBNx3IcE6/vyNIf26a2xStU22LBhff8eM6UPaJ4=";
   };
 
   nativeBuildInputs = [ cppo ];

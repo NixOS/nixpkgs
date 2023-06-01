@@ -1,26 +1,35 @@
-{ stdenv, lib, substituteAll, makeWrapper, fetchgit, ocaml, mupdf, libX11, jbig2dec, openjpeg, libjpeg , lcms2, harfbuzz,
+{ stdenv, lib, substituteAll, makeWrapper, fetchFromGitHub, fetchpatch, ocaml, pkg-config, mupdf, libX11, jbig2dec, openjpeg, libjpeg , lcms2, harfbuzz,
 libGLU, libGL, gumbo, freetype, zlib, xclip, inotify-tools, procps }:
 
 assert lib.versionAtLeast (lib.getVersion ocaml) "4.07";
 
 stdenv.mkDerivation rec {
   pname = "llpp";
-  version = "33";
+  version = "41";
 
-  src = fetchgit {
-    url = "git://repo.or.cz/llpp.git";
+  src = fetchFromGitHub {
+    owner = "criticic";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0shqzhaflm2yhkx6c0csq9lxp1s1r7lh5kgpx9q5k06xya2a7yvs";
-    fetchSubmodules = false;
+    hash = "sha256-Doj0zLYI1pi7eK01+29xFLYPtc8+fWzj10292+PmToE=";
   };
 
-  patches = (substituteAll {
-    inherit version;
-    src = ./fix-build-bash.patch;
-  });
+  patches = [
+    (fetchpatch {
+      name = "system-makedeps.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/system-makedeps.patch?h=llpp&id=0d2913056aaf3dbf7431e57b7b08b55568ba076c";
+      hash = "sha256-t9PLXsM8+exCeYqJBe0LSDK0D2rpktmozS8qNcEAcHo=";
+    })
+  ];
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ ocaml mupdf libX11 libGLU libGL freetype zlib gumbo jbig2dec openjpeg libjpeg lcms2 harfbuzz ];
+  postPatch = ''
+    sed -i "2d;s/ver=.*/ver=${version}/" build.bash
+  '';
+
+  strictDeps = true;
+
+  nativeBuildInputs = [ makeWrapper ocaml pkg-config ];
+  buildInputs = [ mupdf libX11 libGLU libGL freetype zlib gumbo jbig2dec openjpeg libjpeg lcms2 harfbuzz ];
 
   dontStrip = true;
 

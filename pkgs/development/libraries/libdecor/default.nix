@@ -7,26 +7,30 @@
 , wayland
 , wayland-protocols
 , wayland-scanner
-, egl-wayland
 , cairo
 , dbus
 , pango
-, libxkbcommon
 }:
 
 stdenv.mkDerivation rec {
   pname = "libdecor";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "jadahl";
+    domain = "gitlab.freedesktop.org";
+    owner = "libdecor";
     repo = "libdecor";
     rev = "${version}";
-    sha256 = "0qdg3r7k086wzszr969s0ljlqdvfqm31zpl8p5h397bw076zr6p2";
+    hash = "sha256-8b6qCqOSDDbhYwAeAaUyI71tSopTkGtCJaxZaJw1vQQ=";
   };
 
+  outputs = [ "out" "dev" ];
+
   strictDeps = true;
+
+  mesonFlags = [
+    (lib.mesonBool "demo" false)
+  ];
 
   nativeBuildInputs = [
     meson
@@ -38,15 +42,13 @@ stdenv.mkDerivation rec {
   buildInputs = [
     wayland
     wayland-protocols
-    egl-wayland
     cairo
     dbus
     pango
-    libxkbcommon
   ];
 
   meta = with lib; {
-    homepage = "https://gitlab.gnome.org/jadahl/libdecor";
+    homepage = "https://gitlab.freedesktop.org/libdecor/libdecor";
     description = "Client-side decorations library for Wayland clients";
     license = licenses.mit;
     platforms = platforms.linux;

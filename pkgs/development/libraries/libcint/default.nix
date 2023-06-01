@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libcint";
-  version = "4.4.6";
+  version = "5.2.1";
 
   src = fetchFromGitHub {
     owner = "sunqm";
     repo = "libcint";
     rev = "v${version}";
-    sha256 = "sha256-eWUuORMZs6Bl/zFGYZkpgNAgJPIei+k0cQoWl+v+zxo=";
+    hash = "sha256-sFdigOlS5fAi2dV4dhcPg3roqFdvpnh580WDqTA6DGg=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   doCheck = true;
-  checkInputs = [ python3.pkgs.numpy ];
+  nativeCheckInputs = [ python3.pkgs.numpy ];
 
   meta = with lib; {
     description = "General GTO integrals for quantum chemistry";

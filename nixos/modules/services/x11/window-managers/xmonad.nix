@@ -46,7 +46,7 @@ in {
       haskellPackages = mkOption {
         default = pkgs.haskellPackages;
         defaultText = literalExpression "pkgs.haskellPackages";
-        example = literalExpression "pkgs.haskell.packages.ghc8107";
+        example = literalExpression "pkgs.haskell.packages.ghc810";
         type = types.attrs;
         description = lib.mdDoc ''
           haskellPackages used to build Xmonad and other packages.

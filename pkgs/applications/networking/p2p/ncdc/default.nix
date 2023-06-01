@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ncdc";
-  version = "1.23";
+  version = "1.23.1";
 
   src = fetchurl {
     url = "https://dev.yorhel.nl/download/ncdc-${version}.tar.gz";
-    hash = "sha256-gEq65B/MqWnof2UEg65+OiN0Gdq70yCJfiX+iFHwoss=";
+    hash = "sha256-lYgSFAd6Wzwk+7rwIK2g0ITuO1lqfDzB4OaKqsTJteY=";
   };
 
   nativeBuildInputs = [ perl pkg-config ];

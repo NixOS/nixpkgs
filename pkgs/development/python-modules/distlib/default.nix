@@ -1,14 +1,38 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, setuptools
+}:
 
 buildPythonPackage rec {
   pname = "distlib";
-  version = "0.3.4";
+  version = "0.3.6";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e4b58818180336dc9c529bfb9a0b58728ffc09ad92027a3f30b7cd91e3458579";
-    extension = "zip";
+    hash = "sha256-FLrS2bBNOjYSesl/MLEqGSaPIRBj2PjuT0cQiJbhG0Y=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  postFixup = lib.optionalString (!stdenv.targetPlatform.isWindows) ''
+    find $out -name '*.exe' -delete
+  '';
+
+  pythonImportsCheck = [
+    "distlib"
+    "distlib.database"
+    "distlib.locators"
+    "distlib.index"
+    "distlib.markers"
+    "distlib.metadata"
+    "distlib.util"
+    "distlib.resources"
+  ];
 
   # Tests use pypi.org.
   doCheck = false;
@@ -20,4 +44,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ lnl7 ];
   };
 }
-

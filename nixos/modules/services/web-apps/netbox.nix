@@ -4,49 +4,24 @@ with lib;
 
 let
   cfg = config.services.netbox;
+  pythonFmt = pkgs.formats.pythonVars {};
   staticDir = cfg.dataDir + "/static";
-  configFile = pkgs.writeTextFile {
-    name = "configuration.py";
-    text = ''
-      STATIC_ROOT = '${staticDir}'
-      ALLOWED_HOSTS = ['*']
-      DATABASE = {
-        'NAME': 'netbox',
-        'USER': 'netbox',
-        'HOST': '/run/postgresql',
-      }
 
-      # Redis database settings. Redis is used for caching and for queuing background tasks such as webhook events. A separate
-      # configuration exists for each. Full connection details are required in both sections, and it is strongly recommended
-      # to use two separate database IDs.
-      REDIS = {
-          'tasks': {
-              'URL': 'unix://${config.services.redis.servers.netbox.unixSocket}?db=0',
-              'SSL': False,
-          },
-          'caching': {
-              'URL': 'unix://${config.services.redis.servers.netbox.unixSocket}?db=1',
-              'SSL': False,
-          }
-      }
-
-      with open("${cfg.secretKeyFile}", "r") as file:
-          SECRET_KEY = file.readline()
-
-      ${optionalString cfg.enableLdap "REMOTE_AUTH_BACKEND = 'netbox.authentication.LDAPBackend'"}
-
-      ${cfg.extraConfig}
-    '';
+  settingsFile = pythonFmt.generate "netbox-settings.py" cfg.settings;
+  extraConfigFile = pkgs.writeTextFile {
+    name = "netbox-extraConfig.py";
+    text = cfg.extraConfig;
   };
-  pkg = (pkgs.netbox.overrideAttrs (old: {
+  configFile = pkgs.concatText "configuration.py" [ settingsFile extraConfigFile ];
+
+  pkg = (cfg.package.overrideAttrs (old: {
     installPhase = old.installPhase + ''
       ln -s ${configFile} $out/opt/netbox/netbox/netbox/configuration.py
     '' + optionalString cfg.enableLdap ''
-      ln -s ${ldapConfigPath} $out/opt/netbox/netbox/netbox/ldap_config.py
+      ln -s ${cfg.ldapConfigPath} $out/opt/netbox/netbox/netbox/ldap_config.py
     '';
   })).override {
-    plugins = ps: ((cfg.plugins ps)
-      ++ optional cfg.enableLdap [ ps.django-auth-ldap ]);
+    inherit (cfg) plugins;
   };
   netboxManageScript = with pkgs; (writeScriptBin "netbox-manage" ''
     #!${stdenv.shell}
@@ -67,11 +42,46 @@ in {
       '';
     };
 
+    settings = lib.mkOption {
+      description = lib.mdDoc ''
+        Configuration options to set in `configuration.py`.
+        See the [documentation](https://docs.netbox.dev/en/stable/configuration/) for more possible options.
+      '';
+
+      default = { };
+
+      type = lib.types.submodule {
+        freeformType = pythonFmt.type;
+
+        options = {
+          ALLOWED_HOSTS = lib.mkOption {
+            type = with lib.types; listOf str;
+            default = ["*"];
+            description = lib.mdDoc ''
+              A list of valid fully-qualified domain names (FQDNs) and/or IP
+              addresses that can be used to reach the NetBox service.
+            '';
+          };
+        };
+      };
+    };
+
     listenAddress = mkOption {
       type = types.str;
       default = "[::1]";
       description = lib.mdDoc ''
         Address the server will listen on.
+      '';
+    };
+
+    package = mkOption {
+      type = types.package;
+      default = if versionAtLeast config.system.stateVersion "23.05" then pkgs.netbox else pkgs.netbox_3_3;
+      defaultText = literalExpression ''
+        if versionAtLeast config.system.stateVersion "23.05" then pkgs.netbox else pkgs.netbox_3_3;
+      '';
+      description = lib.mdDoc ''
+        NetBox package to use.
       '';
     };
 
@@ -114,7 +124,7 @@ in {
       default = "";
       description = lib.mdDoc ''
         Additional lines of configuration appended to the `configuration.py`.
-        See the [documentation](https://netbox.readthedocs.io/en/stable/configuration/optional-settings/) for more possible options.
+        See the [documentation](https://docs.netbox.dev/en/stable/configuration/) for more possible options.
       '';
     };
 
@@ -132,13 +142,94 @@ in {
       type = types.path;
       default = "";
       description = lib.mdDoc ''
-        Path to the Configuration-File for LDAP-Authentification, will be loaded as `ldap_config.py`.
+        Path to the Configuration-File for LDAP-Authentication, will be loaded as `ldap_config.py`.
         See the [documentation](https://netbox.readthedocs.io/en/stable/installation/6-ldap/#configuration) for possible options.
+      '';
+      example = ''
+        import ldap
+        from django_auth_ldap.config import LDAPSearch, PosixGroupType
+
+        AUTH_LDAP_SERVER_URI = "ldaps://ldap.example.com/"
+
+        AUTH_LDAP_USER_SEARCH = LDAPSearch(
+            "ou=accounts,ou=posix,dc=example,dc=com",
+            ldap.SCOPE_SUBTREE,
+            "(uid=%(user)s)",
+        )
+
+        AUTH_LDAP_GROUP_SEARCH = LDAPSearch(
+            "ou=groups,ou=posix,dc=example,dc=com",
+            ldap.SCOPE_SUBTREE,
+            "(objectClass=posixGroup)",
+        )
+        AUTH_LDAP_GROUP_TYPE = PosixGroupType()
+
+        # Mirror LDAP group assignments.
+        AUTH_LDAP_MIRROR_GROUPS = True
+
+        # For more granular permissions, we can map LDAP groups to Django groups.
+        AUTH_LDAP_FIND_GROUP_PERMS = True
       '';
     };
   };
 
   config = mkIf cfg.enable {
+    services.netbox = {
+      plugins = mkIf cfg.enableLdap (ps: [ ps.django-auth-ldap ]);
+      settings = {
+        STATIC_ROOT = staticDir;
+        MEDIA_ROOT = "${cfg.dataDir}/media";
+        REPORTS_ROOT = "${cfg.dataDir}/reports";
+        SCRIPTS_ROOT = "${cfg.dataDir}/scripts";
+
+        DATABASE = {
+          NAME = "netbox";
+          USER = "netbox";
+          HOST = "/run/postgresql";
+        };
+
+        # Redis database settings. Redis is used for caching and for queuing
+        # background tasks such as webhook events. A separate configuration
+        # exists for each. Full connection details are required in both
+        # sections, and it is strongly recommended to use two separate database
+        # IDs.
+        REDIS = {
+            tasks = {
+                URL = "unix://${config.services.redis.servers.netbox.unixSocket}?db=0";
+                SSL = false;
+            };
+            caching =  {
+                URL = "unix://${config.services.redis.servers.netbox.unixSocket}?db=1";
+                SSL = false;
+            };
+        };
+
+        REMOTE_AUTH_BACKEND = lib.mkIf cfg.enableLdap "netbox.authentication.LDAPBackend";
+
+        LOGGING = lib.mkDefault {
+          version = 1;
+
+          formatters.precise.format = "[%(levelname)s@%(name)s] %(message)s";
+
+          handlers.console = {
+            class = "logging.StreamHandler";
+            formatter = "precise";
+          };
+
+          # log to console/systemd instead of file
+          root = {
+            level = "INFO";
+            handlers = [ "console" ];
+          };
+        };
+      };
+
+      extraConfig = ''
+        with open("${cfg.secretKeyFile}", "r") as file:
+            SECRET_KEY = file.readline()
+      '';
+    };
+
     services.redis.servers.netbox.enable = true;
 
     services.postgresql = {

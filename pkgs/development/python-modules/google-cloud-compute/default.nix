@@ -12,21 +12,23 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-compute";
-  version = "1.5.1";
+  version = "1.11.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1crkhcf56U6DAx9xVG2e9hCxQ04OjQq2QgLs434cCv0=";
+    hash = "sha256-0dBaSz7G+DC73Md5p0DpY6gNMkpP1u9Bp8JIoHz5ZIk=";
   };
 
   propagatedBuildInputs = [
     google-api-core
     proto-plus
     protobuf
-  ];
+  ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytest-asyncio
     pytestCheckHook
@@ -48,6 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "API Client library for Google Cloud Compute";
     homepage = "https://github.com/googleapis/python-compute";
+    changelog = "https://github.com/googleapis/python-compute/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ jpetrucciani ];
   };

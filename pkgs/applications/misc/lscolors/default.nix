@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lscolors";
-  version = "0.12.0";
+  version = "0.14.0";
 
   src = fetchCrate {
     inherit version pname;
-    sha256 = "sha256-1tLI+M2hpXWsiO/x27ncs8zn8dBDx18AgsSbN/YE2Ic=";
+    sha256 = "sha256-YVKs/1R//oKYBSSGnj6UMFo5zDp5O3QDDdkDKF4ICBk=";
   };
 
-  cargoSha256 = "sha256-4bFzFztaD9jV3GXpZwCowAhvszedM5ion5/h3D26EY8=";
+  cargoHash = "sha256-EJdjSFgvvwH5beW+aD1KT5G9bpW/8mdi+7c27KSkZjo=";
 
   # setid is not allowed in the sandbox
   checkFlags = [ "--skip=tests::style_for_setid" ];

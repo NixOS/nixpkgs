@@ -14,13 +14,13 @@ buildPythonPackage rec {
     owner = "cheind";
     repo = "py-minexr";
     rev = "v${version}";
-    sha256 = "sha256-Om67ttAHxu7C3IwPB+JHYi78E9qBi1E6layMVg4+S3M=";
+    hash = "sha256-Om67ttAHxu7C3IwPB+JHYi78E9qBi1E6layMVg4+S3M=";
   };
 
   propagatedBuildInputs = [ numpy ];
 
   pythonImportsCheck = [ "minexr" ];
-  checkInputs = [ pytestCheckHook pillow ];
+  nativeCheckInputs = [ pytestCheckHook pillow ];
 
   meta = with lib; {
     description = "Minimal, standalone OpenEXR reader for single-part, uncompressed scan line files.";

@@ -16,7 +16,7 @@ buildPythonPackage {
   disabled = isPy27;
   inherit (libgumath) src version meta;
 
-  checkInputs = [ numba ];
+  nativeCheckInputs = [ numba ];
   propagatedBuildInputs = [ ndtypes xnd ];
 
   postPatch = ''

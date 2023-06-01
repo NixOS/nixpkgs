@@ -1,26 +1,34 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
+, pytestCheckHook
 , pytz
-, unittest2
-, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "ciso8601";
-  version = "2.2.0";
+  version = "2.3.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "closeio";
     repo = "ciso8601";
-    rev = "v${version}";
-    sha256 = "sha256-TqB1tQDgCkXu+QuzP6yBEH/xHxhhD/kGR2S0I8Osc5E=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-qTpt91Wf3L6Jl7FU8sn9PvGMRd/cjhQ1mQvUaQeLFQU=";
   };
 
-  checkInputs = [
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
     pytz
-  ] ++ lib.optional (isPy27) [
-    unittest2
+  ];
+
+  pytestFlagsArray = [
+    "tests/tests.py"
   ];
 
   pythonImportsCheck = [ "ciso8601" ];

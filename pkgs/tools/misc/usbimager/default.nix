@@ -1,22 +1,22 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config
+{ lib, stdenv, fetchFromGitLab, pkg-config, wrapGAppsHook
 , withLibui ? true, gtk3
 , withUdisks ? stdenv.isLinux, udisks, glib
 , libX11 }:
 
 stdenv.mkDerivation rec {
   pname = "usbimager";
-  version = "1.0.8";
+  version = "1.0.9";
 
   src = fetchFromGitLab {
     owner = "bztsrc";
     repo = pname;
     rev = version;
-    sha256 = "1j0g1anmdwc3pap3m4kfzqjfkn7q0vpmqniii2kcz7svs5h3ybga";
+    sha256 = "sha256-CEGUXJXqXmD8uT93T9dg49Lf5vTpAzQjdnhYmbR5zTI=";
   };
 
   sourceRoot = "source/src/";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
   buildInputs = lib.optionals withUdisks [ udisks glib ]
     ++ lib.optional (!withLibui) libX11
     ++ lib.optional withLibui gtk3;
@@ -43,5 +43,7 @@ stdenv.mkDerivation rec {
     # windows and darwin could work, but untested
     # feel free add them if you have a machine to test
     platforms = with platforms; linux;
+    # never built on aarch64-linux since first introduction in nixpkgs
+    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }

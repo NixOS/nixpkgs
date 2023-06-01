@@ -53,12 +53,23 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  patches = [ ./fix-build-on-darwin.patch ];
+  patches = [
+    ./fix-build-on-darwin.patch
+    ./fix-cross-mingw-build.patch
+  ];
   patchFlags = [ "-p0" ];
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [
+  postPatch = lib.optionalString stdenv.hostPlatform.isMinGW ''
+    substituteInPlace CPP/7zip/7zip_gcc.mak C/7zip_gcc_c.mak \
+      --replace windres.exe ${stdenv.cc.targetPrefix}windres
+  '';
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
     "-Wno-deprecated-copy-dtor"
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
+    "-Wno-conversion"
+    "-Wno-unused-macros"
+  ]);
 
   inherit makefile;
 
@@ -73,7 +84,8 @@ stdenv.mkDerivation rec {
     # aarch64-darwin so we don't need additional changes for it
     ++ lib.optionals stdenv.isDarwin [ "MACOSX_DEPLOYMENT_TARGET=10.16" ]
     # it's the compression code with the restriction, see DOC/License.txt
-    ++ lib.optionals (!enableUnfree) [ "DISABLE_RAR_COMPRESS=true" ];
+    ++ lib.optionals (!enableUnfree) [ "DISABLE_RAR_COMPRESS=true" ]
+    ++ lib.optionals (stdenv.hostPlatform.isMinGW) [ "IS_MINGW=1" "MSYSTEM=1" ];
 
   nativeBuildInputs = lib.optionals useUasm [ uasm ];
 
@@ -84,7 +96,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm555 -t $out/bin b/*/7zz
+    install -Dm555 -t $out/bin b/*/7zz${stdenv.hostPlatform.extensions.executable}
     install -Dm444 -t $out/share/doc/${pname} ../../../../DOC/*.txt
 
     runHook postInstall
@@ -109,7 +121,7 @@ stdenv.mkDerivation rec {
       # the unRAR compression code is disabled by default
       lib.optionals enableUnfree [ unfree ];
     maintainers = with maintainers; [ anna328p peterhoeg jk ];
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
     mainProgram = "7zz";
   };
 }

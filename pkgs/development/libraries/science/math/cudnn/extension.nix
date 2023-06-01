@@ -1,116 +1,66 @@
+# Support matrix can be found at
+# https://docs.nvidia.com/deeplearning/cudnn/archives/cudnn-880/support-matrix/index.html
+# Type aliases
+# Release = {
+#   version: String,
+#   minCudaVersion: String,
+#   maxCudaVersion: String,
+#   url: String,
+#   hash: String,
+# }
 final: prev: let
-
   inherit (final) callPackage;
-  inherit (prev) cudatoolkit cudaVersion lib pkgs;
+  inherit (prev) cudaVersion;
+  inherit (prev.lib) attrsets lists versions;
+  inherit (prev.lib.strings) replaceStrings versionAtLeast versionOlder;
 
-  ### CuDNN
+  # Compute versioned attribute name to be used in this package set
+  # Patch version changes should not break the build, so we only use major and minor
+  # computeName :: String -> String
+  computeName = version: "cudnn_${replaceStrings ["."] ["_"] (versions.majorMinor version)}";
 
-  buildCuDnnPackage = args:
-    let
-      useCudatoolkitRunfile = lib.versionOlder cudaVersion "11.3.999";
-    in
-    callPackage ./generic.nix { inherit useCudatoolkitRunfile; } args;
+  # Check whether a CUDNN release supports our CUDA version
+  # Thankfully we're able to do lexicographic comparison on the version strings
+  # isSupported :: Release -> Bool
+  isSupported = release:
+    versionAtLeast cudaVersion release.minCudaVersion
+    && versionAtLeast release.maxCudaVersion cudaVersion;
 
-  toUnderscore = str: lib.replaceStrings ["."] ["_"] str;
+  # useCudatoolkitRunfile :: Bool
+  useCudatoolkitRunfile = versionOlder cudaVersion "11.3.999";
 
-  majorMinorPatch = str: lib.concatStringsSep "." (lib.take 3 (lib.splitVersion str));
+  # buildCuDnnPackage :: Release -> Derivation
+  buildCuDnnPackage = callPackage ./generic.nix {inherit useCudatoolkitRunfile;};
 
-  cuDnnPackages = with lib; let
-    # Check whether a file is supported for our cuda version
-    isSupported = fileData: elem cudaVersion fileData.supportedCudaVersions;
-    # Return the first file that is supported. In practice there should only ever be one anyway.
-    supportedFile = files: findFirst isSupported null files;
-    # Supported versions with versions as keys and file as value
-    supportedVersions = filterAttrs (version: file: file !=null ) (mapAttrs (version: files: supportedFile files) cuDnnVersions);
-    # Compute versioned attribute name to be used in this package set
-    computeName = version: "cudnn_${toUnderscore version}";
-    # Add all supported builds as attributes
-    allBuilds = mapAttrs' (version: file: nameValuePair (computeName version) (buildCuDnnPackage (removeAttrs file ["fileVersion"]))) supportedVersions;
-    # Set the default attributes, e.g. cudnn = cudnn_8_3_1;
-    defaultBuild = { "cudnn" = allBuilds.${computeName cuDnnDefaultVersion}; };
-  in allBuilds // defaultBuild;
+  # Reverse the list to have the latest release first
+  # cudnnReleases :: List Release
+  cudnnReleases = lists.reverseList (builtins.import ./releases.nix);
 
-  cuDnnVersions = let
-    urlPrefix = "https://developer.download.nvidia.com/compute/redist/cudnn";
-  in {
-    "7.4.2" = [
-      rec {
-        fileVersion = "10.0";
-        fullVersion = "7.4.2.24";
-        hash = "sha256-Lt/IagK1DRfojEeJVaMy5qHoF05+U6NFi06lH68C2qM=";
-        url = "${urlPrefix}/v${majorMinorPatch fullVersion}/cudnn-10.0-linux-x64-v${fullVersion}.tgz";
-        supportedCudaVersions = [ "10.0" ];
-      }
-    ];
-    "7.6.5" = [
-      rec {
-        fileVersion = "10.0";
-        fullVersion = "7.6.5.32";
-        hash = "sha256-KDVeOV8LK5OsLIO2E2CzW6bNA3fkTni+GXtrYbS0kro=";
-        url = "${urlPrefix}/v${majorMinorPatch fullVersion}/cudnn-${cudatoolkit.majorVersion}-linux-x64-v${fullVersion}.tgz";
-        supportedCudaVersions = [ "10.0" ];
-      }
-      rec {
-        fileVersion = "10.1";
-        fullVersion = "7.6.5.32";
-        hash = "sha256-fq7IA5osMKsLx1jTA1iHZ2k972v0myJIWiwAvy4TbLM=";
-        url = "${urlPrefix}/v${majorMinorPatch fullVersion}/cudnn-${cudatoolkit.majorVersion}-linux-x64-v${fullVersion}.tgz";
-        supportedCudaVersions = [ "10.1" ];
-      }
-      rec {
-        fileVersion = "10.2";
-        fullVersion = "7.6.5.32";
-        hash = "sha256-fq7IA5osMKsLx1jTA1iHZ2k972v0myJIWiwAvy4TbLN=";
-        url = "${urlPrefix}/v${majorMinorPatch fullVersion}/cudnn-${cudatoolkit.majorVersion}-linux-x64-v${fullVersion}.tgz";
-        supportedCudaVersions = [ "10.2" ];
-      }
-    ];
-    "8.1.1" = [
-      rec {
-        fileVersion = "10.2";
-        fullVersion = "8.1.1.33";
-        hash = "sha256-Kkp7mabpv6aQ6xm7QeSVU/KnpJGls6v8rpAOFmxbbr0=";
-        url = "${urlPrefix}/v${majorMinorPatch fullVersion}/cudnn-${fileVersion}-linux-x64-v${fullVersion}.tgz";
-        supportedCudaVersions = [ "10.2" ];
-      }
-      rec {
-        fileVersion = "11.2";
-        fullVersion = "8.1.1.33";
-        hash = "sha256-mKh4TpKGLyABjSDCgbMNSgzZUfk2lPZDPM9K6cUCumo=";
-        url = "${urlPrefix}/v${majorMinorPatch fullVersion}/cudnn-${fileVersion}-linux-x64-v${fullVersion}.tgz";
-        supportedCudaVersions = [ "11.2" ];
-      }
-    ];
-    "8.3.2" = [
-      rec {
-        fileVersion = "10.2";
-        fullVersion = "8.3.2.44";
-        hash = "sha256-1vVu+cqM+PketzIQumw9ykm6REbBZhv6/lXB7EC2aaw=";
-        url = "${urlPrefix}/v${majorMinorPatch fullVersion}/local_installers/${fileVersion}/cudnn-linux-x86_64-${fullVersion}_cuda${fileVersion}-archive.tar.xz";
-        supportedCudaVersions = [ "10.2" ];
-      }
-      rec {
-        fileVersion = "11.5";
-        fullVersion = "8.3.2.44";
-        hash = "sha256-VQCVPAjF5dHd3P2iNPnvvdzb5DpTsm3AqCxyP6FwxFc=";
-        url = "${urlPrefix}/v${majorMinorPatch fullVersion}/local_installers/${fileVersion}/cudnn-linux-x86_64-${fullVersion}_cuda${fileVersion}-archive.tar.xz";
-        supportedCudaVersions = [ "11.0" "11.1" "11.2" "11.3" "11.4" "11.4" "11.5" "11.6" ];
-      }
-    ];
+  # Check whether a CUDNN release supports our CUDA version
+  # supportedReleases :: List Release
+  supportedReleases = builtins.filter isSupported cudnnReleases;
+
+  # Function to transform our releases into build attributes
+  # toBuildAttrs :: Release -> { name: String, value: Derivation }
+  toBuildAttrs = release: {
+    name = computeName release.version;
+    value = buildCuDnnPackage release;
   };
 
-  # Default attributes
-  cuDnnDefaultVersion = {
-    "10.0" = "7.4.2";
-    "10.1" = "7.6.5";
-    "10.2" = "8.3.2";
-    "11.0" = "8.3.2";
-    "11.1" = "8.3.2";
-    "11.2" = "8.3.2";
-    "11.3" = "8.3.2";
-    "11.4" = "8.3.2";
-    "11.5" = "8.3.2";
-    "11.6" = "8.3.2";
-  }.${cudaVersion};
+  # Add all supported builds as attributes
+  # allBuilds :: AttrSet String Derivation
+  allBuilds = builtins.listToAttrs (builtins.map toBuildAttrs supportedReleases);
 
-in cuDnnPackages
+  defaultBuild = attrsets.optionalAttrs (supportedReleases != []) {
+    cudnn = let
+      # The latest release is the first element of the list and will be our default choice
+      # latestReleaseName :: String
+      latestReleaseName = computeName (builtins.head supportedReleases).version;
+    in
+      allBuilds.${latestReleaseName};
+  };
+
+  # builds :: AttrSet String Derivation
+  builds = allBuilds // defaultBuild;
+in
+  builds

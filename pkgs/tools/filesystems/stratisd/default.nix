@@ -2,12 +2,17 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
+, cargo
+, rustc
 , pkg-config
 , asciidoc
+, ncurses
+, glibc
 , dbus
 , cryptsetup
 , util-linux
 , udev
+, lvm2
 , systemd
 , xfsprogs
 , thin-provisioning-tools
@@ -18,28 +23,26 @@
 , tpm2-tools
 , coreutils
 , clevisSupport ? false
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "stratisd";
-  version = "3.2.2";
+  version = "3.5.5";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-dNbbKGRLSYVnPdKfxlLIwXNEf7P6EvGbOp8sfpaw38g=";
+    hash = "sha256-d8vGwxvfNbN234rZJm4nmsDqvp8OVGEvazM6hI7BGvs=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    hash = "sha256-tJT0GKLpZtiQ/AZACkNeC3zgso54k/L03dFI0m1Jbls=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "loopdev-0.4.0" = "sha256-nV52zjsg5u6++J8CdN2phii8AwjHg1uap2lt+U8obDQ=";
+    };
   };
-
-  patches = [
-    # Allow overriding BINARIES_PATHS with environment variable at compile time
-    ./paths.patch
-  ];
 
   postPatch = ''
     substituteInPlace udev/61-stratisd.rules \
@@ -53,26 +56,31 @@ stdenv.mkDerivation rec {
       --replace udevadm               "${udev}/bin/udevadm"
   '';
 
-  nativeBuildInputs = with rustPlatform; [
-    cargoSetupHook
-    bindgenHook
-    rust.cargo
-    rust.rustc
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    rustPlatform.bindgenHook
+    cargo
+    rustc
     pkg-config
     asciidoc
+    ncurses # tput
   ];
 
   buildInputs = [
+    glibc
+    glibc.static
     dbus
     cryptsetup
     util-linux
     udev
+    lvm2
   ];
 
-  BINARIES_PATHS = lib.makeBinPath ([
+  outputs = ["out" "initrd"];
+
+  EXECUTABLES_PATHS = lib.makeBinPath ([
     xfsprogs
     thin-provisioning-tools
-    udev
   ] ++ lib.optionals clevisSupport [
     clevis
     jose
@@ -83,17 +91,27 @@ stdenv.mkDerivation rec {
     coreutils
   ]);
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
-  buildFlags = [ "release" "release-min" "docs/stratisd.8" ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" "INSTALL=install" ];
+  buildFlags = [ "build-all" ];
 
   doCheck = true;
   checkTarget = "test";
 
   # remove files for supporting dracut
   postInstall = ''
+    mkdir -p "$initrd/bin"
+    cp "dracut/90stratis/stratis-rootfs-setup" "$initrd/bin"
+    mkdir -p "$initrd/lib/systemd/system"
+    substitute "dracut/90stratis/stratisd-min.service" "$initrd/lib/systemd/system/stratisd-min.service" \
+      --replace /usr "$out" \
+      --replace mkdir "${coreutils}/bin/mkdir"
+    mkdir -p "$initrd/lib/udev/rules.d"
+    cp udev/61-stratisd.rules "$initrd/lib/udev/rules.d"
     rm -r "$out/lib/dracut"
     rm -r "$out/lib/systemd/system-generators"
   '';
+
+  passthru.tests = nixosTests.stratis;
 
   meta = with lib; {
     description = "Easy to use local storage management for Linux";

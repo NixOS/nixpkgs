@@ -1,14 +1,15 @@
 { mkDerivation, fetchurl, makeWrapper, lib, php }:
+
 let
   pname = "phpstan";
-  version = "1.8.3";
+  version = "1.10.15";
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-    sha256 = "sha256-hKpwTpeEYKDvkkmwU7olW+a1pWiQTPDlN7Wy1IDk4UY=";
+    sha256 = "sha256-zGrAgQttAvGdRpuOB3V/GprMzc2NMya4d3MY1SIfYOQ=";
   };
 
   dontUnpack = true;
@@ -25,6 +26,7 @@ mkDerivation {
   '';
 
   meta = with lib; {
+    changelog = "https://github.com/phpstan/phpstan/releases/tag/${version}";
     description = "PHP Static Analysis Tool";
     longDescription = ''
       PHPStan focuses on finding errors in your code without actually

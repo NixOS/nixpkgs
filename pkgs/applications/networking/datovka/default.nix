@@ -2,30 +2,31 @@
 , mkDerivation
 , fetchurl
 , libxml2
-, libisds
+, libdatovka
 , qmake
 , qtbase
+, qtwebsockets
 , qtsvg
 , pkg-config
 }:
 
 mkDerivation rec {
   pname = "datovka";
-  version = "4.15.6";
+  version = "4.22.1";
 
   src = fetchurl {
-    url = "https://secure.nic.cz/files/datove_schranky/${version}/${pname}-${version}.tar.xz";
-    sha256 = "1qs1yd9qqsf56jm9w6sffkqb2l8s3i9qgi2q8vd59ss19ym6yky2";
+    url = "https://gitlab.nic.cz/datovka/datovka/-/archive/v${version}/datovka-v${version}.tar.gz";
+    sha256 = "sha256-R18dBsfrMBcBB3EraC0tIJABwZBROFqi/fhm62IDa2g=";
   };
 
-  buildInputs = [ libisds qmake qtbase qtsvg libxml2 ];
+  buildInputs = [ libdatovka qmake qtbase qtsvg libxml2 qtwebsockets ];
 
   nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {
     description = "Client application for operating Czech government-provided Databox infomation system";
     homepage = "https://www.datovka.cz/";
-    license = licenses.lgpl3;
+    license = licenses.gpl3Plus;
     maintainers = [ maintainers.mmahut ];
     platforms = platforms.linux;
   };

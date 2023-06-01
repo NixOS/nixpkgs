@@ -18,7 +18,7 @@ in
             };
             tub.port = mkOption {
               default = 3458;
-              type = types.int;
+              type = types.port;
               description = lib.mdDoc ''
                 The port on which the introducer will listen.
               '';
@@ -58,7 +58,7 @@ in
             };
             tub.port = mkOption {
               default = 3457;
-              type = types.int;
+              type = types.port;
               description = lib.mdDoc ''
                 The port on which the tub will listen.
 
@@ -80,7 +80,7 @@ in
             };
             web.port = mkOption {
               default = 3456;
-              type = types.int;
+              type = types.port;
               description = lib.mdDoc ''
                 The port on which the Web server will listen.
 

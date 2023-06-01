@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=../../../../.. -i bash -p nodePackages.node2nix
+#!nix-shell -I nixpkgs=../../../../.. -i bash -p nodePackages.node2nix wget
 
 # TODO: merge with other node packages in nixpkgs/pkgs/development/node-packages once
 # * support for npm projects in sub-directories is added to node2nix:
@@ -15,16 +15,15 @@ if [ "$#" -ne 1 ] || [[ "$1" == -* ]]; then
 fi
 
 wget https://github.com/pacien/ldgallery/raw/$1/viewer/package.json
-wget https://github.com/pacien/ldgallery/raw/$1/viewer/package-lock.json
 
 # Development dependencies are required for this Vue application to build
 node2nix \
   --node-env ../../../../development/node-packages/node-env.nix \
   --development \
   --input ./package.json \
-  --lock ./package-lock.json \
   --output node-packages.nix \
   --composition node-composition.nix \
+  --nodejs-14 \
   --no-copy-node-env
 
-rm package.json package-lock.json
+rm package.json

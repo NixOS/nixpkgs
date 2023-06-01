@@ -1,4 +1,5 @@
 { stdenv
+, fetchpatch
 , bashInteractive
 , diffPlugins
 , glibcLocales
@@ -6,6 +7,7 @@
 , gst_all_1
 , lib
 , python3Packages
+, sphinxHook
 , runtimeShell
 , writeScript
 
@@ -50,11 +52,15 @@ python3Packages.buildPythonApplication rec {
   patches = [
     # Bash completion fix for Nix
     ./patches/bash-completion-always-print.patch
+    (fetchpatch {
+      # Fix unidecode>=1.3.5 compat
+      url = "https://github.com/beetbox/beets/commit/5ae1e0f3c8d3a450cb39f7933aa49bb78c2bc0d9.patch";
+      hash = "sha256-gqkrE+U1j3tt1qPRJufTGS/GftaSw/gweXunO/mCVG8=";
+    })
   ];
 
   propagatedBuildInputs = with python3Packages; [
     confuse
-    gobject-introspection
     gst-python
     jellyfish
     mediafile
@@ -67,9 +73,9 @@ python3Packages.buildPythonApplication rec {
     unidecode
   ] ++ (concatMap (p: p.propagatedBuildInputs) (attrValues enabledPlugins));
 
-  # see: https://github.com/NixOS/nixpkgs/issues/56943#issuecomment-1131643663
   nativeBuildInputs = [
     gobject-introspection
+    sphinxHook
   ];
 
   buildInputs = [
@@ -78,6 +84,9 @@ python3Packages.buildPythonApplication rec {
     gst-plugins-good
     gst-plugins-ugly
   ]);
+
+  outputs = [ "out" "doc" "man" ];
+  sphinxBuilders = [ "html" "man" ];
 
   postInstall = ''
     mkdir -p $out/share/zsh/site-functions
@@ -108,7 +117,7 @@ python3Packages.buildPythonApplication rec {
     "--prefix PATH : ${lib.makeBinPath pluginWrapperBins}"
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytest
     mock
     rarfile

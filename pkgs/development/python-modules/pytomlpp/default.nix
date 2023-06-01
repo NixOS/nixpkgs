@@ -13,19 +13,19 @@
 
 buildPythonPackage rec {
   pname = "pytomlpp";
-  version = "1.0.6";
+  version = "1.0.13";
 
   src = fetchFromGitHub {
     owner = "bobfang1992";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-QyjIJCSgiSKjqMBvCbOlWYx6rBbKIoDvXez2YnYaPUo=";
+    hash = "sha256-QJeXvj1M3Vq5ctmx7RhczONsPRXAecv3WhJgKWtNK+M=";
   };
 
   buildInputs = [ pybind11 ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
 
     python-dateutil

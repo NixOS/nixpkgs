@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
@@ -17,15 +18,16 @@
 
 buildPythonPackage rec {
   pname = "pygmt";
-  version = "0.7.0";
+  version = "0.9.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "GenericMappingTools";
     repo = "pygmt";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-Z38fZvmeWDLZEIyH+UG6Nb6KNnjEuXIn3RRH4CPWz9A=";
+    hash = "sha256-XDIAFIU+chewMDEoQDYqSYvK1tT9afh44w3Yd7ILZIc=";
   };
 
   postPatch = ''
@@ -33,20 +35,41 @@ buildPythonPackage rec {
       --replace "env.get(\"GMT_LIBRARY_PATH\", \"\")" "env.get(\"GMT_LIBRARY_PATH\", \"${gmt}/lib\")"
   '';
 
-  nativeBuildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ numpy netcdf4 pandas packaging xarray ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  doCheck = false; # the *entire* test suite requires network access
-  checkInputs = [ pytestCheckHook pytest-mpl ghostscript ipython ];
+  propagatedBuildInputs = [
+    numpy
+    netcdf4
+    pandas
+    packaging
+    xarray
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-mpl
+    ghostscript
+    ipython
+  ];
+
+  # The *entire* test suite requires network access
+  doCheck = false;
+
   postBuild = ''
     export HOME=$TMP
   '';
-  pythonImportsCheck = [ "pygmt" ];
+
+  pythonImportsCheck = [
+    "pygmt"
+  ];
 
   meta = with lib; {
     description = "A Python interface for the Generic Mapping Tools";
     homepage = "https://github.com/GenericMappingTools/pygmt";
     license = licenses.bsd3;
+    changelog = "https://github.com/GenericMappingTools/pygmt/releases/tag/v${version}";
     # pygmt.exceptions.GMTCLibNotFoundError: Error loading the GMT shared library '/nix/store/r3xnnqgl89vrnq0kzxx0bmjwzks45mz8-gmt-6.1.1/lib/libgmt.dylib'
     broken = stdenv.isDarwin;
     maintainers = with maintainers; [ sikmir ];

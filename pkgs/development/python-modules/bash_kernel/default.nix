@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "bash_kernel";
-  version = "0.7.2";
+  version = "0.9.0";
   format = "flit";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0w0nbr3iqqsgpk83rgd0f5b02462bkyj2n0h6i9dwyc1vpnq9350";
+    sha256 = "sha256-BCPwUS72+DplThQ5o2lxiJmjjyeUj+IbZlst8dvzp8c=";
   };
 
   patches = [
@@ -43,13 +43,14 @@ buildPythonPackage rec {
   '';
 
   postInstall = ''
-    ${python.interpreter} -m bash_kernel.install --prefix $out
+    ${python.pythonForBuild.interpreter} -m bash_kernel.install --prefix $out
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Bash Kernel for Jupyter";
     homepage = "https://github.com/takluyver/bash_kernel";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ zimbatm ];
+    changelog = "https://github.com/takluyver/bash_kernel/releases/tag/${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ zimbatm ];
   };
 }

@@ -40,7 +40,7 @@ let
       ++ lib.optionals pythonBindings [ python3 py3c ]
       ++ lib.optional perlBindings perl
       ++ lib.optional saslSupport sasl
-      ++ lib.optional stdenv.hostPlatform.isDarwin [ CoreServices Security ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices Security ];
 
     patches = [ ./apr-1.patch ] ++ extraPatches;
 
@@ -61,6 +61,8 @@ let
       (lib.withFeatureAs httpSupport "serf" serf)
       "--with-zlib=${zlib.dev}"
       "--with-sqlite=${sqlite.dev}"
+      "--with-apr=${apr.dev}"
+      "--with-apr-util=${aprutil.dev}"
     ] ++ lib.optionals javahlBindings [
       "--enable-javahl"
       "--with-jdk=${jdk}"
@@ -100,8 +102,12 @@ let
     inherit perlBindings pythonBindings;
 
     enableParallelBuilding = true;
+    # Missing install dependencies:
+    # libtool:   error: error: relink 'libsvn_ra_serf-1.la' with the above command before installing it
+    # make: *** [build-outputs.mk:1316: install-serf-lib] Error 1
+    enableParallelInstalling = false;
 
-    checkInputs = [ python3 ];
+    nativeCheckInputs = [ python3 ];
     doCheck = false; # fails 10 out of ~2300 tests
 
     meta = with lib; {

@@ -7,7 +7,6 @@
 stdenv.mkDerivation rec {
   pname = "pv";
   version = "1.6.20";
-  name = "pv-1.6.20";
 
   src = fetchurl {
     url = "https://www.ivarch.com/programs/sources/pv-${version}.tar.bz2";

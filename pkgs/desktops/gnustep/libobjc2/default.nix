@@ -2,13 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libobjc2";
-  version = "1.9";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "gnustep";
     repo = "libobjc2";
     rev = "v${version}";
-    sha256 = "00pscl3ly3rv6alf9vk70kxnnxq2rfgpc1ylcv6cgjs9jxdnrqmn";
+    hash = "sha256-iDOVEDnTAfg9r3/kdHp7hzX2oIjO1ovaqgrlIV7V68M=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ];

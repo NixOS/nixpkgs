@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.avahi;
 
-  yesNo = yes : if yes then "yes" else "no";
+  yesNo = yes: if yes then "yes" else "no";
 
   avahiDaemonConf = with cfg; pkgs.writeText "avahi-daemon.conf" ''
     [server]
@@ -17,7 +17,8 @@ let
     browse-domains=${concatStringsSep ", " browseDomains}
     use-ipv4=${yesNo ipv4}
     use-ipv6=${yesNo ipv6}
-    ${optionalString (interfaces!=null) "allow-interfaces=${concatStringsSep "," interfaces}"}
+    ${optionalString (allowInterfaces!=null) "allow-interfaces=${concatStringsSep "," allowInterfaces}"}
+    ${optionalString (denyInterfaces!=null) "deny-interfaces=${concatStringsSep "," denyInterfaces}"}
     ${optionalString (domainName!=null) "domain-name=${domainName}"}
     allow-point-to-point=${yesNo allowPointToPoint}
     ${optionalString (cacheEntriesMax!=null) "cache-entries-max=${toString cacheEntriesMax}"}
@@ -39,6 +40,10 @@ let
   '';
 in
 {
+  imports = [
+    (lib.mkRenamedOptionModule [ "services" "avahi" "interfaces" ] [ "services" "avahi" "allowInterfaces" ])
+  ];
+
   options.services.avahi = {
     enable = mkOption {
       type = types.bool;
@@ -47,7 +52,7 @@ in
         Whether to run the Avahi daemon, which allows Avahi clients
         to use Avahi's service discovery facilities and also allows
         the local machine to advertise its presence and services
-        (through the mDNS responder implemented by `avahi-daemon').
+        (through the mDNS responder implemented by `avahi-daemon`).
       '';
     };
 
@@ -91,7 +96,7 @@ in
       description = lib.mdDoc "Whether to use IPv6.";
     };
 
-    interfaces = mkOption {
+    allowInterfaces = mkOption {
       type = types.nullOr (types.listOf types.str);
       default = null;
       description = lib.mdDoc ''
@@ -101,18 +106,30 @@ in
       '';
     };
 
+    denyInterfaces = mkOption {
+      type = types.nullOr (types.listOf types.str);
+      default = null;
+      description = lib.mdDoc ''
+        List of network interfaces that should be ignored by the
+        {command}`avahi-daemon`. Other unspecified interfaces will be used,
+        unless {option}`allowInterfaces` is set. This option takes precedence
+        over {option}`allowInterfaces`.
+      '';
+    };
+
     openFirewall = mkOption {
       type = types.bool;
       default = true;
       description = lib.mdDoc ''
         Whether to open the firewall for UDP port 5353.
+        Disabling this setting also disables discovering of network devices.
       '';
     };
 
     allowPointToPoint = mkOption {
       type = types.bool;
       default = false;
-      description= lib.mdDoc ''
+      description = lib.mdDoc ''
         Whether to use POINTTOPOINT interfaces. Might make mDNS unreliable due to usually large
         latencies with such links and opens a potential security hole by allowing mDNS access from Internet
         connections.
@@ -133,7 +150,7 @@ in
 
     extraServiceFiles = mkOption {
       type = with types; attrsOf (either str path);
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           ssh = "''${pkgs.avahi}/etc/avahi/services/ssh.service";
@@ -204,7 +221,7 @@ in
       default = false;
       description = lib.mdDoc ''
         Whether to enable the mDNS NSS (Name Service Switch) plug-in.
-        Enabling it allows applications to resolve names in the `.local'
+        Enabling it allows applications to resolve names in the `.local`
         domain by transparently querying the Avahi daemon.
       '';
     };
@@ -235,7 +252,7 @@ in
       isSystemUser = true;
     };
 
-    users.groups.avahi = {};
+    users.groups.avahi = { };
 
     system.nssModules = optional cfg.nssmdns pkgs.nssmdns;
     system.nssDatabases.hosts = optionals cfg.nssmdns (mkMerge [
@@ -245,10 +262,12 @@ in
 
     environment.systemPackages = [ pkgs.avahi ];
 
-    environment.etc = (mapAttrs' (n: v: nameValuePair
-      "avahi/services/${n}.service"
-      { ${if types.path.check v then "source" else "text"} = v; }
-    ) cfg.extraServiceFiles);
+    environment.etc = (mapAttrs'
+      (n: v: nameValuePair
+        "avahi/services/${n}.service"
+        { ${if types.path.check v then "source" else "text"} = v; }
+      )
+      cfg.extraServiceFiles);
 
     systemd.sockets.avahi-daemon = {
       description = "Avahi mDNS/DNS-SD Stack Activation Socket";
@@ -274,6 +293,7 @@ in
         BusName = "org.freedesktop.Avahi";
         Type = "dbus";
         ExecStart = "${pkgs.avahi}/sbin/avahi-daemon --syslog -f ${avahiDaemonConf}";
+        ConfigurationDirectory = "avahi/services";
       };
     };
 

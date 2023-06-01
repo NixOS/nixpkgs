@@ -1,16 +1,14 @@
 { lib, fetchFromGitHub, buildGoModule }:
 
-with lib;
-
 buildGoModule rec {
   pname = "butane";
-  version = "0.15.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "coreos";
     repo = "butane";
     rev = "v${version}";
-    sha256 = "sha256-Aa3IBLBJwSDaQ+BJakxBZB27yx0gelDoujWLaAaQ9VI=";
+    hash = "sha256-HkvDJVSGve6t1gEek8FvfIK20r5TOHRJ71KsGUj95fM=";
   };
 
   vendorSha256 = null;
@@ -27,7 +25,7 @@ buildGoModule rec {
     mv $out/bin/{internal,butane}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Translates human-readable Butane configs into machine-readable Ignition configs";
     license = licenses.asl20;
     homepage = "https://github.com/coreos/butane";

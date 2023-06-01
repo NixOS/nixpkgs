@@ -8,6 +8,8 @@ in
   options.services.vector = {
     enable = mkEnableOption (lib.mdDoc "Vector");
 
+    package = mkPackageOptionMD pkgs "vector" { };
+
     journaldAccess = mkOption {
       type = types.bool;
       default = false;
@@ -26,13 +28,9 @@ in
   };
 
   config = mkIf cfg.enable {
+    # for cli usage
+    environment.systemPackages = [ pkgs.vector ];
 
-    users.groups.vector = { };
-    users.users.vector = {
-      description = "Vector service user";
-      group = "vector";
-      isSystemUser = true;
-    };
     systemd.services.vector = {
       description = "Vector event and log aggregator";
       wantedBy = [ "multi-user.target" ];
@@ -44,16 +42,15 @@ in
           conf = format.generate "vector.toml" cfg.settings;
           validateConfig = file:
           pkgs.runCommand "validate-vector-conf" {
-            nativeBuildInputs = [ pkgs.buildPackages.vector ];
+            nativeBuildInputs = [ pkgs.vector ];
           } ''
               vector validate --no-environment "${file}"
               ln -s "${file}" "$out"
             '';
         in
         {
-          ExecStart = "${pkgs.vector}/bin/vector --config ${validateConfig conf}";
-          User = "vector";
-          Group = "vector";
+          ExecStart = "${getExe cfg.package} --config ${validateConfig conf}";
+          DynamicUser = true;
           Restart = "no";
           StateDirectory = "vector";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";

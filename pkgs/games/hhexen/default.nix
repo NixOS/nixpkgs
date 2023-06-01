@@ -15,8 +15,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Linux port of Raven Game's Hexen";
-    homepage = "http://hhexen.sourceforge.net/hhexen.html";
+    homepage = "https://hhexen.sourceforge.net/hhexen.html";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ djanatyn ];
+    mainProgram = "hhexen-gl";
   };
 }

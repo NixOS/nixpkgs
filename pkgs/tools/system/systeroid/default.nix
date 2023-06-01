@@ -7,13 +7,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "systeroid";
-  version = "0.2.2";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Xkpa5W+smNMrcWXylOy0fU1wI7jBF9Bw16pzI5IDFI4=";
+    sha256 = "sha256-1qZ0vryWFGoIC3gdgJv6HolqCV8fogAZnjGHYnbP8Es=";
   };
 
   postPatch = ''
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
       --replace '"/usr/share/doc/kernel-doc-*/Documentation/*",' '"${linux-doc}/share/doc/linux-doc/*",'
   '';
 
-  cargoSha256 = "sha256-A9yd/Z94B6beWyiiRl7rJQOj7YMNFHkjhtu5MHG8/XA=";
+  cargoHash = "sha256-aWkWufHZaAmebdDdrgrIbQrSSzj/RgymQ4hOkGtY2Zc=";
 
   buildInputs = [
     xorg.libxcb

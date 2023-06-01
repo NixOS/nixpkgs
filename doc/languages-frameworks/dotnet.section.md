@@ -11,7 +11,7 @@ with import <nixpkgs> {};
 mkShell {
   name = "dotnet-env";
   packages = [
-    dotnet-sdk_3
+    dotnet-sdk
   ];
 }
 ```
@@ -27,36 +27,57 @@ mkShell {
   name = "dotnet-env";
   packages = [
     (with dotnetCorePackages; combinePackages [
-      sdk_3_1
-      sdk_5_0
+      sdk_6_0
+      sdk_7_0
     ])
   ];
 }
 ```
 
-This will produce a dotnet installation that has the dotnet 3.1, 3.0, and 2.1 sdk. The first sdk listed will have it's cli utility present in the resulting environment. Example info output:
+This will produce a dotnet installation that has the dotnet 6.0 7.0 sdk. The first sdk listed will have it's cli utility present in the resulting environment. Example info output:
 
 ```ShellSession
 $ dotnet --info
-.NET Core SDK (reflecting any global.json):
- Version:   3.1.101
- Commit:    b377529961
+.NET SDK:
+ Version:   7.0.202
+ Commit:    6c74320bc3
 
-...
+Środowisko uruchomieniowe:
+ OS Name:     nixos
+ OS Version:  23.05
+ OS Platform: Linux
+ RID:         linux-x64
+ Base Path:   /nix/store/n2pm44xq20hz7ybsasgmd7p3yh31gnh4-dotnet-sdk-7.0.202/sdk/7.0.202/
 
-.NET Core SDKs installed:
-  2.1.803 [/nix/store/iiv98i2jdi226dgh4jzkkj2ww7f8jgpd-dotnet-core-combined/sdk]
-  3.0.102 [/nix/store/iiv98i2jdi226dgh4jzkkj2ww7f8jgpd-dotnet-core-combined/sdk]
-  3.1.101 [/nix/store/iiv98i2jdi226dgh4jzkkj2ww7f8jgpd-dotnet-core-combined/sdk]
+Host:
+  Version:      7.0.4
+  Architecture: x64
+  Commit:       0a396acafe
 
-.NET Core runtimes installed:
-  Microsoft.AspNetCore.All 2.1.15 [/nix/store/iiv98i2jdi226dgh4jzkkj2ww7f8jgpd-dotnet-core-combined/shared/Microsoft.AspNetCore.All]
-  Microsoft.AspNetCore.App 2.1.15 [/nix/store/iiv98i2jdi226dgh4jzkkj2ww7f8jgpd-dotnet-core-combined/shared/Microsoft.AspNetCore.App]
-  Microsoft.AspNetCore.App 3.0.2 [/nix/store/iiv98i2jdi226dgh4jzkkj2ww7f8jgpd-dotnet-core-combined/shared/Microsoft.AspNetCore.App]
-  Microsoft.AspNetCore.App 3.1.1 [/nix/store/iiv98i2jdi226dgh4jzkkj2ww7f8jgpd-dotnet-core-combined/shared/Microsoft.AspNetCore.App]
-  Microsoft.NETCore.App 2.1.15 [/nix/store/iiv98i2jdi226dgh4jzkkj2ww7f8jgpd-dotnet-core-combined/shared/Microsoft.NETCore.App]
-  Microsoft.NETCore.App 3.0.2 [/nix/store/iiv98i2jdi226dgh4jzkkj2ww7f8jgpd-dotnet-core-combined/shared/Microsoft.NETCore.App]
-  Microsoft.NETCore.App 3.1.1 [/nix/store/iiv98i2jdi226dgh4jzkkj2ww7f8jgpd-dotnet-core-combined/shared/Microsoft.NETCore.App]
+.NET SDKs installed:
+  6.0.407 [/nix/store/3b19303vwrhv0xxz1hg355c7f2hgxxgd-dotnet-core-combined/sdk]
+  7.0.202 [/nix/store/3b19303vwrhv0xxz1hg355c7f2hgxxgd-dotnet-core-combined/sdk]
+
+.NET runtimes installed:
+  Microsoft.AspNetCore.App 6.0.15 [/nix/store/3b19303vwrhv0xxz1hg355c7f2hgxxgd-dotnet-core-combined/shared/Microsoft.AspNetCore.App]
+  Microsoft.AspNetCore.App 7.0.4 [/nix/store/3b19303vwrhv0xxz1hg355c7f2hgxxgd-dotnet-core-combined/shared/Microsoft.AspNetCore.App]
+  Microsoft.NETCore.App 6.0.15 [/nix/store/3b19303vwrhv0xxz1hg355c7f2hgxxgd-dotnet-core-combined/shared/Microsoft.NETCore.App]
+  Microsoft.NETCore.App 7.0.4 [/nix/store/3b19303vwrhv0xxz1hg355c7f2hgxxgd-dotnet-core-combined/shared/Microsoft.NETCore.App]
+
+Other architectures found:
+  None
+
+Environment variables:
+  Not set
+
+global.json file:
+  Not found
+
+Learn more:
+  https://aka.ms/dotnet/info
+
+Download .NET:
+  https://aka.ms/dotnet/download
 ```
 
 ## dotnet-sdk vs dotnetCorePackages.sdk {#dotnet-sdk-vs-dotnetcorepackages.sdk}
@@ -71,7 +92,7 @@ The `dotnetCorePackages.sdk` contains both a runtime and the full sdk of a given
 
 To package Dotnet applications, you can use `buildDotnetModule`. This has similar arguments to `stdenv.mkDerivation`, with the following additions:
 
-* `projectFile` has to be used for specifying the dotnet project file relative to the source root. These usually have `.sln` or `.csproj` file extensions. This can be an array of multiple projects as well.
+* `projectFile` is used for specifying the dotnet project file, relative to the source root. These usually have `.sln` or `.csproj` file extensions. This can be a list of multiple projects as well. Most of the time dotnet can figure this location out by itself, so this should only be set if necessary.
 * `nugetDeps` takes either a path to a `deps.nix` file, or a derivation. The `deps.nix` file can be generated using the script attached to `passthru.fetch-deps`. This file can also be generated manually using `nuget-to-nix` tool, which is available in nixpkgs. If the argument is a derivation, it will be used directly and assume it has the same output as `mkNugetDeps`.
 * `packNupkg` is used to pack project as a `nupkg`, and installs it to `$out/share`. If set to `true`, the derivation can be used as a dependency for another dotnet project by adding it to `projectReferences`.
 * `projectReferences` can be used to resolve `ProjectReference` project items. Referenced projects can be packed with `buildDotnetModule` by setting the `packNupkg = true` attribute and passing a list of derivations to `projectReferences`. Since we are sharing referenced projects as NuGets they must be added to csproj/fsproj files as `PackageReference` as well.
@@ -88,7 +109,7 @@ To package Dotnet applications, you can use `buildDotnetModule`. This has simila
 * `runtimeDeps` is used to wrap libraries into `LD_LIBRARY_PATH`. This is how dotnet usually handles runtime dependencies.
 * `buildType` is used to change the type of build. Possible values are `Release`, `Debug`, etc. By default, this is set to `Release`.
 * `selfContainedBuild` allows to enable the [self-contained](https://docs.microsoft.com/en-us/dotnet/core/deploying/#publish-self-contained) build flag. By default, it is set to false and generated applications have a dependency on the selected dotnet runtime. If enabled, the dotnet runtime is bundled into the executable and the built app has no dependency on Dotnet.
-* `dotnet-sdk` is useful in cases where you need to change what dotnet SDK is being used.
+* `dotnet-sdk` is useful in cases where you need to change what dotnet SDK is being used. You can also set this to the result of `dotnetSdkPackages.combinePackages`, if the project uses multiple SDKs to build.
 * `dotnet-runtime` is useful in cases where you need to change what dotnet runtime is being used. This can be either a regular dotnet runtime, or an aspnetcore.
 * `dotnet-test-sdk` is useful in cases where unit tests expect a different dotnet SDK. By default, this is set to the `dotnet-sdk` attribute.
 * `testProjectFile` is useful in cases where the regular project file does not contain the unit tests. It gets restored and build, but not installed. You may need to regenerate your nuget lockfile after setting this.
@@ -100,7 +121,7 @@ To package Dotnet applications, you can use `buildDotnetModule`. This has simila
 * `dotnetPackFlags` can be used to pass flags to `dotnet pack`. Used only if `packNupkg` is set to `true`.
 * `dotnetFlags` can be used to pass flags to all of the above phases.
 
-When packaging a new application, you need to fetch it's dependencies. You can set `nugetDeps` to an empty string to make the derivation temporarily evaluate, and then run `nix-build -A package.passthru.fetch-deps` to generate it's dependency fetching script. After running the script, you should have the location of the generated lockfile printed to the console. This can be copied to a stable directory. Note that if either `projectFile` or `nugetDeps` are unset, this script cannot be generated!
+When packaging a new application, you need to fetch its dependencies. You can run `nix-build -A package.fetch-deps` to generate a script that will build a lockfile for you. After running the script you should have the location of the generated lockfile printed to the console, which can be copied to a stable directory. Then set `nugetDeps = ./deps.nix` and you're ready to build the derivation.
 
 Here is an example `default.nix`, using some of the previously discussed arguments:
 ```nix
@@ -119,9 +140,8 @@ in buildDotnetModule rec {
 
   projectReferences = [ referencedProject ]; # `referencedProject` must contain `nupkg` in the folder structure.
 
-  dotnet-sdk = dotnetCorePackages.sdk_3_1;
-  dotnet-runtime = dotnetCorePackages.net_5_0;
-  dotnetFlags = [ "--runtime linux-x64" ];
+  dotnet-sdk = dotnetCorePackages.sdk_6.0;
+  dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
   executables = [ "foo" ]; # This wraps "$out/lib/$pname/foo" to `$out/bin/foo`.
   executables = []; # Don't install any executables.

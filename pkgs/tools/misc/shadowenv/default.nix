@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "shadowenv";
-  version = "2.0.6";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = pname;
     rev = version;
-    sha256 = "sha256-OfrK5eQ2oJ7ZeUem4PZPE2tsjIObQ+aao6GrtrK8AqA=";
+    hash = "sha256-11Zce3eehyuDOl2zYl0sf/yh8SOOnu8W/CrL18e3zzw=";
   };
 
-  cargoSha256 = "sha256-gno44ZdLthcp5/+NP12d0C+x1jrmJHNkHSnyuHWl3Zk=";
+  cargoHash = "sha256-eo+/mZ6QFoXgIT1uT65TVR65xWBm/Cw5yBzvRUVgQUY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -23,6 +23,10 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --bash sh/completions/shadowenv.bash
     installShellCompletion --fish sh/completions/shadowenv.fish
     installShellCompletion --zsh sh/completions/_shadowenv
+  '';
+
+  preCheck = ''
+    HOME=$TMPDIR
   '';
 
   meta = with lib; {

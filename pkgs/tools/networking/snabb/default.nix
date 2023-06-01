@@ -1,51 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, bash, makeWrapper, git, mariadb, diffutils, which, coreutils, procps, nettools
-,supportOpenstack ? true
+{ lib
+, stdenv
+, fetchFromGitHub
 }:
-
-with lib;
 
 stdenv.mkDerivation rec {
   pname = "snabb";
-  version = "2019.11";
+  version = "2023.04";
 
   src = fetchFromGitHub {
     owner = "snabbco";
     repo = "snabb";
     rev = "v${version}";
-    sha256 = "1sas9d9kk92mc2wrwgmm0xxz7ycmh388dwvyxf1hy183yvin1nac";
+    sha256 = "sha256-6STKoDARQ6Ue/ckd3kdIH+ZKnQ4iozx4a070g2N+XMo=";
   };
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-truncation" ];
-
-  patchPhase = ''
-    patchShebangs .
-
-    # some hardcodeism
-    for f in $(find src/program/snabbnfv/ -type f); do
-      substituteInPlace $f --replace "/bin/bash" "${bash}/bin/bash"
-    done
-  '' + optionalString supportOpenstack ''
-    # We need a way to pass $PATH to the scripts
-    sed -i '2iexport PATH=${git}/bin:${mariadb}/bin:${which}/bin:${procps}/bin:${coreutils}/bin' src/program/snabbnfv/neutron_sync_master/neutron_sync_master.sh.inc
-    sed -i '2iexport PATH=${git}/bin:${coreutils}/bin:${diffutils}/bin:${nettools}/bin' src/program/snabbnfv/neutron_sync_agent/neutron_sync_agent.sh.inc
-  '';
-
-  preBuild = ''
-    make clean
-  '';
 
   installPhase = ''
     mkdir -p $out/bin
     cp src/snabb $out/bin
   '';
 
-  # Dependencies are underspecified: "make -C src obj/arch/sse2_c.o" fails with
-  # "Fatal error: can't create obj/arch/sse2_c.o: No such file or directory".
-  enableParallelBuilding = false;
-
-  meta =  {
+  meta = with lib; {
     homepage = "https://github.com/SnabbCo/snabbswitch";
     description = "Simple and fast packet networking toolkit";
     longDescription = ''

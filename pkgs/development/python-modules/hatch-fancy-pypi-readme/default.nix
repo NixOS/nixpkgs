@@ -5,11 +5,13 @@
 , pythonOlder
 , build
 , hatchling
+, tomli
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "hatch-fancy-pypi-readme";
-  version = "22.3.0";
+  version = "22.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "hatch_fancy_pypi_readme";
     inherit version;
-    hash = "sha256-fUZR+PB4JZMckoc8tRE3IUqTi623p1m4XB2Vv3T4bvo=";
+    hash = "sha256-2pEoLKCWAcGK3tjjeNr4tXjHAhSGbwlxFW7pu5zmwmo=";
   };
 
   nativeBuildInputs = [
@@ -26,9 +28,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     hatchling
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     build
     pytestCheckHook
   ];

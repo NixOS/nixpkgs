@@ -2,6 +2,7 @@
 , python3
 , fetchFromGitHub
 , fetchpatch
+, installShellFiles
 , libcdio-paranoia
 , cdrdao
 , libsndfile
@@ -35,6 +36,8 @@ in python3.pkgs.buildPythonApplication rec {
   ];
 
   nativeBuildInputs = with python3.pkgs; [
+    installShellFiles
+
     setuptools-scm
     docutils
     setuptoolsCheckHook
@@ -53,7 +56,7 @@ in python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [ libsndfile ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     twisted
   ] ++ bins;
 
@@ -65,12 +68,21 @@ in python3.pkgs.buildPythonApplication rec {
     export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
   '';
 
+  outputs = [ "out" "man" ];
+  postBuild = ''
+    make -C man
+  '';
+
   preCheck = ''
     # disable tests that require internet access
     # https://github.com/JoeLametta/whipper/issues/291
     substituteInPlace whipper/test/test_common_accurip.py \
       --replace "test_AccurateRipResponse" "dont_test_AccurateRipResponse"
     export HOME=$TMPDIR
+  '';
+
+  postInstall = ''
+    installManPage man/*.1
   '';
 
   passthru.tests.version = testers.testVersion {

@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg   = config.services.minetest-server;
-  flag  = val: name: if val != null then "--${name} ${toString val} " else "";
+  flag  = val: name: optionalString (val != null) "--${name} ${toString val} ";
   flags = [
     (flag cfg.gameId "gameid")
     (flag cfg.world "world")
@@ -62,7 +62,7 @@ in
           Path to logfile for logging.
 
           If set to null, logging will be output to stdout which means
-          all output will be catched by systemd.
+          all output will be caught by systemd.
         '';
       };
 

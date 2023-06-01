@@ -5,7 +5,6 @@
 , gperftools ? null, leveldb ? null
 }:
 
-with lib;
 let
   shouldUsePkg = pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
 
@@ -32,26 +31,26 @@ stdenv.mkDerivation rec {
   buildInputs = [ optLz4 optSnappy optZlib optBzip2 optDb optGperftools optLeveldb ];
 
   configureFlags = [
-    (withFeature   false                   "attach")
-    (withFeatureAs true                    "builtins" "")
-    (enableFeature (optBzip2 != null)      "bzip2")
-    (enableFeature false                   "diagnostic")
-    (enableFeature false                   "java")
-    (enableFeature (optLeveldb != null)    "leveldb")
-    (enableFeature false                   "python")
-    (enableFeature (optSnappy != null)     "snappy")
-    (enableFeature (optLz4 != null)        "lz4")
-    (enableFeature (optGperftools != null) "tcmalloc")
-    (enableFeature (optZlib != null)       "zlib")
-    (withFeatureAs (optDb != null)         "berkeleydb" optDb)
-    (withFeature   false                   "helium")
+    (lib.withFeature   false                   "attach")
+    (lib.withFeatureAs true                    "builtins" "")
+    (lib.enableFeature (optBzip2 != null)      "bzip2")
+    (lib.enableFeature false                   "diagnostic")
+    (lib.enableFeature false                   "java")
+    (lib.enableFeature (optLeveldb != null)    "leveldb")
+    (lib.enableFeature false                   "python")
+    (lib.enableFeature (optSnappy != null)     "snappy")
+    (lib.enableFeature (optLz4 != null)        "lz4")
+    (lib.enableFeature (optGperftools != null) "tcmalloc")
+    (lib.enableFeature (optZlib != null)       "zlib")
+    (lib.withFeatureAs (optDb != null)         "berkeleydb" optDb)
+    (lib.withFeature   false                   "helium")
   ];
 
   preConfigure = ''
     ./autogen.sh
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://wiredtiger.com/";
     description = "";
     license = licenses.gpl2;

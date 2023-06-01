@@ -13,7 +13,7 @@
 , wrapt
 , passlib
 , pydot
-, python-Levenshtein
+, levenshtein
 , html2text
 , weasyprint
 , gevent
@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "trytond";
-  version = "6.4.4";
+  version = "6.8.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-eTYm3anMKhgoaB8t5jald5XRD3PIVijJP4vmh0pA9lE=";
+    hash = "sha256-+G3ELH0KnBGA1YJk67ID7VedmCN0vrhGBN+WA8aEcNg=";
   };
 
   propagatedBuildInputs = [
@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
     # extra dependencies
     pydot
-    python-Levenshtein
+    levenshtein
     html2text
     weasyprint
     gevent
@@ -59,7 +59,7 @@ buildPythonPackage rec {
   ++ passlib.optional-dependencies.argon2
   ++ lib.optional withPostgresql psycopg2;
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

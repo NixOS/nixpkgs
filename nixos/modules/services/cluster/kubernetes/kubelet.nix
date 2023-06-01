@@ -62,6 +62,8 @@ in
     (mkRemovedOptionModule [ "services" "kubernetes" "kubelet" "applyManifests" ] "")
     (mkRemovedOptionModule [ "services" "kubernetes" "kubelet" "cadvisorPort" ] "")
     (mkRemovedOptionModule [ "services" "kubernetes" "kubelet" "allowPrivileged" ] "")
+    (mkRemovedOptionModule [ "services" "kubernetes" "kubelet" "networkPlugin" ] "")
+    (mkRemovedOptionModule [ "services" "kubernetes" "kubelet" "containerRuntime" ] "")
   ];
 
   ###### interface
@@ -133,19 +135,13 @@ in
       };
     };
 
-    containerRuntime = mkOption {
-      description = lib.mdDoc "Which container runtime type to use";
-      type = enum ["docker" "remote"];
-      default = "remote";
-    };
-
     containerRuntimeEndpoint = mkOption {
       description = lib.mdDoc "Endpoint at which to find the container runtime api interface/socket";
       type = str;
       default = "unix:///run/containerd/containerd.sock";
     };
 
-    enable = mkEnableOption (lib.mdDoc "Kubernetes kubelet.");
+    enable = mkEnableOption (lib.mdDoc "Kubernetes kubelet");
 
     extraOpts = mkOption {
       description = lib.mdDoc "Kubernetes kubelet extra command line options.";
@@ -170,14 +166,13 @@ in
       port = mkOption {
         description = lib.mdDoc "Kubernetes kubelet healthz port.";
         default = 10248;
-        type = int;
+        type = port;
       };
     };
 
     hostname = mkOption {
       description = lib.mdDoc "Kubernetes kubelet hostname override.";
-      default = config.networking.hostName;
-      defaultText = literalExpression "config.networking.hostName";
+      defaultText = literalExpression "config.networking.fqdnOrHostName";
       type = str;
     };
 
@@ -187,12 +182,6 @@ in
       description = lib.mdDoc "List of manifests to bootstrap with kubelet (only pods can be created as manifest entry)";
       type = attrsOf attrs;
       default = {};
-    };
-
-    networkPlugin = mkOption {
-      description = lib.mdDoc "Network plugin to use by Kubernetes.";
-      type = nullOr (enum ["cni" "kubenet"]);
-      default = "kubenet";
     };
 
     nodeIp = mkOption {
@@ -210,7 +199,7 @@ in
     port = mkOption {
       description = lib.mdDoc "Kubernetes kubelet info server listening port.";
       default = 10250;
-      type = int;
+      type = port;
     };
 
     seedDockerImages = mkOption {
@@ -315,7 +304,6 @@ in
               "--cluster-dns=${cfg.clusterDns}"} \
             ${optionalString (cfg.clusterDomain != "")
               "--cluster-domain=${cfg.clusterDomain}"} \
-            --cni-conf-dir=${cniConfig} \
             ${optionalString (cfg.featureGates != [])
               "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
             --hairpin-mode=hairpin-veth \
@@ -323,8 +311,6 @@ in
             --healthz-port=${toString cfg.healthz.port} \
             --hostname-override=${cfg.hostname} \
             --kubeconfig=${kubeconfig} \
-            ${optionalString (cfg.networkPlugin != null)
-              "--network-plugin=${cfg.networkPlugin}"} \
             ${optionalString (cfg.nodeIp != null)
               "--node-ip=${cfg.nodeIp}"} \
             --pod-infra-container-image=pause \
@@ -340,7 +326,6 @@ in
             ${optionalString (cfg.tlsKeyFile != null)
               "--tls-private-key-file=${cfg.tlsKeyFile}"} \
             ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
-            --container-runtime=${cfg.containerRuntime} \
             --container-runtime-endpoint=${cfg.containerRuntimeEndpoint} \
             --cgroup-driver=systemd \
             ${cfg.extraOpts}
@@ -352,13 +337,13 @@ in
         };
       };
 
-      # Allways include cni plugins
+      # Always include cni plugins
       services.kubernetes.kubelet.cni.packages = [pkgs.cni-plugins pkgs.cni-plugin-flannel];
 
       boot.kernelModules = ["br_netfilter" "overlay"];
 
-      services.kubernetes.kubelet.hostname = with config.networking;
-        mkDefault (hostName + optionalString (domain != null) ".${domain}");
+      services.kubernetes.kubelet.hostname =
+        mkDefault config.networking.fqdnOrHostName;
 
       services.kubernetes.pki.certs = with top.lib; {
         kubelet = mkCert {

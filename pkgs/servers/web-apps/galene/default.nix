@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "galene";
-  version = "0.5.5";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "jech";
     repo = "galene";
     rev = "galene-${version}";
-    hash = "sha256-J1cX8mm1yZTvsaz7DOAbmjmXkdoIrs793aDnmHm8BFk=";
+    hash = "sha256-P1KW9JUHzH/aK3wehVMSVJcUmMqDEGc8zVg8P6F828s=";
   };
 
-  vendorSha256 = "sha256-HZQeVa4UB/1jpPbfrh3XgWQe2S3qA8CM268KghgJA0w=";
+  vendorSha256 = "sha256-+itNqxEy0S2g5UGpUIthJE2ILQzToISref/8F4zTmYg=";
 
   ldflags = [ "-s" "-w" ];
   preCheck = "export TZ=UTC";
@@ -29,6 +29,6 @@ buildGoModule rec {
     changelog = "https://github.com/jech/galene/raw/galene-${version}/CHANGES";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rgrunbla ];
+    maintainers = with maintainers; [ rgrunbla erdnaxe ];
   };
 }

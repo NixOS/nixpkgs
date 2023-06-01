@@ -1,0 +1,13 @@
+diff --git a/builder.go b/builder.go
+index ed6c5ef..36e8055 100644
+--- a/builder.go
++++ b/builder.go
+@@ -200,7 +200,7 @@ func NewReplace(old, new string) Replace {
+ // It is the caller's responsibility to remove the folder when finished.
+ func newTempFolder() (string, error) {
+ 	var parentDir string
+-	if runtime.GOOS == "darwin" {
++	if false && runtime.GOOS == "darwin" {
+ 		// After upgrading to macOS High Sierra, Caddy builds mysteriously
+ 		// started missing the embedded version information that -ldflags
+ 		// was supposed to produce. But it only happened on macOS after

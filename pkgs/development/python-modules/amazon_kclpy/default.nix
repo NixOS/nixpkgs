@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "amazon_kclpy";
-  version = "2.0.6";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "amazon-kinesis-client-python";
-    rev = "v${version}";
-    sha256 = "0gbpwhpd9i13vi0cch48qqrma90p230psqrkbfcjvdah69w434l4";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Z0MC4SbZS82beMA7UunEfs4KvrmhW5xAhFeb7WXA7DM=";
   };
 
   # argparse is just required for python2.6
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs =  [ mock boto ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   checkPhase = ''
     ${python.interpreter} -m pytest

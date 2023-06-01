@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "searxng";
-  version = "unstable-2022-09-01";
+  version = "unstable-2023-05-19";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "174e5242569812618af4ebd9a646ba2a6ded5459";
-    sha256 = "sha256-Q1+4HkgOoTRtW5XYWpC5dpukkrjG5fP0585soo/srmQ=";
+    rev = "d867bf17e6d2f9a7c83c9a1ffafda5184a24c0e3";
+    sha256 = "sha256-W7/8/3FzwErPkRlfuyqajova6LRKarANPtc6L/z20CI=";
   };
 
   postPatch = ''
@@ -26,11 +26,11 @@ python3.pkgs.buildPythonApplication rec {
     babel
     certifi
     python-dateutil
+    fasttext-predict
     flask
-    flaskbabel
+    flask-babel
     brotli
     jinja2
-    langdetect
     lxml
     pygments
     pyyaml
@@ -56,6 +56,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/searxng/searxng";
     description = "A fork of Searx, a privacy-respecting, hackable metasearch engine";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ kranzes ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

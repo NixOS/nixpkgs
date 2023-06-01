@@ -9,15 +9,16 @@
 
 buildPythonPackage rec {
   pname = "adb-enhanced";
-  version = "2.5.14";
+  version = "2.5.18";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.4";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ashishb";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-GaPOYBQEGI40MutjjY8exABqGge2p/buk9v+NcZ5oJs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-xsl8AentI4Tqo2mHWFRi6myyb0/MemATJz9erKN9eKQ=";
   };
 
   propagatedBuildInputs = [

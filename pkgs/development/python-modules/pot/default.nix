@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "POT";
     inherit version;
-    sha256 = "sha256-PKmuPI83DPy7RkOgHHPdPJJz5NT/fpr123AVTzTLwgQ=";
+    hash = "sha256-PKmuPI83DPy7RkOgHHPdPJJz5NT/fpr123AVTzTLwgQ=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     pymanopt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cvxopt
     matplotlib
     numpy

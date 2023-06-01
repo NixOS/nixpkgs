@@ -134,6 +134,15 @@ in
         '';
       };
 
+      stateless = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          If set, all state directories relating to CUPS will be removed on
+          startup of the service.
+        '';
+      };
+
       startWhenNeeded = mkOption {
         type = types.bool;
         default = true;
@@ -308,6 +317,7 @@ in
     environment.etc.cups.source = "/var/lib/cups";
 
     services.dbus.packages = [ cups.out ] ++ optional polkitEnabled cups-pk-helper;
+    services.udev.packages = cfg.drivers;
 
     # Allow asswordless printer admin for members of wheel group
     security.polkit.extraConfig = mkIf polkitEnabled ''
@@ -332,7 +342,7 @@ in
 
     systemd.sockets.cups = mkIf cfg.startWhenNeeded {
       wantedBy = [ "sockets.target" ];
-      listenStreams = [ "/run/cups/cups.sock" ]
+      listenStreams = [ "" "/run/cups/cups.sock" ]
         ++ map (x: replaceStrings ["localhost"] ["127.0.0.1"] (removePrefix "*:" x)) cfg.listenAddresses;
     };
 
@@ -343,8 +353,9 @@ in
 
         path = [ cups.out ];
 
-        preStart =
-          ''
+        preStart = lib.optionalString cfg.stateless ''
+          rm -rf /var/cache/cups /var/lib/cups /var/spool/cups
+        '' + ''
             mkdir -m 0700 -p /var/cache/cups
             mkdir -m 0700 -p /var/spool/cups
             mkdir -m 0755 -p ${cfg.tempDir}
@@ -385,10 +396,7 @@ in
             ''}
           '';
 
-          serviceConfig = {
-            PrivateTmp = true;
-            RuntimeDirectory = [ "cups" ];
-          };
+          serviceConfig.PrivateTmp = true;
       };
 
     systemd.services.cups-browsed = mkIf avahiEnabled

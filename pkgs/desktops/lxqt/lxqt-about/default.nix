@@ -9,18 +9,18 @@
 , kwindowsystem
 , liblxqt
 , libqtxdg
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
   pname = "lxqt-about";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "GTnjmMVbkO5CeNLxNisD6XncqX32otaATZSka4YVNHo=";
+    sha256 = "Dm4WFtF0O7MgAvwYBI/1DkY9MhneI+QSM+wRp4JlD+o=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ mkDerivation rec {
     libqtxdg
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-about";

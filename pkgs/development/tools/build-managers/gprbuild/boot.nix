@@ -7,14 +7,14 @@
 }:
 
 let
-  version = "22.0.0";
+  version = "23.0.0";
 
   gprConfigKbSrc = fetchFromGitHub {
     name = "gprconfig-kb-${version}-src";
     owner = "AdaCore";
     repo = "gprconfig_kb";
     rev = "v${version}";
-    sha256 = "0zvd0v5cz0zd1hfnhdd91c6sr3bbv1w715j2gvzx3vxlpx1c2q4n";
+    sha256 = "1rhskq4r2plf3ia67k08misygnpr9knzw3kp3kyv5778lra8y6s2";
   };
 in
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     owner = "AdaCore";
     repo = "gprbuild";
     rev = "v${version}";
-    sha256 = "0rv0ha0kxzab5hhv0jzkjkmchhlvlx8fci8xalnngrgb9nd4r3v8";
+    sha256 = "1ciaq4nh98vd7r5i11v353c1ms9s5yph0yxk4fkryc6bvkm4666x";
   };
 
   nativeBuildInputs = [
@@ -53,7 +53,14 @@ stdenv.mkDerivation {
   # introducing a wrapper for it in the future remains TODO.
   # For the moment this doesn't matter since we have no situation
   # were gprbuild is used to build something used at build time.
-  setupHook = ./gpr-project-path-hook.sh;
+  setupHooks = [
+    ./gpr-project-path-hook.sh
+  ] ++ lib.optionals stdenv.targetPlatform.isDarwin [
+    # This setupHook replaces the paths of shared libraries starting
+    # with @rpath with the absolute paths on Darwin, so that the
+    # binaries can be run without additional setup.
+    ./gpr-project-darwin-rpath-hook.sh
+  ];
 
   installPhase = ''
     runHook preInstall

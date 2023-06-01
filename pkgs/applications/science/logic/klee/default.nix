@@ -1,9 +1,10 @@
 { lib
+, stdenv
 , callPackage
 , fetchFromGitHub
 , cmake
-, llvmPackages_11
 , clang
+, llvm
 , python3
 , zlib
 , z3
@@ -35,18 +36,14 @@
 }:
 
 let
-
   # Python used for KLEE tests.
   kleePython = python3.withPackages (ps: with ps; [ tabulate ]);
 
   # The klee-uclibc derivation.
   kleeuClibc = callPackage ./klee-uclibc.nix {
-    inherit clang llvmPackages_11 extraKleeuClibcConfig debugRuntime runtimeAsserts;
+    inherit stdenv clang llvm extraKleeuClibcConfig debugRuntime runtimeAsserts;
   };
-
-in
-clang.stdenv.mkDerivation rec {
-
+in stdenv.mkDerivation rec {
   pname = "klee";
   version = "2.3";
 
@@ -61,7 +58,7 @@ clang.stdenv.mkDerivation rec {
     cryptominisat
     gperftools
     lit # Configure phase checking for lit
-    llvmPackages_11.llvm
+    llvm
     sqlite
     stp
     z3
@@ -72,13 +69,13 @@ clang.stdenv.mkDerivation rec {
     cmake
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gtest
 
     # Should appear BEFORE lit, since lit passes through python rather
     # than the python environment we make.
     kleePython
-    (lit.override { python3 = kleePython; })
+    (lit.override { python = kleePython; })
   ];
 
   cmakeFlags = let
@@ -99,7 +96,7 @@ clang.stdenv.mkDerivation rec {
   ];
 
   # Silence various warnings during the compilation of fortified bitcode.
-  NIX_CFLAGS_COMPILE = ["-Wno-macro-redefined"];
+  env.NIX_CFLAGS_COMPILE = toString ["-Wno-macro-redefined"];
 
   prePatch = ''
     patchShebangs .

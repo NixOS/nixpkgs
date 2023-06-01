@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication rec {
     gtk3 gobject-introspection
     glib
   ];
-  checkInputs = with python3Packages; [ flake8 pytest ];
+  nativeCheckInputs = with python3Packages; [ flake8 pytest ];
   propagatedBuildInputs = with python3Packages; [
     svgwrite pyxdg pycairo pygobject3 setuptools-scm
   ];

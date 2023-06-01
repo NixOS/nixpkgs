@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "mitogen-hq";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-cx0q2Y9A6UzpdD1kuGBtXIs9oBGFpkIyvPfN2hj+A1g=";
+    hash = "sha256-cx0q2Y9A6UzpdD1kuGBtXIs9oBGFpkIyvPfN2hj+A1g=";
   };
 
   # Tests require network access and Docker support

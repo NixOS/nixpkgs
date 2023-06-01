@@ -14,13 +14,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nwg-panel";
-  version = "0.7.8";
+  version = "0.7.17";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-panel";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-dRYM6alxvhaVTRJPZ/minnEDXrijk8SX2C6/EYhhpEA=";
+    sha256 = "sha256-HGbPBHf5PIjbuMSd/2fFSCLQ/7s1Xbys+KoGXctQOvM=";
   };
 
   # No tests
@@ -56,6 +56,6 @@ python3Packages.buildPythonApplication rec {
     description = "GTK3-based panel for Sway window manager";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ berbiche ];
+    maintainers = with maintainers; [ ];
   };
 }

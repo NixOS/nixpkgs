@@ -1,23 +1,29 @@
-{ fetchzip, lib }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
-  version = "1.500";
-in
-fetchzip {
-  name = "sil-abyssinica-${version}";
-  url = "mirror://debian/pool/main/f/fonts-sil-abyssinica/fonts-sil-abyssinica_${version}.orig.tar.xz";
-  sha256 = "sha256-fCa88wG2JfHTaHaBkuvoncbcbrh3XNzc8ewS3W+W/fM=";
+stdenvNoCC.mkDerivation rec {
+  pname = "sil-abyssinica";
+  version = "2.200";
 
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    tar xf $downloadedFile --strip-components=1 -C $out/share/fonts AbyssinicaSIL-${version}/AbyssinicaSIL-R.ttf
+  src = fetchzip {
+    url = "https://software.sil.org/downloads/r/abyssinica/AbyssinicaSIL-${version}.zip";
+    hash = "sha256-IdWMZHm9VoLVDO0//ISujxlXUxe0O6+aEcdP63YRmPg=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/{fonts/truetype,doc/${pname}-${version}}
+    mv *.ttf $out/share/fonts/truetype/
+    mv *.txt documentation $out/share/doc/${pname}-${version}/
+
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "Unicode font for Ethiopian and Erythrean scripts (Amharic et al.)";
     homepage = "https://software.sil.org/abyssinica/";
     license = licenses.ofl;
-    maintainers = with lib.maintainers; [ serge ];
+    maintainers = with maintainers; [ serge ];
     platforms = platforms.all;
   };
 }

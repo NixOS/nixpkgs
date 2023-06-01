@@ -1,16 +1,16 @@
-{ lib, stdenv, fetchurl, fuse, pkg-config }:
+{ lib, stdenv, fetchurl, fuse, fuse3, pkg-config }:
 
 stdenv.mkDerivation rec {
-  version = "1.17.0";
+  version = "1.17.2";
   pname = "bindfs";
 
   src = fetchurl {
     url    = "https://bindfs.org/downloads/${pname}-${version}.tar.gz";
-    sha256 = "sha256-cNpX1J53lP5UuFdb/danlDqrVK2i6OL99L4E4AEUUdw=";
+    sha256 = "sha256-XyxQpwuNWMAluB+/Nk+tQy0VSTZjDOACPMiLqo1codA=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ fuse ];
+  buildInputs = if stdenv.isDarwin then [ fuse ] else [ fuse3 ];
   postFixup = ''
     ln -s $out/bin/bindfs $out/bin/mount.fuse.bindfs
   '';

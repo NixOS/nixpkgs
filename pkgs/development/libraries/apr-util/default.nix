@@ -2,15 +2,13 @@
 , sslSupport ? true, openssl
 , bdbSupport ? true, db
 , ldapSupport ? !stdenv.isCygwin, openldap
-, libiconv
+, libiconv, libxcrypt
 , cyrus_sasl, autoreconfHook
 }:
 
 assert sslSupport -> openssl != null;
 assert bdbSupport -> db != null;
 assert ldapSupport -> openldap != null;
-
-with lib;
 
 stdenv.mkDerivation rec {
   pname = "apr-util";
@@ -21,37 +19,44 @@ stdenv.mkDerivation rec {
     sha256 = "0nq3s1yn13vplgl6qfm09f7n0wm08malff9s59bqf9nid9xjzqfk";
   };
 
-  patches = optional stdenv.isFreeBSD ./include-static-dependencies.patch;
+  patches = [ ./fix-libxcrypt-build.patch ]
+    ++ lib.optional stdenv.isFreeBSD ./include-static-dependencies.patch;
+
+  NIX_CFLAGS_LINK = [ "-lcrypt" ];
 
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = optional stdenv.isFreeBSD autoreconfHook;
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.isFreeBSD autoreconfHook;
 
   configureFlags = [ "--with-apr=${apr.dev}" "--with-expat=${expat.dev}" ]
-    ++ optional (!stdenv.isCygwin) "--with-crypto"
-    ++ optional sslSupport "--with-openssl=${openssl.dev}"
-    ++ optional bdbSupport "--with-berkeley-db=${db.dev}"
-    ++ optional ldapSupport "--with-ldap=ldap"
-    ++ optionals stdenv.isCygwin
+    ++ lib.optional (!stdenv.isCygwin) "--with-crypto"
+    ++ lib.optional sslSupport "--with-openssl=${openssl.dev}"
+    ++ lib.optional bdbSupport "--with-berkeley-db=${db.dev}"
+    ++ lib.optional ldapSupport "--with-ldap=ldap"
+    ++ lib.optionals stdenv.isCygwin
       [ "--without-pgsql" "--without-sqlite2" "--without-sqlite3"
         "--without-freetds" "--without-berkeley-db" "--without-crypto" ]
     ;
 
-  # For some reason, db version 6.9 is selected when cross-compiling.
-  # It's unclear as to why, it requires someone with more autotools / configure knowledge to go deeper into that.
-  # Always replacing the link flag with a generic link flag seems to help though, so let's do that for now.
-  postConfigure = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-    substituteInPlace Makefile \
-      --replace "-ldb-6.9" "-ldb"
+  postConfigure = ''
+    echo '#define APR_HAVE_CRYPT_H 1' >> confdefs.h
+  '' +
+    # For some reason, db version 6.9 is selected when cross-compiling.
+    # It's unclear as to why, it requires someone with more autotools / configure knowledge to go deeper into that.
+    # Always replacing the link flag with a generic link flag seems to help though, so let's do that for now.
+    lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+      substituteInPlace Makefile \
+        --replace "-ldb-6.9" "-ldb"
+      substituteInPlace apu-1-config \
+        --replace "-ldb-6.9" "-ldb"
   '';
 
-  propagatedBuildInputs = [ apr expat libiconv ]
-    ++ optional sslSupport openssl
-    ++ optional bdbSupport db
-    ++ optional ldapSupport openldap
-    ++ optional stdenv.isFreeBSD cyrus_sasl;
+  propagatedBuildInputs = [ apr expat libiconv libxcrypt ]
+    ++ lib.optional sslSupport openssl
+    ++ lib.optional bdbSupport db
+    ++ lib.optional ldapSupport openldap
+    ++ lib.optional stdenv.isFreeBSD cyrus_sasl;
 
   postInstall = ''
     for f in $out/lib/*.la $out/lib/apr-util-1/*.la $dev/bin/apu-1-config; do

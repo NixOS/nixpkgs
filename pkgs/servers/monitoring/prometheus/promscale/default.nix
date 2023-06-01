@@ -7,20 +7,16 @@
 
 buildGoModule rec {
   pname = "promscale";
-  version = "0.10.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = pname;
     rev = version;
-    sha256 = "sha256-KF+aD9vJYqNJkJftx27ZsxmOIXZ/2ciKwjwcTw0GBvY=";
+    sha256 = "sha256-JizUI9XRzOEHF1kAblYQRYB11z9KWX7od3lPiRN+JNI=";
   };
 
-  patches = [
-    ./0001-remove-jaeger-test-dep.patch
-  ];
-
-  vendorSha256 = "sha256-/cjRM8CrOKnx0BcRu2+MLV28MYLOrG5x1DN24mRUJzQ=";
+  vendorSha256 = "sha256-lnyKsipr/f9W9LWLb2lizKGLvIbS3XnSlOH1u1B87OY=";
 
   ldflags = [
     "-s"
@@ -28,7 +24,11 @@ buildGoModule rec {
     "-X github.com/timescale/promscale/pkg/version.Version=${version}"
     "-X github.com/timescale/promscale/pkg/version.CommitHash=${src.rev}"
   ];
-
+  preBuild = ''
+    # Without this build fails with
+    # main module (github.com/timescale/promscale) does not contain package github.com/timescale/promscale/migration-tool/cmd/prom-migrator
+    rm -r migration-tool
+  '';
   checkPhase = ''
     runHook preCheck
 
@@ -51,6 +51,6 @@ buildGoModule rec {
     changelog = "https://github.com/timescale/promscale/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ _0x4A6F ];
+    maintainers = with maintainers; [ _0x4A6F anpin ];
   };
 }

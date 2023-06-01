@@ -26,12 +26,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libhandy";
-  version = "1.6.3";
+  version = "1.8.2";
 
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
     "devdoc"
   ] ++ lib.optionals enableGlade [
     "glade"
@@ -40,8 +39,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-R3iL01gE69M8sJkR6XU0TIQ1ngttlSCv0cgh66i6d/8=";
+    sha256 = "sha256-0RqizT5XCsbQ79ukbRcxR8EfRYJkV+kkwFmQuy4N+a0=";
   };
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     gobject-introspection
@@ -61,7 +64,7 @@ stdenv.mkDerivation rec {
     glade
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     xvfb-run
     at-spi2-atk
     at-spi2-core
@@ -70,9 +73,8 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
+    "-Dgtk_doc=true"
     "-Dglade_catalog=${if enableGlade then "enabled" else "disabled"}"
-    "-Dintrospection=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "enabled" else "disabled"}"
   ];
 
   # Uses define_variable in pkg-config, but we still need it to use the glade output

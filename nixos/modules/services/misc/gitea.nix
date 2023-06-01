@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.gitea;
   opt = options.services.gitea;
-  gitea = cfg.package;
+  exe = lib.getExe cfg.package;
   pg = config.services.postgresql;
   useMysql = cfg.database.type == "mysql";
   usePostgresql = cfg.database.type == "postgres";
@@ -26,9 +26,18 @@ in
   imports = [
     (mkRenamedOptionModule [ "services" "gitea" "cookieSecure" ] [ "services" "gitea" "settings" "session" "COOKIE_SECURE" ])
     (mkRenamedOptionModule [ "services" "gitea" "disableRegistration" ] [ "services" "gitea" "settings" "service" "DISABLE_REGISTRATION" ])
+    (mkRenamedOptionModule [ "services" "gitea" "domain" ] [ "services" "gitea" "settings" "server" "DOMAIN" ])
+    (mkRenamedOptionModule [ "services" "gitea" "httpAddress" ] [ "services" "gitea" "settings" "server" "HTTP_ADDR" ])
+    (mkRenamedOptionModule [ "services" "gitea" "httpPort" ] [ "services" "gitea" "settings" "server" "HTTP_PORT" ])
     (mkRenamedOptionModule [ "services" "gitea" "log" "level" ] [ "services" "gitea" "settings" "log" "LEVEL" ])
     (mkRenamedOptionModule [ "services" "gitea" "log" "rootPath" ] [ "services" "gitea" "settings" "log" "ROOT_PATH" ])
+    (mkRenamedOptionModule [ "services" "gitea" "rootUrl" ] [ "services" "gitea" "settings" "server" "ROOT_URL" ])
     (mkRenamedOptionModule [ "services" "gitea" "ssh" "clonePort" ] [ "services" "gitea" "settings" "server" "SSH_PORT" ])
+    (mkRenamedOptionModule [ "services" "gitea" "staticRootPath" ] [ "services" "gitea" "settings" "server" "STATIC_ROOT_PATH" ])
+
+    (mkChangedOptionModule [ "services" "gitea" "enableUnixSocket" ] [ "services" "gitea" "settings" "server" "PROTOCOL" ] (
+      config: if config.services.gitea.enableUnixSocket then "http+unix" else "http"
+    ))
 
     (mkRemovedOptionModule [ "services" "gitea" "ssh" "enable" ] "services.gitea.ssh.enable has been migrated into freeform setting services.gitea.settings.server.DISABLE_SSH. Keep in mind that the setting is inverted")
   ];
@@ -57,13 +66,26 @@ in
       stateDir = mkOption {
         default = "/var/lib/gitea";
         type = types.str;
-        description = lib.mdDoc "gitea data directory.";
+        description = lib.mdDoc "Gitea data directory.";
+      };
+
+      customDir = mkOption {
+        default = "${cfg.stateDir}/custom";
+        defaultText = literalExpression ''"''${config.${opt.stateDir}}/custom"'';
+        type = types.str;
+        description = lib.mdDoc "Gitea custom directory. Used for config, custom templates and other options.";
       };
 
       user = mkOption {
         type = types.str;
         default = "gitea";
         description = lib.mdDoc "User account under which gitea runs.";
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "gitea";
+        description = lib.mdDoc "Group under which gitea runs.";
       };
 
       database = {
@@ -175,7 +197,7 @@ in
         };
 
         type = mkOption {
-          type = types.enum [ "zip" "rar" "tar" "sz" "tar.gz" "tar.xz" "tar.bz2" "tar.br" "tar.lz4" ];
+          type = types.enum [ "zip" "rar" "tar" "sz" "tar.gz" "tar.xz" "tar.bz2" "tar.br" "tar.lz4" "tar.zst" ];
           default = "zip";
           description = lib.mdDoc "Archive format used to store the dump file.";
         };
@@ -183,7 +205,7 @@ in
         file = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = lib.mdDoc "Filename to be used for the dump. If `null` a default name is choosen by gitea.";
+          description = lib.mdDoc "Filename to be used for the dump. If `null` a default name is chosen by gitea.";
           example = "gitea-dump";
         };
       };
@@ -214,44 +236,6 @@ in
         default = "${cfg.stateDir}/repositories";
         defaultText = literalExpression ''"''${config.${opt.stateDir}}/repositories"'';
         description = lib.mdDoc "Path to the git repositories.";
-      };
-
-      domain = mkOption {
-        type = types.str;
-        default = "localhost";
-        description = lib.mdDoc "Domain name of your server.";
-      };
-
-      rootUrl = mkOption {
-        type = types.str;
-        default = "http://localhost:3000/";
-        description = lib.mdDoc "Full public URL of gitea server.";
-      };
-
-      httpAddress = mkOption {
-        type = types.str;
-        default = "0.0.0.0";
-        description = lib.mdDoc "HTTP listen address.";
-      };
-
-      httpPort = mkOption {
-        type = types.int;
-        default = 3000;
-        description = lib.mdDoc "HTTP listen port.";
-      };
-
-      enableUnixSocket = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc "Configure Gitea to listen on a unix socket instead of the default TCP port.";
-      };
-
-      staticRootPath = mkOption {
-        type = types.either types.str types.path;
-        default = gitea.data;
-        defaultText = literalExpression "package.data";
-        example = "/var/lib/gitea/data";
-        description = lib.mdDoc "Upper level of template and static files path.";
       };
 
       mailerPasswordFile = mkOption {
@@ -285,7 +269,7 @@ in
             };
           }
         '';
-        type = with types; submodule {
+        type = types.submodule {
           freeformType = format.type;
           options = {
             log = {
@@ -303,6 +287,46 @@ in
             };
 
             server = {
+              PROTOCOL = mkOption {
+                type = types.enum [ "http" "https" "fcgi" "http+unix" "fcgi+unix" ];
+                default = "http";
+                description = lib.mdDoc ''Listen protocol. `+unix` means "over unix", not "in addition to."'';
+              };
+
+              HTTP_ADDR = mkOption {
+                type = types.either types.str types.path;
+                default = if lib.hasSuffix "+unix" cfg.settings.server.PROTOCOL then "/run/gitea/gitea.sock" else "0.0.0.0";
+                defaultText = literalExpression ''if lib.hasSuffix "+unix" cfg.settings.server.PROTOCOL then "/run/gitea/gitea.sock" else "0.0.0.0"'';
+                description = lib.mdDoc "Listen address. Must be a path when using a unix socket.";
+              };
+
+              HTTP_PORT = mkOption {
+                type = types.port;
+                default = 3000;
+                description = lib.mdDoc "Listen port. Ignored when using a unix socket.";
+              };
+
+              DOMAIN = mkOption {
+                type = types.str;
+                default = "localhost";
+                description = lib.mdDoc "Domain name of your server.";
+              };
+
+              ROOT_URL = mkOption {
+                type = types.str;
+                default = "http://${cfg.settings.server.DOMAIN}:${toString cfg.settings.server.HTTP_PORT}/";
+                defaultText = literalExpression ''"http://''${config.services.gitea.settings.server.DOMAIN}:''${toString config.services.gitea.settings.server.HTTP_PORT}/"'';
+                description = lib.mdDoc "Full public URL of gitea server.";
+              };
+
+              STATIC_ROOT_PATH = mkOption {
+                type = types.either types.str types.path;
+                default = cfg.package.data;
+                defaultText = literalExpression "config.${opt.package}.data";
+                example = "/var/lib/gitea/data";
+                description = lib.mdDoc "Upper level of template and static files path.";
+              };
+
               DISABLE_SSH = mkOption {
                 type = types.bool;
                 default = false;
@@ -310,7 +334,7 @@ in
               };
 
               SSH_PORT = mkOption {
-                type = types.int;
+                type = types.port;
                 default = 22;
                 example = 2222;
                 description = lib.mdDoc ''
@@ -359,12 +383,14 @@ in
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion = cfg.database.createDatabase -> cfg.database.user == cfg.user;
+      { assertion = cfg.database.createDatabase -> useSqlite || cfg.database.user == cfg.user;
         message = "services.gitea.database.user must match services.gitea.user if the database is to be automatically provisioned";
       }
     ];
 
     services.gitea.settings = {
+      "cron.update_checker".ENABLED = lib.mkDefault false;
+
       database = mkMerge [
         {
           DB_TYPE = cfg.database.type;
@@ -387,27 +413,10 @@ in
         ROOT = cfg.repositoryRoot;
       };
 
-      server = mkMerge [
-        {
-          DOMAIN = cfg.domain;
-          STATIC_ROOT_PATH = toString cfg.staticRootPath;
-          LFS_JWT_SECRET = "#lfsjwtsecret#";
-          ROOT_URL = cfg.rootUrl;
-        }
-        (mkIf cfg.enableUnixSocket {
-          PROTOCOL = "unix";
-          HTTP_ADDR = "/run/gitea/gitea.sock";
-        })
-        (mkIf (!cfg.enableUnixSocket) {
-          HTTP_ADDR = cfg.httpAddress;
-          HTTP_PORT = cfg.httpPort;
-        })
-        (mkIf cfg.lfs.enable {
-          LFS_START_SERVER = true;
-          LFS_CONTENT_PATH = cfg.lfs.contentDir;
-        })
-
-      ];
+      server = mkIf cfg.lfs.enable {
+        LFS_START_SERVER = true;
+        LFS_JWT_SECRET = "#lfsjwtsecret#";
+      };
 
       session = {
         COOKIE_NAME = lib.mkDefault "session";
@@ -425,6 +434,10 @@ in
 
       oauth2 = {
         JWT_SECRET = "#oauth2jwtsecret#";
+      };
+
+      lfs = mkIf cfg.lfs.enable {
+        PATH = cfg.lfs.contentDir;
       };
     };
 
@@ -452,87 +465,96 @@ in
     };
 
     systemd.tmpfiles.rules = [
-      "d '${cfg.dump.backupDir}' 0750 ${cfg.user} gitea - -"
-      "z '${cfg.dump.backupDir}' 0750 ${cfg.user} gitea - -"
-      "Z '${cfg.dump.backupDir}' - ${cfg.user} gitea - -"
-      "d '${cfg.lfs.contentDir}' 0750 ${cfg.user} gitea - -"
-      "z '${cfg.lfs.contentDir}' 0750 ${cfg.user} gitea - -"
-      "Z '${cfg.lfs.contentDir}' - ${cfg.user} gitea - -"
-      "d '${cfg.repositoryRoot}' 0750 ${cfg.user} gitea - -"
-      "z '${cfg.repositoryRoot}' 0750 ${cfg.user} gitea - -"
-      "Z '${cfg.repositoryRoot}' - ${cfg.user} gitea - -"
-      "d '${cfg.stateDir}' 0750 ${cfg.user} gitea - -"
-      "d '${cfg.stateDir}/conf' 0750 ${cfg.user} gitea - -"
-      "d '${cfg.stateDir}/custom' 0750 ${cfg.user} gitea - -"
-      "d '${cfg.stateDir}/custom/conf' 0750 ${cfg.user} gitea - -"
-      "d '${cfg.stateDir}/log' 0750 ${cfg.user} gitea - -"
-      "z '${cfg.stateDir}' 0750 ${cfg.user} gitea - -"
-      "z '${cfg.stateDir}/.ssh' 0700 ${cfg.user} gitea - -"
-      "z '${cfg.stateDir}/conf' 0750 ${cfg.user} gitea - -"
-      "z '${cfg.stateDir}/custom' 0750 ${cfg.user} gitea - -"
-      "z '${cfg.stateDir}/custom/conf' 0750 ${cfg.user} gitea - -"
-      "z '${cfg.stateDir}/log' 0750 ${cfg.user} gitea - -"
-      "Z '${cfg.stateDir}' - ${cfg.user} gitea - -"
+      "d '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "Z '${cfg.dump.backupDir}' - ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
+      "Z '${cfg.repositoryRoot}' - ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.customDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.customDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/data' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.stateDir}/.ssh' 0700 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.stateDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.customDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.customDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.stateDir}/data' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
+      "Z '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
 
       # If we have a folder or symlink with gitea locales, remove it
       # And symlink the current gitea locales in place
-      "L+ '${cfg.stateDir}/conf/locale' - - - - ${gitea.out}/locale"
+      "L+ '${cfg.stateDir}/conf/locale' - - - - ${cfg.package.out}/locale"
+
+    ] ++ lib.optionals cfg.lfs.enable [
+      "d '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
+      "Z '${cfg.lfs.contentDir}' - ${cfg.user} ${cfg.group} - -"
     ];
 
     systemd.services.gitea = {
       description = "gitea";
       after = [ "network.target" ] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
       wantedBy = [ "multi-user.target" ];
-      path = [ gitea pkgs.git ];
+      path = [ cfg.package pkgs.git pkgs.gnupg ];
 
       # In older versions the secret naming for JWT was kind of confusing.
       # The file jwt_secret hold the value for LFS_JWT_SECRET and JWT_SECRET
-      # wasn't persistant at all.
+      # wasn't persistent at all.
       # To fix that, there is now the file oauth2_jwt_secret containing the
       # values for JWT_SECRET and the file jwt_secret gets renamed to
       # lfs_jwt_secret.
       # We have to consider this to stay compatible with older installations.
       preStart = let
-        runConfig = "${cfg.stateDir}/custom/conf/app.ini";
-        secretKey = "${cfg.stateDir}/custom/conf/secret_key";
-        oauth2JwtSecret = "${cfg.stateDir}/custom/conf/oauth2_jwt_secret";
-        oldLfsJwtSecret = "${cfg.stateDir}/custom/conf/jwt_secret"; # old file for LFS_JWT_SECRET
-        lfsJwtSecret = "${cfg.stateDir}/custom/conf/lfs_jwt_secret"; # new file for LFS_JWT_SECRET
-        internalToken = "${cfg.stateDir}/custom/conf/internal_token";
+        runConfig = "${cfg.customDir}/conf/app.ini";
+        secretKey = "${cfg.customDir}/conf/secret_key";
+        oauth2JwtSecret = "${cfg.customDir}/conf/oauth2_jwt_secret";
+        oldLfsJwtSecret = "${cfg.customDir}/conf/jwt_secret"; # old file for LFS_JWT_SECRET
+        lfsJwtSecret = "${cfg.customDir}/conf/lfs_jwt_secret"; # new file for LFS_JWT_SECRET
+        internalToken = "${cfg.customDir}/conf/internal_token";
         replaceSecretBin = "${pkgs.replace-secret}/bin/replace-secret";
       in ''
-        # copy custom configuration and generate a random secret key if needed
+        # copy custom configuration and generate random secrets if needed
         ${optionalString (!cfg.useWizard) ''
           function gitea_setup {
-            cp -f ${configFile} ${runConfig}
+            cp -f '${configFile}' '${runConfig}'
 
-            if [ ! -s ${secretKey} ]; then
-                ${gitea}/bin/gitea generate secret SECRET_KEY > ${secretKey}
+            if [ ! -s '${secretKey}' ]; then
+                ${exe} generate secret SECRET_KEY > '${secretKey}'
             fi
 
             # Migrate LFS_JWT_SECRET filename
-            if [[ -s ${oldLfsJwtSecret} && ! -s ${lfsJwtSecret} ]]; then
-                mv ${oldLfsJwtSecret} ${lfsJwtSecret}
+            if [[ -s '${oldLfsJwtSecret}' && ! -s '${lfsJwtSecret}' ]]; then
+                mv '${oldLfsJwtSecret}' '${lfsJwtSecret}'
             fi
 
-            if [ ! -s ${oauth2JwtSecret} ]; then
-                ${gitea}/bin/gitea generate secret JWT_SECRET > ${oauth2JwtSecret}
+            if [ ! -s '${oauth2JwtSecret}' ]; then
+                ${exe} generate secret JWT_SECRET > '${oauth2JwtSecret}'
             fi
 
-            if [ ! -s ${lfsJwtSecret} ]; then
-                ${gitea}/bin/gitea generate secret LFS_JWT_SECRET > ${lfsJwtSecret}
+            ${lib.optionalString cfg.lfs.enable ''
+            if [ ! -s '${lfsJwtSecret}' ]; then
+                ${exe} generate secret LFS_JWT_SECRET > '${lfsJwtSecret}'
             fi
+            ''}
 
-            if [ ! -s ${internalToken} ]; then
-                ${gitea}/bin/gitea generate secret INTERNAL_TOKEN > ${internalToken}
+            if [ ! -s '${internalToken}' ]; then
+                ${exe} generate secret INTERNAL_TOKEN > '${internalToken}'
             fi
 
             chmod u+w '${runConfig}'
             ${replaceSecretBin} '#secretkey#' '${secretKey}' '${runConfig}'
             ${replaceSecretBin} '#dbpass#' '${cfg.database.passwordFile}' '${runConfig}'
             ${replaceSecretBin} '#oauth2jwtsecret#' '${oauth2JwtSecret}' '${runConfig}'
-            ${replaceSecretBin} '#lfsjwtsecret#' '${lfsJwtSecret}' '${runConfig}'
             ${replaceSecretBin} '#internaltoken#' '${internalToken}' '${runConfig}'
+
+            ${lib.optionalString cfg.lfs.enable ''
+              ${replaceSecretBin} '#lfsjwtsecret#' '${lfsJwtSecret}' '${runConfig}'
+            ''}
 
             ${lib.optionalString (cfg.mailerPasswordFile != null) ''
               ${replaceSecretBin} '#mailerpass#' '${cfg.mailerPasswordFile}' '${runConfig}'
@@ -543,30 +565,30 @@ in
         ''}
 
         # run migrations/init the database
-        ${gitea}/bin/gitea migrate
+        ${exe} migrate
 
         # update all hooks' binary paths
-        ${gitea}/bin/gitea admin regenerate hooks
+        ${exe} admin regenerate hooks
 
         # update command option in authorized_keys
         if [ -r ${cfg.stateDir}/.ssh/authorized_keys ]
         then
-          ${gitea}/bin/gitea admin regenerate keys
+          ${exe} admin regenerate keys
         fi
       '';
 
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
-        Group = "gitea";
+        Group = cfg.group;
         WorkingDirectory = cfg.stateDir;
-        ExecStart = "${gitea}/bin/gitea web --pid /run/gitea/gitea.pid";
+        ExecStart = "${exe} web --pid /run/gitea/gitea.pid";
         Restart = "always";
         # Runtime directory and mode
         RuntimeDirectory = "gitea";
         RuntimeDirectoryMode = "0755";
         # Access write directories
-        ReadWritePaths = [ cfg.dump.backupDir cfg.repositoryRoot cfg.stateDir cfg.lfs.contentDir ];
+        ReadWritePaths = [ cfg.customDir cfg.dump.backupDir cfg.repositoryRoot cfg.stateDir cfg.lfs.contentDir ];
         UMask = "0027";
         # Capabilities
         CapabilityBoundingSet = "";
@@ -592,13 +614,14 @@ in
         PrivateMounts = true;
         # System Call Filtering
         SystemCallArchitectures = "native";
-        SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @raw-io @reboot @resources @setuid @swap";
+        SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @module @mount @obsolete @raw-io @reboot @setuid @swap";
       };
 
       environment = {
         USER = cfg.user;
         HOME = cfg.stateDir;
         GITEA_WORK_DIR = cfg.stateDir;
+        GITEA_CUSTOM = cfg.customDir;
       };
     };
 
@@ -607,12 +630,14 @@ in
         description = "Gitea Service";
         home = cfg.stateDir;
         useDefaultShell = true;
-        group = "gitea";
+        group = cfg.group;
         isSystemUser = true;
       };
     };
 
-    users.groups.gitea = {};
+    users.groups = mkIf (cfg.group == "gitea") {
+      gitea = {};
+    };
 
     warnings =
       optional (cfg.database.password != "") "config.services.gitea.database.password will be stored as plaintext in the Nix store. Use database.passwordFile instead." ++
@@ -630,8 +655,7 @@ in
     systemd.services.gitea-dump = mkIf cfg.dump.enable {
        description = "gitea dump";
        after = [ "gitea.service" ];
-       wantedBy = [ "default.target" ];
-       path = [ gitea ];
+       path = [ cfg.package ];
 
        environment = {
          USER = cfg.user;
@@ -642,7 +666,7 @@ in
        serviceConfig = {
          Type = "oneshot";
          User = cfg.user;
-         ExecStart = "${gitea}/bin/gitea dump --type ${cfg.dump.type}" + optionalString (cfg.dump.file != null) " --file ${cfg.dump.file}";
+         ExecStart = "${exe} dump --type ${cfg.dump.type}" + optionalString (cfg.dump.file != null) " --file ${cfg.dump.file}";
          WorkingDirectory = cfg.dump.backupDir;
        };
     };
@@ -654,5 +678,5 @@ in
       timerConfig.OnCalendar = cfg.dump.interval;
     };
   };
-  meta.maintainers = with lib.maintainers; [ srhb ma27 ];
+  meta.maintainers = with lib.maintainers; [ srhb ma27 thehedgeh0g ];
 }

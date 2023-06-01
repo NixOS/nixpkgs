@@ -3,7 +3,7 @@
 , fetchurl
 , autoconf
 , pkg-config
-, xlibsWrapper
+, libX11
 , libXext
 , libGLU
 , libGL
@@ -22,14 +22,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoconf pkg-config ];
-  buildInputs = [ libGLU libGL xlibsWrapper imagemagick6 libtiff bzip2 ];
+  buildInputs = [ libGLU libGL libX11 libXext imagemagick6 libtiff bzip2 ];
 
   patches = [
     ./cstddef.patch
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${imagemagick6.dev}/include/ImageMagick";
-  NIX_LDFLAGS= "-rpath ${libXext}/lib";
+  env.NIX_CFLAGS_COMPILE = "-I${imagemagick6.dev}/include/ImageMagick";
 
   meta = {
     description = "Really Slick Screensavers Port to GLX";

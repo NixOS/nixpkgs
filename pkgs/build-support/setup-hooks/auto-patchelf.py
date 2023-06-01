@@ -5,6 +5,7 @@ import os
 import pprint
 import subprocess
 import sys
+from fnmatch import fnmatch
 from collections import defaultdict
 from contextlib import contextmanager
 from dataclasses import dataclass
@@ -130,7 +131,14 @@ def populate_cache(initial: List[Path], recursive: bool =False) -> None:
             if not path.is_file():
                 continue
 
+            # As an optimisation, resolve the symlinks here, as the target is unique
+            # XXX: (layus, 2022-07-25) is this really an optimisation in all cases ?
+            # It could make the rpath bigger or break the fragile precedence of $out.
             resolved = path.resolve()
+            # Do not use resolved paths when names do not match
+            if resolved.name != path.name:
+                resolved = path
+
             try:
                 with open_elf(path) as elf:
                     osabi = get_osabi(elf)
@@ -159,7 +167,7 @@ class Dependency:
     found: bool = False     # Whether it was found somewhere
 
 
-def auto_patchelf_file(path: Path, runtime_deps: list[Path]) -> list[Dependency]:
+def auto_patchelf_file(path: Path, runtime_deps: list[Path], append_rpaths: List[Path] = []) -> list[Dependency]:
     try:
         with open_elf(path) as elf:
 
@@ -227,6 +235,8 @@ def auto_patchelf_file(path: Path, runtime_deps: list[Path]) -> list[Dependency]
             dependencies.append(Dependency(path, dep, False))
             print(f"    {dep} -> not found!")
 
+    rpath.extend(append_rpaths)
+
     # Dedup the rpath
     rpath_str = ":".join(dict.fromkeys(map(Path.as_posix, rpath)))
 
@@ -243,8 +253,9 @@ def auto_patchelf(
         paths_to_patch: List[Path],
         lib_dirs: List[Path],
         runtime_deps: List[Path],
-        recursive: bool =True,
-        ignore_missing: List[str] = []) -> None:
+        recursive: bool = True,
+        ignore_missing: List[str] = [],
+        append_rpaths: List[Path] = []) -> None:
 
     if not paths_to_patch:
         sys.exit("No paths to patch, stopping.")
@@ -257,7 +268,7 @@ def auto_patchelf(
     dependencies = []
     for path in chain.from_iterable(glob(p, '*', recursive) for p in paths_to_patch):
         if not path.is_symlink() and path.is_file():
-            dependencies += auto_patchelf_file(path, runtime_deps)
+            dependencies += auto_patchelf_file(path, runtime_deps, append_rpaths)
 
     missing = [dep for dep in dependencies if not dep.found]
 
@@ -265,8 +276,10 @@ def auto_patchelf(
     print(f"auto-patchelf: {len(missing)} dependencies could not be satisfied")
     failure = False
     for dep in missing:
-        if dep.name.name in ignore_missing or "*" in ignore_missing:
-            print(f"warn: auto-patchelf ignoring missing {dep.name} wanted by {dep.file}")
+        for pattern in ignore_missing:
+            if fnmatch(dep.name.name, pattern):
+                print(f"warn: auto-patchelf ignoring missing {dep.name} wanted by {dep.file}")
+                break
         else:
             print(f"error: auto-patchelf could not satisfy dependency {dep.name} wanted by {dep.file}")
             failure = True
@@ -302,6 +315,12 @@ def main() -> None:
     parser.add_argument(
         "--runtime-dependencies", nargs="*", type=Path,
         help="Paths to prepend to the runtime path of executable binaries.")
+    parser.add_argument(
+        "--append-rpaths",
+        nargs="*",
+        type=Path,
+        help="Paths to append to all runtime paths unconditionally",
+    )
 
     print("automatically fixing dependencies for ELF files")
     args = parser.parse_args()
@@ -312,7 +331,8 @@ def main() -> None:
         args.libs,
         args.runtime_dependencies,
         args.recursive,
-        args.ignore_missing)
+        args.ignore_missing,
+        append_rpaths=args.append_rpaths)
 
 
 interpreter_path: Path  = None # type: ignore

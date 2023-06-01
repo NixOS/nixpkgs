@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "datashader";
-  version = "0.14.2";
+  version = "0.14.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-q8aOpuJD6aX9m9jPm9PY5vZGBJL6Jpf+pPHbcQVOJLg=";
+    hash = "sha256-AkHmEflRvjJFlycI5adpuxg6+/zu7Dzy7vbYCvd1b70=";
   };
 
   propagatedBuildInputs = [
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     scipy
   ] ++ dask.optional-dependencies.complete;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
     nbsmoke

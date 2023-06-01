@@ -1,21 +1,8 @@
-{ config, lib, pkgs, extendModules, noUserModules, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
 let
-
-
-  # This attribute is responsible for creating boot entries for
-  # child configuration. They are only (directly) accessible
-  # when the parent configuration is boot default. For example,
-  # you can provide an easy way to boot the same configuration
-  # as you use, but with another kernel
-  # !!! fix this
-  children =
-    mapAttrs
-      (childName: childConfig: childConfig.configuration.system.build.toplevel)
-      config.specialisation;
-
   systemBuilder =
     let
       kernelPath = "${config.boot.kernelPackages.kernel}/" +
@@ -27,7 +14,7 @@ let
 
       # Containers don't have their own kernel or initrd.  They boot
       # directly into stage 2.
-      ${optionalString (!config.boot.isContainer) ''
+      ${optionalString config.boot.kernel.enable ''
         if [ ! -f ${kernelPath} ]; then
           echo "The bootloader cannot find the proper kernel image."
           echo "(Expecting ${kernelPath})"
@@ -72,17 +59,13 @@ let
       ln -s ${config.system.path} $out/sw
       ln -s "$systemd" $out/systemd
 
-      echo -n "$configurationName" > $out/configuration-name
       echo -n "systemd ${toString config.systemd.package.interfaceVersion}" > $out/init-interface-version
       echo -n "$nixosLabel" > $out/nixos-version
       echo -n "${config.boot.kernelPackages.stdenv.hostPlatform.system}" > $out/system
 
-      mkdir $out/specialisation
-      ${concatStringsSep "\n"
-      (mapAttrsToList (name: path: "ln -s ${path} $out/specialisation/${name}") children)}
-
       mkdir $out/bin
       export localeArchive="${config.i18n.glibcLocales}/lib/locale/locale-archive"
+      export distroId=${config.system.nixos.distroId};
       substituteAll ${./switch-to-configuration.pl} $out/bin/switch-to-configuration
       chmod +x $out/bin/switch-to-configuration
       ${optionalString (pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) ''
@@ -93,7 +76,15 @@ let
         fi
       ''}
 
-      echo -n "${toString config.system.extraDependencies}" > $out/extra-dependencies
+      ${config.system.systemBuilderCommands}
+
+      cp "$extraDependenciesPath" "$out/extra-dependencies"
+
+      ${optionalString (!config.boot.isContainer && config.boot.bootspec.enable) ''
+        ${config.boot.bootspec.writer}
+        ${optionalString config.boot.bootspec.enableValidation
+          ''${config.boot.bootspec.validator} "$out/${config.boot.bootspec.filename}"''}
+      ''}
 
       ${config.system.extraSystemBuilderCmds}
     '';
@@ -103,10 +94,11 @@ let
   # kernel, systemd units, init scripts, etc.) as well as a script
   # `switch-to-configuration' that activates the configuration and
   # makes it bootable.
-  baseSystem = pkgs.stdenvNoCC.mkDerivation {
+  baseSystem = pkgs.stdenvNoCC.mkDerivation ({
     name = "nixos-system-${config.system.name}-${config.system.nixos.label}";
     preferLocalBuild = true;
     allowSubstitutes = false;
+    passAsFile = [ "extraDependencies" ];
     buildCommand = systemBuilder;
 
     inherit (pkgs) coreutils;
@@ -121,11 +113,11 @@ let
     dryActivationScript = config.system.dryActivationScript;
     nixosLabel = config.system.nixos.label;
 
-    configurationName = config.boot.loader.grub.configurationName;
+    inherit (config.system) extraDependencies;
 
     # Needed by switch-to-configuration.
     perl = pkgs.perl.withPackages (p: with p; [ ConfigIniFiles FileSlurp ]);
-  };
+  } // config.system.systemBuilderArgs);
 
   # Handle assertions and warnings
 
@@ -140,15 +132,12 @@ let
       pkgs.replaceDependency { inherit oldDependency newDependency drv; }
     ) baseSystemAssertWarn config.system.replaceRuntimeDependencies;
 
-  /* Workaround until https://github.com/NixOS/nixpkgs/pull/156533
-     Call can be replaced by argument when that's merged.
-  */
-  tmpFixupSubmoduleBoundary = subopts:
-    lib.mkOption {
-      type = lib.types.submoduleWith {
-        modules = [ { options = subopts; } ];
-      };
-    };
+  systemWithBuildDeps = system.overrideAttrs (o: {
+    systemBuildClosure = pkgs.closureInfo { rootPaths = [ system.drvPath ]; };
+    buildCommand = o.buildCommand + ''
+      ln -sn $systemBuildClosure $out/build-closure
+    '';
+  });
 
 in
 
@@ -160,49 +149,6 @@ in
   ];
 
   options = {
-
-    specialisation = mkOption {
-      default = {};
-      example = lib.literalExpression "{ fewJobsManyCores.configuration = { nix.settings = { core = 0; max-jobs = 1; }; }; }";
-      description = lib.mdDoc ''
-        Additional configurations to build. If
-        `inheritParentConfig` is true, the system
-        will be based on the overall system configuration.
-
-        To switch to a specialised configuration
-        (e.g. `fewJobsManyCores`) at runtime, run:
-
-        ```
-        sudo /run/current-system/specialisation/fewJobsManyCores/bin/switch-to-configuration test
-        ```
-      '';
-      type = types.attrsOf (types.submodule (
-        local@{ ... }: let
-          extend = if local.config.inheritParentConfig
-            then extendModules
-            else noUserModules.extendModules;
-        in {
-          options.inheritParentConfig = mkOption {
-            type = types.bool;
-            default = true;
-            description = lib.mdDoc "Include the entire system's configuration. Set to false to make a completely differently configured system.";
-          };
-
-          options.configuration = mkOption {
-            default = {};
-            description = lib.mdDoc ''
-              Arbitrary NixOS configuration.
-
-              Anything you can add to a normal NixOS configuration, you can add
-              here, including imports and config values, although nested
-              specialisations will be ignored.
-            '';
-            visible = "shallow";
-            inherit (extend { modules = [ ./no-clone.nix ]; }) type;
-          };
-        })
-      );
-    };
 
     system.boot.loader.id = mkOption {
       internal = true;
@@ -231,7 +177,7 @@ in
       '';
     };
 
-    system.build = tmpFixupSubmoduleBoundary {
+    system.build = {
       installBootLoader = mkOption {
         internal = true;
         # "; true" => make the `$out` argument from switch-to-configuration.pl
@@ -276,6 +222,34 @@ in
       '';
     };
 
+    system.systemBuilderCommands = mkOption {
+      type = types.lines;
+      internal = true;
+      default = "";
+      description = ''
+        This code will be added to the builder creating the system store path.
+      '';
+    };
+
+    system.systemBuilderArgs = mkOption {
+      type = types.attrsOf types.unspecified;
+      internal = true;
+      default = {};
+      description = lib.mdDoc ''
+        `lib.mkDerivation` attributes that will be passed to the top level system builder.
+      '';
+    };
+
+    system.forbiddenDependenciesRegex = mkOption {
+      default = "";
+      example = "-dev$";
+      type = types.str;
+      description = lib.mdDoc ''
+        A POSIX Extended Regular Expression that matches store paths that
+        should not appear in the system closure, with the exception of {option}`system.extraDependencies`, which is not checked.
+      '';
+    };
+
     system.extraSystemBuilderCmds = mkOption {
       type = types.lines;
       internal = true;
@@ -290,8 +264,23 @@ in
       default = [];
       description = lib.mdDoc ''
         A list of packages that should be included in the system
-        closure but not otherwise made available to users. This is
-        primarily used by the installation tests.
+        closure but generally not visible to users.
+
+        This option has also been used for build-time checks, but the
+        `system.checks` option is more appropriate for that purpose as checks
+        should not leave a trace in the built system configuration.
+      '';
+    };
+
+    system.checks = mkOption {
+      type = types.listOf types.package;
+      default = [];
+      description = lib.mdDoc ''
+        Packages that are added as dependencies of the system's build, usually
+        for the purpose of validating some part of the configuration.
+
+        Unlike `system.extraDependencies`, these store paths do not
+        become part of the built system configuration.
       '';
     };
 
@@ -341,22 +330,76 @@ in
       '';
     };
 
+    system.includeBuildDependencies = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Whether to include the build closure of the whole system in
+        its runtime closure.  This can be useful for making changes
+        fully offline, as it includes all sources, patches, and
+        intermediate outputs required to build all the derivations
+        that the system depends on.
+
+        Note that this includes _all_ the derivations, down from the
+        included applications to their sources, the compilers used to
+        build them, and even the bootstrap compiler used to compile
+        the compilers. This increases the size of the system and the
+        time needed to download its dependencies drastically: a
+        minimal configuration with no extra services enabled grows
+        from ~670MiB in size to 13.5GiB, and takes proportionally
+        longer to download.
+      '';
+    };
+
   };
 
 
   config = {
+    assertions = [
+      {
+        assertion = config.system.copySystemConfiguration -> !lib.inPureEvalMode;
+        message = "system.copySystemConfiguration is not supported with flakes";
+      }
+    ];
 
     system.extraSystemBuilderCmds =
       optionalString
         config.system.copySystemConfiguration
         ''ln -s '${import ../../../lib/from-env.nix "NIXOS_CONFIG" <nixos-config>}' \
             "$out/configuration.nix"
+        '' +
+      optionalString
+        (config.system.forbiddenDependenciesRegex != "")
+        ''
+          if [[ $forbiddenDependenciesRegex != "" && -n $closureInfo ]]; then
+            if forbiddenPaths="$(grep -E -- "$forbiddenDependenciesRegex" $closureInfo/store-paths)"; then
+              echo -e "System closure $out contains the following disallowed paths:\n$forbiddenPaths"
+              exit 1
+            fi
+          fi
         '';
 
-    system.build.toplevel = system;
+    system.systemBuilderArgs = {
+      # Not actually used in the builder. `passedChecks` is just here to create
+      # the build dependencies. Checks are similar to build dependencies in the
+      # sense that if they fail, the system build fails. However, checks do not
+      # produce any output of value, so they are not used by the system builder.
+      # In fact, using them runs the risk of accidentally adding unneeded paths
+      # to the system closure, which defeats the purpose of the `system.checks`
+      # option, as opposed to `system.extraDependencies`.
+      passedChecks = concatStringsSep " " config.system.checks;
+    }
+    // lib.optionalAttrs (config.system.forbiddenDependenciesRegex != "") {
+      inherit (config.system) forbiddenDependenciesRegex;
+      closureInfo = pkgs.closureInfo { rootPaths = [
+        # override to avoid  infinite recursion (and to allow using extraDependencies to add forbidden dependencies)
+        (config.system.build.toplevel.overrideAttrs (_: { extraDependencies = []; closureInfo = null; }))
+      ]; };
+    };
+
+
+    system.build.toplevel = if config.system.includeBuildDependencies then systemWithBuildDeps else system;
 
   };
 
-  # uses extendModules to generate a type
-  meta.buildDocsInSandbox = false;
 }

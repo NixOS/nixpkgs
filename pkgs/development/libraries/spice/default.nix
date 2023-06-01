@@ -22,37 +22,21 @@
 , libopus
 , gst_all_1
 , orc
+, gdk-pixbuf
 }:
-
-let
-  # This file was mistakenly not included with the 0.15.0 release tarball.
-  # Should be fixed with the next release.
-  # https://gitlab.freedesktop.org/spice/spice/-/issues/56
-  doxygen_sh = fetchurl {
-    url = "https://gitlab.freedesktop.org/spice/spice/-/raw/v0.15.0/doxygen.sh";
-    sha256 = "0g4bx91qclihp1jfhdhyj7wp4hf4289794xxbw32kk58lnd7bzkg";
-  };
-in
 
 stdenv.mkDerivation rec {
   pname = "spice";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchurl {
     url = "https://www.spice-space.org/download/releases/spice-server/${pname}-${version}.tar.bz2";
-    sha256 = "1xd0xffw0g5vvwbq4ksmm3jjfq45f9dw20xpmi82g1fj9f7wy85k";
+    sha256 = "ramvZ6syGRa9frWePWGaSneWwIooxzLt/H8C/ICxo3o=";
   };
 
-  postPatch = ''
-    install ${doxygen_sh} doxygen.sh
-    patchShebangs build-aux
-
-    # https://gitlab.freedesktop.org/spice/spice-common/-/issues/5
-    substituteInPlace subprojects/spice-common/meson.build \
-      --replace \
-      "cmd = run_command(python, '-m', module)" \
-      "cmd = run_command(python, '-c', 'import @0@'.format(module))"
-  '';
+  patches = [
+    ./remove-rt-on-darwin.patch
+  ];
 
   nativeBuildInputs = [
     glib
@@ -65,7 +49,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsa-lib
     cyrus_sasl
     glib
     gst_all_1.gst-plugins-base
@@ -84,13 +67,24 @@ stdenv.mkDerivation rec {
     python3.pkgs.pyparsing
     spice-protocol
     zlib
+  ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib
+  ] ++ lib.optionals stdenv.isDarwin [
+    gdk-pixbuf
   ];
 
-  NIX_CFLAGS_COMPILE = "-fno-stack-protector";
+  env.NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
   mesonFlags = [
     "-Dgstreamer=1.0"
   ];
+
+  postPatch = ''
+    patchShebangs build-aux
+
+    # Forgotten in 0.15.1 tarball
+    sed -i /meson.add_dist_script/d meson.build
+  '';
 
   postInstall = ''
     ln -s spice-server $out/include/spice
@@ -108,7 +102,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.spice-space.org/";
     license = licenses.lgpl21;
 
-    maintainers = [ maintainers.bluescreen303 ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ bluescreen303 atemu ];
+    platforms = with platforms; linux ++ darwin;
   };
 }

@@ -10,6 +10,12 @@ stdenv.mkDerivation rec {
  propagatedBuildInputs = [ calendar js_of_ocaml-ppx_deriving_json eliom ];
  nativeBuildInputs = [ ocaml findlib opaline eliom ];
 
+ # Remove widgets not compatible with jsoo 4.1.0
+ # https://github.com/ocsigen/ocsigen-toolkit/issues/221
+ preConfigure = ''
+   rm src/widgets/ot_{carousel,drawer,swipe,tongue}.eliom{,i}
+ '';
+
   strictDeps = true;
 
  installPhase = ''

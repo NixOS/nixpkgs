@@ -3,12 +3,12 @@
 , libGLU, lv2, gtk2, cairo, pango, fftwFloat, zita-convolver }:
 
 stdenv.mkDerivation rec {
-  version = "20220714";
   pname = "x42-plugins";
+  version = "20230315";
 
   src = fetchurl {
     url = "https://gareus.org/misc/x42-plugins/${pname}-${version}.tar.xz";
-    sha256 = "sha256-myrHOfgpCwuW8YX0jZ3RutoqtXysU0ejBNcuxN3stXU=";
+    hash = "sha256-l7Wg+G795i4QFI94NHcPDnvJMYcfQONUkIJeyX2bZos=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -31,10 +31,12 @@ stdenv.mkDerivation rec {
     sed -i 's|/usr/include/zita-convolver.h|${zita-convolver}/include/zita-convolver.h|g' ./convoLV2/Makefile
   '';
 
+  enableParallelBuilding = true;
+
   meta = with lib;
     { description = "Collection of LV2 plugins by Robin Gareus";
       homepage = "https://github.com/x42/x42-plugins";
-      maintainers = with maintainers; [ magnetophon ];
+      maintainers = with maintainers; [ magnetophon orivej ];
       license = licenses.gpl2;
       platforms = [ "i686-linux" "x86_64-linux" ];
     };

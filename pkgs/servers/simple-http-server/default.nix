@@ -1,26 +1,30 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, Security }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, stdenv
+, darwin
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "simple-http-server";
-  version = "0.6.2";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "TheWaWaR";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ndLFN9FZZA+zsb+bjZ3gMvQJqo6I92erGOQ44H+/LCg=";
+    sha256 = "sha256-Xi5tJIfK4zjckKERhxHuDqeyOB9Dxul/eFLKOtpgR/w=";
   };
 
-  cargoLock.lockFile = ./Cargo.lock;
-
-  patches = [ ./0001-cargo-remove-vendored-openssl.patch ];
-  postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-  '';
+  cargoSha256 = "sha256-wv1hlBTQe1Mm67J2FqrrXSSlZkFPB0TzKc5VUMMfUIQ=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   # Currently no tests are implemented, so we avoid building the package twice
   doCheck = false;
@@ -28,7 +32,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Simple HTTP server in Rust";
     homepage = "https://github.com/TheWaWaR/simple-http-server";
+    changelog = "https://github.com/TheWaWaR/simple-http-server/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ mephistophiles ];
+    maintainers = with maintainers; [ figsoda mephistophiles ];
   };
 }

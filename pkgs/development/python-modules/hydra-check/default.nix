@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "nix-community";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-voSbpOPJUPjwzdMLVt2TC/FIi6LKk01PLd/GczOAUR8=";
+    hash = "sha256-voSbpOPJUPjwzdMLVt2TC/FIi6LKk01PLd/GczOAUR8=";
   };
 
   nativeBuildInputs = [ poetry-core ];

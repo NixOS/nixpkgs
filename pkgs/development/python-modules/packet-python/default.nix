@@ -15,11 +15,11 @@ buildPythonPackage rec {
   version = "1.44.3";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-WVfMELOoml7Hx78jy6TAwlFRLuSQu9dtsb6Khs6/cgI=";
+    hash = "sha256-WVfMELOoml7Hx78jy6TAwlFRLuSQu9dtsb6Khs6/cgI=";
   };
   nativeBuildInputs = [ pytest-runner ];
   propagatedBuildInputs = [ requests ];
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     pytest-runner
     requests-mock

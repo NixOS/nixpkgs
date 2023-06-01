@@ -2,7 +2,7 @@
 , freeimage, libGL }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.4";
+  version = "1.0.6";
   pname = "gamecube-tools";
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "devkitPro";
     repo  = "gamecube-tools";
     rev = "v${version}";
-    sha256 = "sha256-0iMY2LokfsYgHzIuFc8RlrVlJCURqVqprP54PG4oW0M=";
+    sha256 = "sha256-GsTmwyxBc36Qg+UGy+cRAjGW1eh1XxV0s94B14ZJAjU=";
   };
 
   meta = with lib; {

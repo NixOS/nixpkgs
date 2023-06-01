@@ -10,7 +10,8 @@ let
 
   defaultPinentryFlavor =
     if xserverCfg.desktopManager.lxqt.enable
-    || xserverCfg.desktopManager.plasma5.enable then
+    || xserverCfg.desktopManager.plasma5.enable
+    || xserverCfg.desktopManager.deepin.enable then
       "qt"
     else if xserverCfg.desktopManager.xfce.enable then
       "gtk2"
@@ -135,7 +136,7 @@ in
       # The SSH agent protocol doesn't have support for changing TTYs; however we
       # can simulate this with the `exec` feature of openssh (see ssh_config(5))
       # that hooks a command to the shell currently running the ssh program.
-      Match host * exec "${cfg.package}/bin/gpg-connect-agent --quiet updatestartuptty /bye >/dev/null 2>&1"
+      Match host * exec "${pkgs.runtimeShell} -c '${cfg.package}/bin/gpg-connect-agent --quiet updatestartuptty /bye >/dev/null 2>&1'"
     '';
 
     environment.extraInit = mkIf cfg.agent.enableSSHSupport ''

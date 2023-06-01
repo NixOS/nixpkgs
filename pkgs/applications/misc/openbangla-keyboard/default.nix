@@ -1,9 +1,11 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, cargo
 , cmake
 , pkg-config
 , rustPlatform
+, rustc
 , wrapQtAppsHook
 , ibus
 , qtbase
@@ -25,8 +27,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    rustPlatform.rust.cargo
-    rustPlatform.rust.rustc
+    cargo
+    rustc
     rustPlatform.cargoSetupHook
     wrapQtAppsHook
   ];
@@ -68,5 +70,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hqurve ];
     platforms = platforms.linux;
+    # never built on aarch64-linux since first introduction in nixpkgs
+    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }

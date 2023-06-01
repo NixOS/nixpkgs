@@ -227,9 +227,13 @@ let
 
   mkService = name: container: let
     dependsOn = map (x: "${cfg.backend}-${x}.service") container.dependsOn;
+    escapedName = escapeShellArg name;
   in {
     wantedBy = [] ++ optional (container.autoStart) "multi-user.target";
-    after = lib.optionals (cfg.backend == "docker") [ "docker.service" "docker.socket" ] ++ dependsOn;
+    after = lib.optionals (cfg.backend == "docker") [ "docker.service" "docker.socket" ]
+            # if imageFile is not set, the service needs the network to download the image from the registry
+            ++ lib.optionals (container.imageFile == null) [ "network-online.target" ]
+            ++ dependsOn;
     requires = dependsOn;
     environment = proxy_env;
 
@@ -250,16 +254,25 @@ let
       ${optionalString (container.imageFile != null) ''
         ${cfg.backend} load -i ${container.imageFile}
         ''}
+      ${optionalString (cfg.backend == "podman") ''
+        rm -f /run/podman-${escapedName}.ctr-id
+        ''}
       '';
 
     script = concatStringsSep " \\\n  " ([
       "exec ${cfg.backend} run"
       "--rm"
-      "--name=${escapeShellArg name}"
+      "--name=${escapedName}"
       "--log-driver=${container.log-driver}"
     ] ++ optional (container.entrypoint != null)
       "--entrypoint=${escapeShellArg container.entrypoint}"
-      ++ (mapAttrsToList (k: v: "-e ${escapeShellArg k}=${escapeShellArg v}") container.environment)
+      ++ lib.optionals (cfg.backend == "podman") [
+        "--cidfile=/run/podman-${escapedName}.ctr-id"
+        "--cgroups=no-conmon"
+        "--sdnotify=conmon"
+        "-d"
+        "--replace"
+      ] ++ (mapAttrsToList (k: v: "-e ${escapeShellArg k}=${escapeShellArg v}") container.environment)
       ++ map (f: "--env-file ${escapeShellArg f}") container.environmentFiles
       ++ map (p: "-p ${escapeShellArg p}") container.ports
       ++ optional (container.user != null) "-u ${escapeShellArg container.user}"
@@ -270,8 +283,12 @@ let
       ++ map escapeShellArg container.cmd
     );
 
-    preStop = "[ $SERVICE_RESULT = success ] || ${cfg.backend} stop ${name}";
-    postStop = "${cfg.backend} rm -f ${name} || true";
+    preStop = if cfg.backend == "podman"
+      then "[ $SERVICE_RESULT = success ] || podman stop --ignore --cidfile=/run/podman-${escapedName}.ctr-id"
+      else "[ $SERVICE_RESULT = success ] || ${cfg.backend} stop ${name}";
+    postStop =  if cfg.backend == "podman"
+      then "podman rm -f --ignore --cidfile=/run/podman-${escapedName}.ctr-id"
+      else "${cfg.backend} rm -f ${name} || true";
 
     serviceConfig = {
       ### There is no generalized way of supporting `reload` for docker
@@ -293,6 +310,10 @@ let
       TimeoutStartSec = 0;
       TimeoutStopSec = 120;
       Restart = "always";
+    } // optionalAttrs (cfg.backend == "podman") {
+      Environment="PODMAN_SYSTEMD_UNIT=podman-${name}.service";
+      Type="notify";
+      NotifyAccess="all";
     };
   };
 

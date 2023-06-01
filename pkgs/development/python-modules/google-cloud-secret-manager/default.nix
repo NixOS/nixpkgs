@@ -3,37 +3,35 @@
 , fetchPypi
 , google-api-core
 , grpc-google-iam-v1
-, libcst
-, mock
 , proto-plus
-, pytestCheckHook
+, protobuf
 , pytest-asyncio
+, pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-secret-manager";
-  version = "2.12.4";
+  version = "2.16.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nbM+uZr7a3RXvtLI7n5XZZD9r9ZVoh5iCSoZAnDIuQQ=";
+    hash = "sha256-FJ0Rzpvn6oHUrDVE0/zUxxap7bLLd12cB1IxVwsHn7s=";
   };
 
   propagatedBuildInputs = [
     google-api-core
     grpc-google-iam-v1
-    libcst
     proto-plus
-  ];
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
-    mock
-    pytestCheckHook
+  nativeCheckInputs = [
     pytest-asyncio
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
@@ -45,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Secret Manager API API client library";
     homepage = "https://github.com/googleapis/python-secret-manager";
+    changelog = "https://github.com/googleapis/python-secret-manager/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ siriobalmelli SuperSandro2000 ];
   };

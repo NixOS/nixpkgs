@@ -28,6 +28,11 @@ buildPythonPackage rec {
     hash = "sha256-RM6QM/iR00ymg0FBUtaWAtxPHIX4u9U/t5N/UT/T6sc=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pyparsing>=2.4*" "pyparsing>=2.4"
+  '';
+
   propagatedBuildInputs = [
     chardet
     pycurl
@@ -38,7 +43,7 @@ buildPythonPackage rec {
     colorama
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     netaddr
     pytest
     pytestCheckHook

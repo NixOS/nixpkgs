@@ -76,16 +76,16 @@ in
 
   nativeBuildInputs = [makeInitrdNGTool cpio] ++ lib.optional makeUInitrd ubootTools ++ lib.optional strip binutils;
 
-  STRIP = if strip then "${(binutils.nativeDrv or binutils).targetPrefix}strip" else null;
+  STRIP = if strip then "${pkgsBuildHost.binutils.targetPrefix}strip" else null;
 }) ''
-  mkdir ./root
+  mkdir -p ./root/var/empty
   make-initrd-ng "$contentsPath" ./root
   mkdir "$out"
   (cd root && find * .[^.*] -exec touch -h -d '@1' '{}' +)
   for PREP in $prepend; do
     cat $PREP >> $out/initrd
   done
-  (cd root && find * .[^.*] -print0 | sort -z | cpio -o -H newc -R +0:+0 --reproducible --null | eval -- $compress >> "$out/initrd")
+  (cd root && find . -print0 | sort -z | cpio -o -H newc -R +0:+0 --reproducible --null | eval -- $compress >> "$out/initrd")
 
   if [ -n "$makeUInitrd" ]; then
       mkimage -A "$uInitrdArch" -O linux -T ramdisk -C "$uInitrdCompression" -d "$out/initrd" $out/initrd.img

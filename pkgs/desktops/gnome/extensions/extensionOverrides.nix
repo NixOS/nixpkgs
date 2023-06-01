@@ -1,9 +1,14 @@
 { lib
 , ddcutil
+, easyeffects
 , gjs
+, glib
 , gnome
 , gobject-introspection
+, gsound
 , hddtemp
+, libgda
+, libgtop
 , liquidctl
 , lm_sensors
 , netcat-gnu
@@ -14,8 +19,10 @@
 , smartmontools
 , substituteAll
 , touchegg
+, util-linux
 , vte
 , wrapGAppsHook
+, xdg-utils
 , xprop
 }:
 let
@@ -58,6 +65,16 @@ super: lib.trivial.pipe super [
     '';
   }))
 
+  (patchExtension "eepresetselector@ulville.github.io" (old: {
+    patches = [
+      # Needed to find the currently set preset
+      (substituteAll {
+        src = ./extensionOverridesPatches/eepresetselector_at_ulville.github.io.patch;
+        easyeffects_gsettings_path = "${glib.getSchemaPath easyeffects}";
+      })
+    ];
+  }))
+
   (patchExtension "freon@UshakovVasilii_Github.yahoo.com" (old: {
     patches = [
       (substituteAll {
@@ -79,26 +96,43 @@ super: lib.trivial.pipe super [
     '';
   }))
 
-  (patchExtension "screen-autorotate@kosmospredanie.yandex.ru" (old: {
-    # Requires gjs
-    # https://github.com/NixOS/nixpkgs/issues/164865
-    postPatch = ''
-      for file in *.js; do
-        substituteInPlace $file --replace "gjs" "${gjs}/bin/gjs"
-      done
-    '';
-  }))
-
-  (patchExtension "shell-volume-mixer@derhofbauer.at" (old: {
+  (patchExtension "gtk4-ding@smedius.gitlab.com" (old: {
     patches = [
       (substituteAll {
-        src = ./extensionOverridesPatches/shell-volume-mixer_at_derhofbauer.at.patch;
-        inherit pulseaudio;
-        inherit python3;
+        inherit gjs util-linux xdg-utils;
+        util_linux = util-linux;
+        xdg_utils = xdg-utils;
+        src = ./extensionOverridesPatches/gtk4-ding_at_smedius.gitlab.com.patch;
+        nautilus_gsettings_path = "${glib.getSchemaPath gnome.nautilus}";
       })
     ];
+  }))
 
-    meta.maintainers = with lib.maintainers; [ rhoriguchi ];
+  (patchExtension "pano@elhan.io" (old: {
+    patches = [
+      (substituteAll {
+        src = ./extensionOverridesPatches/pano_at_elhan.io.patch;
+        inherit gsound libgda;
+      })
+    ];
+  }))
+
+  (patchExtension "tophat@fflewddur.github.io" (old: {
+    patches = [
+      (substituteAll {
+        src = ./extensionOverridesPatches/tophat_at_fflewddur.github.io.patch;
+        gtop_path = "${libgtop}/lib/girepository-1.0";
+      })
+    ];
+  }))
+
+  (patchExtension "Vitals@CoreCoding.com" (old: {
+    patches = [
+      (substituteAll {
+        src = ./extensionOverridesPatches/vitals_at_corecoding.com.patch;
+        gtop_path = "${libgtop}/lib/girepository-1.0";
+      })
+    ];
   }))
 
   (patchExtension "unite@hardpixel.eu" (old: {

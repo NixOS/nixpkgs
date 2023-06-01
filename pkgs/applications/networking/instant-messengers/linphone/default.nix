@@ -8,7 +8,7 @@
 , liblinphone
 , mediastreamer
 , mediastreamer-openh264
-, minizip2
+, minizip-ng
 , mkDerivation
 , qtgraphicaleffects
 , qtquickcontrols2
@@ -33,7 +33,7 @@
 
 mkDerivation rec {
   pname = "linphone-desktop";
-  version = "4.4.8";
+  version = "5.0.16";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -41,7 +41,7 @@ mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "sha256-o/IyUvIthCrka6oTa0xMKg0sDj4zdon3kBr2gJ2Id8w=";
+    hash = "sha256-zS0JyK+HGiHY7tPdl3RK6fJJOUS+fKM1u3npNxDAAYE=";
   };
 
   patches = [
@@ -54,7 +54,7 @@ mkDerivation rec {
   postPatch = ''
     echo "project(linphoneqt VERSION ${version})" >linphone-app/linphoneqt_version.cmake
     substituteInPlace linphone-app/src/app/AppController.cpp \
-      --replace "LINPHONE_QT_GIT_VERSION" "\"${version}\""
+      --replace "APPLICATION_SEMVER" "\"${version}\""
   '';
 
   # TODO: After linphone-desktop and liblinphone split into separate packages,
@@ -70,7 +70,7 @@ mkDerivation rec {
     mediastreamer
     mediastreamer-openh264
 
-    minizip2
+    minizip-ng
     qtgraphicaleffects
     qtquickcontrols2
     qttranslations
@@ -81,7 +81,7 @@ mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DMINIZIP_INCLUDE_DIRS=${minizip2}/include"
+    "-DMINIZIP_INCLUDE_DIRS=${minizip-ng}/include"
     "-DMINIZIP_LIBRARIES=minizip"
 
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/

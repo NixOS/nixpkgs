@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "pazz";
     repo = "urwidtrees";
     rev = version;
-    sha256 = "sha256-yGSjwagCd5TiwEFtF6ZhDuVqj4PTa5pVXhs8ebr2O/g=";
+    hash = "sha256-yGSjwagCd5TiwEFtF6ZhDuVqj4PTa5pVXhs8ebr2O/g=";
   };
 
   propagatedBuildInputs = [ urwid ];
@@ -22,11 +22,11 @@ buildPythonPackage rec {
   patches = [
     (fetchpatch {
       url = "https://github.com/pazz/urwidtrees/commit/ed39dbc4fc67b0e0249bf108116a88cd18543aa9.patch";
-    sha256 = "sha256-fA+30d2uVaoNCg4rtoWLNPvrZtq41Co4vcmM80hkURs=";
+    hash = "sha256-fA+30d2uVaoNCg4rtoWLNPvrZtq41Co4vcmM80hkURs=";
     })
   ];
 
-  checkInputs = [ glibcLocales ];
+  nativeCheckInputs = [ glibcLocales ];
   LC_ALL="en_US.UTF-8";
 
   meta = with lib; {

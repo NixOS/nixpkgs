@@ -1,5 +1,5 @@
-{ lib, buildDunePackage, cohttp-lwt, graphql-cohttp, graphql-lwt, irmin
-, alcotest, alcotest-lwt, logs, yojson, cohttp-lwt-unix, cacert
+{ lib, buildDunePackage, cohttp-lwt, cohttp-lwt-unix, graphql-cohttp, graphql-lwt, irmin, git-unix
+, alcotest, alcotest-lwt, logs, yojson, cacert
 }:
 
 buildDunePackage rec {
@@ -7,27 +7,21 @@ buildDunePackage rec {
   pname = "irmin-graphql";
 
   inherit (irmin) version src;
+  duneVersion = "3";
 
-  useDune2 = true;
-
-  propagatedBuildInputs = [ cohttp-lwt graphql-cohttp graphql-lwt irmin ];
+  propagatedBuildInputs = [ cohttp-lwt cohttp-lwt-unix graphql-cohttp graphql-lwt irmin git-unix ];
 
   doCheck = true;
+
   checkInputs = [
     alcotest
     alcotest-lwt
     logs
-    cohttp-lwt-unix
     yojson
     cacert
   ];
 
   meta = irmin.meta // {
     description = "GraphQL server for Irmin";
-    broken = true; # Not compatible with graphql 0.14
   };
-
 }
-
-
-

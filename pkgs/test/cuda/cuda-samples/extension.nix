@@ -11,6 +11,9 @@ final: prev: let
     "11.4" = "082dkk5y34wyvjgj2p5j1d00rk8xaxb9z0mhvz16bd469r1bw2qk";
     "11.5" = "sha256-AKRZbke0K59lakhTi8dX2cR2aBuWPZkiQxyKaZTvHrI=";
     "11.6" = "sha256-AsLNmAplfuQbXg9zt09tXAuFJ524EtTYsQuUlV1tPkE=";
+    "11.7" = throw "The tag 11.7 of cuda-samples does not exist";
+    "11.8" = "sha256-7+1P8+wqTKUGbCUBXGMDO9PkxYr2+PLDx9W2hXtXbuc=";
+    "12.0" = "sha256-Lj2kbdVFrJo5xPYPMiE4BS7Z8gpU5JLKXVJhZABUe/g=";
   }.${prev.cudaVersion};
 
 in {

@@ -2,11 +2,13 @@
 , stdenv
 , fetchgit
 , openjdk17_headless
-, gradle
+, gradle_7
 , perl
 , makeWrapper
 }:
-
+let
+  gradle = gradle_7;
+in
 stdenv.mkDerivation rec {
   pname = "apksigner";
   version = "33.0.1";
@@ -87,6 +89,6 @@ stdenv.mkDerivation rec {
     homepage = "https://developer.android.com/studio/command-line/apksigner";
     license = licenses.asl20;
     maintainers = with maintainers; [ linsui ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.unix;
   };
 }

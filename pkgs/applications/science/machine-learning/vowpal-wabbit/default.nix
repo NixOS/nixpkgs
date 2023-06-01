@@ -1,42 +1,44 @@
-{ lib, stdenv, fetchFromGitHub, cmake, boost, flatbuffers, rapidjson, spdlog, zlib }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, boost, eigen, rapidjson, spdlog, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "vowpal-wabbit";
-  version = "9.0.1";
+  version = "9.6.0";
 
   src = fetchFromGitHub {
     owner = "VowpalWabbit";
     repo = "vowpal_wabbit";
     rev = version;
-    sha256 = "sha256-ZUurY2bmTKKIW4GR4oiIpLxb6DSRUNJI/EyNSOu9D9c=";
+    sha256 = "sha256-iSsxpeTRZjIhZaYBeoKLHl9j1aBIXWjONmAInmKvU/I=";
   };
+
+  patches = [
+    # Fix x86_64-linux build by adding missing include
+    # https://github.com/VowpalWabbit/vowpal_wabbit/pull/4275
+    (fetchpatch {
+      url = "https://github.com/VowpalWabbit/vowpal_wabbit/commit/0cb410dfc885ca1ecafd1f8a962b481574fb3b82.patch";
+      sha256 = "sha256-bX3eJ+vMTEMAo3EiESQTDryBP0h2GtnMa/Fz0rTeaNY=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     boost
-    flatbuffers
+    eigen
     rapidjson
     spdlog
     zlib
   ];
 
-  # -DBUILD_TESTS=OFF is set as both it saves time in the build and the default
-  # cmake flags appended by the builder include -DBUILD_TESTING=OFF for which
-  # this is the equivalent flag.
-  # Flatbuffers are an optional feature.
-  # BUILD_FLATBUFFERS=ON turns it on. This will still consume Flatbuffers as a
-  # system dependency
   cmakeFlags = [
     "-DVW_INSTALL=ON"
-    "-DBUILD_TESTS=OFF"
     "-DBUILD_JAVA=OFF"
     "-DBUILD_PYTHON=OFF"
-    "-DUSE_LATEST_STD=ON"
     "-DRAPIDJSON_SYS_DEP=ON"
     "-DFMT_SYS_DEP=ON"
     "-DSPDLOG_SYS_DEP=ON"
-    "-DBUILD_FLATBUFFERS=ON"
+    "-DVW_BOOST_MATH_SYS_DEP=ON"
+    "-DVW_EIGEN_SYS_DEP=ON"
   ];
 
   meta = with lib; {

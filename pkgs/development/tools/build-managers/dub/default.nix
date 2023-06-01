@@ -4,7 +4,7 @@ assert dcompiler != null;
 
 stdenv.mkDerivation rec {
   pname = "dub";
-  version = "1.23.0";
+  version = "1.30.0";
 
   enableParallelBuilding = true;
 
@@ -12,18 +12,17 @@ stdenv.mkDerivation rec {
     owner = "dlang";
     repo = "dub";
     rev = "v${version}";
-    sha256 = "06a4whsl1m600k096nwif83n7za3vr7pj1xwapncy5fcad1gmady";
+    sha256 = "sha256-iVl7bjblvIxvrUX7Phq6h4AIAmZjNVkGYYFA1hhsE7c=";
   };
 
-  postUnpack = ''
-      patchShebangs .
-  '';
-
-  # Can be removed with https://github.com/dlang/dub/pull/1368
   dubvar = "\\$DUB";
   postPatch = ''
-      substituteInPlace test/fetchzip.sh \
-          --replace "dub remove" "\"${dubvar}\" remove"
+    patchShebangs test
+
+
+    # Can be removed with https://github.com/dlang/dub/pull/1368
+    substituteInPlace test/fetchzip.sh \
+        --replace "dub remove" "\"${dubvar}\" remove"
   '';
 
   nativeBuildInputs = [ dcompiler libevent rsync ];
@@ -50,7 +49,7 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     export DUB=$NIX_BUILD_TOP/source/bin/dub
     export PATH=$PATH:$NIX_BUILD_TOP/source/bin/
-    export DC=${dcompiler.out}/bin/${dcompiler.pname}
+    export DC=${dcompiler.out}/bin/${if dcompiler.pname=="ldc" then "ldc2" else dcompiler.pname}
     echo "DC out --> $DC"
     export HOME=$TMP
 
@@ -103,6 +102,7 @@ stdenv.mkDerivation rec {
     rm test/single-file-sdl-default-name.sh
     rm test/subpackage-common-with-sourcefile-globbing.sh
     rm test/issue934-path-dep.sh
+    rm -r test/issue2258-dynLib-exe-dep # requires files below
     rm -r test/1-dynLib-simple
     rm -r test/1-exec-simple-package-json
     rm -r test/1-exec-simple
@@ -136,6 +136,7 @@ stdenv.mkDerivation rec {
     rm -r test/issue97-targettype-none-onerecipe
     rm -r test/path-subpackage-ref
     rm -r test/sdl-package-simple
+    rm -r test/dpath-variable # requires execution of dpath-variable.sh
 
     ./test/run-unittest.sh
   '';
@@ -150,6 +151,6 @@ stdenv.mkDerivation rec {
     homepage = "https://code.dlang.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ ThomasMader ];
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

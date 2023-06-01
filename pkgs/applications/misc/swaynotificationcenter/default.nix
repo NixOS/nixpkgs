@@ -13,11 +13,14 @@
 , gtk-layer-shell
 , gtk3
 , json-glib
+, libgee
 , libhandy
+, libpulseaudio
 , librsvg
 , meson
 , ninja
 , pkg-config
+, python3
 , scdoc
 , vala
 , xvfb-run
@@ -25,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "SwayNotificationCenter";
-  version = "0.6.3";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "ErikReider";
-    repo = "SwayNotificationCenter";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-79Kda2Mi2r38f0J12bRm9wbHiZCy9+ojPDxwlFG8EYw=";
+    hash = "sha256-mwwSTs4d9jUXUy33nSYJCRFlpH6naCmbRUSpfVacMBE=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     meson
     ninja
     pkg-config
+    python3
     scdoc
     vala
     wrapGAppsHook
@@ -56,20 +60,16 @@ stdenv.mkDerivation (finalAttrs: rec {
     gtk-layer-shell
     gtk3
     json-glib
+    libgee
     libhandy
+    libpulseaudio
     librsvg
     # systemd # ends with broken permission
   ];
 
-  # Fix-Me: Broken in 0.6.3, but fixed on master. Enable on next release. Requires python3 in nativeBuildInputs.
-  # postPatch = ''
-  #   chmod +x build-aux/meson/postinstall.py
-  #   patchShebangs build-aux/meson/postinstall.py
-  # '';
-
-  # Remove past 0.6.3
-  postInstall = ''
-    glib-compile-schemas "$out"/share/glib-2.0/schemas
+  postPatch = ''
+    chmod +x build-aux/meson/postinstall.py
+    patchShebangs build-aux/meson/postinstall.py
   '';
 
   passthru.tests.version = testers.testVersion {
@@ -80,8 +80,10 @@ stdenv.mkDerivation (finalAttrs: rec {
   meta = with lib; {
     description = "Simple notification daemon with a GUI built for Sway";
     homepage = "https://github.com/ErikReider/SwayNotificationCenter";
+    changelog = "https://github.com/ErikReider/SwayNotificationCenter/releases/tag/v${version}";
     license = licenses.gpl3;
     platforms = platforms.linux;
+    mainProgram = "swaync";
     maintainers = with maintainers; [ berbiche pedrohlc ];
   };
 })

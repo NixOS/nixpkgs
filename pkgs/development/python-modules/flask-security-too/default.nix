@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 
 # extras: babel
 , babel
@@ -9,7 +10,8 @@
 # extras: common
 , bcrypt
 , bleach
-, flask_mail
+, flask-mailman
+, qrcode
 
 # extras: fsqla
 , flask-sqlalchemy
@@ -19,13 +21,12 @@
 # extras: mfa
 , cryptography
 , phonenumbers
-, pyqrcode
 
 # propagates
 , blinker
 , email-validator
 , flask
-, flask_login
+, flask-login
 , flask_principal
 , flask-wtf
 , itsdangerous
@@ -39,24 +40,28 @@
 , peewee
 , pony
 , pytestCheckHook
+, python-dateutil
 , zxcvbn
 }:
 
 buildPythonPackage rec {
   pname = "flask-security-too";
-  version = "4.1.5";
+  version = "5.1.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Flask-Security-Too";
     inherit version;
-    sha256 = "sha256-98jKcHDv/+mls7QVWeGvGcmoYOGCspxM7w5/2RjJxoM=";
+    hash = "sha256-lZzm43m30y+2qjxNddFEeg9HDlQP9afq5VtuR25zaLc=";
   };
 
   propagatedBuildInputs = [
     blinker
     email-validator
     flask
-    flask_login
+    flask-login
     flask_principal
     flask-wtf
     itsdangerous
@@ -71,7 +76,8 @@ buildPythonPackage rec {
     common = [
       bcrypt
       bleach
-      flask_mail
+      flask-mailman
+      qrcode
     ];
     fsqla = [
       flask-sqlalchemy
@@ -81,11 +87,10 @@ buildPythonPackage rec {
     mfa = [
       cryptography
       phonenumbers
-      pyqrcode
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     argon2-cffi
     flask-mongoengine
     mongoengine
@@ -93,6 +98,7 @@ buildPythonPackage rec {
     peewee
     pony
     pytestCheckHook
+    python-dateutil
     zxcvbn
   ]
   ++ passthru.optional-dependencies.babel
@@ -101,10 +107,13 @@ buildPythonPackage rec {
   ++ passthru.optional-dependencies.mfa;
 
 
-  pythonImportsCheck = [ "flask_security" ];
+  pythonImportsCheck = [
+    "flask_security"
+  ];
 
   meta = with lib; {
-    homepage = "https://pypi.org/project/Flask-Security-Too/";
+    changelog = "https://github.com/Flask-Middleware/flask-security/blob/${version}/CHANGES.rst";
+    homepage = "https://github.com/Flask-Middleware/flask-security";
     description = "Simple security for Flask apps (fork)";
     license = licenses.mit;
     maintainers = with maintainers; [ gador ];

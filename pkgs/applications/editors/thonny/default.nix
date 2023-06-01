@@ -1,16 +1,16 @@
-{ lib, fetchFromGitHub, python3, makeDesktopItem, copyDesktopItems }:
+{ lib, fetchFromGitHub, python3, tk, makeDesktopItem, copyDesktopItems }:
 
 with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "thonny";
-  version = "3.3.14";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    sha256 = "13l8blq7y6p7a235x2lfiqml1bd4ba2brm3vfvs8wasjh3fvm9g5";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-TxfpzKAsU/5ble4VzJ+4pokCiyJsdisjmNwWfxOMKzE=";
   };
 
   nativeBuildInputs = [ copyDesktopItems ];
@@ -42,6 +42,7 @@ buildPythonApplication rec {
 
   preFixup = ''
     wrapProgram "$out/bin/thonny" \
+       --set TK_LIBRARY "${tk}/lib/${tk.libPrefix}" \
        --prefix PYTHONPATH : $PYTHONPATH:$(toPythonPath ${python3.pkgs.jedi})
   '';
 

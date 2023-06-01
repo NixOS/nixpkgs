@@ -1,20 +1,24 @@
-{ lib, buildGoPackage, fetchFromSourcehut, nixosTests }:
+{ lib, buildGoModule, fetchFromSourcehut, nixosTests }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "phylactery";
   version = "0.1.2";
-
-  goPackagePath = "git.sr.ht/~cnx/phylactery";
 
   src = fetchFromSourcehut {
     owner = "~cnx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-HQN6wJ/4YeuQaDcNgdHj0RgYnn2NxXGRfxybmv60EdQ=";
+    hash = "sha256-HQN6wJ/4YeuQaDcNgdHj0RgYnn2NxXGRfxybmv60EdQ=";
   };
 
-  # Upstream repo doesn't provide any test.
-  doCheck = false;
+  vendorHash = null;
+
+  preBuild = ''
+    cp ${./go.mod} go.mod
+  '';
+
+  ldflags = [ "-s" "-w" ];
+
   passthru.tests.phylactery = nixosTests.phylactery;
 
   meta = with lib; {

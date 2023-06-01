@@ -1,59 +1,41 @@
-{ stdenv, lib, rustPlatform, fetchgit
-, minijail-tools, pkg-config, protobuf, wayland-scanner
+{ lib, rustPlatform, fetchgit, pkg-config, protobuf, python3, wayland-scanner
 , libcap, libdrm, libepoxy, minijail, virglrenderer, wayland, wayland-protocols
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "crosvm";
-  version = "104.0";
+  version = "113.0";
 
   src = fetchgit {
-    url = "https://chromium.googlesource.com/crosvm/crosvm";
-    rev = "265aab613b1eb31598ea0826f04810d9f010a2c6";
-    sha256 = "OzbtPHs6BWK83RZ/6eCQHA61X6SY8FoBkaN70a37pvc=";
+    url = "https://chromium.googlesource.com/chromiumos/platform/crosvm";
+    rev = "f2871094c45bc3a8a2604cbba5b34da27d676af7";
+    sha256 = "seeqr453Qjk1MoYq2ZlPsgUOMaV7PbK4MKze2cl2NvI=";
     fetchSubmodules = true;
   };
 
   separateDebugInfo = true;
 
-  patches = [
-    ./default-seccomp-policy-dir.diff
+  cargoSha256 = "hGhYzynNvsaSQO2lSEh/OGWkeE8bEinwb0QxX87TQU0=";
+
+  nativeBuildInputs = [
+    pkg-config protobuf python3 rustPlatform.bindgenHook wayland-scanner
   ];
-
-  cargoLock.lockFile = ./Cargo.lock;
-
-  nativeBuildInputs = [ minijail-tools pkg-config protobuf wayland-scanner ];
 
   buildInputs = [
     libcap libdrm libepoxy minijail virglrenderer wayland wayland-protocols
   ];
 
-  arch = stdenv.hostPlatform.parsed.cpu.name;
-
-  postPatch = ''
-    cp ${cargoLock.lockFile} Cargo.lock
-    sed -i "s|/usr/share/policy/crosvm/|$PWD/seccomp/$arch/|g" \
-        seccomp/$arch/*.policy
+  preConfigure = ''
+    patchShebangs third_party/minijail/tools/*.py
   '';
 
-  preBuild = ''
-    export DEFAULT_SECCOMP_POLICY_DIR=$out/share/policy
-
-    for policy in seccomp/$arch/*.policy; do
-        compile_seccomp_policy \
-            --default-action trap $policy ''${policy%.policy}.bpf
-    done
-
-    substituteInPlace seccomp/$arch/*.policy \
-      --replace "@include $(pwd)/seccomp/$arch/" "@include $out/share/policy/"
-  '';
+  # crosvm mistakenly expects the stable protocols to be in the root
+  # of the pkgdatadir path, rather than under the "stable"
+  # subdirectory.
+  PKG_CONFIG_WAYLAND_PROTOCOLS_PKGDATADIR =
+    "${wayland-protocols}/share/wayland-protocols/stable";
 
   buildFeatures = [ "default" "virgl_renderer" "virgl_renderer_next" ];
-
-  postInstall = ''
-    mkdir -p $out/share/policy/
-    cp -v seccomp/$arch/*.{policy,bpf} $out/share/policy/
-  '';
 
   passthru.updateScript = ./update.py;
 

@@ -3,11 +3,13 @@
 , rustPlatform
 , fetchFromGitLab
 , fetchpatch
+, cargo
 , meson
 , ninja
 , gettext
 , python3
 , pkg-config
+, rustc
 , glib
 , libhandy
 , gtk3
@@ -42,10 +44,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    sha256 = "0y34b5rnr75h7dxbx93mafrmwsh187wq5js7fmkb1m1yyybj1v1x";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "gettext-rs-0.4.2" = "sha256-wyZ1bf0oFcQo8gEi2GEalRUoKMoJYHysu79qcfjd4Ng=";
+    };
   };
 
   nativeBuildInputs = [
@@ -54,9 +57,9 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     python3
-    rustPlatform.rust.cargo
+    cargo
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.rustc
+    rustc
     wrapGAppsHook
     glib
   ];

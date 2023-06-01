@@ -18,14 +18,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libnice";
-  version = "0.1.18";
+  version = "0.1.21";
 
   outputs = [ "bin" "out" "dev" ]
     ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
     url = "https://libnice.freedesktop.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "1x3kj9b3dy9m2h6j96wgywfamas1j8k2ca43k5v82kmml9dx5asy";
+    hash = "sha256-cuc6Ks8g9ZCT4h1WAWBuQFhzUD6zXzRvpiHeI+mbOzk=";
   };
 
   patches = [
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
       It provides a GLib-based library, libnice and a Glib-free library,
       libstun as well as GStreamer elements.'';
     homepage = "https://libnice.freedesktop.org/";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = with licenses; [ lgpl21 mpl11 ];
   };
 }

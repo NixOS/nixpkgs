@@ -1,18 +1,22 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
-  version = "2.038";
-in fetchzip {
-  name = "source-code-pro-${version}";
+stdenvNoCC.mkDerivation rec {
+  pname = "source-code-pro";
+  version = "2.042";
 
-  url = "https://github.com/adobe-fonts/source-code-pro/releases/download/${version}R-ro%2F1.058R-it%2F1.018R-VAR/OTF-source-code-pro-${version}R-ro-1.058R-it.zip";
+  src = fetchzip {
+    url = "https://github.com/adobe-fonts/source-code-pro/releases/download/${version}R-u%2F1.062R-i%2F1.026R-vf/OTF-source-code-pro-${version}R-u_1.062R-i.zip";
+    stripRoot = false;
+    hash = "sha256-+BnfmD+AjObSoVxPvFAqbnMD2j5qf2YmbXGQtXoaiy0=";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 OTF/*.otf -t $out/share/fonts/opentype
+
+    runHook postInstall
   '';
-
-  sha256 = "027cf62zj27q7l3d4sqzdfgz423lzysihdg8cvmkk6z910a1v368";
 
   meta = {
     description = "Monospaced font family for user interface and coding environments";

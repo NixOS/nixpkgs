@@ -2,7 +2,7 @@
     and out-of-tree mod packages (mod.nix).
 */
 { lib, makeSetupHook, curl, unzip, dos2unix, pkg-config, makeWrapper
-, lua, mono, dotnetPackages, python2
+, lua, mono, dotnetPackages, python3
 , libGL, freetype, openal, SDL2
 , zenity
 }:
@@ -10,9 +10,11 @@
 with lib;
 
 let
-  path = makeBinPath ([ mono python2 ] ++ optional (zenity != null) zenity);
+  path = makeBinPath ([ mono python3 ] ++ optional (zenity != null) zenity);
   rpath = makeLibraryPath [ lua freetype openal SDL2 ];
-  mkdirp = makeSetupHook { } ./mkdirp.sh;
+  mkdirp = makeSetupHook {
+    name = "openra-mkdirp-hook";
+  } ./mkdirp.sh;
 
 in {
   patchEngine = dir: version: ''
@@ -66,7 +68,7 @@ in {
       makeWrapper
       mkdirp
       mono
-      python2
+      python3
     ];
 
     makeFlags = [ "prefix=$(out)" ];

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, perl, which
+{ lib, stdenv, fetchFromGitHub, fetchpatch, perl, which
 # Most packages depending on openblas expect integer width to match
 # pointer width, but some expect to use 32-bit integers always
 # (for compatibility with reference BLAS).
@@ -31,8 +31,6 @@
 , opencv
 , python3
 }:
-
-with lib;
 
 let blas64_ = blas64; in
 
@@ -108,6 +106,13 @@ let
       DYNAMIC_ARCH = setDynamicArch false;
       USE_OPENMP = true;
     };
+
+    loongarch64-linux = {
+      BINARY = 64;
+      TARGET = setTarget "LOONGSONGENERIC";
+      DYNAMIC_ARCH = setDynamicArch false;
+      USE_OPENMP = true;
+    };
   };
 in
 
@@ -121,7 +126,7 @@ let
   blas64 =
     if blas64_ != null
       then blas64_
-      else hasPrefix "x86_64" stdenv.hostPlatform.system;
+      else lib.hasPrefix "x86_64" stdenv.hostPlatform.system;
   # Convert flag values to format OpenBLAS's build expects.
   # `toString` is almost what we need other than bools,
   # which we need to map {true -> 1, false -> 0}
@@ -129,14 +134,14 @@ let
   mkMakeFlagValue = val:
     if !builtins.isBool val then toString val
     else if val then "1" else "0";
-  mkMakeFlagsFromConfig = mapAttrsToList (var: val: "${var}=${mkMakeFlagValue val}");
+  mkMakeFlagsFromConfig = lib.mapAttrsToList (var: val: "${var}=${mkMakeFlagValue val}");
 
   shlibExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
 in
 stdenv.mkDerivation rec {
   pname = "openblas";
-  version = "0.3.20";
+  version = "0.3.21";
 
   outputs = [ "out" "dev" ];
 
@@ -144,8 +149,22 @@ stdenv.mkDerivation rec {
     owner = "xianyi";
     repo = "OpenBLAS";
     rev = "v${version}";
-    sha256 = "sha256-FLPVcepf7tv/es+4kur9Op7o3iVAAayuYN4hY/P4mmQ=";
+    sha256 = "sha256-F6cXPqQai4kA5zrsa8E0Q7dD9zZHlwZ+B16EOGNXoXs=";
   };
+
+  patches = lib.optionals stdenv.hostPlatform.isLoongArch64 [
+    # https://github.com/xianyi/OpenBLAS/pull/3626
+    (fetchpatch {
+      name = "openblas-0.3.21-fix-loong.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sci-libs/openblas/files/openblas-0.3.21-fix-loong.patch?id=37ee4c70278eb41181f69e175575b0152b941655";
+      hash = "sha256-iWy11l3wEvzNV08LbhOjnSPj1SjPH8RMnb3ORz7V+gc";
+    })
+  ];
+
+  postPatch = ''
+    # cc1: error: invalid feature modifier 'sve2' in '-march=armv8.5-a+sve+sve2+bf16'
+    substituteInPlace Makefile.arm64 --replace "+sve2+bf16" ""
+  '';
 
   inherit blas64;
 
@@ -174,10 +193,13 @@ stdenv.mkDerivation rec {
     buildPackages.stdenv.cc
   ];
 
+  enableParallelBuilding = true;
+
   makeFlags = mkMakeFlagsFromConfig (config // {
     FC = "${stdenv.cc.targetPrefix}gfortran";
     CC = "${stdenv.cc.targetPrefix}${if stdenv.cc.isClang then "clang" else "cc"}";
     PREFIX = placeholder "out";
+    OPENBLAS_INCLUDE_DIR = "${placeholder "dev"}/include";
     NUM_THREADS = 64;
     INTERFACE64 = blas64;
     NO_STATIC = !enableStatic;
@@ -191,6 +213,10 @@ stdenv.mkDerivation rec {
     NO_BINARY_MODE = if stdenv.isx86_64
         then toString (stdenv.hostPlatform != stdenv.buildPlatform)
         else stdenv.hostPlatform != stdenv.buildPlatform;
+    # This disables automatic build job count detection (which honours neither enableParallelBuilding nor NIX_BUILD_CORES)
+    # and uses the main make invocation's job count, falling back to 1 if no parallelism is used.
+    # https://github.com/xianyi/OpenBLAS/blob/v0.3.20/getarch.c#L1781-L1792
+    MAKE_NB_JOBS = 0;
   } // (lib.optionalAttrs singleThreaded {
     # As described on https://github.com/xianyi/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
     USE_THREAD = false;
@@ -209,7 +235,7 @@ stdenv.mkDerivation rec {
 Name: $alias
 Version: ${version}
 Description: $alias provided by the OpenBLAS package.
-Cflags: -I$out/include
+Cflags: -I$dev/include
 Libs: -L$out/lib -lopenblas
 EOF
     done
@@ -241,7 +267,7 @@ EOF
     description = "Basic Linear Algebra Subprograms";
     license = licenses.bsd3;
     homepage = "https://github.com/xianyi/OpenBLAS";
-    platforms = platforms.unix;
+    platforms = attrNames configs;
     maintainers = with maintainers; [ ttuegel ];
   };
 }

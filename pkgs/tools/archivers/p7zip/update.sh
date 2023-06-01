@@ -7,7 +7,7 @@ DRV_DIR="$PWD"
 
 OLD_VERSION="$(sed -nE 's/\s*version = "(.*)".*/\1/p' ./default.nix)"
 
-NEW_VERSION="$(curl https://api.github.com/repos/jinfeihan57/p7zip/releases/latest | jq .tag_name -r | tr -d 'v')"
+NEW_VERSION="$(curl https://api.github.com/repos/p7zip-project/p7zip/releases/latest | jq .tag_name -r | tr -d 'v')"
 
 echo "comparing versions $OLD_VERSION => $NEW_VERSION"
 if [[ "$OLD_VERSION" == "$NEW_VERSION" ]]; then

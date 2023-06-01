@@ -5,19 +5,19 @@
 }:
 
 let
-  gitRev    = "8fb4b0929ce84cf375bfb83a9d522ccd80681eaf";
+  gitRev    = "8b805c674adad536f9dd552b4be75fadcb3c7db6";
   gitBranch = "develop";
   gitTag    = "0.9.3";
 in
   stdenv.mkDerivation {
     pname = "antimony";
-    version = "2020-03-28";
+    version = "2022-11-23";
 
     src = fetchFromGitHub {
       owner  = "mkeeter";
       repo   = "antimony";
       rev    = gitRev;
-      sha256 = "1s0zmq5jmhmb1wcsyaxfmii448g6x8b41mzvb1awlljj85qj0k2s";
+      sha256 = "NmOuBewfHqtAim2cNP62LXgRjVWuVUGweV46sY1qjGk=";
     };
 
     patches = [ ./paths-fix.patch ];

@@ -11,22 +11,24 @@
 , libapparmor
 , libselinux
 , libseccomp
+, testers
+, buildah
 }:
 
 buildGoModule rec {
   pname = "buildah";
-  version = "1.27.1";
+  version = "1.30.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "buildah";
     rev = "v${version}";
-    sha256 = "sha256-WTb64VhVst3E0bct51EmsfeloTDLe2zXsy5tDDvX2rI=";
+    hash = "sha256-h0fipw3lJKy+VkGkh1XbZ6wUOg4001uURoJpjNq7QOs=";
   };
 
   outputs = [ "out" "man" ];
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 
@@ -46,7 +48,7 @@ buildGoModule rec {
     runHook preBuild
     patchShebangs .
     make bin/buildah
-    make -C docs GOMD2MAN="${go-md2man}/bin/go-md2man"
+    make -C docs GOMD2MAN="go-md2man"
     runHook postBuild
   '';
 
@@ -57,6 +59,10 @@ buildGoModule rec {
     make -C docs install PREFIX="$man"
     runHook postInstall
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = buildah;
+  };
 
   meta = with lib; {
     description = "A tool which facilitates building OCI images";

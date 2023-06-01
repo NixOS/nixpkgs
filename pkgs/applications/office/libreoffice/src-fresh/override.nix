@@ -16,8 +16,7 @@ attrs:
     sed -e '/CPPUNIT_ASSERT_EQUAL(22, nEndRunPos);/d' -i './vcl/qa/cppunit/text.cxx'
   '';
   configureFlags = attrs.configureFlags ++ [
-    (lib.enableFeature kdeIntegration "kf5")
-    "--without-system-zxing"
-    "--without-system-cuckoo"
+    "--without-system-dragonbox"
+    "--without-system-libfixmath"
   ];
 }

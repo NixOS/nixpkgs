@@ -1,28 +1,29 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchPypi
 , python3
 , git
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "hatch";
-  version = "1.3.1";
+  version = "1.6.3";
   format = "pyproject";
 
-  src = fetchFromGitHub {
-    owner = "pypa";
-    repo = "hatch";
-    rev = "hatch-v${version}";
-    sha256 = "sha256-ftT86HX5CVbiHe5yzXT2gNl8Rx+f+fmiAJRnOuDpvYI=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-ZQ5nG6MAMY5Jjvk7vjuZsyzhSSB2T7h1P4mZP2Pu15o=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
     click
     hatchling
     httpx
+    hyperlink
     keyring
+    packaging
     pexpect
+    platformdirs
     pyperclip
     rich
     shellingham
@@ -32,10 +33,11 @@ python3.pkgs.buildPythonApplication rec {
     virtualenv
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     git
     pytestCheckHook
     pytest-mock
+    pytest-xdist
   ];
 
   preCheck = ''
@@ -54,15 +56,22 @@ python3.pkgs.buildPythonApplication rec {
     "test_editable_exact"
     "test_editable_exact_extra_dependencies"
     "test_editable_exact_force_include"
+    "test_editable_exact_force_include_option"
     "test_editable_exact_force_include_build_data_precedence"
     "test_editable_pth"
     # AssertionError: assert len(extract_installed_requirements(output.splitlines())) > 0
     "test_creation_allow_system_packages"
+    # Formatting changes with pygments 2.14.0
+    "test_create_necessary_directories"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # https://github.com/NixOS/nixpkgs/issues/209358
+    "test_scripts_no_environment"
   ];
 
   meta = with lib; {
     description = "Modern, extensible Python project manager";
     homepage = "https://hatch.pypa.io/latest/";
+    changelog = "https://github.com/pypa/hatch/blob/hatch-v${version}/docs/history.md#hatch";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];
   };

@@ -13,5 +13,6 @@ import ./make-test-python.nix ({ pkgs, ... }:
       start_all()
       machine.wait_for_unit("multi-user.target")
       machine.wait_for_unit("sssd.service")
+      machine.succeed("sssctl config-check")
     '';
 })

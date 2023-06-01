@@ -1,5 +1,4 @@
 { lib
-, bash
 , stdenv
 , lz4
 , ffmpeg-full

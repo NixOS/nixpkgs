@@ -31,7 +31,7 @@ buildPythonPackage rec {
     tomli
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

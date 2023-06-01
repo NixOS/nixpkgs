@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DEIGEN_INCLUDE_DIR=${eigen2}/include/eigen2"
+    "-DLUABIND_LIBRARY=${luabind}/lib/libluabind09.a"
   ];
 
   meta = with lib; {

@@ -1,33 +1,39 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , chardet
+, click
+, flex
+, packaging
+, pyicu
 , requests
 , ruamel-yaml
 , setuptools-scm
 , six
-, semver
+, swagger-spec-validator
 , pytestCheckHook
 , openapi-spec-validator
 }:
 
 buildPythonPackage rec {
   pname = "prance";
-  version = "0.21.8.0";
+  version = "0.22.02.22.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "RonnyPfannschmidt";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-kGANMHfWwhW3ZBw2ZVCJZR/bV2EPhcydMKhDeDTVwcQ=";
+    hash = "sha256-NtIbZp34IcMYJzaNQVL9GLdNS3NYOCRoWS1wGg/gLVA=";
   };
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "--cov=prance --cov-report=term-missing --cov-fail-under=90" "" \
-      --replace "chardet>=3.0,<5.0" "chardet"
+      --replace "--cov=prance --cov-report=term-missing --cov-fail-under=90" ""
   '';
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -38,27 +44,37 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     chardet
+    packaging
     requests
     ruamel-yaml
     six
-    semver
   ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    cli = [ click ];
+    flex = [ flex ];
+    icu = [ pyicu ];
+    osv = [ openapi-spec-validator ];
+    ssv = [ swagger-spec-validator ];
+  };
+
+  nativeCheckInputs = [
     pytestCheckHook
-    openapi-spec-validator
-  ];
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   # Disable tests that require network
   disabledTestPaths = [
     "tests/test_convert.py"
   ];
   disabledTests = [
+    "test_convert_defaults"
+    "test_convert_output"
     "test_fetch_url_http"
   ];
   pythonImportsCheck = [ "prance" ];
 
   meta = with lib; {
+    changelog = "https://github.com/RonnyPfannschmidt/prance/blob/${src.rev}/CHANGES.rst";
     description = "Resolving Swagger/OpenAPI 2.0 and 3.0.0 Parser";
     homepage = "https://github.com/RonnyPfannschmidt/prance";
     license = licenses.mit;

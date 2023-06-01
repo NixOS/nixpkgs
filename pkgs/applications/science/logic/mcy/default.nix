@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, yosys, symbiyosys, python3
+, yosys, python3
 }:
 
 let

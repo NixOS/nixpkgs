@@ -32,7 +32,7 @@ buildPythonPackage rec {
     webob
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pastedeploy
     pyquery
     pytestCheckHook

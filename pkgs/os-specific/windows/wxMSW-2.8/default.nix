@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     (if compat24 then "--enable-compat24" else "--disable-compat24")
     (if compat26 then "--enable-compat26" else "--disable-compat26")
     "--disable-precomp-headers"
-    (if unicode then "--enable-unicode" else "")
+    (lib.optionalString unicode "--enable-unicode")
     "--with-opengl"
   ];
 

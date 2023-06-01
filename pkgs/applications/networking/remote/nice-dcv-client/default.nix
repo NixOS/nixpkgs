@@ -4,7 +4,6 @@
 , glib
 , libX11
 , gst_all_1
-, sqlite
 , libepoxy
 , pango
 , cairo

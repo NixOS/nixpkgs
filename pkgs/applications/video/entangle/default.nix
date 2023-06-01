@@ -33,6 +33,7 @@
 , libxkbcommon
 , orc
 , pcre
+, pcre2
 , udev
 , util-linux
 , xorg
@@ -94,7 +95,8 @@ stdenv.mkDerivation rec {
     libunwind
     libxkbcommon
     orc
-    pcre
+    pcre # required by libselinux before we USE_PCRE2
+    pcre2 # required by glib-2.0
     udev
     util-linux
     zstd

@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opustags";
-  version = "1.6.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "fmang";
     repo = "opustags";
     rev = version;
-    sha256 = "1wsfw713rhi2gg5xc04cx5i31hlw0l3wdflj3r1y8w45bdk6ag1z";
+    sha256 = "sha256-qxtTJ4Hl2ccL+rhONeoOfV6ZyJaWaVDPMsXYJkXCWkY=";
   };
 
   buildInputs = [ libogg ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [ ffmpeg glibcLocales perl ] ++ (with perlPackages; [ ListMoreUtils ]);
+  nativeCheckInputs = [ ffmpeg glibcLocales perl ] ++ (with perlPackages; [ ListMoreUtils ]);
 
   checkPhase = ''
     export LANG="en_US.UTF-8"

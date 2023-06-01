@@ -32,13 +32,13 @@
 
 stdenv.mkDerivation rec {
   pname = "picom";
-  version = "9.1";
+  version = "10.2";
 
   src = fetchFromGitHub {
     owner = "yshui";
     repo = "picom";
     rev = "v${version}";
-    sha256 = "sha256-Fqk6bPAOg4muxmSP+ezpGUNw6xrMWchZACKemeA08mA=";
+    hash = "sha256-C+icJXTkE+XMaU7N6JupsP8xhmRVggX9hY1P7za0pO0=";
     fetchSubmodules = true;
   };
 

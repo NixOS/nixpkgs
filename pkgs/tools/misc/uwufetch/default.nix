@@ -1,37 +1,42 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, viu }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, viu }:
 
 stdenv.mkDerivation rec {
   pname = "uwufetch";
-  version = "1.7";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "TheDarkBug";
     repo = pname;
     rev = version;
-    hash = "sha256-6yfRWFKdg7wM18hD2Bn095HzpnURhZJtx+SYx8SVBLA=";
+    hash = "sha256-cA8sajh+puswyKikr0Jp9ei+EpVkH+vhEp+pTerkUqA=";
   };
 
-  patches = [
-    # cannot find images in /usr
-    ./fix-paths.patch
-    # https://github.com/TheDarkBug/uwufetch/pull/150
-    (fetchpatch {
-      url = "https://github.com/lourkeur/uwufetch/commit/de561649145b57d8750843555e4ffbc1cbcb01f0.patch";
-      sha256 = "sha256-KR81zxGlmthcadYBdsiVwxa5+lZUtqP7w0O4uFuputE=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace uwufetch.c \
+      --replace "/usr/lib/uwufetch" "$out/lib/uwufetch" \
+      --replace "/usr/local/lib/uwufetch" "$out/lib/uwufetch" \
+      --replace "/etc/uwufetch/config" "$out/etc/uwufetch/config"
+    # fix command_path for package manager (nix-store)
+    substituteInPlace fetch.c \
+      --replace "/usr/bin" "/run/current-system/sw/bin"
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile \
+      --replace "local/bin" "bin" \
+      --replace "local/lib" "lib" \
+      --replace "local/include" "include" \
+      --replace "local/share" "share"
+  '';
 
   nativeBuildInputs = [ makeWrapper ];
 
-  installFlags = [
-    "PREFIX=${placeholder "out"}/bin"
-    "LIBDIR=${placeholder "out"}/lib"
-    "MANDIR=${placeholder "out"}/share/man/man1"
+  makeFlags = [
+    "UWUFETCH_VERSION=${version}"
   ];
 
-  postPatch = ''
-    substituteAllInPlace uwufetch.c
-  '';
+  installFlags = [
+    "DESTDIR=${placeholder "out"}"
+    "ETC_DIR=${placeholder "out"}/etc"
+  ];
 
   postFixup = ''
     wrapProgram $out/bin/uwufetch \
@@ -42,6 +47,7 @@ stdenv.mkDerivation rec {
     description = "A meme system info tool for Linux";
     homepage = "https://github.com/TheDarkBug/uwufetch";
     license = licenses.gpl3Plus;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ lourkeur ];
   };
 }

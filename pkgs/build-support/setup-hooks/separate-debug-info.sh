@@ -11,6 +11,9 @@ _separateDebugInfo() {
     local dst="${debug:-$out}"
     if [ "$prefix" = "$dst" ]; then return 0; fi
 
+    # in case there is nothing to strip, don't fail the build
+    mkdir -p "$dst"
+
     dst="$dst/lib/debug/.build-id"
 
     # Find executables and dynamic libraries.
@@ -26,17 +29,21 @@ _separateDebugInfo() {
         fi
 
         # Extract the debug info.
-        header "separating debug info from $i (build ID $id)"
+        echo "separating debug info from $i (build ID $id)"
         mkdir -p "$dst/${id:0:2}"
 
         # This may fail, e.g. if the binary is for a different
         # architecture than we're building for.  (This happens with
         # firmware blobs in QEMU.)
         (
+            if [ -f "$dst/${id:0:2}/${id:2}.debug" ]
+            then
+                echo "separate-debug-info: warning: multiple files with build id $id found, overwriting"
+            fi
             $OBJCOPY --only-keep-debug "$i" "$dst/${id:0:2}/${id:2}.debug"
 
             # Also a create a symlink <original-name>.debug.
             ln -sfn ".build-id/${id:0:2}/${id:2}.debug" "$dst/../$(basename "$i")"
         ) || rmdir -p "$dst/${id:0:2}"
-    done < <(find "$prefix" -type f -print0)
+    done < <(find "$prefix" -type f -print0 | sort -z)
 }

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "duckdb-engine";
-  version = "0.5.0";
+  version = "0.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     repo = "duckdb_engine";
     owner = "Mause";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6bR2pt7gUHZu4I7VmJgVsFT9u3/e4c9RAKHHlbX/Tyk=";
+    hash = "sha256-qLQjFkud9DivLQ9PignLrXlUVOAxsd28s7+2GdC5jKE=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,16 @@ buildPythonPackage rec {
     sqlalchemy
   ];
 
-  checkInputs = [
+  preCheck = ''
+    export HOME="$(mktemp -d)"
+  '';
+
+  # this test tries to download the httpfs extension
+  disabledTests = [
+    "test_preload_extension"
+  ];
+
+  nativeCheckInputs = [
     pytestCheckHook
     hypothesis
     ipython-sql
@@ -48,6 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "SQLAlchemy driver for duckdb";
     homepage = "https://github.com/Mause/duckdb_engine";
+    changelog = "https://github.com/Mause/duckdb_engine/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
   };

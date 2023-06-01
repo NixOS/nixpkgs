@@ -13,12 +13,12 @@ buildPythonPackage rec {
     owner = "gvalkov";
     repo = "python-ansimarkup";
     rev = "v${version}";
-    sha256 = "sha256-HGeVapv2Z5GtPwSp3+dvUwAH0bFqu+Bmk5E6SRr7NO4=";
+    hash = "sha256-HGeVapv2Z5GtPwSp3+dvUwAH0bFqu+Bmk5E6SRr7NO4=";
   };
 
   propagatedBuildInputs = [ colorama ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ansimarkup" ];
 

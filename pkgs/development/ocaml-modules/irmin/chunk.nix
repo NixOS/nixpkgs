@@ -1,11 +1,12 @@
-{ lib, buildDunePackage, irmin, irmin-test, alcotest }:
+{ lib, buildDunePackage, irmin, irmin-test, fmt, logs, lwt, alcotest }:
 
 buildDunePackage rec {
 
   pname = "irmin-chunk";
-  inherit (irmin) version src useDune2;
+  inherit (irmin) version src strictDeps;
+  duneVersion = "3";
 
-  propagatedBuildInputs = [ irmin ];
+  propagatedBuildInputs = [ irmin fmt logs lwt ];
 
   doCheck = true;
   checkInputs = [ alcotest irmin-test ];

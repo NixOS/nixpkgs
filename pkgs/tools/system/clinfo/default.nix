@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "clinfo";
-  version = "3.0.21.02.21";
+  version = "3.0.23.01.25";
 
   src = fetchFromGitHub {
     owner = "Oblomov";
     repo = "clinfo";
     rev = version;
-    sha256 = "sha256-0ijfbfv1F6mnt1uFH/A4yOADJoAFrPMa3yAOFJW53ek=";
+    sha256 = "sha256-1jZP4SnLIHh3vQJLBp+j/eQ1c8XBGFR2hjYxflhpWAU=";
   };
 
   buildInputs = lib.optionals (!stdenv.isDarwin) [

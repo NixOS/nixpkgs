@@ -129,6 +129,7 @@ rec {
              )
            )
          )}
+      '' + lib.optionalString (partialSolution.interpreter != "none") ''
         ${partialSolution.interpreter} -n $out
       '';
     };
@@ -146,6 +147,7 @@ rec {
             )
           )
         }
+      '' + lib.optionalString (partialSolution.interpreter != "none") ''
         ${partialSolution.interpreter} -n $out/bin/${name}
       '';
     };
@@ -181,10 +183,13 @@ rec {
       src = unresholved;
       inherit version pname;
       buildInputs = [ resholve ];
+      disallowedReferences = [ resholve ];
 
       # retain a reference to the base
       passthru = unresholved.passthru // {
         unresholved = unresholved;
+        # fallback attr for update bot to query our src
+        originalSrc = unresholved.src;
       };
 
       # do these imply that we should use NoCC or something?

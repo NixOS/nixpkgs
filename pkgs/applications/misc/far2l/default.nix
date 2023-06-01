@@ -2,7 +2,7 @@
 , xdg-utils, zip, unzip, gzip, bzip2, gnutar, p7zip, xz
 , IOKit, Carbon, Cocoa, AudioToolbox, OpenGL
 , withTTYX ? true, libX11
-, withGUI ? true, wxGTK30, wxmac
+, withGUI ? true, wxGTK32
 , withUCD ? true, libuchardet
 
 # Plugins
@@ -12,18 +12,15 @@
 , withPython ? false, python3Packages
 }:
 
-let
-  wxWidgets = (if stdenv.isDarwin then wxmac else wxGTK30);
-in
 stdenv.mkDerivation rec {
   pname = "far2l";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "elfmz";
     repo = "far2l";
     rev = "v_${version}";
-    sha256 = "sha256-nfoAElPLQ97lj65MBX4JMEdgTFbkdEbR1BazYZgV/lg=";
+    sha256 = "sha256-0t1ND6LmDcivfrZ8RaEr1vjeS5JtaeWkoHkl2e7Xr5s=";
   };
 
   patches = [ ./python_prebuild.patch ];
@@ -31,7 +28,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ninja pkg-config m4 makeWrapper ];
 
   buildInputs = lib.optional withTTYX libX11
-    ++ lib.optional withGUI wxWidgets
+    ++ lib.optional withGUI wxGTK32
     ++ lib.optional withUCD libuchardet
     ++ lib.optionals withColorer [ spdlog xercesc ]
     ++ lib.optionals withMultiArc [ libarchive pcre ]
@@ -73,7 +70,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Linux port of FAR Manager v2, a program for managing files and archives in Windows operating systems";
     homepage = "https://github.com/elfmz/far2l";
-    license = licenses.gpl2Plus; # NOTE: might change in far2l repo soon, check next time
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ hypersw ];
     platforms = platforms.unix;
   };

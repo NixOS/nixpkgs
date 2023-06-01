@@ -1,37 +1,43 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 , backports_csv
 , configobj
 , mock
-, pytest
+, pytestCheckHook
+, pygments
 , tabulate
 , terminaltables
 , wcwidth
 }:
 
 buildPythonPackage rec {
-  pname = "cli_helpers";
-  version = "2.2.1";
+  pname = "cli-helpers";
+  version = "2.3.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-DMwc/Noaxk3H7YPXATBVzxnll50p5Wwh87aS3gFVWq4=";
+    pname = "cli_helpers";
+    inherit version;
+    hash = "sha256-5xdNADorWP0+Mac/u8RdWqUT3mLL1C1Df3i5ZYvV+Wc=";
   };
 
   propagatedBuildInputs = [
     configobj
-    terminaltables
     tabulate
-    wcwidth
-  ] ++ (lib.optionals isPy27 [ backports_csv ]);
+  ] ++ tabulate.optional-dependencies.widechars;
 
-  # namespace collision between backport.csv and backports.configparser
-  doCheck = !isPy27;
+  passthru.optional-dependencies = {
+    styles = [ pygments ];
+  };
 
-  checkInputs = [ pytest mock ];
-
-  checkPhase = ''
-    py.test
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    mock
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   meta = with lib; {
     description = "Python helpers for common CLI tasks";

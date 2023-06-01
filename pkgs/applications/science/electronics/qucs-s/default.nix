@@ -1,27 +1,39 @@
-{ stdenv, lib, fetchFromGitHub, flex, bison, qt4, libX11, cmake, gperf, adms,
-ngspice, wrapGAppsHook,
-kernels ? [ ngspice ] }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, flex
+, bison
+, qtbase
+, qttools
+, qtsvg
+, qtwayland
+, wrapQtAppsHook
+, libX11
+, cmake
+, gperf
+, adms
+, ngspice
+, kernels ? [ ngspice ]
+}:
 
 stdenv.mkDerivation rec {
   pname = "qucs-s";
-  version = "0.0.22";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "ra3xdh";
     repo = "qucs_s";
     rev = version;
-    sha256 = "0rrq2ddridc09m6fixdmbngn42xmv8cmdf6r8zzn2s98fqib5qd6";
+    sha256 = "sha256-2YyVeeUnLBS1Si9gwEsQLZVG98715dz/v+WCYjB3QlI=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook cmake ];
-  buildInputs = [ flex bison qt4 libX11 gperf adms ] ++ kernels;
+  nativeBuildInputs = [ flex bison wrapQtAppsHook cmake ];
+  buildInputs = [ qtbase qttools qtsvg qtwayland libX11 gperf adms ] ++ kernels;
 
-  preConfigure = ''
-    # Make custom kernels avaible from qucs-s
-    gappsWrapperArgs+=(--prefix PATH ":" ${lib.escapeShellArg (lib.makeBinPath kernels)})
-  '';
+  # Make custom kernels avaible from qucs-s
+  qtWrapperArgs = [ "--prefix" "PATH" ":" (lib.makeBinPath kernels) ];
 
-  QTDIR=qt4;
+  QTDIR = qtbase.dev;
 
   doInstallCheck = true;
   installCheck = ''

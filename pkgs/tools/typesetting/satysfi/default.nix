@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, ruby, dune_2, ocamlPackages
+{ lib, stdenv, fetchFromGitHub, ruby, ocamlPackages
 , ipaexfont, junicode, lmodern, lmmath
 }:
 let
@@ -17,6 +17,7 @@ let
       rev = "v0.3.7+satysfi";
       sha256 = "0y8s0ij1vp1s4h5y1hn3ns76fzki2ba5ysqdib33akdav9krbj8p";
     };
+    propagatedBuildInputs = o.propagatedBuildInputs ++ [ ocamlPackages.result ];
   });
   yojson-with-position = ocamlPackages.buildDunePackage {
     pname = "yojson-with-position";
@@ -27,20 +28,20 @@ let
       rev = "v1.4.2+satysfi";
       sha256 = "17s5xrnpim54d1apy972b5l08bph4c0m5kzbndk600fl0vnlirnl";
     };
-    useDune2 = true;
+    duneVersion = "3";
     nativeBuildInputs = [ ocamlPackages.cppo ];
     propagatedBuildInputs = [ ocamlPackages.biniou ];
     inherit (ocamlPackages.yojson) meta;
   };
 in
-  stdenv.mkDerivation rec {
+  ocamlPackages.buildDunePackage rec {
     pname = "satysfi";
-    version = "0.0.7";
+    version = "0.0.8";
     src = fetchFromGitHub {
       owner = "gfngfn";
       repo = "SATySFi";
       rev = "v${version}";
-      sha256 = "sha256-BmnOIplC24JMb0LSgGPh/j01rXvtl0wni3Chb347eR8=";
+      sha256 = "sha256-cVGe1N3qMlEGAE/jPUji/X3zlijadayka1OL6iFioY4=";
       fetchSubmodules = true;
     };
 
@@ -50,23 +51,24 @@ in
       $out/share/satysfi
     '';
 
-    DUNE_PROFILE = "release";
+    duneVersion = "3";
 
-    nativeBuildInputs = [ ruby dune_2 ];
+    nativeBuildInputs = with ocamlPackages; [ menhir cppo ];
 
     buildInputs = [ camlpdf otfm yojson-with-position ] ++ (with ocamlPackages; [
-      ocaml findlib menhir menhirLib
-      batteries camlimages core_kernel ppx_deriving uutf omd cppo re
+      menhirLib
+      batteries camlimages core_kernel ppx_deriving uutf omd re
     ]);
 
-    installPhase = ''
-      cp -r ${ipaexfont}/share/fonts/opentype/* lib-satysfi/dist/fonts/
-      cp -r ${junicode}/share/fonts/junicode-ttf/* lib-satysfi/dist/fonts/
-      cp -r ${lmodern}/share/fonts/opentype/public/lm/* lib-satysfi/dist/fonts/
-      cp -r ${lmmath}/share/fonts/opentype/latinmodern-math.otf lib-satysfi/dist/fonts/
-      make install PREFIX=$out LIBDIR=$out/share/satysfi
-      mkdir -p $out/share/satysfi/
+    postInstall = ''
+      mkdir -p $out/share/satysfi/dist/fonts
       cp -r lib-satysfi/dist/ $out/share/satysfi/
+      cp -r \
+        ${ipaexfont}/share/fonts/opentype/* \
+        ${junicode}/share/fonts/junicode-ttf/* \
+        ${lmodern}/share/fonts/opentype/public/lm/* \
+        ${lmmath}/share/fonts/opentype/latinmodern-math.otf \
+        $out/share/satysfi/dist/fonts
     '';
 
     meta = with lib; {

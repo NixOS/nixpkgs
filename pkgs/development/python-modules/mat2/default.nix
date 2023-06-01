@@ -23,16 +23,18 @@
 
 buildPythonPackage rec {
   pname = "mat2";
-  version = "0.13.0";
+  version = "0.13.3";
 
   disabled = pythonOlder "3.5";
+
+  format = "setuptools";
 
   src = fetchFromGitLab {
     domain = "0xacab.org";
     owner = "jvoisin";
     repo = "mat2";
     rev = version;
-    hash = "sha256-H3l8w2F+ZcJ1P/Dg0ZVBJPUK0itLocL7a0jeSrG3Ws8=";
+    hash = "sha256-x3vGltGuFjI435lEXZU3p4eQcgRm0Oodqd6pTWO7ZX8=";
   };
 
   patches = [
@@ -48,11 +50,6 @@ buildPythonPackage rec {
     ./executable-name.patch
     # hardcode path to mat2 executable
     ./tests.patch
-    # fix gobject-introspection typelib path for Nautilus extension
-    (substituteAll {
-      src = ./fix_poppler.patch;
-      poppler_path = "${poppler_gi}/lib/girepository-1.0";
-    })
   ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [
     (substituteAll {
       src = ./bubblewrap-path.patch;
@@ -61,6 +58,7 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
+    rm pyproject.toml
     substituteInPlace dolphin/mat2.desktop \
       --replace "@mat2@" "$out/bin/mat2" \
       --replace "@mat2svg@" "$out/share/icons/hicolor/scalable/apps/mat2.svg"
@@ -86,14 +84,11 @@ buildPythonPackage rec {
   postInstall = ''
     install -Dm 444 data/mat2.svg -t "$out/share/icons/hicolor/scalable/apps"
     install -Dm 444 doc/mat2.1 -t "$out/share/man/man1"
-    install -Dm 444 nautilus/mat2.py -t "$out/share/nautilus-python/extensions"
-    buildPythonPath "$out $pythonPath $propagatedBuildInputs"
-    patchPythonScript "$out/share/nautilus-python/extensions/mat2.py"
   '' + lib.optionalString dolphinIntegration ''
     install -Dm 444 dolphin/mat2.desktop -t "$out/share/kservices5/ServiceMenus"
   '';
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   unittestFlagsArray = [ "-v" ];
 

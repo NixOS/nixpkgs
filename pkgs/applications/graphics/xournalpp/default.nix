@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xournalpp";
-  version = "1.1.1";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "xournalpp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-AzLkXGcTjtfBaPOZ/Tc+TwL63vm08G2tZw3pGzoo7po=";
+    sha256 = "sha256-Hn7IDnbrmK3V+iz8UqdmHRV2TS4MwYSgYtnH6igbGJ8=";
   };
 
   nativeBuildInputs = [ cmake gettext pkg-config wrapGAppsHook ];
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optional withLua lua;
 
-  buildFlags = "translations";
+  buildFlags = [ "translations" ];
 
   hardeningDisable = [ "format" ];
 

@@ -11,6 +11,8 @@ buildPythonPackage {
   pname = "faiss-pytest-suite";
   inherit (faiss) version;
 
+  format = "other";
+
   src = "${faiss.src}/tests";
 
   dontBuild = true;
@@ -21,7 +23,12 @@ buildPythonPackage {
     "test_contrib.py"
   ];
 
-  checkInputs = [
+  disabledTests = [
+    # https://github.com/facebookresearch/faiss/issues/2836
+    "test_update_codebooks_with_double"
+  ];
+
+  nativeCheckInputs = [
     faiss
     pytestCheckHook
     scipy

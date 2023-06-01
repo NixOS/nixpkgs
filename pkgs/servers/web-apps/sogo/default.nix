@@ -1,21 +1,21 @@
-{ gnustep, lib, fetchFromGitHub, fetchpatch, makeWrapper, python3, lndir
+{ gnustep, lib, fetchFromGitHub, fetchpatch, makeWrapper, python3, lndir, libxcrypt
 , openssl, openldap, sope, libmemcached, curl, libsodium, libytnef, libzip, pkg-config, nixosTests
 , oath-toolkit
 , enableActiveSync ? false
 , libwbxml }:
 gnustep.stdenv.mkDerivation rec {
   pname = "SOGo";
-  version = "5.7.0";
+  version = "5.8.0";
 
   src = fetchFromGitHub {
     owner = "inverse-inc";
     repo = pname;
     rev = "SOGo-${version}";
-    hash = "sha256-3Xy0y1sdixy4gXhzhP9mfWeaDmOVJty+X95xCyxayPE=";
+    hash = "sha256-lHUEV5yYLs3oc8Arl3KX8G/OEAoLmS7pRLCGsRAJAr4=";
   };
 
-  nativeBuildInputs = [ gnustep.make makeWrapper python3 ];
-  buildInputs = [ gnustep.base sope openssl libmemcached curl libsodium libytnef libzip pkg-config openldap oath-toolkit ]
+  nativeBuildInputs = [ gnustep.make makeWrapper python3 pkg-config ];
+  buildInputs = [ gnustep.base sope openssl libmemcached curl libsodium libytnef libzip openldap oath-toolkit libxcrypt ]
     ++ lib.optional enableActiveSync libwbxml;
 
   patches = lib.optional enableActiveSync ./enable-activesync.patch;
@@ -51,7 +51,7 @@ gnustep.stdenv.mkDerivation rec {
     sed -i "s:${gnustep.make}:$out:g" $out/share/GNUstep/GNUstep.conf
 
     # Link in GNUstep base
-    ${lndir}/bin/lndir ${gnustep.base}/lib/GNUstep/ $out/lib/GNUstep/
+    ${lndir}/bin/lndir ${lib.getLib gnustep.base}/lib/GNUstep/ $out/lib/GNUstep/
 
     # Link in sope
     ${lndir}/bin/lndir ${sope}/ $out/
@@ -65,8 +65,6 @@ gnustep.stdenv.mkDerivation rec {
     for bin in $out/bin/*; do
       wrapProgram $bin --prefix LD_LIBRARY_PATH : $out/lib/sogo --prefix GNUSTEP_CONFIG_FILE : $out/share/GNUstep/GNUstep.conf
     done
-
-    rmdir $out/nix
   '';
 
   passthru.tests.sogo = nixosTests.sogo;

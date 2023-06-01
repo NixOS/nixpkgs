@@ -1,10 +1,14 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , poetry-core
 
 # propagates
+, importlib-resources
 , jsonschema
+, jsonschema-spec
+, lazy-object-proxy
 , openapi-schema-validator
 , pyyaml
 
@@ -18,21 +22,18 @@
 
 buildPythonPackage rec {
   pname = "openapi-spec-validator";
-  version = "0.4.0";
+  version = "0.5.6";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   # no tests via pypi sdist
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = pname;
-    rev = version;
-    hash = "sha256-mGgHlDZTUo72RNZ/448gkGdza4EntYU9YoBpSKDUCeA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-BIGHaZhrEc7wcIesBIXdVRzozllCNOz67V+LmQfZ8oY=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'openapi-schema-validator = "^0.2.0"' 'openapi-schema-validator = "*"'
-  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -40,8 +41,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     jsonschema
+    jsonschema-spec
+    lazy-object-proxy
     openapi-schema-validator
-    pyyaml
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
   ];
 
   passthru.optional-dependencies.requests = [
@@ -52,7 +56,7 @@ buildPythonPackage rec {
     sed -i '/--cov/d' pyproject.toml
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -69,8 +73,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/p1c2u/openapi-spec-validator";
+    changelog = "https://github.com/p1c2u/openapi-spec-validator/releases/tag/${version}";
     description = "Validates OpenAPI Specs against the OpenAPI 2.0 (aka Swagger) and OpenAPI 3.0.0 specification";
+    homepage = "https://github.com/p1c2u/openapi-spec-validator";
     license = licenses.asl20;
     maintainers = with maintainers; [ rvl ];
   };

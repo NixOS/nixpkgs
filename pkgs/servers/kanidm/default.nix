@@ -4,6 +4,7 @@
 , nixosTests
 , rustPlatform
 , fetchFromGitHub
+, fetchpatch
 , installShellFiles
 , pkg-config
 , udev
@@ -17,30 +18,44 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "kanidm";
-  version = "1.1.0-alpha.9";
+  version = "1.1.0-alpha.12";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "985462590b1c49b26a0b0ee01e24b1eb01942165";
-    hash = "sha256-JtoDuA3NCKmX+wDqav30VwrLeDALYat1iKFWpbYOO1s=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ZlUn7m5xgMWWIr9y/dkM/yZ2KF2LdkaxqtHsMcxAT/M=";
   };
 
-  cargoSha256 = "sha256-pkBkXIG2PF5YMeighQwHwhURWbJabfveyszRIdrQjcA=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "tracing-forest-0.1.5" = "sha256-L6auSKB4DCnZBZpx7spiikhSOD6i1W3erc3zjn+26Ao=";
+    };
+  };
 
   KANIDM_BUILD_PROFILE = "release_nixos_${arch}";
+
+  patches = [
+    (fetchpatch {
+      # Bring back x86_64-v1 microarchitecture level
+      name = "cpu-opt-level.patch";
+      url = "https://github.com/kanidm/kanidm/commit/59c6723f7dfb2266eae45c3b2ddd377872a7a113.patch";
+      hash = "sha256-8rVEYitxvdVduQ/+AD/UG3v+mgT/VxkLoxNIXczUfCQ=";
+    })
+  ];
 
   postPatch =
     let
       format = (formats.toml { }).generate "${KANIDM_BUILD_PROFILE}.toml";
       profile = {
         web_ui_pkg_path = "@web_ui_pkg_path@";
-        cpu_flags = if stdenv.isx86_64 then "x86_64_v1" else "none";
+        cpu_flags = if stdenv.isx86_64 then "x86_64_legacy" else "none";
       };
     in
     ''
-      cp ${format profile} profiles/${KANIDM_BUILD_PROFILE}.toml
-      substituteInPlace profiles/${KANIDM_BUILD_PROFILE}.toml \
+      cp ${format profile} libs/profiles/${KANIDM_BUILD_PROFILE}.toml
+      substituteInPlace libs/profiles/${KANIDM_BUILD_PROFILE}.toml \
         --replace '@web_ui_pkg_path@' "$out/ui"
     '';
 
@@ -61,7 +76,7 @@ rustPlatform.buildRustPackage rec {
     # We don't compile the wasm-part form source, as there isn't a rustc for
     # wasm32-unknown-unknown in nixpkgs yet.
     mkdir $out
-    cp -r kanidmd_web_ui/pkg $out/ui
+    cp -r server/web_ui/pkg $out/ui
   '';
 
   preFixup = ''

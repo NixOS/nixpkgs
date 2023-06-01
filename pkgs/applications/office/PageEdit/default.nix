@@ -1,19 +1,30 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, qtsvg, qtwebengine, qttranslations }:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, qtsvg, qtwebengine, qttranslations, wrapQtAppsHook }:
 
-mkDerivation rec {
-  pname = "PageEdit";
-  version = "1.9.10";
+stdenv.mkDerivation rec {
+  pname = "pageedit";
+  version = "1.9.20";
 
   src = fetchFromGitHub {
     owner = "Sigil-Ebook";
     repo = pname;
     rev = version;
-    hash = "sha256-y2Z5enEptiOrwEGBKlo4H4I9ojIPG9KP3BlvTCj4PVY=";
+    hash = "sha256-naoflFANeMwabbdrNL3+ndvEXYT4Yqf+Mo77HcCexHE=";
   };
 
-  nativeBuildInputs = [ cmake qttranslations ];
+  nativeBuildInputs = [ cmake qttranslations wrapQtAppsHook ];
   propagatedBuildInputs = [ qtsvg qtwebengine ];
   cmakeFlags = [ "-DINSTALL_BUNDLED_DICTS=0" ];
+
+  installPhase =
+    if stdenv.isDarwin then ''
+      runHook preInstall
+
+      mkdir -p $out/Applications
+      cp -r bin/PageEdit.app $out/Applications
+      makeWrapper $out/Applications/PageEdit.app/Contents/MacOS/PageEdit $out/bin/pageedit
+
+      runHook postInstall
+    '' else null;
 
   meta = with lib; {
     description = "ePub XHTML Visual Editor";

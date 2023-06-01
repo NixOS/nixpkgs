@@ -9,20 +9,20 @@
 
 buildPythonPackage rec {
   pname = "primer3";
-  version = "0.6.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "libnano";
     repo = "primer3-py";
-    rev = version;
-    sha256 = "1glybwp9w2m1ydvaphr41gj31d8fvlh40s35galfbjqa563si72g";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-o9B8TN3mOchOO7dz34mI3NDtIhHSlA9+lMNsYcxhTE0=";
   };
 
   nativeBuildInputs = [ cython ]
     ++ lib.optionals stdenv.isDarwin [ gcc ];
 
   # pytestCheckHook leads to a circular import issue
-  checkInputs = [ click ];
+  nativeCheckInputs = [ click ];
 
   pythonImportsCheck = [ "primer3" ];
 

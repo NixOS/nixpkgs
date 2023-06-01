@@ -1,28 +1,31 @@
-{ stdenv
-, lib
-, python3
+{ lib
+, stdenv
+, fetchFromGitHub
 , glibcLocales
 , installShellFiles
 , jq
+, python3
 }:
-let
-  inherit (python3.pkgs) buildPythonApplication fetchPypi setuptools-scm;
-in
-buildPythonApplication rec {
+
+python3.pkgs.buildPythonApplication rec {
   pname = "todoman";
   version = "4.1.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "ce3caa481d923e91da9b492b46509810a754e2d3ef857f5d20bc5a8e362b50c8";
+  src = fetchFromGitHub {
+    owner = "pimutils";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-MItFZ+4Q7UKeIWHl8KFiWOLNgFcfb0h1YWjPd+g48Wg=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     installShellFiles
+  ] ++ (with python3.pkgs; [
     setuptools-scm
-  ];
+  ]);
 
   propagatedBuildInputs = with python3.pkgs; [
     atomicwrites
@@ -38,7 +41,7 @@ buildPythonApplication rec {
     urwid
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     flake8
     flake8-import-order
     freezegun
@@ -64,12 +67,13 @@ buildPythonApplication rec {
     # Testing of the CLI part and output
     "test_color_due_dates"
     "test_color_flag"
+    "test_datetime_serialization"  # Will be fixed in versions after 4.1.0
     "test_default_command"
     "test_main"
     "test_missing_cache_dir"
     "test_sorting_null_values"
     "test_xdg_existant"
-  ] ++ lib.optionals stdenv.isDarwin [
+    # Tests are sensitive to performance
     "test_sorting_fields"
   ];
 
@@ -81,17 +85,15 @@ buildPythonApplication rec {
     homepage = "https://github.com/pimutils/todoman";
     description = "Standards-based task manager based on iCalendar";
     longDescription = ''
-      Todoman is a simple, standards-based, cli todo (aka: task) manager. Todos
-      are stored into icalendar files, which means you can sync them via CalDAV
+      Todoman is a simple, standards-based, cli todo (aka task) manager. Todos
+      are stored into iCalendar files, which means you can sync them via CalDAV
       using, for example, vdirsyncer.
 
       Todos are read from individual ics files from the configured directory.
-      This matches the vdir specification.  There’s support for the most common TODO
+      This matches the vdir specification. There is support for the most common TODO
       features for now (summary, description, location, due date and priority) for
-      now.  Runs on any Unix-like OS. It’s been tested on GNU/Linux, BSD and macOS.
+      now.
       Unsupported fields may not be shown but are never deleted or altered.
-
-      Todoman is part of the pimutils project
     '';
     changelog = "https://github.com/pimutils/todoman/raw/v${version}/CHANGELOG.rst";
     license = licenses.isc;

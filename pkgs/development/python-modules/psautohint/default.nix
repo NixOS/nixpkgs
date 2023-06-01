@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ fonttools lxml fs ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-cov
     pytest-xdist
@@ -44,6 +44,9 @@ buildPythonPackage rec {
     "test_multi_outpath"
     "test_mmhint"
     "test_otf"
+    # flaky tests (see https://github.com/adobe-type-tools/psautohint/issues/385)
+    "test_hashmap_old_version"
+    "test_hashmap_no_version"
   ];
 
   passthru.tests = {

@@ -1,7 +1,7 @@
 { lib, mkCoqDerivation, coq, hydra-battles, gaia,
   mathcomp-zify, mathcomp, version ? null }:
 
-with lib; mkCoqDerivation rec {
+mkCoqDerivation rec {
   pname = "gaia-hydras";
   repo = "hydra-battles";
 
@@ -10,7 +10,7 @@ with lib; mkCoqDerivation rec {
   releaseRev = (v: "v${v}");
 
   inherit version;
-  defaultVersion = with versions; switch [coq.coq-version mathcomp.version] [
+  defaultVersion = with lib.versions; lib.switch [coq.coq-version mathcomp.version] [
     { cases = [ (range "8.14" "8.16") (isGe "1.12.0") ]; out = "0.6"; }
     { cases = [ (range "8.13" "8.14") (isGe "1.12.0") ]; out = "0.5"; }
   ] null;
@@ -21,9 +21,9 @@ with lib; mkCoqDerivation rec {
     mathcomp-zify
   ];
 
-  useDune2 = true;
+  useDune = true;
 
-  meta = {
+  meta = with lib; {
     description = "Comparison between ordinals in Gaia and Hydra battles";
     longDescription = ''
       The Gaia and Hydra battles projects develop different notions of ordinals.

@@ -1,38 +1,32 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pytestCheckHook
 , pythonOlder
 , requests
-, nose
-, mock
 }:
 
 buildPythonPackage rec {
   pname = "pyfritzhome";
-  version = "0.6.5";
+  version = "0.6.8";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hthiery";
     repo = "python-fritzhome";
-    rev = version;
-    hash = "sha256-0wfC4lQeTghN2uDUO8Rn2+G8BYOh2UfCZBDJmTw6Lb0=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-MIWRBwqVuS1iEuWxsE1yuGS2zHYVgnH2G4JJk7Yct6s=";
   };
 
   propagatedBuildInputs = [
     requests
   ];
 
-  checkInputs = [
-    mock
-    nose
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
-
-  checkPhase = ''
-    nosetests
-  '';
 
   pythonImportsCheck = [
     "pyfritzhome"

@@ -1,20 +1,19 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-}:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "gowitness";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "sensepost";
     repo = pname;
     rev = version;
-    hash = "sha256-6O4pGsUu9tG3VAIGaD9aauXaVMhvK+HpEjByE0AwVnE=";
+    sha256 = "sha256-rylft6v6Np8xOm2AUtH7e/zDZQ87WNPeerXEtziSrDw=";
   };
 
-  vendorSha256 = "sha256-6FgYDiz050ZlC1XBz7dKkVFKY7gkGhIm0ND23tMwxC8=";
+  vendorHash = "sha256-l6jdVsKKLqEyFpz7JhkLLjVTWX1pZenlCY5UqSZVMdc=";
+
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     description = "Web screenshot utility";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3, cmake, libglvnd, libGLU }:
+{ lib, stdenv, fetchFromGitHub, python3, cmake, libglvnd, libGLU, unstableGitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "gl3w";
@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     cp ${libglvnd.dev}/include/GL/glcorearb.h include/GL/glcorearb.h
     cp ${libglvnd.dev}/include/KHR/khrplatform.h include/KHR/khrplatform.h
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Simple OpenGL core profile loading";

@@ -7,15 +7,19 @@
 
 buildGoModule rec {
   pname = "stayrtr";
-  version = "0.3.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "bgp";
     repo = "stayrtr";
     rev = "v${version}";
-    sha256 = "10ndb8p7znnjycwg56m63gzqf9zc6lq9mcvz4n48j0c4il5xyn8x";
+    hash = "sha256-/KwL/SEnHquFhPcYXpvQs71W4K1BrbqTPakatTNF47Q=";
   };
-  vendorSha256 = "1nwrzbpqycr4ixk8a90pgaxcwakv5nlfnql6hmcc518qrva198wp";
+  vendorHash = "sha256-ndMME9m3kbv/c1iKlU2Pn/YoiRQy7jfVQri3M+qhujk=";
+
+  patches = [
+    ./go.mod.patch
+  ];
 
   ldflags = [
     "-s"

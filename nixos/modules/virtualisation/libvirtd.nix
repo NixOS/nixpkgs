@@ -220,6 +220,17 @@ in
       '';
     };
 
+    parallelShutdown = mkOption {
+      type = types.ints.unsigned;
+      default = 0;
+      description = lib.mdDoc ''
+        Number of guests that will be shutdown concurrently, taking effect when onShutdown
+        is set to "shutdown". If set to 0, guests will be shutdown one after another.
+        Number of guests on shutdown at any time will not exceed number set in this
+        variable.
+      '';
+    };
+
     allowedBridges = mkOption {
       type = types.listOf types.str;
       default = [ "virbr0" ];
@@ -336,6 +347,7 @@ in
     };
 
     systemd.services.libvirtd = {
+      wantedBy = [ "multi-user.target" ];
       requires = [ "libvirtd-config.service" ];
       after = [ "libvirtd-config.service" ]
         ++ optional vswitch.enable "ovs-vswitchd.service";
@@ -372,6 +384,7 @@ in
 
       environment.ON_BOOT = "${cfg.onBoot}";
       environment.ON_SHUTDOWN = "${cfg.onShutdown}";
+      environment.PARALLEL_SHUTDOWN = "${toString cfg.parallelShutdown}";
     };
 
     systemd.sockets.virtlogd = {
@@ -401,13 +414,16 @@ in
     # https://libvirt.org/daemons.html#monolithic-systemd-integration
     systemd.sockets.libvirtd.wantedBy = [ "sockets.target" ];
 
-    security.polkit.extraConfig = ''
-      polkit.addRule(function(action, subject) {
-        if (action.id == "org.libvirt.unix.manage" &&
-          subject.isInGroup("libvirtd")) {
-          return polkit.Result.YES;
-        }
-      });
-    '';
+    security.polkit = {
+      enable = true;
+      extraConfig = ''
+        polkit.addRule(function(action, subject) {
+          if (action.id == "org.libvirt.unix.manage" &&
+            subject.isInGroup("libvirtd")) {
+            return polkit.Result.YES;
+          }
+        });
+      '';
+    };
   };
 }

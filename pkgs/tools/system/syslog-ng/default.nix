@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     "--with-jsonc=system"
     "--with-systemd-journal=system"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+    "--without-compile-date"
   ];
 
   outputs = [ "out" "man" ];

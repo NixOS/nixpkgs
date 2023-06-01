@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "matze";
     repo = "pkgconfig";
     rev = "v${version}";
-    sha256 = "sha256-uuLUGRNLCR3NS9g6OPCI+qG7tPWsLhI3OE5WmSI3vm8=";
+    hash = "sha256-uuLUGRNLCR3NS9g6OPCI+qG7tPWsLhI3OE5WmSI3vm8=";
   };
 
   postPatch = ''
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ poetry-core ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pkgconfig" ];
 

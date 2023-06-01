@@ -73,7 +73,7 @@ stdenv.mkDerivation {
   name = "exemplary-weechat-script";
   src = fetchurl {
     url = "https://scripts.tld/your-scripts.tar.gz";
-    sha256 = "...";
+    hash = "...";
   };
   passthru.scripts = [ "foo.py" "bar.lua" ];
   installPhase = ''

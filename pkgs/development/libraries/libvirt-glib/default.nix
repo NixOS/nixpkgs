@@ -5,21 +5,24 @@
 , meson
 , ninja
 , pkg-config
-, gobject-introspection
 , gettext
-, gtk-doc
-, docbook-xsl-nons
 , vala
 , libcap_ng
 , libvirt
 , libxml2
+, buildPackages
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, gobject-introspection
+, withDocs ? stdenv.hostPlatform == stdenv.buildPlatform
+, gtk-doc
+, docbook-xsl-nons
 }:
 
 stdenv.mkDerivation rec {
   pname = "libvirt-glib";
   version = "4.0.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ] ++ lib.optional withDocs "devdoc";
 
   src = fetchurl {
     url = "https://libvirt.org/sources/glib/${pname}-${version}.tar.xz";
@@ -39,21 +42,35 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gettext
-    gtk-doc
-    docbook-xsl-nons
     vala
     gobject-introspection
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ] ++ lib.optionals withDocs [
+    gtk-doc
+    docbook-xsl-nons
   ];
 
-  buildInputs = (lib.optionals stdenv.isLinux [
-    libcap_ng
-  ]) ++ [
+  buildInputs = [
     libvirt
     libxml2
-    gobject-introspection
+  ] ++ lib.optionals stdenv.isLinux [
+    libcap_ng
   ];
 
   strictDeps = true;
+
+  # The build system won't let us build with docs or introspection
+  # unless we're building natively, but will still do a mandatory
+  # check for the dependencies for those things unless we explicitly
+  # disable the options.
+  mesonFlags = [
+    (lib.mesonEnable "docs" withDocs)
+    (lib.mesonEnable "introspection" withIntrospection)
+  ];
+
+  # https://gitlab.com/libvirt/libvirt-glib/-/issues/4
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=pointer-sign" ];
 
   meta = with lib; {
     description = "Library for working with virtual machines";

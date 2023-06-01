@@ -2,36 +2,42 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, setuptools
 , construct
 , websockets
-, asynctest
+, pytest-asyncio
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "vallox-websocket-api";
-  version = "2.12.0";
+  version = "3.2.1";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
-
-  format = "setuptools";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "yozik04";
     repo = "vallox_websocket_api";
     rev = "refs/tags/${version}";
-    hash = "sha256-Ibp+oAd6q8Vu9V+TaLzlPbWIDheFUjCyW83Hg4Ztw20=";
+    hash = "sha256-KtjyTSD7osIdThq/Ota4oCyeseBHxqaYaL47wiVicsI=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     construct
     websockets
   ];
 
-  checkInputs = [
-    asynctest
+  nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
   ];
+
+  pythonImportsCheck = [ "vallox_websocket_api" ];
 
   meta = {
     description = "Async API for Vallox ventilation units";

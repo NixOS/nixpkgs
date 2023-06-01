@@ -2,8 +2,6 @@
 , texinfo, libuuid, flex, bison, pixman, autoconf
 }:
 
-with lib;
-
 let
   qemuName = "qemu-3.1.0";
   cpuTarget = if stdenv.targetPlatform.system == "x86_64-linux" then "x86_64-linux-user"

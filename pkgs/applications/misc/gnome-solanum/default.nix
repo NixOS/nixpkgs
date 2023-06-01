@@ -3,10 +3,12 @@
 , fetchFromGitLab
 , fetchpatch
 , rustPlatform
+, cargo
 , desktop-file-utils
 , meson
 , ninja
 , pkg-config
+, rustc
 , wrapGAppsHook
 , python3
 , git
@@ -55,11 +57,10 @@ stdenv.mkDerivation rec {
     python3
     git
     desktop-file-utils
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
     glib

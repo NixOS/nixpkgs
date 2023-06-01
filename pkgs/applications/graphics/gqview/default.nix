@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
   NIX_LDFLAGS = "-lm";
 
   meta = with lib; {
     description = "A fast image viewer";
-    homepage = "http://gqview.sourceforge.net";
+    homepage = "https://gqview.sourceforge.net";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ];

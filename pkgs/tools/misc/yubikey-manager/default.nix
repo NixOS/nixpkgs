@@ -1,21 +1,17 @@
 { python3Packages, fetchFromGitHub, lib, yubikey-personalization, libu2f-host, libusb1, procps
-, stdenv, pyOpenSSLSupport ? !(stdenv.isDarwin && stdenv.isAarch64) }:
+, stdenv }:
 
 python3Packages.buildPythonPackage rec {
   pname = "yubikey-manager";
-  version = "4.0.9";
+  version = "5.1.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
-    repo = "yubikey-manager";
-    rev = "refs/tags/${version}";
     owner = "Yubico";
-    sha256 = "sha256-MwM/b1QP6pkyBjz/r6oC4sW1mKC0CKMay45a0wCktk0=";
+    repo = "yubikey-manager";
+    rev = version;
+    hash = "sha256-rF1oOhlZP1EKiqErJ4L/otkoEvW0iA2P4g5MWCKrCO4=";
   };
-
-  patches = lib.optionals (!pyOpenSSLSupport) [
-    ./remove-pyopenssl-tests.patch
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -27,16 +23,15 @@ python3Packages.buildPythonPackage rec {
   nativeBuildInputs = with python3Packages; [ poetry-core ];
 
   propagatedBuildInputs =
-    with python3Packages; ([
+    with python3Packages; [
       click
       cryptography
       pyscard
       pyusb
       six
       fido2
-    ] ++ lib.optionals pyOpenSSLSupport [
-      pyopenssl
-    ]) ++ [
+      keyring
+    ] ++ [
       libu2f-host
       libusb1
       yubikey-personalization
@@ -59,7 +54,7 @@ python3Packages.buildPythonPackage rec {
       --replace 'compdef _ykman_completion ykman;' '_ykman_completion "$@"'
   '';
 
-  checkInputs = with python3Packages; [ pytestCheckHook makefun ];
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook makefun ];
 
   meta = with lib; {
     homepage = "https://developers.yubico.com/yubikey-manager";
@@ -68,5 +63,6 @@ python3Packages.buildPythonPackage rec {
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ benley lassulus pinpox ];
+    mainProgram = "ykman";
   };
 }

@@ -4,21 +4,25 @@
 , coreutils
 , jinja2
 , pandas
+, pyparsing
 , pytestCheckHook
+, pythonOlder
 , which
-, verilog
 , yosys
 }:
 
 buildPythonPackage rec {
   pname = "edalize";
-  version = "0.4.0";
+  version = "0.5.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "olofk";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-fpUNCxW7+uymodJ/yGME9VNcCEZdBROIdT1+blpgkzA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-jsrJr/iuezh9/KL0PykWB1XKev4Wr5QeDh0ZWNMZSp8=";
   };
 
   postPatch = ''
@@ -27,19 +31,30 @@ buildPythonPackage rec {
     patchShebangs tests/mock_commands/vsim
   '';
 
-  propagatedBuildInputs = [ jinja2 ];
-
-  checkInputs = [
-    pytestCheckHook
-    pandas
-    which
-    yosys
-    verilog
+  propagatedBuildInputs = [
+    jinja2
   ];
 
-  pythonImportsCheck = [ "edalize" ];
+  passthru.optional-dependencies = {
+    reporting = [
+      pandas
+      pyparsing
+    ];
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    which
+    yosys
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+
+  pythonImportsCheck = [
+    "edalize"
+  ];
 
   disabledTestPaths = [
+    "tests/test_questa_formal.py"
+    "tests/test_slang.py"
     "tests/test_apicula.py"
     "tests/test_ascentlint.py"
     "tests/test_diamond.py"
@@ -67,7 +82,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Abstraction library for interfacing EDA tools";
     homepage = "https://github.com/olofk/edalize";
+    changelog = "https://github.com/olofk/edalize/releases/tag/v${version}";
     license = licenses.bsd2;
-    maintainers = [ maintainers.astro ];
+    maintainers = with maintainers; [ astro ];
   };
 }

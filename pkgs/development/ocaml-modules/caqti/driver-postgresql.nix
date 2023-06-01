@@ -2,8 +2,9 @@
 
 buildDunePackage {
   pname = "caqti-driver-postgresql";
-  useDune2 = true;
   inherit (caqti) version src;
+
+  duneVersion = "3";
 
   propagatedBuildInputs = [ caqti postgresql ];
 

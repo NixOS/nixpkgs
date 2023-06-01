@@ -1,15 +1,17 @@
 { buildOctavePackage
 , lib
-, fetchurl
+, fetchFromBitbucket
 }:
 
 buildOctavePackage rec {
   pname = "octclip";
-  version = "2.0.1";
+  version = "2.0.3";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "05ijh3izgfaan84n6zp690nap9vnz0zicjd0cgvd1c6askm7vxql";
+  src = fetchFromBitbucket {
+    owner = "jgpallero";
+    repo = pname;
+    rev = "OctCLIP-${version}";
+    sha256 = "sha256-gG2b8Ix6bzO6O7GRACE81JCVxfXW/+ZdfoniigAEq3g=";
   };
 
   # The only compilation problem is that no formatting specifier was provided

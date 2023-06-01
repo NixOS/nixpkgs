@@ -2,18 +2,20 @@
 
 buildGoModule rec {
   pname = "ivy";
-  version = "0.1.13";
+  version = "0.2.10";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "robpike";
     repo = "ivy";
-    sha256 = "sha256-IiQrmmHitKUItm/ZSTQ3jGO3ls8vPPexyOtUvfq3yeU=";
+    hash = "sha256-6rZfBx6jKNOEnG+cmrzgvjUoCHQe+olPeX11qX8ep38=";
   };
 
-  vendorSha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+  vendorHash = null;
 
   subPackages = [ "." ];
+
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     homepage = "https://github.com/robpike/ivy";

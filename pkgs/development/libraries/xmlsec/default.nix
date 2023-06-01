@@ -22,15 +22,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libxml2 gnutls libxslt libgcrypt libtool openssl nss ];
+  buildInputs = [ libxml2 gnutls libgcrypt libtool openssl nss ];
+
+  propagatedBuildInputs = [
+    # required by xmlsec/transforms.h
+    libxslt
+  ];
 
   enableParallelBuilding = true;
   doCheck = true;
-  checkInputs = [ nss.tools ];
+  nativeCheckInputs = [ nss.tools ];
   preCheck = ''
-  substituteInPlace tests/testrun.sh \
-    --replace 'timestamp=`date +%Y%m%d_%H%M%S`' 'timestamp=19700101_000000' \
-    --replace 'TMPFOLDER=/tmp' '$(mktemp -d)'
+    substituteInPlace tests/testrun.sh \
+      --replace 'timestamp=`date +%Y%m%d_%H%M%S`' 'timestamp=19700101_000000' \
+      --replace 'TMPFOLDER=/tmp' '$(mktemp -d)'
   '';
 
   # enable deprecated soap headers required by lasso
@@ -67,13 +72,14 @@ stdenv.mkDerivation rec {
     touch $out
   '';
 
-  meta = {
+  meta = with lib; {
     description = "XML Security Library in C based on libxml2";
-    homepage = "http://www.aleksey.com/xmlsec";
+    homepage = "https://www.aleksey.com/xmlsec/";
     downloadPage = "https://www.aleksey.com/xmlsec/download.html";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "xmlsec1";
-    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with maintainers; [ ];
+    platforms = with platforms; linux ++ darwin;
   };
 }
 )

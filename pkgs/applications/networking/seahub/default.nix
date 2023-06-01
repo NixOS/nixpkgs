@@ -12,7 +12,7 @@ let
         version = "0.7.0";
         src = old.src.override {
           inherit version;
-          sha256 = "0izl6bibhz3v538ad5hl13lfr6kvprf62rcl77wq2i5538h8hg3s";
+          hash = "sha256-ejyIIBqlRIH5OZRlYVy+e5rs6AgUlqbQKHt8uOIy9Ec=";
         };
       });
     };
@@ -20,13 +20,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "seahub";
-  version = "9.0.6";
+  version = "9.0.10";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seahub";
-    rev = "876b7ba9b680fc668e89706aff535593772ae921"; # using a fixed revision because upstream may re-tag releases :/
-    sha256 = "sha256-GHvJlm5DVt3IVJnqJu8YobNNqbjdPd08s4DCdQQRQds=";
+    rev = "5971bf25fe67d94ec4d9f53b785c15a098113620"; # using a fixed revision because upstream may re-tag releases :/
+    sha256 = "sha256-7Exvm3EShb/1EqwA4wzWB9zCdv0P/ISmjKSoqtOMnqk=";
   };
 
   dontBuild = true;
@@ -60,6 +61,8 @@ python.pkgs.buildPythonApplication rec {
     pysearpc
     seaserv
     gunicorn
+    markdown
+    bleach
   ];
 
   installPhase = ''

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname   = "tldextract";
-  version = "3.3.1";
+  version = "3.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/hWsMgXlolthaJNp+Yy0XHd4qPKvET18EVWezlGV8tY=";
+    hash = "sha256-+p5QxKA77eKh2V3KYg1mFnhIRiaFjM84jPlnGg3Ul6Q=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     requests-file
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
     responses

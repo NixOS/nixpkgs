@@ -35,10 +35,12 @@ rec {
       mkdir -p $out/lib
 
       # Copy what we need from Glibc.
-      cp -p ${pkgs.stdenv.cc.libc}/lib/ld-linux*.so.? $out/lib
-      cp -p ${pkgs.stdenv.cc.libc}/lib/libc.so.* $out/lib
-      cp -p ${pkgs.stdenv.cc.libc}/lib/libm.so.* $out/lib
-      cp -p ${pkgs.stdenv.cc.libc}/lib/libresolv.so.* $out/lib
+      cp -p \
+        ${pkgs.stdenv.cc.libc}/lib/ld-*.so.? \
+        ${pkgs.stdenv.cc.libc}/lib/libc.so.* \
+        ${pkgs.stdenv.cc.libc}/lib/libm.so.* \
+        ${pkgs.stdenv.cc.libc}/lib/libresolv.so.* \
+        $out/lib
 
       # Copy BusyBox.
       cp -pd ${pkgs.busybox}/bin/* $out/bin
@@ -49,7 +51,7 @@ rec {
       for i in $out/bin/*; do
           if [ -f "$i" -a ! -L "$i" ]; then
               echo "patching $i..."
-              patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib $i || true
+              patchelf --set-interpreter $out/lib/ld-*.so.? --set-rpath $out/lib $i || true
           fi
       done
     ''; # */
@@ -406,7 +408,7 @@ rec {
       eval "$origPostHook"
     '';
 
-    origPostHook = if attrs ? postHook then attrs.postHook else "";
+    origPostHook = lib.optionalString (attrs ? postHook) attrs.postHook;
 
     /* Don't run Nix-specific build steps like patchelf. */
     fixupPhase = "true";
@@ -527,9 +529,8 @@ rec {
       echo "System/kernel: $(uname -a)"
       if test -e /etc/fedora-release; then echo "Fedora release: $(cat /etc/fedora-release)"; fi
       if test -e /etc/SuSE-release; then echo "SUSE release: $(cat /etc/SuSE-release)"; fi
-      header "installed RPM packages"
+      echo "installed RPM packages"
       rpm -qa --qf "%{Name}-%{Version}-%{Release} (%{Arch}; %{Distribution}; %{Vendor})\n"
-      stopNest
     '';
 
     buildPhase = ''
@@ -559,9 +560,8 @@ rec {
       find $rpmout -name "*.rpm" -exec cp {} $out/$outDir \;
 
       for i in $out/$outDir/*.rpm; do
-        header "Generated RPM/SRPM: $i"
+        echo "Generated RPM/SRPM: $i"
         rpm -qip $i
-        stopNest
       done
 
       eval "$postInstall"
@@ -977,45 +977,79 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
-    debian9i386 = {
-      name = "debian-9.13-stretch-i386";
-      fullName = "Debian 9.13 Stretch (i386)";
-      packagesList = fetchurl {
-        url = "https://snapshot.debian.org/archive/debian/20210526T143040Z/dists/stretch/main/binary-i386/Packages.xz";
-        sha256 = "sha256-fFRumd20wuVaYxzw0VPkAw5mQo8kIg+eXII15VSz9wA=";
-      };
-      urlPrefix = "mirror://debian";
-      packages = commonDebianPackages;
+    ubuntu2204i386 = {
+      name = "ubuntu-22.04-jammy-i386";
+      fullName = "Ubuntu 22.04 Jammy (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = "mirror://ubuntu/dists/jammy/main/binary-i386/Packages.xz";
+            sha256 = "sha256-iZBmwT0ep4v+V3sayybbOgZBOFFZwPGpOKtmuLMMVPQ=";
+          })
+          (fetchurl {
+            url = "mirror://ubuntu/dists/jammy/universe/binary-i386/Packages.xz";
+            sha256 = "sha256-DO2LdpZ9rDDBhWj2gvDWd0TJJVZHxKsYTKTi6GXjm1E=";
+          })
+        ];
+      urlPrefix = "mirror://ubuntu";
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
-    debian9x86_64 = {
-      name = "debian-9.13-stretch-amd64";
-      fullName = "Debian 9.13 Stretch (amd64)";
-      packagesList = fetchurl {
-        url = "https://snapshot.debian.org/archive/debian/20210526T143040Z/dists/stretch/main/binary-amd64/Packages.xz";
-        sha256 = "sha256-1p4DEVpTGlBE3PtbQ90kYw4QNHkW0F4rna/Xz+ncMhw=";
-      };
-      urlPrefix = "mirror://debian";
-      packages = commonDebianPackages;
+    ubuntu2204x86_64 = {
+      name = "ubuntu-22.04-jammy-amd64";
+      fullName = "Ubuntu 22.04 Jammy (amd64)";
+      packagesLists =
+        [ (fetchurl {
+            url = "mirror://ubuntu/dists/jammy/main/binary-amd64/Packages.xz";
+            sha256 = "sha256-N8tX8VVMv6ccWinun/7hipqMF4K7BWjgh0t/9M6PnBE=";
+          })
+          (fetchurl {
+            url = "mirror://ubuntu/dists/jammy/universe/binary-amd64/Packages.xz";
+            sha256 = "sha256-0pyyTJP+xfQyVXBrzn60bUd5lSA52MaKwbsUpvNlXOI=";
+          })
+        ];
+      urlPrefix = "mirror://ubuntu";
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
     debian10i386 = {
-      name = "debian-10.9-buster-i386";
-      fullName = "Debian 10.9 Buster (i386)";
+      name = "debian-10.13-buster-i386";
+      fullName = "Debian 10.13 Buster (i386)";
       packagesList = fetchurl {
-        url = "https://snapshot.debian.org/archive/debian/20210526T143040Z/dists/buster/main/binary-i386/Packages.xz";
-        sha256 = "sha256-zlkbKV+IGBCyWKD4v4LFM/EUA4TYS9fkLBPuF6MgUDo=";
+        url = "https://snapshot.debian.org/archive/debian/20221126T084953Z/dists/buster/main/binary-i386/Packages.xz";
+        hash = "sha256-n9JquhtZgxw3qr9BX0MQoY3ZTIHN0dit+iru3DC31UY=";
       };
       urlPrefix = "mirror://debian";
       packages = commonDebianPackages;
     };
 
     debian10x86_64 = {
-      name = "debian-10.9-buster-amd64";
-      fullName = "Debian 10.9 Buster (amd64)";
+      name = "debian-10.13-buster-amd64";
+      fullName = "Debian 10.13 Buster (amd64)";
       packagesList = fetchurl {
-        url = "https://snapshot.debian.org/archive/debian/20210526T143040Z/dists/buster/main/binary-amd64/Packages.xz";
-        sha256 = "sha256-k13toY1b3CX7GBPQ7Jm24OMqCEsgPlGK8M99x57o69o=";
+        url = "https://snapshot.debian.org/archive/debian/20221126T084953Z/dists/buster/main/binary-amd64/Packages.xz";
+        hash = "sha256-YukIIB3u87jgp9oudwklsxyKVKjSL618wFgDSXiFmjU=";
+      };
+      urlPrefix = "mirror://debian";
+      packages = commonDebianPackages;
+    };
+
+    debian11i386 = {
+      name = "debian-11.6-bullseye-i386";
+      fullName = "Debian 11.6 Bullseye (i386)";
+      packagesList = fetchurl {
+        url = "https://snapshot.debian.org/archive/debian/20230131T034648Z/dists/bullseye/main/binary-i386/Packages.xz";
+        hash = "sha256-z9eG7RlvelEnZAaeCfIO+XxTZVL3d+zTA7ShU43l/pw=";
+      };
+      urlPrefix = "mirror://debian";
+      packages = commonDebianPackages;
+    };
+
+    debian11x86_64 = {
+      name = "debian-11.6-bullseye-amd64";
+      fullName = "Debian 11.6 Bullseye (amd64)";
+      packagesList = fetchurl {
+        url = "https://snapshot.debian.org/archive/debian/20230131T034648Z/dists/bullseye/main/binary-amd64/Packages.xz";
+        hash = "sha256-mz0eCWdn6uWt40OxsSPheHzEnMeLE52yR/vpb48/VF0=";
       };
       urlPrefix = "mirror://debian";
       packages = commonDebianPackages;
@@ -1156,7 +1190,7 @@ rec {
      of the default image parameters can be given.  In particular,
      `extraPackages' specifies the names of additional packages from
      the distribution that should be included in the image; `packages'
-     allows the entire set of packages to be overriden; and `size'
+     allows the entire set of packages to be overridden; and `size'
      sets the size of the disk in megabytes.  E.g.,
      `diskImageFuns.ubuntu1004x86_64 { extraPackages = ["firefox"];
      size = 8192; }' builds an 8 GiB image containing Firefox in

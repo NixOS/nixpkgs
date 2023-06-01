@@ -1,24 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, kernel, linuxHeaders }:
+{ lib, stdenv, fetchFromGitHub, kernel, linuxHeaders, pahole }:
 
 stdenv.mkDerivation rec {
   pname = "tuxedo-keyboard-${kernel.version}";
-  version = "3.0.9";
+  version = "3.1.4";
 
   src = fetchFromGitHub {
     owner = "tuxedocomputers";
     repo = "tuxedo-keyboard";
     rev = "v${version}";
-    sha256 = "HGN2CKJ76FzgKkOsU5pLMsRl7hEGMcZ8Loa2YP0P558=";
+    sha256 = "h6+br+JPEItym83MaVt+xo6o/zMtTv8+wsBoTeYa2AM=";
   };
 
-  buildInputs = [ linuxHeaders ];
+  buildInputs = [
+    pahole
+    linuxHeaders
+  ];
 
   makeFlags = [ "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
 
   installPhase = ''
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}"
 
-    for module in clevo_acpi.ko clevo_wmi.ko tuxedo_keyboard.ko tuxedo_io/tuxedo_io.ko; do
+    for module in clevo_acpi.ko clevo_wmi.ko tuxedo_keyboard.ko tuxedo_io/tuxedo_io.ko uniwill_wmi.ko; do
         mv src/$module $out/lib/modules/${kernel.modDirVersion}
     done
   '';

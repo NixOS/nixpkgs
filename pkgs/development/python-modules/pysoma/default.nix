@@ -1,20 +1,27 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pysoma";
-  version = "0.0.11";
+  version = "0.0.13";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-U/kLaO/GBpOa9mHHlYQiWSw7sVNPaMneDURoJBqqojo=";
+    hash = "sha256-1bS9zafuqxwcuqpM/AA3ZjNbFpxBNXtoHYFsQOWmLXQ=";
   };
 
   # Project has no test
   doCheck = false;
-  pythonImportsCheck = [ "api" ];
+
+  pythonImportsCheck = [
+    "api"
+  ];
 
   meta = with lib; {
     description = "Python wrapper for the HTTP API provided by SOMA Connect";

@@ -9,4 +9,7 @@
  <xi:include href="images/dockertools.section.xml" />
  <xi:include href="images/ocitools.section.xml" />
  <xi:include href="images/snaptools.section.xml" />
+ <xi:include href="images/portableservice.section.xml" />
+ <xi:include href="images/makediskimage.section.xml" />
+ <xi:include href="images/binarycache.section.xml" />
 </chapter>

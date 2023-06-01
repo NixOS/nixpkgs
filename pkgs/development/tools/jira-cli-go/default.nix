@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, less, more, installShellFiles, testers, jira-cli-go }:
+{ lib, buildGoModule, fetchFromGitHub, less, more, installShellFiles, testers, jira-cli-go, nix-update-script }:
 
 buildGoModule rec {
   pname = "jira-cli-go";
-  version = "1.1.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "ankitpokhrel";
     repo = "jira-cli";
     rev = "v${version}";
-    sha256 = "sha256-UpDaKg6TA1qCkbzF7BARtj+tAyuCCGAyqOdItZU64Ls=";
+    hash = "sha256-+8OPXyOTEnX864Lr8IugHh890XtmRtUr1pEN1/QxMz4=";
   };
 
-  vendorSha256 = "sha256-SpUggA9u8OGV2zF3EQ0CB8M6jpiVQi957UGaN+foEuk=";
+  vendorSha256 = "sha256-sG/ZKQRVxBfaMKnLk2+HdmRhojI6BZVob1XDIAYMfY0=";
 
   ldflags = [
     "-s" "-w"
@@ -20,12 +20,17 @@ buildGoModule rec {
     "-X github.com/ankitpokhrel/jira-cli/internal/version.Version=${version}"
   ];
 
-  checkInputs = [ less more ]; # Tests expect a pager in $PATH
+  __darwinAllowLocalNetworking = true;
 
-  passthru.tests.version = testers.testVersion {
-    package = jira-cli-go;
-    command = "jira version";
-    inherit version;
+  nativeCheckInputs = [ less more ]; # Tests expect a pager in $PATH
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = jira-cli-go;
+      command = "jira version";
+      inherit version;
+    };
+    updateScript = nix-update-script { };
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -41,7 +46,9 @@ buildGoModule rec {
   meta = with lib; {
     description = "Feature-rich interactive Jira command line";
     homepage = "https://github.com/ankitpokhrel/jira-cli";
+    changelog = "https://github.com/ankitpokhrel/jira-cli/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ bryanasdev000 anthonyroussel ];
+    mainProgram = "jira";
   };
 }

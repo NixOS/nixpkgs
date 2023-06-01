@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, rpmextract, undmg, autoPatchelfHook
-, xorg, gtk3, gnome2, nss, alsa-lib, udev, libnotify
+, xorg, gtk3, nss, alsa-lib, udev, libnotify
 , wrapGAppsHook }:
 
 let

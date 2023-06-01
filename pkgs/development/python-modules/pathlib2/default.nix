@@ -15,12 +15,12 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-n+DtrYmLg8DD4ZnIQrJ+0hZkXS4Xd1ey3Wc4TUETxkE=";
+    hash = "sha256-n+DtrYmLg8DD4ZnIQrJ+0hZkXS4Xd1ey3Wc4TUETxkE=";
   };
 
   propagatedBuildInputs = [ six ]
     ++ lib.optionals (pythonOlder "3.5") [ scandir typing ];
-  checkInputs = [ glibcLocales ]
+  nativeCheckInputs = [ glibcLocales ]
     ++ lib.optional (pythonOlder "3.3") mock;
 
   preCheck = ''

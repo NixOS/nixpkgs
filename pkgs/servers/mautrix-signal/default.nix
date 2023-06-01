@@ -2,20 +2,35 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "mautrix-signal";
-  version = "0.3.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
-    rev = "v${version}";
-    sha256 = "sha256-khtvfZbqBRQyHteil+H/b3EktjRet6DRcKMHmCClNq0=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-UbetU1n9zD/mVFaJc9FECDq/Zell1TI/aYPsGXGB8Js=";
   };
 
+  postPatch = ''
+    # the version mangling in mautrix_signal/get_version.py interacts badly with pythonRelaxDepsHook
+    substituteInPlace setup.py \
+      --replace 'version=version' 'version="${version}"'
+  '';
+
+  nativeBuildInputs = with python3.pkgs; [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "mautrix"
+  ];
+
   propagatedBuildInputs = with python3.pkgs; [
-    CommonMark
+    commonmark
     aiohttp
     asyncpg
     attrs
+    commonmark
     mautrix
     phonenumbers
     pillow
@@ -31,12 +46,6 @@ python3.pkgs.buildPythonPackage rec {
 
   doCheck = false;
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "asyncpg>=0.20,<0.26" "asyncpg>=0.20" \
-      --replace "mautrix>=0.16.0,<0.17" "mautrix>=0.16.0"
-  '';
-
   postInstall = ''
     mkdir -p $out/bin
 
@@ -47,8 +56,8 @@ python3.pkgs.buildPythonPackage rec {
     " > $out/bin/mautrix-signal
     chmod +x $out/bin/mautrix-signal
     wrapProgram $out/bin/mautrix-signal \
-      --set PATH ${python3}/bin \
-      --set PYTHONPATH "$PYTHONPATH"
+      --prefix PATH : "${python3}/bin" \
+      --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 
   meta = with lib; {

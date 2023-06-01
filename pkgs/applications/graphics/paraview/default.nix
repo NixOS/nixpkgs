@@ -1,12 +1,12 @@
 { lib, stdenv, fetchFromGitLab, fetchurl
-, boost, cmake, ffmpeg, qtbase, qtx11extras
+, boost, cmake, ffmpeg, wrapQtAppsHook, qtbase, qtx11extras
 , qttools, qtxmlpatterns, qtsvg, gdal, gfortran, libXt, makeWrapper
-, mkDerivation, ninja, mpi, python3, tbb, libGLU, libGL
+, ninja, mpi, python3, tbb, libGLU, libGL
 , withDocs ? true
 }:
 
 let
-  version = "5.10.0";
+  version = "5.11.0";
 
   docFiles = [
     (fetchurl {
@@ -26,7 +26,7 @@ let
     })
   ];
 
-in mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "paraview";
   inherit version;
 
@@ -35,7 +35,7 @@ in mkDerivation rec {
     owner = "paraview";
     repo = "paraview";
     rev = "v${version}";
-    sha256 = "0ipx6zq44hpic7gvv0s2jvjncak6vlmrz5sp9ypc15b15bna0gs2";
+    sha256 = "sha256-WvkKGl5lG+apX6m4ULVZZVtDsSUjEVXe/seh95b+LmI=";
     fetchSubmodules = true;
   };
 
@@ -68,6 +68,7 @@ in mkDerivation rec {
     makeWrapper
     ninja
     gfortran
+    wrapQtAppsHook
   ];
 
   buildInputs = [

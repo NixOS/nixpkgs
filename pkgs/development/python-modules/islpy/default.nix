@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "islpy";
-  version = "2022.2.1";
+  version = "2023.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "07062ljvznm2dg3r9b3lq98qygxsha8ylxi4zs7hx49l0jw2vbjy";
+    sha256 = "sha256-QLkpCBF95OBOzPrBXmlzyhFMfq1bs2+S/8Z5n4oMekg=";
   };
 
   postConfigure = ''
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six ];
 
   preCheck = "mv islpy islpy.hidden";
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "islpy" ];
 
   meta = with lib; {

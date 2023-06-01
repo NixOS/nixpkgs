@@ -3,14 +3,20 @@
 , bash-completion
 , fetchurl
 , fetchpatch
-, gdbm ? null
+, gdbm
 , glib
 , gsettings-desktop-schemas
 , gtk-vnc
 , gtk3
 , intltool
-, libcap ? null
+, libcap
 , libgovirt
+  # Currently unsupported. According to upstream, libgovirt is for a very narrow
+  # use-case and we don't currently cover it in Nixpkgs. It's safe to disable.
+  # https://gitlab.com/virt-viewer/virt-viewer/-/issues/100#note_1265011223
+  # Can be enabled again once this is merged:
+  # https://gitlab.com/virt-viewer/virt-viewer/-/merge_requests/129
+, ovirtSupport ? false
 , libvirt
 , libvirt-glib
 , libxml2
@@ -19,19 +25,12 @@
 , pkg-config
 , python3
 , shared-mime-info
-, spice-gtk ? null
-, spice-protocol ? null
+, spice-gtk
+, spice-protocol
 , spiceSupport ? true
 , vte
 , wrapGAppsHook
 }:
-
-assert spiceSupport -> (
-  gdbm != null
-  && libcap != null
-  && spice-gtk != null
-  && spice-protocol != null
-);
 
 with lib;
 
@@ -45,10 +44,10 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Fix build with meson 0.61
-    # https://gitlab.com/virt-viewer/virt-viewer/-/merge_requests/117
+    # Fix build with meson 0.61. Should be fixed in the next release.
+    # https://gitlab.com/virt-viewer/virt-viewer/-/merge_requests/120
     (fetchpatch {
-      url = "https://gitlab.com/virt-viewer/virt-viewer/-/commit/ed19e51407bee53988878a6ebed4e7279d00b1a1.patch";
+      url = "https://gitlab.com/virt-viewer/virt-viewer/-/commit/98d9f202ef768f22ae21b5c43a080a1aa64a7107.patch";
       sha256 = "sha256-3AbnkbhWOh0aNjUkmVoSV/9jFQtvTllOr7plnkntb2o=";
     })
   ];
@@ -70,20 +69,26 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gtk-vnc
     gtk3
-    libgovirt
     libvirt
     libvirt-glib
     libxml2
     vte
-  ] ++ optionals spiceSupport [
+  ] ++ optionals ovirtSupport [
+    libgovirt
+  ] ++ optionals spiceSupport ([
     gdbm
-    libcap
     spice-gtk
     spice-protocol
-  ];
+  ] ++ optionals stdenv.isLinux [
+    libcap
+  ]);
 
   # Required for USB redirection PolicyKit rules file
   propagatedUserEnvPkgs = optional spiceSupport spice-gtk;
+
+  mesonFlags = [
+    (lib.mesonEnable "ovirt" ovirtSupport)
+  ];
 
   strictDeps = true;
 
@@ -93,8 +98,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A viewer for remote virtual machines";
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ raskin atemu ];
+    platforms = with platforms; linux ++ darwin;
     license = licenses.gpl2;
   };
   passthru = {

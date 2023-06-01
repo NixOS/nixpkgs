@@ -1,16 +1,13 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchgit }:
 
 stdenv.mkDerivation rec {
   pname = "tt-rss";
-  year = "21";
-  month = "06";
-  day = "21";
-  version = "20${year}-${month}-${day}";
-  rev = "cd26dbe64c9b14418f0b2d826a38a35c6bf8a270";
+  version = "unstable-2023-04-13";
 
-  src = fetchurl {
-    url = "https://git.tt-rss.org/fox/tt-rss/archive/${rev}.tar.gz";
-    sha256 = "1dpmzi7hknv5rk2g1iw13r8zcxcwrhkd5hhf292ml0dw3cwki0gm";
+  src = fetchgit {
+    url = "https://git.tt-rss.org/fox/tt-rss.git";
+    rev = "0578bf802571781a0a7e3debbbec66437a7d28b4";
+    hash = "sha256-j6R1QoH8SzUtyI3rGE6rHriboAfApAo/Guw8WbJ7LqU=";
   };
 
   installPhase = ''
@@ -21,7 +18,7 @@ stdenv.mkDerivation rec {
 
     # see the code of Config::get_version(). you can check that the version in
     # the footer of the preferences pages is not UNKNOWN
-    echo "${year}.${month}" > $out/version_static.txt
+    echo "23.04" > $out/version_static.txt
 
     runHook postInstall
   '';

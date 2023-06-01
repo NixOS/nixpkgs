@@ -12,13 +12,14 @@
 , ujson
 , aiohttp
 , crcmod
+, pytest-timeout
 , pytest-vcr
 , vcrpy
 }:
 
 buildPythonPackage rec {
   pname = "gcsfs";
-  version = "2022.5.0";
+  version = "2023.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,8 +27,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = pname;
-    rev = version;
-    hash = "sha256-gIkK1VSg1h04+MQBoxFtXIdn80faJlgQ9ayqV5p0RMU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-FHS+g0SuYH9OPiE/+p2SHrsWfzBQ82GM6hTph8koh+o=";
   };
 
   propagatedBuildInputs = [
@@ -42,8 +43,9 @@ buildPythonPackage rec {
     ujson
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-vcr
+    pytest-timeout
     pytestCheckHook
     vcrpy
   ];
@@ -66,6 +68,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Convenient Filesystem interface over GCS";
     homepage = "https://github.com/fsspec/gcsfs";
+    changelog = "https://github.com/fsspec/gcsfs/raw/${version}/docs/source/changelog.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ nbren12 ];
   };

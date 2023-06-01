@@ -18,17 +18,19 @@
 
 buildPythonPackage rec {
   pname = "tpm2-pytss";
-  version = "1.2.0";
+  version = "2.1.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-OgWWTjcj3Qd4dSaCwY+fuRQpLSFn4+9o11kPR9n8a54=";
+    hash = "sha256-W1tLFFb9wa7vPSw5cL6qB4yPfyZIyXppvPYMWi+VyJc=";
   };
 
   nativeBuildInputs = [
     cffi
-    pkgconfig # this is the python module
+    pkgconfig # this is the Python module
     pkg-config # this is the actual pkg-config tool
     setuptools-scm
   ];
@@ -47,15 +49,18 @@ buildPythonPackage rec {
   # https://github.com/tpm2-software/tpm2-pytss/issues/341
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     ibm-sw-tpm2
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "tpm2_pytss" ];
+  pythonImportsCheck = [
+    "tpm2_pytss"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/tpm2-software/tpm2-pytss";
+    changelog = "https://github.com/tpm2-software/tpm2-pytss/blob/${version}/CHANGELOG.md";
     description = "TPM2 TSS Python bindings for Enhanced System API (ESYS)";
     license = licenses.bsd2;
     maintainers = with maintainers; [ baloo ];

@@ -208,7 +208,7 @@ let
         };
 
         port = mkOption {
-          type = types.nullOr types.int;
+          type = types.nullOr types.port;
           default = null;
           description = lib.mdDoc ''
             The database's port. If not set, the default ports will be provided (5432
@@ -534,7 +534,7 @@ let
     services.phpfpm.pools = mkIf (cfg.pool == "${poolName}") {
       ${poolName} = {
         inherit (cfg) user;
-        phpPackage = pkgs.php80;
+        phpPackage = pkgs.php81;
         settings = mapAttrs (name: mkDefault) {
           "listen.owner" = "nginx";
           "listen.group" = "nginx";

@@ -9,7 +9,7 @@ let
     pkgs.writeText "rspamd-exporter-config.yml" (builtins.toJSON conf);
 
   generateConfig = extraLabels: {
-    metrics = (map (path: {
+    modules.default.metrics = (map (path: {
       name = "rspamd_${replaceStrings [ "[" "." " " "]" "\\" "'" ] [ "_" "_" "_" "" "" "" ] path}";
       path = "{ .${path} }";
       labels = extraLabels;

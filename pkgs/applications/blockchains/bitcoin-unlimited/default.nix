@@ -3,10 +3,8 @@
 , withGui, wrapQtAppsHook ? null, qtbase ? null, qttools ? null
 , Foundation, ApplicationServices, AppKit }:
 
-with lib;
-
 stdenv.mkDerivation rec {
-  pname = "bitcoin" + optionalString (!withGui) "d" + "-unlimited";
+  pname = "bitcoin" + lib.optionalString (!withGui) "d" + "-unlimited";
   version = "1.10.0.0";
 
   src = fetchFromGitLab {
@@ -17,19 +15,19 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook python3 ]
-    ++ optionals withGui [ wrapQtAppsHook qttools ];
+    ++ lib.optionals withGui [ wrapQtAppsHook qttools ];
   buildInputs = [ openssl db48 boost zlib
                   miniupnpc util-linux protobuf libevent ]
-                  ++ optionals withGui [ qtbase qttools qrencode ]
-                  ++ optionals stdenv.isDarwin [ Foundation ApplicationServices AppKit ];
+                  ++ lib.optionals withGui [ qtbase qttools qrencode ]
+                  ++ lib.optionals stdenv.isDarwin [ Foundation ApplicationServices AppKit ];
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
-                     ++ optionals withGui [ "--with-gui=qt5"
+                     ++ lib.optionals withGui [ "--with-gui=qt5"
                                             "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
                                           ];
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Peer-to-peer electronic cash system (Unlimited client)";
     longDescription= ''
       Bitcoin is a free open source peer-to-peer electronic cash system that is
@@ -60,7 +58,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.bitcoinunlimited.info/";
     maintainers = with maintainers; [ DmitryTsygankov ];
     license = licenses.mit;
-    broken = stdenv.isDarwin;
+    broken = true;
     platforms = platforms.unix;
   };
 }

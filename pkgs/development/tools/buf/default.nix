@@ -10,33 +10,29 @@
 
 buildGoModule rec {
   pname = "buf";
-  version = "1.7.0";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ALqyl5GLOxwsojR0/hfjO4yD3AEkyQK+faa3smMW94c=";
+    hash = "sha256-vLiOAlzIrIwMKPn8yl/YyFmXbFHFAZB1yLejQbAEivg=";
   };
 
-  vendorSha256 = "sha256-K+CAC2OrmjzpRF0DLSYp21BgvkxtJCF2FdpzYx/CqGI=";
+  vendorHash = "sha256-DT3vffs33hGlylQLKc5o7Xble8Blyy4hgvE27CHnmJc=";
 
   patches = [
     # Skip a test that requires networking to be available to work.
     ./skip_test_requiring_network.patch
     # Skip TestWorkspaceGit which requires .git and commits.
     ./skip_test_requiring_dotgit.patch
-    # Skips the invalid_upstream test as it is flakey. Based on upstream commit
-    # 27930caf2eb35c2592a77f59ed5afe4d9e2fb7ea.
-    # This patch may be removed on the next buf update.
-    ./skip_test_invalid_upstream_flakey.patch
   ];
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [ "-s" "-w" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     git # Required for TestGitCloner
     protobuf # Required for buftesting.GetProtocFilePaths
   ];
@@ -47,6 +43,9 @@ buildGoModule rec {
     # To skip TestCloneBranchAndRefToBucket
     export CI=true
   '';
+
+  # Allow tests that bind or connect to localhost on macOS.
+  __darwinAllowLocalNetworking = true;
 
   installPhase = ''
     runHook preInstall
@@ -77,6 +76,6 @@ buildGoModule rec {
     changelog = "https://github.com/bufbuild/buf/releases/tag/v${version}";
     description = "Create consistent Protobuf APIs that preserve compatibility and comply with design best-practices";
     license = licenses.asl20;
-    maintainers = with maintainers; [ raboof jk lrewega ];
+    maintainers = with maintainers; [ jk lrewega ];
   };
 }

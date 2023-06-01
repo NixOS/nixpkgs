@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "blackfire";
-  version = "2.10.0";
+  version = "2.15.0";
 
   src = passthru.sources.${stdenv.hostPlatform.system} or (throw "Unsupported platform for blackfire: ${stdenv.hostPlatform.system}");
 
@@ -57,23 +57,23 @@ stdenv.mkDerivation rec {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_amd64.deb";
-        sha256 = "kyYmPU/y7pR2kx5ymDMuJvinTo5hpKs0Jy3LZPjDJyw=";
+        sha256 = "eKHP7yOy6hnHi0EomZhsGXWinNy4roQ9qRGn8tah6KI=";
       };
       "i686-linux" = fetchurl {
         url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_i386.deb";
-        sha256 = "swaZmlEoKSmH95pqAYW3ygOzQKkedWhc7FOMy3RnJFs=";
+        sha256 = "sCFVmGz850h9NKoVKUBV+93k913ihpfk+48buzsNOqw=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_arm64.deb";
-        sha256 = "QjrLn+gxoJovMlLsIe24BNKVaFK3vgFk9BwRHSl/y3M=";
+        sha256 = "V6adZVR82Z15fN//wuwHZK6C95hAxXPB9NuA0kx1qPA=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://packages.blackfire.io/blackfire/${version}/blackfire-darwin_arm64.pkg.tar.gz";
-        sha256 = "pBzSswicNK8z/asmGhj+IhBSS0mPJSf91XBX75AGAtY=";
+        sha256 = "X0sWPjmVAzJTKHUxVLbhWTdc7ryn2GkNMj9CuRgTb0I=";
       };
       "x86_64-darwin" = fetchurl {
         url = "https://packages.blackfire.io/blackfire/${version}/blackfire-darwin_amd64.pkg.tar.gz";
-        sha256 = "ekeA/+N59mgDtkchEP1p4jz74goaPySmvZ6urCLcUNw=";
+        sha256 = "FvoslunTPxmc2KqaxNSb0uK9fP4CV5HR39UDoW3zJfw=";
       };
     };
 
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     homepage = "https://blackfire.io/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ jtojnar shyim ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "i686-linux" "x86_64-darwin" ];
+    maintainers = with maintainers; [ shyim ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "i686-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-j4W4zwHA4yA6iAFVa/LDKp00eeCX3PbmWkjd2LSUGfk=";
+    hash = "sha256-j4W4zwHA4yA6iAFVa/LDKp00eeCX3PbmWkjd2LSUGfk=";
   };
 
   patches = [
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     # https://github.com/h4l/rnginline/issues/3
     (fetchpatch {
       url = "https://github.com/h4l/rnginline/commit/b1d1c8cda2a17d46627309950f2442021749c07e.patch";
-      sha256 = "sha256-XbisEwun2wPOp7eqW2YDVdayJ4sjAMG/ezFwgoCKe9o=";
+      hash = "sha256-XbisEwun2wPOp7eqW2YDVdayJ4sjAMG/ezFwgoCKe9o=";
       name = "fix_tests_failing_collect.patch";
     })
   ];
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];

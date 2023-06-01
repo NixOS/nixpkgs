@@ -14,13 +14,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "terminator";
-  version = "2.1.1";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "gnome-terminator";
     repo = "terminator";
     rev = "v${version}";
-    sha256 = "1pfrzna30xv9yri6dsny1j5k35417m4hsg97c455vssywyl9w4jr";
+    hash = "sha256-Kx0z9oheA7Ihgsyg6zgPcGFMrqlXoIpQcL/dMqPB2qA=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,6 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     gtk3
-    gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
     keybinder3
     libnotify
     python3
@@ -70,6 +69,7 @@ python3.pkgs.buildPythonApplication rec {
       quadkonsole, etc. in that the main focus is arranging terminals in grids
       (tabs is the most common default method, which Terminator also supports).
     '';
+    changelog = "https://github.com/gnome-terminator/terminator/releases/tag/v${version}";
     homepage = "https://github.com/gnome-terminator/terminator";
     license = licenses.gpl2;
     maintainers = with maintainers; [ bjornfor ];
