@@ -37,15 +37,14 @@ let
       if type ? _type
         then type else
       if type ? ${typeAttr}
-        then toType type.type else
+        then              toType    (breadcrumb ++ [typeAttr]) type.${typeAttr}    else
       if type ? ${attrAttr}
-        then lazyAttrsOf (toType    (breadcrumb ++ [attrAttr]) type."${attrAttr}") else
+        then lazyAttrsOf (toType    (breadcrumb ++ [attrAttr]) type.${attrAttr}) else
       if type ? ${listAttr}
-        then listOf      (toType    (breadcrumb ++ [listAttr]) type."${listAttr}") else
+        then listOf      (toType    (breadcrumb ++ [listAttr]) type.${listAttr}) else
       if type ? ${subMAttr}
-        then submodule   (toOptions (breadcrumb ++ [subMAttr]) type."${subMAttr}")
-      else
-        throw ''${concatStringsSep "." breadcrumb} has no attr _type|${typeAttr}|${attrAttr}|${listAttr}|${subMAttr}'';
+        then submodule   (toOptions (breadcrumb ++ [subMAttr]) type.${subMAttr}) else
+      throw ''${concatStringsSep "." breadcrumb} has no attr _type|${typeAttr}|${attrAttr}|${listAttr}|${subMAttr}'';
     in
       if debug then
         trace ''
@@ -67,15 +66,14 @@ let
       if typeOf optDef     != "set"
         then throw ''optDef must be a attrset, instead it is a ${typeOf optDef}, breadcrumb: ${concatStringsSep "." breadcrumb}, optName: ${optName}'' else
       if optDef ? ${typeAttr}
-        then optDef else
+        then removeAttrs optDef [typeAttr] // { type = optDef.${typeAttr}; } else
       if optDef ? ${attrAttr}
-        then removeAttrs optDef [attrAttr] // { type = lazyAttrsOf (toType    (breadcrumb ++ [optName attrAttr]) optDef."${attrAttr}");} else
+        then removeAttrs optDef [attrAttr] // { type = lazyAttrsOf (toType    (breadcrumb ++ [optName attrAttr]) optDef.${attrAttr});} else
       if optDef ? ${listAttr}
-        then removeAttrs optDef [listAttr] // { type = listOf      (toType    (breadcrumb ++ [optName listAttr]) optDef."${listAttr}");} else
+        then removeAttrs optDef [listAttr] // { type = listOf      (toType    (breadcrumb ++ [optName listAttr]) optDef.${listAttr});} else
       if optDef ? ${subMAttr}
-        then removeAttrs optDef [subMAttr] // { type = submodule   (toOptions (breadcrumb ++ [optName subMAttr]) optDef."${subMAttr}");}
-      else
-        throw ''${concatStringsSep "." (breadcrumb ++ optName)} has no attr _type|${typeAttr}|${attrAttr}|${listAttr}|${subMAttr}'';
+        then removeAttrs optDef [subMAttr] // { type = submodule   (toOptions (breadcrumb ++ [optName subMAttr]) optDef.${subMAttr});} else
+      throw ''${concatStringsSep "." (breadcrumb ++ optName)} has no attr _type|${typeAttr}|${attrAttr}|${listAttr}|${subMAttr}'';
     in
       if debug then
         trace ''
