@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "gst-python";
-  version = "1.22.2";
+  version = "1.22.3";
 
   format = "other";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-python/${pname}-${version}.tar.xz";
-    hash = "sha256-vvKz2Czkvka3dbG7VjBcEAPuAbU1pTqC+f6JJJchU60=";
+    hash = "sha256-cL7T+r5jS8Yi723k5uscM7yc79ZL2rIA9voxa0aMcxw=";
   };
 
   # Python 2.x is not supported.
@@ -61,5 +61,6 @@ buildPythonPackage rec {
     homepage = "https://gstreamer.freedesktop.org";
     description = "Python bindings for GStreamer";
     license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ lilyinstarlight ];
   };
 }

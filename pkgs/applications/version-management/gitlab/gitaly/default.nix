@@ -1,17 +1,19 @@
-{ lib, fetchFromGitLab, fetchFromGitHub, buildGoModule, ruby
-, bundlerEnv, pkg-config
+{ lib
+, fetchFromGitLab
+, fetchFromGitHub
+, buildGoModule
+, pkg-config
+
 # libgit2 + dependencies
-, libgit2, openssl, zlib, pcre, http-parser }:
+, libgit2
+, http-parser
+, openssl
+, pcre
+, zlib
+}:
 
 let
-  rubyEnv = bundlerEnv rec {
-    name = "gitaly-env";
-    inherit ruby;
-    copyGemFiles = true;
-    gemdir = ./.;
-  };
-
-  version = "15.11.6";
+  version = "16.0.1";
   package_version = "v${lib.versions.major version}";
   gitaly_package = "gitlab.com/gitlab-org/gitaly/${package_version}";
 
@@ -22,17 +24,17 @@ let
       owner = "gitlab-org";
       repo = "gitaly";
       rev = "v${version}";
-      sha256 = "sha256-n56Jqgu64+pN4bcH/Sh8/+4StpTEY529a4yVozqtK5Y=";
+      sha256 = "sha256-2OlCjwcJ0RydbKI15X4wZ20XVclC44McNig95UndDGg=";
     };
 
-    vendorSha256 = "sha256-gJelagGPogeCdJtRpj4RaYlqzZRhtU0EIhmj1aK4ZOk=";
+    vendorSha256 = "sha256-KBhTI70eReZGSd7RxwGXcUGa0wDo7q5tU9fUhrLeFO0=";
 
     ldflags = [ "-X ${gitaly_package}/internal/version.version=${version}" "-X ${gitaly_package}/internal/version.moduleVersion=${version}" ];
 
     tags = [ "static,system_libgit2" ];
 
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ rubyEnv.wrappedRuby libgit2 openssl zlib pcre http-parser ];
+    buildInputs = [ libgit2 openssl zlib pcre http-parser ];
 
     doCheck = false;
   };
@@ -46,10 +48,6 @@ in
 buildGoModule ({
   pname = "gitaly";
 
-  passthru = {
-    inherit rubyEnv;
-  };
-
   subPackages = [ "cmd/gitaly" "cmd/gitaly-backup" ];
 
   preConfigure = ''
@@ -57,12 +55,7 @@ buildGoModule ({
     cp -r ${auxBins}/bin/* _build/bin
   '';
 
-  postInstall = ''
-    mkdir -p $ruby
-    cp -rv $src/ruby/{bin,lib} $ruby
-  '';
-
-  outputs = [ "out" "ruby" ];
+  outputs = [ "out" ];
 
   meta = with lib; {
     homepage = "https://gitlab.com/gitlab-org/gitaly";

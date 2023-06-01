@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 3c284b7c96b88e71001fbff4c94a24ee553a8e78
-  ref: refs/tags/6.3.17
+  revision: 3641bc9666de2c52f5be49cb9e8c4a71529f8a75
+  ref: refs/tags/6.3.18
   specs:
-    metasploit-framework (6.3.17)
+    metasploit-framework (6.3.18)
       actionpack (~> 7.0)
       activerecord (~> 7.0)
       activesupport (~> 7.0)
@@ -101,25 +101,25 @@ GEM
   remote: https://rubygems.org/
   specs:
     Ascii85 (1.1.0)
-    actionpack (7.0.4.3)
-      actionview (= 7.0.4.3)
-      activesupport (= 7.0.4.3)
-      rack (~> 2.0, >= 2.2.0)
+    actionpack (7.0.5)
+      actionview (= 7.0.5)
+      activesupport (= 7.0.5)
+      rack (~> 2.0, >= 2.2.4)
       rack-test (>= 0.6.3)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.2.0)
-    actionview (7.0.4.3)
-      activesupport (= 7.0.4.3)
+    actionview (7.0.5)
+      activesupport (= 7.0.5)
       builder (~> 3.1)
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
-    activemodel (7.0.4.3)
-      activesupport (= 7.0.4.3)
-    activerecord (7.0.4.3)
-      activemodel (= 7.0.4.3)
-      activesupport (= 7.0.4.3)
-    activesupport (7.0.4.3)
+    activemodel (7.0.5)
+      activesupport (= 7.0.5)
+    activerecord (7.0.5)
+      activemodel (= 7.0.5)
+      activesupport (= 7.0.5)
+    activesupport (7.0.5)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
@@ -130,8 +130,8 @@ GEM
     arel-helpers (2.14.0)
       activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.2.0)
-    aws-partitions (1.767.0)
-    aws-sdk-core (3.173.0)
+    aws-partitions (1.772.0)
+    aws-sdk-core (3.173.1)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.5)
@@ -180,7 +180,7 @@ GEM
     eventmachine (1.2.7)
     faker (3.2.0)
       i18n (>= 1.8.11, < 2)
-    faraday (2.7.4)
+    faraday (2.7.5)
       faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (3.0.2)
@@ -271,7 +271,7 @@ GEM
     network_interface (0.0.2)
     nexpose (7.3.0)
     nio4r (2.5.9)
-    nokogiri (1.15.1)
+    nokogiri (1.15.2)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     nori (2.6.0)
@@ -304,11 +304,12 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.5.0)
-      loofah (~> 2.19, >= 2.19.1)
-    railties (7.0.4.3)
-      actionpack (= 7.0.4.3)
-      activesupport (= 7.0.4.3)
+    rails-html-sanitizer (1.6.0)
+      loofah (~> 2.21)
+      nokogiri (~> 1.14)
+    railties (7.0.5)
+      actionpack (= 7.0.5)
+      activesupport (= 7.0.5)
       method_source
       rake (>= 12.2)
       thor (~> 1.0)
@@ -445,4 +446,4 @@ DEPENDENCIES
   metasploit-framework!
 
 BUNDLED WITH
-   2.4.12
+   2.4.13

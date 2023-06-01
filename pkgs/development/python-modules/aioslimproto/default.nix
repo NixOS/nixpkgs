@@ -1,4 +1,5 @@
 { lib
+, async-timeout
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
@@ -7,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "aioslimproto";
-  version = "2.2.0";
+  version = "2.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -16,8 +17,12 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-3aLAAUaoGkdzjUHFb6aiyVv0fzO8DojN0Y3DTf6h2Ow=";
+    hash = "sha256-ku96N3n71mrYuott6E6UwbloP6RzM9tiEATvYHzdYnM=";
   };
+
+  propagatedBuildInputs = [
+    async-timeout
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

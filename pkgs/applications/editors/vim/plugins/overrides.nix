@@ -746,6 +746,18 @@ self: super: {
     vimCommandCheck = "MinimapToggle";
   });
 
+  minsnip-nvim = buildVimPluginFrom2Nix {
+    pname = "minsnip.nvim";
+    version = "2022-01-04";
+    src = fetchFromGitHub {
+      owner = "jose-elias-alvarez";
+      repo = "minsnip.nvim";
+      rev = "6ae2f3247b3a2acde540ccef2e843fdfcdfebcee";
+      sha256 = "1db5az5civ2bnqg7v3g937mn150ys52258c3glpvdvyyasxb4iih";
+    };
+    meta.homepage = "https://github.com/jose-elias-alvarez/minsnip.nvim/";
+  };
+
   ncm2 = super.ncm2.overrideAttrs (old: {
     dependencies = with self; [ nvim-yarp ];
   });
@@ -900,7 +912,7 @@ self: super: {
         pname = "sg-nvim-rust";
         inherit (old) version src;
 
-        cargoHash = "sha256-gnQNQlW/c1vzyR+HbYn7rpxZ1C6WXFcqpylIOTUMZ6g=";
+        cargoHash = "sha256-9iXKVlhoyyRXCP4Bx9rCHljETdE9UD9PNWqPYDurQnI=";
 
         nativeBuildInputs = [ pkg-config ];
 

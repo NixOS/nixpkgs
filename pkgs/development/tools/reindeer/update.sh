@@ -2,7 +2,7 @@
 #!nix-shell -I nixpkgs=./. -i bash -p curl jq nix-prefetch common-updater-scripts mktemp nix coreutils
 
 # First, check that we only update once per day since the version tag is dependent on the date.
-NEW_VERSION="unstable-$(date +%F)"
+NEW_VERSION="unstable-$(date -u +%F)"
 CURRENT_VERSION=$(nix-instantiate --eval -E "with import ./. {}; reindeer.version" | tr -d '"')
 if [[ "$NEW_VERSION" == "$CURRENT_VERSION" ]]; then
     echo "skipping reindeer update within same day (version: \"$CURRENT_VERSION\")"
