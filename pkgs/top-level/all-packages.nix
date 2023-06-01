@@ -34440,6 +34440,8 @@ with pkgs;
 
   sublime-music = callPackage ../applications/audio/sublime-music { };
 
+  subtitlr = callPackage ../applications/audio/subtitlr { };
+
   subunit = callPackage ../development/libraries/subunit { };
 
   surf = callPackage ../applications/networking/browsers/surf { gtk = gtk2; };
