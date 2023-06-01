@@ -71,7 +71,7 @@ in
           package = mkDefault pkgs.cinnamon.mint-themes;
         };
         iconTheme = mkIf (notExcluded pkgs.cinnamon.mint-y-icons) {
-          name = mkDefault "Mint-Y-Aqua";
+          name = mkDefault "Mint-Y-Sand";
           package = mkDefault pkgs.cinnamon.mint-y-icons;
         };
         cursorTheme = mkIf (notExcluded pkgs.cinnamon.mint-cursor-themes) {
