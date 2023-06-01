@@ -11925,6 +11925,8 @@ with pkgs;
 
   renderdoc = libsForQt5.callPackage ../development/tools/renderdoc { };
 
+  repgrep = callPackage ../tools/text/repgrep { };
+
   replace = callPackage ../tools/text/replace { };
 
   resvg = callPackage ../tools/graphics/resvg { };
