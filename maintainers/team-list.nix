@@ -293,6 +293,7 @@ with lib.maintainers; {
       imincik
       sikmir
       nh2
+      willcohen
     ];
     scope = "Maintain geospatial packages.";
     shortName = "Geospatial";
