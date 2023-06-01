@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libmcfp";
-  version = "1.2.3";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "mhekkel";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Mi5nj8vR1j3V7fIMBrSyhD57emmlkCb0F08+5s7Usj0=";
+    hash = "sha256-Xz7M3TmUHGqiYZbFGSDxsVvg4VhgoVvr9TW03UxdFBw=";
   };
 
   nativeBuildInputs = [ cmake ];
