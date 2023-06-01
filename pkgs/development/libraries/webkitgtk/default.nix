@@ -2,6 +2,7 @@
 , stdenv
 , runCommand
 , fetchurl
+, fetchpatch
 , perl
 , python3
 , ruby
@@ -97,6 +98,13 @@ stdenv.mkDerivation (finalAttrs: {
       src = ./fdo-backend-path.patch;
       wpebackend_fdo = libwpe-fdo;
     })
+    (fetchpatch {
+      name = "CVE-2023-32373.patch";
+      url = "https://github.com/WebKit/WebKit/commit/85fd2302d16a09a82d9a6e81eb286babb23c4b3c.patch";
+      hash = "sha256-8TMPCExfBjZhAS4l3anKgsFNkrKR6ig7nLqu4hT3A90=";
+    })
+    # Based on https://github.com/WebKit/WebKit/commit/698c6e293734c3c46f223b77d5b4ee48b320e32c
+    ./CVE-2023-28204.patch
   ];
 
   preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
