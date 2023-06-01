@@ -97,6 +97,9 @@ In addition to numerous new and updated packages, this release has the following
 
 - [ivpn](https://www.ivpn.net/), a secure, private VPN with fast WireGuard connections. Available as [services.ivpn](#opt-services.ivpn.enable).
 
+<<<<<<< HEAD
+- [vmalert](https://victoriametrics.com/), an alerting engine for VictoriaMetrics. Available as [services.vmalert](#opt-services.vmalert.enable).
+
 - [jellyseerr](https://github.com/Fallenbagel/jellyseerr), a web-based requests manager for Jellyfin, forked from Overseerr. Available as [services.jellyseerr](#opt-services.jellyseerr.enable).
 
 - [kavita](https://kavitareader.com), a self-hosted digital library. Available as [services.kavita](options.html#opt-services.kavita.enable).
@@ -117,6 +120,29 @@ In addition to numerous new and updated packages, this release has the following
 
 - [opensearch](https://opensearch.org), a search server alternative to Elasticsearch. Available as [services.opensearch](options.html#opt-services.opensearch.enable).
 
+||||||| parent of f53d2b5cfb0 (# Ceci est la combinaison de 72 commits.)
+=======
+- [jellyseerr](https://github.com/Fallenbagel/jellyseerr), a web-based requests manager for Jellyfin, forked from Overseerr. Available as [services.jellyseerr](#opt-services.jellyseerr.enable).
+
+- [kavita](https://kavitareader.com), a self-hosted digital library. Available as [services.kavita](options.html#opt-services.kavita.enable).
+
+- [keyd](https://github.com/rvaiya/keyd), a key remapping daemon for Linux. Available as [services.keyd](#opt-services.keyd.enable).
+
+- [lldap](https://github.com/lldap/lldap), a lightweight authentication server that provides an opinionated, simplified LDAP interface for authentication. Available as [services.lldap](#opt-services.lldap.enable).
+
+- [minipro](https://gitlab.com/DavidGriffith/minipro/), an open source program for controlling the MiniPRO TL866xx series of chip programmers. Available as [programs.minipro](options.html#opt-programs.minipro.enable).
+
+- [mmsd](https://gitlab.com/kop316/mmsd), a lower level daemon that transmits and receives MMSes. Available as [services.mmsd](#opt-services.mmsd.enable).
+
+- [monica](https://www.monicahq.com), an open source personal CRM. Available as [services.monica](options.html#opt-services.monica.enable).
+
+- [networkd-dispatcher](https://gitlab.com/craftyguy/networkd-dispatcher), a dispatcher service for systemd-networkd connection status changes. Available as [services.networkd-dispatcher](#opt-services.networkd-dispatcher.enable).
+
+- [nimdow](https://github.com/avahe-kellenberger/nimdow), a window manager written in Nim, inspired by dwm. Available as [services.xserver.windowManager.nimdow.enable](options.html#opt-services.xserver.windowManager.nimdow.enable).
+
+- [opensearch](https://opensearch.org), a search server alternative to Elasticsearch. Available as [services.opensearch](options.html#opt-services.opensearch.enable).
+
+>>>>>>> f53d2b5cfb0 (# Ceci est la combinaison de 72 commits.)
 - [openvscode-server](https://github.com/gitpod-io/openvscode-server), run VS Code on a remote machine with access through a modern web browser from any device, anywhere. Available as [services.openvscode-server](#opt-services.openvscode-server.enable).
 
 - [peroxide](https://github.com/ljanyst/peroxide), a fork of the official [ProtonMail bridge](https://github.com/ProtonMail/proton-bridge) that aims to be similar to [Hydroxide](https://github.com/emersion/hydroxide). Available as [services.peroxide](#opt-services.peroxide.enable).
