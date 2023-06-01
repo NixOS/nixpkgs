@@ -3,13 +3,11 @@
 stdenv.mkDerivation rec {
   pname = "citus";
   version = "11.3.0";
-  # version = "11.0.6";
 
   src = fetchFromGitHub {
     owner  = "citusdata";
     repo   = "citus";
     rev    = "v${version}";
-    # sha256 = "zBygZLaFUnAkDEgrdeGwnWl1y+gIK4JWmB7gW482xx8=";
     sha256 = "e+pkKFFFIATIoODRmOGFr0yFCYo2Q7mVJJ/zbtObJ30=";
   };
 
@@ -30,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Transparent, distributed sharding and replication for PostgreSQL";
-    homepage    = https://www.citusdata.com/;
+    homepage    = "https://www.citusdata.com/";
     maintainers = with maintainers; [ ];
     platforms   = platforms.linux;
     license     = licenses.agpl3;
