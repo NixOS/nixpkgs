@@ -52,6 +52,5 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ kragniz rasendubi ];
-    broken = stdenv.hostPlatform.isStatic; # See https://github.com/NixOS/nixpkgs/issues/213623
   };
 }
