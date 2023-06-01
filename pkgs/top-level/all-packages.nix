@@ -7331,9 +7331,7 @@ with pkgs;
 
   endlessh-go = callPackage ../servers/endlessh-go { };
 
-  eris-go = callPackage ../servers/eris-go {
-    buildGoModule = buildGo119Module; # go 1.20 build failure
-  };
+  eris-go = callPackage ../servers/eris-go { };
 
   ericw-tools = callPackage ../applications/misc/ericw-tools { stdenv = gcc10StdenvCompat; };
 
