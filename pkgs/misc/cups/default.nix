@@ -134,7 +134,12 @@ stdenv.mkDerivation rec {
         --replace "Exec=htmlview" "Exec=xdg-open"
     '';
 
-  passthru.tests.nixos = nixosTests.printing;
+  passthru.tests = {
+    inherit (nixosTests)
+      printing-service
+      printing-socket
+    ;
+  };
 
   meta = with lib; {
     homepage = "https://openprinting.github.io/cups/";
