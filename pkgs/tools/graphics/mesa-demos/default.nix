@@ -1,7 +1,23 @@
-{ lib, stdenv, fetchurl
-, freeglut, glew, libGL, libGLU, libX11, libXext, mesa
-, meson, ninja, pkg-config, wayland, wayland-protocols
-, vulkan-loader, libxkbcommon, libdecor, glslang }:
+{ lib
+, stdenv
+, fetchurl
+, freeglut
+, libGL
+, libGLU
+, libX11
+, libXext
+, mesa
+, meson
+, ninja
+, pkg-config
+, wayland
+, wayland-scanner
+, wayland-protocols
+, vulkan-loader
+, libxkbcommon
+, libdecor
+, glslang
+}:
 
 stdenv.mkDerivation rec {
   pname = "mesa-demos";
@@ -12,11 +28,33 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-MEaj0mp7BRr3690lel8jv+sWDK1u2VIynN/x6fHtSWs=";
   };
 
+  strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    wayland-scanner
+    glslang
+  ];
+
   buildInputs = [
-    freeglut glew libX11 libXext libGL libGLU mesa wayland
-    wayland-protocols vulkan-loader libxkbcommon libdecor glslang
-  ] ++ lib.optional (mesa ? osmesa) mesa.osmesa ;
-  nativeBuildInputs = [ meson ninja pkg-config wayland ];
+    freeglut
+    libX11
+    libXext
+    libGL
+    libGLU
+    mesa
+    wayland
+    wayland-protocols
+    vulkan-loader
+    libxkbcommon
+    libdecor
+  ] ++ lib.optional (mesa ? osmesa) mesa.osmesa;
 
   mesonFlags = [
     "-Degl=${if stdenv.isDarwin then "disabled" else "auto"}"
