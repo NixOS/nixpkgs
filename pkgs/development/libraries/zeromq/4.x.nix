@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, asciidoc, pkg-config, libsodium
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, asciidoc, pkg-config, libsodium
 , enableDrafts ? false }:
 
 stdenv.mkDerivation rec {
@@ -14,6 +14,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake asciidoc pkg-config ];
   buildInputs = [ libsodium ];
+
+  patches = [
+    # Fixes a static assertion failure regarding rebinding an allocator on clang 16 and GCC 13.
+    (fetchpatch {
+      url = "https://github.com/zeromq/libzmq/pull/4480.patch";
+      hash = "sha256-tSTYSrQzgnfbY/70QhPdOnpEXX05VAYwVYuW8P1LWf0=";
+    })
+  ];
 
   doCheck = false; # fails all the tests (ctest)
 
