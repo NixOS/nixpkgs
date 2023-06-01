@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "reindeer";
-  version = "unstable-2023-05-18";
+  version = "unstable-2023-05-31";
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = pname;
-    rev = "2d6d37dcddaa840b6cd99951176c972f4c3afddd";
-    sha256 = "sha256-31Kf6cVqAVFprTHEJp06E0p0y5YwdowhmPti8JBJw3g=";
+    rev = "9971d473177b26e7ba8cae2a42501f433e5d62b4";
+    sha256 = "sha256-RaPYy6ansK/JXEfz7KWDeVSGr6pZH5T1oQRuZW4ZqzI=";
   };
 
   cargoLock = {
