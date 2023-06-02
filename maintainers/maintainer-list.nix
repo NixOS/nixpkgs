@@ -6364,6 +6364,12 @@
       fingerprint = "45A9 9917 578C D629 9F5F  B5B4 C22D 4DE4 D7B3 2D19";
     }];
   };
+  hitsmaxft = {
+    name = "Bhe Hongtyu";
+    email = "mfthits@gmail.com";
+    github = "hitsmaxft";
+    githubId = 352727;
+  };
   hjones2199 = {
     email = "hjones2199@gmail.com";
     github = "hjones2199";
