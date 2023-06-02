@@ -59,28 +59,66 @@ in {
 
     networking.usePredictableInterfaceNames = false;
 
-    services.udev.extraRules = ''
-      ENV{DEVTYPE}=="disk", KERNEL!="sda" SUBSYSTEM=="block", SUBSYSTEMS=="scsi", KERNELS=="?:0:0:0", ATTR{removable}=="0", SYMLINK+="disk/by-lun/0",
-      ENV{DEVTYPE}=="disk", KERNEL!="sda" SUBSYSTEM=="block", SUBSYSTEMS=="scsi", KERNELS=="?:0:0:1", ATTR{removable}=="0", SYMLINK+="disk/by-lun/1",
-      ENV{DEVTYPE}=="disk", KERNEL!="sda" SUBSYSTEM=="block", SUBSYSTEMS=="scsi", KERNELS=="?:0:0:2", ATTR{removable}=="0", SYMLINK+="disk/by-lun/2"
-      ENV{DEVTYPE}=="disk", KERNEL!="sda" SUBSYSTEM=="block", SUBSYSTEMS=="scsi", KERNELS=="?:0:0:3", ATTR{removable}=="0", SYMLINK+="disk/by-lun/3"
+    #https://docs.microsoft.com/en-us/troubleshoot/azure/virtual-machines/troubleshoot-device-names-problems#get-the-latest-azure-storage-rules
+    #https://raw.githubusercontent.com/Azure/WALinuxAgent/master/config/66-azure-storage.rules
+    services.udev.packages = [
+      (pkgs.writeTextFile {
+      name = "azure-storage-udev-rules";
+      destination = "/lib/udev/rules.d/66-azure-storage.rules";
+      text = ''
+# Azure specific rules.
+ACTION!="add|change", GOTO="walinuxagent_end"
+SUBSYSTEM!="block", GOTO="walinuxagent_end"
+ATTRS{ID_VENDOR}!="Msft", GOTO="walinuxagent_end"
+ATTRS{ID_MODEL}!="Virtual_Disk", GOTO="walinuxagent_end"
 
-      ENV{DEVTYPE}=="disk", KERNEL!="sda" SUBSYSTEM=="block", SUBSYSTEMS=="scsi", KERNELS=="?:0:0:4", ATTR{removable}=="0", SYMLINK+="disk/by-lun/4"
-      ENV{DEVTYPE}=="disk", KERNEL!="sda" SUBSYSTEM=="block", SUBSYSTEMS=="scsi", KERNELS=="?:0:0:5", ATTR{removable}=="0", SYMLINK+="disk/by-lun/5"
-      ENV{DEVTYPE}=="disk", KERNEL!="sda" SUBSYSTEM=="block", SUBSYSTEMS=="scsi", KERNELS=="?:0:0:6", ATTR{removable}=="0", SYMLINK+="disk/by-lun/6"
-      ENV{DEVTYPE}=="disk", KERNEL!="sda" SUBSYSTEM=="block", SUBSYSTEMS=="scsi", KERNELS=="?:0:0:7", ATTR{removable}=="0", SYMLINK+="disk/by-lun/7"
+# Match the known ID parts for root and resource disks.
+ATTRS{device_id}=="?00000000-0000-*", ENV{fabric_name}="root", GOTO="wa_azure_names"
+ATTRS{device_id}=="?00000000-0001-*", ENV{fabric_name}="resource", GOTO="wa_azure_names"
 
-      ENV{DEVTYPE}=="disk", KERNEL!="sda" SUBSYSTEM=="block", SUBSYSTEMS=="scsi", KERNELS=="?:0:0:8", ATTR{removable}=="0", SYMLINK+="disk/by-lun/8"
-      ENV{DEVTYPE}=="disk", KERNEL!="sda" SUBSYSTEM=="block", SUBSYSTEMS=="scsi", KERNELS=="?:0:0:9", ATTR{removable}=="0", SYMLINK+="disk/by-lun/9"
-      ENV{DEVTYPE}=="disk", KERNEL!="sda" SUBSYSTEM=="block", SUBSYSTEMS=="scsi", KERNELS=="?:0:0:10", ATTR{removable}=="0", SYMLINK+="disk/by-lun/10"
-      ENV{DEVTYPE}=="disk", KERNEL!="sda" SUBSYSTEM=="block", SUBSYSTEMS=="scsi", KERNELS=="?:0:0:11", ATTR{removable}=="0", SYMLINK+="disk/by-lun/11"
+# Gen2 disk.
+ATTRS{device_id}=="{f8b3781a-1e82-4818-a1c3-63d806ec15bb}", ENV{fabric_scsi_controller}="scsi0", GOTO="azure_datadisk"
+# Create symlinks for data disks attached.
+ATTRS{device_id}=="{f8b3781b-1e82-4818-a1c3-63d806ec15bb}", ENV{fabric_scsi_controller}="scsi1", GOTO="azure_datadisk"
+ATTRS{device_id}=="{f8b3781c-1e82-4818-a1c3-63d806ec15bb}", ENV{fabric_scsi_controller}="scsi2", GOTO="azure_datadisk"
+ATTRS{device_id}=="{f8b3781d-1e82-4818-a1c3-63d806ec15bb}", ENV{fabric_scsi_controller}="scsi3", GOTO="azure_datadisk"
+GOTO="walinuxagent_end"
 
-      ENV{DEVTYPE}=="disk", KERNEL!="sda" SUBSYSTEM=="block", SUBSYSTEMS=="scsi", KERNELS=="?:0:0:12", ATTR{removable}=="0", SYMLINK+="disk/by-lun/12"
-      ENV{DEVTYPE}=="disk", KERNEL!="sda" SUBSYSTEM=="block", SUBSYSTEMS=="scsi", KERNELS=="?:0:0:13", ATTR{removable}=="0", SYMLINK+="disk/by-lun/13"
-      ENV{DEVTYPE}=="disk", KERNEL!="sda" SUBSYSTEM=="block", SUBSYSTEMS=="scsi", KERNELS=="?:0:0:14", ATTR{removable}=="0", SYMLINK+="disk/by-lun/14"
-      ENV{DEVTYPE}=="disk", KERNEL!="sda" SUBSYSTEM=="block", SUBSYSTEMS=="scsi", KERNELS=="?:0:0:15", ATTR{removable}=="0", SYMLINK+="disk/by-lun/15"
+# Parse out the fabric n ame based off of scsi indicators.
+LABEL="azure_datadisk"
+ENV{DEVTYPE}=="partition", PROGRAM="${pkgs.bash}/bin/sh -c 'readlink /sys/class/block/%k/../device|cut -d: -f4'", ENV{fabric_name}="$env{fabric_scsi_controller}/lun$result"
+ENV{DEVTYPE}=="disk", PROGRAM="${pkgs.bash}/bin/sh -c 'readlink /sys/class/block/%k/device|cut -d: -f4'", ENV{fabric_name}="$env{fabric_scsi_controller}/lun$result"
 
-    '';
+ENV{fabric_name}=="scsi0/lun0", ENV{fabric_name}="root"
+ENV{fabric_name}=="scsi0/lun1", ENV{fabric_name}="resource"
+# Don't create a symlink for the cd-rom.
+ENV{fabric_name}=="scsi0/lun2", GOTO="walinuxagent_end"
+
+# Create the symlinks.
+LABEL="wa_azure_names"
+ENV{DEVTYPE}=="disk", SYMLINK+="disk/azure/$env{fabric_name}"
+ENV{DEVTYPE}=="partition", SYMLINK+="disk/azure/$env{fabric_name}-part%n"
+
+LABEL="walinuxagent_end"
+        '';
+      })
+
+    # https://raw.githubusercontent.com/Azure/WALinuxAgent/master/config/99-azure-product-uuid.rules
+    (pkgs.writeTextFile {
+      name = "azure-product-uuid-udev-rules";
+      destination = "/lib/udev/rules.d/99-azure-product-uuid.rules";
+      text = ''
+SUBSYSTEM!="dmi", GOTO="product_uuid-exit"
+ATTR{sys_vendor}!="Microsoft Corporation", GOTO="product_uuid-exit"
+ATTR{product_name}!="Virtual Machine", GOTO="product_uuid-exit"
+TEST!="/sys/devices/virtual/dmi/id/product_uuid", GOTO="product_uuid-exit"
+
+RUN+="${pkgs.coreutils}/bin/chmod 0444 /sys/devices/virtual/dmi/id/product_uuid"
+
+LABEL="product_uuid-exit"
+        '';
+      })
+    ];
   }
 
   (mkIf cfg.getSshKeys (
