@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "peewee-migrate";
-  version = "1.7.1";
+  version = "1.10.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "klen";
     repo = "peewee_migrate";
     rev = "refs/tags/${version}";
-    hash = "sha256-s7/Ev4nAKUr5OBgziETVCtjlxvBoeoZXriUBuAUi4eE=";
+    hash = "sha256-YDL7J/LmCRz6kRHQ0NrnVnvtS3rFkH08umjPI95mn6w=";
   };
 
   nativeBuildInputs = [
