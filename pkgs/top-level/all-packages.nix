@@ -6002,6 +6002,8 @@ with pkgs;
 
   antibody = callPackage ../shells/zsh/antibody { };
 
+  antidote = callPackage ../shells/zsh/antidote { };
+
   antigen = callPackage ../shells/zsh/antigen { };
 
   apparix = callPackage ../tools/misc/apparix { };
