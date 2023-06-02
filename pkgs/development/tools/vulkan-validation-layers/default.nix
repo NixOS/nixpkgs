@@ -18,14 +18,14 @@
 }:
 
 let
-  robin-hood-hashing = callPackage ./robin-hood-hashing.nix {};
+  robin-hood-hashing = callPackage ./robin-hood-hashing.nix { };
 
   # Current VVL version requires a newer spirv-headers than the latest release tag.
   # This should hopefully not be too common and the override should be removed after
   # the next SPIRV headers release.
   # FIXME: if this ever becomes common, figure out a way to pull revisions directly
   # from upstream known-good.json
-  spirv-headers' = spirv-headers.overrideAttrs(_: {
+  spirv-headers' = spirv-headers.overrideAttrs (_: {
     version = "unstable-2023-04-27";
 
     src = fetchFromGitHub {
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   # If we were to use "dev" here instead of headers, the setupHook would be
   # placed in that output instead of "out".
-  outputs = ["out" "headers"];
+  outputs = [ "out" "headers" ];
   outputInclude = "headers";
 
   src = fetchFromGitHub {
@@ -79,7 +79,9 @@ stdenv.mkDerivation rec {
     "-DPKG_CONFIG_EXECUTABLE=${pkg-config}/bin/pkg-config"
     # Hide dev warnings that are useless for packaging
     "-Wno-dev"
-  ];
+  ] ++ (lib.lists.optionals stdenv.isDarwin [
+    "-DCMAKE_CXX_FLAGS=-faligned-allocation"
+  ]);
 
   # Tests require access to vulkan-compatible GPU, which isn't
   # available in Nix sandbox. Fails with VK_ERROR_INCOMPATIBLE_DRIVER.
@@ -96,9 +98,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "The official Khronos Vulkan validation layers";
-    homepage    = "https://github.com/KhronosGroup/Vulkan-ValidationLayers";
-    platforms   = platforms.linux;
-    license     = licenses.asl20;
+    homepage = "https://github.com/KhronosGroup/Vulkan-ValidationLayers";
+    platforms = platforms.linux ++ platforms.darwin;
+    license = licenses.asl20;
     maintainers = [ maintainers.ralith ];
   };
 }
