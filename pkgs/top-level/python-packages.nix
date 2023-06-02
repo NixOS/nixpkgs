@@ -1861,6 +1861,8 @@ self: super: with self; {
 
   cock = callPackage ../development/python-modules/cock { };
 
+  class-doc = callPackage ../development/python-modules/class-doc { };
+
   click = callPackage ../development/python-modules/click { };
 
   clickclick = callPackage ../development/python-modules/clickclick { };
