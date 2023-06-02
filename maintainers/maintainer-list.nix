@@ -177,6 +177,12 @@
     githubId = 12578560;
     name = "Quinn Bohner";
   };
+  _8-bit-fox = {
+    email = "sebastian@markwaerter.de";
+    github = "8-bit-fox";
+    githubId = 43320117;
+    name = "Sebastian Marquardt";
+  };
   _9999years = {
     email = "rbt@fastmail.com";
     github = "9999years";
