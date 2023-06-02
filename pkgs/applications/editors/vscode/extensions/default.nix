@@ -1452,6 +1452,22 @@ let
         };
       };
 
+      github.copilot-chat = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "github";
+          name = "copilot-chat";
+          version = "0.1.2023060101";
+          sha256 = "sha256-g3UIcy2TpD3m8EamxneUXYAV/bbCPvPhOWdcuXPkK9g=";
+        };
+        meta = {
+          description = "GitHub Copilot Chat is a companion extension to GitHub Copilot that houses experimental chat features";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=GitHub.copilot-chat";
+          homepage = "https://github.com/features/copilot";
+          license = lib.licenses.unfree;
+          maintainers = [ lib.maintainers.laurent-f1z1 ];
+        };
+      };
+
       github.github-vscode-theme = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "github-vscode-theme";
