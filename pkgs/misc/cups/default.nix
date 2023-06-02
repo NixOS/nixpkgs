@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cups";
-  version = "2.4.2";
+  version = "2.4.3";
 
   src = fetchurl {
     url = "https://github.com/OpenPrinting/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
-    sha256 = "sha256-8DzLQLCH0eMJQKQOAUHcu6Jj85l0wg658lIQZsnGyQg=";
+    sha256 = "sha256-nd65jyDpyfSvEhwrEFPnQgt5vWdw8a3tKGYwPSdSb28=";
   };
 
   outputs = [ "out" "lib" "dev" "man" ];
@@ -134,7 +134,12 @@ stdenv.mkDerivation rec {
         --replace "Exec=htmlview" "Exec=xdg-open"
     '';
 
-  passthru.tests.nixos = nixosTests.printing;
+  passthru.tests = {
+    inherit (nixosTests)
+      printing-service
+      printing-socket
+    ;
+  };
 
   meta = with lib; {
     homepage = "https://openprinting.github.io/cups/";
