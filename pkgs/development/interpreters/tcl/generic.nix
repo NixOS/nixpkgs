@@ -1,7 +1,9 @@
-{ lib, stdenv, callPackage, makeSetupHook
+{ lib, stdenv, callPackage, newScope, makeSetupHook
 
 # Version specific stuff
 , release, version, src
+
+, config
 , ...
 }:
 
@@ -54,5 +56,13 @@ stdenv.mkDerivation (finalAttrs: {
       propagatedBuildInputs = [ buildPackages.makeWrapper ];
     } ./tcl-package-hook.sh) {};
     mkTclDerivation = callPackage ./mk-tcl-derivation.nix { tcl = finalAttrs.finalPackage; };
+    pkgs =
+      let
+        packages = import ../../../top-level/tcl-packages.nix { tcl = finalAttrs.finalPackage; };
+        scope = lib.makeScope newScope packages;
+        # Allows extending all tcl package sets with overlays
+        extension = lib.composeManyExtensions config.tclPackagesExtensions or [];
+      in
+      scope.overrideScope' extension;
   };
 })

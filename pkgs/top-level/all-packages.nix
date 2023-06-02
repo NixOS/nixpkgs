@@ -17447,6 +17447,8 @@ with pkgs;
   tcl-8_5 = callPackage ../development/interpreters/tcl/8.5.nix { };
   tcl-8_6 = callPackage ../development/interpreters/tcl/8.6.nix { };
 
+  tclPackages = recurseIntoAttrs tcl.pkgs;
+
   tclreadline = callPackage ../development/interpreters/tclreadline { };
 
   eltclsh = callPackage ../development/tools/eltclsh { };
@@ -24330,8 +24332,6 @@ with pkgs;
   taskflow = callPackage ../development/libraries/taskflow { };
 
   tclap = callPackage ../development/libraries/tclap { };
-
-  tcllib = callPackage ../development/libraries/tcllib { };
 
   tcltls = callPackage ../development/libraries/tcltls { };
 
