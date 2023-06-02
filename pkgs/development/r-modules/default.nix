@@ -357,6 +357,7 @@ let
     kza = [ pkgs.fftw.dev ];
     lpsymphony = with pkgs; [ pkg-config gfortran gettext ];
     lwgeom = with pkgs; [ proj geos gdal ];
+    rvg = [ pkgs.libpng.dev ];
     magick = [ pkgs.imagemagick.dev ];
     ModelMetrics = lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     mvabund = [ pkgs.gsl ];
