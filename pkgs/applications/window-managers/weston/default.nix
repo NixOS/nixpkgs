@@ -1,10 +1,12 @@
 { lib, stdenv, fetchurl
 , meson, ninja, pkg-config, python3, wayland-scanner
-, cairo, dbus, lcms2, libdrm, libevdev, libinput, libjpeg, libxkbcommon, mesa
-, seatd, wayland, wayland-protocols, xcbutilcursor
+, cairo, dbus, libdrm, libevdev, libinput, libxkbcommon, mesa, seatd, wayland
+, wayland-protocols, xcbutilcursor
 
 , demoSupport ? true
 , hdrSupport ? true, libdisplay-info
+, jpegSupport ? true, libjpeg
+, lcmsSupport ? true, lcms2
 , pangoSupport ? true, pango
 , pipewireSupport ? true, pipewire
 , rdpSupport ? true, freerdp
@@ -27,9 +29,11 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ meson ninja pkg-config python3 wayland-scanner ];
   buildInputs = [
-    cairo lcms2 libdrm libevdev libinput libjpeg libxkbcommon mesa seatd
-    wayland wayland-protocols
+    cairo libdrm libevdev libinput libxkbcommon mesa seatd wayland
+    wayland-protocols
   ] ++ lib.optional hdrSupport libdisplay-info
+    ++ lib.optional jpegSupport libjpeg
+    ++ lib.optional lcmsSupport lcms2
     ++ lib.optional pangoSupport pango
     ++ lib.optional pipewireSupport pipewire
     ++ lib.optional rdpSupport freerdp
@@ -44,7 +48,9 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "backend-pipewire" pipewireSupport)
     (lib.mesonBool "backend-rdp" rdpSupport)
     (lib.mesonBool "backend-vnc" vncSupport)
+    (lib.mesonBool "color-management-lcms" lcmsSupport)
     (lib.mesonBool "demo-clients" demoSupport)
+    (lib.mesonBool "image-jpeg" jpegSupport)
     (lib.mesonBool "image-webp" webpSupport)
     (lib.mesonBool "pipewire" pipewireSupport)
     (lib.mesonBool "remoting" remotingSupport)

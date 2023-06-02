@@ -35,58 +35,50 @@ touch regular
 ln -s target symlink
 mkfifo fifo
 
-checkPathType() {
-    local path=$1
-    local expectedPathType=$2
-    local actualPathType=$(nix-instantiate --eval --strict --json 2>&1 \
-        -E '{ path }: let lib = import <nixpkgs/lib>; in lib.filesystem.pathType path' \
-        --argstr path "$path")
-    if [[ "$actualPathType" != "$expectedPathType" ]]; then
-        die "lib.filesystem.pathType \"$path\" == $actualPathType, but $expectedPathType was expected"
+expectSuccess() {
+    local expr=$1
+    local expectedResultRegex=$2
+    if ! result=$(nix-instantiate --eval --strict --json \
+        --expr "with (import <nixpkgs/lib>).filesystem; $expr"); then
+        die "$expr failed to evaluate, but it was expected to succeed"
+    fi
+    if [[ ! "$result" =~ $expectedResultRegex ]]; then
+        die "$expr == $result, but $expectedResultRegex was expected"
     fi
 }
 
-checkPathType "/" '"directory"'
-checkPathType "$PWD/directory" '"directory"'
-checkPathType "$PWD/regular" '"regular"'
-checkPathType "$PWD/symlink" '"symlink"'
-checkPathType "$PWD/fifo" '"unknown"'
-checkPathType "$PWD/non-existent" "error: evaluation aborted with the following error message: 'lib.filesystem.pathType: Path $PWD/non-existent does not exist.'"
-
-checkPathIsDirectory() {
-    local path=$1
-    local expectedIsDirectory=$2
-    local actualIsDirectory=$(nix-instantiate --eval --strict --json 2>&1 \
-        -E '{ path }: let lib = import <nixpkgs/lib>; in lib.filesystem.pathIsDirectory path' \
-        --argstr path "$path")
-    if [[ "$actualIsDirectory" != "$expectedIsDirectory" ]]; then
-        die "lib.filesystem.pathIsDirectory \"$path\" == $actualIsDirectory, but $expectedIsDirectory was expected"
+expectFailure() {
+    local expr=$1
+    local expectedErrorRegex=$2
+    if result=$(nix-instantiate --eval --strict --json 2>"$work/stderr" \
+        --expr "with (import <nixpkgs/lib>).filesystem; $expr"); then
+        die "$expr evaluated successfully to $result, but it was expected to fail"
+    fi
+    if [[ ! "$(<"$work/stderr")" =~ $expectedErrorRegex ]]; then
+        die "Error was $(<"$work/stderr"), but $expectedErrorRegex was expected"
     fi
 }
 
-checkPathIsDirectory "/" "true"
-checkPathIsDirectory "$PWD/directory" "true"
-checkPathIsDirectory "$PWD/regular" "false"
-checkPathIsDirectory "$PWD/symlink" "false"
-checkPathIsDirectory "$PWD/fifo" "false"
-checkPathIsDirectory "$PWD/non-existent" "false"
+expectSuccess "pathType /." '"directory"'
+expectSuccess "pathType $PWD/directory" '"directory"'
+expectSuccess "pathType $PWD/regular" '"regular"'
+expectSuccess "pathType $PWD/symlink" '"symlink"'
+expectSuccess "pathType $PWD/fifo" '"unknown"'
+# Different errors depending on whether the builtins.readFilePath primop is available or not
+expectFailure "pathType $PWD/non-existent" "error: (evaluation aborted with the following error message: 'lib.filesystem.pathType: Path $PWD/non-existent does not exist.'|getting status of '$PWD/non-existent': No such file or directory)"
 
-checkPathIsRegularFile() {
-    local path=$1
-    local expectedIsRegularFile=$2
-    local actualIsRegularFile=$(nix-instantiate --eval --strict --json 2>&1 \
-        -E '{ path }: let lib = import <nixpkgs/lib>; in lib.filesystem.pathIsRegularFile path' \
-        --argstr path "$path")
-    if [[ "$actualIsRegularFile" != "$expectedIsRegularFile" ]]; then
-        die "lib.filesystem.pathIsRegularFile \"$path\" == $actualIsRegularFile, but $expectedIsRegularFile was expected"
-    fi
-}
+expectSuccess "pathIsDirectory /." "true"
+expectSuccess "pathIsDirectory $PWD/directory" "true"
+expectSuccess "pathIsDirectory $PWD/regular" "false"
+expectSuccess "pathIsDirectory $PWD/symlink" "false"
+expectSuccess "pathIsDirectory $PWD/fifo" "false"
+expectSuccess "pathIsDirectory $PWD/non-existent" "false"
 
-checkPathIsRegularFile "/" "false"
-checkPathIsRegularFile "$PWD/directory" "false"
-checkPathIsRegularFile "$PWD/regular" "true"
-checkPathIsRegularFile "$PWD/symlink" "false"
-checkPathIsRegularFile "$PWD/fifo" "false"
-checkPathIsRegularFile "$PWD/non-existent" "false"
+expectSuccess "pathIsRegularFile /." "false"
+expectSuccess "pathIsRegularFile $PWD/directory" "false"
+expectSuccess "pathIsRegularFile $PWD/regular" "true"
+expectSuccess "pathIsRegularFile $PWD/symlink" "false"
+expectSuccess "pathIsRegularFile $PWD/fifo" "false"
+expectSuccess "pathIsRegularFile $PWD/non-existent" "false"
 
 echo >&2 tests ok

@@ -49,7 +49,7 @@ in {
       description = lib.mdDoc ''
         Sway package to use. Will override the options
         'wrapperFeatures', 'extraSessionCommands', and 'extraOptions'.
-        Set to <code>null</code> to not add any Sway package to your
+        Set to `null` to not add any Sway package to your
         path. This should be done if you want to use the Home Manager Sway
         module to install Sway.
       '';

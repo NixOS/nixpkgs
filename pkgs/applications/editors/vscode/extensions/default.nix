@@ -416,6 +416,22 @@ let
         };
       };
 
+      ban.spellright = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "ban";
+          name = "spellright";
+          version = "3.0.112";
+          sha256 = "sha256-79Yg4I0OkfG7PaDYnTA8HK8jrSxre4FGriq0Baiq7wA=";
+        };
+        meta = {
+          description = "A Visual Studio Code extension for Spellchecker";
+          changelog = "https://marketplace.visualstudio.com/items/ban.spellright/changelog";
+          homepage = "https://github.com/bartosz-antosik/vscode-spellright";
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ onedragon ];
+        };
+      };
+
       bbenoist.nix = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "Nix";
@@ -670,6 +686,30 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      w88975.code-translate = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "code-translate";
+          publisher = "w88975";
+          version = "1.0.20";
+          sha256 = "sha256-blqLK7S+RmEoyr9zktS5/SNC0GeSXnNpbhltyajoAfw=";
+        };
+        meta = {
+          description = "A Visual Studio Code extension to provide purely hover translation";
+          longDescription = ''
+            Code Translate is a purely hover translation extension
+            - Non-intrusive display of translation results: perfectly integrated with VS Code code analysis.
+            - Powerful word splitting capabilities: supports various forms of word splitting such as camel case and underscore.
+            - Rich local vocabulary: includes 3.4+ million offline words, supporting various rare words.
+            - Based on a rich local vocabulary: Code Translate has super-fast query speed, with each word typically queried in less than 10ms.
+            - Multi-platform support: supports both the desktop version and online version of VS Code, and the plugin can be used on both versions.
+          '';
+          homepage = "https://github.com/w88975/code-translate-vscode";
+          changelog = "https://marketplace.visualstudio.com/items/w88975.code-translate/changelog";
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ onedragon ];
         };
       };
 
@@ -1176,6 +1216,22 @@ let
         };
       };
 
+      ExiaHuang.dictionary = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "ExiaHuang";
+          name = "dictionary";
+          version = "0.0.2";
+          sha256 = "sha256-caNcbDTB/F2mdlGpfIfJv13lzY5Wwj7p7r8dAte9+3A=";
+        };
+        meta = {
+          description = "A Visual Studio Code extension of using chinese-english dictonary in right-click menu";
+          homepage = "https://github.com/exiahuang/fanyi-vscode";
+          changelog = "https://marketplace.visualstudio.com/items/ExiaHuang.dictionary/changelog";
+          license = lib.licenses.gpl3Only;
+          maintainers = with lib.maintainers; [ onedragon ];
+        };
+      };
+
       file-icons.file-icons = buildVscodeMarketplaceExtension {
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/file-icons.file-icons/changelog";
@@ -1300,6 +1356,23 @@ let
           publisher = "freebroccolo";
           version = "1.0.38";
           sha256 = "1nay6qs9vcxd85ra4bv93gg3aqg3r2wmcnqmcsy9n8pg1ds1vngd";
+        };
+      };
+
+      funkyremi.vscode-google-translate = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "funkyremi";
+          name = "vscode-google-translate";
+          version = "1.4.13";
+          sha256 = "sha256-9Vo6lwqD1eE3zY0Gi9ME/6lPwmwuJ3Iq9StHPvncnM4=";
+        };
+        meta = {
+          description = "A Visual Studio Code extension using google translation to helping you quickly translate text right in your code rocket";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=funkyremi.vscode-google-translate";
+          homepage = "https://github.com/funkyremi/vscode-google-translate.git";
+          changelog = "https://marketplace.visualstudio.com/items/funkyremi.vscode-google-translate/changelog";
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ onedragon ];
         };
       };
 
@@ -1573,6 +1646,26 @@ let
           sha256 = "sha256-KIKROyfkosBS1Resgl+s3VENVg4ibaeIgKjermXESoA=";
         };
         meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      intellsmi.comment-translate = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "intellsmi";
+          name = "comment-translate";
+          version = "2.2.4";
+          sha256 = "sha256-g6mlScxv8opZuqgWtTJ3k0Yo7W7WzIkwB+8lWf6cMiU=";
+        };
+        meta = {
+          description = "A Visual Studio Code extension to translate the comments for computer language";
+          longDescription = ''
+            This plugin uses the Google Translate API to translate comments for the VSCode programming language.
+          '';
+          homepage = "https://github.com/intellism/vscode-comment-translate/blob/HEAD/doc/README.md";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=intellsmi.comment-translate";
+          changelog = "https://marketplace.visualstudio.com/items/intellsmi.comment-translate/changelog";
+          maintainers = with lib.maintainers; [ onedragon ];
           license = lib.licenses.mit;
         };
       };
@@ -2185,6 +2278,21 @@ let
         };
       };
 
+      ms-vscode.live-server = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "live-server";
+          publisher = "ms-vscode";
+          version = "0.4.8";
+          sha256 = "sha256-/IrLq+nNxwQB1S1NIGYkv24DOY7Mc25eQ+orUfh42pg=";
+        };
+        meta = {
+          description = "Launch a development local Server with live reload feature for static & dynamic pages";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode.live-server";
+          homepage = "https://github.com/microsoft/vscode-livepreview";
+          license = lib.licenses.mit;
+        };
+      };
+
       ms-vscode.makefile-tools = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "makefile-tools";
@@ -2546,6 +2654,27 @@ let
         };
       };
 
+      RoweWilsonFrederiskHolme.wikitext = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "wikitext";
+          publisher = "RoweWilsonFrederiskHolme";
+          version = "3.8.0";
+          sha256 = "30540a85163e797028eec9bc3db1866bbf473e98615bf6ade6d1d672017ebe52";
+        };
+        meta = {
+          description = "Extension that helps users view and write MediaWiki's Wikitext files";
+          longDescription = ''
+            With this extension, you can more easily discover your grammatical problems
+            through the marked and styled text. The plugin is based on MediaWiki's
+            Wikitext standard, but the rules are somewhat stricter, which helps users
+            write text that is easier to read and maintain.
+          '';
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=RoweWilsonFrederiskHolme.wikitext";
+          homepage = "https://github.com/Frederisk/Wikitext-VSCode-Extension";
+          license = lib.licenses.mit;
+        };
+      };
+
       rubbersheep.gi = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "gi";
@@ -2879,6 +3008,23 @@ let
         };
       };
 
+      tailscale.vscode-tailscale = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-tailscale";
+          publisher = "tailscale";
+          version = "0.4.0";
+          sha256 = "sha256-c/BZHKHs2EKd37148dSxEeP1wBXv75HhDqzegmHPjOs=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/tailscale.vscode-tailscale/changelog";
+          description = "VSCode extension to share a port over the internet with Tailscale Funnel";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Tailscale.vscode-tailscale";
+          homepage = "https://github.com/tailscale-dev/vscode-tailscale";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.drupol ];
+        };
+      };
+
       takayama.vscode-qq = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "takayama";
@@ -2900,6 +3046,22 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      techtheawesome.rust-yew = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "rust-yew";
+          publisher = "techtheawesome";
+          version = "0.2.2";
+          sha256 = "sha256-t9DYY1fqW7M5F1pbIUtnnodxMzIzURew4RXT78djWMI=";
+        };
+        meta = {
+          description = "A VSCode extension that provides some language features for Yew's html macro syntax";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=TechTheAwesome.rust-yew";
+          homepage = "https://github.com/TechTheAwesome/code-yew-server";
+          license = lib.licenses.gpl3Only;
+          maintainers = [ lib.maintainers.CardboardTurkey ];
         };
       };
 
@@ -3312,6 +3474,27 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      yzhang.dictionary-completion = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "yzhang";
+          name = "dictionary-completion";
+          version = "1.2.2";
+          sha256 = "sha256-dpJcJARRKzRNHfXs/qknud8OQ8xIyeaVnt/EcDq0k4E=";
+        };
+        meta = {
+          description = "A Visual Studio Code extension to help user easyly finish long words ";
+          longDescription = ''
+            Dictionary completion allows user to get a list of keywords, based off of the current word at the cursor.
+            This is useful if you are typing a long word (e.g. acknowledgeable) and don't want to finish typing or don't remember the Spelling
+          '';
+          homepage = "https://github.com/yzhang-gh/vscode-dic-completion#readme";
+          changelog = "https://marketplace.visualstudio.com/items/yzhang.dictionary-completion/changelog";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=yzhang.dictionary-completion";
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ onedragon ];
         };
       };
 

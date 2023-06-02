@@ -417,6 +417,8 @@ with pkgs;
 
   certgraph = callPackage ../tools/security/certgraph { };
 
+  certsync = callPackage ../tools/security/certsync { };
+
   cewl = callPackage ../tools/security/cewl { };
 
   chatgpt-cli = callPackage ../tools/misc/chatgpt-cli { };
@@ -553,9 +555,7 @@ with pkgs;
 
   efficient-compression-tool = callPackage ../tools/compression/efficient-compression-tool { };
 
-  enumer = callPackage ../tools/misc/enumer {
-    buildGoModule = buildGo119Module; # go 1.20 build failure
-  };
+  enumer = callPackage ../tools/misc/enumer { };
 
   evans = callPackage ../development/tools/evans { };
 
@@ -679,6 +679,8 @@ with pkgs;
   enumerepo = callPackage ../tools/security/enumerepo {};
 
   erosmb = callPackage ../tools/security/erosmb { };
+
+  eslint_d = callPackage ../development/tools/eslint_d { };
 
   oauth2c = callPackage ../tools/security/oauth2c { };
 
@@ -1658,9 +1660,7 @@ with pkgs;
 
   mnc = callPackage ../tools/misc/mnc { };
 
-  mgmt = callPackage ../applications/system/mgmt {
-    buildGoModule = buildGo119Module; # go 1.20 build failure
-  };
+  mgmt = callPackage ../applications/system/mgmt { };
 
   monica = callPackage ../servers/web-apps/monica { };
 
@@ -3199,9 +3199,7 @@ with pkgs;
 
   botamusique = callPackage ../tools/audio/botamusique { };
 
-  boulder = callPackage ../tools/admin/boulder {
-    buildGoModule = buildGo119Module; # go 1.20 build failure
-  };
+  boulder = callPackage ../tools/admin/boulder { };
 
   btrfs-heatmap = callPackage ../tools/filesystems/btrfs-heatmap { };
 
@@ -3228,7 +3226,7 @@ with pkgs;
 
   certigo = callPackage ../tools/admin/certigo { };
 
-  certipy = callPackage ../tools/security/certipy { };
+  certipy = with python3Packages; toPythonApplication certipy-ad;
 
   catcli = python3Packages.callPackage ../tools/filesystems/catcli { };
 
@@ -6288,7 +6286,6 @@ with pkgs;
   clementine = libsForQt5.callPackage ../applications/audio/clementine {
     gst_plugins =
       with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-ugly gst-libav ];
-    protobuf = protobuf3_19;
   };
 
   mellowplayer = libsForQt5.callPackage ../applications/audio/mellowplayer { };
@@ -6882,6 +6879,8 @@ with pkgs;
   dhcpcd = callPackage ../tools/networking/dhcpcd { };
 
   dhcping = callPackage ../tools/networking/dhcping { };
+
+  dotacat = callPackage ../tools/misc/dotacat { };
 
   di = callPackage ../tools/system/di { };
 
@@ -8763,7 +8762,7 @@ with pkgs;
 
   infisical = callPackage ../development/tools/infisical { };
 
-  inform6 = callPackage ../development/compilers/inform6 { };
+  inform6 = darwin.apple_sdk_11_0.callPackage ../development/compilers/inform6 { };
 
   inform7 = callPackage ../development/compilers/inform7 { };
 
@@ -11928,6 +11927,8 @@ with pkgs;
 
   renderdoc = libsForQt5.callPackage ../development/tools/renderdoc { };
 
+  repgrep = callPackage ../tools/text/repgrep { };
+
   replace = callPackage ../tools/text/replace { };
 
   resvg = callPackage ../tools/graphics/resvg { };
@@ -12111,6 +12112,8 @@ with pkgs;
   };
 
   rustypaste = callPackage ../servers/rustypaste { };
+
+  rustypaste-cli = callPackage ../tools/misc/rustypaste-cli { };
 
   rw = callPackage ../tools/misc/rw { };
 
@@ -18884,6 +18887,8 @@ with pkgs;
 
   mockgen = callPackage ../development/tools/mockgen { };
 
+  mockoon = callPackage ../tools/networking/mockoon { };
+
   modd = callPackage ../development/tools/modd { };
 
   mold = callPackage ../development/tools/mold {
@@ -23579,6 +23584,8 @@ with pkgs;
 
   podofo = callPackage ../development/libraries/podofo { };
 
+  podofo010 = callPackage ../development/libraries/podofo/0.10.x.nix { };
+
   polkit = callPackage ../development/libraries/polkit { };
 
   poppler = callPackage ../development/libraries/poppler { lcms = lcms2; };
@@ -26382,6 +26389,8 @@ with pkgs;
     # Version 1.38.1 requires Go >= 1.20
     buildGoModule = buildGo120Module;
   };
+
+  tailscale-systray = callPackage ../applications/misc/tailscale-systray { };
 
   tailspin = callPackage ../tools/misc/tailspin { };
 
@@ -29282,6 +29291,8 @@ with pkgs;
 
   abaddon = callPackage ../applications/networking/instant-messengers/abaddon { };
 
+  adguardian = callPackage ../applications/networking/adguardian { };
+
   aeolus = callPackage ../applications/audio/aeolus { };
   aeolus-stops = callPackage ../applications/audio/aeolus/stops.nix { };
 
@@ -29718,7 +29729,9 @@ with pkgs;
 
   calculix = callPackage ../applications/science/math/calculix { };
 
-  calibre = qt6Packages.callPackage ../applications/misc/calibre { };
+  calibre = qt6Packages.callPackage ../applications/misc/calibre {
+    podofo = podofo010;
+  };
 
   calibre-web = callPackage ../servers/calibre-web { };
 
@@ -31397,6 +31410,8 @@ with pkgs;
   mt32emu-qt = libsForQt5.callPackage ../applications/audio/munt/mt32emu-qt.nix { };
 
   mt32emu-smf2wav = callPackage ../applications/audio/munt/mt32emu-smf2wav.nix { };
+
+  noson = libsForQt5.callPackage ../applications/audio/noson { };
 
   offpunk = callPackage ../applications/networking/browsers/offpunk { };
 
@@ -34425,6 +34440,8 @@ with pkgs;
 
   sublime-music = callPackage ../applications/audio/sublime-music { };
 
+  subtitlr = callPackage ../applications/audio/subtitlr { };
+
   subunit = callPackage ../development/libraries/subunit { };
 
   surf = callPackage ../applications/networking/browsers/surf { gtk = gtk2; };
@@ -35145,7 +35162,7 @@ with pkgs;
   vscodium-fhsWithPackages = vscodium.fhsWithPackages;
 
   openvscode-server = callPackage ../servers/openvscode-server {
-    nodejs = nodejs_18;
+    nodejs = nodejs_16;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Security;
     inherit (darwin) cctools;
   };
@@ -35266,6 +35283,8 @@ with pkgs;
   westonLite = weston.override {
     demoSupport = false;
     hdrSupport = false;
+    jpegSupport = false;
+    lcmsSupport = false;
     pangoSupport = false;
     pipewireSupport = false;
     rdpSupport = false;

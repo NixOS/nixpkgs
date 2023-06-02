@@ -9,8 +9,6 @@
 , setuptools-rust
 , openssl
 , Security
-, packaging
-, six
 , isPyPy
 , cffi
 , pkg-config

@@ -1719,6 +1719,8 @@ self: super: with self; {
 
   certipy = callPackage ../development/python-modules/certipy { };
 
+  certipy-ad = callPackage ../development/python-modules/certipy-ad { };
+
   certomancer = callPackage ../development/python-modules/certomancer { };
 
   certvalidator = callPackage ../development/python-modules/certvalidator { };
@@ -2554,6 +2556,8 @@ self: super: with self; {
   dissect-cim = callPackage ../development/python-modules/dissect-cim { };
 
   dissect-clfs = callPackage ../development/python-modules/dissect-clfs { };
+
+  dissect-cobaltstrike = callPackage ../development/python-modules/dissect-cobaltstrike { };
 
   dissect-cstruct = callPackage ../development/python-modules/dissect-cstruct { };
 
