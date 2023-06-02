@@ -46,6 +46,13 @@ in
         description = mdDoc "Open ports in the firewall for the atuin server.";
       };
 
+      database = {
+        createLocally = mkOption {
+          type = types.bool;
+          default = true;
+          description = lib.mdDoc "Create the database and database user locally.";
+        };
+      };
     };
   };
 
@@ -65,7 +72,8 @@ in
 
     systemd.services.atuin = {
       description = "atuin server";
-      after = [ "network.target" "postgresql.service" ];
+      requires = lib.optionals cfg.database.createLocally [ "postgresql.service" ];
+      after = [ "network.target" ] ++ lib.optionals cfg.database.createLocally [ "postgresql.service" ] ;
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
@@ -80,7 +88,7 @@ in
         ATUIN_PORT = toString cfg.port;
         ATUIN_MAX_HISTORY_LENGTH = toString cfg.maxHistoryLength;
         ATUIN_OPEN_REGISTRATION = boolToString cfg.openRegistration;
-        ATUIN_DB_URI = "postgresql:///atuin";
+        ATUIN_DB_URI =  mkIf cfg.database.createLocally "postgresql:///atuin";
         ATUIN_PATH = cfg.path;
         ATUIN_CONFIG_DIR = "/run/atuin"; # required to start, but not used as configuration is via environment variables
       };
