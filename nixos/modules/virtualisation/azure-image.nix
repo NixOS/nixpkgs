@@ -5,7 +5,10 @@ let
   cfg = config.virtualisation.azureImage;
 in
 {
-  imports = [ ./azure.nix ];
+  imports = [
+    ./azure.nix
+    ./azure-init.nix
+  ];
 
   options = {
     virtualisation.azureImage.diskSize = mkOption {
@@ -46,9 +49,6 @@ in
       inherit (cfg) diskSize;
       inherit config lib pkgs;
     };
-
-    # Azure metadata is available as a CD-ROM drive.
-    fileSystems."/metadata".device = "/dev/sr0";
 
     systemd.services.fetch-ssh-keys = {
       description = "Fetch host keys and authorized_keys for root user";
