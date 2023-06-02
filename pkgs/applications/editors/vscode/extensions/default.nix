@@ -305,6 +305,23 @@ let
         };
       };
 
+      asdine.cue = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "cue";
+          publisher = "asdine";
+          version = "0.3.2";
+          sha256 = "sha256-jMXqhgjRdM3UG/9NtiwWAg61mBW8OYVAKDWgb4hzhA4=";
+        };
+        meta = {
+          description = "Cue language support for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=asdine.cue";
+          homepage = "https://github.com/asdine/vscode-cue";
+          changelog = "https://marketplace.visualstudio.com/items/asdine.cue/changelog";
+          license = lib.licenses.mit;
+          maintainers = [lib.maintainers.matthewpi];
+        };
+      };
+
       astro-build.astro-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "astro-vscode";
