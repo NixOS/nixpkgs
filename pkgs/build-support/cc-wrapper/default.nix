@@ -612,5 +612,6 @@ stdenv.mkDerivation {
         lib.attrByPath ["meta" "description"] "System C compiler" cc_
         + " (wrapper script)";
       priority = 10;
+      mainProgram = if name != "" then name else ccName;
   };
 }
