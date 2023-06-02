@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "gitsign";
-  version = "0.6.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-VgkTFYnHKpqZOack5SabOFu2BRespVRhgrsepo0V1mI=";
+    hash = "sha256-99JpuABkPHTNy9OpvRL7aIe1ZTrs2uZvxtxZf8346Ao=";
   };
-  vendorHash = "sha256-zalysp+90+QM5hX7yUudJW61h+3tQOab7ZpcF5kZSB0=";
+  vendorHash = "sha256-+EKC/Up48EjwfVhLTpoxctWCSMDL0kLZaRPLBl0JGFQ=";
 
   subPackages = [
     "."
