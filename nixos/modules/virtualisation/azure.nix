@@ -11,6 +11,16 @@ in {
       description = "Allow access for ssh authorized keys in azure vm metadata.";
       default = true;
     };
+
+    executeUserData = mkOption {
+      type = bool;
+      description = ''
+        Execute userdata from azure metadata at startup.
+        For example you can add "nix --experimental-features 'nix-command flakes' run nixpkgs#hello"
+        to userdata in azure metadata, to run hello world at start up.
+      '';
+      default = false;
+    };
   };
 
   config = mkMerge [
@@ -94,5 +104,48 @@ in {
 
     services.openssh.authorizedKeysCommand = "/etc/ssh/get-authorized-keys-from-azure";
   }))
+
+  (mkIf cfg.executeUserData {
+    systemd.services.azure-execute-userdata = let
+      execute-userdata = pkgs.writeShellApplication {
+          name = "execute-userdata";
+          runtimeInputs = with pkgs; [ curl coreutils config.nix.package config.system.build.nixos-rebuild ];
+          text = ''
+            userData=$(curl --retry 6 --retry-all-errors -H Metadata:true --noproxy "*"\
+              "http://169.254.169.254/metadata/instance/compute/userData?api-version=2021-10-01&format=text"\
+            | base64 --decode)
+
+            if [ -n "$userData" ]
+            then
+	            echo "Execute azure userdata"
+              eval "$userData"
+            else
+              echo "Azure userdata is empty"
+            fi
+          '';
+        };
+    in {
+      description = "Execute userdata from azure metadata";
+
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network-online.target" ];
+
+      path = [ execute-userdata ];
+
+      environment = {
+        # For nix-shell, nix-buld, ..,
+        NIX_PATH = "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos";
+      };
+
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+
+      script = ''
+        execute-userdata
+      '';
+    };
+  })
   ];
 }
