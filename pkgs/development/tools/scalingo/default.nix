@@ -25,7 +25,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Command Line client for Scalingo PaaS";
     homepage = "https://doc.scalingo.com/platform/cli/start";
-    changelog = "https://github.com/Scalingo/cli/blob/master/CHANGELOG.md#1282";
+    changelog = "https://github.com/Scalingo/cli/blob/master/CHANGELOG.md";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ cimm ];
     platforms = with lib.platforms; unix;
