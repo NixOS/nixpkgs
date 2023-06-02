@@ -2774,6 +2774,22 @@ let
         };
       };
 
+      seatonjiang.gitmoji-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "seatonjiang";
+          name = "gitmoji-vscode";
+          version = "1.2.2";
+          sha256 = "sha256-+lwbCLV62y1IHrjCygBphQZJUu+ZApYTwBQld5uu12w=";
+        };
+        meta = {
+          description = "Gitmoji tool for git commit messages in VSCode";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=seatonjiang.gitmoji-vscode";
+          homepage = "https://github.com/seatonjiang/gitmoji-vscode/";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.laurent-f1z1 ];
+        };
+      };
+
       serayuzgur.crates = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "crates";
