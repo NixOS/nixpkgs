@@ -17606,6 +17606,10 @@ with pkgs;
 
   asdf-vm = callPackage ../tools/misc/asdf-vm { };
 
+  rtx = callPackage ../tools/misc/rtx {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   ### DEVELOPMENT / TOOLS
 
   abi-compliance-checker = callPackage ../development/tools/misc/abi-compliance-checker { };
