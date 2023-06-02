@@ -25,13 +25,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "monero-cli";
-  version = "0.18.2.0";
+  version = "0.18.2.2";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    sha256 = "n2e5U3p0eG2atPYV86H2UAURwsIkeSOBm8iwYsDVAoc=";
+    sha256 = "6VI5D3vP6NKdrEE5qOpKnv1wr6AWriixdOxkAa8HaCQ=";
   };
 
   patches = [
