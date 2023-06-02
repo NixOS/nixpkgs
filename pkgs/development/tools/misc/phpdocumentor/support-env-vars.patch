@@ -1,0 +1,24 @@
+diff --git c/src/phpDocumentor/Kernel.php w/src/phpDocumentor/Kernel.php
+index 5707422d..1e8ffe99 100644
+--- c/src/phpDocumentor/Kernel.php
++++ w/src/phpDocumentor/Kernel.php
+@@ -59,11 +59,19 @@ class Kernel extends BaseKernel
+
+     public function getCacheDir(): string
+     {
++        if (isset($_SERVER['APP_CACHE_DIR'])) {
++            return $_SERVER['APP_CACHE_DIR'] . '/' . $this->environment;
++        }
++
+         return $this->getProjectDir() . '/var/cache/' . $this->environment;
+     }
+
+     public function getLogDir(): string
+     {
++        if (isset($_SERVER['APP_LOG_DIR'])) {
++            return $_SERVER['APP_LOG_DIR'];
++        }
++
+         if ($this->isPhar()) {
+             return '/tmp/php-doc/log';
+         }
