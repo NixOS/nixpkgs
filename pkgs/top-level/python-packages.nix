@@ -1861,6 +1861,8 @@ self: super: with self; {
 
   cock = callPackage ../development/python-modules/cock { };
 
+  class-doc = callPackage ../development/python-modules/class-doc { };
+
   click = callPackage ../development/python-modules/click { };
 
   clickclick = callPackage ../development/python-modules/clickclick { };
@@ -6221,6 +6223,8 @@ self: super: with self; {
   mido = callPackage ../development/python-modules/mido { };
 
   migen = callPackage ../development/python-modules/migen { };
+
+  mike = callPackage ../development/python-modules/mike { };
 
   milc = callPackage ../development/python-modules/milc { };
 
@@ -12755,6 +12759,8 @@ self: super: with self; {
   versiontag = callPackage ../development/python-modules/versiontag { };
 
   versiontools = callPackage ../development/python-modules/versiontools { };
+
+  verspec = callPackage ../development/python-modules/verspec { };
 
   vertica-python = callPackage ../development/python-modules/vertica-python { };
 

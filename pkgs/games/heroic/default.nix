@@ -2,8 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , fetchYarnDeps
-, fetchpatch
-, gitUpdater
 , yarn
 , fixup_yarn_lock
 , nodejs
@@ -17,28 +15,19 @@
 let appName = "heroic";
 in stdenv.mkDerivation rec {
   pname = "heroic-unwrapped";
-  version = "2.7.1";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
     rev = "v${version}";
-    sha256 = "sha256-l2eVLn1N+1nGxr8Oa2ecQgBmO0w/VJ8AY06GYQ0HiiI=";
+    hash = "sha256-AZwJRBkWuzBPT+ADVHabiK2KRXe6clZFa0IO99BO2Wk=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    sha256 = "sha256-R0lZrVfUH8NucuwarcE47jQ8ex5FY2hK6jJJ2TIRSWY=";
+    hash = "sha256-xiLK0D9+oL2UMD7b/9htOQJEpYCNayKW+KJ/vNVCgsw=";
   };
-
-  patches = [
-    # Fix for capturing keyboard shortcuts when not in focus.
-    # TODO: Remove when updating past 2.7.1.
-    (fetchpatch {
-      url = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/commit/c82e6ca8dd7070071793fe5a3c4c04b4ae02c3c7.patch";
-      hash = "sha256-Pum67YPejfq8ERv6XWVLQzs+/SyNojmTGTQpE0UR4kg=";
-    })
-  ];
 
   nativeBuildInputs = [
     yarn
@@ -101,10 +90,6 @@ in stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
-
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
 
   meta = with lib; {
     description = "A Native GOG and Epic Games Launcher for Linux, Windows and Mac";
