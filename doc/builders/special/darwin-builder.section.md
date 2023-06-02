@@ -67,7 +67,7 @@ $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
 ```
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-22.11-darwin";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-23.05-darwin";
     darwin.url = "github:lnl7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
   };
@@ -77,6 +77,7 @@ $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
 
     inherit (darwin.lib) darwinSystem;
     system = "aarch64-darwin";
+    workingDirectory = "/var/lib/darwin-builder";
     pkgs = nixpkgs.legacyPackages."${system}";
     linuxSystem = builtins.replaceStrings [ "darwin" ] [ "linux" ] system;
 
@@ -84,7 +85,10 @@ $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
       system = linuxSystem;
       modules = [
         "${nixpkgs}/nixos/modules/profiles/macos-builder.nix"
-        { virtualisation.host.pkgs = pkgs; }
+        { virtualisation.host.pkgs = pkgs;
+          virtualisation.darwin-builder.workingDirectory = workingDirectory;
+          system.nixos.revision = nixpkgs.lib.mkForce null;
+        }
       ];
     };
   in {
@@ -101,7 +105,8 @@ $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
               maxJobs = 4;
               supportedFeatures = [ "kvm" "benchmark" "big-parallel" ];
             }];
-
+            # enable the nix-daemon (for multi-user installs)
+            services.nix-daemon.enable = true;
             launchd.daemons.darwin-builder = {
               command = "${darwin-builder.config.system.build.macos-builder-installer}/bin/create-builder";
               serviceConfig = {
