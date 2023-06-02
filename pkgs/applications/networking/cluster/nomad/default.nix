@@ -44,7 +44,7 @@ rec {
   # Upstream partially documents used Go versions here
   # https://github.com/hashicorp/nomad/blob/master/contributing/golang.md
 
-  nomad = nomad_1_4;
+  nomad = nomad_1_5;
 
   nomad_1_2 = generic {
     buildGoModule = buildGo120Module;
@@ -66,5 +66,15 @@ rec {
     sha256 = "sha256-l4GvQIS5JSSgjBjPivAKAb7gKlVLw4WoZpPR8LxnLNc=";
     vendorSha256 = "sha256-05BhKF6kx0wbu74cidpTFhUN668R/AxV6qWmchCm/WE=";
     passthru.tests.nomad = nixosTests.nomad;
+  };
+  nomad_1_5 = generic {
+    buildGoModule = buildGo120Module;
+    version = "1.5.5";
+    sha256 = "sha256-8m0ng6i+JlgJKuzpce3gckrKVXNmjTiMCki1+N/ndio=";
+    vendorSha256 = "sha256-RqSabARrCjIjkncWcQUF/WcTd65N2kkbSTlZkMw59ZQ=";
+    passthru.tests.nomad = nixosTests.nomad;
+    preCheck = ''
+      export PATH="$PATH:/build/go/bin"
+    '';
   };
 }
