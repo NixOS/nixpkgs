@@ -8761,7 +8761,7 @@ with pkgs;
 
   infisical = callPackage ../development/tools/infisical { };
 
-  inform6 = callPackage ../development/compilers/inform6 { };
+  inform6 = darwin.apple_sdk_11_0.callPackage ../development/compilers/inform6 { };
 
   inform7 = callPackage ../development/compilers/inform7 { };
 
@@ -18885,6 +18885,8 @@ with pkgs;
   mmtf-cpp = callPackage ../development/libraries/science/chemistry/mmtf-cpp { };
 
   mockgen = callPackage ../development/tools/mockgen { };
+
+  mockoon = callPackage ../tools/networking/mockoon { };
 
   modd = callPackage ../development/tools/modd { };
 
@@ -34429,6 +34431,8 @@ with pkgs;
   };
 
   sublime-music = callPackage ../applications/audio/sublime-music { };
+
+  subtitlr = callPackage ../applications/audio/subtitlr { };
 
   subunit = callPackage ../development/libraries/subunit { };
 

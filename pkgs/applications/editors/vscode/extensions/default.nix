@@ -3049,6 +3049,22 @@ let
         };
       };
 
+      techtheawesome.rust-yew = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "rust-yew";
+          publisher = "techtheawesome";
+          version = "0.2.2";
+          sha256 = "sha256-t9DYY1fqW7M5F1pbIUtnnodxMzIzURew4RXT78djWMI=";
+        };
+        meta = {
+          description = "A VSCode extension that provides some language features for Yew's html macro syntax";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=TechTheAwesome.rust-yew";
+          homepage = "https://github.com/TechTheAwesome/code-yew-server";
+          license = lib.licenses.gpl3Only;
+          maintainers = [ lib.maintainers.CardboardTurkey ];
+        };
+      };
+
       theangryepicbanana.language-pascal = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "language-pascal";

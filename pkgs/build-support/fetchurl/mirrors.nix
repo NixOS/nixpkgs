@@ -269,7 +269,6 @@
     "https://versaweb.dl.sourceforge.net/sourceforge/"
     "https://freefr.dl.sourceforge.net/sourceforge/"
     "https://osdn.dl.sourceforge.net/sourceforge/"
-    "https://kent.dl.sourceforge.net/sourceforge/"
   ];
 
   # Steam Runtime
