@@ -31443,6 +31443,8 @@ with pkgs;
 
   pixinsight = libsForQt5.callPackage ../applications/graphics/pixinsight { };
 
+  please-cli = callPackage ../applications/misc/please-cli { };
+
   protonup-qt = python3Packages.callPackage ../applications/misc/protonup-qt { };
 
   pmbootstrap = python3Packages.callPackage ../tools/misc/pmbootstrap { };
