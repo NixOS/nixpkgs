@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "2.1.7";
+  version = "2.1.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "meshtastic";
     repo = "Meshtastic-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-9uzXDgmUF0pHJ+AW/ao3EBsbqozGzzF1+W8YNLViNM0=";
+    hash = "sha256-ZIUR9YMoXhbpIDWXxKr6TyNkANuRiJvhkJILx7mWSrw=";
   };
 
   propagatedBuildInputs = [
