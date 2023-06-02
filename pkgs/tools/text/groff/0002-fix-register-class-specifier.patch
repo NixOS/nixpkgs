@@ -1,0 +1,397 @@
+diff -ur a/src/preproc/grn/hdb.cpp b/src/preproc/grn/hdb.cpp
+--- a/src/preproc/grn/hdb.cpp	2018-11-25 18:45:39.000000000 -0500
++++ b/src/preproc/grn/hdb.cpp	2023-06-01 20:21:46.722313812 -0400
+@@ -35,7 +35,7 @@
+ extern POINT *PTMakePoint(double x, double y, POINT ** pplist);
+ 
+ 
+-int DBGetType(register char *s);
++int DBGetType(char *s);
+ 
+ 
+ /*
+@@ -61,7 +61,7 @@
+ 	    char *text,
+ 	    ELT **db)
+ {
+-  register ELT *temp;
++  ELT *temp;
+ 
+   temp = (ELT *) malloc(sizeof(ELT));
+   temp->nextelt = *db;
+@@ -80,11 +80,11 @@
+  * pointer to that database.
+  */
+ ELT *
+-DBRead(register FILE *file)
++DBRead(FILE *file)
+ {
+-  register int i;
+-  register int done;		/* flag for input exhausted */
+-  register double nx;		/* x holder so x is not set before orienting */
++  int i;
++  int done;		/* flag for input exhausted */
++  double nx;		/* x holder so x is not set before orienting */
+   int type;			/* element type */
+   ELT *elist;			/* pointer to the file's elements */
+   POINT *plist;			/* pointer for reading in points */
+@@ -209,7 +209,7 @@
+  * New file format has literal names for element types.
+  */
+ int
+-DBGetType(register char *s)
++DBGetType(char *s)
+ {
+   if (isdigit(s[0]) || (s[0] == '-'))	/* old element format or EOF */
+     return (atoi(s));
+@@ -298,7 +298,7 @@
+        double *xp,
+        double *yp)
+ {
+-  register int c, i, j, m, frac;
++  int c, i, j, m, frac;
+   int iscale = 1, jscale = 1;	/* x = i/scale, y=j/jscale */
+ 
+   while ((c = getc(f)) == ' ');
+diff -ur a/src/preproc/grn/hgraph.cpp b/src/preproc/grn/hgraph.cpp
+--- a/src/preproc/grn/hgraph.cpp	2018-07-02 17:56:04.000000000 -0400
++++ b/src/preproc/grn/hgraph.cpp	2023-06-01 20:27:12.377455550 -0400
+@@ -48,7 +48,7 @@
+ extern int res;
+ 
+ void HGSetFont(int font, int size);
+-void HGPutText(int justify, POINT pnt, register char *string);
++void HGPutText(int justify, POINT pnt, char *string);
+ void HGSetBrush(int mode);
+ void tmove2(int px, int py);
+ void doarc(POINT cp, POINT sp, int angle);
+@@ -58,8 +58,8 @@
+ void HGtline(int x1, int y1);
+ void deltax(double x);
+ void deltay(double y);
+-void HGArc(register int cx, register int cy, int px, int py, int angle);
+-void picurve(register int *x, register int *y, int npts);
++void HGArc(int cx, int cy, int px, int py, int angle);
++void picurve(int *x, int *y, int npts);
+ void HGCurve(int *x, int *y, int numpoints);
+ void Paramaterize(int x[], int y[], double h[], int n);
+ void PeriodicSpline(double h[], int z[],
+@@ -83,10 +83,10 @@
+ HGPrintElt(ELT *element,
+ 	   int /* baseline */)
+ {
+-  register POINT *p1;
+-  register POINT *p2;
+-  register int length;
+-  register int graylevel;
++  POINT *p1;
++  POINT *p2;
++  int length;
++  int graylevel;
+ 
+   if (!DBNullelt(element) && !Nullpoint((p1 = element->ptlist))) {
+     /* p1 always has first point */
+@@ -278,7 +278,7 @@
+ void
+ HGPutText(int justify,
+ 	  POINT pnt,
+-	  register char *string)
++	  char *string)
+ {
+   int savelasty = lasty;	/* vertical motion for text is to be */
+ 				/* ignored.  Save current y here     */
+@@ -387,7 +387,7 @@
+ void
+ HGSetBrush(int mode)
+ {
+-  register int printed = 0;
++  int printed = 0;
+ 
+   if (linmod != style[--mode]) {
+     /* Groff doesn't understand \Ds, so we take it out */
+@@ -417,7 +417,7 @@
+ void
+ deltax(double x)
+ {
+-  register int ix = (int) (x * troffscale);
++  int ix = (int) (x * troffscale);
+ 
+   printf(" %du", ix - lastx);
+   lastx = ix;
+@@ -437,7 +437,7 @@
+ void
+ deltay(double y)
+ {
+-  register int iy = (int) (y * troffscale);
++  int iy = (int) (y * troffscale);
+ 
+   printf(" %du", iy - lastyline);
+   lastyline = iy;
+@@ -457,8 +457,8 @@
+ tmove2(int px,
+        int py)
+ {
+-  register int dx;
+-  register int dy;
++  int dx;
++  int dy;
+ 
+   if ((dy = py - lasty)) {
+     printf("\\v'%du'", dy);
+@@ -483,10 +483,10 @@
+ void
+ tmove(POINT * ptr)
+ {
+-  register int ix = (int) (ptr->x * troffscale);
+-  register int iy = (int) (ptr->y * troffscale);
+-  register int dx;
+-  register int dy;
++  int ix = (int) (ptr->x * troffscale);
++  int iy = (int) (ptr->y * troffscale);
++  int dx;
++  int dy;
+ 
+   if ((dy = iy - lasty)) {
+     printf(".sp %du\n", dy);
+@@ -547,7 +547,7 @@
+ drawwig(POINT * ptr,
+ 	int type)
+ {
+-  register int npts;			/* point list index */
++  int npts;			/* point list index */
+   int x[MAXPOINTS], y[MAXPOINTS];	/* point list */
+ 
+   for (npts = 1; !Nullpoint(ptr); ptr = PTNextPoint(ptr), npts++) {
+@@ -574,20 +574,20 @@
+  *----------------------------------------------------------------------------*/
+ 
+ void
+-HGArc(register int cx,
+-      register int cy,
++HGArc(int cx,
++      int cy,
+       int px,
+       int py,
+       int angle)
+ {
+   double xs, ys, resolution, fullcircle;
+   int m;
+-  register int mask;
+-  register int extent;
+-  register int nx;
+-  register int ny;
+-  register int length;
+-  register double epsilon;
++  int mask;
++  int extent;
++  int nx;
++  int ny;
++  int length;
++  double epsilon;
+ 
+   xs = px - cx;
+   ys = py - cy;
+@@ -633,13 +633,13 @@
+  *----------------------------------------------------------------------------*/
+ 
+ void
+-picurve(register int *x,
+-	register int *y,
++picurve(int *x,
++	int *y,
+ 	int npts)
+ {
+-  register int nseg;		/* effective resolution for each curve */
+-  register int xp;		/* current point (and temporary) */
+-  register int yp;
++  int nseg;		/* effective resolution for each curve */
++  int xp;		/* current point (and temporary) */
++  int yp;
+   int pxp, pyp;			/* previous point (to make lines from) */
+   int i;			/* inner curve segment traverser */
+   int length = 0;
+@@ -710,10 +710,10 @@
+   double h[MAXPOINTS], dx[MAXPOINTS], dy[MAXPOINTS];
+   double d2x[MAXPOINTS], d2y[MAXPOINTS], d3x[MAXPOINTS], d3y[MAXPOINTS];
+   double t, t2, t3;
+-  register int j;
+-  register int k;
+-  register int nx;
+-  register int ny;
++  int j;
++  int k;
++  int nx;
++  int ny;
+   int lx, ly;
+   int length = 0;
+ 
+@@ -776,10 +776,10 @@
+ 	     double h[],
+ 	     int n)
+ {
+-  register int dx;
+-  register int dy;
+-  register int i;
+-  register int j;
++  int dx;
++  int dy;
++  int i;
++  int j;
+   double u[MAXPOINTS];
+ 
+   for (i = 1; i <= n; ++i) {
+@@ -937,9 +937,9 @@
+  *----------------------------------------------------------------------------*/
+ 
+ void
+-change(register int x,
+-       register int y,
+-       register int vis)
++change(int x,
++       int y,
++       int vis)
+ {
+   static int length = 0;
+ 
+@@ -967,17 +967,17 @@
+ HGtline(int x_1,
+ 	int y_1)
+ {
+-  register int x_0 = lastx;
+-  register int y_0 = lasty;
+-  register int dx;
+-  register int dy;
+-  register int oldcoord;
+-  register int res1;
+-  register int visible;
+-  register int res2;
+-  register int xinc;
+-  register int yinc;
+-  register int dotcounter;
++  int x_0 = lastx;
++  int y_0 = lasty;
++  int dx;
++  int dy;
++  int oldcoord;
++  int res1;
++  int visible;
++  int res2;
++  int xinc;
++  int yinc;
++  int dotcounter;
+ 
+   if (linmod == SOLID) {
+     line(x_1, y_1);
+diff -ur a/src/preproc/grn/hpoint.cpp b/src/preproc/grn/hpoint.cpp
+--- a/src/preproc/grn/hpoint.cpp	2018-07-02 17:56:04.000000000 -0400
++++ b/src/preproc/grn/hpoint.cpp	2023-06-01 20:23:52.754718087 -0400
+@@ -32,7 +32,7 @@
+ 	    double y,
+ 	    POINT **pplist)
+ {
+-  register POINT *pt;
++  POINT *pt;
+ 
+   if (Nullpoint(pt = *pplist)) {	/* empty list */
+     *pplist = (POINT *) malloc(sizeof(POINT));
+diff -ur a/src/preproc/grn/main.cpp b/src/preproc/grn/main.cpp
+--- a/src/preproc/grn/main.cpp	2018-07-02 17:56:04.000000000 -0400
++++ b/src/preproc/grn/main.cpp	2023-06-01 20:30:42.045457374 -0400
+@@ -88,7 +88,7 @@
+ 
+ extern void HGPrintElt(ELT *element, int baseline);
+ extern ELT *DBInit();
+-extern ELT *DBRead(register FILE *file);
++extern ELT *DBRead(FILE *file);
+ extern POINT *PTInit();
+ extern POINT *PTMakePoint(double x, double y, POINT **pplist);
+ 
+@@ -231,9 +231,9 @@
+ 
+ void getres();
+ int doinput(FILE *fp);
+-void conv(register FILE *fp, int baseline);
++void conv(FILE *fp, int baseline);
+ void savestate();
+-int has_polygon(register ELT *elist);
++int has_polygon(ELT *elist);
+ void interpret(char *line);
+ 
+ 
+@@ -283,9 +283,9 @@
+ {
+   setlocale(LC_NUMERIC, "C");
+   program_name = argv[0];
+-  register FILE *fp;
+-  register int k;
+-  register char c;
++  FILE *fp;
++  int k;
++  char c;
+   int gfil = 0;
+   char **file = NULL;
+   int file_cur_size = INIT_FILE_SIZE;
+@@ -466,7 +466,7 @@
+ void
+ initpic()
+ {
+-  register int i;
++  int i;
+ 
+   for (i = 0; i < STYLES; i++) {	/* line thickness defaults */
+     thick[i] = defthick[i];
+@@ -511,12 +511,12 @@
+  *----------------------------------------------------------------------------*/
+ 
+ void
+-conv(register FILE *fp,
++conv(FILE *fp,
+      int baseline)
+ {
+-  register FILE *gfp = NULL;	/* input file pointer */
+-  register int done = 0;	/* flag to remember if finished */
+-  register ELT *e;		/* current element pointer */
++  FILE *gfp = NULL;	/* input file pointer */
++  int done = 0;	/* flag to remember if finished */
++  ELT *e;		/* current element pointer */
+   ELT *PICTURE;			/* whole picture data base pointer */
+   double temp;			/* temporary calculating area */
+   /* POINT ptr; */		/* coordinates of a point to pass to 'mov' */
+@@ -577,7 +577,7 @@
+       }				/* here, troffscale is the */
+ 				/* picture's scaling factor */
+       if (pointscale) {
+-	register int i;		/* do pointscaling here, when */
++	int i;		/* do pointscaling here, when */
+ 				/* scale is known, before output */
+ 	for (i = 0; i < SIZES; i++)
+ 	  tsize[i] = (int) (troffscale * (double) tsize[i] + 0.5);
+@@ -700,7 +700,7 @@
+ void
+ savestate()
+ {
+-  register int i;
++  int i;
+ 
+   for (i = 0; i < STYLES; i++)	/* line thickness defaults */
+     defthick[i] = thick[i];
+@@ -761,8 +761,8 @@
+ {
+   char str1[MAXINLINE];
+   char str2[MAXINLINE];
+-  register char *chr;
+-  register int i;
++  char *chr;
++  int i;
+   double par;
+ 
+   str2[0] = '\0';
+@@ -935,7 +935,7 @@
+  */
+ 
+ int
+-has_polygon(register ELT *elist)
++has_polygon(ELT *elist)
+ {
+   while (!DBNullelt(elist)) {
+     if (elist->type == POLYGON)

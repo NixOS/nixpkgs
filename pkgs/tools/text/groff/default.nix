@@ -30,6 +30,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./0001-Fix-cross-compilation-by-looking-for-ar.patch
+    # Clang 16 does not allow the `register` storage class specifier. This is fixed upstream and
+    # will be included in the 1.23.0 release, but the commit does not apply cleanly to 1.22.4 due
+    # to other changes that have been made.
+    ./0002-fix-register-class-specifier.patch
   ]
   ++ lib.optionals (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "9") [
     # https://trac.macports.org/ticket/59783
