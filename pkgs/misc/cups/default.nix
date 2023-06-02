@@ -19,6 +19,8 @@
 , libpaper ? null
 , coreutils
 , nixosTests
+, hostname
+, iconv
 }:
 
 stdenv.mkDerivation rec {
@@ -142,6 +144,16 @@ stdenv.mkDerivation rec {
       printing-socket
     ;
   };
+
+  doCheck = !stdenv.isDarwin;  # some locale tests fail on darwin
+  nativeCheckInputs = [
+    hostname
+  ] ++ lib.optionals stdenv.isDarwin [
+    iconv
+  ];
+  preCheck = ''
+    export CUPS_TESTBASE=$(mktemp -d)
+  '';
 
   meta = with lib; {
     homepage = "https://openprinting.github.io/cups/";
