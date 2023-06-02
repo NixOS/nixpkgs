@@ -3,20 +3,21 @@
 , fetchPypi
 , hatch-vcs
 , hatchling
+, pytest-mock
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "filelock";
-  version = "3.9.0";
+  version = "3.12.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ezGfJDQLUfVaK/ehKsB1WpsD5xgxHaxWeg9Pf6vS9d4=";
+    hash = "sha256-/AOuQyiMAT0uqDyFlwAbESnbNRqtnFf+JAkyeRa45xg=";
   };
 
   nativeBuildInputs = [
@@ -25,6 +26,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-mock
     pytestCheckHook
   ];
 
