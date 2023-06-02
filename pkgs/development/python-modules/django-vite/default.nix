@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "django-vite";
-  version = "2.1.0";
+  version = "2.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "MrBin99";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-yRZA5CDkJbQt7aSVL7V90Z+0jAqh7JC/d8pLSI/yexk=";
+    hash = "sha256-MKAzNtmFue7MrYtg5sOXog1u1daJwh3t98aIUSyyfBQ=";
   };
 
   propagatedBuildInputs = [
