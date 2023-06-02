@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "email-validator";
-  version = "1.3.1";
+  version = "2.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "JoshData";
     repo = "python-${pname}";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JW6Yrotm3HjUOUtNFxRorkrJKjzuwIXwjpUuMWEyLV0=";
+    hash = "sha256-o7UREa+IBiFjmqx0p+4XJCcoHQ/R6r2RtoezEcWvgbg=";
   };
 
   propagatedBuildInputs = [
@@ -30,16 +30,25 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  # importing some test modules and running some tests fails with
+  # dns.resolver.NoResolverConfiguration due to network sandboxing
+  preCheck =
+    let skipDNSResolver = testfile: "sed -i -E 's/^RESOLVER = .+//g' tests/test_${testfile}.py";
+    in ''
+    ${skipDNSResolver "deliverability"}
+    ${skipDNSResolver "main"}
+    '';
+
   disabledTests = [
-    # fails with dns.resolver.NoResolverConfiguration due to network sandboxing
+    "test_caching_dns_resolver"
     "test_deliverability_no_records"
     "test_deliverability_found"
     "test_deliverability_fails"
     "test_deliverability_dns_timeout"
     "test_email_example_reserved_domain"
     "test_main_single_good_input"
+    "test_main_single_bad_input"
     "test_main_multi_input"
-    "test_main_input_shim"
     "test_validate_email__with_caching_resolver"
     "test_validate_email__with_configured_resolver"
   ];
