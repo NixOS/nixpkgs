@@ -33676,6 +33676,8 @@ with pkgs;
 
   popcorntime = callPackage ../applications/video/popcorntime { };
 
+  pot = callPackage ../applications/misc/pot { };
+
   pothos = libsForQt5.callPackage ../applications/radio/pothos { };
 
   potrace = callPackage ../applications/graphics/potrace { };
