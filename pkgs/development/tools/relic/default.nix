@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, testers
+, relic
+}:
 
 buildGoModule rec {
   pname = "relic";
@@ -19,6 +24,12 @@ buildGoModule rec {
     "-X=main.version=${version}"
     "-X=main.commit=${src.rev}"
   ];
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = relic;
+    };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/sassoftware/relic";
