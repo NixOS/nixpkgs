@@ -1,12 +1,12 @@
 { stdenv, lib, fetchFromGitHub, hidapi, installShellFiles }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "usbrelay";
   version = "1.2";
 
   src = fetchFromGitHub {
     owner = "darrylb123";
     repo = "usbrelay";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-oJyHzbXOBKxLmPFZMS2jLF80frkiKjPJ89UwkenjIzs=";
   };
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [
-    "DIR_VERSION=${version}"
+    "DIR_VERSION=${finalAttrs.version}"
     "PREFIX=${placeholder "out"}"
     "LDCONFIG=${stdenv.cc.libc.bin}/bin/ldconfig"
   ];
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ wentasah ];
     platforms = platforms.linux;
   };
-}
+})
