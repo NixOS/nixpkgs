@@ -113,6 +113,7 @@ in
       services.gnome.glib-networking.enable = true;
       services.gnome.gnome-keyring.enable = true;
       services.gvfs.enable = true;
+      services.switcherooControl.enable = mkDefault true; # xapp-gpu-offload-helper
       services.udisks2.enable = true;
       services.upower.enable = mkDefault config.powerManagement.enable;
       services.xserver.libinput.enable = mkDefault true;
