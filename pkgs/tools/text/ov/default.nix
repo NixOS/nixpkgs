@@ -4,6 +4,8 @@
 , installShellFiles
 , pandoc
 , makeWrapper
+, testers
+, ov
 }:
 
 buildGoModule rec {
@@ -51,6 +53,13 @@ buildGoModule rec {
     mkdir -p $doc/share/$name
     cp $src/ov.yaml $doc/share/$name/sample-config.yaml
   '';
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = ov;
+      version = "v${version}";
+    };
+  };
 
   meta = with lib; {
     description = "Feature-rich terminal-based text viewer";
