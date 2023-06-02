@@ -14,24 +14,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hpp-fcl";
-  version = "2.3.3";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "humanoid-path-planner";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-7MXQ5+S/lvaTBVGY2gTJ1nUegtf9cp7p0JLJ4oPJAUY=";
+    hash = "sha256-tX8AvlR/Az8fFs4ylqFijw3hXiNRoEWffmYbTcaqO90=";
   };
-
-  patches = [
-    # Fix unittest where nix env set `boost::archive::tmpdir()` to `/build` and trigger a path concatenation bug.
-    (fetchpatch {
-      name = "tests-use-boost-filesystem.patch";
-      url = "https://github.com/humanoid-path-planner/hpp-fcl/commit/7e8fde64a5d2c2412325f6cb5d78623bf2409176.patch";
-      hash = "sha256-YjESkj8SqYiyrJuXIa5mSnHIph/D04J10poTDcYgs2c=";
-    })
-  ];
 
   strictDeps = true;
 
