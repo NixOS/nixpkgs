@@ -8,20 +8,22 @@
 
 buildGoModule rec {
   pname = "ov";
-  version = "0.23.0";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "noborus";
     repo = "ov";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zIPJvlzq9N5sjc7OkdQnxZZYK4RuM6jW4EWLrEzSabg=";
+    hash = "sha256-xTnUTtMm986MnQEKgExWfABU8E8C+ZiRZvOpg3FY5cY=";
   };
 
   vendorHash = "sha256-bQREazHu0SQrMKyNPtUvzeKR/zb0FJOLpHBwHml43Hs=";
 
   ldflags = [
-    "-X main.Version=v${version}"
-    "-X main.Revision=${src.rev}"
+    "-s"
+    "-w"
+    "-X=main.Version=v${version}"
+    "-X=main.Revision=${src.rev}"
   ];
 
   subPackages = [ "." ];
@@ -53,8 +55,8 @@ buildGoModule rec {
   meta = with lib; {
     description = "Feature-rich terminal-based text viewer";
     homepage = "https://noborus.github.io/ov";
+    changelog = "https://github.com/noborus/ov/releases/tag/v${version}";
     license = licenses.mit;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ farcaller ];
+    maintainers = with maintainers; [ farcaller figsoda ];
   };
 }
