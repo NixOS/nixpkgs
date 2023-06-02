@@ -24345,6 +24345,8 @@ with pkgs;
 
   tclx = callPackage ../development/libraries/tclx { };
 
+  tcl-fcgi = callPackage ../development/libraries/tcl-fcgi { };
+
   tdb = callPackage ../development/libraries/tdb { };
 
   tdlib = callPackage ../development/libraries/tdlib { };
