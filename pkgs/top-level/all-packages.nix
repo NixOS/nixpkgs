@@ -17273,8 +17273,6 @@ with pkgs;
 
   check-jsonschema = callPackage ../development/tools/check-jsonschema { };
 
-  pypi2nix = callPackage ../development/tools/pypi2nix { };
-
   pypi-mirror = callPackage ../development/tools/pypi-mirror { };
 
   setupcfg2nix = python3Packages.callPackage ../development/tools/setupcfg2nix { };
