@@ -10113,6 +10113,10 @@ with pkgs;
 
   mdbtools = callPackage ../tools/misc/mdbtools { };
 
+  mmdbctl = callPackage ../tools/misc/mmdbctl {
+    buildGoModule = buildGo119Module; # go 1.20 panic
+  };
+
   mdk = callPackage ../development/tools/mdk { };
 
   mdk4 = callPackage ../tools/networking/mdk4 { };
