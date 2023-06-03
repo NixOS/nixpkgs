@@ -33,6 +33,15 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" "man" ];
 
+  patches = [
+    (fetchpatch {
+      # https://www.openwall.com/lists/oss-security/2023/06/01/1
+      name = "CVE-2023-32324.patch";
+      url = "https://github.com/OpenPrinting/cups/commit/fd8bc2d32589d1fd91fe1c0521be2a7c0462109e.patch";
+      hash = "sha256-Q0Pw+MC7KE5VEiugY+GFtvPERG8x6ngNHUsWTEaDCHA=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace cups/testfile.c \
       --replace 'cupsFileFind("cat", "/bin' 'cupsFileFind("cat", "${coreutils}/bin'
@@ -134,7 +143,12 @@ stdenv.mkDerivation rec {
         --replace "Exec=htmlview" "Exec=xdg-open"
     '';
 
-  passthru.tests.nixos = nixosTests.printing;
+  passthru.tests = {
+    inherit (nixosTests)
+      printing-service
+      printing-socket
+    ;
+  };
 
   meta = with lib; {
     homepage = "https://openprinting.github.io/cups/";
