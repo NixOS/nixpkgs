@@ -448,7 +448,7 @@ in {
         cfg.nginx
         {
           root = lib.mkForce "${pixelfed}/public/";
-          locations."/".tryFiles = "$uri $uri/ /index.php?query_string";
+          locations."/".tryFiles = "$uri $uri/ /index.php?$query_string";
           locations."/favicon.ico".extraConfig = ''
             access_log off; log_not_found off;
           '';

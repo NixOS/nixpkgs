@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "slade";
-  version = "3.2.2";
+  version = "3.2.3";
 
   src = fetchFromGitHub {
     owner = "sirjuddington";
     repo = "SLADE";
     rev = version;
-    sha256 = "sha256-UAxGNJ66o5wO8i/g0CgY395uHfJRJSxTlXlBbhgDAbM=";
+    sha256 = "sha256-YZTCviGhOlAgD3RidPu8gPqqo4MLURiBGV7nazILwFg=";
   };
 
   postPatch = lib.optionalString (!stdenv.hostPlatform.isx86) ''

@@ -16,13 +16,21 @@
       "url": "https://download.jetbrains.com/datagrip/datagrip-2023.1.2.tar.gz",
       "build_number": "231.9011.35"
     },
+    "dataspell": {
+      "update-channel": "DataSpell RELEASE",
+      "url-template": "https://download.jetbrains.com/python/dataspell-{version}.tar.gz",
+      "version": "2023.1",
+      "sha256": "12856b7571ff789a427361cfcb4cb1743e7f3af77f611ceda57aafe847328865",
+      "url": "https://download.jetbrains.com/python/dataspell-2023.1.tar.gz",
+      "build_number": "231.8109.197"
+    },
     "gateway": {
       "update-channel": "Gateway RELEASE",
       "url-template": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-{version}.tar.gz",
-      "version": "2023.1.1",
-      "sha256": "217196806daebd14e604d13247862e44e6a0b0b9f115f1b9ceadbcfb064b3c3c",
-      "url": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2023.1.1.tar.gz",
-      "build_number": "231.8770.69"
+      "version": "2023.1.2",
+      "sha256": "fab46521e7a4558a166e3b11d86ca2312a9807e69419925ed5743ab4f421ab96",
+      "url": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2023.1.2.tar.gz",
+      "build_number": "231.9011.34"
     },
     "goland": {
       "update-channel": "GoLand RELEASE",
@@ -123,13 +131,21 @@
       "url": "https://download.jetbrains.com/datagrip/datagrip-2023.1.2.dmg",
       "build_number": "231.9011.35"
     },
+    "dataspell": {
+      "update-channel": "DataSpell RELEASE",
+      "url-template": "https://download.jetbrains.com/python/dataspell-{version}.dmg",
+      "version": "2023.1",
+      "sha256": "dc118f466b6e5fa3e6c449f25977d5d1fc6746c004a000464802c535a1bdaa90",
+      "url": "https://download.jetbrains.com/python/dataspell-2023.1.dmg",
+      "build_number": "231.8109.197"
+    },
     "gateway": {
       "update-channel": "Gateway RELEASE",
       "url-template": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-{version}.dmg",
-      "version": "2023.1.1",
-      "sha256": "e580bf5bd657b721677fec0250ce582adb1cf92daa1ac065b56fc2d8148fac97",
-      "url": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2023.1.1.dmg",
-      "build_number": "231.8770.69"
+      "version": "2023.1.2",
+      "sha256": "320beadb9eb50f48eb431bcd2c88ec1c2e7e0ef2f1f2414aa3842de5930d79ff",
+      "url": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2023.1.2.dmg",
+      "build_number": "231.9011.34"
     },
     "goland": {
       "update-channel": "GoLand RELEASE",
@@ -230,13 +246,21 @@
       "url": "https://download.jetbrains.com/datagrip/datagrip-2023.1.2-aarch64.dmg",
       "build_number": "231.9011.35"
     },
+    "dataspell": {
+      "update-channel": "DataSpell RELEASE",
+      "url-template": "https://download.jetbrains.com/python/dataspell-{version}-aarch64.dmg",
+      "version": "2023.1",
+      "sha256": "7b5b4388303bf7d381597995e3f4d5684c0f60a4e5ad5a4481ab4e451be6e2cf",
+      "url": "https://download.jetbrains.com/python/dataspell-2023.1-aarch64.dmg",
+      "build_number": "231.8109.197"
+    },
     "gateway": {
       "update-channel": "Gateway RELEASE",
       "url-template": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-{version}-aarch64.dmg",
-      "version": "2023.1.1",
-      "sha256": "ab0c773315a6d8abcaae75440f7fc122a7e80237eddaa3487c3222a52a95497f",
-      "url": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2023.1.1-aarch64.dmg",
-      "build_number": "231.8770.69"
+      "version": "2023.1.2",
+      "sha256": "338edd281715b14193834ed01947c6161865e58d1416557316c2b298401a0272",
+      "url": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2023.1.2-aarch64.dmg",
+      "build_number": "231.9011.34"
     },
     "goland": {
       "update-channel": "GoLand RELEASE",
