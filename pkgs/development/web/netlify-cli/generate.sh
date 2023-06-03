@@ -10,5 +10,5 @@ node2nix \
   --output node-packages.nix \
   --composition composition.nix \
   --node-env node-env.nix \
-  --nodejs-16 \
+  --nodejs-18 \
   ;

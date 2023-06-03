@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-recoveryservices";
-  version = "2.3.0";
+  version = "2.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    hash = "sha256-4L6Tqgvqh+nJyeXMolSpQ/2knAED75RQqD/lUDOt5ek=";
+    hash = "sha256-2JeOvtNxx6Z3AY4GI9fBRKbMcYVHsbrhk8C+5t5eelk=";
   };
 
   propagatedBuildInputs = [

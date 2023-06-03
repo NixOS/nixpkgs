@@ -305,6 +305,23 @@ let
         };
       };
 
+      asdine.cue = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "cue";
+          publisher = "asdine";
+          version = "0.3.2";
+          sha256 = "sha256-jMXqhgjRdM3UG/9NtiwWAg61mBW8OYVAKDWgb4hzhA4=";
+        };
+        meta = {
+          description = "Cue language support for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=asdine.cue";
+          homepage = "https://github.com/asdine/vscode-cue";
+          changelog = "https://marketplace.visualstudio.com/items/asdine.cue/changelog";
+          license = lib.licenses.mit;
+          maintainers = [lib.maintainers.matthewpi];
+        };
+      };
+
       astro-build.astro-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "astro-vscode";
@@ -599,18 +616,51 @@ let
         };
       };
 
-      catppuccin.catppuccin-vsc = buildVscodeMarketplaceExtension {
+      catppuccin = {
+        catppuccin-vsc = buildVscodeMarketplaceExtension {
+          mktplcRef = {
+            name = "catppuccin-vsc";
+            publisher = "catppuccin";
+            version = "2.6.1";
+            sha256 = "sha256-B56b7PeuVnkxEqvd4vL9TYO7s8fuA+LOCTbJQD9e7wY=";
+          };
+          meta = {
+            description = "Soothing pastel theme for VSCode";
+            license = lib.licenses.mit;
+            downloadPage = "https://marketplace.visualstudio.com/items?itemName=Catppuccin.catppuccin-vsc";
+            maintainers = [ lib.maintainers.nullx76 ];
+          };
+        };
+        catppuccin-vsc-icons = buildVscodeMarketplaceExtension {
+          mktplcRef = {
+            name = "catppuccin-vsc-icons";
+            publisher = "catppuccin";
+            version = "0.12.0";
+            sha256 = "sha256-i47tY6DSVtV8Yf6AgZ6njqfhaUFGEpgbRcBF70l2Xe0=";
+          };
+          meta = {
+            description = "Soothing pastel icon theme for VSCode";
+            license = lib.licenses.mit;
+            downloadPage = "https://marketplace.visualstudio.com/items?itemName=Catppuccin.catppuccin-vsc-icons";
+            maintainers = [ lib.maintainers.laurent-f1z1 ];
+          };
+        };
+      };
+
+      charliermarsh.ruff = buildVscodeMarketplaceExtension {
         mktplcRef = {
-          name = "catppuccin-vsc";
-          publisher = "catppuccin";
-          version = "2.6.1";
-          sha256 = "sha256-B56b7PeuVnkxEqvd4vL9TYO7s8fuA+LOCTbJQD9e7wY=";
+          name = "ruff";
+          publisher = "charliermarsh";
+          version = "2023.16.0";
+          sha256 = "sha256-MCRfG2CmGXLX15Qv/cxuH8VE1lJLPs4tXlCNnFqm5lc=";
         };
         meta = {
-          description = "Soothing pastel theme for VSCode";
           license = lib.licenses.mit;
-          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Catppuccin.catppuccin-vsc";
-          maintainers = [ lib.maintainers.nullx76 ];
+          changelog = "https://github.com/charliermarsh/ruff-vscode/releases";
+          description = "Ruff extension for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff";
+          homepage = "https://github.com/charliermarsh/ruff-vscode/";
+          maintainers = [ lib.maintainers.azd325 ];
         };
       };
 
@@ -1435,6 +1485,22 @@ let
         };
       };
 
+      github.copilot-chat = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "github";
+          name = "copilot-chat";
+          version = "0.1.2023060101";
+          sha256 = "sha256-g3UIcy2TpD3m8EamxneUXYAV/bbCPvPhOWdcuXPkK9g=";
+        };
+        meta = {
+          description = "GitHub Copilot Chat is a companion extension to GitHub Copilot that houses experimental chat features";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=GitHub.copilot-chat";
+          homepage = "https://github.com/features/copilot";
+          license = lib.licenses.unfree;
+          maintainers = [ lib.maintainers.laurent-f1z1 ];
+        };
+      };
+
       github.github-vscode-theme = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "github-vscode-theme";
@@ -1717,6 +1783,22 @@ let
           homepage = "https://github.com/James-Yu/LaTeX-Workshop";
           license = lib.licenses.mit;
           maintainers = [ ];
+        };
+      };
+
+      janet-lang.vscode-janet = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-janet";
+          publisher = "janet-lang";
+          version = "0.0.2";
+          sha256 = "sha256-oj0e++z2BtadIXOnTlocIIHliYweZ1iyrV08DwatfLI=";
+        };
+        meta = {
+          description = "Janet language support for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=janet-lang.vscode-janet";
+          homepage = "https://github.com/janet-lang/vscode-janet";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.wackbyte ];
         };
       };
 
@@ -2754,6 +2836,22 @@ let
         };
         meta = {
           license = lib.licenses.asl20;
+        };
+      };
+
+      seatonjiang.gitmoji-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "seatonjiang";
+          name = "gitmoji-vscode";
+          version = "1.2.2";
+          sha256 = "sha256-+lwbCLV62y1IHrjCygBphQZJUu+ZApYTwBQld5uu12w=";
+        };
+        meta = {
+          description = "Gitmoji tool for git commit messages in VSCode";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=seatonjiang.gitmoji-vscode";
+          homepage = "https://github.com/seatonjiang/gitmoji-vscode/";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.laurent-f1z1 ];
         };
       };
 
