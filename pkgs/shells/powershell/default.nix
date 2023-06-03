@@ -1,5 +1,5 @@
 { stdenv, lib, autoPatchelfHook, fetchzip, libunwind, libuuid, icu, curl
-, darwin, makeWrapper, less, openssl_1_1, pam, lttng-ust }:
+, darwin, makeWrapper, less, openssl, pam, lttng-ust }:
 
 let archString = if stdenv.isAarch64 then "arm64"
                  else if stdenv.isx86_64 then "x64"
@@ -15,7 +15,7 @@ let archString = if stdenv.isAarch64 then "arm64"
     platformLdLibraryPath = if stdenv.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH"
                      else if stdenv.isLinux then "LD_LIBRARY_PATH"
                      else throw "unsupported platform";
-                     libraries = [ libunwind libuuid icu curl openssl_1_1 ] ++
+                     libraries = [ libunwind libuuid icu curl openssl ] ++
                        (if stdenv.isLinux then [ pam lttng-ust ] else [ darwin.Libsystem ]);
 in
 stdenv.mkDerivation rec {
@@ -42,17 +42,13 @@ stdenv.mkDerivation rec {
 
     cp -r * $pslibs
 
-    rm -f $pslibs/libcrypto${ext}.1.0.0
-    rm -f $pslibs/libssl${ext}.1.0.0
-
     # At least the 7.1.4-osx package does not have the executable bit set.
     chmod a+x $pslibs/pwsh
 
-    ls $pslibs
-  '' + lib.optionalString (!stdenv.isDarwin && !stdenv.isAarch64) ''
-    patchelf --replace-needed libcrypto${ext}.1.0.0 libcrypto${ext}.1.1 $pslibs/libmi.so
-    patchelf --replace-needed libssl${ext}.1.0.0 libssl${ext}.1.1 $pslibs/libmi.so
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (stdenv.isLinux && stdenv.isx86_64) ''
+    patchelf --replace-needed libcrypto${ext}.1.0.0 libcrypto${ext} $pslibs/libmi.so
+    patchelf --replace-needed libssl${ext}.1.0.0 libssl${ext} $pslibs/libmi.so
+  '' + lib.optionalString stdenv.isLinux ''
     patchelf --replace-needed liblttng-ust${ext}.0 liblttng-ust${ext}.1 $pslibs/libcoreclrtraceptprovider.so
   '' + ''
 
