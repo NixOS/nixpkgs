@@ -459,6 +459,7 @@ package-maintainers:
     - calendar-recycling
     - checksum
     - check-pvp
+    - coinor-clp
     - combinatorial
     - comfort-graph
     - comfort-array
@@ -490,6 +491,7 @@ package-maintainers:
     - jack
     - latex
     - lazyio
+    - linear-programming
     - markov-chain
     - midi
     - midi-alsa
@@ -548,6 +550,7 @@ package-maintainers:
     - netlib-comfort-array
     - blas-comfort-array
     - lapack-comfort-array
+    - comfort-blas
     - lapack
     - lapack-hmatrix
     - hmm-lapack
