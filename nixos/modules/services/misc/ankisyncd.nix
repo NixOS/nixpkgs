@@ -26,7 +26,7 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.ankisyncd-rs;
+        default = pkgs.ankisyncd;
         defaultText = literalExpression "pkgs.ankisyncd";
         description = lib.mdDoc "The package to use for the ankisyncd command.";
       };
