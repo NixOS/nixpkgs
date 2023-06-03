@@ -8835,6 +8835,8 @@ with pkgs;
 
   ipfetch = callPackage ../tools/networking/ipfetch { };
 
+  ipfire-location-database = callPackage ../data/misc/ipfire-location-database { };
+
   ipfs-cluster = callPackage ../applications/networking/ipfs-cluster { };
 
   ipfs-upload-client = callPackage ../applications/networking/ipfs-upload-client { };
