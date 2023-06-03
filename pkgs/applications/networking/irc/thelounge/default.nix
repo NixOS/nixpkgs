@@ -1,4 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchYarnDeps, yarn, fixup_yarn_lock, nodejs, npmHooks, nixosTests }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, nodejs
+, yarn
+, fixup_yarn_lock
+, python3
+, npmHooks
+, darwin
+, sqlite
+, srcOnly
+, buildPackages
+, nixosTests
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "thelounge";
@@ -24,7 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-OKLsNGl94EDyLgP2X2tiwihgRQFXGvf5XgXwgX+JEpk=";
   };
 
-  nativeBuildInputs = [ nodejs yarn fixup_yarn_lock npmHooks.npmInstallHook ];
+  nativeBuildInputs = [ nodejs yarn fixup_yarn_lock python3 npmHooks.npmInstallHook ] ++ lib.optional stdenv.isDarwin darwin.cctools;
+  buildInputs = [ sqlite ];
 
   configurePhase = ''
     runHook preConfigure
@@ -49,8 +64,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   # `npm prune` doesn't work and/or hangs for whatever reason.
   preInstall = ''
-    rm -rf node_modules
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive --production
+    patchShebangs node_modules
+
+    # Build the sqlite3 package.
+    npm_config_nodedir="${srcOnly nodejs}" npm_config_node_gyp="${buildPackages.nodejs}/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js" npm rebuild --verbose --sqlite=${sqlite.dev}
+
+    # These files seemingly aren't needed, and also might not exist when the Darwin sandbox is disabled?
+    rm -rf node_modules/sqlite3/build-tmp-napi-v6/{Release/obj.target,node_sqlite3.target.mk}
   '';
 
   dontNpmPrune = true;
