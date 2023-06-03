@@ -39,7 +39,7 @@ buildPythonApplication rec {
     (fetchpatch {
       # werkzeug 2.1 compatibility for the tests
       url = "https://github.com/tryton/trytond/commit/86a50ca06cf0d79404dbd731141ed29f8e9fcb9d.patch";
-      hash = "sha256-xY5Sdhkd0lEgscV7NHwX2YWxobWqQFElY5BJvDT+we8=";
+      sha256 = "sha256-xY5Sdhkd0lEgscV7NHwX2YWxobWqQFElY5BJvDT+we8=";
     })
   ];
 
