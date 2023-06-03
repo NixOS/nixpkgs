@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "fastavro";
-  version = "1.7.2";
+  version = "1.7.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
