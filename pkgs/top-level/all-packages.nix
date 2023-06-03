@@ -36168,6 +36168,8 @@ with pkgs;
 
   freenukum = callPackage ../games/freenukum { };
 
+  gamepad-tool = callPackage ../games/gamepad-tool { };
+
   gnome-hexgl = callPackage ../games/gnome-hexgl { };
 
   gotypist = callPackage ../games/gotypist { };
