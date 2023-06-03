@@ -1,26 +1,55 @@
-{ lib, stdenv, fetchurl, cmake, zlib, freetype, libjpeg, libtiff, fontconfig
-, openssl, libpng, lua5, pkg-config, libidn, expat
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, expat
+, fontconfig
+, freetype
+, libidn
+, libjpeg
+, libpng
+, libtiff
+, libxml2
+, lua5
+, openssl
+, pkg-config
+, zlib
 }:
 
-stdenv.mkDerivation rec {
-  version = "0.9.8";
+stdenv.mkDerivation (finalAttrs: {
   pname = "podofo";
+  version = "0.10.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/podofo/${pname}-${version}.tar.gz";
-    sha256 = "sha256-XeYH4V8ZK4rZBzgwB1nYjeoPXM3OO/AASKDJMrxkUVQ=";
+  src = fetchFromGitHub {
+    owner = "podofo";
+    repo = "podofo";
+    rev = finalAttrs.version;
+    hash = "sha256-Z9mVAo2dITEtTdqA2sftaLZSCiTbGS02RYxfNcEwd1c=";
   };
 
   outputs = [ "out" "dev" "lib" ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ zlib freetype libjpeg libtiff fontconfig openssl libpng
-                  libidn expat lua5 ];
+  buildInputs = [
+    expat
+    fontconfig
+    freetype
+    libidn
+    libjpeg
+    libpng
+    libtiff
+    libxml2
+    lua5
+    openssl
+    zlib
+  ];
 
   cmakeFlags = [
-    "-DPODOFO_BUILD_SHARED=ON"
-    "-DPODOFO_BUILD_STATIC=OFF"
+    "-DPODOFO_BUILD_STATIC=${if stdenv.hostPlatform.isStatic then "ON" else "OFF"}"
     "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
   ];
 
@@ -28,10 +57,11 @@ stdenv.mkDerivation rec {
     moveToOutput lib "$lib"
   '';
 
-  meta = with lib; {
-    homepage = "https://podofo.sourceforge.net";
+  meta = {
+    homepage = "https://github.com/podofo/podofo";
     description = "A library to work with the PDF file format";
-    platforms = platforms.all;
-    license = with licenses; [ gpl2Plus lgpl2Plus ];
+    platforms = lib.platforms.all;
+    license = with lib.licenses; [ gpl2Plus lgpl2Plus ];
+    maintainers = [];
   };
-}
+})

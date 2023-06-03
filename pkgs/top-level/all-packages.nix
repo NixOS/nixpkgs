@@ -23599,8 +23599,6 @@ with pkgs;
 
   podofo = callPackage ../development/libraries/podofo { };
 
-  podofo010 = callPackage ../development/libraries/podofo/0.10.x.nix { };
-
   polkit = callPackage ../development/libraries/polkit { };
 
   poppler = callPackage ../development/libraries/poppler { lcms = lcms2; };
@@ -29741,9 +29739,7 @@ with pkgs;
 
   calculix = callPackage ../applications/science/math/calculix { };
 
-  calibre = qt6Packages.callPackage ../applications/misc/calibre {
-    podofo = podofo010;
-  };
+  calibre = qt6Packages.callPackage ../applications/misc/calibre { };
 
   calibre-web = callPackage ../servers/calibre-web { };
 
