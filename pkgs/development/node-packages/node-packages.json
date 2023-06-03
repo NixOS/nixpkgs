@@ -2,6 +2,7 @@
   "@angular/cli"
 , "@antfu/ni"
 , "@astrojs/language-server"
+, "@babel/cli"
 , "@bitwarden/cli"
 , "@commitlint/cli"
 , "@commitlint/config-conventional"

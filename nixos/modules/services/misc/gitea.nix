@@ -498,7 +498,8 @@ in
 
     systemd.services.gitea = {
       description = "gitea";
-      after = [ "network.target" ] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
+      after = [ "network.target" ] ++ optional usePostgresql "postgresql.service" ++ optional useMysql "mysql.service";
+      requires = optional usePostgresql "postgresql.service" ++ optional useMysql "mysql.service";
       wantedBy = [ "multi-user.target" ];
       path = [ cfg.package pkgs.git pkgs.gnupg ];
 
