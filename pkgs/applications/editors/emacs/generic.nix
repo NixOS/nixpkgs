@@ -94,7 +94,7 @@
 , withWebP ? lib.versionAtLeast version "29"
 , withX ? !(stdenv.isDarwin || noGui || withPgtk)
 , withXinput2 ? withX && lib.versionAtLeast version "29"
-, withXwidgets ? false
+, withXwidgets ? !noGui && (withGTK3 || withPgtk)
 
 # Options
 , siteStart ? ./site-start.el
@@ -118,7 +118,7 @@ assert withGconf -> withX;
 assert withGpm -> stdenv.isLinux;
 assert withNS -> stdenv.isDarwin && !(withX || variant == "macport");
 assert withPgtk -> withGTK3 && !withX;
-assert withXwidgets -> withGTK3;
+assert withXwidgets -> !noGui && (withGTK3 || withPgtk);
 
 let
   libGccJitLibraryPaths = [
@@ -241,7 +241,6 @@ mkDerivation (finalAttrs: (lib.optionalAttrs nativeComp {
     motif
   ] ++ lib.optionals (withX && withXwidgets) [
     glib-networking
-    webkitgtk
   ] ++ lib.optionals nativeComp [
     libgccjit
   ] ++ lib.optionals withImageMagick [
@@ -265,7 +264,6 @@ mkDerivation (finalAttrs: (lib.optionalAttrs nativeComp {
   ] ++ lib.optionals withX [
     Xaw3d
     cairo
-
     giflib
     libXaw
     libXpm
@@ -273,6 +271,8 @@ mkDerivation (finalAttrs: (lib.optionalAttrs nativeComp {
     libpng
     librsvg
     libtiff
+  ] ++ lib.optionals withXwidgets [
+    webkitgtk
   ] ++ lib.optionals stdenv.isDarwin [
     sigtool
   ] ++ lib.optionals withNS [
