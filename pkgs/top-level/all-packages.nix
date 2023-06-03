@@ -2563,6 +2563,8 @@ with pkgs;
 
   ### APPLICATIONS/FILE-MANAGERS
 
+  browsr = callPackage ../applications/file-managers/browsr { };
+
   cfm = callPackage ../applications/file-managers/cfm { };
 
   clex = callPackage ../applications/file-managers/clex { };
@@ -8243,6 +8245,8 @@ with pkgs;
   grin = callPackage ../tools/text/grin { };
 
   gyb = callPackage ../tools/backup/gyb { };
+
+  halftone = callPackage ../applications/graphics/halftone { };
 
   harminv = callPackage ../development/libraries/science/chemistry/harminv { };
 
@@ -14648,6 +14652,8 @@ with pkgs;
   };
 
   beekeeper-studio = callPackage ../development/tools/database/beekeeper-studio { };
+
+  bfc = callPackage ../development/compilers/bfc { };
 
   bigloo = callPackage ../development/compilers/bigloo { };
 
@@ -25990,7 +25996,6 @@ with pkgs;
     boost = boost177; # Configure checks for specific version.
     protobuf = protobuf3_19;
     icu = icu69;
-    openssl = openssl_1_1;
   };
 
   mysql_jdbc = callPackage ../servers/sql/mysql/jdbc { };
@@ -36764,6 +36769,14 @@ with pkgs;
     gtk = gtk2;
   };
 
+  maptool = callPackage ../games/maptool {
+    # MapTool is fussy about which JRE it uses; OpenJDK will leave it hanging
+    # at launch in a class initialization deadlock. MapTool ships Temurin with
+    # their pre-built releases so we might as well use it too.
+    jre = temurin-bin-17;
+    openjfx = openjfx17;
+  };
+
   mari0 = callPackage ../games/mari0 { };
 
   manaplus = callPackage ../games/manaplus { stdenv = gcc11Stdenv; };
@@ -40702,6 +40715,8 @@ with pkgs;
   flac2all = callPackage ../applications/audio/flac2all { };
 
   tuner = callPackage ../applications/audio/tuner { };
+
+  tidal-dl = python3Packages.callPackage ../tools/audio/tidal-dl { };
 
   locate-dominating-file = callPackage ../tools/misc/locate-dominating-file { };
 
