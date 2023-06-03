@@ -7,7 +7,7 @@ tcl.mkTclDerivation {
   src = fetchfossil {
     url = "http://tdom.org";
     rev = "3eb60c75dad1df56";
-    sha256 = "sha256-3Odqzlo9wEpbSQceHNaeceb6OSWtueSxyWxmfc7T1AY=";
+    hash = "sha256-3Odqzlo9wEpbSQceHNaeceb6OSWtueSxyWxmfc7T1AY=";
   };
 
   meta = with lib; {
