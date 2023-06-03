@@ -1010,6 +1010,7 @@
   ./services/networking/shorewall.nix
   ./services/networking/shorewall6.nix
   ./services/networking/shout.nix
+  ./services/networking/sitespeed-io.nix
   ./services/networking/skydns.nix
   ./services/networking/smartdns.nix
   ./services/networking/smokeping.nix

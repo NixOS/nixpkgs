@@ -14,14 +14,14 @@
 
 let
   pname = "pgadmin";
-  version = "7.1";
+  version = "7.2";
   yarnSha256 = "sha256-9iuD0cy0PEtx9Jc626LtE0sAOtP451TGlFKGtC8Tjs4=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-oqOjWfmBJNqCCSyKzbdJkdNql7Him2HgAcRovWtjfbE=";
+    hash = "sha256-RefEuP/Oh4X6knnIBnPrlITXFHbbL2U9yfvc4Ng6VJ4=";
   };
 
   # keep the scope, as it is used throughout the derivation and tests
@@ -185,6 +185,7 @@ pythonPackages.buildPythonApplication rec {
     speaklater3
     google-auth-oauthlib
     google-api-python-client
+    keyring
   ];
 
   passthru.tests = {
