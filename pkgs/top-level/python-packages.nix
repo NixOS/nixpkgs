@@ -11778,6 +11778,8 @@ self: super: with self; {
 
   svgwrite = callPackage ../development/python-modules/svgwrite { };
 
+  sv-ttk = callPackage ../development/python-modules/sv-ttk { };
+
   swagger-spec-validator = callPackage ../development/python-modules/swagger-spec-validator { };
 
   swagger-ui-bundle = callPackage ../development/python-modules/swagger-ui-bundle { };
