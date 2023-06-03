@@ -55,6 +55,7 @@
 , microsoft-gsl
 , rlottie
 , stdenv
+, nix-update-script
 }:
 
 # Main reference:
@@ -74,7 +75,6 @@ in
 stdenv.mkDerivation rec {
   pname = "telegram-desktop";
   version = "4.8.1";
-  # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
@@ -186,7 +186,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit tg_owt;
-    updateScript = ./update.py;
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
