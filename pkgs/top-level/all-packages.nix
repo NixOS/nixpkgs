@@ -1879,8 +1879,8 @@ with pkgs;
 
   darcs-to-git = callPackage ../applications/version-management/darcs-to-git { };
 
-  delta = callPackage ../applications/version-management/delta {
-    inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation Security;
+  delta = darwin.apple_sdk_11_0.callPackage ../applications/version-management/delta {
+    inherit (darwin.apple_sdk_11_0.frameworks) DiskArbitration Foundation Security;
   };
 
   diff-so-fancy = callPackage ../applications/version-management/diff-so-fancy { };
