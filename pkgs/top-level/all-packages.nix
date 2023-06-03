@@ -20607,6 +20607,8 @@ with pkgs;
 
   geoip = callPackage ../development/libraries/geoip { };
 
+  geoip-db-tool = callPackage ../tools/misc/geoip-db-tool { };
+
   geoipjava = callPackage ../development/libraries/java/geoipjava { };
 
   geomyidae = callPackage ../applications/networking/gopher/geomyidae { };
