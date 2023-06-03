@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tuxedo-keyboard-${kernel.version}";
-  version = "3.1.4";
+  version = "3.2.5";
 
   src = fetchFromGitHub {
     owner = "tuxedocomputers";
     repo = "tuxedo-keyboard";
     rev = "v${version}";
-    sha256 = "h6+br+JPEItym83MaVt+xo6o/zMtTv8+wsBoTeYa2AM=";
+    hash = "sha256-pSGshUyim06Sqkp5QFzhUjeIz/N3aORvVt6DEyzQLaU=";
   };
 
   buildInputs = [
