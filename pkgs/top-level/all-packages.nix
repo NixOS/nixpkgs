@@ -3624,6 +3624,8 @@ with pkgs;
 
   pacparser = callPackage ../tools/networking/pacparser { };
 
+  pairdrop = callPackage ../applications/misc/pairdrop { };
+
   opencbm = callPackage ../tools/misc/opencbm { };
 
   parquet-tools = callPackage ../tools/misc/parquet-tools { };
