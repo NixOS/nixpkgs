@@ -1,7 +1,5 @@
-{ pname ? "emacs"
+{ pname
 , version
-, versionModifier ? ""
-, name ? "emacs-${version}${versionModifier}"
 , variant
 , src
 , patches ? _: [ ]
