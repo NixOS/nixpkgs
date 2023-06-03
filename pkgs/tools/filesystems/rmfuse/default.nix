@@ -18,7 +18,10 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'bidict = "^' 'bidict = ">='
+      --replace 'bidict = "^' 'bidict = ">=' \
+      --replace 'xdg = "^5.0.1"' 'xdg-base-dirs = "^6.0.0"'
+    substituteInPlace rmfuse/config.py \
+      --replace 'from xdg import' 'from xdg_base_dirs import'
   '';
 
   nativeBuildInputs = with python3.pkgs; [
@@ -30,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
     rmrl
     rmcl
     pyfuse3
-    xdg
+    xdg-base-dirs
   ];
 
   meta = {

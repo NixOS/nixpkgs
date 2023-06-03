@@ -15,20 +15,22 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-BgJdcdIgYNZUJLWDgUWIDyiSSAkLdePYus3IYQo/QpY=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'xdg = "' 'xdg-base-dirs = "'
+    substituteInPlace frogmouth/data/{config,data_directory}.py \
+      --replace 'from xdg import' 'from xdg_base_dirs import'
+  '';
+
   nativeBuildInputs = [
     python3.pkgs.poetry-core
-    python3.pkgs.pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
     httpx
     textual
     typing-extensions
-    xdg
-  ];
-
-  pythonRelaxDeps = [
-    "xdg"
+    xdg-base-dirs
   ];
 
   pythonImportsCheck = [ "frogmouth" ];

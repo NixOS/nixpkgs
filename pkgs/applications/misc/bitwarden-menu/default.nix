@@ -2,7 +2,7 @@
 , buildPythonApplication
 , fetchPypi
 , pynput
-, xdg
+, xdg-base-dirs
 }:
 
 buildPythonApplication rec {
@@ -15,9 +15,16 @@ buildPythonApplication rec {
     hash = "sha256-OC+MHEiUU6bDT2wSSDtu0KnwDwBpbLTBta0xjfuzlOI=";
   };
 
+  postPatch = ''
+    substituteInPlace bwm/__init__.py \
+      --replace 'from xdg import' 'from xdg_base_dirs import'
+    substituteInPlace setup.py \
+      --replace '"xdg"' '"xdg-base-dirs"'
+  '';
+
   propagatedBuildInputs = [
     pynput
-    xdg
+    xdg-base-dirs
   ];
 
   doCheck = false;

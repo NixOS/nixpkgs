@@ -7,7 +7,7 @@
 , reportlab
 , setuptools
 , svglib
-, xdg
+, xdg-base-dirs
 }:
 
 buildPythonPackage rec {
@@ -25,6 +25,13 @@ buildPythonPackage rec {
     hash = "sha256-13pMfRe2McWDpBTlJy/TBT0W5wyd0EXDoocxeIzmqCo=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'xdg = "^5.0.1"' 'xdg-base-dirs = "^6.0.0"'
+    substituteInPlace rmrl/constants.py \
+      --replace 'from xdg import' 'from xdg_base_dirs import'
+  '';
+
   nativeBuildInputs = [
     poetry-core
   ];
@@ -34,7 +41,7 @@ buildPythonPackage rec {
     reportlab
     setuptools
     svglib
-    xdg
+    xdg-base-dirs
   ];
 
   # upstream has no tests

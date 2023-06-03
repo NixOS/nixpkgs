@@ -5,7 +5,7 @@
 , poetry-core
 , asks
 , trio
-, xdg
+, xdg-base-dirs
 }:
 
 buildPythonPackage rec {
@@ -23,7 +23,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace '= "^' '= ">='
+      --replace '= "^' '= ">=' \
+      --replace 'xdg = ' 'xdg-base-dirs = '
+    substituteInPlace rmcl/{config,datacache}.py \
+      --replace 'from xdg import' 'from xdg_base_dirs import'
   '';
 
   nativeBuildInputs = [
@@ -33,7 +36,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     asks
     trio
-    xdg
+    xdg-base-dirs
   ];
 
   # upstream has no tests
