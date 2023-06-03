@@ -21,6 +21,14 @@
 , nixosTests
 , hostname
 , iconv
+
+# for passthru.tests
+, ghostscript
+, gtk3
+, gtklp
+, python3
+, samba
+, scribus
 }:
 
 stdenv.mkDerivation rec {
@@ -143,6 +151,14 @@ stdenv.mkDerivation rec {
       printing-service
       printing-socket
     ;
+    inherit
+      scribus
+      gtklp
+    ;
+    ghostscript = ghostscript.override { cupsSupport = true; };
+    gtk3 = gtk3.override { cupsSupport = true; };
+    pycups = python3.pkgs.pycups;
+    samba = samba.override { enablePrinting = true; };
   };
 
   doCheck = !stdenv.isDarwin;  # some locale tests fail on darwin
