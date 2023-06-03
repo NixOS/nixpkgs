@@ -1,4 +1,4 @@
-# Trivial builders {#chap-trivial-builders}
+# Trivial build helpers {#chap-trivial-builders}
 
 Nixpkgs provides a couple of functions that help with building derivations. The most important one, `stdenv.mkDerivation`, has already been documented above. The following functions wrap `stdenv.mkDerivation`, making it easier to use in certain cases.
 
