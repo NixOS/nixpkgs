@@ -61,7 +61,7 @@ lib.runTests (
   testnetbsd = mseteq netbsd [ "aarch64-netbsd" "armv6l-netbsd" "armv7a-netbsd" "armv7l-netbsd" "i686-netbsd" "m68k-netbsd" "mipsel-netbsd" "powerpc-netbsd" "riscv32-netbsd" "riscv64-netbsd" "x86_64-netbsd" ];
   testopenbsd = mseteq openbsd [ "i686-openbsd" "x86_64-openbsd" ];
   testwindows = mseteq windows [ "i686-cygwin" "x86_64-cygwin" "i686-windows" "x86_64-windows" ];
-  testserenity = mseteq serenity [ "x86_64-serenity" ];
+  testserenity = mseteq serenity [ "x86_64-serenity" "aarch64-serenity" ];
   testunix = mseteq unix (linux ++ darwin ++ freebsd ++ openbsd ++ netbsd ++ illumos ++ cygwin ++ redox ++ serenity);
 })
 

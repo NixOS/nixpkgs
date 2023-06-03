@@ -52,7 +52,7 @@ let
     "x86_64-redox"
 
     # Serenity
-    "x86_64-serenity"
+    "x86_64-serenity" "aarch64-serenity"
 
     # WASI
     "wasm64-wasi" "wasm32-wasi"
