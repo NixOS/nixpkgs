@@ -7,6 +7,7 @@
 , setuptools
 , importlib-resources
 , dbus-next
+, rubicon-objc
 }:
 
 buildPythonPackage rec {
@@ -33,6 +34,8 @@ buildPythonPackage rec {
     importlib-resources
   ] ++ lib.optionals stdenv.isLinux [
     dbus-next
+  ] ++ lib.optionals stdenv.isDarwin [
+    rubicon-objc
   ];
 
   # no tests available, do the imports check instead
@@ -48,6 +51,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/samschott/desktop-notifier/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ sfrijters ];
-    platforms = platforms.linux;
   };
 }
