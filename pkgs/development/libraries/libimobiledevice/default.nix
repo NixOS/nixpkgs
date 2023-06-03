@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
-, gnutls
+, openssl
 , libgcrypt
 , libplist
 , libtasn1
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    gnutls
+    openssl
     libgcrypt
     libplist
     libtasn1
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     export RELEASE_VERSION=${version}
   '';
 
-  configureFlags = [ "--with-gnutls" "--without-cython" ];
+  configureFlags = [ "--without-cython" ];
 
   meta = with lib; {
     homepage = "https://github.com/libimobiledevice/libimobiledevice";
