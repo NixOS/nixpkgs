@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "nexttrace";
-  version = "1.1.5";
+  version = "1.1.6";
 
   src = fetchFromGitHub {
     owner = "sjlleo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9JLJ6v8eDVgqB4mdbHtBCZ1Wm5gjk7ywjGGgYOFZFAQ=";
+    sha256 = "sha256-nANxqASwvYYoTTZeQpHyJfldS58rmKga+I5QYMRgvQA=";
   };
   vendorHash = "sha256-1geVqj4W9HoMCM1OkGqpYqHj2jGoGEU9Zv6fkaHBzpk=";
 
