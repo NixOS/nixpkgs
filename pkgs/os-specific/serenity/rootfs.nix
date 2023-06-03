@@ -1,15 +1,15 @@
 { lib
 , stdenv
-, callPackage
-, runCommand
-, pkgsBuildBuild
 , buildPackages
+, cmake
+, ninja
+, libxcrypt
 , src
 , version
 }:
 
 let
-  cpuArch = stdenv.targetPlatform.parsed.cpu.name;
+  arch = stdenv.targetPlatform.parsed.cpu.name;
 in
 stdenv.mkDerivation rec {
   inherit src version;
@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
   '';
 
   depsBuildBuild =
-    [
+    lib.optional stdenv.buildPlatform.isLinux libxcrypt
+    ++ [
       buildPackages.gccStdenv.cc
-      pkgsBuildBuild.cmake
-      pkgsBuildBuild.ninja
-    ]
-    ++ lib.optional stdenv.buildPlatform.isLinux buildPackages.libxcrypt;
+      cmake
+      ninja
+    ];
 
   # The default cmake configure phase sets CMAKE_INSTALL_* flags that interfere
   # with expected paths
@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
     runHook preConfigure
 
     mkdir -p Toolchain/Local
-    ln -s ${stdenv.cc} Toolchain/Local/${cpuArch}
+    ln -s ${stdenv.cc} Toolchain/Local/${arch}
 
-    cmake -S Meta/CMake/Superbuild -B Build/superbuild-${cpuArch} -GNinja \
+    cmake -S Meta/CMake/Superbuild -B Build/superbuild-${arch} -GNinja \
       -DCMAKE_C_COMPILER=gcc \
       -DCMAKE_CXX_COMPILER=g++ \
-      -DSERENITY_ARCH=${cpuArch} \
+      -DSERENITY_ARCH=${arch} \
       -DSERENITY_TOOLCHAIN=GNU \
       -DENABLE_TIME_ZONE_DATABASE_DOWNLOAD=OFF \
       -DENABLE_UNICODE_DATABASE_DOWNLOAD=OFF \
@@ -59,14 +59,14 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
-  ninjaFlagsArray = [ "-CBuild/superbuild-${cpuArch}" ];
+  ninjaFlagsArray = [ "-CBuild/superbuild-${arch}" ];
   enableParallelBuilding = true;
 
   # Build system uses --sysroot=Build/<arch>/Root to specify location of crt
   # libraries but the flag is unsupported in nixpkgs's ld-wrapper. Use -B as
   # a workaround
   preBuild = ''
-    export NIX_CFLAGS_COMPILE+=" -B$(pwd)/Build/${cpuArch}/Root/usr/lib/"
+    export NIX_CFLAGS_COMPILE+=" -B$(pwd)/Build/${arch}/Root/usr/lib/"
   '';
   hardeningDisable = [ "fortify" ];
 
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir $out
-    cp -r Build/${cpuArch}/Root/usr/{lib,include} $out
+    cp -r Build/${arch}/Root/usr/{lib,include} $out
 
     runHook postInstall
   '';

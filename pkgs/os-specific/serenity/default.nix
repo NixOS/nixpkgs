@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , stdenvNoCC
-, runCommand
 , callPackage
 , buildPackages
 , patchelf
