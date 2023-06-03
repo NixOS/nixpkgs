@@ -1744,6 +1744,8 @@ with pkgs;
 
   tauon = callPackage ../applications/audio/tauon { };
 
+  teamd = callPackage ../tools/networking/teamd { };
+
   tere = callPackage ../tools/misc/tere { };
 
   termusic = callPackage ../applications/audio/termusic { };
