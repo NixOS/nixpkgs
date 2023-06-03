@@ -21526,6 +21526,8 @@ with pkgs;
 
   libantlr3c = callPackage ../development/libraries/libantlr3c { };
 
+  libansilove = callPackage ../development/libraries/libansilove { };
+
   libaom = callPackage ../development/libraries/libaom {
     # Remove circular dependency for libavif
     libjxl = libjxl.override { buildDocs = false; };
