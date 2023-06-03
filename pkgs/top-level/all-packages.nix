@@ -1718,6 +1718,8 @@ with pkgs;
 
   simple-dlna-browser = callPackage ../tools/networking/simple-dlna-browser { };
 
+  sitespeed-io = callPackage ../tools/networking/sitespeed-io { };
+
   sorted-grep = callPackage ../tools/text/sorted-grep { };
 
   smbmap = callPackage ../tools/security/smbmap { };
@@ -1879,8 +1881,8 @@ with pkgs;
 
   darcs-to-git = callPackage ../applications/version-management/darcs-to-git { };
 
-  delta = callPackage ../applications/version-management/delta {
-    inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation Security;
+  delta = darwin.apple_sdk_11_0.callPackage ../applications/version-management/delta {
+    inherit (darwin.apple_sdk_11_0.frameworks) DiskArbitration Foundation Security;
   };
 
   diff-so-fancy = callPackage ../applications/version-management/diff-so-fancy { };
@@ -5168,6 +5170,8 @@ with pkgs;
   gtg = callPackage ../applications/office/gtg { };
 
   gti = callPackage ../tools/misc/gti { };
+
+  has = callPackage ../applications/misc/has { };
 
   hdate = callPackage ../applications/misc/hdate { };
 
@@ -9461,6 +9465,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  mdbook-toc = callPackage ../tools/text/mdbook-toc {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
   mdbook-admonish = callPackage ../tools/text/mdbook-admonish {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -12794,6 +12802,8 @@ with pkgs;
   };
 
   surfraw = callPackage ../tools/networking/surfraw { };
+
+  swagger-cli = callPackage ../tools/networking/swagger-cli { };
 
   swagger-codegen = callPackage ../tools/networking/swagger-codegen { };
 
@@ -26154,6 +26164,7 @@ with pkgs;
   prometheus-flow-exporter = callPackage ../servers/monitoring/prometheus/flow-exporter.nix { };
   prometheus-fritzbox-exporter = callPackage ../servers/monitoring/prometheus/fritzbox-exporter.nix { };
   prometheus-gitlab-ci-pipelines-exporter = callPackage ../servers/monitoring/prometheus/gitlab-ci-pipelines-exporter.nix { };
+  prometheus-graphite-exporter = callPackage ../servers/monitoring/prometheus/graphite-exporter.nix { };
   prometheus-haproxy-exporter = callPackage ../servers/monitoring/prometheus/haproxy-exporter.nix { };
   prometheus-influxdb-exporter = callPackage ../servers/monitoring/prometheus/influxdb-exporter.nix { };
   prometheus-ipmi-exporter = callPackage ../servers/monitoring/prometheus/ipmi-exporter.nix { };
@@ -27934,7 +27945,9 @@ with pkgs;
 
   vdo = callPackage ../os-specific/linux/vdo { };
 
-  windows = callPackages ../os-specific/windows { };
+  windmill = callPackage ../servers/windmill {};
+
+  windows = callPackages ../os-specific/windows {};
 
   wirelesstools = callPackage ../os-specific/linux/wireless-tools { };
 
