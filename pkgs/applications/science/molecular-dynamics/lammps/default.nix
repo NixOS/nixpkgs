@@ -62,6 +62,6 @@ stdenv.mkDerivation rec {
     homepage = "https://lammps.sandia.gov";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ maintainers.costrouc maintainers.doronbehar ];
   };
 }
