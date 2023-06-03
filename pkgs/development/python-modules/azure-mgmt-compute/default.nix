@@ -3,6 +3,7 @@
 , fetchPypi
 , azure-mgmt-common
 , azure-mgmt-core
+, isodate
 , pythonOlder
 }:
 
@@ -11,7 +12,7 @@ buildPythonPackage rec {
   version = "30.0.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -22,6 +23,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     azure-mgmt-common
     azure-mgmt-core
+    isodate
   ];
 
   pythonNamespaces = [
