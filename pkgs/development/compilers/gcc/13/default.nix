@@ -78,8 +78,7 @@ let majorVersion = "13";
       })
       ++ optional langD ../libphobos.patch
       # Adds support for Serenity
-      # https://github.com/SerenityOS/serenity/tree/02fe3feb710f97820bd3ee9e39ff3d05bb3f97fe/Toolchain/Patches/gcc
-      ++ optional targetPlatform.isSerenity ./support-serenity.patch
+      ++ optionals targetPlatform.isSerenity (import ./../serenity-patches.nix { inherit fetchurl; })
 
       # backport fixes to build gccgo with musl libc
       ++ optionals (langGo && stdenv.hostPlatform.isMusl) [
