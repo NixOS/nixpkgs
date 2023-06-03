@@ -519,6 +519,8 @@ with pkgs;
 
   databricks-sql-cli = python3Packages.callPackage ../applications/misc/databricks-sql-cli { };
 
+  dbip-country-lite = callPackage ../data/misc/dbip-country-lite { };
+
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
 
   dhallPackageToNix = callPackage ../build-support/dhall/package-to-nix.nix { };
@@ -12442,7 +12444,9 @@ with pkgs;
 
   sing-geosite = callPackage ../data/misc/sing-geosite { };
 
-  sing-geoip = callPackage ../data/misc/sing-geoip { };
+  sing-geoip = callPackage ../data/misc/sing-geoip {
+    buildGoModule = buildGo119Module;
+  };
 
   sipcalc = callPackage ../tools/networking/sipcalc { };
 
