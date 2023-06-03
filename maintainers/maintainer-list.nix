@@ -11813,6 +11813,12 @@
     githubId = 30825096;
     name = "Ning Zhang";
   };
+  oaksoaj = {
+    email = "oaksoaj@riseup.net";
+    name = "Oaksoaj";
+    github = "oaksoaj";
+    githubId = 103952141;
+  };
   obadz = {
     email = "obadz-nixos@obadz.com";
     github = "obadz";
