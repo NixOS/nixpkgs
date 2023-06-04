@@ -23,6 +23,10 @@ buildGoModule rec {
     version = "v${version}";
   };
 
+  postInstall = ''
+    mv $out/bin/{cmd,kluctl}
+  '';
+
   meta = with lib; {
     description = "The missing glue to put together large Kubernetes deployments";
     homepage = "https://kluctl.io/";
