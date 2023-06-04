@@ -26685,6 +26685,8 @@ with pkgs;
 
   b43FirmwareCutter = callPackage ../os-specific/linux/firmware/b43-firmware-cutter { };
 
+  epilys-bb = callPackage ../tools/system/epilys-bb { };
+
   below = callPackage ../os-specific/linux/below { };
 
   bt-fw-converter = callPackage ../os-specific/linux/firmware/bt-fw-converter { };
