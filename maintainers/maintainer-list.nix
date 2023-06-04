@@ -4958,6 +4958,12 @@
     githubId = 2512008;
     name = "Even Brenden";
   };
+  evilmav = {
+    email = "elenskiy.ilya@gmail.com";
+    github = "evilmav";
+    githubId = 6803717;
+    name = "Ilya Elenskiy";
+  };
   evils = {
     email = "evils.devils@protonmail.com";
     matrix = "@evils:nixos.dev";

@@ -1493,6 +1493,8 @@ self: super: with self; {
 
   brian2 = callPackage ../development/python-modules/brian2 { };
 
+  broadbean = callPackage ../development/python-modules/broadbean { };
+
   broadlink = callPackage ../development/python-modules/broadlink { };
 
   brother = callPackage ../development/python-modules/brother { };
@@ -7059,6 +7061,8 @@ self: super: with self; {
 
   opencensus-context = callPackage ../development/python-modules/opencensus-context { };
 
+  opencensus-ext-azure = callPackage ../development/python-modules/opencensus-ext-azure { };
+
   opencontainers = callPackage ../development/python-modules/opencontainers { };
 
   opencv3 = toPythonModule (pkgs.opencv3.override {
@@ -10167,6 +10171,8 @@ self: super: with self; {
 
   pyvisa-py = callPackage ../development/python-modules/pyvisa-py { };
 
+  pyvisa-sim = callPackage ../development/python-modules/pyvisa-sim { };
+
   pyvista = callPackage ../development/python-modules/pyvista { };
 
   pyviz-comms = callPackage ../development/python-modules/pyviz-comms { };
@@ -10258,6 +10264,12 @@ self: super: with self; {
   qcelemental = callPackage ../development/python-modules/qcelemental { };
 
   qcengine = callPackage ../development/python-modules/qcengine { };
+
+  qcodes = callPackage ../development/python-modules/qcodes { };
+
+  qcodes-contrib-drivers = callPackage ../development/python-modules/qcodes-contrib-drivers { };
+
+  qcodes-loop = callPackage ../development/python-modules/qcodes-loop { };
 
   qcs-api-client = callPackage ../development/python-modules/qcs-api-client { };
 
@@ -11741,6 +11753,8 @@ self: super: with self; {
   stringcase = callPackage ../development/python-modules/stringcase { };
 
   stringly = callPackage ../development/python-modules/stringly { };
+
+  stringparser = callPackage ../development/python-modules/stringparser { };
 
   stripe = callPackage ../development/python-modules/stripe { };
 
