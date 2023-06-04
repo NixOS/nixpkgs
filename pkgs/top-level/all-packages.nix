@@ -19575,6 +19575,8 @@ with pkgs;
 
   visualvm = callPackage ../development/tools/java/visualvm { };
 
+  volta = callPackage ../development/tools/volta { };
+
   vultr = callPackage ../development/tools/vultr { };
 
   vultr-cli = callPackage ../development/tools/vultr-cli { };
