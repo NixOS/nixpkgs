@@ -169,7 +169,7 @@ let
   replaceDefaultConfig = defaultConfig: newConfig: ''
     rm $dst/${defaultConfig}
     ln -s ${pkg.out}/share/fontconfig/conf.avail/${newConfig} \
-          dst/
+          $dst/
   '';
 
   # fontconfig configuration package
