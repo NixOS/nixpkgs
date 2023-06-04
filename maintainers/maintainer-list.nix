@@ -2943,7 +2943,7 @@
   };
   citadelcore = {
     email = "alex@arctarus.co.uk";
-    github = "CitadelCore";
+    github = "VertexA115";
     githubId = 5567402;
     name = "Alex Zero";
     keys = [{
@@ -5531,7 +5531,7 @@
   };
   fuzen = {
     email = "me@fuzen.cafe";
-    github = "Fuzen-py";
+    github = "LovingMelody";
     githubId = 17859309;
     name = "Fuzen";
   };
@@ -6768,7 +6768,7 @@
   };
   ilya-kolpakov = {
     email = "ilya.kolpakov@gmail.com";
-    github = "ilya-kolpakov";
+    github = "1pakch";
     githubId = 592849;
     name = "Ilya Kolpakov";
   };
@@ -7170,7 +7170,7 @@
   jayesh-bhoot = {
     name = "Jayesh Bhoot";
     email = "jb@jayeshbhoot.com";
-    github = "jayeshbhoot";
+    github = "bhootjb";
     githubId = 1915507;
   };
   jayman2000 = {
@@ -7988,7 +7988,7 @@
   };
   juaningan = {
     email = "juaningan@gmail.com";
-    github = "uningan";
+    github = "oneingan";
     githubId = 810075;
     name = "Juan Rodal";
   };
