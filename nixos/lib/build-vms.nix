@@ -29,7 +29,7 @@ rec {
     nodes: configurations:
 
     import ./eval-config.nix {
-      inherit system specialArgs;
+      inherit system specialArgs lib;
       modules = configurations ++ extraConfigurations;
       baseModules =  (import ../modules/module-list.nix) ++
         [ ../modules/virtualisation/qemu-vm.nix
