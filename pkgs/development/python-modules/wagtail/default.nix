@@ -1,4 +1,5 @@
-{ anyascii
+{ lib
+, anyascii
 , beautifulsoup4
 , buildPythonPackage
 , callPackage
@@ -12,10 +13,10 @@
 , fetchPypi
 , html5lib
 , l18n
-, lib
 , openpyxl
 , permissionedforms
 , pillow
+, pythonOlder
 , requests
 , telepath
 , willow
@@ -24,10 +25,13 @@
 buildPythonPackage rec {
   pname = "wagtail";
   version = "4.2.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-s89gs3H//Dc3k6BLZUC4APyDgiWY9LetWAkI+kXQTf8=";
+    hash = "sha256-s89gs3H//Dc3k6BLZUC4APyDgiWY9LetWAkI+kXQTf8=";
   };
 
   postPatch = ''
@@ -36,23 +40,23 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+    anyascii
+    beautifulsoup4
     django
+    django_treebeard
+    django-filter
     django-modelcluster
     django-taggit
-    django_treebeard
     djangorestframework
-    django-filter
-    pillow
-    beautifulsoup4
-    html5lib
-    willow
-    requests
-    openpyxl
-    anyascii
     draftjs-exporter
-    permissionedforms
-    telepath
+    html5lib
     l18n
+    openpyxl
+    permissionedforms
+    pillow
+    requests
+    telepath
+    willow
   ];
 
   # Tests are in separate derivation because they require a package that depends
