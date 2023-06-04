@@ -9133,7 +9133,9 @@ with pkgs;
 
   kluctl = callPackage ../applications/networking/cluster/kluctl { };
 
-  kibana7 = callPackage ../development/tools/misc/kibana/7.x.nix { };
+  kibana7 = callPackage ../development/tools/misc/kibana/7.x.nix {
+    nodejs = nodejs_16;
+  };
   kibana = kibana7;
 
   kibi = callPackage ../applications/editors/kibi { };
