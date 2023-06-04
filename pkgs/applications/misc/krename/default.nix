@@ -1,8 +1,17 @@
-{
-  mkDerivation, fetchurl, lib,
-  extra-cmake-modules, kdoctools, wrapGAppsHook,
-  kconfig, kinit, kjsembed, taglib, exiv2, podofo,
-  kcrash
+{ mkDerivation
+, fetchurl
+, fetchpatch
+, lib
+, extra-cmake-modules
+, kdoctools
+, wrapGAppsHook
+, kconfig
+, kinit
+, kjsembed
+, taglib
+, exiv2
+, podofo
+, kcrash
 }:
 
 let
@@ -16,6 +25,20 @@ in mkDerivation rec {
     url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
     sha256 = "sha256-sjxgp93Z9ttN1/VaxV/MqKVY+miq+PpcuJ4er2kvI+0=";
   };
+
+  patches = [
+    # https://invent.kde.org/utilities/krename/-/merge_requests/20
+    (fetchpatch {
+      name = "podofo-0.10-compat.part-1.patch";
+      url = "https://invent.kde.org/utilities/krename/-/commit/c0fa9edaad597271ffc34da1f45fa539e3ff5ef5.patch";
+      sha256 = "sha256-4kNCUnw3AUK/wfkYRdAnmIWaeZeSag/+1XMjpzWuDaY=";
+    })
+    (fetchpatch {
+      name = "podofo-0.10-compat.part-2.patch";
+      url = "https://invent.kde.org/utilities/krename/-/commit/0eb28403821a79d8aa3ac346067ad6ebb2fe06c1.patch";
+      sha256 = "sha256-9r9NKqM0cH0EFLbaE3WW4SfjI49n5wxY309HQ07Nuoo=";
+    })
+  ];
 
   buildInputs = [ taglib exiv2 podofo ];
 
