@@ -19946,6 +19946,8 @@ with pkgs;
 
   capnproto-java = callPackage ../development/tools/capnproto-java { };
 
+  capnproto-rust = callPackage ../development/tools/capnproto-rust { };
+
   captive-browser = callPackage ../applications/networking/browsers/captive-browser { };
 
   ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
