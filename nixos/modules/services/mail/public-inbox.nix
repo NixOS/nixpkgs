@@ -275,9 +275,8 @@ in
           default = {};
           description = lib.mdDoc "public inboxes";
           type = types.submodule {
-            # Keeping in line with the tradition of unnecessarily specific types, allow users to set
-            # freeform settings either globally under the `publicinbox` section, or for specific
-            # inboxes through additional nesting.
+            # Support both global options like `services.public-inbox.settings.publicinbox.imapserver`
+            # and inbox specific options like `services.public-inbox.settings.publicinbox.foo.address`.
             freeformType = with types; attrsOf (oneOf [ iniAtom (attrsOf iniAtom) ]);
 
             options.css = mkOption {
@@ -285,11 +284,23 @@ in
               default = [];
               description = lib.mdDoc "The local path name of a CSS file for the PSGI web interface.";
             };
+            options.imapserver = mkOption {
+              type = with types; listOf str;
+              default = [];
+              example = [ "imap.public-inbox.org" ];
+              description = lib.mdDoc "IMAP URLs to this public-inbox instance";
+            };
             options.nntpserver = mkOption {
               type = with types; listOf str;
               default = [];
               example = [ "nntp://news.public-inbox.org" "nntps://news.public-inbox.org" ];
               description = lib.mdDoc "NNTP URLs to this public-inbox instance";
+            };
+            options.pop3server = mkOption {
+              type = with types; listOf str;
+              default = [];
+              example = [ "pop.public-inbox.org" ];
+              description = lib.mdDoc "POP3 URLs to this public-inbox instance";
             };
             options.wwwlisting = mkOption {
               type = with types; enum [ "all" "404" "match=domain" ];
