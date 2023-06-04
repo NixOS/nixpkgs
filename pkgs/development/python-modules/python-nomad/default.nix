@@ -19,6 +19,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client library for Hashicorp Nomad";
     homepage = "https://github.com/jrxFive/python-nomad";
+    changelog = "https://github.com/jrxFive/python-nomad/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ xbreak ];
   };
