@@ -7756,6 +7756,8 @@ self: super: with self; {
 
   pyschemes = callPackage ../development/python-modules/pyschemes { };
 
+  pyschlage = callPackage ../development/python-modules/pyschlage { };
+
   pyshark = callPackage ../development/python-modules/pyshark { };
 
   pysiaalarm = callPackage ../development/python-modules/pysiaalarm { };
