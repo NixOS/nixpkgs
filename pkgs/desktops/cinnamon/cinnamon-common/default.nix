@@ -160,17 +160,15 @@ stdenv.mkDerivation rec {
       -e '/^#/!s,/usr/bin,/run/current-system/sw/bin,g' \
       {} +
 
-    sed "s|/usr/share/sounds|/run/current-system/sw/share/sounds|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/SettingsWidgets.py
+    pushd ./files/usr/share/cinnamon/cinnamon-settings
+      sed "s|\"/usr/lib\"|\"${cinnamon-control-center}/lib\"|g" -i ./bin/capi.py
+      sed "s|'python3'|'${pythonEnv.interpreter}'|g" -i ./bin/CinnamonGtkSettings.py
+      sed "s|/usr/share/sounds|/run/current-system/sw/share/sounds|g" -i ./bin/SettingsWidgets.py
+      sed "s|msgfmt|${gettext}/bin/msgfmt|g" -i ./bin/Spices.py
+      sed 's|"lspci"|"${pciutils}/bin/lspci"|g' -i ./modules/cs_info.py
+    popd
 
-    sed "s|'python3'|'${pythonEnv.interpreter}'|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/CinnamonGtkSettings.py
-
-    sed "s|\"/usr/lib\"|\"${cinnamon-control-center}/lib\"|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/capi.py
-
-    sed 's|"lspci"|"${pciutils}/bin/lspci"|g' -i ./files/usr/share/cinnamon/cinnamon-settings/modules/cs_info.py
-
-    sed "s| cinnamon-session| ${cinnamon-session}/bin/cinnamon-session|g" -i ./files/usr/bin/cinnamon-session-cinnamon  -i ./files/usr/bin/cinnamon-session-cinnamon2d
-
-    sed "s|msgfmt|${gettext}/bin/msgfmt|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/Spices.py
+    sed "s| cinnamon-session| ${cinnamon-session}/bin/cinnamon-session|g" -i ./files/usr/bin/cinnamon-session-{cinnamon,cinnamon2d}
 
     patchShebangs src/data-to-c.pl
   '';
