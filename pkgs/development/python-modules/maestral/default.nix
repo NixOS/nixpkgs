@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , makePythonPath
@@ -17,6 +18,7 @@
 , pyro5
 , requests
 , rich
+, rubicon-objc
 , setuptools
 , survey
 , typing-extensions
@@ -57,6 +59,8 @@ buildPythonPackage rec {
     survey
     typing-extensions
     watchdog
+  ] ++ lib.optionals stdenv.isDarwin [
+    rubicon-objc
   ];
 
   makeWrapperArgs = [
@@ -86,6 +90,15 @@ buildPythonPackage rec {
     "test_cased_path_candidates"
     # AssertionError
     "test_locking_multiprocess"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # maetral daemon does not start but worked in real environment
+    "test_start_already_running"
+    "test_stop"
+    "test_notify_level"
+    "test_notify_snooze"
+    "test_lifecycle"
+    "test_connection"
+    "test_remote_exceptions"
   ];
 
   pythonImportsCheck = [
@@ -100,6 +113,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/samschott/maestral/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg sfrijters ];
-    platforms = platforms.unix;
   };
 }
