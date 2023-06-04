@@ -519,6 +519,8 @@ with pkgs;
 
   databricks-sql-cli = python3Packages.callPackage ../applications/misc/databricks-sql-cli { };
 
+  dbip-country-lite = callPackage ../data/misc/dbip-country-lite { };
+
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
 
   dhallPackageToNix = callPackage ../build-support/dhall/package-to-nix.nix { };
@@ -1508,6 +1510,8 @@ with pkgs;
 
   balena-cli = callPackage ../tools/admin/balena-cli { };
 
+  basez = callPackage ../tools/misc/basez { };
+
   butler = callPackage ../games/itch/butler.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
@@ -1718,6 +1722,8 @@ with pkgs;
 
   simple-dlna-browser = callPackage ../tools/networking/simple-dlna-browser { };
 
+  sitespeed-io = callPackage ../tools/networking/sitespeed-io { };
+
   sorted-grep = callPackage ../tools/text/sorted-grep { };
 
   smbmap = callPackage ../tools/security/smbmap { };
@@ -1879,9 +1885,7 @@ with pkgs;
 
   darcs-to-git = callPackage ../applications/version-management/darcs-to-git { };
 
-  delta = callPackage ../applications/version-management/delta {
-    inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation Security;
-  };
+  delta = darwin.apple_sdk_11_0.callPackage ../applications/version-management/delta { };
 
   diff-so-fancy = callPackage ../applications/version-management/diff-so-fancy { };
 
@@ -2898,8 +2902,7 @@ with pkgs;
 
   arangodb = callPackage ../servers/nosql/arangodb { };
 
-  # arcanist currently crashes with some workflows on php8.1, use 8.0
-  arcanist = callPackage ../development/tools/misc/arcanist { php = php80; };
+  arcanist = callPackage ../development/tools/misc/arcanist { php = php81; };
 
   arduino = arduino-core.override { withGui = true; };
 
@@ -3622,6 +3625,8 @@ with pkgs;
   mpdevil = callPackage ../applications/audio/mpdevil { };
 
   pacparser = callPackage ../tools/networking/pacparser { };
+
+  pairdrop = callPackage ../applications/misc/pairdrop { };
 
   opencbm = callPackage ../tools/misc/opencbm { };
 
@@ -5168,6 +5173,8 @@ with pkgs;
   gtg = callPackage ../applications/office/gtg { };
 
   gti = callPackage ../tools/misc/gti { };
+
+  has = callPackage ../applications/misc/has { };
 
   hdate = callPackage ../applications/misc/hdate { };
 
@@ -9462,6 +9469,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  mdbook-toc = callPackage ../tools/text/mdbook-toc {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
   mdbook-admonish = callPackage ../tools/text/mdbook-admonish {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -12433,7 +12444,9 @@ with pkgs;
 
   sing-geosite = callPackage ../data/misc/sing-geosite { };
 
-  sing-geoip = callPackage ../data/misc/sing-geoip { };
+  sing-geoip = callPackage ../data/misc/sing-geoip {
+    buildGoModule = buildGo119Module;
+  };
 
   sipcalc = callPackage ../tools/networking/sipcalc { };
 
@@ -12795,6 +12808,8 @@ with pkgs;
   };
 
   surfraw = callPackage ../tools/networking/surfraw { };
+
+  swagger-cli = callPackage ../tools/networking/swagger-cli { };
 
   swagger-codegen = callPackage ../tools/networking/swagger-codegen { };
 
@@ -17280,8 +17295,6 @@ with pkgs;
   pythonDocs = recurseIntoAttrs (callPackage ../development/interpreters/python/cpython/docs {});
 
   check-jsonschema = callPackage ../development/tools/check-jsonschema { };
-
-  pypi2nix = callPackage ../development/tools/pypi2nix { };
 
   pypi-mirror = callPackage ../development/tools/pypi-mirror { };
 
@@ -26162,6 +26175,7 @@ with pkgs;
   prometheus-flow-exporter = callPackage ../servers/monitoring/prometheus/flow-exporter.nix { };
   prometheus-fritzbox-exporter = callPackage ../servers/monitoring/prometheus/fritzbox-exporter.nix { };
   prometheus-gitlab-ci-pipelines-exporter = callPackage ../servers/monitoring/prometheus/gitlab-ci-pipelines-exporter.nix { };
+  prometheus-graphite-exporter = callPackage ../servers/monitoring/prometheus/graphite-exporter.nix { };
   prometheus-haproxy-exporter = callPackage ../servers/monitoring/prometheus/haproxy-exporter.nix { };
   prometheus-influxdb-exporter = callPackage ../servers/monitoring/prometheus/influxdb-exporter.nix { };
   prometheus-ipmi-exporter = callPackage ../servers/monitoring/prometheus/ipmi-exporter.nix { };
@@ -27942,7 +27956,9 @@ with pkgs;
 
   vdo = callPackage ../os-specific/linux/vdo { };
 
-  windows = callPackages ../os-specific/windows { };
+  windmill = callPackage ../servers/windmill {};
+
+  windows = callPackages ../os-specific/windows {};
 
   wirelesstools = callPackage ../os-specific/linux/wireless-tools { };
 
@@ -36158,6 +36174,8 @@ with pkgs;
 
   freenukum = callPackage ../games/freenukum { };
 
+  gamepad-tool = callPackage ../games/gamepad-tool { };
+
   gnome-hexgl = callPackage ../games/gnome-hexgl { };
 
   gotypist = callPackage ../games/gotypist { };
@@ -40030,7 +40048,9 @@ with pkgs;
 
   vivisect = with python3Packages; toPythonApplication (vivisect.override { withGui = true; });
 
-  vokoscreen = libsForQt5.callPackage ../applications/video/vokoscreen { };
+  vokoscreen = libsForQt5.callPackage ../applications/video/vokoscreen {
+    ffmpeg = ffmpeg-full;
+  };
 
   vokoscreen-ng = libsForQt5.callPackage ../applications/video/vokoscreen-ng {
     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly;

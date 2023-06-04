@@ -141,6 +141,11 @@ let
     "$out/bin/python"
   else pythonForBuild.interpreter;
 
+  src = fetchurl {
+    url = with sourceVersion; "https://www.python.org/ftp/python/${major}.${minor}.${patch}/Python-${version}.tar.xz";
+    inherit hash;
+  };
+
   # The CPython interpreter contains a _sysconfigdata_<platform specific suffix>
   # module that is imported by the sysconfig and distutils.sysconfig modules.
   # The sysconfigdata module is generated at build time and contains settings
@@ -216,15 +221,11 @@ let
 
 in with passthru; stdenv.mkDerivation {
   pname = "python3";
-  inherit version;
+  inherit src version;
 
   inherit nativeBuildInputs;
   buildInputs = [ bash ] ++ buildInputs; # bash is only for patchShebangs
 
-  src = fetchurl {
-    url = with sourceVersion; "https://www.python.org/ftp/python/${major}.${minor}.${patch}/Python-${version}.tar.xz";
-    inherit hash;
-  };
 
   prePatch = optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
@@ -523,7 +524,24 @@ in with passthru; stdenv.mkDerivation {
 
   separateDebugInfo = true;
 
-  inherit passthru;
+  passthru = passthru // {
+    doc = stdenv.mkDerivation {
+      inherit src;
+      name = "python${pythonVersion}-${version}-doc";
+
+      dontConfigure = true;
+
+      dontBuild = true;
+
+      sphinxRoot = "Doc";
+
+      postInstallSphinx = ''
+        mv $out/share/doc/* $out/share/doc/python${pythonVersion}-${version}
+      '';
+
+      nativeBuildInputs = with pkgsBuildBuild.python3.pkgs; [ sphinxHook python_docs_theme ];
+    };
+  };
 
   enableParallelBuilding = true;
 

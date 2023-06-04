@@ -6,11 +6,16 @@
 
 stdenv.mkDerivation {
   name = "minizinc-simple-test";
-  meta.timeout = 10;
+
+  nativeBuildInputs = [ minizinc ];
+
   dontInstall = true;
+
   buildCommand = ''
-    ${minizinc}/bin/minizinc --solver gecode ${./aust.mzn}
-    ${minizinc}/bin/minizinc --solver cbc ${./loan.mzn} ${./loan1.dzn}
+    minizinc --solver gecode ${./aust.mzn}
+    minizinc --solver cbc ${./loan.mzn} ${./loan1.dzn}
     touch $out
   '';
+
+  meta.timeout = 10;
 }

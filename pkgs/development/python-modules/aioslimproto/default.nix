@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "aioslimproto";
-  version = "2.2.1";
+  version = "2.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-ku96N3n71mrYuott6E6UwbloP6RzM9tiEATvYHzdYnM=";
+    hash = "sha256-ZvyAZ/VLkkZkDTBzuxt7hrCuYxNsMHm0C0wkabnE3Ek=";
   };
 
   propagatedBuildInputs = [

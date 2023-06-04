@@ -2,7 +2,7 @@
 , stdenvNoCC
 , buildGoModule
 , fetchFromGitHub
-, clash-geoip
+, dbip-country-lite
 }:
 
 let
@@ -34,7 +34,7 @@ let
 in
 stdenvNoCC.mkDerivation rec {
   inherit (generator) pname;
-  inherit (clash-geoip) version;
+  inherit (dbip-country-lite) version;
 
   dontUnpack = true;
 
@@ -43,8 +43,8 @@ stdenvNoCC.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    ${pname} ${clash-geoip}/etc/clash/Country.mmdb geoip.db
-    ${pname} ${clash-geoip}/etc/clash/Country.mmdb geoip-cn.db cn
+    ${pname} ${dbip-country-lite.mmdb} geoip.db
+    ${pname} ${dbip-country-lite.mmdb} geoip-cn.db cn
 
     runHook postBuild
   '';
@@ -61,6 +61,6 @@ stdenvNoCC.mkDerivation rec {
   passthru = { inherit generator; };
 
   meta = generator.meta // {
-    inherit (clash-geoip.meta) license;
+    inherit (dbip-country-lite.meta) license;
   };
 }
