@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation {
   meta = {
     description = "High-performance on-the-fly thumbnailer for mpv";
     homepage = "https://github.com/po5/thumbfast";
-    license = lib.licenses.unfree; # no explicit licensing information available at this time
+    license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ apfelkuchen6 ];
   };
 }
