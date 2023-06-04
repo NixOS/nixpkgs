@@ -68,6 +68,9 @@ stdenv.mkDerivation rec {
     protobuf
   ];
 
+  # https://hydra.nixos.org/build/222679737/nixlog/3/tail
+  NIX_CFLAGS_COMPILE = if stdenv.isAarch64 then "-Wno-error=maybe-uninitialized" else null;
+
   doInstallCheck = true;
 
   preInstallCheck =
