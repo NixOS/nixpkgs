@@ -179,8 +179,12 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${gnome.caribou}/share"
     )
 
+    buildPythonPath "$out ${python3.pkgs.xapp}"
+
+    # https://github.com/NixOS/nixpkgs/issues/200397
+    patchPythonScript $out/bin/cinnamon-spice-updater
+
     # https://github.com/NixOS/nixpkgs/issues/129946
-    buildPythonPath "${python3.pkgs.xapp}"
     patchPythonScript $out/share/cinnamon/cinnamon-desktop-editor/cinnamon-desktop-editor.py
   '';
 
