@@ -130,6 +130,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/googleapis/google-cloud-cpp";
     description = "C++ Idiomatic Clients for Google Cloud Platform services";
     platforms = [ "x86_64-linux" "aarch64-linux" ];
+    requiredSystemFeatures = [ "big-parallel" ];
     maintainers = with maintainers; [ cpcloud ];
   };
 }
