@@ -6956,6 +6956,8 @@ self: super: with self; {
 
   obspy = callPackage ../development/python-modules/obspy { };
 
+  oca-port = callPackage ../development/python-modules/oca-port { };
+
   oci = callPackage ../development/python-modules/oci { };
 
   ocifs = callPackage ../development/python-modules/ocifs { };
