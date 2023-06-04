@@ -114,6 +114,7 @@ in
       services.gnome.gnome-keyring.enable = true;
       services.gvfs.enable = true;
       services.switcherooControl.enable = mkDefault true; # xapp-gpu-offload-helper
+      services.touchegg.enable = mkDefault true;
       services.udisks2.enable = true;
       services.upower.enable = mkDefault config.powerManagement.enable;
       services.xserver.libinput.enable = mkDefault true;
