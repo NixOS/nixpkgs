@@ -31563,6 +31563,8 @@ with pkgs;
 
   waybar = callPackage ../applications/misc/waybar { };
 
+  waycorner = callPackage ../applications/misc/waycorner { };
+
   waylock = callPackage ../applications/misc/waylock {
     zig = buildPackages.zig_0_10;
   };
