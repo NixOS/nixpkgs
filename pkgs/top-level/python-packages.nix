@@ -7418,6 +7418,8 @@ self: super: with self; {
 
   openaiauth = callPackage ../development/python-modules/openaiauth { };
 
+  openapi-codec = callPackage ../development/python-modules/openapi-codec { };
+
   openapi-core = callPackage ../development/python-modules/openapi-core { };
 
   overly = callPackage ../development/python-modules/overly { };
