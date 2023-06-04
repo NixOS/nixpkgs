@@ -5422,7 +5422,7 @@
     githubId = 7551358;
     name = "Frede Emil";
   };
- Freed-Wu = {
+  Freed-Wu = {
     email = "wuzhenyu@ustc.edu";
     github = "Freed-Wu";
     githubId = 32936898;
@@ -7655,10 +7655,10 @@
     name = "Jocelyn Thode";
   };
   joedevivo = {
-     github = "joedevivo";
-     githubId = 55951;
-     name = "Joe DeVivo";
-   };
+    github = "joedevivo";
+    githubId = 55951;
+    name = "Joe DeVivo";
+  };
   joelancaster = {
     email = "joe.a.lancas@gmail.com";
     github = "JoeLancaster";
@@ -8951,7 +8951,7 @@
     github = "leifhelm";
     githubId = 31693262;
     name = "Jakob Leifhelm";
-    keys =[{
+    keys = [{
       fingerprint = "4A82 F68D AC07 9FFD 8BF0  89C4 6817 AA02 3810 0822";
     }];
   };
@@ -10008,7 +10008,7 @@
     githubId = 95194;
     name = "Mauricio Scheffer";
   };
-   maxbrunet = {
+  maxbrunet = {
     email = "max@brnt.mx";
     github = "maxbrunet";
     githubId = 32458727;
@@ -10380,7 +10380,7 @@
     name = "Michael Pacheco";
     github = "MichaelPachec0";
     githubId = 48970112;
-    keys = [ {
+    keys = [{
       fingerprint = "8D12 991F 5558 C501 70B2  779C 7811 46B0 B5F9 5F64";
     }];
   };
