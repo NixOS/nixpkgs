@@ -1231,7 +1231,7 @@ in {
     services.dockerRegistry = optionalAttrs cfg.registry.enable {
       enable = true;
       enableDelete = true; # This must be true, otherwise GitLab won't manage it correctly
-      package = cfg.package;
+      package = cfg.registry.package;
       extraConfig = {
         auth.token = {
           realm = "http${optionalString (cfg.https == true) "s"}://${cfg.host}/jwt/auth";
