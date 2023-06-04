@@ -8028,6 +8028,8 @@ self: super: with self; {
 
   protobuf3-to-dict = callPackage ../development/python-modules/protobuf3-to-dict { };
 
+  protoc-gen-swagger = callPackage ../development/python-modules/protoc-gen-swagger { };
+
   proton-client = callPackage ../development/python-modules/proton-client { };
 
   protonup-ng = callPackage ../development/python-modules/protonup-ng { };
