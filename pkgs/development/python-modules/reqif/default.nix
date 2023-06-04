@@ -7,12 +7,15 @@
 , lxml
 , jinja2
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "reqif";
   version = "0.0.35";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "strictdoc-project";
@@ -49,6 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for ReqIF format";
     homepage = "https://github.com/strictdoc-project/reqif";
+    changelog = "https://github.com/strictdoc-project/reqif/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ yuu ];
   };
