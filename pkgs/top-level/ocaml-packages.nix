@@ -345,6 +345,8 @@ let
 
     dolog = callPackage ../development/ocaml-modules/dolog { };
 
+    domain-local-await = callPackage ../development/ocaml-modules/domain-local-await { };
+
     domain-name = callPackage ../development/ocaml-modules/domain-name { };
 
     domainslib = callPackage ../development/ocaml-modules/domainslib { };
