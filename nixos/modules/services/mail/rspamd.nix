@@ -215,7 +215,7 @@ let
       text = v.extraConfig;
     })
     (filterAttrs (n: v: v.extraConfig != "") cfg.workers))
-    // (if cfg.extraConfig == "" then {} else {
+    // (lib.optionalAttrs (cfg.extraConfig != "") {
       "extra-config.inc".text = cfg.extraConfig;
     });
 in
