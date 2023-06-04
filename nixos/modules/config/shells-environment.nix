@@ -115,6 +115,11 @@ in
         aliases are added to all users' shells.
         Aliases mapped to `null` are ignored.
       '';
+      default = {
+        ls = "ls --color=tty";
+        ll = "ls -l";
+        l  = "ls -alh";
+      };
       type = with types; attrsOf (nullOr (either str path));
     };
 
