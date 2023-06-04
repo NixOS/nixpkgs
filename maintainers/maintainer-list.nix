@@ -5885,15 +5885,6 @@
     githubId = 1621335;
     name = "Andrew Trachenko";
   };
-  gordias = {
-    name = "Gordias";
-    email = "gordias@disroot.org";
-    github = "gordiasdot";
-    githubId = 94724133;
-    keys = [{
-      fingerprint = "C006 B8A0 0618 F3B6 E0E4  2ECD 5D47 2848 30FA A4FA";
-    }];
-  };
   gotcha = {
     email = "gotcha@bubblenet.be";
     github = "gotcha";
