@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    description = "ZooKeeper FUSE (File System in Userspace)";
+    homepage = "https://zookeeper.apache.org";
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ztzg ];
     license = licenses.asl20;
