@@ -161,11 +161,11 @@ stdenv.mkDerivation rec {
       {} +
 
     pushd ./files/usr/share/cinnamon/cinnamon-settings
-      sed "s|\"/usr/lib\"|\"${cinnamon-control-center}/lib\"|g" -i ./bin/capi.py
-      sed "s|'python3'|'${pythonEnv.interpreter}'|g" -i ./bin/CinnamonGtkSettings.py
-      sed "s|/usr/share/sounds|/run/current-system/sw/share/sounds|g" -i ./bin/SettingsWidgets.py
-      sed "s|msgfmt|${gettext}/bin/msgfmt|g" -i ./bin/Spices.py
-      sed 's|"lspci"|"${pciutils}/bin/lspci"|g' -i ./modules/cs_info.py
+      substituteInPlace ./bin/capi.py                     --replace '"/usr/lib"' '"${cinnamon-control-center}/lib"'
+      substituteInPlace ./bin/CinnamonGtkSettings.py      --replace "'python3'" "'${pythonEnv.interpreter}'"
+      substituteInPlace ./bin/SettingsWidgets.py          --replace "/usr/share/sounds" "/run/current-system/sw/share/sounds"
+      substituteInPlace ./bin/Spices.py                   --replace "msgfmt" "${gettext}/bin/msgfmt"
+      substituteInPlace ./modules/cs_info.py              --replace "lspci" "${pciutils}/bin/lspci"
     popd
 
     sed "s| cinnamon-session| ${cinnamon-session}/bin/cinnamon-session|g" -i ./files/usr/bin/cinnamon-session-{cinnamon,cinnamon2d}
