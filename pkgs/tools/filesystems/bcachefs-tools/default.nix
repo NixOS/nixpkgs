@@ -63,7 +63,7 @@ stdenv.mkDerivation {
   postFixup = ''
     ln -s $out/bin/mount.bcachefs.sh $out/bin/mount.bcachefs
     wrapProgram $out/bin/mount.bcachefs.sh \
-      --prefix PATH : ${lib.makeBinPath [ getopt util-linux ]}
+      --prefix PATH : $out/bin:${lib.makeBinPath [ pkgs.getopt pkgs.util-linux pkgs.coreutils pkgs.gawk ]}
   '';
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
