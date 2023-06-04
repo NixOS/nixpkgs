@@ -1753,6 +1753,8 @@ with pkgs;
 
   systeroid = callPackage ../tools/system/systeroid { };
 
+  task-keeper = callPackage ../tools/misc/task-keeper { };
+
   tauon = callPackage ../applications/audio/tauon { };
 
   tere = callPackage ../tools/misc/tere { };
