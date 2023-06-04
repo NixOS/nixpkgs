@@ -88,10 +88,10 @@ index 9e79f84691..1a1c75718c 100644
          (void) mkdir_parents(etc_localtime, 0755);
          r = symlink_atomic(e, etc_localtime);
 diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
-index 65d9e7e398..dd44d529ca 100644
+index e5aa4feb1e..a7a8fae860 100644
 --- a/src/nspawn/nspawn.c
 +++ b/src/nspawn/nspawn.c
-@@ -1915,8 +1915,8 @@ int userns_mkdir(const char *root, const char *path, mode_t mode, uid_t uid, gid
+@@ -1918,8 +1918,8 @@ int userns_mkdir(const char *root, const char *path, mode_t mode, uid_t uid, gid
  static const char *timezone_from_path(const char *path) {
          return PATH_STARTSWITH_SET(
                          path,

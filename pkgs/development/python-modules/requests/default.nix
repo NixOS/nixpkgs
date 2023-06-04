@@ -30,6 +30,15 @@ buildPythonPackage rec {
     hash = "sha256-8uNKdfR0kBm7Dj7/tmaDYw5P/q91gZ+1G+vvG/Wu8Fk=";
   };
 
+  pathes = [
+    (fetchpatch {
+      # https://github.com/psf/requests/security/advisories/GHSA-j8r2-6x86-q33q
+      name = "CVE-2023-32681.patch";
+      url = "https://github.com/psf/requests/commit/74ea7cf7a6a27a4eeb2ae24e162bcc942a6706d5.patch";
+      hash = "sha256-x8NJfu9Qta0ieAjk1VQn9zNyARInEcjR4MPTFUwANTc=";
+    })
+  ];
+
   propagatedBuildInputs = [
     brotlicffi
     certifi

@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole
+, libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole, ubootTools
 , fetchpatch
 }:
 
@@ -100,13 +100,13 @@ stdenv.mkDerivation ({
   inherit version src;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr zstd python3Minimal ]
-      ++ optional  (kernelConf.target == "uImage") buildPackages.ubootTools
-      ++ optional  (lib.versionOlder version "5.8") libelf
-      ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
-      ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
-      ++ optional  (lib.versionAtLeast version "5.8")  elfutils
-      ;
+  nativeBuildInputs = [
+    bc gmp libmpc mpfr nettools openssl perl python3Minimal rsync ubootTools
+    zstd
+  ] ++ optional  (lib.versionOlder version "5.8") libelf
+    ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
+    ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
+    ++ optional  (lib.versionAtLeast version "5.8")  elfutils;
 
   patches =
     map (p: p.patch) kernelPatches
