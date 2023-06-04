@@ -2775,6 +2775,8 @@ self: super: with self; {
 
   django-rest-registration = callPackage ../development/python-modules/django-rest-registration { };
 
+  django-rest-swagger = callPackage ../development/python-modules/django-rest-swagger { };
+
   django-rq = callPackage ../development/python-modules/django-rq { };
 
   djangorestframework = callPackage ../development/python-modules/djangorestframework { };
