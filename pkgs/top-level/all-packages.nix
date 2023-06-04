@@ -1510,6 +1510,8 @@ with pkgs;
 
   balena-cli = callPackage ../tools/admin/balena-cli { };
 
+  basez = callPackage ../tools/misc/basez { };
+
   butler = callPackage ../games/itch/butler.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
@@ -1883,9 +1885,7 @@ with pkgs;
 
   darcs-to-git = callPackage ../applications/version-management/darcs-to-git { };
 
-  delta = darwin.apple_sdk_11_0.callPackage ../applications/version-management/delta {
-    inherit (darwin.apple_sdk_11_0.frameworks) DiskArbitration Foundation Security;
-  };
+  delta = darwin.apple_sdk_11_0.callPackage ../applications/version-management/delta { };
 
   diff-so-fancy = callPackage ../applications/version-management/diff-so-fancy { };
 
