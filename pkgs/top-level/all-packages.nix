@@ -26408,11 +26408,7 @@ with pkgs;
 
   tailspin = callPackage ../tools/misc/tailspin { };
 
-  thanos = callPackage ../servers/monitoring/thanos {
-    # Fails to run with go1.20 due to go4.org/unsafe/assume-no-moving-gc not being
-    # update to be compatible with Go 1.20
-    buildGoModule = buildGo119Module;
-  };
+  thanos = callPackage ../servers/monitoring/thanos { };
 
   trafficserver = callPackage ../servers/http/trafficserver { };
 
