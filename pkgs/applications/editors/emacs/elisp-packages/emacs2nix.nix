@@ -4,8 +4,8 @@ let
   src = pkgs.fetchFromGitHub {
     owner = "nix-community";
     repo = "emacs2nix";
-    rev = "2e8d2c644397be57455ad32c2849f692eeac7797";
-    sha256 = "sha256-qnOYDYHAQ+r5eegKP9GqHz5R2ig96B2W7M+uYa1ti9M=";
+    rev = "7f07ac3c3f175630de68153d98a93b9fa24d1eb3";
+    sha256 = "sha256-Mh9G8LH3n1ccg+shBoWQRk67yAA+GEYGkk8tjM7W02Y=";
     fetchSubmodules = true;
   };
 in
