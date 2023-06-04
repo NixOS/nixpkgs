@@ -31892,7 +31892,12 @@ with pkgs;
   firefox-mobile = callPackage ../applications/networking/browsers/firefox/mobile-config.nix { };
 
   firefox-esr = firefox-esr-115;
-  firefox-esr-115 = wrapFirefox firefox-esr-115-unwrapped { };
+  firefox-esr-115 = wrapFirefox firefox-esr-115-unwrapped {
+    nameSuffix = "-esr";
+    desktopName = "Firefox ESR";
+    wmClass = "firefox-esr";
+    icon = "firefox-esr";
+  };
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
     inherit (gnome) adwaita-icon-theme;
