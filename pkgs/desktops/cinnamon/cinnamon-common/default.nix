@@ -155,12 +155,14 @@ stdenv.mkDerivation rec {
       -e s,/usr/share/locale,/run/current-system/sw/share/locale,g \
       {} +
 
+    # All optional and may introduce circular dependency.
+    find ./files/usr/share/cinnamon/applets -type f -exec sed -i \
+      -e '/^#/!s,/usr/bin,/run/current-system/sw/bin,g' \
+      {} +
+
     sed "s|/usr/share/sounds|/run/current-system/sw/share/sounds|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/SettingsWidgets.py
 
     sed "s|'python3'|'${pythonEnv.interpreter}'|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/CinnamonGtkSettings.py
-
-    sed "s|/usr/bin/cinnamon-screensaver-command|/run/current-system/sw/bin/cinnamon-screensaver-command|g" \
-      -i ./files/usr/share/cinnamon/applets/menu@cinnamon.org/applet.js -i ./files/usr/share/cinnamon/applets/user@cinnamon.org/applet.js
 
     sed "s|\"/usr/lib\"|\"${cinnamon-control-center}/lib\"|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/capi.py
 
