@@ -557,6 +557,10 @@ with pkgs;
 
   efficient-compression-tool = callPackage ../tools/compression/efficient-compression-tool { };
 
+  eludris = callPackage ../tools/misc/eludris {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   enumer = callPackage ../tools/misc/enumer { };
 
   evans = callPackage ../development/tools/evans { };
