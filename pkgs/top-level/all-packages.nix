@@ -3499,6 +3499,8 @@ with pkgs;
 
   glaxnimate = libsForQt5.callPackage ../applications/video/glaxnimate { };
 
+  gluesql = callPackage ../servers/sql/gluesql { };
+
   gmid = callPackage ../servers/gemini/gmid { };
 
   gmni = callPackage ../applications/networking/browsers/gmni { };
