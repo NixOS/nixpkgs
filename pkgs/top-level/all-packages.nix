@@ -3499,6 +3499,8 @@ with pkgs;
 
   glaxnimate = libsForQt5.callPackage ../applications/video/glaxnimate { };
 
+  gluesql = callPackage ../servers/sql/gluesql { };
+
   gmid = callPackage ../servers/gemini/gmid { };
 
   gmni = callPackage ../applications/networking/browsers/gmni { };
@@ -4778,6 +4780,8 @@ with pkgs;
   eddy = libsForQt5.callPackage ../applications/graphics/eddy { };
 
   eggdrop = callPackage ../tools/networking/eggdrop { };
+
+  egglog = callPackage ../applications/science/logic/egglog { };
 
   ekam = callPackage ../development/tools/build-managers/ekam { };
 
@@ -6394,9 +6398,7 @@ with pkgs;
 
   unionfs-fuse = callPackage ../tools/filesystems/unionfs-fuse { };
 
-  unparam = callPackage ../tools/misc/unparam {
-    buildGoModule = buildGo119Module; # go 1.20 build failure
-  };
+  unparam = callPackage ../tools/misc/unparam { };
 
   inherit (nodePackages) uppy-companion;
 
@@ -19058,6 +19060,8 @@ with pkgs;
   pgcli = with pkgs.python3Packages; toPythonApplication pgcli;
 
   picotool = callPackage ../development/tools/picotool { };
+
+  planus = callPackage ../development/tools/misc/planus { };
 
   pmccabe = callPackage ../development/tools/misc/pmccabe { };
 
@@ -32648,7 +32652,6 @@ with pkgs;
 
   monotone = callPackage ../applications/version-management/monotone {
     lua = lua5;
-    boost = boost170;
   };
 
   monotoneViz = callPackage ../applications/version-management/monotone-viz {

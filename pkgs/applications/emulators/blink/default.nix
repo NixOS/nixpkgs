@@ -13,9 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # 'make check' requires internet connection
   doCheck = true;
-  checkPhase = ''
-    make test
-  '';
+  checkTarget = "test";
 
   meta = {
     description = "Tiniest x86-64-linux emulator";
