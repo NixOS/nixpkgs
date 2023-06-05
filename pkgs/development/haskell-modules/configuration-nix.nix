@@ -141,8 +141,19 @@ builtins.intersectAttrs super {
       ];
     }) super.audacity
   );
-  # 2023-04-27: Deactivating examples for now because they cause a non-trivial build failure.
-  # med-module = enableCabalFlag "buildExamples" super.med-module;
+
+  med-module = enableCabalFlag "buildExamples" (
+    overrideCabal (drv: {
+      executableHaskellDepends = [
+        self.HPDF
+        self.filepath
+        self.non-empty
+        self.optparse-applicative
+        self.shell-utility
+      ];
+    }) super.med-module
+  );
+
   spreadsheet = enableCabalFlag "buildExamples" (
     overrideCabal (drv: {
       executableHaskellDepends = [
