@@ -102,7 +102,7 @@ let
       "reqwest" # tests hang on darwin
       "threadshare" # tests cannot bind to localhost on darwin
       "webp" # not supported on darwin (upstream crate issue)
-    ] ++ lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
+    ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
       # these require gstreamer-gl which requires darwin sdk bump
       "gtk4"
       "livesync"
@@ -206,7 +206,7 @@ stdenv.mkDerivation rec {
     export CSOUND_LIB_DIR=${lib.getLib csound}/lib
   '' + lib.optionalString (lib.mutuallyExclusive [ "webrtc" "webrtchttp" ] selectedPlugins) ''
     sed -i "/\['gstreamer-webrtc-1\.0', 'gst-plugins-bad', 'gstwebrtc_dep', 'gstwebrtc'\]/d" meson.build
-  '' + lib.optionalString (stdenv.isDarwin && !stdenv.isAarch64) ''
+  '' + lib.optionalString (!gst-plugins-base.glEnabled) ''
     sed -i "/\['gstreamer-gl-1\.0', 'gst-plugins-base', 'gst_gl_dep', 'gstgl'\]/d" meson.build
   '';
 

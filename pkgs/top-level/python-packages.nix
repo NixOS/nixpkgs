@@ -6230,6 +6230,8 @@ self: super: with self; {
 
   migen = callPackage ../development/python-modules/migen { };
 
+  mike = callPackage ../development/python-modules/mike { };
+
   milc = callPackage ../development/python-modules/milc { };
 
   milksnake = callPackage ../development/python-modules/milksnake { };
@@ -12815,6 +12817,8 @@ self: super: with self; {
   versiontag = callPackage ../development/python-modules/versiontag { };
 
   versiontools = callPackage ../development/python-modules/versiontools { };
+
+  verspec = callPackage ../development/python-modules/verspec { };
 
   vertica-python = callPackage ../development/python-modules/vertica-python { };
 

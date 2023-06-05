@@ -47,6 +47,11 @@ stdenv.mkDerivation rec {
       ./85_security_load_3.85+.patch
     )
     ./fix-cross-compilation.patch
+  ] ++ lib.optionals (lib.versionOlder version "3.89") [
+    # Backport gcc-13 build fix:
+    #  https://bugzilla.mozilla.org/show_bug.cgi?id=1771273
+    #  https://hg.mozilla.org/projects/nss/raw-rev/21e7aaa1f7d94bca15d997e5b4c2329b32fad21a
+    ./gcc-13-esr.patch
   ];
 
   patchFlags = [ "-p0" ];
