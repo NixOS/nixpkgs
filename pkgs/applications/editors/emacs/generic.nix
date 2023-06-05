@@ -140,6 +140,7 @@ mkDerivation (finalAttrs: (lib.optionalAttrs nativeComp {
 } // {
   pname = pname
           + (if noGui then "-nox"
+             else if (variant == "macport") then "-macport"
              else if withPgtk then "-pgtk"
              else if withGTK3 then "-gtk3"
              else if withGTK2 then "-gtk2"
