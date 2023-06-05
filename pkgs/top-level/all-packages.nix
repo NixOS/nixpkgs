@@ -12454,9 +12454,7 @@ with pkgs;
 
   sing-geosite = callPackage ../data/misc/sing-geosite { };
 
-  sing-geoip = callPackage ../data/misc/sing-geoip {
-    buildGoModule = buildGo119Module;
-  };
+  sing-geoip = callPackage ../data/misc/sing-geoip { };
 
   sipcalc = callPackage ../tools/networking/sipcalc { };
 
