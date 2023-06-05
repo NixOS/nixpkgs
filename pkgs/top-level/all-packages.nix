@@ -4380,6 +4380,8 @@ with pkgs;
 
   oguri = callPackage  ../tools/wayland/oguri { };
 
+  pww = callPackage ../tools/wayland/pww { };
+
   shikane = callPackage ../tools/wayland/shikane { };
 
   shotman = callPackage ../tools/wayland/shotman { };
