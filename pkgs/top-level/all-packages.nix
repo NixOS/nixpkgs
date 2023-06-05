@@ -22221,9 +22221,7 @@ with pkgs;
 
   librevenge = callPackage ../development/libraries/librevenge { };
 
-  librime = callPackage ../development/libraries/librime {
-    boost = boost174;
-  };
+  librime = callPackage ../development/libraries/librime { };
 
   librsb = callPackage ../development/libraries/librsb {
     # Taken from https://build.opensuse.org/package/view_file/science/librsb/librsb.spec
