@@ -308,7 +308,9 @@ in
             libvirt/nwfilter/*.xml );
         do
             mkdir -p /var/lib/$(dirname $i) -m 755
+            set +e
             cp -npd ${cfg.package}/var/lib/$i /var/lib/$i
+            set -e
         done
 
         # Copy generated qemu config to libvirt directory
