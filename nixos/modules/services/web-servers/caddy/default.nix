@@ -14,7 +14,7 @@ let
     in
       ''
         ${hostOpts.hostName} ${concatStringsSep " " hostOpts.serverAliases} {
-          bind ${concatStringsSep " " hostOpts.listenAddresses}
+          ${optionalString (hostOpts.listenAddresses != [ ]) "bind ${concatStringsSep " " hostOpts.listenAddresses}"}
           ${optionalString (hostOpts.useACMEHost != null) "tls ${sslCertDir}/cert.pem ${sslCertDir}/key.pem"}
           log {
             ${hostOpts.logFormat}
