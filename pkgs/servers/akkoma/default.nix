@@ -9,14 +9,14 @@
 
 beamPackages.mixRelease rec {
   pname = "pleroma";
-  version = "3.8.0";
+  version = "3.9.3";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "akkoma";
     rev = "v${version}";
-    hash = "sha256-KpaJ2xx3XEibMv1G8o9Lw7+LcnxPCUiWlmdcoi5wklQ=";
+    hash = "sha256-vXE7jv1GPAMKpWEAE9IUgWo7A+zkGYUzu0jlZ9oSbjA=";
   };
 
   postPatch = ''
