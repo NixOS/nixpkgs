@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "pymodbus";
-  version = "3.1.3";
+  version = "3.3.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pymodbus-dev";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-GHyDlt046v4KP9KQRnXH6F+3ikoCjbhVHEQuSdm99a8=";
+    hash = "sha256-ri/QODKawLjaXSiOGIFxKWAuIc2qIG8aIsoXUDOYq2U=";
   };
 
   # Twisted asynchronous version is not supported due to a missing dependency
