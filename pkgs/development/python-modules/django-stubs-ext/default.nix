@@ -19,9 +19,6 @@ buildPythonPackage rec {
     hash = "sha256-JpbW99hTg0GwYM/6lWXHLqeX6GZofgQLhtKcrYeZ5f4=";
   };
 
-  # setup.cfg tries to pull in nonexistent LICENSE.txt file
-  postPatch = "rm setup.cfg";
-
   propagatedBuildInputs = [
     django
     typing-extensions
