@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   # AOT native-comp, mostly copied from pkgs/build-support/emacs/generic.nix
-  postInstall = lib.optionalString (emacs.nativeComp or false) ''
+  postInstall = lib.optionalString (emacs.withNativeCompilation or false) ''
     mkdir -p $out/share/emacs/native-lisp
     export EMACSLOADPATH=$out/share/emacs/site-lisp/mu4e:
     export EMACSNATIVELOADPATH=$out/share/emacs/native-lisp:
