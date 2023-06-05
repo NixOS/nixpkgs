@@ -4022,6 +4022,8 @@ with pkgs;
 
   bless = callPackage ../applications/editors/bless { };
 
+  blink = callPackage ../applications/emulators/blink { };
+
   blink1-tool = callPackage ../tools/misc/blink1-tool { };
 
   blis = callPackage ../development/libraries/science/math/blis { };
@@ -25769,9 +25771,7 @@ with pkgs;
 
   networkaudiod = callPackage ../servers/networkaudiod { };
 
-  unifiedpush-common-proxies = callPackage ../servers/unifiedpush-common-proxies {
-    buildGoModule = buildGo119Module; # go 1.20 build failure
-  };
+  unifiedpush-common-proxies = callPackage ../servers/unifiedpush-common-proxies { };
 
   unit = callPackage ../servers/http/unit { };
 
