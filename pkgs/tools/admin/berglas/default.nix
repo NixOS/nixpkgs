@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, testers, berglas }:
 
 let
   skipTests = {
@@ -45,6 +45,12 @@ buildGoModule rec {
   ];
 
   postPatch = skipTestsCommand;
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = berglas;
+    };
+  };
 
   meta = with lib; {
     description = "A tool for managing secrets on Google Cloud";
