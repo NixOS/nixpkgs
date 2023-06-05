@@ -4,13 +4,13 @@
 
 let
   sources = {
-    "@types/node-18.15.11" = {
+    "@types/node-20.2.5" = {
       name = "_at_types_slash_node";
       packageName = "@types/node";
-      version = "18.15.11";
+      version = "20.2.5";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@types/node/-/node-18.15.11.tgz";
-        sha512 = "E5Kwq2n4SbMzQOn6wnmBjuK9ouqlURrcZDVfbo9ftDDTFt3nk7ZKK4GMOzoYgnpQJKcxwQw+lGaBvvlMo0qN/Q==";
+        url = "https://registry.npmjs.org/@types/node/-/node-20.2.5.tgz";
+        sha512 = "JJulVEQXmiY9Px5axXHeYGLSjhkZEnD+MDPDGbCbIAbMslkKwmygtZFy1X6s/075Yo94sf8GuSlFfPzysQrWZQ==";
       };
     };
     "fsevents-2.3.2" = {
@@ -22,30 +22,30 @@ let
         sha512 = "xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==";
       };
     };
-    "playwright-core-1.31.1" = {
+    "playwright-core-1.34.3" = {
       name = "playwright-core";
       packageName = "playwright-core";
-      version = "1.31.1";
+      version = "1.34.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/playwright-core/-/playwright-core-1.31.1.tgz";
-        sha512 = "JTyX4kV3/LXsvpHkLzL2I36aCdml4zeE35x+G5aPc4bkLsiRiQshU5lWeVpHFAuC8xAcbI6FDcw/8z3q2xtJSQ==";
+        url = "https://registry.npmjs.org/playwright-core/-/playwright-core-1.34.3.tgz";
+        sha512 = "2pWd6G7OHKemc5x1r1rp8aQcpvDh7goMBZlJv6Co5vCNLVcQJdhxRL09SGaY6HcyHH9aT4tiynZabMofVasBYw==";
       };
     };
   };
 in
 {
-  "@playwright/test-1.31.1" = nodeEnv.buildNodePackage {
+  "@playwright/test-1.34.3" = nodeEnv.buildNodePackage {
     name = "_at_playwright_slash_test";
     packageName = "@playwright/test";
-    version = "1.31.1";
+    version = "1.34.3";
     src = fetchurl {
-      url = "https://registry.npmjs.org/@playwright/test/-/test-1.31.1.tgz";
-      sha512 = "IsytVZ+0QLDh1Hj83XatGp/GsI1CDJWbyDaBGbainsh0p2zC7F4toUocqowmjS6sQff2NGT3D9WbDj/3K2CJiA==";
+      url = "https://registry.npmjs.org/@playwright/test/-/test-1.34.3.tgz";
+      sha512 = "zPLef6w9P6T/iT6XDYG3mvGOqOyb6eHaV9XtkunYs0+OzxBtrPAAaHotc0X+PJ00WPPnLfFBTl7mf45Mn8DBmw==";
     };
     dependencies = [
-      sources."@types/node-18.15.11"
+      sources."@types/node-20.2.5"
       sources."fsevents-2.3.2"
-      sources."playwright-core-1.31.1"
+      sources."playwright-core-1.34.3"
     ];
     buildInputs = globalBuildInputs;
     meta = {

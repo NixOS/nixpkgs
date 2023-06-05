@@ -52,10 +52,13 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             sendAnonymousUsage = false;
           };
 
-          entryPoints.web.address = ":80";
+          entryPoints.web.address = ":\${HTTP_PORT}";
 
           providers.docker.exposedByDefault = false;
         };
+        environmentFiles = [(pkgs.writeText "traefik.env" ''
+          HTTP_PORT=80
+        '')];
       };
 
       systemd.services.simplehttp = {

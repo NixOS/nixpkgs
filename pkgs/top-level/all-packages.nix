@@ -557,6 +557,10 @@ with pkgs;
 
   efficient-compression-tool = callPackage ../tools/compression/efficient-compression-tool { };
 
+  eludris = callPackage ../tools/misc/eludris {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   enumer = callPackage ../tools/misc/enumer { };
 
   evans = callPackage ../development/tools/evans { };
@@ -3616,6 +3620,8 @@ with pkgs;
 
   lesspass-cli = callPackage ../tools/security/lesspass-cli { };
 
+  livebook = callPackage ../servers/web-apps/livebook { };
+
   lsix = callPackage ../tools/graphics/lsix { };
 
   mdr = callPackage ../tools/misc/mdr { };
@@ -3747,6 +3753,8 @@ with pkgs;
   waypoint = callPackage ../applications/networking/cluster/waypoint { };
 
   xc = callPackage ../development/tools/xc { };
+
+  ios-webkit-debug-proxy = callPackage ../development/mobile/ios-webkit-debug-proxy { };
 
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
@@ -13710,6 +13718,8 @@ with pkgs;
 
   whatip = callPackage ../tools/networking/whatip { };
 
+  whatsapp-chat-exporter = callPackage ../tools/misc/whatsapp-chat-exporter { };
+
   whatweb = callPackage ../tools/security/whatweb { };
 
   whipper = callPackage ../applications/audio/whipper { };
@@ -14361,7 +14371,7 @@ with pkgs;
 
   zip = callPackage ../tools/archivers/zip { };
 
-  zinc = callPackage ../servers/search/zinc { };
+  zincsearch = callPackage ../servers/search/zincsearch { };
 
   zkfuse = callPackage ../tools/filesystems/zkfuse { };
 
@@ -16756,6 +16766,8 @@ with pkgs;
 
   tinyscheme = callPackage ../development/interpreters/tinyscheme { };
 
+  tbox = callPackage ../development/libraries/tbox { };
+
   inherit (nodePackages) typescript;
 
   bupc = callPackage ../development/compilers/bupc { };
@@ -17805,7 +17817,8 @@ with pkgs;
     electron_21-bin
     electron_22-bin
     electron_23-bin
-    electron_24-bin;
+    electron_24-bin
+    electron_25-bin;
 
   electron = electron-bin;
   electron_9 = electron_9-bin;
@@ -17824,6 +17837,7 @@ with pkgs;
   electron_22 = electron_22-bin;
   electron_23 = electron_23-bin;
   electron_24 = electron_24-bin;
+  electron_25 = electron_25-bin;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
@@ -19569,6 +19583,8 @@ with pkgs;
 
   visualvm = callPackage ../development/tools/java/visualvm { };
 
+  volta = callPackage ../development/tools/volta { };
+
   vultr = callPackage ../development/tools/vultr { };
 
   vultr-cli = callPackage ../development/tools/vultr-cli { };
@@ -19588,6 +19604,10 @@ with pkgs;
   watson-ruby = callPackage ../development/tools/misc/watson-ruby { };
 
   webdis = callPackage ../development/tools/database/webdis { };
+
+  xmake = callPackage ../development/tools/build-managers/xmake {
+    lua = lua5_4;
+  };
 
   xc3sprog = callPackage ../development/embedded/xc3sprog { stdenv = gcc10StdenvCompat; };
 
@@ -19941,6 +19961,8 @@ with pkgs;
   capnproto = callPackage ../development/libraries/capnproto { };
 
   capnproto-java = callPackage ../development/tools/capnproto-java { };
+
+  capnproto-rust = callPackage ../development/tools/capnproto-rust { };
 
   captive-browser = callPackage ../applications/networking/browsers/captive-browser { };
 
@@ -24727,6 +24749,8 @@ with pkgs;
 
   xgeometry-select = callPackage ../tools/X11/xgeometry-select { };
 
+  xmake-core-sv = callPackage ../development/libraries/xmake-core-sv { };
+
   xmlada = callPackage ../development/libraries/ada/xmlada { };
 
   xmlrpc_c = callPackage ../development/libraries/xmlrpc-c { };
@@ -26408,11 +26432,7 @@ with pkgs;
 
   tailspin = callPackage ../tools/misc/tailspin { };
 
-  thanos = callPackage ../servers/monitoring/thanos {
-    # Fails to run with go1.20 due to go4.org/unsafe/assume-no-moving-gc not being
-    # update to be compatible with Go 1.20
-    buildGoModule = buildGo119Module;
-  };
+  thanos = callPackage ../servers/monitoring/thanos { };
 
   trafficserver = callPackage ../servers/http/trafficserver { };
 
@@ -26680,6 +26700,8 @@ with pkgs;
   b43Firmware_6_30_163_46 = callPackage ../os-specific/linux/firmware/b43-firmware/6.30.163.46.nix { };
 
   b43FirmwareCutter = callPackage ../os-specific/linux/firmware/b43-firmware-cutter { };
+
+  epilys-bb = callPackage ../tools/system/epilys-bb { };
 
   below = callPackage ../os-specific/linux/below { };
 
@@ -40605,6 +40627,8 @@ with pkgs;
   webwormhole = callPackage ../tools/networking/webwormhole { };
 
   werf = callPackage ../applications/networking/cluster/werf { };
+
+  yor = callPackage ../applications/networking/cluster/yor { };
 
   wifi-password = callPackage ../os-specific/darwin/wifi-password { };
 

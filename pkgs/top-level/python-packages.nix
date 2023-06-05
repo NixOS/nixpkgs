@@ -1493,6 +1493,8 @@ self: super: with self; {
 
   brian2 = callPackage ../development/python-modules/brian2 { };
 
+  broadbean = callPackage ../development/python-modules/broadbean { };
+
   broadlink = callPackage ../development/python-modules/broadlink { };
 
   brother = callPackage ../development/python-modules/brother { };
@@ -6956,6 +6958,8 @@ self: super: with self; {
 
   obspy = callPackage ../development/python-modules/obspy { };
 
+  oca-port = callPackage ../development/python-modules/oca-port { };
+
   oci = callPackage ../development/python-modules/oci { };
 
   ocifs = callPackage ../development/python-modules/ocifs { };
@@ -7057,6 +7061,8 @@ self: super: with self; {
 
   opencensus-context = callPackage ../development/python-modules/opencensus-context { };
 
+  opencensus-ext-azure = callPackage ../development/python-modules/opencensus-ext-azure { };
+
   opencontainers = callPackage ../development/python-modules/opencontainers { };
 
   opencv3 = toPythonModule (pkgs.opencv3.override {
@@ -7105,6 +7111,36 @@ self: super: with self; {
   openstacksdk = callPackage ../development/python-modules/openstacksdk { };
 
   opentimestamps = callPackage ../development/python-modules/opentimestamps { };
+
+  opentelemetry-api = callPackage ../development/python-modules/opentelemetry-api { };
+
+  opentelemetry-exporter-otlp = callPackage ../development/python-modules/opentelemetry-exporter-otlp { };
+
+  opentelemetry-exporter-otlp-proto-common = callPackage ../development/python-modules/opentelemetry-exporter-otlp-proto-common { };
+
+  opentelemetry-exporter-otlp-proto-grpc = callPackage ../development/python-modules/opentelemetry-exporter-otlp-proto-grpc { };
+
+  opentelemetry-exporter-otlp-proto-http = callPackage ../development/python-modules/opentelemetry-exporter-otlp-proto-http { };
+
+  opentelemetry-exporter-prometheus = callPackage ../development/python-modules/opentelemetry-exporter-prometheus { };
+
+  opentelemetry-instrumentation = callPackage ../development/python-modules/opentelemetry-instrumentation { };
+
+  opentelemetry-instrumentation-asgi = callPackage ../development/python-modules/opentelemetry-instrumentation-asgi { };
+
+  opentelemetry-instrumentation-django = callPackage ../development/python-modules/opentelemetry-instrumentation-django { };
+
+  opentelemetry-instrumentation-wsgi = callPackage ../development/python-modules/opentelemetry-instrumentation-wsgi { };
+
+  opentelemetry-proto = callPackage ../development/python-modules/opentelemetry-proto { };
+
+  opentelemetry-semantic-conventions = callPackage ../development/python-modules/opentelemetry-semantic-conventions { };
+
+  opentelemetry-sdk = callPackage ../development/python-modules/opentelemetry-sdk { };
+
+  opentelemetry-test-utils = callPackage ../development/python-modules/opentelemetry-test-utils { };
+
+  opentelemetry-util-http = callPackage ../development/python-modules/opentelemetry-util-http { };
 
   openturns = toPythonModule (pkgs.openturns.override {
     python3Packages = self;
@@ -9553,6 +9589,8 @@ self: super: with self; {
 
   pytest-golden = callPackage ../development/python-modules/pytest-golden { };
 
+  pytest-grpc = callPackage ../development/python-modules/pytest-grpc { };
+
   pytest-helpers-namespace = callPackage ../development/python-modules/pytest-helpers-namespace { };
 
   pytest-html = callPackage ../development/python-modules/pytest-html { };
@@ -10133,6 +10171,8 @@ self: super: with self; {
 
   pyvisa-py = callPackage ../development/python-modules/pyvisa-py { };
 
+  pyvisa-sim = callPackage ../development/python-modules/pyvisa-sim { };
+
   pyvista = callPackage ../development/python-modules/pyvista { };
 
   pyviz-comms = callPackage ../development/python-modules/pyviz-comms { };
@@ -10224,6 +10264,12 @@ self: super: with self; {
   qcelemental = callPackage ../development/python-modules/qcelemental { };
 
   qcengine = callPackage ../development/python-modules/qcengine { };
+
+  qcodes = callPackage ../development/python-modules/qcodes { };
+
+  qcodes-contrib-drivers = callPackage ../development/python-modules/qcodes-contrib-drivers { };
+
+  qcodes-loop = callPackage ../development/python-modules/qcodes-loop { };
 
   qcs-api-client = callPackage ../development/python-modules/qcs-api-client { };
 
@@ -11707,6 +11753,8 @@ self: super: with self; {
   stringcase = callPackage ../development/python-modules/stringcase { };
 
   stringly = callPackage ../development/python-modules/stringly { };
+
+  stringparser = callPackage ../development/python-modules/stringparser { };
 
   stripe = callPackage ../development/python-modules/stripe { };
 

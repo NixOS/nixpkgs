@@ -30,7 +30,7 @@ appimageTools.wrapType2 rec {
     description = "App for Ledger hardware wallets";
     homepage = "https://www.ledger.com/ledger-live/";
     license = licenses.mit;
-    maintainers = with maintainers; [ andresilva thedavidmeister nyanloutre RaghavSood th0rgal WeebSorceress ];
+    maintainers = with maintainers; [ andresilva thedavidmeister nyanloutre RaghavSood th0rgal ];
     platforms = [ "x86_64-linux" ];
   };
 }

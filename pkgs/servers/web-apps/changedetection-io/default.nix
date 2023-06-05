@@ -17,6 +17,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
+      --replace "apprise~=1.3.0" "apprise" \
       --replace "cryptography~=3.4" "cryptography" \
       --replace "dnspython<2.3.0" "dnspython" \
       --replace "pytest ~=6.2" "" \
