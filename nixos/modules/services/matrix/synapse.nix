@@ -17,7 +17,9 @@ let
 
   usePostgresql = cfg.settings.database.name == "psycopg2";
   hasLocalPostgresDB = let args = cfg.settings.database.args; in
-    usePostgresql && (!(args ? host) || (elem args.host [ "localhost" "127.0.0.1" "::1" ]));
+    usePostgresql
+      && !cfg.overrideLocalPostgresCheck
+      && (!(args ? host) || (elem args.host [ "localhost" "127.0.0.1" "::1" ]));
 
   registerNewMatrixUser =
     let
@@ -186,6 +188,18 @@ in {
         description = lib.mdDoc ''
           The directory where matrix-synapse stores its stateful data such as
           certificates, media and uploads.
+        '';
+      };
+
+      overrideLocalPostgresCheck = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Override the assertion that a local PostgreSQL instance must be
+          enabled when Synapse is configured to use a PostgreSQL running on
+          `localhost`, `::1` or `127.0.0.1`. This may be useful when e.g.,
+          running a Synapse instance in a NixOS container, which shares the
+          host's network namespace.
         '';
       };
 
