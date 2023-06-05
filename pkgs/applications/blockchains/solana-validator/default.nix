@@ -4,15 +4,10 @@
 , fetchFromGitHub
 , lib
 , rustPlatform
-, IOKit
-, Security
-, AppKit
 , pkg-config
 , udev
 , zlib
 , protobuf
-, clang
-, llvm
 , openssl
 , libclang
 , rustfmt
@@ -63,7 +58,6 @@ rustPlatform.buildRustPackage rec {
 
   # partly inspired by https://github.com/obsidiansystems/solana-bridges/blob/develop/default.nix#L29
   inherit cargoSha256;
-  verifyCargoDeps = true;
 
   cargoBuildFlags = builtins.map (n: "--bin=${n}") solanaPkgs;
 
