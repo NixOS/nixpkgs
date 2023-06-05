@@ -4022,7 +4022,7 @@ with pkgs;
 
   bless = callPackage ../applications/editors/bless { };
 
-  blink = callPackage ../applications/emulators/blink { };
+  blink = darwin.apple_sdk_11_0.callPackage ../applications/emulators/blink { };
 
   blink1-tool = callPackage ../tools/misc/blink1-tool { };
 
