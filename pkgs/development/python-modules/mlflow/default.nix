@@ -86,6 +86,7 @@ buildPythonPackage rec {
     knownVulnerabilities = [
       "CVE-2023-1176"
       "CVE-2023-1177"
+      "CVE-2023-30172"
     ];
   };
 }
