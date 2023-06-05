@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "dwdwfsapi";
-  version = "1.0.6";
+  version = "1.0.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zeSV2acjtSWUYnrMjEBtrSPlXRvrNQRX5SYPYHnaOy0=";
+    hash = "sha256-7le1F+581JwrBX/C1aaqsDaSpIt0yNsNKiGnJtHUg5s=";
   };
 
   propagatedBuildInputs = [
