@@ -186,6 +186,9 @@ stdenv.mkDerivation rec {
 
     # https://github.com/NixOS/nixpkgs/issues/129946
     patchPythonScript $out/share/cinnamon/cinnamon-desktop-editor/cinnamon-desktop-editor.py
+
+    # Called as `pkexec cinnamon-settings-users.py`.
+    wrapGApp $out/share/cinnamon/cinnamon-settings-users/cinnamon-settings-users.py
   '';
 
   passthru = {
