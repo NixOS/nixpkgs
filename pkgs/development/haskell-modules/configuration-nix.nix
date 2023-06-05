@@ -1297,5 +1297,8 @@ self: super: builtins.intersectAttrs super {
   scalendar = dontCheck super.scalendar;
 
   halide-haskell = super.halide-haskell.override { Halide = pkgs.halide; };
+  # Sydtest has a brittle test suite that will only work with the exact
 
+  # versions that it ships with.
+  sydtest = dontCheck super.sydtest;
 }
