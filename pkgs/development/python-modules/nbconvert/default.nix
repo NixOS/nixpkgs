@@ -25,15 +25,9 @@
 , traitlets
 }:
 
-let
-  # see https://github.com/jupyter/nbconvert/issues/1896
-  style-css = fetchurl {
-    url = "https://cdn.jupyter.org/notebook/5.4.0/style/style.min.css";
-    hash = "sha256-WGWmCfRDewRkvBIc1We2GQdOVAoFFaO4LyIvdk61HgE=";
-  };
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "nbconvert";
-  version = "7.2.5";
+  version = "7.4.0";
 
   disabled = pythonOlder "3.7";
 
@@ -41,7 +35,7 @@ in buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-j9xE/X2UJNt/3G4eg0oC9rhiD/tlN2c4i+L56xb4QYQ=";
+    hash = "sha256-UbbHe1B7F3tz9nKduhVnbkLE6SvLAO3IzJgu5y59idc=";
   };
 
   # Add $out/share/jupyter to the list of paths that are used to search for
@@ -52,9 +46,6 @@ in buildPythonPackage rec {
 
   postPatch = ''
     substituteAllInPlace ./nbconvert/exporters/templateexporter.py
-
-    mkdir -p share/templates/classic/static
-    cp ${style-css} share/templates/classic/static/style.css
   '';
 
   nativeBuildInputs = [
