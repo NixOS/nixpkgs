@@ -31113,6 +31113,8 @@ with pkgs;
 
   svox = callPackage ../applications/audio/svox { };
 
+  genesys = callPackage ../applications/misc/genesys { };
+
   giada = callPackage ../applications/audio/giada { };
 
   giara = callPackage ../applications/networking/giara { };
