@@ -6224,6 +6224,8 @@ self: super: with self; {
 
   microdata = callPackage ../development/python-modules/microdata { };
 
+  mididings = callPackage ../development/python-modules/mididings { };
+
   midiutil = callPackage ../development/python-modules/midiutil { };
 
   mido = callPackage ../development/python-modules/mido { };
