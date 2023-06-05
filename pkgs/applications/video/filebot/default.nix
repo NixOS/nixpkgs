@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, coreutils, openjdk17, makeWrapper, autoPatchelfHook
 , zlib, libzen, libmediainfo, curlWithGnuTls, libmms, glib
+, genericUpdater, writeShellScript
 }:
 
 let
@@ -42,6 +43,13 @@ in stdenv.mkDerivation rec {
     # Expose the binary in bin to make runnable.
     ln -s $out/opt/filebot.sh $out/bin/filebot
   '';
+
+  passthru.updateScript = genericUpdater {
+    versionLister = writeShellScript "filebot-versionLister" ''
+      curl -s https://www.filebot.net \
+        | sed -rne 's,^.*FileBot_([0-9]*\.[0-9]+\.[0-9]+)-portable.tar.xz.*,\1,p'
+    '';
+  };
 
   meta = with lib; {
     description = "The ultimate TV and Movie Renamer";

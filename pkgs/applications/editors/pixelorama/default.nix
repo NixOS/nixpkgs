@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, godot-headless, godot-export-templates }:
+{ lib, stdenv, fetchFromGitHub, godot-headless, godot-export-templates, nix-update-script }:
 
 let
   preset =
@@ -46,6 +46,8 @@ in stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://orama-interactive.itch.io/pixelorama";
