@@ -29,5 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/jart/blink";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ t4ccer ];
+    platforms = lib.platforms.all;
   };
 })
