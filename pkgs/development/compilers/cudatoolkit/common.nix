@@ -158,6 +158,10 @@ backendStdenv.mkDerivation rec {
     "libcom_err.so.2"
   ];
 
+  preFixup = ''
+    patchelf $out/lib64/libnvrtc.so --add-needed libnvrtc-builtins.so
+  '';
+
   unpackPhase = ''
     sh $src --keep --noexec
 
@@ -342,4 +346,3 @@ backendStdenv.mkDerivation rec {
     maintainers = teams.cuda.members;
   };
 }
-
