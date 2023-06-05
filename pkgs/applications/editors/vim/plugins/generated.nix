@@ -6777,6 +6777,18 @@ final: prev:
     meta.homepage = "https://github.com/gpanders/nvim-moonwalk/";
   };
 
+  nvim-navbuddy = buildVimPluginFrom2Nix {
+    pname = "nvim-navbuddy";
+    version = "2023-05-28";
+    src = fetchFromGitHub {
+      owner = "SmiteshP";
+      repo = "nvim-navbuddy";
+      rev = "0db1d62761131ca4d0665423b3f7903532763a77";
+      sha256 = "03dn2cl5q7ijhhh8qjbb7nijy04bijpwp8h243ysmzz2wwkgck8w";
+    };
+    meta.homepage = "https://github.com/SmiteshP/nvim-navbuddy/";
+  };
+
   nvim-navic = buildVimPluginFrom2Nix {
     pname = "nvim-navic";
     version = "2023-05-09";
@@ -15010,18 +15022,6 @@ final: prev:
       sha256 = "0dc1mg9x8flda59vl8d89m1ri1n0jl72q4jhmxj7mg9gp2r39l3m";
     };
     meta.homepage = "https://github.com/nanotee/zoxide.vim/";
-  };
-
-  nvim-navbuddy = buildVimPluginFrom2Nix {
-    pname = "nvim-navbuddy";
-    version = "2023-05-28";
-    src = fetchFromGitHub {
-      owner = "SmiteshP";
-      repo = "nvim-navbuddy";
-      rev = "0db1d62761131ca4d0665423b3f7903532763a77";
-      sha256 = "03dn2cl5q7ijhhh8qjbb7nijy04bijpwp8h243ysmzz2wwkgck8w";
-    };
-    meta.homepage = "https://github.com/SmiteshP/nvim-navbuddy/";
   };
 
   catppuccin-nvim = buildVimPluginFrom2Nix {
