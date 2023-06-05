@@ -4781,6 +4781,8 @@ with pkgs;
 
   eggdrop = callPackage ../tools/networking/eggdrop { };
 
+  egglog = callPackage ../applications/science/logic/egglog { };
+
   ekam = callPackage ../development/tools/build-managers/ekam { };
 
   eksctl = callPackage ../tools/admin/eksctl { };
