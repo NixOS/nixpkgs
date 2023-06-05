@@ -374,22 +374,6 @@ mountFS() {
 
     checkFS "$device" "$fsType"
 
-    # Optionally resize the filesystem.
-    case $options in
-        *x-nixos.autoresize*)
-            if [ "$fsType" = ext2 -o "$fsType" = ext3 -o "$fsType" = ext4 ]; then
-                modprobe "$fsType"
-                echo "resizing $device..."
-                e2fsck -fp "$device"
-                resize2fs "$device"
-            elif [ "$fsType" = f2fs ]; then
-                echo "resizing $device..."
-                fsck.f2fs -fp "$device"
-                resize.f2fs "$device"
-            fi
-            ;;
-    esac
-
     # Create backing directories for overlayfs
     if [ "$fsType" = overlay ]; then
         for i in upper work; do
