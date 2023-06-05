@@ -89,7 +89,7 @@ let
       PrivateNetwork = mkDefault (!needNetwork);
       ProcSubset = "pid";
       ProtectClock = true;
-      ProtectHome = mkDefault true;
+      ProtectHome = "tmpfs";
       ProtectHostname = true;
       ProtectKernelLogs = true;
       ProtectProc = "invisible";
