@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -n easysnap* $out/bin/
+    cp easysnap* $out/bin/
 
     for i in $out/bin/*; do
       substituteInPlace $i \
