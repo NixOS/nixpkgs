@@ -124,11 +124,13 @@ installPhase() {
         if [ -e nvngx.dll ] && [ -e _nvngx.dll ]; then
             install -Dm644 -t $i/lib/nvidia/wine/ nvngx.dll _nvngx.dll
         fi
-
-        if [ -e nvoptix.bin ]; then
-            install -Dm444 -t $i/share/nvidia/ nvoptix.bin
-        fi
     done
+
+
+    # OptiX tries loading `$ORIGIN/nvoptix.bin` first
+    if [ -e nvoptix.bin ]; then
+        install -Dm444 -t $out/lib/ nvoptix.bin
+    fi
 
     if [ -n "$bin" ]; then
         # Install the X drivers.
