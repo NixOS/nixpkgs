@@ -1,7 +1,6 @@
 { lib
 , fetchFromGitHub
 , rustPlatform
-, bashInteractive
 , git
 , openssl
 , pkg-config
