@@ -25463,6 +25463,10 @@ with pkgs;
 
   exabgp = callPackage ../servers/networking/exabgp { };
 
+  rustus = callPackage ../servers/networking/rustus {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   exim = callPackage ../servers/mail/exim { };
 
   fastnetmon-advanced = callPackage ../servers/fastnetmon-advanced { };
