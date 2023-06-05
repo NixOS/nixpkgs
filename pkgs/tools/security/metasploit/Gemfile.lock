@@ -1,15 +1,16 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 3641bc9666de2c52f5be49cb9e8c4a71529f8a75
-  ref: refs/tags/6.3.18
+  revision: 5465dc93856c5e82f37c297a627339278cc1ecec
+  ref: refs/tags/6.3.19
   specs:
-    metasploit-framework (6.3.18)
+    metasploit-framework (6.3.19)
       actionpack (~> 7.0)
       activerecord (~> 7.0)
       activesupport (~> 7.0)
       aws-sdk-ec2
       aws-sdk-iam
       aws-sdk-s3
+      aws-sdk-ssm
       bcrypt
       bcrypt_pbkdf
       bootsnap
@@ -130,25 +131,28 @@ GEM
     arel-helpers (2.14.0)
       activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.2.0)
-    aws-partitions (1.772.0)
-    aws-sdk-core (3.173.1)
+    aws-partitions (1.774.0)
+    aws-sdk-core (3.174.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.5)
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-ec2 (1.380.0)
-      aws-sdk-core (~> 3, >= 3.165.0)
+    aws-sdk-ec2 (1.381.0)
+      aws-sdk-core (~> 3, >= 3.174.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-iam (1.77.0)
-      aws-sdk-core (~> 3, >= 3.165.0)
+    aws-sdk-iam (1.78.0)
+      aws-sdk-core (~> 3, >= 3.174.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-kms (1.64.0)
-      aws-sdk-core (~> 3, >= 3.165.0)
+    aws-sdk-kms (1.65.0)
+      aws-sdk-core (~> 3, >= 3.174.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.122.0)
-      aws-sdk-core (~> 3, >= 3.165.0)
+    aws-sdk-s3 (1.123.1)
+      aws-sdk-core (~> 3, >= 3.174.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
+    aws-sdk-ssm (1.151.0)
+      aws-sdk-core (~> 3, >= 3.174.0)
+      aws-sigv4 (~> 1.1)
     aws-sigv4 (1.5.2)
       aws-eventstream (~> 1, >= 1.0.2)
     bcrypt (3.1.18)
@@ -184,7 +188,7 @@ GEM
       faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (3.0.2)
-    faraday-retry (2.1.0)
+    faraday-retry (2.2.0)
       faraday (~> 2.0)
     faye-websocket (0.11.2)
       eventmachine (>= 0.12.0)
@@ -205,10 +209,10 @@ GEM
       domain_name (~> 0.5)
     http_parser.rb (0.8.0)
     httpclient (2.8.3)
-    i18n (1.13.0)
+    i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     io-console (0.6.0)
-    irb (1.6.4)
+    irb (1.7.0)
       reline (>= 0.3.0)
     jmespath (1.6.2)
     jsobfu (0.4.2)
@@ -293,7 +297,7 @@ GEM
       ttfunk
     pg (1.5.3)
     public_suffix (5.0.1)
-    puma (6.2.2)
+    puma (6.3.0)
       nio4r (~> 2.0)
     racc (1.6.2)
     rack (2.2.7)
@@ -321,7 +325,7 @@ GEM
     recog (3.1.1)
       nokogiri
     redcarpet (3.6.0)
-    reline (0.3.4)
+    reline (0.3.5)
       io-console (~> 0.5)
     rex-arch (0.1.14)
       rex-text
@@ -446,4 +450,4 @@ DEPENDENCIES
   metasploit-framework!
 
 BUNDLED WITH
-   2.4.13
+   2.4.12
