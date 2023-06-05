@@ -1611,6 +1611,7 @@ mapAliases ({
 
   tahoelafs = throw "'tahoelafs' has been renamed to/replaced by 'tahoe-lafs'"; # Converted to throw 2022-02-22
   tangogps = foxtrotgps; # Added 2020-01-26
+  taskspooler = ts;
   taplo-cli = taplo; # Added 2022-07-30
   taplo-lsp = taplo; # Added 2022-07-30
   tdesktop = telegram-desktop; # Added 2023-04-07
