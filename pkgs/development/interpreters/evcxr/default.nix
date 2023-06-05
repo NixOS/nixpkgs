@@ -20,11 +20,15 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin
     [ libiconv CoreServices Security ];
 
-  # test broken with rust 1.69:
-  # * https://github.com/evcxr/evcxr/issues/294
-  # * https://github.com/NixOS/nixpkgs/issues/229524
   checkFlags = [
+    # test broken with rust 1.69:
+    # * https://github.com/evcxr/evcxr/issues/294
+    # * https://github.com/NixOS/nixpkgs/issues/229524
     "--skip=check_for_errors"
+
+    # test broken with rust 1.70
+    # * https://github.com/evcxr/evcxr/issues/295
+    "--skip=partially_inferred_variable_type"
   ];
 
   postInstall = let
