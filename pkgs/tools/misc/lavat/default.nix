@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "AngelJumbo";
     repo = "lavat";
     rev = "v${version}";
-    sha256 = "sha256-xDjqKhwoaqCqo7tkpcEe2MBEpVTJUOpKtu7Fi9aPOPo=";
+    hash = "sha256-xDjqKhwoaqCqo7tkpcEe2MBEpVTJUOpKtu7Fi9aPOPo=";
   };
 
   installPhase = ''
