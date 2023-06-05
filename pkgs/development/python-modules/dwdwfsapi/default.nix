@@ -33,6 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client to retrieve data provided by DWD via their geoserver WFS API";
     homepage = "https://github.com/stephan192/dwdwfsapi";
+    changelog = "https://github.com/stephan192/dwdwfsapi/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ elohmeier ];
   };
