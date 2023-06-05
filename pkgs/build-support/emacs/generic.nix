@@ -2,32 +2,25 @@
 
 { lib, stdenv, emacs, texinfo, writeText, gcc, ... }:
 
-with lib;
-
 { pname
 , version ? null
-
 , buildInputs ? []
 , packageRequires ? []
-
 , meta ? {}
-
 , ...
 }@args:
 
 let
-
   defaultMeta = {
     broken = false;
     platforms = emacs.meta.platforms;
-  } // optionalAttrs ((args.src.meta.homepage or "") != "") {
+  } // lib.optionalAttrs ((args.src.meta.homepage or "") != "") {
     homepage = args.src.meta.homepage;
   };
-
 in
 
 stdenv.mkDerivation ({
-  name = "emacs-${pname}${optionalString (version != null) "-${version}"}";
+  name = "emacs-${pname}${lib.optionalString (version != null) "-${version}"}";
 
   unpackCmd = ''
     case "$curSrc" in
@@ -68,7 +61,7 @@ stdenv.mkDerivation ({
   meta = defaultMeta // meta;
 }
 
-// lib.optionalAttrs (emacs.nativeComp or false) {
+// lib.optionalAttrs (emacs.withNativeCompilation or false) {
 
   LIBRARY_PATH = "${lib.getLib stdenv.cc.libc}/lib";
 
@@ -90,6 +83,4 @@ stdenv.mkDerivation ({
   '';
 }
 
-// removeAttrs args [ "buildInputs" "packageRequires"
-                      "meta"
-                    ])
+// removeAttrs args [ "buildInputs" "packageRequires" "meta" ])
