@@ -35,6 +35,7 @@ let
     expat
     fontconfig
     freetype
+  ] ++ lib.optionals stdenv.isLinux [
     libGL
     xorg.libX11
     xorg.libXcursor
@@ -42,7 +43,6 @@ let
     xorg.libXrandr
     xorg.libXxf86vm
     xorg.libxcb
-  ] ++ lib.optionals stdenv.isLinux [
     libxkbcommon
     wayland
   ];
