@@ -3536,9 +3536,7 @@ with pkgs;
     SDL = SDL_sixel;
   };
 
-  gremlin-console = callPackage ../applications/misc/gremlin-console {
-    openjdk = openjdk11;
-  };
+  gremlin-console = callPackage ../applications/misc/gremlin-console { };
 
   gremlin-server = callPackage ../applications/misc/gremlin-server {
     openjdk = openjdk11;
