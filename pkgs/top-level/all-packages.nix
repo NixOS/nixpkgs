@@ -10451,6 +10451,8 @@ with pkgs;
   inherit (callPackage ../servers/web-apps/netbox { })
     netbox_3_3 netbox;
 
+  netbox2netshot = callPackage ../tools/admin/netbox2netshot { };
+
   netcat = libressl.nc;
 
   netcat-gnu = callPackage ../tools/networking/netcat { };
