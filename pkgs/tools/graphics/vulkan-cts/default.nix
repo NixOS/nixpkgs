@@ -35,8 +35,14 @@ let
   amber = fetchFromGitHub {
     owner = "google";
     repo = "amber";
-    rev = "8b145a6c89dcdb4ec28173339dd176fb7b6f43ed";
-    hash = "sha256-+xFYlUs13khT6r475eJJ+XS875h2sb+YbJ8ZN4MOSAA=";
+    rev = "933ecb4d6288675a92eb1650e0f52b1d7afe8273";
+    hash = "sha256-v9z4gv/mTjaCkByZn6uDpMteQuIf0FzZXeKyoXfFjXo=";
+  };
+  esextractor = fetchFromGitHub {
+    owner = "Igalia";
+    repo = "ESExtractor";
+    rev = "v0.2.5";
+    hash = "sha256-A3lyTTarR1ZJrXcrLDR5D7H1kBwJNyrPPjEklRM9YBY=";
   };
   jsoncpp = fetchFromGitHub {
     owner = "open-source-parsers";
@@ -47,20 +53,20 @@ let
   glslang = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = "a0ad0d7067521fff880e36acfb8ce453421c3f25";
-    hash = "sha256-ZKkFHGitLjw5LPJW1TswIJ+KulkrS8C4G3dUF5U/F2c=";
+    rev = "cd2082e0584d4e39d11e3f401184e0d558ab304f";
+    hash = "sha256-j7O0j4E8lQ9tqAiuhnD/t6VL45OUvntsoKlhiuCXet4=";
   };
   spirv-tools = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "f98473ceeb1d33700d01e20910433583e5256030";
-    hash = "sha256-RSUmfp9QZ7yRbLdFygz9mDfrgUUT8og+ZD9/6VkghMo=";
+    rev = "01828dac778d08f4ebafd2e06bd419f6c84e5984";
+    hash = "sha256-i1rDMVpUiNdacDe20DsN67/rzK5V434EzfSv97y+xGU=";
   };
   spirv-headers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "87d5b782bec60822aa878941e6b13c0a9a954c9b";
-    hash = "sha256-Bv10LM6YXaH2V64oqAcrps23higHzCjlIYYBob5zS4A=";
+    rev = "1feaf4414eb2b353764d01d88f8aa4bcc67b60db";
+    hash = "sha256-VOq3r6ZcbDGGxjqC4IoPMGC5n1APUPUAs9xcRzxdyfk=";
   };
   video-parser = fetchFromGitHub {
     owner = "nvpro-samples";
@@ -71,29 +77,30 @@ let
   vulkan-docs = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Docs";
-    rev = "9a2e576a052a1e65a5d41b593e693ff02745604b";
-    hash = "sha256-DBA2FeV0G/HI8GUMtGYO52jk7wM4HMlKLDA4b+Wmo+k=";
+    rev = "9fff8b252a3688c0231fa78709084bbe677d3bf7";
+    hash = "sha256-KpKsKTY5xCSZ5Y92roa0fq/iqc1hVJNS7l87RFcxyRQ=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-cts";
-  version = "1.3.5.2";
+  version = "1.3.6.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "VK-GL-CTS";
     rev = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-79N0DX+yQhTuAhspBmeqM/iFQpJ1LabKyFfzHoLLbeg=";
+    hash = "sha256-PWkY5PFoxKosteRgbo6aRqGFHBkoEPFcg6NN8EquD8U=";
   };
 
   outputs = [ "out" "lib" ];
 
   prePatch = ''
-    mkdir -p external/renderdoc/src external/spirv-headers external/video-parser external/vulkan-docs
+    mkdir -p external/ESExtractor external/renderdoc/src external/spirv-headers external/video-parser external/vulkan-docs
 
     cp -r ${renderdoc} external/renderdoc/src/renderdoc_app.h
 
     cp -r ${amber} external/amber/src
+    cp -r ${esextractor} external/ESExtractor/src
     cp -r ${jsoncpp} external/jsoncpp/src
     cp -r ${glslang} external/glslang/src
     cp -r ${spirv-tools} external/spirv-tools/src
