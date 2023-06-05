@@ -250,6 +250,12 @@ with pkgs;
 
   ani-cli = callPackage ../applications/video/ani-cli { };
 
+  anilibrix = callPackage ../applications/video/anilibrix {
+    nodejs = nodejs_14;
+    yarn = yarn.override { nodejs = nodejs_14; };
+    electron = electron_15;
+  };
+
   dra-cla = callPackage ../applications/video/dra-cla { };
 
   anime-downloader = callPackage ../applications/video/anime-downloader { };
