@@ -41,6 +41,12 @@ let
         RestrictNamespaces = true;
         SystemCallArchitectures = "native";
         SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+
+        # Because of various issues Invidious must be restarted often, at least once a day, ideally
+        # every hour.
+        # This option enables the automatic restarting of the Invidious instance.
+        Restart = lib.mkDefault "always";
+        RuntimeMaxSec = lib.mkDefault "1h";
       };
     };
 
