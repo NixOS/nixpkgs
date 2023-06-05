@@ -1237,4 +1237,8 @@ self: super: builtins.intersectAttrs super {
   # Disable checks to break dependency loop with SCalendar
   scalendar = dontCheck super.scalendar;
 
+  # Sydtest has a brittle test suite that will only work with the exact
+  # versions that it ships with.
+  sydtest = dontCheck super.sydtest;
+
 }

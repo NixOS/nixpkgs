@@ -5195,7 +5195,6 @@ broken-packages:
   - sws
   - syb-extras
   - syb-with-class-instances-text
-  - sydtest
   - syfco
   - sym
   - symantic
