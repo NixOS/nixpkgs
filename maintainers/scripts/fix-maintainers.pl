@@ -42,7 +42,7 @@ while(my($k, $v) = each %$maintainers_json) {
     }
     my $resp_json = from_json($resp->content);
     my $api_user = %$resp_json{"login"};
-    if ($current_user ne $api_user) {
+    if (lc($current_user) ne lc($api_user)) {
         print $current_user . " is now known on github as " . $api_user . ". Editing maintainer-list.nix…\n";
         my $file = path($maintainers_list_nix);
         my $data = $file->slurp_utf8;
