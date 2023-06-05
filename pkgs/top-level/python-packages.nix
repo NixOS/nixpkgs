@@ -2753,6 +2753,8 @@ self: super: with self; {
 
   django-libsass = callPackage ../development/python-modules/django-libsass { };
 
+  django-leaflet = callPackage ../development/python-modules/django-leaflet { };
+
   django-logentry-admin = callPackage ../development/python-modules/django-logentry-admin { };
 
   django-login-required-middleware = callPackage ../development/python-modules/django-login-required-middleware { };
