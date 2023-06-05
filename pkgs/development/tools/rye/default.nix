@@ -1,5 +1,5 @@
 { lib
-, fetchgit
+, fetchFromGitHub
 , rustPlatform
 , bashInteractive
 , git
@@ -13,8 +13,9 @@ rustPlatform.buildRustPackage rec {
   pname = "rye";
   version = "0.6.0";
 
-  src = fetchgit {
-    url = "https://github.com/mitsuhiko/${pname}.git";
+  src = fetchFromGitHub {
+    owner = "mitsuhiko";
+    repo = pname;
     rev = version;
     # One of the tests runs git command so we need .git directory there
     leaveDotGit = true;
