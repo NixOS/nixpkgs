@@ -9,11 +9,11 @@ buildNpmPackage {
     repo = "ASF-ui";
     # updated by the update script
     # this is always the commit that should be used with asf-ui from the latest asf version
-    rev = "114c390c92a889b86cf560def28fb8f39bc4fe54";
-    sha256 = "1ajmi2l6xhv3nlnag2kmkblny925irp4gngdc3mniiimw364p826";
+    rev = "3078d92e8b8d79571b771f452a53d1789330c541";
+    hash = "sha256-K3YTgsde9aqtmKuFKjXpoWe6USGpKBlC6eeazuOYTqk=";
   };
 
-  npmDepsHash = "sha256-AY1DFuZkB8tOQd2FzHuNZ31rtLlWujP+3AqsMMB2BhU=";
+  npmDepsHash = "sha256-L+aWsGMUmIsPJRQ4XPg8WOWOqHKcfDQTqUK+vGBHi0Y=";
 
   installPhase = ''
     runHook preInstall
