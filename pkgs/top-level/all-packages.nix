@@ -21974,9 +21974,7 @@ with pkgs;
 
   libgtop = callPackage ../development/libraries/libgtop { };
 
-  libLAS = callPackage ../development/libraries/libLAS {
-    boost = boost172;
-  };
+  libLAS = callPackage ../development/libraries/libLAS { };
 
   liblaxjson = callPackage ../development/libraries/liblaxjson { };
 
