@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, coreutils }:
+{ lib, stdenv, fetchurl, makeWrapper, coreutils, gnused, dbus }:
 
 stdenv.mkDerivation rec {
   pname = "openresolv";
@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
   installFlags = [ "SYSCONFDIR=$(out)/etc" ];
 
   postInstall = ''
-    wrapProgram "$out/sbin/resolvconf" --set PATH "${coreutils}/bin"
+    wrapProgram "$out/sbin/resolvconf" \
+      --set PATH "${coreutils}/bin:${gnused}/bin:${dbus}/bin"
   '';
 
   meta = {
