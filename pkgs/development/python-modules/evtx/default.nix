@@ -22,10 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-t//oNvD+7wnv5KkriKBX4xgGS8pQpZgCsKxAEXsj0X8=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-DPEL36cYNV5v4iW3+Fg1eEeuBuK9S7Qe78xOzZs8aJw=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "pyo3-file-0.6.0" = "sha256-lTCaVb4w4rhR3RYya/lcNeGlAtnHQbe/VelEh/vM9PQ=";
+    };
   };
 
   nativeBuildInputs = with rustPlatform; [
