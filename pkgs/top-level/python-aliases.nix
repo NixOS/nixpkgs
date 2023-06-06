@@ -216,6 +216,7 @@ mapAliases ({
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
   PyMVGLive = pymvglive; # added 2023-02-19
   pyramid_hawkauth = throw "pyramid_hawkauth has been removed because it is no longer maintained"; # added 2023-02-2
+  pyramid_jinja2 = pyramid-jinja2; # added 2023-06-06
   pyreadability = readability-lxml; # added 2022-05-24
   pyroute2-core = throw "pyroute2 migrated back to a single package scheme in version 0.7.1"; # added 2022-07-16
   pyroute2-ethtool = throw "pyroute2 migrated back to a single package scheme in version 0.7.1"; # added 2022-07-16
