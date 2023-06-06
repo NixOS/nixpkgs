@@ -7,12 +7,6 @@
 , preFixup ? ""
 , shellHook ? ""
 
-# Go linker flags, passed to go via -ldflags
-, ldflags ? []
-
-# Go tags, passed to go via -tag
-, tags ? []
-
 # We want parallel builds by default
 , enableParallelBuilding ? true
 
@@ -48,9 +42,6 @@
 , buildFlagsArray ? ""
 
 , meta ? {}, ... } @ args:
-
-
-with builtins;
 
 let
   dep2src = goDep:
@@ -172,7 +163,7 @@ let
 
         declare -a flags
         flags+=($buildFlags "''${buildFlagsArray[@]}")
-        flags+=(''${tags:+-tags=${lib.concatStringsSep "," tags}})
+        flags+=(''${tags:+-tags=''${tags// /,}})
         flags+=(''${ldflags:+-ldflags="$ldflags"})
         flags+=("-p" "$NIX_BUILD_CORES")
 

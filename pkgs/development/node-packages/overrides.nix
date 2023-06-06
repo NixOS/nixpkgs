@@ -17,6 +17,8 @@ let
 in
 
 final: prev: {
+  inherit nodejs;
+
   "@angular/cli" = prev."@angular/cli".override {
     prePatch = ''
       export NG_CLI_ANALYTICS=false

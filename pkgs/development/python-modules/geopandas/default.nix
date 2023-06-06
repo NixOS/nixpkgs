@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "geopandas";
-  version = "0.13.0";
+  version = "0.13.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "geopandas";
     repo = "geopandas";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GYEd679EX+gyGb2fpfyrJlGYPduc+W7I2tjTHegyWi8=";
+    hash = "sha256-k9/IowWi0jABeNhAjdJqbfcxp4eNzisTqS3RKBK2p58=";
   };
 
   propagatedBuildInputs = [
@@ -47,8 +47,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Requires network access
-    "test_read_file_remote_geojson_url"
-    "test_read_file_remote_zipfile_url"
+    "test_read_file_url"
   ];
 
   pytestFlagsArray = [
@@ -64,6 +63,6 @@ buildPythonPackage rec {
     homepage = "https://geopandas.org";
     changelog = "https://github.com/geopandas/geopandas/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ knedlsepp ];
+    maintainers = teams.geospatial.members;
   };
 }

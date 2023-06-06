@@ -536,8 +536,6 @@ self: super: with self; {
 
   aocd = callPackage ../development/python-modules/aocd { };
 
-  apache-airflow = callPackage ../development/python-modules/apache-airflow { };
-
   apache-beam = callPackage ../development/python-modules/apache-beam { };
 
   apcaccess = callPackage ../development/python-modules/apcaccess { };
@@ -611,6 +609,8 @@ self: super: with self; {
   argon2-cffi-bindings = callPackage ../development/python-modules/argon2-cffi-bindings { };
 
   argparse-addons = callPackage ../development/python-modules/argparse-addons { };
+
+  argparse-dataclass = callPackage ../development/python-modules/argparse-dataclass { };
 
   args = callPackage ../development/python-modules/args { };
 
@@ -4380,6 +4380,8 @@ self: super: with self; {
 
   grpc-google-iam-v1 = callPackage ../development/python-modules/grpc-google-iam-v1 { };
 
+  grpc-interceptor = callPackage ../development/python-modules/grpc-interceptor { };
+
   grpcio = callPackage ../development/python-modules/grpcio { };
 
   grpcio-gcp = callPackage ../development/python-modules/grpcio-gcp { };
@@ -6229,6 +6231,8 @@ self: super: with self; {
   mido = callPackage ../development/python-modules/mido { };
 
   migen = callPackage ../development/python-modules/migen { };
+
+  mike = callPackage ../development/python-modules/mike { };
 
   milc = callPackage ../development/python-modules/milc { };
 
@@ -10629,6 +10633,8 @@ self: super: with self; {
 
   rich = callPackage ../development/python-modules/rich { };
 
+  rich-argparse = callPackage ../development/python-modules/rich-argparse { };
+
   rich-argparse-plus = callPackage ../development/python-modules/rich-argparse-plus { };
 
   rich-click = callPackage ../development/python-modules/rich-click { };
@@ -12815,6 +12821,8 @@ self: super: with self; {
   versiontag = callPackage ../development/python-modules/versiontag { };
 
   versiontools = callPackage ../development/python-modules/versiontools { };
+
+  verspec = callPackage ../development/python-modules/verspec { };
 
   vertica-python = callPackage ../development/python-modules/vertica-python { };
 

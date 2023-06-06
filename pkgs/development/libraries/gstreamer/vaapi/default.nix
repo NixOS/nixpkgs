@@ -62,10 +62,11 @@ stdenv.mkDerivation rec {
     xorg.libXrandr
     xorg.libSM
     xorg.libICE
-    libGL
-    libGLU
     nasm
     libvpx
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    libGL
+    libGLU
   ];
 
   strictDeps = true;

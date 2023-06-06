@@ -1,12 +1,10 @@
-{ version, hash }:
-
 { stdenv, lib, fetchurl, fetchpatch
 , meson, pkg-config, ninja
 , intltool, bison, flex, file, python3Packages, wayland-scanner
 , expat, libdrm, xorg, wayland, wayland-protocols, openssl
 , llvmPackages_15, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau
-, libglvnd, libunwind
+, libglvnd, libunwind, lm_sensors
 , vulkan-loader, glslang
 , galliumDrivers ?
   if stdenv.isLinux then
@@ -87,6 +85,9 @@
 */
 
 let
+  version = "23.1.1";
+  hash = "sha256-omeQMe1bc7KcTwQqxk2W+DsM/khYYX3jLi78GWxlOkA=";
+
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
   branch = lib.versions.major version;
@@ -145,11 +146,6 @@ self = stdenv.mkDerivation {
       "get_option('datadir')" "'${placeholder "out"}/share'"
     substituteInPlace src/amd/vulkan/meson.build --replace \
       "get_option('datadir')" "'${placeholder "out"}/share'"
-  ''
-  # TODO: can be removed >= 23.0.4 (most likely)
-  # https://gitlab.freedesktop.org/mesa/mesa/-/commit/035aa34ed5eb418339c0e2d2
-  + ''
-    sed '/--size_t-is-usize/d' -i src/gallium/frontends/rusticl/meson.build
   '';
 
   outputs = [ "out" "dev" "drivers" ]
@@ -197,6 +193,10 @@ self = stdenv.mkDerivation {
 
     # To enable non-mesa gbm backends to be found (e.g. Nvidia)
     "-Dgbm-backends-path=${libglvnd.driverLink}/lib/gbm:${placeholder "out"}/lib/gbm"
+
+    # meson auto_features enables these features, but we do not want them
+    "-Dandroid-libbacktrace=disabled"
+
   ] ++ lib.optionals stdenv.isLinux [
     "-Dglvnd=true"
 
@@ -219,10 +219,9 @@ self = stdenv.mkDerivation {
     libX11 libXext libxcb libXt libXfixes libxshmfence libXrandr
     libffi libvdpau libelf libXvMC
     libpthreadstubs openssl /*or another sha1 provider*/
-    zstd
+    zstd libunwind
   ] ++ lib.optionals haveWayland [ wayland wayland-protocols ]
-    ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal udev ]
-    ++ lib.optionals stdenv.isDarwin [ libunwind ]
+    ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal udev lm_sensors ]
     ++ lib.optionals enableOpenCL [ libclc llvmPackages.clang llvmPackages.clang-unwrapped rustc rust-bindgen' spirv-llvm-translator' ]
     ++ lib.optional withValgrind valgrind-light
     ++ lib.optional haveZink vulkan-loader
@@ -253,6 +252,7 @@ self = stdenv.mkDerivation {
     if [ -n "$(shopt -s nullglob; echo "$out/lib/libxatracker"*)" -o -n "$(shopt -s nullglob; echo "$out/lib/libvulkan_"*)" ]; then
       # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM
       mv -t $drivers/lib       \
+        $out/lib/libpowervr_rogue* \
         $out/lib/libxatracker* \
         $out/lib/libvulkan_*
     fi
@@ -371,6 +371,9 @@ self = stdenv.mkDerivation {
     license = licenses.mit; # X11 variant, in most files
     platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ primeos vcunat ]; # Help is welcome :)
+
+    # https://gitlab.freedesktop.org/mesa/mesa/-/issues/8634
+    broken = stdenv.isDarwin;
   };
 };
 

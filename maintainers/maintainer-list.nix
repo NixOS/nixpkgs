@@ -11464,6 +11464,12 @@
       fingerprint = "E576 BFB2 CF6E B13D F571  33B9 E315 A758 4613 1564";
     }];
   };
+  nielsegberts = {
+    email = "nix@nielsegberts.nl";
+    github = "nielsegberts";
+    githubId = 368712;
+    name = "Niels Egberts";
+  };
   nigelgbanks = {
     name = "Nigel Banks";
     email = "nigel.g.banks@gmail.com";
@@ -16132,6 +16138,12 @@
     github = "hesiod";
     githubId = 3159881;
     name = "Tobias Markus";
+  };
+  tm-drtina = {
+    email = "tm.drtina@gmail.com";
+    github = "tm-drtina";
+    githubId = 26902865;
+    name = "Tomas Drtina";
   };
   tmountain = {
     email = "tinymountain@gmail.com";

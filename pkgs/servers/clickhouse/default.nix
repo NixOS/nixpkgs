@@ -21,12 +21,26 @@ stdenv.mkDerivation rec {
   pname = "clickhouse";
   version = "23.3.2.37";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitHub rec {
     owner = "ClickHouse";
     repo = "ClickHouse";
     rev = "v${version}-lts";
     fetchSubmodules = true;
-    sha256 = "sha256-t6aW3wYmD4UajVaUhIE96wCqr6JbOtoBt910nD9IVsk=";
+    hash = "sha256-G/5KZ4vd9w5g0yB6bzyM8VX3l32Di+a6Ll87NK3GOrg=";
+    name = "clickhouse-${rev}.tar.gz";
+    postFetch = ''
+      # compress to not exceed the 4GB output limit
+      # try to make a deterministic tarball
+      tar -I 'gzip -n' \
+        --sort=name \
+        --mtime=1970-01-01 \
+        --owner=root --group=root \
+        --numeric-owner --mode=go=rX,u+rw,a-s \
+        --transform='s@^@source/@S' \
+        -cf temp  -C "$out" .
+      rm -r "$out"
+      mv temp "$out"
+    '';
   };
 
   strictDeps = true;

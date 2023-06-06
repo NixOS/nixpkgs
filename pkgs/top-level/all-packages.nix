@@ -481,6 +481,8 @@ with pkgs;
 
   commix = callPackage ../tools/security/commix { };
 
+  comodoro = callPackage ../applications/misc/comodoro { };
+
   compdb = callPackage ../tools/misc/compdb { };
 
   conserver = callPackage ../tools/misc/conserver { };
@@ -1455,7 +1457,7 @@ with pkgs;
 
   airgeddon = callPackage ../tools/networking/airgeddon { };
 
-  apache-airflow = with python3.pkgs; toPythonApplication apache-airflow;
+  apache-airflow = callPackage ../servers/apache-airflow { };
 
   apachetomcatscanner = callPackage ../tools/security/apachetomcatscanner { };
 
@@ -3497,6 +3499,8 @@ with pkgs;
 
   glaxnimate = libsForQt5.callPackage ../applications/video/glaxnimate { };
 
+  gluesql = callPackage ../servers/sql/gluesql { };
+
   gmid = callPackage ../servers/gemini/gmid { };
 
   gmni = callPackage ../applications/networking/browsers/gmni { };
@@ -4021,6 +4025,8 @@ with pkgs;
   bfetch = callPackage ../tools/misc/bfetch { };
 
   bless = callPackage ../applications/editors/bless { };
+
+  blink = darwin.apple_sdk_11_0.callPackage ../applications/emulators/blink { };
 
   blink1-tool = callPackage ../tools/misc/blink1-tool { };
 
@@ -4774,6 +4780,8 @@ with pkgs;
   eddy = libsForQt5.callPackage ../applications/graphics/eddy { };
 
   eggdrop = callPackage ../tools/networking/eggdrop { };
+
+  egglog = callPackage ../applications/science/logic/egglog { };
 
   ekam = callPackage ../development/tools/build-managers/ekam { };
 
@@ -6390,9 +6398,7 @@ with pkgs;
 
   unionfs-fuse = callPackage ../tools/filesystems/unionfs-fuse { };
 
-  unparam = callPackage ../tools/misc/unparam {
-    buildGoModule = buildGo119Module; # go 1.20 build failure
-  };
+  unparam = callPackage ../tools/misc/unparam { };
 
   inherit (nodePackages) uppy-companion;
 
@@ -8249,7 +8255,6 @@ with pkgs;
   graphviz-nox = callPackage ../tools/graphics/graphviz {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
     withXorg = false;
-    libdevil = libdevil-nox;
   };
 
   grass-sass = callPackage ../tools/misc/grass-sass { };
@@ -12452,9 +12457,7 @@ with pkgs;
 
   sing-geosite = callPackage ../data/misc/sing-geosite { };
 
-  sing-geoip = callPackage ../data/misc/sing-geoip {
-    buildGoModule = buildGo119Module;
-  };
+  sing-geoip = callPackage ../data/misc/sing-geoip { };
 
   sipcalc = callPackage ../tools/networking/sipcalc { };
 
@@ -18183,6 +18186,8 @@ with pkgs;
 
   coder = callPackage ../development/tools/coder { };
 
+  codespelunker = callPackage ../development/tools/codespelunker { };
+
   compile-daemon = callPackage ../development/tools/compile-daemon { };
 
   complexity = callPackage ../development/tools/misc/complexity { };
@@ -19058,6 +19063,8 @@ with pkgs;
 
   picotool = callPackage ../development/tools/picotool { };
 
+  planus = callPackage ../development/tools/misc/planus { };
+
   pmccabe = callPackage ../development/tools/misc/pmccabe { };
 
   pkgconf-unwrapped = callPackage ../development/tools/misc/pkgconf { };
@@ -19654,7 +19661,6 @@ with pkgs;
   ycmd = callPackage ../development/tools/misc/ycmd {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
     python = python3;
-    boost = boost174;
   };
 
   yodl = callPackage ../development/tools/misc/yodl { };
@@ -20118,9 +20124,7 @@ with pkgs;
 
   cpp-ipfs-http-client = callPackage ../development/libraries/cpp-ipfs-http-client { };
 
-  cpp-netlib = callPackage ../development/libraries/cpp-netlib {
-    boost = boost169; # fatal error: 'boost/asio/stream_socket_service.hpp' file not found
-  };
+  cpp-netlib = callPackage ../development/libraries/cpp-netlib { };
 
   cpp-jwt = callPackage ../development/libraries/cpp-jwt { };
 
@@ -20360,7 +20364,7 @@ with pkgs;
 
   far2l = callPackage ../applications/misc/far2l {
     stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
-    inherit (darwin.apple_sdk.frameworks) IOKit Carbon Cocoa AudioToolbox OpenGL;
+    inherit (darwin.apple_sdk.frameworks) IOKit Carbon Cocoa AudioToolbox OpenGL System;
   };
 
   farbfeld = callPackage ../development/libraries/farbfeld { };
@@ -21693,6 +21697,8 @@ with pkgs;
 
   libcrossguid = callPackage ../development/libraries/libcrossguid { };
 
+  libcs50 = callPackage ../development/libraries/libcs50 { };
+
   libuchardet = callPackage ../development/libraries/libuchardet { };
 
   libchop = callPackage ../development/libraries/libchop { };
@@ -22218,9 +22224,7 @@ with pkgs;
 
   librevenge = callPackage ../development/libraries/librevenge { };
 
-  librime = callPackage ../development/libraries/librime {
-    boost = boost174;
-  };
+  librime = callPackage ../development/libraries/librime { };
 
   librsb = callPackage ../development/libraries/librsb {
     # Taken from https://build.opensuse.org/package/view_file/science/librsb/librsb.spec
@@ -22417,9 +22421,7 @@ with pkgs;
 
   libndctl = callPackage ../development/libraries/libndctl { };
 
-  libnest2d = callPackage ../development/libraries/libnest2d {
-    boost = boost174;
-  };
+  libnest2d = callPackage ../development/libraries/libnest2d { };
 
   libnet = callPackage ../development/libraries/libnet { };
 
@@ -23087,17 +23089,10 @@ with pkgs;
   # Default libGLU
   libGLU = mesa_glu;
 
-  # Keep Mesa 22.3 for now because 23.0 does not build on Darwin.
-  # FIXME: remove, also investigate why we even need Mesa on Darwin.
-  mesa_22_3 = darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa/22.3.nix {
+  mesa = darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa {
     inherit (darwin.apple_sdk_11_0.frameworks) OpenGL;
     inherit (darwin.apple_sdk_11_0.libs) Xplugin;
   };
-  mesa_23_0 = darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa/23.0.nix {
-    inherit (darwin.apple_sdk_11_0.frameworks) OpenGL;
-    inherit (darwin.apple_sdk_11_0.libs) Xplugin;
-  };
-  mesa = if stdenv.isDarwin then mesa_22_3 else mesa_23_0;
 
   mesa_glu =  callPackage ../development/libraries/mesa-glu {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
@@ -25777,9 +25772,7 @@ with pkgs;
 
   networkaudiod = callPackage ../servers/networkaudiod { };
 
-  unifiedpush-common-proxies = callPackage ../servers/unifiedpush-common-proxies {
-    buildGoModule = buildGo119Module; # go 1.20 build failure
-  };
+  unifiedpush-common-proxies = callPackage ../servers/unifiedpush-common-proxies { };
 
   unit = callPackage ../servers/http/unit { };
 
@@ -31831,6 +31824,8 @@ with pkgs;
 
   irssi = callPackage ../applications/networking/irc/irssi { };
 
+  filebrowser = callPackage ../applications/networking/filebrowser { };
+
   fish-irssi = callPackage ../applications/networking/irc/irssi/fish { };
 
   kirc = callPackage ../applications/networking/irc/kirc { };
@@ -32656,7 +32651,6 @@ with pkgs;
 
   monotone = callPackage ../applications/version-management/monotone {
     lua = lua5;
-    boost = boost170;
   };
 
   monotoneViz = callPackage ../applications/version-management/monotone-viz {

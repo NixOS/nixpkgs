@@ -53,6 +53,7 @@
 , enableLTO ? stdenv.is64bit && stdenv.isLinux
 , reproducibleBuild ? false
 , pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}"
+, noldconfigPatch ? ./. + "/${sourceVersion.major}.${sourceVersion.minor}/no-ldconfig.patch"
 } @ inputs:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -252,7 +253,7 @@ in with passthru; stdenv.mkDerivation {
     # ctypes.util.find_library during the loading of the uuid module
     # (since it will do a futile invocation of gcc (!) to find
     # libuuid, slowing down program startup a lot).
-    (./. + "/${sourceVersion.major}.${sourceVersion.minor}/no-ldconfig.patch")
+    noldconfigPatch
     # Make sure that the virtualenv activation scripts are
     # owner-writable, so venvs can be recreated without permission
     # errors.
@@ -284,7 +285,7 @@ in with passthru; stdenv.mkDerivation {
           sha256 = "1h18lnpx539h5lfxyk379dxwr8m2raigcjixkf133l4xy3f4bzi2";
         }
     )
-  ] ++ optionals (pythonOlder "3.12") [
+  ] ++ optionals (pythonAtLeast "3.7" && pythonOlder "3.12") [
     # LDSHARED now uses $CC instead of gcc. Fixes cross-compilation of extension modules.
     ./3.8/0001-On-all-posix-systems-not-just-Darwin-set-LDSHARED-if.patch
     # Use sysconfigdata to find headers. Fixes cross-compilation of extension modules.

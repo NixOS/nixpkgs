@@ -54,6 +54,7 @@
 , lua5
 , mpeg2dec
 , ncurses
+, openssl
 , perl
 , pkg-config
 , removeReferencesTo
@@ -158,6 +159,7 @@ stdenv.mkDerivation rec {
     libXvMC
     xcbutilkeysyms
   ])
+  ++ optional onlyLibVLC openssl # not sure why
   ++ optional (!stdenv.hostPlatform.isAarch && !onlyLibVLC) live555
   ++ optional jackSupport libjack2
   ++ optionals chromecastSupport [ libmicrodns protobuf ]
