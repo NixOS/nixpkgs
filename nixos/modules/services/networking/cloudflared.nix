@@ -284,6 +284,7 @@ in
             fullConfig = {
               tunnel = name;
               "credentials-file" = tunnel.credentialsFile;
+              originRequest = filterConfig tunnel.originRequest;
               ingress =
                 (map
                   (key: {
