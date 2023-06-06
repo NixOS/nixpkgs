@@ -203,7 +203,7 @@ in
         description = "Lemmy server";
 
         environment = {
-          LEMMY_CONFIG_LOCATION = "/run/lemmy/config.hjson";
+          LEMMY_CONFIG_LOCATION = "${settingsFormat.generate "config.hjson" cfg.settings}";
           LEMMY_DATABASE_URL = mkIf (cfg.database.uri != null) cfg.database.uri;
         };
 
@@ -221,7 +221,6 @@ in
         serviceConfig = {
           DynamicUser = true;
           RuntimeDirectory = "lemmy";
-          ExecStartPre = "${pkgs.coreutils}/bin/install -m 600 ${settingsFormat.generate "config.hjson" cfg.settings} /run/lemmy/config.hjson";
           ExecStart = "${cfg.server.package}/bin/lemmy_server";
         };
       };
