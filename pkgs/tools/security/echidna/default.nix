@@ -46,7 +46,7 @@ mkDerivation rec {
   description = "Ethereum smart contract fuzzer";
   homepage = "https://github.com/crytic/echidna";
   license = lib.licenses.agpl3Plus;
-  maintainers = with lib.maintainers; [ arturcygan ];
+  maintainers = with lib.maintainers; [ arturcygan hellwolf ];
   platforms = lib.platforms.unix;
   mainProgram = "echidna-test";
 }
