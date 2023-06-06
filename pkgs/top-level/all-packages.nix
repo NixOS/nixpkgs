@@ -1355,7 +1355,7 @@ with pkgs;
   };
 
   arc_unpacker = callPackage ../tools/archivers/arc_unpacker {
-    boost = boost16x; # checkPhase fails with Boost 1.77
+    boost = boost175; # checkPhase fails with Boost 1.77
   };
 
   adminer = callPackage ../servers/adminer { };
