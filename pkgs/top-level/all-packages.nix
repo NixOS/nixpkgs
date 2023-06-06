@@ -17726,6 +17726,8 @@ with pkgs;
 
   ansible-doctor = callPackage ../tools/admin/ansible/doctor.nix { };
 
+  dbus-test-runner = callPackage ../development/tools/dbus-test-runner { };
+
   phpunit = callPackage ../development/tools/misc/phpunit { };
 
   ### DEVELOPMENT / TOOLS / LANGUAGE-SERVERS
