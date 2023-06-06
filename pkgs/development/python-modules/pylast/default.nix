@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pylast";
-  version = "5.1.0";
+  version = "5.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "pylast";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-LRZYLo9h7Z8WXemLgKR5qzAmtL4x/AQQJpta3e0WHcc=";
+    hash = "sha256-6yxsqruosSOJ5LeIBbvuEko4s9qU/ObNZiJD5YH/hvY=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
