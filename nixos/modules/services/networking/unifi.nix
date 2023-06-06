@@ -193,6 +193,4 @@ in
     (mkRemovedOptionModule [ "services" "unifi" "dataDir" ] "You should move contents of dataDir to /var/lib/unifi/data" )
     (mkRenamedOptionModule [ "services" "unifi" "openPorts" ] [ "services" "unifi" "openFirewall" ])
   ];
-
-  meta.maintainers = with lib.maintainers; [ pennae ];
 }
