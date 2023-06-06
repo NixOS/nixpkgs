@@ -13,7 +13,7 @@ configuration options.
 :::
 
 ::: {.note}
-However, many packages in the `nix` store come with extensions one might add.
+Alternatively, many packages come with extensions one might add.
 Examples include:
 - [`python310Packages.requests`](https://search.nixos.org/packages/query=python310Packages.requests)
 - [`passExtensions.pass-otp`](https://search.nixos.org/packages/query=passExtensions.pass-otp)
