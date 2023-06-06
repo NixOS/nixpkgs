@@ -1581,6 +1581,8 @@ let
 
     tcslib = callPackage ../development/ocaml-modules/tcslib { };
 
+    tdigest = callPackage ../development/ocaml-modules/tdigest { };
+
     telegraml = callPackage ../development/ocaml-modules/telegraml { };
 
     terminal = callPackage ../development/ocaml-modules/terminal { };
