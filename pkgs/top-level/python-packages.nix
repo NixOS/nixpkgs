@@ -536,8 +536,6 @@ self: super: with self; {
 
   aocd = callPackage ../development/python-modules/aocd { };
 
-  apache-airflow = callPackage ../development/python-modules/apache-airflow { };
-
   apache-beam = callPackage ../development/python-modules/apache-beam { };
 
   apcaccess = callPackage ../development/python-modules/apcaccess { };
@@ -611,6 +609,8 @@ self: super: with self; {
   argon2-cffi-bindings = callPackage ../development/python-modules/argon2-cffi-bindings { };
 
   argparse-addons = callPackage ../development/python-modules/argparse-addons { };
+
+  argparse-dataclass = callPackage ../development/python-modules/argparse-dataclass { };
 
   args = callPackage ../development/python-modules/args { };
 
@@ -10632,6 +10632,8 @@ self: super: with self; {
   rflink = callPackage ../development/python-modules/rflink { };
 
   rich = callPackage ../development/python-modules/rich { };
+
+  rich-argparse = callPackage ../development/python-modules/rich-argparse { };
 
   rich-argparse-plus = callPackage ../development/python-modules/rich-argparse-plus { };
 
