@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, curl, boost169, eigen
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, curl, boost, eigen
 , freeimage, freetype, libGLU, libGL, SDL2, alsa-lib, libarchive
 , fetchpatch }:
 
@@ -20,8 +20,12 @@ stdenv.mkDerivation {
     })
   ];
 
+  postPatch = ''
+    sed -i "7i #include <stack>" es-app/src/views/gamelist/ISimpleGameListView.h
+  '';
+
   nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [ alsa-lib boost169 curl eigen freeimage freetype libarchive libGLU libGL SDL2 ];
+  buildInputs = [ alsa-lib boost curl eigen freeimage freetype libarchive libGLU libGL SDL2 ];
 
   installPhase = ''
     install -D ../emulationstation $out/bin/emulationstation
