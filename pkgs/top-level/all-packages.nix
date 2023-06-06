@@ -25564,6 +25564,8 @@ with pkgs;
 
   hiawatha = callPackage ../servers/http/hiawatha { };
 
+  hiraeth = callPackage ../servers/hiraeth { };
+
   hoard = callPackage ../tools/misc/hoard { inherit (darwin) Security; };
 
   home-assistant = callPackage ../servers/home-assistant { };
