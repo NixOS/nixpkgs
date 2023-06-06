@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "mypy-extensions";
-  version = "0.4.3";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "mypy_extensions";
     rev = version;
-    hash = "sha256-JjhbxX5DBAbcs1o2fSWywz9tot792q491POXiId+NyI=";
+    hash = "sha256-gOfHC6dUeBE7SsWItpUHHIxW3wzhPM5SuGW1U8P7DD0=";
   };
 
   propagatedBuildInputs = lib.optional (pythonOlder "3.5") typing;
