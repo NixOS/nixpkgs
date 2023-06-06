@@ -184,6 +184,7 @@ let
     coreutils
     procps
     findutils # Needed for gitlab:cleanup:orphan_job_artifact_files
+    getconf
   ];
 
   gitlab-rake = pkgs.stdenv.mkDerivation {
@@ -1463,6 +1464,8 @@ in {
         gzip
 
         procps # Sidekiq MemoryKiller
+
+        getconf # needed by prometheus exporter
       ];
       serviceConfig = {
         Type = "simple";
@@ -1643,6 +1646,7 @@ in {
         nodejs
         procps
         gnupg
+        getconf
       ];
       serviceConfig = {
         Type = "notify";
