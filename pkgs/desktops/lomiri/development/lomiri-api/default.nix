@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitLab
+, gitUpdater
 , makeFontsConf
 , testers
 , cmake
@@ -19,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-api";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-api";
     rev = finalAttrs.version;
-    hash = "sha256-84iM4N6vEn6nmZMTBsUOCtR0WkYfoowsJhhIlQoaq1c=";
+    hash = "sha256-UTl0vObSlEvHuLmDt7vS3yEqZWGklJ9tVwlUAtRSTlU=";
   };
 
   outputs = [ "out" "dev" "doc" ];
@@ -85,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    updateScript = gitUpdater { };
   };
 
   meta = with lib; {
