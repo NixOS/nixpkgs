@@ -3,7 +3,6 @@
 , openblas
 , blas
 , lapack
-, openfst
 , icu
 , cmake
 , pkg-config
@@ -44,7 +43,6 @@ stdenv.mkDerivation {
 
   buildInputs = [
     openblas
-    openfst
     icu
   ] ++ lib.optionals stdenv.isDarwin [
     Accelerate
