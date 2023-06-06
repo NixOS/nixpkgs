@@ -36,6 +36,8 @@ stdenv.mkDerivation {
     export MKDIR_P="mkdir -p"
   '';
 
+  enableParallelBuilding = true;
+
   # Fix reference to sh in bootstrap-tools, and invoke grep via
   # absolute path rather than looking at argv[0].
   postInstall =
