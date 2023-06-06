@@ -10,19 +10,15 @@
 , git
 , python3
 , Accelerate
+, _experimental-update-script-combinators
+, common-updater-scripts
+, ripgrep
+, unstableGitUpdater
+, writeShellScript
 }:
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
-let
-  # rev from https://github.com/kaldi-asr/kaldi/blob/master/cmake/third_party/openfst.cmake
-  openfst = fetchFromGitHub {
-    owner = "kkm000";
-    repo = "openfst";
-    rev = "338225416178ac36b8002d70387f5556e44c8d05";
-    sha256 = "sha256-MGEUuw7ex+WcujVdxpO2Bf5sB6Z0edcAeLGqW/Lo1Hs=";
-  };
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kaldi";
   version = "unstable-2022-09-26";
 
@@ -38,7 +34,7 @@ stdenv.mkDerivation {
     "-DBUILD_SHARED_LIBS=on"
     "-DBLAS_LIBRARIES=-lblas"
     "-DLAPACK_LIBRARIES=-llapack"
-    "-DFETCHCONTENT_SOURCE_DIR_OPENFST:PATH=${openfst}"
+    "-DFETCHCONTENT_SOURCE_DIR_OPENFST:PATH=${finalAttrs.passthru.sources.openfst}"
   ];
 
   buildInputs = [
@@ -69,6 +65,31 @@ stdenv.mkDerivation {
     cp -r ../egs $out/share/kaldi
   '';
 
+  passthru = {
+    sources = {
+      # rev from https://github.com/kaldi-asr/kaldi/blob/master/cmake/third_party/openfst.cmake
+      openfst = fetchFromGitHub {
+        owner = "kkm000";
+        repo = "openfst";
+        rev = "338225416178ac36b8002d70387f5556e44c8d05";
+        hash = "sha256-MGEUuw7ex+WcujVdxpO2Bf5sB6Z0edcAeLGqW/Lo1Hs=";
+      };
+    };
+
+    updateScript =
+      let
+        updateSource = unstableGitUpdater {};
+        updateOpenfst = writeShellScript "update-openfst" ''
+          hash=$(${ripgrep}/bin/rg --multiline --pcre2 --only-matching 'FetchContent_Declare\(\s*openfst[^)]*GIT_TAG\s*([0-9a-f]{40})' --replace '$1' "${finalAttrs.src}/cmake/third_party/openfst.cmake")
+          ${common-updater-scripts}/bin/update-source-version kaldi.sources.openfst "$hash" --source-key=out "--version-key=rev"
+        '';
+      in
+      _experimental-update-script-combinators.sequence [
+        updateSource
+        updateOpenfst
+      ];
+    };
+
   meta = with lib; {
     description = "Speech Recognition Toolkit";
     homepage = "https://kaldi-asr.org";
@@ -76,4 +97,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ mic92 ];
     platforms = platforms.unix;
   };
-}
+})
