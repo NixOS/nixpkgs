@@ -16,7 +16,13 @@ in
 
     enable = mkEnableOption (lib.mdDoc "lemmy a federated alternative to reddit in rust");
 
+    server = {
+      package = mkPackageOptionMD pkgs "lemmy-server" {};
+    };
+
     ui = {
+      package = mkPackageOptionMD pkgs "lemmy-ui" {};
+
       port = mkOption {
         type = types.port;
         default = 1234;
@@ -124,7 +130,7 @@ in
         virtualHosts."${cfg.settings.hostname}" = {
           extraConfig = ''
             handle_path /static/* {
-              root * ${pkgs.lemmy-ui}/dist
+              root * ${cfg.ui.package}/dist
               file_server
             }
             @for_backend {
@@ -216,7 +222,7 @@ in
           DynamicUser = true;
           RuntimeDirectory = "lemmy";
           ExecStartPre = "${pkgs.coreutils}/bin/install -m 600 ${settingsFormat.generate "config.hjson" cfg.settings} /run/lemmy/config.hjson";
-          ExecStart = "${pkgs.lemmy-server}/bin/lemmy_server";
+          ExecStart = "${cfg.server.package}/bin/lemmy_server";
         };
       };
 
@@ -243,8 +249,8 @@ in
 
         serviceConfig = {
           DynamicUser = true;
-          WorkingDirectory = "${pkgs.lemmy-ui}";
-          ExecStart = "${pkgs.nodejs}/bin/node ${pkgs.lemmy-ui}/dist/js/server.js";
+          WorkingDirectory = "${cfg.ui.package}";
+          ExecStart = "${pkgs.nodejs}/bin/node ${cfg.ui.package}/dist/js/server.js";
         };
       };
     };
