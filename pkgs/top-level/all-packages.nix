@@ -924,7 +924,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     antlr = antlr4_10;
     boost = boost177; # Configure checks for specific version.
-    protobuf = protobuf3_19;
     icu =  icu69;
   };
 
@@ -23114,6 +23113,8 @@ with pkgs;
 
   markdown-anki-decks = callPackage ../tools/misc/markdown-anki-decks { };
 
+  mdslides = callPackage ../tools/misc/mdslides { };
+
   micropython = callPackage ../development/interpreters/micropython { };
 
   MIDIVisualizer = darwin.apple_sdk_11_0.callPackage ../applications/audio/midi-visualizer {
@@ -24075,6 +24076,8 @@ with pkgs;
   simp_le = callPackage ../tools/admin/simp_le { };
 
   simpleitk = callPackage ../development/libraries/simpleitk { lua = lua5_3; };
+
+  sioclient = callPackage ../development/libraries/sioclient { };
 
   sfml = callPackage ../development/libraries/sfml {
     inherit (darwin.apple_sdk.frameworks) IOKit Foundation AppKit OpenAL;
@@ -33274,9 +33277,7 @@ with pkgs;
 
   notmuch-addrlookup = callPackage ../applications/networking/mailreaders/notmuch-addrlookup { };
 
-  nova-filters =  callPackage ../applications/audio/nova-filters {
-    boost = boost172;
-  };
+  nova-filters = callPackage ../applications/audio/nova-filters { };
 
   nvi = callPackage ../applications/editors/nvi { };
 

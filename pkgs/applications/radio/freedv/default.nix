@@ -15,6 +15,7 @@
 , speexdsp
 , hamlib_4
 , wxGTK32
+, sioclient
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
 , AppKit
 , AVFoundation
@@ -24,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "freedv";
-  version = "1.8.9";
+  version = "1.8.10.1";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "freedv-gui";
     rev = "v${version}";
-    hash = "sha256-HDHXVTkXC1fCqj4lnxURmXvQNtwDX4zA6/QFnYceUI4=";
+    hash = "sha256-m8Myo/5jt+rnV8cAR2p20aAHnbatTkIXGSVhLebAP9g=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
     speexdsp
     hamlib_4
     wxGTK32
+    sioclient
   ] ++ (if pulseSupport then [ libpulseaudio ] else [ portaudio ])
   ++ lib.optionals stdenv.isDarwin [
     AppKit
