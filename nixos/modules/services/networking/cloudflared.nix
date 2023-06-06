@@ -170,7 +170,7 @@ in
           credentialsFile = mkOption {
             type = types.str;
             description = lib.mdDoc ''
-              Credential file.
+              Credential file. The account that runs cloudflared needs to have access to this file.
 
               See [https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-useful-terms/#credentials-file](Credentials file).
             '';
