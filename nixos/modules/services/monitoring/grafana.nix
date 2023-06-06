@@ -121,6 +121,11 @@ let
         default = false;
         description = lib.mdDoc "Allow users to edit datasources from the UI.";
       };
+      jsonData = mkOption {
+        type = types.nullOr types.attrs;
+        default = null;
+        description = lib.mdDoc "Extra data for datasource plugins.";
+      };
       secureJsonData = mkOption {
         type = types.nullOr types.attrs;
         default = null;
