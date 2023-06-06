@@ -24,10 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-T61nPW3wjBRjmJ81w59T1b/Kxrwwqvyj3gILE9OF/5Q=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-wrMNtcaLAsWBVeJbYbYo+Xmobl01lnUbR9NUqqUzUgU=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "flapigen-0.6.0-pre8" = "sha256-8KBhVgHn+UtrEtBQJEVTrx+h4IqhKTn9Csx6yBAV0RQ=";
+    };
   };
 
   format = "pyproject";
