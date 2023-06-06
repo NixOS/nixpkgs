@@ -48,7 +48,7 @@ in
         };
 
         options.federation = {
-          enabled = mkEnableOption (lib.mdDoc "activitypub federation");
+          enabled = (mkEnableOption (lib.mdDoc "activitypub federation")) // { visible = false; };
         };
 
         options.captcha = {
@@ -70,6 +70,10 @@ in
 
   config =
     lib.mkIf cfg.enable {
+      warnings = lib.optional (cfg.settings.federation.enabled) ''
+        This option was removed in 0.17.0 and no longer has any effect.
+      '';
+
       services.lemmy.settings = (mapAttrs (name: mkDefault)
         {
           bind = "127.0.0.1";
