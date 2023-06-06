@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, fetchpatch
 , duckdb
 , google-cloud-storage
 , mypy
@@ -46,6 +45,15 @@ buildPythonPackage rec {
     psutil
     pytestCheckHook
   ];
+
+  disabledTests = [
+    # tries to make http request
+    "test_install_non_existent_extension"
+  ];
+
+  preCheck = ''
+    export HOME="$(mktemp -d)"
+  '';
 
   pythonImportsCheck = [
     "duckdb"
