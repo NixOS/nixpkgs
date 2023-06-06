@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitLab
+, fetchpatch
 , gitUpdater
 , testers
 , cmake
@@ -25,6 +26,15 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-MswB8cQvz3JvcJL2zj7szUOBzKRjxzJO7/x+87m7E7c=";
   };
+
+  patches = [
+    # Remove when version > 0.1.4
+    (fetchpatch {
+      name = "0001-gmenuharness-Rename-type-attribute-from-x-canonical-type-to-x-lomiri-type.patch";
+      url = "https://gitlab.com/ubports/development/core/gmenuharness/-/commit/70e9ed85792a6ac1950faaf26391ce91e69486ab.patch";
+      hash = "sha256-jeue0qrl2JZCt/Yfj4jT210wsF/E+MlbtNT/yFTcw5I=";
+    })
+  ];
 
   strictDeps = true;
 
