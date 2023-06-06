@@ -8811,6 +8811,8 @@ self: super: with self; {
 
   pylint-venv = callPackage ../development/python-modules/pylint-venv { };
 
+  pylion = callPackage ../development/python-modules/pylion { };
+
   pylitterbot = callPackage ../development/python-modules/pylitterbot { };
 
   py-libzfs = callPackage ../development/python-modules/py-libzfs { };
