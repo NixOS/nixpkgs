@@ -22241,6 +22241,10 @@ with pkgs;
 
   libplist = callPackage ../development/libraries/libplist { };
 
+  libqtdbustest = libsForQt5.callPackage ../development/libraries/libqtdbustest {
+    inherit (lomiri) cmake-extras;
+  };
+
   libre = callPackage ../development/libraries/libre { };
 
   libredwg = callPackage ../development/libraries/libredwg { };
