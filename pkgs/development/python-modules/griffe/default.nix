@@ -27,9 +27,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'dynamic = ["version"]' 'version = "${version}"' \
       --replace 'license = "ISC"' 'license = {file = "LICENSE"}' \
-      --replace 'version = {source = "scm"}' 'license-expression = "ISC"'
   '';
 
   nativeBuildInputs = [
