@@ -538,7 +538,6 @@ with lib.maintainers; {
       ma27
       fadenb
       mguentner
-      ekleog
       ralith
       dandellion
       sumnerevans
