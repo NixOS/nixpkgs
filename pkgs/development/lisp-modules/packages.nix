@@ -419,7 +419,7 @@ let
 
     buildScript = pkgs.writeText "build-nyxt.lisp" ''
       (load "${super.nyxt.asdfFasl}/asdf.${super.nyxt.faslExt}")
-      (asdf:load-system :nyxt/gtk-application)
+      (asdf:load-system :nyxt/gi-gtk-application)
       (sb-ext:save-lisp-and-die "nyxt" :executable t
                                        #+sb-core-compression :compression
                                        #+sb-core-compression t
@@ -438,6 +438,7 @@ let
         --prefix LD_LIBRARY_PATH : $LD_LIBRARY_PATH \
         --prefix XDG_DATA_DIRS : $XDG_ICON_DIRS \
         --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
+        --prefix GI_TYPELIB_PATH : $GI_TYPELIB_PATH \
         --prefix GIO_EXTRA_MODULES ":" ${pkgs.dconf.lib}/lib/gio/modules/ \
         --prefix GIO_EXTRA_MODULES ":" ${pkgs.glib-networking}/lib/gio/modules/
     '';
