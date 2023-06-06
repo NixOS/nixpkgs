@@ -72,6 +72,11 @@ stdenv.mkDerivation rec {
     mpi
   ];
 
+  # For backwards compatibility
+  postInstall = ''
+    ln -s $out/bin/lmp $out/bin/lmp_serial
+  '';
+
   meta = with lib; {
     description = "Classical Molecular Dynamics simulation code";
     longDescription = ''
