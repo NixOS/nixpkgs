@@ -27,7 +27,15 @@ in
     caddy.enable = mkEnableOption (lib.mdDoc "exposing lemmy with the caddy reverse proxy");
     nginx.enable = mkEnableOption (lib.mdDoc "exposing lemmy with the nginx reverse proxy");
 
-    database.createLocally = mkEnableOption (lib.mdDoc "creation of database on the instance");
+    database = {
+      createLocally = mkEnableOption (lib.mdDoc "creation of database on the instance");
+
+      uri = mkOption {
+        type = with types; nullOr str;
+        default = null;
+        description = lib.mdDoc "The connection URI to use. Takes priority over the configuration file if set.";
+      };
+    };
 
     settings = mkOption {
       default = { };
@@ -190,9 +198,7 @@ in
 
         environment = {
           LEMMY_CONFIG_LOCATION = "/run/lemmy/config.hjson";
-
-          # Verify how this is used, and don't put the password in the nix store
-          LEMMY_DATABASE_URL = with cfg.settings.database;"postgres:///${database}?host=${host}";
+          LEMMY_DATABASE_URL = mkIf (cfg.database.uri != null) cfg.database.uri;
         };
 
         documentation = [
