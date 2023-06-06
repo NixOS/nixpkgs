@@ -69,11 +69,11 @@ let
   '';
 in buildPythonApplication rec {
   pname = "xpra";
-  version = "4.4.4";
+  version = "4.4.5";
 
   src = fetchurl {
     url = "https://xpra.org/src/${pname}-${version}.tar.xz";
-    hash = "sha256-oPa9ECqCE9+PrcZufsHWYR6EHxTZVFJOMUlK2b0mwLE=";
+    hash = "sha256-o2vDPzZWgpEFe0yzNjwtuLPHO0GfWbSscKjvIfTi6Ro=";
   };
 
   patches = [
@@ -211,6 +211,7 @@ in buildPythonApplication rec {
     homepage = "https://xpra.org/";
     downloadPage = "https://xpra.org/src/";
     description = "Persistent remote applications for X";
+    changelog = "https://github.com/Xpra-org/xpra/releases/tag/v${version}";
     platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = with maintainers; [ offline numinit mvnetbiz ];
