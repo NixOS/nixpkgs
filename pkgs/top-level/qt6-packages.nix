@@ -37,6 +37,8 @@ in
 
   qtpbfimageplugin = callPackage ../development/libraries/qtpbfimageplugin { };
 
+  qtstyleplugin-kvantum = callPackage ../development/libraries/qtstyleplugin-kvantum { };
+
   quazip = callPackage ../development/libraries/quazip { };
 
   qxlsx = callPackage ../development/libraries/qxlsx { };
