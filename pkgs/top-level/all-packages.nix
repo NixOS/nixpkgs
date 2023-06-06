@@ -37006,12 +37006,9 @@ with pkgs;
 
   pong3d = callPackage ../games/pong3d { };
 
-  pokerth = libsForQt5.callPackage ../games/pokerth {
-    boost = boost16x;
-  };
+  pokerth = libsForQt5.callPackage ../games/pokerth { };
 
   pokerth-server = libsForQt5.callPackage ../games/pokerth {
-    boost = boost16x;
     target = "server";
   };
 
