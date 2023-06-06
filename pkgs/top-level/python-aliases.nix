@@ -41,6 +41,7 @@ mapAliases ({
   ansible-later = throw "ansible-later has been promoted to a top-level attribute"; # Added 2023-05-16
   ansible-lint = throw "ansible-lint has been promoted to a top-level attribute"; # Added 2023-05-16
   anyjson = throw "anyjson has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
+  apache-airflow = throw "apache-airflow has been moved out of pythonPackages and is available as a standalone package"; # added 2023-06-05
   argon2_cffi = argon2-cffi; # added 2022-05-09
   APScheduler = apscheduler; # added 2023-02-19
   asyncio-nats-client = nats-py; # added 2022-02-08
