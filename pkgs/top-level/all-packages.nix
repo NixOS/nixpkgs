@@ -25657,7 +25657,7 @@ with pkgs;
   };
 
   lemmy-ui = callPackage ../servers/web-apps/lemmy/ui.nix {
-    nodejs = nodejs_14;
+    nodejs = nodejs_18;
   };
 
   lightgbm = callPackage ../development/libraries/lightgbm { };
