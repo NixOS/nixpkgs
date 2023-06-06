@@ -17,6 +17,12 @@ rustPlatform.buildRustPackage rec {
   ]);
 
   cargoSha256 = "sha256:1dpdlzv96kpc25yf5jgsz9qldghyw35x382qpxhkadkn5dryzjvd";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "pubgrub-dependency-provider-elm-0.1.0" = "sha256-00J5XZfmuB4/fgB06aaXrRjdmOpOsSwA3dC3Li1m2Cc=";
+    };
+  };
 
   # Tests perform networking and therefore can't work in sandbox
   doCheck = false;
