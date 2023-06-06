@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
     ln -s "$out/lib/pkgconfig/lua.pc" "$out/lib/pkgconfig/lua${lib.replaceStrings [ "." ] [ "" ] luaversion}.pc"
 
     # Make documentation outputs of different versions co-installable.
-    mv $out/share/doc/lua $out/share/doc/lua-$version
+    mv $out/share/doc/lua $out/share/doc/lua-${version}
   '';
 
   # copied from python
