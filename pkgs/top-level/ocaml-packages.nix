@@ -1375,6 +1375,8 @@ let
 
     ppx_repr = callPackage ../development/ocaml-modules/repr/ppx.nix { };
 
+    ppx_show = callPackage ../development/ocaml-modules/ppx_show { };
+
     ppx_tools =
       if lib.versionAtLeast ocaml.version "4.02"
       then callPackage ../development/ocaml-modules/ppx_tools {}
