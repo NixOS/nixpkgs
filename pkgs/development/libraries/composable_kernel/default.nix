@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , unstableGitUpdater
-, runCommand
 , cmake
 , rocm-cmake
 , hip
@@ -88,9 +87,6 @@ let
     };
   });
 
-  ckProfiler = runCommand "ckProfiler" { preferLocalBuild = true; } ''
-    cp -a ${ck}/bin/ckProfiler $out
-  '';
 in stdenv.mkDerivation {
   inherit (ck) pname version outputs src passthru requiredSystemFeatures meta;
 
@@ -102,8 +98,7 @@ in stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    cp -as ${ckProfiler} $out/bin/ckProfiler
+    mkdir -p $out
     cp -an ${ck}/* $out
   '' + lib.optionalString buildTests ''
     cp -a ${ck.test} $test
