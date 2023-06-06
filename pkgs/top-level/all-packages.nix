@@ -25136,10 +25136,12 @@ with pkgs;
   sbcl_2_3_4 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.4"; };
     faslExt = "fasl";
+    flags = [ "--dynamic-space-size" "3000" ];
   };
   sbcl_2_3_5 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.5"; };
     faslExt = "fasl";
+    flags = [ "--dynamic-space-size" "3000" ];
   };
   sbcl = sbcl_2_3_5;
 
