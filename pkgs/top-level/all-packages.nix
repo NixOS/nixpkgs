@@ -37103,10 +37103,7 @@ with pkgs;
 
   sauerbraten = callPackage ../games/sauerbraten { };
 
-  scid = callPackage ../games/scid {
-    tcl = tcl-8_5;
-    tk = tk-8_5;
-  };
+  scid = callPackage ../games/scid { };
 
   scid-vs-pc = callPackage ../games/scid-vs-pc {
     tcl = tcl-8_6;
