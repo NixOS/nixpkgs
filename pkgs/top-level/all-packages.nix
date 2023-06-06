@@ -24078,6 +24078,8 @@ with pkgs;
 
   simpleitk = callPackage ../development/libraries/simpleitk { lua = lua5_3; };
 
+  sioclient = callPackage ../development/libraries/sioclient { };
+
   sfml = callPackage ../development/libraries/sfml {
     inherit (darwin.apple_sdk.frameworks) IOKit Foundation AppKit OpenAL;
   };
