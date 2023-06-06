@@ -40420,9 +40420,7 @@ with pkgs;
 
   NSPlist = callPackage ../development/libraries/NSPlist { };
 
-  PlistCpp = callPackage ../development/libraries/PlistCpp {
-    boost = boost172;
-  };
+  PlistCpp = callPackage ../development/libraries/PlistCpp { };
 
   xib2nib = callPackage ../development/tools/xib2nib { };
 
