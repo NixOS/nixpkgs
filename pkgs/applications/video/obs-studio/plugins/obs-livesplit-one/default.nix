@@ -18,7 +18,12 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-C1u4z7iQUETM84kf6S6obw+C0ox8J9gMJoVP3/3ZoYw=";
   };
 
-  cargoHash = "sha256-mQ0TR4DL4bA5u4IL3RY9aLxU5G6qQ5W5xuNadiXGeB0=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "livesplit-core-0.11.0" = "sha256-efap498JWOeGBg3A/7BMME/6GyvuTli9hegxS+jeruQ=";
+    };
+  };
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ fontconfig obs-studio ];
