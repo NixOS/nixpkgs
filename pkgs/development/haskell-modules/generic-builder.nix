@@ -34,7 +34,7 @@ in
 , doInstallIntermediates ? false
 , editedCabalFile ? null
 # aarch64 outputs otherwise exceed 2GB limit
-, enableLibraryProfiling ? !(ghc.isGhcjs or stdenv.targetPlatform.isAarch64 or false)
+, enableLibraryProfiling ? !(ghc.isGhcjs or stdenv.hostPlatform.isAarch64 or false)
 , enableExecutableProfiling ? false
 , profilingDetail ? "exported-functions"
 # TODO enable shared libs for cross-compiling
