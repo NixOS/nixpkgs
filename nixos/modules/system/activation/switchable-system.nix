@@ -61,6 +61,7 @@ in
           --subst-var-by coreutils "${pkgs.coreutils}" \
           --subst-var-by distroId ${lib.escapeShellArg config.system.nixos.distroId} \
           --subst-var-by installBootLoader ${lib.escapeShellArg config.system.build.installBootLoader} \
+          --subst-var-by preSwitchCheck ${lib.escapeShellArg config.system.preSwitchChecks.script} \
           --subst-var-by localeArchive "${config.i18n.glibcLocales}/lib/locale/locale-archive" \
           --subst-var-by perl "${perlWrapped}" \
           --subst-var-by shell "${pkgs.bash}/bin/sh" \
@@ -93,6 +94,7 @@ in
             --set TOPLEVEL ''${!toplevelVar} \
             --set DISTRO_ID ${lib.escapeShellArg config.system.nixos.distroId} \
             --set INSTALL_BOOTLOADER ${lib.escapeShellArg config.system.build.installBootLoader} \
+            --set PRE_SWITCH_CHECK ${lib.escapeShellArg config.system.preSwitchChecks.script} \
             --set LOCALE_ARCHIVE ${config.i18n.glibcLocales}/lib/locale/locale-archive \
             --set SYSTEMD ${config.systemd.package}
         )
