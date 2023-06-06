@@ -5351,6 +5351,8 @@ with pkgs;
 
   lexicon = callPackage ../tools/admin/lexicon { };
 
+  lenpaste = callPackage ../servers/lenpaste { };
+
   lief = callPackage ../development/libraries/lief {
     python = python3;
   };
