@@ -40,7 +40,6 @@
 , gnused
 , which
 , gawk
-, texlive
 }:
 
 let
@@ -64,7 +63,6 @@ let
       mv -v * "$out/"
     '';
   };
-  dvips = texlive.combine { inherit (texlive) scheme-infraonly dvips; };
 
 in
 stdenv.mkDerivation rec {
@@ -162,8 +160,6 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/unix-lpr.sh \
       --replace "PATH=/bin:/usr/bin:/usr/ucb:/usr/etc" ""
     wrapProgram $out/bin/unix-lpr.sh --prefix PATH : ${lib.makeBinPath [ coreutils gnused ]}:$out/bin
-
-    wrapProgram $out/bin/dvipdf --prefix PATH : ${lib.makeBinPath [ coreutils dvips ]}:$out/bin
 
   '' + lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libgs.dylib.$dylib_version $out/lib/libgs.dylib.$dylib_version $out/bin/gs
