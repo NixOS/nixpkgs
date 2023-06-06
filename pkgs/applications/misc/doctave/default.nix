@@ -14,7 +14,12 @@ rustPlatform.buildRustPackage rec {
   # Cargo.lock is outdated
   cargoPatches = [ ./cargo-lock.patch ];
 
-  cargoSha256 = "sha256-keLcNttdM9JUnn3qi/bWkcObIHl3MRACDHKPSZuScOc=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "doctave-markdown-0.9.0" = "sha256-DDeb91DgLx7vOYHwoDy6+/532q/3/myJUZDqjq7ejJ0=";
+    };
+  };
 
   buildInputs = lib.optionals stdenv.isDarwin [
     CoreServices
