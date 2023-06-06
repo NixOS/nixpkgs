@@ -4044,7 +4044,9 @@ with pkgs;
     cudaSupport = config.cudaSupport or false;
   };
 
-  tensorflow-lite = callPackage ../development/libraries/science/math/tensorflow-lite { };
+  tensorflow-lite = callPackage ../development/libraries/science/math/tensorflow-lite {
+    abseil-cpp = abseil-cpp_202103;
+  };
 
   tiny-cuda-nn = callPackage ../development/libraries/science/math/tiny-cuda-nn { };
 
@@ -7558,7 +7560,7 @@ with pkgs;
   fcitx5-chinese-addons = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-chinese-addons.nix { };
 
   fcitx5-mozc = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-mozc.nix {
-    abseil-cpp = abseil-cpp.override {
+    abseil-cpp = abseil-cpp_202103.override {
       cxxStandard = "17";
     };
   };
@@ -19770,6 +19772,7 @@ with pkgs;
   ycmd = callPackage ../development/tools/misc/ycmd {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
     python = python3;
+    abseil-cpp = abseil-cpp_202103;
   };
 
   yodl = callPackage ../development/tools/misc/yodl { };
@@ -19802,7 +19805,7 @@ with pkgs;
   abseil-cpp_202103 = callPackage ../development/libraries/abseil-cpp/202103.nix { };
   abseil-cpp_202206 = callPackage ../development/libraries/abseil-cpp/202206.nix { };
   abseil-cpp_202301 = callPackage ../development/libraries/abseil-cpp/202301.nix { };
-  abseil-cpp = abseil-cpp_202103;
+  abseil-cpp = abseil-cpp_202301;
 
   accountsservice = callPackage ../development/libraries/accountsservice { };
 
@@ -23801,9 +23804,15 @@ with pkgs;
 
   protobuf = protobuf3_21;
 
-  protobuf3_21 = callPackage ../development/libraries/protobuf/3.21.nix { };
-  protobuf3_20 = callPackage ../development/libraries/protobuf/3.20.nix { };
-  protobuf3_19 = callPackage ../development/libraries/protobuf/3.19.nix { };
+  protobuf3_21 = callPackage ../development/libraries/protobuf/3.21.nix {
+    abseil-cpp = abseil-cpp_202103;
+  };
+  protobuf3_20 = callPackage ../development/libraries/protobuf/3.20.nix {
+    abseil-cpp = abseil-cpp_202103;
+  };
+  protobuf3_19 = callPackage ../development/libraries/protobuf/3.19.nix {
+    abseil-cpp = abseil-cpp_202103;
+  };
 
   protobufc = callPackage ../development/libraries/protobufc { };
 
@@ -32414,6 +32423,7 @@ with pkgs;
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
     };
+    abseil-cpp = abseil-cpp_202103;
   };
 
   libreoffice-qt = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
