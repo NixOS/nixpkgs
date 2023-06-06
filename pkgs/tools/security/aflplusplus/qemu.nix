@@ -30,8 +30,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "AFLplusplus";
     repo = "qemuafl";
-    rev = "a8af9cbde71e333ce72a46f15e655d0b82ed0939";
-    sha256 = "sha256-veT9Vne9arB1kbQDAKGZ/skse5C5KNAiMBj2JWkS4tQ=";
+    rev = "0569eff8a12dec73642b96757f6b5b51a618a03a";
+    sha256 = "sha256-nYWHyRfOH2p9znRxjxsiyw11uZuMBiuJfEc7FHM5X7M=";
     fetchSubmodules = true;
   };
 
