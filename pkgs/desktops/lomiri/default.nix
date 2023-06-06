@@ -9,6 +9,7 @@ let
   in {
     #### Development tools / libraries
     cmake-extras = callPackage ./development/cmake-extras { };
+    gmenuharness = callPackage ./development/gmenuharness { };
     lomiri-api = callPackage ./development/lomiri-api { };
   };
 in
