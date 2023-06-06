@@ -518,6 +518,46 @@ runTests {
     expected = false;
   };
 
+  testFindFirstExample1 = {
+    expr = findFirst (x: x > 3) 7 [ 1 6 4 ];
+    expected = 6;
+  };
+
+  testFindFirstExample2 = {
+    expr = findFirst (x: x > 9) 7 [ 1 6 4 ];
+    expected = 7;
+  };
+
+  testFindFirstEmpty = {
+    expr = findFirst (abort "when the list is empty, the predicate is not needed") null [];
+    expected = null;
+  };
+
+  testFindFirstSingleMatch = {
+    expr = findFirst (x: x == 5) null [ 5 ];
+    expected = 5;
+  };
+
+  testFindFirstSingleDefault = {
+    expr = findFirst (x: false) null [ (abort "if the predicate doesn't access the value, it must not be evaluated") ];
+    expected = null;
+  };
+
+  testFindFirstNone = {
+    expr = builtins.tryEval (findFirst (x: x == 2) null [ 1 (throw "the last element must be evaluated when there's no match") ]);
+    expected = { success = false; value = false; };
+  };
+
+  # Makes sure that the implementation doesn't cause a stack overflow
+  testFindFirstBig = {
+    expr = findFirst (x: x == 1000000) null (range 0 1000000);
+    expected = 1000000;
+  };
+
+  testFindFirstLazy = {
+    expr = findFirst (x: x == 1) 7 [ 1 (abort "list elements after the match must not be evaluated") ];
+    expected = 1;
+  };
 
 # ATTRSETS
 
