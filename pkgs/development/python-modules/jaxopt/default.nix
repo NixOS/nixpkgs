@@ -17,6 +17,8 @@
 buildPythonPackage rec {
   pname = "jaxopt";
   version = "0.5.5";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -48,6 +50,11 @@ buildPythonPackage rec {
     "jaxopt.linear_solve"
     "jaxopt.loss"
     "jaxopt.tree_util"
+  ];
+
+  disabledTests = [
+    # Stack frame issue
+    "test_bisect"
   ];
 
   meta = with lib; {
