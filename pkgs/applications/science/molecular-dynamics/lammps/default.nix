@@ -84,6 +84,10 @@ stdenv.mkDerivation rec {
     homepage = "https://lammps.sandia.gov";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    # compiling lammps with 64 bit support blas and lapack might cause runtime
+    # segfaults. In anycase both blas and lapack should have the same #bits
+    # support.
+    broken = (blas.isILP64 && lapack.isILP64);
     maintainers = [ maintainers.costrouc maintainers.doronbehar ];
   };
 }
