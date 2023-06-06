@@ -37582,6 +37582,8 @@ with pkgs;
 
   gnustep = recurseIntoAttrs (callPackage ../desktops/gnustep { });
 
+  lomiri = recurseIntoAttrs (callPackage ../desktops/lomiri { });
+
   lumina = recurseIntoAttrs (callPackage ../desktops/lumina { });
 
   ### DESKTOPS/LXDE
