@@ -7,10 +7,10 @@
 
 stdenv.mkDerivation rec {
   pname = "bilibili";
-  version = "1.10.1-1";
+  version = "1.10.1-4";
   src = fetchurl {
     url = "https://github.com/msojocs/bilibili-linux/releases/download/v${version}/io.github.msojocs.bilibili_${version}_amd64.deb";
-    hash = "sha256-Kx45erpxS66/CWmo4Csw0jhp23u03fn7r+vkq5CtJg0=";
+    hash = "sha256-/jvgCEqd0kSAs3U7eJQ7fFyHdGcyV/7nMnNgQpDVgm0=";
   };
 
   unpackPhase = ''
