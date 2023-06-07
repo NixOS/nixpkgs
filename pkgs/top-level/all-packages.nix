@@ -16737,6 +16737,7 @@ with pkgs;
   };
   swiPrologWithGui = swiProlog.override { withGui = true; };
 
+  tbb_2019_6 = callPackage ../development/libraries/tbb/2019_6.nix { };
   tbb_2020_3 = callPackage ../development/libraries/tbb/2020_3.nix { };
   tbb_2021_8 = callPackage ../development/libraries/tbb { };
   # many packages still fail with latest version
