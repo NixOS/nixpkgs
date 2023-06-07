@@ -23725,6 +23725,8 @@ with pkgs;
 
   quarto = callPackage ../development/libraries/quarto { };
 
+  quartoMinimal = callPackage ../development/libraries/quarto { rWrapper = null; python3 = null; };
+
   qt4 = qt48;
 
   qt48 = callPackage ../development/libraries/qt-4.x/4.8 {
