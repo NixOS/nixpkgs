@@ -744,6 +744,7 @@ in {
   systemd-networkd-vrf = handleTest ./systemd-networkd-vrf.nix {};
   systemd-no-tainted = handleTest ./systemd-no-tainted.nix {};
   systemd-nspawn = handleTest ./systemd-nspawn.nix {};
+  systemd-nspawn-configfile = handleTest ./systemd-nspawn-configfile.nix {};
   systemd-oomd = handleTest ./systemd-oomd.nix {};
   systemd-portabled = handleTest ./systemd-portabled.nix {};
   systemd-repart = handleTest ./systemd-repart.nix {};
