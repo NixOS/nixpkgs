@@ -2597,6 +2597,7 @@ dont-distribute-packages:
  - libmolude
  - libraft
  - librato
+ - libssh2-conduit
  - libxml-enumerator
  - lifted-base-tf
  - lightning-haskell

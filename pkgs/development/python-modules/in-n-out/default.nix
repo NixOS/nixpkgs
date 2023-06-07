@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "in-n-out";
-  version = "0.1.6";
+  version = "0.1.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PuzjidORMFVlmFZbmnu9O92FoiuXrC8NNRyjwdodriY=";
+    hash = "sha256-g4Dw0ejB6BxcMpRZGgxNDeAyuY93UROVsIrAwv6vSqY=";
   };
 
   nativeBuildInputs = [

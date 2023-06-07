@@ -12,16 +12,6 @@ in rec {
     };
   };
 
-  openconnect_unstable = common {
-    version = "unstable-2022-03-14";
-    src = fetchFromGitLab {
-      owner = "openconnect";
-      repo = "openconnect";
-      rev = "a27a46f1362978db9723c8730f2533516b4b31b1";
-      sha256 = "sha256-Kz98GHCyEcx7vUF+AXMLR7886+iKGKNwx1iRaYcH8ps=";
-    };
-  };
-
   openconnect_openssl = openconnect.override {
     useOpenSSL = true;
   };

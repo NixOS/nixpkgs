@@ -713,7 +713,7 @@ in
           Configuration lines appended to the generated Nginx
           configuration file. Commonly used by different modules
           providing http snippets. {option}`appendConfig`
-          can be specified more than once and it's value will be
+          can be specified more than once and its value will be
           concatenated (contrary to {option}`config` which
           can be set only once).
         '';

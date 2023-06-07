@@ -1663,6 +1663,14 @@ self: super: {
   servant-swagger-ui-core = doJailbreak super.servant-swagger-ui-core;
 
   hercules-ci-agent = lib.pipe super.hercules-ci-agent [
+    (appendPatches [
+      # https://github.com/hercules-ci/hercules-ci-agent/pull/507
+      (fetchpatch {
+        url = "https://github.com/hercules-ci/hercules-ci-agent/commit/f5c39d0cbde36a056419cab8d69a67302eb8b0e4.patch";
+        sha256 = "sha256-J8N4+HUQ6vlJBCwCyxv8Fv5HSbtiim64Qh1n9CaRe1o=";
+        stripLen = 1;
+      })
+    ])
     (self.generateOptparseApplicativeCompletions [ "hercules-ci-agent" ])
   ];
 
