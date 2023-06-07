@@ -5391,6 +5391,8 @@ with pkgs;
 
   blahtexml = callPackage ../tools/typesetting/tex/blahtexml { };
 
+  catdvi = callPackage ../tools/typesetting/tex/catdvi { };
+
   dblatex = callPackage ../tools/typesetting/tex/dblatex { };
 
   dblatexFull = dblatex.override { enableAllFeatures = true; };
