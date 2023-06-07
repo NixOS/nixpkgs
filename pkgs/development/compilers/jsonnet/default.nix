@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/lib $out/include $out/share/doc/jsonnet
     cp jsonnet $out/bin/
     cp jsonnetfmt $out/bin/
-    cp libjsonnet*.so $out/lib/
+    cp libjsonnet*.so* $out/lib/
     cp -a include/*.h $out/include/
     cp -r ./html $out/share/doc/jsonnet
   '';
