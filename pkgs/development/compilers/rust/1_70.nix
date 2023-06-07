@@ -16,24 +16,24 @@
 , pkgsBuildTarget, pkgsBuildBuild, pkgsBuildHost
 , makeRustPlatform
 , llvmPackages_11
-, llvmPackages_15, llvm_15
+, llvmPackages_16, llvm_16
 } @ args:
 
 import ./default.nix {
   rustcVersion = "1.70.0";
   rustcSha256 = "sha256-sr+uAAt6UEDk7Eu8UKCfIVSBkMt1cLDtdzWDaEE70nw=";
 
-  llvmSharedForBuild = pkgsBuildBuild.llvmPackages_15.libllvm.override { enableSharedLibraries = true; };
-  llvmSharedForHost = pkgsBuildHost.llvmPackages_15.libllvm.override { enableSharedLibraries = true; };
-  llvmSharedForTarget = pkgsBuildTarget.llvmPackages_15.libllvm.override { enableSharedLibraries = true; };
+  llvmSharedForBuild = pkgsBuildBuild.llvmPackages_16.libllvm.override { enableSharedLibraries = true; };
+  llvmSharedForHost = pkgsBuildHost.llvmPackages_16.libllvm.override { enableSharedLibraries = true; };
+  llvmSharedForTarget = pkgsBuildTarget.llvmPackages_16.libllvm.override { enableSharedLibraries = true; };
 
   llvmBootstrapForDarwin = llvmPackages_11;
 
   # For use at runtime
-  llvmShared = llvm_15.override { enableSharedLibraries = true; };
+  llvmShared = llvm_16.override { enableSharedLibraries = true; };
 
   # Expose llvmPackages used for rustc from rustc via passthru for LTO in Firefox
-  llvmPackages = llvmPackages_15;
+  llvmPackages = llvmPackages_16;
 
   # Note: the version MUST be one version prior to the version we're
   # building
@@ -60,4 +60,4 @@ import ./default.nix {
   rustcPatches = [ ];
 }
 
-(builtins.removeAttrs args [ "pkgsBuildHost" "llvmPackages_11" "llvmPackages_15" "llvm_15"])
+(builtins.removeAttrs args [ "pkgsBuildHost" "llvmPackages_11" "llvmPackages_16" "llvm_16"])
