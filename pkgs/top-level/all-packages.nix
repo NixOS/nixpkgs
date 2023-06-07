@@ -25985,6 +25985,7 @@ with pkgs;
     mariadb_106
     mariadb_1010
     mariadb_1011
+    mariadb_110
   ;
   mariadb = mariadb_106;
   mariadb-embedded = mariadb.override { withEmbedded = true; };
