@@ -5,6 +5,7 @@
 , antiword
 , bison
 , catdoc
+, catdvi
 , chmlib
 , djvulibre
 , file
@@ -43,6 +44,7 @@ let filters = {
       awk = gawk;
       antiword = antiword;
       catppt = catdoc;
+      catdvi = catdvi;
       djvused = djvulibre;
       djvutxt = djvulibre;
       egrep = gnugrep;
