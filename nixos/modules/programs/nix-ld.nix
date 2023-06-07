@@ -59,7 +59,7 @@ in
 
     environment.pathsToLink = [ "/share/nix-ld" ];
 
-    environment.variables = {
+    environment.sessionVariables = {
       NIX_LD = toString nix-ld-so;
       NIX_LD_LIBRARY_PATH = "/run/current-system/sw/share/nix-ld/lib";
     };
