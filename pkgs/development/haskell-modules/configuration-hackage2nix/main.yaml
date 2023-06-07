@@ -623,7 +623,8 @@ unsupported-platforms:
   mpi-hs-binary:                                [ aarch64-linux, platforms.darwin ]
   mpi-hs-cereal:                                [ aarch64-linux, platforms.darwin ]
   mpi-hs-store:                                 [ aarch64-linux, platforms.darwin ]
-  mplayer-spot:                                 [ aarch64-linux ]
+  mplayer-spot:                                 [ aarch64-linux, platforms.darwin ]
+  monomer-hagrid:                               [ platforms.darwin ] # depends on mesa
   mptcp-pm:                                     [ platforms.darwin ]
   netlink:                                      [ platforms.darwin ]
   notifications-tray-icon:                      [ platforms.darwin ] # depends on gi-dbusmenu
@@ -642,6 +643,7 @@ unsupported-platforms:
   reflex-localize-dom:                          [ platforms.darwin, aarch64-linux ]
   rtlsdr:                                       [ platforms.darwin ]
   rubberband:                                   [ platforms.darwin ]
+  SDL-mixer:                                    [ platforms.darwin ] # depends on mesa
   sdl2-mixer:                                   [ platforms.darwin ]
   sdl2-ttf:                                     [ platforms.darwin ]
   sensei:                                       [ platforms.darwin ]
