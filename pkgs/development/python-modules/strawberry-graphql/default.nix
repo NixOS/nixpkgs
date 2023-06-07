@@ -1,7 +1,6 @@
 { lib
 , aiohttp
 , asgiref
-, backports-cached-property
 , buildPythonPackage
 , chalice
 , channels
@@ -16,7 +15,6 @@
 , freezegun
 , graphql-core
 , libcst
-, mypy
 , opentelemetry-api
 , opentelemetry-sdk
 , poetry-core
@@ -149,7 +147,6 @@ buildPythonPackage rec {
     daphne
     email-validator
     freezegun
-    mypy
     pytest-asyncio
     pytest-emoji
     pytest-mock
@@ -168,6 +165,7 @@ buildPythonPackage rec {
     "tests/django/test_dataloaders.py"
     "tests/exceptions/"
     "tests/http/"
+    "tests/mypy/test_plugin.py" # avoid dependency on mypy
     "tests/schema/extensions/"
     "tests/schema/test_dataloaders.py"
     "tests/schema/test_lazy/"
