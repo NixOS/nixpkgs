@@ -50,8 +50,6 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     mock
-    mypy
-    mypy-extensions
     dbus-python
     pygobject3
     pyinotify
