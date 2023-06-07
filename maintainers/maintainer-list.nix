@@ -9469,6 +9469,12 @@
       fingerprint = "97A0 AE5E 03F3 499B 7D7A  65C6 76A4 1432 37EF 5817";
     }];
   };
+  lukaswrz = {
+    email = "lukas@wrz.one";
+    github = "lukaswrz";
+    githubId = 84395723;
+    name = "Lukas Wurzinger";
+  };
   lukeadams = {
     email = "luke.adams@belljar.io";
     github = "lukeadams";
