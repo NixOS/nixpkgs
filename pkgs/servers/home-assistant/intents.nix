@@ -33,6 +33,11 @@ buildPythonPackage rec {
 
   sourceRoot = "source/package";
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "2023.4.26" "${version}"
+  '';
+
   nativeBuildInputs = [
     hassil
     jinja2
