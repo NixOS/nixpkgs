@@ -40267,7 +40267,7 @@ with pkgs;
   wamr = callPackage ../development/interpreters/wamr { };
 
   wasmer = callPackage ../development/interpreters/wasmer {
-    llvmPackages = llvmPackages_12;
+    llvmPackages = llvmPackages_14;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation SystemConfiguration Security;
   };
 
