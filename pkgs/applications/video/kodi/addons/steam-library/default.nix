@@ -3,13 +3,13 @@
 buildKodiAddon rec {
   pname = "steam-library";
   namespace = "plugin.program.steam.library";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "aanderse";
     repo = namespace;
     rev = "v${version}";
-    sha256 = "1ai8k55bamzkx7awk3dl8ksw93pan3h9b1xlylcldy7a0ddldzdg";
+    sha256 = "sha256-LVdFih0n/lkjyaYf8jw0IFlcDiXXOtUH2N9OduV1H9Q=";
   };
 
   propagatedBuildInputs = [

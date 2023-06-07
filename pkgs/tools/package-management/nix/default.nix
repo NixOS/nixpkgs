@@ -183,8 +183,8 @@ in lib.makeExtensible (self: {
   };
 
   nix_2_16 = common {
-    version = "2.16.0";
-    hash = "sha256-KjcQkI2HgbP7KOlHxb2DvyHISQXo2OExvvjqTyK7P0o=";
+    version = "2.16.1";
+    hash = "sha256-/XCWa2osNFIpPC5MkxlX6qTZf/DaTLwS3LWN0SRFiuU=";
   };
 
   # The minimum Nix version supported by Nixpkgs
@@ -204,7 +204,7 @@ in lib.makeExtensible (self: {
     else
       nix;
 
-  stable = self.nix_2_13;
+  stable = self.nix_2_15;
 
   unstable = self.nix_2_16;
 })

@@ -20,7 +20,7 @@ let
       pkgs.adwaita-qt6
     ]
     else if isQtStyle then [ pkgs.libsForQt5.qtstyleplugins ]
-    else if isQt5ct then [ pkgs.libsForQt5.qt5ct ]
+    else if isQt5ct then [ pkgs.libsForQt5.qt5ct pkgs.qt6Packages.qt6ct ]
     else if isLxqt then [ pkgs.lxqt.lxqt-qtplugin pkgs.lxqt.lxqt-config ]
     else if isKde then [ pkgs.libsForQt5.plasma-integration pkgs.libsForQt5.systemsettings ]
     else throw "`qt.platformTheme` ${cfg.platformTheme} and `qt.style` ${cfg.style} are not compatible.";

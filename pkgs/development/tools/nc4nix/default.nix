@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "nc4nix";
-  version = "unstable-2023-05-25";
+  version = "unstable-2023-06-05";
 
   src = fetchFromGitHub {
     owner = "helsinki-systems";
     repo = "nc4nix";
-    rev = "14cab9b2f8628ae6668c1d01519f558069f7f675";
-    sha256 = "sha256-iy9jJMRu0SkfrDufO6WAObqdiusvwhyv+GGHVrD3CV4=";
+    rev = "b7fa87cb9b21aceaf0cb0f9b612dde4f91ca6655";
+    sha256 = "sha256-fVB8l1HyBL7Xq99MgsnnlU4a+ZM7R1ImsAg4czajwCA=";
   };
 
   patches = [
@@ -31,13 +31,6 @@ buildGoModule rec {
       url = "https://github.com/helsinki-systems/nc4nix/pull/2/commits/449eec89538df4e92106d06046831202eb84a1db.patch";
       sha256 = "sha256-qAAbR1G748+2vwwfAhpe8luVEIKNGifqXqTV9QqaUFc=";
       name = "add_package_selection_command_line_arg.patch";
-    })
-    # Only consider (new) stable releases of NC apps
-    # https://github.com/helsinki-systems/nc4nix/issues/4
-    (fetchpatch {
-      url = "https://github.com/helsinki-systems/nc4nix/pull/5/commits/076a188bf30203ddea0217d83f2e3b16f3b9392b.patch";
-      sha256 = "sha256-N7X9j0tWD8ZAWjXXCXGITl/EBbrIbKbHJHyskT1rVTs=";
-      name = "only_consider_stable_releases.patch";
     })
   ];
 

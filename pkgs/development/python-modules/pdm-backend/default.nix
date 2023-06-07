@@ -40,6 +40,8 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  setupHook = ./setup-hook.sh;
+
   meta = with lib; {
     homepage = "https://github.com/pdm-project/pdm-backend";
     changelog = "https://github.com/pdm-project/pdm-backend/releases/tag/${version}";
