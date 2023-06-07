@@ -32172,8 +32172,6 @@ with pkgs;
       # no idea how to fix the tests :(
       doCheck = false;
     });
-
-    abseil-cpp = abseil-cpp_202111;
   };
 
   kotatogram-desktop-with-webkit = callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop/with-webkit.nix { };
