@@ -4,7 +4,6 @@
 , typing-inspect
 , marshmallow-enum
 , hypothesis
-, mypy
 , pytestCheckHook
 }:
 
@@ -26,14 +25,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
-    mypy
     pytestCheckHook
   ];
 
-  disabledTests = [
+  disabledTestPaths = [
+    # fails with the following error and avoid dependency on mypy
     # mypy_main(None, text_io, text_io, [__file__], clean_exit=True)
     # TypeError: main() takes at most 4 arguments (5 given)
-    "test_type_hints"
+    "tests/test_annotations.py"
   ];
 
   pythonImportsCheck = [ "dataclasses_json" ];
