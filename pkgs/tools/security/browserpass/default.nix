@@ -5,6 +5,8 @@
 , gnupg
 , makeWrapper
 , autoPatchelfHook
+, testers
+, browserpass
 }:
 
 buildGoModule rec {
@@ -55,6 +57,11 @@ buildGoModule rec {
     mkdir -p $out/lib/mozilla/native-messaging-hosts
     ln -s $out/lib/browserpass/hosts/firefox/*.json $out/lib/mozilla/native-messaging-hosts
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = browserpass;
+    command = "browserpass --version";
+  };
 
   meta = with lib; {
     description = "Browserpass native client app";
