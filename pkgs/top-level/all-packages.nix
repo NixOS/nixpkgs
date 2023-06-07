@@ -4044,9 +4044,7 @@ with pkgs;
     cudaSupport = config.cudaSupport or false;
   };
 
-  tensorflow-lite = callPackage ../development/libraries/science/math/tensorflow-lite {
-    abseil-cpp = abseil-cpp_202103;
-  };
+  tensorflow-lite = callPackage ../development/libraries/science/math/tensorflow-lite { };
 
   tiny-cuda-nn = callPackage ../development/libraries/science/math/tiny-cuda-nn { };
 
