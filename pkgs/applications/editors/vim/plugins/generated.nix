@@ -10626,6 +10626,18 @@ final: prev:
     meta.homepage = "https://github.com/mhinz/vim-crates/";
   };
 
+  vim-crystal = buildVimPluginFrom2Nix {
+    pname = "vim-crystal";
+    version = "2023-03-15";
+    src = fetchFromGitHub {
+      owner = "vim-crystal";
+      repo = "vim-crystal";
+      rev = "dc21188ec8c2ee77bb81dffca02e1a29d87cfd9f";
+      sha256 = "1r7nr1g471h875p97yhz29z0w9kngf7vxs8b943cvyid0cr4ysxq";
+    };
+    meta.homepage = "https://github.com/vim-crystal/vim-crystal/";
+  };
+
   vim-csharp = buildVimPluginFrom2Nix {
     pname = "vim-csharp";
     version = "2017-03-29";
