@@ -234,6 +234,10 @@ in
       # This ensures that anything built on the guest isn't lost when the guest is
       # restarted.
       writableStoreUseTmpfs = false;
+
+      # Pass certificates from host to the guest otherwise when custom CA certificates
+      # are required we can't use the cached builder.
+      useHostCerts = true;
     };
   };
 }
