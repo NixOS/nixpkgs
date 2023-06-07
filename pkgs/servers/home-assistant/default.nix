@@ -3,7 +3,7 @@
 , callPackage
 , fetchFromGitHub
 , fetchPypi
-, python3
+, python311
 , substituteAll
 , ffmpeg-headless
 , inetutils
@@ -278,7 +278,7 @@ let
     })
   ];
 
-  python = python3.override {
+  python = python311.override {
     packageOverrides = lib.composeManyExtensions (defaultOverrides ++ [ packageOverrides ]);
   };
 
@@ -323,7 +323,7 @@ in python.pkgs.buildPythonApplication rec {
     hash = "sha256-0rhjh/mIevRdisWvTSx9QQjHdY7nMVpuGyTr9sChipk=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with python.pkgs; [
     setuptools
   ];
 
@@ -479,7 +479,7 @@ in python.pkgs.buildPythonApplication rec {
       getPackages
       python
       supportedComponentsWithTests;
-    pythonPath = python3.pkgs.makePythonPath (componentBuildInputs ++ extraBuildInputs);
+    pythonPath = python.pkgs.makePythonPath (componentBuildInputs ++ extraBuildInputs);
     frontend = python.pkgs.home-assistant-frontend;
     intents = python.pkgs.home-assistant-intents;
     tests = {
