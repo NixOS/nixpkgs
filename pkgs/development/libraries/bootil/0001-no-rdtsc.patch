@@ -1,0 +1,29 @@
+diff --git a/src/3rdParty/smhasher/Platform.h b/src/3rdParty/smhasher/Platform.h
+index 538835f..0faf539 100644
+--- a/src/3rdParty/smhasher/Platform.h
++++ b/src/3rdParty/smhasher/Platform.h
+@@ -29,10 +29,6 @@ void SetAffinity ( int cpu );
+ 
+ #define BIG_CONSTANT(x) (x)
+ 
+-// RDTSC == Read Time Stamp Counter
+-
+-#define rdtsc() __rdtsc()
+-
+ //-----------------------------------------------------------------------------
+ // Other compilers
+ 
+@@ -70,13 +66,6 @@ inline uint64_t rotr64 ( uint64_t x, int8_t r )
+ 
+ #define BIG_CONSTANT(x) (x##LLU)
+ 
+-__inline__ unsigned long long int rdtsc()
+-{
+-    unsigned long long int x;
+-    __asm__ volatile ("rdtsc" : "=A" (x));
+-    return x;
+-}
+-
+ #include <strings.h>
+ #define _stricmp strcasecmp
+ 

@@ -15,6 +15,8 @@ stdenv.mkDerivation {
     sha256 = "1njdj6nvmwf7j2fwqbyvd1cf5l52797vk2wnsliylqdzqcjmfpij";
   };
 
+  patches = [ ./0001-no-rdtsc.patch ];
+
   # Avoid guessing where files end up. Just use current directory.
   postPatch = ''
     substituteInPlace projects/premake4.lua \
@@ -40,6 +42,5 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ abigailbuccaneer ];
     # Build uses `-msse` and `-mfpmath=sse`
     platforms = platforms.all;
-    badPlatforms = [ "aarch64-linux" ];
   };
 }
