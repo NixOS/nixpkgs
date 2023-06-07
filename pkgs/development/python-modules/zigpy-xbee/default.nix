@@ -1,8 +1,6 @@
 { lib
-, asynctest
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pyserial
 , pyserial-asyncio
 , pytest-asyncio
@@ -33,7 +31,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    asynctest
     pytest-asyncio
     pytestCheckHook
   ];
