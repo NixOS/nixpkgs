@@ -34,6 +34,7 @@
 , zlib
 , withGui ? true
 , withPython ? with stdenv; buildPlatform.canExecute hostPlatform
+, autoreconfHook
 }:
 
 let filters = {
@@ -111,6 +112,7 @@ mkDerivation rec {
   ] ++ [
     makeWrapper
     which
+    autoreconfHook
   ];
 
   buildInputs = [
