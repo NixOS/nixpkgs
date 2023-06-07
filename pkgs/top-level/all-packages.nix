@@ -34325,9 +34325,7 @@ with pkgs;
 
   ly = callPackage ../applications/display-managers/ly { };
 
-  slic3r = callPackage ../applications/misc/slic3r {
-    boost = boost172; # Building fails with Boost >1.72 due to boost/detail/endian.hpp missing
-  };
+  slic3r = callPackage ../applications/misc/slic3r { };
 
   curaengine_stable = callPackage ../applications/misc/curaengine/stable.nix { };
 
