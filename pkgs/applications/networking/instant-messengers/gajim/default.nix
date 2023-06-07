@@ -15,18 +15,17 @@
 , enableRST ? true, docutils
 , enableSpelling ? true, gspell
 , enableUPnP ? true, gupnp-igd
-, enableOmemoPluginDependencies ? true
 , enableAppIndicator ? true, libappindicator-gtk3
 , extraPythonPackages ? ps: []
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  version = "1.7.3";
+  version = "1.8.0";
 
   src = fetchurl {
     url = "https://gajim.org/downloads/${lib.versions.majorMinor version}/gajim-${version}.tar.gz";
-    hash = "sha256-t8yzWfdsY8pXye7Dn5hME0bOHgf+MzuyVY3hweXc0xg=";
+    hash = "sha512-ckKQ3m1DiqzZKal1nXpxIGjDA8r5ACoacN3A6aoWOHBU0+TvrPhOztKPSe95dJx2TV/mf8sjw7rvOit3FN8hjg==";
   };
 
   format = "pyproject";
@@ -55,7 +54,7 @@ python3.pkgs.buildPythonApplication rec {
     nbxmpp pygobject3 dbus-python pillow css-parser precis-i18n keyring setuptools packaging gssapi
   ] ++ lib.optionals enableE2E [ pycrypto python-gnupg ]
     ++ lib.optional enableRST docutils
-    ++ lib.optionals enableOmemoPluginDependencies [ python-axolotl qrcode ]
+    ++ [ omemo-dr qrcode ]
     ++ extraPythonPackages python3.pkgs;
 
   nativeCheckInputs = [ xvfb-run dbus ];
