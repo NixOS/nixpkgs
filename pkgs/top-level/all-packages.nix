@@ -36020,8 +36020,7 @@ with pkgs;
 
   napari = with python3Packages; toPythonApplication napari;
 
-  nano-wallet = libsForQt5.callPackage ../applications/blockchains/nano-wallet
-    { stdenv = gcc10StdenvCompat; boost = boost172; };
+  nano-wallet = libsForQt5.callPackage ../applications/blockchains/nano-wallet { };
 
   namecoin  = callPackage ../applications/blockchains/namecoin { withGui = true; };
   namecoind = callPackage ../applications/blockchains/namecoin { withGui = false; };
