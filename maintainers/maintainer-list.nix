@@ -14308,6 +14308,11 @@
       fingerprint = "A317 37B3 693C 921B 480C  C629 4A2A AAA3 82F8 294C";
     }];
   };
+  servilio = {
+    name = "Servilio Afre Puentes";
+    email = "servilio@gmail.com";
+    githubId = 1601168;
+  };
   seylerius = {
     name = "Sable Seyler";
     email = "sable@seyleri.us";
