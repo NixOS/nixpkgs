@@ -144,6 +144,8 @@ mkDerivation rec {
         substituteInPlace $f --replace /usr/bin/perl   ${lib.getBin (perl.passthru.withPackages (p: [ p.ImageExifTool ]))}/bin/perl
       fi
     done
+    wrapProgram $out/bin/recoll      --prefix PATH : "${filterPath}"
+    wrapProgram $out/bin/recollindex --prefix PATH : "${filterPath}"
     wrapProgram $out/share/recoll/filters/rclaudio.py \
       --prefix PYTHONPATH : $PYTHONPATH
     wrapProgram $out/share/recoll/filters/rclimg \
