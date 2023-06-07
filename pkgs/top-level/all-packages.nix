@@ -36848,6 +36848,8 @@ with pkgs;
   minecraftServers = import ../games/minecraft-servers { inherit callPackage lib javaPackages; };
   minecraft-server = minecraftServers.vanilla; # backwards compatibility
 
+  minesweep-rs = callPackage ../games/minesweep-rs { };
+
   moon-buggy = callPackage ../games/moon-buggy { };
 
   inherit (callPackages ../games/minetest {
