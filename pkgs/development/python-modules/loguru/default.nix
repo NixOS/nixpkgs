@@ -34,7 +34,11 @@ buildPythonPackage rec {
     "tests/test_multiprocessing.py"
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = [
+    # fails on some machine configurations
+    # AssertionError: assert '' != ''
+    "test_file_buffering"
+  ] ++ lib.optionals stdenv.isDarwin [
     "test_rotation_and_retention"
     "test_rotation_and_retention_timed_file"
     "test_renaming"
