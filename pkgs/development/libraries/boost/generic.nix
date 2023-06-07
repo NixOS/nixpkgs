@@ -72,7 +72,10 @@ let
                     then if lib.versionOlder version "1.78" then "mips1" else "mips"
                     else if stdenv.hostPlatform.parsed.cpu.name == "s390x" then "s390x"
                     else toString stdenv.hostPlatform.parsed.cpu.family}"
-    "binary-format=${toString stdenv.hostPlatform.parsed.kernel.execFormat.name}"
+    # env in host triplet for Mach-O is "macho", but boost binary format for Mach-O is "mach-o"
+    "binary-format=${if stdenv.hostPlatform.parsed.kernel.execFormat == lib.systems.parse.execFormats.macho
+                     then "mach-o"
+                     else toString stdenv.hostPlatform.parsed.kernel.execFormat.name}"
     "target-os=${toString stdenv.hostPlatform.parsed.kernel.name}"
 
     # adapted from table in boost manual
