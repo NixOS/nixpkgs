@@ -703,7 +703,6 @@ broken-packages:
   - clanki
   - clarifai
   - CLASE
-  - clash-prelude
   - Clash-Royale-Hack-Cheats
   - ClassLaws
   - classy-influxdb-simple
@@ -3095,6 +3094,7 @@ broken-packages:
   - libpq
   - librandomorg
   - libsecp256k1
+  - libssh2 # failure in compileBuildDriverPhase in job https://hydra.nixos.org/build/223222399 at 2023-06-07
   - libsystemd-daemon
   - libtagc
   - libxls

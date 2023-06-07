@@ -936,6 +936,8 @@ let
 
     mec = callPackage ../development/ocaml-modules/mec { };
 
+    memtrace = callPackage ../development/ocaml-modules/memtrace { };
+
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
     menhirLib = callPackage ../development/ocaml-modules/menhir/lib.nix { };
