@@ -17,7 +17,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/xgadget-lab/nexttrace/printer.version=v${version}"
+    "-X github.com/xgadget-lab/nexttrace/config.Version=v${version}"
   ];
 
   meta = with lib; {
