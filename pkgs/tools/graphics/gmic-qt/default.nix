@@ -55,11 +55,11 @@ assert lib.assertMsg
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmic-qt${lib.optionalString (variant != "standalone") "-${variant}"}";
-  version = "3.2.4";
+  version = "3.2.5";
 
   src = fetchzip {
     url = "https://gmic.eu/files/source/gmic_${finalAttrs.version}.tar.gz";
-    hash = "sha256-FJ2zlsah/3Jf5ie4UhQsPvMoxDMc6iHl3AkhKsZSuqE=";
+    hash = "sha256-mfDcRG6zEjEuemCaLUOLzbbcq8FN9+n+EqN0NeR9H7U=";
   };
 
   nativeBuildInputs = [
