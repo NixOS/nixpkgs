@@ -2,7 +2,6 @@
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
-, mypy
 , pyjwt
 , pytestCheckHook
 , pythonOlder
@@ -34,7 +33,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    mypy
     pytestCheckHook
     responses
   ];
