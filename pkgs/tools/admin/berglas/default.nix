@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, testers, berglas }:
 
 let
   skipTests = {
@@ -38,7 +38,19 @@ buildGoModule rec {
 
   vendorHash = "sha256-qcFS07gma7GVxhdrYca0E6rcczNcZmU8JcjjcpEaxp0=";
 
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=github.com/GoogleCloudPlatform/berglas/internal/version.Version=${version}"
+  ];
+
   postPatch = skipTestsCommand;
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = berglas;
+    };
+  };
 
   meta = with lib; {
     description = "A tool for managing secrets on Google Cloud";

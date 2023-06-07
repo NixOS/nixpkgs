@@ -924,7 +924,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     antlr = antlr4_10;
     boost = boost177; # Configure checks for specific version.
-    protobuf = protobuf3_19;
     icu =  icu69;
   };
 
@@ -7380,9 +7379,7 @@ with pkgs;
 
   emv = callPackage ../tools/misc/emv { };
 
-  enblend-enfuse = callPackage ../tools/graphics/enblend-enfuse {
-    boost = boost172;
-  };
+  enblend-enfuse = callPackage ../tools/graphics/enblend-enfuse { };
 
   enc = callPackage ../tools/security/enc { };
 
@@ -16687,9 +16684,7 @@ with pkgs;
 
   smlpkg = callPackage ../tools/package-management/smlpkg { };
 
-  solc = callPackage ../development/compilers/solc {
-    boost = boost172;
-  };
+  solc = callPackage ../development/compilers/solc { };
 
   souffle = callPackage ../development/compilers/souffle { };
 
@@ -21975,9 +21970,7 @@ with pkgs;
 
   libgtop = callPackage ../development/libraries/libgtop { };
 
-  libLAS = callPackage ../development/libraries/libLAS {
-    boost = boost172;
-  };
+  libLAS = callPackage ../development/libraries/libLAS { };
 
   liblaxjson = callPackage ../development/libraries/liblaxjson { };
 
@@ -23114,6 +23107,8 @@ with pkgs;
 
   markdown-anki-decks = callPackage ../tools/misc/markdown-anki-decks { };
 
+  mdslides = callPackage ../tools/misc/mdslides { };
+
   micropython = callPackage ../development/interpreters/micropython { };
 
   MIDIVisualizer = darwin.apple_sdk_11_0.callPackage ../applications/audio/midi-visualizer {
@@ -24075,6 +24070,8 @@ with pkgs;
   simp_le = callPackage ../tools/admin/simp_le { };
 
   simpleitk = callPackage ../development/libraries/simpleitk { lua = lua5_3; };
+
+  sioclient = callPackage ../development/libraries/sioclient { };
 
   sfml = callPackage ../development/libraries/sfml {
     inherit (darwin.apple_sdk.frameworks) IOKit Foundation AppKit OpenAL;
@@ -25946,9 +25943,7 @@ with pkgs;
 
   easyeffects = callPackage ../applications/audio/easyeffects { };
 
-  pulseeffects-legacy = callPackage ../applications/audio/pulseeffects-legacy {
-    boost = boost172;
-  };
+  pulseeffects-legacy = callPackage ../applications/audio/pulseeffects-legacy { };
 
   soundux = callPackage ../applications/audio/soundux {
     yt-dlp = yt-dlp.override { withAlias = true; };
@@ -33274,9 +33269,7 @@ with pkgs;
 
   notmuch-addrlookup = callPackage ../applications/networking/mailreaders/notmuch-addrlookup { };
 
-  nova-filters =  callPackage ../applications/audio/nova-filters {
-    boost = boost172;
-  };
+  nova-filters = callPackage ../applications/audio/nova-filters { };
 
   nvi = callPackage ../applications/editors/nvi { };
 
@@ -36053,9 +36046,7 @@ with pkgs;
 
   solana-cli = callPackage ../applications/blockchains/solana { };
 
-  solana-validator = callPackage ../applications/blockchains/solana-validator {
-    inherit (darwin.apple_sdk.frameworks) IOKit Security AppKit;
-  };
+  solana-validator = callPackage ../applications/blockchains/solana-validator { };
 
   snarkos = callPackage ../applications/blockchains/snarkos {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -36951,7 +36942,11 @@ with pkgs;
 
   otto-matic = callPackage ../games/otto-matic { };
 
-  openraPackages = import ../games/openra pkgs.__splicedPackages;
+  openraPackages_2019 = import ../games/openra_2019 pkgs.__splicedPackages;
+
+  openra_2019 = openraPackages_2019.engines.release;
+
+  openraPackages = recurseIntoAttrs (callPackage ../games/openra {});
 
   openra = openraPackages.engines.release;
 
@@ -40427,9 +40422,7 @@ with pkgs;
 
   NSPlist = callPackage ../development/libraries/NSPlist { };
 
-  PlistCpp = callPackage ../development/libraries/PlistCpp {
-    boost = boost172;
-  };
+  PlistCpp = callPackage ../development/libraries/PlistCpp { };
 
   xib2nib = callPackage ../development/tools/xib2nib { };
 
