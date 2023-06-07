@@ -1,45 +1,57 @@
-{ lib, stdenv
+{ lib
 , buildPythonPackage
+, ccache
 , fetchFromGitHub
-, vmprof
-, pyqt4
 , isPyPy
-, pkgs
-, scons
-, chrpath
+, ordered-set
+, python
+, setuptools
+, zstandard
 }:
 
 buildPythonPackage rec {
   pname = "nuitka";
-  version = "1.1.5";
-  format = "setuptools";
+  version = "1.7";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Nuitka";
     repo = "Nuitka";
     rev = version;
-    hash = "sha256-8eWOcxATVS866nlN39b2VU1CuXAfcn0yQsDweHS2yDU=";
+    hash = "sha256-2meOFL2agQn9eBPy3pN6VoNmzUkYZen4XLYO5cnD2kQ=";
   };
 
-  nativeCheckInputs = [ vmprof pyqt4 ];
-  nativeBuildInputs = [ scons ];
-  propagatedBuildInputs = [ chrpath ];
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    ordered-set
+    zstandard
+  ];
+
+  nativeCheckInputs = [
+    ccache
+  ];
 
   postPatch = ''
     patchShebangs tests/run-tests
-  '' + lib.optionalString stdenv.isLinux ''
-    substituteInPlace nuitka/plugins/standard/ImplicitImports.py --replace 'locateDLL("uuid")' '"${lib.getLib pkgs.util-linux}/lib/libuuid.so"'
   '';
-
-  # We do not want any wrappers here.
-  postFixup = "";
 
   checkPhase = ''
-    tests/run-tests
+    runHook preCheck
+
+    # ./tests/run-tests takes too long to run
+    # basic test gives sufficient coverage to assume that a change is correct
+    # https://nuitka.net/doc/developer-manual.html#basic-tests
+    ${python.interpreter} tests/basics/run_all.py search
+
+    runHook postCheck
   '';
 
-  # Problem with a subprocess (parts)
-  doCheck = false;
+  pythonImportsCheck = [
+    "nuitka"
+  ];
 
   # Requires CPython
   disabled = isPyPy;
