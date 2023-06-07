@@ -12,7 +12,7 @@ buildDunePackage rec {
     sha256 = "sha256-y/Xz04CMFfRIzrDzGot16zEQsBMNc4J5s/q0VERcj04=";
   };
 
-  duneVersion = "3";
+  minimalOCamlVersion = "4.11";
 
   meta = with lib; {
     homepage = "https://github.com/janestreet/${pname}";
