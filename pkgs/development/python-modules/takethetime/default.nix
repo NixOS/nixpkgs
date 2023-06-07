@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  # Tests are timing dependent and aren't included with PyPI distribution
+  # all tests are timing dependent
   doCheck = false;
 
   pythonImportsCheck = [ "takethetime" ];
