@@ -7460,6 +7460,8 @@ self: super: with self; {
 
   netmap = callPackage ../development/python-modules/netmap { };
 
+  omemo-dr = callPackage ../development/python-modules/omemo-dr { };
+
   onetimepad = callPackage ../development/python-modules/onetimepad { };
 
   openai = callPackage ../development/python-modules/openai { };
