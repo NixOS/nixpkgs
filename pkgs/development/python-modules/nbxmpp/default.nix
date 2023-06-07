@@ -54,6 +54,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://dev.gajim.org/gajim/python-nbxmpp";
+    changelog = "https://dev.gajim.org/gajim/python-nbxmpp/-/blob/master/ChangeLog";
     description = "Non-blocking Jabber/XMPP module";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ abbradar ];
