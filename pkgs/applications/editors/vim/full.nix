@@ -24,7 +24,7 @@
 , netbeansSupport   ? config.netbeans or true       # Enable NetBeans integration support.
 , ximSupport        ? config.vim.xim or true        # less than 15KB, needed for deadkeys
 , darwinSupport     ? config.vim.darwin or false    # Enable Darwin support
-, ftNixSupport      ? config.vim.ftNix or true      # Add .nix filetype detection and minimal syntax highlighting support
+, ftNixSupport      ? config.vim.ftNix or true      # Add nix indentation support from vim-nix (not needed for basic syntax highlighting)
 }:
 
 
@@ -61,7 +61,7 @@ let
 
   common = callPackage ./common.nix {};
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
 
   pname = "vim-full";
 
@@ -71,7 +71,7 @@ in stdenv.mkDerivation rec {
     default = common.src; # latest release
   };
 
-  patches = [ ./cflags-prune.diff ] ++ lib.optional ftNixSupport ./ft-nix-support.patch;
+  patches = [ ./cflags-prune.diff ];
 
   configureFlags = [
     "--with-features=${features}"
@@ -163,10 +163,9 @@ in stdenv.mkDerivation rec {
   # error: '__declspec' attributes are not enabled; use '-fdeclspec' or '-fms-extensions' to enable support for __declspec attributes
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-fdeclspec";
 
-  preConfigure = "" + lib.optionalString ftNixSupport ''
+  preConfigure = lib.optionalString ftNixSupport ''
       cp ${vimPlugins.vim-nix.src}/ftplugin/nix.vim runtime/ftplugin/nix.vim
       cp ${vimPlugins.vim-nix.src}/indent/nix.vim runtime/indent/nix.vim
-      cp ${vimPlugins.vim-nix.src}/syntax/nix.vim runtime/syntax/nix.vim
     '';
 
   preInstall = ''
