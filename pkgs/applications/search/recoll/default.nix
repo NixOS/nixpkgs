@@ -49,6 +49,12 @@ mkDerivation rec {
     "--enable-recollq"
     "--disable-webkit"
     "--without-systemd"
+
+    # this leaks into the final `librecoll-*.so` binary, so we need
+    # to be sure it is taken from `pkgs.file` rather than `stdenv`,
+    # especially when cross-compiling
+    "--with-file-command=${file}/bin/file"
+
   ] ++ lib.optionals (!withPython) [
     "--disable-python-module"
     "--disable-python-chm"
@@ -68,8 +74,9 @@ mkDerivation rec {
     ./fix-datadir.patch
   ];
 
-  nativeBuildInputs = [
-    file
+  nativeBuildInputs = lib.optionals withGui [
+    qtbase
+  ] ++ [
     pkg-config
   ] ++ lib.optionals withPython [
     python3Packages.setuptools
@@ -87,6 +94,7 @@ mkDerivation rec {
   ] ++ [
     xapian
     zlib
+    file
   ] ++ lib.optionals withGui [
     qtbase
   ] ++ lib.optionals stdenv.isDarwin [
