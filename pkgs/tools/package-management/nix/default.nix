@@ -111,6 +111,13 @@ let
     hash = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
   };
 
+  patch-fix-aarch64-darwin-static = fetchpatch {
+    # https://github.com/NixOS/nix/pull/8068
+    name = "fix-aarch64-darwin-static.patch";
+    url = "https://github.com/NixOS/nix/commit/220aa8e0ac9d17de2c9f356a68be43b673d851a1.patch";
+    hash = "sha256-YrmFkVpwPreiig1/BsP+DInpTdQrPmS7bEY0WUGpw+c=";
+  };
+
 in lib.makeExtensible (self: {
   nix_2_3 = (common rec {
     version = "2.3.16";
@@ -170,6 +177,9 @@ in lib.makeExtensible (self: {
   nix_2_13 = common {
     version = "2.13.3";
     hash = "sha256-jUc2ccTR8f6MGY2pUKgujm+lxSPNGm/ZAP+toX+nMNc=";
+    patches = [
+      patch-fix-aarch64-darwin-static
+    ];
   };
 
   nix_2_14 = common {
