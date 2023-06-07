@@ -30,6 +30,6 @@ buildGoModule rec {
     homepage = "https://github.com/achannarasappa/ticker";
     changelog = "https://github.com/achannarasappa/ticker/releases/tag/v${version}";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ siraben ];
+    maintainers = with maintainers; [ siraben sarcasticadmin ];
   };
 }
