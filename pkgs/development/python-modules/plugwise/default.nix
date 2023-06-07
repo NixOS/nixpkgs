@@ -8,7 +8,6 @@
 , freezegun
 , jsonpickle
 , munch
-, mypy
 , pyserial
 , pytest-aiohttp
 , pytest-asyncio
@@ -48,7 +47,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     freezegun
     jsonpickle
-    mypy
     pytest-aiohttp
     pytest-asyncio
     pytestCheckHook
