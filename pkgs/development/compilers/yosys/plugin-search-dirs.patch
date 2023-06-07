@@ -1,34 +1,45 @@
-diff --git a/passes/cmds/plugin.cc b/passes/cmds/plugin.cc
-index 3ed19497..f9534bd0 100644
---- a/passes/cmds/plugin.cc
-+++ b/passes/cmds/plugin.cc
-@@ -75,8 +75,27 @@ void load_plugin(std::string filename, std::vector<std::string> aliases)
- 		#endif
+diff --git i/passes/cmds/plugin.cc w/passes/cmds/plugin.cc
+index 08b4aa8c4..f00f540e9 100644
+--- i/passes/cmds/plugin.cc
++++ w/passes/cmds/plugin.cc
+@@ -87,15 +87,33 @@ void load_plugin(std::string filename, std::vector<std::string> aliases)
  
- 		void *hdl = dlopen(filename.c_str(), RTLD_LAZY|RTLD_LOCAL);
--		if (hdl == NULL && orig_filename.find('/') == std::string::npos)
--			hdl = dlopen((proc_share_dirname() + "plugins/" + orig_filename + ".so").c_str(), RTLD_LAZY|RTLD_LOCAL);
-+		if (hdl == NULL && orig_filename.find('/') == std::string::npos) {
-+			std::string install_dir = proc_share_dirname() + "plugins";
+ 			// We were unable to open the file, try to do so from the plugin directory
+ 			if (hdl == NULL && orig_filename.find('/') == std::string::npos) {
+-				hdl = dlopen([orig_filename]() {
+-					std::string new_path = proc_share_dirname() + "plugins/" + orig_filename;
++                            std::string install_dir = proc_share_dirname() + "plugins";
+ 
+-					// Check if we need to append .so
+-					if (new_path.find(".so") == std::string::npos)
+-						new_path.append(".so");
++				vector<string> all_dirs;
++				all_dirs.push_back(install_dir);
+ 
+-					return new_path;
+-				}().c_str(), RTLD_LAZY|RTLD_LOCAL);
++				char* plugin_dirs = getenv("NIX_YOSYS_PLUGIN_DIRS");
++				if (plugin_dirs != NULL) {
++					std::string p(plugin_dirs), t;
++					std::stringstream ss(p);
 +
-+			vector<string> all_dirs;
-+			all_dirs.push_back(install_dir);
-+
-+			char* plugin_dirs = getenv("NIX_YOSYS_PLUGIN_DIRS");
-+			if (plugin_dirs != NULL) {
-+				std::string p(plugin_dirs), t;
-+				std::stringstream ss(p);
-+
-+				while(std::getline(ss, t, ':')) {
-+					all_dirs.push_back(t);
++					while(std::getline(ss, t, ':')) {
++						all_dirs.push_back(t);
++					}
 +				}
-+			}
 +
-+			for (auto dir : all_dirs) {
-+				hdl = dlopen((dir + "/" + orig_filename + ".so").c_str(), RTLD_LAZY|RTLD_LOCAL);
-+				if (hdl != NULL) break;
-+			}
-+		}
- 		if (hdl == NULL)
- 			log_cmd_error("Can't load module `%s': %s\n", filename.c_str(), dlerror());
- 		loaded_plugins[orig_filename] = hdl;
++				for (auto dir : all_dirs) {
++					hdl = dlopen([dir, orig_filename]() {
++						std::string new_path = dir + "/" + orig_filename;
++
++						// Check if we need to append .so
++						if (new_path.find(".so") == std::string::npos)
++							new_path.append(".so");
++
++						return new_path;
++					}().c_str(), RTLD_LAZY|RTLD_LOCAL);
++					if (hdl != NULL) break;
++                                }
+ 			}
+ 
+ 			if (hdl == NULL)
