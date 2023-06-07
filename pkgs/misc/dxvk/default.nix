@@ -27,8 +27,8 @@ stdenvNoCC.mkDerivation (finalAttrs:
         --subst-var-by bash ${bash} \
         --subst-var-by dxvk32 ${dxvk32} \
         --subst-var-by dxvk64 ${dxvk64} \
-        --subst-var-by mcfgthreads32 "${pkgsCross.mingw32.windows.mcfgthreads}" \
-        --subst-var-by mcfgthreads64 "${pkgsCross.mingwW64.windows.mcfgthreads}"
+        --subst-var-by mcfgthreads32 "${pkgsCross.mingw32.windows.mcfgthreads_pre_gcc_13}" \
+        --subst-var-by mcfgthreads64 "${pkgsCross.mingwW64.windows.mcfgthreads_pre_gcc_13}"
       chmod a+x $out/bin/setup_dxvk.sh
       declare -A dxvks=( [x32]=${dxvk32} [x64]=${dxvk64} )
       for arch in "''${!dxvks[@]}"; do
