@@ -87,7 +87,6 @@ in lib.listToAttrs (map (component: lib.nameValuePair component (
     dontUsePytestXdist = true;
 
     pytestFlagsArray = lib.remove "tests" old.pytestFlagsArray
-      ++ [ "--numprocesses=2" ]
       ++ extraPytestFlagsArray.${component} or [ ]
       ++ [ "tests/components/${component}" ];
 
