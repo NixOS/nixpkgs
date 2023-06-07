@@ -9002,6 +9002,8 @@ with pkgs;
 
   jot = callPackage ../applications/misc/jot { };
 
+  jotdown = callPackage ../tools/text/jotdown { };
+
   journaldriver = callPackage ../tools/misc/journaldriver { };
 
   jp = callPackage ../development/tools/jp { };
