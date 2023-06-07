@@ -138,7 +138,7 @@ To use a different GitHub instance, use `githubBase` (defaults to `"github.com"`
 
 ## `fetchFromGitLab` {#fetchfromgitlab}
 
-This is used with GitLab repositories. It behaves similarly to `fetchFromGitHub`, expects `owner`, `repo`, `rev`, and `hash`.
+This is used with GitLab repositories. It behaves similarly to `fetchFromGitHub`, and expects `owner`, `repo`, `rev`, and `hash`.
 
 To use a specific GitLab instance, use `domain` (defaults to `"gitlab.com"`).
 
