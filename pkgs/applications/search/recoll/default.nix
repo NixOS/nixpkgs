@@ -1,8 +1,9 @@
 { stdenv
 , fetchurl
+, fetchpatch
 , lib
 , mkDerivation
-, antiword
+, abiword
 , bison
 , catdoc
 , chmlib
@@ -39,8 +40,8 @@ let filters = {
       # "binary-name = package" where:
       #  - "${package}/bin/${binary-name}" is the full path to the binary
       #  - occurrences of `"${binary-name}"` in recoll's filters should be fixed up
+      abiword = abiword;
       awk = gawk;
-      antiword = antiword;
       catppt = catdoc;
       djvused = djvulibre;
       djvutxt = djvulibre;
@@ -90,6 +91,14 @@ mkDerivation rec {
   patches = [
     # fix "No/bad main configuration file" error
     ./fix-datadir.patch
+
+    # use abiword instead of antiword; allows indexing "fast-saved"
+    # MSWORD files (which is most of them) instead of failing with
+    # "Word2: fast saved documents are not supported yet"
+    (fetchpatch {
+      url = "https://trac.xapian.org/raw-attachment/ticket/383/abiword.patch";
+      hash = "sha256-AOTM36cQhvCnuANjYTfQIT5wmq96BHKQrag+/7J9NYs=";
+    })
   ];
 
   nativeBuildInputs = [
