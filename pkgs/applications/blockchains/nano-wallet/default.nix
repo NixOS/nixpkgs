@@ -34,11 +34,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  buildPhase = ''
-    runHook preBuild
-    make nano_wallet
-    runHook postBuild
-  '';
+  makeFlags = [ "nano_wallet" ];
 
   checkPhase = ''
     runHook preCheck
