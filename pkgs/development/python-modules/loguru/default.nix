@@ -2,10 +2,8 @@
 , stdenv
 , buildPythonPackage
 , colorama
-, fetchpatch
 , fetchFromGitHub
 , freezegun
-, mypy
 , pytestCheckHook
 , pythonOlder
 }:
@@ -28,10 +26,11 @@ buildPythonPackage rec {
     pytestCheckHook
     colorama
     freezegun
-    mypy
   ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  disabledTestPaths = [
+    "tests/test_type_hinting.py" # avoid dependency on mypy
+  ] ++ lib.optionals stdenv.isDarwin [
     "tests/test_multiprocessing.py"
   ];
 
