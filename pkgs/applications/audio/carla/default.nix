@@ -24,14 +24,14 @@
 assert withQt -> qtbase != null;
 assert withQt -> wrapQtAppsHook != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "carla";
   version = "2.5.5";
 
   src = fetchFromGitHub {
     owner = "falkTX";
-    repo = pname;
-    rev = "v${version}";
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
     hash = "sha256-kXQ0dv4KrwvfxdP73zimof9XKpAz5E6hQrFOjLG4hKU=";
   };
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withGtk2 gtk2
     ++ lib.optional withGtk3 gtk3;
 
-  propagatedBuildInputs = pythonPath;
+  propagatedBuildInputs = finalAttrs.pythonPath;
 
   enableParallelBuilding = true;
 
@@ -100,4 +100,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.minijackson ];
     platforms = platforms.linux;
   };
-}
+})
