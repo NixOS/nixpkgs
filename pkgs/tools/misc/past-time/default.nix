@@ -1,13 +1,9 @@
 { lib
-, buildPythonApplication
-, click
 , fetchFromGitHub
-, freezegun
-, pytestCheckHook
-, tqdm
+, python3
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "past-time";
   version = "0.2.1";
   format = "setuptools";
@@ -16,15 +12,15 @@ buildPythonApplication rec {
     owner = "fabaff";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "0yhc0630rmcx4ia9y6klpx002mavfmqf1s3jb2gz54jlccwqbfgl";
+    hash = "sha256-9LmFOWNUkvKfWHLo4HB1W1UBQL90Gp9UJJ3VDIYBDHo=";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     click
     tqdm
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3.pkgs; [
     freezegun
     pytestCheckHook
   ];
