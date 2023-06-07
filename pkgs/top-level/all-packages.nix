@@ -21023,6 +21023,8 @@ with pkgs;
 
   cairo = callPackage ../development/libraries/cairo { };
 
+  cairo-lang = callPackage ../development/compilers/cairo { };
+
   cairomm = callPackage ../development/libraries/cairomm { };
 
   cairomm_1_16 = callPackage ../development/libraries/cairomm/1.16.nix {
