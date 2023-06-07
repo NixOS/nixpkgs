@@ -26308,9 +26308,8 @@ with pkgs;
     libtool = darwin.cctools;
   };
 
-  # Fails to compile with boost <= 1.72
   rippled = callPackage ../servers/rippled {
-    boost = boost172;
+    boost = boost177;
   };
 
   rippled-validator-keys-tool = callPackage ../servers/rippled/validator-keys-tool.nix { };
