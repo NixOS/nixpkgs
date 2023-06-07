@@ -33,6 +33,7 @@
 , xapian
 , zlib
 , withGui ? true
+, withPython ? with stdenv; buildPlatform.canExecute hostPlatform
 }:
 
 mkDerivation rec {
@@ -48,6 +49,9 @@ mkDerivation rec {
     "--enable-recollq"
     "--disable-webkit"
     "--without-systemd"
+  ] ++ lib.optionals (!withPython) [
+    "--disable-python-module"
+    "--disable-python-chm"
   ] ++ lib.optionals (!withGui) [
     "--disable-qtgui"
     "--disable-x11mon"
@@ -67,7 +71,9 @@ mkDerivation rec {
   nativeBuildInputs = [
     file
     pkg-config
+  ] ++ lib.optionals withPython [
     python3Packages.setuptools
+  ] ++ [
     makeWrapper
     which
   ];
@@ -75,8 +81,10 @@ mkDerivation rec {
   buildInputs = [
     bison
     chmlib
+  ] ++ lib.optionals withPython [
     python3Packages.python
     python3Packages.mutagen
+  ] ++ [
     xapian
     zlib
   ] ++ lib.optionals withGui [
@@ -139,5 +147,8 @@ mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ jcumming ehmry ];
+
+    # `Makefile.am` assumes the ability to run the hostPlatform's python binary at build time
+    broken = withPython && (with stdenv; !buildPlatform.canExecute hostPlatform);
   };
 }
