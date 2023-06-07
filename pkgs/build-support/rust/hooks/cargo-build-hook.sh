@@ -5,6 +5,10 @@ cargoBuildHook() {
 
     runHook preBuild
 
+    # Let stdenv handle stripping, for consistency and to not break
+    # separateDebugInfo.
+    export "CARGO_PROFILE_${cargoBuildType@U}_STRIP"=false
+
     if [ ! -z "${buildAndTestSubdir-}" ]; then
         # ensure the output doesn't end up in the subdirectory
         export CARGO_TARGET_DIR="$(pwd)/target"
