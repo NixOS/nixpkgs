@@ -4492,7 +4492,8 @@
     "wsdot" = ps: with ps; [
     ];
     "wyoming" = ps: with ps; [
-    ]; # missing inputs: wyoming
+      wyoming
+    ];
     "x10" = ps: with ps; [
     ];
     "xbox" = ps: with ps; [
@@ -5417,6 +5418,7 @@
     "worldclock"
     "ws66i"
     "wsdot"
+    "wyoming"
     "xbox"
     "xiaomi"
     "xiaomi_aqara"
