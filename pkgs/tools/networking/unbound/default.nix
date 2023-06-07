@@ -65,6 +65,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withDoH [ libnghttp2 ]
     ++ lib.optionals withPythonModule [ python ];
 
+  enableParallelBuilding = true;
+
   configureFlags = [
     "--with-ssl=${openssl.dev}"
     "--with-libexpat=${expat.dev}"

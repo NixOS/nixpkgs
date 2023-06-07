@@ -141,6 +141,7 @@ let
     "tree-sitter-sql" = {
       orga = "derekstride";
       repo = "tree-sitter-sql";
+      branch = "gh-pages";
     };
     "tree-sitter-vim" = {
       orga = "vigoux";
@@ -357,6 +358,14 @@ let
     "tree-sitter-jsonnet" = {
       orga = "sourcegraph";
       repo = "tree-sitter-jsonnet";
+    };
+    "tree-sitter-solidity" = {
+      orga = "JoranHonig";
+      repo = "tree-sitter-solidity";
+    };
+    "tree-sitter-nu" = {
+      orga = "LhKipp";
+      repo = "tree-sitter-nu";
     };
   };
 

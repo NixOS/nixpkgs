@@ -31,6 +31,8 @@ rustPlatform.buildRustPackage rec {
   ]
   ++ lib.optional stdenv.isDarwin Security;
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "Generate Bazel BUILD files from Cargo dependencies";
     homepage = "https://github.com/google/cargo-raze";

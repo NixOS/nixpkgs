@@ -3,13 +3,12 @@
 , stdenv
 , stdenvNoCC
 , fetchFromGitHub
+, fixDarwinDylibNames
 , genBytecode ? false
 , bqn-path ? null
-, mbqn-source ? null
+, mbqn-source
 , enableReplxx ? false
-, enableSingeli ? stdenv.hostPlatform.avx2Support
-  # No support for macOS' .dylib on the CBQN side
-, enableLibcbqn ? stdenv.hostPlatform.isLinux
+, enableLibcbqn ? ((stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin) && !enableReplxx)
 , libffi
 , pkg-config
 }:
@@ -24,37 +23,42 @@ assert genBytecode -> ((bqn-path != null) && (mbqn-source != null));
 
 stdenv.mkDerivation rec {
   pname = "cbqn" + lib.optionalString (!genBytecode) "-standalone";
-  version = "unstable-2023-02-01";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "dzaima";
     repo = "CBQN";
-    rev = "05c1270344908e98c9f2d06b3671c3646f8634c3";
-    hash = "sha256-wKeyYWMgTZPr+Ienz3xnsXeD67vwdK4sXbQlW+GpQho=";
+    rev = "v${version}";
+    hash = "sha256-LoxwNxuadbYJgIkr1+bZoErTc9WllN2siAsKnxoom3Y=";
   };
 
   nativeBuildInputs = [
     pkg-config
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs = [
     libffi
   ];
 
   dontConfigure = true;
+  doInstallCheck = true;
 
   postPatch = ''
     sed -i '/SHELL =.*/ d' makefile
+    patchShebangs build/build
   '';
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
-  ]
-  ++ lib.optional enableReplxx "REPLXX=1";
+  ];
 
   buildFlags = [
     # interpreter binary
-    (lib.flatten (if enableSingeli then ["o3n-singeli" "f='-mavx2'"] else ["o3"]))
+    "o3"
+    "notui=1" # display build progress in a plain-text format
+    "REPLXX=${if enableReplxx then "1" else "0"}"
+  ] ++ lib.optionals stdenv.hostPlatform.avx2Support [
+    "has=avx2"
   ] ++ lib.optionals enableLibcbqn [
     # embeddable interpreter as a shared lib
     "shared-o3"
@@ -63,6 +67,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     # Purity: avoids git downloading bytecode files
     mkdir -p build/bytecodeLocal/gen
+    cp -r ${singeli-submodule}/dev/* build/singeliLocal/
   '' + (if genBytecode then ''
     ${bqn-path} ./build/genRuntime ${mbqn-source} build/bytecodeLocal/
   '' else ''
@@ -70,10 +75,7 @@ stdenv.mkDerivation rec {
   '')
   + lib.optionalString enableReplxx ''
     cp -r ${replxx-submodule}/dev/* build/replxxLocal/
-  ''
-  + lib.optionalString enableSingeli ''
-    cp -r ${singeli-submodule}/dev/* build/singeliLocal/
- '';
+  '';
 
   outputs = [
     "out"
@@ -99,12 +101,31 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    # main test suite from mlochbaum/BQN
+    $out/bin/BQN ${mbqn-source}/test/this.bqn
+
+    # CBQN tests that do not require compiling with test-only flags
+    $out/bin/BQN test/cmp.bqn
+    $out/bin/BQN test/equal.bqn
+    $out/bin/BQN test/copy.bqn
+    $out/bin/BQN test/bit.bqn
+    $out/bin/BQN test/hash.bqn
+    $out/bin/BQN test/squeezeValid.bqn
+    $out/bin/BQN test/squeezeExact.bqn
+    $out/bin/BQN test/various.bqn
+    $out/bin/BQN test/random.bqn
+
+    runHook postInstallCheck
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/dzaima/CBQN/";
     description = "BQN implementation in C";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres sternenseemann synthetica shnarazk ];
+    maintainers = with maintainers; [ AndersonTorres sternenseemann synthetica shnarazk detegr ];
     platforms = platforms.all;
   };
 }
-# TODO: test suite

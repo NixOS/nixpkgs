@@ -9,7 +9,7 @@ let
     crossSystem = localSystem;
     crossOverlays = [];
 
-    # Ignore custom stdenvs when cross compiling for compatability
+    # Ignore custom stdenvs when cross compiling for compatibility
     config = builtins.removeAttrs config [ "replaceStdenv" ];
   };
 
@@ -72,7 +72,7 @@ in lib.init bootStages ++ [
            else if crossSystem.isDarwin
              then buildPackages.llvmPackages.libcxxClang
            else if crossSystem.useLLVM or false
-             then buildPackages.llvmPackages.clangUseLLVM
+             then buildPackages.llvmPackages.clang
            else buildPackages.gcc;
 
       extraNativeBuildInputs = old.extraNativeBuildInputs

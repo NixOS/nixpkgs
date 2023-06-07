@@ -77,7 +77,7 @@ stdenv.mkDerivation {
 
 
     configureFlagsArray=(
-      "--with-gssapi"
+      "--with-krb5"
       "--sysconfdir=/etc"
       "--localstatedir=/var"
       "--disable-kernel-module"
@@ -107,6 +107,8 @@ stdenv.mkDerivation {
     for d in AdminGuide QuickStartUnix UserGuide ; do
       cp "doc/xml/''${d}"/*.html "$doc/share/doc/openafs/''${d}"
     done
+
+    cp src/tools/dumpscan/{afsdump_dirlist,afsdump_extract,afsdump_scan,dumptool} $out/bin
 
     rm -r $out/lib/openafs
   '' + optionalString withDevdoc ''

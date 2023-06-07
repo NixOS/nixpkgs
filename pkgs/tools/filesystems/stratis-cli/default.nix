@@ -6,13 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "stratis-cli";
-  version = "3.5.0";
+  version = "3.5.2";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-IfvI8DVjm68SewHtQbhGGU1oku4eZnF7cRyeVPB/Ctk=";
+    hash = "sha256-qQufRG+7Z7xUCRg2/aIzG8FH1j4PFFThS2ljwrT285s=";
   };
 
   propagatedBuildInputs = with python3Packages; [

@@ -27,7 +27,6 @@
 , re2
 , ncurses
 , libfido2
-, v8
 , python3
 , cyrus_sasl
 , openldap
@@ -39,16 +38,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mysql-shell";
-  version = "8.0.32";
+  version = "8.0.33";
 
   srcs = [
     (fetchurl {
       url = "https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell-${version}-src.tar.gz";
-      hash = "sha256-GUkeZ856/olOssiqkb3qc8ddnianVGXwrcW6hrIG3wE=";
+      hash = "sha256-ElcAOvyQjXNns35p4J+jnGu8orZR81Itz/fxYh7Usbs=";
     })
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor version}/mysql-${version}.tar.gz";
-      hash = "sha256-Hw2SojeJgkRxbdWB95k1bgc8LaY8Oy5KAeEDLL7VDig=";
+      hash = "sha256-liAC9dkG9C9AsnejnS25OTEkjB8H/49DEsKI5jgD3RI=";
     })
   ];
 
@@ -83,7 +82,6 @@ stdenv.mkDerivation rec {
     libfido2
     cyrus_sasl
     openldap
-    v8
     python3
     antlr.runtime.cpp
   ] ++ pythonDeps
@@ -108,13 +106,9 @@ stdenv.mkDerivation rec {
     "-DWITH_LZ4=system"
     "-DWITH_ZLIB=system"
     "-DWITH_PROTOBUF=${protobuf}"
-    "-DHAVE_V8=1"
-    "-DV8_INCLUDE_DIR=${v8}/include"
-    "-DV8_LIB_DIR=${v8}/lib"
+    "-DHAVE_V8=0" # V8 10.x required.
     "-DHAVE_PYTHON=1"
   ];
-
-  CXXFLAGS = [ "-DV8_COMPRESS_POINTERS=1" "-DV8_31BIT_SMIS_ON_64BIT_ARCH=1" ];
 
   postFixup = ''
     wrapProgram $out/bin/mysqlsh --set PYTHONPATH "${lib.makeSearchPath python3.sitePackages pythonDeps}"

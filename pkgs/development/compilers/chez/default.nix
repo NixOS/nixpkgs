@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "chez-scheme";
-  version = "9.5.8";
+  version = "9.5.8a";
 
   src = fetchFromGitHub {
     owner  = "cisco";
     repo   = "ChezScheme";
     rev    = "refs/tags/v${version}";
-    sha256 = "sha256-esCWEzny/I+Ors6+upKlt4h13oN0bRLWN9OTKuSqdl8=";
+    sha256 = "sha256-d8DgHATZzZbOYODHFKTqg4oWg/wja8jQgcCVpj8j6yQ=";
     fetchSubmodules = true;
   };
 

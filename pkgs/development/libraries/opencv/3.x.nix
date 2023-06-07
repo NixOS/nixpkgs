@@ -32,7 +32,7 @@
 , enableDC1394    ? false, libdc1394
 , enableDocs      ? false, doxygen, graphviz-nox
 
-, AVFoundation, Cocoa, VideoDecodeAcceleration, bzip2, CoreMedia, MediaToolbox
+, AVFoundation, Cocoa, VideoDecodeAcceleration, bzip2, CoreMedia, MediaToolbox, Accelerate
 }:
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
@@ -211,7 +211,9 @@ stdenv.mkDerivation {
     # tesseract & leptonica.
     ++ lib.optionals enableTesseract [ tesseract leptonica ]
     ++ lib.optional enableTbb tbb
-    ++ lib.optionals stdenv.isDarwin [ bzip2 AVFoundation Cocoa VideoDecodeAcceleration CoreMedia MediaToolbox ]
+    ++ lib.optionals stdenv.isDarwin [
+      bzip2 AVFoundation Cocoa VideoDecodeAcceleration CoreMedia MediaToolbox Accelerate
+    ]
     ++ lib.optionals enableDocs [ doxygen graphviz-nox ];
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy

@@ -36,7 +36,7 @@ buildType = if stdenv.isDarwin then
 
 edk2 = buildStdenv.mkDerivation {
   pname = "edk2";
-  version = "202211";
+  version = "202302";
 
   patches = [
     # pass targetPrefix as an env var
@@ -52,7 +52,7 @@ edk2 = buildStdenv.mkDerivation {
     repo = "edk2";
     rev = "edk2-stable${edk2.version}";
     fetchSubmodules = true;
-    sha256 = "sha256-0jE73xPyenAcgJ1mS35oTc5cYw7jJvVYxhPdhTWpKA0=";
+    sha256 = "sha256-KZ5bTdaStO2M1hLPx9LsUSMl9NEiZeYMmFiShxCJqJM=";
   };
 
   nativeBuildInputs = [ pythonEnv ];
@@ -116,7 +116,7 @@ edk2 = buildStdenv.mkDerivation {
 
       buildPhase = ''
         runHook preBuild
-        build -a ${targetArch} -b RELEASE -t ${buildType} -p ${projectDscPath} -n $NIX_BUILD_CORES $buildFlags
+        build -a ${targetArch} -b ${attrs.buildConfig or "RELEASE"} -t ${buildType} -p ${projectDscPath} -n $NIX_BUILD_CORES $buildFlags
         runHook postBuild
       '';
 

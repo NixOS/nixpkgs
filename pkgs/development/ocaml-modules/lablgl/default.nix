@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, ocaml, findlib, libGLU, libGL, freeglut } :
+{ lib, stdenv, fetchFromGitHub, ocaml, findlib, libGLU, libGL, freeglut, darwin } :
 
 if lib.versionOlder ocaml.version "4.03"
 then throw "lablgl is not available for OCaml ${ocaml.version}"
@@ -19,7 +19,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ ocaml findlib ];
   buildInputs = [ freeglut ];
-  propagatedBuildInputs = [ libGLU libGL ];
+  propagatedBuildInputs = [
+    libGLU
+    libGL
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.GLUT
+    darwin.apple_sdk.libs.Xplugin
+  ];
 
   patches = [ ./Makefile.config.patch ./META.patch ];
 
@@ -46,6 +52,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub vbgl ];
     mainProgram = "lablglut";
-    broken = stdenv.isDarwin;
   };
 }

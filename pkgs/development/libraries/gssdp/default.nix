@@ -47,7 +47,6 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dgtk_doc=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
     "-Dsniffer=false"
-    "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
   ];
 
   # Bail out! GLib-GIO-FATAL-CRITICAL: g_inet_address_to_string: assertion 'G_IS_INET_ADDRESS (address)' failed

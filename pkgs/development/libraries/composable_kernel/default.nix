@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , unstableGitUpdater
-, runCommand
 , cmake
 , rocm-cmake
 , hip
@@ -76,6 +75,9 @@ let
 
     passthru.updateScript = unstableGitUpdater { };
 
+    # Times out otherwise
+    requiredSystemFeatures = [ "big-parallel" ];
+
     meta = with lib; {
       description = "Performance portable programming model for machine learning tensor operators";
       homepage = "https://github.com/ROCmSoftwarePlatform/composable_kernel";
@@ -85,11 +87,8 @@ let
     };
   });
 
-  ckProfiler = runCommand "ckProfiler" { preferLocalBuild = true; } ''
-    cp -a ${ck}/bin/ckProfiler $out
-  '';
 in stdenv.mkDerivation {
-  inherit (ck) pname version outputs src passthru meta;
+  inherit (ck) pname version outputs src passthru requiredSystemFeatures meta;
 
   dontUnpack = true;
   dontPatch = true;
@@ -99,8 +98,7 @@ in stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    cp -as ${ckProfiler} $out/bin/ckProfiler
+    mkdir -p $out
     cp -an ${ck}/* $out
   '' + lib.optionalString buildTests ''
     cp -a ${ck.test} $test

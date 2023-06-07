@@ -27,7 +27,7 @@ mkDerivation rec {
       logic that will be used by all financial applications in KDE.
 
       The target is to share financial related information over
-      application bounderies.
+      application boundaries.
     '';
     license = lib.licenses.lgpl21Plus;
     platforms = qtbase.meta.platforms;

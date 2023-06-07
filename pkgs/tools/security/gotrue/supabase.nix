@@ -7,21 +7,21 @@
 
 buildGoModule rec {
   pname = "gotrue";
-  version = "2.47.1";
+  version = "2.69.2";
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-GBrdYlWvtlz/A/5Tn58EPYBL3X73D44GzbN1OrzwU8U=";
+    hash = "sha256-Jx9TDTJkf5Bp4VWhJ2j04bqp6zXlrOBriSHLhW414h8=";
   };
 
-  vendorHash = "sha256-FIl30sKmdcXayK8KWGFl+N+lYExl4ibKZ2tcvelw8zo=";
+  vendorHash = "sha256-gv6ZzteQmx8AwYv6+EbZMSVKttf2T0okQyvfrvKpozM=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/netlify/gotrue/internal/utilities.Version=${version}"
+    "-X github.com/supabase/gotrue/internal/utilities.Version=${version}"
   ];
 
   # integration tests require network to connect to postgres database

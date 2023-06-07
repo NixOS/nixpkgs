@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "jcli";
-  version = "0.0.41";
+  version = "0.0.42";
 
   src = fetchFromGitHub {
     owner = "jenkins-zh";
     repo = "jenkins-cli";
     rev = "v${version}";
-    hash = "sha256-oZtbjfquCYMMYgKe7sclRQDXnkNwAEY/GvwenGBnVk4=";
+    hash = "sha256-t9NE911TjAvoCsmf9F989DNQ+s9GhgUF7cwuyHefWts=";
   };
 
   vendorHash = "sha256-bmPnxFvdKU5zuMsCDboSOxP5f7NnMRwS/gN0sW7eTRA=";

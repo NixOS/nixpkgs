@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "coursier";
-  version = "2.1.0";
+  version = "2.1.4";
 
   src = fetchurl {
     url = "https://github.com/coursier/coursier/releases/download/v${version}/coursier";
-    sha256 = "PfvqoVwf5Cbf+Mef/v6jhMzVnfwM0+/vBQoS4RM5mK4=";
+    sha256 = "i/z/IuSxvLDBJ9QZGuIo3b3IZFy/J55mEbZftWyFnz8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -1,8 +1,6 @@
 { darwin, fetchFromGitHub, rustPlatform, lib, stdenv }:
 
-with rustPlatform;
-
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "click";
   version = "0.4.2";
 

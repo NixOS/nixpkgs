@@ -3,6 +3,7 @@
 , callPackage
 , fetchFromGitHub
 , fetchurl
+, fetchpatch
 , autoPatchelfHook
 , makeWrapper
 , buildNpmPackage
@@ -29,6 +30,7 @@
 , amf-headers
 , svt-av1
 , vulkan-loader
+, libappindicator
 , cudaSupport ? false
 , cudaPackages ? {}
 }:
@@ -42,28 +44,35 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sunshine";
-  version = "0.18.4";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
     rev = "v${version}";
-    sha256 = "sha256-nPUWBka/fl1oTB0vTv6qyL7EHh7ptFnxwfV/jYtloTc=";
+    sha256 = "sha256-fifwctVrSkAcMK8juAirIbIP64H7GKEwC+sUR/U6Q3Y=";
     fetchSubmodules = true;
   };
 
   # remove pre-built ffmpeg; use ffmpeg from nixpkgs
-  patches = [ ./ffmpeg.diff ];
+  patches = [
+    ./ffmpeg.diff
+    # fix for X11 not being added to libraries unless prebuilt FFmpeg is used: https://github.com/LizardByte/Sunshine/pull/1166
+    (fetchpatch {
+      url = "https://github.com/LizardByte/Sunshine/commit/a067da6cae72cf36f76acc06fcf1e814032af886.patch";
+      sha256 = "sha256-HMxM7luiFBEmFkvQtkdAMMSjAaYPEFX3LL0T/ActUhM=";
+    })
+  ];
 
   # fetch node_modules needed for webui
   ui = buildNpmPackage {
     inherit src version;
     pname = "sunshine-ui";
-    npmDepsHash = "sha256-k8Vfi/57AbGxYFPYSNh8bv4KqHnZjk3BDp8SJQHzuR8=";
+    npmDepsHash = "sha256-sdwvM/Irejo8DgMHJWWCxwOykOK9foqLFFd/tuzrkxI=";
 
     dontNpmBuild = true;
 
-    # use generated package-lock.json upstream does not provide one
+    # use generated package-lock.json as upstream does not provide one
     postPatch = ''
       cp ${./package-lock.json} ./package-lock.json
     '';
@@ -94,6 +103,7 @@ stdenv.mkDerivation rec {
     xorg.libXfixes
     xorg.libXrandr
     xorg.libXtst
+    xorg.libXi
     openssl
     libopus
     boost
@@ -110,6 +120,7 @@ stdenv.mkDerivation rec {
     mesa
     amf-headers
     svt-av1
+    libappindicator
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cudatoolkit
   ];
@@ -121,21 +132,18 @@ stdenv.mkDerivation rec {
     libxcb
   ];
 
-  CXXFLAGS = [
-    "-Wno-format-security"
-  ];
-  CFLAGS = [
-    "-Wno-format-security"
-  ];
-
   cmakeFlags = [
     "-Wno-dev"
   ];
 
   postPatch = ''
-    # fix hardcoded libevdev path
+    # fix hardcoded libevdev and icon path
     substituteInPlace CMakeLists.txt \
-      --replace '/usr/include/libevdev-1.0' '${libevdev}/include/libevdev-1.0'
+      --replace '/usr/include/libevdev-1.0' '${libevdev}/include/libevdev-1.0' \
+      --replace '/usr/share' "$out/share"
+
+    substituteInPlace packaging/linux/sunshine.desktop \
+      --replace '@PROJECT_NAME@' 'Sunshine'
 
     # add FindFFMPEG to source tree
     cp ${findFfmpeg} cmake/FindFFMPEG.cmake
@@ -152,6 +160,12 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/sunshine \
       --set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
+
+  postInstall = ''
+    install -Dm644 ../packaging/linux/${pname}.desktop $out/share/applications/${pname}.desktop
+  '';
+
+  passthru.updateScript = ./updater.sh;
 
   meta = with lib; {
     description = "Sunshine is a Game stream host for Moonlight.";

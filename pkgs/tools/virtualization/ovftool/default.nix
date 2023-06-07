@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, system ? builtins.currentSystem, ovftoolBundles ? {}
 , requireFile, autoPatchelfHook, makeWrapper, unzip
-, glibc, c-ares, libxcrypt, expat, icu60, xercesc, zlib
+, glibc, c-ares, libxcrypt-legacy, expat, icu60, xercesc, zlib
 }:
 
 let
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   # Some dependencies are not loaded until operations actually occur!
   buildInputs = [
     glibc
-    libxcrypt
+    libxcrypt-legacy
     c-ares
     expat
     icu60

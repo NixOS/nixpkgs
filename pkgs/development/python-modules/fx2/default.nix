@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "fx2";
-  version = "0.9";
+  version = "0.11";
 
   src = fetchFromGitHub {
     owner = "whitequark";
     repo = "libfx2";
     rev = "v${version}";
-    hash = "sha256-Uk+K7ym92JX4fC3PyTNxd0UvBzoNZmtbscBYjSWChuk=";
+    hash = "sha256-uJpXsUMFqJY7mjj1rtfc0XWEfNDxO1xXobgBDGFHnp4=";
   };
 
   nativeBuildInputs = [ sdcc ];
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ libusb1 crcmod ];
 
   preBuild = ''
+    make -C firmware
     cd software
-    ${python.pythonForBuild.interpreter} setup.py build_ext
   '';
 
   preInstall = ''

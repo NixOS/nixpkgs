@@ -46,10 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/2.0-immodules.cache.patch
     ./patches/gtk2-theme-paths.patch
   ] ++ lib.optionals stdenv.isDarwin [
-    (fetchpatch {
-      url = "https://bug557780.bugzilla-attachments.gnome.org/attachment.cgi?id=306776";
-      sha256 = "0sp8f1r5c4j2nlnbqgv7s7nxa4cfwigvm033hvhb1ld652pjag4r";
-    })
+    ./patches/2.0-gnome_bugzilla_557780_306776_freeciv_darwin.patch
     ./patches/2.0-darwin-x11.patch
   ];
 

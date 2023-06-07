@@ -1,8 +1,6 @@
-diff --git a/client/out/languageserver.js b/client/out/languageserver.js
-index 6c7429c..6f53aa4 100644
 --- a/client/out/languageserver.js
 +++ b/client/out/languageserver.js
-@@ -79,11 +79,9 @@ class LuaClient {
+@@ -145,11 +145,9 @@
                      break;
                  case "linux":
                      command = this.context.asAbsolutePath(path.join('server', binDir ? binDir : 'bin-Linux', 'lua-language-server'));
@@ -12,5 +10,5 @@ index 6c7429c..6f53aa4 100644
                      command = this.context.asAbsolutePath(path.join('server', binDir ? binDir : 'bin-macOS', 'lua-language-server'));
 -                    yield fs.promises.chmod(command, '777');
                      break;
-             }
-             let serverOptions = {
+                 default:
+                     throw new Error(`Unsupported operating system "${platform}"!`);

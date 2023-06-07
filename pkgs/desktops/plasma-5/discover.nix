@@ -1,5 +1,4 @@
 { mkDerivation
-, lib
 , extra-cmake-modules
 , gettext
 , kdoctools
@@ -12,7 +11,6 @@
 , packagekit-qt
 , pcre
 , util-linux
-, qtbase
 , qtquickcontrols2
 , qtwebview
 , qtx11extras

@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , fetchpatch
 , gitUpdater
+, testers
 , cmake
 , pkg-config
 , python3
@@ -35,37 +36,27 @@
 , gtest
 , umockdev
 , wlcs
+, validatePkgConfig
 }:
 
-let
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-  pythonEnv = python3.withPackages(ps: with ps; [
-    pillow
-  ] ++ lib.optionals doCheck [
-    pygobject3
-    python-dbusmock
-  ]);
-in
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mir";
-  version = "2.12.1";
+  version = "2.13.0";
 
   src = fetchFromGitHub {
     owner = "MirServer";
     repo = "mir";
-    rev = "v${version}";
-    hash = "sha256-c9lFlzoxj45Xx5FYd0O/arVCV9ilArzj5GrPuJigJ4E=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Ip8p4mjcgmZQJTU4MNvWkTTtSJc+cCL3x1mMDFlZrVY=";
   };
 
   patches = [
-    # Fixes various path concatenation problems and missing GNUInstallDirs variable uses that affect
-    # install locations and generated pkg-config files
-    # Remove when a version > 2.12.1 has the fixes
+    # Fixes Mir being able to drop first input device on launch
+    # Drop when https://github.com/MirServer/mir/issues/2837 fixed in a release
     (fetchpatch {
-      name = "0001-mir-Better-install-path-concatenations-and-more-GNUInstallDirs-variables.patch";
-      url = "https://github.com/MirServer/mir/commit/58c4ca628748278b1eb7a3721ad9a0c3590e28f2.patch";
-      hash = "sha256-+FNVlApaVzA94cy4awulLwTtggD07xACbvjII/RxyRM=";
+      name = "0001-mir-Simplify_probing_of_evdev_input_platform.patch";
+      url = "https://github.com/MirServer/mir/commit/7787cfa721934bb43d3255218e7c92e700923fcb.patch";
+      hash = "sha256-9C9qcmngd+K8EAcyOYUJFTdFDu1Nt1MM7Y9TRNOXFB4=";
     })
   ];
 
@@ -87,7 +78,7 @@ stdenv.mkDerivation rec {
 
     # Fix Xwayland default
     substituteInPlace src/miral/x11_support.cpp \
-      --replace '/usr/bin/Xwayland' '${xwayland}/bin/Xwayland'
+      --replace '/usr/bin/Xwayland' '${lib.getExe xwayland}'
 
     # Fix paths for generating drm-formats
     substituteInPlace src/platform/graphics/CMakeLists.txt \
@@ -110,7 +101,13 @@ stdenv.mkDerivation rec {
     libxslt
     lttng-ust # lttng-gen-tp
     pkg-config
-    pythonEnv
+    (python3.withPackages (ps: with ps; [
+      pillow
+    ] ++ lib.optionals finalAttrs.doCheck [
+      pygobject3
+      python-dbusmock
+    ]))
+    validatePkgConfig
   ];
 
   buildInputs = [
@@ -139,21 +136,23 @@ stdenv.mkDerivation rec {
     xorg.libXcursor
     xorg.xorgproto
     xwayland
-  ] ++ lib.optionals doCheck [
-    gtest
-    umockdev
-    wlcs
   ];
 
   nativeCheckInputs = [
     dbus
   ];
 
+  checkInputs = [
+    gtest
+    umockdev
+    wlcs
+  ];
+
   buildFlags = [ "all" "doc" ];
 
   cmakeFlags = [
     "-DMIR_PLATFORM='gbm-kms;x11;eglstream-kms;wayland'"
-    "-DMIR_ENABLE_TESTS=${if doCheck then "ON" else "OFF"}"
+    "-DMIR_ENABLE_TESTS=${if finalAttrs.doCheck then "ON" else "OFF"}"
     # BadBufferTest.test_truncated_shm_file *doesn't* throw an error as the test expected, mark as such
     # https://github.com/MirServer/mir/pull/1947#issuecomment-811810872
     "-DMIR_SIGBUS_HANDLER_ENVIRONMENT_BROKEN=ON"
@@ -164,7 +163,7 @@ stdenv.mkDerivation rec {
     "-DMIR_BUILD_PLATFORM_TEST_HARNESS=OFF"
   ];
 
-  inherit doCheck;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   preCheck = ''
     # Needs to be exactly /tmp so some failing tests don't get run, don't know why they fail yet
@@ -175,6 +174,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "doc" ];
 
   passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     updateScript = gitUpdater {
       rev-prefix = "v";
     };
@@ -191,8 +191,22 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A display server and Wayland compositor developed by Canonical";
     homepage = "https://mir-server.io";
+    changelog = "https://github.com/MirServer/mir/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ onny OPNA2608 ];
     platforms = platforms.linux;
+    pkgConfigModules = [
+      "miral"
+      "mircommon"
+      "mircookie"
+      "mircore"
+      "miroil"
+      "mirplatform"
+      "mir-renderer-gl-dev"
+      "mirrenderer"
+      "mirserver"
+      "mirtest"
+      "mirwayland"
+    ];
   };
-}
+})

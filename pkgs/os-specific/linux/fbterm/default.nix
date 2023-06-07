@@ -1,52 +1,99 @@
-{ stdenv, lib, fetchurl, gpm, freetype, fontconfig, pkg-config, ncurses, libx86 }:
+{ stdenv
+, autoreconfHook
+, fetchFromGitLab
+, fetchpatch
+, fetchurl
+, fontconfig
+, freetype
+, gpm
+, lib
+, ncurses
+, pkg-config
+}:
 
 stdenv.mkDerivation rec {
-  version = "1.7.0";
+  version = "1.7-2";
   pname = "fbterm";
 
-  src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/fbterm/fbterm-${version}.tar.gz";
-    sha256 = "0pciv5by989vzvjxsv1jsv4bdp4m8j0nfbl29jm5fwi12w4603vj";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "debian";
+    repo = pname;
+    rev = "debian/${version}";
+    hash = "sha256-vRUZgFpA1IkzkLzl7ImT+Yff5XqjFbUlkHmj/hd7XDE=";
   };
 
-  nativeBuildInputs = [ pkg-config ncurses ];
-  buildInputs = [ gpm freetype fontconfig ncurses ]
-    ++ lib.optional stdenv.hostPlatform.isx86 libx86;
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    ncurses
+  ];
+  buildInputs = [
+    gpm
+    freetype
+    fontconfig
+    ncurses
+  ];
 
-  preConfigure = ''
-    sed -e '/ifdef SYS_signalfd/atypedef long long loff_t;' -i src/fbterm.cpp
-    sed -e '/install-exec-hook:/,/^[^\t]/{d}; /.NOEXPORT/iinstall-exec-hook:\
-    ' -i src/Makefile.in
-    export HOME=$PWD;
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lfreetype"
+  # preConfigure = ''
+  #   sed -e '/ifdef SYS_signalfd/atypedef long long loff_t;' -i src/fbterm.cpp
+  #   sed -e '/install-exec-hook:/,/^[^\t]/{d}; /.NOEXPORT/iinstall-exec-hook:\
+  #   ' -i src/Makefile.in
+  #   export HOME=$PWD;
+  #   export NIX_LDFLAGS="$NIX_LDFLAGS -lfreetype"
+  # '';
+
+  preInstall = ''
+    export HOME=$PWD
   '';
-  preBuild = ''
+
+  postInstall =
+  let
+    fbtermrc = fetchurl {
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/fbtermrc?h=fbterm";
+      hash = "sha256-zNIfi2ZjEGc5PLdOIirKGTXESb5Wm5XBAI1sfHa31LY=";
+    };
+  in
+  ''
     mkdir -p "$out/share/terminfo"
     tic -a -v2 -o"$out/share/terminfo" terminfo/fbterm
-    makeFlagsArray+=("AR=$AR")
+
+    mkdir -p "$out/etc/fbterm"
+    cp "${fbtermrc}" "$out/etc/fbterm"
   '';
 
+  # Patches from https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=fbterm
   patches = [
-    # fixes from Arch Linux package
-    (fetchurl {
-      url = "https://raw.githubusercontent.com/glitsj16/fbterm-patched/d1fe03313be4654dd0a1c0bb5f51530732345134/gcc-6-build-fixes.patch";
-      sha256 = "1kl9fjnrri6pamjdl4jpkqxk5wxcf6jcchv5801xz8vxp4542m40";
+    (fetchpatch {
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/fbconfig.patch?h=fbterm";
+      hash = "sha256-skCdUqyMkkqxS1YUI7cofsfnNNo3SL/qe4WEIXlhm/s=";
     })
-    (fetchurl {
-      url = "https://raw.githubusercontent.com/glitsj16/fbterm-patched/d1fe03313be4654dd0a1c0bb5f51530732345134/insertmode-fix.patch";
-      sha256 = "1bad9mqcfpqb94lpx23lsamlhplil73ahzin2xjva0gl3gr1038l";
+    (fetchpatch {
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/color_palette.patch?h=fbterm";
+      hash = "sha256-SkWxzfapyBTtMpTXkiFHRAw8/uXw7cAWwg5Q3TqWlk8=";
     })
-    (fetchurl {
-      url = "https://raw.githubusercontent.com/glitsj16/fbterm-patched/d1fe03313be4654dd0a1c0bb5f51530732345134/miscoloring-fix.patch";
-      sha256 = "1mjszji0jgs2jsagjp671fv0d1983wmxv009ff1jfhi9pbay6jd0";
+    (fetchpatch {
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/fbterm.patch?h=fbterm";
+      hash = "sha256-XNHBTGQGeaQPip2XgcKlr123VDwils2pnyiGqkBGhzU=";
     })
-    ./select.patch
+    (fetchpatch {
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/0001-Fix-build-with-gcc-6.patch?h=fbterm";
+      hash = "sha256-3d3zBvr5upICVVkd6tn63IhuB0sF67f62aKnf8KvOwg=";
+    })
+    (fetchpatch {
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix_ftbfs_crosscompile.patch?h=fbterm";
+      hash = "sha256-jv/FSG6dHR0jKjPXQIfqsvpiT/XYzwv/VwuV+qUSovM=";
+    })
+    (fetchpatch {
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix_ftbfs_epoll.patch?h=fbterm";
+      hash = "sha256-wkhfG0uY/5ZApcXTERkaKqz5IDpnilxUEcxull4645A=";
+    })
   ];
 
   meta = with lib; {
     description = "Framebuffer terminal emulator";
-    homepage = "https://code.google.com/archive/p/fbterm/";
-    maintainers = with maintainers; [ raskin ];
+    homepage = "https://salsa.debian.org/debian/fbterm";
+    maintainers = with maintainers; [ lovesegfault raskin ];
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

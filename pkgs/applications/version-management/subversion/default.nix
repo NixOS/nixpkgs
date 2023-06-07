@@ -61,6 +61,8 @@ let
       (lib.withFeatureAs httpSupport "serf" serf)
       "--with-zlib=${zlib.dev}"
       "--with-sqlite=${sqlite.dev}"
+      "--with-apr=${apr.dev}"
+      "--with-apr-util=${aprutil.dev}"
     ] ++ lib.optionals javahlBindings [
       "--enable-javahl"
       "--with-jdk=${jdk}"

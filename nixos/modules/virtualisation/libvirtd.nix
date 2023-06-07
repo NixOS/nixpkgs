@@ -308,7 +308,9 @@ in
             libvirt/nwfilter/*.xml );
         do
             mkdir -p /var/lib/$(dirname $i) -m 755
-            cp -npd ${cfg.package}/var/lib/$i /var/lib/$i
+            if [ ! -e /var/lib/$i ]; then
+              cp -pd ${cfg.package}/var/lib/$i /var/lib/$i
+            fi
         done
 
         # Copy generated qemu config to libvirt directory
@@ -414,13 +416,16 @@ in
     # https://libvirt.org/daemons.html#monolithic-systemd-integration
     systemd.sockets.libvirtd.wantedBy = [ "sockets.target" ];
 
-    security.polkit.extraConfig = ''
-      polkit.addRule(function(action, subject) {
-        if (action.id == "org.libvirt.unix.manage" &&
-          subject.isInGroup("libvirtd")) {
-          return polkit.Result.YES;
-        }
-      });
-    '';
+    security.polkit = {
+      enable = true;
+      extraConfig = ''
+        polkit.addRule(function(action, subject) {
+          if (action.id == "org.libvirt.unix.manage" &&
+            subject.isInGroup("libvirtd")) {
+            return polkit.Result.YES;
+          }
+        });
+      '';
+    };
   };
 }

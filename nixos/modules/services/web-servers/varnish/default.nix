@@ -99,7 +99,7 @@ in
     environment.systemPackages = [ cfg.package ];
 
     # check .vcl syntax at compile time (e.g. before nixops deployment)
-    system.extraDependencies = mkIf cfg.enableConfigCheck [
+    system.checks = mkIf cfg.enableConfigCheck [
       (pkgs.runCommand "check-varnish-syntax" {} ''
         ${cfg.package}/bin/varnishd -C ${commandLine} 2> $out || (cat $out; exit 1)
       '')

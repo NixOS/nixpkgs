@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3, makeDesktopItem, copyDesktopItems }:
+{ lib, fetchFromGitHub, python3, tk, makeDesktopItem, copyDesktopItems }:
 
 with python3.pkgs;
 
@@ -63,6 +63,6 @@ buildPythonApplication rec {
     homepage = "https://www.thonny.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -17,10 +17,9 @@ let
           '';
 
 in
-with lib;
 {
   name = "miniflux";
-  meta.maintainers = with pkgs.lib.maintainers; [ ];
+  meta.maintainers = [ ];
 
   nodes = {
     default =

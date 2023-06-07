@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
 
+  buildInputs = [ stdenv.cc.cc.lib ];
+
   installPhase = ''
     runHook preInstall
 

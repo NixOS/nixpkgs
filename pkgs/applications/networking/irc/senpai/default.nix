@@ -2,12 +2,12 @@
 
 buildGoModule rec {
   pname = "senpai";
-  version = "unstable-2023-02-13";
+  version = "0.2.0";
 
   src = fetchFromSourcehut {
     owner = "~taiite";
     repo = "senpai";
-    rev = "1318e784bd2bba3765aee97811a3f0053d3a6723";
+    rev = "v${version}";
     sha256 = "sha256-q167og8S8YbLcREZ7DVbJhjMzx4iO0WgIFkOV2IpieM=";
   };
 
@@ -30,7 +30,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Your everyday IRC student";
-    homepage = "https://ellidri.org/senpai";
+    homepage = "https://sr.ht/~taiite/senpai/";
     license = licenses.isc;
     maintainers = with maintainers; [ malte-v ];
   };

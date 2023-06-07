@@ -12,20 +12,16 @@
 let
   inherit (harePackages) harec;
 in
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hare";
-  version = "unstable-2023-02-10";
+  version = "unstable-2023-04-23";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "hare";
-    rev = "52b3f2d0c7a85e04a79666a954101e527b7f1272";
-    hash = "sha256-/zP8LbZ113Ar06MZF1zP20LKMGko+4HcOXSntLVAQAU=";
+    rev = "464ec7a660b12ab1ef8e4dcc9d00604cec996c6e";
+    hash = "sha256-5/ObckDxosqUkFfDVhGA/0kwjFzDUxu420nkfa97vqM=";
   };
-
-  patches = [
-    ./000-disable-failing-test-cases.diff
-  ];
 
   nativeBuildInputs = [
     binutils-unwrapped
@@ -98,6 +94,5 @@ stdenv.mkDerivation (self: {
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.AndersonTorres ];
     inherit (harec.meta) platforms badPlatforms;
-    broken = stdenv.isAarch64; # still figuring how to set cross-compiling stuff
   };
 })

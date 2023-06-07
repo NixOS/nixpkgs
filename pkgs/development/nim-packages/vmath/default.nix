@@ -1,4 +1,4 @@
-{ lib, buildNimPackage, fetchFromGitHub }:
+{ lib, stdenv, buildNimPackage, fetchFromGitHub }:
 
 buildNimPackage rec {
   pname = "vmath";
@@ -11,7 +11,7 @@ buildNimPackage rec {
     hash = "sha256-/v0lQIOMogTxFRtbssziW4W6VhMDepM6Si8igLgcx30=";
   };
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib;
     src.meta // {

@@ -1,7 +1,6 @@
 { lib
 , fetchurl
 , buildDunePackage
-, ocaml
 , fmt
 , alcotest
 , hxd
@@ -13,6 +12,9 @@ buildDunePackage rec {
   pname = "duff";
   version = "0.5";
 
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
+
   src = fetchurl {
     url = "https://github.com/mirage/duff/releases/download/v${version}/duff-${version}.tbz";
     sha256 = "sha256-0eqpfPWNOHYjkcjXRnZUTUFF0/L9E+TNoOqKCETN5hI=";
@@ -20,7 +22,7 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ fmt ];
 
-  doCheck = lib.versionAtLeast ocaml.version "4.08";
+  doCheck = true;
   checkInputs = [
     alcotest
     crowbar

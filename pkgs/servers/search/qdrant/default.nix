@@ -5,26 +5,26 @@
 , stdenv
 , pkg-config
 , openssl
+, nix-update-script
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "qdrant";
-  version = "1.1.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-mNprwomTVg/C75tPciQ4J8bb42ejpVKy/RSRcQySdvU=";
+    sha256 = "sha256-1UJZibj7twM/4z9w+ebOI0AVjPZGz7B1BWw0M0pMQ+k=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "quantization-0.1.0" = "sha256-4TY08ScRbL4zVG428BTZu42ocAsPk/8wM+zzI8EFSrs=";
-      "raft-0.7.0" = "sha256-NflESS+CoTFMkCC2SYWgyMRHBe7+sMIbuElhUL5uMcg=";
-      "wal-0.1.2" = "sha256-vaPQff8pBqCJhACj4/t3AyPhnddHwsGWCI3IUr5uWro=";
+      "quantization-0.1.0" = "sha256-mhiVicQXj8639bX2mGp9XnjTNVFdd6mnk+B1B1f3ywA=";
+      "wal-0.1.2" = "sha256-oZ6xij59eIpCGcFL2Ds6E180l1SGIRMOq7OcLc1TpxY=";
     };
   };
 
@@ -42,6 +42,10 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ protobuf rustPlatform.bindgenHook pkg-config ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-faligned-allocation";
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Vector Search Engine for the next generation of AI applications";

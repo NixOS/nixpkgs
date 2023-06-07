@@ -222,6 +222,9 @@ let
       patches = [];
       propagatedBuildInputs = args.propagatedBuildInputs or []
           ++ lispLibs ++ javaLibs ++ nativeLibs;
+      meta = (args.meta or {}) // {
+        maintainers = args.meta.maintainers or lib.teams.lisp.members;
+      };
     })));
 
   # Build the set of lisp packages using `lisp`

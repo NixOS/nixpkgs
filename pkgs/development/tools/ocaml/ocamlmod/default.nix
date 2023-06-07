@@ -1,9 +1,12 @@
 { lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, ounit }:
 
 let
-  # ounit is only available for OCaml >= 4.04
-  doCheck = lib.versionAtLeast ocaml.version "4.04";
+  # ounit is only available for OCaml >= 4.08
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 in
+
+lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
+  "ocamlmod is not available for OCaml ≥ 5.0"
 
 stdenv.mkDerivation {
   pname = "ocamlmod";

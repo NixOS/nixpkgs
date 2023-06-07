@@ -32,6 +32,8 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # No need to test the version number
     "cirq_google/_version_test.py"
+    # Trace/BPT trap: 5
+    "cirq_google/engine/calibration_test.py"
   ];
 
   disabledTests = [

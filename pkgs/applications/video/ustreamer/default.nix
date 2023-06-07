@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ustreamer";
-  version = "5.36";
+  version = "5.38";
 
   src = fetchFromGitHub {
     owner = "pikvm";
     repo = "ustreamer";
     rev = "v${version}";
-    sha256 = "sha256-VnqCiEPaBzGN2TL7oXO4T7dcNdGneac/5nFPwRPiJ9c=";
+    sha256 = "sha256-pc1Pf8KnjGPb74GbcmHaj/XCD0wjgiglaAKjnZUa6Ag=";
   };
 
   buildInputs = [ libbsd libevent libjpeg ];

@@ -13,47 +13,47 @@
 let
   phpMajor = lib.versions.majorMinor php.version;
 
-  version = "1.86.5";
+  version = "1.87.2";
 
   hashes = {
     "x86_64-linux" = {
       system = "amd64";
       sha256 = {
-        "8.0" = "N+SRigtolwNjxdH5/jWazPq7oBh2dxoT6tNBugyVdL0=";
-        "8.1" = "MCxZcIduGTbGJsUR16wwUlxc1CbeSAIvNTfI76WQUrs=";
-        "8.2" = "OoQt4zAPUQTPCLnNxnc0/e0osjo0eDP7I6sn2n90ZgQ=";
+        "8.0" = "ylzxQlyk6jpyO9Zcqv/uUiRWcMSkPKFBgiCDnyU8lWI=";
+        "8.1" = "FEb0NBJpwoYaNdEHEn4TkSQR7VShGpHptaDIRKwrmkQ=";
+        "8.2" = "itB0Zm1Mog18F8vIHn9AZMYMzafLQR0v5zcOgqy1ouI=";
       };
     };
     "i686-linux" = {
       system = "i386";
       sha256 = {
-        "8.0" = "Vv/rqRvt9ganet4z84rN2uJ6LCvn8rop9jFQdlnYMB8=";
-        "8.1" = "lFRY2yWOuWY4Zu3Y7FYbvTSmpZl4epgPKzHffncwXpk=";
-        "8.2" = "VSRaPib7RfA5W0FG3JgaXTlGTnOLKaw3tz8p/Mkmpx8=";
+        "8.0" = "DL5wiaez4tzrn8xY+ptYiCvZ1HWaStT9vGWPd5whTaE=";
+        "8.1" = "0bX2frll0ne6H6o7HNH4TRV2D+NDe11mVvqwhvSDg9E=";
+        "8.2" = "U6zmbEkRr3+9yVwUgQ1+SBNK0zWD92S2KBOHJ1gMmjM=";
       };
     };
     "aarch64-linux" = {
       system = "arm64";
       sha256 = {
-        "8.0" = "XvLZrfYbyiAV0q/S3ANcafyLGQWkcJuRa1RUWSpaNH8=";
-        "8.1" = "msezMA7yhC16ATxN7c4xDdy6PrZ7HVito4x1L3mzh70=";
-        "8.2" = "Q7LTst4OBPrQ91vI/V9eN9MHo0qxTD1ZCWMFeYXT21s=";
+        "8.0" = "R6zdOw/K+/YPYzSEOEyz83hqiLHCM4EOjz2tLrJOPlE=";
+        "8.1" = "agLQVI3u7ENcWLDRx7YSEBZobRnwEaKAmFpIU5AXhqo=";
+        "8.2" = "Y2bUYaymoZ/Ct5a7K+5U+zNh9ZKUaq0Oal/v04nzuaU=";
       };
     };
     "aarch64-darwin" = {
       system = "arm64";
       sha256 = {
-        "8.0" = "OSnjO2nmcqy+vytRNWFYMi8Y20n7AwAwmhDBS7K5MBQ=";
-        "8.1" = "VyPY1Gj6q4PpXDLPS9ARt9LUmYIG3hsGlEJjh9944Hc=";
-        "8.2" = "M+8Lwx2nzlxLEP+F1vcjB9HgInsz5vOc3AIEzQHrC2I=";
+        "8.0" = "XcFU1lq694aLIn1HQdDSg2Zx68/fLew3GjkTLsxHYvk=";
+        "8.1" = "ovTtwXPut9jCvxVyd5mQzrfJPCy+rQvUi4c74NrBzY4=";
+        "8.2" = "8hybE62l8vSwbqpcrnj/lI2Wjy8R3wuO04zwofLi9EY=";
       };
     };
     "x86_64-darwin" = {
       system = "amd64";
       sha256 = {
-        "8.0" = "1xRcZic2XQLFkBhh2H9ZgCpG+1xq4oqhef7qEjhSeLQ=";
-        "8.1" = "MmI3TjvmLymRxo/Iy9s49A6le+pZiiflGq+CfU/xmW0=";
-        "8.2" = "n0Cy59tVUO70oTidB9lIPUXMkQ8ndzYHtYfXuQYQ2Mc=";
+        "8.0" = "F4mIvjyf3Zi3icKcPe6KP2gR9jeC7EJskw9TfsTHz6Y=";
+        "8.1" = "WsHH/XJboHeRhxpYY0WtXEJwOsGNFtfexBShC/J7GaQ=";
+        "8.2" = "w3Vu7CTFebn59i1FYVCYHiOadTIPlPCkQ1QHEfvHWig=";
       };
     };
   };

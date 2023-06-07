@@ -1,32 +1,24 @@
 { lib
-, stdenv
-, fetchzip
+, fetchFromGitLab
 , imagemagick
-, autoPatchelfHook
-, gtk3
-, libsecret
-, jsoncpp
-, wrapGAppsHook
+, flutter37
 , makeDesktopItem
+, gnome
 }:
 
-let
-  version = "1.10.0";
-  # map of nix platform -> expected url platform
-  platformMap = {
-    x86_64-linux = "linux-x86";
-    aarch64-linux = "linux-arm64";
-  };
-in
-stdenv.mkDerivation {
-  inherit version;
+flutter37.buildFlutterApplication rec {
+  version = "1.11.2";
   name = "fluffychat";
 
-  src = fetchzip {
-    url = "https://gitlab.com/api/v4/projects/16112282/packages/generic/fluffychat/${version}/fluffychat-${platformMap.${stdenv.hostPlatform.system}}.tar.gz";
-    stripRoot = false;
-    sha256 = "sha256-SbzTEMeJRFEUN0nZF9hL0UEzTWl1VtHVPIx/AGgQvM8=";
+  src = fetchFromGitLab {
+    owner = "famedly";
+    repo = "fluffychat";
+    rev = "v${version}";
+    hash = "sha256-vHzZDkSgxcZf3y/+A645hxBverm34J5xNnNwyxnSVUA=";
   };
+
+  depsListFile = ./deps.json;
+  vendorHash = "sha256-u8YI4UBnEfPpvjBfhbo4LGolb56w94EiUlnLlYITdXQ=";
 
   desktopItem = makeDesktopItem {
     name = "Fluffychat";
@@ -37,17 +29,10 @@ stdenv.mkDerivation {
     categories = [ "Chat" "Network" "InstantMessaging" ];
   };
 
-  buildInputs = [ gtk3 libsecret jsoncpp ];
-  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook imagemagick ];
-
-  installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share
-    mv * $out/share
-
-    ln -s $out/share/fluffychat $out/bin/fluffychat
-
-    FAV=$out/share/data/flutter_assets/assets/favicon.png
+  nativeBuildInputs = [ imagemagick ];
+  extraWrapProgramArgs = "--prefix PATH : ${gnome.zenity}/bin";
+  postInstall = ''
+    FAV=$out/app/data/flutter_assets/assets/favicon.png
     ICO=$out/share/icons
 
     install -D $FAV $ICO/fluffychat.png
@@ -68,6 +53,6 @@ stdenv.mkDerivation {
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ mkg20001 gilice ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
-    sourceProvenance = [ sourceTypes.binaryNativeCode ];
+    sourceProvenance = [ sourceTypes.fromSource ];
   };
 }

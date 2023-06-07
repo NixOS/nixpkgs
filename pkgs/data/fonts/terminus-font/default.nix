@@ -24,6 +24,9 @@ stdenv.mkDerivation rec {
   '';
 
   installTargets = [ "install" "install-otb" "fontdir" ];
+  # fontdir depends on the previous two targets, but this is not known
+  # to make, so we need to disable parallelism:
+  enableParallelInstalling = false;
 
   meta = with lib; {
     description = "A clean fixed width font";

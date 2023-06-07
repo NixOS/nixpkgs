@@ -1,7 +1,7 @@
 { pkgs ? import ../../.. {} }:
 let
   inherit (pkgs) lib;
-  manpageURLs = builtins.fromJSON (builtins.readFile (pkgs.path + "/doc/manpage-urls.json"));
+  manpageURLs = lib.importJSON (pkgs.path + "/doc/manpage-urls.json");
 in pkgs.writeText "link-manpages.lua" ''
   --[[
   Adds links to known man pages that aren't already in a link.

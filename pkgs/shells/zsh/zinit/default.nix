@@ -2,12 +2,12 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "zinit";
-  version = "3.7";
+  version = "3.11.0";
   src = fetchFromGitHub {
     owner = "zdharma-continuum";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-B+cTGz+U8MR22l6xXdRAAjDr+ulCk+CJ9GllFMK0axE=";
+    hash = "sha256-Gps7s26qqEjQPDhhSJr9u5SuRNRJnmayKfw45Ygjcd8=";
   };
   # adapted from https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=zsh-zplugin-git
   dontBuild = true;
@@ -20,9 +20,9 @@ stdenvNoCC.mkDerivation rec {
 
     # Zplugin's source files
     install -dm0755 "$outdir"
-    # Installing also backward compatibility layer
-    install -m0644 z{plugin,init}{,-side,-install,-autoload}.zsh "$outdir"
-    install -m0755 git-process-output.zsh "$outdir"
+    # Installing backward compatibility layer
+    install -m0644 zinit{,-side,-install,-autoload}.zsh "$outdir"
+    install -m0755 share/git-process-output.zsh "$outdir"
 
     # Zplugin autocompletion
     installShellCompletion --zsh _zinit

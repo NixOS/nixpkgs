@@ -4,19 +4,20 @@
 , buildPythonPackage
 , fetchPypi
 , rustPlatform
+, cargo
+, rustc
 , setuptools-rust
 , openssl
 , Security
-, packaging
-, six
 , isPyPy
 , cffi
+, pkg-config
 , pytestCheckHook
-, pytest-benchmark
 , pytest-subtests
 , pythonOlder
 , pretend
 , libiconv
+, libxcrypt
 , iso8601
 , py
 , pytz
@@ -28,33 +29,42 @@ let
 in
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "39.0.1"; # Also update the hash in vectors.nix
+  version = "40.0.1"; # Also update the hash in vectors.nix
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0fYZjubZFIQF5JiHgDkH/olioj5sb4PqfZjxwN43VpU=";
+    hash = "sha256-KAPy+LHpX2FEGZJsfm9V2CivxhTKXtYVQ4d65mjMNHI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-0x+KIqJznDEyIUqVuYfIESKmHBWfzirPeX2R/cWlngc=";
+    hash = "sha256-gFfDTc2QWBWHBCycVH1dYlCsWQMVcRZfOBIau+njtDU=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "--benchmark-disable" ""
+  '';
 
   cargoRoot = "src/rust";
 
   nativeBuildInputs = lib.optionals (!isPyPy) [
     cffi
+    pkg-config
   ] ++ [
     rustPlatform.cargoSetupHook
     setuptools-rust
-  ] ++ (with rustPlatform; [ rust.cargo rust.rustc ]);
+    cargo
+    rustc
+  ];
 
   buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
+    ++ lib.optionals stdenv.isDarwin [ Security libiconv ]
+    ++ lib.optionals (pythonOlder "3.9") [ libxcrypt ];
 
   propagatedBuildInputs = lib.optionals (!isPyPy) [
     cffi
@@ -68,7 +78,6 @@ buildPythonPackage rec {
     pretend
     py
     pytestCheckHook
-    pytest-benchmark
     pytest-subtests
     pytz
   ];
@@ -77,7 +86,10 @@ buildPythonPackage rec {
     "--disable-pytest-warnings"
   ];
 
-  disabledTestPaths = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  disabledTestPaths = [
+    # save compute time by not running benchmarks
+    "tests/bench"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # aarch64-darwin forbids W+X memory, but this tests depends on it:
     # * https://cffi.readthedocs.io/en/latest/using.html#callbacks
     "tests/hazmat/backends/test_openssl_memleak.py"

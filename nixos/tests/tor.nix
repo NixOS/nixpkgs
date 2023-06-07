@@ -1,15 +1,13 @@
-import ./make-test-python.nix ({ lib, ... }: with lib;
-
-{
+import ./make-test-python.nix ({ lib, ... }: {
   name = "tor";
-  meta.maintainers = with maintainers; [ joachifm ];
+  meta.maintainers = with lib.maintainers; [ joachifm ];
 
   nodes.client = { pkgs, ... }: {
     boot.kernelParams = [ "audit=0" "apparmor=0" "quiet" ];
     networking.firewall.enable = false;
     networking.useDHCP = false;
 
-    environment.systemPackages = with pkgs; [ netcat ];
+    environment.systemPackages = [ pkgs.netcat ];
     services.tor.enable = true;
     services.tor.client.enable = true;
     services.tor.settings.ControlPort = 9051;

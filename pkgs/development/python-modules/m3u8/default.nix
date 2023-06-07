@@ -1,32 +1,40 @@
-{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, requests, iso8601, bottle, pytestCheckHook }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, iso8601
+, bottle
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "m3u8";
-  version = "0.9.0";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "globocom";
     repo = pname;
-    rev = version;
-    hash = "sha256-EfHhmV2otEgEy2OVohS+DF7dk97GFdWZ4cFCERZBmlA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-9Xmbc1aL7SI24FFn0/5KJtAM3+Xyvd3bwUh8DU1wGKE=";
   };
 
-  patches = [
-    # Fix hardcoded /tmp dir (fix build on Hydra)
-    (fetchpatch {
-      url = "https://github.com/globocom/m3u8/commit/cf7ae5fda4681efcea796cd7c51c02f152c36009.patch";
-      hash = "sha256-SEETpIJQddid8D//6DVrSGs/BqDeMOzufE0bBrm+/xY=";
-    })
+  propagatedBuildInputs = [
+    iso8601
   ];
 
-  propagatedBuildInputs = [ requests iso8601 ];
+  nativeCheckInputs = [
+    bottle
+    pytestCheckHook
+  ];
 
-  nativeCheckInputs = [ bottle pytestCheckHook ];
+  disabledTests = [
+    # Tests require network access
+    "test_load_should_create_object_from_uri"
+    "test_load_should_create_object_from_uri_with_relative_segments"
+    "test_load_should_remember_redirect"
+  ];
 
-  pytestFlagsArray = [
-    "tests/test_parser.py"
-    "tests/test_model.py"
-    "tests/test_variant_m3u8.py"
+  pythonImportsCheck = [
+    "m3u8"
   ];
 
   meta = with lib; {
@@ -36,4 +44,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ Scriptkiddi ];
   };
 }
-

@@ -3,7 +3,7 @@ let
   callPackage = newScope self;
 
   self = with lib; {
-    pkgs = self;
+    inherit callPackage;
 
     fetchegg = { pname, version, sha256, ... }:
       fetchurl {

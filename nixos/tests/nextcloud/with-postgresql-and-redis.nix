@@ -25,11 +25,9 @@ in {
           redis = true;
           memcached = false;
         };
+        database.createLocally = true;
         config = {
           dbtype = "pgsql";
-          dbname = "nextcloud";
-          dbuser = "nextcloud";
-          dbhost = "/run/postgresql";
           inherit adminuser;
           adminpassFile = toString (pkgs.writeText "admin-pass-file" ''
             ${adminpass}
@@ -48,23 +46,6 @@ in {
 
       services.redis.servers."nextcloud".enable = true;
       services.redis.servers."nextcloud".port = 6379;
-
-      systemd.services.nextcloud-setup= {
-        requires = ["postgresql.service"];
-        after = [
-          "postgresql.service"
-        ];
-      };
-
-      services.postgresql = {
-        enable = true;
-        ensureDatabases = [ "nextcloud" ];
-        ensureUsers = [
-          { name = "nextcloud";
-            ensurePermissions."DATABASE nextcloud" = "ALL PRIVILEGES";
-          }
-        ];
-      };
     };
   };
 

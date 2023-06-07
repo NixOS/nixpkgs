@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "intake";
-  version = "0.6.6";
+  version = "0.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-/VQKLmEpIOULTPpJKuVLyqqQVLKVhwVBoos9Q/upwQM=";
+    hash = "sha256-2LUblA8eVCOfVJ6BJayralNiv6EFt6MzR5ptKksVNA4=";
   };
 
   propagatedBuildInputs = [
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     intake-parquet
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.server;
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   passthru.optional-dependencies = {
     server = [

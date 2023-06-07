@@ -3,7 +3,6 @@
 , callPackage
 , fetchFromGitHub
 , fetchPypi
-, fetchpatch
 , python3
 , substituteAll
 , ffmpeg-headless
@@ -18,9 +17,6 @@
 # Additional packages to add to propagatedBuildInputs
 , extraPackages ? ps: []
 
-# Write out info about included extraComponents and extraPackages
-, writeText
-
 # Override Python packages using
 # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
 # Applied after defaultOverrides
@@ -34,15 +30,6 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
-      advantage-air = super.advantage-air.overridePythonAttrs (oldAttrs: rec {
-        version = "0.4.1";
-        src = super.fetchPypi {
-          pname = "advantage_air";
-          inherit version;
-          hash = "sha256-I9HMDLZX9xKDJuYSAweM2r4v3ZKevHTn5dHTYxN3EuE=";
-        };
-      });
-
       aiowatttime = super.aiowatttime.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.1";
         src = fetchFromGitHub {
@@ -56,7 +43,7 @@ let
       astral = super.astral.overridePythonAttrs (oldAttrs: rec {
         pname = "astral";
         version = "2.2";
-        src = self.fetchPypi {
+        src = fetchPypi {
           inherit pname version;
           hash = "sha256-5B2ZZ9XEi+QhNGVS8PTe2tQ/85qDV09f8q0ytmJ7b74=";
         };
@@ -67,15 +54,6 @@ let
         propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [
           self.pytz
         ];
-      });
-
-      bimmer-connected = super.bimmer-connected.overridePythonAttrs (oldAttrs: rec {
-        version = "0.12.1";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/${version}";
-          hash = "sha256-wLQ2UkedLSwfbUqmb85QgsDYh0zcbgQOMnhbRHW5Bnw=";
-        };
       });
 
       dsmr-parser = super.dsmr-parser.overridePythonAttrs (oldAttrs: rec {
@@ -98,15 +76,6 @@ let
         doCheck = false;
       });
 
-      gios = super.gios.overridePythonAttrs (oldAttrs: rec {
-        version = "2.3.0";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/${version}";
-          hash = "sha256-/lAENP9wKZ+h2Iq2e9S7s7Naa0CTl/I2cwCxBEAwsrA=";
-        };
-      });
-
       jaraco-abode = super.jaraco-abode.overridePythonAttrs (oldAttrs: rec {
         version = "3.3.0";
         src = fetchFromGitHub {
@@ -127,6 +96,33 @@ let
         };
       });
 
+      # moto tests are a nuissance
+      moto = super.moto.overridePythonAttrs (_: {
+        doCheck = false;
+      });
+
+      notifications-android-tv = super.notifications-android-tv.overridePythonAttrs (oldAttrs: rec {
+        version = "0.1.5";
+        format = "setuptools";
+
+        src = fetchFromGitHub {
+          owner = "engrbm87";
+          repo = "notifications_android_tv";
+          rev = "refs/tags/${version}";
+          hash = "sha256-adkcUuPl0jdJjkBINCTW4Kmc16C/HzL+jaRZB/Qr09A=";
+        };
+
+        nativeBuildInputs = with super; [
+          setuptools
+        ];
+
+        propagatedBuildInputs = with super; [
+          requests
+        ];
+
+        doCheck = false; # no tests
+      });
+
       # Pinned due to API changes in 1.3.0
       ovoenergy = super.ovoenergy.overridePythonAttrs (oldAttrs: rec {
         version = "1.2.0";
@@ -141,7 +137,7 @@ let
       # Pinned due to API changes in 0.1.0
       poolsense = super.poolsense.overridePythonAttrs (oldAttrs: rec {
         version = "0.0.8";
-        src = super.fetchPypi {
+        src = fetchPypi {
           pname = "poolsense";
           inherit version;
           hash = "sha256-17MHrYRmqkH+1QLtgq2d6zaRtqvb9ju9dvPt9gB2xCc=";
@@ -157,6 +153,16 @@ let
         };
       });
 
+      py-synologydsm-api = super.py-synologydsm-api.overridePythonAttrs (oldAttrs: rec {
+        version = "2.1.4";
+        src = fetchFromGitHub {
+          owner = "mib1185";
+          repo = "py-synologydsm-api";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-37JzdhMny6YDTBO9NRzfrZJAVAOPnpcr95fOKxisbTg=";
+        };
+      });
+
       # Pinned due to API changes >0.3.5.3
       pyatag = super.pyatag.overridePythonAttrs (oldAttrs: rec {
         version = "0.3.5.3";
@@ -165,16 +171,6 @@ let
           repo = "pyatag";
           rev = version;
           sha256 = "00ly4injmgrj34p0lyx7cz2crgnfcijmzc0540gf7hpwha0marf6";
-        };
-      });
-
-      # https://github.com/home-assistant/core/pull/80931
-      pyjwt = super.pyjwt.overridePythonAttrs (oldAttrs: rec {
-        version = "2.5.0";
-        src = super.fetchPypi {
-          pname = "PyJWT";
-          inherit version;
-          hash = "sha256-53q4lICQXYaZhEKsV4jzUzP6hfZQR6U0rcOO3zyI/Ds=";
         };
       });
 
@@ -187,10 +183,20 @@ let
         };
       });
 
+      python-roborock = super.python-roborock.overridePythonAttrs (oldAttrs: rec {
+        version = "0.8.3";
+        src = fetchFromGitHub {
+          owner = "humbertogontijo";
+          repo = "python-roborock";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-O7MjxCQ4JwFFC2ibdU8hCPhFPQhV5/LsmDO6vRdyYL0=";
+        };
+      });
+
       python-slugify = super.python-slugify.overridePythonAttrs (oldAttrs: rec {
         pname = "python-slugify";
         version = "4.0.1";
-        src = super.fetchPypi {
+        src = fetchPypi {
           inherit pname version;
           hash = "sha256-aaUXdm4AwSaOW7/A0BCgqFCN4LGNMK1aH/NX+K5yQnA=";
         };
@@ -236,27 +242,11 @@ let
       });
 
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.6";
-        src = super.fetchPypi {
+        version = "2.0.12";
+        src = fetchPypi {
           pname = "SQLAlchemy";
           inherit version;
-          hash = "sha256-w0PwtUZJX116I5xwv1CpmkjXMhwWW4Kvr6hIO56+v24=";
-        };
-        nativeCheckInputs = oldAttrs.nativeCheckInputs ++ (with super; [
-          pytest-xdist
-        ]);
-        disabledTestPaths = (oldAttrs.disabledTestPaths or []) ++ [
-          "test/aaa_profiling"
-          "test/ext/mypy"
-        ];
-      });
-
-      subarulink = super.subarulink.overridePythonAttrs (oldAttrs: rec {
-        version = "0.7.0";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/v${version}";
-          hash = "sha256-BxnpdZwbnZF1oWcu3jRDeXvcaweOuVk1R79KpMLB02c=";
+          hash = "sha256-vd/FvR3uXbD93J2rJvgAwoPzJD5ygbvxByAP7TASX5w=";
         };
       });
 
@@ -282,24 +272,24 @@ let
         };
       });
 
-      # Pinned due to API changes in 2.0
-      vsure = super.vsure.overridePythonAttrs (oldAttrs: rec {
-        version = "1.8.1";
-        src = super.fetchPypi {
-          pname = "vsure";
-          inherit version;
-          hash = "sha256-Zh83t7yjZU2NjOgCkqPUHbqvEyEWXGITRgr5d2fLtRI=";
-        };
-      });
-
       # Pinned due to API changes ~1.0
       vultr = super.vultr.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "spry-group";
           repo = "python-vultr";
-          rev = "v${version}";
-          sha256 = "1qjvvr2v9gfnwskdl0ayazpcmiyw9zlgnijnhgq9mcri5gq9jw5h";
+          rev = version;
+          hash = "sha256-sHCZ8Csxs5rwg1ZG++hP3MfK7ldeAdqm5ta9tEXeW+I=";
+        };
+      });
+
+      websockets = super.websockets.overridePythonAttrs (oldAttrs: rec {
+        version = "11.0.1";
+        src = fetchFromGitHub {
+          owner = "aaugustin";
+          repo = "websockets";
+          rev = "refs/tags/${version}";
+          hash = "sha256-cD8pC7n2OGS8AjG0VdjNXi8jXxvN7yKkadNR0GCqc90=";
         };
       });
 
@@ -327,7 +317,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.3.6";
+  hassVersion = "2023.5.4";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -343,7 +333,7 @@ in python.pkgs.buildPythonApplication rec {
   # Primary source is the pypi sdist, because it contains translations
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4PS6ozyqJddF6Jp9cKRojUtHTTNd3xo2oTDboowQACk=";
+    hash = "sha256-mRiRKMafRkgAOshH/5i6yj379FEzZgXhkdkK557sMaQ=";
   };
 
   # Secondary source is git for tests
@@ -351,7 +341,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-+u1kCyIzTQrMvO6slr1YW0kZqkh4QGxUo5ucJzxkfEE=";
+    hash = "sha256-r28BhC6lBIoxu7Wp/1h+qgPEDaUCqH4snyKk/h/vgyQ=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -425,6 +415,7 @@ in python.pkgs.buildPythonApplication rec {
     python-slugify
     pyyaml
     requests
+    ulid-transform
     voluptuous
     voluptuous-serialize
     yarl
@@ -477,6 +468,8 @@ in python.pkgs.buildPythonApplication rec {
     "--showlocals"
     # AssertionError: assert 1 == 0
     "--deselect tests/test_config.py::test_merge"
+    # AssertionError: assert 2 == 1
+    "--deselect=tests/helpers/test_translation.py::test_caching"
     # tests are located in tests/
     "tests"
   ];

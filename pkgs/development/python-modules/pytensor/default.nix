@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.10.1";
+  version = "2.11.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = pname;
     rev = "refs/tags/rel-${version}";
-    hash = "sha256-sk/HGfiiNKrgnf5fPaxoOySvAEpnAXnLFmK0yah51ww=";
+    hash = "sha256-4GDur8S19i8pZkywKHZUelmd2e0jZmC5HzF7o2esDl4=";
   };
 
   nativeBuildInputs = [
@@ -72,8 +72,10 @@ buildPythonPackage rec {
   disabledTests = [
     # benchmarks (require pytest-benchmark):
     "test_elemwise_speed"
+    "test_fused_elemwise_benchmark"
     "test_logsumexp_benchmark"
     "test_scan_multiple_output"
+    "test_vector_taps_benchmark"
   ];
 
   disabledTestPaths = [

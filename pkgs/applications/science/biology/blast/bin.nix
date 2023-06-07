@@ -35,7 +35,7 @@ in
 stdenv.mkDerivation {
   inherit pname version src;
 
-  nativeBuildInputs = lib.optional stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
   buildInputs = [ python3 perl ] ++ lib.optionals stdenv.isLinux [ zlib bzip2 glib libxml2 ];
 

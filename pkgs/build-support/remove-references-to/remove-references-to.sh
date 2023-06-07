@@ -32,6 +32,6 @@ done
 
 for region in "${regions[@]}"; do
     for hook in "${fixupHooks[@]}"; do
-        eval "$hook" "$i"
+        eval "$hook" "$region"
     done
 done

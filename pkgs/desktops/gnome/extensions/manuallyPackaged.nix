@@ -18,5 +18,6 @@
   "taskwhisperer-extension@infinicode.de" = callPackage ./taskwhisperer { };
   "tilingnome@rliang.github.com" = callPackage ./tilingnome { };
   "TopIcons@phocean.net" = callPackage ./topicons-plus { };
+  "valent@andyholmes.ca" = callPackage ./valent { };
   "window-corner-preview@fabiomereu.it" = callPackage ./window-corner-preview { };
 }

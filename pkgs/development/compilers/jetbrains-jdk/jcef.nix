@@ -75,9 +75,12 @@ let rpath = lib.makeLibraryPath [
 buildType = if debugBuild then "Debug" else "Release";
 
 in stdenv.mkDerivation rec {
-  name = "jcef-jetbrains";
-  rev = "153d40c761a25a745d7ebf0ee3a024bbc2c840b5";
-  commit-num = "611";  # Run `git rev-list --count HEAD`
+  pname = "jcef-jetbrains";
+  rev = "3dfde2a70f1f914c6a84ba967123a0e38f51053f";
+  # This is the commit number
+  # Currently from the 231 branch: https://github.com/JetBrains/jcef/tree/231
+  # Run `git rev-list --count HEAD`
+  version = "654";
 
   nativeBuildInputs = [ cmake python3 jdk17 git rsync ant ninja ];
   buildInputs = [ libX11 libXdamage nss nspr ];
@@ -86,7 +89,7 @@ in stdenv.mkDerivation rec {
     owner = "jetbrains";
     repo = "jcef";
     inherit rev;
-    hash = "sha256-Vud4nIT2c7uOK7GKKw3plf41WzKqhg+2xpIwB/LyqnE=";
+    hash = "sha256-g8jWzRI2uYzu8O7JHENn0u9yY08fvY6g0Uym02oYUMI=";
   };
   cef-bin = let
     fileName = "cef_binary_104.4.26+g4180781+chromium-104.0.5112.102_linux64_minimal";
@@ -116,7 +119,7 @@ in stdenv.mkDerivation rec {
       -e 's|os.path.isdir(os.path.join(path, \x27.git\x27))|True|' \
       -e 's|"%s rev-parse %s" % (git_exe, branch)|"echo '${rev}'"|' \
       -e 's|"%s config --get remote.origin.url" % git_exe|"echo 'https://github.com/jetbrains/jcef'"|' \
-      -e 's|"%s rev-list --count %s" % (git_exe, branch)|"echo '${commit-num}'"|' \
+      -e 's|"%s rev-list --count %s" % (git_exe, branch)|"echo '${version}'"|' \
       -i tools/git_util.py
 
     cp ${clang-fmt} tools/buildtools/linux64/clang-format

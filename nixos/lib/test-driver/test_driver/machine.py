@@ -7,6 +7,7 @@ import io
 import os
 import queue
 import re
+import select
 import shlex
 import shutil
 import socket
@@ -99,7 +100,7 @@ def _perform_ocr_on_screenshot(
         + "-blur 1x65535"
     )
 
-    tess_args = f"-c debug_file=/dev/null --psm 11"
+    tess_args = "-c debug_file=/dev/null --psm 11"
 
     cmd = f"convert {magick_args} '{screenshot_path}' 'tiff:{screenshot_path}.tiff'"
     ret = subprocess.run(cmd, shell=True, capture_output=True)
@@ -132,7 +133,7 @@ def retry(fn: Callable, timeout: int = 900) -> None:
 
 
 class StartCommand:
-    """The Base Start Command knows how to append the necesary
+    """The Base Start Command knows how to append the necessary
     runtime qemu options as determined by a particular test driver
     run. Any such start command is expected to happily receive and
     append additional qemu args.
@@ -154,6 +155,7 @@ class StartCommand:
         # qemu options
         qemu_opts = (
             " -device virtio-serial"
+            # Note: virtconsole will map to /dev/hvc0 in Linux guests
             " -device virtconsole,chardev=shell"
             " -device virtio-rng-pci"
             " -serial stdio"
@@ -209,7 +211,7 @@ class StartCommand:
 class NixStartScript(StartCommand):
     """A start script from nixos/modules/virtualiation/qemu-vm.nix
     that also satisfies the requirement of the BaseStartCommand.
-    These Nix commands have the particular charactersitic that the
+    These Nix commands have the particular characteristic that the
     machine name can be extracted out of them via a regex match.
     (Admittedly a _very_ implicit contract, evtl. TODO fix)
     """
@@ -367,8 +369,8 @@ class Machine:
     @staticmethod
     def create_startcommand(args: Dict[str, str]) -> StartCommand:
         rootlog.warning(
-            "Using legacy create_startcommand(),"
-            "please use proper nix test vm instrumentation, instead"
+            "Using legacy create_startcommand(), "
+            "please use proper nix test vm instrumentation, instead "
             "to generate the appropriate nixos test vm qemu startup script"
         )
         hda = None
@@ -524,8 +526,10 @@ class Machine:
         if timeout is not None:
             timeout_str = f"timeout {timeout}"
 
+        # While sh is bash on NixOS, this is not the case for every distro.
+        # We explicitly call bash here to allow for the driver to boot other distros as well.
         out_command = (
-            f"{timeout_str} sh -c {shlex.quote(command)} | (base64 --wrap 0; echo)\n"
+            f"{timeout_str} bash -c {shlex.quote(command)} | (base64 --wrap 0; echo)\n"
         )
 
         assert self.shell
@@ -719,6 +723,15 @@ class Machine:
         self.wait_for_unit(jobname)
 
     def connect(self) -> None:
+        def shell_ready(timeout_secs: int) -> bool:
+            """We sent some data from the backdoor service running on the guest
+            to indicate that the backdoor shell is ready.
+            As soon as we read some data from the socket here, we assume that
+            our root shell is operational.
+            """
+            (ready, _, _) = select.select([self.shell], [], [], timeout_secs)
+            return bool(ready)
+
         if self.connected:
             return
 
@@ -728,8 +741,11 @@ class Machine:
             assert self.shell
 
             tic = time.time()
-            self.shell.recv(1024)
-            # TODO: Timeout
+            # TODO: do we want to bail after a set number of attempts?
+            while not shell_ready(timeout_secs=30):
+                self.log("Guest root shell did not produce any data yet...")
+
+            self.log(self.shell.recv(1024).decode())
             toc = time.time()
 
             self.log("connected to guest root shell")
@@ -839,21 +855,37 @@ class Machine:
         with self.nested(f"waiting for {regex} to appear on screen"):
             retry(screen_matches)
 
-    def wait_for_console_text(self, regex: str) -> None:
+    def wait_for_console_text(self, regex: str, timeout: int | None = None) -> None:
+        """
+        Wait for the provided regex to appear on console.
+        For each reads,
+
+        If timeout is None, timeout is infinite.
+
+        `timeout` is in seconds.
+        """
+        # Buffer the console output, this is needed
+        # to match multiline regexes.
+        console = io.StringIO()
+
+        def console_matches() -> bool:
+            nonlocal console
+            try:
+                # This will return as soon as possible and
+                # sleep 1 second.
+                console.write(self.last_lines.get(block=False))
+            except queue.Empty:
+                pass
+            console.seek(0)
+            matches = re.search(regex, console.read())
+            return matches is not None
+
         with self.nested(f"waiting for {regex} to appear on console"):
-            # Buffer the console output, this is needed
-            # to match multiline regexes.
-            console = io.StringIO()
-            while True:
-                try:
-                    console.write(self.last_lines.get())
-                except queue.Empty:
-                    self.sleep(1)
-                    continue
-                console.seek(0)
-                matches = re.search(regex, console.read())
-                if matches is not None:
-                    return
+            if timeout is not None:
+                retry(console_matches, timeout)
+            else:
+                while not console_matches():
+                    pass
 
     def send_key(
         self, key: str, delay: Optional[float] = 0.01, log: Optional[bool] = True
@@ -950,7 +982,7 @@ class Machine:
         Prepares the machine to be reconnected which is useful if the
         machine was started with `allow_reboot = True`
         """
-        self.send_key(f"ctrl-alt-delete")
+        self.send_key("ctrl-alt-delete")
         self.connected = False
 
     def wait_for_x(self) -> None:

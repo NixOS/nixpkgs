@@ -23,14 +23,13 @@
 , poppler
 , auto-multiple-choice
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "auto-multiple-choice";
   version = "1.5.2";
   src = fetchurl {
     url = "https://download.auto-multiple-choice.net/${pname}_${version}_precomp.tar.gz";
     sha256 = "sha256-AjonJOooSe53Fww3QU6Dft95ojNqWrTuPul3nkIbctM=";
   };
-  tlType = "run";
 
   # There's only the Makefile
   dontConfigure = true;
@@ -137,6 +136,11 @@ stdenv.mkDerivation rec {
     XMLWriter
   ]);
 
+  passthru = {
+    tlType = "run";
+    pkgs = [ finalAttrs.finalPackage ];
+  };
+
   meta = with lib; {
     description = "Create and manage multiple choice questionnaires with automated marking.";
     longDescription = ''
@@ -156,10 +160,7 @@ stdenv.mkDerivation rec {
         auto-multiple-choice
         (texlive.combine {
           inherit (pkgs.texlive) scheme-full;
-          extra =
-            {
-              pkgs = [ auto-multiple-choice ];
-            };
+          inherit auto-multiple-choice;
         })
       ];
       </screen>
@@ -172,4 +173,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.thblt ];
     platforms = platforms.all;
   };
-}
+})

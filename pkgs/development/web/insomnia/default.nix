@@ -12,15 +12,16 @@ let
     libudev0-shim
     nghttp2
     openssl
+    stdenv.cc.cc.lib
   ];
 in stdenv.mkDerivation rec {
   pname = "insomnia";
-  version = "2022.7.5";
+  version = "2023.2.2";
 
   src = fetchurl {
     url =
       "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.deb";
-    sha256 = "sha256-BJAiDv+Zg+wU6ovAkuMVTGN9WElOlC96m/GEYrg6exE=";
+    sha256 = "sha256-XM7OLr5ety95jjlVqNuQp3rD9laoe1uC1HNP66HJe5M=";
   };
 
   nativeBuildInputs = [
@@ -81,7 +82,7 @@ in stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    wrapProgram "$out/bin/insomnia" --prefix LD_LIBRARY_PATH : ${runtimeLibs}
+    wrapProgram "$out/bin/insomnia" "''${gappsWrapperArgs[@]}" --prefix LD_LIBRARY_PATH : ${runtimeLibs}
   '';
 
   meta = with lib; {

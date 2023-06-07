@@ -9,6 +9,7 @@
 , pytestCheckHook
 , python-dateutil
 , pythonOlder
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
@@ -21,12 +22,23 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "basilfx";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-exxpJJA+JnVuehCnWs/ihk/SSPUqV7ODXZxvbmuHe8U=";
   };
 
+  postPatch = ''
+    # https://github.com/basilfx/aiobiketrax/pull/63
+    substituteInPlace aiobiketrax/api.py \
+      --replace "auth0.v3" "auth0"
+  '';
+
+  pythonRelaxDeps = [
+    "auth0-python"
+  ];
+
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

@@ -54,7 +54,7 @@ in {
 
       serviceConfig = {
         ExecStart = "${pkgs.fcgiwrap}/sbin/fcgiwrap -c ${builtins.toString cfg.preforkProcesses} ${
-          if (cfg.socketType != "unix") then "-s ${cfg.socketType}:${cfg.socketAddress}" else ""
+          optionalString (cfg.socketType != "unix") "-s ${cfg.socketType}:${cfg.socketAddress}"
         }";
       } // (if cfg.user != null && cfg.group != null then {
         User = cfg.user;

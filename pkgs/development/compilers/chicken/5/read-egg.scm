@@ -14,7 +14,10 @@
          (->string (if (list? dep)
                        (car dep)
                        dep)))
-       (ref 'dependencies egg eqv? '())))
+       (append
+        (ref 'dependencies egg eqv? '())
+        ;; TODO separate this into `buildInputs` and `propagatedBuildInputs`
+        (ref 'build-dependencies egg eqv? '()))))
 (printf "dependencies = [~A]\n"
         (string-intersperse (map (lambda (dep) (sprintf "~S" dep))
                                  dependencies)

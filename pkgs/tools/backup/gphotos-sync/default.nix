@@ -1,27 +1,13 @@
 { lib
+, pkgs
 , fetchFromGitHub
 , fetchpatch
 , python3
 , ffmpeg
 }:
-let
-  py = python3.override {
-    packageOverrides = self: super: {
-      google-auth-oauthlib = super.google-auth-oauthlib.overridePythonAttrs (oldAttrs: rec {
-        version = "0.5.2b1";
-        src = fetchFromGitHub {
-          owner = "gilesknap";
-          repo = "google-auth-library-python-oauthlib";
-          rev = "v${version}";
-          hash = "sha256-o4Jakm/JgLszumrSoTTnU+nc79Ei70abjpmn614qGyc=";
-        };
-      });
-    };
-  };
-in
-py.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "gphotos-sync";
-  version = "3.04";
+  version = "3.1.2";
   format = "pyproject";
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -30,36 +16,37 @@ py.pkgs.buildPythonApplication rec {
     owner = "gilesknap";
     repo = "gphotos-sync";
     rev = version;
-    sha256 = "0mnlnqmlh3n1b6fjwpx2byl1z41vgghjb95598kz5gvdi95iirrs";
+    hash = "sha256-lLw450Rk7tIENFTZWHoinkhv3VtctDv18NKxhox+NgI=";
   };
 
   patches = [
     ./skip-network-tests.patch
   ];
 
-  propagatedBuildInputs = with py.pkgs; [
+  nativeBuildInputs = [ python3.pkgs.pythonRelaxDepsHook ];
+  pythonRelaxDeps = [
+    "psutil"
+    "exif"
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
     appdirs
     attrs
     exif
     google-auth-oauthlib
     psutil
     pyyaml
+    psutil
     requests-oauthlib
     types-pyyaml
     types-requests
   ];
 
-  postPatch = ''
-    # this is a patched release that we include via packageOverrides above
-    substituteInPlace setup.cfg \
-      --replace " @ https://github.com/gilesknap/google-auth-library-python-oauthlib/archive/refs/tags/v0.5.2b1.zip" ""
-  '';
-
   buildInputs = [
     ffmpeg
   ];
 
-  nativeCheckInputs = with py.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     mock
     pytestCheckHook
     setuptools-scm

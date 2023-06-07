@@ -20,7 +20,7 @@
 
 channel="${1:-stable}" # stable/candidate/edge
 nixpkgs="$(git rev-parse --show-toplevel)"
-spotify_nix="$nixpkgs/pkgs/applications/audio/spotify/default.nix"
+spotify_nix="$nixpkgs/pkgs/applications/audio/spotify/linux.nix"
 
 
 #

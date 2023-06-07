@@ -42,7 +42,7 @@
 }:
 
 let
-  hashesFile = builtins.fromJSON (builtins.readFile ./hashes.json);
+  hashesFile = lib.importJSON ./hashes.json;
 
   getCoreSrc = core:
     fetchFromGitHub (builtins.getAttr core hashesFile);

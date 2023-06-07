@@ -17,6 +17,11 @@ buildPythonPackage rec {
     hash = "sha256-M0K7pBDXlBKQ7tDlii5arbD3uXhj7EKDsoPEBu5yOig=";
   };
 
+  disabledTests = [
+    # requires network connections
+    "test_free_providers"
+  ];
+
   pythonImportsCheck = [
     "xyzservices.providers"
   ];

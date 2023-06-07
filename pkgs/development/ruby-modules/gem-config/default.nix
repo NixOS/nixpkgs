@@ -27,6 +27,7 @@
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
 , bundler, libsass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
 , CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libmaxminddb, libyaml
+, autoSignDarwinBinariesHook, fetchpatch
 }@args:
 
 let
@@ -282,6 +283,15 @@ in
     meta.mainProgram = "rbprettier";
   };
 
+  prometheus-client-mmap = attrs: {
+    dontBuild = false;
+    postPatch = let
+      getconf = if stdenv.hostPlatform.isGnu then stdenv.cc.libc else getconf;
+    in ''
+      substituteInPlace lib/prometheus/client/page_size.rb --replace "getconf" "${lib.getBin getconf}/bin/getconf"
+    '';
+  };
+
   glib2 = attrs: {
     nativeBuildInputs = [ pkg-config ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
@@ -325,7 +335,9 @@ in
   };
 
   grpc = attrs: {
-    nativeBuildInputs = [ pkg-config ] ++ lib.optional stdenv.isDarwin cctools;
+    nativeBuildInputs = [ pkg-config ]
+      ++ lib.optional stdenv.isDarwin cctools
+      ++ lib.optional (lib.versionAtLeast attrs.version "1.53.0" && stdenv.isDarwin && stdenv.isAarch64) autoSignDarwinBinariesHook;
     buildInputs = [ openssl ];
     hardeningDisable = [ "format" ];
     env.NIX_CFLAGS_COMPILE = toString [
@@ -342,7 +354,7 @@ in
     postPatch = ''
       substituteInPlace Makefile \
         --replace '-Wno-invalid-source-encoding' ""
-    '' + lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString (lib.versionOlder attrs.version "1.53.0" && stdenv.isDarwin) ''
       # For < v1.48.0
       substituteInPlace src/ruby/ext/grpc/extconf.rb \
         --replace "ENV['AR'] = 'libtool -o' if RUBY_PLATFORM =~ /darwin/" ""
@@ -513,7 +525,7 @@ in
 
   openssl = attrs: {
     # https://github.com/ruby/openssl/issues/369
-    buildInputs = [ openssl_1_1 ];
+    buildInputs = [ (if (lib.versionAtLeast attrs.version "3.0.0") then openssl else openssl_1_1) ];
   };
 
   opus-ruby = attrs: {
@@ -527,6 +539,15 @@ in
 
   ovirt-engine-sdk = attrs: {
     buildInputs = [ curl libxml2 ];
+    dontBuild = false;
+    patches = [
+      # fix ruby 3.1 https://github.com/oVirt/ovirt-engine-sdk-ruby/pull/3
+      (fetchpatch {
+        url = "https://github.com/oVirt/ovirt-engine-sdk-ruby/pull/3/commits/b596b919bc7857fdc0fc1c61a8cb7eab32cfc2db.patch";
+        hash = "sha256-AzGTQaD/e6X4LOMuXhy/WhbayhWKYCGHXPFlzLRWyPM=";
+        stripLen = 1;
+      })
+    ];
   };
 
   pango = attrs: {
@@ -646,6 +667,13 @@ in
       "--with-cflags=-I${ncurses.dev}/include"
       "--with-ldflags=-L${ncurses.out}/lib"
     ];
+    dontBuild = false;
+    postPatch = ''
+      substituteInPlace extconf.rb --replace 'rubyio.h' 'ruby/io.h'
+      substituteInPlace terminfo.c \
+        --replace 'rubyio.h' 'ruby/io.h' \
+        --replace 'rb_cData' 'rb_cObject'
+    '';
   };
 
   ruby-vips = attrs: {

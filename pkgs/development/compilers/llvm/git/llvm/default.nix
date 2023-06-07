@@ -24,10 +24,10 @@
   && (stdenv.hostPlatform == stdenv.buildPlatform)
 , enableManpages ? false
 , enableSharedLibraries ? !stdenv.hostPlatform.isStatic
-, enablePFM ? !(stdenv.isDarwin
-  || stdenv.isAarch64 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
-  || stdenv.isAarch32 # broken for the armv7l builder
-)
+, enablePFM ? stdenv.isLinux /* PFM only supports Linux */
+  # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
+  # broken for the armv7l builder
+  && !stdenv.hostPlatform.isAarch
 , enablePolly ? true
 } @args:
 
@@ -134,6 +134,13 @@ in stdenv.mkDerivation (rec {
     # It's not clear to me why this isn't an issue for LLVM developers running
     # on macOS (nothing about this _seems_ nix specific)..
     ./lit-shell-script-runner-set-dyld-library-path.patch
+
+    # Fix musl build.
+    (fetchpatch {
+      url = "https://github.com/llvm/llvm-project/commit/5cd554303ead0f8891eee3cd6d25cb07f5a7bf67.patch";
+      relative = "llvm";
+      hash = "sha256-XPbvNJ45SzjMGlNUgt/IgEvM2dHQpDOe6woUJY+nUYA=";
+    })
   ] ++ lib.optionals enablePolly [
     ./gnu-install-dirs-polly.patch
 
@@ -239,6 +246,38 @@ in stdenv.mkDerivation (rec {
     cmakeFlagsArray+=(
       -DLLVM_LIT_ARGS="-svj''${NIX_BUILD_CORES} --no-progress-bar"
     )
+  '';
+
+  # Defensive check: some paths (that we make symlinks to) depend on the release
+  # version, for example:
+  #  - https://github.com/llvm/llvm-project/blob/406bde9a15136254f2b10d9ef3a42033b3cb1b16/clang/lib/Headers/CMakeLists.txt#L185
+  #
+  # So we want to sure that the version in the source matches the release
+  # version we were given.
+  #
+  # We do this check here, in the LLVM build, because it happens early.
+  postConfigure = let
+    v = lib.versions;
+    major = v.major release_version;
+    minor = v.minor release_version;
+    patch = v.patch release_version;
+  in ''
+    # $1: part, $2: expected
+    check_version() {
+      part="''${1^^}"
+      part="$(cat include/llvm/Config/llvm-config.h  | grep "#define LLVM_VERSION_''${part} " | cut -d' ' -f3)"
+
+      if [[ "$part" != "$2" ]]; then
+        echo >&2 \
+          "mismatch in the $1 version! we have version ${release_version}" \
+          "and expected the $1 version to be '$2'; the source has '$part' instead"
+        exit 3
+      fi
+    }
+
+    check_version major ${major}
+    check_version minor ${minor}
+    check_version patch ${patch}
   '';
 
   # E.g. mesa.drivers use the build-id as a cache key (see #93946):

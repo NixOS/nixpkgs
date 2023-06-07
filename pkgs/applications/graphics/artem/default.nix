@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "artem";
-  version = "1.1.5";
+  version = "1.1.7";
 
   src = fetchFromGitHub {
     owner = "finefindus";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1jax39gizlcbqnkjckxwm5h0wdk5dk8dasaj9wxv7yidbcbgj4zh";
+    sha256 = "sha256-wd8csdt7qOWFhUBRjqfJSEGnNDyHD7lJA8CtW+q4Kxg=";
   };
 
-  cargoSha256 = "sha256-n2NOWrgcMVHpNCHL7r8+Kl1e01XYadaNM7UdE8fQo1U=";
+  cargoSha256 = "sha256-zFXQUQVPqTur7m+aL0JhSiZI+EEFo9nCTVu1yAOgp/I=";
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
 

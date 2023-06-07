@@ -4,7 +4,6 @@
 , rustPlatform
 , installShellFiles
 , cmake
-, fetchpatch
 , git
 , nixosTests
 , Security
@@ -14,13 +13,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
-  version = "1.13.1";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-MgCYlcJoNJ3eChH7WLKgvgblmz9Wy6JplULjeGGiEXY=";
+    hash = "sha256-aINiWzkt4sAWgcGdkHTb2KRMh2z+LiOhDdTJbzbXwR4=";
   };
 
   nativeBuildInputs = [ installShellFiles cmake ];
@@ -36,7 +35,7 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/starship completions zsh)
   '';
 
-  cargoHash = "sha256-sdETcvmz9mWTXEt9h7vP+FKolhnamkwtbkYiJE/HVX0=";
+  cargoHash = "sha256-XT2kgiITtG1FNyztNvos/r01pvdF1xPhHA4+YhFGFEU=";
 
   nativeCheckInputs = [ git ];
 

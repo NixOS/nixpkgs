@@ -1,45 +1,68 @@
 { branch ? "mainline"
-, libsForQt5
+, qt6Packages
 , fetchFromGitHub
+, fetchgit
 , fetchurl
+, fetchzip
+, runCommand
+, gnutar
 }:
 
 let
-  # Mirror of https://api.yuzu-emu.org/gamedb, last updated 2022-08-13
-  # Please make sure to update this when updating yuzu!
+  sources = import ./sources.nix;
+
   compat-list = fetchurl {
     name = "yuzu-compat-list";
-    url = "https://raw.githubusercontent.com/flathub/org.yuzu_emu.yuzu/d83401d2ee3fd5e1922e31baed1f3bdb1c0f036c/compatibility_list.json";
-    sha256 = "sha256-anOmO7NscHDsQxT03+YbJEyBkXjhcSVGgKpDwt//GHw=";
+    url = "https://raw.githubusercontent.com/flathub/org.yuzu_emu.yuzu/${sources.compatList.rev}/compatibility_list.json";
+    hash = sources.compatList.hash;
   };
+
+  mainlineSrc = fetchFromGitHub {
+    owner = "yuzu-emu";
+    repo = "yuzu-mainline";
+    rev = "mainline-0-${sources.mainline.version}";
+    hash = sources.mainline.hash;
+    fetchSubmodules = true;
+  };
+
+  # The mirror repo for early access builds is missing submodule info,
+  # but the Windows distributions include a source tarball, which in turn
+  # includes the full git metadata. So, grab that and rehydrate it.
+  # This has the unfortunate side effect of requiring two FODs, one
+  # for the Windows download and one for the full repo with submodules.
+  eaZip = fetchzip {
+    name = "yuzu-ea-windows-dist";
+    url = "https://github.com/pineappleEA/pineapple-src/releases/download/EA-${sources.ea.version}/Windows-Yuzu-EA-${sources.ea.version}.zip";
+    hash = sources.ea.distHash;
+  };
+
+  eaGitSrc = runCommand "yuzu-ea-dist-unpacked" {
+    src = eaZip;
+    nativeBuildInputs = [ gnutar ];
+  }
+  ''
+    mkdir $out
+    tar xf $src/*.tar.xz --directory=$out --strip-components=1
+  '';
+
+  eaSrcRehydrated = fetchgit {
+    url = eaGitSrc;
+    fetchSubmodules = true;
+    hash = sources.ea.fullHash;
+  };
+
 in {
-  mainline = libsForQt5.callPackage ./generic.nix rec {
-    pname = "yuzu-mainline";
-    version = "1245";
-
-    src = fetchFromGitHub {
-      owner = "yuzu-emu";
-      repo = "yuzu-mainline";
-      rev = "mainline-0-${version}";
-      sha256 = "sha256-lWXlY1KQC067MvCRUFhmr0c7KDrHDuwJOhIWMKw1f+A=";
-      fetchSubmodules = true;
-    };
-
-    inherit branch compat-list;
+  mainline = qt6Packages.callPackage ./generic.nix {
+    branch = "mainline";
+    version = sources.mainline.version;
+    src = mainlineSrc;
+    inherit compat-list;
   };
 
-  early-access = libsForQt5.callPackage ./generic.nix rec {
-    pname = "yuzu-ea";
-    version = "2945";
-
-    src = fetchFromGitHub {
-      owner = "pineappleEA";
-      repo = "pineapple-src";
-      rev = "EA-${version}";
-      sha256 = "sha256-/051EtQxhB5oKH/JxZZ2AjnxOBcRxCBIwd4Qr8lq7Ok=";
-      fetchSubmodules = true;
-    };
-
-    inherit branch compat-list;
+  early-access = qt6Packages.callPackage ./generic.nix {
+    branch = "early-access";
+    version = sources.ea.version;
+    src = eaSrcRehydrated;
+    inherit compat-list;
   };
 }.${branch}

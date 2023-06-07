@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchPypi
 , fetchpatch
 , installShellFiles
 , ninja
@@ -12,18 +13,23 @@
 , OpenGL
 , AppKit
 , Cocoa
+, libxcrypt
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.0.0";
+  version = "1.1.0";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qlCkukVXwl59SERqv96FeVfc31g4X/++Zwug6O+szgU=";
+    hash = "sha256-2WFsRM1sU2if+PBfxpWKaT8uF8NHKo2vg87lXav/gp8=";
   };
 
   patches = [
+    # Fix Meson tests that fail when the Nix store is case-sensitive APFS.
+    # https://github.com/mesonbuild/meson/pull/11820
+    ./darwin-case-sensitive-fs.patch
+
     # Meson is currently inspecting fewer variables than autoconf does, which
     # makes it harder for us to use setup hooks, etc.  Taken from
     # https://github.com/mesonbuild/meson/pull/6827
@@ -72,11 +78,11 @@ python3.pkgs.buildPythonApplication rec {
       ];
     })
 
-    # tests: avoid unexpected failure when cmake is not installed
-    # https://github.com/mesonbuild/meson/pull/11321
+    # Fix regression in precomputing CMAKE_SIZEOF_VOID_P
+    # See https://github.com/mesonbuild/meson/pull/11761
     (fetchpatch {
-      url = "https://github.com/mesonbuild/meson/commit/a38ad3039d0680f3ac34a6dc487776c79c48acf3.patch";
-      hash = "sha256-9YaXwc+F3Pw4BjuOXqva4MD6DAxX1k5WLbn0xzwuEmw=";
+      url = "https://github.com/mesonbuild/meson/commit/7c78c2b5a0314078bdabb998ead56925dc8b0fc0.patch";
+      sha256 = "sha256-vSnHhuOIXf/1X+bUkUmGND5b30ES0O8EDArwb4p2/w4=";
     })
   ];
 
@@ -120,6 +126,10 @@ python3.pkgs.buildPythonApplication rec {
       --replace "python3 -c " "${python3.interpreter} -c "
   '';
 
+  buildInputs = lib.optionals (python3.pythonOlder "3.9") [
+    libxcrypt
+  ];
+
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
@@ -140,7 +150,7 @@ python3.pkgs.buildPythonApplication rec {
       code.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ jtojnar mbe AndersonTorres ];
+    maintainers = with maintainers; [ mbe AndersonTorres ];
     inherit (python3.meta) platforms;
   };
 }

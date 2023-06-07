@@ -7,14 +7,14 @@
 , runtimeShell
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "argbash";
   version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "matejak";
     repo = "argbash";
-    rev = self.version;
+    rev = finalAttrs.version;
     hash = "sha256-G739q6OhsXEldpIxiyOU51AmG4RChMqaN1t2wOy6sPU=";
   };
 

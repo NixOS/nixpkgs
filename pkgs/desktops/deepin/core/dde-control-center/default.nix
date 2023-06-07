@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , dtkwidget
 , qt5integration
 , qt5platform-plugins

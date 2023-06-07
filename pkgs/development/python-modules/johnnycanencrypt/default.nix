@@ -1,9 +1,8 @@
 { lib
 , stdenv
-, fetchPypi
+, fetchFromGitHub
 , buildPythonPackage
 , rustPlatform
-, llvmPackages
 , pkg-config
 , pcsclite
 , nettle
@@ -17,32 +16,32 @@
 
 buildPythonPackage rec {
   pname = "johnnycanencrypt";
-  version = "0.12.0";
+  version = "0.13.1";
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-aGhM/uyYE7l0h6L00qp+HRUVaj7s/tnHWIHJpLAkmR4=";
+  src = fetchFromGitHub {
+    owner = "kushaldas";
+    repo = "johnnycanencrypt";
+    rev = "v${version}";
+    hash = "sha256-1zHdV0QNYgeJIMaSljIMtqjpkwih2+s8jAaQnCumdgw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-fcwDxkUFtA6LS77xdLktNnZJXmyl/ZzArvIW69SPpmI=";
+    hash = "sha256-nsVC2plY2yXjOZBvM4GYNQJqHR+ZWxfiDjPcTCoe6+0=";
   };
 
   format = "pyproject";
-
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   propagatedBuildInputs = [
     httpx
   ];
 
   nativeBuildInputs = [
-    llvmPackages.clang
     pkg-config
   ] ++ (with rustPlatform; [
+    bindgenHook
     cargoSetupHook
     maturinBuildHook
   ]);

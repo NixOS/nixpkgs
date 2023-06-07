@@ -1,7 +1,10 @@
 { stdenv, lib, rustPlatform, rustc, Security, patchelf }:
+
 rustPlatform.buildRustPackage {
   pname = "clippy";
   inherit (rustc) version src;
+
+  separateDebugInfo = true;
 
   # the rust source tarball already has all the dependencies vendored, no need to fetch them again
   cargoVendorDir = "vendor";
@@ -10,7 +13,8 @@ rustPlatform.buildRustPackage {
   # changes hash of vendor directory otherwise
   dontUpdateAutotoolsGnuConfigScripts = true;
 
-  buildInputs = [ rustc.llvm ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ rustc.llvm ]
+    ++ lib.optionals stdenv.isDarwin [ Security ];
 
   # fixes: error: the option `Z` is only accepted on the nightly compiler
   RUSTC_BOOTSTRAP = 1;

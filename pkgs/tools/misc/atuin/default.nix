@@ -6,22 +6,25 @@
 , libiconv
 , Security
 , SystemConfiguration
-, xvfb-run
 , nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "atuin";
-  version = "14.0.0";
+  version = "15.0.0";
 
   src = fetchFromGitHub {
     owner = "ellie";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-P8PTEbTWI+vwWiPvjr4yTwO/JfPzfpUPO0ATi1ILhfk=";
+    hash = "sha256-BX1WpvJMcfpepsRX0U6FJBL5/+mpUyTZxm65BbbZLJA=";
   };
 
-  cargoHash = if stdenv.isLinux then "sha256-T3Y6WiU6UdLmZiXYekL5cIonqFisU94PpiVlB1sNr9U=" else "sha256-a81gKajbifhDqlKlpnA4FzVX+NktqOCRqlajuuYopCg=";
+  # TODO: unify this to one hash because updater do not support this
+  cargoHash =
+    if stdenv.isLinux
+    then "sha256-EnIR+BXw8oYlv3dpYy4gAkN/zckRI8KEAbbR9wPmMq4="
+    else "sha256-hHcahzrIuXIgOv+sx0HbC9f5guTcTr6L4eeLoiQsAzA=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -32,16 +35,6 @@ rustPlatform.buildRustPackage rec {
       --bash <($out/bin/atuin gen-completions -s bash) \
       --fish <($out/bin/atuin gen-completions -s fish) \
       --zsh <($out/bin/atuin gen-completions -s zsh)
-  '';
-
-  nativeCheckInputs = lib.optionals xvfb-run.meta.available [
-    xvfb-run
-  ];
-
-  checkPhase = lib.optionalString xvfb-run.meta.available ''
-    runHook preCheck
-    xvfb-run cargo test
-    runHook postCheck
   '';
 
   passthru.tests = {

@@ -32,7 +32,6 @@ import ../make-test-python.nix (
     name = "mjolnir";
     meta = with pkgs.lib; {
       maintainers = teams.matrix.members;
-      broken = true; # times out after spending many hours
     };
 
     nodes = {
@@ -99,6 +98,8 @@ import ../make-test-python.nix (
             enable = true;
             username = "mjolnir";
             passwordFile = pkgs.writeText "password.txt" "mjolnir-password";
+            # otherwise mjolnir tries to connect to ::1, which is not listened by pantalaimon
+            options.listenAddress = "127.0.0.1";
           };
           managementRoom = "#moderators:homeserver";
         };

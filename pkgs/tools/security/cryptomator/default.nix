@@ -1,18 +1,18 @@
 { lib, stdenv, fetchFromGitHub
 , autoPatchelfHook
-, fuse, jffi
-, maven, jdk, jre, makeShellWrapper, glib, wrapGAppsHook
+, fuse3
+, maven, jdk, makeShellWrapper, glib, wrapGAppsHook
 }:
 
 let
   pname = "cryptomator";
-  version = "1.6.14";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
     rev = version;
-    sha256 = "sha256-ArOYL3xj2HiXXu1Bymd5mciMsmikCDvxr5M3LMqZgYA=";
+    sha256 = "sha256-4MjF2PDH0JB1biY4HO2wOC0i6EIGSlzkK6tDm8nzvIo=";
   };
 
   # perform fake build to make a fixed-output derivation out of the files downloaded from maven central (120MB)
@@ -21,7 +21,7 @@ let
     inherit src;
 
     nativeBuildInputs = [ jdk maven ];
-    buildInputs = [ jre ];
+    buildInputs = [ jdk ];
 
     buildPhase = ''
       while mvn -Plinux package -Dmaven.test.skip=true -Dmaven.repo.local=$out/.m2 -Dmaven.wagon.rto=5000; [ $? = 1 ]; do
@@ -35,9 +35,8 @@ let
       find $out/.m2 -type f -iname '*.pom' -exec sed -i -e 's/\r\+$//' {} \;
     '';
 
-    outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-svpz1mHCHNQGWc+CBroAPvW4cXQdYuqFkK4JSmf6kXE=";
+    outputHash = "sha256-2nCaSL7OlS9f+PZPh0YiMvnjOaAqlQimkKWDSjSP+bQ=";
 
     doCheck = false;
   };
@@ -60,12 +59,8 @@ in stdenv.mkDerivation rec {
     cp target/libs/* $out/share/cryptomator/libs/
     cp target/mods/* target/cryptomator-*.jar $out/share/cryptomator/mods/
 
-    # The bundeled jffi.so dosn't work on nixos and causes a segmentation fault
-    # we thus replace it with a version build by nixos
-    rm $out/share/cryptomator/libs/jff*.jar
-    cp -f ${jffi}/share/java/jffi-complete.jar $out/share/cryptomator/libs/
-
-    makeShellWrapper ${jre}/bin/java $out/bin/cryptomator \
+    makeShellWrapper ${jdk}/bin/java $out/bin/cryptomator \
+      --add-flags "--enable-preview" \
       --add-flags "--class-path '$out/share/cryptomator/libs/*'" \
       --add-flags "--module-path '$out/share/cryptomator/mods'" \
       --add-flags "-Dcryptomator.logDir='~/.local/share/Cryptomator/logs'" \
@@ -82,9 +77,9 @@ in stdenv.mkDerivation rec {
       --add-flags "-Djavafx.embed.singleThread=true " \
       --add-flags "-Dawt.useSystemAAFontSettings=on" \
       --add-flags "--module org.cryptomator.desktop/org.cryptomator.launcher.Cryptomator" \
-      --prefix PATH : "$out/share/cryptomator/libs/:${lib.makeBinPath [ jre glib ]}" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ fuse ]}" \
-      --set JAVA_HOME "${jre.home}"
+      --prefix PATH : "$out/share/cryptomator/libs/:${lib.makeBinPath [ jdk glib ]}" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ fuse3 ]}" \
+      --set JAVA_HOME "${jdk.home}"
 
     # install desktop entry and icons
     cp -r ${src}/dist/linux/appimage/resources/AppDir/usr/* $out/
@@ -105,7 +100,7 @@ in stdenv.mkDerivation rec {
     wrapGAppsHook
     jdk
   ];
-  buildInputs = [ fuse jre glib jffi ];
+  buildInputs = [ fuse3 jdk glib ];
 
   meta = with lib; {
     description = "Free client-side encryption for your cloud files";

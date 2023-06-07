@@ -16,7 +16,8 @@ stdenv.mkDerivation {
 }
 ```
 
-(`stdenv` needs to be in scope, so if you write this in a separate Nix expression from `pkgs/all-packages.nix`, you need to pass it as a function argument.) Specifying a `name` and a `src` is the absolute minimum Nix requires. For convenience, you can also use `pname` and `version` attributes and `mkDerivation` will automatically set `name` to `"${pname}-${version}"` by default. Since [RFC 0035](https://github.com/NixOS/rfcs/pull/35), this is preferred for packages in Nixpkgs, as it allows us to reuse the version easily:
+(`stdenv` needs to be in scope, so if you write this in a separate Nix expression from `pkgs/all-packages.nix`, you need to pass it as a function argument.) Specifying a `name` and a `src` is the absolute minimum Nix requires. For convenience, you can also use `pname` and `version` attributes and `mkDerivation` will automatically set `name` to `"${pname}-${version}"` by default.
+**Since [RFC 0035](https://github.com/NixOS/rfcs/pull/35), this is preferred for packages in Nixpkgs**, as it allows us to reuse the version easily:
 
 ```nix
 stdenv.mkDerivation rec {
@@ -33,7 +34,8 @@ Many packages have dependencies that are not provided in the standard environmen
 
 ```nix
 stdenv.mkDerivation {
-  name = "libfoo-1.2.3";
+  pname = "libfoo";
+  version = "1.2.3";
   ...
   buildInputs = [libbar perl ncurses];
 }
@@ -45,7 +47,8 @@ Often it is necessary to override or modify some aspect of the build. To make th
 
 ```nix
 stdenv.mkDerivation {
-  name = "fnord-4.5";
+  pname = "fnord";
+  version = "4.5";
   ...
   buildPhase = ''
     gcc foo.c -o foo
@@ -65,7 +68,8 @@ While the standard environment provides a generic builder, you can still supply 
 
 ```nix
 stdenv.mkDerivation {
-  name = "libfoo-1.2.3";
+  pname = "libfoo";
+  version = "1.2.3";
   ...
   builder = ./builder.sh;
 }
@@ -253,7 +257,7 @@ propagated-dep(mapOffset(h0, t0, h1),
 ```
 let mapOffset(h, t, i) = i + (if i <= 0 then h else t - 1)
 
-dep(h0, _, A, B)
+dep(h0, t0, A, B)
 propagated-dep(h1, t1, B, C)
 h0 + h1 in {-1, 0, 1}
 h0 + t1 in {-1, 0, -1}
@@ -1200,7 +1204,7 @@ Nix itself considers a build-time dependency as merely something that should pre
 
 In order to alleviate this burden, the setup hook mechanism was written, where any package can include a shell script that \[by convention rather than enforcement by Nix\], any downstream reverse-dependency will source as part of its build process. That allows the downstream dependency to merely specify its dependencies, and lets those dependencies effectively initialize themselves. No boilerplate mirroring the list of dependencies is needed.
 
-The setup hook mechanism is a bit of a sledgehammer though: a powerful feature with a broad and indiscriminate area of effect. The combination of its power and implicit use may be expedient, but isn’t without costs. Nix itself is unchanged, but the spirit of added dependencies being effect-free is violated even if the letter isn’t. For example, if a derivation path is mentioned more than once, Nix itself doesn’t care and simply makes sure the dependency derivation is already built just the same—depending is just needing something to exist, and needing is idempotent. However, a dependency specified twice will have its setup hook run twice, and that could easily change the build environment (though a well-written setup hook will therefore strive to be idempotent so this is in fact not observable). More broadly, setup hooks are anti-modular in that multiple dependencies, whether the same or different, should not interfere and yet their setup hooks may well do so.
+The setup hook mechanism is a bit of a sledgehammer though: a powerful feature with a broad and indiscriminate area of effect. The combination of its power and implicit use may be expedient, but isn’t without costs. Nix itself is unchanged, but the spirit of added dependencies being effect-free is violated even if the latter isn’t. For example, if a derivation path is mentioned more than once, Nix itself doesn’t care and simply makes sure the dependency derivation is already built just the same—depending is just needing something to exist, and needing is idempotent. However, a dependency specified twice will have its setup hook run twice, and that could easily change the build environment (though a well-written setup hook will therefore strive to be idempotent so this is in fact not observable). More broadly, setup hooks are anti-modular in that multiple dependencies, whether the same or different, should not interfere and yet their setup hooks may well do so.
 
 The most typical use of the setup hook is actually to add other hooks which are then run (i.e. after all the setup hooks) on each dependency. For example, the C compiler wrapper’s setup hook feeds itself flags for each dependency that contains relevant libraries and headers. This is done by defining a bash function, and appending its name to one of `envBuildBuildHooks`, `envBuildHostHooks`, `envBuildTargetHooks`, `envHostHostHooks`, `envHostTargetHooks`, or `envTargetTargetHooks`. These 6 bash variables correspond to the 6 sorts of dependencies by platform (there’s 12 total but we ignore the propagated/non-propagated axis).
 

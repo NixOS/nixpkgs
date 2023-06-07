@@ -6,29 +6,31 @@
 , ninja
 , python3
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook4
 , desktop-file-utils
 , gtk4
 , libadwaita
 , json-glib
 , glib
 , glib-networking
+, gtksourceview5
 , libxml2
 , libgee
-, libsoup
+, libsoup_3
 , libsecret
+, libwebp
 , gst_all_1
 , nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "tuba";
-  version = "0.1.0";
+  version = "0.3.2";
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "Tuba";
     rev = "v${version}";
-    hash = "sha256-dkURVzbDBrE4bBUvf2fPqvgLKE07tn7jl3OudZpEWUo=";
+    hash = "sha256-PSEPpJn/lYpeI6AN2AY73NpOcDkMm0zNqeSdELn5HvY=";
   };
 
   nativeBuildInputs = [
@@ -37,20 +39,22 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     python3
-    wrapGAppsHook
+    wrapGAppsHook4
     desktop-file-utils
   ];
 
   buildInputs = [
     glib
     glib-networking
+    gtksourceview5
     json-glib
     libxml2
     libgee
-    libsoup
+    libsoup_3
     gtk4
     libadwaita
     libsecret
+    libwebp
   ] ++ (with gst_all_1; [
     gstreamer
     gst-libav
@@ -68,7 +72,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Browse the Fediverse";
     homepage = "https://tuba.geopjr.dev/";
+    mainProgram = "dev.geopjr.Tuba";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ chuangzhu ];
+    changelog = "https://github.com/GeopJr/Tuba/releases/tag/v${version}";
+    maintainers = with maintainers; [ chuangzhu aleksana ];
   };
 }

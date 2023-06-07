@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "benthos";
-  version = "4.13.0";
+  version = "4.16.0";
 
   src = fetchFromGitHub {
     owner = "benthosdev";
     repo = "benthos";
     rev = "refs/tags/v${version}";
-    hash = "sha256-i4WsoZg22HCaDq6c9bQI3oAVGzW57Y6DrULyki3Hh+U=";
+    hash = "sha256-3cT+UBbjqCwglcGpAGpyxwD7MW5e/0w/BkSlS8E91vQ=";
   };
 
-  vendorHash = "sha256-Q+oEYP/IpCDdwj/mLl5nVZ+t+mPYtRpNrAwta4viPMo=";
+  vendorHash = "sha256-1G1KxD+9aEnkaNsqPAVo+M+jslQcX4zZMQiKpN2PLRY=";
 
   doCheck = false;
 

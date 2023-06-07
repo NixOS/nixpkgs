@@ -2,11 +2,11 @@
 
 let
   pname = "openlens";
-  version = "6.4.5";
+  version = "6.4.15";
 
   src = fetchurl {
     url = "https://github.com/MuhammedKalkan/OpenLens/releases/download/v${version}/OpenLens-${version}.x86_64.AppImage";
-    sha256 = "sha256-Lwl4unhXSyYCEImiPncAnmIQt26CD4horsREMyi6nuA=";
+    sha256 = "sha256-Q7Vh+/SKbnQ7HbDlx1XqBXg1U2DaIvY139VrIIdOX5E=";
   };
 
   appimageContents = appimageTools.extractType2 {

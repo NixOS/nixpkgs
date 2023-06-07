@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/MichaHoffmann/tree-sitter-hcl",
-  "rev": "4ff21306a71269c4ac814769b90b0ecf3194d21d",
-  "date": "2022-06-02T20:13:06+02:00",
-  "path": "/nix/store/jsn5dixjqqvwagcgwgjdr91igic2r42w-tree-sitter-hcl",
-  "sha256": "1gvpl6kw83ywwd64ssz5xs4idc8ip2jmiz2mfy9xlkjbl9nfngci",
+  "rev": "6b74f88b3d396e0f101c93f807e0b3667cd3e3a2",
+  "date": "2022-12-02T21:24:38+01:00",
+  "path": "/nix/store/nn324j92ywapf4smjhkjyljlf6f5f96q-tree-sitter-hcl",
+  "sha256": "1dm129c91qyg955mpxy408wa7cmxyvh5n79c8rlb3yhc77f4z2px",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

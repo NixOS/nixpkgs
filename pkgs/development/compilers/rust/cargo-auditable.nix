@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, makeRustPlatform, rustc, cargo, installShellFiles }:
+{ lib, fetchFromGitHub, makeRustPlatform, rustc, cargo, installShellFiles, stdenv }:
 
 let
   args = rec {
@@ -25,6 +25,7 @@ let
       changelog = "https://github.com/rust-secure-code/cargo-auditable/blob/v${version}/cargo-auditable/CHANGELOG.md";
       license = with licenses; [ mit /* or */ asl20 ];
       maintainers = with maintainers; [ figsoda ];
+      broken = stdenv.hostPlatform != stdenv.buildPlatform;
     };
   };
 
@@ -41,8 +42,6 @@ let
 in
 
 rustPlatform.buildRustPackage.override { cargo-auditable = bootstrap; } (args // {
-  auditable = true; # TODO: remove when this is the default
-
   nativeBuildInputs = [
     installShellFiles
   ];
@@ -50,4 +49,8 @@ rustPlatform.buildRustPackage.override { cargo-auditable = bootstrap; } (args //
   postInstall = ''
     installManPage cargo-auditable/cargo-auditable.1
   '';
+
+  passthru = {
+    inherit bootstrap;
+  };
 })

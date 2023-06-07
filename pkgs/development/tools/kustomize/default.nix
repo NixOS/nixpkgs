@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "kustomize";
-  version = "4.5.4";
+  version = "5.0.3";
 
   ldflags = let t = "sigs.k8s.io/kustomize/api/provenance"; in
     [
@@ -15,13 +15,13 @@ buildGoModule rec {
     owner = "kubernetes-sigs";
     repo = pname;
     rev = "kustomize/v${version}";
-    sha256 = "sha256-7Ode+ONgWJRNSbIpvIjhuT+oVvZgJfByFqS/iSUhcXw=";
+    hash = "sha256-VKDLutzt5mFY7M9zmtEKvBjRD8+ea1Yil/NupvWBoVU=";
   };
 
   # avoid finding test and development commands
   modRoot = "kustomize";
-
-  vendorSha256 = "sha256-beIbeY/+k2NgotGw5zQFkYuqMKlwctoxuToZfiFlCm4=";
+  proxyVendor = true;
+  vendorHash = "sha256-FvxkQqC4LuYcgOw6HUSIbdJcYpJoJQN7TQHGquZRlZA=";
 
   nativeBuildInputs = [ installShellFiles ];
 

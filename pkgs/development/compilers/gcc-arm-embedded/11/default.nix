@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     #!${runtimeShell}
     export PYTHONPATH=${python38}/lib/python3.8
     export PYTHONHOME=${python38}/bin/python3.8
-    $out/bin/arm-none-eabi-gdb-unwrapped
+    exec $out/bin/arm-none-eabi-gdb-unwrapped "\$@"
     EOF
     chmod +x $out/bin/arm-none-eabi-gdb
   '';

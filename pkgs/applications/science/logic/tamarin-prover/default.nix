@@ -1,4 +1,4 @@
-{ haskellPackages, mkDerivation, fetchFromGitHub, lib, stdenv
+{ haskellPackages, mkDerivation, fetchFromGitHub, fetchpatch, lib, stdenv
 # the following are non-haskell dependencies
 , makeWrapper, which, maude, graphviz, glibcLocales
 }:
@@ -66,6 +66,27 @@ in
 mkDerivation (common "tamarin-prover" src // {
   isLibrary = false;
   isExecutable = true;
+
+  patches = [
+    # Backport unreleased patch allowing maude 3.2.1
+    (fetchpatch {
+      name = "tamarin-prover-allow-maude-3.2.1.patch";
+      url = "https://github.com/tamarin-prover/tamarin-prover/commit/bfcf56909479e154a203f0eeefa767f4d91b600d.patch";
+      sha256 = "1zjqzyxwnfp7z3h3li8jrxn9732dx6lyq9q3w2dsphmxbzrs64dg";
+    })
+    # Backport unreleased patch allowing maude 3.2.2
+    (fetchpatch {
+      name = "tamarin-prover-allow-maude-3.2.2.patch";
+      url = "https://github.com/tamarin-prover/tamarin-prover/commit/df1aa9fc4fcc72b6cf0bed0f71844efe3d8ad238.patch";
+      sha256 = "1bkwvyyz5d660jjh08z8wq9c3l40s0rxd2nsbn20xnl2nynyvqpy";
+    })
+    # Backport proposed patch allowing maude 3.3 and 3.3.1
+    (fetchpatch {
+      name = "tamarin-prover-allow-maude-3.3.patch";
+      url = "https://github.com/tamarin-prover/tamarin-prover/pull/544/commits/d0313b1a1bac7c92130773f7ccdd890f8aec286d.patch";
+      sha256 = "1jhlz8vp9a3aahyhj24yjcv4l1389y9kg878yfnq0rkkgvk0m681";
+    })
+  ];
 
   # strip out unneeded deps manually
   doHaddock = false;

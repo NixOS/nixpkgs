@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
   pname = "libchamplain";
   version = "0.12.21";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ]
+    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -37,6 +38,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gobject-introspection
     vala
+  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
     gtk-doc
     docbook_xsl
     docbook_xml_dtd_412
@@ -55,7 +57,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=true"
+    (lib.mesonBool "gtk_doc" (stdenv.buildPlatform == stdenv.hostPlatform))
     "-Dvapi=true"
     (lib.mesonBool "libsoup3" withLibsoup3)
   ];

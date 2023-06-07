@@ -1,16 +1,18 @@
 { lib
 , clangStdenv
 , fetchFromGitLab
-, libclang
 , rustPlatform
+, cargo
 , meson
 , ninja
 , pkg-config
+, rustc
 , glib
 , gtk4
 , libadwaita
 , zbar
 , sqlite
+, openssl
 , pipewire
 , gstreamer
 , gst-plugins-base
@@ -22,20 +24,20 @@
 
 clangStdenv.mkDerivation rec {
   pname = "gnome-decoder";
-  version = "0.3.1";
+  version = "0.3.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "decoder";
     rev = version;
-    hash = "sha256-WJIOaYSesvLmOzF1Q6o6aLr4KJanXVaNa+r+2LlpKHQ=";
+    hash = "sha256-eMyPN3UxptqavY9tEATW2AP+kpoWaLwUKCwhNQrarVc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-RMHVrv/0q42qFUXyd5BSymzx+BxiyqTX0Jzmxnlhyr4=";
+    hash = "sha256-3j1hoFffQzWBy4IKtmoMkLBJmNbntpyn0sjv1K0MmDo=";
   };
 
   nativeBuildInputs = [
@@ -45,11 +47,11 @@ clangStdenv.mkDerivation rec {
     wrapGAppsHook4
     appstream-glib
     desktop-file-utils
-  ] ++ (with rustPlatform; [
-    rust.cargo
-    rust.rustc
-    cargoSetupHook
-  ]);
+    cargo
+    rustc
+    rustPlatform.bindgenHook
+    rustPlatform.cargoSetupHook
+  ];
 
   buildInputs = [
     glib
@@ -57,19 +59,12 @@ clangStdenv.mkDerivation rec {
     libadwaita
     zbar
     sqlite
+    openssl
     pipewire
     gstreamer
     gst-plugins-base
     gst-plugins-bad
   ];
-
-  LIBCLANG_PATH = "${libclang.lib}/lib";
-
-  # FIXME: workaround for Pipewire 0.3.64 deprecated API change, remove when fixed upstream
-  # https://gitlab.freedesktop.org/pipewire/pipewire-rs/-/issues/55
-  preBuild = ''
-    export BINDGEN_EXTRA_CLANG_ARGS="$BINDGEN_EXTRA_CLANG_ARGS -DPW_ENABLE_DEPRECATED"
-  '';
 
   meta = with lib; {
     description = "Scan and Generate QR Codes";
@@ -78,6 +73,5 @@ clangStdenv.mkDerivation rec {
     platforms = platforms.linux;
     mainProgram = "decoder";
     maintainers = with maintainers; [ zendo ];
-    broken = true;
   };
 }

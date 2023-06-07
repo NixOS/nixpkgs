@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   ] ++ (lib.optionals stdenv.isDarwin [
     "XCODE_TOOL_PATH=${darwin.binutils.bintools}/bin"
     "C_COMPILER=$(CC)"
+    "CXX_COMPILER=$(CXX)"
     "LINKER_OPTIONS=-headerpad_max_install_names"
     "POSTINSTALL_PROGRAM=install_name_tool"
   ]);

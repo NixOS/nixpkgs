@@ -150,12 +150,6 @@ let
       copy_bin_and_libs ${pkgs.kmod}/bin/kmod
       ln -sf kmod $out/bin/modprobe
 
-      # Copy resize2fs if any ext* filesystems are to be resized
-      ${optionalString (any (fs: fs.autoResize && (lib.hasPrefix "ext" fs.fsType)) fileSystems) ''
-        # We need mke2fs in the initrd.
-        copy_bin_and_libs ${pkgs.e2fsprogs}/sbin/resize2fs
-      ''}
-
       # Copy multipath.
       ${optionalString config.services.multipath.enable ''
         copy_bin_and_libs ${config.services.multipath.package}/bin/multipath
@@ -445,7 +439,8 @@ let
           ) config.boot.initrd.secrets)
          }
 
-        (cd "$tmp" && find . -print0 | sort -z | bsdtar --uid 0 --gid 0 -cnf - -T - | bsdtar --null -cf - --format=newc @-) | \
+        # mindepth 1 so that we don't change the mode of /
+        (cd "$tmp" && find . -mindepth 1 -print0 | sort -z | bsdtar --uid 0 --gid 0 -cnf - -T - | bsdtar --null -cf - --format=newc @-) | \
           ${compressorExe} ${lib.escapeShellArgs initialRamdisk.compressorArgs} >> "$1"
       '';
 

@@ -476,6 +476,14 @@ rec {
       check = x: isDerivation x && hasAttr "shellPath" x;
     };
 
+    pkgs = addCheck
+      (unique { message = "A Nixpkgs pkgs set can not be merged with another pkgs set."; } attrs // {
+        name = "pkgs";
+        descriptionClass = "noun";
+        description = "Nixpkgs package set";
+      })
+      (x: (x._type or null) == "pkgs");
+
     path = mkOptionType {
       name = "path";
       descriptionClass = "noun";
@@ -696,6 +704,7 @@ rec {
       , specialArgs ? {}
       , shorthandOnlyDefinesConfig ? false
       , description ? null
+      , class ? null
       }@attrs:
       let
         inherit (lib.modules) evalModules;
@@ -707,7 +716,7 @@ rec {
         ) defs;
 
         base = evalModules {
-          inherit specialArgs;
+          inherit class specialArgs;
           modules = [{
             # This is a work-around for the fact that some sub-modules,
             # such as the one included in an attribute set, expects an "args"
@@ -762,9 +771,16 @@ rec {
         functor = defaultFunctor name // {
           type = types.submoduleWith;
           payload = {
-            inherit modules specialArgs shorthandOnlyDefinesConfig description;
+            inherit modules class specialArgs shorthandOnlyDefinesConfig description;
           };
           binOp = lhs: rhs: {
+            class =
+              # `or null` was added for backwards compatibility only. `class` is
+              # always set in the current version of the module system.
+              if lhs.class or null == null then rhs.class or null
+              else if rhs.class or null == null then lhs.class or null
+              else if lhs.class or null == rhs.class then lhs.class or null
+              else throw "A submoduleWith option is declared multiple times with conflicting class values \"${toString lhs.class}\" and \"${toString rhs.class}\".";
             modules = lhs.modules ++ rhs.modules;
             specialArgs =
               let intersecting = builtins.intersectAttrs lhs.specialArgs rhs.specialArgs;

@@ -22,10 +22,6 @@ import ../make-test-python.nix ({ lib, ... }:
             hostKeys = [ ./ssh_host_ed25519_key ];
           };
         };
-        boot.initrd.extraUtilsCommands = ''
-          mkdir -p $out/secrets/etc/ssh
-          cat "${./ssh_host_ed25519_key}" > $out/secrets/etc/ssh/sh_host_ed25519_key
-        '';
         boot.initrd.preLVMCommands = ''
           while true; do
             if [ -f fnord ]; then

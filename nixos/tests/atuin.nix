@@ -6,10 +6,9 @@ let
   testPass = "password";
   testEmail = "test.testerman@test.com";
 in
-with lib;
 {
   name = "atuin";
-  meta.maintainers = with pkgs.lib.maintainers; [ devusb ];
+  meta.maintainers = with lib.maintainers; [ devusb ];
 
   nodes = {
     server =

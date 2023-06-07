@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
+, cargo
 , meson
 , ninja
 , pkg-config
@@ -10,6 +11,7 @@
 , appstream-glib
 , desktop-file-utils
 , libxml2
+, rustc
 , wrapGAppsHook4
 , openssl
 , dbus
@@ -47,11 +49,10 @@ stdenv.mkDerivation rec {
     desktop-file-utils # update-desktop-database
     libxml2 # xmllint
     wrapGAppsHook4
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
     openssl

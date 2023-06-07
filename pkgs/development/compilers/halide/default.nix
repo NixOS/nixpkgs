@@ -15,13 +15,13 @@ assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 
 llvmPackages.stdenv.mkDerivation rec {
   pname = "halide";
-  version = "15.0.0";
+  version = "15.0.1";
 
   src = fetchFromGitHub {
     owner = "halide";
     repo = "Halide";
     rev = "v${version}";
-    sha256 = "sha256-te9Yn/rmA0YSulnxXL/y5d8PFphjQPgZUDWHNn7oqMg=";
+    sha256 = "sha256-mnZ6QMqDr48bH2W+andGZj2EhajXKApjuW6B50xtzx0=";
   };
 
   cmakeFlags = [ "-DWARNINGS_AS_ERRORS=OFF" "-DWITH_PYTHON_BINDINGS=OFF" "-DTARGET_WEBASSEMBLY=OFF" ];

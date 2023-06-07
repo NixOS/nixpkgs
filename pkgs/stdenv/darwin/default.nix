@@ -63,6 +63,7 @@ rec {
     unset SDKROOT
 
     stripAllFlags=" " # the Darwin "strip" command doesn't know "-s"
+    stripDebugFlags="-S" # the Darwin "strip" command does something odd with "-p"
   '';
 
   bootstrapTools = derivation ({
@@ -486,7 +487,7 @@ rec {
           nghttp2.lib
           coreutils
           gnugrep
-          pcre.out
+          gnugrep.pcre2.out
           gmp
           libiconv
           brotli.lib
@@ -562,7 +563,7 @@ rec {
           nghttp2.lib
           coreutils
           gnugrep
-          pcre.out
+          gnugrep.pcre2.out
           gmp
           libiconv
           brotli.lib
@@ -586,8 +587,9 @@ rec {
       persistent = self: super: with prevStage; {
         inherit
           gnumake gzip gnused bzip2 ed xz patch bash python3
-          ncurses libffi zlib gmp pcre gnugrep cmake
+          ncurses libffi zlib gmp gnugrep cmake
           coreutils findutils diffutils patchutils ninja libxml2;
+        inherit (gnugrep) pcre2;
 
         # Hack to make sure we don't link ncurses in bootstrap tools. The proper
         # solution is to avoid passing -L/nix-store/...-bootstrap-tools/lib,
@@ -642,8 +644,9 @@ rec {
       persistent = self: super: with prevStage; {
         inherit
           gnumake gzip gnused bzip2 gawk ed xz patch bash
-          ncurses libffi zlib gmp pcre gnugrep
+          ncurses libffi zlib gmp gnugrep
           coreutils findutils diffutils patchutils pbzx;
+        inherit (gnugrep) pcre2;
 
         darwin = super.darwin.overrideScope (_: _: {
           inherit (darwin) dyld ICU Libsystem Csu libiconv rewrite-tbd;
@@ -733,7 +736,7 @@ rec {
         gawk
         gnugrep
         patch
-        pcre.out
+        gnugrep.pcre2.out
         gettext
         binutils.bintools
         binutils.bintools.lib

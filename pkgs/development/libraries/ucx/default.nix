@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ucx";
-  version = "1.14.0";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucx";
     rev = "v${version}";
-    sha256 = "sha256-OSYeJfMi57KABt8l3Yj0glqx54C5cwM2FqlijszJIk4=";
+    sha256 = "sha256-oAigiCgbr27pX+kNl+RW1P10TKYFSKrHDK4U4z8WMko=";
   };
 
   nativeBuildInputs = [ autoreconfHook doxygen pkg-config ];
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     rdma-core
     zlib
   ] ++ lib.optional enableCuda cudatoolkit
-  ++ lib.optional enableRocm [ rocm-core rocm-runtime rocm-device-libs hip ];
+  ++ lib.optionals enableRocm [ rocm-core rocm-runtime rocm-device-libs hip ];
 
   configureFlags = [
     "--with-rdmacm=${rdma-core}"

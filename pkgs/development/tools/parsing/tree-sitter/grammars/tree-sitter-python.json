@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/tree-sitter/tree-sitter-python",
-  "rev": "b14614e2144b8f9ee54deed5a24f3c6f51f9ffa8",
-  "date": "2022-10-24T22:08:56+02:00",
-  "path": "/nix/store/n4jhzd32dykrfxzar6cymx1b8njmmsxs-tree-sitter-python",
-  "sha256": "086v2mrczj8gavl4w8w8m982pg94w8ph5vf5iaksi1pvgcmw8c71",
+  "rev": "62827156d01c74dc1538266344e788da74536b8a",
+  "date": "2023-02-28T17:23:11+01:00",
+  "path": "/nix/store/vnh5j5nb3crn0zfc71i35fig0blsilsl-tree-sitter-python",
+  "sha256": "038l9zdn821s2igwfiwxq2ajkc1d66iri4zj9afazbma7kh5fnw5",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

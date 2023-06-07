@@ -5,13 +5,11 @@
 , darwin
 , git
 , nettle
-# Use the same llvmPackages version as Rust
-, llvmPackages_12
+, nix-update-script
 , cargo
 , rustc
 , rustPlatform
 , pkg-config
-, glib
 , openssl
 , sqlite
 , capnproto
@@ -26,23 +24,22 @@ rustPlatform.buildRustPackage rec {
   pname = "sequoia";
   # Upstream has separate version numbering for the library and the CLI frontend.
   # This derivation provides the CLI frontend, and thus uses its version number.
-  version = "0.27.0";
+  version = "0.28.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia";
     rev = "sq/v${version}";
-    sha256 = "sha256-KhJAXpj47Tvds5SLYwnsNeIlPf9QEopoCzsvvHgCwaI=";
+    hash = "sha256-T7WOYMqyBeVHs+4w8El99t0NTUKqMW1QeAkNGKcaWr0=";
   };
 
-  cargoSha256 = "sha256-Y7iiZVIT9Vbe4YmTfGTU8p3H3odQKms2FBnnWgvF7mI=";
+  cargoHash = "sha256-zaAAEFBumfHU4hGzAOmLvBu3X4J7LAlmexqixHtVPr8=";
 
   patches = [
-    (fetchpatch
-      { url = "https://gitlab.com/sequoia-pgp/sequoia/-/commit/7916f90421ecb9a75e32f0284459bcc9a3fd02b0.patch";
-        sha256 = "sha256-KBBn6XaGzIT0iVzoCYsS0N+OkZzGuWmUmIF2hl49FEI=";
-      }
-    )
+    (fetchpatch {
+      url = "https://gitlab.com/sequoia-pgp/sequoia/-/commit/4dc6e624c2394936dc447f18aedb4a4810bb2ddb.patch";
+      hash = "sha256-T6hh7U1gvKvyn/OCuJBvLM7TG1VFnpvpAiWS72m3P6I=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -50,8 +47,7 @@ rustPlatform.buildRustPackage rec {
     cargo
     rustc
     git
-    llvmPackages_12.libclang.lib
-    llvmPackages_12.clang
+    rustPlatform.bindgenHook
     ensureNewerSourcesForZipFilesHook
     capnproto
   ] ++
@@ -81,8 +77,6 @@ rustPlatform.buildRustPackage rec {
     "build-release"
   ];
 
-  LIBCLANG_PATH = "${llvmPackages_12.libclang.lib}/lib";
-
   # Sometimes, tests fail on CI (ofborg) & hydra without this
   checkFlags = [
     # doctest for sequoia-ipc fail for some reason
@@ -102,6 +96,8 @@ rustPlatform.buildRustPackage rec {
   doCheck = true;
   checkPhase = null;
   installPhase = null;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A cool new OpenPGP implementation";

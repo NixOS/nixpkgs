@@ -37,7 +37,7 @@ appimageTools.wrapType2 {
   meta = with lib; {
     description = "The Kubernetes IDE";
     homepage = "https://k8slens.dev/";
-    license = licenses.mit;
+    license = licenses.lens;
     maintainers = with maintainers; [ dbirks RossComputerGuy ];
     platforms = [ "x86_64-linux" ];
   };

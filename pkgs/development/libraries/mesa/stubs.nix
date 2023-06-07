@@ -1,12 +1,13 @@
 { stdenv
-, libglvnd, mesa
+, libglvnd
+, mesa
 , OpenGL
 , testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  inherit (libglvnd) version;
   pname = "libGL";
+  inherit (if stdenv.hostPlatform.isDarwin then mesa else libglvnd) version;
   outputs = [ "out" "dev" ];
 
   # On macOS, libglvnd is not supported, so we just use what mesa
@@ -77,5 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta.pkgConfigModules = [ "gl" "egl" "glesv1_cm" "glesv2" ];
+  meta = {
+    description = "Stub bindings using " + (if stdenv.hostPlatform.isDarwin then "mesa" else "libglvnd");
+    pkgConfigModules = [ "gl" "egl" "glesv1_cm" "glesv2" ];
+  } // {
+    inherit (if stdenv.hostPlatform.isDarwin then mesa.meta else libglvnd.meta) homepage license platforms;
+  };
 })

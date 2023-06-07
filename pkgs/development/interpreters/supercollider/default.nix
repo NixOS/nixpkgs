@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchurl, fetchpatch, cmake
+{ lib, stdenv, mkDerivation, fetchurl, cmake
 , pkg-config, alsa-lib, libjack2, libsndfile, fftw
 , curl, gcc, libXt, qtbase, qttools, qtwebengine
 , readline, qtwebsockets, useSCEL ? false, emacs
@@ -8,22 +8,16 @@
 
 mkDerivation rec {
   pname = "supercollider";
-  version = "3.12.2";
+  version = "3.13.0";
 
   src = fetchurl {
     url = "https://github.com/supercollider/supercollider/releases/download/Version-${version}/SuperCollider-${version}-Source.tar.bz2";
-    sha256 = "sha256-1QYorCgSwBK+SVAm4k7HZirr1j+znPmVicFmJdvO3g4=";
+    sha256 = "sha256-D8Xbpbrq43+Qaa0oiFqkBcaiUwnjiGy+ERvTt8BVMc4=";
   };
 
   patches = [
     # add support for SC_DATA_DIR and SC_PLUGIN_DIR env vars to override compile-time values
     ./supercollider-3.12.0-env-dirs.patch
-
-    # fix issue with libsndfile >=1.1.0
-    (fetchpatch {
-      url = "https://github.com/supercollider/supercollider/commit/b9dd70c4c8d61c93d7a70645e0bd18fa76e6834e.patch";
-      hash = "sha256-6FhEHyY0rnE6d7wC+v0U9K+L0aun5LkTqaEFhr3eQNw=";
-    })
   ];
 
   strictDeps = true;
@@ -72,6 +66,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "Programming language for real time audio synthesis";
     homepage = "https://supercollider.github.io";
+    changelog = "https://github.com/supercollider/supercollider/blob/Version-${version}/CHANGELOG.md";
     maintainers = with maintainers; [ lilyinstarlight ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

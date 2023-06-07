@@ -73,6 +73,16 @@ stdenv.mkDerivation {
       url = "https://git.openafs.org/?p=openafs.git;a=patch;h=cba2b88851c3ae0ab1b18ea3ce77f7f5e8200b2f";
       hash = "sha256-suj7n0U0odHXZHLPqeB/k96gyBh52uoS3AuHvOzPyd8=";
     })
+    # Linux 6.3: Include linux/filelock.h if available
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15388/revisions/ddb99d32012c43c76ae37f6a7563f1ca32f0e964/patch";
+      hash = "sha256-0Cql4+0ISfW4J4D7PhlSYNfIKAeDVWEz57PHOu5TRXg=";
+    })
+    # Linux 6.3: Use mnt_idmap for inode op functions
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/15389/revisions/ff0d53d2fb38fc3b262f02fb1c5f49b286ff13dd/patch";
+      hash = "sha256-KyVAI/A+/lNrLyKY6O8DgMKzgnF6P5sOfSq3qcs6Qq0=";
+    })
   ];
 
   hardeningDisable = [ "pic" ];

@@ -1,24 +1,39 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, autoconf, automake, libtool, pkg-config, ApplicationServices, CoreServices, pkgsStatic }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, pkg-config
+, ApplicationServices
+, CoreServices
+, pkgsStatic
+
+# for passthru.tests
+, bind
+, cmake
+, knot-resolver
+, lispPackages
+, luajitPackages
+, mosquitto
+, neovim
+, nodejs
+, ocamlPackages
+, python3
+}:
 
 stdenv.mkDerivation rec {
-  version = "1.44.2";
+  version = "1.45.0";
   pname = "libuv";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-K6v+00basjI32ON27ZjC5spQi/zWCcslDwQwyosq2iY=";
+    sha256 = "sha256-qKw9QFR24Uw7pVA9isPH8Va+9/5DYuqXz6l6jWcXn+4=";
   };
 
-  patches = [
-    # Fix tests for statically linked variant upstream PR is
-    # https://github.com/libuv/libuv/pull/3735
-    (fetchpatch {
-      url = "https://github.com/libuv/libuv/commit/9d898acc564351dde74e9ed9865144e5c41f5beb.patch";
-      sha256 = "sha256-6XsjrseD8a+ny887EKOX0NmHocLMXGf2YL13vkNHUZ0=";
-    })
-  ];
+  outputs = [ "out" "dev" ];
 
   postPatch = let
     toDisable = [
@@ -28,7 +43,7 @@ stdenv.mkDerivation rec {
       "getaddrinfo_fail" "getaddrinfo_fail_sync"
       "threadpool_multiple_event_loops" # times out on slow machines
       "get_passwd" # passed on NixOS but failed on other Linuxes
-      "tcp_writealot" "udp_multicast_join" "udp_multicast_join6" # times out sometimes
+      "tcp_writealot" "udp_multicast_join" "udp_multicast_join6" "metrics_pool_events" # times out sometimes
       "fs_fstat" # https://github.com/libuv/libuv/issues/2235#issuecomment-1012086927
 
       # Assertion failed in test/test-tcp-bind6-error.c on line 60: r == UV_EADDRINUSE
@@ -74,12 +89,25 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # separateDebugInfo breaks static build
+  # https://github.com/NixOS/nixpkgs/issues/219466
+  separateDebugInfo = !stdenv.hostPlatform.isStatic;
+
   doCheck = true;
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  passthru.tests.static = pkgsStatic.libuv;
+  passthru.tests = {
+    inherit bind cmake knot-resolver mosquitto neovim nodejs;
+    inherit (lispPackages) cl-libuv;
+    luajit-libluv = luajitPackages.libluv;
+    luajit-luv = luajitPackages.luv;
+    ocaml-luv = ocamlPackages.luv;
+    python-pyuv = python3.pkgs.pyuv;
+    python-uvloop = python3.pkgs.uvloop;
+    static = pkgsStatic.libuv;
+  };
 
   meta = with lib; {
     description = "A multi-platform support library with a focus on asynchronous I/O";

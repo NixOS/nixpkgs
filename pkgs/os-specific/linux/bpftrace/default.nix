@@ -1,42 +1,56 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, pkg-config, flex, bison
-, llvmPackages, elfutils
-, libbfd, libbpf, libopcodes, bcc
+{ lib, stdenv, fetchFromGitHub, fetchpatch
+, llvmPackages, elfutils, bcc
+, libbpf, libbfd, libopcodes
 , cereal, asciidoctor
-, nixosTests
+, cmake, pkg-config, flex, bison
 , util-linux
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "bpftrace";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
-    owner  = "iovisor";
-    repo   = "bpftrace";
-    rev    = "v${version}";
-    sha256 = "sha256-PBqq3u8zym+RY6xudJ66ItzDZEJBNvJDtve1GtxcOdQ=";
+    owner = "iovisor";
+    repo  = "bpftrace";
+    rev   = "v${version}";
+    hash  = "sha256-+SBLcMyOf1gZN8dG5xkNLsqIcK1eVlswjY1GRXepFVg=";
   };
 
-  buildInputs = with llvmPackages;
-    [ llvm libclang
-      elfutils bcc
-      libbpf libbfd libopcodes
-      cereal asciidoctor
-    ];
+  patches = [
+    # fails to build - https://github.com/iovisor/bpftrace/issues/2598
+    (fetchpatch {
+      name = "link-binaries-against-zlib";
+      url = "https://github.com/iovisor/bpftrace/commit/a60b171eb288250c3f1d6f065b05d8a87aff3cdd.patch";
+      hash = "sha256-b/0pKDjolo2RQ/UGjEfmWdG0tnIiFX8PJHhRCXvzyxA=";
+    })
+  ];
 
-  nativeBuildInputs = [ cmake pkg-config flex bison llvmPackages.llvm.dev util-linux ];
+  buildInputs = with llvmPackages; [
+    llvm libclang
+    elfutils bcc
+    libbpf libbfd libopcodes
+    cereal asciidoctor
+  ];
+
+  nativeBuildInputs = [
+    cmake pkg-config flex bison
+    llvmPackages.llvm.dev
+    util-linux
+  ];
 
   # tests aren't built, due to gtest shenanigans. see:
   #
   #     https://github.com/iovisor/bpftrace/issues/161#issuecomment-453606728
   #     https://github.com/iovisor/bpftrace/pull/363
   #
-  cmakeFlags =
-    [ "-DBUILD_TESTING=FALSE"
-      "-DLIBBCC_INCLUDE_DIRS=${bcc}/include"
-      "-DINSTALL_TOOL_DOCS=off"
-    ];
+  cmakeFlags = [
+    "-DBUILD_TESTING=FALSE"
+    "-DLIBBCC_INCLUDE_DIRS=${bcc}/include"
+    "-DINSTALL_TOOL_DOCS=OFF"
+    "-DUSE_SYSTEM_BPF_BCC=ON"
+  ];
 
   # Pull BPF scripts into $PATH (next to their bcc program equivalents), but do
   # not move them to keep `${pkgs.bpftrace}/share/bpftrace/tools/...` working.

@@ -34,6 +34,9 @@ stdenv.mkDerivation rec {
 
     # Fixup build with newer Linux headers: https://github.com/lkl/linux/pull/484
     sed '1i#include <linux/sockios.h>' -i tools/lkl/lib/hijack/xlate.c
+  '' + lib.optionalString stdenv.isi686 ''
+    echo CONFIG_KALLSYMS=n >> arch/lkl/configs/defconfig
+    echo CONFIG_KALLSYMS_BASE_RELATIVE=n >> arch/lkl/configs/defconfig
   '' + lib.optionalString firewallSupport ''
     cat ${./lkl-defconfig-enable-nftables} >> arch/lkl/configs/defconfig
   '';

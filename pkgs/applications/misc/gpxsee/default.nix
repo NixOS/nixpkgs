@@ -22,13 +22,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gpxsee";
-  version = "12.2";
+  version = "13.3";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     rev = version;
-    hash = "sha256-d+hQNI+eCSMRFMzq09wL+GN9TgOIt245Z8GlPe7nY8E=";
+    hash = "sha256-eJ5jW81GQr/MvOrxinZdalZ4cvGYlVGv7JbePwHGEDY=";
   };
 
   patches = (substituteAll {

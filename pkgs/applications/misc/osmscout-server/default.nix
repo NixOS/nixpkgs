@@ -14,13 +14,13 @@ let
 in
 mkDerivation rec {
   pname = "osmscout-server";
-  version = "2.2.2";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "rinigus";
     repo = "osmscout-server";
     rev = version;
-    sha256 = "sha256-ngB3c6rUQ/+AeaJHKAFRl9lCkUobLWSnsn030brB+Bw=";
+    hash = "sha256-jcg/0SKeLviEC+vszh5DployKDAI7N+a8lzvImzFTvY=";
     fetchSubmodules = true;
   };
 

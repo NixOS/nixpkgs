@@ -1,13 +1,13 @@
 { lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, copyDesktopItems, unzip
-, appimage-run }:
+, appimage-run, nix-update-script }:
 
 stdenv.mkDerivation rec {
   pname = "ldtk";
-  version = "1.2.5";
+  version = "1.3.2";
 
   src = fetchurl {
     url = "https://github.com/deepnight/ldtk/releases/download/v${version}/ubuntu-distribution.zip";
-    sha256 = "sha256-kx4GOENYYbS09HxAiCCvqm/ztc32sdB39W8uv6D+R+A=";
+    hash = "sha256-8GiMm1Nb2jRLFWtGNsSfrW1jIi9yKCcyuUKwMEqoUZI=";
   };
 
   nativeBuildInputs = [ unzip makeWrapper copyDesktopItems appimage-run ];
@@ -47,9 +47,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
-    homepage = "https://ldtk.io/";
     description = "Modern, lightweight and efficient 2D level editor";
+    homepage = "https://ldtk.io/";
+    changelog = "https://github.com/deepnight/ldtk/releases/tag/v${version}";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ felschr ];

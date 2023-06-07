@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "dask-ml";
-  version = "2022.5.27";
+  version = "2023.3.24";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Y2nTk0GSvMGSP87oTD+4+8zsoQITeQEHC6Px2eOGzOQ=";
+    hash = "sha256-lsCQ220yg2U24/Ccpk3rWZ6GRYeqjj1NLGtK9YhzMwc=";
   };
 
   nativeBuildInputs = [

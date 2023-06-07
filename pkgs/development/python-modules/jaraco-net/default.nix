@@ -26,6 +26,7 @@
 , importlib-resources
 , pyparsing
 , requests-mock
+, nettools
 }:
 
 buildPythonPackage rec {
@@ -78,6 +79,8 @@ buildPythonPackage rec {
     importlib-resources
     pyparsing
     requests-mock
+  ] ++ lib.optionals stdenv.isDarwin [
+    nettools
   ];
 
   disabledTestPaths = [

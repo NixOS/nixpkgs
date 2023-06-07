@@ -49,7 +49,7 @@ gnuradio3_8.pkgs.mkDerivation rec {
   buildInputs = [
     gnuradio3_8.unwrapped.boost
     codec2
-    gnuradio3_8.unwrapped.log4cpp
+    gnuradio3_8.unwrapped.logLib
     gmp
     libpulseaudio
     libconfig

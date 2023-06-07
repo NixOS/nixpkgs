@@ -164,6 +164,9 @@ let
     cl-readline = super.cl-readline.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.readline ];
     });
+    log4cl = super.log4cl.overrideLispAttrs (o: {
+      patches = [ ./patches/log4cl-fix-build.patch ];
+    });
     md5 = super.md5.overrideLispAttrs (o: {
       lispLibs = [ super.flexi-streams ];
     });
@@ -203,6 +206,27 @@ let
       patches = [ ./patches/math-no-compile-time-directory.patch ];
       nativeLibs = [ pkgs.fontconfig ];
     });
+    mcclim-fonts = super.mcclim-fonts.overrideLispAttrs (o: {
+      lispLibs = o.lispLibs ++ [
+        super.cl-dejavu
+        super.zpb-ttf
+        super.cl-vectors
+        super.cl-paths-ttf
+        super.flexi-streams
+      ];
+      systems = [ "mcclim-fonts" "mcclim-fonts/truetype" ];
+    });
+    mcclim-render = super.mcclim-render.overrideLispAttrs (o: {
+      lispLibs = o.lispLibs ++ [
+        self.mcclim-fonts
+      ];
+    });
+    mcclim-layouts = super.mcclim-layouts.overrideLispAttrs (o: {
+      systems = [ "mcclim-layouts" "mcclim-layouts/tab" ];
+      lispLibs = o.lispLibs ++ [
+        self.mcclim
+      ];
+});
   });
 
   qlpkgs =

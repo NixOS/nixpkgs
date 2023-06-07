@@ -4,32 +4,40 @@
 , cmake
 , libffi
 , pkg-config
+, patchelf
 , wayland-protocols
 , wayland
 , xorg
+, darwin
 }:
 
 stdenv.mkDerivation rec {
   pname = "clipboard-jh";
-  version = "0.3.2";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "Slackadays";
     repo = "clipboard";
     rev = version;
-    sha256 = "sha256-xdogl2WDuQXeLFuBY1u7PSpaoVI9HKScOdxHZ3+whIg=";
+    hash = "sha256-RLb7R4BXnP7J5gX8hsE9yi6N3kezsutP1HqkmjR3yRs=";
   };
+
+  postPatch = ''
+    sed -i "/CMAKE_OSX_ARCHITECTURES/d" CMakeLists.txt
+  '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.isLinux [
     libffi
     wayland-protocols
     wayland
     xorg.libX11
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.AppKit
   ];
 
   cmakeFlags = [
@@ -38,11 +46,16 @@ stdenv.mkDerivation rec {
     "-DINSTALL_PREFIX=${placeholder "out"}"
   ];
 
+  postFixup = lib.optionalString stdenv.isLinux ''
+    patchelf $out/bin/cb --add-rpath $out/lib
+  '';
+
   meta = with lib; {
     description = "Cut, copy, and paste anything, anywhere, all from the terminal";
     homepage = "https://github.com/Slackadays/clipboard";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ dit7ya ];
-    mainProgram = "clipboard";
+    platforms = platforms.all;
+    mainProgram = "cb";
   };
 }

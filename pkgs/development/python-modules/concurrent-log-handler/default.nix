@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "concurrent-log-handler";
-  version = "0.9.20";
+  version = "0.9.22";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-n6KtYUdKE3tWQnAr0z8hgVWYqsuh51E5s3zrLO3aj58=";
+    hash = "sha256-+PnlhCkrnzpLR3VwGP3xr8i/lynxiKW2dQrNih5+P8k=";
   };
 
   propagatedBuildInputs = [

@@ -82,6 +82,7 @@ let
       mathcomp-bigenough = callPackage ../development/coq-modules/mathcomp-bigenough {};
       mathcomp-classical = self.mathcomp-analysis.classical;
       mathcomp-finmap = callPackage ../development/coq-modules/mathcomp-finmap {};
+      mathcomp-infotheo = callPackage ../development/coq-modules/mathcomp-infotheo {};
       mathcomp-real-closed = callPackage ../development/coq-modules/mathcomp-real-closed {};
       mathcomp-tarjan = callPackage ../development/coq-modules/mathcomp-tarjan {};
       mathcomp-word = callPackage ../development/coq-modules/mathcomp-word {};
@@ -183,7 +184,7 @@ in rec {
   coqPackages_8_15 = mkCoqPackages coq_8_15;
   coqPackages_8_16 = mkCoqPackages coq_8_16;
   coqPackages_8_17 = mkCoqPackages coq_8_17;
-  coqPackages = recurseIntoAttrs coqPackages_8_16;
+  coqPackages = recurseIntoAttrs coqPackages_8_17;
   coq = coqPackages.coq;
 
 }

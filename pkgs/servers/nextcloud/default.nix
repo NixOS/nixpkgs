@@ -39,19 +39,26 @@ let
     };
   };
 in {
-  nextcloud24 = generic {
-    version = "24.0.11";
-    sha256 = "sha256-ipsg4rulhRnatEW9VwUJLvOEtX5ZiK7MXK3AU8Q9qIo=";
-  };
+  nextcloud24 = throw ''
+    Nextcloud v24 has been removed from `nixpkgs` as the support for is dropped
+    by upstream in 2023-04. Please upgrade to at least Nextcloud v25 by declaring
+
+        services.nextcloud.package = pkgs.nextcloud25;
+
+    in your NixOS config.
+
+    WARNING: if you were on Nextcloud 23 you have to upgrade to Nextcloud 24
+    first on 22.11 because Nextcloud doesn't support upgrades across multiple major versions!
+  '';
 
   nextcloud25 = generic {
-    version = "25.0.5";
-    sha256 = "sha256-xtxjLYPGK9V0GvUzXcE7awzeYQZNPNmlHuDmtHeMqaU=";
+    version = "25.0.6";
+    sha256 = "sha256-fYtO3CZ5oNpaIs+S+emMrxqYNlck0AC43fxdiomsjDg=";
   };
 
   nextcloud26 = generic {
-    version = "26.0.0";
-    sha256 = "sha256-8WMVA2Ou6TZuy1zVJZv2dW7U8HPOp4tfpRXK2noNDD0=";
+    version = "26.0.2";
+    sha256 = "sha256-89sOxeCq/3wIjrNPdS1315kTvGeE4PxHqEzaoo5WejM=";
   };
 
   # tip: get the sha with:

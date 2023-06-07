@@ -20,6 +20,10 @@ in pkgs.stdenv.mkDerivation {
     ln -s ${doc-support} ./doc-support/result
   '';
 
+  preBuild = ''
+    make -j$NIX_BUILD_CORES render-md
+  '';
+
   installPhase = ''
     dest="$out/share/doc/nixpkgs"
     mkdir -p "$(dirname "$dest")"

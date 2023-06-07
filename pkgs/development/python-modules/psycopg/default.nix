@@ -26,21 +26,22 @@
 , sphinx-autodoc-typehints
 
 # tests
+, anyio
 , pproxy
-, pytest-asyncio
 , pytest-randomly
 , pytestCheckHook
+, postgresqlTestHook
 }:
 
 let
   pname = "psycopg";
-  version = "3.1.8";
+  version = "3.1.9";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-VmuotHcLWd+k8/GLv0N2wSZR0sZjY+TmGBQjhpYE3YA=";
+    hash = "sha256-yRb6yRpX1vDmXpYu4O50MYMpP2j75aSqhXCWMF1xVH0=";
   };
 
   patches = [
@@ -49,15 +50,10 @@ let
       libpq = "${postgresql.lib}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
       libc = "${stdenv.cc.libc}/lib/libc.so.6";
     })
-    (fetchpatch {
-      name = "cython-3.0.0b1-compat.patch";
-      url = "https://github.com/psycopg/psycopg/commit/573446a14312f36257ed9dcfb8eb2756b69d5d9b.patch";
-      hash = "sha256-NWItarNb/Yyfj1avb/SXTkinVGxvWUGH8y6tR/zhVmE=";
-    })
   ];
 
   baseMeta = {
-    changelog = "https://github.com/psycopg/psycopg/blob/master/docs/news.rst";
+    changelog = "https://github.com/psycopg/psycopg/blob/${version}/docs/news.rst#current-release";
     homepage = "https://github.com/psycopg/psycopg";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ hexa ];
@@ -170,19 +166,27 @@ buildPythonPackage rec {
     pool = [ psycopg-pool ];
   };
 
-  preCheck = ''
-    cd ..
-  '';
-
   nativeCheckInputs = [
+    anyio
     pproxy
-    pytest-asyncio
     pytest-randomly
     pytestCheckHook
     postgresql
   ]
+  ++ lib.optional (stdenv.isLinux) postgresqlTestHook
   ++ passthru.optional-dependencies.c
   ++ passthru.optional-dependencies.pool;
+
+  env = {
+    postgresqlEnableTCP = 1;
+    PGUSER = "psycopg";
+  };
+
+  preCheck = ''
+    cd ..
+  '' + lib.optionalString (stdenv.isLinux) ''
+    export PSYCOPG_TEST_DSN="host=127.0.0.1 user=$PGUSER"
+  '';
 
   disabledTests = [
     # don't depend on mypy for tests

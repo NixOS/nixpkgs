@@ -214,11 +214,15 @@ class HTMLRenderer(Renderer):
         self._ordered_list_nesting -= 1;
         return "</ol></div>"
     def example_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        if id := token.attrs.get('id'):
-            return f'<a id="{escape(cast(str, id), True)}" />'
-        return ""
+        if id := cast(str, token.attrs.get('id', '')):
+            id = f'id="{escape(id, True)}"' if id else ''
+        return f'<div class="example"><a {id} />'
     def example_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        return ""
+        return '</div></div><br class="example-break" />'
+    def example_title_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return '<p class="title"><strong>'
+    def example_title_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return '</strong></p><div class="example-contents">'
 
     def _make_hN(self, level: int) -> tuple[str, str]:
         return f"h{min(6, max(1, level + self._hlevel_offset))}", ""

@@ -1,22 +1,26 @@
 { lib
-, fetchFromGitHub
 , buildPythonPackage
-, pytestCheckHook
-, untangle
-, psutil
-, trio
+, fetchFromGitHub
 , numpy
+, psutil
+, pytestCheckHook
+, pythonOlder
+, trio
+, untangle
 }:
 
 buildPythonPackage rec {
   pname = "pydevd";
-  version = "2.8.0";
+  version = "2.9.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fabioz";
     repo = "PyDev.Debugger";
     rev = "pydev_debugger_${lib.replaceStrings ["."] ["_"] version}";
-    hash = "sha256-+yRngN10654trB09ZZa8QQsTPdM7VxVj7r6jh7OcgAA=";
+    hash = "sha256-TDU/V7kY7zVxiP4OVjGqpsRVYplpkgCly2qAOqhZONo=";
   };
 
   nativeCheckInputs = [
@@ -46,13 +50,14 @@ buildPythonPackage rec {
     "test_tracing_basic"
   ];
 
-  pythonImportsCheck = [ "pydevd" ];
+  pythonImportsCheck = [
+    "pydevd"
+  ];
 
   meta = with lib; {
     description = "PyDev.Debugger (used in PyDev, PyCharm and VSCode Python)";
     homepage = "https://github.com/fabioz/PyDev.Debugger";
     license = licenses.epl10;
     maintainers = with maintainers; [ onny ];
-    broken = true;
   };
 }

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , python3Packages
+, fetchPypi
 , makeWrapper
 , coreutils
 , iptables
@@ -13,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   pname = "sshuttle";
   version = "1.1.1";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-9aPtHlqxITx6bfhgr0HxqQOrLK+/73Hzcazc/yHmnuY=";
   };

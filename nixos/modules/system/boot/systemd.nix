@@ -588,6 +588,15 @@ in
     systemd.services."systemd-backlight@".restartIfChanged = false;
     systemd.services."systemd-fsck@".restartIfChanged = false;
     systemd.services."systemd-fsck@".path = [ config.system.path ];
+    systemd.services."systemd-makefs@" = {
+      restartIfChanged = false;
+      path = [ pkgs.util-linux ] ++ config.system.fsPackages;
+      # Since there is no /etc/systemd/system/systemd-makefs@.service
+      # file, the units generated in /run/systemd/generator would
+      # override anything we put here. But by forcing the use of a
+      # drop-in in /etc, it does apply.
+      overrideStrategy = "asDropin";
+    };
     systemd.services.systemd-random-seed.restartIfChanged = false;
     systemd.services.systemd-remount-fs.restartIfChanged = false;
     systemd.services.systemd-update-utmp.restartIfChanged = false;

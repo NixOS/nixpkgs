@@ -4,16 +4,20 @@
 }:
 buildGoModule rec {
   pname = "clash-meta";
-  version = "1.14.2";
+  version = "1.14.5";
 
   src = fetchFromGitHub {
     owner = "MetaCubeX";
     repo = "Clash.Meta";
     rev = "v${version}";
-    sha256 = "sha256-sn+0TNXCK4af4zfkf09hLsFkuvkcyjhwh35kKo993FQ=";
+    # macOS has a case-insensitive filesystem, so these two can be the same file
+    postFetch = ''
+      rm -f $out/.github/workflows/{Delete,delete}.yml
+    '';
+    hash = "sha256-4jhe+zhcRACcwwPWFd5oW8eIKTpPWfz0z5cnA9E8Wkc=";
   };
 
-  vendorHash = "sha256-3j+5fF57eu7JJd3rnrWYwuWDivycUkUTTzptYaK3G/Q=";
+  vendorHash = "sha256-VcT9dda5E9IMrDB/3QWBGWiNxGAEM2yKDbJwhGpN8og=";
 
   # Do not build testing suit
   excludedPackages = [ "./test" ];

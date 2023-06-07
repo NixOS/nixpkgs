@@ -52,6 +52,7 @@
 , libspatialite
 , sqlite
 , libtiff
+, useTiledb ? !(stdenv.isDarwin && stdenv.isx86_64)
 , tiledb
 , libwebp
 , xercesc
@@ -61,13 +62,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gdal";
-  version = "3.6.3";
+  version = "3.6.4";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${version}";
-    hash = "sha256-Rg/dvSkq1Hn8NgZEE0ID92Vihyw7MA78OBnON8Riy38=";
+    hash = "sha256-pGdZmQBUuNCk9/scUvq4vduINu5gqtCRLaz7QE2e6WU=";
   };
 
   nativeBuildInputs = [
@@ -91,6 +92,8 @@ stdenv.mkDerivation rec {
     "-DCMAKE_SKIP_BUILD_RPATH=ON" # without, libgdal.so can't find libmariadb.so
   ] ++ lib.optionals stdenv.isDarwin [
     "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
+  ] ++ lib.optionals (!useTiledb) [
+    "-DGDAL_USE_TILEDB=OFF"
   ];
 
   buildInputs = [
@@ -135,7 +138,9 @@ stdenv.mkDerivation rec {
     libspatialite
     sqlite
     libtiff
+  ] ++ lib.optionals useTiledb [
     tiledb
+  ] ++ [
     libwebp
     zlib
     zstd
@@ -197,6 +202,8 @@ stdenv.mkDerivation rec {
   postCheck = ''
     popd # ../autotest
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Translator library for raster geospatial data formats";

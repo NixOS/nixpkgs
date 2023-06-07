@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-compressor";
-  version = "5.12.14";
+  version = "5.12.15";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0F1LdoeGtIKOVepifwdNMohbEb9fakpQLiNHg5H9Nlw=";
+    sha256 = "sha256-6grnbv9hMKntOmpVcmU5IpAbHM7r0dQWb+SoQYtc5YY=";
   };
 
   postPatch = ''
@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     dtkwidget
+    qt5integration
     qt5platform-plugins
     udisks2-qt5
     kcodecs
@@ -59,11 +60,6 @@ stdenv.mkDerivation rec {
   ];
 
   strictDeps = true;
-
-  # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
-  qtWrapperArgs = [
-    "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
-  ];
 
   meta = with lib; {
     description = "A fast and lightweight application for creating and extracting archives";

@@ -3,7 +3,7 @@ with lib;
 
 let
   cfg = config.services.mbpfan;
-  verbose = if cfg.verbose then "v" else "";
+  verbose = optionalString cfg.verbose "v";
   settingsFormat = pkgs.formats.ini {};
   settingsFile = settingsFormat.generate "mbpfan.ini" cfg.settings;
 

@@ -1,9 +1,10 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, stdenv
 , makeWrapper
 , pkg-config
+, zstd
+, stdenv
 , alsa-lib
 , libxkbcommon
 , udev
@@ -15,32 +16,37 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jumpy";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "fishfolk";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vBnHNc/kCyZ8gTWhQShn4lBQECguFBzBd7xIfLBgm7A=";
+    sha256 = "sha256-krO/iPGnzXeY3W8xSFerlKa1DvDl7ss00bGaAMkHUtw=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "bevy_simple_tilemap-0.10.1" = "sha256-Q/AsBZjsr+uTIh/oN0OsIJxntZ4nuc1AReo0Ronj930=";
-      "bones_asset-0.1.0" = "sha256-CyP7rbS3X26xlCFxn3g9YhZze7UeqxQ1wULrZ3er7Xc=";
+      "bones_asset-0.1.0" = "sha256-YyY5OsbRLkpAgvNifRiXfmzfsgFw/oFV1nQVCkXG4j4=";
     };
   };
 
-  auditable = true; # TODO: remove when this is the default
+  patches = [
+    # jumpy uses an outdated version of mimalloc
+    # which fails to build on aarch64-linux
+    ./update-mimalloc.patch
+  ];
 
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optionals stdenv.isLinux [
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = [
+    zstd
+  ] ++ lib.optionals stdenv.isLinux [
     alsa-lib
     libxkbcommon
     udev
@@ -56,6 +62,10 @@ rustPlatform.buildRustPackage rec {
   ];
 
   cargoBuildFlags = [ "--bin" "jumpy" ];
+
+  env = {
+    ZSTD_SYS_USE_PKG_CONFIG = true;
+  };
 
   postInstall = ''
     mkdir $out/share

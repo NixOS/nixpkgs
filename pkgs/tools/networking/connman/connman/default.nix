@@ -4,6 +4,7 @@
 , fetchurl
 , fetchpatch
 , pkg-config
+, autoreconfHook
 , file
 , glib
 # always required runtime dependencies
@@ -11,7 +12,7 @@
 , libmnl
 , gnutls
 , readline
-# configureable options
+# configurable options
 , firewallType ? "iptables" # or "nftables"
 , iptables ? null
 , libnftnl ? null # for nftables
@@ -64,7 +65,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-eftA9P3VUwxFqo5ZL7Froj02dPOpjPELiaZXbxmN5Yk=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isMusl [
+  patches = [
+    (fetchpatch {
+      name = "pppd-2.5.0-compat.patch";
+      url = "https://git.kernel.org/pub/scm/network/connman/connman.git/patch/?id=a48864a2e5d2a725dfc6eef567108bc13b43857f";
+      sha256 = "sha256-jB1qL13mceQ1riv3K+oFWw4VC7ohv/CcH9sjxZPXcG4=";
+    })
+    (fetchpatch {
+      name = "CVE-2023-28488.patch";
+      url = "https://git.kernel.org/pub/scm/network/connman/connman.git/patch/?id=99e2c16ea1cced34a5dc450d76287a1c3e762138";
+      sha256 = "sha256-377CmsECji2w/c4bZXR+TxzTB7Lce0yo7KdK1oWfCVY=";
+    })
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     # Fix Musl build by avoiding a Glibc-only API.
     (fetchpatch {
       url = "https://git.alpinelinux.org/aports/plain/community/connman/libresolv.patch?id=e393ea84386878cbde3cccadd36a30396e357d1e";
@@ -88,6 +100,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     file
+    autoreconfHook  # as long as we're patching configure.ac
   ];
 
   # fix invalid path to 'file'

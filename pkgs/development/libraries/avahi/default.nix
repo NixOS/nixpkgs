@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     sha256 = "1npdixwxxn3s9q1f365x9n9rc5xgfz39hxf23faqvlrklgbhj0q6";
   };
 
+  outputs = [ "out" "dev" "man" ];
+
   patches = [
     # CVE-2021-36217 / CVE-2021-3502
     (fetchpatch {
@@ -115,7 +117,7 @@ stdenv.mkDerivation rec {
   postInstall =
     # Maintain compat for mdnsresponder
     lib.optionalString withLibdnssdCompat ''
-      ln -s avahi-compat-libdns_sd/dns_sd.h "$out/include/dns_sd.h"
+      ln -s avahi-compat-libdns_sd/dns_sd.h "$dev/include/dns_sd.h"
     '';
 
   passthru.tests = {

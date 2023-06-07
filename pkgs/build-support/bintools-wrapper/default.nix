@@ -88,6 +88,7 @@ let
     else if targetPlatform.isMips                     then "${sharedLibraryLoader}/lib/ld.so.1"
     # `ld-linux-riscv{32,64}-<abi>.so.1`
     else if targetPlatform.isRiscV                    then "${sharedLibraryLoader}/lib/ld-linux-riscv*.so.1"
+    else if targetPlatform.isLoongArch64              then "${sharedLibraryLoader}/lib/ld-linux-loongarch*.so.1"
     else if targetPlatform.isDarwin                   then "/usr/lib/dyld"
     else if targetPlatform.isFreeBSD                  then "/libexec/ld-elf.so.1"
     else if lib.hasSuffix "pc-gnu" targetPlatform.config then "ld.so.1"
@@ -102,7 +103,7 @@ in
 stdenv.mkDerivation {
   pname = targetPrefix
     + (if name != "" then name else "${bintoolsName}-wrapper");
-  version = if bintools == null then null else bintoolsVersion;
+  version = if bintools == null then "" else bintoolsVersion;
 
   preferLocalBuild = true;
 
@@ -166,7 +167,7 @@ stdenv.mkDerivation {
 
     # If we are asked to wrap `gas` and this bintools has it,
     # then symlink it (`as` will be symlinked next).
-    # This is mainly for the wrapped gnatboot on x86-64 Darwin,
+    # This is mainly for the wrapped gnat-bootstrap on x86-64 Darwin,
     # as it must have both the GNU assembler from cctools (installed as `gas`)
     # and the Clang integrated assembler (installed as `as`).
     # See pkgs/os-specific/darwin/binutils/default.nix for details.

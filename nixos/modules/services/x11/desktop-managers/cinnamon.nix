@@ -70,9 +70,9 @@ in
           name = mkDefault "Mint-Y-Aqua";
           package = mkDefault pkgs.cinnamon.mint-themes;
         };
-        iconTheme = mkIf (notExcluded pkgs.cinnamon.mint-x-icons) {
+        iconTheme = mkIf (notExcluded pkgs.cinnamon.mint-y-icons) {
           name = mkDefault "Mint-Y-Aqua";
-          package = mkDefault pkgs.cinnamon.mint-x-icons;
+          package = mkDefault pkgs.cinnamon.mint-y-icons;
         };
         cursorTheme = mkIf (notExcluded pkgs.cinnamon.mint-cursor-themes) {
           name = mkDefault "Bibata-Modern-Classic";
@@ -186,6 +186,15 @@ in
 
       xdg.mime.enable = true;
       xdg.icons.enable = true;
+
+      xdg.portal.enable = true;
+      xdg.portal.extraPortals = [
+        pkgs.xdg-desktop-portal-xapp
+        (pkgs.xdg-desktop-portal-gtk.override {
+          # Do not build portals that we already have.
+          buildPortalsInGnome = false;
+        })
+      ];
 
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";

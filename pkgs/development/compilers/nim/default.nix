@@ -148,6 +148,7 @@ in {
       description = "Statically typed, imperative programming language";
       homepage = "https://nim-lang.org/";
       license = licenses.mit;
+      mainProgram = "nim";
       maintainers = with maintainers; [ ehmry ];
     };
   };
@@ -202,6 +203,10 @@ in {
       strictDeps = true;
 
       nativeBuildInputs = [ makeWrapper ];
+
+      # Needed for any nim package that uses the standard library's
+      # 'std/sysrand' module.
+      depsTargetTargetPropagated = lib.optional stdenv.isDarwin Security;
 
       patches = [
         ./nim.cfg.patch

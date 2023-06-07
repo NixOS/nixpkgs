@@ -5,17 +5,21 @@
 , flask
 , pytestCheckHook
 , python-socketio
+, pythonOlder
+, redis
 }:
 
 buildPythonPackage rec {
   pname = "Flask-SocketIO";
-  version = "5.1.1";
+  version = "5.3.3";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "Flask-SocketIO";
     rev = "v${version}";
-    hash = "sha256-PnNJEtcWaisOlt6OmYUl97TlZb9cK2ORvtEcmGPxSB0=";
+    hash = "sha256-oqy6tSk569QaSkeNsyXuaD6uUB3yuEFg9Jwh5rneyOE=";
   };
 
   propagatedBuildInputs = [
@@ -24,8 +28,8 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    coverage
     pytestCheckHook
+    redis
   ];
 
   pytestFlagsArray = [

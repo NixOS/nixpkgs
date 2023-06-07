@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildPythonApplication, libjack2, pydbus, pyliblo, pyqt5, qttools, which }:
+{ lib, fetchurl, buildPythonApplication, libjack2, pydbus, pyliblo, pyqt5, qttools, which, bash }:
 
 buildPythonApplication rec {
   pname = "raysession";
@@ -23,7 +23,7 @@ buildPythonApplication rec {
     qttools # lrelease to build translations.
     which   # which to find lrelease.
   ];
-  buildInputs = [ libjack2 ];
+  buildInputs = [ libjack2 bash ];
   propagatedBuildInputs = [ pydbus pyliblo pyqt5 ];
 
   dontWrapQtApps = true; # The program is a python script.

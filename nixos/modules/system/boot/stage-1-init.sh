@@ -293,6 +293,9 @@ checkFS() {
     # Skip fsck for inherently readonly filesystems.
     if [ "$fsType" = squashfs ]; then return 0; fi
 
+    # Skip fsck.erofs because it is still experimental.
+    if [ "$fsType" = erofs ]; then return 0; fi
+
     # If we couldn't figure out the FS type, then skip fsck.
     if [ "$fsType" = auto ]; then
         echo 'cannot check filesystem with type "auto"!'
@@ -371,22 +374,6 @@ mountFS() {
 
     checkFS "$device" "$fsType"
 
-    # Optionally resize the filesystem.
-    case $options in
-        *x-nixos.autoresize*)
-            if [ "$fsType" = ext2 -o "$fsType" = ext3 -o "$fsType" = ext4 ]; then
-                modprobe "$fsType"
-                echo "resizing $device..."
-                e2fsck -fp "$device"
-                resize2fs "$device"
-            elif [ "$fsType" = f2fs ]; then
-                echo "resizing $device..."
-                fsck.f2fs -fp "$device"
-                resize.f2fs "$device"
-            fi
-            ;;
-    esac
-
     # Create backing directories for overlayfs
     if [ "$fsType" = overlay ]; then
         for i in upper work; do
@@ -409,6 +396,11 @@ mountFS() {
         sleep 1
         n=$((n + 1))
     done
+
+    # For bind mounts, busybox has a tendency to ignore options, which can be a
+    # security issue (e.g. "nosuid"). Remounting the partition seems to fix the
+    # issue.
+    mount "/mnt-root$mountPoint" -o "remount,$optionsPrefixed"
 
     [ "$mountPoint" == "/" ] &&
         [ -f "/mnt-root/etc/NIXOS_LUSTRATE" ] &&
@@ -437,7 +429,7 @@ lustrateRoot () {
         mv -v "$d" "$root/old-root.tmp"
     done
 
-    # Use .tmp to make sure subsequent invokations don't clash
+    # Use .tmp to make sure subsequent invocations don't clash
     mv -v "$root/old-root.tmp" "$root/old-root"
 
     mkdir -m 0755 -p "$root/etc"

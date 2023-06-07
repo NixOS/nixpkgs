@@ -1,12 +1,12 @@
 { stdenv
 , pkgs
 , lib
-, nodejs-16_x
+, nodejs_20
 , runtimeShell
 }:
 
 let
-  nodejs = nodejs-16_x;
+  nodejs = nodejs_20;
 
   nodePackages = import ./node-packages.nix {
     inherit pkgs nodejs;

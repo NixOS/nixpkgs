@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ccache";
-  version = "4.8";
+  version = "4.8.1";
 
   src = fetchFromGitHub {
     owner = "ccache";
     repo = "ccache";
     rev = "refs/tags/v${finalAttrs.version}";
-    sha256 = "sha256-X7Pv+yEQaKPdWTiKq67kSAyimyKvLSCYr4EjLlw+J0U=";
+    sha256 = "sha256-v0XYIaUKgdCYNSlwLNA3+oBEh6IDo8f5GPNsmYzzYRM=";
   };
 
   outputs = [ "out" "man" ];
@@ -74,10 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
     # A derivation that provides gcc and g++ commands, but that
     # will end up calling ccache for the given cacheDir
     links = { unwrappedCC, extraConfig }: stdenv.mkDerivation {
-      name = "ccache-links";
+      pname = "ccache-links";
+      inherit (finalAttrs) version;
       passthru = {
         isClang = unwrappedCC.isClang or false;
         isGNU = unwrappedCC.isGNU or false;
+        isCcache = true;
       };
       inherit (unwrappedCC) lib;
       nativeBuildInputs = [ makeWrapper ];

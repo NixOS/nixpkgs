@@ -8,21 +8,22 @@
 { config
 , stdenv, lib, buildPackages, pkgs, darwin
 , fetchurl, fetchpatch, fetchFromGitHub, fetchFromGitLab
-, perl, overrides, buildPerl, shortenPerlShebang
+, perl, shortenPerlShebang
 , nixosTests
 }:
+
+self:
 
 # cpan2nix assumes that perl-packages.nix will be used only with perl 5.30.3 or above
 assert lib.versionAtLeast perl.version "5.30.3";
 let
   inherit (lib) maintainers teams;
-  self = _self // (overrides pkgs);
-  _self = with self; {
+
+in
+with self; {
 
   inherit perl;
   perlPackages = self;
-
-  callPackage = pkgs.newScope self;
 
   # Check whether a derivation provides a perl module.
   hasPerlModule = drv: drv ? perlModule ;
@@ -41,9 +42,7 @@ let
       };
     });
 
-  buildPerlPackage = callPackage ../development/perl-modules/generic {
-    inherit buildPerl;
-  };
+  buildPerlPackage = callPackage ../development/perl-modules/generic { };
 
   # Helper functions for packages that use Module::Build to build.
   buildPerlModule = args:
@@ -1623,6 +1622,34 @@ let
   };
 
   BioExtAlign = callPackage ../development/perl-modules/Bio-Ext-Align { };
+
+  BioDBHTS = buildPerlModule {
+    pname = "Bio-DB-HTS";
+    version = "3.01";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AV/AVULLO/Bio-DB-HTS-3.01.tar.gz";
+      sha256 = "12a6bc1f579513cac8b9167cce4e363655cc8eba26b7d9fe1170dfe95e044f42";
+    };
+
+    buildInputs = [ pkgs.htslib pkgs.zlib ];
+
+    propagatedBuildInputs = [ BioPerl ];
+    htslibStore = toString pkgs.htslib;
+
+    postPatch = ''
+      # -Wl,-rpath not recognized : replaced by -rpath=
+      sed -i 's/Wl,-rpath,/rpath=/' Build.PL
+    '';
+
+    preBuild = ''
+      export HTSLIB_DIR=${pkgs.htslib}
+    '';
+
+    meta = {
+      description = "Perl interface to HTS library for DNA sequencing";
+      license = lib.licenses.asl20;
+    };
+  };
 
   BioPerl = buildPerlPackage {
     pname = "BioPerl";
@@ -6135,6 +6162,20 @@ let
     };
   };
 
+  DateRange = buildPerlPackage {
+    pname = "Date-Range";
+    version = "1.41";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TM/TMTM/Date-Range-1.41.tar.gz";
+      hash = "sha256-v5iXSSsQHAUDh50Up+fr6QJUQ4NgGufGmpXedcvZSLk=";
+    };
+    propagatedBuildInputs = [ DateSimple ];
+    meta = {
+      description = "work with a range of dates";
+      license = with lib.licenses; [ gpl2Plus ];
+    };
+  };
+
   DateSimple = buildPerlPackage {
     pname = "Date-Simple";
     version = "3.03";
@@ -9816,17 +9857,18 @@ let
 
   FinanceQuote = buildPerlPackage {
     pname = "Finance-Quote";
-    version = "1.49";
+    version = "1.55";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EC/ECOCODE/Finance-Quote-1.49.tar.gz";
-      hash = "sha256-ldvERDumVjILNjxWYl0E83nJQ+IC9g9AoqNRUrVLv1M=";
+      url = "mirror://cpan/authors/id/B/BP/BPSCHUCK/Finance-Quote-1.55.tar.gz";
+      hash = "sha256-4uAAtnxmtq9Q1HYYWEkhEFEKVaAwqJEBfUDH3iGLdI8=";
     };
-    propagatedBuildInputs = [ CGI DateTimeFormatStrptime HTMLTableExtract JSON JSONParse LWPProtocolHttps StringUtil TextTemplate ];
-    buildInputs = [ TestPod ];
+    buildInputs = [ DateManip DateRange DateSimple DateTime DateTimeFormatISO8601 StringUtil TestKwalitee TestPerlCritic TestPod TestPodCoverage ];
+    propagatedBuildInputs = [ DateTimeFormatStrptime Encode HTMLTableExtract HTMLTokeParserSimple HTMLTree HTMLTreeBuilderXPath HTTPCookies JSON IOCompress LWPProtocolHttps Readonly StringUtil SpreadsheetXLSX TextTemplate TryTiny WebScraper XMLLibXML libwwwperl ];
     meta = {
       homepage = "https://finance-quote.sourceforge.net/";
       description = "Get stock and mutual fund quotes from various exchanges";
-      license = with lib.licenses; [gpl2 ];
+      license = with lib.licenses; [ gpl2Plus ];
+      maintainers = with lib.maintainers; [ nevivurn ];
     };
   };
 
@@ -10870,6 +10912,7 @@ let
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Hash-SharedMem-0.005.tar.gz";
       hash = "sha256-Mkd2gIYC973EStqpN4lTZUVAKakm+mEfMhyb9rlAu14=";
     };
+    env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-mno-outline-atomics";
     buildInputs = [ ScalarString ];
     meta = {
       description = "Efficient shared mutable hash";
@@ -12489,7 +12532,7 @@ let
       hash = "sha256-PYHDzBtc/2nMqTYeLG443wNSJRrntB4v8/68hQ5GNWU=";
     };
     meta = {
-      description = "Run a subprocess with input/ouput redirection";
+      description = "Run a subprocess with input/output redirection";
       license = with lib.licenses; [ artistic1 gpl1Plus bsd3 ];
     };
   };
@@ -12551,11 +12594,11 @@ let
 
   ImageExifTool = buildPerlPackage rec {
     pname = "Image-ExifTool";
-    version = "12.55";
+    version = "12.62";
 
     src = fetchurl {
       url = "https://exiftool.org/Image-ExifTool-${version}.tar.gz";
-      hash = "sha256-CFgb16GnYPIKG0PLbTiSfm7FRdWZBtroXH32c5Ru6gg=";
+      hash = "sha256-SZCkbGm2VoiNfVcyuvQDnalkaI7d33ocLutRQEmZ7B0=";
     };
 
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
@@ -13056,6 +13099,22 @@ let
       description = "Add paths relative to the current file to @INC";
       homepage = "https://github.com/Grinnz/lib-relative";
       license = with lib.licenses; [ artistic2 ];
+    };
+  };
+
+  libwwwperl = buildPerlPackage {
+    pname = "libwww-perl";
+    version = "6.70";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SI/SIMBABQUE/libwww-perl-6.70.tar.gz";
+      hash = "sha256-NPANI0R1e5wLVa01gI1T6T19kvekZOyDf+anPFH7WWk=";
+    };
+    buildInputs = [ HTTPDaemon TestFatal TestNeeds TestRequiresInternet ];
+    propagatedBuildInputs = [ EncodeLocale FileListing HTMLParser HTTPCookieJar HTTPCookies HTTPDate HTTPMessage HTTPNegotiate LWPMediaTypes NetHTTP TryTiny URI WWWRobotRules ];
+    meta = {
+      homepage = "https://github.com/libwww-perl/libwww-perl";
+      description = "The World-Wide Web library for Perl";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -21584,6 +21643,22 @@ let
     };
   };
 
+  SpreadsheetXLSX = buildPerlPackage {
+    pname = "Spreadsheet-XLSX";
+    version = "0.17";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AS/ASB/Spreadsheet-XLSX-0.17.tar.gz";
+      hash = "sha256-M7d4knz/FjCQZbdOuMRpawNxZg0szf5FvkYFCSrO6XY=";
+    };
+    buildInputs = [ TestNoWarnings TestWarnings ];
+    propagatedBuildInputs = [ ArchiveZip SpreadsheetParseExcel ];
+    meta = {
+      homepage = "https://github.com/asb-capfan/Spreadsheet-XLSX";
+      description = "Perl extension for reading MS Excel 2007 files;";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   SQLAbstract = buildPerlPackage {
     pname = "SQL-Abstract";
     version = "2.000001";
@@ -23069,8 +23144,8 @@ let
 
     # use native libraries from the host when running build commands
     postConfigure = lib.optionalString cross (let
-      host_perl = buildPerl;
-      host_self = buildPerl.pkgs.TermReadKey;
+      host_perl = perl.perlOnBuild;
+      host_self = perl.perlOnBuild.pkgs.TermReadKey;
       perl_lib = "${host_perl}/lib/perl5/${host_perl.version}";
       self_lib = "${host_self}/lib/perl5/site_perl/${host_perl.version}";
     in ''
@@ -23079,7 +23154,7 @@ let
 
     # TermReadKey uses itself in the build process
     nativeBuildInputs = lib.optionals cross [
-      buildPerl.pkgs.TermReadKey
+      perl.perlOnBuild.pkgs.TermReadKey
     ];
     meta = {
       description = "A perl module for simple terminal control";
@@ -23270,7 +23345,7 @@ let
     };
     propagatedBuildInputs = [ TermVT102 ];
     meta = {
-      description = "A Term::VT102 that grows automatically to accomodate whatever you print to it";
+      description = "A Term::VT102 that grows automatically to accommodate whatever you print to it";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -25097,8 +25172,8 @@ let
       url = "mirror://cpan/authors/id/A/AM/AMBS/Text-BibTeX-0.88.tar.gz";
       hash = "sha256-sBRYbmi9vK+wos+gQB6woE6l3oxNW8Nt0Pf66ras9Cw=";
     };
-    # libbtparse.so: cannot open shared object file (aarch64 only)
-    patches = [ ../development/perl-modules/TextBibTeX-use-lib-on-aarch64.patch ];
+    # libbtparse.so: cannot open shared object file
+    patches = [ ../development/perl-modules/TextBibTeX-use-lib.patch ];
     perlPreHook = "export LD=$CC";
     perlPostHook = lib.optionalString stdenv.isDarwin ''
       oldPath="$(pwd)/btparse/src/libbtparse.dylib"
@@ -25851,10 +25926,10 @@ let
       url = "mirror://cpan/authors/id/K/KU/KUBOTA/Text-WrapI18N-0.06.tar.gz";
       hash = "sha256-S9KaF/DCx5LRLBAFs8J28qsPrjnACFmuF0HXlBhGpIg=";
     };
-    buildInputs = [ pkgs.glibcLocales ];
+    buildInputs = lib.optionals (!stdenv.isDarwin) [ pkgs.glibcLocales ];
     propagatedBuildInputs = [ TextCharWidth ];
     preConfigure = ''
-      substituteInPlace WrapI18N.pm --replace '/usr/bin/locale' '${pkgs.glibc.bin}/bin/locale'
+      substituteInPlace WrapI18N.pm --replace '/usr/bin/locale' '${pkgs.unixtools.locale}/bin/locale'
     '';
     meta = {
       description = "Line wrapping module with support for multibyte, fullwidth, and combining characters and languages without whitespaces between words";
@@ -27834,6 +27909,22 @@ let
     };
   };
 
+  WebScraper = buildPerlModule {
+    pname = "Web-Scraper";
+    version = "0.38";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Web-Scraper-0.38.tar.gz";
+      hash = "sha256-+VtuX41/7r4RbQW/WaK3zxpR7Z0wvKgBI0MOxFZ1Q78=";
+    };
+    buildInputs = [ ModuleBuildTiny TestBase TestRequires ];
+    propagatedBuildInputs = [ HTMLParser HTMLSelectorXPath HTMLTagset HTMLTree HTMLTreeBuilderXPath UNIVERSALrequire URI XMLXPathEngine YAML libwwwperl ];
+    meta = {
+      homepage = "https://github.com/miyagawa/web-scraper";
+      description = "Web Scraping Toolkit using HTML and CSS Selectors or XPath expressions";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   WebServiceLinode = buildPerlModule {
     pname = "WebService-Linode";
     version = "0.29";
@@ -28025,4 +28116,4 @@ let
   version = self.Version;
 
   Gtk2GladeXML = throw "Gtk2GladeXML has been removed"; # 2022-01-15
-}; in self
+}

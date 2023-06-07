@@ -8,21 +8,21 @@
 , alcotest-lwt
 , bisect_ppx
 , qcheck-alcotest
-,
+, ppx_repr
 }:
 
 buildDunePackage rec {
   pname = "tezos-bls12-381-polynomial";
-  version = "0.1.3";
+  version = "1.0.1";
   duneVersion = "3";
   src = fetchFromGitLab {
     owner = "nomadic-labs/cryptography";
     repo = "privacy-team";
     rev = "v${version}";
-    sha256 = "sha256-H1Wog3GItTIVsawr9JkyyKq+uGqbTQPTR1dacpmxLbs=";
+    sha256 = "sha256-5qDa/fQoTypjaceQ0MBzt0rM+0hSJcpGlXMGAZKRboo=";
   };
 
-  propagatedBuildInputs = [ bls12-381 data-encoding bigstringaf ];
+  propagatedBuildInputs = [ ppx_repr bls12-381 data-encoding bigstringaf ];
 
   checkInputs = [ alcotest alcotest-lwt bisect_ppx qcheck-alcotest ];
 

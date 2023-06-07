@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dtschema";
-  version = "2022.12";
+  version = "2023.04";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "devicetree-org";
     repo = "dt-schema";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-+wF6WdonZrkZEnlq/P6QeT3X7CMinxbapLa7q0t2zUc=";
+    sha256 = "sha256-w9TsRdiDTdExft7rdb2hYcvxP6hxOFZKI3hITiNSwgw=";
   };
 
   patches = [

@@ -1,11 +1,11 @@
-{ mkDerivation, lib, fetchurl
+{ mkDerivation, lib
 , extra-cmake-modules, ki18n
 , kconfig, kconfigwidgets, kcoreaddons, kdbusaddons, kiconthemes, kcmutils
 , kio, knotifications, plasma-framework, kwidgetsaddons, kwindowsystem
-, kitemviews, lcms2, libXrandr, qtx11extras
+, kitemmodels, kitemviews, lcms2, libXrandr, qtx11extras
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "colord-kde";
 
   nativeBuildInputs = [ extra-cmake-modules ];
@@ -13,7 +13,7 @@ mkDerivation rec {
   buildInputs = [
     kconfig kconfigwidgets kcoreaddons kdbusaddons kiconthemes
     kcmutils ki18n kio knotifications plasma-framework kwidgetsaddons
-    kwindowsystem kitemviews lcms2 libXrandr qtx11extras
+    kwindowsystem kitemmodels kitemviews lcms2 libXrandr qtx11extras
   ];
 
   meta = with lib; {

@@ -1,25 +1,23 @@
-{ rustPlatform
+{ lib
+, rustPlatform
 , fetchFromGitHub
 , pkg-config
 , dbus
 , protobuf
-, lib
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pbpctrl";
-
-  # https://github.com/qzed/pbpctrl/issues/4
-  version = "unstable-2023-02-07";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "qzed";
     repo = "${pname}";
-    rev = "9fef4bb88046a9f00719b189f8e378c8dbdb8ee6";
-    hash = "sha256-8YbsBqqITJ9bKzbGX6d/CSBb8wzr6bDzy8vsyntL1CA=";
+    rev = "v${version}";
+    hash = "sha256-CYroQb6x2d4ay3RZUSiSrcGDF0IL3ETZtHAFt18sa5s=";
   };
 
-  cargoHash = "sha256-ZxJjjaT/ZpEPxvO42UWBy3xW/V5dhXGsKn3KmuM89YA==";
+  cargoHash = "sha256-+YtnPKbxZENL6/u36RFFZA6F+19qHDAVx6Q8FSB/LCU=";
 
   nativeBuildInputs = [ pkg-config protobuf ];
   buildInputs = [ dbus ];

@@ -27,6 +27,8 @@ buildPythonPackage rec {
     "test_delete_cookie"
     "test_error"
     "test_error_in_generator_callback"
+    # timing sensitive
+    "test_ims"
   ];
 
   __darwinAllowLocalNetworking = true;

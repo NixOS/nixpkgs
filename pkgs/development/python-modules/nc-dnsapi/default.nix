@@ -1,17 +1,18 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "nc-dnsapi";
-  version = "0.1.5";
+  version = "0.1.6";
 
-  src = fetchPypi {
-    inherit version;
-    pname = "nc_dnsapi";
-    hash = "sha256-1fvzr3e0ZAbSDOovhLz5GHJCS6l+K89fbYHoaWxO9cA=";
+  src = fetchFromGitHub {
+    owner = "nbuchwitz";
+    repo = "nc_dnsapi";
+    rev = "v${version}";
+    hash = "sha256-OE4+wJbJbUZ+YB5J5OyvytLFCcrnXCeZEqmphHKKprQ=";
   };
 
   propagatedBuildInputs = [ requests ];

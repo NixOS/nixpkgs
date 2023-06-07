@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "phonenumbers";
-  version = "8.13.7";
+  version = "8.13.11";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JTuw4BJQ0hoR8rQrPm4WG39ssqxEDi4qlcHacdIh7ho=";
+    hash = "sha256-PjJ02IyrNgm1X/W5NBcHXbyi0TBk8QP79WLg6h3aD5o=";
   };
 
   nativeCheckInputs = [

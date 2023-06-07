@@ -9,31 +9,31 @@
 }:
 
 let
-  version = "0.15.0";
+  version = "0.16.0";
 
   dist = {
     aarch64-darwin = rec {
       archSuffix = "Darwin-arm64";
       url = "https://github.com/lima-vm/lima/releases/download/v${version}/lima-${version}-${archSuffix}.tar.gz";
-      sha256 = "0da51d3c179e89bde404ea40be88b5c11aea8c7cf50cd030fd5b779e91462856";
+      sha256 = "092d586426f85c61263bd4822c22538b1585dc84d0369dccac936db758a17ce1";
     };
 
     x86_64-darwin = rec {
       archSuffix = "Darwin-x86_64";
       url = "https://github.com/lima-vm/lima/releases/download/v${version}/lima-${version}-${archSuffix}.tar.gz";
-      sha256 = "c535bc21923bc290ac56fe3a9ea87e8740c7c51e030f05cc32d51e726a59673e";
+      sha256 = "6c6278ddc2db080b4ad6a2f39ae36e6258efd6c696fbe599a5d389cfb9232aa1";
     };
 
     aarch64-linux = rec {
       archSuffix = "Linux-aarch64";
       url = "https://github.com/lima-vm/lima/releases/download/v${version}/lima-${version}-${archSuffix}.tar.gz";
-      sha256 = "964c897f6dc2a6e203b0c109a7cd59102fe192837c792549b597d7ac301ecf54";
+      sha256 = "e33301878082cb73eb9bc4f267b91eb4895ac3c8303d56d4b86c1264563bfcff";
     };
 
     x86_64-linux = rec {
       archSuffix = "Linux-x86_64";
       url = "https://github.com/lima-vm/lima/releases/download/v${version}/lima-${version}-${archSuffix}.tar.gz";
-      sha256 = "5ec308716abe8833ce36d6e77cac44d98d7cfc8add8dbcbe053a91af01cecfa1";
+      sha256 = "be6093c2a9b0aa3c39cc5a5e39e79223c6d03f0e07ebadf70c3c128143672a84";
     };
   };
 in

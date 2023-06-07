@@ -429,7 +429,8 @@ in
             dolphin-plugins
             ffmpegthumbs
             kdegraphics-thumbnailers
-            pkgs.kio-admin
+            kde-inotify-survey
+            kio-admin
             kio-extras
           ];
           optionalPackages = [

@@ -1,7 +1,9 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, cargo
 , rustPlatform
+, rustc
 , glib
 , pkg-config
 , gdk-pixbuf
@@ -32,8 +34,8 @@ stdenv.mkDerivation rec {
     glib
     pkg-config
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.cargo
-    rustPlatform.rust.rustc
+    cargo
+    rustc
     wrapGAppsHook
   ];
 

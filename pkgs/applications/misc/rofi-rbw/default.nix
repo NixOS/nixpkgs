@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchFromGitHub, configargparse, setuptools, poetry-core }:
+{ lib, buildPythonApplication, fetchFromGitHub, configargparse, setuptools, poetry-core, rbw }:
 
 buildPythonApplication rec {
   pname = "rofi-rbw";
@@ -20,6 +20,10 @@ buildPythonApplication rec {
   propagatedBuildInputs = [ configargparse ];
 
   pythonImportsCheck = [ "rofi_rbw" ];
+
+  preFixup = ''
+    makeWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ rbw ]})
+  '';
 
   meta = with lib; {
     description = "Rofi frontend for Bitwarden";

@@ -27,5 +27,7 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ oberblastmeister ];
     mainProgram = "trash";
+    # darwin is unsupported due to https://github.com/Byron/trash-rs/issues/8
+    platforms = platforms.linux;
   };
 }

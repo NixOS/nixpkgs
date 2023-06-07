@@ -1,4 +1,5 @@
 { lib
+, cargo
 , clang
 , desktop-file-utils
 , fetchFromGitLab
@@ -11,6 +12,7 @@
 , pipewire
 , pkg-config
 , rustPlatform
+, rustc
 , stdenv
 }:
 
@@ -38,8 +40,8 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.cargo
-    rustPlatform.rust.rustc
+    cargo
+    rustc
     rustPlatform.bindgenHook
   ];
 

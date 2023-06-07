@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vdo";
-  version = "8.2.0.2";  # kvdo uses this!
+  version = "8.2.0.2";  # bump this version with kvdo
 
   src = fetchFromGitHub {
     owner = "dm-vdo";
@@ -57,7 +57,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/dm-vdo/vdo";
     description = "A set of userspace tools for managing pools of deduplicated and/or compressed block storage";
-    platforms = platforms.linux;
+    # platforms are defined in https://github.com/dm-vdo/vdo/blob/master/utils/uds/atomicDefs.h
+    platforms = [ "x86_64-linux" "aarch64-linux" "s390-linux" "powerpc64-linux" "powerpc64le-linux" ];
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ ajs124 ];
   };

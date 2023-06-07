@@ -6,21 +6,47 @@
 , ocamlPackages
 , cacert
 , ocaml-crunch
+, jq
+, mustache-go
+, yaml2json
+, tezos-rust-libs
+, darwin
 }:
 
 ocamlPackages.buildDunePackage rec {
   pname = "ligo";
-  version = "0.60.0";
+  version = "0.66.0";
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
     rev = version;
-    sha256 = "sha256-gyMSpy+F3pF2Kv1ygUs20mrspJ6GtJ6ySyZD7zfZj2w=";
+    sha256 = "sha256-BFeNnpMT+WKqTvjVg+H2qHl5EUMcbe7xmJohbpD99gY=";
     fetchSubmodules = true;
   };
 
+  postPatch = ''
+    substituteInPlace "vendors/tezos-ligo/src/lib_hacl/hacl.ml" \
+      --replace \
+        "Hacl.NaCl.Noalloc.Easy.secretbox ~pt:msg ~n:nonce ~key ~ct:cmsg" \
+        "Hacl.NaCl.Noalloc.Easy.secretbox ~pt:msg ~n:nonce ~key ~ct:cmsg ()" \
+      --replace \
+        "Hacl.NaCl.Noalloc.Easy.box_afternm ~pt:msg ~n:nonce ~ck:k ~ct:cmsg" \
+        "Hacl.NaCl.Noalloc.Easy.box_afternm ~pt:msg ~n:nonce ~ck:k ~ct:cmsg ()"
+
+    substituteInPlace "vendors/tezos-ligo/src/lib_crypto/crypto_box.ml" \
+      --replace \
+        "secretbox_open ~key ~nonce ~cmsg ~msg" \
+        "secretbox_open ~key ~nonce ~cmsg ~msg ()" \
+      --replace \
+        "Box.box_open ~k ~nonce ~cmsg ~msg" \
+        "Box.box_open ~k ~nonce ~cmsg ~msg ()"
+  '';
+
   # The build picks this up for ligo --version
   LIGO_VERSION = version;
+
+  # This is a hack to work around the hack used in the dune files
+  OPAM_SWITCH_PREFIX = "${tezos-rust-libs}";
 
   duneVersion = "3";
 
@@ -33,6 +59,10 @@ ocamlPackages.buildDunePackage rec {
     ocamlPackages.crunch
     ocamlPackages.menhir
     ocamlPackages.ocaml-recovery-parser
+    # deps for changelog
+    jq
+    mustache-go
+    yaml2json
   ];
 
   buildInputs = with ocamlPackages; [
@@ -60,13 +90,19 @@ ocamlPackages.buildDunePackage rec {
     lambda-term
     tar-unix
     parse-argv
-
+    hacl-star
+    prometheus
+    # lsp
+    linol
+    linol-lwt
+    ocaml-lsp
     # Test helpers deps
     qcheck
     qcheck-alcotest
     alcotest-lwt
-
     # vendored tezos' deps
+    aches
+    aches-lwt
     tezos-plonk
     tezos-bls12-381-polynomial
     ctypes
@@ -78,13 +114,10 @@ ocamlPackages.buildDunePackage rec {
     lwt-canceler
     ipaddr
     bls12-381
-    bls12-381-legacy
     bls12-381-signature
     ptime
     mtime
     lwt_log
-    ringo
-    ringo-lwt
     secp256k1-internal
     resto
     resto-directory
@@ -95,6 +128,8 @@ ocamlPackages.buildDunePackage rec {
     pure-splitmix
     zarith_stubs_js
     simple-diff
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
   ];
 
   nativeCheckInputs = [

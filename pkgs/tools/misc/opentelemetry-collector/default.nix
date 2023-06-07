@@ -1,28 +1,26 @@
-{ buildGoModule
+{ lib
+, buildGoModule
 , fetchFromGitHub
-, lib
-, writeScript
 }:
 
-let
-  otelcontribcol = writeScript "otelcontribcol" ''
-    echo 'ERROR: otelcontribcol is now in `pkgs.opentelemetry-collector-contrib`, call the collector with `otelcorecol` or move to `pkgs.opentelemetry-collector-contrib`' >&2
-    exit 1
-  '';
-in
 buildGoModule rec {
   pname = "opentelemetry-collector";
-  version = "0.74.0";
+  version = "0.78.2";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector";
     rev = "v${version}";
-    sha256 = "sha256-A2xiYCU2Lq/F59pQhgQD8sf1BcRvuaWKvGdxNGQ938E=";
+    hash = "sha256-zYKm5P+o59F1g5kCMirCEW0X5FrOwMdIRw64CMbUsAg=";
   };
   # there is a nested go.mod
   sourceRoot = "source/cmd/otelcorecol";
-  vendorHash = "sha256-VTPywVGs56lJxYLwmz71jBJ5ltxCZYUw0z6RslN2ZOE=";
+  vendorHash = "sha256-7rnj3hIdp12CMva0zxWzkTi+a4N1uBIbG6BBaKjzH+4=";
+
+  # upstream strongly recommends disabling CGO
+  # additionally dependencies have had issues when GCO was enabled that weren't caught upstream
+  # https://github.com/open-telemetry/opentelemetry-collector/blob/main/CONTRIBUTING.md#using-cgo
+  CGO_ENABLED = 0;
 
   preBuild = ''
     # set the build version, can't be done via ldflags
@@ -31,14 +29,10 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  postInstall = ''
-    cp ${otelcontribcol} $out/bin/otelcontribcol
-  '';
-
   meta = with lib; {
     homepage = "https://github.com/open-telemetry/opentelemetry-collector";
     changelog = "https://github.com/open-telemetry/opentelemetry-collector/blob/v${version}/CHANGELOG.md";
-    description = "OpenTelemetry Collector offers a vendor-agnostic implementation on how to receive, process and export telemetry data";
+    description = "A vendor-agnostic implementation on how to receive, process and export telemetry data";
     longDescription = ''
       The OpenTelemetry Collector offers a vendor-agnostic implementation on how
       to receive, process and export telemetry data. In addition, it removes the

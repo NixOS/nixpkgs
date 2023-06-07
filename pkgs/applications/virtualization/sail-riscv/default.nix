@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, fetchpatch
 , lib
 , arch
 , ocamlPackages
@@ -24,14 +25,24 @@ stdenv.mkDerivation rec {
   buildInputs = with ocamlPackages; [ zlib linksem ];
   strictDeps = true;
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/riscv/sail-riscv/pull/250/commits/8bd37c484b83a8ce89c8bb7a001b8ae34dc4d77f.patch";
+      hash = "sha256-tDgkGhcbT6phoCAvilxMI56YUuUqQFgvh+2QduOjdMg=";
+    })
+  ];
+
   postPatch = ''
     rm -r prover_snapshots
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace Makefile --replace "-flto" ""
   '';
 
   makeFlags = [
     "SAIL=sail"
     "ARCH=${arch}"
     "SAIL_DIR=${ocamlPackages.sail}/share/sail"
+    "LEM_DIR=${ocamlPackages.sail}/share/lem"
   ];
 
   installPhase = ''
@@ -50,6 +61,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/riscv/sail-riscv";
     description = "A formal specification of the RISC-V architecture, written in Sail";
     maintainers = with maintainers; [ genericnerdyusername ];
+    broken = stdenv.isDarwin && stdenv.isAarch64;
     license = licenses.bsd2;
   };
 }

@@ -2,7 +2,7 @@
   mkDerivation, lib,
   extra-cmake-modules, kdoctools,
   gettext,
-  kcoreaddons, kconfig, kdbusaddons, kwidgetsaddons, kitemviews, kcompletion,
+  kcoreaddons, kconfig, kdbusaddons, kwidgetsaddons, kitemviews, kcompletion, kxmlgui,
   python3
 }:
 
@@ -16,7 +16,7 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    gettext kcoreaddons kconfig kdbusaddons kwidgetsaddons kitemviews kcompletion python3
+    gettext kcoreaddons kconfig kdbusaddons kwidgetsaddons kitemviews kcompletion kxmlgui python3
   ];
   propagatedUserEnvPkgs = [ ];
 }

@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "uncover";
-  version = "1.0.3";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-emfS5/HEt+I0DlUDgbWGqjF8bVLHsKxgAS4CKB8WO9E=";
+    hash = "sha256-TkNqy5436EH7P7F/kKaFrAuG6D+WwkIJzV5+a/H3aYM=";
   };
 
-  vendorHash = "sha256-ckswffKbTXq8GMO2RvVz43ig27LKBxI2WqHRAx04dk0=";
+  vendorHash = "sha256-P2XlFvFkrmH8ATWP1QXtNsUwCT22j0LmzlMuob6LlmY=";
 
   meta = with lib; {
     description = "API wrapper to search for exposed hosts";

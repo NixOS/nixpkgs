@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "django-auth-ldap";
-  version = "4.2.0";
+  version = "4.3.0";
   format = "pyproject";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qsceZbCovc/FzQi3CZfuPNw3eG/9XZdbfiz6R1ldQn8=";
+    hash = "sha256-eItbHucAVGgdf659CF3qp28vpvZMyf49152u9iwvYSE=";
   };
 
   nativeBuildInputs = [

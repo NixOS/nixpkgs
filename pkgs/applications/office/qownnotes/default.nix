@@ -8,29 +8,31 @@
 , qtsvg
 , qtwayland
 , qtwebsockets
-, qtx11extras
-, qtxmlpatterns
+, qt5compat
 , makeWrapper
 , wrapQtAppsHook
+, botan2
+, pkg-config
 }:
 
 let
   pname = "qownnotes";
   appname = "QOwnNotes";
-  version = "23.4.0";
+  version = "23.5.3";
 in
 stdenv.mkDerivation {
   inherit pname appname version;
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/${pname}/src/${pname}-${version}.tar.xz";
-    sha256 = "sha256-8gSy7WL0wpLAXxVo3oOA9X12qd/R7P3MgmlwXxpJSUs=";
+    hash = "sha256-keNR+RMFVlHMeyT1Ngtuu2jWMDwFyLbZAVUk7c0Ed38=";
   };
 
   nativeBuildInputs = [
     qmake
     qttools
     wrapQtAppsHook
+    pkg-config
   ] ++ lib.optionals stdenv.isDarwin [ makeWrapper ];
 
   buildInputs = [
@@ -38,9 +40,13 @@ stdenv.mkDerivation {
     qtdeclarative
     qtsvg
     qtwebsockets
-    qtx11extras
-    qtxmlpatterns
+    qt5compat
+    botan2
   ] ++ lib.optionals stdenv.isLinux [ qtwayland ];
+
+  qmakeFlags = [
+    "USE_SYSTEM_BOTAN=1"
+  ];
 
   postInstall =
   # Create a lowercase symlink for Linux
@@ -60,7 +66,7 @@ stdenv.mkDerivation {
     changelog = "https://www.qownnotes.org/changelog.html";
     downloadPage = "https://github.com/pbek/QOwnNotes/releases/tag/v${version}";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ totoroot ];
+    maintainers = with maintainers; [ pbek totoroot ];
     platforms = platforms.unix;
   };
 }

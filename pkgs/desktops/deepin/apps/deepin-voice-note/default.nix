@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtbase
     dtkwidget
+    qt5integration
     qt5platform-plugins
     dde-qt-dbus-factory
     qtmultimedia
@@ -61,11 +62,6 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DVERSION=${version}" ];
 
   env.NIX_CFLAGS_COMPILE = "-I${dde-qt-dbus-factory}/include/libdframeworkdbus-2.0";
-
-  # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
-  qtWrapperArgs = [
-    "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
-  ];
 
   preFixup = ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")

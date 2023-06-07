@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "iocextract";
-  version = "1.15.1";
+  version = "1.15.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "InQuest";
     repo = "python-iocextract";
     rev = "refs/tags/v${version}";
-    hash = "sha256-muto8lr3sP44bLFIoAuPeS8pRv7pNP1JFKaAJV01TZY=";
+    hash = "sha256-l0TGi3Y3/Dcwyp80eRWYYlDaDDJdpc31fcxdYEVvQas=";
   };
 
   propagatedBuildInputs = [

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "blast";
-  version = "2.13.0";
+  version = "2.14.0";
 
   src = fetchurl {
     url = "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${version}/ncbi-blast-${version}+-src.tar.gz";
-    sha256 = "sha256-iVU3FNEz2vKMR3+D0zN5Szxi5BSECMByobRiDl7E/rI=";
+    sha256 = "sha256-v0d/Gww7gvC3pwlL8AOpqD4347BxbB33mQYMT+qxdQA=";
   };
 
   sourceRoot = "ncbi-blast-${version}+-src/c++";

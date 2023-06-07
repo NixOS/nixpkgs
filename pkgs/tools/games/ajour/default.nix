@@ -36,7 +36,7 @@ let
   ];
 
 in rustPlatform.buildRustPackage rec {
-  pname = "Ajour";
+  pname = "ajour";
   version = "1.3.2";
 
   src = fetchFromGitHub {

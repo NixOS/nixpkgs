@@ -24,7 +24,7 @@ headers="$(nix-prefetch-url "https://artifacts.electronjs.org/headers/dist/v${VE
 
 # Entry similar to the following goes in default.nix:
 
-echo "  electron_${VERSION%%.*} = mkElectron \"${VERSION}\" {"
+echo "  electron_${VERSION%%.*}-bin = mkElectron \"${VERSION}\" {"
 
 for S in "${!SYSTEMS[@]}"; do
   hash="$(grep " *electron-v${VERSION}-${SYSTEMS[$S]}.zip$" "$hashfile"|cut -f1 -d' ' || :)"

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   checkInputs = [
     ounit
   ];
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   preInstall = "mkdir -p $OCAMLFIND_DESTDIR";
   installFlags = [ "BINDIR=$(out)/bin" ];

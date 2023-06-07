@@ -2,6 +2,7 @@
 , amqtt
 , buildPythonPackage
 , fetchFromGitHub
+, orjson
 , paho-mqtt
 , poetry-core
 , pytest-asyncio
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "roombapy";
-  version = "1.6.7";
+  version = "1.6.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,14 +21,24 @@ buildPythonPackage rec {
     owner = "pschmitt";
     repo = "roombapy";
     rev = "refs/tags/${version}";
-    hash = "sha256-cZoHUup3Znna4Za5twYyua3r03InapzU4c1aRrG6rpo=";
+    hash = "sha256-Bu8wl5Qtys1sy5FnB+2NCGnXnuq9u+TUUR9zNdlOFTU=";
   };
+
+  postPatch = ''
+    # hbmqtt was replaced by amqtt
+    substituteInPlace tests/test_roomba_integration.py \
+      --replace "from hbmqtt.broker import Broker" "from amqtt.broker import Broker"
+
+    substituteInPlace pyproject.toml \
+      --replace 'orjson = ">=3.8.7"' 'orjson = "*"'
+  '';
 
   nativeBuildInputs = [
     poetry-core
   ];
 
   propagatedBuildInputs = [
+    orjson
     paho-mqtt
   ];
 
@@ -36,12 +47,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ];
-
-  postPatch = ''
-    # hbmqtt was replaced by amqtt
-    substituteInPlace tests/test_roomba_integration.py \
-      --replace "from hbmqtt.broker import Broker" "from amqtt.broker import Broker"
-  '';
 
   disabledTestPaths = [
     # Requires network access

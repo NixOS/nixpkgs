@@ -45,7 +45,10 @@ let
   # NB: This file describes the Nixpkgs manual, which happens to use module
   #     docs infra originally developed for NixOS.
   optionsDoc = pkgs.nixosOptionsDoc {
-    inherit (pkgs.lib.evalModules { modules = [ ../../pkgs/top-level/config.nix ]; }) options;
+    inherit (pkgs.lib.evalModules {
+      modules = [ ../../pkgs/top-level/config.nix ];
+      class = "nixpkgsConfig";
+    }) options;
     documentType = "none";
     transformOptions = opt:
       opt // {

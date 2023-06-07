@@ -40,17 +40,24 @@ Since release 15.09 there is a new TeX Live packaging that lives entirely under 
 
 ## Custom packages {#sec-language-texlive-custom-packages}
 
+You may find that you need to use an external TeX package. A derivation for such package has to provide the contents of the "texmf" directory in its output and provide the appropriate `tlType` attribute (one of `"run"`, `"bin"`, `"doc"`, `"source"`). Dependencies on other TeX packages can be listed in the attribute `tlDeps`.
 
-You may find that you need to use an external TeX package. A derivation for such package has to provide contents of the "texmf" directory in its output and provide the `tlType` attribute. Here is a (very verbose) example:
+Such derivation must then be listed in the attribute `pkgs` of an attribute set passed to `texlive.combine`, for instance by passing `extraPkgs = { pkgs = [ custom_package ]; };`. Within Nixpkgs, `pkgs` should be part of the derivation itself, allowing users to call `texlive.combine { inherit (texlive) scheme-small; inherit some_tex_package; }`.
+
+Here is a (very verbose) example where the attribute `pkgs` is attached to the derivation itself, which requires creating a fixed point. See also the packages `auctex`, `eukleides`, `mftrace` for more examples.
 
 ```nix
 with import <nixpkgs> {};
 
 let
-  foiltex_run = stdenvNoCC.mkDerivation {
+  foiltex = stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "latex-foiltex";
     version = "2.1.4b";
-    passthru.tlType = "run";
+    passthru = {
+      pkgs = [ finalAttrs.finalPackage ];
+      tlDeps = with texlive; [ latex ];
+      tlType = "run";
+    };
 
     srcs = [
       (fetchurl {
@@ -102,8 +109,7 @@ let
       maintainers = with maintainers; [ veprbl ];
       platforms = platforms.all;
     };
-  };
-  foiltex = { pkgs = [ foiltex_run ]; };
+  });
 
   latex_with_foiltex = texlive.combine {
     inherit (texlive) scheme-small;

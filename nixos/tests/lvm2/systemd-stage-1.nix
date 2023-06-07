@@ -1,18 +1,18 @@
 { kernelPackages ? null, flavour }: let
   preparationCode = {
     raid = ''
-      machine.succeed("vgcreate test_vg /dev/vdc /dev/vdd")
+      machine.succeed("vgcreate test_vg /dev/vdb /dev/vdc")
       machine.succeed("lvcreate -L 512M --type raid0 test_vg -n test_lv")
     '';
 
     thinpool = ''
-      machine.succeed("vgcreate test_vg /dev/vdc")
+      machine.succeed("vgcreate test_vg /dev/vdb")
       machine.succeed("lvcreate -L 512M -T test_vg/test_thin_pool")
       machine.succeed("lvcreate -n test_lv -V 16G --thinpool test_thin_pool test_vg")
     '';
 
     vdo = ''
-      machine.succeed("vgcreate test_vg /dev/vdc")
+      machine.succeed("vgcreate test_vg /dev/vdb")
       machine.succeed("lvcreate --type vdo -n test_lv -L 6G -V 12G test_vg/vdo_pool_lv")
     '';
   }.${flavour};
@@ -79,7 +79,7 @@ in import ../make-test-python.nix ({ pkgs, ... }: {
       kernelPackages = lib.mkIf (kernelPackages != null) kernelPackages;
     };
 
-    specialisation.boot-lvm.configuration.virtualisation.bootDevice = "/dev/test_vg/test_lv";
+    specialisation.boot-lvm.configuration.virtualisation.rootDevice = "/dev/test_vg/test_lv";
   };
 
   testScript = ''

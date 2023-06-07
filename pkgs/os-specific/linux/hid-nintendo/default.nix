@@ -4,14 +4,14 @@
 , kernel
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hid-nintendo";
   version = "3.2";
 
   src = fetchFromGitHub {
     owner = "nicman23";
     repo = "dkms-hid-nintendo";
-    rev = self.version;
+    rev = finalAttrs.version;
     hash = "sha256-2a+95zwyhJsF/KSo/Pm/JZ7ktDG02UZjsixSnVUXRrA=";
   };
 

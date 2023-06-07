@@ -1,9 +1,7 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "budgie";
 
-  meta = with lib; {
-    maintainers = [ maintainers.federicoschonborn ];
-  };
+  meta.maintainers = [ lib.maintainers.federicoschonborn ];
 
   nodes.machine = { ... }: {
     imports = [
@@ -20,7 +18,12 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       };
     };
 
-    services.xserver.desktopManager.budgie.enable = true;
+    services.xserver.desktopManager.budgie = {
+      enable = true;
+      extraPlugins = [
+        pkgs.budgiePlugins.budgie-analogue-clock-applet
+      ];
+    };
   };
 
   testScript = { nodes, ... }:

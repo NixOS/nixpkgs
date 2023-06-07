@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gio-qt";
-  version = "0.0.11";
+  version = "0.0.12";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-dlY1CTlXywgGZUonBBe3cDwx8h2xXrPY6Ft/D59nlug=";
+    sha256 = "sha256-/wLaVR31T+EcT6D5Cw0QIjZasioPWC74KNmt1tckwXk=";
   };
 
   nativeBuildInputs = [

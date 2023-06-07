@@ -28,21 +28,22 @@
 , bash
 , installShellFiles
 , nixosTests
+, gitUpdater
 }:
 
 buildGoModule rec {
   pname = "lxd";
-  version = "5.12";
+  version = "5.14";
 
   src = fetchurl {
     urls = [
       "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz"
       "https://github.com/lxc/lxd/releases/download/lxd-${version}/lxd-${version}.tar.gz"
     ];
-    hash = "sha256-YGH/M0aw56snNt3s8drcJYHZPYkVW993YilF228nMhw=";
+    hash = "sha256-EtVZ0g9LD6dWA70/E1Ad/RWJjbvrAzU2hF3n6CdTMBE=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   postPatch = ''
     substituteInPlace shared/usbid/load.go \
@@ -98,6 +99,10 @@ buildGoModule rec {
 
   passthru.tests.lxd = nixosTests.lxd;
   passthru.tests.lxd-nftables = nixosTests.lxd-nftables;
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/lxc/lxd.git";
+    rev-prefix = "lxd-";
+  };
 
   meta = with lib; {
     description = "Daemon based on liblxc offering a REST API to manage containers";

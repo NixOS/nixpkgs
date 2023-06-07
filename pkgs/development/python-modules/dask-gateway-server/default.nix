@@ -5,23 +5,25 @@
 , cryptography
 , fetchFromGitHub
 , go
+, pykerberos
 , pythonOlder
+, skein
+, sqlalchemy
 , traitlets
 }:
 
 buildPythonPackage rec {
   pname = "dask-gateway-server";
-  # update dask-gateway-server lock step with dask-gateway
-  version = "2022.4.0";
+  version = "2022.10.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-gateway";
     rev = version;
-    hash = "sha256-Grjp7gt3Pos4cQSGV/Rynz6W/zebRI0OqDiWT4cTh8I=";
+    hash = "sha256-8yyako49F3rK8oZFmpYOiLVg9K3YF76/XerapQx3uhc=";
   };
 
   sourceRoot = "${src.name}/${pname}";
@@ -37,9 +39,24 @@ buildPythonPackage rec {
     traitlets
   ];
 
+  passthru.optional-dependencies = {
+    kerberos = [
+      pykerberos
+    ];
+    jobqueue = [
+      sqlalchemy
+    ];
+    local = [
+      sqlalchemy
+    ];
+    yarn = [
+      skein
+      sqlalchemy
+    ];
+  };
+
   preBuild = ''
     export HOME=$(mktemp -d)
-    export GO111MODULE=off
   '';
 
   # Tests requires cluster for testing

@@ -2,13 +2,13 @@
 
 xmrig.overrideAttrs (oldAttrs: rec {
   pname = "xmrig-mo";
-  version = "6.19.1-mo1";
+  version = "6.19.3-mo1";
 
   src = fetchFromGitHub {
     owner = "MoneroOcean";
     repo = "xmrig";
     rev = "v${version}";
-    sha256 = "sha256-wrjn1QhHI/OeSpPkwuwqQAsTOW8O/lNqIgKjkjxSbbA=";
+    sha256 = "sha256-0yH+EFhzhDS/75AIjMiFbkQuHfPaJRzdr7n4/WBkeNM=";
   };
 
   meta = with lib; {

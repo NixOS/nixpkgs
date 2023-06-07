@@ -19,6 +19,7 @@
 , pkg-config, glib, libsecret
 , gzip # needed at runtime by gitweb.cgi
 , withSsh ? false
+, sysctl
 , doInstallCheck ? !stdenv.isDarwin  # extremely slow on darwin
 , tests
 }:
@@ -28,7 +29,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.39.2";
+  version = "2.40.1";
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
 in
@@ -41,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "R1918Tc7LNTkOHBhhRdZZtXBH2jE2x5IwmJXxD3c8tY=";
+    hash = "sha256-SJO4uY7vyf3EsOfKJJ40AAT6p4BKQz0XQp4xHh/vIdI=";
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -214,8 +215,6 @@ stdenv.mkDerivation (finalAttrs: {
                   --set PERL5LIB   "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
       wrapProgram $out/libexec/git-core/git-cvsimport \
                   --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
-      wrapProgram $out/libexec/git-core/git-add--interactive \
-                  --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
       wrapProgram $out/libexec/git-core/git-archimport \
                   --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
       wrapProgram $out/libexec/git-core/git-instaweb \
@@ -292,6 +291,8 @@ stdenv.mkDerivation (finalAttrs: {
     "DEFAULT_TEST_TARGET=prove"
     "PERL_PATH=${buildPackages.perl}/bin/perl"
   ];
+
+  nativeInstallCheckInputs = lib.optional stdenv.isDarwin sysctl;
 
   preInstallCheck = ''
     installCheckFlagsArray+=(

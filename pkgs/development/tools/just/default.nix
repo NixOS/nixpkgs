@@ -6,11 +6,13 @@
 , bash
 , installShellFiles
 , libiconv
+, mdbook
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
   version = "1.13.0";
+  outputs = [ "out" "man" "doc" ];
 
   src = fetchFromGitHub {
     owner = "casey";
@@ -21,7 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-91C/5m2avsW7GKQDg/Ez9fzzFhe8ih1De1RbV/MBJbM=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles mdbook ];
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   preCheck = ''
@@ -42,6 +44,15 @@ rustPlatform.buildRustPackage rec {
     cp $TMPDIR/string.rs tests/string.rs
   '';
 
+  postBuild = ''
+    cargo run --package generate-book
+
+    # No linkcheck in sandbox
+    echo 'optional = true' >> book/en/book.toml
+    mdbook build book/en
+    find .
+  '';
+
   checkFlags = [
     "--skip=edit" # trying to run "vim" fails as there's no /usr/bin/env or which in the sandbox to find vim and the dependency is not easily patched
     "--skip=run_shebang" # test case very rarely fails with "Text file busy"
@@ -49,6 +60,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
+    mkdir -p $doc/share/doc/$name
+    mv ./book/en/build/html $doc/share/doc/$name
     installManPage man/just.1
 
     installShellCompletion --cmd just \

@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gexiv2";
-  version = "0.14.0";
+  version = "0.14.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "5YJ5pv8gtvZPpJlhXaXptXz2W6eFC3L6/fFyIanW1p4=";
+    sha256 = "7D7j7DhguceJWKVdqJz3auIwWEjhL0GUW3tSEk2PbPk=";
   };
 
   nativeBuildInputs = [
@@ -51,8 +51,13 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=true"
-    "-Dpython3_girdir=${placeholder "out"}/${python3.sitePackages}/gi/overrides"
+    "-Dtests=true"
   ];
+
+  # Needed for darwin due to std::auto_ptr in exiv2 header files & enabling C++ 17
+  # https://github.com/Exiv2/exiv2/issues/2359
+  # https://gitlab.gnome.org/GNOME/gexiv2/-/issues/73
+  env.NIX_CFLAGS_COMPILE = "-D_LIBCPP_ENABLE_CXX17_REMOVED_AUTO_PTR";
 
   doCheck = true;
 

@@ -18,7 +18,6 @@
 , gdk-pixbuf
 , glib
 , gtk3
-, imagemagick
 , libappindicator-gtk3
 , libdbusmenu
 , libdrm
@@ -37,11 +36,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tidal-hifi";
-  version = "4.4.0";
+  version = "5.1.0";
 
   src = fetchurl {
     url = "https://github.com/Mastermindzh/tidal-hifi/releases/download/${version}/tidal-hifi_${version}_amd64.deb";
-    sha256 = "sha256-6KlcxBV/zHN+ZnvIu1PcKNeS0u7LqhDqAjbXawT5Vv8=";
+    sha256 = "sha256-IaSgul2L0L343TVT3ujgBoMt6tITwjJaBNOVJPCBDtI=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper ];
@@ -61,7 +60,6 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     glib
     gtk3
-    imagemagick
     pango
     systemd
     mesa # for libgbm
@@ -110,12 +108,6 @@ stdenv.mkDerivation rec {
       "''${gappsWrapperArgs[@]}"
     substituteInPlace $out/share/applications/tidal-hifi.desktop \
       --replace "/opt/tidal-hifi/tidal-hifi" "tidal-hifi"
-
-    for size in 48 64 128 256 512; do
-      mkdir -p $out/share/icons/hicolor/''${size}x''${size}/apps/
-      convert $out/share/icons/hicolor/0x0/apps/tidal-hifi.png \
-        -resize ''${size}x''${size} $out/share/icons/hicolor/''${size}x''${size}/apps/icon.png
-    done
   '';
 
   meta = with lib; {

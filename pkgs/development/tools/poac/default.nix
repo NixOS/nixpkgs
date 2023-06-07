@@ -7,7 +7,6 @@
 , git2-cpp
 , cacert
 , boost179
-, fmt_8
 , icu
 , libarchive
 , libgit2
@@ -60,7 +59,6 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DPOAC_BUILD_TESTING=OFF"
     "-DCPM_SOURCE_CACHE=${placeholder "out"}/share"
-    "-DFETCHCONTENT_SOURCE_DIR_FMT=${fmt_8}"
     "-DFETCHCONTENT_SOURCE_DIR_GIT2-CPP=${git2-cpp.src}"
     "-DFETCHCONTENT_SOURCE_DIR_GLOB=${glob}"
     "-DFETCHCONTENT_SOURCE_DIR_PACKAGEPROJECT.CMAKE=${package-project-cmake.src}"
@@ -76,7 +74,6 @@ stdenv.mkDerivation rec {
       enableShared = stdenv.isDarwin;
       enableStatic = !stdenv.isDarwin;
     })
-    fmt_8
     git2-cpp
     glob
     package-project-cmake

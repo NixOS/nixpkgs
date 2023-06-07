@@ -402,6 +402,18 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         )
         if not (items := walk_and_emit(toc, toc_depth)):
             return ""
+        examples = ""
+        if toc.examples:
+            examples_entries = [
+                f'<dt>{i + 1}. <a href="{ex.target.href()}">{ex.target.toc_html}</a></dt>'
+                for i, ex in enumerate(toc.examples)
+            ]
+            examples = (
+                '<div class="list-of-examples">'
+                '<p><strong>List of Examples</strong><p>'
+                f'<dl>{"".join(examples_entries)}</dl>'
+                '</div>'
+            )
         return (
             f'<div class="toc">'
             f' <p><strong>Table of Contents</strong></p>'
@@ -409,6 +421,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             f'  {"".join(items)}'
             f' </dl>'
             f'</div>'
+            f'{examples}'
         )
 
     def _make_hN(self, level: int) -> tuple[str, str]:
@@ -513,6 +526,25 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
             self._redirection_targets.add(into)
         return tokens
 
+    def _number_examples(self, tokens: Sequence[Token], start: int = 1) -> int:
+        for (i, token) in enumerate(tokens):
+            if token.type == "example_title_open":
+                title = tokens[i + 1]
+                assert title.type == 'inline' and title.children
+                # the prefix is split into two tokens because the xref title_html will want
+                # only the first of the two, but both must be rendered into the example itself.
+                title.children = (
+                    [
+                        Token('text', '', 0, content=f'Example {start}'),
+                        Token('text', '', 0, content='. ')
+                    ] + title.children
+                )
+                start += 1
+            elif token.type.startswith('included_') and token.type != 'included_options':
+                for sub, _path in token.meta['included']:
+                    start = self._number_examples(sub, start)
+        return start
+
     # xref | (id, type, heading inlines, file, starts new file)
     def _collect_ids(self, tokens: Sequence[Token], target_file: str, typ: str, file_changed: bool
                      ) -> list[XrefTarget | tuple[str, str, Token, str, bool]]:
@@ -534,6 +566,8 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
                 subtyp = bt.type.removeprefix('included_').removesuffix('s')
                 for si, (sub, _path) in enumerate(bt.meta['included']):
                     result += self._collect_ids(sub, sub_file, subtyp, si == 0 and sub_file != target_file)
+            elif bt.type == 'example_open' and (id := cast(str, bt.attrs.get('id', ''))):
+                result.append((id, 'example', tokens[i + 2], target_file, False))
             elif bt.type == 'inline':
                 assert bt.children
                 result += self._collect_ids(bt.children, target_file, typ, False)
@@ -558,6 +592,11 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
             title = prefix + title_html
             toc_html = f"{n}. {title_html}"
             title_html = f"Appendix&nbsp;{n}"
+        elif typ == 'example':
+            # skip the prepended `Example N. ` from _number_examples
+            toc_html, title = self._renderer.renderInline(inlines.children[2:]), title_html
+            # xref title wants only the prepended text, sans the trailing colon and space
+            title_html = self._renderer.renderInline(inlines.children[0:1])
         else:
             toc_html, title = title_html, title_html
             title_html = (
@@ -569,6 +608,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
         return XrefTarget(id, title_html, toc_html, re.sub('<.*?>', '', title), path, drop_fragment)
 
     def _postprocess(self, infile: Path, outfile: Path, tokens: Sequence[Token]) -> None:
+        self._number_examples(tokens)
         xref_queue = self._collect_ids(tokens, outfile.name, 'book', True)
 
         failed = False

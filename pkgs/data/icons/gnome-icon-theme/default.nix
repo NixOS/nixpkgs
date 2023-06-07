@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   dontDropIconThemeCache = true;
 
-  postInstall = ''
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isMusl) ''
     # remove a tree of dirs with no files within
     rm -r "$out/share/locale"
   '';

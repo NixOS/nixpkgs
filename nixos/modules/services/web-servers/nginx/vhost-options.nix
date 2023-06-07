@@ -27,12 +27,35 @@ with lib;
     };
 
     listen = mkOption {
-      type = with types; listOf (submodule { options = {
-        addr = mkOption { type = str;  description = lib.mdDoc "IP address.";  };
-        port = mkOption { type = port;  description = lib.mdDoc "Port number."; default = 80; };
-        ssl  = mkOption { type = bool; description = lib.mdDoc "Enable SSL.";  default = false; };
-        extraParameters = mkOption { type = listOf str; description = lib.mdDoc "Extra parameters of this listen directive."; default = []; example = [ "backlog=1024" "deferred" ]; };
-      }; });
+      type = with types; listOf (submodule {
+        options = {
+          addr = mkOption {
+            type = str;
+            description = lib.mdDoc "IP address.";
+          };
+          port = mkOption {
+            type = port;
+            description = lib.mdDoc "Port number.";
+            default = 80;
+          };
+          ssl = mkOption {
+            type = bool;
+            description = lib.mdDoc "Enable SSL.";
+            default = false;
+          };
+          proxyProtocol = mkOption {
+            type = bool;
+            description = lib.mdDoc "Enable PROXY protocol.";
+            default = false;
+          };
+          extraParameters = mkOption {
+            type = listOf str;
+            description = lib.mdDoc "Extra parameters of this listen directive.";
+            default = [ ];
+            example = [ "backlog=1024" "deferred" ];
+          };
+        };
+      });
       default = [];
       example = [
         { addr = "195.154.1.1"; port = 443; ssl = true; }
@@ -45,7 +68,7 @@ with lib;
         and `onlySSL`.
 
         If you only want to set the addresses manually and not
-        the ports, take a look at `listenAddresses`
+        the ports, take a look at `listenAddresses`.
       '';
     };
 

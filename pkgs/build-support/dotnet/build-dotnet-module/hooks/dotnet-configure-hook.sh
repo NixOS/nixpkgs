@@ -39,6 +39,8 @@ cat <<EOF > "./NuGet.config"
 </configuration>
 EOF
 
+    env dotnet tool restore --add-source "@nugetSource@/lib"
+
     for project in ${projectFile[@]} ${testProjectFile[@]-}; do
         dotnetRestore "$project"
     done

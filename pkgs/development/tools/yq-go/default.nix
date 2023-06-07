@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "yq-go";
-  version = "4.33.2";
+  version = "4.34.1";
 
   src = fetchFromGitHub {
     owner = "mikefarah";
     repo = "yq";
     rev = "v${version}";
-    hash = "sha256-z4TSc6thjWoaucx2RBDDqK+f6689cympifGzzF4N07E=";
+    hash = "sha256-rkf3yoTB7umGHvbVb7eg21a4AJTyYOuWf4jHs274SGc=";
   };
 
-  vendorHash = "sha256-aaQxW8fvDaOb49rsTw92WVWgtbJJHH7e92ChuhKI4ME=";
+  vendorHash = "sha256-726kRRxFj7tqVguPDiHuPpHRN2+FDsqBtIJ4J8I/0Oc=";
 
   nativeBuildInputs = [ installShellFiles ];
 

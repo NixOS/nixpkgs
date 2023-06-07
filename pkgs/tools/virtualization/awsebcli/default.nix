@@ -1,4 +1,4 @@
-{ lib, python3, glibcLocales, docker-compose_1 }:
+{ lib, python3, fetchPypi, glibcLocales, docker-compose_1 }:
 let
   docker_compose = changeVersion (with localPython.pkgs; docker-compose_1.override {
     inherit colorama pyyaml six dockerpty docker jsonschema requests websocket-client paramiko;
@@ -25,7 +25,7 @@ let
             PYTHONPATH="tests/lib3:$PYTHONPATH" ${localPython.interpreter} -m test_all
             runHook postCheck
           '';
-          src = localPython.pkgs.fetchPypi {
+          src = fetchPypi {
             pname = "PyYAML";
             inherit version;
             hash = "sha256-YHd0y7oocyv6gCtUuqdIQhX1MJkQVbtWLvvtWy8gpF4=";
@@ -36,11 +36,11 @@ let
 in
 with localPython.pkgs; buildPythonApplication rec {
   pname = "awsebcli";
-  version = "3.20.5";
+  version = "3.20.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EoSEanwGvP3RcemXrVy7iAGrY/vMC6LbwcrXj2OsF8Q=";
+    hash = "sha256-9n6nObYoZlOKgQvSdNqHLRr+RlDoKfR3fgD7Xa9wPzM=";
   };
 
 
