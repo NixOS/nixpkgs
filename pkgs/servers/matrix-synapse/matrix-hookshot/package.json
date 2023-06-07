@@ -1,6 +1,6 @@
 {
   "name": "matrix-hookshot",
-  "version": "4.1.0",
+  "version": "4.2.0",
   "description": "A bridge between Matrix and multiple project management services, such as GitHub, GitLab and JIRA.",
   "main": "lib/app.js",
   "repository": "https://github.com/matrix-org/matrix-hookshot",
