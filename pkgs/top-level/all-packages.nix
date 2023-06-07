@@ -5193,6 +5193,8 @@ with pkgs;
 
   hdate = callPackage ../applications/misc/hdate { };
 
+  headache = callPackage ../development/tools/headache { };
+
   heatseeker = callPackage ../tools/misc/heatseeker { };
 
   hebcal = callPackage ../tools/misc/hebcal { };
