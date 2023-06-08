@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 let
   cfg = config.services.keter;
-  yaml = pkgs.formats.yaml {};
+  yaml = pkgs.formats.yaml { };
 in
 {
   meta = {
@@ -52,7 +52,7 @@ Keep an old app running and swap the ports when the new one is booted.
                 };
                 port = lib.mkOption {
                   type = lib.types.int;
-                  description =  lib.mdDoc "port";
+                  description = lib.mdDoc "port";
                 };
               };
             });
