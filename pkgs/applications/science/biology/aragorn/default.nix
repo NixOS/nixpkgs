@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl, installShellFiles }:
+{ lib
+, stdenv
+, fetchurl
+, installShellFiles
+}:
 let
   man = fetchurl {
     url = "https://web.archive.org/web/20230608093053if_/http://www.ansikte.se/ARAGORN/Downloads/aragorn.1";
@@ -6,12 +10,12 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.2.41";
   pname = "aragorn";
 
   src = fetchurl {
-    url = "http://www.ansikte.se/ARAGORN/Downloads/aragorn${version}.c";
+    url = "http://www.ansikte.se/ARAGORN/Downloads/aragorn${finalAttrs.version}.c";
     hash = "sha256-kqMcxcCwrRbU17AZkZibd18H0oFd8TX+bj6riPXpf0o=";
   };
 
@@ -22,12 +26,20 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
+    runHook preBuild
+
     $CC -O3 -ffast-math -finline-functions -o aragorn $src
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin && cp aragorn $out/bin
     installManPage ${man}
+
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -37,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.bzizou ];
     platforms = platforms.unix;
   };
-}
+})
