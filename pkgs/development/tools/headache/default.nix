@@ -1,4 +1,6 @@
-{ lib, buildDunePackage, fetchFromGitHub, camomile }:
+{ lib, fetchFromGitHub, ocamlPackages }:
+
+with ocamlPackages;
 
 buildDunePackage rec {
   pname = "headache";

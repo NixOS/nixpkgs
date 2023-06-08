@@ -21,7 +21,7 @@ let
 
   makeFdb =
     { version
-    , sha256
+    , hash
     , rev ? "refs/tags/${version}"
     , officialRelease ? true
     , patches ? []
@@ -34,7 +34,7 @@ let
         src = fetchFromGitHub {
           owner = "apple";
           repo  = "foundationdb";
-          inherit rev sha256;
+          inherit rev hash;
         };
 
         buildInputs = [ ssl boost msgpack toml11 ];

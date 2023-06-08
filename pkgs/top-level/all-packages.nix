@@ -897,6 +897,8 @@ with pkgs;
 
   packr = callPackage ../development/libraries/packr { };
 
+  pacproxy = callPackage ../tools/networking/pacproxy { };
+
   perseus-cli = callPackage ../development/tools/perseus-cli {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -2402,9 +2404,7 @@ with pkgs;
 
   pcem = callPackage ../applications/emulators/pcem { };
 
-  pcsx2 = callPackage ../applications/emulators/pcsx2 {
-    wxGTK = wxGTK32;
-  };
+  pcsx2 = qt6Packages.callPackage ../applications/emulators/pcsx2 { };
 
   pcsxr = callPackage ../applications/emulators/pcsxr { };
 
@@ -5198,6 +5198,8 @@ with pkgs;
   has = callPackage ../applications/misc/has { };
 
   hdate = callPackage ../applications/misc/hdate { };
+
+  headache = callPackage ../development/tools/headache { };
 
   heatseeker = callPackage ../tools/misc/heatseeker { };
 
@@ -11563,7 +11565,7 @@ with pkgs;
 
   cnping = callPackage ../tools/networking/cnping { };
 
-  past-time = python3Packages.callPackage ../tools/misc/past-time { };
+  past-time = callPackage ../tools/misc/past-time { };
 
   pastebinit = callPackage ../tools/misc/pastebinit { };
 
@@ -14905,6 +14907,8 @@ with pkgs;
   eli = callPackage ../development/compilers/eli { };
 
   eql = callPackage ../development/compilers/eql { };
+
+  erg = callPackage ../development/compilers/erg { };
 
   elm2nix = haskell.lib.compose.justStaticExecutables haskellPackages.elm2nix;
 
@@ -18438,9 +18442,7 @@ with pkgs;
 
   emma = callPackage ../development/tools/analysis/emma { };
 
-  ent-go = callPackage ../development/tools/ent {
-    buildGoModule = buildGo119Module; # go 1.20 build failure
-  };
+  ent-go = callPackage ../development/tools/ent { };
 
   epm = callPackage ../development/tools/misc/epm { };
 
@@ -19891,12 +19893,6 @@ with pkgs;
   boolstuff = callPackage ../development/libraries/boolstuff { };
 
   inherit (callPackage ../development/libraries/boost { inherit (buildPackages) boost-build; })
-    boost168
-    boost169
-    boost170
-    boost172
-    boost173
-    boost174
     boost175
     boost177
     boost178
@@ -19906,7 +19902,6 @@ with pkgs;
     boost182
   ;
 
-  boost16x = boost169;
   boost17x = boost179;
   boost18x = boost182;
   boost = boost17x;
@@ -23828,6 +23823,8 @@ with pkgs;
   rapidjson = callPackage ../development/libraries/rapidjson { };
 
   rapidxml = callPackage ../development/libraries/rapidxml { };
+
+  rapidyaml = callPackage ../development/libraries/rapidyaml {};
 
   raul = callPackage ../development/libraries/audio/raul { };
 
@@ -31581,6 +31578,8 @@ with pkgs;
 
   waybar = callPackage ../applications/misc/waybar { };
 
+  waycorner = callPackage ../applications/misc/waycorner { };
+
   waylock = callPackage ../applications/misc/waylock {
     zig = buildPackages.zig_0_10;
   };
@@ -37384,10 +37383,7 @@ with pkgs;
 
   xbomb = callPackage ../games/xbomb { };
 
-  xconq = callPackage ../games/xconq {
-    tcl = tcl-8_5;
-    tk = tk-8_5;
-  };
+  xconq = callPackage ../games/xconq { };
 
   xcowsay = callPackage ../games/xcowsay { };
 

@@ -9,8 +9,8 @@ let
   cmakeBuild = import ./cmake.nix args;
 in {
   foundationdb71 = cmakeBuild {
-    version = "7.1.30";
-    sha256  = "sha256-dAnAE1m2NZLHgP4QJvURBPcxArXvWWdhqEYwh3tU+tU";
+    version = "7.1.32";
+    hash    = "sha256-CNJ4w1ECadj2KtcfbBPBQpXQeq9BAiw54hUgRTWPFzY=";
     boost   = boost178;
     ssl     = openssl;
 
