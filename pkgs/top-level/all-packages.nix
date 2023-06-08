@@ -14532,6 +14532,8 @@ with pkgs;
 
   fzf-git-sh = callPackage ../shells/fzf-git-sh { };
 
+  hishtory = callPackage ../shells/hishtory { };
+
   ion = callPackage ../shells/ion { };
 
   jush = callPackage ../shells/jush { };
