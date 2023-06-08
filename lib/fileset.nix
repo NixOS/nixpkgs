@@ -186,7 +186,7 @@ let
       if value._isLibCleanSourceWith or false then
         throw ''
           lib.fileset.${function}: Expected ${context} to be a path, but it's a value produced by `lib.sources` instead.
-              Such a value is only supported when converted to a file set using `lib.fileset.impureFromSource`.''
+              Such a value is only supported when converted to a file set using `lib.fileset.fromSource`.''
       else if isCoercibleToString value then
         throw ''
           lib.fileset.${function}: Expected ${context} to be a path, but it's a string-coercible value instead, possibly a Nix store path.
@@ -587,6 +587,24 @@ in {
     };
 
   /*
+  Create a file set from a filtered local source as produced by the `lib.sources` functions.
+  This does not import anything into the store.
+
+  Type:
+    fromSource :: SourceLike -> FileSet
+
+  Example:
+    fromSource (lib.sources.cleanSource ./.)
+  */
+  fromSource = source:
+    if ! source._isLibCleanSourceWith or false || ! source ? origSrc || ! source ? filter then
+      throw "lib.fileset.fromSource: Expected the argument to be a value produced from `lib.sources`, but got a ${typeOf source} instead."
+    else if ! isPath source.origSrc then
+      throw "lib.fileset.fromSource: Expected the argument to be source-like value of a local path."
+    else
+      _fromSource source.origSrc source.filter;
+
+  /*
   Coerce a value to a file set:
 
   - If the value is a file set already, return it directly
@@ -602,22 +620,6 @@ in {
   */
   coerce = value: _coerce "coerce" "argument" value;
 
-  /*
-  Create a file set from a filtered source as produced by the `lib.sources` functions.
-
-  This function may be impure because the `lib.sources`-based file filters have access to the absolute file paths, which can be altered without changing any files in the project.
-
-  Type:
-    impureFromSource :: SourceLike -> FileSet
-
-  Example:
-    impureFromSource (lib.sources.cleanSource ./.)
-  */
-  impureFromSource = source:
-    if ! source._isLibCleanSourceWith or false || ! source ? origSrc || ! source ? filter then
-      throw "lib.fileset.impureFromSource: Expected the argument to be a value produced from `lib.sources`, but got a ${typeOf source} instead."
-    else
-      _fromSource source.origSrc source.filter;
 
   /*
   Create a file set containing all files contained in a path (see `coerce`), or no files if the path doesn't exist.
