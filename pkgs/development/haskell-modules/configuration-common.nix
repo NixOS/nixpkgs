@@ -1047,42 +1047,6 @@ self: super: {
   # jailbreak tasty < 1.2 until servant-docs > 0.11.3 is on hackage.
   snap-templates = doJailbreak super.snap-templates; # https://github.com/snapframework/snap-templates/issues/22
 
-  inherit (
-    let
-      # Copy hledger man pages from the source traball into the proper place.
-      # It always contains the relevant man page(s) at the top level. For
-      # hledger it additionally has all the other man pages in embeddedfiles/
-      # which we ignore.
-      installHledgerManPages = overrideCabal (drv: {
-        postInstall = ''
-          for i in $(seq 1 9); do
-            for j in *.$i; do
-              mkdir -p $out/share/man/man$i
-              cp -v $j $out/share/man/man$i/
-            done
-          done
-          mkdir -p $out/share/info
-          cp -v *.info* $out/share/info/
-        '';
-      });
-
-      hledgerWebTestFix = overrideCabal (drv: {
-        preCheck = ''
-          ${drv.preCheck or ""}
-          export HOME="$(mktemp -d)"
-        '';
-      });
-    in
-    {
-      hledger = installHledgerManPages super.hledger;
-      hledger-web = installHledgerManPages (hledgerWebTestFix super.hledger-web);
-      hledger-ui = installHledgerManPages super.hledger-ui;
-    }
-  ) hledger
-    hledger-web
-    hledger-ui
-    ;
-
   hledger_1_30_1 = doDistribute (super.hledger_1_30_1.override {
     hledger-lib = self.hledger-lib_1_30;
   });

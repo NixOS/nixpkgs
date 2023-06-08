@@ -214,6 +214,43 @@ self: super: builtins.intersectAttrs super {
     '';
   }) super.nvvm;
 
+  # hledger* overrides
+  inherit (
+    let
+      # Copy hledger man pages from the source tarball into the proper place.
+      # It always contains the relevant man page(s) at the top level. For
+      # hledger it additionally has all the other man pages in embeddedfiles/
+      # which we ignore.
+      installHledgerManPages = overrideCabal (drv: {
+        postInstall = ''
+          for i in $(seq 1 9); do
+            for j in *.$i; do
+              mkdir -p $out/share/man/man$i
+              cp -v $j $out/share/man/man$i/
+            done
+          done
+          mkdir -p $out/share/info
+          cp -v *.info* $out/share/info/
+        '';
+      });
+
+      hledgerWebTestFix = overrideCabal (drv: {
+        preCheck = ''
+          ${drv.preCheck or ""}
+          export HOME="$(mktemp -d)"
+        '';
+      });
+    in
+    {
+      hledger = installHledgerManPages super.hledger;
+      hledger-web = installHledgerManPages (hledgerWebTestFix super.hledger-web);
+      hledger-ui = installHledgerManPages super.hledger-ui;
+    }
+  ) hledger
+    hledger-web
+    hledger-ui
+    ;
+
   cufft = overrideCabal (drv: {
     preConfigure = ''
       export CUDA_PATH=${pkgs.cudatoolkit}
