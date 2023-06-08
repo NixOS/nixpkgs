@@ -14907,6 +14907,8 @@ with pkgs;
 
   eql = callPackage ../development/compilers/eql { };
 
+  erg = callPackage ../development/compilers/erg { };
+
   elm2nix = haskell.lib.compose.justStaticExecutables haskellPackages.elm2nix;
 
   elmPackages = recurseIntoAttrs (callPackage ../development/compilers/elm { });
