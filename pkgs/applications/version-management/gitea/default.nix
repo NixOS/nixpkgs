@@ -34,7 +34,7 @@ buildGoModule rec {
   ];
 
   postPatch = ''
-    substituteInPlace modules/setting/setting.go --subst-var data
+    substituteInPlace modules/setting/server.go --subst-var data
   '';
 
   subPackages = [ "." ];
