@@ -169,6 +169,12 @@ self: super: {
    ];
   }) super.vector;
 
+  # Almost guaranteed failure due to floating point imprecision with QuickCheck-2.14.3
+  # https://github.com/haskell/math-functions/issues/73
+  math-functions = overrideCabal (drv: {
+    testFlags = drv.testFlags or [] ++ [ "-p" "! /Kahan.t_sum_shifted/" ];
+  }) super.math-functions;
+
   # There are numerical tests on random data, that may fail occasionally
   lapack = dontCheck super.lapack;
 
@@ -1049,8 +1055,8 @@ self: super: {
       cp -v embeddedfiles/*.info* $out/share/info/
     '';
   }) super.hledger;
-  hledger_1_29_2 = doDistribute (super.hledger_1_29_2.override {
-    hledger-lib = self.hledger-lib_1_29_2;
+  hledger_1_30_1 = doDistribute (super.hledger_1_30_1.override {
+    hledger-lib = self.hledger-lib_1_30;
   });
   hledger-ui = overrideCabal (drv: {
     postInstall = ''
