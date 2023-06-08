@@ -5668,7 +5668,6 @@ broken-packages:
   - util-plus
   - util-primitive
   - uuagc-bootstrap
-  - uuagc-cabal
   - uuagc-diagrams
   - uu-cco
   - uuid-aeson
