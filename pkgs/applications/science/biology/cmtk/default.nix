@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "cmtk";
-  version = "3.3.1";
+  version = "3.3.2";
 
   src = fetchurl {
     name = "cmtk-source.tar.gz";
-    url = "https://www.nitrc.org/frs/download.php/8198/CMTK-${version}-Source.tar.gz//?i_agree=1&download_now=1";
-    sha256 = "1nmsga9m7vcc4y4a6zl53ra3mwlgjwdgsq1j291awkn7zr1az6qs";
+    url = "https://www.nitrc.org/frs/download.php/13188/CMTK-${version}-Source.tar.gz//?i_agree=1&download_now=1";
+    hash = "sha256-iE164NCOSOypZLLZfZy9RTyrS+YnY9ECqfb4QhlsMS4=";
   };
 
   nativeBuildInputs = [ cmake ];
