@@ -897,6 +897,8 @@ with pkgs;
 
   packr = callPackage ../development/libraries/packr { };
 
+  pacproxy = callPackage ../tools/networking/pacproxy { };
+
   perseus-cli = callPackage ../development/tools/perseus-cli {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
