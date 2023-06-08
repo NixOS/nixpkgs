@@ -298,7 +298,12 @@ let
             ../modules/profiles/installation-device.nix
             ../modules/profiles/base.nix
             extraInstallerConfig
+            ./common/auto-format-root-device.nix
           ];
+
+          # In systemdStage1, also automatically format the device backing the
+          # root filesystem.
+          virtualisation.fileSystems."/".autoFormat = systemdStage1;
 
           # builds stuff in the VM, needs more juice
           virtualisation.diskSize = 8 * 1024;

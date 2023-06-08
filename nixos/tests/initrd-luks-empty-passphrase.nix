@@ -14,6 +14,8 @@ in {
   name = "initrd-luks-empty-passphrase";
 
   nodes.machine = { pkgs, ... }: {
+    imports = lib.optionals (!systemdStage1) [ ./common/auto-format-root-device.nix ];
+
     virtualisation = {
       emptyDiskImages = [ 512 ];
       useBootLoader = true;
@@ -23,6 +25,7 @@ in {
       # the new root device is /dev/vdb
       # an empty 512MiB drive, containing no Nix store.
       mountHostNixStore = true;
+      fileSystems."/".autoFormat = lib.mkIf systemdStage1 true;
     };
 
     boot.loader.systemd-boot.enable = true;
