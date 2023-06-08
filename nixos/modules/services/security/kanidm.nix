@@ -320,6 +320,7 @@ in
         ProtectHome = false;
         RestrictAddressFamilies = [ "AF_UNIX" ];
         TemporaryFileSystem = "/:ro";
+        Restart = "on-failure";
       };
       environment.RUST_LOG = "info";
     };
