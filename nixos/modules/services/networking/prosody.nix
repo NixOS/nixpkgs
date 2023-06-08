@@ -271,7 +271,7 @@ let
       mkKeyValue = k:
         generators.mkKeyValueDefault {
           mkValueString = toLua;
-          } " = " (prefix + k);
+        } " = " (prefix + k);
     }
     (filterAttrs (k: v: v != null) settings);
 
