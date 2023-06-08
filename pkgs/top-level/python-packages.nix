@@ -5490,6 +5490,8 @@ self: super: with self; {
 
   kneed = callPackage ../development/python-modules/kneed { };
 
+  knx-frontend = callPackage ../development/python-modules/knx-frontend { };
+
   kombu = callPackage ../development/python-modules/kombu { };
 
   konnected = callPackage ../development/python-modules/konnected { };
