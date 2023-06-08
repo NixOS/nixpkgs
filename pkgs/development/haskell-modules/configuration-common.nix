@@ -2369,6 +2369,10 @@ self: super: {
     sha256 = "1lpcz671mk5cwqffjfi9ncc0d67bmwgzypy3i37a2fhfmxd0y3nl";
   }) ((p: assert p.version == "4.0.0"; p) super.taffybar);
 
+  # Tests likely broke because of https://github.com/nick8325/quickcheck/issues/359,
+  # but fft is not on GitHub, so no issue reported.
+  fft = dontCheck super.fft;
+
   # lucid-htmx has restrictive upper bounds on lucid and servant:
   #
   #   Setup: Encountered missing or private dependencies:

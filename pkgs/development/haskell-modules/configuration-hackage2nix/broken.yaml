@@ -1498,7 +1498,6 @@ broken-packages:
   - Feval
   - fez-conf
   - ffeed
-  - fft
   - ffunctor
   - fgl-extras-decompositions
   - fib
