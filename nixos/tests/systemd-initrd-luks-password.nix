@@ -25,6 +25,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
         cryptroot2.device = "/dev/vdc";
       };
       virtualisation.rootDevice = "/dev/mapper/cryptroot";
+      virtualisation.fileSystems."/".autoFormat = true;
       # test mounting device unlocked in initrd after switching root
       virtualisation.fileSystems."/cryptroot2".device = "/dev/mapper/cryptroot2";
     };
