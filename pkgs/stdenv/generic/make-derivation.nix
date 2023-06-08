@@ -163,6 +163,23 @@ let
 
 , env ? { }
 
+# Only applies if `src` is unset
+# If set, requires srcWorkDir to be set too
+# Includes all files from the file set
+, srcFileset ? null
+
+, src ?
+    if srcFileset == null then
+      null
+    else if srcWorkDir == null then
+      throw "stdenv.mkDerivation: Setting the `srcFileset` attribute requires also setting the `srcWorkDir` attribute."
+    else
+      lib.fileset.toSource {
+        root = lib.path.commonAncestor (lib.fileset.getInfluenceBase srcFileset) srcWorkDir;
+        fileset = srcFileset;
+        extraExistingDirs = [ srcWorkDir ];
+      }
+
 , srcWorkDir ? null
 
 , sourceRoot ?
@@ -315,7 +332,7 @@ else let
   derivationArg =
     (removeAttrs attrs
       (["meta" "passthru" "pos"
-       "srcWorkDir"
+       "srcFileset" "srcWorkDir"
        "checkInputs" "installCheckInputs"
        "nativeCheckInputs" "nativeInstallCheckInputs"
        "__contentAddressed"
@@ -462,7 +479,7 @@ else let
 
       inherit outputs;
 
-      inherit sourceRoot;
+      inherit src sourceRoot;
 
     } // lib.optionalAttrs (__contentAddressed) {
       inherit __contentAddressed;
