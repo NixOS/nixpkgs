@@ -17798,6 +17798,11 @@ with pkgs;
 
   nil = callPackage ../development/tools/language-servers/nil { };
 
+  nixd = callPackage ../development/tools/language-servers/nixd {
+    llvmPackages = llvmPackages_16;
+    nix = nixVersions.nix_2_16;
+  };
+
   nls = callPackage ../development/tools/language-servers/nls { };
 
   pylyzer = callPackage ../development/tools/language-servers/pylyzer { };
