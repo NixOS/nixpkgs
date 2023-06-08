@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   # [1] https://github.com/requarks/wiki/discussions/6388
   # [2] https://nodejs.org/en/blog/release/v17.0.0
   # [3] https://nodejs.org/en/blog/release/v18.0.0
+  patches = [ ./drop-node-check.patch ];
   nativeBuildInputs = [ jq moreutils ];
   postPatch = ''
     # Dirty hack to implement nodejs-18 support.
