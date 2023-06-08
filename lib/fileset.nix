@@ -29,6 +29,7 @@ let
     head
     tail
     foldl'
+    range
     length
     elemAt
     all
@@ -38,8 +39,6 @@ let
     ;
 
   inherit (lib.strings)
-    optionalString
-    concatStringsSep
     isCoercibleToString
     ;
 
@@ -53,6 +52,10 @@ let
     pathType
     ;
 
+  inherit (lib.sources)
+    cleanSourceWith
+    ;
+
   inherit (lib.path)
     append
     deconstruct
@@ -62,7 +65,6 @@ let
     ;
 
   inherit (lib.path.components)
-    toSubpath
     fromSubpath
     ;
 
@@ -137,13 +139,13 @@ let
     else
       # Always coerce to a directory
       # If we don't do this we run into problems like:
-      # - What should `addToStore { base = ./default.nix; entryPoint = ./default.nix; fileset = difference ./default.nix ./default.nix; }` do?
+      # - What should `toSource { base = ./default.nix; fileset = difference ./default.nix ./default.nix; }` do?
       #   - Importing an empty directory wouldn't make much sense because our `base` is a file
       #   - Neither can we create a store path containing nothing at all
       #   - The only option is to throw an error that `base` should be a directory
       # - Should `fileFilter (file: file.name == "default.nix") ./default.nix` run the predicate on the ./default.nix file?
       #   - If no, should the result include or exclude ./default.nix? In any case, it would be confusing and inconsistent
-      #   - If yes, it needs to consider ./. to have influence the filesystem result, so filter would change the necessary base
+      #   - If yes, it needs to consider ./. to have influence the filesystem result, because file names are part of the parent directory, so filter would change the necessary base
       _create (dirOf path)
         (_nestTree
           (dirOf path)
@@ -464,37 +466,36 @@ let
 in {
 
   /*
-  Import a file set into the store.
-  This function takes an attribute set as an argument with these attributes:
+  Import a file set into the Nix store, making it usable inside derivations.
+  Return a source-like value that can be coerced to a Nix store path.
 
-  - `fileset`: The set of files to import into the store.
-    Use the `lib.fileset` combinator functions to define this value.
+  This function takes an attribute set with these attributes as an argument:
 
-  - `entryPoint`: The local directory that the resulting directory should focus on, meaning that if you `cd` into the resulting directory, all files in the fileset are accessible at paths relative to the `entryPoint`.
-    This means that changing this value likely also requires changes to the code consuming the result, so it should generally be avoided.
+  - `root` (required): The local path that should be the root of the result.
+    `fileset` must not be influenceable by paths outside `root`, meaning `lib.fileset.getInfluenceBase fileset` must be under `root`.
 
-  - `base` (optional, defaults to `entryPoint`): The directory under which all file set operations set must be contained.
-    This means that everything outside of this path cannot influence the result of this import, including the name of the `base` directory itself.
-    Changing `base` does not affect which files are available in the result, so it can generally be safely changed without breaking anything.
-    By changing `base` to a directory higher up, you can adjust the `fileset` to include more files that weren't under `base` before.
+    Warning: Setting `root` to `lib.fileset.getInfluenceBase fileset` directly would make the resulting Nix store path file structure dependent on how `fileset` is declared.
+    This makes it non-trivial to predict where specific paths are located in the result.
 
-  Note that directories containing no files that are in the `fileset` will not be imported into the store.
-  If you need to ensure such directories exist in the result, consider creating and including a hidden file.
+  - `fileset` (required): The set of files to import into the Nix store.
+    Use the other `lib.fileset` functions to define `fileset`.
+    Only directories containing at least one file are included in the result, unless `extraExistingDirs` is used to ensure the existence of specific directories even without any files.
+
+  - `extraExistingDirs` (optional, default `[]`): Additionally ensure the existence of these directory paths in the result, even they don't contain any files in `fileset`.
 
   Type:
-    addToStore :: {
-      (optional) base :: Path,
-      entryPoint :: Path,
+    toSource :: {
+      root :: Path,
       fileset :: FileSet,
-    } -> {
-      outPath :: String,
-      _root :: String,
-      _subpath :: String,
-    }
+      extraExistingDirs :: [ Path ] ? [ ],
+    } -> SourceLike
   */
-  addToStore = { name ? "source", base ? entryPoint, entryPoint, fileset }@args:
+  toSource = { root, fileset, extraExistingDirs ? [ ] }:
     let
-      actualFileset = _coerce "addToStore" "attribute `fileset`" fileset;
+      maybeFileset = fileset;
+    in
+    let
+      fileset = _coerce "toSource" "`fileset` attribute" maybeFileset;
 
       # Directories that recursively have no files in them will always be `null`
       sparseTree =
@@ -514,12 +515,37 @@ in {
                 sparseSubtrees
             else
               tree;
-          resultingTree = recurse actualFileset._base actualFileset._tree;
-          # The fileset's _base might be below the base of the `addToStore`, so we need to lift the tree up to `base`
-          extraBaseNesting = removePrefix base actualFileset._base;
-        in _nestTree base extraBaseNesting resultingTree;
+          resultingTree = recurse fileset._base fileset._tree;
+          # The fileset's _base might be below the root of the `toSource`, so we need to lift the tree up to `root`
+          extraRootNesting = removePrefix root fileset._base;
+        in _nestTree root extraRootNesting resultingTree;
 
-      baseComponentsLength = length (deconstruct base).components;
+      sparseExtendedTree =
+        if ! isList extraExistingDirs then
+          throw "lib.fileset.toSource: Expected the `extraExistingDirs` attribute to be a list, but it's a ${typeOf extraExistingDirs} instead."
+        else
+          lib.foldl' (tree: i:
+            let
+              dir = elemAt extraExistingDirs i;
+
+              # We're slightly abusing the internal functions and structure to ensure that the extra directory is represented in the sparse tree.
+              value = mapAttrs (name: value: null) (readDir dir);
+              extraTree = _nestTree root (removePrefix root dir) value;
+              result = _unionTree tree extraTree;
+            in
+            if ! isPath dir then
+              throw "lib.fileset.toSource: Expected all elements of the `extraExistingDirs` attribute to be paths, but element at index ${toString i} is a ${typeOf dir} instead."
+            else if ! pathExists dir then
+              throw "lib.fileset.toSource: Expected all elements of the `extraExistingDirs` attribute to be paths that exist, but the path at index ${toString i} \"${toString dir}\" does not."
+            else if pathType dir != "directory" then
+              throw "lib.fileset.toSource: Expected all elements of the `extraExistingDirs` attribute to be paths pointing to directories, but the path at index ${toString i} \"${toString dir}\" points to a file instead."
+            else if ! hasPrefix root dir then
+              throw "lib.fileset.toSource: Expected all elements of the `extraExistingDirs` attribute to be paths under the `root` attribute \"${toString root}\", but the path at index ${toString i} \"${toString dir}\" is not."
+            else
+              result
+          ) sparseTree (range 0 (length extraExistingDirs - 1));
+
+      rootComponentsLength = length (deconstruct root).components;
 
       # This function is called often for the filter, so it should be fast
       inSet = components:
@@ -531,60 +557,32 @@ in {
               recurse (index + 1) localTree.${elemAt components index}
             else
               localTree == "directory";
-        in recurse baseComponentsLength sparseTree;
-
-
-      assertPath = name: value:
-        if ! isPath value then
-          if value._isLibCleanSourceWith or false then
-            throw ''
-              lib.fileset.addToStore: Expected attribute `${name}` to be a path, but it's a value produced by `lib.sources` instead.
-                  Such a value is only supported when converted to a file set using `lib.fileset.impureFromSource` and passed to the `fileset` attribute, where it may also be combined using other functions from `lib.fileset`.''
-          else if isCoercibleToString value then
-            throw ''
-              lib.fileset.addToStore: Expected attribute `${name}` to be a path, but it's a string-like value instead, possibly a Nix store path.
-                  Such a value is not supported, `lib.fileset` only supports local file filtering.''
-          else
-            throw "lib.fileset.addToStore: Expected attribute `${name}` to be a path, but it's a ${typeOf value} instead."
-        else if pathType value != "directory" then
-          # This would also be caught by the `may be influenced` condition further down, because of how files always set their containing directories as the base
-          # We can catch this earlier here for a better error message
-          throw "lib.fileset.addToStore: The `${name}` attribute \"${toString value}\" is expected to be a path pointing to a directory, but it's pointing to a file instead."
-        else true;
+        in recurse rootComponentsLength sparseExtendedTree;
 
     in
-    assert assertPath "entryPoint" entryPoint;
-    assert assertPath "base" base;
-    if ! hasPrefix base entryPoint then
-      throw "lib.fileset.addToStore: The `entryPoint` attribute \"${toString entryPoint}\" is expected to be under the `base` attribute \"${toString base}\", but it's not."
-    else if ! hasPrefix base actualFileset._base then
-      throw ''
-        lib.fileset.addToStore: The file set may be influenced by files in "${toString actualFileset._base}", which is outside of the `base` attribute${optionalString (! args ? base) ", implicitly set to the same as the `entryPoint` attribute,"} "${toString base}". To resolve this:
-            - If "${toString actualFileset._base}" is inside your project directory, set the `base` attribute to the same value.
-            - If "${toString actualFileset._base}" is outside your project directory and you do not want it to be able to influence the contents of the file set, make sure to not use file set operations on such a directory.''
-    else if ! inSet (deconstruct entryPoint).components then
-      # This likely indicates a mistake, catching this here also ensures we don't have to handle this special case of a potential empty directory
-      throw "lib.fileset.addToStore: The file set contains no files under the `entryPoint` attribute \"${toString entryPoint}\"."
+    if ! isPath root then
+      if root._isLibCleanSourceWith or false then
+        throw ''
+          lib.fileset.toSource: Expected attribute `root` to be a path, but it's a value produced by `lib.sources` instead.
+              Such a value is only supported when converted to a file set using `lib.fileset.fromSource` and passed to the `fileset` attribute, where it may also be combined using other functions from `lib.fileset`.''
+      else if isCoercibleToString root then
+        throw ''
+          lib.fileset.toSource: Expected attribute `root` to be a path, but it's a string-like value instead, possibly a Nix store path.
+              Such a value is not supported, `lib.fileset` only supports local file filtering.''
+      else
+        throw "lib.fileset.toSource: Expected attribute `root` to be a path, but it's a ${typeOf root} instead."
+    else if ! pathExists root then
+      throw "lib.fileset.toSource: Expected attribute `root` \"${toString root}\" to be a path that exists, but it doesn't."
+    else if pathType root != "directory" then
+      throw "lib.fileset.toSource: Expected attribute `root` \"${toString root}\" to be a path pointing to a directory, but it's pointing to a file instead."
+    else if ! hasPrefix root fileset._base then
+      throw "lib.fileset.toSource: Expected attribute `fileset` to not be influenceable by any paths outside `root`, but `lib.fileset.getInfluenceBase fileset` \"${toString fileset._base}\" is outside `root`."
     else
-    let
-      # We're not using `lib.sources`, because sources with `_subpath` and `_root` can't be composed properly with those functions
-      # The default behavior of those functions reimporting the store path is more correct
-      root = builtins.path {
-        inherit name;
-        path = base;
+      cleanSourceWith {
+        name = "source";
+        src = root;
         filter = pathString: _: inSet (fromSubpath "./${pathString}");
       };
-      components = removePrefix base entryPoint;
-    in {
-      # TODO: Consider not exposing these properties and instead letting `mkDerivation` parse `src`, splitting the `outPath` itself. This would make this functionality more general.
-      _root = root;
-      _subpath = toSubpath components;
-      outPath =
-        if components == [] then
-          root
-        else
-          "${root}/${concatStringsSep "/" components}";
-    };
 
   /*
   Create a file set from a filtered local source as produced by the `lib.sources` functions.
