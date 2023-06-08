@@ -67,8 +67,9 @@ in {
         description = lib.mdDoc ''
           Whether to use a declarative Minecraft server configuration.
           Only if set to `true`, the options
-          {option}`services.minecraft-server.whitelist` and
-          {option}`services.minecraft-server.serverProperties` will be
+          {option}`services.minecraft-server.whitelist`,
+          {option}`services.minecraft-server.serverProperties` and
+          {option}`services.minecraft-server.serverIcon` will be
           applied.
         '';
       };
@@ -147,6 +148,18 @@ in {
           is set to `true`. See
           <https://minecraft.gamepedia.com/Server.properties#Java_Edition_3>
           for documentation on these values.
+        '';
+      };
+
+      serverIcon = mkOption {
+        type = with types; path // {
+          description = "path of a .png file";
+          check = x: path.check x && (strMatching ".*\\.png").check (toString x);
+        };
+        default = null;
+        description = lib.mdDoc ''
+          Server icon that shows up in the Multiplayer list. Must be a 64x64 PNG file.
+          Only has an effect when {option}`services.minecraft-server.declarative` is `true`.
         '';
       };
 
@@ -242,12 +255,18 @@ in {
           # Was declarative before, no need to back up anything
           ln -sf ${whitelistFile} whitelist.json
           cp -f ${serverPropertiesFile} server.properties
+      '' + lib.optionalString (cfg.serverIcon != null) ''
+          ln -sf ${cfg.serverIcon} server-icon.png
+      '' + ''
 
         else
 
           # Declarative for the first time, backup stateful files
           ln -sb --suffix=.stateful ${whitelistFile} whitelist.json
           cp -b --suffix=.stateful ${serverPropertiesFile} server.properties
+      '' + lib.optionalString (cfg.serverIcon != null) ''
+          ln -sb --suffix=.stateful ${cfg.serverIcon} server-icon.png
+      '' + ''
 
           # server.properties must have write permissions, because every time
           # the server starts it first parses the file and then regenerates it..
