@@ -413,6 +413,16 @@ in /* No rec! Add dependencies on this file at the top. */ {
           ${subpathInvalidReason subpath}'';
     joinRelPath (splitRelPath subpath);
 
+  commonAncestor = a: b:
+    let
+      a' = deconstructPath a;
+      b' = deconstructPath b;
+    in
+    if a'.root != b'.root then
+      throw "lib.path.commonAncestor: Given paths don't have the same filesystem root"
+    else
+      a'.root + ("/" + concatStringsSep "/" (lib.lists.commonPrefix a'.components b'.components));
+
   deconstruct = path: deconstructPath path;
   construct = { root, components }: root + ("/" + concatStringsSep "/" components);
 
