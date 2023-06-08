@@ -886,6 +886,17 @@
     };
     version = "0.5.3";
   };
+  erb-formatter = {
+    dependencies = ["syntax_tree"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1hr6q367ngnjjlclhjx8gma98dndmk04bj1pap5p5sqarn8ic01x";
+      type = "gem";
+    };
+    version = "0.4.3";
+  };
   erubi = {
     groups = ["default"];
     platforms = [];
