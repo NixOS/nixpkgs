@@ -222,15 +222,15 @@ self: super: builtins.intersectAttrs super {
       # hledger it additionally has all the other man pages in embeddedfiles/
       # which we ignore.
       installHledgerManPages = overrideCabal (drv: {
+        buildTools = drv.buildTools or [] ++ [
+          pkgs.buildPackages.installShellFiles
+        ];
         postInstall = ''
           for i in $(seq 1 9); do
-            for j in *.$i; do
-              mkdir -p $out/share/man/man$i
-              cp -v $j $out/share/man/man$i/
-            done
+            installManPage *.$i
           done
-          mkdir -p $out/share/info
-          cp -v *.info* $out/share/info/
+
+          install -v -Dm644 *.info* -t "$out/share/info/"
         '';
       });
 
