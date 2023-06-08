@@ -115,7 +115,7 @@ let
   # Type: Path -> <tree> -> <fileset>
   _create = base: tree: {
     _type = "fileset";
-    # All properties are internal
+    # All attributes are internal
     _base = base;
     _tree = tree;
     # Double __ to make it be evaluated and ordered first
@@ -634,6 +634,31 @@ in {
       _singleton path
     else
       _create path null;
+
+  /*
+  Return the common ancestor directory of all file set operations used to construct this file set, meaning that nothing outside the this directory can influence the set of files included.
+
+  Type:
+    getInfluenceBase :: FileSet -> Path
+
+  Example:
+    getInfluenceBase ./Makefile
+    => ./.
+
+    getInfluenceBase ./src
+    => ./src
+
+    getInfluenceBase (fileFilter (file: false) ./.)
+    => ./.
+
+    getInfluenceBase (union ./Makefile ../default.nix)
+    => ../.
+  */
+  getInfluenceBase = maybeFileset:
+    let
+      fileset = _coerce "getInfluenceBase" "argument" maybeFileset;
+    in
+    fileset._base;
 
   /*
   Incrementally evaluate and trace a file set in a pretty way.
