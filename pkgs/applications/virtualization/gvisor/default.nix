@@ -9,31 +9,20 @@
 
 buildGoModule rec {
   pname = "gvisor";
-  version = "20230529.0";
+  version = "20221102.1";
 
   # gvisor provides a synthetic go branch (https://github.com/google/gvisor/tree/go)
   # that can be used to build gvisor without bazel.
-  #
   # For updates, you should stick to the commits labeled "Merge release-** (automated)"
-  # Make sure to check that the tagged commit for a release aligns with the version in
-  # the message for good measure; e.g. the commit
-  #
-  #     142d38d770a07291877dc0d50b88b719dbef76dc is "Merge release-20230522.0-11-g919cfd12b (automated)"
-  #
-  # on the 'go' branch. But the mentioned commit, 919cfd12b..., is actually tagged as release-20230529.0
-  #
-  #    https://github.com/google/gvisor/releases/tag/release-202329.0
-  #
-  # Presumably this is a result of the release process. Handle with care.
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "gvisor";
-    rev = "142d38d770a07291877dc0d50b88b719dbef76dc";
-    hash = "sha256-Ukcjlz/6iUmDAUpQpIVfZHKbwK90Mt6fukcFaw64hQI=";
+    rev = "bf8eeee3a9eb966bc72c773da060a3c8bb73b8ff";
+    sha256 = "sha256-rADQsJ+AnBVlfQURGJl1xR6Ad5NyRWSrBSpOFMRld+o=";
   };
 
-  vendorHash = "sha256-COr47mZ4tsbzMjkv63l+fexo0RL5lrBXeewak9CuZVk=";
+  vendorSha256 = "sha256-iGLWxx/Kn1QaJTNOZcc+mwoF3ecEDOkaqmA0DH4pdgU=";
 
   nativeBuildInputs = [ makeWrapper ];
 
