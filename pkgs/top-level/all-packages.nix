@@ -22220,6 +22220,8 @@ with pkgs;
         CoreServices;
   };
 
+  libremines = qt6.callPackage ../games/libremines { };
+
   librelp = callPackage ../development/libraries/librelp { };
 
   librepo = callPackage ../tools/package-management/librepo {
