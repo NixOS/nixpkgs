@@ -791,11 +791,11 @@ in
 
     environment.etc."prosody/prosody.cfg.lua".text =
       let
-        httpDiscoItems =
-          optional (cfg.uploadHttp != null)
-            { url = cfg.uploadHttp.domain; description = "HTTP upload endpoint";} ++
-          optional (cfg.httpFileShare != null)
-            { url = cfg.httpFileShare.domain; description = "HTTP file share endpoint";};
+        httpDiscoItems = optional (cfg.uploadHttp != null) {
+          url = cfg.uploadHttp.domain; description = "HTTP upload endpoint";
+        } ++ optional (cfg.httpFileShare != null) {
+          url = cfg.httpFileShare.domain; description = "HTTP file share endpoint";
+        };
         mucDiscoItems = builtins.foldl'
             (acc: muc: [{ url = muc.domain; description = "${muc.domain} MUC endpoint";}] ++ acc)
             []
