@@ -1,5 +1,4 @@
 { lib
-, callPackage
 , buildPythonPackage
 , fetchPypi
 , installShellFiles
@@ -11,6 +10,7 @@
 , ncclient
 , packaging
 , paramiko
+, passlib
 , pexpect
 , psutil
 , pycrypto
@@ -50,6 +50,7 @@ buildPythonPackage rec {
     cryptography
     jinja2
     packaging
+    passlib
     pyyaml
     resolvelib # This library is a PITA, since ansible requires a very old version of it
     # optional dependencies
