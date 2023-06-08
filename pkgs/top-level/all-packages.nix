@@ -28874,6 +28874,8 @@ with pkgs;
 
   phinger-cursors = callPackage ../data/icons/phinger-cursors { };
 
+  phira = callPackage ../games/phira { };
+
   qogir-icon-theme = callPackage ../data/icons/qogir-icon-theme { };
 
   qogir-kde = callPackage ../data/themes/qogir-kde { };
