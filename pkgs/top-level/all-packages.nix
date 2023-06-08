@@ -4612,6 +4612,8 @@ with pkgs;
 
   dbus-broker = callPackage ../os-specific/linux/dbus-broker { };
 
+  dblab = callPackage ../development/tools/database/dblab { };
+
   dbx = callPackage ../applications/misc/dbx { };
 
   ioport = callPackage ../os-specific/linux/ioport { };
@@ -31326,9 +31328,7 @@ with pkgs;
 
   hexedit = callPackage ../applications/editors/hexedit { };
 
-  himalaya = callPackage ../applications/networking/mailreaders/himalaya {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  himalaya = callPackage ../applications/networking/mailreaders/himalaya { };
 
   hipchat = callPackage ../applications/networking/instant-messengers/hipchat { };
 
