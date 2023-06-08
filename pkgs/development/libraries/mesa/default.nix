@@ -210,6 +210,8 @@ self = stdenv.mkDerivation {
     # Rusticl, new OpenCL frontend
     "-Dgallium-rusticl=true" "-Drust_std=2021"
     "-Dclang-libdir=${llvmPackages.clang-unwrapped.lib}/lib"
+  ]  ++ lib.optionals (!withValgrind) [
+    "-Dvalgrind=disabled"
   ] ++ lib.optional enablePatentEncumberedCodecs
     "-Dvideo-codecs=h264dec,h264enc,h265dec,h265enc,vc1dec"
   ++ lib.optional (vulkanLayers != []) "-D vulkan-layers=${builtins.concatStringsSep "," vulkanLayers}";
