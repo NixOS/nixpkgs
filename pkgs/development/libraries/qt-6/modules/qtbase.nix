@@ -250,6 +250,10 @@ stdenv.mkDerivation rec {
     fixQtBuiltinPaths "$out" '*.pr?'
   '';
 
+  preConfigure = ''
+    NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"$qtPluginPrefix\""
+  '';
+
   dontStrip = debugSymbols;
 
   setupHook = ../hooks/qtbase-setup-hook.sh;
