@@ -7,5 +7,17 @@
   "firefox": {
     "version": "113.0.2",
     "sha512": "7b1ff7d547fda02901f54a2593e03598a830698192003d833e27b85db0e00571ff66e03ebd4089e76fa65b09df000cbb2542450beeabb0b310875910603e6743"
+  },
+  "bin": {
+    "mac": {
+      "x86_64": {
+        "url": "https://gitlab.com/librewolf-community/browser/macos/uploads/62a3836df78e94c13455d85abaf521c1/librewolf-113.0.2-1.en-US.mac.x86_64.dmg",
+        "sha256": "0sncfvxfmrs7ikv03m8xgd0ha58q8j508pf68x2yqkqnyr8anl0w"
+      },
+      "aarch64": {
+        "url": "https://gitlab.com/librewolf-community/browser/macos/uploads/ee6be51c4b9eee802cd7df889bfcf622/librewolf-113.0.2-1.en-US.mac.aarch64.dmg",
+        "sha256": "1p255g72cjssfsrbnbgfvakdz46p1gi0rpjah7w19b1kvgskx5j2"
+      }
+    }
   }
 }
