@@ -67,6 +67,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     changelog = "https://github.com/PrismLauncher/PrismLauncher/releases/tag/${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ minion3665 Scrumplex ];
+    maintainers = with maintainers; [ minion3665 Scrumplex getchoo ];
   };
 }
