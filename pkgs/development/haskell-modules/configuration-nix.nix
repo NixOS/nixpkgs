@@ -1018,7 +1018,8 @@ self: super: builtins.intersectAttrs super {
         wrapProgram "$out/bin/nvfetcher" --prefix 'PATH' ':' "${
           pkgs.lib.makeBinPath [
             pkgs.nvchecker
-            pkgs.nix-prefetch
+            pkgs.nix # nix-prefetch-url
+            pkgs.nix-prefetch-git
             pkgs.nix-prefetch-docker
           ]
         }"
