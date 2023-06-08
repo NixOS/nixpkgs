@@ -29,6 +29,7 @@
 /lib/debug.nix              @edolstra @Profpatsch
 /lib/asserts.nix            @edolstra @Profpatsch
 /lib/path.*                 @infinisil @fricklerhandwerk
+/lib/fileset.nix            @infinisil
 
 # Nixpkgs Internals
 /default.nix                                     @Ericson2314
@@ -61,6 +62,7 @@
 /doc/build-aux/pandoc-filters @jtojnar
 /doc/contributing/ @fricklerhandwerk
 /doc/contributing/contributing-to-documentation.chapter.md @jtojnar @fricklerhandwerk
+/doc/functions/fileset.section.md @infinisil
 
 # NixOS Internals
 /nixos/default.nix                                    @infinisil
