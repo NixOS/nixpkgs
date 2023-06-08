@@ -701,6 +701,21 @@ in {
       simpleTree;
 
   /*
+  The same as `lib.fileset.trace`, but instead of taking an argument for the value to return, the given file set is returned instead.
+
+  Type:
+    traceVal :: { expand :: Bool ? false } -> FileSet -> FileSet
+  */
+  traceVal = { expand ? false }: maybeFileset:
+    let
+      fileset = _coerce "traceVal" "second argument" maybeFileset;
+      simpleTree = _simplifyTree expand fileset._base fileset._tree;
+    in
+    _prettyFoldl' (acc: el: builtins.trace el acc) fileset
+      fileset._base
+      simpleTree;
+
+  /*
   The same as `lib.fileset.trace`, but instead of tracing each line, the result is returned as a string.
 
   Type:
