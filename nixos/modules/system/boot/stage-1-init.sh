@@ -143,7 +143,8 @@ specialMount() {
   local options="$3"
   local fsType="$4"
 
-  mkdir -m 0755 -p "$mountPoint"
+  mkdir -p "$mountPoint"
+  chmod 0755 "$mountPoint"
   mount -n -t "$fsType" -o "$options" "$device" "$mountPoint"
 }
 source @earlyMountScript@
@@ -397,7 +398,8 @@ mountFS() {
     if [ "$fsType" = overlay ]; then
         for i in upper work; do
              dir="$( echo "$optionsPrefixed" | grep -o "${i}dir=[^,]*" )"
-             mkdir -m 0700 -p "${dir##*=}"
+             mkdir -p "${dir##*=}"
+             chmod 0700 "${dir##*=}"
         done
     fi
 
@@ -435,7 +437,8 @@ lustrateRoot () {
     echo -e "\e[1;33m<<< @distroName@ is now lustrating the root filesystem (cruft goes to /old-root) >>>\e[0m"
     echo
 
-    mkdir -m 0755 -p "$root/old-root.tmp"
+    mkdir -p "$root/old-root.tmp"
+    chmod 0755 "$root/old-root.tmp"
 
     echo
     echo "Moving impurities out of the way:"
@@ -451,7 +454,8 @@ lustrateRoot () {
     # Use .tmp to make sure subsequent invocations don't clash
     mv -v "$root/old-root.tmp" "$root/old-root"
 
-    mkdir -m 0755 -p "$root/etc"
+    mkdir -p "$root/etc"
+    chmod 0755 "$root/etc"
     touch "$root/etc/NIXOS"
 
     exec 4< "$root/old-root/etc/NIXOS_LUSTRATE"
@@ -460,7 +464,8 @@ lustrateRoot () {
     echo "Restoring selected impurities:"
     while read -u 4 keeper; do
         dirname="$(dirname "$keeper")"
-        mkdir -m 0755 -p "$root/$dirname"
+        mkdir -p "$root/$dirname"
+        chmod 0755 "$root/$dirname"
         cp -av "$root/old-root/$keeper" "$root/$keeper"
     done
 
@@ -652,7 +657,8 @@ if [ ! -e "$targetRoot/$stage2Init" ]; then
     fi
 fi
 
-mkdir -m 0755 -p $targetRoot/proc $targetRoot/sys $targetRoot/dev $targetRoot/run
+mkdir -p $targetRoot/proc $targetRoot/sys $targetRoot/dev $targetRoot/run
+chmod 0755 $targetRoot/proc $targetRoot/sys $targetRoot/dev $targetRoot/run
 
 mount --move /proc $targetRoot/proc
 mount --move /sys $targetRoot/sys
