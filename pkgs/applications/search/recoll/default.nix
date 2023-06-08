@@ -33,6 +33,7 @@
 , xapian
 , zlib
 , withGui ? true
+, withPython ? with stdenv; buildPlatform.canExecute hostPlatform
 }:
 
 mkDerivation rec {
@@ -48,6 +49,15 @@ mkDerivation rec {
     "--enable-recollq"
     "--disable-webkit"
     "--without-systemd"
+
+    # this leaks into the final `librecoll-*.so` binary, so we need
+    # to be sure it is taken from `pkgs.file` rather than `stdenv`,
+    # especially when cross-compiling
+    "--with-file-command=${file}/bin/file"
+
+  ] ++ lib.optionals (!withPython) [
+    "--disable-python-module"
+    "--disable-python-chm"
   ] ++ lib.optionals (!withGui) [
     "--disable-qtgui"
     "--disable-x11mon"
@@ -64,10 +74,13 @@ mkDerivation rec {
     ./fix-datadir.patch
   ];
 
-  nativeBuildInputs = [
-    file
+  nativeBuildInputs = lib.optionals withGui [
+    qtbase
+  ] ++ [
     pkg-config
+  ] ++ lib.optionals withPython [
     python3Packages.setuptools
+  ] ++ [
     makeWrapper
     which
   ];
@@ -75,10 +88,13 @@ mkDerivation rec {
   buildInputs = [
     bison
     chmlib
+  ] ++ lib.optionals withPython [
     python3Packages.python
     python3Packages.mutagen
+  ] ++ [
     xapian
     zlib
+    file
   ] ++ lib.optionals withGui [
     qtbase
   ] ++ lib.optionals stdenv.isDarwin [
@@ -139,5 +155,8 @@ mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ jcumming ehmry ];
+
+    # `Makefile.am` assumes the ability to run the hostPlatform's python binary at build time
+    broken = withPython && (with stdenv; !buildPlatform.canExecute hostPlatform);
   };
 }
