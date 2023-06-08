@@ -163,6 +163,29 @@ let
 
 , env ? { }
 
+, srcWorkDir ? null
+
+, sourceRoot ?
+    if srcWorkDir == null then
+      null
+    else if ! builtins.isPath srcWorkDir then
+      throw "stdenv.mkDerivation: The `srcWorkDir` attribute is expected to be a path, but it's a ${builtins.typeOf srcWorkDir} instead."
+    else if ! builtins.pathExists srcWorkDir then
+      throw "stdenv.mkDerivation: The `srcWorkDir` attribute \"${toString srcWorkDir}\" does not exist."
+    else if lib.filesystem.pathType srcWorkDir != "directory" then
+      throw "stdenv.mkDerivation: The `srcWorkDir` attribute \"${toString srcWorkDir}\" is not a directory"
+    # All of the following conditions for `src` are always fulfilled if `src` is set via `srcFileset`
+    else if ! src._isLibCleanSourceWith or false then
+      throw "stdenv.mkDerivation: If the `srcWorkDir` attribute is set, `src` must be a source-like value produced by the functions in `lib.sources`."
+    else if ! builtins.isPath src.origSrc then
+      throw "stdenv.mkDerivation: If the `srcWorkDir` attribute is set, `src` must be produced from a local path."
+    else if ! lib.path.hasPrefix src.origSrc srcWorkDir then
+      throw "stdenv.mkDerivation: The `srcWorkDir` \"${toString srcWorkDir}\" needs to be under the local path that produced the source \"${src.origSrc}\"."
+    else
+      lib.path.subpath.join (
+        [ src.name ]
+        ++ lib.path.removePrefix src.origSrc srcWorkDir
+      )
 , ... } @ attrs:
 
 let
@@ -292,6 +315,7 @@ else let
   derivationArg =
     (removeAttrs attrs
       (["meta" "passthru" "pos"
+       "srcWorkDir"
        "checkInputs" "installCheckInputs"
        "nativeCheckInputs" "nativeInstallCheckInputs"
        "__contentAddressed"
@@ -438,22 +462,7 @@ else let
 
       inherit outputs;
 
-      ${if attrs ? src then "src" else null} =
-        if attrs ? src._root && attrs.src ? _subpath then
-          attrs.src._root
-        else
-          attrs.src;
-
-      # TODO simplify by adding to unpackPhase instead.
-      #      This wasn't done yet to avoid a mass rebuild while working on this.
-      ${if attrs ? src then "postUnpack" else null} =
-        if attrs ? src._root && attrs.src ? _subpath then
-          ''
-            sourceRoot="$sourceRoot"/${lib.escapeShellArg attrs.src._subpath}
-            ${attrs.postUnpack or ""}
-          ''
-        else
-          attrs.postUnpack or null;
+      inherit sourceRoot;
 
     } // lib.optionalAttrs (__contentAddressed) {
       inherit __contentAddressed;
