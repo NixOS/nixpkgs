@@ -306,12 +306,16 @@ in
 
           ln -sf ${hydraConf} ${baseDir}/hydra.conf
 
-          mkdir -m 0700 -p ${baseDir}/www
+          mkdir -p ${baseDir}/www
+          chmod 0700 ${baseDir}/www
           chown hydra-www:hydra ${baseDir}/www
 
-          mkdir -m 0700 -p ${baseDir}/queue-runner
-          mkdir -m 0750 -p ${baseDir}/build-logs
-          mkdir -m 0750 -p ${baseDir}/runcommand-logs
+          mkdir -p ${baseDir}/queue-runner
+          chmod 0700 ${baseDir}/queue-runner
+          mkdir -p ${baseDir}/build-logs
+          chmod 0750 ${baseDir}/build-logs
+          mkdir -p ${baseDir}/runcommand-logs
+          chmod 0750 ${baseDir}/runcommand-logs
           chown hydra-queue-runner.hydra \
             ${baseDir}/queue-runner \
             ${baseDir}/build-logs \

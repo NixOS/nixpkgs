@@ -229,15 +229,24 @@ in {
             ];
             dockerDisableCache = true;
             preBuildScript = pkgs.writeScript "setup-container" '''
-              mkdir -p -m 0755 /nix/var/log/nix/drvs
-              mkdir -p -m 0755 /nix/var/nix/gcroots
-              mkdir -p -m 0755 /nix/var/nix/profiles
-              mkdir -p -m 0755 /nix/var/nix/temproots
-              mkdir -p -m 0755 /nix/var/nix/userpool
-              mkdir -p -m 1777 /nix/var/nix/gcroots/per-user
-              mkdir -p -m 1777 /nix/var/nix/profiles/per-user
-              mkdir -p -m 0755 /nix/var/nix/profiles/per-user/root
-              mkdir -p -m 0700 "$HOME/.nix-defexpr"
+              mkdir -p /nix/var/log/nix/drvs
+              chmod 0755 /nix/var/log/nix/drvs
+              mkdir -p /nix/var/nix/gcroots
+              chmod 0755 /nix/var/nix/gcroots
+              mkdir -p /nix/var/nix/profiles
+              chmod 0755 /nix/var/nix/profiles
+              mkdir -p /nix/var/nix/temproots
+              chmod 0755 /nix/var/nix/temproots
+              mkdir -p /nix/var/nix/userpool
+              chmod 0755 /nix/var/nix/userpool
+              mkdir -p /nix/var/nix/gcroots/per-user
+              chmod 1777 /nix/var/nix/gcroots/per-user
+              mkdir -p /nix/var/nix/profiles/per-user
+              chmod 1777 /nix/var/nix/profiles/per-user
+              mkdir -p /nix/var/nix/profiles/per-user/root
+              chmod 0755 /nix/var/nix/profiles/per-user/root
+              mkdir -p "$HOME/.nix-defexpr"
+              chmod 0700 "$HOME/.nix-defexpr"
 
               . ''${pkgs.nix}/etc/profile.d/nix.sh
 
