@@ -4,6 +4,8 @@
 , python3
 , config
 , acceptLicense ? config.input-fonts.acceptLicense or false
+, preset ? "default"
+, lineHeight ? "1.2"
 }:
 
 let
@@ -29,6 +31,21 @@ let
 
   releaseDate = "2015-06-24";
 
+  presetParams = {
+    "andale" = "&a=0&g=0&i=topserif&l=serifs&zero=0&asterisk=0&braces=straight&preset=andale";
+    "anonymous" = "&a=0&g=ss&i=serif&l=serif&zero=slash&asterisk=height&braces=straight&preset=anonymous";
+    "consolas" = "&a=0&g=0&i=serif&l=serif&zero=slash&asterisk=0&braces=straight&preset=consolas";
+    "default" = "&a=0&g=0&i=0&l=0&zero=0&asterisk=0&braces=0&preset=default";
+    "dejavu" = "&a=0&g=ss&i=serif&l=serifs_round&zero=slash&asterisk=height&braces=straight&preset=dejavu";
+    "envy" = "&a=0&g=ss&i=topserif&l=topserif&zero=slash&asterisk=0&braces=0&preset=envy";
+    "fira" = "&a=0&g=0&i=serif&l=serifs_round&zero=0&asterisk=0&braces=straight&preset=fira";
+    "liberation" = "&a=0&g=ss&i=serif&l=serif&zero=0&asterisk=0&braces=straight&preset=liberation";
+    "monaco" = "&a=ss&g=ss&i=serifs&l=serifs&zero=slash&asterisk=0&braces=0&preset=monaco";
+    "pragmata" = "&a=0&g=0&i=serif&l=serif&zero=0&asterisk=height&braces=straight&preset=pragmata";
+    "sourcecode" = "a=0&g=0&i=topserif&l=serifs_round&zero=0&asterisk=height&braces=straight&preset=sourcecode";
+  }.${preset};
+
+  presetHash = (import ./hashes.nix).${preset}.${lineHeight};
 in
 
 stdenv.mkDerivation rec {
@@ -40,8 +57,8 @@ stdenv.mkDerivation rec {
     fetchzip {
       name = "input-fonts-${version}";
       # Add .zip parameter so that zip unpackCmd can match it.
-      url = "https://input.djr.com/build/?fontSelection=whole&a=0&g=0&i=0&l=0&zero=0&asterisk=0&braces=0&preset=default&line-height=1.2&accept=I+do&email=&.zip";
-      sha256 = "BESZ4Bjgm2hvQ7oPpMvYSlE8EqvQjqHZtXWIovqyIzA=";
+      url = "https://input.djr.com/build/?fontSelection=whole&${presetParams}&line-height=${lineHeight}&accept=I+do&email=&.zip";
+      hash = presetHash;
       stripRoot = false;
 
       postFetch = ''
