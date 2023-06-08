@@ -765,6 +765,7 @@ in {
   tigervnc = handleTest ./tigervnc.nix {};
   timescaledb = handleTest ./timescaledb.nix {};
   promscale = handleTest ./promscale.nix {};
+  tiltfive = handleTestOn ["x86_64-linux"]  ./tiltfive.nix {};
   timezone = handleTest ./timezone.nix {};
   tinc = handleTest ./tinc {};
   tinydns = handleTest ./tinydns.nix {};
