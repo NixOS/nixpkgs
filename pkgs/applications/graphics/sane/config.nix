@@ -28,9 +28,12 @@ installSanePath = path: ''
         done
       fi
     '';
+    # don't use `substituteInPlace`, since it struggles to escape patterns like '${backend}[[:cntrl:]]'
+    # or '${backend}[$"\n"]' which is required here, since otherwise partial matches might disable
+    # other backends as well (e.g. `ricoh` vs `ricoh2`)
     disableBackend = backend: ''
-      grep -q '${backend}' $out/etc/sane.d/dll.conf || { echo '${backend} is not a default plugin in $SANE_CONFIG_DIR/dll.conf'; exit 1; }
-      substituteInPlace $out/etc/sane.d/dll.conf --replace '${backend}' '# ${backend} disabled in nixos config'
+      grep -q -E '^#?${backend}$' $out/etc/sane.d/dll.conf || { echo '"${backend}" is not a default plugin in $SANE_CONFIG_DIR/dll.conf that could be disabled'; exit 1; }
+      sed -i 's/^${backend}$/#${backend} # disabled by NixOS config/g' $out/etc/sane.d/dll.conf
     '';
 in
 stdenv.mkDerivation {
