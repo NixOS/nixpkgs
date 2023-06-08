@@ -2097,6 +2097,8 @@ with pkgs;
     util-linux = if stdenv.isLinux then util-linuxMinimal else util-linux;
   };
 
+  git-relevant-history = callPackage ../applications/version-management/git-relevant-history { };
+
   git-remote-codecommit = python3Packages.callPackage ../applications/version-management/git-remote-codecommit { };
 
   gitRepo = git-repo;
