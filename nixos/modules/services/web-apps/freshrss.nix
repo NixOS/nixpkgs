@@ -278,7 +278,7 @@ in
       systemd.services.freshrss-updater = {
         description = "FreshRSS feed updater";
         wants = [ "network-online.target" ];
-        bindsTo = [ ] ++ optional usePostgresql "postgresql.service" ++ optional useMysql "mysql.service";
+        bindsTo = optional usePostgresql "postgresql.service" ++ optional useMysql "mysql.service";
         after = [ "freshrss-config.service" ];
         wantedBy = [ "multi-user.target" ];
         startAt = "*:0/5";
