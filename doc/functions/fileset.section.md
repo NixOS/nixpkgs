@@ -104,16 +104,16 @@ fileFilter
   - main.c (regular)
 ```
 
-File sets can be added to the Nix store using the [`addToStore`](#function-library-lib.fileset.addToStore) function. This function requires the `entryPoint` argument to indicate where the resulting string (via `outPath`, see [`toString`](https://nixos.org/manual/nix/stable/language/builtins.html?highlight=outPath#builtins-toString)) should be focused on, meaning that when you `cd ${addToStore ...}`, the files will be available at paths relative to `entryPoint`:
+File sets can be added to the Nix store using the [`toSource`](#function-library-lib.fileset.toSource) function. This function returns a string-coercible value via `outPath`, meaning it can be used directly as directory in `src` or other uses.
 ```nix
-nix-repl> addToStore {
-            entryPoint = ./.;
+nix-repl> toSource {
+            root = ./.;
             fileset = union ./Makefile ./src;
           }
 {
+  # ...
+  origSrc = /home/user/my/project;
   outPath = "/nix/store/4p6kpi1znyvih3qjzrzcwbh9sx1qdjpj-source";
-  root = "/nix/store/4p6kpi1znyvih3qjzrzcwbh9sx1qdjpj-source";
-  subpath = "./.";
 }
 
 $ cd /nix/store/4p6kpi1znyvih3qjzrzcwbh9sx1qdjpj-source
@@ -126,60 +126,18 @@ $ find .
 ./Makefile
 ```
 
-Sometimes we also want to make files outside of the `entryPoint` accessible. This can be done using the optional `base` argument:
-
-```nix
-nix-repl> addToStore {
-            base = ../.;
-            entryPoint = ./.;
-            fileset = unions [
-              ./Makefile
-              ./src
-              # This file is not in ./.!
-              ../utils.nix
-            ];
-          }
-{
-  outPath = "/nix/store/348vyqsfz2rijgzxpks9x2yjpxvh073w-source/project";
-  root = "/nix/store/348vyqsfz2rijgzxpks9x2yjpxvh073w-source";
-  subpath = "./project";
-}
-
-$ cd /nix/store/348vyqsfz2rijgzxpks9x2yjpxvh073w-source/project
-
-$ find .
-.
-./Makefile
-./src
-./src/main.h
-./src/main.c
-
-$ cat ../utils.nix
-# These are utils!
-```
-
-As you can see, when changing to the `outPath` directory, we can still find the same files as before, but now we also have access to `../utils.nix`.
-
-Note however that the directory name `project` is included in the store path, meaning that the hashes will change when you rename that directory.
-Therefore `base` should not be set higher up than the current version control root directory, otherwise the result can change even when no files in the directory changed.
-
-Lastly, here's an example of how we can define derivation sources using file sets using [`addToStore`](#function-library-lib.fileset.addToStore):
+We can use this to declare the source of a derivation:
 ```nix
 # default.nix
 with import <nixpkgs> {};
-let
-  fs = lib.fileset;
-  sourceFiles = fs.unions [
-    ./Makefile
-    ./src
-  ];
-in
-fs.trace {} sourceFiles
 stdenv.mkDerivation {
   name = "my-project";
-  src = fs.addToStore {
-    entryPoint = ./.;
-    fileset = sourceFiles;
+  src = lib.fileset.toSource {
+    root = ./.;
+    fileset = lib.fileset.traceVal {} (lib.fileset.unions [
+      ./Makefile
+      ./src
+    ]);
   };
   dontBuild = true;
   installPhase = ''
@@ -197,10 +155,91 @@ trace: - src (recursive directory)
 
 $ cat result
 .
+./Makefile
+./src
+./src/main.c
+./src/main.h
+```
+
+Sometimes we also want to make files outside the current `root` accessible. We can do this by setting the `root` to higher up:
+```nix
+lib.fileset.toSource {
+  root = ../.;
+  fileset = lib.fileset.unions [
+    ./Makefile
+    ./src
+    ../utils.nix
+  ];
+};
+```
+
+However, we notice that the resulting file structure in the build directory changed:
+```
+$ nix-build && cat result
+.
+./utils.nix
+./foo
+./foo/src
+./foo/src/main.c
+./foo/src/main.h
+./foo/Makefile
+```
+
+In order to prevent this we can use `srcWorkDir` to specify the local directory to start the build from:
+```nix
+# default.nix
+with import <nixpkgs> {};
+stdenv.mkDerivation {
+  name = "my-project";
+  src = lib.fileset.toSource {
+    root = ../.;
+    fileset = lib.fileset.unions [
+      ./Makefile
+      ./src
+      ../utils.nix
+    ];
+  };
+  # Make sure the build starts in ./.
+  srcWorkDir = ./.;
+
+  dontBuild = true;
+  installPhase = ''
+    find . > $out
+    echo "Utils: $(cat ../utils.nix)" >> $out
+  '';
+}
+```
+
+```
+$ nix-build && cat result
+.
+./Makefile
 ./src
 ./src/main.h
 ./src/main.c
-./Makefile
+Utils: # These are utils!
+```
+
+However for more convenience there's integration of file set functionality into `stdenv.mkDerivation` using the `srcFileset` attribute, which then doesn't require setting `root` anymore:
+
+```
+# default.nix
+with import <nixpkgs> {};
+stdenv.mkDerivation {
+  name = "my-project";
+  srcFileset = lib.fileset.unions [
+    ./Makefile
+    ./src
+    ../utils.nix
+  ];
+  srcWorkDir = ./.;
+
+  dontBuild = true;
+  installPhase = ''
+    find . > $out
+    echo "Utils: $(cat ../utils.nix)" >> $out
+  '';
+}
 ```
 
 This covers the basics of almost all functions available, see the full reference [here](#sec-functions-library-fileset).
