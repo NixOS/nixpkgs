@@ -1047,10 +1047,6 @@ self: super: {
   # jailbreak tasty < 1.2 until servant-docs > 0.11.3 is on hackage.
   snap-templates = doJailbreak super.snap-templates; # https://github.com/snapframework/snap-templates/issues/22
 
-  hledger_1_30_1 = doDistribute (super.hledger_1_30_1.override {
-    hledger-lib = self.hledger-lib_1_30;
-  });
-
   # https://github.com/haskell-hvr/resolv/pull/6
   resolv_0_1_1_2 = dontCheck super.resolv_0_1_1_2;
 

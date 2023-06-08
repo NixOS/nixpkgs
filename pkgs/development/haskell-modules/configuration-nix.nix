@@ -245,10 +245,16 @@ self: super: builtins.intersectAttrs super {
       hledger = installHledgerManPages super.hledger;
       hledger-web = installHledgerManPages (hledgerWebTestFix super.hledger-web);
       hledger-ui = installHledgerManPages super.hledger-ui;
+
+      hledger_1_30_1 = installHledgerManPages
+        (doDistribute (super.hledger_1_30_1.override {
+          hledger-lib = self.hledger-lib_1_30;
+        }));
     }
   ) hledger
     hledger-web
     hledger-ui
+    hledger_1_30_1
     ;
 
   cufft = overrideCabal (drv: {
