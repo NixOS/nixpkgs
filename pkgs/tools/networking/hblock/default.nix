@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/hectorm/hblock";
     license = licenses.mit;
     maintainers = with maintainers; [ alanpearce ];
+    platforms = platforms.unix;
   };
 }
