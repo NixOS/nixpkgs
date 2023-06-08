@@ -5761,18 +5761,6 @@
   "fortiosapi": [
     "setuptools"
   ],
-  "foundationdb51": [
-    "setuptools"
-  ],
-  "foundationdb52": [
-    "setuptools"
-  ],
-  "foundationdb60": [
-    "setuptools"
-  ],
-  "foundationdb61": [
-    "setuptools"
-  ],
   "foundationdb71": [
     "setuptools"
   ],

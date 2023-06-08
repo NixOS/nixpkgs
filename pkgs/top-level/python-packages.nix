@@ -1585,6 +1585,8 @@ self: super: with self; {
 
   cachey = callPackage ../development/python-modules/cachey { };
 
+  cacheyou = callPackage ../development/python-modules/cacheyou { };
+
   cachy = callPackage ../development/python-modules/cachy { };
 
   cadquery = callPackage ../development/python-modules/cadquery {
@@ -5488,6 +5490,8 @@ self: super: with self; {
 
   kneed = callPackage ../development/python-modules/kneed { };
 
+  knx-frontend = callPackage ../development/python-modules/knx-frontend { };
+
   kombu = callPackage ../development/python-modules/kombu { };
 
   konnected = callPackage ../development/python-modules/konnected { };
@@ -8176,6 +8180,8 @@ self: super: with self; {
   py-dormakaba-dkey = callPackage ../development/python-modules/py-dormakaba-dkey { };
 
   py-nightscout = callPackage ../development/python-modules/py-nightscout { };
+
+  py-partiql-parser = callPackage ../development/python-modules/py-partiql-parser { };
 
   py-pdf-parser = callPackage ../development/python-modules/py-pdf-parser { };
 

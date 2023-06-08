@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "wiki-js";
-  version = "2.5.298";
+  version = "2.5.299";
 
   src = fetchurl {
     url = "https://github.com/Requarks/wiki/releases/download/v${version}/${pname}.tar.gz";
-    sha256 = "sha256-O7KQ134zh9ullYyQZimmxfdRwXeHkD8aAhy/pRzIjxo=";
+    sha256 = "sha256-GYe05dbR8RwCzPedeCMUQTWZ51roM/V2jUPPv7o7UEU=";
   };
 
   # Implements nodejs 18 support as it's not planned to fix this before
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   # [1] https://github.com/requarks/wiki/discussions/6388
   # [2] https://nodejs.org/en/blog/release/v17.0.0
   # [3] https://nodejs.org/en/blog/release/v18.0.0
+  patches = [ ./drop-node-check.patch ];
   nativeBuildInputs = [ jq moreutils ];
   postPatch = ''
     # Dirty hack to implement nodejs-18 support.
