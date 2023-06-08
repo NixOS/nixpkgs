@@ -12,14 +12,14 @@ info() {
 
 export LD_LIBRARY_PATH=@extraUtils@/lib
 export PATH=@extraUtils@/bin
-ln -s @extraUtils@/bin /bin
+ln -s "@extraUtils@/bin" /bin
 # hardcoded in util-linux's mount helper search path `/run/wrappers/bin:/run/current-system/sw/bin:/sbin`
-ln -s @extraUtils@/bin /sbin
+ln -s "@extraUtils@/bin" /sbin
 
 # Copy the secrets to their needed location
 if [ -d "@extraUtils@/secrets" ]; then
     for secret in $(cd "@extraUtils@/secrets"; find . -type f); do
-        mkdir -p $(dirname "/$secret")
+        mkdir -p "$(dirname "/$secret")"
         ln -s "@extraUtils@/secrets/$secret" "$secret"
     done
 fi
@@ -146,7 +146,7 @@ specialMount() {
   chmod 0755 "$mountPoint"
   mount -n -t "$fsType" -o "$options" "$device" "$mountPoint"
 }
-source @earlyMountScript@
+source "@earlyMountScript@"
 
 # Copy initrd secrets from /.initrd-secrets to their actual destinations
 if [ -d "/.initrd-secrets" ]; then
@@ -155,7 +155,7 @@ if [ -d "/.initrd-secrets" ]; then
     # under /.initrd-secrets/
     #
     for secret in $(cd "/.initrd-secrets"; find . -type f); do
-        mkdir -p $(dirname "/$secret")
+        mkdir -p "$(dirname "/$secret")"
         cp "/.initrd-secrets/$secret" "$secret"
     done
 fi
@@ -253,10 +253,10 @@ done
 @setHostId@
 
 # Load the required kernel modules.
-echo @extraUtils@/bin/modprobe > /proc/sys/kernel/modprobe
+echo "@extraUtils@/bin/modprobe" > /proc/sys/kernel/modprobe
 for i in @kernelModules@; do
     info "loading module $(basename $i)..."
-    modprobe $i
+    modprobe "$i"
 done
 
 
@@ -268,9 +268,9 @@ ln -sfn /proc/self/fd/0 /dev/stdin
 ln -sfn /proc/self/fd/1 /dev/stdout
 ln -sfn /proc/self/fd/2 /dev/stderr
 mkdir -p /etc/systemd
-ln -sfn @linkUnits@ /etc/systemd/network
+ln -sfn "@linkUnits@" /etc/systemd/network
 mkdir -p /etc/udev
-ln -sfn @udevRules@ /etc/udev/rules.d
+ln -sfn "@udevRules@" /etc/udev/rules.d
 mkdir -p /dev/.mdadm
 systemd-udevd --daemon
 udevadm trigger --action=add
@@ -526,7 +526,7 @@ fi
 # Try to find and mount the root device.
 mkdir -p $targetRoot
 
-exec 3< @fsInfo@
+exec 3< "@fsInfo@"
 
 while read -u 3 mountPoint; do
     read -u 3 device
@@ -619,7 +619,7 @@ udevadm control --exit
 
 # Reset the logging file descriptors.
 # Do this just before pkill, which will kill the tee process.
-exec 1>&$logOutFd 2>&$logErrFd
+exec 1>&"$logOutFd" 2>&"$logErrFd"
 eval "exec $logOutFd>&- $logErrFd>&-"
 
 # Kill any remaining processes, just to be sure we're not taking any
@@ -656,13 +656,13 @@ if [ ! -e "$targetRoot/$stage2Init" ]; then
     fi
 fi
 
-mkdir -p $targetRoot/proc $targetRoot/sys $targetRoot/dev $targetRoot/run
-chmod 0755 $targetRoot/proc $targetRoot/sys $targetRoot/dev $targetRoot/run
+mkdir -p "$targetRoot/proc" "$targetRoot/sys" "$targetRoot/dev" "$targetRoot/run"
+chmod 0755 "$targetRoot/proc" "$targetRoot/sys" "$targetRoot/dev" "$targetRoot/run"
 
-mount --move /proc $targetRoot/proc
-mount --move /sys $targetRoot/sys
-mount --move /dev $targetRoot/dev
-mount --move /run $targetRoot/run
+mount --move /proc "$targetRoot/proc"
+mount --move /sys "$targetRoot/sys"
+mount --move /dev "$targetRoot/dev"
+mount --move /run "$targetRoot/run"
 
 exec env -i $(type -P switch_root) "$targetRoot" "$stage2Init"
 
