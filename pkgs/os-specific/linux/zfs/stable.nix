@@ -12,12 +12,12 @@ callPackage ./generic.nix args {
   # check the release notes for compatible kernels
   kernelCompatible =
     if stdenv'.isx86_64
-    then kernel.kernelOlder "6.3"
+    then kernel.kernelOlder "6.4"
     else kernel.kernelOlder "6.2";
-  latestCompatibleLinuxPackages = linuxKernel.packages.linux_6_1;
+  latestCompatibleLinuxPackages = linuxKernel.packages.linux_6_3;
 
   # this package should point to the latest release.
-  version = "2.1.11";
+  version = "2.1.12";
 
-  sha256 = "tJLwyqUj1l5F0WKZDeMGrEFa8fc/axKqm31xtN51a5M=";
+  sha256 = "eYUR5d4gpTrlFu6j1uL83DWL9uPGgAUDRdSEb73V5i4=";
 }
