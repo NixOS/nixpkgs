@@ -55,9 +55,11 @@ in
         ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/per-user/root/channels \
           -i ${channelSources} --quiet --option build-use-substitutes false \
           ${optionalString config.boot.initrd.systemd.enable "--option sandbox false"} # There's an issue with pivot_root
-        mkdir -m 0700 -p /root/.nix-defexpr
+        mkdir -p /root/.nix-defexpr
+        chmod 0700 /root/.nix-defexpr
         ln -s /nix/var/nix/profiles/per-user/root/channels /root/.nix-defexpr/channels
-        mkdir -m 0755 -p /var/lib/nixos
+        mkdir -p /var/lib/nixos
+        chmod 0755 /var/lib/nixos
         touch /var/lib/nixos/did-channel-init
       fi
     '';

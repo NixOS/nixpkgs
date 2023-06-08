@@ -185,7 +185,8 @@ nix-env --store "$mountPoint" "${extraBuildFlags[@]}" \
         -p "$mountPoint"/nix/var/nix/profiles/system --set "$system" "${verbosity[@]}"
 
 # Mark the target as a NixOS installation, otherwise switch-to-configuration will chicken out.
-mkdir -m 0755 -p "$mountPoint/etc"
+mkdir -p "$mountPoint/etc"
+chmod 0755 "$mountPoint/etc"
 touch "$mountPoint/etc/NIXOS"
 
 # Switch to the new system configuration.  This will install Grub with
