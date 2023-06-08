@@ -34,13 +34,10 @@
 , qt6Support ? false, qt6
 , raspiCameraSupport ? false, libraspberrypi
 , enableJack ? true, libjack2
-, libXdamage
-, libXext
-, libXfixes
+, enableX11 ? stdenv.isLinux, xorg
 , ncurses
 , wayland
 , wayland-protocols
-, xorg
 , libgudev
 , wavpack
 , glib
@@ -105,15 +102,14 @@ stdenv.mkDerivation rec {
     mpg123
     twolame
     libintl
-    libXdamage
-    libXext
-    libXfixes
     ncurses
-    xorg.libXfixes
-    xorg.libXdamage
     wavpack
   ] ++ lib.optionals raspiCameraSupport [
     libraspberrypi
+  ] ++ lib.optionals enableX11 [
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXdamage
   ] ++ lib.optionals gtkSupport [
     # for gtksink
     gtk3
@@ -149,6 +145,8 @@ stdenv.mkDerivation rec {
     "-Dqt6=disabled"
   ] ++ lib.optionals (!gtkSupport) [
     "-Dgtk3=disabled"
+  ] ++ lib.optionals (!enableX11) [
+    "-Dximagesrc=disabled" # Linux-only
   ] ++ lib.optionals (!enableJack) [
     "-Djack=disabled"
   ] ++ lib.optionals (!stdenv.isLinux) [
@@ -158,7 +156,6 @@ stdenv.mkDerivation rec {
     "-Dpulse=disabled" # TODO check if we can keep this enabled
     "-Dv4l2-gudev=disabled" # Linux-only
     "-Dv4l2=disabled" # Linux-only
-    "-Dximagesrc=disabled" # Linux-only
   ] ++ lib.optionals (!raspiCameraSupport) [
     "-Drpicamsrc=disabled"
   ];
