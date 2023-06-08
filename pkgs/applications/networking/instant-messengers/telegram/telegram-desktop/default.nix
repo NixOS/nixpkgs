@@ -94,6 +94,15 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/debian/telegram-desktop/-/raw/09b363ed5a4fcd8ecc3282b9bfede5fbb83f97ef/debian/patches/Disable-register-custom-scheme.patch";
       hash = "sha256-B8X5lnSpwwdp1HlvyXJWQPybEN+plOwimdV5gW6aY2Y=";
     })
+    # Bring custom xdg-activation implementation back
+    # Fixes https://github.com/telegramdesktop/tdesktop/issues/2635: TG desktop doen't open links
+    # https://github.com/desktop-app/lib_base/pull/180
+    (fetchpatch {
+      url = "https://github.com/desktop-app/lib_base/commit/6041498fbafcd0a22df88b7973d9e8f9bdf16958.patch";
+      extraPrefix = "Telegram/lib_base/";
+      stripLen = 1;
+      hash = "sha256-9IV1T/tjN2VA7wcpbt2GRpOMC76yOzRlGWuIAa8HTX0=";
+    })
   ];
 
   postPatch = ''
