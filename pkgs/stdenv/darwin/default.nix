@@ -651,7 +651,7 @@ rec {
         darwin = super.darwin.overrideScope (_: _: {
           inherit (darwin) dyld ICU Libsystem Csu libiconv rewrite-tbd;
         } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
-          inherit (darwin) binutils binutils-unwrapped cctools;
+          inherit (darwin) binutils binutils-unwrapped cctools-port;
         });
       } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
         inherit llvm;

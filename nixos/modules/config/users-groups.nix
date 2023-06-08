@@ -652,7 +652,7 @@ in {
       deps = [ "users" ];
       text = ''
         users=()
-        while IFS=: read -r user hash tail; do
+        while IFS=: read -r user hash _; do
           if [[ "$hash" = "$"* && ! "$hash" =~ ^\''$${cryptSchemeIdPatternGroup}\$ ]]; then
             users+=("$user")
           fi

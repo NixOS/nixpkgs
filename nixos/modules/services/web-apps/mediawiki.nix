@@ -8,7 +8,7 @@ let
   cfg = config.services.mediawiki;
   fpm = config.services.phpfpm.pools.mediawiki;
   user = "mediawiki";
-  group = if cfg.webserver == "apache" then "apache" else "mediawiki";
+  group = if cfg.webserver == "apache" then config.services.httpd.group else "mediawiki";
 
   cacheDir = "/var/cache/mediawiki";
   stateDir = "/var/lib/mediawiki";

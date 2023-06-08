@@ -271,7 +271,8 @@ in {
     junit_4_12;
 
   inherit (callPackage ../development/java-modules/jogl { })
-    jogl_2_3_2;
+    jogl_2_3_2
+    jogl_2_4_0;
 
   inherit (callPackage ../development/java-modules/log4j { inherit fetchMaven; })
     log4j_1_2_12;

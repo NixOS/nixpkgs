@@ -155,6 +155,13 @@ mapAliases ({
   boost159 = throw "boost159 has been deprecated in favor of the latest version"; # Added 2023-01-01
   boost15x = throw "boost15x has been deprecated in favor of the latest version"; # Added 2023-01-01
   boost160 = throw "boost160 has been deprecated in favor of the latest version"; # Added 2023-01-01
+  boost168 = throw "boost168 has been deprecated in favor of the latest version"; # Added 2023-06-08
+  boost169 = throw "boost169 has been deprecated in favor of the latest version"; # Added 2023-06-08
+  boost16x = throw "boost16x has been deprecated in favor of the latest version"; # Added 2023-06-08
+  boost170 = throw "boost170 has been deprecated in favor of the latest version"; # Added 2023-06-08
+  boost172 = throw "boost172 has been deprecated in favor of the latest version"; # Added 2023-06-08
+  boost173 = throw "boost173 has been deprecated in favor of the latest version"; # Added 2023-06-08
+  boost174 = throw "boost174 has been deprecated in favor of the latest version"; # Added 2023-06-08
   botan = throw "botan has been removed because it did not support a supported openssl version"; # added 2021-12-15
   bpftool = bpftools; # Added 2021-05-03
   bpytop = throw "bpytop has been deprecated by btop"; # Added 2023-02-16
@@ -524,6 +531,10 @@ mapAliases ({
   '';
 
   foomatic_filters = throw "'foomatic_filters' has been renamed to/replaced by 'foomatic-filters'"; # Converted to throw 2022-02-22
+  foundationdb51 = throw "foundationdb51 is no longer maintained, use foundationdb71 instead"; # added 2023-06-06
+  foundationdb52 = throw "foundationdb52 is no longer maintained, use foundationdb71 instead"; # added 2023-06-06
+  foundationdb60 = throw "foundationdb60 is no longer maintained, use foundationdb71 instead"; # added 2023-06-06
+  foundationdb61 = throw "foundationdb61 is no longer maintained, use foundationdb71 instead"; # added 2023-06-06
   foxitreader = throw "foxitreader has been removed because it had vulnerabilities and was unmaintained"; # added 2023-02-20
   fscryptctl-experimental = throw "The package fscryptctl-experimental has been removed. Please switch to fscryptctl"; # Added 2021-11-07
   fsharp41 = throw "fsharp41 has been removed, please use dotnet-sdk_5 or later";
@@ -1058,6 +1069,7 @@ mapAliases ({
   mongodb-3_4 = throw "mongodb-3_4 has been removed, it's end of life since January 2020"; # Added 2022-11-30
   mongodb-3_6 = throw "mongodb-3_6 has been removed, it's end of life since April 2021"; # Added 2022-11-30
   mongodb-4_0 = throw "mongodb-4_0 has been removed, it's end of life since April 2022"; # Added 2023-01-05
+  mongodb-4_2 = throw "mongodb-4_2 has been removed, it's end of life since April 2023"; # Added 2023-06-06
   monodevelop = throw "monodevelop has been removed from nixpkgs"; # Added 2022-01-15
   mopidy-gmusic = throw "mopidy-gmusic has been removed because Google Play Music was discontinued"; # Added 2021-03-07
   mopidy-local-images = throw "mopidy-local-images has been removed as it's unmaintained. Its functionality has been merged into the mopidy-local extension"; # Added 2020-10-18
