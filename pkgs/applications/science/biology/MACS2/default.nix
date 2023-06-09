@@ -2,32 +2,43 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "MACS2";
-  version = "2.2.7.1";
+  version = "2.2.8";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1rcxj943kgzs746f5jrb72x1cp4v50rk3qmad0m99a02vndscb5d";
+    hash = "sha256-KgpDasidj4yUoeQQaQA3dg5eN5Ka1xnFRpbnTvhKmOA=";
   };
 
   postPatch = ''
-    # remove version check which breaks on 3.10
+    # prevent setup.py from installing numpy
     substituteInPlace setup.py \
-      --replace 'if float(sys.version[:3])<3.6:' 'if False:'
+      --replace "subprocess.call([sys.executable, \"-m\", 'pip', 'install', f'numpy{numpy_requires}'],cwd=cwd)" "0"
   '';
+
+  nativeBuildInputs = with python3.pkgs; [
+    cython
+    setuptools
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [ numpy ];
 
-  # To prevent ERROR: diffpeak_cmd (unittest.loader._FailedTest) for obsolete
-  # function (ImportError: Failed to import test module: diffpeak_cmd)
-  doCheck = false;
+  nativeCheckInputs = [
+    python3.pkgs.unittestCheckHook
+  ];
+
+  unittestFlagsArray = [
+    "-s"
+    "test"
+  ];
+
   pythonImportsCheck = [ "MACS2" ];
 
   meta = with lib; {
     description = "Model-based Analysis for ChIP-Seq";
+    homepage = "https://github.com/macs3-project/MACS/";
+    changelog = "https://github.com/macs3-project/MACS/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ gschwartz ];
-    platforms = platforms.linux;
-    # error: ‘PyThreadState’ {aka ‘struct _ts’} has no member named ‘use_tracing’; did you mean ‘tracing’?
-    broken = true;
   };
 }
