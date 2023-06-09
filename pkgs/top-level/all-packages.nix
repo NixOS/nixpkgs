@@ -1416,9 +1416,9 @@ with pkgs;
   };
 
   aflplusplus = callPackage ../tools/security/aflplusplus {
-    clang = clang_9;
-    llvm = llvm_9;
-    python = python3;
+    clang = clang_15;
+    llvm = llvm_15;
+    llvmPackages = llvmPackages_15;
     wine = null;
   };
 
@@ -6944,10 +6944,7 @@ with pkgs;
 
   dsp = callPackage ../tools/audio/dsp { };
 
-  dirdiff = callPackage ../tools/text/dirdiff {
-    tcl = tcl-8_5;
-    tk = tk-8_5;
-  };
+  dirdiff = callPackage ../tools/text/dirdiff { };
 
   dwdiff = callPackage ../applications/misc/dwdiff { };
 
@@ -20731,7 +20728,7 @@ with pkgs;
   };
   glfw2 = callPackage ../development/libraries/glfw/2.x.nix { };
   glfw3 = callPackage ../development/libraries/glfw/3.x.nix {
-    inherit (darwin.apple_sdk.frameworks) Cocoa Kernel;
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa Kernel OpenGL;
   };
 
   glibc = callPackage ../development/libraries/glibc {
@@ -29354,9 +29351,7 @@ with pkgs;
 
   alot = callPackage ../applications/networking/mailreaders/alot { };
 
-  alpine = callPackage ../applications/networking/mailreaders/alpine {
-    tcl = tcl-8_5;
-  };
+  alpine = callPackage ../applications/networking/mailreaders/alpine { };
 
   msgviewer = callPackage ../applications/networking/mailreaders/msgviewer { };
 
