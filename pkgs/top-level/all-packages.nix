@@ -36199,6 +36199,8 @@ with pkgs;
 
   tts = callPackage ../tools/audio/tts { };
 
+  wyoming-piper = callPackage ../tools/audio/wyoming/piper.nix { };
+
   ### GAMES
 
   _1oom = callPackage ../games/1oom { };
