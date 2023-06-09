@@ -3500,10 +3500,11 @@
       psutil-home-assistant
       pyserial
       pyudev
+      sensirion-ble
       sqlalchemy
       webrtcvad
       zeroconf
-    ]; # missing inputs: sensirion-ble
+    ];
     "sensor" = ps: with ps; [
       fnv-hash-fast
       psutil-home-assistant
@@ -5280,6 +5281,7 @@
     "sense"
     "senseme"
     "sensibo"
+    "sensirion_ble"
     "sensor"
     "sensorpro"
     "sensorpush"
