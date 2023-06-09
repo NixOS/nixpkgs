@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, makeFontsConf
 , nix-update-script
 , autoreconfHook
 , pkg-config
@@ -16,28 +17,30 @@
 
 stdenv.mkDerivation rec {
   pname = "libsidplayfp";
-  version = "2.4.2";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "libsidplayfp";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-e+blEdO2KA/noW9pq56qZ0/vvtqQwiDbBJoQR0cQeds=";
+    sha256 = "sha256-KCp/8UjVl8e3+4s1FD4GvHP7AUAS+eIB7RWhmgm5GIA=";
   };
 
   postPatch = ''
     patchShebangs .
   '';
 
+  strictDeps = true;
+
   nativeBuildInputs = [ autoreconfHook pkg-config perl xa ]
     ++ lib.optionals docSupport [ doxygen graphviz ];
 
   buildInputs = [ libgcrypt libexsid ];
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  nativeCheckInputs = [ unittest-cpp ];
+  checkInputs = [ unittest-cpp ];
 
   enableParallelBuilding = true;
 
@@ -53,6 +56,13 @@ stdenv.mkDerivation rec {
     "--with-exsid"
   ]
   ++ lib.optional doCheck "--enable-tests";
+
+  FONTCONFIG_FILE = lib.optionalString docSupport (makeFontsConf { fontDirectories = [ ]; });
+
+  preBuild = ''
+    # Reduce noise from fontconfig during doc building
+    export XDG_CACHE_HOME=$TMPDIR
+  '';
 
   postInstall = lib.optionalString docSupport ''
     mkdir -p $doc/share/doc/libsidplayfp
