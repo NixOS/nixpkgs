@@ -91,6 +91,7 @@ else stdenv.mkDerivation {
     autoPatchelfHook
     wrapGAppsHook
     makeWrapper
+    dpkg
   ];
 
   buildInputs = libraries;
@@ -98,10 +99,6 @@ else stdenv.mkDerivation {
   runtimeDependencies = [
     (lib.getLib systemd)
   ];
-
-  unpackPhase = ''
-    ${dpkg}/bin/dpkg-deb -x $src .
-  '';
 
   installPhase = ''
     runHook preInstall

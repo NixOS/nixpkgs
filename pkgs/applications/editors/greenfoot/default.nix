@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, jdk }:
+{ lib, stdenv, fetchurl, makeWrapper, dpkg, jdk }:
 
 stdenv.mkDerivation rec {
   pname = "greenfoot";
@@ -11,12 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-wGgKDsA/2luw+Nzs9dWb/HRHMx/0S0CFfoI53OCzxug=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  unpackPhase = ''
-    ar xf $src
-    tar xf data.tar.xz
-  '';
+  nativeBuildInputs = [ makeWrapper dpkg ];
 
   installPhase = ''
     mkdir -p $out

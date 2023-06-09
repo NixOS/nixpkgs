@@ -54,10 +54,6 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  unpackPhase = ''
-    dpkg -x $src .
-  '';
-
   buildPhase = ''
     # Replace the embedded Tor binary (which is in a Tar archive)
     # with one from Nixpkgs.

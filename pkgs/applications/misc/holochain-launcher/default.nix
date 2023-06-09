@@ -31,8 +31,6 @@ stdenv.mkDerivation rec {
     libappindicator
   ];
 
-  unpackCmd = "dpkg-deb -x $curSrc source";
-
   installPhase = ''
     mv usr $out
   '';

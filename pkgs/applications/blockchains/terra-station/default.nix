@@ -32,14 +32,10 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper dpkg ];
 
   dontConfigure = true;
   dontBuild = true;
-
-  unpackPhase = ''
-    ${dpkg}/bin/dpkg-deb -x $src .
-  '';
 
   installPhase = ''
     runHook preInstall

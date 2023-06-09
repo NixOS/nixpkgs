@@ -109,12 +109,9 @@ stdenv.mkDerivation rec {
     dpkg
   ];
 
-  unpackPhase = ''
-    dpkg-deb -x $src $out
-  '';
-
   installPhase = ''
-    cp -r $out/usr/share $out/share
+    mkdir -p $out
+    cp -r opt/ usr/share/ $out
 
     substituteInPlace $out/lib/systemd/system/appgate-dumb-resolver.service \
         --replace "/opt/" "$out/opt/"

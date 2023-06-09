@@ -9,7 +9,7 @@
 , libdrm, mesa
 , vulkan-loader
 , nss, nspr
-, patchelf, makeWrapper
+, dpkg, patchelf, makeWrapper
 , wayland, pipewire
 , isSnapshot ? false
 , proprietaryCodecs ? false, vivaldi-ffmpeg-codecs ? null
@@ -38,12 +38,7 @@ in stdenv.mkDerivation rec {
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
-  unpackPhase = ''
-    ar vx $src
-    tar -xvf data.tar.xz
-  '';
-
-  nativeBuildInputs = [ patchelf makeWrapper ];
+  nativeBuildInputs = [ dpkg patchelf makeWrapper ];
 
   dontWrapQtApps = true;
 

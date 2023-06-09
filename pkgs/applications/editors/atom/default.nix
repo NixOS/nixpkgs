@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgs, fetchurl, wrapGAppsHook, glib, gtk3, atomEnv }:
+{ lib, stdenv, pkgs, fetchurl, wrapGAppsHook, dpkg, glib, gtk3, atomEnv }:
 
 let
   versions = {
@@ -30,6 +30,7 @@ let
 
     nativeBuildInputs = [
       wrapGAppsHook  # Fix error: GLib-GIO-ERROR **: No GSettings schemas are installed on the system
+      dpkg
     ];
 
     buildInputs = [
@@ -38,10 +39,6 @@ let
 
     dontBuild = true;
     dontConfigure = true;
-
-    unpackPhase = ''
-      ar p $src data.tar.xz | tar xJ ./usr/
-    '';
 
     installPhase = ''
       runHook preInstall

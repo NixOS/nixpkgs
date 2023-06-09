@@ -47,10 +47,6 @@ stdenv.mkDerivation rec {
 
   runtimeDependencies = with pkgs; [ eudev ];
 
-  unpackCmd = "dpkg -x $src .";
-
-  sourceRoot = ".";
-
   installPhase = ''
     runHook preInstall
 

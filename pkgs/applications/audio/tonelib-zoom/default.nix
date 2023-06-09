@@ -46,8 +46,6 @@ stdenv.mkDerivation rec {
     libjack2
   ];
 
-  unpackCmd = "dpkg -x $curSrc source";
-
   installPhase = ''
     mv usr $out
     substituteInPlace $out/share/applications/ToneLib-Zoom.desktop --replace /usr/ $out/

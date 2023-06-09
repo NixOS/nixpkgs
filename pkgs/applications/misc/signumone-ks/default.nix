@@ -26,10 +26,6 @@ stdenv.mkDerivation rec {
 
   libPath = lib.makeLibraryPath buildInputs;
 
-  unpackPhase = ''
-    dpkg-deb -x ${src} ./
-  '';
-
   installPhase = ''
     DESKTOP_PATH=$out/share/applications/signumone-ks.desktop
 

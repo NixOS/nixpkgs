@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, callPackage, patchelf, makeWrapper, libusb1, avahi-compat, glib, libredirect, nixosTests }:
+{ stdenv, lib, fetchurl, callPackage, patchelf, makeWrapper, dpkg, libusb1, avahi-compat, glib, libredirect, nixosTests }:
 let
   myPatchElf = file: with lib; ''
     patchelf --set-interpreter \
@@ -22,12 +22,7 @@ stdenv.mkDerivation rec {
     };
   }."${system}" or (throw "Unsupported system: ${system}");
 
-  unpackPhase = ''
-    ar x $src
-    tar xfv data.tar.xz
-  '';
-
-  nativeBuildInputs = [ makeWrapper patchelf ];
+  nativeBuildInputs = [ makeWrapper patchelf dpkg ];
   buildInputs = [ libusb1 avahi-compat stdenv.cc.cc glib ];
   dontBuild = true;
 

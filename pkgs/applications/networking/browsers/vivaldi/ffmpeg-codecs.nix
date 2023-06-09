@@ -9,11 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-V+zqLhI8L/8ssxSR6S2v4gUAtoK3fB8Fi9bajBFEauU=";
   };
 
-  buildInputs = [ dpkg ];
-
-  unpackPhase = ''
-    dpkg-deb -x $src .
-  '';
+  nativeBuildInputs = [ dpkg ];
 
   installPhase = ''
     install -vD usr/lib/chromium-browser/libffmpeg.so $out/lib/libffmpeg.so

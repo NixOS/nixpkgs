@@ -44,8 +44,6 @@ stdenv.mkDerivation rec {
     libjack2
   ];
 
-  unpackCmd = "dpkg -x $curSrc source";
-
   installPhase = ''
     mv usr $out
     substituteInPlace $out/share/applications/ToneLib-Jam.desktop --replace /usr/ $out/
