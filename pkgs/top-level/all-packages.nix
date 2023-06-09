@@ -3765,6 +3765,8 @@ with pkgs;
 
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
+  xcodes = callPackage ../development/tools/xcodes { };
+
   gomobile = callPackage ../development/mobile/gomobile { };
 
   ssh-agents = callPackage ../tools/networking/ssh-agents { };
@@ -31111,6 +31113,8 @@ with pkgs;
 
   svox = callPackage ../applications/audio/svox { };
 
+  genesys = callPackage ../applications/misc/genesys { };
+
   giada = callPackage ../applications/audio/giada { };
 
   giara = callPackage ../applications/networking/giara { };
@@ -31666,6 +31670,8 @@ with pkgs;
   wmfs = callPackage ../applications/window-managers/wmfs { };
 
   i810switch = callPackage ../os-specific/linux/i810switch { };
+
+  ical2orgpy = callPackage ../tools/misc/ical2orgpy { };
 
   icewm = callPackage ../applications/window-managers/icewm { };
 
@@ -32943,6 +32949,8 @@ with pkgs;
   nwg-bar = callPackage ../applications/misc/nwg-bar { };
 
   nwg-dock = callPackage ../applications/misc/nwg-dock { };
+
+  nwg-dock-hyprland = callPackage ../applications/misc/nwg-dock-hyprland { };
 
   nwg-drawer = callPackage ../applications/misc/nwg-drawer { };
 
@@ -37102,10 +37110,7 @@ with pkgs;
 
   scid = callPackage ../games/scid { };
 
-  scid-vs-pc = callPackage ../games/scid-vs-pc {
-    tcl = tcl-8_6;
-    tk = tk-8_6;
-  };
+  scid-vs-pc = callPackage ../games/scid-vs-pc { };
 
   scummvm = callPackage ../games/scummvm {
     stdenv = if (stdenv.isDarwin && stdenv.isAarch64) then llvmPackages_14.stdenv else stdenv;
