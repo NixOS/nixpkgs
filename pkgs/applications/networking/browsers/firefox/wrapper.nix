@@ -381,8 +381,6 @@ let
         ${extraPrefs}
         EOF
 
-        mkdir -p $out/lib/${libName}/distribution/extensions
-
         #############################
         #                           #
         #   END EXTRA PREF CHANGES  #
