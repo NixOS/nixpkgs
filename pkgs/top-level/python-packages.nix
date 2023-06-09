@@ -2214,6 +2214,8 @@ self: super: with self; {
 
   csvw = callPackage ../development/python-modules/csvw { };
 
+  csv2md = callPackage ../development/python-modules/csv2md { };
+
   ctap-keyring-device = callPackage ../development/python-modules/ctap-keyring-device { };
 
   cu2qu = callPackage ../development/python-modules/cu2qu { };
