@@ -1,10 +1,10 @@
-{ lib, python3Packages, ... }:
+{ lib, python3Packages, fetchPypi, ... }:
 
 python3Packages.buildPythonPackage rec {
   pname = "ical2orgpy";
   version = "0.4.0";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-7/kWW1oTSJXPJtN02uIDrFdNJ9ExKRUa3tUNA0oJSoc=";
   };
