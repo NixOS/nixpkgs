@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildPythonApplication, libjack2, pyqt5, qttools, which }:
+{ lib, fetchurl, buildPythonApplication, libjack2, pyqt5, qt5, which, bash }:
 
 buildPythonApplication rec {
   pname = "patchance";
@@ -13,10 +13,11 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [
     pyqt5   # pyuic5 and pyrcc5 to build resources.
-    qttools # lrelease to build translations.
+    qt5.qttools # lrelease to build translations.
     which   # which to find lrelease.
+    qt5.wrapQtAppsHook
   ];
-  buildInputs = [ libjack2 ];
+  buildInputs = [ libjack2 bash ];
   propagatedBuildInputs = [ pyqt5 ];
 
   dontWrapQtApps = true; # The program is a python script.
@@ -27,8 +28,15 @@ buildPythonApplication rec {
     "--prefix" "LD_LIBRARY_PATH" ":" (lib.makeLibraryPath [ libjack2 ])
   ];
 
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
+
   postFixup = ''
     wrapPythonProgramsIn "$out/share/patchance/src" "$out $pythonPath"
+    for file in $out/bin/*; do
+      wrapQtApp "$file"
+    done
   '';
 
   meta = with lib; {

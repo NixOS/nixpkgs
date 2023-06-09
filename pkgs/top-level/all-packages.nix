@@ -11817,9 +11817,7 @@ with pkgs;
 
   patchage = callPackage ../applications/audio/patchage { };
 
-  patchance = python3Packages.callPackage ../applications/audio/patchance {
-    inherit (qt5) qttools;
-  };
+  patchance = python3Packages.callPackage ../applications/audio/patchance { };
 
   patatt = callPackage ../development/tools/patatt { };
 
