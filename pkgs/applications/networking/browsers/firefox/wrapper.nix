@@ -133,15 +133,10 @@ let
             ret // {
               "${e.extid}" = {
                 installation_mode = "allowed";
+                install_url = "file://${e.outPath}/${e.extid}.xpi";
               };
             }
           ) {} extensions;
-
-          Extensions = {
-            Install = lib.foldr (e: ret:
-              ret ++ [ "${e.outPath}/${e.extid}.xpi" ]
-            ) [] extensions;
-          };
         } // lib.optionalAttrs smartcardSupport {
           SecurityDevices = {
             "OpenSC PKCS#11 Module" = "opensc-pkcs11.so";
