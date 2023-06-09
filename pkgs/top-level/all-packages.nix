@@ -9623,6 +9623,8 @@ with pkgs;
 
   lemmy-help = callPackage ../tools/misc/lemmy-help { };
 
+  lerpn = callPackage ../tools/misc/lerpn { };
+
   lethe = callPackage ../tools/security/lethe {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
