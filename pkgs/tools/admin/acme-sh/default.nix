@@ -74,5 +74,8 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with lib.maintainers; [ mkaito ] ++ teams.serokell.members;
     inherit (coreutils.meta) platforms;
+    knownVulnerabilities = [
+      "Arbitrary remote code execution; https://github.com/acmesh-official/acme.sh/issues/4659"
+    ];
   };
 }
