@@ -11229,6 +11229,8 @@ self: super: with self; {
 
   sipyco = callPackage ../development/python-modules/sipyco { };
 
+  sisyphus-control = callPackage ../development/python-modules/sisyphus-control { };
+
   siuba = callPackage ../development/python-modules/siuba { };
 
   six = callPackage ../development/python-modules/six { };
