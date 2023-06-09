@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , makeWrapper
+, openssl
 , sgx-sdk
 , sgx-psw
 , which
@@ -23,6 +24,7 @@ let
 
     buildInputs = [
       sgx-sdk
+      openssl
     ];
 
     # The samples don't have proper support for parallel building

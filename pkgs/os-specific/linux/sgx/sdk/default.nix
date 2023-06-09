@@ -29,15 +29,15 @@
 stdenv.mkDerivation rec {
   pname = "sgx-sdk";
   # Version as given in se_version.h
-  version = "2.16.100.4";
+  version = "2.19.100.3";
   # Version as used in the Git tag
-  versionTag = "2.16";
+  versionTag = "2.19";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "linux-sgx";
     rev = "sgx_${versionTag}";
-    hash = "sha256-qgXuJJWiqmcU11umCsE3DnlK4VryuTDAsNf53YPw6UY=";
+    hash = "sha256-6UGcY3evRIDtkjYB1kJWs5HaLFksBw0m+8vyC/nPttc=";
     fetchSubmodules = true;
   };
 
@@ -128,6 +128,8 @@ stdenv.mkDerivation rec {
       install -D ${ipp-crypto-no_mitigation.src}/LICENSE license/LICENSE
 
       popd
+
+      sh external/sgx-emm/create_symlink.sh
     '';
 
   buildFlags = [
@@ -164,6 +166,7 @@ stdenv.mkDerivation rec {
 
     # Move `lib64` to `lib` and symlink `lib64`
     mv $installDir/lib64 lib
+    ln -sf $out/lib/libsgx_urts.so lib/libsgx_urts.so.2
     ln -s lib/ lib64
 
     mv $installDir/include/ .
@@ -216,6 +219,8 @@ stdenv.mkDerivation rec {
 
     echo "Fixing SGX_SDK default in samples"
     substituteInPlace $out/share/SampleCode/LocalAttestation/buildenv.mk \
+      --replace '/opt/intel/sgxsdk' "$out"
+    substituteInPlace $out/share/SampleCode/SampleAttestedTLS/sgxenv.mk \
       --replace '/opt/intel/sgxsdk' "$out"
     for file in $out/share/SampleCode/*/Makefile; do
       substituteInPlace $file \
