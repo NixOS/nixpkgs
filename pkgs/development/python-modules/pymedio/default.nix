@@ -27,7 +27,9 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace "!=3.10.*," "" --replace "!=3.11.*" ""
   '';
 
-  propagatedBuildInputs = [ numpy ];
+  propagatedBuildInputs = [
+    numpy
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -44,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Read medical image files into Numpy arrays";
     homepage = "https://github.com/jcreinhold/pymedio";
+    changelog = "https://github.com/jcreinhold/pymedio/blob/v${version}/HISTORY.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };
