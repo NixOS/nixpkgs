@@ -1,4 +1,5 @@
 # This test runs the FRR suite and multiple routing protocols in a
+
 # chain. It has a client and a server that want to reach each other,
 # which is only possible if all routing protocols converge.
 #
@@ -104,10 +105,14 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
                     bgp router-id 10.1.0.1
                     no bgp ebgp-requires-policy
 
+                    neighbor ibgp4 peer-group
+                    neighbor remote-as internal
+                    
+                    neighbor interface eth2 peer-group ibgp4
+
                     address-family ipv4 unicast
                       network 192.168.1.0/24
-
-                      neighbor eth2 interface remote-as internal
+                    exit-address-family
                 '';
               };
 
@@ -174,10 +179,14 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
                     bgp router-id 10.2.0.1
                     no bgp ebgp-requires-policy
 
+                    neighbor ibgp4 peer-group
+                    neighbor remote-as internal
+                    
+                    neighbor interface eth1 peer-group ibgp4
+                    !
                     address-family ipv4 unicast
                       network 192.168.3.0/24
-
-                      neighbor eth1 interface remote-as internal
+                    exit-address-family
                   !
                 '';
               };
@@ -235,21 +244,27 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
                   machine.wait_until_succeeds("vtysh -c 'show ip ospf neighbor' | grep Full")
                   machine.log(machine.execute("vtysh -c 'show ip ospf neighbor'")[1])
 
-              router1.wait_until_succeeds("ping -c 3 router2 >2&")
-              router2.wait_until_succeeds("ping -c 3 router1 >2&")
+              router1.wait_until_succeeds("ping -c 1 10.2.0.1")
+              router2.wait_until_succeeds("ping -c 1 10.1.0.1")
 
           with subtest("Wait for BGPD"):
               for machine in router1, router2:
                   machine.wait_for_unit("bgpd")
 
           with subtest("Wait for BGP sessions"):
+              router1.wait_until_succeeds("vtysh -c 'show bgp neighbor' |& grep -v 'No BGP neighbors found'")
+              router1.sleep(10)
+              print("summary")
               router1.log(router1.execute("vtysh -c 'show ip bgp summary'")[1])
-              router1.log(router1.execute("vtysh -c 'show ip bgp neighbor'")[1])
+              print("neighbor")
+              router1.log(router1.execute("vtysh -c 'show ip bgp neighbor router2'")[1])
+              print("route")
               router1.log(router1.execute("vtysh -c 'show ip route'")[1])
 
+          print("summary")
           router1.log(router1.execute("vtysh -c 'show bgp summary'")[1])
 
           with subtest("Test ICMP"):
-              client.wait_until_succeeds("ping -c 3 server >&2")
+              client.wait_until_succeeds("ping -c 1 server >&2")
         '';
     })
