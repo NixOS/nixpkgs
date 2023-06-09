@@ -49,8 +49,8 @@ in {
     (fetchpatch {
       name = "CVE-2020-35492.patch";
       includes = [ "src/cairo-image-compositor.c" ];
-      url = "https://github.com/freedesktop/cairo/commit/78266cc8c0f7a595cfe8f3b694bfb9bcc3700b38.patch";
-      sha256 = "048nzfz7rkgqb9xs0dfs56qdw7ckkxr87nbj3p0qziqdq4nb6wki";
+      url = "https://gitlab.freedesktop.org/cairo/cairo/-/commit/78266cc8c0f7a595cfe8f3b694bfb9bcc3700b38.patch";
+      hash = "sha256-cXKzLMENx4/BHXLZg3Kfkx3esCnaNaB7WvjNfL77FhE=";
     })
 
     # Workaround https://gitlab.freedesktop.org/cairo/cairo/-/issues/121
