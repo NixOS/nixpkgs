@@ -364,6 +364,7 @@ buildStdenv.mkDerivation ({
   configurePlatforms = [ ];
 
   configureFlags = [
+    "--allow-addon-sideload"
     "--disable-tests"
     "--disable-updater"
     "--enable-application=${application}"
@@ -381,6 +382,7 @@ buildStdenv.mkDerivation ({
     "--with-system-png" # needs APNG support
     "--with-system-webp"
     "--with-system-zlib"
+    "--with-unsigned-addon-scopes=app"
     "--with-wasi-sysroot=${wasiSysRoot}"
     # for firefox, host is buildPlatform, target is hostPlatform
     "--host=${buildStdenv.buildPlatform.config}"
