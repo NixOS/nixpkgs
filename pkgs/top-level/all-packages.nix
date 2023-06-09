@@ -29523,6 +29523,8 @@ with pkgs;
 
   blocky = callPackage ../applications/networking/blocky { };
 
+  brutefir = callPackage ../applications/audio/brutefir { };
+
   cadence = libsForQt5.callPackage ../applications/audio/cadence { };
 
   cheesecutter = callPackage ../applications/audio/cheesecutter { };
