@@ -3,22 +3,26 @@
 , fetchFromGitHub
 , hdf5
 , numpy
+, onnx
 , opencv3
 , pillow
 , pyaml
 , pyclipper
 , python-bidi
-, torch
+, pythonOlder
 , scikit-image
 , scipy
 , shapely
+, torch
 , torchvision
-, onnx
 }:
 
 buildPythonPackage rec {
   pname = "easyocr";
   version = "1.6.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "JaidedAI";
@@ -34,23 +38,27 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    scikit-image
     hdf5
-    python-bidi
     numpy
     opencv3
-    torchvision
     pillow
     pyaml
     pyclipper
-    torch
+    python-bidi
+    scikit-image
     scipy
     shapely
+    torch
+    torchvision
   ];
 
-  nativeCheckInputs = [ onnx ];
+  nativeCheckInputs = [
+    onnx
+  ];
 
-  pythonImportsCheck = [ "easyocr" ];
+  pythonImportsCheck = [
+    "easyocr"
+  ];
 
   meta = with lib; {
     description = "Ready-to-use OCR with 80+ supported languages and all popular writing scripts";
