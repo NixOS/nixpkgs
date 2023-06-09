@@ -38,10 +38,8 @@ in buildPythonPackage {
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optionals stdenv.isLinux [
     addOpenGLRunpath
-    patchelf
-  ] ++ lib.optionals stdenv.isLinux [
     autoPatchelfHook
     cudaPackages.autoAddOpenGLRunpathHook
   ];
