@@ -36,7 +36,7 @@ buildPythonApplication rec {
   ];
 
   postFixup = ''
-    wrapPythonProgramsIn "$out/share/raysession/src" "$out $pythonPath" "$out/bin"
+    wrapPythonProgramsIn "$out/share/raysession/src" "$out $pythonPath"
     for file in $out/bin/*; do
       wrapQtApp "$file"
     done
