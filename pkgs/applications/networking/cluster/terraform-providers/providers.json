@@ -363,11 +363,11 @@
     "vendorHash": "sha256-2iVEcpESaEdgTcmlQ6Wynuxv8RmPFlhF+BVDSjHmclM="
   },
   "exoscale": {
-    "hash": "sha256-wWGqEwo8dMD+2UeaHSzoo+uXrsHNZRDrGhgneACScPM=",
+    "hash": "sha256-DD6CkdZ9KCCkPCgPyWXaAvHfHyn9rYXRsXg9BVJkELM=",
     "homepage": "https://registry.terraform.io/providers/exoscale/exoscale",
     "owner": "exoscale",
     "repo": "terraform-provider-exoscale",
-    "rev": "v0.48.0",
+    "rev": "v0.49.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -620,11 +620,11 @@
     "vendorHash": "sha256-cLp8w0UcO9Hork/GTLOGCcSvfaYEIKl5so3/0ELm79Y="
   },
   "keycloak": {
-    "hash": "sha256-557IxT6Zpfig7XLpWG0DahsWsgnTD7XAlIgU9CmQH5c=",
+    "hash": "sha256-itnXalLx5Bku7sxM5wKJs2vCvDeJnhR1bQ55ye1tpKs=",
     "homepage": "https://registry.terraform.io/providers/mrparkers/keycloak",
     "owner": "mrparkers",
     "repo": "terraform-provider-keycloak",
-    "rev": "v4.3.0",
+    "rev": "v4.3.1",
     "spdx": "MIT",
     "vendorHash": "sha256-GhmawLENmRuG5ZbXEZAw8pYmHn2SN2ONzfSIVEyN4U4="
   },
@@ -764,11 +764,11 @@
     "vendorHash": null
   },
   "newrelic": {
-    "hash": "sha256-Dz+aVO6RpGcgo9LCPHFdYCiJ3ja+ftJFii5wWQm0/jc=",
+    "hash": "sha256-Qm5rMgJ4SN3gmhoMaDDcXg75r7mYHavQzoiscsUk6Vk=",
     "homepage": "https://registry.terraform.io/providers/newrelic/newrelic",
     "owner": "newrelic",
     "repo": "terraform-provider-newrelic",
-    "rev": "v3.24.0",
+    "rev": "v3.24.1",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-WjiTfHs+MEc06aNstblGKvd3cTj49JF1fvm+tuR2WH8="
   },
@@ -927,11 +927,11 @@
     "vendorHash": "sha256-j+3qtGlueKZgf0LuNps4Wc9G3EmpSgl8ZNSLqslyizI="
   },
   "rancher2": {
-    "hash": "sha256-UDVKmOON190eQzGrxzVtq7gDYeKBBM1nnL2ujU1wDo8=",
+    "hash": "sha256-tkr1zqHeIMrselvnlv+n7kTM89T7zYW82UeQPucG50I=",
     "homepage": "https://registry.terraform.io/providers/rancher/rancher2",
     "owner": "rancher",
     "repo": "terraform-provider-rancher2",
-    "rev": "v3.0.0",
+    "rev": "v3.0.1",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-RSHI994zW7rzA/SJ/Ioilg7mQB/VbDInSeZ9IaEYVIc="
   },
@@ -981,13 +981,13 @@
     "vendorHash": null
   },
   "selectel": {
-    "hash": "sha256-gZiDFcrQZsOE0R74LYwoitAjuPqPZCPLTEL3giom+c8=",
+    "hash": "sha256-Mpf7BcT7uRqqDNHk+IqfjIuRgrzMMcGn71exKBbymd8=",
     "homepage": "https://registry.terraform.io/providers/selectel/selectel",
     "owner": "selectel",
     "repo": "terraform-provider-selectel",
-    "rev": "v3.9.1",
+    "rev": "v3.10.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-+Duf/wdjmw6NBhmy1KmNRJ+ZEjjwtJoXXQCw2lJzxS4="
+    "vendorHash": "sha256-mIIp9+jGfCEe2HFdlARVFldNYBNPTRP8s/G0/URgxVA="
   },
   "sentry": {
     "hash": "sha256-L/aZ4/xCVZk3C6AGglzCj5T9XnoI/uiLbRASNAHwcro=",
