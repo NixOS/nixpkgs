@@ -270,9 +270,9 @@ in
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_1011 = self.callPackage generic {
-      # Supported until 2028-02-16. TODO: make this the default, at some point
-      version = "10.11.3";
-      hash = "sha256-sGWw8ypun9R55Wb9ZnFFA3mIbY3aLZp++TCvHlwmwMc=";
+      # Supported until 2028-02-16
+      version = "10.11.4";
+      hash = "sha256-zo2sElVozF9A2nTBchJ2fJLY+u2BBmWAtSakhaWREn0=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
