@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, cmake }:
+{ lib
+, stdenv
+, bzip2
+, cmake
+, fetchurl
+, fftw
+, llvmPackages
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "cmtk";
@@ -11,6 +19,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
+
+  buildInputs = [
+    bzip2
+    fftw
+    zlib
+  ] ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     (lib.optionalString stdenv.cc.isGNU "-std=c++11")
