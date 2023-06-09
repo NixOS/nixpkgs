@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-xvfb";
-  version = "2.0.0";
+  version = "3.0.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1kyq5rg27dsnj7dc6x9y7r8vwf8rc88y2ppnnw6r96alw0nn9fn4";
+    sha256 = "sha256-N0arH00RWfA/dRY40FNonM0oQpGzi4+wPT67579pz8A=";
   };
 
   buildInputs = [ pytest ];
