@@ -628,8 +628,6 @@ let
 
     hashcons = callPackage ../development/ocaml-modules/hashcons { };
 
-    headache = callPackage ../development/ocaml-modules/headache { };
-
     hex = callPackage ../development/ocaml-modules/hex { };
 
     hidapi = callPackage ../development/ocaml-modules/hidapi { };
@@ -935,6 +933,8 @@ let
     mdx = callPackage ../development/ocaml-modules/mdx { };
 
     mec = callPackage ../development/ocaml-modules/mec { };
+
+    memtrace = callPackage ../development/ocaml-modules/memtrace { };
 
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
@@ -1373,6 +1373,8 @@ let
 
     ppx_repr = callPackage ../development/ocaml-modules/repr/ppx.nix { };
 
+    ppx_show = callPackage ../development/ocaml-modules/ppx_show { };
+
     ppx_tools =
       if lib.versionAtLeast ocaml.version "4.02"
       then callPackage ../development/ocaml-modules/ppx_tools {}
@@ -1576,6 +1578,8 @@ let
     tcpip = callPackage ../development/ocaml-modules/tcpip { };
 
     tcslib = callPackage ../development/ocaml-modules/tcslib { };
+
+    tdigest = callPackage ../development/ocaml-modules/tdigest { };
 
     telegraml = callPackage ../development/ocaml-modules/telegraml { };
 

@@ -89,7 +89,7 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   man-pages = linux;
   mc = all;
   mdadm = linux;
-  mesa = mesaPlatforms;
+  mesa = linux;
   mingetty = linux;
   mktemp = all;
   monotone = linux;

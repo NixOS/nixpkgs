@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, perl, makeWrapper
+{ lib, stdenv, fetchFromGitHub, fetchpatch, perl, makeWrapper
 , makeDesktopItem, which, perlPackages, boost, wrapGAppsHook
 }:
 
@@ -42,10 +42,20 @@ stdenv.mkDerivation rec {
     sed -i 's|"/usr/include/asm-generic/ioctls.h"|<asm-generic/ioctls.h>|g' xs/src/libslic3r/GCodeSender.cpp
   '';
 
-  # note the boost-compile-error is fixed in
-  # https://github.com/slic3r/Slic3r/commit/90f108ae8e7a4315f82e317f2141733418d86a68
-  # this patch can be probably be removed in the next version after 1.3.0
-  patches = lib.optional (lib.versionAtLeast boost.version "1.56.0") ./boost-compile-error.patch;
+  patches = [
+    (fetchpatch {
+      url = "https://web.archive.org/web/20230606220657if_/https://sources.debian.org/data/main/s/slic3r/1.3.0%2Bdfsg1-5/debian/patches/Drop-error-admesh-works-correctly-on-little-endian-machin.patch";
+      hash = "sha256-+F94jzMFBdI++SKgyEZTBaHFVbjxWwgJa8YVbpK0euI=";
+    })
+    (fetchpatch {
+      url = "https://web.archive.org/web/20230606220036if_/https://sources.debian.org/data/main/s/slic3r/1.3.0+dfsg1-5/debian/patches/0006-Fix-FTBFS-with-Boost-1.71.patch";
+      hash = "sha256-4jvNccttig5YI1hXSANAWxVz6C4+kowlacMXVCpFgOo=";
+    })
+    (fetchpatch {
+      url = "https://web.archive.org/web/20230606220054if_/https://sources.debian.org/data/main/s/slic3r/1.3.0+dfsg1-5/debian/patches/fix_boost_174.patch";
+      hash = "sha256-aSmxc2htmrla9l/DIRWeKdBW0LTV96wMUZSLLNjgbzY=";
+    })
+  ];
 
   buildPhase = ''
     export SLIC3R_NO_AUTO=true

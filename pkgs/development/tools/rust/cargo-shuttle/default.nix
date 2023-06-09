@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-shuttle";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "shuttle-hq";
     repo = "shuttle";
     rev = "v${version}";
-    hash = "sha256-w2PkrkHMthGRqWW8PQIoRY41S3qPib5JDKDV6I6ESAw=";
+    hash = "sha256-8i7iYJ9j3NP7otA6d0ow9S6aV2TGxKtYlGS0FXTXUbM=";
   };
 
   cargoLock = {
@@ -50,11 +50,6 @@ rustPlatform.buildRustPackage rec {
     # other tests are failing for different reasons
     "init::shuttle_init_tests::"
   ];
-
-  # Cargo.lock is outdated
-  preConfigure = ''
-    cargo metadata --offline
-  '';
 
   meta = with lib; {
     description = "A cargo command for the shuttle platform";

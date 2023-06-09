@@ -6,6 +6,7 @@
 , makeWrapper
 , writeText
 , wrapGAppsHook
+, callPackage
 
 # Common run-time dependencies
 , zlib
@@ -79,7 +80,7 @@ let
 
   version = "12.0.6";
 
-  srcs = {
+  sources = {
     x86_64-linux = fetchurl {
       url = "https://cdn.mullvad.net/browser/${version}/mullvad-browser-linux64-${version}_ALL.tar.xz";
       hash = "sha256-XE6HFU38FhnikxGHRHxIGS3Z3Y2JNWH0yq2NejqbROI=";
@@ -103,7 +104,7 @@ stdenv.mkDerivation rec {
   pname = "mullvad-browser";
   inherit version;
 
-  src = srcs.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+  src = sources.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = [ copyDesktopItems makeWrapper wrapGAppsHook ];
 
@@ -219,10 +220,19 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru = {
+    inherit sources;
+    updateScript = callPackage ../tor-browser-bundle-bin/update.nix {
+      inherit pname version meta;
+      baseUrl = "https://cdn.mullvad.net/browser/";
+      prefix = "mullvad-browser-";
+    };
+  };
+
   meta = with lib; {
     description = "Privacy-focused browser made in a collaboration between The Tor Project and Mullvad";
     homepage = "https://mullvad.net/en/browser";
-    platforms = attrNames srcs;
+    platforms = attrNames sources;
     maintainers = with maintainers; [ felschr ];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain

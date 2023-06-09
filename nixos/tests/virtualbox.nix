@@ -386,7 +386,7 @@ let
     '';
 
     meta = with pkgs.lib.maintainers; {
-      maintainers = [ aszlig cdepillabout ];
+      maintainers = [ aszlig ];
     };
   };
 

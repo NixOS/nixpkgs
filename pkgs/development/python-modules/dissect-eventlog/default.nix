@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-eventlog";
-  version = "3.4";
+  version = "3.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.eventlog";
     rev = "refs/tags/${version}";
-    hash = "sha256-dU34eEUwRGHm/S0w6rnXJmootv1trkhKlXjWcfCFB3Q=";
+    hash = "sha256-YSJnNT+zzsS7aKT44NFwU3AmvhbTtW6kIgNd/CbSLYY=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

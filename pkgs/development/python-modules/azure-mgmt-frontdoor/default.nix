@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-frontdoor";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-nJXQ/BpyOwmybNUqE4cBxq5xxZE56lqgHSTKZTIHIuU=";
+    sha256 = "sha256-GqrJNNcQrNffgqRywgaJ2xkwy+fOJai/RlSVkpw6NWg=";
   };
 
   propagatedBuildInputs = [

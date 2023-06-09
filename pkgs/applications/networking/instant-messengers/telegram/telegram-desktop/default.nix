@@ -6,6 +6,7 @@
 , cmake
 , ninja
 , python3
+, gobject-introspection
 , wrapGAppsHook
 , wrapQtAppsHook
 , extra-cmake-modules
@@ -13,8 +14,9 @@
 , qtwayland
 , qtsvg
 , qtimageformats
-, qt5compat
 , gtk3
+, boost
+, fmt
 , libdbusmenu
 , lz4
 , xxHash
@@ -55,6 +57,7 @@
 , microsoft-gsl
 , rlottie
 , stdenv
+, nix-update-script
 }:
 
 # Main reference:
@@ -73,15 +76,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "4.8.1";
-  # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
+  version = "4.8.3";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "0mxxfh70dffkrq76nky3pwrk10s1q4ahxx2ddb58dz8igq6pl4zi";
+    hash = "sha256-fvg9SFHRHeJVogYQ+vyVqGyLGnOjM5Osi3H0SNGe9fY=";
   };
 
   patches = [
@@ -91,6 +93,15 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://salsa.debian.org/debian/telegram-desktop/-/raw/09b363ed5a4fcd8ecc3282b9bfede5fbb83f97ef/debian/patches/Disable-register-custom-scheme.patch";
       hash = "sha256-B8X5lnSpwwdp1HlvyXJWQPybEN+plOwimdV5gW6aY2Y=";
+    })
+    # Bring custom xdg-activation implementation back
+    # Fixes https://github.com/telegramdesktop/tdesktop/issues/2635: TG desktop doen't open links
+    # https://github.com/desktop-app/lib_base/pull/180
+    (fetchpatch {
+      url = "https://github.com/desktop-app/lib_base/commit/6041498fbafcd0a22df88b7973d9e8f9bdf16958.patch";
+      extraPrefix = "Telegram/lib_base/";
+      stripLen = 1;
+      hash = "sha256-9IV1T/tjN2VA7wcpbt2GRpOMC76yOzRlGWuIAa8HTX0=";
     })
   ];
 
@@ -103,6 +114,8 @@ stdenv.mkDerivation rec {
       --replace '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
     substituteInPlace Telegram/lib_webview/webview/platform/linux/webview_linux_webkitgtk_library.cpp \
       --replace '"libwebkitgtk-6.0.so.4"' '"${webkitgtk_6_0}/lib/libwebkitgtk-6.0.so.4"'
+    substituteInPlace cmake/external/glib/CMakeLists.txt \
+      --replace 'add_subdirectory(cppgir)' 'add_subdirectory(cppgir EXCLUDE_FROM_ALL)'
   '';
 
   # We want to run wrapProgram manually (with additional parameters)
@@ -114,6 +127,7 @@ stdenv.mkDerivation rec {
     cmake
     ninja
     python3
+    gobject-introspection
     wrapGAppsHook
     wrapQtAppsHook
     extra-cmake-modules
@@ -124,8 +138,9 @@ stdenv.mkDerivation rec {
     qtwayland
     qtsvg
     qtimageformats
-    qt5compat
     gtk3
+    boost
+    fmt
     libdbusmenu
     lz4
     xxHash
@@ -174,6 +189,11 @@ stdenv.mkDerivation rec {
     "-DDESKTOP_APP_USE_PACKAGED_FONTS=OFF"
   ];
 
+  preBuild = ''
+    # for cppgir to locate gir files
+    export GI_GIR_PATH="$XDG_DATA_DIRS"
+  '';
+
   postFixup = ''
     # This is necessary to run Telegram in a pure environment.
     # We also use gappsWrapperArgs from wrapGAppsHook.
@@ -186,7 +206,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit tg_owt;
-    updateScript = ./update.py;
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

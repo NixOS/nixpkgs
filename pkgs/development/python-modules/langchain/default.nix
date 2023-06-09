@@ -59,6 +59,7 @@
 , chardet
 , requests-toolbelt
 , neo4j
+, langchainplus-sdk
   # test dependencies
 , pytest-vcr
 , pytest-asyncio
@@ -70,11 +71,12 @@
 , responses
 , pexpect
 , pytestCheckHook
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.0.184";
+  version = "0.0.193";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -83,7 +85,7 @@ buildPythonPackage rec {
     owner = "hwchase17";
     repo = "langchain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DIPlOsV+s7KQF70stCE7M2UwfvAqp3LskR0UtuOnuCs=";
+    hash = "sha256-Qg6kFFPOk+XpLzEl3YSI9I4fPq9KB4UtQf9Khgut7FE=";
   };
 
   postPatch = ''
@@ -95,6 +97,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   buildInputs = [
@@ -215,8 +218,13 @@ buildPythonPackage rec {
       # azure-ai-formrecognizer
       # azure-ai-vision
       # azure-cognitiveservices-speech
+      langchainplus-sdk
     ];
   };
+
+  pythonRelaxDeps = [
+    "langchainplus-sdk"
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

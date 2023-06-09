@@ -26,6 +26,10 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   patches = [
+    # Fix Meson tests that fail when the Nix store is case-sensitive APFS.
+    # https://github.com/mesonbuild/meson/pull/11820
+    ./darwin-case-sensitive-fs.patch
+
     # Meson is currently inspecting fewer variables than autoconf does, which
     # makes it harder for us to use setup hooks, etc.  Taken from
     # https://github.com/mesonbuild/meson/pull/6827

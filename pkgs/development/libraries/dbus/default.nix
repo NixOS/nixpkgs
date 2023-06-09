@@ -67,6 +67,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isLinux [ audit libapparmor ];
   # ToDo: optional selinux?
 
+  __darwinAllowLocalNetworking = true;
+
   configureFlags = [
     "--enable-user-session"
     "--enable-xml-docs"

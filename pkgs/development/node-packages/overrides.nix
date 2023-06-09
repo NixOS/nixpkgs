@@ -17,6 +17,8 @@ let
 in
 
 final: prev: {
+  inherit nodejs;
+
   "@angular/cli" = prev."@angular/cli".override {
     prePatch = ''
       export NG_CLI_ANALYTICS=false
@@ -134,6 +136,15 @@ final: prev: {
     buildInputs = [ final.node-gyp-build pkgs.libtool pkgs.autoconf pkgs.automake ];
     meta = oldAttrs.meta // { broken = since "12"; };
   });
+
+  castnow = prev.castnow.override {
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+
+    postInstall = ''
+      wrapProgram "$out/bin/castnow" \
+          --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.ffmpeg ]}
+    '';
+  };
 
   eask = prev."@emacs-eask/cli".override {
     name = "eask";

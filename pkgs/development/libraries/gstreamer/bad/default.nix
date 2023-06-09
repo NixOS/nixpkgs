@@ -38,7 +38,6 @@
 , bluez
 , chromaprint
 , curl
-, directfb
 , fdk_aac
 , flite
 , gsm
@@ -104,6 +103,7 @@
 , microdnsSupport ? false
 # Checks meson.is_cross_build(), so even canExecute isn't enough.
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
+, guiSupport ? true, directfb
 }:
 
 stdenv.mkDerivation rec {
@@ -183,9 +183,6 @@ stdenv.mkDerivation rec {
     libwebp
     xvidcore
     gnutls
-    libGL
-    libGLU
-    gtk3
     game-music-emu
     openssl
     libxml2
@@ -220,7 +217,6 @@ stdenv.mkDerivation rec {
     mjpegtools
 
     chromaprint
-    directfb
     flite
     libdrm
     libgudev
@@ -237,6 +233,13 @@ stdenv.mkDerivation rec {
     serd
     sord
     sratom
+
+    libGL
+    libGLU
+  ] ++ lib.optionals guiSupport [
+    gtk3
+  ] ++ lib.optionals (stdenv.isLinux && guiSupport) [
+    directfb
   ] ++ lib.optionals stdenv.isDarwin [
     # For unknown reasons the order is important, e.g. if
     # VideoToolbox is last, we get:
@@ -297,10 +300,11 @@ stdenv.mkDerivation rec {
     "-Ddoc=disabled" # needs gstcuda to be enabled which is Linux-only
     "-Dnvcodec=disabled" # Linux-only
     "-Dva=disabled" # see comment on `libva` in `buildInputs`
+  ] ++ lib.optionals (!stdenv.isLinux || !guiSupport) [
+    "-Ddirectfb=disabled"
   ]
   ++ lib.optionals stdenv.isDarwin [
     "-Dchromaprint=disabled"
-    "-Ddirectfb=disabled"
     "-Dflite=disabled"
     "-Dkms=disabled" # renders to libdrm output
     "-Dlv2=disabled"

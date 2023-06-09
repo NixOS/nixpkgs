@@ -3,6 +3,7 @@
 , buildGo120Module
 , fetchFromGitHub
 , nixosTests
+, installShellFiles
 }:
 
 let
@@ -23,10 +24,17 @@ let
         inherit sha256;
       };
 
+      nativeBuildInputs = [ installShellFiles ];
+
       # ui:
       #  Nomad release commits include the compiled version of the UI, but the file
       #  is only included if we build with the ui tag.
       tags = [ "ui" ];
+
+      postInstall = ''
+        echo "complete -C $out/bin/nomad nomad" > nomad.bash
+        installShellCompletion nomad.bash
+      '';
 
       meta = with lib; {
         homepage = "https://www.nomadproject.io/";

@@ -68,12 +68,19 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    boto3
     hypothesis
     packaging
     pytest-randomly
     pytestCheckHook
     shapely
   ];
+
+  doCheck = true;
+
+  preCheck = ''
+    rm -r rasterio # prevent importing local rasterio
+  '';
 
   pytestFlagsArray = [
     "-m 'not network'"
@@ -86,15 +93,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "rasterio"
   ];
-
-  doInstallCheck = true;
-
-  installCheckPhase = ''
-    $out/bin/rio --show-versions | grep -E "rasterio:\s${version}" > /dev/null
-    $out/bin/rio --show-versions | grep -E "GDAL:\s[0-9]+(\.[0-9]+)*" > /dev/null
-    $out/bin/rio --show-versions | grep -E "PROJ:\s[0-9]+(\.[0-9]+)*" > /dev/null
-    $out/bin/rio --show-versions | grep -E "GEOS:\s[0-9]+(\.[0-9]+)*" > /dev/null
-  '';
 
   meta = with lib; {
     description = "Python package to read and write geospatial raster data";
