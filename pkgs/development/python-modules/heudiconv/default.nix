@@ -14,7 +14,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.12.2";
+  version = "0.13.1";
   pname = "heudiconv";
 
   disabled = isPy27;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     #sha256 = "0gzqqa4pzhywdbvks2qjniwhr89sgipl5k7h9hcjs7cagmy9gb05";
-    sha256 = "sha256-cYr74mw7tXRJRr8rXlu1UMZuU3YXXfDzhuc+vaa+7PQ=";
+    sha256 = "sha256-UUBRC6RToj4XVbJnxG+EKdue4NVpTAW31RNm9ieF1lU=";
   };
 
   postPatch = ''
