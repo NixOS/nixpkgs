@@ -13,6 +13,8 @@
 buildPythonPackage rec {
   pname = "pymedio";
   version = "0.2.14";
+  format = "setuptools";
+
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
@@ -21,11 +23,6 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-x3CHoWASDrUoCXfj73NF+0Y/3Mb31dK2Lh+o4OD9ryk=";
   };
-
-  # relax Python dep to work with 3.10.x and 3.11.x
-  postPatch = ''
-    substituteInPlace setup.cfg --replace "!=3.10.*," "" --replace "!=3.11.*" ""
-  '';
 
   propagatedBuildInputs = [
     numpy
