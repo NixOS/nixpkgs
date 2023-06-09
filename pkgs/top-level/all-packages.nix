@@ -20152,6 +20152,8 @@ with pkgs;
 
   cpp-jwt = callPackage ../development/libraries/cpp-jwt { };
 
+  ctranslate2 = callPackage ../development/libraries/ctranslate2 { };
+
   ubus = callPackage ../development/libraries/ubus { };
 
   uci = callPackage ../development/libraries/uci { };
