@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , autoPatchelfHook
 , fetchFromGitHub
 , python3Packages
@@ -23,7 +24,7 @@ python3Packages.buildPythonApplication rec {
       --replace "==" ">="
   '';
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optionals stdenv.isLinux [
     autoPatchelfHook
   ];
 
@@ -46,9 +47,8 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Fast genome-wide functional annotation through orthology assignment";
-    license = licenses.gpl2;
+    license = licenses.agpl3Only;
     homepage = "https://github.com/eggnogdb/eggnog-mapper/wiki";
     maintainers = with maintainers; [ luispedro ];
-    platforms = platforms.all;
   };
 }
