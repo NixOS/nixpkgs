@@ -233,7 +233,7 @@ stdenv.mkDerivation rec {
     description = "Privacy-focused browser made in a collaboration between The Tor Project and Mullvad";
     homepage = "https://mullvad.net/en/browser";
     platforms = attrNames sources;
-    maintainers = with maintainers; [ felschr ];
+    maintainers = with maintainers; [ felschr panicgh ];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.
