@@ -1,6 +1,7 @@
 { stdenv
 , fetchurl
 , jq
+, strip-nondeterminism
 , unzip
 , writeScript
 , zip
@@ -44,11 +45,13 @@ stdenv.mkDerivation {
     echo "$NEW_MANIFEST" > "$out/$UUID/manifest.json"
     cd "$out/$UUID"
     zip -r -q -FS "$out/$UUID.xpi" *
+    strip-nondeterminism "$out/$UUID.xpi"
     rm -r "$out/$UUID"
   '';
 
   nativeBuildInputs = [
     jq
+    strip-nondeterminism
     unzip
     zip
   ];
