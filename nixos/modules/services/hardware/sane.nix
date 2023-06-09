@@ -37,6 +37,8 @@ let
 
   enabled = config.hardware.sane.enable || config.services.saned.enable;
 
+  listenStreams = map (address: "${address}:${toString config.services.saned.listenPort}") config.services.saned.listenAddresses;
+
 in
 
 {
@@ -165,6 +167,32 @@ in
       '';
     };
 
+    services.saned.listenAddresses = mkOption {
+      type = types.listOf types.string;
+      default = [ "0.0.0.0" "[::]" ];
+      example = [ "192.168.25.3" "[2041:0000:140f::875b:131b]" ];
+      description = lib.mdDoc ''
+        The IPv4/IPv6 address(es) on which `saned` binds to and listens for incoming requests.
+      '';
+    };
+
+    # it's a deliberate decision to make `listenPort` read-only,
+    # since the `sane-net` backend doesn't allow to define a custom port per remote scanner,
+    # but instead relies on `sane-port` from `/etc/services`, which would then have to be the
+    # same port for all remote devices.
+    # Besides that, `/etc/services` isn't easily customizable on NixOS, but is instead taken
+    # as-is from pkgs.iana-etc
+    services.saned.listenPort = mkOption {
+      type = types.port;
+      default = 6566;
+      example = literalExpression "7654";
+      description = lib.mdDoc ''
+        Port on which `saned` listens for incoming requests.
+      '';
+      readOnly = true;
+      visible = false;
+    };
+
     services.saned.extraConfig = mkOption {
       type = types.lines;
       default = "";
@@ -211,7 +239,7 @@ in
       systemd.sockets.saned = {
         description = "saned incoming socket";
         wantedBy = [ "sockets.target" ];
-        listenStreams = [ "0.0.0.0:6566" "[::]:6566" ];
+        listenStreams = listenStreams;
         socketConfig = {
           # saned needs to distinguish between IPv4 and IPv6 to open matching data sockets.
           BindIPv6Only = "ipv6-only";
