@@ -1,7 +1,12 @@
-{stdenv, unzip, jq, zip, fetchurl,writeScript,  ...}:
+{ stdenv
+, fetchurl
+, jq
+, unzip
+, writeScript
+, zip
+}:
 
-{
-  name
+{ name
 , url ? null
 , md5 ? ""
 , sha1 ? ""
@@ -14,7 +19,8 @@
 
 let
   extid = if fixedExtid == null then "nixos@${name}" else fixedExtid;
-  source = if url == null then src else fetchurl {
+  source = if url == null then src else
+  fetchurl {
     url = url;
     inherit md5 sha1 sha256 sha512 hash;
   };
@@ -40,5 +46,10 @@ stdenv.mkDerivation {
     zip -r -q -FS "$out/$UUID.xpi" *
     rm -r "$out/$UUID"
   '';
-  nativeBuildInputs = [ unzip zip jq  ];
+
+  nativeBuildInputs = [
+    jq
+    unzip
+    zip
+  ];
 }
