@@ -581,6 +581,8 @@ with pkgs;
 
   frece = callPackage ../development/tools/frece { };
 
+  frida-tools = callPackage ../tools/security/frida-tools { };
+
   frink = callPackage ../development/tools/frink { };
 
   frugal = callPackage ../development/tools/frugal { };
@@ -15608,6 +15610,8 @@ with pkgs;
   gobang = callPackage ../development/tools/database/gobang {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
   };
+
+  goblob = callPackage ../tools/security/goblob { };
 
   gogetdoc = callPackage ../development/tools/gogetdoc { };
 
