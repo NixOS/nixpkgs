@@ -125,10 +125,10 @@ crate_: lib.makeOverridable
       #   hello = attrs: { buildInputs = [ openssl ]; };
       # }
     , crateOverrides
-      # Rust library dependencies, i.e. other libaries that were built
+      # Rust library dependencies, i.e. other libraries that were built
       # with buildRustCrate.
     , dependencies
-      # Rust build dependencies, i.e. other libaries that were built
+      # Rust build dependencies, i.e. other libraries that were built
       # with buildRustCrate and are used by a build script.
     , buildDependencies
       # Specify the "extern" name of a library if it differs from the library target.
