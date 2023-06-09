@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
@@ -32,7 +32,19 @@ let
     LD_LIBRARY_PATH = [ "/etc/sane-libs" ];
   };
 
-  backends = [ pkg netConf ] ++ optional config.services.saned.enable sanedConf ++ config.hardware.sane.extraBackends;
+  backends = [ pkg netConf ]
+    ++ optional config.services.saned.enable sanedConf
+    ++ (
+      if
+        # airscan was explicitly disabled
+        (options.hardware.sane.airscan.enable == true && config.hardware.sane.airscan.enable == false)
+      then
+        # ...ensure, the sane-airscan pkg is not listed in extraBackends
+        lib.lists.remove pkgs.sane-airscan config.hardware.sane.extraBackends
+      else
+        # ...just use extraBackends and if airscan is enabled, add sane-airscan
+        lib.lists.unique (config.hardware.sane.extraBackends ++ (optional config.hardware.sane.airscan.enable pkgs.sane-airscan))
+    );
   saneConfig = pkgs.mkSaneConfig { paths = backends; inherit (config.hardware.sane) disabledDefaultBackends enabledDefaultBackends; };
 
   enabled = config.hardware.sane.enable || config.services.saned.enable;
@@ -78,6 +90,15 @@ in
         :::
       '';
       example = literalExpression "[ pkgs.hplipWithPlugin pkgs.sane-airscan ]";
+    };
+
+    hardware.sane.airscan.enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Enable SANE AirScan, to use network connected scanners based on
+        the WSD or eSCL protocol.
+      '';
     };
 
     hardware.sane.disabledDefaultBackends = mkOption {
