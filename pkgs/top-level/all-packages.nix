@@ -3470,6 +3470,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  fedifetcher = callPackage ../tools/misc/fedifetcher { };
+
   fitnesstrax = callPackage ../applications/misc/fitnesstrax { };
 
   flavours = callPackage ../applications/misc/flavours { };
