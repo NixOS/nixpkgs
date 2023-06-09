@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "stem";
-  version = "1.8.1";
+  version = "1.8.2";
 
   # As of May 2023, the master branch of stem contains fixes for Python 3.11
   # that the last release (1.8.1) doesn't. The test suite fails on both master
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gdQ6fGaLqde8EQOy56kR6dFIKUs3PSelmujaee96Pi8=";
+    hash = "sha256-g/sZ/9TJ+CIHwAYFFIA4n4CvIhp+R4MACu3sTjhOtYI=";
   };
 
   postPatch = ''
