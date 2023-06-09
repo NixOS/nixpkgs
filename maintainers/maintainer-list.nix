@@ -4946,6 +4946,12 @@
     githubId = 1847524;
     name = "Evan Stoll";
   };
+  evanrichter = {
+    email = "evanjrichter@gmail.com";
+    github = "evanrichter";
+    githubId = 330292;
+    name = "Evan Richter";
+  };
   evax = {
     email = "nixos@evax.fr";
     github = "evax";
