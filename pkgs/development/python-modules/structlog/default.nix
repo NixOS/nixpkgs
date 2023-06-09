@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "structlog";
-  version = "22.3.0";
+  version = "23.1.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "hynek";
     repo = "structlog";
     rev = "refs/tags/${version}";
-    hash = "sha256-+r+M+uTXdNBWQf0TGQuZgsCXg2CBKwH8ZE2+uAe0Dzg=";
+    hash = "sha256-0zHvBMiZB4cGntdYXA7C9V9+FfnDB6sHGuFRYAo/LJw=";
   };
 
   nativeBuildInputs = [
