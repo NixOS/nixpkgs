@@ -33,7 +33,7 @@ let
   };
 
   backends = [ pkg netConf ] ++ optional config.services.saned.enable sanedConf ++ config.hardware.sane.extraBackends;
-  saneConfig = pkgs.mkSaneConfig { paths = backends; inherit (config.hardware.sane) disabledDefaultBackends; };
+  saneConfig = pkgs.mkSaneConfig { paths = backends; inherit (config.hardware.sane) disabledDefaultBackends enabledDefaultBackends; };
 
   enabled = config.hardware.sane.enable || config.services.saned.enable;
 
@@ -84,6 +84,16 @@ in
       example = [ "v4l" ];
       description = lib.mdDoc ''
         Names of backends which are enabled by default but should be disabled.
+        See `$SANE_CONFIG_DIR/dll.conf` for the list of possible names.
+      '';
+    };
+
+    hardware.sane.enabledDefaultBackends = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "plustek_pp" ];
+      description = lib.mdDoc ''
+        Names of backends which are disabled by default but should be enabled.
         See `$SANE_CONFIG_DIR/dll.conf` for the list of possible names.
       '';
     };

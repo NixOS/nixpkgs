@@ -1,6 +1,6 @@
 { lib, stdenv }:
 
-{ paths, disabledDefaultBackends ? [] }:
+{ paths, disabledDefaultBackends ? [], enabledDefaultBackends ? [] }:
 
 with lib;
 let
@@ -29,18 +29,31 @@ installSanePath = path: ''
       fi
     '';
     # don't use `substituteInPlace`, since it struggles to escape patterns like '${backend}[[:cntrl:]]'
-    # or '${backend}[$"\n"]' which is required here, since otherwise partial matches might disable
+    # or '${backend}[$"\n"]' which is required here, since otherwise partial matches might disable/enable
     # other backends as well (e.g. `ricoh` vs `ricoh2`)
     disableBackend = backend: ''
       grep -q -E '^#?${backend}$' $out/etc/sane.d/dll.conf || { echo '"${backend}" is not a default plugin in $SANE_CONFIG_DIR/dll.conf that could be disabled'; exit 1; }
       sed -i 's/^${backend}$/#${backend} # disabled by NixOS config/g' $out/etc/sane.d/dll.conf
+    '';
+    enableBackend = backend: ''
+      grep -q -E '^#?${backend}$' $out/etc/sane.d/dll.conf || { echo '"${backend}" is not a plugin in $SANE_CONFIG_DIR/dll.conf that could be enabled'; exit 1; }
+      sed -i 's/^#${backend}$/${backend} # enabled by NixOS config/g' $out/etc/sane.d/dll.conf
     '';
 in
 stdenv.mkDerivation {
   name = "sane-config";
   dontUnpack = true;
 
-  installPhase = ''
+  installPhase =
+    assert lib.assertMsg (
+      lib.lists.mutuallyExclusive disabledDefaultBackends enabledDefaultBackends
+    ) ( ''
+      A backend can't be enabled and disabled at the same time: ${
+      lib.strings.concatStringsSep ", " (lib.lists.intersectLists disabledDefaultBackends enabledDefaultBackends)}.
+      See: `enabledDefaultBackends`/`disabledDefaultBackends in `hardware.sane`.
+      ''
+    );
+  ''
     function symlink () {
       local target=$1 linkname=$2
       if [ -e "$linkname" ]; then
@@ -52,5 +65,6 @@ stdenv.mkDerivation {
     mkdir -p $out/etc/sane.d $out/etc/sane.d/dll.d $out/lib/sane
   ''
   + (concatMapStrings installSanePath paths)
-  + (concatMapStrings disableBackend disabledDefaultBackends);
+  + (concatMapStrings disableBackend disabledDefaultBackends)
+  + (concatMapStrings enableBackend enabledDefaultBackends);
 }
