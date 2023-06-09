@@ -5536,8 +5536,6 @@ self: super: with self; {
 
   lark = callPackage ../development/python-modules/lark { };
 
-  larynx-train = callPackage ../development/python-modules/larynx-train { };
-
   laspy = callPackage ../development/python-modules/laspy { };
 
   laszip = callPackage ../development/python-modules/laszip { };
@@ -7642,6 +7640,8 @@ self: super: with self; {
   pipdeptree = callPackage ../development/python-modules/pipdeptree { };
 
   pipenv-poetry-migrate = callPackage ../development/python-modules/pipenv-poetry-migrate { };
+
+  piper-train = callPackage ../development/python-modules/piper-train { };
 
   pip-api = callPackage ../development/python-modules/pip-api { };
 

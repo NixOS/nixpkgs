@@ -6,11 +6,11 @@
 , espeak-ng
 , onnxruntime
 , pcaudiolib
-, larynx-train
+, piper-train
 }:
 
 let
-  pname = "larynx";
+  pname = "piper";
   version = "0.0.2";
 in
 stdenv.mkDerivation {
@@ -18,9 +18,9 @@ stdenv.mkDerivation {
 
   src = fetchFromGitHub {
     owner = "rhasspy";
-    repo = "larynx2";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6SZ1T2A1DyVmBH2pJBHJdsnniRuLrI/dthRTRRyVSQQ=";
+    repo = "piper";
+    rev = "70afec58bc131010c8993c154ff02a78d1e7b8b0";
+    hash = "sha256-zTW7RGcV8Hh7G6Braf27F/8s7nNjAqagp7tmrKO10BY=";
   };
 
   sourceRoot = "source/src/cpp";
@@ -45,19 +45,19 @@ stdenv.mkDerivation {
     runHook preInstall
 
     mkdir -p $out/bin
-    install -m 0755 larynx $out/bin
+    install -m 0755 piper $out/bin
 
     runHook postInstall
   '';
 
   passthru.tests = {
-    inherit larynx-train;
+    inherit piper-train;
   };
 
   meta = with lib; {
-    changelog = "https://github.com/rhasspy/larynx2/releases/tag/v${version}";
+    changelog = "https://github.com/rhasspy/piper/releases/tag/v${version}";
     description = "A fast, local neural text to speech system";
-    homepage = "https://github.com/rhasspy/larynx2";
+    homepage = "https://github.com/rhasspy/piper";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };
