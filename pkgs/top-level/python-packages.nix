@@ -2218,6 +2218,10 @@ self: super: with self; {
 
   ctap-keyring-device = callPackage ../development/python-modules/ctap-keyring-device { };
 
+  ctranslate2 = callPackage ../development/python-modules/ctranslate2 {
+    ctranslate2-cpp = pkgs.ctranslate2;
+  };
+
   cu2qu = callPackage ../development/python-modules/cu2qu { };
 
   cucumber-tag-expressions = callPackage ../development/python-modules/cucumber-tag-expressions { };
