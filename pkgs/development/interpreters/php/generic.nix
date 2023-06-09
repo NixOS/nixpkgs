@@ -337,6 +337,10 @@ let
             maintainers = teams.php.members;
             platforms = platforms.all;
             outputsToInstall = [ "out" "dev" ];
+            # Will automatically mark php < 8.1 vulnerable with 23.11
+            knownVulnerabilities = optionals ((versionOlder version "8.1") && (isInOldestRelease 2305)) [
+              "PHP 8.0 is reaching its end of life on 2023/11/26 and cannot be supported through the NixOS 23.11 release cycle. https://www.php.net/supported-versions.php"
+            ];
           };
         };
       in
