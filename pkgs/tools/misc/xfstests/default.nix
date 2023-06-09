@@ -5,12 +5,12 @@
 
 stdenv.mkDerivation rec {
   pname = "xfstests";
-  version = "2022.09.04";
+  version = "2023.05.14";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git";
     rev = "v${version}";
-    sha256 = "sha256-hPFoqNmB8pewvBN1nzVMkTrMHCo0xc8tmmIODaiDeRw=";
+    sha256 = "sha256-yyjY9Q3eUH+q+o15zFUjOcNz1HpXPCwdcxWXoycOx98=";
   };
 
   nativeBuildInputs = [
