@@ -38,6 +38,7 @@ with lib;
       gpsd = super.gpsd.override { guiSupport = false; };
       graphviz = super.graphviz-nox;
       gst_all_1 = super.gst_all_1 // {
+        gst-plugins-bad = super.gst_all_1.gst-plugins-bad.override { guiSupport = false; };
         gst-plugins-base = super.gst_all_1.gst-plugins-base.override { enableX11 = false; };
       };
       imagemagick = super.imagemagick.override { libX11Support = false; libXtSupport = false; };

@@ -201,7 +201,7 @@ in buildPythonPackage {
     homepage = "http://tensorflow.org";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
-    maintainers = with maintainers; [ jyp abbradar cdepillabout ];
+    maintainers = with maintainers; [ jyp abbradar ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

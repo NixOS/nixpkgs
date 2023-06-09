@@ -88,6 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
     # not need to know binutils' BINDIR at all. It's an absolute path
     # where libraries are stored.
     ./plugins-no-BINDIR.patch
+
+    # CVE-2023-1972 fix to bfd/elf.c from:
+    # https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=c22d38baefc5a7a1e1f5cdc9dbb556b1f0ec5c57
+    ./CVE-2023-1972.patch
   ]
   ++ lib.optional targetPlatform.isiOS ./support-ios.patch
   # Adds AVR-specific options to "size" for compatibility with Atmel's downstream distribution

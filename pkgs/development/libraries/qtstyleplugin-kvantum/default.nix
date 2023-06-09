@@ -5,8 +5,9 @@
 , qmake
 , qtbase
 , qtsvg
-, qtx11extras
-, kwindowsystem
+, qtx11extras ? null
+, kwindowsystem ? null
+, qtwayland
 , libX11
 , libXext
 , qttools
@@ -34,11 +35,10 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtbase
     qtsvg
-    qtx11extras
-    kwindowsystem
     libX11
     libXext
-  ];
+  ] ++ lib.optionals (lib.versionOlder qtbase.version "6") [ qtx11extras kwindowsystem ]
+    ++ lib.optional (lib.versionAtLeast qtbase.version "6") qtwayland;
 
   sourceRoot = "source/Kvantum";
 
@@ -66,6 +66,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tsujan/Kvantum";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    maintainers = with maintainers; [ romildo Scrumplex ];
   };
 }

@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , cmake
 , pkg-config
@@ -17,14 +18,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lagrange";
-  version = "1.16.1";
+  version = "1.16.3";
 
   src = fetchFromGitHub {
     owner = "skyjake";
     repo = "lagrange";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-vVCKQDcL/NWeNE3tbmEUgDOBw6zxXy7IcT7IB6/paSo=";
+    hash = "sha256-DpgCxnwkNP2mZNYygxFLMufEijYoLr4qor0DYCmbps8=";
   };
+
+  patches = [
+    # fixes `lagrange-tui`
+    # remove when 1.64.4 comes out
+    (fetchpatch {
+      name = "tui-fixed-build-after-changes-to-text-init.patch";
+      url = "https://github.com/skyjake/lagrange/commit/1c811221acc5b8eb47210fba90dc3a789a093e9b.patch";
+      hash = "sha256-K0njCcEOOYAwo3FI8eBg53Qo8J/iNBqCn3WCKQb0cgk=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake pkg-config zip ];
 

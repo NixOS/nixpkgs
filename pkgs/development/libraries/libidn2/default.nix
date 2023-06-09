@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
   # Beware: non-bootstrap libidn2 is overridden by ./hack.nix
   outputs = [ "bin" "dev" "out" "info" "devdoc" ];
 
-  patches = lib.optional stdenv.isDarwin ./fix-error-darwin.patch;
-
   enableParallelBuilding = true;
 
   # The above patch causes the documentation to be regenerated, so the

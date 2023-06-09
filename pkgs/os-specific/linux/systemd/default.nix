@@ -190,6 +190,16 @@ stdenv.mkDerivation (finalAttrs: {
     ./0017-inherit-systemd-environment-when-calling-generators.patch
     ./0018-core-don-t-taint-on-unmerged-usr.patch
     ./0019-tpm2_context_init-fix-driver-name-checking.patch
+
+    (fetchpatch {
+      # https://github.com/systemd/systemd/pull/25948
+      #
+      # [Firmware file size bug]: Some UEFI firmwares fail on large
+      # reads. Now that systemd-boot loads initrd itself, systems with
+      # such firmware won't boot without this fix
+      url = "https://github.com/systemd/systemd/commit/3ed1d966f00b002ed822ca9de116252bd91fe6c3.patch";
+      hash = "sha256-pwXrLTScqgnvfddlzUBZpwsoMrvRLcZPp6e4whMcyL4=";
+    })
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {

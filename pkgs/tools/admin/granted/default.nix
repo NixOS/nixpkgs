@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "granted";
-  version = "0.11.1";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "common-fate";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-m6cFAX8FMyv9H1IKm6meWu2yNEZz4g1Q+h2rRijYJsc=";
+    sha256 = "sha256-UoU2+RBR6vBLRx5gJsVUswoEtZ8chCn+bSv+k4SCGyU=";
   };
 
-  vendorSha256 = "sha256-8BPntTgd7QqO2T3vyWXC1z5yE/ovg3D3iilnislqV30=";
+  vendorHash = "sha256-P7HeJUdVlqrTEMVXGlvcCr9ezEmqIw5AX/+xdcFQoH4=";
 
   nativeBuildInputs = [ makeWrapper ];
 

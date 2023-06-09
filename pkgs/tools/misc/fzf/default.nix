@@ -44,6 +44,8 @@ buildGoModule rec {
 
   vendorHash = "sha256-O6OjBbrVAxDQd27ar2mmFkU1XyVM2C8SJWJ54rgaf2s=";
 
+  CGO_ENABLED = 0;
+
   outputs = [ "out" "man" ];
 
   nativeBuildInputs = [ installShellFiles ];

@@ -1,11 +1,8 @@
 # This module creates a virtual machine from the NixOS configuration.
 # Building the `config.system.build.vm' attribute gives you a command
 # that starts a KVM/QEMU VM running the NixOS configuration defined in
-# `config'.  The Nix store is shared read-only with the host, which
-# makes (re)building VMs very efficient.  However, it also means you
-# can't reconfigure the guest inside the guest - you need to rebuild
-# the VM in the host.  On the other hand, the root filesystem is a
-# read/writable disk image persistent across VM reboots.
+# `config'. By default, the Nix store is shared read-only with the
+# host, which makes (re)building VMs very efficient.
 
 { config, lib, pkgs, options, ... }:
 
@@ -778,12 +775,11 @@ in
         default = false;
         description =
           lib.mdDoc ''
-            If enabled, the virtual machine will be booted using the
-            regular boot loader (i.e., GRUB 1 or 2).  This allows
-            testing of the boot loader.  If
-            disabled (the default), the VM directly boots the NixOS
-            kernel and initial ramdisk, bypassing the boot loader
-            altogether.
+            Use a boot loader to boot the system.
+            This allows, among other things, testing the boot loader.
+
+            If disabled, the kernel and initrd are directly booted,
+            forgoing any bootloader.
           '';
       };
 
@@ -1026,7 +1022,6 @@ in
         "-netdev user,id=user.0,${forwardingOptions}${restrictNetworkOption}\"$QEMU_NET_OPTS\""
       ];
 
-    # FIXME: Consolidate this one day.
     virtualisation.qemu.options = mkMerge [
       (mkIf cfg.qemu.virtioKeyboard [
         "-device virtio-keyboard"
@@ -1078,14 +1073,12 @@ in
       }) cfg.emptyDiskImages)
     ];
 
+    # Use mkVMOverride to enable building test VMs (e.g. via `nixos-rebuild
+    # build-vm`) of a system configuration, where the regular value for the
+    # `fileSystems' attribute should be disregarded (since those filesystems
+    # don't necessarily exist in the VM).
     fileSystems = mkVMOverride cfg.fileSystems;
 
-    # Mount the host filesystem via 9P, and bind-mount the Nix store
-    # of the host into our own filesystem.  We use mkVMOverride to
-    # allow this module to be applied to "normal" NixOS system
-    # configuration, where the regular value for the `fileSystems'
-    # attribute should be disregarded for the purpose of building a VM
-    # test image (since those filesystems don't exist in the VM).
     virtualisation.fileSystems = let
       mkSharedDir = tag: share:
         {

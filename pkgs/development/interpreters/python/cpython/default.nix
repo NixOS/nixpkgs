@@ -53,6 +53,7 @@
 , enableLTO ? stdenv.is64bit && stdenv.isLinux
 , reproducibleBuild ? false
 , pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}"
+, noldconfigPatch ? ./. + "/${sourceVersion.major}.${sourceVersion.minor}/no-ldconfig.patch"
 } @ inputs:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -141,6 +142,11 @@ let
     "$out/bin/python"
   else pythonForBuild.interpreter;
 
+  src = fetchurl {
+    url = with sourceVersion; "https://www.python.org/ftp/python/${major}.${minor}.${patch}/Python-${version}.tar.xz";
+    inherit hash;
+  };
+
   # The CPython interpreter contains a _sysconfigdata_<platform specific suffix>
   # module that is imported by the sysconfig and distutils.sysconfig modules.
   # The sysconfigdata module is generated at build time and contains settings
@@ -216,15 +222,11 @@ let
 
 in with passthru; stdenv.mkDerivation {
   pname = "python3";
-  inherit version;
+  inherit src version;
 
   inherit nativeBuildInputs;
   buildInputs = [ bash ] ++ buildInputs; # bash is only for patchShebangs
 
-  src = fetchurl {
-    url = with sourceVersion; "https://www.python.org/ftp/python/${major}.${minor}.${patch}/Python-${version}.tar.xz";
-    inherit hash;
-  };
 
   prePatch = optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
@@ -251,7 +253,7 @@ in with passthru; stdenv.mkDerivation {
     # ctypes.util.find_library during the loading of the uuid module
     # (since it will do a futile invocation of gcc (!) to find
     # libuuid, slowing down program startup a lot).
-    (./. + "/${sourceVersion.major}.${sourceVersion.minor}/no-ldconfig.patch")
+    noldconfigPatch
     # Make sure that the virtualenv activation scripts are
     # owner-writable, so venvs can be recreated without permission
     # errors.
@@ -283,7 +285,7 @@ in with passthru; stdenv.mkDerivation {
           sha256 = "1h18lnpx539h5lfxyk379dxwr8m2raigcjixkf133l4xy3f4bzi2";
         }
     )
-  ] ++ optionals (pythonOlder "3.12") [
+  ] ++ optionals (pythonAtLeast "3.7" && pythonOlder "3.12") [
     # LDSHARED now uses $CC instead of gcc. Fixes cross-compilation of extension modules.
     ./3.8/0001-On-all-posix-systems-not-just-Darwin-set-LDSHARED-if.patch
     # Use sysconfigdata to find headers. Fixes cross-compilation of extension modules.
@@ -523,7 +525,24 @@ in with passthru; stdenv.mkDerivation {
 
   separateDebugInfo = true;
 
-  inherit passthru;
+  passthru = passthru // {
+    doc = stdenv.mkDerivation {
+      inherit src;
+      name = "python${pythonVersion}-${version}-doc";
+
+      dontConfigure = true;
+
+      dontBuild = true;
+
+      sphinxRoot = "Doc";
+
+      postInstallSphinx = ''
+        mv $out/share/doc/* $out/share/doc/python${pythonVersion}-${version}
+      '';
+
+      nativeBuildInputs = with pkgsBuildBuild.python3.pkgs; [ sphinxHook python_docs_theme ];
+    };
+  };
 
   enableParallelBuilding = true;
 

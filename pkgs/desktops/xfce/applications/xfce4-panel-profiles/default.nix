@@ -2,14 +2,14 @@
  gtk3, libxfce4ui, libxfce4util, pango, harfbuzz, gdk-pixbuf, atk }:
 
 let
-  pythonEnv = python3.withPackages(ps: [ ps.pygobject3 ]);
+  pythonEnv = python3.withPackages(ps: [ ps.pygobject3 ps.psutil ]);
   makeTypelibPath = lib.makeSearchPathOutput "lib/girepository-1.0" "lib/girepository-1.0";
 in mkXfceDerivation {
   category = "apps";
   pname = "xfce4-panel-profiles";
-  version = "1.0.13";
+  version = "1.0.14";
 
-  sha256 = "sha256-B3Q5d3KBN5m8wY82CIbIugJC8nNS+OcgKchn+TGrDhc=";
+  sha256 = "sha256-mGA70t2U4mqEbcrj/DDsPl++EKWyZ8YXzKzzVOrH5h8=";
 
   nativeBuildInputs = [ intltool gettext ];
   propagatedBuildInputs = [ pythonEnv ];

@@ -87,9 +87,9 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libjpeg
     tremor
-    libGL
     pango
   ] ++ lib.optionals (!stdenv.isDarwin) [
+    libGL
     libvisual
   ] ++ lib.optionals stdenv.isDarwin [
     OpenGL

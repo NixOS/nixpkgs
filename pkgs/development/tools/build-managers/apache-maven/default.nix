@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   inherit jdk;
 
   meta = with lib; {
+    mainProgram = "mvn";
     description = "Build automation tool (used primarily for Java projects)";
     homepage = "https://maven.apache.org/";
     license = licenses.asl20;

@@ -6,9 +6,6 @@
 , passthru ? { }
 , patches ? [ ]
 
-  # Go tags, passed to go via -tag
-, tags ? [ ]
-
   # A function to override the go-modules derivation
 , overrideModAttrs ? (_oldAttrs: { })
 
@@ -201,7 +198,7 @@ let
 
         declare -a flags
         flags+=($buildFlags "''${buildFlagsArray[@]}")
-        flags+=(''${tags:+-tags=${lib.concatStringsSep "," tags}})
+        flags+=(''${tags:+-tags=''${tags// /,}})
         flags+=(''${ldflags:+-ldflags="$ldflags"})
         flags+=("-p" "$NIX_BUILD_CORES")
 

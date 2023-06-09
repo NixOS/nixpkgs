@@ -2,6 +2,7 @@
 , fetchurl
 , makeDesktopItem
 , writeText
+, callPackage
 
 # Common run-time dependencies
 , zlib
@@ -88,11 +89,11 @@ let
   fteLibPath = lib.makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "12.0.6";
+  version = "12.0.7";
 
   lang = "ALL";
 
-  srcs = {
+  sources = {
     x86_64-linux = fetchurl {
       urls = [
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
@@ -100,7 +101,7 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
       ];
-      hash = "sha256-MLy/T8A+udasITWYSzaqXSFhA3PJsG7DnKJG0b9UYvA=";
+      hash = "sha256-lo+Iy6I7S1NV1E9CBPqJjRFzuEXGC80NRUUlpZfG5wU=";
     };
 
     i686-linux = fetchurl {
@@ -110,7 +111,7 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
       ];
-      hash = "sha256-njJB5k7rQxRyL7foU8fLCQxy43dJvV26oKvQ+fw6U0o=";
+      hash = "sha256-aLHZUFDZZ4i7BXoM5YxPrznYw812/OGmhG97t9okOvs=";
     };
   };
 
@@ -131,7 +132,7 @@ stdenv.mkDerivation rec {
   pname = "tor-browser-bundle-bin";
   inherit version;
 
-  src = srcs.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+  src = sources.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
   preferLocalBuild = true;
   allowSubstitutes = false;
@@ -447,6 +448,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru = {
+    inherit sources;
+    updateScript = callPackage ./update.nix {
+      inherit pname version meta;
+    };
+  };
+
   meta = with lib; {
     description = "Tor Browser Bundle built by torproject.org";
     longDescription = ''
@@ -460,8 +468,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.torproject.org/";
     changelog = "https://gitweb.torproject.org/builders/tor-browser-build.git/plain/projects/tor-browser/Bundle-Data/Docs/ChangeLog.txt?h=maint-${version}";
-    platforms = attrNames srcs;
-    maintainers = with maintainers; [ offline matejc thoughtpolice joachifm hax404 KarlJoad ];
+    platforms = attrNames sources;
+    maintainers = with maintainers; [ felschr panicgh joachifm hax404 ];
     mainProgram = "tor-browser";
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain

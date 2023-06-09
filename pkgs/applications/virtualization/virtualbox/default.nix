@@ -1,5 +1,5 @@
 { config, stdenv, fetchurl, lib, acpica-tools, dev86, pam, libxslt, libxml2, wrapQtAppsHook
-, libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL, libcap, libGL
+, libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL2, libcap, libGL, libGLU
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
 , qttools, qtsvg, qtwayland, pkg-config, which, docbook_xsl, docbook_xml_dtd_43
 , alsa-lib, curl, libvpx, nettools, dbus, substituteAll, gsoap, zlib
@@ -24,14 +24,14 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  version = "7.0.6";
+  version = "7.0.8";
 in stdenv.mkDerivation {
   pname = "virtualbox";
   inherit version;
 
   src = fetchurl {
-    url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "f146d9a86a35af0abb010e628636fd800cb476cc2ce82f95b0c0ca876e1756ff";
+    url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}a.tar.bz2";
+    sha256 = "7de37359518d467b7f888235175cd388f66e9f16bd9359dd6265fbc95933c1e6";
   };
 
   outputs = [ "out" "modsrc" ];
@@ -45,12 +45,12 @@ in stdenv.mkDerivation {
   buildInputs = [
     acpica-tools dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
     libcap glib lvm2 alsa-lib curl libvpx pam makeself perl
-    libXmu libpng libopus python3 ]
+    libXmu libXrandr libpng libopus python3 ]
     ++ optional javaBindings jdk
     ++ optional pythonBindings python3 # Python is needed even when not building bindings
     ++ optional pulseSupport libpulseaudio
-    ++ optionals headless [ libXrandr libGL ]
-    ++ optionals (!headless) [ qtbase qtx11extras libXinerama SDL ]
+    ++ optionals headless [ libGL ]
+    ++ optionals (!headless) [ qtbase qtx11extras libXinerama SDL2 libGLU ]
     ++ optionals enableWebService [ gsoap zlib ];
 
   hardeningDisable = [ "format" "fortify" "pic" "stackprotector" ];
@@ -82,6 +82,8 @@ in stdenv.mkDerivation {
 
   patches =
      optional enableHardening ./hardened.patch
+     # Since VirtualBox 7.0.8, VBoxSDL requires SDL2, but the build framework uses SDL1
+  ++ optional (!headless) ./fix-sdl.patch
   ++ [ ./extra_symbols.patch ]
      # When hardening is enabled, we cannot use wrapQtApp to ensure that VirtualBoxVM sees
      # the correct environment variables needed for Qt to work, specifically QT_PLUGIN_PATH.

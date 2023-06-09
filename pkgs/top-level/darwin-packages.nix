@@ -100,11 +100,17 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     bintools = self.binutils-unwrapped;
   };
 
-  cctools = callPackage ../os-specific/darwin/cctools/port.nix {
+  cctools = self.cctools-port;
+
+  cctools-apple = callPackage ../os-specific/darwin/cctools/apple.nix {
     stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
   };
 
-  cctools-apple = callPackage ../os-specific/darwin/cctools/apple.nix {
+  cctools-llvm = callPackage ../os-specific/darwin/cctools/llvm.nix {
+    stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
+  };
+
+  cctools-port = callPackage ../os-specific/darwin/cctools/port.nix {
     stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
   };
 
