@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , python3
 , fetchYarnDeps
-, fixup_yarn_lock
+, prefetch-yarn-deps
 , pkg-config
 , libsass
 , nodejs_18
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     export HOME=$PWD
 
     cd web-frontend
-    fixup_yarn_lock yarn.lock
+    fixup-yarn-lock yarn.lock
     yarn config --offline set yarn-offline-mirror $offlineCache
     yarn install --offline --frozen-lockfile --ignore-scripts
     patchShebangs node_modules
