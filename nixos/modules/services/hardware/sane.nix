@@ -149,11 +149,19 @@ in
       type = types.bool;
       default = false;
       description = lib.mdDoc ''
-        Enable saned network daemon for remote connection to scanners.
+        Enable `saned` network daemon to share local scanners with other remote SANE
+        instances which utilize the `net` backend to connect to remote `saned` instances.
+      '';
+    };
 
-        saned would be run from `scanner` user; to allow
-        access to hardware that doesn't have `scanner` group
-        you should add needed groups to this user.
+    services.saned.extraGroups = mkOption {
+      type = types.listOf types.string;
+      default = [];
+      example = literalExpression "[ \"video\" \"usb\" ]";
+      description = lib.mdDoc ''
+        Additional groups to which the `saned` service will get access to.
+        This might be required, when `saned` needs to access device nodes of scanners
+        protected by a group membership.
       '';
     };
 
@@ -192,8 +200,10 @@ in
         description = "Scanner Service";
         environment = mapAttrs (name: val: toString val) env;
         serviceConfig = {
-          User = "scanner";
-          Group = "scanner";
+          User = "saned";
+          Group = "saned";
+          DynamicUser = true;
+          SupplementaryGroups = [ "lp" "scanner" ] ++ config.services.saned.extraGroups;
           ExecStart = "${pkg}/bin/saned";
         };
       };
