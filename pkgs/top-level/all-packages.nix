@@ -36203,6 +36203,8 @@ with pkgs;
 
   tts = callPackage ../tools/audio/tts { };
 
+  wyoming-faster-whisper = callPackage ../tools/audio/wyoming/faster-whisper.nix { };
+
   wyoming-piper = callPackage ../tools/audio/wyoming/piper.nix { };
 
   ### GAMES
