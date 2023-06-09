@@ -17084,6 +17084,8 @@ with pkgs;
 
   davmail = callPackage ../applications/networking/davmail { };
 
+  kamilalisp = callPackage ../development/interpreters/kamilalisp { };
+
   kanif = callPackage ../applications/networking/cluster/kanif { };
 
   kona = callPackage ../development/interpreters/kona { };
