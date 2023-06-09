@@ -185,7 +185,7 @@ self: super: {
 
   ghc-exactprint = unmarkBroken (addBuildDepends (with self.ghc-exactprint.scope; [
    HUnit Diff data-default extra fail free ghc-paths ordered-containers silently syb
-  ]) super.ghc-exactprint_1_7_0_0);
+  ]) super.ghc-exactprint_1_7_0_1);
 
   inherit (pkgs.lib.mapAttrs (_: doJailbreak ) super)
     hls-cabal-plugin
