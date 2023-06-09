@@ -21,13 +21,13 @@
 
 mkDerivation rec {
   pname = "organicmaps";
-  version = "2023.05.08-7";
+  version = "2023.06.04-13";
 
   src = fetchFromGitHub {
     owner = "organicmaps";
     repo = "organicmaps";
     rev = "${version}-android";
-    sha256 = "sha256-V7qTi5NiZf+1voZSHfuAyfMeTeiYfs/CoOQ2zweKmaU=";
+    hash = "sha256-HoEOKN99ClR1sa8YFZcS9XomtXnTRdAXS0iQEdDrhvc=";
     fetchSubmodules = true;
   };
 
@@ -37,6 +37,9 @@ mkDerivation rec {
 
     # crude fix for https://github.com/organicmaps/organicmaps/issues/1862
     echo "echo ${lib.replaceStrings ["." "-"] ["" ""] version}" > tools/unix/version.sh
+
+    # TODO use system boost instead, see https://github.com/organicmaps/organicmaps/issues/5345
+    patchShebangs 3party/boost/tools/build/src/engine/build.sh
   '';
 
   nativeBuildInputs = [
