@@ -2005,6 +2005,8 @@ self: super: with self; {
 
   compiledb = callPackage ../development/python-modules/compiledb { };
 
+  complycube = callPackage ../development/python-modules/complycube { };
+
   compreffor = callPackage ../development/python-modules/compreffor { };
 
   concurrent-log-handler = callPackage ../development/python-modules/concurrent-log-handler { };
