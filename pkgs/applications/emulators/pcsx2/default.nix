@@ -58,7 +58,12 @@ stdenv.mkDerivation rec {
     "-DDISABLE_BUILD_DATE=TRUE"
   ];
 
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook zip ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapQtAppsHook
+    zip
+  ];
 
   buildInputs = [
     curl
