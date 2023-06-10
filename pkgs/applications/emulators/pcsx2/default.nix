@@ -23,6 +23,7 @@
 , rapidyaml
 , SDL2
 , soundtouch
+, strip-nondeterminism
 , vulkan-headers
 , vulkan-loader
 , wayland
@@ -61,6 +62,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    strip-nondeterminism
     wrapQtAppsHook
     zip
   ];
@@ -100,6 +102,7 @@ stdenv.mkDerivation rec {
     install -Dm644 $src/.github/workflows/scripts/linux/pcsx2-qt.desktop $out/share/applications/PCSX2.desktop
 
     zip -jq $out/bin/resources/patches.zip ${pcsx2_patches}/patches/*
+    strip-nondeterminism $out/bin/resources/patches.zip
   '';
 
   qtWrapperArgs = [
