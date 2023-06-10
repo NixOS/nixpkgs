@@ -34,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python package to interact with Obihai devices";
     homepage = "https://github.com/dshokouhi/pyobihai";
+    changelog = "https://github.com/ejpenney/pyobihai/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
