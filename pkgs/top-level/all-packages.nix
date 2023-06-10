@@ -1699,6 +1699,8 @@ with pkgs;
 
   pferd = callPackage ../tools/misc/pferd { };
 
+  polygon-cli = callPackage ../tools/networking/polygon-cli { };
+
   proycon-wayout = callPackage ../tools/wayland/proycon-wayout { };
 
   q = callPackage ../tools/networking/q { };
