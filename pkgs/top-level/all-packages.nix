@@ -3530,6 +3530,8 @@ with pkgs;
 
   graphite-cli = nodePackages.graphite-cli;
 
+  guayadeque = callPackage ../applications/audio/guayadeque { };
+
   gucci = callPackage ../tools/text/gucci { };
 
   guglielmo = libsForQt5.callPackage ../applications/radio/guglielmo { };
