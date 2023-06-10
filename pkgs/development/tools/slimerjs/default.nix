@@ -2,6 +2,7 @@
 , bash
 , fetchFromGitHub
 , firefox
+, strip-nondeterminism
 , stdenv
 , unzip
 , zip
@@ -19,7 +20,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ zip ];
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [
+    strip-nondeterminism
+    unzip
+  ];
 
   preConfigure = ''
     test -d src && cd src
@@ -27,6 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    strip-nondeterminism --type zip omni.ja
     mkdir -p "$out"/{bin,share/doc/slimerjs,lib/slimerjs}
     cp LICENSE README* "$out/share/doc/slimerjs"
     cp -r * "$out/lib/slimerjs"
