@@ -105,5 +105,10 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers  = with lib.maintainers; [ rrbutani ];
     mainProgram  = "lm4flash";
     platforms    = with lib.platforms; unix ++ windows;
+    badPlatforms = with lib.systems.inspect; [
+      # `libusb1` doesn't appear to produce DLLs; we get runtime errors when
+      # not linking statically.
+      { isStatic = false; parsed = patterns.isWindows; }
+    ];
   };
 })
