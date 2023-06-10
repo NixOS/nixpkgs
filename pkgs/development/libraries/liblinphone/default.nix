@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DENABLE_STATIC=NO" # Do not build static libraries
     "-DENABLE_UNIT_TESTS=NO" # Do not build test executables
+    "-DENABLE_STRICT=NO" # Do not build with -Werror
   ];
 
   buildInputs = [
