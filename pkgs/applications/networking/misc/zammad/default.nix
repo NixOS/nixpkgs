@@ -28,7 +28,10 @@ let
 
     src = fetchFromGitHub (lib.importJSON ./source.json);
 
-    patches = [ ./0001-nulldb.patch ];
+    patches = [
+      ./0001-nulldb.patch
+      ./fix-sendmail-location.diff
+    ];
 
     postPatch = ''
       sed -i -e "s|ruby '3.1.[0-9]\+'|ruby '${ruby.version}'|" Gemfile
