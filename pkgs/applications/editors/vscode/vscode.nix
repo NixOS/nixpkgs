@@ -1,7 +1,7 @@
 { stdenv, lib, callPackage, fetchurl
 , isInsiders ? false
 , commandLineArgs ? ""
-, useVSCodeRipgrep ? false
+, useVSCodeRipgrep ? stdenv.isDarwin
 }:
 
 let
