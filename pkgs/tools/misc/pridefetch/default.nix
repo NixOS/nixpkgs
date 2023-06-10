@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, python3, zip }: let
+{ lib
+, fetchFromGitHub
+, python3
+, stdenv
+, zip
+}:
+
+let
   version = "1.1.0";
   sha256 = "sha256-563xOz63vto19yuaHtReV1dSw6BgNf+CLtS3lrPnaoc=";
 
@@ -9,16 +16,21 @@
     rev = "v" + version;
     inherit sha256;
   };
-in stdenv.mkDerivation {
+in
+
+stdenv.mkDerivation {
   inherit pname version src;
+
   nativeBuildInputs = [
     zip
   ];
+
   buildInputs = [
     (python3.withPackages (pythonPackages: with pythonPackages; [
       distro
     ]))
   ];
+
   buildPhase = ''
     runHook preBuild
     pushd src
@@ -28,6 +40,7 @@ in stdenv.mkDerivation {
     rm pridefetch.zip
     runHook postBuild
   '';
+
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
@@ -35,6 +48,7 @@ in stdenv.mkDerivation {
     chmod +x $out/bin/pridefetch
     runHook postInstall
   '';
+
   meta = with lib; {
     description = "Print out system statistics with pride flags";
     longDescription = ''
