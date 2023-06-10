@@ -7,6 +7,7 @@
 , makeDesktopItem
 , makeWrapper
 , stdenv
+, strip-nondeterminism
 , zip
 }:
 
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
+    strip-nondeterminism
     zip
   ];
 
@@ -55,6 +57,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     zip -9 -r orthorobot.love ./*
+    strip-nondeterminism --type zip orthorobot.love
     install -Dm444 -t $out/share/games/lovegames/ orthorobot.love
     makeWrapper ${love}/bin/love $out/bin/orthorobot \
                 --add-flags $out/share/games/lovegames/orthorobot.love
