@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, love, zip, fetchpatch, makeWrapper
-, makeDesktopItem, copyDesktopItems }:
+{ lib
+, copyDesktopItems
+, fetchFromGitHub
+, fetchpatch
+, fetchurl
+, love
+, makeDesktopItem
+, makeWrapper
+, stdenv
+, zip
+}:
 
 stdenv.mkDerivation rec {
   pname = "orthorobot";
@@ -29,7 +38,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ makeWrapper zip copyDesktopItems ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+    zip
+  ];
 
   patches = [
     # support for love11
