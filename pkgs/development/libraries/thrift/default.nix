@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://archive.apache.org/dist/thrift/${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-snLBeIuxZdmVIaJZmzG5f6aeWTHQmQFdka4QegsMxY8=";
+    sha256 = "sha256-snLBeIuxZdmVIaJZmzG5f6aeWTHQmQFdka4QegsMxY8=";
   };
 
   # Workaround to make the Python wrapper not drop this package:
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "setuptools-gte-62.1.0.patch"; # https://github.com/apache/thrift/pull/2635
       url = "https://github.com/apache/thrift/commit/c41ad9d5119e9bdae1746167e77e224f390f2c42.diff";
-      hash = "sha256-FkErrg/6vXTomS4AsCsld7t+Iccc55ZiDaNjJ3W1km0=";
+      sha256 = "sha256-FkErrg/6vXTomS4AsCsld7t+Iccc55ZiDaNjJ3W1km0=";
     })
   ];
 
