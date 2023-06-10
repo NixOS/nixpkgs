@@ -6241,6 +6241,8 @@ with pkgs;
 
   can-utils = callPackage ../os-specific/linux/can-utils { };
 
+  cannelloni = callPackage ../os-specific/linux/cannelloni { };
+
   caudec = callPackage ../applications/audio/caudec { };
 
   ccd2iso = callPackage ../tools/cd-dvd/ccd2iso { };
@@ -9397,6 +9399,8 @@ with pkgs;
   manifest-tool = callPackage ../development/tools/manifest-tool { };
 
   mask = callPackage ../development/tools/mask { };
+
+  maskromtool = qt6Packages.callPackage ../tools/graphics/maskromtool { };
 
   mathpix-snipping-tool = callPackage ../tools/misc/mathpix-snipping-tool { };
 
@@ -18684,8 +18688,6 @@ with pkgs;
   heroku = callPackage ../development/tools/heroku { };
 
   highlight-assertions = callPackage ../development/tools/misc/highlight-assertions { };
-
-  ccloud-cli = callPackage ../development/tools/ccloud-cli { };
 
   confluent-cli = callPackage ../development/tools/confluent-cli { };
 
