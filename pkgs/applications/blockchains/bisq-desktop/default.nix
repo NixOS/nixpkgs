@@ -9,6 +9,7 @@
 , dpkg
 , writeScript
 , bash
+, strip-nondeterminism
 , tor
 , zip
 , xz
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     dpkg
     imagemagick
     makeWrapper
+    strip-nondeterminism
     xz
     zip
   ];
@@ -71,8 +73,9 @@ stdenv.mkDerivation rec {
 
     mkdir -p native/linux/x64/
     cp ${bisq-tor} ./tor
-    tar -cJf native/linux/x64/tor.tar.xz tor
+    tar --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cJf native/linux/x64/tor.tar.xz tor
     zip -r opt/bisq/lib/app/desktop-${version}-all.jar native
+    strip-nondeterminism opt/bisq/lib/app/desktop-${version}-all.jar
   '';
 
   installPhase = ''
