@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , python3
 , stdenv
+, strip-nondeterminism
 , zip
 }:
 
@@ -22,6 +23,7 @@ stdenv.mkDerivation {
   inherit pname version src;
 
   nativeBuildInputs = [
+    strip-nondeterminism
     zip
   ];
 
@@ -35,6 +37,7 @@ stdenv.mkDerivation {
     runHook preBuild
     pushd src
     zip -r ../pridefetch.zip ./*
+    strip-nondeterminism ../pridefetch.zip
     popd
     echo '#!/usr/bin/env python' | cat - pridefetch.zip > pridefetch
     rm pridefetch.zip
