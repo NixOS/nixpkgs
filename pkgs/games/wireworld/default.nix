@@ -19,7 +19,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-8BshnGLuA8lmG9g7FU349DWKP/fZvlvjrQBau/LSJ4E=";
   };
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems zip ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+    zip
+  ];
 
   desktopItems = [
     (makeDesktopItem {
