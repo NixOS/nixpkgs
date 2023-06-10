@@ -227,9 +227,9 @@ in
     };
 
     testScript = { nodes, ... }: let
-      originalSystem = nodes.machine.config.system.build.toplevel;
-      baseSystem = nodes.common.config.system.build.toplevel;
-      finalSystem = nodes.with_netbootxyz.config.system.build.toplevel;
+      originalSystem = nodes.machine.system.build.toplevel;
+      baseSystem = nodes.common.system.build.toplevel;
+      finalSystem = nodes.with_netbootxyz.system.build.toplevel;
     in ''
       machine.succeed("test -e /boot/efi/fruits/tomato.efi")
       machine.succeed("test -e /boot/efi/nixos/.extra-files/efi/fruits/tomato.efi")
