@@ -5,6 +5,7 @@
 , libusb1
 , darwin
 , testers
+, buildPackages
 # As per the README, `lmicdiusb` is not supported on Windows since it needs
 # `poll`:
 # https://github.com/utzig/lm4tools/blob/61a7d17b85e9b4b040fdaf84e02599d186f8b585/README.md#L15
@@ -74,10 +75,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   # `lmicdiusb` has no help text so we don't check that it can run.
   doCheck = true;
-  passthru.tests = {
+  passthru.tests = let
+    inherit (stdenv) hostPlatform;
+    emulatorAvailable = hostPlatform.emulatorAvailable buildPackages;
+    emulator = hostPlatform.emulator buildPackages;
+    binary = lib.getExe finalAttrs.finalPackage;
+    extension = hostPlatform.extensions.executable;
+    # Wine needs `$HOME` to be writable.
+    prelude = lib.optionalString hostPlatform.isWindows "HOME=$(realpath .) ";
+  in lib.optionalAttrs emulatorAvailable {
     lm4flash = testers.testVersion {
       package = finalAttrs.finalPackage;
-      command = "${finalAttrs.finalPackage.meta.mainProgram} -V";
+      command = prelude + "${emulator} ${binary}${extension} -V";
     };
   };
 
