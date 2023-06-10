@@ -1,6 +1,6 @@
 # Bower {#sec-bower}
 
-[Bower](https://bower.io) is a package manager for web site front-end components. Bower packages (comprising of build artefacts and sometimes sources) are stored in `git` repositories, typically on Github. The package registry is run by the Bower team with package metadata coming from the `bower.json` file within each package.
+[Bower](https://bower.io) is a package manager for web site front-end components. Bower packages (comprising of build artifacts and sometimes sources) are stored in `git` repositories, typically on Github. The package registry is run by the Bower team with package metadata coming from the `bower.json` file within each package.
 
 The end result of running Bower is a `bower_components` directory which can be included in the web app's build process.
 

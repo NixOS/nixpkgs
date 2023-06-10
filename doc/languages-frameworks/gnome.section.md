@@ -27,7 +27,7 @@ The modules are typically installed to `lib/gio/modules/` directory of a package
 
 In particular, we recommend:
 
-* adding `dconf.lib` for any software on Linux that reads [GSettings](#ssec-gnome-settings) (even transitivily through e.g. GTK’s file manager)
+* adding `dconf.lib` for any software on Linux that reads [GSettings](#ssec-gnome-settings) (even transitively through e.g. GTK’s file manager)
 * adding `glib-networking` for any software that accesses network using GIO or libsoup – glib-networking contains a module that implements TLS support and loads system-wide proxy settings
 
 To allow software to use various virtual file systems, `gvfs` package can be also added. But that is usually an optional feature so we typically use `gvfs` from the system (e.g. installed globally using NixOS module).
