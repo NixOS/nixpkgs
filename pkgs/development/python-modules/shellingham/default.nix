@@ -11,6 +11,7 @@ buildPythonPackage rec {
   pname = "shellingham";
   version = "1.5.1";
   format = "pyproject";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -29,11 +30,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "shellingham" ];
+  pythonImportsCheck = [
+    "shellingham"
+  ];
 
   meta = with lib; {
     description = "Tool to detect the surrounding shell";
     homepage = "https://github.com/sarugaku/shellingham";
+    changelog = "https://github.com/sarugaku/shellingham/blob/${version}/CHANGELOG.rst";
     license = licenses.isc;
     maintainers = with maintainers; [ mbode ];
   };
