@@ -3845,6 +3845,8 @@ self: super: with self; {
 
   freezegun = callPackage ../development/python-modules/freezegun { };
 
+  frida-python = callPackage ../development/python-modules/frida-python { };
+
   frigidaire = callPackage ../development/python-modules/frigidaire { };
 
   frilouz = callPackage ../development/python-modules/frilouz { };
@@ -11037,6 +11039,8 @@ self: super: with self; {
   sendgrid = callPackage ../development/python-modules/sendgrid { };
 
   sense-energy = callPackage ../development/python-modules/sense-energy { };
+
+  sensirion-ble = callPackage ../development/python-modules/sensirion-ble { };
 
   sensor-state-data = callPackage ../development/python-modules/sensor-state-data { };
 
