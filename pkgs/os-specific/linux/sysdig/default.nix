@@ -84,8 +84,11 @@ stdenv.mkDerivation rec {
     "-DCREATE_TEST_TARGETS=OFF"
   ] ++ lib.optional (kernel == null) "-DBUILD_DRIVER=OFF";
 
-  # needed since luajit-2.1.0-beta3
-  env.NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg -DluaL_getn(L,i)=((int)lua_objlen(L,i))";
+  env.NIX_CFLAGS_COMPILE =
+   # needed since luajit-2.1.0-beta3
+   "-DluaL_reg=luaL_Reg -DluaL_getn(L,i)=((int)lua_objlen(L,i)) " +
+   # fix compiler warnings been treated as errors
+   "-Wno-error";
 
   preConfigure = ''
     if ! grep -q "${libsRev}" cmake/modules/falcosecurity-libs.cmake; then
