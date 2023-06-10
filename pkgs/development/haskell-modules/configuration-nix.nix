@@ -1286,4 +1286,6 @@ self: super: builtins.intersectAttrs super {
   # Disable checks to break dependency loop with SCalendar
   scalendar = dontCheck super.scalendar;
 
+  halide-haskell = super.halide-haskell.override { Halide = pkgs.halide; };
+
 }
