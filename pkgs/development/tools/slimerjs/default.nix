@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, zip, unzip, firefox, bash }:
+{ lib
+, bash
+, fetchFromGitHub
+, firefox
+, stdenv
+, unzip
+, zip
+}:
 
 stdenv.mkDerivation rec {
   pname = "slimerjs";
