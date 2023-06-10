@@ -207,11 +207,17 @@ in
     nodes = {
       inherit common;
 
-      machine = { pkgs, ... }: {
+      machine = { pkgs, nodes, ... }: {
         imports = [ common ];
         boot.loader.systemd-boot.extraFiles = {
           "efi/fruits/tomato.efi" = pkgs.netbootxyz-efi;
         };
+
+        # These are configs for different nodes, but we'll use them here in `machine`
+        system.extraDependencies = [
+          nodes.common.system.build.toplevel
+          nodes.with_netbootxyz.system.build.toplevel
+        ];
       };
 
       with_netbootxyz = { pkgs, ... }: {
