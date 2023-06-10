@@ -11,13 +11,13 @@
 
 buildDotnetModule rec {
   pname = "EventStore";
-  version = "22.10.0";
+  version = "22.10.2";
 
   src = fetchFromGitHub {
     owner = "EventStore";
     repo = "EventStore";
     rev = "oss-v${version}";
-    sha256 = "sha256-gw9t+g0Y/Mrrw4nQagBzQZf9aB1hILvm2nKyUqirZH0=";
+    sha256 = "sha256-CYI1VE+6bR3UFx98IquS8rgucKmQqcHh74Jf/9CGE0k=";
     leaveDotGit = true;
   };
 
