@@ -165,6 +165,7 @@ mapAliases ({
   loo-py = loopy; # added 2022-05-03
   Mako = mako; # added 2023-02-19
   Markups = markups; # added 2022-02-14
+  markdownsuperscript = throw "markdownsuperscript is unmaintained, use pymdown-extensions"; # added 2023-06-10
   MDP = mdp; # added 2023-02-19
   MechanicalSoup = mechanicalsoup; # added 2021-06-01
   memcached = python-memcached; # added 2022-05-06
