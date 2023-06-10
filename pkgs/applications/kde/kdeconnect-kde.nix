@@ -8,6 +8,7 @@
 , kiconthemes
 , kio
 , kirigami2
+, kirigami-addons
 , knotifications
 , kpeople
 , kpeoplevcard
@@ -43,6 +44,7 @@ mkDerivation {
     kiconthemes
     kio
     kirigami2
+    kirigami-addons
     knotifications
     kpeople
     kpeoplevcard
