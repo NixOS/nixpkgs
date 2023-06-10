@@ -2,14 +2,16 @@
 , async-timeout
 , buildPythonPackage
 , fetchFromGitHub
+, pillow
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "aioslimproto";
-  version = "2.2.2";
-  format = "setuptools";
+  version = "2.3.2";
+  format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
@@ -17,11 +19,16 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-ZvyAZ/VLkkZkDTBzuxt7hrCuYxNsMHm0C0wkabnE3Ek=";
+    hash = "sha256-vKIqBbWQNgv1v73P6K51K+yaqXgC1BtllZ59yTNPr2g=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     async-timeout
+    pillow
   ];
 
   nativeCheckInputs = [
