@@ -7,6 +7,7 @@
 , pydantic
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , rstcheck-core
 , typer
 , types-docutils
@@ -27,8 +28,13 @@ buildPythonPackage rec {
     hash = "sha256-UMByfnnP1va3v1IgyQL0f3kC+W6HoiWScb7U2FAvWkU=";
   };
 
+  pythonRelaxDeps = [
+    "typer"
+  ];
+
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
