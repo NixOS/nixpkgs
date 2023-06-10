@@ -34,7 +34,19 @@ in
       unset activationScript dryActivationScript
 
       mkdir $out/bin
-      substituteAll ${./switch-to-configuration.pl} $out/bin/switch-to-configuration
+      substitute ${./switch-to-configuration.pl} $out/bin/switch-to-configuration \
+        --subst-var coreutils \
+        --subst-var distroId \
+        --subst-var installBootLoader \
+        --subst-var localeArchive \
+        --subst-var out \
+        --subst-var perl \
+        --subst-var shell \
+        --subst-var su \
+        --subst-var systemd \
+        --subst-var utillinux \
+        ;
+
       chmod +x $out/bin/switch-to-configuration
       ${optionalString (pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) ''
         if ! output=$($perl/bin/perl -c $out/bin/switch-to-configuration 2>&1); then
