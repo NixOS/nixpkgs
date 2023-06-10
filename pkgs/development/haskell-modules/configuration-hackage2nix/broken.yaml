@@ -1981,7 +1981,6 @@ broken-packages:
   - HaLeX
   - halfs
   - half-space
-  - halide-haskell # failure in compileBuildDriverPhase in job https://hydra.nixos.org/build/212823532 at 2023-03-22
   - halipeto
   - halive
   - halma
