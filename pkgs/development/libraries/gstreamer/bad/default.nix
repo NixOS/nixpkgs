@@ -23,7 +23,6 @@
 , lcms2
 , libnice
 , webrtc-audio-processing
-, webrtc-audio-processing_1
 , lilv
 , lv2
 , serd
@@ -108,13 +107,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
-  version = "1.22.2";
+  version = "1.22.3";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-PY+vHONALIU1zjqMThpslg5LVlXb2mtVlD25rHkCLQ8=";
+    hash = "sha256-4XmP7i2GEn8GN0gcYH+YMpO/D9garXClx7RyBa82Idg=";
   };
 
   patches = [
@@ -361,6 +360,6 @@ stdenv.mkDerivation rec {
     '';
     license = if enableGplPlugins then licenses.gpl2Plus else licenses.lgpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = with maintainers; [ matthewbauer lilyinstarlight ];
   };
 }

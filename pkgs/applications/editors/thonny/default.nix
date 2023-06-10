@@ -42,7 +42,6 @@ buildPythonApplication rec {
 
   preFixup = ''
     wrapProgram "$out/bin/thonny" \
-       --set TK_LIBRARY "${tk}/lib/${tk.libPrefix}" \
        --prefix PYTHONPATH : $PYTHONPATH:$(toPythonPath ${python3.pkgs.jedi})
   '';
 
@@ -64,6 +63,6 @@ buildPythonApplication rec {
     homepage = "https://www.thonny.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
