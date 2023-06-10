@@ -8375,6 +8375,12 @@
     githubId = 546087;
     name = "Kristoffer K. Føllesdal";
   };
+  khaser = {
+    email = "a-horohorin@mail.ru";
+    github = "khaser";
+    githubId = 59027018;
+    name = "Andrey Khorokhorin";
+  };
   kho-dialga = {
     email = "ivandashenyou@gmail.com";
     github = "Kho-Dialga";
