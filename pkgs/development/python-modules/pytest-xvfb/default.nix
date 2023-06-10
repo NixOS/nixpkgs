@@ -3,20 +3,24 @@
 , fetchPypi
 , pytest
 , pyvirtualdisplay
-, isPy27
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pytest-xvfb";
   version = "3.0.0";
-  disabled = isPy27;
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-N0arH00RWfA/dRY40FNonM0oQpGzi4+wPT67579pz8A=";
   };
 
-  buildInputs = [ pytest ];
+  buildInputs = [
+    pytest
+  ];
 
   propagatedBuildInputs = [
     pyvirtualdisplay
