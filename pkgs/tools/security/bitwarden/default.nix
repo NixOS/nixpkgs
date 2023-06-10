@@ -4,7 +4,6 @@
 , dbus
 , electron_24
 , fetchFromGitHub
-, fetchpatch
 , glib
 , gnome
 , gtk3
@@ -27,29 +26,23 @@ let
   buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_18; };
   electron = electron_24;
 
-  version = "2023.4.0";
+  version = "2023.5.0";
   src = applyPatches {
     src = fetchFromGitHub {
       owner = "bitwarden";
       repo = "clients";
       rev = "desktop-v${version}";
-      sha256 = "sha256-TTKDl6Py3k+fAy/kcyiMbAAKQdhVnZTyRXV8D/VpKBE=";
+      sha256 = "sha256-ELKpGSY4ZbgSk4vJnTiB+IOa8RQU8Ahy3A1mYsKtthU=";
     };
 
-    patches = [
-      # Bump electron to 24 and node to 18
-      (fetchpatch {
-        url = "https://github.com/bitwarden/clients/pull/5205.patch";
-        hash = "sha256-sKSrh8RHXtxGczyZScjTeiGZgTZCQ7f45ULj/j9cp6M=";
-      })
-    ];
+    patches = [ ];
   };
 
   desktop-native = rustPlatform.buildRustPackage {
     pname = "bitwarden-desktop-native";
     inherit src version;
     sourceRoot = "source-patched/apps/desktop/desktop_native";
-    cargoSha256 = "sha256-VW9DmSh9jvqFCZjH1SAYkydSGjXSVEbv4CmtoJBiw5Y=";
+    cargoSha256 = "sha256-SeK8Nbgenof9vXI2v7tJ5oHiX60kBoR+UNOSJTRHdzk=";
 
     nativeBuildInputs = [
       pkg-config
@@ -102,7 +95,7 @@ buildNpmPackage' {
   npmBuildFlags = [
     "--workspace apps/desktop"
   ];
-  npmDepsHash = "sha256-UXDn09qyM8GwfUiWLDhhyrGFZeKtTRmQArstw+tm5iE=";
+  npmDepsHash = "sha256-G8DEYPjEP3L4s0pr5n2ZTj8kkT0E7Po1BKhZ2hUdJuY=";
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
