@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyobihai";
-  version = "1.4.1";
+  version = "1.4.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   # GitHub release, https://github.com/dshokouhi/pyobihai/issues/10
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-L/AQy9IxsBDeSlu+45j+/86jjMFzTjAkPGwZoa1QYho=";
+    hash = "sha256-vOyVnPUZlHuWoezpndPjq4vvvb6Pqvy+O15im9P9ja4=";
   };
 
   propagatedBuildInputs = [
