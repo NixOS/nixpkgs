@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, zip, love, makeWrapper, makeDesktopItem
-, copyDesktopItems }:
+{ lib
+, copyDesktopItems
+, fetchFromGitHub
+, love
+, makeDesktopItem
+, makeWrapper
+, stdenv
+, zip
+}:
 
 stdenv.mkDerivation rec {
   pname = "mari0";
@@ -12,7 +19,11 @@ stdenv.mkDerivation rec {
     sha256 = "1zqaq4w599scsjvy1rsb21fd2r8j3srx9vym4ir9bh666dp36gxa";
   };
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems zip ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+    zip
+  ];
 
   desktopItems = [
     (makeDesktopItem {
