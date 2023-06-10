@@ -14,13 +14,13 @@
 , libyaml
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dtc";
   version = "1.7.0";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/utils/dtc/dtc.git";
-    rev = "refs/tags/v${version}";
+    rev = "refs/tags/v${finalAttrs.version}";
     sha256 = "sha256-FMh3VvlY3fUK8fbd0M+aCmlUrmG9YegiOOQ7MOByffc=";
   };
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
 
   nativeBuildInputs = [
     meson
@@ -72,9 +72,9 @@ stdenv.mkDerivation rec {
 
     # meson.build: bump version to 1.7.0
     substituteInPlace libfdt/meson.build \
-      --replace "version: '1.6.0'," "version: '${version}',"
+      --replace "version: '1.6.0'," "version: '${finalAttrs.version}',"
     substituteInPlace meson.build \
-      --replace "version: '1.6.0'," "version: '${version}',"
+      --replace "version: '1.6.0'," "version: '${finalAttrs.version}',"
   '';
 
   # Required for installation of Python library and is innocuous otherwise.
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
   mesonAutoFeatures = "auto";
   mesonFlags = [
     (lib.mesonBool "static-build" stdenv.hostPlatform.isStatic)
-    (lib.mesonBool "tests" doCheck)
+    (lib.mesonBool "tests" finalAttrs.doCheck)
   ];
 
   # Checks are broken on aarch64 darwin
@@ -97,4 +97,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.unix;
   };
-}
+})
