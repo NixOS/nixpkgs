@@ -18478,6 +18478,8 @@ with pkgs;
 
   explain = callPackage ../development/tools/explain { };
 
+  ezno = callPackage ../development/tools/misc/ezno { };
+
   func = callPackage ../applications/networking/cluster/func { };
 
   funnelweb = callPackage ../development/tools/literate-programming/funnelweb { };
