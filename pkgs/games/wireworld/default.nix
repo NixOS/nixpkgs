@@ -6,6 +6,7 @@
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
+, strip-nondeterminism
 }:
 
 stdenv.mkDerivation rec {
@@ -22,6 +23,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
+    strip-nondeterminism
     zip
   ];
 
@@ -39,6 +41,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     zip -9 -r Wireworld.love ./*
+    strip-nondeterminism --type zip Wireworld.love
     install -Dm444 -t $out/share/games/lovegames/ Wireworld.love
     makeWrapper ${love}/bin/love $out/bin/Wireworld \
       --add-flags $out/share/games/lovegames/Wireworld.love
