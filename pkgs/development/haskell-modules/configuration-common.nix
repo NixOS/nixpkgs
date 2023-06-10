@@ -245,6 +245,9 @@ self: super: {
   ghc-datasize = disableLibraryProfiling super.ghc-datasize;
   ghc-vis = disableLibraryProfiling super.ghc-vis;
 
+  # 2023-06-10: Too strict version bound on https://github.com/haskell/ThreadScope/issues/118
+  threadscope = doJailbreak super.threadscope;
+
   # patat main branch has an unreleased commit that fixes the build by
   # relaxing restrictive upper boundaries. This can be removed once there's a
   # new release following version 0.8.8.0.
