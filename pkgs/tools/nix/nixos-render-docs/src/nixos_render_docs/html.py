@@ -257,6 +257,47 @@ class HTMLRenderer(Renderer):
             '</p>'
             '<div class="figure-contents">'
         )
+    def table_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return (
+            '<div class="informaltable">'
+            '<table class="informaltable" border="1">'
+        )
+    def table_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return (
+            '</table>'
+            '</div>'
+        )
+    def thead_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        cols = []
+        for j in range(i + 1, len(tokens)):
+            if tokens[j].type == 'thead_close':
+                break
+            elif tokens[j].type == 'th_open':
+                cols.append(cast(str, tokens[j].attrs.get('style', 'left')).removeprefix('text-align:'))
+        return "".join([
+            "<colgroup>",
+            "".join([ f'<col align="{col}" />' for col in cols ]),
+            "</colgroup>",
+            "<thead>",
+        ])
+    def thead_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "</thead>"
+    def tr_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "<tr>"
+    def tr_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "</tr>"
+    def th_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return f'<th align="{cast(str, token.attrs.get("style", "left")).removeprefix("text-align:")}">'
+    def th_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "</th>"
+    def tbody_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "<tbody>"
+    def tbody_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "</tbody>"
+    def td_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return f'<td align="{cast(str, token.attrs.get("style", "left")).removeprefix("text-align:")}">'
+    def td_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "</td>"
 
     def _make_hN(self, level: int) -> tuple[str, str]:
         return f"h{min(6, max(1, level + self._hlevel_offset))}", ""

@@ -1,5 +1,6 @@
 import nixos_render_docs as nrd
 import pytest
+import textwrap
 
 from sample_md import sample1
 
@@ -81,6 +82,41 @@ def test_images() -> None:
         <img src="foo" alt="*alt text*" title="title text" />
        </div>
       </p>
+    """)
+
+def test_tables() -> None:
+    c = Converter({}, {})
+    assert c._render(textwrap.dedent("""
+      | d | l | m | r |
+      |---|:--|:-:|--:|
+      | a | b | c | d |
+    """)) == unpretty("""
+      <div class="informaltable">
+       <table class="informaltable" border="1">
+        <colgroup>
+         <col align="left" />
+         <col align="left" />
+         <col align="center" />
+         <col align="right" />
+        </colgroup>
+        <thead>
+         <tr>
+          <th align="left">d</th>
+          <th align="left">l</th>
+          <th align="center">m</th>
+          <th align="right">r</th>
+         </tr>
+        </thead>
+        <tbody>
+         <tr>
+          <td align="left">a</td>
+          <td align="left">b</td>
+          <td align="center">c</td>
+          <td align="right">d</td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
     """)
 
 def test_full() -> None:

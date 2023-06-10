@@ -95,6 +95,18 @@ class Renderer:
             "figure_close": self.figure_close,
             "figure_title_open": self.figure_title_open,
             "figure_title_close": self.figure_title_close,
+            "table_open": self.table_open,
+            "table_close": self.table_close,
+            "thead_open": self.thead_open,
+            "thead_close": self.thead_close,
+            "tr_open": self.tr_open,
+            "tr_close": self.tr_close,
+            "th_open": self.th_open,
+            "th_close": self.th_close,
+            "tbody_open": self.tbody_open,
+            "tbody_close": self.tbody_close,
+            "td_open": self.td_open,
+            "td_close": self.td_close,
         }
 
         self._admonitions = {
@@ -239,6 +251,30 @@ class Renderer:
     def figure_title_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
     def figure_title_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def table_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def table_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def thead_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def thead_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def tr_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def tr_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def th_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def th_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def tbody_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def tbody_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def td_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def td_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
 
 def _is_escaped(src: str, pos: int) -> bool:
@@ -506,6 +542,7 @@ class Converter(ABC, Generic[TR]):
             },
             renderer_cls=self.ForbiddenRenderer
         )
+        self._md.enable('table')
         self._md.use(
             container_plugin,
             name="blockattr",
