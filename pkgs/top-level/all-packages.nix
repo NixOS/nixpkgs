@@ -9398,6 +9398,8 @@ with pkgs;
 
   mask = callPackage ../development/tools/mask { };
 
+  maskromtool = qt6Packages.callPackage ../tools/graphics/maskromtool { };
+
   mathpix-snipping-tool = callPackage ../tools/misc/mathpix-snipping-tool { };
 
   matrix-conduit = callPackage ../servers/matrix-conduit { };
