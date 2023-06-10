@@ -36,13 +36,6 @@ let
         ln -s ${config.hardware.firmware}/lib/firmware $out/firmware
       ''}
 
-      echo "$activationScript" > $out/activate
-      echo "$dryActivationScript" > $out/dry-activate
-      substituteInPlace $out/activate --subst-var out
-      substituteInPlace $out/dry-activate --subst-var out
-      chmod u+x $out/activate $out/dry-activate
-      unset activationScript dryActivationScript
-
       ${if config.boot.initrd.systemd.enable then ''
         cp ${config.system.build.bootStage2} $out/prepare-root
         substituteInPlace $out/prepare-root --subst-var-by systemConfig $out
@@ -63,19 +56,6 @@ let
       echo -n "$nixosLabel" > $out/nixos-version
       echo -n "${config.boot.kernelPackages.stdenv.hostPlatform.system}" > $out/system
 
-      mkdir $out/bin
-      export localeArchive="${config.i18n.glibcLocales}/lib/locale/locale-archive"
-      export distroId=${config.system.nixos.distroId};
-      substituteAll ${./switch-to-configuration.pl} $out/bin/switch-to-configuration
-      chmod +x $out/bin/switch-to-configuration
-      ${optionalString (pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) ''
-        if ! output=$($perl/bin/perl -c $out/bin/switch-to-configuration 2>&1); then
-          echo "switch-to-configuration syntax is not valid:"
-          echo "$output"
-          exit 1
-        fi
-      ''}
-
       ${config.system.systemBuilderCommands}
 
       cp "$extraDependenciesPath" "$out/extra-dependencies"
@@ -93,7 +73,7 @@ let
   # symlinks to the various parts of the built configuration (the
   # kernel, systemd units, init scripts, etc.) as well as a script
   # `switch-to-configuration' that activates the configuration and
-  # makes it bootable.
+  # makes it bootable. See `activatable-system.nix`.
   baseSystem = pkgs.stdenvNoCC.mkDerivation ({
     name = "nixos-system-${config.system.name}-${config.system.nixos.label}";
     preferLocalBuild = true;
@@ -109,14 +89,9 @@ let
 
     kernelParams = config.boot.kernelParams;
     installBootLoader = config.system.build.installBootLoader;
-    activationScript = config.system.activationScripts.script;
-    dryActivationScript = config.system.dryActivationScript;
     nixosLabel = config.system.nixos.label;
 
     inherit (config.system) extraDependencies;
-
-    # Needed by switch-to-configuration.
-    perl = pkgs.perl.withPackages (p: with p; [ ConfigIniFiles FileSlurp ]);
   } // config.system.systemBuilderArgs);
 
   # Handle assertions and warnings
