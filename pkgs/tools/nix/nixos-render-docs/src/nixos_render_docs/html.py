@@ -298,6 +298,35 @@ class HTMLRenderer(Renderer):
         return f'<td align="{cast(str, token.attrs.get("style", "left")).removeprefix("text-align:")}">'
     def td_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return "</td>"
+    def footnote_ref(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        href = self._xref_targets[token.meta['target']].href()
+        id = escape(cast(str, token.attrs["id"]), True)
+        return (
+            f'<a href="{href}" class="footnote" id="{id}">'
+            f'<sup class="footnote">[{token.meta["id"] + 1}]</sup>'
+            '</a>'
+        )
+    def footnote_block_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return (
+            '<div class="footnotes">'
+            '<br />'
+            '<hr style="width:100; text-align:left;margin-left: 0" />'
+        )
+    def footnote_block_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "</div>"
+    def footnote_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        # meta id,label
+        id = escape(self._xref_targets[token.meta["label"]].id, True)
+        return f'<div id="{id}" class="footnote">'
+    def footnote_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return "</div>"
+    def footnote_anchor(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        href = self._xref_targets[token.meta['target']].href()
+        return (
+            f'<a href="{href}" class="para">'
+            f'<sup class="para">[{token.meta["id"] + 1}]</sup>'
+            '</a>'
+        )
 
     def _make_hN(self, level: int) -> tuple[str, str]:
         return f"h{min(6, max(1, level + self._hlevel_offset))}", ""

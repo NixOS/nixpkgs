@@ -618,6 +618,10 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
                 result.append((id, 'example', tokens[i + 2], target_file, False))
             elif bt.type == 'figure_open' and (id := cast(str, bt.attrs.get('id', ''))):
                 result.append((id, 'figure', tokens[i + 2], target_file, False))
+            elif bt.type == 'footnote_open' and (id := cast(str, bt.attrs.get('id', ''))):
+                result.append(XrefTarget(id, "???", None, None, target_file))
+            elif bt.type == 'footnote_ref' and (id := cast(str, bt.attrs.get('id', ''))):
+                result.append(XrefTarget(id, "???", None, None, target_file))
             elif bt.type == 'inline':
                 assert bt.children
                 result += self._collect_ids(bt.children, target_file, typ, False)

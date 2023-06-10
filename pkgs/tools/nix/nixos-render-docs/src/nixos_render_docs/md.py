@@ -12,6 +12,7 @@ from markdown_it.token import Token
 from markdown_it.utils import OptionsDict
 from mdit_py_plugins.container import container_plugin # type: ignore[attr-defined]
 from mdit_py_plugins.deflist import deflist_plugin # type: ignore[attr-defined]
+from mdit_py_plugins.footnote import footnote_plugin # type: ignore[attr-defined]
 from mdit_py_plugins.myst_role import myst_role_plugin # type: ignore[attr-defined]
 
 _md_escape_table = {
@@ -107,6 +108,12 @@ class Renderer:
             "tbody_close": self.tbody_close,
             "td_open": self.td_open,
             "td_close": self.td_close,
+            "footnote_ref": self.footnote_ref,
+            "footnote_block_open": self.footnote_block_open,
+            "footnote_block_close": self.footnote_block_close,
+            "footnote_open": self.footnote_open,
+            "footnote_close": self.footnote_close,
+            "footnote_anchor": self.footnote_anchor,
         }
 
         self._admonitions = {
@@ -276,6 +283,18 @@ class Renderer:
         raise RuntimeError("md token not supported", token)
     def td_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
+    def footnote_ref(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def footnote_block_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def footnote_block_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def footnote_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def footnote_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def footnote_anchor(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
 
 def _is_escaped(src: str, pos: int) -> bool:
     found = 0
@@ -421,6 +440,32 @@ def _heading_ids(md: markdown_it.MarkdownIt) -> None:
 
     md.core.ruler.before("replacements", "heading_ids", heading_ids)
 
+def _footnote_ids(md: markdown_it.MarkdownIt) -> None:
+    """generate ids for footnotes, their refs, and their backlinks. the ids we
+       generate here are derived from the footnote label, making numeric footnote
+       labels invalid.
+    """
+    def generate_ids(tokens: Sequence[Token]) -> None:
+        for token in tokens:
+            if token.type == 'footnote_open':
+                if token.meta["label"][:1].isdigit():
+                    assert token.map
+                    raise RuntimeError(f"invalid footnote label in line {token.map[0] + 1}")
+                token.attrs['id'] = token.meta["label"]
+            elif token.type == 'footnote_anchor':
+                token.meta['target'] = f'{token.meta["label"]}.__back.{token.meta["subId"]}'
+            elif token.type == 'footnote_ref':
+                token.attrs['id'] = f'{token.meta["label"]}.__back.{token.meta["subId"]}'
+                token.meta['target'] = token.meta["label"]
+            elif token.type == 'inline':
+                assert token.children
+                generate_ids(token.children)
+
+    def footnote_ids(state: markdown_it.rules_core.StateCore) -> None:
+        generate_ids(state.tokens)
+
+    md.core.ruler.after("footnote_tail", "footnote_ids", footnote_ids)
+
 def _compact_list_attr(md: markdown_it.MarkdownIt) -> None:
     @dataclasses.dataclass
     class Entry:
@@ -549,11 +594,13 @@ class Converter(ABC, Generic[TR]):
             validate=lambda name, *args: _parse_blockattrs(name),
         )
         self._md.use(deflist_plugin)
+        self._md.use(footnote_plugin)
         self._md.use(myst_role_plugin)
         self._md.use(_attr_span_plugin)
         self._md.use(_inline_comment_plugin)
         self._md.use(_block_comment_plugin)
         self._md.use(_heading_ids)
+        self._md.use(_footnote_ids)
         self._md.use(_compact_list_attr)
         self._md.use(_block_attr)
         self._md.use(_block_titles("example"))

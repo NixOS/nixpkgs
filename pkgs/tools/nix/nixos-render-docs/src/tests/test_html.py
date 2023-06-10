@@ -119,6 +119,33 @@ def test_tables() -> None:
       </div>
     """)
 
+def test_footnotes() -> None:
+    c = Converter({}, {
+        "bar": nrd.manual_structure.XrefTarget("bar", "", None, None, ""),
+        "bar.__back.0": nrd.manual_structure.XrefTarget("bar.__back.0", "", None, None, ""),
+        "bar.__back.1": nrd.manual_structure.XrefTarget("bar.__back.1", "", None, None, ""),
+    })
+    assert c._render(textwrap.dedent("""
+      foo [^bar] baz [^bar]
+
+      [^bar]: note
+    """)) == unpretty("""
+      <p>
+       foo <a href="#bar" class="footnote" id="bar.__back.0"><sup class="footnote">[1]</sup></a>␣
+       baz <a href="#bar" class="footnote" id="bar.__back.1"><sup class="footnote">[1]</sup></a>
+      </p>
+      <div class="footnotes">
+       <br />
+       <hr style="width:100; text-align:left;margin-left: 0" />
+       <div id="bar" class="footnote">
+         <p>
+          note<a href="#bar.__back.0" class="para"><sup class="para">[1]</sup></a>
+          <a href="#bar.__back.1" class="para"><sup class="para">[1]</sup></a>
+         </p>
+        </div>
+       </div>
+    """)
+
 def test_full() -> None:
     c = Converter({ 'man(1)': 'http://example.org' }, {})
     assert c._render(sample1) == unpretty("""
