@@ -7,7 +7,6 @@
 , makeWrapper
 , go-swag
 , nixosTests
-, pathDeps ? [ ]
 }:
 
 buildGoModule rec {
@@ -103,8 +102,7 @@ buildGoModule rec {
     makeWrapper $out/share/pufferpanel/pufferpanel $out/bin/pufferpanel \
       --set-default GIN_MODE release \
       --set-default PUFFER_PANEL_EMAIL_TEMPLATES $out/share/pufferpanel/email/emails.json \
-      --set-default PUFFER_PANEL_WEB_FILES $out/share/pufferpanel/www \
-      --prefix PATH : ${lib.escapeShellArg (lib.makeBinPath pathDeps)}
+      --set-default PUFFER_PANEL_WEB_FILES $out/share/pufferpanel/www
 
     runHook postInstall
   '';
