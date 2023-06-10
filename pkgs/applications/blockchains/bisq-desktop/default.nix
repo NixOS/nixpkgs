@@ -41,7 +41,14 @@ stdenv.mkDerivation rec {
     sha256 = "0jisxzajsc4wfvxabvfzd0x9y1fxzg39fkhap1781q7wyi4ry9kd";
   };
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems imagemagick dpkg zip xz ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    dpkg
+    imagemagick
+    makeWrapper
+    xz
+    zip
+  ];
 
   desktopItems = [
     (makeDesktopItem {
