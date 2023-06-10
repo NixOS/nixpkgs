@@ -23,7 +23,7 @@ let
     destination = "/etc/sane.d/net.conf";
     text = ''
       ${lib.optionalString config.services.saned.enable "localhost"}
-      ${config.hardware.sane.netConf}
+      ${lib.strings.concatStringsSep "\n" config.hardware.sane.remoteHosts}
     '';
   };
 
@@ -54,6 +54,13 @@ let
 in
 
 {
+
+  imports = [
+    (mkRemovedOptionModule ["hardware" "sane" "netConf"] ''
+      The configuration for SANE remote hosts has been moved to the `remoteHosts` option,
+      which accepts now a list of IP addresses or hostnames as input.
+    '')
+  ];
 
   ###### interface
 
@@ -127,12 +134,12 @@ in
       description = lib.mdDoc "The value of SANE_CONFIG_DIR.";
     };
 
-    hardware.sane.netConf = mkOption {
-      type = types.lines;
-      default = "";
-      example = "192.168.0.16";
+    hardware.sane.remoteHosts = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = ["192.168.0.16" "192.168.0.38"];
       description = lib.mdDoc ''
-        Network hosts that should be probed for remote scanners.
+        Network hosts providing scanners via a `saned`.
       '';
     };
 
