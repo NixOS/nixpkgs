@@ -18689,8 +18689,6 @@ with pkgs;
 
   highlight-assertions = callPackage ../development/tools/misc/highlight-assertions { };
 
-  ccloud-cli = callPackage ../development/tools/ccloud-cli { };
-
   confluent-cli = callPackage ../development/tools/confluent-cli { };
 
   htmlunit-driver = callPackage ../development/tools/selenium/htmlunit-driver { };
