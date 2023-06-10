@@ -3560,6 +3560,12 @@
       fingerprint = "4779 D1D5 3C97 2EAE 34A5  ED3D D8AF C4BF 0567 0F9D";
     }];
   };
+  dariof4 = {
+    name = "dariof4";
+    email = "dazedtank@gmail.com";
+    github = "dariof4";
+    githubId = 9992814;
+  };
   darkonion0 = {
     name = "Alexandre Peruggia";
     email = "darkgenius1@protonmail.com";
