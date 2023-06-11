@@ -11840,6 +11840,8 @@ with pkgs;
 
   rarcrack = callPackage ../tools/security/rarcrack { };
 
+  rare-regex = callPackage ../tools/text/rare-regex { };
+
   rarian = callPackage ../development/libraries/rarian { };
 
   ratman = callPackage ../tools/networking/ratman { };
