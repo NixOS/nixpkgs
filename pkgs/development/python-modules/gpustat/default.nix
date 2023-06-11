@@ -8,18 +8,19 @@
 , pytestCheckHook
 , pythonOlder
 , pythonRelaxDepsHook
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "gpustat";
-  version = "1.0.0";
+  version = "1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WB6P+FjDLJWjIruPA/HZ3D0Xe07LM93L7Sw3PGf04/E=";
+    hash = "sha256-yPwQVASqwRiE9w7S+gbP0hDTzTicyuSpvDhXnHJGDO4=";
   };
 
   pythonRelaxDeps = [
@@ -28,6 +29,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
