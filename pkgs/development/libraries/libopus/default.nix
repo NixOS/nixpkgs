@@ -7,6 +7,9 @@
 , ninja
 , fixedPoint ? false
 , withCustomModes ? true
+
+# tests
+, ffmpeg-headless
 }:
 
 stdenv.mkDerivation rec {
@@ -48,6 +51,10 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = !stdenv.isi686 && !stdenv.isAarch32; # test_unit_LPC_inv_pred_gain fails
+
+  passthru.tests = {
+    inherit ffmpeg-headless;
+  };
 
   meta = with lib; {
     description = "Open, royalty-free, highly versatile audio codec";
