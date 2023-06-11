@@ -11086,6 +11086,8 @@ self: super: with self; {
 
   platformdirs = callPackage ../development/python-modules/platformdirs { };
 
+  platformio = callPackage ../development/python-modules/platformio { };
+
   playsound = callPackage ../development/python-modules/playsound { };
 
   playwright = callPackage ../development/python-modules/playwright { };
