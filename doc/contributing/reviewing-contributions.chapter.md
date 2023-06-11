@@ -201,7 +201,7 @@ checks should be performed:
     them to either recommit using that key or to remove their key
     information.
 
-    Given a maintainter entry like this:
+    Given a maintainer entry like this:
 
     ``` nix
     {
