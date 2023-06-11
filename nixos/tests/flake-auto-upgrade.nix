@@ -8,8 +8,8 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
     aliceUsername = "alice";
     repohome = "/var/www/git/";
     nixOverlay = (_: prev: {
-      # we have to override nix because we can't build
-      # anything without a substituter for bootstrapping
+      # we have to override nix because we can't build anything
+      # without a substituter for the bootstrapping seed
       nix = (pkgs.writeShellScriptBin "nix" ''
         case $@ in
           *\ flake\ *)
@@ -27,7 +27,13 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
             fi
             ;;
           *\ build\ *attr2*)
-            touch ./result2
+            exit 1
+            ;;
+          *\ build\ *attr3*)
+            touch ./result3
+            ;;
+          *\ build\ *attr4*)
+            touch ./result4
             ;;
         esac
       '').overrideAttrs (_: { version = "2.2"; });
@@ -47,7 +53,16 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
               passwordFile = pkgs.writeText "password" alicePassword;
             };
             updateBranch = "update";
-            buildAttributes = [ "attr1" "attr2" ];
+            buildAttributes = [
+              {
+                attr = "attr1";
+                onFail = [{
+                  attr = "attr2";
+                  onFail = [ "attr3" ];
+                }];
+              }
+              "attr4"
+            ];
             failLogInCommitMsg = true;
           };
           ssh = {
@@ -57,7 +72,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
               key = snakeOilPrivateKey;
             };
             updateBranch = "update";
-            buildAttributes = [ "attr1" "attr2" ];
+            buildAttributes = [ "attr1" ];
           };
         };
         nixpkgs.overlays = [ nixOverlay ];
@@ -146,16 +161,22 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
         assert "2 /var/lib/flake-auto-upgrade-http/repo/fakeFlake" in builder.wait_until_succeeds("wc -l /var/lib/flake-auto-upgrade-http/repo/fakeFlake")
         # attr1 is build
         builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-http/repo/result1")
+        # attr4 is build
+        builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-http/repo/result4")
+        # make build of attr1 fail
         builder.succeed("touch /var/lib/flake-auto-upgrade-http/repo/failFile")
         builder.sleep(1)
         builder.systemctl("start flake-auto-upgrade-http")
-        # attr2 is build
-        builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-http/repo/result2")
+        # attr3 is build
+        builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-http/repo/result3")
+        # attr4 is build
+        builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-http/repo/result4")
         # flake is changed again
         assert "3 /var/lib/flake-auto-upgrade-http/repo/fakeFlake" in builder.succeed("wc -l /var/lib/flake-auto-upgrade-http/repo/fakeFlake")
         # Build failure is recorded in the commit message
         gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git fetch")
         gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git checkout update")
         assert "attr1 failed" in gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git log")
+        assert "attr2 failed" in gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git log")
       '';
   })
