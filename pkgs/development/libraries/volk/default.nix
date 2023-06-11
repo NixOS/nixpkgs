@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = lib.optionals (!enableModTool) [
     "-DENABLE_MODTOOL=OFF"
+  ] ++ lib.optionals (stdenv.hostPlatform.isPower64) [
+    "-DVOLK_CPU_FEATURES=OFF"
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     "-DVOLK_CPU_FEATURES=OFF"
     # offset 17912 in1: -0.0366274 in2: -0.0366173 tolerance was: 1e-05
