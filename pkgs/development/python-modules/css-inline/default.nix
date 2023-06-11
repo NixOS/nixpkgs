@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "css-inline";
-  version = "0.8.7";
+  version = "0.9.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Stranger6667";
     repo = "css-inline";
     rev = "python-v${version}";
-    hash = "sha256-VtWvzEqozbRo9OIcObdaRRqDq9Tcp0KxXOPZWO5qTeE=";
+    hash = "sha256-JyciyXElGDvZgjfL0yz9KhCCDu9ZRZvOn8LwkmfYKSg=";
   };
 
   postPatch = ''
@@ -39,7 +39,7 @@ buildPythonPackage rec {
       ln -s ${./Cargo.lock} Cargo.lock
     '';
     name = "${pname}-${version}";
-    hash = "sha256-S8ebg5sMK7zoG84eAeXIWqDYuRVW9Mx9GJUAaKD9mxw=";
+    hash = "sha256-9oLVMcrAB3JX9XSN5uBvrazFFG6J6s6V3HnEfz/qj2E=";
   };
 
   nativeBuildInputs = [
