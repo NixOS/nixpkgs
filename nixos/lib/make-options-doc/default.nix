@@ -169,7 +169,6 @@ in rec {
       --document-type ${lib.escapeShellArg documentType} \
       --varlist-id ${lib.escapeShellArg variablelistId} \
       --id-prefix ${lib.escapeShellArg optionIdPrefix} \
-      ${lib.optionalString markdownByDefault "--markdown-by-default"} \
       ${optionsJSON}/share/doc/nixos/options.json \
       options.xml
 
