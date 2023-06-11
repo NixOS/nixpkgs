@@ -18677,6 +18677,8 @@ with pkgs;
 
   gtranslator = callPackage ../tools/text/gtranslator { };
 
+  gtree = callPackage ../tools/text/gtree { };
+
   guff = callPackage ../tools/graphics/guff { };
 
   guile-hall = callPackage ../development/tools/guile/guile-hall { };
