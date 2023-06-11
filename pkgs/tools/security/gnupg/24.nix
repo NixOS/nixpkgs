@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.tests.connman = nixosTests.gnupg;
+  passthru.tests = nixosTests.gnupg;
 
   meta = with lib; {
     homepage = "https://gnupg.org";
