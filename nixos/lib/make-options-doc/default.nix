@@ -139,7 +139,6 @@ in rec {
       TOUCH_IF_DB=$dst/.used-docbook \
       python ${./mergeJSON.py} \
         ${lib.optionalString warningsAreErrors "--warnings-are-errors"} \
-        ${if allowDocBook then "--warn-on-docbook" else "--error-on-docbook"} \
         $baseJSON $options \
         > $dst/options.json
 
