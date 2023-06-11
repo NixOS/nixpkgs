@@ -216,12 +216,6 @@ class DocBookConverter(BaseConverter[OptionsDocBookRenderer]):
     def _parallel_render_init_worker(cls, a: Any) -> DocBookConverter:
         return cls(*a)
 
-    def _render_code(self, option: dict[str, Any], key: str) -> list[str]:
-        if lit := option_is(option, key, 'literalDocBook'):
-            return [ f"<para><emphasis>{key.capitalize()}:</emphasis> {lit['text']}</para>" ]
-        else:
-            return super()._render_code(option, key)
-
     def _render_description(self, desc: str | dict[str, Any]) -> list[str]:
         if isinstance(desc, str) and not self._markdown_by_default:
             return [ f"<nixos:option-description><para>{desc}</para></nixos:option-description>" ]
@@ -327,14 +321,11 @@ class ManpageConverter(BaseConverter[OptionsManpageRenderer]):
         return super().add_options(options)
 
     def _render_code(self, option: dict[str, Any], key: str) -> list[str]:
-        if lit := option_is(option, key, 'literalDocBook'):
-            raise RuntimeError("can't render manpages in the presence of docbook")
-        else:
-            try:
-                self._renderer.inline_code_is_quoted = False
-                return super()._render_code(option, key)
-            finally:
-                self._renderer.inline_code_is_quoted = True
+        try:
+            self._renderer.inline_code_is_quoted = False
+            return super()._render_code(option, key)
+        finally:
+            self._renderer.inline_code_is_quoted = True
 
     def _render_description(self, desc: str | dict[str, Any]) -> list[str]:
         if isinstance(desc, str) and not self._markdown_by_default:
@@ -431,14 +422,6 @@ class CommonMarkConverter(BaseConverter[OptionsCommonMarkRenderer]):
     def _parallel_render_init_worker(cls, a: Any) -> CommonMarkConverter:
         return cls(*a)
 
-    def _render_code(self, option: dict[str, Any], key: str) -> list[str]:
-        # NOTE this duplicates the old direct-paste behavior, even if it is somewhat
-        # incorrect, since users rely on it.
-        if lit := option_is(option, key, 'literalDocBook'):
-            return [ f"*{key.capitalize()}:* {lit['text']}" ]
-        else:
-            return super()._render_code(option, key)
-
     def _render_description(self, desc: str | dict[str, Any]) -> list[str]:
         # NOTE this duplicates the old direct-paste behavior, even if it is somewhat
         # incorrect, since users rely on it.
@@ -486,14 +469,6 @@ class AsciiDocConverter(BaseConverter[OptionsAsciiDocRenderer]):
     @classmethod
     def _parallel_render_init_worker(cls, a: Any) -> AsciiDocConverter:
         return cls(*a)
-
-    def _render_code(self, option: dict[str, Any], key: str) -> list[str]:
-        # NOTE this duplicates the old direct-paste behavior, even if it is somewhat
-        # incorrect, since users rely on it.
-        if lit := option_is(option, key, 'literalDocBook'):
-            return [ f"*{key.capitalize()}:* {lit['text']}" ]
-        else:
-            return super()._render_code(option, key)
 
     def _render_description(self, desc: str | dict[str, Any]) -> list[str]:
         # NOTE this duplicates the old direct-paste behavior, even if it is somewhat
@@ -556,12 +531,6 @@ class HTMLConverter(BaseConverter[OptionsHTMLRenderer]):
     @classmethod
     def _parallel_render_init_worker(cls, a: Any) -> HTMLConverter:
         return cls(*a)
-
-    def _render_code(self, option: dict[str, Any], key: str) -> list[str]:
-        if lit := option_is(option, key, 'literalDocBook'):
-            raise RuntimeError("can't render html in the presence of docbook")
-        else:
-            return super()._render_code(option, key)
 
     def _render_description(self, desc: str | dict[str, Any]) -> list[str]:
         if isinstance(desc, str) and not self._markdown_by_default:
