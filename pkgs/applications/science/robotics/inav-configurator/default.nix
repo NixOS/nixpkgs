@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "inav-configurator";
-  version = "5.1.0";
+  version = "6.1.0";
 
   src = fetchurl {
     url = "https://github.com/iNavFlight/inav-configurator/releases/download/${version}/INAV-Configurator_linux64_${version}.tar.gz";
-    sha256 = "sha256-ZvZxQICa5fnJBTx0aW/hqQCuhQW9MkcVa2sOjPYaPXM=";
+    sha256 = "sha256-HIicfkPM824+T+zNWK9l6VDZd9Yt/1fVTQjYqfqoUSs=";
   };
 
   icon = fetchurl {
