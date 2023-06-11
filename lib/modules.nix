@@ -134,11 +134,6 @@ let
             ${if prefix == []
               then null  # unset => visible
               else "internal"} = true;
-            # TODO: hidden during the markdown transition to not expose downstream
-            # users of the docs infra to markdown if they're not ready for it.
-            # we don't make this visible conditionally because it can impact
-            # performance (https://github.com/NixOS/nixpkgs/pull/208407#issuecomment-1368246192)
-            visible = false;
             # TODO: Change the type of this option to a submodule with a
             # freeformType, so that individual arguments can be documented
             # separately
