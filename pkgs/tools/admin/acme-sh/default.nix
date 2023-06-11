@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "acme.sh";
-  version = "3.0.4";
+  version = "3.0.6";
 
   src = fetchFromGitHub {
     owner = "acmesh-official";
     repo = "acme.sh";
-    rev = version;
-    sha256 = "sha256-PHxL48Gj6CJG4r3LXKQCU0KARmTu7DQrC29oLi7gvU8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-4Chqdr4a9+T+/o1vCPY5xMREoYl0HxY3OlGRD86ulGs=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://acme.sh/";
+    changelog = "https://github.com/acmesh-official/acme.sh/releases/tag/${version}";
     description = "A pure Unix shell script implementing ACME client protocol";
     longDescription = ''
       An ACME Shell script: acme.sh
