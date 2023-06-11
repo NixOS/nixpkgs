@@ -184,6 +184,15 @@ in
       '';
     };
 
+    services.saned.openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Open incoming ports needed so that other SANE clients using
+        the `net` backend can connect to this `saned` instance.
+      '';
+    };
+
     services.saned.extraGroups = mkOption {
       type = types.listOf types.string;
       default = [];
@@ -250,6 +259,7 @@ in
     })
 
     (mkIf config.services.saned.enable {
+      networking.firewall.allowedTCPPorts = mkIf config.services.saned.openFirewall [ config.services.saned.listenPort ];
       networking.firewall.connectionTrackingModules = [ "sane" ];
 
       systemd.services."saned@" = {
