@@ -17754,6 +17754,8 @@ with pkgs;
 
   millet = callPackage ../development/tools/language-servers/millet { };
 
+  neocmakelsp = callPackage ../development/tools/language-servers/neocmakelsp { };
+
   nil = callPackage ../development/tools/language-servers/nil { };
 
   nls = callPackage ../development/tools/language-servers/nls { };
