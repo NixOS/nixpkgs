@@ -310,6 +310,7 @@ package-maintainers:
     - streamly
     - streamly-bytestring
     - taskwarrior
+    - threadscope
     - tz
     - weeder
     - witch

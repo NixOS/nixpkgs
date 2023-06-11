@@ -192,6 +192,8 @@ self: super: builtins.intersectAttrs super {
   # Link the proper version.
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
 
+  threadscope = enableSeparateBinOutput super.threadscope;
+
   # Use the default version of mysql to build this package (which is actually mariadb).
   # test phase requires networking
   mysql = dontCheck super.mysql;

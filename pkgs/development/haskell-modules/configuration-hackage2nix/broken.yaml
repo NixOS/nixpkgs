@@ -5363,7 +5363,6 @@ broken-packages:
   - thorn
   - th-pprint
   - threadmanager
-  - threadscope
   - thread-supervisor # test failure in job https://hydra.nixos.org/build/214156434 at 2023-03-29
   - threepenny-editors
   - threepenny-gui-contextmenu
