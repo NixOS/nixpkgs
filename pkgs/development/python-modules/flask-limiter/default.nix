@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "flask-limiter";
-  version = "3.1.0";
+  version = "3.3.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "alisaifee";
     repo = "flask-limiter";
     rev = "refs/tags/${version}";
-    hash = "sha256-eAJRqyAH1j1NHYfagRZM2fPE6hm9+tJHD8FMqvgvMBI=";
+    hash = "sha256-YDVZ/dD+TRJEnJRTRmGEB6EIkK5eQ5MdXh8FideoVDQ=";
   };
 
   postPatch = ''
