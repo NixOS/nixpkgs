@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libremines";
-  version = "1.9.1";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "Bollos00";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-CQE7fggRxFI/VatS7NMcIrC78tzqSwkkVC8gK9iKdVY=";
+    hash = "sha256-aqWzTvvRoke+Rakb6dNpDoD7haKHEKW3XARGLrH2WiY=";
   };
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ];
