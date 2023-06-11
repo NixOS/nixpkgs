@@ -1177,6 +1177,8 @@ self: super: with self; {
 
   backports-shutil-which = callPackage ../development/python-modules/backports-shutil-which { };
 
+  backports-strenum = callPackage ../development/python-modules/backports-strenum { };
+
   backports_tempfile = callPackage ../development/python-modules/backports_tempfile { };
 
   backports_unittest-mock = callPackage ../development/python-modules/backports_unittest-mock { };
@@ -1739,6 +1741,8 @@ self: super: with self; {
 
   cfgv = callPackage ../development/python-modules/cfgv { };
 
+  cfg_diag = callPackage ../development/python-modules/cfg_diag { };
+
   cfn-flip = callPackage ../development/python-modules/cfn-flip { };
 
   cfn-lint = callPackage ../development/python-modules/cfn-lint { };
@@ -2088,6 +2092,8 @@ self: super: with self; {
   contexter = callPackage ../development/python-modules/contexter { };
 
   contextlib2 = callPackage ../development/python-modules/contextlib2 { };
+
+  contextlib-chdir = callPackage ../development/python-modules/contextlib-chdir { };
 
   contexttimer = callPackage ../development/python-modules/contexttimer { };
 
@@ -3521,6 +3527,8 @@ self: super: with self; {
   fb-re2 = callPackage ../development/python-modules/fb-re2 { };
 
   fe25519 = callPackage ../development/python-modules/fe25519 { };
+
+  feature-check = callPackage ../development/python-modules/feature-check { };
 
   feedgen = callPackage ../development/python-modules/feedgen { };
 
@@ -7336,6 +7344,8 @@ self: super: with self; {
   parsedmarc = callPackage ../development/python-modules/parsedmarc { };
 
   parsel = callPackage ../development/python-modules/parsel { };
+
+  parse-stages = callPackage ../development/python-modules/parse-stages { };
 
   parse-type = callPackage ../development/python-modules/parse-type { };
 
@@ -12075,6 +12085,8 @@ self: super: with self; {
 
   testscenarios = callPackage ../development/python-modules/testscenarios { };
 
+  test-stages = callPackage ../development/python-modules/test-stages { };
+
   testtools = callPackage ../development/python-modules/testtools { };
 
   test-tube = callPackage ../development/python-modules/test-tube { };
@@ -12411,6 +12423,8 @@ self: super: with self; {
 
   trio-websocket = callPackage ../development/python-modules/trio-websocket { };
 
+  trivver = callPackage ../development/python-modules/trivver { };
+
   troposphere = callPackage ../development/python-modules/troposphere { };
 
   trove-classifiers = callPackage ../development/python-modules/trove-classifiers { };
@@ -12510,6 +12524,8 @@ self: super: with self; {
   typed-ast = callPackage ../development/python-modules/typed-ast { };
 
   typed-settings = callPackage ../development/python-modules/typed-settings { };
+
+  typedload = callPackage ../development/python-modules/typedload { };
 
   typeguard = callPackage ../development/python-modules/typeguard { };
 
@@ -12762,6 +12778,8 @@ self: super: with self; {
   userpath = callPackage ../development/python-modules/userpath { };
 
   ush = callPackage ../development/python-modules/ush { };
+
+  utf8-locale = callPackage ../development/python-modules/utf8-locale { };
 
   utils = callPackage ../development/python-modules/utils { };
 
