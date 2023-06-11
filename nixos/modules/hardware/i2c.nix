@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -31,10 +31,14 @@ in
       i2c = { };
     };
 
-    services.udev.extraRules = ''
-      # allow group ${cfg.group} and users with a seat use of i2c devices
-      ACTION=="add", KERNEL=="i2c-[0-9]*", TAG+="uaccess", GROUP="${cfg.group}", MODE="660"
-    '';
+    services.udev.packages = lib.singleton (pkgs.writeTextFile
+      { name = "i2c-udev-rules";
+        text = ''
+          # allow group ${cfg.group} and users with a seat use of i2c devices
+          ACTION=="add", KERNEL=="i2c-[0-9]*", TAG+="uaccess", GROUP="${cfg.group}", MODE="660"
+        '';
+        destination = "/etc/udev/rules.d/70-i2c.rules";
+      });
 
   };
 

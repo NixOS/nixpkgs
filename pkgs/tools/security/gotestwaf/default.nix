@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "gotestwaf";
-  version = "0.4.0";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "wallarm";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-waYX7DMyLW0eSzpFRyiCJQdYLFGaAKSlvGYrdcRfCl4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-NalXG4I4BtDU7vfKb4H3gJERDQ92Y/46OWIgdg+7+MA=";
   };
 
   vendorHash = null;
@@ -22,7 +22,7 @@ buildGoModule rec {
   doCheck = false;
 
   ldflags = [
-    "-X github.com/wallarm/gotestwaf/internal/version.Version=v${version}"
+    "-X=github.com/wallarm/gotestwaf/internal/version.Version=v${version}"
   ];
 
   postFixup = ''
@@ -39,6 +39,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Tool for API and OWASP attack simulation";
     homepage = "https://github.com/wallarm/gotestwaf";
+    changelog = "https://github.com/wallarm/gotestwaf/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

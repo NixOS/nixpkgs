@@ -5,13 +5,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "10.13";
+  version = "10.14";
   pname = "monkeys-audio";
 
   src = fetchzip {
     url = "https://monkeysaudio.com/files/MAC_${
       builtins.concatStringsSep "" (lib.strings.splitString "." version)}_SDK.zip";
-    sha256 = "sha256-r+Xjp5q7ehrF34j1FndiKZ+y+FTG1ORXS+9p+R2KbOQ=";
+    sha256 = "sha256-AsWBcEVyHAFzJd9PhbEA866yCGAmgJedvDUP1G7JfUY=";
     stripRoot = false;
   };
   nativeBuildInputs = [

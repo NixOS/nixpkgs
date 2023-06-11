@@ -6,8 +6,8 @@
 , jsonschema
 , pytest-asyncio
 , pytest-mock
+, pytest-rerunfailures
 , pytest-timeout
-, pytest-xdist
 , pytestCheckHook
 , pythonOlder
 , voluptuous
@@ -44,20 +44,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytest-mock
+    pytest-rerunfailures
     pytest-timeout
-    pytest-xdist
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # https://github.com/zigpy/zigpy-znp/issues/209
-    "test_join_device"
-    "test_permit_join"
-    "test_request_recovery_route_rediscovery_af"
-    "test_request_recovery_route_rediscovery_zdo"
-    "test_zigpy_request"
-    "test_zigpy_request_failure"
-    "test_mgmt_nwk_update_req"
+  pytestFlagsArray = [
+    "--reruns=3"
   ];
 
   pythonImportsCheck = [

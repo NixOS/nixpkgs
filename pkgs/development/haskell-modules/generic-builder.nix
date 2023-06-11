@@ -7,7 +7,7 @@ let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
   inherit (buildPackages)
     fetchurl removeReferencesTo
-    pkg-config coreutils gnugrep gnused glibcLocales;
+    pkg-config coreutils gnugrep glibcLocales;
 in
 
 { pname
@@ -246,11 +246,11 @@ let
     "--ghc-options=-haddock"
   ];
 
-  postPhases = optional doInstallIntermediates [ "installIntermediatesPhase" ];
+  postPhases = optional doInstallIntermediates "installIntermediatesPhase";
 
   setupCompileFlags = [
     (optionalString (!coreSetup) "-${nativePackageDbFlag}=$setupPackageConfDir")
-    (optionalString enableParallelBuilding (parallelBuildingFlags))
+    (optionalString enableParallelBuilding parallelBuildingFlags)
     "-threaded"       # https://github.com/haskell/cabal/issues/2398
     "-rtsopts"        # allow us to pass RTS flags to the generated Setup executable
   ];
@@ -698,7 +698,7 @@ stdenv.mkDerivation ({
           lib.optionals (!isCross) setupHaskellDepends);
 
         ghcCommandCaps = lib.toUpper ghcCommand';
-      in stdenv.mkDerivation ({
+      in stdenv.mkDerivation {
         inherit name shellHook;
 
         depsBuildBuild = lib.optional isCross ghcEnvForBuild;
@@ -718,7 +718,7 @@ stdenv.mkDerivation ({
         "NIX_${ghcCommandCaps}_LIBDIR" = if ghc.isHaLVM or false
           then "${ghcEnv}/lib/HaLVM-${ghc.version}"
           else "${ghcEnv}/${ghcLibdir}";
-      });
+      };
 
     env = envFunc { };
 

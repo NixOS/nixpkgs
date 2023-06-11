@@ -168,6 +168,13 @@ in buildFHSEnv rec {
     librsvg
     xorg.libXft
     libvdpau
+
+    # required by coreutils stuff to run correctly
+    # Steam ends up with LD_LIBRARY_PATH=<bunch of runtime stuff>:/usr/lib:<etc>
+    # which overrides DT_RUNPATH in our binaries, so it tries to dynload the
+    # very old versions of stuff from the runtime.
+    # FIXME: how do we even fix this correctly
+    attr
   ] ++ lib.optionals withGameSpecificLibraries [
     # Not formally in runtime but needed by some games
     at-spi2-atk

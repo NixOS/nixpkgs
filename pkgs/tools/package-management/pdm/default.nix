@@ -24,13 +24,13 @@ in
 with python.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "2.6.1";
+  version = "2.7.0";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EFlYhJovjZqp7yGDosUOrp60rEf8gScs1QT92ckO3qI=";
+    hash = "sha256-4dyu/neMFX/U1RuI0ZEBzdbONIHvdWyvpy1Gu5iMAcg=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [
     blinker
-    cachecontrol
+    cacheyou
     certifi
     findpython
     installer

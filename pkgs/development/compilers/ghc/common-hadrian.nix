@@ -143,6 +143,20 @@
         return $ verbosity >= Verbose
   ''
 
+, ghcSrc ? (if rev != null then fetchgit else fetchurl) ({
+    inherit url sha256;
+  } // lib.optionalAttrs (rev != null) {
+    inherit rev;
+  })
+
+  # GHC's build system hadrian built from the GHC-to-build's source tree
+  # using our bootstrap GHC.
+, hadrian ? bootPkgs.callPackage ../../tools/haskell/hadrian {
+    ghcSrc = ghcSrc;
+    ghcVersion = version;
+    userSettings = hadrianUserSettings;
+  }
+
 , #  Whether to build sphinx documentation.
   enableDocs ? (
     # Docs disabled for musl and cross because it's a large task to keep
@@ -161,12 +175,6 @@
 assert !enableNativeBignum -> gmp != null;
 
 let
-  src = (if rev != null then fetchgit else fetchurl) ({
-    inherit url sha256;
-  } // lib.optionalAttrs (rev != null) {
-    inherit rev;
-  });
-
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
   inherit (bootPkgs) ghc;
@@ -187,14 +195,6 @@ let
     ++ lib.optionals targetPlatform.useAndroidPrebuilt [
       "*.*.ghc.c.opts += -optc-std=gnu99"
     ];
-
-  # GHC's build system hadrian built from the GHC-to-build's source tree
-  # using our bootstrap GHC.
-  hadrian = bootPkgs.callPackage ../../tools/haskell/hadrian {
-    ghcSrc = src;
-    ghcVersion = version;
-    userSettings = hadrianUserSettings;
-  };
 
   # Splicer will pull out correct variations
   libDeps = platform: lib.optional enableTerminfo ncurses
@@ -258,7 +258,7 @@ stdenv.mkDerivation ({
   pname = "${targetPrefix}ghc${variantSuffix}";
   inherit version;
 
-  inherit src;
+  src = ghcSrc;
 
   enableParallelBuilding = true;
 

@@ -210,6 +210,12 @@ let
       "-DMAC_CODESIGN_ID=OFF"
     ];
 
+    # Fish’s test suite needs to be able to look up process information and send signals.
+    sandboxProfile = lib.optionalString stdenv.isDarwin ''
+      (allow mach-lookup mach-task-name)
+      (allow signal (target children))
+    '';
+
     # The optional string is kind of an inelegant way to get fish to cross compile.
     # Fish needs coreutils as a runtime dependency, and it gets put into
     # CMAKE_PREFIX_PATH, which cmake uses to look up build time programs, so it

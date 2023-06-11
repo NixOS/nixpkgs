@@ -301,7 +301,7 @@ stdenv.mkDerivation {
     '';
 
   strictDeps = true;
-  propagatedBuildInputs = [ bintools ] ++ extraTools ++ optionals cc.langD or false [ zlib ];
+  propagatedBuildInputs = [ bintools ] ++ extraTools ++ optionals cc.langD or cc.langJava or false [ zlib ];
   depsTargetTargetPropagated = optional (libcxx != null) libcxx ++ extraPackages;
 
   setupHooks = [
@@ -464,7 +464,7 @@ stdenv.mkDerivation {
     + optionalString propagateDoc ''
       ln -s ${cc.man} $man
       ln -s ${cc.info} $info
-    '' + optionalString (cc.langD or false) ''
+    '' + optionalString (cc.langD or cc.langJava or false) ''
       echo "-B${zlib}${zlib.libdir or "/lib/"}" >> $out/nix-support/libc-cflags
     ''
 
@@ -612,5 +612,6 @@ stdenv.mkDerivation {
         lib.attrByPath ["meta" "description"] "System C compiler" cc_
         + " (wrapper script)";
       priority = 10;
+      mainProgram = if name != "" then name else ccName;
   };
 }

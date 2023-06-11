@@ -7,6 +7,8 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
       emptyDiskImages = [ 512 512 ];
       useBootLoader = true;
       useEFIBoot = true;
+      # To boot off the encrypted disk, we need to have a init script which comes from the Nix store
+      mountHostNixStore = true;
     };
     boot.loader.systemd-boot.enable = true;
 

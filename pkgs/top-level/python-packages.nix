@@ -1585,6 +1585,8 @@ self: super: with self; {
 
   cachey = callPackage ../development/python-modules/cachey { };
 
+  cacheyou = callPackage ../development/python-modules/cacheyou { };
+
   cachy = callPackage ../development/python-modules/cachy { };
 
   cadquery = callPackage ../development/python-modules/cadquery {
@@ -3530,7 +3532,6 @@ self: super: with self; {
 
   fenics = callPackage ../development/python-modules/fenics {
     hdf5 = pkgs.hdf5_1_10;
-    boost = pkgs.boost172;
   };
 
   ffcv = callPackage ../development/python-modules/ffcv { };
@@ -3824,10 +3825,6 @@ self: super: with self; {
 
   formulaic = callPackage ../development/python-modules/formulaic { };
 
-  foundationdb51 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb51; };
-  foundationdb52 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb52; };
-  foundationdb60 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb60; };
-  foundationdb61 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb61; };
   foundationdb71 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb71; };
 
   fountains = callPackage ../development/python-modules/fountains { };
@@ -3847,6 +3844,8 @@ self: super: with self; {
   freetype-py = callPackage ../development/python-modules/freetype-py { };
 
   freezegun = callPackage ../development/python-modules/freezegun { };
+
+  frida-python = callPackage ../development/python-modules/frida-python { };
 
   frigidaire = callPackage ../development/python-modules/frigidaire { };
 
@@ -4306,8 +4305,6 @@ self: super: with self; {
   gpytorch = callPackage ../development/python-modules/gpytorch { };
 
   gpt-2-simple = callPackage ../development/python-modules/gpt-2-simple { };
-
-  gpyopt = callPackage ../development/python-modules/gpyopt { };
 
   gql = callPackage ../development/python-modules/gql { };
 
@@ -5495,6 +5492,8 @@ self: super: with self; {
 
   kneed = callPackage ../development/python-modules/kneed { };
 
+  knx-frontend = callPackage ../development/python-modules/knx-frontend { };
+
   kombu = callPackage ../development/python-modules/kombu { };
 
   konnected = callPackage ../development/python-modules/konnected { };
@@ -5518,6 +5517,8 @@ self: super: with self; {
   lakeside = callPackage ../development/python-modules/lakeside { };
 
   langchain = callPackage ../development/python-modules/langchain { };
+
+  langchainplus-sdk = callPackage ../development/python-modules/langchainplus-sdk { };
 
   langcodes = callPackage ../development/python-modules/langcodes { };
 
@@ -7820,6 +7821,8 @@ self: super: with self; {
 
   python-openems = callPackage ../development/python-modules/python-openems { };
 
+  python-opensky = callPackage ../development/python-modules/python-opensky { };
+
   python-openzwave-mqtt = callPackage ../development/python-modules/python-openzwave-mqtt { };
 
   python-owasp-zap-v2-4 = callPackage ../development/python-modules/python-owasp-zap-v2-4 { };
@@ -8181,6 +8184,8 @@ self: super: with self; {
   py-dormakaba-dkey = callPackage ../development/python-modules/py-dormakaba-dkey { };
 
   py-nightscout = callPackage ../development/python-modules/py-nightscout { };
+
+  py-partiql-parser = callPackage ../development/python-modules/py-partiql-parser { };
 
   py-pdf-parser = callPackage ../development/python-modules/py-pdf-parser { };
 
@@ -11037,6 +11042,8 @@ self: super: with self; {
 
   sense-energy = callPackage ../development/python-modules/sense-energy { };
 
+  sensirion-ble = callPackage ../development/python-modules/sensirion-ble { };
+
   sensor-state-data = callPackage ../development/python-modules/sensor-state-data { };
 
   sensorpro-ble = callPackage ../development/python-modules/sensorpro-ble { };
@@ -11225,6 +11232,8 @@ self: super: with self; {
   sip_4 = callPackage ../development/python-modules/sip/4.x.nix { };
 
   sipyco = callPackage ../development/python-modules/sipyco { };
+
+  sisyphus-control = callPackage ../development/python-modules/sisyphus-control { };
 
   siuba = callPackage ../development/python-modules/siuba { };
 
@@ -11835,6 +11844,8 @@ self: super: with self; {
   svg-path = callPackage ../development/python-modules/svg-path { };
 
   svgwrite = callPackage ../development/python-modules/svgwrite { };
+
+  sv-ttk = callPackage ../development/python-modules/sv-ttk { };
 
   swagger-spec-validator = callPackage ../development/python-modules/swagger-spec-validator { };
 

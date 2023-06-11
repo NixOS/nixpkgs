@@ -5,6 +5,7 @@
 , makeWrapper
 , git
 , bash
+, coreutils
 , gitea
 , gzip
 , openssh
@@ -34,7 +35,7 @@ buildGoModule rec {
   ];
 
   postPatch = ''
-    substituteInPlace modules/setting/setting.go --subst-var data
+    substituteInPlace modules/setting/server.go --subst-var data
   '';
 
   subPackages = [ "." ];
@@ -62,7 +63,7 @@ buildGoModule rec {
     cp -R ./options/locale $out/locale
 
     wrapProgram $out/bin/gitea \
-      --prefix PATH : ${lib.makeBinPath [ bash git gzip openssh ]}
+      --prefix PATH : ${lib.makeBinPath [ bash coreutils git gzip openssh ]}
   '';
 
   passthru = {
