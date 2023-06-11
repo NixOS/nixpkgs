@@ -16537,6 +16537,15 @@
       fingerprint = "EE59 5E29 BB5B F2B3 5ED2  3F1C D276 FF74 6700 7335";
     }];
   };
+  undefined-moe = {
+    name = "undefined";
+    email = "i@undefined.moe";
+    github = "undefined-moe";
+    githubId = 29992205;
+    keys = [{
+      fingerprint = "6684 4E7D D213 C75D 8828  6215 C714 A58B 6C1E 0F52";
+    }];
+  };
   unhammer = {
     email = "unhammer@fsfe.org";
     github = "unhammer";
