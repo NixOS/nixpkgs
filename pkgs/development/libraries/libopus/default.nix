@@ -7,6 +7,9 @@
 , ninja
 , fixedPoint ? false
 , withCustomModes ? true
+
+# tests
+, ffmpeg-headless
 }:
 
 stdenv.mkDerivation rec {
@@ -19,6 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    ./fix-pkg-config-paths.patch
     # Fix meson build for arm64. Remove with next release
     # https://gitlab.xiph.org/xiph/opus/-/merge_requests/59
     (fetchpatch {
@@ -47,6 +51,10 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = !stdenv.isi686 && !stdenv.isAarch32; # test_unit_LPC_inv_pred_gain fails
+
+  passthru.tests = {
+    inherit ffmpeg-headless;
+  };
 
   meta = with lib; {
     description = "Open, royalty-free, highly versatile audio codec";
