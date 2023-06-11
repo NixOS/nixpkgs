@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    ./fix-pkg-config-paths.patch
     # Fix meson build for arm64. Remove with next release
     # https://gitlab.xiph.org/xiph/opus/-/merge_requests/59
     (fetchpatch {
