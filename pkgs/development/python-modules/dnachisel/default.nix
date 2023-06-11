@@ -7,6 +7,7 @@
 , numpy
 , proglog
 , pytestCheckHook
+, pythonOlder
 , python-codon-tables
 , primer3
 , genome-collector
@@ -16,6 +17,9 @@
 buildPythonPackage rec {
   pname = "dnachisel";
   version = "3.2.11";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Edinburgh-Genome-Foundry";
