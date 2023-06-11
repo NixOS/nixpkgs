@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ybMrQlO+WuY9H/Fu6ga5S18PKVG3oCrO71jjo85JxR8=";
   };
 
+  postPatch = ''
+    patchShebangs meson/
+  '';
+
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
@@ -31,10 +35,6 @@ stdenv.mkDerivation rec {
     (lib.mesonEnable "asm" stdenv.hostPlatform.isAarch)
     (lib.mesonEnable "docs" false)
   ];
-
-  preBuild = ''
-    patchShebangs meson/get-version.py
-  '';
 
   doCheck = !stdenv.isi686 && !stdenv.isAarch32; # test_unit_LPC_inv_pred_gain fails
 
