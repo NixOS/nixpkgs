@@ -6,10 +6,11 @@
 , extraSources ? []
 , baseOptionsJSON ? null
 , warningsAreErrors ? true
-, allowDocBook ? true
+, allowDocBook ? false
 , prefix ? ../../..
 }:
 
+assert ! allowDocBook;
 with pkgs;
 
 let

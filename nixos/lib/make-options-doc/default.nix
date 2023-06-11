@@ -39,11 +39,15 @@
 # allow docbook option docs if `true`. only markdown documentation is allowed when set to
 # `false`, and a different renderer may be used with different bugs and performance
 # characteristics but (hopefully) indistinguishable output.
-, allowDocBook ? true
+# deprecated since 23.11.
+# TODO remove in a while.
+, allowDocBook ? false
 # whether lib.mdDoc is required for descriptions to be read as markdown.
 # !!! when this is eventually flipped to true, `lib.doRename` should also default to emitting Markdown
 , markdownByDefault ? false
 }:
+
+assert ! allowDocBook;
 
 let
   rawOpts = lib.optionAttrSetToDocList options;
