@@ -193,14 +193,16 @@ let
     in
         lib.concatStringsSep ";" hostProviderLua;
 
+  buildNeovimPlugin = callPackage ./build-neovim-plugin.nix {
+    inherit (vimUtils) toVimPlugin;
+    inherit lua;
+  };
 in
 {
   inherit makeNeovimConfig;
   inherit generateProviderRc;
   inherit legacyWrapper;
 
-  buildNeovimPluginFrom2Nix = callPackage ./build-neovim-plugin.nix {
-    inherit (vimUtils) toVimPlugin;
-    inherit lua;
-  };
+  inherit buildNeovimPlugin;
+  buildNeovimPluginFrom2Nix = lib.warn "buildNeovimPluginFrom2Nix was renamed to buildNeovimPlugin" buildNeovimPlugin;
 }
