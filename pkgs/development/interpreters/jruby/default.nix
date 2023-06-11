@@ -1,27 +1,28 @@
-{ lib, stdenv, callPackage, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, callPackage, fetchurl, makeBinaryWrapper, jre }:
 
 let
 # The version number here is whatever is reported by the RUBY_VERSION string
-rubyVersion = callPackage ../ruby/ruby-version.nix {} "2" "5" "7" "";
+rubyVersion = callPackage ../ruby/ruby-version.nix {} "3" "1" "4" "";
 jruby = stdenv.mkDerivation rec {
   pname = "jruby";
 
-  version = "9.3.9.0";
+  version = "9.4.3.0";
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/jruby.org/downloads/${version}/jruby-bin-${version}.tar.gz";
-    sha256 = "sha256-JR5t2NHS+CkiyMd414V+G++C/lyiz3e8CTVkIdCwWrg=";
+    hash = "sha256-sJfgjFZp6KGIKI4RORHRK0rSvWeiwgnW36hEXWOk2Mk=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   installPhase = ''
-     mkdir -pv $out/docs
+     mkdir -pv $out/share/jruby/docs
      mv * $out
      rm $out/bin/*.{bat,dll,exe,sh}
-     mv $out/COPYING $out/LICENSE* $out/docs
+     mv $out/samples $out/share/jruby/
+     mv $out/BSDL $out/COPYING $out/LEGAL $out/LICENSE* $out/share/jruby/docs/
 
-     for i in $out/bin/jruby{,.bash}; do
+     for i in $out/bin/jruby; do
        wrapProgram $i \
          --set JAVA_HOME ${jre.home}
      done
@@ -52,9 +53,10 @@ jruby = stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Ruby interpreter written in Java";
-    homepage = "http://jruby.org/";
+    homepage = "https://www.jruby.org/";
+    changelog = "https://github.com/jruby/jruby/releases/tag/${version}";
     license = with licenses; [ cpl10 gpl2 lgpl21 ];
-    platforms = platforms.unix;
+    platforms = jre.meta.platforms;
     maintainers = [ maintainers.fzakaria ];
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
   };
