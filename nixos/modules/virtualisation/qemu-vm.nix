@@ -263,7 +263,8 @@ let
         if cfg.useEFIBoot then "efi_bootloading_with_default_fs"
         else "legacy_bootloading_with_default_fs"
       else
-        "direct_boot_with_default_fs"
+        if cfg.directBoot.enable then "direct_boot_with_default_fs"
+        else "custom"
     else
       "custom";
   suggestedRootDevice = {
@@ -769,6 +770,40 @@ in
         '';
       };
 
+    virtualisation.directBoot = {
+      enable =
+        mkOption {
+          type = types.bool;
+          default = !cfg.useBootLoader;
+          defaultText = "!cfg.useBootLoader";
+          description =
+            lib.mdDoc ''
+              If enabled, the virtual machine will boot directly into the kernel instead of through a bootloader. Other relevant parameters such as the initrd are also passed to QEMU.
+
+              If you want to test netboot, consider disabling this option.
+
+              This will not boot / reboot correctly into a system that has switched to a different configuration on disk.
+
+              This is enabled by default if you don't enable bootloaders, but you can still enable a bootloader if you need.
+              Read more about this feature: <https://qemu-project.gitlab.io/qemu/system/linuxboot.html>.
+            '';
+        };
+      initrd =
+        mkOption {
+          type = types.str;
+          default = "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}";
+          defaultText = "\${config.system.build.initialRamdisk}/\${config.system.boot.loader.initrdFile}";
+          description =
+            lib.mdDoc ''
+              In direct boot situations, you may want to influence the initrd to load
+              to use your own customized payload.
+
+              This is useful if you want to test the netboot image without
+              testing the firmware or the loading part.
+            '';
+        };
+    };
+
     virtualisation.useBootLoader =
       mkOption {
         type = types.bool;
@@ -895,6 +930,18 @@ in
               virtualisation.memorySize is above 2047, but qemu is only able to allocate 2047MB RAM on 32bit max.
             '';
           }
+          { assertion = cfg.directBoot.initrd != options.virtualisation.directBoot.initrd.default -> cfg.directBoot.enable;
+            message =
+              ''
+                You changed the default of `virtualisation.directBoot.initrd` but you are not
+                using QEMU direct boot. This initrd will not be used in your current
+                boot configuration.
+
+                Either do not mutate `virtualisation.directBoot.initrd` or enable direct boot.
+
+                If you have a more advanced usecase, please open an issue or a pull request.
+              '';
+          }
         ];
 
     warnings =
@@ -915,6 +962,11 @@ in
           Otherwise, we recommend
 
             ${opt.writableStore} = false;
+            ''
+      ++ optional (cfg.directBoot.enable && cfg.useBootLoader)
+        ''
+          You enabled direct boot and a bootloader, QEMU will not boot your bootloader, rendering
+          `useBootLoader` useless. You might want to disable one of those options.
         '';
 
     # In UEFI boot, we use a EFI-only partition table layout, thus GRUB will fail when trying to install
@@ -1036,9 +1088,9 @@ in
         alphaNumericChars = lowerChars ++ upperChars ++ (map toString (range 0 9));
         # Replace all non-alphanumeric characters with underscores
         sanitizeShellIdent = s: concatMapStrings (c: if builtins.elem c alphaNumericChars then c else "_") (stringToCharacters s);
-      in mkIf (!cfg.useBootLoader) [
+      in mkIf cfg.directBoot.enable [
         "-kernel \${NIXPKGS_QEMU_KERNEL_${sanitizeShellIdent config.system.name}:-${config.system.build.toplevel}/kernel}"
-        "-initrd ${config.system.build.toplevel}/initrd"
+        "-initrd ${cfg.directBoot.initrd}"
         ''-append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo}/registration ${consoles} $QEMU_KERNEL_PARAMS"''
       ])
       (mkIf cfg.useEFIBoot [
