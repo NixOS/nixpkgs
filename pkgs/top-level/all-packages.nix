@@ -36213,6 +36213,8 @@ with pkgs;
 
   antsimulator = callPackage ../games/antsimulator { };
 
+  atlauncher = callPackage ../games/atlauncher { };
+
   augustus = callPackage ../games/augustus { };
 
   ballerburg = callPackage ../games/ballerburg { } ;
