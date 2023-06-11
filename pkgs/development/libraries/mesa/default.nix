@@ -134,6 +134,12 @@ self = stdenv.mkDerivation {
 
     ./opencl.patch
     ./disk_cache-include-dri-driver-path-in-cache-key.patch
+
+    (fetchpatch {
+      # mesa: automatically detect gallium-xa
+      url = "https://gitlab.freedesktop.org/mesa/mesa/-/commit/35b440ead5e0713838985361715cc768cfe5f5bc.diff";
+      hash = "sha256-bDyHhFa0yCZNw/GwuW4EvcsfqvDcgNdg6j/WbAaC3Uc=";
+    })
   ];
 
   postPatch = ''
@@ -213,6 +219,13 @@ self = stdenv.mkDerivation {
   ] ++ lib.optional enablePatentEncumberedCodecs
     "-Dvideo-codecs=h264dec,h264enc,h265dec,h265enc,vc1dec"
   ++ lib.optional (vulkanLayers != []) "-D vulkan-layers=${builtins.concatStringsSep "," vulkanLayers}";
+
+  # setting mesonAutoFeatures="disabled" breaks mesa's ability to
+  # resolve defaults that depend on multiple features (for example,
+  # gallium-xa should be disabled if *none of* a certain set of
+  # drivers are enabled) and would require us to replicate that
+  # defaulting logic here in nixpkgs and also keep it in sync.
+  mesonAutoFeatures = "auto";
 
   buildInputs = with xorg; [
     expat llvmPackages.libllvm libglvnd xorgproto
