@@ -6,13 +6,14 @@
 , jsonschema
 , pathable
 , pyyaml
+, requests
 , typing-extensions
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "jsonschema-spec";
-  version = "0.1.4";
+  version = "0.1.6";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "p1c2u";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-kLCV9WPWGrVgpbueafMVqtGmj3ifrBzTChE2kyxpyZk=";
+    hash = "sha256-rXE7CNIKNbKcPoyiDM5qqN/E+q8L/tsMZWEetpUZJJw=";
   };
 
   postPatch = ''
@@ -35,6 +36,7 @@ buildPythonPackage rec {
     jsonschema
     pathable
     pyyaml
+    requests
     typing-extensions
   ];
 
