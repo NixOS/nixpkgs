@@ -4,7 +4,7 @@ let
 in
 rec {
 
-  inherit (src) packageVersion firefox source;
+  inherit (src) packageVersion firefox source bin;
 
   extraPatches = [ ];
 
