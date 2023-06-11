@@ -272,6 +272,14 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
+  flutter = {
+    members = [ gilice mkg20001 RossComputerGuy FlafyDev hacker1024 ];
+    scope = "Maintain Flutter and Dart-related packages and build tools";
+    shortName = "flutter";
+    enableFeatureFreezePing = false;
+    githubTeams = [ "flutter" ];
+  };
+
   freedesktop = {
     members = [ jtojnar ];
     scope = "Maintain Freedesktop.org packages for graphical desktop.";
