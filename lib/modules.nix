@@ -1146,14 +1146,11 @@ let
     use = id;
   };
 
-  /* Transitional version of mkAliasOptionModule that uses MD docs. */
-  mkAliasOptionModuleMD = from: to: doRename {
-    inherit from to;
-    visible = true;
-    warn = false;
-    use = id;
-    markdown = true;
-  };
+  /* Transitional version of mkAliasOptionModule that uses MD docs.
+
+     This function is no longer necessary and merely an alias of `mkAliasOptionModule`.
+  */
+  mkAliasOptionModuleMD = mkAliasOptionModule;
 
   /* mkDerivedConfig : Option a -> (a -> Definition b) -> Definition b
 
@@ -1175,7 +1172,7 @@ let
       (opt.highestPrio or defaultOverridePriority)
       (f opt.value);
 
-  doRename = { from, to, visible, warn, use, withPriority ? true, markdown ? false }:
+  doRename = { from, to, visible, warn, use, withPriority ? true }:
     { config, options, ... }:
     let
       fromOpt = getAttrFromPath from options;
@@ -1186,9 +1183,7 @@ let
     {
       options = setAttrByPath from (mkOption {
         inherit visible;
-        description = if markdown
-          then lib.mdDoc "Alias of {option}`${showOption to}`."
-          else "Alias of <option>${showOption to}</option>.";
+        description = "Alias of {option}`${showOption to}`.";
         apply = x: use (toOf config);
       } // optionalAttrs (toType != null) {
         type = toType;

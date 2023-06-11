@@ -100,10 +100,7 @@ rec {
     name: mkOption {
     default = false;
     example = true;
-    description =
-      if name ? _type && name._type == "mdDoc"
-      then lib.mdDoc "Whether to enable ${name.text}."
-      else "Whether to enable ${name}.";
+    description = "Whether to enable ${name}.";
     type = lib.types.bool;
   };
 
@@ -185,10 +182,10 @@ rec {
           (if isList example then "pkgs." + concatStringsSep "." example else example);
       });
 
-  /* Like mkPackageOption, but emit an mdDoc description instead of DocBook. */
-  mkPackageOptionMD = pkgs: name: extra:
-    let option = mkPackageOption pkgs name extra;
-    in option // { description = lib.mdDoc option.description; };
+  /* Alias of mkPackageOption. Previously used to create options with markdown
+     documentation, which is no longer required.
+  */
+  mkPackageOptionMD = mkPackageOption;
 
   /* This option accepts anything, but it does not produce any result.
 
@@ -347,11 +344,9 @@ rec {
   literalExample = lib.warn "literalExample is deprecated, use literalExpression instead, or use literalMD for a non-Nix description." literalExpression;
 
   /* Transition marker for documentation that's already migrated to markdown
-     syntax.
+     syntax. This is a no-op and no longer needed.
   */
-  mdDoc = text:
-    if ! isString text then throw "mdDoc expects a string."
-    else { _type = "mdDoc"; inherit text; };
+  mdDoc = lib.id;
 
   /* For use in the `defaultText` and `example` option attributes. Causes the
      given MD text to be inserted verbatim in the documentation, for when
