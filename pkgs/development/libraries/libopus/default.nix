@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     (lib.mesonBool "fixed-point" fixedPoint)
     (lib.mesonBool "custom-modes" withCustomModes)
-    (lib.mesonEnable "asm" stdenv.hostPlatform.isAarch)
+    (lib.mesonEnable "asm" false)
     (lib.mesonEnable "docs" false)
   ];
 
