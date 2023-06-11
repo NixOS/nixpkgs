@@ -1,4 +1,4 @@
-{ lib, stdenv, crystal, fetchFromGitHub, librsvg, pkg-config, libxml2, openssl, shards, sqlite, lsquic, videojs, nixosTests }:
+{ lib, stdenv, crystal, fetchFromGitea, librsvg, pkg-config, libxml2, openssl, shards, sqlite, lsquic, videojs, nixosTests }:
 let
   # All versions, revisions, and checksums are stored in ./versions.json.
   # The update process is the following:
@@ -18,7 +18,8 @@ crystal.buildCrystalPackage rec {
   pname = "invidious";
   inherit (versions.invidious) version;
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "gitea.invidious.io";
     owner = "iv-org";
     repo = pname;
     fetchSubmodules = true;
