@@ -7,8 +7,9 @@ let
   registrationFile = "${dataDir}/telegram-registration.yaml";
   cfg = config.services.mautrix-telegram;
   settingsFormat = pkgs.formats.json {};
+  settingsFileSuffix = "mautrix-telegram-config.json";
   settingsFile =
-    settingsFormat.generate "mautrix-telegram-config.json" cfg.settings;
+    settingsFormat.generate settingsFileSuffix cfg.settings;
 
 in {
   options = {
@@ -154,10 +155,14 @@ in {
       preStart = ''
         # generate the appservice's registration file if absent
         if [ ! -f '${registrationFile}' ]; then
+          # mautrix-telegram --generate-registration will ouput an error if the config file or its directory is read-only
+          tmp_conf=$(mktemp --suffix "${settingsFileSuffix}")
+          trap 'rm "$tmp_conf"' EXIT
+          cat "${settingsFile}" > "$tmp_conf"
           ${pkgs.mautrix-telegram}/bin/mautrix-telegram \
             --generate-registration \
             --base-config='${pkgs.mautrix-telegram}/${pkgs.mautrix-telegram.pythonModule.sitePackages}/mautrix_telegram/example-config.yaml' \
-            --config='${settingsFile}' \
+            --config="$tmp_conf" \
             --registration='${registrationFile}'
         fi
       '' + lib.optionalString (pkgs.mautrix-telegram ? alembic) ''
@@ -184,6 +189,7 @@ in {
 
         ExecStart = ''
           ${pkgs.mautrix-telegram}/bin/mautrix-telegram \
+            --no-update \
             --config='${settingsFile}'
         '';
       };
