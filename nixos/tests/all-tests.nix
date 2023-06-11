@@ -664,6 +664,7 @@ in {
   sabnzbd = handleTest ./sabnzbd.nix {};
   samba = handleTest ./samba.nix {};
   samba-wsdd = handleTest ./samba-wsdd.nix {};
+  sane = handleTest ./saned-sane-net.nix {};
   sanoid = handleTest ./sanoid.nix {};
   schleuder = handleTest ./schleuder.nix {};
   sddm = handleTest ./sddm.nix {};
