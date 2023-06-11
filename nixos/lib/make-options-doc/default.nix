@@ -43,11 +43,12 @@
 # TODO remove in a while.
 , allowDocBook ? false
 # whether lib.mdDoc is required for descriptions to be read as markdown.
-# !!! when this is eventually flipped to true, `lib.doRename` should also default to emitting Markdown
-, markdownByDefault ? false
+# deprecated since 23.11.
+# TODO remove in a while.
+, markdownByDefault ? true
 }:
 
-assert ! allowDocBook;
+assert markdownByDefault && ! allowDocBook;
 
 let
   rawOpts = lib.optionAttrSetToDocList options;
