@@ -5,14 +5,18 @@ with lib;
 let
   nixCommand =
     "${pkgs.nix}/bin/nix --extra-experimental-features 'nix-command flakes'";
-  mkBuilds = attrs:
-    if length attrs == 0 then
-      ""
-    else ''
-      if ! ${nixCommand} build .#${head attrs};
+  mkBuilds = attrs: concatMapStrings mkBuild attrs;
+  mkBuild = attr:
+    if builtins.typeOf attr == "string" then ''
+      if ! ${nixCommand} build .#${attr};
       then
-        echo ${head attrs} >> fail.log
-        ${mkBuilds (tail attrs)}
+        echo ${attr} >> fail.log
+      fi
+    '' else ''
+      if ! ${nixCommand} build .#${attr.attr};
+      then
+        echo ${attr.attr} >> fail.log
+        ${mkBuilds attr.onFail}
       fi
     '';
   mkServices = name: cfg:
@@ -165,9 +169,27 @@ in {
                 lib.mdDoc "The branch which should be merged before update";
             };
             buildAttributes = mkOption {
-              type = types.listOf types.str;
-              description = lib.mdDoc
-                "Attributes to build. This will build until one of them succeeds";
+              type = with types;
+                listOf (oneOf [
+                  str
+                  (submodule (let
+                    attrWithFallback = {
+                      options = {
+                        attr = mkOption {
+                          type = str;
+                          description = lib.mdDoc "Attribute to build";
+                        };
+                        onFail = mkOption {
+                          type =
+                            listOf (oneOf [ str (submodule attrWithFallback) ]);
+                          description =
+                            lib.mdDoc "Attributes to build if attr failed";
+                        };
+                      };
+                    };
+                  in attrWithFallback))
+                ]);
+              description = lib.mdDoc "Attributes to build.";
             };
             updateFlake = mkOption {
               default = true;
