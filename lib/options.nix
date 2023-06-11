@@ -344,19 +344,7 @@ rec {
     if ! isString text then throw "literalExpression expects a string."
     else { _type = "literalExpression"; inherit text; };
 
-  literalExample = lib.warn "literalExample is deprecated, use literalExpression instead, or use literalDocBook for a non-Nix description." literalExpression;
-
-
-  /* For use in the `defaultText` and `example` option attributes. Causes the
-     given DocBook text to be inserted verbatim in the documentation, for when
-     a `literalExpression` would be too hard to read.
-  */
-  literalDocBook = text:
-    if ! isString text then throw "literalDocBook expects a string."
-    else
-      lib.warnIf (lib.isInOldestRelease 2211)
-        "literalDocBook is deprecated, use literalMD instead"
-        { _type = "literalDocBook"; inherit text; };
+  literalExample = lib.warn "literalExample is deprecated, use literalExpression instead, or use literalMD for a non-Nix description." literalExpression;
 
   /* Transition marker for documentation that's already migrated to markdown
      syntax.
