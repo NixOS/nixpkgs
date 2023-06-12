@@ -1,6 +1,5 @@
-{ lib
-, buildPythonPackage
-, larynx
+{ buildPythonPackage
+, piper-tts
 
 # build
 , cython
@@ -15,10 +14,10 @@
 , torch
 }:
 
-buildPythonPackage rec {
-  inherit (larynx) version src meta;
+buildPythonPackage {
+  inherit (piper-tts) version src meta;
 
-  pname = "larynx-train";
+  pname = "piper-train";
   format = "setuptools";
 
   sourceRoot = "source/src/python";
@@ -35,13 +34,13 @@ buildPythonPackage rec {
   '';
 
   postBuild = ''
-    make -C larynx_train/vits/monotonic_align
+    make -C piper_train/vits/monotonic_align
   '';
 
   postInstall = ''
-    export MONOTONIC_ALIGN=$out/${python.sitePackages}/larynx_train/vits/monotonic_align/monotonic_align
+    export MONOTONIC_ALIGN=$out/${python.sitePackages}/piper_train/vits/monotonic_align/monotonic_align
     mkdir -p $MONOTONIC_ALIGN
-    cp -v ./larynx_train/vits/monotonic_align/larynx_train/vits/monotonic_align/core.*.so $MONOTONIC_ALIGN/
+    cp -v ./piper_train/vits/monotonic_align/piper_train/vits/monotonic_align/core.*.so $MONOTONIC_ALIGN/
   '';
 
   propagatedBuildInputs = [
@@ -54,7 +53,7 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [
-    "larynx_train"
+    "piper_train"
   ];
 
   doCheck = false; # no tests
