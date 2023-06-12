@@ -29565,6 +29565,8 @@ with pkgs;
 
   cheesecutter = callPackage ../applications/audio/cheesecutter { };
 
+  cutecapture = callPackage ../applications/video/cutecapture { };
+
   milkytracker = callPackage ../applications/audio/milkytracker { };
 
   ptcollab = libsForQt5.callPackage ../applications/audio/ptcollab { };
