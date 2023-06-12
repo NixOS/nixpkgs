@@ -288,7 +288,9 @@ self = stdenv.mkDerivation {
     mkdir -p $osmesa/lib
     mv -t $osmesa/lib/ $out/lib/libOSMesa*
   '' + lib.optionalString (vulkanLayers != []) ''
-    mv -t $drivers/lib $out/lib/libVkLayer*
+    if [ -n "$(shopt -s nullglob; echo "$out/lib/libVkLayer"*)" ]; then
+      mv -t $drivers/lib $out/lib/libVkLayer*
+    fi
     for js in $drivers/share/vulkan/{im,ex}plicit_layer.d/*.json; do
       substituteInPlace "$js" --replace '"libVkLayer_' '"'"$drivers/lib/libVkLayer_"
     done
