@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, fetchzip
+{ lib, stdenv, buildPackages, fetchzip, fetchFromGitHub
 , appleDerivation', xnu, Libc, Libm, libdispatch, Libinfo
 , dyld, Csu, architecture, libclosure, CarbonHeaders, ncurses, CommonCrypto
 , copyfile, removefile, libresolvHeaders, libresolv, Libnotify, libmalloc, libplatform, libpthread
@@ -29,6 +29,15 @@ let
         rmdir src/opendirectory
       fi
     '';
+  };
+
+  # Libsystem needs `asl.h` from syslog. This is the version corresponding to the 10.12 SDK
+  # source release, but it hasn’t changed in newer versions.
+  syslog.src = fetchFromGitHub {
+    owner = "apple-oss-distributions";
+    repo = "syslog";
+    rev = "syslog-349.50.5";
+    hash = "sha256-tXLW/TNsluhO1X9Rv3FANyzyOe5TE/hZz0gVo7JGvHA=";
   };
 in
 appleDerivation' stdenv {
@@ -62,6 +71,9 @@ appleDerivation' stdenv {
     done
 
     (cd ${buildPackages.darwin.cctools.dev}/include/mach-o && find . -name '*.h' | copyHierarchy $out/include/mach-o)
+
+    # Copy `asl.h` from the syslog sources since it is no longer provided as part of Libc.
+    cp ${syslog.src}/libsystem_asl.tproj/include/asl.h $out/include
 
     mkdir -p $out/include/os
 
