@@ -17,7 +17,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = lib.optionals sctpSupport [ lksctp-tools ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DSCTP_SUPPORT=${lib.boolToString sctpSupport}"
   ];
 
