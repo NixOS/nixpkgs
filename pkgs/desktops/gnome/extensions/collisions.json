@@ -326,6 +326,10 @@
     "panel-date-format": [
       "panel-date-format@keiii.github.com",
       "panel-date-format@atareao.es"
+    ],
+    "battery-time": [
+      "batime@martin.zurowietz.de",
+      "batterytime@typeof.pw"
     ]
   }
 }
