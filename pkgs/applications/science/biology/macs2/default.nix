@@ -1,12 +1,13 @@
 { lib, python3, fetchPypi }:
 
 python3.pkgs.buildPythonPackage rec {
-  pname = "MACS2";
+  pname = "macs2";
   version = "2.2.8";
   format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = lib.toUpper pname;
+    inherit version;
     hash = "sha256-KgpDasidj4yUoeQQaQA3dg5eN5Ka1xnFRpbnTvhKmOA=";
   };
 
