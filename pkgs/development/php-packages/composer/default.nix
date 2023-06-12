@@ -9,16 +9,22 @@ mkDerivation rec {
     sha256 = "sha256-klbEwcgDudDLemahq2xzfkjEPMbfe47J7CSXpyS/RN4=";
   };
 
-  dontUnpack = true;
+  unpackPhase = ''
+    runHook preUnpack
+    php -r '(new Phar("${src}"))->extractTo("./");'
+    runHook postUnpack
+  '';
 
-  nativeBuildInputs = [ makeBinaryWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper php ];
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin
-    install -D $src $out/libexec/composer/composer.phar
-    makeWrapper ${php}/bin/php $out/bin/composer \
-      --add-flags "$out/libexec/composer/composer.phar" \
+    mkdir $out
+    mv * $out/
+    echo '#! ${php}/bin/php' | cat - $out/bin/composer > $out/bin/composer_tmp
+    mv $out/bin/composer_tmp $out/bin/composer
+    chmod +x $out/bin/composer
+    wrapProgram $out/bin/composer \
       --prefix PATH : ${lib.makeBinPath [ unzip ]}
     runHook postInstall
   '';
