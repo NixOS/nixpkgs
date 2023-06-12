@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, testers, eks-node-viewer }:
 
 buildGoModule rec {
   pname = "eks-node-viewer";
@@ -20,6 +20,12 @@ buildGoModule rec {
     "-X=main.commit=${src.rev}"
     "-X=main.version=${version}"
   ];
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = eks-node-viewer;
+    };
+  };
 
   meta = with lib; {
     description = "Tool to visualize dynamic node usage within a cluster";
