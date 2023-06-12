@@ -1,4 +1,10 @@
-{ lib, python3Packages, fetchPypi, nrfutil, libnitrokey }:
+{ lib
+, python3Packages
+, fetchPypi
+, nrfutil
+, libnitrokey
+, nix-update-script
+}:
 
 with python3Packages;
 
@@ -45,7 +51,7 @@ buildPythonApplication rec {
     "typing_extensions"
   ];
 
-  # libnitrokey is not propagated to users of pynitrokey
+  # libnitrokey is not propagated to users of the pynitrokey Python package.
   # It is only usable from the wrapped bin/nitropy
   makeWrapperArgs = [
     "--set LIBNK_PATH ${lib.makeLibraryPath [ libnitrokey ]}"
@@ -55,6 +61,8 @@ buildPythonApplication rec {
   doCheck = false;
 
   pythonImportsCheck = [ "pynitrokey" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Python client for Nitrokey devices";
