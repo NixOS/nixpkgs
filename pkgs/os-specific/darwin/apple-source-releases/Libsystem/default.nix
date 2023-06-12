@@ -1,7 +1,7 @@
 { lib, stdenv, buildPackages, fetchzip
 , appleDerivation', xnu, Libc, Libm, libdispatch, Libinfo
 , dyld, Csu, architecture, libclosure, CarbonHeaders, ncurses, CommonCrypto
-, copyfile, removefile, libresolvHeaders, libresolv, Libnotify, libplatform, libpthread
+, copyfile, removefile, libresolvHeaders, libresolv, Libnotify, libmalloc, libplatform, libpthread
 , mDNSResponder, launchd, libutilHeaders, hfsHeaders, darwin-stubs
 , headersOnly ? false
 , withLibresolv ? !headersOnly
@@ -57,7 +57,7 @@ appleDerivation' stdenv {
                ${libclosure} ${CarbonHeaders} ${libdispatch} ${ncurses.dev} \
                ${CommonCrypto} ${copyfile} ${removefile} ${libresolvHeaders} \
                ${Libnotify} ${libplatform} ${mDNSResponder} ${launchd} \
-               ${libutilHeaders} ${libpthread} ${hfsHeaders}; do
+               ${libutilHeaders} ${libmalloc} ${libpthread} ${hfsHeaders}; do
       (cd $dep/include && find . -name '*.h' | copyHierarchy $out/include)
     done
 
