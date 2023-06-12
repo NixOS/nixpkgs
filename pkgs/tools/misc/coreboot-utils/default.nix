@@ -23,6 +23,7 @@ let
     enableParallelBuilding = true;
 
     postPatch = ''
+      substituteInPlace 3rdparty/vboot/Makefile --replace 'ar qc ' '$$AR qc '
       cd ${path}
       patchShebangs .
     '';
