@@ -9138,6 +9138,11 @@ self: super: with self; {
 
   pypytools = callPackage ../development/python-modules/pypytools { };
 
+  pyqir = callPackage ../development/python-modules/pyqir {
+    # pyqir supports only specific versions of LLVM
+    llvm = pkgs.llvm_14;
+  };
+
   pyqldb = callPackage ../development/python-modules/pyqldb { };
 
   pyqrcode = callPackage ../development/python-modules/pyqrcode { };
