@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, cmake, lksctp-tools, sctpSupport ? true }:
+{ lib, stdenv, fetchFromGitHub, cmake, lksctp-tools, sctpSupport ? true }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "cannelloni";
   version = "1.1.0";
@@ -8,7 +9,12 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-pAXHo9NCXMFKYcIJogytBiPkQE0nK6chU5TKiDNCKA8=";
   };
-  buildInputs = [ cmake ] ++ lib.optionals sctpSupport [ lksctp-tools ];
+
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  buildInputs = lib.optionals sctpSupport [ lksctp-tools ];
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
