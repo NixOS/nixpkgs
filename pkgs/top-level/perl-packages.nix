@@ -4846,6 +4846,26 @@ with self; {
     };
   };
 
+  CryptHSXKPasswd = buildPerlPackage {
+    pname = "Crypt-HSXKPasswd";
+    version = "3.6";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BA/BARTB/Crypt-HSXKPasswd-v3.6.tar.gz";
+      hash = "sha256-lZ3MX58BG/ALha0i31ZrerK/XqHTYrDeD7WuKfvEWLM=";
+    };
+    buildInputs = [ Clone DateTime FileHomeDir FileShare FileShareDir GetoptLong JSON ListMoreUtils MathRound Readonly TextUnidecode TypeTiny ];
+    meta = {
+      description = "A secure memorable password generator";
+      homepage = "http://www.bartb.ie/hsxkpasswd";
+      license = with lib.licenses; [ bsd2 ];
+      maintainers = [ maintainers.dannixon ];
+      mainProgram = "hsxkpasswd";
+    };
+    # Two tests fail as a result of https://github.com/bbusschots/hsxkpasswd/issues/42
+    # (also see https://github.com/bbusschots/hsxkpasswd/issues/43)
+    doCheck = false;
+  };
+
   CryptIDEA = buildPerlPackage {
     pname = "Crypt-IDEA";
     version = "1.10";
