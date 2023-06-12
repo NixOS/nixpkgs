@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mongoc";
-  version = "1.23.4";
+  version = "1.23.5";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-c-driver";
     rev = "refs/tags/${version}";
-    hash = "sha256-jYEEWbm00V3zhzxH8jBkrj/+OC6CGjbh5qofNYmsdTk=";
+    hash = "sha256-gdf3+EsAIf2yfuw75bNAPlwZbi9NFhVB9Q5MmS6KSo8=";
   };
 
   postPatch = ''

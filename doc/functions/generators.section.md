@@ -16,7 +16,7 @@ let
              if v == true then ''"yes"''
         else if v == false then ''"no"''
         else if isString v then ''"${v}"''
-        # and delegats all other values to the default generator
+        # and delegates all other values to the default generator
         else generators.mkValueStringDefault {} v;
     } ":";
   };
