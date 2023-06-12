@@ -266,7 +266,6 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
         rev    = "Libc-997.90.3";
         hash   = "sha256-B18RNO+Rai5XE52TKdJV7eknosTZ+bRERkiU12d/kPU=";
       };
-      Libc_old        = applePackage "Libc/825_40_1.nix" "osx-10.8.5"      "sha256-JvPSY7FzraGpqF/jYLfhU2o/2195NuKrXsryYfVtx3s=" {};
     };
     libclosure      = applePackage "libclosure"        "osx-10.11.6"     "sha256-L5rQ+UBpf3B+W1U+gZKk7fXulslHsc8lxnCsplV+nr0=" {};
     libdispatch     = applePackage "libdispatch"       "osx-10.10.5"     "sha256-jfAEk0OLrJa9AIZVikIoHomd+l+4rCfc320Xh50qK5M=" {};
