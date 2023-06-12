@@ -12,14 +12,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fclones-gui";
-  version = "0.1.0";
+  version = "0.1.2";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-rMeXUNpoEzqsDmlTmnHsFkas3zFgdCH0WSeP83RtT+c=";
+    hash = "sha256-ge2l414kYHK3y4V837GTQ5sSxVRlU8ZYyGdBj4+vUL8=";
   };
 
-  cargoHash = "sha256-2oeyTMYg0PyTpSMLaub3nZGeoK5U6BlC8OReBwRi3DA=";
+  cargoHash = "sha256-rDAUA75KCWlhf13bCucV5w9WAJ+Uw+s8sUCCeWBYJeA=";
 
   nativeBuildInputs = [
     pkg-config
