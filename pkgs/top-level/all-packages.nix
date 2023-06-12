@@ -9729,6 +9729,8 @@ with pkgs;
 
   leatherman = callPackage ../development/libraries/leatherman { };
 
+  lact = callPackage ../tools/system/lact { };
+
   ledit = callPackage ../tools/misc/ledit {
     inherit (ocaml-ng.ocamlPackages_4_12) ocaml camlp5;
   };
