@@ -7,7 +7,10 @@
 , neovimUtils
 , vimUtils
 , perl
+, lndir
 }:
+
+# unwrapped neovim
 neovim:
 
 let
@@ -72,8 +75,14 @@ let
   in
   assert withPython2 -> throw "Python2 support has been removed from the neovim wrapper, please remove withPython2 and python2Env.";
 
-  symlinkJoin {
+  stdenv.mkDerivation (finalAttrs: {
       name = "neovim-${lib.getVersion neovim}${extraName}";
+
+      __structuredAttrs = true;
+      dontUnpack = true;
+      inherit viAlias vimAlias withNodeJs withPython3 withPerl;
+      inherit providerLuaRc packpathDirs;
+
       # Remove the symlinks created by symlinkJoin which we need to perform
       # extra actions upon
       postBuild = lib.optionalString stdenv.isLinux ''
@@ -81,22 +90,22 @@ let
         substitute ${neovim}/share/applications/nvim.desktop $out/share/applications/nvim.desktop \
           --replace 'Name=Neovim' 'Name=Neovim wrapper'
       ''
-      + lib.optionalString withPython3 ''
+      + lib.optionalString finalAttrs.withPython3 ''
         makeWrapper ${python3Env.interpreter} $out/bin/nvim-python3 --unset PYTHONPATH
       ''
       + lib.optionalString (rubyEnv != null) ''
         ln -s ${rubyEnv}/bin/neovim-ruby-host $out/bin/nvim-ruby
       ''
-      + lib.optionalString withNodeJs ''
+      + lib.optionalString finalAttrs.withNodeJs ''
         ln -s ${nodePackages.neovim}/bin/neovim-node-host $out/bin/nvim-node
       ''
-      + lib.optionalString withPerl ''
+      + lib.optionalString finalAttrs.withPerl ''
         ln -s ${perlEnv}/bin/perl $out/bin/nvim-perl
       ''
-      + lib.optionalString vimAlias ''
+      + lib.optionalString finalAttrs.vimAlias ''
         ln -s $out/bin/nvim $out/bin/vim
       ''
-      + lib.optionalString viAlias ''
+      + lib.optionalString finalAttrs.viAlias ''
         ln -s $out/bin/nvim $out/bin/vi
       ''
       + lib.optionalString (manifestRc != null) (let
@@ -139,11 +148,16 @@ let
         makeWrapper ${lib.escapeShellArgs finalMakeWrapperArgs} ${wrapperArgsStr}
       '';
 
-    paths = [ neovim ];
+    buildPhase = ''
+      mkdir -p $out
+      for i in ${neovim}; do
+        lndir -silent $i $out
+      done
+    '';
 
     preferLocalBuild = true;
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper lndir ];
     passthru = {
       inherit providerLuaRc packpathDirs;
       unwrapped = neovim;
@@ -159,6 +173,6 @@ let
       # prefer wrapper over the package
       priority = (neovim.meta.priority or 0) - 1;
     };
-  };
+  });
 in
   lib.makeOverridable wrapper
