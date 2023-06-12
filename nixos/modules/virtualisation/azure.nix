@@ -47,6 +47,7 @@ in {
     # Allow root logins only using the SSH key that the user specified
     # at instance creation time, ping client connections to avoid timeouts
     services.openssh.enable = true;
+    services.openssh.settings.PasswordAuthentication = mkDefault false;
     services.openssh.settings.ClientAliveInterval = 180;
 
     # Force getting the hostname from Azure
