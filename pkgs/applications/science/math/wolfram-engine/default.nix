@@ -125,8 +125,10 @@ stdenv.mkDerivation rec {
     wrapQtApp "$out/libexec/${dirName}/SystemFiles/FrontEnd/Binaries/Linux-x86-64/WolframPlayer" \
       --set LD_LIBRARY_PATH "${zlib}/lib:${stdenv.cc.cc.lib}/lib:${libssh2}/lib:\''${LD_LIBRARY_PATH}" \
       --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb"
-    substituteInPlace $out/libexec/${dirName}/SystemFiles/FrontEnd/Binaries/Linux-x86-64/WolframPlayer \
-      --replace "TopDirectory=" "TopDirectory=$out/libexec/${dirName} #"
+    if ! isELF "$out/libexec/${dirName}/SystemFiles/FrontEnd/Binaries/Linux-x86-64/WolframPlayer"; then
+      substituteInPlace $out/libexec/${dirName}/SystemFiles/FrontEnd/Binaries/Linux-x86-64/WolframPlayer \
+        --replace "TopDirectory=" "TopDirectory=$out/libexec/${dirName} #";
+    fi
 
     for path in WolframPlayer wolframplayer; do
       makeWrapper $out/libexec/${dirName}/Executables/$path $out/bin/$path
