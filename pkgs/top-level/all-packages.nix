@@ -7641,6 +7641,8 @@ with pkgs;
 
   flamerobin = callPackage ../applications/misc/flamerobin { };
 
+  em100 = callPackage ../tools/misc/em100 { };
+
   flashrom = callPackage ../tools/misc/flashrom { };
 
   flashrom-stable = callPackage ../tools/misc/flashrom-stable { };
