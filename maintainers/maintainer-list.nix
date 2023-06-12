@@ -17859,6 +17859,12 @@
     githubId = 2189609;
     name = "Zhaofeng Li";
   };
+  zi3m5f = {
+    name = "zi3m5f";
+    email = "k7n3o3a6f@mozmail.com";
+    github = "zi3m5f";
+    githubId = 113244000;
+  };
   ziguana = {
     name = "Zig Uana";
     email = "git@ziguana.dev";
