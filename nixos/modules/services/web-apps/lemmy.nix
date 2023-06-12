@@ -25,6 +25,7 @@ in
     };
 
     caddy.enable = mkEnableOption (lib.mdDoc "exposing lemmy with the caddy reverse proxy");
+    nginx.enable = mkEnableOption (lib.mdDoc "exposing lemmy with the nginx reverse proxy");
 
     database.createLocally = mkEnableOption (lib.mdDoc "creation of database on the instance");
 
@@ -137,6 +138,41 @@ in
               reverse_proxy 127.0.0.1:${toString cfg.ui.port}
             }
           '';
+        };
+      };
+
+      services.nginx = mkIf cfg.nginx.enable {
+        enable = mkDefault true;
+        virtualHosts."${cfg.settings.hostname}".locations = let
+          ui = "http://127.0.0.1:${toString cfg.ui.port}";
+          backend = "http://127.0.0.1:${toString cfg.settings.port}";
+        in {
+          "~ ^/(api|pictrs|feeds|nodeinfo|.well-known)" = {
+            # backend requests
+            proxyPass = backend;
+            proxyWebsockets = true;
+            recommendedProxySettings = true;
+          };
+          "/" = {
+            # mixed frontend and backend requests, based on the request headers
+            proxyPass = "$proxpass";
+            recommendedProxySettings = true;
+            extraConfig = ''
+              set $proxpass "${ui}";
+              if ($http_accept = "application/activity+json") {
+                set $proxpass "${backend}";
+              }
+              if ($http_accept = "application/ld+json; profile=\"https://www.w3.org/ns/activitystreams\"") {
+                set $proxpass "${backend}";
+              }
+              if ($request_method = POST) {
+                set $proxpass "${backend}";
+              }
+
+              # Cuts off the trailing slash on URLs to make them valid
+              rewrite ^(.+)/+$ $1 permanent;
+            '';
+          };
         };
       };
 

@@ -16,10 +16,8 @@ let
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
     };
+    inherit useFixedHashes;
   };
-
-  # map: name -> fixed-output hash
-  fixedHashes = lib.optionalAttrs useFixedHashes (import ./fixedHashes.nix);
 
   # function for creating a working environment from a set of TL packages
   combine = import ./combine.nix {
@@ -59,7 +57,8 @@ let
       };
 
       texdoc = orig.texdoc // {
-        version = orig.texdoc.version + "-tlpdb-" + (toString tlpdbVersion.revision);
+        extraRevision = ".tlpdb${toString tlpdbVersion.revision}";
+        extraVersion = "-tlpdb-${toString tlpdbVersion.revision}";
 
         # build Data.tlpdb.lua (part of the 'tlType == "run"' package)
         postUnpack = ''
@@ -155,13 +154,24 @@ let
     xzcat "$tlpdbxz" | sed -rn -f "$tl2nix" | uniq > "$out"
   '';
 
+  # map: name -> fixed-output hash
+  fixedHashes = lib.optionalAttrs useFixedHashes (import ./fixed-hashes.nix);
+
+  # NOTE: the fixed naming scheme must match generated-fixed-hashes.nix
+  # name for the URL
+  mkURLName = { pname, tlType, ... }: pname + lib.optionalString (tlType != "run" && tlType != "tlpkg") ".${tlType}";
+  # name + revision for the fixed output hashes
+  mkFixedName = { tlType, revision, extraRevision ? "", ... }@attrs: mkURLName attrs + (lib.optionalString (tlType == "tlpkg") ".tlpkg") + ".r${toString revision}${extraRevision}";
+  # name + version for the derivation
+  mkTLName = { tlType, version, extraVersion ? "", ... }@attrs: mkURLName attrs + (lib.optionalString (tlType == "tlpkg") ".tlpkg") + "-${version}${extraVersion}";
+
   # create a derivation that contains an unpacked upstream TL package
-  mkPkg = { pname, tlType, revision, version, sha512, postUnpack ? "", stripPrefix ? 1, ... }@args:
+  mkPkg = { pname, tlType, revision, version, sha512, extraRevision ? "", postUnpack ? "", stripPrefix ? 1, ... }@args:
     let
       # the basename used by upstream (without ".tar.xz" suffix)
-      urlName = pname + lib.optionalString (tlType != "run" && tlType != "tlpkg") ".${tlType}";
-      tlName = urlName + lib.optionalString (tlType == "tlpkg") ".tlpkg" + "-${version}";
-      fixedHash = fixedHashes.${tlName} or null; # be graceful about missing hashes
+      urlName = mkURLName args;
+      tlName = mkTLName args;
+      fixedHash = fixedHashes.${mkFixedName args} or null; # be graceful about missing hashes
 
       urls = args.urls or (if args ? url then [ args.url ] else
         map (up: "${up}/archive/${urlName}.r${toString revision}.tar.xz") (args.urlPrefixes or urlPrefixes));
@@ -172,7 +182,7 @@ let
           inherit stripPrefix tlType;
           # metadata for texlive.combine
           passthru = {
-            inherit pname tlType version;
+            inherit pname tlType revision version extraRevision;
           } // lib.optionalAttrs (tlType == "run" && args ? deps) {
             tlDeps = map (n: tl.${n}) args.deps;
           } // lib.optionalAttrs (tlType == "run") {
@@ -218,9 +228,13 @@ let
       operator = { pkg, ... }: pkgListToSets (pkg.tlDeps or []);
     });
 
-  assertions =
-    lib.assertMsg (tlpdbVersion.year == version.texliveYear) "TeX Live year in texlive does not match tlpdb.nix, refusing to evaluate" &&
-    lib.assertMsg (tlpdbVersion.frozen == version.final) "TeX Live final status in texlive does not match tlpdb.nix, refusing to evaluate";
+  assertions = with lib;
+    assertMsg (tlpdbVersion.year == version.texliveYear) "TeX Live year in texlive does not match tlpdb.nix, refusing to evaluate" &&
+    assertMsg (tlpdbVersion.frozen == version.final) "TeX Live final status in texlive does not match tlpdb.nix, refusing to evaluate" &&
+    (!useFixedHashes ||
+      (let all = concatLists (catAttrs "pkgs" (attrValues tl));
+         fods = filter (p: isDerivation p && p.tlType != "bin") all;
+      in builtins.all (p: assertMsg (p ? outputHash) "The TeX Live package '${p.pname + lib.optionalString (p.tlType != "run") ("." + p.tlType)}' does not have a fixed output hash. Please read UPGRADING.md on how to build a new 'fixed-hashes.nix'.") fods));
 
 in
   tl // {
