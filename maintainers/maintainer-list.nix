@@ -14049,6 +14049,15 @@
     githubId = 889991;
     name = "Ryan Artecona";
   };
+  ryane = {
+    email = "ryanesc@gmail.com";
+    github = "ryane";
+    githubId = 7346;
+    name = "Ryan Eschinger";
+    keys = [{
+      fingerprint = "E4F4 1EAB BF0F C785 06D8  62EF EF68 CF41 D42A 593D";
+    }];
+  };
   ryanorendorff = {
     github = "ryanorendorff";
     githubId = 12442942;
