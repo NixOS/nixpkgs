@@ -4,14 +4,14 @@
 , cmake
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wamr";
   version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wasm-micro-runtime";
-    rev = "WAMR-${version}";
+    rev = "WAMR-${finalAttrs.version}";
     hash = "sha256-jpT42up9HAVJpo03cFrffQQk2JiHEAEepBGlU4RUfNU=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     # more platforms.
     broken = !stdenv.isLinux;
   };
-}
+})
