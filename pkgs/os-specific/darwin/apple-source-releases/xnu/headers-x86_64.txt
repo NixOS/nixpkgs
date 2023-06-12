@@ -554,6 +554,7 @@ libkern/os/object.h
 libkern/os/object_private.h
 libkern/os/overflow.h
 libkern/os/trace.h
+libproc.h
 mach/audit_triggers.defs
 mach/boolean.h
 mach/bootstrap.h
@@ -1116,6 +1117,7 @@ servers/ls_defs.h
 servers/netname.h
 servers/netname_defs.h
 servers/nm_defs.h
+spawn.h
 sys/_endian.h
 sys/_posix_availability.h
 sys/_select.h
