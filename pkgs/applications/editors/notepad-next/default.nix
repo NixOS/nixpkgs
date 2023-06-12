@@ -27,11 +27,16 @@ mkDerivation rec {
       --replace '$$[QT_INSTALL_TRANSLATIONS]/qt_zh_CN.qm' ""
   '';
 
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mv $out/bin $out/Applications
+    rm -fr $out/share
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/dail8859/NotepadNext";
-    description = "Notepad++-like editor for the Linux desktop";
+    description = "A cross-platform, reimplementation of Notepad++";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.sebtm ];
     broken = stdenv.isAarch64;
   };
