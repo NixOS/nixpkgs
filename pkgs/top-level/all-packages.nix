@@ -4605,6 +4605,8 @@ with pkgs;
 
   dduper = callPackage ../tools/filesystems/dduper { };
 
+  deck = callPackage ../applications/networking/deck { };
+
   dedup = callPackage ../tools/backup/dedup { };
 
   deheader = callPackage ../development/tools/misc/deheader { };
