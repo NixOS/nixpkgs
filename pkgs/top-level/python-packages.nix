@@ -7958,6 +7958,8 @@ self: super: with self; {
 
   pyhs100 = callPackage ../development/python-modules/pyhs100 { };
 
+  pyheif = callPackage ../development/python-modules/pyheif { };
+
   pyi2cflash = callPackage ../development/python-modules/pyi2cflash { };
 
   pyialarm = callPackage ../development/python-modules/pyialarm { };
@@ -10240,6 +10242,8 @@ self: super: with self; {
   shouldbe = callPackage ../development/python-modules/shouldbe { };
 
   should-dsl = callPackage ../development/python-modules/should-dsl { };
+
+  show-in-file-manager = callPackage ../development/python-modules/show-in-file-manager { };
 
   showit = callPackage ../development/python-modules/showit { };
 
