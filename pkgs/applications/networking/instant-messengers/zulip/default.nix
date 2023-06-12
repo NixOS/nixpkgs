@@ -20,6 +20,8 @@ let
 in appimageTools.wrapType2 {
   inherit pname version src;
 
+  runScript = "appimage-exec.sh -w ${appimageContents} -- \${NIXOS_OZONE_WL:+\${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}";
+
   extraInstallCommands = ''
     mv "$out/bin/${pname}-${version}" "$out/bin/${pname}"
     install -m 444 -D ${appimageContents}/zulip.desktop $out/share/applications/zulip.desktop
