@@ -72,6 +72,10 @@ appleDerivation' stdenv {
 
     (cd ${buildPackages.darwin.cctools.dev}/include/mach-o && find . -name '*.h' | copyHierarchy $out/include/mach-o)
 
+    for header in pthread.h pthread_impl.h pthread_spis.h sched.h; do
+      ln -s "$out/include/pthread/$header" "$out/include/$header"
+    done
+
     # Copy `asl.h` from the syslog sources since it is no longer provided as part of Libc.
     cp ${syslog.src}/libsystem_asl.tproj/include/asl.h $out/include
 
