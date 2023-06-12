@@ -8410,6 +8410,8 @@ with pkgs;
 
   fuse-archive = callPackage ../tools/filesystems/fuse-archive { };
 
+  fuse-ext2 = darwin.apple_sdk_11_0.callPackage ../tools/filesystems/fuse-ext2 { };
+
   fuse-overlayfs = callPackage ../tools/filesystems/fuse-overlayfs { };
 
   fusee-interfacee-tk = callPackage ../applications/misc/fusee-interfacee-tk { };
