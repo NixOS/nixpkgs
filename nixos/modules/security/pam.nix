@@ -484,6 +484,9 @@ let
           optionalString cfg.mysqlAuth ''
             account sufficient ${pkgs.pam_mysql}/lib/security/pam_mysql.so config_file=/etc/security/pam_mysql.conf
           '' +
+          optionalString (config.services.kanidm.enablePam) ''
+            account sufficient ${pkgs.kanidm}/lib/pam_kanidm.so ignore_unknown_user
+          '' +
           optionalString (config.services.sssd.enable && cfg.sssdStrictAccess==false) ''
             account sufficient ${pkgs.sssd}/lib/security/pam_sss.so
           '' +
@@ -617,6 +620,9 @@ let
           optionalString use_ldap ''
             auth sufficient ${pam_ldap}/lib/security/pam_ldap.so use_first_pass
           '' +
+          optionalString config.services.kanidm.enablePam ''
+            auth sufficient ${pkgs.kanidm}/lib/pam_kanidm.so ignore_unknown_user use_first_pass
+          '' +
           optionalString config.services.sssd.enable ''
             auth sufficient ${pkgs.sssd}/lib/security/pam_sss.so use_first_pass
           '' +
@@ -652,6 +658,9 @@ let
           '' +
           optionalString cfg.mysqlAuth ''
             password sufficient ${pkgs.pam_mysql}/lib/security/pam_mysql.so config_file=/etc/security/pam_mysql.conf
+          '' +
+          optionalString config.services.kanidm.enablePam ''
+            password sufficient ${pkgs.kanidm}/lib/pam_kanidm.so
           '' +
           optionalString config.services.sssd.enable ''
             password sufficient ${pkgs.sssd}/lib/security/pam_sss.so
@@ -713,6 +722,9 @@ let
           '' +
           optionalString cfg.mysqlAuth ''
             session optional ${pkgs.pam_mysql}/lib/security/pam_mysql.so config_file=/etc/security/pam_mysql.conf
+          '' +
+          optionalString config.services.kanidm.enablePam ''
+            session optional ${pkgs.kanidm}/lib/pam_kanidm.so
           '' +
           optionalString config.services.sssd.enable ''
             session optional ${pkgs.sssd}/lib/security/pam_sss.so
@@ -1298,6 +1310,7 @@ in
       # Include the PAM modules in the system path mostly for the manpages.
       [ pkgs.pam ]
       ++ optional config.users.ldap.enable pam_ldap
+      ++ optional config.services.kanidm.enablePam pkgs.kanidm
       ++ optional config.services.sssd.enable pkgs.sssd
       ++ optionals config.security.pam.krb5.enable [pam_krb5 pam_ccreds]
       ++ optionals config.security.pam.enableOTPW [ pkgs.otpw ]
@@ -1363,6 +1376,9 @@ in
       '' +
       optionalString use_ldap ''
          mr ${pam_ldap}/lib/security/pam_ldap.so,
+      '' +
+      optionalString config.services.kanidm.enablePam ''
+        mr ${pkgs.kanidm}/lib/pam_kanidm.so,
       '' +
       optionalString config.services.sssd.enable ''
         mr ${pkgs.sssd}/lib/security/pam_sss.so,

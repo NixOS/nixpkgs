@@ -11840,6 +11840,8 @@ with pkgs;
 
   rarcrack = callPackage ../tools/security/rarcrack { };
 
+  rare-regex = callPackage ../tools/text/rare-regex { };
+
   rarian = callPackage ../development/libraries/rarian { };
 
   ratman = callPackage ../tools/networking/ratman { };
@@ -17488,6 +17490,8 @@ with pkgs;
 
   starlark = callPackage ../development/interpreters/starlark { };
 
+  starlark-rust = callPackage ../development/interpreters/starlark-rust { };
+
   supercollider = libsForQt5.callPackage ../development/interpreters/supercollider {
     fftw = fftwSinglePrec;
   };
@@ -18674,6 +18678,8 @@ with pkgs;
   crowdin-cli = callPackage ../tools/text/crowdin-cli { };
 
   gtranslator = callPackage ../tools/text/gtranslator { };
+
+  gtree = callPackage ../tools/text/gtree { };
 
   guff = callPackage ../tools/graphics/guff { };
 
@@ -30836,6 +30842,8 @@ with pkgs;
   fbida = callPackage ../applications/graphics/fbida { };
 
   fclones = callPackage ../tools/misc/fclones { };
+
+  fclones-gui = darwin.apple_sdk_11_0.callPackage ../tools/misc/fclones/gui.nix { };
 
   fcp = callPackage ../tools/misc/fcp { };
 
