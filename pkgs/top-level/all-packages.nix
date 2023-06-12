@@ -37858,7 +37858,7 @@ with pkgs;
 
   macse = callPackage ../applications/science/biology/macse { };
 
-  MACS2 = callPackage ../applications/science/biology/MACS2 { };
+  macs2 = callPackage ../applications/science/biology/macs2 { };
 
   mafft = callPackage ../applications/science/biology/mafft { };
 
