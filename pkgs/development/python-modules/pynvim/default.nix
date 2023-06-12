@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     msgpack
-  ] ++ lib.optional (!isPyPy) [
+  ] ++ lib.optionals (!isPyPy) [
     greenlet
   ];
 
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/neovim/pynvim";
     changelog = "https://github.com/neovim/pynvim/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ figsoda ];
   };
 }
