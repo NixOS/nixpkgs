@@ -3545,6 +3545,13 @@
     githubId = 107034852;
     name = "Daniyal Suri";
   };
+  dannixon = {
+    email = "dan@dan-nixon.com";
+    github = "DanNixon";
+    githubId = 4037377;
+    name = "Dan Nixon";
+    matrix = "@dannixon:matrix.org";
+  };
   dansbandit = {
     github = "dansbandit";
     githubId = 4530687;
