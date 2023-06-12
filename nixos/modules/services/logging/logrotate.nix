@@ -51,8 +51,8 @@ let
       # file exist, but we only have sandboxed users here so brown these
       # out. according to man page that means su, create and createolddir.
       # files required to exist also won't be present, so missingok is forced.
-      user=$(${pkgs.buildPackages.coreutils}/bin/id -un)
-      group=$(${pkgs.buildPackages.coreutils}/bin/id -gn)
+      user=$(${pkgs.buildPackages.coreutils}/bin/id -u)
+      group=$(${pkgs.buildPackages.coreutils}/bin/id -g)
       sed -e "s/\bsu\s.*/su $user $group/" \
           -e "s/\b\(create\s\+[0-9]*\s*\|createolddir\s\+[0-9]*\s\+\).*/\1$user $group/" \
           -e "1imissingok" -e "s/\bnomissingok\b//" \
