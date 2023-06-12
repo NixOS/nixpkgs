@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-hashes=${enableHashes}"
     "--enable-obsolete-api=glibc"
     "--disable-failure-tokens"
-  ] ++ lib.optionals (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.libc == "bionic") [
+  ] ++ lib.optionals (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.libc == "bionic" || lib.hasInfix "-march=native" stdenv.cc.NIX_CFLAGS_COMPILE) [
     "--disable-werror"
   ];
 
