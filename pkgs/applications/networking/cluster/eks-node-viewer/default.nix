@@ -13,10 +13,18 @@ buildGoModule rec {
 
   vendorHash = "sha256-L1lG+b7MiJQvLqZuLdSjh5zAaApvWdi9SZSDPvObW5w=";
 
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=main.builtBy=nixpkgs"
+    "-X=main.commit=${src.rev}"
+    "-X=main.version=${version}"
+  ];
+
   meta = with lib; {
     description = "Tool to visualize dynamic node usage within a cluster";
     homepage = "https://github.com/awslabs/eks-node-viewer";
-    changelog = "https://github.com/awslabs/eks-node-viewer/releases/tag/${version}";
+    changelog = "https://github.com/awslabs/eks-node-viewer/releases/tag/${src.rev}";
     license = licenses.asl20;
     maintainers = [ maintainers.ivankovnatsky ];
   };
