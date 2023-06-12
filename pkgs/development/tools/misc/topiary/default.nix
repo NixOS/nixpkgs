@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -41,6 +42,8 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     install -Dm444 languages/* -t $out/share/languages
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A uniform formatter for simple languages, as part of the Tree-sitter ecosystem";
