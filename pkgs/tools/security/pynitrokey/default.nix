@@ -10,18 +10,19 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "pynitrokey";
-  version = "0.4.37";
+  version = "0.4.38";
   format = "flit";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KoZym1b+E0P3kRt0PTm9wCX4nO31isDIwEq38xMgDDU=";
+    hash = "sha256-8TMDbkRyTkzULrBeO0SL/WXB240LD/iZLigE/zPum2A=";
   };
 
   propagatedBuildInputs = [
     certifi
     cffi
     click
+    click-aliases
     cryptography
     ecdsa
     frozendict
@@ -32,6 +33,7 @@ buildPythonApplication rec {
     python-dateutil
     pyusb
     requests
+    semver
     spsdk
     tqdm
     urllib3
