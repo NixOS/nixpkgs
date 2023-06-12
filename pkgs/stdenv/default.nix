@@ -36,7 +36,7 @@ let
 
   # Select the appropriate stages for the platform `system'.
 in
-  if crossSystem != localSystem || crossOverlays != [] then stagesCross
+  if !lib.systems.equals crossSystem localSystem || crossOverlays != [] then stagesCross
   else if config ? replaceStdenv then stagesCustom
   else if localSystem.isLinux then stagesLinux
   else if localSystem.isDarwin then stagesDarwin
