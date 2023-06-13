@@ -17,11 +17,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ libXrandr libX11 ];
 
-  # build script tries to run git to get the current tag
-  postPatch = ''
-    echo "fn main() {}" > build.rs
-  '';
-
   meta = with lib; {
     description = "Minimal X screenshot utility";
     homepage = "https://github.com/neXromancers/shotgun";
