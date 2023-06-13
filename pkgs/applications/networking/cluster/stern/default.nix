@@ -34,6 +34,5 @@ buildGoModule rec {
     homepage = "https://github.com/stern/stern";
     license = licenses.asl20;
     maintainers = with maintainers; [ mbode preisschild ];
-    platforms = platforms.unix;
   };
 }

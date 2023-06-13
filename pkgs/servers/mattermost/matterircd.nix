@@ -20,6 +20,5 @@ buildGoModule rec {
     homepage = "https://github.com/42wim/matterircd";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
   };
 }

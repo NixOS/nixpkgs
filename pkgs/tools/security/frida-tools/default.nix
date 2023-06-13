@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     pygments
-    prompt_toolkit
+    prompt-toolkit
     colorama
     frida-python
   ];

@@ -1,34 +1,42 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , callPackage
-, pytest-cov
 , fetchPypi
-, lib
-, pytest
+, pytestCheckHook
 , pythonOlder
-, pytest-runner
 }:
 
 buildPythonPackage rec {
   pname = "pycategories";
   version = "1.2.0";
-  disabled = pythonOlder "3.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bd70ecb5e94e7659e564ea153f0c7673291dc37c526c246800fc08d6c5378099";
+    hash = "sha256-vXDstelOdlnlZOoVPwx2cykdw3xSbCRoAPwI1sU3gJk=";
   };
 
-  nativeBuildInputs = [ pytest-runner ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'pytest-runner'," ""
+    substituteInPlace setup.cfg \
+      --replace "--cov-report term --cov=categories" ""
+  '';
 
   # Is private because the author states it's unmaintained
   # and shouldn't be used in production code
   propagatedBuildInputs = [ (callPackage ./infix.nix { }) ];
 
-  nativeCheckInputs = [ pytest pytest-cov ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
-    homepage = "https://gitlab.com/danielhones/pycategories";
     description = "Implementation of some concepts from category theory";
+    homepage = "https://gitlab.com/danielhones/pycategories";
+    changelog = "https://gitlab.com/danielhones/pycategories/-/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ dmvianna ];
   };

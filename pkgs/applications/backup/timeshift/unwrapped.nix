@@ -2,9 +2,11 @@
 , stdenv
 , fetchFromGitHub
 , gettext
+, help2man
+, meson
+, ninja
 , pkg-config
 , vala
-, which
 , gtk3
 , json-glib
 , libgee
@@ -15,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "timeshift";
-  version = "22.11.2";
+  version = "23.06.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "timeshift";
     rev = version;
-    sha256 = "yZNERRoNZ1K7BRiAu7sqVQyhghsS/AeZSODMVSm46oY=";
+    sha256 = "epj0oaV+4lebRxcj6MQ2+lJ3juv9JZ+2UPLRc6UisX4=";
   };
 
   patches = [
@@ -29,6 +31,8 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    substituteInPlace ./files/meson.build \
+      --replace "/etc/timeshift" "$out/etc/timeshift"
     while IFS="" read -r -d $'\0' FILE; do
       substituteInPlace "$FILE" \
         --replace "/sbin/blkid" "${util-linux}/bin/blkid"
@@ -42,9 +46,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     gettext
+    help2man
+    meson
+    ninja
     pkg-config
     vala
-    which
   ];
 
   buildInputs = [
@@ -55,14 +61,6 @@ stdenv.mkDerivation rec {
     xapp
   ];
 
-  preBuild = ''
-    makeFlagsArray+=( \
-      "-C" "src" \
-      "prefix=$out" \
-      "sysconfdir=$out/etc" \
-    )
-  '';
-
   meta = with lib; {
     description = "A system restore tool for Linux";
     longDescription = ''
@@ -70,7 +68,7 @@ stdenv.mkDerivation rec {
       Snapshots can be restored using TimeShift installed on the system or from Live CD or USB.
     '';
     homepage = "https://github.com/linuxmint/timeshift";
-    license = licenses.gpl3;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ShamrockLee bobby285271 ];
   };

@@ -995,7 +995,7 @@ and in this case the `python3` interpreter is automatically used.
 ### Interpreters {#interpreters}
 
 Versions 2.7, 3.8, 3.9, 3.10 and 3.11 of the CPython interpreter are available
-as respectively `python27`, python38`, `python39`, `python310` and `python311`.
+as respectively `python27`, `python38`, `python39`, `python310` and `python311`.
 The aliases `python2` and `python3` correspond to respectively `python27` and
 `python310`. The attribute `python` maps to `python2`. The PyPy interpreters
 compatible with Python 2.7 and 3 are available as `pypy27` and `pypy3`, with

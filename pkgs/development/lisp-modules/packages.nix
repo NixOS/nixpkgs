@@ -261,17 +261,211 @@ let
     lispLibs = super.mathkit.lispLibs ++ [ super.sb-cga ];
   };
 
+  quri_7_0 = build-asdf-system {
+    inherit (super.quri) pname systems lispLibs;
+    version = "0.7.0";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "fukamachi";
+      repo = "quri";
+      rev = "0.7.0";
+      sha256 = "sha256-/9p67rfbkdrx5nn4kXEUAM9MzV7NYUsRcKsrP/e2MlA=";
+    };
+  };
+
+  cl-colors2_0_5_3 = build-asdf-system {
+    inherit (super.cl-colors2) pname systems lispLibs;
+    version = "0.5.3";
+
+    src = pkgs.fetchgit {
+      url = "https://notabug.org/cage/cl-colors2";
+      rev = "refs/tags/v0.5.3";
+      sha256 = "sha256-anYkLJoNOVBQoXzWVBgbEusQDdud0RA8nZzedl8V93w=";
+    };
+  };
+
+  cl-webkit2_3_5_8 = build-asdf-system {
+    inherit (super.cl-webkit2) pname systems nativeLibs lispLibs;
+    version = "3.5.8";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "joachifm";
+      repo = "cl-webkit";
+      rev = "3.5.8";
+      sha256 = "sha256-wZ/zRRJlTiOIny4BsU+wsFtxtS5YKx3WalwpCVQPFSY=";
+    };
+  };
+
+  prompter = build-asdf-system {
+    pname = "prompter";
+    version = "0.1.0";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "atlas-engineer";
+      repo = "prompter";
+      rev = "0.1.0";
+      sha256 = "sha256-Duv7L2lMjr3VXsoujQDOMNHCbdUDX4RWoncVm9LDCZE=";
+    };
+
+    lispLibs = [
+      self.cl-containers
+      self.nclasses_0_5_0
+      super.alexandria
+      super.calispel
+      super.closer-mop
+      super.lparallel
+      super.moptilities
+      super.serapeum
+      super.str
+      super.trivial-package-local-nicknames
+    ];
+
+  };
+
+  nasdf-unstable = build-asdf-system {
+    inherit (super.nasdf) pname systems;
+    version = "20230524-git";
+    src = pkgs.fetchFromGitHub {
+      owner = "atlas-engineer";
+      repo = "ntemplate";
+      rev = "51a884f388ec526c32914093fcad6bb2434e3c14";
+      sha256 = "sha256-bjQPkiHAxhjsHCnWpCGMsmQlGDJFGtQEdevnhK2k+kY=";
+    };
+  };
+
+  njson_1_0_0 = build-asdf-system {
+    inherit (super.njson) pname;
+    version = "1.0.0";
+    src = pkgs.fetchFromGitHub {
+      owner = "atlas-engineer";
+      repo = "njson";
+      rev = "1.0.0";
+      sha256 = "sha256-zeOxkoi5cPl1sw1oEOaMsKhhs3Pb8EzzKTjvuDNj/Ko=";
+    };
+    lispLibs = [ self.nasdf-unstable super.cl-json ];
+    systems = [ "njson" "njson/cl-json" ];
+  };
+
+  nsymbols_0_3_1 = build-asdf-system {
+    inherit (super.nsymbols) pname;
+    version = "0.3.1";
+    src = pkgs.fetchFromGitHub {
+      owner = "atlas-engineer";
+      repo = "nsymbols";
+      rev = "0.3.1";
+      sha256 = "sha256-KcrE06bG5Khp5/807wb/TbPG3nWTlNWHrDpmK6bm7ZM=";
+    };
+    lispLibs = [ super.closer-mop ];
+    systems = [ "nsymbols" "nsymbols/star" ];
+
+  };
+
+  nclasses_0_5_0 = build-asdf-system {
+    inherit (super.nclasses) pname systems;
+    version = "0.5.0";
+    src = pkgs.fetchFromGitHub {
+      owner = "atlas-engineer";
+      repo = "nclasses";
+      rev = "0.5.0";
+      sha256 = "sha256-UcavZ0fCA2hkVU/CqUZfyCqJ8gXKPpXTCP0WLUIF1Ss=";
+    };
+    lispLibs = [ self.nasdf-unstable super.moptilities ];
+  };
+
+  nfiles_1_1_2 = build-asdf-system {
+    inherit (super.nfiles) pname systems;
+    version = "1.1.2";
+    src = pkgs.fetchFromGitHub {
+      owner = "atlas-engineer";
+      repo = "nfiles";
+      rev = "1.1.2";
+      sha256 = "sha256-YsVcCFrJIFL9Z4wQNAv6chiz6wB/eB8v/EUMXPLs3fw=";
+    };
+    lispLibs = [
+      self.nasdf-unstable
+      self.nclasses_0_5_0
+      self.quri_7_0
+      super.alexandria
+      super.iolib
+      super.serapeum
+      super.trivial-garbage
+      super.trivial-package-local-nicknames
+      super.trivial-types
+    ];
+  };
+
   nyxt-gtk = build-asdf-system {
     inherit (super.nyxt) pname;
-    version = "2.2.4";
+    version = "3.1.0";
 
-    lispLibs = super.nyxt.lispLibs ++ (with super; [
-      cl-cffi-gtk cl-webkit2 mk-string-metrics cl-css
-    ]);
+    lispLibs = with super; [
+      self.nasdf-unstable
+      self.prompter
+      self.cl-colors2_0_5_3
+      self.njson_1_0_0
+      self.nsymbols_0_3_1
+      self.nclasses_0_5_0
+      self.nfiles_1_1_2
+      self.quri_7_0
+      self.cl-webkit2_3_5_8
+      self.swank
+      alexandria
+      bordeaux-threads
+      calispel
+      cl-base64
+      cl-gopher
+      cl-html-diff
+      cl-json
+      cl-ppcre
+      cl-ppcre-unicode
+      cl-prevalence
+      cl-qrencode
+      cl-tld
+      closer-mop
+      cl-containers
+      dissect
+      moptilities
+      dexador
+      enchant
+      flexi-streams
+      history-tree
+      idna
+      iolib
+      lass
+      local-time
+      lparallel
+      log4cl
+      montezuma
+      ndebug
+      nhooks
+      nkeymaps
+      osicat
+      parenscript
+      py-configparser
+      serapeum
+      str
+      phos
+      plump
+      clss
+      spinneret
+      slynk
+      trivia
+      trivial-clipboard
+      trivial-features
+      trivial-garbage
+      trivial-package-local-nicknames
+      trivial-types
+      unix-opts
+      cluffer
+      cl-cffi-gtk
+      cl-gobject-introspection
+    ];
 
-    src = pkgs.fetchzip {
-      url = "https://github.com/atlas-engineer/nyxt/archive/2.2.4.tar.gz";
-      sha256 = "12l7ir3q29v06jx0zng5cvlbmap7p709ka3ik6x29lw334qshm9b";
+    src = pkgs.fetchFromGitHub {
+      owner = "atlas-engineer";
+      repo = "nyxt";
+      rev = "3.1.0";
+      sha256 = "sha256-H3AlslECb/VvIC6zAGkLNTaGJ/nb97J6RXAN8sEgAgY=";
     };
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -284,27 +478,27 @@ let
       pkgs.gnome.adwaita-icon-theme
     ];
 
-    buildScript = pkgs.writeText "build-nyxt.lisp" ''
-      (load "${super.nyxt.asdfFasl}/asdf.${super.nyxt.faslExt}")
-      (asdf:load-system :nyxt/gtk-application)
-      (sb-ext:save-lisp-and-die "nyxt" :executable t
-                                       #+sb-core-compression :compression
-                                       #+sb-core-compression t
-                                       :toplevel #'nyxt:entry-point)
+    # This is needed since asdf:make tries to write in the directory of the .asd file of the system it's compiling
+    postConfigure = ''
+      export CL_SOURCE_REGISTRY=$CL_SOURCE_REGISTRY:$(pwd)//
     '';
 
-    # Run with WEBKIT_FORCE_SANDBOX=0 if getting a runtime error
-    # See https://github.com/atlas-engineer/nyxt/issues/1781
+    buildScript = pkgs.writeText "build-nyxt.lisp" ''
+      (load "${super.nyxt.asdfFasl}/asdf.${super.nyxt.faslExt}")
+      ;; There's a weird error while copy/pasting in Nyxt that manifests with sb-ext:save-lisp-and-die, so we use asdf:make instead
+      (asdf:make :nyxt/gi-gtk-application)
+    '';
+
     # TODO(kasper): use wrapGAppsHook
     installPhase = super.nyxt.installPhase + ''
       rm -v $out/nyxt
       mkdir -p $out/bin
       cp -v nyxt $out/bin
       wrapProgram $out/bin/nyxt \
-        --set WEBKIT_FORCE_SANDBOX 0 \
         --prefix LD_LIBRARY_PATH : $LD_LIBRARY_PATH \
         --prefix XDG_DATA_DIRS : $XDG_ICON_DIRS \
         --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
+        --prefix GI_TYPELIB_PATH : $GI_TYPELIB_PATH \
         --prefix GIO_EXTRA_MODULES ":" ${pkgs.dconf.lib}/lib/gio/modules/ \
         --prefix GIO_EXTRA_MODULES ":" ${pkgs.glib-networking}/lib/gio/modules/
     '';

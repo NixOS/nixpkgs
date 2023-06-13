@@ -2,17 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "xorriso";
-  version = "1.5.4.pl02";
+  version = "1.5.6";
 
   src = fetchurl {
     url = "mirror://gnu/xorriso/xorriso-${version}.tar.gz";
-    sha256 = "sha256-Psc5PUqdy/X3QwnCikFfVSJ+xidwuVrpk6yNejsVKXI=";
+    sha256 = "sha256-1La2a9BMScazWO5mR12AbW9tdIboARBqR9Mx3x8vj+s=";
   };
 
   doCheck = true;
 
   buildInputs = [ libcdio zlib bzip2 readline libiconv ]
     ++ lib.optionals stdenv.isLinux [ acl attr ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-include unistd.h";
 
   meta = with lib; {
     description = "ISO 9660 Rock Ridge file system manipulator";

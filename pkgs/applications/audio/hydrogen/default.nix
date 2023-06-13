@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hydrogen";
-  version = "1.1.1";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "hydrogen-music";
     repo = pname;
     rev = version;
-    sha256 = "sha256-to24PB9cs4vun93uXEWNVsmSLFRuLGfC4hCh7+mbvIo=";
+    sha256 = "sha256-09zN6OVqVohk153gqXy6C0uHcBhZX2JJL4d6f4BU4Lg=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];

@@ -51,6 +51,13 @@ lib.makeScope
       tinycc = tinycc-mes;
     };
 
+    heirloom = callPackage ./heirloom {
+      bash = bash_2_05;
+      tinycc = tinycc-mes;
+    };
+
+    heirloom-devtools = callPackage ./heirloom-devtools { tinycc = tinycc-mes; };
+
     ln-boot = callPackage ./ln-boot { };
 
     mes = lib.recurseIntoAttrs (callPackage ./mes { });
@@ -73,6 +80,7 @@ lib.makeScope
       echo ${gnused.tests.get-version}
       echo ${gnutar.tests.get-version}
       echo ${gzip.tests.get-version}
+      echo ${heirloom.tests.get-version}
       echo ${mes.compiler.tests.get-version}
       echo ${tinycc-mes.compiler.tests.chain}
       mkdir ''${out}
