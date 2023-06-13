@@ -3445,6 +3445,8 @@ self: super: with self; {
 
   f5-icontrol-rest = callPackage ../development/python-modules/f5-icontrol-rest { };
 
+  f5-sdk = callPackage ../development/python-modules/f5-sdk { };
+
   f90nml = callPackage ../development/python-modules/f90nml { };
 
   fabric = callPackage ../development/python-modules/fabric { };
