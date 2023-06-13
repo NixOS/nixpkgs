@@ -8,7 +8,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "inotify-tools";
     owner = "inotify-tools";
     rev = finalAttrs.version;
-    sha256 = "sha256-EYWVSgwoMjAlc/V5kv+2jfxEqWVW/lEoIxVd+ctEMsk=";
+    hash = "sha256-EYWVSgwoMjAlc/V5kv+2jfxEqWVW/lEoIxVd+ctEMsk=";
   };
 
   configureFlags = [
