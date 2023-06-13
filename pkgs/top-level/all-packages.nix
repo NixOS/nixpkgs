@@ -541,6 +541,8 @@ with pkgs;
 
   dec-decode = callPackage ../development/tools/dec-decode { };
 
+  degrib = callPackage ../applications/science/misc/degrib { };
+
   dsq = callPackage ../tools/misc/dsq { };
 
   dtv-scan-tables = callPackage ../data/misc/dtv-scan-tables { };
