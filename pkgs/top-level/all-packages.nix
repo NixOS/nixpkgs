@@ -24860,6 +24860,8 @@ with pkgs;
   # bump when majoring of packages have updated
   webrtc-audio-processing = webrtc-audio-processing_0_3;
 
+  whereami = callPackage ../development/libraries/whereami { };
+
   wildmidi = callPackage ../development/libraries/wildmidi { };
 
   wiredtiger = callPackage ../development/libraries/wiredtiger { };
