@@ -1,13 +1,13 @@
 { lib, stdenv, autoreconfHook, fetchFromGitHub, nix-update-script, fanotifySupport ? true }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "inotify-tools";
   version = "3.22.6.0";
 
   src = fetchFromGitHub {
     repo = "inotify-tools";
     owner = "inotify-tools";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-EYWVSgwoMjAlc/V5kv+2jfxEqWVW/lEoIxVd+ctEMsk=";
   };
 
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ marcweber pSub shamilton ];
     platforms = platforms.linux;
   };
-}
+})
