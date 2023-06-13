@@ -157,26 +157,19 @@ in rec {
       echo "file json-br $dst/options.json.br" >> $out/nix-support/hydra-build-products
     '';
 
-  optionsUsedDocbook = pkgs.runCommand "options-used-docbook" {} ''
-    if [ -e ${optionsJSON}/share/doc/nixos/.used-docbook ]; then
-      echo 1
-    else
-      echo 0
-    fi >"$out"
-  '';
-
-  optionsDocBook = pkgs.runCommand "options-docbook.xml" {
-    nativeBuildInputs = [
-      pkgs.nixos-render-docs
-    ];
-  } ''
-    nixos-render-docs -j $NIX_BUILD_CORES options docbook \
-      --manpage-urls ${pkgs.path + "/doc/manpage-urls.json"} \
-      --revision ${lib.escapeShellArg revision} \
-      --document-type ${lib.escapeShellArg documentType} \
-      --varlist-id ${lib.escapeShellArg variablelistId} \
-      --id-prefix ${lib.escapeShellArg optionIdPrefix} \
-      ${optionsJSON}/share/doc/nixos/options.json \
-      "$out"
-  '';
+  optionsDocBook = lib.warn "optionsDocBook is deprecated since 23.11 and will be removed in 24.05"
+    (pkgs.runCommand "options-docbook.xml" {
+      nativeBuildInputs = [
+        pkgs.nixos-render-docs
+      ];
+    } ''
+      nixos-render-docs -j $NIX_BUILD_CORES options docbook \
+        --manpage-urls ${pkgs.path + "/doc/manpage-urls.json"} \
+        --revision ${lib.escapeShellArg revision} \
+        --document-type ${lib.escapeShellArg documentType} \
+        --varlist-id ${lib.escapeShellArg variablelistId} \
+        --id-prefix ${lib.escapeShellArg optionIdPrefix} \
+        ${optionsJSON}/share/doc/nixos/options.json \
+        "$out"
+    '');
 }
