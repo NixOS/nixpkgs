@@ -86,9 +86,15 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "tests" finalAttrs.doCheck)
   ];
 
-  # Checks are broken on aarch64 darwin
-  # https://github.com/NixOS/nixpkgs/pull/118700#issuecomment-885892436
-  doCheck = !stdenv.isDarwin;
+  doCheck =
+    # Checks are broken on aarch64 darwin
+    # https://github.com/NixOS/nixpkgs/pull/118700#issuecomment-885892436
+    !stdenv.isDarwin &&
+
+    # we must explicitly disable this here so that mesonFlags receives
+    # `-Dtests=disabled`; without it meson will attempt to run
+    # hostPlatform binaries during the configurePhase.
+    (with stdenv; buildPlatform.canExecute hostPlatform);
 
   meta = with lib; {
     description = "Device Tree Compiler";
