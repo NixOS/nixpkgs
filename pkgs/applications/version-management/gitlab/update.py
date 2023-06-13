@@ -364,7 +364,7 @@ def commit_container_registry(old_version: str, new_version: str) -> None:
             "git",
             "commit",
             "--message",
-            f"gitlab-container-registry: {old_version} -> {new_version}",
+            f"gitlab-container-registry: {old_version} -> {new_version}\n\nhttps://gitlab.com/gitlab-org/container-registry/-/blob/v{new_version}-gitlab/CHANGELOG.md",
         ],
         cwd=GITLAB_DIR,
     )
