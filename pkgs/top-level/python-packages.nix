@@ -13094,6 +13094,8 @@ self: super: with self; {
 
   ukrainealarm = callPackage ../development/python-modules/ukrainealarm { };
 
+  ulid = callPackage ../development/python-modules/ulid { };
+
   ulid-transform = callPackage ../development/python-modules/ulid-transform { };
 
   ultraheat-api = callPackage ../development/python-modules/ultraheat-api { };
