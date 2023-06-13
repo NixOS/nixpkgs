@@ -36,7 +36,7 @@ in
       description = "Free and Open Source AI Image Upscaler";
       homepage = "https://upscayl.github.io/";
       maintainers = with maintainers; [icy-thought];
-      license = licenses.agpl3Only;
+      license = licenses.agpl3Plus;
       platforms = platforms.linux;
     };
   }
