@@ -641,7 +641,7 @@ class Machine:
             return status != 0
 
         with self.nested(f"waiting for failure: {command}"):
-            retry(check_failure)
+            retry(check_failure, timeout)
             return output
 
     def wait_for_shutdown(self) -> None:
