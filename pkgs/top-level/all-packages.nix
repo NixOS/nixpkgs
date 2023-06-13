@@ -8397,6 +8397,12 @@ with pkgs;
 
   optee-client = callPackage ../misc/optee-client { };
 
+  inherit (callPackage ../misc/optee-os { })
+    buildOptee
+    opteeQemuArm
+    opteeQemuAarch64
+    ;
+
   pactorio = callPackage ../development/tools/pactorio {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
