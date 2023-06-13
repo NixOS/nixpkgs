@@ -27,14 +27,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "blackbox";
-  version = "0.13.1";
+  version = "0.13.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "raggesilver";
     repo = "blackbox";
     rev = "v${version}";
-    hash = "sha256-WeR7zdYdRWBR+kmxLjRFE6QII9RdBig7wrbVoCPA5go=";
+    hash = "sha256-qz1805HLG/Yexilw0YCkTzed1wqonUtJ+QrbMyhKHh8=";
   };
 
   postPatch = ''
