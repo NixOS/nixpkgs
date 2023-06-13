@@ -10476,6 +10476,8 @@ self: super: with self; {
 
   recipe-scrapers = callPackage ../development/python-modules/recipe-scrapers { };
 
+  recline = callPackage ../development/python-modules/recline { };
+
   recoll = toPythonModule (pkgs.recoll.override {
     python3Packages = self;
   });
