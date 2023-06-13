@@ -6319,6 +6319,8 @@ self: super: with self; {
 
   ml-collections = callPackage ../development/python-modules/ml-collections { };
 
+  ml-dtypes = callPackage ../development/python-modules/ml-dtypes { };
+
   mlflow = callPackage ../development/python-modules/mlflow { };
 
   mlrose = callPackage ../development/python-modules/mlrose { };
