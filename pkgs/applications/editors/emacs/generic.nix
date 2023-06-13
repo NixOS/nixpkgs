@@ -98,7 +98,7 @@
 , withWebP ? lib.versionAtLeast version "29"
 , withX ? !(stdenv.isDarwin || noGui || withPgtk)
 , withXinput2 ? withX && lib.versionAtLeast version "29"
-, withXwidgets ? !noGui && (withGTK3 || withPgtk)
+, withXwidgets ? !stdenv.isDarwin && !noGui && (withGTK3 || withPgtk)
 
 # Options
 , siteStart ? ./site-start.el
