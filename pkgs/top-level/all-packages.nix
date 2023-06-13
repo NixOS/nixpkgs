@@ -11646,7 +11646,9 @@ with pkgs;
   inherit (callPackages ../tools/security/proxmark3 { gcc-arm-embedded = gcc-arm-embedded-8; })
     proxmark3 proxmark3-unstable;
 
-  proxmark3-rrg = libsForQt5.callPackage ../tools/security/proxmark3/proxmark3-rrg.nix { };
+  proxmark3-rrg = libsForQt5.callPackage ../tools/security/proxmark3/proxmark3-rrg.nix {
+    inherit (darwin.apple_sdk.frameworks) Foundation AppKit;
+  };
 
   proxychains = callPackage ../tools/networking/proxychains { };
 
