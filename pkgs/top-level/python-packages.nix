@@ -6732,6 +6732,8 @@ self: super: with self; {
 
   netapp-lib = callPackage ../development/python-modules/netapp-lib { };
 
+  netapp-ontap = callPackage ../development/python-modules/netapp-ontap { };
+
   netcdf4 = callPackage ../development/python-modules/netcdf4 { };
 
   netdata = callPackage ../development/python-modules/netdata { };
