@@ -178,17 +178,6 @@ in rec {
       --varlist-id ${lib.escapeShellArg variablelistId} \
       --id-prefix ${lib.escapeShellArg optionIdPrefix} \
       ${optionsJSON}/share/doc/nixos/options.json \
-      options.xml
-
-    if grep /nixpkgs/nixos/modules options.xml; then
-      echo "The manual appears to depend on the location of Nixpkgs, which is bad"
-      echo "since this prevents sharing via the NixOS channel.  This is typically"
-      echo "caused by an option default that refers to a relative path (see above"
-      echo "for hints about the offending path)."
-      exit 1
-    fi
-
-    ${pkgs.libxslt.bin}/bin/xsltproc \
-      -o "$out" ${./postprocess-option-descriptions.xsl} options.xml
+      "$out"
   '';
 }
