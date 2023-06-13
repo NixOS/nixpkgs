@@ -39,6 +39,7 @@ in
 
 assert cudaSupport -> lib.versionAtLeast cudatoolkit.version "11.1";
 assert cudaSupport -> lib.versionAtLeast cudnn.version "8.2";
+assert cudaSupport -> stdenv.isLinux;
 
 let
   version = "0.4.12";
@@ -94,7 +95,7 @@ buildPythonPackage rec {
 
   # Prebuilt wheels are dynamically linked against things that nix can't find.
   # Run `autoPatchelfHook` to automagically fix them.
-  nativeBuildInputs = [ autoPatchelfHook ] ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ] ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
 
   # Dynamic link dependencies
   buildInputs = [ stdenv.cc.cc.lib ];
