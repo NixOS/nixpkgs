@@ -9220,6 +9220,12 @@
       fingerprint = "74F5 E5CC 19D3 B5CB 608F  6124 68FF 81E6 A785 0F49";
     }];
   };
+  liyangau = {
+    email = "d@aufomm.com";
+    github = "liyangau";
+    githubId = 71299093;
+    name = "Li Yang";
+  };
   lizelive = {
     email = "nixpkgs@lize.live";
     github = "lizelive";
@@ -17852,6 +17858,12 @@
     github = "zhaofengli";
     githubId = 2189609;
     name = "Zhaofeng Li";
+  };
+  zi3m5f = {
+    name = "zi3m5f";
+    email = "k7n3o3a6f@mozmail.com";
+    github = "zi3m5f";
+    githubId = 113244000;
   };
   ziguana = {
     name = "Zig Uana";

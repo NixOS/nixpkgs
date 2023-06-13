@@ -2218,6 +2218,10 @@ self: super: with self; {
 
   ctap-keyring-device = callPackage ../development/python-modules/ctap-keyring-device { };
 
+  ctranslate2 = callPackage ../development/python-modules/ctranslate2 {
+    ctranslate2-cpp = pkgs.ctranslate2;
+  };
+
   cu2qu = callPackage ../development/python-modules/cu2qu { };
 
   cucumber-tag-expressions = callPackage ../development/python-modules/cucumber-tag-expressions { };
@@ -3485,6 +3489,8 @@ self: super: with self; {
   fasteners = callPackage ../development/python-modules/fasteners { };
 
   fastentrypoints = callPackage ../development/python-modules/fastentrypoints { };
+
+  faster-whisper = callPackage ../development/python-modules/faster-whisper { };
 
   fastimport = callPackage ../development/python-modules/fastimport { };
 
@@ -4847,8 +4853,6 @@ self: super: with self; {
 
   image-go-nord = callPackage ../development/python-modules/image-go-nord { };
 
-  image-match = callPackage ../development/python-modules/image-match { };
-
   imagesize = callPackage ../development/python-modules/imagesize { };
 
   imantics = callPackage ../development/python-modules/imantics { };
@@ -5532,8 +5536,6 @@ self: super: with self; {
 
   lark = callPackage ../development/python-modules/lark { };
 
-  larynx-train = callPackage ../development/python-modules/larynx-train { };
-
   laspy = callPackage ../development/python-modules/laspy { };
 
   laszip = callPackage ../development/python-modules/laszip { };
@@ -6048,8 +6050,6 @@ self: super: with self; {
   markdown-macros = callPackage ../development/python-modules/markdown-macros { };
 
   markdownify  = callPackage ../development/python-modules/markdownify { };
-
-  markdownsuperscript = callPackage ../development/python-modules/markdownsuperscript { };
 
   markupsafe = callPackage ../development/python-modules/markupsafe { };
 
@@ -7640,6 +7640,8 @@ self: super: with self; {
   pipdeptree = callPackage ../development/python-modules/pipdeptree { };
 
   pipenv-poetry-migrate = callPackage ../development/python-modules/pipenv-poetry-migrate { };
+
+  piper-train = callPackage ../development/python-modules/piper-train { };
 
   pip-api = callPackage ../development/python-modules/pip-api { };
 

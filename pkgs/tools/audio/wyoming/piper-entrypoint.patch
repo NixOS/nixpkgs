@@ -1,0 +1,30 @@
+diff --git a/setup.py b/setup.py
+index 1355313..3b144c1 100644
+--- a/setup.py
++++ b/setup.py
+@@ -35,4 +35,9 @@ setup(
+         "Programming Language :: Python :: 3.10",
+     ],
+     keywords="rhasspy wyoming piper",
++    entry_points={
++        'console_scripts': [
++            'wyoming-piper = wyoming_piper:__main__.run'
++        ]
++    }
+ )
+diff --git a/wyoming_piper/__main__.py b/wyoming_piper/__main__.py
+index f60cf13..a0a15f7 100755
+--- a/wyoming_piper/__main__.py
++++ b/wyoming_piper/__main__.py
+@@ -143,5 +143,9 @@ async def main() -> None:
+ 
+ # -----------------------------------------------------------------------------
+ 
+-if __name__ == "__main__":
++def run():
+     asyncio.run(main())
++
++
++if __name__ == "__main__":
++    run()
+\ No newline at end of file
