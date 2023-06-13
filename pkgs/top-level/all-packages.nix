@@ -1783,6 +1783,8 @@ with pkgs;
 
   sitespeed-io = callPackage ../tools/networking/sitespeed-io { };
 
+  slipstream = callPackage ../tools/games/slipstream { };
+
   sorted-grep = callPackage ../tools/text/sorted-grep { };
 
   smbmap = callPackage ../tools/security/smbmap { };
