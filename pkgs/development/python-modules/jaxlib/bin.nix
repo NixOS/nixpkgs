@@ -41,7 +41,7 @@ assert cudaSupport -> lib.versionAtLeast cudatoolkit.version "11.1";
 assert cudaSupport -> lib.versionAtLeast cudnn.version "8.2";
 
 let
-  version = "0.4.11";
+  version = "0.4.12";
 
   pythonVersion = python.pythonVersion;
 
@@ -60,9 +60,9 @@ let
       };
     in
     {
-      "x86_64-linux" = f { platform = "manylinux2014_x86_64"; hash = "sha256-W2yoox631KZLwtL4xwJQxWG5gfTMOAFhsOgv88jVigE="; };
-      "aarch64-darwin" = f { platform = "macosx_11_0_arm64"; hash = "sha256-J9gtMdXBSwzN/mp4ODcZiFnP9Zjs7rMKZX6H6pZKiCQ="; };
-      "x86_64-darwin" = f { platform = "macosx_10_14_x86_64"; hash = "sha256-UOTBafhetO5B4TQx9rsKR0ZaqhaMbYfcRY9BG4zV7sA="; };
+      "x86_64-linux" = f { platform = "manylinux2014_x86_64"; hash = "sha256-8ef5aMP7M3/FetSqfdz2OCaVCt6CLHRSMMsVtV2bCLc="; };
+      "aarch64-darwin" = f { platform = "macosx_11_0_arm64"; hash = "sha256-Opg/DB4wAVSm5L3+G470HiBPDoR/BO4qP0OX9HSbeSo="; };
+      "x86_64-darwin" = f { platform = "macosx_10_14_x86_64"; hash = "sha256-I4zX1vv4L5Ik9eWrJ8fKd0EIt5C9XTN4JlfB8hH+l5c="; };
     };
 
   # Find new releases at https://storage.googleapis.com/jax-releases/jax_releases.html.
@@ -71,7 +71,7 @@ let
   # the correct index.
   gpuSrc = fetchurl {
     url = "https://storage.googleapis.com/jax-releases/cuda11/jaxlib-${version}+cuda11.cudnn86-cp310-cp310-manylinux2014_x86_64.whl";
-    hash = "sha256-z8OOcQPYV2D4spcgp9Pq+Yoy1IpPM3+A2xAILDFTlI4=";
+    hash = "sha256-xc6Nje0WHtMC5nV75zvdN53xSuNTbFSsz1FzHKd8Muo=";
   };
 in
 buildPythonPackage rec {
