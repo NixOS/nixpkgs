@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "vcluster";
-  version = "0.12.3";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "loft-sh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-7yyOpF/eIeJinTe0sHPWLLBUbKYDhphmW8qkOdYOdXM=";
+    sha256 = "sha256-RsaEeWK8jEDolHH0FNFKGrvRDPreAu2/rkXqqYIxH1s=";
   };
 
   vendorSha256 = null;
@@ -40,6 +40,6 @@ buildGoModule rec {
     downloadPage = "https://github.com/loft-sh/vcluster";
     homepage = "https://www.vcluster.com/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ peterromfeldhk berryp ];
+    maintainers = with maintainers; [ peterromfeldhk berryp qjoly ];
   };
 }
