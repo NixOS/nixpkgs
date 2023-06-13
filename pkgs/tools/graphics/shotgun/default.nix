@@ -1,21 +1,17 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, libXrandr, libX11 }:
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "shotgun";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "neXromancers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-fcb+eZXzpuEPFSZexbgDpoBX85gsiIqPlcPXruNGenk=";
+    sha256 = "sha256-ovqPBZznDQnQa9YW1xXA02Jl0AQ7sJNpzovA1SVR8Zc=";
   };
 
-  cargoSha256 = "sha256-n5HPl2h0fr0MyGBivNVrrs23HAllIYtwaw1aaKWHCe4=";
-
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = [ libXrandr libX11 ];
+  cargoSha256 = "sha256-mWifSN9Hpsivq0RdZ9l9+8CWaZMHfzzhT2r27FAuesU=";
 
   meta = with lib; {
     description = "Minimal X screenshot utility";
