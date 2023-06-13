@@ -24,8 +24,8 @@ rec {
     both arguments have been `elaborate`-d.
   */
   equals =
-    let uncomparable = { canExecute = null; emulator = null; emulatorAvailable = null; isCompatible = null; };
-    in a: b: a // uncomparable == b // uncomparable;
+    let removeFunctions = a: lib.filterAttrs (_: v: !builtins.isFunction v) a;
+    in a: b: removeFunctions a == removeFunctions b;
 
   /*
     Try to convert an elaborated system back to a simple string. If not possible,
