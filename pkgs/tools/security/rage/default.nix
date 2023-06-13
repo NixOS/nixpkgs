@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "str4d";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-JLtP3zimNL1UIFsbvtV2JO3PVV6w9VnfjpROs2UoFcU=";
+    hash = "sha256-hFuuwmwe0ti4Y8mSJyNqUIhZjFC6qtv6W5cwtNjPUFQ=";
   };
 
   cargoHash = "sha256-1gtLWU6uiWzUfYy9y3pb2vcnUC3H+Mf9rglmqNd989M=";
