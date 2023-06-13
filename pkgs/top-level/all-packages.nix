@@ -35270,6 +35270,7 @@ with pkgs;
   };
 
   code-server = callPackage ../servers/code-server {
+    nodejs = nodejs_16;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa CoreServices Security;
     inherit (darwin) cctools;
     inherit (nodePackages) node-gyp;
