@@ -143,6 +143,14 @@ in rec {
         $baseJSON $options \
         > $dst/options.json
 
+    if grep /nixpkgs/nixos/modules $dst/options.json; then
+      echo "The manual appears to depend on the location of Nixpkgs, which is bad"
+      echo "since this prevents sharing via the NixOS channel.  This is typically"
+      echo "caused by an option default that refers to a relative path (see above"
+      echo "for hints about the offending path)."
+      exit 1
+    fi
+
       brotli -9 < $dst/options.json > $dst/options.json.br
 
       mkdir -p $out/nix-support
