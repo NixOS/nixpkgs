@@ -59,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
         "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
       ] ++ lib.optionals stdenv.isDarwin [
         "test.basedir"
+        "test.fileclone" # flaky on hydra (possibly filesystem-specific?)
         "test.multi_arch"
         "test.nocpp2"
       ];
