@@ -4,17 +4,24 @@
 let plat = stdenvNoCC.targetPlatform.system; in stdenvNoCC.mkDerivation ({
   inherit pname version;
 
-  src = (fetchurl {
-    name = "${pname}-${version}-${plat}.zip";
-    hash = if lib.isAttrs zipHash then zipHash.${plat} or (throw "unsupported system") else zipHash;
-    url = "https://grafana.com/api/plugins/${pname}/versions/${version}/download" +
-    {
-      x86_64-linux = "?os=linux&arch=amd64";
-      aarch64-linux = "?os=linux&arch=arm64";
-      x86_64-darwin = "?os=darwin&arch=amd64";
-      aarch64-darwin = "?os=darwin&arch=arm64";
-     }.${plat} or (throw "unknown system");
-  });
+  src = if lib.isAttrs zipHash then
+    fetchurl {
+      name = "${pname}-${version}-${plat}.zip";
+      hash = zipHash.${plat} or (throw "unsupported system");
+      url = "https://grafana.com/api/plugins/${pname}/versions/${version}/download" + {
+        x86_64-linux = "?os=linux&arch=amd64";
+        aarch64-linux = "?os=linux&arch=arm64";
+        x86_64-darwin = "?os=darwin&arch=amd64";
+        aarch64-darwin = "?os=darwin&arch=arm64";
+      }.${plat} or (throw "unknown system");
+    }
+  else
+    fetchurl {
+      name = "${pname}-${version}.zip";
+      hash = zipHash;
+      url = "https://grafana.com/api/plugins/${pname}/versions/${version}/download";
+    }
+  ;
 
   nativeBuildInputs = [ unzip ];
 
