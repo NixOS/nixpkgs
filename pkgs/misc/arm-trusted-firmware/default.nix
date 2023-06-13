@@ -18,7 +18,7 @@
 }:
 
 let
-  buildArmTrustedFirmware =
+  buildArmTrustedFirmware = lib.makeOverridable (
     {
       filesToInstall,
       installDir ? "$out",
@@ -109,7 +109,8 @@ let
           // extraMeta;
       }
       // builtins.removeAttrs args [ "extraMeta" ]
-    );
+    )
+  );
 
 in
 {
