@@ -28,7 +28,7 @@ let
 in
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.4.11";
+  version = "0.4.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     repo = pname;
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
     rev = "refs/tags/${pname}-v${version}";
-    hash = "sha256-plGZ62Kq4faWj8crTPT7n3Ope0bEEfw0nzPEWkI5VDo=";
+    hash = "sha256-2JwEpzB5RwmBjGktppKhCpiaBM0AR20wfsRoQ33lh8Y=";
   };
 
   # jaxlib is _not_ included in propagatedBuildInputs because there are
