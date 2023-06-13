@@ -7,6 +7,10 @@ let
 
   efi = config.boot.loader.efi;
 
+  fwupdForSecureBoot = config.services.fwupd.enable && cfg.secureBoot.enable;
+
+  lanzaboote-cross-uefi-stub = pkgs.pkgsCross."${config.boot.kernelPackage.stdenv.qemuArch}-uefi".lanzaboote-uefi-stub;
+
   systemdBootBuilder = pkgs.substituteAll {
     src = ./systemd-boot-builder.py;
 
@@ -63,6 +67,31 @@ let
   finalSystemdBootBuilder = pkgs.writeScript "install-systemd-boot.sh" ''
     #!${pkgs.runtimeShell}
     ${checkedSystemdBootBuilder} "$@"
+    ${cfg.extraInstallCommands}
+    '';
+
+  loaderSettingsFormat = pkgs.formats.keyValue {
+    mkKeyValue = k: v: if v == null then "" else
+    lib.generators.mkKeyValueDefault { } " " k v;
+  };
+
+  loaderConfigFile = loaderSettingsFormat.generate "loader.conf" {
+    timeout = config.boot.loader.timeout;
+    console-mode = cfg.consoleMode;
+    editor = cfg.editor;
+    default = "nixos-*";
+  };
+
+  finalLanzabooteBuilder = pkgs.writeShellScript "install-lanzaboote.sh" ''
+    export LANZABOOTE_STUB="${lanzaboote-cross-uefi-stub}/bin/lanzaboote_stub.efi"
+    ${cfg.secureBoot.package}/bin/lzbt install \
+      --systemd ${config.systemd.package} \
+      --systemd-boot-loader-config ${loaderConfigFile} \
+      --public-key ${cfg.secureBoot.publicKeyFile} \
+      --private-key ${cfg.secureBoot.privateKeyFile} \
+      --configuration-limit ${toString (if cfg.configurationLimit == null then 0 else cfg.configurationLimit)} \
+      ${efi.efiSysMountPoint} \
+      /nix/var/nix/profiles/system-*-link
     ${cfg.extraInstallCommands}
   '';
 in {
@@ -234,10 +263,42 @@ in {
       '';
     };
 
+    secureBoot = mkOption {
+      default = {};
+      type = types.submodule ({ config, ... }: {
+        options = {
+          enable = mkEnableOption "Lanzaboote's SecureBoot implementation";
+
+          pkiBundle = mkOption {
+            type = types.nullOr types.path;
+            description = "PKI bundle containing db, PK and KEK files";
+          };
+
+          publicKeyFile = mkOption {
+            type = types.path;
+            default = "${config.pkiBundle}/keys/db/db.pem";
+            description = "Public key to sign your boot files";
+          };
+
+          privateKeyFile = mkOption {
+            type = types.path;
+            default = "${config.pkiBundle}/keys/db/db.key";
+            description = "Private key to sign your boot files";
+          };
+
+          package = mkPackageOptionMD pkgs "lanzaboote-tool" { };
+        };
+      });
+    };
+
   };
 
   config = mkIf cfg.enable {
     assertions = [
+      {
+        assertion = cfg.secureBoot.enable -> config.boot.bootspec.enable;
+        message = "Bootspec needs to be enabled to support SecureBoot";
+      }
       {
         assertion = (config.boot.kernelPackages.kernel.features or { efiBootStub = true; }) ? efiBootStub;
         message = "This kernel does not support the EFI boot stub";
@@ -267,6 +328,26 @@ in {
         }
       ]) (builtins.attrNames cfg.extraFiles);
 
+    warnings = lib.optional cfg.secureBoot.enable ''
+      You enabled Lanzaboote's experimental SecureBoot implementation.
+
+      This will not support all systemd-boot options for now, if you depend
+      critically on them, please send a PR or do not enable SecureBoot yet.
+
+      This is a feature preview of an implementation of SecureBoot in nixpkgs,
+      it is still experimental and can brick your machine in some circumstances,
+      e.g. missing Microsoft keys, broken firmware, etc.
+
+      This implementation only supports a private key reachable from a
+      disk path.
+
+      Multiple profiles are unsupported yet.
+
+      If you want to get rid of this warning, use the out of tree version for
+      the time being.
+    '';
+
+
     boot.loader.grub.enable = mkDefault false;
 
     boot.loader.supportsInitrdSecrets = true;
@@ -295,9 +376,37 @@ in {
       })
     ];
 
-    system = {
-      build.installBootLoader = finalSystemdBootBuilder;
+    systemd.services.fwupd = lib.mkIf fwupdForSecureBoot {
+      # Tell fwupd to load its efi files from /run
+      environment.FWUPD_EFIAPPDIR = "/run/fwupd-efi";
+    };
 
+    systemd.services.fwupd-efi = lib.mkIf fwupdForSecureBoot {
+      description = "Sign fwupd EFI app";
+      # Exist with the lifetime of the fwupd service
+      wantedBy = [ "fwupd.service" ];
+      partOf = [ "fwupd.service" ];
+      before = [ "fwupd.service" ];
+      # Create runtime directory for signed efi app
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        RuntimeDirectory = "fwupd-efi";
+      };
+      # Place the fwupd efi files in /run and sign them
+      script = ''
+        ln -sf ${config.services.fwupd.package.fwupd-efi}/libexec/fwupd/efi/fwupd*.efi /run/fwupd-efi/
+        ${pkgs.sbsigntool}/bin/sbsign --key '${cfg.privateKeyFile}' --cert '${cfg.publicKeyFile}' /run/fwupd-efi/fwupd*.efi
+      '';
+    };
+
+    services.fwupd.uefiCapsuleSettings = lib.mkIf fwupdForSecureBoot {
+      DisableShimForSecureBoot = true;
+    };
+
+
+    system = {
+      build.installBootLoader = if cfg.secureBoot.enable then finalLanzabooteBuilder else finalSystemdBootBuilder;
       boot.loader.id = "systemd-boot";
 
       requiredKernelConfig = with config.lib.kernelConfig; [
