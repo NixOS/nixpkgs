@@ -74,7 +74,6 @@ let majorVersion = "4";
         ../struct-ucontext-4.8.patch
         ../sigsegv-not-declared.patch
         ../res_state-not-declared.patch
-        ../install-info-files-serially.patch
         # gcc-11 compatibility
         (fetchpatch {
           name = "gcc4-char-reload.patch";
