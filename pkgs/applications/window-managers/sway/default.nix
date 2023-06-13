@@ -1,7 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, substituteAll, swaybg
 , meson, ninja, pkg-config, wayland-scanner, scdoc
 , wayland, libxkbcommon, pcre2, json_c, libevdev
-
 , pango, cairo, libinput, gdk-pixbuf, librsvg
 , wlroots_0_16, wayland-protocols, libdrm
 , nixosTests
