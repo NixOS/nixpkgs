@@ -25735,6 +25735,8 @@ with pkgs;
 
   mastodon = callPackage ../servers/mastodon { };
 
+  gotosocial = callPackage ../servers/gotosocial { };
+
   materialize = callPackage ../servers/sql/materialize {
     inherit (buildPackages.darwin) bootstrap_cmds;
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation;
