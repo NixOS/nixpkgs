@@ -298,6 +298,9 @@ lib.pipe (stdenv.mkDerivation ({
     stripDebugListTarget
     preFixup;
 
+  # https://gcc.gnu.org/PR109898
+  enableParallelInstalling = false;
+
   # https://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
   ${if hostPlatform.system == "x86_64-solaris" then "CC" else null} = "gcc -m64";
 

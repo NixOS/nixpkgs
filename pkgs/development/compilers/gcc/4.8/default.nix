@@ -256,6 +256,9 @@ stdenv.mkDerivation ({
     stripDebugListTarget
     preFixup;
 
+  # https://gcc.gnu.org/PR109898
+  enableParallelInstalling = false;
+
   doCheck = false; # requires a lot of tools, causes a dependency cycle for stdenv
 
   # https://gcc.gnu.org/install/specific.html#x86-64-x-solaris210

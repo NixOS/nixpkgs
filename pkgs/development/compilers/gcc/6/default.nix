@@ -290,6 +290,9 @@ stdenv.mkDerivation ({
     (targetPlatform == hostPlatform && hostPlatform == buildPlatform)
     (if profiledCompiler then "profiledbootstrap" else "bootstrap");
 
+  # https://gcc.gnu.org/PR109898
+  enableParallelInstalling = false;
+
   inherit (callFile ../common/strip-attributes.nix { })
     stripDebugList
     stripDebugListTarget

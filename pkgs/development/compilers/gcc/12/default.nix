@@ -299,6 +299,9 @@ lib.pipe (stdenv.mkDerivation ({
           lib.optionalString (targetPlatform == hostPlatform && hostPlatform == buildPlatform && !disableBootstrap) "bootstrap";
     in lib.optional (target != "") target;
 
+  # https://gcc.gnu.org/PR109898
+  enableParallelInstalling = false;
+
   inherit (callFile ../common/strip-attributes.nix { })
     stripDebugList
     stripDebugListTarget
