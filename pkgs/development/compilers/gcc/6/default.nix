@@ -68,7 +68,6 @@ let majorVersion = "6";
 
       # Fix https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80431
       ../fix-bug-80431.patch
-      ../install-info-files-serially.patch
     ] ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       ++ optional langAda ../gnat-cflags.patch
