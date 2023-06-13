@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "adguardian";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "Lissy93";
     repo = "AdGuardian-Term";
     rev = version;
-    hash = "sha256-r7dh31fZgcUBffzwoBqIoV9XhZOjJRb9aWZUuuiz7y8=";
+    hash = "sha256-WxrSmCwLnXXs5g/hN3xWE66P5n0RD/L9MJpf5N2iNtY=";
   };
 
-  cargoHash = "sha256-/fBLLqmKsoV9Kdsj6JFQwdkidc1TgYfvJP0Wx1po1ao=";
+  cargoHash = "sha256-IPkKiXuFN0KFlcrrSjLmML+O5zCrVRKEqdyV2xBsCsg=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
