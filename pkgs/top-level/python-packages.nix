@@ -1889,6 +1889,8 @@ self: super: with self; {
 
   class-doc = callPackage ../development/python-modules/class-doc { };
 
+  cliche = callPackage ../development/python-modules/cliche { };
+
   click = callPackage ../development/python-modules/click { };
 
   clickclick = callPackage ../development/python-modules/clickclick { };
