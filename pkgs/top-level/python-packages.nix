@@ -6728,6 +6728,8 @@ self: super: with self; {
 
   netaddr = callPackage ../development/python-modules/netaddr { };
 
+  netapp-lib = callPackage ../development/python-modules/netapp-lib { };
+
   netcdf4 = callPackage ../development/python-modules/netcdf4 { };
 
   netdata = callPackage ../development/python-modules/netdata { };
