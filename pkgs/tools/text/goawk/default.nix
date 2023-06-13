@@ -1,9 +1,8 @@
 { buildGoModule, fetchFromGitHub, lib, stdenv, gawk }:
 
-let version = "1.23.3";
-in buildGoModule {
+buildGoModule rec {
   pname = "goawk";
-  inherit version;
+  version = "1.23.3";
 
   src = fetchFromGitHub {
     owner = "benhoyt";
