@@ -69,7 +69,7 @@ lib.runTests (
     let modified =
           assert origValue != arbitraryValue;
           lib.systems.elaborate "x86_64-linux" // { ${platformAttrName} = arbitraryValue; };
-        arbitraryValue = "<<modified>>";
+        arbitraryValue = x: "<<modified>>";
     in {
       expr = lib.systems.equals (lib.systems.elaborate "x86_64-linux") modified;
       expected = {
