@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, gitUpdater
 , glibcLocales
 , gnome
 , gobject-introspection
@@ -13,14 +14,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gpodder";
-  version = "3.10.21";
+  version = "3.11.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "0n73jm5ypsj962gpr0dk10lqh83giqsczm63wchyhmrkyf1wgga1";
+    sha256 = "Ns03MFhd4ZLtyeQTLTgLWY2Ot6gmrksFMOZm8jFaLIg=";
   };
 
   patches = [
@@ -81,6 +82,8 @@ python3Packages.buildPythonApplication rec {
   '';
 
   makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}" ];
+
+  passthru.updateScript = gitUpdater {};
 
   meta = with lib; {
     description = "A podcatcher written in python";
