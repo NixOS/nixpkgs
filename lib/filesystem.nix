@@ -7,10 +7,24 @@ let
   inherit (builtins)
     readDir
     pathExists
+    storeDir
     ;
 
-  inherit (lib.strings)
-    hasPrefix
+  inherit (lib.trivial)
+    inPureEvalMode
+    ;
+
+  inherit (lib.path)
+    deconstruct
+    ;
+
+  inherit (lib.path.components)
+    fromSubpath
+    ;
+
+  inherit (lib.lists)
+    take
+    length
     ;
 
   inherit (lib.filesystem)
@@ -35,20 +49,41 @@ in
       => "regular"
   */
   pathType =
-    builtins.readFileType or
+    let
+      storeDirComponents = fromSubpath "./${storeDir}";
+
+      legacy = path:
+        if ! pathExists path
+        # Fail irrecoverably to mimic the historic behavior of this function and
+        # the new builtins.readFileType
+        then abort "lib.filesystem.pathType: Path ${toString path} does not exist."
+        # The filesystem root is the only path where `dirOf / == /` and
+        # `baseNameOf /` is not valid. We can detect this and directly return
+        # "directory", since we know the filesystem root can't be anything else.
+        else if dirOf path == path
+        then "directory"
+        else (readDir (dirOf path)).${baseNameOf path};
+
+      legacyPureEval = path:
+        let
+          # This is a workaround for the fact that `lib.filesystem.pathType` doesn't work correctly on /nix/store/...-name paths in pure evaluation mode. For file set combinators it's safe to assume that
+          pathParts = deconstruct path;
+          assumeDirectory =
+            storeDirComponents == take (length pathParts.components - 1) pathParts.components;
+        in
+        if assumeDirectory then
+          "directory"
+        else
+          legacy path;
+
+    in
+    if builtins ? readFileType then
+      builtins.readFileType
     # Nix <2.14 compatibility shim
-    (path:
-      if ! pathExists path
-      # Fail irrecoverably to mimic the historic behavior of this function and
-      # the new builtins.readFileType
-      then abort "lib.filesystem.pathType: Path ${toString path} does not exist."
-      # The filesystem root is the only path where `dirOf / == /` and
-      # `baseNameOf /` is not valid. We can detect this and directly return
-      # "directory", since we know the filesystem root can't be anything else.
-      else if dirOf path == path
-      then "directory"
-      else (readDir (dirOf path)).${baseNameOf path}
-    );
+    else if inPureEvalMode then
+      legacyPureEval
+    else
+      legacy;
 
   /*
     Whether a path exists and is a directory.
