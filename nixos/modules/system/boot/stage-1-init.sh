@@ -90,6 +90,15 @@ waitDevice() {
     # uses this for multi-device filesystems, i.e. /dev/sda1:/dev/sda2:/dev/sda3
     local IFS=':'
 
+    # Check whether the delimiter is really used for bcachefs (i.e. it's
+    # elements are device nodes). In other cases the delimiter might occur in
+    # valid device filenames (e.g. /dev/disk/by-id/...)
+    for dev in $device; do
+        if ! [ "${dev:0:5}" = "/dev/" ]; then
+            IFS=
+        fi
+    done
+
     # USB storage devices tend to appear with some delay.  It would be
     # great if we had a way to synchronously wait for them, but
     # alas...  So just wait for a few seconds for the device to
