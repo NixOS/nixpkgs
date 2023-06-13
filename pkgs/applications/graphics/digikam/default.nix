@@ -7,6 +7,7 @@
 , qtxmlpatterns
 , qtsvg
 , qtwebengine
+, qtnetworkauth
 
 , akonadi-contacts
 , kcalendarcore
@@ -59,11 +60,11 @@
 
 mkDerivation rec {
   pname   = "digikam";
-  version = "7.10.0";
+  version = "8.0.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/digiKam-${version}.tar.xz";
-    sha256 = "sha256-o/MPAbfRttWFgivNXr+N9p4P8CRWOnJGLr+AadvaIuE=";
+    hash = "sha256-ECxxK2IJ/irId8mx0BnaytrxFa35FVcNJoFgZtFR6Ec=";
   };
 
   nativeBuildInputs = [
@@ -104,6 +105,7 @@ mkDerivation rec {
     qtxmlpatterns
     qtsvg
     qtwebengine
+    qtnetworkauth
 
     akonadi-contacts
     kcalendarcore
