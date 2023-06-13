@@ -19946,6 +19946,8 @@ with pkgs;
     libiberty_static = libiberty.override { staticBuild = true; };
   };
 
+  optee-client = callPackage ../misc/optee-client { };
+
   package-project-cmake = callPackage ../development/tools/package-project-cmake { };
 
   pactorio = callPackage ../development/tools/pactorio {
