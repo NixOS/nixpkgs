@@ -298,9 +298,9 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /doc/languages-frameworks/javascript.section.md @winterqt
 
 # OCaml
-/pkgs/build-support/ocaml           @romildo @ulrikstrid
-/pkgs/development/compilers/ocaml   @romildo @ulrikstrid
-/pkgs/development/ocaml-modules     @romildo @ulrikstrid
+/pkgs/build-support/ocaml           @ulrikstrid
+/pkgs/development/compilers/ocaml   @ulrikstrid
+/pkgs/development/ocaml-modules     @ulrikstrid
 
 # ZFS
 pkgs/os-specific/linux/zfs                @raitobezarius
