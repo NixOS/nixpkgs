@@ -97,7 +97,7 @@ stdenv.mkDerivation {
 
     ${linkManPages (lib.getMan cctools-port) "ld64" "ld64"}
     ${lib.optionalString (!useLLVMOtool)  # The actual man page for otool in cctools is llvm-otool
-      linkManPages (lib.getMan cctools-port) "llvm-otool" "llvm-otool"}
+      (linkManPages (lib.getMan cctools-port) "llvm-otool" "llvm-otool")}
   '';
 
   passthru = { inherit targetPrefix; };

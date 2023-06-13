@@ -214,7 +214,6 @@
 , "lua-fmt"
 , "lv_font_conv"
 , "madoko"
-, "mailwind"
 , "markdownlint-cli"
 , "markdownlint-cli2"
 , "markdown-link-check"

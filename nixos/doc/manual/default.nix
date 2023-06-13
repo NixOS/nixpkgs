@@ -267,19 +267,41 @@ in rec {
 
   manualEpub = runCommand "nixos-manual-epub"
     { nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin buildPackages.zip ];
+      doc = ''
+        <book xmlns="http://docbook.org/ns/docbook"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              version="5.0"
+              xml:id="book-nixos-manual">
+          <info>
+            <title>NixOS Manual</title>
+            <subtitle>Version ${lib.version}</subtitle>
+          </info>
+          <chapter>
+            <title>Temporarily unavailable</title>
+            <para>
+              The NixOS manual is currently not available in EPUB format,
+              please use the <link xlink:href="https://nixos.org/nixos/manual">HTML manual</link>
+              instead.
+            </para>
+            <para>
+              If you've used the EPUB manual in the past and it has been useful to you, please
+              <link xlink:href="https://github.com/NixOS/nixpkgs/issues/237234">let us know</link>.
+            </para>
+          </chapter>
+        </book>
+      '';
+      passAsFile = [ "doc" ];
     }
     ''
       # Generate the epub manual.
       dst=$out/share/doc/nixos
 
       xsltproc \
-        ${manualXsltprocOptions} \
+        --param chapter.autolabel 0 \
         --nonet --xinclude --output $dst/epub/ \
         ${docbook_xsl_ns}/xml/xsl/docbook/epub/docbook.xsl \
-        ${manual-combined}/manual-combined.xml
+        $docPath
 
-      mkdir -p $dst/epub/OEBPS/images/callouts
-      cp -r ${docbook_xsl_ns}/xml/xsl/docbook/images/callouts/*.svg $dst/epub/OEBPS/images/callouts # */
       echo "application/epub+zip" > mimetype
       manual="$dst/nixos-manual.epub"
       zip -0Xq "$manual" mimetype

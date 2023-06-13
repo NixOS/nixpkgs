@@ -11,7 +11,8 @@ buildGoModule rec {
     sha256 = "sha256-XpZX8a/ITFyqz5TabzjHgz4iWjP09Q7Fuy5EpYp4sKs=";
   };
 
-  vendorHash = "sha256-dOd5aYV7h5Bma32btEa0UpA3dnIIhwM/rl7hWrPvgMM=";
+  proxyVendor = true; # darwin/linux hash mismatch
+  vendorHash = "sha256-I3gOVUhzaV5gbUtrS8SwZBA9xtR/rbLwTp/56Zll3+Q=";
 
   subPackages = [ "cmd/migrate" ];
 

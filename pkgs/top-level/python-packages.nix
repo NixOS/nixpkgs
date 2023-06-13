@@ -2218,6 +2218,10 @@ self: super: with self; {
 
   ctap-keyring-device = callPackage ../development/python-modules/ctap-keyring-device { };
 
+  ctranslate2 = callPackage ../development/python-modules/ctranslate2 {
+    ctranslate2-cpp = pkgs.ctranslate2;
+  };
+
   cu2qu = callPackage ../development/python-modules/cu2qu { };
 
   cucumber-tag-expressions = callPackage ../development/python-modules/cucumber-tag-expressions { };
@@ -3485,6 +3489,8 @@ self: super: with self; {
   fasteners = callPackage ../development/python-modules/fasteners { };
 
   fastentrypoints = callPackage ../development/python-modules/fastentrypoints { };
+
+  faster-whisper = callPackage ../development/python-modules/faster-whisper { };
 
   fastimport = callPackage ../development/python-modules/fastimport { };
 
@@ -5529,8 +5535,6 @@ self: super: with self; {
   language-tags = callPackage ../development/python-modules/language-tags { };
 
   lark = callPackage ../development/python-modules/lark { };
-
-  larynx-train = callPackage ../development/python-modules/larynx-train { };
 
   laspy = callPackage ../development/python-modules/laspy { };
 
@@ -7636,6 +7640,8 @@ self: super: with self; {
   pipdeptree = callPackage ../development/python-modules/pipdeptree { };
 
   pipenv-poetry-migrate = callPackage ../development/python-modules/pipenv-poetry-migrate { };
+
+  piper-train = callPackage ../development/python-modules/piper-train { };
 
   pip-api = callPackage ../development/python-modules/pip-api { };
 
