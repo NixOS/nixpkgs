@@ -1,9 +1,9 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, qt5
 , cmake
 , pkg-config
+, wrapQtAppsHook
 , boost
 , cairo
 , ceres-solver
@@ -12,7 +12,6 @@
 , glog
 , libXdmcp
 , python3
-, python3Packages
 , wayland
 }:
 
@@ -23,10 +22,10 @@ let
     owner = "NatronGitHub";
     repo = "OpenColorIO-Configs";
     rev = "Natron-v${minorVersion}";
-    sha256 = "sha256-TD7Uge9kKbFxOmOCn+TSQovnKTmFS3uERTu5lmZFHbc=";
+    hash = "sha256-TD7Uge9kKbFxOmOCn+TSQovnKTmFS3uERTu5lmZFHbc=";
   };
 in
-qt5.mkDerivation {
+stdenv.mkDerivation {
   inherit version;
   pname = "natron";
 
@@ -35,7 +34,7 @@ qt5.mkDerivation {
     repo = "Natron";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-dgScbfyulZPlrngqSw7xwipldoRd8uFO8VP9mlJyhQ8=";
+    hash = "sha256-dgScbfyulZPlrngqSw7xwipldoRd8uFO8VP9mlJyhQ8=";
   };
 
   cmakeFlags = [ "-DNATRON_SYSTEM_LIBS=ON" ];
@@ -43,6 +42,7 @@ qt5.mkDerivation {
   nativeBuildInputs = [
     cmake
     pkg-config
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -50,8 +50,8 @@ qt5.mkDerivation {
     expat
     cairo
     python3
-    python3Packages.pyside2
-    python3Packages.shiboken2
+    python3.pkgs.pyside2
+    python3.pkgs.shiboken2
     extra-cmake-modules
     wayland
     glog
@@ -66,7 +66,7 @@ qt5.mkDerivation {
 
   postFixup = ''
     wrapProgram $out/bin/Natron \
-      --prefix PYTHONPATH : "${python3Packages.makePythonPath [ python3Packages.qtpy python3Packages.pyside2 ]}" \
+      --prefix PYTHONPATH : "${python3.pkgs.makePythonPath [ python3.pkgs.qtpy python3.pkgs.pyside2 ]}" \
       --set-default OCIO "$out/share/OpenColorIO-Configs/blender/config.ocio"
   '';
 
@@ -80,5 +80,6 @@ qt5.mkDerivation {
     license = lib.licenses.gpl2;
     maintainers = [ maintainers.puffnfresh ];
     platforms = platforms.linux;
+    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }
