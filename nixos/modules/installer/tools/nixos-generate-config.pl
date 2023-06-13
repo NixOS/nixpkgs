@@ -85,7 +85,7 @@ sub debug {
 
 
 # nixpkgs.system
-push @attrs, "nixpkgs.hostPlatform = lib.mkDefault \"@system@\";";
+push @attrs, "nixpkgs.hostPlatform = lib.mkDefault \"@hostPlatformSystem@\";";
 
 
 my $cpuinfo = read_file "/proc/cpuinfo";
