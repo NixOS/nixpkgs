@@ -103,12 +103,10 @@ in rec {
 
       ${prepareManualFromMD}
 
-      # TODO generator is set like this because the docbook/md manual compare workflow will
-      # trigger if it's different
       nixos-render-docs -j $NIX_BUILD_CORES manual html \
         --manpage-urls ${manpageUrls} \
         --revision ${lib.escapeShellArg revision} \
-        --generator "DocBook XSL Stylesheets V${docbook_xsl_ns.version}" \
+        --generator "nixos-render-docs ${lib.version}" \
         --stylesheet style.css \
         --stylesheet overrides.css \
         --stylesheet highlightjs/mono-blue.css \
