@@ -19,7 +19,6 @@ buildGoModule rec {
     description = "Cross-platform, unofficial CLI for Cloudflare Warp";
     homepage    = "https://github.com/ViRb3/wgcf";
     license     = licenses.mit;
-    platforms   = platforms.unix;
     maintainers = with maintainers; [ yureien ];
   };
 }

@@ -19,6 +19,5 @@ buildGoModule rec {
     changelog = "https://github.com/consbio/mbtileserver/blob/v${version}/CHANGELOG.md";
     license = licenses.isc;
     maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.unix;
   };
 }

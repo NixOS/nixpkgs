@@ -17,7 +17,6 @@ buildGoModule rec {
     description = "Allocate, replicate, and track Pins across a cluster of IPFS daemons";
     homepage = "https://ipfscluster.io";
     license = licenses.mit;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ Luflosi jglukasik ];
   };
 }
