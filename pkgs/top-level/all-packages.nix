@@ -8395,6 +8395,8 @@ with pkgs;
     libiberty_static = libiberty.override { staticBuild = true; };
   };
 
+  optee-client = callPackage ../misc/optee-client { };
+
   pactorio = callPackage ../development/tools/pactorio {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
