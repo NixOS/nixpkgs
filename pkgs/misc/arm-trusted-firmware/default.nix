@@ -46,8 +46,12 @@ let
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-    # For Cortex-M0 firmware in RK3399
-    nativeBuildInputs = [ pkgsCross.arm-embedded.stdenv.cc ];
+    nativeBuildInputs = [
+      # For Cortex-M0 firmware in RK3399
+      pkgsCross.arm-embedded.stdenv.cc
+      # For fiptool
+      openssl
+    ];
 
     buildInputs = [ openssl ];
 
