@@ -11803,6 +11803,10 @@ with pkgs;
 
   quicktun = callPackage ../tools/networking/quicktun { };
 
+  quickwit = callPackage ../servers/search/quickwit {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   quilt = callPackage ../development/tools/quilt { };
 
   raider = callPackage ../applications/misc/raider { };
