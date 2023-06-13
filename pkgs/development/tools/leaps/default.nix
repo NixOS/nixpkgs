@@ -23,6 +23,5 @@ buildGoModule rec {
     homepage = "https://github.com/jeffail/leaps/";
     license = licenses.mit;
     maintainers = with lib.maintainers; [ qknight ];
-    platforms = lib.platforms.unix;
   };
 }

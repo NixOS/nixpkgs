@@ -10,6 +10,7 @@
 , gobject-introspection
 , gtk3
 , kissfft
+, libappindicator
 , libnotify
 , libsamplerate
 , libvorbis
@@ -75,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     flac
     gobject-introspection
     gtk3
+    libappindicator
     libnotify
     libopenmpt
     librsvg

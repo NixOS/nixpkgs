@@ -24,6 +24,5 @@ buildGoModule rec {
     changelog = "https://github.com/amacneil/dbmate/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ manveru ];
-    platforms = platforms.unix;
   };
 }

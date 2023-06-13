@@ -22,6 +22,5 @@ buildGoModule rec {
     homepage = "https://github.com/mxschmitt/fritzbox_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ bachp flokli sbruder ];
-    platforms = platforms.unix;
   };
 }

@@ -149,6 +149,9 @@ let
         ./patch/cmake-plugin-includedir.patch
       ];
 
+      buildInputs = common.buildInputs
+        ++ lib.optionals (lib.versionAtLeast common.version "10.7") [ fmt_8 ];
+
       cmakeFlags = common.cmakeFlags ++ [
         "-DPLUGIN_AUTH_PAM=NO"
         "-DWITHOUT_SERVER=ON"

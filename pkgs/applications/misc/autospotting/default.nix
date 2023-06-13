@@ -23,6 +23,5 @@ buildGoModule rec {
     license = licenses.osl3;
     maintainers = with maintainers; [ costrouc ];
     mainProgram = "AutoSpotting";
-    platforms = platforms.unix;
   };
 }

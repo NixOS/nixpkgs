@@ -22,6 +22,5 @@ buildGoModule rec {
     homepage = "https://github.com/parse-nl/SystemdJournal2Gelf";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fadenb fpletz ];
-    platforms = platforms.unix;
   };
 }
