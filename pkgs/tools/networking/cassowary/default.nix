@@ -20,6 +20,5 @@ buildGoModule rec {
     description = "Modern cross-platform HTTP load-testing tool written in Go";
     license = licenses.mit;
     maintainers = with maintainers; [ hugoreeves ];
-    platforms = platforms.unix;
   };
 }

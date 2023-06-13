@@ -27608,6 +27608,8 @@ with pkgs;
 
   pam_pgsql = callPackage ../os-specific/linux/pam_pgsql { };
 
+  pam_rssh = callPackage ../os-specific/linux/pam_rssh { };
+
   pam_ssh_agent_auth = callPackage ../os-specific/linux/pam_ssh_agent_auth { };
 
   pam_tmpdir = callPackage ../os-specific/linux/pam_tmpdir { };
@@ -36800,6 +36802,8 @@ with pkgs;
   iortcw = callPackage ../games/iortcw { };
   # used as base package for iortcw forks
   iortcw_sp = callPackage ../games/iortcw/sp.nix { };
+
+  ironwail = callPackage ../games/ironwail { };
 
   ivan = callPackage ../games/ivan { };
 

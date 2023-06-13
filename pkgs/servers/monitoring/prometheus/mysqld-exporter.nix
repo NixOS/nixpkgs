@@ -32,6 +32,5 @@ buildGoModule rec {
     homepage = "https://github.com/prometheus/mysqld_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley globin ];
-    platforms = platforms.unix;
   };
 }

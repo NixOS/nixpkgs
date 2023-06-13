@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ m4 ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   postInstall = lib.optionalString stdenv.isDarwin ''
-    fixDarwinDylibNames $out/lib/libmilter.dylib.1
+    fixDarwinDylibNames $out/lib/libmilter.*.1
   '';
 
   meta = with lib; {
