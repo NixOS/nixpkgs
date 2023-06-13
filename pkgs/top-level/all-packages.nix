@@ -8369,6 +8369,12 @@ with pkgs;
     libiberty_static = libiberty.override { staticBuild = true; };
   };
 
+  inherit (callPackage ../misc/optee-os { })
+    buildOptee
+    opteeQemuArm
+    opteeQemuAarch64
+    ;
+
   pactorio = callPackage ../development/tools/pactorio {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
