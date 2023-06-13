@@ -31,14 +31,14 @@ lib.checkListOfEnum "${pname}: theme variants" [ "default" "blue" "purple" "pink
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2022-10-21";
+  version = "2023-06-13";
 
   srcs = [
     (fetchFromGitHub {
       owner = "vinceliuice";
       repo = pname;
       rev = version;
-      sha256 = "sha256-0OqQXyv/fcbKTzvQUVIbUw5Y27hU1bzwx/0DelMEZIs=";
+      hash = "sha256-0jb/VQ6Z0BGaEka57BWM0pBweP08cr4jfPRdEN/BJ1M=";
     })
   ]
   ++
