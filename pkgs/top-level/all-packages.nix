@@ -11940,6 +11940,8 @@ with pkgs;
 
   qt-box-editor = libsForQt5.callPackage ../applications/misc/qt-box-editor { };
 
+  readability-cli = callPackage ../tools/text/readability-cli { };
+
   recutils = callPackage ../tools/misc/recutils { };
 
   recoll = libsForQt5.callPackage ../applications/search/recoll { };
@@ -25733,6 +25735,8 @@ with pkgs;
 
   mastodon = callPackage ../servers/mastodon { };
 
+  gotosocial = callPackage ../servers/gotosocial { };
+
   materialize = callPackage ../servers/sql/materialize {
     inherit (buildPackages.darwin) bootstrap_cmds;
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation;
@@ -26245,6 +26249,7 @@ with pkgs;
   prometheus-jitsi-exporter = callPackage ../servers/monitoring/prometheus/jitsi-exporter.nix { };
   prometheus-jmx-httpserver = callPackage ../servers/monitoring/prometheus/jmx-httpserver.nix {  };
   prometheus-json-exporter = callPackage ../servers/monitoring/prometheus/json-exporter.nix { };
+  prometheus-junos-czerwonk-exporter = callPackage ../servers/monitoring/prometheus/junos-czerwonk-exporter.nix { };
   prometheus-kea-exporter = callPackage ../servers/monitoring/prometheus/kea-exporter.nix { };
   prometheus-keylight-exporter = callPackage ../servers/monitoring/prometheus/keylight-exporter.nix { };
   prometheus-knot-exporter = callPackage ../servers/monitoring/prometheus/knot-exporter.nix { };
@@ -27983,6 +27988,8 @@ with pkgs;
   untie = callPackage ../os-specific/linux/untie { };
 
   upower = callPackage ../os-specific/linux/upower { };
+
+  upscayl = callPackage ../applications/graphics/upscayl { };
 
   usbguard = callPackage ../os-specific/linux/usbguard { };
 
@@ -36024,6 +36031,7 @@ with pkgs;
   go-exploitdb = callPackage ../tools/security/go-exploitdb { };
 
   groestlcoin  = libsForQt5.callPackage ../applications/blockchains/groestlcoin {
+    stdenv = darwin.apple_sdk_11_0.stdenv;
     boost = boost17x;
     withGui = true;
     inherit (darwin) autoSignDarwinBinariesHook;

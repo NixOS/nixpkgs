@@ -66,9 +66,12 @@ Useful git commands that can help a lot with this are `git commit --patch --amen
 From time to time, changes between branches must be rebased, for example, if the
 number of new rebuilds they would cause is too large for the target branch. When
 rebasing, care must be taken to include only the intended changes, otherwise
-many CODEOWNERS will be inadvertently requested for review.  To achieve this,
+many CODEOWNERS will be inadvertently requested for review. To achieve this,
 rebasing should not be performed directly on the target branch, but on the merge
-base between the current and target branch.
+base between the current and target branch. As an additional precautionary measure,
+you should temporarily mark the PR as draft for the duration of the operation.
+This reduces the probability of mass-pinging people. (OfBorg might still
+request a couple of persons for reviews though.)
 
 In the following example, we assume that the current branch, called `feature`,
 is based on `master`, and we rebase it onto the merge base between
@@ -100,6 +103,36 @@ git rebase upstream/staging
 git status
 # Force push your changes
 git push origin feature --force-with-lease
+```
+
+### Something went wrong and a lot of people were pinged
+
+It happens. Remember to be kind, especially to new contributors.
+There is no way back, so the pull request should be closed and locked
+(if possible). The changes should be re-submitted in a new PR, in which the people
+originally involved in the conversation need to manually be pinged again.
+No further discussion should happen on the original PR, as a lot of people
+are now subscribed to it.
+
+The following message (or a version thereof) might be left when closing to
+describe the situation, since closing and locking without any explanation
+is kind of rude:
+
+```markdown
+It looks like you accidentally mass-pinged a bunch of people, which are now subscribed
+and getting notifications for everything in this pull request. Unfortunately, they
+cannot be automatically unsubscribed from the issue (removing review request does not
+unsubscribe), therefore development cannot continue in this pull request anymore.
+
+Please open a new pull request with your changes, link back to this one and ping the
+people actually involved in here over there.
+
+In order to avoid this in the future, there are instructions for how to properly
+rebase between branches in our [contribution guidelines](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#rebasing-between-branches-ie-from-master-to-staging).
+Setting your pull request to draft prior to rebasing is strongly recommended.
+In draft status, you can preview the list of people that are about to be requested
+for review, which allows you to sidestep this issue.
+This is not a bulletproof method though, as OfBorg still does review requests even on draft PRs.
 ```
 
 ## Backporting changes

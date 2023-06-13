@@ -306,6 +306,7 @@ in {
   gonic = handleTest ./gonic.nix {};
   google-oslogin = handleTest ./google-oslogin {};
   gotify-server = handleTest ./gotify-server.nix {};
+  gotosocial = runTest ./web-apps/gotosocial.nix;
   grafana = handleTest ./grafana {};
   grafana-agent = handleTest ./grafana-agent.nix {};
   graphite = handleTest ./graphite.nix {};
