@@ -12168,6 +12168,8 @@ with pkgs;
 
   rwc = callPackage ../tools/system/rwc { };
 
+  rwedid = callPackage ../tools/video/rwedid { };
+
   rxp = callPackage ../tools/text/xml/rxp { };
 
   rzip = callPackage ../tools/compression/rzip { };
