@@ -116,7 +116,7 @@ ocamlPackages.buildDunePackage rec {
     bls12-381
     bls12-381-signature
     ptime
-    mtime
+    mtime_1
     lwt_log
     secp256k1-internal
     resto
