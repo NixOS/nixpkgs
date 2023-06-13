@@ -11,7 +11,7 @@
 }:
 
 let
-  buildArmTrustedFirmware = { filesToInstall
+  buildArmTrustedFirmware = lib.makeOverridable ({ filesToInstall
             , installDir ? "$out"
             , platform ? null
             , platformCanUseHDCPBlob ? false  # set this to true if the platform is able to use hdcp.bin
@@ -83,7 +83,7 @@ let
       license = [ licenses.bsd3 ] ++ lib.optionals (!deleteHDCPBlobBeforeBuild) [ licenses.unfreeRedistributable ];
       maintainers = with maintainers; [ lopsided98 ];
     } // extraMeta;
-  } // builtins.removeAttrs args [ "extraMeta" ]);
+  } // builtins.removeAttrs args [ "extraMeta" ]));
 
 in {
   inherit buildArmTrustedFirmware;
