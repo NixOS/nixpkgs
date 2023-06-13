@@ -283,6 +283,13 @@ self: super: builtins.intersectAttrs super {
   sfml-audio = appendConfigureFlag "--extra-include-dirs=${pkgs.openal}/include/AL" super.sfml-audio;
 
   # avoid compiling twice by providing executable as a separate output (with small closure size)
+  cabal-fmt = enableSeparateBinOutput super.cabal-fmt;
+  hindent = enableSeparateBinOutput super.hindent;
+  releaser  = enableSeparateBinOutput super.releaser;
+  eventlog2html = enableSeparateBinOutput super.eventlog2html;
+  ghc-debug-brick  = enableSeparateBinOutput super.ghc-debug-brick;
+  nixfmt  = enableSeparateBinOutput super.nixfmt;
+  calligraphy = enableSeparateBinOutput super.calligraphy;
   niv = enableSeparateBinOutput (self.generateOptparseApplicativeCompletions [ "niv" ] super.niv);
   ghcid = enableSeparateBinOutput super.ghcid;
   ormolu = self.generateOptparseApplicativeCompletions [ "ormolu" ] (enableSeparateBinOutput super.ormolu);
