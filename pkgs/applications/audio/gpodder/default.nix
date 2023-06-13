@@ -1,6 +1,14 @@
-{ lib, fetchFromGitHub, python3, python3Packages, intltool
-, glibcLocales, gnome, gtk3, wrapGAppsHook
+{ lib
+, fetchFromGitHub
+, glibcLocales
+, gnome
 , gobject-introspection
+, gtk3
+, intltool
+, python3
+, python3Packages
+, wrapGAppsHook
+, xdg-utils
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -71,6 +79,8 @@ python3Packages.buildPythonApplication rec {
     LC_ALL=C PYTHONPATH=src/:$PYTHONPATH pytest --ignore=tests --ignore=src/gpodder/utilwin32ctypes.py --doctest-modules src/gpodder/util.py src/gpodder/jsonconfig.py
     LC_ALL=C PYTHONPATH=src/:$PYTHONPATH pytest tests --ignore=src/gpodder/utilwin32ctypes.py --ignore=src/mygpoclient --cov=gpodder
   '';
+
+  makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}" ];
 
   meta = with lib; {
     description = "A podcatcher written in python";
