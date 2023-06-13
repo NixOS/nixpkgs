@@ -68,7 +68,6 @@ let majorVersion = "12";
         ../gnat-cflags-11.patch
         ../gcc-12-gfortran-driving.patch
         ../ppc-musl.patch
-        ../install-info-files-serially.patch
 
         # backport ICE fix on ccache code
         ./lambda-ICE-PR109241.patch
@@ -299,6 +298,9 @@ lib.pipe (stdenv.mkDerivation ({
           lib.optionalString (profiledCompiler) "profiled" +
           lib.optionalString (targetPlatform == hostPlatform && hostPlatform == buildPlatform && !disableBootstrap) "bootstrap";
     in lib.optional (target != "") target;
+
+  # https://gcc.gnu.org/PR109898
+  enableParallelInstalling = false;
 
   inherit (callFile ../common/strip-attributes.nix { })
     stripDebugList

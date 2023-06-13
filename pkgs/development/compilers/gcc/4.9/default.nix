@@ -63,7 +63,6 @@ let majorVersion = "4";
       [ ../9/fix-struct-redefinition-on-glibc-2.36.patch ../use-source-date-epoch.patch
         ../parallel-bconfig.patch ./parallel-strsignal.patch
         ./libsanitizer.patch
-        ../install-info-files-serially.patch
         (fetchpatch {
           name = "avoid-ustat-glibc-2.28.patch";
           url = "https://gitweb.gentoo.org/proj/gcc-patches.git/plain/4.9.4/gentoo/100_all_avoid-ustat-glibc-2.28.patch?id=55fcb515620a8f7d3bb77eba938aa0fcf0d67c96";
@@ -272,6 +271,9 @@ stdenv.mkDerivation ({
   buildFlags = optional
     (targetPlatform == hostPlatform && hostPlatform == buildPlatform)
     (if profiledCompiler then "profiledbootstrap" else "bootstrap");
+
+  # https://gcc.gnu.org/PR109898
+  enableParallelInstalling = false;
 
   inherit (callFile ../common/strip-attributes.nix { })
     stripDebugList

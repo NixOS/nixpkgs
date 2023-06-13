@@ -61,7 +61,6 @@ let majorVersion = "7";
         ../fix-bug-80431.patch
 
         ../9/fix-struct-redefinition-on-glibc-2.36.patch
-        ../install-info-files-serially.patch
       ]
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optionals targetPlatform.isNetBSD [
@@ -243,6 +242,9 @@ stdenv.mkDerivation ({
   buildFlags = optional
     (targetPlatform == hostPlatform && hostPlatform == buildPlatform)
     (if profiledCompiler then "profiledbootstrap" else "bootstrap");
+
+  # https://gcc.gnu.org/PR109898
+  enableParallelInstalling = false;
 
   inherit (callFile ../common/strip-attributes.nix { })
     stripDebugList
