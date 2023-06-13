@@ -1,7 +1,10 @@
 { lib
+, bash
+, coreutils
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
+, makeWrapper
 }:
 
 let config-module = "github.com/f1bonacc1/process-compose/src/config";
@@ -41,6 +44,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     installShellFiles
+    makeWrapper
   ];
 
   vendorHash = "sha256-9RvVBup07FHCjfV/Q6ryU28inqydL/pMGVUfbo2OG5s=";
@@ -54,6 +58,10 @@ buildGoModule rec {
       --bash <($out/bin/process-compose completion bash) \
       --zsh <($out/bin/process-compose completion zsh) \
       --fish <($out/bin/process-compose completion fish)
+
+    # process-compose looks up bash at runtime.
+    # Also add coreutils because most programs need it.
+    wrapProgram $out/bin/process-compose --set PATH "${lib.makeBinPath [ bash coreutils ]}"
   '';
 
   meta = with lib; {
