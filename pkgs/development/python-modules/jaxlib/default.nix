@@ -209,7 +209,7 @@ let
       build --python_path="${python}/bin/python"
       build --distinct_host_configuration=false
       build --define PROTOBUF_INCLUDE_PATH="${pkgs.protobuf}/include"
-    '' + lib.optionalString (stdenv.targetPlatform.isx86_64 && stdenv.targetPlatform.isUnix) ''
+    '' + lib.optionalString (stdenv.targetPlatform.avxSupport && stdenv.targetPlatform.isUnix) ''
       build --config=avx_posix
     '' + lib.optionalString mklSupport ''
       build --config=mkl_open_source_only
