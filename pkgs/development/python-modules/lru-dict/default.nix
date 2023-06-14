@@ -6,7 +6,7 @@
 
 let
   pname = "lru-dict";
-  version = "1.1.8";
+  version = "1.2.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -14,7 +14,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-h4vI70Bz5c+5U9/Bz0WF20HouBTAEGq9400A7g0LMRU=";
+    hash = "sha256-E8VngvGdaN302NsBcAQRkoWWFlFMcGsSbQ3y7HKhG9c=";
   };
 
   nativeCheckInputs = [
