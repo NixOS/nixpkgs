@@ -589,6 +589,8 @@ with pkgs;
 
   functiontrace-server = callPackage ../development/tools/functiontrace-server { };
 
+  gendef = callPackage ../development/tools/gendef { };
+
   glade = callPackage ../development/tools/glade { };
 
   goda = callPackage ../development/tools/goda { };
