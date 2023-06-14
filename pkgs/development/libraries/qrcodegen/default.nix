@@ -16,6 +16,12 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source/c";
 
+  nativeBuildInputs = lib.optionals stdenv.cc.isClang [
+    stdenv.cc.cc.libllvm.out
+  ];
+
+  makeFlags = lib.optionals stdenv.cc.isClang [ "AR=llvm-ar" ];
+
   installPhase = ''
     runHook preInstall
 
@@ -32,7 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ mcbeth AndersonTorres ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
   };
 }
 # TODO: build the other languages
