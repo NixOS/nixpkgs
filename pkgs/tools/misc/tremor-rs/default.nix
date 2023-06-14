@@ -5,6 +5,7 @@
 , openssl
 , fetchFromGitHub
 , installShellFiles
+, oniguruma
 , stdenv
 , Security
 , libiconv
@@ -34,7 +35,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles rustPlatform.bindgenHook ];
 
-  buildInputs = [ openssl ]
+  buildInputs = [ oniguruma openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security libiconv ];
 
   # relax lints to fix an error caused by invalid macro_export
