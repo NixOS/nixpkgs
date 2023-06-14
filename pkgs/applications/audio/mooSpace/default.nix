@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   patchPhase = "mv ${pname}_faust.dsp ${pname}.dsp";
 
+  dontWrapQtApps = true;
+
   buildPhase = ''
     faust2jaqt -time -vec -t 0 ${pname}.dsp
     faust2lv2  -time -vec -t 0 -gui ${pname}.dsp
@@ -21,9 +23,11 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp ${pname} $out/bin/
-      mkdir -p $out/lib/lv2
-      cp -r ${pname}.lv2 $out/lib/lv2
+    for f in $(find . -executable -type f); do
+      cp $f $out/bin/
+    done
+    mkdir -p $out/lib/lv2
+    cp -r ${pname}.lv2 $out/lib/lv2
   '';
 
   meta = {
