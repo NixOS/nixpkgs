@@ -12,13 +12,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nix-ld";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "mic92";
     repo = "nix-ld";
     rev = version;
-    sha256 = "sha256-dM9YPN+yq6sHmRhJQinYdAVXBkTgEtrVQcsd/mIIX0o=";
+    sha256 = "sha256-NitUt9LBJMpAbbKC98aRPYMfxZFq3PHH6ieqM4MVO08=";
   };
 
   doCheck = true;
