@@ -5,14 +5,17 @@
 , pythonOlder
 }:
 buildPythonPackage rec {
-  pname = "pkgutil_resolve_name";
+  pname = "pkgutil-resolve-name";
   version = "1.3.10";
+  format = "flit";
+
+  disabled = pythonOlder "3.7";
+
   src = fetchPypi {
-    inherit pname version;
+    pname = "pkgutil_resolve_name";
+    inherit version;
     hash = "sha256-NX1snmp1VlPP14iTgXwIU682XdUeyX89NYqBk3O70XQ=";
   };
-  format = "flit";
-  disabled = pythonOlder "3.7";
 
   passthru.updateScript = nix-update-script { };
 
