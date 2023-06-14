@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.27.0";
+  version = "0.28.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -31,17 +31,12 @@ buildPythonPackage rec {
     owner = "encode";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-qT3ZJQY5l1K88llJdKoSkwHvfcWwjH6JysMnHYGknqw=";
+    hash = "sha256-knGTJQj5apGNc9D3NY+Oe2YQm1i8AZxWU+Zsfi9v/XU=";
   };
 
   nativeBuildInputs = [
     hatchling
   ];
-
-  postPatch = ''
-    # remove coverage arguments to pytest
-    sed -i '/--cov/d' setup.cfg
-  '';
 
   propagatedBuildInputs = [
     anyio
