@@ -58,6 +58,8 @@
 
   obs-transition-table = qt6Packages.callPackage ./obs-transition-table.nix { };
 
+  obs-tuna = qt6Packages.callPackage ./obs-tuna { };
+
   obs-vaapi = callPackage ./obs-vaapi { };
 
   obs-vertical-canvas = qt6Packages.callPackage ./obs-vertical-canvas.nix { };
