@@ -11994,6 +11994,8 @@ with pkgs;
 
   remote-touchpad = callPackage ../tools/inputmethods/remote-touchpad { };
 
+  remote-utilities-viewer = callPackage ../applications/networking/remote/remote-utilities-viewer { };
+
   reposurgeon = callPackage ../applications/version-management/reposurgeon { };
 
   reptyr = callPackage ../os-specific/linux/reptyr { };
