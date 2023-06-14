@@ -288,7 +288,10 @@ lib.pipe (stdenv.mkDerivation ({
 
   configurePlatforms = [ "build" "host" "target" ];
 
-  configureFlags = callFile ../common/configure-flags.nix { };
+  configureFlags = callFile ../common/configure-flags.nix { }
+    # On mips64-unknown-linux-gnu libsanitizer defines collide with
+    # glibc's definitions and fail the build. It was fixed in gcc-13+.
+    ++ lib.optionals targetPlatform.isMips [ "--disable-libsanitizer" ];
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
