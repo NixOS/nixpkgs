@@ -14,9 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-aci5SFBRNRrSub4XVJ2luHNZ2pAUegjgQ6pD9kpkaTY=";
   };
 
-  preBuild = ''
-    cd c/
-  '';
+  sourceRoot = "source/c";
 
   installPhase = ''
     runHook preInstall
