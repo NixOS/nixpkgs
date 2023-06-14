@@ -4,7 +4,7 @@
 , esbuild
 , deno
 , fetchurl
-, nodePackages
+, dart-sass
 , rWrapper
 , rPackages
 , extraRPackages ? []
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ deno ]} \
       --prefix QUARTO_PANDOC : ${pandoc}/bin/pandoc \
       --prefix QUARTO_ESBUILD : ${esbuild}/bin/esbuild \
-      --prefix QUARTO_DART_SASS : ${nodePackages.sass}/bin/sass \
+      --prefix QUARTO_DART_SASS : ${dart-sass}/bin/dart-sass \
       ${lib.optionalString (rWrapper != null) "--prefix QUARTO_R : ${rWrapper.override { packages = [ rPackages.rmarkdown ] ++ extraRPackages; }}/bin/R"} \
       ${lib.optionalString (python3 != null) "--prefix QUARTO_PYTHON : ${python3.withPackages (ps: with ps; [ jupyter ipython ] ++ (extraPythonPackages ps))}/bin/python3"}
   '';
