@@ -153,6 +153,7 @@ buildPerlPackage rec {
             --set NIX_CFLAGS_COMPILE_${stdenv.cc.suffixSalt} -I${lib.getDev libxcrypt}/include \
             --prefix PATH : ${lib.makeBinPath [
               git
+              xapian
               /* for InlineC */
               gnumake
               stdenv.cc
