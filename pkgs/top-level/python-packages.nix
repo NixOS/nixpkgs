@@ -11201,6 +11201,8 @@ self: super: with self; {
 
   simplekml = callPackage ../development/python-modules/simplekml { };
 
+  simplekv = callPackage ../development/python-modules/simplekv { };
+
   simplenote = callPackage ../development/python-modules/simplenote { };
 
   simplesat = callPackage ../development/python-modules/simplesat { };
