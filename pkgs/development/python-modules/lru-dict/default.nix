@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
+, pythonOlder
 }:
 
 let
@@ -11,6 +12,8 @@ in
 buildPythonPackage {
   inherit pname version;
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -28,6 +31,7 @@ buildPythonPackage {
   meta = with lib; {
     description = "Fast and memory efficient LRU cache for Python";
     homepage = "https://github.com/amitdev/lru-dict";
+    changelog = "https://github.com/amitdev/lru-dict/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };
