@@ -11839,6 +11839,8 @@ self: super: with self; {
 
   sumtypes = callPackage ../development/python-modules/sumtypes { };
 
+  summarytools = callPackage ../development/python-modules/summarytools { };
+
   sunpy = callPackage ../development/python-modules/sunpy { };
 
   sunwatcher = callPackage ../development/python-modules/sunwatcher { };
