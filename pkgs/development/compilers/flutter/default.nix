@@ -53,13 +53,13 @@ in
 {
   inherit wrapFlutter;
   stable = mkFlutter {
-    version = "3.10.0";
-    engineVersion = "d44b5a94c976fbb65815374f61ab5392a220b084";
-    dartVersion = "3.0.0";
-    hash = "sha256-3cRVPNrph9QUUnAdQhd5TOp2i1zFRxJ+OhqxXrJ+ncU=";
+    version = "3.10.5";
+    engineVersion = "45f6e009110df4f34ec2cf99f63cf73b71b7a420";
+    dartVersion = "3.0.5";
+    hash = "sha256-lLppUQzu+fl81TMYSPD+HA83BqeIg7bXpURyo49NPwI=";
     dartHash = {
-      x86_64-linux = "sha256-AhvAt2c0URzL+MSIXlwbkuWNuhKbWvUpoyiYf1vXfcc=";
-      aarch64-linux = "sha256-bo4kZtNpj91JaCW8+GD4bQ60oOWQ7daj4C7cAHwLMtw=";
+      x86_64-linux = "sha256-UVVwPFk0qsKNR4JZMOGSGh1T482MN/8Xp4MZ3SA3C28=";
+      aarch64-linux = "sha256-phzaFfrv7qbZOOhPq92q39R6mr5vFeBqEmYDU7e7lZQ=";
     };
     patches = flutter3Patches;
   };
