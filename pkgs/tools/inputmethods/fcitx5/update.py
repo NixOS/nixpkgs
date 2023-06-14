@@ -33,7 +33,6 @@ def get_latest_tag(repo, owner=OWNER):
     return r.json()[0].get("name")
 
 def main():
-    sources = dict()
     for repo in REPOS:
         rev = get_latest_tag(repo)
         if repo == "fcitx5-qt":
