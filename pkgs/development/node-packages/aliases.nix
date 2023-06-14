@@ -44,6 +44,7 @@ mapAliases {
   "@nestjs/cli" = pkgs.nest-cli; # Added 2023-05-06
   eslint_d = pkgs.eslint_d; # Added 2023-05-26
   manta = pkgs.node-manta; # Added 2023-05-06
+  readability-cli = pkgs.readability-cli; # Added 2023-06-12
   thelounge = pkgs.thelounge; # Added 2023-05-22
   triton = pkgs.triton; # Added 2023-05-06
 }

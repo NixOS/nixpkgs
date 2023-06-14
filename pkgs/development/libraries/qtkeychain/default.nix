@@ -12,18 +12,16 @@
 
 stdenv.mkDerivation rec {
   pname = "qtkeychain";
-  version = "0.12.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "frankosterfeld";
     repo = "qtkeychain";
-    rev = "v${version}";
-    sha256 = "0gi1nx4bcc1vwfw41cif3xi2i59229vy0kc2r5959d8n6yv31kfr"; # v0.9.1
+    rev = "${version}";
+    sha256 = "sha256-LclYOuIYn+jYCvg69uHFlV3VcZ2KWdr8lFyCSBIB7Kw=";
   };
 
   dontWrapQtApps = true;
-
-  patches = [ ./0002-Fix-install-name-Darwin.patch ];
 
   cmakeFlags = [
     "-DBUILD_WITH_QT6=${if lib.versions.major qtbase.version == "6" then "ON" else "OFF"}"

@@ -29,6 +29,5 @@ buildGoModule rec {
     homepage = "https://github.com/oliver006/redis_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ eskytthe srhb ma27 ];
-    platforms = platforms.unix;
   };
 }

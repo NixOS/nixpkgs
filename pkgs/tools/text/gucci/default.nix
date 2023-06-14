@@ -34,6 +34,5 @@ buildGoModule rec {
     homepage = "https://github.com/noqcks/gucci";
     license = licenses.mit;
     maintainers = with maintainers; [ braydenjw ];
-    platforms = platforms.unix;
   };
 }

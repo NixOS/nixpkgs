@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation rec {
   pname = "clickhouse";
-  version = "23.3.2.37";
+  version = "23.3.3.52";
 
   src = fetchFromGitHub rec {
     owner = "ClickHouse";
     repo = "ClickHouse";
     rev = "v${version}-lts";
     fetchSubmodules = true;
-    hash = "sha256-G/5KZ4vd9w5g0yB6bzyM8VX3l32Di+a6Ll87NK3GOrg=";
+    hash = "sha256-yeoL3HA1wRDg2+t3FtrM4wBtuu94Lpe4xxGxc09duQI=";
     name = "clickhouse-${rev}.tar.gz";
     postFetch = ''
       # compress to not exceed the 4GB output limit

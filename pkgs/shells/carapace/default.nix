@@ -34,6 +34,5 @@ buildGoModule rec {
     homepage = "https://rsteube.github.io/carapace-bin/";
     maintainers = with maintainers; [ star-szr ];
     license = licenses.mit;
-    platforms = platforms.unix;
   };
 }

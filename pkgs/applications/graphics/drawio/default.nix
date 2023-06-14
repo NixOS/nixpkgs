@@ -14,19 +14,19 @@
 
 stdenv.mkDerivation rec {
   pname = "drawio";
-  version = "21.2.8";
+  version = "21.3.7";
 
   src = fetchFromGitHub {
     owner = "jgraph";
     repo = "drawio-desktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-XXtAd29r161rcamZM8QnkJ9mhQeJvqTL4Escdu95me8=";
+    hash = "sha256-f8QQA8qehB7wYJRoKizPxewBTVV64kxaBg2oTTNelBU=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-H77BfiH3Nqi1a2Uek8N8BgODzMBGgXrBvrcahrKisNo=";
+    hash = "sha256-gLt6a2Kq1LIzFiSnqLKKFTg8sd3Wrqsdys23SCFcrQ0=";
   };
 
   nativeBuildInputs = [

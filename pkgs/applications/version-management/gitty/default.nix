@@ -19,7 +19,6 @@ buildGoModule rec {
     homepage = "https://github.com/muesli/gitty/";
     description = "Contextual information about your git projects, right on the command-line";
     license = licenses.mit;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ izorkin ];
   };
 }

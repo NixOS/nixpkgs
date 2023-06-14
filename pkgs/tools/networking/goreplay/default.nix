@@ -31,7 +31,6 @@ buildGoModule rec {
     homepage = "https://github.com/buger/goreplay";
     license = lib.licenses.lgpl3Only;
     description = "Open-source tool for capturing and replaying live HTTP traffic";
-    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ lovek323 ];
   };
 }

@@ -45,7 +45,6 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Distributed image processing";
     homepage = "https://github.com/dask/dask-image";
     license = licenses.bsdOriginal;

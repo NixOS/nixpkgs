@@ -33,6 +33,5 @@ buildGoModule rec {
     homepage = "https://github.com/justwatchcom/sql_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ justinas ];
-    platforms = platforms.unix;
   };
 }
