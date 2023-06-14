@@ -1,81 +1,38 @@
 { stdenv
 , fetchFromGitLab
-, fetchpatch
 , lib
 , darwin
-, git
 , nettle
 , nix-update-script
-, cargo
-, rustc
 , rustPlatform
 , pkg-config
 , openssl
 , sqlite
-, capnproto
-, ensureNewerSourcesForZipFilesHook
-, pythonSupport ? true
-, pythonPackages ? null
 }:
-
-assert pythonSupport -> pythonPackages != null;
 
 rustPlatform.buildRustPackage rec {
   pname = "sequoia";
-  # Upstream has separate version numbering for the library and the CLI frontend.
-  # This derivation provides the CLI frontend, and thus uses its version number.
-  version = "0.28.0";
+  version = "0.30.1";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
-    repo = "sequoia";
-    rev = "sq/v${version}";
-    hash = "sha256-T7WOYMqyBeVHs+4w8El99t0NTUKqMW1QeAkNGKcaWr0=";
+    repo = "sequoia-sq";
+    rev = "v${version}";
+    hash = "sha256-uFcmuyz0JsUTvKqCb+3t8JdB4Dn4hJq00jeEhvMNW18=";
   };
 
-  cargoHash = "sha256-zaAAEFBumfHU4hGzAOmLvBu3X4J7LAlmexqixHtVPr8=";
-
-  patches = [
-    (fetchpatch {
-      url = "https://gitlab.com/sequoia-pgp/sequoia/-/commit/4dc6e624c2394936dc447f18aedb4a4810bb2ddb.patch";
-      hash = "sha256-T6hh7U1gvKvyn/OCuJBvLM7TG1VFnpvpAiWS72m3P6I=";
-    })
-  ];
+  cargoHash = "sha256-9UQojec2jy9DVwQQplaKuPWYCeRXtWtdzj1d/LLyfJQ=";
 
   nativeBuildInputs = [
     pkg-config
-    cargo
-    rustc
-    git
     rustPlatform.bindgenHook
-    ensureNewerSourcesForZipFilesHook
-    capnproto
-  ] ++
-    lib.optionals pythonSupport [ pythonPackages.setuptools ]
-  ;
-
-  nativeCheckInputs = lib.optionals pythonSupport [
-    pythonPackages.pytest
-    pythonPackages.pytest-runner
   ];
 
   buildInputs = [
     openssl
     sqlite
     nettle
-  ] ++ lib.optionals pythonSupport [ pythonPackages.python pythonPackages.cffi ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ]
-  ;
-
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-    # Defaults to "ginstall" from some reason, although upstream's Makefiles check uname
-    "INSTALL=install"
-  ];
-
-  buildFlags = [
-    "build-release"
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   # Sometimes, tests fail on CI (ofborg) & hydra without this
   checkFlags = [
@@ -84,24 +41,20 @@ rustPlatform.buildRustPackage rec {
     "--skip=macros::time_it"
   ];
 
-  preInstall = lib.optionalString pythonSupport ''
-    export installFlags="PYTHONPATH=$PYTHONPATH:$out/${pythonPackages.python.sitePackages}"
-  '' + lib.optionalString (!pythonSupport) ''
-    export makeFlags="PYTHON=disable"
+  # Install manual pages, see https://gitlab.com/sequoia-pgp/sequoia-sq#building
+  postInstall = ''
+    mkdir -p $out/share/man
+    SQ_MAN=$out/share/man/man1 cargo run
   '';
 
-  # Don't use buildRustPackage phases, only use it for rust deps setup
-  configurePhase = null;
-  buildPhase = null;
   doCheck = true;
-  checkPhase = null;
-  installPhase = null;
 
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A cool new OpenPGP implementation";
     homepage = "https://sequoia-pgp.org/";
+    changelog = "https://gitlab.com/sequoia-pgp/sequoia-sq/-/blob/v${version}/NEWS";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ minijackson doronbehar ];
     mainProgram = "sq";

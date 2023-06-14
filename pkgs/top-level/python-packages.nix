@@ -11104,10 +11104,7 @@ self: super: with self; {
 
   seqeval = callPackage ../development/python-modules/seqeval { };
 
-  sequoia = disabledIf isPyPy (toPythonModule (pkgs.sequoia.override {
-    pythonPackages = self;
-    pythonSupport = true;
-  }));
+  sequoia = disabledIf isPyPy (toPythonModule pkgs.sequoi);
 
   serialio = callPackage ../development/python-modules/serialio { };
 
