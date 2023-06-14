@@ -2,9 +2,8 @@ import nixos_render_docs as nrd
 
 from sample_md import sample1
 
-from typing import Mapping, Optional
+from typing import Mapping
 
-import markdown_it
 
 class Converter(nrd.md.Converter[nrd.commonmark.CommonMarkRenderer]):
     def __init__(self, manpage_urls: Mapping[str, str]):
@@ -27,7 +26,7 @@ def test_indented_fence() -> None:
 
 def test_full() -> None:
     c = Converter({ 'man(1)': 'http://example.org' })
-    assert c._render(sample1) == f"""\
+    assert c._render(sample1) == """\
 **Warning:** foo
 
 **Note:** nested

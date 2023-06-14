@@ -11,7 +11,6 @@ from markdown_it.token import Token
 from typing import Any, Generic, Optional
 from urllib.parse import quote
 
-import markdown_it
 
 from . import md
 from . import parallel
@@ -265,7 +264,7 @@ class DocBookConverter(BaseConverter[OptionsDocBookRenderer]):
                 '  <title>Configuration Options</title>',
             ]
         result += [
-            f'<variablelist xmlns:xlink="http://www.w3.org/1999/xlink"',
+            '<variablelist xmlns:xlink="http://www.w3.org/1999/xlink"',
             '               xmlns:nixos="tag:nixos.org"',
             '               xmlns="http://docbook.org/ns/docbook"',
             f'              xml:id="{self._varlist_id}">',

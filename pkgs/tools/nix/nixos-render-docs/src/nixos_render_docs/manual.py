@@ -7,9 +7,8 @@ import xml.sax.saxutils as xml
 from abc import abstractmethod
 from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any, cast, ClassVar, Generic, get_args, NamedTuple, Optional, Union
+from typing import Any, cast, ClassVar, Generic, get_args, NamedTuple
 
-import markdown_it
 from markdown_it.token import Token
 
 from . import md, options
@@ -17,7 +16,6 @@ from .docbook import DocBookRenderer, Heading, make_xml_id
 from .html import HTMLRenderer, UnresolvedXrefError
 from .manual_structure import check_structure, FragmentType, is_include, TocEntry, TocEntryType, XrefTarget
 from .md import Converter, Renderer
-from .utils import Freezeable
 
 class BaseConverter(Converter[md.TR], Generic[md.TR]):
     # per-converter configuration for ns:arg=value arguments to include blocks, following
@@ -519,7 +517,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
             # we use blender-style //path to denote paths relative to the origin file
             # (usually index.html). this makes everything a lot easier and clearer.
             if not into.startswith("//") or '/' in into[2:]:
-                raise RuntimeError(f"html:into-file must be a relative-to-origin //filename", into)
+                raise RuntimeError("html:into-file must be a relative-to-origin //filename", into)
             into = token.meta['include-args']['into-file'] = into[2:]
             if into in self._redirection_targets:
                 raise RuntimeError(f"redirection target {into} in line {token.map[0] + 1} is already in use")
@@ -617,7 +615,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
             for item in xref_queue:
                 try:
                     target = item if isinstance(item, XrefTarget) else self._render_xref(*item)
-                except UnresolvedXrefError as e:
+                except UnresolvedXrefError:
                     if failed:
                         raise
                     deferred.append(item)

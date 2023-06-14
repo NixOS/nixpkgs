@@ -1,6 +1,6 @@
 from abc import ABC
 from collections.abc import Mapping, MutableMapping, Sequence
-from typing import Any, Callable, cast, Generic, get_args, Iterable, Literal, NoReturn, Optional, TypeVar
+from typing import Any, cast, Generic, get_args, Iterable, Literal, NoReturn, Optional, TypeVar
 
 import dataclasses
 import re
