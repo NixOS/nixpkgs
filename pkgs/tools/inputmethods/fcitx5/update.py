@@ -2,7 +2,6 @@
 #!nix-shell -i python3 -p nix-update nix-prefetch-github python3Packages.requests
 
 from nix_prefetch_github import *
-import json
 import requests
 import subprocess
 
