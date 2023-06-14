@@ -2,14 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "libbson";
-  version = "1.9.5";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "mongodb";
-    repo = "libbson";
+    repo = "mongo-c-driver";
     rev = version;
-    sha256 = "16rmzxhhmbvhp4q6qac5j9c74z2pcg5raag5w16mynzikdd2l05b";
+    sha256 = "sha256-15YKd5zfvEpsPpJX5DtXhDl3kErMGfCCGNAhQul01nk=";
   };
+
+  cmakeFlags = [
+    "-DENABLE_MONGOC=OFF"
+    "-DENABLE_BSON=ON"
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ perl ];
