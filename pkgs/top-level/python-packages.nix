@@ -6239,6 +6239,8 @@ self: super: with self; {
 
   litex = callPackage ../development/python-modules/litex { };
 
+  litex-boards = callPackage ../development/python-modules/litex-boards { };
+
   mike = callPackage ../development/python-modules/mike { };
 
   milc = callPackage ../development/python-modules/milc { };
