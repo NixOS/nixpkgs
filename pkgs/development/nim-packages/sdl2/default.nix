@@ -8,7 +8,6 @@ buildNimPackage (finalAttrs: {
     hash = "sha256-Vtcj8goI4zZPQs2TbFoBFlcR5UqDtOldaXSH/+/xULk=";
   };
   propagatedBuildInputs = [ SDL2 ];
-  doCheck = true;
   meta = {
     description = "Nim wrapper for SDL 2.x";
     platforms = lib.platforms.linux; # Problems with Darwin.

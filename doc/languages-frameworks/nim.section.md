@@ -59,7 +59,6 @@ buildNimPackage (finalAttrs: {
     hash = "sha256-Vtcj8goI4zZPQs2TbFoBFlcR5UqDtOldaXSH/+/xULk=";
   };
   propagatedBuildInputs = [ SDL2 ];
-  doCheck = true;
 })
 ```
 

@@ -5,6 +5,7 @@ let
   baseAttrs = {
     strictDeps = true;
     enableParallelBuilding = true;
+    doCheck = true;
     configurePhase = ''
       runHook preConfigure
       export NIX_NIM_BUILD_INPUTS=''${pkgsHostTarget[@]} $NIX_NIM_BUILD_INPUTS
@@ -30,7 +31,7 @@ let
   };
 
   inputsOverride =
-    { depsBuildBuild ? [ ], nativeBuildInputs ? [ ], meta, ... }: {
+    { depsBuildBuild ? [ ], nativeBuildInputs ? [ ], ... }: {
       depsBuildBuild = [ nim_builder ] ++ depsBuildBuild;
       nativeBuildInputs = [ nim ] ++ nativeBuildInputs;
     };
