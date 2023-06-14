@@ -9,6 +9,7 @@
 , openssl
 , wrapGAppsHook4
 , glib
+, zstd
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -40,6 +41,7 @@ rustPlatform.buildRustPackage rec {
     bluez
     dbus
     openssl
+    zstd
   ];
 
   postInstall = ''
