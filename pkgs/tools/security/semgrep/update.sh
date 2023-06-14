@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gnused jq
+#!nix-shell -i bash -p curl gnused jq nix-prefetch
 
 set -euxo pipefail
 
@@ -33,7 +33,7 @@ NEW_VERSION=$(
 )
 # trim v prefix
 NEW_VERSION="${NEW_VERSION:1}"
-OLD_VERSION="$(instantiateClean semgrep.common.version)"
+OLD_VERSION="$(instantiateClean semgrep.passthru.common.version)"
 
 if [[ "$OLD_VERSION" == "$NEW_VERSION" ]]; then
     echo "Already up to date"
@@ -50,43 +50,54 @@ fetchgithub() {
     set -eo pipefail
 }
 
-fetchzip() {
-    set +eo pipefail
-    nix-build -E "with import $NIXPKGS_ROOT {}; fetchzip {url = \"$1\"; sha256 = lib.fakeSha256; }" 2>&1 >/dev/null | grep "got:" | cut -d':' -f2 | sed 's| ||g'
-    set -eo pipefail
+fetch_arch() {
+  VERSION=$1
+  PLATFORM=$2
+  nix-prefetch "{ fetchPypi }:
+fetchPypi rec {
+  pname = \"semgrep\";
+  version = \"$VERSION\";
+  format = \"wheel\";
+  dist = python;
+  python = \"cp37.cp38.cp39.py37.py38.py39\";
+  platform = \"$PLATFORM\";
+}
+"
 }
 
 replace "$OLD_VERSION" "$NEW_VERSION" "$COMMON_FILE"
 
 echo "Updating src"
 
-OLD_HASH="$(instantiateClean semgrep.common.src.outputHash)"
+OLD_HASH="$(instantiateClean semgrep.passthru.common.srcHash)"
 echo "Old hash $OLD_HASH"
 TMP_HASH="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
 replace "$OLD_HASH" "$TMP_HASH" "$COMMON_FILE"
-NEW_HASH="$(fetchgithub semgrep.common.src)"
+NEW_HASH="$(fetchgithub semgrep.src)"
 echo "New hash $NEW_HASH"
 replace "$TMP_HASH" "$NEW_HASH" "$COMMON_FILE"
 
 echo "Updated src"
 
-# loop through platforms for core
-nix-instantiate -E "with import $NIXPKGS_ROOT {}; builtins.attrNames semgrep.common.core.data" --eval --strict --json \
-| jq '.[]' -r \
-| while read -r PLATFORM; do
-    echo "Updating core for $PLATFORM"
-    SUFFIX=$(instantiateClean semgrep.common.core.data."$PLATFORM".suffix)
-    OLD_HASH=$(instantiateClean semgrep.common.core.data."$PLATFORM".sha256)
-    echo "Old hash $OLD_HASH"
 
-    NEW_URL="https://github.com/returntocorp/semgrep/releases/download/v$NEW_VERSION/semgrep-v$NEW_VERSION$SUFFIX"
-    NEW_HASH="$(fetchzip "$NEW_URL")"
-    echo "New hash $NEW_HASH"
+update_core_platform() {
+    SYSTEM=$1
+    echo "Updating core src $SYSTEM"
 
+    PLATFORM="$(instantiateClean "semgrep.passthru.common.core.$SYSTEM.platform")"
+
+    OLD_HASH="$(instantiateClean "semgrep.passthru.common.core.$SYSTEM.hash")"
+    echo "Old core hash $OLD_HASH"
+    NEW_HASH="$(fetch_arch "$NEW_VERSION" "$PLATFORM")"
+    echo "New core hash $NEW_HASH"
     replace "$OLD_HASH" "$NEW_HASH" "$COMMON_FILE"
 
-    echo "Updated core for $PLATFORM"
-done
+    echo "Updated core src $SYSTEM"
+}
+
+update_core_platform "x86_64-linux"
+update_core_platform "x86_64-darwin"
+update_core_platform "aarch64-darwin"
 
 OLD_PWD=$PWD
 TMPDIR="$(mktemp -d)"
@@ -109,7 +120,7 @@ nix-instantiate -E "with import $NIXPKGS_ROOT {}; builtins.attrNames semgrep.pas
     echo "Updating $SUBMODULE"
     OLD_REV=$(instantiateClean semgrep.passthru.common.submodules."$SUBMODULE".rev)
     echo "Old commit $OLD_REV"
-    OLD_HASH=$(instantiateClean semgrep.passthru.common.submodules."$SUBMODULE".outputHash)
+    OLD_HASH=$(instantiateClean semgrep.passthru.common.submodules."$SUBMODULE".hash)
     echo "Old hash $OLD_HASH"
 
     NEW_REV=$(get_submodule_commit "$SUBMODULE")
@@ -120,13 +131,12 @@ nix-instantiate -E "with import $NIXPKGS_ROOT {}; builtins.attrNames semgrep.pas
       continue
     fi
 
-    NEW_URL=$(instantiateClean semgrep.passthru.common.submodules."$SUBMODULE".url | sed "s@$OLD_REV@$NEW_REV@g")
-    NEW_HASH=$(nix --experimental-features nix-command hash to-sri "sha256:$(nix-prefetch-url "$NEW_URL")")
+    NEW_URL=$(instantiateClean semgrep.passthru.submodulesSubset."$SUBMODULE".url | sed "s@$OLD_REV@$NEW_REV@g")
 
     TMP_HASH="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
     replace "$OLD_REV" "$NEW_REV" "$COMMON_FILE"
     replace "$OLD_HASH" "$TMP_HASH" "$COMMON_FILE"
-    NEW_HASH="$(fetchgithub semgrep.passthru.common.submodules."$SUBMODULE")"
+    NEW_HASH="$(fetchgithub semgrep.passthru.submodulesSubset."$SUBMODULE")"
     echo "New hash $NEW_HASH"
     replace "$TMP_HASH" "$NEW_HASH" "$COMMON_FILE"
 
