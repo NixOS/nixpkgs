@@ -9,7 +9,6 @@ buildNimPackage rec {
     rev = version;
     hash = "sha256-VmSYWgXDJLB2D2m3/ymrEytT2iW5JE56WmDz2MPHAqQ=";
   };
-  doCheck = true;
   meta = with lib;
     src.meta // {
       description =
