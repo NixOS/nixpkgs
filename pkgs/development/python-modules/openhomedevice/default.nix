@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bazwilliams";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-KNQelldqHx4m8IfgGUwWw/+AVzBotIa7cJGy1SfbRy0=";
   };
 
@@ -36,6 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to access Linn Ds and Openhome devices";
     homepage = "https://github.com/bazwilliams/openhomedevice";
+    changelog = "https://github.com/bazwilliams/openhomedevice/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
