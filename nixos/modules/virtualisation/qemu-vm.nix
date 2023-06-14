@@ -997,7 +997,7 @@ in
               virtualisation.memorySize is above 2047, but qemu is only able to allocate 2047MB RAM on 32bit max.
             '';
           }
-          { assertion = cfg.directBoot.initrd != options.virtualisation.directBoot.initrd.default -> cfg.directBoot.enable;
+          { assertion = cfg.directBoot.enable || cfg.directBoot.initrd == options.virtualisation.directBoot.initrd.default;
             message =
               ''
                 You changed the default of `virtualisation.directBoot.initrd` but you are not
