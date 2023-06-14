@@ -594,6 +594,7 @@
   ./services/matrix/pantalaimon.nix
   ./services/matrix/synapse.nix
   ./services/misc/airsonic.nix
+  ./services/misc/adaptivemm.nix
   ./services/misc/ananicy.nix
   ./services/misc/ankisyncd.nix
   ./services/misc/apache-kafka.nix
