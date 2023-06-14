@@ -75,6 +75,6 @@ mkYarnPackage {
     homepage = "https://join-lemmy.org/";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ happysalada billewanick ];
-    platforms = platforms.linux;
+    inherit (nodejs.meta) platforms;
   };
 }
