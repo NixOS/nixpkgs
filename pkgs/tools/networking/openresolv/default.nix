@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, makeWrapper, coreutils }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "openresolv";
   version = "3.12.0";
 
-  src = fetchurl {
-    url = "mirror://roy/openresolv/${pname}-${version}.tar.xz";
-    sha256 = "sha256-QrMFCOhXoihTXGMeqsk2hi2G7KaMFLXAvzh7oXa5G5c=";
+  src = fetchFromGitHub {
+    owner = "NetworkConfiguration";
+    repo = "openresolv";
+    rev = "v${version}";
+    sha256 = "sha256-lEyqOf2NGWnH44pDVNVSWZeuhXx7z0ru4KuXu2RuyIg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
