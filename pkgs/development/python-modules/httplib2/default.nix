@@ -10,6 +10,7 @@
 , pytest-randomly
 , pytest-timeout
 , pytestCheckHook
+, pythonAtLeast
 , six
 }:
 
@@ -39,8 +40,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Don't run tests for Python 2.7
-  doCheck = !isPy27;
+  # Don't run tests for older Pythons
+  doCheck = pythonAtLeast "3.9";
 
   postPatch = ''
     sed -i "/--cov/d" setup.cfg
