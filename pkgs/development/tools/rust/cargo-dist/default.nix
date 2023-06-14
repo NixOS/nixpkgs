@@ -32,10 +32,6 @@ rustPlatform.buildRustPackage rec {
     zstd
   ];
 
-  env = {
-    ZSTD_SYS_USE_PKG_CONFIG = true;
-  };
-
   nativeCheckInputs = lib.optionals stdenv.isDarwin [
     rustup
   ];

@@ -38,10 +38,6 @@ rustPlatform.buildRustPackage rec {
 
   buildNoDefaultFeatures = true;
 
-  env = {
-    ZSTD_SYS_USE_PKG_CONFIG = true;
-  };
-
   # tests require internet access
   doCheck = false;
 

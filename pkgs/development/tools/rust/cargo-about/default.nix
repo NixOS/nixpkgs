@@ -26,10 +26,6 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Security
   ];
 
-  env = {
-    ZSTD_SYS_USE_PKG_CONFIG = true;
-  };
-
   meta = with lib; {
     description = "Cargo plugin to generate list of all licenses for a crate";
     homepage = "https://github.com/EmbarkStudios/cargo-about";
