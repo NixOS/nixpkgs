@@ -13459,6 +13459,8 @@ with pkgs;
 
   ugrep = callPackage ../tools/text/ugrep { };
 
+  ugs = callPackage ../tools/misc/ugs { };
+
   uhk-agent = callPackage ../os-specific/linux/uhk-agent { };
 
   uhk-udev-rules = callPackage ../os-specific/linux/uhk-udev-rules { };
