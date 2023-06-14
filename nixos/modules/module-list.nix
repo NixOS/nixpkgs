@@ -1018,6 +1018,7 @@
   ./services/network-filesystems/kubo.nix
   ./services/network-filesystems/litestream/default.nix
   ./services/network-filesystems/moosefs.nix
+  ./services/network-filesystems/ipfs-cluster.nix
   ./services/network-filesystems/netatalk.nix
   ./services/network-filesystems/nfsd.nix
   ./services/network-filesystems/openafs/client.nix
