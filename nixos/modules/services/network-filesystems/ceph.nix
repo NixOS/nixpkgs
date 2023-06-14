@@ -11,7 +11,7 @@ let
 
   makeServices = daemonType: daemonIds:
     mkMerge (map (daemonId:
-      { "ceph-${daemonType}-${daemonId}" = makeService daemonType daemonId cfg.global.clusterName pkgs.ceph; })
+      { "ceph-${daemonType}-${daemonId}" = makeService daemonType daemonId cfg.global.clusterName cfg.${daemonType}.package; })
       daemonIds);
 
   makeService = daemonType: daemonId: clusterName: ceph:
@@ -210,6 +210,7 @@ in
           to the id part in ceph i.e. [ "name1" ] would result in mgr.name1
         '';
       };
+      package = mkPackageOptionMD pkgs "ceph" { };
       extraConfig = mkOption {
         type = with types; attrsOf str;
         default = {};
@@ -230,6 +231,7 @@ in
           to the id part in ceph i.e. [ "name1" ] would result in mon.name1
         '';
       };
+      package = mkPackageOptionMD pkgs "ceph" { };
       extraConfig = mkOption {
         type = with types; attrsOf str;
         default = {};
@@ -250,7 +252,7 @@ in
           to the id part in ceph i.e. [ "name1" ] would result in osd.name1
         '';
       };
-
+      package = mkPackageOptionMD pkgs "ceph" { };
       extraConfig = mkOption {
         type = with types; attrsOf str;
         default = {
@@ -278,6 +280,7 @@ in
           to the id part in ceph i.e. [ "name1" ] would result in mds.name1
         '';
       };
+      package = mkPackageOptionMD pkgs "ceph" { };
       extraConfig = mkOption {
         type = with types; attrsOf str;
         default = {};
@@ -289,6 +292,7 @@ in
 
     rgw = {
       enable = mkEnableOption (lib.mdDoc "Ceph RadosGW daemon");
+      package = mkPackageOptionMD pkgs "ceph" { };
       daemons = mkOption {
         type = with types; listOf str;
         default = [];
