@@ -273,9 +273,9 @@ stdenv.mkDerivation (fBuildAttrs // {
     ${
       bazelCmd {
         cmd = "run";
-        additionalFlags = fBuildAttrs.bazelRunFlags ++ ["--jobs" "$NIX_BUILD_CORES"];
+        additionalFlags = fBuildAttrs.bazelRunFlags ++ [ "--jobs" "$NIX_BUILD_CORES" ];
         # Bazel run only accepts a single target, but `bazelCmd` expects `targets` to be a list.
-        targets = if fBuildAttrs.bazelRunTarget == null then [] else [fBuildAttrs.bazelRunTarget];
+        targets = lib.optionals (fBuildAttrs.bazelRunTarget != null) [ fBuildAttrs.bazelRunTarget ];
         targetRunFlags = fBuildAttrs.runTargetFlags;
       }
     }
