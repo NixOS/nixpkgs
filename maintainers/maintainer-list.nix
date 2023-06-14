@@ -5572,6 +5572,11 @@
     githubId = 17859309;
     name = "Fuzen";
   };
+  fwc = {
+    github = "fwc";
+    githubId = 29337229;
+    name = "mtths";
+  };
   fxfactorial = {
     email = "edgar.factorial@gmail.com";
     github = "fxfactorial";
