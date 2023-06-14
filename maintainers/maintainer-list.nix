@@ -195,6 +195,12 @@
     githubId = 15312184;
     name = "Rebecca Turner";
   };
+  a12l = {
+    email = "nixpkgs@a12l.xyz";
+    github = "a12l";
+    githubId = 38804798;
+    name = "Albin Otterhäll";
+  };
   a1russell = {
     email = "adamlr6+pub@gmail.com";
     github = "a1russell";
