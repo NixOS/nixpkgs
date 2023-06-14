@@ -1,0 +1,12 @@
+diff -u a/cohttp/scripts/generate.ml b/cohttp/scripts/generate.ml
+--- a/cohttp/scripts/generate.ml	2023-06-14 10:32:52.333929097 +0200
++++ b/cohttp/scripts/generate.ml	2023-06-14 10:33:00.216042417 +0200
+@@ -94,7 +94,7 @@
+   Buffer.contents buf
+
+ let parse_error fmt =
+-  Printf.kprintf
++  Printf.ksprintf
+     (fun msg ->
+       Printf.eprintf "parse error: %s\n" msg;
+       exit 1)

@@ -20,6 +20,12 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ base64 re stringext uri-sexp ];
 
+  patches = [ ./generate.patch ];
+
+  postPatch = ''
+    substituteInPlace cohttp/src/dune --replace "bytes" ""
+  '';
+
   doCheck = true;
   checkInputs = [ fmt alcotest crowbar ];
 

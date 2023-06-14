@@ -10,7 +10,12 @@
 }:
 
 let params =
-  if lib.versionAtLeast ocaml.version "4.14"
+  if lib.versionAtLeast ocaml.version "5.0"
+  then {
+    name = "lsp";
+    version = "1.15.1-5.0";
+    sha256 = "sha256-BlC79KKA2LMJkDLsG12PWJ0dN7Buj++LcoEfYbd0B80=";
+  } else if lib.versionAtLeast ocaml.version "4.14"
   then {
     name = "lsp";
     version = "1.14.2";
