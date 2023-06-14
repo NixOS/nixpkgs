@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "rare";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "zix99";
     repo = "rare";
     rev = version;
-    hash = "sha256-p/L9OL5Eo98PcT5vvODy2xdSH7fuIZJQIAfqhdO490Q=";
+    hash = "sha256-v3zczT3PMSm2AMKVnVdDxsCpYA8QhZcmOCuiQiz5hFo=";
   };
 
   vendorHash = "sha256-wUOtxNjL/4MosACCzPTWKWrnMZhxINfN1ppkRsqDh9M=";
