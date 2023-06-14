@@ -3,18 +3,18 @@
 with lib;
 
 let
-  cfg  = config.services.ceph;
+  cfg = config.services.ceph;
 
   # function that translates "camelCaseOptions" to "camel case options", credits to tilpner in #nixos@freenode
   expandCamelCase = replaceStrings upperChars (map (s: " ${s}") lowerChars);
   expandCamelCaseAttrs = mapAttrs' (name: value: nameValuePair (expandCamelCase name) value);
 
-  makeServices = (daemonType: daemonIds:
+  makeServices = daemonType: daemonIds:
     mkMerge (map (daemonId:
       { "ceph-${daemonType}-${daemonId}" = makeService daemonType daemonId cfg.global.clusterName pkgs.ceph; })
-      daemonIds));
+      daemonIds);
 
-  makeService = (daemonType: daemonId: clusterName: ceph:
+  makeService = daemonType: daemonId: clusterName: ceph:
     let
       stateDirectory = "ceph/${if daemonType == "rgw" then "radosgw" else daemonType}/${clusterName}-${daemonId}"; in {
     enable = true;
@@ -54,9 +54,9 @@ let
     } // optionalAttrs ( daemonType == "mon") {
       RestartSec = "10";
     };
-  });
+  };
 
-  makeTarget = (daemonType:
+  makeTarget = daemonType:
     {
       "ceph-${daemonType}" = {
         description = "Ceph target allowing to start/stop all ceph-${daemonType} services at once";
@@ -65,8 +65,7 @@ let
         before = [ "ceph.target" ];
         unitConfig.StopWhenUnneeded = true;
       };
-    }
-  );
+    };
 in
 {
   options.services.ceph = {
@@ -328,16 +327,16 @@ in
       { assertion = cfg.global.fsid != "";
         message = "fsid has to be set to a valid uuid for the cluster to function";
       }
-      { assertion = cfg.mon.enable == true -> cfg.mon.daemons != [];
+      { assertion = cfg.mon.enable -> cfg.mon.daemons != [];
         message = "have to set id of atleast one MON if you're going to enable Monitor";
       }
-      { assertion = cfg.mds.enable == true -> cfg.mds.daemons != [];
+      { assertion = cfg.mds.enable -> cfg.mds.daemons != [];
         message = "have to set id of atleast one MDS if you're going to enable Metadata Service";
       }
-      { assertion = cfg.osd.enable == true -> cfg.osd.daemons != [];
+      { assertion = cfg.osd.enable -> cfg.osd.daemons != [];
         message = "have to set id of atleast one OSD if you're going to enable OSD";
       }
-      { assertion = cfg.mgr.enable == true -> cfg.mgr.daemons != [];
+      { assertion = cfg.mgr.enable -> cfg.mgr.daemons != [];
         message = "have to set id of atleast one MGR if you're going to enable MGR";
       }
     ];
