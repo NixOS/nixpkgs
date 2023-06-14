@@ -1,22 +1,22 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch
-, cmake, which, m4, python3, bison, flex, llvmPackages, ncurses, xcode
-
+, cmake, which, m4, python3, bison, flex, llvmPackages, ncurses, xcode, tbb
   # the default test target is sse4, but that is not supported by all Hydra agents
 , testedTargets ? if stdenv.isAarch64 || stdenv.isAarch32 then [ "neon-i32x4" ] else [ "sse2-i32x4" ]
 }:
 
 stdenv.mkDerivation rec {
   pname   = "ispc";
-  version = "1.19.0";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "sha256:0yhcgyzjlrgs920lm0l6kygj2skanfb6qkxbdgm69r8c2xkzkaa3";
+    sha256 = "sha256:06wgvfbc6nh5c7yili47h2gzl0ykcwnvyizy499kb6gsplflf9gh";
   };
 
-  nativeBuildInputs = [ cmake which m4 bison flex python3 llvmPackages.libllvm.dev ] ++ lib.lists.optionals stdenv.isDarwin [ xcode ];
+  nativeBuildInputs = [ cmake which m4 bison flex python3 llvmPackages.libllvm.dev tbb ] ++ lib.lists.optionals stdenv.isDarwin [ xcode ];
+
   buildInputs = with llvmPackages; [
     libllvm libclang openmp ncurses
   ];
@@ -52,7 +52,10 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
+    "-DFILE_CHECK_EXECUTABLE=${llvmPackages.llvm}/bin/FileCheck"
+    "-DLLVM_AS_EXECUTABLE=${llvmPackages.llvm}/bin/llvm-as"
     "-DLLVM_CONFIG_EXECUTABLE=${llvmPackages.llvm.dev}/bin/llvm-config"
+    "-DLLVM_DIS_EXECUTABLE=${llvmPackages.llvm}/bin/llvm-dis"
     "-DCLANG_EXECUTABLE=${llvmPackages.clang}/bin/clang"
     "-DCLANGPP_EXECUTABLE=${llvmPackages.clang}/bin/clang++"
     "-DISPC_INCLUDE_EXAMPLES=OFF"
