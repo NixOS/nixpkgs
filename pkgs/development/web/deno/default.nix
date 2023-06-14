@@ -2,10 +2,12 @@
 , lib
 , callPackage
 , fetchFromGitHub
+, pkg-config
 , rustPlatform
 , installShellFiles
 , libiconv
 , darwin
+, zstd
 , librusty_v8 ? callPackage ./librusty_v8.nix { }
 }:
 
@@ -27,8 +29,9 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace .cargo/config.toml --replace '"-C", "link-arg=-fuse-ld=lld"' ""
   '';
 
-  nativeBuildInputs = [ installShellFiles ];
-  buildInputs = lib.optionals stdenv.isDarwin (
+  nativeBuildInputs = [ installShellFiles pkg-config ];
+  buildInputs = [ zstd ]
+    ++ lib.optionals stdenv.isDarwin (
     [ libiconv darwin.libobjc ] ++
     (with darwin.apple_sdk.frameworks; [ Security CoreServices Metal Foundation QuartzCore ])
   );
@@ -62,8 +65,10 @@ rustPlatform.buildRustPackage rec {
     runHook postInstallCheck
   '';
 
-  passthru.updateScript = ./update/update.ts;
-  passthru.tests = callPackage ./tests { };
+  passthru = {
+    updateScript = ./update/update.ts;
+    tests = callPackage ./tests { };
+  };
 
   meta = with lib; {
     homepage = "https://deno.land/";
