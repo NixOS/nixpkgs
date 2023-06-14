@@ -5,6 +5,7 @@
 , libressl
 , curl
 , Security
+, zstd
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,6 +28,7 @@ rustPlatform.buildRustPackage rec {
     # gracefully exit while doing work.
     # See: https://github.com/rustwasm/wasm-pack/issues/650
     libressl
+    zstd
   ] ++ lib.optionals stdenv.isDarwin [ curl Security ];
 
   # Most tests rely on external resources and build artifacts.
