@@ -26,11 +26,17 @@ let
     cp -R ${dir} $out
   '';
 
+  mkAllLocks = settings: lib.flatten (
+    lib.mapAttrsToList (k: v: lib.mapAttrsToList (k': _: "/${k}/${k'}") v) settings);
+
   # Generate dconf DB from dconfDatabase and keyfiles
   mkDconfDb = val: compileDconfDb (pkgs.symlinkJoin {
     name = "nixos-generated-dconf-keyfiles";
     paths = [
       (pkgs.writeTextDir "nixos-generated-dconf-keyfiles" (lib.generators.toDconfINI val.settings))
+      (pkgs.writeTextDir "locks/nixos-generated-dconf-locks" (lib.concatStringsSep "\n"
+        (if val.lockAll then mkAllLocks val.settings else val.locks)
+      ))
     ] ++ (map checkDconfKeyfiles val.keyfiles);
   });
 
@@ -102,6 +108,22 @@ let
             };
           }
         '';
+      };
+      locks = lib.mkOption {
+        type = with lib.types; listOf str;
+        default = [ ];
+        description = lib.mdDoc ''
+          A list of dconf keys to be lockdown. This doesn't take effect if `lockAll`
+          is set.
+        '';
+        example = literalExpression ''
+          [ "/org/gnome/desktop/background/picture-uri" ]
+        '';
+      };
+      lockAll = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = lib.mdDoc "Lockdown all dconf keys in `settings`.";
       };
     };
   };
