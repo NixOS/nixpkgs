@@ -1,8 +1,10 @@
 { lib
+, aioresponses
 , async-upnp-client
 , buildPythonPackage
 , fetchFromGitHub
 , lxml
+, pytestCheckHook
 , pythonOlder
 }:
 
@@ -25,12 +27,17 @@ buildPythonPackage rec {
     lxml
   ];
 
-  # Tests are currently outdated
-  # https://github.com/bazwilliams/openhomedevice/issues/20
-  doCheck = false;
+  nativeCheckInputs = [
+    aioresponses
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "openhomedevice"
+  ];
+
+  pytestFlagsArray = [
+    "tests/*.py"
   ];
 
   meta = with lib; {
