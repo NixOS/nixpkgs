@@ -381,7 +381,8 @@ in {
         type = types.str;
         description = lib.mdDoc ''
           The full path to a file that contains the admin's password. Must be
-          readable by user `nextcloud`.
+          readable by user `nextcloud`. The password is set only in the initial
+          setup of nextcloud by the systemd `nextcloud-setup.service`.
         '';
       };
 
