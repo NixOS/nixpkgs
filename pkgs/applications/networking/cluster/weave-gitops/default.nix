@@ -20,10 +20,10 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-  installShellCompletion \
-    --bash <($out/bin/gitops completion bash 2>/dev/null) \
-    --fish <($out/bin/gitops completion fish 2>/dev/null) \
-    --zsh <($out/bin/gitops completion zsh 2>/dev/null)
+    installShellCompletion --cmd gitops \
+      --bash <($out/bin/gitops completion bash 2>/dev/null) \
+      --fish <($out/bin/gitops completion fish 2>/dev/null) \
+      --zsh <($out/bin/gitops completion zsh 2>/dev/null)
   '';
 
   meta = with lib; {
