@@ -6243,8 +6243,10 @@ self: super: with self; {
 
   litespi = callPackage ../development/python-modules/litespi { };
 
+  pythondata-cpu-vexriscv = callPackage ../development/python-modules/pythondata-cpu-vexriscv { };
   pythondata-software-picolibc = callPackage ../development/python-modules/pythondata-software-picolibc { };
   pythondata-software-compiler_rt = callPackage ../development/python-modules/pythondata-software-compiler_rt { };
+
   mike = callPackage ../development/python-modules/mike { };
 
   milc = callPackage ../development/python-modules/milc { };
