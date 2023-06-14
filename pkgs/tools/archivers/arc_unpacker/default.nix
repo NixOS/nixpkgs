@@ -1,7 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, boost, libpng, libiconv
-, libjpeg, zlib, openssl, libwebp, catch2 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, makeWrapper
+, boost
+, libpng
+, libiconv
+, libjpeg
+, zlib
+, openssl
+, libwebp
+, catch2
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "arc_unpacker";
   version = "unstable-2021-08-06";
 
@@ -12,13 +25,34 @@ stdenv.mkDerivation rec {
     hash = "sha256-STbdWH7Mr3gpOrZvujblYrIIKEWBHzy1/BaNuh4teI8=";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper catch2 ];
-  buildInputs = [ boost libiconv libjpeg libpng libwebp openssl zlib ];
+  patches = [
+    (fetchpatch {
+      name = "failing_tests.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/failing_tests.patch?h=arc_unpacker-git&id=bda1ad9f69e6802e703b2e6913d71a36d76cfef9";
+      hash = "sha256-bClACsf/+SktyLAPtt7EcSqprkw8JVIi1ZLpcJcv9IE=";
+    })
+  ];
 
   postPatch = ''
     cp ${catch2}/include/catch2/catch.hpp tests/test_support/catch.h
     sed '1i#include <limits>' -i src/dec/eagls/pak_archive_decoder.cc # gcc12
   '';
+
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+    catch2
+  ];
+
+  buildInputs = [
+    boost
+    libiconv
+    libjpeg
+    libpng
+    libwebp
+    openssl
+    zlib
+  ];
 
   checkPhase = ''
     runHook preCheck

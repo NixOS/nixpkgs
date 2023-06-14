@@ -589,6 +589,8 @@ with pkgs;
 
   functiontrace-server = callPackage ../development/tools/functiontrace-server { };
 
+  gendef = callPackage ../development/tools/gendef { };
+
   glade = callPackage ../development/tools/glade { };
 
   goda = callPackage ../development/tools/goda { };
@@ -1359,9 +1361,7 @@ with pkgs;
     type = "OPN";
   };
 
-  arc_unpacker = callPackage ../tools/archivers/arc_unpacker {
-    boost = boost175; # checkPhase fails with Boost 1.77
-  };
+  arc_unpacker = callPackage ../tools/archivers/arc_unpacker { };
 
   adminer = callPackage ../servers/adminer { };
 
@@ -13458,6 +13458,8 @@ with pkgs;
   uget-integrator = callPackage ../tools/networking/uget-integrator { };
 
   ugrep = callPackage ../tools/text/ugrep { };
+
+  ugs = callPackage ../tools/misc/ugs { };
 
   uhk-agent = callPackage ../os-specific/linux/uhk-agent { };
 
@@ -32972,7 +32974,7 @@ with pkgs;
 
   neomutt = callPackage ../applications/networking/mailreaders/neomutt { };
 
-  natron = callPackage ../applications/video/natron { };
+  natron = libsForQt5.callPackage ../applications/video/natron { };
 
   natural-docs = callPackage ../applications/misc/natural-docs { };
 
