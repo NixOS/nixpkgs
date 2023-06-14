@@ -300,7 +300,7 @@ crate_: lib.makeOverridable
           (crate.features ++ features)
         );
 
-      libName = if crate ? libName then crate.libName else crate.crateName;
+      libName = crate.libName or crate.crateName;
       libPath = lib.optionalString (crate ? libPath) crate.libPath;
 
       # Seed the symbol hashes with something unique every time.
@@ -329,7 +329,7 @@ crate_: lib.makeOverridable
       colors = lib.attrByPath [ "colors" ] "always" crate;
       extraLinkFlags = lib.concatStringsSep " " (crate.extraLinkFlags or [ ]);
       edition = crate.edition or null;
-      codegenUnits = if crate ? codegenUnits then crate.codegenUnits else 1;
+      codegenUnits = crate.codegenUnits or 1;
       extraRustcOpts =
         lib.optionals (crate ? extraRustcOpts) crate.extraRustcOpts
           ++ extraRustcOpts_
