@@ -345,6 +345,9 @@ lib.pipe (stdenv.mkDerivation ({
       platforms
       maintainers
     ;
+    broken = stdenv.targetPlatform.isMips64 &&
+             stdenv.targetPlatform.parsed.abi.name == "gnu" &&
+             !(stdenv.targetPlatform.gcc ? abi);
   };
 }
 
@@ -359,4 +362,3 @@ lib.pipe (stdenv.mkDerivation ({
   (callPackage ../common/libgcc.nix   { inherit langC langCC langJit; })
   (callPackage ../common/checksum.nix { inherit langC langCC; })
 ]
-
