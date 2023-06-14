@@ -11109,6 +11109,8 @@ self: super: with self; {
 
   setuptools-lint = callPackage ../development/python-modules/setuptools-lint { };
 
+  setuptools-odoo = callPackage ../development/python-modules/setuptools-odoo { };
+
   setuptools-rust = callPackage ../development/python-modules/setuptools-rust { };
 
   setuptools-scm = callPackage ../development/python-modules/setuptools-scm { };
