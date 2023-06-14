@@ -19,6 +19,35 @@ self: super: {
     meta.homepage = "https://gitlab.com/FlyingWombat/case.kak";
   };
 
+  connect-kak = buildKakounePluginFrom2Nix {
+    pname = "connect-kak";
+    version = "2021-02-24";
+    src = fetchFromGitHub {
+      owner = "kakounedotcom";
+      repo = "connect.kak";
+      rev = "a536605a208149eed58986bda54f3dda215dfe61";
+      sha256 = "1svw64zk28sn271vjyzvq21zaln13vnx59rxnxah6adq8n5nkr4a";
+    };
+
+    postInstall = ''
+      target=$out/share/kak/autoload/plugins/connect-kak
+
+      # Remove the missplaced bin directory
+      rm -r $target/bin
+
+      # Copy the bin directory to the correct path
+      cp -r ./bin $out
+    '';
+
+    meta = with lib; {
+      description = "Make it easy managing Kakoune sessions";
+      homepage = "https://github.com/kakounedotcom/connect.kak";
+      license = licenses.unlicense;
+      maintainers = with maintainers; [ a12l ];
+      platforms = platforms.all;
+    };
+  };
+
   fzf-kak = super.fzf-kak.overrideAttrs(oldAttrs: rec {
     preFixup = ''
       if [[ -x "${fzf}/bin/fzf" ]]; then
