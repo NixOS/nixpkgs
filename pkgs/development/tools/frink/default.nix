@@ -8,15 +8,17 @@
 }:
 stdenv.mkDerivation rec {
   pname = "frink";
-  version = "2023-01-31";
+  version = "2023-05-22";
 
   src = fetchurl {
     # Upstream does not provide versioned download links
-    url = "https://web.archive.org/web/20230202134810/https://frinklang.org/frinkjar/frink.jar";
-    sha256 = "sha256-xs1FQvFPgeAxscAiwBBP8N8aYe0OlsYbH/vbzzCbYZc=";
+    url = "https://web.archive.org/web/20230526123219/https://frinklang.org/frinkjar/frink.jar";
+    sha256 = "sha256-IgINJvt9G5f1HELKhV5BHIu9NoA8STDqNg/dVTFzK0Y=";
   };
 
   dontUnpack = true;
+
+  nativeBuildInputs = [ jdk ];
 
   buildInputs = [ jdk rlwrap ];
 
@@ -27,9 +29,18 @@ stdenv.mkDerivation rec {
 
     cp ${src} $out/lib/frink.jar
 
+    # Generate rlwrap helper files.
+    # See https://frinklang.org/fsp/colorize.fsp?f=listUnits.frink
+    # and https://frinklang.org/fsp/colorize.fsp?f=listFunctions.frink
+    java -classpath "$out/lib/frink.jar" frink.gui.FrinkStarter -e 'joinln[lexicalSort[units[]]]' > $out/lib/unitnames.txt
+    java -classpath "$out/lib/frink.jar" frink.gui.FrinkStarter -e 'joinln[map[{|f|
+        f =~ %s/\s+//g
+        return "$f$"
+      }, lexicalSort[functions[]]]]' > $out/lib/functionnames.txt
+
     cat > "$out/bin/frink" << EOF
     #!${stdenv.shell}
-    exec ${rlwrap}/bin/rlwrap ${jdk}/bin/java -classpath "$out/lib/frink.jar" frink.gui.FrinkStarter "\$@"
+    exec ${rlwrap}/bin/rlwrap -f $out/lib/unitnames.txt -b '$' -f $out/lib/functionnames.txt ${jdk}/bin/java -classpath "$out/lib/frink.jar" frink.gui.FrinkStarter "\$@"
     EOF
 
     chmod a+x "$out/bin/frink"
