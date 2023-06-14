@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , httpcore
 , httpx
 , flask
@@ -20,6 +21,14 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-Qs3+NWMKiAFlKTTosdyHOxWRPKFlYQD20+MKiKR371U=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "httpx-0.24-test-compatibility.patch";
+      url = "https://github.com/lundberg/respx/commit/b014780bde8e82a65fc6bb02d62b89747189565c.patch";
+      hash = "sha256-wz9YYUtdptZw67ddnzUCet2iTozKaW0jrTIS62I/HXo=";
+    })
+  ];
 
   propagatedBuildInputs = [
     httpx
