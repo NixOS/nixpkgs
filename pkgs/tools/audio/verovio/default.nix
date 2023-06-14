@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "rism-digital";
     repo = pname;
     rev = "version-${version}";
-    sha256 = "sha256-1Tv9wHx4bu1NH0rG4Bsc0oa7eeWcWrkmJ3VnV9cjPxg=";
+    hash = "sha256-1Tv9wHx4bu1NH0rG4Bsc0oa7eeWcWrkmJ3VnV9cjPxg=";
     leaveDotGit = true;
   };
 
