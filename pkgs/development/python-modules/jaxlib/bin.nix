@@ -132,7 +132,7 @@ buildPythonPackage rec {
     ln -s ${cudatoolkit}/bin/ptxas $out/bin/ptxas
   '';
 
-  pythonImportsCheck = jaxlib.pythonImportsCheck;
+  inherit (jaxlib) pythonImportsCheck;
 
   meta = with lib; {
     description = "XLA library for JAX";
