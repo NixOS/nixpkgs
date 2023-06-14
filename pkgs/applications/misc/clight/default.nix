@@ -6,23 +6,14 @@
 
 stdenv.mkDerivation rec {
   pname = "clight";
-  version = "4.9";
+  version = "4.10";
 
   src = fetchFromGitHub {
     owner = "FedeDP";
     repo = "Clight";
     rev = version;
-    sha256 = "sha256-m1oKjyy7fMK6mIf5FRuWCbfAM8qlHXRR/rwHsCZADiY=";
+    sha256 = "sha256-IAoz4f4XrX8bgesWL4yLK6m5F+c75WNIMFgKBj+W61Q=";
   };
-
-  # dbus-1.pc has datadir=/etc
-  SESSION_BUS_DIR = "${placeholder "out"}/share/dbus-1/services";
-
-  postPatch = ''
-    sed -i "s@/usr@$out@" CMakeLists.txt
-    sed -i "s@/etc@$out\0@" CMakeLists.txt
-    sed -i "s@pkg_get_variable(SESSION_BUS_DIR.*@set(SESSION_BUS_DIR $SESSION_BUS_DIR)@" CMakeLists.txt
-  '';
 
   nativeBuildInputs = [
     dbus
@@ -44,7 +35,7 @@ stdenv.mkDerivation rec {
     ++ optional withUpower upower;
 
   cmakeFlags = [
-    # bash-completion.pc completionsdir=${bash-completion.out}
+    "-DSESSION_BUS_DIR=${placeholder "out"}/share/dbus-1/services"
     "-DBASH_COMPLETIONS_DIR=${placeholder "out"}/share/bash-completions/completions"
     "-DZSH_COMPLETIONS_DIR=${placeholder "out"}/share/zsh/site-functions"
   ];

@@ -903,6 +903,8 @@ with pkgs;
 
   pacproxy = callPackage ../tools/networking/pacproxy { };
 
+  pacup = python3Packages.callPackage ../tools/package-management/pacup { };
+
   perseus-cli = callPackage ../development/tools/perseus-cli {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -12623,6 +12625,8 @@ with pkgs;
 
   sozu = callPackage ../servers/sozu { };
 
+  spacer = callPackage ../tools/misc/spacer { };
+
   sparrow-unwrapped = callPackage ../applications/blockchains/sparrow {
     openimajgrabber = callPackage ../applications/blockchains/sparrow/openimajgrabber.nix {};
     openjdk = openjdk.override { enableJavaFX = true; };
@@ -17117,6 +17121,8 @@ with pkgs;
   joker = callPackage ../development/interpreters/joker { };
 
   davmail = callPackage ../applications/networking/davmail { };
+
+  kamilalisp = callPackage ../development/interpreters/kamilalisp { };
 
   kanif = callPackage ../applications/networking/cluster/kanif { };
 
@@ -33402,10 +33408,6 @@ with pkgs;
 
   openfx = callPackage ../development/libraries/openfx { };
 
-  openimageio_1 = callPackage ../development/libraries/openimageio/1.x.nix {
-    boost = boost175;
-  };
-
   openimageio = darwin.apple_sdk_11_0.callPackage ../development/libraries/openimageio { };
 
   openjump = callPackage ../applications/misc/openjump { };
@@ -37700,6 +37702,8 @@ with pkgs;
 
   openmolcas = callPackage ../applications/science/chemistry/openmolcas { };
 
+  pdb2pqr = with python3Packages; toPythonApplication pdb2pqr;
+
   pymol = callPackage ../applications/science/chemistry/pymol { };
 
   quantum-espresso = callPackage ../applications/science/chemistry/quantum-espresso { };
@@ -39125,7 +39129,7 @@ with pkgs;
 
   faust2 = callPackage ../applications/audio/faust/faust2.nix { };
 
-  faust2alqt = callPackage ../applications/audio/faust/faust2alqt.nix { };
+  faust2alqt = libsForQt5.callPackage ../applications/audio/faust/faust2alqt.nix { };
 
   faust2alsa = callPackage ../applications/audio/faust/faust2alsa.nix { };
 
@@ -39139,17 +39143,15 @@ with pkgs;
 
   faust2jackrust = callPackage ../applications/audio/faust/faust2jackrust.nix { };
 
-  faust2jaqt = callPackage ../applications/audio/faust/faust2jaqt.nix { };
+  faust2jaqt = libsForQt5.callPackage ../applications/audio/faust/faust2jaqt.nix { };
 
   faust2ladspa = callPackage ../applications/audio/faust/faust2ladspa.nix { };
 
-  faust2lv2 = callPackage ../applications/audio/faust/faust2lv2.nix { };
+  faust2lv2 = libsForQt5.callPackage ../applications/audio/faust/faust2lv2.nix { };
 
   faustlive = callPackage ../applications/audio/faust/faustlive.nix { };
 
   faustPhysicalModeling = callPackage ../applications/audio/faustPhysicalModeling  { };
-
-  faustStk = callPackage ../applications/audio/faustStk  { };
 
   flockit = callPackage ../tools/backup/flockit { };
 

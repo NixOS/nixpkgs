@@ -4,7 +4,6 @@
 , fetchurl
 , makeWrapper
 , jre_headless
-, util-linux
 , gnugrep
 , coreutils
 , autoPatchelfHook
@@ -14,15 +13,15 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "opensearch";
-  version = "2.7.0";
+  version = "2.8.0";
 
   src = fetchurl {
     url = "https://artifacts.opensearch.org/releases/bundle/opensearch/${version}/opensearch-${version}-linux-x64.tar.gz";
-    hash = "sha256-qghqFcwfGDtKVyJW3Hb9Ad8UPh2dfhzxwyCZOp7mGmM=";
+    hash = "sha256-64vWis+YQfjOw8eaYi1nggq/Q2ErqqcEuISXPGROypc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre_headless util-linux ];
+  buildInputs = [ jre_headless ];
 
   installPhase = ''
     runHook preInstall
@@ -34,11 +33,12 @@ stdenvNoCC.mkDerivation rec {
       --replace 'bin/opensearch-keystore' "$out/bin/opensearch-keystore"
 
     wrapProgram $out/bin/opensearch \
-      --prefix PATH : "${lib.makeBinPath [ util-linux gnugrep coreutils ]}" \
+      --prefix PATH : "${lib.makeBinPath [ gnugrep coreutils ]}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$out/plugins/opensearch-knn/lib/" \
       --set JAVA_HOME "${jre_headless}"
 
     wrapProgram $out/bin/opensearch-plugin --set JAVA_HOME "${jre_headless}"
+    wrapProgram $out/bin/opensearch-cli --set JAVA_HOME "${jre_headless}"
 
     runHook postInstall
   '';
