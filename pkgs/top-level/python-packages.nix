@@ -7713,6 +7713,8 @@ self: super: with self; {
 
   pygments-style-github = callPackage ../development/python-modules/pygments-style-github { };
 
+  pygnmi = callPackage ../development/python-modules/pygnmi { };
+
   pygti = callPackage ../development/python-modules/pygti { };
 
   pyheos = callPackage ../development/python-modules/pyheos { };
