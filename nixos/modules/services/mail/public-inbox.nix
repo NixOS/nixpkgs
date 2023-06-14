@@ -563,16 +563,7 @@ in
                 ${pkgs.git}/bin/git config core.sharedRepository 0640
               fi
             '') cfg.inboxes
-            ) + ''
-            shopt -s nullglob
-            for inbox in ${stateDir}/inboxes/*/; do
-              # This should be idempotent, but only do it for new
-              # inboxes anyway because it's only needed once, and could
-              # be slow for large pre-existing inboxes.
-              ls -1 "$inbox" | grep -q '^xap' ||
-              ${cfg.package}/bin/public-inbox-index "$inbox"
-            done
-          '';
+            );
           serviceConfig = {
             Type = "oneshot";
             RemainAfterExit = true;
