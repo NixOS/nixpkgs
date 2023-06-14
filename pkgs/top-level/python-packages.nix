@@ -6345,6 +6345,8 @@ self: super: with self; {
 
   mmpython = callPackage ../development/python-modules/mmpython { };
 
+  mmtf-python = callPackage ../development/python-modules/mmtf-python { };
+
   mnemonic = callPackage ../development/python-modules/mnemonic { };
 
   mne-python = callPackage ../development/python-modules/mne-python { };
