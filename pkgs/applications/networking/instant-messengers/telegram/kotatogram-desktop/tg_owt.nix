@@ -1,12 +1,13 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , cmake
 , ninja
 , yasm
 , libjpeg
-, openssl_1_1
+, openssl
 , libopus
 , ffmpeg_4
 , protobuf
@@ -44,6 +45,17 @@
 , ApplicationServices
 }:
 
+let
+  libsrtp = fetchFromGitHub {
+    owner = "cisco";
+    repo = "libsrtp";
+
+    # https://github.com/desktop-app/tg_owt/commit/6894e86eef8809d42b66eb85e376006f2a816a56
+    rev = "a566a9cfcd619e8327784aa7cff4a1276dc1e895";
+    sha256 = "sha256-OvCw7oF1OuamP3qO2BsimeBSHq1rcXFLfK8KnbbgkMU=";
+  };
+in
+
 stdenv.mkDerivation {
   pname = "tg_owt";
   version = "unstable-2022-04-13";
@@ -58,6 +70,16 @@ stdenv.mkDerivation {
 
   patches = [
     ./tg_owt.patch
+
+    (fetchpatch {
+      url = "https://github.com/desktop-app/tg_owt/commit/0614aac699b1a53242ffe2664e3724533bf64f97.patch";
+      hash = "sha256-iCdX518CB/RboDFhl3opnwcAgtqpNWZzYtV75Q+WB6Y=";
+    })
+
+    (fetchpatch {
+      url = "https://github.com/desktop-app/tg_owt/commit/9d120195334db4f232c925529aa7601656dc59d7.patch";
+      hash = "sha256-k99OBCdE2eQVyXEyvreEqVtzC8Xfdolbgd1Z7lV2ceE=";
+    })
   ];
 
   postPatch = lib.optionalString stdenv.isLinux ''
@@ -66,6 +88,9 @@ stdenv.mkDerivation {
       --replace '"libGL.so.1"' '"${libGL}/lib/libGL.so.1"' \
       --replace '"libgbm.so.1"' '"${mesa}/lib/libgbm.so.1"' \
       --replace '"libdrm.so.2"' '"${libdrm}/lib/libdrm.so.2"'
+
+    rm -r src/third_party/libsrtp
+    cp -r --no-preserve=mode ${libsrtp} src/third_party/libsrtp
   '';
 
   outputs = [ "out" "dev" ];
@@ -74,7 +99,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [
     libjpeg
-    openssl_1_1
+    openssl
     libopus
     ffmpeg_4
     protobuf
