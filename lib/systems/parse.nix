@@ -474,6 +474,8 @@ rec {
             else abis.gnueabi
           # Default ppc64 BE to ELFv2
           else if isPower64 parsed && isBigEndian parsed then abis.gnuabielfv2
+          # gcc default mips64-unknown-linux-gnu to n32 ABI, not 64-bit ABI.
+          else if isMips64 parsed then abis.gnuabin32
           else abis.gnu
         else                     abis.unknown;
     };
