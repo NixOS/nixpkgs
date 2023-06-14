@@ -37,9 +37,7 @@ let
   inherit (cudaPackages) cudatoolkit cudnn;
 in
 
-assert cudaSupport -> lib.versionAtLeast cudatoolkit.version "11.1";
-assert cudaSupport -> lib.versionAtLeast cudnn.version "8.2";
-assert cudaSupport -> stdenv.isLinux;
+assert cudaSupport -> lib.versionAtLeast cudatoolkit.version "11.1" && lib.versionAtLeast cudnn.version "8.2" && stdenv.isLinux;
 
 let
   version = "0.4.12";
