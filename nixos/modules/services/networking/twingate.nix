@@ -14,7 +14,7 @@ in {
   config = mkIf cfg.enable {
 
     networking.firewall.checkReversePath = lib.mkDefault false;
-    networking.networkmanager.enable = true;
+    services.resolved.enable = true;
 
     environment.systemPackages = [ pkgs.twingate ]; # for the CLI
     systemd.packages = [ pkgs.twingate ];
