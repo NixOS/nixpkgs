@@ -16,7 +16,7 @@ in
     boot.tmp = {
       cleanOnBoot = mkOption {
         type = types.bool;
-        default = false;
+        default = true;
         description = lib.mdDoc ''
           Whether to delete all files in {file}`/tmp` during boot.
         '';
