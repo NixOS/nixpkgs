@@ -1,5 +1,5 @@
-{ lib, stdenv, rustPlatform, fetchFromGitea, openssl, pkg-config, protobuf
-, cacert, testers, Security, garage, nixosTests }:
+{ lib, stdenv, rustPlatform, fetchFromGitea, libsodium, openssl, pkg-config, protobuf, zstd
+, cacert, Security, garage, nixosTests }:
 let
   generic = { version, sha256, cargoSha256, eol ? false, broken ? false }: rustPlatform.buildRustPackage {
     pname = "garage";
@@ -18,7 +18,9 @@ let
     nativeBuildInputs = [ protobuf pkg-config ];
 
     buildInputs = [
+      libsodium
       openssl
+      zstd
     ] ++ lib.optional stdenv.isDarwin Security;
 
     checkInputs = [
@@ -62,7 +64,7 @@ let
       homepage = "https://garagehq.deuxfleurs.fr";
       license = lib.licenses.agpl3Only;
       maintainers = with lib.maintainers; [ nickcao _0x4A6F teutat3s raitobezarius ];
-      knownVulnerabilities = (lib.optional eol "Garage version ${version} is EOL");
+      knownVulnerabilities = lib.optional eol "Garage version ${version} is EOL";
       inherit broken;
     };
   };
