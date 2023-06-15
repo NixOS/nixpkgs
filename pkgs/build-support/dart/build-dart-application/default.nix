@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchDartDeps, writeText, dartHooks, makeWrapper, dart, nodejs }:
+{ lib, stdenv, fetchDartDeps, writeText, dartHooks, makeWrapper, dart, nodejs, darwin }:
 
 { pubGetScript ? "dart pub get"
 
@@ -54,6 +54,8 @@ stdenv.mkDerivation (args // {
     dartBuildHook
     dartInstallHook
     makeWrapper
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.sigtool
   ];
 
   # When stripping, it seems some ELF information is lost and the dart VM cli
