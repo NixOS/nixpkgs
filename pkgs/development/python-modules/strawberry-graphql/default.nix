@@ -17,6 +17,8 @@
 , graphql-core
 , libcst
 , mypy
+, opentelemetry-api
+, opentelemetry-sdk
 , poetry-core
 , pydantic
 , pygments
@@ -42,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "strawberry-graphql";
-  version = "0.176.3";
+  version = "0.185.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -51,7 +53,7 @@ buildPythonPackage rec {
     owner = "strawberry-graphql";
     repo = "strawberry";
     rev = "refs/tags/${version}";
-    hash = "sha256-O57gCJiLlR3k45V6cRNd9AHo9EGoWd7WRMmnV/8xFyQ=";
+    hash = "sha256-PwhTD1k2GOVf6ACNDY1atLLP1jjAF6eTDCE3eLUIpJA=";
   };
 
   patches = [
@@ -112,10 +114,10 @@ buildPythonPackage rec {
       flask
       pytest-flask
     ];
-    # opentelemetry = [
-    #   opentelemetry-api
-    #   opentelemetry-sdk
-    # ];
+    opentelemetry = [
+      opentelemetry-api
+      opentelemetry-sdk
+    ];
     pydantic = [
       pydantic
     ];
