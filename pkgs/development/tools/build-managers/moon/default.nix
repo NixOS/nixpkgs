@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage rec {
 
   env = {
     RUSTFLAGS = "-C strip=symbols";
-    OPENSSL_NO_VENDOR = 1;
   };
 
   buildInputs = [ openssl ] ++

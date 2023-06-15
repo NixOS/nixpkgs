@@ -53,9 +53,6 @@ rustPlatform.buildRustPackage rec {
     scripts/regenerate_test_rustdocs.sh
   '';
 
-  # use system openssl
-  OPENSSL_NO_VENDOR = true;
-
   meta = with lib; {
     description = "A tool to scan your Rust crate for semver violations";
     homepage = "https://github.com/obi1kenobi/cargo-semver-checks";

@@ -94,9 +94,6 @@ rustPlatform.buildRustPackage rec {
   CPPFLAGS=lib.optionals stdenv.isDarwin "-isystem ${lib.getDev libcxx}/include/c++/v1";
   LDFLAGS=lib.optionals stdenv.isDarwin "-L${lib.getLib libcxx}/lib";
 
-  # If set, always finds OpenSSL in the system, even if the vendored feature is enabled.
-  OPENSSL_NO_VENDOR = 1;
-
   meta = with lib; {
     description = "Web-Scale Blockchain for fast, secure, scalable, decentralized apps and marketplaces. ";
     homepage = "https://solana.com";

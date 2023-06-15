@@ -28,10 +28,6 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  env = {
-    OPENSSL_NO_VENDOR = 1;
-  };
-
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [

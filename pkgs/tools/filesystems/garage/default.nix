@@ -25,8 +25,6 @@ let
       cacert
     ];
 
-    OPENSSL_NO_VENDOR = true;
-
     # See https://git.deuxfleurs.fr/Deuxfleurs/garage/src/tag/v0.8.2/nix/compile.nix#L192-L198
     # on version changes for checking if changes are required here
     buildFeatures = [

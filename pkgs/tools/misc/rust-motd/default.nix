@@ -30,8 +30,6 @@ rustPlatform.buildRustPackage rec {
     Security
   ];
 
-  OPENSSL_NO_VENDOR = 1;
-
   meta = with lib; {
     description = "Beautiful, useful MOTD generation with zero runtime dependencies";
     homepage = "https://github.com/rust-motd/rust-motd";

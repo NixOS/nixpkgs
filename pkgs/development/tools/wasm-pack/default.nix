@@ -29,9 +29,6 @@ rustPlatform.buildRustPackage rec {
     libressl
   ] ++ lib.optionals stdenv.isDarwin [ curl Security ];
 
-  # Needed to get openssl-sys to use pkg-config.
-  OPENSSL_NO_VENDOR = 1;
-
   # Most tests rely on external resources and build artifacts.
   # Disabling check here to work with build sandboxing.
   doCheck = false;

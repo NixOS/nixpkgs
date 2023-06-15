@@ -23,8 +23,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ];
 
-  OPENSSL_NO_VENDOR = 1;
-
   checkFlags = [
     # require internet access
     "--skip=arguments::input::url_input"

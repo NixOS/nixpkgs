@@ -40,10 +40,6 @@ rustPlatform.buildRustPackage rec {
     Security
   ];
 
-  env = {
-    OPENSSL_NO_VENDOR = true;
-  };
-
   postInstall = ''
     installManPage findomain.1
   '';

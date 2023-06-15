@@ -56,9 +56,6 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/tremor completions zsh)
   '';
 
-  # OPENSSL_NO_VENDOR - If set, always find OpenSSL in the system, even if the vendored feature is enabled.
-  OPENSSL_NO_VENDOR = 1;
-
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
