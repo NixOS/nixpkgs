@@ -642,6 +642,8 @@ with pkgs;
 
   proto-contrib = callPackage ../development/tools/proto-contrib { };
 
+  protoc-gen-dart = callPackage ../development/tools/protoc-gen-dart { };
+
   protoc-gen-doc = callPackage ../development/tools/protoc-gen-doc { };
 
   protoc-gen-entgrpc = callPackage ../development/tools/protoc-gen-entgrpc { };
@@ -1688,6 +1690,8 @@ with pkgs;
   mprocs = callPackage ../tools/misc/mprocs { };
 
   mpy-utils = python3Packages.callPackage ../tools/misc/mpy-utils { };
+
+  mymcplus = python3Packages.callPackage ../tools/games/mymcplus { };
 
   networkd-notify = python3Packages.callPackage ../tools/networking/networkd-notify {
     systemd = pkgs.systemd;
@@ -35353,6 +35357,9 @@ with pkgs;
       inherit (wayfireApplications-unwrapped) wayfire;
     }
   );
+
+  weave-gitops = callPackage ../applications/networking/cluster/weave-gitops { };
+
   wf-config = callPackage ../applications/window-managers/wayfire/wf-config.nix { };
 
   waypipe = callPackage ../applications/networking/remote/waypipe { };
