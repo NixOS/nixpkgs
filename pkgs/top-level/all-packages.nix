@@ -20662,7 +20662,7 @@ with pkgs;
   gecode_6 = qt5.callPackage ../development/libraries/gecode { };
   gecode = gecode_6;
 
-  geph = callPackages ../applications/networking/geph { };
+  geph = recurseIntoAttrs (callPackages ../applications/networking/geph { });
 
   gephi = callPackage ../applications/science/misc/gephi { };
 
