@@ -134,7 +134,7 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
             )
         fi
 
-        if test "$crossStageStatic" == 1; then
+        if test "$withoutTargetLibc" == 1; then
             # We don't want the gcc build to assume there will be a libc providing
             # limits.h in this stage
             makeFlagsArray+=(
@@ -166,7 +166,7 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
         rm -Rf zlib
     fi
 
-    if test -n "$crossMingw" -a -n "$crossStageStatic"; then
+    if test -n "$crossMingw" -a -n "$withoutTargetLibc"; then
         mkdir -p ../mingw
         # --with-build-sysroot expects that:
         cp -R $libcCross/include ../mingw
