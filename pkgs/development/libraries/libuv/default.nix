@@ -27,8 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libuv";
 
   src = fetchFromGitHub {
-    owner = finalAttrs.pname;
-    repo = finalAttrs.pname;
+    owner = "libuv";
+    repo = "libuv";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-qKw9QFR24Uw7pVA9isPH8Va+9/5DYuqXz6l6jWcXn+4=";
   };
