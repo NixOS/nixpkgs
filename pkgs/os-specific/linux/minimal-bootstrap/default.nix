@@ -70,6 +70,12 @@ lib.makeScope
     tinycc-bootstrappable = lib.recurseIntoAttrs (callPackage ./tinycc/bootstrappable.nix { });
     tinycc-mes = lib.recurseIntoAttrs (callPackage ./tinycc/mes.nix { });
 
+    xz = callPackage ./xz {
+      bash = bash_2_05;
+      tinycc = tinycc-mes;
+      inherit (heirloom) sed;
+    };
+
     inherit (callPackage ./utils.nix { }) derivationWithMeta writeTextFile writeText;
 
     test = kaem.runCommand "minimal-bootstrap-test" {} ''
@@ -83,6 +89,7 @@ lib.makeScope
       echo ${heirloom.tests.get-version}
       echo ${mes.compiler.tests.get-version}
       echo ${tinycc-mes.compiler.tests.chain}
+      echo ${xz.tests.get-version}
       mkdir ''${out}
     '';
   })
