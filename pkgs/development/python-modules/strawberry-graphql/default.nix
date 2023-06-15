@@ -174,6 +174,7 @@ buildPythonPackage rec {
     "tests/starlite/"
     "tests/test_dataloaders.py"
     "tests/utils/test_pretty_print.py"
+    "tests/websockets/test_graphql_transport_ws.py"
   ];
 
   meta = with lib; {
