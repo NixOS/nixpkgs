@@ -3320,8 +3320,6 @@ self: super: with self; {
 
   evaluate = callPackage ../development/python-modules/evaluate { };
 
-  ev3dev2 = callPackage ../development/python-modules/ev3dev2 { };
-
   evdev = callPackage ../development/python-modules/evdev { };
 
   eve = callPackage ../development/python-modules/eve { };
@@ -9741,6 +9739,8 @@ self: super: with self; {
   python-etcd = callPackage ../development/python-modules/python-etcd { };
 
   python-ethtool = callPackage ../development/python-modules/python-ethtool { };
+
+  python-ev3dev2 = callPackage ../development/python-modules/python-ev3dev2 { };
 
   python_fedora = callPackage ../development/python-modules/python_fedora { };
 
