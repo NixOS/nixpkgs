@@ -94,6 +94,10 @@ in
   };
 
   config = mkIf cfg.agent.enable {
+    environment.etc."gnupg/gpg-agent.conf".text = ''
+      pinentry-program ${pkgs.pinentry.${cfg.agent.pinentryFlavor}}/bin/pinentry
+    '';
+
     # This overrides the systemd user unit shipped with the gnupg package
     systemd.user.services.gpg-agent = mkIf (cfg.agent.pinentryFlavor != null) {
       unitConfig = {
@@ -102,10 +106,7 @@ in
         Requires = [ "gpg-agent.socket" ];
       };
       serviceConfig = {
-        ExecStart = ''
-          ${cfg.package}/bin/gpg-agent --supervised \
-            --pinentry-program ${pkgs.pinentry.${cfg.agent.pinentryFlavor}}/bin/pinentry
-        '';
+        ExecStart = "${cfg.package}/bin/gpg-agent --supervised";
         ExecReload = "${cfg.package}/bin/gpgconf --reload gpg-agent";
       };
     };
