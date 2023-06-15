@@ -11,6 +11,7 @@
 , clang
 , gtk3
 , xdotool
+, libsodium
 , libxcb
 , libXfixes
 , alsa-lib
@@ -96,7 +97,7 @@ rustPlatform.buildRustPackage rec {
     '';
 
   nativeBuildInputs = [ pkg-config cmake makeWrapper copyDesktopItems yasm nasm clang wrapGAppsHook rustPlatform.bindgenHook ];
-  buildInputs = [ alsa-lib pulseaudio libXfixes libxcb xdotool gtk3 libvpx libopus libXtst libyuv ];
+  buildInputs = [ alsa-lib pulseaudio libsodium libXfixes libxcb xdotool gtk3 libvpx libopus libXtst libyuv ];
 
   # Checks require an active X display.
   doCheck = false;
