@@ -4,7 +4,7 @@
 , ...
 }:
 
-assert crossSystem == localSystem;
+assert lib.systems.equals crossSystem localSystem;
 
 bootStages ++ [
   (prevStage: {

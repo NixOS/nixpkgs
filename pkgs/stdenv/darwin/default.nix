@@ -36,7 +36,7 @@
     }
 }:
 
-assert crossSystem == localSystem;
+assert lib.systems.equals crossSystem localSystem;
 
 let
   inherit (localSystem) system;

@@ -2,7 +2,7 @@
 , localSystem, crossSystem, config, overlays, crossOverlays ? []
 }:
 
-assert crossSystem == localSystem;
+assert lib.systems.equals crossSystem localSystem;
 let inherit (localSystem) system;
     fetchURL = import <nix/fetchurl.nix>;
     trivialBuilder = (import ./trivial-builder.nix);
