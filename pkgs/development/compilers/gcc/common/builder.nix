@@ -13,15 +13,15 @@ mkdir "$NIX_FIXINC_DUMMY"
 if test "$staticCompiler" = "1"; then
     EXTRA_LDFLAGS="-static"
 else
-    EXTRA_LDFLAGS="-Wl,-rpath,${!outputLib}/lib"
+    EXTRA_LDFLAGS="-Wl,-rpath,''${!outputLib}/lib"
 fi
 
 
 # GCC interprets empty paths as ".", which we don't want.
-if test -z "${CPATH-}"; then unset CPATH; fi
-if test -z "${LIBRARY_PATH-}"; then unset LIBRARY_PATH; fi
-echo "\$CPATH is \`${CPATH-}'"
-echo "\$LIBRARY_PATH is \`${LIBRARY_PATH-}'"
+if test -z "''${CPATH-}"; then unset CPATH; fi
+if test -z "''${LIBRARY_PATH-}"; then unset LIBRARY_PATH; fi
+echo "\$CPATH is \`''${CPATH-}'"
+echo "\$LIBRARY_PATH is \`''${LIBRARY_PATH-}'"
 
 if test "$noSysDirs" = "1"; then
 
@@ -30,73 +30,73 @@ if test "$noSysDirs" = "1"; then
         EXTRA_LDFLAGS_FOR_BUILD EXTRA_LDFLAGS_FOR_TARGET
 
     # Extract flags from Bintools Wrappers
-    for post in '_FOR_BUILD' ''; do
-        curBintools="NIX_BINTOOLS${post}"
+    for post in '_FOR_BUILD' ""; do
+        curBintools="NIX_BINTOOLS''${post}"
 
         declare -a extraLDFlags=()
-        if [[ -e "${!curBintools}/nix-support/orig-libc" ]]; then
+        if [[ -e "''${!curBintools}/nix-support/orig-libc" ]]; then
             # Figure out what extra flags when linking to pass to the gcc
             # compilers being generated to make sure that they use our libc.
-            extraLDFlags=($(< "${!curBintools}/nix-support/libc-ldflags") $(< "${!curBintools}/nix-support/libc-ldflags-before" || true))
-            if [ -e ${!curBintools}/nix-support/ld-set-dynamic-linker ]; then
-                extraLDFlags=-dynamic-linker=$(< ${!curBintools}/nix-support/dynamic-linker)
+            extraLDFlags=($(< "''${!curBintools}/nix-support/libc-ldflags") $(< "''${!curBintools}/nix-support/libc-ldflags-before" || true))
+            if [ -e ''${!curBintools}/nix-support/ld-set-dynamic-linker ]; then
+                extraLDFlags=-dynamic-linker=$(< ''${!curBintools}/nix-support/dynamic-linker)
             fi
 
             # The path to the Libc binaries such as `crti.o'.
-            libc_libdir="$(< "${!curBintools}/nix-support/orig-libc")/lib"
+            libc_libdir="$(< "''${!curBintools}/nix-support/orig-libc")/lib"
         else
             # Hack: support impure environments.
             extraLDFlags=("-L/usr/lib64" "-L/usr/lib")
             libc_libdir="/usr/lib"
         fi
         extraLDFlags=("-L$libc_libdir" "-rpath" "$libc_libdir"
-                      "${extraLDFlags[@]}")
-        for i in "${extraLDFlags[@]}"; do
-            declare EXTRA_LDFLAGS${post}+=" -Wl,$i"
+                      "''${extraLDFlags[@]}")
+        for i in "''${extraLDFlags[@]}"; do
+            declare EXTRA_LDFLAGS''${post}+=" -Wl,$i"
         done
     done
 
     # Extract flags from CC Wrappers
-    for post in '_FOR_BUILD' ''; do
-        curCC="NIX_CC${post}"
-        curFIXINC="NIX_FIXINC_DUMMY${post}"
+    for post in '_FOR_BUILD' ""; do
+        curCC="NIX_CC''${post}"
+        curFIXINC="NIX_FIXINC_DUMMY''${post}"
 
         declare -a extraFlags=()
-        if [[ -e "${!curCC}/nix-support/orig-libc" ]]; then
+        if [[ -e "''${!curCC}/nix-support/orig-libc" ]]; then
             # Figure out what extra compiling flags to pass to the gcc compilers
             # being generated to make sure that they use our libc.
-            extraFlags=($(< "${!curCC}/nix-support/libc-crt1-cflags") $(< "${!curCC}/nix-support/libc-cflags"))
+            extraFlags=($(< "''${!curCC}/nix-support/libc-crt1-cflags") $(< "''${!curCC}/nix-support/libc-cflags"))
 
             # The path to the Libc headers
-            libc_devdir="$(< "${!curCC}/nix-support/orig-libc-dev")"
+            libc_devdir="$(< "''${!curCC}/nix-support/orig-libc-dev")"
 
             # Use *real* header files, otherwise a limits.h is generated that
             # does not include Libc's limits.h (notably missing SSIZE_MAX,
             # which breaks the build).
-            declare NIX_FIXINC_DUMMY${post}="$libc_devdir/include"
+            declare NIX_FIXINC_DUMMY''${post}="$libc_devdir/include"
         else
             # Hack: support impure environments.
             extraFlags=("-isystem" "/usr/include")
-            declare NIX_FIXINC_DUMMY${post}=/usr/include
+            declare NIX_FIXINC_DUMMY''${post}=/usr/include
         fi
 
-        extraFlags=("-I${!curFIXINC}" "${extraFlags[@]}")
+        extraFlags=("-I''${!curFIXINC}" "''${extraFlags[@]}")
 
         # BOOT_CFLAGS defaults to `-g -O2'; since we override it below, make
         # sure to explictly add them so that files compiled with the bootstrap
         # compiler are optimized and (optionally) contain debugging information
         # (info "(gccinstall) Building").
-        if test -n "${dontStrip-}"; then
-            extraFlags=("-O2" "-g" "${extraFlags[@]}")
+        if test -n "''${dontStrip-}"; then
+            extraFlags=("-O2" "-g" "''${extraFlags[@]}")
         else
             # Don't pass `-g' at all; this saves space while building.
-            extraFlags=("-O2" "${extraFlags[@]}")
+            extraFlags=("-O2" "''${extraFlags[@]}")
         fi
 
-        declare EXTRA_FLAGS${post}="${extraFlags[*]}"
+        declare EXTRA_FLAGS''${post}="''${extraFlags[*]}"
     done
 
-    if test -z "${targetConfig-}"; then
+    if test -z "''${targetConfig-}"; then
         # host = target, so the flags are the same
         EXTRA_FLAGS_FOR_TARGET="$EXTRA_FLAGS"
         EXTRA_LDFLAGS_FOR_TARGET="$EXTRA_LDFLAGS"
@@ -128,7 +128,7 @@ if test "$noSysDirs" = "1"; then
         "FLAGS_FOR_TARGET=$EXTRA_FLAGS_FOR_TARGET $EXTRA_LDFLAGS_FOR_TARGET"
     )
 
-    if test -z "${targetConfig-}"; then
+    if test -z "''${targetConfig-}"; then
         makeFlagsArray+=(
             "BOOT_CFLAGS=$EXTRA_FLAGS $EXTRA_LDFLAGS"
             "BOOT_LDFLAGS=$EXTRA_FLAGS_FOR_TARGET $EXTRA_LDFLAGS_FOR_TARGET"
@@ -191,44 +191,44 @@ postConfigure() {
 
 
 preInstall() {
-    mkdir -p "$out/${targetConfig}/lib"
-    mkdir -p "${!outputLib}/${targetConfig}/lib"
+    mkdir -p "$out/''${targetConfig}/lib"
+    mkdir -p "''${!outputLib}/''${targetConfig}/lib"
     # Make ‘lib64’ symlinks to ‘lib’.
     if [ -n "$linkLib64toLib" ]; then
-        ln -s lib "$out/${targetConfig}/lib64"
-        ln -s lib "${!outputLib}/${targetConfig}/lib64"
+        ln -s lib "$out/''${targetConfig}/lib64"
+        ln -s lib "''${!outputLib}/''${targetConfig}/lib64"
     fi
     # Make ‘lib32’ symlinks to ‘lib’.
     if [ -n "$linkLib32toLib" ]; then
-        ln -s lib "$out/${targetConfig}/lib32"
-        ln -s lib "${!outputLib}/${targetConfig}/lib32"
+        ln -s lib "$out/''${targetConfig}/lib32"
+        ln -s lib "''${!outputLib}/''${targetConfig}/lib32"
     fi
 }
 
 
 postInstall() {
     # Move runtime libraries to lib output.
-    moveToOutput "${targetConfig+$targetConfig/}lib/lib*.so*" "${!outputLib}"
-    moveToOutput "${targetConfig+$targetConfig/}lib/lib*.la"  "${!outputLib}"
-    moveToOutput "${targetConfig+$targetConfig/}lib/lib*.dylib" "${!outputLib}"
-    moveToOutput "${targetConfig+$targetConfig/}lib/lib*.dll.a" "${!outputLib}"
-    moveToOutput "share/gcc-*/python" "${!outputLib}"
+    moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.so*" "''${!outputLib}"
+    moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.la"  "''${!outputLib}"
+    moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.dylib" "''${!outputLib}"
+    moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.dll.a" "''${!outputLib}"
+    moveToOutput "share/gcc-*/python" "''${!outputLib}"
 
     if [ -z "$enableShared" ]; then
-        moveToOutput "${targetConfig+$targetConfig/}lib/lib*.a" "${!outputLib}"
+        moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.a" "''${!outputLib}"
     fi
 
-    for i in "${!outputLib}/${targetConfig}"/lib/*.{la,py}; do
-        substituteInPlace "$i" --replace "$out" "${!outputLib}"
+    for i in "''${!outputLib}/''${targetConfig}"/lib/*.{la,py}; do
+        substituteInPlace "$i" --replace "$out" "''${!outputLib}"
     done
 
     if [ -n "$enableMultilib" ]; then
-        moveToOutput "${targetConfig+$targetConfig/}lib64/lib*.so*" "${!outputLib}"
-        moveToOutput "${targetConfig+$targetConfig/}lib64/lib*.la"  "${!outputLib}"
-        moveToOutput "${targetConfig+$targetConfig/}lib64/lib*.dylib" "${!outputLib}"
+        moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.so*" "''${!outputLib}"
+        moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.la"  "''${!outputLib}"
+        moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.dylib" "''${!outputLib}"
 
-        for i in "${!outputLib}/${targetConfig}"/lib64/*.{la,py}; do
-            substituteInPlace "$i" --replace "$out" "${!outputLib}"
+        for i in "''${!outputLib}/''${targetConfig}"/lib64/*.{la,py}; do
+            substituteInPlace "$i" --replace "$out" "''${!outputLib}"
         done
     fi
 
@@ -241,10 +241,10 @@ postInstall() {
     rm -rf $out/bin/gccbug
 
     if type "install_name_tool"; then
-        for i in "${!outputLib}"/lib/*.*.dylib "${!outputLib}"/lib/*.so.[0-9]; do
+        for i in "''${!outputLib}"/lib/*.*.dylib "''${!outputLib}"/lib/*.so.[0-9]; do
             install_name_tool -id "$i" "$i" || true
             for old_path in $(otool -L "$i" | grep "$out" | awk '{print $1}'); do
-              new_path=`echo "$old_path" | sed "s,$out,${!outputLib},"`
+              new_path=`echo "$old_path" | sed "s,$out,''${!outputLib},"`
               install_name_tool -change "$old_path" "$new_path" "$i" || true
             done
         done
@@ -255,10 +255,10 @@ postInstall() {
     # of $dir headers and use it later as `-isysroot`. This prevents
     # cc-wrapper from overriding libc headers with `-idirafter`.
     # It should be safe to drop it and rely solely on the cc-wrapper.
-    local sysinc_dir=$out/${targetConfig+$targetConfig/}sys-include
+    local sysinc_dir=$out/''${targetConfig+$targetConfig/}sys-include
     if [ -d "$sysinc_dir" ]; then
-        chmod -R u+w "$out/${targetConfig+$targetConfig/}sys-include"
-        rm -rfv "$out/${targetConfig+$targetConfig/}sys-include"
+        chmod -R u+w "$out/''${targetConfig+$targetConfig/}sys-include"
+        rm -rfv "$out/''${targetConfig+$targetConfig/}sys-include"
     fi
 
     # Get rid of some "fixed" header files
