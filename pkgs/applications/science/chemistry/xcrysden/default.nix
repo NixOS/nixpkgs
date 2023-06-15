@@ -44,15 +44,23 @@ gcc8Stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
+    runHook preConfigure
+
     # `bwidget` source code is required to build xcrysden.
     # If it is not existing, the build script tries to download it and fails.
     cp ${bwidget.src} external/src/${bwidget.tgz}
 
     cp system/Make.sys-shared Make.sys
+
+    runHook postConfigure
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     make all
+
+    runHook postBuild
   '';
 
   makeFlags = [ "prefix=$(out)" ];
