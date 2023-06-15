@@ -1707,6 +1707,8 @@ with pkgs;
 
   pferd = callPackage ../tools/misc/pferd { };
 
+  polygon-cli = callPackage ../tools/networking/polygon-cli { };
+
   proycon-wayout = callPackage ../tools/wayland/proycon-wayout { };
 
   q = callPackage ../tools/networking/q { };
@@ -4121,6 +4123,8 @@ with pkgs;
   btrfs-progs = callPackage ../tools/filesystems/btrfs-progs { };
 
   btrfs-snap = callPackage ../tools/filesystems/btrfs-snap { };
+
+  ssdfs-utils = callPackage ../tools/filesystems/ssdfs-utils { };
 
   btlejack = python3Packages.callPackage ../applications/radio/btlejack { };
 
@@ -6560,6 +6564,8 @@ with pkgs;
   age = callPackage ../tools/security/age { };
 
   agebox = callPackage ../tools/security/agebox { };
+
+  age-plugin-tpm = callPackage ../tools/security/age-plugin-tpm { };
 
   age-plugin-yubikey = darwin.apple_sdk_11_0.callPackage ../tools/security/age-plugin-yubikey {
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation PCSC IOKit;
@@ -9723,6 +9729,8 @@ with pkgs;
 
   leatherman = callPackage ../development/libraries/leatherman { };
 
+  lact = callPackage ../tools/system/lact { };
+
   ledit = callPackage ../tools/misc/ledit {
     inherit (ocaml-ng.ocamlPackages_4_12) ocaml camlp5;
   };
@@ -10442,6 +10450,8 @@ with pkgs;
 
   inherit (callPackage ../servers/web-apps/netbox { })
     netbox_3_3 netbox;
+
+  netbox2netshot = callPackage ../tools/admin/netbox2netshot { };
 
   netcat = libressl.nc;
 
@@ -17802,6 +17812,8 @@ with pkgs;
 
   verible = callPackage ../development/tools/language-servers/verible { };
 
+  vscode-langservers-extracted = callPackage ../development/tools/language-servers/vscode-langservers-extracted { };
+
   zls = callPackage ../development/tools/language-servers/zls {
     zig = buildPackages.zig_0_10;
   };
@@ -20654,7 +20666,7 @@ with pkgs;
   gecode_6 = qt5.callPackage ../development/libraries/gecode { };
   gecode = gecode_6;
 
-  geph = callPackages ../applications/networking/geph { };
+  geph = recurseIntoAttrs (callPackages ../applications/networking/geph { });
 
   gephi = callPackage ../applications/science/misc/gephi { };
 
@@ -32035,6 +32047,8 @@ with pkgs;
 
   keyfinder-cli = callPackage ../applications/audio/keyfinder-cli { };
 
+  kfilt = callPackage ../applications/networking/cluster/kfilt { };
+
   kgraphviewer = libsForQt5.callPackage ../applications/graphics/kgraphviewer { };
 
   khal = callPackage ../applications/misc/khal { };
@@ -35424,7 +35438,7 @@ with pkgs;
   wgnord = callPackage ../applications/networking/wgnord/default.nix { };
 
   whalebird = callPackage ../applications/misc/whalebird {
-    electron = electron_19;
+    electron = electron_21;
   };
 
   windowlab = callPackage ../applications/window-managers/windowlab { };
@@ -37149,6 +37163,8 @@ with pkgs;
   quantumminigolf = callPackage ../games/quantumminigolf { };
 
   r2mod_cli = callPackage ../games/r2mod_cli { };
+
+  r2modman = callPackage ../games/r2modman { };
 
   racer = callPackage ../games/racer { };
 
