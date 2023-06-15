@@ -14,17 +14,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   # Upstream's configure script is not autoconf generated, but a hand written one.
   setOutputFlags = false;
-  preConfigure =
-    # We cannot use configureFlags or configureFlagsArray directly, since we
-    # don't have structuredAttrs yet and using placeholder causes permissions
-    # denied errors. Using $dev / $man in configureFlags causes bash evaluation
-    # errors
-  ''
-    configureFlagsArray+=(
-      "--includedir=$dev/include"
-      "--mandir=$man/share/man"
-    )
-  '';
+  configureFlags = [
+    "--includedir=${placeholder "dev"}/include"
+    "--mandir=${placeholder "man"}/share/man"
+  ];
 
   # Doesn't recognize platform flags
   configurePlatforms = [];
