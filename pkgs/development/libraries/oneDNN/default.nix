@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/oneapi-src/oneDNN/releases/tag/v${version}";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ alexarice bhipple ];
+    maintainers = with maintainers; [ bhipple ];
   };
 }
