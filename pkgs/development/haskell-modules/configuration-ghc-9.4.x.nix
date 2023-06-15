@@ -55,6 +55,14 @@ in {
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
   xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_2_2_1;
 
+  # fix build with avx, see https://github.com/haskell-crypto/cryptonite/issues/347
+  # https://github.com/haskell-crypto/cryptonite/pull/373
+  cryptonite = appendPatch (pkgs.fetchpatch {
+    url = "https://github.com/haskell-crypto/cryptonite/commit/1da7efd7ffac8b8b3ea325da79cd73a2e4a39085.patch";
+    excludes = [ "cbits/decaf/tools/generate.sh" ];
+    sha256 = "sha256-fgu8D9z3lFfVNz5GJqsbWApG+T2PPZyXJ+AkFXArwH0=";
+  }) super.cryptonite;
+
   # Tests fail because of typechecking changes
   conduit = dontCheck super.conduit;
 
