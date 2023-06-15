@@ -18,17 +18,9 @@ rec {
   # Packaged resources required for the first bootstrapping stage.
   # Contains source code and 256-byte hex0 binary seed.
   #
-  # We don't have access to utilities such as fetchgit and fetchzip since this
-  # is this is part of the bootstrap process and would introduce a circular
-  # dependency. The only tool we have to fetch source trees is `import <nix/fetchurl.nix>`
-  # with the unpack option, taking a NAR file as input. This requires source
-  # tarballs to be repackaged.
-  #
-  # To build see `make-bootstrap-sources.nix`
-  src = import <nix/fetchurl.nix> {
-    inherit name;
-    url = "https://github.com/emilytrau/bootstrap-tools-nar-mirror/releases/download/2023-05-02/${name}.nar.xz";
-    hash = "sha256-ZRG0k49MxL1UTZhuMTvPoEprdSpJRNVy8QhLE6k+etg=";
-    unpack = true;
+  src = builtins.fetchGit {
+    inherit (import ./bootstrap-sources.nix) name rev;
+    url = "https://github.com/oriansj/stage0-posix";
+    shallow = true;
   };
 }
