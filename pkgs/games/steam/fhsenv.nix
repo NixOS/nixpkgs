@@ -188,6 +188,7 @@ in buildFHSEnv rec {
     libvorbis # Dead Cells
     libxcrypt # Alien Isolation, XCOM 2, Company of Heroes 2
     mono
+    ncurses # Crusader Kings III
     xorg.xkeyboardconfig
     xorg.libpciaccess
     xorg.libXScrnSaver # Dead Cells
