@@ -41,6 +41,7 @@
 , sqlite
 , udev
 , zlib
+, zstd
 }:
 
 let
@@ -306,5 +307,11 @@ in
 
   xcb = attrs: {
     buildInputs = [ python3 ];
+  };
+
+  zstd-sys = attrs: {
+    ZSTD_SYS_USE_PKG_CONFIG = true;
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ zstd ];
   };
 }
