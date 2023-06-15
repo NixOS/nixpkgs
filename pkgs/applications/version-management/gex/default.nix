@@ -1,21 +1,26 @@
 { lib
 , stdenv
+, openssl
+, pkg-config
 , rustPlatform
 , fetchFromGitHub
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gex";
-  version = "0.3.3";
+  version = "0.3.8";
 
   src = fetchFromGitHub {
     owner = "Piturnah";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-oUcQKpZqqb8wZDpdFfpxLpwdfQlokJE5bsoPwxh+JMM=";
+    hash = "sha256-pjyS0H25wdcexpzZ2vVzGTwDPzyvA9PDgzz81yLGTOY=";
   };
 
-  cargoHash = "sha256-ZFrIlNysjlXI8n78N2Hkff6gAplipxSQXUWG8HJq8fs=";
+  cargoHash = "sha256-+FwXm3QN9bt//dWqzkBzsGigyl1SSY4/P29QtV75V6M=";
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ openssl ];
 
   meta = with lib; {
     description = "Git Explorer: cross-platform git workflow improvement tool inspired by Magit";
