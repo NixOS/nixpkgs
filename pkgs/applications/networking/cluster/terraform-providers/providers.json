@@ -801,11 +801,11 @@
   },
   "nutanix": {
     "deleteVendor": true,
-    "hash": "sha256-kxLsQeseSncGRJCeh/1yD7oouS5OYwo5N5YorzwQdBs=",
+    "hash": "sha256-c2+3nAwbFL3DWQW6OqAweTMmg8nZER4CaHGeGrh1/Tg=",
     "homepage": "https://registry.terraform.io/providers/nutanix/nutanix",
     "owner": "nutanix",
     "repo": "terraform-provider-nutanix",
-    "rev": "v1.9.0",
+    "rev": "v1.9.1",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-LRIfxQGwG988HE5fftGl6JmBG7tTknvmgpm4Fu1NbWI="
   },
