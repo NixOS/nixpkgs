@@ -10555,6 +10555,8 @@ with pkgs;
 
   notable = callPackage ../applications/misc/notable { };
 
+  npm-check = callPackage ../development/tools/npm-check { };
+
   nth = with python3Packages; toPythonApplication name-that-hash;
 
   ntlmrecon = callPackage ../tools/security/ntlmrecon { };
