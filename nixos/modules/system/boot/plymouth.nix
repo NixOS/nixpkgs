@@ -134,6 +134,13 @@ in
     # XXX: Needed because we supply a different set of plugins in initrd.
     environment.etc."plymouth/plugins".source = "${plymouth}/lib/plymouth";
 
+    systemd.tmpfiles.rules = [
+      "d /run/plymouth 0755 root root 0 -"
+      "L+ /run/plymouth/plymouthd.defaults - - - - /etc/plymouth/plymouthd.defaults"
+      "L+ /run/plymouth/themes - - - - /etc/plymouth/themes"
+      "L+ /run/plymouth/plugins - - - - /etc/plymouth/plugins"
+    ];
+
     systemd.packages = [ plymouth ];
 
     systemd.services.plymouth-kexec.wantedBy = [ "kexec.target" ];
@@ -160,8 +167,8 @@ in
       contents = {
         # Files
         "/etc/plymouth/plymouthd.conf".source = configFile;
-        "/etc/plymouth/plymouthd.defaults".source = "${plymouth}/share/plymouth/plymouthd.defaults";
         "/etc/plymouth/logo.png".source = cfg.logo;
+        "/etc/plymouth/plymouthd.defaults".source = "${plymouth}/share/plymouth/plymouthd.defaults";
         # Directories
         "/etc/plymouth/plugins".source = pkgs.runCommand "plymouth-initrd-plugins" {} ''
           # Check if the actual requested theme is here
@@ -174,8 +181,8 @@ in
 
           mkdir -p $out/renderers
           # module might come from a theme
-          cp ${themesEnv}/lib/plymouth/{text,details,label,$moduleName}.so $out
-          cp ${plymouth}/lib/plymouth/renderers/{drm,frame-buffer}.so $out/renderers
+          cp ${themesEnv}/lib/plymouth/*.so $out
+          cp ${plymouth}/lib/plymouth/renderers/*.so $out/renderers
         '';
         "/etc/plymouth/themes".source = pkgs.runCommand "plymouth-initrd-themes" {} ''
           # Check if the actual requested theme is here
@@ -184,18 +191,23 @@ in
               exit 1
           fi
 
-          mkdir $out
-          cp -r ${themesEnv}/share/plymouth/themes/${cfg.theme} $out
+          mkdir -p $out/${cfg.theme}
+          cp -r ${themesEnv}/share/plymouth/themes/${cfg.theme}/* $out/${cfg.theme}
           # Copy more themes if the theme depends on others
-          for theme in $(grep -hRo '/etc/plymouth/themes/.*$' $out | xargs -n1 basename); do
+          for theme in $(grep -hRo '/share/plymouth/themes/.*$' $out | xargs -n1 basename); do
               if [[ -d "${themesEnv}/share/plymouth/themes/$theme" ]]; then
                   if [[ ! -d "$out/$theme" ]]; then
                     echo "Adding dependent theme: $theme"
-                    cp -r "${themesEnv}/share/plymouth/themes/$theme" $out
+                    mkdir -p "$out/$theme"
+                    cp -r "${themesEnv}/share/plymouth/themes/$theme"/* "$out/$theme"
                   fi
               else
                 echo "Missing theme dependency: $theme"
               fi
+          done
+          # Fixup references
+          for theme in $out/*/*.plymouth; do
+            sed -i "s,${builtins.storeDir}/.*/share/plymouth/themes,$out," "$theme"
           done
         '';
 
@@ -225,6 +237,11 @@ in
         plymouth-switch-root-initramfs.wantedBy = [ "halt.target" "kexec.target" "plymouth-switch-root-initramfs.service" "poweroff.target" "reboot.target" ];
         plymouth-switch-root.wantedBy = [ "initrd-switch-root.target" ];
       };
+      # Link in runtime files before starting
+      services.plymouth-start.preStart = ''
+        mkdir -p /run/plymouth
+        ln -sf /etc/plymouth/{plymouthd.defaults,themes,plugins} /run/plymouth/
+      '';
     };
 
     # Insert required udev rules. We take stage 2 systemd because the udev
@@ -249,8 +266,8 @@ in
 
       mkdir -p $out/lib/plymouth/renderers
       # module might come from a theme
-      cp ${themesEnv}/lib/plymouth/{text,details,label,$moduleName}.so $out/lib/plymouth
-      cp ${plymouth}/lib/plymouth/renderers/{drm,frame-buffer}.so $out/lib/plymouth/renderers
+      cp ${themesEnv}/lib/plymouth/*.so $out/lib/plymouth
+      cp ${plymouth}/lib/plymouth/renderers/*.so $out/lib/plymouth/renderers
 
       mkdir -p $out/share/plymouth/themes
       cp ${plymouth}/share/plymouth/plymouthd.defaults $out/share/plymouth
@@ -267,7 +284,7 @@ in
       chmod -R +w themes
       find themes -type f | while read file
       do
-        sed -i "s,/nix/.*/share/plymouth/themes,$out/share/plymouth/themes,g" $file
+        sed -i "s,${builtins.storeDir}/.*/share/plymouth/themes,$out/share/plymouth/themes,g" $file
       done
 
       # Install themes
@@ -275,7 +292,7 @@ in
 
       # Install logo
       mkdir -p $out/etc/plymouth
-      cp -r -L ${themesEnv}/etc/plymouth $out
+      cp -r -L ${themesEnv}/etc/plymouth $out/etc
 
       # Setup font
       mkdir -p $out/share/fonts
@@ -304,11 +321,11 @@ in
     boot.initrd.preLVMCommands = mkIf (!config.boot.initrd.systemd.enable) (mkAfter ''
       mkdir -p /etc/plymouth
       mkdir -p /run/plymouth
+      ln -s $extraUtils/etc/plymouth/logo.png /etc/plymouth/logo.png
       ln -s ${configFile} /etc/plymouth/plymouthd.conf
-      ln -s $extraUtils/share/plymouth/plymouthd.defaults /etc/plymouth/plymouthd.defaults
-      ln -s $extraUtils/share/plymouth/logo.png /etc/plymouth/logo.png
-      ln -s $extraUtils/share/plymouth/themes /etc/plymouth/themes
-      ln -s $extraUtils/lib/plymouth /etc/plymouth/plugins
+      ln -s $extraUtils/share/plymouth/plymouthd.defaults /run/plymouth/plymouthd.defaults
+      ln -s $extraUtils/share/plymouth/themes /run/plymouth/themes
+      ln -s $extraUtils/lib/plymouth /run/plymouth/plugins
       ln -s $extraUtils/etc/fonts /etc/fonts
 
       plymouthd --mode=boot --pid-file=/run/plymouth/pid --attach-to-session
