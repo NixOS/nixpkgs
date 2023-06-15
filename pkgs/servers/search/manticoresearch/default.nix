@@ -1,16 +1,17 @@
 { lib, stdenv, fetchFromGitHub, fetchurl
 , bison, cmake, flex, pkg-config
 , boost, icu, libstemmer, mariadb-connector-c, re2
+, nlohmann_json
 }:
 let
   columnar = stdenv.mkDerivation rec {
     pname = "columnar";
-    version = "c16-s5"; # see NEED_COLUMNAR_API/NEED_SECONDARY_API in Manticore's GetColumnar.cmake
+    version = "c18-s6"; # see NEED_COLUMNAR_API/NEED_SECONDARY_API in Manticore's GetColumnar.cmake
     src = fetchFromGitHub {
       owner = "manticoresoftware";
       repo = "columnar";
       rev = version;
-      sha256 = "sha256-iHB82FeA0rq9eRuDzY+AT/MiaRIGETsnkNPCqKRXgq8=";
+      sha256 = "sha256-/HGh1Wktb65oXKCjGxMl+8kNwEEfPzGT4UxGoGS4+8c=";
     };
     nativeBuildInputs = [ cmake ];
     cmakeFlags = [ "-DAPI_ONLY=ON" ];
@@ -24,13 +25,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "manticoresearch";
-  version = "5.0.3";
+  version = "6.0.4";
 
   src = fetchFromGitHub {
     owner = "manticoresoftware";
     repo = "manticoresearch";
     rev = version;
-    sha256 = "sha256-samZYwDYgI9jQ7jcoMlpxulSFwmqyt5bkxG+WZ9eXuk=";
+    sha256 = "sha256-enSK3hlGUtrPVA/qF/AFiDJN8CbaTHCzYadBorZLE+c=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     icu.dev
     libstemmer
     mariadb-connector-c
+    nlohmann_json
     re2
   ];
 
@@ -54,6 +56,7 @@ stdenv.mkDerivation rec {
 
     # supply our own packages rather than letting manticore download dependencies during build
     sed -i 's/^with_get/with_menu/' CMakeLists.txt
+    sed -i 's/include(GetNLJSON)/find_package(nlohmann_json)/' CMakeLists.txt
   '';
 
   cmakeFlags = [
