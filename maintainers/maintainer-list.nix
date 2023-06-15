@@ -3098,6 +3098,15 @@
     githubId = 34317;
     name = "Corey O'Connor";
   };
+  code-asher = {
+    email = "ash@coder.com";
+    github = "code-asher";
+    githubId = 45609798;
+    name = "Asher";
+    keys = [{
+      fingerprint = "6E3A FA6D 915C C2A4 D26F  C53E 7BB4 BA9C 783D 2BBC";
+    }];
+  };
   CodeLongAndProsper90 = {
     github = "CodeLongAndProsper90";
     githubId = 50145141;
