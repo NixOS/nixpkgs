@@ -60,6 +60,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   pythonRelaxDeps = [
+    "art"
     "fsspec"
     "pymupdf"
     "rich-click"
