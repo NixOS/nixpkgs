@@ -144,7 +144,7 @@ let majorVersion = "9";
 
 in
 
-lib.pipe (stdenv.mkDerivation ({
+lib.pipe ((callPackage ../common/builder.nix {}) ({
   pname = "${crossNameAddon}${name}";
   inherit version;
 
