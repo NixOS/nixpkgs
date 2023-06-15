@@ -163,22 +163,7 @@ let
 
 , env ? { }
 
-# Only applies if `src` is unset
-# If set, requires srcWorkDir to be set too
-# Includes all files from the file set
-, srcFileset ? null
-
-, src ?
-    if srcFileset == null then
-      null
-    else if srcWorkDir == null then
-      throw "stdenv.mkDerivation: Setting the `srcFileset` attribute requires also setting the `srcWorkDir` attribute."
-    else
-      lib.fileset.toSource {
-        root = lib.path.commonAncestor (lib.fileset.getInfluenceBase srcFileset) srcWorkDir;
-        fileset = srcFileset;
-        extraExistingDirs = [ srcWorkDir ];
-      }
+, src ? null
 
 , srcWorkDir ? null
 
@@ -191,7 +176,7 @@ let
       throw "stdenv.mkDerivation: The `srcWorkDir` attribute \"${toString srcWorkDir}\" does not exist."
     else if lib.filesystem.pathType srcWorkDir != "directory" then
       throw "stdenv.mkDerivation: The `srcWorkDir` attribute \"${toString srcWorkDir}\" is not a directory"
-    # All of the following conditions for `src` are always fulfilled if `src` is set via `srcFileset`
+    # All of the following conditions are always fulfilled if `src = lib.fileset.toSource { ... }`
     else if ! src._isLibCleanSourceWith or false then
       throw "stdenv.mkDerivation: If the `srcWorkDir` attribute is set, `src` must be a source-like value produced by the functions in `lib.sources`."
     else if ! builtins.isPath src.origSrc then
@@ -332,7 +317,7 @@ else let
   derivationArg =
     (removeAttrs attrs
       (["meta" "passthru" "pos"
-       "srcFileset" "srcWorkDir"
+       "srcWorkDir"
        "checkInputs" "installCheckInputs"
        "nativeCheckInputs" "nativeInstallCheckInputs"
        "__contentAddressed"
