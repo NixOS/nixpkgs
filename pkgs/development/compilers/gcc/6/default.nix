@@ -203,8 +203,6 @@ lib.pipe (stdenv.mkDerivation ({
   pname = "${crossNameAddon}${name}";
   inherit version;
 
-  builder = ../builder.sh;
-
   src = if stdenv.targetPlatform.isVc4 then fetchFromGitHub {
     owner = "itszor";
     repo = "gcc-vc4";
