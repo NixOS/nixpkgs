@@ -615,6 +615,13 @@ in mkLicense lset) ({
     free = true;
   };
 
+  fairsource09 = {
+    fullName = "Fair Source License, version 0.9";
+    url = "https://fair.io/v0.9.txt";
+    free = false;
+    redistributable = true;
+  };
+
   issl = {
     fullName = "Intel Simplified Software License";
     url = "https://software.intel.com/en-us/license/intel-simplified-software-license";
