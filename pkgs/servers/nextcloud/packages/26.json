@@ -169,6 +169,16 @@
       "agpl"
     ]
   },
+  "qownnotesapi": {
+    "sha256": "1hkcqcc6y7x0zrc88qqmsf7mz0dl1kk06gsl6la3kr33fxr0cp0k",
+    "url": "https://github.com/pbek/qownnotesapi/releases/download/v23.6.0/qownnotesapi-nc.tar.gz",
+    "version": "23.6.0",
+    "description": "QOwnNotesAPI is the Nextcloud/ownCloud API for [QOwnNotes](http://www.qownnotes.org), the open source notepad for Linux, macOS and Windows, that works together with the notes application of Nextcloud/ownCloud.\n\nThe only purpose of this App is to provide API access to your Nextcloud/ownCloud server for your QOwnNotes desktop installation, you cannot use this App for anything else, if you don't have QOwnNotes installed on your desktop computer!",
+    "homepage": "https://github.com/pbek/qownnotesapi",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "registration": {
     "sha256": "07dqc670qmdb3c8jjnj7azxxspjhiv6m9nrj960y3rjabyzy25m9",
     "url": "https://github.com/nextcloud-releases/registration/releases/download/v2.1.0/registration-v2.1.0.tar.gz",
