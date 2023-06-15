@@ -1,46 +1,45 @@
 { lib
 , stdenv
-, atk
-, pkg-config
-, curl
-, darwin
-, libgit2
-, gtk3
-, libssh2
-, openssl
-, sqlite
-, zlib
-, dbus
-, dbus-glib
-, gdk-pixbuf
-, cairo
-, python3
-, libsodium
-, postgresql
-, gmp
-, gobject-introspection
-, foundationdb
-, capnproto
-, nettle
-, gtk4
-, clang
-, llvmPackages
-, linux-pam
-, pango
-, cmake
-, glib
-, freetype
-, fontconfig
-, rdkafka
-, udev
-, libevdev
 , alsa-lib
-, graphene
-, protobuf
+, atk
 , autoconf
 , automake
+, cairo
+, capnproto
+, clang
+, cmake
+, curl
+, darwin
+, dbus
+, dbus-glib
+, fontconfig
+, foundationdb
+, freetype
+, gdk-pixbuf
+, glib
+, gmp
+, gobject-introspection
+, graphene
+, gtk3
+, gtk4
+, libevdev
+, libgit2
+, libsodium
+, libssh2
 , libtool
-, ...
+, linux-pam
+, llvmPackages
+, nettle
+, openssl
+, pango
+, pkg-config
+, postgresql
+, protobuf
+, python3
+, rdkafka
+, sqlite
+, udev
+, zlib
 }:
 
 let
@@ -50,6 +49,11 @@ in
   alsa-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ alsa-lib ];
+  };
+
+  atk-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ atk ];
   };
 
   cairo-rs = attrs: {
@@ -296,10 +300,4 @@ in
   xcb = attrs: {
     buildInputs = [ python3 ];
   };
-
-  atk-sys = attrs: {
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ atk ];
-  };
-
 }
