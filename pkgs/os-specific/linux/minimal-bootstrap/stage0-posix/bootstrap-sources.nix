@@ -19,7 +19,7 @@ rec {
   # Contains source code and 256-byte hex0 binary seed.
   #
   src = builtins.fetchGit {
-    inherit (import ./bootstrap-sources.nix) name rev;
+    inherit name rev;
     url = "https://github.com/oriansj/stage0-posix";
     shallow = true;
   };
