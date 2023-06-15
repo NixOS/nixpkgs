@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xed-editor";
-  version = "3.2.8";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xed";
     rev = version;
-    sha256 = "sha256-ax769qjV0oZ6tnEE5FsXNbHETI6KNgvh0WviBsPs9j8=";
+    sha256 = "sha256-fBwxc6n4sNNRiKcax96Tl3cFD+Ryvmj+XizB3z2s4+Q=";
   };
 
   nativeBuildInputs = [
