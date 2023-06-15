@@ -30,6 +30,7 @@
 , linux-pam
 , llvmPackages
 , nettle
+, oniguruma
 , openssl
 , pango
 , pkg-config
@@ -205,6 +206,12 @@ in
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ nettle clang ];
     LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+  };
+
+  onig_sys = attrs: {
+    RUSTONIG_SYSTEM_LIBONIG = true;
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ oniguruma ];
   };
 
   openssl = attrs: {
