@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub
 , makeWrapper, cmake, llvmPackages
-, flex, bison, elfutils, python, luajit, netperf, iperf, libelf
+, flex, bison, elfutils, python, luajit, netperf, iperf, zip
 , bash, libbpf, nixosTests
 , audit
 }:
 
 python.pkgs.buildPythonApplication rec {
   pname = "bcc";
-  version = "0.26.0";
+  version = "0.28.0";
 
   disabled = !stdenv.isLinux;
 
@@ -15,7 +15,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "iovisor";
     repo = "bcc";
     rev = "v${version}";
-    sha256 = "sha256-zx38tPwuuGU6px9pRNN5JtvBysK9fStOvoqe7cLo7LM=";
+    sha256 = "sha256-+ecSaVroDC2bWbio4JsuwEvHQdCMpxLt7hIkeREMJs8=";
   };
   format = "other";
 
@@ -32,7 +32,11 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [ python.pkgs.netaddr ];
-  nativeBuildInputs = [ makeWrapper cmake flex bison llvmPackages.llvm.dev ];
+  nativeBuildInputs = [
+    makeWrapper cmake flex bison llvmPackages.llvm.dev
+    python.pkgs.setuptools
+    zip
+  ];
 
   cmakeFlags = [
     "-DBCC_KERNEL_MODULES_DIR=/run/booted-system/kernel-modules/lib/modules"
