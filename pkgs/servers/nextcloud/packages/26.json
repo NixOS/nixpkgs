@@ -20,9 +20,9 @@
     ]
   },
   "contacts": {
-    "sha256": "1xs42qfnw9j5f930798yl9vj2dpmjsg3i1m6phx0x3dbcbjd2da6",
-    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v5.3.0/contacts-v5.3.0.tar.gz",
-    "version": "5.3.0",
+    "sha256": "07bnq5hfw9br2xa1j77vydwdaxnc0jyzpacd9hh4f5hvgxmbg6ag",
+    "url": "https://github.com/nextcloud-releases/contacts/releases/download/V5.3.1/contacts-V5.3.1.tar.gz",
+    "version": "5.3.1",
     "description": "The Nextcloud contacts app is a user interface for Nextcloud's CardDAV server. Easily sync contacts from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Mail and Calendar – more to come.\n* 🎉 **Never forget a birthday!** You can sync birthdays and other recurring events with your Nextcloud Calendar.\n* 👥 **Sharing of Adressbooks!** You want to share your contacts with your friends or coworkers? No problem!\n* 🙈 **We’re not reinventing the wheel!** Based on the great and open SabreDAV library.",
     "homepage": "https://github.com/nextcloud/contacts#readme",
     "licenses": [
@@ -100,9 +100,9 @@
     ]
   },
   "mail": {
-    "sha256": "03az3x6mjswh4zj1a5zi9v7syskxkv98agvvv1pkmr76zbbvrzi0",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.2.0/mail-v3.2.0.tar.gz",
-    "version": "3.2.0",
+    "sha256": "1i149w2c2nlk3yn0bh872ijkaqxqbnlvsr558fn8gml0z9vwdfav",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.2.1/mail-v3.2.1.tar.gz",
+    "version": "3.2.1",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [

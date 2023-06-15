@@ -20,9 +20,9 @@
     ]
   },
   "contacts": {
-    "sha256": "1xs42qfnw9j5f930798yl9vj2dpmjsg3i1m6phx0x3dbcbjd2da6",
-    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v5.3.0/contacts-v5.3.0.tar.gz",
-    "version": "5.3.0",
+    "sha256": "07bnq5hfw9br2xa1j77vydwdaxnc0jyzpacd9hh4f5hvgxmbg6ag",
+    "url": "https://github.com/nextcloud-releases/contacts/releases/download/V5.3.1/contacts-V5.3.1.tar.gz",
+    "version": "5.3.1",
     "description": "The Nextcloud contacts app is a user interface for Nextcloud's CardDAV server. Easily sync contacts from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Mail and Calendar – more to come.\n* 🎉 **Never forget a birthday!** You can sync birthdays and other recurring events with your Nextcloud Calendar.\n* 👥 **Sharing of Adressbooks!** You want to share your contacts with your friends or coworkers? No problem!\n* 🙈 **We’re not reinventing the wheel!** Based on the great and open SabreDAV library.",
     "homepage": "https://github.com/nextcloud/contacts#readme",
     "licenses": [
