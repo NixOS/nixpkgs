@@ -39797,6 +39797,8 @@ with pkgs;
 
   refind = callPackage ../tools/bootloaders/refind { };
 
+  refmt = callPackage ../development/tools/refmt { };
+
   spectra = callPackage ../development/libraries/spectra { };
 
   spectrojack = callPackage ../applications/audio/spectrojack { };
