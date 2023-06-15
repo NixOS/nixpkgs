@@ -10,6 +10,7 @@
 , libdrm
 , libGL
 , wayland
+, xkeyboard_config
 , libthai
 }:
 
@@ -88,18 +89,16 @@ let
     # for including insync's xdg data dirs
     extraOutputsToInstall = [ "share" ];
 
-    targetPkgs = pkgs: [
+    targetPkgs = pkgs: with pkgs; [
       insync-pkg
-    ];
-
-    multiPkgs = pkgs: with pkgs; [
-      # apparently only package needed for the FHS :)
       libudev0-shim
     ];
 
     runScript = writeShellScript "insync-wrapper.sh" ''
     # QT_STYLE_OVERRIDE was used to suppress a QT warning, it should have no actual effect for this binary.
     export QT_STYLE_OVERRIDE=Fusion
+    # xkb configuration needed: https://github.com/NixOS/nixpkgs/issues/236365
+    export XKB_CONFIG_ROOT=${xkeyboard_config}/share/X11/xkb/
     exec "${insync-pkg.outPath}/lib/insync/insync" "$@"
     '';
 
