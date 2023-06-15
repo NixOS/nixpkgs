@@ -25,7 +25,7 @@ let
     pname = "${pname}-adapter";
     inherit version src;
 
-    cargoSha256 = "sha256-Qq2igtH1XIB+NAEES6hdNZcMbEmaFN69qIJ+gTYupvQ=";
+    cargoHash = "sha256-Qq2igtH1XIB+NAEES6hdNZcMbEmaFN69qIJ+gTYupvQ=";
 
     nativeBuildInputs = [ makeWrapper ];
 
