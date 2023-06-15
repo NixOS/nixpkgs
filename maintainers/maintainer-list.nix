@@ -1405,6 +1405,12 @@
     githubId = 453170;
     name = "Alastair Pharo";
   };
+  astavie = {
+    email = "astavie@pm.me";
+    github = "astavie";
+    githubId = 7745457;
+    name = "Astavie";
+  };
   astro = {
     email = "astro@spaceboyz.net";
     github = "astro";
