@@ -120,6 +120,7 @@ let
         znver1         = versionAtLeast ccVersion "6.0";
         znver2         = versionAtLeast ccVersion "9.0";
         znver3         = versionAtLeast ccVersion "11.0";
+        znver4         = versionAtLeast ccVersion "13.0";
       }.${arch} or true
     else if isClang then
       { # Intel
@@ -130,6 +131,8 @@ let
         # AMD
         znver1         = versionAtLeast ccVersion "4.0";
         znver2         = versionAtLeast ccVersion "9.0";
+        znver3         = versionAtLeast ccVersion "12.0";
+        znver4         = versionAtLeast ccVersion "16.0";
       }.${arch} or true
     else
       false;
