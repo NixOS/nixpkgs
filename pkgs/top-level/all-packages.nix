@@ -28681,6 +28681,8 @@ with pkgs;
 
   line-awesome = callPackage ../data/fonts/line-awesome { };
 
+  linearicons-free = callPackage ../data/fonts/linearicons-free { };
+
   linja-pi-pu-lukin = callPackage ../data/fonts/linja-pi-pu-lukin { };
 
   linja-sike = callPackage ../data/fonts/linja-sike { };
