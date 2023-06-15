@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    echo "${version}\n" > RELEASE-VERSION
+    echo "${version}" > RELEASE-VERSION
   '';
 
   propagatedBuildInputs = [ pillow ];
