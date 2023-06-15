@@ -29458,6 +29458,7 @@ with pkgs;
   };
 
   anytype = callPackage ../applications/misc/anytype { };
+  anytype-legacy = callPackage ../applications/misc/anytype/legacy.nix { };
 
   ao = libfive;
 
