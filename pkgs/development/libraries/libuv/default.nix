@@ -22,14 +22,14 @@
 , python3
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.45.0";
   pname = "libuv";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
+    owner = "libuv";
+    repo = "libuv";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-qKw9QFR24Uw7pVA9isPH8Va+9/5DYuqXz6l6jWcXn+4=";
   };
 
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
       "shutdown_close_pipe"
     ];
     tdRegexp = lib.concatStringsSep "\\|" toDisable;
-    in lib.optionalString doCheck ''
+    in lib.optionalString (finalAttrs.doCheck) ''
       sed '/${tdRegexp}/d' -i test/test-list.h
     '';
 
@@ -112,10 +112,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A multi-platform support library with a focus on asynchronous I/O";
     homepage    = "https://libuv.org/";
-    changelog   = "https://github.com/libuv/libuv/blob/v${version}/ChangeLog";
+    changelog   = "https://github.com/libuv/libuv/blob/v${finalAttrs.version}/ChangeLog";
     maintainers = with maintainers; [ cstrahan ];
     platforms   = platforms.all;
     license     = with licenses; [ mit isc bsd2 bsd3 cc-by-40 ];
   };
 
-}
+})
