@@ -126,7 +126,10 @@
   # removeNext :: X (List (NonEmptyList X)) -> (List (NonEmptyList X))
   removeNext = next: tails:
     removeEmpties (map (l:
-      if (builtins.elemAt l 0 == next)
+      # Unlike (a == b), (builtins.elem a [b]) includes pointer equality optimization,
+      # and thus avoids recursive eager evaluation of the terms for comparison purposes...
+      # but only if the two terms are the same.
+      if (builtins.elem (builtins.elemAt l 0) [ next ])
       then builtins.tail l
       else l)
     tails);
