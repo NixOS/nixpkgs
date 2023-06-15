@@ -12,6 +12,7 @@
 , protobuf
 , pytest-aiohttp
 , pytest-asyncio
+, pytest-httpserver
 , pytest-timeout
 , pytestCheckHook
 , pythonRelaxDepsHook
@@ -23,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.12.1";
+  version = "0.13.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -32,7 +33,7 @@ buildPythonPackage rec {
     owner = "postlund";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-HugvgJAD5R6n8XK802QR7FAaZscyzFRayg48kf3crFQ=";
+    hash = "sha256-xRQsPj44ydciOMj8wKTqJbKUJOxcItPi64qu4nhHY4U=";
   };
 
   postPatch = ''
@@ -77,6 +78,7 @@ buildPythonPackage rec {
     deepdiff
     pytest-aiohttp
     pytest-asyncio
+    pytest-httpserver
     pytest-timeout
     pytestCheckHook
   ];
