@@ -13,7 +13,7 @@ tcl.mkTclDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge.net/projects/togl/files/Togl/${version}/Togl${version}-src.tar.gz";
-    sha256 = "sha256-t9SpC7rTrKYY1QXumef9j7BMgp9jIx3aI2D1V7o/dhA=";
+    hash = "sha256-t9SpC7rTrKYY1QXumef9j7BMgp9jIx3aI2D1V7o/dhA=";
   };
 
   postPatch = ''

@@ -18,12 +18,10 @@ let
     tgz = "bwidget-${ver}.tar.gz";
     src = fetchurl {
       url = "mirror://sourceforge.net/projects/tcllib/files/BWidget/${ver}/${tgz}";
-      sha256 = "sha256-dtj0IoDnFgJCGG0SQ3lJgw6r1QCabBT059ug9mFAOoE=";
+      hash = "sha256-dtj0IoDnFgJCGG0SQ3lJgw6r1QCabBT059ug9mFAOoE=";
     };
   };
-
 in
-
 
 gcc8Stdenv.mkDerivation rec {
   pname = "xcrysden";
@@ -31,7 +29,7 @@ gcc8Stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.xcrysden.org/download/xcrysden-${version}.tar.gz";
-    sha256 = "sha256-gRc27lmL7BpbQn/RDk4GOjDdfK2ulqQ6ULNs6QpPUD8=";
+    hash = "sha256-gRc27lmL7BpbQn/RDk4GOjDdfK2ulqQ6ULNs6QpPUD8=";
   };
 
   buildInputs = [
