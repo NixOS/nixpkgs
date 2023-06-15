@@ -1,5 +1,5 @@
 { lib, stdenv
-, fetchgit
+, fetchzip
 , autoreconfHook
 , pkg-config
 , glib
@@ -16,9 +16,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  src = fetchgit {
-    url = "https://git.kernel.org/pub/scm/network/ofono/ofono.git";
-    rev = version;
+  src = fetchzip {
+    url = "https://git.kernel.org/pub/scm/network/ofono/ofono.git/snapshot/ofono-${version}.tar.gz";
     sha256 = "sha256-GxQfh/ps5oM9G6B1EVgnjo8LqHD1hMqdnju1PCQq3kA=";
   };
 

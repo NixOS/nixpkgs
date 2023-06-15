@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchgit
+, fetchzip
 , openssl
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableManpages ? false
@@ -13,9 +13,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" ] ++ lib.optional enableManpages "man";
 
-  src = fetchgit {
-    url = "https://git.kernel.org/pub/scm/fs/fsverity/fsverity-utils.git";
-    rev = "v${version}";
+  src = fetchzip {
+    url = "https://git.kernel.org/pub/scm/fs/fsverity/fsverity-utils.git/snapshot/fsverity-utils-v${version}.tar.gz";
     sha256 = "sha256-ygBOkp2PBe8Z2ak6SXEJ6HHuT4NRKmIsbJDHcY+h8PQ=";
   };
 
