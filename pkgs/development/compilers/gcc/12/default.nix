@@ -31,6 +31,7 @@
 , disableGdbPlugin ? !enablePlugin
 , nukeReferences
 , callPackage
+, autoreconfHook269
 }:
 
 # Make sure we get GNU sed.
@@ -118,6 +119,8 @@ let majorVersion = "12";
           url = "https://github.com/gcc-mirror/gcc/commit/c86b726c048eddc1be320c0bf64a897658bee13d.diff";
           hash = "sha256-QSIlqDB6JRQhbj/c3ejlmbfWz9l9FurdSWxpwDebnlI=";
         })
+      ] ++ optionals (enablePlugin && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
+        ../enable-plugins-when-cross-compiling.patch
       ]
 
       # Fix detection of bootstrap compiler Ada support (cctools as) on Nix Darwin
@@ -274,7 +277,12 @@ lib.pipe (stdenv.mkDerivation ({
   inherit noSysDirs staticCompiler crossStageStatic
     libcCross crossMingw;
 
-  inherit (callFile ../common/dependencies.nix { }) depsBuildBuild nativeBuildInputs depsBuildTarget buildInputs depsTargetTarget;
+  inherit (callFile ../common/dependencies.nix { }) depsBuildBuild depsBuildTarget buildInputs depsTargetTarget;
+
+  nativeBuildInputs = (callFile ../common/dependencies.nix { }).nativeBuildInputs
+                      ++ lib.optionals (enablePlugin && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
+                        autoreconfHook269
+                      ];
 
   NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm";
 
