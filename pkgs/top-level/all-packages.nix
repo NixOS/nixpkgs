@@ -24432,6 +24432,8 @@ with pkgs;
 
   taglib-sharp = callPackage ../development/libraries/taglib-sharp { };
 
+  tanidvr = callPackage ../applications/video/tanidvr { };
+
   talloc = callPackage ../development/libraries/talloc { };
 
   tagparser = callPackage ../development/libraries/tagparser { };
