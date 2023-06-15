@@ -8375,6 +8375,12 @@
     githubId = 546087;
     name = "Kristoffer K. Føllesdal";
   };
+  khaser = {
+    email = "a-horohorin@mail.ru";
+    github = "khaser";
+    githubId = 59027018;
+    name = "Andrey Khorokhorin";
+  };
   kho-dialga = {
     email = "ivandashenyou@gmail.com";
     github = "Kho-Dialga";
@@ -9331,6 +9337,12 @@
     github = "lopsided98";
     githubId = 5624721;
     name = "Ben Wolsieffer";
+  };
+  lord-valen = {
+    name = "Lord Valen";
+    matrix = "@lord-valen:matrix.org";
+    github = "Lord-Valen";
+    githubId = 46138807;
   };
   lorenz = {
     name = "Lorenz Brun";
@@ -14037,6 +14049,15 @@
     githubId = 889991;
     name = "Ryan Artecona";
   };
+  ryane = {
+    email = "ryanesc@gmail.com";
+    github = "ryane";
+    githubId = 7346;
+    name = "Ryan Eschinger";
+    keys = [{
+      fingerprint = "E4F4 1EAB BF0F C785 06D8  62EF EF68 CF41 D42A 593D";
+    }];
+  };
   ryanorendorff = {
     github = "ryanorendorff";
     githubId = 12442942;
@@ -17111,6 +17132,16 @@
     email = "david@adaltas.com";
     github = "wdavidw";
     githubId = 46896;
+  };
+  weathercold = {
+    name = "Weathercold";
+    email = "weathercold.scr@gmail.com";
+    matrix = "@weathercold:matrix.org";
+    github = "Weathercold";
+    githubId = 49368953;
+    keys = [{
+      fingerprint = "D20F C904 A145 8B28 53D8  FBA0 0422 0096 01E4 87FC";
+    }];
   };
   wegank = {
     name = "Weijia Wang";
