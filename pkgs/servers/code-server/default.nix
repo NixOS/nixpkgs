@@ -297,7 +297,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/coder/code-server";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ offline henkery ];
+    maintainers = with lib.maintainers; [ offline henkery code-asher ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
   };
 })
