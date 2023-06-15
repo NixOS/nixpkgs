@@ -27,10 +27,6 @@ rustPlatform.buildRustPackage rec {
     oniguruma
   ];
 
-  env = {
-    RUSTONIG_SYSTEM_LIBONIG = true;
-  };
-
   meta = with lib; {
     description = "Puts bad Linux applications in a box with only their files";
     homepage = "https://github.com/queer/boxxy";

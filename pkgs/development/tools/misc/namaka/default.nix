@@ -30,7 +30,6 @@ rustPlatform.buildRustPackage rec {
 
   env = {
     GEN_ARTIFACTS = "artifacts";
-    RUSTONIG_SYSTEM_LIBONIG = true;
   };
 
   postInstall = ''

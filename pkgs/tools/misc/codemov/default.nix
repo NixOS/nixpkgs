@@ -36,10 +36,6 @@ rustPlatform.buildRustPackage {
     oniguruma
   ];
 
-  env = {
-    RUSTONIG_SYSTEM_LIBONIG = true;
-  };
-
   postInstall = ''
     wrapProgram $out/bin/codemov \
       --prefix PATH : ${lib.makeBinPath [ ffmpeg git ]}

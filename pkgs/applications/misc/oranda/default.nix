@@ -44,7 +44,6 @@ rustPlatform.buildRustPackage rec {
   ];
 
   env = {
-    RUSTONIG_SYSTEM_LIBONIG = true;
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
