@@ -3,7 +3,7 @@
 { libpath }:
 let
   lib = import libpath;
-  inherit (lib.path) hasPrefix append subpath;
+  inherit (lib.path) hasPrefix removePrefix append subpath;
 
   cases = lib.runTests {
     # Test examples from the lib.path.append documentation
@@ -55,6 +55,23 @@ let
     testHasPrefixExample4 = {
       expr = hasPrefix /. /foo;
       expected = true;
+    };
+
+    testRemovePrefixExample1 = {
+      expr = removePrefix /foo /foo/bar/baz;
+      expected = "./bar/baz";
+    };
+    testRemovePrefixExample2 = {
+      expr = removePrefix /foo /foo;
+      expected = "./.";
+    };
+    testRemovePrefixExample3 = {
+      expr = (builtins.tryEval (removePrefix /foo/bar /foo)).success;
+      expected = false;
+    };
+    testRemovePrefixExample4 = {
+      expr = removePrefix /. /foo;
+      expected = "./foo";
     };
 
     # Test examples from the lib.path.subpath.isValid documentation
