@@ -1,28 +1,33 @@
-{ lib, stdenv
-, fetchFromGitHub
+{ lib
+, stdenv
 , autoreconfHook
+, fetchFromGitHub
+, file
+, jansson
+, openssl
 , pcre
 , pkg-config
 , protobufc
-, withCrypto ? true, openssl
-, enableCuckoo ? true, jansson
-, enableDex ? true
-, enableDotNet ? true
-, enableMacho ? true
-, enableMagic ? true, file
-, enableStatic ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yara";
   version = "4.3.2";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
-    repo = pname;
-    rev = "v${version}";
+    repo = "yara";
+    rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-TmMHn/Zi/ZyJGHobEg9r1uLWu7e+8XJPwCvnUhQlD6I=";
   };
+
+  withCrypto = true;
+  enableCuckoo = true;
+  enableDex = true;
+  enableDotNet = true;
+  enableMacho = true;
+  enableMagic = true;
+  enableStatic = false;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -32,33 +37,34 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pcre
     protobufc
-  ] ++ lib.optionals withCrypto [
+  ] ++ lib.optionals finalAttrs.withCrypto [
     openssl
-  ] ++ lib.optionals enableMagic [
+  ] ++ lib.optionals finalAttrs.enableMagic [
     file
-  ] ++ lib.optionals enableCuckoo [
+  ] ++ lib.optionals finalAttrs.enableCuckoo [
     jansson
   ];
 
-  preConfigure = "./bootstrap.sh";
+  preConfigure = ''
+    ./bootstrap.sh
+  '';
 
-  configureFlags = [
-    (lib.withFeature withCrypto "crypto")
-    (lib.enableFeature enableCuckoo "cuckoo")
-    (lib.enableFeature enableDex "dex")
-    (lib.enableFeature enableDotNet "dotnet")
-    (lib.enableFeature enableMacho "macho")
-    (lib.enableFeature enableMagic "magic")
-    (lib.enableFeature enableStatic "static")
-  ];
+  configureFlags = lib.optionals finalAttrs.withCrypto [ "--without-crypto" ]
+    ++ lib.optionals finalAttrs.enableCuckoo [ "--enable-cuckoo" ]
+    ++ lib.optionals finalAttrs.enableDex [ "--enable-dex" ]
+    ++ lib.optionals finalAttrs.enableDotNet [ "--enable-dotnet" ]
+    ++ lib.optionals finalAttrs.enableMacho [ "--enable-macho" ]
+    ++ lib.optionals finalAttrs.enableMagic [ "--enable-magic" ]
+    ++ lib.optionals finalAttrs.enableStatic [ "--enable-static" ];
 
-  doCheck = enableStatic;
+  doCheck = finalAttrs.enableStatic;
 
   meta = with lib; {
     description = "The pattern matching swiss knife for malware researchers";
     homepage = "http://Virustotal.github.io/yara/";
+    changelog = "https://github.com/VirusTotal/yara/releases/tag/v${finalAttrs.version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     platforms = platforms.all;
   };
-}
+})
