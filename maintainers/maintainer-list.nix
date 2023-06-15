@@ -3764,6 +3764,12 @@
       fingerprint = "9B43 6B14 77A8 79C2 6CDB  6604 C171 2510 02C2 00F2";
     }];
   };
+  deemp = {
+    email = "deempleton@gmail.com";
+    github = "deemp";
+    githubId = 48378098;
+    name = "Danila Danko";
+  };
   deepfire = {
     email = "_deepfire@feelingofgreen.ru";
     github = "deepfire";
@@ -10426,6 +10432,12 @@
     name = "Mike Belsanti";
     github = "michaelBelsanti";
     githubId = 62124625;
+  };
+  michaelCTS = {
+    email = "michael.vogel@cts.co";
+    name = "Michael Vogel";
+    github = "michaelCTS";
+    githubId = 132582212;
   };
   michaelgrahamevans = {
     email = "michaelgrahamevans@gmail.com";

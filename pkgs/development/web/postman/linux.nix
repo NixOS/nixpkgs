@@ -47,12 +47,12 @@ let
   dist = {
     aarch64-linux = {
       arch = "arm64";
-      sha256 = "sha256-ciQ9LqtaOosUAtcZiwOQ+8gB5dTut8pXHAjUsoQEEB8=";
+      sha256 = "sha256-cBueTCZHZZGU3Z/UKLBIw4XCvCz9Hm4MxdIMY9+2ulk=";
     };
 
     x86_64-linux = {
       arch = "64";
-      sha256 = "sha256-QaIj+SOQGR6teUIdLB3D5klRlYrna1MoE3c6UXYEoB4=";
+      sha256 = "sha256-svk60K4pZh0qRdx9+5OUTu0xgGXMhqvQTGTcmqBOMq8=";
     };
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 

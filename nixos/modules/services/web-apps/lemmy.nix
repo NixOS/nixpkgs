@@ -16,7 +16,13 @@ in
 
     enable = mkEnableOption (lib.mdDoc "lemmy a federated alternative to reddit in rust");
 
+    server = {
+      package = mkPackageOptionMD pkgs "lemmy-server" {};
+    };
+
     ui = {
+      package = mkPackageOptionMD pkgs "lemmy-ui" {};
+
       port = mkOption {
         type = types.port;
         default = 1234;
@@ -27,7 +33,15 @@ in
     caddy.enable = mkEnableOption (lib.mdDoc "exposing lemmy with the caddy reverse proxy");
     nginx.enable = mkEnableOption (lib.mdDoc "exposing lemmy with the nginx reverse proxy");
 
-    database.createLocally = mkEnableOption (lib.mdDoc "creation of database on the instance");
+    database = {
+      createLocally = mkEnableOption (lib.mdDoc "creation of database on the instance");
+
+      uri = mkOption {
+        type = with types; nullOr str;
+        default = null;
+        description = lib.mdDoc "The connection URI to use. Takes priority over the configuration file if set.";
+      };
+    };
 
     settings = mkOption {
       default = { };
@@ -49,7 +63,7 @@ in
         };
 
         options.federation = {
-          enabled = mkEnableOption (lib.mdDoc "activitypub federation");
+          enabled = (mkEnableOption (lib.mdDoc "activitypub federation")) // { visible = false; };
         };
 
         options.captcha = {
@@ -71,6 +85,10 @@ in
 
   config =
     lib.mkIf cfg.enable {
+      warnings = lib.optional (cfg.settings.federation.enabled) ''
+        This option was removed in 0.17.0 and no longer has any effect.
+      '';
+
       services.lemmy.settings = (mapAttrs (name: mkDefault)
         {
           bind = "127.0.0.1";
@@ -112,7 +130,7 @@ in
         virtualHosts."${cfg.settings.hostname}" = {
           extraConfig = ''
             handle_path /static/* {
-              root * ${pkgs.lemmy-ui}/dist
+              root * ${cfg.ui.package}/dist
               file_server
             }
             @for_backend {
@@ -185,10 +203,8 @@ in
         description = "Lemmy server";
 
         environment = {
-          LEMMY_CONFIG_LOCATION = "/run/lemmy/config.hjson";
-
-          # Verify how this is used, and don't put the password in the nix store
-          LEMMY_DATABASE_URL = with cfg.settings.database;"postgres:///${database}?host=${host}";
+          LEMMY_CONFIG_LOCATION = "${settingsFormat.generate "config.hjson" cfg.settings}";
+          LEMMY_DATABASE_URL = mkIf (cfg.database.uri != null) cfg.database.uri;
         };
 
         documentation = [
@@ -205,8 +221,7 @@ in
         serviceConfig = {
           DynamicUser = true;
           RuntimeDirectory = "lemmy";
-          ExecStartPre = "${pkgs.coreutils}/bin/install -m 600 ${settingsFormat.generate "config.hjson" cfg.settings} /run/lemmy/config.hjson";
-          ExecStart = "${pkgs.lemmy-server}/bin/lemmy_server";
+          ExecStart = "${cfg.server.package}/bin/lemmy_server";
         };
       };
 
@@ -233,8 +248,8 @@ in
 
         serviceConfig = {
           DynamicUser = true;
-          WorkingDirectory = "${pkgs.lemmy-ui}";
-          ExecStart = "${pkgs.nodejs}/bin/node ${pkgs.lemmy-ui}/dist/js/server.js";
+          WorkingDirectory = "${cfg.ui.package}";
+          ExecStart = "${pkgs.nodejs}/bin/node ${cfg.ui.package}/dist/js/server.js";
         };
       };
     };

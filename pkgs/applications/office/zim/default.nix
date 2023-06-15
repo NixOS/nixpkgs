@@ -27,6 +27,20 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
+  postInstall = ''
+    (
+      cd icons
+      for img in *.{png,svg}; do
+        size=''${img#zim}
+        size=''${size%.png}
+        size=''${size%.svg}
+        dimensions="''${size}x''${size}"
+        mkdir -p $out/share/icons/hicolor/$dimensions/apps
+        cp $img $out/share/icons/hicolor/$dimensions/apps/${pname}.png
+      done
+    )
+  '';
+
   # RuntimeError: could not create GtkClipboard object
   doCheck = false;
 
