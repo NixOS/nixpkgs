@@ -38,7 +38,10 @@ in package.override rec {
     hash = "sha256-ZrvYKMSx5WymWR46/UKr5jCsclXXzBeY21ju22zeqN0=";
   };
 
-  passthru.tests = { inherit (nixosTests) pixelfed; };
+  passthru = {
+    tests = { inherit (nixosTests) pixelfed; };
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "A federated image sharing platform";
