@@ -13,6 +13,8 @@
 , version, src, meta, sourceRoot, commandLineArgs
 , executableName, longName, shortName, pname, updateScript
 , dontFixup ? false
+, rev ? null, vscodeServer ? null
+
 # sourceExecutableName is the name of the binary in the source archive, over
 # which we have no control
 , sourceExecutableName ? executableName
@@ -30,6 +32,8 @@ let
       inherit executableName longName tests updateScript;
       fhs = fhs {};
       fhsWithPackages = f: fhs { additionalPkgs = f; };
+    } // lib.optionalAttrs (vscodeServer != null) {
+      inherit rev vscodeServer;
     };
 
     desktopItem = makeDesktopItem {

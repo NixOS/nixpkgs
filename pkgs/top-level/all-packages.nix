@@ -642,6 +642,8 @@ with pkgs;
 
   proto-contrib = callPackage ../development/tools/proto-contrib { };
 
+  protoc-gen-dart = callPackage ../development/tools/protoc-gen-dart { };
+
   protoc-gen-doc = callPackage ../development/tools/protoc-gen-doc { };
 
   protoc-gen-entgrpc = callPackage ../development/tools/protoc-gen-entgrpc { };
@@ -902,6 +904,8 @@ with pkgs;
   packr = callPackage ../development/libraries/packr { };
 
   pacproxy = callPackage ../tools/networking/pacproxy { };
+
+  pacup = python3Packages.callPackage ../tools/package-management/pacup { };
 
   perseus-cli = callPackage ../development/tools/perseus-cli {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -1686,6 +1690,8 @@ with pkgs;
   mprocs = callPackage ../tools/misc/mprocs { };
 
   mpy-utils = python3Packages.callPackage ../tools/misc/mpy-utils { };
+
+  mymcplus = python3Packages.callPackage ../tools/games/mymcplus { };
 
   networkd-notify = python3Packages.callPackage ../tools/networking/networkd-notify {
     systemd = pkgs.systemd;
@@ -12622,6 +12628,8 @@ with pkgs;
   soundwireserver = callPackage ../applications/audio/soundwireserver { };
 
   sozu = callPackage ../servers/sozu { };
+
+  spacer = callPackage ../tools/misc/spacer { };
 
   sparrow-unwrapped = callPackage ../applications/blockchains/sparrow {
     openimajgrabber = callPackage ../applications/blockchains/sparrow/openimajgrabber.nix {};
@@ -33404,10 +33412,6 @@ with pkgs;
 
   openfx = callPackage ../development/libraries/openfx { };
 
-  openimageio_1 = callPackage ../development/libraries/openimageio/1.x.nix {
-    boost = boost175;
-  };
-
   openimageio = darwin.apple_sdk_11_0.callPackage ../development/libraries/openimageio { };
 
   openjump = callPackage ../applications/misc/openjump { };
@@ -35353,6 +35357,9 @@ with pkgs;
       inherit (wayfireApplications-unwrapped) wayfire;
     }
   );
+
+  weave-gitops = callPackage ../applications/networking/cluster/weave-gitops { };
+
   wf-config = callPackage ../applications/window-managers/wayfire/wf-config.nix { };
 
   waypipe = callPackage ../applications/networking/remote/waypipe { };
@@ -37701,6 +37708,8 @@ with pkgs;
   dkh = callPackage ../applications/science/chemistry/dkh { };
 
   openmolcas = callPackage ../applications/science/chemistry/openmolcas { };
+
+  pdb2pqr = with python3Packages; toPythonApplication pdb2pqr;
 
   pymol = callPackage ../applications/science/chemistry/pymol { };
 

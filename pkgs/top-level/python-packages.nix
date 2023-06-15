@@ -1879,6 +1879,8 @@ self: super: with self; {
 
   clickclick = callPackage ../development/python-modules/clickclick { };
 
+  click-aliases = callPackage ../development/python-modules/click-aliases { };
+
   click-command-tree = callPackage ../development/python-modules/click-command-tree { };
 
   click-completion = callPackage ../development/python-modules/click-completion { };
@@ -6337,6 +6339,8 @@ self: super: with self; {
     enablePython = true;
   });
 
+  mmcif-pdbx = callPackage ../development/python-modules/mmcif-pdbx { };
+
   mmcv = callPackage ../development/python-modules/mmcv { };
 
   mmengine = callPackage ../development/python-modules/mmengine { };
@@ -7426,6 +7430,8 @@ self: super: with self; {
 
   pcpp = callPackage ../development/python-modules/pcpp { };
 
+  pdb2pqr = callPackage ../development/python-modules/pdb2pqr { };
+
   pdf2image = callPackage ../development/python-modules/pdf2image { };
 
   pdfkit = callPackage ../development/python-modules/pdfkit { };
@@ -7684,6 +7690,8 @@ self: super: with self; {
   ppdeep = callPackage ../development/python-modules/ppdeep { };
 
   prodict = callPackage ../development/python-modules/prodict { };
+
+  propka = callPackage ../development/python-modules/propka { };
 
   proxy_tools = callPackage ../development/python-modules/proxy_tools { };
 
@@ -13261,11 +13269,15 @@ self: super: with self; {
 
   xsdata = callPackage ../development/python-modules/xsdata { };
 
+  xstatic-asciinema-player = callPackage ../development/python-modules/xstatic-asciinema-player { };
+
   xstatic-bootbox = callPackage ../development/python-modules/xstatic-bootbox { };
 
   xstatic-bootstrap = callPackage ../development/python-modules/xstatic-bootstrap { };
 
   xstatic = callPackage ../development/python-modules/xstatic { };
+
+  xstatic-font-awesome = callPackage ../development/python-modules/xstatic-font-awesome { };
 
   xstatic-jquery = callPackage ../development/python-modules/xstatic-jquery { };
 
