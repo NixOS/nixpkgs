@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, aiocontextvars
 , buildPythonPackage
 , colorama
 , fetchpatch
@@ -13,23 +12,17 @@
 
 buildPythonPackage rec {
   pname = "loguru";
-  # No release since Jan 2022, only master is compatible with Python 3.11
-  # https://github.com/Delgan/loguru/issues/740
-  version = "unstable-2023-01-20";
+  version = "0.7.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Delgan";
     repo = pname;
-    rev = "07f94f3c8373733119f85aa8b9ca05ace3325a4b";
-    hash = "sha256-lMGyQbBX3z6186ojs/iew7JMrG91ivPA679T9r+7xYw=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-JwhJPX58KrPdX237L43o77spycLAVFv3K9njJiRK30Y=";
   };
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.7") [
-    aiocontextvars
-  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -54,8 +47,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/Delgan/loguru";
     description = "Python logging made (stupidly) simple";
+    homepage = "https://github.com/Delgan/loguru";
+    changelog = "https://github.com/delgan/loguru/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum rmcgibbo ];
   };
