@@ -19,7 +19,7 @@ in {
     if test "$staticCompiler" = "1"; then
         EXTRA_LDFLAGS="-static"
     else
-        EXTRA_LDFLAGS="-Wl,-rpath,''${!outputLib}/lib"
+        EXTRA_LDFLAGS="-Wl,-rpath,${builtins.placeholder "lib"}/lib"
     fi
 
     # GCC interprets empty paths as ".", which we don't want.
@@ -193,12 +193,12 @@ in {
 
   preInstall = ''
     mkdir -p "$out/${ifNullThen targetConfig ""}/lib"
-    mkdir -p "''${!outputLib}/${ifNullThen targetConfig ""}/lib"
+    mkdir -p "${builtins.placeholder "lib"}/${ifNullThen targetConfig ""}/lib"
   '' +
   # Make `lib64` symlinks to `lib`.
   lib.optionalString (!enableMultilib && stdenv.hostPlatform.is64bit && !stdenv.hostPlatform.isMips64n32) ''
     ln -s lib "$out/${ifNullThen targetConfig ""}/lib64"
-    ln -s lib "''${!outputLib}/${ifNullThen targetConfig ""}/lib64"
+    ln -s lib "${builtins.placeholder "lib"}/${ifNullThen targetConfig ""}/lib64"
   '' +
   # On mips platforms, gcc follows the IRIX naming convention:
   #
@@ -209,32 +209,32 @@ in {
   # Make `lib32` symlinks to `lib`.
   lib.optionalString (!enableMultilib && stdenv.targetPlatform.isMips64n32) ''
     ln -s lib "$out/${ifNullThen targetConfig ""}/lib32"
-    ln -s lib "''${!outputLib}/${ifNullThen targetConfig ""}/lib32"
+    ln -s lib "${builtins.placeholder "lib"}/${ifNullThen targetConfig ""}/lib32"
   '';
 
   postInstall = ''
     # Move runtime libraries to lib output.
-    moveToOutput "${targetConfigSlash}lib/lib*.so*" "''${!outputLib}"
-    moveToOutput "${targetConfigSlash}lib/lib*.la"  "''${!outputLib}"
-    moveToOutput "${targetConfigSlash}lib/lib*.dylib" "''${!outputLib}"
-    moveToOutput "${targetConfigSlash}lib/lib*.dll.a" "''${!outputLib}"
-    moveToOutput "share/gcc-*/python" "''${!outputLib}"
+    moveToOutput "${targetConfigSlash}lib/lib*.so*" "${builtins.placeholder "lib"}"
+    moveToOutput "${targetConfigSlash}lib/lib*.la"  "${builtins.placeholder "lib"}"
+    moveToOutput "${targetConfigSlash}lib/lib*.dylib" "${builtins.placeholder "lib"}"
+    moveToOutput "${targetConfigSlash}lib/lib*.dll.a" "${builtins.placeholder "lib"}"
+    moveToOutput "share/gcc-*/python" "${builtins.placeholder "lib"}"
 
     if [ -z "$enableShared" ]; then
-        moveToOutput "${targetConfigSlash}lib/lib*.a" "''${!outputLib}"
+        moveToOutput "${targetConfigSlash}lib/lib*.a" "${builtins.placeholder "lib"}"
     fi
 
-    for i in "''${!outputLib}/${ifNullThen targetConfig ""}"/lib/*.{la,py}; do
-        substituteInPlace "$i" --replace "$out" "''${!outputLib}"
+    for i in "${builtins.placeholder "lib"}/${ifNullThen targetConfig ""}"/lib/*.{la,py}; do
+        substituteInPlace "$i" --replace "$out" "${builtins.placeholder "lib"}"
     done
 
     if [ -n "$enableMultilib" ]; then
-        moveToOutput "${targetConfigSlash}lib64/lib*.so*" "''${!outputLib}"
-        moveToOutput "${targetConfigSlash}lib64/lib*.la"  "''${!outputLib}"
-        moveToOutput "${targetConfigSlash}lib64/lib*.dylib" "''${!outputLib}"
+        moveToOutput "${targetConfigSlash}lib64/lib*.so*" "${builtins.placeholder "lib"}"
+        moveToOutput "${targetConfigSlash}lib64/lib*.la"  "${builtins.placeholder "lib"}"
+        moveToOutput "${targetConfigSlash}lib64/lib*.dylib" "${builtins.placeholder "lib"}"
 
-        for i in "''${!outputLib}/${ifNullThen targetConfig ""}"/lib64/*.{la,py}; do
-            substituteInPlace "$i" --replace "$out" "''${!outputLib}"
+        for i in "${builtins.placeholder "lib"}/${ifNullThen targetConfig ""}"/lib64/*.{la,py}; do
+            substituteInPlace "$i" --replace "$out" "${builtins.placeholder "lib"}"
         done
     fi
 
@@ -247,10 +247,10 @@ in {
     rm -rf $out/bin/gccbug
 
     if type "install_name_tool"; then
-        for i in "''${!outputLib}"/lib/*.*.dylib "''${!outputLib}"/lib/*.so.[0-9]; do
+        for i in "${builtins.placeholder "lib"}"/lib/*.*.dylib "${builtins.placeholder "lib"}"/lib/*.so.[0-9]; do
             install_name_tool -id "$i" "$i" || true
             for old_path in $(otool -L "$i" | grep "$out" | awk '{print $1}'); do
-              new_path=`echo "$old_path" | sed "s,$out,''${!outputLib},"`
+              new_path=`echo "$old_path" | sed "s,$out,${builtins.placeholder "lib"},"`
               install_name_tool -change "$old_path" "$new_path" "$i" || true
             done
         done
