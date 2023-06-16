@@ -1,6 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
-, gcc-unwrapped
+, udev
 , dpkg
 , util-linux
 , bash
@@ -8,30 +9,13 @@
 , electron
 }:
 
-let
-  inherit (stdenv.hostPlatform) system;
-
-  throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
-
-  sha256 = {
-    "x86_64-linux" = "1rcidar97nnpjb163x9snnnhw1z1ld4asgbd5dxpzdh8hikh66ll";
-    "i686-linux" = "1jll4i0j9kh78kl10s596xxs60gy7cnlafgpk89861yihj0i73a5";
-  }."${system}" or throwSystem;
-
-  arch = {
-    "x86_64-linux" = "amd64";
-    "i686-linux" = "i386";
-  }."${system}" or throwSystem;
-
-in
-
 stdenv.mkDerivation rec {
   pname = "etcher";
-  version = "1.7.9";
+  version = "1.18.4";
 
   src = fetchurl {
-    url = "https://github.com/balena-io/etcher/releases/download/v${version}/balena-etcher-electron_${version}_${arch}.deb";
-    inherit sha256;
+    url = "https://github.com/balena-io/etcher/releases/download/v${version}/balena-etcher_${version}_amd64.deb";
+    hash = "sha256-k1Nnpma5wGUWBF7xUO93h0ltOdU1hXurMOghcWRFJlQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -61,8 +45,8 @@ stdenv.mkDerivation rec {
     cp -a usr/share/* $out/share
     cp -a opt/balenaEtcher/{locales,resources} $out/share/${pname}
 
-    substituteInPlace $out/share/applications/balena-etcher-electron.desktop \
-      --replace /opt/balenaEtcher/balena-etcher-electron ${pname}
+    substituteInPlace $out/share/applications/balena-etcher.desktop \
+      --replace /opt/balenaEtcher/balena-etcher ${pname}
 
     runHook postInstall
   '';
@@ -70,15 +54,15 @@ stdenv.mkDerivation rec {
   postFixup = ''
     makeWrapper ${electron}/bin/electron $out/bin/${pname} \
       --add-flags $out/share/${pname}/resources/app \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ gcc-unwrapped.lib ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc.lib udev ]}"
   '';
 
   meta = with lib; {
     description = "Flash OS images to SD cards and USB drives, safely and easily";
     homepage = "https://etcher.io/";
     license = licenses.asl20;
-    maintainers = [ maintainers.shou ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    maintainers = with maintainers; [ shou jared-davis ];
+    platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }
