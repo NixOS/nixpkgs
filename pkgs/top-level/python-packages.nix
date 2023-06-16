@@ -7476,6 +7476,8 @@ self: super: with self; {
     inherit (pkgs) glibcLocales git;
   };
 
+  pem = callPackage ../development/python-modules/pem { };
+
   pendulum = callPackage ../development/python-modules/pendulum { };
 
   pep440 = callPackage ../development/python-modules/pep440 { };
