@@ -43,6 +43,14 @@ buildPythonPackage rec {
     "lime/tests/test_lime_text.py"
   ];
 
+  pythonImportsCheck = [
+    "lime.exceptions"
+    "lime.explanation"
+    "lime.lime_base"
+    "lime.lime_image"
+    "lime.lime_text"
+  ];
+
   meta = with lib; {
     description = "Local Interpretable Model-Agnostic Explanations for machine learning classifiers";
     homepage = "https://github.com/marcotcr/lime";
