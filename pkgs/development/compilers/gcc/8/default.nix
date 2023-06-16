@@ -199,7 +199,10 @@ lib.pipe (stdenv.mkDerivation ({
             )
           '';
 
-  inherit noSysDirs staticCompiler withoutTargetLibc
+  # kludge to prevent a mass-rebuild; will be removed in a PR sent to staging
+  crossStageStatic = withoutTargetLibc;
+
+  inherit noSysDirs staticCompiler
     libcCross crossMingw;
 
   inherit (callFile ../common/dependencies.nix { })
