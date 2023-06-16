@@ -337,7 +337,15 @@ in
 
   config = {
     _module.args = {
-      pkgs = finalPkgs.__splicedPackages;
+      pkgs =
+        # We explicitly set the default override priority, so that we do not need
+        # to evaluate finalPkgs in case an override is placed on `_module.args.pkgs`.
+        # After all, to determine a definition priority, we need to evaluate `._type`,
+        # which is somewhat costly for Nixpkgs. With an explicit priority, we only
+        # evaluate the wrapper to find out that the priority is lower, and then we
+        # don't need to evaluate `finalPkgs`.
+        lib.mkOverride lib.modules.defaultOverridePriority
+          finalPkgs.__splicedPackages;
     };
 
     assertions = [
