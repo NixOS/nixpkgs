@@ -15,17 +15,17 @@
 
 stdenv.mkDerivation rec {
   pname = "libtracefs";
-  version = "1.6.4";
+  version = "1.7.0";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git";
     rev = "libtracefs-${version}";
-    sha256 = "sha256-fWop0EMkoVulLBzU7q8x1IhMtdnEJ89wMz0cz964F6s=";
+    sha256 = "sha256-64eXFFdnZHHf4C3vbADtPuIMsfJ85VZ6t8A1gIc1CW0=";
   };
 
   postPatch = ''
     substituteInPlace scripts/utils.mk --replace /bin/pwd ${coreutils}/bin/pwd
-    patchShebangs check-manpages.sh
+    patchShebangs --build check-manpages.sh
   '';
 
   outputs = [ "out" "dev" "devman" "doc" ];
