@@ -16,5 +16,6 @@ buildNodejs {
     ./disable-darwin-v8-system-instrumentation-node19.patch
     ./bypass-darwin-xcrun-node16.patch
     ./node-npm-build-npm-package-logic.patch
+    ./common-gypi-cross.patch
   ];
 }
