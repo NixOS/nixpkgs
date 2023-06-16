@@ -7183,6 +7183,12 @@
     githubId = 3874017;
     name = "Jappie Klooster";
   };
+  jared-davis = {
+    email = "message@jared-pri.me";
+    github = "Jared-Prime";
+    githubId = 1060000;
+    name = "Jared Davis";
+  };
   jasoncarr = {
     email = "jcarr250@gmail.com";
     github = "jasoncarr0";
