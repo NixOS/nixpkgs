@@ -12629,6 +12629,12 @@
     githubId = 421510;
     name = "Noé Rubinstein";
   };
+  pho = {
+    email = "phofin@gmail.com";
+    github = "pho";
+    githubId = 88469;
+    name = "Jaime Breva";
+  };
   photex = {
     email = "photex@gmail.com";
     github = "photex";
