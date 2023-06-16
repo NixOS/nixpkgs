@@ -2,18 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "libtraceevent";
-  version = "1.6.2";
+  version = "1.7.3";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git";
     rev = "libtraceevent-${version}";
-    sha256 = "sha256-iLy2rEKn0UJguRcY/W8RvUq7uX+snQojb/cXOmMsjwc=";
+    sha256 = "sha256-poF+Cqcdj0KIgEJWW7XDAlRLz2/Egi948s1M24ETvBo=";
   };
 
   # Don't build and install html documentation
   postPatch = ''
     sed -i -e '/^all:/ s/html//' -e '/^install:/ s/install-html//' Documentation/Makefile
     substituteInPlace scripts/utils.mk --replace /bin/pwd ${coreutils}/bin/pwd
+    patchShebangs --build check-manpages.sh
   '';
 
   outputs = [ "out" "dev" "devman" ];
