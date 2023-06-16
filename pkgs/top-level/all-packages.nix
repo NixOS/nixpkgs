@@ -16672,7 +16672,10 @@ with pkgs;
 
   ograc = callPackage ../development/tools/rust/ograc { };
 
+  opensmalltalk-vm = callPackage ../development/compilers/opensmalltalk-vm { };
+
   ravedude = callPackage ../development/tools/rust/ravedude { };
+
   rhack = callPackage ../development/tools/rust/rhack { };
   roogle = callPackage ../development/tools/rust/roogle { };
   rustfmt = rustPackages.rustfmt;
@@ -17797,6 +17800,11 @@ with pkgs;
   neocmakelsp = callPackage ../development/tools/language-servers/neocmakelsp { };
 
   nil = callPackage ../development/tools/language-servers/nil { };
+
+  nixd = callPackage ../development/tools/language-servers/nixd {
+    llvmPackages = llvmPackages_16;
+    nix = nixVersions.nix_2_16;
+  };
 
   nls = callPackage ../development/tools/language-servers/nls { };
 
