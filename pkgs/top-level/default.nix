@@ -60,11 +60,24 @@ in let
 
   localSystem = lib.systems.elaborate args.localSystem;
 
-  # Condition preserves sharing which in turn affects equality.
+  # Condition preserves sharing which in turn improves equality within this Nixpkgs.
+  #
+  # Use `lib.systems.equals` to compare systems.
   crossSystem =
-    if crossSystem0 == null || crossSystem0 == args.localSystem
-    then localSystem
-    else lib.systems.elaborate crossSystem0;
+    if crossSystem0 == null || lib.systems.equals crossSystem0 args.localSystem
+    then
+      # This makes `crossSystem == localSystem` so that comparisons with `==`
+      # work **in the context of this single Nixpkgs invocation**.
+      #
+      # Equality is still broken when comparing between two Nixpkgs instances:
+      #
+      #      (import <nixpkgs> {}).stdenv.hostPlatform
+      #   != (import <nixpkgs> {}).stdenv.hostPlatform
+      localSystem
+    else
+      # It's a truly different system, so no significant equality problems.
+      # We only have to elaborate it, just like we did for localSystem above.
+      lib.systems.elaborate crossSystem0;
 
   # Allow both:
   # { /* the config */ } and
