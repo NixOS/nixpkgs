@@ -398,6 +398,15 @@
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-DSdE0CkAIJje71/S64no9fMJMUhAnFiK3lWewvcyE14="
   },
+  "fly": {
+    "hash": "sha256-houGmQPvoOI2We6blMRuGrcuK7M9qLbB7XhvvHR9JZY=",
+    "homepage": "https://registry.terraform.io/providers/fly-apps/fly",
+    "owner": "fly-apps",
+    "repo": "terraform-provider-fly",
+    "rev": "v0.0.22",
+    "spdx": "BSD-3-Clause",
+    "vendorHash": "sha256-Z6PAMT2AyTWJr7FmZ1LcIRRK9KQB4MihBz/Vwefu/58="
+  },
   "fortios": {
     "deleteVendor": true,
     "hash": "sha256-nvK5mbQdCB6lmdyhJbMS15eOER8eIAYv26mc1FCifXs=",
