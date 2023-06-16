@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "clickhouse";
-  version = "21.8.12.29";
+  version = "21.8.15.7";
 
   broken = stdenv.buildPlatform.is32bit; # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     repo   = "ClickHouse";
     rev    = "v${version}-lts";
     fetchSubmodules = true;
-    sha256 = "1qqacb7v7mhr9k162yll8mcbh0cxa347f5hypz0a8l54v1dz5fyl";
+    sha256 = "06n02l3j27mw1gpnay4fs4hnmzlr7pf4c3s9i680cjdrhscrqmjp";
   };
 
   nativeBuildInputs = [ cmake libtool llvm-bintools ninja ];
