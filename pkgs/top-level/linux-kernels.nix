@@ -482,8 +482,6 @@ in {
 
     prl-tools = callPackage ../os-specific/linux/prl-tools { };
 
-    sch_cake = callPackage ../os-specific/linux/sch_cake { };
-
     isgx = callPackage ../os-specific/linux/isgx { };
 
     rr-zen_workaround = callPackage ../development/tools/analysis/rr/zen_workaround.nix { };
@@ -563,6 +561,7 @@ in {
 
   } // lib.optionalAttrs config.allowAliases {
     ati_drivers_x11 = throw "ati drivers are no longer supported by any kernel >=4.1"; # added 2021-05-18;
+    sch_cake = throw "sch_cake was added in mainline kernel version 4.19"; # Added 2023-06-14
     xmm7360-pci = throw "Support for the XMM7360 WWAN card was added to the iosm kmod in mainline kernel version 5.18";
   });
 
