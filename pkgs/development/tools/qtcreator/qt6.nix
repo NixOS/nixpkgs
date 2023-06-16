@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , cmake
 , pkg-config
 , ninja
@@ -29,21 +28,12 @@
 
 stdenv.mkDerivation rec {
   pname = "qtcreator";
-  version = "10.0.1";
+  version = "10.0.2";
 
   src = fetchurl {
     url = "https://download.qt.io/official_releases/${pname}/${lib.versions.majorMinor version}/${version}/qt-creator-opensource-src-${version}.tar.xz";
-    sha256 = "sha256-QWGwfc7A/I8xUpx9thC3FzFBKNoAei76haqbwzCXoWM=";
+    hash = "sha256-2n/F59wagMccCeJFt9JxHrAbpXXi+ZEQ0Ep855mSbU4=";
   };
-
-  patches = [
-    # fix build with Qt 6.5.1
-    # FIXME: remove for next release
-    (fetchpatch {
-      url = "https://github.com/qt-creator/qt-creator/commit/9817df63fb9eae342d5bf6f28f526aa09b17e8de.diff";
-      hash = "sha256-HIQuKroWUhJBWhVG3fyoBIFvezktCyQAuaZz/lvg7uk=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
