@@ -24,7 +24,7 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
 
     if test "$noSysDirs" = "1"; then
 
-        declare \
+        declare -g \
             EXTRA_FLAGS_FOR_BUILD EXTRA_FLAGS EXTRA_FLAGS_FOR_TARGET \
             EXTRA_LDFLAGS_FOR_BUILD EXTRA_LDFLAGS_FOR_TARGET
 
@@ -51,7 +51,7 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
             extraLDFlags=("-L$libc_libdir" "-rpath" "$libc_libdir"
                           "''${extraLDFlags[@]}")
             for i in "''${extraLDFlags[@]}"; do
-                declare EXTRA_LDFLAGS''${post}+=" -Wl,$i"
+                declare -g EXTRA_LDFLAGS''${post}+=" -Wl,$i"
             done
         done
 
@@ -72,11 +72,11 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
                 # Use *real* header files, otherwise a limits.h is generated that
                 # does not include Libc's limits.h (notably missing SSIZE_MAX,
                 # which breaks the build).
-                declare NIX_FIXINC_DUMMY''${post}="$libc_devdir/include"
+                declare -g NIX_FIXINC_DUMMY''${post}="$libc_devdir/include"
             else
                 # Hack: support impure environments.
                 extraFlags=("-isystem" "/usr/include")
-                declare NIX_FIXINC_DUMMY''${post}=/usr/include
+                declare -g NIX_FIXINC_DUMMY''${post}=/usr/include
             fi
 
             extraFlags=("-I''${!curFIXINC}" "''${extraFlags[@]}")
@@ -92,7 +92,7 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
                 extraFlags=("-O2" "''${extraFlags[@]}")
             fi
 
-            declare EXTRA_FLAGS''${post}="''${extraFlags[*]}"
+            declare -g EXTRA_FLAGS''${post}="''${extraFlags[*]}"
         done
 
         if test -z "''${targetConfig-}"; then
