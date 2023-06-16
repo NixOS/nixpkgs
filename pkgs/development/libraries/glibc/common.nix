@@ -161,7 +161,7 @@ stdenv.mkDerivation ({
     ++ lib.optional withGd "--with-gd"
     ++ lib.optional (!withLibcrypt) "--disable-crypt";
 
-  makeFlags = [
+  makeFlags = (args.makeFlags or []) ++ [
     "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
   ];
 
@@ -196,7 +196,7 @@ stdenv.mkDerivation ({
   passthru = { inherit version; minorRelease = version; };
 }
 
-// (removeAttrs args [ "withLinuxHeaders" "withGd" "postInstall" ]) //
+// (removeAttrs args [ "withLinuxHeaders" "withGd" "postInstall" "makeFlags" ]) //
 
 {
   src = fetchurl {
