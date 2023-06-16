@@ -2,7 +2,12 @@
 , fetchPypi
 , buildPythonPackage
 
-, matplotlib, numpy, scipy, tqdm, scikit-learn-extra, scikit-image
+, matplotlib
+, numpy
+, scipy
+, tqdm
+, scikit-learn
+, scikit-image
 
 , pytestCheckHook
 , pythonOlder
@@ -25,7 +30,7 @@ buildPythonPackage rec {
     numpy
     scipy
     tqdm
-    scikit-learn-extra
+    scikit-learn
     scikit-image
   ];
 
