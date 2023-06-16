@@ -275,7 +275,7 @@ let
         acmeLocation = optionalString (vhost.enableACME || vhost.useACMEHost != null) ''
           location /.well-known/acme-challenge {
             ${optionalString (vhost.acmeFallbackHost != null) "try_files $uri @acme-fallback;"}
-            ${optionalString (vhost.acmeRoot != null) "root ${vhost.acmeRoot};"}
+            root ${vhost.acmeRoot};
             auth_basic off;
           }
           ${optionalString (vhost.acmeFallbackHost != null) ''
@@ -316,9 +316,6 @@ let
           ''}
           ${optionalString vhost.rejectSSL ''
             ssl_reject_handshake on;
-          ''}
-          ${optionalString (hasSSL && vhost.kTLS) ''
-            ssl_conf_command Options KTLS;
           ''}
 
           ${mkBasicAuth vhostName vhost}
@@ -837,14 +834,6 @@ in
       }
 
       {
-        assertion = any (host: host.kTLS) (attrValues virtualHosts) -> versionAtLeast cfg.package.version "1.21.4";
-        message = ''
-          services.nginx.virtualHosts.<name>.kTLS requires nginx version
-          1.21.4 or above; see the documentation for services.nginx.package.
-        '';
-      }
-
-      {
         assertion = all (host: !(host.enableACME && host.useACMEHost != null)) (attrValues virtualHosts);
         message = ''
           Options services.nginx.service.virtualHosts.<name>.enableACME and
@@ -962,16 +951,9 @@ in
     };
 
     security.acme.certs = let
-      acmePairs = map (vhostConfig: let
-        hasRoot = vhostConfig.acmeRoot != null;
-      in nameValuePair vhostConfig.serverName {
+      acmePairs = map (vhostConfig: nameValuePair vhostConfig.serverName {
         group = mkDefault cfg.group;
-        # if acmeRoot is null inherit config.security.acme
-        # Since config.security.acme.certs.<cert>.webroot's own default value
-        # should take precedence set priority higher than mkOptionDefault
-        webroot = mkOverride (if hasRoot then 1000 else 2000) vhostConfig.acmeRoot;
-        # Also nudge dnsProvider to null in case it is inherited
-        dnsProvider = mkOverride (if hasRoot then 1000 else 2000) null;
+        webroot = vhostConfig.acmeRoot;
         extraDomainNames = vhostConfig.serverAliases;
       # Filter for enableACME-only vhosts. Don't want to create dud certs
       }) (filter (vhostConfig: vhostConfig.useACMEHost == null) acmeEnabledVhosts);
