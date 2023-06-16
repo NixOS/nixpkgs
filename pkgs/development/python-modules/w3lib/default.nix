@@ -26,7 +26,7 @@ buildPythonPackage rec {
     "w3lib"
   ];
 
-  disabledTests = lib.optional (pythonAtLeast "3.11") [
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [
     # regressed on Python 3.11.4
     # https://github.com/scrapy/w3lib/issues/212
     "test_safe_url_string_url"
