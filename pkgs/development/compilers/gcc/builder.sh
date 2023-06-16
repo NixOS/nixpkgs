@@ -135,7 +135,7 @@ if test "$noSysDirs" = "1"; then
         )
     fi
 
-    if test "$withoutTargetLibc" == 1; then
+    if test "$crossStageStatic" == 1; then
         # We don't want the gcc build to assume there will be a libc providing
         # limits.h in this stage
         makeFlagsArray+=(
@@ -167,7 +167,7 @@ preConfigure() {
         rm -Rf zlib
     fi
 
-    if test -n "$crossMingw" -a -n "$withoutTargetLibc"; then
+    if test -n "$crossMingw" -a -n "$crossStageStatic"; then
         mkdir -p ../mingw
         # --with-build-sysroot expects that:
         cp -R $libcCross/include ../mingw
