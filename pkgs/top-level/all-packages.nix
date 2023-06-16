@@ -16678,7 +16678,8 @@ with pkgs;
 
   ograc = callPackage ../development/tools/rust/ograc { };
 
-  opensmalltalk-vm = callPackage ../development/compilers/opensmalltalk-vm { };
+  inherit (callPackages ../development/compilers/opensmalltalk-vm { })
+    squeak-cog-spur squeak-stack-spur newspeak-cog-spur;
 
   ravedude = callPackage ../development/tools/rust/ravedude { };
 
