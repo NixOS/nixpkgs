@@ -14543,6 +14543,12 @@
       fingerprint = "A317 37B3 693C 921B 480C  C629 4A2A AAA3 82F8 294C";
     }];
   };
+  sestrella = {
+    email = "sestrella.me@gmail.com";
+    github = "sestrella";
+    githubId = 2049686;
+    name = "Sebastián Estrella";
+  };
   seylerius = {
     name = "Sable Seyler";
     email = "sable@seyleri.us";
