@@ -24,6 +24,9 @@ ocamlPackages.buildDunePackage rec {
     fetchSubmodules = true;
   };
 
+  # https://gitlab.com/ligolang/ligo/-/merge_requests/2706.diff
+  patches = [ ./2706.diff ];
+
   postPatch = ''
     substituteInPlace "vendors/tezos-ligo/src/lib_hacl/hacl.ml" \
       --replace \
