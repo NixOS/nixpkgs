@@ -6,18 +6,12 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "raycast";
-  version = "1.53.2";
+  version = "1.53.3";
 
   src = fetchurl {
-    # https://github.com/NixOS/nixpkgs/pull/223495
-    # official download API: https://api.raycast.app/v2/download
-    # this returns an AWS CloudFront signed URL with expiration timestamp and signature
-    # the returned URL will always be the latest Raycast which might result in an impure derivation
-    # the package maintainer created a repo (https://github.com/stepbrobd/raycast-overlay)
-    # to host GitHub Actions to periodically check for updates
-    # and re-release the `.dmg` file to Internet Archive (https://archive.org/details/raycast)
-    url = "https://archive.org/download/raycast/raycast-${version}.dmg";
-    sha256 = "sha256-e2UGS1LSBj0xZu0gWlb8SiXhx1sZzcZDOGPhg6ziI9c=";
+    name = "Raycast.dmg";
+    url = "https://releases.raycast.com/releases/${version}/download?build=universal";
+    sha256 = "sha256-FHCNySTtP7Dxa2UAlYoHD4u5ammLuhOQKC3NGpxcyYo=";
   };
 
   dontPatch = true;

@@ -435,6 +435,8 @@ with pkgs;
 
   checkpwn = callPackage ../tools/misc/checkpwn { };
 
+  banana-vera = callPackage ../development/tools/analysis/banana-vera { };
+
   chrysalis = callPackage ../applications/misc/chrysalis { };
 
   ciel = callPackage ../tools/package-management/ciel { };
@@ -11530,9 +11532,7 @@ with pkgs;
 
   postscript-lexmark = callPackage ../misc/drivers/postscript-lexmark { };
 
-  povray = callPackage ../tools/graphics/povray {
-    boost = boost175;
-  };
+  povray = callPackage ../tools/graphics/povray { };
 
   power-profiles-daemon = callPackage ../os-specific/linux/power-profiles-daemon { };
 
@@ -17082,7 +17082,7 @@ with pkgs;
   };
 
   inherit (beam.interpreters)
-    erlang erlang_25 erlang_24 erlang_23
+    erlang erlang_26 erlang_25 erlang_24 erlang_23
     erlang_odbc erlang_javac erlang_odbc_javac
     elixir elixir_1_14 elixir_1_13 elixir_1_12 elixir_1_11 elixir_1_10
     elixir-ls;
@@ -23456,6 +23456,8 @@ with pkgs;
 
   oneDNN = callPackage ../development/libraries/oneDNN { };
 
+  oneDNN_2 = callPackage ../development/libraries/oneDNN/2.nix { };
+
   onedrive = callPackage ../applications/networking/sync/onedrive { };
 
   oneko = callPackage ../applications/misc/oneko { };
@@ -24455,6 +24457,8 @@ with pkgs;
   taglib_extras = callPackage ../development/libraries/taglib-extras { };
 
   taglib-sharp = callPackage ../development/libraries/taglib-sharp { };
+
+  tanidvr = callPackage ../applications/video/tanidvr { };
 
   talloc = callPackage ../development/libraries/talloc { };
 
@@ -26360,6 +26364,8 @@ with pkgs;
   qpid-cpp = callPackage ../servers/amqp/qpid-cpp { };
 
   qremotecontrol-server = libsForQt5.callPackage ../servers/misc/qremotecontrol-server { };
+
+  questdb = callPackage ../servers/nosql/questdb { };
 
   rabbitmq-server = callPackage ../servers/amqp/rabbitmq-server {
     inherit (darwin.apple_sdk.frameworks) AppKit Carbon Cocoa;
@@ -35866,6 +35872,8 @@ with pkgs;
 
   yuview = libsForQt5.yuview;
 
+  wallust = callPackage ../applications/misc/wallust { };
+
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
   zammad = callPackage ../applications/networking/misc/zammad { };
@@ -36190,9 +36198,7 @@ with pkgs;
 
   wasabibackend = callPackage ../applications/blockchains/wasabibackend { };
 
-  wownero = callPackage ../applications/blockchains/wownero {
-    boost = boost175;
-  };
+  wownero = callPackage ../applications/blockchains/wownero { };
 
   zcash = callPackage ../applications/blockchains/zcash {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -37890,6 +37896,8 @@ with pkgs;
   iv = callPackage ../applications/science/biology/iv {
     neuron-version = neuron.version;
   };
+
+  kalign = callPackage ../applications/science/biology/kalign { };
 
   kallisto = callPackage ../applications/science/biology/kallisto {
     autoconf = buildPackages.autoconf269;

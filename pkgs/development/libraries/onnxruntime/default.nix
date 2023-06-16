@@ -13,7 +13,7 @@
 , howard-hinnant-date
 , nlohmann_json
 , boost
-, oneDNN
+, oneDNN_2
 , abseil-cpp_202111
 , gtest
 , pythonSupport ? false
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     howard-hinnant-date
     nlohmann_json
     boost
-    oneDNN
+    oneDNN_2
     protobuf
   ] ++ lib.optionals pythonSupport [
     nsync
