@@ -2,7 +2,7 @@
 , perl # used to generate help tags
 , pkg-config
 , ncurses, libX11
-, util-linux, file, which, groff
+, file, which, groff
 
   # adds support for handling removable media (vifm-media). Linux only!
 , mediaSupport ? false, python3 ? null, udisks2 ? null, lib ? null
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ perl pkg-config makeWrapper ];
-  buildInputs = [ ncurses libX11 util-linux file which groff ];
+  buildInputs = [ ncurses libX11 file which groff ];
 
   postPatch = ''
     # Avoid '#!/usr/bin/env perl' references to build help.
