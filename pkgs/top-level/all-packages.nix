@@ -14081,7 +14081,7 @@ with pkgs;
   xbursttools = callPackage ../tools/misc/xburst-tools {
     # It needs a cross compiler for mipsel to build the firmware it will
     # load into the Ben Nanonote
-    gccCross = pkgsCross.ben-nanonote.buildPackages.gccCrossStageStatic;
+    gccCross = pkgsCross.ben-nanonote.buildPackages.gccWithoutTargetLibc;
     autoconf = buildPackages.autoconf269;
   };
 
@@ -14988,7 +14988,7 @@ with pkgs;
     dontStrip = true;
   })));
 
-  gccCrossLibcStdenv = overrideCC stdenv buildPackages.gccCrossStageStatic;
+  gccCrossLibcStdenv = overrideCC stdenv buildPackages.gccWithoutTargetLibc;
 
   crossLibcStdenv =
     if stdenv.hostPlatform.useLLVM or false || stdenv.hostPlatform.isDarwin
@@ -14997,7 +14997,7 @@ with pkgs;
 
   # The GCC used to build libc for the target platform. Normal gccs will be
   # built with, and use, that cross-compiled libc.
-  gccCrossStageStatic = assert stdenv.targetPlatform != stdenv.hostPlatform; let
+  gccWithoutTargetLibc = assert stdenv.targetPlatform != stdenv.hostPlatform; let
     libcCross1 = binutilsNoLibc.libc;
     in wrapCCWith {
       cc = gccFun {
@@ -15014,7 +15014,6 @@ with pkgs;
         langCC = false;
         libcCross = libcCross1;
         targetPackages.stdenv.cc.bintools = binutilsNoLibc;
-        enableShared = false;
       };
       bintools = binutilsNoLibc;
       libc = libcCross1;
