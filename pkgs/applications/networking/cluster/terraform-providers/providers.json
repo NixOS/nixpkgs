@@ -1256,10 +1256,9 @@
     "hash": "sha256-qB+Jc8oO4Hr1gqBV/jRriWJ/qFpBAs1IpwrCpAf7+wk=",
     "homepage": "https://registry.terraform.io/providers/yandex-cloud/yandex",
     "owner": "yandex-cloud",
-    "proxyVendor": true,
     "repo": "terraform-provider-yandex",
     "rev": "v0.93.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-shdf+al8BKfdvlVYPLqTAapa8A3V3DGYIhfyPv8zkVI="
+    "vendorHash": "sha256-n33fo6Fn27Fgh3qjPKHxq4zfyG4ZPkPJsZOSDkWuQ38="
   }
 }
