@@ -529,7 +529,7 @@ in
             Automatic pool detection found an empty pool name, which can't be used.
             Hint: for `fileSystems` entries with `fsType = zfs`, the `device` attribute
             should be a zfs dataset name, like `device = "pool/data/set"`.
-            This error can be triggered by using an absolute path, such as `"/dev/disks/..."`.
+            This error can be triggered by using an absolute path, such as `"/dev/disk/..."`.
           '';
         }
       ];
