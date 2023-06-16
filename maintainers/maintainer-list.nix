@@ -16971,6 +16971,12 @@
       fingerprint = "AEF2 3487 66F3 71C6 89A7  3600 95A4 2FE8 3535 25F9";
     }];
   };
+  vinetos = {
+    name = "vinetos";
+    email = "vinetosdev@gmail.com";
+    github = "vinetos";
+    githubId = 10145351;
+  };
   vinnymeller = {
     email = "vinnymeller@proton.me";
     github = "vinnymeller";

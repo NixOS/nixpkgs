@@ -69,6 +69,6 @@ buildPythonPackage rec {
     homepage = "https://altair-viz.github.io";
     downloadPage = "https://github.com/altair-viz/altair";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ teh ];
+    maintainers = with maintainers; [ teh vinetos ];
   };
 }
