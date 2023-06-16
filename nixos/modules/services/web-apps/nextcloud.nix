@@ -1020,6 +1020,7 @@ in {
             innodb_read_only_compressed = 0;
           };
         };
+
         initialScript = pkgs.writeText "mysql-init" ''
           CREATE USER '${cfg.config.dbname}'@'localhost' IDENTIFIED BY '${builtins.readFile( cfg.config.dbpassFile )}';
           CREATE DATABASE IF NOT EXISTS ${cfg.config.dbname};
