@@ -66,7 +66,6 @@ let
       "--disable-threads"
       "--disable-libgomp"
       "--disable-libquadmath"
-      "--disable-shared"
       "--disable-libatomic" # requires libc
       "--disable-decimal-float" # requires libc
       "--disable-libmpx" # requires libc
