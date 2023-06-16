@@ -645,12 +645,10 @@ in
         ++  [ linuxHeaders # propagated from .dev
             binutils gcc gcc.cc gcc.cc.lib gcc.expand-response-params gcc.cc.libgcc glibc.passthru.libgcc
           ]
-        ++ lib.optionals (!localSystem.isx86 || localSystem.libc == "musl")
-            [ prevStage.updateAutotoolsGnuConfigScriptsHook prevStage.gnu-config ]
+        ++ [ prevStage.updateAutotoolsGnuConfigScriptsHook prevStage.gnu-config ]
         ++ (with gcc-unwrapped.passthru; [
           gmp libmpc mpfr isl
         ])
-        ++ [ prevStage.gnu-config ]
       ;
 
       overrides = self: super: {
