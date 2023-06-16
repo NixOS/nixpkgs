@@ -34328,6 +34328,8 @@ with pkgs;
 
   sway-launcher-desktop = callPackage ../applications/misc/sway-launcher-desktop { };
 
+  tart = callPackage ../applications/virtualization/tart { };
+
   tecoc = callPackage ../applications/editors/tecoc { };
 
   viber = callPackage ../applications/networking/instant-messengers/viber { };
