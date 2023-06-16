@@ -6,8 +6,7 @@
 , langJit
 , targetPlatform
 , hostPlatform
-, crossStageStatic
-, enableShared
+, withoutTargetLibc
 }:
 
 assert !stdenv.targetPlatform.hasSharedLibraries -> !enableShared;
@@ -20,7 +19,7 @@ drv: lib.pipe drv
     lib.optionalAttrs (
       targetPlatform != hostPlatform &&
       targetPlatform.libc == "msvcrt" &&
-      crossStageStatic
+      withoutTargetLibc
     ) {
       makeFlags = [ "all-gcc" "all-target-libgcc" ];
       installTargets = "install-gcc install-target-libgcc";

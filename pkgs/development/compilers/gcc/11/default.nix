@@ -22,7 +22,7 @@
 , name ? "gcc"
 , libcCross ? null
 , threadsCross ? null # for MinGW
-, crossStageStatic ? false
+, withoutTargetLibc ? false
 , gnused ? null
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , buildPackages
@@ -82,14 +82,14 @@ let majorVersion = "11";
       ++ optional (stdenv.isDarwin && targetPlatform.isAvr) ./avr-gcc-11.3-darwin.patch
 
       # Obtain latest patch with ../update-mcfgthread-patches.sh
-      ++ optional (!crossStageStatic && targetPlatform.isMinGW && threadsCross.model == "mcf") ./Added-mcf-thread-model-support-from-mcfgthread.patch
+      ++ optional (!withoutTargetLibc && targetPlatform.isMinGW && threadsCross.model == "mcf") ./Added-mcf-thread-model-support-from-mcfgthread.patch
 
       # openjdk build fails without this on -march=opteron; is upstream in gcc12
       ++ [ ./gcc-issue-103910.patch ];
 
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
-    stageNameAddon = if crossStageStatic then "stage-static" else "stage-final";
+    stageNameAddon = if withoutTargetLibc then "stage-static" else "stage-final";
     crossNameAddon = optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-${stageNameAddon}-";
 
     callFile = lib.callPackageWith {
@@ -110,7 +110,7 @@ let majorVersion = "11";
         binutils
         buildPackages
         cloog
-        crossStageStatic
+        withoutTargetLibc
         enableLTO
         enableMultilib
         enablePlugin
@@ -227,7 +227,7 @@ lib.pipe (stdenv.mkDerivation ({
             )
           '';
 
-  inherit noSysDirs staticCompiler crossStageStatic
+  inherit noSysDirs staticCompiler withoutTargetLibc
     libcCross crossMingw;
 
   inherit (callFile ../common/dependencies.nix { })
@@ -307,6 +307,6 @@ lib.pipe (stdenv.mkDerivation ({
 // optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
 ))
 [
-  (callPackage ../common/libgcc.nix   { inherit version langC langCC langJit targetPlatform hostPlatform enableShared crossStageStatic; })
+  (callPackage ../common/libgcc.nix   { inherit version langC langCC langJit targetPlatform hostPlatform withoutTargetLibc; })
   (callPackage ../common/checksum.nix { inherit langC langCC; })
 ]
