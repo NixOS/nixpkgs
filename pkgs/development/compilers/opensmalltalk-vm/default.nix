@@ -181,4 +181,4 @@ let
   platform = stdenv.targetPlatform.system;
 in
   vmsByPlatform.${platform} or
-    (throw "Unsupported platform ${platform}: only the following platforms are supported: ${builtins.attrNames vmsByPlatform}")
+    (throw "Unsupported platform ${platform}: only the following platforms are supported: ${lib.concatStringsSep ", " (builtins.attrNames vmsByPlatform)}")
