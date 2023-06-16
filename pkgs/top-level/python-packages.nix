@@ -8679,6 +8679,10 @@ self: super: with self; {
 
   pygrok = callPackage ../development/python-modules/pygrok { };
 
+  pygsl = callPackage ../development/python-modules/pygsl {
+    inherit (pkgs) gsl swig;
+  };
+
   pygtfs = callPackage ../development/python-modules/pygtfs { };
 
   pygtail = callPackage ../development/python-modules/pygtail { };
