@@ -46,7 +46,7 @@ buildGoModule {
     $out/bin/caddy manpage --directory manpages
     installManPage manpages/*
 
-    installShellCompletion --cmd metal \
+    installShellCompletion --cmd caddy \
       --bash <($out/bin/caddy completion bash) \
       --fish <($out/bin/caddy completion fish) \
       --zsh <($out/bin/caddy completion zsh)
