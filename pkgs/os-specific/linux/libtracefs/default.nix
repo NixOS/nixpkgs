@@ -8,9 +8,13 @@
 , docbook_xml_dtd_45
 , docbook_xsl
 , coreutils
-, which
 , valgrind
 , sourceHighlight
+, meson
+, flex
+, bison
+, ninja
+, cunit
 }:
 
 stdenv.mkDerivation rec {
@@ -24,22 +28,30 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace scripts/utils.mk --replace /bin/pwd ${coreutils}/bin/pwd
-    patchShebangs --build check-manpages.sh
+    chmod +x samples/extract-example.sh
+    patchShebangs --build check-manpages.sh samples/extract-example.sh Documentation/install-docs.sh.in
   '';
 
   outputs = [ "out" "dev" "devman" "doc" ];
-  enableParallelBuilding = true;
-  nativeBuildInputs = [ pkg-config asciidoc xmlto docbook_xml_dtd_45 docbook_xsl which valgrind sourceHighlight ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    asciidoc
+    xmlto
+    docbook_xml_dtd_45
+    docbook_xsl
+    valgrind
+    sourceHighlight
+    flex
+    bison
+  ];
   buildInputs = [ libtraceevent ];
-  makeFlags = [
-    "prefix=${placeholder "out"}"
-    "doc"                       # build docs
-  ];
-  installFlags = [
-    "pkgconfig_dir=${placeholder "out"}/lib/pkgconfig"
-    "install_doc"
-  ];
+
+  ninjaFlags = [ "all" "docs" ];
+
+  doCheck = true;
+  checkInputs = [ cunit ];
 
   meta = with lib; {
     description = "Linux kernel trace file system library";
