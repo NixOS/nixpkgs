@@ -3,7 +3,12 @@
 , enableMultilib
 }:
 
-originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
+originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs //
+(let
+  inherit (finalAttrs) targetConfig;
+  ifNullThen = val: default: if val==null then default else val;
+  targetConfigSlash = if targetConfig==null then "" else "${targetConfig}/";
+in {
   preUnpack = ''
     oldOpts="$(shopt -po nounset)" || true
     set -euo pipefail
@@ -96,7 +101,7 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
             declare -g EXTRA_FLAGS''${post}="''${extraFlags[*]}"
         done
 
-        if test -z "''${targetConfig-}"; then
+        if test -z "${ifNullThen targetConfig ""}"; then
             # host = target, so the flags are the same
             EXTRA_FLAGS_FOR_TARGET="$EXTRA_FLAGS"
             EXTRA_LDFLAGS_FOR_TARGET="$EXTRA_LDFLAGS"
@@ -128,7 +133,7 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
             "FLAGS_FOR_TARGET=$EXTRA_FLAGS_FOR_TARGET $EXTRA_LDFLAGS_FOR_TARGET"
         )
 
-        if test -z "''${targetConfig-}"; then
+        if test -z "${ifNullThen targetConfig ""}"; then
             makeFlagsArray+=(
                 "BOOT_CFLAGS=$EXTRA_FLAGS $EXTRA_LDFLAGS"
                 "BOOT_LDFLAGS=$EXTRA_FLAGS_FOR_TARGET $EXTRA_LDFLAGS_FOR_TARGET"
@@ -187,13 +192,13 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
   '';
 
   preInstall = ''
-    mkdir -p "$out/''${targetConfig}/lib"
-    mkdir -p "''${!outputLib}/''${targetConfig}/lib"
+    mkdir -p "$out/${ifNullThen targetConfig ""}/lib"
+    mkdir -p "''${!outputLib}/${ifNullThen targetConfig ""}/lib"
   '' +
   # Make `lib64` symlinks to `lib`.
   lib.optionalString (!enableMultilib && stdenv.hostPlatform.is64bit && !stdenv.hostPlatform.isMips64n32) ''
-    ln -s lib "$out/''${targetConfig}/lib64"
-    ln -s lib "''${!outputLib}/''${targetConfig}/lib64"
+    ln -s lib "$out/${ifNullThen targetConfig ""}/lib64"
+    ln -s lib "''${!outputLib}/${ifNullThen targetConfig ""}/lib64"
   '' +
   # On mips platforms, gcc follows the IRIX naming convention:
   #
@@ -203,32 +208,32 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
   #
   # Make `lib32` symlinks to `lib`.
   lib.optionalString (!enableMultilib && stdenv.targetPlatform.isMips64n32) ''
-    ln -s lib "$out/''${targetConfig}/lib32"
-    ln -s lib "''${!outputLib}/''${targetConfig}/lib32"
+    ln -s lib "$out/${ifNullThen targetConfig ""}/lib32"
+    ln -s lib "''${!outputLib}/${ifNullThen targetConfig ""}/lib32"
   '';
 
   postInstall = ''
     # Move runtime libraries to lib output.
-    moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.so*" "''${!outputLib}"
-    moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.la"  "''${!outputLib}"
-    moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.dylib" "''${!outputLib}"
-    moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.dll.a" "''${!outputLib}"
+    moveToOutput "${targetConfigSlash}lib/lib*.so*" "''${!outputLib}"
+    moveToOutput "${targetConfigSlash}lib/lib*.la"  "''${!outputLib}"
+    moveToOutput "${targetConfigSlash}lib/lib*.dylib" "''${!outputLib}"
+    moveToOutput "${targetConfigSlash}lib/lib*.dll.a" "''${!outputLib}"
     moveToOutput "share/gcc-*/python" "''${!outputLib}"
 
     if [ -z "$enableShared" ]; then
-        moveToOutput "''${targetConfig+$targetConfig/}lib/lib*.a" "''${!outputLib}"
+        moveToOutput "${targetConfigSlash}lib/lib*.a" "''${!outputLib}"
     fi
 
-    for i in "''${!outputLib}/''${targetConfig}"/lib/*.{la,py}; do
+    for i in "''${!outputLib}/${ifNullThen targetConfig ""}"/lib/*.{la,py}; do
         substituteInPlace "$i" --replace "$out" "''${!outputLib}"
     done
 
     if [ -n "$enableMultilib" ]; then
-        moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.so*" "''${!outputLib}"
-        moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.la"  "''${!outputLib}"
-        moveToOutput "''${targetConfig+$targetConfig/}lib64/lib*.dylib" "''${!outputLib}"
+        moveToOutput "${targetConfigSlash}lib64/lib*.so*" "''${!outputLib}"
+        moveToOutput "${targetConfigSlash}lib64/lib*.la"  "''${!outputLib}"
+        moveToOutput "${targetConfigSlash}lib64/lib*.dylib" "''${!outputLib}"
 
-        for i in "''${!outputLib}/''${targetConfig}"/lib64/*.{la,py}; do
+        for i in "''${!outputLib}/${ifNullThen targetConfig ""}"/lib64/*.{la,py}; do
             substituteInPlace "$i" --replace "$out" "''${!outputLib}"
         done
     fi
@@ -256,10 +261,10 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
     # of $dir headers and use it later as `-isysroot`. This prevents
     # cc-wrapper from overriding libc headers with `-idirafter`.
     # It should be safe to drop it and rely solely on the cc-wrapper.
-    local sysinc_dir=$out/''${targetConfig+$targetConfig/}sys-include
+    local sysinc_dir=$out/${targetConfigSlash}sys-include
     if [ -d "$sysinc_dir" ]; then
-        chmod -R u+w "$out/''${targetConfig+$targetConfig/}sys-include"
-        rm -rfv "$out/''${targetConfig+$targetConfig/}sys-include"
+        chmod -R u+w "$out/${targetConfigSlash}sys-include"
+        rm -rfv "$out/${targetConfigSlash}sys-include"
     fi
 
     # Get rid of some "fixed" header files
@@ -286,4 +291,4 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
         fi
     done
   '';
-}))
+})))
