@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "bluetooth-data-tools";
-  version = "1.0.0";
+  version = "1.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-D788rypEEzi/lvQ/cmHh9Qt+GaHhcZIEhPtar73j2pk=";
+    hash = "sha256-4VNg+ZDKdr1aTPoVHm9IWhwHfPN1ZisQL9RikRVuPBE=";
   };
 
   nativeBuildInputs = [
