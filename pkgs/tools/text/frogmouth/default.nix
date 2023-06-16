@@ -1,6 +1,7 @@
 { lib
 , python3
 , fetchFromGitHub
+, fetchpatch
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,9 +16,17 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-BgJdcdIgYNZUJLWDgUWIDyiSSAkLdePYus3IYQo/QpY=";
   };
 
-  nativeBuildInputs = [
-    python3.pkgs.poetry-core
-    python3.pkgs.pythonRelaxDepsHook
+  patches = [
+    (fetchpatch {
+      name = "require-httpx-0.24.patch";
+      url = "https://github.com/Textualize/frogmouth/commit/386c3bf33238cd6780ca87f2ab4088d81c41707d.patch";
+      hash = "sha256-eVBELI9dGFxSPbbdeKgvz44F3oVbT+FOeGt/eqViXsI=";
+    })
+  ];
+
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -28,6 +37,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "httpx"
     "xdg"
   ];
 
