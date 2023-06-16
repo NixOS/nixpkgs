@@ -55,11 +55,6 @@ let
     description = "An evaluation of Nixpkgs; the top level attribute set of packages";
   };
 
-  # Whether `pkgs` was constructed by this module - not if nixpkgs.pkgs or
-  # _module.args.pkgs is set. However, determining whether _module.args.pkgs
-  # is defined elsewhere does not seem feasible.
-  constructedByMe = !opt.pkgs.isDefined;
-
   hasBuildPlatform = opt.buildPlatform.highestPrio < (mkOptionDefault {}).priority;
   hasHostPlatform = opt.hostPlatform.isDefined;
   hasPlatform = hasHostPlatform || hasBuildPlatform;
@@ -348,7 +343,17 @@ in
           finalPkgs.__splicedPackages;
     };
 
-    assertions = [
+    assertions = let
+      # Whether `pkgs` was constructed by this module. This is false when any of
+      # nixpkgs.pkgs or _module.args.pkgs is set.
+      constructedByMe =
+        # We set it with default priority and it can not be merged, so if the
+        # pkgs module argument has that priority, it's from us.
+        (lib.modules.mergeAttrDefinitionsWithPrio options._module.args).pkgs.highestPrio
+          == lib.modules.defaultOverridePriority
+        # Although, if nixpkgs.pkgs is set, we did forward it, but we did not construct it.
+          && !opt.pkgs.isDefined;
+    in [
       (
         let
           nixosExpectedSystem =
