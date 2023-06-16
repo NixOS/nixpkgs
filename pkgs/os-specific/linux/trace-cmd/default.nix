@@ -59,6 +59,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://www.trace-cmd.org/";
     license     = with licenses; [ lgpl21Only gpl2Only ];
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ thoughtpolice basvandijk ];
+    maintainers = with maintainers; [ thoughtpolice basvandijk wentasah ];
   };
 }
