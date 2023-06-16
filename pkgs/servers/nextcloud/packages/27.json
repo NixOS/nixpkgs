@@ -20,9 +20,9 @@
     ]
   },
   "contacts": {
-    "sha256": "1xs42qfnw9j5f930798yl9vj2dpmjsg3i1m6phx0x3dbcbjd2da6",
-    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v5.3.0/contacts-v5.3.0.tar.gz",
-    "version": "5.3.0",
+    "sha256": "07bnq5hfw9br2xa1j77vydwdaxnc0jyzpacd9hh4f5hvgxmbg6ag",
+    "url": "https://github.com/nextcloud-releases/contacts/releases/download/V5.3.1/contacts-V5.3.1.tar.gz",
+    "version": "5.3.1",
     "description": "The Nextcloud contacts app is a user interface for Nextcloud's CardDAV server. Easily sync contacts from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Mail and Calendar – more to come.\n* 🎉 **Never forget a birthday!** You can sync birthdays and other recurring events with your Nextcloud Calendar.\n* 👥 **Sharing of Adressbooks!** You want to share your contacts with your friends or coworkers? No problem!\n* 🙈 **We’re not reinventing the wheel!** Based on the great and open SabreDAV library.",
     "homepage": "https://github.com/nextcloud/contacts#readme",
     "licenses": [
@@ -80,9 +80,9 @@
     ]
   },
   "mail": {
-    "sha256": "03az3x6mjswh4zj1a5zi9v7syskxkv98agvvv1pkmr76zbbvrzi0",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.2.0/mail-v3.2.0.tar.gz",
-    "version": "3.2.0",
+    "sha256": "1i149w2c2nlk3yn0bh872ijkaqxqbnlvsr558fn8gml0z9vwdfav",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.2.1/mail-v3.2.1.tar.gz",
+    "version": "3.2.1",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
@@ -117,6 +117,16 @@
       "agpl"
     ]
   },
+  "onlyoffice": {
+    "sha256": "01h5ry6m8y25jgzkd4pfwbyakls264sqqjqkadvf1vdyirs6sm1r",
+    "url": "https://github.com/ONLYOFFICE/onlyoffice-nextcloud/releases/download/v8.0.0/onlyoffice.tar.gz",
+    "version": "8.0.0",
+    "description": "ONLYOFFICE connector allows you to view, edit and collaborate on text documents, spreadsheets and presentations within Nextcloud using ONLYOFFICE Docs. This will create a new Edit in ONLYOFFICE action within the document library for Office documents. This allows multiple users to co-author documents in real time from the familiar web interface and save the changes back to your file storage.",
+    "homepage": "https://www.onlyoffice.com",
+    "licenses": [
+      "apache"
+    ]
+  },
   "polls": {
     "sha256": "10906dzlswi352gbshvh86h6yyhwm8b54nkzqgwzpbg9h6yqp1w9",
     "url": "https://github.com/nextcloud/polls/releases/download/v5.0.5/polls.tar.gz",
@@ -133,6 +143,16 @@
     "version": "5.3.0",
     "description": "The Preview Generator app allows admins to pre-generate previews. The app listens to edit events and stores this information. Once a cron job is triggered it will generate start preview generation. This means that you can better utilize your system by pre-generating previews when your system is normally idle and thus putting less load on your machine when the requests are actually served.\n\nThe app does not replace on demand preview generation so if a preview is requested before it is pre-generated it will still be shown.\nThe first time you install this app, before using a cron job, you properly want to generate all previews via:\n**./occ preview:generate-all -vvv**\n\n**Important**: To enable pre-generation of previews you must add **php /var/www/nextcloud/occ preview:pre-generate** to a system cron job that runs at times of your choosing.",
     "homepage": "https://github.com/nextcloud/previewgenerator",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "qownnotesapi": {
+    "sha256": "1hkcqcc6y7x0zrc88qqmsf7mz0dl1kk06gsl6la3kr33fxr0cp0k",
+    "url": "https://github.com/pbek/qownnotesapi/releases/download/v23.6.0/qownnotesapi-nc.tar.gz",
+    "version": "23.6.0",
+    "description": "QOwnNotesAPI is the Nextcloud/ownCloud API for [QOwnNotes](http://www.qownnotes.org), the open source notepad for Linux, macOS and Windows, that works together with the notes application of Nextcloud/ownCloud.\n\nThe only purpose of this App is to provide API access to your Nextcloud/ownCloud server for your QOwnNotes desktop installation, you cannot use this App for anything else, if you don't have QOwnNotes installed on your desktop computer!",
+    "homepage": "https://github.com/pbek/qownnotesapi",
     "licenses": [
       "agpl"
     ]
