@@ -1,6 +1,7 @@
 { lib
 , stdenvNoCC
 , fetchurl
+, nixosTests
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -23,6 +24,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) guacamole-client;
+  };
 
   meta = {
     description = "Clientless remote desktop gateway";
