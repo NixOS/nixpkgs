@@ -31347,6 +31347,8 @@ with pkgs;
 
   guacamole-client = callPackage ../servers/guacamole-client { };
 
+  guacamole-server = callPackage ../servers/guacamole-server { };
+
   q4wine = libsForQt5.callPackage ../applications/misc/q4wine { };
 
   qrcodegen = callPackage ../development/libraries/qrcodegen { };
