@@ -9,7 +9,7 @@ buildNpmPackage rec {
 
   src = fetchFromGitHub {
     owner = "dylang";
-    repo = pname;
+    repo = "npm-check";
     rev = "v${version}"
     hash = "sha256-F7bMvGqOxJzoaw25VR6D90UNwT8HxZ4PZhhQEvQFDn4=";
   };
