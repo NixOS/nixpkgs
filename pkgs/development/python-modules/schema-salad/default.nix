@@ -6,8 +6,10 @@
 , cachecontrol
 , lockfile
 , mistune
+, mypy
 , rdflib
 , ruamel-yaml
+, setuptools
 , pytestCheckHook
 , pythonOlder
 }:
@@ -32,8 +34,10 @@ buildPythonPackage rec {
     cachecontrol
     lockfile
     mistune
+    mypy
     rdflib
     ruamel-yaml
+    setuptools # needs pkg_resources at runtime
   ];
 
   nativeCheckInputs = [
