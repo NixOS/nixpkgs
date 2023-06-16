@@ -21,7 +21,7 @@ buildPythonApplication rec {
     sha256 = "MwyLBwKz5ur1sBXHiCLq/Nq2u5aaiC+KzXqvGBmQii8=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     mv tuna-cmd.py tuna/cmd.py
 
     substituteInPlace setup.py \
