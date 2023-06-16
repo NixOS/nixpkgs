@@ -6,6 +6,7 @@
 , glm
 , eigen
 , qtbase
+, stellarium
 }:
 
 stdenv.mkDerivation rec {
@@ -25,6 +26,10 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DQT_VERSION=6" ];
 
   doCheck = true;
+
+  passthru.tests = {
+    inherit stellarium;
+  };
 
   meta = with lib;{
     description = "Simulator of light scattering by planetary atmospheres";
