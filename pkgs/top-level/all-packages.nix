@@ -12176,6 +12176,8 @@ with pkgs;
 
   rustypaste-cli = callPackage ../tools/misc/rustypaste-cli { };
 
+  rustywind = callPackage ../development/tools/misc/rustywind { };
+
   rw = callPackage ../tools/misc/rw { };
 
   rwc = callPackage ../tools/system/rwc { };
