@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Windows 10 icon theme";
     homepage = "http://b00merang.weebly.com/windows-10.html";
-    license = licenses.gpl3;
+    license = licenses.unfree;
     maintainers = with maintainers; [ mib ];
     platforms = platforms.linux;
   };
