@@ -58,13 +58,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvscode-server";
-  version = "1.79.0";
+  version = "1.79.1";
 
   src = fetchFromGitHub {
     owner = "gitpod-io";
     repo = "openvscode-server";
     rev = "openvscode-server-v${finalAttrs.version}";
-    hash = "sha256-dVzGyK1ybZywCm602zWJroSCQ2wx5IzV+HqwZUsEgKU=";
+    hash = "sha256-yMJo66RYcbVyIFKNNxDe0U9CPvaez/kTu9sPGcaESPw=";
   };
 
   yarnCache = stdenv.mkDerivation {
@@ -100,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     jq
     moreutils
   ];
+
   buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
     ++ (with xorg; [ libX11 libxkbfile ])
     ++ lib.optionals stdenv.isDarwin [
