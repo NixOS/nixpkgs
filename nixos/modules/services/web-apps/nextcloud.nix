@@ -1065,10 +1065,8 @@ in {
       services.nextcloud = lib.mkIf cfg.configureRedis {
         caching.redis = true;
         extraOptions = {
-          memcache = {
-            distributed = ''\OC\Memcache\Redis'';
-            locking = ''\OC\Memcache\Redis'';
-          };
+          "memcache.distributed" = ''\OC\Memcache\Redis'';
+          "memcache.locking" = ''\OC\Memcache\Redis'';
           redis = {
             host = config.services.redis.servers.nextcloud.unixSocket;
             port = 0;
