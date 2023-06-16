@@ -710,9 +710,10 @@ in {
   sway = handleTest ./sway.nix {};
   switchTest = handleTest ./switch-test.nix {};
   sympa = handleTest ./sympa.nix {};
-  syncthing = handleTest ./syncthing.nix {};
-  syncthing-init = handleTest ./syncthing-init.nix {};
+  syncthing = handleTest ./syncthing {};
+  syncthing-init = handleTest ./syncthing/init.nix {};
   syncthing-relay = handleTest ./syncthing-relay.nix {};
+  syncthing-declarative = handleTest ./syncthing/declarative.nix {};
   systemd = handleTest ./systemd.nix {};
   systemd-analyze = handleTest ./systemd-analyze.nix {};
   systemd-binfmt = handleTestOn ["x86_64-linux"] ./systemd-binfmt.nix {};

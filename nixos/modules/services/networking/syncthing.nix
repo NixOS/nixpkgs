@@ -15,7 +15,10 @@ let
 
   folders = mapAttrsToList ( _: folder: {
     inherit (folder) path id label type;
-    devices = map (device: { deviceId = cfg.devices.${device}.id; }) folder.devices;
+    devices = map (device: {
+      deviceId = cfg.devices.${device}.id;
+      encryptionPassword = attrByPath [device] "" folder.encryptionPasswordFiles;
+    }) folder.devices;
     rescanIntervalS = folder.rescanInterval;
     fsWatcherEnabled = folder.watch;
     fsWatcherDelayS = folder.watchDelay;
@@ -27,7 +30,9 @@ let
     folder.enable
   ) cfg.folders);
 
-  updateConfig = pkgs.writers.writeDash "merge-syncthing-config" ''
+  pathsToReplace = concatMap (f: attrValues f.encryptionPasswordFiles) (attrValues cfg.folders);
+
+  updateConfig = pkgs.writers.writeBash "merge-syncthing-config" ''
     set -efu
 
     # be careful not to leak secrets in the filesystem or in process listings
@@ -58,6 +63,13 @@ let
         "devices": (${builtins.toJSON devices}${optionalString (cfg.devices == {} || ! cfg.overrideDevices) " + .devices"}),
         "folders": (${builtins.toJSON folders}${optionalString (cfg.folders == {} || ! cfg.overrideFolders) " + .folders"})
     } * ${builtins.toJSON cfg.extraOptions}')
+
+    # replace every path in place of the encryptionPassword
+    ${toShellVar "secrets" pathsToReplace}
+    for p in "''${secrets[@]}"
+    do
+      new_cfg=$(printf '%s\n' "$new_cfg" | ${pkgs.jq}/bin/jq --arg key "$p" --rawfile value "$p" '(.folders[].devices[]|select(.encryptionPassword==$key).encryptionPassword)|=($value | sub("\n$";""))')
+    done
 
     # send the new config
     curl -X PUT -d "$new_cfg" ${cfg.guiAddress}/rest/config
@@ -250,6 +262,20 @@ in {
                 The devices this folder should be shared with. Each device must
                 be defined in the [devices](#opt-services.syncthing.devices) option.
               '';
+            };
+
+            encryptionPasswordFiles = mkOption {
+              type = types.attrsOf types.path;
+              default = {};
+              description = mdDoc ''
+                The untrusted devices for this folder and the file that contains
+                the encryption password. Each device must be defined in the
+                [devices](#opt-services.syncthing.devices) option.
+                See https://docs.syncthing.net/users/untrusted.html
+              '';
+              example = {
+                bigbox = "/home/user/bigbox_shared_password";
+              };
             };
 
             versioning = mkOption {
