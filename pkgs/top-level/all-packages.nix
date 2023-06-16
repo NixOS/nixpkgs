@@ -31441,6 +31441,8 @@ with pkgs;
   hledger-web = haskell.lib.compose.justStaticExecutables haskellPackages.hledger-web;
   hledger-utils = with python3.pkgs; toPythonApplication hledger-utils;
 
+  hmm = callPackage ../applications/misc/hmm { };
+
   homebank = callPackage ../applications/office/homebank {
     gtk = gtk3;
   };
