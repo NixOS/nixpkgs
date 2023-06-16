@@ -19,13 +19,28 @@
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "1.0.2";
+  version = "0.24.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-tYcJWaVIS2FPJtMcpMF1JLGwMXUiGZ3JhcO0JW4DB2c=";
+    sha256 = "oDNKGALmTWVgIsO/q1anP71r9LEpg0PzaIryFRgQu98=";
   };
+
+  patches = [
+    # This patch fixes compatibility with numpy 1.20. It was merged before 0.24.1 was released,
+    # but for some reason was not included in the 0.24.1 release tarball.
+    (fetchpatch {
+      url = "https://github.com/scikit-learn/scikit-learn/commit/e7ef22c3ba2334cb3b476e95d7c083cf6b48ce56.patch";
+      sha256 = "174554k1pbf92bj7wgq0xjj16bkib32ailyhwavdxaknh4bd9nmv";
+    })
+    # This patch fixes numerical issue with openblas 0.3.18. It was merged in scikit-learn v1.0.2.
+    # See details in https://github.com/scikit-learn/scikit-learn/issues/21340
+    ( fetchpatch {
+      url = "https://github.com/scikit-learn/scikit-learn/commit/657454c0e5a73071ec6681a0774fdaa4269adda7.patch";
+      sha256 = "1lv71ashr9wcgxqvqazrdpnm1l6cazcsj2sf6n9ybadpghrqp8yf";
+    })
+  ];
 
   buildInputs = [
     pillow
