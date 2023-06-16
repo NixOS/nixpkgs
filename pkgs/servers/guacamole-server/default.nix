@@ -81,6 +81,10 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/sbin/guacd --prefix LD_LIBRARY_PATH ":" $out/lib
   '';
 
+  passthru.tests = {
+    inherit (nixosTests) guacamole-server;
+  };
+
   meta = {
     description = "Clientless remote desktop gateway";
     homepage = "https://guacamole.apache.org/";
