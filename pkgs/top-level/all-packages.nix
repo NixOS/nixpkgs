@@ -12682,6 +12682,8 @@ with pkgs;
 
   sockperf = callPackage ../tools/networking/sockperf { };
 
+  softnet = callPackage ../tools/networking/softnet { };
+
   solaar = callPackage ../applications/misc/solaar { };
 
   solanum = callPackage ../servers/irc/solanum {
