@@ -27873,6 +27873,8 @@ with pkgs;
     withoutInitTools = true;
   };
 
+  tart = callPackage ../os-specific/darwin/tart { };
+
   # FIXME: `tcp-wrapper' is actually not OS-specific.
   tcp_wrappers = callPackage ../os-specific/linux/tcp-wrappers { };
 
