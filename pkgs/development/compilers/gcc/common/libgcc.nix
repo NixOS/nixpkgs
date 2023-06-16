@@ -6,8 +6,7 @@
 , langJit
 , targetPlatform
 , hostPlatform
-, crossStageStatic
-, enableShared
+, withoutTargetLibc
 }:
 
 assert !stdenv.targetPlatform.hasSharedLibraries -> !enableShared;
