@@ -17,5 +17,6 @@ buildNodejs {
     ./revert-arm64-pointer-auth.patch
     ./node-npm-build-npm-package-logic.patch
     ./trap-handler-backport.patch
+    ./common-gypi-cross.patch
   ];
 }
