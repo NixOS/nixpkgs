@@ -140,17 +140,11 @@ in {
             )
         fi
 
-        if test "$withoutTargetLibc" == 1; then
-            # We don't want the gcc build to assume there will be a libc providing
-            # limits.h in this stage
-            makeFlagsArray+=(
-                'LIMITS_H_TEST=false'
-            )
-        else
-            makeFlagsArray+=(
-                'LIMITS_H_TEST=true'
-            )
-        fi
+        # We don't want the gcc build to assume there will be a libc providing
+        # limits.h in this stage
+        makeFlagsArray+=(
+            'LIMITS_H_TEST=${lib.boolToString (!finalAttrs.withoutTargetLibc)}'
+        )
     fi
 
     eval "$oldOpts"
