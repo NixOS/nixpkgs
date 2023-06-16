@@ -11,18 +11,26 @@
 glibc.overrideAttrs (oldAttrs: {
   pname = "glibc-mtrace";
 
-  buildPhase = ''
-    runHook preBuild
-
+  preBuild = (oldAttrs.preBuild or "") + ''
     mkdir malloc
-    make -C ../glibc-${glibc.minorRelease}/malloc objdir=`pwd` `pwd`/malloc/mtrace;
-
-    runHook postBuild
   '';
 
+  makeFlags = (oldAttrs.makeFlags or []) ++ [
+    "-C" "../glibc-${glibc.minorRelease}/malloc"
+    "objdir=$$NIX_BUILD_TOP/build"
+    "$NIX_BUILD_TOP/build/malloc/mtrace"
+  ];
+
+  # deliberately do not run glibc's preInstall/postInstall, but run
+  # any which might be appended by overlays
+  preInstall = "";
+  postInstall = "";
+
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     mv malloc/mtrace $out/bin/
+    runHook postInstall
   '';
 
   # Perl checked during configure
