@@ -34,7 +34,6 @@
 , buildInputs ? []
 , nativeBuildInputs ? []
 , cargoUpdateHook ? ""
-, cargoDepsHook ? ""
 , buildType ? "release"
 , meta ? {}
 , cargoLock ? null
