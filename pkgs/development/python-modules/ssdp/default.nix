@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "ssdp";
-  version = "1.1.1";
+  version = "1.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "codingjoe";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-D2mww3sEc2SvufWNmT450a2CW+ogROn3RHypljkebuY=";
+    hash = "sha256-QG6W8huEUjq8cgMgienCxDv3nJRTopDuJiPg5FDjNW4=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
