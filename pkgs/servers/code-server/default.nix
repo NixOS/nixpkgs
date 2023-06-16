@@ -54,17 +54,19 @@ let
     sed -i 's/${version}/${esbuild'.version}/g' ${path}/node_modules/esbuild/lib/main.js
     ln -s -f ${esbuild'}/bin/esbuild ${path}/node_modules/esbuild/bin/esbuild
   '';
+
+  commit = "2798322b03e7f446f59c5142215c11711ed7a427";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "code-server";
-  version = "4.12.0";
+  version = "4.13.0";
 
   src = fetchFromGitHub {
     owner = "coder";
     repo = "code-server";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-PQp5dji2Ynp+LJRWBka41umwe1/IR76C+at/wyOWGcI=";
+    hash = "sha256-4hkKGQU9G3CllD+teWXnYoHaY3YdDz25fwaMUS5OlfM=";
   };
 
   yarnCache = stdenv.mkDerivation {
@@ -92,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-4Vr9u3+W/IhbbTc39jyDyDNQODlmdF+M/N8oJn0Z4+w=";
+    outputHash = "sha256-xLcrOVhKC0cOPcS5XwIMyv1KiEE0azZ1z+wS9PPKjAQ=";
   };
 
   nativeBuildInputs = [
@@ -120,7 +122,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # remove git calls from vscode build script
+    # Remove all git calls from the VS Code build script except `git rev-parse
+    # HEAD` which is replaced in postPatch with the commit.
     ./build-vscode-nogit.patch
   ];
 
@@ -130,8 +133,10 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs ./ci
 
     # inject git commit
-    substituteInPlace ci/build/build-release.sh \
-      --replace '$(git rev-parse HEAD)' "$commit"
+    substituteInPlace ./ci/build/build-vscode.sh \
+      --replace '$(git rev-parse HEAD)' "${commit}"
+    substituteInPlace ./ci/build/build-release.sh \
+      --replace '$(git rev-parse HEAD)' "${commit}"
   '';
 
   configurePhase = ''
@@ -232,8 +237,8 @@ stdenv.mkDerivation (finalAttrs: {
       -execdir ln -s ${ripgrep}/bin/rg {}/bin/rg \;
 
     # run postinstall scripts after patching
-    find ./lib/vscode -path "*node_modules" -prune -o \
-      -path "./*/*/*/*/*" -name "yarn.lock" -printf "%h\n" | \
+    find ./lib/vscode \( -path "*/node_modules/*" -or -path "*/extensions/*" \) \
+      -and -type f -name "yarn.lock" -printf "%h\n" | \
         xargs -I {} sh -c 'jq -e ".scripts.postinstall" {}/package.json >/dev/null && yarn --cwd {} postinstall --frozen-lockfile --offline || true'
 
     # build code-server
@@ -241,6 +246,15 @@ stdenv.mkDerivation (finalAttrs: {
 
     # build vscode
     VERSION=${finalAttrs.version} yarn build:vscode
+
+    # inject version into package.json
+    jq --slurp '.[0] * .[1]' ./package.json <(
+      cat << EOF
+    {
+      "version": "${finalAttrs.version}"
+    }
+    EOF
+    ) | sponge ./package.json
 
     # create release
     yarn release
@@ -283,7 +297,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/coder/code-server";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ offline henkery ];
+    maintainers = with lib.maintainers; [ offline henkery code-asher ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
   };
 })

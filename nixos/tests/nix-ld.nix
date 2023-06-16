@@ -13,5 +13,8 @@ import ./make-test-python.nix ({ lib, pkgs, ...} :
   testScript = ''
     start_all()
     machine.succeed("hello")
+
+    # test fallback if NIX_LD is not set
+    machine.succeed("unset NIX_LD; unset NIX_LD_LIBRARY_PATH; hello")
  '';
 })

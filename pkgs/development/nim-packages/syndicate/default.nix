@@ -11,7 +11,6 @@ buildNimPackage rec {
     hash = "sha256-yTPbEsBcpEPXfmhykbWzWdnJ2ExEJxdii1L+mqx8VGQ=";
   };
   propagatedBuildInputs = [ nimSHA2 preserves ];
-  doCheck = true;
   meta = src.meta // {
     description = "Nim implementation of the Syndicated Actor model";
     license = lib.licenses.unlicense;
