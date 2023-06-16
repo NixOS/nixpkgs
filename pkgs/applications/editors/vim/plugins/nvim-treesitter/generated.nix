@@ -1608,12 +1608,12 @@
   };
   scala = buildGrammar {
     language = "scala";
-    version = "0.0.0+rev=e0d5372";
+    version = "0.0.0+rev=a5c4c29";
     src = fetchFromGitHub {
       owner = "tree-sitter";
       repo = "tree-sitter-scala";
-      rev = "e0d5372a203b7c2e95cb34e43124a3a819940bae";
-      hash = "sha256-Jwij4RUiF78dASKoioescxGoc/RXih10K7c1sAkKu8g=";
+      rev = "a5c4c29b95aca29dea71f34bf046ad0b36499045";
+      hash = "sha256-R7503gLEWdktp/OKBc2hCAf6YzS4RInzYU99ohLJZ+g=";
     };
     meta.homepage = "https://github.com/tree-sitter/tree-sitter-scala";
   };
