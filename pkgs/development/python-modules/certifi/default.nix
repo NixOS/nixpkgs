@@ -4,6 +4,7 @@
 , pythonOlder
 , fetchFromGitHub
 , pytestCheckHook
+, overrideCerts ? true
 }:
 
 buildPythonPackage rec {
@@ -19,16 +20,16 @@ buildPythonPackage rec {
     hash = "sha256-r6TJ6YGL0cygz+F6g6wiqBfBa/QKhynZ92C6lHTZ2rI=";
   };
 
-  patches = [
+  patches = if overrideCerts then [
     # Add support for NIX_SSL_CERT_FILE
     ./env.patch
-  ];
+  ] else [];
 
-  postPatch = ''
+  postPatch = if overrideCerts then ''
     # Use our system-wide ca-bundle instead of the bundled one
     rm -v "certifi/cacert.pem"
     ln -snvf "${cacert}/etc/ssl/certs/ca-bundle.crt" "certifi/cacert.pem"
-  '';
+  '' else "";
 
   propagatedNativeBuildInputs = [
     # propagate cacerts setup-hook to set up `NIX_SSL_CERT_FILE`
