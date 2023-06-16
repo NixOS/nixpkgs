@@ -718,6 +718,8 @@ with pkgs;
 
   credential-detector = callPackage ../tools/security/credential-detector { };
 
+  creds = callPackage ../tools/security/creds { };
+
   credslayer = callPackage ../tools/security/credslayer { };
 
   device-tree_rpi = callPackage ../os-specific/linux/device-tree/raspberrypi.nix { };
