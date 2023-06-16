@@ -8,18 +8,18 @@
 , stdenv
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "bfc";
-  version = "unstable-2023-02-02";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "Wilfred";
     repo = "bfc";
-    rev = "647379de6ec36b64ba0a098589c8374d0ce32690";
+    rev = version;
     hash = "sha256-pPx9S7EnrL6aIvLlrCjGDKNYLhzd6ud1RvN+qCiZGXk=";
   };
 
-  cargoHash = "sha256-5RPB4biLB2BTmfgOGzvnnQjnGp3cTmJdU1CVTAFRvKE=";
+  cargoHash = "sha256-2m21FdSSFC6MsOeofHk6P4yGR3wZ3siLQTAtl4UbDBQ=";
 
   buildInputs = [
     libxml2
