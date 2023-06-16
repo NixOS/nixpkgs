@@ -37,7 +37,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     # Kexec node1 to the toplevel of node2 via the kexec-boot script
     node1.succeed('touch /run/foo')
     node1.fail('hello')
-    node1.execute('${nodes.node2.config.system.build.kexecTree}/kexec-boot', check_output=False)
+    node1.execute('${nodes.node2.system.build.kexecTree}/kexec-boot', check_output=False)
     node1.connected = False
     node1.connect()
     node1.wait_for_unit("multi-user.target")
