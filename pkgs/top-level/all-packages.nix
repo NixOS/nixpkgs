@@ -37893,6 +37893,8 @@ with pkgs;
     neuron-version = neuron.version;
   };
 
+  kalign = callPackage ../applications/science/biology/kalign { };
+
   kallisto = callPackage ../applications/science/biology/kallisto {
     autoconf = buildPackages.autoconf269;
   };
