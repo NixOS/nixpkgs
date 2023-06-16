@@ -12050,6 +12050,15 @@
     github = "jackyliu16";
     githubId = 50787361;
   };
+  onemoresuza = {
+    name = "Coutinho de Souza";
+    email = "dev@onemoresuza.mailer.me";
+    github = "onemoresuza";
+    githubId = 106456302;
+    keys = [{
+      fingerprint = "484F D3B8 BAD7 BF5D 8B68  2AEA A2ED 1159 935E 4D7E";
+    }];
+  };
   onixie = {
     email = "onixie@gmail.com";
     github = "onixie";
