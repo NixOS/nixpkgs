@@ -12907,7 +12907,7 @@
     name = "Riley Inman";
   };
   riotbib = {
-    email = "github-nix@lnrt.de";
+    email = "lennart@cope.cool";
     github = "riotbib";
     githubId = 43172581;
     name = "Lennart Mühlenmeier";
