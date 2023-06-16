@@ -11997,6 +11997,7 @@ self: super: with self; {
 
   tensorflow-bin = callPackage ../development/python-modules/tensorflow/bin.nix {
     cudaSupport = pkgs.config.cudaSupport or false;
+    cudaPackages = pkgs.cudaPackages_11_7;
   };
 
   tensorflow-build = callPackage ../development/python-modules/tensorflow {
@@ -12025,7 +12026,6 @@ self: super: with self; {
 
   tensorflowWithCuda = self.tensorflow.override {
     cudaSupport = true;
-    cudaPackages = pkgs.cudaPackages_11_7;
   };
 
   tensorflowWithoutCuda = self.tensorflow.override {
