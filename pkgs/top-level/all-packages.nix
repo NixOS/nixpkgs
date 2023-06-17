@@ -6299,6 +6299,8 @@ with pkgs;
 
   cider = callPackage ../applications/audio/cider { };
 
+  iat = callPackage ../tools/cd-dvd/iat { };
+
   isolyzer = callPackage ../tools/cd-dvd/isolyzer { };
 
   isomd5sum = callPackage ../tools/cd-dvd/isomd5sum { };
