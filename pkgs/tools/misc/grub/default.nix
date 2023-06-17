@@ -341,6 +341,12 @@ stdenv.mkDerivation rec {
       url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=1514678888595ef41a968a0c69b7ff769edd1e9c";
       sha256 = "sha256-tgAEoAtaNKJjscjMFkXXiVn59Pa4c+NiQ3iVW6CMrpo=";
     })
+
+    # fix incompatibility with e2fsprogs 1.47+
+    (fetchpatch {
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=7fd5feff97c4b1f446f8fcf6d37aca0c64e7c763";
+      sha256 = "sha256-pejn1bJkC7XnT2ODaxeERHUrMOONoBV6w0wF2Z2ZKWI=";
+    })
   ];
 
   postPatch = if kbdcompSupport then ''
