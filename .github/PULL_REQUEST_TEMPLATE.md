@@ -1,32 +1,24 @@
-###### Description of changes
+## Changes
 
 <!--
-For package updates please link to a changelog or describe changes, this helps your fellow maintainers discover breaking updates.
+For package updates please link to a changelog or describe changes. This helps your fellow maintainers discover breaking updates.
+
 For new packages please briefly describe the package or provide a link to its homepage.
+
+Please see https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md for more details on contributing to nixpkgs.
 -->
 
-###### Things done
+## Manual tests
 
-<!-- Please check what applies. Note that these are not hard requirements but merely serve as information for reviewers. -->
+<!-- Please explain any manual tests you've performed, such as running files in `./result/bin/`. -->
 
-- Built on platform(s)
-  - [ ] x86_64-linux
-  - [ ] aarch64-linux
-  - [ ] x86_64-darwin
-  - [ ] aarch64-darwin
-- [ ] For non-Linux: Is `sandbox = true` set in `nix.conf`? (See [Nix manual](https://nixos.org/manual/nix/stable/command-ref/conf-file.html))
-- [ ] Tested, as applicable:
-  - [NixOS test(s)](https://nixos.org/manual/nixos/unstable/index.html#sec-nixos-tests) (look inside [nixos/tests](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests))
-  - and/or [package tests](https://nixos.org/manual/nixpkgs/unstable/#sec-package-tests)
-  - or, for functions and "core" functionality, tests in [lib/tests](https://github.com/NixOS/nixpkgs/blob/master/lib/tests) or [pkgs/test](https://github.com/NixOS/nixpkgs/blob/master/pkgs/test)
-  - made sure NixOS tests are [linked](https://nixos.org/manual/nixpkgs/unstable/#ssec-nixos-tests-linking) to the relevant packages
-- [ ] Tested compilation of all packages that depend on this change using `nix-shell -p nixpkgs-review --run "nixpkgs-review rev HEAD"`. Note: all changes have to be committed, also see [nixpkgs-review usage](https://github.com/Mic92/nixpkgs-review#usage)
-- [ ] Tested basic functionality of all binary files (usually in `./result/bin/`)
-- [23.11 Release Notes (or backporting 23.05 Release notes)](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#generating-2305-release-notes)
-  - [ ] (Package updates) Added a release notes entry if the change is major or breaking
-  - [ ] (Module updates) Added a release notes entry if the change is significant
-  - [ ] (Module addition) Added a release notes entry if adding a new NixOS module
-- [ ] Fits [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md).
+## Sandboxed non-Linux build?
+
+If this change is applicable to non-Linux platforms such as macOS, please indicate your [`nix.conf` `sandbox` setting](https://nixos.org/manual/nix/stable/command-ref/conf-file.html#conf-sandbox):
+
+- [ ] `sandbox = true`
+- [ ] `sandbox` is not set
+- [ ] `sandbox = false`
 
 <!--
 To help with the large amounts of pull requests, we would appreciate your

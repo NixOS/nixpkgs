@@ -61,6 +61,22 @@ Pull requests should not be squash merged in order to keep complete commit messa
 This means that, when addressing review comments in order to keep the pull request in an always mergeable status, you will sometimes need to rewrite your branch's history and then force-push it with `git push --force-with-lease`.
 Useful git commands that can help a lot with this are `git commit --patch --amend` and `git rebase --interactive`. For more details consult the git man pages or online resources like [git-rebase.io](https://git-rebase.io/) or [The Pro Git Book](https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History).
 
+## Testing changes
+
+To run the main types of tests locally:
+
+- Run [NixOS tests](https://nixos.org/manual/nixos/unstable/#sec-nixos-tests) with `nix-build nixos/tests/NAME.nix`, where `NAME` is the name of a specific test file
+- Run [global package tests](https://nixos.org/manual/nixpkgs/unstable/#sec-package-tests) with `nix-build --attr PACKAGE pkgs/test/default.nix`, where `PACKAGE` is the package name
+- Run package-internal tests with `nix-build --attr pkgs.PACKAGE.passthru.tests`
+- Run library tests with `nix-build lib/tests/NAME.nix`
+
+Make sure NixOS tests are [linked](https://nixos.org/manual/nixpkgs/unstable/#ssec-nixos-tests-linking) to the relevant packages.
+
+To compile all packages that depend on this change:
+
+1. Commit all changes (see [nixpkgs-review usage](https://github.com/Mic92/nixpkgs-review#usage))
+2. Run `nix-shell -p nixpkgs-review --run "nixpkgs-review rev HEAD"`
+
 ## Rebasing between branches (i.e. from master to staging)
 
 From time to time, changes between branches must be rebased, for example, if the
