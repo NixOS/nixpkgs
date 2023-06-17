@@ -14,6 +14,8 @@
 let
   inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
 
+  isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+
   majorVersion = lib.versions.major version;
   minorVersion = lib.versions.minor version;
 
@@ -63,7 +65,6 @@ let
     moveToDev = false;
 
     configureFlags = let
-      isCross = stdenv.hostPlatform != stdenv.buildPlatform;
       inherit (stdenv.hostPlatform) gcc isAarch32;
     in sharedConfigureFlags ++ lib.optionals (lib.versionOlder version "19") [
       "--without-dtrace"
@@ -115,9 +116,10 @@ let
 
     inherit patches;
 
+    # NB: be careful when running patchShebangs at patch phase. Some files are
+    # copied verbatim to the output with shabangs patched to store paths and
+    # subsequent patchShebangs at install phase would not update them.
     postPatch = ''
-      patchShebangs .
-
       # fix tests
       for a in test/parallel/test-child-process-env.js \
                test/parallel/test-child-process-exec-env.js \
@@ -136,9 +138,9 @@ let
     doCheck = false; # fails 4 out of 1453 tests
 
     postInstall = ''
-      PATH=$out/bin:$PATH patchShebangs $out
+      HOST_PATH=$out/bin''${HOST_PATH:+:$HOST_PATH} patchShebangs --host $out
 
-      ${lib.optionalString (enableNpm && stdenv.hostPlatform == stdenv.buildPlatform) ''
+      ${lib.optionalString (enableNpm && !isCross) ''
         mkdir -p $out/share/bash-completion/completions/
         HOME=$TMPDIR $out/bin/npm completion > $out/share/bash-completion/completions/npm
         for dir in "$out/lib/node_modules/npm/man/"*; do
