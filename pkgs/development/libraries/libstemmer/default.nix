@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     patchShebangs .
-  '' + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  '' + lib.optionalString (!lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform) ''
     substituteInPlace GNUmakefile \
       --replace './snowball' '${lib.getBin buildPackages.libstemmer}/bin/snowball'
   '';

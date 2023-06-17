@@ -11,7 +11,7 @@
 , glib-networking
 , buildPackages
 , gobject-introspection
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.systems.emulatorAvailable stdenv.hostPlatform buildPackages
 , vala
 , libpsl
 , python3

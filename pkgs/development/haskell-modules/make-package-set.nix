@@ -620,7 +620,7 @@ in package-set { inherit pkgs lib callPackage; } self // {
         commands:
         pkg:
 
-        if stdenv.buildPlatform.canExecute stdenv.hostPlatform
+        if lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform
         then lib.foldr haskellLib.__generateOptparseApplicativeCompletion pkg commands
         else pkg
       ) { };

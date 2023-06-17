@@ -24,7 +24,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-CjuH4ANP2bJDeA+o+1j+obbtk5/NVLet/OFS3Rms4r0=";
 
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  doCheck = lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform;
 
   postPatch = ''
     # Because this Makefile will be installed to be used by the user, patch

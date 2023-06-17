@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   dontUseCmakeConfigure = true;
 
   mesonFlags = [
-    (lib.mesonEnable "tests" (stdenv.buildPlatform.canExecute stdenv.hostPlatform))
+    (lib.mesonEnable "tests" (lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform))
   ];
 
   doCheck = true;

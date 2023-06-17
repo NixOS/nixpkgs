@@ -7,7 +7,7 @@
 , vala
 , gobject-introspection
 , buildPackages
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.systems.emulatorAvailable stdenv.hostPlatform buildPackages
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_43
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
-  ] ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ] ++ lib.optionals (withIntrospection && !lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform) [
     mesonEmulatorHook
   ];
 

@@ -59,7 +59,7 @@ let
       crossSystem = crossSystemFun system;
     };
 
-    emulator = crossPkgs.hostPlatform.emulator pkgs;
+    emulator = lib.systems.emulator crossPkgs.hostPlatform pkgs;
 
     # Apply some transformation on windows to get dlls in the right
     # place. Unfortunately mingw doesn’t seem to be able to do linking

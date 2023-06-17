@@ -17,14 +17,14 @@ buildGoModule rec {
 
   buildPhase = ''
     runHook preBuild
-    make GO_LDFLAGS="-s -w" GH_VERSION=${version} bin/gh ${lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) "manpages"}
+    make GO_LDFLAGS="-s -w" GH_VERSION=${version} bin/gh ${lib.optionalString (lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform) "manpages"}
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
     install -Dm755 bin/gh -t $out/bin
-   '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+   '' + lib.optionalString (lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform) ''
     installManPage share/man/*/*.[1-9]
 
     installShellCompletion --cmd gh \

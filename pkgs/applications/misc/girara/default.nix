@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Ddocs=disabled" # docs do not seem to be installed
-    (lib.mesonEnable "tests" (stdenv.buildPlatform.canExecute stdenv.hostPlatform))
+    (lib.mesonEnable "tests" (lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform))
   ];
 
   checkPhase = ''

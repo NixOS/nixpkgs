@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ] ++ lib.optionals (!lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform) [
     mesonEmulatorHook
   ];
 

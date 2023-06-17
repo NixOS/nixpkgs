@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     export NO_COLOR=true
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = lib.optionalString (lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform) ''
     installShellCompletion --cmd typical \
       --bash <($out/bin/typical shell-completion bash) \
       --fish <($out/bin/typical shell-completion fish) \

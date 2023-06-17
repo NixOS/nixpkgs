@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--datadir=${placeholder "dev"}/share"
     "-Dcairo=disabled"
     "-Dgtk_doc=${lib.boolToString (stdenv.hostPlatform == stdenv.buildPlatform)}"
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ] ++ lib.optionals (!lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform) [
     "-Dgi_cross_ldd_wrapper=${substituteAll {
       name = "g-ir-scanner-lddwrapper";
       isExecutable = true;
@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (buildPackages) bash;
       buildlddtree = "${buildPackages.pax-utils}/bin/lddtree";
     }}"
-    "-Dgi_cross_binary_wrapper=${stdenv.hostPlatform.emulator buildPackages}"
+    "-Dgi_cross_binary_wrapper=${lib.systems.emulator stdenv.hostPlatform buildPackages}"
     # can't use canExecute, we need prebuilt when cross
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "-Dgi_cross_use_prebuilt_gi=true"

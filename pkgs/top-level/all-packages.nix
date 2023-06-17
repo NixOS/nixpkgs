@@ -5542,18 +5542,18 @@ with pkgs;
   # example of an error which this fixes
   # [Errno 8] Exec format error: './gdk3-scan'
   mesonEmulatorHook =
-    if (!stdenv.buildPlatform.canExecute stdenv.targetPlatform) then
+    if (!lib.systems.canExecute stdenv.buildPlatform stdenv.targetPlatform) then
       makeSetupHook
         {
           name = "mesonEmulatorHook";
           substitutions = {
             crossFile = writeText "cross-file.conf" ''
               [binaries]
-              exe_wrapper = ${lib.escapeShellArg (stdenv.targetPlatform.emulator buildPackages)}
+              exe_wrapper = ${lib.escapeShellArg (lib.systems.emulator stdenv.targetPlatform buildPackages)}
             '';
           };
         } ../development/tools/build-managers/meson/emulator-hook.sh
-    else throw "mesonEmulatorHook has to be in a conditional to check if the target binaries can be executed i.e. (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)";
+    else throw "mesonEmulatorHook has to be in a conditional to check if the target binaries can be executed i.e. (!lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform)";
 
   meson-tools = callPackage ../misc/meson-tools { };
 

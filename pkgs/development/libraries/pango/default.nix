@@ -17,7 +17,7 @@
 , glib
 , python3
 , x11Support? !stdenv.isDarwin, libXft
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.systems.emulatorAvailable stdenv.hostPlatform buildPackages
 , buildPackages, gobject-introspection
 }:
 

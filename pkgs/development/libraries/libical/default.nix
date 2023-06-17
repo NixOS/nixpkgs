@@ -14,7 +14,7 @@
 , python3
 , tzdata
 , fixDarwinDylibNames
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable pkgsBuildHost
+, withIntrospection ? lib.systems.emulatorAvailable stdenv.hostPlatform pkgsBuildHost
 , gobject-introspection
 , vala
 }:

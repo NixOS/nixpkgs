@@ -1,7 +1,39 @@
-{ lib }:
-  let inherit (lib.attrsets) mapAttrs; in
+{ lib
+}:
+let
+ inherit (lib.attrsets) mapAttrs;
 
-rec {
+ selectEmulator = platform: pkgs:
+   let
+     qemu-user = pkgs.qemu.override {
+       smartcardSupport = false;
+       spiceSupport = false;
+       openGLSupport = false;
+       virglSupport = false;
+       vncSupport = false;
+       gtkSupport = false;
+       sdlSupport = false;
+       pulseSupport = false;
+       smbdSupport = false;
+       seccompSupport = false;
+       enableDocs = false;
+       hostCpuTargets = [ "${platform.qemuArch}-linux-user" ];
+     };
+     wine = (pkgs.winePackagesFor "wine${toString platform.parsed.cpu.bits}").minimal;
+   in
+     if lib.systems.canExecute pkgs.stdenv.hostPlatform platform
+     then "${pkgs.runtimeShell} -c '\"$@\"' --"
+     else if platform.isWindows
+     then "${wine}/bin/wine${lib.optionalString (platform.parsed.cpu.bits == 64) "64"}"
+     else if platform.isLinux && pkgs.stdenv.hostPlatform.isLinux && platform.qemuArch != null
+     then "${qemu-user}/bin/qemu-${platform.qemuArch}"
+     else if platform.isWasi
+     then "${pkgs.wasmtime}/bin/wasmtime"
+     else if platform.isMmix
+     then "${pkgs.mmixware}/bin/mmix"
+     else null;
+
+in rec {
   doubles = import ./doubles.nix { inherit lib; };
   parse = import ./parse.nix { inherit lib; };
   inspect = import ./inspect.nix { inherit lib; };
@@ -49,6 +81,18 @@ rec {
   */
   flakeExposed = import ./flake-systems.nix { };
 
+  canExecute = machinePlatform: binaryPlatform:
+    machinePlatform.isAndroid == binaryPlatform.isAndroid &&
+    parse.isCompatible machinePlatform.parsed.cpu binaryPlatform.parsed.cpu
+    && machinePlatform.parsed.kernel == binaryPlatform.parsed.kernel;
+
+  emulatorAvailable = platform: pkgs: (selectEmulator platform pkgs) != null;
+
+  emulator = platform: pkgs:
+    if (emulatorAvailable platform pkgs)
+    then selectEmulator platform pkgs
+    else throw "Don't know how to run ${platform.config} executables.";
+
   # Elaborate a `localSystem` or `crossSystem` so that it contains everything
   # necessary.
   #
@@ -65,11 +109,10 @@ rec {
       system = parse.doubleFromSystem final.parsed;
       config = parse.tripleFromSystem final.parsed;
       # Determine whether we can execute binaries built for the provided platform.
-      canExecute = platform:
-        final.isAndroid == platform.isAndroid &&
-        parse.isCompatible final.parsed.cpu platform.parsed.cpu
-        && final.parsed.kernel == platform.parsed.kernel;
-      isCompatible = _: throw "2022-05-23: isCompatible has been removed in favor of canExecute, refer to the 22.11 changelog for details";
+      isCompatible      = _: throw "2022-05-23: isCompatible has been removed in favor of canExecute, refer to the 22.11 changelog for details";
+      canExecute        = _: throw "2022-06-17: `platform.canExecute` has been removed in favor of `lib.systems.canExecute platform`";
+      emulatorAvailable = _: throw "2022-06-17: `platform.emulatorAvailable` has been removed in favor of `lib.systems.emulatorAvailable platform`";
+      emulator          = _: throw "2022-06-17: `platform.emulator` has been removed in favor of `lib.systems.emulator platform`";
       # Derived meta-data
       libc =
         /**/ if final.isDarwin              then "libSystem"
@@ -206,48 +249,10 @@ rec {
         if final.isMacOS then "MACOSX_DEPLOYMENT_TARGET"
         else if final.isiOS then "IPHONEOS_DEPLOYMENT_TARGET"
         else null;
-    } // (
-      let
-        selectEmulator = pkgs:
-          let
-            qemu-user = pkgs.qemu.override {
-              smartcardSupport = false;
-              spiceSupport = false;
-              openGLSupport = false;
-              virglSupport = false;
-              vncSupport = false;
-              gtkSupport = false;
-              sdlSupport = false;
-              pulseSupport = false;
-              smbdSupport = false;
-              seccompSupport = false;
-              enableDocs = false;
-              hostCpuTargets = [ "${final.qemuArch}-linux-user" ];
-            };
-            wine = (pkgs.winePackagesFor "wine${toString final.parsed.cpu.bits}").minimal;
-          in
-          if pkgs.stdenv.hostPlatform.canExecute final
-          then "${pkgs.runtimeShell} -c '\"$@\"' --"
-          else if final.isWindows
-          then "${wine}/bin/wine${lib.optionalString (final.parsed.cpu.bits == 64) "64"}"
-          else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux && final.qemuArch != null
-          then "${qemu-user}/bin/qemu-${final.qemuArch}"
-          else if final.isWasi
-          then "${pkgs.wasmtime}/bin/wasmtime"
-          else if final.isMmix
-          then "${pkgs.mmixware}/bin/mmix"
-          else null;
-      in {
-        emulatorAvailable = pkgs: (selectEmulator pkgs) != null;
-
-        emulator = pkgs:
-          if (final.emulatorAvailable pkgs)
-          then selectEmulator pkgs
-          else throw "Don't know how to run ${final.config} executables.";
-
-    }) // mapAttrs (n: v: v final.parsed) inspect.predicates
-      // mapAttrs (n: v: v final.gcc.arch or "default") architectures.predicates
-      // args;
+    }
+    // mapAttrs (n: v: v final.parsed) inspect.predicates
+    // mapAttrs (n: v: v final.gcc.arch or "default") architectures.predicates
+    // args;
   in assert final.useAndroidPrebuilt -> final.isAndroid;
      assert lib.foldl
        (pass: { assertion, message }:

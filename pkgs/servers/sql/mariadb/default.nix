@@ -106,7 +106,7 @@ let
       ] ++ lib.optionals isCross [
         # revisit this if nixpkgs supports any architecture whose stack grows upwards
         "-DSTACK_DIRECTION=-1"
-        "-DCMAKE_CROSSCOMPILING_EMULATOR=${stdenv.hostPlatform.emulator buildPackages}"
+        "-DCMAKE_CROSSCOMPILING_EMULATOR=${lib.systems.emulator stdenv.hostPlatform buildPackages}"
       ];
 
       postInstall = lib.optionalString (!withEmbedded) ''

@@ -13,7 +13,7 @@
 , libgcrypt
 , gobject-introspection
 , buildPackages
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.systems.emulatorAvailable stdenv.hostPlatform buildPackages
 , vala
 , gi-docgen
 , gnome

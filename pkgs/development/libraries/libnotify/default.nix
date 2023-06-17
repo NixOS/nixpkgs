@@ -9,7 +9,7 @@
 , gdk-pixbuf
 , gnome
 , buildPackages
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.systems.emulatorAvailable stdenv.hostPlatform buildPackages
 , gobject-introspection
 }:
 

@@ -163,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DMIR_BUILD_PLATFORM_TEST_HARNESS=OFF"
   ];
 
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  doCheck = lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform;
 
   preCheck = ''
     # Needs to be exactly /tmp so some failing tests don't get run, don't know why they fail yet

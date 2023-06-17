@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X github.com/stern/stern/cmd.version=${version}" ];
 
   postInstall = let
-    stern = if stdenv.buildPlatform.canExecute stdenv.hostPlatform then "$out" else buildPackages.stern;
+    stern = if lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform then "$out" else buildPackages.stern;
   in
     ''
       for shell in bash zsh; do

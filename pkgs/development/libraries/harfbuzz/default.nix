@@ -11,7 +11,7 @@
 , ninja
 , gobject-introspection
 , buildPackages
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.systems.emulatorAvailable stdenv.hostPlatform buildPackages
 , icu
 , graphite2
 , harfbuzz # The icu variant uses and propagates the non-icu one.

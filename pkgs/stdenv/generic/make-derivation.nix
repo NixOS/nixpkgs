@@ -168,8 +168,8 @@ let
 let
   # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
   # no package has `doCheck = true`.
-  doCheck' = doCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-  doInstallCheck' = doInstallCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  doCheck' = doCheck && lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform;
+  doInstallCheck' = doInstallCheck && lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform;
 
   separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux;
   outputs' = outputs ++ lib.optional separateDebugInfo' "debug";
@@ -418,7 +418,7 @@ else let
 
           crossFile = builtins.toFile "cross-file.conf" ''
             [properties]
-            needs_exe_wrapper = ${lib.boolToString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)}
+            needs_exe_wrapper = ${lib.boolToString (!lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform)}
 
             [host_machine]
             system = '${stdenv.targetPlatform.parsed.kernel.name}'

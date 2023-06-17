@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     # we must explicitly disable this here so that mesonFlags receives
     # `-Dtests=disabled`; without it meson will attempt to run
     # hostPlatform binaries during the configurePhase.
-    (with stdenv; buildPlatform.canExecute hostPlatform);
+    (with stdenv; lib.systems.canExecute buildPlatform hostPlatform);
 
   meta = with lib; {
     description = "Device Tree Compiler";

@@ -22,7 +22,7 @@ buildGoModule rec {
   postInstall = ''
     export HOME=$(mktemp -d) # attempts to write to /homeless-shelter
     for shell in bash fish zsh; do
-      ${stdenv.hostPlatform.emulator buildPackages} $out/bin/doctl completion $shell > doctl.$shell
+      ${lib.systems.emulator stdenv.hostPlatform buildPackages} $out/bin/doctl completion $shell > doctl.$shell
       installShellCompletion doctl.$shell
     done
   '';

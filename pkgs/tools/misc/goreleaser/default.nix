@@ -27,7 +27,7 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall =
-    let emulator = stdenv.hostPlatform.emulator buildPackages;
+    let emulator = lib.systems.emulator stdenv.hostPlatform buildPackages;
     in ''
       ${emulator} $out/bin/goreleaser man > goreleaser.1
       installManPage ./goreleaser.1

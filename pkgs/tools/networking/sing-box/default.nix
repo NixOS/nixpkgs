@@ -45,7 +45,7 @@ buildGoModule rec {
     "-X=github.com/sagernet/sing-box/constant.Version=${version}"
   ];
 
-  postInstall = let emulator = stdenv.hostPlatform.emulator buildPackages; in ''
+  postInstall = let emulator = lib.systems.emulator stdenv.hostPlatform buildPackages; in ''
     installShellCompletion --cmd sing-box \
       --bash <(${emulator} $out/bin/sing-box completion bash) \
       --fish <(${emulator} $out/bin/sing-box completion fish) \

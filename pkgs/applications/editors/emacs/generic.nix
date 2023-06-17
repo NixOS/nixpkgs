@@ -429,6 +429,6 @@ mkDerivation (finalAttrs: (lib.optionalAttrs withNativeCompilation {
     platforms = if variant == "macport"
                 then lib.platforms.darwin
                 else lib.platforms.all;
-    broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
+    broken = !(lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform);
   };
 }))

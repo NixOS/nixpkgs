@@ -11,7 +11,7 @@
 , bash-completion
 , bash
 , buildPackages
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.systems.emulatorAvailable stdenv.hostPlatform buildPackages
 , withDocs ? stdenv.hostPlatform == stdenv.buildPlatform
 , gobject-introspection
 }:

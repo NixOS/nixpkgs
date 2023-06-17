@@ -19,7 +19,7 @@
 , lib
 , testers
 , buildPackages
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.systems.emulatorAvailable stdenv.hostPlatform buildPackages
 , gobject-introspection
 }:
 
@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
       done
     '' + lib.optionalString withIntrospection ''
       # We need to install 'loaders.cache' in lib/gdk-pixbuf-2.0/2.10.0/
-      ${stdenv.hostPlatform.emulator buildPackages} $dev/bin/gdk-pixbuf-query-loaders --update-cache
+      ${lib.systems.emulator stdenv.hostPlatform buildPackages} $dev/bin/gdk-pixbuf-query-loaders --update-cache
     '';
 
   # The fixDarwinDylibNames hook doesn't patch binaries.

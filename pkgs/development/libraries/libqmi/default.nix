@@ -18,8 +18,8 @@
 , libmbim
 , libqrtr-glib
 , buildPackages
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
-, withMan ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, withIntrospection ? lib.systems.emulatorAvailable stdenv.hostPlatform buildPackages
+, withMan ? lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform
 }:
 
 stdenv.mkDerivation rec {
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
-  ] ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ] ++ lib.optionals (withIntrospection && !lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform) [
     mesonEmulatorHook
   ];
 

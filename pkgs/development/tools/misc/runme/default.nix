@@ -47,7 +47,7 @@ buildGoModule rec {
     unset ldflags
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = lib.optionalString (lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform) ''
     installShellCompletion --cmd runme \
       --bash <($out/bin/runme completion bash) \
       --fish <($out/bin/runme completion fish) \

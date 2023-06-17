@@ -25,7 +25,7 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-X github.com/gohugoio/hugo/common/hugo.vendorInfo=nixpkgs" ];
 
-  postInstall = let emulator = stdenv.hostPlatform.emulator buildPackages; in ''
+  postInstall = let emulator = lib.systems.emulator stdenv.hostPlatform buildPackages; in ''
     ${emulator} $out/bin/hugo gen man
     installManPage man/*
     installShellCompletion --cmd hugo \

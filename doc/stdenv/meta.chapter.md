@@ -208,7 +208,7 @@ This means that `broken` can be used to express constraints, for example:
 - Does not cross compile
 
   ```nix
-   meta.broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+   meta.broken = !(lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform)
   ```
 
 - Broken if all of a certain set of its dependencies are broken

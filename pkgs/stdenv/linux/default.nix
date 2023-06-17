@@ -85,7 +85,7 @@
   # compatible with or current architecture.
   getCompatibleTools = lib.foldl (v: system:
     if v != null then v
-    else if localSystem.canExecute (lib.systems.elaborate { inherit system; }) then archLookupTable.${system}
+    else if lib.systems.canExecute localSystem (lib.systems.elaborate { inherit system; }) then archLookupTable.${system}
     else null) null (lib.attrNames archLookupTable);
 
   archLookupTable = table.${localSystem.libc}

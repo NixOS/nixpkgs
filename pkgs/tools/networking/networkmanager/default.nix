@@ -175,7 +175,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_42
     docbook_xml_dtd_43
     pythonForDocs
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ] ++ lib.optionals (!lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform) [
     mesonEmulatorHook
   ];
 

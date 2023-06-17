@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ] ++ lib.optionals (!lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform) [
     mesonEmulatorHook
   ];
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   ];
 
   # TODO: send patch upstream to make running tests optional
-  postPatch = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postPatch = lib.optionalString (!lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform) ''
     substituteInPlace meson.build \
       --replace "subdir('tests')" ""
   '';
