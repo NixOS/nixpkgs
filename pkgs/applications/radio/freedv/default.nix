@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "freedv";
-  version = "1.8.10.1";
+  version = "1.8.11";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "freedv-gui";
     rev = "v${version}";
-    hash = "sha256-m8Myo/5jt+rnV8cAR2p20aAHnbatTkIXGSVhLebAP9g=";
+    hash = "sha256-uI81dz0rU2/UnLvoQffuFOB3NGaTK0MJmCWGvGQKw24=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
