@@ -185,7 +185,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "egg-smol"
+name = "egglog"
 version = "0.1.0"
 dependencies = [
  "clap",
@@ -906,7 +906,7 @@ name = "web-demo"
 version = "0.1.0"
 dependencies = [
  "console_error_panic_hook",
- "egg-smol",
+ "egglog",
  "js-sys",
  "log",
  "wasm-bindgen",
