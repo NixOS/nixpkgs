@@ -70,7 +70,6 @@ let
     ] ++ (lib.optionals isCross [
       "--cross-compiling"
       "--without-intl"
-      "--without-snapshot"
       "--dest-cpu=${let platform = stdenv.hostPlatform; in
                     if      platform.isAarch32 then "arm"
                     else if platform.isAarch64 then "arm64"
