@@ -140,9 +140,10 @@ let
     postInstall = ''
       HOST_PATH=$out/bin''${HOST_PATH:+:$HOST_PATH} patchShebangs --host $out
 
-      ${lib.optionalString (enableNpm && !isCross) ''
-        mkdir -p $out/share/bash-completion/completions/
-        HOME=$TMPDIR $out/bin/npm completion > $out/share/bash-completion/completions/npm
+      ${lib.optionalString (enableNpm) ''
+        mkdir -p $out/share/bash-completion/completions
+        ln -s $out/lib/node_modules/npm/lib/utils/completion.sh \
+          $out/share/bash-completion/completions/npm
         for dir in "$out/lib/node_modules/npm/man/"*; do
           mkdir -p $out/share/man/$(basename "$dir")
           for page in "$dir"/*; do
