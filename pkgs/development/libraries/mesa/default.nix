@@ -85,8 +85,8 @@
 */
 
 let
-  version = "23.1.1";
-  hash = "sha256-omeQMe1bc7KcTwQqxk2W+DsM/khYYX3jLi78GWxlOkA=";
+  version = "23.1.2";
+  hash = "sha256-YLHzrbFWGDDBWL88aFCJQ2dPudafOEw8colpQ4WrXH4=";
 
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule

@@ -248,6 +248,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     CommonCrypto    = applePackage "CommonCrypto"      "osx-10.12.6"     "sha256-FLgODBrfv+XsGaAjddncYAm/BIJJYw6LcwX/z7ncKFM=" {};
     configd         = applePackage "configd"           "osx-10.8.5"      "sha256-6I3FWNjTgds5abEcZrD++s9b+P9a2+qUf8KFAb72DwI=" {
       Security      = applePackage "Security/boot.nix" "osx-10.9.5"      "sha256-7qr0IamjCXCobIJ6V9KtvbMBkJDfRCy4C5eqpHJlQLI=" {};
+      inherit (pkgs.darwin.apple_sdk.libs) xpc;
     };
     copyfile        = applePackage "copyfile"          "osx-10.12.6"     "sha256-uHqLFOIpXK+n0RHyOZzVsP2DDZcFDivKCnqHBaXvHns=" {};
     Csu             = applePackage "Csu"               "osx-10.11.6"     "sha256-h6a/sQMEVeFxKNWAPgKBXjWhyL2L2nvX9BQUMaTQ6sY=" {};
@@ -310,6 +311,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     configdHeaders  = applePackage "configd"           "osx-10.8.5"      "sha256-6I3FWNjTgds5abEcZrD++s9b+P9a2+qUf8KFAb72DwI=" {
       headersOnly = true;
       Security    = null;
+      xpc         = null;
     };
     libutilHeaders  = pkgs.darwin.libutil.override { headersOnly = true; };
     hfsHeaders      = pkgs.darwin.hfs.override { headersOnly = true; };

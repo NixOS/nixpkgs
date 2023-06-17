@@ -178,7 +178,7 @@ let
       Name: v8
       Description: V8 JavaScript Engine
       Version: $major.$minor.$patch
-      Libs: -L$libv8/lib -lv8 -pthread -licui18n
+      Libs: -L$libv8/lib -lv8 -pthread -licui18n -licuuc
       Cflags: -I$libv8/include
       EOF
     '';

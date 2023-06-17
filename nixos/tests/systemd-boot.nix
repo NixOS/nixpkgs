@@ -258,7 +258,8 @@ in
     '';
   };
 
-  # See: [Firmware file size bug] in systemd/default.nix
+  # Some UEFI firmwares fail on large reads. Now that systemd-boot loads initrd
+  # itself, systems with such firmware won't boot without this fix
   uefiLargeFileWorkaround = makeTest {
     name = "uefi-large-file-workaround";
 

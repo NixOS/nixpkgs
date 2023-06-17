@@ -29,11 +29,11 @@ assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
   pname = targetPrefix + basename + lib.optionalString hostCpuOnly "-host-cpu-only";
-  version = "13.1";
+  version = "13.2";
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}-${version}.tar.xz";
-    hash = "sha256-EVrVwY1ppr4qsViC02XdoqIhHBT0gLNQLG66V24ulaA=";
+    hash = "sha256-/Vvrt74YM6vbbgI8L0mKNUSYKB350FUj2JFbq+uJPwo=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -48,12 +48,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./debug-info-from-env.patch
-
-    # Backport musl fix
-    (fetchpatch {
-      url = "https://sourceware.org/git/?p=binutils-gdb.git;a=patch;h=2e977d9901393ea1bacbe1896af0929e968bc811";
-      hash = "sha256-/+UYjiOxrszJy1x8xavs63/ptNZ+ISIAQhG+i86VDpA=";
-    })
   ] ++ lib.optionals stdenv.isDarwin [
     ./darwin-target-match.patch
   ];
