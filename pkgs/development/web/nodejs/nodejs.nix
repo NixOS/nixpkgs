@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, python, zlib, libuv, util-linux, http-parser
+{ lib, stdenv, fetchurl, openssl, python, zlib, libuv, util-linux, http-parser, runtimeShellPackage
 , pkg-config, which, buildPackages
 # for `.pkgs` attribute
 , callPackage
@@ -55,6 +55,7 @@ let
     depsBuildBuild = [ buildPackages.stdenv.cc openssl libuv zlib ];
 
     buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
+      ++ lib.optional isCross runtimeShellPackage # for patchShebangs
       ++ [ zlib libuv openssl http-parser icu ];
 
     nativeBuildInputs = [ which pkg-config python ]
@@ -132,7 +133,7 @@ let
     checkFlags = [ "PYTHONDONTWRITEBYTECODE=1" ];
 
     postInstall = ''
-      HOST_PATH=$out/bin''${HOST_PATH:+:$HOST_PATH} patchShebangs --host $out
+      HOST_PATH=$out/bin patchShebangs --host $out
 
       ${lib.optionalString (enableNpm) ''
         mkdir -p $out/share/bash-completion/completions
