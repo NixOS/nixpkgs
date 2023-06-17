@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An embeddable implementation of the Ruby language";
     homepage = "https://mruby.org";
-    maintainers = [ maintainers.nicknovitski ];
+    maintainers = with maintainers; [ nicknovitski marsam ];
     license = licenses.mit;
     platforms = platforms.all;
   };
