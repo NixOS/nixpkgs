@@ -3,12 +3,6 @@
 version = 3
 
 [[package]]
-name = "Inflector"
-version = "0.11.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fe438c63458706e03479442743baae6c88256498e6431708f6dfc520a26515d3"
-
-[[package]]
 name = "abao"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -66,12 +60,6 @@ checksum = "67fc08ce920c31afb70f013dcce1bfc3a3195de6a228474e45e1f145b36f8d04"
 dependencies = [
  "memchr",
 ]
-
-[[package]]
-name = "aliasable"
-version = "0.1.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "250f629c0161ad8107cf89319e990051fae62832fd343083bea452d93e2205fd"
 
 [[package]]
 name = "alloc-no-stdlib"
@@ -216,9 +204,9 @@ dependencies = [
 
 [[package]]
 name = "async-imap"
-version = "0.8.0"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d11e163a705d0c809dfc886eee95df5117c758539c940c0fe9aa3aa4da5388ce"
+checksum = "da93622739d458dd9a6abc1abf0e38e81965a5824a3b37f9500437c82a8bb572"
 dependencies = [
  "async-channel",
  "base64 0.21.2",
@@ -229,8 +217,8 @@ dependencies = [
  "log",
  "nom",
  "once_cell",
- "ouroboros",
  "pin-utils",
+ "self_cell",
  "stop-token",
  "thiserror",
  "tokio",
@@ -1160,7 +1148,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat"
-version = "1.116.0"
+version = "1.117.0"
 dependencies = [
  "ansi_term",
  "anyhow",
@@ -1236,7 +1224,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat-jsonrpc"
-version = "1.116.0"
+version = "1.117.0"
 dependencies = [
  "anyhow",
  "async-channel",
@@ -1260,7 +1248,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat-repl"
-version = "1.116.0"
+version = "1.117.0"
 dependencies = [
  "ansi_term",
  "anyhow",
@@ -1275,7 +1263,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat-rpc-server"
-version = "1.116.0"
+version = "1.117.0"
 dependencies = [
  "anyhow",
  "deltachat",
@@ -1300,7 +1288,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat_ffi"
-version = "1.116.0"
+version = "1.117.0"
 dependencies = [
  "anyhow",
  "deltachat",
@@ -2661,9 +2649,9 @@ dependencies = [
 
 [[package]]
 name = "libc"
-version = "0.2.145"
+version = "0.2.146"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fc86cde3ff845662b8f4ef6cb50ea0e20c524eb3d29ae048287e06a1b3fa6a81"
+checksum = "f92be4933c13fd498862a9e02a3055f8a8d9c039ce33db97306fd5a6caa7f29b"
 
 [[package]]
 name = "libm"
@@ -3166,29 +3154,6 @@ dependencies = [
  "log",
  "serde",
  "winapi",
-]
-
-[[package]]
-name = "ouroboros"
-version = "0.15.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e1358bd1558bd2a083fed428ffeda486fbfb323e698cdda7794259d592ca72db"
-dependencies = [
- "aliasable",
- "ouroboros_macro",
-]
-
-[[package]]
-name = "ouroboros_macro"
-version = "0.15.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5f7d21ccd03305a674437ee1248f3ab5d4b1db095cf1caf49f1713ddf61956b7"
-dependencies = [
- "Inflector",
- "proc-macro-error",
- "proc-macro2",
- "quote",
- "syn 1.0.109",
 ]
 
 [[package]]
@@ -4310,6 +4275,12 @@ dependencies = [
  "core-foundation-sys",
  "libc",
 ]
+
+[[package]]
+name = "self_cell"
+version = "1.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4c309e515543e67811222dbc9e3dd7e1056279b782e1dacffe4242b718734fb6"
 
 [[package]]
 name = "semver"
