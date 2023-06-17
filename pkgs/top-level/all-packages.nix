@@ -9589,6 +9589,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  nbutools = callPackage ../tools/security/nbutools { };
+
   ncrack = callPackage ../tools/security/ncrack { };
 
   nerdctl = callPackage ../applications/networking/cluster/nerdctl { };
