@@ -269,7 +269,7 @@ in {
         PrivateTmp = true;
         ProtectControlGroups = true;
         PrivateMounts = true;
-      } // (lib.optionalAttrs (cfg.claim_token_file != null) {
+      } // (lib.optionalAttrs (cfg.claimTokenFile != null) {
         LoadCredential = [
           "netdata_claim_token:${cfg.claimTokenFile}"
         ];
