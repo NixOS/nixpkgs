@@ -99,13 +99,6 @@ stdenv.mkDerivation {
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace cmake/config-ix.cmake \
       --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
-  '' + lib.optionalString (useLLVM) ''
-    substituteInPlace lib/builtins/int_util.c \
-      --replace "#include <stdlib.h>" ""
-    substituteInPlace lib/builtins/clear_cache.c \
-      --replace "#include <assert.h>" ""
-    substituteInPlace lib/builtins/cpu_model.c \
-      --replace "#include <assert.h>" ""
   '';
 
   # Hack around weird upsream RPATH bug
