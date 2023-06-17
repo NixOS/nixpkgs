@@ -205,6 +205,14 @@ let
       platforms = platforms.linux ++ platforms.darwin;
       mainProgram = "node";
       knownVulnerabilities = optional (versionOlder version "18") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";
+
+      # Node.js build system does not have separate host and target OS
+      # configurations (architectures are defined as host_arch and target_arch,
+      # but there is no such thing as host_os and target_os).
+      #
+      # We may be missing something here, but it doesn’t look like it is
+      # possible to cross-compile between different operating systems.
+      broken = stdenv.buildPlatform.parsed.kernel.name != stdenv.hostPlatform.parsed.kernel.name;
     };
 
     passthru.python = python; # to ensure nodeEnv uses the same version
