@@ -264,8 +264,8 @@ let
   makeScriptWriter {
     interpreter =
       if libraries == []
-      then "${python}/bin/python"
-      else "${python.withPackages (ps: libraries)}/bin/python"
+      then python.interpreter
+      else (python.withPackages (ps: libraries)).interpreter
     ;
     check = optionalString python.isPy3k (writeDash "pythoncheck.sh" ''
       exec ${buildPythonPackages.flake8}/bin/flake8 --show-source ${ignoreAttribute} "$1"
