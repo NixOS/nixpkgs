@@ -1463,8 +1463,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "codespaces";
-          version = "1.14.7";
-          sha256 = "pcZGMxTVnMeD6rnNV0d9Wysk6MrYiYcJ+byuH9VR0ds=";
+          version = "1.14.8";
+          sha256 = "sha256-kCgnOODT1KDi9PMWs3CATXESWoHnDRhCIZhEUSkm14o=";
         };
         meta = { license = lib.licenses.unfree; };
       };
