@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bfc";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "Wilfred";
     repo = "bfc";
     rev = version;
-    hash = "sha256-pPx9S7EnrL6aIvLlrCjGDKNYLhzd6ud1RvN+qCiZGXk=";
+    hash = "sha256-uRQP3LS7cpG85BilkSaI+2WbEp/6zZcFrryMNO+n6EA=";
   };
 
-  cargoHash = "sha256-2m21FdSSFC6MsOeofHk6P4yGR3wZ3siLQTAtl4UbDBQ=";
+  cargoHash = "sha256-aQLUZzHBy5CBbp5SpsS5dFQYpD7Bc+4zTfLjA/nmMnE=";
 
   buildInputs = [
     libxml2
