@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xemu";
-  version = "0.7.92";
+  version = "0.7.95";
 
   src = fetchFromGitHub {
     owner = "xemu-project";
     repo = "xemu";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-wRGoeud4EY2N/seG0Kd7CJt1IkDdJMJwFwpQNoLOl2g=";
+    hash = "sha256-JZEDVmW1Q+nAFv8oVaYl7w41Mvm+L/t8PamkkE1FaIk=";
     fetchSubmodules = true;
   };
 
