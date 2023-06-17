@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
                 lib.optionals (finalAttrs.pname == "luarocks-nix") [ file nix-prefetch-git ])}
         }
     done
-  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  '' + lib.optionalString (lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform) ''
     installShellCompletion --cmd luarocks \
       --bash <($out/bin/luarocks completion bash) \
       --fish <($out/bin/luarocks completion fish) \

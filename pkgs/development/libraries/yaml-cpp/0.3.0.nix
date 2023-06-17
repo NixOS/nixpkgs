@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=${lib.boolToString (!stdenv.hostPlatform.isStatic)}"
   ];
 
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  doCheck = lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform;
 
   meta = with lib; {
     description = "A YAML parser and emitter for C++";

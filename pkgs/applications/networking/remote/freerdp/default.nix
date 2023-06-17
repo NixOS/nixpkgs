@@ -51,7 +51,7 @@
 , withUnfree ? false
 
 # tries to compile and run generate_argument_docbook.c
-, withManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, withManPages ? lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform
 
 , buildPackages
 }:

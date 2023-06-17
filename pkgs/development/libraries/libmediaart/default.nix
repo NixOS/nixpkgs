@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ meson ninja pkg-config vala gtk-doc docbook_xsl docbook_xml_dtd_412 gobject-introspection ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    ++ lib.optionals (!lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform) [
     mesonEmulatorHook
   ];
 

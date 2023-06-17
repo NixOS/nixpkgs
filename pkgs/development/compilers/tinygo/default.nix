@@ -78,7 +78,7 @@ buildGoModule rec {
   buildInputs = [ llvm clang.cc ]
     ++ lib.optionals stdenv.isDarwin [ zlib ncurses libffi libxml2 xar ];
 
-  doCheck = (stdenv.buildPlatform.canExecute stdenv.hostPlatform);
+  doCheck = (lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform);
   inherit tinygoTests;
 
   allowGoReference = true;

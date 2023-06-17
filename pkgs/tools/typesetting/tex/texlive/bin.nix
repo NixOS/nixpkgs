@@ -61,7 +61,7 @@ let
     '' +
     # when cross compiling, we must use himktables from PATH
     # (i.e. from buildPackages.texlive.bin.core.dev)
-    lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)  ''
+    lib.optionalString (!lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform)  ''
       sed -i 's|\./himktables|himktables|' texk/web2c/Makefile.in
     ''
 ;
@@ -128,7 +128,7 @@ core = stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) (with texlive.bin.core; [
+  ] ++ lib.optionals (!lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform) (with texlive.bin.core; [
     # configure: error: tangle was not found but is required when cross-compiling.
     # dev (himktables) is used when building hitex to generate the additional source file hitables.c
     web/*tangle*/ cweb/*ctangle*/ omegaware/*otangle*/ tie/*tie*/ # see "Building TeX Live" 6.4.2 Cross problems

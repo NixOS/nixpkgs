@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ] ++ lib.optionals (!lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform) [
     #  meson.build:88:2: ERROR: Can not run test applications in this cross environment.
     mesonEmulatorHook
   ];

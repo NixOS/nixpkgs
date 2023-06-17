@@ -11,7 +11,7 @@
 , libvirt
 , libxml2
 , buildPackages
-, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && lib.systems.emulatorAvailable stdenv.hostPlatform buildPackages
 , gobject-introspection
 , withDocs ? stdenv.hostPlatform == stdenv.buildPlatform
 , gtk-doc

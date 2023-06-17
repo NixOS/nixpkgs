@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
       dbus-python
       python-dbusmock
     ]))
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ] ++ lib.optionals (!lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform) [
     mesonEmulatorHook
   ];
 
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "-Dgtk_doc=true"
-    "-Dtests=${lib.boolToString (stdenv.buildPlatform.canExecute stdenv.hostPlatform)}"
+    "-Dtests=${lib.boolToString (lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform)}"
   ];
 
   doCheck = true;

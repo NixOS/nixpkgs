@@ -244,7 +244,7 @@ in
   in lib.mapAttrsRecursiveCond (as: !lib.isDerivation as) (name: mkBootstrapToolsJob)
     # The `bootstrapTools.${platform}.bootstrapTools` derivation
     # *unpacks* the bootstrap-files using their own `busybox` binary,
-    # so it will fail unless buildPlatform.canExecute hostPlatform.
+    # so it will fail unless `lib.systems.canExecute buildPlatform hostPlatform`.
     # Unfortunately `bootstrapTools` also clobbers its own `system`
     # attribute, so there is no way to detect this -- we must add it
     # as a special case.  We filter the "test" attribute (only from

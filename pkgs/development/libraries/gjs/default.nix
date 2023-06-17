@@ -57,7 +57,7 @@ in stdenv.mkDerivation rec {
     libxml2 # for xml-stripblanks
     dbus # for dbus-run-session
     gobject-introspection
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ] ++ lib.optionals (!lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform) [
     mesonEmulatorHook
   ];
 

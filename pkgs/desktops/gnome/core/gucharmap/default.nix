@@ -74,7 +74,7 @@ in stdenv.mkDerivation rec {
     libxml2
     desktop-file-utils
     gobject-introspection
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ] ++ lib.optionals (!lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform) [
     mesonEmulatorHook
   ];
 

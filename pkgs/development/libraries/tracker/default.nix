@@ -10,7 +10,7 @@
 , asciidoc
 , gobject-introspection
 , buildPackages
-, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && lib.systems.emulatorAvailable stdenv.hostPlatform buildPackages
 , vala
 , python3
 , gi-docgen

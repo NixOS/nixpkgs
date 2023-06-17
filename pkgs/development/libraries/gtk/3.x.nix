@@ -23,8 +23,8 @@
 , at-spi2-atk
 , gobject-introspection
 , buildPackages
-, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
-, compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && lib.systems.emulatorAvailable stdenv.hostPlatform buildPackages
+, compileSchemas ? lib.systems.emulatorAvailable stdenv.hostPlatform buildPackages
 , fribidi
 , xorg
 , libepoxy
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk-doc
     # For xmllint
     libxml2
-  ] ++ lib.optionals ((withIntrospection || compileSchemas) && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ] ++ lib.optionals ((withIntrospection || compileSchemas) && !(lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform)) [
     mesonEmulatorHook
   ] ++ lib.optionals waylandSupport [
     wayland-scanner

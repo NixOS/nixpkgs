@@ -64,6 +64,9 @@ lib.runTests (
   testunix = mseteq unix (linux ++ darwin ++ freebsd ++ openbsd ++ netbsd ++ illumos ++ cygwin ++ redox);
 })
 
+
+# Uncomment after 23.11
+/*
 # Verify that pointer equality doesn't influence the result of comparing two
 # platform sets that are the same, but have been constructed by independent calls
 # to `lib.systems.elaborate`.
@@ -103,6 +106,7 @@ lib.runTests (
     expected = null;
   };
 }
+*/
 
 # Generate test cases to assert that a change in any non-function attribute makes a platform unequal
 // lib.concatMapAttrs (platformAttrName: origValue: {

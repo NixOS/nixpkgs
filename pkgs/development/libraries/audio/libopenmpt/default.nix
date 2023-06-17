@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     (lib.strings.withFeature usePulseAudio "pulseaudio")
   ];
 
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  doCheck = lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform;
 
   postFixup = ''
     moveToOutput share/doc $dev

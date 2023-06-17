@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-roPyRaT89I3HbyvBK/owiigMus1EeKEhhKHFsgfzp10=";
   };
 
-  checkPhase = let emulator = stdenv.hostPlatform.emulator buildPackages; in ''
+  checkPhase = let emulator = lib.systems.emulator stdenv.hostPlatform buildPackages; in ''
     runHook preCheck
 
     for testcase in selftest1 selftest2; do

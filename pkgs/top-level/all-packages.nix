@@ -5999,7 +5999,7 @@ with pkgs;
       # The throw is moved into the `makeSetupHook` derivation, so that its
       # outer level, but not its outPath can still be evaluated if the condition
       # doesn't hold. This ensures that splicing still can work correctly.
-      (if (!stdenv.hostPlatform.canExecute stdenv.targetPlatform) then
+      (if (!lib.systems.canExecute stdenv.buildPlatform stdenv.targetPlatform) then
         ../by-name/me/meson/emulator-hook.sh
        else
          throw "mesonEmulatorHook may only be added to nativeBuildInputs when the target binaries can't be executed; however you are attempting to use it in a situation where ${stdenv.hostPlatform.config} can execute ${stdenv.targetPlatform.config}. Consider only adding mesonEmulatorHook according to a conditional based canExecute in your package expression.");

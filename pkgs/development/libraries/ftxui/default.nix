@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     "-DFTXUI_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"
   ];
 
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  doCheck = lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform;
 
   meta = with lib; {
     homepage = "https://github.com/ArthurSonzogni/FTXUI";

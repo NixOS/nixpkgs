@@ -34,29 +34,67 @@ let
      then "${pkgs.mmixware}/bin/mmix"
      else null;
 
- # These definitions have to be floated out into a `let … in` binding to ensure
- # that they are the same exact value struct in the evaluating Nix
- # implementation. Due to a quirk in how equality is implemented, values including
- # functions are considered equal if they have the same memory location as long as
- # they are inside a container value and not compared directly. Thus any attribute
- # set will compare equal to itself even if it contains functions.
- # By floating the functions out of the attribute set construction we'll ensure
- # that the functions have the same memory location regardless of what call to
- # lib.systems.elaborate produced them. This ensures that platform sets will be
- # equal even if they have been constructed by different calls to lib.systems.elaborate
- # —as long as their other contents are the same.
- #
- # For details see:
- # - https://github.com/NixOS/nix/issues/3371
- # - https://code.tvl.fyi/about/tvix/docs/value-pointer-equality.md
- isCompatiblePlaceholder      = _: throw "2022-05-23: isCompatible has been removed in favor of canExecute, refer to the 22.11 changelog for details";
- canExecutePlaceholder        = _: throw "2023-06-17: `platform.canExecute` has been removed in favor of `lib.systems.canExecute platform`";
- emulatorAvailablePlaceholder = _: throw "2023-06-17: `platform.emulatorAvailable` has been removed in favor of `lib.systems.emulatorAvailable platform`";
- emulatorPlaceholder          = _: throw "2023-06-17: `platform.emulator` has been removed in favor of `lib.systems.emulator platform`";
+  doubles = import ./doubles.nix { inherit lib; };
+
+  parse = import ./parse.nix { inherit lib; };
+
+  isCompatiblePlaceholder      = _: throw "2022-05-23: isCompatible has been removed in favor of canExecute, refer to the 22.11 changelog for details";
+
+  # These definitions have to be floated out into a `let … in` binding to ensure
+  # that they are the same exact value struct in the evaluating Nix
+  # implementation. Due to a quirk in how equality is implemented, values including
+  # functions are considered equal if they have the same memory location as long as
+  # they are inside a container value and not compared directly. Thus any attribute
+  # set will compare equal to itself even if it contains functions.
+  # By floating the functions out of the attribute set construction we'll ensure
+  # that the functions have the same memory location regardless of what call to
+  # lib.systems.elaborate produced them. This ensures that platform sets will be
+  # equal even if they have been constructed by different calls to lib.systems.elaborate
+  # —as long as their other contents are the same.
+  #
+  # For details see:
+  # - https://github.com/NixOS/nix/issues/3371
+  # - https://code.tvl.fyi/about/tvix/docs/value-pointer-equality.md
+
+  # uncomment after 24.05 branch-off
+  /*
+  canExecutePlaceholder        = _: throw "2023-06-17: `platform.canExecute` has been removed in favor of `lib.systems.canExecute platform`";
+  emulatorAvailablePlaceholder = _: throw "2023-06-17: `platform.emulatorAvailable` has been removed in favor of `lib.systems.emulatorAvailable platform`";
+  emulatorPlaceholder          = _: throw "2023-06-17: `platform.emulator` has been removed in favor of `lib.systems.emulator platform`";
+  */
+
+  # uncomment after 23.11 branch-off
+  # delete after 24.05 branch-off
+  /*
+  canExecutePlaceholder        = _: lib.warn "2023-06-17: `platform.canExecute` has been removed in favor of `lib.systems.canExecute platform`"
+    self: plat: canExecute self plat;
+  emulatorAvailablePlaceholder = _: lib.warn "2023-06-17: `platform.emulatorAvailable` has been removed in favor of `lib.systems.emulatorAvailabl
+    self: pkgs: emulatorAvailable self pkgs;
+  emulatorPlaceholder          = _: lib.warn "2023-06-17: `platform.emulator` has been removed in favor of `lib.systems.emulator platform`"
+    self: pkgs: emulator self pkgs;
+  */
+
+  # delete out after 23.11 branch-off
+  canExecutePlaceholder        = self: plat: canExecute self plat;
+  emulatorAvailablePlaceholder = self: pkgs: emulatorAvailable self pkgs;
+  emulatorPlaceholder          = self: pkgs: emulator self pkgs;
+
+  canExecute = machinePlatform: binaryPlatform:
+    machinePlatform.isAndroid == binaryPlatform.isAndroid &&
+    parse.isCompatible machinePlatform.parsed.cpu binaryPlatform.parsed.cpu
+    && machinePlatform.parsed.kernel == binaryPlatform.parsed.kernel;
+
+  emulatorAvailable = platform: pkgs: (selectEmulator platform pkgs) != null;
+
+  emulator = platform: pkgs:
+    if (emulatorAvailable platform pkgs)
+    then selectEmulator platform pkgs
+    else throw "Don't know how to run ${platform.config} executables.";
+
 
 in rec {
   doubles = import ./doubles.nix { inherit lib; };
-  parse = import ./parse.nix { inherit lib; };
+  inherit parse;
   inspect = import ./inspect.nix { inherit lib; };
   platforms = import ./platforms.nix { inherit lib; };
   examples = import ./examples.nix { inherit lib; };
@@ -87,17 +125,7 @@ in rec {
   */
   flakeExposed = import ./flake-systems.nix { };
 
-  canExecute = machinePlatform: binaryPlatform:
-    machinePlatform.isAndroid == binaryPlatform.isAndroid &&
-    parse.isCompatible machinePlatform.parsed.cpu binaryPlatform.parsed.cpu
-    && machinePlatform.parsed.kernel == binaryPlatform.parsed.kernel;
-
-  emulatorAvailable = platform: pkgs: (selectEmulator platform pkgs) != null;
-
-  emulator = platform: pkgs:
-    if (emulatorAvailable platform pkgs)
-    then selectEmulator platform pkgs
-    else throw "Don't know how to run ${platform.config} executables.";
+  inherit canExecute emulatorAvailable emulator;
 
   # Elaborate a `localSystem` or `crossSystem` so that it contains everything
   # necessary.
@@ -118,11 +146,19 @@ in rec {
       # Either of these can be losslessly-extracted from `parsed` iff parsing succeeds.
       system = parse.doubleFromSystem final.parsed;
       config = parse.tripleFromSystem final.parsed;
+
       # Placeholders for removed functions that inform the user about their replacements
-      isCompatible      = isCompatiblePlaceholder;
-      canExecute        = canExecutePlaceholder;
-      emulatorAvailable = emulatorAvailablePlaceholder;
-      emulator          = emulatorPlaceholder;
+      #isCompatible      = isCompatiblePlaceholder final;
+
+      # 2023-06-17: `platform.canExecute` is deprecated in favor of `lib.systems.canExecute platform`
+      canExecute        = canExecutePlaceholder final;
+
+      # 2023-06-17: `platform.emulatorAvailable` has been removed in favor of `lib.systems.emulatorAvailable platform`
+      emulatorAvailable = emulatorAvailablePlaceholder final;
+
+      # 2023-06-17: `platform.emulator` has been removed in favor of `lib.systems.emulator platform`
+      emulator          = emulatorPlaceholder final;
+
       # Derived meta-data
       libc =
         /**/ if final.isDarwin              then "libSystem"
@@ -379,7 +415,7 @@ in rec {
         else if final.isiOS then "IPHONEOS_DEPLOYMENT_TARGET"
         else null;
 
-    }) // mapAttrs (n: v: v final.parsed) inspect.predicates
+    } // mapAttrs (n: v: v final.parsed) inspect.predicates
       // mapAttrs (n: v: v final.gcc.arch or "default") architectures.predicates
       // args;
   in assert final.useAndroidPrebuilt -> final.isAndroid;

@@ -8,7 +8,7 @@ let
     || (stdenv.cc.isGNU && stdenv.isLinux)
   );
   staticLibc = lib.optionalString (stdenv.hostPlatform.libc == "glibc") "-L ${glibc.static}/lib";
-  emulator = stdenv.hostPlatform.emulator buildPackages;
+  emulator = lib.systems.emulator stdenv.hostPlatform buildPackages;
   isCxx = stdenv.cc.libcxx != null;
   libcxxStdenvSuffix = lib.optionalString isCxx "-libcxx";
 in stdenv.mkDerivation {

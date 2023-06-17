@@ -5,7 +5,7 @@
 }:
 
 let
-  isCross = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  isCross = !lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform;
   isStatic = stdenv.hostPlatform.isStatic;
   isMusl = stdenv.hostPlatform.isMusl;
 in

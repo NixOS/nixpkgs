@@ -28,7 +28,7 @@ let
 in
 
 # wrap both pkgsCrossX.buildPackages.gobject-introspection and {pkgs,pkgsSomethingExecutableOnBuildSystem).buildPackages.gobject-introspection
-if (!stdenv.hostPlatform.canExecute stdenv.targetPlatform) && stdenv.targetPlatform.emulatorAvailable buildPackages
+if (!lib.systems.canExecute stdenv.hostPlatform stdenv.targetPlatform) && lib.systems.emulatorAvailable stdenv.targetPlatform buildPackages
 then
   overriddenUnwrappedGir.overrideAttrs
     (previousAttrs:
@@ -54,7 +54,7 @@ then
             rm "$dev/bin/g-ir-compiler"
             rm "$dev/bin/g-ir-scanner"
             export bash="${buildPackages.bash}"
-            export emulator=${lib.escapeShellArg (stdenv.targetPlatform.emulator buildPackages)}
+            export emulator=${lib.escapeShellArg (lib.systems.emulator stdenv.targetPlatform buildPackages)}
             export emulatorwrapper="$dev/bin/g-ir-scanner-qemuwrapper"
             export buildlddtree="${buildPackages.pax-utils}/bin/lddtree"
 

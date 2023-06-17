@@ -28,7 +28,7 @@ let
          ''
     else interpreter;
 
-  getEmulator = system: (lib.systems.elaborate { inherit system; }).emulator pkgs;
+  getEmulator = system: lib.systems.emulator (lib.systems.elaborate { inherit system; }) pkgs;
   getQemuArch = system: (lib.systems.elaborate { inherit system; }).qemuArch;
 
   # Mapping of systems to “magicOrExtension” and “mask”. Mostly taken from:

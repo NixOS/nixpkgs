@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = lib.optionalString (lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform) ''
     installShellCompletion --cmd planus \
       --bash <($out/bin/planus generate-completions bash) \
       --fish <($out/bin/planus generate-completions fish) \

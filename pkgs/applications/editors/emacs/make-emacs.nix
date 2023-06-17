@@ -407,6 +407,6 @@ mkDerivation (finalAttrs: {
   };
 
   meta = meta // {
-    broken = withNativeCompilation && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
+    broken = withNativeCompilation && !(lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform);
   };
 })

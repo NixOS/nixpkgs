@@ -24,7 +24,7 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall =
-    let emulator = stdenv.hostPlatform.emulator buildPackages;
+    let emulator = lib.systems.emulator stdenv.hostPlatform buildPackages;
     in ''
       ${emulator} $out/bin/nfpm man > nfpm.1
       installManPage ./nfpm.1

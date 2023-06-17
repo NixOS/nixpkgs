@@ -150,7 +150,7 @@ depsBuildBuild = [ buildPackages.stdenv.cc ];
 Add the following to your `mkDerivation` invocation.
 
 ```nix
-doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+doCheck = lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform;
 ```
 
 #### Package using Meson needs to run binaries for the host platform during build. {#cross-meson-runs-host-code}
@@ -162,7 +162,7 @@ e.g.
 ```
 nativeBuildInputs = [
   meson
-] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+] ++ lib.optionals (!lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform) [
   mesonEmulatorHook
 ];
 ```

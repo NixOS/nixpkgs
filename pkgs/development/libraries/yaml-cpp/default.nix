@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     "-DINSTALL_GTEST=false"
   ];
 
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  doCheck = lib.systems.canExecute stdenv.buildPlatform stdenv.hostPlatform;
 
   passthru.updateScript = gitUpdater { };
 
