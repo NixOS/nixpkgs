@@ -119,23 +119,25 @@ let
     # NB: be careful when running patchShebangs at patch phase. Some files are
     # copied verbatim to the output with shabangs patched to store paths and
     # subsequent patchShebangs at install phase would not update them.
-    postPatch = ''
-      # fix tests
-      for a in test/parallel/test-child-process-env.js \
-               test/parallel/test-child-process-exec-env.js \
-               test/parallel/test-child-process-default-options.js \
-               test/fixtures/syntax/good_syntax_shebang.js \
-               test/fixtures/syntax/bad_syntax_shebang.js ; do
-        substituteInPlace $a \
-          --replace "/usr/bin/env" "${coreutils}/bin/env"
-      done
-    '' + lib.optionalString stdenv.isDarwin ''
+    postPatch = lib.optionalString stdenv.isDarwin ''
       sed -i -e "s|tr1/type_traits|type_traits|g" \
              -e "s|std::tr1|std|" src/util.h
     '';
 
-    nativeCheckInputs = [ procps ];
-    doCheck = false; # fails 4 out of 1453 tests
+    doCheck = lib.versionAtLeast version "16"; # some tests fail on v14
+
+    # Some dependencies required for tools/doc/node_modules (and therefore
+    # test-addons, jstest and others) target are not included in the tarball.
+    # Run test targets that do not require network access.
+    checkTarget = lib.concatStringsSep " " [
+      "build-js-native-api-tests"
+      "build-node-api-tests"
+      "tooltest"
+      "cctest"
+    ];
+
+    # Do not create __pycache__ when running tests.
+    checkFlags = [ "PYTHONDONTWRITEBYTECODE=1" ];
 
     postInstall = ''
       HOST_PATH=$out/bin''${HOST_PATH:+:$HOST_PATH} patchShebangs --host $out
