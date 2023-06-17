@@ -378,15 +378,59 @@ in
             };
 
             domain = mkOption {
-              description = lib.mdDoc "The public facing domain name used to access grafana from a browser.";
+              description = lib.mdDoc ''
+                The public facing domain name used to access grafana from a browser.
+
+                This setting is only used in the default value of the `root_url` setting.
+                If you set the latter manually, this option does not have to be specified.
+              '';
               default = "localhost";
               type = types.str;
             };
 
+            enforce_domain = mkOption {
+              description = lib.mdDoc ''
+                Redirect to correct domain if the host header does not match the domain.
+                Prevents DNS rebinding attacks.
+              '';
+              default = false;
+              type = types.bool;
+            };
+
             root_url = mkOption {
-              description = lib.mdDoc "Full public facing url.";
+              description = lib.mdDoc ''
+                This is the full URL used to access Grafana from a web browser.
+                This is important if you use Google or GitHub OAuth authentication (for the callback URL to be correct).
+
+                This setting is also important if you have a reverse proxy in front of Grafana that exposes it through a subpath.
+                In that case add the subpath to the end of this URL setting.
+              '';
+              # https://github.com/grafana/grafana/blob/cb7e18938b8eb6860a64b91aaba13a7eb31bc95b/conf/defaults.ini#L54
               default = "%(protocol)s://%(domain)s:%(http_port)s/";
               type = types.str;
+            };
+
+            serve_from_sub_path = mkOption {
+              description = lib.mdDoc ''
+                Serve Grafana from subpath specified in the `root_url` setting.
+                By default it is set to `false` for compatibility reasons.
+
+                By enabling this setting and using a subpath in `root_url` above,
+                e.g. `root_url = "http://localhost:3000/grafana"`,
+                Grafana is accessible on `http://localhost:3000/grafana`.
+                If accessed without subpath, Grafana will redirect to an URL with the subpath.
+              '';
+              default = false;
+              type = types.bool;
+            };
+
+            router_logging = mkOption {
+              description = lib.mdDoc ''
+                Set to `true` for Grafana to log all HTTP requests (not just errors).
+                These are logged as Info level events to the Grafana log.
+              '';
+              default = false;
+              type = types.bool;
             };
 
             static_root_path = mkOption {
@@ -398,28 +442,80 @@ in
 
             enable_gzip = mkOption {
               description = lib.mdDoc ''
-                Set this option to true to enable HTTP compression, this can improve transfer speed and bandwidth utilization.
-                It is recommended that most users set it to true. By default it is set to false for compatibility reasons.
+                Set this option to `true` to enable HTTP compression, this can improve transfer speed and bandwidth utilization.
+                It is recommended that most users set it to `true`. By default it is set to `false` for compatibility reasons.
               '';
               default = false;
               type = types.bool;
             };
 
             cert_file = mkOption {
-              description = lib.mdDoc "Cert file for ssl.";
+              description = lib.mdDoc ''
+                Path to the certificate file (if `protocol` is set to `https` or `h2`).
+              '';
               default = "";
               type = types.str;
             };
 
             cert_key = mkOption {
-              description = lib.mdDoc "Cert key for ssl.";
+              description = lib.mdDoc ''
+                Path to the certificate key file (if `protocol` is set to `https` or `h2`).
+              '';
               default = "";
               type = types.str;
             };
 
+            socket_gid = mkOption {
+              description = lib.mdDoc ''
+                GID where the socket should be set when `protocol=socket`.
+                Make sure that the target group is in the group of Grafana process and that Grafana process is the file owner before you change this setting.
+                It is recommended to set the gid as http server user gid.
+                Not set when the value is -1.
+              '';
+              default = -1;
+              type = types.int;
+            };
+
+            socket_mode = mkOption {
+              description = lib.mdDoc ''
+                Mode where the socket should be set when `protocol=socket`.
+                Make sure that Grafana process is the file owner before you change this setting.
+              '';
+              # I assume this value is interpreted as octal literal by grafana.
+              # If this was an int, people following tutorials or porting their
+              # old config could stumble across nix not having octal literals.
+              default = "0660";
+              type = types.str;
+            };
+
             socket = mkOption {
-              description = lib.mdDoc "Path where the socket should be created when protocol=socket. Make sure that Grafana has appropriate permissions before you change this setting.";
+              description = lib.mdDoc ''
+                Path where the socket should be created when `protocol=socket`.
+                Make sure that Grafana has appropriate permissions before you change this setting.
+              '';
               default = "/run/grafana/grafana.sock";
+              type = types.str;
+            };
+
+            cdn_url = mkOption {
+              description = lib.mdDoc ''
+                Specify a full HTTP URL address to the root of your Grafana CDN assets.
+                Grafana will add edition and version paths.
+
+                For example, given a cdn url like `https://cdn.myserver.com`
+                grafana will try to load a javascript file from `http://cdn.myserver.com/grafana-oss/7.4.0/public/build/app.<hash>.js`.
+              '';
+              default = "";
+              type = types.str;
+            };
+
+            read_timeout = mkOption {
+              description = lib.mdDoc ''
+                Sets the maximum time using a duration format (5s/5m/5ms)
+                before timing out read of an incoming request and closing idle connections.
+                0 means there is no timeout for reading the request.
+              '';
+              default = "0";
               type = types.str;
             };
           };
@@ -432,26 +528,33 @@ in
             };
 
             host = mkOption {
-              description = lib.mdDoc "Database host.";
+              description = lib.mdDoc ''
+                Only applicable to MySQL or Postgres.
+                Includes IP or hostname and port or in case of Unix sockets the path to it.
+                For example, for MySQL running on the same host as Grafana: `host = "127.0.0.1:3306"`
+                or with Unix sockets: `host = "/var/run/mysqld/mysqld.sock"`
+              '';
               default = "127.0.0.1:3306";
               type = types.str;
             };
 
             name = mkOption {
-              description = lib.mdDoc "Database name.";
+              description = lib.mdDoc "The name of the Grafana database.";
               default = "grafana";
               type = types.str;
             };
 
             user = mkOption {
-              description = lib.mdDoc "Database user.";
+              description = lib.mdDoc "The database user (not applicable for `sqlite3`).";
               default = "root";
               type = types.str;
             };
 
             password = mkOption {
               description = lib.mdDoc ''
-                Database password. Please note that the contents of this option
+                The database user's password (not applicable for `sqlite3`).
+
+                Please note that the contents of this option
                 will end up in a world-readable Nix store. Use the file provider
                 pointing at a reasonably secured file in the local filesystem
                 to work around that. Look at the documentation for details:
@@ -461,15 +564,144 @@ in
               type = types.str;
             };
 
+            max_idle_conn = mkOption {
+              description = lib.mdDoc "The maximum number of connections in the idle connection pool.";
+              default = 2;
+              type = types.int;
+            };
+
+            max_open_conn = mkOption {
+              description = lib.mdDoc "The maximum number of open connections to the database.";
+              default = 0; # https://github.com/grafana/grafana/blob/cb7e18938b8eb6860a64b91aaba13a7eb31bc95b/conf/defaults.ini#L123-L124
+              type = types.int;
+            };
+
+            conn_max_lifetime = mkOption {
+              description = lib.mdDoc ''
+                Sets the maximum amount of time a connection may be reused.
+                The default is 14400 (which means 14400 seconds or 4 hours).
+                For MySQL, this setting should be shorter than the `wait_timeout` variable.
+              '';
+              default = 14400;
+              type = types.int;
+            };
+
+            locking_attempt_timeout_sec = mkOption {
+              description = lib.mdDoc ''
+                For `mysql`, if the `migrationLocking` feature toggle is set,
+                specify the time (in seconds) to wait before failing to lock the database for the migrations.
+              '';
+              default = 0;
+              type = types.int;
+            };
+
+            log_queries = mkOption {
+              description = lib.mdDoc "Set to `true` to log the sql calls and execution times";
+              default = false;
+              type = types.bool;
+            };
+
+            ssl_mode = mkOption {
+              description = lib.mdDoc ''
+                For Postgres, use either `disable`, `require` or `verify-full`.
+                For MySQL, use either `true`, `false`, or `skip-verify`.
+              '';
+              default = "disable"; # https://github.com/grafana/grafana/blob/cb7e18938b8eb6860a64b91aaba13a7eb31bc95b/conf/defaults.ini#L134
+              type = types.enum [ "disable" "require" "verify-full" "true" "false" "skip-verify" ];
+            };
+
+            isolation_level = mkOption {
+              description = lib.mdDoc ''
+                Only the MySQL driver supports isolation levels in Grafana.
+                In case the value is empty, the driver's default isolation level is applied.
+              '';
+              default = null;
+              type = types.nullOr (types.enum [ "READ-UNCOMMITTED" "READ-COMMITTED" "REPEATABLE-READ" "SERIALIZABLE" ]);
+            };
+
+            ca_cert_path = mkOption {
+              description = lib.mdDoc "The path to the CA certificate to use.";
+              default = "";
+              type = types.str;
+            };
+
+            client_key_path = mkOption {
+              description = lib.mdDoc "The path to the client key. Only if server requires client authentication.";
+              default = "";
+              type = types.str;
+            };
+
+            client_cert_path = mkOption {
+              description = lib.mdDoc "The path to the client cert. Only if server requires client authentication.";
+              default = "";
+              type = types.str;
+            };
+
+            server_cert_name = mkOption {
+              description = lib.mdDoc ''
+                The common name field of the certificate used by the `mysql` or `postgres` server.
+                Not necessary if `ssl_mode` is set to `skip-verify`.
+              '';
+              default = "";
+              type = types.str;
+            };
+
             path = mkOption {
-              description = lib.mdDoc "Only applicable to sqlite3 database. The file path where the database will be stored.";
+              description = lib.mdDoc "Only applicable to `sqlite3` database. The file path where the database will be stored.";
               default = "${cfg.dataDir}/data/grafana.db";
               defaultText = literalExpression ''"''${config.${opt.dataDir}}/data/grafana.db"'';
               type = types.path;
             };
+
+            cache_mode = mkOption {
+              description = lib.mdDoc ''
+                For `sqlite3` only.
+                [Shared cache](https://www.sqlite.org/sharedcache.html) setting used for connecting to the database.
+              '';
+              default = "private";
+              type = types.enum [ "private" "shared" ];
+            };
+
+            wal = mkOption {
+              description = lib.mdDoc ''
+                For `sqlite3` only.
+                Setting to enable/disable [Write-Ahead Logging](https://sqlite.org/wal.html).
+              '';
+              default = false;
+              type = types.bool;
+            };
+
+            query_retries = mkOption {
+              description = lib.mdDoc ''
+                This setting applies to `sqlite3` only and controls the number of times the system retries a query when the database is locked.
+              '';
+              default = 0;
+              type = types.int;
+            };
+
+            transaction_retries = mkOption {
+              description = lib.mdDoc ''
+                This setting applies to `sqlite3` only and controls the number of times the system retries a transaction when the database is locked.
+              '';
+              default = 5;
+              type = types.int;
+            };
+
+            # TODO Add "instrument_queries" option when upgrading to grafana 10.0
+            # instrument_queries = mkOption {
+            #   description = lib.mdDoc "Set to `true` to add metrics and tracing for database queries.";
+            #   default = false;
+            #   type = types.bool;
+            # };
           };
 
           security = {
+            disable_initial_admin_creation = mkOption {
+              description = lib.mdDoc "Disable creation of admin user on first start of Grafana.";
+              default = false;
+              type = types.bool;
+            };
+
             admin_user = mkOption {
               description = lib.mdDoc "Default admin username.";
               default = "admin";
@@ -488,6 +720,12 @@ in
               type = types.str;
             };
 
+            admin_email = mkOption {
+              description = lib.mdDoc "The email of the default Grafana Admin, created on startup.";
+              default = "admin@localhost";
+              type = types.str;
+            };
+
             secret_key = mkOption {
               description = lib.mdDoc ''
                 Secret key used for signing. Please note that the contents of this option
@@ -499,6 +737,139 @@ in
               default = "SW2YcwTIb9zpOOhoPsMm";
               type = types.str;
             };
+
+            disable_gravatar = mkOption {
+              description = lib.mdDoc "Set to `true` to disable the use of Gravatar for user profile images.";
+              default = false;
+              type = types.bool;
+            };
+
+            data_source_proxy_whitelist = mkOption {
+              description = lib.mdDoc ''
+                Define a whitelist of allowed IP addresses or domains, with ports,
+                to be used in data source URLs with the Grafana data source proxy.
+                Format: `ip_or_domain:port` separated by spaces.
+                PostgreSQL, MySQL, and MSSQL data sources do not use the proxy and are therefore unaffected by this setting.
+              '';
+              default = "";
+              type = types.str;
+            };
+
+            disable_brute_force_login_protection = mkOption {
+              description = lib.mdDoc "Set to `true` to disable [brute force login protection](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html#account-lockout).";
+              default = false;
+              type = types.bool;
+            };
+
+            cookie_secure = mkOption {
+              description = lib.mdDoc "Set to `true` if you host Grafana behind HTTPS.";
+              default = false;
+              type = types.bool;
+            };
+
+            cookie_samesite = mkOption {
+              description = lib.mdDoc ''
+                Sets the `SameSite` cookie attribute and prevents the browser from sending this cookie along with cross-site requests.
+                The main goal is to mitigate the risk of cross-origin information leakage.
+                This setting also provides some protection against cross-site request forgery attacks (CSRF),
+                [read more about SameSite here](https://owasp.org/www-community/SameSite).
+                Using value `disabled` does not add any `SameSite` attribute to cookies.
+              '';
+              default = "lax";
+              type = types.enum [ "lax" "strict" "none" "disabled" ];
+            };
+
+            allow_embedding = mkOption {
+              description = lib.mdDoc ''
+                When `false`, the HTTP header `X-Frame-Options: deny` will be set in Grafana HTTP responses
+                which will instruct browsers to not allow rendering Grafana in a `<frame>`, `<iframe>`, `<embed>` or `<object>`.
+                The main goal is to mitigate the risk of [Clickjacking](https://owasp.org/www-community/attacks/Clickjacking).
+              '';
+              default = false;
+              type = types.bool;
+            };
+
+            strict_transport_security = mkOption {
+              description = lib.mdDoc ''
+                Set to `true` if you want to enable HTTP `Strict-Transport-Security` (HSTS) response header.
+                Only use this when HTTPS is enabled in your configuration,
+                or when there is another upstream system that ensures your application does HTTPS (like a frontend load balancer).
+                HSTS tells browsers that the site should only be accessed using HTTPS.
+              '';
+              default = false;
+              type = types.bool;
+            };
+
+            strict_transport_security_max_age_seconds = mkOption {
+              description = lib.mdDoc ''
+                Sets how long a browser should cache HSTS in seconds.
+                Only applied if `strict_transport_security` is enabled.
+              '';
+              default = 86400;
+              type = types.int;
+            };
+
+            strict_transport_security_preload = mkOption {
+              description = lib.mdDoc ''
+                Set to `true` to enable HSTS `preloading` option.
+                Only applied if `strict_transport_security` is enabled.
+              '';
+              default = false;
+              type = types.bool;
+            };
+
+            strict_transport_security_subdomains = mkOption {
+              description = lib.mdDoc ''
+                Set to `true` to enable HSTS `includeSubDomains` option.
+                Only applied if `strict_transport_security` is enabled.
+              '';
+              default = false;
+              type = types.bool;
+            };
+
+            x_content_type_options = mkOption {
+              description = lib.mdDoc ''
+                Set to `false` to disable the `X-Content-Type-Options` response header.
+                The `X-Content-Type-Options` response HTTP header is a marker used by the server
+                to indicate that the MIME types advertised in the `Content-Type` headers should not be changed and be followed.
+              '';
+              default = true;
+              type = types.bool;
+            };
+
+            x_xss_protection = mkOption {
+              description = lib.mdDoc ''
+                Set to `false` to disable the `X-XSS-Protection` header,
+                which tells browsers to stop pages from loading when they detect reflected cross-site scripting (XSS) attacks.
+              '';
+              default = true;
+              type = types.bool;
+            };
+
+            content_security_policy = mkOption {
+              description = lib.mdDoc ''
+                Set to `true` to add the `Content-Security-Policy` header to your requests.
+                CSP allows to control resources that the user agent can load and helps prevent XSS attacks.
+              '';
+              default = false;
+              type = types.bool;
+            };
+
+            content_security_policy_report_only = mkOption {
+              description = lib.mdDoc ''
+                Set to `true` to add the `Content-Security-Policy-Report-Only` header to your requests.
+                CSP in Report Only mode enables you to experiment with policies by monitoring their effects without enforcing them.
+                You can enable both policies simultaneously.
+              '';
+              default = false;
+              type = types.bool;
+            };
+
+            # The options content_security_policy_template and
+            # content_security_policy_template are missing because I'm not sure
+            # how exactly the quoting of the default value works. See also
+            # https://github.com/grafana/grafana/blob/cb7e18938b8eb6860a64b91aaba13a7eb31bc95b/conf/defaults.ini#L364
+            # https://github.com/grafana/grafana/blob/cb7e18938b8eb6860a64b91aaba13a7eb31bc95b/conf/defaults.ini#L373
           };
 
           smtp = {
@@ -507,16 +878,19 @@ in
               default = false;
               type = types.bool;
             };
+
             host = mkOption {
               description = lib.mdDoc "Host to connect to.";
               default = "localhost:25";
               type = types.str;
             };
+
             user = mkOption {
               description = lib.mdDoc "User used for authentication.";
               default = "";
               type = types.str;
             };
+
             password = mkOption {
               description = lib.mdDoc ''
                 Password used for authentication. Please note that the contents of this option
@@ -528,43 +902,204 @@ in
               default = "";
               type = types.str;
             };
+
+            cert_file = mkOption {
+              description = lib.mdDoc "File path to a cert file.";
+              default = "";
+              type = types.str;
+            };
+
+            key_file = mkOption {
+              description = lib.mdDoc "File path to a key file.";
+              default = "";
+              type = types.str;
+            };
+
+            skip_verify = mkOption {
+              description = lib.mdDoc "Verify SSL for SMTP server.";
+              default = false;
+              type = types.bool;
+            };
+
             from_address = mkOption {
-              description = lib.mdDoc "Email address used for sending.";
+              description = lib.mdDoc "Address used when sending out emails.";
               default = "admin@grafana.localhost";
               type = types.str;
+            };
+
+            from_name = mkOption {
+              description = lib.mdDoc "Name to be used as client identity for EHLO in SMTP dialog.";
+              default = "Grafana";
+              type = types.str;
+            };
+
+            startTLS_policy = mkOption {
+              description = lib.mdDoc "StartTLS policy when connecting to server.";
+              default = null;
+              type = types.nullOr (types.enum [ "OpportunisticStartTLS" "MandatoryStartTLS" "NoStartTLS" ]);
             };
           };
 
           users = {
             allow_sign_up = mkOption {
-              description = lib.mdDoc "Disable user signup / registration.";
+              description = lib.mdDoc ''
+                Set to false to prohibit users from being able to sign up / create user accounts.
+                The admin user can still create users.
+              '';
               default = false;
               type = types.bool;
             };
 
             allow_org_create = mkOption {
-              description = lib.mdDoc "Whether user is allowed to create organizations.";
+              description = lib.mdDoc "Set to `false` to prohibit users from creating new organizations.";
               default = false;
               type = types.bool;
             };
 
             auto_assign_org = mkOption {
-              description = lib.mdDoc "Whether to automatically assign new users to default org.";
+              description = lib.mdDoc ''
+                Set to `true` to automatically add new users to the main organization (id 1).
+                When set to `false,` new users automatically cause a new organization to be created for that new user.
+                The organization will be created even if the `allow_org_create` setting is set to `false`.
+              '';
               default = true;
               type = types.bool;
             };
 
+            auto_assign_org_id = mkOption {
+              description = lib.mdDoc ''
+                Set this value to automatically add new users to the provided org.
+                This requires `auto_assign_org` to be set to `true`.
+                Please make sure that this organization already exists.
+              '';
+              default = 1;
+              type = types.int;
+            };
+
             auto_assign_org_role = mkOption {
-              description = lib.mdDoc "Default role new users will be auto assigned.";
+              description = lib.mdDoc ''
+                The role new users will be assigned for the main organization (if the `auto_assign_org` setting is set to `true`).
+              '';
               default = "Viewer";
               type = types.enum [ "Viewer" "Editor" "Admin" ];
             };
+
+            verify_email_enabled = mkOption {
+              description = lib.mdDoc "Require email validation before sign up completes.";
+              default = false;
+              type = types.bool;
+            };
+
+            login_hint = mkOption {
+              description = lib.mdDoc "Text used as placeholder text on login page for login/username input.";
+              default = "email or username";
+              type = types.str;
+            };
+
+            password_hint = mkOption {
+              description = lib.mdDoc "Text used as placeholder text on login page for password input.";
+              default = "password";
+              type = types.str;
+            };
+
+            default_theme = mkOption {
+              description = lib.mdDoc "Sets the default UI theme. `system` matches the user's system theme.";
+              default = "dark";
+              type = types.enum [ "dark" "light" "system" ];
+            };
+
+            default_language = mkOption {
+              description = lib.mdDoc "This setting configures the default UI language, which must be a supported IETF language tag, such as `en-US`.";
+              default = "en-US";
+              type = types.str;
+            };
+
+            home_page = mkOption {
+              description = lib.mdDoc ''
+                Path to a custom home page.
+                Users are only redirected to this if the default home dashboard is used.
+                It should match a frontend route and contain a leading slash.
+              '';
+              default = "";
+              type = types.str;
+            };
+
+            viewers_can_edit = mkOption {
+              description = lib.mdDoc ''
+                Viewers can access and use Explore and perform temporary edits on panels in dashboards they have access to.
+                They cannot save their changes.
+              '';
+              default = false;
+              type = types.bool;
+            };
+
+            editors_can_admin = mkOption {
+              description = lib.mdDoc "Editors can administrate dashboards, folders and teams they create.";
+              default = false;
+              type = types.bool;
+            };
+
+            user_invite_max_lifetime_duration = mkOption {
+              description = lib.mdDoc ''
+                The duration in time a user invitation remains valid before expiring.
+                This setting should be expressed as a duration.
+                Examples: `6h` (hours), `2d` (days), `1w` (week).
+                The minimum supported duration is `15m` (15 minutes).
+              '';
+              default = "24h";
+              type = types.str;
+            };
+
+            hidden_users = mkOption {
+              description = lib.mdDoc ''
+                This is a comma-separated list of usernames.
+                Users specified here are hidden in the Grafana UI.
+                They are still visible to Grafana administrators and to themselves.
+              '';
+              default = "";
+              type = types.str;
+            };
           };
 
-          analytics.reporting_enabled = mkOption {
-            description = lib.mdDoc "Whether to allow anonymous usage reporting to stats.grafana.net.";
-            default = true;
-            type = types.bool;
+          analytics = {
+            reporting_enabled = mkOption {
+              description = lib.mdDoc ''
+                When enabled Grafana will send anonymous usage statistics to `stats.grafana.org`.
+                No IP addresses are being tracked, only simple counters to track running instances, versions, dashboard and error counts.
+                Counters are sent every 24 hours.
+              '';
+              default = true;
+              type = types.bool;
+            };
+
+            check_for_updates = mkOption {
+              description = lib.mdDoc ''
+                When set to `false`, disables checking for new versions of Grafana from Grafana's GitHub repository.
+                When enabled, the check for a new version runs every 10 minutes.
+                It will notify, via the UI, when a new version is available.
+                The check itself will not prompt any auto-updates of the Grafana software, nor will it send any sensitive information.
+              '';
+              default = true;
+              type = types.bool;
+            };
+
+            check_for_plugin_updates = mkOption {
+              description = lib.mdDoc ''
+                When set to `false`, disables checking for new versions of installed plugins from https://grafana.com.
+                When enabled, the check for a new plugin runs every 10 minutes.
+                It will notify, via the UI, when a new plugin update exists.
+                The check itself will not prompt any auto-updates of the plugin, nor will it send any sensitive information.
+              '';
+              default = cfg.declarativePlugins == null;
+              defaultText = literalExpression "cfg.declarativePlugins == null";
+              type = types.bool;
+            };
+
+            feedback_links_enabled = mkOption {
+              description = lib.mdDoc "Set to `false` to remove all feedback links from the UI.";
+              default = true;
+              type = types.bool;
+            };
           };
         };
       };
