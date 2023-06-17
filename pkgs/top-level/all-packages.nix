@@ -11362,6 +11362,8 @@ with pkgs;
 
   pfetch = callPackage ../tools/misc/pfetch { };
 
+  pfetch-rs = callPackage ../tools/misc/pfetch-rs { };
+
   pfstools = libsForQt5.callPackage ../tools/graphics/pfstools { };
 
   phoc = callPackage ../applications/misc/phoc { };
