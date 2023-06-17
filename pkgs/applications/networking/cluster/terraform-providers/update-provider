@@ -107,6 +107,7 @@ if [[ ${provider} =~ ^[^/]+/[^/]+$ ]]; then
   # create empty stings so nix-prefetch works
   update_attr hash ""
   update_attr vendorHash ""
+  update_attr spdx ""
 fi
 
 homepage="$(read_attr homepage)"
