@@ -2,6 +2,7 @@
   "bookmarks"
 , "calendar"
 , "contacts"
+, "cospend"
 , "deck"
 , "files_texteditor"
 , "files_markdown"
@@ -10,6 +11,7 @@
 , "impersonate"
 , "keeweb"
 , "mail"
+, "maps"
 , "news"
 , "notes"
 , "notify_push"
@@ -24,4 +26,5 @@
 , "twofactor_totp"
 , "twofactor_webauthn"
 , "unsplash"
+, "user_saml"
 ]
