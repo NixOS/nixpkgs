@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gpsd libcap libnl ];
 
   preBuild = ''
-    makeFlags="PREFIX=$out PKG_CONFIG=${pkg-config}/bin/${pkg-config.targetPrefix}pkg-config"
+    makeFlags="PREFIX=$out"
   '';
 
   meta = {
