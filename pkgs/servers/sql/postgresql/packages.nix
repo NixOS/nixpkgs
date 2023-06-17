@@ -16,6 +16,8 @@ self: super: {
 
     pg_ed25519 = super.callPackage ./ext/pg_ed25519.nix { };
 
+    pg_graphql = super.callPackage ./ext/pg_graphql.nix { };
+
     pg_hint_plan = super.callPackage ./ext/pg_hint_plan.nix { };
 
     pg_ivm = super.callPackage ./ext/pg_ivm.nix { };
