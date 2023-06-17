@@ -7,15 +7,15 @@ let
   rustfmt-nightly = rustfmt.override { asNightly = true; };
 in rustPlatform.buildRustPackage rec {
   pname = "rust-bindgen-unwrapped";
-  version = "0.65.1";
+  version = "0.66.0";
 
   src = fetchCrate {
     pname = "bindgen-cli";
     inherit version;
-    sha256 = "9JJXQQSbCxTh3fIbVSrc6WAYGivwomkoB8ZIquUNr9o=";
+    sha256 = "sha256-Or5gaYXqfRcxAzBf4nOjmM9CQMvfwb8KbpD8hDJJQ4o=";
   };
 
-  cargoSha256 = "Kz6Y+4F9Yu5oKYI9LgZKLh0AkQTwerPS4A758TZrkoc=";
+  cargoHash = "sha256-rsowGeBSuqHyz90qozeCi5dXsH4EHKhIUQbDaNJKabI=";
 
   buildInputs = [ clang.cc.lib ];
 
