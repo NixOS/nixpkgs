@@ -5,25 +5,25 @@ with lib;
 let
   cfg = config.services.grafana;
   opt = options.services.grafana;
-  provisioningSettingsFormat = pkgs.formats.yaml {};
+  provisioningSettingsFormat = pkgs.formats.yaml { };
   declarativePlugins = pkgs.linkFarm "grafana-plugins" (builtins.map (pkg: { name = pkg.pname; path = pkg; }) cfg.declarativePlugins);
   useMysql = cfg.settings.database.type == "mysql";
   usePostgresql = cfg.settings.database.type == "postgres";
 
-  settingsFormatIni = pkgs.formats.ini {};
+  settingsFormatIni = pkgs.formats.ini { };
   configFile = settingsFormatIni.generate "config.ini" cfg.settings;
 
   mkProvisionCfg = name: attr: provisionCfg:
     if provisionCfg.path != null
-      then provisionCfg.path
+    then provisionCfg.path
     else
       provisioningSettingsFormat.generate "${name}.yaml"
         (if provisionCfg.settings != null
-          then provisionCfg.settings
-          else {
-            apiVersion = 1;
-            ${attr} = [];
-          });
+        then provisionCfg.settings
+        else {
+          apiVersion = 1;
+          ${attr} = [ ];
+        });
 
   datasourceFileOrDir = mkProvisionCfg "datasource" "datasources" cfg.provision.datasources;
   dashboardFileOrDir = mkProvisionCfg "dashboard" "providers" cfg.provision.dashboards;
@@ -35,9 +35,10 @@ let
 
   notifierFileOrDir = pkgs.writeText "notifier.yaml" (builtins.toJSON notifierConfiguration);
 
-  generateAlertingProvisioningYaml = x: if (cfg.provision.alerting."${x}".path == null)
-                                        then provisioningSettingsFormat.generate "${x}.yaml" cfg.provision.alerting."${x}".settings
-                                        else cfg.provision.alerting."${x}".path;
+  generateAlertingProvisioningYaml = x:
+    if (cfg.provision.alerting."${x}".path == null)
+    then provisioningSettingsFormat.generate "${x}.yaml" cfg.provision.alerting."${x}".settings
+    else cfg.provision.alerting."${x}".path;
   rulesFileOrDir = generateAlertingProvisioningYaml "rules";
   contactPointsFileOrDir = generateAlertingProvisioningYaml "contactPoints";
   policiesFileOrDir = generateAlertingProvisioningYaml "policies";
@@ -102,7 +103,7 @@ let
         description = lib.mdDoc "Datasource type. Required.";
       };
       access = mkOption {
-        type = types.enum ["proxy" "direct"];
+        type = types.enum [ "proxy" "direct" ];
         default = "proxy";
         description = lib.mdDoc "Access mode. proxy or direct (Server or Browser in the UI). Required.";
       };
@@ -170,7 +171,7 @@ let
         description = lib.mdDoc "Notifier name.";
       };
       type = mkOption {
-        type = types.enum ["dingding" "discord" "email" "googlechat" "hipchat" "kafka" "line" "teams" "opsgenie" "pagerduty" "prometheus-alertmanager" "pushover" "sensu" "sensugo" "slack" "telegram" "threema" "victorops" "webhook"];
+        type = types.enum [ "dingding" "discord" "email" "googlechat" "hipchat" "kafka" "line" "teams" "opsgenie" "pagerduty" "prometheus-alertmanager" "pushover" "sensu" "sensugo" "slack" "telegram" "threema" "victorops" "webhook" ];
         description = lib.mdDoc "Notifier type.";
       };
       uid = mkOption {
@@ -225,7 +226,8 @@ let
       };
     };
   };
-in {
+in
+{
   imports = [
     (mkRenamedOptionModule [ "services" "grafana" "protocol" ] [ "services" "grafana" "settings" "server" "protocol" ])
     (mkRenamedOptionModule [ "services" "grafana" "addr" ] [ "services" "grafana" "settings" "server" "http_addr" ])
@@ -354,7 +356,7 @@ in {
             protocol = mkOption {
               description = lib.mdDoc "Which protocol to listen.";
               default = "http";
-              type = types.enum ["http" "https" "h2" "socket"];
+              type = types.enum [ "http" "https" "h2" "socket" ];
             };
 
             http_addr = mkOption {
@@ -426,7 +428,7 @@ in {
             type = mkOption {
               description = lib.mdDoc "Database type.";
               default = "sqlite3";
-              type = types.enum ["mysql" "sqlite3" "postgres"];
+              type = types.enum [ "mysql" "sqlite3" "postgres" ];
             };
 
             host = mkOption {
@@ -555,7 +557,7 @@ in {
             auto_assign_org_role = mkOption {
               description = lib.mdDoc "Default role new users will be auto assigned.";
               default = "Viewer";
-              type = types.enum ["Viewer" "Editor" "Admin"];
+              type = types.enum [ "Viewer" "Editor" "Admin" ];
             };
           };
 
@@ -575,7 +577,7 @@ in {
         description = lib.mdDoc ''
           Declaratively provision Grafana's datasources.
         '';
-        default = {};
+        default = { };
         type = submodule' {
           options.settings = mkOption {
             description = lib.mdDoc ''
@@ -595,13 +597,13 @@ in {
 
                 datasources = mkOption {
                   description = lib.mdDoc "List of datasources to insert/update.";
-                  default = [];
+                  default = [ ];
                   type = types.listOf grafanaTypes.datasourceConfig;
                 };
 
                 deleteDatasources = mkOption {
                   description = lib.mdDoc "List of datasources that should be deleted from the database.";
-                  default = [];
+                  default = [ ];
                   type = types.listOf (types.submodule {
                     options.name = mkOption {
                       description = lib.mdDoc "Name of the datasource to delete.";
@@ -650,7 +652,7 @@ in {
         description = lib.mdDoc ''
           Declaratively provision Grafana's dashboards.
         '';
-        default = {};
+        default = { };
         type = submodule' {
           options.settings = mkOption {
             description = lib.mdDoc ''
@@ -669,7 +671,7 @@ in {
 
               options.providers = mkOption {
                 description = lib.mdDoc "List of dashboards to insert/update.";
-                default = [];
+                default = [ ];
                 type = types.listOf grafanaTypes.dashboardConfig;
               };
             });
@@ -700,7 +702,7 @@ in {
 
       notifiers = mkOption {
         description = lib.mdDoc "Grafana notifier configuration.";
-        default = [];
+        default = [ ];
         type = types.listOf grafanaTypes.notifierConfig;
         apply = x: map _filter x;
       };
@@ -736,7 +738,7 @@ in {
 
                 groups = mkOption {
                   description = lib.mdDoc "List of rule groups to import or update.";
-                  default = [];
+                  default = [ ];
                   type = types.listOf (types.submodule {
                     freeformType = provisioningSettingsFormat.type;
 
@@ -759,7 +761,7 @@ in {
 
                 deleteRules = mkOption {
                   description = lib.mdDoc "List of alert rule UIDs that should be deleted.";
-                  default = [];
+                  default = [ ];
                   type = types.listOf (types.submodule {
                     options.orgId = mkOption {
                       description = lib.mdDoc "Organization ID, default = 1";
@@ -860,7 +862,7 @@ in {
 
                 contactPoints = mkOption {
                   description = lib.mdDoc "List of contact points to import or update.";
-                  default = [];
+                  default = [ ];
                   type = types.listOf (types.submodule {
                     freeformType = provisioningSettingsFormat.type;
 
@@ -873,7 +875,7 @@ in {
 
                 deleteContactPoints = mkOption {
                   description = lib.mdDoc "List of receivers that should be deleted.";
-                  default = [];
+                  default = [ ];
                   type = types.listOf (types.submodule {
                     options.orgId = mkOption {
                       description = lib.mdDoc "Organization ID, default = 1.";
@@ -941,7 +943,7 @@ in {
 
                 policies = mkOption {
                   description = lib.mdDoc "List of contact points to import or update.";
-                  default = [];
+                  default = [ ];
                   type = types.listOf (types.submodule {
                     freeformType = provisioningSettingsFormat.type;
                   });
@@ -949,7 +951,7 @@ in {
 
                 resetPolicies = mkOption {
                   description = lib.mdDoc "List of orgIds that should be reset to the default policy.";
-                  default = [];
+                  default = [ ];
                   type = types.listOf types.int;
                 };
               };
@@ -1011,7 +1013,7 @@ in {
 
                 templates = mkOption {
                   description = lib.mdDoc "List of templates to import or update.";
-                  default = [];
+                  default = [ ];
                   type = types.listOf (types.submodule {
                     freeformType = provisioningSettingsFormat.type;
 
@@ -1029,7 +1031,7 @@ in {
 
                 deleteTemplates = mkOption {
                   description = lib.mdDoc "List of alert rule UIDs that should be deleted.";
-                  default = [];
+                  default = [ ];
                   type = types.listOf (types.submodule {
                     options.orgId = mkOption {
                       description = lib.mdDoc "Organization ID, default = 1.";
@@ -1093,7 +1095,7 @@ in {
 
                 muteTimes = mkOption {
                   description = lib.mdDoc "List of mute time intervals to import or update.";
-                  default = [];
+                  default = [ ];
                   type = types.listOf (types.submodule {
                     freeformType = provisioningSettingsFormat.type;
 
@@ -1106,7 +1108,7 @@ in {
 
                 deleteMuteTimes = mkOption {
                   description = lib.mdDoc "List of mute time intervals that should be deleted.";
-                  default = [];
+                  default = [ ];
                   type = types.listOf (types.submodule {
                     options.orgId = mkOption {
                       description = lib.mdDoc "Organization ID, default = 1.";
@@ -1168,45 +1170,58 @@ in {
   };
 
   config = mkIf cfg.enable {
-    warnings = let
-      doesntUseFileProvider = opt: defaultValue:
-        let
-          regex = "${optionalString (defaultValue != null) "^${defaultValue}$|"}^\\$__(file|env)\\{.*}$|^\\$[^_\\$][^ ]+$";
-        in builtins.match regex opt == null;
-    in
-      # Ensure that no custom credentials are leaked into the Nix store. Unless the default value
-      # is specified, this can be achieved by using the file/env provider:
-      # https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#variable-expansion
-      (optional (
-        doesntUseFileProvider cfg.settings.database.password "" ||
-        doesntUseFileProvider cfg.settings.security.admin_password "admin"
-      ) ''
-        Grafana passwords will be stored as plaintext in the Nix store!
-        Use file provider or an env-var instead.
-      '')
-      # Warn about deprecated notifiers.
-      ++ (optional (cfg.provision.notifiers != []) ''
-        Notifiers are deprecated upstream and will be removed in Grafana 10.
-        Use `services.grafana.provision.alerting.contactPoints` instead.
-      '')
-      # Ensure that `secureJsonData` of datasources provisioned via `datasources.settings`
-      # only uses file/env providers.
-      ++ (optional (
-        let
-          datasourcesToCheck = optionals
-            (cfg.provision.datasources.settings != null)
-            cfg.provision.datasources.settings.datasources;
-          declarationUnsafe = { secureJsonData, ... }:
-            secureJsonData != null
-            && any (flip doesntUseFileProvider null) (attrValues secureJsonData);
-        in any declarationUnsafe datasourcesToCheck
-      ) ''
-        Declarations in the `secureJsonData`-block of a datasource will be leaked to the
-        Nix store unless a file-provider or an env-var is used!
-      '')
-      ++ (optional (
-        any (x: x.secure_settings != null) cfg.provision.notifiers
-      ) "Notifier secure settings will be stored as plaintext in the Nix store! Use file provider instead.");
+    warnings =
+      let
+        doesntUseFileProvider = opt: defaultValue:
+          let regex = "${optionalString (defaultValue != null) "^${defaultValue}$|"}^\\$__(file|env)\\{.*}$|^\\$[^_\\$][^ ]+$";
+          in builtins.match regex opt == null;
+
+        # Ensure that no custom credentials are leaked into the Nix store. Unless the default value
+        # is specified, this can be achieved by using the file/env provider:
+        # https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#variable-expansion
+        passwordWithoutFileProvider = optional
+          (
+            doesntUseFileProvider cfg.settings.database.password "" ||
+            doesntUseFileProvider cfg.settings.security.admin_password "admin"
+          )
+          ''
+            Grafana passwords will be stored as plaintext in the Nix store!
+            Use file provider or an env-var instead.
+          '';
+
+        # Warn about deprecated notifiers.
+        deprecatedNotifiers = optional (cfg.provision.notifiers != [ ]) ''
+          Notifiers are deprecated upstream and will be removed in Grafana 10.
+          Use `services.grafana.provision.alerting.contactPoints` instead.
+        '';
+
+        # Ensure that `secureJsonData` of datasources provisioned via `datasources.settings`
+        # only uses file/env providers.
+        secureJsonDataWithoutFileProvider = optional
+          (
+            let
+              datasourcesToCheck = optionals
+                (cfg.provision.datasources.settings != null)
+                cfg.provision.datasources.settings.datasources;
+              declarationUnsafe = { secureJsonData, ... }:
+                secureJsonData != null
+                && any (flip doesntUseFileProvider null) (attrValues secureJsonData);
+            in
+            any declarationUnsafe datasourcesToCheck
+          )
+          ''
+            Declarations in the `secureJsonData`-block of a datasource will be leaked to the
+            Nix store unless a file-provider or an env-var is used!
+          '';
+
+        notifierSecureSettingsWithoutFileProvider = optional
+          (any (x: x.secure_settings != null) cfg.provision.notifiers)
+          "Notifier secure settings will be stored as plaintext in the Nix store! Use file provider instead.";
+      in
+      passwordWithoutFileProvider
+      ++ deprecatedNotifiers
+      ++ secureJsonDataWithoutFileProvider
+      ++ notifierSecureSettingsWithoutFileProvider;
 
     environment.systemPackages = [ cfg.package ];
 
@@ -1216,11 +1231,12 @@ in {
         message = "Cannot set both datasources settings and datasources path";
       }
       {
-        assertion = let
-          prometheusIsNotDirect = opt: all
-          ({ type, access, ... }: type == "prometheus" -> access != "direct")
-          opt;
-        in
+        assertion =
+          let
+            prometheusIsNotDirect = opt: all
+              ({ type, access, ... }: type == "prometheus" -> access != "direct")
+              opt;
+          in
           cfg.provision.datasources.settings == null || prometheusIsNotDirect cfg.provision.datasources.settings.datasources;
         message = "For datasources of type `prometheus`, the `direct` access mode is not supported anymore (since Grafana 9.2.0)";
       }
@@ -1252,8 +1268,8 @@ in {
 
     systemd.services.grafana = {
       description = "Grafana Service Daemon";
-      wantedBy = ["multi-user.target"];
-      after = ["networking.target"] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "networking.target" ] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
       script = ''
         set -o errexit -o pipefail -o nounset -o errtrace
         shopt -s inherit_errexit
@@ -1309,6 +1325,6 @@ in {
       createHome = true;
       group = "grafana";
     };
-    users.groups.grafana = {};
+    users.groups.grafana = { };
   };
 }
