@@ -4,6 +4,7 @@
 , gdk-pixbuf
 , glib
 , freetype
+, libgepub
 , libgsf
 , poppler
 , gst_all_1
@@ -26,6 +27,7 @@ mkXfceDerivation {
     gdk-pixbuf
     glib
     gst_all_1.gst-plugins-base
+    libgepub # optional EPUB thumbnailer support
     libgsf
     poppler # technically the glib binding
   ];
