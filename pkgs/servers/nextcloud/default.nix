@@ -2,6 +2,7 @@
 , nextcloud27Packages
 , nextcloud26Packages
 , nextcloud25Packages
+, nextcloud24Packages
 }:
 
 let
@@ -62,6 +63,7 @@ in {
   nextcloud24 = generic {
     version = "24.0.12";
     sha256 = "sha256-Lwk73300+vONIvOKXhHzruMnRv9K3T3xfHkLmzY5CDY=";
+    packages = nextcloud24Packages;
   };
 
   nextcloud25 = generic {
