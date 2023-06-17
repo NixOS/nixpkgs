@@ -8,20 +8,20 @@
 , lsprotocol
 , hatchling
 , typing-extensions
-, unittestCheckHook
+, pytestCheckHook
 , python-lsp-jsonrpc
 }:
 
 buildPythonPackage rec {
   pname = "ruff-lsp";
-  version = "0.0.27";
+  version = "0.0.31";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;
     pname = "ruff_lsp";
-    hash = "sha256-Mp5PX87UFUADl/INxZptTsHUBxNpaSRqdsPgRNnLCaQ=";
+    hash = "sha256-cqkHhC0xK6+x82f10V2zW+tn97Nw0QSl+2w1ZBTjg+8=";
   };
 
   postPatch = ''
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   doCheck = stdenv.isDarwin;
 
   nativeCheckInputs = [
-    unittestCheckHook
+    pytestCheckHook
     python-lsp-jsonrpc
     ruff
   ];
@@ -52,11 +52,10 @@ buildPythonPackage rec {
     "--suffix PATH : ${lib.makeBinPath [ ruff ]}"
   ];
 
-
   meta = with lib; {
-    homepage = "https://github.com/charliermarsh/ruff-lsp";
     description = "A Language Server Protocol implementation for Ruff";
-    changelog = "https://github.com/charliermarsh/ruff-lsp/releases/tag/v${version}";
+    homepage = "https://github.com/astral-sh/ruff-lsp";
+    changelog = "https://github.com/astral-sh/ruff-lsp/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ kalekseev ];
   };
