@@ -59,14 +59,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "code-server";
-  version = "4.13.0";
+  version = "4.14.0";
 
   src = fetchFromGitHub {
     owner = "coder";
     repo = "code-server";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-4hkKGQU9G3CllD+teWXnYoHaY3YdDz25fwaMUS5OlfM=";
+    hash = "sha256-MJ/FCYAdWNG0joTAdvIWYqAplOoRiDRWvE9bM/V3QHo=";
   };
 
   yarnCache = stdenv.mkDerivation {
@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-xLcrOVhKC0cOPcS5XwIMyv1KiEE0azZ1z+wS9PPKjAQ=";
+    outputHash = "sha256-J5ME9Nc7GWVoKeV908BR9ib9yH5KNmBOtltRvJcpZIY=";
   };
 
   nativeBuildInputs = [

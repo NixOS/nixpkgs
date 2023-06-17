@@ -40,16 +40,11 @@ in {
         secretFile = "/etc/nextcloud-secrets.json";
 
         extraOptions.redis = {
-          host = "/run/redis/redis.sock";
-          port = 0;
           dbindex = 0;
           timeout = 1.5;
           # password handled via secretfile below
         };
-        extraOptions.memcache = {
-          local = "\OC\Memcache\Redis";
-          locking = "\OC\Memcache\Redis";
-        };
+        configureRedis = true;
       };
 
       services.redis.servers."nextcloud".enable = true;
@@ -74,7 +69,7 @@ in {
 
       # This file is meant to contain secret options which should
       # not go into the nix store. Here it is just used to set the
-      # databyse type to postgres.
+      # redis password.
       environment.etc."nextcloud-secrets.json".text = ''
         {
           "redis": {
@@ -117,6 +112,6 @@ in {
     )
 
     # redis cache should not be empty
-    nextcloud.fail("redis-cli KEYS * | grep -q 'empty array'")
+    nextcloud.fail('test "[]" = "$(redis-cli --json KEYS "*")"')
   '';
 })
