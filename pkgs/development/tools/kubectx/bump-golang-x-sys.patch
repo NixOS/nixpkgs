@@ -1,0 +1,25 @@
+diff --git a/go.mod b/go.mod
+index c523783..1ef8d00 100644
+--- a/go.mod
++++ b/go.mod
+@@ -9,6 +9,7 @@ require (
+ 	github.com/imdario/mergo v0.3.9 // indirect
+ 	github.com/mattn/go-isatty v0.0.12
+ 	github.com/pkg/errors v0.9.1
++	golang.org/x/sys v0.0.0-20220731174439-a90be440212d // indirect
+ 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
+ 	k8s.io/apimachinery v0.21.0-alpha.1
+ 	k8s.io/client-go v0.21.0-alpha.1
+diff --git a/go.sum b/go.sum
+index 8f16b5a..7426c68 100644
+--- a/go.sum
++++ b/go.sum
+@@ -293,6 +293,8 @@ golang.org/x/sys v0.0.0-20200323222414-85ca7c5b95cd/go.mod h1:h1NjWce9XRLGQEsW7w
+ golang.org/x/sys v0.0.0-20200930185726-fdedc70b468f/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+ golang.org/x/sys v0.0.0-20201112073958-5cba982894dd h1:5CtCZbICpIOFdgO940moixOPjc0178IU44m4EjOO5IY=
+ golang.org/x/sys v0.0.0-20201112073958-5cba982894dd/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
++golang.org/x/sys v0.0.0-20220731174439-a90be440212d h1:Sv5ogFZatcgIMMtBSTTAgMYsicp25MXBubjXNDKwm80=
++golang.org/x/sys v0.0.0-20220731174439-a90be440212d/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
+ golang.org/x/text v0.0.0-20170915032832-14c0d48ead0c/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
+ golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
+ golang.org/x/text v0.3.1-0.20180807135948-17ff2d5776d2/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=

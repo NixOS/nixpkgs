@@ -1,0 +1,26 @@
+diff --git a/plotkicadsch/src/git-imgdiff b/plotkicadsch/src/git-imgdiff
+index cbddecb..8d21a8a 100755
+--- a/plotkicadsch/src/git-imgdiff
++++ b/plotkicadsch/src/git-imgdiff
+@@ -1,4 +1,4 @@
+ #!/bin/bash
+ PIPE=$(mktemp -u)
+-(! compare -metric RMSE $2 $1 png:${PIPE} 2> /dev/null) &&  (montage -geometry +4+4 $2 $PIPE $1 png:- | display -title "$1" -)
++(! @imagemagick@/bin/compare -metric RMSE $2 $1 png:${PIPE} 2> /dev/null) &&  (@imagemagick@/bin/montage -geometry +4+4 $2 $PIPE $1 png:- | @imagemagick@/bin/display -title "$1" -)
+ rm $PIPE
+diff --git a/plotkicadsch/src/sysAbst.ml b/plotkicadsch/src/sysAbst.ml
+index c3c7b52..15db6d4 100644
+--- a/plotkicadsch/src/sysAbst.ml
++++ b/plotkicadsch/src/sysAbst.ml
+@@ -30,7 +30,7 @@ let detect_os () : os =
+   if Sys.win32 then Windows
+   else if Sys.cygwin then Cygwin
+   else
+-    let ((in_ch, _, _) as uname) = UnixLabels.open_process_full "uname" ~env:[| |] in
++    let ((in_ch, _, _) as uname) = UnixLabels.open_process_full "@coreutils@/bin/uname" ~env:[| |] in
+     let os = input_line in_ch in
+     ignore (UnixLabels.close_process_full uname) ;
+     match os with
+-- 
+2.37.1
+

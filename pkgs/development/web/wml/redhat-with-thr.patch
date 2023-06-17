@@ -1,0 +1,19 @@
+Description: Fix FTBFS with Perl 5.16
+ Patch taken from Fedora
+Debian-Bug: 676263
+Fedora-Bug: 839609
+Author: Jitka Plesnikova
+Origin: https://bugzilla.redhat.com/show_bug.cgi?id=839609
+
+--- a/wml_backend/p3_eperl/eperl_perl5.h 2012-07-27 10:49:27.048508799 +0200
++++ b/wml_backend/p3_eperl/eperl_perl5.h 2012-07-27 10:50:16.288714291 +0200
+@@ -72,9 +72,6 @@ 
+ #  define PL_curstash curstash
+ #endif
+ 
+-#ifndef WITH_THR
+-#  define PL_defoutgv defoutgv
+-#endif
+ 
+ /*  
+   Initialization of locales when building a new Perl interpreter.

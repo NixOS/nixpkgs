@@ -1,0 +1,14 @@
+commit 4de021d049a9b194da93d7e96ff12cc1cbabac83
+Author: Nicolas B. Pierron <nixos@nbp.name>
+Date:   Sun Nov 16 15:19:38 2014 +0100
+
+    Use a template for taskwarrior install path.
+
+--- a/taskw/warrior.py
++++ b/taskw/warrior.py
+@@ -449 +449 @@ class TaskWarriorShellout(TaskWarriorBase):
+-                'task',
++                '@@taskwarrior@@/bin/task',
+@@ -553 +553 @@ class TaskWarriorShellout(TaskWarriorBase):
+-                ['task', '--version'],
++                ['@@taskwarrior@@/bin/task', '--version'],

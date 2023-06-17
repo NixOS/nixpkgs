@@ -1,0 +1,15 @@
+diff --git "a/Makefile.in" "b/Makefile.in"
+index b482958..472b8da 100644
+--- "a/Makefile.in"
++++ "b/Makefile.in"
+@@ -27,9 +27,7 @@ MKINSTALLDIRS = ./mkinstalldirs
+ CC = @CC@
+ CFLAGS = @XX_CFLAGS@ @CFLAGS@
+ 
+-DEFINES = @DEFINES@ -DG_DISABLE_DEPRECATED \
+-	-DGDK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED \
+-	-DGTK_DISABLE_DEPRECATED
++DEFINES = @DEFINES@
+ 
+ SRCS = bdf.c \
+        bdfcons.c \

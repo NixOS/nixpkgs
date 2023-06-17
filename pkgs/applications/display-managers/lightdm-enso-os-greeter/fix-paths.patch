@@ -1,0 +1,24 @@
+diff --git a/greeter/CMakeLists.txt b/greeter/CMakeLists.txt
+index 57aebb0..ab50bff 100644
+--- a/greeter/CMakeLists.txt
++++ b/greeter/CMakeLists.txt
+@@ -9,7 +9,6 @@ list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+ set (CONF_DIR "/etc/lightdm")
+ set (DATADIR "${CMAKE_INSTALL_PREFIX}/share")
+ set (PKGDATADIR "${DATADIR}/enso/greeter")
+-set (CMAKE_INSTALL_PREFIX /usr)
+ set (VERSION "1.0.6")
+ 
+ 
+@@ -94,9 +93,9 @@ glib_compile_resources (GLIB_RESOURCES_CSS SOURCE data/css.gresource.xml)
+ add_executable (pantheon-greeter ${VALA_C} ${GLIB_RESOURCES_CSS})
+ target_link_libraries(pantheon-greeter m)
+ 
+-install (TARGETS pantheon-greeter RUNTIME DESTINATION sbin)
++install (TARGETS pantheon-greeter RUNTIME DESTINATION bin)
+ install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/pantheon-greeter.desktop DESTINATION share/xgreeters)
+-install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/greeter.conf DESTINATION ${CONF_DIR})
++install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/greeter.conf DESTINATION etc/lightdm)
+ install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/fingerprint.svg DESTINATION ${PKGDATADIR})
+ install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/power.svg DESTINATION ${PKGDATADIR})
+ install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/checked.svg DESTINATION ${PKGDATADIR})

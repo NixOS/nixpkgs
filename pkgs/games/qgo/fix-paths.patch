@@ -1,0 +1,50 @@
+diff --git a/src/defines.h b/src/defines.h
+index 5d40955..82d0627 100644
+--- a/src/defines.h
++++ b/src/defines.h
+@@ -48,7 +48,7 @@
+ * GNUgo default level
+ */
+ #define DEFAULT_ENGINE "gnugo"
+-#define DEFAULT_ENGINE_PATH "/usr/games/"
++#define DEFAULT_ENGINE_PATH ""
+ #define DEFAULT_ENGINE_OPTIONS "--mode gtp --quiet --level 10"
+ 
+ 
+@@ -220,8 +220,8 @@ extern QString applicationPath;
+ 	#define SOUND_PATH_PREFIX			"qGo.app/Contents/Resources/Sounds/"
+     #define TRANSLATIONS_PATH		"qGo.app/Contents/Resources/Translations/"
+ #else
+-    #define SOUND_PATH_PREFIX		"/usr/share/qgo/sounds/"
+-    #define TRANSLATIONS_PATH		"/usr/share/qgo/languages"
++    #define SOUND_PATH_PREFIX		"/@out@/share/qgo/sounds/"
++    #define TRANSLATIONS_PATH		"/@out@/share/qgo/languages"
+ #endif
+ 
+ #endif
+diff --git a/src/src.pro b/src/src.pro
+index f989ce7..b7d691f 100644
+--- a/src/src.pro
++++ b/src/src.pro
+@@ -165,17 +165,17 @@ SOURCES += displayboard.cpp \
+     newgamedialog.cpp
+ 
+ unix*:!macx-* {
+-    QGO_INSTALL_PATH = /usr/share/qgo
+-    QGO_INSTALL_BIN_PATH = /usr/bin
++    QGO_INSTALL_PATH = @out@/share/qgo
++    QGO_INSTALL_BIN_PATH = /@out@/bin
+ 
+-    icon.path = /usr/share/pixmaps
++    icon.path = @out@/share/pixmaps
+     icon.files = resources/pics/qgo.png
+     icon.files += resources/pics/qgo_16x16.xpm
+     icon.files += resources/pics/qgo_32x32.xpm
+     icon.files += resources/pics/qgo_48x48.png
+     icon.files += resources/pics/qgo_48x48.xpm
+     INSTALLS += icon
+-    desktopfile.path = /usr/share/applications
++    desktopfile.path = @out@/share/applications
+     desktopfile.files = qgo.desktop
+     INSTALLS += desktopfile
+ }

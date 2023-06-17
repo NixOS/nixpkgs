@@ -1,0 +1,12 @@
+diff -ubr popa3d-1.0.2-orig/params.h popa3d-1.0.2/params.h
+--- popa3d-1.0.2-orig/params.h	2012-09-19 01:19:56.698098130 +0200
++++ popa3d-1.0.2/params.h	2012-09-19 01:37:06.749130665 +0200
+@@ -13,7 +13,7 @@
+ /*
+  * Are we going to be a standalone server or start via an inetd clone?
+  */
+-#define POP_STANDALONE			0
++#define POP_STANDALONE			1
+ 
+ #if POP_STANDALONE
+ 

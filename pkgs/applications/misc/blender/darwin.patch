@@ -1,0 +1,80 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1894,7 +1894,7 @@ if(WITH_COMPILER_SHORT_FILE_MACRO)
+   ADD_CHECK_CXX_COMPILER_FLAG(CXX_PREFIX_MAP_FLAGS CXX_MACRO_PREFIX_MAP -fmacro-prefix-map=foo=bar)
+   if(C_MACRO_PREFIX_MAP AND CXX_MACRO_PREFIX_MAP)
+     if(APPLE)
+-      if(XCODE AND ${XCODE_VERSION} VERSION_LESS 12.0)
++      if(FALSE)
+       # Developers may have say LLVM Clang-10.0.1 toolchain (which supports the flag)
+       # with Xcode-11 (the Clang of which doesn't support the flag).
+         message(WARNING
+diff --git a/build_files/cmake/platform/platform_apple.cmake b/build_files/cmake/platform/platform_apple.cmake
+--- a/build_files/cmake/platform/platform_apple.cmake
++++ b/build_files/cmake/platform/platform_apple.cmake
+@@ -60,7 +60,6 @@ else()
+   message(STATUS "Using pre-compiled LIBDIR: ${LIBDIR}")
+ endif()
+ if(NOT EXISTS "${LIBDIR}/")
+-  message(FATAL_ERROR "Mac OSX requires pre-compiled libs at: '${LIBDIR}'")
+ endif()
+ 
+ # Prefer lib directory paths
+@@ -98,10 +97,6 @@ if(WITH_CODEC_SNDFILE)
+   find_library(_sndfile_VORBIS_LIBRARY NAMES vorbis HINTS ${LIBDIR}/ffmpeg/lib)
+   find_library(_sndfile_VORBISENC_LIBRARY NAMES vorbisenc HINTS ${LIBDIR}/ffmpeg/lib)
+   list(APPEND LIBSNDFILE_LIBRARIES
+-    ${_sndfile_FLAC_LIBRARY}
+-    ${_sndfile_OGG_LIBRARY}
+-    ${_sndfile_VORBIS_LIBRARY}
+-    ${_sndfile_VORBISENC_LIBRARY}
+   )
+ 
+   print_found_status("SndFile libraries" "${LIBSNDFILE_LIBRARIES}")
+@@ -118,7 +113,7 @@ if(WITH_PYTHON)
+     # Normally cached but not since we include them with blender.
+     set(PYTHON_INCLUDE_DIR "${LIBDIR}/python/include/python${PYTHON_VERSION}")
+     set(PYTHON_EXECUTABLE "${LIBDIR}/python/bin/python${PYTHON_VERSION}")
+-    set(PYTHON_LIBRARY ${LIBDIR}/python/lib/libpython${PYTHON_VERSION}.a)
++    set(PYTHON_LIBRARY ${LIBDIR}/python/lib/libpython${PYTHON_VERSION}.dylib)
+     set(PYTHON_LIBPATH "${LIBDIR}/python/lib/python${PYTHON_VERSION}")
+   else()
+     # Module must be compiled against Python framework.
+@@ -147,7 +142,7 @@ endif()
+ 
+ # FreeType compiled with Brotli compression for woff2.
+ find_package(Freetype REQUIRED)
+-list(APPEND FREETYPE_LIBRARIES
++message(TRACE APPEND FREETYPE_LIBRARIES
+   ${LIBDIR}/brotli/lib/libbrotlicommon-static.a
+   ${LIBDIR}/brotli/lib/libbrotlidec-static.a)
+ 
+@@ -159,9 +154,7 @@ if(WITH_CODEC_FFMPEG)
+   set(FFMPEG_ROOT_DIR ${LIBDIR}/ffmpeg)
+   set(FFMPEG_FIND_COMPONENTS
+     avcodec avdevice avformat avutil
+-    mp3lame ogg opus swresample swscale
+-    theora theoradec theoraenc vorbis vorbisenc
+-    vorbisfile vpx x264 xvidcore)
++    swresample swscale)
+   if(EXISTS ${LIBDIR}/ffmpeg/lib/libaom.a)
+     list(APPEND FFMPEG_FIND_COMPONENTS aom)
+   endif()
+@@ -273,7 +266,6 @@ if(WITH_BOOST)
+ endif()
+ 
+ if(WITH_INTERNATIONAL OR WITH_CODEC_FFMPEG)
+-  string(APPEND PLATFORM_LINKFLAGS " -liconv") # boost_locale and ffmpeg needs it !
+ endif()
+ 
+ if(WITH_PUGIXML)
+@@ -402,7 +394,7 @@ endif()
+ 
+ # CMake FindOpenMP doesn't know about AppleClang before 3.12, so provide custom flags.
+ if(WITH_OPENMP)
+-  if(CMAKE_C_COMPILER_ID MATCHES "Clang")
++  if(FALSE)
+     # Use OpenMP from our precompiled libraries.
+     message(STATUS "Using ${LIBDIR}/openmp for OpenMP")
+     set(OPENMP_CUSTOM ON)

@@ -1,0 +1,109 @@
+diff --git a/app/createThumbnail.js b/app/createThumbnail.js
+index ebe5213..9f67873 100755
+--- a/app/createThumbnail.js
++++ b/app/createThumbnail.js
+@@ -1,4 +1,4 @@
+-#!/usr/bin/gjs
++#!@gjs@/bin/gjs
+ 
+ /* DING: Desktop Icons New Generation for GNOME Shell
+  *
+diff --git a/app/ding.js b/app/ding.js
+index b200be4..3ce05ef 100755
+--- a/app/ding.js
++++ b/app/ding.js
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env gjs
++#!@gjs@/bin/gjs
+ 
+ /* DING: Desktop Icons New Generation for GNOME Shell
+  *
+diff --git a/app/fileItemMenu.js b/app/fileItemMenu.js
+index cadca48..9632ecc 100644
+--- a/app/fileItemMenu.js
++++ b/app/fileItemMenu.js
+@@ -683,7 +683,7 @@ var FileItemMenu = class {
+             return;
+         }
+         let xdgEmailCommand = [];
+-        xdgEmailCommand.push('xdg-email');
++        xdgEmailCommand.push('@xdg_utils@/bin/xdg-email');
+         for (let fileItem of this._desktopManager.getCurrentSelection(false)) {
+             fileItem.unsetSelected();
+             xdgEmailCommand.push('--attach');
+diff --git a/app/preferences.js b/app/preferences.js
+index c89271c..29f0db8 100644
+--- a/app/preferences.js
++++ b/app/preferences.js
+@@ -31,6 +31,7 @@ var Preferences = class {
+         this._extensionPath = Data.codePath;
+         this._Enums = Data.Enums;
+         let schemaSource = GioSSS.get_default();
++        const schemaSourceNautilus = Gio.SettingsSchemaSource.new_from_directory('@nautilus_gsettings_path@', Gio.SettingsSchemaSource.get_default(), true);
+         this._desktopManager = null;
+ 
+         // Gtk
+@@ -38,7 +39,7 @@ var Preferences = class {
+         this.gtkSettings = new Gio.Settings({ settings_schema: schemaGtk });
+ 
+         // Gnome Files
+-        let schemaObj = schemaSource.lookup(this._Enums.SCHEMA_NAUTILUS, true);
++        let schemaObj = schemaSourceNautilus.lookup(this._Enums.SCHEMA_NAUTILUS, true);
+         if (!schemaObj) {
+             this.nautilusSettings = null;
+             this.CLICK_POLICY_SINGLE = false;
+@@ -47,7 +48,7 @@ var Preferences = class {
+         }
+ 
+         // Compression
+-        const compressionSchema = schemaSource.lookup(this._Enums.SCHEMA_NAUTILUS_COMPRESSION, true);
++        const compressionSchema = schemaSourceNautilus.lookup(this._Enums.SCHEMA_NAUTILUS_COMPRESSION, true);
+         if (!compressionSchema)
+             this.nautilusCompression = null;
+         else
+diff --git a/app/thumbnailapp.js b/app/thumbnailapp.js
+index b22bbe0..c5c7711 100755
+--- a/app/thumbnailapp.js
++++ b/app/thumbnailapp.js
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env gjs
++#!@gjs@/bin/gjs
+ 
+ /* DING: Desktop Icons New Generation for GNOME Shell
+  *
+diff --git a/extension.js b/extension.js
+index 2e5bcaa..4eaa108 100644
+--- a/extension.js
++++ b/extension.js
+@@ -373,7 +373,7 @@ function getDesktopGeometry() {
+ async function doKillAllOldDesktopProcesses() {
+     const procFolder = Gio.File.new_for_path('/proc');
+     const processes = await FileUtils.enumerateDir(procFolder);
+-    const thisPath = `gjs ${GLib.build_filenamev([
++    const thisPath = `@gjs@/bin/gjs ${GLib.build_filenamev([
+         ExtensionUtils.getCurrentExtension().path,
+         'app',
+         'ding.js',
+@@ -397,7 +397,7 @@ async function doKillAllOldDesktopProcesses() {
+             }
+ 
+             if (contents.startsWith(thisPath)) {
+-                let proc = new Gio.Subprocess({ argv: ['/bin/kill', filename] });
++                let proc = new Gio.Subprocess({ argv: ['@util_linux@/bin/kill', filename] });
+                 proc.init(null);
+                 print(`Killing old DING process ${filename}`);
+                 await proc.wait_async_promise(null);
+diff --git a/prefs.js b/prefs.js
+index 1ad0cad..d830f11 100644
+--- a/prefs.js
++++ b/prefs.js
+@@ -46,7 +46,8 @@ function fillPreferencesWindow(window) {
+     let schemaSource = GioSSS.get_default();
+     let schemaGtk = schemaSource.lookup(Enums.SCHEMA_GTK, true);
+     let gtkSettings = new Gio.Settings({ settings_schema: schemaGtk });
+-    let schemaNautilus = schemaSource.lookup(Enums.SCHEMA_NAUTILUS, true);
++    const schemaSourceNautilus = Gio.SettingsSchemaSource.new_from_directory('@nautilus_gsettings_path@', Gio.SettingsSchemaSource.get_default(), true);
++    let schemaNautilus = schemaSourceNautilus.lookup(Enums.SCHEMA_NAUTILUS, true);
+     let nautilusSettings;
+     if (!schemaNautilus)
+         nautilusSettings = null;

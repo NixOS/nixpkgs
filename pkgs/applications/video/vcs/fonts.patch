@@ -1,0 +1,23 @@
+--- a/vcs	2020-04-04 14:37:53.531095977 -0700
++++ b/vcs	2020-04-04 14:40:46.459407878 -0700
+@@ -3669,18 +3669,8 @@
+ 	[[ ( -z $USR_FONT_TITLE ) && ( $FONT_TITLE != 'DejaVu-Sans-Book' ) ]] && return
+ 	[[ ( -z $USR_FONT_TSTAMPS ) && ( $FONT_TSTAMPS != 'DejaVu-Sans-Book' ) ]] && return
+ 	[[ ( -z $USR_FONT_SIGN ) && ( $FONT_SIGN != 'DejaVu-Sans-Book' ) ]] && return
+-	# Try to locate DejaVu Sans
+-	local dvs=''
+-	if [[ -d /usr/local/share/fonts ]]; then
+-		dvs=$(find /usr/local/share/fonts/ -type f -iname 'dejavusans.ttf')
+-	fi
+-	if [[ ( -z $dvs ) && ( -d /usr/share/fonts ) ]]; then
+-		dvs=$(find /usr/share/fonts/ -type f -iname 'dejavusans.ttf')
+-	fi
+-	if [[ -z $dvs ]]; then
+-		warn "Unable to locate DejaVu Sans font. Falling back to helvetica."
+-		dvs=helvetica
+-	fi
++	# Use DejaVu Sans, by default
++	local dvs='@dejavu_fonts@/share/fonts/truetype/DejaVuSans.ttf'
+ 	[[ -z $USR_FONT_HEADING ]] && FONT_HEADING="$dvs"
+ 	[[ -z $USR_FONT_TITLE ]] && FONT_TITLE="$dvs"
+ 	[[ -z $USR_FONT_TSTAMPS ]] && FONT_TSTAMPS="$dvs"

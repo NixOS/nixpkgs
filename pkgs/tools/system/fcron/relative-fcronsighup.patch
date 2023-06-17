@@ -1,0 +1,16 @@
+Use relative fcronsighup to prefer setuid executable over package binary.
+--- fcron-3.2.1.orig/fcrontab.c	2016-06-26 17:02:48.000000000 +0200
++++ fcron-3.2.1/fcrontab.c	2017-03-05 21:54:24.676871335 +0100
+@@ -154,10 +154,10 @@
+                         fcrontab_gid);
+                 exit(ERR);
+             }
+-            execl(BINDIREX "/fcronsighup", BINDIREX "/fcronsighup", fcronconf,
++            execlp("fcronsighup",  "fcronsighup", fcronconf,
+                   NULL);
+ 
+-            error_e("Could not exec " BINDIREX " fcronsighup");
++            error_e("Could not exec fcronsighup");
+             exit(ERR);
+             break;
+ 

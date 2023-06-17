@@ -1,0 +1,222 @@
+diff --git a/cloudinit/net/dhcp.py b/cloudinit/net/dhcp.py
+index a9a1c980..2d83089b 100644
+--- a/cloudinit/net/dhcp.py
++++ b/cloudinit/net/dhcp.py
+@@ -14,12 +14,48 @@ from io import StringIO
+ 
+ import configobj
+ 
+-from cloudinit import subp, util
++from cloudinit import subp, util, temp_utils
+ from cloudinit.net import find_fallback_nic, get_devicelist
+ 
+ LOG = logging.getLogger(__name__)
+ 
+ NETWORKD_LEASES_DIR = "/run/systemd/netif/leases"
++UDHCPC_SCRIPT = """#!/bin/sh
++log() {
++    echo "udhcpc[$PPID]" "$interface: $2"
++}
++
++[ -z "$1" ] && echo "Error: should be called from udhcpc" && exit 1
++
++case $1 in
++    bound|renew)
++    cat <<JSON > "$LEASE_FILE"
++{
++    "interface": "$interface",
++    "fixed-address": "$ip",
++    "subnet-mask": "$subnet",
++    "routers": "${router%% *}",
++    "static_routes" : "${staticroutes}"
++}
++JSON
++    ;;
++
++    deconfig)
++    log err "Not supported"
++    exit 1
++    ;;
++
++    leasefail | nak)
++    log err "configuration failed: $1: $message"
++    exit 1
++    ;;
++
++    *)
++    echo "$0: Unknown udhcpc command: $1" >&2
++    exit 1
++    ;;
++esac
++"""
+ 
+ 
+ class NoDHCPLeaseError(Exception):
+@@ -43,12 +79,14 @@ class NoDHCPLeaseMissingDhclientError(NoDHCPLeaseError):
+ 
+ 
+ def maybe_perform_dhcp_discovery(nic=None, dhcp_log_func=None, tmp_dir=None):
+-    """Perform dhcp discovery if nic valid and dhclient command exists.
++    """Perform dhcp discovery if nic valid and dhclient or udhcpc command
++    exists.
+ 
+     If the nic is invalid or undiscoverable or dhclient command is not found,
+     skip dhcp_discovery and return an empty dict.
+ 
+-    @param nic: Name of the network interface we want to run dhclient on.
++    @param nic: Name of the network interface we want to run the dhcp client
++        on.
+     @param dhcp_log_func: A callable accepting the dhclient output and error
+         streams.
+     @param tmp_dir: Tmp dir with exec permissions.
+@@ -66,11 +104,16 @@ def maybe_perform_dhcp_discovery(nic=None, dhcp_log_func=None, tmp_dir=None):
+             "Skip dhcp_discovery: nic %s not found in get_devicelist.", nic
+         )
+         raise NoDHCPLeaseInterfaceError()
++    udhcpc_path = subp.which("udhcpc")
++    if udhcpc_path:
++        return dhcp_udhcpc_discovery(udhcpc_path, nic, dhcp_log_func)
+     dhclient_path = subp.which("dhclient")
+-    if not dhclient_path:
+-        LOG.debug("Skip dhclient configuration: No dhclient command found.")
+-        raise NoDHCPLeaseMissingDhclientError()
+-    return dhcp_discovery(dhclient_path, nic, dhcp_log_func)
++    if dhclient_path:
++        return dhcp_discovery(dhclient_path, nic, dhcp_log_func)
++    LOG.debug(
++        "Skip dhclient configuration: No dhclient or udhcpc command found."
++    )
++    raise NoDHCPLeaseMissingDhclientError()
+ 
+ 
+ def parse_dhcp_lease_file(lease_file):
+@@ -107,6 +150,61 @@ def parse_dhcp_lease_file(lease_file):
+     return dhcp_leases
+ 
+ 
++def dhcp_udhcpc_discovery(udhcpc_cmd_path, interface, dhcp_log_func=None):
++    """Run udhcpc on the interface without scripts or filesystem artifacts.
++
++    @param udhcpc_cmd_path: Full path to the udhcpc used.
++    @param interface: Name of the network interface on which to dhclient.
++    @param dhcp_log_func: A callable accepting the dhclient output and error
++        streams.
++
++    @return: A list of dicts of representing the dhcp leases parsed from the
++        dhclient.lease file or empty list.
++    """
++    LOG.debug("Performing a dhcp discovery on %s", interface)
++
++    tmp_dir = temp_utils.get_tmp_ancestor(needs_exe=True)
++    lease_file = os.path.join(tmp_dir, interface + ".lease.json")
++    with contextlib.suppress(FileNotFoundError):
++        os.remove(lease_file)
++
++    # udhcpc needs the interface up to send initial discovery packets.
++    # Generally dhclient relies on dhclient-script PREINIT action to bring the
++    # link up before attempting discovery. Since we are using -sf /bin/true,
++    # we need to do that "link up" ourselves first.
++    subp.subp(["ip", "link", "set", "dev", interface, "up"], capture=True)
++    udhcpc_script = os.path.join(tmp_dir, "udhcpc_script")
++    util.write_file(udhcpc_script, UDHCPC_SCRIPT, 0o755)
++    cmd = [
++        udhcpc_cmd_path,
++        "-O",
++        "staticroutes",
++        "-i",
++        interface,
++        "-s",
++        udhcpc_script,
++        "-n",  # Exit if lease is not obtained
++        "-q",  # Exit after obtaining lease
++        "-f",  # Run in foreground
++        "-v",
++    ]
++
++    out, err = subp.subp(
++        cmd, update_env={"LEASE_FILE": lease_file}, capture=True
++    )
++
++    if dhcp_log_func is not None:
++        dhcp_log_func(out, err)
++    lease_json = util.load_json(util.load_file(lease_file))
++    static_routes = lease_json["static_routes"].split()
++    if static_routes:
++        # format: dest1/mask gw1 ... destn/mask gwn
++        lease_json["static_routes"] = [
++            i for i in zip(static_routes[::2], static_routes[1::2])
++        ]
++    return [lease_json]
++
++
+ def dhcp_discovery(dhclient_cmd_path, interface, dhcp_log_func=None):
+     """Run dhclient on the interface without scripts or filesystem artifacts.
+ 
+diff --git a/tests/unittests/net/test_dhcp.py b/tests/unittests/net/test_dhcp.py
+index 40340553..8913cf65 100644
+--- a/tests/unittests/net/test_dhcp.py
++++ b/tests/unittests/net/test_dhcp.py
+@@ -12,6 +12,7 @@ from cloudinit.net.dhcp import (
+     NoDHCPLeaseError,
+     NoDHCPLeaseInterfaceError,
+     NoDHCPLeaseMissingDhclientError,
++    dhcp_udhcpc_discovery,
+     dhcp_discovery,
+     maybe_perform_dhcp_discovery,
+     networkd_load_leases,
+@@ -334,6 +335,43 @@ class TestDHCPParseStaticRoutes(CiTestCase):
+         )
+ 
+ 
++class TestUDHCPCDiscoveryClean(CiTestCase):
++    maxDiff = None
++
++    @mock.patch("cloudinit.net.dhcp.os.remove")
++    @mock.patch("cloudinit.net.dhcp.subp.subp")
++    @mock.patch("cloudinit.util.load_json")
++    @mock.patch("cloudinit.util.load_file")
++    @mock.patch("cloudinit.util.write_file")
++    def test_udhcpc_discovery(
++        self, m_write_file, m_load_file, m_loadjson, m_subp, m_remove
++    ):
++        """dhcp_discovery waits for the presence of pidfile and dhcp.leases."""
++        m_subp.return_value = ("", "")
++        m_loadjson.return_value = {
++            "interface": "eth9",
++            "fixed-address": "192.168.2.74",
++            "subnet-mask": "255.255.255.0",
++            "routers": "192.168.2.1",
++            "static_routes": "10.240.0.1/32 0.0.0.0 0.0.0.0/0 10.240.0.1",
++        }
++        self.assertEqual(
++            [
++                {
++                    "fixed-address": "192.168.2.74",
++                    "interface": "eth9",
++                    "routers": "192.168.2.1",
++                    "static_routes": [
++                        ("10.240.0.1/32", "0.0.0.0"),
++                        ("0.0.0.0/0", "10.240.0.1"),
++                    ],
++                    "subnet-mask": "255.255.255.0",
++                }
++            ],
++            dhcp_udhcpc_discovery("/sbin/udhcpc", "eth9"),
++        )
++
++
+ class TestDHCPDiscoveryClean(CiTestCase):
+     with_logs = True
+ 
+@@ -372,7 +410,7 @@ class TestDHCPDiscoveryClean(CiTestCase):
+             maybe_perform_dhcp_discovery()
+ 
+         self.assertIn(
+-            "Skip dhclient configuration: No dhclient command found.",
++            "Skip dhclient configuration: No dhclient or udhcpc command found.",
+             self.logs.getvalue(),
+         )
+ 
+-- 
+2.38.4
+

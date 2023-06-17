@@ -1,0 +1,26 @@
+diff --git a/src/modules/meson.build b/src/modules/meson.build
+index 5d2dc9984..35f5773aa 100644
+--- a/src/modules/meson.build
++++ b/src/modules/meson.build
+@@ -169,6 +169,7 @@ if build_module_jack_tunnel
+     install_dir : modules_install_dir,
+     install_rpath: modules_install_dir,
+     dependencies : [mathlib, dl_lib, pipewire_dep],
++    c_args: '-DNIXPKGS_LIBJACK_PATH="@0@"'.format(jack_dep.get_variable('libdir'))
+   )
+   build_module_jackdbus_detect = dbus_dep.found()
+   if build_module_jackdbus_detect
+diff --git a/src/modules/module-jack-tunnel/weakjack.h b/src/modules/module-jack-tunnel/weakjack.h
+index 42580f798..e7aadd3cc 100644
+--- a/src/modules/module-jack-tunnel/weakjack.h
++++ b/src/modules/module-jack-tunnel/weakjack.h
+@@ -164,8 +164,7 @@ static inline int weakjack_load(struct weakjack *jack, const char *lib)
+ 
+ 		search_dirs = getenv("LIBJACK_PATH");
+ 		if (!search_dirs)
+-			search_dirs = PREFIX "/lib64/:" PREFIX "/lib/:"
+-				"/usr/lib64/:/usr/lib/:" LIBDIR;
++			search_dirs = NIXPKGS_LIBJACK_PATH;
+ 
+ 		while ((p = pw_split_walk(search_dirs, ":", &len, &state))) {
+ 			int pathlen;

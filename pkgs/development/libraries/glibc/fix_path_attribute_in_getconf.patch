@@ -1,0 +1,6 @@
+diff -ubr glibc-2.17-orig/sysdeps/unix/confstr.h glibc-2.17/sysdeps/unix/confstr.h
+--- glibc-2.17-orig/sysdeps/unix/confstr.h	2013-06-03 22:01:44.829726968 +0200
++++ glibc-2.17/sysdeps/unix/confstr.h	2013-06-03 22:04:39.469376740 +0200
+@@ -1 +1 @@
+-#define	CS_PATH	"/bin:/usr/bin"
++#define	CS_PATH	"/run/current-system/sw/bin:/bin:/usr/bin"

@@ -1,0 +1,47 @@
+diff --git a/plat/rockchip/rk3399/drivers/dp/cdn_dp.c b/plat/rockchip/rk3399/drivers/dp/cdn_dp.c
+index a8773f4f6..8e28c4830 100644
+--- a/plat/rockchip/rk3399/drivers/dp/cdn_dp.c
++++ b/plat/rockchip/rk3399/drivers/dp/cdn_dp.c
+@@ -13,17 +13,6 @@
+ 
+ #include <cdn_dp.h>
+ 
+-__asm__(
+-	".pushsection .text.hdcp_handler, \"ax\", %progbits\n"
+-	".global hdcp_handler\n"
+-	".balign 4\n"
+-	"hdcp_handler:\n"
+-	".incbin \"" HDCPFW "\"\n"
+-	".type hdcp_handler, %function\n"
+-	".size hdcp_handler, .- hdcp_handler\n"
+-	".popsection\n"
+-);
+-
+ static uint64_t *hdcp_key_pdata;
+ static struct cdn_dp_hdcp_key_1x key;
+ 
+@@ -38,7 +27,7 @@ uint64_t dp_hdcp_ctrl(uint64_t type)
+ 		return 0;
+ 	case HDCP_KEY_DATA_START_DECRYPT:
+ 		if (hdcp_key_pdata == (uint64_t *)(&key + 1))
+-			return hdcp_handler(&key);
++			return PSCI_E_DISABLED;
+ 		else
+ 			return PSCI_E_INVALID_PARAMS;
+ 		assert(0); /* Unreachable */
+diff --git a/plat/rockchip/rk3399/platform.mk b/plat/rockchip/rk3399/platform.mk
+index a658fb286..5edb6a25b 100644
+--- a/plat/rockchip/rk3399/platform.mk
++++ b/plat/rockchip/rk3399/platform.mk
+@@ -88,11 +88,6 @@ $(eval $(call add_define_val,RK3399M0PMUFW,\"$(RK3399M0PMUFW)\"))
+ ifdef PLAT_RK_DP_HDCP
+ BL31_SOURCES	+= ${RK_PLAT_SOC}/drivers/dp/cdn_dp.c
+ 
+-HDCPFW=${RK_PLAT_SOC}/drivers/dp/hdcp.bin
+-$(eval $(call add_define_val,HDCPFW,\"$(HDCPFW)\"))
+-
+-${BUILD_PLAT}/bl31/cdn_dp.o: CCACHE_EXTRAFILES=$(HDCPFW)
+-${RK_PLAT_SOC}/drivers/dp/cdn_dp.c: $(HDCPFW)
+ endif
+ 
+ # CCACHE_EXTRAFILES is needed because ccache doesn't handle .incbin

@@ -1,0 +1,18 @@
+diff --git a/wx/lib/wxcairo/wx_pycairo.py b/wx/lib/wxcairo/wx_pycairo.py
+index 7cfe3071..24d1120f 100644
+--- a/wx/lib/wxcairo/wx_pycairo.py
++++ b/wx/lib/wxcairo/wx_pycairo.py
+@@ -197,7 +197,12 @@ def _findCairoLib():
+ 
+ # For other DLLs we'll just use a dictionary to track them, as there
+ # probably isn't any need to use them outside of this module.
+-_dlls = dict()
++_dlls = {
++    "gdk": ctypes.CDLL("@libgdk@"),
++    "pangocairo": ctypes.CDLL("@libpangocairo@"),
++    "cairoLib": ctypes.CDLL("@libcairo@"),
++    "appsvc": ctypes.CDLL(None),
++}
+ 
+ def _findHelper(names, key, msg):
+     dll = _dlls.get(key, None)

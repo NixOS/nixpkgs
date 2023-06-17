@@ -1,0 +1,116 @@
+diff --git a/Lib/py_compile.py b/Lib/py_compile.py
+index 978da73d74..3559eb95ca 100644
+--- a/Lib/py_compile.py
++++ b/Lib/py_compile.py
+@@ -120,16 +120,27 @@ def compile(file, cfile=None, dfile=None, doraise=False):
+             return
+     if cfile is None:
+         cfile = file + (__debug__ and 'c' or 'o')
+-    with open(cfile, 'wb') as fc:
+-        fc.write('\0\0\0\0')
+-        if "DETERMINISTIC_BUILD" in os.environ:
++    # Atomically write the pyc/pyo file.  Issue #13146.
++    # id() is used to generate a pseudo-random filename.
++    path_tmp = '{}.{}'.format(cfile, id(cfile))
++    try:
++        with open(path_tmp, 'wb') as fc:
+             fc.write('\0\0\0\0')
+-        else:
+-            wr_long(fc, timestamp)
+-        marshal.dump(codeobject, fc)
+-        fc.flush()
+-        fc.seek(0, 0)
+-        fc.write(MAGIC)
++            if "DETERMINISTIC_BUILD" in os.environ:
++                fc.write('\0\0\0\0')
++            else:
++                wr_long(fc, timestamp)
++            marshal.dump(codeobject, fc)
++            fc.flush()
++            fc.seek(0, 0)
++            fc.write(MAGIC)
++        os.rename(path_tmp, cfile)
++    except OSError:
++        try:
++            os.unlink(path_tmp)
++        except OSError:
++            pass
++        raise
+ 
+ def main(args=None):
+     """Compile several source files.
+diff --git a/Python/import.c b/Python/import.c
+index 1e31d79279..f78a1efcf0 100644
+--- a/Python/import.c
++++ b/Python/import.c
+@@ -951,6 +951,8 @@ static void
+ write_compiled_module(PyCodeObject *co, char *cpathname, struct stat *srcstat, time_t mtime)
+ {
+     FILE *fp;
++    size_t cpathname_len;
++    char *cpathname_tmp;
+ #ifdef MS_WINDOWS   /* since Windows uses different permissions  */
+     mode_t mode = srcstat->st_mode & ~S_IEXEC;
+     /* Issue #6074: We ensure user write access, so we can delete it later
+@@ -963,11 +965,28 @@ write_compiled_module(PyCodeObject *co, char *cpathname, struct stat *srcstat, t
+     mode_t mode = srcstat->st_mode & ~S_IXUSR & ~S_IXGRP & ~S_IXOTH;
+ #endif
+ 
++#ifdef MS_WINDOWS
+     fp = open_exclusive(cpathname, mode);
++#else
++    /* Under POSIX, we first write to a tmp file and then take advantage
++       of atomic renaming. */
++    cpathname_len = strlen(cpathname);
++    cpathname_tmp = PyMem_MALLOC(cpathname_len + 5);
++    if (cpathname_tmp == NULL) {
++        PyErr_Clear();
++        return;
++    }
++    memcpy(cpathname_tmp, cpathname, cpathname_len);
++    memcpy(cpathname_tmp + cpathname_len, ".tmp", 5);
++    fp = open_exclusive(cpathname_tmp, mode);
++#endif
+     if (fp == NULL) {
+         if (Py_VerboseFlag)
+             PySys_WriteStderr(
+                 "# can't create %s\n", cpathname);
++#ifndef MS_WINDOWS
++        PyMem_FREE(cpathname_tmp);
++#endif
+         return;
+     }
+     PyMarshal_WriteLongToFile(pyc_magic, fp, Py_MARSHAL_VERSION);
+@@ -979,7 +998,12 @@ write_compiled_module(PyCodeObject *co, char *cpathname, struct stat *srcstat, t
+             PySys_WriteStderr("# can't write %s\n", cpathname);
+         /* Don't keep partial file */
+         fclose(fp);
++#ifdef MS_WINDOWS
+         (void) unlink(cpathname);
++#else
++        (void) unlink(cpathname_tmp);
++        PyMem_FREE(cpathname_tmp);
++#endif
+         return;
+     }
+     /* Now write the true mtime (as a 32-bit field) */
+@@ -989,6 +1013,19 @@ write_compiled_module(PyCodeObject *co, char *cpathname, struct stat *srcstat, t
+         PyMarshal_WriteLongToFile((long)mtime, fp, Py_MARSHAL_VERSION);
+         fflush(fp);
+     }
++    /* Under POSIX, do an atomic rename */
++#ifndef MS_WINDOWS
++    if (rename(cpathname_tmp, cpathname)) {
++        if (Py_VerboseFlag)
++            PySys_WriteStderr("# can't write %s\n", cpathname);
++        /* Don't keep tmp file */
++        fclose(fp);
++        (void) unlink(cpathname_tmp);
++        PyMem_FREE(cpathname_tmp);
++        return;
++    }
++    PyMem_FREE(cpathname_tmp);
++#endif
+     fclose(fp);
+     if (Py_VerboseFlag)
+         PySys_WriteStderr("# wrote %s\n", cpathname);
