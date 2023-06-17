@@ -16,5 +16,6 @@ buildNodejs {
     ./bypass-darwin-xcrun-node16.patch
     ./revert-arm64-pointer-auth.patch
     ./node-npm-build-npm-package-logic.patch
+    ./trap-handler-backport.patch
   ];
 }
