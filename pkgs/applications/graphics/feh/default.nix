@@ -5,20 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "feh";
-  version = "3.9";
+  version = "3.10";
 
   src = fetchFromGitHub {
     owner = "derf";
     repo = pname;
     rev = version;
-    sha256 = "sha256-rgNC4M1TJ5EPeWmVHVzgaxTGLY7CYQf7uOsOn5bkwKE=";
+    hash = "sha256-9NJ6zgQHcFJPmRlqJuCMXcKjLvDPUG+QvKGTJlWvWK4=";
   };
-
-  postPatch = ''
-    substituteInPlace test/feh.t \
-      --replace "WARNING:" "WARNING: While loading" \
-      --replace "Does not look like an image \(magic bytes missing\)" "Unknown error \(15\)"
-  '';
 
   outputs = [ "out" "man" "doc" ];
 
