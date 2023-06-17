@@ -29,8 +29,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "S-expression parser for Python";
-    homepage = "https://github.com/tkf/sexpdata";
-    license = licenses.bsd0;
+    homepage = "https://github.com/jd-boyd/sexpdata";
+    changelog = "https://github.com/jd-boyd/sexpdata/releases/tag/v${version}";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ ];
   };
-
 }
