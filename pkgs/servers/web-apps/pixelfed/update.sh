@@ -12,6 +12,7 @@ TARGET_VERSION_REMOTE=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} https://a
 TARGET_VERSION=${TARGET_VERSION_REMOTE:1}
 PIXELFED=https://github.com/pixelfed/pixelfed/raw/$TARGET_VERSION_REMOTE
 SHA256=$(nix-prefetch-url --unpack "https://github.com/pixelfed/pixelfed/archive/v$TARGET_VERSION/pixelfed.tar.gz")
+SRI_HASH=$(nix hash to-sri --type sha256 "$SHA256")
 
 if [[ "$CURRENT_VERSION" == "$TARGET_VERSION" ]]; then
   echo "pixelfed is up-to-date: ${CURRENT_VERSION}"
@@ -28,7 +29,7 @@ rm composer.json composer.lock
 
 # change version number
 sed -e "s/version =.*;/version = \"$TARGET_VERSION\";/g" \
-    -e "s/sha256 =.*;/sha256 = \"$SHA256\";/g" \
+    -e "s/hash =.*;/hash = \"$SRI_HASH\";/g" \
     -i ./default.nix
 
 cd ../../../..
