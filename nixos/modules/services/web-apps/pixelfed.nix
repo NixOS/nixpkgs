@@ -380,11 +380,11 @@ in {
       };
 
       script = ''
-        # Before running any PHP program, cleanup the bootstrap.
+        # Before running any PHP program, cleanup the code cache.
         # It's necessary if you upgrade the application otherwise you might
         # try to import non-existent modules.
-        rm -f ${cfg.runtimeDir}/bootstrap/app.php
-        rm -rf ${cfg.runtimeDir}/bootstrap/cache/*
+        rm -f ${cfg.runtimeDir}/app.php
+        rm -rf ${cfg.runtimeDir}/cache/*
 
         # Concatenate non-secret .env and secret .env
         rm -f ${cfg.dataDir}/.env
