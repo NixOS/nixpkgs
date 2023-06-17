@@ -1,19 +1,18 @@
 { lib, stdenvNoCC, fetchFromGitHub, php, phpPackages }:
 
 let
-  version = "2023.01.21";
+  version = "2023.06.17";
 
   src = fetchFromGitHub {
     owner = "phpactor";
     repo = "phpactor";
     rev = version;
-    hash = "sha256-jWZgBEaffjQ5wCStSEe+eIi7BJt6XAQFEjmq5wvW5V8=";
+    hash = "sha256-NI+CLXlflQ8zQ+0AbjhJFdV6Y2+JGy7XDj0RBJ4YRRg=";
   };
 
-  vendor = stdenvNoCC.mkDerivation rec {
+  vendor = stdenvNoCC.mkDerivation {
     pname = "phpactor-vendor";
     inherit src version;
-
 
     # See https://github.com/NixOS/nix/issues/6660
     dontPatchShebangs = true;
@@ -45,7 +44,7 @@ let
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-7R6nadWFv7A5Hv14D9egsTD/zcKK5uK9LQlHmwtbKdE=";
+    outputHash = "sha256-fjcfdNzQsVgRpksxybSIpdHz1BOLTlY49Cjeaw0Evl8=";
   };
 in
 stdenvNoCC.mkDerivation {
