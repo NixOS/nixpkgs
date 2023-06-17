@@ -21,7 +21,7 @@ buildNpmPackage rec {
   dontNpmBuild = true;
 
   meta = with lib; {
-    description = "Check for outdated, incorrect, and unused dependencies.";
+    description = "Check for outdated, incorrect, and unused dependencies";
     homepage = "https://github.com/dylang/npm-check";
     changelog = "https://github.com/dylang/npm-check/releases/tag/v${version}";
     license = licenses.mit;
