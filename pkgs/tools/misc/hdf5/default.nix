@@ -26,7 +26,7 @@ assert !cppSupport || !mpiSupport;
 let inherit (lib) optional optionals; in
 
 stdenv.mkDerivation rec {
-  version = "1.14.0";
+  version = "1.14.1-2";
   pname = "hdf5"
     + lib.optionalString cppSupport "-cpp"
     + lib.optionalString fortranSupport "-fortran"
@@ -34,8 +34,11 @@ stdenv.mkDerivation rec {
     + lib.optionalString threadsafe "-threadsafe";
 
   src = fetchurl {
-    url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${lib.versions.majorMinor version}/hdf5-${version}/src/hdf5-${version}.tar.bz2";
-    sha256 = "sha256-5OeUM0UO2uKGWkxjKBiLtFORsp10+MU47mmfCxFsK6A=";
+    url = let
+        majorMinor = lib.versions.majorMinor version;
+        majorMinorPatch = with lib.versions; "${major version}.${minor version}.${patch version}";
+      in "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${majorMinor}/hdf5-${majorMinorPatch}/src/hdf5-${version}.tar.bz2";
+    sha256 = "sha256-BsoUHRo8MStdfMSCahJzcpOuExAxdIhhaJ9qLsghnb0=";
   };
 
   passthru = {
