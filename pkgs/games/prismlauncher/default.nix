@@ -25,13 +25,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "prismlauncher-unwrapped";
-  version = "7.0";
+  version = "7.1";
 
   src = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "PrismLauncher";
     rev = version;
-    sha256 = "sha256-jBBHWN/ERUVzJAyebN7eFCODZg1P7QYPOBPIM+bIbak=";
+    sha256 = "sha256-ri4oaeJKmvjJapUASPX10nl4JcLPjA3SgTp2EyaEPWg=";
   };
 
   nativeBuildInputs = [ extra-cmake-modules cmake jdk17 ninja ];

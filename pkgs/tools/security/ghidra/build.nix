@@ -178,7 +178,7 @@ in stdenv.mkDerivation rec {
     ];
     license = licenses.asl20;
     maintainers = with maintainers; [ roblabla ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 
 }
