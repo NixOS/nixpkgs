@@ -14,8 +14,8 @@ let
     sha256Hash = "sha256-X+ZuH4cHKfQtfvOF0kLk+QjQ5AR3pTEparczHEUk+uY=";
   };
   betaVersion = {
-    version = "2022.3.1.12"; # "Android Studio Giraffe (2022.3.1) Beta 1"
-    sha256Hash = "sha256-Wy5iifscL1Ko7ZInx/uAvyJyM4cS6LfTYWxdJbZk6po=";
+    version = "2022.3.1.16"; # "Android Studio Giraffe (2022.3.1) Beta 5"
+    sha256Hash = "sha256-D+Hoa50fzvtO0/6DsExmGSDzcgDIT2Bg+HvI6mCle14=";
   };
   latestVersion = betaVersion;
 in {
