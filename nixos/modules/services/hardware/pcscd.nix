@@ -16,9 +16,6 @@ let
 
 in
 {
-
-  ###### interface
-
   options.services.pcscd = {
     enable = mkEnableOption (lib.mdDoc "PCSC-Lite daemon");
 
@@ -46,10 +43,7 @@ in
     };
   };
 
-  ###### implementation
-
   config = mkIf config.services.pcscd.enable {
-
     environment.etc."reader.conf".source = cfgFile;
 
     environment.systemPackages = [ package ];
