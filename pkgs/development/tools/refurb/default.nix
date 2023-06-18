@@ -15,6 +15,11 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-e/gKBgbtjO2XYnAIdHDoVJWyP6cyvsuIFLrV/eqjces=";
   };
 
+  postPatch = ''
+    # remove --cov* options provided to pytest
+    sed -i '/^addopts = "--cov/d' pyproject.toml
+  '';
+
   nativeBuildInputs = with python3Packages; [
     poetry-core
   ];
@@ -41,9 +46,9 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    sed -i "/^addopts/d" pyproject.toml
-  '';
+  disabledTests = [
+    "test_checks" # broken because new mypy release added new checks
+  ];
 
   pythonImportsCheck = [
     "refurb"

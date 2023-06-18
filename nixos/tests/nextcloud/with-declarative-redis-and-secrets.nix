@@ -1,4 +1,5 @@
-import ../make-test-python.nix ({ pkgs, ...}: let
+args@{ nextcloudVersion ? 27, ... }:
+(import ../make-test-python.nix ({ pkgs, ...}: let
   username = "custom_admin_username";
   # This will be used both for redis and postgresql
   pass = "hunter2";
@@ -9,7 +10,7 @@ import ../make-test-python.nix ({ pkgs, ...}: let
 in {
   name = "nextcloud-with-declarative-redis";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ eqyiel ];
+    maintainers = [ eqyiel ma27 ];
   };
 
   nodes = {
@@ -22,6 +23,7 @@ in {
       services.nextcloud = {
         enable = true;
         hostName = "nextcloud";
+        package = pkgs.${"nextcloud" + (toString nextcloudVersion)};
         caching = {
           apcu = false;
           redis = true;
@@ -47,8 +49,11 @@ in {
         configureRedis = true;
       };
 
-      services.redis.servers."nextcloud".enable = true;
-      services.redis.servers."nextcloud".port = 6379;
+      services.redis.servers."nextcloud" = {
+        enable = true;
+        port = 6379;
+        requirePass = "secret";
+      };
 
       systemd.services.nextcloud-setup= {
         requires = ["postgresql.service"];
@@ -114,4 +119,4 @@ in {
     # redis cache should not be empty
     nextcloud.fail('test "[]" = "$(redis-cli --json KEYS "*")"')
   '';
-})
+})) args
