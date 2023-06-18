@@ -55,7 +55,6 @@ in
 
     systemd.services.pcscd = {
       environment.PCSCLITE_HP_DROPDIR = pluginEnv;
-      restartTriggers = [ "/etc/reader.conf" ];
 
       # If the cfgFile is empty and not specified (in which case the default
       # /etc/reader.conf is assumed), pcscd will happily start going through the
