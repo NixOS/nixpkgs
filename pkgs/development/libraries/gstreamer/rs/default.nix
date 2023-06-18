@@ -138,6 +138,10 @@ stdenv.mkDerivation rec {
     '';
   };
 
+  postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
+    rm net/raptorq/tests/raptorq.rs
+  '';
+
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
