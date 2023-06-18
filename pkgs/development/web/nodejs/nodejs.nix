@@ -116,14 +116,6 @@ let
 
     inherit patches;
 
-    # NB: be careful when running patchShebangs at patch phase. Some files are
-    # copied verbatim to the output with shabangs patched to store paths and
-    # subsequent patchShebangs at install phase would not update them.
-    postPatch = lib.optionalString stdenv.isDarwin ''
-      sed -i -e "s|tr1/type_traits|type_traits|g" \
-             -e "s|std::tr1|std|" src/util.h
-    '';
-
     doCheck = lib.versionAtLeast version "16"; # some tests fail on v14
 
     # Some dependencies required for tools/doc/node_modules (and therefore
