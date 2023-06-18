@@ -7,7 +7,7 @@
   dependencies,
   crateFeatures, crateRenames, libName, release, libPath,
   crateType, metadata, crateBin, hasCrateBin,
-  extraRustcOpts,
+  extraRustcOpts, verbose, colors,
   buildTests,
   codegenUnits
 }:
@@ -40,7 +40,9 @@
       ++ (map (x: "--crate-type ${x}") crateType)
     );
 
-    binRustcOpts = lib.concatStringsSep " " baseRustcOpts;
+    binRustcOpts = lib.concatStringsSep " " (
+      baseRustcOpts
+    );
 
     build_bin = if buildTests then "build_bin_test" else "build_bin";
   in ''
