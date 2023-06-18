@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "fakeroute";
@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     url = "https://maxwell.ydns.eu/git/rnhmjoj/fakeroute/releases/download/v${version}/fakeroute-${version}.tar.gz";
     hash = "sha256-DoXGJm8vOlAD6ZuvVAt6bkgfahc8WgyYIXCrgqzfiWg=";
   };
+
+  passthru.tests.fakeroute = nixosTests.fakeroute;
 
   meta = with lib; {
     description = ''
