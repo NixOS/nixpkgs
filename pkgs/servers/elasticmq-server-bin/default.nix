@@ -3,11 +3,11 @@
 let
   elasticmq-server = stdenv.mkDerivation rec {
     pname = "elasticmq-server";
-    version = "1.4.1";
+    version = "1.4.2";
 
     src = fetchurl {
       url = "https://s3-eu-west-1.amazonaws.com/softwaremill-public/${pname}-${version}.jar";
-      sha256 = "sha256-F1G9shYvntFiSgLdXPkSTpN/MP86ewhHRIchbXues+s=";
+      sha256 = "sha256-71GlX8zwiC5tZm2LGSUdOa4ZDZUQQJ9zTY8viu2MQLk=";
     };
 
     # don't do anything?
