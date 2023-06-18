@@ -707,6 +707,11 @@ in mkLicense lset) ({
     url = "https://opensource.franz.com/preamble.html";
   };
 
+  lppl1 = {
+    spdxId = "LPPL-1.0";
+    fullName = "LaTeX Project Public License v1.0";
+  };
+
   lppl12 = {
     spdxId = "LPPL-1.2";
     fullName = "LaTeX Project Public License v1.2";
