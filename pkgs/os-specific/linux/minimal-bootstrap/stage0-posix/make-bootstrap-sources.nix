@@ -8,8 +8,7 @@
 #
 # To build:
 #
-#   nix-build . -A minimal-bootstrap-sources
-#   => ./result/stage0-posix-$version-$rev-source.nar.xz
+#   nix-build '<nixpkgs>' -o sources.nar.xz -A make-minimal-bootstrap-sources
 #
 
 { lib
@@ -19,7 +18,7 @@
 , xz
 }:
 let
-  inherit (import ./bootstrap-sources.nix) name rev;
+  inherit (import ./bootstrap-sources.nix { make-minimal-bootstrap-sources = null; }) name rev;
 
   src = fetchFromGitHub {
     owner = "oriansj";
@@ -41,8 +40,9 @@ let
         $out/mescc-tools-extra/M2libc
     '';
   };
+
 in
-runCommand name {
+runCommand "${name}.nar.xz" {
   nativeBuildInputs = [ nix xz ];
 
   passthru = { inherit src; };
@@ -55,6 +55,5 @@ runCommand name {
     platforms = platforms.all;
   };
 } ''
-  mkdir $out
-  nix-store --dump ${src} | xz -c > "$out/${name}.nar.xz"
+  nix-store --dump ${src} | xz -c > $out
 ''
