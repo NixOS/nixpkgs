@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "survey";
-  version = "3.4.3";
+  version = "4.4.0";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TK89quY3bpNIEz1n3Ecew4FnTH6QgeSLdDNV86gq7+I=";
+    hash = "sha256-5pesfVIUA0+po8a9MggowZu+UVtZv9hbZHwxMSuZhRg=";
   };
 
   propagatedBuildInputs = [
