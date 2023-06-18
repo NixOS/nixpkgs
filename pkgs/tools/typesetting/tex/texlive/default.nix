@@ -184,6 +184,9 @@ let
     in runCommand "texlive-${tlName}"
       ( {
           src = fetchurl { inherit urls sha512; };
+          meta = {
+            license = map (x: lib.licenses.${x}) (args.license or []);
+          };
           inherit stripPrefix tlType;
           # metadata for texlive.combine
           passthru = {
