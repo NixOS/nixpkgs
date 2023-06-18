@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, git
 , openssl
 , pkg-config
 , rustPlatform
@@ -19,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-+FwXm3QN9bt//dWqzkBzsGigyl1SSY4/P29QtV75V6M=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config git ];
   buildInputs = [ openssl ];
 
   meta = with lib; {
