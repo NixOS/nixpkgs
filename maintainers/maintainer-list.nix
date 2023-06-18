@@ -11865,7 +11865,7 @@
     name = "Kartik Gokte";
   };
   nullishamy = {
-    email = "amy.codes@null.net";
+    email = "spam@amyerskine.me";
     name = "nullishamy";
     github = "nullishamy";
     githubId = 99221043;
