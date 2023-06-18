@@ -52,6 +52,8 @@ stdenv.mkDerivation rec {
       url = "https://github.com/OpenPrinting/cups/commit/411b6136f450a583ee08c3880fa09dbe837eb3f1.patch";
       sha256 = "sha256-dVopmr34c9N5H2ZZz52rXVnHQBuDTNo8M40x9455+jQ=";
     })
+  ] ++ [
+    ./CVE-2023-32324.patch
   ];
 
   postPatch = ''

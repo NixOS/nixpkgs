@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-RVr7NFVxY+6MBD8NV7eMW8TEWuCgcfqpula1o1VZe0o=";
   };
 
+  patches = [
+    ./1.0.0-CVE-2023-32570.patch
+  ];
+
   nativeBuildInputs = [ meson ninja nasm pkg-config ];
   # TODO: doxygen (currently only HTML and not build by default).
   buildInputs = [ xxHash ]
