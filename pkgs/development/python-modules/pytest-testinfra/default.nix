@@ -40,7 +40,7 @@ buildPythonPackage rec {
     \ttestinfra_hosts(host_selector): mark test to run on selected hosts \
     \tdestructive: mark test as destructive \
     \tskip_wsl: skip test on WSL, no systemd support' setup.cfg
-    '';
+  '';
 
   # docker is required for all disabled tests
   disabledTests = [
