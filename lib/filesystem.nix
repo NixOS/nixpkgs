@@ -98,19 +98,13 @@ in
   haskellPathsInDir =
     # The directory within to search
     root:
-    let # Files in the root
-        root-files = builtins.attrNames (builtins.readDir root);
-        # Files with their full paths
-        root-files-with-paths =
-          map (file:
-            { name = file; value = root + "/${file}"; }
-          ) root-files;
-        # Subdirectories of the root with a cabal file.
-        cabal-subdirs =
-          builtins.filter ({ name, value }:
-            builtins.pathExists (value + "/${name}.cabal")
-          ) root-files-with-paths;
-    in builtins.listToAttrs cabal-subdirs;
+      # Files in the root
+      builtins.attrNames (builtins.readDir root)
+      # Files with their full paths
+      |> map (file: { name = file; value = root + "/${file}"; })
+      # Subdirectories of the root with a cabal file.
+      |> builtins.filter ({ name, value }: builtins.pathExists (value + "/${name}.cabal"))
+      |> builtins.listToAttrs;
   /*
     Find the first directory containing a file matching 'pattern'
     upward from a given 'file'.
@@ -124,9 +118,11 @@ in
     # The file to start searching upward from
     file:
     let go = path:
-          let files = builtins.attrNames (builtins.readDir path);
-              matches = builtins.filter (match: match != null)
-                          (map (builtins.match pattern) files);
+          let
+            matches = builtins.readDir path
+              |> builtins.attrNames
+              |> map (builtins.match pattern)
+              |> builtins.filter (match: match != null)
           in
             if builtins.length matches != 0
               then { inherit path matches; }
@@ -149,11 +145,13 @@ in
   listFilesRecursive =
     # The path to recursively list
     dir:
-    lib.flatten (lib.mapAttrsToList (name: type:
-    if type == "directory" then
-      lib.filesystem.listFilesRecursive (dir + "/${name}")
-    else
-      dir + "/${name}"
-  ) (builtins.readDir dir));
+    builtins.readDir dir
+    |> lib.mapAttrsToList (name: type:
+      if type == "directory" then
+        lib.filesystem.listFilesRecursive (dir + "/${name}")
+      else
+        dir + "/${name}"
+    )
+    |> lib.flatten;
 
 }

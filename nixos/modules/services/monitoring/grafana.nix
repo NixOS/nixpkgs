@@ -6,7 +6,7 @@ let
   cfg = config.services.grafana;
   opt = options.services.grafana;
   provisioningSettingsFormat = pkgs.formats.yaml {};
-  declarativePlugins = pkgs.linkFarm "grafana-plugins" (builtins.map (pkg: { name = pkg.pname; path = pkg; }) cfg.declarativePlugins);
+  declarativePlugins = cfg.declarativePlugins |> builtins.map (pkg: { name = pkg.pname; path = pkg; }) |> pkgs.linkFarm "grafana-plugins";
   useMysql = cfg.settings.database.type == "mysql";
   usePostgresql = cfg.settings.database.type == "postgres";
 

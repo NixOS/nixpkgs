@@ -58,9 +58,10 @@ let
     "x86_64-windows" "i686-windows"
   ];
 
-  allParsed = map parse.mkSystemFromString all;
-
-  filterDoubles = f: map parse.doubleFromSystem (lists.filter f allParsed);
+  filterDoubles = f: all
+    |> map parse.mkSystemFromString
+    |> lists.filter f
+    |> map parse.doubleFromSystem;
 
 in {
   inherit all;

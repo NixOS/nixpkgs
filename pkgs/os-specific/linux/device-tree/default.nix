@@ -17,7 +17,7 @@ with lib; {
         # skip files without `compatible` string
         test -z "$dtbCompat" && continue
 
-        ${flip (concatMapStringsSep "\n") overlays (o: ''
+        ${overlays |> concatMapStringsSep "\n" (o: ''
         overlayCompat="$(fdtget -t s "${o.dtboFile}" / compatible)"
 
         # skip incompatible and non-matching overlays

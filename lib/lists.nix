@@ -383,7 +383,7 @@ rec {
        groupBy' builtins.add 0 (x: boolToString (x > 2)) [ 5 1 2 3 4 ]
        => { true = 12; false = 3; }
   */
-  groupBy' = op: nul: pred: lst: mapAttrs (name: foldl op nul) (groupBy pred lst);
+  groupBy' = op: nul: pred: lst: lst |> groupBy pred |> mapAttrs (name: foldl op nul);
 
   groupBy = builtins.groupBy or (
     pred: foldl' (r: e:

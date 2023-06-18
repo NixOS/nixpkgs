@@ -124,8 +124,11 @@ rec {
   */
   getLicenseFromSpdxId =
     let
-      spdxLicenses = lib.mapAttrs (id: ls: assert lib.length ls == 1; builtins.head ls)
-        (lib.groupBy (l: lib.toLower l.spdxId) (lib.filter (l: l ? spdxId) (lib.attrValues lib.licenses)));
+      spdxLicenses = lib.licenses
+        |> lib.attrValues
+        |> lib.filter (l: l ? spdxId)
+        |> lib.groupBy (l: lib.toLower l.spdxId)
+        |> lib.mapAttrs (id: ls: assert lib.length ls == 1; builtins.head ls);
     in licstr:
       spdxLicenses.${ lib.toLower licstr } or (
         lib.warn "getLicenseFromSpdxId: No license matches the given SPDX ID: ${licstr}"

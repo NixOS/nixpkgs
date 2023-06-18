@@ -480,7 +480,10 @@ rec {
 
   in mkSystem parsed;
 
-  mkSystemFromString = s: mkSystemFromSkeleton (mkSkeletonFromList (lib.splitString "-" s));
+  mkSystemFromString = s: s
+    |> lib.splitString "-"
+    |> mkSkeletonFromList
+    |> mkSystemFromSkeleton;
 
   kernelName = kernel:
     kernel.name + toString (kernel.version or "");

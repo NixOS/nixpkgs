@@ -10,11 +10,11 @@ let
 
   checks =
     mapAttrs'
-      (n: v: nameValuePair "check.${n}" (filterAttrs (_: v: v != null) v))
+      (n: v: v |> filterAttrs (_: v: v != null) |> nameValuePair "check.${n}")
       cfg.checks;
   wakeups =
     mapAttrs'
-      (n: v: nameValuePair "wakeup.${n}" (filterAttrs (_: v: v != null) v))
+      (n: v: nameValuePair "wakeup.${n}" <| filterAttrs (_: v: v != null) v)
       cfg.wakeups;
 
   # Whether the given check is enabled
@@ -207,7 +207,7 @@ in
       documentation = [ "https://autosuspend.readthedocs.io/en/latest/systemd_integration.html" ];
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      path = flatten (attrValues (filterAttrs (n: _: hasCheck n) dependenciesForChecks));
+      path = dependenciesForChecks |> filterAttrs (n: _: hasCheck n) |> attrValues |> flatten;
       serviceConfig = {
         ExecStart = ''${autosuspend}/bin/autosuspend -l ${autosuspend}/etc/autosuspend-logging.conf -c ${autosuspend-conf} daemon'';
       };

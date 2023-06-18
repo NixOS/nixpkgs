@@ -6,20 +6,18 @@ lib.mapAttrs (lname: lset: let
     free = true; # Most of our licenses are Free, explicitly declare unfree additions as such!
     deprecated = false;
   };
-
-  mkLicense = licenseDeclaration: let
-    applyDefaults = license: defaultLicense // license;
-    applySpdx = license:
-      if license ? spdxId
-      then license // { url = "https://spdx.org/licenses/${license.spdxId}.html"; }
-      else license;
-    applyRedistributable = license: { redistributable = license.free; } // license;
-  in lib.pipe licenseDeclaration [
-    applyDefaults
-    applySpdx
-    applyRedistributable
-  ];
-in mkLicense lset) ({
+  applyDefaults = license: defaultLicense // license;
+  applySpdx = license:
+    if license ? spdxId
+    then license // { url = "https://spdx.org/licenses/${license.spdxId}.html"; }
+    else license;
+  applyRedistributable = license: { redistributable = license.free; } // license;
+in
+  lset
+    |> applyDefaults
+    |> applySpdx
+    |> applyRedistributable
+) ({
   /* License identifiers from spdx.org where possible.
    * If you cannot find your license here, then look for a similar license or
    * add it to this list. The URL mentioned above is a good source for inspiration.

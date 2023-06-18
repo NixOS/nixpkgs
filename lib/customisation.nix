@@ -37,9 +37,9 @@ rec {
      see the nixpkgs manual for more information on overriding.
   */
   overrideDerivation = drv: f:
-    let
-      newDrv = derivation (drv.drvAttrs // (f drv));
-    in lib.flip (extendDerivation (builtins.seq drv.drvPath true)) newDrv (
+      # The new derivation
+      derivation (drv.drvAttrs // (f drv))
+      |> extendDerivation (builtins.seq drv.drvPath true) (
       { meta = drv.meta or {};
         passthru = if drv ? passthru then drv.passthru else {};
       }
@@ -80,14 +80,14 @@ rec {
       result = f origArgs;
 
       # Creates a functor with the same arguments as f
-      copyArgs = g: lib.setFunctionArgs g (lib.functionArgs f);
+      copyArgs = g: lib.setFunctionArgs g <| lib.functionArgs f;
       # Changes the original arguments with (potentially a function that returns) a set of new attributes
       overrideWith = newArgs: origArgs // (if lib.isFunction newArgs then newArgs origArgs else newArgs);
 
       # Re-call the function but with different arguments
-      overrideArgs = copyArgs (newArgs: makeOverridable f (overrideWith newArgs));
+      overrideArgs = copyArgs (newArgs: makeOverridable f <| overrideWith newArgs);
       # Change the result of the function call by applying g to it
-      overrideResult = g: makeOverridable (copyArgs (args: g (f args))) origArgs;
+      overrideResult = g: origArgs |> copyArgs (args: g (f args)) |> makeOverridable;
     in
       if builtins.isAttrs result then
         result // {
@@ -136,25 +136,26 @@ rec {
 
       # A list of argument names that the function requires, but
       # wouldn't be passed to it
-      missingArgs = lib.attrNames
-        # Filter out arguments that have a default value
-        (lib.filterAttrs (name: value: ! value)
+      missingArgs = allArgs
+        |> lib.attrNames
         # Filter out arguments that would be passed
-        (removeAttrs fargs (lib.attrNames allArgs)));
+        |> removeAttrs fargs
+        # Filter out arguments that have a default value
+        |> lib.filterAttrs (name: value: ! value)
+        lib.attrNames;
 
       # Get a list of suggested argument names for a given missing one
-      getSuggestions = arg: lib.pipe (autoArgs // args) [
-        lib.attrNames
+      getSuggestions = arg: (autoArgs // args)
+        |> lib.attrNames
         # Only use ones that are at most 2 edits away. While mork would work,
         # levenshteinAtMost is only fast for 2 or less.
-        (lib.filter (lib.strings.levenshteinAtMost 2 arg))
+        |>  lib.filter (lib.strings.levenshteinAtMost 2 arg)
         # Put strings with shorter distance first
-        (lib.sort (x: y: lib.strings.levenshtein x arg < lib.strings.levenshtein y arg))
+        |>  lib.sort (x: y: lib.strings.levenshtein x arg < lib.strings.levenshtein y arg)
         # Only take the first couple results
-        (lib.take 3)
+        |> lib.take 3
         # Quote all entries
-        (map (x: "\"" + x + "\""))
-      ];
+        |> map (x: "\"" + x + "\"");
 
       prettySuggestions = suggestions:
         if suggestions == [] then ""
@@ -275,10 +276,12 @@ rec {
     let self = f self // {
           newScope = scope: newScope (self // scope);
           callPackage = self.newScope {};
-          overrideScope = g: lib.warn
-            "`overrideScope` (from `lib.makeScope`) is deprecated. Do `overrideScope' (self: super: { … })` instead of `overrideScope (super: self: { … })`. All other overrides have the parameters in that order, including other definitions of `overrideScope`. This was the only definition violating the pattern."
-            (makeScope newScope (lib.fixedPoints.extends (lib.flip g) f));
-          overrideScope' = g: makeScope newScope (lib.fixedPoints.extends g f);
+          overrideScope = g:
+            lib.fixedPoints.extends (lib.flip g) f
+            |> makeScope newScope
+            |> lib.warn
+            "`overrideScope` (from `lib.makeScope`) is deprecated. Do `overrideScope' (self: super: { … })` instead of `overrideScope (super: self: { … })`. All other overrides have the parameters in that order, including other definitions of `overrideScope`. This was the only definition violating the pattern.";
+          ovˍerrideScope' = g: makeScope newScope <| lib.fixedPoints.extends g f;
           packages = f;
         };
     in self;

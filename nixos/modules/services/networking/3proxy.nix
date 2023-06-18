@@ -332,13 +332,13 @@ in {
         ''users $"${cfg.usersFile}"''
       }
 
-      ${concatMapStringsSep "\n" (service: ''
+      ${cfg.services |> concatMapStringsSep "\n" (service: ''
         auth ${concatStringsSep " " service.auth}
 
         ${optionalString (cfg.denyPrivate)
         "deny * * ${optionalList cfg.privateRanges}"}
 
-        ${concatMapStringsSep "\n" (acl:
+        ${service.acl |> concatMapStringsSep "\n" (acl:
           "${acl.rule} ${
             concatMapStringsSep " " optionalList [
               acl.users
@@ -346,7 +346,7 @@ in {
               acl.targets
               acl.targetPorts
             ]
-          }") service.acl}
+          }")}
 
         maxconn ${toString service.maxConnections}
 
@@ -360,7 +360,7 @@ in {
         }
 
         flush
-      '') cfg.services}
+      '')}
       ${optionalString (cfg.extraConfig != null) cfg.extraConfig}
     '');
     systemd.services."3proxy" = {
