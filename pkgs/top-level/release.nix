@@ -26,7 +26,7 @@
       # for no real reason.
       # Remove them for 23.11.
       "nodejs-16.20.0"
-      "openssl-1.1.1t"
+      "openssl-1.1.1u"
     ];
   }; }
 }:
