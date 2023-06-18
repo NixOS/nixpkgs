@@ -10233,6 +10233,8 @@ with pkgs;
 
   mirakurun = callPackage ../applications/video/mirakurun { };
 
+  miru = callPackage ../applications/video/miru { };
+
   miredo = callPackage ../tools/networking/miredo { };
 
   mirrorbits = callPackage ../servers/mirrorbits { };
