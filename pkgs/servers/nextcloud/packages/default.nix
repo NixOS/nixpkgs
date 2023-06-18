@@ -15,7 +15,7 @@ let packages = self:
     # This takes the data generated from the go tool.
     mkNextcloudDerivation = self.callPackage ({ }: { data }:
       pkgs.fetchNextcloudApp {
-        inherit (data) url sha256;
+        inherit (data) url sha256 description homepage licenses;
       }) {};
 
   } // lib.mapAttrs (type: pkgs: lib.makeExtensible (_: lib.mapAttrs (pname: data: self.mkNextcloudDerivation { inherit data; }) pkgs)) generatedJson;
