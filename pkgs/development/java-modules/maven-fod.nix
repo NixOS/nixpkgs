@@ -4,12 +4,12 @@
 }:
 
 { src
-, patches ? []
+, patches ? [ ]
 , pname
 , version
 , mvnSha256 ? "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
 , mvnHash ? "sha256-${mvnSha256}"
-, mvnFetchExtraArgs ? {}
+, mvnFetchExtraArgs ? { }
 , mvnParameters ? ""
 , ...
 } @args:

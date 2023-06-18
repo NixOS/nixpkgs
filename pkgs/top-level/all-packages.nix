@@ -6299,6 +6299,8 @@ with pkgs;
 
   cider = callPackage ../applications/audio/cider { };
 
+  iat = callPackage ../tools/cd-dvd/iat { };
+
   isolyzer = callPackage ../tools/cd-dvd/isolyzer { };
 
   isomd5sum = callPackage ../tools/cd-dvd/isomd5sum { };
@@ -36302,6 +36304,8 @@ with pkgs;
   among-sus = callPackage ../games/among-sus { };
 
   antsimulator = callPackage ../games/antsimulator { };
+
+  atlauncher = callPackage ../games/atlauncher { };
 
   augustus = callPackage ../games/augustus { };
 

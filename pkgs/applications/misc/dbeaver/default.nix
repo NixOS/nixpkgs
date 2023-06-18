@@ -19,26 +19,31 @@
 , javaPackages
 }:
 
+let
+  mavenJdk17 = maven.override {
+    jdk = jdk17;
+  };
+in
 (javaPackages.mavenfod.override {
-  inherit maven; # use overridden maven version (see dbeaver's entry in all-packages.nix)
+  maven = mavenJdk17;
 }) rec {
   pname = "dbeaver";
-  version = "22.2.2"; # When updating also update mvnSha256
+  version = "22.2.2"; # When updating also update mvnHash
 
   src = fetchFromGitHub {
     owner = "dbeaver";
     repo = "dbeaver";
     rev = version;
-    sha256 = "sha256-TUdtrhQ1JzqZx+QNauNA1P/+WDSSeOGIgGX3SdS0JTI=";
+    hash = "sha256-TUdtrhQ1JzqZx+QNauNA1P/+WDSSeOGIgGX3SdS0JTI=";
   };
 
-  mvnSha256 = "uu7UNRIuAx2GOh4+YxxoGRcV5QO8C72q32e0ynJdgFo=";
+  mvnHash = "sha256-87pf7XRXCuZlAbL54pX+a5Lo/874DmUr/W37/V+5YpQ=";
   mvnParameters = "-P desktop,all-platforms";
 
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
-    maven
+    mavenJdk17
   ];
 
   buildInputs = [
@@ -76,7 +81,7 @@
         aarch64-darwin = "aarch64";
         aarch64-linux = "aarch64";
         x86_64-darwin = "x86_64";
-        x86_64-linux  = "x86_64";
+        x86_64-linux = "x86_64";
       };
 
       systemPlatform = platformMap.${stdenv.hostPlatform.system} or (throw "dbeaver not supported on ${stdenv.hostPlatform.system}");
@@ -129,7 +134,7 @@
     '';
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # dependencies from maven
+      binaryBytecode # dependencies from maven
     ];
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];

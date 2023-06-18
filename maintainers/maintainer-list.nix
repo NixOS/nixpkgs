@@ -5795,6 +5795,13 @@
     githubId = 48872998;
     name = "Seth";
   };
+  getpsyched = {
+    name = "Priyanshu Tripathi";
+    email = "priyanshutr@proton.me";
+    matrix = "@getpsyched:matrix.org";
+    github = "getpsyched";
+    githubId = 43472218;
+  };
   gfrascadorio = {
     email = "gfrascadorio@tutanota.com";
     github = "gfrascadorio";
