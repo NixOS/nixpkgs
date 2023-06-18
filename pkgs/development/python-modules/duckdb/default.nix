@@ -2,7 +2,6 @@
 , buildPythonPackage
 , duckdb
 , google-cloud-storage
-, mypy
 , numpy
 , pandas
 , psutil
@@ -15,9 +14,8 @@ buildPythonPackage rec {
   inherit (duckdb) pname version src patches;
   format = "setuptools";
 
-  # we can't use sourceRoot otherwise patches don't apply, because the patches
-  # apply to the C++ library
   postPatch = ''
+    # we can't use sourceRoot otherwise patches don't apply, because the patches apply to the C++ library
     cd tools/pythonpkg
 
     # 1. let nix control build cores
@@ -25,6 +23,9 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "multiprocessing.cpu_count()" "$NIX_BUILD_CORES" \
       --replace "setuptools_scm<7.0.0" "setuptools_scm"
+
+      # avoid dependency on mypy
+      rm tests/stubs/test_stubs.py
   '';
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -41,7 +42,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     google-cloud-storage
-    mypy
     psutil
     pytestCheckHook
   ];

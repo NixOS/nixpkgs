@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , loguru
 , pytest-asyncio
-, pytest-mypy
 , pytestCheckHook
 , pythonOlder
 }:
@@ -24,8 +23,9 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    sed -i '/--cov/d' pytest.ini
-    sed -i '/--mypy/d' pytest.ini
+    sed -i pytest.ini \
+      -e '/--cov/d' \
+      -e '/--mypy/d'
   '';
 
   passthru.optional-dependencies = {
@@ -36,7 +36,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
-    pytest-mypy
     pytestCheckHook
   ] ++ passthru.optional-dependencies.loguru;
 

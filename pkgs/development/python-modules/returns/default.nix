@@ -5,13 +5,9 @@
 , fetchFromGitHub
 , httpx
 , hypothesis
-, mypy
 , poetry-core
 , pytestCheckHook
 , pytest-aio
-, pytest-cov
-, pytest-mypy
-, pytest-mypy-plugins
 , pytest-subtests
 , setuptools
 , trio
@@ -30,6 +26,12 @@ buildPythonPackage rec {
     hash = "sha256-28WYjrjmu3hQ8+Snuvl3ykTd86eWYI97AE60p6SVwDQ=";
   };
 
+  postPatch = ''
+    sed -i setup.cfg \
+      -e '/--cov.*/d' \
+      -e '/--mypy.*/d'
+  '';
+
   nativeBuildInputs = [
     poetry-core
   ];
@@ -38,17 +40,17 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  preCheck = ''
+    rm -rf returns/contrib/mypy
+  '';
+
   nativeCheckInputs = [
     anyio
     curio
     httpx
     hypothesis
-    mypy
     pytestCheckHook
     pytest-aio
-    pytest-cov
-    pytest-mypy
-    pytest-mypy-plugins
     pytest-subtests
     setuptools
     trio
@@ -58,7 +60,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Make your functions return something meaningful, typed, and safe!";
-    homepage = "returns.rtfd.io";
+    homepage = "https://github.com/dry-python/returns";
     license = licenses.bsd2;
     maintainers = [ maintainers.jessemoore ];
   };

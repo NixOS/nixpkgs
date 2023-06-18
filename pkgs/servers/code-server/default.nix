@@ -287,6 +287,9 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       inherit (nixosTests) code-server;
     };
+    # vscode-with-extensions compatibility
+    executableName = "code-server";
+    longName = "Visual Studio Code Server";
   };
 
   meta = {
