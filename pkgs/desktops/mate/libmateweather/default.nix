@@ -3,6 +3,8 @@
 , fetchurl
 , pkg-config
 , gettext
+, glib
+, libxml2
 , gtk3
 , libsoup
 , tzdata
@@ -21,6 +23,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     gettext
+    glib # glib-compile-schemas
+    libxml2 # xmllint
   ];
 
   buildInputs = [
