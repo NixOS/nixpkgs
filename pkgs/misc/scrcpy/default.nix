@@ -10,7 +10,7 @@
 , runtimeShell
 , installShellFiles
 
-, platform-tools
+, android-tools
 , ffmpeg
 , libusb1
 , SDL2
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     ln -s "${prebuilt_server}" "$out/share/scrcpy/scrcpy-server"
 
     # runtime dep on `adb` to push the server
-    wrapProgram "$out/bin/scrcpy" --prefix PATH : "${platform-tools}/bin"
+    wrapProgram "$out/bin/scrcpy" --prefix PATH : "${android-tools}/bin"
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace $out/share/applications/scrcpy-console.desktop \
       --replace "/bin/bash" "${runtimeShell}"
