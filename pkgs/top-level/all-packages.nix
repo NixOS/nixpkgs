@@ -6805,6 +6805,8 @@ with pkgs;
 
   trurl = callPackage ../tools/networking/trurl { };
 
+  curv = callPackage ../applications/graphics/curv { };
+
   cunit = callPackage ../tools/misc/cunit { };
   bcunit = callPackage ../tools/misc/bcunit { };
 
