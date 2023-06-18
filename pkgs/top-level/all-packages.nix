@@ -3304,6 +3304,8 @@ with pkgs;
 
   codespell = callPackage ../development/tools/codespell { };
 
+  codux = callPackage ../applications/editors/codux { };
+
   coolreader = libsForQt5.callPackage ../applications/misc/coolreader { };
 
   corsair = with python3Packages; toPythonApplication corsair-scan;
