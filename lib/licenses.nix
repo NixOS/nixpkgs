@@ -717,6 +717,11 @@ in mkLicense lset) ({
     fullName = "LaTeX Project Public License v1.2";
   };
 
+  lppl13a = {
+    spdxId = "LPPL-1.3a";
+    fullName = "LaTeX Project Public License v1.3a";
+  };
+
   lppl13c = {
     spdxId = "LPPL-1.3c";
     fullName = "LaTeX Project Public License v1.3c";
