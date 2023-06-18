@@ -204,7 +204,7 @@ in {
     package = mkOption {
       type = types.package;
       description = lib.mdDoc "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud24" "nextcloud25" "nextcloud26" ];
+      relatedPackages = [ "nextcloud24" "nextcloud25" "nextcloud26" "nextcloud27" ];
     };
     phpPackage = mkOption {
       type = types.package;
