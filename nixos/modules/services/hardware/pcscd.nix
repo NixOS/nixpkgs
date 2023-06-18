@@ -22,7 +22,7 @@ in
     plugins = mkOption {
       type = types.listOf types.package;
       defaultText = literalExpression "[ pkgs.ccid ]";
-      example = literalExpression "[ pkgs.pcsc-cyberjack ]";
+      example = literalExpression "with pkgs; [ pcsc-cyberjack yubikey-personalization ]";
       description = lib.mdDoc "Plugin packages to be used for PCSC-Lite.";
     };
 
