@@ -506,6 +506,11 @@ in mkLicense lset) ({
     url = "http://www.schristiancollins.com/generaluser.php"; # license included in sources
   };
 
+  gfsl = {
+    fullName = "GUST Font Source License";
+    url = "http://www.gust.org.pl/fonts/licenses/GUST-FONT-SOURCE-LICENSE.txt";
+  };
+
   gpl1Only = {
     spdxId = "GPL-1.0-only";
     fullName = "GNU General Public License v1.0 only";
