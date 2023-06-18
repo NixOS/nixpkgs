@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "jazzband";
     repo = "prettytable";
     rev = "refs/tags/${version}";
-    hash= "sha256-J6oWNug2MEkUZSi67mM5H/Nf4tdSTB/ku34plp1XWCM=";
+    hash = "sha256-J6oWNug2MEkUZSi67mM5H/Nf4tdSTB/ku34plp1XWCM=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

@@ -42,7 +42,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "jupyter_server";
     inherit version;
-    hash= "sha256-jddZkukLfKVWeUoe1cylEmPGl6vG0N9WGvV0qhwKAz8=";
+    hash = "sha256-jddZkukLfKVWeUoe1cylEmPGl6vG0N9WGvV0qhwKAz8=";
   };
 
   nativeBuildInputs = [

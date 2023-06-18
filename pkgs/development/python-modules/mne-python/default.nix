@@ -70,5 +70,6 @@ buildPythonPackage rec {
     homepage = "https://mne.tools";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
+    pypiName = "mne";
   };
 }

@@ -294,6 +294,10 @@ let
     # https://github.com/NixOS/hydra/blob/53335323ae79ca1a42643f58e520b376898ce641/doc/manual/src/jobs.md#meta-fields
     isHydraChannel = bool;
 
+    # Used by update-python-libraries for Python modules that have a PyPI name
+    # different from their pname
+    pypiName = nullOr str;
+
     # Weirder stuff that doesn't appear in the documentation?
     maxSilent = int;
     knownVulnerabilities = listOf str;

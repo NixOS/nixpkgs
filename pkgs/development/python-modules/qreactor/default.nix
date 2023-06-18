@@ -37,5 +37,6 @@ buildPythonPackage rec {
     description = "Twisted and PyQt5/qtpy eventloop integration base";
     license = licenses.mit;
     maintainers = with maintainers; [ raboof ];
+    pypiName = "qt-reactor";
   };
 }

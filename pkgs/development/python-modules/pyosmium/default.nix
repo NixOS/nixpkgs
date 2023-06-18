@@ -64,5 +64,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/osmcode/pyosmium/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd2;
     maintainers = with maintainers; [ sikmir ];
+    pypiName = "osmium";
   };
 }

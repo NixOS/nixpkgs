@@ -30,5 +30,6 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ siraben ];
     platforms = platforms.unix;
+    pypiName = "tree-sitter";
   };
 }

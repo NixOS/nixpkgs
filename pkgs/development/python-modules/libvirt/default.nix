@@ -24,5 +24,6 @@ buildPythonPackage rec {
     description = "libvirt Python bindings";
     license = licenses.lgpl2;
     maintainers = [ maintainers.fpletz ];
+    pypiName = "libvirt-python";
   };
 }

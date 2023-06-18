@@ -31,5 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/libnano/primer3-py";
     license = with licenses; [ gpl2Only ];
     maintainers = with maintainers; [ fab ];
+    pypiName = "primer3-py";
   };
 }
