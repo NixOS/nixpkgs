@@ -52,8 +52,9 @@
   mlcc = true;
   mlterm-menu = true;
   # Note that according to upstream's ./configure script, to disable
-  # mlimgloader you have to disable _all_ tools. See:
-  # https://github.com/arakiken/mlterm/issues/69
+  # mlimgloader you have to --disable-image, See:
+  # https://github.com/arakiken/mlterm/issues/69 and see also the
+  # `enableFeatures.image` flag.
   mlimgloader = true;
   registobmp = true;
   mlfc = true;
@@ -73,6 +74,8 @@
   bidi = true;
   # Open Type layout support, (substituting glyphs with opentype fonts)
   otl = true;
+  # See comment above for enableTools.mlimgloader
+  image = enableTools.mlimgloader;
 }
 # Configure the Exec directive in the generated .desktop file
 , desktopBinary ? (
