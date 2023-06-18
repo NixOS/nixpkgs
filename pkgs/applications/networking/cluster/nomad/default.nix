@@ -74,4 +74,15 @@ rec {
     vendorSha256 = "sha256-05BhKF6kx0wbu74cidpTFhUN668R/AxV6qWmchCm/WE=";
     passthru.tests.nomad = nixosTests.nomad;
   };
+
+  nomad_1_5 = generic {
+    buildGoModule = buildGo120Module;
+    version = "1.5.6";
+    sha256 = "sha256-eFzGaTJ9BcK5F10lkTKB3sNaGZsmZ0BbPZI6kT5ZUpo=";
+    vendorSha256 = "sha256-tOUQr44wUhhCccvj4dCI7fvLMrKaEX7xY7035Q3wU3M=";
+    passthru.tests.nomad = nixosTests.nomad;
+    preCheck = ''
+      export PATH="$PATH:/build/go/bin"
+    '';
+  };
 }
