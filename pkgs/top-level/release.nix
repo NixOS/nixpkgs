@@ -212,6 +212,17 @@ let
     (mapTestOn ((packagePlatforms pkgs) // {
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
+      # Include the haskell-language-server builds for the latest GHCs
+      #
+      # Note:
+      #   - Haskell languages server (HLS) is a key development tool in the GHC ecosystem.
+      #   - It is tightly bundled with each release of the GHC, and it needs rebuilt for each GHC.
+      #   - Building HLS locally is time and memory consuming.
+      #   - Having them prebuilt as part of the release hydra job could produce a cached HLS for each GHC.
+      haskell-language-servers = packagePlatforms (builtins.foldl' (acc: v: acc // {
+        ${v} = pkgs.haskell.packages.${v}.haskell-language-server;
+      }) {} ["ghc92" "ghc94" "ghc96"]);
+
       idrisPackages = packagePlatforms pkgs.idrisPackages;
       agdaPackages = packagePlatforms pkgs.agdaPackages;
 
