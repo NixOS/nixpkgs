@@ -300,6 +300,11 @@ in mkLicense lset) ({
     fullName = "Creative Commons Attribution Share Alike 1.0";
   };
 
+  cc-by-sa-20 = {
+    spdxId = "CC-BY-SA-2.0";
+    fullName = "Creative Commons Attribution Share Alike 2.0";
+  };
+
   cc-by-sa-25 = {
     spdxId = "CC-BY-SA-2.5";
     fullName = "Creative Commons Attribution Share Alike 2.5";
