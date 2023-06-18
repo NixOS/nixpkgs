@@ -69,10 +69,7 @@ in buildPythonPackage rec {
         ''--exclude="(${builtins.concatStringsSep "|" excludedTests})"''}
   '';
 
-  # https://github.com/cython/cython/issues/2785
-  # Temporary solution
-  doCheck = false;
-  # doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.isDarwin;
 
   # force regeneration of generated code in source distributions
   # https://github.com/cython/cython/issues/5089
