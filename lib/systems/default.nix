@@ -33,6 +33,26 @@ let
      then "${pkgs.mmixware}/bin/mmix"
      else null;
 
+ # These definitions have to be floated out into a `let … in` binding to ensure
+ # that they are the same exact value struct in the evaluating Nix
+ # implementation. Due to a quirk in how equality is implemented, values including
+ # functions are considered equal if they have the same memory location as long as
+ # they are inside a container value and not compared directly. Thus any attribute
+ # set will compare equal to itself even if it contains functions.
+ # By floating the functions out of the attribute set construction we'll ensure
+ # that the functions have the same memory location regardless of what call to
+ # lib.systems.elaborate produced them. This ensures that platform sets will be
+ # equal even if they have been constructed by different calls to lib.systems.elaborate
+ # —as long as their other contents are the same.
+ #
+ # For details see:
+ # - https://github.com/NixOS/nix/issues/3371
+ # - https://code.tvl.fyi/about/tvix/docs/value-pointer-equality.md
+ isCompatiblePlaceholder      = _: throw "2022-05-23: isCompatible has been removed in favor of canExecute, refer to the 22.11 changelog for details";
+ canExecutePlaceholder        = _: throw "2023-06-17: `platform.canExecute` has been removed in favor of `lib.systems.canExecute platform`";
+ emulatorAvailablePlaceholder = _: throw "2023-06-17: `platform.emulatorAvailable` has been removed in favor of `lib.systems.emulatorAvailable platform`";
+ emulatorPlaceholder          = _: throw "2023-06-17: `platform.emulator` has been removed in favor of `lib.systems.emulator platform`";
+
 in rec {
   doubles = import ./doubles.nix { inherit lib; };
   parse = import ./parse.nix { inherit lib; };
@@ -108,11 +128,11 @@ in rec {
       # Either of these can be losslessly-extracted from `parsed` iff parsing succeeds.
       system = parse.doubleFromSystem final.parsed;
       config = parse.tripleFromSystem final.parsed;
-      # Determine whether we can execute binaries built for the provided platform.
-      isCompatible      = _: throw "2022-05-23: isCompatible has been removed in favor of canExecute, refer to the 22.11 changelog for details";
-      canExecute        = _: throw "2022-06-17: `platform.canExecute` has been removed in favor of `lib.systems.canExecute platform`";
-      emulatorAvailable = _: throw "2022-06-17: `platform.emulatorAvailable` has been removed in favor of `lib.systems.emulatorAvailable platform`";
-      emulator          = _: throw "2022-06-17: `platform.emulator` has been removed in favor of `lib.systems.emulator platform`";
+      # Placeholders for removed functions that inform the user about their replacements
+      isCompatible      = isCompatiblePlaceholder;
+      canExecute        = canExecutePlaceholder;
+      emulatorAvailable = emulatorAvailablePlaceholder;
+      emulator          = emulatorPlaceholder;
       # Derived meta-data
       libc =
         /**/ if final.isDarwin              then "libSystem"

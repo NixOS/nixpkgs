@@ -48,6 +48,30 @@ lib.runTests (
   testunix = mseteq unix (linux ++ darwin ++ freebsd ++ openbsd ++ netbsd ++ illumos ++ cygwin ++ redox);
 })
 
+# Verify that pointer equality doesn't influence the result of comparing two
+# platform sets that are the same, but have been constructed by independent calls
+# to `lib.systems.elaborate`.
+// builtins.listToAttrs (builtins.map (input: {
+  name = "test_equality_same_argument_${input}";
+  value = {
+    expr = lib.systems.elaborate input == lib.systems.elaborate input;
+    expected = true;
+  };
+}) [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" "x86_64-unknown-linux-musl" "powerpc64le-unknown-linux-gnu" "riscv64-linux" ])
+
+# Verify that pointer equality doesn't influence the result of comparing two
+# platform sets that are the same, but have been constructed by two different,
+# but effectively equivalent arguments to `lib.systems.elaborate` (in one case
+# we pass the `system` as a string, the other time it is placed in a skeleton
+# platform attribute set).
+// builtins.listToAttrs (builtins.map (system: {
+  name = "test_equality_equivalent_argument_${system}";
+  value = {
+    expr = lib.systems.elaborate system == lib.systems.elaborate { inherit system; };
+    expected = true;
+  };
+}) [ "x86_64-linux" "riscv64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-netbsd" ])
+
 // {
   test_equals_example_x86_64-linux = {
     expr = lib.systems.equals (lib.systems.elaborate "x86_64-linux") (lib.systems.elaborate "x86_64-linux");
