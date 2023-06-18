@@ -72,9 +72,9 @@ let
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.yarny ];
-    description = "IBM Spectrum Protect (Tivoli Storage Manager) CLI and API";
+    description = "IBM Storage Protect (Tivoli Storage Manager) CLI and API";
     longDescription = ''
-      IBM Spectrum Protect (Tivoli Storage Manager) provides
+      IBM Storage Protect (Tivoli Storage Manager) provides
       a single point of control for backup and recovery.
       This package contains the client software, that is,
       a command line client and linkable libraries.
@@ -104,10 +104,10 @@ let
 
   unwrapped = stdenv.mkDerivation rec {
     name = "tsm-client-${version}-unwrapped";
-    version = "8.1.17.2";
+    version = "8.1.19.0";
     src = fetchurl {
       url = mkSrcUrl version;
-      hash = "sha512-DZCXb3fZO2VYJJJUdjGt9TSdrYNhf8w7QMgEERzX8xb74jjA+UPNI2dbNCeja/vrgRYLYipWZPyjTQJmkxlM/g==";
+      hash = "sha512-HF4w8R6R+7gfIFsYlO3R6mkDxMo4TvL/KeK7IuuspGLiajGnBU2B7yg9/oUiT11YUBHjklaINyceQWWJoFSQJw==";
     };
     inherit meta passthru;
 

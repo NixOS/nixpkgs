@@ -6805,6 +6805,8 @@ with pkgs;
 
   trurl = callPackage ../tools/networking/trurl { };
 
+  curv = callPackage ../applications/graphics/curv { };
+
   cunit = callPackage ../tools/misc/cunit { };
   bcunit = callPackage ../tools/misc/bcunit { };
 
@@ -9248,9 +9250,7 @@ with pkgs;
 
   kdiff3 = libsForQt5.callPackage ../tools/text/kdiff3 { };
 
-  kube-router = callPackage ../applications/networking/cluster/kube-router {
-    buildGoModule = buildGo119Module; # go 1.20 build failure
-  };
+  kube-router = callPackage ../applications/networking/cluster/kube-router { };
 
   kubepug = callPackage ../development/tools/kubepug { };
 

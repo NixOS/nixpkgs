@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "cloudnativelabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/ruSSq+iHmJDFHH+mLoqtdljAGlc15lXjTqq+luJIU8=";
+    hash = "sha256-/ruSSq+iHmJDFHH+mLoqtdljAGlc15lXjTqq+luJIU8=";
   };
 
   vendorHash = "sha256-U2TvH4TPBI6verEcyv0Z+ZFAKbADgzncJhW1IAJw4Ms=";
