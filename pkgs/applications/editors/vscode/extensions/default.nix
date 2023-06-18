@@ -651,15 +651,15 @@ let
         mktplcRef = {
           name = "ruff";
           publisher = "charliermarsh";
-          version = "2023.22.0";
-          sha256 = "sha256-RhEDf/EbUD5YdHDyoZwr68OfOgKfkSXJFsKcLHC5bcc=";
+          version = "2023.24.0";
+          sha256 = "sha256-wwunbseX/VxoU8mRDankDim6PQy8uwEhLXR4RUVo7Xw=";
         };
         meta = {
           license = lib.licenses.mit;
-          changelog = "https://github.com/charliermarsh/ruff-vscode/releases";
+          changelog = "https://github.com/astral-sh/ruff-vscode/releases";
           description = "Ruff extension for Visual Studio Code";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff";
-          homepage = "https://github.com/charliermarsh/ruff-vscode/";
+          homepage = "https://github.com/astral-sh/ruff-vscode/";
           maintainers = [ lib.maintainers.azd325 ];
         };
       };
