@@ -18045,11 +18045,11 @@ with pkgs;
   # available as `pythonPackages.tkinter` and can be used as any other Python package.
   # When switching these sets, please update docs at ../../doc/languages-frameworks/python.md
   python2 = python27;
-  python3 = python310;
+  python3 = python311;
 
   # pythonPackages further below, but assigned here because they need to be in sync
   python2Packages = dontRecurseIntoAttrs python27Packages;
-  python3Packages = dontRecurseIntoAttrs python310Packages;
+  python3Packages = dontRecurseIntoAttrs python311Packages;
 
   pypy = pypy2;
   pypy2 = pypy27;
