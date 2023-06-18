@@ -17,6 +17,12 @@ let
   pkgList = rec {
     combined = combinePkgs (lib.attrValues pkgSet);
     all = lib.filter pkgFilter combined;
+    licenses = let
+        concatLicenses = lib.foldl (acc: el: if builtins.elem el acc then acc else acc ++ [ el ]);
+      in lib.foldl
+        (acc: pkg:
+          concatLicenses acc (lib.toList (pkg.meta.license or [])))
+        [] all;
     splitBin = builtins.partition (p: p.tlType == "bin") all;
     bin = splitBin.right
       ++ lib.optional
@@ -84,6 +90,7 @@ let
 in (buildEnv {
 
   inherit name;
+  meta.license = pkgList.licenses;
 
   ignoreCollisions = false;
 
