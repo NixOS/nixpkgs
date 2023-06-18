@@ -28,6 +28,7 @@
 , ninja
 , openmp
 , rocmSupport ? false
+, static ? false
 , stdenv
 , symlinkJoin
 }:
@@ -145,6 +146,8 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DGPU_TARGET=${gpuTargetString}"
+  ] ++ lists.optionals static [
+    "-DBUILD_SHARED_LIBS=OFF"
   ] ++ lists.optionals cudaSupport [
     "-DCMAKE_CUDA_ARCHITECTURES=${cudaArchitecturesString}"
     "-DMIN_ARCH=${minArch}" # Disarms magma's asserts
