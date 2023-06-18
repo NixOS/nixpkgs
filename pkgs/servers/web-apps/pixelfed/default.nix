@@ -30,7 +30,6 @@ in package.override rec {
   pname = "pixelfed";
   version = "0.11.8";
 
-  # GitHub distribution does not include vendored files
   src = fetchFromGitHub {
     owner = "pixelfed";
     repo = pname;
