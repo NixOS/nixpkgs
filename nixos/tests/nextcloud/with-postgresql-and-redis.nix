@@ -97,5 +97,8 @@ in {
     client.succeed(
         "${withRcloneEnv} ${diffSharedFile}"
     )
+
+    # redis cache should not be empty
+    nextcloud.fail('test "[]" = "$(redis-cli --json KEYS "*")"')
   '';
 })) args
