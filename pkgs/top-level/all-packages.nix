@@ -12285,9 +12285,7 @@ with pkgs;
     inherit (darwin.apple_sdk.libs) utmp;
   };
 
-  scrcpy = callPackage ../misc/scrcpy {
-    inherit (androidenv.androidPkgs_9_0) platform-tools;
-  };
+  scrcpy = callPackage ../misc/scrcpy { };
 
   screen-message = callPackage ../tools/X11/screen-message { };
 
