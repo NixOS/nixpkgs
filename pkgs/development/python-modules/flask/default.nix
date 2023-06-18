@@ -19,12 +19,12 @@
 
 buildPythonPackage rec {
   pname = "flask";
-  version = "2.2.2";
+  version = "2.2.5";
 
   src = fetchPypi {
     pname = "Flask";
     inherit version;
-    sha256 = "sha256-ZCxFDRnErUgvlnKb0qj20yVUqh4jH09rTn5SZLFsyis=";
+    sha256 = "sha256-7e6bCn/yZiG9WowQ/0hK4oc3okENmbC7mmhQx/uXeqA=";
   };
 
   propagatedBuildInputs = [
