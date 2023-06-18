@@ -932,25 +932,25 @@ let
           sources = {
             "x86_64-linux" = {
               arch = "linux-x64";
-              sha256 = "sha256-ccMkaXppkgdsN2XtSFaw85xLUCFMDF1z+XidP0KAHCA=";
+              sha256 = "sha256-L56vG9U2fqtaZIXQ5xepwLibOs/WyHQj/t2EIY7ZXvM=";
             };
             "x86_64-darwin" = {
               arch = "darwin-x64";
-              sha256 = "17lsf736jagw2q6dwxvpj2dspiqrlyvmmhv6p6cf81vxijpgmq9d";
+              sha256 = "0rx2dkaz0qpmck1k4hg0jpksixhwcrq0sndimx0f44jcnc7aby21";
             };
             "aarch64-linux" = {
               arch = "linux-arm64";
-              sha256 = "1cnfzzpikcsp1l1a8amim0fz5r1pkszn231cfl745ggiksbjyhsp";
+              sha256 = "13swwh1br6ry64hlq1yjbrbq71vyg44h0pb907zdjabwim27y88x";
             };
             "aarch64-darwin" = {
               arch = "darwin-arm64";
-              sha256 = "0jli6l9qrssnpm5a3m1g7g1dw2i5bv9wxd0gqg6vda7dwfs2f494";
+              sha256 = "0fsisxc3vcyqk634xbk2rdcw2g8ablv3n46y6bz20i0npa4clhpa";
             };
           };
         in {
           name = "phptools-vscode";
           publisher = "devsense";
-          version = "1.33.13032";
+          version = "1.34.13295";
         } // sources.${stdenv.system};
 
         nativeBuildInputs = [
