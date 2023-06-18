@@ -23,16 +23,21 @@
 
 stdenv.mkDerivation rec {
   pname = "pot";
-  version = "1.1.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "pot-app";
     repo = "pot-desktop";
     rev = version;
-    hash = "sha256-MDBIChljWlztzjdyrdkzvrLuuJ0PAUonHj1hCJkqYCc=";
+    hash = "sha256-AiDQleRMuLExaVuiLvubebobDaK2YJTWjZ00F5UptuQ=";
   };
 
   sourceRoot = "source/src-tauri";
+
+  postUnpack = ''
+    sed -i -e 's/dev/v1/' source/src-tauri/Cargo.toml
+    cp ${./Cargo.lock} source/src-tauri/Cargo.lock
+  '';
 
   postPatch = ''
     substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
@@ -70,16 +75,16 @@ stdenv.mkDerivation rec {
 
     dontFixup = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-2kQuhlQnt1gGajPWXG9rj/T/SYkJStql1h4rgkZFhXc=";
+    outputHash = "sha256-HJdVAjvHmhvztJMR9rVniWl12sGQYTyZojEYaoKnn5M=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "tauri-plugin-single-instance-0.0.0" = "sha256-M6uGcf4UWAU+494wAK/r2ta1c3IZ07iaURLwJJR9F3U=";
-      "tauri-plugin-autostart-0.0.0" = "sha256-M6uGcf4UWAU+494wAK/r2ta1c3IZ07iaURLwJJR9F3U=";
+      "tauri-plugin-single-instance-0.0.0" = "sha256-9eclolp+Gb8qF/KYIRiOoCJbMJLI8LyWLQu82npI7mQ=";
+      "tauri-plugin-autostart-0.0.0" = "sha256-9eclolp+Gb8qF/KYIRiOoCJbMJLI8LyWLQu82npI7mQ=";
       "enigo-0.1.2" = "sha256-99VJ0WYD8jV6CYUZ1bpYJBwIE2iwOZ9SjOvyA2On12Q=";
-      "selection-0.1.0" = "sha256-xHLMkxYWsvnxTwchwrga8eizmSP730rE+MC8hOinMC8=";
+      "selection-0.1.0" = "sha256-85NUACRi7TjyMNKVz93G+W1EXKIVZZge/h/HtDwiW/Q=";
     };
   };
 
@@ -104,12 +109,12 @@ stdenv.mkDerivation rec {
 
   ESBUILD_BINARY_PATH = "${lib.getExe (esbuild.override {
     buildGoModule = args: buildGoModule (args // rec {
-      version = "0.17.15";
+      version = "0.17.19";
       src = fetchFromGitHub {
         owner = "evanw";
         repo = "esbuild";
         rev = "v${version}";
-        hash = "sha256-AzkjVw3o+yP/l6jiMmgzaymb0el2/OcAl8WQYbuMprw=";
+        hash = "sha256-PLC7OJLSOiDq4OjvrdfCawZPfbfuZix4Waopzrj8qsU=";
       };
       vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
     });
