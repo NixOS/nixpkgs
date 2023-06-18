@@ -626,6 +626,11 @@ in mkLicense lset) ({
     free = false;
   };
 
+  knuth = {
+    fullName = "Knuth CTAN License";
+    spdxId = "Knuth-CTAN";
+  };
+
   lal12 = {
     spdxId = "LAL-1.2";
     fullName = "Licence Art Libre 1.2";
