@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "urdfdom";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "ros";
     repo = pname;
     rev = version;
-    hash = "sha256-9MJnify4zcDBSZVJZCN/XupN5xax+U4PLee54gVVw3Q=";
+    hash = "sha256-UdkGJAXK3Q8QJaqMZBA5/FKUgWq9EVeqkqwVewTlTD8=";
   };
 
   patches = [
