@@ -205,27 +205,51 @@ checkout_ref(){
 }
 
 # Update submodules
-init_submodules(){
+init_submodules() {
     # Add urls into .git/config file
     clean_git submodule init
 
-    # list submodule directories and their hashes
-    git submodule status |
-    while read -r l; do
-        local hash
-        local dir
-        local name
-        local url
+    # Create an array to store background process IDs
+    declare -a pids
 
-        # checkout each submodule
-        hash=$(echo "$l" | awk '{print $1}' | tr -d '-')
-        dir=$(echo "$l" | sed -n 's/^.[0-9a-f]\+ \(.*[^)]*\)\( (.*)\)\?$/\1/p')
-        name=$(
-            git config -f .gitmodules --get-regexp submodule\..*\.path |
-            sed -n "s,^\(.*\)\.path $dir\$,\\1,p")
-        url=$(git config --get "${name}.url")
+    # Read submodule status into an array
+    mapfile -t submodule_status < <(git submodule status)
 
-        clone "$dir" "$url" "$hash" ""
+    # Process each submodule in parallel
+    for l in "${submodule_status[@]}"; do
+        (
+            local hash
+            local dir
+            local name
+            local url
+
+            # Checkout each submodule
+            hash=$(echo "$l" | awk '{print $1}' | tr -d '-')
+            dir=$(echo "$l" | sed -n 's/^.[0-9a-f]\+ \(.*[^)]*\)\( (.*)\)\?$/\1/p')
+            name=$(
+                git config -f .gitmodules --get-regexp submodule\..*\.path |
+                sed -n "s,^\(.*\)\.path $dir\$,\\1,p")
+            url=$(git config --get "${name}.url")
+
+            clone "$dir" "$url" "$hash" ""
+        ) &
+
+        # Store the process ID of the background process
+        pids+=($!)
+
+        # Limit the number of concurrent background processes (optional)
+        if (( ${#pids[@]} >= $NIX_BUILD_CORES )); then
+            # Wait for any of the background processes to finish
+            wait -n
+
+            # Remove finished background process IDs from the array
+            pids=("${pids[@]:1}")
+        fi
+    done
+
+    # Wait for all remaining background processes to finish
+    for pid in "${pids[@]}"; do
+        wait "$pid"
     done
 }
 
