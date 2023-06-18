@@ -98,6 +98,11 @@ in mkLicense lset) ({
     fullName = "Artistic License 1.0";
   };
 
+  artistic1-cl8 = {
+    spdxId = "Artistic-1.0-cl8";
+    fullName = "Artistic License 1.0 w/clause 8";
+  };
+
   artistic2 = {
     spdxId = "Artistic-2.0";
     fullName = "Artistic License 2.0";
