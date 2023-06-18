@@ -27,7 +27,7 @@ in {
     sed -i 's|locations=.*|locations=${lua}/lib|' ${dir}/thirdparty/configure-native-deps.sh
   '';
 
-  wrapLaunchGame = openraSuffix: ''
+  wrapLaunchGame = openraSuffix: binaryName: ''
     # Setting TERM=xterm fixes an issue with terminfo in mono: System.Exception: Magic number is wrong: 542
     # https://github.com/mono/mono/issues/6752#issuecomment-365212655
     wrapProgram $out/lib/openra${openraSuffix}/launch-game.sh \
@@ -35,7 +35,7 @@ in {
       --prefix LD_LIBRARY_PATH : "${rpath}" \
       --set TERM xterm
 
-    makeWrapper $out/lib/openra${openraSuffix}/launch-game.sh $(mkdirp $out/bin)/openra${openraSuffix} \
+    makeWrapper $out/lib/openra${openraSuffix}/launch-game.sh $(mkdirp $out/bin)/${binaryName} \
       --chdir "$out/lib/openra${openraSuffix}"
   '';
 
