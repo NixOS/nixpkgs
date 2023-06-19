@@ -41288,7 +41288,7 @@ with pkgs;
 
   hfst = callPackage ../development/libraries/hfst { };
 
-  hfst-ospell = callPackage ../applications/misc/hfst-ospell { };
-
   omorfi = callPackage ../applications/misc/omorfi { };
+
+  hfst-ospell = callPackage ../development/libraries/hfst-ospell { };
 }
