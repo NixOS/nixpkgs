@@ -19,13 +19,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "awesome";
-  version = "4.3";
 
   src = fetchFromGitHub {
     owner = "awesomewm";
     repo = "awesome";
-    rev = "v${version}";
-    sha256 = "1i7ajmgbsax4lzpgnmkyv35x8vxqi0j84a14k6zys4blx94m9yjf";
+    rev = "master";
   };
 
   patches = [
