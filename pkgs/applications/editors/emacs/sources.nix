@@ -17,12 +17,12 @@
 
   emacs29 = import ./generic.nix {
     pname = "emacs";
-    version = "29.0.91";
+    version = "29.0.92";
     variant = "mainline";
     src = fetchFromSavannah {
       repo = "emacs";
-      rev = "29.0.91";
-      hash = "sha256-YU/sbIr7xX5ELJtPcTL9ZQgZtjEW5oI7YC20fQsOVSY=";
+      rev = "29.0.92";
+      hash = "sha256-Vkry+2zYejZVwZKQlmQiAJnbjsj87DiIZ1ungooYd8A=";
     };
   };
 
