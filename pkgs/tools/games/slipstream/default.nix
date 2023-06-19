@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "Vhati";
     repo = "Slipstream-Mod-Manager";
     rev = "v${version}";
-    sha256 = "sha256-F+o94Oh9qxVdfgwdmyOv+WZl1BjQuzhQWaVrAgScgIU=";
+    hash = "sha256-F+o94Oh9qxVdfgwdmyOv+WZl1BjQuzhQWaVrAgScgIU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
