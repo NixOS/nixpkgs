@@ -7127,6 +7127,12 @@
     githubId = 7558482;
     name = "Jack Gerrits";
   };
+  jacksmithinsulander = {
+    email = "666.jack.smith@protonmail.com";
+    name = "Jack Smith Insulander";
+    github = "jacksmithinsulander";
+    githubId = 106760392;
+  }
   jagajaga = {
     email = "ars.seroka@gmail.com";
     github = "jagajaga";
