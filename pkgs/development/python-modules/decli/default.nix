@@ -1,16 +1,20 @@
 { buildPythonPackage
 , lib
 , fetchPypi
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "decli";
-  version = "0.5.2";
+  version = "0.6.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8s3lUDSnXIGcYwx2VahExhLyWYxCwhKZFgRl32rUY60=";
+    hash = "sha256-7YjMuUdwHo5VCbeUX9pW4VDirHSmnyXUeshe8wqwwPA=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   pythonImportsCheck = [ "decli" ];
 
