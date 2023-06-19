@@ -541,7 +541,7 @@ with prev;
   });
 
   vstruct = prev.vstruct.overrideAttrs (_: {
-    meta.broken = (luaOlder "5.1" || luaAtLeast "5.3");
+    meta.broken = (luaOlder "5.1" || luaAtLeast "5.4");
   });
 
   vusted = prev.vusted.overrideAttrs (_: {
