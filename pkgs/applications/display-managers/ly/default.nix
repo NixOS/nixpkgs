@@ -1,19 +1,20 @@
-{ stdenv, lib, fetchFromGitHub, linux-pam }:
+{ stdenv, lib, fetchFromGitHub, git, linux-pam, libxcb }:
 
 stdenv.mkDerivation rec {
   pname = "ly";
-  version = "0.2.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
-    owner = "cylgom";
+    owner = "fairyglade";
     repo = "ly";
-    rev = version;
-    sha256 = "16gjcrd4a6i4x8q8iwlgdildm7cpdsja8z22pf2izdm6rwfki97d";
+    rev = "v${version}";
+    hash = "sha256-78XD6DK9aQi8hITWJWnFZ3U9zWTcuw3vtRiU3Lhu7O4=";
     fetchSubmodules = true;
   };
 
-  buildInputs = [ linux-pam ];
-  makeFlags = [ "FLAGS=-Wno-error" ];
+  hardeningDisable = [ "all" ];
+  nativeBuildInputs = [ git ];
+  buildInputs = [ libxcb linux-pam ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -23,7 +24,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "TUI display manager";
     license = licenses.wtfpl;
-    homepage = "https://github.com/cylgom/ly";
+    homepage = "https://github.com/fairyglade/ly";
     maintainers = [ maintainers.vidister ];
+    platforms = platforms.linux;
   };
 }
