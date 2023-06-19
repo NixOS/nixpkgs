@@ -18,6 +18,7 @@
 , version
 , release_version
 , zlib
+, zstd
 , which
 , sysctl
 , buildLlvmTools
@@ -96,7 +97,7 @@ in
   buildInputs = [ libxml2 libffi ]
     ++ optional enablePFM libpfm; # exegesis
 
-  propagatedBuildInputs = [ ncurses zlib ];
+  propagatedBuildInputs = [ ncurses zlib zstd ];
 
   nativeCheckInputs = [
     which
