@@ -52,7 +52,7 @@ let
 
     CC_host = "cc";
     CXX_host = "c++";
-    depsBuildBuild = [ buildPackages.stdenv.cc openssl libuv zlib ];
+    depsBuildBuild = [ buildPackages.stdenv.cc openssl libuv zlib icu ];
 
     buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
       ++ lib.optional isCross runtimeShellPackage # for patchShebangs
@@ -71,7 +71,6 @@ let
       "--without-dtrace"
     ] ++ (lib.optionals isCross [
       "--cross-compiling"
-      "--without-intl"
       "--dest-cpu=${let platform = stdenv.hostPlatform; in
                     if      platform.isAarch32 then "arm"
                     else if platform.isAarch64 then "arm64"
