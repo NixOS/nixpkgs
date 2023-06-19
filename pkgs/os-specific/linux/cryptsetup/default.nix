@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     description = "LUKS for dm-crypt";
     changelog = "https://gitlab.com/cryptsetup/cryptsetup/-/raw/v${version}/docs/v${version}-ReleaseNotes";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ raitobezarius ];
     platforms = with lib.platforms; linux;
   };
 }
