@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/B00merang-Artwork/Windows-10/archive/refs/tags/${version}.tar.gz";
-    sha256 = "sha256-ZGuLyOBNOANIicqs7zhGy2ZVmV8YBdh7P/e8Cykkmq4=";
+    hash = "sha256-ZGuLyOBNOANIicqs7zhGy2ZVmV8YBdh7P/e8Cykkmq4=";
   };
 
   installPhase = ''
