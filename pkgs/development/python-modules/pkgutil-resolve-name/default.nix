@@ -17,6 +17,9 @@ buildPythonPackage rec {
     hash = "sha256-NX1snmp1VlPP14iTgXwIU682XdUeyX89NYqBk3O70XQ=";
   };
 
+  # has no tests
+  doCheck = false;
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
