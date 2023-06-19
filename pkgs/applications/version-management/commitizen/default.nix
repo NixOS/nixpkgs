@@ -1,76 +1,82 @@
-{ buildPythonApplication
+{ argcomplete
+, buildPythonApplication
 , charset-normalizer
 , colorama
 , commitizen
 , decli
+, deprecated
 , fetchFromGitHub
 , git
+, importlib-metadata
 , jinja2
 , lib
+, nix-update-script
 , packaging
 , poetry-core
+, pre-commit
 , py
 , pytest-freezer
 , pytest-mock
 , pytest-regressions
 , pytestCheckHook
+, pythonRelaxDepsHook
 , pyyaml
 , questionary
 , termcolor
 , testers
 , tomlkit
 , typing-extensions
-, argcomplete
-, nix-update-script
-, pre-commit
 }:
 
 buildPythonApplication rec {
   pname = "commitizen";
-  version = "2.42.1";
+  version = "3.5.2";
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-lrZfMqmslwx3B2WkvFosm3EmCHgpZEA/fOzR6UYf6f8=";
+    hash = "sha256-4m3NCnGUX9lHCk6czwzxXLqf8GLi2u2A/crBZYTyplA=";
   };
 
   format = "pyproject";
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+    pythonRelaxDepsHook
+  ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'charset-normalizer = "^2.1.0"' 'charset-normalizer = "*"' \
-      --replace 'argcomplete = ">=1.12.1,<2.1"' 'argcomplete = ">=1.12.1"'
-  '';
+  pythonRelaxDeps = [
+    "decli"
+  ];
 
   propagatedBuildInputs = [
+    argcomplete
     charset-normalizer
-    termcolor
-    questionary
     colorama
     decli
-    tomlkit
+    importlib-metadata
     jinja2
-    pyyaml
-    argcomplete
-    typing-extensions
     packaging
+    pyyaml
+    questionary
+    termcolor
+    tomlkit
+    typing-extensions
   ];
 
   doCheck = true;
 
   nativeCheckInputs = [
+    argcomplete
+    deprecated
+    git
     pre-commit
     py
-    pytestCheckHook
     pytest-freezer
     pytest-mock
     pytest-regressions
-    argcomplete
-    git
+    pytestCheckHook
   ];
 
   # the tests require a functional git installation
@@ -90,10 +96,7 @@ buildPythonApplication rec {
     "test_bump_on_git_with_hooks_no_verify_enabled"
     "test_bump_on_git_with_hooks_no_verify_disabled"
     "test_bump_pre_commit_changelog"
-    "test_bump_pre_commit_changelog_fails_always"
     "test_get_commits_with_signature"
-    # fatal: not a git repository (or any of the parent directories): .git
-    "test_commitizen_debug_excepthook"
   ];
 
   passthru = {
