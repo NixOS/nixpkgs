@@ -18,7 +18,7 @@
 , version
 , release_version
 , zlib
-, zstd
+, enableZstd ? true, zstd
 , which
 , sysctl
 , buildLlvmTools
@@ -97,7 +97,8 @@ in
   buildInputs = [ libxml2 libffi ]
     ++ optional enablePFM libpfm; # exegesis
 
-  propagatedBuildInputs = [ ncurses zlib zstd ];
+  propagatedBuildInputs = [ ncurses zlib ]
+    ++ lib.optional enableZstd zstd;
 
   nativeCheckInputs = [
     which
@@ -384,7 +385,11 @@ in
   checkTarget = "check-all";
 
   # For the update script:
-  passthru.monorepoSrc = monorepoSrc;
+  # passthru.monorepoSrc = monorepoSrc;
+  passthru = {
+    inherit enableZstd;
+    inherit monorepoSrc;
+  };
 
   requiredSystemFeatures = [ "big-parallel" ];
   meta = llvm_meta // {
