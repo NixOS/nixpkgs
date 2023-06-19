@@ -10,7 +10,8 @@ if test -n "$dir"; then
     mkdir -p $out/$dir
 fi
 
-substituteAll $src $target
+source "$substitutionsPath"
+substitute $src $target "${substitutions[@]}"
 
 if test -n "$isExecutable"; then
     chmod +x $target
