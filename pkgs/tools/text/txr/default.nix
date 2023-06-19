@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "txr";
-  version = "287";
+  version = "288";
 
   src = fetchurl {
     url = "http://www.kylheku.com/cgit/txr/snapshot/txr-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-L0+H1NDdEkKzO4Xj6uPu0+CInbF+J8e1ta2rC2uDD1M=";
+    hash = "sha256-ieqBM9pnwWQHdpHAczCMXqYqpP0Zv6AfL2DsHiUnF/8=";
   };
 
   buildInputs = [ libffi ];
