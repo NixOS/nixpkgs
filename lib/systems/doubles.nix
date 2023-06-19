@@ -19,7 +19,7 @@ let
     "aarch64-genode" "i686-genode" "x86_64-genode"
 
     # illumos
-    "x86_64-solaris"
+    "x86_64-solaris2"
 
     # JS
     "javascript-ghcjs"
