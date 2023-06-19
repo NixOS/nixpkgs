@@ -9,18 +9,18 @@
 
 stdenv.mkDerivation rec {
   pname = "gettext";
-  version = "0.21.1";
+  version = "0.22";
 
   src = fetchurl {
     url = "mirror://gnu/gettext/${pname}-${version}.tar.gz";
-    sha256 = "sha256-6MNlDh2M7odcTzVWQjgsHfgwWL1aEe6FVcDPJ21kbUU=";
+    hash = "sha256-SfCJvhG0kBcLvwntL1Hl9Rd/Vb5MxmUEpYYYIOD7Bqs=";
   };
   patches = [
     ./absolute-paths.diff
   ] ++ lib.optional stdenv.hostPlatform.isWindows (fetchpatch {
     url = "https://aur.archlinux.org/cgit/aur.git/plain/gettext_formatstring-ruby.patch?h=mingw-w64-gettext&id=e8b577ee3d399518d005e33613f23363a7df07ee";
     name = "gettext_formatstring-ruby.patch";
-    sha256 = "sha256-6SxZObOMkQDxuKJuJY+mQ/VuJJxSeGbf97J8ZZddCV0=";
+    hash = "sha256-6SxZObOMkQDxuKJuJY+mQ/VuJJxSeGbf97J8ZZddCV0=";
   });
 
   outputs = [ "out" "man" "doc" "info" ];
