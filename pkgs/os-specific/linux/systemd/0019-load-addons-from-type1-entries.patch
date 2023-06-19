@@ -1,0 +1,68 @@
+From 3ed0b6a695f3e847bc00a7d024db4eadaba3033f Mon Sep 17 00:00:00 2001
+From: Raito Bezarius <masterancpp@gmail.com>
+Date: Fri, 16 Jun 2023 14:03:35 +0200
+Subject: [PATCH] systemd-boot(config): load addons paths from configuration
+
+This make it possible to attach addons to any Type #1 entry.
+---
+ src/boot/efi/boot.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/src/boot/efi/boot.c b/src/boot/efi/boot.c
+index cda6f56426..29d976d2ec 100644
+--- a/src/boot/efi/boot.c
++++ b/src/boot/efi/boot.c
+@@ -56,6 +56,7 @@ typedef struct {
+         char16_t *devicetree;
+         char16_t *options;
+         char16_t **initrd;
++        char16_t **addons; /* systemd-addons for this entry */
+         char16_t key;
+         EFI_STATUS (*call)(void);
+         int tries_done;
+@@ -576,6 +577,8 @@ static void print_status(Config *config, char16_t *loaded_image_path) {
+                         printf("        loader: %ls\n", entry->loader);
+                 STRV_FOREACH(initrd, entry->initrd)
+                         printf("        initrd: %ls\n", *initrd);
++                STRV_FOREACH(addon, entry->addons)
++                        printf("         addon: %ls\n", *addon);
+                 if (entry->devicetree)
+                         printf("    devicetree: %ls\n", entry->devicetree);
+                 if (entry->options)
+@@ -1092,6 +1095,7 @@ static void config_entry_free(ConfigEntry *entry) {
+         free(entry->devicetree);
+         free(entry->options);
+         strv_free(entry->initrd);
++        strv_free(entry->addons);
+         free(entry->path);
+         free(entry->current_name);
+         free(entry->next_name);
+@@ -1405,7 +1409,7 @@ static void config_entry_add_type1(
+ 
+         _cleanup_(config_entry_freep) ConfigEntry *entry = NULL;
+         char *line;
+-        size_t pos = 0, n_initrd = 0;
++        size_t pos = 0, n_initrd = 0, n_addons = 0;
+         char *key, *value;
+         EFI_STATUS err;
+ 
+@@ -1493,6 +1497,16 @@ static void config_entry_add_type1(
+                         continue;
+                 }
+ 
++                if (streq8(key, "add-on")) {
++                        entry->addons = xrealloc(
++                                entry->addons,
++                                n_addons == 0 ? 0 : (n_addons + 1) * sizeof(uint16_t *),
++                                (n_addons + 2) * sizeof(uint16_t *));
++                        entry->addons[n_addons++] = xstr8_to_path(value);
++                        entry->addons[n_addons] = NULL;
++                        continue;
++                }
++
+                 if (streq8(key, "options")) {
+                         _cleanup_free_ char16_t *new = NULL;
+ 
+-- 
+2.41.0
+

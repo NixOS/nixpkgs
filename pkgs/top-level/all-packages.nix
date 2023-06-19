@@ -27884,6 +27884,7 @@ with pkgs;
   };
   systemdMinimal = systemd.override {
     pname = "systemd-minimal";
+    withAddons = false;
     withAcl = false;
     withAnalyze = false;
     withApparmor = false;

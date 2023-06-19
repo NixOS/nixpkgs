@@ -1,0 +1,258 @@
+From 06a8375e55ae1469f7b9cc70fabdacd07c35492b Mon Sep 17 00:00:00 2001
+From: Raito Bezarius <masterancpp@gmail.com>
+Date: Mon, 19 Jun 2023 01:57:59 +0200
+Subject: [PATCH] systemd-stub: support loading `.initrd` via addons
+
+Loading `.initrd` via addons is now possible by transforming the "command line append via addon"
+into a generic "process addons and provide an set of 'what can change depending on policy choice' structure
+to the caller", this is `struct addon_additions`.
+
+Multiple design choices were made implicitly,
+for the best or the worse, some of them are discutable.
+
+- existing initrd in the UKI has priority over any addon:
+  if addons are to be used, the UKI should be built "without initrd" probably
+  as it can trivially regain his default initrd via an addon.
+
+- global addons cannot load `.initrd`, this is usually unwanted as only UKI-specific addon
+  can bring out the desired initrd for this particular boot entry rather than a generic one.
+
+- global addons will still measure `.initrd` if present in TPM PCR16
+
+- UKI-specific addon will consider only the unique `.initrd` section of the last addon provided
+  it is unclear if this is an good idea or not ; it means that priority is based on (more or less)
+  source path sorting which is semi-predictable if you know enough about it.
+
+- UKI-specific addon will still measure all passed `.initrd` if present in TPM PCR16
+
+- `addon_additions` will still count the number of measured initrds in total
+
+- `.initrd` via addons are measured in TPM PCR16, a new PCR introduced
+  for initrd addons measurements, exposed via EFI variable
+  `StubPcrInitRDAddons` if any measurement was done
+---
+ src/boot/efi/stub.c       | 124 ++++++++++++++++++++++++++++++--------
+ src/fundamental/tpm-pcr.h |   4 ++
+ 2 files changed, 104 insertions(+), 24 deletions(-)
+
+diff --git a/src/boot/efi/stub.c b/src/boot/efi/stub.c
+index 93a3641424..0a00642fc5 100644
+--- a/src/boot/efi/stub.c
++++ b/src/boot/efi/stub.c
+@@ -21,6 +21,15 @@
+ /* magic string to find in the binary image */
+ _used_ _section_(".sdmagic") static const char magic[] = "#### LoaderInfo: systemd-stub " GIT_VERSION " ####";
+ 
++struct addon_additions {
++        char16_t *cmdline_append; /* this gets append to the command line */
++        bool parameters_measured;
++
++        EFI_PHYSICAL_ADDRESS initrd_base_override; /* this replaces the initrd */
++        size_t initrd_size;
++        int initrd_measured;
++};
++
+ static EFI_STATUS combine_initrd(
+                 EFI_PHYSICAL_ADDRESS initrd_base, size_t initrd_size,
+                 const void * const extra_initrds[], const size_t extra_initrd_sizes[], size_t n_extra_initrds,
+@@ -246,25 +255,22 @@ static EFI_STATUS load_addons_from_dir(
+ 
+ }
+ 
+-static EFI_STATUS cmdline_append_and_measure_addons(
+-                EFI_HANDLE stub_image,
+-                EFI_LOADED_IMAGE_PROTOCOL *loaded_image,
+-                const char16_t *prefix,
+-                const char *uname,
+-                bool *ret_parameters_measured,
+-                char16_t **cmdline_append) {
++static EFI_STATUS process_and_measure_addons(
++        EFI_HANDLE stub_image,
++        EFI_LOADED_IMAGE_PROTOCOL *loaded_image,
++        const char16_t *prefix,
++        const char *uname,
++        struct addon_additions *additions) {
+ 
+         _cleanup_(strv_freep) char16_t **items = NULL;
+         _cleanup_(file_closep) EFI_FILE *root = NULL;
+-        _cleanup_free_ char16_t *buffer = NULL;
+         size_t n_items = 0, n_allocated = 0;
+         EFI_STATUS err;
+ 
+         assert(stub_image);
+         assert(loaded_image);
+         assert(prefix);
+-        assert(ret_parameters_measured);
+-        assert(cmdline_append);
++        assert(additions);
+ 
+         if (!loaded_image->DeviceHandle)
+                 return EFI_SUCCESS;
+@@ -318,11 +324,14 @@ static EFI_STATUS cmdline_append_and_measure_addons(
+                         return log_error_status(err, "Failed to find protocol in %ls: %m", items[i]);
+ 
+                 err = pe_memory_locate_sections(loaded_addon->ImageBase, unified_sections, addrs, szs);
+-                if (err != EFI_SUCCESS || szs[UNIFIED_SECTION_CMDLINE] == 0) {
++                /* an useful addon contains either cmdline or initrd */
++                bool contains_useful_section = (szs[UNIFIED_SECTION_CMDLINE] > 0
++                        || szs[UNIFIED_SECTION_INITRD] > 0);
++                if (err != EFI_SUCCESS || !contains_useful_section) {
+                         if (err == EFI_SUCCESS)
+                                 err = EFI_NOT_FOUND;
+                         log_error_status(err,
+-                                         "Unable to locate embedded .cmdline section in %ls, ignoring: %m",
++                                         "Unable to locate embedded .cmdline or .initrd section in %ls, ignoring: %m",
+                                          items[i]);
+                         continue;
+                 }
+@@ -343,22 +352,78 @@ static EFI_STATUS cmdline_append_and_measure_addons(
+                         continue;
+                 }
+ 
+-                _cleanup_free_ char16_t *tmp = TAKE_PTR(buffer),
++                /* Extract initrd if available */
++                if (szs[UNIFIED_SECTION_INITRD] > 0) {
++                        bool m = false;
++                        additions->initrd_size = szs[UNIFIED_SECTION_INITRD];
++                        additions->initrd_base_override =
++                                POINTER_TO_PHYSICAL_ADDRESS(loaded_addon->ImageBase) +
++                                addrs[UNIFIED_SECTION_INITRD];
++
++                        (void) tpm_log_event_ascii(
++                                TPM_PCR_INDEX_INITRD_ADDONS,
++                                POINTER_TO_PHYSICAL_ADDRESS(unified_sections[UNIFIED_SECTION_INITRD]),
++                                strsize8(unified_sections[UNIFIED_SECTION_INITRD]),
++                                unified_sections[UNIFIED_SECTION_INITRD],
++                                &m);
++
++                        (void) tpm_log_event_ascii(
++                                TPM_PCR_INDEX_INITRD_ADDONS,
++                                additions->initrd_base_override,
++                                additions->initrd_size,
++                                unified_sections[UNIFIED_SECTION_INITRD],
++                                &m);
++
++                        additions->initrd_measured += (int)m;
++                }
++
++                /* Extract and join command line if available */
++                _cleanup_free_ char16_t *tmp = TAKE_PTR(additions->cmdline_append),
+                                         *extra16 = xstrn8_to_16((char *)loaded_addon->ImageBase + addrs[UNIFIED_SECTION_CMDLINE],
+                                                                 szs[UNIFIED_SECTION_CMDLINE]);
+-                buffer = xasprintf("%ls%ls%ls", strempty(tmp), isempty(tmp) ? u"" : u" ", extra16);
++                /* Python: " ".join(tmp, extra16) */
++                additions->cmdline_append = xasprintf("%ls%ls%ls", strempty(tmp), isempty(tmp) ? u"" : u" ", extra16);
+         }
+ 
+-        mangle_stub_cmdline(buffer);
++        mangle_stub_cmdline(additions->cmdline_append);
+ 
+-        if (!isempty(buffer)) {
+-                _cleanup_free_ char16_t *tmp = TAKE_PTR(*cmdline_append);
++        if (!isempty(additions->cmdline_append)) {
+                 bool m = false;
+ 
+-                (void) tpm_log_load_options(buffer, &m);
+-                *ret_parameters_measured = m;
++                (void) tpm_log_load_options(additions->cmdline_append, &m);
++                additions->parameters_measured = m;
++        }
++
++        return EFI_SUCCESS;
++
++}
++
++static EFI_STATUS cmdline_append_and_measure_addons(
++                EFI_HANDLE stub_image,
++                EFI_LOADED_IMAGE_PROTOCOL *loaded_image,
++                const char16_t *prefix,
++                const char *uname,
++                bool *ret_parameters_measured,
++                char16_t **cmdline_append) {
++        struct addon_additions addon_effects;
++        EFI_STATUS err;
+ 
+-                *cmdline_append = xasprintf("%ls%ls%ls", strempty(tmp), isempty(tmp) ? u"" : u" ", buffer);
++        err = process_and_measure_addons(
++                stub_image,
++                loaded_image,
++                prefix,
++                uname,
++                &addon_effects
++        );
++        if (err != EFI_SUCCESS)
++                return err;
++
++        *ret_parameters_measured = addon_effects.parameters_measured;
++        if (!isempty(addon_effects.cmdline_append)) {
++                _cleanup_free_ char16_t *tmp = TAKE_PTR(*cmdline_append);
++
++                *cmdline_append = xasprintf("%ls%ls%ls", strempty(tmp), isempty(tmp) ? u"" : u" ",
++                                            addon_effects.cmdline_append);
+         }
+ 
+         return EFI_SUCCESS;
+@@ -372,6 +437,7 @@ static EFI_STATUS run(EFI_HANDLE image) {
+         _cleanup_(devicetree_cleanup) struct devicetree_state dt_state = {};
+         EFI_LOADED_IMAGE_PROTOCOL *loaded_image;
+         size_t addrs[_UNIFIED_SECTION_MAX] = {}, szs[_UNIFIED_SECTION_MAX] = {};
++        struct addon_additions addon_effects;
+         _cleanup_free_ char16_t *cmdline = NULL;
+         int sections_measured = -1, parameters_measured = -1;
+         _cleanup_free_ char *uname = NULL;
+@@ -476,16 +542,20 @@ static EFI_STATUS run(EFI_HANDLE image) {
+         parameters_measured = parameters_measured < 0 ? m : (parameters_measured && m);
+ 
+         _cleanup_free_ char16_t *dropin_dir = get_extra_dir(loaded_image->FilePath);
+-        err = cmdline_append_and_measure_addons(
++        err = process_and_measure_addons(
+                         image,
+                         loaded_image,
+                         dropin_dir,
+                         uname,
+-                        &m,
+-                        &cmdline);
++                        &addon_effects);
+         if (err != EFI_SUCCESS)
+                 log_error_status(err, "Error loading UKI-specific addons, ignoring: %m");
+-        parameters_measured = parameters_measured < 0 ? m : (parameters_measured && m);
++        parameters_measured = parameters_measured < 0 ? addon_effects.parameters_measured : (parameters_measured
++                && addon_effects.parameters_measured);
++        if (addon_effects.initrd_measured > 0)
++                (void) efivar_set_uint_string(MAKE_GUID_PTR(LOADER), u"StubPcrInitRDAddons",
++                                              TPM_PCR_INDEX_INITRD_ADDONS, 0);
++
+ 
+         const char *extra = smbios_find_oem_string("io.systemd.stub.kernel-cmdline-extra");
+         if (extra) {
+@@ -589,6 +659,12 @@ static EFI_STATUS run(EFI_HANDLE image) {
+         initrd_size = szs[UNIFIED_SECTION_INITRD];
+         initrd_base = initrd_size != 0 ? POINTER_TO_PHYSICAL_ADDRESS(loaded_image->ImageBase) + addrs[UNIFIED_SECTION_INITRD] : 0;
+ 
++        /* If we do not have any initrd, but we do have an addon initrd, let's use it as a last resort? */
++        if (initrd_size == 0 && addon_effects.initrd_size != 0) {
++                initrd_size = addon_effects.initrd_size;
++                initrd_base = addon_effects.initrd_base_override;
++        }
++
+         dt_size = szs[UNIFIED_SECTION_DTB];
+         dt_base = dt_size != 0 ? POINTER_TO_PHYSICAL_ADDRESS(loaded_image->ImageBase) + addrs[UNIFIED_SECTION_DTB] : 0;
+ 
+diff --git a/src/fundamental/tpm-pcr.h b/src/fundamental/tpm-pcr.h
+index 4989d93f0c..5499be8baa 100644
+--- a/src/fundamental/tpm-pcr.h
++++ b/src/fundamental/tpm-pcr.h
+@@ -20,6 +20,10 @@
+ /* This TPM PCR is where we measure the root fs volume key (and maybe /var/'s) if it is split off */
+ #define TPM_PCR_INDEX_VOLUME_KEY 15U
+ 
++/* This TPM PCR is where we extend the initrd addon images into which we pass to the booted kernel
++ */
++#define TPM_PCR_INDEX_INITRD_ADDONS 16U
++
+ /* List of PE sections that have special meaning for us in unified kernels. This is the canonical order in
+  * which we measure the sections into TPM PCR 11 (see above). PLEASE DO NOT REORDER! */
+ typedef enum UnifiedSection {
+-- 
+2.41.0
+

@@ -81,6 +81,7 @@
 , bpftools
 , libbpf
 
+, withAddons ? true
 , withAcl ? true
 , withAnalyze ? true
 , withApparmor ? true
@@ -190,6 +191,9 @@ stdenv.mkDerivation (finalAttrs: {
     ./0016-inherit-systemd-environment-when-calling-generators.patch
     ./0017-core-don-t-taint-on-unmerged-usr.patch
     ./0018-tpm2_context_init-fix-driver-name-checking.patch
+  ] ++ lib.optional withAddons [
+    ./0019-load-addons-from-type1-entries.patch
+    ./0020-load-initrd-from-addons-in-stub.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
