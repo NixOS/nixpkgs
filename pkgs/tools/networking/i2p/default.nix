@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "i2p";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchurl {
     urls = map (mirror: "${mirror}/${finalAttrs.version}/i2psource_${finalAttrs.version}.tar.bz2") [
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
       "https://files.i2p-projekt.de"
       "https://download.i2p2.no/releases"
     ];
-    sha256 = "sha256-5LoGpuKTWheZDwV6crjXnkUqJVamzv5QEtXdY0Zv7r8=";
+    sha256 = "sha256-9T80++I6h2LjeGVydRswG++ygojvtrEELU/GTGYQeE8=";
   };
 
   buildInputs = [ jdk ant gettext which ];

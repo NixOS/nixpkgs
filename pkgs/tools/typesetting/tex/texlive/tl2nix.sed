@@ -36,6 +36,33 @@ $a}
   /^catalogue-version/s/[\#,:\(\)]//g
   s/^catalogue-version_(.*)/  version = "\1";/p
 
+  /^catalogue-license/{
+    # wrap licenses in quotes
+    s/ ([^ ]+)/ "\1"/g
+    # adjust naming as in nixpkgs, the full texts of the licenses are available at https://www.ctan.org/license/${licenseName}
+    s/"(cc-by(-sa)?-[1-4])"/"\10"/g
+    s/"apache2"/"asl20"/g
+    s/"artistic"/"artistic1-cl8"/g
+    s/"bsd"/"bsd3"/g          # license text does not match exactly, but is pretty close
+    s/"bsd4"/"bsdOriginal"/g
+    s/"collection"/"free"/g   # used for collections of individual packages with distinct licenses. As TeXlive only contains free software, we can use "free" as a catchall
+    s/"fdl"/"fdl13Only"/g
+    s/"gpl1?"/"gpl1Only"/g
+    s/"gpl2\+"/"gpl2Plus"/g
+    s/"gpl3\+"/"gpl3Plus"/g
+    s/"lgpl"/"lgpl2"/g
+    s/"lgpl2\.1"/"lgpl21"/g
+    s/"lppl"/"lppl13c"/g      # not used consistently, sometimes "lppl" refers to an older version of the license
+    s/"lppl1\.2"/"lppl12"/g
+    s/"lppl1\.3"/"lppl13c"/g  # If a work refers to LPPL 1.3 as its license, this is interpreted as the latest version of the 1.3 license (https://www.latex-project.org/lppl/)
+    s/"lppl1\.3a"/"lppl13a"/g
+    s/"lppl1\.3c"/"lppl13c"/g
+    s/"other-free"/"free"/g
+    s/"pd"/"publicDomain"/g
+
+    s/^catalogue-license (.*)/  license = [ \1 ];/p
+  }
+
   # extract deps
   /^depend ([^.]+|texlive\.infra)$/{
     # open a list
