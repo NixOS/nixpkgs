@@ -1,0 +1,29 @@
+diff --git a/routers/static_filter.go b/routers/static_filter.go
+index b8ecc9f..730f04d 100644
+--- a/routers/static_filter.go
++++ b/routers/static_filter.go
+@@ -48,21 +48,21 @@ func StaticFilter(ctx *context.Context) {
+ 		return
+ 	}
+ 
+-	path := "web/build"
++	path := "@web_root@" + "web/build"
+ 	if urlPath == "/" {
+ 		path += "/index.html"
+ 	} else {
+ 		path += urlPath
+ 	}
+ 
+-	path2 := strings.TrimPrefix(path, "web/build/images/")
++	path2 := strings.TrimLeft(path, "@web_root@" + "web/build/images/")
+ 	if util.FileExist(path2) {
+ 		makeGzipResponse(ctx.ResponseWriter, ctx.Request, path2)
+ 		return
+ 	}
+ 
+ 	if !util.FileExist(path) {
+-		path = "web/build/index.html"
++		path = "@web_root@" + "web/build/index.html"
+ 	}
+ 	if !util.FileExist(path) {
+ 		return

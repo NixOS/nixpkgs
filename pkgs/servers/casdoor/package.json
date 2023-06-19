@@ -1,0 +1,99 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@ant-design/cssinjs": "^1.8.1",
+    "@ant-design/icons": "^4.7.0",
+    "@craco/craco": "^6.4.5",
+    "@crowdin/cli": "^3.7.10",
+    "@ctrl/tinycolor": "^3.5.0",
+    "@emotion/react": "^11.10.5",
+    "@metamask/eth-sig-util": "^6.0.0",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "antd": "5.2.3",
+    "antd-token-previewer": "^1.1.0-22",
+    "buffer": "^6.0.3",
+    "codemirror": "^5.61.1",
+    "copy-to-clipboard": "^3.3.1",
+    "core-js": "^3.25.0",
+    "craco-less": "^2.0.0",
+    "eslint-plugin-unused-imports": "^2.0.0",
+    "file-saver": "^2.0.5",
+    "i18n-iso-countries": "^7.0.0",
+    "i18next": "^19.8.9",
+    "libphonenumber-js": "^1.10.19",
+    "moment": "^2.29.1",
+    "react": "^18.2.0",
+    "react-app-polyfill": "^3.0.0",
+    "react-codemirror2": "^7.2.1",
+    "react-cropper": "^2.1.7",
+    "react-device-detect": "^2.2.2",
+    "react-dom": "^18.2.0",
+    "react-github-corner": "^2.5.0",
+    "react-google-one-tap-login": "^0.1.1",
+    "react-helmet": "^6.1.0",
+    "react-highlight-words": "^0.18.0",
+    "react-i18next": "^11.8.7",
+    "react-metamask-avatar": "^1.2.1",
+    "react-router-dom": "^5.3.3",
+    "react-scripts": "5.0.1",
+    "react-social-login-buttons": "^3.4.0"
+  },
+  "scripts": {
+    "start": "cross-env PORT=7001 craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "craco eject",
+    "crowdin:sync": "crowdin upload && crowdin download",
+    "preinstall": "node -e \"if (process.env.npm_execpath.indexOf('yarn') === -1) throw new Error('Use yarn for installing: https://yarnpkg.com/en/docs/install')\"",
+    "fix": "eslint --fix src/**/*.{js,jsx,ts,tsx}",
+    "lint:css": "stylelint src/**/*.{css,less} --fix"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all",
+      "ie > 8"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version",
+      "ie > 8"
+    ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.18.13",
+    "@babel/eslint-parser": "^7.18.9",
+    "@babel/preset-react": "^7.18.6",
+    "cross-env": "^7.0.3",
+    "cypress": "^12.5.1",
+    "eslint": "8.22.0",
+    "eslint-plugin-react": "^7.31.1",
+    "husky": "^4.3.8",
+    "lint-staged": "^13.0.3",
+    "stylelint": "^14.11.0",
+    "stylelint-config-recommended-less": "^1.0.4",
+    "stylelint-config-standard": "^28.0.0"
+  },
+  "lint-staged": {
+    "src/**/*.{css,less}": [
+      "stylelint --fix"
+    ],
+    "src/**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  }
+}
