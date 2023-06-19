@@ -22498,6 +22498,8 @@ with pkgs;
 
   libmkv = callPackage ../development/libraries/libmkv { };
 
+  libnut = callPackage ../development/libraries/libnut { };
+
   libmms = callPackage ../development/libraries/libmms { };
 
   libmowgli = callPackage ../development/libraries/libmowgli { };
@@ -28697,6 +28699,8 @@ with pkgs;
   linden-hill = callPackage ../data/fonts/linden-hill { };
 
   line-awesome = callPackage ../data/fonts/line-awesome { };
+
+  linearicons-free = callPackage ../data/fonts/linearicons-free { };
 
   linja-pi-pu-lukin = callPackage ../data/fonts/linja-pi-pu-lukin { };
 

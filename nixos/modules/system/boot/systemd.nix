@@ -587,7 +587,7 @@ in
     # Some overrides to upstream units.
     systemd.services."systemd-backlight@".restartIfChanged = false;
     systemd.services."systemd-fsck@".restartIfChanged = false;
-    systemd.services."systemd-fsck@".path = [ config.system.path ];
+    systemd.services."systemd-fsck@".path = [ pkgs.util-linux ] ++ config.system.fsPackages;
     systemd.services."systemd-makefs@" = {
       restartIfChanged = false;
       path = [ pkgs.util-linux ] ++ config.system.fsPackages;
