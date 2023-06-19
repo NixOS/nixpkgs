@@ -18605,7 +18605,7 @@ with pkgs;
     antlr4_12
     antlr4_13;
 
-  antlr4 = antlr4_12;
+  antlr4 = antlr4_13;
 
   antlr = antlr4;
 
