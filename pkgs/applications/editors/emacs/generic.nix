@@ -386,6 +386,8 @@ mkDerivation (finalAttrs: (lib.optionalAttrs withNativeCompilation {
     inherit withTreeSitter;
     pkgs = recurseIntoAttrs (emacsPackagesFor finalAttrs.finalPackage);
     tests = { inherit (nixosTests) emacs-daemon; };
+    # Backwards compatibility aliases. Remove this at some point before 23.11 release cut-off.
+    nativeComp = builtins.trace "emacs.passthru: nativeComp was renamed to withNativeCompilation and will be removed in 23.11" withNativeCompilation;
   };
 
   meta = {
