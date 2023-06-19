@@ -76,8 +76,7 @@ in buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest
-    # "hypothesis" indirectly depends on numpy to build its documentation.
-    (hypothesis.override { enableDocumentation = false; })
+    hypothesis
     typing-extensions
   ];
 

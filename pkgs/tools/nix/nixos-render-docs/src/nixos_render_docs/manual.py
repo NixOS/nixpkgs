@@ -207,7 +207,7 @@ class ManualDocBookRenderer(RendererMixin, DocBookRenderer):
                 raise RuntimeError(f"rendering {path}") from e
         return "".join(result)
     def included_options(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        conv = options.DocBookConverter(self._manpage_urls, self._revision, False, 'fragment',
+        conv = options.DocBookConverter(self._manpage_urls, self._revision, 'fragment',
                                         token.meta['list-id'], token.meta['id-prefix'])
         conv.add_options(token.meta['source'])
         return conv.finalize(fragment=True)
@@ -469,7 +469,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         return "".join(outer)
 
     def included_options(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        conv = options.HTMLConverter(self._manpage_urls, self._revision, False,
+        conv = options.HTMLConverter(self._manpage_urls, self._revision,
                                      token.meta['list-id'], token.meta['id-prefix'],
                                      self._xref_targets)
         conv.add_options(token.meta['source'])

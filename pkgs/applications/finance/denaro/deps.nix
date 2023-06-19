@@ -4,6 +4,7 @@
 { fetchNuGet }: [
   (fetchNuGet { pname = "Cake.Tool"; version = "3.0.0"; sha256 = "0gjacqdgnh1d40sm9vrdb8vr6jv3vyh6j265gj1aaf9af2569637"; })
   (fetchNuGet { pname = "Docnet.Core"; version = "2.3.1"; sha256 = "03b39x0vlymdknwgwhsmnpw4gj3njmbl9pd57ls3rhfn9r832d44"; })
+  (fetchNuGet { pname = "GetText.NET"; version = "1.8.7"; sha256 = "0djn5sc7p33ayjmxmxs4hqagh51bg70wqs6mwbhlhsrc67bvgj9a"; })
   (fetchNuGet { pname = "GirCore.Adw-1"; version = "0.3.0"; sha256 = "1bsjqxck58dff9hnw21cp3xk1afly8721sfsbnxcr5i39hlrbl37"; })
   (fetchNuGet { pname = "GirCore.Cairo-1.0"; version = "0.3.0"; sha256 = "1zb8ilgywpwgjrzrbdvzvy70f46fb05iy49592mkjg2lv24q5l3y"; })
   (fetchNuGet { pname = "GirCore.FreeType2-2.0"; version = "0.3.0"; sha256 = "1bc78409bdhfqqbirwr1lkzxl27adndv05q5fcm5sivmlzr7fbkm"; })

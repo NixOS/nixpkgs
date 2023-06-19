@@ -26,6 +26,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
         };
       };
       virtualisation.rootDevice = "/dev/mapper/cryptroot";
+      virtualisation.fileSystems."/".autoFormat = true;
     };
   };
 

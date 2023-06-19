@@ -36,6 +36,9 @@
 
   # ####### GNOME 43 #######
 
+  "lockkeys@vaina.lt" = "lock-keys";
+  "lockkeys@fawtytoo" = "lock-keys-2";
+
   # DEPRECATED: Use "Caffeine" instead
   "KeepAwake@jepfa.de" = "keep-awake";
   "awake@vixalien.com" = null;
@@ -51,9 +54,6 @@
   "floating-panel-usedbymyself@wpism" = null;
 
   # ####### GNOME 42 #######
-
-  "lockkeys@vaina.lt" = "lock-keys";
-  "lockkeys@fawtytoo" = "lock-keys-2";
 
   "wireguard-indicator@gregos.me" = "wireguard-indicator-2";
   "wireguard-indicator@atareao.es" = "wireguard-indicator";

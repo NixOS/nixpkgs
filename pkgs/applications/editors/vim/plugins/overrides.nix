@@ -799,6 +799,10 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
+  nvim-coverage = super.nvim-coverage.overrideAttrs(old: {
+    dependencies = with self; [ plenary-nvim ];
+  });
+
   nvim-dap-python = super.nvim-dap-python.overrideAttrs (old: {
     dependencies = with self; [ nvim-dap ];
   });
@@ -946,24 +950,18 @@ self: super: {
 
   sniprun =
     let
-      version = "1.3.3";
+      version = "1.3.4";
       src = fetchFromGitHub {
         owner = "michaelb";
         repo = "sniprun";
         rev = "v${version}";
-        hash = "sha256-my06P2fqWjZAnxVjVzIV8q+FQOlxRLVZs3OZ0XBR6N0=";
+        hash = "sha256-H1PmjiNyUp+fTDqnfppFii+aDh8gPD/ALHFNWVXch3w=";
       };
       sniprun-bin = rustPlatform.buildRustPackage {
         pname = "sniprun-bin";
         inherit version src;
 
-        cargoLock = {
-          lockFile = ./sniprun/Cargo.lock;
-        };
-
-        postPatch = ''
-          ln -s ${./sniprun/Cargo.lock} Cargo.lock
-        '';
+        cargoHash = "sha256-WXhH0zqGj/D83AoEfs0kPqW7UXIAkURTJ+/BKbuUvss=";
 
         nativeBuildInputs = [ makeWrapper ];
 

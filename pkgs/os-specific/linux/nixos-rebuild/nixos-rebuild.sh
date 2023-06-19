@@ -77,7 +77,7 @@ while [ "$#" -gt 0 ]; do
       --use-substitutes|-s)
         copyClosureFlags+=("$i")
         ;;
-      -I|--max-jobs|-j|--cores|--builders)
+      -I|--max-jobs|-j|--cores|--builders|--log-format)
         j="$1"; shift 1
         extraBuildFlags+=("$i" "$j")
         ;;

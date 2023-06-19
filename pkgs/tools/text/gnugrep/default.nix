@@ -16,8 +16,10 @@ stdenv.mkDerivation {
     hash = "sha256-HbKu3eidDepCsW2VKPiUyNFdrk4ZC1muzHj1qVEnbqs=";
   };
 
-  # Some gnulib tests fail on Musl: https://github.com/NixOS/nixpkgs/pull/228714
-  postPatch = if stdenv.hostPlatform.isMusl then ''
+  # Some gnulib tests fail
+  # - on Musl: https://github.com/NixOS/nixpkgs/pull/228714
+  # - on x86_64-darwin: https://github.com/NixOS/nixpkgs/pull/228714#issuecomment-1576826330
+  postPatch = if stdenv.hostPlatform.isMusl || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) then ''
     sed -i 's:gnulib-tests::g' Makefile.in
   '' else null;
 
@@ -28,13 +30,16 @@ stdenv.mkDerivation {
 
   # cygwin: FAIL: multibyte-white-space
   # freebsd: FAIL mb-non-UTF8-performance
-  doCheck = !stdenv.isCygwin && !stdenv.isFreeBSD;
+  # x86_64-darwin: fails 'stack-overflow' tests on Rosetta 2 emulator
+  doCheck = !stdenv.isCygwin && !stdenv.isFreeBSD && !(stdenv.isDarwin && stdenv.hostPlatform.isx86_64);
 
   # On macOS, force use of mkdir -p, since Grep's fallback
   # (./install-sh) is broken.
   preConfigure = ''
     export MKDIR_P="mkdir -p"
   '';
+
+  enableParallelBuilding = true;
 
   # Fix reference to sh in bootstrap-tools, and invoke grep via
   # absolute path rather than looking at argv[0].

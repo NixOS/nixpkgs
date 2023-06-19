@@ -9,7 +9,17 @@ in {
     services.code-server = {
       enable = lib.mkEnableOption (lib.mdDoc "code-server");
 
-      package = lib.mkPackageOptionMD pkgs "code-server" { };
+      package = lib.mkPackageOptionMD pkgs "code-server" {
+        example = ''
+          pkgs.vscode-with-extensions.override {
+            vscode = pkgs.code-server;
+            vscodeExtensions = with pkgs.vscode-extensions; [
+              bbenoist.nix
+              dracula-theme.theme-dracula
+            ];
+          }
+        '';
+      };
 
       extraPackages = lib.mkOption {
         default = [ ];

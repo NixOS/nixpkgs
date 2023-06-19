@@ -7,28 +7,16 @@
 
 stdenv.mkDerivation rec {
   pname = "diffutils";
-  version = "3.9";
+  version = "3.10";
 
   src = fetchurl {
     url = "mirror://gnu/diffutils/diffutils-${version}.tar.xz";
-    hash = "sha256-2A076QogGGjeg9eNrTQTrYgWDMU7zDbrnq98INvwI/E=";
+    hash = "sha256-kOXpPMck5OvhLt6A3xY0Bjx6hVaSaFkZv+YLVWyb0J4=";
   };
-
-  patches = [
-    # Backport of a fix for 'diff -D' output.
-    # TODO: remove when updating to 3.10.
-    ./fix-diff-D.patch
-  ];
-
-  postPatch = ''
-    # avoid the need for help2man
-    # TODO: can be removed when fix-diff-D.patch is removed.
-    touch man/diff.1
-  '';
 
   outputs = [ "out" "info" ];
 
-  nativeBuildInputs = [ xz.bin ];
+  nativeBuildInputs = [ (lib.getBin xz) ];
   /* If no explicit coreutils is given, use the one from stdenv. */
   buildInputs = [ coreutils ];
 
@@ -38,10 +26,13 @@ stdenv.mkDerivation rec {
     lib.optional (coreutils != null) "PR_PROGRAM=${coreutils}/bin/pr"
     ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "gl_cv_func_getopt_gnu=yes";
 
+  doCheck = true;
+
   meta = with lib; {
     homepage = "https://www.gnu.org/software/diffutils/diffutils.html";
     description = "Commands for showing the differences between files (diff, cmp, etc.)";
     license = licenses.gpl3;
     platforms = platforms.unix;
+    maintainers = with maintainers; [ das_j ];
   };
 }

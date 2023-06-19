@@ -116,10 +116,12 @@ let
         cooperlake     = versionAtLeast ccVersion "10.0";
         tigerlake      = versionAtLeast ccVersion "10.0";
         knm            = versionAtLeast ccVersion "8.0";
+        alderlake      = versionAtLeast ccVersion "12.0";
         # AMD
         znver1         = versionAtLeast ccVersion "6.0";
         znver2         = versionAtLeast ccVersion "9.0";
         znver3         = versionAtLeast ccVersion "11.0";
+        znver4         = versionAtLeast ccVersion "13.0";
       }.${arch} or true
     else if isClang then
       { # Intel
@@ -127,9 +129,12 @@ let
         icelake-client = versionAtLeast ccVersion "7.0";
         icelake-server = versionAtLeast ccVersion "7.0";
         knm            = versionAtLeast ccVersion "7.0";
+        alderlake      = versionAtLeast ccVersion "16.0";
         # AMD
         znver1         = versionAtLeast ccVersion "4.0";
         znver2         = versionAtLeast ccVersion "9.0";
+        znver3         = versionAtLeast ccVersion "12.0";
+        znver4         = versionAtLeast ccVersion "16.0";
       }.${arch} or true
     else
       false;

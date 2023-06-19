@@ -14,11 +14,11 @@ $a}
 }
 
 # form an attrmap per package
-# ignore packages whose name contains "." (such as binaries)
-:next-package
+# ignore packages whose name contains "." (such as binaries) except for texlive.infra
 /^name ([^.]+|texlive\.infra)$/,/^$/{
-  # quote package names, as some start with a number :-/
-  s/^name (.*)$/"\1" = {/p
+  # quote invalid names
+  s/^name ([0-9].*|texlive\.infra)$/"\1" = {/p
+  s/^name (.*)$/\1 = {/p
 
   # extract revision
   s/^revision ([0-9]*)$/  revision = \1;/p
@@ -36,34 +36,62 @@ $a}
   /^catalogue-version/s/[\#,:\(\)]//g
   s/^catalogue-version_(.*)/  version = "\1";/p
 
+  /^catalogue-license/{
+    # wrap licenses in quotes
+    s/ ([^ ]+)/ "\1"/g
+    # adjust naming as in nixpkgs, the full texts of the licenses are available at https://www.ctan.org/license/${licenseName}
+    s/"(cc-by(-sa)?-[1-4])"/"\10"/g
+    s/"apache2"/"asl20"/g
+    s/"artistic"/"artistic1-cl8"/g
+    s/"bsd"/"bsd3"/g          # license text does not match exactly, but is pretty close
+    s/"bsd4"/"bsdOriginal"/g
+    s/"collection"/"free"/g   # used for collections of individual packages with distinct licenses. As TeXlive only contains free software, we can use "free" as a catchall
+    s/"fdl"/"fdl13Only"/g
+    s/"gpl1?"/"gpl1Only"/g
+    s/"gpl2\+"/"gpl2Plus"/g
+    s/"gpl3\+"/"gpl3Plus"/g
+    s/"lgpl"/"lgpl2"/g
+    s/"lgpl2\.1"/"lgpl21"/g
+    s/"lppl"/"lppl13c"/g      # not used consistently, sometimes "lppl" refers to an older version of the license
+    s/"lppl1\.2"/"lppl12"/g
+    s/"lppl1\.3"/"lppl13c"/g  # If a work refers to LPPL 1.3 as its license, this is interpreted as the latest version of the 1.3 license (https://www.latex-project.org/lppl/)
+    s/"lppl1\.3a"/"lppl13a"/g
+    s/"lppl1\.3c"/"lppl13c"/g
+    s/"other-free"/"free"/g
+    s/"pd"/"publicDomain"/g
+
+    s/^catalogue-license (.*)/  license = [ \1 ];/p
+  }
+
   # extract deps
-  /^depend [^.]+$/{
-    s/^depend (.+)$/  deps = [\n    "\1"/
+  /^depend ([^.]+|texlive\.infra)$/{
+    # open a list
+    i\  deps = [
 
     # loop through following depend lines
-    :next
-      h ; N     # save & read next line
-      s/\ndepend ([^.]+|texlive\.infra)$/\n    "\1"/
-      s/\ndepend (.+)$//
-      t next    # loop if the previous lines matched
+    :next-dep
+      s/^\n?depend ([^.]+|texlive\.infra)$/    "\1"/p # print dep
+      s/^.*$//                                        # clear pattern space
+      N; /^\ndepend /b next-dep
 
-    x; s/$/\n  ];/p ; x     # print saved deps
-    s/^.*\n//   # remove deps, resume processing
+    # close the list
+    i\  ];
+    D # restart cycle from the current line
   }
 
   # detect presence of notable files
   /^runfiles /{
-    s/^runfiles .*$//  # ignore the first line
-    :next-file
-      h ; N            # save to hold space & read next line
-      s!\n (.+)$! \1!  # save file name
-      t next-file      # loop if the previous lines matched
+    s/^.*$//  # ignore the first line
 
-    x                  # work on saved lines in hold space
+    # read all files
+    :next-file
+      N
+      s/\n / /    # remove newline
+      t next-file # loop if previous line matched
+
     / (RELOC|texmf-dist)\//i\  hasRunfiles = true;
     / tlpkg\//i\  hasTlpkg = true;
-    x                  # restore pattern space
-    s/^.*\n//          # remove saved lines, resume processing
+    D # restart cycle from the current line
   }
 
   # extract postaction scripts (right now, at most one per package, so a string suffices)
@@ -75,8 +103,5 @@ $a}
   /^execute\sAddFormat/i\  hasFormats = true;
 
   # close attrmap
-  /^$/{
-    i};
-    b next-package
-  }
+  /^$/i};
 }

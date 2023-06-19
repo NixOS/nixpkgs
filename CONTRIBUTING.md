@@ -161,19 +161,6 @@ Anything that does not cause user or downstream dependency regressions can be ba
 - Services which require a client to be up-to-date regardless. (E.g. `spotify`, `steam`, or `discord`)
 - Security critical applications (E.g. `firefox`)
 
-## Generating 23.11 Release Notes
-<!--
-note: title unchanged even though we don't need regeneration because extant
-PRs will link here. definitely change the title for 23.11 though.
--->
-
-Documentation in nixpkgs is transitioning to a markdown-centric workflow. In the past release notes required a translation step to convert from markdown to a compatible docbook document, but this is no longer necessary.
-
-Steps for updating 23.11 Release notes:
-
-1. Edit `nixos/doc/manual/release-notes/rl-2311.section.md` with the desired changes
-2. Commit changes to `rl-2311.section.md`.
-
 ## Reviewing contributions
 
 See the nixpkgs manual for more details on how to [Review contributions](https://nixos.org/nixpkgs/manual/#chap-reviewing-contributions).

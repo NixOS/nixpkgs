@@ -46,7 +46,7 @@ stdenv.mkDerivation (recursiveUpdate packageAttrs rec {
   ];
 
   postInstall = ''
-    ${wrapLaunchGame ""}
+    ${wrapLaunchGame "" "openra"}
 
     ${concatStrings (map (mod: ''
       makeWrapper $out/bin/openra $out/bin/openra-${mod} --add-flags Game.Mod=${mod}

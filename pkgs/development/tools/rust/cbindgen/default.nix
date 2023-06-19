@@ -1,21 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, python3Packages, Security }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, cmake
+, python3Packages
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-cbindgen";
-  version = "0.24.3";
+  version = "0.24.6";
 
   src = fetchFromGitHub {
-    owner = "eqrion";
+    owner = "mozilla";
     repo = "cbindgen";
     rev = "v${version}";
-    hash = "sha256-v5g6/ul6mJtzC4O4WlNopPtFUSbx2Jv79mZL72mucws=";
+    hash = "sha256-RHh97hwWmjV6hw+fX+fOtixX/DGedTf9cx+PYPW6/wI=";
   };
 
-  cargoSha256 = "sha256-j3/2cFjSDkx0TXCaxYSCLrBbAHrJfJ6hwBcXlDedwh8=";
+  cargoSha256 = "sha256-7G/16arXYwt7Nrs1isWyrPubm8GMi8NsjLjWAD8x6aM=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
   nativeCheckInputs = [
+    cmake
     python3Packages.cython
   ];
 
@@ -34,8 +42,9 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/mozilla/cbindgen/blob/v${version}/CHANGES";
     description = "A project for generating C bindings from Rust code";
-    homepage = "https://github.com/eqrion/cbindgen";
+    homepage = "https://github.com/mozilla/cbindgen";
     license = licenses.mpl20;
     maintainers = with maintainers; [ hexa ];
   };

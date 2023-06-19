@@ -62,10 +62,6 @@ in
           description = lib.mdDoc "Port where lemmy should listen for incoming requests.";
         };
 
-        options.federation = {
-          enabled = (mkEnableOption (lib.mdDoc "activitypub federation")) // { visible = false; };
-        };
-
         options.captcha = {
           enabled = mkOption {
             type = types.bool;
@@ -85,10 +81,6 @@ in
 
   config =
     lib.mkIf cfg.enable {
-      warnings = lib.optional (cfg.settings.federation.enabled) ''
-        This option was removed in 0.17.0 and no longer has any effect.
-      '';
-
       services.lemmy.settings = (mapAttrs (name: mkDefault)
         {
           bind = "127.0.0.1";
@@ -194,10 +186,16 @@ in
         };
       };
 
-      assertions = [{
-        assertion = cfg.database.createLocally -> cfg.settings.database.host == "localhost" || cfg.settings.database.host == "/run/postgresql";
-        message = "if you want to create the database locally, you need to use a local database";
-      }];
+      assertions = [
+        {
+          assertion = cfg.database.createLocally -> cfg.settings.database.host == "localhost" || cfg.settings.database.host == "/run/postgresql";
+          message = "if you want to create the database locally, you need to use a local database";
+        }
+        {
+          assertion = (!(hasAttrByPath ["federation"] cfg.settings)) && (!(hasAttrByPath ["federation" "enabled"] cfg.settings));
+          message = "`services.lemmy.settings.federation` was removed in 0.17.0 and no longer has any effect";
+        }
+      ];
 
       systemd.services.lemmy = {
         description = "Lemmy server";

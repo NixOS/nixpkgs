@@ -44,6 +44,11 @@ let
         deps = (orig.xdvi.deps or []) ++  [ "metafont" ];
       };
 
+      arabi-add = orig.arabi-add // {
+        # tlpdb lists license as "unknown", but the README says lppl13: http://mirrors.ctan.org/language/arabic/arabi-add/README
+        license = [  "lppl13c" ];
+      };
+
       # remove dependency-heavy packages from the basic collections
       collection-basic = orig.collection-basic // {
         deps = lib.filter (n: n != "metafont" && n != "xdvi") orig.collection-basic.deps;
@@ -179,6 +184,9 @@ let
     in runCommand "texlive-${tlName}"
       ( {
           src = fetchurl { inherit urls sha512; };
+          meta = {
+            license = map (x: lib.licenses.${x}) (args.license or []);
+          };
           inherit stripPrefix tlType;
           # metadata for texlive.combine
           passthru = {

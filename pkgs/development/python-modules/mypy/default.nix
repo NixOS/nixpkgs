@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pythonOlder
 
 # build-system
@@ -32,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "1.0.1";
+  version = "1.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -41,23 +40,8 @@ buildPythonPackage rec {
     owner = "python";
     repo = "mypy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vxPEUDC6fkYYiOl5nHf0qwMgPDC+9Vw56eTUQ174raQ=";
+    hash = "sha256-dfKuIyzgZo5hAZHighpXH78dHJ1PMbyCakyxF34CnMQ=";
   };
-
-  patches = [
-    # Fix compatibility with setupptools>=67.4.0
-    (fetchpatch {
-      # https://github.com/python/mypy/pull/14781
-      url = "https://github.com/python/mypy/commit/ab7b69a0532a5fe976c9c2a1b713d82d630692a4.patch";
-      hash = "sha256-dtzmoOZP3tOtxrBVhgqpdv+rnrTjTKHxQhBieuJXRtA=";
-    })
-    (fetchpatch {
-      # https://github.com/python/mypy/pull/14787
-      url = "https://github.com/python/mypy/commit/243f584d43e6eb316920f3155067ce7c1b65d473.patch";
-      hash = "sha256-uuh3S5ZyuJeTXyMvav2uSEao2qq23xMjK8rJjkY8RCY=";
-      includes = [ "mypyc/build.py" ];
-    })
-  ];
 
   nativeBuildInputs = [
     mypy-extensions

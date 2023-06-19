@@ -2,7 +2,6 @@
 , buildPythonPackage
 , colorama
 , fetchFromGitHub
-, pytest-mypy
 , pytestCheckHook
 , pythonOlder
 , regex
@@ -28,7 +27,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-mypy
     pytestCheckHook
   ];
 

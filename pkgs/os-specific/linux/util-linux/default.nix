@@ -38,6 +38,16 @@ stdenv.mkDerivation rec {
       url = "https://github.com/util-linux/util-linux/commit/1bd85b64632280d6bf0e86b4ff29da8b19321c5f.diff";
       hash = "sha256-dgu4de5ul/si7Vzwe8lr9NvsdI1CWfDQKuqvARaY6sE=";
     })
+
+    # FIXME: backport bcache detection fixes, remove in next release
+    (fetchpatch {
+      url = "https://github.com/util-linux/util-linux/commit/158639a2a4c6e646fd4fa0acb5f4743e65daa415.diff";
+      hash = "sha256-9F1OQFxKuI383u6MVy/UM15B6B+tkZFRwuDbgoZrWME=";
+    })
+    (fetchpatch {
+      url = "https://github.com/util-linux/util-linux/commit/00a19fb8cdfeeae30a6688ac6b490e80371b2257.diff";
+      hash = "sha256-w1S6IKSoL6JhVew9t6EemNRc/nrJQ5oMqFekcx0kno8=";
+    })
   ];
 
   outputs = [ "bin" "dev" "out" "lib" "man" ];

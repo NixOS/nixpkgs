@@ -286,7 +286,7 @@ let
     makeTest {
       inherit enableOCR;
       name = "installer-" + name;
-      meta = with pkgs.lib.maintainers; {
+      meta = {
         # put global maintainers here, individuals go into makeInstallerTest fkt call
         maintainers = (meta.maintainers or []);
       };
@@ -298,7 +298,12 @@ let
             ../modules/profiles/installation-device.nix
             ../modules/profiles/base.nix
             extraInstallerConfig
+            ./common/auto-format-root-device.nix
           ];
+
+          # In systemdStage1, also automatically format the device backing the
+          # root filesystem.
+          virtualisation.fileSystems."/".autoFormat = systemdStage1;
 
           # builds stuff in the VM, needs more juice
           virtualisation.diskSize = 8 * 1024;
@@ -335,9 +340,6 @@ let
             desktop-file-utils
             docbook5
             docbook_xsl_ns
-            (docbook-xsl-ns.override {
-              withManOptDedupPatch = true;
-            })
             kbd.dev
             kmod.dev
             libarchive.dev

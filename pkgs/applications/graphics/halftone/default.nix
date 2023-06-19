@@ -15,13 +15,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "halftone";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "tfuxu";
     repo = pname;
     rev = version;
-    hash = "sha256-EYxnGpVKPV3Xg6dH3m1aC3/pDigUxkNF7C8U16n8al8=";
+    hash = "sha256-C/AzaKXZx/0mbrG5v2I5kKcw3N0gh/m/9zshbZfzECw=";
   };
 
   format = "other";

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, buildEnv, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -261,6 +261,7 @@ in {
         StateDirectory = "netbox";
         StateDirectoryMode = "0750";
         Restart = "on-failure";
+        RestartSec = 30;
       };
     in {
       netbox-migration = {
@@ -276,13 +277,18 @@ in {
           ExecStart = ''
             ${pkg}/bin/netbox migrate
           '';
+          PrivateTmp = true;
         };
       };
 
       netbox = {
         description = "NetBox WSGI Service";
+        documentation = [ "https://docs.netbox.dev/" ];
+
         wantedBy = [ "netbox.target" ];
-        after = [ "netbox-migration.service" ];
+
+        after = [ "network-online.target" "netbox-migration.service" ];
+        wants = [ "network-online.target" ];
 
         preStart = ''
           ${pkg}/bin/netbox trace_paths --no-input
@@ -290,9 +296,7 @@ in {
           ${pkg}/bin/netbox remove_stale_contenttypes --no-input
         '';
 
-        environment = {
-          PYTHONPATH = pkg.pythonPath;
-        };
+        environment.PYTHONPATH = pkg.pythonPath;
 
         serviceConfig = defaultServiceConfig // {
           ExecStart = ''
@@ -300,32 +304,37 @@ in {
               --bind ${cfg.listenAddress}:${toString cfg.port} \
               --pythonpath ${pkg}/opt/netbox/netbox
           '';
+          PrivateTmp = true;
         };
       };
 
       netbox-rq = {
         description = "NetBox Request Queue Worker";
+        documentation = [ "https://docs.netbox.dev/" ];
+
         wantedBy = [ "netbox.target" ];
         after = [ "netbox.service" ];
 
-        environment = {
-          PYTHONPATH = pkg.pythonPath;
-        };
+        environment.PYTHONPATH = pkg.pythonPath;
 
         serviceConfig = defaultServiceConfig // {
           ExecStart = ''
             ${pkg}/bin/netbox rqworker high default low
           '';
+          PrivateTmp = true;
         };
       };
 
       netbox-housekeeping = {
         description = "NetBox housekeeping job";
-        after = [ "netbox.service" ];
+        documentation = [ "https://docs.netbox.dev/" ];
 
-        environment = {
-          PYTHONPATH = pkg.pythonPath;
-        };
+        wantedBy = [ "multi-user.target" ];
+
+        after = [ "network-online.target" ];
+        wants = [ "network-online.target" ];
+
+        environment.PYTHONPATH = pkg.pythonPath;
 
         serviceConfig = defaultServiceConfig // {
           Type = "oneshot";
@@ -338,10 +347,17 @@ in {
 
     systemd.timers.netbox-housekeeping = {
       description = "Run NetBox housekeeping job";
-      wantedBy = [ "timers.target" ];
+      documentation = [ "https://docs.netbox.dev/" ];
+
+      wantedBy = [ "multi-user.target" ];
+
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
 
       timerConfig = {
         OnCalendar = "daily";
+        AccuracySec = "1h";
+        Persistent = true;
       };
     };
 

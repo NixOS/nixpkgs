@@ -238,6 +238,19 @@ buildStdenv.mkDerivation ({
       hash = "sha256-fLUYaJwhrC/wF24HkuWn2PHqz7LlAaIZ1HYjRDB2w9A=";
     })
   ]
+  ++ lib.optional (lib.versionOlder version "109") [
+    # cherry-pick bindgen change to fix build with clang 16
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/community/firefox-esr/bindgen.patch?id=4c4b0c01c808657fffc5b796c56108c57301b28f";
+      hash = "sha256-lTvgT358M4M2vedZ+A6xSKsBYhSN+McdmEeR9t75MLU=";
+    })
+  ]
+  ++ lib.optional (lib.versionOlder version "111") [
+    # cherry-pick mp4parse change fixing build with Rust 1.70+
+    # original change: https://github.com/mozilla/mp4parse-rust/commit/8b5b652d38e007e736bb442ccd5aa5ed699db100
+    # vendored to update checksums
+    ./mp4parse-rust-170.patch
+  ]
   ++ lib.optional (lib.versionOlder version "111") ./env_var_for_system_dir-ff86.patch
   ++ lib.optional (lib.versionAtLeast version "111") ./env_var_for_system_dir-ff111.patch
   ++ lib.optional (lib.versionAtLeast version "96") ./no-buildconfig-ffx96.patch

@@ -10,20 +10,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.0.270";
+  version = "0.0.272";
 
   src = fetchFromGitHub {
-    owner = "charliermarsh";
+    owner = "astral-sh";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-rruNNP/VkvMQexQ+V/ASxl5flHt00YomMAVzW+eWp20=";
+    hash = "sha256-B4wZTKC1Z6OxXQHrG9Q9VjY6ZnA3FOoMMNfroe+1A7I=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "libcst-0.1.0" = "sha256-jG9jYJP4reACkFLrQBWOYH6nbKniNyFVItD0cTZ+nW0=";
-      "ruff_text_size-0.0.0" = "sha256-hiM4+YAb0UUt8mUoKhMqTAiR3hCyoRMyEDe6di6Ohrc=";
+      "ruff_text_size-0.0.0" = "sha256-5CjNHj5Rz51HwLyXtUKJHmEKkAC183oafdqKDem69oc=";
       "unicode_names2-0.6.0" = "sha256-eWg9+ISm/vztB0KIdjhq5il2ZnwGJQCleCYfznCI3Wg=";
     };
   };
@@ -58,8 +58,8 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "An extremely fast Python linter";
-    homepage = "https://github.com/charliermarsh/ruff";
-    changelog = "https://github.com/charliermarsh/ruff/releases/tag/v${version}";
+    homepage = "https://github.com/astral-sh/ruff";
+    changelog = "https://github.com/astral-sh/ruff/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
   };

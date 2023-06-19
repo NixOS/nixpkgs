@@ -118,7 +118,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-rs";
-  version = "0.10.7";
+  version = "0.10.8";
 
   outputs = [ "out" "dev" ];
 
@@ -127,7 +127,7 @@ stdenv.mkDerivation rec {
     owner = "gstreamer";
     repo = "gst-plugins-rs";
     rev = version;
-    hash = "sha256-b+j7nAMK66+msRnIaj1S1DSvES5Gid3QazXgqO1II/Q=";
+    hash = "sha256-UxmfyqbQwkQjwHiARRpFJiGsrsNjv6V129lIHPk7gRk=";
     # TODO: temporary workaround for case-insensitivity problems with color-name crate - https://github.com/annymosse/color-name/pull/2
     nativeBuildInputs = [ yq moreutils ];
     postFetch = ''
@@ -138,15 +138,19 @@ stdenv.mkDerivation rec {
     '';
   };
 
+  postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
+    rm net/raptorq/tests/raptorq.rs
+  '';
+
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "cairo-rs-0.17.9" = "sha256-LiIb6y/Ks/o+rZhU8RpXN7jSo7JzBGmcNumxyx/lZs0=";
+      "cairo-rs-0.17.10" = "sha256-5lWlDHlMco380tRaxyApdNv5DDKJL9QrKI2DvHM3868=";
       "color-name-1.1.0" = "sha256-RfMStbe2wX5qjPARHIFHlSDKjzx8DwJ+RjzyltM5K7A=";
       "ffv1-0.0.0" = "sha256-af2VD00tMf/hkfvrtGrHTjVJqbl+VVpLaR0Ry+2niJE=";
       "flavors-0.2.0" = "sha256-zBa0X75lXnASDBam9Kk6w7K7xuH9fP6rmjWZBUB5hxk=";
       "gdk4-0.6.6" = "sha256-TI4F9MjIpxFEZItoewP/Zem1vM4MsKNJTzfgah1vjmI=";
-      "gstreamer-0.20.5" = "sha256-IQ56Upe73egId1IJRfzvqrJIzTc1x5FgAEbva9kuqPE=";
+      "gstreamer-0.20.6" = "sha256-IyzqCQ5oQt5QgFp6liGyDaFhteCceR1KPzJCE4R6zus=";
     };
   };
 

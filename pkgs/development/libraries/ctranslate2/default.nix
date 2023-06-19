@@ -4,9 +4,12 @@
 , cmake
 , darwin # Accelerate
 , llvmPackages # openmp
-, oneDNN
-, openblas
 , withMkl ? false, mkl
+# Enabling both withOneDNN and withOpenblas is broken
+# https://github.com/OpenNMT/CTranslate2/issues/1294
+, withOneDNN ? false, oneDNN
+, withOpenblas ? true, openblas
+, withRuy ? true
 }:
 
 let
@@ -30,19 +33,24 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     # https://opennmt.net/CTranslate2/installation.html#build-options
-    "-DWITH_DNNL=OFF" # requires oneDNN>=3.0
-    "-DWITH_OPENBLAS=ON"
+    # https://github.com/OpenNMT/CTranslate2/blob/54810350e662ebdb01ecbf8e4a746f02aeff1dd7/python/tools/prepare_build_environment_linux.sh#L53
+    # https://github.com/OpenNMT/CTranslate2/blob/59d223abcc7e636c1c2956e62482bc3299cc7766/python/tools/prepare_build_environment_macos.sh#L12
+    "-DOPENMP_RUNTIME=COMP"
+    "-DWITH_DNNL=${cmakeBool withOneDNN}"
+    "-DWITH_OPENBLAS=${cmakeBool withOpenblas}"
+    "-DWITH_RUY=${cmakeBool withRuy}"
     "-DWITH_MKL=${cmakeBool withMkl}"
   ]
   ++ lib.optional stdenv.isDarwin "-DWITH_ACCELERATE=ON";
 
-  buildInputs = [
-    llvmPackages.openmp
-    openblas
-    oneDNN
-  ] ++ lib.optional withMkl [
+  buildInputs = lib.optionals withMkl [
     mkl
+  ] ++ lib.optionals withOneDNN [
+    oneDNN
+  ] ++ lib.optionals withOpenblas [
+    openblas
   ] ++ lib.optionals stdenv.isDarwin [
+    llvmPackages.openmp
     darwin.apple_sdk.frameworks.Accelerate
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
     darwin.apple_sdk.frameworks.CoreGraphics
@@ -54,6 +62,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/OpenNMT/CTranslate2";
     changelog = "https://github.com/OpenNMT/CTranslate2/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ hexa misuzu ];
   };
 }

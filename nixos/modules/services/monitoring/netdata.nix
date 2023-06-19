@@ -159,6 +159,15 @@ in {
         '';
       };
 
+      claimTokenFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = lib.mdDoc ''
+          If set, automatically registers the agent using the given claim token
+          file.
+        '';
+      };
+
       enableAnalyticsReporting = mkOption {
         type = types.bool;
         default = false;
@@ -260,7 +269,25 @@ in {
         PrivateTmp = true;
         ProtectControlGroups = true;
         PrivateMounts = true;
-      };
+      } // (lib.optionalAttrs (cfg.claimTokenFile != null) {
+        LoadCredential = [
+          "netdata_claim_token:${cfg.claimTokenFile}"
+        ];
+
+        ExecStartPre = pkgs.writeShellScript "netdata-claim" ''
+          set -euo pipefail
+
+          if [[ -f /var/lib/netdata/cloud.d/claimed_id ]]; then
+            # Already registered
+            exit
+          fi
+
+          exec ${cfg.package}/bin/netdata-claim.sh \
+            -token="$(< "$CREDENTIALS_DIRECTORY/netdata_claim_token")" \
+            -url=https://app.netdata.cloud \
+            -daemon-not-running
+        '';
+      });
     };
 
     systemd.enableCgroupAccounting = true;

@@ -177,8 +177,7 @@ in
           description = lib.mdDoc "The email addresses of the public-inbox.";
         };
         options.url = mkOption {
-          type = with types; nullOr str;
-          default = null;
+          type = types.nonEmptyStr;
           example = "https://example.org/lists/example-discuss";
           description = lib.mdDoc "URL where this inbox can be accessed over HTTP.";
         };
