@@ -21,6 +21,7 @@
 , textToSpeechSupport ? stdenv.isLinux
 , jdks ? [ jdk17 jdk8 ]
 , additionalLibs ? [ ]
+, additionalPrograms ? [ ]
 }:
 let
   prismlauncherFinal = prismlauncher-unwrapped.override {
@@ -66,12 +67,17 @@ symlinkJoin {
       ++ lib.optional textToSpeechSupport flite
       ++ additionalLibs;
 
+      programs = [
+        xorg.xrandr
+      ]
+      ++ additionalPrograms;
+
     in
     [ "--prefix PRISMLAUNCHER_JAVA_PATHS : ${lib.makeSearchPath "bin/java" jdks}" ]
     ++ lib.optionals stdenv.isLinux [
       "--set LD_LIBRARY_PATH /run/opengl-driver/lib:${lib.makeLibraryPath libs}"
       # xorg.xrandr needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
-      "--prefix PATH : ${lib.makeBinPath [xorg.xrandr]}"
+      "--prefix PATH : ${lib.makeBinPath programs}"
     ];
 
   inherit (prismlauncherFinal) meta;
