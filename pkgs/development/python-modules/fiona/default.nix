@@ -78,6 +78,6 @@ buildPythonPackage rec {
     description = "OGR's neat, nimble, no-nonsense API for Python";
     homepage = "https://fiona.readthedocs.io/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ knedlsepp ];
+    maintainers = teams.geospatial.members;
   };
 }
