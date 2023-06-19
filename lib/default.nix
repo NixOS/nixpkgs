@@ -138,7 +138,7 @@ let
       mergeDefaultOption mergeOneOption mergeEqualOption mergeUniqueOption
       getValues getFiles
       optionAttrSetToDocList optionAttrSetToDocList'
-      scrubOptionValue literalExpression literalExample literalDocBook
+      scrubOptionValue literalExpression literalExample
       showOption showOptionWithDefLocs showFiles
       unknownModule mkOption mkPackageOption mkPackageOptionMD
       mdDoc literalMD;
