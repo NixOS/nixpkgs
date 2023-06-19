@@ -29441,6 +29441,8 @@ with pkgs;
 
   appvm = callPackage ../applications/virtualization/appvm { };
 
+  atomic-swap = callPackage ../applications/misc/atomic-swap { };
+
   yggdrasil = callPackage ../tools/networking/yggdrasil { };
 
   masterpdfeditor = libsForQt5.callPackage ../applications/misc/masterpdfeditor { };
