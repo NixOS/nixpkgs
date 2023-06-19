@@ -281,6 +281,9 @@ rec {
 
   types.kernel = enum (attrValues kernels);
 
+  # TODO (@amjoseph): we should eliminate execFormats or move it to
+  # abis; executable format is a property of the ABI not the kernel.
+  # This will also clear up the netbsd kludge in tripleFromSystem.
   kernels = with execFormats; with kernelFamilies; setTypes types.openKernel {
     # TODO(@Ericson2314): Don't want to mass-rebuild yet to keeping 'darwin' as
     # the normalized name for macOS.
