@@ -1,10 +1,10 @@
 { lib, stdenv, fetchurl }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "windows10-icons";
   version = "1.0";
 
   src = fetchurl {
-    url = "https://github.com/B00merang-Artwork/Windows-10/archive/refs/tags/${version}.tar.gz";
+    url = "https://github.com/B00merang-Artwork/Windows-10/archive/refs/tags/${finalAttrs.version}.tar.gz";
     hash = "sha256-ZGuLyOBNOANIicqs7zhGy2ZVmV8YBdh7P/e8Cykkmq4=";
   };
 
@@ -22,4 +22,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ mib ];
     platforms = platforms.linux;
   };
-}
+})
