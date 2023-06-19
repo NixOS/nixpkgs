@@ -15,6 +15,7 @@
 , jdk17
 , gamemode
 , flite
+, mesa-demos
 
 , msaClientID ? null
 , gamemodeSupport ? stdenv.isLinux
@@ -69,6 +70,7 @@ symlinkJoin {
 
       programs = [
         xorg.xrandr
+        mesa-demos  # need glxinfo
       ]
       ++ additionalPrograms;
 
