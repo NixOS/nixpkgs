@@ -28,7 +28,6 @@ rustPlatform.buildRustPackage rec {
   dontPatchELF = true;
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "A tiling window manager for the adventurer";
     homepage = "https://github.com/leftwm/leftwm";
     license = licenses.mit;
