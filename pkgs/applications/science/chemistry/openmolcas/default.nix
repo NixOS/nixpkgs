@@ -22,7 +22,7 @@ in stdenv.mkDerivation {
     repo = "OpenMolcas";
     # The tag keeps moving, fix a hash instead
     rev = "1cda3772686cbf99a4af695929a12d563c795ca2"; # 2023-06-12
-    sha256 = "sha256-6AAagMWRwxdoxAMpwH6efVHaq8501U2bkQank4tdsA8=";
+    sha256 = "sha256-DLRQsRy2jt8V8q2sKmv2hLuKCuMihp/+zcMY/3sg1Fk=";
   };
 
   patches = [
