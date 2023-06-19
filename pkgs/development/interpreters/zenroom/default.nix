@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchurl }:
+{ lib
+, stdenv
+, fetchurl 
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zenroom";
