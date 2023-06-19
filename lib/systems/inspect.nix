@@ -73,7 +73,7 @@ rec {
     isMacOS        = { kernel = kernels.macos; };
     isiOS          = { kernel = kernels.ios; };
     isLinux        = { kernel = kernels.linux; };
-    isSunOS        = { kernel = kernels.solaris; };
+    isSunOS        = { kernel = kernels.solaris2; };
     isFreeBSD      = { kernel = { name = "freebsd"; }; };
     isNetBSD       = { kernel = kernels.netbsd; };
     isOpenBSD      = { kernel = kernels.openbsd; };
