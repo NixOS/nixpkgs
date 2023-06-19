@@ -1,6 +1,7 @@
 { lib, stdenv
 , fetchFromGitHub
 , cmake
+, ninja
 , pkg-config
 , grpc
 , protobuf
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    ninja
     pkg-config
 
     # Used for functional tests, which run during buildPhase.
