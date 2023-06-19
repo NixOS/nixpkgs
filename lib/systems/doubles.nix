@@ -43,7 +43,9 @@ let
     "aarch64_be-none" "aarch64-none" "arm-none" "armv6l-none" "avr-none" "i686-none"
     "microblaze-none" "microblazeel-none" "mips-none" "mips64-none" "msp430-none" "or1k-none" "m68k-none"
     "powerpc-none" "powerpcle-none" "riscv32-none" "riscv64-none" "rx-none"
-    "s390-none" "s390x-none" "vc4-none" "x86_64-none"
+    "s390-none" "s390x-none"
+    "vc4-elf"  # nonstandard triple, requires many hacks
+    "x86_64-none"
 
     # OpenBSD
     "i686-openbsd" "x86_64-openbsd"

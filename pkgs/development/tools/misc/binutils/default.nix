@@ -40,7 +40,7 @@ let
       url = "mirror://gnu/binutils/binutils-${version}.tar.bz2";
       hash = "sha256-+CmOsVOks30RLpRapcsoUAQLzyaj6mW1pxXIOv4F5Io=";
     };
-    vc4-none = fetchFromGitHub {
+    vc4-elf = fetchFromGitHub {
       owner = "itszor";
       repo = "binutils-vc4";
       rev = "708acc851880dbeda1dd18aca4fd0a95b2573b36";
