@@ -25052,11 +25052,19 @@ with pkgs;
 
   smack = callPackage ../development/libraries/java/smack { };
 
-  swt = callPackage ../development/libraries/java/swt { };
+  swt = callPackage ../development/libraries/java/swt { 
+    gtk = gtk2;
+  };
+
   swt_jdk8 = callPackage ../development/libraries/java/swt {
+    gtk = gtk2;
     jdk = jdk8;
   };
 
+  swt-jdk8-gtk3 = callPackage ../development/libraries/java/swt {
+    gtk = gtk3;
+    jdk = jdk8;
+  };
 
   ### DEVELOPMENT / LIBRARIES / JAVASCRIPT
 
@@ -38647,6 +38655,17 @@ with pkgs;
   brmodelo = callPackage ../applications/science/engineering/brmodelo { };
 
   jflap = callPackage ../applications/science/engineering/jflap { };
+
+  modelio = callPackage ../applications/science/engineering/modelio {
+    inherit (eclipses) eclipse-sdk;
+    # gtk = lib.getDev gtk2;
+    gtk = gtk2;
+    swt = swt_jdk8;
+  };
+  
+  moda = callPackage ../applications/science/engineering/moda {
+    gtk = lib.getDev gtk3;
+  };
 
   strictdoc = python3.pkgs.callPackage ../applications/science/engineering/strictdoc { };
 

@@ -5,7 +5,7 @@
 , pkg-config
 , atk
 , glib
-, gtk2
+, gtk
 , jdk
 , libGL
 , libGLU
@@ -63,7 +63,7 @@ in stdenv.mkDerivation rec {
   ];
   buildInputs = [
     atk
-    gtk2
+    gtk
     jdk
     libGL
     libGLU
