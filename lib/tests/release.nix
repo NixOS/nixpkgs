@@ -8,6 +8,13 @@
 
 let
   lib = import ../.;
+
+  # This should be built once and kept in OfBorg's long-running
+  # store (not the ephemeral store which is `nix-store --init`ed
+  # below).  This is generating the *expected* test results, so it
+  # doesn't matter what version of Nix is used.
+  triples-expected = (import ./triples.nix).expected-output-from-gnu-config;
+
   testWithNix = nix:
     pkgs.runCommand "nixpkgs-lib-tests-nix-${nix.version}" {
       buildInputs = [
@@ -59,6 +66,11 @@ let
 
       echo "Running lib/tests/systems.nix"
       [[ $(nix-instantiate --eval --strict lib/tests/systems.nix | tee /dev/stderr) == '[ ]' ]];
+
+      echo "Running lib/tests/triples.nix"
+      set -x
+      [[ $(nix-instantiate --eval --strict -E '(import ${../..}/lib/tests/triples.nix).tests ${triples-expected.outPath}' | tee /dev/stderr) == '[ ]' ]];
+      set +x
 
       mkdir $out
       echo success > $out/${nix.version}
