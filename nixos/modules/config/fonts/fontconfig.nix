@@ -402,6 +402,19 @@ in
               in
               lib.warnIf (lib.hasPrefix "hint" val) warning val';
           };
+
+          interpreterVersion = mkOption {
+            type = types.nullOr types.int;
+            default = null;
+            description = lib.mdDoc ''
+              Subpixel hinting mode can be chosen by setting the TrueType
+              interpreter version. The available settings are:
+
+              - 35: Classic mode (default in 2.6)
+              - 38: Infinality mode
+              - 40: Minimal mode (default in 2.7)
+            '';
+          };
         };
 
         includeUserConf = mkOption {
@@ -522,6 +535,10 @@ in
     })
     (mkIf cfg.enable {
       fonts.fontconfig.confPackages = [ confPkg ];
+    })
+    (mkIf (cfg.enable && cfg.hinting.interpreterVersion != null) {
+      environment.sessionVariables.FREETYPE_PROPERTIES =
+        "truetype:interpreter-version=${toString cfg.hinting.interpreterVersion}";
     })
   ];
 
