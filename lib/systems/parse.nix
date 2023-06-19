@@ -489,9 +489,10 @@ rec {
   kernelName = kernel:
     kernel.name + toString (kernel.version or "");
 
-  doubleFromSystem = { cpu, kernel, abi, ... }:
+  doubleFromSystem = { cpu, kernel, abi, ... }@platform:
     /**/ if abi == abis.cygnus       then "${cpu.name}-cygwin"
     else if kernel.families ? darwin then "${cpu.name}-darwin"
+    else if isVc4 platform           then "${cpu.name}-${abi.name}"  # hack for nonstandard triple
     else "${cpu.name}-${kernelName kernel}";
 
   # Convert a system into a string triple
