@@ -26,7 +26,10 @@ let
         homepage = "https://github.com/xddxdd/bird-lg-go";
         changelog = "https://github.com/xddxdd/bird-lg-go/releases/tag/v${version}";
         license = licenses.gpl3Plus;
-        maintainers = with maintainers; [ tchekda ];
+        maintainers = with maintainers; [
+          tchekda
+          e1mo
+        ];
       };
     };
 
