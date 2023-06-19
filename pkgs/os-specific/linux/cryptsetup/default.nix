@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, lvm2, json_c, asciidoctor
 , openssl, libuuid, pkg-config, popt, nixosTests
+, libargon2, withInternalArgon2 ? false
 
   # The release tarballs contain precomputed manpage files, so we don't need
   # to run asciidoctor on the man sources. By avoiding asciidoctor, we make
@@ -41,6 +42,8 @@ stdenv.mkDerivation rec {
     "--disable-ssh-token"
   ] ++ lib.optionals (!rebuildMan) [
     "--disable-asciidoc"
+  ] ++ lib.optionals (!withInternalArgon2) [
+    "--enable-libargon2"
   ] ++ lib.optionals stdenv.hostPlatform.isStatic [
     "--disable-external-tokens"
     # We have to override this even though we're removing token
@@ -50,7 +53,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals rebuildMan [ asciidoctor ];
-  buildInputs = [ lvm2 json_c openssl libuuid popt ];
+  buildInputs = [ lvm2 json_c openssl libuuid popt ] ++ lib.optional (!withInternalArgon2) libargon2;
 
   # The test [7] header backup in compat-test fails with a mysterious
   # "out of memory" error, even though tons of memory is available.
