@@ -799,6 +799,10 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
+  nvim-coverage = super.nvim-coverage.overrideAttrs(old: {
+    dependencies = with self; [ plenary-nvim ];
+  });
+
   nvim-dap-python = super.nvim-dap-python.overrideAttrs (old: {
     dependencies = with self; [ nvim-dap ];
   });
