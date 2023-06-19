@@ -51,7 +51,7 @@ in
 
     system.disableInstallerTools = mkOption {
       internal = true;
-      type = types.bool;
+      type = lib.types.bool;
       default = false;
       description = lib.mdDoc ''
         Disable nixos-rebuild, nixos-generate-config, nixos-installer
@@ -61,39 +61,55 @@ in
       '';
     };
 
-    system.installerTools = lib.mkOption {
-      internal = true;
-      type = lib.types.attrsOf (lib.types.submodule ({ name, config, lib, ... }: {
-        options = {
-          name = lib.mkOption {
-            type = lib.types.str;
-            description = lib.mdDoc ''
-              the name of the package
-            '';
+    system.installerTools = {
+      nixos-version.selfContained = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = lib.mdDoc ''
+          Whether nixos-version is a self-contained script with a static reference
+          to the info it provides.
+          The alternative is to always read this info from /run/current-system.
+
+          The reason for not making nixos-version self-contained, is that doing so
+          causes a lot of rebuilds whenever the info contained in the JSON file,
+          like the nixpkgs revision hash, changes.
+        '';
+      };
+
+      tools = lib.mkOption {
+        internal = true;
+        type = lib.types.attrsOf (lib.types.submodule ({ name, config, lib, ... }: {
+          options = {
+            name = lib.mkOption {
+              type = lib.types.str;
+              description = lib.mdDoc ''
+                the name of the package
+              '';
+            };
+
+            enable = lib.mkEnableOption (lib.mdDoc "the package as part of the installer tools.");
+
+            package = lib.mkOption {
+              type = lib.types.package;
+              description = lib.mdDoc ''
+                the derivation providing the package
+              '';
+            };
           };
 
-          enable = lib.mkEnableOption (lib.mdDoc "the package as part of the installer tools.");
-
-          package = lib.mkOption {
-            type = lib.types.package;
-            description = lib.mdDoc ''
-              the derivation providing the package
-            '';
-          };
-        };
-
-        config.name = lib.mkDefault name;
-      }));
+          config.name = lib.mkDefault name;
+        }));
+      };
     };
   };
 
   config =
     let
-      installerTools = lib.filterAttrs (_: tool: tool.enable) config.system.installerTools;
+      installerTools = lib.filterAttrs (_: tool: tool.enable) config.system.installerTools.tools;
     in
     lib.mkIf (config.nix.enable && !config.system.disableInstallerTools) {
 
-      system.installerTools = {
+      system.installerTools.tools = {
         nixos-build-vms = {
           enable = true;
           package = makeProg {
@@ -138,7 +154,7 @@ in
             nix = config.nix.package.out;
             path = makeBinPath [
               pkgs.jq
-              config.system.installerTools.nixos-enter.package
+              config.system.installerTools.tools.nixos-enter.package
               pkgs.util-linuxMinimal
             ];
           };
@@ -160,15 +176,13 @@ in
             name = "nixos-version";
             src = ./nixos-version.sh;
             inherit (pkgs) runtimeShell;
-            inherit (config.system.nixos) version codeName revision;
-            inherit (config.system) configurationRevision;
-            json = builtins.toJSON ({
-              nixosVersion = config.system.nixos.version;
-            } // optionalAttrs (config.system.nixos.revision != null) {
-              nixpkgsRevision = config.system.nixos.revision;
-            } // optionalAttrs (config.system.configurationRevision != null) {
-              configurationRevision = config.system.configurationRevision;
-            });
+            path = [
+              pkgs.jq
+            ];
+            nixosVersionJson =
+              if config.system.installerTools.nixos-version.selfContained
+              then "${config.system.nixosVersionJson}"
+              else "/run/current-system/nixos-version.json";
           };
         };
       };
@@ -280,7 +294,7 @@ in
         lib.attrValues (lib.mapAttrs (_: tool: tool.package) installerTools);
 
       documentation.man.man-db.skipPackages =
-        lib.mkIf (installerTools ? nixos-version) [ config.system.installerTools.nixos-version.package ];
+        lib.mkIf (installerTools ? nixos-version) [ config.system.installerTools.tools.nixos-version.package ];
 
       system.build = lib.mapAttrs (_: drv: drv.package) installerTools;
     };
