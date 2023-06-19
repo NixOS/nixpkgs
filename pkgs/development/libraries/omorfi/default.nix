@@ -1,18 +1,15 @@
 { lib
 , stdenv
-, autoconf
-, automake
 , autoreconfHook
 , cg3
 , fetchFromGitHub
 , hfst
 , hfst-ospell
 , icu
-, libtool
 , libvoikko
+, makeWrapper
 , pkg-config
 , python3
-, python3Packages
 , zip
 }:
 
@@ -42,29 +39,28 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.wrapPython
   ];
 
->>>>>>> 2ea2d99a91e (hfst changes):pkgs/development/libraries/omorfi/default.nix
   buildInputs = [
-    hfst
+    python3.pkgs.hfst
     hfst-ospell
-    python3Packages.hfst-python
-    icu
-  ];
-  nativeBuildInputs = [
-    autoconf
-    automake
-    autoreconfHook
-    cg3
-    libtool
-    pkg-config
-    python3
     libvoikko
-    zip
   ];
+
+  # Supplied pkg-config file doesn't properly expose these
   propagatedBuildInputs = [
     hfst
-    python3Packages.hfst
     icu
   ];
+
+  # Wrap shell scripts so they find the Python scripts
+  # omorfi.bash inexplicably fails when wrapped
+  preFixup = ''
+    wrapPythonProgramsIn "$out/bin" "$out ${python3.pkgs.hfst}"
+    for i in "$out/bin"/*.{sh,bash}; do
+      if [ $(basename "$i") != "omorfi.bash" ]; then
+        wrapProgram "$i" --prefix "PATH" : "$out/bin/"
+      fi
+    done
+  '';
 
   # Enable all features
   configureFlags = [
@@ -74,22 +70,12 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-hyphenator"
   ];
 
-  # Fix for omorfi-hyphenate.sh file not found error
-  postInstall = ''
-    mv $out/share/omorfi/omorfi.hyphenate-rules.hfst $out/share/omorfi/omorfi.hyphenate.hfst
-  '';
-
-  src = fetchFromGitHub {
-    owner = "flammie";
-    repo = "omorfi";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-UoqdwNWCNOPX6u1YBlnXUcB/fmcvcy/HXbYciVrMBOY=";
-  };
-
   meta = with lib; {
     description = "Analysis for Finnish text";
     homepage = "https://github.com/flammie/omorfi";
     license = licenses.gpl3;
     maintainers = with maintainers; [ lurkki ];
+    # Darwin build fails due to hfst not being found
+    broken = stdenv.isDarwin;
   };
 })
