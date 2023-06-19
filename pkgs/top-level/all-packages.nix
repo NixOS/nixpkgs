@@ -41286,9 +41286,9 @@ with pkgs;
 
   libvoikko = callPackage ../development/libraries/libvoikko { };
 
-  hfst = callPackage ../development/libraries/hfst/hfst.nix { };
+  hfst = callPackage ../development/libraries/hfst { };
 
-  hfst-ospell = callPackage ../applications/misc/hfst-ospell/default.nix { };
+  hfst-ospell = callPackage ../applications/misc/hfst-ospell { };
 
-  omorfi = callPackage ../applications/misc/omorfi/omorfi.nix { };
+  omorfi = callPackage ../applications/misc/omorfi { };
 }
