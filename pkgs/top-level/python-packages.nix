@@ -7829,6 +7829,8 @@ self: super: with self; {
 
   python-ipmi = callPackage ../development/python-modules/python-ipmi { };
 
+  python-ipware = callPackage ../development/python-modules/python-ipware { };
+
   python-ironicclient = callPackage ../development/python-modules/python-ironicclient { };
 
   python-izone = callPackage ../development/python-modules/python-izone { };
@@ -9747,6 +9749,8 @@ self: super: with self; {
   pytest-tap = callPackage ../development/python-modules/pytest-tap { };
 
   pytest-test-utils = callPackage ../development/python-modules/pytest-test-utils { };
+
+  pytest-testinfra = callPackage ../development/python-modules/pytest-testinfra { };
 
   pytest-testmon = callPackage ../development/python-modules/pytest-testmon { };
 
@@ -12197,6 +12201,8 @@ self: super: with self; {
   tifffile = callPackage ../development/python-modules/tifffile { };
 
   tika = callPackage ../development/python-modules/tika { };
+
+  tika-client = callPackage ../development/python-modules/tika-client { };
 
   tiktoken = callPackage ../development/python-modules/tiktoken { };
 

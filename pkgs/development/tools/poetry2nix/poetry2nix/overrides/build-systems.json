@@ -7199,6 +7199,9 @@
   "igraph": [
     "setuptools"
   ],
+  "ihatemoney": [
+    "setuptools"
+  ],
   "ijson": [
     "setuptools"
   ],

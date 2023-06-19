@@ -718,6 +718,8 @@ with pkgs;
 
   credential-detector = callPackage ../tools/security/credential-detector { };
 
+  creds = callPackage ../tools/security/creds { };
+
   credslayer = callPackage ../tools/security/credslayer { };
 
   device-tree_rpi = callPackage ../os-specific/linux/device-tree/raspberrypi.nix { };
@@ -894,6 +896,8 @@ with pkgs;
   graph-easy = callPackage ../tools/graphics/graph-easy { };
 
   mangal = callPackage ../applications/misc/mangal { };
+
+  mermaid-filter = callPackage ../tools/misc/mermaid-filter { };
 
   graphw00f = callPackage ../tools/security/graphw00f { };
 
@@ -4452,6 +4456,8 @@ with pkgs;
 
   wdt = callPackage ../applications/networking/sync/wdt { };
 
+  wl-clip-persist = callPackage ../tools/wayland/wl-clip-persist { };
+
   wl-clipboard = callPackage ../tools/wayland/wl-clipboard { };
 
   wl-clipboard-x11 = callPackage ../tools/wayland/wl-clipboard-x11 { };
@@ -6871,6 +6877,8 @@ with pkgs;
   deer = callPackage ../shells/zsh/zsh-deer { };
 
   deno = callPackage ../development/web/deno { };
+
+  deqp-runner = callPackage ../tools/graphics/deqp-runner { };
 
   detox = callPackage ../tools/misc/detox { };
 
@@ -9611,6 +9619,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  nbutools = callPackage ../tools/security/nbutools { };
+
   ncrack = callPackage ../tools/security/ncrack { };
 
   nerdctl = callPackage ../applications/networking/cluster/nerdctl { };
@@ -10566,6 +10576,7 @@ with pkgs;
     nomad_1_2
     nomad_1_3
     nomad_1_4
+    nomad_1_5
     ;
 
   nomad-autoscaler = callPackage ../applications/networking/cluster/nomad-autoscaler { };
