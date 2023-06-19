@@ -323,21 +323,21 @@ rec {
 
   types.abi = enum (attrValues abis);
 
-  abis = setTypes types.openAbi {
-    cygnus       = {};
-    msvc         = {};
+  abis = setTypes types.openAbi rec {
+    cygnus       = { kernels = [ "windows" ]; };
+    msvc         = { kernels = [ "windows" ]; };
 
     # Note: eabi is specific to ARM and PowerPC.
     # On PowerPC, this corresponds to PPCEABI.
     # On ARM, this corresponds to ARMEABI.
-    eabi         = { float = "soft"; };
-    eabihf       = { float = "hard"; };
+    eabi         = { float = "soft"; kernels = builtins.attrNames kernels; };
+    eabihf       = { float = "hard"; kernels = builtins.attrNames kernels; };
 
     # Other architectures should use ELF in embedded situations.
-    elf          = {};
+    elf          = { kernels = [ ]; };
 
-    androideabi  = {};
-    android      = {
+    androideabi  = { inherit (android) kernels; };
+    android      = { kernels = [ "linux" ];
       assertions = [
         { assertion = platform: !platform.isAarch32;
           message = ''
@@ -347,9 +347,9 @@ rec {
       ];
     };
 
-    gnueabi      = { float = "soft"; };
-    gnueabihf    = { float = "hard"; };
-    gnu          = {
+    gnueabi      = { float = "soft"; inherit (gnu) kernels; };
+    gnueabihf    = { float = "hard"; inherit (gnu) kernels; };
+    gnu          = { kernels = [ "freebsd12" "freebsd13" "linux" ];
       assertions = [
         { assertion = platform: !platform.isAarch32;
           message = ''
@@ -363,27 +363,28 @@ rec {
         }
       ];
     };
-    gnuabi64     = { abi = "64"; };
-    muslabi64    = { abi = "64"; };
+    gnuabi64     = { abi = "64"; inherit (gnu) kernels; };
+    muslabi64    = { abi = "64"; kernels = [ "linux" ]; };
 
     # NOTE: abi=n32 requires a 64-bit MIPS chip!  That is not a typo.
     # It is basically the 64-bit abi with 32-bit pointers.  Details:
     # https://www.linux-mips.org/pub/linux/mips/doc/ABI/MIPS-N32-ABI-Handbook.pdf
-    gnuabin32    = { abi = "n32"; };
-    muslabin32   = { abi = "n32"; };
+    gnuabin32    = { abi = "n32"; inherit (gnu) kernels; };
+    muslabin32   = { abi = "n32"; inherit (musl) kernels; };
 
-    gnuabielfv2  = { abi = "elfv2"; };
-    gnuabielfv1  = { abi = "elfv1"; };
+    gnuabielfv2  = { abi = "elfv2"; kernels = [ "linux" ]; };
+    gnuabielfv1  = { abi = "elfv1"; kernels = [ "linux" ]; };
 
-    musleabi     = { float = "soft"; };
-    musleabihf   = { float = "hard"; };
-    musl         = {};
+    musleabi     = { float = "soft"; inherit (musl) kernels; };
+    musleabihf   = { float = "hard"; inherit (musl) kernels; };
+    musl         = { kernels = [ "linux" ]; };
 
-    uclibceabi   = { float = "soft"; };
-    uclibceabihf = { float = "hard"; };
-    uclibc       = {};
+    uclibceabi   = { float = "soft"; inherit (uclibc) kernels; };
+    uclibceabihf = { float = "hard"; inherit (uclibc) kernels; };
+    uclibc       = { kernels = [ "linux" ]; };
 
-    unknown = {};
+    # in gnu-config triples, this abi is actually the empty string "" rather than "-unknown"
+    unknown = { kernels = [ "darwin" "freebsd12" "freebsd13" "freebsd" "genode" "solaris2" "solaris" "ghcjs" "mmixware" "netbsd" "none" "openbsd" "redox" "wasi" ]; };
   };
 
   ################################################################################
@@ -403,6 +404,15 @@ rec {
 
   mkSystem = components:
     assert types.parsedPlatform.check components;
+    assert ((components.kernel == kernels.ghcjs) != (components.cpu == cpuTypes.javascript))
+           -> throw "cpu==\"javascript\" and kernel==\"ghcjs\" are valid only with each other; you attempted to use cpu==\"${components.cpu.name}\" with kernel==\"${components.kernel.name}\"";
+    assert !(lib.elem components.kernel.name (components.abi.kernels or [ components.kernel.name ])) && !(isVc4 components)
+            -> throw "kernel ${components.kernel.name} does not allow abi ${components.abi.name}";
+    assert !(isVc4 components -> (with components; vendor.name == "" && kernel.name == "" && abi.name == "elf"))
+            -> throw (with components; "Broadcom VC4 CPUs may be used only in the grandfathered nonstandard triple `vc4-elf`; you tried to create ${cpu.name}-${vendor.name}-${kernel.name}-${abi.name}");
+    assert !(isJavaScript components -> (with components; (vendor.name == "unknown" || vendor.name == "") && kernel == kernels.ghcjs && abi == abis.unknown))
+            -> throw (with components; "The special `javascript` \"cpu\" may be used only in the grandfathered nonstandard triple `javascript-unknown-ghcjs`; you tried to create ${cpu.name}-${vendor.name}-${kernel.name}-${abi.name}");
+
     setType "system" components;
 
   mkSkeletonFromList = l: {
