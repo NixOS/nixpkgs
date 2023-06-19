@@ -16,7 +16,10 @@ stdenv.mkDerivation rec {
   patches = [ ./prefix.patch ];
   dontConfigure = true;
   makeFlags = [ "prefix=$(out)" ];
-  installTargets = "install-libnut";
+  installTargets = [
+    "install-libnut"
+    "install-nututils"
+  ];
 
   meta = with lib; {
     description = "A library to read/write the NUT video container format";
