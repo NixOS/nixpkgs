@@ -80,6 +80,9 @@ stdenv.mkDerivation rec {
   # ( https://github.com/IntelRealSense/meta-intel-realsense/issues/20 )
   postInstall = lib.optionalString enablePython  ''
     cp ../wrappers/python/pyrealsense2/__init__.py $out/${pythonPackages.python.sitePackages}/pyrealsense2
+  '' + ''
+    substituteInPlace $out/lib/cmake/realsense2/realsense2Targets.cmake \
+    --replace "\''${_IMPORT_PREFIX}/include" "$dev/include"
   '';
 
   meta = with lib; {
