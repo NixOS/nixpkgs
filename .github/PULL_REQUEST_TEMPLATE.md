@@ -1,11 +1,11 @@
-###### Description of changes
+## Description of changes
 
 <!--
 For package updates please link to a changelog or describe changes, this helps your fellow maintainers discover breaking updates.
 For new packages please briefly describe the package or provide a link to its homepage.
 -->
 
-###### Things done
+## Things done
 
 <!-- Please check what applies. Note that these are not hard requirements but merely serve as information for reviewers. -->
 
