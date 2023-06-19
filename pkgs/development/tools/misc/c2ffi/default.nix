@@ -1,24 +1,25 @@
-{ lib
+{ stdenv
+, lib
 , fetchFromGitHub
 , cmake
-, llvmPackages_11
+, llvmPackages_15
 , unstableGitUpdater
 }:
 
 let
-  c2ffiBranch = "llvm-11.0.0";
-  llvmPackages = llvmPackages_11;
+  c2ffiBranch = "llvm-15.0.0";
+  llvmPackages = llvmPackages_15;
 in
 
 llvmPackages.stdenv.mkDerivation {
   pname = "c2ffi-${c2ffiBranch}";
-  version = "unstable-2021-06-15";
+  version = "unstable-2023-06-08";
 
   src = fetchFromGitHub {
     owner = "rpav";
     repo = "c2ffi";
-    rev = "f50243926a0afb589de1078a073ac08910599582";
-    sha256 = "UstGicFzFY0/Jge5HGYTPwYSnh9OUBY5346ObZYfR54=";
+    rev = "3078cb57ccfa43736aa93720a72f1074034cb37d";
+    sha256 = "sha256-q4TWNJF6mtVUJ/97NSS6Eep2aSYDU5UbOC+wcrBW610";
   };
 
   passthru.updateScript = unstableGitUpdater {
@@ -52,5 +53,6 @@ llvmPackages.stdenv.mkDerivation {
     description = "An LLVM based tool for extracting definitions from C, C++, and Objective C header files for use with foreign function call interfaces";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ attila-lendvai ];
+    meta.broken = stdenv.hostPlatform.isDarwin;
  };
 }
