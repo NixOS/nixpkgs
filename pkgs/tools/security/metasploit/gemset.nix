@@ -104,70 +104,70 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1y5qw1gzmhad2hi7g78mdc7kx7j90a669rpx3nb1n3vih5dj084q";
+      sha256 = "0plbj6d69j3vi8zwg9q8hkr77b7p7kg8bfqpvv9ghv2zay3igp3v";
       type = "gem";
     };
-    version = "1.779.0";
+    version = "1.780.0";
   };
   aws-sdk-core = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1r29w7p08qp24z3qqvh5g7gchijlxw2x0bx9abcq7rnnzyqcd55n";
+      sha256 = "1fbbzcszpdjy2yzxfvl5fzgn0jgznkwxvqpb46nxv69gqhv3dpsg";
       type = "gem";
     };
-    version = "3.174.0";
+    version = "3.175.0";
   };
   aws-sdk-ec2 = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1v32lmfpxiiwaybiwn3x3987hppm0c1g6k7l7gqpmyfh9b0yfmqj";
+      sha256 = "0smq6m3xgh81snmckai835ashg1f6p5qq0l6mmwqqg5cgppgi81r";
       type = "gem";
     };
-    version = "1.383.0";
+    version = "1.384.0";
   };
   aws-sdk-iam = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1m3434rgl6azw2rfm9gvk5ibjsdn234brfg5iax8wqr4iaas129l";
+      sha256 = "0bqz348kdcfwm4pz79d0rfwn4qaf75icrp8nkiilgnl16zwc2l6b";
       type = "gem";
     };
-    version = "1.79.0";
+    version = "1.81.0";
   };
   aws-sdk-kms = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0dwmxdqgkz077sm4rckv653b8qjvby3jp696wjndpwdpzz2vg8mb";
+      sha256 = "0dkgcgvif4hjlq5jhixd2hf17pm2pib7p3jxg9g92pybsff9rk7c";
       type = "gem";
     };
-    version = "1.66.0";
+    version = "1.67.0";
   };
   aws-sdk-s3 = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0haglr7rlgsa68aca3r14xli8wzf5scsm9s22j16ya1hk3zsy7yh";
+      sha256 = "17ya49rwjzimqhzsj6vlc4xfvj2sixy04kr4b6ddg3r6y0jrsixi";
       type = "gem";
     };
-    version = "1.124.0";
+    version = "1.126.0";
   };
   aws-sdk-ssm = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0qz1x5dizp32n1g3fshabfkm89yx83l1ak1dhjldad15ix4lga0i";
+      sha256 = "08n63a4grhrylg5k055ksklp7dsh1rww59d3rshyphkjr5wyg3nv";
       type = "gem";
     };
-    version = "1.151.0";
+    version = "1.152.0";
   };
   aws-sigv4 = {
     groups = ["default"];
@@ -634,12 +634,12 @@
     platforms = [];
     source = {
       fetchSubmodules = false;
-      rev = "9f8fd022975dd9108576143b267ccc373ab6dfd7";
-      sha256 = "19v3lfvd23jq0is3y34fprfp434qmgdrkm16m4a6drrm2idrbici";
+      rev = "e4402b8b4ae8dfabcbb185c59200c3ae86c0cd6c";
+      sha256 = "0hz0cnf40gkdngh1gl9a2a65kfbhqzjphxsv4dz821kgf68jrn1f";
       type = "git";
       url = "https://github.com/rapid7/metasploit-framework";
     };
-    version = "6.3.20";
+    version = "6.3.21";
   };
   metasploit-model = {
     groups = ["default"];
@@ -656,10 +656,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "15563b4zvgx5qdc72wkjmk6fwhj87d5kwrk9x44rw1b6ya4dsch7";
+      sha256 = "0cva2kaj000gq3039ignp8wn36lq9b8znrwk98iwg8p4xc0vqa78";
       type = "gem";
     };
-    version = "2.0.135";
+    version = "2.0.141";
   };
   metasploit_data_models = {
     groups = ["default"];
@@ -706,10 +706,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0ic7i5z88zcaqnpzprf7saimq2f6sad57g5mkkqsrqrcd6h3mx06";
+      sha256 = "1kg9wh7jlc9zsr3hkhpzkbn0ynf4np5ap9m2d8xdrb8shy0y6pmb";
       type = "gem";
     };
-    version = "5.18.0";
+    version = "5.18.1";
   };
   mqtt = {
     groups = ["default"];
@@ -837,10 +837,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1mr2ibfk874ncv0qbdkynay738w2mfinlkhnbd5lyk5yiw5q1p10";
+      sha256 = "1g6wvxab4qwnbny983n9bckc0afy6y6s3g5v3csdbsp8n7g9vxi3";
       type = "gem";
     };
-    version = "1.15.2";
+    version = "1.14.5";
   };
   nori = {
     groups = ["default"];
