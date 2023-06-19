@@ -23838,6 +23838,8 @@ with pkgs;
 
   qbs = libsForQt5.callPackage ../development/tools/build-managers/qbs { };
 
+  qdjango = libsForQt5.callPackage ../development/libraries/qdjango { };
+
   qimageblitz = callPackage ../development/libraries/qimageblitz { };
 
   qolibri = libsForQt5.callPackage ../applications/misc/qolibri { };
