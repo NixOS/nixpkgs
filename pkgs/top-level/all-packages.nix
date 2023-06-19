@@ -3558,6 +3558,8 @@ with pkgs;
 
   gotktrix = callPackage ../applications/networking/instant-messengers/gotktrix { };
 
+  gow = callPackage ../development/tools/gow { };
+
   graphite-cli = nodePackages.graphite-cli;
 
   gucci = callPackage ../tools/text/gucci { };
