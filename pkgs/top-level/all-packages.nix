@@ -11728,6 +11728,8 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) Carbon Cocoa IOKit;
   };
 
+  rio = callPackage ../applications/terminal-emulators/rio { };
+
   rig = callPackage ../tools/misc/rig { };
 
   ripdrag = callPackage ../tools/misc/ripdrag { };
