@@ -11,13 +11,13 @@ let
 in
 let finalPackage = buildDotnetModule rec {
   pname = "omnisharp-roslyn";
-  version = "1.39.6";
+  version = "1.39.7";
 
   src = fetchFromGitHub {
     owner = "OmniSharp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "6KCHZ5I5OkDaensqHO//owI/nrQkOoF60f/n3YV7jaE=";
+    sha256 = "sha256-KfO6YVTVAQeFKlnHSNx/KbO8vr+gDqwlyy50uEDA6FM=";
   };
 
   projectFile = "src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj";
@@ -39,8 +39,8 @@ let finalPackage = buildDotnetModule rec {
 
   postPatch = ''
     # Relax the version requirement
-    substituteInPlace global.json \
-      --replace '7.0.100-rc.1.22431.12' '${sdk_6_0.version}'
+    rm global.json
+
     # Patch the project files so we can compile them properly
     for project in src/OmniSharp.Http.Driver/OmniSharp.Http.Driver.csproj src/OmniSharp.LanguageServerProtocol/OmniSharp.LanguageServerProtocol.csproj src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj; do
       substituteInPlace $project \
