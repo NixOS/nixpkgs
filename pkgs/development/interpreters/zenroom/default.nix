@@ -1,7 +1,6 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
+{ lib
+  , stdenv
+  , fetchurl
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
       maintainable.
     '';
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [jacksmithinsulander];
+    maintainers = with maintainers; [ jacksmithinsulander ];
     mainProgram = finalAttrs.pname;
     platforms = platforms.linux;
   };
