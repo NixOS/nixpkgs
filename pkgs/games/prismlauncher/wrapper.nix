@@ -14,9 +14,11 @@
 , jdk8
 , jdk17
 , gamemode
+, flite
 
 , msaClientID ? null
 , gamemodeSupport ? stdenv.isLinux
+, textToSpeechSupport ? stdenv.isLinux
 , jdks ? [ jdk17 jdk8 ]
 , additionalLibs ? [ ]
 }:
@@ -61,6 +63,7 @@ symlinkJoin {
         stdenv.cc.cc.lib
       ]
       ++ lib.optional gamemodeSupport gamemode.lib
+      ++ lib.optional textToSpeechSupport flite
       ++ additionalLibs;
 
     in
