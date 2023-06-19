@@ -5127,6 +5127,8 @@ self: super: with self; {
 
   jaxlib-bin = callPackage ../development/python-modules/jaxlib/bin.nix {
     cudaSupport = pkgs.config.cudaSupport or false;
+    # 2023-05-11: fails on the error below with cudaPackages_11_8, drop asap
+    # cp: cannot stat '/nix/store/...-cudatoolkit-11.8.0-merged/include/./include': No such file or directory
     cudaPackages = pkgs.cudaPackages_11_7;
   };
 
@@ -5134,6 +5136,9 @@ self: super: with self; {
     inherit (pkgs.darwin) cctools;
     # Some platforms don't have `cudaSupport` defined, hence the need for 'or false'.
     cudaSupport = pkgs.config.cudaSupport or false;
+    # 2023-05-11: fails on the error below with cudaPackages_11_8, drop asap
+    # cp: cannot stat '/nix/store/...-cudatoolkit-11.8.0-merged/include/./include': No such file or directory
+    cudaPackages = pkgs.cudaPackages_11_7;
     IOKit = pkgs.darwin.apple_sdk_11_0.IOKit;
     protobuf = pkgs.protobuf3_20; # jaxlib-build 0.3.15 won't build with protobuf 3.21
   };
@@ -11992,6 +11997,7 @@ self: super: with self; {
 
   tensorflow-bin = callPackage ../development/python-modules/tensorflow/bin.nix {
     cudaSupport = pkgs.config.cudaSupport or false;
+    cudaPackages = pkgs.cudaPackages_11_7;
   };
 
   tensorflow-build = callPackage ../development/python-modules/tensorflow {
