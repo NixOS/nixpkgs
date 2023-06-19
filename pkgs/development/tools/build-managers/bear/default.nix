@@ -12,6 +12,9 @@
 , zlib
 , sqlite
 , re2
+, lit
+, python3
+, coreutils
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +28,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-x46BS+By5Zj5xeYRD45eXRDCAOqwpkkivVyJPnhkAMc=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+
+    # Used for functional tests, which run during buildPhase.
+    lit
+    python3
+  ];
 
   buildInputs = [
     grpc
@@ -40,10 +50,28 @@ stdenv.mkDerivation rec {
     re2
   ];
 
-  patches = [
-    # Default libexec would be set to /nix/store/*-bear//nix/store/*-bear/libexec/...
-    ./no-double-relative.patch
+  cmakeFlags = [
+    # Build system and generated files concatenate install prefix and
+    # CMAKE_INSTALL_{BIN,LIB}DIR, which breaks if these are absolute paths.
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
+
+  patches = [
+    # Fix toolchain environment variable handling and the Darwin SIP check.
+    ./fix-functional-tests.patch
+  ];
+
+  postPatch = ''
+    patchShebangs test/bin
+
+    # /usr/bin/env is used in test commands and embedded scripts.
+    find test -name '*.sh' \
+      -exec sed -ie 's|/usr/bin/env|${coreutils}/bin/env|g' {} +
+  '';
+
+  # Functional tests use loopback networking.
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Tool that generates a compilation database for clang tooling";
