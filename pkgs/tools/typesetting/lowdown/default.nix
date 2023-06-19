@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fixDarwinDylibNames, which
+{ lib, stdenv, fetchurl, fixDarwinDylibNames, which, dieHook
 , enableShared ? !(stdenv.hostPlatform.isStatic)
 , enableStatic ? stdenv.hostPlatform.isStatic
 # for passthru.tests
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha512 = "1cizrzmldi7lrgdkpn4b6skp1b5hz2jskkbcbv9k6lmz08clm02gyifh7fgd8j2rklqsim34n5ifyg83xhsjzd57xqjys1ccjdn3a5m";
   };
 
-  nativeBuildInputs = [ which ]
+  nativeBuildInputs = [ which dieHook ]
     ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
 
   preConfigure = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
@@ -52,9 +52,8 @@ stdenv.mkDerivation rec {
 
     # Check that soVersion is up to date even if we are not on darwin
     lib.optionalString (enableShared && !stdenv.isDarwin) ''
-      set -x
-      test -f $lib/lib/liblowdown.so.${soVersion}
-      set +x
+      test -f $lib/lib/liblowdown.so.${soVersion} || \
+        die "postInstall: expected $lib/lib/liblowdown.so.${soVersion} is missing"
     ''
     # Fix lib extension so that fixDarwinDylibNames detects it, see
     # <https://github.com/kristapsdz/lowdown/issues/87#issuecomment-1532243650>.
@@ -63,7 +62,8 @@ stdenv.mkDerivation rec {
       mv "$lib/lib/liblowdown.so.${soVersion}" "$darwinDylib"
 
       # Make sure we are re-creating a symbolic link here
-      test -L "$lib/lib/liblowdown.so"
+      test -L "$lib/lib/liblowdown.so" || \
+        die "postInstall: expected $lib/lib/liblowdown.so to be a symlink"
       ln -s "$darwinDylib" "$lib/lib/liblowdown.dylib"
       rm "$lib/lib/liblowdown.so"
     '';
