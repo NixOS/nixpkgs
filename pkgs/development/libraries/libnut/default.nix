@@ -1,4 +1,7 @@
-{ stdenv, lib, fetchgit }:
+{ stdenv
+, lib
+, fetchgit
+}:
 stdenv.mkDerivation rec {
   pname = "libnut";
   version = "unstable-2020-11-06";
