@@ -56,7 +56,7 @@ let
       homepage = "https://github.com/onekey-sec/sasquatch";
       description = "Set of patches to the standard unsquashfs utility (part of squashfs-tools) that attempts to add support for as many hacked-up vendor-specific SquashFS implementations as possible";
       license = licenses.gpl2Plus;
-      maintainers = with maintainers; [ pamplemousse vlaci ];
+      maintainers = with maintainers; [ vlaci ];
       platforms = platforms.unix;
       mainProgram = pname;
     };
