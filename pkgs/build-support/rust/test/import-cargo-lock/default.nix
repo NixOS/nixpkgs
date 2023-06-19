@@ -1,4 +1,4 @@
-{ callPackage, writers, python3Packages }:
+{ callPackage, maturin, writers, python3Packages }:
 
 # Build like this from nixpkgs root:
 # $ nix-build -A tests.importCargoLock
@@ -10,7 +10,7 @@
   gitDependencyRevNonWorkspaceNestedCrate = callPackage ./git-dependency-rev-non-workspace-nested-crate { };
   gitDependencyTag = callPackage ./git-dependency-tag { };
   gitDependencyBranch = callPackage ./git-dependency-branch { };
-  maturin = callPackage ./maturin { };
+  maturin = maturin.tests.pyo3;
   v1 = callPackage ./v1 { };
   gitDependencyWorkspaceInheritance = callPackage ./git-dependency-workspace-inheritance {
     replaceWorkspaceValues = writers.writePython3 "replace-workspace-values"
