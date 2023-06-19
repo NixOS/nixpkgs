@@ -2,6 +2,7 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
+, fetchpatch
 , libiconv
 , openssl
 , pkg-config
@@ -22,6 +23,15 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-MZrx72poA6uOIulWIQkfOr9gy5qr5f61UtLITfES/rk=";
+
+  patches = [
+    # Fix errors in test `test_visualize_newline` on Rust 1.70
+    # <https://github.com/extrawurst/gitui/pull/1646>
+    (fetchpatch {
+      url = "https://github.com/extrawurst/gitui/commit/c1e3e978a225d57bf365f61e0d35394ad1e85950.patch";
+      hash = "sha256-N1dkEbjsUpBnAbXhk0qyywbjZoMkTVGNM6EDAKdwNi0=";
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 
