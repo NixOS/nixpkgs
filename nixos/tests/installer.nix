@@ -286,7 +286,7 @@ let
     makeTest {
       inherit enableOCR;
       name = "installer-" + name;
-      meta = with pkgs.lib.maintainers; {
+      meta = {
         # put global maintainers here, individuals go into makeInstallerTest fkt call
         maintainers = (meta.maintainers or []);
       };
