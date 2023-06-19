@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isStatic) "-lgcc_s";
 
   configureFlags = [
-    "--enable-cryptsetup-reencrypt"
     "--with-crypto_backend=openssl"
     "--disable-ssh-token"
   ] ++ lib.optionals (!rebuildMan) [
