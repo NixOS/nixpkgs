@@ -1,6 +1,6 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Eelco Dolstra <eelco.dolstra@logicblox.com>
-Date: Fri, 19 Dec 2014 14:46:17 +0100
+From: Raito Bezarius <masterancpp@gmail.com>
+Date: Mon, 19 Jun 2023 02:13:42 +0200
 Subject: [PATCH] Add some NixOS-specific unit directories
 
 Look in `/nix/var/nix/profiles/default/lib/systemd/{system,user}` for
@@ -8,13 +8,15 @@ units provided by packages installed into the default profile via
 `nix-env -iA nixos.$package`.
 
 Also, remove /usr and /lib as these don't exist on NixOS.
+
+Original-Author: Eelco Dolstra <eelco.dolstra@logicblox.com>
 ---
  src/basic/path-lookup.c | 17 ++---------------
  src/core/systemd.pc.in  |  8 ++++----
  2 files changed, 6 insertions(+), 19 deletions(-)
 
 diff --git a/src/basic/path-lookup.c b/src/basic/path-lookup.c
-index c99e9d8786..b9f85d1f8c 100644
+index 7d158a8295..f9bd62b631 100644
 --- a/src/basic/path-lookup.c
 +++ b/src/basic/path-lookup.c
 @@ -92,11 +92,7 @@ int xdg_user_data_dir(char **ret, const char *suffix) {
@@ -62,35 +64,37 @@ index c99e9d8786..b9f85d1f8c 100644
                                          STRV_IFNOTNULL(generator_late));
                          break;
  
-@@ -808,7 +799,6 @@ char **generator_binary_paths(LookupScope scope) {
-                 case LOOKUP_SCOPE_SYSTEM:
+@@ -808,7 +799,6 @@ char **generator_binary_paths(RuntimeScope scope) {
+                 case RUNTIME_SCOPE_SYSTEM:
                          add = strv_new("/run/systemd/system-generators",
                                         "/etc/systemd/system-generators",
 -                                       "/usr/local/lib/systemd/system-generators",
                                         SYSTEM_GENERATOR_DIR);
                          break;
  
-@@ -816,7 +806,6 @@ char **generator_binary_paths(LookupScope scope) {
-                 case LOOKUP_SCOPE_USER:
+@@ -816,7 +806,6 @@ char **generator_binary_paths(RuntimeScope scope) {
+                 case RUNTIME_SCOPE_USER:
                          add = strv_new("/run/systemd/user-generators",
                                         "/etc/systemd/user-generators",
 -                                       "/usr/local/lib/systemd/user-generators",
                                         USER_GENERATOR_DIR);
                          break;
  
-@@ -855,12 +844,10 @@ char **env_generator_binary_paths(bool is_system) {
-                 if (is_system)
+@@ -855,14 +844,12 @@ char **env_generator_binary_paths(RuntimeScope runtime_scope) {
+                 case RUNTIME_SCOPE_SYSTEM:
                          add = strv_new("/run/systemd/system-environment-generators",
                                          "/etc/systemd/system-environment-generators",
 -                                        "/usr/local/lib/systemd/system-environment-generators",
                                          SYSTEM_ENV_GENERATOR_DIR);
-                 else
+                         break;
+ 
+                 case RUNTIME_SCOPE_USER:
                          add = strv_new("/run/systemd/user-environment-generators",
                                         "/etc/systemd/user-environment-generators",
 -                                       "/usr/local/lib/systemd/user-environment-generators",
                                         USER_ENV_GENERATOR_DIR);
+                         break;
  
-                 if (!add)
 diff --git a/src/core/systemd.pc.in b/src/core/systemd.pc.in
 index 693433b34b..5932a21b5b 100644
 --- a/src/core/systemd.pc.in

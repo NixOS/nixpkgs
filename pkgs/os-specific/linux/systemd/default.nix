@@ -55,7 +55,6 @@
 , e2fsprogs
 , elfutils
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
-, gnu-efi
 , iptables
 , withSelinux ? false
 , libselinux
@@ -117,6 +116,7 @@
 , withNss ? !stdenv.hostPlatform.isMusl
 , withOomd ? true
 , withPam ? true
+, withPasswordQuality ? false
 , withPCRE2 ? true
 , withPolkit ? true
 , withPortabled ? !stdenv.hostPlatform.isMusl
@@ -152,7 +152,7 @@ assert withRepart -> withCryptsetup;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "253.6";
+  version = "254-rc1";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
@@ -167,9 +167,9 @@ stdenv.mkDerivation (finalAttrs: {
   # This has proven to be less error-prone than the previous systemd fork.
   src = fetchFromGitHub {
     owner = "systemd";
-    repo = "systemd-stable";
-    rev = "v${version}";
-    hash = "sha256-LZs6QuBe23W643bTuz+MD2pzHiapsBJBHoFXi/QjzG4=";
+    repo = "systemd";
+    rev = "v254-rc1";
+    hash = "sha256-66moj7uYOaI+PHkl5HX/RrwfupCR1bAWlQ6z6+sMhRk=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -196,7 +196,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./0016-inherit-systemd-environment-when-calling-generators.patch
     ./0017-core-don-t-taint-on-unmerged-usr.patch
     ./0018-tpm2_context_init-fix-driver-name-checking.patch
-    ./0019-bootctl-also-print-efi-files-not-owned-by-systemd-in.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
@@ -231,16 +230,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
-    substituteInPlace src/boot/efi/meson.build \
-      --replace \
-      "run_command(cc.cmd_array(), '-print-prog-name=objcopy', check: true).stdout().strip()" \
-      "'${stdenv.cc.bintools.targetPrefix}objcopy'"
   '' + lib.optionalString withLibBPF ''
     substituteInPlace meson.build \
       --replace "find_program('clang'" "find_program('${stdenv.cc.targetPrefix}clang'"
-    # BPF does not work with stack protector
-    substituteInPlace src/core/bpf/meson.build \
-      --replace "clang_flags = [" "clang_flags = [ '-fno-stack-protector',"
   '' + lib.optionalString withUkify ''
     substituteInPlace src/ukify/ukify.py \
       --replace \
@@ -327,6 +319,9 @@ stdenv.mkDerivation (finalAttrs: {
 
           # Support for PKCS#11 in systemd-cryptsetup, systemd-cryptenroll and systemd-homed
           { name = "libp11-kit.so.0"; pkg = opt (withHomed || withCryptsetup) p11-kit; }
+
+          # Password quality support
+          { name = "libpasswdqc.so.1"; pkg = opt withPasswordQuality null; }
         ];
 
       patchDlOpen = dl:
@@ -397,7 +392,7 @@ stdenv.mkDerivation (finalAttrs: {
       docbook_xml_dtd_42
       docbook_xml_dtd_45
       bash
-      (buildPackages.python3Packages.python.withPackages (ps: with ps; [ lxml jinja2 ]))
+      (buildPackages.python3Packages.python.withPackages (ps: with ps; [ lxml jinja2 ] ++ lib.optional withEfi ps.pyelftools))
     ]
     ++ lib.optionals withLibBPF [
       bpftools
@@ -424,7 +419,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals withCompression [ bzip2 lz4 xz zstd ]
     ++ lib.optional withCoredump elfutils
     ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
-    ++ lib.optional withEfi gnu-efi
     ++ lib.optional withKexectools kexec-tools
     ++ lib.optional withKmod kmod
     ++ lib.optional withLibidn2 libidn2
@@ -540,12 +534,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dman=true"
 
     "-Defi=${lib.boolToString withEfi}"
-    "-Dgnu-efi=${lib.boolToString withEfi}"
+    "-Dbootloader=${lib.boolToString withEfi}"
 
     "-Dukify=${lib.boolToString withUkify}"
-  ] ++ lib.optionals withEfi [
-    "-Defi-libdir=${toString gnu-efi}/lib"
-    "-Defi-includedir=${toString gnu-efi}/include/efi"
   ] ++ lib.optionals (withShellCompletions == false) [
     "-Dbashcompletiondir=no"
     "-Dzshcompletiondir=no"
@@ -589,6 +580,7 @@ stdenv.mkDerivation (finalAttrs: {
           where = [
             "man/systemd-analyze.xml"
             "man/systemd.service.xml"
+            "man/systemd-run.xml"
             "src/analyze/test-verify.c"
             "src/test/test-env-file.c"
             "src/test/test-fileio.c"
@@ -598,7 +590,7 @@ stdenv.mkDerivation (finalAttrs: {
         {
           search = "/bin/cat";
           replacement = "${coreutils}/bin/cat";
-          where = [ "test/create-busybox-container" "test/test-execute/exec-noexecpaths-simple.service" "src/journal/cat.c" ];
+          where = [ "test/test-execute/exec-noexecpaths-simple.service" "src/journal/cat.c" ];
         }
         {
           search = "/usr/lib/systemd/systemd-fsck";
