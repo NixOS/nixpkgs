@@ -568,6 +568,14 @@ rec {
     else if kernel == "windows" then "${cpu}${optVendor}-mingw32"
     else "${cpu}${optVendor}-${kernel}${optExecFormat}${optAbi}";
 
+  # To "canonicalize" a triple is to parse it and then unparse (turn
+  # back into a string) it.
+  canonicalize = triple:
+    lib.pipe triple [
+      mkSystemFromString   # parse
+      tripleFromSystem     # unparse
+    ];
+
   ################################################################################
 
 }
