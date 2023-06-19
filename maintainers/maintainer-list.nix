@@ -7132,7 +7132,7 @@
     name = "Jack Smith Insulander";
     github = "jacksmithinsulander";
     githubId = 106760392;
-  }
+  };
   jagajaga = {
     email = "ars.seroka@gmail.com";
     github = "jagajaga";
