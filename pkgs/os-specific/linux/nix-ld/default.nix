@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "mic92";
     repo = "nix-ld";
     rev = version;
-    sha256 = "sha256-+z9t7BLugZO1WhyYEq6FI38TMh2EwfgfAv3RDFSjwtc=";
+    hash = "sha256-+z9t7BLugZO1WhyYEq6FI38TMh2EwfgfAv3RDFSjwtc=";
   };
 
   doCheck = true;
