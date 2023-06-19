@@ -9,17 +9,21 @@
 , systemd
 , meson
 , ninja
+, makeWrapper
+, testers
+, tang
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "tang";
-  version = "13";
+  version = "14";
 
   src = fetchFromGitHub {
     owner = "latchset";
     repo = "tang";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SOdgMUWavTaDUiVvpEyE9ac+9aDmZs74n7ObugksBcc=";
+    hash = "sha256-QKURKb2g71pZvuZlJk3Rc26H3oU0WSkjgQtJQLrYGbw=";
   };
 
   nativeBuildInputs = [
@@ -27,6 +31,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    makeWrapper
   ];
 
   buildInputs = [
@@ -40,6 +45,21 @@ stdenv.mkDerivation rec {
     "out"
     "man"
   ];
+
+  postFixup = ''
+    wrapProgram $out/bin/tang-show-keys --prefix PATH ":" ${lib.makeBinPath [ jose ]}
+    wrapProgram $out/libexec/tangd-keygen --prefix PATH ":" ${lib.makeBinPath [ jose ]}
+    wrapProgram $out/libexec/tangd-rotate-keys --prefix PATH ":" ${lib.makeBinPath [ jose ]}
+  '';
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = tang;
+      command = "${tang}/libexec/tangd --version";
+      version = "tangd ${version}";
+    };
+    updateScript = gitUpdater { };
+  };
 
   meta = {
     description = "Server for binding data to network presence";
