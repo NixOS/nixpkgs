@@ -1571,6 +1571,8 @@ with pkgs;
 
   etlegacy = callPackage ../games/etlegacy { lua = lua5_4; };
 
+  fscan = callPackage ../tools/security/fscan { };
+
   copier = callPackage ../tools/misc/copier { };
 
   gabutdm = callPackage ../applications/networking/gabutdm { };
