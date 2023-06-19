@@ -41283,4 +41283,12 @@ with pkgs;
   waylyrics = callPackage ../applications/audio/waylyrics { };
 
   gitrs = callPackage ../tools/misc/gitrs { };
+
+  libvoikko = callPackage ../development/libraries/libvoikko { };
+
+  hfst = callPackage ../development/libraries/hfst/hfst.nix { };
+
+  hfst-ospell = callPackage ../applications/misc/hfst-ospell/default.nix { };
+
+  omorfi = callPackage ../applications/misc/omorfi/omorfi.nix { };
 }
