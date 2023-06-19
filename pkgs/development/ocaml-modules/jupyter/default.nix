@@ -1,49 +1,62 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  base,
-  uuidm,
-  base64,
-  ocaml_lwt,
-  lwt_ppx,
-  logs,
-  stdint,
-  zmq,
-  zmq-lwt,
-  yojson,
-  ppx_deriving_yojson,
-  cryptokit,
-  opam,
+{ lib
+, fetchurl
+, buildDunePackage
+, cppo
+, base
+, uuidm
+, base64
+, lwt
+, lwt_ppx
+, logs
+, stdint
+, zmq
+, zmq-lwt
+, yojson
+, ppx_yojson_conv
+, ppx_deriving
+, cryptokit
+, opam
+, ounit2
+, ocp-indent
 }:
 
 buildDunePackage rec {
   pname = "jupyter";
-  version = "f886e34f3a456b2d1ed3990e30f3783d1fbf7b99";
+  version = "2.8.2";
 
-  minimumOCamlVersion = "4.04";
+  minimumOCamlVersion = "4.10";
+  duneVersion = "3";
 
-  src = fetchFromGitHub {
-    owner  = "akabe";
-    repo   = "ocaml-jupyter";
-    rev = version;
-    sha256 = "13x079g2fqqmz4hw64qxvy3jwmysg26lis9svmhvq14ydn65din1";
+  src = fetchurl {
+    url = "https://github.com/akabe/ocaml-jupyter/archive/refs/tags/v${version}.tar.gz";
+    sha256 = "sha256-npQcQyksrSknCHngqbORAqgwn2j3UFWFTVeixRiU+DQ=";
   };
+
+  nativeBuildInputs = [
+    cppo
+  ];
 
   buildInputs = [
     base
     uuidm
     base64
-    ocaml_lwt
+    lwt
     lwt_ppx
     logs
     stdint
     zmq
     zmq-lwt
     yojson
-    ppx_deriving_yojson
+    ppx_yojson_conv
+    ppx_deriving
     cryptokit
-    opam
+  ];
+
+  propagatedBuildInputs = [ opam ];
+
+  checkInputs = [
+    ounit2
+    ocp-indent
   ];
 
   meta = {
@@ -51,5 +64,6 @@ buildDunePackage rec {
     description = "An OCaml kernel for Jupyter (IPython) notebook";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kwshi ];
+    mainProgram = "ocaml-jupyter-opam-genspec";
   };
 }
