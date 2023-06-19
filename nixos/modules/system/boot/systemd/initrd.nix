@@ -333,6 +333,13 @@ in {
       visible = "shallow";
       description = lib.mdDoc "Definition of slice configurations.";
     };
+
+    withTpmModules = mkOption {
+      default = true;
+      type = types.bool;
+      visible = "shallow";
+      description = lib.mdDoc "withTpmModules.";
+    };
   };
 
   config = mkIf (config.boot.initrd.enable && cfg.enable) {
@@ -341,9 +348,10 @@ in {
     boot.initrd.availableKernelModules = [
       # systemd needs this for some features
       "autofs4"
+    ] ++ lib.optionals cfg.withTpmModules ([
       # systemd-cryptenroll
       "tpm-tis"
-    ] ++ lib.optional (pkgs.stdenv.hostPlatform.system != "riscv64-linux") "tpm-crb";
+    ] ++ lib.optional (pkgs.stdenv.hostPlatform.system != "riscv64-linux") "tpm-crb");
 
     boot.initrd.systemd = {
       initrdBin = [pkgs.bash pkgs.coreutils cfg.package.kmod cfg.package] ++ config.system.fsPackages;
