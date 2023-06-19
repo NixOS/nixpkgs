@@ -8,7 +8,7 @@ buildPecl rec {
     owner = "amphp";
     repo = "ext-uv";
     rev = "v${version}";
-    sha256 = "sha256-RYb7rszHbdTLfBi66o9hVkFwX+7RlcxH5PAw5frjpFg=";
+    hash = "sha256-RYb7rszHbdTLfBi66o9hVkFwX+7RlcxH5PAw5frjpFg=";
   };
 
   buildInputs = [ libuv ];
