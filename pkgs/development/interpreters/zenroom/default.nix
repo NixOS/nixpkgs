@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "zenroom";
   version = "3.5.0";
@@ -11,14 +12,13 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://files.dyne.org/zenroom/nightly/zenroom-linux-amd64";
     hash = "sha256-9xhQPrez4pk1zCzCyBqmNF/mkfChcA38p/s8//AwpZ8=";
   };
+
   dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/bin
     install -m 550 $src $out/bin/zenroom
   '';
-
-  
 
   meta = with lib; {
     homepage = "https://zenroom.org/";
