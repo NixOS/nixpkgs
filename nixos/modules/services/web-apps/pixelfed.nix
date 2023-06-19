@@ -356,7 +356,8 @@ in {
         ExecStart = "${pixelfed-manage}/bin/pixelfed-manage schedule:run";
         User = user;
         Group = group;
-        StateDirectory = cfg.dataDir;
+        StateDirectory =
+          lib.mkIf (cfg.dataDir == "/var/lib/pixelfed") "pixelfed";
       };
     };
 
@@ -390,6 +391,9 @@ in {
         mkdir -p ${cfg.dataDir}/storage
         rsync -av --no-perms ${pixelfed}/storage-static/ ${cfg.dataDir}/storage
         chmod -R +w ${cfg.dataDir}/storage
+
+        chmod g+x ${cfg.dataDir}/storage ${cfg.dataDir}/storage/app
+        chmod -R g+rX ${cfg.dataDir}/storage/app/public
 
         # Link the app.php in the runtime folder.
         # We cannot link the cache folder only because bootstrap folder needs to be writeable.
@@ -441,7 +445,7 @@ in {
     ];
 
     # Enable NGINX to access our phpfpm-socket.
-    users.users."${config.services.nginx.group}".extraGroups = [ cfg.group ];
+    users.users."${config.services.nginx.user}".extraGroups = [ cfg.group ];
     services.nginx = mkIf (cfg.nginx != null) {
       enable = true;
       virtualHosts."${cfg.domain}" = mkMerge [
