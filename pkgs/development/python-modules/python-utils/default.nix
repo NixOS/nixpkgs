@@ -6,20 +6,21 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "python-utils";
-  version = "3.5.2";
+  version = "3.6.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "WoLpH";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-FFBWkq7ct4JWSTH4Ldg+pbG/BAiW33puB7lqFPBjptw=";
+    hash = "sha256-D4HmmXIiy1mOEE7lxy9ddeqMxR8l1+k8WgDFPeTVHUE=";
   };
 
   postPatch = ''
@@ -27,6 +28,10 @@ buildPythonPackage rec {
       -e '/--cov/d' \
       -e '/--mypy/d'
   '';
+
+  propagatedBuildInputs = [
+    typing-extensions
+  ];
 
   passthru.optional-dependencies = {
     loguru = [
