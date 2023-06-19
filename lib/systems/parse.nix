@@ -295,7 +295,7 @@ rec {
     netbsd   = { execFormat = elf;     families = { inherit bsd; }; };
     none     = { execFormat = unknown; families = { }; };
     openbsd  = { execFormat = elf;     families = { inherit bsd; }; };
-    solaris  = { execFormat = elf;     families = { }; };
+    solaris2 = { execFormat = elf;     families = { }; name = "solaris"; version = 2; };
     wasi     = { execFormat = wasm;    families = { }; };
     redox    = { execFormat = elf;     families = { }; };
     windows  = { execFormat = pe;      families = { }; };
