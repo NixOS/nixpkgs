@@ -92,6 +92,7 @@
 , withCompression ? true  # adds bzip2, lz4, xz and zstd
 , withCoredump ? true
 , withCryptsetup ? true
+, withRepart ? true
 , withDocumentation ? true
 , withEfi ? stdenv.hostPlatform.isEfi
 , withFido2 ? true
@@ -146,6 +147,7 @@ assert withCoredump -> withCompression;
 assert withHomed -> withCryptsetup;
 assert withHomed -> withPam;
 assert withUkify -> withEfi;
+assert withRepart -> withCryptsetup;
 
 let
   wantCurl = withRemote || withImportd;
@@ -498,6 +500,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dlibidn2=${lib.boolToString withLibidn2}"
     "-Dfirstboot=${lib.boolToString withFirstboot}"
     "-Dsysusers=${lib.boolToString withSysusers}"
+    "-Drepart=${lib.boolToString withRepart}"
     "-Dquotacheck=false"
     "-Dldconfig=false"
     "-Dsmack=true"
