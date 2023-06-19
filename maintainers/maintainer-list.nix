@@ -1794,6 +1794,16 @@
       fingerprint = "A3E1 C409 B705 50B3 BF41  492B 5684 0A61 4DBE 37AE";
     }];
   };
+  bastaynav = {
+    name = "Ivan Bastrakov";
+    email = "bastaynav@proton.me";
+    matrix = "@bastaynav:matrix.org";
+    github = "bastaynav";
+    githubId = 6987136;
+    keys = [{
+      fingerprint = "2C6D 37D4 6AA1 DCDA BE8D  F346 43E2 CF4C 01B9 4940";
+    }];
+  };
   basvandijk = {
     email = "v.dijk.bas@gmail.com";
     github = "basvandijk";
@@ -5824,15 +5834,6 @@
     github = "ggPeti";
     githubId = 3217744;
     name = "Peter Ferenczy";
-  };
-  ggwpaiushtha = {
-    name = "Ivan";
-    email = "ggwpaiushtha@gmail.com";
-    github = "GGwpAiushtha";
-    githubId = 6987136;
-    keys = [{
-      fingerprint = "2C6D 37D4 6AA1 DCDA BE8D  F346 43E2 CF4C 01B9 4940";
-    }];
   };
   ghostbuster91 = {
     name = "Kasper Kondzielski";

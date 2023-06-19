@@ -33,6 +33,6 @@ in
       homepage = "https://github.com/catppuccin/Kvantum";
       license = licenses.mit;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ggwpaiushtha];
+      maintainers = with maintainers; [ bastaynav ];
     };
   }

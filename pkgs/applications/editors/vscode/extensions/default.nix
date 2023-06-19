@@ -3445,7 +3445,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=vscode-icons-team.vscode-icons";
           homepage = "https://github.com/vscode-icons/vscode-icons";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.ggwpaiushtha ];
+          maintainers = [ lib.maintainers.bastaynav ];
         };
       };
 
