@@ -393,6 +393,8 @@ with pkgs;
 
   caroline = callPackage ../development/libraries/caroline { };
 
+  casdoor = callPackage ../servers/casdoor { };
+
   castget = callPackage ../applications/networking/feedreaders/castget { };
 
   castxml = callPackage ../development/tools/castxml { };
