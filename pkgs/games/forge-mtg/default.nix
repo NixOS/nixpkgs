@@ -9,13 +9,13 @@
 }:
 
 let
-  version = "1.6.53";
+  version = "1.6.56";
 
   src = fetchFromGitHub {
     owner = "Card-Forge";
     repo = "forge";
     rev = "forge-${version}";
-    sha256 = "sha256-tNPG90mw8HZjp37YJ9JQlOBiVNPRo6xuNur651Adva8=";
+    hash = "sha256-VB/ToTq1XwHPEUNmbocwUoCP4DfyAFdlRAwxrx4tNJU=";
   };
 
   # launch4j downloads and runs a native binary during the package phase.
@@ -46,7 +46,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-6FTbYXaF3rBIZov2WJxjG/ovmvimjXFPaFchAduVzI8=";
+    outputHash = "sha256-aSNqAWbLebmiYnByyw5myc7eivzpP2STStz6qUUMw90=";
   };
 
 in stdenv.mkDerivation {
@@ -68,7 +68,9 @@ in stdenv.mkDerivation {
     cp -a \
       forge-gui-desktop/target/forge.sh \
       forge-gui-desktop/target/forge-gui-desktop-${version}-jar-with-dependencies.jar \
-      forge-adventure/target/forge-adventure.sh \
+      forge-gui-mobile-dev/target/forge-adventure.sh \
+      forge-gui-mobile-dev/target/forge-gui-mobile-dev-${version}-jar-with-dependencies.jar \
+      forge-adventure/target/forge-adventure-editor.sh \
       forge-adventure/target/forge-adventure-${version}-jar-with-dependencies.jar \
       forge-gui/res \
       $out/share/forge
@@ -76,7 +78,7 @@ in stdenv.mkDerivation {
   '';
 
   preFixup = ''
-    for commandToInstall in forge forge-adventure; do
+    for commandToInstall in forge forge-adventure forge-adventure-editor; do
       chmod 555 $out/share/forge/$commandToInstall.sh
       makeWrapper $out/share/forge/$commandToInstall.sh $out/bin/$commandToInstall \
         --prefix PATH : ${lib.makeBinPath [ coreutils openjdk gnused ]} \
