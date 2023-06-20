@@ -84,7 +84,7 @@ rec {
     isRedox        = { kernel = kernels.redox; };
     isGhcjs        = { kernel = kernels.ghcjs; };
     isGenode       = { kernel = kernels.genode; };
-    isNone         = { kernel = kernels.none; };
+    isNone         = [ { kernel = kernels.none; } { kernel = kernels.""; } ];
 
     isAndroid      = [ { abi = abis.android; } { abi = abis.androideabi; } ];
     isGnu          = with abis; map (a: { abi = a; }) [ gnuabi64 gnuabin32 gnu gnueabi gnueabihf gnuabielfv1 gnuabielfv2 ];
