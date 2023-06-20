@@ -41,7 +41,7 @@ cudaPackages.backendStdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 -t $out/bin bin/${stdenv.hostPlatform.parsed.cpu.name}/${stdenv.hostPlatform.parsed.kernel.name}/release/*
+    install -Dm755 -t $out/bin bin/${cudaPackages.backendStdenv.hostPlatform.parsed.cpu.name}/${cudaPackages.backendStdenv.hostPlatform.parsed.kernel.name}/release/*
 
     runHook postInstall
   '';
