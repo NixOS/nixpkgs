@@ -1,15 +1,19 @@
 { lib
 , fetchPypi
 , buildPythonPackage
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "mmh3";
   version = "4.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-BWuD0E5ZVUfQQHzI5apdi6iAKor6QXtkwcMCNbU4njA=";
+    hash = "sha256-BWuD0E5ZVUfQQHzI5apdi6iAKor6QXtkwcMCNbU4njA=";
   };
 
   pythonImportsCheck = [
