@@ -5163,6 +5163,8 @@ with pkgs;
 
   go-neb = callPackage ../applications/networking/instant-messengers/go-neb { };
 
+  go-thumbnailer = callPackage ../applications/misc/go-thumbnailer { };
+
   geckodriver = callPackage ../development/tools/geckodriver {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
