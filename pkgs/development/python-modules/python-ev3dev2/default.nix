@@ -6,7 +6,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "ev3dev2";
+  pname = "python-ev3dev2";
   version = "2.1.0";
 
   src = fetchFromGitHub {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    echo "${version}\n" > RELEASE-VERSION
+    echo "${version}" > RELEASE-VERSION
   '';
 
   propagatedBuildInputs = [ pillow ];
