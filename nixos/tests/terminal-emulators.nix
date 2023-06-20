@@ -23,9 +23,8 @@ with pkgs.lib;
 let tests = {
       alacritty.pkg = p: p.alacritty;
 
-      # times out after spending many hours
-      #contour.pkg = p: p.contour;
-      #contour.cmd = "contour $command";
+      contour.pkg = p: p.contour;
+      contour.cmd = "contour early-exit-threshold 0 execute $command";
 
       cool-retro-term.pkg = p: p.cool-retro-term;
       cool-retro-term.colourTest = false; # broken by gloss effect
