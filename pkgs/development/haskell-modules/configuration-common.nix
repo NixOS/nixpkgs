@@ -2623,4 +2623,8 @@ self: super: {
     url = "https://github.com/vincenthz/hs-gauge/commit/3d7776f41187c70c4f0b4517e6a7dde10dc02309.patch";
     hash = "sha256-4osUMo0cvTvyDTXF8lY9tQbFqLywRwsc3RkHIhqSriQ=";
   }) super.gauge;
+
+  # Flaky QuickCheck tests
+  # https://github.com/Haskell-Things/ImplicitCAD/issues/441
+  implicit = dontCheck super.implicit;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
