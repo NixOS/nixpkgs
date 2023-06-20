@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "0.4.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "gruebel";
@@ -39,11 +39,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'regex = "^2022.3.15"' 'regex = "*"'
-  '';
-
   pythonImportsCheck = [
     "pycep"
   ];
@@ -51,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python based Bicep parser";
     homepage = "https://github.com/gruebel/pycep";
+    changelog = "https://github.com/gruebel/pycep/blob/${version}/CHANGELOG.md";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
