@@ -168,6 +168,12 @@ self: super: {
     '';
   });
 
+  clipboard-image-nvim = super.clipboard-image-nvim.overrideAttrs (old: {
+    postPatch = ''
+      sed -i -e 's/require "health"/vim.health/' lua/clipboard-image/health.lua
+    '';
+  });
+
   cmp-clippy = super.cmp-clippy.overrideAttrs (old: {
     dependencies = with self; [ nvim-cmp plenary-nvim ];
   });
