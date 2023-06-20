@@ -227,7 +227,10 @@ rec {
     # bottom of https://sourceforge.net/p/mingw-w64/wiki2/Unicode%20apps/
     w64 = {};
 
-    none = {};
+    # gnu-config distinguishes between `foo-bar-baz` and
+    # `foo-unknown-bar-baz`; we use `""` to represent the
+    # former case.
+    "" = { name = ""; };
     unknown = {};
   };
 
@@ -413,7 +416,7 @@ rec {
       else if elemAt l 1 == "windows"
         then { cpu = elemAt l 0;                      kernel = "windows";  abi = "msvc";     }
       else if (elemAt l 1) == "elf"
-        then { cpu = elemAt l 0; vendor = "unknown";  kernel = "none";     abi = elemAt l 1; }
+        then { cpu = elemAt l 0;                      kernel = "none";     abi = elemAt l 1; }
       else   { cpu = elemAt l 0;                      kernel = elemAt l 1;                   };
     "3" =
       # cpu-kernel-environment
@@ -423,7 +426,6 @@ rec {
         cpu    = elemAt l 0;
         kernel = elemAt l 1;
         abi    = elemAt l 2;
-        vendor = "unknown";
       }
       # cpu-vendor-os
       else if elemAt l 1 == "apple" ||
@@ -508,9 +510,7 @@ rec {
 
   tripleFromSkeleton = { cpu, vendor, kernel, optExecFormat?"", abi }: let
     optAbi = lib.optionalString (abi != "unknown") "-${abi}";
-
-    # this allows to print a "vendorless" skeleton
-    optVendor = lib.optionalString (vendor != null) "-${vendor}";
+    optVendor = lib.optionalString (vendor != "") "-${vendor}";
   in
     # gnu-config considers "mingw32" and "cygwin" to be kernels.
     # This is obviously bogus, which is why nixpkgs has historically
