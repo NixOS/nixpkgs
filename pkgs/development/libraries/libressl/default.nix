@@ -92,8 +92,8 @@ let
 
 in {
   libressl_3_6 = generic {
-    version = "3.6.2";
-    hash = "sha256-S+gP/wc3Rs9QtKjlur4nlayumMaxMqngJRm0Rd+/0DM=";
+    version = "3.6.3";
+    hash = "sha256-h7G7426e7I0K5fBMg9NrLFsOWBeEx+sIFwJe0p6t6jc=";
   };
 
   libressl_3_7 = generic {
