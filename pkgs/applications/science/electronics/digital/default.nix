@@ -1,4 +1,4 @@
-{ lib, javaPackages, fetchFromGitHub, makeDesktopItem, copyDesktopItems, makeWrapper
+{ lib, fetchFromGitHub, makeDesktopItem, copyDesktopItems, makeWrapper
 , jre, maven
 }:
 
@@ -27,7 +27,7 @@ let
   # Also use the commit date as a build and output timestamp.
   mvnParameters = "-Pno-git-rev -Dgit.commit.id.describe=${version} -Dproject.build.outputTimestamp=${buildDate} -DbuildTimestamp=${buildDate}";
 in
-javaPackages.mavenfod rec {
+maven.buildMavenPackage rec {
   pname = "digital";
   inherit version jre;
 

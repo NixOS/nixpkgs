@@ -1,11 +1,9 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , maven
-, javaPackages
 }:
 
-javaPackages.mavenfod rec {
+maven.buildMavenPackage {
   pname = "scim-keycloak-user-storage-spi";
   version = "unstable-2023-04-12";
 

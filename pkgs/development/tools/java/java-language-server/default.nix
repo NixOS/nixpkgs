@@ -1,4 +1,4 @@
-{ lib, javaPackages, stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
 , jdk, maven
 , makeWrapper
 }:
@@ -10,7 +10,7 @@ let
     else if stdenv.isWindows then "windows"
     else throw "unsupported platform";
 in
-javaPackages.mavenfod rec {
+maven.buildMavenPackage rec {
   pname = "java-language-server";
   version = "0.2.38";
 
