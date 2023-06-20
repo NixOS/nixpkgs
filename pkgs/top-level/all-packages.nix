@@ -6660,6 +6660,8 @@ with pkgs;
 
   bombardier = callPackage ../tools/networking/bombardier { };
 
+  caeml = callPackage ../applications/networking/mailreaders/caeml { };
+
   calyx-vpn = libsForQt5.callPackage ../tools/networking/bitmask-vpn {
     provider = "calyx";
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
