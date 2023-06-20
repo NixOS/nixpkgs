@@ -29,7 +29,7 @@ javaPackages.mavenfod rec {
       maven
     ];
   };
-  mvnHash = "sha256-udjk5YlTK+Mm8weDhesK6X7qZn4w9HbKZ821SyWxsOE=";
+  mvnHash = "sha256-1x6cNt6t3FnjRNg8iNYflkyDnuPFXGKoxhVJWoz2jIU=";
 
   nativeBuildInputs = [
     makeWrapper
