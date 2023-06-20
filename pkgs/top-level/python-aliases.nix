@@ -207,6 +207,7 @@ mapAliases ({
   Pweave = pweave; # added 2023-02-19
   pyalmond = throw "pyalmond has been removed, since its API endpoints have been shutdown"; # added 2023-02-02
   pyblake2 = throw "pyblake2 is deprecated in favor of hashlib"; # added 2023-04-23
+  pyblock = throw "pyblock has been removed, since it is abandoned and broken"; # added 2023-06-20
   pydrive = throw "pydrive is broken and deprecated and has been replaced with pydrive2."; # added 2022-06-01
   PyGithub = pygithub; # added 2023-02-19
   pyGtkGlade = throw "Glade support for pygtk has been removed"; # added 2022-01-15
