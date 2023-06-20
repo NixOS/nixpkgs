@@ -7,8 +7,7 @@
 , patches ? [ ]
 , pname
 , version
-, mvnSha256 ? "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
-, mvnHash ? "sha256-${mvnSha256}"
+, mvnHash ? ""
 , mvnFetchExtraArgs ? { }
 , mvnParameters ? ""
 , ...
@@ -41,6 +40,7 @@ stdenv.mkDerivation (rec {
 
     # don't do any fixup
     dontFixup = true;
+    outputHashAlgo = if mvnHash != "" then null else "sha256";
     outputHashMode = "recursive";
     outputHash = mvnHash;
   } // mvnFetchExtraArgs);
