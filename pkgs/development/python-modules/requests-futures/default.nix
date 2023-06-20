@@ -1,12 +1,16 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "requests-futures";
   version = "1.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
