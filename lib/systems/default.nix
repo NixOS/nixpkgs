@@ -48,7 +48,7 @@ rec {
       parsed = parse.mkSystemFromString (if args ? config then args.config else args.system);
       # Either of these can be losslessly-extracted from `parsed` iff parsing succeeds.
       system = parse.doubleFromSystem final.parsed;
-      config = parse.tripleFromSystem final.parsed;
+      config = parse.tripleFromSystemLossy final.parsed;
       # Determine whether we can execute binaries built for the provided platform.
       canExecute = platform:
         final.isAndroid == platform.isAndroid &&
