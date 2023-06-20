@@ -35412,6 +35412,8 @@ with pkgs;
 
   warpd = callPackage ../applications/misc/warpd { };
 
+  watershot = callPackage ../applications/misc/watershot { };
+
   w3m = callPackage ../applications/networking/browsers/w3m { };
 
   # Should always be the version with the most features
