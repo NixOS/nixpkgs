@@ -337,6 +337,7 @@ mapAliases ({
   xenomapper = throw "xenomapper was moved to pkgs.xenomapper"; # added 2021-12-31
   XlsxWriter = xlsxwriter; # added 2023-02-19
   Yapsy = yapsy; # added 2023-02-19
+  zake = throw "zake has been removed because it is abandoned"; # added 2023-06-20
   zc-buildout221 = zc-buildout; # added 2021-07-21
   zc_buildout_nix = throw "zc_buildout_nix was pinned to a version no longer compatible with other modules";
 })
