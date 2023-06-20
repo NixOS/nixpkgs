@@ -23,9 +23,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     ragel
-    util-linux
     python3
-  ];
+  ] ++ lib.optional stdenv.isLinux util-linux;
 
   buildInputs = [
     boost
