@@ -1513,6 +1513,8 @@ let
 
     seq = callPackage ../development/ocaml-modules/seq { };
 
+    seqes = callPackage ../development/ocaml-modules/seqes { };
+
     sha = callPackage ../development/ocaml-modules/sha { };
 
     shared-memory-ring = callPackage ../development/ocaml-modules/shared-memory-ring { };
