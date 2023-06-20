@@ -7,8 +7,7 @@
 , patches ? [ ]
 , pname
 , version
-, mvnSha256 ? "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
-, mvnHash ? "sha256-${mvnSha256}"
+, mvnHash ? ""
 , mvnFetchExtraArgs ? { }
 , mvnParameters ? ""
 , ...
@@ -20,9 +19,9 @@
 stdenv.mkDerivation (rec {
   fetchedMavenDeps = stdenv.mkDerivation ({
     name = "${pname}-${version}-maven-deps";
-    inherit src;
+    inherit src patches;
 
-    buildInputs = [
+    nativeBuildInputs = [
       maven
     ];
 
@@ -32,15 +31,16 @@ stdenv.mkDerivation (rec {
 
     # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
     installPhase = ''
-      find $out -type f \
-        -name \*.lastUpdated -or \
-        -name resolver-status.properties -or \
-        -name _remote.repositories \
+      find $out -type f \( \
+        -name \*.lastUpdated \
+        -o -name resolver-status.properties \
+        -o -name _remote.repositories \) \
         -delete
     '';
 
     # don't do any fixup
     dontFixup = true;
+    outputHashAlgo = if mvnHash != "" then null else "sha256";
     outputHashMode = "recursive";
     outputHash = mvnHash;
   } // mvnFetchExtraArgs);

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "07vikhkldxy51jbpy3jgva6wz75jksch6bjd6dqkagfgqd6baw45";
     rev = "5fcdb411d06e8638c2380f7acb72a8a6909739cd";
   };
-  mavenDependenciesSha256 = "00r69n9hwvrn5cbhxklx7w00sjmqvcxs7gvhbm150ggy7bc865qv";
+  mavenDependenciesSha256 = "sha256-oGd8PFF1Z9BElNsgqbC/llQm8j/T+T01VwvSw3tTU0E=";
   # This is adapted from https://github.com/volth/nixpkgs/blob/6aa470dfd57cae46758b62010a93c5ff115215d7/pkgs/applications/networking/cluster/hadoop/default.nix#L20-L32
   fetchedMavenDeps = stdenv.mkDerivation {
     name = "exhibitor-${version}-maven-deps";
