@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "giuspen";
     repo = "cherrytree";
     rev = version;
-    sha256 = "sha256-1ytph2HTwIqVTD6+a5P1gvFG+2xsfZWRkmn7RpwuwKY=";
+    hash = "sha256-1ytph2HTwIqVTD6+a5P1gvFG+2xsfZWRkmn7RpwuwKY=";
   };
 
   nativeBuildInputs = [
