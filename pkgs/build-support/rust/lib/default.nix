@@ -31,10 +31,12 @@ rec {
       ++ lib.optional platform.isWindows "windows";
 
   # https://doc.rust-lang.org/reference/conditional-compilation.html#target_vendor
-  toTargetVendor = platform: let
+  toTargetVendor = platform: if platform.isDarwin then "apple" else let
     inherit (platform.parsed) vendor;
-  in platform.rustc.platform.vendor or {
+  in
+    platform.rustc.platform.vendor or {
     "w64" = "pc";
+    "" = "unknown";
   }.${vendor.name} or vendor.name;
 
   # Returns the name of the rust target, even if it is custom. Adjustments are
