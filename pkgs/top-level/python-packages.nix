@@ -13433,8 +13433,6 @@ self: super: with self; {
 
   zadnegoale = callPackage ../development/python-modules/zadnegoale { };
 
-  zake = callPackage ../development/python-modules/zake { };
-
   zamg = callPackage ../development/python-modules/zamg { };
 
   zarr = callPackage ../development/python-modules/zarr { };
