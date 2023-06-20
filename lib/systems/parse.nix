@@ -494,6 +494,7 @@ rec {
     else if kernel.families ? darwin then "${cpu.name}-darwin"
     else "${cpu.name}-${kernelName kernel}";
 
+  # Convert a system into a string triple
   tripleFromSystem = { cpu, vendor, kernel, abi, ... } @ sys: assert isSystem sys; let
     optExecFormat =
       lib.optionalString (kernel.name == "netbsd" &&
@@ -507,6 +508,15 @@ rec {
         inherit optExecFormat;
         abi = abi.name;
       };
+
+  # Convert a system into a string triple, erasing the distinction
+  # between vendors."" and vendors.unknown -- i.e. `mips-linux-gnu`
+  # and `mips-unknown-linux-gnu` both become
+  # `"mips-unknown-linux-gnu"`.
+  tripleFromSystemLossy = { cpu, vendor, kernel, abi, ... } @ sys: assert isSystem sys;
+    tripleFromSystem (sys // lib.optionalAttrs (sys.vendor == vendors."") {
+      vendor = vendors.unknown;
+    });
 
   tripleFromSkeleton = { cpu, vendor, kernel, optExecFormat?"", abi }: let
     optAbi = lib.optionalString (abi != "unknown") "-${abi}";
