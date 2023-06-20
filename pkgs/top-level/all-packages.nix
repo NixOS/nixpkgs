@@ -810,6 +810,8 @@ with pkgs;
 
   pbm = callPackage ../tools/admin/pbm { };
 
+  fable = callPackage ../development/tools/fable { };
+
   dotnetenv = callPackage ../build-support/dotnet/dotnetenv {
     dotnetfx = dotnetfx40;
   };
