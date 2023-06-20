@@ -53,7 +53,9 @@ let
       # if running simultaneous services.
       NonBlocking = true;
       #LimitNOFILE = 30000;
-      User = config.users.users."public-inbox".name;
+      User =
+        lib.mkIf config.systemd.services."public-inbox-${srv}".confinement.enable
+          config.users.users."public-inbox".name;
       Group = config.users.groups."public-inbox".name;
       RuntimeDirectory = [
           "public-inbox-${srv}/perl-inline"
@@ -61,9 +63,7 @@ let
       RuntimeDirectoryMode = "700";
       # This is for BindPaths= and BindReadOnlyPaths=
       # to allow traversal of directories they create inside RootDirectory=
-      UMask = "0066";
-      StateDirectory = ["public-inbox"];
-      StateDirectoryMode = "0750";
+      UMask = "0026";
       WorkingDirectory = stateDir;
       BindReadOnlyPaths = [
           "/etc"
@@ -109,7 +109,6 @@ let
       SystemCallArchitectures = "native";
 
       # The following options are redundant when confinement is enabled
-      RootDirectory = "/var/empty";
       TemporaryFileSystem = "/";
       PrivateMounts = true;
       MountAPIVFS = true;
@@ -444,8 +443,10 @@ in
       (mkIf cfg.imap.enable
         { public-inbox-imapd = mkMerge [(serviceConfig "imapd") {
           after = [ "public-inbox-init.service" "public-inbox-watch.service" ];
+          environment.PI_DIR = "/var/lib/public-inbox/.public-inbox";
           requires = [ "public-inbox-init.service" ];
           serviceConfig = {
+            DynamicUser = !config.systemd.services."public-inbox-imapd".confinement.enable;
             ExecStart = escapeShellArgs (
               [ "${cfg.package}/bin/public-inbox-imapd" ] ++
               cfg.imap.args ++
@@ -458,8 +459,10 @@ in
       (mkIf cfg.http.enable
         { public-inbox-httpd = mkMerge [(serviceConfig "httpd") {
           after = [ "public-inbox-init.service" "public-inbox-watch.service" ];
+          environment.PI_DIR = "/var/lib/public-inbox/.public-inbox";
           requires = [ "public-inbox-init.service" ];
           serviceConfig = {
+            DynamicUser = !config.systemd.services."public-inbox-httpd".confinement.enable;
             ExecStart = escapeShellArgs (
               [ "${cfg.package}/bin/public-inbox-httpd" ] ++
               cfg.http.args ++
@@ -497,8 +500,10 @@ in
       (mkIf cfg.nntp.enable
         { public-inbox-nntpd = mkMerge [(serviceConfig "nntpd") {
           after = [ "public-inbox-init.service" "public-inbox-watch.service" ];
+          environment.PI_DIR = "/var/lib/public-inbox/.public-inbox";
           requires = [ "public-inbox-init.service" ];
           serviceConfig = {
+            DynamicUser = !config.systemd.services."public-inbox-nntpd".confinement.enable;
             ExecStart = escapeShellArgs (
               [ "${cfg.package}/bin/public-inbox-nntpd" ] ++
               cfg.nntp.args ++
@@ -519,6 +524,10 @@ in
           serviceConfig = {
             ExecStart = "${cfg.package}/bin/public-inbox-watch";
             ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+            StateDirectory = ["public-inbox"];
+            StateDirectoryMode = "0750";
+            User = config.users.users."public-inbox".name;
+            Group = config.users.groups."public-inbox".name;
           };
         }];
       })
@@ -572,15 +581,22 @@ in
               ls -1 "$inbox" | grep -q '^xap' ||
               ${cfg.package}/bin/public-inbox-index "$inbox"
             done
+
+            # Older versions of the module did not make inboxes group-readable.
+            # chmod -R g+r ${stateDir}/inboxes
           '';
           serviceConfig = {
             Type = "oneshot";
             RemainAfterExit = true;
             StateDirectory = [
+              "public-inbox"
               "public-inbox/.public-inbox"
               "public-inbox/.public-inbox/emergency"
               "public-inbox/inboxes"
             ];
+            StateDirectoryMode = "0750";
+            User = config.users.users."public-inbox".name;
+            Group = config.users.groups."public-inbox".name;
           };
         }];
       })
