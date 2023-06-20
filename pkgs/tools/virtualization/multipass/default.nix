@@ -46,7 +46,7 @@ stdenv.mkDerivation
     owner = "canonical";
     repo = "multipass";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-8wRho/ECWxiE6rNqjBzaqFaIdhXzOzFuCcQ4zzfSmb4=";
+    hash = "sha256-8wRho/ECWxiE6rNqjBzaqFaIdhXzOzFuCcQ4zzfSmb4=";
     fetchSubmodules = true;
   };
 
