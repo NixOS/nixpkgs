@@ -31579,6 +31579,8 @@ with pkgs;
 
   marker = callPackage ../applications/editors/marker { };
 
+  meek = callPackage ../tools/networking/meek { };
+
   meerk40t = callPackage ../applications/misc/meerk40t { };
 
   meerk40t-camera = callPackage ../applications/misc/meerk40t/camera.nix { };
