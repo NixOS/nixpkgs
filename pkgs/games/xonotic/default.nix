@@ -16,7 +16,7 @@
 
 let
   pname = "xonotic";
-  version = "0.8.5";
+  version = "0.8.6";
   name = "${pname}-${version}";
   variant =
     if withSDL && withGLX then
@@ -61,7 +61,7 @@ let
 
     src = fetchurl {
       url = "https://dl.xonotic.org/xonotic-${version}-source.zip";
-      sha256 = "sha256-oagbpVqxUb8JdY5/WWFLLlFQ6EIkdT53lQvNB6KC6l0=";
+      hash = "sha256-i5KseBz/SuicEhoj6s197AWiqr7azMI6GdGglYtAEqg=";
     };
 
     nativeBuildInputs = [ unzip ];
@@ -145,7 +145,7 @@ in rec {
   xonotic-data = fetchzip {
     name = "xonotic-data";
     url = "https://dl.xonotic.org/xonotic-${version}.zip";
-    sha256 = "sha256-/malKGbDdUnqG+bJOJ2f3zHb7hAGiNZdprczr2Fgb5E=";
+    hash = "sha256-Lhjpyk7idmfQAVn4YUb7diGyyKZQBfwNXxk2zMOqiZQ=";
     postFetch = ''
       cd $out
       rm -rf $(ls | grep -v "^data$" | grep -v "^key_0.d0pk$")
