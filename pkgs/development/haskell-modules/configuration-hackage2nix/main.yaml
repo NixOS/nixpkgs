@@ -700,6 +700,8 @@ supported-platforms:
   gi-gtkosxapplication:                         [ platforms.darwin ]
   gtk-mac-integration:                          [ platforms.darwin ]
   gtk3-mac-integration:                         [ platforms.darwin ]
+  halide-haskell:                               [ platforms.linux ]
+  halide-JuicyPixels:                           [ platforms.linux ]
   hommage-ds:                                   [ platforms.windows ]
   hpapi:                                        [ platforms.linux ] # limited by pkgs.papi
   hsignal:                                      [ platforms.x86 ] # -msse2
