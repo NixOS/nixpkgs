@@ -55,6 +55,7 @@
 , nodejs
 , xdotool
 , xorg
+, xxd
 , zathura
 , zsh
 
@@ -573,6 +574,12 @@ self: super: {
 
   harpoon = super.harpoon.overrideAttrs (old: {
     dependencies = with self; [ plenary-nvim ];
+  });
+
+  hex-nvim = super.hex-nvim.overrideAttrs (old: {
+    postPatch = ''
+      substituteInPlace lua/hex.lua --replace xxd ${xxd}/bin/xxd
+    '';
   });
 
   himalaya-vim = super.himalaya-vim.overrideAttrs (old: {
