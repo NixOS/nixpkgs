@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "requests-futures";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "35547502bf1958044716a03a2f47092a89efe8f9789ab0c4c528d9c9c30bc148";
+    sha256 = "sha256-9VpO+ABw4oWOfR5zEj0r+uryW5P9NDhNjd8UjitnY3M=";
   };
 
   propagatedBuildInputs = [ requests ];
