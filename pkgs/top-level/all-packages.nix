@@ -40957,6 +40957,8 @@ with pkgs;
 
   isolate = callPackage ../tools/security/isolate { };
 
+  tremotesf = libsForQt5.callPackage ../applications/networking/p2p/tremotesf { };
+
   reindeer = callPackage ../development/tools/reindeer { };
 
   charasay = callPackage ../tools/misc/charasay { };
