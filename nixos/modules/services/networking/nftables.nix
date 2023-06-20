@@ -51,6 +51,12 @@ in
         This script gets run before the ruleset is checked. It can be used to
         create additional files needed for the ruleset check to work, or modify
         the ruleset for cases the build environment cannot cover.
+
+        You can also create a redirect from a path outside the build sandbox to
+        any given file (provided it is available at build time) like this:
+        ```bash
+          export NIX_REDIRECTS="/path/to/redirect=''${someFile}"
+        ```
       '';
     };
 
@@ -144,7 +150,11 @@ in
           checkPhase = lib.optionalString cfg.checkRuleset ''
             cp $out ruleset.conf
             ${cfg.preCheckRuleset}
-            export NIX_REDIRECTS=/etc/protocols=${pkgs.buildPackages.iana-etc}/etc/protocols:/etc/services=${pkgs.buildPackages.iana-etc}/etc/services
+            export NIX_REDIRECTS=${concatStringsSep ":"
+              [ "/etc/protocols=${config.environment.etc.protocols.source}"
+                "/etc/services=${config.environment.etc.services.source}"
+                "/etc/hosts=${config.environment.etc.hosts.source}"
+              ]}''${NIX_REDIRECTS:+:$NIX_REDIRECTS}
             LD_PRELOAD="${pkgs.buildPackages.libredirect}/lib/libredirect.so ${pkgs.buildPackages.lklWithFirewall.lib}/lib/liblkl-hijack.so" \
               ${pkgs.buildPackages.nftables}/bin/nft --check --file ruleset.conf
           '';
