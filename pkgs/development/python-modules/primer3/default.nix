@@ -18,17 +18,25 @@ buildPythonPackage rec {
     hash = "sha256-Ku2PVrWYWPKnNXeUQmstQedJg1O0hsQl4/iEnAMMEaY=";
   };
 
-  nativeBuildInputs = [ cython ]
-    ++ lib.optionals stdenv.isDarwin [ gcc ];
+  nativeBuildInputs = [
+    cython
+  ] ++ lib.optionals stdenv.isDarwin [
+    gcc
+  ];
 
   # pytestCheckHook leads to a circular import issue
-  nativeCheckInputs = [ click ];
+  nativeCheckInputs = [
+    click
+  ];
 
-  pythonImportsCheck = [ "primer3" ];
+  pythonImportsCheck = [
+    "primer3"
+  ];
 
   meta = with lib; {
     description = "Oligo analysis and primer design";
     homepage = "https://github.com/libnano/primer3-py";
+    changelog = "https://github.com/libnano/primer3-py/blob/v${version}/CHANGES";
     license = with licenses; [ gpl2Only ];
     maintainers = with maintainers; [ fab ];
   };
