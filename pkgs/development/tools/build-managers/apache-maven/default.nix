@@ -1,21 +1,38 @@
-{ lib, stdenv, fetchurl, jdk, makeWrapper }:
+{ lib
+, stdenvNoCC
+, fetchurl
+, jdk
+, makeWrapper
+}:
 
 assert jdk != null;
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "apache-maven";
   version = "3.9.2";
 
-  builder = ./builder.sh;
-
   src = fetchurl {
-    url = "mirror://apache/maven/maven-3/${version}/binaries/${pname}-${version}-bin.tar.gz";
-    sha256 = "sha256-gJ7zIgxtF5GVwGwyTLmm002Oy6Vmxc/Y64MWe8A0EX0=";
+    url = "mirror://apache/maven/maven-3/${finalAttrs.version}/binaries/${finalAttrs.pname}-${finalAttrs.version}-bin.tar.gz";
+    hash = "sha256-gJ7zIgxtF5GVwGwyTLmm002Oy6Vmxc/Y64MWe8A0EX0=";
   };
+
+  sourceRoot = ".";
 
   nativeBuildInputs = [ makeWrapper ];
 
-  inherit jdk;
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/maven
+    cp -r ${finalAttrs.pname}-${finalAttrs.version}/* $out/maven
+
+    makeWrapper $out/maven/bin/mvn $out/bin/mvn \
+      --set-default JAVA_HOME "${jdk}"
+    makeWrapper $out/maven/bin/mvnDebug $out/bin/mvnDebug \
+      --set-default JAVA_HOME "${jdk}"
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     mainProgram = "mvn";
@@ -25,4 +42,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ cko ];
   };
-}
+})
