@@ -462,9 +462,7 @@ rec {
 
   # This should revert the job done by config.guess from the gcc compiler.
   mkSystemFromSkeleton = { cpu
-                         , # Optional, but fallback too complex for here.
-                           # Inferred below instead.
-                           vendor ? assert false; null
+                         , vendor ? ""
                          , kernel
                          , # Also inferred below
                            abi    ? assert false; null
@@ -474,13 +472,36 @@ rec {
     getKernel = name:  kernels.${name} or (throw "Unknown kernel: ${name}");
     getAbi    = name:     abis.${name} or (throw "Unknown ABI: ${name}");
 
+    vendor_ = getVendor vendor;
+
+    # These the three CPUs for which gnu-config will sometimes
+    # clobber an explicitly-specified `-unknown` vendor with
+    # something else.
+    clobberedVendor =
+      if      isS390 parsed        then vendors.ibm
+      else if isMicroBlaze parsed  then vendors.xilinx
+      else if isMmix parsed        then vendors.knuth
+      else if isVc4 parsed         then vendors.""     # hack for nonstandard triple
+      else vendors.unknown;
+
     parsed = {
       cpu = getCpu args.cpu;
       vendor =
-        /**/ if args ? vendor    then getVendor args.vendor
-        else if isDarwin  parsed then vendors.apple
-        else if isWindows parsed then vendors.pc
-        else                     vendors.unknown;
+          if vendor_ == vendors.unknown then clobberedVendor
+          else if vendor_ != vendors."" then vendor_
+          else if (isx86_64 parsed || isi686 parsed) &&
+                  parsed.abi == abis.gnu then
+                    vendors.unknown  # nixpkgs-specific behavior
+          else if (isx86_64 parsed || isAarch64 parsed) &&
+                  isLittleEndian parsed &&
+                  parsed.kernel == kernels.darwin &&
+                  parsed.abi == abis.unknown then
+                    vendors.apple    # nixpkgs-specific behavior
+          else if isx86 parsed && isLinux parsed then vendors.pc
+          else if (args?abi && (args.abi=="eabi" || args.abi=="eabihf")) && !(isLinux parsed || isNetBSD parsed) then vendor_
+          else if isx86 parsed then vendors.pc
+          else clobberedVendor;
+
       kernel = if hasPrefix "darwin" args.kernel      then getKernel "darwin"
                else if hasPrefix "netbsd" args.kernel then getKernel "netbsd"
                else                                   getKernel args.kernel;
