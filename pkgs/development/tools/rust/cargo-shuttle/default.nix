@@ -2,8 +2,6 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
-, curl
-, libgit2_1_5
 , openssl
 , zlib
 , stdenv
@@ -12,13 +10,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-shuttle";
-  version = "0.18.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "shuttle-hq";
     repo = "shuttle";
     rev = "v${version}";
-    hash = "sha256-8i7iYJ9j3NP7otA6d0ow9S6aV2TGxKtYlGS0FXTXUbM=";
+    hash = "sha256-FtJaJZ76QvFXDVrQmnGO3ZCryc4aKIfs07Gbun1LfzM=";
   };
 
   cargoLock = {
@@ -30,13 +28,10 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [
-    curl
     pkg-config
   ];
 
   buildInputs = [
-    curl
-    libgit2_1_5
     openssl
     zlib
   ] ++ lib.optionals stdenv.isDarwin [
