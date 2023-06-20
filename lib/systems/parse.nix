@@ -300,6 +300,7 @@ rec {
     linux    = { execFormat = elf;     families = { }; };
     netbsd   = { execFormat = elf;     families = { inherit bsd; }; };
     none     = { execFormat = unknown; families = { }; };
+    ""       = { execFormat = unknown; families = { }; };
     openbsd  = { execFormat = elf;     families = { inherit bsd; }; };
     solaris2 = { execFormat = elf;     families = { }; name = "solaris"; version = 2; };
     wasi     = { execFormat = wasm;    families = { }; };
@@ -337,7 +338,7 @@ rec {
     eabihf       = { float = "hard"; kernels = builtins.attrNames kernels; };
 
     # Other architectures should use ELF in embedded situations.
-    elf          = { kernels = [ ]; };
+    elf          = { kernels = [ "" ]; };
 
     androideabi  = { inherit (android) kernels; };
     android      = { kernels = [ "linux" ];
@@ -387,7 +388,7 @@ rec {
     uclibc       = { kernels = [ "linux" ]; };
 
     # in gnu-config triples, this abi is actually the empty string "" rather than "-unknown"
-    unknown = { kernels = [ "darwin" "freebsd12" "freebsd13" "freebsd" "genode" "solaris2" "solaris" "ghcjs" "mmixware" "netbsd" "none" "openbsd" "redox" "wasi" ]; };
+    unknown = { kernels = [ "darwin" "freebsd12" "freebsd13" "freebsd" "genode" "solaris2" "solaris" "ghcjs" "mmixware" "netbsd" "none" "" "openbsd" "redox" "wasi" ]; };
   };
 
   ################################################################################
@@ -432,12 +433,21 @@ rec {
       else if elemAt l 1 == "windows"
         then { cpu = elemAt l 0;                      kernel = "windows";  abi = "msvc";     }
       else if (elemAt l 1) == "elf"
-        then { cpu = elemAt l 0;                      kernel = "none";     abi = elemAt l 1; }
+        then { cpu = elemAt l 0;                      kernel = "";         abi = elemAt l 1; }
       else   { cpu = elemAt l 0;                      kernel = elemAt l 1;                   };
     "3" =
+      # cpu-vendor-""-abi
+      if elemAt l 1 == "unknown" && elemAt l 2 == "elf"
+      then {
+        cpu    = elemAt l 0;
+        vendor = elemAt l 1;
+        kernel = "";
+        abi    = elemAt l 2;
+      }
       # cpu-kernel-environment
-      if elemAt l 1 == "linux" ||
-         elem (elemAt l 2) ["eabi" "eabihf" "elf" "gnu"]
+      else if elemAt l 1 == "linux" ||
+              elemAt l 1 == "none" ||
+              elem (elemAt l 2) ["eabi" "eabihf" "elf" "gnu"]
       then {
         cpu    = elemAt l 0;
         kernel = elemAt l 1;
@@ -560,6 +570,7 @@ rec {
   tripleFromSkeleton = { cpu, vendor, kernel, optExecFormat?"", abi }: let
     optAbi = lib.optionalString (abi != "unknown") "-${abi}";
     optVendor = lib.optionalString (vendor != "") "-${vendor}";
+    optKernel = lib.optionalString (kernel != "") "-${kernel}";
   in
     # gnu-config considers "mingw32" and "cygwin" to be kernels.
     # This is obviously bogus, which is why nixpkgs has historically
@@ -568,7 +579,7 @@ rec {
     # quirk when unparsing in order to round-trip correctly.
     if      abi == "cygnus"     then "${cpu}${optVendor}-cygwin"
     else if kernel == "windows" then "${cpu}${optVendor}-mingw32"
-    else "${cpu}${optVendor}-${kernel}${optExecFormat}${optAbi}";
+    else "${cpu}${optVendor}${optKernel}${optExecFormat}${optAbi}";
 
   # To "canonicalize" a triple is to parse it and then unparse (turn
   # back into a string) it.
