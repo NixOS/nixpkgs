@@ -92,6 +92,21 @@ let
       X86_AMD_PSTATE                   = whenAtLeast "5.17" yes;
       # Intel DPTF (Dynamic Platform and Thermal Framework) Support
       ACPI_DPTF                        = whenAtLeast "5.10" yes;
+
+      # Required to bring up some Bay Trail devices properly
+      I2C                              = yes;
+      I2C_DESIGNWARE_PLATFORM          = yes;
+      PMIC_OPREGION                    = whenAtLeast "5.10" yes;
+      INTEL_SOC_PMIC                   = whenAtLeast "5.10" yes;
+      BYTCRC_PMIC_OPREGION             = whenAtLeast "5.10" yes;
+      CHTCRC_PMIC_OPREGION             = whenAtLeast "5.10" yes;
+      XPOWER_PMIC_OPREGION             = whenAtLeast "5.10" yes;
+      BXT_WC_PMIC_OPREGION             = whenAtLeast "5.10" yes;
+      INTEL_SOC_PMIC_CHTWC             = whenAtLeast "5.10" yes;
+      CHT_WC_PMIC_OPREGION             = whenAtLeast "5.10" yes;
+      INTEL_SOC_PMIC_CHTDC_TI          = whenAtLeast "5.10" yes;
+      CHT_DC_TI_PMIC_OPREGION          = whenAtLeast "5.10" yes;
+      TPS68470_PMIC_OPREGION           = whenAtLeast "5.10" yes;
     };
 
     external-firmware = {
