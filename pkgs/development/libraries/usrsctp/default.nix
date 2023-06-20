@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "usrsctp";
-  version = "0.9.5.0";
+  version = "unstable-2023-05-24";
 
   src = fetchFromGitHub {
     owner = "sctplab";
     repo = "usrsctp";
-    rev = version;
-    sha256 = "10ndzkip8blgkw572n3dicl6mgjaa7kygwn3vls80liq92vf1sa9";
+    rev = "ac559d2a95277e5e0827e9ee5a1d3b1b50e0822a";
+    hash = "sha256-CIdLGBVCVjz3LFAZXc0IcYsQUOG2NpgEHsWNpzs97gI=";
   };
 
   nativeBuildInputs = [ cmake ];
