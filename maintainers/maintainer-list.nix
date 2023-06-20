@@ -7834,6 +7834,12 @@
     githubId = 2576152;
     name = "John M. Harris, Jr.";
   };
+  johnpyp = {
+    name = "John Paul Penaloza";
+    email = "johnpyp.dev@gmail.com";
+    github = "johnpyp";
+    githubId = 20625636;
+  };
   johnramsden = {
     email = "johnramsden@riseup.net";
     github = "johnramsden";
