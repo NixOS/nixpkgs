@@ -24,7 +24,7 @@ javaPackages.mavenfod rec {
 
   mvnFetchExtraArgs.dontConfigure = true;
   mvnParameters = "-DskipTests";
-  mvnHash = "sha256-2MVlF3QIWiDvUlnMH4RLi2Od57aoh8zK/OmHqztOnZ4=";
+  mvnHash = "sha256-bzYBSrCS9Kp+qnVO60h915Or1VWabphwLEu6lcBULuc=";
 
   nativeBuildInputs = [ maven jdk makeWrapper ];
 

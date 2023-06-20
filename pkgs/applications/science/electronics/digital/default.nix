@@ -39,7 +39,7 @@ javaPackages.mavenfod rec {
   };
 
   inherit mvnParameters;
-  mvnHash = "sha256-tc4mrXeyeI973IsNA9CcYJXEtTj91DcpCSmVYBYytt8=";
+  mvnHash = "sha256-Ej/JePvd9Ieni8FqSaXBDc2T6Cwr8WP54iko8wYiT68=";
 
   nativeBuildInputs = [ copyDesktopItems maven makeWrapper ];
 

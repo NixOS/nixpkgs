@@ -28,7 +28,7 @@ in javaPackages.mavenfod {
 
   # Tests need a running Xorg.
   mvnParameters = "-DskipTests";
-  mvnHash = "sha256-Bq02zyOZjah5jtFBEvE+Xif6aAAwPiuP5sUL42V8dUs=";
+  mvnHash = "sha256-ajrHnaiJS7ZnR9BjLaXK2bnAKCp5UWQqYpjWbz3z6bw=";
 
   nativeBuildInputs = [ maven makeWrapper ];
 
