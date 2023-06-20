@@ -38344,7 +38344,11 @@ with pkgs;
     fftw = fftw;
   };
 
-  lammps-mpi = lowPrio (lammps.override { withMPI = true; });
+  lammps-mpi = lowPrio (lammps.override {
+    extraBuildInputs = [
+      mpi
+    ];
+  });
 
   gromacs = callPackage ../applications/science/molecular-dynamics/gromacs {
     singlePrec = true;
