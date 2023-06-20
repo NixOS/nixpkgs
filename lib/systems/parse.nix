@@ -489,6 +489,7 @@ rec {
         else if isLinux parsed || isWindows parsed then
           if isAarch32 parsed then
             if parsed.vendor == vendors.apple then abis.gnu
+            else if isLinux parsed then abis.gnu
             else if lib.versionAtLeast (parsed.cpu.version or "0") "6"
             then abis.gnueabihf
             else abis.gnueabi
