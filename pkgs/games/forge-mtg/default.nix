@@ -1,6 +1,7 @@
 { coreutils
 , fetchFromGitHub
 , gnused
+, javaPackages
 , lib
 , maven
 , makeWrapper
@@ -21,46 +22,15 @@ let
   # launch4j downloads and runs a native binary during the package phase.
   patches = [ ./no-launch4j.patch ];
 
-  mavenRepository = stdenv.mkDerivation {
-    pname = "forge-mtg-maven-repository";
-    inherit version src patches;
-
-    nativeBuildInputs = [ maven ];
-
-    buildPhase = ''
-      runHook preBuild
-      # Tests need a running Xorg.
-      mvn package -Dmaven.repo.local=$out -DskipTests
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-      find $out -type f \( \
-        -name \*.lastUpdated \
-        -o -name resolver-status.properties \
-        -o -name _remote.repositories \) \
-        -delete
-      runHook postInstall
-    '';
-
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-aSNqAWbLebmiYnByyw5myc7eivzpP2STStz6qUUMw90=";
-  };
-
-in stdenv.mkDerivation {
+in javaPackages.mavenfod {
   pname = "forge-mtg";
   inherit version src patches;
 
-  nativeBuildInputs = [ maven makeWrapper ];
+  # Tests need a running Xorg.
+  mvnParameters = "-DskipTests";
+  mvnHash = "sha256-Bq02zyOZjah5jtFBEvE+Xif6aAAwPiuP5sUL42V8dUs=";
 
-  buildPhase = ''
-    runHook preBuild
-    # Tests need a running Xorg.
-    mvn --offline -Dmaven.repo.local=${mavenRepository} -DskipTests package;
-    runHook postBuild
-  '';
+  nativeBuildInputs = [ maven makeWrapper ];
 
   installPhase = ''
     runHook preInstall
