@@ -27,7 +27,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library to write SQL queries in a pythonic way";
-    homepage = "https://pypi.org/project/python-sql/";
+    homepage = "https://foss.heptapod.net/tryton/python-sql";
+    changelog = "https://foss.heptapod.net/tryton/python-sql/-/blob/${version}/CHANGELOG";
     license = licenses.bsd3;
     maintainers = with maintainers; [ johbo ];
   };
