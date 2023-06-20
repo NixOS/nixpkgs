@@ -486,7 +486,8 @@ rec {
         /**/ if args ? abi       then getAbi args.abi
         else if isLinux parsed || isWindows parsed then
           if isAarch32 parsed then
-            if lib.versionAtLeast (parsed.cpu.version or "0") "6"
+            if parsed.vendor == vendors.apple then abis.gnu
+            else if lib.versionAtLeast (parsed.cpu.version or "0") "6"
             then abis.gnueabihf
             else abis.gnueabi
           else abis.gnu
