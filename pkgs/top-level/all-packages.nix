@@ -8274,6 +8274,8 @@ with pkgs;
 
   gptfdisk = callPackage ../tools/system/gptfdisk { };
 
+  gql = callPackage ../applications/version-management/gql { };
+
   grafterm = callPackage ../tools/misc/grafterm { };
 
   gradience = callPackage ../applications/misc/gradience { };
