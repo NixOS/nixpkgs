@@ -36876,6 +36876,8 @@ with pkgs;
 
   hyperrogue = callPackage ../games/hyperrogue { };
 
+  ibmcloud-cli = callPackage ../tools/admin/ibmcloud-cli { stdenv = stdenvNoCC; };
+
   icbm3d = callPackage ../games/icbm3d { };
 
   infra = callPackage ../tools/admin/infra { };
