@@ -206,27 +206,7 @@ checkout_ref(){
 
 # Update submodules
 init_submodules(){
-    # Add urls into .git/config file
-    clean_git submodule init
-
-    # list submodule directories and their hashes
-    git submodule status |
-    while read -r l; do
-        local hash
-        local dir
-        local name
-        local url
-
-        # checkout each submodule
-        hash=$(echo "$l" | awk '{print $1}' | tr -d '-')
-        dir=$(echo "$l" | sed -n 's/^.[0-9a-f]\+ \(.*[^)]*\)\( (.*)\)\?$/\1/p')
-        name=$(
-            git config -f .gitmodules --get-regexp submodule\..*\.path |
-            sed -n "s,^\(.*\)\.path $dir\$,\\1,p")
-        url=$(git config --get "${name}.url")
-
-        clone "$dir" "$url" "$hash" ""
-    done
+    clean_git submodule update --init --recursive -j $NIX_BUILD_CORES
 }
 
 clone(){
