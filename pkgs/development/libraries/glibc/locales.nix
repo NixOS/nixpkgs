@@ -60,11 +60,11 @@
       echo SUPPORTED-LOCALES='${toString locales}' > ../glibc-2*/localedata/SUPPORTED
     '';
 
+  enableParallelBuilding = true;
+
   makeFlags = (previousAttrs.makeFlags or []) ++ [
     "localedata/install-locales"
     "localedir=${builtins.placeholder "out"}/lib/locale"
-  ] ++ lib.optionals finalAttrs.finalPackage.enableParallelInstalling [
-    "PARALLELMFLAGS=-j$(NIX_BUILD_CORES)"
   ];
 
   installPhase =
