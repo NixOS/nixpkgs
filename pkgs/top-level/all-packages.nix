@@ -804,6 +804,8 @@ with pkgs;
   mkNugetSource = callPackage ../build-support/dotnet/make-nuget-source { };
   mkNugetDeps = callPackage ../build-support/dotnet/make-nuget-deps { };
 
+  buildDotnetGlobalTool = callPackage ../build-support/dotnet/build-dotnet-global-tool { };
+
   fsautocomplete = callPackage ../development/tools/fsautocomplete { };
 
   dotnetenv = callPackage ../build-support/dotnet/dotnetenv {
