@@ -240,7 +240,6 @@ dont-distribute-packages:
  - JsContracts
  - JsonGrammar
  - JuPyTer-notebook
- - JuicyPixels-scale-dct
  - JunkDB-driver-gdbm
  - JunkDB-driver-hashtables
  - KiCS
@@ -452,7 +451,6 @@ dont-distribute-packages:
  - aeson-native
  - affine
  - afv
- - ag-pictgen
  - agda-server
  - agda-snippets-hakyll
  - agentx
@@ -660,7 +658,6 @@ dont-distribute-packages:
  - apiary-websockets
  - apis
  - apotiki
- - appendful-persistent
  - approx-rand-test
  - arbor-monad-metric-datadog
  - archive-tar-bytestring
@@ -679,8 +676,6 @@ dont-distribute-packages:
  - ascii-table
  - ascii-th_1_2_0_0
  - ascii_1_7_0_0
- - asic
- - asil
  - assert4hs-hspec
  - assert4hs-tasty
  - assimp
@@ -810,7 +805,6 @@ dont-distribute-packages:
  - bitcoin-tx
  - bitcoin-types
  - bitcoind-regtest
- - bitfield
  - bitly-cli
  - bitmaps
  - bittorrent
@@ -881,7 +875,6 @@ dont-distribute-packages:
  - cabal-query
  - cabal-test
  - cabal2arch
- - cabal2json
  - cabalmdvrpm
  - cabalrpmdeps
  - caffegraph
@@ -1033,7 +1026,6 @@ dont-distribute-packages:
  - compact-mutable
  - compact-mutable-vector
  - compact-socket
- - compactable
  - compdata-automata
  - compdata-dags
  - compdata-param
@@ -1135,7 +1127,6 @@ dont-distribute-packages:
  - csv-enumerator
  - ctpl
  - cube
- - cuckoo
  - cv-combinators
  - cypher
  - daino
@@ -1397,7 +1388,6 @@ dont-distribute-packages:
  - eventuo11y-otel
  - eventuo11y-prometheus
  - every-bit-counts
- - ewe
  - exference
  - exinst-aeson
  - exinst-base
@@ -1451,7 +1441,6 @@ dont-distribute-packages:
  - feed-translator
  - feed2lj
  - feed2twitter
- - feedback
  - fei-base
  - fei-dataiter
  - fei-datasets
@@ -1513,7 +1502,7 @@ dont-distribute-packages:
  - fpnla-examples
  - frame-markdown
  - freckle-app
- - freckle-app_1_9_0_2
+ - freckle-app_1_9_0_3
  - free-functors
  - free-game
  - free-theorems-counterexamples
@@ -1574,14 +1563,7 @@ dont-distribute-packages:
  - geni-util
  - geniconvert
  - geniserver
- - genvalidity-appendful
- - genvalidity-dirforest
  - genvalidity-network-uri
- - genvalidity-sydtest
- - genvalidity-sydtest-aeson
- - genvalidity-sydtest-hashable
- - genvalidity-sydtest-lens
- - genvalidity-sydtest-persistent
  - geo-uk
  - geodetic
  - geolite-csv
@@ -1932,7 +1914,6 @@ dont-distribute-packages:
  - hakyll-ogmarkup
  - hakyll-shortcut-links
  - halberd
- - halide-JuicyPixels
  - halide-arrayfire
  - hall-symbols
  - halma-gui
@@ -1970,7 +1951,6 @@ dont-distribute-packages:
  - hascat-setup
  - hascat-system
  - hashable-accelerate
- - hashes
  - hashflare
  - hask-home
  - haskdeep
@@ -2674,7 +2654,6 @@ dont-distribute-packages:
  - loli
  - longshot
  - loop-effin
- - looper
  - lorentz
  - lostcities
  - loup
@@ -2797,6 +2776,7 @@ dont-distribute-packages:
  - monetdb-mapi
  - mongrel2-handler
  - monky
+ - monoidmap
  - monte-carlo
  - moo
  - moonshine
@@ -2945,6 +2925,7 @@ dont-distribute-packages:
  - nri-test-encoding
  - numerals-base
  - numeric-ode
+ - numeric-optimization-backprop
  - numerical
  - numhask-hedgehog
  - numhask-range
@@ -3205,7 +3186,6 @@ dont-distribute-packages:
  - protobuf-native
  - protocol-buffers-descriptor
  - protocol-buffers-descriptor-fork
- - proton
  - psql
  - ptera
  - ptera-core
@@ -3378,7 +3358,6 @@ dont-distribute-packages:
  - remotion
  - repa-array
  - repa-convert
- - repa-fftw
  - repa-flow
  - repa-plugin
  - repa-stream
@@ -3465,9 +3444,6 @@ dont-distribute-packages:
  - runtime-arbitrary
  - rv
  - s-expression
- - safe-coloured-text-gen
- - safe-coloured-text-layout
- - safe-coloured-text-layout-gen
  - safe-coupling
  - safe-plugins
  - safer-file-handles
@@ -3798,27 +3774,6 @@ dont-distribute-packages:
  - swapper
  - sweet-egison
  - switch
- - sydtest-aeson
- - sydtest-amqp
- - sydtest-autodocodec
- - sydtest-hedgehog
- - sydtest-hedgehog_0_4_0_0
- - sydtest-hedis
- - sydtest-hspec
- - sydtest-hspec_0_4_0_0
- - sydtest-mongo
- - sydtest-persistent
- - sydtest-persistent-postgresql
- - sydtest-persistent-sqlite
- - sydtest-process
- - sydtest-rabbitmq
- - sydtest-servant
- - sydtest-typed-process
- - sydtest-wai
- - sydtest-webdriver
- - sydtest-webdriver-screenshot
- - sydtest-webdriver-yesod
- - sydtest-yesod
  - sylvia
  - sym-plot
  - symantic-atom
@@ -3893,7 +3848,6 @@ dont-distribute-packages:
  - thumbnail-polish
  - tic-tac-toe
  - tickle
- - tiger
  - tighttp
  - timberc
  - time-exts
@@ -3919,7 +3873,6 @@ dont-distribute-packages:
  - to-string-instances
  - toboggan
  - todos
- - token-limiter-concurrent
  - toktok
  - tomlcheck
  - tonatona
@@ -4060,7 +4013,6 @@ dont-distribute-packages:
  - uu-cco-hut-parsing
  - uu-cco-uu-parsinglib
  - uu-options
- - uuagc
  - uuid-crypto
  - uvector-algorithms
  - v4l2
