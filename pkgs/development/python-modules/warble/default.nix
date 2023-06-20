@@ -1,9 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, gcc
 , cython
-, libcxx
 , boost
 , bluez
 }:
@@ -21,12 +19,10 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    gcc
     cython
   ];
 
   buildInputs = [
-    libcxx
     boost
     bluez
   ];
