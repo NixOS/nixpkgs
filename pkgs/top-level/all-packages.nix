@@ -6333,6 +6333,8 @@ with pkgs;
 
   chain-bench = callPackage ../tools/security/chain-bench { };
 
+  chainsaw = callPackage ../tools/security/chainsaw { };
+
   checkinstall = callPackage ../tools/package-management/checkinstall { };
 
   checkmake = callPackage ../development/tools/checkmake { };
