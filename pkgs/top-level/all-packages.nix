@@ -808,6 +808,8 @@ with pkgs;
 
   fsautocomplete = callPackage ../development/tools/fsautocomplete { };
 
+  pbm = callPackage ../tools/admin/pbm { };
+
   dotnetenv = callPackage ../build-support/dotnet/dotnetenv {
     dotnetfx = dotnetfx40;
   };
