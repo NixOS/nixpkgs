@@ -1,24 +1,24 @@
 { lib
 , fetchFromGitLab
 , imagemagick
-, flutter37
+, flutter
 , makeDesktopItem
 , gnome
 }:
 
-flutter37.buildFlutterApplication rec {
-  version = "1.11.2";
+flutter.buildFlutterApplication rec {
+  version = "1.12.1";
   name = "fluffychat";
 
   src = fetchFromGitLab {
     owner = "famedly";
     repo = "fluffychat";
     rev = "v${version}";
-    hash = "sha256-vHzZDkSgxcZf3y/+A645hxBverm34J5xNnNwyxnSVUA=";
+    hash = "sha256-F4oVscw5L8iQZtz5K+yo4tlPYYv1wfs88oyq5Uds20I=";
   };
 
   depsListFile = ./deps.json;
-  vendorHash = "sha256-u8YI4UBnEfPpvjBfhbo4LGolb56w94EiUlnLlYITdXQ=";
+  vendorHash = "sha256-u0cQ5ejyxhw4du3jXRB8oWsAlMtbw5nX+SMUUCuwklE=";
 
   desktopItem = makeDesktopItem {
     name = "Fluffychat";
