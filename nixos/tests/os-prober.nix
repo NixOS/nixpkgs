@@ -83,6 +83,8 @@ in {
           docbook5
           docbook_xsl_ns
           grub2
+          kbd
+          kbd.dev
           kmod.dev
           libarchive
           libarchive.dev
