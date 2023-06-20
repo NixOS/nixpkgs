@@ -7,7 +7,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kord";
-  version = "0.5.16";
+  version = "0.6.1";
 
   # kord depends on nightly features
   RUSTC_BOOTSTRAP = 1;
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     owner = "twitchax";
     repo = "kord";
     rev = "v${version}";
-    sha256 = "sha256-gI88fweOT2t+4cj58/mLygtTnue2Ai1QSC5oZf7Xv/g=";
+    sha256 = "sha256-CeMh6yB4fGoxtGLbkQe4OMMvBM0jesyP+8JtU5kCP84=";
   };
 
   cargoLock = {

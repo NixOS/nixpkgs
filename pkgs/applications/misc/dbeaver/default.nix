@@ -37,7 +37,7 @@ in
     hash = "sha256-TUdtrhQ1JzqZx+QNauNA1P/+WDSSeOGIgGX3SdS0JTI=";
   };
 
-  mvnHash = "sha256-87pf7XRXCuZlAbL54pX+a5Lo/874DmUr/W37/V+5YpQ=";
+  mvnHash = "sha256-ERZYDsPxp1YXteSmunFIgTGZUYqjZJhqrNytLnIUNBQ=";
   mvnParameters = "-P desktop,all-platforms";
 
   nativeBuildInputs = [
