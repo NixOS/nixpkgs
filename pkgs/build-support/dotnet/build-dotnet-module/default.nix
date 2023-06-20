@@ -12,6 +12,7 @@
 , nuget-to-nix
 , cacert
 , coreutils
+, runtimeShellPackage
 }:
 
 { name ? "${args.pname}-${args.version}"
@@ -183,7 +184,7 @@ stdenvNoCC.mkDerivation (args // {
       writeShellScript "fetch-${pname}-deps" ''
         set -euo pipefail
 
-        export PATH="${lib.makeBinPath [ coreutils dotnet-sdk (nuget-to-nix.override { inherit dotnet-sdk; }) ]}"
+        export PATH="${lib.makeBinPath [ coreutils runtimeShellPackage dotnet-sdk (nuget-to-nix.override { inherit dotnet-sdk; }) ]}"
 
         for arg in "$@"; do
             case "$arg" in
@@ -262,7 +263,7 @@ stdenvNoCC.mkDerivation (args // {
         echo "Restoring project..."
 
         ${dotnet-sdk}/bin/dotnet tool restore
-        mv $HOME/.nuget/packages/* $tmp/nuget_pkgs || true
+        cp -r $HOME/.nuget/packages/* $tmp/nuget_pkgs || true
 
         for rid in "${lib.concatStringsSep "\" \"" runtimeIds}"; do
             (( ''${#projectFiles[@]} == 0 )) && dotnetRestore "" "$rid"
@@ -271,6 +272,8 @@ stdenvNoCC.mkDerivation (args // {
                 dotnetRestore "$project" "$rid"
             done
         done
+        # Second copy, makes sure packages restored by ie. paket are included
+        cp -r $HOME/.nuget/packages/* $tmp/nuget_pkgs || true
 
         echo "Succesfully restored project"
 
