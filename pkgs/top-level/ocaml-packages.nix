@@ -104,7 +104,6 @@ let
 
     bls12-381 = callPackage ../development/ocaml-modules/bls12-381 { };
     bls12-381-gen = callPackage ../development/ocaml-modules/bls12-381/gen.nix { };
-    bls12-381-hash = callPackage ../development/ocaml-modules/bls12-381-hash { };
 
     bls12-381-signature = callPackage ../development/ocaml-modules/bls12-381-signature { };
 
