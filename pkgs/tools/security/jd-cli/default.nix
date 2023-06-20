@@ -11,7 +11,7 @@ javaPackages.mavenfod rec {
     hash = "sha256-rRttA5H0A0c44loBzbKH7Waoted3IsOgxGCD2VM0U/Q=";
   };
 
-  mvnHash = "sha256-EIam0rxmCBs/mpMck6ePFoQBQ6KYYNqJKVE32gdXPfE=";
+  mvnHash = "sha256-kLpjMj05uC94/5vGMwMlFzLKNFOKeyNvq/vmB6pHTAo=";
 
   nativeBuildInputs = [ maven makeWrapper ];
 

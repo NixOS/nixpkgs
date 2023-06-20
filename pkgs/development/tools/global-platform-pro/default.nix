@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "1qwgvz6l5wia8q5824c9f3iwyapfskljhqf1z09fw6jjj1jy3b15";
+    outputHash = "sha256-rRLsCTY3fEAvGRDvNXqpjac2Gb5fdlyhK2wTK5CVN9k=";
   };
 
   nativeBuildInputs = [ jdk maven makeWrapper ];
