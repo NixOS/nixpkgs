@@ -8319,8 +8319,6 @@ self: super: with self; {
 
   pyblackbird = callPackage ../development/python-modules/pyblackbird { };
 
-  pyblock = toPythonModule (callPackage ../development/python-modules/pyblock { });
-
   pybluez = callPackage ../development/python-modules/pybluez {
     inherit (pkgs) bluez;
   };
