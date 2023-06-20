@@ -164,9 +164,6 @@ let
     cl-readline = super.cl-readline.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.readline ];
     });
-    log4cl = super.log4cl.overrideLispAttrs (o: {
-      patches = [ ./patches/log4cl-fix-build.patch ];
-    });
     md5 = super.md5.overrideLispAttrs (o: {
       lispLibs = [ super.flexi-streams ];
     });
