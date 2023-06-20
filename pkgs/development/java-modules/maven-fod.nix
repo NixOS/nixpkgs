@@ -20,9 +20,9 @@
 stdenv.mkDerivation (rec {
   fetchedMavenDeps = stdenv.mkDerivation ({
     name = "${pname}-${version}-maven-deps";
-    inherit src;
+    inherit src patches;
 
-    buildInputs = [
+    nativeBuildInputs = [
       maven
     ];
 
@@ -32,10 +32,10 @@ stdenv.mkDerivation (rec {
 
     # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
     installPhase = ''
-      find $out -type f \
-        -name \*.lastUpdated -or \
-        -name resolver-status.properties -or \
-        -name _remote.repositories \
+      find $out -type f \( \
+        -name \*.lastUpdated \
+        -o -name resolver-status.properties \
+        -o -name _remote.repositories \) \
         -delete
     '';
 
