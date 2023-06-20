@@ -1,6 +1,5 @@
 { lib
 , cudaPackages
-, gcc11Stdenv
 , fetchFromGitHub
 , fetchpatch
 , addOpenGLRunpath
