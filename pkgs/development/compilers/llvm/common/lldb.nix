@@ -1,8 +1,8 @@
-{ lib, stdenv, llvm_meta
-, runCommand
-, monorepoSrc
+{ lib
+, stdenv
+, llvm_meta
+, release_version
 , cmake
-, ninja
 , zlib
 , ncurses
 , swig
@@ -13,64 +13,57 @@
 , libclang
 , python3
 , version
-, libobjc
-, xpc
-, Foundation
-, bootstrap_cmds
-, Carbon
-, Cocoa
+, darwin
 , lit
 , makeWrapper
-, darwin
-, enableManpages ? false
 , lua5_3
+, ninja
+, runCommand
+, src ? null
+, monorepoSrc ? null
+, patches ? [ ]
+, enableManpages ? false
 }:
 
-# TODO: we build the python bindings but don't expose them as a python package
-# TODO: expose the vscode extension?
+let
+  src' =
+    if monorepoSrc != null then
+      runCommand "lldb-src-${version}" { } ''
+        mkdir -p "$out"
+        cp -r ${monorepoSrc}/cmake "$out"
+        cp -r ${monorepoSrc}/lldb "$out"
+      '' else src;
+in
 
 stdenv.mkDerivation (rec {
+  passthru.monorepoSrc = monorepoSrc;
   pname = "lldb";
   inherit version;
 
-  src = runCommand "${pname}-src-${version}" {} ''
-    mkdir -p "$out"
-    cp -r ${monorepoSrc}/cmake "$out"
-    cp -r ${monorepoSrc}/${pname} "$out"
-  '';
-
-  sourceRoot = "${src.name}/${pname}";
-
-  patches = [
-    # FIXME: do we need this? ./procfs.patch
-    (runCommand "resource-dir.patch" {
-      clangLibDir = "${libclang.lib}/lib";
-    } ''
-      substitute '${./resource-dir.patch}' "$out" --subst-var clangLibDir
-    '')
-    ./gnu-install-dirs.patch
-  ]
-  # This is a stopgap solution if/until the macOS SDK used for x86_64 is
-  # updated.
-  #
-  # The older 10.12 SDK used on x86_64 as of this writing has a `mach/machine.h`
-  # header that does not define `CPU_SUBTYPE_ARM64E` so we replace the one use
-  # of this preprocessor symbol in `lldb` with its expansion.
-  #
-  # See here for some context:
-  # https://github.com/NixOS/nixpkgs/pull/194634#issuecomment-1272129132
-  ++ lib.optional (
-    stdenv.targetPlatform.isDarwin
-      && !stdenv.targetPlatform.isAarch64
-      && (lib.versionOlder darwin.apple_sdk.sdk.version "11.0")
-  ) ./cpu_subtype_arm64e_replacement.patch;
+  src = src';
+  inherit patches;
 
   outputs = [ "out" "lib" "dev" ];
 
+  sourceRoot =
+    if lib.versionOlder release_version "13" then null
+    else "${src.name}/${pname}";
+
   nativeBuildInputs = [
-    cmake ninja python3 which swig lit makeWrapper lua5_3
+    cmake
+  ] ++ lib.optionals (lib.versionAtLeast release_version "15") [
+    ninja
+  ] ++ [
+    python3
+    which
+    swig
+    lit
+    makeWrapper
+  ] ++ lib.optionals (lib.versionAtLeast release_version "14") [
+    lua5_3
   ] ++ lib.optionals enableManpages [
-    python3.pkgs.sphinx python3.pkgs.recommonmark
+    python3.pkgs.sphinx
+    python3.pkgs.recommonmark
   ];
 
   buildInputs = [
@@ -80,12 +73,12 @@ stdenv.mkDerivation (rec {
     libxml2
     libllvm
   ] ++ lib.optionals stdenv.isDarwin [
-    libobjc
-    xpc
-    Foundation
-    bootstrap_cmds
-    Carbon
-    Cocoa
+    darwin.libobjc
+    darwin.apple_sdk.libs.xpc
+    darwin.apple_sdk.frameworks.Foundation
+    darwin.bootstrap_cmds
+    darwin.apple_sdk.frameworks.Carbon
+    darwin.apple_sdk.frameworks.Cocoa
   ]
   # The older libSystem used on x86_64 macOS is missing the
   # `<bsm/audit_session.h>` header which `lldb` uses.
@@ -96,7 +89,8 @@ stdenv.mkDerivation (rec {
   # https://github.com/NixOS/nixpkgs/pull/194634#issuecomment-1272129132
   ++ lib.optional (
       stdenv.targetPlatform.isDarwin
-        && !stdenv.targetPlatform.isAarch64
+      && !stdenv.targetPlatform.isAarch64
+      && (lib.versionAtLeast release_version "15")
     ) (
       runCommand "bsm-audit-session-header" { } ''
         install -Dm444 \
@@ -116,29 +110,45 @@ stdenv.mkDerivation (rec {
     "-DLLDB_USE_SYSTEM_DEBUGSERVER=ON"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "-DLLDB_CODESIGN_IDENTITY=" # codesigning makes nondeterministic
-  ] ++ lib.optionals enableManpages [
+  ] ++ lib.optionals enableManpages ([
     "-DLLVM_ENABLE_SPHINX=ON"
     "-DSPHINX_OUTPUT_MAN=ON"
     "-DSPHINX_OUTPUT_HTML=OFF"
-
+  ] ++ lib.optionals (lib.versionAtLeast release_version "15") [
     # docs reference `automodapi` but it's not added to the extensions list when
     # only building the manpages:
     # https://github.com/llvm/llvm-project/blob/af6ec9200b09039573d85e349496c4f5b17c3d7f/lldb/docs/conf.py#L54
     #
     # so, we just ignore the resulting errors
     "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-  ] ++ lib.optionals doCheck [
+  ]) ++ lib.optionals doCheck [
     "-DLLDB_TEST_C_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
     "-DLLDB_TEST_CXX_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++"
   ];
 
   doCheck = false;
 
-  installCheckPhase = ''
-    if [ ! -e "$lib/${python3.sitePackages}/lldb/_lldb.so" ] ; then
-        return 1;
-    fi
-  '';
+  # TODO: cleanup with mass-rebuild
+  installCheckPhase =
+    if ((lib.versions.major release_version) == "14") then ''
+      if [ ! -e $lib/${python3.sitePackages}/lldb/_lldb*.so ] ; then
+          echo "ERROR: python files not installed where expected!";
+          return 1;
+      fi
+      if [ ! -e "$lib/lib/lua/${lua5_3.luaversion}/lldb.so" ] ; then
+          echo "ERROR: lua files not installed where expected!";
+          return 1;
+      fi
+    '' else if (((lib.versions.major release_version) == "15") || (lib.versions.major release_version) == "16") then ''
+      if [ ! -e "$lib/${python3.sitePackages}/lldb/_lldb.so" ] ; then
+          return 1;
+      fi
+    '' else ''
+      if [ ! -e "$lib/${python3.sitePackages}/lldb/_lldb.so" ] ; then
+          echo "ERROR: python files not installed where expected!";
+          return 1;
+      fi
+    '';
 
   postInstall = ''
     wrapProgram $out/bin/lldb --prefix PYTHONPATH : $lib/${python3.sitePackages}/
@@ -147,7 +157,7 @@ stdenv.mkDerivation (rec {
     # vscode:
     install -D ../tools/lldb-vscode/package.json $out/share/vscode/extensions/llvm-org.lldb-vscode-0.1.0/package.json
     mkdir -p $out/share/vscode/extensions/llvm-org.lldb-vscode-0.1.0/bin
-    ln -s $out/bin/lldb-vscode $out/share/vscode/extensions/llvm-org.lldb-vscode-0.1.0/bin
+    ln -s $out/bin/${if (lib.versionOlder release_version "12") then "llvm-vscode" else "lldb-vscode"} $out/share/vscode/extensions/llvm-org.lldb-vscode-0.1.0/bin
   '';
 
   meta = llvm_meta // {
@@ -159,13 +169,24 @@ stdenv.mkDerivation (rec {
       larger LLVM Project, such as the Clang expression parser and LLVM
       disassembler.
     '';
+    # llvm <10 never built on aarch64-darwin since first introduction in nixpkgs
+    broken =
+      (lib.versionOlder release_version "11" && stdenv.isDarwin && stdenv.isAarch64)
+        || (((lib.versions.major release_version) == "13") && stdenv.isDarwin);
   };
+} // lib.optionalAttrs (lib.versionOlder release_version "15") {
+  doInstallCheck = true;
 } // lib.optionalAttrs enableManpages {
   pname = "lldb-manpages";
 
-  ninjaFlags = [ "docs-lldb-man" ];
+  buildPhase =
+    if lib.versionOlder release_version "15" then ''
+      make ${if (lib.versionOlder release_version "12") then "docs-man" else "docs-lldb-man"}
+    '' else null;
 
-  propagatedBuildInputs = [];
+  ninjaFlags = if lib.versionAtLeast release_version "15" then [ "docs-lldb-man" ] else null;
+
+  propagatedBuildInputs = [ ];
 
   # manually install lldb man page
   installPhase = ''
