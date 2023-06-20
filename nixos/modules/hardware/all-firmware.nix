@@ -14,10 +14,7 @@ in {
     (mkRenamedOptionModule [ "networking" "enableRTL8192cFirmware" ] [ "hardware" "enableRedistributableFirmware" ])
   ];
 
-  ###### interface
-
   options = {
-
     hardware.enableAllFirmware = mkOption {
       default = false;
       type = types.bool;
@@ -27,7 +24,7 @@ in {
     };
 
     hardware.enableRedistributableFirmware = mkOption {
-      default = config.hardware.enableAllFirmware;
+      default = cfg.enableAllFirmware;
       defaultText = lib.literalExpression "config.hardware.enableAllFirmware";
       type = types.bool;
       description = lib.mdDoc ''
@@ -36,7 +33,8 @@ in {
     };
 
     hardware.wirelessRegulatoryDatabase = mkOption {
-      default = false;
+      default = cfg.enableAllFirmware || cfg.enableRedistributableFirmware;
+      defaultText = lib.literalExpression "config.hardware.enableAllFirmware || config.hardware.enableRedistributableFirmware";
       type = types.bool;
       description = lib.mdDoc ''
         Load the wireless regulatory database at boot.
@@ -44,9 +42,6 @@ in {
     };
 
   };
-
-
-  ###### implementation
 
   config = mkMerge [
     (mkIf (cfg.enableAllFirmware || cfg.enableRedistributableFirmware) {
@@ -66,7 +61,6 @@ in {
         ++ optionals (versionOlder config.boot.kernelPackages.kernel.version "4.13") [
         rtl8723bs-firmware
       ];
-      hardware.wirelessRegulatoryDatabase = true;
     })
     (mkIf cfg.enableAllFirmware {
       assertions = [{
