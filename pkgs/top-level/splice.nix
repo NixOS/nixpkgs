@@ -44,7 +44,36 @@ let
             valueHostHost = pkgsHostHost.${name} or { };
             valueHostTarget = pkgsHostTarget.${name} or { };
             valueTargetTarget = pkgsTargetTarget.${name} or { };
-            augmentedValue = defaultValue
+
+            addEntangled = origOverrideAttrs: f0:
+              let
+                # copied from make-derivation.nix, check there for the comment.
+                f = self: super:
+                  let x = f0 super;
+                  in
+                  if builtins.isFunction x
+                  then
+                    f0 self super
+                  else x;
+              in
+              origOverrideAttrs (
+                lib.composeExtensions f (self: super: {
+                  passthru = (super.passthru or { }) // {
+                    crossDrv = super.passthru.crossDrv.overrideAttrs f;
+                    nativeDrv = super.passthru.nativeDrv.overrideAttrs f;
+                    __spliced = { } // (lib.mapAttrs (_: sDrv: sDrv.overrideAttrs f) splicingAttrs.__spliced);
+                    overrideAttrs = addEntangled self.overrideAttrs;
+                  };
+                })
+              );
+
+            entangle = pkg1: splicingAttrs: pkg1.overrideAttrs (self: super: {
+              passthru = (super.passthru or { }) // {
+                overrideAttrs = addEntangled self.overrideAttrs;
+              } // splicingAttrs;
+            });
+
+            splicingAttrs = { }
               # TODO(@Artturin): remove before release 23.05 and only have __spliced.
               // (lib.optionalAttrs (pkgsBuildHost ? ${name}) { nativeDrv = lib.warn "use ${name}.__spliced.buildHost instead of ${name}.nativeDrv" valueBuildHost; })
               // (lib.optionalAttrs (pkgsHostTarget ? ${name}) { crossDrv = lib.warn "use ${name}.__spliced.hostTarget instead of ${name}.crossDrv" valueHostTarget; })
@@ -55,10 +84,12 @@ let
                   // (lib.optionalAttrs (pkgsBuildTarget ? ${name}) { buildTarget = valueBuildTarget; })
                   // (lib.optionalAttrs (pkgsHostHost ? ${name}) { hostHost = valueHostHost; })
                   // (lib.optionalAttrs (pkgsHostTarget ? ${name}) { hostTarget = valueHostTarget; })
-                  // (lib.optionalAttrs (pkgsTargetTarget ? ${name}) {
-                  targetTarget = valueTargetTarget;
-                });
+                  // (lib.optionalAttrs (pkgsTargetTarget ? ${name}) { targetTarget = valueTargetTarget; });
             };
+            augmentedValue =
+              if (defaultValue ? overrideAttrs)
+              then entangle defaultValue splicingAttrs
+              else defaultValue // splicingAttrs;
             # Get the set of outputs of a derivation. If one derivation fails to
             # evaluate we don't want to diverge the entire splice, so we fall back
             # on {}
