@@ -16550,6 +16550,7 @@ with pkgs;
   cargo-license = callPackage ../development/tools/rust/cargo-license { };
   cargo-llvm-cov = callPackage ../development/tools/rust/cargo-llvm-cov { };
   cargo-llvm-lines = callPackage ../development/tools/rust/cargo-llvm-lines { };
+  cargo-local-registry = callPackage ../development/tools/rust/cargo-local-registry { };
   cargo-lock = callPackage ../development/tools/rust/cargo-lock { };
   cargo-machete = callPackage ../development/tools/rust/cargo-machete { };
   cargo-outdated = callPackage ../development/tools/rust/cargo-outdated {
