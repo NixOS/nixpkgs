@@ -1,4 +1,7 @@
 { lib
+, stdenv
+, which
+, coreutils
 , callPackage
 , makeSetupHook
 , makeWrapper
@@ -67,6 +70,9 @@ in
       substitutions = {
         dotnetRuntime = dotnet-runtime;
         runtimeDeps = libraryPath;
+        shell = stdenv.shell;
+        which = "${which}/bin/which";
+        dirname = "${coreutils}/bin/dirname";
       };
     } ./dotnet-fixup-hook.sh) { };
 }
