@@ -809,6 +809,12 @@ in mkLicense lset) ({
     fullName = "Microsoft Public License";
   };
 
+  mulan-psl2 = {
+    spdxId = "MulanPSL-2.0";
+    fullName = "Mulan Permissive Software License, Version 2";
+    url = "https://license.coscl.org.cn/MulanPSL2";
+  };
+
   nasa13 = {
     spdxId = "NASA-1.3";
     fullName = "NASA Open Source Agreement 1.3";
