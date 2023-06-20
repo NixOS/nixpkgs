@@ -617,6 +617,11 @@ let
       RING_BUFFER_BENCHMARK = no;
     };
 
+    perf = {
+      # enable AMD Zen branch sampling if available
+      PERF_EVENTS_AMD_BRS       = whenAtLeast "5.19" (option yes);
+    };
+
     virtualisation = {
       PARAVIRT = option yes;
 
