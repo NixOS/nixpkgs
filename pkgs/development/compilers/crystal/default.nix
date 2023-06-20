@@ -41,7 +41,6 @@ let
   };
 
   arch = archs.${stdenv.system} or (throw "system ${stdenv.system} not supported");
-  isAarch64Darwin = stdenv.system == "aarch64-darwin";
 
   nativeCheckInputs = [ git gmp openssl readline libxml2 libyaml libffi ];
 
@@ -80,7 +79,7 @@ let
     , extraBuildInputs ? [ ]
     , buildFlags ? [ "all" "docs" "release=1"]
     }:
-    lib.fix (compiler: stdenv.mkDerivation (finalAttrs: {
+    stdenv.mkDerivation (finalAttrs: {
       pname = "crystal";
       inherit buildFlags doCheck version;
 
@@ -235,7 +234,7 @@ let
 
       passthru.buildBinary = binary;
       passthru.buildCrystalPackage = callPackage ./build-package.nix {
-        crystal = compiler;
+        crystal = finalAttrs.finalPackage;
       };
 
       meta = with lib; {
@@ -245,7 +244,7 @@ let
         license = licenses.asl20;
         maintainers = with maintainers; [ david50407 manveru peterhoeg ];
       };
-    }))
+    })
   );
 
 in
