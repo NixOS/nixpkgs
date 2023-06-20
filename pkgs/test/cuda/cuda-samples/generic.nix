@@ -10,9 +10,7 @@
 , glfw3
 , freeimage
 }:
-let
-  stdenv = cudaPackages.backendStdenv;
-in stdenv.mkDerivation rec {
+cudaPackages.backendStdenv.mkDerivation rec {
   pname = "cuda-samples";
   version = lib.versions.majorMinor cudatoolkit.version;
 
