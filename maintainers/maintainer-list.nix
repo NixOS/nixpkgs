@@ -9799,6 +9799,12 @@
     githubId = 782440;
     name = "Luna Nova";
   };
+  lurkki = {
+    email = "jussi.kuokkanen@protonmail.com";
+    github = "Lurkki14";
+    githubId = 44469719;
+    name = "Jussi Kuokkanen";
+  };
   lux = {
     email = "lux@lux.name";
     github = "luxzeitlos";
