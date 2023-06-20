@@ -25576,8 +25576,6 @@ with pkgs;
 
   exhaustive = callPackage ../development/tools/exhaustive { };
 
-  exhibitor = callPackage ../servers/exhibitor { };
-
   hyp = callPackage ../servers/http/hyp { };
 
   peering-manager = callPackage ../servers/web-apps/peering-manager { };
