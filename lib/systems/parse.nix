@@ -489,8 +489,6 @@ rec {
             if lib.versionAtLeast (parsed.cpu.version or "0") "6"
             then abis.gnueabihf
             else abis.gnueabi
-          # Default ppc64 BE to ELFv2
-          else if isPower64 parsed && isBigEndian parsed then abis.gnuabielfv2
           else abis.gnu
         else                     abis.unknown;
     };
