@@ -54,7 +54,7 @@
 , glib
 , gnum4
 , gtk3
-, icu
+, icu72
 , libGL
 , libGLU
 , libevent
@@ -427,7 +427,9 @@ buildStdenv.mkDerivation ({
     freetype
     glib
     gtk3
-    icu
+    # icu73 changed how it follows symlinks which breaks in the firefox sandbox
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1839287
+    icu72
     libffi
     libGL
     libGLU
