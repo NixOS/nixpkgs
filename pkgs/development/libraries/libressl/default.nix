@@ -97,7 +97,7 @@ in {
   };
 
   libressl_3_7 = generic {
-    version = "3.7.2";
-    hash = "sha256-sGqlOP78nGszxNtJMaCaX1LZ0jVyGa/L/32T/hLr9vc=";
+    version = "3.7.3";
+    hash = "sha256-eUjIVqkMglvXJotvhWdKjc0lS65C4iF4GyTj+NwzXbM=";
   };
 }
