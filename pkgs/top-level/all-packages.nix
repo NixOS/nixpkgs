@@ -23626,7 +23626,6 @@ with pkgs;
   };
 
   inherit (callPackages ../development/libraries/libressl { })
-    libressl_3_4
     libressl_3_6
     libressl_3_7;
 
