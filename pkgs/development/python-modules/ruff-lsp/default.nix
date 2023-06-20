@@ -10,18 +10,19 @@
 , typing-extensions
 , pytestCheckHook
 , python-lsp-jsonrpc
+, pytest-asyncio
 }:
 
 buildPythonPackage rec {
   pname = "ruff-lsp";
-  version = "0.0.31";
+  version = "0.0.32";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;
     pname = "ruff_lsp";
-    hash = "sha256-cqkHhC0xK6+x82f10V2zW+tn97Nw0QSl+2w1ZBTjg+8=";
+    hash = "sha256-n69Ibm+SFpjEkwPoYAJxVmmgtrRhzWh0PLfRe+iLxdo=";
   };
 
   postPatch = ''
@@ -39,10 +40,12 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  # fails in linux sandbox
   doCheck = stdenv.isDarwin;
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-asyncio
     python-lsp-jsonrpc
     ruff
   ];
