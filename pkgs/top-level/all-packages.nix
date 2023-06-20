@@ -21341,6 +21341,8 @@ with pkgs;
 
   hunspellDicts = recurseIntoAttrs (callPackages ../development/libraries/hunspell/dictionaries.nix {});
 
+  hunspellDictsChromium = recurseIntoAttrs (callPackages ../development/libraries/hunspell/dictionaries-chromium.nix {});
+
   hunspellWithDicts = dicts: callPackage ../development/libraries/hunspell/wrapper.nix { inherit dicts; };
 
   hwloc = callPackage ../development/libraries/hwloc { };
