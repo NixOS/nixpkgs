@@ -125,6 +125,16 @@ let
       CC_OPTIMIZE_FOR_SIZE = no;
     };
 
+    memory = {
+      DAMON = whenAtLeast "5.15" yes;
+      DAMON_VADDR = whenAtLeast "5.15" yes;
+      DAMON_PADDR = whenAtLeast "5.15" yes;
+      DAMON_SYSFS = whenAtLeast "5.15" yes;
+      DAMON_DBGFS = whenAtLeast "5.15" yes;
+      DAMON_RECLAIM = whenAtLeast "5.15" yes;
+      DAMON_LRU_SORT = whenAtLeast "5.15" yes;
+    };
+
     memtest = {
       MEMTEST = yes;
     };
