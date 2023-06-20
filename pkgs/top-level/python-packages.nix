@@ -9269,8 +9269,6 @@ self: super: with self; {
 
   pyregion = callPackage ../development/python-modules/pyregion { };
 
-  pyres = callPackage ../development/python-modules/pyres { };
-
   pyric = callPackage ../development/python-modules/pyric { };
 
   pyrisco = callPackage ../development/python-modules/pyrisco { };
