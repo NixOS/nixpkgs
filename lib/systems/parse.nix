@@ -497,16 +497,29 @@ rec {
       lib.optionalString (kernel.name == "netbsd" &&
                           gnuNetBSDDefaultExecFormat cpu != kernel.execFormat)
         kernel.execFormat.name;
-    optAbi = lib.optionalString (abi != abis.unknown) "-${abi.name}";
+    in
+      tripleFromSkeleton {
+        cpu = cpu.name;
+        vendor = vendor.name;
+        kernel = kernelName kernel;
+        inherit optExecFormat;
+        abi = abi.name;
+      };
+
+  tripleFromSkeleton = { cpu, vendor, kernel, optExecFormat?"", abi }: let
+    optAbi = lib.optionalString (abi != "unknown") "-${abi}";
+
+    # this allows to print a "vendorless" skeleton
+    optVendor = lib.optionalString (vendor != null) "-${vendor}";
   in
     # gnu-config considers "mingw32" and "cygwin" to be kernels.
     # This is obviously bogus, which is why nixpkgs has historically
     # parsed them differently.  However for regression testing
     # reasons (see lib/tests/triples.nix) we need to replicate this
     # quirk when unparsing in order to round-trip correctly.
-    if      abi == abis.cygnus        then "${cpu.name}-${vendor.name}-cygwin"
-    else if kernel == kernels.windows then "${cpu.name}-${vendor.name}-mingw32"
-    else "${cpu.name}-${vendor.name}-${kernelName kernel}${optExecFormat}${optAbi}";
+    if      abi == "cygnus"     then "${cpu}${optVendor}-cygwin"
+    else if kernel == "windows" then "${cpu}${optVendor}-mingw32"
+    else "${cpu}${optVendor}-${kernel}${optExecFormat}${optAbi}";
 
   ################################################################################
 
