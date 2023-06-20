@@ -5,9 +5,7 @@ let
     jdk = jdk11;
   };
 in
-(javaPackages.mavenfod.override {
-  maven = mavenJdk11;
-}) rec {
+mavenJdk11.buildMavenPackage rec {
   pname = "gephi";
   version = "0.10.1";
 

@@ -1,10 +1,10 @@
-{ lib, javaPackages, fetchFromGitHub
+{ lib, fetchFromGitHub
 , autoPatchelfHook
 , fuse3
 , maven, jdk, makeShellWrapper, glib, wrapGAppsHook
 }:
 
-javaPackages.mavenfod rec {
+maven.buildMavenPackage rec {
   pname = "cryptomator";
   version = "1.8.0";
 

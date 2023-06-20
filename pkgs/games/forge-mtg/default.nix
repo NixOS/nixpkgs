@@ -1,12 +1,10 @@
 { coreutils
 , fetchFromGitHub
 , gnused
-, javaPackages
 , lib
 , maven
 , makeWrapper
 , openjdk
-, stdenv
 }:
 
 let
@@ -22,7 +20,8 @@ let
   # launch4j downloads and runs a native binary during the package phase.
   patches = [ ./no-launch4j.patch ];
 
-in javaPackages.mavenfod {
+in
+maven.buildMavenPackage {
   pname = "forge-mtg";
   inherit version src patches;
 

@@ -1,13 +1,11 @@
-{ lib, javaPackages, fetchFromGitHub, jdk8, maven, makeWrapper, jre8_headless, pcsclite }:
+{ lib, fetchFromGitHub, jdk8, maven, makeWrapper, jre8_headless, pcsclite }:
 
 let
   mavenJdk8 = maven.override {
     jdk = jdk8;
   };
 in
-(javaPackages.mavenfod.override {
-  maven = mavenJdk8;
-}) rec {
+mavenJdk8.buildMavenPackage rec {
   pname = "global-platform-pro";
   version = "18.09.14";
   GPPRO_VERSION = "18.09.14-0-gb439b52"; # git describe --tags --always --long --dirty
