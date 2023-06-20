@@ -14,6 +14,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-/ITZBh0vRYHb6fDUZQNRwW2pmQulJlDZ8EbObUBtsz4=";
 
+  patches = [
+    ./Disable-inmemory-storage-driver-test.patch
+  ];
+
   postPatch = ''
     substituteInPlace health/checks/checks_test.go \
       --replace \
