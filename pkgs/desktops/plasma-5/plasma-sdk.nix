@@ -16,11 +16,16 @@
 , ktexteditor
 , kwidgetsaddons
 , kdoctools
-, qtbase
 }:
 
 mkDerivation {
   pname = "plasma-sdk";
+
+  # work around build failure due to duplicate docs
+  # see: https://invent.kde.org/plasma/plasma-sdk/-/issues/5
+  # FIXME: remove when fixed
+  postPatch = "rm -rf po/nl/docs/plasma-sdk";
+
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     karchive
