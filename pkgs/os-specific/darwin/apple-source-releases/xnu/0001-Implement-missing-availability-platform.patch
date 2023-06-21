@@ -1,0 +1,24 @@
+From 0fdd7beac9dd2f47e5c8b4aa555f97c532c6e6ed Mon Sep 17 00:00:00 2001
+From: toonn <toonn@toonn.io>
+Date: Mon, 23 Aug 2021 13:55:48 +0200
+Subject: [PATCH 2/2] Implement missing availability platform
+
+---
+ EXTERNAL_HEADERS/AvailabilityInternal.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/EXTERNAL_HEADERS/AvailabilityInternal.h b/EXTERNAL_HEADERS/AvailabilityInternal.h
+index 8663cae..3c27779 100644
+--- a/EXTERNAL_HEADERS/AvailabilityInternal.h
++++ b/EXTERNAL_HEADERS/AvailabilityInternal.h
+@@ -23459,6 +23459,7 @@
+ #define __API_AVAILABLE_PLATFORM_ios(x) ios,introduced=x
+ #define __API_AVAILABLE_PLATFORM_watchos(x) watchos,introduced=x
+ #define __API_AVAILABLE_PLATFORM_tvos(x) tvos,introduced=x
++#define __API_AVAILABLE_PLATFORM_bridgeos(x) bridgeos,introduced=x
+ 
+ #define __API_A(x) __attribute__((availability(__API_AVAILABLE_PLATFORM_##x)))
+ #define __API_AVAILABLE1(x) __API_A(x)
+-- 
+2.17.2 (Apple Git-113)
+
