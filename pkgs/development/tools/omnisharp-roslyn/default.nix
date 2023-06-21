@@ -1,5 +1,6 @@
 { buildDotnetModule
 , dotnetCorePackages
+, dotnetPackages
 , fetchFromGitHub
 , lib
 , stdenv
@@ -25,6 +26,10 @@ let finalPackage = buildDotnetModule rec {
 
   dotnet-sdk = sdk_6_0;
   dotnet-runtime = sdk_6_0;
+
+  projectReferences = with dotnetPackages; [
+    csharp-language-server-protocol
+  ];
 
   dotnetInstallFlags = [ "--framework net6.0" ];
   dotnetBuildFlags = [ "--framework net6.0" "--no-self-contained" ];
