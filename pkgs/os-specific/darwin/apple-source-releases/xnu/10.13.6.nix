@@ -53,7 +53,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
   '';
 
   PLATFORM = "MacOSX";
-  SDKVERSION = "10.11";
+  SDKVERSION = "10.13.6";
   CC = "${stdenv.cc.targetPrefix or ""}cc";
   CXX = "${stdenv.cc.targetPrefix or ""}c++";
   MIG = "mig";
@@ -63,7 +63,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
   NM = "${stdenv.cc.bintools.targetPrefix or ""}nm";
   UNIFDEF = "unifdef";
   DSYMUTIL = "dsymutil";
-  HOST_OS_VERSION = "10.10";
+  HOST_OS_VERSION = "10.13.6";
   HOST_CC = "${buildPackages.stdenv.cc.targetPrefix or ""}cc";
   HOST_FLEX = "flex";
   HOST_BISON = "bison";
