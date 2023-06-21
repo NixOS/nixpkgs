@@ -9203,6 +9203,21 @@ self: super: with self; {
 
   pyqt6-webengine = callPackage ../development/python-modules/pyqt6-webengine.nix { };
 
+  pyqt3d = pkgs.libsForQt5.callPackage ../development/python-modules/pyqt3d {
+    inherit (self) buildPythonPackage pyqt5 pyqt-builder python pythonOlder
+      setuptools sip;
+  };
+
+  pyqtchart = pkgs.libsForQt5.callPackage ../development/python-modules/pyqtchart {
+    inherit (self) buildPythonPackage pyqt5 pyqt-builder python pythonOlder
+      setuptools sip;
+  };
+
+  pyqtdatavisualization = pkgs.libsForQt5.callPackage ../development/python-modules/pyqtdatavisualization {
+    inherit (self) buildPythonPackage pyqt5 pyqt-builder python pythonOlder
+      setuptools sip;
+  };
+
   pyqtgraph = callPackage ../development/python-modules/pyqtgraph { };
 
   pyqtwebengine = pkgs.libsForQt5.callPackage ../development/python-modules/pyqtwebengine {
