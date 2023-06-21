@@ -34,8 +34,13 @@ stdenv.mkDerivation rec {
 
     ln -sf $out/codeql/tools/linux64/lib64trace.so $out/codeql/tools/linux64/libtrace.so
 
-    sed -i 's%\$CODEQL_DIST/tools/\$CODEQL_PLATFORM/java-aarch64%\${jdk17}%g' $out/codeql/codeql
-    sed -i 's%\$CODEQL_DIST/tools/\$CODEQL_PLATFORM/java%\${jdk17}%g' $out/codeql/codeql
+    # many of the codeql extractors use CODEQL_DIST + CODEQL_PLATFORM to
+    # resolve java home, so to be able to create databases, we want to make
+    # sure that they point somewhere sane/usable since we can not autopatch
+    # the codeql packaged java dist, but we DO want to patch the extractors
+    # as well as the builders which are ELF binaries for the most part
+    rm -rf $out/codeql/tools/linux64/java
+    ln -s ${jdk17} $out/codeql/tools/linux64/java
 
     ln -s $out/codeql/codeql $out/bin/
   '';
