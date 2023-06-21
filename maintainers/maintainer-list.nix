@@ -12389,6 +12389,12 @@
     githubId = 75299;
     name = "Malcolm Matalka";
   };
+  orichter = {
+    email = "richter-oliver@gmx.net";
+    github = "RichterOliver";
+    githubId = 135209509;
+    name = "Oliver Richter";
+  };
   orivej = {
     email = "orivej@gmx.fr";
     github = "orivej";
