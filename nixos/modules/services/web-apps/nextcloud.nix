@@ -211,7 +211,7 @@ in {
     };
     phpPackage = mkOption {
       type = types.package;
-      relatedPackages = [ "php80" "php81" ];
+      relatedPackages = [ "php81" "php82" ];
       defaultText = "pkgs.php";
       description = lib.mdDoc ''
         PHP package to use for Nextcloud.
