@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nmap";
-  version = "7.93";
+  version = "7.94";
 
   src = fetchurl {
     url = "https://nmap.org/dist/nmap-${version}.tar.bz2";
-    sha256 = "sha256-Vbz+R5PiWsyWukJ02MQijbVQuOjv1yAEs47FWi3RZlE=";
+    sha256 = "sha256-1xvhie7EPX4Jm6yFcVCdMWxFd8p5SRgyrD4SF7yPksw=";
   };
 
   prePatch = lib.optionalString stdenv.isDarwin ''
