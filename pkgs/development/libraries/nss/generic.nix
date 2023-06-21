@@ -52,6 +52,10 @@ stdenv.mkDerivation rec {
     #  https://bugzilla.mozilla.org/show_bug.cgi?id=1771273
     #  https://hg.mozilla.org/projects/nss/raw-rev/21e7aaa1f7d94bca15d997e5b4c2329b32fad21a
     ./gcc-13-esr.patch
+  ] ++ lib.optionals (lib.versionAtLeast version "3.90") [
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1836925
+    # https://phabricator.services.mozilla.com/D180068
+    ./remove-c25519-support.patch
   ];
 
   patchFlags = [ "-p0" ];

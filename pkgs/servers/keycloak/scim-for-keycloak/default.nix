@@ -1,11 +1,9 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , maven
-, javaPackages
 }:
 
-javaPackages.mavenfod rec {
+maven.buildMavenPackage rec {
   pname = "scim-for-keycloak";
   version = "kc-15-b2"; # When updating also update mvnHash
 

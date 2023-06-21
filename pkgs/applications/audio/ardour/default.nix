@@ -78,6 +78,7 @@ stdenv.mkDerivation rec {
   patches = [
     # AS=as in the environment causes build failure https://tracker.ardour.org/view.php?id=8096
     ./as-flags.patch
+    ./default-plugin-search-paths.patch
   ];
 
   # Ardour's wscript requires git revision and date to be available.

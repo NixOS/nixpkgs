@@ -1,6 +1,6 @@
-{ lib, javaPackages, fetchFromGitHub, jre, makeWrapper, maven }:
+{ lib, fetchFromGitHub, jre, makeWrapper, maven }:
 
-javaPackages.mavenfod rec {
+maven.buildMavenPackage rec {
   pname = "jd-cli";
   version = "1.2.1";
 
