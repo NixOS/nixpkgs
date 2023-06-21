@@ -10819,6 +10819,8 @@ with pkgs;
 
   miniupnpd = callPackage ../tools/networking/miniupnpd { };
 
+  miniupnpd-nftables = callPackage ../tools/networking/miniupnpd { firewall = "nftables"; };
+
   miniball = callPackage ../development/libraries/miniball { };
 
   minijail = callPackage ../tools/system/minijail { };
