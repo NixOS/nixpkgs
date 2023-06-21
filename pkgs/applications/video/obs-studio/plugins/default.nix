@@ -38,6 +38,8 @@
 
   obs-teleport = callPackage ./obs-teleport { };
 
+  obs-transition-table = qt6Packages.callPackage ./obs-transition-table.nix { };
+
   obs-vaapi = callPackage ./obs-vaapi { };
 
   obs-vkcapture = callPackage ./obs-vkcapture.nix {
