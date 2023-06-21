@@ -178,6 +178,7 @@ in
   };
 
   libssh2-sys = attrs: {
+    LIBSSH2_SYS_USE_PKG_CONFIG = true;
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ openssl zlib libssh2 ];
   };
