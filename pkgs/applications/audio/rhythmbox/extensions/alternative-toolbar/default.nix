@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
         make install
     '';
 
-    # # package needs more work done to integrate with rhythmbox: 
+    # # package needs more work done to integrate with rhythmbox:
     # # - not sure how to join the $out of this package with the main rhythmbox one or link the relevant things to the home folder.
     #
     # installPhase = ''
