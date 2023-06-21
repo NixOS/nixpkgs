@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "ruff-lsp";
-  version = "0.0.34";
+  version = "0.0.35";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;
     pname = "ruff_lsp";
-    hash = "sha256-8zbKP9Taeh9O5ptJoRYDtVm0QSeMtTA7ppEpjXcoDCY=";
+    hash = "sha256-qRNpswpQitvVczFBKsUFlew+W1uEjtkbWnmwBRUHq0w=";
   };
 
   postPatch = ''
