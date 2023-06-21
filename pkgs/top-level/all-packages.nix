@@ -6063,6 +6063,8 @@ with pkgs;
 
   mstflint = callPackage ../tools/misc/mstflint { };
 
+  msldapdump = callPackage ../tools/security/msldapdump { };
+
   mslink = callPackage ../tools/misc/mslink { };
 
   mceinject = callPackage ../os-specific/linux/mceinject { };
