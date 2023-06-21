@@ -12,7 +12,10 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
 
   nativeBuildInputs = [ bootstrap_cmds bison flex gnum4 unifdef perl python3 ];
 
-  patches = lib.optionals stdenv.isx86_64 [ ./python3.patch ];
+  patches = lib.optionals stdenv.isx86_64 [
+    ./python3.patch
+    ./0001-Implement-missing-availability-platform.patch
+  ];
 
   postPatch = ''
     substituteInPlace Makefile \
