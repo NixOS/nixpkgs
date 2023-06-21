@@ -13,6 +13,9 @@ let
   inherit (lib)
     optionalString
     ;
+
+  perlWrapped = pkgs.perl.withPackages (p: with p; [ ConfigIniFiles FileSlurp ]);
+
 in
 {
   config = {
@@ -35,21 +38,21 @@ in
 
       mkdir $out/bin
       substitute ${./switch-to-configuration.pl} $out/bin/switch-to-configuration \
-        --subst-var coreutils \
-        --subst-var distroId \
-        --subst-var installBootLoader \
-        --subst-var localeArchive \
         --subst-var out \
-        --subst-var perl \
-        --subst-var shell \
-        --subst-var su \
-        --subst-var systemd \
-        --subst-var utillinux \
+        --subst-var-by coreutils "${pkgs.coreutils}" \
+        --subst-var-by distroId ${lib.escapeShellArg config.system.nixos.distroId} \
+        --subst-var-by installBootLoader ${lib.escapeShellArg config.system.build.installBootLoader} \
+        --subst-var-by localeArchive "${config.i18n.glibcLocales}/lib/locale/locale-archive" \
+        --subst-var-by perl "${perlWrapped}" \
+        --subst-var-by shell "${pkgs.bash}/bin/sh" \
+        --subst-var-by su "${pkgs.shadow.su}/bin/su" \
+        --subst-var-by systemd "${config.systemd.package}"\
+        --subst-var-by utillinux "${pkgs.util-linux}" \
         ;
 
       chmod +x $out/bin/switch-to-configuration
       ${optionalString (pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) ''
-        if ! output=$($perl/bin/perl -c $out/bin/switch-to-configuration 2>&1); then
+        if ! output=$(${perlWrapped}/bin/perl -c $out/bin/switch-to-configuration 2>&1); then
           echo "switch-to-configuration syntax is not valid:"
           echo "$output"
           exit 1
