@@ -45,6 +45,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           regular2 = foreground;
         };
       };
+
+      etc."gpg-agent.conf".text = ''
+        pinentry-timeout 86400
+      '';
     };
 
     fonts.fonts = [ pkgs.inconsolata ];
@@ -154,6 +158,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
     # Test gpg-agent starting pinentry-gnome3 via D-Bus (tests if
     # $WAYLAND_DISPLAY is correctly imported into the D-Bus user env):
+    swaymsg("exec mkdir -p ~/.gnupg")
+    swaymsg("exec cp /etc/gpg-agent.conf ~/.gnupg")
+
     swaymsg("exec DISPLAY=INVALID gpg --no-tty --yes --quick-generate-key test", succeed=False)
     machine.wait_until_succeeds("pgrep --exact gpg")
     wait_for_window("gpg")
