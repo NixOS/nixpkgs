@@ -3,6 +3,7 @@
 , callPackage
 , fetchFromGitHub
 , fetchzip
+, fetchpatch
 , ffmpeg
 , pjsip
 , opendht
@@ -50,7 +51,12 @@ rec {
       patch-src = src + "/daemon/contrib/src/ffmpeg/";
     in
     {
-      patches = old.patches ++ (map (x: patch-src + x) (readLinesToList ./config/ffmpeg_patches));
+      patches = old.patches ++ [
+        (fetchpatch {
+          url = "https://git.videolan.org/?p=ffmpeg.git;a=patch;h=e5163b1d34381a3319214a902ef1df923dd2eeba";
+          hash = "sha256-nLhP2+34cj5EgpnUrePZp60nYAxmbhZAEDfay4pBVk0=";
+        })
+      ] ++ map (x: patch-src + x) (readLinesToList ./config/ffmpeg_patches);
       configureFlags = old.configureFlags
         ++ (readLinesToList ./config/ffmpeg_args_common)
         ++ lib.optionals stdenv.isLinux (readLinesToList ./config/ffmpeg_args_linux)
