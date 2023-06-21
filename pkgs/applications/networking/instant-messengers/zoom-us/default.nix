@@ -50,7 +50,7 @@ let
   # find where to edit them.
   versions.aarch64-darwin = "5.14.10.19202";
   versions.x86_64-darwin = "5.14.10.19202";
-  versions.x86_64-linux = "5.14.10.3738";
+  versions.x86_64-linux = "5.15.0.4063";
 
   srcs = {
     aarch64-darwin = fetchurl {
@@ -64,7 +64,7 @@ let
     };
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-linux}/zoom_x86_64.pkg.tar.xz";
-      hash = "sha256-ccuTzvsbygifFVCp5LJkMmKBZK2amMbAesXDlNXxoco=";
+      hash = "sha256-DhP6LZt/G3K9YDs7iXABsJMuhpzITP4aJ0PWXrFAL3I=";
     };
   };
 
