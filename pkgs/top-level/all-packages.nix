@@ -26267,6 +26267,8 @@ with pkgs;
 
   ops = callPackage ../applications/virtualization/ops { };
 
+  oracle = callPackage ../servers/sql/oracle { };
+
   seabios = callPackage ../applications/virtualization/seabios { };
 
   vmfs-tools = callPackage ../tools/filesystems/vmfs-tools { };
