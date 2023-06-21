@@ -1,22 +1,33 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, fetchpatch
 , testers
 , scip
 }:
 
 buildGoModule rec {
   pname = "scip";
-  version = "0.2.3";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "sourcegraph";
     repo = "scip";
     rev = "v${version}";
-    hash = "sha256-0ErEA44vRRntWxajUKiQXqaKvQtqCPPXnI/sBktQyIo=";
+    hash = "sha256-tcnBv+dxuLD/ixeOLGrHu2UVfOnrfANjyaRzW5oDC94=";
   };
 
-  vendorHash = "sha256-T0NYucDVBnTxROVYXlccOvHX74Cs6czXL/fy14I8MZc=";
+  vendorHash = "sha256-+IR3fc6tvSwPGDZ4DxrE48Ii3azcT0LMmID1LRAu5g8=";
+
+  patches = [
+    # update documentation to fix broken test
+    # https://github.com/sourcegraph/scip/pull/174
+    (fetchpatch {
+      name = "test-fix-out-of-sync-documentation.patch";
+      url = "https://github.com/sourcegraph/scip/commit/7450b7701637956d4ae6669338c808234f7a7bfa.patch";
+      hash = "sha256-Y5nAVHyy430xdN89ohA8XAssNdSSPq4y7QaesN48jVs=";
+    })
+  ];
 
   ldflags = [
     "-s"
