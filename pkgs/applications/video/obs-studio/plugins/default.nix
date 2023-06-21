@@ -46,6 +46,8 @@
 
   obs-teleport = callPackage ./obs-teleport { };
 
+  obs-transition-table = qt6Packages.callPackage ./obs-transition-table.nix { };
+
   obs-vaapi = callPackage ./obs-vaapi { };
 
   obs-vintage-filter = callPackage ./obs-vintage-filter.nix { };
