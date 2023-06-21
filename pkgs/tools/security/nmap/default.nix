@@ -1,8 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch, libpcap, pkg-config, openssl, lua5_3
 , pcre, libssh2
-, libX11 ? null
-, gtk2 ? null
-, makeWrapper ? null
 , withLua ? true
 }:
 
@@ -14,18 +11,6 @@ stdenv.mkDerivation rec {
     url = "https://nmap.org/dist/nmap-${version}.tar.bz2";
     sha256 = "sha256-Vbz+R5PiWsyWukJ02MQijbVQuOjv1yAEs47FWi3RZlE=";
   };
-
-  patches = [ ./zenmap.patch ]
-    ++ lib.optionals stdenv.cc.isClang [(
-      # Fixes a compile error due an ambiguous reference to bind(2) in
-      # nping/EchoServer.cc, which is otherwise resolved to std::bind.
-      # https://github.com/nmap/nmap/pull/1363
-      fetchpatch {
-        url = "https://github.com/nmap/nmap/commit/5bbe66f1bd8cbd3718f5805139e2e8139e6849bb.diff";
-        includes = [ "nping/EchoServer.cc" ];
-        sha256 = "0xcph9mycy57yryjg253frxyz87c4135rrbndlqw1400c8jxq70c";
-      }
-    )];
 
   prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace libz/configure \
