@@ -19530,6 +19530,8 @@ with pkgs;
 
   sqlmap = with python3Packages; toPythonApplication sqlmap;
 
+  src-cli = callPackage ../development/tools/misc/src-cli { };
+
   sselp = callPackage ../tools/X11/sselp{ };
 
   statix = callPackage ../tools/nix/statix { };
