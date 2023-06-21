@@ -482,9 +482,9 @@ in {
   };
 
   testScript = { nodes, ... }: let
-    originalSystem = nodes.machine.config.system.build.toplevel;
-    otherSystem = nodes.other.config.system.build.toplevel;
-    machine = nodes.machine.config.system.build.toplevel;
+    originalSystem = nodes.machine.system.build.toplevel;
+    otherSystem = nodes.other.system.build.toplevel;
+    machine = nodes.machine.system.build.toplevel;
 
     # Ensures failures pass through using pipefail, otherwise failing to
     # switch-to-configuration is hidden by the success of `tee`.
