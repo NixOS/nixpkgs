@@ -3,18 +3,19 @@
 , fetchFromGitHub
 , Security
 , autoreconfHook
+, util-linux
 , openssl
 }:
 
 stdenv.mkDerivation rec {
   pname = "wolfssl";
-  version = "5.6.0";
+  version = "5.6.2";
 
   src = fetchFromGitHub {
     owner = "wolfSSL";
     repo = "wolfssl";
     rev = "refs/tags/v${version}-stable";
-    hash = "sha256-ZSITzCuyie76OE2+PR+Q208kz7owXKqzLLJzGXXPNUk=";
+    hash = "sha256-4kNc2SHni9i4X5GJ1hoekkJZ4mTwU4l9gYxx/6CySVU=";
   };
 
   postPatch = ''
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
+    util-linux
   ];
 
   doCheck = true;
