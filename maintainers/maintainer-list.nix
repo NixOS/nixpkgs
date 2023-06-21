@@ -14955,6 +14955,11 @@
     githubId = 6224096;
     name = "Soner Sayakci";
   };
+  shymega = {
+    name = "Dom Rodriguez";
+    github = "shymega";
+    githubId = 1334592;
+  };
   siddharthist = {
     email = "langston.barrett@gmail.com";
     github = "langston-barrett";
