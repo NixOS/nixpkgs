@@ -356,7 +356,7 @@ in
       rstudio-server = 324;
       localtimed = 325;
       automatic-timezoned = 326;
-
+      autobrr = 326;
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
       nixbld = 30000; # start of range of uids
@@ -666,6 +666,7 @@ in
       rstudio-server = 324;
       localtimed = 325;
       automatic-timezoned = 326;
+      autobrr = 327;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

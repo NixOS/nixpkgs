@@ -2255,6 +2255,12 @@
     matrix = "@boozedog:matrix.org";
     name = "David A. Buser";
   };
+  borgstad = {
+    email = "aborgstad@gmail.com";
+    github = "borgstad";
+    githubId = 43218087;
+    name = "Andreas Borgstad";
+  };
   borisbabic = {
     email = "boris.ivan.babic@gmail.com";
     github = "borisbabic";
