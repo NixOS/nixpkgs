@@ -321,4 +321,16 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     # TODO(matthewbauer):
     # To be removed, once I figure out how to build a newer Security version.
     Security        = applePackage "Security/boot.nix" "osx-10.9.5"      "sha256-7qr0IamjCXCobIJ6V9KtvbMBkJDfRCy4C5eqpHJlQLI=" {};
+
+    # To enable splitting up the SDK bump into reviewable chunks before
+    # switching to it wholesale.
+    "10.13.6" = let applePackageMapping = namePath: version: sdkName: sha256:
+                      applePackage' ( { }."${namePath}"
+                                      or namePath
+                                    )
+                                    version
+                                    sdkName
+                                    sha256;
+                 in import ./macos-10.13.6.nix
+                      { applePackage' = applePackageMapping; };
 }
