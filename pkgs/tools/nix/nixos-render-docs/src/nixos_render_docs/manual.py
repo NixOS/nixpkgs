@@ -284,6 +284,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
     def _file_header(self, toc: TocEntry) -> str:
         prev_link, up_link, next_link = "", "", ""
         prev_a, next_a, parent_title = "", "", "&nbsp;"
+        nav_html = ""
         home = toc.root
         if toc.prev:
             prev_link = f'<link rel="prev" href="{toc.prev.target.href()}" title="{toc.prev.target.title}" />'
@@ -299,6 +300,22 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         if toc.next:
             next_link = f'<link rel="next" href="{toc.next.target.href()}" title="{toc.next.target.title}" />'
             next_a = f'<a accesskey="n" href="{toc.next.target.href()}">Next</a>'
+        if toc.prev or toc.parent or toc.next:
+            nav_html = "\n".join([
+                '  <div class="navheader">',
+                '   <table width="100%" summary="Navigation header">',
+                '    <tr>',
+                f'    <th colspan="3" align="center">{toc.target.title}</th>',
+                '    </tr>',
+                '    <tr>',
+                f'    <td width="20%" align="left">{prev_a}&nbsp;</td>',
+                f'    <th width="60%" align="center">{parent_title}</th>',
+                f'    <td width="20%" align="right">&nbsp;{next_a}</td>',
+                '    </tr>',
+                '   </table>',
+                '   <hr />',
+                '  </div>',
+            ])
         return "\n".join([
             '<?xml version="1.0" encoding="utf-8" standalone="no"?>',
             '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"',
@@ -316,25 +333,14 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             f' {up_link}{prev_link}{next_link}',
             ' </head>',
             ' <body>',
-            '  <div class="navheader">',
-            '   <table width="100%" summary="Navigation header">',
-            '    <tr>',
-            f'    <th colspan="3" align="center">{toc.target.title}</th>',
-            '    </tr>',
-            '    <tr>',
-            f'    <td width="20%" align="left">{prev_a}&nbsp;</td>',
-            f'    <th width="60%" align="center">{parent_title}</th>',
-            f'    <td width="20%" align="right">&nbsp;{next_a}</td>',
-            '    </tr>',
-            '   </table>',
-            '   <hr />',
-            '  </div>',
+            nav_html,
         ])
 
     def _file_footer(self, toc: TocEntry) -> str:
         # prev, next = self._get_prev_and_next()
         prev_a, up_a, home_a, next_a = "", "&nbsp;", "&nbsp;", ""
         prev_text, up_text, next_text = "", "", ""
+        nav_html = ""
         home = toc.root
         if toc.prev:
             prev_a = f'<a accesskey="p" href="{toc.prev.target.href()}">Prev</a>'
@@ -348,22 +354,26 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             next_a = f'<a accesskey="n" href="{toc.next.target.href()}">Next</a>'
             assert toc.next.target.title
             next_text = toc.next.target.title
+        if toc.prev or toc.parent or toc.next:
+            nav_html = "\n".join([
+                '  <div class="navfooter">',
+                '   <hr />',
+                '   <table width="100%" summary="Navigation footer">',
+                '    <tr>',
+                f'    <td width="40%" align="left">{prev_a}&nbsp;</td>',
+                f'    <td width="20%" align="center">{up_a}</td>',
+                f'    <td width="40%" align="right">&nbsp;{next_a}</td>',
+                '    </tr>',
+                '    <tr>',
+                f'     <td width="40%" align="left" valign="top">{prev_text}&nbsp;</td>',
+                f'     <td width="20%" align="center">{home_a}</td>',
+                f'     <td width="40%" align="right" valign="top">&nbsp;{next_text}</td>',
+                '    </tr>',
+                '   </table>',
+                '  </div>',
+            ])
         return "\n".join([
-            '  <div class="navfooter">',
-            '   <hr />',
-            '   <table width="100%" summary="Navigation footer">',
-            '    <tr>',
-            f'    <td width="40%" align="left">{prev_a}&nbsp;</td>',
-            f'    <td width="20%" align="center">{up_a}</td>',
-            f'    <td width="40%" align="right">&nbsp;{next_a}</td>',
-            '    </tr>',
-            '    <tr>',
-            f'     <td width="40%" align="left" valign="top">{prev_text}&nbsp;</td>',
-            f'     <td width="20%" align="center">{home_a}</td>',
-            f'     <td width="40%" align="right" valign="top">&nbsp;{next_text}</td>',
-            '    </tr>',
-            '   </table>',
-            '  </div>',
+            nav_html,
             ' </body>',
             '</html>',
         ])
