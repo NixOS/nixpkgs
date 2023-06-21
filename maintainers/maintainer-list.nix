@@ -5933,6 +5933,15 @@
     githubId = 25820499;
     name = "Roman Kretschmer";
   };
+  gobidev = {
+    email = "adrian.groh@t-online.de";
+    github = "Gobidev";
+    githubId = 50576978;
+    name = "Adrian Groh";
+    keys = [{
+      fingerprint = "62BD BF30 83E9 7076 9665 B60B 3AA3 153E 98B0 D771";
+    }];
+  };
   goertzenator = {
     email = "daniel.goertzen@gmail.com";
     github = "goertzenator";
@@ -10678,6 +10687,15 @@
     github = "mirrexagon";
     githubId = 1776903;
     name = "Andrew Abbott";
+  };
+  Misaka13514 = {
+    name = "Misaka13514";
+    email = "Misaka13514@gmail.com";
+    matrix = "@misaka13514:matrix.org";
+    github = "Misaka13514";
+    githubId = 54669781;
+    keys =
+      [{ fingerprint = "293B 93D8 A471 059F 85D7  16A6 5BA9 2099 D9BE 2DAA"; }];
   };
   mislavzanic = {
     email = "mislavzanic3@gmail.com";
