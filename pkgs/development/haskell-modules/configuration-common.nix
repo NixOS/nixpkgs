@@ -202,16 +202,6 @@ self: super: {
     ];
   }) super.statistics;
 
-  # QuickCheck-2.14.3 Rational generator reveals bug in tests
-  # https://github.com/diagrams/active/issues/43
-  active = appendPatches [
-    (pkgs.fetchpatch {
-      name = "active-test-zero-duration.patch";
-      url = "https://github.com/diagrams/active/commit/8fcc37c228a4d40fff3fa0d755f1de11b7c6a0c2.patch";
-      sha256 = "09wfmswr3rwy9qa2is6470bmkjnjbqkqdlg7ama3bii36yxrapyj";
-    })
-  ] super.active;
-
   # There are numerical tests on random data, that may fail occasionally
   lapack = dontCheck super.lapack;
 
