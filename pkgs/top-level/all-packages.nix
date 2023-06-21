@@ -35086,8 +35086,6 @@ with pkgs;
 
   uefi-run = callPackage ../tools/virtualization/uefi-run { };
 
-  uhhyou.lv2 = callPackage ../applications/audio/uhhyou.lv2 { };
-
   umurmur = callPackage ../applications/networking/umurmur { };
 
   udocker = callPackage ../tools/virtualization/udocker { };
