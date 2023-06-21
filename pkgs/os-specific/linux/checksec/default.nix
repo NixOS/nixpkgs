@@ -1,14 +1,25 @@
 { lib
 , stdenv
+, fetchpatch
 , fetchFromGitHub
 , makeWrapper
+
+  # dependencies
+, binutils
+, coreutils
+, curl
+, elfutils
 , file
 , findutils
-, binutils-unwrapped
+, gawk
 , glibc
-, coreutils
-, sysctl
+, gnugrep
+, gnused
 , openssl
+, procps
+, sysctl
+, wget
+, which
 }:
 
 stdenv.mkDerivation rec {
@@ -24,6 +35,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./0001-attempt-to-modprobe-config-before-checking-kernel.patch
+    # Tool would sanitize the environment, removing the PATH set by our wrapper.
+    ./0002-don-t-sanatize-the-environment.patch
   ];
 
   nativeBuildInputs = [
@@ -33,18 +46,29 @@ stdenv.mkDerivation rec {
   installPhase =
     let
       path = lib.makeBinPath [
-        findutils
+        binutils
+        coreutils
+        curl
+        elfutils
         file
-        binutils-unwrapped
-        sysctl
+        findutils
+        gawk
+        gnugrep
+        gnused
         openssl
+        procps
+        sysctl
+        wget
+        which
       ];
     in
     ''
       mkdir -p $out/bin
       install checksec $out/bin
-      substituteInPlace $out/bin/checksec --replace /lib/libc.so.6 ${glibc.out}/lib/libc.so.6
-      substituteInPlace $out/bin/checksec --replace "/usr/bin/id -" "${coreutils}/bin/id -"
+      substituteInPlace $out/bin/checksec \
+        --replace "/bin/sed" "${gnused}/bin/sed" \
+        --replace "/usr/bin/id" "${coreutils}/bin/id" \
+        --replace "/lib/libc.so.6" "${glibc}/lib/libc.so.6"
       wrapProgram $out/bin/checksec \
         --prefix PATH : ${path}
     '';
