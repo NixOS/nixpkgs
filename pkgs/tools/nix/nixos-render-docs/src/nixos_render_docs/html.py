@@ -67,7 +67,8 @@ class HTMLRenderer(Renderer):
             if tokens[i + 1].type == 'link_close':
                 tag, text = "xref", xref.title_html
             if xref.title:
-                title = f'title="{escape(xref.title, True)}"'
+                # titles are not attribute-safe on their own, so we need to replace quotes.
+                title = 'title="{}"'.format(xref.title.replace('"', '&quot;'))
             target, href = "", xref.href()
         return f'<a class="{tag}" href="{href}" {title} {target}>{text}'
     def link_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
