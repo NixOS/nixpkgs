@@ -2,12 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libnatpmp";
-  version = "20150609";
+  version = "20230423";
 
   src = fetchurl {
-    name = "${pname}-${version}.tar.gz";
-    url = "http://miniupnp.free.fr/files/download.php?file=${pname}-${version}.tar.gz";
-    sha256 = "1c1n8n7mp0amsd6vkz32n8zj3vnsckv308bb7na0dg0r8969rap1";
+    url = "https://miniupnp.tuxfamily.org/files/${pname}-${version}.tar.gz";
+    hash = "sha256-BoTtLIQGQ351GaG9IOqDeA24cbOjpddSMRuj6Inb/HA=";
   };
 
   makeFlags = [
