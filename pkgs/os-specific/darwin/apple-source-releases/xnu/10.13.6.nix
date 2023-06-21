@@ -74,9 +74,9 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  preBuild = let macosVersion =
-    "10.0 10.1 10.2 10.3 10.4 10.5 10.6 10.7 10.8 10.9 10.10 10.11" +
-    lib.optionalString stdenv.isAarch64 " 10.12 10.13 10.14 10.15 11.0";
+  preBuild = let
+    macosVersions = "10.0 10.1 10.2 10.3 10.4 10.5 10.6 10.7 10.8 10.9 10.10 10.10.2 10.10.3 10.11 10.11.2 10.11.3 10.11.4 10.12 10.12.1 10.12.2 10.12.4 10.13 10.13.1 10.13.2 10.13.4";
+    iosVersions = "2.0 2.1 2.2 3.0 3.1 3.2 4.0 4.1 4.2 4.3 5.0 5.1 6.0 6.1 7.0 7.1 8.0 8.1 8.2 8.3 8.4 9.0 9.1 9.2 9.3 10.0 10.1 10.2 10.3 11.0 11.1 11.2 11.3 11.4";
    in ''
     # This is a bit of a hack...
     mkdir -p sdk/usr/local/libexec
@@ -84,9 +84,9 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
     cat > sdk/usr/local/libexec/availability.pl <<EOF
       #!$SHELL
       if [ "\$1" == "--macosx" ]; then
-        echo ${macosVersion}
+        echo ${macosVersions}
       elif [ "\$1" == "--ios" ]; then
-        echo 2.0 2.1 2.2 3.0 3.1 3.2 4.0 4.1 4.2 4.3 5.0 5.1 6.0 6.1 7.0 8.0 9.0
+        echo ${iosVersions}
       fi
     EOF
     chmod +x sdk/usr/local/libexec/availability.pl
