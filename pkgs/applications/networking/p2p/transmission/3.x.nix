@@ -11,7 +11,7 @@
 , zlib
 , pcre
 , libb64
-, libutp
+, libutp_3_3
 , miniupnpc
 , dht
 , libnatpmp
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     pcre
     libb64
-    libutp
+    libutp_3_3
     miniupnpc
     dht
     libnatpmp
