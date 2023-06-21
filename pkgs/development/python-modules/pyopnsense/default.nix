@@ -8,7 +8,6 @@
 , pytestCheckHook
 , pythonOlder
 , requests
-, six
 }:
 
 buildPythonPackage rec {
@@ -24,7 +23,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pbr
-    six
     requests
   ];
 
