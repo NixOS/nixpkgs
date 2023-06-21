@@ -319,6 +319,9 @@ in
     # file and doesn't link zlib as well.
     # https://github.com/ClangBuiltLinux/tc-build/issues/150#issuecomment-845418812
     "-DLLVM_ENABLE_LIBXML2=OFF"
+  ] ++ optionals enableZstd [
+    # Since llvm 16, we can use this option to make llvm to use static version of zstd.
+    "-DLLVM_USE_STATIC_ZSTD=${toString stdenv.hostPlatform.isStatic}"
   ] ++ optionals enableManpages [
     "-DLLVM_BUILD_DOCS=ON"
     "-DLLVM_ENABLE_SPHINX=ON"

@@ -331,6 +331,11 @@ in stdenv.mkDerivation (rec {
     # file and doesn't link zlib as well.
     # https://github.com/ClangBuiltLinux/tc-build/issues/150#issuecomment-845418812
     "-DLLVM_ENABLE_LIBXML2=OFF"
+  ] ++ optionals enableZstd [
+    # We can use this option to make llvm to use static version of zstd.
+    #
+    # This option was backported to LLVM 15: https://github.com/llvm/llvm-project/commit/4bd3f3759259548e159aeba5c76efb9a0864e6fa
+    "-DLLVM_USE_STATIC_ZSTD=${toString stdenv.hostPlatform.isStatic}"
   ] ++ optionals enableManpages [
     "-DLLVM_BUILD_DOCS=ON"
     "-DLLVM_ENABLE_SPHINX=ON"
