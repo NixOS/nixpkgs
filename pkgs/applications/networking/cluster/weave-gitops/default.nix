@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "weave-gitops";
-  version = "0.23.0";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "weaveworks";
