@@ -651,8 +651,8 @@ let
         mktplcRef = {
           name = "ruff";
           publisher = "charliermarsh";
-          version = "2023.24.0";
-          sha256 = "sha256-wwunbseX/VxoU8mRDankDim6PQy8uwEhLXR4RUVo7Xw=";
+          version = "2023.26.0";
+          sha256 = "sha256-5JaOo0BqTWo3NAdzS9DSClTwB9YiBhICEPOqWmBv270=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1222,8 +1222,8 @@ let
         mktplcRef = {
           name = "prettier-vscode";
           publisher = "esbenp";
-          version = "9.13.0";
-          sha256 = "sha256-Iqz1O6odSzAfojCgGDwDA1YtnWU5Ei7vx9Qt25/1SLw=";
+          version = "9.14.0";
+          sha256 = "sha256-0eb3W9SErsqPofjR1DaChDghvWOQFSYIMnnWbu8GiHY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/esbenp.prettier-vscode/changelog";

@@ -412,6 +412,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6184e33543162437515c2e2b48714794e37845ec9851711914eec9d308f6ebe8"
 
 [[package]]
+name = "directories"
+version = "5.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9a49173b84e034382284f27f1af4dcbbd231ffa358c0fe316541a7337f376a35"
+dependencies = [
+ "dirs-sys",
+]
+
+[[package]]
 name = "dirs-next"
 version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -419,6 +428,18 @@ checksum = "b98cf8ebf19c3d1b223e151f99a4f9f0690dca41414773390fc824184ac833e1"
 dependencies = [
  "cfg-if",
  "dirs-sys-next",
+]
+
+[[package]]
+name = "dirs-sys"
+version = "0.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "520f05a5cbd335fae5a99ff7a6ab8627577660ee5cfd6a94a6a929b52ff0321c"
+dependencies = [
+ "libc",
+ "option-ext",
+ "redox_users",
+ "windows-sys",
 ]
 
 [[package]]
@@ -787,6 +808,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0ab1bc2a289d34bd04a330323ac98a1b4bc82c9d9fcb1e66b63caa84da26b575"
 
 [[package]]
+name = "option-ext"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "04744f49eae99ab78e0d5c0b603ab218f515ea8cfe5a456d7629ad883a3b6e7d"
+
+[[package]]
 name = "os_str_bytes"
 version = "6.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1083,6 +1110,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "serde-toml-merge"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a78072b550e5c20bc4a9d1384be28809cbdb7b25b2b4707ddc6d908b7e6de3bf"
+dependencies = [
+ "toml",
+]
+
+[[package]]
 name = "serde_derive"
 version = "1.0.164"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1360,7 +1396,7 @@ dependencies = [
 
 [[package]]
 name = "topiary"
-version = "0.2.2"
+version = "0.2.3"
 dependencies = [
  "clap 4.3.3",
  "criterion",
@@ -1391,12 +1427,14 @@ dependencies = [
 
 [[package]]
 name = "topiary-cli"
-version = "0.2.2"
+version = "0.2.3"
 dependencies = [
  "assert_cmd",
  "clap 4.3.3",
+ "directories",
  "env_logger",
  "log",
+ "serde-toml-merge",
  "tempfile",
  "tokio",
  "toml",
@@ -1405,7 +1443,7 @@ dependencies = [
 
 [[package]]
 name = "topiary-playground"
-version = "0.2.2"
+version = "0.2.3"
 dependencies = [
  "cfg-if",
  "itertools",
@@ -1467,9 +1505,8 @@ dependencies = [
 
 [[package]]
 name = "tree-sitter-ocaml"
-version = "0.20.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fd16598f40f35974b5e5ec503fcea921d20cefbd8eaf0914ce6bd6edfbb5cee4"
+version = "0.20.1"
+source = "git+https://github.com/tree-sitter/tree-sitter-ocaml#f1106bf834703f1f2f795da1a3b5f8f40174ffcc"
 dependencies = [
  "cc",
  "tree-sitter",

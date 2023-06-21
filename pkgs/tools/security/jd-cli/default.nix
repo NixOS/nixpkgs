@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, jre, makeWrapper, maven }:
+{ lib, fetchFromGitHub, jre, makeWrapper, maven }:
 
-let
+maven.buildMavenPackage rec {
   pname = "jd-cli";
   version = "1.2.1";
 
@@ -11,38 +11,9 @@ let
     hash = "sha256-rRttA5H0A0c44loBzbKH7Waoted3IsOgxGCD2VM0U/Q=";
   };
 
-  deps = stdenv.mkDerivation {
-    name = "${pname}-${version}-deps";
-    inherit src;
-
-    nativeBuildInputs = [ maven ];
-    buildPhase = ''
-      mvn package -Dmaven.repo.local=$out
-    '';
-
-    # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
-    installPhase = ''
-      find $out -type f \
-        -name \*.lastUpdated -or \
-        -name resolver-status.properties -or \
-        -name _remote.repositories \
-        -delete
-    '';
-
-    dontFixup = true;
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-5d3ZLuzoEkPjh01uL/BuhJ6kevLdsm1P4PMLkEWaVUM=";
-  };
-
-in stdenv.mkDerivation rec {
-  inherit pname version src;
+  mvnHash = "sha256-kLpjMj05uC94/5vGMwMlFzLKNFOKeyNvq/vmB6pHTAo=";
 
   nativeBuildInputs = [ maven makeWrapper ];
-
-  buildPhase = ''
-    mvn --offline -Dmaven.repo.local=${deps} package;
-  '';
 
   installPhase = ''
     mkdir -p $out/bin $out/share/jd-cli

@@ -10,14 +10,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "snagboot";
-  version = "1.0";
+  version = "1.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "bootlin";
     repo = "snagboot";
     rev = "v${version}";
-    hash = "sha256-QqGeELm2seX3tIKQvuXp9VsNDah+m9FNcaEVk6TMP0U=";
+    hash = "sha256-MU6LzjH6s2MS7T3u1OUeJ5ZmWgL0otA/q0ylwTNH4fA=";
   };
 
   passthru = {
@@ -56,14 +56,14 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   postInstall = lib.optionalString stdenv.isLinux ''
-    rules="src/snagrecover/80-snagboot.rules"
+    rules="src/snagrecover/50-snagboot.rules"
     if [ ! -f "$rules" ]; then
         echo "$rules is missing, must update the Nix file."
         exit 1
     fi
 
     mkdir -p "$out/lib/udev/rules.d"
-    cp "$rules" "$out/lib/udev/rules.d/80-snagboot.rules"
+    cp "$rules" "$out/lib/udev/rules.d/50-snagboot.rules"
   '';
 
   # There are no tests
