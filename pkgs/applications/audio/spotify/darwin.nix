@@ -6,21 +6,25 @@
 , lib
 }:
 
+let
+  version = "1.2.13.661.ga588f749";
+in
 stdenv.mkDerivation {
-  inherit pname;
+  inherit pname version;
 
-  version = "1.1.97.962.g24733a46";
-
-  src = if stdenv.isAarch64 then (
-    fetchurl {
-      url = "https://web.archive.org/web/20221101120432/https://download.scdn.co/SpotifyARM64.dmg";
-      sha256 = "sha256-8WDeVRgaZXuUa95PNa15Cuul95ynklBaZpuq+U1eGTU=";
-    })
-  else (
-    fetchurl {
-      url = "https://web.archive.org/web/20221101120647/https://download.scdn.co/Spotify.dmg";
-      sha256 = "sha256-uPpD8Hv70FlaSjtt9rq5ntI64agxG8+/LNEvRe4ocJ4=";
-    });
+  src =
+    if stdenv.isAarch64 then
+      (
+        fetchurl {
+          url = "https://archive.org/download/darwin-spotify-arm64/SpotifyARM64-${version}.dmg";
+          sha256 = "sha256-69JWASGgFLbQ6b6BivXHPolIMMTxwzB2rzejrnUeG+8=";
+        })
+    else
+      (
+        fetchurl {
+          url = "https://archive.org/download/darwin-spotify-amd64/SpotifyAMD64-${version}.dmg";
+          sha256 = "sha256-4nte4VPYHhcMG5ZWn6D6u2M43ipKFsKz4tZ2fbCom+8=";
+        });
 
   nativeBuildInputs = [ undmg ];
 
