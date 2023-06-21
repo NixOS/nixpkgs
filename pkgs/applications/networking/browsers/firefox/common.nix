@@ -371,6 +371,7 @@ buildStdenv.mkDerivation ({
     export MOZILLA_OFFICIAL=1
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     # linking firefox hits the vm.max_map_count kernel limit with the default musl allocator
+    # TODO: Default vm.max_map_count has been increased, retest without this
     export LD_PRELOAD=${mimalloc}/lib/libmimalloc.so
   '';
 
