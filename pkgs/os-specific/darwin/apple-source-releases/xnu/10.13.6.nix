@@ -21,8 +21,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
 
     substituteInPlace makedefs/MakeInc.cmd \
       --replace "/usr/bin/" "" \
-      --replace "/bin/" "" \
-      --replace "-Werror " ""
+      --replace "/bin/" ""
 
     substituteInPlace makedefs/MakeInc.def \
       --replace "-c -S -m" "-c -m"
@@ -38,14 +37,11 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
 
     substituteInPlace libsyscall/xcodescripts/mach_install_mig.sh \
       --replace "/usr/include" "/include" \
-      --replace "/usr/local/include" "/include" \
       --replace 'MIG=`' "# " \
       --replace 'MIGCC=`' "# " \
-      --replace " -o 0" "" \
       --replace '$SRC/$mig' '-I$DSTROOT/include $SRC/$mig' \
       --replace '$SRC/servers/netname.defs' '-I$DSTROOT/include $SRC/servers/netname.defs' \
       --replace '$BUILT_PRODUCTS_DIR/mig_hdr' '$BUILT_PRODUCTS_DIR' \
-      --replace 'MACHINE_ARCH=armv7' 'MACHINE_ARCH=arm64' # this might break the comments saying 32-bit is required
 
     patchShebangs .
   '' + lib.optionalString stdenv.isAarch64 ''
