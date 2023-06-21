@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "ruff-lsp";
-  version = "0.0.32";
+  version = "0.0.34";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;
     pname = "ruff_lsp";
-    hash = "sha256-n69Ibm+SFpjEkwPoYAJxVmmgtrRhzWh0PLfRe+iLxdo=";
+    hash = "sha256-8zbKP9Taeh9O5ptJoRYDtVm0QSeMtTA7ppEpjXcoDCY=";
   };
 
   postPatch = ''
@@ -60,6 +60,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/astral-sh/ruff-lsp";
     changelog = "https://github.com/astral-sh/ruff-lsp/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ kalekseev ];
+    maintainers = with maintainers; [ figsoda kalekseev ];
   };
 }

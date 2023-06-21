@@ -1579,6 +1579,8 @@ with pkgs;
 
   etlegacy = callPackage ../games/etlegacy { lua = lua5_4; };
 
+  fscan = callPackage ../tools/security/fscan { };
+
   copier = callPackage ../tools/misc/copier { };
 
   gabutdm = callPackage ../applications/networking/gabutdm { };
@@ -6346,6 +6348,8 @@ with pkgs;
   cgreen = callPackage ../development/libraries/cgreen { };
 
   chain-bench = callPackage ../tools/security/chain-bench { };
+
+  chainsaw = callPackage ../tools/security/chainsaw { };
 
   checkinstall = callPackage ../tools/package-management/checkinstall { };
 
@@ -11359,6 +11363,8 @@ with pkgs;
   };
 
   pfetch = callPackage ../tools/misc/pfetch { };
+
+  pfetch-rs = callPackage ../tools/misc/pfetch-rs { };
 
   pfstools = libsForQt5.callPackage ../tools/graphics/pfstools { };
 
@@ -23626,7 +23632,6 @@ with pkgs;
   };
 
   inherit (callPackages ../development/libraries/libressl { })
-    libressl_3_4
     libressl_3_6
     libressl_3_7;
 
@@ -35406,6 +35411,8 @@ with pkgs;
   warp = callPackage ../applications/networking/warp { };
 
   warpd = callPackage ../applications/misc/warpd { };
+
+  watershot = callPackage ../applications/misc/watershot { };
 
   w3m = callPackage ../applications/networking/browsers/w3m { };
 
