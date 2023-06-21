@@ -1,6 +1,6 @@
 from abc import ABC
 from collections.abc import Mapping, MutableMapping, Sequence
-from typing import Any, cast, Generic, get_args, Iterable, Literal, NoReturn, Optional, TypeVar
+from typing import Any, Callable, cast, Generic, get_args, Iterable, Literal, NoReturn, Optional, TypeVar
 
 import dataclasses
 import re
@@ -426,31 +426,37 @@ def _block_attr(md: markdown_it.MarkdownIt) -> None:
 
     md.core.ruler.push("block_attr", block_attr)
 
-def _example_titles(md: markdown_it.MarkdownIt) -> None:
+def _block_titles(block: str) -> Callable[[markdown_it.MarkdownIt], None]:
+    open, close = f'{block}_open', f'{block}_close'
+    title_open, title_close = f'{block}_title_open', f'{block}_title_close'
+
     """
-    find title headings of examples and stick them into meta for renderers, then
-    remove them from the token stream. also checks whether any example contains a
+    find title headings of blocks and stick them into meta for renderers, then
+    remove them from the token stream. also checks whether any block contains a
     non-title heading since those would make toc generation extremely complicated.
     """
-    def example_titles(state: markdown_it.rules_core.StateCore) -> None:
+    def block_titles(state: markdown_it.rules_core.StateCore) -> None:
         in_example = [False]
         for i, token in enumerate(state.tokens):
-            if token.type == 'example_open':
+            if token.type == open:
                 if state.tokens[i + 1].type == 'heading_open':
                     assert state.tokens[i + 3].type == 'heading_close'
-                    state.tokens[i + 1].type = 'example_title_open'
-                    state.tokens[i + 3].type = 'example_title_close'
+                    state.tokens[i + 1].type = title_open
+                    state.tokens[i + 3].type = title_close
                 else:
                     assert token.map
-                    raise RuntimeError(f"found example without title in line {token.map[0] + 1}")
+                    raise RuntimeError(f"found {block} without title in line {token.map[0] + 1}")
                 in_example.append(True)
-            elif token.type == 'example_close':
+            elif token.type == close:
                 in_example.pop()
             elif token.type == 'heading_open' and in_example[-1]:
                 assert token.map
-                raise RuntimeError(f"unexpected non-title heading in example in line {token.map[0] + 1}")
+                raise RuntimeError(f"unexpected non-title heading in {block} in line {token.map[0] + 1}")
 
-    md.core.ruler.push("example_titles", example_titles)
+    def do_add(md: markdown_it.MarkdownIt) -> None:
+        md.core.ruler.push(f"{block}_titles", block_titles)
+
+    return do_add
 
 TR = TypeVar('TR', bound='Renderer')
 
@@ -494,7 +500,7 @@ class Converter(ABC, Generic[TR]):
         self._md.use(_heading_ids)
         self._md.use(_compact_list_attr)
         self._md.use(_block_attr)
-        self._md.use(_example_titles)
+        self._md.use(_block_titles("example"))
         self._md.enable(["smartquotes", "replacements"])
 
     def _parse(self, src: str) -> list[Token]:

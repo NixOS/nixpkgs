@@ -569,23 +569,24 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
             self._redirection_targets.add(into)
         return tokens
 
-    def _number_examples(self, tokens: Sequence[Token], start: int = 1) -> int:
+    def _number_block(self, block: str, prefix: str, tokens: Sequence[Token], start: int = 1) -> int:
+        title_open, title_close = f'{block}_title_open', f'{block}_title_close'
         for (i, token) in enumerate(tokens):
-            if token.type == "example_title_open":
+            if token.type == title_open:
                 title = tokens[i + 1]
                 assert title.type == 'inline' and title.children
                 # the prefix is split into two tokens because the xref title_html will want
                 # only the first of the two, but both must be rendered into the example itself.
                 title.children = (
                     [
-                        Token('text', '', 0, content=f'Example {start}'),
+                        Token('text', '', 0, content=f'{prefix} {start}'),
                         Token('text', '', 0, content='. ')
                     ] + title.children
                 )
                 start += 1
             elif token.type.startswith('included_') and token.type != 'included_options':
                 for sub, _path in token.meta['included']:
-                    start = self._number_examples(sub, start)
+                    start = self._number_block(block, prefix, sub, start)
         return start
 
     # xref | (id, type, heading inlines, file, starts new file)
@@ -636,7 +637,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
             toc_html = f"{n}. {title_html}"
             title_html = f"Appendix&nbsp;{n}"
         elif typ == 'example':
-            # skip the prepended `Example N. ` from _number_examples
+            # skip the prepended `Example N. ` from numbering
             toc_html, title = self._renderer.renderInline(inlines.children[2:]), title_html
             # xref title wants only the prepended text, sans the trailing colon and space
             title_html = self._renderer.renderInline(inlines.children[0:1])
@@ -651,7 +652,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
         return XrefTarget(id, title_html, toc_html, re.sub('<.*?>', '', title), path, drop_fragment)
 
     def _postprocess(self, infile: Path, outfile: Path, tokens: Sequence[Token]) -> None:
-        self._number_examples(tokens)
+        self._number_block('example', "Example", tokens)
         xref_queue = self._collect_ids(tokens, outfile.name, 'book', True)
 
         failed = False
