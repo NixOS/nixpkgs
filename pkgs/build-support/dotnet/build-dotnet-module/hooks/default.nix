@@ -44,7 +44,7 @@ in
       name = "dotnet-check-hook";
       propagatedBuildInputs = [ dotnet-test-sdk ];
       substitutions = {
-        inherit buildType libraryPath;
+        inherit buildType runtimeId libraryPath;
         disabledTests = lib.optionalString (disabledTests != [])
           (let
             escapedNames = lib.lists.map (n: lib.replaceStrings [","] ["%2C"] n) disabledTests;
