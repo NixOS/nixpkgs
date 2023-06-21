@@ -14,11 +14,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "apr-util";
-  version = "1.6.1";
+  version = "1.6.3";
 
   src = fetchurl {
     url = "mirror://apache/apr/${pname}-${version}.tar.bz2";
-    sha256 = "0nq3s1yn13vplgl6qfm09f7n0wm08malff9s59bqf9nid9xjzqfk";
+    sha256 = "sha256-pBB243EHRjJsOUUEKZStmk/KwM4Cd92P6gdv7DyXcrU=";
   };
 
   patches = [ ./fix-libxcrypt-build.patch ]
