@@ -81,13 +81,7 @@ let
     passAsFile = [ "extraDependencies" ];
     buildCommand = systemBuilder;
 
-    # Some of these variables may be unused, but without certainly, removing
-    # them runs a risk of breaking out of tree systemBuilderCommands
-    inherit (pkgs) coreutils;
     systemd = config.systemd.package;
-    shell = "${pkgs.bash}/bin/sh";
-    su = "${pkgs.shadow.su}/bin/su";
-    utillinux = pkgs.util-linux;
 
     kernelParams = config.boot.kernelParams;
     nixosLabel = config.system.nixos.label;
