@@ -51,7 +51,7 @@ Keep an old app running and swap the ports when the new one is booted.
                   description = lib.mdDoc "host";
                 };
                 port = lib.mkOption {
-                  type = lib.types.int;
+                  type = lib.types.port;
                   description = lib.mdDoc "port";
                 };
               };
