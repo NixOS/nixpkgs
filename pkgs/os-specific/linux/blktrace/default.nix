@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Block layer IO tracing mechanism";
-    maintainers = with maintainers; [ ];
-    license = licenses.gpl2;
+    maintainers = with maintainers; [ nickcao ];
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }
