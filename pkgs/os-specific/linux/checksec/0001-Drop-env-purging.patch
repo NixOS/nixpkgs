@@ -1,0 +1,25 @@
+From 4660ceb380f53aa38aef72d16a3b9ed7a5817214 Mon Sep 17 00:00:00 2001
+From: Jonathan Cooper <jonathan@cooper.cafe>
+Date: Wed, 21 Jun 2023 15:29:09 -0400
+Subject: [PATCH] Drop env purging
+
+---
+ checksec | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/checksec b/checksec
+index 4fc3c31..b3ab86f 100755
+--- a/checksec
++++ b/checksec
+@@ -3,7 +3,7 @@
+ # in the src directory. Any updates to this file will be overwritten when generated
+ 
+ # sanitize the environment before run
+-[[ "$(env | /bin/sed -r -e '/^(PWD|SHLVL|_)=/d')" ]] && exec -c "$0" "$@"
++[[ "$(env | /bin/sed -r -e '/^(PWD|SHLVL|_)=/d')" ]]
+ 
+ # --- Modified Version ---
+ # Name    : checksec.sh
+-- 
+2.40.1
+

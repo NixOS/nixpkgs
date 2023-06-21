@@ -9,6 +9,12 @@
 , coreutils
 , sysctl
 , openssl
+, gnused
+, gnugrep
+, gawk
+, procps
+, which
+, binutils
 }:
 
 stdenv.mkDerivation rec {
@@ -24,6 +30,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./0001-attempt-to-modprobe-config-before-checking-kernel.patch
+    ./0001-Drop-env-purging.patch
   ];
 
   nativeBuildInputs = [
@@ -33,18 +40,25 @@ stdenv.mkDerivation rec {
   installPhase =
     let
       path = lib.makeBinPath [
-        findutils
+        binutils
+        coreutils
         file
-        binutils-unwrapped
-        sysctl
+        findutils
+        gawk
+        gnugrep
+        gnused
         openssl
+        procps
+        sysctl
+        which
       ];
     in
     ''
       mkdir -p $out/bin
       install checksec $out/bin
-      substituteInPlace $out/bin/checksec --replace /lib/libc.so.6 ${glibc.out}/lib/libc.so.6
-      substituteInPlace $out/bin/checksec --replace "/usr/bin/id -" "${coreutils}/bin/id -"
+      substituteInPlace $out/bin/checksec --replace "/bin/sed" "${gnused}/bin/sed"
+      substituteInPlace $out/bin/checksec --replace "/usr/bin/id" "${coreutils}/bin/id"
+      substituteInPlace $out/bin/checksec --replace "/lib/libc.so.6" "${glibc}/lib/libc.so.6"
       wrapProgram $out/bin/checksec \
         --prefix PATH : ${path}
     '';
