@@ -44,6 +44,9 @@ class HTMLRenderer(Renderer):
         result += self._close_headings(None)
         return result
 
+    def _pull_image(self, path: str) -> str:
+        raise NotImplementedError()
+
     def text(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return escape(token.content)
     def paragraph_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
@@ -224,6 +227,16 @@ class HTMLRenderer(Renderer):
         return '<p class="title"><strong>'
     def example_title_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return '</strong></p><div class="example-contents">'
+    def image(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        src = self._pull_image(cast(str, token.attrs['src']))
+        alt = f'alt="{escape(token.content, True)}"' if token.content else ""
+        if title := cast(str, token.attrs.get('title', '')):
+            title = f'title="{escape(title, True)}"'
+        return (
+            '<div class="mediaobject">'
+            f'<img src="{escape(src, True)}" {alt} {title} />'
+            '</div>'
+        )
 
     def _make_hN(self, level: int) -> tuple[str, str]:
         return f"h{min(6, max(1, level + self._hlevel_offset))}", ""

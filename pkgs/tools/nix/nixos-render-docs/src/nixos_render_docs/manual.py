@@ -1,4 +1,5 @@
 import argparse
+import hashlib
 import html
 import json
 import re
@@ -241,25 +242,42 @@ class HTMLParameters(NamedTuple):
     toc_depth: int
     chunk_toc_depth: int
     section_toc_depth: int
+    media_dir: Path
 
 class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
     _base_path: Path
+    _in_dir: Path
     _html_params: HTMLParameters
 
     def __init__(self, toplevel_tag: str, revision: str, html_params: HTMLParameters,
                  manpage_urls: Mapping[str, str], xref_targets: dict[str, XrefTarget],
-                 base_path: Path):
+                 in_dir: Path, base_path: Path):
         super().__init__(toplevel_tag, revision, manpage_urls, xref_targets)
-        self._base_path, self._html_params = base_path, html_params
+        self._in_dir = in_dir
+        self._base_path = base_path.absolute()
+        self._html_params = html_params
+
+    def _pull_image(self, src: str) -> str:
+        src_path = Path(src)
+        content = (self._in_dir / src_path).read_bytes()
+        # images may be used more than once, but we want to store them only once and
+        # in an easily accessible (ie, not input-file-path-dependent) location without
+        # having to maintain a mapping structure. hashing the file and using the hash
+        # as both the path of the final image provides both.
+        content_hash = hashlib.sha3_256(content).hexdigest()
+        target_name = f"{content_hash}{src_path.suffix}"
+        target_path = self._base_path / self._html_params.media_dir / target_name
+        target_path.write_bytes(content)
+        return f"./{self._html_params.media_dir}/{target_name}"
 
     def _push(self, tag: str, hlevel_offset: int) -> Any:
-        result = (self._toplevel_tag, self._headings, self._attrspans, self._hlevel_offset)
+        result = (self._toplevel_tag, self._headings, self._attrspans, self._hlevel_offset, self._in_dir)
         self._hlevel_offset += hlevel_offset
         self._toplevel_tag, self._headings, self._attrspans = tag, [], []
         return result
 
     def _pop(self, state: Any) -> None:
-        (self._toplevel_tag, self._headings, self._attrspans, self._hlevel_offset) = state
+        (self._toplevel_tag, self._headings, self._attrspans, self._hlevel_offset, self._in_dir) = state
 
     def _render_book(self, tokens: Sequence[Token]) -> str:
         assert tokens[4].children
@@ -481,8 +499,10 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             # we do not set _hlevel_offset=0 because docbook doesn't either.
         else:
             inner = outer
+        in_dir = self._in_dir
         for included, path in fragments:
             try:
+                self._in_dir = (in_dir / path).parent
                 inner.append(self.render(included))
             except Exception as e:
                 raise RuntimeError(f"rendering {path}") from e
@@ -525,8 +545,9 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
         # renderer not set on purpose since it has a dependency on the output path!
 
     def convert(self, infile: Path, outfile: Path) -> None:
-        self._renderer = ManualHTMLRenderer('book', self._revision, self._html_params,
-                                            self._manpage_urls, self._xref_targets, outfile.parent)
+        self._renderer = ManualHTMLRenderer(
+            'book', self._revision, self._html_params, self._manpage_urls, self._xref_targets,
+            infile.parent, outfile.parent)
         super().convert(infile, outfile)
 
     def _parse(self, src: str) -> list[Token]:
@@ -687,6 +708,7 @@ def _build_cli_html(p: argparse.ArgumentParser) -> None:
     p.add_argument('--toc-depth', default=1, type=int)
     p.add_argument('--chunk-toc-depth', default=1, type=int)
     p.add_argument('--section-toc-depth', default=0, type=int)
+    p.add_argument('--media-dir', default="media", type=Path)
     p.add_argument('infile', type=Path)
     p.add_argument('outfile', type=Path)
 
@@ -700,7 +722,7 @@ def _run_cli_html(args: argparse.Namespace) -> None:
         md = HTMLConverter(
             args.revision,
             HTMLParameters(args.generator, args.stylesheet, args.script, args.toc_depth,
-                           args.chunk_toc_depth, args.section_toc_depth),
+                           args.chunk_toc_depth, args.section_toc_depth, args.media_dir),
             json.load(manpage_urls))
         md.convert(args.infile, args.outfile)
 

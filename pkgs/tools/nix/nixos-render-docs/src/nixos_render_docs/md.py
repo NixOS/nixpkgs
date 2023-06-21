@@ -90,6 +90,7 @@ class Renderer:
             "example_close": self.example_close,
             "example_title_open": self.example_title_open,
             "example_title_close": self.example_title_close,
+            "image": self.image,
         }
 
         self._admonitions = {
@@ -224,6 +225,8 @@ class Renderer:
     def example_title_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
     def example_title_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def image(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
 
 def _is_escaped(src: str, pos: int) -> bool:

@@ -3,10 +3,14 @@ import pytest
 
 from sample_md import sample1
 
+class Renderer(nrd.html.HTMLRenderer):
+    def _pull_image(self, src: str) -> str:
+        return src
+
 class Converter(nrd.md.Converter[nrd.html.HTMLRenderer]):
     def __init__(self, manpage_urls: dict[str, str], xrefs: dict[str, nrd.manual_structure.XrefTarget]):
         super().__init__()
-        self._renderer = nrd.html.HTMLRenderer(manpage_urls, xrefs)
+        self._renderer = Renderer(manpage_urls, xrefs)
 
 def unpretty(s: str) -> str:
     return "".join(map(str.strip, s.splitlines())).replace('␣', ' ').replace('↵', '\n')
@@ -68,6 +72,16 @@ def test_xrefs() -> None:
     with pytest.raises(nrd.html.UnresolvedXrefError) as exc:
         c._render("[](#baz)")
     assert exc.value.args[0] == 'bad local reference, id #baz not known'
+
+def test_images() -> None:
+    c = Converter({}, {})
+    assert c._render("![*alt text*](foo \"title text\")") == unpretty("""
+      <p>
+       <div class="mediaobject">
+        <img src="foo" alt="*alt text*" title="title text" />
+       </div>
+      </p>
+    """)
 
 def test_full() -> None:
     c = Converter({ 'man(1)': 'http://example.org' }, {})
