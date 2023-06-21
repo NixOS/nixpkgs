@@ -17,7 +17,7 @@ let finalPackage = buildDotnetModule rec {
     owner = "OmniSharp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-KfO6YVTVAQeFKlnHSNx/KbO8vr+gDqwlyy50uEDA6FM=";
+    sha256 = "sha256-jFmn/p1ewjE5dICbPVgCrn4eDFdcVt8RzKkJUaexNq0=";
   };
 
   projectFile = "src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj";
