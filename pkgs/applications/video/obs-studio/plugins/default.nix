@@ -40,6 +40,8 @@
 
   obs-pipewire-audio-capture = callPackage ./obs-pipewire-audio-capture.nix { };
 
+  obs-scale-to-sound = callPackage ./obs-scale-to-sound.nix { };
+
   obs-shaderfilter = qt6Packages.callPackage ./obs-shaderfilter.nix { };
 
   obs-source-clone = callPackage ./obs-source-clone.nix { };
