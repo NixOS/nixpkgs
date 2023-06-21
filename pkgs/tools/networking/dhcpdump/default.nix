@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
     description = "A tool for visualization of DHCP packets as recorded and output by tcpdump to analyze DHCP server responses";
     homepage = "http://www.mavetju.org/unix/dhcpdump-man.php";
     platforms = platforms.linux;
+    maintainers = with maintainers; [ nickcao ];
     license = licenses.bsd2;
   };
 }
