@@ -1,4 +1,5 @@
 { lib
+, nix-update-script
 , rustPlatform
 , fetchFromGitHub
 , installShellFiles
@@ -52,6 +53,10 @@ rustPlatform.buildRustPackage rec {
       --fish ./completions/rtx.fish \
       --zsh ./completions/_rtx
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://github.com/jdxcode/rtx";
