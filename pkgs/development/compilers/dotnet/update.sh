@@ -241,6 +241,14 @@ sdk_packages () {
       "runtime.osx-arm64.Microsoft.NETCore.DotNetHost" \
       "runtime.osx-arm64.Microsoft.NETCore.DotNetHostPolicy" \
       "runtime.osx-arm64.Microsoft.NETCore.DotNetHostResolver" \
+      "Microsoft.NETCore.App.Crossgen2.linux-musl-arm" \
+      "Microsoft.NETCore.App.Crossgen2.linux-musl-arm64" \
+      "Microsoft.NETCore.App.Crossgen2.linux-musl-x64" \
+      "Microsoft.NETCore.App.Crossgen2.linux-arm" \
+      "Microsoft.NETCore.App.Crossgen2.linux-arm64" \
+      "Microsoft.NETCore.App.Crossgen2.linux-x64" \
+      "Microsoft.NETCore.App.Crossgen2.osx-x64" \
+      "Microsoft.NETCore.App.Crossgen2.osx-arm64"
     )
 
     # Packages that only apply to .NET 7 and up
