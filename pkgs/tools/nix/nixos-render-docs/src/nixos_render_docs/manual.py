@@ -312,7 +312,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             "".join((f'<script src="{html.escape(script, True)}" type="text/javascript"></script>'
                      for script in self._html_params.scripts)),
             f' <meta name="generator" content="{html.escape(self._html_params.generator, True)}" />',
-            f' <link rel="home" href="{home.target.href()}" title="{home.target.title}" />',
+            f' <link rel="home" href="{home.target.href()}" title="{home.target.title}" />' if home.target.href() else "",
             f' {up_link}{prev_link}{next_link}',
             ' </head>',
             ' <body>',
@@ -628,6 +628,22 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
             if len(deferred) == len(xref_queue):
                 failed = True # do another round and report the first error
             xref_queue = deferred
+
+        paths_seen = set()
+        for t in self._xref_targets.values():
+            paths_seen.add(t.path)
+
+        if len(paths_seen) == 1:
+            for (k, t) in self._xref_targets.items():
+                self._xref_targets[k] = XrefTarget(
+                    t.id,
+                    t.title_html,
+                    t.toc_html,
+                    t.title,
+                    t.path,
+                    t.drop_fragment,
+                    drop_target=True
+                )
 
         TocEntry.collect_and_link(self._xref_targets, tokens)
 

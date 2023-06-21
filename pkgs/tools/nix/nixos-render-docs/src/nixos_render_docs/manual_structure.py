@@ -110,9 +110,12 @@ class XrefTarget:
     path: str
     """whether to drop the `#anchor` from links when expanding xrefs"""
     drop_fragment: bool = False
+    """whether to drop the `path.html` from links when expanding xrefs.
+       mostly useful for docbook compatibility"""
+    drop_target: bool = False
 
     def href(self) -> str:
-        path = html.escape(self.path, True)
+        path = "" if self.drop_target else html.escape(self.path, True)
         return path if self.drop_fragment else f"{path}#{html.escape(self.id, True)}"
 
 @dc.dataclass
