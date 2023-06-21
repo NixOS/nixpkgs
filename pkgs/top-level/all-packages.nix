@@ -30101,6 +30101,10 @@ with pkgs;
   codeblocks = callPackage ../applications/editors/codeblocks { };
   codeblocksFull = codeblocks.override { contribPlugins = true; };
 
+  codelite = callPackage ../applications/editors/codelite {
+    wxGTK = wxGTK32;
+  };
+
   cudatext-qt = callPackage ../applications/editors/cudatext { widgetset = "qt5"; };
   cudatext-gtk = callPackage ../applications/editors/cudatext { widgetset = "gtk2"; };
   cudatext = cudatext-qt;
