@@ -40,7 +40,7 @@ def md_make_code(code: str, info: str = "", multiline: Optional[bool] = None) ->
     ticks, sep = ('`' * (longest + (3 if multiline else 1)), '\n' if multiline else ' ')
     return f"{ticks}{info}{sep}{code}{sep}{ticks}"
 
-AttrBlockKind = Literal['admonition', 'example']
+AttrBlockKind = Literal['admonition', 'example', 'figure']
 
 AdmonitionKind = Literal["note", "caution", "tip", "important", "warning"]
 
@@ -91,6 +91,10 @@ class Renderer:
             "example_title_open": self.example_title_open,
             "example_title_close": self.example_title_close,
             "image": self.image,
+            "figure_open": self.figure_open,
+            "figure_close": self.figure_close,
+            "figure_title_open": self.figure_title_open,
+            "figure_title_close": self.figure_title_close,
         }
 
         self._admonitions = {
@@ -228,6 +232,14 @@ class Renderer:
         raise RuntimeError("md token not supported", token)
     def image(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
+    def figure_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def figure_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def figure_title_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
+    def figure_title_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        raise RuntimeError("md token not supported", token)
 
 def _is_escaped(src: str, pos: int) -> bool:
     found = 0
@@ -270,6 +282,8 @@ def _parse_blockattrs(info: str) -> Optional[tuple[AttrBlockKind, Optional[str],
         return ('admonition', id, classes)
     if classes == ['example']:
         return ('example', id, classes)
+    elif classes == ['figure']:
+        return ('figure', id, classes)
     return None
 
 def _attr_span_plugin(md: markdown_it.MarkdownIt) -> None:
@@ -419,6 +433,11 @@ def _block_attr(md: markdown_it.MarkdownIt) -> None:
                     if id is not None:
                         token.attrs['id'] = id
                     stack.append('example_close')
+                elif kind == 'figure':
+                    token.type = 'figure_open'
+                    if id is not None:
+                        token.attrs['id'] = id
+                    stack.append('figure_close')
                 else:
                     assert_never(kind)
             elif token.type == 'container_blockattr_close':
@@ -501,6 +520,7 @@ class Converter(ABC, Generic[TR]):
         self._md.use(_compact_list_attr)
         self._md.use(_block_attr)
         self._md.use(_block_titles("example"))
+        self._md.use(_block_titles("figure"))
         self._md.enable(["smartquotes", "replacements"])
 
     def _parse(self, src: str) -> list[Token]:

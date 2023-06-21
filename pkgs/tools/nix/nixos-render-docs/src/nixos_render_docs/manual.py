@@ -426,6 +426,19 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 if next_level:
                     result.append(f'<dd><dl>{"".join(next_level)}</dl></dd>')
             return result
+        def build_list(kind: str, id: str, lst: Sequence[TocEntry]) -> str:
+            if not lst:
+                return ""
+            entries = [
+                f'<dt>{i}. <a href="{e.target.href()}">{e.target.toc_html}</a></dt>'
+                for i, e in enumerate(lst, start=1)
+            ]
+            return (
+                f'<div class="{id}">'
+                f'<p><strong>List of {kind}</strong></p>'
+                f'<dl>{"".join(entries)}</dl>'
+                '</div>'
+            )
         # we don't want to generate the "Title of Contents" header for sections,
         # docbook doesn't and it's only distracting clutter unless it's the main table.
         # we also want to generate tocs only for a top-level section (ie, one that is
@@ -442,18 +455,8 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             toc_depth = self._html_params.toc_depth
         if not (items := walk_and_emit(toc, toc_depth)):
             return ""
-        examples = ""
-        if toc.examples:
-            examples_entries = [
-                f'<dt>{i + 1}. <a href="{ex.target.href()}">{ex.target.toc_html}</a></dt>'
-                for i, ex in enumerate(toc.examples)
-            ]
-            examples = (
-                '<div class="list-of-examples">'
-                '<p><strong>List of Examples</strong></p>'
-                f'<dl>{"".join(examples_entries)}</dl>'
-                '</div>'
-            )
+        figures = build_list("Figures", "list-of-figures", toc.figures)
+        examples = build_list("Examples", "list-of-examples", toc.examples)
         return "".join([
             f'<div class="toc">',
             ' <p><strong>Table of Contents</strong></p>' if print_title else "",
@@ -461,6 +464,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             f'  {"".join(items)}'
             f' </dl>'
             f'</div>'
+            f'{figures}'
             f'{examples}'
         ])
 
@@ -612,6 +616,8 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
                     result += self._collect_ids(sub, sub_file, subtyp, si == 0 and sub_file != target_file)
             elif bt.type == 'example_open' and (id := cast(str, bt.attrs.get('id', ''))):
                 result.append((id, 'example', tokens[i + 2], target_file, False))
+            elif bt.type == 'figure_open' and (id := cast(str, bt.attrs.get('id', ''))):
+                result.append((id, 'figure', tokens[i + 2], target_file, False))
             elif bt.type == 'inline':
                 assert bt.children
                 result += self._collect_ids(bt.children, target_file, typ, False)
@@ -636,8 +642,8 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
             title = prefix + title_html
             toc_html = f"{n}. {title_html}"
             title_html = f"Appendix&nbsp;{n}"
-        elif typ == 'example':
-            # skip the prepended `Example N. ` from numbering
+        elif typ in ['example', 'figure']:
+            # skip the prepended `{Example,Figure} N. ` from numbering
             toc_html, title = self._renderer.renderInline(inlines.children[2:]), title_html
             # xref title wants only the prepended text, sans the trailing colon and space
             title_html = self._renderer.renderInline(inlines.children[0:1])
@@ -653,6 +659,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
 
     def _postprocess(self, infile: Path, outfile: Path, tokens: Sequence[Token]) -> None:
         self._number_block('example', "Example", tokens)
+        self._number_block('figure', "Figure", tokens)
         xref_queue = self._collect_ids(tokens, outfile.name, 'book', True)
 
         failed = False

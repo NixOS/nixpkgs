@@ -237,6 +237,26 @@ class HTMLRenderer(Renderer):
             f'<img src="{escape(src, True)}" {alt} {title} />'
             '</div>'
         )
+    def figure_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        if anchor := cast(str, token.attrs.get('id', '')):
+            anchor = f'<a id="{escape(anchor, True)}"></a>'
+        return f'<div class="figure">{anchor}'
+    def figure_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return (
+            ' </div>'
+            '</div><br class="figure-break" />'
+        )
+    def figure_title_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return (
+            '<p class="title">'
+            ' <strong>'
+        )
+    def figure_title_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+        return (
+            ' </strong>'
+            '</p>'
+            '<div class="figure-contents">'
+        )
 
     def _make_hN(self, level: int) -> tuple[str, str]:
         return f"h{min(6, max(1, level + self._hlevel_offset))}", ""
