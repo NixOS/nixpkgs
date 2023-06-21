@@ -907,6 +907,7 @@ mapAliases ({
   libtorrentRasterbar = libtorrent-rasterbar; # Added 2020-12-20
   libtorrentRasterbar-1_2_x = libtorrent-rasterbar-1_2_x; # Added 2020-12-20
   libtorrentRasterbar-2_0_x = libtorrent-rasterbar-2_0_x; # Added 2020-12-20
+  libtransmission = transmission_3;
   libtxc_dxtn = throw "libtxc_dxtn was removed 2020-03-16, now integrated in Mesa";
   libtxc_dxtn_s2tc = throw "libtxc_dxtn_s2tc was removed 2020-03-16, now integrated in Mesa";
   libudev = throw "'libudev' has been renamed to/replaced by 'udev'"; # Converted to throw 2022-02-22
@@ -1687,6 +1688,7 @@ mapAliases ({
   torchPackages = throw "torchPackages has been removed, as the upstream project has been abandoned"; # Added 2020-03-28
   trang = throw "'trang' has been renamed to/replaced by 'jing-trang'"; # Converted to throw 2022-02-22
   transfig = fig2dev; # Added 2022-02-15
+  transmission = transmission_3;
   transmission-remote-cli = throw "transmission-remote-cli has been removed, as the upstream project has been abandoned. Please use tremc instead"; # Added 2020-10-14
   transmission_gtk = throw "'transmission_gtk' has been renamed to/replaced by 'transmission-gtk'"; # Converted to throw 2022-02-22
   transmission_remote_gtk = throw "'transmission_remote_gtk' has been renamed to/replaced by 'transmission-remote-gtk'"; # Converted to throw 2022-02-22

@@ -34991,15 +34991,18 @@ with pkgs;
 
   transcribe = callPackage ../applications/audio/transcribe { };
 
-  transmission = callPackage ../applications/networking/p2p/transmission { };
   transmission_3 = callPackage ../applications/networking/p2p/transmission/3.x.nix { };
-  libtransmission = transmission.override {
+  transmission-gtk = transmission_3.override { enableGTK3 = true; };
+  transmission-qt = transmission_3.override { enableQt = true; };
+
+  transmission_4 = callPackage ../applications/networking/p2p/transmission { };
+  transmission_4-gtk = transmission_4.override { enableGTK3 = true; };
+  transmission_4-qt = transmission_4.override { enableQt = true; };
+  libtransmission_4 = transmission_4.override {
     installLib = true;
     enableDaemon = false;
     enableCli = false;
   };
-  transmission-gtk = transmission.override { enableGTK3 = true; };
-  transmission-qt = transmission.override { enableQt = true; };
 
   transmission-remote-gtk = callPackage ../applications/networking/p2p/transmission-remote-gtk { };
 
