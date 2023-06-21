@@ -108,7 +108,7 @@ in {
   alps = handleTest ./alps.nix {};
   amazon-init-shell = handleTest ./amazon-init-shell.nix {};
   apcupsd = handleTest ./apcupsd.nix {};
-  apfs = handleTest ./apfs.nix {};
+  apfs = runTest ./apfs.nix;
   apparmor = handleTest ./apparmor.nix {};
   atd = handleTest ./atd.nix {};
   atop = handleTest ./atop.nix {};
