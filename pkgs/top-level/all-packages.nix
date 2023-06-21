@@ -11971,6 +11971,8 @@ with pkgs;
 
   richgo = callPackage ../development/tools/richgo {  };
 
+  rlci = callPackage ../development/interpreters/rlci { };
+
   rs = callPackage ../tools/text/rs { };
 
   rst2html5 = callPackage ../tools/text/rst2html5 { };
