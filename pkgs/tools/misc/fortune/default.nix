@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fortune-mod";
-  version = "3.18.0";
+  version = "3.20.0";
 
   # We use fetchurl instead of fetchFromGitHub because the release pack has some
   # special files.
   src = fetchurl {
     url = "https://github.com/shlomif/fortune-mod/releases/download/${pname}-${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-xaaB8aJgG3GG0fYS0vOnxC4RifQybxejS8ysqYE0xCs=";
+    sha256 = "sha256-MQG+lfuJxISNSD5ykw2o0D9pJXN6I9eIA9a1XEL+IJQ=";
   };
 
   nativeBuildInputs = [ cmake perl rinutils ];
