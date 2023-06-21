@@ -1499,6 +1499,12 @@
     githubId = 11037075;
     name = "Ashley Hooper";
   };
+  asimpson = {
+    email = "adam@adamsimpson.net";
+    github = "asimpson";
+    githubId = 1048831;
+    name = "Adam Simpson";
+  };
   aske = {
     email = "aske@fmap.me";
     github = "aske";
