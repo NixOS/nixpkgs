@@ -51,6 +51,27 @@ EOF
         dotnetRestore "$project"
     done
 
+    echo "Fixing up native binaries..."
+    # Find all native binaries and nuget libraries, and fix them up,
+    # by setting the proper interpreter and rpath to some commonly used libraries
+    for binary in $(find "$HOME/.nuget/packages/" -type f -executable); do
+        if patchelf --print-interpreter "$binary" >/dev/null 2>/dev/null; then
+            echo "Found binary: $binary, fixing it up..."
+            patchelf --set-interpreter "$(cat "@dynamicLinker@")" "$binary"
+
+            # This makes sure that if the binary requires some specific runtime dependencies, it can find it.
+            # This fixes dotnet-built binaries like crossgen2
+            patchelf \
+                --add-needed libicui18n.so \
+                --add-needed libicuuc.so \
+                --add-needed libz.so \
+                --add-needed libssl.so \
+                "$binary"
+
+            patchelf --set-rpath "@libPath@" "$binary"
+        fi
+    done
+
     runHook postConfigure
 
     echo "Finished dotnetConfigureHook"
