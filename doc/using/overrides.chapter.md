@@ -16,6 +16,12 @@ Example usages:
 pkgs.foo.override { arg1 = val1; arg2 = val2; ... }
 ```
 
+It's also possible to access the previous arguments.
+
+```nix
+pkgs.foo.override (previous: { arg1 = previous.arg1; ... })
+```
+
 <!-- TODO: move below programlisting to a new section about extending and overlays and reference it -->
 
 ```nix
