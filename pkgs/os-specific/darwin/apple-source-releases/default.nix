@@ -342,7 +342,9 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
             # Have packages depend on each other
             # rather than previous versions.
             self."10.13.6"
-            { }."${namePath}" or namePath;
+            {
+              xnu = "xnu/10.13.6.nix";
+            }."${namePath}" or namePath;
       in
       {
         inherit (import ./macos-10.13.6.nix { applePackage' = applePackageMapping; })
@@ -358,6 +360,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
           mDNSResponder
           objc4
           removefile
+          xnu
           ;
       };
 }
