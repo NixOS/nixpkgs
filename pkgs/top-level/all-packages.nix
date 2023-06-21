@@ -1184,6 +1184,8 @@ with pkgs;
 
   closureInfo = callPackage ../build-support/closure-info.nix { };
 
+  sensible-utils = callPackage ../tools/misc/sensible-utils { };
+
   serverspec = callPackage ../tools/misc/serverspec { };
 
   setupSystemdUnits = callPackage ../build-support/setup-systemd-units.nix { };
@@ -10609,6 +10611,8 @@ with pkgs;
 
   notable = callPackage ../applications/misc/notable { };
 
+  npm-check = callPackage ../development/tools/npm-check { };
+
   nth = with python3Packages; toPythonApplication name-that-hash;
 
   ntlmrecon = callPackage ../tools/security/ntlmrecon { };
@@ -13801,9 +13805,8 @@ with pkgs;
 
   wasm-tools = callPackage ../tools/misc/wasm-tools { };
 
-  wasmedge = callPackage ../development/tools/wasmedge {
-    llvmPackages = llvmPackages_12;
-    inherit (darwin.apple_sdk.frameworks) Foundation;
+  wasmedge = darwin.apple_sdk_11_0.callPackage ../development/tools/wasmedge {
+    inherit (darwin.apple_sdk_11_0.frameworks) Foundation;
   };
 
   welkin = callPackage ../tools/graphics/welkin { };
@@ -30944,8 +30947,8 @@ with pkgs;
 
   welle-io = libsForQt5.callPackage ../applications/radio/welle-io { };
 
-  wireshark = callPackage ../applications/networking/sniffers/wireshark {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices SystemConfiguration;
+  wireshark = qt6Packages.callPackage ../applications/networking/sniffers/wireshark {
+    inherit (darwin.apple_sdk_11_0.frameworks) ApplicationServices SystemConfiguration;
     libpcap = libpcap.override { withBluez = stdenv.isLinux; };
   };
   wireshark-qt = wireshark;
@@ -32085,8 +32088,11 @@ with pkgs;
 
   k3s_1_24 = callPackage ../applications/networking/cluster/k3s/1_24 { };
   k3s_1_25 = callPackage ../applications/networking/cluster/k3s/1_25 { };
-  k3s_1_26 = callPackage ../applications/networking/cluster/k3s/1_26 { };
-  k3s = k3s_1_26;
+  inherit (callPackage ../applications/networking/cluster/k3s { })
+    k3s_1_26
+    k3s_1_27
+  ;
+  k3s = k3s_1_27;
 
   k3sup = callPackage ../applications/networking/cluster/k3sup { };
 
@@ -33462,6 +33468,8 @@ with pkgs;
   gnome-obfuscate = callPackage ../applications/graphics/gnome-obfuscate {
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
+
+  obs-cli = callPackage ../applications/misc/obs-cli { };
 
   obs-studio = qt6Packages.callPackage ../applications/video/obs-studio {
     ffmpeg_4 = ffmpeg-full;
