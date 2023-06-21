@@ -3,25 +3,26 @@
 , callPackage
 , buildPythonPackage
 , fetchPypi
-, rustPlatform
 , cargo
-, rustc
-, setuptools-rust
-, openssl
-, Security
-, isPyPy
 , cffi
-, pkg-config
-, pytestCheckHook
-, pytest-subtests
-, pythonOlder
-, pretend
+, hypothesis
+, isPyPy
+, iso8601
 , libiconv
 , libxcrypt
-, iso8601
+, openssl
+, pkg-config
+, pretend
 , py
+, pytest-subtests
+, pytestCheckHook
+, pythonOlder
 , pytz
-, hypothesis
+, rustPlatform
+, rustc
+, Security
+, setuptools
+, setuptools-rust
 }:
 
 let
@@ -29,20 +30,20 @@ let
 in
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "40.0.1"; # Also update the hash in vectors.nix
-  format = "setuptools";
-  disabled = pythonOlder "3.6";
+  version = "41.0.1"; # Also update the hash in vectors.nix
+  format = "pyproject";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KAPy+LHpX2FEGZJsfm9V2CivxhTKXtYVQ4d65mjMNHI=";
+    hash = "sha256-00V5CFQB0/SXYtL31mNNa2wq4SQiAuhg9NJrBG46EAY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${pname}-${version}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-gFfDTc2QWBWHBCycVH1dYlCsWQMVcRZfOBIau+njtDU=";
+    hash = "sha256-38q81vRf8QHR8lFRM2KbH7Ng5nY7nmtWRMoPWS9VO/U=";
   };
 
   postPatch = ''
@@ -54,6 +55,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
+    setuptools
     setuptools-rust
     cargo
     rustc
@@ -100,8 +102,6 @@ buildPythonPackage rec {
       Cryptography includes both high level recipes and low level interfaces to
       common cryptographic algorithms such as symmetric ciphers, message
       digests, and key derivation functions.
-      Our goal is for it to be your "cryptographic standard library". It
-      supports Python 2.7, Python 3.5+, and PyPy 5.4+.
     '';
     homepage = "https://github.com/pyca/cryptography";
     changelog = "https://cryptography.io/en/latest/changelog/#v"
