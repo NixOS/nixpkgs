@@ -81,6 +81,13 @@ self: super:
   });
 
   libX11 = super.libX11.overrideAttrs (attrs: {
+    patches = attrs.patches or [] ++ [
+      (fetchpatch { # https://lists.x.org/archives/xorg-announce/2023-June/003406.html
+        name = "cve-2023-3138.patch";
+        url = "https://gitlab.freedesktop.org/xorg/lib/libx11/-/commit/304a654a0d57bf0f00d8998185f0360332cfa36c.diff";
+        sha256 = "N16RimC2KHOH7ucQODYOc1+EPPffZxr7nINT+7yv6oc=";
+      })
+    ];
     outputs = [ "out" "dev" "man" ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
