@@ -82,7 +82,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ asciidoctor bison cmake ninja flex makeWrapper pkg-config python3 perl ]
     ++ lib.optionals withQt [ qt6.wrapQtAppsHook wrapGAppsHook ];
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  depsBuildBuild = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ buildPackages.stdenv.cc ];
 
   buildInputs = [
     gettext
