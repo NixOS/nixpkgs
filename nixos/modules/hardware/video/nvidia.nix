@@ -265,7 +265,7 @@ in
       {
         assertion = primeEnabled -> pCfg.nvidiaBusId != "" && (pCfg.intelBusId != "" || pCfg.amdgpuBusId != "");
         message = ''
-          When NVIDIA PRIME is enabled, the GPU bus IDs must configured.
+          When NVIDIA PRIME is enabled, the GPU bus IDs must be configured.
         '';
       }
 
