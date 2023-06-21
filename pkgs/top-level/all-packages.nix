@@ -30945,8 +30945,8 @@ with pkgs;
 
   welle-io = libsForQt5.callPackage ../applications/radio/welle-io { };
 
-  wireshark = callPackage ../applications/networking/sniffers/wireshark {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices SystemConfiguration;
+  wireshark = qt6Packages.callPackage ../applications/networking/sniffers/wireshark {
+    inherit (darwin.apple_sdk_11_0.frameworks) ApplicationServices SystemConfiguration;
     libpcap = libpcap.override { withBluez = stdenv.isLinux; };
   };
   wireshark-qt = wireshark;
