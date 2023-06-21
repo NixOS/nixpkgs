@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , flaky
+, google-cloud-storage
 , mock
 , paste
 , pillow
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "filedepot";
-  version = "0.9.0";
+  version = "0.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,11 +25,12 @@ buildPythonPackage rec {
     owner = "amol-";
     repo = "depot";
     rev = "refs/tags/${version}";
-    hash = "sha256-OJc4Qwar3sKhKKF1WldwaueRG7FCboWT2wXYldHJbPU=";
+    hash = "sha256-vPceky5cvmy3MooWz7dRdy68VoAHN7i3a7egBs4dPE8=";
   };
 
   propagatedBuildInputs = [
     anyascii
+    google-cloud-storage
   ];
 
   nativeCheckInputs = [

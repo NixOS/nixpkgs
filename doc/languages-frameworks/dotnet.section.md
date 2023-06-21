@@ -109,6 +109,8 @@ To package Dotnet applications, you can use `buildDotnetModule`. This has simila
 * `runtimeDeps` is used to wrap libraries into `LD_LIBRARY_PATH`. This is how dotnet usually handles runtime dependencies.
 * `buildType` is used to change the type of build. Possible values are `Release`, `Debug`, etc. By default, this is set to `Release`.
 * `selfContainedBuild` allows to enable the [self-contained](https://docs.microsoft.com/en-us/dotnet/core/deploying/#publish-self-contained) build flag. By default, it is set to false and generated applications have a dependency on the selected dotnet runtime. If enabled, the dotnet runtime is bundled into the executable and the built app has no dependency on Dotnet.
+* `useAppHost` will enable creation of a binary executable that runs the .NET application using the specified root. More info in [Microsoft docs](https://learn.microsoft.com/en-us/dotnet/core/deploying/#publish-framework-dependent). Enabled by default.
+* `useDotnetFromEnv` will change the binary wrapper so that it uses the .NET from the environment. The runtime specified by `dotnet-runtime` is given as a fallback in case no .NET is installed in the user's environment. This is most useful for .NET global tools and LSP servers, which often extend the .NET CLI and their runtime should match the users' .NET runtime.
 * `dotnet-sdk` is useful in cases where you need to change what dotnet SDK is being used. You can also set this to the result of `dotnetSdkPackages.combinePackages`, if the project uses multiple SDKs to build.
 * `dotnet-runtime` is useful in cases where you need to change what dotnet runtime is being used. This can be either a regular dotnet runtime, or an aspnetcore.
 * `dotnet-test-sdk` is useful in cases where unit tests expect a different dotnet SDK. By default, this is set to the `dotnet-sdk` attribute.
@@ -149,5 +151,62 @@ in buildDotnetModule rec {
   packNupkg = true; # This packs the project as "foo-0.1.nupkg" at `$out/share`.
 
   runtimeDeps = [ ffmpeg ]; # This will wrap ffmpeg's library path into `LD_LIBRARY_PATH`.
+}
+```
+
+## Dotnet global tools {#dotnet-global-tools}
+
+[.NET Global tools](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools) are a mechanism provided by the dotnet CLI to install .NET binaries from Nuget packages.
+
+They can be installed either as a global tool for the entire system, or as a local tool specific to project.
+
+The local installation is the easiest and works on NixOS in the same way as on other Linux distributions.
+[See dotnet documention](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools#install-a-local-tool) to learn more.
+
+[The global installation method](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools#install-a-global-tool)
+should also work most of the time. You have to remember to update the `PATH`
+value to the location the tools are installed to (the CLI will inform you about it during installation) and also set
+the `DOTNET_ROOT` value, so that the tool can find the .NET SDK package.
+You can find the path to the SDK by running `nix eval --raw nixpkgs#dotnet-sdk` (substitute the `dotnet-sdk` package for
+another if a different SDK version is needed).
+
+This method is not recommended on NixOS, since it's not declarative and involves installing binaries not made for NixOS,
+which will not always work.
+
+The third, and preferred way, is packaging the tool into a Nix derivation.
+
+### Packaging Dotnet global tools {#packaging-dotnet-global-tools}
+
+Dotnet global tools are standard .NET binaries, just made available through a special
+NuGet package. Therefore, they can be built and packaged like every .NET application,
+using `buildDotnetModule`.
+
+If however the source is not available or difficult to build, the
+`buildDotnetGlobalTool` helper can be used, which will package the tool
+straight from its NuGet package.
+
+This helper has the same arguments as `buildDotnetModule`, with a few differences:
+
+* `pname` and `version` are required, and will be used to find the NuGet package of the tool
+* `nugetName` can be used to override the NuGet package name that will be downloaded, if it's different from `pname`
+* `nugetSha256` is the hash of the fetched NuGet package. Set this to `lib.fakeHash256` for the first build, and it will error out, giving you the proper hash. Also remember to update it during version updates (it will not error out if you just change the version while having a fetched package in `/nix/store`)
+* `dotnet-runtime` is set to `dotnet-sdk` by default. When changing this, remember that .NET tools fetched from NuGet require an SDK.
+
+Here is an example of packaging `pbm`, an unfree binary without source available:
+```nix
+{ buildDotnetGlobalTool, lib }:
+
+buildDotnetGlobalTool {
+  pname = "pbm";
+  version = "1.3.1";
+
+  nugetSha256 = "sha256-ZG2HFyKYhVNVYd2kRlkbAjZJq88OADe3yjxmLuxXDUo=";
+
+  meta = with lib; {
+    homepage = "https://cmd.petabridge.com/index.html";
+    changelog = "https://cmd.petabridge.com/articles/RELEASE_NOTES.html";
+    license = licenses.unfree;
+    platforms = platforms.linux;
+  };
 }
 ```

@@ -25,8 +25,6 @@ dotnetConfigureHook() {
             ${dotnetFlags[@]}
     }
 
-    (( "${#projectFile[@]}" == 0 )) && dotnetRestore
-
     # Generate a NuGet.config file to make sure everything,
     # including things like <Sdk /> dependencies, is restored from the proper source
 cat <<EOF > "./NuGet.config"
@@ -39,7 +37,15 @@ cat <<EOF > "./NuGet.config"
 </configuration>
 EOF
 
+    # Patch paket.dependencies and paket.lock (if found) to use the proper source. This ensures
+    # paket restore works correctly
+    # We use + instead of / in sed to avoid problems with slashes
+    find -name paket.dependencies -exec sed -i 's+source .*+source @nugetSource@/lib+g' {} \;
+    find -name paket.lock -exec sed -i 's+remote:.*+remote: @nugetSource@/lib+g' {} \;
+
     env dotnet tool restore --add-source "@nugetSource@/lib"
+
+    (( "${#projectFile[@]}" == 0 )) && dotnetRestore
 
     for project in ${projectFile[@]} ${testProjectFile[@]-}; do
         dotnetRestore "$project"

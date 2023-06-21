@@ -8,7 +8,7 @@ let
   openjfx17 = callPackage ../development/compilers/openjdk/openjfx/17.nix { };
   openjfx19 = callPackage ../development/compilers/openjdk/openjfx/19.nix { };
 
-  mavenfod = callPackage ../development/java-modules/maven-fod.nix { };
+  mavenfod = pkgs.maven.buildMavenPackage;
 
 in {
   inherit mavenfod openjfx11 openjfx15 openjfx17 openjfx19;

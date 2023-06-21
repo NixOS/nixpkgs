@@ -1,6 +1,6 @@
-{ lib, javaPackages, fetchFromGitHub, maven, makeWrapper, jdk }:
+{ lib, fetchFromGitHub, maven, makeWrapper, jdk }:
 
-javaPackages.mavenfod rec {
+maven.buildMavenPackage rec {
   pname = "exhibitor";
   version = "1.5.6";
 

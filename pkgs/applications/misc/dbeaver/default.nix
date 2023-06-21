@@ -16,7 +16,6 @@
 , maven
 , webkitgtk_4_1
 , glib-networking
-, javaPackages
 }:
 
 let
@@ -24,9 +23,7 @@ let
     jdk = jdk17;
   };
 in
-(javaPackages.mavenfod.override {
-  maven = mavenJdk17;
-}) rec {
+mavenJdk17.buildMavenPackage rec {
   pname = "dbeaver";
   version = "22.2.2"; # When updating also update mvnHash
 

@@ -12,6 +12,7 @@
 , nuget-to-nix
 , cacert
 , coreutils
+, runtimeShellPackage
 }:
 
 { name ? "${args.pname}-${args.version}"
@@ -74,7 +75,10 @@
 , buildType ? "Release"
   # If set to true, builds the application as a self-contained - removing the runtime dependency on dotnet
 , selfContainedBuild ? false
-  # Whether to explicitly enable UseAppHost when building
+  # Whether to use an alternative wrapper, that executes the application DLL using the dotnet runtime from the user environment. `dotnet-runtime` is provided as a default in case no .NET is installed
+  # This is useful for .NET tools and applications that may need to run under different .NET runtimes
+, useDotnetFromEnv ? false
+  # Whether to explicitly enable UseAppHost when building. This is redundant if useDotnetFromEnv is enabledz
 , useAppHost ? true
   # The dotnet SDK to use.
 , dotnet-sdk ? dotnetCorePackages.sdk_6_0
@@ -158,7 +162,7 @@ stdenvNoCC.mkDerivation (args // {
   # gappsWrapperArgs gets included when wrapping for dotnet, as to avoid double wrapping
   dontWrapGApps = args.dontWrapGApps or true;
 
-  inherit selfContainedBuild useAppHost;
+  inherit selfContainedBuild useAppHost useDotnetFromEnv;
 
   passthru = {
     inherit nuget-source;
@@ -183,7 +187,7 @@ stdenvNoCC.mkDerivation (args // {
       writeShellScript "fetch-${pname}-deps" ''
         set -euo pipefail
 
-        export PATH="${lib.makeBinPath [ coreutils dotnet-sdk (nuget-to-nix.override { inherit dotnet-sdk; }) ]}"
+        export PATH="${lib.makeBinPath [ coreutils runtimeShellPackage dotnet-sdk (nuget-to-nix.override { inherit dotnet-sdk; }) ]}"
 
         for arg in "$@"; do
             case "$arg" in
@@ -262,7 +266,7 @@ stdenvNoCC.mkDerivation (args // {
         echo "Restoring project..."
 
         ${dotnet-sdk}/bin/dotnet tool restore
-        mv $HOME/.nuget/packages/* $tmp/nuget_pkgs || true
+        cp -r $HOME/.nuget/packages/* $tmp/nuget_pkgs || true
 
         for rid in "${lib.concatStringsSep "\" \"" runtimeIds}"; do
             (( ''${#projectFiles[@]} == 0 )) && dotnetRestore "" "$rid"
@@ -271,6 +275,8 @@ stdenvNoCC.mkDerivation (args // {
                 dotnetRestore "$project" "$rid"
             done
         done
+        # Second copy, makes sure packages restored by ie. paket are included
+        cp -r $HOME/.nuget/packages/* $tmp/nuget_pkgs || true
 
         echo "Succesfully restored project"
 
