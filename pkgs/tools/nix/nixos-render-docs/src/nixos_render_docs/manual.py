@@ -235,8 +235,12 @@ class HTMLParameters(NamedTuple):
     generator: str
     stylesheets: Sequence[str]
     scripts: Sequence[str]
+    # number of levels in the rendered table of contents. tables are prepended to
+    # the content they apply to (entire document / document chunk / top-level section
+    # of a chapter), setting a depth of 0 omits the respective table.
     toc_depth: int
     chunk_toc_depth: int
+    section_toc_depth: int
 
 class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
     _base_path: Path
@@ -384,7 +388,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
         return super()._heading_tag(token, tokens, i)
     def _build_toc(self, tokens: Sequence[Token], i: int) -> str:
         toc = TocEntry.of(tokens[i])
-        if toc.kind == 'section':
+        if toc.kind == 'section' and self._html_params.section_toc_depth < 1:
             return ""
         def walk_and_emit(toc: TocEntry, depth: int) -> list[str]:
             if depth <= 0:
@@ -404,11 +408,20 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 if next_level:
                     result.append(f'<dd><dl>{"".join(next_level)}</dl></dd>')
             return result
-        toc_depth = (
-            self._html_params.chunk_toc_depth
-            if toc.starts_new_chunk and toc.kind != 'book'
-            else self._html_params.toc_depth
-        )
+        # we don't want to generate the "Title of Contents" header for sections,
+        # docbook doesn't and it's only distracting clutter unless it's the main table.
+        # we also want to generate tocs only for a top-level section (ie, one that is
+        # not itself contained in another section)
+        print_title = toc.kind != 'section'
+        if toc.kind == 'section':
+            if toc.parent and toc.parent.kind == 'section':
+                toc_depth = 0
+            else:
+                toc_depth = self._html_params.section_toc_depth
+        elif toc.starts_new_chunk and toc.kind != 'book':
+            toc_depth = self._html_params.chunk_toc_depth
+        else:
+            toc_depth = self._html_params.toc_depth
         if not (items := walk_and_emit(toc, toc_depth)):
             return ""
         examples = ""
@@ -423,15 +436,15 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
                 f'<dl>{"".join(examples_entries)}</dl>'
                 '</div>'
             )
-        return (
-            f'<div class="toc">'
-            f' <p><strong>Table of Contents</strong></p>'
+        return "".join([
+            f'<div class="toc">',
+            ' <p><strong>Table of Contents</strong></p>' if print_title else "",
             f' <dl class="toc">'
             f'  {"".join(items)}'
             f' </dl>'
             f'</div>'
             f'{examples}'
-        )
+        ])
 
     def _make_hN(self, level: int) -> tuple[str, str]:
         # for some reason chapters don't increase the hN nesting count in docbook xslts. duplicate
@@ -673,6 +686,7 @@ def _build_cli_html(p: argparse.ArgumentParser) -> None:
     p.add_argument('--script', default=[], action='append')
     p.add_argument('--toc-depth', default=1, type=int)
     p.add_argument('--chunk-toc-depth', default=1, type=int)
+    p.add_argument('--section-toc-depth', default=0, type=int)
     p.add_argument('infile', type=Path)
     p.add_argument('outfile', type=Path)
 
@@ -686,7 +700,7 @@ def _run_cli_html(args: argparse.Namespace) -> None:
         md = HTMLConverter(
             args.revision,
             HTMLParameters(args.generator, args.stylesheet, args.script, args.toc_depth,
-                           args.chunk_toc_depth),
+                           args.chunk_toc_depth, args.section_toc_depth),
             json.load(manpage_urls))
         md.convert(args.infile, args.outfile)
 
