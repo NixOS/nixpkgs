@@ -13,9 +13,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libaio ];
 
-  preConfigure = ''
-    sed s,/usr/local,$out, -i Makefile
-  '';
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+    "CC:=$(CC)"
+  ];
 
   meta = with lib; {
     description = "Block layer IO tracing mechanism";
