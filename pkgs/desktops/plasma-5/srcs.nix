@@ -364,11 +364,11 @@
     };
   };
   plasma-sdk = {
-    version = "5.27.6";
+    version = "5.27.6.1";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.27.6/plasma-sdk-5.27.6.tar.xz";
-      sha256 = "1gvniypjbd6a866vhs7npdf19004kmrb0b5g5mpkvpa7rzzfqlp3";
-      name = "plasma-sdk-5.27.6.tar.xz";
+      url = "${mirror}/stable/plasma/5.27.6/plasma-sdk-5.27.6.1.tar.xz";
+      sha256 = "1byfknk60j4hajy1ibh25dv96irkpl4b5hyrrdg39m6fdx30wjrf";
+      name = "plasma-sdk-5.27.6.1.tar.xz";
     };
   };
   plasma-systemmonitor = {
