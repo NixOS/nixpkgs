@@ -1,21 +1,40 @@
-{ lib, stdenv, fetchurl, libpcap, perl }:
+{ lib
+, stdenv
+, fetchurl
+, perl
+, installShellFiles
+, libpcap
+}:
 
 stdenv.mkDerivation rec {
   pname = "dhcpdump";
   version = "1.8";
 
   src = fetchurl {
-    url = "mirror://ubuntu/pool/universe/d/dhcpdump/dhcpdump_${version}.orig.tar.gz";
-    sha256 = "143iyzkqvhj4dscwqs75jvfr4wvzrs11ck3fqn5p7yv2h50vjpkd";
+    url = "http://www.mavetju.org/download/dhcpdump-${version}.tar.gz";
+    hash = "sha256-bV65QYFi+3OLxW5MFoLOf3OS3ZblaMyZbkTCjef3cZA=";
   };
 
-  buildInputs = [libpcap perl];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    perl # pod2man
+    installShellFiles
+  ];
+
+  buildInputs = [
+    libpcap
+  ];
 
   hardeningDisable = [ "fortify" ];
 
   installPhase = ''
-    mkdir -pv $out/bin
-    cp dhcpdump $out/bin
+    runHook preBuild
+
+    install -Dm555 dhcpdump "$out/bin/dhcpdump"
+    installManPage dhcpdump.8
+
+    runHook postBuild
   '';
 
   meta = with lib; {
