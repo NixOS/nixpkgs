@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
     description = "A small, fast run-time speech synthesis engine";
     homepage = "http://www.festvox.org/flite/";
     license = licenses.bsdOriginal;
+    maintainers = with maintainers; [ getchoo ];
     platforms = platforms.all;
   };
 }
