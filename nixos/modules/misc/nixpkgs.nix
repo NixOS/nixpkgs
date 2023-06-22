@@ -162,7 +162,9 @@ in
         details, see the Nixpkgs documentation.)  It allows you to set
         package configuration options.
 
-        Ignored when `nixpkgs.pkgs` is set.
+        If `nixpkgs.pkgs` is set: merges `nixpkgs.pkgs.config` for
+        consumption by the module system, but doesn't re-import
+        `nixpkgs.pkgs` with the module-modified config.
       '';
     };
 
@@ -339,6 +341,11 @@ in
     _module.args = {
       pkgs = finalPkgs.__splicedPackages;
     };
+
+    # pass along the pkgs.config, if pkgs is defined
+    # don't set as defaults so that it is merged with
+    # other values set by the module system
+    nixpkgs.config = if opt.pkgs.isDefined then cfg.pkgs.config else {};
 
     assertions = [
       (
