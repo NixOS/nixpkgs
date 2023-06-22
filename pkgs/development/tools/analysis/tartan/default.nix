@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     homepage = "https://freedesktop.org/wiki/Software/tartan";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
   };
 }
