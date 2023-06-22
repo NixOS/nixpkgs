@@ -9,6 +9,22 @@ let
     expr     = lib.sort lib.lessThan x;
     expected = lib.sort lib.lessThan y;
   };
+
+  /*
+    Try to convert an elaborated system back to a simple string. If not possible,
+    return null. So we have the property:
+
+        sys: _valid_ sys ->
+          sys == elaborate (toLosslessStringMaybe sys)
+
+    NOTE: This property is not guaranteed when `sys` was elaborated by a different
+          version of Nixpkgs.
+  */
+  toLosslessStringMaybe = sys:
+    if lib.isString sys then sys
+    else if lib.systems.equals sys (lib.systems.elaborate sys.system) then sys.system
+    else null;
+
 in
 lib.runTests (
 # We assert that the new algorithmic way of generating these lists matches the
@@ -55,11 +71,11 @@ lib.runTests (
   };
 
   test_toLosslessStringMaybe_example_x86_64-linux = {
-    expr = lib.systems.toLosslessStringMaybe (lib.systems.elaborate "x86_64-linux");
+    expr = toLosslessStringMaybe (lib.systems.elaborate "x86_64-linux");
     expected = "x86_64-linux";
   };
   test_toLosslessStringMaybe_fail = {
-    expr = lib.systems.toLosslessStringMaybe (lib.systems.elaborate "x86_64-linux" // { something = "extra"; });
+    expr = toLosslessStringMaybe (lib.systems.elaborate "x86_64-linux" // { something = "extra"; });
     expected = null;
   };
 }

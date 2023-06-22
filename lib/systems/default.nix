@@ -27,21 +27,6 @@ rec {
     let removeFunctions = a: lib.filterAttrs (_: v: !builtins.isFunction v) a;
     in a: b: removeFunctions a == removeFunctions b;
 
-  /*
-    Try to convert an elaborated system back to a simple string. If not possible,
-    return null. So we have the property:
-
-        sys: _valid_ sys ->
-          sys == elaborate (toLosslessStringMaybe sys)
-
-    NOTE: This property is not guaranteed when `sys` was elaborated by a different
-          version of Nixpkgs.
-  */
-  toLosslessStringMaybe = sys:
-    if lib.isString sys then sys
-    else if equals sys (elaborate sys.system) then sys.system
-    else null;
-
   /* List of all Nix system doubles the nixpkgs flake will expose the package set
      for. All systems listed here must be supported by nixpkgs as `localSystem`.
 
