@@ -5,9 +5,14 @@ let
   api = {
     enable = mkEnableOption (lib.mdDoc "iperf3 network throughput testing server");
     port = mkOption {
-      type        = types.ints.u16;
+      type        = types.port;
       default     = 5201;
       description = lib.mdDoc "Server port to listen on for iperf3 client requests.";
+    };
+    multipleServerPorts = mkOption {
+      type        = types.nullOr (types.listOf types.port);
+      default     = null;
+      description = lib.mdDoc "List of ports for multiple iperf3 servers. If set, the `port` option will be ignored.";
     };
     affinity = mkOption {
       type        = types.nullOr types.ints.unsigned;
@@ -59,37 +64,69 @@ let
   imp = {
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.port ];
+      allowedTCPPorts = if (cfg.multipleServerPorts == null) then [ cfg.port ] else cfg.multipleServerPorts;
     };
 
-    systemd.services.iperf3 = {
-      description = "iperf3 daemon";
-      unitConfig.Documentation = "man:iperf3(1) https://iperf.fr/iperf-doc.php";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+    systemd.services = if (cfg.multipleServerPorts == null) then {
+      iperf3 = {
+        description = "iperf3 daemon";
+        unitConfig.Documentation = "man:iperf3(1) https://iperf.fr/iperf-doc.php";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
 
-      serviceConfig = {
-        Restart = "on-failure";
-        RestartSec = 2;
-        DynamicUser = true;
-        PrivateDevices = true;
-        CapabilityBoundingSet = "";
-        NoNewPrivileges = true;
-        ExecStart = ''
-          ${pkgs.iperf3}/bin/iperf \
-            --server \
-            --port ${toString cfg.port} \
-            ${optionalString (cfg.affinity != null) "--affinity ${toString cfg.affinity}"} \
-            ${optionalString (cfg.bind != null) "--bind ${cfg.bind}"} \
-            ${optionalString (cfg.rsaPrivateKey != null) "--rsa-private-key-path ${cfg.rsaPrivateKey}"} \
-            ${optionalString (cfg.authorizedUsersFile != null) "--authorized-users-path ${cfg.authorizedUsersFile}"} \
-            ${optionalString cfg.verbose "--verbose"} \
-            ${optionalString cfg.debug "--debug"} \
-            ${optionalString cfg.forceFlush "--forceflush"} \
-            ${escapeShellArgs cfg.extraFlags}
-        '';
+        serviceConfig = {
+          Restart = "on-failure";
+          RestartSec = 2;
+          DynamicUser = true;
+          PrivateDevices = true;
+          CapabilityBoundingSet = "";
+          NoNewPrivileges = true;
+          ExecStart = ''
+            ${pkgs.iperf3}/bin/iperf \
+              --server \
+              --port ${toString cfg.port} \
+              ${optionalString (cfg.affinity != null) "--affinity ${toString cfg.affinity}"} \
+              ${optionalString (cfg.bind != null) "--bind ${cfg.bind}"} \
+              ${optionalString (cfg.rsaPrivateKey != null) "--rsa-private-key-path ${cfg.rsaPrivateKey}"} \
+              ${optionalString (cfg.authorizedUsersFile != null) "--authorized-users-path ${cfg.authorizedUsersFile}"} \
+              ${optionalString cfg.verbose "--verbose"} \
+              ${optionalString cfg.debug "--debug"} \
+              ${optionalString cfg.forceFlush "--forceflush"} \
+              ${escapeShellArgs cfg.extraFlags}
+          '';
+        };
       };
-    };
+    } else listToAttrs ((map (port: {
+      name = "iperf3-${toString port}";
+      value = {
+        description = "iperf3 daemon on port ${toString port}";
+        unitConfig.Documentation = "man:iperf3(1) https://iperf.fr/iperf-doc.php";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
+
+        serviceConfig = {
+          Restart = "on-failure";
+          RestartSec = 2;
+          DynamicUser = true;
+          PrivateDevices = true;
+          CapabilityBoundingSet = "";
+          NoNewPrivileges = true;
+          ExecStart = ''
+            ${pkgs.iperf3}/bin/iperf \
+              --server \
+              --port ${toString port} \
+              ${optionalString (cfg.affinity != null) "--affinity ${toString cfg.affinity}"} \
+              ${optionalString (cfg.bind != null) "--bind ${cfg.bind}"} \
+              ${optionalString (cfg.rsaPrivateKey != null) "--rsa-private-key-path ${cfg.rsaPrivateKey}"} \
+              ${optionalString (cfg.authorizedUsersFile != null) "--authorized-users-path ${cfg.authorizedUsersFile}"} \
+              ${optionalString cfg.verbose "--verbose"} \
+              ${optionalString cfg.debug "--debug"} \
+              ${optionalString cfg.forceFlush "--forceflush"} \
+              ${escapeShellArgs cfg.extraFlags}
+          '';
+        };
+      };
+    }) cfg.multipleServerPorts));
   };
 in {
   options.services.iperf3 = api;
