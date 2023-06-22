@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "freefilesync";
-  version = "12.3";
+  version = "12.4";
 
   src = fetchurl {
     url = "https://freefilesync.org/download/FreeFileSync_${version}_Source.zip";
-    hash = "sha256-s6jNWqqriL/ePFCUQvLeNxNjHz+nZevD2x1kkw1gDE8=";
+    hash = "sha256-rH1xp0/ggWWyUPcksY2GhYtUddTGrEDxdL/uODurvDo=";
   };
 
   sourceRoot = ".";
