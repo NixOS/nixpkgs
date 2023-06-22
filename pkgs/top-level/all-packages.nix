@@ -39722,6 +39722,8 @@ with pkgs;
 
   nixpkgs-hammering = callPackage ../tools/nix/nixpkgs-hammering { };
 
+  nixpkgs-lint-community = callPackage ../tools/nix/nixpkgs-lint { };
+
   rnix-hashes = callPackage ../tools/nix/rnix-hashes { };
 
   nixos-artwork = callPackage ../data/misc/nixos-artwork { };
