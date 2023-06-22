@@ -34,13 +34,13 @@ let
 
 in package.override rec {
   pname = "snipe-it";
-  version = "6.1.0";
+  version = "6.1.1";
 
   src = fetchFromGitHub {
     owner = "snipe";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0c8cjywhyiywfav2syjkah777qj5f1jrckgri70ypqyxbwgb4rpm";
+    sha256 = "0kqrq0blamqbfh8dxfyvn2m4q7yphamh4yvpfs7iyb3lb7z7a75i";
   };
 
   passthru.tests = nixosTests.snipe-it;
