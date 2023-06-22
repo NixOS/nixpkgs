@@ -9,10 +9,6 @@ let
     pathExists
     ;
 
-  inherit (lib.strings)
-    hasPrefix
-    ;
-
   inherit (lib.filesystem)
     pathType
     ;
