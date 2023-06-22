@@ -6,11 +6,9 @@
     Additional engines or mods can be added with `openraPackages.buildOpenRAEngine` (function around `engine.nix`)
     and `openraPackages.buildOpenRAMod` (function around `mod.nix`), respectively.
 */
-pkgs:
+{ pkgs, lib }:
 
 let
-  lib = pkgs.lib;
-
   /*  Building an engine or out-of-tree mod is very similar,
       but different enough not to be able to build them with the same package definition,
       so instaed we define what is common between them in a separate file.
