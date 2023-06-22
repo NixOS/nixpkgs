@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "containerlab";
-  version = "0.41.2";
+  version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "srl-labs";
     repo = "containerlab";
     rev = "v${version}";
-    hash = "sha256-HOsfQUCYlU19C30XKCQZj2Mw5NQfmp9miZYmN1s14QU=";
+    hash = "sha256-Vs3+5lnHy1QOisyq8heHlkE+Ezd6jDTFiTZUPxNQDnA=";
   };
 
-  vendorHash = "sha256-dumXV5o/x4rqvX3tATsWFXz6DSowTSgaiHvzFoQaDIw=";
+  vendorHash = "sha256-QaL4dlGw0az/hnYK20UOgh+AZ4wjhaopesJeN4zmeFE=";
 
   ldflags = [
     "-s"
