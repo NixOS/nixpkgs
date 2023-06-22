@@ -27,13 +27,13 @@ let
     fontconfig
     libGL
     vulkan-loader
-  ] ++ lib.optional withX11 [
+  ] ++ lib.optionals withX11 [
     libX11
     libXcursor
     libXi
     libXrandr
     libxcb
-  ] ++ lib.optional withWayland [
+  ] ++ lib.optionals withWayland [
     wayland
   ];
 in
