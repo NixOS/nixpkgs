@@ -18166,5 +18166,11 @@
     githubId = 32876;
     name = "Diego Zamboni";
   };
+  zzzsy = {
+    email = "me@zzzsy.top";
+    github = "zzzsyyy";
+    githubId = 	59917878;
+    name = "Mathias Zhang";
+  };
 }
 /* Keep the list alphabetically sorted. */
