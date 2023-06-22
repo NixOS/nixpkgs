@@ -3117,11 +3117,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xkeyboardconfig = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
     pname = "xkeyboard-config";
-    version = "2.38";
+    version = "2.39";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.38.tar.xz";
-      sha256 = "0wn8asnbz111194ksi2mysa6ikn4kqgd9rpfydl8icc6mcdsk406";
+      url = "mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.39.tar.xz";
+      sha256 = "10m6mbjymi7qf30g5yd400kqijdjg7ym9qjzh0bc3c7pxwrzbias";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
