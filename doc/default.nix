@@ -1,5 +1,8 @@
 { pkgs ? (import ./.. { }), nixpkgs ? { }}:
 let
+  inherit (pkgs) lib;
+  inherit (lib) hasPrefix removePrefix;
+
   doc-support = import ./doc-support { inherit pkgs nixpkgs; };
 
   epub = pkgs.runCommand "manual.epub" {
@@ -43,6 +46,28 @@ let
     zip -0Xq "$out" mimetype
     cd scratch && zip -Xr9D "$out" *
   '';
+
+  # NB: This file describes the Nixpkgs manual, which happens to use module
+  #     docs infra originally developed for NixOS.
+  optionsDoc = pkgs.nixosOptionsDoc {
+    inherit (pkgs.lib.evalModules {
+      modules = [ ../pkgs/top-level/config.nix ];
+      class = "nixpkgsConfig";
+    }) options;
+    documentType = "none";
+    transformOptions = opt:
+      opt // {
+        declarations =
+          map
+            (decl:
+              if hasPrefix (toString ../..) (toString decl)
+              then
+                let subpath = removePrefix "/" (removePrefix (toString ../.) (toString decl));
+                in { url = "https://github.com/NixOS/nixpkgs/blob/master/${subpath}"; name = subpath; }
+              else decl)
+            opt.declarations;
+        };
+  };
 in pkgs.stdenv.mkDerivation {
   name = "nixpkgs-manual";
 
@@ -54,6 +79,7 @@ in pkgs.stdenv.mkDerivation {
 
   postPatch = ''
     ln -s ${doc-support} ./doc-support/result
+    ln -s ${optionsDoc.optionsJSON}/share/doc/nixos/options.json ./config-options.json
   '';
 
   buildPhase = ''

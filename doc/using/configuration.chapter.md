@@ -188,7 +188,7 @@ The following attributes can be passed in [`config`](#chap-packageconfig).
 ```{=include=} options
 id-prefix: opt-
 list-id: configuration-variable-list
-source: ../doc-support/result/config-options.json/share/doc/nixos/options.json
+source: ../config-options.json
 ```
 
 

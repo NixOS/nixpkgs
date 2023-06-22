@@ -1,8 +1,5 @@
 { pkgs ? (import ../.. {}), nixpkgs ? { }}:
 let
-  inherit (pkgs) lib;
-  inherit (lib) hasPrefix removePrefix;
-
   libsets = [
     { name = "asserts"; description = "assertion functions"; }
     { name = "attrsets"; description = "attribute set functions"; }
@@ -19,29 +16,6 @@ let
   ];
 
   functionDocs = import ./lib-function-docs.nix { inherit pkgs nixpkgs libsets; };
-  version = pkgs.lib.version;
-
-  # NB: This file describes the Nixpkgs manual, which happens to use module
-  #     docs infra originally developed for NixOS.
-  optionsDoc = pkgs.nixosOptionsDoc {
-    inherit (pkgs.lib.evalModules {
-      modules = [ ../../pkgs/top-level/config.nix ];
-      class = "nixpkgsConfig";
-    }) options;
-    documentType = "none";
-    transformOptions = opt:
-      opt // {
-        declarations =
-          map
-            (decl:
-              if hasPrefix (toString ../..) (toString decl)
-              then
-                let subpath = removePrefix "/" (removePrefix (toString ../..) (toString decl));
-                in { url = "https://github.com/NixOS/nixpkgs/blob/master/${subpath}"; name = subpath; }
-              else decl)
-            opt.declarations;
-        };
-  };
 
 in pkgs.runCommand "doc-support" {}
 ''
@@ -49,7 +23,6 @@ in pkgs.runCommand "doc-support" {}
   (
     cd result
     ln -s ${functionDocs} ./function-docs
-    ln -s ${optionsDoc.optionsJSON} ./config-options.json
   )
   mv result $out
 ''
