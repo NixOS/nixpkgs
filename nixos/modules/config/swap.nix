@@ -252,6 +252,8 @@ in
           let realDevice' = escapeSystemdPath sw.realDevice;
           in nameValuePair "mkswap-${sw.deviceName}"
           { description = "Initialisation of swap device ${sw.device}";
+            requires = [ "systemd-modules-load.service" ];
+            after = [ "systemd-modules-load.service" ];
             wantedBy = [ "${realDevice'}.swap" ];
             before = [ "${realDevice'}.swap" ];
             path = [ pkgs.util-linux pkgs.e2fsprogs ]
