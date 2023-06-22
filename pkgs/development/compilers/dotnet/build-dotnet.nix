@@ -24,6 +24,8 @@ assert if type == "sdk" then packages != null else true;
 , runCommand
 , writeShellScript
 , mkNugetDeps
+, buildDotnetModule
+, emptyDirectory
 }:
 
 let
@@ -139,6 +141,8 @@ stdenv.mkDerivation (finalAttrs: rec {
       '' else null;
 
     tests = {
+    } // lib.optionalAttrs (type == "sdk") rec {
+      # `dotnet --version` doesn't work on runtime
       version = testers.testVersion {
         package = finalAttrs.finalPackage;
       };
@@ -153,6 +157,35 @@ stdenv.mkDerivation (finalAttrs: rec {
         # yes, older SDKs omit the comma
         [[ "$output" =~ Hello,?\ World! ]] && touch "$out"
       '';
+
+      classlib = buildDotnetModule rec {
+        name = "classlib-test";
+        dotnet-sdk = finalAttrs.finalPackage;
+        dotnet-runtime = finalAttrs.finalPackage;
+        nugetDeps = emptyDirectory;
+        unpackPhase = ''
+          dotnet new classlib -n ${name}
+        '';
+        sourceRoot = name;
+        packNupkg = true;
+      };
+
+      console = buildDotnetModule rec {
+        name = "console-test";
+        dotnet-sdk = finalAttrs.finalPackage;
+        dotnet-runtime = finalAttrs.finalPackage;
+        nugetDeps = emptyDirectory;
+        unpackPhase = ''
+          dotnet new console -n ${name}
+        '';
+        sourceRoot = name;
+        preConfigure = ''
+          dotnet add package ${classlib.name} --no-restore
+        '';
+        projectReferences = [
+          classlib
+        ];
+      };
     };
   };
 
