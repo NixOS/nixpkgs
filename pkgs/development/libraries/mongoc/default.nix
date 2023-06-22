@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     cyrus_sasl
     snappy
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk_11_0.frameworks.Security
   ];
 
   cmakeFlags = [
@@ -56,7 +56,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin && stdenv.isx86_64;
     description = "The official C client library for MongoDB";
     homepage = "http://mongoc.org";
     license = licenses.asl20;
