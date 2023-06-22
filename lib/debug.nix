@@ -15,22 +15,15 @@
 { lib }:
 let
   inherit (lib)
-    isInt
-    attrNames
     isList
     isAttrs
     substring
-    addErrorContext
     attrValues
     concatLists
-    concatStringsSep
     const
     elem
     generators
-    head
     id
-    isDerivation
-    isFunction
     mapAttrs
     trace;
 in
