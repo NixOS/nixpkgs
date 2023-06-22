@@ -11568,6 +11568,8 @@ with pkgs;
 
   poretools = callPackage ../applications/science/biology/poretools { };
 
+  porsmo = callPackage ../applications/misc/porsmo { };
+
   pantum-driver = callPackage ../misc/drivers/pantum-driver {
     libjpeg8 = libjpeg.override { enableJpeg8 = true; };
   };
