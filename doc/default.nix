@@ -50,7 +50,7 @@ in pkgs.stdenv.mkDerivation {
     nixos-render-docs
   ];
 
-  src = pkgs.nix-gitignore.gitignoreSource [] ./.;
+  src = ./.;
 
   postPatch = ''
     ln -s ${doc-support} ./doc-support/result

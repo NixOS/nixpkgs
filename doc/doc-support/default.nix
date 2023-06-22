@@ -21,26 +21,6 @@ let
   functionDocs = import ./lib-function-docs.nix { inherit pkgs nixpkgs libsets; };
   version = pkgs.lib.version;
 
-  epub-xsl = pkgs.writeText "epub.xsl" ''
-    <?xml version='1.0'?>
-    <xsl:stylesheet
-      xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-      version="1.0">
-      <xsl:import href="${pkgs.docbook_xsl_ns}/xml/xsl/docbook/epub/docbook.xsl" />
-      <xsl:import href="${./parameters.xml}"/>
-    </xsl:stylesheet>
-  '';
-
-  xhtml-xsl = pkgs.writeText "xhtml.xsl" ''
-    <?xml version='1.0'?>
-    <xsl:stylesheet
-      xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-      version="1.0">
-      <xsl:import href="${pkgs.docbook_xsl_ns}/xml/xsl/docbook/xhtml/docbook.xsl" />
-      <xsl:import href="${./parameters.xml}"/>
-    </xsl:stylesheet>
-  '';
-
   # NB: This file describes the Nixpkgs manual, which happens to use module
   #     docs infra originally developed for NixOS.
   optionsDoc = pkgs.nixosOptionsDoc {
@@ -70,13 +50,6 @@ in pkgs.runCommand "doc-support" {}
     cd result
     ln -s ${functionDocs} ./function-docs
     ln -s ${optionsDoc.optionsJSON} ./config-options.json
-
-    ln -s ${pkgs.docbook5}/xml/rng/docbook/docbook.rng ./docbook.rng
-    ln -s ${pkgs.docbook_xsl_ns}/xml/xsl ./xsl
-    ln -s ${epub-xsl} ./epub.xsl
-    ln -s ${xhtml-xsl} ./xhtml.xsl
-
-    ln -s ${./xmlformat.conf} ./xmlformat.conf
   )
   mv result $out
 ''
