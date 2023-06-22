@@ -1611,18 +1611,18 @@ self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  setxkbmap = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libxkbfile }: stdenv.mkDerivation {
+  setxkbmap = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libxkbfile, libXrandr }: stdenv.mkDerivation {
     pname = "setxkbmap";
-    version = "1.3.2";
+    version = "1.3.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/setxkbmap-1.3.2.tar.bz2";
-      sha256 = "1xdrxs65v7d0rw1yaz0vsz55w4hxym99216p085ya9978j379wlg";
+      url = "mirror://xorg/individual/app/setxkbmap-1.3.4.tar.xz";
+      sha256 = "1pps0x66512y3f7v6xgnb6gjbllsgi4q5zxmjcdiv60fsia8b3dy";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ libX11 libxkbfile ];
+    buildInputs = [ libX11 libxkbfile libXrandr ];
     meta.platforms = lib.platforms.unix;
   }) {};
 
