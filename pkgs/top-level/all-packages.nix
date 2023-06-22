@@ -19863,7 +19863,12 @@ with pkgs;
     jre = jre.override { enableJavaFX = true; };
   };
 
-  scenic-view = callPackage ../development/tools/scenic-view { jdk = jdk11; };
+  scenic-view = callPackage ../development/tools/scenic-view {
+    jdk = jdk.override {
+      enableJavaFX = true;
+      openjfx = openjfx.override { withWebKit = true; };
+    };
+  };
 
   shncpd = callPackage ../tools/networking/shncpd { };
 
