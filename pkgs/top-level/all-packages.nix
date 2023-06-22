@@ -9904,8 +9904,6 @@ with pkgs;
 
   libmbim = callPackage ../development/libraries/libmbim { };
 
-  libmongo-client = callPackage ../development/libraries/libmongo-client { };
-
   libmongocrypt = callPackage ../development/libraries/libmongocrypt { };
 
   libmesode = callPackage ../development/libraries/libmesode { };

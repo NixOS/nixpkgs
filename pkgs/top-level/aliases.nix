@@ -879,6 +879,7 @@ mapAliases ({
   liblastfm = libsForQt5.liblastfm; # Added 2020-06-14
   liblrdf = throw "'liblrdf' has been renamed to/replaced by 'lrdf'"; # Converted to throw 2022-02-22
   libmicrohttpd_0_9_70 = throw "'libmicrohttpd_0_9_70' has been removed because it is insecure, and has been replaced by 'libmicrohttpd_0_9_69' and 'libmicrohttpd_0_9_71'"; # Added 2022-10-10
+  libmongo-client = throw "'libmongo-client' has been removed, upstream gone"; # Added 2023-06-22
   libmsgpack = throw "'libmsgpack' has been renamed to/replaced by 'msgpack'"; # Converted to throw 2022-02-22
   libnih = throw "'libnih' has been removed"; # Converted to throw 2022-05-17
   libosmpbf = throw "libosmpbf was removed because it is no longer required by osrm-backend";
