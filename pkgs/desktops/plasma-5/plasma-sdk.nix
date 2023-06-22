@@ -16,11 +16,11 @@
 , ktexteditor
 , kwidgetsaddons
 , kdoctools
-, qtbase
 }:
 
 mkDerivation {
   pname = "plasma-sdk";
+
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     karchive
