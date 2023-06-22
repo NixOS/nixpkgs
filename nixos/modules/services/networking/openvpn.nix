@@ -42,10 +42,14 @@ let
       upScriptOption = optionalString (cfg.up != "" || cfg.updateResolvConf) "up ${pkgs.writeShellScript "openvpn-${name}-up" upScript}";
 P     downScriptOption = optionalString (cfg.down != "" || cfg.updateResolvConf) "down ${pkgs.writeShellScript "openvpn-${name}-down" downScript}";
 
-      authUserPassOption = optionalString (cfg.authUserPass != null) "auth-user-pass ${pkgs.writeText "openvpn-credentials-${name}" ''
+      authUserPassUnsafeOption = optionalString (cfg.authUserPass != null) "auth-user-pass ${pkgs.writeText "openvpn-credentials-${name}" ''
             ${cfg.authUserPass.username}
             ${cfg.authUserPass.password}
       ''}";
+
+      authUserPassFileOption = optionalString (cfg.authUserPassFile != null) "auth-user-pass ${cfg.authUserPassFile}";
+
+      authUserPassOption = if (authUserPassFileOption != "") then authUserPassFileOption else authUserPassUnsafeOption;
 
       configFile = pkgs.writeText "openvpn-config-${name}"
         ''
@@ -181,6 +185,12 @@ in
               update resolv.conf with the DNS information provided by openvpn. The
               script will be run after the "up" commands and before the "down" commands.
             '';
+          };
+
+          authUserPassFile = mkOption {
+            default = null;
+            description = lib.mdDoc ''Specify a file path to use as `auth-user-pass ''${authUserPass}`. File will not be included in the nix store unless you specify it as a path `authUserFile = ./myauthfile`'';
+            type = types.nullOr types.str;
           };
 
           authUserPass = mkOption {
