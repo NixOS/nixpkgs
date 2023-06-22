@@ -1,7 +1,7 @@
 { mkDerivation, backintime-common, python3 }:
 
 let
-  python' = python3.withPackages (ps: with ps; [ pyqt5 backintime-common ]);
+  python' = python3.withPackages (ps: with ps; [ pyqt5 backintime-common packaging ]);
 in
 mkDerivation {
   inherit (backintime-common)
