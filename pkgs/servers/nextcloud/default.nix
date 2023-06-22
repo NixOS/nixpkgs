@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, nixosTests
+{ lib, stdenv, zopfli, brotli, fetchurl, nixosTests
 , nextcloud27Packages
 , nextcloud26Packages
 , nextcloud25Packages
@@ -27,6 +27,16 @@ let
       tests = nixosTests.nextcloud;
       inherit packages;
     };
+
+    nativeBuildInputs = [ zopfli brotli ];
+
+    buildPhase = ''
+      # Create missing static gzip and brotli files
+      find apps/ core/ dist/ resources/ themes/ \
+        -type f -regextype posix-extended -iregex '.*\.(css|js|json|svg|ico|txt|md|xml|html|ttf|otf|eot)' \
+        -exec zopfli --gzip {} ';' \
+        -exec brotli --best --keep {} ';'
+    '';
 
     installPhase = ''
       runHook preInstall
