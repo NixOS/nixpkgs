@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , pkgs
-, fetchgit
 , phpPackage
 , autoconf
 , pkg-config
@@ -10,22 +9,16 @@
 , curl
 , cyrus_sasl
 , enchant2
-, fetchpatch
 , freetds
-, freetype
 , gd
 , gettext
 , gmp
 , html-tidy
 , icu64
-, libXpm
 , libffi
 , libiconv
-, libjpeg
 , libkrb5
-, libpng
 , libsodium
-, libwebp
 , libxml2
 , libxslt
 , libzip
@@ -85,15 +78,15 @@ lib.makeScope pkgs.newScope (self: with self; {
   # will mark the extension as a zend extension or not.
   mkExtension = lib.makeOverridable
     ({ name
-    , configureFlags ? [ "--enable-${extName}" ]
-    , internalDeps ? [ ]
-    , postPhpize ? ""
-    , buildInputs ? [ ]
-    , zendExtension ? false
-    , doCheck ? true
-    , extName ? name
-    , ...
-    }@args: stdenv.mkDerivation ((builtins.removeAttrs args [ "name" ]) // {
+     , configureFlags ? [ "--enable-${extName}" ]
+     , internalDeps ? [ ]
+     , postPhpize ? ""
+     , buildInputs ? [ ]
+     , zendExtension ? false
+     , doCheck ? true
+     , extName ? name
+     , ...
+     }@args: stdenv.mkDerivation ((builtins.removeAttrs args [ "name" ]) // {
       pname = "php-${name}";
       extensionName = extName;
 
@@ -217,8 +210,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     ast = callPackage ../development/php-packages/ast { };
 
-    blackfire = pkgs.callPackage ../development/tools/misc/blackfire/php-probe.nix { inherit php; };
-
     couchbase = callPackage ../development/php-packages/couchbase { };
 
     datadog_trace = callPackage ../development/php-packages/datadog_trace { };
@@ -283,7 +274,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     redis = callPackage ../development/php-packages/redis { };
 
-    relay = callPackage ../development/php-packages/relay  { inherit php; };
+    relay = callPackage ../development/php-packages/relay { inherit php; };
 
     smbclient = callPackage ../development/php-packages/smbclient { };
 
@@ -646,5 +637,7 @@ lib.makeScope pkgs.newScope (self: with self; {
       # Produce the final attribute set of all extensions defined.
     in
     builtins.listToAttrs namedExtensions
-  );
+  ) // lib.optionalAttrs (!(lib.versionAtLeast php.version "8.3")) {
+    blackfire = callPackage ../development/tools/misc/blackfire/php-probe.nix { inherit php; };
+  };
 })
