@@ -66,12 +66,21 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    stdenv.cc
     cmake
     pkg-config
     wrapQtAppsHook
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreBluetooth
+    ForceFeedback
+    IOBluetooth
+    IOKit
+    moltenvk
+    OpenGL
+    VideoToolbox
+  ] ++ [
     bzip2
     cubeb
     curl
@@ -79,7 +88,6 @@ stdenv.mkDerivation rec {
     ffmpeg
     fmt_8
     hidapi
-    libGL
     libiconv
     libpulseaudio
     libspng
@@ -99,20 +107,13 @@ stdenv.mkDerivation rec {
     alsa-lib
     bluez
     libevdev
+    libGL
     libXext
     libXrandr
     # FIXME: Remove comment on next mgba version
     #mgba # Derivation doesn't support Darwin
     udev
     vulkan-loader
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreBluetooth
-    ForceFeedback
-    IOBluetooth
-    IOKit
-    moltenvk
-    OpenGL
-    VideoToolbox
   ];
 
   cmakeFlags = [
@@ -124,6 +125,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     "-DOSX_USE_DEFAULT_SEARCH_PATH=True"
     "-DUSE_BUNDLED_MOLTENVK=OFF"
+    "-DMACOS_CODE_SIGNING=OFF"
     # Bundles the application folder into a standalone executable, so we cannot devendor libraries
     "-DSKIP_POSTPROCESS_BUNDLE=ON"
     # Needs xcode so compilation fails with it enabled. We would want the version to be fixed anyways.
@@ -184,7 +186,5 @@ stdenv.mkDerivation rec {
       xfix
       ivar
     ];
-    # Requires both LLVM and SDK bump
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
