@@ -8,9 +8,9 @@
 */
 pkgs:
 
-with pkgs.lib;
-
 let
+  lib = pkgs.lib;
+
   /*  Building an engine or out-of-tree mod is very similar,
       but different enough not to be able to build them with the same package definition,
       so instaed we define what is common between them in a separate file.
@@ -21,7 +21,10 @@ let
       so either the attributes added by `makeOverridable` have to be removed
       or the engine and mod package definitions will need to add `...` to the argument list.
   */
-  common = let f = import ./common.nix; in f (builtins.intersectAttrs (functionArgs f) pkgs // {
+  common = let
+    f = import ./common.nix;
+    fArgs = lib.functionArgs f;
+  in f (builtins.intersectAttrs fArgs pkgs // {
     lua = pkgs.lua5_1;
     # It is not necessary to run the game, but it is nicer to be given an error dialog in the case of failure,
     # rather than having to look to the logs why it is not starting.
@@ -40,8 +43,8 @@ let
       to base the name on the attribute name instead, preventing the need to specify the name twice
       if the attribute name and engine/mod name are equal.
   */
-  callWithName = name: value: if isFunction value then value name else value;
-  buildOpenRASet = f: args: pkgs.recurseIntoAttrs (mapAttrs callWithName (f ({
+  callWithName = name: value: if lib.isFunction value then value name else value;
+  buildOpenRASet = f: args: pkgs.recurseIntoAttrs (lib.mapAttrs callWithName (f ({
     inherit (pkgs) fetchFromGitHub;
     postFetch = ''
       sed -i 's/curl/curl --insecure/g' $out/thirdparty/{fetch-thirdparty-deps,noget}.sh
@@ -56,14 +59,16 @@ in pkgs.recurseIntoAttrs rec {
     # Allow specifying the name at a later point if no name has been given.
     let builder = name: pkgs.callPackage ./engine.nix (common // {
       engine = engine // { inherit name; };
-    }); in if name == null then builder else builder name;
+    });
+    in if name == null then builder else builder name;
 
   # See `buildOpenRAEngine`.
   buildOpenRAMod = { name ? null, version, title, description, homepage, src, engine, assetsError ? "" }@mod: ({ version, mods ? [], src }@engine:
     let builder = name: pkgs.callPackage ./mod.nix (common // {
       mod = mod // { inherit name assetsError; };
       engine = engine // { inherit mods; };
-    }); in if name == null then builder else builder name) engine;
+    });
+    in if name == null then builder else builder name) engine;
 
   # See `buildOpenRASet`.
   engines = buildOpenRASet (import ./engines.nix) { inherit buildOpenRAEngine; };
