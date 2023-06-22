@@ -1,5 +1,5 @@
 { lib
-, buildGo120Module
+, buildGoModule
 , fetchFromGitHub
 , gitUpdater
 , makeWrapper
@@ -9,20 +9,20 @@
 , shellhub-agent
 }:
 
-buildGo120Module rec {
+buildGoModule rec {
   pname = "shellhub-agent";
-  version = "0.12.2";
+  version = "0.12.3";
 
   src = fetchFromGitHub {
     owner = "shellhub-io";
     repo = "shellhub";
     rev = "v${version}";
-    sha256 = "9ZOLbws2jRjUK3IK2HnRF6TDk3ZXAtE/oCjAR5BjqlM=";
+    hash = "sha256-WKMy2JttXFRcW1yb5aQ6xe8BoSoN65K8Hlmac62+QPc=";
   };
 
   modRoot = "./agent";
 
-  vendorSha256 = "sha256-7T2MWwcq99AF8d/DM2n8xROroRSqiEKY+58x9UZ3fow=";
+  vendorHash = "sha256-BqzpQcL3U6SIrDW5NfBG0D2zyvv1zNu7uoOBYmKbF4Y=";
 
   ldflags = [ "-s" "-w" "-X main.AgentVersion=v${version}" ];
 
