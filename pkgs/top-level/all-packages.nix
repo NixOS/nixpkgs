@@ -16730,6 +16730,8 @@ with pkgs;
 
   ravedude = callPackage ../development/tools/rust/ravedude { };
 
+  ra-multiplex = callPackage ../development/tools/rust/ra-multiplex {};
+
   rhack = callPackage ../development/tools/rust/rhack { };
   roogle = callPackage ../development/tools/rust/roogle { };
   rustfmt = rustPackages.rustfmt;
