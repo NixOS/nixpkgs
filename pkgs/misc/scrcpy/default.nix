@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, fetchpatch
 , fetchurl
 , fetchFromGitHub
 , makeWrapper
@@ -17,10 +16,10 @@
 }:
 
 let
-  version = "2.0";
+  version = "2.1";
   prebuilt_server = fetchurl {
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
-    sha256 = "sha256-niQWFfV4zWkLtDMRAA3r3s9qnFCnCCsAGVLxj28h3cI=";
+    sha256 = "sha256-W4vxlAJkuTDHGhxhTFfaIkf1Ky1CQLyoZcxtNm3/Zog=";
   };
 in
 stdenv.mkDerivation rec {
@@ -31,24 +30,14 @@ stdenv.mkDerivation rec {
     owner = "Genymobile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-PWH+XLKraFfjXovnZpREXBaQVyOyP8yIMYDMiF6ddXg=";
+    sha256 = "sha256-M5zOKwqQ0y70gsI+c0Or7hUzz4fH/8DqcOeKq4Vryc4=";
   };
 
-  # Remove in the next patch release
-  patches = [
-    (fetchpatch {
-      name = "fix-macos-build-error.patch";
-      url = "https://github.com/Genymobile/scrcpy/commit/6b769675fa68e60c9765022e43c4d7b1e329353a.patch";
-      hash = "sha256-lQx01HI0nTWdZFusLIswZT2iOgkP84btqF6F58tGNko=";
-    })
-  ];
-
-  # postPatch:
-  #   screen.c: When run without a hardware accelerator, this allows the command to continue working rather than failing unexpectedly.
+  #   display.c: When run without a hardware accelerator, this allows the command to continue working rather than failing unexpectedly.
   #   This can happen when running on non-NixOS because then scrcpy seems to have a hard time using the host OpenGL-supporting hardware.
   #   It would be better to fix the OpenGL problem, but that seems much more intrusive.
   postPatch = ''
-    substituteInPlace app/src/screen.c \
+    substituteInPlace app/src/display.c \
       --replace "SDL_RENDERER_ACCELERATED" "SDL_RENDERER_ACCELERATED || SDL_RENDERER_SOFTWARE"
   '';
 
