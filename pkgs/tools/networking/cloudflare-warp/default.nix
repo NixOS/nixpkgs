@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   version = "2023.3.398";
 
   src = fetchurl {
-    url = "https://pkg.cloudflareclient.com/uploads/cloudflare_warp_2023_3_398_1_amd64_002e48d521.deb";
-    hash = "sha256-1var+/G3WwICRLXsMHke277tmPYRPFW8Yf9b1Ex9OmU=";
+    url = "https://pkg.cloudflareclient.com/pool/focal/main/c/cloudflare-warp/cloudflare-warp_${version}-1_amd64.deb";
+    hash = "sha256-VBNJqHF2RPBm3121abjvI/qeCnygMlF2q9YsGO97A3g=";
   };
 
   nativeBuildInputs = [
