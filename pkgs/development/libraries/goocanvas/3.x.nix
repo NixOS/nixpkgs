@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     gettext
     gobject-introspection
     gtk-doc
-    python3
+    python3.pythonForBuild
   ];
 
   buildInputs = [
