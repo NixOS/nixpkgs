@@ -100,6 +100,9 @@ in makeScope pkgs'.newScope (self: makeOverridable ({
 
     # Package specific priority overrides goes here
 
+    # EXWM is not tagged very often, prefer it from elpa devel.
+    inherit (elpaDevelPackages) exwm;
+
     # Telega uploads packages incompatible with stable tdlib to melpa
     # Prefer the one from melpa stable
     inherit (melpaStablePackages) telega;
