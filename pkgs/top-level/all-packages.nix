@@ -638,6 +638,10 @@ with pkgs;
 
   n98-magerun2 = callPackage ../development/tools/misc/n98-magerun2 { };
 
+  pilfer = callPackage ../applications/networking/eludris/pilfer {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   prisma-engines = callPackage ../development/tools/database/prisma-engines {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
