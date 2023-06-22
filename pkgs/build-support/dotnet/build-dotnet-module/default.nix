@@ -99,10 +99,10 @@ let
       else dotnetCorePackages.systemToDotnetRid stdenvNoCC.targetPlatform.system;
   }) dotnetConfigureHook dotnetBuildHook dotnetCheckHook dotnetInstallHook dotnetFixupHook;
 
-  localDeps =
-    if (projectReferences != [ ])
-    then linkFarmFromDrvs "${name}-project-references" projectReferences
-    else null;
+  localSource = mkNugetSource {
+    name = "${name}-local-source";
+    deps = map (d: "${d}/share") projectReferences;
+  };
 
   _nugetDeps =
     if (nugetDeps != null) then
@@ -115,7 +115,7 @@ let
   dependenciesSource = mkNugetSource {
     name = "${name}-dependencies-source";
     description = "A Nuget source with the dependencies for ${name}";
-    deps = [ _nugetDeps ] ++ lib.optional (localDeps != null) localDeps;
+    deps = [ _nugetDeps ];
   };
 
   # this contains all the nuget packages that are implicitly referenced by the dotnet
@@ -132,7 +132,7 @@ let
 
   nuget-source = symlinkJoin {
     name = "${name}-nuget-source";
-    paths = [ dependenciesSource sdkSource ];
+    paths = [ sdkSource localSource dependenciesSource ];
   };
 in
 stdenvNoCC.mkDerivation (args // {
