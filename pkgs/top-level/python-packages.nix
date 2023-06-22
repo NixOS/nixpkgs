@@ -2505,8 +2505,6 @@ self: super: with self; {
 
   derpconf = callPackage ../development/python-modules/derpconf { };
 
-  descartes = callPackage ../development/python-modules/descartes { };
-
   desktop-notifier = callPackage ../development/python-modules/desktop-notifier { };
 
   detect-secrets = callPackage ../development/python-modules/detect-secrets { };
@@ -2736,8 +2734,6 @@ self: super: with self; {
   django-health-check = callPackage ../development/python-modules/django-health-check { };
 
   django-hierarkey = callPackage ../development/python-modules/django-hierarkey { };
-
-  django-hijack-admin = callPackage ../development/python-modules/django-hijack-admin { };
 
   django-hijack = callPackage ../development/python-modules/django-hijack { };
 
