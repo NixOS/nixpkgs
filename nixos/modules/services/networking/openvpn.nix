@@ -39,20 +39,22 @@ let
         ${cfg.down}
       '';
 
+      upScriptOption = optionalString (cfg.up != "" || cfg.updateResolvConf) "up ${pkgs.writeShellScript "openvpn-${name}-up" upScript}";
+P     downScriptOption = optionalString (cfg.down != "" || cfg.updateResolvConf) "down ${pkgs.writeShellScript "openvpn-${name}-down" downScript}";
+
+      authUserPassOption = optionalString (cfg.authUserPass != null) "auth-user-pass ${pkgs.writeText "openvpn-credentials-${name}" ''
+            ${cfg.authUserPass.username}
+            ${cfg.authUserPass.password}
+      ''}";
+
       configFile = pkgs.writeText "openvpn-config-${name}"
         ''
           errors-to-stderr
           ${optionalString (cfg.up != "" || cfg.down != "" || cfg.updateResolvConf) "script-security 2"}
           ${cfg.config}
-          ${optionalString (cfg.up != "" || cfg.updateResolvConf)
-              "up ${pkgs.writeShellScript "openvpn-${name}-up" upScript}"}
-          ${optionalString (cfg.down != "" || cfg.updateResolvConf)
-              "down ${pkgs.writeShellScript "openvpn-${name}-down" downScript}"}
-          ${optionalString (cfg.authUserPass != null)
-              "auth-user-pass ${pkgs.writeText "openvpn-credentials-${name}" ''
-                ${cfg.authUserPass.username}
-                ${cfg.authUserPass.password}
-              ''}"}
+          ${upScriptOption}
+          ${downScriptOption}
+          ${authUserPassOption}
         '';
 
     in
