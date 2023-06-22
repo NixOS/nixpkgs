@@ -26,13 +26,13 @@ let
   buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_18; };
   electron = electron_24;
 
-  version = "2023.5.0";
+  version = "2023.5.1";
   src = applyPatches {
     src = fetchFromGitHub {
       owner = "bitwarden";
       repo = "clients";
       rev = "desktop-v${version}";
-      sha256 = "sha256-ELKpGSY4ZbgSk4vJnTiB+IOa8RQU8Ahy3A1mYsKtthU=";
+      sha256 = "sha256-dD9C6+GRjCMcfBse2Qq0ot8bVGyhjnd8VvpdNlrjRs4=";
     };
 
     patches = [ ];
@@ -42,7 +42,7 @@ let
     pname = "bitwarden-desktop-native";
     inherit src version;
     sourceRoot = "source-patched/apps/desktop/desktop_native";
-    cargoSha256 = "sha256-SeK8Nbgenof9vXI2v7tJ5oHiX60kBoR+UNOSJTRHdzk=";
+    cargoSha256 = "sha256-8U4E5q2OSZGXy2ZRn0y4Skm5Y+FiOJVU1mtzObO9UqY=";
 
     nativeBuildInputs = [
       pkg-config
@@ -95,7 +95,7 @@ buildNpmPackage' {
   npmBuildFlags = [
     "--workspace apps/desktop"
   ];
-  npmDepsHash = "sha256-G8DEYPjEP3L4s0pr5n2ZTj8kkT0E7Po1BKhZ2hUdJuY=";
+  npmDepsHash = "sha256-USXWA/7wuu3i9/+/pMXREgcB+4yOpQGG5RGuUyJvuQw=";
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
