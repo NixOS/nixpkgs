@@ -1,5 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, python3, libGL, libGLU
-, alsa-lib, glibmm, sqlite, SDL2, SDL2_ttf_2_0_15, SDL2_image, gtk3, wrapGAppsHook }:
+{ lib
+, SDL2
+, SDL2_image
+, SDL2_ttf_2_0_15
+, alsa-lib
+, fetchFromGitHub
+, glibmm
+, gtk3
+, libGL
+, libGLU
+, meson
+, ninja
+, pkg-config
+, python3
+, sqlite
+, stdenv
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "linthesia";
