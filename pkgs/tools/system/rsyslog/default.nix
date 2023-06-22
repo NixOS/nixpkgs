@@ -49,7 +49,6 @@
 , withRdkafka ? true
 , rdkafka
 , withMongo ? true
-, libmongo-client
 , mongoc
 , withCzmq ? true
 , czmq
@@ -97,7 +96,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional withNet libnet
   ++ lib.optional withHadoop hadoop
   ++ lib.optional withRdkafka rdkafka
-  ++ lib.optionals withMongo [ libmongo-client mongoc ]
+  ++ lib.optionals withMongo [ mongoc ]
   ++ lib.optional withCzmq czmq
   ++ lib.optional withRabbitmq rabbitmq-c
   ++ lib.optional withHiredis hiredis
