@@ -3,7 +3,7 @@ let
   versions = if stdenv.isLinux then {
     stable = "0.0.27";
     ptb = "0.0.42";
-    canary = "0.0.154";
+    canary = "0.0.158";
     development = "0.0.216";
   } else {
     stable = "0.0.273";
@@ -24,7 +24,7 @@ let
       };
       canary = fetchurl {
         url = "https://dl-canary.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
-        sha256 = "sha256-rtqPQZBrmxnHuXgzmC7VNiucXBBmtrn8AiKNDtxaR7c=";
+        sha256 = "sha256-vEkH8erhTP03/hU3TJqAULgaZMfTJl/zPrebEBa5ktA=";
       };
       development = fetchurl {
         url = "https://dl-development.discordapp.net/apps/linux/${version}/discord-development-${version}.tar.gz";
