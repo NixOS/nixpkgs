@@ -71,7 +71,7 @@ let
 
       configureFlags = [ "--with-scriptname=${scriptName}" ] ++ configureFlags;
 
-      buildFlags = "all";
+      buildFlags = [ "all" ];
 
       enableParallelBuilding = true;
 
