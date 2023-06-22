@@ -14,6 +14,7 @@
 , testers
 , runCommand
 , fetchurl
+, fetchpatch
   # Main build tools
 , pkg-config
 , autoconf
@@ -135,6 +136,11 @@ let
       "${src}/contrib/ffmpeg/A29-matroskaenc-aac-extradata-updated.patch"
       "${src}/contrib/ffmpeg/A30-ccaption_dec-fix-pts-in-real_time-mode.patch"
       "${src}/contrib/ffmpeg/A32-qsv-fix-decode-10bit-hdr.patch"
+
+      (fetchpatch {
+        url = "https://git.videolan.org/?p=ffmpeg.git;a=patch;h=e5163b1d34381a3319214a902ef1df923dd2eeba";
+        hash = "sha256-nLhP2+34cj5EgpnUrePZp60nYAxmbhZAEDfay4pBVk0=";
+      })
     ];
   });
 
