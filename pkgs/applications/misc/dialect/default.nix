@@ -45,7 +45,6 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     gtk4
     glib
-    gobject-introspection
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     libsoup_3

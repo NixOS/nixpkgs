@@ -26,10 +26,10 @@ buildPythonApplication {
 
   nativeBuildInputs = [
     wrapGAppsHook
+    gobject-introspection
   ];
 
   buildInputs = [
-    gobject-introspection
     gtk3
     libappindicator
     libpulseaudio

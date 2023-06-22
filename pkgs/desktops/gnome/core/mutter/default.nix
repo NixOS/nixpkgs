@@ -108,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
     gi-docgen
     xorgserver
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -116,7 +117,6 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gnome-desktop
     gnome-settings-daemon
-    gobject-introspection
     gsettings-desktop-schemas
     atk
     fribidi

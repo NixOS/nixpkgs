@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     wrapGAppsHook
+    gobject-introspection
   ];
   buildInputs = [
     glib
@@ -29,7 +30,6 @@ stdenv.mkDerivation rec {
     libgee
     xorg.libSM
     xorg.libICE
-    gobject-introspection
     libsecret
   ];
 

@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
     appstream-glib
     desktop-file-utils
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -52,7 +53,6 @@ stdenv.mkDerivation rec {
     libgee
     json-glib
     gtksourceview5
-    gobject-introspection
   ];
 
   runtimeDependencies = [

@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    gobject-introspection
   ];
 
   buildInputs = [
-    gobject-introspection
     gtk3
   ];
 

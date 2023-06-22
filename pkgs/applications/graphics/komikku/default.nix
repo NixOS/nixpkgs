@@ -47,7 +47,6 @@ python3.pkgs.buildPythonApplication rec {
     libadwaita
     libnotify
     webkitgtk_6_0
-    gobject-introspection
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

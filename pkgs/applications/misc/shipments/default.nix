@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     wrapGAppsHook
+    gobject-introspection
   ];
 
   buildInputs = [
-    gobject-introspection
     gtk3
     libhandy
     (python3.withPackages (ps: with ps; [

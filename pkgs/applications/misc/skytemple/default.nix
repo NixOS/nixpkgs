@@ -20,7 +20,6 @@ python3Packages.buildPythonApplication rec {
   };
 
   buildInputs = [
-    gobject-introspection
     gtk3
     gtksourceview4
     # webkitgkt is used for rendering interactive statistics graph which

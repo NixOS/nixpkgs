@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
     pkg-config
     wrapGAppsHook
     jinja2
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -62,7 +63,6 @@ stdenv.mkDerivation rec {
     libSM
     libXScrnSaver
     libXtst
-    gobject-introspection
     glib
     glibmm
     gtkmm3

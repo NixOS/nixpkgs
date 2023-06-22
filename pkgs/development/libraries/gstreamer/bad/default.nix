@@ -141,7 +141,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gobject-introspection
     gst-plugins-base
     orc
     json-glib

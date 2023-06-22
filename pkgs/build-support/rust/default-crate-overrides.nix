@@ -193,8 +193,8 @@ in
   };
 
   graphene-sys = attrs: {
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ graphene gobject-introspection ];
+    nativeBuildInputs = [ pkg-config gobject-introspection ];
+    buildInputs = [ graphene ];
   };
 
   nettle-sys = attrs: {

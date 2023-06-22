@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
     xorg.libxkbfile
     xorg.libXext
     xorg.libXrandr
-    gobject-introspection
   ];
 
   nativeBuildInputs = [
@@ -51,6 +50,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
     intltool
     pkg-config
+    gobject-introspection
   ];
 
   postPatch = ''

@@ -13,7 +13,8 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-btwiKxmb1xDtPSTOIvpHJDQ5SY1gnBWlKnYOzzSLDEY=";
   };
 
-  buildInputs = [ glib python pygobject3 gobject-introspection networkmanager python3Packages.wrapPython ];
+  nativeBuildInputs = [ gobject-introspection ];
+  buildInputs = [ glib python pygobject3 networkmanager python3Packages.wrapPython ];
 
   dontBuild = true;
 

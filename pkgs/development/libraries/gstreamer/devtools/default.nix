@@ -46,7 +46,6 @@ stdenv.mkDerivation rec {
     cairo
     python3
     json-glib
-    gobject-introspection
   ];
 
   propagatedBuildInputs = [

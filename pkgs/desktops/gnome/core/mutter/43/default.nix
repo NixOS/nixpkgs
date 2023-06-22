@@ -102,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook
     gi-docgen
     xorgserver
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -110,7 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gnome-desktop
     gnome-settings-daemon
-    gobject-introspection
     gsettings-desktop-schemas
     gtk3
     libcanberra

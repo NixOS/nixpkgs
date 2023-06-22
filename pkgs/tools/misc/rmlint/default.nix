@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals withGui [
     makeWrapper
     wrapGAppsHook
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -52,7 +53,6 @@ stdenv.mkDerivation rec {
     util-linux
   ] ++ lib.optionals withGui [
     cairo
-    gobject-introspection
     gtksourceview3
     pango
     polkit
