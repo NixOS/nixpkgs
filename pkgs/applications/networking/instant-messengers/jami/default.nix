@@ -24,7 +24,7 @@
 , libpulseaudio
 , libupnp
 , yaml-cpp
-, msgpack
+, msgpack-cxx
 , openssl
 , restinio
 , secp256k1
@@ -132,7 +132,7 @@ stdenv.mkDerivation rec {
       libpulseaudio
       libupnp
       yaml-cpp
-      msgpack
+      msgpack-cxx
       opendht-jami
       openssl
       pjsip-jami
