@@ -1,6 +1,7 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, gnum4, pkg-config, python3
-, intel-gpu-tools, libdrm, libva, libX11, libGL, wayland, libXext
+, intel-gpu-tools, libdrm, libva
 , enableHybridCodec ? false, vaapi-intel-hybrid
+, enableGui ? true, libX11, libGL, wayland, libXext
 }:
 
 stdenv.mkDerivation rec {
@@ -22,13 +23,14 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--enable-x11"
-    "--enable-wayland"
+    (lib.enableFeature enableGui "x11")
+    (lib.enableFeature enableGui "wayland")
   ] ++ lib.optional enableHybridCodec "--enable-hybrid-codec";
 
   nativeBuildInputs = [ autoreconfHook gnum4 pkg-config python3 ];
 
-  buildInputs = [ intel-gpu-tools libdrm libva libX11 libXext libGL wayland ]
+  buildInputs = [ intel-gpu-tools libdrm libva ]
+    ++ lib.optionals enableGui [ libX11 libXext libGL wayland ]
     ++ lib.optional enableHybridCodec vaapi-intel-hybrid;
 
   enableParallelBuilding = true;
@@ -48,6 +50,6 @@ stdenv.mkDerivation rec {
       backends for each supported hardware vendor.
     '';
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

@@ -1871,6 +1871,8 @@ self: super: with self; {
 
   clip-anytorch = callPackage ../development/python-modules/clip-anytorch { };
 
+  clr-loader = callPackage ../development/python-modules/clr-loader { };
+
   cock = callPackage ../development/python-modules/cock { };
 
   class-doc = callPackage ../development/python-modules/class-doc { };
@@ -2503,8 +2505,6 @@ self: super: with self; {
 
   derpconf = callPackage ../development/python-modules/derpconf { };
 
-  descartes = callPackage ../development/python-modules/descartes { };
-
   desktop-notifier = callPackage ../development/python-modules/desktop-notifier { };
 
   detect-secrets = callPackage ../development/python-modules/detect-secrets { };
@@ -2734,8 +2734,6 @@ self: super: with self; {
   django-health-check = callPackage ../development/python-modules/django-health-check { };
 
   django-hierarkey = callPackage ../development/python-modules/django-hierarkey { };
-
-  django-hijack-admin = callPackage ../development/python-modules/django-hijack-admin { };
 
   django-hijack = callPackage ../development/python-modules/django-hijack { };
 
@@ -9201,6 +9199,21 @@ self: super: with self; {
 
   pyqt6-webengine = callPackage ../development/python-modules/pyqt6-webengine.nix { };
 
+  pyqt3d = pkgs.libsForQt5.callPackage ../development/python-modules/pyqt3d {
+    inherit (self) buildPythonPackage pyqt5 pyqt-builder python pythonOlder
+      setuptools sip;
+  };
+
+  pyqtchart = pkgs.libsForQt5.callPackage ../development/python-modules/pyqtchart {
+    inherit (self) buildPythonPackage pyqt5 pyqt-builder python pythonOlder
+      setuptools sip;
+  };
+
+  pyqtdatavisualization = pkgs.libsForQt5.callPackage ../development/python-modules/pyqtdatavisualization {
+    inherit (self) buildPythonPackage pyqt5 pyqt-builder python pythonOlder
+      setuptools sip;
+  };
+
   pyqtgraph = callPackage ../development/python-modules/pyqtgraph { };
 
   pyqtwebengine = pkgs.libsForQt5.callPackage ../development/python-modules/pyqtwebengine {
@@ -9957,11 +9970,7 @@ self: super: with self; {
 
   python-nest = callPackage ../development/python-modules/python-nest { };
 
-  pythonnet = callPackage
-    ../development/python-modules/pythonnet {
-      # Using `mono > 5`, tests are failing..
-      mono = pkgs.mono5;
-    };
+  pythonnet = callPackage ../development/python-modules/pythonnet { };
 
   python-nmap = callPackage ../development/python-modules/python-nmap { };
 

@@ -1735,6 +1735,7 @@ mapAliases ({
 
   v4l_utils = v4l-utils; # Added 2019-08-07
   vamp = { vampSDK = vamp-plugin-sdk; }; # Added 2020-03-26
+  vaapiIntel = intel-vaapi-driver; # Added 2023-05-31
   vapor = throw "vapor was removed because it was unmaintained and upstream service no longer exists";
   varnish62 = throw "varnish62 was removed from nixpkgs, because it is unmaintained upstream. Please switch to a different release"; # Added 2021-07-26
   varnish63 = throw "varnish63 was removed from nixpkgs, because it is unmaintained upstream. Please switch to a different release"; # Added 2021-07-26
