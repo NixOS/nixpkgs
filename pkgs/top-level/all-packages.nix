@@ -19859,7 +19859,9 @@ with pkgs;
 
   schemaspy = callPackage ../development/tools/database/schemaspy { };
 
-  scenebuilder = callPackage ../development/tools/scenebuilder { };
+  scenebuilder = callPackage ../development/tools/scenebuilder {
+    jre = jre.override { enableJavaFX = true; };
+  };
 
   scenic-view = callPackage ../development/tools/scenic-view { jdk = jdk11; };
 
