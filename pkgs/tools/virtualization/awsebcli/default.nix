@@ -36,18 +36,17 @@ let
 in
 with localPython.pkgs; buildPythonApplication rec {
   pname = "awsebcli";
-  version = "3.20.6";
+  version = "3.20.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9n6nObYoZlOKgQvSdNqHLRr+RlDoKfR3fgD7Xa9wPzM=";
+    hash = "sha256-hnLWqc4UzUnvz4wmKZ8JcEWUMPmh2BdQS1IAyxC+yb4=";
   };
 
 
   preConfigure = ''
     substituteInPlace requirements.txt \
       --replace "six>=1.11.0,<1.15.0" "six==1.16.0" \
-      --replace "requests>=2.20.1,<=2.26" "requests<3" \
       --replace "pathspec==0.10.1" "pathspec>=0.10.0,<1" \
       --replace "colorama>=0.2.5,<0.4.4" "colorama>=0.2.5,<=0.4.6" \
       --replace "termcolor == 1.1.0" "termcolor>=2.0.0,<3"
