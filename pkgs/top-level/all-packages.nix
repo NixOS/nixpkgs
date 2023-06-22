@@ -5110,6 +5110,8 @@ with pkgs;
 
   gdrive = callPackage ../applications/networking/gdrive { };
 
+  gdrive3 = callPackage ../applications/networking/gdrive3 { };
+
   gdu = callPackage ../tools/system/gdu { };
 
   gfxreconstruct = callPackage ../tools/graphics/gfxreconstruct { };
@@ -9904,8 +9906,6 @@ with pkgs;
 
   libmbim = callPackage ../development/libraries/libmbim { };
 
-  libmongo-client = callPackage ../development/libraries/libmongo-client { };
-
   libmongocrypt = callPackage ../development/libraries/libmongocrypt { };
 
   libmesode = callPackage ../development/libraries/libmesode { };
@@ -11570,6 +11570,8 @@ with pkgs;
 
   poretools = callPackage ../applications/science/biology/poretools { };
 
+  porsmo = callPackage ../applications/misc/porsmo { };
+
   pantum-driver = callPackage ../misc/drivers/pantum-driver {
     libjpeg8 = libjpeg.override { enableJpeg8 = true; };
   };
@@ -11978,6 +11980,8 @@ with pkgs;
   rich-cli = callPackage ../misc/rich-cli { };
 
   richgo = callPackage ../development/tools/richgo {  };
+
+  rlci = callPackage ../development/interpreters/rlci { };
 
   rs = callPackage ../tools/text/rs { };
 
@@ -16643,6 +16647,7 @@ with pkgs;
   cargo-msrv = callPackage ../development/tools/rust/cargo-msrv {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-mutants = callPackage ../development/tools/rust/cargo-mutants { };
 
   cargo-ndk = callPackage ../development/tools/rust/cargo-ndk {
     inherit (darwin.apple_sdk.frameworks) CoreGraphics Foundation;
@@ -38232,6 +38237,10 @@ with pkgs;
     rocmSupport = false;
   };
 
+  magma-cuda-static = magma-cuda.override {
+    static = true;
+  };
+
   # TODO:AMD won't compile with anything newer than 2.6.2 -- it fails at the linking stage.
   magma-hip = magma_2_6_2.override {
     cudaSupport = false;
@@ -39712,6 +39721,8 @@ with pkgs;
   nixpkgs-fmt = callPackage ../tools/nix/nixpkgs-fmt { };
 
   nixpkgs-hammering = callPackage ../tools/nix/nixpkgs-hammering { };
+
+  nixpkgs-lint-community = callPackage ../tools/nix/nixpkgs-lint { };
 
   rnix-hashes = callPackage ../tools/nix/rnix-hashes { };
 
