@@ -75,6 +75,7 @@ let
       name = "llvmPackages_${v}";
       value = pkgs."llvmPackages_${v}" // {
         stdenv = mkStdenv pkgs."llvmPackages_${v}".stdenv;
+        clang = mkCc pkgs."llvmPackages_${v}".clang;
       };
     })
     [ "12" "13" "14" "15" "16" ]
