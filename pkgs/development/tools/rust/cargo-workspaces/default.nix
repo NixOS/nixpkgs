@@ -16,14 +16,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-workspaces";
-  version = "0.2.42";
+  version = "0.2.43";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-2jP1p53sKqt7p8DQ9fzIH9L9NuzQ4uc/qisZcfOo7fw=";
+    sha256 = "sha256-xLwDCXJ/Ab4H1U4M9z3Xx7WWCr0Po2mvbL6jWtU/4K4=";
   };
 
-  cargoHash = "sha256-5jcyXbS5C/jxUWSJJ8fCVR/hwPOqNJz8otWnOgirJCA=";
+  cargoHash = "sha256-jia2n+rKIDewDLPZPvJ+7jdF9uT/afwDhu6aEgpX9Kc=";
 
   # needed to get libssh2/libgit2 to link properly
   LIBGIT2_SYS_USE_PKG_CONFIG = true;
