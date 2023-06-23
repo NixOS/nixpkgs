@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-0Fr9PvUShi04z8SUsZE7zHuXZWg4rxt6gwSBb6lr2Pc=";
+    hash = "sha256-0Fr9PvUShi04z8SUsZE7zHuXZWg4rxt6gwSBb6lr2Pc=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -40,12 +40,12 @@ buildPythonPackage rec {
     "spectral_cube/tests/test_visualization.py"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "Library for reading and analyzing astrophysical spectral data cubes";
-    homepage = "http://radio-astro-tools.github.io";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ smaret ];
+    homepage = "https://spectral-cube.readthedocs.io";
+    changelog = "https://github.com/radio-astro-tools/spectral-cube/releases/tag/v${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ smaret ];
     broken = true;
   };
 }
