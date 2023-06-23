@@ -10,7 +10,7 @@ buildPythonPackage rec {
   version = "5.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     description = "A daemon process control library and tools for Unix-based systems";
     homepage = "https://pypi.python.org/pypi/zdaemon";
     changelog = "https://github.com/zopefoundation/zdaemon/blob/${version}/CHANGES.rst";
-    license = licenses.zpl20;
+    license = licenses.zpl21;
     maintainers = with maintainers; [ goibhniu ];
   };
 }
