@@ -22,9 +22,17 @@ export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 mapfile -t sources < <(dotnet nuget list source --format short | awk '/^E / { print $2 }')
 
-declare -A base_addresses
+declare -a remote_sources
 
 for index in "${sources[@]}"; do
+  if [[ ! -e "$index" ]]; then
+    remote_sources+=("$index")
+  fi
+done
+
+declare -A base_addresses
+
+for index in "${remote_sources[@]}"; do
   base_addresses[$index]=$(
     curl --compressed --netrc -fsL "$index" | \
       jq -r '.resources[] | select(."@type" == "PackageBaseAddress/3.0.0")."@id"')
@@ -43,7 +51,12 @@ for package in *; do
     fi
 
     used_source="$(jq -r '.source' "$version"/.nupkg.metadata)"
-    for source in "${sources[@]}"; do
+    # This means a local source was used, which is likely in /nix/store/, so we
+    # don't need it in the lock file.
+    if [[ ! -v base_addresses[$used_source] ]]; then
+       continue
+    fi
+    for source in "${remote_sources[@]}"; do
       url="${base_addresses[$source]}$package/$version/$package.$version.nupkg"
       if [[ "$source" == "$used_source" ]]; then
         sha256="$(nix-hash --type sha256 --flat --base32 "$version/$package.$version".nupkg)"
