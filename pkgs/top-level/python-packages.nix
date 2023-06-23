@@ -2939,6 +2939,8 @@ self: super: with self; {
 
   djangorestframework-simplejwt = callPackage ../development/python-modules/djangorestframework-simplejwt { };
 
+  djangorestframework-stubs = callPackage ../development/python-modules/djangorestframework-stubs { };
+
   django-reversion = callPackage ../development/python-modules/django-reversion { };
 
   django-sekizai = callPackage ../development/python-modules/django-sekizai { };
