@@ -110,7 +110,7 @@ in buildFHSEnv rec {
     gnome2.GConf
     curlWithGnuTls
     nspr
-    nss
+    nss_latest
     cups
     libcap
     SDL2
