@@ -1,3 +1,28 @@
+lib:
+{
+  # git tag
+  k3sVersion,
+  # commit hash
+  k3sCommit,
+  k3sRepoSha256 ? lib.fakeHash,
+  k3sVendorSha256 ? lib.fakeHash,
+  # taken from ./scripts/version.sh VERSION_ROOT https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L47
+  k3sRootVersion,
+  k3sRootSha256 ? lib.fakeHash,
+  # Based on the traefik charts here: https://github.com/k3s-io/k3s/blob/d71ab6317e22dd34673faa307a412a37a16767f6/scripts/download#L29-L32
+  # see also https://github.com/k3s-io/k3s/blob/d71ab6317e22dd34673faa307a412a37a16767f6/manifests/traefik.yaml#L8
+  chartVersions,
+  # taken from ./scripts/version.sh VERSION_CNIPLUGINS https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L45
+  k3sCNIVersion,
+  k3sCNISha256 ? lib.fakeHash,
+  # taken from ./scripts/version.sh VERSION_CONTAINERD
+  containerdVersion,
+  containerdSha256 ? lib.fakeHash,
+  # run `grep github.com/kubernetes-sigs/cri-tools go.mod | head -n1 | awk '{print $4}'` in the k3s repo at the tag
+  criCtlVersion,
+  updateScript ? null,
+}:
+
 # builder.nix contains a "builder" expression that, given k3s version and hash
 # variables, creates a package for that version.
 # Due to variance in k3s's build process, this builder only works for k3s 1.26+
@@ -30,30 +55,6 @@
 , sqlite
 , nixosTests
 , pkgsBuildBuild
-}:
-
-{
-  # git tag
-  k3sVersion,
-  # commit hash
-  k3sCommit,
-  k3sRepoSha256 ? lib.fakeHash,
-  k3sVendorSha256 ? lib.fakeHash,
-  # taken from ./scripts/version.sh VERSION_ROOT https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L47
-  k3sRootVersion,
-  k3sRootSha256 ? lib.fakeHash,
-  # Based on the traefik charts here: https://github.com/k3s-io/k3s/blob/d71ab6317e22dd34673faa307a412a37a16767f6/scripts/download#L29-L32
-  # see also https://github.com/k3s-io/k3s/blob/d71ab6317e22dd34673faa307a412a37a16767f6/manifests/traefik.yaml#L8
-  chartVersions,
-  # taken from ./scripts/version.sh VERSION_CNIPLUGINS https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L45
-  k3sCNIVersion,
-  k3sCNISha256 ? lib.fakeHash,
-  # taken from ./scripts/version.sh VERSION_CONTAINERD
-  containerdVersion,
-  containerdSha256 ? lib.fakeHash,
-  # run `grep github.com/kubernetes-sigs/cri-tools go.mod | head -n1 | awk '{print $4}'` in the k3s repo at the tag
-  criCtlVersion,
-  updateScript ? null,
 }:
 
 # k3s is a kinda weird derivation. One of the main points of k3s is the
