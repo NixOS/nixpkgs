@@ -7785,6 +7785,8 @@ self: super: with self; {
 
   pysbd = callPackage ../development/python-modules/pysbd { };
 
+  pysequoia = callPackage ../development/python-modules/pysequoia { };
+
   pyschemes = callPackage ../development/python-modules/pyschemes { };
 
   pyschlage = callPackage ../development/python-modules/pyschlage { };
@@ -11103,8 +11105,6 @@ self: super: with self; {
   seqdiag = callPackage ../development/python-modules/seqdiag { };
 
   seqeval = callPackage ../development/python-modules/seqeval { };
-
-  sequoia = disabledIf isPyPy (toPythonModule pkgs.sequoi);
 
   serialio = callPackage ../development/python-modules/serialio { };
 
