@@ -176,7 +176,7 @@ in
     environment.systemPackages = [ config.networking.firewall.package ];
 
     boot = {
-      kernelModules = [ "nf_nat_ftp" ];
+      kernel.modules = [ "nf_nat_ftp" ];
       kernel.sysctl = {
         "net.ipv4.conf.all.forwarding" = mkOverride 99 true;
         "net.ipv4.conf.default.forwarding" = mkOverride 99 true;

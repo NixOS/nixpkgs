@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.netbird;
-  kernel = config.boot.kernelPackages;
+  kernel = config.boot.kernel.packages;
   interfaceName = "wt0";
 in {
   meta.maintainers = with maintainers; [ misuzu ];

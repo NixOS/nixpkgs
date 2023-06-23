@@ -1,6 +1,6 @@
 { config, lib, ... }:
 
-let kernel = config.boot.kernelPackages; in
+let kernel = config.boot.kernel.packages; in
 
 {
 
@@ -24,7 +24,7 @@ let kernel = config.boot.kernelPackages; in
 
   config = lib.mkIf config.hardware.nvidiaOptimus.disable {
     boot.blacklistedKernelModules = ["nouveau" "nvidia" "nvidiafb" "nvidia-drm"];
-    boot.kernelModules = [ "bbswitch" ];
+    boot.kernel.modules = [ "bbswitch" ];
     boot.extraModulePackages = [ kernel.bbswitch ];
 
     systemd.services.bbswitch = {

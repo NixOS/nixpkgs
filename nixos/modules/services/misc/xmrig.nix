@@ -52,7 +52,7 @@ with lib;
   };
 
   config = mkIf cfg.enable {
-    boot.kernelModules = [ "msr" ];
+    boot.kernel.modules = [ "msr" ];
 
     systemd.services.xmrig = {
       wantedBy = [ "multi-user.target" ];

@@ -58,7 +58,7 @@ in {
     })
     (mkIf cfg.boot.thin.enable {
       boot.initrd = {
-        kernelModules = [ "dm-snapshot" "dm-thin-pool" ];
+        kernel.modules = [ "dm-snapshot" "dm-thin-pool" ];
 
         systemd.initrdBin = lib.mkIf config.boot.initrd.services.lvm.enable [ pkgs.thin-provisioning-tools ];
 
@@ -84,7 +84,7 @@ in {
     (mkIf cfg.boot.vdo.enable {
       boot = {
         initrd = {
-          kernelModules = [ "kvdo" ];
+          kernel.modules = [ "kvdo" ];
 
           systemd.initrdBin = lib.mkIf config.boot.initrd.services.lvm.enable [ pkgs.vdo ];
 
@@ -102,7 +102,7 @@ in {
             done
           '';
         };
-        extraModulePackages = [ config.boot.kernelPackages.kvdo ];
+        extraModulePackages = [ config.boot.kernel.packages.kvdo ];
       };
 
       services.lvm.package = mkOverride 999 pkgs.lvm2_vdo;  # this overrides mkDefault

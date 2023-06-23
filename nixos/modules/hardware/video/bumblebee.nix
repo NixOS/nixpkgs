@@ -4,7 +4,7 @@ with lib;
 let
   cfg = config.hardware.bumblebee;
 
-  kernel = config.boot.kernelPackages;
+  kernel = config.boot.kernel.packages;
 
   useNvidia = cfg.driver == "nvidia";
 
@@ -76,7 +76,7 @@ in
 
   config = mkIf cfg.enable {
     boot.blacklistedKernelModules = [ "nvidia-drm" "nvidia" "nouveau" ];
-    boot.kernelModules = optional useBbswitch "bbswitch";
+    boot.kernel.modules = optional useBbswitch "bbswitch";
     boot.extraModulePackages = optional useBbswitch kernel.bbswitch ++ optional useNvidia kernel.nvidia_x11.bin;
 
     environment.systemPackages = [ bumblebee primus ];

@@ -8,7 +8,7 @@ import ./make-test-python.nix ({ lib, ... }:
 
   nodes = {
     qemuGuest = { lib, ... }: {
-      boot.kernelModules = [ "ptp_kvm" ];
+      boot.kernel.modules = [ "ptp_kvm" ];
 
       services.chrony = {
         enable = true;

@@ -28,9 +28,9 @@ import ./make-test-python.nix ({ pkgs, ... } : {
         };
       };
       boot.extraModulePackages =
-        optional (versionOlder config.boot.kernelPackages.kernel.version "5.6")
-          config.boot.kernelPackages.wireguard;
-      boot.kernelModules = [ "wireguard" ];
+        optional (versionOlder config.boot.kernel.packages.kernel.version "5.6")
+          config.boot.kernel.packages.wireguard;
+      boot.kernel.modules = [ "wireguard" ];
     };
 
   testScript =

@@ -10,7 +10,7 @@ with lib;
   };
 
   config = mkIf config.programs.appgate-sdp.enable {
-    boot.kernelModules = [ "tun" ];
+    boot.kernel.modules = [ "tun" ];
     environment.systemPackages = [ pkgs.appgate-sdp ];
     services.dbus.packages = [ pkgs.appgate-sdp ];
     systemd = {

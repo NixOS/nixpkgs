@@ -13,7 +13,7 @@ in
 
     system.fsPackages = [ pkgs.reiserfsprogs ];
 
-    boot.initrd.kernelModules = mkIf inInitrd [ "reiserfs" ];
+    boot.initrd.kernel.modules = mkIf inInitrd [ "reiserfs" ];
 
     boot.initrd.extraUtilsCommands = mkIf (inInitrd && !config.boot.initrd.systemd.enable)
       ''

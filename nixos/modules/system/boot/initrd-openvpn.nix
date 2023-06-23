@@ -47,7 +47,7 @@ in
     ];
 
     # Add kernel modules needed for OpenVPN
-    boot.initrd.kernelModules = [ "tun" "tap" ];
+    boot.initrd.kernel.modules = [ "tun" "tap" ];
 
     # Add openvpn and ip binaries to the initrd
     # The shared libraries are required for DNS resolution

@@ -228,7 +228,7 @@ in
 
     environment.systemPackages = [ openvpn ];
 
-    boot.kernelModules = [ "tun" ];
+    boot.kernel.modules = [ "tun" ];
 
   };
 

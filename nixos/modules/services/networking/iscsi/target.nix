@@ -31,7 +31,7 @@ in
 
     environment.systemPackages = with pkgs; [ targetcli ];
 
-    boot.kernelModules = [ "configfs" "target_core_mod" "iscsi_target_mod" ];
+    boot.kernel.modules = [ "configfs" "target_core_mod" "iscsi_target_mod" ];
 
     systemd.services.iscsi-target = {
       enable = true;

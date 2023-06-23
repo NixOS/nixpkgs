@@ -74,7 +74,7 @@ in
 
   config = mkIf cfg.enable {
 
-    boot.kernelModules = [ "autofs4" ];
+    boot.kernel.modules = [ "autofs4" ];
 
     systemd.services.autofs =
       { description = "Automounts filesystems on demand";

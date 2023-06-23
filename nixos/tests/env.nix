@@ -6,7 +6,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
   nodes.machine = { pkgs, ... }:
     {
-      boot.kernelPackages = pkgs.linuxPackages;
+      boot.kernel.packages = pkgs.linuxPackages;
       environment.etc.plainFile.text = ''
         Hello World
       '';

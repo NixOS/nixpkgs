@@ -63,7 +63,7 @@ in {
         sof-firmware
         libreelec-dvb-firmware
       ] ++ optional pkgs.stdenv.hostPlatform.isAarch raspberrypiWirelessFirmware
-        ++ optionals (versionOlder config.boot.kernelPackages.kernel.version "4.13") [
+        ++ optionals (versionOlder config.boot.kernel.packages.kernel.version "4.13") [
         rtl8723bs-firmware
       ];
       hardware.wirelessRegulatoryDatabase = true;

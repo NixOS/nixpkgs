@@ -5,7 +5,7 @@ with lib;
 let
 
   cfg = config.virtualisation.anbox;
-  kernelPackages = config.boot.kernelPackages;
+  kernelPackages = config.boot.kernel.packages;
   addrOpts = v: addr: pref: name: {
     address = mkOption {
       default = addr;
@@ -67,7 +67,7 @@ in
   config = mkIf cfg.enable {
 
     assertions = singleton {
-      assertion = versionAtLeast (getVersion config.boot.kernelPackages.kernel) "4.18";
+      assertion = versionAtLeast (getVersion config.boot.kernel.packages.kernel) "4.18";
       message = "Anbox needs user namespace support to work properly";
     };
 

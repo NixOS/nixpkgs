@@ -9,7 +9,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
     imports = [ ../modules/profiles/minimal.nix ];
 
     # add a virtual wlan interface
-    boot.kernelModules = [ "mac80211_hwsim" ];
+    boot.kernel.modules = [ "mac80211_hwsim" ];
 
     # wireless access point
     services.hostapd = {

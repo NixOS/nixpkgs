@@ -33,7 +33,7 @@ in {
     environment.systemPackages = [ cfg.package ];
     services.udev.packages = [ cfg.package ];
 
-    boot.kernelModules = [ "i2c-dev" ]
+    boot.kernel.modules = [ "i2c-dev" ]
      ++ lib.optionals (cfg.motherboard == "amd") [ "i2c-piix4" ]
      ++ lib.optionals (cfg.motherboard == "intel") [ "i2c-i801" ];
 

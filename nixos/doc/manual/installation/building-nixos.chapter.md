@@ -48,10 +48,10 @@ file at `modules/installer/cd-dvd/installation-cd-graphical-gnome-macbook.nix`:
 {
   imports = [ ./installation-cd-graphical-gnome.nix ];
 
-  boot.initrd.kernelModules = [ "wl" ];
+  boot.initrd.kernel.modules = [ "wl" ];
 
-  boot.kernelModules = [ "kvm-intel" "wl" ];
-  boot.extraModulePackages = [ config.boot.kernelPackages.broadcom_sta ];
+  boot.kernel.modules = [ "kvm-intel" "wl" ];
+  boot.extraModulePackages = [ config.boot.kernel.packages.broadcom_sta ];
 }
 ```
 

@@ -106,7 +106,7 @@ in
       "net.ipv4.icmp_echo_ignore_all" = 1;
     };
 
-    boot.kernelModules = [ "tun" ];
+    boot.kernel.modules = [ "tun" ];
 
     systemd.services =
     let

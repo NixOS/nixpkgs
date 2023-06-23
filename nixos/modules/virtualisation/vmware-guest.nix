@@ -29,7 +29,7 @@ in
     } ];
 
     boot.initrd.availableKernelModules = [ "mptspi" ];
-    boot.initrd.kernelModules = [ "vmw_pvscsi" ];
+    boot.initrd.kernel.modules = [ "vmw_pvscsi" ];
 
     environment.systemPackages = [ open-vm-tools ];
 

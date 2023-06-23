@@ -3,7 +3,7 @@ import ../make-test-python.nix ({ pkgs, lib, kernelPackages ? null, nftables ? f
     wg-snakeoil-keys = import ./snakeoil-keys.nix;
     peer = import ./make-peer.nix { inherit lib; };
     commonConfig = {
-      boot.kernelPackages = lib.mkIf (kernelPackages != null) kernelPackages;
+      boot.kernel.packages = lib.mkIf (kernelPackages != null) kernelPackages;
       networking.nftables.enable = nftables;
       # Make sure iptables doesn't work with nftables enabled
       boot.blacklistedKernelModules = lib.mkIf nftables [ "nft_compat" ];

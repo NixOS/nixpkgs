@@ -3208,7 +3208,7 @@ let
         "${config.boot.initrd.systemd.package}/lib/systemd/systemd-networkd-wait-online"
         "${config.boot.initrd.systemd.package}/lib/systemd/systemd-network-generator"
       ];
-      kernelModules = [ "af_packet" ];
+      kernel.modules = [ "af_packet" ];
 
       systemd.services.nixos-flush-networkd = mkIf config.boot.initrd.network.flushBeforeStage2 {
         description = "Flush Network Configuration";

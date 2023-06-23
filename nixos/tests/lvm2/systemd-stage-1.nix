@@ -19,7 +19,7 @@
 
   extraConfig = {
     raid = {
-      boot.initrd.kernelModules = [
+      boot.initrd.kernel.modules = [
         "dm-raid"
         "raid0"
       ];

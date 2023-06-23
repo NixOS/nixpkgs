@@ -166,7 +166,7 @@ let
       mv etc/udev/hwdb.bin $out
     '';
 
-  compressFirmware = firmware: if (config.boot.kernelPackages.kernelAtLeast "5.3" && (firmware.compressFirmware or true)) then
+  compressFirmware = firmware: if (config.boot.kernel.packages.kernelAtLeast "5.3" && (firmware.compressFirmware or true)) then
     pkgs.compressFirmwareXz firmware
   else
     id firmware;

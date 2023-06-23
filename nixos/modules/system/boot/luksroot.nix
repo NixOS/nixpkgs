@@ -4,7 +4,7 @@ with lib;
 
 let
   luks = config.boot.initrd.luks;
-  kernelPackages = config.boot.kernelPackages;
+  kernelPackages = config.boot.kernel.packages;
   defaultPrio = (mkOptionDefault {}).priority;
 
   commonFunctions = ''

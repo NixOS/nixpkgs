@@ -61,7 +61,7 @@ let
       # device to appear as a reference clock, synchronized to the host clock.
       # Because CockroachDB *requires* a time-synchronization mechanism for
       # the system time in a cluster scenario, this is necessary to work.
-      boot.kernelModules = [ "ptp_kvm" ];
+      boot.kernel.modules = [ "ptp_kvm" ];
 
       # Enable and configure Chrony, using the given virtualized clock passed
       # through by KVM.

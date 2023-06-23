@@ -24,7 +24,7 @@ in
 
       # Create a virtual sound device, with mixing
       # and all, for recording audio.
-      boot.kernelModules = [ "snd-aloop" ];
+      boot.kernel.modules = [ "snd-aloop" ];
       sound.enable = true;
       sound.extraConfig = ''
         pcm.!default {

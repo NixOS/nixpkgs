@@ -6,7 +6,7 @@ let
 
   enabled = elem "displaylink" config.services.xserver.videoDrivers;
 
-  evdi = config.boot.kernelPackages.evdi;
+  evdi = config.boot.kernel.packages.evdi;
 
   displaylink = pkgs.displaylink.override {
     inherit evdi;
@@ -19,7 +19,7 @@ in
   config = mkIf enabled {
 
     boot.extraModulePackages = [ evdi ];
-    boot.kernelModules = [ "evdi" ];
+    boot.kernel.modules = [ "evdi" ];
 
     environment.etc."X11/xorg.conf.d/40-displaylink.conf".text = ''
       Section "OutputClass"

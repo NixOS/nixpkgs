@@ -53,10 +53,10 @@ in
     (mkIf enableBtrfs {
       system.fsPackages = [ pkgs.btrfs-progs ];
 
-      boot.initrd.kernelModules = mkIf inInitrd [ "btrfs" ];
+      boot.initrd.kernel.modules = mkIf inInitrd [ "btrfs" ];
       boot.initrd.availableKernelModules = mkIf inInitrd (
         [ "crc32c" ]
-        ++ optionals (config.boot.kernelPackages.kernel.kernelAtLeast "5.5") [
+        ++ optionals (config.boot.kernel.packages.kernel.kernelAtLeast "5.5") [
           # Needed for mounting filesystems with new checksums
           "xxhash_generic"
           "blake2b_generic"

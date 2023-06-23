@@ -6,7 +6,7 @@ let
 
   cfg = config.powerManagement.scsiLinkPolicy;
 
-  kernel = config.boot.kernelPackages.kernel;
+  kernel = config.boot.kernel.packages.kernel;
 
   allowedValues = [
     "min_power"

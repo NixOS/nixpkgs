@@ -3,7 +3,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
 
   nodes.machine = { pkgs, ... }: {
     boot.initrd.systemd.enable = true;
-    boot.initrd.kernelModules = [ "loop" ]; # Load module in initrd.
+    boot.initrd.kernel.modules = [ "loop" ]; # Load module in initrd.
     boot.extraModprobeConfig = ''
       options loop max_loop=42
     '';

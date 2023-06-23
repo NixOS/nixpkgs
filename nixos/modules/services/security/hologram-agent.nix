@@ -33,7 +33,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    boot.kernelModules = [ "dummy" ];
+    boot.kernel.modules = [ "dummy" ];
 
     networking.interfaces.dummy0.ipv4.addresses = [
       { address = "169.254.169.254"; prefixLength = 32; }

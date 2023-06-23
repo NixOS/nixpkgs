@@ -7,7 +7,7 @@ with lib;
 let
 
   cfg = config.virtualisation.virtualbox.guest;
-  kernel = config.boot.kernelPackages;
+  kernel = config.boot.kernel.packages;
 
 in
 

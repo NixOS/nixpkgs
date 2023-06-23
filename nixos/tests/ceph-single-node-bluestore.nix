@@ -47,7 +47,7 @@ let
       xfsprogs
     ];
 
-    boot.kernelModules = [ "xfs" ];
+    boot.kernel.modules = [ "xfs" ];
 
     services.ceph = cephConfig;
   };

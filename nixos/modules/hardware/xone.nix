@@ -12,7 +12,7 @@ in
   config = mkIf cfg.enable {
     boot = {
       blacklistedKernelModules = [ "xpad" "mt76x2u" ];
-      extraModulePackages = with config.boot.kernelPackages; [ xone ];
+      extraModulePackages = with config.boot.kernel.packages; [ xone ];
     };
     hardware.firmware = [ pkgs.xow_dongle-firmware ];
   };

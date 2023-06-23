@@ -5,8 +5,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     boot.extraModulePackages = let
       compileKernelModule = name: source: pkgs.runCommandCC name rec {
         inherit source;
-        kdev = config.boot.kernelPackages.kernel.dev;
-        kver = config.boot.kernelPackages.kernel.modDirVersion;
+        kdev = config.boot.kernel.packages.kernel.dev;
+        kver = config.boot.kernel.packages.kernel.modDirVersion;
         ksrc = "${kdev}/lib/modules/${kver}/build";
         hardeningDisable = [ "pic" ];
         nativeBuildInputs = kdev.moduleBuildDependencies;
@@ -67,7 +67,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
     in lib.singleton kcanary;
 
-    boot.initrd.kernelModules = [ "kcanary" ];
+    boot.initrd.kernel.modules = [ "kcanary" ];
 
     boot.initrd.extraUtilsCommands = let
       compile = name: source: pkgs.runCommandCC name { inherit source; } ''

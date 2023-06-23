@@ -93,12 +93,12 @@ let
 
   needMakefs = lib.any (fs: fs.autoFormat) fileSystems;
 
-  kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
+  kernel-name = config.boot.kernel.packages.kernel.name or "kernel";
   modulesTree = config.system.modulesTree.override { name = kernel-name + "-modules"; };
   firmware = config.hardware.firmware;
   # Determine the set of modules that we need to mount the root FS.
   modulesClosure = pkgs.makeModulesClosure {
-    rootModules = config.boot.initrd.availableKernelModules ++ config.boot.initrd.kernelModules;
+    rootModules = config.boot.initrd.availableKernelModules ++ config.boot.initrd.kernel.modules;
     kernel = modulesTree;
     firmware = firmware;
     allowMissing = false;
@@ -371,7 +371,7 @@ in {
         "/lib/modules".source = "${modulesClosure}/lib/modules";
         "/lib/firmware".source = "${modulesClosure}/lib/firmware";
 
-        "/etc/modules-load.d/nixos.conf".text = concatStringsSep "\n" config.boot.initrd.kernelModules;
+        "/etc/modules-load.d/nixos.conf".text = concatStringsSep "\n" config.boot.initrd.kernel.modules;
 
         # We can use either ! or * to lock the root account in the
         # console, but some software like OpenSSH won't even allow you

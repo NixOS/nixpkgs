@@ -24,7 +24,7 @@ let
       '';
       boot.initrd.compressor = compressor;
       # zstd compression is only supported from 5.9 onwards. Remove when 5.10 becomes default.
-      boot.kernelPackages = pkgs.linuxPackages_latest;
+      boot.kernel.packages = pkgs.linuxPackages_latest;
     };
 
     testScript = ''

@@ -15,7 +15,7 @@ with lib;
     maintainers = [ maintainers.joachifm maintainers.emily ];
   };
 
-  boot.kernelPackages = mkDefault pkgs.linuxPackages_hardened;
+  boot.kernel.packages = mkDefault pkgs.linuxPackages_hardened;
 
   nix.settings.allowed-users = mkDefault [ "@users" ];
 

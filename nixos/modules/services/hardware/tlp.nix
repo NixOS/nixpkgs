@@ -47,7 +47,7 @@ in
 
   ###### implementation
   config = mkIf cfg.enable {
-    boot.kernelModules = [ "msr" ];
+    boot.kernel.modules = [ "msr" ];
 
     warnings = optional (cfg.extraConfig != "") ''
       Using config.services.tlp.extraConfig is deprecated and will become unsupported in a future release. Use config.services.tlp.settings instead.

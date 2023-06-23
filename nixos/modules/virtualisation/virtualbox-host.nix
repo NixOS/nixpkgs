@@ -10,7 +10,7 @@ let
     extensionPack = if cfg.enableExtensionPack then pkgs.virtualboxExtpack else null;
   };
 
-  kernelModules = config.boot.kernelPackages.virtualbox.override {
+  kernelModules = config.boot.kernel.packages.virtualbox.override {
     inherit virtualbox;
   };
 
@@ -93,7 +93,7 @@ in
   config = mkIf cfg.enable (mkMerge [{
     warnings = mkIf (config.nixpkgs.config.virtualbox.enableExtensionPack or false)
       ["'nixpkgs.virtualbox.enableExtensionPack' has no effect, please use 'virtualisation.virtualbox.host.enableExtensionPack'"];
-    boot.kernelModules = [ "vboxdrv" "vboxnetadp" "vboxnetflt" ];
+    boot.kernel.modules = [ "vboxdrv" "vboxnetadp" "vboxnetflt" ];
     boot.extraModulePackages = [ kernelModules ];
     environment.systemPackages = [ virtualbox ];
 

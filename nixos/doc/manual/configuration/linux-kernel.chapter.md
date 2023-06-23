@@ -1,11 +1,11 @@
 # Linux Kernel {#sec-kernel-config}
 
 You can override the Linux kernel and associated packages using the
-option `boot.kernelPackages`. For instance, this selects the Linux 3.10
+option `boot.kernel.packages`. For instance, this selects the Linux 3.10
 kernel:
 
 ```nix
-boot.kernelPackages = pkgs.linuxKernel.packages.linux_3_10;
+boot.kernel.packages = pkgs.linuxKernel.packages.linux_3_10;
 ```
 
 Note that this not only replaces the kernel, but also packages that are
@@ -56,17 +56,17 @@ something as a kernel module).
 
 Kernel modules for hardware devices are generally loaded automatically
 by `udev`. You can force a module to be loaded via
-[](#opt-boot.kernelModules), e.g.
+[](#opt-boot.kernel.modules), e.g.
 
 ```nix
-boot.kernelModules = [ "fuse" "kvm-intel" "coretemp" ];
+boot.kernel.modules = [ "fuse" "kvm-intel" "coretemp" ];
 ```
 
 If the module is required early during the boot (e.g. to mount the root
-file system), you can use [](#opt-boot.initrd.kernelModules):
+file system), you can use [](#opt-boot.initrd.kernel.modules):
 
 ```nix
-boot.initrd.kernelModules = [ "cifs" ];
+boot.initrd.kernel.modules = [ "cifs" ];
 ```
 
 This causes the specified modules and their dependencies to be added to
@@ -108,7 +108,7 @@ affect the generated configuration. You can also build a custom version of Linux
 To use your custom kernel package in your NixOS configuration, set
 
 ```nix
-boot.kernelPackages = pkgs.linuxPackagesFor yourCustomKernel;
+boot.kernel.packages = pkgs.linuxPackagesFor yourCustomKernel;
 ```
 
 Note that this method will use the common configuration defined in `pkgs/os-specific/linux/kernel/common-config.nix`,
@@ -167,7 +167,7 @@ version *that is supported by ZFS* like this:
 
 ```nix
 {
-  boot.kernelPackages = pkgs.zfs.latestCompatibleLinuxPackages;
+  boot.kernel.packages = pkgs.zfs.latestCompatibleLinuxPackages;
 }
 ```
 

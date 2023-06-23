@@ -3,7 +3,7 @@
 with lib;
 
 let
-  cpupower = config.boot.kernelPackages.cpupower;
+  cpupower = config.boot.kernel.packages.cpupower;
   cfg = config.powerManagement;
 in
 
@@ -65,7 +65,7 @@ in
     in
     mkIf enable {
 
-      boot.kernelModules = optional governorEnable "cpufreq_${cfg.cpuFreqGovernor}";
+      boot.kernel.modules = optional governorEnable "cpufreq_${cfg.cpuFreqGovernor}";
 
       environment.systemPackages = [ cpupower ];
 

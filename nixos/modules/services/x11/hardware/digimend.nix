@@ -6,7 +6,7 @@ let
 
   cfg = config.services.xserver.digimend;
 
-  pkg = config.boot.kernelPackages.digimend;
+  pkg = config.boot.kernel.packages.digimend;
 
 in
 

@@ -42,7 +42,7 @@ merged last, so for list-type options, it will appear at the end of the
 merged list. If you want it to appear first, you can use `mkBefore`:
 
 ```nix
-boot.kernelModules = mkBefore [ "kvm-intel" ];
+boot.kernel.modules = mkBefore [ "kvm-intel" ];
 ```
 
 This causes the `kvm-intel` kernel module to be loaded before any other
@@ -98,7 +98,7 @@ out:
 $ nixos-option services.xserver.enable
 true
 
-$ nixos-option boot.kernelModules
+$ nixos-option boot.kernel.modules
 [ "tun" "ipv6" "loop" ... ]
 ```
 

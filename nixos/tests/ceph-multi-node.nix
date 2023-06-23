@@ -51,7 +51,7 @@ let
       libressl.nc
     ];
 
-    boot.kernelModules = [ "xfs" ];
+    boot.kernel.modules = [ "xfs" ];
 
     services.ceph = cephConfig;
   };

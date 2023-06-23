@@ -13,7 +13,7 @@ in
 
     system.fsPackages = [ pkgs.dosfstools pkgs.mtools ];
 
-    boot.initrd.kernelModules = mkIf inInitrd [ "vfat" "nls_cp437" "nls_iso8859-1" ];
+    boot.initrd.kernel.modules = mkIf inInitrd [ "vfat" "nls_cp437" "nls_iso8859-1" ];
 
     boot.initrd.extraUtilsCommands = mkIf (inInitrd && !config.boot.initrd.systemd.enable)
       ''

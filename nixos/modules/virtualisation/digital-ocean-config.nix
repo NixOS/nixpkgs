@@ -39,8 +39,8 @@ with lib;
       boot = {
         growPartition = true;
         kernelParams = [ "console=ttyS0" "panic=1" "boot.panic_on_fail" ];
-        initrd.kernelModules = [ "virtio_scsi" ];
-        kernelModules = [ "virtio_pci" "virtio_net" ];
+        initrd.kernel.modules = [ "virtio_scsi" ];
+        kernel.modules = [ "virtio_pci" "virtio_net" ];
         loader = {
           grub.device = "/dev/vda";
           timeout = 0;

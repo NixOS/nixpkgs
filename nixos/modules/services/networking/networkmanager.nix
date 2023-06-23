@@ -528,7 +528,7 @@ in {
       }
     ];
 
-    boot.kernelModules = [ "ctr" ];
+    boot.kernel.modules = [ "ctr" ];
 
     security.polkit.enable = true;
     security.polkit.extraConfig = polkitConf;

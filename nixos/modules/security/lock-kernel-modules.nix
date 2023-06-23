@@ -15,13 +15,13 @@ with lib;
         Disable kernel module loading once the system is fully initialised.
         Module loading is disabled until the next reboot. Problems caused
         by delayed module loading can be fixed by adding the module(s) in
-        question to {option}`boot.kernelModules`.
+        question to {option}`boot.kernel.modules`.
       '';
     };
   };
 
   config = mkIf config.security.lockKernelModules {
-    boot.kernelModules = concatMap (x:
+    boot.kernel.modules = concatMap (x:
       if x.device != null
         then
           if x.fsType == "vfat"

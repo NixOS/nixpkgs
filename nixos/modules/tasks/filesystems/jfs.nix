@@ -10,7 +10,7 @@ in
 
     system.fsPackages = [ pkgs.jfsutils ];
 
-    boot.initrd.kernelModules = mkIf inInitrd [ "jfs" ];
+    boot.initrd.kernel.modules = mkIf inInitrd [ "jfs" ];
 
     boot.initrd.extraUtilsCommands = mkIf (inInitrd && !config.boot.initrd.systemd.enable) ''
       copy_bin_and_libs ${pkgs.jfsutils}/sbin/fsck.jfs

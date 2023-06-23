@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.hardware.openrazer;
-  kernelPackages = config.boot.kernelPackages;
+  kernelPackages = config.boot.kernel.packages;
 
   toPyBoolStr = b: if b then "True" else "False";
 
@@ -108,7 +108,7 @@ in
 
   config = mkIf cfg.enable {
     boot.extraModulePackages = [ kernelPackages.openrazer ];
-    boot.kernelModules = drivers;
+    boot.kernel.modules = drivers;
 
     # Makes the man pages available so you can successfully run
     # > systemctl --user help openrazer-daemon

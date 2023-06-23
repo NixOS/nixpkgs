@@ -33,9 +33,9 @@ in
 
       package = mkOption {
         type = types.nullOr types.package;
-        default = config.boot.kernelPackages.prl-tools;
-        defaultText = "config.boot.kernelPackages.prl-tools";
-        example = literalExpression "config.boot.kernelPackages.prl-tools";
+        default = config.boot.kernel.packages.prl-tools;
+        defaultText = "config.boot.kernel.packages.prl-tools";
+        example = literalExpression "config.boot.kernel.packages.prl-tools";
         description = lib.mdDoc ''
           Defines which package to use for prl-tools. Override to change the version.
         '';
@@ -52,7 +52,7 @@ in
 
     boot.extraModulePackages = [ prl-tools ];
 
-    boot.kernelModules = [ "prl_fs" "prl_fs_freeze" "prl_tg" ]
+    boot.kernel.modules = [ "prl_fs" "prl_fs_freeze" "prl_tg" ]
       ++ optional (pkgs.stdenv.hostPlatform.system == "aarch64-linux") "prl_notifier";
 
     services.timesyncd.enable = false;

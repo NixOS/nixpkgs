@@ -47,9 +47,9 @@ in
     boot.zfs.devNodes = mkIf cfg.zfs.enable "/dev/";
 
     boot.extraModulePackages = [
-      config.boot.kernelPackages.ena
+      config.boot.kernel.packages.ena
     ];
-    boot.initrd.kernelModules = [ "xen-blkfront" ];
+    boot.initrd.kernel.modules = [ "xen-blkfront" ];
     boot.initrd.availableKernelModules = [ "nvme" ];
     boot.kernelParams = [ "console=ttyS0,115200n8" "random.trust_cpu=on" ];
 
