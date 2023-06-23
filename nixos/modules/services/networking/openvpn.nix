@@ -39,8 +39,12 @@ let
         ${cfg.down}
       '';
 
-      upScriptOption = optionalString (cfg.up != "" || cfg.updateResolvConf) "up ${pkgs.writeShellScript "openvpn-${name}-up" upScript}";
-      downScriptOption = optionalString (cfg.down != "" || cfg.updateResolvConf) "down ${pkgs.writeShellScript "openvpn-${name}-down" downScript}";
+      hasUpScript = (cfg.up != "");
+      hasDownScript = (cfg.down != "");
+
+
+      upScriptOption = optionalString (hasUpScript || cfg.updateResolvConf) "up ${pkgs.writeShellScript "openvpn-${name}-up" upScript}";
+      downScriptOption = optionalString (hasDownScript || cfg.updateResolvConf) "down ${pkgs.writeShellScript "openvpn-${name}-down" downScript}";
 
       authUserPassUnsafeOption = optionalString (cfg.authUserPass != null) "auth-user-pass ${pkgs.writeText "openvpn-credentials-${name}" ''
             ${cfg.authUserPass.username}
@@ -54,7 +58,7 @@ let
       configFile = pkgs.writeText "openvpn-config-${name}"
         ''
           errors-to-stderr
-          ${optionalString (cfg.up != "" || cfg.down != "" || cfg.updateResolvConf) "script-security 2"}
+          ${optionalString (hasUpScript || hasDownScript || cfg.updateResolvConf) "script-security 2"}
           ${cfg.config}
           ${upScriptOption}
           ${downScriptOption}
