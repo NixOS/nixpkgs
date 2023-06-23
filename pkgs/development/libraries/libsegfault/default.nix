@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     description = "Implementation of libSegFault.so with Boost.stracktrace";
     homepage = "https://github.com/jonathanpoelen/libsegfault";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }
