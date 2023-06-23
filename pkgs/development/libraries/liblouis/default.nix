@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21Plus # library
       gpl3Plus # tools
     ];
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 })
