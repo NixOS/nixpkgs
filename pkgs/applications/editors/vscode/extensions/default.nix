@@ -880,8 +880,8 @@ let
         mktplcRef = {
           name = "vscode-eslint";
           publisher = "dbaeumer";
-          version = "2.4.0";
-          sha256 = "sha256-7MUQJkLPOF3oO0kpmfP3bWbS3aT7J0RF7f74LW55BQs=";
+          version = "2.4.2";
+          sha256 = "sha256-eIjaiVQ7PNJUtOiZlM+lw6VmW07FbMWPtY7UoedWtbw=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/dbaeumer.vscode-eslint/changelog";
