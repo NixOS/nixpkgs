@@ -17400,6 +17400,9 @@ with pkgs;
   pythonInterpreters = callPackage ./../development/interpreters/python { };
   inherit (pythonInterpreters) python27 python38 python39 python310 python311 python312 python3Minimal pypy27 pypy39 pypy38 pypy37 rustpython;
 
+  python310_regc = callPackage ./../development/interpreters/python/regcpython/3-10.nix { };
+  python3_regc = python310_regc;
+
   # List of extensions with overrides to apply to all Python package sets.
   pythonPackagesExtensions = [ ];
   # Python package sets.
