@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "vcluster";
-  version = "0.15.1";
+  version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "loft-sh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-RsaEeWK8jEDolHH0FNFKGrvRDPreAu2/rkXqqYIxH1s=";
+    sha256 = "sha256-xXeNWLhaCjOqKYJWshosStuAGy43Ur2Kp7xSY6KKcqw=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   subPackages = [ "cmd/vclusterctl" ];
 
