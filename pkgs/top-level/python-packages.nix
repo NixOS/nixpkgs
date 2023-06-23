@@ -1739,6 +1739,8 @@ self: super: with self; {
 
   celery-singleton = callPackage ../development/python-modules/celery-singleton { };
 
+  celery-types = callPackage ../development/python-modules/celery-types { };
+
   cement = callPackage ../development/python-modules/cement { };
 
   cemm = callPackage ../development/python-modules/cemm { };
