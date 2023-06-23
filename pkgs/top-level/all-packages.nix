@@ -2031,6 +2031,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation;
   };
 
+  git-credential-manager = callPackage ../applications/version-management/git-credential-manager { };
+
   git-credential-oauth = callPackage ../applications/version-management/git-credential-oauth { };
 
   git-crypt = callPackage ../applications/version-management/git-crypt { };
@@ -3469,6 +3471,8 @@ with pkgs;
   fastmod = callPackage ../tools/text/fastmod {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  fedifetcher = callPackage ../tools/misc/fedifetcher { };
 
   fitnesstrax = callPackage ../applications/misc/fitnesstrax { };
 

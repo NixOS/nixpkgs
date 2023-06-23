@@ -1,25 +1,34 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, stdenv
+, xorg
+, darwin
 , testers
 , src-cli
 }:
 
 buildGoModule rec {
   pname = "src-cli";
-  version = "5.0.3";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "sourcegraph";
     repo = "src-cli";
     rev = version;
-    hash = "sha256-KqCH4f9QPfr/Hm4phR9qeCV925RkOawGnbCx8wz/QwE=";
+    hash = "sha256-sN6Ea1kJce8Jqy8YrkWzDrQDrmA8F+UYz7ZuqfdbnJ4=";
   };
 
-  vendorHash = "sha256-NMLrBYGscZexnR43I4Ku9aqzJr38z2QAnZo0RouHFrc=";
+  vendorHash = "sha256-A533f+FfEzU2TlNwHkD8gjeQYRATz85cCCmqLdl9290=";
 
   subPackages = [
     "cmd/src"
+  ];
+
+  buildInputs = lib.optionals stdenv.isLinux [
+    xorg.libX11
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Cocoa
   ];
 
   ldflags = [
