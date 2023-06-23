@@ -40,7 +40,7 @@ let
       '';
 
       upScriptOption = optionalString (cfg.up != "" || cfg.updateResolvConf) "up ${pkgs.writeShellScript "openvpn-${name}-up" upScript}";
-P     downScriptOption = optionalString (cfg.down != "" || cfg.updateResolvConf) "down ${pkgs.writeShellScript "openvpn-${name}-down" downScript}";
+      downScriptOption = optionalString (cfg.down != "" || cfg.updateResolvConf) "down ${pkgs.writeShellScript "openvpn-${name}-down" downScript}";
 
       authUserPassUnsafeOption = optionalString (cfg.authUserPass != null) "auth-user-pass ${pkgs.writeText "openvpn-credentials-${name}" ''
             ${cfg.authUserPass.username}
