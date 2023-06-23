@@ -172,7 +172,7 @@ stdenvNoCC.mkDerivation (args // {
 
   passthru = {
     inherit nuget-source;
-
+  } // lib.optionalAttrs (nugetDepsFile != null) {
     fetch-deps =
       let
         flags = dotnetFlags ++ dotnetRestoreFlags;
