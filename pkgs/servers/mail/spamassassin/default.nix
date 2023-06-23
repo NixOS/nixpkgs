@@ -1,4 +1,14 @@
-{ lib, fetchurl, perlPackages, makeWrapper, gnupg, re2c, gcc, gnumake }:
+{ lib
+, fetchurl
+, perlPackages
+, makeWrapper
+, gnupg
+, re2c
+, gcc
+, gnumake
+, runCommand
+, spamassassin
+}:
 
 perlPackages.buildPerlPackage rec {
   pname = "SpamAssassin";
@@ -38,6 +48,17 @@ perlPackages.buildPerlPackage rec {
     for n in "$out/bin/"*; do
       wrapProgram "$n" --prefix PERL5LIB : "$PERL5LIB" --prefix PATH : ${lib.makeBinPath [ gnupg re2c gcc gnumake ]}
     done
+  '';
+
+  passthru.tests.smoke-test = runCommand "spamassassin-smoke-test"
+    {
+      nativeBuildInputs = [ spamassassin ];
+    } ''
+    sa-compile \
+      -C ${spamassassin}/share/spamassassin \
+      --updatedir /tmp \
+      --siteconfigpath /tmp \
+      --cf 'body TEST_RULE /test/'
   '';
 
   meta = {
