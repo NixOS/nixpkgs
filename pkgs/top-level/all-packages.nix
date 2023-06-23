@@ -17815,6 +17815,8 @@ with pkgs;
     llvmPackages = llvmPackages_14;
   };
 
+  csharp-language-server = callPackage ../development/tools/language-servers/csharp-language-server { };
+
   docker-compose-language-service = callPackage ../development/tools/language-servers/docker-compose-language-service { };
 
   dot-language-server = callPackage ../development/tools/language-servers/dot-language-server { };
