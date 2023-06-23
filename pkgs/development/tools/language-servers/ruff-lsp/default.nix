@@ -53,6 +53,11 @@ buildPythonPackage rec {
   makeWrapperArgs = [
     # prefer ruff from user's PATH, that's usually desired behavior
     "--suffix PATH : ${lib.makeBinPath [ ruff ]}"
+
+    # Unset ambient PYTHONPATH in the wrapper, so ruff-lsp only ever runs with
+    # its own, isolated set of dependencies. This works because the correct
+    # PYTHONPATH is set in the Python script, which runs after the wrapper.
+    "--unset PYTHONPATH"
   ];
 
   meta = with lib; {
