@@ -190,6 +190,13 @@ stdenv.mkDerivation (finalAttrs: {
     ./0017-core-don-t-taint-on-unmerged-usr.patch
     ./0018-tpm2_context_init-fix-driver-name-checking.patch
     ./0019-bootctl-also-print-efi-files-not-owned-by-systemd-in.patch
+
+    # https://github.com/systemd/systemd/pull/28000
+    (fetchpatch {
+      name = "fix-service-exit";
+      url = "https://github.com/systemd/systemd/commit/5f7f82ba625ee48d662c1f0286f44b8b0918d05d.patch";
+      sha256 = "sha256-pFRXpZjeVl5ZG/mOjHEuMg9zXq4Orwvdp+/LYTbR09I=";
+    })
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {

@@ -116,6 +116,9 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
     cp EXTERNAL_HEADERS/Availability*.h $out/System/Library/Frameworks/Kernel.framework/Versions/A/Headers/
     cp -r EXTERNAL_HEADERS/corecrypto $out/include
 
+    # These headers are needed by Libsystem.
+    cp libsyscall/wrappers/{spawn/spawn.h,libproc/libproc.h} $out/include
+
     # Build the mach headers we crave
     export SRCROOT=$PWD/libsyscall
     export DERIVED_SOURCES_DIR=$out/include

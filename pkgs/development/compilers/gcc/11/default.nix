@@ -58,7 +58,6 @@ let majorVersion = "11";
     patches = [
       # Fix https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80431
       ../fix-bug-80431.patch
-      ../install-info-files-serially.patch
     ] ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       ++ optional (noSysDirs && hostPlatform.isRiscV) ../no-sys-dirs-riscv.patch
@@ -252,6 +251,9 @@ lib.pipe (stdenv.mkDerivation ({
     let target = lib.optionalString (profiledCompiler) "profiled"
       + lib.optionalString (targetPlatform == hostPlatform && hostPlatform == buildPlatform && !disableBootstrap) "bootstrap";
     in lib.optional (target != "") target;
+
+  # https://gcc.gnu.org/PR109898
+  enableParallelInstalling = false;
 
   inherit (callFile ../common/strip-attributes.nix { })
     stripDebugList
