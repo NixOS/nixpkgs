@@ -36,7 +36,7 @@ let
         echo "${metadata}" | base64 --decode > $out/metadata.json
       '';
     };
-    nativeBuildInputs = with pkgs; [ buildPackages.glib ];
+    nativeBuildInputs = with pkgs; [ glib ];
     buildPhase = ''
       runHook preBuild
       if [ -d schemas ]; then

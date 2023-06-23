@@ -41,15 +41,12 @@ stdenv.mkDerivation rec {
     runHook postPatch
   '';
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
-
   buildInputs = [
     bison
     curl
     file
     flex
+    makeWrapper
     perl
     texinfo
     unzip

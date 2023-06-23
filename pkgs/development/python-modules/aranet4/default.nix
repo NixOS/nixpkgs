@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "aranet4";
-  version = "2.2.0";
+  version = "2.1.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "Anrijs";
     repo = "Aranet4-Python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-u2KLs+j8MvJhyX8rpMjd1uwPSD8hkCbhOL7Y/FqbwTM=";
+    hash = "sha256-5q4eOC9iuN8pUmDsiQ7OwEXkxi4KdL+bhGVjlQlTBAg=";
   };
 
   propagatedBuildInputs = [
@@ -32,11 +32,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "aranet4"
-  ];
-
-  disabledTests = [
-    # Test compares rendered output
-    "test_current_values"
   ];
 
   meta = with lib; {

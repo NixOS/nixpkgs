@@ -1,31 +1,8 @@
-{
-  lib,
-  stdenv,
-  curl,
-  jq,
-  htmlq,
-  xorg,
-  alsa-lib,
-  freetype,
-  p7zip,
-  autoPatchelfHook,
-  writeShellScript,
-  zlib,
-  libjack2,
-  makeWrapper,
-}: let
+{ lib, stdenv, curl, jq, htmlq, xorg, alsa-lib, freetype, p7zip, autoPatchelfHook, writeShellScript, zlib, libjack2, makeWrapper, }: 
+let
   versionForFile = v: builtins.replaceStrings ["."] [""] v;
 
-  mkPianoteq = {
-    name,
-    src,
-    version,
-    archdir ?
-      if (stdenv.hostPlatform.system == "aarch64-linux")
-      then "arm-64bit"
-      else "x86-64bit",
-    ...
-  }:
+  mkPianoteq = { name, src, version, archdir ? if (stdenv.hostPlatform.system == "aarch64-linux") then "arm-64bit" else "x86-64bit", ... }:
     stdenv.mkDerivation rec {
       inherit src version;
 
@@ -76,12 +53,7 @@
       };
     };
 
-  fetchWithCurlScript = {
-    name,
-    sha256,
-    script,
-    impureEnvVars ? [],
-  }:
+  fetchWithCurlScript = { name, sha256, script, impureEnvVars ? [], }:
     stdenv.mkDerivation {
       inherit name;
       builder = writeShellScript "builder.sh" ''
@@ -108,23 +80,17 @@
         ${script}
 
       '';
-      nativeBuildInputs = [curl];
+      nativeBuildInputs = [ curl ];
       outputHashAlgo = "sha256";
       outputHash = sha256;
 
-      impureEnvVars =
-        lib.fetchers.proxyImpureEnvVars
-        ++ impureEnvVars
-        ++ [
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ impureEnvVars ++ [
           # This variable allows the user to pass additional options to curl
           "NIX_CURL_FLAGS"
         ];
     };
 
-  fetchPianoteqTrial = {
-    name,
-    sha256,
-  }:
+  fetchPianoteqTrial = { name, sha256, }:
     fetchWithCurlScript {
       inherit name sha256;
       script = ''
@@ -157,10 +123,7 @@
       '';
     };
 
-  fetchPianoteqWithLogin = {
-    name,
-    sha256,
-  }:
+  fetchPianoteqWithLogin = { name, sha256, }:
     fetchWithCurlScript {
       inherit name sha256;
 
@@ -270,5 +233,4 @@ in {
       sha256 = "vWvo+ctJ0yN6XeJZZVhA3Ul9eWJWAh7Qo54w0TpOiVw=";
     };
   };
-  # TODO other paid binaries, I don't own that so I don't know their hash.
 }

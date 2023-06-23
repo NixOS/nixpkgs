@@ -114,28 +114,6 @@ waitDevice() {
     done
 }
 
-# Create the mount point if required.
-makeMountPoint() {
-    local device="$1"
-    local mountPoint="$2"
-    local options="$3"
-
-    local IFS=,
-
-    # If we're bind mounting a file, the mount point should also be a file.
-    if ! [ -d "$device" ]; then
-        for opt in $options; do
-            if [ "$opt" = bind ] || [ "$opt" = rbind ]; then
-                mkdir -p "$(dirname "/mnt-root$mountPoint")"
-                touch "/mnt-root$mountPoint"
-                return
-            fi
-        done
-    fi
-
-    mkdir -m 0755 -p "/mnt-root$mountPoint"
-}
-
 # Mount special file systems.
 specialMount() {
   local device="$1"
@@ -406,7 +384,7 @@ mountFS() {
 
     info "mounting $device on $mountPoint..."
 
-    makeMountPoint "$device" "$mountPoint" "$optionsPrefixed"
+    mkdir -p "/mnt-root$mountPoint"
 
     # For ZFS and CIFS mounts, retry a few times before giving up.
     # We do this for ZFS as a workaround for issue NixOS/nixpkgs#25383.

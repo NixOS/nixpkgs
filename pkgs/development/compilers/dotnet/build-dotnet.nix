@@ -122,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     export DOTNET_CLI_TELEMETRY_OPTOUT=1
   '';
 
-  passthru = {
+  passthru = rec {
     inherit icu;
     packages = packageDeps;
 
