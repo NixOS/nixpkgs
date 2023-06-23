@@ -19120,6 +19120,8 @@ with pkgs;
 
   omake = callPackage ../development/tools/ocaml/omake { };
 
+  oelint-adv = with python3Packages; callPackage ../development/tools/oelint-adv { };
+
   omniorb = callPackage ../development/tools/omniorb { };
 
   openai = with python3Packages; toPythonApplication openai;
