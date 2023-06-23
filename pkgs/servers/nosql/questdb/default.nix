@@ -5,11 +5,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "questdb";
-  version = "7.1.3";
+  version = "7.2";
 
   src = fetchurl {
     url = "https://github.com/questdb/questdb/releases/download/${version}/questdb-${version}-no-jre-bin.tar.gz";
-    sha256 = "lB3h8HRQaQwdTtxxjHNfYrDXY3UULSSrM74OCGgLoMc=";
+    sha256 = "sha256-37pmNeN02sHt2Cpyjk3FpBFscBw2Zqm4nNmOlyiX6H0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
