@@ -1,7 +1,7 @@
 { lib }:
 
 lib.mapAttrs (lname: lset: let
-  defaultLicense = rec {
+  defaultLicense = {
     shortName = lname;
     free = true; # Most of our licenses are Free, explicitly declare unfree additions as such!
     deprecated = false;
