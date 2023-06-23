@@ -17874,6 +17874,8 @@ with pkgs;
 
   rnix-lsp = callPackage ../development/tools/language-servers/rnix-lsp { };
 
+  ruff-lsp = python3Packages.callPackage ../development/tools/language-servers/ruff-lsp { };
+
   svls = callPackage ../development/tools/language-servers/svls { };
 
   typst-lsp = callPackage ../development/tools/language-servers/typst-lsp { };
