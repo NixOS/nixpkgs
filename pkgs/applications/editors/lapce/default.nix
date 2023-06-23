@@ -84,6 +84,10 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
+  postPatch = ''
+    substituteInPlace lapce-ui/Cargo.toml --replace ", \"lapce-data/updater\"" ""
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
