@@ -60,14 +60,14 @@ in {
   '';
 
   nextcloud25 = generic {
-    version = "25.0.7";
-    sha256 = "sha256-LpAUcSXW1riFpW3PnAC774tKE1PNE6ypVRXZlnZvNF8=";
+    version = "25.0.8";
+    sha256 = "sha256-Ia6afooDCNDZsGSoh5dddZvLUE3fU+jU6sy6MrxUMVs=";
     packages = nextcloud25Packages;
   };
 
   nextcloud26 = generic {
-    version = "26.0.2";
-    sha256 = "sha256-89sOxeCq/3wIjrNPdS1315kTvGeE4PxHqEzaoo5WejM=";
+    version = "26.0.3";
+    sha256 = "sha256-pagQy818Pc/yXyKAkyHy7UHtfMBgEgRImskOJYBgtck=";
     packages = nextcloud26Packages;
   };
 
