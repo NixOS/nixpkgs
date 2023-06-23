@@ -21,7 +21,6 @@ let
     isBool
     isFunction
     isList
-    isPath
     isString
     length
     mapAttrs

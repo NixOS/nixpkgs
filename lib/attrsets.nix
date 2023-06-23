@@ -3,7 +3,7 @@
 
 let
   inherit (builtins) head tail length;
-  inherit (lib.trivial) flip id mergeAttrs pipe;
+  inherit (lib.trivial) id mergeAttrs;
   inherit (lib.strings) concatStringsSep concatMapStringsSep escapeNixIdentifier sanitizeDerivationName;
   inherit (lib.lists) foldr foldl' concatMap concatLists elemAt all partition groupBy take foldl;
 in
