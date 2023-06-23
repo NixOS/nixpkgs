@@ -2,6 +2,8 @@
 , stdenv
 , which
 , coreutils
+, zlib
+, openssl
 , callPackage
 , makeSetupHook
 , makeWrapper
@@ -26,6 +28,14 @@ in
       propagatedBuildInputs = [ dotnet-sdk nuget-source ];
       substitutions = {
         nugetSource = nuget-source;
+        dynamicLinker = "${stdenv.cc}/nix-support/dynamic-linker";
+        libPath = lib.makeLibraryPath [
+          stdenv.cc.cc.lib
+          stdenv.cc.libc
+          dotnet-sdk.passthru.icu
+          zlib
+          openssl
+        ];
         inherit runtimeId;
       };
     } ./dotnet-configure-hook.sh) { };
@@ -44,7 +54,7 @@ in
       name = "dotnet-check-hook";
       propagatedBuildInputs = [ dotnet-test-sdk ];
       substitutions = {
-        inherit buildType libraryPath;
+        inherit buildType runtimeId libraryPath;
         disabledTests = lib.optionalString (disabledTests != [])
           (let
             escapedNames = lib.lists.map (n: lib.replaceStrings [","] ["%2C"] n) disabledTests;

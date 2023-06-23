@@ -1,5 +1,4 @@
 { lib
-, stdenvNoCC
 , buildDotnetModule
 , fetchFromGitHub
 , dotnetCorePackages
@@ -30,10 +29,6 @@ buildDotnetModule rec {
   projectFile = "NickvisionMoney.GNOME/NickvisionMoney.GNOME.csproj";
   nugetDeps = ./deps.nix;
   executables = "NickvisionMoney.GNOME";
-
-  # Prevent installing native libraries for all platforms
-  dotnetBuildFlags = [ "--runtime" (dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system) ];
-  dotnetInstallFlags = [ "--runtime" (dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system) ];
 
   nativeBuildInputs = [
     pkg-config
