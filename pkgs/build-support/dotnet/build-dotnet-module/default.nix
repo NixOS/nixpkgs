@@ -214,7 +214,7 @@ stdenvNoCC.mkDerivation (args // {
         if [[ ''${TMPDIR:-} == /run/user/* ]]; then
            # /run/user is usually a tmpfs in RAM, which may be too small
            # to store all downloaded dotnet packages
-           TMPDIR=
+           unset TMPDIR
         fi
 
         export tmp=$(mktemp -td "deps-${pname}-XXXXXX")
