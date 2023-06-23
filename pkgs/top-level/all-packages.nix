@@ -37466,6 +37466,12 @@ with pkgs;
 
   tibia = pkgsi686Linux.callPackage ../games/tibia { };
 
+  tiltfive-driver = callPackage ../games/tiltfive/driver.nix { };
+
+  tiltfive-control-panel = callPackage ../games/tiltfive/control-panel.nix { };
+
+  tiltfive-sdk = callPackage ../games/tiltfive/sdk.nix { };
+
   tintin = callPackage ../games/tintin { };
 
   tinyfugue = callPackage ../games/tinyfugue { };

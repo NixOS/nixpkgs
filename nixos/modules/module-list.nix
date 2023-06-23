@@ -86,6 +86,7 @@
   ./hardware/sensor/iio.nix
   ./hardware/steam-hardware.nix
   ./hardware/system-76.nix
+  ./hardware/tiltfive.nix
   ./hardware/tuxedo-keyboard.nix
   ./hardware/ubertooth.nix
   ./hardware/uinput.nix
