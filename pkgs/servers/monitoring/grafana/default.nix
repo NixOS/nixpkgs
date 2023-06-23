@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "grafana";
-  version = "9.4.12";
+  version = "9.4.13";
 
   excludedPackages = [ "alert_webhook_listener" "clean-swagger" "release_publisher" "slow_proxy" "slow_proxy_mac" "macaron" "devenv" ];
 
@@ -10,12 +10,12 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "grafana";
     repo = "grafana";
-    sha256 = "sha256-qtGsqm+AOQY45SuG9XNepb9MeABNq5ROFVjEPaPlVtA=";
+    sha256 = "sha256-mNLJwIPUDIMZ0cX2A3TDkj7K7JqgnVRN9V0P62saNjQ=";
   };
 
   srcStatic = fetchurl {
     url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
-    sha256 = "sha256-fpW/faQ70OYSRZklK6RsAm7o6ouAyeKDXG6Eccwm2zs=";
+    sha256 = "sha256-x+LhZh/GM4ueC6DG7tVBgXcDYTJBDStEGrfWu71dYrg=";
   };
 
   vendorSha256 = "sha256-/Gbs/lYjNDz0brCCmsWA+ntWFNnVX8qykKiWqrMwuKQ=";
