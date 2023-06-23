@@ -294,8 +294,10 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/tests/matrix-conduit.nix                            @piegamesde
 
 # Dotnet
-/pkgs/build-support/dotnet          @IvarWithoutBones
-/pkgs/development/compilers/dotnet  @IvarWithoutBones
+/pkgs/build-support/dotnet                  @IvarWithoutBones
+/pkgs/development/compilers/dotnet          @IvarWithoutBones
+/pkgs/test/dotnet                           @IvarWithoutBones
+/doc/languages-frameworks/dotnet.section.md @IvarWithoutBones
 
 # Node.js
 /pkgs/build-support/node/build-npm-package      @lilyinstarlight @winterqt
