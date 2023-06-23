@@ -106,6 +106,7 @@ let
       CHT_WC_PMIC_OPREGION             = whenAtLeast "5.10" yes;
       INTEL_SOC_PMIC_CHTDC_TI          = whenAtLeast "5.10" yes;
       CHT_DC_TI_PMIC_OPREGION          = whenAtLeast "5.10" yes;
+      MFD_TPS68470                     = whenBetween "5.10" "5.13" yes;
       TPS68470_PMIC_OPREGION           = whenAtLeast "5.10" yes;
     };
 
