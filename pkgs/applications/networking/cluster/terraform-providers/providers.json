@@ -399,13 +399,13 @@
     "vendorHash": "sha256-DSdE0CkAIJje71/S64no9fMJMUhAnFiK3lWewvcyE14="
   },
   "fly": {
-    "hash": "sha256-houGmQPvoOI2We6blMRuGrcuK7M9qLbB7XhvvHR9JZY=",
+    "hash": "sha256-9QB2fbggCKcJz8tkSYgq/X8r+MB2M76VCWXgsHARTkU=",
     "homepage": "https://registry.terraform.io/providers/fly-apps/fly",
     "owner": "fly-apps",
     "repo": "terraform-provider-fly",
-    "rev": "v0.0.22",
+    "rev": "v0.0.23",
     "spdx": "BSD-3-Clause",
-    "vendorHash": "sha256-Z6PAMT2AyTWJr7FmZ1LcIRRK9KQB4MihBz/Vwefu/58="
+    "vendorHash": "sha256-f+Z6Y2WPxqJoHoCwuK6sgFa8nUnkW/WwrD55dtU0wtM="
   },
   "fortios": {
     "deleteVendor": true,
