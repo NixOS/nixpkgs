@@ -3,7 +3,23 @@ let
   inherit (pkgs) lib;
   inherit (lib) hasPrefix removePrefix;
 
-  doc-support = import ./doc-support { inherit pkgs nixpkgs; };
+  lib-docs = import ./doc-support/lib-function-docs.nix {
+    inherit pkgs nixpkgs;
+    libsets = [
+      { name = "asserts"; description = "assertion functions"; }
+      { name = "attrsets"; description = "attribute set functions"; }
+      { name = "strings"; description = "string manipulation functions"; }
+      { name = "versions"; description = "version string functions"; }
+      { name = "trivial"; description = "miscellaneous functions"; }
+      { name = "lists"; description = "list manipulation functions"; }
+      { name = "debug"; description = "debugging functions"; }
+      { name = "options"; description = "NixOS / nixpkgs option handling"; }
+      { name = "path"; description = "path functions"; }
+      { name = "filesystem"; description = "filesystem functions"; }
+      { name = "sources"; description = "source filtering functions"; }
+      { name = "cli"; description = "command-line serialization functions"; }
+    ];
+  };
 
   epub = pkgs.runCommand "manual.epub" {
     nativeBuildInputs = with pkgs; [ libxslt zip ];
@@ -78,14 +94,13 @@ in pkgs.stdenv.mkDerivation {
   src = ./.;
 
   postPatch = ''
-    ln -s ${doc-support} ./doc-support/result
     ln -s ${optionsDoc.optionsJSON}/share/doc/nixos/options.json ./config-options.json
   '';
 
   buildPhase = ''
     cat \
       ./functions/library.md.in \
-      ./doc-support/result/function-docs/index.md \
+      ${lib-docs}/index.md \
       > ./functions/library.md
     substitute ./manual.md.in ./manual.md \
       --replace '@MANUAL_VERSION@' '${pkgs.lib.version}'
