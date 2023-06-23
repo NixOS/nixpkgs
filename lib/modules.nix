@@ -920,14 +920,7 @@ let
       option -> attrsOf { highestPrio, value }
   */
   mergeAttrDefinitionsWithPrio = opt:
-        let subAttrDefs =
-              lib.concatMap
-                ({ value, ... }@def:
-                  map
-                    (value: def // { inherit value; })
-                    (lib.pushDownProperties value)
-                )
-                opt.definitionsWithLocations;
+        let
             defsByAttr =
               lib.zipAttrs (
                 lib.concatLists (
@@ -935,7 +928,7 @@ let
                     ({ value, ... }@def:
                       map
                         (lib.mapAttrsToList (k: value: { ${k} = def // { inherit value; }; }))
-                        (lib.pushDownProperties value)
+                        (pushDownProperties value)
                     )
                     opt.definitionsWithLocations
                 )
