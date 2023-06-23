@@ -337,7 +337,7 @@ let
 
         phpPackage = mkOption {
           type = types.package;
-          relatedPackages = [ "php80" "php81" ];
+          relatedPackages = [ "php81" "php82" ];
           default = pkgs.php81;
           defaultText = "pkgs.php81";
           description = lib.mdDoc ''

@@ -195,6 +195,16 @@
     githubId = 15312184;
     name = "Rebecca Turner";
   };
+  _999eagle = {
+    email = "github@999eagle.moe";
+    matrix = "@sophie:catgirl.cloud";
+    github = "999eagle";
+    githubId = 1221984;
+    name = "Sophie Tauchert";
+    keys = [{
+      fingerprint = "7B59 F09E 0FE5 BC34 F032  1FB4 5270 1DE5 F5F5 1125";
+    }];
+  };
   a1russell = {
     email = "adamlr6+pub@gmail.com";
     github = "a1russell";
@@ -7833,6 +7843,12 @@
     github = "JohnMH";
     githubId = 2576152;
     name = "John M. Harris, Jr.";
+  };
+  johnpyp = {
+    name = "John Paul Penaloza";
+    email = "johnpyp.dev@gmail.com";
+    github = "johnpyp";
+    githubId = 20625636;
   };
   johnramsden = {
     email = "johnramsden@riseup.net";

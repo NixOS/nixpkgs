@@ -205,7 +205,7 @@ let
 
 in
 
-buildStdenv.mkDerivation ({
+buildStdenv.mkDerivation {
   pname = "${pname}-unwrapped";
   inherit version;
 
@@ -239,14 +239,14 @@ buildStdenv.mkDerivation ({
       hash = "sha256-fLUYaJwhrC/wF24HkuWn2PHqz7LlAaIZ1HYjRDB2w9A=";
     })
   ]
-  ++ lib.optional (lib.versionOlder version "109") [
+  ++ lib.optionals (lib.versionOlder version "109") [
     # cherry-pick bindgen change to fix build with clang 16
     (fetchpatch {
       url = "https://git.alpinelinux.org/aports/plain/community/firefox-esr/bindgen.patch?id=4c4b0c01c808657fffc5b796c56108c57301b28f";
       hash = "sha256-lTvgT358M4M2vedZ+A6xSKsBYhSN+McdmEeR9t75MLU=";
     })
   ]
-  ++ lib.optional (lib.versionOlder version "111") [
+  ++ lib.optionals (lib.versionOlder version "111") [
     # cherry-pick mp4parse change fixing build with Rust 1.70+
     # original change: https://github.com/mozilla/mp4parse-rust/commit/8b5b652d38e007e736bb442ccd5aa5ed699db100
     # vendored to update checksums
@@ -371,6 +371,7 @@ buildStdenv.mkDerivation ({
     export MOZILLA_OFFICIAL=1
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     # linking firefox hits the vm.max_map_count kernel limit with the default musl allocator
+    # TODO: Default vm.max_map_count has been increased, retest without this
     export LD_PRELOAD=${mimalloc}/lib/libmimalloc.so
   '';
 
@@ -589,4 +590,4 @@ buildStdenv.mkDerivation ({
   dontUpdateAutotoolsGnuConfigScripts = true;
 
   requiredSystemFeatures = [ "big-parallel" ];
-})
+}
