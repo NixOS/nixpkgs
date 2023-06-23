@@ -90,7 +90,7 @@ buildPythonApplication rec {
     description = "Graphical application to manage Nitrokey devices";
     homepage = "https://github.com/Nitrokey/nitrokey-app2";
     license = licenses.asl20;
-    maintainers = with maintainers; [ panicgh ];
+    maintainers = with maintainers; [ panicgh frogamic ];
     mainProgram = "nitrokeyapp";
   };
 }
