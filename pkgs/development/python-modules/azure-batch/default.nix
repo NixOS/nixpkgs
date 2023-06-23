@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "azure-batch";
-  version = "13.0.0";
+  version = "14.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    hash = "sha256-6Sld5wQE0nbtoN0iU9djl0Oavl2PGMH8oZnEm41q4wo=";
+    hash = "sha256-FlsembhvghAkxProX7NIadQHqg67DKS5b7JthZwmyTQ=";
   };
 
   propagatedBuildInputs = [
