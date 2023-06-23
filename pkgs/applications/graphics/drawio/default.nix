@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper '${electron}/bin/electron' "$out/bin/drawio" \
       --add-flags "$out/share/lib/drawio/resources/app.asar" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-wayland-ime --enable-features=WaylandWindowDecorations}}" \
       --inherit-argv0
 
     runHook postInstall

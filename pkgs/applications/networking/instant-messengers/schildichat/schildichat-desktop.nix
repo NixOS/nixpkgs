@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
       --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher.so \
       --add-flags "$out/share/element/electron" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-wayland-ime --enable-features=WaylandWindowDecorations}}"
 
     runHook postInstall
   '';

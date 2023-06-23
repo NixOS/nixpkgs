@@ -168,7 +168,7 @@ stdenv.mkDerivation rec {
       wrapProgram $executable \
         --prefix XDG_DATA_DIRS    :  "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
         --prefix LD_LIBRARY_PATH  :  ${rpath}:$out/opt/bytedance/feishu:${addOpenGLRunpath.driverLink}/share \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-wayland-ime --enable-features=WaylandWindowDecorations}}" \
         ${lib.optionalString (commandLineArgs!="") "--add-flags ${lib.escapeShellArg commandLineArgs}"}
     done
 

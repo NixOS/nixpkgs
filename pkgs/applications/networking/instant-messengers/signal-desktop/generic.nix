@@ -152,7 +152,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ] }"
       # Currently crashes see https://github.com/NixOS/nixpkgs/issues/222043
-      #--add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      #--add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-wayland-ime --enable-features=WaylandWindowDecorations}}"
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
     )
 

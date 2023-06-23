@@ -177,7 +177,7 @@ stdenv.mkDerivation rec {
       ${optionalString (disableFeatures != []) ''
       --add-flags "--disable-features=${strings.concatStringsSep "," disableFeatures}"
       ''}
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-wayland-ime --enable-features=WaylandWindowDecorations}}"
       ${optionalString vulkanSupport ''
       --prefix XDG_DATA_DIRS  : "${addOpenGLRunpath.driverLink}/share"
       ''}

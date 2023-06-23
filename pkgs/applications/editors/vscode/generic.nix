@@ -121,7 +121,7 @@ let
       gappsWrapperArgs+=(
         # Add gio to PATH so that moving files to the trash works when not using a desktop environment
         --prefix PATH : ${glib.bin}/bin
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-wayland-ime --enable-features=WaylandWindowDecorations}}"
         --add-flags ${lib.escapeShellArg commandLineArgs}
       )
     '';

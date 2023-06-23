@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-wayland-ime}}"
     )
   '';
 

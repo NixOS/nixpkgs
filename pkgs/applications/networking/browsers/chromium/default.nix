@@ -185,7 +185,7 @@ in stdenv.mkDerivation {
     mkdir -p "$out/bin"
 
     makeWrapper "${browserBinary}" "$out/bin/chromium" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-wayland-ime --enable-features=WaylandWindowDecorations}}" \
       --add-flags ${escapeShellArg commandLineArgs}
 
     ed -v -s "$out/bin/chromium" << EOF

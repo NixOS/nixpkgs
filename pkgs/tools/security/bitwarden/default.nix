@@ -138,7 +138,7 @@ buildNpmPackage' {
 
     makeWrapper '${electron}/bin/electron' "$out/bin/bitwarden" \
       --add-flags $out/opt/Bitwarden/resources/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-wayland-ime --enable-features=WaylandWindowDecorations}}" \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
 

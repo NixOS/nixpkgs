@@ -62,7 +62,7 @@ in
       # executable wrapper
       makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
         --add-flags "$out/share/micropad" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-wayland-ime --enable-features=WaylandWindowDecorations}}"
 
       runHook postInstall
     '';
