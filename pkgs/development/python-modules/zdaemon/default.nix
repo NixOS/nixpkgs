@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "zdaemon";
-  version = "4.4";
+  version = "5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SCHjvbRzh88eklWwREusQ3z3KqC1nRQHuTLjH9QyPvw=";
+    hash = "sha256-ml7GxRmigLvPqPfnP04Q2AjnuCcQq2COD0Sb88BtQ9U=";
   };
 
   propagatedBuildInputs = [
