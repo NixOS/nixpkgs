@@ -24,8 +24,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-0zOwqxD3WX/4e19ywpghdfoGmh2KC+70HbTSYkVHzUA=";
 
-  OPENSSL_NO_VENDOR = true;
-
   nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
 

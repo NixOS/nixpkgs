@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
-  OPENSSL_NO_VENDOR = 1;
   buildInputs = [ curl zlib openssl ]
     ++ lib.optional stdenv.isDarwin libiconv;
 

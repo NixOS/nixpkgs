@@ -26,8 +26,6 @@ stdenv.mkDerivation rec {
     sha256 = "GApYgE7AezKmcGWNY+dF1Yp1TZmEeUdq3CsjvMvo/Rw=";
   };
 
-  ZSTD_SYS_USE_PKG_CONFIG = true;
-
   enableParallelBuilding = true;
 
   installPhase = ''

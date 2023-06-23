@@ -37,8 +37,6 @@ rustPlatform.buildRustPackage rec {
     installManPage docs/man/ratmand.1
   '';
 
-  SODIUM_USE_PKG_CONFIG = 1;
-
   dashboard = stdenv.mkDerivation rec {
     pname = "ratman-dashboard";
     inherit version src;

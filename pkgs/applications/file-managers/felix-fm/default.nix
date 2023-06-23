@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pkg-config
 , bzip2
+, oniguruma
 , zstd
 , zoxide
 }:
@@ -29,6 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     bzip2
+    oniguruma
     zstd
   ];
 

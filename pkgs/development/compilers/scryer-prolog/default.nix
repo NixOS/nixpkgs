@@ -2,6 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
+, libsodium
 , openssl
 , gmp
 , libmpc
@@ -28,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl gmp libmpc mpfr ];
+  buildInputs = [ libsodium openssl gmp libmpc mpfr ];
 
   CARGO_FEATURE_USE_SYSTEM_LIBS = true;
 

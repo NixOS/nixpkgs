@@ -1,12 +1,15 @@
 { fetchFromGitHub
 , lib
+, pkg-config
 , protobuf
 , rocksdb
 , rustPlatform
 , stdenv
 , Security
 , SystemConfiguration
+, zstd
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
   version = "0.9.42";
@@ -39,9 +42,10 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
+  buildInputs = [ zstd ]
+    ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
-  nativeBuildInputs = [ rustPlatform.bindgenHook ];
+  nativeBuildInputs = [ rustPlatform.bindgenHook pkg-config ];
 
   preBuild = ''
     export SUBSTRATE_CLI_GIT_COMMIT_HASH=$(cat .git_commit)

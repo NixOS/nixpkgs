@@ -84,7 +84,6 @@ rustPlatform.buildRustPackage rec {
 
   env = {
     GEN_ARTIFACTS = "artifacts";
-    ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
   meta = with lib; {

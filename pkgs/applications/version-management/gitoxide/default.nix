@@ -29,9 +29,6 @@ rustPlatform.buildRustPackage rec {
     then [ libiconv Security SystemConfiguration ]
     else [ openssl ]);
 
-  # Needed to get openssl-sys to use pkg-config.
-  OPENSSL_NO_VENDOR = 1;
-
   meta = with lib; {
     description = "A command-line application for interacting with git repositories";
     homepage = "https://github.com/Byron/gitoxide";

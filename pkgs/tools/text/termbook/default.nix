@@ -34,10 +34,6 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Security
   ];
 
-  env = {
-    RUSTONIG_SYSTEM_LIBONIG = true;
-  };
-
   # update dependencies to fix build failure caused by unaligned packed structs
   postPatch = ''
     ln -sf ${./Cargo.lock} Cargo.lock

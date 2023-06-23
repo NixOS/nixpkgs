@@ -7,6 +7,7 @@
 , atk
 , glib
 , gtk3-x11
+, pkgsStatic
 , nix-update-script
 }:
 
@@ -47,6 +48,7 @@ rustPlatform.buildRustPackage rec {
     atk
     glib
     gtk3-x11
+    pkgsStatic.zstd
   ];
 
   cargoTestFlags = [

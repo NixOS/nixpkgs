@@ -35,10 +35,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeCheckInputs = [ git ];
 
-  env = {
-    RUSTONIG_SYSTEM_LIBONIG = true;
-  };
-
   postInstall = ''
     installShellCompletion --cmd delta \
       etc/completion/completion.{bash,fish,zsh}

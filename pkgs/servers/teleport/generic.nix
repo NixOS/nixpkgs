@@ -51,8 +51,6 @@ let
     # buildRustPackage sets strictDeps = true;
     nativeCheckInputs = buildInputs;
 
-    OPENSSL_NO_VENDOR = "1";
-
     postInstall = ''
       mkdir -p $out/include
       cp ${buildAndTestSubdir}/librdprs.h $out/include/

@@ -36,8 +36,6 @@ rustPlatform.buildRustPackage rec {
     hyperscan
   ];
 
-  OPENSSL_NO_VENDOR = 1;
-
   meta = with lib; {
     description = "Find secrets and sensitive information in textual data";
     homepage = "https://github.com/praetorian-inc/noseyparker";

@@ -23,9 +23,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-NJQvu+EREF40u5P3i8h2yGYC1vM6Q8xEXX9WyOnJkBM=";
   };
 
-  # Use system openssl.
-  OPENSSL_NO_VENDOR = 1;
-
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {

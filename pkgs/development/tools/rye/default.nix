@@ -6,6 +6,7 @@
 , pkg-config
 , stdenv
 , SystemConfiguration
+, zstd
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,17 +29,13 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  env = {
-    OPENSSL_NO_VENDOR = 1;
-  };
-
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     git
     openssl
-  ]
-  ++ lib.optional stdenv.isDarwin SystemConfiguration;
+    zstd
+  ] ++ lib.optional stdenv.isDarwin SystemConfiguration;
 
   nativeCheckInputs = [ git ];
 

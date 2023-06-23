@@ -63,7 +63,6 @@ rustPlatform.buildRustPackage {
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
-  RUSTONIG_SYSTEM_LIBONIG = true;
 
   TZDIR = "${tzdata}/share/zoneinfo";
 

@@ -39,8 +39,6 @@ rustPlatform.buildRustPackage rec {
     CoreServices
   ];
 
-  RUSTONIG_SYSTEM_LIBONIG = true;
-
   postInstall = ''
     installShellCompletion --cmd zola \
       --bash <($out/bin/zola completion bash) \

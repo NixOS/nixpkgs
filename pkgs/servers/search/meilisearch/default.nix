@@ -2,7 +2,9 @@
 , lib
 , rustPlatform
 , fetchFromGitHub
+, pkg-config
 , Security
+, zstd
 , nixosTests
 , nix-update-script
 }:
@@ -37,15 +39,19 @@ rustPlatform.buildRustPackage {
   # Default features include mini dashboard which downloads something from the internet.
   buildNoDefaultFeatures = true;
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    zstd
+  ] ++ lib.optionals stdenv.isDarwin [
     Security
   ];
 
   passthru = {
     updateScript = nix-update-script { };
-    tests = {
-      meilisearch = nixosTests.meilisearch;
-    };
+    tests = { inherit (nixosTests) meilisearch; };
   };
 
   # Tests will try to compile with mini-dashboard features which downloads something from the internet.

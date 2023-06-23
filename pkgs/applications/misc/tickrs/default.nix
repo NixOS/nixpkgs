@@ -32,10 +32,6 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
-  env = {
-    OPENSSL_NO_VENDOR = true;
-  };
-
   meta = with lib; {
     description = "Realtime ticker data in your terminal";
     homepage = "https://github.com/tarkah/tickrs";

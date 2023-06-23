@@ -49,8 +49,6 @@ rustPlatform.buildRustPackage rec {
   cargoTestFlags = cargoBuildFlags;
 
   env = {
-    OPENSSL_NO_VENDOR = true;
-    SODIUM_USE_PKG_CONFIG = true;
     SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
   };
 

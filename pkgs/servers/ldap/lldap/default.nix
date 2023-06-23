@@ -1,16 +1,16 @@
 { binaryen
 , fetchFromGitHub
-, fetchpatch
-, fetchzip
 , lib
 , lldap
 , nixosTests
+, pkg-config
 , rustPlatform
 , rustc
 , stdenv
 , wasm-bindgen-cli
 , wasm-pack
 , which
+, zstd
 }:
 
 let
@@ -91,6 +91,10 @@ in rustPlatform.buildRustPackage (commonDerivationAttrs // {
   postPatch = commonDerivationAttrs.postPatch + ''
     substituteInPlace server/src/infra/tcp_server.rs --subst-var-by frontend '${frontend}'
   '';
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
 
   postInstall = ''
     mv $out/bin/migration-tool $out/bin/lldap_migration_tool

@@ -54,8 +54,6 @@ rustPlatform.buildRustPackage rec {
     git config --global user.email nixbld@example.com
   '';
 
-  RUSTONIG_SYSTEM_LIBONIG = true;
-
   meta = with lib; {
     description = "Dive into a file's history to find root cause";
     homepage = "https://github.com/gitext-rs/git-dive";

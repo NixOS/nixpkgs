@@ -31,8 +31,6 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ] ++ lib.optional stdenv.isAarch64 dtc;
 
-  OPENSSL_NO_VENDOR = true;
-
   # Integration tests require root.
   cargoTestFlags = [ "--bins" ];
 

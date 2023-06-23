@@ -32,8 +32,6 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  OPENSSL_NO_VENDOR = 1;
-
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl libgit2 ]

@@ -19,6 +19,7 @@
 , rustfmt
 , stdenv
 , swagger-cli
+, zstd
 }:
 
 let
@@ -103,7 +104,7 @@ rustPlatform.buildRustPackage {
       --replace '"/bin/bash"' '"${bash}/bin/bash"'
   '';
 
-  buildInputs = [ openssl rustfmt lld ];
+  buildInputs = [ openssl rustfmt lld zstd ];
 
   nativeBuildInputs = [ pkg-config makeWrapper swagger-cli ];
 

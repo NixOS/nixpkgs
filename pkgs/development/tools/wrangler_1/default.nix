@@ -18,8 +18,6 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ curl CoreFoundation CoreServices Security libiconv ];
 
-  OPENSSL_NO_VENDOR = 1;
-
   # tries to use "/homeless-shelter" and fails
   doCheck = false;
 

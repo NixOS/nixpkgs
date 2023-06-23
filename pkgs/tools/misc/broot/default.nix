@@ -39,8 +39,6 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
-  RUSTONIG_SYSTEM_LIBONIG = true;
-
   postPatch = ''
     # Fill the version stub in the man page. We can't fill the date
     # stub reproducibly.

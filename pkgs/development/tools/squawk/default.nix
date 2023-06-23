@@ -35,8 +35,6 @@ rustPlatform.buildRustPackage rec {
     Security
   ]);
 
-  OPENSSL_NO_VENDOR = 1;
-
   LIBPG_QUERY_PATH = libpg_query;
 
   meta = with lib; {

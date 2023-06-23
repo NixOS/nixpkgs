@@ -52,7 +52,6 @@ rustPlatform.buildRustPackage rec {
     libsodium
   ];
 
-  env.SODIUM_USE_PKG_CONFIG = 1;
   env.NIX_CFLAGS_COMPILE = toString ([
     "-O2"
     "-Wno-error=array-bounds"

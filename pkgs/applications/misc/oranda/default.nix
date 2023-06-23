@@ -43,11 +43,6 @@ rustPlatform.buildRustPackage rec {
     "--skip=build"
   ];
 
-  env = {
-    RUSTONIG_SYSTEM_LIBONIG = true;
-    ZSTD_SYS_USE_PKG_CONFIG = true;
-  };
-
   meta = with lib; {
     description = "Generate beautiful landing pages for your developer tools";
     homepage = "https://github.com/axodotdev/oranda";

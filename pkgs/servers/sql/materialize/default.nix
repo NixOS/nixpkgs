@@ -72,9 +72,6 @@ rustPlatform.buildRustPackage rec {
     # Provides the mig command used by the krb5-src build script
     ++ lib.optional stdenv.isDarwin bootstrap_cmds;
 
-  # Needed to get openssl-sys to use pkg-config.
-  OPENSSL_NO_VENDOR = 1;
-
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ libiconv DiskArbitration Foundation ];
 

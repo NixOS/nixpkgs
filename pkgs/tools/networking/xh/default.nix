@@ -7,6 +7,7 @@
 , stdenv
 , Security
 , openssl
+, oniguruma
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,11 +27,10 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
-  buildInputs = lib.optionals withNativeTls
+  buildInputs = [
+    oniguruma
+  ] ++ lib.optionals withNativeTls
     (if stdenv.isDarwin then [ Security ] else [ openssl ]);
-
-  # Get openssl-sys to use pkg-config
-  OPENSSL_NO_VENDOR = 1;
 
   postInstall = ''
     installShellCompletion \

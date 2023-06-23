@@ -5,6 +5,7 @@
 , libressl
 , curl
 , Security
+, zstd
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,10 +28,8 @@ rustPlatform.buildRustPackage rec {
     # gracefully exit while doing work.
     # See: https://github.com/rustwasm/wasm-pack/issues/650
     libressl
+    zstd
   ] ++ lib.optionals stdenv.isDarwin [ curl Security ];
-
-  # Needed to get openssl-sys to use pkg-config.
-  OPENSSL_NO_VENDOR = 1;
 
   # Most tests rely on external resources and build artifacts.
   # Disabling check here to work with build sandboxing.

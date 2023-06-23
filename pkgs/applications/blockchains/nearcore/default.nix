@@ -28,8 +28,6 @@ rustPlatform.buildRustPackage rec {
   CARGO_PROFILE_RELEASE_LTO = "fat";
   NEAR_RELEASE_BUILD = "release";
 
-  OPENSSL_NO_VENDOR = 1; # we want to link to OpenSSL provided by Nix
-
   # don't build SDK samples that require wasm-enabled rust
   buildAndTestSubdir = "neard";
   doCheck = false; # needs network

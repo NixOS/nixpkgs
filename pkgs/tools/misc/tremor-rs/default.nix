@@ -5,6 +5,7 @@
 , openssl
 , fetchFromGitHub
 , installShellFiles
+, oniguruma
 , stdenv
 , Security
 , libiconv
@@ -34,7 +35,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles rustPlatform.bindgenHook ];
 
-  buildInputs = [ openssl ]
+  buildInputs = [ oniguruma openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security libiconv ];
 
   # relax lints to fix an error caused by invalid macro_export
@@ -55,9 +56,6 @@ rustPlatform.buildRustPackage rec {
       --fish <($out/bin/tremor completions fish) \
       --zsh <($out/bin/tremor completions zsh)
   '';
-
-  # OPENSSL_NO_VENDOR - If set, always find OpenSSL in the system, even if the vendored feature is enabled.
-  OPENSSL_NO_VENDOR = 1;
 
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";

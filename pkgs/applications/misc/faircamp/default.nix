@@ -7,6 +7,7 @@
 , libopus
 , vips
 , ffmpeg
+, zstd
 , callPackage
 , unstableGitUpdater
 }:
@@ -39,6 +40,7 @@ rustPlatform.buildRustPackage {
     glib
     libopus
     vips
+    zstd
   ];
 
   postInstall = ''

@@ -5,6 +5,7 @@
 , stdenv
 , openssl
 , pkg-config
+, zstd
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,13 +23,14 @@ rustPlatform.buildRustPackage rec {
 
   env = {
     RUSTFLAGS = "-C strip=symbols";
-    OPENSSL_NO_VENDOR = 1;
   };
 
-  buildInputs = [ openssl ] ++
-    lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
+  buildInputs = [
+    openssl
+    zstd
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
   nativeBuildInputs = [ pkg-config ];
 

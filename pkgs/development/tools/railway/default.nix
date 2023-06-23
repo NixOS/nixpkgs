@@ -19,8 +19,6 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
-  OPENSSL_NO_VENDOR = 1;
-
   meta = with lib; {
     mainProgram = "railway";
     description = "Railway.app CLI";

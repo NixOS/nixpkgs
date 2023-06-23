@@ -46,6 +46,7 @@
 , checkFeatures ? buildFeatures
 , useNextest ? false
 , auditable ? !cargo-auditable.meta.broken
+, useSystemLibraries ? true
 
 , depsExtraArgs ? {}
 
@@ -168,4 +169,12 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
       "wasm32-wasi"
     ];
   } // meta;
-})
+} // lib.optionalAttrs useSystemLibraries (
+# doesn't work on darwin
+lib.optionalAttrs stdenv.isLinux {
+  OPENSSL_NO_VENDOR = 1;
+} // {
+  RUSTONIG_SYSTEM_LIBONIG = true;
+  SODIUM_USE_PKG_CONFIG = true;
+  ZSTD_SYS_USE_PKG_CONFIG = true;
+}))
