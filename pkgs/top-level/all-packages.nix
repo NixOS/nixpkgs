@@ -13827,6 +13827,8 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation;
   };
 
+  wasmi = callPackage ../development/tools/wasmi { };
+
   welkin = callPackage ../tools/graphics/welkin { };
 
   wemux = callPackage ../tools/misc/wemux { };
