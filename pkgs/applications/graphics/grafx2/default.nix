@@ -37,12 +37,16 @@ stdenv.mkDerivation rec {
   makeFlags = [ "-C src" ];
   installFlags = [ "-C src" "PREFIX=$(out)" ];
 
+  postInstall = ''
+    mv $out/bin/grafx2-sdl $out/bin/grafx2
+  '';
+
   meta = {
     description = "Bitmap paint program inspired by the Amiga programs Deluxe Paint and Brilliance";
     homepage = "http://pulkomandy.tk/projects/GrafX2";
     license = lib.licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = [];
-    mainProgram = "grafx2-sdl";
+    mainProgram = "grafx2";
   };
 }
