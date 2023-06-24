@@ -330,7 +330,7 @@ assert buildPostproc -> buildAvutil;
 assert buildSwscale -> buildAvutil;
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "ffmpeg" + (if ffmpegVariant == "small" then "" else "-${ffmpegVariant}");
+  pname = "ffmpeg" + (optionalString (ffmpegVariant != "small") "-${ffmpegVariant}");
   inherit version;
 
   src = fetchgit {

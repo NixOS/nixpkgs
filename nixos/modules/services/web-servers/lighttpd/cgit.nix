@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.lighttpd.cgit;
-  pathPrefix = if stringLength cfg.subdir == 0 then "" else "/" + cfg.subdir;
+  pathPrefix = optionalString (stringLength cfg.subdir != 0) ("/" + cfg.subdir);
   configFile = pkgs.writeText "cgitrc"
     ''
       # default paths to static assets

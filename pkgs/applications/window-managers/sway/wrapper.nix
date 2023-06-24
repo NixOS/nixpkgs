@@ -28,7 +28,7 @@ let
        export DBUS_SESSION_BUS_ADDRESS
        exec ${sway}/bin/sway "$@"
      else
-       exec ${if !dbusSupport then "" else "${dbus}/bin/dbus-run-session"} ${sway}/bin/sway "$@"
+       exec ${lib.optionalString dbusSupport "${dbus}/bin/dbus-run-session"} ${sway}/bin/sway "$@"
      fi
    '';
 in symlinkJoin {

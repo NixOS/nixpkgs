@@ -22,7 +22,7 @@ let
     armv7l-linux = "0m1v24gg2dy79hgrz37gysgrazg8vkr1gkp52j6m6y76vi0l8249";
   }.${system} or throwSystem;
 
-  sourceRoot = if stdenv.isDarwin then "" else ".";
+  sourceRoot = lib.optionalString (!stdenv.isDarwin) ".";
 in
   callPackage ./generic.nix rec {
     inherit sourceRoot commandLineArgs useVSCodeRipgrep;

@@ -468,7 +468,7 @@ rec {
 
         echo "installing RPMs..."
         PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
-          rpm -iv --nosignature ${if runScripts then "" else "--noscripts"} $rpms
+          rpm -iv --nosignature ${lib.optionalString (!runScripts) "--noscripts"} $rpms
 
         echo "running post-install script..."
         eval "$postInstall"

@@ -2,8 +2,7 @@
 
 let
   load_num =
-    if num == null then "" else
-    ''
+    lib.optionalString (num != null) ''
       -I ${num}/lib/ocaml/${ocaml.version}/site-lib/num \
       -I ${num}/lib/ocaml/${ocaml.version}/site-lib/top-num \
       -I ${num}/lib/ocaml/${ocaml.version}/site-lib/stublibs \

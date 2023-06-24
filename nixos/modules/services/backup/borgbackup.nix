@@ -33,7 +33,7 @@ let
     }
     trap on_exit EXIT
 
-    archiveName="${if cfg.archiveBaseName == null then "" else cfg.archiveBaseName + "-"}$(date ${cfg.dateFormat})"
+    archiveName="${optionalString (cfg.archiveBaseName != null) (cfg.archiveBaseName + "-")}$(date ${cfg.dateFormat})"
     archiveSuffix="${optionalString cfg.appendFailedSuffix ".failed"}"
     ${cfg.preHook}
   '' + optionalString cfg.doInit ''

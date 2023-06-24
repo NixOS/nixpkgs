@@ -19,8 +19,8 @@ let
     welcometext="${cfg.welcometext}"
     port=${toString cfg.port}
 
-    ${if cfg.hostName == "" then "" else "host="+cfg.hostName}
-    ${if cfg.password == "" then "" else "serverpassword="+cfg.password}
+    ${optionalString (cfg.hostName != "") "host=${cfg.hostName}"}
+    ${optionalString (cfg.password != "") "serverpassword=${cfg.password}"}
 
     bandwidth=${toString cfg.bandwidth}
     users=${toString cfg.users}
@@ -32,17 +32,17 @@ let
     bonjour=${boolToString cfg.bonjour}
     sendversion=${boolToString cfg.sendVersion}
 
-    ${if cfg.registerName     == "" then "" else "registerName="+cfg.registerName}
-    ${if cfg.registerPassword == "" then "" else "registerPassword="+cfg.registerPassword}
-    ${if cfg.registerUrl      == "" then "" else "registerUrl="+cfg.registerUrl}
-    ${if cfg.registerHostname == "" then "" else "registerHostname="+cfg.registerHostname}
+    ${optionalString (cfg.registerName != "") "registerName=${cfg.registerName}"}
+    ${optionalString (cfg.registerPassword == "") "registerPassword=${cfg.registerPassword}"}
+    ${optionalString (cfg.registerUrl != "") "registerUrl=${cfg.registerUrl}"}
+    ${optionalString (cfg.registerHostname != "") "registerHostname=${cfg.registerHostname}"}
 
     certrequired=${boolToString cfg.clientCertRequired}
-    ${if cfg.sslCert == "" then "" else "sslCert="+cfg.sslCert}
-    ${if cfg.sslKey  == "" then "" else "sslKey="+cfg.sslKey}
-    ${if cfg.sslCa   == "" then "" else "sslCA="+cfg.sslCa}
+    ${optionalString (cfg.sslCert != "") "sslCert=${cfg.sslCert}"}
+    ${optionalString (cfg.sslKey != "") "sslKey=${cfg.sslKey}"}
+    ${optionalString (cfg.sslCa != "") "sslCA=${cfg.sslCa}"}
 
-    ${lib.optionalString (cfg.dbus != null) "dbus=${cfg.dbus}"}
+    ${optionalString (cfg.dbus != null) "dbus=${cfg.dbus}"}
 
     ${cfg.extraConfig}
   '';
