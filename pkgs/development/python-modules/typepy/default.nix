@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "typepy";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-J6SgVd2m0wOVr2ZV/pryRcJrn+BYTGstAUQO349c2lE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-cgy1+6RZ1DUyH45bAKpGPOOZCwhCUghummw2fnfJGww=";
   };
 
   propagatedBuildInputs = [ mbstrdecoder python-dateutil pytz packaging ];
