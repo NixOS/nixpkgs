@@ -1,57 +1,71 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, pythonOlder
+, fetchFromGitHub
 , pythonRelaxDepsHook
 , attrs
 , boto3
+, cloudpickle
 , google-pasta
-, importlib-metadata
 , numpy
 , protobuf
 , protobuf3-to-dict
 , smdebug-rulesconfig
+, importlib-metadata
+, packaging
 , pandas
 , pathos
-, packaging
-, pythonOlder
+, schema
+, pyyaml
+, jsonschema
+, platformdirs
+, tblib
 }:
 
 buildPythonPackage rec {
   pname = "sagemaker";
-  version = "2.135.0";
+  version = "2.168.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ypdcqEYLxHbfnq1ycq3hVLThhIIs3pq29Fv33Ly2hbE=";
+  src = fetchFromGitHub {
+    owner = "aws";
+    repo = "sagemaker-python-sdk";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-BKvHLvfGEPlf9hoByNGElDcvobQnh19GE0Q6n3+MHEA=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
   pythonRelaxDeps = [
-    # FIXME: Remove when >= 2.111.0
     "attrs"
+    "boto3"
+    "importlib-metadata"
     "protobuf"
   ];
 
   propagatedBuildInputs = [
     attrs
     boto3
+    cloudpickle
     google-pasta
-    importlib-metadata
     numpy
-    packaging
-    pathos
     protobuf
     protobuf3-to-dict
     smdebug-rulesconfig
+    importlib-metadata
+    packaging
     pandas
+    pathos
+    schema
+    pyyaml
+    jsonschema
+    platformdirs
+    tblib
   ];
-
-  postFixup = ''
-    [ "$($out/bin/sagemaker-upgrade-v2 --help 2>&1 | grep -cim1 'pandas failed to import')" -eq "0" ]
-  '';
 
   doCheck = false;
 
