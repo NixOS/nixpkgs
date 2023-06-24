@@ -17,16 +17,23 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "tonarino";
     repo = "innernet";
-    rev = "v${version}";
-    sha256 = "sha256-eAiYXE8kSfuhBgrIo6rbtE2YH9JcLJwA/vXA5IWNYG8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-eAiYXE8kSfuhBgrIo6rbtE2YH9JcLJwA/vXA5IWNYG8=";
   };
+
   cargoHash = "sha256-F+VvVF+5I53IF4Vur0SkUQXoqo8EE3XWirm88gu/GI4=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
     installShellFiles
   ];
-  buildInputs = [ sqlite ] ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
+
+  buildInputs = [
+    sqlite
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
+    libiconv
+  ];
 
   postInstall = ''
     installManPage doc/innernet-server.8.gz
@@ -46,6 +53,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A private network system that uses WireGuard under the hood";
     homepage = "https://github.com/tonarino/innernet";
+    changelog = "https://github.com/tonarino/innernet/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ tomberek _0x4A6F ];
   };
