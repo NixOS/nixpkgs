@@ -93,8 +93,8 @@ in
     sha256 = "sha256-7cuUf29TMpX62PwO1ab3ZuzmzlcrRjTKB1CyXnYgYus=";
   };
   z3_4_11 = common {
-    version = "4.11.0";
-    sha256 = "sha256-ItmtZHDhCeLAVtN7K80dqyAh20o7TM4xk2sTb9QgHvk=";
+    version = "4.11.2";
+    sha256 = "sha256-OO0wtCvSKwGxnKvu+AfXe4mEzv4nofa7A00BjX+KVjc=";
   };
   z3_4_8 = common {
     version = "4.8.17";
