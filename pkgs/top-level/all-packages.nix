@@ -29659,6 +29659,8 @@ with pkgs;
 
   autokey = callPackage ../applications/office/autokey { };
 
+  autokernel = callPackage ../tools/admin/autokernel { };
+
   autotalent = callPackage ../applications/audio/autotalent { };
 
   autotrace = callPackage ../applications/graphics/autotrace { };
