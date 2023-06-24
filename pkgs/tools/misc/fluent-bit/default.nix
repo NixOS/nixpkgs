@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Log forwarder and processor, part of Fluentd ecosystem";
     homepage = "https://fluentbit.io";
+    changelog = "https://github.com/fluent/fluent-bit/releases/tag/v${version}";
     maintainers = with maintainers; [ samrose fpletz ];
     license = licenses.asl20;
     platforms = platforms.linux;
