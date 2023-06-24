@@ -7082,6 +7082,8 @@ with pkgs;
     buildGoModule = buildGo119Module; # build fails with 1.20
   };
 
+  dool = callPackage ../tools/system/dool { };
+
   dosfstools = callPackage ../tools/filesystems/dosfstools { };
 
   dotnetfx35 = callPackage ../development/libraries/dotnetfx35 { };
