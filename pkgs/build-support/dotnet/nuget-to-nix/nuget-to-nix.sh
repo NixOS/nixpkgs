@@ -1,6 +1,7 @@
 #!@runtimeShell@
 
 set -euo pipefail
+shopt -s nullglob
 
 export PATH="@binPath@"
 # used for glob ordering of package names
