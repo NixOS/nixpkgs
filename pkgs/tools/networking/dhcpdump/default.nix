@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , perl
 , installShellFiles
 , libpcap
@@ -8,11 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dhcpdump";
-  version = "1.8";
+  version = "1.9";
 
-  src = fetchurl {
-    url = "http://www.mavetju.org/download/dhcpdump-${version}.tar.gz";
-    hash = "sha256-bV65QYFi+3OLxW5MFoLOf3OS3ZblaMyZbkTCjef3cZA=";
+  src = fetchFromGitHub {
+    owner = "bbonev";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ck6DLsLQ00unNqPLBKkxaJLDCaPFjTFJcQjTbKSq0U8=";
   };
 
   strictDeps = true;
@@ -26,8 +28,6 @@ stdenv.mkDerivation rec {
     libpcap
   ];
 
-  hardeningDisable = [ "fortify" ];
-
   installPhase = ''
     runHook preBuild
 
@@ -39,7 +39,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A tool for visualization of DHCP packets as recorded and output by tcpdump to analyze DHCP server responses";
-    homepage = "http://www.mavetju.org/unix/dhcpdump-man.php";
+    homepage = "https://github.com/bbonev/dhcpdump";
+    changelog = "https://github.com/bbonev/dhcpdump/releases/tag/v${version}";
     platforms = platforms.linux;
     maintainers = with maintainers; [ nickcao ];
     license = licenses.bsd2;
