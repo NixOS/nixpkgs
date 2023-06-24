@@ -38,6 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python serialization and RPC framework";
     homepage = "https://github.com/apache/avro";
+    changelog = "https://github.com/apache/avro/releases/tag/release-${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ zimbatm ];
   };
