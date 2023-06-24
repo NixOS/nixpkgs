@@ -19,7 +19,6 @@ let
     "x86_64-linux" = {
       system = "amd64";
       sha256 = {
-        "8.0" = "ylzxQlyk6jpyO9Zcqv/uUiRWcMSkPKFBgiCDnyU8lWI=";
         "8.1" = "FEb0NBJpwoYaNdEHEn4TkSQR7VShGpHptaDIRKwrmkQ=";
         "8.2" = "itB0Zm1Mog18F8vIHn9AZMYMzafLQR0v5zcOgqy1ouI=";
       };
@@ -27,7 +26,6 @@ let
     "i686-linux" = {
       system = "i386";
       sha256 = {
-        "8.0" = "DL5wiaez4tzrn8xY+ptYiCvZ1HWaStT9vGWPd5whTaE=";
         "8.1" = "0bX2frll0ne6H6o7HNH4TRV2D+NDe11mVvqwhvSDg9E=";
         "8.2" = "U6zmbEkRr3+9yVwUgQ1+SBNK0zWD92S2KBOHJ1gMmjM=";
       };
@@ -35,7 +33,6 @@ let
     "aarch64-linux" = {
       system = "arm64";
       sha256 = {
-        "8.0" = "R6zdOw/K+/YPYzSEOEyz83hqiLHCM4EOjz2tLrJOPlE=";
         "8.1" = "agLQVI3u7ENcWLDRx7YSEBZobRnwEaKAmFpIU5AXhqo=";
         "8.2" = "Y2bUYaymoZ/Ct5a7K+5U+zNh9ZKUaq0Oal/v04nzuaU=";
       };
@@ -43,7 +40,6 @@ let
     "aarch64-darwin" = {
       system = "arm64";
       sha256 = {
-        "8.0" = "XcFU1lq694aLIn1HQdDSg2Zx68/fLew3GjkTLsxHYvk=";
         "8.1" = "ovTtwXPut9jCvxVyd5mQzrfJPCy+rQvUi4c74NrBzY4=";
         "8.2" = "8hybE62l8vSwbqpcrnj/lI2Wjy8R3wuO04zwofLi9EY=";
       };
@@ -51,7 +47,6 @@ let
     "x86_64-darwin" = {
       system = "amd64";
       sha256 = {
-        "8.0" = "F4mIvjyf3Zi3icKcPe6KP2gR9jeC7EJskw9TfsTHz6Y=";
         "8.1" = "WsHH/XJboHeRhxpYY0WtXEJwOsGNFtfexBShC/J7GaQ=";
         "8.2" = "w3Vu7CTFebn59i1FYVCYHiOadTIPlPCkQ1QHEfvHWig=";
       };

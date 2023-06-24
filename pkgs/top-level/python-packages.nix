@@ -12106,6 +12106,8 @@ self: super: with self; {
 
   textual = callPackage ../development/python-modules/textual { };
 
+  textual-universal-directorytree = callPackage ../development/python-modules/textual-universal-directorytree { };
+
   testbook = callPackage ../development/python-modules/testbook { };
 
   testing-common-database = callPackage ../development/python-modules/testing-common-database { };

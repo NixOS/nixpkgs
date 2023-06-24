@@ -1773,7 +1773,7 @@ in
 
         # Warn about deprecated notifiers.
         deprecatedNotifiers = optional (cfg.provision.notifiers != [ ]) ''
-          Notifiers are deprecated upstream and will be removed in Grafana 10.
+          Notifiers are deprecated upstream and will be removed in Grafana 11.
           Use `services.grafana.provision.alerting.contactPoints` instead.
         '';
 
