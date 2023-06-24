@@ -6,7 +6,7 @@
 , fetchpatch
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "nc4nix";
   version = "unstable-2023-06-06";
 
@@ -24,6 +24,15 @@ buildGoModule rec {
       url = "https://github.com/helsinki-systems/nc4nix/commit/a7bca4793cc12e87d381f12f6f8c00ae2ca02893.patch";
       sha256 = "sha256-0JxyhSQLtlgLtsMv82wMjQHGdmOoQ2dcPPNAw2cFByE=";
       name = "switch_hash_calculation_method.patch";
+    })
+
+    # Fix invalid entries (pre-releases of apps are not to be taken into account,
+    # but if only pre-releases are compatible with a given Nextcloud version,
+    # invalid entries are generated)
+    (fetchpatch {
+      url = "https://github.com/helsinki-systems/nc4nix/commit/c48131b5ca382585fd3294d51d59acc1e92fadb1.patch";
+      sha256 = "sha256-/zc3Smjd6CksC5wUvoB6uAyTzPcIgqimb+zASIuTft0=";
+      excludes = [ "25.json" "26.json" "27.json" ];
     })
   ];
 
