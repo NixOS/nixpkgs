@@ -47,7 +47,7 @@
         selfTargetTarget = pythonOnTargetForTarget.pkgs or {}; # There is no Python TargetTarget.
       };
       hooks = import ./hooks/default.nix;
-      keep = lib.extends hooks pythonPackagesFun;
+      keep = self: { inherit (self) wrapPython; };
       extra = _: {};
       optionalExtensions = cond: as: lib.optionals cond as;
       pythonExtension = import ../../../top-level/python-packages.nix;
@@ -57,6 +57,7 @@
       ] ++ (optionalExtensions (!self.isPy3k) [
         python2Extension
       ]) ++ pythonPackagesExtensions ++ [
+        hooks
         overrides
       ]);
       aliases = self: super: lib.optionalAttrs config.allowAliases (import ../../../top-level/python-aliases.nix lib self super);
@@ -64,7 +65,7 @@
       otherSplices
       keep
       extra
-      (lib.extends (lib.composeExtensions aliases extensions) keep))
+      (lib.extends (lib.composeExtensions aliases extensions) pythonPackagesFun))
     {
       overrides = packageOverrides;
       python = self;
