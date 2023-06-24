@@ -38195,6 +38195,8 @@ with pkgs;
 
   gurobi = callPackage ../applications/science/math/gurobi { };
 
+  hypre = callPackage ../development/libraries/science/math/hypre { };
+
   jags = callPackage ../applications/science/math/jags { };
 
   labplot = libsForQt5.callPackage ../applications/science/math/labplot { };
