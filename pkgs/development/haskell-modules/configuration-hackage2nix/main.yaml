@@ -53,6 +53,11 @@ default-package-overrides:
   - dhall-nixpkgs == 1.0.9
   - dhall-nix == 1.1.25
 
+  # 2023-06-24: HLS at large can't deal with lsp-2.0.0.0 yet
+  - lsp == 1.6.*
+  - lsp-types == 1.6.*
+  - lsp-test == 0.14.*
+
 extra-packages:
   - Cabal == 2.2.*                      # required for jailbreak-cabal etc.
   - Cabal == 2.4.*                      # required for cabal-install etc.
