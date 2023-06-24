@@ -873,6 +873,11 @@ in mkLicense lset) ({
     fullName = "OpenSSL License";
   };
 
+  opubl = {
+    spdxId = "OPUBL-1.0";
+    fullName = "Open Publication License v1.0";
+  };
+
   osl2 = {
     spdxId = "OSL-2.0";
     fullName = "Open Software License 2.0";
