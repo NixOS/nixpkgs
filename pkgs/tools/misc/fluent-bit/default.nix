@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fluent-bit";
-  version = "2.1.4";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-bit";
     rev = "v${version}";
-    sha256 = "sha256-WaIGTQiBVbLpSw17rBd1KbllkGEnSSXAPdO0CcbSNSI=";
+    hash = "sha256-PPpdGLzyivsLd6I7ER9llp6fdLgtWRwEkKzLko/ehro=";
   };
 
   nativeBuildInputs = [ cmake flex bison ];
@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Log forwarder and processor, part of Fluentd ecosystem";
     homepage = "https://fluentbit.io";
+    changelog = "https://github.com/fluent/fluent-bit/releases/tag/v${version}";
     maintainers = with maintainers; [ samrose fpletz ];
     license = licenses.asl20;
     platforms = platforms.linux;
