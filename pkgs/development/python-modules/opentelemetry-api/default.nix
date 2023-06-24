@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , pythonOlder
+, pythonRelaxDepsHook
 , fetchFromGitHub
 , deprecated
 , hatchling
@@ -28,6 +29,11 @@ let
 
     nativeBuildInputs = [
       hatchling
+      pythonRelaxDepsHook
+    ];
+
+    pythonRelaxDeps = [
+      "importlib-metadata"
     ];
 
     propagatedBuildInputs = [
