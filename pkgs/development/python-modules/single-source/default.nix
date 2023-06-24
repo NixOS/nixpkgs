@@ -4,6 +4,7 @@
 , importlib-metadata
 , poetry-core
 , pytest-mock
+, toml
 , pytestCheckHook
 , pythonOlder
 }:
@@ -31,8 +32,12 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-mock
     pytestCheckHook
+  ];
+
+  checkInputs = [
+    pytest-mock
+    toml
   ];
 
   pythonImportsCheck = [
@@ -44,6 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/rabbit72/single-source";
     changelog = "https://github.com/rabbit72/single-source/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }
