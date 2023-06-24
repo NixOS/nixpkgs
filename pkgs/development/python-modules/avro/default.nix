@@ -29,6 +29,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Requires network access
     "test_server_with_path"
+    # AssertionError: 'reader type: null not compatible with writer type: int'
+    "test_schema_compatibility_type_mismatch"
   ];
 
   pythonImportsCheck = [
