@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , lib
 , stdenv
+, cubeb
 , curl
 , ffmpeg
 , fmt
@@ -10,7 +11,6 @@
 , libaio
 , libbacktrace
 , libpcap
-, libpulseaudio
 , libsamplerate
 , libXrandr
 , libzip
@@ -69,7 +69,6 @@ stdenv.mkDerivation rec {
     libaio
     libbacktrace
     libpcap
-    libpulseaudio
     libsamplerate
     libXrandr
     libzip
@@ -85,7 +84,8 @@ stdenv.mkDerivation rec {
     vulkan-loader
     wayland
     xz
-  ];
+  ]
+  ++ cubeb.passthru.backendLibs;
 
   installPhase = ''
     mkdir -p $out/bin
@@ -98,11 +98,10 @@ stdenv.mkDerivation rec {
   '';
 
   qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([
       ffmpeg # It's loaded with dlopen. They plan to change it https://github.com/PCSX2/pcsx2/issues/8624
-      libpulseaudio
       vulkan-loader
-    ]}"
+    ] ++ cubeb.passthru.backendLibs)}"
   ];
 
   meta = with lib; {
