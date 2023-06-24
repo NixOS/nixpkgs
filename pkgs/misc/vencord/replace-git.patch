@@ -7,7 +7,7 @@ index 7ff599a..85b3bfa 100644
  export const watch = process.argv.includes("--watch");
  export const isStandalone = JSON.stringify(process.argv.includes("--standalone"));
 -export const gitHash = execSync("git rev-parse --short HEAD", { encoding: "utf-8" }).trim();
-+export const gitHash = "@version@";
++export const gitHash = "v@version@";
  export const banner = {
      js: `
  // Vencord ${gitHash}
