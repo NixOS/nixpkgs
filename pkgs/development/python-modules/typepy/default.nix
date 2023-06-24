@@ -24,10 +24,17 @@ buildPythonPackage rec {
     hash = "sha256-cgy1+6RZ1DUyH45bAKpGPOOZCwhCUghummw2fnfJGww=";
   };
 
-  propagatedBuildInputs = [ mbstrdecoder python-dateutil pytz packaging ];
+  propagatedBuildInputs = [
+    mbstrdecoder
+    python-dateutil
+    pytz
+    packaging
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-  checkInputs = [ tcolorpy ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    tcolorpy
+  ];
 
   meta = with lib; {
     description = "Library for variable type checker/validator/converter at a run time";
