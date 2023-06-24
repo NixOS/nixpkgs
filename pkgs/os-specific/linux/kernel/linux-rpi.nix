@@ -23,6 +23,24 @@ lib.overrideDerivation (buildLinux (args // {
     "4" = "bcm2711_defconfig";
   }.${toString rpiVersion};
 
+  structuredExtraConfig = with lib.kernel; {
+    # The perl script to generate kernel options sets unspecified
+    # parameters to `m` if possible [1]. This results in the
+    # unspecified config option KUNIT [2] getting set to `m` which
+    # causes DRM_VC4_KUNIT_TEST [3] to get set to `y`.
+    #
+    # This vc4 unit test fails on boot due to a null pointer
+    # exception with the existing config. I'm not sure why, but in
+    # any case, the DRM_VC4_KUNIT_TEST config option itself states
+    # that it is only useful for kernel developers working on the
+    # vc4 driver.
+    #
+    # [1] https://github.com/NixOS/nixpkgs/blob/85bcb95aa83be667e562e781e9d186c57a07d757/pkgs/os-specific/linux/kernel/generate-config.pl#L1-L10
+    # [2] https://github.com/raspberrypi/linux/blob/1.20230405/lib/kunit/Kconfig#L5-L14
+    # [3] https://github.com/raspberrypi/linux/blob/bb63dc31e48948bc2649357758c7a152210109c4/drivers/gpu/drm/vc4/Kconfig#L38-L52
+    KUNIT = no;
+  };
+
   features = {
     efiBootStub = false;
   } // (args.features or {});
