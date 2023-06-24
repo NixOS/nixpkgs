@@ -1,34 +1,33 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 , setuptools
 , setuptools-scm
 , typing-extensions
-, toml
 , zipp
 }:
 
 buildPythonPackage rec {
   pname = "importlib-metadata";
-  version = "6.0.0";
+  version = "6.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    pname = "importlib_metadata";
-    inherit version;
-    hash = "sha256-41S+3rYO+mr/3MiuEhtzVEp6p0FW0EcxGUj21xHNN40=";
+  src = fetchFromGitHub {
+    owner = "python";
+    repo = "importlib_metadata";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-73AkriM1QgXKOlrCxrC/AG+IEXjo+kPjQrxfVFHIJlc=";
   };
 
   nativeBuildInputs = [
-    setuptools # otherwise cross build fails
+    setuptools
     setuptools-scm
   ];
 
   propagatedBuildInputs = [
-    toml
     zipp
   ] ++ lib.optionals (pythonOlder "3.8") [
     typing-extensions
@@ -40,6 +39,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "importlib_metadata"
   ];
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   meta = with lib; {
     description = "Read metadata from Python packages";
