@@ -18,8 +18,7 @@ let
     { name = "cli"; description = "command-line serialization functions"; }
   ];
 
-  locationsXml = import ./lib-function-locations.nix { inherit pkgs nixpkgs libsets; };
-  functionDocs = import ./lib-function-docs.nix { inherit locationsXml pkgs libsets; };
+  functionDocs = import ./lib-function-docs.nix { inherit pkgs nixpkgs libsets; };
   version = pkgs.lib.version;
 
   epub-xsl = pkgs.writeText "epub.xsl" ''
@@ -69,7 +68,6 @@ in pkgs.runCommand "doc-support" {}
   mkdir result
   (
     cd result
-    ln -s ${locationsXml} ./function-locations.xml
     ln -s ${functionDocs} ./function-docs
     ln -s ${optionsDoc.optionsDocBook} ./config-options.docbook.xml
 

@@ -1,8 +1,13 @@
 # Generates the documentation for library functions via nixdoc.
 
-{ pkgs, locationsXml, libsets }:
+{ pkgs, nixpkgs, libsets }:
 
-with pkgs; stdenv.mkDerivation {
+with pkgs;
+
+let
+  locationsXml = import ./lib-function-locations.nix { inherit pkgs nixpkgs libsets; };
+in
+stdenv.mkDerivation {
   name = "nixpkgs-lib-docs";
   src = ../../lib;
 
