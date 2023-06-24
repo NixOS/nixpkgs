@@ -1,6 +1,48 @@
 { pkgs ? (import ./.. { }), nixpkgs ? { }}:
 let
   doc-support = import ./doc-support { inherit pkgs nixpkgs; };
+
+  epub = pkgs.runCommand "manual.epub" {
+    nativeBuildInputs = with pkgs; [ libxslt zip ];
+
+    epub = ''
+      <book xmlns="http://docbook.org/ns/docbook"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            version="5.0"
+            xml:id="nixpkgs-manual">
+        <info>
+          <title>Nixpkgs Manual</title>
+          <subtitle>Version ${pkgs.lib.version}</subtitle>
+        </info>
+        <chapter>
+          <title>Temporarily unavailable</title>
+          <para>
+            The Nixpkgs manual is currently not available in EPUB format,
+            please use the <link xlink:href="https://nixos.org/nixpkgs/manual">HTML manual</link>
+            instead.
+          </para>
+          <para>
+            If you've used the EPUB manual in the past and it has been useful to you, please
+            <link xlink:href="https://github.com/NixOS/nixpkgs/issues/237234">let us know</link>.
+          </para>
+        </chapter>
+      </book>
+    '';
+
+    passAsFile = [ "epub" ];
+  } ''
+    mkdir scratch
+    xsltproc \
+      --param chapter.autolabel 0 \
+      --nonet \
+      --output scratch/ \
+      ${pkgs.docbook_xsl_ns}/xml/xsl/docbook/epub/docbook.xsl \
+      $epubPath
+
+    echo "application/epub+zip" > mimetype
+    zip -0Xq "$out" mimetype
+    cd scratch && zip -Xr9D "$out" *
+  '';
 in pkgs.stdenv.mkDerivation {
   name = "nixpkgs-manual";
 
@@ -20,33 +62,7 @@ in pkgs.stdenv.mkDerivation {
     ln -s ${doc-support} ./doc-support/result
   '';
 
-  epub = ''
-    <book xmlns="http://docbook.org/ns/docbook"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
-          version="5.0"
-          xml:id="nixpkgs-manual">
-      <info>
-        <title>Nixpkgs Manual</title>
-        <subtitle>Version ${pkgs.lib.version}</subtitle>
-      </info>
-      <chapter>
-        <title>Temporarily unavailable</title>
-        <para>
-          The Nixpkgs manual is currently not available in EPUB format,
-          please use the <link xlink:href="https://nixos.org/nixpkgs/manual">HTML manual</link>
-          instead.
-        </para>
-        <para>
-          If you've used the EPUB manual in the past and it has been useful to you, please
-          <link xlink:href="https://github.com/NixOS/nixpkgs/issues/237234">let us know</link>.
-        </para>
-      </chapter>
-    </book>
-  '';
-  passAsFile = [ "epub" ];
-
   preBuild = ''
-    cp $epubPath epub.xml
     make -j$NIX_BUILD_CORES render-md
   '';
 
@@ -56,7 +72,7 @@ in pkgs.stdenv.mkDerivation {
     mv out/html "$dest"
     mv "$dest/index.html" "$dest/manual.html"
 
-    mv out/epub/manual.epub "$dest/nixpkgs-manual.epub"
+    cp ${epub} "$dest/nixpkgs-manual.epub"
 
     mkdir -p $out/nix-support/
     echo "doc manual $dest manual.html" >> $out/nix-support/hydra-build-products

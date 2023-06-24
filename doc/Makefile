@@ -17,7 +17,7 @@ pandoc_flags = --extract-media=$(pandoc_media_dir) \
 	-f commonmark$(pandoc_commonmark_enabled_extensions)+smart
 
 .PHONY: all
-all: validate format out/html/index.html out/epub/manual.epub
+all: validate format out/html/index.html
 
 .PHONY: render-md
 render-md: ${MD_TARGETS}
@@ -65,19 +65,6 @@ out/html/index.html: doc-support/result manual-full.xml style.css highlightjs
 	mkdir -p out/html/images/callouts
 	cp doc-support/result/xsl/docbook/images/callouts/*.svg out/html/images/callouts/
 	chmod u+w -R out/html/
-
-out/epub/manual.epub: epub.xml
-	mkdir -p out/epub/scratch
-	xsltproc --nonet \
-		--output out/epub/scratch/ \
-		doc-support/result/epub.xsl \
-		./epub.xml
-
-	echo "application/epub+zip" > mimetype
-	zip -0Xq "out/epub/manual.epub" mimetype
-	rm mimetype
-	cd "out/epub/scratch/" && zip -Xr9D "../manual.epub" *
-	rm -rf "out/epub/scratch/"
 
 highlightjs: doc-support/result
 	mkdir -p highlightjs
