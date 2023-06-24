@@ -5,7 +5,6 @@
 , meson
 , ninja
 , pkg-config
-, python3
 , vala
 , wrapGAppsHook4
 , evolution-data-server
@@ -16,6 +15,7 @@
 , libadwaita
 , libgee
 , libical
+, libportal-gtk4
 , pantheon
 , sqlite
 , webkitgtk_6_0
@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "planify";
-  version = "unstable-2023-04-20";
+  version = "4.1";
 
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planify";
-    rev = "97c0f1c30d087e2ac459241bfdb9b606a12a77ce";
-    sha256 = "sha256-W4Hfa9zgKpGKfd7QSTLF2FT0vSJ5mQMV+W9WWltZlL4=";
+    rev = version;
+    sha256 = "sha256-H8TPuqKRwbcB+2NTC5ZIK7y6uiYbTT4svtx21FbTzME=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     vala
     wrapGAppsHook4
   ];
@@ -51,21 +50,11 @@ stdenv.mkDerivation rec {
     libadwaita
     libgee
     libical
+    libportal-gtk4
     pantheon.granite7
     sqlite
     webkitgtk_6_0
   ];
-
-  mesonFlags = [
-    "-Dproduction=true"
-  ];
-
-  postPatch = ''
-    chmod +x build-aux/meson/post_install.py
-    patchShebangs build-aux/meson/post_install.py
-    substituteInPlace build-aux/meson/post_install.py \
-      --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
-  '';
 
   meta = with lib; {
     description = "Task manager with Todoist support designed for GNU/Linux";
@@ -73,6 +62,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dtzWill ] ++ teams.pantheon.members;
     platforms = platforms.linux;
-    mainProgram = "com.github.alainm23.task-planner";
+    mainProgram = "io.github.alainm23.planify";
   };
 }
