@@ -13211,8 +13211,6 @@ with pkgs;
 
   tinyfecvpn = callPackage ../tools/networking/tinyfecvpn { };
 
-  tinygltf = callPackage ../development/libraries/tinygltf { };
-
   tinyobjloader = callPackage ../development/libraries/tinyobjloader { };
 
   tinyprog = callPackage ../development/embedded/fpga/tinyprog { };
@@ -20416,7 +20414,9 @@ with pkgs;
 
   dotconf = callPackage ../development/libraries/dotconf { };
 
-  draco = callPackage ../development/libraries/draco { };
+  draco = callPackage ../development/libraries/draco {
+    tinygltf = callPackage ../development/libraries/draco/tinygltf.nix { };
+  };
 
   # Multi-arch "drivers" which we want to build for i686.
   driversi686Linux = recurseIntoAttrs {
