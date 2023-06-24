@@ -445,6 +445,7 @@ mapAliases ({
   electron_8 = throw "electron_8 has been removed in favor of newer versions"; # added 2022-02-08
 
   electrum-dash = throw "electrum-dash has been removed from nixpkgs as the project is abandoned"; # Added 2022-01-01
+  elementary-planner = throw "elementary-planner has been renamed to planify"; # Added 2023-06-24
 
   elixir_ls = elixir-ls; # Added 2023-03-20
 

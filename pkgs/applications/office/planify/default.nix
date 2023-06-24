@@ -22,12 +22,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "elementary-planner";
+  pname = "planify";
   version = "unstable-2023-04-20";
 
   src = fetchFromGitHub {
     owner = "alainm23";
-    repo = "planner";
+    repo = "planify";
     rev = "97c0f1c30d087e2ac459241bfdb9b606a12a77ce";
     sha256 = "sha256-W4Hfa9zgKpGKfd7QSTLF2FT0vSJ5mQMV+W9WWltZlL4=";
   };
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Task manager with Todoist support designed for GNU/Linux";
-    homepage = "https://useplanner.com";
+    homepage = "https://github.com/alainm23/planify";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dtzWill ] ++ teams.pantheon.members;
     platforms = platforms.linux;
