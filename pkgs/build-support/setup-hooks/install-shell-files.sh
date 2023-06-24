@@ -96,7 +96,7 @@ installManPage() {
 #
 # If any argument is `--` the remaining arguments will be treated as paths.
 installShellCompletion() {
-    local shell='' name='' cmdname='' retval=0 parseArgs=1 arg
+    local shell='' name='' cmdname='' size_check=256 retval=0 parseArgs=1 arg
     while { arg=$1; shift; }; do
         # Parse arguments
         if (( parseArgs )); then
@@ -121,6 +121,17 @@ installShellCompletion() {
                     echo 'installShellCompletion: error: --cmd flag expected an argument' >&2
                     return 1
                 }
+                continue;;
+            --size-check)
+                size_check=$1
+                shift || {
+                    echo 'installShellCompletion: error: --size-check flag expected an argument' >&2
+                    return 1
+                }
+                continue;;
+            --size-check=*)
+                # treat `--size-check=foo` the same as `--size-check foo`
+                size_check=${arg#--size-check=}
                 continue;;
             --cmd=*)
                 # treat `--cmd=foo` the same as `--cmd foo`
@@ -219,6 +230,12 @@ installShellCompletion() {
         else
             install -Dm644 -T "$arg" "$outPath"
         fi || return
+        # Sanity check file size to avoid assuming completion has succeed but it generate an invalid file.
+        local fileSize=$(stat -c%s "$outPath")
+        if (( fileSize < size_check )); then
+            echo "installShellCompletion: error: $outPath is too small ($fileSize only), use '--size-check $fileSize' to override" >&2
+            return 1
+        fi
         # Clear the per-path flags
         name=
     done

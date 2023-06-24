@@ -49,11 +49,11 @@ recurseIntoAttrs {
   # installShellCompletion
 
   install-completion = runTest "install-completion" {} ''
-    echo foo > foo
-    echo bar > bar
-    echo baz > baz
-    echo qux > qux.zsh
-    echo quux > quux
+    dd bs=1 count=256 if=/dev/urandom of=foo
+    dd bs=1 count=256 if=/dev/urandom of=bar
+    dd bs=1 count=256 if=/dev/urandom of=baz
+    dd bs=1 count=256 if=/dev/urandom of=qux.zsh
+    dd bs=1 count=256 if=/dev/urandom of=quux
 
     installShellCompletion --bash foo bar --zsh baz qux.zsh --fish quux
 
@@ -66,7 +66,7 @@ recurseIntoAttrs {
   install-completion-output = runTest "install-completion-output" {
     outputs = [ "out" "bin" ];
   } ''
-    echo foo > foo
+    dd bs=1 count=256 if=/dev/urandom of=foo
 
     installShellCompletion --bash foo
 
@@ -78,9 +78,9 @@ recurseIntoAttrs {
     touch $out
   '';
   install-completion-name = runTest "install-completion-name" {} ''
-    echo foo > foo
-    echo bar > bar
-    echo baz > baz
+    dd bs=1 count=256 if=/dev/urandom of=foo
+    dd bs=1 count=256 if=/dev/urandom of=bar
+    dd bs=1 count=256 if=/dev/urandom of=baz
 
     installShellCompletion --bash --name foobar.bash foo --zsh --name _foobar bar --fish baz
 
@@ -89,9 +89,9 @@ recurseIntoAttrs {
     cmp baz $out/share/fish/vendor_completions.d/baz
   '';
   install-completion-inference = runTest "install-completion-inference" {} ''
-    echo foo > foo.bash
-    echo bar > bar.zsh
-    echo baz > baz.fish
+    dd bs=1 count=256 if=/dev/urandom of=foo.bash
+    dd bs=1 count=256 if=/dev/urandom of=bar.zsh
+    dd bs=1 count=256 if=/dev/urandom of=baz.fish
 
     installShellCompletion foo.bash bar.zsh baz.fish
 
@@ -100,10 +100,10 @@ recurseIntoAttrs {
     cmp baz.fish $out/share/fish/vendor_completions.d/baz.fish
   '';
   install-completion-cmd = runTest "install-completion-cmd" {} ''
-    echo foo > foo.bash
-    echo bar > bar.zsh
-    echo baz > baz.fish
-    echo qux > qux.fish
+    dd bs=1 count=256 if=/dev/urandom of=foo.bash
+    dd bs=1 count=256 if=/dev/urandom of=bar.zsh
+    dd bs=1 count=256 if=/dev/urandom of=baz.fish
+    dd bs=1 count=256 if=/dev/urandom of=qux.fish
 
     installShellCompletion --cmd foobar --bash foo.bash --zsh bar.zsh --fish baz.fish --name qux qux.fish
 
@@ -113,13 +113,17 @@ recurseIntoAttrs {
     cmp qux.fish $out/share/fish/vendor_completions.d/qux
   '';
   install-completion-fifo = runTest "install-completion-fifo" {} ''
-    installShellCompletion \
-      --bash --name foo.bash <(echo foo) \
-      --zsh --name _foo <(echo bar) \
-      --fish --name foo.fish <(echo baz)
+    dd bs=1 count=256 if=/dev/urandom of=foo.bash
+    dd bs=1 count=256 if=/dev/urandom of=bar.zsh
+    dd bs=1 count=256 if=/dev/urandom of=baz.fish
 
-    [[ $(<$out/share/bash-completion/completions/foo.bash) == foo ]] || { echo "foo.bash comparison failed"; exit 1; }
-    [[ $(<$out/share/zsh/site-functions/_foo) == bar ]] || { echo "_foo comparison failed"; exit 1; }
-    [[ $(<$out/share/fish/vendor_completions.d/foo.fish) == baz ]] || { echo "foo.fish comparison failed"; exit 1; }
+    installShellCompletion \
+      --bash --name foo.bash <(cat foo.bash) \
+      --zsh --name _foo <(cat bar.zsh) \
+      --fish --name foo.fish <(cat baz.fish)
+
+    cmp foo.bash $out/share/bash-completion/completions/foo.bash
+    cmp bar.zsh $out/share/zsh/site-functions/_foo
+    cmp baz.fish $out/share/fish/vendor_completions.d/foo.fish
   '';
 }
