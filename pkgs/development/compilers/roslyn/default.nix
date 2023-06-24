@@ -4,7 +4,6 @@
 , buildDotnetModule
 , dotnetCorePackages
 , unzip
-, mkNugetDeps
 }:
 
 buildDotnetModule rec {
@@ -22,11 +21,7 @@ buildDotnetModule rec {
 
   projectFile = [ "src/NuGet/Microsoft.Net.Compilers.Toolset/Microsoft.Net.Compilers.Toolset.Package.csproj" ];
 
-  nugetDeps = mkNugetDeps {
-    name = "${pname}-deps";
-    nugetDeps = import ./extended-deps.nix;
-    sourceFile = ./deps.nix;
-  };
+  nugetDeps = ./deps.nix;
 
   dontDotnetFixup = true;
 
