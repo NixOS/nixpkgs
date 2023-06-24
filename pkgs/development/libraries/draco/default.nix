@@ -15,14 +15,14 @@
 let
   cmakeBool = b: if b then "ON" else "OFF";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.5.6";
   pname = "draco";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "draco";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-2YQMav0JJMbJ2bvnN/Xv90tjE/OWLbrZDO4WlaOvcfI=";
     fetchSubmodules = true;
   };
@@ -59,4 +59,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ jansol ];
     platforms = platforms.all;
   };
-}
+})
