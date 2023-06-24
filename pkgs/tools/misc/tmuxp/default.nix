@@ -1,10 +1,6 @@
 { lib, python3Packages, fetchPypi, installShellFiles }:
 
-let
-  pypkgs = python3Packages;
-
-in
-pypkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "tmuxp";
   version = "1.28.1";
 
@@ -19,12 +15,12 @@ pypkgs.buildPythonApplication rec {
   format = "pyproject";
 
   nativeBuildInputs = [
-    pypkgs.poetry-core
-    pypkgs.shtab
+    python3Packages.poetry-core
+    python3Packages.shtab
     installShellFiles
   ];
 
-  propagatedBuildInputs = with pypkgs; [
+  propagatedBuildInputs = with python3Packages; [
     click
     colorama
     kaptan
