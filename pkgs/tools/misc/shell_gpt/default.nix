@@ -6,12 +6,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "shell_gpt";
-  version = "0.9.1";
+  version = "0.9.3";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-k57oPqUpBuqoJFJ2JU3O4d4ESqb1DqJam/L+lJgBWIQ=";
+    sha256 = "sha256-g7zQ9ii38jBMUT0n8SjkccnGlkpCO4817GZ2yidxpMU=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
