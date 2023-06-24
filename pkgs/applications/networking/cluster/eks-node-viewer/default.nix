@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "eks-node-viewer";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-p0n7ocoMBgM6i7e6yX+NDIkZBcJ3dT6VNWPihCheeC0=";
+    sha256 = "sha256-k8WCD/FirC62WSmcgM5PmTs/hZEmR9xpneyZ1orcoMI=";
   };
 
-  vendorHash = "sha256-L1lG+b7MiJQvLqZuLdSjh5zAaApvWdi9SZSDPvObW5w=";
+  vendorHash = "sha256-nUVFQruesP6a74s4UfVrd+2P2lmn1NyVrJBS2dR2QdI=";
 
   ldflags = [
     "-s"
