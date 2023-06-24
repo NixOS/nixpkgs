@@ -2,7 +2,6 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, fetchPypi
 , setuptools
 , setuptools-scm
 , requests
@@ -19,15 +18,16 @@
 , bx-py-utils
 , platformdirs
 , jaraco_itertools
+, jaraco_functools
 , pytestCheckHook
 , requests-mock
 }:
 
 buildPythonPackage rec {
   pname = "jaraco-abode";
-  version = "5.0.1";
+  version = "5.1.0";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   format = "pyproject";
 
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "jaraco";
     repo = "jaraco.abode";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vKlvZrgRKv2C43JLfl4Wum4Icz9yOKEaB6qKapZ0rwQ=";
+    hash = "sha256-guLgmhjFgYLRZsQ0j92NXkktZ80bwVvMUJLZeg3dgxE=";
   };
 
   postPatch = ''
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   propagatedBuildInputs = [
     requests
@@ -65,6 +65,7 @@ buildPythonPackage rec {
     bx-py-utils
     platformdirs
     jaraco_itertools
+    jaraco_functools
   ];
 
   pythonImportsCheck = [ "jaraco.abode" ];
@@ -83,6 +84,7 @@ buildPythonPackage rec {
     "test_cookies"
     "test_empty_cookies"
     "test_invalid_cookies"
+    "test_camera_capture_no_control_URLs"
   ];
 
   meta = with lib; {
