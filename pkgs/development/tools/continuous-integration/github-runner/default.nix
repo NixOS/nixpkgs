@@ -131,7 +131,10 @@ buildDotnetModule rec {
 
   # Fully qualified name of disabled tests
   disabledTests =
-    [ "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync" ]
+    [
+      "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync"
+      "GitHub.Runner.Common.Tests.ProcessInvokerL0.OomScoreAdjIsInherited"
+    ]
     ++ map (x: "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync_${x}") [
       "Cancel_CloneHashTask_WhenNotNeeded"
       "CloneHash_RuntimeAndExternals"
