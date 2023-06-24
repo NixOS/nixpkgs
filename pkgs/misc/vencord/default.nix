@@ -46,6 +46,7 @@ buildNpmPackage rec {
       src = ./replace-git.patch;
       inherit version;
     })
+    ./disable-updater-ui.patch
   ];
 
   installPhase = if buildWebExtension then ''
