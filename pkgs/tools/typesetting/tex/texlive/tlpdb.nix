@@ -25886,7 +25886,7 @@ lshort-german = {
   stripPrefix = 0;
   sha512.run = "c937bb8da86a3ef6d428d134903bf8af74a286d644bedfe4766841b2b5234b34e2caed70460ecaf7a1b1dc57f1faf1396435cca7f714f84d75f15acea12e79f8";
   sha512.doc = "69cebdd6a1444670a154d5cdd199022f6f1d6612b24b05fc8dc1e9f54a89fb65cda1f545341cd37616dbf6dd94077ccb924bf4b49f1473e45eb0bcd33f5f33a6";
-  license = [ "opl" ];
+  license = [ "opubl" ];
   version = "3.0c";
 };
 lshort-italian = {

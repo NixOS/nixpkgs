@@ -49,6 +49,12 @@ let
         license = [  "lppl13c" ];
       };
 
+      # TODO: remove this when updating to texlive-2023, npp-for-context is no longer in texlive
+      npp-for-context = orig.npp-for-context // {
+        # tlpdb lists license as "noinfo", but it's gpl3: https://github.com/luigiScarso/context-npp
+        license = [  "gpl3Only" ];
+      };
+
       # remove dependency-heavy packages from the basic collections
       collection-basic = orig.collection-basic // {
         deps = lib.filter (n: n != "metafont" && n != "xdvi") orig.collection-basic.deps;
