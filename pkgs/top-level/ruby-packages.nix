@@ -249,10 +249,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0sk2bypzk4igvl1bx1blr6pvn5hxbm453vz1n9hgd0zrn6y9ckaq";
+      sha256 = "1sm8wnvxz4r9iq79s295jsrvznvjpd0pagnh1pz3xfmc9qffi7yi";
       type = "gem";
     };
-    version = "1.17.8";
+    version = "1.17.12";
   };
   cairo-gobject = {
     dependencies = ["cairo" "glib2"];
@@ -964,10 +964,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "08rxibzssqv14sgdfh45pdm26nbk54xp84vb5pb1mlyalszz1mc3";
+      sha256 = "1ai4cxnymjp7c2xqbfksks82aah0pbyjsl3r2cgc4iimrw2wg8qy";
       type = "gem";
     };
-    version = "2.7.6";
+    version = "2.7.7";
   };
   faraday-net_http = {
     groups = ["default"];
@@ -1924,10 +1924,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "09yj3z5snhaawh2z1w45yyihzmh57m6m7dp8ra8gxavhj5kbiq5p";
+      sha256 = "16z11alz13vfc4zs5l3fk6n51n2jw9lskvc4h4prnww0y797qd87";
       type = "gem";
     };
-    version = "2.7.0";
+    version = "2.7.1";
   };
   kramdown = {
     dependencies = ["rexml"];
@@ -1961,6 +1961,16 @@
       type = "gem";
     };
     version = "1.6.6";
+  };
+  language_server-protocol = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0gvb1j8xsqxms9mww01rmdl78zkd72zgxaap56bhv8j45z05hp1x";
+      type = "gem";
+    };
+    version = "3.17.0.3";
   };
   libv8 = {
     groups = ["default"];
@@ -2185,10 +2195,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0ic7i5z88zcaqnpzprf7saimq2f6sad57g5mkkqsrqrcd6h3mx06";
+      sha256 = "1kg9wh7jlc9zsr3hkhpzkbn0ynf4np5ap9m2d8xdrb8shy0y6pmb";
       type = "gem";
     };
-    version = "5.18.0";
+    version = "5.18.1";
   };
   molinillo = {
     groups = ["default"];
@@ -2266,10 +2276,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1r1sh17dj6jwmnk4awj0vpagl3fncrkdlvm99m17warqsynbnvji";
+      sha256 = "004wx9xhcam92g1d4ybvrl1yqablm2svalyck9sq4igy9nwkz9nb";
       type = "gem";
     };
-    version = "1.1.5";
+    version = "1.1.8";
   };
   ncursesw = {
     groups = ["default"];
@@ -2287,10 +2297,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1d996zf3g8xz244791b0qsl9vr7zg4lqnnmf9k2kshr9lki5jam8";
+      sha256 = "1k1qyjr9lkk5y3483k6wk6d9h1jx4v5hzby1mf0pj3b4kr2arxbm";
       type = "gem";
     };
-    version = "0.3.4";
+    version = "0.3.6";
   };
   net-pop = {
     dependencies = ["net-protocol"];
@@ -2474,15 +2484,15 @@
     version = "1.23.0";
   };
   parser = {
-    dependencies = ["ast"];
+    dependencies = ["ast" "racc"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "08f89nssj7ws7sjfvc2fcjpfm83sjgmniyh0npnmpqf5sfv44r8x";
+      sha256 = "1swigds85jddb5gshll1g8lkmbcgbcp9bi1d4nigwvxki8smys0h";
       type = "gem";
     };
-    version = "3.2.2.1";
+    version = "3.2.2.3";
   };
   paru = {
     groups = ["default"];
@@ -2551,10 +2561,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "02fw2pzrmvwp67nbndpy8a2ln74fd8kmsiffw77z7g1mp58ww651";
+      sha256 = "1i9skw2yry57nyphzvhrvw2k1lan0ysfpf157qd7s7apsscdzc7w";
       type = "gem";
     };
-    version = "1.5.1";
+    version = "1.5.2";
   };
   polyglot = {
     groups = ["default"];
@@ -2646,10 +2656,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0m2i3shf5y7bj253z00gxpw2k5dr6nn97s7ppbs3q4zw78i0pz94";
+      sha256 = "11v3l46mwnlzlc371wr3x6yylpgafgwdf0q7hc7c1lzx6r414r5g";
       type = "gem";
     };
-    version = "1.7.0";
+    version = "1.7.1";
   };
   rack = {
     groups = ["default"];
@@ -2889,10 +2899,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "17xizkw5ryw8hhq64iqxmzdrrdxpc5lhkqc1fgm1aj0zsk1r2950";
+      sha256 = "136br91alxdwh1s85z912dwz23qlhm212vy6i3wkinz3z8mkxxl3";
       type = "gem";
     };
-    version = "2.8.0";
+    version = "2.8.1";
   };
   rest-client = {
     dependencies = ["http-accept" "http-cookie" "mime-types" "netrc"];
@@ -3012,15 +3022,15 @@
     version = "3.12.0";
   };
   rubocop = {
-    dependencies = ["json" "parallel" "parser" "rainbow" "regexp_parser" "rexml" "rubocop-ast" "ruby-progressbar" "unicode-display_width"];
+    dependencies = ["json" "language_server-protocol" "parallel" "parser" "rainbow" "regexp_parser" "rexml" "rubocop-ast" "ruby-progressbar" "unicode-display_width"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "14gg24mn8gmi88133x2aq3k3wr3jq2l6rklyvsb1dmgnj7qhm1m9";
+      sha256 = "0b7pf8916k7ps9jdnkn0774n37jpdzp88mzcqdij3h9hvpn6vr81";
       type = "gem";
     };
-    version = "1.52.0";
+    version = "1.53.0";
   };
   rubocop-ast = {
     dependencies = ["parser"];
@@ -3477,10 +3487,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1pfddf51n5fnj4f9ggwj3wbf23ynj0nbxlxqpz12y1gvl9g7d6r6";
+      sha256 = "1d9cvm0f4zdpwa795v3zv4973y5zk59j7s1x3yn90jjrhcz1yvfd";
       type = "gem";
     };
-    version = "0.3.2";
+    version = "0.4.0";
   };
   tiny_tds = {
     groups = ["default"];
