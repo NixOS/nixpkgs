@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     description = "A JVM-based Common Lisp implementation";
     license = lib.licenses.gpl3 ;
     maintainers = lib.teams.lisp.members;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
     homepage = "https://common-lisp.net/project/armedbear/";
   };
 }

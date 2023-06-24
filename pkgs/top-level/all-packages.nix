@@ -585,6 +585,8 @@ with pkgs;
 
   firefly-desktop = callPackage ../applications/misc/firefly-desktop { };
 
+  flaca = callPackage ../applications/graphics/flaca { };
+
   frece = callPackage ../development/tools/frece { };
 
   frida-tools = callPackage ../tools/security/frida-tools { };
@@ -3792,6 +3794,8 @@ with pkgs;
 
   waydroid = callPackage ../os-specific/linux/waydroid { };
 
+  wgo = callPackage ../development/tools/wgo { };
+
   wiiload = callPackage ../development/tools/wiiload { };
 
   winhelpcgi = callPackage ../development/tools/winhelpcgi {
@@ -4822,6 +4826,8 @@ with pkgs;
   earlybird = callPackage ../tools/security/earlybird { };
 
   earlyoom = callPackage ../os-specific/linux/earlyoom { };
+
+  easyabc = callPackage ../applications/audio/easyabc { };
 
   easycrypt = callPackage ../applications/science/logic/easycrypt { };
 
@@ -6086,6 +6092,8 @@ with pkgs;
   msr-tools = callPackage ../os-specific/linux/msr-tools { };
 
   mstflint = callPackage ../tools/misc/mstflint { };
+
+  msldapdump = callPackage ../tools/security/msldapdump { };
 
   mslink = callPackage ../tools/misc/mslink { };
 
@@ -16537,6 +16545,7 @@ with pkgs;
   cargo-clone = callPackage ../development/tools/rust/cargo-clone {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
+  cargo-component = callPackage ../development/tools/rust/cargo-component { };
   cargo-criterion = callPackage ../development/tools/rust/cargo-criterion { };
   cargo-cyclonedx = callPackage ../development/tools/rust/cargo-cyclonedx {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration CoreFoundation;
@@ -24263,6 +24272,7 @@ with pkgs;
     s6-portable-utils
     s6-portable-utils-man-pages
     s6-rc
+    s6-rc-man-pages
     sdnotify-wrapper
     skalibs
     skalibs_2_10
@@ -31341,6 +31351,10 @@ with pkgs;
   gscreenshot = callPackage ../applications/graphics/gscreenshot { };
 
   gtkpod = callPackage ../applications/audio/gtkpod { };
+
+  guacamole-client = callPackage ../servers/guacamole-client { };
+
+  guacamole-server = callPackage ../servers/guacamole-server { };
 
   q4wine = libsForQt5.callPackage ../applications/misc/q4wine { };
 

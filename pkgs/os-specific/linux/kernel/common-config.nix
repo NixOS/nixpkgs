@@ -106,6 +106,7 @@ let
       CHT_WC_PMIC_OPREGION             = whenAtLeast "5.10" yes;
       INTEL_SOC_PMIC_CHTDC_TI          = whenAtLeast "5.10" yes;
       CHT_DC_TI_PMIC_OPREGION          = whenAtLeast "5.10" yes;
+      MFD_TPS68470                     = whenBetween "5.10" "5.13" yes;
       TPS68470_PMIC_OPREGION           = whenAtLeast "5.10" yes;
     };
 
@@ -128,11 +129,11 @@ let
     memory = {
       DAMON = whenAtLeast "5.15" yes;
       DAMON_VADDR = whenAtLeast "5.15" yes;
-      DAMON_PADDR = whenAtLeast "5.15" yes;
-      DAMON_SYSFS = whenAtLeast "5.15" yes;
+      DAMON_PADDR = whenAtLeast "5.16" yes;
+      DAMON_SYSFS = whenAtLeast "5.18" yes;
       DAMON_DBGFS = whenAtLeast "5.15" yes;
-      DAMON_RECLAIM = whenAtLeast "5.15" yes;
-      DAMON_LRU_SORT = whenAtLeast "5.15" yes;
+      DAMON_RECLAIM = whenAtLeast "5.16" yes;
+      DAMON_LRU_SORT = whenAtLeast "6.0" yes;
     };
 
     memtest = {

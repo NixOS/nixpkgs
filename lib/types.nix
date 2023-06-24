@@ -211,7 +211,7 @@ rec {
   # nixos/doc/manual/development/option-types.xml!
   types = rec {
 
-    raw = mkOptionType rec {
+    raw = mkOptionType {
       name = "raw";
       description = "raw value";
       descriptionClass = "noun";
