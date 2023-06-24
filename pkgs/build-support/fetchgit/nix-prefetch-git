@@ -206,7 +206,7 @@ checkout_ref(){
 
 # Update submodules
 init_submodules(){
-    clean_git submodule update --init --recursive -j $NIX_BUILD_CORES
+    clean_git submodule update --init --recursive -j ${NIX_BUILD_CORES:-1}
 }
 
 clone(){
