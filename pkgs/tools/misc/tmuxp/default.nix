@@ -20,6 +20,7 @@ pypkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     pypkgs.poetry-core
+    pypkgs.shtab
     installShellFiles
   ];
 
@@ -32,9 +33,8 @@ pypkgs.buildPythonApplication rec {
 
   postInstall = ''
     installShellCompletion --cmd tmuxp \
-      --bash <(_TMUXP_COMPLETE=bash_source $out/bin/tmuxp) \
-      --fish <(_TMUXP_COMPLETE=fish_source $out/bin/tmuxp) \
-      --zsh <(_TMUXP_COMPLETE=zsh_source $out/bin/tmuxp)
+      --bash <(shtab --shell=bash -u tmuxp.cli.create_parser) \
+      --zsh <(shtab --shell=zsh -u tmuxp.cli.create_parser)
   '';
 
   meta = with lib; {
