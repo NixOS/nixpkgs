@@ -1397,21 +1397,24 @@ self: super: {
     });
   };
 
-
-  # 2023-04-16: https://github.com/ghcjs/jsaddle/pull/137
-  jsaddle-webkit2gtk = lib.pipe super.jsaddle-webkit2gtk
-    [
-      (appendPatch (fetchpatch {
-        url = "https://github.com/ghcjs/jsaddle/commit/f990366f19d23a8008d482572d52351c1a6f7215.patch";
-        hash = "sha256-IbkJrlyG6q5rqMIhn//Dt3u6T314Pug+mQMwwe0LK5w=";
-        relative = "jsaddle-webkit2gtk";
-      }))
-      (overrideCabal (old: {
-        postPatch = old.postPatch or "" + ''
-          sed -i 's/bytestring.*0.11/bytestring/' jsaddle-webkit2gtk.cabal
-        '';
-      }))
-    ];
+  # 2023-06-24: too strict upper bound on bytestring
+  jsaddle-webkit2gtk =
+    appendPatches [
+      (pkgs.fetchpatch {
+        name = "jsaddle-webkit2gtk-ghc-9.2.patch";
+        url = "https://github.com/ghcjs/jsaddle/commit/d2ce9e6be1dcba0ab417314a0b848012d1a47e03.diff";
+        stripLen = 1;
+        includes = [ "jsaddle-webkit2gtk.cabal" ];
+        sha256 = "16pcs3l7s8shhcnrhi80bwjgy7w23csd9b8qpmc5lnxn4wxr4c2r";
+      })
+      (pkgs.fetchpatch {
+        name = "jsaddle-webkit2gtk-ghc-9.6.patch";
+        url = "https://github.com/ghcjs/jsaddle/commit/99b23dac8b4c5b23f5ed7963e681a46c1abdd1a5.patch";
+        sha256 = "02rdifap9vzf6bhjp5siw68ghjrxh2phzd0kwjihf3hxi4a2xlp3";
+        stripLen = 1;
+        includes = [ "jsaddle-webkit2gtk.cabal" ];
+      })
+    ] super.jsaddle-webkit2gtk;
 
   # 2022-03-16: lens bound can be loosened https://github.com/ghcjs/jsaddle-dom/issues/19
   jsaddle-dom = overrideCabal (old: {
