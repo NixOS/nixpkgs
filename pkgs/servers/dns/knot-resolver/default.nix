@@ -116,7 +116,7 @@ wrapped-full = runCommand unwrapped.name
     allowSubstitutes = false;
     inherit (unwrapped) meta;
   }
-  ''
+  (''
     mkdir -p "$out"/bin
     makeWrapper '${unwrapped}/bin/kresd' "$out"/bin/kresd \
       --set LUA_PATH  "$LUA_PATH" \
@@ -125,10 +125,10 @@ wrapped-full = runCommand unwrapped.name
     ln -sr '${unwrapped}/share' "$out"/
     ln -sr '${unwrapped}/lib'   "$out"/ # useful in NixOS service
     ln -sr "$out"/{bin,sbin}
-
+  '' + lib.optionalString unwrapped.doInstallCheck ''
     echo "Checking that 'http' module loads, i.e. lua search paths work:"
     echo "modules.load('http')" > test-http.lua
     echo -e 'quit()' | env -i "$out"/bin/kresd -a 127.0.0.1#53535 -c test-http.lua
-  '';
+  '');
 
 in result
