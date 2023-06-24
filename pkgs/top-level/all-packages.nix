@@ -3794,6 +3794,8 @@ with pkgs;
 
   waydroid = callPackage ../os-specific/linux/waydroid { };
 
+  wgo = callPackage ../development/tools/wgo { };
+
   wiiload = callPackage ../development/tools/wiiload { };
 
   winhelpcgi = callPackage ../development/tools/winhelpcgi {
@@ -6090,6 +6092,8 @@ with pkgs;
   msr-tools = callPackage ../os-specific/linux/msr-tools { };
 
   mstflint = callPackage ../tools/misc/mstflint { };
+
+  msldapdump = callPackage ../tools/security/msldapdump { };
 
   mslink = callPackage ../tools/misc/mslink { };
 
@@ -16541,6 +16545,7 @@ with pkgs;
   cargo-clone = callPackage ../development/tools/rust/cargo-clone {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
+  cargo-component = callPackage ../development/tools/rust/cargo-component { };
   cargo-criterion = callPackage ../development/tools/rust/cargo-criterion { };
   cargo-cyclonedx = callPackage ../development/tools/rust/cargo-cyclonedx {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration CoreFoundation;
