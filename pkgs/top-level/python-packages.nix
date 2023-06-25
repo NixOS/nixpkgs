@@ -11794,6 +11794,8 @@ self: super: with self; {
 
   stdlib-list = callPackage ../development/python-modules/stdlib-list { };
 
+  stdlibs = callPackage ../development/python-modules/stdlibs { };
+
   steamodd = callPackage ../development/python-modules/steamodd { };
 
   steamship = callPackage ../development/python-modules/steamship { };
