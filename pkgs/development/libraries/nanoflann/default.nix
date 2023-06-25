@@ -1,14 +1,14 @@
 {lib, stdenv, fetchFromGitHub, cmake}:
 
 stdenv.mkDerivation rec {
-  version = "1.4.3";
+  version = "1.5.0";
   pname = "nanoflann";
 
   src = fetchFromGitHub {
     owner = "jlblancoc";
     repo = "nanoflann";
     rev = "v${version}";
-    sha256 = "sha256-NcewcNQcI1CjMNibRF9HCoE2Ibs0/Hy4eOkJ20W3wLo=";
+    sha256 = "sha256-vPLL6l4sFRi7nvIfdMbBn/gvQ1+1lQHlZbR/2ok0Iw8=";
   };
 
   nativeBuildInputs = [ cmake ];
