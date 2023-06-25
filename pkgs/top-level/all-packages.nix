@@ -7082,6 +7082,8 @@ with pkgs;
     buildGoModule = buildGo119Module; # build fails with 1.20
   };
 
+  dool = callPackage ../tools/system/dool { };
+
   dosfstools = callPackage ../tools/filesystems/dosfstools { };
 
   dotnetfx35 = callPackage ../development/libraries/dotnetfx35 { };
@@ -8523,6 +8525,8 @@ with pkgs;
   pigz = callPackage ../tools/compression/pigz { };
 
   pixz = callPackage ../tools/compression/pixz { };
+
+  plog = callPackage ../development/libraries/plog {};
 
   plplot = callPackage ../development/libraries/plplot {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -12070,6 +12074,8 @@ with pkgs;
 
   remote-touchpad = callPackage ../tools/inputmethods/remote-touchpad { };
 
+  remote-exec = python3Packages.callPackage ../tools/misc/remote-exec { };
+
   reposurgeon = callPackage ../applications/version-management/reposurgeon { };
 
   reptyr = callPackage ../os-specific/linux/reptyr { };
@@ -13824,6 +13830,8 @@ with pkgs;
   wasmedge = darwin.apple_sdk_11_0.callPackage ../development/tools/wasmedge {
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation;
   };
+
+  wasmi = callPackage ../development/tools/wasmi { };
 
   welkin = callPackage ../tools/graphics/welkin { };
 
@@ -17310,7 +17318,7 @@ with pkgs;
   # PHP interpreters, packages and extensions.
   #
   # Set default PHP interpreter, extensions and packages
-  php = php81;
+  php = php82;
   phpExtensions = php.extensions;
   phpPackages = php.packages;
 
@@ -17873,6 +17881,8 @@ with pkgs;
   pylyzer = callPackage ../development/tools/language-servers/pylyzer { };
 
   rnix-lsp = callPackage ../development/tools/language-servers/rnix-lsp { };
+
+  ruff-lsp = python3Packages.callPackage ../development/tools/language-servers/ruff-lsp { };
 
   svls = callPackage ../development/tools/language-servers/svls { };
 
@@ -30449,8 +30459,6 @@ with pkgs;
 
   electrum-ltc = libsForQt5.callPackage ../applications/misc/electrum/ltc.nix { };
 
-  elementary-planner = callPackage ../applications/office/elementary-planner { };
-
   elf-dissector = libsForQt5.callPackage ../applications/misc/elf-dissector {
     libdwarf = libdwarf_20210528;
   };
@@ -33229,6 +33237,8 @@ with pkgs;
   piper = callPackage ../os-specific/linux/piper { };
 
   pipe-viewer = perlPackages.callPackage ../applications/video/pipe-viewer { };
+
+  planify = callPackage ../applications/office/planify { };
 
   plank = callPackage ../applications/misc/plank { };
 
@@ -38670,6 +38680,7 @@ with pkgs;
 
 
   inherit (callPackages ../applications/science/logic/z3 { python = python3; })
+    z3_4_12
     z3_4_11
     z3_4_8
     z3_4_8_5;
