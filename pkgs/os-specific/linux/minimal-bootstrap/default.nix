@@ -58,6 +58,8 @@ lib.makeScope
 
     heirloom-devtools = callPackage ./heirloom-devtools { tinycc = tinycc-mes; };
 
+    linux-headers = callPackage ./linux-headers { bash = bash_2_05; };
+
     ln-boot = callPackage ./ln-boot { };
 
     mes = lib.recurseIntoAttrs (callPackage ./mes { });
