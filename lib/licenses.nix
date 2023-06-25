@@ -995,6 +995,14 @@ in mkLicense lset) ({
     url = "https://github.com/thestk/stk/blob/master/LICENSE";
   };
 
+  sustainableUse = {
+    shortName = "sustainable";
+    fullName = "Sustainable Use License";
+    url = "https://github.com/n8n-io/n8n/blob/master/LICENSE.md";
+    free = false;
+    redistributable = false; # only free to redistribute "for non-commercial purposes"
+  };
+
   tsl = {
     shortName = "TSL";
     fullName = "Timescale License Agreegment";
