@@ -426,6 +426,14 @@ in
     };
   };
 
+  fuse = mkLibretroCore {
+    core = "fuse";
+    meta = {
+      description = "A port of the Fuse Unix Spectrum Emulator to libretro";
+      license = lib.licenses.gpl3Only;
+    };
+  };
+
   gambatte = mkLibretroCore {
     core = "gambatte";
     meta = {
