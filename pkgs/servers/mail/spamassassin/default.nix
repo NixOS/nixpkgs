@@ -1,4 +1,4 @@
-{ lib, fetchurl, perlPackages, makeWrapper, gnupg, re2c, gcc, gnumake, libxcrypt, coreutils, poppler_utils, tesseract, iana-etc }:
+{ lib, fetchurl, perlPackages, makeWrapper, gnupg, re2c, gcc, gnumake, libxcrypt, openssl, coreutils, poppler_utils, tesseract, iana-etc }:
 
 perlPackages.buildPerlPackage rec {
   pname = "SpamAssassin";
@@ -21,11 +21,13 @@ perlPackages.buildPerlPackage rec {
     Razor2ClientAgent MailSPF NetDNSResolverProgrammable Socket6
     ArchiveZip EmailAddressXS NetLibIDN2 MaxMindDBReader GeoIP MailDMARC
     MaxMindDBReaderXS
-  ]);
+  ]) ++ [
+    openssl
+  ];
 
   # Enabling 'taint' mode is desirable, but that flag disables support
   # for the PERL5LIB environment variable. Needs further investigation.
-  makeFlags = [ "PERL_BIN=${perlPackages.perl}/bin/perl" "PERL_TAINT=no" ];
+  makeFlags = [ "PERL_BIN=${perlPackages.perl}/bin/perl" "PERL_TAINT=no" "ENABLE_SSL=yes" ];
 
   makeMakerFlags = [ "SYSCONFDIR=/etc LOCALSTATEDIR=/var/lib/spamassassin" ];
 
