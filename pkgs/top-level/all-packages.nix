@@ -7082,6 +7082,8 @@ with pkgs;
     buildGoModule = buildGo119Module; # build fails with 1.20
   };
 
+  dool = callPackage ../tools/system/dool { };
+
   dosfstools = callPackage ../tools/filesystems/dosfstools { };
 
   dotnetfx35 = callPackage ../development/libraries/dotnetfx35 { };
@@ -17316,7 +17318,7 @@ with pkgs;
   # PHP interpreters, packages and extensions.
   #
   # Set default PHP interpreter, extensions and packages
-  php = php81;
+  php = php82;
   phpExtensions = php.extensions;
   phpPackages = php.packages;
 
