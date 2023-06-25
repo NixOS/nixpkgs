@@ -13623,6 +13623,8 @@ with pkgs;
 
   usbmuxd2 = callPackage ../tools/misc/usbmuxd2 { };
 
+  usort = with python3Packages; toPythonApplication usort;
+
   ustreamer = callPackage ../applications/video/ustreamer { };
 
   usync = callPackage ../applications/misc/usync { };

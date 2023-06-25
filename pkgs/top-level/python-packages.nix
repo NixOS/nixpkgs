@@ -12850,6 +12850,8 @@ self: super: with self; {
 
   ush = callPackage ../development/python-modules/ush { };
 
+  usort = callPackage ../development/python-modules/usort { };
+
   utils = callPackage ../development/python-modules/utils { };
 
   uuid = callPackage ../development/python-modules/uuid { };
