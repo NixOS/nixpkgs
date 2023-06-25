@@ -199,5 +199,32 @@ in {
       sha256 = "05w7sv9v38r6ljz9xai816w5z2qqwx88hcfjm241fvgbs54125hx";
     };
   };
+  standard-6 = mkPianoteq rec {
+    name = "standard-6";
+    version = "6.7.3";
+    archdir = if (stdenv.hostPlatform.system == "aarch64-linux") then throw "Pianoteq standard-6 is not supported on aarch64-linux" else "amd64";
+    src = fetchPianoteqWithLogin {
+      name = "pianoteq_linux_v${versionForFile version}.7z";
+      sha256 = "u6ZNpmHFVOk+r+6Q8OURSfAi41cxMoDvaEXrTtHEAVY=";
+    };
+  };
+
+  standard-7 = mkPianoteq rec {
+    name = "standard-7";
+    version = "7.5.4";
+    src = fetchPianoteqWithLogin {
+      name = "pianoteq_linux_v${versionForFile version}.7z";
+      sha256 = "TA9CiuT21fQedlMUGz7bNNxYun5ArmRjvIxjOGqXDCs=";
+    };
+  };
+
+  standard-8 = mkPianoteq rec {
+    name = "standard-8";
+    version = "8.1.1";
+    src = fetchPianoteqWithLogin {
+      name = "pianoteq_linux_v${versionForFile version}.7z";
+      sha256 = "vWvo+ctJ0yN6XeJZZVhA3Ul9eWJWAh7Qo54w0TpOiVw=";
+    };
+  };
   # TODO other paid binaries, I don't own that so I don't know their hash.
 }
