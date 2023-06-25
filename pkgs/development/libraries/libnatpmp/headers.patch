@@ -1,0 +1,12 @@
+diff a/Makefile b/Makefile
+--- a/Makefile
++++ b/Makefile
+@@ -56,7 +56,7 @@ else
+ endif
+ endif
+ 
+-HEADERS = natpmp.h
++HEADERS = natpmp.h natpmp_declspec.h
+ 
+ EXECUTABLES = testgetgateway natpmpc-shared natpmpc-static
+ 

@@ -9,6 +9,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-BoTtLIQGQ351GaG9IOqDeA24cbOjpddSMRuj6Inb/HA=";
   };
 
+  patches = [ ./headers.patch ];
   makeFlags = [
     "INSTALLPREFIX=$(out)"
     "CC:=$(CC)"
