@@ -281,18 +281,30 @@ let
     };
 
     wireless = {
-      CFG80211_WEXT         = option yes; # Without it, ipw2200 drivers don't build
-      IPW2100_MONITOR       = option yes; # support promiscuous mode
-      IPW2200_MONITOR       = option yes; # support promiscuous mode
-      HOSTAP_FIRMWARE       = option yes; # Support downloading firmware images with Host AP driver
-      HOSTAP_FIRMWARE_NVRAM = option yes;
-      ATH9K_PCI             = option yes; # Detect Atheros AR9xxx cards on PCI(e) bus
-      ATH9K_AHB             = option yes; # Ditto, AHB bus
-      B43_PHY_HT            = option yes;
-      BCMA_HOST_PCI         = option yes;
-      RTW88                 = whenAtLeast "5.2" module;
-      RTW88_8822BE          = mkMerge [ (whenBetween "5.2" "5.8" yes) (whenAtLeast "5.8" module) ];
-      RTW88_8822CE          = mkMerge [ (whenBetween "5.2" "5.8" yes) (whenAtLeast "5.8" module) ];
+      CFG80211_WEXT               = option yes; # Without it, ipw2200 drivers don't build
+      IPW2100_MONITOR             = option yes; # support promiscuous mode
+      IPW2200_MONITOR             = option yes; # support promiscuous mode
+      HOSTAP_FIRMWARE             = option yes; # Support downloading firmware images with Host AP driver
+      HOSTAP_FIRMWARE_NVRAM       = option yes;
+      ATH9K_PCI                   = option yes; # Detect Atheros AR9xxx cards on PCI(e) bus
+      ATH9K_AHB                   = option yes; # Ditto, AHB bus
+      # The description of this option makes it sound dangerous or even illegal
+      # But OpenWRT enables it by default: https://github.com/openwrt/openwrt/blob/master/package/kernel/mac80211/Makefile#L55
+      # At the time of writing (25-06-2023): this is only used in a "correct" way by ath drivers for initiating DFS radiation
+      # for "certified devices"
+      EXPERT                      = option yes; # this is needed for offering the certification option
+      CFG80211_CERTIFICATION_ONUS = option yes;
+      # DFS: "Dynamic Frequency Selection" is a spectrum-sharing mechanism that allows
+      # you to use certain interesting frequency when your local regulatory domain mandates it.
+      # ATH drivers hides the feature behind this option and makes hostapd works with DFS frequencies.
+      # OpenWRT enables it too: https://github.com/openwrt/openwrt/blob/master/package/kernel/mac80211/ath.mk#L42
+      ATH9K_DFS_CERTIFIED         = option yes;
+      ATH10K_DFS_CERTIFIED        = option yes;
+      B43_PHY_HT                  = option yes;
+      BCMA_HOST_PCI               = option yes;
+      RTW88                       = whenAtLeast "5.2" module;
+      RTW88_8822BE                = mkMerge [ (whenBetween "5.2" "5.8" yes) (whenAtLeast "5.8" module) ];
+      RTW88_8822CE                = mkMerge [ (whenBetween "5.2" "5.8" yes) (whenAtLeast "5.8" module) ];
     };
 
     fb = {
