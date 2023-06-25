@@ -6,14 +6,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.8.7";
+  version = "2.8.13";
   pname = "tinygltf";
 
   src = fetchFromGitHub {
     owner = "syoyo";
     repo = "tinygltf";
     rev = "v${version}";
-    hash = "sha256-uQlv+mUWnqUJIXnPf2pVuRg1akcXAfqyBIzPPmm4Np4=";
+    hash = "sha256-eyCa52wlV4RLATp4RE3+5hLSdSNWxLgz7MjdgMqsais=";
   };
 
   nativeBuildInputs = [ cmake ];
