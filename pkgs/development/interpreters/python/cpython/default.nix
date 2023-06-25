@@ -109,7 +109,7 @@ let
     pythonOnBuildForHost = override pkgsBuildHost.${pythonAttr};
     pythonOnBuildForTarget = override pkgsBuildTarget.${pythonAttr};
     pythonOnHostForHost = override pkgsHostHost.${pythonAttr};
-    pythonOnTargetForTarget = if lib.hasAttr pythonAttr pkgsTargetTarget then (override pkgsTargetTarget.${pythonAttr}) else {};
+    pythonOnTargetForTarget = lib.optionalAttrs (lib.hasAttr pythonAttr pkgsTargetTarget) (override pkgsTargetTarget.${pythonAttr});
   };
 
   version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";

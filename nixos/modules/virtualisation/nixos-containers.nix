@@ -800,14 +800,14 @@ in
       # declarative containers
       ++ (mapAttrsToList (name: cfg: nameValuePair "container@${name}" (let
           containerConfig = cfg // (
-          if cfg.enableTun then
+          optionalAttrs cfg.enableTun
             {
               allowedDevices = cfg.allowedDevices
                 ++ [ { node = "/dev/net/tun"; modifier = "rw"; } ];
               additionalCapabilities = cfg.additionalCapabilities
                 ++ [ "CAP_NET_ADMIN" ];
             }
-          else {});
+          );
         in
           recursiveUpdate unit {
             preStart = preStartScript containerConfig;
@@ -817,7 +817,7 @@ in
             unitConfig.RequiresMountsFor = lib.optional (!containerConfig.ephemeral) "${stateDirectory}/%i";
             environment.root = if containerConfig.ephemeral then "/run/nixos-containers/%i" else "${stateDirectory}/%i";
           } // (
-          if containerConfig.autoStart then
+          optionalAttrs containerConfig.autoStart
             {
               wantedBy = [ "machines.target" ];
               wants = [ "network.target" ];
@@ -828,7 +828,7 @@ in
               ];
               restartIfChanged = true;
             }
-          else {})
+          )
       )) config.containers)
     ));
 

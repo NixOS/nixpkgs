@@ -230,8 +230,7 @@ let
   });
 
   qlpkgs =
-    if builtins.pathExists ./imported.nix
-    then pkgs.callPackage ./imported.nix { inherit build-asdf-system; }
-    else {};
+    lib.optionalAttrs (builtins.pathExists ./imported.nix)
+      (pkgs.callPackage ./imported.nix { inherit build-asdf-system; });
 
 in qlpkgs.overrideScope' overrides
