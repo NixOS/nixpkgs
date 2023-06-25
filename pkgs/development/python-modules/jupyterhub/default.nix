@@ -11,11 +11,16 @@
 , fetchzip
 , importlib-metadata
 , jinja2
+, jsonschema
 , jupyter-telemetry
+, jupyterlab
+, mock
+, nbclassic
 , nodePackages
 , notebook
 , oauthlib
 , pamela
+, playwright
 , prometheus-client
 , pytest-asyncio
 , pytestCheckHook
@@ -63,14 +68,14 @@ in
 
 buildPythonPackage rec {
   pname = "jupyterhub";
-  version = "4.0.0";
+  version = "4.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LKspluSafStwwLtYCpkuRCBZSD4K8YrwYaKayCsUqGc=";
+    hash = "sha256-jig/9Z5cQBZxIHfSVJ7XSs2RWjKDb+ACGGeKh4G9ft4=";
   };
 
   # Most of this only applies when building from source (e.g. js/css assets are
@@ -143,6 +148,11 @@ buildPythonPackage rec {
     beautifulsoup4
     cryptography
     notebook
+    jsonschema
+    nbclassic
+    mock
+    jupyterlab
+    playwright
     pytest-asyncio
     pytestCheckHook
     requests-mock
@@ -166,26 +176,26 @@ buildPythonPackage rec {
     # Not testing with a running instance
     # AttributeError: 'coroutine' object has no attribute 'db'
     "docs/test_docs.py"
-    "jupyterhub/tests/test_orm.py"
+    "jupyterhub/tests/browser/test_browser.py"
     "jupyterhub/tests/test_api.py"
-    "jupyterhub/tests/test_auth.py"
     "jupyterhub/tests/test_auth_expiry.py"
+    "jupyterhub/tests/test_auth.py"
     "jupyterhub/tests/test_metrics.py"
     "jupyterhub/tests/test_named_servers.py"
-    "jupyterhub/tests/selenium/test_browser.py"
-    "jupyterhub/tests/test_user.py"
+    "jupyterhub/tests/test_orm.py"
+    "jupyterhub/tests/test_pages.py"
+    "jupyterhub/tests/test_proxy.py"
+    "jupyterhub/tests/test_scopes.py"
+    "jupyterhub/tests/test_services_auth.py"
     "jupyterhub/tests/test_singleuser.py"
     "jupyterhub/tests/test_spawner.py"
-    "jupyterhub/tests/test_services_auth.py"
-    "jupyterhub/tests/test_scopes.py"
-    "jupyterhub/tests/test_proxy.py"
-    "jupyterhub/tests/test_pages.py"
+    "jupyterhub/tests/test_user.py"
   ];
 
   meta = with lib; {
     description = "Serves multiple Jupyter notebook instances";
     homepage = "https://jupyter.org/";
-    changelog = "https://github.com/jupyterhub/jupyterhub/blob/${version}/docs/source/changelog.md";
+    changelog = "https://github.com/jupyterhub/jupyterhub/blob/${version}/docs/source/reference/changelog.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ixxie cstrahan ];
     # darwin: E   OSError: dlopen(/nix/store/43zml0mlr17r5jsagxr00xxx91hz9lky-openpam-20170430/lib/libpam.so, 6): image not found
