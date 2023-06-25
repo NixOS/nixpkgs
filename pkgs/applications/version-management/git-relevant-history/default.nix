@@ -1,4 +1,4 @@
-{ fetchFromGitHub, python3, git, git-filter-repo }:
+{ lib, fetchFromGitHub, python3, git, git-filter-repo }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "git-relevant-history";
@@ -13,4 +13,12 @@ python3.pkgs.buildPythonApplication rec {
     git git-filter-repo
     python3.pkgs.docopt
   ];
+
+  meta = with lib; {
+    description = "Extract only relevant history from git repo";
+    homepage = "https://github.com/rainlabs-eu/git-relevant-history";
+    license = licenses.asl20;
+    platforms = platforms.all;
+    maintainers = [ maintainers.bendlas ];
+  };
 }
