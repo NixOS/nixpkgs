@@ -141,6 +141,7 @@ stdenv.mkDerivation rec {
   dylib_version = lib.versions.majorMinor version;
   preFixup = lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libgs.dylib.$dylib_version $out/lib/libgs.dylib.$dylib_version $out/bin/gs
+    install_name_tool -change libgs.dylib.$dylib_version $out/lib/libgs.dylib.$dylib_version $out/bin/gsx
   '';
 
   # validate dynamic linkage
@@ -149,6 +150,7 @@ stdenv.mkDerivation rec {
     runHook preInstallCheck
 
     $out/bin/gs --version
+    $out/bin/gsx --version
     pushd examples
     for f in *.{ps,eps,pdf}; do
       echo "Rendering $f"
