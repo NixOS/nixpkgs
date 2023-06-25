@@ -28,14 +28,24 @@ let
       inherit packages;
     };
 
+    outputs = [ "out" "compressed" ];
+
     nativeBuildInputs = [ zopfli brotli ];
 
     buildPhase = ''
       # Create missing static gzip and brotli files
-      find apps/ core/ dist/ resources/ themes/ \
-        -type f -regextype posix-extended -iregex '.*\.(css|js|json|svg|ico|txt|md|xml|html|ttf|otf|eot)' \
-        -exec zopfli --gzip {} ';' \
-        -exec brotli --best --keep {} ';'
+      shopt -s globstar
+      for f in apps/** core/** dist/** resources/** themes/**; do
+        if [ -f "$f" ]; then
+          case "$f" in
+          *.css | *.js | *.json | *.svg | *.ico | *.txt | *.md | *.xml | *.html | *.ttf | *.otf | *.eot)
+            mkdir -p "$compressed/''${f%/*}"
+            zopfli --gzip -c "$f" > "$compressed/$f.gz"
+            brotli --best --keep --output="$compressed/$f.br" "$f"
+            ;;
+          esac
+        fi
+      done
     '';
 
     installPhase = ''
