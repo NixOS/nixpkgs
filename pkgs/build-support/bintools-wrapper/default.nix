@@ -388,8 +388,8 @@ stdenv.mkDerivation {
   };
 
   meta =
-    let bintools_ = if bintools != null then bintools else {}; in
-    (if bintools_ ? meta then removeAttrs bintools.meta ["priority"] else {}) //
+    let bintools_ = lib.optionalAttrs (bintools != null) bintools; in
+    (lib.optionalAttrs (bintools_ ? meta) (removeAttrs bintools.meta ["priority"])) //
     { description =
         lib.attrByPath ["meta" "description"] "System binary utilities" bintools_
         + " (wrapper script)";

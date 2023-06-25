@@ -26,9 +26,7 @@ final: prev: let
   in lib.mapAttrs buildCudaToolkitRedistPackage attrs;
 
   # All cudatoolkit redist packages for the current cuda version
-  cudaToolkitRedistPackages = if
-    lib.hasAttr cudaVersion cudaToolkitRedistManifests
-  then buildCudaToolkitRedistPackages { version = cudaVersion; manifest = cudaToolkitRedistManifests.${cudaVersion}; }
-  else {};
+  cudaToolkitRedistPackages = lib.optionalAttrs (lib.hasAttr cudaVersion cudaToolkitRedistManifests)
+    (buildCudaToolkitRedistPackages { version = cudaVersion; manifest = cudaToolkitRedistManifests.${cudaVersion}; });
 
 in cudaToolkitRedistPackages

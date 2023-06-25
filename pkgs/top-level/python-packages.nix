@@ -5435,6 +5435,8 @@ self: super: with self; {
 
   karton-yaramatcher = callPackage ../development/python-modules/karton-yaramatcher { };
 
+  kasa-crypt = callPackage ../development/python-modules/kasa-crypt { };
+
   kazoo = callPackage ../development/python-modules/kazoo { };
 
   kbcstorage = callPackage ../development/python-modules/kbcstorage { };
