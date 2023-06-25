@@ -757,9 +757,8 @@ in
 
     environment.etc."prosody/prosody.cfg.lua".text =
       let
-        httpDiscoItems = if (cfg.uploadHttp != null)
-            then [{ url = cfg.uploadHttp.domain; description = "HTTP upload endpoint";}]
-            else [];
+        httpDiscoItems = optionals (cfg.uploadHttp != null)
+            [{ url = cfg.uploadHttp.domain; description = "HTTP upload endpoint";}];
         mucDiscoItems = builtins.foldl'
             (acc: muc: [{ url = muc.domain; description = "${muc.domain} MUC endpoint";}] ++ acc)
             []
