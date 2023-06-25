@@ -54,6 +54,10 @@ lib.makeScope
       mesBootstrap = true;
     };
 
+    inherit (callPackage ./glibc {
+      bash = bash_2_05;
+    }) glibc22;
+
     gnugrep = callPackage ./gnugrep {
       bash = bash_2_05;
       tinycc = tinycc-mes;
