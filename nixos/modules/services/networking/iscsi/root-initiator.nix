@@ -108,7 +108,7 @@ in
       # the network not work.
       network.flushBeforeStage2 = false;
 
-      kernelModules = [ "iscsi_tcp" ];
+      kernel.modules = [ "iscsi_tcp" ];
 
       extraUtilsCommands = ''
         copy_bin_and_libs ${pkgs.openiscsi}/bin/iscsid

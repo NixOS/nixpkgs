@@ -43,7 +43,7 @@ in
         message = "Windows Azure Linux Agent is not compatible with NetworkManager";
       }];
 
-    boot.initrd.kernelModules = [ "ata_piix" ];
+    boot.initrd.kernel.modules = [ "ata_piix" ];
     networking.firewall.allowedUDPPorts = [ 68 ];
 
 

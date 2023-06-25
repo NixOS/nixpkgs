@@ -2,7 +2,7 @@
 
 with lib;
 let
-  kernelVersion = config.boot.kernelPackages.kernel.version;
+  kernelVersion = config.boot.kernel.packages.kernel.version;
   linuxKernelMinVersion = "5.8";
   kernelPatch = pkgs.kernelPatches.ath_regd_optional // {
     extraConfig = ''

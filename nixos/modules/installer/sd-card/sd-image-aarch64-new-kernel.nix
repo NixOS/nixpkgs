@@ -3,5 +3,5 @@
 {
   imports = [ ./sd-image-aarch64.nix ];
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernel.packages = pkgs.linuxPackages_latest;
 }

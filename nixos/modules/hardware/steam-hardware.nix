@@ -27,6 +27,6 @@ in
     #
     # If the udev rules are not triggered, some controllers won't work with
     # steam.
-    boot.kernelModules = [ "uinput" ];
+    boot.kernel.modules = [ "uinput" ];
   };
 }

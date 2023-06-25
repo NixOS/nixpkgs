@@ -116,8 +116,8 @@ in
         };
 
         kernelPackage = mkOption {
-          default = config.boot.kernelPackages.kernel;
-          defaultText = literalExpression "config.boot.kernelPackages.kernel";
+          default = config.boot.kernel.packages.kernel;
+          defaultText = literalExpression "config.boot.kernel.packages.kernel";
           example = literalExpression "pkgs.linux_latest";
           type = types.path;
           description = lib.mdDoc ''

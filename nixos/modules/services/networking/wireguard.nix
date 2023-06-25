@@ -7,7 +7,7 @@ let
   cfg = config.networking.wireguard;
   opt = options.networking.wireguard;
 
-  kernel = config.boot.kernelPackages;
+  kernel = config.boot.kernel.packages;
 
   # interface options
 

@@ -6,7 +6,7 @@ let
 
   cfg = config.hardware.facetimehd;
 
-  kernelPackages = config.boot.kernelPackages;
+  kernelPackages = config.boot.kernel.packages;
 
 in
 
@@ -28,7 +28,7 @@ in
 
   config = mkIf cfg.enable {
 
-    boot.kernelModules = [ "facetimehd" ];
+    boot.kernel.modules = [ "facetimehd" ];
 
     boot.blacklistedKernelModules = [ "bdc_pci" ];
 

@@ -120,7 +120,7 @@ let
   };
 
   modulesTree = pkgs.aggregateModules
-    (with config.boot.kernelPackages; [ kernel zfs ]);
+    (with config.boot.kernel.packages; [ kernel zfs ]);
 
   tools = lib.makeBinPath (
     with pkgs; [

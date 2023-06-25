@@ -43,7 +43,7 @@ in
 
   config = mkIf cfg.enable {
 
-    boot.kernelModules = [ "cachefiles" ];
+    boot.kernel.modules = [ "cachefiles" ];
 
     systemd.services.cachefilesd = {
       description = "Local network file caching management daemon";

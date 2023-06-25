@@ -40,7 +40,7 @@ let cfg = config.services.drbd; in
 
     services.udev.packages = [ pkgs.drbd ];
 
-    boot.kernelModules = [ "drbd" ];
+    boot.kernel.modules = [ "drbd" ];
 
     boot.extraModprobeConfig =
       ''

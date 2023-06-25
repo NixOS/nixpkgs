@@ -201,7 +201,7 @@ let
 
       # FIXME: Nix 2.4 broke nixos-option, someone has to fix it.
       # with subtest("Test nixos-option"):
-      #     kernel_modules = machine.succeed("nixos-option boot.initrd.kernelModules")
+      #     kernel_modules = machine.succeed("nixos-option boot.initrd.kernel.modules")
       #     assert "virtio_console" in kernel_modules
       #     assert "List of modules" in kernel_modules
       #     assert "qemu-guest.nix" in kernel_modules

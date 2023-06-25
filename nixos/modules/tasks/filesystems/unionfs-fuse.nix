@@ -4,7 +4,7 @@
   config = lib.mkMerge [
 
     (lib.mkIf (lib.any (fs: fs == "unionfs-fuse") config.boot.initrd.supportedFilesystems) {
-      boot.initrd.kernelModules = [ "fuse" ];
+      boot.initrd.kernel.modules = [ "fuse" ];
 
       boot.initrd.extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
         copy_bin_and_libs ${pkgs.fuse}/sbin/mount.fuse

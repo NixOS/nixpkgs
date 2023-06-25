@@ -467,7 +467,7 @@ Use the following commands:
 
     ::: {.note}
     Depending on your hardware configuration or type of file system, you
-    may need to set the option `boot.initrd.kernelModules` to include
+    may need to set the option `boot.initrd.kernel.modules` to include
     the kernel modules that are necessary for mounting the root file
     system, otherwise the installed system will not be able to boot. (If
     this happens, boot from the installation media again, mount the

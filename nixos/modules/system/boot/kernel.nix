@@ -4,18 +4,23 @@ with lib;
 
 let
 
-  inherit (config.boot) kernelPatches;
-  inherit (config.boot.kernel) features randstructSeed;
-  inherit (config.boot.kernelPackages) kernel;
+  inherit (config.boot.kernel) features patches randstructSeed;
+  inherit (config.boot.kernel.packages) kernel;
 
   kernelModulesConf = pkgs.writeText "nixos.conf"
     ''
-      ${concatStringsSep "\n" config.boot.kernelModules}
+      ${concatStringsSep "\n" config.boot.kernel.modules}
     '';
 
 in
 
 {
+  imports = [
+    (mkRenamedOptionModule [ "boot" "kernelModules" ] [ "boot" "kernel" "modules" ])
+    (mkRenamedOptionModule [ "boot" "kernelPackages" ] [ "boot" "kernel" "packages" ])
+    (mkRenamedOptionModule [ "boot" "kernelParams" ] [ "boot" "kernel" "params" ])
+    (mkRenamedOptionModule [ "boot" "kernelPatches" ] [ "boot" "kernel" "patches" ])
+  ];
 
   ###### interface
 
@@ -37,13 +42,13 @@ in
       '';
     };
 
-    boot.kernelPackages = mkOption {
+    boot.kernel.packages = mkOption {
       default = pkgs.linuxPackages;
       type = types.raw;
-      apply = kernelPackages: kernelPackages.extend (self: super: {
+      apply = packages: packages.extend (self: super: {
         kernel = super.kernel.override (originalArgs: {
           inherit randstructSeed;
-          kernelPatches = (originalArgs.kernelPatches or []) ++ kernelPatches;
+          patches = (originalArgs.patches or []) ++ patches;
           features = lib.recursiveUpdate super.kernel.features features;
         });
       });
@@ -70,7 +75,7 @@ in
       '';
     };
 
-    boot.kernelPatches = mkOption {
+    boot.kernel.patches = mkOption {
       type = types.listOf types.attrs;
       default = [];
       example = literalExpression ''
@@ -110,7 +115,7 @@ in
         }
         ```
 
-        There's a small set of existing kernel patches in Nixpkgs, available as `pkgs.kernelPatches`,
+        There's a small set of existing kernel patches in Nixpkgs, available as `pkgs.kernel.patches`,
         that follow this format and can be used directly.
       '';
     };
@@ -128,9 +133,9 @@ in
       '';
     };
 
-    boot.kernelParams = mkOption {
+    boot.kernel.params = mkOption {
       type = types.listOf (types.strMatching ''([^"[:space:]]|"[^"]*")+'' // {
-        name = "kernelParam";
+        name = "param";
         description = "string, with spaces inside double quotes";
       });
       default = [ ];
@@ -153,7 +158,7 @@ in
         (Deprecated) This option, if set, activates the VESA 800x600 video
         mode on boot and disables kernel modesetting. It is equivalent to
         specifying `[ "vga=0x317" "nomodeset" ]` in the
-        {option}`boot.kernelParams` option. This option is
+        {option}`boot.kernel.params` option. This option is
         deprecated as of 2020: Xorg now works better with modesetting, and
         you might want a different VESA vga setting, anyway.
       '';
@@ -162,11 +167,11 @@ in
     boot.extraModulePackages = mkOption {
       type = types.listOf types.package;
       default = [];
-      example = literalExpression "[ config.boot.kernelPackages.nvidia_x11 ]";
+      example = literalExpression "[ config.boot.kernel.packages.nvidia_x11 ]";
       description = lib.mdDoc "A list of additional packages supplying kernel modules.";
     };
 
-    boot.kernelModules = mkOption {
+    boot.kernel.modules = mkOption {
       type = types.listOf types.str;
       default = [];
       description = lib.mdDoc ''
@@ -174,7 +179,7 @@ in
         the boot process.  Note that modules that are needed to
         mount the root file system should be added to
         {option}`boot.initrd.availableKernelModules` or
-        {option}`boot.initrd.kernelModules`.
+        {option}`boot.initrd.kernel.modules`.
       '';
     };
 
@@ -195,11 +200,11 @@ in
         loaded automatically when an ext3 filesystem is mounted, and
         modules for PCI devices are loaded when they match the PCI ID
         of a device in your system).  To force a module to be loaded,
-        include it in {option}`boot.initrd.kernelModules`.
+        include it in {option}`boot.initrd.kernel.modules`.
       '';
     };
 
-    boot.initrd.kernelModules = mkOption {
+    boot.initrd.kernel.modules = mkOption {
       type = types.listOf types.str;
       default = [];
       description = lib.mdDoc "List of modules that are always loaded by the initrd.";
@@ -211,7 +216,7 @@ in
       description = lib.mdDoc ''
         This option, if set, adds a collection of default kernel modules
         to {option}`boot.initrd.availableKernelModules` and
-        {option}`boot.initrd.kernelModules`.
+        {option}`boot.initrd.kernel.modules`.
       '';
     };
 
@@ -297,7 +302,7 @@ in
             "rtc_cmos"
           ]);
 
-        boot.initrd.kernelModules =
+        boot.initrd.kernel.modules =
           optionals config.boot.initrd.includeDefaultModules [
             # For LVM.
             "dm_mod"
@@ -311,13 +316,13 @@ in
 
         # Implement consoleLogLevel both in early boot and using sysctl
         # (so you don't need to reboot to have changes take effect).
-        boot.kernelParams =
+        boot.kernel.params =
           [ "loglevel=${toString config.boot.consoleLogLevel}" ] ++
           optionals config.boot.vesa [ "vga=0x317" "nomodeset" ];
 
         boot.kernel.sysctl."kernel.printk" = mkDefault config.boot.consoleLogLevel;
 
-        boot.kernelModules = [ "loop" "atkbd" ];
+        boot.kernel.modules = [ "loop" "atkbd" ];
 
         # Create /etc/modules-load.d/nixos.conf, which is read by
         # systemd-modules-load.service to load required kernel modules.
@@ -330,7 +335,7 @@ in
             restartTriggers = [ kernelModulesConf ];
             serviceConfig =
               { # Ignore failed module loads.  Typically some of the
-                # modules in ‘boot.kernelModules’ are "nice to have but
+                # modules in ‘boot.kernel.modules’ are "nice to have but
                 # not required" (e.g. acpi-cpufreq), so we don't want to
                 # barf on those.
                 SuccessExitStatus = "0 1";
@@ -381,8 +386,8 @@ in
           ] ++ (optional (randstructSeed != "") (isYes "GCC_PLUGIN_RANDSTRUCT"));
 
         # nixpkgs kernels are assumed to have all required features
-        assertions = if config.boot.kernelPackages.kernel ? features then [] else
-          let cfg = config.boot.kernelPackages.kernel.config; in map (attrs:
+        assertions = if config.boot.kernel.packages.kernel ? features then [] else
+          let cfg = config.boot.kernel.packages.kernel.config; in map (attrs:
             { assertion = attrs.assertion cfg; inherit (attrs) message; }
           ) config.system.requiredKernelConfig;
 

@@ -15,7 +15,7 @@ in {
   # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nvme-ebs-volumes.html#timeout-nvme-ebs-volumes
   config.boot.kernelParams =
     let timeout =
-      if pkgs.lib.versionAtLeast config.boot.kernelPackages.kernel.version "4.15"
+      if pkgs.lib.versionAtLeast config.boot.kernel.packages.kernel.version "4.15"
       then "4294967295"
       else  "255";
     in [ "nvme_core.io_timeout=${timeout}" ];

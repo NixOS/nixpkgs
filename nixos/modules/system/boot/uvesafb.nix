@@ -16,10 +16,10 @@ in {
       v86d.package = mkOption {
         type = types.package;
         description = mdDoc "Which v86d package to use with uvesafb";
-        defaultText = ''config.boot.kernelPackages.v86d.overrideAttrs (old: {
+        defaultText = ''config.boot.kernel.packages.v86d.overrideAttrs (old: {
           hardeningDisable = [ "all" ];
         })'';
-        default = config.boot.kernelPackages.v86d.overrideAttrs (old: {
+        default = config.boot.kernel.packages.v86d.overrideAttrs (old: {
           hardeningDisable = [ "all" ];
         });
       };
@@ -27,7 +27,7 @@ in {
   };
   config = mkIf cfg.enable {
     boot.initrd = {
-      kernelModules = [ "uvesafb" ];
+      kernel.modules = [ "uvesafb" ];
       extraFiles."/usr/v86d".source = cfg.v86d.package;
     };
 

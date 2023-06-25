@@ -10,7 +10,7 @@ let
 
   enabled = elem "amdgpu-pro" drivers;
 
-  package = config.boot.kernelPackages.amdgpu-pro;
+  package = config.boot.kernel.packages.amdgpu-pro;
   package32 = pkgs.pkgsi686Linux.linuxPackages.amdgpu-pro.override { kernel = null; };
 
   opengl = config.hardware.opengl;
@@ -32,7 +32,7 @@ in
 
     boot.extraModulePackages = [ package.kmod ];
 
-    boot.kernelPackages = pkgs.linuxKernel.packagesFor
+    boot.kernel.packages = pkgs.linuxKernel.packagesFor
       (pkgs.linuxKernel.kernels.linux_5_10.override {
         structuredExtraConfig = {
           DEVICE_PRIVATE = kernel.yes;

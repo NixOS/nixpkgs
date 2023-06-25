@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.hardware.new-lg4ff;
-  kernelPackages = config.boot.kernelPackages;
+  kernelPackages = config.boot.kernel.packages;
 in {
   options.hardware.new-lg4ff = {
     enable = mkOption {
@@ -21,7 +21,7 @@ in {
   config = lib.mkIf cfg.enable {
     boot = {
       extraModulePackages = [ kernelPackages.new-lg4ff ];
-      kernelModules = [ "hid-logitech-new" ];
+      kernel.modules = [ "hid-logitech-new" ];
     };
   };
 

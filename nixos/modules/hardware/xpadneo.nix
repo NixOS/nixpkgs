@@ -16,11 +16,11 @@ in
       extraModprobeConfig =
         mkIf
           (config.hardware.bluetooth.enable &&
-            (lib.versionOlder config.boot.kernelPackages.kernel.version "5.12"))
+            (lib.versionOlder config.boot.kernel.packages.kernel.version "5.12"))
           "options bluetooth disable_ertm=1";
 
-      extraModulePackages = with config.boot.kernelPackages; [ xpadneo ];
-      kernelModules = [ "hid_xpadneo" ];
+      extraModulePackages = with config.boot.kernel.packages; [ xpadneo ];
+      kernel.modules = [ "hid_xpadneo" ];
     };
   };
 

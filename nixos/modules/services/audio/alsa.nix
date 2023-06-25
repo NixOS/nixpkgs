@@ -96,7 +96,7 @@ in
     # ALSA provides a udev rule for restoring volume settings.
     services.udev.packages = [ alsa-utils ];
 
-    boot.kernelModules = optional config.sound.enableOSSEmulation "snd_pcm_oss";
+    boot.kernel.modules = optional config.sound.enableOSSEmulation "snd_pcm_oss";
 
     systemd.services.alsa-store =
       { description = "Store Sound Card State";

@@ -145,7 +145,7 @@ Lists
     separated by whitespace, like this:
 
     ```nix
-    boot.kernelModules = [ "fuse" "kvm-intel" "coretemp" ];
+    boot.kernel.modules = [ "fuse" "kvm-intel" "coretemp" ];
     ```
 
     List elements can be any other type, e.g. sets:

@@ -1359,7 +1359,7 @@ in
         }
       ];
 
-    boot.kernelModules = [ ]
+    boot.kernel.modules = [ ]
       ++ optional hasVirtuals "tun"
       ++ optional hasSits "sit"
       ++ optional hasGres "gre"

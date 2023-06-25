@@ -754,7 +754,7 @@ in
 
     boot.initrd.availableKernelModules = [ "squashfs" "iso9660" "uas" "overlay" ];
 
-    boot.initrd.kernelModules = [ "loop" "overlay" ];
+    boot.initrd.kernel.modules = [ "loop" "overlay" ];
 
     # Closures to be copied to the Nix store on the CD, namely the init
     # script and the top-level system configuration directory.
@@ -773,7 +773,7 @@ in
     # store on the CD.
     isoImage.contents =
       [
-        { source = config.boot.kernelPackages.kernel + "/" + config.system.boot.loader.kernelFile;
+        { source = config.boot.kernel.packages.kernel + "/" + config.system.boot.loader.kernelFile;
           target = "/boot/" + config.system.boot.loader.kernelFile;
         }
         { source = config.system.build.initialRamdisk + "/" + config.system.boot.loader.initrdFile;

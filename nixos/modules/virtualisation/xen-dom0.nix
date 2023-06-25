@@ -161,7 +161,7 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
-    boot.kernelModules =
+    boot.kernel.modules =
       [ "xen-evtchn" "xen-gntdev" "xen-gntalloc" "xen-blkback" "xen-netback"
         "xen-pciback" "evtchn" "gntdev" "netbk" "blkbk" "xen-scsibk"
         "usbbk" "pciback" "xen-acpi-processor" "blktap2" "tun" "netxen_nic"
@@ -172,7 +172,7 @@ in
     # The xenfs module is needed in system.activationScripts.xen, but
     # the modprobe command there fails silently. Include xenfs in the
     # initrd as a work around.
-    boot.initrd.kernelModules = [ "xenfs" ];
+    boot.initrd.kernel.modules = [ "xenfs" ];
 
     # The radeonfb kernel module causes the screen to go black as soon
     # as it's loaded, so don't load it.

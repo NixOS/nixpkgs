@@ -56,7 +56,7 @@ in {
 
   in {
     environment.systemPackages = [ cfg.package ];
-    boot.kernelModules = [ "tun" "openvswitch" ];
+    boot.kernel.modules = [ "tun" "openvswitch" ];
 
     boot.extraModulePackages = [ cfg.package ];
 

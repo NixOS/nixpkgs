@@ -541,12 +541,12 @@ in {
     systemd.packages = [ cfg.package ];
 
     environment.systemPackages = [ cfg.package ];
-    boot.kernelModules = [ "dm-multipath" "dm-service-time" ];
+    boot.kernel.modules = [ "dm-multipath" "dm-service-time" ];
 
     # We do not have systemd in stage-1 boot so must invoke `multipathd`
     # with the `-1` argument which disables systemd calls. Invoke `multipath`
     # to display the multipath mappings in the output of `journalctl -b`.
-    boot.initrd.kernelModules = [ "dm-multipath" "dm-service-time" ];
+    boot.initrd.kernel.modules = [ "dm-multipath" "dm-service-time" ];
     boot.initrd.postDeviceCommands = ''
       modprobe -a dm-multipath dm-service-time
       multipathd -s

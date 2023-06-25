@@ -16,7 +16,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    boot.kernelModules = [ "hdapsd" ];
+    boot.kernel.modules = [ "hdapsd" ];
     services.udev.packages = hdapsd;
     systemd.packages = hdapsd;
   };

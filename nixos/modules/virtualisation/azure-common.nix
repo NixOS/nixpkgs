@@ -8,7 +8,7 @@ with lib;
   virtualisation.azure.agent.enable = true;
 
   boot.kernelParams = [ "console=ttyS0" "earlyprintk=ttyS0" "rootdelay=300" "panic=1" "boot.panic_on_fail" ];
-  boot.initrd.kernelModules = [ "hv_vmbus" "hv_netvsc" "hv_utils" "hv_storvsc" ];
+  boot.initrd.kernel.modules = [ "hv_vmbus" "hv_netvsc" "hv_utils" "hv_storvsc" ];
 
   # Generate a GRUB menu.
   boot.loader.grub.device = "/dev/sda";

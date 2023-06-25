@@ -159,7 +159,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    boot.kernelModules = [ "msr" ];
+    boot.kernel.modules = [ "msr" ];
 
     environment.systemPackages = [ cfg.package ];
 

@@ -7,7 +7,7 @@ let
 
   cfg = config.services.v4l2-relayd;
 
-  kernelPackages = config.boot.kernelPackages;
+  kernelPackages = config.boot.kernel.packages;
 
   gst = (with pkgs.gst_all_1; [
     gst-plugins-bad
@@ -188,7 +188,7 @@ in
 
       boot = mkIf ((length enabledInstances) > 0) {
         extraModulePackages = [ kernelPackages.v4l2loopback ];
-        kernelModules = [ "v4l2loopback" ];
+        kernel.modules = [ "v4l2loopback" ];
       };
 
       systemd.services = mkInstanceServices enabledInstances;

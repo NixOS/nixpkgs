@@ -340,7 +340,7 @@ in
       # Always include cni plugins
       services.kubernetes.kubelet.cni.packages = [pkgs.cni-plugins pkgs.cni-plugin-flannel];
 
-      boot.kernelModules = ["br_netfilter" "overlay"];
+      boot.kernel.modules = ["br_netfilter" "overlay"];
 
       services.kubernetes.kubelet.hostname =
         mkDefault config.networking.fqdnOrHostName;

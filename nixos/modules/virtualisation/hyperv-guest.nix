@@ -27,7 +27,7 @@ in {
 
   config = mkIf cfg.enable {
     boot = {
-      initrd.kernelModules = [
+      initrd.kernel.modules = [
         "hv_balloon" "hv_netvsc" "hv_storvsc" "hv_utils" "hv_vmbus"
       ];
 
@@ -38,7 +38,7 @@ in {
       ];
     };
 
-    environment.systemPackages = [ config.boot.kernelPackages.hyperv-daemons.bin ];
+    environment.systemPackages = [ config.boot.kernel.packages.hyperv-daemons.bin ];
 
     # enable hotadding cpu/memory
     services.udev.packages = lib.singleton (pkgs.writeTextFile {
@@ -54,7 +54,7 @@ in {
     });
 
     systemd = {
-      packages = [ config.boot.kernelPackages.hyperv-daemons.lib ];
+      packages = [ config.boot.kernel.packages.hyperv-daemons.lib ];
 
       targets.hyperv-daemons = {
         wantedBy = [ "multi-user.target" ];

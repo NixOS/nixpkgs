@@ -120,7 +120,7 @@ in
       engine = {
         init_path = "${pkgs.catatonit}/bin/catatonit";
       } // lib.optionalAttrs cfg.ociSeccompBpfHook.enable {
-        hooks_dir = [ config.boot.kernelPackages.oci-seccomp-bpf-hook ];
+        hooks_dir = [ config.boot.kernel.packages.oci-seccomp-bpf-hook ];
       };
     };
 

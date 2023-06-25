@@ -11,7 +11,7 @@ let
 
   udev = config.systemd.package;
 
-  kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
+  kernel-name = config.boot.kernel.packages.kernel.name or "kernel";
 
   modulesTree = config.system.modulesTree.override { name = kernel-name + "-modules"; };
   firmware = config.hardware.firmware;
@@ -19,7 +19,7 @@ let
 
   # Determine the set of modules that we need to mount the root FS.
   modulesClosure = pkgs.makeModulesClosure {
-    rootModules = config.boot.initrd.availableKernelModules ++ config.boot.initrd.kernelModules;
+    rootModules = config.boot.initrd.availableKernelModules ++ config.boot.initrd.kernel.modules;
     kernel = modulesTree;
     firmware = firmware;
     allowMissing = false;
@@ -321,7 +321,9 @@ let
     inherit (config.system.build) earlyMountScript;
 
     inherit (config.boot.initrd) checkJournalingFS verbose
-      preLVMCommands preDeviceCommands postDeviceCommands postMountCommands preFailCommands kernelModules;
+      preLVMCommands preDeviceCommands postDeviceCommands postMountCommands preFailCommands;
+
+    inherit (config.boot.initrd.kernel) modules;
 
     resumeDevices = map (sd: if sd ? device then sd.device else "/dev/disk/by-label/${sd.label}")
                     (filter (sd: hasPrefix "/dev/" sd.device && !sd.randomEncryption.enable
@@ -585,7 +587,7 @@ in
 
     boot.initrd.compressor = mkOption {
       default = (
-        if lib.versionAtLeast config.boot.kernelPackages.kernel.version "5.9"
+        if lib.versionAtLeast config.boot.kernel.packages.kernel.version "5.9"
         then "zstd"
         else "gzip"
       );

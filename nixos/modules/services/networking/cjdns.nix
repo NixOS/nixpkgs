@@ -229,7 +229,7 @@ in
 
   config = mkIf cfg.enable {
 
-    boot.kernelModules = [ "tun" ];
+    boot.kernel.modules = [ "tun" ];
 
     # networking.firewall.allowedUDPPorts = ...
 

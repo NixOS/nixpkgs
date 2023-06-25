@@ -63,9 +63,9 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    boot.extraModulePackages = [ config.boot.kernelPackages.vmware ];
+    boot.extraModulePackages = [ config.boot.kernel.packages.vmware ];
     boot.extraModprobeConfig = "alias char-major-10-229 fuse";
-    boot.kernelModules = [ "vmw_pvscsi" "vmw_vmci" "vmmon" "vmnet" "fuse" ];
+    boot.kernel.modules = [ "vmw_pvscsi" "vmw_vmci" "vmmon" "vmnet" "fuse" ];
 
     environment.systemPackages = [ cfg.package ] ++ cfg.extraPackages;
     services.printing.drivers = [ cfg.package ];

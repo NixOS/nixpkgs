@@ -77,7 +77,7 @@ in {
       general.max_temp = mkDefault 70;
     };
 
-    boot.kernelModules = [ "coretemp" "applesmc" ];
+    boot.kernel.modules = [ "coretemp" "applesmc" ];
     environment.systemPackages = [ cfg.package ];
     environment.etc."mbpfan.conf".source = settingsFile;
 

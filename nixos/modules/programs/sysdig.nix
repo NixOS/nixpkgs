@@ -9,6 +9,6 @@ in {
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.sysdig ];
-    boot.extraModulePackages = [ config.boot.kernelPackages.sysdig ];
+    boot.extraModulePackages = [ config.boot.kernel.packages.sysdig ];
   };
 }

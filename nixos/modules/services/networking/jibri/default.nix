@@ -409,7 +409,7 @@ in
       extraModprobeConfig = ''
         options snd-aloop enable=1,1,1,1,1,1,1,1
       '';
-      kernelModules = [ "snd-aloop" ];
+      kernel.modules = [ "snd-aloop" ];
     };
   };
 

@@ -985,7 +985,7 @@ let
     in {
       name = "WlanInterface";
       nodes.machine = { pkgs, ... }: {
-        boot.kernelModules = [ "mac80211_hwsim" ];
+        boot.kernel.modules = [ "mac80211_hwsim" ];
         networking.wlanInterfaces = {
           wlan0 = { device = "wlan0"; };
           wap0 = { device = "wlan0"; mac = testMac; };

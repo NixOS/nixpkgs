@@ -78,7 +78,7 @@ in
 
     system.fsPackages = [ pkgs.nfs-utils ];
 
-    boot.initrd.kernelModules = mkIf inInitrd [ "nfs" ];
+    boot.initrd.kernel.modules = mkIf inInitrd [ "nfs" ];
 
     systemd.packages = [ pkgs.nfs-utils ];
 

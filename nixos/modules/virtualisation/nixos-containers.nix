@@ -290,7 +290,7 @@ let
     DeviceAllow = map (d: "${d.node} ${d.modifier}") cfg.allowedDevices;
   };
 
-  kernelVersion = config.boot.kernelPackages.kernel.version;
+  kernelVersion = config.boot.kernel.packages.kernel.version;
 
   bindMountOpts = { name, ... }: {
 
@@ -890,7 +890,7 @@ in
       nixos-container
     ];
 
-    boot.kernelModules = [
+    boot.kernel.modules = [
       "bridge"
       "macvlan"
       "tap"

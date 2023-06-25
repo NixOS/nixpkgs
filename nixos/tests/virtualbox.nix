@@ -57,7 +57,7 @@ let
 
     virtualisation.virtualbox.guest.enable = true;
 
-    boot.initrd.kernelModules = [
+    boot.initrd.kernel.modules = [
       "af_packet" "vboxsf"
       "virtio" "virtio_pci" "virtio_ring" "virtio_net" "vboxguest"
     ];

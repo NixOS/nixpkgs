@@ -5,7 +5,7 @@ with lib;
 let
   systemBuilder =
     let
-      kernelPath = "${config.boot.kernelPackages.kernel}/" +
+      kernelPath = "${config.boot.kernel.packages.kernel}/" +
         "${config.system.boot.loader.kernelFile}";
       initrdPath = "${config.system.build.initialRamdisk}/" +
         "${config.system.boot.loader.initrdFile}";
@@ -61,7 +61,7 @@ let
 
       echo -n "systemd ${toString config.systemd.package.interfaceVersion}" > $out/init-interface-version
       echo -n "$nixosLabel" > $out/nixos-version
-      echo -n "${config.boot.kernelPackages.stdenv.hostPlatform.system}" > $out/system
+      echo -n "${config.boot.kernel.packages.stdenv.hostPlatform.system}" > $out/system
 
       mkdir $out/bin
       export localeArchive="${config.i18n.glibcLocales}/lib/locale/locale-archive"

@@ -14,7 +14,7 @@ let
 
     nodes.machine = { ... }:
       {
-        boot.kernelPackages = linuxPackages;
+        boot.kernel.packages = linuxPackages;
       };
 
     testScript =

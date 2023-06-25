@@ -226,12 +226,12 @@ in
 
     hardware.nvidia.package = lib.mkOption {
       type = types.package;
-      default = config.boot.kernelPackages.nvidiaPackages.stable;
-      defaultText = literalExpression "config.boot.kernelPackages.nvidiaPackages.stable";
+      default = config.boot.kernel.packages.nvidiaPackages.stable;
+      defaultText = literalExpression "config.boot.kernel.packages.nvidiaPackages.stable";
       description = lib.mdDoc ''
         The NVIDIA X11 derivation to use.
       '';
-      example = literalExpression "config.boot.kernelPackages.nvidiaPackages.legacy_340";
+      example = literalExpression "config.boot.kernel.packages.nvidiaPackages.legacy_340";
     };
 
     hardware.nvidia.open = lib.mkOption {
@@ -457,14 +457,14 @@ in
     hardware.firmware = lib.optional cfg.open nvidia_x11.firmware;
 
     # nvidia-uvm is required by CUDA applications.
-    boot.kernelModules = [ "nvidia-uvm" ] ++
+    boot.kernel.modules = [ "nvidia-uvm" ] ++
       optionals config.services.xserver.enable [ "nvidia" "nvidia_modeset" "nvidia_drm" ];
 
     # If requested enable modesetting via kernel parameter.
     boot.kernelParams = optional (offloadCfg.enable || cfg.modesetting.enable) "nvidia-drm.modeset=1"
       ++ optional cfg.powerManagement.enable "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
       ++ optional cfg.open "nvidia.NVreg_OpenRmEnableUnsupportedGpus=1"
-      ++ optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2" && !ibtSupport) "ibt=off";
+      ++ optional (config.boot.kernel.packages.kernel.kernelAtLeast "6.2" && !ibtSupport) "ibt=off";
 
     services.udev.extraRules =
       ''
@@ -475,7 +475,7 @@ in
         KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 0'"
         KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm-tools c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 1'"
       '' + optionalString cfg.powerManagement.finegrained (
-      optionalString (versionOlder config.boot.kernelPackages.kernel.version "5.5") ''
+      optionalString (versionOlder config.boot.kernel.packages.kernel.version "5.5") ''
         # Remove NVIDIA USB xHCI Host Controller devices, if present
         ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c0330", ATTR{remove}="1"
 

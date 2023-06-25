@@ -103,7 +103,7 @@ in
 
   config = mkIf cfg.enable {
 
-    boot.initrd.kernelModules = [ "af_packet" ];
+    boot.initrd.kernel.modules = [ "af_packet" ];
 
     boot.initrd.extraUtilsCommands = ''
       copy_bin_and_libs ${pkgs.klibc}/lib/klibc/bin.static/ipconfig

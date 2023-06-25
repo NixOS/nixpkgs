@@ -174,7 +174,7 @@ sub pciCheck {
          $device eq "0x4331" || $device eq "0x43a0" || $device eq "0x43b1"
         ) )
      {
-        push @modulePackages, "config.boot.kernelPackages.broadcom_sta";
+        push @modulePackages, "config.boot.kernel.packages.broadcom_sta";
         push @kernelModules, "wl";
      }
 
@@ -585,8 +585,8 @@ my $hwConfig = <<EOF;
   imports =${\multiLineList("    ", @imports)};
 
   boot.initrd.availableKernelModules = [$initrdAvailableKernelModules ];
-  boot.initrd.kernelModules = [$initrdKernelModules ];
-  boot.kernelModules = [$kernelModules ];
+  boot.initrd.kernel.modules = [$initrdKernelModules ];
+  boot.kernel.modules = [$kernelModules ];
   boot.extraModulePackages = [$modulePackages ];
 $fsAndSwap
 $networkingDhcpConfig

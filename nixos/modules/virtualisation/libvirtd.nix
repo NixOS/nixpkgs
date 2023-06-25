@@ -277,7 +277,7 @@ in
       etc.ethertypes.source = "${pkgs.iptables}/etc/ethertypes";
     };
 
-    boot.kernelModules = [ "tun" ];
+    boot.kernel.modules = [ "tun" ];
 
     users.groups.libvirtd.gid = config.ids.gids.libvirtd;
 

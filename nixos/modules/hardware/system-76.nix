@@ -5,13 +5,13 @@ let
   cfg = config.hardware.system76;
   opt = options.hardware.system76;
 
-  kpkgs = config.boot.kernelPackages;
+  kpkgs = config.boot.kernel.packages;
   modules = [ "system76" "system76-io" ] ++ (optional (versionOlder kpkgs.kernel.version "5.5") "system76-acpi");
   modulePackages = map (m: kpkgs.${m}) modules;
   moduleConfig = mkIf cfg.kernel-modules.enable {
     boot.extraModulePackages = modulePackages;
 
-    boot.kernelModules = modules;
+    boot.kernel.modules = modules;
 
     services.udev.packages = modulePackages;
   };
@@ -36,7 +36,7 @@ let
     };
   };
 
-  power-pkg = config.boot.kernelPackages.system76-power;
+  power-pkg = config.boot.kernel.packages.system76-power;
   powerConfig = mkIf cfg.power-daemon.enable {
     # Make system76-power usable by root from the command line.
     environment.systemPackages = [ power-pkg ];

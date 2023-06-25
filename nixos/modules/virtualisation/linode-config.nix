@@ -49,8 +49,8 @@ with lib;
     ];
 
     # Set Up LISH Serial Connection
-    kernelParams = [ "console=ttyS0,19200n8" ];
-    kernelModules = [ "virtio_net" ];
+    kernel.params = [ "console=ttyS0,19200n8" ];
+    kernel.modules = [ "virtio_net" ];
 
     loader = {
       # Increase Timeout to Allow LISH Connection

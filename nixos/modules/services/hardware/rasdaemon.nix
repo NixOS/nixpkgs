@@ -103,7 +103,7 @@ in
         aer-inject
       ]);
 
-    boot.initrd.kernelModules = cfg.extraModules
+    boot.initrd.kernel.modules = cfg.extraModules
       ++ optionals (cfg.testing) [
         # edac_core and amd64_edac should get loaded automatically
         # i7core_edac may not be, and may not be required, but should load successfully

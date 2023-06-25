@@ -25,7 +25,7 @@ in
 
   config = mkIf cfg.enable {
 
-    boot.kernelModules = [ "i2c-dev" ];
+    boot.kernel.modules = [ "i2c-dev" ];
 
     users.groups = mkIf (cfg.group == "i2c") {
       i2c = { };

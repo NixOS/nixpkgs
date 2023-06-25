@@ -34,7 +34,7 @@ with lib;
   };
 
   config = mkIf cfg.enable {
-    boot.kernelModules = [ "tun" ];
+    boot.kernel.modules = [ "tun" ];
 
     environment.systemPackages = [ cfg.package ];
 

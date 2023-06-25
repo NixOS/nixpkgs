@@ -12,7 +12,7 @@
   boot.loader.generic-extlinux-compatible.enable = true;
 
   boot.consoleLogLevel = lib.mkDefault 7;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernel.packages = pkgs.linuxPackages_latest;
   # The serial ports listed here are:
   # - ttyS0: for Tegra (Jetson TK1)
   # - ttymxc0: for i.MX6 (Wandboard)

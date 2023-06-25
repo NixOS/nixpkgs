@@ -111,7 +111,7 @@ might look like this:
     ];
 
   boot.initrd.availableKernelModules = [ "ehci_hcd" "ahci" ];
-  boot.kernelModules = [ "kvm-intel" ];
+  boot.kernel.modules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =

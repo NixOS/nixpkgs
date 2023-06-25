@@ -337,7 +337,7 @@ in
       };
       path = with pkgs; [
         # unfree:
-        # config.boot.kernelPackages.nvidiaPackages.latest.bin
+        # config.boot.kernel.packages.nvidiaPackages.latest.bin
         ffmpeg_5-headless
         libva-utils
         procps

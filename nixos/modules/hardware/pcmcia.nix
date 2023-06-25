@@ -49,7 +49,7 @@ in
 
   config = mkIf config.hardware.pcmcia.enable {
 
-    boot.kernelModules = [ "pcmcia" ];
+    boot.kernel.modules = [ "pcmcia" ];
 
     services.udev.packages = [ pcmciaUtils ];
 

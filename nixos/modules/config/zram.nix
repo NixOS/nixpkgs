@@ -112,7 +112,7 @@ in
 
     # Disabling this for the moment, as it would create and mkswap devices twice,
     # once in stage 2 boot, and again when the zram-reloader service starts.
-    # boot.kernelModules = [ "zram" ];
+    # boot.kernel.modules = [ "zram" ];
 
     systemd.packages = [ pkgs.zram-generator ];
     systemd.services."systemd-zram-setup@".path = [ pkgs.util-linux ]; # for mkswap

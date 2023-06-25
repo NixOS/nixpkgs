@@ -535,22 +535,22 @@ in
       ];
 
       boot = {
-        kernelModules = [ "zfs" ];
+        kernel.modules = [ "zfs" ];
         # https://github.com/openzfs/zfs/issues/260
         # https://github.com/openzfs/zfs/issues/12842
         # https://github.com/NixOS/nixpkgs/issues/106093
-        kernelParams = lib.optionals (!config.boot.zfs.allowHibernation) [ "nohibernate" ];
+        kernel.params = lib.optionals (!config.boot.zfs.allowHibernation) [ "nohibernate" ];
 
         extraModulePackages = [
           (if config.boot.zfs.enableUnstable then
-            config.boot.kernelPackages.zfsUnstable
+            config.boot.kernel.packages.zfsUnstable
            else
-            config.boot.kernelPackages.zfs)
+            config.boot.kernel.packages.zfs)
         ];
       };
 
       boot.initrd = mkIf inInitrd {
-        kernelModules = [ "zfs" ] ++ optional (!cfgZfs.enableUnstable) "spl";
+        kernel.modules = [ "zfs" ] ++ optional (!cfgZfs.enableUnstable) "spl";
         extraUtilsCommands =
           ''
             copy_bin_and_libs ${cfgZfs.package}/sbin/zfs

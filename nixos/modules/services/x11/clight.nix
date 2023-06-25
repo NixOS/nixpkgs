@@ -73,7 +73,7 @@ in {
         message = "You must specify a valid latitude and longitude if manually providing location"; }
     ];
 
-    boot.kernelModules = [ "i2c_dev" ];
+    boot.kernel.modules = [ "i2c_dev" ];
     environment.systemPackages = with pkgs; [ clight clightd ];
     services.dbus.packages = with pkgs; [ clight clightd ];
     services.upower.enable = true;
