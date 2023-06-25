@@ -14,6 +14,8 @@ perlPackages.buildPerlPackage rec {
     HTMLParser NetCIDRLite NetDNS NetAddrIP DBFile HTTPDate MailDKIM LWP
     LWPProtocolHttps IOSocketSSL DBI EncodeDetect IPCountry NetIdent
     Razor2ClientAgent MailSPF NetDNSResolverProgrammable Socket6
+    ArchiveZip EmailAddressXS NetLibIDN2 MaxMindDBReader GeoIP MailDMARC
+    MaxMindDBReaderXS
   ]);
 
   # Enabling 'taint' mode is desirable, but that flag disables support
