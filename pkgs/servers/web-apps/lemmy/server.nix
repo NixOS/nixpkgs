@@ -26,6 +26,11 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # `cargo test` fails as `tokio::test` relies on the macros feature which wasn't specified in Cargo.toml
+    ./tokio-macros.patch
+  ];
+
   cargoSha256 = pinData.serverCargoSha256;
 
   buildInputs = [ postgresql ]
