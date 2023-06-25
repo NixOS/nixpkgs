@@ -7,12 +7,13 @@
 , pycryptodomex
 , pytestCheckHook
 , pythonOlder
+, pytz
 , sensor-state-data
 }:
 
 buildPythonPackage rec {
   pname = "bthome-ble";
-  version = "2.11.3";
+  version = "2.12.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-axumlQnD7MKGdmy1gGQNU4B/3jXffK2jTyO3BtWvp5w=";
+    hash = "sha256-SonB0pT6sC6kpFmIMzNeASUHyuik4HOOquWx6+K05Y8=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +34,7 @@ buildPythonPackage rec {
     bluetooth-sensor-state-data
     sensor-state-data
     pycryptodomex
+    pytz
   ];
 
   nativeCheckInputs = [

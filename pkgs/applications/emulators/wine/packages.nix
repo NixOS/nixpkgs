@@ -1,4 +1,4 @@
-{ stdenv_32bit, lib, pkgs, pkgsi686Linux, pkgsCross, callPackage, moltenvk,
+{ stdenv_32bit, lib, pkgs, pkgsi686Linux, pkgsCross, callPackage, substituteAll, moltenvk,
   wineRelease ? "stable",
   supportFlags
 }:
@@ -34,7 +34,11 @@ in with src; {
     geckos = [ gecko32 gecko64 ];
     mingwGccs = with pkgsCross; [ mingw32.buildPackages.gcc mingwW64.buildPackages.gcc ];
     monos =  [ mono ];
-    buildScript = ./builder-wow.sh;
+    buildScript = substituteAll {
+        src = ./builder-wow.sh;
+        # pkgconfig has trouble picking the right architecture
+        pkgconfig64remove = lib.makeSearchPathOutput "dev" "lib/pkgconfig" [ pkgs.glib pkgs.gst_all_1.gstreamer ];
+      };
     platforms = [ "x86_64-linux" ];
     mainProgram = "wine64";
   };
