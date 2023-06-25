@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "tela-icon-theme";
-  version = "2023-02-03";
+  version = "2023-06-25";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
-    repo = pname;
+    repo = "tela-icon-theme";
     rev = version;
-    sha256 = "sha256-W3gGn4ioTg/iOWTa5hfwx6FWzpFilpG8IXwaO5/YAvk=";
+    hash = "sha256-tv0C4mW2A3dScUXBWa7a3lkG4lPIjZTsj5b1/oEVuiw=";
   };
 
   nativeBuildInputs = [ gtk3 jdupes ];
@@ -35,6 +35,7 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "A flat colorful Design icon theme";
     homepage = "https://github.com/vinceliuice/tela-icon-theme";
+    changelog = "https://github.com/vinceliuice/Tela-icon-theme/releases/tag/${src.rev}";
     license = licenses.gpl3Only;
     # darwin systems use case-insensitive filesystems that cause hash mismatches
     platforms = subtractLists platforms.darwin platforms.unix;
