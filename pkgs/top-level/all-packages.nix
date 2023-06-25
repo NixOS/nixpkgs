@@ -1765,6 +1765,10 @@ with pkgs;
 
   vopono = callPackage ../tools/networking/vopono { };
 
+  vrc-get = callPackage ../tools/misc/vrc-get {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   winbox = callPackage ../tools/admin/winbox {
     wine = wineWowPackages.staging;
   };
