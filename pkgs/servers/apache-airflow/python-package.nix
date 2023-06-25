@@ -82,7 +82,7 @@
 , enabledProviders ? []
 }:
 let
-  version = "2.6.0";
+  version = "2.6.2";
 
   airflow-src = fetchFromGitHub rec {
     owner = "apache";
@@ -91,7 +91,7 @@ let
     # Download using the git protocol rather than using tarballs, because the
     # GitHub archive tarballs don't appear to include tests
     forceFetchGit = true;
-    hash = "sha256-CsLOj68+tSOI7drZq6QH+C2EB/9trg5cFAYAQp/06m8=";
+    hash = "sha256-ejZw71lMhfnqy4Ziha8/ufmX+SkOfopkeCskf02ZQgA=";
   };
 
   # airflow bundles a web interface, which is built using webpack by an undocumented shell script in airflow's source tree.
