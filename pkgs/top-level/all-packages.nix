@@ -316,6 +316,8 @@ with pkgs;
 
   atomic-operator = callPackage ../tools/security/atomic-operator { };
 
+  atomic-swap = callPackage ../applications/blockchains/atomic-swap { };
+
   avro-tools = callPackage ../development/tools/avro-tools { };
 
   bacnet-stack = callPackage ../tools/networking/bacnet-stack { };
