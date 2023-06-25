@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , jupyterhub
+, packaging
 , pythonOlder
 }:
 
@@ -21,6 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     jupyterhub
+    packaging
   ];
 
   # Tests require a job scheduler e.g. slurm, pbs, etc.
