@@ -1,4 +1,4 @@
-{ lib, fetchurl, perlPackages, makeWrapper, gnupg, re2c, gcc, gnumake, libxcrypt, openssl, coreutils, poppler_utils, tesseract, iana-etc }:
+{ lib, fetchurl, perlPackages, makeBinaryWrapper, gnupg, re2c, gcc, gnumake, libxcrypt, openssl, coreutils, poppler_utils, tesseract, iana-etc }:
 
 perlPackages.buildPerlPackage rec {
   pname = "SpamAssassin";
@@ -14,7 +14,7 @@ perlPackages.buildPerlPackage rec {
     ./sa_compile-use-perl5lib.patch
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
   buildInputs = (with perlPackages; [
     HTMLParser NetCIDRLite NetDNS NetAddrIP DBFile HTTPDate MailDKIM LWP
     LWPProtocolHttps IOSocketSSL DBI EncodeDetect IPCountry NetIdent
@@ -25,9 +25,7 @@ perlPackages.buildPerlPackage rec {
     openssl
   ];
 
-  # Enabling 'taint' mode is desirable, but that flag disables support
-  # for the PERL5LIB environment variable. Needs further investigation.
-  makeFlags = [ "PERL_BIN=${perlPackages.perl}/bin/perl" "PERL_TAINT=no" "ENABLE_SSL=yes" ];
+  makeFlags = [ "PERL_BIN=${perlPackages.perl}/bin/perl" "ENABLE_SSL=yes" ];
 
   makeMakerFlags = [ "SYSCONFDIR=/etc LOCALSTATEDIR=/var/lib/spamassassin" ];
 
@@ -56,7 +54,18 @@ perlPackages.buildPerlPackage rec {
     mv "rules/"* $out/share/spamassassin/
 
     for n in "$out/bin/"*; do
-      wrapProgram "$n" --prefix PERL5LIB : "$PERL5LIB" --prefix PATH : ${lib.makeBinPath [ gnupg re2c gcc gnumake ]} --prefix C_INCLUDE_PATH : ${lib.makeSearchPathOutput "include" "include" [ libxcrypt ]}
+      # Skip if this isn't a perl script
+      if ! head -n1 "$n" | grep -q bin/perl; then
+        continue
+      fi
+      echo "Wrapping $n for taint mode"
+      orig="$out/bin/.$(basename "$n")-wrapped"
+      mv "$n" "$orig"
+      # We don't inherit argv0 so that $^X works properly in e.g. sa-compile
+      makeWrapper "${perlPackages.perl}/bin/perl" "$n" \
+        --add-flags "-T $perlFlags $orig" \
+        --prefix PATH : ${lib.makeBinPath [ gnupg re2c gcc gnumake ]} \
+        --prefix C_INCLUDE_PATH : ${lib.makeSearchPathOutput "include" "include" [ libxcrypt ]}
     done
   '';
 
