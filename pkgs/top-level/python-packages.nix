@@ -6444,6 +6444,8 @@ self: super: with self; {
 
   more-properties = callPackage ../development/python-modules/more-properties { };
 
+  moreorless = callPackage ../development/python-modules/moreorless { };
+
   moretools = callPackage ../development/python-modules/moretools { };
 
   morfessor = callPackage ../development/python-modules/morfessor { };
