@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "gut";
-  version = "0.2.9";
+  version = "0.2.10";
 
   src = fetchFromGitHub {
     owner = "julien040";
     repo = "gut";
     rev = version;
-    hash = "sha256-zi0Hqf9fuZIh0GlP1Qf3dq5z1+eR1mO+Ybagehyif9g=";
+    hash = "sha256-y6GhLuTqOaxAQjDgqh1ivDwGhpYY0a6ZNDdE3Pox3is=";
   };
 
-  vendorHash = "sha256-hsZEWGA+sHZJ3S15OkfLOIALmHJeYVxxg3vKgTGtiJE=";
+  vendorHash = "sha256-91iyAFD/RPEkMarKKVwJ4t92qosP2Db1aQ6dmNZNDwU=";
 
   ldflags = [ "-s" "-w" "-X github.com/julien040/gut/src/telemetry.gutVersion=${version}" ];
 

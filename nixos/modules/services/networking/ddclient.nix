@@ -48,7 +48,7 @@ with lib;
     (mkChangedOptionModule [ "services" "ddclient" "domain" ] [ "services" "ddclient" "domains" ]
       (config:
         let value = getAttrFromPath [ "services" "ddclient" "domain" ] config;
-        in if value != "" then [ value ] else []))
+        in optional (value != "") value))
     (mkRemovedOptionModule [ "services" "ddclient" "homeDir" ] "")
     (mkRemovedOptionModule [ "services" "ddclient" "password" ] "Use services.ddclient.passwordFile instead.")
     (mkRemovedOptionModule [ "services" "ddclient" "ipv6" ] "")

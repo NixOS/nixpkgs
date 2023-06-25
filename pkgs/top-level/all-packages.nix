@@ -4625,6 +4625,8 @@ with pkgs;
 
   dapr-cli = callPackage ../development/tools/dapr/cli { };
 
+  das = callPackage ../tools/security/das { };
+
   dasel = callPackage ../applications/misc/dasel { };
 
   dasher = callPackage ../applications/accessibility/dasher { };
@@ -23337,6 +23339,10 @@ with pkgs;
 
   msgpack = callPackage ../development/libraries/msgpack { };
 
+  msgpack-c = callPackage ../development/libraries/msgpack-c { };
+
+  msgpack-cxx = callPackage ../development/libraries/msgpack-cxx { };
+
   msoffcrypto-tool = with python3.pkgs; toPythonApplication msoffcrypto-tool;
 
   msilbc = callPackage ../development/libraries/msilbc { };
@@ -35529,7 +35535,7 @@ with pkgs;
   weechat-unwrapped = callPackage ../applications/networking/irc/weechat {
     inherit (darwin) libobjc;
     inherit (darwin) libresolv;
-    guile = guile_2_0;
+    guile = guile_3_0;
   };
 
   weechat = wrapWeechat weechat-unwrapped { };
