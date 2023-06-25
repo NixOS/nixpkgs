@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "micawber";
-  version = "0.5.4";
+  version = "0.5.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "003c5345aafe84f6b60fd289c003e8b1fef04c14e015c2d52d792a6b88135c89";
+    sha256 = "sha256-CsWBS2X/KngfsTlLkaI6ipX3NJK2u49wW67q2C6t1UM=";
   };
 
   propagatedBuildInputs = [ beautifulsoup4 ];
