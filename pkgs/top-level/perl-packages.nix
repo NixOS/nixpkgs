@@ -14256,6 +14256,28 @@ with self; {
     };
   };
 
+  MailDMARC = buildPerlPackage {
+    pname = "Mail-DMARC";
+    version = "1.20230215";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MB/MBRADSHAW/Mail-DMARC-1.20230215.tar.gz";
+      hash = "sha256-V9z1R1nLkkSOVukUE0D2E0QnTFjZ3WWqkKqczw5+uQM=";
+    };
+    buildInputs = [ ExtUtilsMakeMaker FileShareDirInstall ];
+    doCheck = false;  # uses actual DNS at runtime
+    checkInputs = [ XMLSAX XMLValidatorSchema TestException TestFileShareDir TestMore TestOutput ];
+    propagatedBuildInputs = [
+      ConfigTiny DBDSQLite DBIxSimple EmailMIME EmailSender Encode FileShareDir GetoptLong
+      IOCompress IO IOSocketSSL NetDNS NetIDNEncode NetIP NetSSLeay RegexpCommon Socket6
+      SysSyslog URI XMLLibXML
+    ];
+    meta = {
+      description = "Perl implementation of DMARC";
+      homepage = "https://github.com/msimerson/mail-dmarc";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   MailMaildir = buildPerlPackage {
     version = "1.0.0";
     pname = "Mail-Maildir";
