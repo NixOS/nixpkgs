@@ -23339,6 +23339,10 @@ with pkgs;
 
   msgpack = callPackage ../development/libraries/msgpack { };
 
+  msgpack-c = callPackage ../development/libraries/msgpack-c { };
+
+  msgpack-cxx = callPackage ../development/libraries/msgpack-cxx { };
+
   msoffcrypto-tool = with python3.pkgs; toPythonApplication msoffcrypto-tool;
 
   msilbc = callPackage ../development/libraries/msilbc { };
