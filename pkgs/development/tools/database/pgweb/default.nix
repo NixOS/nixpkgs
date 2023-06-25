@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "pgweb";
-  version = "0.13.1";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "sosedoff";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+sU+kNTOv78g4mvynXoIyNtmeIDxzfAs4Kr/Lx9zfiU=";
+    sha256 = "sha256-0wwDye7Iku9+brYoVqlCpnm+A3xsr8tL2dyWaBVvres=";
   };
 
   postPatch = ''
@@ -16,7 +16,7 @@ buildGoModule rec {
     rm -f pkg/client/{client,dump}_test.go
   '';
 
-  vendorSha256 = "sha256-W+Vybea4oppD4BHRqcyouQL79cF+y+sONY9MRggti20=";
+  vendorHash = "sha256-Jpvf6cST3kBvYzCQLoJ1fijUC/hP1ouptd2bQZ1J/Lo=";
 
   ldflags = [ "-s" "-w" ];
 
