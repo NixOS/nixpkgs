@@ -40,7 +40,10 @@ let
       backgroundColor = f cfg.backgroundColor;
       entryOptions = f cfg.entryOptions;
       subEntryOptions = f cfg.subEntryOptions;
-      grub = f grub;
+      # PC platforms (like x86_64-linux) have a non-EFI target (`grubTarget`), but other platforms
+      # (like aarch64-linux) have an undefined `grubTarget`. Avoid providing the path to a non-EFI
+      # GRUB on those platforms.
+      grub = f (if (grub.grubTarget or "") != "" then grub else "");
       grubTarget = f (grub.grubTarget or "");
       shell = "${pkgs.runtimeShell}";
       fullName = lib.getName realGrub;
