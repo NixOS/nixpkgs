@@ -18,11 +18,11 @@
   inherit (lib) optional optionals;
 in stdenv.mkDerivation rec {
   pname = "orc";
-  version = "0.4.33";
+  version = "0.4.34";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/orc/${pname}-${version}.tar.xz";
-    sha256 = "sha256-hE5tfbgIb3k/V2GNPUto0p2ZsWA05xQw3zwhz9PDVCo=";
+    sha256 = "sha256-j0ers/CXFx5E64B63Nq9hg+6Lv/TfY08T71fNByt1B8=";
   };
 
   postPatch = lib.optionalString stdenv.isAarch32 ''
