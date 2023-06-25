@@ -1811,6 +1811,8 @@ with pkgs;
 
   topicctl = callPackage ../tools/misc/topicctl { };
 
+  trigger-control = callPackage ../tools/games/trigger-control { };
+
   ttchat = callPackage ../tools/misc/ttchat { };
 
   ukmm = callPackage ../tools/games/ukmm { };
