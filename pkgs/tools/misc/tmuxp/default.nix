@@ -6,17 +6,22 @@ let
 in
 pypkgs.buildPythonApplication rec {
   pname = "tmuxp";
-  version = "1.27.0";
+  version = "1.28.1";
 
   src = pypkgs.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-QAk+rcNYjhAgkJX2fa0bl3dHrB4yyYQ/oNlUX3IQMR8=";
+    sha256 = "sha256-sNLqUyas6QY11eW/FhkqB6+u4MTqiY1ixvD3BN69Fic=";
   };
 
   # No tests in archive
   doCheck = false;
 
-  nativeBuildInputs = [ installShellFiles ];
+  format = "pyproject";
+
+  nativeBuildInputs = [
+    pypkgs.poetry-core
+    installShellFiles
+  ];
 
   propagatedBuildInputs = with pypkgs; [
     click

@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonAutoFeatures = "auto";
   mesonFlags = [
     (lib.mesonBool "static-build" stdenv.hostPlatform.isStatic)
-    (lib.mesonBool "tests" finalAttrs.doCheck)
+    (lib.mesonBool "tests" finalAttrs.finalPackage.doCheck)
   ];
 
   # Checks are broken on aarch64 darwin
