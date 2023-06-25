@@ -4621,6 +4621,8 @@ with pkgs;
 
   dapr-cli = callPackage ../development/tools/dapr/cli { };
 
+  das = callPackage ../tools/security/das { };
+
   dasel = callPackage ../applications/misc/dasel { };
 
   dasher = callPackage ../applications/accessibility/dasher { };
