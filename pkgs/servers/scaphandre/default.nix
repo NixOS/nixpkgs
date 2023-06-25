@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     owner = "hubblo-org";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-cXwgPYTgom4KrL/PH53Fk6ChtALuMYyJ/oTrUKHCrzE=";
+    hash = "sha256-cXwgPYTgom4KrL/PH53Fk6ChtALuMYyJ/oTrUKHCrzE=";
   };
 
   cargoSha256 = "sha256-Vdkq9ShbHWepvIgHPjhKY+LmhjS+Pl84QelgEpen7Qs=";
