@@ -55,8 +55,9 @@ stdenv.mkDerivation {
       "--enable-nls"
       "--enable-luainterp=dynamic"
       "--enable-python3interp=dynamic"
-      "--enable-perlinterp=dynamic"
-      "--enable-rubyinterp=dynamic"
+      # TODO: re-add theses once dynamic language support restored
+      # "--enable-perlinterp=dynamic"
+      # "--enable-rubyinterp=dynamic"
       "--enable-tclinterp=yes"
       "--without-local-dir"
       "--with-luajit"
