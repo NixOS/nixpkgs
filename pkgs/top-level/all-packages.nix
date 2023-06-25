@@ -33387,7 +33387,7 @@ with pkgs;
   mepo = callPackage ../applications/misc/mepo {
     inherit (gnome) zenity;
     zigHook = zigHook.override {
-      zig = buildPackages.zig_0_9;
+      zig = buildPackages.zig_0_10;
     };
   };
 
