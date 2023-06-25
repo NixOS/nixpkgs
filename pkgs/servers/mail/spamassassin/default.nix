@@ -1,4 +1,4 @@
-{ lib, fetchurl, perlPackages, makeWrapper, gnupg, re2c, gcc, gnumake, libxcrypt }:
+{ lib, fetchurl, perlPackages, makeWrapper, gnupg, re2c, gcc, gnumake, libxcrypt, coreutils, poppler_utils, tesseract, iana-etc }:
 
 perlPackages.buildPerlPackage rec {
   pname = "SpamAssassin";
@@ -8,6 +8,11 @@ perlPackages.buildPerlPackage rec {
     url = "mirror://apache/spamassassin/source/Mail-${pname}-${version}.tar.bz2";
     hash = "sha256-5aoXBQowvHK6qGr9xgSMrepNHsLsxh14dxegWbgxnog=";
   };
+
+  patches = [
+    ./satest-no-clean-path.patch
+    ./sa_compile-use-perl5lib.patch
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = (with perlPackages; [
@@ -24,7 +29,25 @@ perlPackages.buildPerlPackage rec {
 
   makeMakerFlags = [ "SYSCONFDIR=/etc LOCALSTATEDIR=/var/lib/spamassassin" ];
 
-  doCheck = false;
+  checkInputs = (with perlPackages; [
+    TextDiff  # t/strip2.t
+  ]) ++ [
+    coreutils  # date, t/basic_meta.t
+    poppler_utils  # pdftotext, t/extracttext.t
+    tesseract  # tesseract, t/extracttext.t
+    iana-etc  # t/dnsbl_subtests.t (/etc/protocols used by Net::DNS::Nameserver)
+    re2c gcc gnumake
+  ];
+  preCheck = ''
+    substituteInPlace t/spamc_x_e.t \
+      --replace "/bin/echo" "${coreutils}/bin/echo"
+    export C_INCLUDE_PATH='${lib.makeSearchPathOutput "include" "include" [ libxcrypt ]}'
+    export HARNESS_OPTIONS="j''${NIX_BUILD_CORES}"
+
+    export HOME=$NIX_BUILD_TOP/home
+    mkdir -p $HOME
+    mkdir t/log  # pre-create to avoid race conditions
+  '';
 
   postInstall = ''
     mkdir -p $out/share/spamassassin
