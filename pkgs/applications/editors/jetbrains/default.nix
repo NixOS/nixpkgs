@@ -64,12 +64,12 @@ let
       postFixup = (attrs.postFixup or "") + lib.optionalString (stdenv.isLinux) ''
         (
           cd $out/clion
-          # bundled cmake does not find libc
-          rm -rf bin/cmake/linux
-          ln -s ${cmake} bin/cmake/linux
-          # bundled gdb does not find libcrypto 10
-          rm -rf bin/gdb/linux
-          ln -s ${gdb} bin/gdb/linux
+
+          # I think the included gdb has a couple of patches, so we patch it instead of replacing
+          ls -d $PWD/bin/gdb/linux/x64/lib/python3.8/lib-dynload/* |
+          xargs patchelf \
+            --replace-needed libssl.so.10 libssl.so \
+            --replace-needed libcrypto.so.10 libcrypto.so
 
           ls -d $PWD/bin/lldb/linux/x64/lib/python3.8/lib-dynload/* |
           xargs patchelf \
