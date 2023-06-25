@@ -14003,6 +14003,8 @@ with pkgs;
 
   udunits = callPackage ../development/libraries/udunits { };
 
+  ufmt = with python3Packages; toPythonApplication ufmt;
+
   uftp = callPackage ../servers/uftp { };
 
   uhttpmock = callPackage ../development/libraries/uhttpmock { };
