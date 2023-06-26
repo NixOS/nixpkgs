@@ -31,8 +31,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL2 ] ++ lib.optionals stdenv.isDarwin [ Accelerate CoreGraphics CoreML CoreVideo ];
 
-  WHISPER_COREML = lib.optionalString stdenv.isDarwin "1";
-  WHISPER_COREML_ALLOW_FALLBACK = lib.optionalString stdenv.isDarwin "1";
+  env = lib.optionalAttrs stdenv.isDarwin {
+    WHISPER_COREML = "1";
+    WHISPER_COREML_ALLOW_FALLBACK = "1";
+  };
+
   makeFlags = [ "main" "stream" ];
 
   installPhase = ''
