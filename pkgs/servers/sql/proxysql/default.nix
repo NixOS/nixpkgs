@@ -171,5 +171,6 @@ stdenv.mkDerivation rec {
     description = "High-performance MySQL proxy";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ ajs124 ];
+    platforms = platforms.unix;
   };
 }
