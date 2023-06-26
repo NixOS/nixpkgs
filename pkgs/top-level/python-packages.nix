@@ -643,7 +643,7 @@ self: super: with self; {
   arsenic = callPackage ../development/python-modules/arsenic { };
 
   art = callPackage ../development/python-modules/art { };
-  
+
   artifacts = callPackage ../development/python-modules/artifacts { };
 
   arviz = callPackage ../development/python-modules/arviz { };
