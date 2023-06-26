@@ -24,8 +24,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mt940" ];
 
   meta = with lib; {
-    description = "A library to parse MT940 files and returns smart Python collections for statistics and manipulation";
+    description = "Module to parse MT940 files and returns smart Python collections for statistics and manipulation";
     homepage = "https://github.com/WoLpH/mt940";
+    changelog = "https://github.com/wolph/mt940/releases/tag/v${version}";
     license = licenses.bsd3;
   };
 }
