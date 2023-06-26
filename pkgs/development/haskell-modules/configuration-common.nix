@@ -1593,7 +1593,9 @@ self: super: {
   #   so add them to build input and also wrap the resulting binary so they're in
   #   PATH.
   # - Patch can be removed on next package set bump (for v0.2.11)
-  update-nix-fetchgit = let deps = [ pkgs.git pkgs.nix pkgs.nix-prefetch-git ];
+
+  # 2023-06-26: Test failure: https://hydra.nixos.org/build/225081865
+  update-nix-fetchgit = dontCheck (let deps = [ pkgs.git pkgs.nix pkgs.nix-prefetch-git ];
   in self.generateOptparseApplicativeCompletions [ "update-nix-fetchgit" ] (overrideCabal
     (drv: {
       buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.makeWrapper ];
@@ -1602,7 +1604,7 @@ self: super: {
           lib.makeBinPath deps
         }"
       '';
-    }) (addTestToolDepends deps super.update-nix-fetchgit));
+    }) (addTestToolDepends deps super.update-nix-fetchgit)));
 
   # Raise version bounds: https://github.com/idontgetoutmuch/binary-low-level/pull/16
   binary-strict = appendPatches [
