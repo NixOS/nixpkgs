@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, adoptopenjdk-bin, jre }:
+{ lib, stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
   pname = "tlaplus";
@@ -10,7 +10,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ adoptopenjdk-bin ];
 
   dontUnpack = true;
   installPhase = ''
@@ -33,6 +32,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license     = lib.licenses.mit;
     platforms   = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ florentc thoughtpolice ];
+    maintainers = with lib.maintainers; [ florentc thoughtpolice mgregson ];
   };
 }

@@ -149,6 +149,7 @@ stdenv.mkDerivation rec {
     "--enable-prefix-only=yes"
     "--disable-pcp" # TODO: figure out how to package its dependency
     "--with-default-session-path=/run/wrappers/bin:/run/current-system/sw/bin"
+    "--with-admin-group=root" # TODO: really? Maybe "wheel"?
   ];
 
   enableParallelBuilding = true;
