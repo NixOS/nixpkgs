@@ -4460,6 +4460,12 @@
     githubId = 424946;
     name = "James Earl Douglas";
   };
+  earthengine = {
+    email = "earthengine@skiff.com";
+    github = "ee2500";
+    githubId = 134107129;
+    name = "EarthEngine";
+  };
   ebbertd = {
     email = "daniel@ebbert.nrw";
     github = "ebbertd";
