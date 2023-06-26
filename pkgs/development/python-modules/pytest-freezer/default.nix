@@ -1,8 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, flit-core
 , freezegun
-, hatchling
 , pytest
 , pytestCheckHook
 , pythonOlder
@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-freezer";
-  version = "0.4.6";
+  version = "0.4.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -19,11 +19,11 @@ buildPythonPackage rec {
     owner = "pytest-dev";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-0JZv6MavRceAV+ZOetCVxJEyttd5W3PCts6Fz2KQsh0=";
+    hash = "sha256-Eak6LNoyu2wvZbPaBBUO0UkyB9vni8YbsADGK0as7Cg=";
   };
 
   nativeBuildInputs = [
-    hatchling
+    flit-core
   ];
 
   buildInputs = [
