@@ -9,6 +9,7 @@ args@
 , autoAddOpenGLRunpathHook
 , addOpenGLRunpath
 , alsa-lib
+, curlMinimal
 , expat
 , fetchurl
 , fontconfig
@@ -16,6 +17,7 @@ args@
 , gdk-pixbuf
 , glib
 , glibc
+, gst_all_1
 , gtk2
 , lib
 , libxkbcommon
@@ -129,7 +131,22 @@ backendStdenv.mkDerivation rec {
     ucx
     xorg.libxshmfence
     xorg.libxkbfile
-  ];
+  ] ++ lib.optionals (lib.versionAtLeast version "12.1") (map lib.getLib [
+    # Used by `/target-linux-x64/CollectX/clx` and `/target-linux-x64/CollectX/libclx_api.so` for:
+    # - `libcurl.so.4`
+    curlMinimal
+
+    # Used by `/target-linux-x64/libQt6Multimedia.so.6` for:
+    # - `libgstaudio-1.0.so.0`
+    # - `libgstvideo-1.0.so.0`
+    # - `libgstpbutils-1.0.so.0`
+    # - `libgstallocators-1.0.so.0`
+    # - `libgstapp-1.0.so.0`
+    # - `libgstbase-1.0.so.0`
+    # - `libgstreamer-1.0.so.0`
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+  ]);
 
   # Prepended to runpaths by autoPatchelf.
   # The order inherited from older rpath preFixup code

@@ -18,6 +18,8 @@ let
 
   qemu = cfg.qemu.package;
 
+  hostPkgs = cfg.host.pkgs;
+
   consoles = lib.concatMapStringsSep " " (c: "console=${c}") cfg.qemu.consoles;
 
   driveOpts = { ... }: {
@@ -84,9 +86,9 @@ let
   # Shell script to start the VM.
   startVM =
     ''
-      #! ${cfg.host.pkgs.runtimeShell}
+      #! ${hostPkgs.runtimeShell}
 
-      export PATH=${makeBinPath [ cfg.host.pkgs.coreutils ]}''${PATH:+:}$PATH
+      export PATH=${makeBinPath [ hostPkgs.coreutils ]}''${PATH:+:}$PATH
 
       set -e
 
@@ -97,7 +99,7 @@ let
         local size=$2
         local temp=$(mktemp)
         ${qemu}/bin/qemu-img create -f raw "$temp" "$size"
-        ${pkgs.e2fsprogs}/bin/mkfs.ext4 -L ${rootFilesystemLabel} "$temp"
+        ${hostPkgs.e2fsprogs}/bin/mkfs.ext4 -L ${rootFilesystemLabel} "$temp"
         ${qemu}/bin/qemu-img convert -f raw -O qcow2 "$temp" "$name"
         rm "$temp"
       }
@@ -142,17 +144,17 @@ let
           else ''
             (
               cd ${builtins.storeDir}
-              ${pkgs.erofs-utils}/bin/mkfs.erofs \
+              ${hostPkgs.erofs-utils}/bin/mkfs.erofs \
                 --force-uid=0 \
                 --force-gid=0 \
                 -L ${nixStoreFilesystemLabel} \
                 -U eb176051-bd15-49b7-9e6b-462e0b467019 \
                 -T 0 \
                 --exclude-regex="$(
-                  <${pkgs.closureInfo { rootPaths = [ config.system.build.toplevel regInfo ]; }}/store-paths \
+                  <${hostPkgs.closureInfo { rootPaths = [ config.system.build.toplevel regInfo ]; }}/store-paths \
                     sed -e 's^.*/^^g' \
                   | cut -c -10 \
-                  | ${pkgs.python3}/bin/python ${./includes-to-excludes.py} )" \
+                  | ${hostPkgs.python3}/bin/python ${./includes-to-excludes.py} )" \
                 "$TMPDIR"/store.img \
                 . \
                 </dev/null >/dev/null
@@ -214,7 +216,7 @@ let
     '';
 
 
-  regInfo = pkgs.closureInfo { rootPaths = config.virtualisation.additionalPaths; };
+  regInfo = hostPkgs.closureInfo { rootPaths = config.virtualisation.additionalPaths; };
 
   # Use well-defined and persistent filesystem labels to identify block devices.
   rootFilesystemLabel = "nixos";
@@ -644,7 +646,7 @@ in
       package =
         mkOption {
           type = types.package;
-          default = cfg.host.pkgs.qemu_kvm;
+          default = hostPkgs.qemu_kvm;
           defaultText = literalExpression "config.virtualisation.host.pkgs.qemu_kvm";
           example = literalExpression "pkgs.qemu_test";
           description = lib.mdDoc "QEMU package to use.";
@@ -1180,14 +1182,14 @@ in
 
     services.qemuGuest.enable = cfg.qemu.guestAgent.enable;
 
-    system.build.vm = cfg.host.pkgs.runCommand "nixos-vm" {
+    system.build.vm = hostPkgs.runCommand "nixos-vm" {
       preferLocalBuild = true;
       meta.mainProgram = "run-${config.system.name}-vm";
     }
       ''
         mkdir -p $out/bin
         ln -s ${config.system.build.toplevel} $out/system
-        ln -s ${cfg.host.pkgs.writeScript "run-nixos-vm" startVM} $out/bin/run-${config.system.name}-vm
+        ln -s ${hostPkgs.writeScript "run-nixos-vm" startVM} $out/bin/run-${config.system.name}-vm
       '';
 
     # When building a regular system configuration, override whatever

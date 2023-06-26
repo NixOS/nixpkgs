@@ -39,18 +39,7 @@ buildDotnetModule rec {
     "EventStore.Projections.Core.Tests.Services.grpc_service.ServerFeaturesTests<LogFormat+V3,UInt32>.should_receive_expected_endpoints"
   ];
 
-  nugetBinariesToPatch = lib.optionals stdenv.isLinux [
-    "grpc.tools/2.49.1/tools/linux_x64/protoc"
-    "grpc.tools/2.49.1/tools/linux_x64/grpc_csharp_plugin"
-  ];
-
   postConfigure = ''
-    # Fixes execution of native protoc binaries during build
-    for binary in $nugetBinariesToPatch; do
-      path="$HOME/.nuget/packages/$binary"
-      patchelf --set-interpreter "$(cat $NIX_BINTOOLS/nix-support/dynamic-linker)" $path
-    done
-
     # Fixes git execution by GitInfo on mac os
     substituteInPlace "$HOME/.nuget/packages/gitinfo/2.0.26/build/GitInfo.targets" \
       --replace "<GitExe Condition=\"Exists('/usr/bin/git')\">/usr/bin/git</GitExe>" " " \

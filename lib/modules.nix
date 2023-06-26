@@ -21,7 +21,6 @@ let
     isBool
     isFunction
     isList
-    isPath
     isString
     length
     mapAttrs
@@ -905,6 +904,40 @@ let
     else opt // { type = opt.type.substSubModules opt.options; options = []; };
 
 
+  /*
+    Merge an option's definitions in a way that preserves the priority of the
+    individual attributes in the option value.
+
+    This does not account for all option semantics, such as readOnly.
+
+    Type:
+      option -> attrsOf { highestPrio, value }
+  */
+  mergeAttrDefinitionsWithPrio = opt:
+        let
+            defsByAttr =
+              lib.zipAttrs (
+                lib.concatLists (
+                  lib.concatMap
+                    ({ value, ... }@def:
+                      map
+                        (lib.mapAttrsToList (k: value: { ${k} = def // { inherit value; }; }))
+                        (pushDownProperties value)
+                    )
+                    opt.definitionsWithLocations
+                )
+              );
+        in
+          assert opt.type.name == "attrsOf" || opt.type.name == "lazyAttrsOf";
+          lib.mapAttrs
+                (k: v:
+                  let merging = lib.mergeDefinitions (opt.loc ++ [k]) opt.type.nestedTypes.elemType v;
+                  in {
+                    value = merging.mergedValue;
+                    inherit (merging.defsFinal') highestPrio;
+                  })
+                defsByAttr;
+
   /* Properties. */
 
   mkIf = condition: content:
@@ -1246,6 +1279,7 @@ private //
     importJSON
     importTOML
     mergeDefinitions
+    mergeAttrDefinitionsWithPrio
     mergeOptionDecls  # should be private?
     mkAfter
     mkAliasAndWrapDefinitions

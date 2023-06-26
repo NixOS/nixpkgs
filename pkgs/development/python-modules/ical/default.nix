@@ -13,12 +13,13 @@
 , pytest-golden
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , pyyaml
 }:
 
 buildPythonPackage rec {
   pname = "ical";
-  version = "4.5.3";
+  version = "4.5.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -27,8 +28,16 @@ buildPythonPackage rec {
     owner = "allenporter";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-CHo6khJ8Bqej/OdQBtcfa/luO1Gj8cu7h//MwPhWrMU=";
+    hash = "sha256-UcuJ23yzpRHDUFlwov692UyLXP/9Qb4F+IJIszo12/M=";
   };
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "tzdata"
+  ];
 
   propagatedBuildInputs = [
     emoji

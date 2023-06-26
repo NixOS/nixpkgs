@@ -195,6 +195,16 @@
     githubId = 15312184;
     name = "Rebecca Turner";
   };
+  _999eagle = {
+    email = "github@999eagle.moe";
+    matrix = "@sophie:catgirl.cloud";
+    github = "999eagle";
+    githubId = 1221984;
+    name = "Sophie Tauchert";
+    keys = [{
+      fingerprint = "7B59 F09E 0FE5 BC34 F032  1FB4 5270 1DE5 F5F5 1125";
+    }];
+  };
   a1russell = {
     email = "adamlr6+pub@gmail.com";
     github = "a1russell";
@@ -3973,6 +3983,13 @@
     githubId = 17111639;
     name = "Devin Singh";
   };
+  devpikachu = {
+    email = "andrei.hava@proton.me";
+    matrix = "@andrei:matrix.detpikachu.dev";
+    github = "devpikachu";
+    githubId = 30475873;
+    name = "Andrei Hava";
+  };
   devusb = {
     email = "mhelton@devusb.us";
     github = "devusb";
@@ -4481,6 +4498,15 @@
     github = "nuxeh";
     githubId = 1516017;
     name = "Ed Cragg";
+  };
+  eddsteel = {
+    email = "edd@eddsteel.com";
+    github = "eddsteel";
+    githubId = 206872;
+    name = "Edd Steel";
+    keys = [{
+      fingerprint = "1BE8 48D7 6C7C 4C51 349D  DDCC 3362 0159 D403 85A0";
+    }];
   };
   edef = {
     email = "edef@edef.eu";
@@ -7831,6 +7857,12 @@
     githubId = 2576152;
     name = "John M. Harris, Jr.";
   };
+  johnpyp = {
+    name = "John Paul Penaloza";
+    email = "johnpyp.dev@gmail.com";
+    github = "johnpyp";
+    githubId = 20625636;
+  };
   johnramsden = {
     email = "johnramsden@riseup.net";
     github = "johnramsden";
@@ -9566,6 +9598,13 @@
     github = "Luis-Hebendanz";
     githubId = 22085373;
     name = "Luis Hebendanz";
+  };
+  luisnquin = {
+    email = "lpaandres2020@gmail.com";
+    matrix = "@luisnquin:matrix.org";
+    github = "luisnquin";
+    githubId = 86449787;
+    name = "Luis Quiñones";
   };
   luispedro = {
     email = "luis@luispedro.org";
@@ -18146,6 +18185,12 @@
     github = "zzamboni";
     githubId = 32876;
     name = "Diego Zamboni";
+  };
+  zzzsy = {
+    email = "me@zzzsy.top";
+    github = "zzzsyyy";
+    githubId = 	59917878;
+    name = "Mathias Zhang";
   };
 }
 /* Keep the list alphabetically sorted. */

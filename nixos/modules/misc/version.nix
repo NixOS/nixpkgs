@@ -32,7 +32,7 @@ let
     VARIANT_ID = cfg.variant_id;
   };
 
-  initrdReleaseContents = osReleaseContents // {
+  initrdReleaseContents = (removeAttrs osReleaseContents [ "BUILD_ID" ]) // {
     PRETTY_NAME = "${osReleaseContents.PRETTY_NAME} (Initrd)";
   };
   initrdRelease = pkgs.writeText "initrd-release" (attrsToText initrdReleaseContents);

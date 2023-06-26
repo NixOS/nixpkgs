@@ -611,8 +611,8 @@ stdenv.mkDerivation {
   };
 
   meta =
-    let cc_ = if cc != null then cc else {}; in
-    (if cc_ ? meta then removeAttrs cc.meta ["priority"] else {}) //
+    let cc_ = lib.optionalAttrs (cc != null) cc; in
+    (lib.optionalAttrs (cc_ ? meta) (removeAttrs cc.meta ["priority"])) //
     { description =
         lib.attrByPath ["meta" "description"] "System C compiler" cc_
         + " (wrapper script)";

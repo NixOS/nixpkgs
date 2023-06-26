@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "klipper";
-  version = "unstable-2023-04-24";
+  version = "unstable-2023-06-23";
 
   src = fetchFromGitHub {
     owner = "KevinOConnor";
     repo = "klipper";
-    rev = "b17ae55f5bd3a079ab3626b1e6fd5c60416e6ba0";
-    sha256 = "sha256-e1luOJdTeSB/UNl/W91tBuuQ5f2fKfo1CSMQiE+A1T4=";
+    rev = "b9247810b90938339e87056a5d0f8a7f207d4ea4";
+    sha256 = "sha256-FJoSQSmlrceG9NVoEx1PvcS3IX/8Eu+Q2tzgx8DJjjc=";
   };
 
   sourceRoot = "source/klippy";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs = [ (python3.withPackages (p: with p; [ cffi pyserial greenlet jinja2 markupsafe numpy ])) ];
+  buildInputs = [ (python3.withPackages (p: with p; [ can cffi pyserial greenlet jinja2 markupsafe numpy ])) ];
 
   # we need to run this to prebuild the chelper.
   postBuild = ''

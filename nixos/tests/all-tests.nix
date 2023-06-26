@@ -315,6 +315,8 @@ in {
   graylog = handleTest ./graylog.nix {};
   grocy = handleTest ./grocy.nix {};
   grub = handleTest ./grub.nix {};
+  guacamole-client = handleTest ./guacamole-client.nix {};
+  guacamole-server = handleTest ./guacamole-server.nix {};
   gvisor = handleTest ./gvisor.nix {};
   hadoop = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop; };
   hadoop_3_2 = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop_3_2; };
@@ -594,7 +596,6 @@ in {
   phosh = handleTest ./phosh.nix {};
   photoprism = handleTest ./photoprism.nix {};
   php = handleTest ./php {};
-  php80 = handleTest ./php { php = pkgs.php80; };
   php81 = handleTest ./php { php = pkgs.php81; };
   php82 = handleTest ./php { php = pkgs.php82; };
   phylactery = handleTest ./web-apps/phylactery.nix {};

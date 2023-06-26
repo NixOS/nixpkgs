@@ -5,12 +5,12 @@
 }:
 
 let
-  version = "0.4.6";
+  version = "0.4.7";
   src = fetchFromGitHub {
     owner = "zinclabs";
     repo = "zincsearch";
     rev = "v${version}";
-    hash = "sha256-M2QNrQFMZJuJ2BlGmHT1eGGWccXqjLSjuEppP8uTWJw=";
+    hash = "sha256-6ZwEH9Xm+iIZ0SDa8qb82lIN3KU6DMe2wt0q9doKgkE=";
   };
 
   webui = buildNpmPackage {

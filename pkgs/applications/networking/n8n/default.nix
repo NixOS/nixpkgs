@@ -38,12 +38,6 @@ nodePackages.n8n.override {
   meta = with lib; {
     description = "Free and source-available fair-code licensed workflow automation tool. Easily automate tasks across different services.";
     maintainers = with maintainers; [ freezeboy k900 ];
-    license = {
-      fullName = "Sustainable Use License";
-      url = "https://github.com/n8n-io/n8n/blob/master/LICENSE.md";
-      free = false;
-      # only free to redistribute "for non-commercial purposes"
-      redistributable = false;
-    };
+    license = licenses.sustainableUse;
   };
 }

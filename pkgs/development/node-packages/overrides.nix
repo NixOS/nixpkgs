@@ -597,6 +597,11 @@ final: prev: {
 
   wrangler = prev.wrangler.override (oldAttrs: {
     meta = oldAttrs.meta // { broken = before "16.13"; };
+    buildInputs = [ pkgs.llvmPackages.libcxx pkgs.llvmPackages.libunwind ] ++ lib.optional stdenv.isLinux pkgs.autoPatchelfHook;
+    preFixup = ''
+      # patch elf is trying to patch binary for sunos
+      rm -r $out/lib/node_modules/wrangler/node_modules/@esbuild/sunos-x64
+    '';
   });
 
   yaml-language-server = prev.yaml-language-server.override {

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gettext, msgpack, libtermkey, libiconv
+{ lib, stdenv, fetchFromGitHub, cmake, gettext, msgpack-c, libtermkey, libiconv
 , libuv, lua, ncurses, pkg-config
 , unibilium, gperf
 , libvterm-neovim
@@ -66,7 +66,7 @@ in
       # https://github.com/luarocks/luarocks/issues/1402#issuecomment-1080616570
       # and it's definition at: pkgs/development/lua-modules/overrides.nix
       lua.pkgs.libluv
-      msgpack
+      msgpack-c
       ncurses
       neovimLuaEnv
       tree-sitter

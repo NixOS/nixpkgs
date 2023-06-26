@@ -15,6 +15,20 @@ lib.makeScope
 
     bash_2_05 = callPackage ./bash/2.nix { tinycc = tinycc-mes; };
 
+    binutils = callPackage ./binutils {
+      bash = bash_2_05;
+      gcc = gcc2;
+      binutils = binutils-mes;
+      glibc = glibc22;
+      sed = heirloom.sed;
+    };
+    binutils-mes = callPackage ./binutils {
+      bash = bash_2_05;
+      tinycc = tinycc-mes;
+      sed = heirloom.sed;
+      mesBootstrap = true;
+    };
+
     bzip2 = callPackage ./bzip2 {
       bash = bash_2_05;
       tinycc = tinycc-mes;
@@ -26,6 +40,23 @@ lib.makeScope
       bash = bash_2_05;
       tinycc = tinycc-mes;
     };
+
+    gcc2 = callPackage ./gcc/2.nix {
+      bash = bash_2_05;
+      gcc = gcc2-mes;
+      binutils = binutils-mes;
+      glibc = glibc22;
+    };
+    gcc2-mes = callPackage ./gcc/2.nix {
+      bash = bash_2_05;
+      tinycc = tinycc-mes;
+      binutils = binutils-mes;
+      mesBootstrap = true;
+    };
+
+    inherit (callPackage ./glibc {
+      bash = bash_2_05;
+    }) glibc22;
 
     gnugrep = callPackage ./gnugrep {
       bash = bash_2_05;
@@ -58,6 +89,8 @@ lib.makeScope
 
     heirloom-devtools = callPackage ./heirloom-devtools { tinycc = tinycc-mes; };
 
+    linux-headers = callPackage ./linux-headers { bash = bash_2_05; };
+
     ln-boot = callPackage ./ln-boot { };
 
     mes = lib.recurseIntoAttrs (callPackage ./mes { });
@@ -70,12 +103,22 @@ lib.makeScope
     tinycc-bootstrappable = lib.recurseIntoAttrs (callPackage ./tinycc/bootstrappable.nix { });
     tinycc-mes = lib.recurseIntoAttrs (callPackage ./tinycc/mes.nix { });
 
+    xz = callPackage ./xz {
+      bash = bash_2_05;
+      tinycc = tinycc-mes;
+      inherit (heirloom) sed;
+    };
+
     inherit (callPackage ./utils.nix { }) derivationWithMeta writeTextFile writeText;
 
     test = kaem.runCommand "minimal-bootstrap-test" {} ''
       echo ${bash_2_05.tests.get-version}
+      echo ${binutils.tests.get-version}
+      echo ${binutils-mes.tests.get-version}
       echo ${bzip2.tests.get-version}
       echo ${gawk.tests.get-version}
+      echo ${gcc2.tests.get-version}
+      echo ${gcc2-mes.tests.get-version}
       echo ${gnugrep.tests.get-version}
       echo ${gnused.tests.get-version}
       echo ${gnutar.tests.get-version}
@@ -83,6 +126,7 @@ lib.makeScope
       echo ${heirloom.tests.get-version}
       echo ${mes.compiler.tests.get-version}
       echo ${tinycc-mes.compiler.tests.chain}
+      echo ${xz.tests.get-version}
       mkdir ''${out}
     '';
   })

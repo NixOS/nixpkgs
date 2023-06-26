@@ -1953,7 +1953,7 @@ dependencies = [
 
 [[package]]
 name = "typst-lsp"
-version = "0.6.2"
+version = "0.7.1"
 dependencies = [
  "anyhow",
  "chrono",
@@ -1962,6 +1962,7 @@ dependencies = [
  "elsa",
  "futures",
  "if_chain",
+ "indexmap",
  "itertools",
  "lazy_static",
  "memmap2 0.7.0",
