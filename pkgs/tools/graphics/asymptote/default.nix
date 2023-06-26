@@ -2,7 +2,7 @@
 , autoreconfHook, bison, glm, flex
 , freeglut, ghostscriptX, imagemagick, fftw
 , boehmgc, libGLU, libGL, mesa, ncurses, readline, gsl, libsigsegv
-, python3Packages
+, python3
 , zlib, perl, curl
 , texLive, texinfo
 , darwin
@@ -32,10 +32,8 @@ stdenv.mkDerivation rec {
     boehmgc ncurses readline gsl libsigsegv
     zlib perl curl
     texLive
-  ] ++ (with python3Packages; [
-    python
-    pyqt5
-  ]);
+    (python3.withPackages (ps: with ps; [ cson numpy pyqt5 ]))
+  ];
 
   propagatedBuildInputs = [
     glm
