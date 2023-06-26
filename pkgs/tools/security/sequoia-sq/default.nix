@@ -11,7 +11,7 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "sequoia";
+  pname = "sequoia-sq";
   version = "0.30.1";
 
   src = fetchFromGitLab {
