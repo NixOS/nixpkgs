@@ -48,6 +48,7 @@ with lib;
       after = [ "network.target" ];
 
       serviceConfig = {
+        Type = "notify";
         User = "clickhouse";
         Group = "clickhouse";
         ConfigurationDirectory = "clickhouse-server";
@@ -55,6 +56,12 @@ with lib;
         StateDirectory = "clickhouse";
         LogsDirectory = "clickhouse";
         ExecStart = "${cfg.package}/bin/clickhouse-server --config-file=/etc/clickhouse-server/config.xml";
+        TimeoutStartSec = "infinity";
+      };
+
+      environment = {
+        # Switching off watchdog is very important for sd_notify to work correctly.
+        CLICKHOUSE_WATCHDOG_ENABLE = "0";
       };
     };
 

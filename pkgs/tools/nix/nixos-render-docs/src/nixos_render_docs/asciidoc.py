@@ -1,6 +1,6 @@
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
-from typing import Any, cast, Optional
+from typing import cast
 from urllib.parse import quote
 
 from .md import Renderer
@@ -104,7 +104,7 @@ class AsciiDocRenderer(Renderer):
     def hardbreak(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return " +\n"
     def softbreak(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        return f" "
+        return " "
     def code_inline(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         self._parstack[-1].continuing = True
         return f"``{asciidoc_escape(token.content)}``"

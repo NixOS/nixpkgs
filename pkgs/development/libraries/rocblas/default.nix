@@ -126,6 +126,8 @@ stdenv.mkDerivation (finalAttrs: {
     repo = finalAttrs.src.repo;
   };
 
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = with lib; {
     description = "BLAS implementation for ROCm platform";
     homepage = "https://github.com/ROCmSoftwarePlatform/rocBLAS";

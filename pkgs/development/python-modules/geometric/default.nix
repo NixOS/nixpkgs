@@ -1,6 +1,7 @@
 { buildPythonPackage
 , lib
 , fetchFromGitHub
+, fetchpatch
 , networkx
 , numpy
 , scipy
@@ -10,18 +11,20 @@
 
 buildPythonPackage rec {
   pname = "geometric";
-  version = "1.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "leeping";
     repo = "geomeTRIC";
     rev = version;
-    hash = "sha256-y8dh4vZ/d1KL1EpDrle8CH/KIDMCKKZdAyJVgUFjx/o=";
+    hash = "sha256-3d4z1n8+e0HgdeKLNSsHLb3XHOk09uy+gP9AwNvNITE=";
   };
 
-  patches = [
-    ./ase-is-optional.patch
-  ];
+  patches = [ (fetchpatch {
+    name = "ase-is-optional";
+    url = "https://github.com/leeping/geomeTRIC/commit/aff6e4411980ac9cbe112a050c3a34ba7e305a43.patch";
+    hash = "sha256-JGGPX+JwkQ8Imgmyx+ReRTV+k6mxHYgm+Nd8WUjbFEg=";
+  }) ];
 
   propagatedBuildInputs = [
     networkx

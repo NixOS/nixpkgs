@@ -16,10 +16,17 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ zope_interface webob ];
 
+  # skip failing test
+  # OSError: [Errno 22] Invalid argument
+  preCheck = ''
+    rm repoze/who/plugins/tests/test_htpasswd.py
+  '';
+
   meta = with lib; {
     description = "WSGI Authentication Middleware / API";
     homepage = "http://www.repoze.org";
+    changelog = "https://github.com/repoze/repoze.who/blob/${version}/CHANGES.rst";
     license = licenses.bsd0;
+    maintainers = with maintainers; [ ];
   };
-
 }

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rmw";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "theimpossibleastronaut";
     repo = "rmw";
     rev = "v${version}";
-    hash = "sha256-KOYj63j/vCG7I63bgep03HzufOj/p/EHaY8lyRMHCkY=";
+    hash = "sha256-rfJdJHSkusZj/PN74KgV5i36YC0YRZmIfRdvkUNoKEM=";
     fetchSubmodules = true;
   };
 

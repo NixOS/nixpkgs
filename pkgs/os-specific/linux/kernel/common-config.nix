@@ -77,6 +77,13 @@ let
       ACPI_APEI                        = (option yes);
       # APEI Generic Hardware Error Source
       ACPI_APEI_GHES                   = (option yes);
+
+      # Enable lazy RCUs for power savings:
+      # https://lore.kernel.org/rcu/20221019225138.GA2499943@paulmck-ThinkPad-P17-Gen-1/
+      # RCU_LAZY depends on RCU_NOCB_CPU depends on NO_HZ_FULL
+      # depends on HAVE_VIRT_CPU_ACCOUNTING_GEN depends on 64BIT,
+      # so we can't force-enable this
+      RCU_LAZY                         = whenAtLeast "6.2" (option yes);
     } // optionalAttrs (stdenv.hostPlatform.isx86) {
       INTEL_IDLE                       = yes;
       INTEL_RAPL                       = whenAtLeast "5.3" module;
@@ -85,6 +92,22 @@ let
       X86_AMD_PSTATE                   = whenAtLeast "5.17" yes;
       # Intel DPTF (Dynamic Platform and Thermal Framework) Support
       ACPI_DPTF                        = whenAtLeast "5.10" yes;
+
+      # Required to bring up some Bay Trail devices properly
+      I2C                              = yes;
+      I2C_DESIGNWARE_PLATFORM          = yes;
+      PMIC_OPREGION                    = whenAtLeast "5.10" yes;
+      INTEL_SOC_PMIC                   = whenAtLeast "5.10" yes;
+      BYTCRC_PMIC_OPREGION             = whenAtLeast "5.10" yes;
+      CHTCRC_PMIC_OPREGION             = whenAtLeast "5.10" yes;
+      XPOWER_PMIC_OPREGION             = whenAtLeast "5.10" yes;
+      BXT_WC_PMIC_OPREGION             = whenAtLeast "5.10" yes;
+      INTEL_SOC_PMIC_CHTWC             = whenAtLeast "5.10" yes;
+      CHT_WC_PMIC_OPREGION             = whenAtLeast "5.10" yes;
+      INTEL_SOC_PMIC_CHTDC_TI          = whenAtLeast "5.10" yes;
+      CHT_DC_TI_PMIC_OPREGION          = whenAtLeast "5.10" yes;
+      MFD_TPS68470                     = whenBetween "5.10" "5.13" yes;
+      TPS68470_PMIC_OPREGION           = whenAtLeast "5.10" yes;
     };
 
     external-firmware = {
@@ -101,6 +124,16 @@ let
     optimization = {
       # Optimize with -O2, not -Os
       CC_OPTIMIZE_FOR_SIZE = no;
+    };
+
+    memory = {
+      DAMON = whenAtLeast "5.15" yes;
+      DAMON_VADDR = whenAtLeast "5.15" yes;
+      DAMON_PADDR = whenAtLeast "5.16" yes;
+      DAMON_SYSFS = whenAtLeast "5.18" yes;
+      DAMON_DBGFS = whenAtLeast "5.15" yes;
+      DAMON_RECLAIM = whenAtLeast "5.16" yes;
+      DAMON_LRU_SORT = whenAtLeast "6.0" yes;
     };
 
     memtest = {
@@ -124,7 +157,8 @@ let
 
     timer = {
       # Enable Full Dynticks System.
-      NO_HZ_FULL = mkIf stdenv.is64bit yes; # TODO: more precise condition?
+      # NO_HZ_FULL depends on HAVE_VIRT_CPU_ACCOUNTING_GEN depends on 64BIT
+      NO_HZ_FULL = mkIf stdenv.is64bit yes;
     };
 
     # Enable NUMA.
@@ -609,6 +643,11 @@ let
       RING_BUFFER_BENCHMARK = no;
     };
 
+    perf = {
+      # enable AMD Zen branch sampling if available
+      PERF_EVENTS_AMD_BRS       = whenAtLeast "5.19" (option yes);
+    };
+
     virtualisation = {
       PARAVIRT = option yes;
 
@@ -679,10 +718,11 @@ let
     };
 
     zram = {
-      ZRAM     = module;
-      ZSWAP    = option yes;
-      ZBUD     = option yes;
-      ZSMALLOC = module;
+      ZRAM           = module;
+      ZRAM_WRITEBACK = option yes;
+      ZSWAP          = option yes;
+      ZBUD           = option yes;
+      ZSMALLOC       = module;
     };
 
     brcmfmac = {

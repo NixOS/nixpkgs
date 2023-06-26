@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gabutdm";
-  version = "2.1.5";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
     owner = "gabutakut";
     repo = pname;
     rev = version;
-    hash = "sha256-8fV7STYSpmNnLyoAjz+RuF/0nFeNiu8AIxkON1MbWr4=";
+    hash = "sha256-ai5LsoK21XwXqL4LRuKsOR1/JV6LnP+1ZJ9fMHpj178=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Simple and faster download manager";
+    description = "Simple and fast download manager";
     homepage = "https://github.com/gabutakut/gabutdm";
     license = licenses.lgpl21Plus;
     mainProgram = "com.github.gabutakut.gabutdm";

@@ -14,6 +14,7 @@
 , "jetpack"
 , "jetpack-lite"
 , "lightbox-photoswipe"
+, "login-lockdown"
 , "mailpoet"
 , "merge-minify-refresh"
 , "opengraph"
@@ -28,6 +29,7 @@
 , "wp-gdpr-compliance"
 , "wp-mail-smtp"
 , "wp-statistics"
+, "wp-swiper"
 , "wp-user-avatars"
 , "wpforms-lite"
 ]

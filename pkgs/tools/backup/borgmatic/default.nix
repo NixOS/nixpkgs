@@ -3,6 +3,7 @@
 , borgbackup
 , coreutils
 , python3Packages
+, fetchPypi
 , systemd
 , enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , installShellFiles
@@ -12,11 +13,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
-  version = "1.7.9";
+  version = "1.7.14";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-v3Qxwy7V6rqX90G4/Xp6mVTUkrqDXmudgh3th0GCjuk=";
+    sha256 = "sha256-rABJfdrV+D2v6yHpAbzj/0MSGc9bo49pwXEC45Mmmlk=";
   };
 
   nativeCheckInputs = with python3Packages; [ flexmock pytestCheckHook pytest-cov ];

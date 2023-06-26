@@ -52,7 +52,8 @@ buildDunePackage rec {
     result
   ];
 
-  doCheck = lib.versionOlder ocaml.version "5.0";
+  doCheck = lib.versionAtLeast ocaml.version "4.08"
+    && lib.versionOlder ocaml.version "5.0";
   checkInputs = [
     (if lib.versionAtLeast version "5.2" then ounit2 else ounit)
   ];

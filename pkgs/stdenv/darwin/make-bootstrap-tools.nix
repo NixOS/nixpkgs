@@ -54,7 +54,7 @@ in rec {
       chmod -R u+w $out/include
       cp -rL ${darwin.ICU}/include* $out/include
       cp -rL ${libiconv}/include/* $out/include
-      cp -rL ${lib.getDev gnugrep.pcre}/include/* $out/include
+      cp -rL ${lib.getDev gnugrep.pcre2}/include/* $out/include
       mv $out/include $out/include-Libsystem
 
       # Copy coreutils, bash, etc.
@@ -86,7 +86,7 @@ in rec {
       cp -d ${libssh2.out}/lib/libssh*.dylib $out/lib
       cp -d ${lib.getLib openssl}/lib/*.dylib $out/lib
 
-      cp -d ${gnugrep.pcre.out}/lib/libpcre*.dylib $out/lib
+      cp -d ${gnugrep.pcre2.out}/lib/libpcre2*.dylib $out/lib
       cp -d ${lib.getLib libiconv}/lib/lib*.dylib $out/lib
       cp -d ${lib.getLib gettext}/lib/libintl*.dylib $out/lib
       chmod +x $out/lib/libintl*.dylib

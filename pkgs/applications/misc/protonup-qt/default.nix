@@ -1,14 +1,14 @@
 { appimageTools, fetchurl, lib }:
 let
   pname = "protonup-qt";
-  version = "2.7.7";
+  version = "2.8.0";
   src = fetchurl {
     url = "https://github.com/DavidoTek/ProtonUp-Qt/releases/download/v${version}/ProtonUp-Qt-${version}-x86_64.AppImage";
-    sha256 = "sha256-eDi13DYS4Rtj3ouuhRoET1Ctc4D7p50khqXNOSBIvto=";
+    hash = "sha256-o3Tsrdrj5qDcTqhdgdf4Lcpp9zfBQY+/l3Ohm1A/pm4=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in
-appimageTools.wrapType2 rec {
+appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
@@ -27,6 +27,7 @@ appimageTools.wrapType2 rec {
     license = licenses.gpl3;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "protonup-qt";
+    changelog = "https://github.com/DavidoTek/ProtonUp-Qt/releases/tag/v${version}";
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ michaelBelsanti ];
   };

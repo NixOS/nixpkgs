@@ -6,7 +6,7 @@
 , makeWrapper
 , runCommand
 , appimageTools
-, patchelf
+, icu
 }:
 let
   pname = "jetbrains-toolbox";
@@ -54,7 +54,9 @@ stdenv.mkDerivation {
     runHook preInstall
 
     install -Dm644 ${appimageContents}/.DirIcon $out/share/icons/hicolor/scalable/apps/jetbrains-toolbox.svg
-    makeWrapper ${appimage}/bin/${pname}-${version} $out/bin/${pname} --append-flags "--update-failed"
+    makeWrapper ${appimage}/bin/${pname}-${version} $out/bin/${pname} \
+      --append-flags "--update-failed" \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [icu]}
 
     runHook postInstall
   '';

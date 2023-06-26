@@ -375,6 +375,13 @@ in
                 <https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67>
               '';
             };
+            StrictModes = mkOption {
+              type = types.bool;
+              default = true;
+              description = lib.mdDoc ''
+                Whether sshd should check file modes and ownership of directories
+              '';
+            };
             Ciphers = mkOption {
               type = types.listOf types.str;
               default = [
@@ -521,7 +528,7 @@ in
 
       };
 
-    networking.firewall.allowedTCPPorts = if cfg.openFirewall then cfg.ports else [];
+    networking.firewall.allowedTCPPorts = optionals cfg.openFirewall cfg.ports;
 
     security.pam.services.sshd =
       { startSession = true;
@@ -569,12 +576,27 @@ in
       '';
 
     assertions = [{ assertion = if cfg.settings.X11Forwarding then cfgc.setXAuthLocation else true;
-                    message = "cannot enable X11 forwarding without setting xauth location";}]
+                    message = "cannot enable X11 forwarding without setting xauth location";}
+                  (let
+                    duplicates =
+                      # Filter out the groups with more than 1 element
+                      lib.filter (l: lib.length l > 1) (
+                        # Grab the groups, we don't care about the group identifiers
+                        lib.attrValues (
+                          # Group the settings that are the same in lower case
+                          lib.groupBy lib.strings.toLower (attrNames cfg.settings)
+                        )
+                      );
+                    formattedDuplicates = lib.concatMapStringsSep ", " (dupl: "(${lib.concatStringsSep ", " dupl})") duplicates;
+                  in
+                  {
+                    assertion = lib.length duplicates == 0;
+                    message = ''Duplicate sshd config key; does your capitalization match the option's? Duplicate keys: ${formattedDuplicates}'';
+                  })]
       ++ forEach cfg.listenAddresses ({ addr, ... }: {
         assertion = addr != null;
         message = "addr must be specified in each listenAddresses entry";
       });
-
   };
 
 }

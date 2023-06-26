@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   nativeBuildInputs = [ autoreconfHook ];
 
-  # tests are super flaky unfortunately, and regularily break.
+  # tests are super flaky unfortunately, and regularly break.
   # let's disable them for now.
   doCheck = false;
   nativeCheckInputs = [

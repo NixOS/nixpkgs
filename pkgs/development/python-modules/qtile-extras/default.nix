@@ -6,7 +6,7 @@
 , xorgserver
 , pulseaudio
 , pytest-asyncio
-, qtile-unwrapped
+, qtile
 , keyring
 , requests
 , stravalib
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   ];
   checkInputs = [
     pytest-asyncio
-    qtile-unwrapped
+    qtile
     pulseaudio
     keyring
     requests

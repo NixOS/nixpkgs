@@ -520,10 +520,17 @@ in
                 will set up automatically for each build. This prevents impurities
                 in builds by disallowing access to dependencies outside of the Nix
                 store by using network and mount namespaces in a chroot environment.
+
                 This is enabled by default even though it has a possible performance
                 impact due to the initial setup time of a sandbox for each build. It
                 doesn't affect derivation hashes, so changing this option will not
                 trigger a rebuild of packages.
+
+                When set to "relaxed", this option permits derivations that set
+                `__noChroot = true;` to run outside of the sandboxed environment.
+                Exercise caution when using this mode of operation! It is intended to
+                be a quick hack when building with packages that are not easily setup
+                to be built reproducibly.
               '';
             };
 
@@ -641,7 +648,7 @@ in
         '';
         description = lib.mdDoc ''
           Configuration for Nix, see
-          <https://nixos.org/manual/nix/stable/#sec-conf-file> or
+          <https://nixos.org/manual/nix/stable/command-ref/conf-file.html> or
           {manpage}`nix.conf(5)` for available options.
           The value declared here will be translated directly to the key-value pairs Nix expects.
 

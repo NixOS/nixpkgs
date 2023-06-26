@@ -27,7 +27,10 @@ npmInstallHook() {
     local -r nodeModulesPath="$packageOut/node_modules"
 
     if [ ! -d "$nodeModulesPath" ]; then
-        npm prune --omit dev --no-save $npmInstallFlags "${npmInstallFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}"
+        if [ -z "${dontNpmPrune-}" ]; then
+            npm prune --omit dev --no-save $npmInstallFlags "${npmInstallFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}"
+        fi
+
         find node_modules -maxdepth 1 -type d -empty -delete
 
         cp -r node_modules "$nodeModulesPath"

@@ -13,8 +13,8 @@
 , howard-hinnant-date
 , nlohmann_json
 , boost
-, oneDNN
-, abseil-cpp_202111
+, oneDNN_2
+, abseil-cpp
 , gtest
 , pythonSupport ? false
 , nsync
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     howard-hinnant-date
     nlohmann_json
     boost
-    oneDNN
+    oneDNN_2
     protobuf
   ] ++ lib.optionals pythonSupport [
     nsync
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     "-Donnxruntime_USE_PREINSTALLED_EIGEN=ON"
     "-Donnxruntime_USE_MPI=ON"
     "-Deigen_SOURCE_PATH=${eigen.src}"
-    "-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${abseil-cpp_202111.src}"
+    "-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${abseil-cpp.src}"
     "-Donnxruntime_USE_DNNL=YES"
   ] ++ lib.optionals pythonSupport [
     "-Donnxruntime_ENABLE_PYTHON=ON"

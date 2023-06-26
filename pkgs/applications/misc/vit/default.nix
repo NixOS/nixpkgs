@@ -1,5 +1,6 @@
 { lib
 , python3Packages
+, fetchPypi
 , taskwarrior
 , glibcLocales
 }:

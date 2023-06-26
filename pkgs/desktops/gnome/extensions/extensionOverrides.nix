@@ -1,24 +1,28 @@
 { lib
 , ddcutil
+, easyeffects
 , gjs
+, glib
 , gnome
 , gobject-introspection
 , gsound
 , hddtemp
 , libgda
+, libgtop
 , liquidctl
 , lm_sensors
 , netcat-gnu
 , nvme-cli
 , procps
 , pulseaudio
-, libgtop
 , python3
 , smartmontools
 , substituteAll
 , touchegg
+, util-linux
 , vte
 , wrapGAppsHook
+, xdg-utils
 , xprop
 }:
 let
@@ -36,6 +40,10 @@ in
 super: lib.trivial.pipe super [
   (patchExtension "caffeine@patapon.info" (old: {
     meta.maintainers = with lib.maintainers; [ eperuffo ];
+  }))
+
+  (patchExtension "dash-to-dock@micxgx.gmail.com" (old: {
+    meta.maintainers = with lib.maintainers; [ rhoriguchi ];
   }))
 
   (patchExtension "ddterm@amezin.github.com" (old: {
@@ -61,6 +69,16 @@ super: lib.trivial.pipe super [
     '';
   }))
 
+  (patchExtension "eepresetselector@ulville.github.io" (old: {
+    patches = [
+      # Needed to find the currently set preset
+      (substituteAll {
+        src = ./extensionOverridesPatches/eepresetselector_at_ulville.github.io.patch;
+        easyeffects_gsettings_path = "${glib.getSchemaPath easyeffects}";
+      })
+    ];
+  }))
+
   (patchExtension "freon@UshakovVasilii_Github.yahoo.com" (old: {
     patches = [
       (substituteAll {
@@ -80,6 +98,18 @@ super: lib.trivial.pipe super [
         substituteInPlace $file --replace "gjs" "${gjs}/bin/gjs"
       done
     '';
+  }))
+
+  (patchExtension "gtk4-ding@smedius.gitlab.com" (old: {
+    patches = [
+      (substituteAll {
+        inherit gjs util-linux xdg-utils;
+        util_linux = util-linux;
+        xdg_utils = xdg-utils;
+        src = ./extensionOverridesPatches/gtk4-ding_at_smedius.gitlab.com.patch;
+        nautilus_gsettings_path = "${glib.getSchemaPath gnome.nautilus}";
+      })
+    ];
   }))
 
   (patchExtension "pano@elhan.io" (old: {

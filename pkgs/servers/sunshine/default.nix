@@ -3,7 +3,6 @@
 , callPackage
 , fetchFromGitHub
 , fetchurl
-, fetchpatch
 , autoPatchelfHook
 , makeWrapper
 , buildNpmPackage
@@ -44,31 +43,26 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sunshine";
-  version = "0.19.1";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
     rev = "v${version}";
-    sha256 = "sha256-fifwctVrSkAcMK8juAirIbIP64H7GKEwC+sUR/U6Q3Y=";
+    sha256 = "sha256-/ceN44PAEtXzrAUi4AEldW1FBhJqIXah1Zd0S6fiV3s=";
     fetchSubmodules = true;
   };
 
   # remove pre-built ffmpeg; use ffmpeg from nixpkgs
   patches = [
     ./ffmpeg.diff
-    # fix for X11 not being added to libraries unless prebuilt FFmpeg is used: https://github.com/LizardByte/Sunshine/pull/1166
-    (fetchpatch {
-      url = "https://github.com/LizardByte/Sunshine/commit/a067da6cae72cf36f76acc06fcf1e814032af886.patch";
-      sha256 = "sha256-HMxM7luiFBEmFkvQtkdAMMSjAaYPEFX3LL0T/ActUhM=";
-    })
   ];
 
   # fetch node_modules needed for webui
   ui = buildNpmPackage {
     inherit src version;
     pname = "sunshine-ui";
-    npmDepsHash = "sha256-sdwvM/Irejo8DgMHJWWCxwOykOK9foqLFFd/tuzrkxI=";
+    npmDepsHash = "sha256-pwmkpZjDwluKJjcY0ehetQbAlFnj1tsW100gRjolboc=";
 
     dontNpmBuild = true;
 

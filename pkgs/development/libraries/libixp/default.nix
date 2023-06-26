@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/0intro/libixp";
-    description = "Portable, simple C-language 9P client and server libary";
+    description = "Portable, simple C-language 9P client and server library";
     maintainers = with lib.maintainers; [ kovirobi ];
     license = lib.licenses.mit;
     platforms = with lib.platforms; unix;

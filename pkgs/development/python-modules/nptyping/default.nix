@@ -5,7 +5,6 @@
 , pytestCheckHook
 , beartype
 , invoke
-, mypy
 , numpy
 , pandas
 , feedparser
@@ -34,7 +33,6 @@ buildPythonPackage rec {
     beartype
     feedparser
     invoke
-    mypy
     pandas
     pytestCheckHook
     typeguard

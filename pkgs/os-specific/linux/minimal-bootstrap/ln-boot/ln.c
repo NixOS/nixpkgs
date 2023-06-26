@@ -8,7 +8,7 @@ int main(int argc, char** argv)
   if (argc != 4 || strcmp(argv[1], "-s")) {
     fputs("Usage: ", stdout);
     fputs(argv[0], stdout);
-    fputs("ln -s TARGET LINK_NAME\n", stdout);
+    fputs(" -s TARGET LINK_NAME\n", stdout);
     exit(EXIT_FAILURE);
   }
 

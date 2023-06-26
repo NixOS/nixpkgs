@@ -62,9 +62,7 @@ in {
         frontend = {};
 
         # include some popular integrations, that absolutely shouldn't break
-        esphome = {};
         knx = {};
-        matter = {};
         shelly = {};
         zha = {};
 
@@ -199,7 +197,7 @@ in {
 
     with subtest("Check that new components get setup after restart"):
         journal = get_journal_since(cursor)
-        for domain in ["esphome"]:
+        for domain in ["backup"]:
             assert f"Setup of domain {domain} took" in journal, f"{domain} setup missing"
 
     with subtest("Check that no errors were logged"):

@@ -317,7 +317,8 @@ in {
     environment.etc."binfmt.d/nixos.conf".source = builtins.toFile "binfmt_nixos.conf"
       (lib.concatStringsSep "\n" (lib.mapAttrsToList makeBinfmtLine config.boot.binfmt.registrations));
     system.activationScripts.binfmt = stringAfter [ "specialfs" ] ''
-      mkdir -p -m 0755 /run/binfmt
+      mkdir -p /run/binfmt
+      chmod 0755 /run/binfmt
       ${lib.concatStringsSep "\n" (lib.mapAttrsToList activationSnippet config.boot.binfmt.registrations)}
     '';
     systemd = lib.mkIf (config.boot.binfmt.registrations != {}) {

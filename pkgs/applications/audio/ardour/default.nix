@@ -58,14 +58,14 @@
 }:
 stdenv.mkDerivation rec {
   pname = "ardour";
-  version = "7.3";
+  version = "7.4";
 
   # We can't use `fetchFromGitea` here, as attempting to fetch release archives from git.ardour.org
   # result in an empty archive. See https://tracker.ardour.org/view.php?id=7328 for more info.
   src = fetchgit {
     url = "git://git.ardour.org/ardour/ardour.git";
     rev = version;
-    hash = "sha256-fDZGmKQ6qgENkq8NY/J67Jym+IXoOYs8DT4xyPXLcC4=";
+    hash = "sha256-CUGhJi3ji0F6v41Y08sQvo7oKITOJ96ojdJL+FyCxmw=";
   };
 
   bundledContent = fetchzip {
@@ -78,6 +78,7 @@ stdenv.mkDerivation rec {
   patches = [
     # AS=as in the environment causes build failure https://tracker.ardour.org/view.php?id=8096
     ./as-flags.patch
+    ./default-plugin-search-paths.patch
   ];
 
   # Ardour's wscript requires git revision and date to be available.

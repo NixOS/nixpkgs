@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "julia";
-  version = "1.9.0";
+  version = "1.9.1";
 
   src = fetchurl {
     url = "https://github.com/JuliaLang/julia/releases/download/v${version}/julia-${version}-full.tar.gz";
-    hash = "sha256-Ii61M8ncVHNJSes6QWn1Su+hvCC+OF/Bz3mMghn+ZAA=";
+    hash = "sha256-oTznFrY9PkbZEIOV4f/Iod5xLmqEimA6xZK88IDqATk=";
   };
 
   patches = [

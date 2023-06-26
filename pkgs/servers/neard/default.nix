@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     description = "Near Field Communication manager";
     homepage = "https://01.org/linux-nfc";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

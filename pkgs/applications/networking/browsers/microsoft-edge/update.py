@@ -60,7 +60,7 @@ def nix_expressions(latest: dict[str, Packages]):
 def write_expression():
     latest = latest_packages(packages())
     channel_strs = nix_expressions(latest)
-    nix_expr = '{\n' + textwrap.indent('\n'.join(channel_strs), '  ') + '\n}'
+    nix_expr = '{\n' + textwrap.indent('\n'.join(channel_strs), '  ') + '\n}\n'
     with open('default.nix', 'w') as f:
         f.write(nix_expr)
 

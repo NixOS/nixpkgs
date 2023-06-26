@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/GZbkJVDQu1UY8SliK282kUWAVMfOnpQadUlRT/tJrM=";
   };
 
+  postPatch = ''
+    substituteInPlace pkg/META --replace "bytes" ""
+  '';
+
   strictDeps = true;
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];

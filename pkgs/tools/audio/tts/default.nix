@@ -1,7 +1,6 @@
 { lib
 , python3
 , fetchFromGitHub
-, fetchpatch
 , espeak-ng
 , tts
 }:
@@ -9,34 +8,26 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
+      torch = super.torch-bin;
+      torchvision = super.torchvision-bin;
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.13.2";
+  version = "0.14.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3t4JYEwQ+puGLhGl3nn93qsL8IeOwlYtHXTrnZ5Cf+w=";
+    hash = "sha256-AVU4ULz++t9850pYeNrG5HKNvUZcMld4O1/zu697rzk=";
   };
-
-  patches = [
-    (fetchpatch {
-      # upgrade librosa to 0.10.0
-      url = "https://github.com/coqui-ai/TTS/commit/4c829e74a1399ab083b566a70c1b7e879eda6e1e.patch";
-      hash = "sha256-QP9AnMbdEpGJywiZBreojHUjq29ihqy6HxvUtS5OKvQ=";
-      excludes = [
-        "requirements.txt"
-      ];
-    })
-  ];
 
   postPatch = let
     relaxedConstraints = [
+      "bnunicodenormalizer"
       "cython"
       "gruut"
       "inflect"
@@ -64,7 +55,11 @@ python.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python.pkgs; [
     anyascii
+    bangla
+    bnnumerizer
+    bnunicodenormalizer
     coqpit
+    einops
     flask
     fsspec
     g2pkk
@@ -73,6 +68,7 @@ python.pkgs.buildPythonApplication rec {
     inflect
     jamo
     jieba
+    k-diffusion
     librosa
     matplotlib
     mecab-python3
@@ -89,6 +85,7 @@ python.pkgs.buildPythonApplication rec {
     torchaudio-bin
     tqdm
     trainer
+    transformers
     unidic-lite
     webrtcvad
   ];

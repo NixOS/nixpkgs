@@ -1,7 +1,8 @@
 { lib
+, applyPatches
 , buildNpmPackage
 , dbus
-, electron
+, electron_24
 , fetchFromGitHub
 , glib
 , gnome
@@ -11,7 +12,7 @@
 , makeDesktopItem
 , makeWrapper
 , moreutils
-, nodejs_16
+, nodejs_18
 , pkg-config
 , python3
 , rustPlatform
@@ -22,23 +23,26 @@ let
   description = "A secure and free password manager for all of your devices";
   icon = "bitwarden";
 
-  buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_16; };
+  buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_18; };
+  electron = electron_24;
 
-  version = "2023.3.2";
-  src = fetchFromGitHub {
-    owner = "bitwarden";
-    repo = "clients";
-    rev = "desktop-v${version}";
-    sha256 = "sha256-KQDM7XDUA+yRv8y1K//rMCs4J36df42RVsiAXazJeYQ=";
+  version = "2023.5.0";
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "bitwarden";
+      repo = "clients";
+      rev = "desktop-v${version}";
+      sha256 = "sha256-ELKpGSY4ZbgSk4vJnTiB+IOa8RQU8Ahy3A1mYsKtthU=";
+    };
+
+    patches = [ ];
   };
 
   desktop-native = rustPlatform.buildRustPackage {
     pname = "bitwarden-desktop-native";
     inherit src version;
-    sourceRoot = "source/apps/desktop/desktop_native";
-    cargoSha256 = "sha256-XsAmVYWPPnY0cgBzpO2aWx/fh85fKr8kMO98cDMzOKk=";
-
-    patchFlags = [ "-p4" ];
+    sourceRoot = "source-patched/apps/desktop/desktop_native";
+    cargoSha256 = "sha256-SeK8Nbgenof9vXI2v7tJ5oHiX60kBoR+UNOSJTRHdzk=";
 
     nativeBuildInputs = [
       pkg-config
@@ -91,7 +95,7 @@ buildNpmPackage' {
   npmBuildFlags = [
     "--workspace apps/desktop"
   ];
-  npmDepsHash = "sha256-RmkTWhakZstCCMLQ3iJ8KD5Yt5ZafXc8NDgncJMLaxs=";
+  npmDepsHash = "sha256-G8DEYPjEP3L4s0pr5n2ZTj8kkT0E7Po1BKhZ2hUdJuY=";
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -103,6 +107,11 @@ buildNpmPackage' {
   ];
 
   preBuild = ''
+    if [[ $(jq --raw-output '.devDependencies.electron' < package.json | grep -E --only-matching '^[0-9]+') != ${lib.escapeShellArg (lib.versions.major electron.version)} ]]; then
+      echo 'ERROR: electron version mismatch'
+      exit 1
+    fi
+
     jq 'del(.scripts.postinstall)' apps/desktop/package.json | sponge apps/desktop/package.json
     jq '.scripts.build = ""' apps/desktop/desktop_native/package.json | sponge apps/desktop/desktop_native/package.json
     cp ${desktop-native}/lib/libdesktop_native.so apps/desktop/desktop_native/desktop_native.linux-x64-musl.node
@@ -111,7 +120,7 @@ buildNpmPackage' {
   postBuild = ''
     pushd apps/desktop
 
-    "$(npm bin)"/electron-builder \
+    npm exec electron-builder -- \
       --dir \
       -c.electronDist=${electron}/lib/electron \
       -c.electronVersion=${electron.version}

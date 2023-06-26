@@ -29,13 +29,23 @@ if [ -n "$__structuredAttrs" ]; then
         export "$outputName=${outputs[$outputName]}"
     done
 
+    # Before Nix 2.4, $NIX_ATTRS_*_FILE was named differently:
+    # https://github.com/NixOS/nix/commit/27ce722
+    if [[ -n "${ATTRS_JSON_FILE:-}" ]]; then
+        export NIX_ATTRS_JSON_FILE="$ATTRS_JSON_FILE"
+    fi
+
+    if [[ -n "${ATTRS_SH_FILE:-}" ]]; then
+        export NIX_ATTRS_SH_FILE="$ATTRS_SH_FILE"
+    fi
+
     # $NIX_ATTRS_JSON_FILE pointed to the wrong location in sandbox
     # https://github.com/NixOS/nix/issues/6736; please keep around until the
     # fix reaches *every patch version* that's >= lib/minver.nix
-    if ! [[ -e "$NIX_ATTRS_JSON_FILE" ]]; then
+    if ! [[ -e "${NIX_ATTRS_JSON_FILE:-}" ]]; then
         export NIX_ATTRS_JSON_FILE="$NIX_BUILD_TOP/.attrs.json"
     fi
-    if ! [[ -e "$NIX_ATTRS_SH_FILE" ]]; then
+    if ! [[ -e "${NIX_ATTRS_SH_FILE:-}" ]]; then
         export NIX_ATTRS_SH_FILE="$NIX_BUILD_TOP/.attrs.sh"
     fi
 else
@@ -311,12 +321,6 @@ _accumFlagsArray() {
 _addRpathPrefix() {
     if [ "${NIX_NO_SELF_RPATH:-0}" != 1 ]; then
         export NIX_LDFLAGS="-rpath $1/lib ${NIX_LDFLAGS-}"
-        if [ -n "${NIX_LIB64_IN_SELF_RPATH:-}" ]; then
-            export NIX_LDFLAGS="-rpath $1/lib64 ${NIX_LDFLAGS-}"
-        fi
-        if [ -n "${NIX_LIB32_IN_SELF_RPATH:-}" ]; then
-            export NIX_LDFLAGS="-rpath $1/lib32 ${NIX_LDFLAGS-}"
-        fi
     fi
 }
 

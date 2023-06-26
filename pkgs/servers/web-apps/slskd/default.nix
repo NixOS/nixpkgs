@@ -10,13 +10,13 @@
 }:
 let
   pname = "slskd";
-  version = "0.17.5";
+  version = "0.17.8";
 
   src = fetchFromGitHub {
     owner = "slskd";
     repo = "slskd";
     rev = version;
-    sha256 = "sha256-iIM29ZI3M9etbw4yzin+4f4cGHIt5qjIl7uzsTUCBc4=";
+    sha256 = "sha256-kqkJZNxg044RbgHFsRfvRMyFRBjnIubdHRqUuMjj2D0=";
   };
 
   meta = with lib; {

@@ -126,6 +126,12 @@ installPhase() {
         fi
     done
 
+
+    # OptiX tries loading `$ORIGIN/nvoptix.bin` first
+    if [ -e nvoptix.bin ]; then
+        install -Dm444 -t $out/lib/ nvoptix.bin
+    fi
+
     if [ -n "$bin" ]; then
         # Install the X drivers.
         mkdir -p $bin/lib/xorg/modules

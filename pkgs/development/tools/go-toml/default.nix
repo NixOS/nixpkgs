@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "go-toml";
-  version = "2.0.7";
+  version = "2.0.8";
 
   src = fetchFromGitHub {
     owner = "pelletier";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-bGLJSzSwcoKRMRwLSmGEWoQaC9NVwcKyFKpcEw+/Nag=";
+    sha256 = "sha256-pMy/cYyB9ncOuYysX0a9PmTuJdIrMcKL///57bniixI=";
   };
 
-  vendorHash = "sha256-MMCyFKqsL9aSQqK9VtPzUbgfLTFpzD5g8QYx8qIwktg=";
+  vendorHash = "sha256-44mxDswHIfVfAyvtyDHS4MnHCTPRlUvdhzHALICUJR4=";
 
   excludedPackages = [ "cmd/gotoml-test-decoder" "cmd/tomltestgen" ];
 

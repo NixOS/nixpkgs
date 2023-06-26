@@ -1,7 +1,6 @@
 { lib
 , clangStdenv
 , fetchFromGitLab
-, libclang
 , rustPlatform
 , cargo
 , meson
@@ -50,6 +49,7 @@ clangStdenv.mkDerivation rec {
     desktop-file-utils
     cargo
     rustc
+    rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
   ];
 
@@ -65,8 +65,6 @@ clangStdenv.mkDerivation rec {
     gst-plugins-base
     gst-plugins-bad
   ];
-
-  LIBCLANG_PATH = "${libclang.lib}/lib";
 
   meta = with lib; {
     description = "Scan and Generate QR Codes";

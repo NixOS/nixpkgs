@@ -6,14 +6,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "unstable-2022-09-12";
+  version = "1.2.1";
   pname = "nqptp";
 
   src = fetchFromGitHub {
     owner = "mikebrady";
     repo = pname;
-    rev = "476e69697d2ec1a28d399432aed23c580e3e570a";
-    hash = "sha256-UPUYEX5YUl//OcsBKuGgKLaAMzn2F+ksNRQJ3/pkbKc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-JfgJXyUCUUrydHHUHSLvtJ6KfFS8eKVEzCW5AdzakI0=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

@@ -55,6 +55,6 @@ buildGoModule rec {
     license = with licenses; [ agpl3Only asl20 ];
     homepage = "https://grafana.com/oss/loki/";
     changelog = "https://github.com/grafana/loki/releases/tag/v${version}";
-    maintainers = with maintainers; [ willibutz globin mmahut indeednotjames ];
+    maintainers = with maintainers; [ willibutz globin mmahut emilylange ];
   };
 }

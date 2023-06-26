@@ -5,13 +5,13 @@
 
 crystal.buildCrystalPackage rec {
   pname = "blahaj";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "BLAHAJ";
     rev = "v${version}";
-    hash = "sha256-g38a3mUt2bkwFH/Mwr2D3zEZczM/gdWObUOeeIJGHZ4=";
+    hash = "sha256-drdC507lIYanHS7fneW9Xwqmyr6f1oGF1+xeYQ2DzKA=";
   };
 
   meta = with lib; {

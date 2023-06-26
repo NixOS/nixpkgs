@@ -5,23 +5,22 @@
 
 buildGoModule rec {
   pname = "opentelemetry-collector";
-  version = "0.77.0";
+  version = "0.79.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector";
     rev = "v${version}";
-    hash = "sha256-koPkEOtB5KnePdx67hJ/WNBojNDqKvf9kqYb59bwh8k=";
+    hash = "sha256-OTddX0hTrcxvU1XI5DSXOYPhVrn3dJ9Ryvr/wf1AHQ0=";
   };
   # there is a nested go.mod
   sourceRoot = "source/cmd/otelcorecol";
-  vendorHash = "sha256-M1fLrQFrcfCRCcunkgEzUicVfi5Mz/Or6tFpcGfWf4E=";
+  vendorHash = "sha256-Efsgogk3C7oroniRPrl5GwTogBk7lT0XPkbz0ygJh48=";
 
-  patches = [
-    # remove when fixed upstream
-    # https://github.com/open-telemetry/opentelemetry-collector/issues/7668
-    ./update_go-m1cpu_fix_aarch64-darwin.patch
-  ];
+  # upstream strongly recommends disabling CGO
+  # additionally dependencies have had issues when GCO was enabled that weren't caught upstream
+  # https://github.com/open-telemetry/opentelemetry-collector/blob/main/CONTRIBUTING.md#using-cgo
+  CGO_ENABLED = 0;
 
   preBuild = ''
     # set the build version, can't be done via ldflags
@@ -43,5 +42,6 @@ buildGoModule rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ uri-canva jk ];
+    mainProgram = "otelcorecol";
   };
 }

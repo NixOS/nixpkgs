@@ -35,8 +35,10 @@ in
     gossipSecretFile = mkOption {
       type = types.path;
       description = mdDoc ''
-        File containing the shared secret key to use for gossip encryption.
-        Required if `enableGossipEncryption` is set.
+        File containing the gossip secret, a shared secret key to use for gossip
+        encryption.  Required if `enableGossipEncryption` is set.  This file
+        may contain any arbitrary-length utf8 string.  To generate a new gossip
+        secret, use a command such as `openssl rand -base64 32`.
       '';
     };
     enablePersistence = mkOption {
@@ -94,7 +96,7 @@ in
                 address = mkOption {
                   type = types.str;
                   description = mdDoc ''
-                    Wireguard address of this peer (a single IP address, multliple
+                    Wireguard address of this peer (a single IP address, multiple
                     addresses or address ranges are not supported).
                   '';
                   example = "10.0.0.42";

@@ -2,9 +2,9 @@ let
 
   generic =
       # dependencies
-      { stdenv, lib, fetchurl, makeWrapper
+      { stdenv, lib, fetchurl, makeWrapper, fetchpatch
       , glibc, zlib, readline, openssl, icu, lz4, zstd, systemd, libossp_uuid
-      , pkg-config, libxml2, tzdata, libkrb5
+      , pkg-config, libxml2, tzdata, libkrb5, substituteAll, darwin
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
       , enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd && !stdenv.hostPlatform.isStatic
@@ -103,6 +103,24 @@ let
       ./patches/hardcode-pgxs-path.patch
       ./patches/specify_pkglibdir_at_runtime.patch
       ./patches/findstring.patch
+
+      (substituteAll {
+        src = ./locale-binary-path.patch;
+        locale = "${if stdenv.isDarwin then darwin.adv_cmds else lib.getBin stdenv.cc.libc}/bin/locale";
+      })
+
+    ] ++ lib.optionals stdenv'.hostPlatform.isMusl [
+      # Fixes for musl libc
+      # These patches are not properly guarded and should NOT be enabled everywhere
+      (fetchpatch {
+        url = "https://git.alpinelinux.org/aports/plain/main/postgresql14/disable-test-collate.icu.utf8.patch?id=56999e6d0265ceff5c5239f85fdd33e146f06cb7";
+        hash = "sha256-pnl+wM3/IUyq5iJzk+h278MDA9R0GQXQX8d4wJcB2z4=";
+      })
+      (fetchpatch {
+        url = "https://git.alpinelinux.org/aports/plain/main/postgresql14/icu-collations-hack.patch?id=56999e6d0265ceff5c5239f85fdd33e146f06cb7";
+        hash = "sha256-Yb6lMBDqeVP/BLMyIr5rmR6OkaVzo68cV/+cL2LOe/M=";
+      })
+
     ] ++ lib.optionals stdenv'.isLinux [
       (if atLeast "13" then ./patches/socketdir-in-run-13.patch else ./patches/socketdir-in-run.patch)
     ];
@@ -290,45 +308,45 @@ let
 
   mkPackages = self: {
     postgresql_11 = self.callPackage generic {
-      version = "11.19";
+      version = "11.20";
       psqlSchema = "11.1"; # should be 11, but changing it is invasive
-      hash = "sha256-ExCeK3HxE5QFwnIB2jczphrOcu4cIo2cnwMg4GruFMI=";
+      hash = "sha256-PXyIgvZKfphTSgRCV9/uerrXelt9oSUI2F1yK5i1rM4=";
       this = self.postgresql_11;
       thisAttr = "postgresql_11";
       inherit self;
     };
 
     postgresql_12 = self.callPackage generic {
-      version = "12.14";
+      version = "12.15";
       psqlSchema = "12";
-      hash = "sha256-eFYQI304LIQtNW40cTjljAb/6uJA5swLUqxevMMNBD4=";
+      hash = "sha256-u1IG4oZMHEV5k4uW6mCW0VXyKr8tLMKqV1cePEyxKzY=";
       this = self.postgresql_12;
       thisAttr = "postgresql_12";
       inherit self;
     };
 
     postgresql_13 = self.callPackage generic {
-      version = "13.10";
+      version = "13.11";
       psqlSchema = "13";
-      hash = "sha256-W7z1pW2FxE86iwWPtGhi/0nLyRg00H4pXQLm3jwhbfI=";
+      hash = "sha256-SZL/ZHIDVmtnDU5U3FMXSZomhWyTV20OqVG99r7lC/s=";
       this = self.postgresql_13;
       thisAttr = "postgresql_13";
       inherit self;
     };
 
     postgresql_14 = self.callPackage generic {
-      version = "14.7";
+      version = "14.8";
       psqlSchema = "14";
-      hash = "sha256-zvYPAJj6gQHBVG9CVORbcir1QxM3lFs3ryBwB2MNszE=";
+      hash = "sha256-OdOPADBzftA4Nd6+7+47N9M1RizkmV4kl7w41iHr5Fo=";
       this = self.postgresql_14;
       thisAttr = "postgresql_14";
       inherit self;
     };
 
     postgresql_15 = self.callPackage generic {
-      version = "15.2";
+      version = "15.3";
       psqlSchema = "15";
-      hash = "sha256-maIXH8PWtbX1a3V6ejy4XVCaOOQnOAXe8jlB7SuEaMc=";
+      hash = "sha256-/8fUiR8A/79cP06rf7vO2EYLjA7mPFpRZxM7nmWZ2TI=";
       this = self.postgresql_15;
       thisAttr = "postgresql_15";
       inherit self;

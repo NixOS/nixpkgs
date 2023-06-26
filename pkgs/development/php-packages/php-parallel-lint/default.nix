@@ -43,6 +43,6 @@ mkDerivation {
     description = "Tool to check syntax of PHP files faster than serial check with fancier output";
     license = licenses.bsd2;
     homepage = "https://github.com/php-parallel-lint/PHP-Parallel-Lint";
-    maintainers = with maintainers; [ jtojnar ] ++ teams.php.members;
+    maintainers = with maintainers; [ ] ++ teams.php.members;
   };
 }

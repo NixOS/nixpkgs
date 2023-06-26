@@ -22,7 +22,7 @@
 }:
 
 let
-  apparmor-version = "3.1.3";
+  apparmor-version = "3.1.4";
 
   apparmor-meta = component: with lib; {
     homepage = "https://apparmor.net/";
@@ -36,7 +36,7 @@ let
     owner = "apparmor";
     repo = "apparmor";
     rev = "v${apparmor-version}";
-    hash = "sha256-6N1BStOXKui6BxSriWVoOkvyGRUJ4btsloHh/SsG/JE=";
+    hash = "sha256-YWPdIUd+2x74tqiW+YX8NKh3jxSKhD+5zdiDMjhPzpE=";
   };
 
   aa-teardown = writeShellScript "aa-teardown" ''

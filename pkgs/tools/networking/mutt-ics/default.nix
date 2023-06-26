@@ -1,4 +1,4 @@
-{ lib, python3 }:
+{ lib, python3, fetchPypi }:
 
 with python3.pkgs; buildPythonApplication rec {
   pname = "mutt-ics";

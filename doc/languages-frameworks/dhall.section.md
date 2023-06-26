@@ -307,12 +307,12 @@ $ nix-env --install --attr haskellPackages.dhall-nixpkgs
 
 $ nix-env --install --attr nix-prefetch-git  # Used by dhall-to-nixpkgs
 
-$ dhall-to-nixpkgs github https://github.com/Gabriel439/dhall-semver.git
+$ dhall-to-nixpkgs github https://github.com/Gabriella439/dhall-semver.git
 { buildDhallGitHubPackage, Prelude }:
   buildDhallGitHubPackage {
     name = "dhall-semver";
     githubBase = "github.com";
-    owner = "Gabriel439";
+    owner = "Gabriella439";
     repo = "dhall-semver";
     rev = "2d44ae605302ce5dc6c657a1216887fbb96392a4";
     fetchSubmodules = false;

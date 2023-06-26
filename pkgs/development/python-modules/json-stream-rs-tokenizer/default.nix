@@ -1,8 +1,10 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , rustPlatform
 , cargo
+, darwin
 , rustc
 , setuptools-rust
 , json-stream-rs-tokenizer
@@ -36,6 +38,10 @@ buildPythonPackage rec {
     rustPlatform.cargoSetupHook
     cargo
     rustc
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.libiconv
   ];
 
   # Tests depend on json-stream, which depends on this package.

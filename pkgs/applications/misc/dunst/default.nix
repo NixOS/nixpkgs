@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper
-, pkg-config, which, perl, jq, libXrandr
+, pkg-config, which, perl, jq, libXrandr, coreutils
 , cairo, dbus, systemd, gdk-pixbuf, glib, libX11, libXScrnSaver
 , wayland, wayland-protocols
 , libXinerama, libnotify, pango, xorgproto, librsvg
@@ -38,6 +38,9 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/dunst \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
+
+    wrapProgram $out/bin/dunstctl \
+      --prefix PATH : "${lib.makeBinPath [ coreutils dbus ]}"
 
     install -D contrib/_dunst.zshcomp $out/share/zsh/site-functions/_dunst
     install -D contrib/_dunstctl.zshcomp $out/share/zsh/site-functions/_dunstctl

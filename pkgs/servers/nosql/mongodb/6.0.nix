@@ -6,8 +6,8 @@ let
   };
 in
 buildMongoDB {
-  version = "6.0.5";
-  sha256 = "sha256-iUY5nbyaoMknBlWy3ItkgY87lHNVbZ1N9ricbzMpWX4=";
+  version = "6.0.6";
+  sha256 = "sha256-/AUe87fCM/BFJy3sPSuRBrOWMoE8zHIGhKYf/5NNCjc=";
   patches = [
     (fetchpatch {
       name = "mongodb-6.1.0-rc-more-specific-cache-alignment-types.patch";

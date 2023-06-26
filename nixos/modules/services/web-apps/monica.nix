@@ -367,7 +367,7 @@ in {
     };
 
     systemd.services.monica-setup = {
-      description = "Preperation tasks for monica";
+      description = "Preparation tasks for monica";
       before = ["phpfpm-monica.service"];
       after = optional db.createLocally "mysql.service";
       wantedBy = ["multi-user.target"];

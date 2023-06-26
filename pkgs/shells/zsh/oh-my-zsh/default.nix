@@ -5,15 +5,15 @@
 , git, nix, nixfmt, jq, coreutils, gnused, curl, cacert, bash }:
 
 stdenv.mkDerivation rec {
-  version = "2023-04-21";
+  version = "2023-06-20";
   pname = "oh-my-zsh";
-  rev = "5d3e86e2a48adf7a308773f8f1b725d187c7c5ef";
+  rev = "8a6fc5c16d49368dc8f9ddd965a9e25ef652e129";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "ohmyzsh";
     repo = "ohmyzsh";
-    sha256 = "pJRe3UEpXpfop4huOzWwxivyCRJKIDN/y+Slv8bKcmk=";
+    sha256 = "sha256-/t4BUntSWNES8c+ePFOPniqYp2edlgc4IWW4RKfDZsU=";
   };
 
   strictDeps = true;

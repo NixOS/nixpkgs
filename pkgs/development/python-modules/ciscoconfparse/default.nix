@@ -1,19 +1,20 @@
 { lib
 , buildPythonPackage
-, dnspython
 , deprecat
+, dnspython
 , fetchFromGitHub
 , loguru
 , passlib
 , poetry-core
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , toml
 }:
 
 buildPythonPackage rec {
   pname = "ciscoconfparse";
-  version = "1.7.18";
+  version = "1.7.24";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,8 +23,12 @@ buildPythonPackage rec {
     owner = "mpenning";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-jWInSqvMuwYJTPqHnrYWhMH/HvaQc2dFRqQu4RGFr28=";
+    hash = "sha256-vL/CQdYcOP356EyRToviWylP1EBtxmeov6qkhfQNZ2Y=";
   };
+
+  pythonRelaxDeps = [
+    "loguru"
+  ];
 
   postPatch = ''
     patchShebangs tests
@@ -31,6 +36,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

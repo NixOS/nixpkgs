@@ -1,10 +1,10 @@
-{ lib, pythonPackages, mopidy }:
+{ lib, fetchPypi, pythonPackages, mopidy }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "Mopidy-Notify";
   version = "0.2.0";
 
-  src = pythonPackages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-lzZupjlS0kbNvsn18serOoMfu0sRb0nRwpowvOPvt/g=";
   };

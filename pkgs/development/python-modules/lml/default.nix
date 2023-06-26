@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = "Load me later. A lazy plugin management system for Python";
     homepage = "http://lml.readthedocs.io/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ jtojnar ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

@@ -14,13 +14,14 @@
 
 let
   pname = "pgadmin";
-  version = "7.0";
+  version = "7.3";
+  yarnSha256 = "sha256-gbFAeTB24EU0SWSAMnPus1rcgQmHcPySb6wXX3xKnvg=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-m2mO37qNjrznpdKeFHq6yE8cZx4sHBvPB2RHUtS1Uis=";
+    hash = "sha256-7qdM/CkrSy9g85WhaG57O9uqHIwQIpOThHKxGs+U0dQ=";
   };
 
   # keep the scope, as it is used throughout the derivation and tests
@@ -28,8 +29,8 @@ let
   pythonPackages = python3.pkgs.overrideScope (final: prev: rec { });
 
   offlineCache = fetchYarnDeps {
-    yarnLock = src + "/web/yarn.lock";
-    hash = "sha256-cnn7CJcnT+TUeeZoeJVX3bO85vuJmVrO7CPR/CYTCS0=";
+    yarnLock = ./yarn.lock;
+    hash = yarnSha256;
   };
 
 in
@@ -101,6 +102,10 @@ pythonPackages.buildPythonApplication rec {
     cd web
     export HOME="$TMPDIR"
     yarn config --offline set yarn-offline-mirror "${offlineCache}"
+    # replace with converted yarn.lock file
+    rm yarn.lock
+    cp ${./yarn.lock} yarn.lock
+    chmod +w yarn.lock
     fixup_yarn_lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
@@ -180,6 +185,7 @@ pythonPackages.buildPythonApplication rec {
     speaklater3
     google-auth-oauthlib
     google-api-python-client
+    keyring
   ];
 
   passthru.tests = {

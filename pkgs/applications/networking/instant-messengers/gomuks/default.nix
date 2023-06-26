@@ -53,6 +53,5 @@ buildGoModule rec {
     description = "A terminal based Matrix client written in Go";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ chvp emily ];
-    platforms = platforms.unix;
   };
 }

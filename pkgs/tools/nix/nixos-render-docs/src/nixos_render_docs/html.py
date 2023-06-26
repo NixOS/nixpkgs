@@ -211,7 +211,7 @@ class HTMLRenderer(Renderer):
         self._ordered_list_nesting += 1
         return f'<div class="orderedlist"><ol class="orderedlist {extra}" {start} type="{style}">'
     def ordered_list_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
-        self._ordered_list_nesting -= 1;
+        self._ordered_list_nesting -= 1
         return "</ol></div>"
     def example_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         if id := cast(str, token.attrs.get('id', '')):

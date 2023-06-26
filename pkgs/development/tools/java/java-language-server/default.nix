@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , jdk, maven
-, runtimeShell, makeWrapper
+, makeWrapper
 }:
 
 let
@@ -10,7 +10,7 @@ let
     else if stdenv.isWindows then "windows"
     else throw "unsupported platform";
 in
-stdenv.mkDerivation rec {
+maven.buildMavenPackage rec {
   pname = "java-language-server";
   version = "0.2.38";
 
@@ -22,45 +22,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-zkbl/SLg09XK2ZhJNzWEtvFCQBRQ62273M/2+4HV1Lk=";
   };
 
-  fetchedMavenDeps = stdenv.mkDerivation {
-    name = "java-language-server-${version}-maven-deps";
-    inherit src;
-    buildInputs = [ maven ];
-
-    buildPhase = ''
-      runHook preBuild
-
-      mvn package -Dmaven.repo.local=$out -DskipTests
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      find $out -type f \
-        -name \*.lastUpdated -or \
-        -name resolver-status.properties -or \
-        -name _remote.repositories \
-        -delete
-
-      runHook postInstall
-    '';
-
-    dontFixup = true;
-    dontConfigure = true;
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-YkcQKmm8oeEH7uyUzV/qGoe4LiI6o5wZ7o69qrO3oCA=";
-  };
-
+  mvnFetchExtraArgs.dontConfigure = true;
+  mvnParameters = "-DskipTests";
+  mvnHash = "sha256-bzYBSrCS9Kp+qnVO60h915Or1VWabphwLEu6lcBULuc=";
 
   nativeBuildInputs = [ maven jdk makeWrapper ];
 
   dontConfigure = true;
-  buildPhase = ''
-    runHook preBuild
-
+  preBuild = ''
     jlink \
       ${lib.optionalString (!stdenv.isDarwin) "--module-path './jdks/${platform}/jdk-13/jmods'"} \
       --add-modules java.base,java.compiler,java.logging,java.sql,java.xml,jdk.compiler,jdk.jdi,jdk.unsupported,jdk.zipfs \
@@ -68,10 +37,6 @@ stdenv.mkDerivation rec {
       --no-header-files \
       --no-man-pages \
       --compress 2
-
-    mvn package --offline -Dmaven.repo.local=${fetchedMavenDeps} -DskipTests
-
-    runHook postBuild
   '';
 
   installPhase = ''

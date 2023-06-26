@@ -116,10 +116,12 @@ let
         cooperlake     = versionAtLeast ccVersion "10.0";
         tigerlake      = versionAtLeast ccVersion "10.0";
         knm            = versionAtLeast ccVersion "8.0";
+        alderlake      = versionAtLeast ccVersion "12.0";
         # AMD
         znver1         = versionAtLeast ccVersion "6.0";
         znver2         = versionAtLeast ccVersion "9.0";
         znver3         = versionAtLeast ccVersion "11.0";
+        znver4         = versionAtLeast ccVersion "13.0";
       }.${arch} or true
     else if isClang then
       { # Intel
@@ -127,9 +129,12 @@ let
         icelake-client = versionAtLeast ccVersion "7.0";
         icelake-server = versionAtLeast ccVersion "7.0";
         knm            = versionAtLeast ccVersion "7.0";
+        alderlake      = versionAtLeast ccVersion "16.0";
         # AMD
         znver1         = versionAtLeast ccVersion "4.0";
         znver2         = versionAtLeast ccVersion "9.0";
+        znver3         = versionAtLeast ccVersion "12.0";
+        znver4         = versionAtLeast ccVersion "16.0";
       }.${arch} or true
     else
       false;
@@ -301,7 +306,7 @@ stdenv.mkDerivation {
     '';
 
   strictDeps = true;
-  propagatedBuildInputs = [ bintools ] ++ extraTools ++ optionals cc.langD or false [ zlib ];
+  propagatedBuildInputs = [ bintools ] ++ extraTools ++ optionals cc.langD or cc.langJava or false [ zlib ];
   depsTargetTargetPropagated = optional (libcxx != null) libcxx ++ extraPackages;
 
   setupHooks = [
@@ -317,7 +322,7 @@ stdenv.mkDerivation {
       touch "$out/nix-support/cc-ldflags"
     ''
 
-    # Backwards compatability for packages expecting this file, e.g. with
+    # Backwards compatibility for packages expecting this file, e.g. with
     # `$NIX_CC/nix-support/dynamic-linker`.
     #
     # TODO(@Ericson2314): Remove this after stable release and force
@@ -464,7 +469,7 @@ stdenv.mkDerivation {
     + optionalString propagateDoc ''
       ln -s ${cc.man} $man
       ln -s ${cc.info} $info
-    '' + optionalString (cc.langD or false) ''
+    '' + optionalString (cc.langD or cc.langJava or false) ''
       echo "-B${zlib}${zlib.libdir or "/lib/"}" >> $out/nix-support/libc-cflags
     ''
 
@@ -606,11 +611,12 @@ stdenv.mkDerivation {
   };
 
   meta =
-    let cc_ = if cc != null then cc else {}; in
-    (if cc_ ? meta then removeAttrs cc.meta ["priority"] else {}) //
+    let cc_ = lib.optionalAttrs (cc != null) cc; in
+    (lib.optionalAttrs (cc_ ? meta) (removeAttrs cc.meta ["priority"])) //
     { description =
         lib.attrByPath ["meta" "description"] "System C compiler" cc_
         + " (wrapper script)";
       priority = 10;
+      mainProgram = if name != "" then name else ccName;
   };
 }

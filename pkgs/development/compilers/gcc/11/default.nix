@@ -50,19 +50,14 @@ with lib;
 with builtins;
 
 let majorVersion = "11";
-    version = "${majorVersion}.3.0";
+    version = "${majorVersion}.4.0";
     disableBootstrap = !stdenv.hostPlatform.isDarwin;
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
     patches = [
       # Fix https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80431
-      (fetchurl {
-        name = "fix-bug-80431.patch";
-        url = "https://gcc.gnu.org/git/?p=gcc.git;a=patch;h=de31f5445b12fd9ab9969dc536d821fe6f0edad0";
-        sha256 = "0sd52c898msqg7m316zp0ryyj7l326cjcn2y19dcxqp15r74qj0g";
-      })
-      ./fix-struct-redefinition-on-glibc-2.36.patch
+      ../fix-bug-80431.patch
       ../install-info-files-serially.patch
     ] ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
@@ -79,9 +74,9 @@ let majorVersion = "11";
       ++ optionals stdenv.isDarwin [
         (fetchpatch {
           # There are no upstream release tags in https://github.com/iains/gcc-11-branch.
-          # 2d280e7 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-11.3.0
-          url = "https://github.com/iains/gcc-11-branch/compare/2d280e7eafc086e9df85f50ed1a6526d6a3a204d..gcc-11.3-darwin-r2.diff";
-          sha256 = "sha256-LFAXUEoYD7YeCG8V9mWanygyQOI7U5OhCRIKOVCCDAg=";
+          # ff4bf32 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-11.4.0
+          url = "https://github.com/iains/gcc-11-branch/compare/ff4bf326d03e750a8d4905ea49425fe7d15a04b8..gcc-11.4-darwin-r0.diff";
+          hash = "sha256-6prPgR2eGVJs7vKd6iM1eZsEPCD1ShzLns2Z+29vlt4=";
         })
       ]
       # https://github.com/osx-cross/homebrew-avr/issues/280#issuecomment-1272381808
@@ -171,7 +166,7 @@ lib.pipe (stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = "sha256-tHzygYaR9bHiHfK7OMeV+sLPvWQO3i0KXhyJ4zijrDk=";
+    hash = "sha256-Py2yIrAH6KSiPNW6VnJu8I6LHx6yBV7nLBQCzqc6jdk=";
   };
 
   inherit patches;

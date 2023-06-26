@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "pv-migrate";
@@ -23,11 +23,22 @@ buildGoModule rec {
     "-X main.date=1970-01-01-00:00:01"
   ];
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  postInstall = ''
+    installShellCompletion --cmd pv-migrate \
+      --bash <($out/bin/pv-migrate completion bash) \
+      --fish <($out/bin/pv-migrate completion fish) \
+      --zsh <($out/bin/pv-migrate completion zsh)
+  '';
+
   meta = with lib; {
     description = "CLI tool to easily migrate Kubernetes persistent volumes ";
     homepage = "https://github.com/utkuozdemir/pv-migrate";
     changelog = "https://github.com/utkuozdemir/pv-migrate/releases/tag/${version}";
     license = licenses.afl20;
-    maintainers = [ maintainers.ivankovnatsky ];
+    maintainers = with lib.maintainers; [ ivankovnatsky qjoly ];
   };
 }

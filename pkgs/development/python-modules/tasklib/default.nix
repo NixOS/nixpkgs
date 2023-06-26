@@ -1,5 +1,6 @@
 { lib
 , pythonPackages
+, fetchPypi
 , taskwarrior
 , writeShellScriptBin
 }:

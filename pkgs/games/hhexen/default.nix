@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     homepage = "https://hhexen.sourceforge.net/hhexen.html";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ djanatyn ];
+    mainProgram = "hhexen-gl";
   };
 }

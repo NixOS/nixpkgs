@@ -16,22 +16,20 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cloud-init";
-  version = "23.1.2";
+  version = "23.2";
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "cloud-init";
     rev = "refs/tags/${version}";
-    hash = "sha256-tn4flcrf04hVWhqkmK4qDenXcnV93pP+C+8J63b6FXQ=";
+    hash = "sha256-/bhezXS5GunlgID7e/QaTC4UsQ2hDvS5HnG8Wphk64k=";
   };
 
   patches = [
     ./0001-add-nixos-support.patch
-    # upstream: https://github.com/canonical/cloud-init/pull/2125
+    # upstream: https://github.com/canonical/cloud-init/pull/4190
     ./0002-Add-Udhcpc-support.patch
-    # upstream: https://github.com/canonical/cloud-init/pull/2151
-    ./0003-vultr-remove-check_route-check.patch
   ];
 
   prePatch = ''

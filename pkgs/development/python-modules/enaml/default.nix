@@ -11,7 +11,7 @@
 , setuptools
 , setuptools-scm
 , pythonOlder
-, sip_4
+, sip
 }:
 
 buildPythonPackage rec {
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     pegen
     ply
     qtpy
-    sip_4
+    sip
   ];
 
   # qt bindings cannot be found during tests

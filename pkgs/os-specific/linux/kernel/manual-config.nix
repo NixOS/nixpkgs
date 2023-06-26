@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole
+, libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole, ubootTools
 , fetchpatch
 }:
 
@@ -87,7 +87,8 @@ let
 
   isModular = config.isYes "MODULES";
 
-  kernelConf =  stdenv.hostPlatform.linux-kernel;
+  kernelConf = stdenv.hostPlatform.linux-kernel;
+  target = kernelConf.target or "vmlinux";
 
   buildDTBs = kernelConf.DTB or false;
 in
@@ -100,13 +101,13 @@ stdenv.mkDerivation ({
   inherit version src;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr zstd python3Minimal ]
-      ++ optional  (kernelConf.target == "uImage") buildPackages.ubootTools
-      ++ optional  (lib.versionOlder version "5.8") libelf
-      ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
-      ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
-      ++ optional  (lib.versionAtLeast version "5.8")  elfutils
-      ;
+  nativeBuildInputs = [
+    bc gmp libmpc mpfr nettools openssl perl python3Minimal rsync ubootTools
+    zstd
+  ] ++ optional  (lib.versionOlder version "5.8") libelf
+    ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
+    ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
+    ++ optional  (lib.versionAtLeast version "5.8")  elfutils;
 
   patches =
     map (p: p.patch) kernelPatches
@@ -179,7 +180,8 @@ stdenv.mkDerivation ({
   configurePhase = ''
     runHook preConfigure
 
-    export buildRoot=$(mktemp -d)
+    export buildRoot=$TMPDIR/kernel-buildroot
+    mkdir -p $buildRoot
 
     echo "manual-config configurePhase buildRoot=$buildRoot pwd=$PWD"
 
@@ -296,8 +298,8 @@ stdenv.mkDerivation ({
   # Some image types need special install targets (e.g. uImage is installed with make uinstall)
   installTargets = [
     (kernelConf.installTarget or (
-      /**/ if kernelConf.target == "uImage" then "uinstall"
-      else if kernelConf.target == "zImage" || kernelConf.target == "Image.gz" then "zinstall"
+      /**/ if target == "uImage" then "uinstall"
+      else if target == "zImage" || target == "Image.gz" then "zinstall"
       else "install"))
   ];
 
@@ -405,6 +407,9 @@ stdenv.mkDerivation ({
       maintainers.thoughtpolice
     ];
     platforms = platforms.linux;
+    badPlatforms =
+      lib.optionals (lib.versionOlder version "4.15") [ "riscv32-linux" "riscv64-linux" ] ++
+      lib.optional (lib.versionOlder version "5.19") "loongarch64-linux";
     timeout = 14400; # 4 hours
   } // extraMeta;
 } // optionalAttrs (pos != null) {

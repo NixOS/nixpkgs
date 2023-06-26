@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
-, openssl_1_1
+, openssl
 , avahi
 , alsa-lib
 , libplist
@@ -34,6 +34,10 @@
 , enableLibdaemon ? false
 }:
 
+let
+  inherit (lib) optional optionals;
+in
+
 stdenv.mkDerivation rec {
   version = "4.1.1";
   pname = "shairport-sync";
@@ -47,8 +51,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = with lib; [
-    openssl_1_1
+  buildInputs = [
+    openssl
     avahi
     popt
     libconfig
@@ -76,7 +80,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = with lib; [
+  configureFlags = [
     "--without-configfiles"
     "--sysconfdir=/etc"
     "--with-ssl=openssl"

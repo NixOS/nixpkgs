@@ -17,13 +17,13 @@
 }:
 buildDotnetModule rec {
   pname = "github-runner";
-  version = "2.304.0";
+  version = "2.305.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-5amc0oVcFCPFrUcX5iITjnN9Mtpzi4wWsJe7Kdm9YxA=";
+    hash = "sha256-sI29B4VlSc4DQW7mrBZmtWPKgO3q8B5Dt5JSVCY1nCQ=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git-revision
@@ -131,7 +131,10 @@ buildDotnetModule rec {
 
   # Fully qualified name of disabled tests
   disabledTests =
-    [ "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync" ]
+    [
+      "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync"
+      "GitHub.Runner.Common.Tests.ProcessInvokerL0.OomScoreAdjIsInherited"
+    ]
     ++ map (x: "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync_${x}") [
       "Cancel_CloneHashTask_WhenNotNeeded"
       "CloneHash_RuntimeAndExternals"

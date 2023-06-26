@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "breezy";
-  version = "3.3.2";
+  version = "3.3.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TqaUn8uwdrl4VFsJn6xoq6011voYmd7vT2uCo9uiV8E=";
+    hash = "sha256-WrXmxp63uja5lfPIPjPnvh1d/KwrkoOIjh4MYeRwMOc=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
@@ -44,8 +44,6 @@ buildPythonPackage rec {
   postPatch = ''
     ln -s ${./Cargo.lock} Cargo.lock
   '';
-
-  cargoHash = "sha256-xYZh/evNp036/wRlNWWUYeD2EkleM+OeY4qbYMCE00I=";
 
   nativeBuildInputs = [
     cython
@@ -117,6 +115,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Friendly distributed version control system";
     homepage = "https://www.breezy-vcs.org/";
+    changelog = "https://github.com/breezy-team/breezy/blob/brz-${version}/doc/en/release-notes/brz-${versions.majorMinor version}.txt";
     license = licenses.gpl2Only;
     maintainers = [ maintainers.marsam ];
     mainProgram = "brz";

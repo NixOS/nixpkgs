@@ -15,6 +15,7 @@
 , geoip
 , libbsd
 , libiconv
+, libkrb5
 , libmaxminddb
 , libmodsecurity
 , libuuid
@@ -662,14 +663,15 @@ let self = {
     };
   };
 
-  secure-token = {
+  secure-token = rec {
     name = "secure-token";
+    version = "1.5";
     src = fetchFromGitHub {
       name = "secure-token";
       owner = "kaltura";
       repo = "nginx-secure-token-module";
-      rev = "95bdc0d1aca06ea7fe42555f71e65910bd74914d";
-      sha256 = "19wzck1xzq4kz7nyabcwzlank1k7wi7w2wn2c1mwz374c79g8ggp";
+      rev = "refs/tags/${version}";
+      hash = "sha256-qYTjGS9pykRqMFmNls52YKxEdXYhHw+18YC2zzdjEpU=";
     };
 
     inputs = [ openssl ];
@@ -781,6 +783,8 @@ let self = {
       rev = "72c8ee04c81f929ec84d5a6d126f789b77781a8c";
       sha256 = "05rw3a7cv651951li995r5l1yzz6kwkm2xpbd59jsfzd74bw941i";
     };
+
+    inputs = [ libkrb5 ];
 
     meta = with lib; {
       description = "SPNEGO HTTP Authentication Module";
@@ -980,8 +984,8 @@ let self = {
       name = "vod";
       owner = "kaltura";
       repo = "nginx-vod-module";
-      rev = "1.29";
-      sha256 = "1z0ka0cwqbgh3fv2d5yva395sf90626rdzx7lyfrgs89gy4h9nrr";
+      rev = "1.31";
+      hash = "sha256-ZpeO8QWQ+fGkz08u/zFOq7vj4aHcodzSHNrc1SgGUyc=";
     };
 
     inputs = [ ffmpeg fdk_aac openssl libxml2 libiconv ];
@@ -1000,15 +1004,15 @@ let self = {
       name = "vts";
       owner = "vozlt";
       repo = "nginx-module-vts";
-      rev = "v0.2.1";
-      sha256 = "sha256-x4ry5ljPeJQY+7Mp04/xYIGf22d6Nee7CSqHezdK4gQ=";
+      rev = "v0.2.2";
+      sha256 = "sha256-ReTmYGVSOwtnYDMkQDMWwxw09vT4iHYfYZvgd8iBotk=";
     };
 
     meta = with lib; {
       description = "Virtual host traffic status module";
       homepage = "https://github.com/vozlt/nginx-module-vts";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = with maintainers; [ SuperSandro2000 ];
     };
   };
 
@@ -1028,7 +1032,7 @@ let self = {
       description = "Nginx modules for the Zstandard compression";
       homepage = "https://github.com/tokers/zstd-nginx-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = with maintainers; [ SuperSandro2000 ];
     };
   };
 }; in self // lib.optionalAttrs config.allowAliases {

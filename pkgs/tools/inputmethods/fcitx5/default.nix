@@ -31,6 +31,7 @@
 , xcbutilwm
 , xcb-imdkit
 , libxkbfile
+, nixosTests
 }:
 let
   enDictVer = "20121020";
@@ -89,7 +90,12 @@ stdenv.mkDerivation rec {
     libxkbfile
   ];
 
-  passthru.updateScript = ./update.py;
+  passthru = {
+    updateScript = ./update.py;
+    tests = {
+      inherit (nixosTests) fcitx5;
+    };
+  };
 
   meta = with lib; {
     description = "Next generation of fcitx";

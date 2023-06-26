@@ -99,6 +99,7 @@ in {
     systemd.units."kmsconvt@.service".aliases = [ "autovt@.service" ];
 
     systemd.services.systemd-vconsole-setup.enable = false;
+    systemd.services.reload-systemd-vconsole-setup.enable = false;
 
     services.kmscon.extraConfig =
       let

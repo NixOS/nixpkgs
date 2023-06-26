@@ -39,13 +39,13 @@ let common = { version, hash, jdk ? jdk11_headless, tests }:
 in
 {
   hbase_2_4 = common {
-    version = "2.4.16";
-    hash = "sha256-vMuTqS2bXFRcCsZ7bOaNLVGyOG38HhL8WlCq2MFmAaE=";
+    version = "2.4.17";
+    hash = "sha256-1JT57kpp+dqoXY5ZZig1nHDtSqvfLjEWviu73J7hKj0=";
     tests.standalone = nixosTests.hbase_2_4;
   };
   hbase_2_5 = common {
-    version = "2.5.3";
-    hash = "sha256-h08jnDQaakpkYFHHn9qeg4JCSBtwRjv42qKLpyOVdsI=";
+    version = "2.5.4";
+    hash = "sha256-/7kp0f/K8DCeFheDPzs2ZFqcnZwQtH1rrMx+UMbQ7TM=";
     tests.standalone = nixosTests.hbase2;
   };
   hbase_3_0 = common {

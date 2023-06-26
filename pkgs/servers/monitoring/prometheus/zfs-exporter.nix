@@ -25,6 +25,5 @@ buildGoModule rec {
     homepage = "https://github.com/pdf/zfs_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.unix;
   };
 }

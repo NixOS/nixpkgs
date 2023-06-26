@@ -5,6 +5,8 @@
 , copyDesktopItems
 , makeWrapper
 , writeText
+, wrapGAppsHook
+, callPackage
 
 # Common run-time dependencies
 , zlib
@@ -76,14 +78,12 @@ let
       ++ lib.optionals mediaSupport [ ffmpeg ]
   );
 
-  tag = "mullvad-browser-102.10.0esr-12.0-2-build2";
-  version = "12.0.5";
-  lang = "ALL";
+  version = "12.0.7";
 
-  srcs = {
+  sources = {
     x86_64-linux = fetchurl {
-      url = "https://github.com/mullvad/mullvad-browser/releases/download/${tag}/mullvad-browser-linux64-${version}_${lang}.tar.xz";
-      hash = "sha256-Ezs2pjJNGOinMIskBDwpj70eKSkfcV6ZCKb60I5J23w=";
+      url = "https://cdn.mullvad.net/browser/${version}/mullvad-browser-linux64-${version}_ALL.tar.xz";
+      hash = "sha256-8TcC39A9VFyhFb+pfefzvwJqXq1yF7C2YDcbCyEa0yo=";
     };
   };
 
@@ -104,9 +104,9 @@ stdenv.mkDerivation rec {
   pname = "mullvad-browser";
   inherit version;
 
-  src = srcs.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+  src = sources.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [ copyDesktopItems makeWrapper wrapGAppsHook ];
 
   preferLocalBuild = true;
   allowSubstitutes = false;
@@ -220,12 +220,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru = {
+    inherit sources;
+    updateScript = callPackage ../tor-browser-bundle-bin/update.nix {
+      inherit pname version meta;
+      baseUrl = "https://cdn.mullvad.net/browser/";
+      prefix = "mullvad-browser-";
+    };
+  };
+
   meta = with lib; {
     description = "Privacy-focused browser made in a collaboration between The Tor Project and Mullvad";
-    homepage = "https://www.mullvad.net/en/browser";
-    changelog = "https://github.com/mullvad/mullvad-browser/releases/tag/${tag}";
-    platforms = attrNames srcs;
-    maintainers = with maintainers; [ felschr ];
+    homepage = "https://mullvad.net/en/browser";
+    platforms = attrNames sources;
+    maintainers = with maintainers; [ felschr panicgh ];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.

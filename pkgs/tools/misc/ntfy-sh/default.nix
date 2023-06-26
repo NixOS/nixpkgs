@@ -1,25 +1,29 @@
 { lib, pkgs, stdenv, buildGoModule, fetchFromGitHub, nixosTests
-, nodejs, debianutils, mkdocs, python3, python3Packages }:
+, nodejs, debianutils, mkdocs, python3, python3Packages
+, pkg-config, pixman, cairo, pango }:
 
 
 let
   nodeDependencies = (import ./node-composition.nix {
     inherit pkgs nodejs;
     inherit (stdenv.hostPlatform) system;
-  }).nodeDependencies;
+  }).nodeDependencies.override {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ pixman cairo pango ];
+  };
 in
 buildGoModule rec {
   pname = "ntfy-sh";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "binwiederhier";
     repo = "ntfy";
     rev = "v${version}";
-    sha256 = "sha256-bwYiIeDpZZpfv/HNtB/3acL0dJfegF/4OqWcEV8YGfY=";
+    sha256 = "sha256-C7Ko7JBiQoafos7TbVTqq6pn7NnuLOZo7Dcf6ob2IzI=";
   };
 
-  vendorSha256 = "sha256-HHuj3PcIu1wsdcfd04PofoZHjRSgTfWfJcomqH3KXa8=";
+  vendorSha256 = "sha256-9mhMeGcAdFjzLJdsGnoTArtxVEaUznpN64j5SMBYHv8=";
 
   doCheck = false;
 

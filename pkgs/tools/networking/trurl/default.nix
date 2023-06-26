@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "trurl";
-  version = "0.6";
+  version = "0.8";
 
   src = fetchFromGitHub {
     owner = "curl";
     repo = pname;
     rev = "${pname}-${version}";
-    hash = "sha256-/Gf7T67LPzVPhjAqTvbLiJOqfKeWvwH/WHelJZTH4ZI=";
+    hash = "sha256-KHJMxzHqHW8WbeD6jxyuzZhuHc5x4B7fP/rYAK687ac=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   doCheck = true;
-  nativeCheckInputs = [ python3 python3Packages.packaging ];
+  nativeCheckInputs = [ python3 ];
   checkTarget = "test";
 
   passthru.tests.version = testers.testVersion {

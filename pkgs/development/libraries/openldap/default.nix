@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     "devdoc"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   enableParallelBuilding = true;
 
   nativeBuildInputs = [

@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "pyopengl-accelerate";
-  version = "3.1.6";
+  version = "3.1.7";
   disabled = pythonAtLeast "3.10"; # fails to compile
 
   src = fetchPypi {
     pname = "PyOpenGL-accelerate";
     inherit version;
-    hash = "sha256-rYowAlbsolIoJh3hb3QeUaMPNPHhsc9oNZ9cYtvNzcM=";
+    hash = "sha256-KxI2ISc6k59/0uwidUHjmfm11OgV1prgvbG2xwopNoA=";
   };
 
   meta = {

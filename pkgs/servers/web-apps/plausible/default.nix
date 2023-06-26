@@ -25,7 +25,7 @@ let
   mixFodDeps = beamPackages.fetchMixDeps {
     pname = "${pname}-deps";
     inherit src version;
-    sha256 = "1ikcskp4gvvdprl65x1spijdc8dz6klnrnkvgy2jbk0b3d7yn1v5";
+    hash = "sha256-ZQfrTxsLzCWFf3vabOk0vyHWZLw69GJovm3vR+7UbMY=";
   };
 
   yarnDeps = mkYarnModules {
@@ -48,9 +48,6 @@ beamPackages.mixRelease {
   inherit pname version src mixFodDeps;
 
   nativeBuildInputs = [ nodejs ];
-
-  # https://github.com/whitfin/cachex/issues/205
-  stripDebug = false;
 
   passthru = {
     tests = { inherit (nixosTests) plausible; };

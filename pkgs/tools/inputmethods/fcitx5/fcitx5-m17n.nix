@@ -9,6 +9,7 @@
 , m17n_db
 , gettext
 , fmt
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -35,6 +36,10 @@ stdenv.mkDerivation rec {
     m17n_lib
     fmt
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) fcitx5;
+  };
 
   meta = with lib; {
     description = "m17n support for Fcitx5";

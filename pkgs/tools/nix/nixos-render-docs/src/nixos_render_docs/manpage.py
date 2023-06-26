@@ -1,10 +1,9 @@
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
-from typing import Any, cast, Iterable, Optional
+from typing import cast, Iterable, Optional
 
 import re
 
-import markdown_it
 from markdown_it.token import Token
 
 from .md import Renderer

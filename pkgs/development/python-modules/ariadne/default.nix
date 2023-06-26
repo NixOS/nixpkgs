@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, hatchling
 , freezegun
 , graphql-core
 , opentracing
@@ -17,7 +18,7 @@
 buildPythonPackage rec {
   pname = "ariadne";
   version = "0.18.1";
-  format = "setuptools";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -27,6 +28,10 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-E7uC+l0Yjol8UPLF4CV+PN49tOUJXNUS5yYdF1oyfwU=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     graphql-core
@@ -53,6 +58,12 @@ buildPythonPackage rec {
     "test_attempt_parse_request_missing_content_type_raises_bad_request_error"
     "test_attempt_parse_non_json_request_raises_bad_request_error"
     "test_attempt_parse_non_json_request_body_raises_bad_request_error"
+  ];
+
+  disabledTestPaths = [
+    # missing graphql-sync-dataloader test dep
+    "tests/test_dataloaders.py"
+    "tests/wsgi/test_configuration.py"
   ];
 
   meta = with lib; {

@@ -1,6 +1,12 @@
-{ lib, stdenv, callPackage }:
+{ lib
+, stdenv
+, callPackage
+, ...
+}@args:
 
 let
+  extraArgs = removeAttrs args [ "callPackage" ];
+
   pname = "spotify";
 
   meta = with lib; {
@@ -12,5 +18,5 @@ let
   };
 
 in if stdenv.isDarwin
-then callPackage ./darwin.nix { inherit pname meta; }
-else callPackage ./linux.nix { inherit pname meta; }
+then callPackage ./darwin.nix (extraArgs // { inherit pname meta; })
+else callPackage ./linux.nix (extraArgs // { inherit pname meta; })

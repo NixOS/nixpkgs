@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "0.23.0";
+  version = "0.28.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "Textualize";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-XgJ43yyiwzSH22NzidJ7z+Qh6+pOuAdfL7ZxabJkd3U=";
+    hash = "sha256-tSCMKM9Wv4crl6SLcIc2r6QY6U3RBTW8yfAjkYLV3eE=";
   };
 
   nativeBuildInputs = [
@@ -68,6 +68,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "textual"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "TUI framework for Python inspired by modern web development";

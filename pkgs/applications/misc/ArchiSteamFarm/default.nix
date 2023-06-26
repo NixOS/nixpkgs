@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildDotnetModule
 , fetchFromGitHub
 , dotnetCorePackages
@@ -7,19 +6,18 @@
 , zlib
 , openssl
 , callPackage
-, stdenvNoCC
 }:
 
 buildDotnetModule rec {
   pname = "archisteamfarm";
   # nixpkgs-update: no auto update
-  version = "5.4.5.2";
+  version = "5.4.7.2";
 
   src = fetchFromGitHub {
     owner = "justarchinet";
     repo = pname;
     rev = version;
-    sha256 = "sha256-l3qcdgTTpbI4Jdy1jpzyCiAFglJfzBHkb6hLIZ4hDKQ=";
+    hash = "sha256-qKG4eFF/YTb7wlABBtEjOqBYvtVTLKCXqTD9idkhnI4=";
   };
 
   dotnet-runtime = dotnetCorePackages.aspnetcore_7_0;

@@ -1,6 +1,6 @@
 # This test verifies that we can request and assign IPv6 prefixes from upstream
 # (e.g. ISP) routers.
-# The setup consits of three VMs. One for the ISP, as your residential router
+# The setup consists of three VMs. One for the ISP, as your residential router
 # and the third as a client machine in the residential network.
 #
 # There are two VLANs in this test:
@@ -268,7 +268,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
     };
 
-    # This is the client behind the router. We should be receving router
+    # This is the client behind the router. We should be receiving router
     # advertisements for both the ULA and the delegated prefix.
     # All we have to do is boot with the default (networkd) configuration.
     client = {

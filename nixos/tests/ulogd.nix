@@ -1,9 +1,7 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "ulogd";
 
-  meta = with lib; {
-    maintainers = with maintainers; [ p-h ];
-  };
+  meta.maintainers = with lib.maintainers; [ p-h ];
 
   nodes.machine = { ... }: {
     networking.firewall.enable = false;

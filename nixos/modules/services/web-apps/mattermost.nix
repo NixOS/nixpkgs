@@ -86,8 +86,7 @@ let
   mattermostConf = recursiveUpdate
     mattermostConfWithoutPlugins
     (
-      if mattermostPlugins == null then {}
-      else {
+      lib.optionalAttrs (mattermostPlugins != null) {
         PluginSettings = {
           Enable = true;
         };

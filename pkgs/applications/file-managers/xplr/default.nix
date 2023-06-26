@@ -2,18 +2,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "xplr";
-  version = "0.21.1";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "sayanarijit";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WUv0F7etmJFNRnHXkQ5G3p/5BWL30kfSYnxXYpAdo+I=";
+    sha256 = "sha256-MCOkl95X5YZTAC0VHtSY5xWf1R3987cxepSM7na+LdA=";
   };
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
-  cargoSha256 = "sha256-0JJpGSOwayPB3cn7OpBjsOiK4WQNbil3gYrfkqG2cS8=";
+  cargoHash = "sha256-1uAnIuxDDv3Z/fMs2Cu/aFWrnugGcEKlNjhILqDpOMI=";
 
   checkFlags = [
     # failure: path::tests::test_relative_to_parent

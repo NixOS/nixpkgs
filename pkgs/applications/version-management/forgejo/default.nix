@@ -116,7 +116,7 @@ buildGoModule rec {
     homepage = "https://forgejo.org";
     changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ indeednotjames urandom ];
+    maintainers = with maintainers; [ emilylange urandom ];
     broken = stdenv.isDarwin;
     mainProgram = "gitea";
   };

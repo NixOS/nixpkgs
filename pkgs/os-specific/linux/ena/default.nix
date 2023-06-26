@@ -1,15 +1,32 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, kernel }:
 
 stdenv.mkDerivation rec {
-  version = "2.8.3";
+  version = "2.8.6";
   name = "ena-${version}-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "amzn";
     repo = "amzn-drivers";
     rev = "ena_linux_${version}";
-    sha256 = "sha256-Z5BCqqC4FNKHqpocJ6CsHwhh5sszj5QfxiN6+Dkaqek=";
+    hash = "sha256-clRu+ecK/Je0kvlAAm6qCJqMyvZv0C88YIGDImhRhKA=";
   };
+
+  patches =
+    [ # https://github.com/amzn/amzn-drivers/issues/269#issuecomment-1552483792
+      (fetchpatch {
+        url = "https://github.com/amzn/amzn-drivers/files/11504862/phc_kernel_6_2_fix.patch";
+        hash = "sha256-/EBkISwXMd7t4WZjsG9KVP6vncFwcZq1QBsxQLXyWsY=";
+      })
+      # https://github.com/amzn/amzn-drivers/issues/270#issuecomment-1561924754
+      (fetchpatch {
+        url = "https://github.com/amzn/amzn-drivers/files/11559312/devlink_6_2_fix.patch";
+        hash = "sha256-Nc71u91G0dL+ld6ovqjHaE6X2TxduWeQYr5K0KdoA3Q=";
+      })
+      (fetchpatch {
+        url = "https://github.com/amzn/amzn-drivers/files/11559314/devlink_6_3_fix.patch";
+        hash = "sha256-aEQTbwHC1DcDrtj188eoGzi3GU9MXnwIxuJW4L7qb/I=";
+      })
+    ];
 
   hardeningDisable = [ "pic" ];
 

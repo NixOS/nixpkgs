@@ -8,133 +8,32 @@
 , makeScopeWithSplicing
 , pythonPackagesExtensions
 , stdenv
-}:
+}@args:
 
 (let
 
   # Common passthru for all Python interpreters.
-  passthruFun =
-    { implementation
-    , libPrefix
-    , executable
-    , sourceVersion
-    , pythonVersion
-    , packageOverrides
-    , sitePackages
-    , hasDistutilsCxxPatch
-    , pythonOnBuildForBuild
-    , pythonOnBuildForHost
-    , pythonOnBuildForTarget
-    , pythonOnHostForHost
-    , pythonOnTargetForTarget
-    , pythonAttr ? null
-    , self # is pythonOnHostForTarget
-    }: let
-      pythonPackages = let
-        ensurePythonModules = items: let
-          exceptions = [
-            stdenv
-          ];
-          providesSetupHook = lib.attrByPath [ "provides" "setupHook"] false;
-          valid = value: pythonPackages.hasPythonModule value || providesSetupHook value || lib.elem value exceptions;
-          func = name: value:
-            if lib.isDerivation value then
-              lib.extendDerivation (valid value || throw "${name} should use `buildPythonPackage` or `toPythonModule` if it is to be part of the Python packages set.") {} value
-            else
-              value;
-        in lib.mapAttrs func items;
-      in ensurePythonModules (callPackage
-        # Function that when called
-        # - imports python-packages.nix
-        # - adds spliced package sets to the package set
-        # - applies overrides from `packageOverrides` and `pythonPackagesOverlays`.
-        ({ pkgs, stdenv, python, overrides }: let
-          pythonPackagesFun = import ./python-packages-base.nix {
-            inherit stdenv pkgs lib;
-            python = self;
-          };
-          otherSplices = {
-            selfBuildBuild = pythonOnBuildForBuild.pkgs;
-            selfBuildHost = pythonOnBuildForHost.pkgs;
-            selfBuildTarget = pythonOnBuildForTarget.pkgs;
-            selfHostHost = pythonOnHostForHost.pkgs;
-            selfTargetTarget = pythonOnTargetForTarget.pkgs or {}; # There is no Python TargetTarget.
-          };
-          hooks = import ./hooks/default.nix;
-          keep = lib.extends hooks pythonPackagesFun;
-          extra = _: {};
-          optionalExtensions = cond: as: lib.optionals cond as;
-          pythonExtension = import ../../../top-level/python-packages.nix;
-          python2Extension = import ../../../top-level/python2-packages.nix;
-          extensions = lib.composeManyExtensions ([
-            pythonExtension
-          ] ++ (optionalExtensions (!self.isPy3k) [
-            python2Extension
-          ]) ++ pythonPackagesExtensions ++ [
-            overrides
-          ]);
-          aliases = self: super: lib.optionalAttrs config.allowAliases (import ../../../top-level/python-aliases.nix lib self super);
-        in makeScopeWithSplicing
-          otherSplices
-          keep
-          extra
-          (lib.extends (lib.composeExtensions aliases extensions) keep))
-        {
-          overrides = packageOverrides;
-          python = self;
-        });
-    in rec {
-        isPy27 = pythonVersion == "2.7";
-        isPy37 = pythonVersion == "3.7";
-        isPy38 = pythonVersion == "3.8";
-        isPy39 = pythonVersion == "3.9";
-        isPy310 = pythonVersion == "3.10";
-        isPy311 = pythonVersion == "3.11";
-        isPy312 = pythonVersion == "3.12";
-        isPy2 = lib.strings.substring 0 1 pythonVersion == "2";
-        isPy3 = lib.strings.substring 0 1 pythonVersion == "3";
-        isPy3k = isPy3;
-        isPyPy = lib.hasInfix "pypy" interpreter;
-
-        buildEnv = callPackage ./wrapper.nix { python = self; inherit (pythonPackages) requiredPythonModules; };
-        withPackages = import ./with-packages.nix { inherit buildEnv pythonPackages;};
-        pkgs = pythonPackages;
-        interpreter = "${self}/bin/${executable}";
-        inherit executable implementation libPrefix pythonVersion sitePackages;
-        inherit sourceVersion;
-        pythonAtLeast = lib.versionAtLeast pythonVersion;
-        pythonOlder = lib.versionOlder pythonVersion;
-        inherit hasDistutilsCxxPatch;
-        # TODO: rename to pythonOnBuild
-        # Not done immediately because its likely used outside Nixpkgs.
-        pythonForBuild = pythonOnBuildForHost.override { inherit packageOverrides; self = pythonForBuild; };
-
-        tests = callPackage ./tests.nix {
-          python = self;
-        };
-
-        inherit pythonAttr;
-  };
+  passthruFun = import ./passthrufun.nix args;
 
   sources = {
     python310 = {
       sourceVersion = {
         major = "3";
         minor = "10";
-        patch = "11";
+        patch = "12";
         suffix = "";
       };
-      hash = "sha256-PDvDBIMDchyQSgPrgya2Mekh8RzDvimIRWpC8RXa8Ew=";
+      hash = "sha256-r7dL8ZEw56R9EDEsj154TyTgUnmB6raOIFRs+4ZYMLg=";
     };
 
     python311 = {
       sourceVersion = {
         major = "3";
         minor = "11";
-        patch = "3";
+        patch = "4";
         suffix = "";
       };
-      hash = "sha256-il25nJYafs8nx1lWGJyWAslodR8R2+riuQDb/xwIW14=";
+      hash = "sha256-Lw5AnfKrV6qfxMvd+5dq9E5OVb9vYZ7ua8XCKXJkp/Y=";
     };
   };
 
@@ -158,10 +57,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "8";
-      patch = "16";
+      patch = "17";
       suffix = "";
     };
-    hash = "sha256-2F27N3QTJHPYCB3LFY80oQzK16kLlsflDqS7YfXORWI=";
+    hash = "sha256-LlSwxoGR8WVS9t4ul6I5ZUBXKiGfa7soWRoTfOzEkKk=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -171,10 +70,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "9";
-      patch = "16";
+      patch = "17";
       suffix = "";
     };
-    hash = "sha256-It3cCZJG3SdgZlVh6K23OU6gzEOnJoTGSA+TgPd4ZDk=";
+    hash = "sha256-MM4FfETyg/jtk2Bsy9uNUd1Sa9xMYszl4Nwhe/o+jO4=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -197,9 +96,9 @@ in {
       major = "3";
       minor = "12";
       patch = "0";
-      suffix = "a7";
+      suffix = "b3";
     };
-    hash = "sha256-oZrk3Fr+vf9eExI0bxYAYqEeDb1fnmimqYHqN7IWCOE=";
+    hash = "sha256-kWDGBl6YhbN8LleGXQuyf8flSqqcGGx2HaMNK928ye4=";
     inherit (darwin) configd;
     inherit passthruFun;
   };

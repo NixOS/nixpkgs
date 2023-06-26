@@ -43,7 +43,7 @@ in
             # Passing the terminal device makes bash run non-interactively.
             # Otherwise we get errors on the terminal because bash tries to
             # setup things like job control.
-            # Note: calling bash explicitely here instead of sh makes sure that
+            # Note: calling bash explicitly here instead of sh makes sure that
             # we can also run non-NixOS guests during tests.
             PS1= exec /usr/bin/env bash --norc /dev/hvc0
           '';
@@ -115,10 +115,12 @@ in
       ShowStatus=no
       # Allow very slow start
       DefaultTimeoutStartSec=300
+      DefaultDeviceTimeoutSec=300
     '';
     systemd.user.extraConfig = ''
       # Allow very slow start
       DefaultTimeoutStartSec=300
+      DefaultDeviceTimeoutSec=300
     '';
 
     boot.initrd.systemd.extraConfig = config.systemd.extraConfig;

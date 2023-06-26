@@ -1,5 +1,4 @@
-{ lib
-, buildFHSEnv
+{ buildFHSEnv
 , symlinkJoin
 , bottles-unwrapped
 , gst_all_1

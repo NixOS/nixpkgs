@@ -9,8 +9,11 @@
 , python3Packages
 , writeText
 , wrapNeovimUnstable
+, runCommand
 }:
 let
+  inherit (vimUtils) toVimPlugin;
+
    /* returns everything needed for the caller to wrap its own neovim:
    - the generated content of the future init.vim
    - the arguments to wrap neovim with
@@ -193,14 +196,43 @@ let
     in
         lib.concatStringsSep ";" hostProviderLua;
 
+  buildNeovimPlugin = callPackage ./build-neovim-plugin.nix {
+    inherit (vimUtils) toVimPlugin;
+    inherit lua;
+  };
+
+  grammarToPlugin = grammar:
+    let
+      name = lib.pipe grammar [
+        lib.getName
+
+        # added in buildGrammar
+        (lib.removeSuffix "-grammar")
+
+        # grammars from tree-sitter.builtGrammars
+        (lib.removePrefix "tree-sitter-")
+        (lib.replaceStrings [ "-" ] [ "_" ])
+      ];
+    in
+
+    toVimPlugin (runCommand "vimplugin-treesitter-grammar-${name}"
+      {
+        meta = {
+          platforms = lib.platforms.all;
+        } // grammar.meta;
+      }
+      ''
+        mkdir -p $out/parser
+        ln -s ${grammar}/parser $out/parser/${name}.so
+      '');
+
 in
 {
   inherit makeNeovimConfig;
   inherit generateProviderRc;
   inherit legacyWrapper;
+  inherit grammarToPlugin;
 
-  buildNeovimPluginFrom2Nix = callPackage ./build-neovim-plugin.nix {
-    inherit (vimUtils) toVimPlugin;
-    inherit lua;
-  };
+  inherit buildNeovimPlugin;
+  buildNeovimPluginFrom2Nix = lib.warn "buildNeovimPluginFrom2Nix was renamed to buildNeovimPlugin" buildNeovimPlugin;
 }

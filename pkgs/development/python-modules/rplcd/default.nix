@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "rplcd";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchPypi {
     inherit version;
     pname = "RPLCD";
-    hash = "sha256-AIEiL+IPU76DF+P08c5qokiJcZdNNDJ/Jjng2Z292LY=";
+    hash = "sha256-uZ0pPzWK8cBSX8/qvcZGYEnlVdtWn/vKPyF1kfwU5Pk=";
   };
 
   # Disable check because it depends on a GPIO library

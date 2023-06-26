@@ -50,7 +50,6 @@ buildGoModule rec {
     homepage = "https://github.com/timescale/promscale";
     changelog = "https://github.com/timescale/promscale/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ _0x4A6F anpin ];
   };
 }

@@ -227,6 +227,7 @@ in
   riscv32-embedded = mapTestOnCross lib.systems.examples.riscv32-embedded embedded;
   rx-embedded = mapTestOnCross lib.systems.examples.rx-embedded embedded;
 
+  x86_64-freebsd = mapTestOnCross lib.systems.examples.x86_64-freebsd common;
   x86_64-netbsd = mapTestOnCross lib.systems.examples.x86_64-netbsd common;
 
   # we test `embedded` instead of `linuxCommon` because very few packages

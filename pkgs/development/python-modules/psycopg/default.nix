@@ -50,6 +50,11 @@ let
       libpq = "${postgresql.lib}/lib/libpq${stdenv.hostPlatform.extensions.sharedLibrary}";
       libc = "${stdenv.cc.libc}/lib/libc.so.6";
     })
+    # mark additional tests as timing sensitive
+    (fetchpatch {
+      url = "https://github.com/psycopg/psycopg/commit/762bb2e4c840886acca12a3676296e10a7114fa2.patch";
+      hash = "sha256-1uAcZqLhCAM9oOd7oOZDjyhKpo59fscEJ+L8KSWhnzM=";
+    })
   ];
 
   baseMeta = {

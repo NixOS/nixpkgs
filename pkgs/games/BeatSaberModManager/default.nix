@@ -13,6 +13,8 @@
   libICE,
   libSM,
   fontconfig,
+
+  xdg-utils,
 }:
 
 buildDotnetModule rec {
@@ -45,6 +47,11 @@ buildDotnetModule rec {
     libICE
     libSM
     fontconfig
+  ];
+
+  # Required for OneClick
+  makeWrapperArgs = [
+    ''--suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"''
   ];
 
   meta = with lib; {

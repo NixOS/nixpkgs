@@ -1,7 +1,7 @@
 { lib, stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget, targetPackages
 , llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget, llvmPackages
 , fetchurl, file, python3
-, darwin, cargo, cmake, rust, rustc, rustPlatform
+, darwin, cargo, cmake, rust, rustc
 , pkg-config, openssl, xz
 , libiconv
 , which, libffi
@@ -238,9 +238,10 @@ in stdenv.mkDerivation rec {
       "x86_64-darwin" "i686-darwin" "aarch64-darwin"
       "i686-freebsd13" "x86_64-freebsd13"
       "x86_64-solaris"
-      "aarch64-linux" "armv7l-linux" "i686-linux" "mipsel-linux"
-      "mips64el-linux" "powerpc64-linux" "powerpc64le-linux"
-      "riscv64-linux" "s390x-linux" "x86_64-linux"
+      "aarch64-linux" "armv6l-linux" "armv7l-linux" "i686-linux"
+      "loongarch64-linux" "mipsel-linux" "mips64el-linux"
+      "powerpc64-linux" "powerpc64le-linux" "riscv64-linux"
+      "s390x-linux" "x86_64-linux"
       "aarch64-netbsd" "armv7l-netbsd" "i686-netbsd" "powerpc-netbsd"
       "x86_64-netbsd"
       "i686-openbsd" "x86_64-openbsd"

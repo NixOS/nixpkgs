@@ -62,7 +62,6 @@ buildDotnetModule rec {
     description = ".NET C# and Visual Basic compiler";
     homepage = "https://github.com/dotnet/roslyn";
     mainProgram = "csc";
-    platforms = platforms.linux;
     license = licenses.mit;
     maintainers = with maintainers; [ corngood ];
   };

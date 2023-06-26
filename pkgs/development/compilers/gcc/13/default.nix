@@ -121,9 +121,7 @@ let majorVersion = "13";
 
       # Use absolute path in GNAT dylib install names on Darwin
       ++ optional (stdenv.isDarwin && langAda) ../gnat-darwin-dylib-install-name.patch
-
-      # Obtain latest patch with ../update-mcfgthread-patches.sh
-      ++ optional (!crossStageStatic && targetPlatform.isMinGW && threadsCross.model == "mcf") ./Added-mcf-thread-model-support-from-mcfgthread.patch;
+    ;
 
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";

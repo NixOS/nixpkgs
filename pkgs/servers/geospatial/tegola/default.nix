@@ -21,7 +21,6 @@ buildGoModule rec {
     homepage = "https://www.tegola.io/";
     description = "Mapbox Vector Tile server";
     maintainers = with maintainers; [ ingenieroariel ];
-    platforms = platforms.unix;
     license = licenses.mit;
   };
 }

@@ -3,10 +3,10 @@
 
 set -eo pipefail
 
-new_version="$(ia list raycast | grep -Eo '^raycast-.*\.dmg$' | sort -r | head -n1 | sed -E 's/^raycast-([0-9]+\.[0-9]+\.[0-9]+)\.dmg$/\1/')"
-old_version="$(sed -nE 's/\s*version = "(.*)".*/\1/p' ./default.nix)"
+new_version=$(curl --silent https://releases.raycast.com/releases/latest | jq -r '.version')
+old_version=$(sed -nE 's/\s*version = "(.*)".*/\1/p' ./default.nix)
 
-if [[ "$new_version" == "$old_version" ]]; then
+if [[ $new_version == $old_version ]]; then
     echo "Already up to date."
     exit 0
 else
@@ -15,6 +15,6 @@ else
     rm ./default.nix.bak
 fi
 
-hash="$(nix --extra-experimental-features nix-command store prefetch-file --json --hash-type sha256 "https://archive.org/download/raycast/raycast-$new_version.dmg" | jq -r '.hash')"
+hash=$(nix --extra-experimental-features nix-command store prefetch-file --json --hash-type sha256 "https://releases.raycast.com/releases/$new_version/download?build=universal" | jq -r '.hash')
 sed -Ei.bak '/ *sha256 = /{N;N; s@("sha256-)[^;"]+@"'"$hash"'@}' ./default.nix
 rm ./default.nix.bak

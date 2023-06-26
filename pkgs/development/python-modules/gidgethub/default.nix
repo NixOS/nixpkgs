@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "gidgethub";
-  version = "5.2.1";
+  version = "5.3.0";
   format = "flit";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pTP4WleVUmFDPCUHAUdjBMw3QDfAq2aw5TcrSEZ0nVw=";
+    hash = "sha256-ns59N/vOuBm4BWDn7Vj5NuSKZdN+xfVtt5FFFWtCaiU=";
   };
 
   propagatedBuildInputs = [

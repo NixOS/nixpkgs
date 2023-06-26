@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchPypi
 , alsa-utils
 , gobject-introspection
 , libappindicator-gtk3

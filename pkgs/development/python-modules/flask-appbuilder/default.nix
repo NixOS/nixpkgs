@@ -7,6 +7,7 @@
 , email-validator
 , flask
 , flask-babel
+, flask-limiter
 , flask-login
 , flask-openid
 , flask-sqlalchemy
@@ -26,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "flask-appbuilder";
-  version = "4.2.1";
+  version = "4.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -34,7 +35,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Flask-AppBuilder";
     inherit version;
-    hash = "sha256-rZbu0Bif5pOa/zu6MCrbGJpkqUdYzWyVgp6tqRzGyIc=";
+    hash = "sha256-FP92HEGOsufHtaIySqDiScD3QUu3iQhWdtvkOecUvuI=";
   };
 
   propagatedBuildInputs = [
@@ -44,6 +45,7 @@ buildPythonPackage rec {
     email-validator
     flask
     flask-babel
+    flask-limiter
     flask-login
     flask-openid
     flask-sqlalchemy

@@ -48,11 +48,7 @@ let majorVersion = "8";
 
     patches = [
       # Fix https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80431
-      (fetchurl {
-        name = "fix-bug-80431.patch";
-        url = "https://gcc.gnu.org/git/?p=gcc.git;a=patch;h=de31f5445b12fd9ab9969dc536d821fe6f0edad0";
-        sha256 = "0sd52c898msqg7m316zp0ryyj7l326cjcn2y19dcxqp15r74qj0g";
-      })
+      ../fix-bug-80431.patch
       ../9/fix-struct-redefinition-on-glibc-2.36.patch
       ../install-info-files-serially.patch
     ] ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch

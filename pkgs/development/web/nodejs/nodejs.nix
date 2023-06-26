@@ -178,7 +178,7 @@ let
       Name: v8
       Description: V8 JavaScript Engine
       Version: $major.$minor.$patch
-      Libs: -L$libv8/lib -lv8 -pthread -licui18n
+      Libs: -L$libv8/lib -lv8 -pthread -licui18n -licuuc
       Cflags: -I$libv8/include
       EOF
     '';
@@ -197,7 +197,7 @@ let
       maintainers = with maintainers; [ goibhniu gilligan cko marsam ];
       platforms = platforms.linux ++ platforms.darwin;
       mainProgram = "node";
-      knownVulnerabilities = optional (versionOlder version "14") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";
+      knownVulnerabilities = optional (versionOlder version "18") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";
     };
 
     passthru.python = python; # to ensure nodeEnv uses the same version

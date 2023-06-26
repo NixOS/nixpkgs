@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, cacert, openssl, nixosTests
-, python310, fetchpatch
+, python310, fetchPypi, fetchpatch
 }:
 
 let
@@ -11,7 +11,7 @@ let
     packageOverrides = self: super: {
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
         version = "1.3.24";
-        src = super.fetchPypi {
+        src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-67t3fL+TEjWbiXv4G6ANrg9ctp+6KhgmXcwYpvXvdRk=";
@@ -24,7 +24,7 @@ let
       });
       flask_migrate = super.flask_migrate.overridePythonAttrs (oldAttrs: rec {
         version = "2.7.0";
-        src = self.fetchPypi {
+        src = fetchPypi {
           pname = "Flask-Migrate";
           inherit version;
           hash = "sha256-ri8FZxWIdi3YOiHYsYxR/jVehng+JFlJlf+Nc4Df/jg=";
@@ -33,7 +33,7 @@ let
       flask-sqlalchemy = super.flask-sqlalchemy.overridePythonAttrs (old: rec {
         version = "2.5.1";
         format = "setuptools";
-        src = self.fetchPypi {
+        src = fetchPypi {
           pname = "Flask-SQLAlchemy";
           inherit version;
           hash = "sha256:2bda44b43e7cacb15d4e05ff3cc1f8bc97936cc464623424102bfc2c35e95912";
@@ -123,7 +123,7 @@ let
         pname = "Flask-Babel";
         version = "2.0.0";
         format = "setuptools";
-        src = self.fetchPypi {
+        src = fetchPypi {
           inherit pname;
           inherit version;
           hash = "sha256:f9faf45cdb2e1a32ea2ec14403587d4295108f35017a7821a2b1acb8cfd9257d";
@@ -141,9 +141,6 @@ let
         sphinxHook = null;
         sphinx-better-theme = null;
       }).overridePythonAttrs dropDocOutput;
-      hypothesis = super.hypothesis.override {
-        enableDocumentation = false;
-      };
       pyjwt = (super.pyjwt.override {
         sphinxHook = null;
         sphinx-rtd-theme = null;
@@ -155,7 +152,7 @@ let
         sphinx-rtd-theme = null;
       }).overridePythonAttrs (old: rec {
         version = "5.1.0";
-        src = self.fetchPypi {
+        src = fetchPypi {
           inherit (old) pname;
           inherit version;
           hash = "sha256-GysFCsG64EnNB/WSCxT6u+UmOPSF2a2h6xFanuv/aDU=";
@@ -164,6 +161,13 @@ let
         doCheck = false;
       });
       pyopenssl = (super.pyopenssl.override {
+        sphinxHook = null;
+        sphinx-rtd-theme = null;
+      }).overridePythonAttrs dropDocOutput;
+      deprecated = (super.deprecated.override {
+        sphinxHook = null;
+      }).overridePythonAttrs dropDocOutput;
+      wrapt = (super.wrapt.override {
         sphinxHook = null;
         sphinx-rtd-theme = null;
       }).overridePythonAttrs dropDocOutput;
@@ -239,5 +243,6 @@ python3'.pkgs.buildPythonPackage rec {
     license = licenses.agpl3Plus;
     homepage = "http://www.privacyidea.org";
     maintainers = with maintainers; [ globin ma27 ];
+    platforms = platforms.linux;
   };
 }

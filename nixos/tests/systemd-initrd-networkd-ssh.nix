@@ -10,13 +10,16 @@ import ./make-test-python.nix ({ lib, ... }: {
       virtualisation = {
         emptyDiskImages = [ 4096 ];
         useBootLoader = true;
+        # Booting off the encrypted disk requires an available init script from the Nix store
+        mountHostNixStore = true;
         useEFIBoot = true;
       };
 
       specialisation.encrypted-root.configuration = {
-        virtualisation.bootDevice = "/dev/mapper/root";
+        virtualisation.rootDevice = "/dev/mapper/root";
+        virtualisation.fileSystems."/".autoFormat = true;
         boot.initrd.luks.devices = lib.mkVMOverride {
-          root.device = "/dev/vdc";
+          root.device = "/dev/vdb";
         };
         boot.initrd.systemd.enable = true;
         boot.initrd.network = {
@@ -61,7 +64,7 @@ import ./make-test-python.nix ({ lib, ... }: {
 
     server.wait_for_unit("multi-user.target")
     server.succeed(
-        "echo somepass | cryptsetup luksFormat --type=luks2 /dev/vdc",
+        "echo somepass | cryptsetup luksFormat --type=luks2 /dev/vdb",
         "bootctl set-default nixos-generation-1-specialisation-encrypted-root.conf",
         "sync",
     )

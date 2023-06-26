@@ -636,28 +636,13 @@ in {
 
             trusted_key_servers = mkOption {
               type = types.listOf (types.submodule {
+                freeformType = format.type;
                 options = {
                   server_name = mkOption {
                     type = types.str;
                     example = "matrix.org";
                     description = lib.mdDoc ''
                       Hostname of the trusted server.
-                    '';
-                  };
-
-                  verify_keys = mkOption {
-                    type = types.nullOr (types.attrsOf types.str);
-                    default = null;
-                    example = literalExpression ''
-                      {
-                        "ed25519:auto" = "Noi6WqcDj0QmPxCNQqgezwTlBKrfqehY1u2FyWP9uYw";
-                      }
-                    '';
-                    description = lib.mdDoc ''
-                      Attribute set from key id to base64 encoded public key.
-
-                      If specified synapse will check that the response is signed
-                      by at least one of the given keys.
                     '';
                   };
                 };

@@ -22,6 +22,7 @@
 , CoreGraphics
 , Cocoa
 , Foundation
+, System
 , libiconv
 , UserNotifications
 , nixosTests
@@ -81,10 +82,13 @@ rustPlatform.buildRustPackage rec {
     CoreGraphics
     Foundation
     libiconv
+    System
     UserNotifications
   ];
 
   buildFeatures = [ "distro-defaults" ];
+
+  env.NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework System";
 
   postInstall = ''
     mkdir -p $out/nix-support

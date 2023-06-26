@@ -87,6 +87,10 @@ rec {
       inherit buildCommand name;
       passAsFile = [ "buildCommand" ]
         ++ (derivationArgs.passAsFile or []);
+      pos = let args = builtins.attrNames derivationArgs; in
+        if builtins.length args > 0
+        then builtins.unsafeGetAttrPos (builtins.head args) derivationArgs
+        else null;
     }
     // (lib.optionalAttrs runLocal {
           preferLocalBuild = true;
@@ -135,9 +139,15 @@ rec {
     , allowSubstitutes ? false
     , preferLocalBuild ? true
     }:
+    let
+      matches = builtins.match "/bin/([^/]+)" destination;
+    in
     runCommand name
-      { inherit text executable checkPhase meta allowSubstitutes preferLocalBuild;
+      { inherit text executable checkPhase allowSubstitutes preferLocalBuild;
         passAsFile = [ "text" ];
+        meta = lib.optionalAttrs (executable && matches != null) {
+          mainProgram = lib.head matches;
+        } // meta;
       }
       ''
         target=$out${lib.escapeShellArg destination}
@@ -350,8 +360,6 @@ rec {
           runHook postCheck
         ''
         else checkPhase;
-
-      meta.mainProgram = name;
     };
 
   # Create a C binary

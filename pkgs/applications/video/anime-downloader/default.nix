@@ -49,6 +49,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "A simple but powerful anime downloader and streamer";
     license = licenses.unlicense;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ WeebSorceress ];
+    maintainers = with maintainers; [ ];
   };
 }

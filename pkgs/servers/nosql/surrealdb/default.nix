@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , pkg-config
 , openssl
-, llvmPackages
 , rocksdb
 , testers
 , surrealdb
@@ -25,7 +24,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-eLJ+sxsK45pkgNUYrNuUOAqutwIjvEhGGjsvwGzfVKI=";
 
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+  # error: linker `aarch64-linux-gnu-gcc` not found
+  postPatch = ''
+    rm .cargo/config.toml
+  '';
 
   PROTOC = "${protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
@@ -35,8 +37,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-    # needed on top of LIBCLANG_PATH to compile rquickjs
-    llvmPackages.clang
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [ openssl ]

@@ -1,5 +1,5 @@
 from collections.abc import Sequence
-from typing import Any, Callable, Optional, Tuple, NamedTuple
+from typing import Callable, Optional, NamedTuple
 
 from markdown_it.token import Token
 

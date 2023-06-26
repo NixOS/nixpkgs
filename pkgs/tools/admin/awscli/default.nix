@@ -1,6 +1,7 @@
 { lib
 , python3
 , fetchFromGitHub
+, fetchPypi
 , groff
 , less
 }:

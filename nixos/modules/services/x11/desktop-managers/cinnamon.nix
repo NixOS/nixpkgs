@@ -70,9 +70,9 @@ in
           name = mkDefault "Mint-Y-Aqua";
           package = mkDefault pkgs.cinnamon.mint-themes;
         };
-        iconTheme = mkIf (notExcluded pkgs.cinnamon.mint-x-icons) {
-          name = mkDefault "Mint-Y-Aqua";
-          package = mkDefault pkgs.cinnamon.mint-x-icons;
+        iconTheme = mkIf (notExcluded pkgs.cinnamon.mint-y-icons) {
+          name = mkDefault "Mint-Y-Sand";
+          package = mkDefault pkgs.cinnamon.mint-y-icons;
         };
         cursorTheme = mkIf (notExcluded pkgs.cinnamon.mint-cursor-themes) {
           name = mkDefault "Bibata-Modern-Classic";
@@ -113,6 +113,8 @@ in
       services.gnome.glib-networking.enable = true;
       services.gnome.gnome-keyring.enable = true;
       services.gvfs.enable = true;
+      services.switcherooControl.enable = mkDefault true; # xapp-gpu-offload-helper
+      services.touchegg.enable = mkDefault true;
       services.udisks2.enable = true;
       services.upower.enable = mkDefault config.powerManagement.enable;
       services.xserver.libinput.enable = mkDefault true;
@@ -178,6 +180,8 @@ in
         nixos-artwork.wallpapers.simple-dark-gray
         mint-artwork
         mint-cursor-themes
+        mint-l-icons
+        mint-l-theme
         mint-themes
         mint-x-icons
         mint-y-icons
@@ -186,6 +190,15 @@ in
 
       xdg.mime.enable = true;
       xdg.icons.enable = true;
+
+      xdg.portal.enable = true;
+      xdg.portal.extraPortals = [
+        pkgs.xdg-desktop-portal-xapp
+        (pkgs.xdg-desktop-portal-gtk.override {
+          # Do not build portals that we already have.
+          buildPortalsInGnome = false;
+        })
+      ];
 
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";

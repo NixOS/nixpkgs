@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
       "--with-jwt=${libjwt}"
       "--with-lz4=${lz4.dev}"
       "--with-munge=${munge}"
-      "--with-yaml=${libyaml}"
+      "--with-yaml=${libyaml.dev}"
       "--with-ofed=${rdma-core}"
       "--sysconfdir=/etc/slurm"
       "--with-pmix=${pmix}"

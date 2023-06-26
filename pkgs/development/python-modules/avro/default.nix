@@ -29,6 +29,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Requires network access
     "test_server_with_path"
+    # AssertionError: 'reader type: null not compatible with writer type: int'
+    "test_schema_compatibility_type_mismatch"
   ];
 
   pythonImportsCheck = [
@@ -38,6 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python serialization and RPC framework";
     homepage = "https://github.com/apache/avro";
+    changelog = "https://github.com/apache/avro/releases/tag/release-${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ zimbatm ];
   };

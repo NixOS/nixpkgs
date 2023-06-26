@@ -14,7 +14,7 @@ let
     in
       ''
         ${hostOpts.hostName} ${concatStringsSep " " hostOpts.serverAliases} {
-          bind ${concatStringsSep " " hostOpts.listenAddresses}
+          ${optionalString (hostOpts.listenAddresses != [ ]) "bind ${concatStringsSep " " hostOpts.listenAddresses}"}
           ${optionalString (hostOpts.useACMEHost != null) "tls ${sslCertDir}/cert.pem ${sslCertDir}/key.pem"}
           log {
             ${hostOpts.logFormat}
@@ -245,15 +245,23 @@ in
     };
 
     acmeCA = mkOption {
-      default = "https://acme-v02.api.letsencrypt.org/directory";
-      example = "https://acme-staging-v02.api.letsencrypt.org/directory";
+      default = null;
+      example = "https://acme-v02.api.letsencrypt.org/directory";
       type = with types; nullOr str;
       description = lib.mdDoc ''
-        The URL to the ACME CA's directory. It is strongly recommended to set
-        this to Let's Encrypt's staging endpoint for testing or development.
+        ::: {.note}
+        Sets the [`acme_ca` option](https://caddyserver.com/docs/caddyfile/options#acme-ca)
+        in the global options block of the resulting Caddyfile.
+        :::
 
-        Set it to `null` if you want to write a more
-        fine-grained configuration manually.
+        The URL to the ACME CA's directory. It is strongly recommended to set
+        this to `https://acme-staging-v02.api.letsencrypt.org/directory` for
+        Let's Encrypt's [staging endpoint](https://letsencrypt.org/docs/staging-environment/)
+        while testing or in development.
+
+        Value `null` should be prefered for production setups,
+        as it omits the `acme_ca` option to enable
+        [automatic issuer fallback](https://caddyserver.com/docs/automatic-https#issuer-fallback).
       '';
     };
 

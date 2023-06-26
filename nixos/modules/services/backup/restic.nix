@@ -145,6 +145,7 @@ in
           type = types.attrsOf unitOption;
           default = {
             OnCalendar = "daily";
+            Persistent = true;
           };
           description = lib.mdDoc ''
             When to run the backup. See {manpage}`systemd.timer(5)` for details.
@@ -152,6 +153,7 @@ in
           example = {
             OnCalendar = "00:05";
             RandomizedDelaySec = "5h";
+            Persistent = true;
           };
         };
 
@@ -296,7 +298,7 @@ in
           let
             extraOptions = concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
             resticCmd = "${backup.package}/bin/restic${extraOptions}";
-            excludeFlags = if (backup.exclude != []) then ["--exclude-file=${pkgs.writeText "exclude-patterns" (concatStringsSep "\n" backup.exclude)}"] else [];
+            excludeFlags = optional (backup.exclude != []) "--exclude-file=${pkgs.writeText "exclude-patterns" (concatStringsSep "\n" backup.exclude)}";
             filesFromTmpFile = "/run/restic-backups-${name}/includes";
             backupPaths =
               if (backup.dynamicFilesFrom == null)

@@ -62,7 +62,7 @@ in buildFHSEnv rec {
   name = "steam";
 
   targetPkgs = pkgs: with pkgs; [
-    steamPackages.steam
+    steam
     # License agreement
     gnome.zenity
   ] ++ commonTargetPkgs pkgs;
@@ -168,6 +168,13 @@ in buildFHSEnv rec {
     librsvg
     xorg.libXft
     libvdpau
+
+    # required by coreutils stuff to run correctly
+    # Steam ends up with LD_LIBRARY_PATH=<bunch of runtime stuff>:/usr/lib:<etc>
+    # which overrides DT_RUNPATH in our binaries, so it tries to dynload the
+    # very old versions of stuff from the runtime.
+    # FIXME: how do we even fix this correctly
+    attr
   ] ++ lib.optionals withGameSpecificLibraries [
     # Not formally in runtime but needed by some games
     at-spi2-atk
@@ -181,6 +188,7 @@ in buildFHSEnv rec {
     libvorbis # Dead Cells
     libxcrypt # Alien Isolation, XCOM 2, Company of Heroes 2
     mono
+    ncurses # Crusader Kings III
     xorg.xkeyboardconfig
     xorg.libpciaccess
     xorg.libXScrnSaver # Dead Cells
@@ -207,10 +215,12 @@ in buildFHSEnv rec {
     libpsl
     nghttp2.lib
     rtmpdump
-  ] ++ steamPackages.steam-runtime-wrapped.overridePkgs
+  ]
+  # This needs to come from pkgs as the passed-in steam-runtime-wrapped may not be the same architecture
+  ++ pkgs.steamPackages.steam-runtime-wrapped.overridePkgs
   ++ extraLibraries pkgs;
 
-  extraInstallCommands = ''
+  extraInstallCommands = lib.optionalString (steam != null) ''
     mkdir -p $out/share/applications
     ln -s ${steam}/share/icons $out/share
     ln -s ${steam}/share/pixmaps $out/share
@@ -262,9 +272,15 @@ in buildFHSEnv rec {
     exec steam ${extraArgs} "$@"
   '';
 
-  meta = steam.meta // lib.optionalAttrs (!withGameSpecificLibraries) {
-    description = steam.meta.description + " (without game specific libraries)";
-  };
+  meta =
+    if steam != null
+    then
+      steam.meta // lib.optionalAttrs (!withGameSpecificLibraries) {
+        description = steam.meta.description + " (without game specific libraries)";
+      }
+    else {
+      description = "Steam dependencies (dummy package, do not use)";
+    };
 
   # allows for some gui applications to share IPC
   # this fixes certain issues where they don't render correctly
@@ -298,7 +314,7 @@ in buildFHSEnv rec {
       exec -- "$run" "$@"
     '';
 
-    meta = steam.meta // {
+    meta = (steam.meta or {}) // {
       description = "Run commands in the same FHS environment that is used for Steam";
       name = "steam-run";
     };

@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , unzip
@@ -275,6 +276,21 @@ stdenv.mkDerivation {
   # Ensures that we use the system OpenEXR rather than the vendored copy of the source included with OpenCV.
   patches = [
     ./cmake-don-t-use-OpenCVFindOpenEXR.patch
+  ] ++ lib.optionals enableContrib [
+    (fetchpatch {
+      name = "CVE-2023-2617.patch";
+      url = "https://github.com/opencv/opencv_contrib/commit/ccc277247ac1a7aef0a90353edcdec35fbc5903c.patch";
+      stripLen = 2;
+      extraPrefix = [ "opencv_contrib/" ];
+      sha256 = "sha256-drZ+DVn+Pk4zAZJ+LgX5u3Tz7MU0AEI/73EVvxDP3AU=";
+    })
+    (fetchpatch {
+      name = "CVE-2023-2618.patch";
+      url = "https://github.com/opencv/opencv_contrib/commit/ec406fa4748fb4b0630c1b986469e7918d5e8953.patch";
+      stripLen = 2;
+      extraPrefix = [ "opencv_contrib/" ];
+      sha256 = "sha256-cB5Tsh2fDOsc0BNtSzd6U/QoCjkd9yMW1QutUU69JJ0=";
+    })
   ] ++ lib.optional enableCuda ./cuda_opt_flow.patch;
 
   # This prevents cmake from using libraries in impure paths (which

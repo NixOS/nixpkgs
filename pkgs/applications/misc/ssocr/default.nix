@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ssocr";
-  version = "2.22.1";
+  version = "2.23.1";
 
   src = fetchFromGitHub {
     owner = "auerswal";
     repo = "ssocr";
     rev = "v${version}";
-    sha256 = "sha256-j1l1o1wtVQo+G9HfXZ1sJQ8amsUQhuYxFguWFQoRe/s=";
+    sha256 = "sha256-EfZsTrZI6vKM7tB6mKNGEkdfkNFbN5p4TmymOJGZRBk=";
   };
 
   nativeBuildInputs = [ pkg-config ];

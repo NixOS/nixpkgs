@@ -69,7 +69,6 @@ in
 
         # Use boot package set to break cycle
         inherit (bootstrapRustPackages) cargo rustc;
-        rustPlatform = bootRustPlatform;
       } // lib.optionalAttrs (stdenv.cc.isClang && stdenv.hostPlatform == stdenv.buildPlatform) {
         stdenv = llvmBootstrapForDarwin.stdenv;
         pkgsBuildBuild = pkgsBuildBuild // { targetPackages.stdenv = llvmBootstrapForDarwin.stdenv; };

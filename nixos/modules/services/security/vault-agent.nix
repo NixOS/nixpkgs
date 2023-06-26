@@ -123,6 +123,6 @@ in
       })
     [ "consul-template" "vault-agent" ]);
 
-  meta.maintainers = with maintainers; [ indeednotjames tcheronneau ];
+  meta.maintainers = with maintainers; [ emilylange tcheronneau ];
 }
 

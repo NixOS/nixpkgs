@@ -47,6 +47,7 @@ let
           ./patches/0004-qtbase-fix-locating-tzdir-on-NixOS.patch
           ./patches/0005-qtbase-deal-with-a-font-face-at-index-0-as-Regular-f.patch
           ./patches/0006-qtbase-qt-cmake-always-use-cmake-from-path.patch
+          ./patches/0007-qtbase-find-qt-tools-in-QTTOOLSPATH.patch
         ];
       };
       env = callPackage ./qt-env.nix { };
@@ -132,7 +133,7 @@ let
       qtwebchannel = callPackage ./modules/qtwebchannel.nix { };
       qtwebengine = callPackage ./modules/qtwebengine.nix {
         inherit (darwin) bootstrap_cmds cctools xnu;
-        inherit (darwin.apple_sdk_11_0) libpm libunwind;
+        inherit (darwin.apple_sdk_11_0) libpm libunwind llvmPackages_14;
         inherit (darwin.apple_sdk_11_0.libs) sandbox;
         inherit (darwin.apple_sdk_11_0.frameworks)
           AGL AVFoundation Accelerate Cocoa CoreLocation CoreML ForceFeedback

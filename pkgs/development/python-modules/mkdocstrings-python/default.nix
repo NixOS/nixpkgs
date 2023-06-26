@@ -40,7 +40,6 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'license = "ISC"' 'license = {text = "ISC"}' \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
   pythonImportsCheck = [

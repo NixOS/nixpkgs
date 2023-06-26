@@ -3,6 +3,7 @@
 , buildGo120Module
 , fetchFromGitHub
 , nixosTests
+, installShellFiles
 }:
 
 let
@@ -23,15 +24,21 @@ let
         inherit sha256;
       };
 
+      nativeBuildInputs = [ installShellFiles ];
+
       # ui:
       #  Nomad release commits include the compiled version of the UI, but the file
       #  is only included if we build with the ui tag.
       tags = [ "ui" ];
 
+      postInstall = ''
+        echo "complete -C $out/bin/nomad nomad" > nomad.bash
+        installShellCompletion nomad.bash
+      '';
+
       meta = with lib; {
         homepage = "https://www.nomadproject.io/";
         description = "A Distributed, Highly Available, Datacenter-Aware Scheduler";
-        platforms = platforms.unix;
         license = licenses.mpl20;
         maintainers = with maintainers; [ rushmorem pradeepchhetri endocrimes maxeaubrey techknowlogick ];
       };
@@ -66,5 +73,16 @@ rec {
     sha256 = "sha256-l4GvQIS5JSSgjBjPivAKAb7gKlVLw4WoZpPR8LxnLNc=";
     vendorSha256 = "sha256-05BhKF6kx0wbu74cidpTFhUN668R/AxV6qWmchCm/WE=";
     passthru.tests.nomad = nixosTests.nomad;
+  };
+
+  nomad_1_5 = generic {
+    buildGoModule = buildGo120Module;
+    version = "1.5.6";
+    sha256 = "sha256-eFzGaTJ9BcK5F10lkTKB3sNaGZsmZ0BbPZI6kT5ZUpo=";
+    vendorSha256 = "sha256-tOUQr44wUhhCccvj4dCI7fvLMrKaEX7xY7035Q3wU3M=";
+    passthru.tests.nomad = nixosTests.nomad;
+    preCheck = ''
+      export PATH="$PATH:/build/go/bin"
+    '';
   };
 }

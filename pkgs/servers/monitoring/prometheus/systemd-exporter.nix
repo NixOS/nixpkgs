@@ -20,6 +20,5 @@ buildGoModule rec {
     homepage = "https://github.com/povilasv/systemd_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ chkno ];
-    platforms = platforms.unix;
   };
 }

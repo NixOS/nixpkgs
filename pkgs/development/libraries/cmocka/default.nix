@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
   pname = "cmocka";
   majorVersion = "1.1";
-  version = "${majorVersion}.6";
+  version = "${majorVersion}.7";
 
   src = fetchurl {
     url = "https://cmocka.org/files/${majorVersion}/cmocka-${version}.tar.xz";
-    sha256 = "0xksffx1w3pzm18ynf28cx8scrhylcbz43s1rgkkdqnyil1q6cjv";
+    sha256 = "sha256-gQVw6wuNZIBDMfgrKf9Hx5DOnNaxY+mNR6SAcEfsrYI=";
   };
 
   patches = [
@@ -52,6 +52,5 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ kragniz rasendubi ];
-    broken = stdenv.hostPlatform.isStatic; # See https://github.com/NixOS/nixpkgs/issues/213623
   };
 }

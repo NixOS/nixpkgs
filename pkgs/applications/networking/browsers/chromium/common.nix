@@ -155,7 +155,6 @@ let
       curl
       libepoxy
       libffi
-    ] ++ lib.optionals (chromiumVersionAtLeast "114") [
       libevdev
     ] ++ lib.optional systemdSupport systemd
       ++ lib.optionals cupsSupport [ libgcrypt cups ]
@@ -170,6 +169,13 @@ let
       # (we currently package 1.26 in Nixpkgs while Chromium bundles 1.21):
       # Source: https://bugs.chromium.org/p/angleproject/issues/detail?id=7582#c1
       ./patches/angle-wayland-include-protocol.patch
+      # We need to revert this patch to build M114+ with LLVM 16:
+      (githubPatch {
+        # Reland [clang] Disable autoupgrading debug info in ThinLTO builds
+        commit = "54969766fd2029c506befc46e9ce14d67c7ed02a";
+        sha256 = "sha256-Vryjg8kyn3cxWg3PmSwYRG6zrHOqYWBMSdEMGiaPg6M=";
+        revert = true;
+      })
     ];
 
     postPatch = ''
@@ -243,7 +249,7 @@ let
       # Allow building against system libraries in official builds
       sed -i 's/OFFICIAL_BUILD/GOOGLE_CHROME_BUILD/' tools/generate_shim_headers/generate_shim_headers.py
 
-    '' + lib.optionalString stdenv.isAarch64 ''
+    '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.isAarch64) ''
       substituteInPlace build/toolchain/linux/BUILD.gn \
         --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
     '' + lib.optionalString ungoogled ''

@@ -15,32 +15,23 @@ case of packages not containing exported library code the attribute
 The following example shows a Nim program that depends only on Nim libraries:
 
 ```nix
-{ lib, nimPackages, fetchurl }:
+{ lib, nimPackages, fetchFromGitHub }:
 
-nimPackages.buildNimPackage rec {
-  pname = "hottext";
-  version = "1.4";
-
+nimPackages.buildNimPackage (finalAttrs: {
+  pname = "ttop";
+  version = "1.0.1";
   nimBinOnly = true;
 
-  src = fetchurl {
-    url = "https://git.sr.ht/~ehmry/hottext/archive/v${version}.tar.gz";
-    hash = "sha256-hIUofi81zowSMbt1lUsxCnVzfJGN3FEiTtN8CEFpwzY=";
+  src = fetchFromGitHub {
+    owner = "inv2004";
+    repo = "ttop";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-x4Uczksh6p3XX/IMrOFtBxIleVHdAPX9e8n32VAUTC4=";
   };
 
-  buildInputs = with nimPackages; [
-    bumpy
-    chroma
-    flatty
-    nimsimd
-    pixie
-    sdl2
-    typography
-    vmath
-    zippy
-  ];
-}
+  buildInputs = with nimPackages; [ asciigraph illwill parsetoml zippy ];
 
+})
 ```
 
 ## Nim library packages in Nixpkgs {#nim-library-packages-in-nixpkgs}
@@ -60,15 +51,15 @@ non-Nim package:
 ```nix
 { lib, buildNimPackage, fetchNimble, SDL2 }:
 
-buildNimPackage rec {
+buildNimPackage (finalAttrs: {
   pname = "sdl2";
   version = "2.0.4";
   src = fetchNimble {
-    inherit pname version;
-    hash = "sha256-qDtVSnf+7rTq36WAxgsUZ8XoUk4sKwHyt8EJcY5WP+o=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-Vtcj8goI4zZPQs2TbFoBFlcR5UqDtOldaXSH/+/xULk=";
   };
   propagatedBuildInputs = [ SDL2 ];
-}
+})
 ```
 
 ## `buildNimPackage` parameters {#buildnimpackage-parameters}

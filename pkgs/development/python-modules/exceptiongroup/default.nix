@@ -33,6 +33,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = if (pythonAtLeast "3.11") then [
+    # regression in 3.11.4
+    # https://github.com/agronholm/exceptiongroup/issues/64
+    "test_catch_handler_raises"
+  ] else null;
+
   pythonImportsCheck = [
     "exceptiongroup"
   ];

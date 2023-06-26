@@ -1,7 +1,6 @@
 { lib
 , python3Packages
 , fetchFromGitHub
-, fetchpatch
 , gettext
 , chromaprint
 , qt5
@@ -28,16 +27,22 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "sha256-ukqlAXGaqX89U77cM9Ux0RYquT31Ho8ri1Ue7S3+MwQ=";
   };
 
-  nativeBuildInputs = [ gettext qt5.wrapQtAppsHook qt5.qtbase ]
-  ++ lib.optionals (pyqt5.multimediaEnabled) [
-    qt5.qtmultimedia.bin
+  nativeBuildInputs = [
+    gettext
+    qt5.wrapQtAppsHook
+  ] ++ lib.optionals (pyqt5.multimediaEnabled) [
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
     gst_all_1.gst-vaapi
     gst_all_1.gstreamer
-  ]
-  ;
+  ];
+  buildInputs = [
+    qt5.qtbase
+    qt5.qtwayland
+  ] ++ lib.optionals (pyqt5.multimediaEnabled) [
+    qt5.qtmultimedia.bin
+  ];
 
   propagatedBuildInputs = with pythonPackages; [
     chromaprint

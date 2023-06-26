@@ -1,13 +1,14 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, alsa-lib
 , flac
 , libmad
 , libpulseaudio
 , libvorbis
 , mpg123
-, audioBackend ? "alsa"
+, audioBackend ? if stdenv.isLinux then "alsa" else "portaudio"
+, alsaSupport ? stdenv.isLinux
+, alsa-lib
 , dsdSupport ? true
 , faad2Support ? true
 , faad2
@@ -19,10 +20,18 @@
 , soxr
 , sslSupport ? true
 , openssl
+, portaudioSupport ? stdenv.isDarwin
+, portaudio
+, AudioToolbox
+, AudioUnit
+, Carbon
+, CoreAudio
+, CoreVideo
+, VideoDecodeAcceleration
 }:
 
 let
-  inherit (lib) optional optionalString;
+  inherit (lib) optional optionals optionalString;
 
   pulseSupport = audioBackend == "pulse";
 
@@ -44,7 +53,10 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ flac libmad libvorbis mpg123 ]
-    ++ lib.singleton (if pulseSupport then libpulseaudio else alsa-lib)
+    ++ optional pulseSupport libpulseaudio
+    ++ optional alsaSupport alsa-lib
+    ++ optional portaudioSupport portaudio
+    ++ optionals stdenv.isDarwin [ CoreVideo VideoDecodeAcceleration CoreAudio AudioToolbox AudioUnit Carbon ]
     ++ optional faad2Support faad2
     ++ optional ffmpegSupport ffmpeg
     ++ optional opusSupport opusfile
@@ -65,9 +77,14 @@ stdenv.mkDerivation {
     ++ optional (!faad2Support) "-DNO_FAAD"
     ++ optional ffmpegSupport "-DFFMPEG"
     ++ optional opusSupport "-DOPUS"
+    ++ optional portaudioSupport "-DPORTAUDIO"
     ++ optional pulseSupport "-DPULSEAUDIO"
     ++ optional resampleSupport "-DRESAMPLE"
     ++ optional sslSupport "-DUSE_SSL";
+
+  env = lib.optionalAttrs stdenv.isDarwin {
+    LDADD = "-lportaudio -lpthread";
+  };
 
   installPhase = ''
     runHook preInstall
@@ -85,6 +102,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/ralph-irving/squeezelite";
     license = with licenses; [ gpl3Plus ] ++ optional dsdSupport bsd2;
     maintainers = with maintainers; [ adamcstephens ];
-    platforms = platforms.linux;
+    platforms = if (audioBackend == "pulse") then platforms.linux else platforms.linux ++ platforms.darwin;
   };
 }

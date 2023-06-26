@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gettext, msgpack, libtermkey, libiconv
-, fetchpatch
+{ lib, stdenv, fetchFromGitHub, cmake, gettext, msgpack-c, libtermkey, libiconv
 , libuv, lua, ncurses, pkg-config
 , unibilium, gperf
 , libvterm-neovim
@@ -37,13 +36,13 @@ let
 in
   stdenv.mkDerivation rec {
     pname = "neovim-unwrapped";
-    version = "0.9.0";
+    version = "0.9.1";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      hash = "sha256-4uCPWnjSMU7ac6Q3LT+Em8lVk1MuSegxHMLGQRtFqAs=";
+      hash = "sha256-G51qD7GklEn0JrneKSSqDDx0Odi7W2FjdQc0ZDE9ZK4=";
     };
 
     patches = [
@@ -51,14 +50,6 @@ in
       # necessary so that nix can handle `UpdateRemotePlugins` for the plugins
       # it installs. See https://github.com/neovim/neovim/issues/9413.
       ./system_rplugin_manifest.patch
-
-      # fix bug with the gsub directive
-      # https://github.com/neovim/neovim/pull/23015
-      (fetchpatch {
-        name = "use-the-correct-replacement-args-for-gsub-directive.patch";
-        url = "https://github.com/neovim/neovim/commit/ccc0980f86c6ef9a86b0e5a3a691f37cea8eb776.patch";
-        hash = "sha256-sZWM6M8jCL1e72H0bAc51a6FrH0mFFqTV1gGLwKT7Zo=";
-      })
     ];
 
     dontFixCmake = true;
@@ -75,7 +66,7 @@ in
       # https://github.com/luarocks/luarocks/issues/1402#issuecomment-1080616570
       # and it's definition at: pkgs/development/lua-modules/overrides.nix
       lua.pkgs.libluv
-      msgpack
+      msgpack-c
       ncurses
       neovimLuaEnv
       tree-sitter

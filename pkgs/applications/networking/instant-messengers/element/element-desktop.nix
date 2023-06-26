@@ -123,6 +123,10 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     mimeTypes = [ "x-scheme-handler/element" ];
   };
 
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    cp build/icon.icns $out/Applications/Element.app/Contents/Resources/element.icns
+  '';
+
   passthru = {
     updateScript = ./update.sh;
 

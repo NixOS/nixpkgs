@@ -28,18 +28,20 @@
 
 stdenv.mkDerivation rec {
   pname = "stratisd";
-  version = "3.5.4";
+  version = "3.5.7";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-V/1gNgjunT11ErXWIa5hDp2+onPCTequCswwXWD5+9E=";
+    hash = "sha256-JkGDik2RL+JnUJloV5597UlSnF5PncP3F6nzghJpGBg=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    hash = "sha256-RljuLL8tep42KNGVsS5CxI7xuhxEjRZ90jVn3jUhVYM=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "loopdev-0.4.0" = "sha256-nV52zjsg5u6++J8CdN2phii8AwjHg1uap2lt+U8obDQ=";
+    };
   };
 
   postPatch = ''
@@ -74,6 +76,8 @@ stdenv.mkDerivation rec {
     lvm2
   ];
 
+  outputs = ["out" "initrd"];
+
   EXECUTABLES_PATHS = lib.makeBinPath ([
     xfsprogs
     thin-provisioning-tools
@@ -95,6 +99,14 @@ stdenv.mkDerivation rec {
 
   # remove files for supporting dracut
   postInstall = ''
+    mkdir -p "$initrd/bin"
+    cp "dracut/90stratis/stratis-rootfs-setup" "$initrd/bin"
+    mkdir -p "$initrd/lib/systemd/system"
+    substitute "dracut/90stratis/stratisd-min.service" "$initrd/lib/systemd/system/stratisd-min.service" \
+      --replace /usr "$out" \
+      --replace mkdir "${coreutils}/bin/mkdir"
+    mkdir -p "$initrd/lib/udev/rules.d"
+    cp udev/61-stratisd.rules "$initrd/lib/udev/rules.d"
     rm -r "$out/lib/dracut"
     rm -r "$out/lib/systemd/system-generators"
   '';

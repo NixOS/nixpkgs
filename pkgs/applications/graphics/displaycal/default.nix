@@ -1,10 +1,11 @@
 { lib
 , python3
-, xorg
-, argyllcms
+, fetchPypi
 , wrapGAppsHook
 , gtk3
 , librsvg
+, xorg
+, argyllcms
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -12,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   version = "3.9.10";
   format = "setuptools";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     pname = "DisplayCAL";
     inherit version;
     hash = "sha256-oDHDVb0zuAC49yPfmNe7xuFKaA1BRZGr75XwsLqugHs=";

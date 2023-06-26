@@ -6,11 +6,11 @@
 
 buildDunePackage rec {
   pname = "odoc";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchurl {
     url = "https://github.com/ocaml/odoc/releases/download/${version}/odoc-${version}.tbz";
-    sha256 = "sha256-9XTb0ozQ/DorlVJcS7ld320fZAi7T+EhV/pTeIT5h/0=";
+    sha256 = "sha256-aBjJcfwMPu2dPRQzifgHObFhivcLn9tEOzW9fwEhdAw=";
   };
 
   duneVersion = "3";

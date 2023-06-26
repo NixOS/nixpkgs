@@ -79,7 +79,7 @@ let
       { case = range "8.5" "8.6";   out = ocamlPackages_4_05; }
     ] ocamlPackages_4_14;
   ocamlNativeBuildInputs = with ocamlPackages; [ ocaml findlib ]
-    ++ optional (coqAtLeast "8.14") dune_2;
+    ++ optional (coqAtLeast "8.14") dune_3;
   ocamlPropagatedBuildInputs = [ ]
     ++ optional (!coqAtLeast "8.10") ocamlPackages.camlp5
     ++ optional (!coqAtLeast "8.13") ocamlPackages.num

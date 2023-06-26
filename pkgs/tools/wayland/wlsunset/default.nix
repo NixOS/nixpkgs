@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wlsunset";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromSourcehut {
     owner = "~kennylevinsen";
     repo = pname;
     rev = version;
-    sha256 = "0hhsddh3rs066rbsjksr8kcwg8lvglbvs67dq0r5wx5c1xcwb51w";
+    sha256 = "sha256-jGYPWaRUqDL4htdAOA9CAQfoHLBPvK7O9vAzcE81f/E=";
   };
 
   strictDeps = true;

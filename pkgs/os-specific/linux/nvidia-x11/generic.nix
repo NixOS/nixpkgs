@@ -16,6 +16,7 @@
 
 , prePatch ? ""
 , postPatch ? null
+, patchFlags ? null
 , patches ? []
 , broken ? false
 , brokenOpen ? broken
@@ -49,7 +50,7 @@ let
   libPathFor = pkgs: lib.makeLibraryPath (with pkgs; [
     libdrm xorg.libXext xorg.libX11
     xorg.libXv xorg.libXrandr xorg.libxcb zlib stdenv.cc.cc
-    wayland mesa libGL
+    wayland mesa libGL openssl
   ]);
 
   self = stdenv.mkDerivation {
@@ -85,7 +86,7 @@ let
       else throw "nvidia-x11 does not support platform ${stdenv.hostPlatform.system}";
 
     patches = if libsOnly then null else patches;
-    inherit prePatch postPatch;
+    inherit prePatch postPatch patchFlags;
     inherit version useGLVND useProfiles;
     inherit (stdenv.hostPlatform) system;
     inherit i686bundled;

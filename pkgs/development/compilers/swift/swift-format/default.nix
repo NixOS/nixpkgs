@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   configurePhase = generated.configure;
 
   # We only install the swift-format binary, so don't need the other products.
-  swiftpmFlags = "--product swift-format";
+  swiftpmFlags = [ "--product swift-format" ];
 
   installPhase = ''
     binPath="$(swiftpmBinPath)"

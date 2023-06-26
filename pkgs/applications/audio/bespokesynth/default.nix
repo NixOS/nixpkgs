@@ -30,10 +30,12 @@
 , pcre
 , mount
 , gnome
+, Accelerate
 , Cocoa
 , WebKit
 , CoreServices
 , CoreAudioKit
+, IOBluetooth
   # It is not allowed to distribute binaries with the VST2 SDK plugin without a license
   # (the author of Bespoke has such a licence but not Nix). VST3 should work out of the box.
   # Read more in https://github.com/NixOS/nixpkgs/issues/145607
@@ -102,10 +104,12 @@ stdenv.mkDerivation rec {
     pcre
     mount
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    Accelerate
     Cocoa
     WebKit
     CoreServices
     CoreAudioKit
+    IOBluetooth
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [

@@ -8,17 +8,18 @@
 , wayland
 , xorg
 , darwin
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "clipboard-jh";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "Slackadays";
     repo = "clipboard";
     rev = version;
-    hash = "sha256-RLb7R4BXnP7J5gX8hsE9yi6N3kezsutP1HqkmjR3yRs=";
+    hash = "sha256-1HWWrBI96znHctoMhQyO46Jmbg1jXPcvkDdwiWwp4KE=";
   };
 
   postPatch = ''
@@ -44,6 +45,12 @@ stdenv.mkDerivation rec {
     "-Wno-dev"
     "-DINSTALL_PREFIX=${placeholder "out"}"
   ];
+
+  postFixup = lib.optionalString stdenv.isLinux ''
+    patchelf $out/bin/cb --add-rpath $out/lib
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Cut, copy, and paste anything, anywhere, all from the terminal";
