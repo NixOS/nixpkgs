@@ -721,6 +721,7 @@ let
       ZRAM           = module;
       ZRAM_WRITEBACK = option yes;
       ZSWAP          = option yes;
+      ZPOOL          = yes;
       ZBUD           = option yes;
       ZSMALLOC       = module;
     };
