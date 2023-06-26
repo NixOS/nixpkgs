@@ -445,6 +445,8 @@ with pkgs;
 
   classicube = callPackage ../games/classicube { };
 
+  clatd = callPackage ../tools/networking/clatd { };
+
   clj-kondo = callPackage ../development/tools/clj-kondo { };
 
   cloak = callPackage ../applications/misc/cloak {
