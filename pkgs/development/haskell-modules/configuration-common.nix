@@ -1493,6 +1493,12 @@ self: super: {
     sha256 = "1c5ck2ibag2gcyag6rjivmlwdlp5k0dmr8nhk7wlkzq2vh7zgw63";
   }) super.splot;
 
+  # Fix build with newer monad-logger: https://github.com/obsidiansystems/monad-logger-extras/pull/5
+  monad-logger-extras = appendPatch (fetchpatch {
+    url = "https://github.com/obsidiansystems/monad-logger-extras/commit/ffebbb46263690d641f30264563f687f3e8d4952.patch";
+    sha256 = "sha256-tt5328mnePwzZU6HRCN04Ak879Pj4M+CjLwY4/X1fxQ=";
+  }) super.monad-logger-extras;
+
   # Fails with encoding problems, likely needs locale data.
   # Test can be executed by adding which to testToolDepends and
   # $PWD/dist/build/haskeline-examples-Test to $PATH.
