@@ -26551,6 +26551,8 @@ with pkgs;
 
   scalr-cli = callPackage ../tools/admin/scalr-cli { };
 
+  scaphandre = callPackage ../servers/scaphandre { };
+
   shairplay = callPackage ../servers/shairplay { avahi = avahi-compat; };
 
   shairport-sync = callPackage ../servers/shairport-sync { };

@@ -670,6 +670,7 @@ in {
   samba = handleTest ./samba.nix {};
   samba-wsdd = handleTest ./samba-wsdd.nix {};
   sanoid = handleTest ./sanoid.nix {};
+  scaphandre = handleTest ./scaphandre.nix {};
   schleuder = handleTest ./schleuder.nix {};
   sddm = handleTest ./sddm.nix {};
   seafile = handleTest ./seafile.nix {};

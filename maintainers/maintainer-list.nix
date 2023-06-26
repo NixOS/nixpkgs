@@ -5691,6 +5691,16 @@
       fingerprint = "0200 3EF8 8D2B CF2D 8F00  FFDC BBB3 E40E 5379 7FD9";
     }];
   };
+  gaelreyrol = {
+    email = "me@gaelreyrol.dev";
+    matrix = "@Zevran:matrix.org";
+    name = "Gaël Reyrol";
+    github = "gaelreyrol";
+    githubId = 498465;
+    keys = [{
+      fingerprint = "3492 D8FA ACFF 4C5F A56E  50B7 DFB9 B69A 2C42 7F61";
+    }];
+  };
   GaetanLepage = {
     email = "gaetan@glepage.com";
     github = "GaetanLepage";
