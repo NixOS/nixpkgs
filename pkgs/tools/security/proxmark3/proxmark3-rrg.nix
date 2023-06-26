@@ -78,8 +78,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Client for proxmark3, powerful general purpose RFID tool";
-    homepage = "https://rfidresearchgroup.com/";
-    license = licenses.gpl2Plus;
+    homepage = "https://github.com/RfidResearchGroup/proxmark3";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ nyanotech emilytrau ];
     platforms = platforms.unix;
   };
