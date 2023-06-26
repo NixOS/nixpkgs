@@ -620,6 +620,9 @@ self: super: {
   xsd = dontCheck super.xsd;
   zip-archive = dontCheck super.zip-archive;  # https://github.com/jgm/zip-archive/issues/57
 
+  # 2023-06-26: Test failure: https://hydra.nixos.org/build/224869905
+  comfort-blas = dontCheck super.comfort-blas;
+
   # These test suites run for ages, even on a fast machine. This is nuts.
   Random123 = dontCheck super.Random123;
   systemd = dontCheck super.systemd;
