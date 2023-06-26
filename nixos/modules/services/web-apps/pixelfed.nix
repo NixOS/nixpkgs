@@ -24,7 +24,7 @@ let
     if [[ "$USER" != ${user} ]]; then
       sudo='exec /run/wrappers/bin/sudo -u ${user}'
     fi
-    $sudo ${cfg.phpPackage}/bin/php artisan "$@"
+    $sudo ${phpPackage}/bin/php artisan "$@"
   '';
   dbSocket = {
     "pgsql" = "/run/postgresql";
