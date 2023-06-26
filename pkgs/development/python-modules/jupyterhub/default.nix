@@ -19,6 +19,7 @@
 , nodePackages
 , notebook
 , oauthlib
+, packaging
 , pamela
 , playwright
 , prometheus-client
@@ -128,6 +129,7 @@ buildPythonPackage rec {
     jinja2
     jupyter-telemetry
     oauthlib
+    packaging
     pamela
     prometheus-client
     requests
