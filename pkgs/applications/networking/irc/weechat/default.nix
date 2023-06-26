@@ -51,6 +51,7 @@ let
       cmakeFlags = with lib; [
         "-DENABLE_MAN=ON"
         "-DENABLE_DOC=ON"
+        "-DENABLE_DOC_INCOMPLETE=ON"
         "-DENABLE_TESTS=${if enableTests then "ON" else "OFF"}"
       ]
         ++ optionals stdenv.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib"]
