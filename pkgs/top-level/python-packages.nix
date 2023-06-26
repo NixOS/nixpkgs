@@ -1889,6 +1889,8 @@ self: super: with self; {
 
   class-doc = callPackage ../development/python-modules/class-doc { };
 
+  cliche = callPackage ../development/python-modules/cliche { };
+
   click = callPackage ../development/python-modules/click { };
 
   clickclick = callPackage ../development/python-modules/clickclick { };
@@ -6728,6 +6730,10 @@ self: super: with self; {
 
   netaddr = callPackage ../development/python-modules/netaddr { };
 
+  netapp-lib = callPackage ../development/python-modules/netapp-lib { };
+
+  netapp-ontap = callPackage ../development/python-modules/netapp-ontap { };
+
   netcdf4 = callPackage ../development/python-modules/netcdf4 { };
 
   netdata = callPackage ../development/python-modules/netdata { };
@@ -10542,6 +10548,8 @@ self: super: with self; {
   recaptcha_client = callPackage ../development/python-modules/recaptcha_client { };
 
   recipe-scrapers = callPackage ../development/python-modules/recipe-scrapers { };
+
+  recline = callPackage ../development/python-modules/recline { };
 
   recoll = toPythonModule (pkgs.recoll.override {
     python3Packages = self;
