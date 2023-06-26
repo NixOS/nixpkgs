@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, autoPatchelfHook, udev, libusb }:
+{ stdenv, lib, fetchurl, autoPatchelfHook, udev, libusb1 }:
 let
   arch =
     if stdenv.isx86_64 then "x86_64"
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoPatchelfHook ];
 
-  buildInputs = [ libusb udev stdenv.cc.cc.lib ];
+  buildInputs = [ libusb1 udev stdenv.cc.cc.lib ];
 
   unpackPhase = ''
     sh "$src" --noexec --target source
