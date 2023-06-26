@@ -4,7 +4,6 @@
 , hostPlatform
 , fetchurl
 , checkMeta
-, make-minimal-bootstrap-sources
 }:
 
 lib.makeScope
@@ -60,8 +59,6 @@ lib.makeScope
     heirloom-devtools = callPackage ./heirloom-devtools { tinycc = tinycc-mes; };
 
     ln-boot = callPackage ./ln-boot { };
-
-    inherit make-minimal-bootstrap-sources;
 
     mes = lib.recurseIntoAttrs (callPackage ./mes { });
     mes-libc = callPackage ./mes/libc.nix { };
