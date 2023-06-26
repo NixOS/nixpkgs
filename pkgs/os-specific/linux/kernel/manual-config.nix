@@ -1,6 +1,7 @@
 { lib, stdenv, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
 , libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole, ubootTools
 , fetchpatch
+, rustc, rust-bindgen, rustPlatform
 }:
 
 let
@@ -86,6 +87,7 @@ let
   } // config_;
 
   isModular = config.isYes "MODULES";
+  withRust = config.isYes "RUST";
 
   kernelConf = stdenv.hostPlatform.linux-kernel;
   target = kernelConf.target or "vmlinux";
@@ -107,7 +109,10 @@ stdenv.mkDerivation ({
   ] ++ optional  (lib.versionOlder version "5.8") libelf
     ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
     ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
-    ++ optional  (lib.versionAtLeast version "5.8")  elfutils;
+    ++ optional  (lib.versionAtLeast version "5.8")  elfutils
+    ++ optionals withRust [ rustc rust-bindgen ];
+
+  RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
 
   patches =
     map (p: p.patch) kernelPatches

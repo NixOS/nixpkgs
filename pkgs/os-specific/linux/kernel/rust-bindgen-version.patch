@@ -1,0 +1,14 @@
+diff --git a/scripts/rust_is_available.sh b/scripts/rust_is_available.sh
+index aebbf1913..b7b0a4abc 100755
+--- a/scripts/rust_is_available.sh
++++ b/scripts/rust_is_available.sh
+@@ -102,8 +102,7 @@ fi
+ # Check that the `libclang` used by the Rust bindings generator is suitable.
+ bindgen_libclang_version=$( \
+ 	LC_ALL=C "$BINDGEN" $(dirname $0)/rust_is_available_bindgen_libclang.h 2>&1 >/dev/null \
+-		| grep -F 'clang version ' \
+-		| grep -oE '[0-9]+\.[0-9]+\.[0-9]+' \
++		| grep -oP 'clang version \K[0-9]+\.[0-9]+\.[0-9]+' \
+ 		| head -n 1 \
+ )
+ bindgen_libclang_min_version=$($min_tool_version llvm)

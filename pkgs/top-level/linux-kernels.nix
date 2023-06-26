@@ -180,6 +180,12 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+        kernelPatches.rust-bindgen-version
+        kernelPatches.rust-bindgen-0-63-fix
+        kernelPatches.rust-bindgen-0-65-fix
+        kernelPatches.rust-import-alloc-vec-modules
+        kernelPatches.rust-1-68-fix
+        kernelPatches.rust-1-70-fix
       ];
     };
 
@@ -188,6 +194,11 @@ in {
         kernelPatches = [
           kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
+          kernelPatches.rust-bindgen-version
+          kernelPatches.rust-bindgen-0-63-fix
+          kernelPatches.rust-bindgen-0-65-fix
+          kernelPatches.rust-1-68-fix
+          kernelPatches.rust-1-70-fix
         ];
       };
       latest = packageAliases.linux_latest.kernel;

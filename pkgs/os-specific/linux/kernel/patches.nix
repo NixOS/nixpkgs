@@ -66,4 +66,50 @@
       hash = "sha256-DYPWgraXPNeFkjtuDYkFXHnCJ4yDewrukM2CCAqC2BE=";
     };
   };
+
+  rust-bindgen-version = rec {
+    name = "rust-bindgen-version";
+    patch = ./rust-bindgen-version.patch;
+  };
+  rust-bindgen-0-63-fix = rec {
+    name = "rust-bindgen-0.63-fix";
+    patch = ./rust-bindgen-0.63-fix.patch;
+  };
+  rust-bindgen-0-65-fix = rec {
+    name = "rust-bindgen-0.65-fix";
+    patch = ./rust-bindgen-0.65-fix.patch;
+  };
+  # easiest way to make the rust-1-68-fix patch apply
+  rust-import-alloc-vec-modules = rec {
+    name = "rust-import-alloc-vec-modules";
+    patch = fetchpatch {
+      name = "rust-import-alloc-vec-modules.patch";
+      url = "https://github.com/Rust-for-Linux/linux/compare/3c01a424a37fe625052c68c8620f6aa701f77769...318c3cc8e107c2b36108132057ca90d0d56d1bd9.diff";
+      hash = "sha256-WNsfWDFZnloDYNH456bAupIq+7stc9hQIZPAhGIGGn4=";
+    };
+  };
+  rust-1-68-fix = rec {
+    name = "rust-1.68-fix";
+    patch = fetchpatch {
+      name = "rust-1.68.patch";
+      url = "https://github.com/Rust-for-Linux/linux/commit/3ed03f4da06ede71ac53cf25b9441a372e9f2487.diff";
+      hash = "sha256-szbc7YA93VDLFJrgG7V0BDs8q6WxCQhU30Sy33i5FGA=";
+      excludes = [
+        "scripts/Makefile.build"
+        "rust/kernel/init.rs"
+        "rust/kernel/lib.rs"
+        "rust/uapi/lib.rs"
+      ];
+    };
+  };
+  rust-1-70-fix = rec {
+    name = "rust-1.70-fix";
+    patch = fetchpatch {
+      name = "rust-1.70.patch";
+      url = "https://github.com/AsahiLinux/linux/commit/496a1b061691f01602aa63d2a8027cf3020d4bb8.diff";
+      hash = "sha256-bBhm4gMqVGRNuVecbJKnPfryGsDOJ71qpMo6a6VNDio=";
+      # this hunk only applies to downstream asahi changes
+      excludes = [ "scripts/Makefile.build" ];
+    };
+  };
 }
