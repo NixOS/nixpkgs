@@ -911,6 +911,8 @@ with pkgs;
 
   graphw00f = callPackage ../tools/security/graphw00f { };
 
+  graphite-cursors = callPackage ../data/icons/graphite-cursors { };
+
   opendrop = python3Packages.callPackage ../tools/networking/opendrop { };
 
   owl = callPackage ../tools/networking/owl { };
