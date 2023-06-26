@@ -6318,6 +6318,8 @@ self: super: with self; {
 
   mip = callPackage ../development/python-modules/mip { };
 
+  mir_eval = callPackage ../development/python-modules/mir_eval { };
+
   misaka = callPackage ../development/python-modules/misaka { };
 
   misoc = callPackage ../development/python-modules/misoc { };
