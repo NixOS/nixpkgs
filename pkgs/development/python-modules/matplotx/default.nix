@@ -8,8 +8,6 @@
 , networkx
 , pypng
 , scipy
-, imageio
-, pytest-cov
 }:
 
 buildPythonPackage rec {
