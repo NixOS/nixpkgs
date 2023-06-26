@@ -61,6 +61,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for rendering readme descriptions";
     homepage = "https://github.com/pypa/readme_renderer";
+    changelog = "https://github.com/pypa/readme_renderer/blob/${version}/CHANGES.rst";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
