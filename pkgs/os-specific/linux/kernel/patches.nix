@@ -65,4 +65,27 @@
     name = "export-rt-sched-migrate";
     patch = ./export-rt-sched-migrate.patch;
   };
+
+  # The Rust fixes below usually come from the Asahi Linux tree:
+  # https://github.com/AsahiLinux/linux
+  #
+  # Check the asahi-wip branch.
+  rust-1-72-fix =  {
+    name = "rust-1.72-fix";
+    patch = fetchpatch {
+      name = "rust-1.72.patch";
+      url = "https://github.com/AsahiLinux/linux/commit/0a4d8dad3c64d6603c7a439717de1d7974c433f0.diff";
+      hash = "sha256-9WHmJGY20914Hl1IrYQuCbg55x9IUANPB2FvwG5CMcg=";
+    };
+  };
+
+  rust-1-73-fix = {
+    name = "rust-1.73-fix";
+    patch = fetchpatch {
+      name = "rust-1.73.patch";
+      url = "https://github.com/AsahiLinux/linux/commit/4a2b4a49d5a17df37c7bbf11964f05a2e8198165.diff";
+      hash = "sha256-jLVbVAsyigKSwhqZVaW7uXOAxxprdMFSf/ZAQZHph60=";
+    };
+  };
+
 }

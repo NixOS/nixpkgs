@@ -182,6 +182,8 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+        kernelPatches.rust-1-72-fix
+        kernelPatches.rust-1-73-fix
       ];
     };
 
