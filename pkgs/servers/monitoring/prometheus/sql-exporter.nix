@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "sql_exporter";
-  version = "0.4.5";
+  version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = "justwatchcom";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-A3hMSnfxiEgFYueARuldEHT/5ROCIwWjqQj2FdkVYqo=";
+    sha256 = "sha256-aSygfs5jVc1CTb+uj16U//99ypP4kixz7gqDvxIxxfM=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   ldflags = let t = "github.com/prometheus/common/version"; in
     [
