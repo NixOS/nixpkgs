@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
       icu
       libpulseaudio
 
-      # Editor dependencies
+      # Unity Editor dependencies
       libglvnd # provides ligbl
       xorg.libX11
       xorg.libXcursor
@@ -90,6 +90,12 @@ stdenv.mkDerivation rec {
       zlib
       clang
       git # for git-based packages in unity package manager
+
+      # Unity Editor 2019 specific dependencies
+      xorg.libXi
+      xorg.libXrender
+      gnome2.GConf
+      libcap
     ] ++ extraLibs pkgs;
   };
 
