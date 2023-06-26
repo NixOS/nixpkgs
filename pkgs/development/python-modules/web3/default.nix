@@ -37,10 +37,6 @@ buildPythonPackage rec {
     hash = "sha256-p3Dpmb0BST1nbh42q/eK/DjQqoIPHvNr2KllRpTgFFw=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
-
   propagatedBuildInputs = [
     aiohttp
     eth-abi
