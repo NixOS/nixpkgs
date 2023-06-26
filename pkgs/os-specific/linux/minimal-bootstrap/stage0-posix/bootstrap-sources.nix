@@ -1,4 +1,4 @@
-{ make-minimal-bootstrap-sources
+{
 }:
 
 rec {
@@ -6,6 +6,7 @@ rec {
   # Pinned from https://github.com/oriansj/stage0-posix/commit/3189b5f325b7ef8b88e3edec7c1cde4fce73c76c
   version = "unstable-2023-05-02";
   rev = "3189b5f325b7ef8b88e3edec7c1cde4fce73c76c";
+  outputHashAlgo = "sha256";
 
   # This 256 byte seed is the only pre-compiled binary in the bootstrap chain.
   hex0-seed = import <nix/fetchurl.nix> {
@@ -69,9 +70,37 @@ rec {
   specifically designed for bit-exact reproducibility, none of the
   requirements above apply to `minimal-bootstrap-sources`.
   */
-  minimal-bootstrap-sources = make-minimal-bootstrap-sources.overrideAttrs(_: {
+  minimal-bootstrap-sources = derivation {
+    name = "${name}.nar.xz";
+    system = builtins.currentSystem;
     outputHashMode = "flat";
-    outputHashAlgo = "sha256";
+    inherit outputHashAlgo;
     outputHash = "sha256-ig988BiRTz92hhZZgKQW1tVPoV4aQ2D69Cq3wHvVgHg=";
-  });
+
+    # This builder always fails, but fortunately Nix will print the
+    # "builder", which is really the error message that we want the
+    # user to see.
+    builder = ''
+      #
+      #
+      # Neither your store nor your substituters seems to have:
+      #
+      #  ${name}.nar.xz
+      #
+      # Please obtain or create this file, give it exactly the name
+      # shown above, and then run the following command:
+      #
+      #   nix-store --add-fixed ${outputHashAlgo} ${name}.nar.xz
+      #
+      # You can create this file from an already-bootstrapped nixpkgs
+      # using the following command:
+      #
+      #   nix-build '<nixpkgs>' -A make-minimal-bootstrap-sources
+      #
+      # Or, if you prefer, you can create this file using only `git`,
+      # `nix`, and `xz`.  For the commands needed in order to do this,
+      # see `make-bootstrap-sources.nix`.
+      #
+    '';
+  };
 }

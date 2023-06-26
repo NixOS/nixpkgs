@@ -18,7 +18,7 @@
 , xz
 }:
 let
-  inherit (import ./bootstrap-sources.nix { make-minimal-bootstrap-sources = null; }) name rev;
+  inherit (import ./bootstrap-sources.nix { }) name rev;
 
   src = fetchFromGitHub {
     owner = "oriansj";

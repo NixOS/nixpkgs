@@ -4,7 +4,6 @@
 , hostPlatform
 , fetchurl
 , checkMeta
-, make-minimal-bootstrap-sources
 }:
 
 lib.makeScope
@@ -93,8 +92,6 @@ lib.makeScope
     linux-headers = callPackage ./linux-headers { bash = bash_2_05; };
 
     ln-boot = callPackage ./ln-boot { };
-
-    inherit make-minimal-bootstrap-sources;
 
     mes = lib.recurseIntoAttrs (callPackage ./mes { });
     mes-libc = callPackage ./mes/libc.nix { };
