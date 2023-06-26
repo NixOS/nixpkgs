@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "eth-hash";
-  version = "0.3.2";
+  version = "0.5.2";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-hash";
     rev = "v${version}";
-    hash = "sha256-LMDtFUrsPYgj/Fl9aBW1todlj1D3LlFxAkzNFAzCGLQ=";
+    hash = "sha256-6UN+kvLjjAtkmLgUaovjZC/6n3FZtXCwyXZH7ijQObU=";
   };
 
   nativeCheckInputs = [
