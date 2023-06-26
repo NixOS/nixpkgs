@@ -3,12 +3,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "4.28.0";
+  version = "4.30.0";
   pname = "mt-940";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ydTOaijDmA2ogIONzRMMoz+5jr99qxWM1zzGGzg7f2Q=";
+    hash = "sha256-2hTi7ITWxuhWBNKmuKgAsI7GAANRrN5QHEHrZigZKVw=";
   };
 
   propagatedBuildInputs = lib.optional (!isPy3k) enum34;
