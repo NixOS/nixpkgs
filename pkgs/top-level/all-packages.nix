@@ -19727,6 +19727,8 @@ with pkgs;
 
   rdocker = callPackage ../development/tools/rdocker { };
 
+  readexe = callPackage ../development/tools/misc/readexe { };
+
   redis-dump = callPackage ../development/tools/redis-dump { };
 
   redis-plus-plus = callPackage ../development/libraries/redis-plus-plus { };
