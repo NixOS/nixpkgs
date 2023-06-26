@@ -542,9 +542,10 @@ stdenv.mkDerivation (finalAttrs: {
   # outputs where we don't want them. Patch the generated config.h to remove all
   # such references except for data.
   postConfigure = let
-    toStrip = lib.remove "data" finalAttrs.outputs; # We want to keep references to the data dir.
+    toStrip = map placeholder (lib.remove "data" finalAttrs.outputs) # We want to keep references to the data dir.
+      ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) buildPackages.stdenv.cc;
   in
-    "remove-references-to ${lib.concatStringsSep " " (map (o: "-t ${placeholder o}") toStrip)} config.h";
+    "remove-references-to ${lib.concatStringsSep " " (map (o: "-t ${o}") toStrip)} config.h";
 
   nativeBuildInputs = [ removeReferencesTo addOpenGLRunpath perl pkg-config texinfo yasm ];
 
