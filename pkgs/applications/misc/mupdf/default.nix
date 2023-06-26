@@ -64,9 +64,11 @@ stdenv.mkDerivation rec {
     substituteInPlace Makerules --replace "(shell pkg-config" "(shell $PKG_CONFIG"
   '';
 
+  # Use shared libraries to decrease size
+  buildFlags = [ "shared" ];
+
   makeFlags = [
     "prefix=$(out)"
-    "shared=yes"
     "USE_SYSTEM_LIBS=yes"
     "PKG_CONFIG=${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
   ] ++ lib.optionals (!enableX11) [ "HAVE_X11=no" ]
