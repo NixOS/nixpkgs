@@ -11540,6 +11540,8 @@ self: super: with self; {
 
   speedtest-cli = callPackage ../development/python-modules/speedtest-cli { };
 
+  speg = callPackage ../development/python-modules/speg { };
+
   spglib = callPackage ../development/python-modules/spglib { };
 
   sphfile = callPackage ../development/python-modules/sphfile { };
