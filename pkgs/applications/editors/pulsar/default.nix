@@ -23,13 +23,13 @@
 
 let
   pname = "pulsar";
-  version = "1.105.0";
+  version = "1.106.0";
 
   sourcesPath = {
     x86_64-linux.tarname = "Linux.${pname}-${version}.tar.gz";
-    x86_64-linux.hash = "sha256-j2d83m8B6lt1eRAwOOTEq4o+CNe8I+6rkz9qyux55Qw=";
+    x86_64-linux.hash = "sha256-Wd0z6kHd6qZgrgZBxZQjwVC1dDqYtJ94L7aAnbuJoO8=";
     aarch64-linux.tarname = "ARM.Linux.${pname}-${version}-arm64.tar.gz";
-    aarch64-linux.hash = "sha256-iZVE1R30Tynyn/cAwNIiGrsCMTkWKFUforOkGXSzMsw=";
+    aarch64-linux.hash = "sha256-Xadjqw8PRrq0ksif6te0gxn8xeYTCYnJcsrezfl2SYs=";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   additionalLibs = lib.makeLibraryPath [

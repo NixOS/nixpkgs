@@ -1,18 +1,18 @@
 { lib, stdenv, fetchFromGitHub, flex, bison, pkg-config, zlib, libtiff, libpng, fftw
-, cairo, readline, ffmpeg, makeWrapper, wxGTK32, libiconv, netcdf, blas
+, cairo, readline, ffmpeg, makeWrapper, wxGTK32, libiconv, libxml2, netcdf, blas
 , proj, gdal, geos, sqlite, postgresql, libmysqlclient, python3Packages, proj-datumgrid
 , zstd, pdal, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "grass";
-  version = "8.2.1";
+  version = "8.3.0";
 
   src = with lib; fetchFromGitHub {
     owner = "OSGeo";
     repo = "grass";
     rev = version;
-    hash = "sha256-U3PQd3u9i+9Bc7BSd0gK8Ss+iV9BT1xLBDrKydtl3Qk=";
+    hash = "sha256-YHQtvp/AYMWme46yIc4lE/izjqVePnPxn3GY5RRfPq4=";
   };
 
   nativeBuildInputs = [
@@ -21,11 +21,10 @@ stdenv.mkDerivation rec {
     geos # for `geos-config`
     netcdf # for `nc-config`
     libmysqlclient # for `mysql_config`
-    pdal # for `pdal-config`; remove with next version, see https://github.com/OSGeo/grass/pull/2851
   ] ++ (with python3Packages; [ python-dateutil numpy wxPython_4_2 ]);
 
   buildInputs = [
-    cairo zlib proj libtiff libpng fftw sqlite
+    cairo zlib proj libtiff libpng libxml2 fftw sqlite
     readline ffmpeg postgresql blas wxGTK32
     proj-datumgrid zstd
     gdal

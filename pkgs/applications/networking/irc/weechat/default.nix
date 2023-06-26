@@ -36,14 +36,14 @@ let
   in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "3.8";
+      version = "4.0.0";
       pname = "weechat";
 
       hardeningEnable = [ "pie" ];
 
       src = fetchurl {
-        url = "https://weechat.org/files/src/weechat-${version}.tar.bz2";
-        hash = "sha256-objxAUGvBhTkbQl4GshDP3RsCkAW4z917L9WyaVoYj4=";
+        url = "https://weechat.org/files/src/weechat-${version}.tar.xz";
+        hash = "sha256-W9de4V8zkqCtF07nxUUY2uzjh4R3ZwwH8Q1uv5iCQPk=";
       };
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
@@ -51,6 +51,7 @@ let
       cmakeFlags = with lib; [
         "-DENABLE_MAN=ON"
         "-DENABLE_DOC=ON"
+        "-DENABLE_DOC_INCOMPLETE=ON"
         "-DENABLE_TESTS=${if enableTests then "ON" else "OFF"}"
       ]
         ++ optionals stdenv.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib"]
@@ -84,7 +85,7 @@ let
       '';
 
       meta = {
-        homepage = "http://www.weechat.org/";
+        homepage = "https://weechat.org/";
         description = "A fast, light and extensible chat client";
         longDescription = ''
           You can find more documentation as to how to customize this package

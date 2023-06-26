@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "shotgun";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "neXromancers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ovqPBZznDQnQa9YW1xXA02Jl0AQ7sJNpzovA1SVR8Zc=";
+    sha256 = "sha256-sBstFz7cYfwVQpDZeC3wPjzbKU5zQzmnhiWNqiCda1k=";
   };
 
-  cargoSha256 = "sha256-mWifSN9Hpsivq0RdZ9l9+8CWaZMHfzzhT2r27FAuesU=";
+  cargoSha256 = "sha256-P6riJgnEe+bNP3cUKNCfIkgKM44XGYSDADnU6w7CFDA=";
 
   meta = with lib; {
     description = "Minimal X screenshot utility";

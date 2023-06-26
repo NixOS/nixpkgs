@@ -13,6 +13,7 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     sha256 = "sha256-K99CmaBrJu30/12FxnsNsDKsTyX4f2uQSO7cwHsPuDw=";
   };
+  patches = [ ./micro_vm-allow-SYS_clock_gettime.patch ];
 
   cargoSha256 = "sha256-SFIOGGRzGkVWHIXkviVWuhDN29pa0uD3GqKh+G421xI=";
 

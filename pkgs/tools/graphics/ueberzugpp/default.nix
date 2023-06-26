@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ueberzugpp";
-  version = "2.8.7";
+  version = "2.8.8";
 
   src = fetchFromGitHub {
     owner = "jstkdng";
     repo = "ueberzugpp";
     rev = "v${version}";
-    hash = "sha256-grkLsbatgezM8wFbwAatLQw35wucU0Kc6hacRefFvHw=";
+    hash = "sha256-HvcH8ysH43i87so758m6QD+AuNfTiOdo5knI+3PBO8U=";
   };
 
   # error: no member named 'ranges' in namespace 'std'

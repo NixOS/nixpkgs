@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , writeText
 , rustPlatform
 , meson
@@ -112,6 +113,17 @@ let
   ) (lib.attrNames validPlugins);
 
   invalidPlugins = lib.subtractLists (lib.attrNames validPlugins) selectedPlugins;
+
+  # TODO: figure out what must be done about this upstream - related lu-zero/cargo-c#323 lu-zero/cargo-c#138
+  cargo-c' = cargo-c.overrideAttrs (oldAttrs: {
+    patches = (oldAttrs.patches or []) ++ [
+      (fetchpatch {
+        name = "cargo-c-test-rlib-fix.patch";
+        url = "https://github.com/lu-zero/cargo-c/commit/596c582deed419b0cf1f80b9be77ff705df20e01.diff";
+        hash = "sha256-GETjZwYqX7h51rxWznAg5Ojozdp1SOYnUh+iuRGA4/w=";
+      })
+    ];
+  });
 in
   assert lib.assertMsg (invalidPlugins == [])
     "Invalid gst-plugins-rs plugin${lib.optionalString (lib.length invalidPlugins > 1) "s"}: ${lib.concatStringsSep ", " invalidPlugins}";
@@ -138,7 +150,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
+  postPatch = ''
     rm net/raptorq/tests/raptorq.rs
   '';
 
@@ -165,7 +177,7 @@ stdenv.mkDerivation rec {
     pkg-config
     rustc
     cargo
-    cargo-c
+    cargo-c'
     nasm
   ] ++ lib.optionals enableDocumentation [
     hotdoc

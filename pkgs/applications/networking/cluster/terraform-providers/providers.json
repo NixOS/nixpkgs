@@ -128,11 +128,11 @@
     "vendorHash": null
   },
   "azurerm": {
-    "hash": "sha256-mpCd1POtIN/gaiXdL832UK6a1XoaUYHpS6shD8WXA88=",
+    "hash": "sha256-WA4wXUkYCxFV7b/Gr3TvrFtZWJAr0CI2F2a6gsSbRjU=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azurerm",
     "owner": "hashicorp",
     "repo": "terraform-provider-azurerm",
-    "rev": "v3.62.0",
+    "rev": "v3.62.1",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -182,13 +182,13 @@
     "vendorHash": "sha256-jOscYbwZ8m4smGiAy2vNhPMTAUnINkpuVRQ8E6LpWVw="
   },
   "buildkite": {
-    "hash": "sha256-/bLMhyJFdoktlekxsItPcu+YoqiFDOdUsMpwqNhiuJU=",
+    "hash": "sha256-QXhuT/EOqaxBCFGh49JIkrX8SoiSIZEyNzR5RDJldyo=",
     "homepage": "https://registry.terraform.io/providers/buildkite/buildkite",
     "owner": "buildkite",
     "repo": "terraform-provider-buildkite",
-    "rev": "v0.19.0",
+    "rev": "v0.19.1",
     "spdx": "MIT",
-    "vendorHash": "sha256-ZWC6CtAheuHZtLc8BolrniRPNpKkG0VR3UY5bVUtrSk="
+    "vendorHash": "sha256-cWENIMdkg7+h0sIci+W6A9pxhfQ5/wvWbKx5D4S5Nw0="
   },
   "checkly": {
     "hash": "sha256-ZJQdH1ot/ygnM4Q2rihzHFH67ge6zfVrPASgV0lUs34=",
@@ -381,11 +381,11 @@
     "vendorHash": "sha256-E1gzdES/YVxQq2J47E2zosvud2C/ViBeQ8+RfNHMBAg="
   },
   "fastly": {
-    "hash": "sha256-vQ9SXWVr7eAg0SvwR5t5CvAllD6wG4aqmleMFYoREfE=",
+    "hash": "sha256-/TVsH07uWVI0hhN5ulzSW2nGUEaaW3ZiePT+wGoatKY=",
     "homepage": "https://registry.terraform.io/providers/fastly/fastly",
     "owner": "fastly",
     "repo": "terraform-provider-fastly",
-    "rev": "v5.2.0",
+    "rev": "v5.2.1",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -408,15 +408,14 @@
     "vendorHash": "sha256-f+Z6Y2WPxqJoHoCwuK6sgFa8nUnkW/WwrD55dtU0wtM="
   },
   "fortios": {
-    "deleteVendor": true,
-    "hash": "sha256-nvK5mbQdCB6lmdyhJbMS15eOER8eIAYv26mc1FCifXs=",
+    "hash": "sha256-fWz3OAIOSVHNA6x8i6f/ewcC0WwWDYzeaT8rz3vFDWA=",
     "homepage": "https://registry.terraform.io/providers/fortinetdev/fortios",
     "owner": "fortinetdev",
     "proxyVendor": true,
     "repo": "terraform-provider-fortios",
-    "rev": "v1.16.0",
+    "rev": "1.17.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-ZgVA2+2tu17dnAc51Aw3k6v8k7QosNTmFjFhmeknxa8="
+    "vendorHash": "sha256-DwRfbD4AqB+4KLuYtqY5fUdzRrEpTIvL4VAM7nieJJA="
   },
   "gandi": {
     "hash": "sha256-eVSMjXSYRedig93Tm2ZLpbuJhG3wKSBwfLli7OWs3dU=",
@@ -873,11 +872,11 @@
     "vendorHash": "sha256-OT6VKLCc1sCPe4r/L5lhSF9BLLYU0iNNW21fSrEF7mA="
   },
   "opsgenie": {
-    "hash": "sha256-us4UaCLvWWoS+N7eXPs2/xSk9wl1zULaiG93LX45bks=",
+    "hash": "sha256-SjvFRwhWK3COj9SaehT2XnMxK5z7qA+5LvGCFHRuiiQ=",
     "homepage": "https://registry.terraform.io/providers/opsgenie/opsgenie",
     "owner": "opsgenie",
     "repo": "terraform-provider-opsgenie",
-    "rev": "v0.6.24",
+    "rev": "v0.6.25",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },

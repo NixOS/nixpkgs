@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "unityhub";
-  version = "3.4.2";
+  version = "3.5.0";
 
   src = fetchurl {
     url = "https://hub-dist.unity3d.com/artifactory/hub-debian-prod-local/pool/main/u/unity/unityhub_amd64/unityhub-amd64-${version}.deb";
-    sha256 = "sha256-I1qtrD94IpMut0a6JUHErHaksoZ+z8/dDG8U68Y5zJE=";
+    sha256 = "sha256-d5TUUhGqchkrCRqJWHEewurjsHxbfZ+5hv9w9Yv2EQ4=";
   };
 
   nativeBuildInputs = [
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
       icu
       libpulseaudio
 
-      # Editor dependencies
+      # Unity Editor dependencies
       libglvnd # provides ligbl
       xorg.libX11
       xorg.libXcursor
@@ -90,6 +90,12 @@ stdenv.mkDerivation rec {
       zlib
       clang
       git # for git-based packages in unity package manager
+
+      # Unity Editor 2019 specific dependencies
+      xorg.libXi
+      xorg.libXrender
+      gnome2.GConf
+      libcap
     ] ++ extraLibs pkgs;
   };
 

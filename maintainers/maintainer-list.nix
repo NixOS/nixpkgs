@@ -4460,6 +4460,12 @@
     githubId = 424946;
     name = "James Earl Douglas";
   };
+  earthengine = {
+    email = "earthengine@skiff.com";
+    github = "ee2500";
+    githubId = 134107129;
+    name = "EarthEngine";
+  };
   ebbertd = {
     email = "daniel@ebbert.nrw";
     github = "ebbertd";
@@ -5683,6 +5689,16 @@
     name = "Florian Brandes";
     keys = [{
       fingerprint = "0200 3EF8 8D2B CF2D 8F00  FFDC BBB3 E40E 5379 7FD9";
+    }];
+  };
+  gaelreyrol = {
+    email = "me@gaelreyrol.dev";
+    matrix = "@Zevran:matrix.org";
+    name = "Gaël Reyrol";
+    github = "gaelreyrol";
+    githubId = 498465;
+    keys = [{
+      fingerprint = "3492 D8FA ACFF 4C5F A56E  50B7 DFB9 B69A 2C42 7F61";
     }];
   };
   GaetanLepage = {
@@ -9593,6 +9609,13 @@
     githubId = 22085373;
     name = "Luis Hebendanz";
   };
+  luisnquin = {
+    email = "lpaandres2020@gmail.com";
+    matrix = "@luisnquin:matrix.org";
+    github = "luisnquin";
+    githubId = 86449787;
+    name = "Luis Quiñones";
+  };
   luispedro = {
     email = "luis@luispedro.org";
     github = "luispedro";
@@ -10463,6 +10486,11 @@
     github = "M-Gregoire";
     githubId = 9469313;
     name = "Gregoire Martinache";
+  };
+  mgregson = {
+    github = "mgregson";
+    githubId = 333572;
+    name = "Michael Gregson";
   };
   mgttlinger = {
     email = "megoettlinger@gmail.com";

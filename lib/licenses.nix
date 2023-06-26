@@ -873,6 +873,11 @@ in mkLicense lset) ({
     fullName = "OpenSSL License";
   };
 
+  opubl = {
+    spdxId = "OPUBL-1.0";
+    fullName = "Open Publication License v1.0";
+  };
+
   osl2 = {
     spdxId = "OSL-2.0";
     fullName = "Open Software License 2.0";
@@ -993,6 +998,14 @@ in mkLicense lset) ({
     shortName = "stk";
     fullName = "Synthesis Tool Kit 4.3";
     url = "https://github.com/thestk/stk/blob/master/LICENSE";
+  };
+
+  sustainableUse = {
+    shortName = "sustainable";
+    fullName = "Sustainable Use License";
+    url = "https://github.com/n8n-io/n8n/blob/master/LICENSE.md";
+    free = false;
+    redistributable = false; # only free to redistribute "for non-commercial purposes"
   };
 
   tsl = {

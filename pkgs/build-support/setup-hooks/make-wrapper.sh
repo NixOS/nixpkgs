@@ -166,11 +166,11 @@ makeShellWrapper() {
         elif [[ "$p" == "--add-flags" ]]; then
             flags="${params[$((n + 1))]}"
             n=$((n + 1))
-            flagsBefore="$flagsBefore $flags"
+            flagsBefore="${flagsBefore-} $flags"
         elif [[ "$p" == "--append-flags" ]]; then
             flags="${params[$((n + 1))]}"
             n=$((n + 1))
-            flagsAfter="$flagsAfter $flags"
+            flagsAfter="${flagsAfter-} $flags"
         elif [[ "$p" == "--argv0" ]]; then
             argv0="${params[$((n + 1))]}"
             n=$((n + 1))
@@ -183,7 +183,7 @@ makeShellWrapper() {
     done
 
     echo exec ${argv0:+-a \"$argv0\"} \""$original"\" \
-         "$flagsBefore" '"$@"' "$flagsAfter" >> "$wrapper"
+         "${flagsBefore-}" '"$@"' "${flagsAfter-}" >> "$wrapper"
 
     chmod +x "$wrapper"
 }

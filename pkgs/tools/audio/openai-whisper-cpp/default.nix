@@ -6,6 +6,7 @@
 , wget
 , Accelerate
 , CoreGraphics
+, CoreML
 , CoreVideo
 }:
 
@@ -28,7 +29,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ SDL2 ] ++ lib.optionals stdenv.isDarwin [ Accelerate CoreGraphics CoreVideo ];
+  buildInputs = [ SDL2 ] ++ lib.optionals stdenv.isDarwin [ Accelerate CoreGraphics CoreML CoreVideo ];
+
+  env = lib.optionalAttrs stdenv.isDarwin {
+    WHISPER_COREML = "1";
+    WHISPER_COREML_ALLOW_FALLBACK = "1";
+  };
 
   makeFlags = [ "main" "stream" ];
 

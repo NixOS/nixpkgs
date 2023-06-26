@@ -597,6 +597,7 @@ in {
   php = handleTest ./php {};
   php81 = handleTest ./php { php = pkgs.php81; };
   php82 = handleTest ./php { php = pkgs.php82; };
+  php83 = handleTest ./php { php = pkgs.php83; };
   phylactery = handleTest ./web-apps/phylactery.nix {};
   pict-rs = handleTest ./pict-rs.nix {};
   pinnwand = handleTest ./pinnwand.nix {};
@@ -670,6 +671,7 @@ in {
   samba = handleTest ./samba.nix {};
   samba-wsdd = handleTest ./samba-wsdd.nix {};
   sanoid = handleTest ./sanoid.nix {};
+  scaphandre = handleTest ./scaphandre.nix {};
   schleuder = handleTest ./schleuder.nix {};
   sddm = handleTest ./sddm.nix {};
   seafile = handleTest ./seafile.nix {};

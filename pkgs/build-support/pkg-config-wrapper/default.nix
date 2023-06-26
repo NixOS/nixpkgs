@@ -119,8 +119,8 @@ stdenv.mkDerivation {
   };
 
   meta =
-    let pkg-config_ = if pkg-config != null then pkg-config else {}; in
-    (if pkg-config_ ? meta then removeAttrs pkg-config.meta ["priority"] else {}) //
+    let pkg-config_ = lib.optionalAttrs (pkg-config != null) pkg-config; in
+    (lib.optionalAttrs (pkg-config_ ? meta) (removeAttrs pkg-config.meta ["priority"])) //
     { description =
         lib.attrByPath ["meta" "description"] "pkg-config" pkg-config_
         + " (wrapper script)";
