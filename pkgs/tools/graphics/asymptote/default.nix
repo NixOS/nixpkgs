@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, fetchpatch
-, autoreconfHook, bison, glm, flex, wrapQtAppsHook
+, autoreconfHook, bison, glm, flex, wrapQtAppsHook, cmake
 , freeglut, ghostscriptX, imagemagick, fftw
 , boehmgc, libGLU, libGL, mesa, ncurses, readline, gsl, libsigsegv
-, python3, qtbase, qtsvg
+, python3, qtbase, qtsvg, boost
 , zlib, perl, curl
 , texLive, texinfo
 , darwin
@@ -26,12 +26,13 @@ stdenv.mkDerivation rec {
     bison
     texinfo
     wrapQtAppsHook
+    cmake
   ];
 
   buildInputs = [
     ghostscriptX imagemagick fftw
     boehmgc ncurses readline gsl libsigsegv
-    zlib perl curl qtbase qtsvg
+    zlib perl curl qtbase qtsvg boost
     texLive
     (python3.withPackages (ps: with ps; [ cson numpy pyqt5 ]))
   ];
@@ -69,6 +70,8 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/texmf
     install -Dt $out/share/emacs/site-lisp/${pname} $out/share/asymptote/*.el
   '';
+
+  dontUseCmakeConfigure = true;
 
   enableParallelBuilding = true;
   # Missing install depends:
