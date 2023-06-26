@@ -8,7 +8,6 @@
   "@squoosh/cli" = "squoosh-cli";
   "@webassemblyjs/cli-1.11.1" = "wasm2wast";
   coffee-script = "coffee";
-  typescript = "tsc";
   vue-cli = "vue";
   "@withgraphite/graphite-cli" = "gt";
 

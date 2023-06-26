@@ -17,7 +17,7 @@
 , git
 , autoconf
 , libtool
-, nodePackages
+, typescript
 , ApplicationServices
 , Carbon
 , Cocoa
@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     cmake
     git
-    nodePackages.typescript
+    typescript
     makeWrapper
   ] ++ lib.optionals stdenv.isLinux [
     pkg-config
