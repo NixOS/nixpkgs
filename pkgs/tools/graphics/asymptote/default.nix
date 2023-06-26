@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, fetchpatch
-, autoreconfHook, bison, glm, flex
+, autoreconfHook, bison, glm, flex, wrapQtAppsHook
 , freeglut, ghostscriptX, imagemagick, fftw
 , boehmgc, libGLU, libGL, mesa, ncurses, readline, gsl, libsigsegv
-, python3
+, python3, qtbase, qtsvg
 , zlib, perl, curl
 , texLive, texinfo
 , darwin
@@ -25,12 +25,13 @@ stdenv.mkDerivation rec {
     flex
     bison
     texinfo
+    wrapQtAppsHook
   ];
 
   buildInputs = [
     ghostscriptX imagemagick fftw
     boehmgc ncurses readline gsl libsigsegv
-    zlib perl curl
+    zlib perl curl qtbase qtsvg
     texLive
     (python3.withPackages (ps: with ps; [ cson numpy pyqt5 ]))
   ];
@@ -42,6 +43,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     OpenGL GLUT Cocoa
   ]);
+
+  dontWrapQtApps = true;
 
   preConfigure = ''
     HOME=$TMP
@@ -55,6 +58,9 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-I${boehmgc.dev}/include/gc";
 
   postInstall = ''
+    rm "$out"/bin/xasy
+    makeQtWrapper "$out"/share/asymptote/GUI/xasy.py "$out"/bin/xasy --prefix PATH : "$out"/bin
+
     mv $out/share/info/asymptote/*.info $out/share/info/
     sed -i -e 's|(asymptote/asymptote)|(asymptote)|' $out/share/info/asymptote.info
     rmdir $out/share/info/asymptote
