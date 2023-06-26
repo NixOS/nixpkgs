@@ -54,7 +54,7 @@ in stdenv.mkDerivation rec {
       bin/language_server_x must be symlinked into the plugin directory, replacing the existing binary.
       For example:
       ```shell
-      ln -s /run/current-system/sw/bin/codeium_language_server ~/.local/share/JetBrains/Rider2023.1/codeium/f1c80c965ed51164cc8af59131e9a4d4fc13f878/language_server_linux_x64
+      ln -s "$(which codeium_language_server)" /home/a/.local/share/JetBrains/Rider2023.1/codeium/662505c9b23342478d971f66a530cd102ae35df7/language_server_linux_x64
       ```
     '';
     homepage = "https://codeium.com/";
