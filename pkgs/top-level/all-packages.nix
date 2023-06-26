@@ -17338,6 +17338,16 @@ with pkgs;
   phpExtensions = php.extensions;
   phpPackages = php.packages;
 
+  # Import PHP83 interpreter, extensions and packages
+  php83 = callPackage ../development/interpreters/php/8.3.nix {
+    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
+    pcre2 = pcre2.override {
+      withJitSealloc = false; # See https://bugs.php.net/bug.php?id=78927 and https://bugs.php.net/bug.php?id=78630
+    };
+  };
+  php83Extensions = recurseIntoAttrs php83.extensions;
+  php83Packages = recurseIntoAttrs php83.packages;
+
   # Import PHP82 interpreter, extensions and packages
   php82 = callPackage ../development/interpreters/php/8.2.nix {
     stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
