@@ -1,10 +1,10 @@
-{ lib, python3, khard, testers }:
+{ lib, python3, fetchPypi, khard, testers }:
 
 python3.pkgs.buildPythonApplication rec {
   version = "0.18.0";
   pname = "khard";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "05860fdayqap128l7i6bcmi9kdyi2gx02g2pmh88d56xgysd927y";
   };

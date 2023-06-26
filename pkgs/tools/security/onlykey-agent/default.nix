@@ -1,5 +1,6 @@
 { lib
 , python3Packages
+, fetchPypi
 , onlykey-cli
 }:
 
@@ -46,7 +47,7 @@ python3Packages.buildPythonApplication rec {
   pname = "onlykey-agent";
   version = "1.1.13";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-GAb6crtW6rLAbFtdi6fAGCPjXpKFhravguoGjuNcIxc=";
   };

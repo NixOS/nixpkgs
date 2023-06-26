@@ -26,14 +26,14 @@ assert lib.assertOneOf "backend" backend [ "opencl" "cuda" "tensorrt" "eigen" ];
 # of gcc.  If you need to use cuda10, please override stdenv with gcc8Stdenv
 stdenv.mkDerivation rec {
   pname = "katago";
-  version = "1.12.4";
-  githash = "75280bf26582090dd4985dca62bc7124116c856d";
+  version = "1.13.1";
+  githash = "3539a3d410b12f79658bb7a2cdaf1ecb6c95e6c1";
 
   src = fetchFromGitHub {
     owner = "lightvector";
     repo = "katago";
     rev = "v${version}";
-    sha256 = "sha256-1rznAxEFJ/Ah5/WiSwc+rtITOUOPYOua5BLKeqHOBr0=";
+    sha256 = "sha256-A2ZvFcklYQoxfqYrLrazksrJkfdELnn90aAbkm7pJg0=";
   };
 
   fakegit = writeShellScriptBin "git" "echo ${githash}";

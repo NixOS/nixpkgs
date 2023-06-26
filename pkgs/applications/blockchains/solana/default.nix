@@ -60,7 +60,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   strictDeps = true;
-  verifyCargoDeps = true;
   cargoBuildFlags = builtins.map (n: "--bin=${n}") solanaPkgs;
 
   # Even tho the tests work, a shit ton of them try to connect to a local RPC

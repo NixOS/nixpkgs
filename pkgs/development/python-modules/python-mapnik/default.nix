@@ -133,7 +133,7 @@ buildPythonPackage rec {
     "test_visual_zoom_all_rendering1"
     "test_visual_zoom_all_rendering2"
     "test_wgs84_inverse_forward"
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     "test_passing_pycairo_context_pdf"
   ];
 

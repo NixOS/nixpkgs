@@ -1,7 +1,12 @@
-{ fetchFromGitHub,
-  lib, stdenv,
-  cmake, zlib, libuv, openssl,
-  examples ? false
+{ fetchFromGitHub
+, lib
+, stdenv
+, cmake
+, zlib
+, libuv
+, openssl
+, pkg-config
+, examples ? false
 }: stdenv.mkDerivation rec {
     pname = "cassandra-cpp-driver";
     version = "2.16.2";
@@ -13,14 +18,13 @@
       sha256 = "sha256-NAvaRLhEvFjSmXcyM039wLC6IfLws2rkeRpbE5eL/rQ=";
     };
 
-    LIBUV_ROOT_DIR = "${libuv}/";
-    nativeBuildInputs = [ cmake ];
+    nativeBuildInputs = [ cmake pkg-config ];
     buildInputs = [ zlib libuv openssl.dev ];
 
-    cmakeFlags = lib.attrsets.mapAttrsToList
+    cmakeFlags = (lib.attrsets.mapAttrsToList
       (name: value: "-DCASS_BUILD_${name}:BOOL=${if value then "ON" else "OFF"}") {
         EXAMPLES = examples;
-      };
+      }) ++ [ "-DLIBUV_INCLUDE_DIR=${lib.getDev libuv}/include" ];
 
     meta = with lib; {
       description = "DataStax CPP cassandra driver";

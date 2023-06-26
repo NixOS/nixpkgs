@@ -1,12 +1,12 @@
 { fetchFromGitHub, buildGoModule, jq, buildNpmPackage, lib, makeWrapper }:
 
 let
-  version = "0.12.2";
+  version = "0.13.1";
   src = fetchFromGitHub {
     owner = "usememos";
     repo = "memos";
     rev = "v${version}";
-    sha256 = "vAY++SHUMBw+jyuu6KFNt62kE5FM8ysGheQwBSOYos8=";
+    sha256 = "VUY81ir7cPtuHodJhkSz3bmnoIeQH20kbg+duDcjfwM=";
   };
 
   frontend = buildNpmPackage {
@@ -15,7 +15,7 @@ let
 
     src = "${src}/web";
 
-    npmDepsHash = "sha256-vgO5HWbV/oR1GenK9q5a1bhlTSJqtF4HBcQTZ3DqZq8=";
+    npmDepsHash = "sha256-36UcHE98dsGvYQWLIc/xgP8Q0IyJ7la0Qoo3lZqUcmw=";
 
     postPatch = ''
       cp ${./package-lock.json} package-lock.json
@@ -32,7 +32,7 @@ buildGoModule rec {
 
   # check will unable to access network in sandbox
   doCheck = false;
-  vendorSha256 = "sha256-P4OnICBiTAs/uaQgoYNKK50yj/PYntyH/bLihdPv88s=";
+  vendorSha256 = "sha256-OztHMpOj7Ewmxu+pzPmzmtHBDe1sbzj805In37mFjzU=";
 
   # Inject frontend assets into go embed
   prePatch = ''

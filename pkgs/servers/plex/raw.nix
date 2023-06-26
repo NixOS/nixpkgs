@@ -12,16 +12,16 @@
 # server, and the FHS userenv and corresponding NixOS module should
 # automatically pick up the changes.
 stdenv.mkDerivation rec {
-  version = "1.32.1.6999-91e1e2e2c";
+  version = "1.32.4.7195-7c8f9d3b6";
   pname = "plexmediaserver";
 
   # Fetch the source
   src = if stdenv.hostPlatform.system == "aarch64-linux" then fetchurl {
     url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_arm64.deb";
-    sha256 = "sha256-gVM4KFRhnvEG1LAJUTdzSyJz3R3WZ8lvy7AbHLTd7XI=";
+    sha256 = "sha256-Qb684Mm080QudeLG111cLCSRh1CAJ31IjNOO62XkFTs=";
   } else fetchurl {
     url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_amd64.deb";
-    sha256 = "sha256-DSwcT67l5u8XNThbWIpdbJOb+vGUXF0u6SQSXyiOhSI=";
+    sha256 = "sha256-lnkhjzBW9DENCVJNP+4h8fVVUh4LhnJ1XjrCjF3ngKE=";
   };
 
   outputs = [ "out" "basedb" ];

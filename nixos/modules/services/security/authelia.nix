@@ -72,7 +72,7 @@ let
               type = types.nullOr types.path;
               default = null;
               description = mdDoc ''
-                Path to your JWT secret used during identity verificaiton.
+                Path to your JWT secret used during identity verificaton.
               '';
             };
 

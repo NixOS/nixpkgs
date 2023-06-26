@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "martin";
-  version = "0.8.2";
+  version = "0.8.6";
 
   src = fetchFromGitHub {
     owner = "maplibre";
     repo = "martin";
     rev = "v${version}";
-    hash = "sha256-8Kdvwu8KLEMEYoRgkcgYYyX60am+P6jEF7e2W2/lICk=";
+    hash = "sha256-JHNmGjdbTC3WDmgVM20hXU5IX87DUaWfblIPUe0BUJk=";
   };
 
-  cargoHash = "sha256-XCKLi9m/MZXeBpzLFaxPtEsKQYw1wJlWQdspaRFR6Ug=";
+  cargoHash = "sha256-JK1Q0Sn3FCv6DuGsMySsORJBRpTfMdD/Y4dP8qPc1D8=";
 
   nativeBuildInputs = [ pkg-config ];
 

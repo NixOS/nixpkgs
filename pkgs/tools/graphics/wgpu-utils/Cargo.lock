@@ -700,7 +700,7 @@ checksum = "9ea835d29036a4087793836fa931b08837ad5e957da9e23886b29586fb9b6650"
 
 [[package]]
 name = "dummy"
-version = "0.16.0"
+version = "0.16.1"
 dependencies = [
  "wgpu-core",
 ]
@@ -1913,7 +1913,7 @@ checksum = "6ac9a59f73473f1b8d852421e59e64809f025994837ef743615c6d0c5b305160"
 
 [[package]]
 name = "player"
-version = "0.16.0"
+version = "0.16.1"
 dependencies = [
  "env_logger",
  "log",
@@ -2130,7 +2130,7 @@ dependencies = [
 
 [[package]]
 name = "run-wasm"
-version = "0.16.0"
+version = "0.16.1"
 dependencies = [
  "cargo-run-wasm",
 ]
@@ -3084,7 +3084,7 @@ dependencies = [
 
 [[package]]
 name = "wgpu"
-version = "0.16.0"
+version = "0.16.1"
 dependencies = [
  "arrayvec 0.7.2",
  "async-executor",
@@ -3124,7 +3124,7 @@ dependencies = [
 
 [[package]]
 name = "wgpu-core"
-version = "0.16.0"
+version = "0.16.1"
 dependencies = [
  "arrayvec 0.7.2",
  "bit-vec",
@@ -3190,7 +3190,7 @@ dependencies = [
 
 [[package]]
 name = "wgpu-info"
-version = "0.16.0"
+version = "0.16.1"
 dependencies = [
  "env_logger",
  "num-traits 0.2.15",

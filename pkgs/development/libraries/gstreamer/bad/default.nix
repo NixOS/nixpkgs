@@ -23,7 +23,6 @@
 , lcms2
 , libnice
 , webrtc-audio-processing
-, webrtc-audio-processing_1
 , lilv
 , lv2
 , serd
@@ -39,7 +38,6 @@
 , bluez
 , chromaprint
 , curl
-, directfb
 , fdk_aac
 , flite
 , gsm
@@ -90,6 +88,7 @@
 , vo-aacenc
 , libfreeaptx
 , zxing-cpp
+, usrsctp
 , VideoToolbox
 , AudioToolbox
 , AVFoundation
@@ -104,17 +103,18 @@
 , microdnsSupport ? false
 # Checks meson.is_cross_build(), so even canExecute isn't enough.
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
+, guiSupport ? true, directfb
 }:
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
-  version = "1.22.2";
+  version = "1.22.3";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-PY+vHONALIU1zjqMThpslg5LVlXb2mtVlD25rHkCLQ8=";
+    hash = "sha256-4XmP7i2GEn8GN0gcYH+YMpO/D9garXClx7RyBa82Idg=";
   };
 
   patches = [
@@ -165,6 +165,7 @@ stdenv.mkDerivation rec {
     libde265
     libdvdnav
     libdvdread
+    libnice
     qrencode
     libsndfile
     libusb1
@@ -182,9 +183,6 @@ stdenv.mkDerivation rec {
     libwebp
     xvidcore
     gnutls
-    libGL
-    libGLU
-    gtk3
     game-music-emu
     openssl
     libxml2
@@ -193,6 +191,7 @@ stdenv.mkDerivation rec {
     vo-aacenc
     libfreeaptx
     zxing-cpp
+    usrsctp
   ] ++ lib.optionals enableZbar [
     zbar
   ] ++ lib.optionals faacSupport [
@@ -218,11 +217,9 @@ stdenv.mkDerivation rec {
     mjpegtools
 
     chromaprint
-    directfb
     flite
     libdrm
     libgudev
-    libnice
     sbc
     spandsp
 
@@ -236,6 +233,13 @@ stdenv.mkDerivation rec {
     serd
     sord
     sratom
+
+    libGL
+    libGLU
+  ] ++ lib.optionals guiSupport [
+    gtk3
+  ] ++ lib.optionals (stdenv.isLinux && guiSupport) [
+    directfb
   ] ++ lib.optionals stdenv.isDarwin [
     # For unknown reasons the order is important, e.g. if
     # VideoToolbox is last, we get:
@@ -276,7 +280,6 @@ stdenv.mkDerivation rec {
     "-Dmusepack=disabled"
     "-Dopenni2=disabled" # not packaged in nixpkgs as of writing
     "-Dopensles=disabled" # not packaged in nixpkgs as of writing
-    "-Dsctp=disabled" # required `usrsctp` library not packaged in nixpkgs as of writing
     "-Dsvthevcenc=disabled" # required `SvtHevcEnc` library not packaged in nixpkgs as of writing
     "-Dteletext=disabled" # required `zvbi` library not packaged in nixpkgs as of writing
     "-Dtinyalsa=disabled" # not packaged in nixpkgs as of writing
@@ -297,10 +300,11 @@ stdenv.mkDerivation rec {
     "-Ddoc=disabled" # needs gstcuda to be enabled which is Linux-only
     "-Dnvcodec=disabled" # Linux-only
     "-Dva=disabled" # see comment on `libva` in `buildInputs`
+  ] ++ lib.optionals (!stdenv.isLinux || !guiSupport) [
+    "-Ddirectfb=disabled"
   ]
   ++ lib.optionals stdenv.isDarwin [
     "-Dchromaprint=disabled"
-    "-Ddirectfb=disabled"
     "-Dflite=disabled"
     "-Dkms=disabled" # renders to libdrm output
     "-Dlv2=disabled"
@@ -311,7 +315,6 @@ stdenv.mkDerivation rec {
     "-Duvch264=disabled" # requires gudev
     "-Dv4l2codecs=disabled" # requires gudev
     "-Dladspa=disabled" # requires lrdf
-    "-Dwebrtc=disabled" # requires libnice, which as of writing doesn't work on Darwin in nixpkgs
     "-Dwildmidi=disabled" # see dependencies above
   ] ++ lib.optionals (!stdenv.isLinux || !stdenv.isx86_64) [
     "-Dqsv=disabled" # Linux (and Windows) x86 only
@@ -361,6 +364,6 @@ stdenv.mkDerivation rec {
     '';
     license = if enableGplPlugins then licenses.gpl2Plus else licenses.lgpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = with maintainers; [ matthewbauer lilyinstarlight ];
   };
 }

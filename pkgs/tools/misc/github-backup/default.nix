@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchPypi
 , git
 , git-lfs
 }:
@@ -8,7 +9,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "github-backup";
   version = "0.42.0";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-tFfS3Z7xrbN2QEOrYcUVd8/YwGKfmR2NaUBeXuSL+tY=";
   };

@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vtm";
-  version = "0.9.9h";
+  version = "0.9.9n";
 
   src = fetchFromGitHub {
     owner = "netxs-group";
     repo = "vtm";
     rev = "v${version}";
-    sha256 = "sha256-6JyOoEJoJ/y6pXfhQV4nei2NAOCClScFDscwqNPKZu8=";
+    sha256 = "sha256-THsIA8+yfMXM+WLVL8TCnD1CEZy1iB4hA7SzhdVT4hA=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "Terminal multiplexer with window manager and session sharing";
     homepage = "https://vtm.netxs.online/";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.all;
     maintainers = with maintainers; [ ahuzik ];
   };
 }

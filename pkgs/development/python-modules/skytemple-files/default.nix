@@ -20,7 +20,7 @@
 , graphql-core
 , gql
 , armips
-# tests
+  # tests
 , pytestCheckHook
 , parameterized
 , xmldiff
@@ -70,7 +70,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytestCheckHook parameterized xmldiff ] ++ passthru.optional-dependencies.spritecollab;
-  pytestFlagsArray = "test/";
+  pytestFlagsArray = [ "test/" ];
   disabledTestPaths = [
     "test/skytemple_files_test/common/spritecollab/sc_online_test.py"
     "test/skytemple_files_test/compression_container/atupx/atupx_test.py" # Particularly long test

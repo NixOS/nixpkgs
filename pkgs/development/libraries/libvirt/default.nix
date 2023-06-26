@@ -114,13 +114,13 @@ stdenv.mkDerivation rec {
   # NOTE: You must also bump:
   # <nixpkgs/pkgs/development/python-modules/libvirt/default.nix>
   # SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "9.2.0";
+  version = "9.4.0";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-uASIfQVbY/5I/PELEB6EGzzHfcgY4jIolbyH05TgiLA=";
+    sha256 = "sha256-aYLXiZtbNXwJ8qmTHXv2OnyrYWK7KbwQWulTeuTbe0k=";
     fetchSubmodules = true;
   };
 
@@ -141,11 +141,13 @@ stdenv.mkDerivation rec {
     # delete only the first occurrence of this
     sed -i '0,/qemuxml2argvtest/{/qemuxml2argvtest/d;}' tests/meson.build
 
+  '' + lib.optionalString isLinux ''
     for binary in mount umount mkfs; do
       substituteInPlace meson.build \
         --replace "find_program('$binary'" "find_program('${lib.getBin util-linux}/bin/$binary'"
     done
 
+  '' + ''
     substituteInPlace meson.build \
       --replace "'dbus-daemon'," "'${lib.getBin dbus}/bin/dbus-daemon',"
   '' + lib.optionalString isLinux ''

@@ -66,18 +66,13 @@ out/html/index.html: doc-support/result manual-full.xml style.css highlightjs
 	cp doc-support/result/xsl/docbook/images/callouts/*.svg out/html/images/callouts/
 	chmod u+w -R out/html/
 
-out/epub/manual.epub: manual-full.xml
+out/epub/manual.epub: epub.xml
 	mkdir -p out/epub/scratch
 	xsltproc --nonet \
 		--output out/epub/scratch/ \
 		doc-support/result/epub.xsl \
-		./manual-full.xml
+		./epub.xml
 
-	cp -r $(pandoc_media_dir) out/epub/scratch/OEBPS
-	cp ./overrides.css out/epub/scratch/OEBPS
-	cp ./style.css out/epub/scratch/OEBPS
-	mkdir -p out/epub/scratch/OEBPS/images/callouts/
-	cp doc-support/result/xsl/docbook/images/callouts/*.svg out/epub/scratch/OEBPS/images/callouts/
 	echo "application/epub+zip" > mimetype
 	zip -0Xq "out/epub/manual.epub" mimetype
 	rm mimetype

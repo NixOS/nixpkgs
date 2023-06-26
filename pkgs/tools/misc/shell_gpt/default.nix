@@ -1,16 +1,17 @@
 { lib
 , python3
+, fetchPypi
 , nix-update-script
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "shell_gpt";
-  version = "0.9.0";
+  version = "0.9.3";
   format = "pyproject";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-KzW9yI1TGG2hFKeXHFqqYCLw/PB9+lJoTgyWrXxCHpo=";
+    sha256 = "sha256-g7zQ9ii38jBMUT0n8SjkccnGlkpCO4817GZ2yidxpMU=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

@@ -13,6 +13,17 @@ const constants = {
     targetFile: new URL("default.nix", import.meta.url).pathname,
 };
 
+async function utf16ToUtf8(blob) {
+    // Sometime, upstream saves the SHA256SUMS.txt file in UTF-16, which absolutely breaks node's string handling
+    // So we need to convert this blob to UTF-8
+
+    // We need to skip the first 2 bytes, which are the BOM
+    const arrayBuffer = await blob.slice(2).arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    const utf8String = buffer.toString('utf16le');
+    return utf8String;
+}
+
 async function getLatestVersion() {
     const requestResult = await fetch(constants.githubUrl);
     if (!requestResult.ok) {
@@ -37,6 +48,7 @@ async function getSha256Sum(hashFileContent, targetFile) {
 
     let sha256 = hashFileContent.
         split('\n').
+        map(line => line.replace("\r", "")). // Side-effect of the UTF-16 conversion, if the file was created from Windows
         filter((line) => line.endsWith(targetFile))[0].
         split(' ')[0];
 
@@ -47,14 +59,21 @@ async function getSha256Sums(newVersion) {
     // Upstream provides a file with the hashes of the files, but it's not in the SRI format, and it refers to the compressed tarball
     // So let's just use nix-prefetch-url to get the hashes of the decompressed tarball, and `nix hash to-sri` to convert them to SRI format
     const hashFileUrl = constants.sha256FileURL(newVersion);
-    const hashFileContent = await fetch(hashFileUrl).then((response) => response.text());
+    const hashFileContent = await fetch(hashFileUrl).then((response) => response.blob());
+    const headerbuffer = await hashFileContent.slice(0, 2).arrayBuffer()
+    const header = Buffer.from(headerbuffer).toString('hex');
+
+    // We must detect if it's UTF-16 or UTF-8. If it's UTF-16, we must convert it to UTF-8, otherwise just use it as-is
+    const hashFileContentString = header == 'fffe' ?
+        await utf16ToUtf8(hashFileContent) :
+        await hashFileContent.text();
 
     let x86_64;
     let aarch64;
     console.log("Getting new hashes");
     let promises = [
-        getSha256Sum(hashFileContent, constants.x86_64FileName(newVersion)).then((hash) => { x86_64 = hash; }),
-        getSha256Sum(hashFileContent, constants.aarch64FileName(newVersion)).then((hash) => { aarch64 = hash; }),
+        getSha256Sum(hashFileContentString, constants.x86_64FileName(newVersion)).then((hash) => { x86_64 = hash; }),
+        getSha256Sum(hashFileContentString, constants.aarch64FileName(newVersion)).then((hash) => { aarch64 = hash; }),
     ];
     await Promise.all(promises);
     return { x86_64, aarch64 };

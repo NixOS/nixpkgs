@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "mastodon-py";
-  version = "1.8.0";
+  version = "1.8.1";
 
   format = "setuptools";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "halcy";
     repo = "Mastodon.py";
     rev = "refs/tags/${version}";
-    hash = "sha256-T/yG9LLdttBQ+9vCSit+pyQX/BPqqDXbrTcPfTAUu1U=";
+    hash = "sha256-r0AAUjd2MBfZANEpyztMNyaQTlGWvWoUVjJNO1eL218=";
   };
 
   postPatch = ''

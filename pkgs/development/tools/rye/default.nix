@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , rustPlatform
+, git
 , openssl
 , pkg-config
 , stdenv
@@ -9,23 +10,37 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rye";
-  version = "unstable-2023-04-23";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
-    repo = "rye";
-    rev = "b3fe43a4e462d10784258cad03c19c9738367346";
-    hash = "sha256-q9/VUWyrP/NsuLYY1+/5teYvDJGq646WbMXptnUUUyw=";
+    repo = pname;
+    rev = version;
+    # One of the tests runs git command so we need .git directory there
+    leaveDotGit = true;
+    sha256 = "llm4aqMfaVf3VbHudWjb9V2GFgJpP9S211Ui7xXdrAU=";
   };
 
-  cargoHash = "sha256-eyJ6gXFVnSC1aEt5YLl5rFoa3+M73smu5wJdAN15HQM=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "dialoguer-0.10.4" = "sha256-WDqUKOu7Y0HElpPxf2T8EpzAY3mY8sSn9lf0V0jyAFc=";
+    };
+  };
+
+  env = {
+    OPENSSL_NO_VENDOR = 1;
+  };
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
+    git
     openssl
   ]
   ++ lib.optional stdenv.isDarwin SystemConfiguration;
+
+  nativeCheckInputs = [ git ];
 
   meta = with lib; {
     description = "A tool to easily manage python dependencies and environments";

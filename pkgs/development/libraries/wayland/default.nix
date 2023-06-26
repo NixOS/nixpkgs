@@ -124,6 +124,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ primeos codyopel qyliss ];
   };
-
-  passthru.version = version;
 }

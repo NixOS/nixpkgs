@@ -2,18 +2,18 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "source-code-pro";
-  version = "2.038";
+  version = "2.042";
 
   src = fetchzip {
-    url = "https://github.com/adobe-fonts/source-code-pro/releases/download/${version}R-ro%2F1.058R-it%2F1.018R-VAR/OTF-source-code-pro-${version}R-ro-1.058R-it.zip";
+    url = "https://github.com/adobe-fonts/source-code-pro/releases/download/${version}R-u%2F1.062R-i%2F1.026R-vf/OTF-source-code-pro-${version}R-u_1.062R-i.zip";
     stripRoot = false;
-    hash = "sha256-ijeTLka131jf6B9xj/eNWK1T5r7r3aBXBgnVyRAxmuY=";
+    hash = "sha256-+BnfmD+AjObSoVxPvFAqbnMD2j5qf2YmbXGQtXoaiy0=";
   };
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 *.otf -t $out/share/fonts/opentype
+    install -Dm644 OTF/*.otf -t $out/share/fonts/opentype
 
     runHook postInstall
   '';

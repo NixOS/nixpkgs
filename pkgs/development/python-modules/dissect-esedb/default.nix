@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-esedb";
-  version = "3.6";
+  version = "3.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.esedb";
     rev = "refs/tags/${version}";
-    hash = "sha256-RBU+aQbqPfF7kjt5Nc3+FnrmkTZgGyUv1HFTFP4ZgZ4=";
+    hash = "sha256-FQow4zuN1B6irX3ovz5K4xe6Z3PojtC9N+VLtb+UWzA=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

@@ -6,6 +6,7 @@
 , sniffio
 , pytest-trio
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 }:
 
@@ -47,6 +48,10 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     "tests/python" # tries to import internal API test.test_asyncio
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [
+    "test_run_task"
   ];
 
   pythonImportsCheck = [

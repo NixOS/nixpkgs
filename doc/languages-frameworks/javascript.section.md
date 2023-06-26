@@ -143,7 +143,7 @@ To update NPM packages in nixpkgs, run the same `generate.sh` script:
 #### Git protocol error {#javascript-git-error}
 
 Some packages may have Git dependencies from GitHub specified with `git://`.
-GitHub has [disabled unecrypted Git connections](https://github.blog/2021-09-01-improving-git-protocol-security-github/#no-more-unauthenticated-git), so you may see the following error when running the generate script:
+GitHub has [disabled unencrypted Git connections](https://github.blog/2021-09-01-improving-git-protocol-security-github/#no-more-unauthenticated-git), so you may see the following error when running the generate script:
 
 ```
 The unauthenticated git protocol on port 9418 is no longer supported

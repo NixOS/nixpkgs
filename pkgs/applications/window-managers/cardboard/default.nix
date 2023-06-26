@@ -57,11 +57,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cardboard";
-  version = "0.pre+unstable=2021-05-10";
+  version = "unstable=2021-05-10";
 
   src = fetchFromGitLab {
     owner = "cardboardwm";
-    repo = pname;
+    repo = "cardboard";
     rev = "b54758d85164fb19468f5ca52588ebea576cd027";
     hash = "sha256-Kn5NyQSDyX7/nn2bKZPnsuepkoppi5XIkdu7IDy5r4w=";
   };
@@ -73,6 +73,7 @@ stdenv.mkDerivation rec {
     pkg-config
     unzip
   ];
+
   buildInputs = [
     ffmpeg
     libGL
@@ -93,12 +94,12 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    (cd subprojects
-     tar xvf ${cereal-wrap}
-     unzip ${cereal-wrapdb}
-     cp -r ${expected-wrap} ${expected-wrap.name}
-     cp -r ${wlroots-wrap} ${wlroots-wrap.name}
-    )
+    pushd subprojects
+    tar xvf ${cereal-wrap}
+    unzip ${cereal-wrapdb}
+    cp -r ${expected-wrap} ${expected-wrap.name}
+    cp -r ${wlroots-wrap} ${wlroots-wrap.name}
+    popd
 
     sed '1i#include <functional>' -i cardboard/ViewAnimation.h # gcc12
   '';
@@ -112,11 +113,15 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=array-bounds" ]; # gcc12
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/cardboardwm/cardboard";
     description = "A scrollable, tiling Wayland compositor inspired on PaperWM";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; unix;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    inherit (wayland.meta) platforms;
+    knownVulnerabilities = [
+      "CVE-2020-11104 (inherited from cereal 1.3.0)"
+      "CVE-2020-11105 (inherited from cereal 1.3.0)"
+    ];
   };
 }

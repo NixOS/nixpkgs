@@ -95,18 +95,20 @@ rec {
   makeStaticDarwin = stdenv: stdenv.override (old: {
     # extraBuildInputs are dropped in cross.nix, but darwin still needs them
     extraBuildInputs = [ pkgs.buildPackages.darwin.CF ];
-    mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
-      NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "")
+    mkDerivationFromStdenv = withOldMkDerivation old (stdenv: mkDerivationSuper: args:
+    (mkDerivationSuper args).overrideAttrs (finalAttrs: {
+      NIX_CFLAGS_LINK = toString (finalAttrs.NIX_CFLAGS_LINK or "")
         + lib.optionalString (stdenv.cc.isGNU or false) " -static-libgcc";
-      nativeBuildInputs = (args.nativeBuildInputs or []) ++ [
-        (pkgs.buildPackages.makeSetupHook {
-          name = "darwin-portable-libSystem-hook";
-          substitutions = {
-            libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";
-          };
-        } ./darwin/portable-libsystem.sh)
-      ];
-    });
+      nativeBuildInputs = (finalAttrs.nativeBuildInputs or [])
+        ++ lib.optional stdenv.hasCC [
+          (pkgs.buildPackages.makeSetupHook {
+            name = "darwin-portable-libSystem-hook";
+            substitutions = {
+              libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";
+            };
+          } ./darwin/portable-libsystem.sh)
+        ];
+    }));
   });
 
   # Puts all the other ones together

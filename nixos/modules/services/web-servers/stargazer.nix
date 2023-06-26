@@ -152,7 +152,7 @@ in
 
         Expressed as a list of attribute sets. Each set must have a key `route`
         that becomes the section name for that route in the stargazer ini cofig.
-        The remaining keys and vaules become the parameters for that route.
+        The remaining keys and values become the parameters for that route.
 
         [Refer to upstream docs for other params](https://git.sr.ht/~zethra/stargazer/tree/main/item/doc/stargazer.ini.5.txt)
       '';

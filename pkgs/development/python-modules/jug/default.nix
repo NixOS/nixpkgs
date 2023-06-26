@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "jug";
-  version = "2.2.2";
+  version = "2.2.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Jug";
     inherit version;
-    hash = "sha256-3uK6mWaLEGPFoPuznU+OcnkjFZ+beDoIw0vOC4l5gRg=";
+    hash = "sha256-DNJsmWCSzqyNVjsrFDE9tJhMA9oGM7dBr9h/nZfa+Fk=";
   };
 
   propagatedBuildInputs = [

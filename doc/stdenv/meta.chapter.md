@@ -70,7 +70,7 @@ A list of the maintainers of this Nix expression. Maintainers are defined in [`n
 
 ### `mainProgram` {#var-meta-mainProgram}
 
-The name of the main binary for the package. This effects the binary `nix run` executes and falls back to the name of the package. Example: `"rg"`
+The name of the main binary for the package. This affects the binary `nix run` executes and falls back to the name of the package. Example: `"rg"`
 
 ### `priority` {#var-meta-priority}
 
@@ -128,7 +128,7 @@ Prefer `passthru.tests` for tests that are introduced in nixpkgs because:
 * we can run `passthru.tests` independently
 * `installCheckPhase` adds overhead to each build
 
-For more on how to write and run package tests, see <xref linkend="sec-package-tests"/>.
+For more on how to write and run package tests, see [](#sec-package-tests).
 
 #### NixOS tests {#var-meta-tests-nixos}
 
@@ -182,7 +182,7 @@ runCommand "my-package-test" {
 
 ### `timeout` {#var-meta-timeout}
 
-A timeout (in seconds) for building the derivation. If the derivation takes longer than this time to build, it can fail due to breaking the timeout. However, all computers do not have the same computing power, hence some builders may decide to apply a multiplicative factor to this value. When filling this value in, try to keep it approximately consistent with other values already present in `nixpkgs`.
+A timeout (in seconds) for building the derivation. If the derivation takes longer than this time to build, Hydra will fail it due to breaking the timeout. However, all computers do not have the same computing power, hence some builders may decide to apply a multiplicative factor to this value. When filling this value in, try to keep it approximately consistent with other values already present in `nixpkgs`.
 
 `meta` attributes are not stored in the instantiated derivation.
 Therefore, this setting may be lost when the package is used as a dependency.

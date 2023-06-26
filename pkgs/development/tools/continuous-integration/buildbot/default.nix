@@ -1,4 +1,5 @@
 { python3
+, fetchPypi
 , recurseIntoAttrs
 , callPackage
 }:
@@ -7,7 +8,7 @@ let
     packageOverrides = self: super: {
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
         version = "1.4.40";
-        src = super.fetchPypi {
+        src = fetchPypi {
           pname = "SQLAlchemy";
           inherit version;
           hash = "sha256-RKZgUGCAzJdeHfpXdv5fYxXdxiane1C/Du4YsDieomU=";

@@ -1,6 +1,10 @@
 pkgs: lib: self: super:
 
 ### Deprecated aliases - for backward compatibility
+###
+### !!! NOTE !!!
+### Use `./remove-attr.py [attrname]` in this directory to remove your alias
+### from the `nodePackages` set without regenerating the entire file.
 
 with self;
 
@@ -38,6 +42,10 @@ mapAliases {
   "@githubnext/github-copilot-cli" = pkgs.github-copilot-cli; # Added 2023-05-02
   "@google/clasp" = pkgs.google-clasp; # Added 2023-05-07
   "@nestjs/cli" = pkgs.nest-cli; # Added 2023-05-06
+  eslint_d = pkgs.eslint_d; # Added 2023-05-26
   manta = pkgs.node-manta; # Added 2023-05-06
+  readability-cli = pkgs.readability-cli; # Added 2023-06-12
+  thelounge = pkgs.thelounge; # Added 2023-05-22
   triton = pkgs.triton; # Added 2023-05-06
+  vscode-langservers-extracted = pkgs.vscode-langservers-extracted; # Added 2023-05-27
 }

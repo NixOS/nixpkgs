@@ -29,7 +29,6 @@ buildGoModule rec {
     license = licenses.bsd3;
     homepage = "https://github.com/esnet/gdg";
     maintainers = with maintainers; teams.bitnomial.members;
-    platforms = platforms.unix;
     mainProgram = "gdg";
     changelog =
       "https://github.com/esnet/gdg/releases/tag/v${version}";

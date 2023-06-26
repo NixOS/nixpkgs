@@ -16,8 +16,9 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ perl gettext ];
+  strictdeps = true;
+  nativeBuildInputs = [ makeWrapper gettext ];
+  buildInputs = [ perl ]; # perl is needed for `lib/byobu/include/*` scripts
   propagatedBuildInputs = [ textual-window-manager screen ];
 
   postPatch = ''

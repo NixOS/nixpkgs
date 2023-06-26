@@ -1,0 +1,11 @@
+diff --git a/cpz/src/main.rs b/cpz/src/main.rs
+index 4e7ce8d..0d0922d 100644
+--- a/cpz/src/main.rs
++++ b/cpz/src/main.rs
+@@ -1,5 +1,6 @@
+ #![feature(once_cell)]
+ #![feature(let_chains)]
++#![feature(main_separator_str)]
+ 
+ use std::{
+     borrow::Cow,

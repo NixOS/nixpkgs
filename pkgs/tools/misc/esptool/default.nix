@@ -46,5 +46,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dezgeg dotlambda ] ++ teams.lumiguide.members;
     platforms = with platforms; linux ++ darwin;
+    mainProgram = "esptool.py";
   };
 }

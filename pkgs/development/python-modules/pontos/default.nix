@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , git
 , httpx
+, lxml
 , packaging
 , poetry-core
 , pytestCheckHook
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pontos";
-  version = "23.5.1";
+  version = "23.6.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-nUVJjBebHOY0/oN/Cl2HdaLGnDVgLsUK7Yd+johP1PM=";
+    hash = "sha256-HBDijU5R1furmlP1ykmjbbBWXh/LSVE2zuuJ80D9Yng=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +37,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     colorful
     httpx
+    lxml
     packaging
     python-dateutil
     semver
@@ -63,6 +65,8 @@ buildPythonPackage rec {
     # Network access
     "test_fail_sign_on_upload_fail"
     "test_successfully_sign"
+    # calls git log, but our fetcher removes .git
+    "test_git_error"
   ];
 
   pythonImportsCheck = [

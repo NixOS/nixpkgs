@@ -290,11 +290,14 @@ self: super: builtins.intersectAttrs super {
     src = assert super.nix-serve-ng.version == "1.0.0";
       # Workaround missing files in sdist
       # https://github.com/aristanetworks/nix-serve-ng/issues/10
+      #
+      # Workaround for libstore incompatibility with Nix 2.13
+      # https://github.com/aristanetworks/nix-serve-ng/issues/22
       pkgs.fetchFromGitHub {
         repo = "nix-serve-ng";
         owner = "aristanetworks";
-        rev = "433f70f4daae156b84853f5aaa11987aa5ce7277";
-        sha256 = "0mqp67z5mi8rsjahdh395n7ppf0b65k8rd3pvnl281g02rbr69y2";
+        rev = "dabf46d65d8e3be80fa2eacd229eb3e621add4bd";
+        hash = "sha256-SoJJ3rMtDMfUzBSzuGMY538HDIj/s8bPf8CjIkpqY2w=";
       };
   } (addPkgconfigDepend pkgs.boost.dev super.nix-serve-ng);
 
@@ -426,18 +429,8 @@ self: super: builtins.intersectAttrs super {
     '';
   }) super.leksah);
 
-  dyre =
-    appendPatch
-      # Dyre needs special support for reading the NIX_GHC env var.  This is
-      # available upstream in https://github.com/willdonnelly/dyre/pull/43, but
-      # hasn't been released to Hackage as of dyre-0.9.1.  Likely included in
-      # next version.
-      (pkgs.fetchpatch {
-        url = "https://github.com/willdonnelly/dyre/commit/c7f29d321aae343d6b314f058812dffcba9d7133.patch";
-        sha256 = "10m22k35bi6cci798vjpy4c2l08lq5nmmj24iwp0aflvmjdgscdb";
-      })
-      # dyre's tests appear to be trying to directly call GHC.
-      (dontCheck super.dyre);
+  # dyre's tests appear to be trying to directly call GHC.
+  dyre = dontCheck super.dyre;
 
   # https://github.com/edwinb/EpiVM/issues/13
   # https://github.com/edwinb/EpiVM/issues/14
@@ -994,30 +987,44 @@ self: super: builtins.intersectAttrs super {
   # won't work (or would need to patch test suite).
   domaindriven-core = dontCheck super.domaindriven-core;
 
- cachix = overrideCabal (drv: {
-    version = "1.4.2";
+  cachix-api = overrideCabal (drv: {
+    version = "1.5";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      rev = "v1.4.2";
-      sha256 = "sha256-EjfBM5O+wXJhthRU/Nd9VFue7xo5O93nx0pMt3jx0Ow=";
+      rev = "v1.5";
+      sha256 = "sha256-bt8FFtDSJpBckx3dIjW5Xdvj8aVCm78R3VTpjK5F3Ac=";
+    };
+    postUnpack = "sourceRoot=$sourceRoot/cachix-api";
+    postPatch = ''
+      sed -i 's/1.4.2/1.5/' cachix-api.cabal
+    '';
+  }) super.cachix-api;
+  cachix = overrideCabal (drv: {
+    version = "1.5";
+    src = pkgs.fetchFromGitHub {
+      owner = "cachix";
+      repo = "cachix";
+      rev = "v1.5";
+      sha256 = "sha256-bt8FFtDSJpBckx3dIjW5Xdvj8aVCm78R3VTpjK5F3Ac=";
     };
     postUnpack = "sourceRoot=$sourceRoot/cachix";
     postPatch = ''
-      sed -i 's/1.4.1/1.4.2/' cachix.cabal
+      sed -i 's/1.4.2/1.5/' cachix.cabal
     '';
-  }) (super.cachix.override {
-    fsnotify = dontCheck super.fsnotify_0_4_1_0;
-    hnix-store-core = super.hnix-store-core_0_6_1_0;
-  });
-
-  cachix_1_3_3 = overrideCabal (drv: {
-    hydraPlatforms = pkgs.lib.platforms.all;
-  }) (super.cachix_1_3_3.override {
-    nix = self.hercules-ci-cnix-store.nixPackage;
-    fsnotify = dontCheck super.fsnotify_0_4_1_0;
-    hnix-store-core = super.hnix-store-core_0_6_1_0;
-  });
+  }) (lib.pipe
+        (super.cachix.override {
+          fsnotify = dontCheck super.fsnotify_0_4_1_0;
+          hnix-store-core = super.hnix-store-core_0_6_1_0;
+          nix = self.hercules-ci-cnix-store.nixPackage;
+        })
+        [
+         (addBuildTool self.hercules-ci-cnix-store.nixPackage)
+         (addBuildTool pkgs.pkg-config)
+         (addBuildDepend self.inline-c-cpp)
+         (addBuildDepend self.hercules-ci-cnix-store)
+        ]
+  );
 
   hercules-ci-agent = super.hercules-ci-agent.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; };
   hercules-ci-cnix-expr = addTestToolDepend pkgs.git (super.hercules-ci-cnix-expr.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; });

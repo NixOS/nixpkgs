@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustypaste";
-  version = "0.8.4";
+  version = "0.10.1";
 
-  src = fetchFromGitHub{
+  src = fetchFromGitHub {
     owner = "orhun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-tx2ipgvYDdCwcWFeZ/qgGXyKe+kHLuOgDAz/8vf2zEs=";
+    sha256 = "sha256-WLuMG9gC2kSdyrYa0CNnInjetXph0OL/Jmjskih4tuw=";
   };
 
-  cargoHash = "sha256-/zji2sFaOweBo666LqfNRpO/0vi1eAGgOReeuvQIaEQ=";
+  cargoHash = "sha256-A651PTooQjITjxCLKPhnFSCxa27uesTOP8ZbAlRbOUk=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage rec {
 
   # Some tests need network
   checkFlags = [
-    "--skip paste::tests::test_paste_data"
-    "--skip server::tests::test_upload_file"
-    "--skip server::tests::test_upload_remote_file"
-    "--skip util::tests::test_get_expired_files"
+    "--skip=paste::tests::test_paste_data"
+    "--skip=server::tests::test_upload_file"
+    "--skip=server::tests::test_upload_remote_file"
+    "--skip=util::tests::test_get_expired_files"
   ];
 
   meta = with lib; {
@@ -30,6 +30,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/orhun/rustypaste";
     changelog = "https://github.com/orhun/rustypaste/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ seqizz ];
+    maintainers = with maintainers; [ figsoda seqizz ];
   };
 }

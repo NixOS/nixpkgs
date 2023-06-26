@@ -1,10 +1,10 @@
-{ lib, python3Packages, mopidy }:
+{ lib, python3Packages, fetchPypi, mopidy }:
 
 python3Packages.buildPythonApplication rec {
   pname = "mopidy-jellyfin";
   version = "1.0.4";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit version;
     pname = "Mopidy-Jellyfin";
     sha256 = "ny0u6HdOlZCsmIzZuQ1rql+bvHU3xkh8IdwhJVHNH9c=";

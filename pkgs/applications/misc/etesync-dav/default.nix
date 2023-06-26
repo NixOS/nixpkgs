@@ -3,6 +3,7 @@
 , fetchpatch
 , nixosTests
 , python3
+, fetchPypi
 , radicale3
 }:
 
@@ -44,7 +45,7 @@ in python.pkgs.buildPythonApplication rec {
   pname = "etesync-dav";
   version = "0.32.1";
 
-  src = python.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash = "sha256-pOLug5MnVdKaw5wedABewomID9LU0hZPCf4kZKKU1yA=";
   };

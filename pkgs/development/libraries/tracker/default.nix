@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , gettext
 , meson
 , ninja
@@ -39,6 +40,16 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "+XLVCse6/czxE7HrmdyuNUBGhameVb/vFvOsg7Tel00=";
   };
+
+  patches = [
+    # Backport sqlite-3.42.0 compatibility:
+    #   https://gitlab.gnome.org/GNOME/tracker/-/merge_requests/600
+    (fetchpatch {
+      name = "sqlite-3.42.0.patch";
+      url = "https://gitlab.gnome.org/GNOME/tracker/-/commit/4cbbd1773a7367492fa3b3e3804839654e18a12a.patch";
+      hash = "sha256-w5D9I0P1DdyILhpjslh6ifojmlUiBoeFnxHPIr0rO3s=";
+    })
+  ];
 
   strictDeps = true;
 

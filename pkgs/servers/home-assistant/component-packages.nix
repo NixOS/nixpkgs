@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2023.5.2";
+  version = "2023.6.3";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -93,6 +93,9 @@
     "airzone" = ps: with ps; [
       aioairzone
     ];
+    "airzone_cloud" = ps: with ps; [
+      aioairzone-cloud
+    ];
     "aladdin_connect" = ps: with ps; [
       aioaladdinconnect
     ];
@@ -150,7 +153,8 @@
     ++ androidtv.optional-dependencies.async
     ++ pure-python-adb.optional-dependencies.async;
     "androidtv_remote" = ps: with ps; [
-    ]; # missing inputs: androidtvremote2
+      androidtvremote2
+    ];
     "anel_pwrctrl" = ps: with ps; [
     ]; # missing inputs: anel_pwrctrl-homeassistant
     "anova" = ps: with ps; [
@@ -685,6 +689,10 @@
     "datadog" = ps: with ps; [
       datadog
     ];
+    "date" = ps: with ps; [
+    ];
+    "datetime" = ps: with ps; [
+    ];
     "ddwrt" = ps: with ps; [
     ];
     "debugpy" = ps: with ps; [
@@ -901,8 +909,15 @@
     "dweet" = ps: with ps; [
     ]; # missing inputs: dweepy
     "dynalite" = ps: with ps; [
+      aiohttp-cors
       dynalite-devices
-    ];
+      fnv-hash-fast
+      home-assistant-frontend
+      janus
+      pillow
+      psutil-home-assistant
+      sqlalchemy
+    ]; # missing inputs: dynalite_panel
     "eafm" = ps: with ps; [
       aioeafm
     ];
@@ -946,6 +961,8 @@
     "eight_sleep" = ps: with ps; [
       pyeight
     ];
+    "electrasmart" = ps: with ps; [
+    ]; # missing inputs: pyelectra
     "elgato" = ps: with ps; [
       elgato
     ];
@@ -1394,8 +1411,6 @@
     "glances" = ps: with ps; [
       glances-api
     ];
-    "goalfeed" = ps: with ps; [
-    ]; # missing inputs: pysher
     "goalzero" = ps: with ps; [
       goalzero
     ];
@@ -1429,6 +1444,11 @@
     ];
     "google_domains" = ps: with ps; [
     ];
+    "google_generative_ai_conversation" = ps: with ps; [
+      aiohttp-cors
+      hassil
+      home-assistant-intents
+    ]; # missing inputs: google-generativeai
     "google_mail" = ps: with ps; [
       aiohttp-cors
       fnv-hash-fast
@@ -1897,8 +1917,7 @@
       zeroconf
     ];
     "iotawatt" = ps: with ps; [
-      iotawattpy
-    ];
+    ]; # missing inputs: ha-iotawattpy
     "iperf3" = ps: with ps; [
     ]; # missing inputs: iperf3
     "ipma" = ps: with ps; [
@@ -1944,6 +1963,8 @@
     "justnimbus" = ps: with ps; [
       justnimbus
     ];
+    "jvc_projector" = ps: with ps; [
+    ]; # missing inputs: pyjvcprojector
     "kaiterra" = ps: with ps; [
     ]; # missing inputs: kaiterra-async-client
     "kaleidescape" = ps: with ps; [
@@ -1989,9 +2010,8 @@
     "keyboard" = ps: with ps; [
     ]; # missing inputs: pyuserinput
     "keyboard_remote" = ps: with ps; [
-      aionotify
       evdev
-    ];
+    ]; # missing inputs: asyncinotify
     "keymitt_ble" = ps: with ps; [
       pymicrobot
       aioesphomeapi
@@ -2033,8 +2053,15 @@
     ];
     "knx" = ps: with ps; [
       aiohttp-cors
+      fnv-hash-fast
+      home-assistant-frontend
       janus
+      knx-frontend
+      pillow
+      psutil-home-assistant
+      sqlalchemy
       xknx
+      xknxproject
     ];
     "kodi" = ps: with ps; [
       aiohttp-cors
@@ -2576,8 +2603,6 @@
       psutil-home-assistant
       sqlalchemy
     ];
-    "mycroft" = ps: with ps; [
-    ]; # missing inputs: mycroftapi
     "myq" = ps: with ps; [
       pymyq
     ];
@@ -2837,6 +2862,7 @@
       opensensemap-api
     ];
     "opensky" = ps: with ps; [
+      python-opensky
     ];
     "opentherm_gw" = ps: with ps; [
       pyotgw
@@ -2851,8 +2877,7 @@
       pyopnsense
     ];
     "opple" = ps: with ps; [
-      pyoppleio
-    ];
+    ]; # missing inputs: pyoppleio-legacy
     "oralb" = ps: with ps; [
       aioesphomeapi
       aiohttp-cors
@@ -2989,6 +3014,8 @@
       icmplib
     ];
     "pioneer" = ps: with ps; [
+    ];
+    "piper" = ps: with ps; [
     ];
     "pjlink" = ps: with ps; [
     ]; # missing inputs: pypjlink2
@@ -3324,7 +3351,7 @@
       pyruckus
     ];
     "russound_rio" = ps: with ps; [
-    ]; # missing inputs: russound_rio
+    ]; # missing inputs: russound-rio
     "russound_rnet" = ps: with ps; [
     ]; # missing inputs: russound
     "ruuvi_gateway" = ps: with ps; [
@@ -3472,10 +3499,11 @@
       psutil-home-assistant
       pyserial
       pyudev
+      sensirion-ble
       sqlalchemy
       webrtcvad
       zeroconf
-    ]; # missing inputs: sensirion-ble
+    ];
     "sensor" = ps: with ps; [
       fnv-hash-fast
       psutil-home-assistant
@@ -3617,7 +3645,8 @@
     "siren" = ps: with ps; [
     ];
     "sisyphus" = ps: with ps; [
-    ]; # missing inputs: sisyphus-control
+      sisyphus-control
+    ];
     "sky_hub" = ps: with ps; [
       pyskyqhub
     ];
@@ -3671,8 +3700,6 @@
     "smarttub" = ps: with ps; [
       python-smarttub
     ];
-    "smarty" = ps: with ps; [
-    ]; # missing inputs: pysmarty
     "smhi" = ps: with ps; [
       smhi-pkg
     ];
@@ -4123,6 +4150,8 @@
       webrtcvad
       zeroconf
     ];
+    "time" = ps: with ps; [
+    ];
     "time_date" = ps: with ps; [
     ];
     "timer" = ps: with ps; [
@@ -4416,9 +4445,6 @@
     ];
     "watson_iot" = ps: with ps; [
     ]; # missing inputs: ibmiotf
-    "watson_tts" = ps: with ps; [
-      ibm-watson
-    ];
     "watttime" = ps: with ps; [
       aiowatttime
     ];
@@ -4444,6 +4470,8 @@
     ];
     "whirlpool" = ps: with ps; [
       whirlpool-sixth-sense
+    ];
+    "whisper" = ps: with ps; [
     ];
     "whois" = ps: with ps; [
       whois
@@ -4491,7 +4519,8 @@
     "wsdot" = ps: with ps; [
     ];
     "wyoming" = ps: with ps; [
-    ]; # missing inputs: wyoming
+      wyoming
+    ];
     "x10" = ps: with ps; [
     ];
     "xbox" = ps: with ps; [
@@ -4555,6 +4584,8 @@
     ];
     "xs1" = ps: with ps; [
     ]; # missing inputs: xs1-api-client
+    "yale_home" = ps: with ps; [
+    ];
     "yale_smart_alarm" = ps: with ps; [
       yalesmartalarmclient
     ];
@@ -4626,6 +4657,13 @@
     ];
     "youless" = ps: with ps; [
       youless-api
+    ];
+    "youtube" = ps: with ps; [
+      aiohttp-cors
+      fnv-hash-fast
+      google-api-python-client
+      psutil-home-assistant
+      sqlalchemy
     ];
     "zabbix" = ps: with ps; [
       py-zabbix
@@ -4721,6 +4759,7 @@
     "airvisual"
     "airvisual_pro"
     "airzone"
+    "airzone_cloud"
     "aladdin_connect"
     "alarm_control_panel"
     "alarmdecoder"
@@ -4732,6 +4771,7 @@
     "analytics"
     "android_ip_webcam"
     "androidtv"
+    "androidtv_remote"
     "apache_kafka"
     "apcupsd"
     "api"
@@ -4806,6 +4846,8 @@
     "crownstone"
     "daikin"
     "datadog"
+    "date"
+    "datetime"
     "debugpy"
     "deconz"
     "default_config"
@@ -4835,7 +4877,7 @@
     "dte_energy_bridge"
     "duckdns"
     "dunehd"
-    "dynalite"
+    "dwd_weather_warnings"
     "eafm"
     "easyenergy"
     "ecobee"
@@ -4998,7 +5040,6 @@
     "intent"
     "intent_script"
     "ios"
-    "iotawatt"
     "ipma"
     "ipp"
     "iqvia"
@@ -5240,6 +5281,7 @@
     "sense"
     "senseme"
     "sensibo"
+    "sensirion_ble"
     "sensor"
     "sensorpro"
     "sensorpush"
@@ -5334,6 +5376,7 @@
     "tibber"
     "tile"
     "tilt_ble"
+    "time"
     "time_date"
     "timer"
     "tod"
@@ -5415,6 +5458,7 @@
     "worldclock"
     "ws66i"
     "wsdot"
+    "wyoming"
     "xbox"
     "xiaomi"
     "xiaomi_aqara"
@@ -5429,6 +5473,7 @@
     "yeelight"
     "yolink"
     "youless"
+    "youtube"
     "zamg"
     "zeroconf"
     "zerproc"

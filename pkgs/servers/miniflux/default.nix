@@ -2,7 +2,7 @@
 
 let
   pname = "miniflux";
-  version = "2.0.43";
+  version = "2.0.45";
 
 in buildGoModule {
   inherit pname version;
@@ -11,16 +11,14 @@ in buildGoModule {
     owner = pname;
     repo = "v2";
     rev = version;
-    sha256 = "sha256-IVIAlDYOuAl51V/Q1hpkjIREHTXq8E5D/w4cyTZ8ebs=";
+    sha256 = "sha256-/d5+Qc2kXZZkKe80+879YdxYt+zy/Y1sf2dwSjGw0EM=";
   };
 
-  vendorHash = "sha256-/BINHOlRmAfOIXY9x5VjnQwIc87Mt2TAvBE1tPq6W80=";
+  vendorHash = "sha256-nwKo4Sjg8HjuxeDUgwQYZ2LOHxkRSlyaBlQwSjOuJ7U=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  checkPhase = ''
-    go test $(go list ./... | grep -v client)
-  ''; # skip client tests as they require network access
+  checkFlags = [ "-skip=TestClient" ]; # skip client tests as they require network access
 
   ldflags = [
     "-s" "-w" "-X miniflux.app/version.Version=${version}"

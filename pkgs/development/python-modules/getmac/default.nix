@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "getmac";
-  version = "0.9.3";
+  version = "0.9.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "GhostofGoes";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-5g7FSdlwGeohbjOX3ErTKn83VDFtWV7fVq6zziAjCq0=";
+    hash = "sha256-B9agBmSrD3ZhqpGclZdMQNRSLSkepR6iduP1yrYz9tU=";
   };
 
   nativeCheckInputs = [

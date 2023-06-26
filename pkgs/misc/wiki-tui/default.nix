@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wiki-tui";
-  version = "0.6.4";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "Builditluc";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-pjNXDU1YgzaH4vtdQnnfRCSmbhIgeAiOP/uyhBNG/7s=";
+    hash = "sha256-vrWjX8WB9niZnBDIlMSj/NUuJxCkP4QoOLp+xTnvSjs=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     Security
   ];
 
-  cargoHash = "sha256-RWj1QCHYEtw+QzdX+YlFiMqMhvCfxYzj6SUzfhqrcM8=";
+  cargoHash = "sha256-m3gxmoZVEVzqach7Oep943B4DhOUzrTB+Z6J/TvdCQ8=";
 
   meta = with lib; {
     description = "A simple and easy to use Wikipedia Text User Interface";

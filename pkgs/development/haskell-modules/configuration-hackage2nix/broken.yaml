@@ -620,6 +620,7 @@ broken-packages:
   - cassava-conduit
   - cassava-records
   - cassette
+  - castagnoli #  failure  in job https://hydra.nixos.org/build/219826672 at 2023-05-19
   - castle
   - catamorphism
   - Catana
@@ -702,7 +703,6 @@ broken-packages:
   - clanki
   - clarifai
   - CLASE
-  - clash-prelude
   - Clash-Royale-Hack-Cheats
   - ClassLaws
   - classy-influxdb-simple
@@ -842,7 +842,6 @@ broken-packages:
   - conferer-provider-json
   - conferer-snap
   - conferer-source-json
-  - conferer-warp
   - confide
   - ConfigFileTH
   - config-parser
@@ -2429,6 +2428,7 @@ broken-packages:
   - hplaylist
   - hpodder
   - hpqtypes
+  - hprox # dependency missing in job https://hydra.nixos.org/build/221844808 at 2023-05-30
   - hps-kmeans
   - hPushover
   - hpygments
@@ -2606,6 +2606,7 @@ broken-packages:
   - http-rfc7807
   - http-server
   - http-shed
+  - httpstan # dependency missing in job https://hydra.nixos.org/build/221916023 at 2023-05-31
   - http-wget
   - htune
   - htvm
@@ -2738,6 +2739,7 @@ broken-packages:
   - inj-base
   - inject-function
   - injections
+  - inline-c-objc # failure building test suite 'tests' in job https://hydra.nixos.org/build/221844966 at 2023-05-30
   - in-other-words-plugin
   - inserts
   - instana-haskell-trace-sdk
@@ -3092,6 +3094,7 @@ broken-packages:
   - libpq
   - librandomorg
   - libsecp256k1
+  - libssh2 # failure in compileBuildDriverPhase in job https://hydra.nixos.org/build/223222399 at 2023-06-07
   - libsystemd-daemon
   - libtagc
   - libxls
@@ -5021,7 +5024,6 @@ broken-packages:
   - sqlvalue-list
   - srcinst
   - srt-dhall
-  - srtree # dependency missing in job https://hydra.nixos.org/build/219208055 at 2023-05-10
   - sscan
   - ssh
   - ssh-tunnel
@@ -5056,6 +5058,7 @@ broken-packages:
   - state-record
   - static
   - static-canvas
+  - static-ls #  failure  in job https://hydra.nixos.org/build/221848657 at 2023-05-30
   - static-tensor
   - statistics-dirichlet
   - statistics-fusion
@@ -5862,6 +5865,7 @@ broken-packages:
   - wol
   - word24
   - word2vec-model
+  - word8set #  failure  in job https://hydra.nixos.org/build/221843616 at 2023-05-30
   - wordchoice
   - wordify
   - Wordlint

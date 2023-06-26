@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , python3Packages
 , runtimeShell
 , bcftools
@@ -23,6 +24,19 @@ in python3Packages.buildPythonApplication rec {
     rev = "v${version}";
     hash = "sha256-UJNMKEV5m2jFqnWvkVAtymkcE2TjPIXp7JqRZpMSqsE=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-anno-trf-on-darwin.patch";
+      url = "https://github.com/ACEnglish/truvari/commit/f9f36305e8eaa88f951562210e3672a4d4f71265.patch";
+      hash = "sha256-7O9jTQDCC2b8hUBm0qJQCYMzTC9NFtn/E0dTHSfJALU=";
+    })
+    (fetchpatch {
+      name = "fix-anno-grm-on-darwin.patch";
+      url = "https://github.com/ACEnglish/truvari/commit/31416552008a506204ed4e2add55474f10392357.patch";
+      hash = "sha256-42u0ewZU38GCoSfff+XQFv9hEFeO3WlJufTHcl6vkN4=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \

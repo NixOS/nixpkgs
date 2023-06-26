@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "picotool";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = pname;
     rev = version;
-    sha256 = "sha256-KP5Cq6pYKQI5dV6S4lLapu9EcwAgLgYpK0qreNDZink=";
+    sha256 = "sha256-OcQJeiva6X2rUyh1rJ+w4O2dWxaR7MwMfbHlnWuBVb8=";
   };
 
   buildInputs = [ libusb1 pico-sdk ];

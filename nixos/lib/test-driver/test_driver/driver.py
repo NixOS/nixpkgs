@@ -163,11 +163,6 @@ class Driver:
                 machine.wait_for_shutdown()
 
     def create_machine(self, args: Dict[str, Any]) -> Machine:
-        rootlog.warning(
-            "Using legacy create_machine(), please instantiate the"
-            "Machine class directly, instead"
-        )
-
         tmp_dir = get_tmp_dir()
 
         if args.get("startCommand"):

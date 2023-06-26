@@ -511,7 +511,7 @@ let format' = format; in let
     ${if format == "raw" then ''
       mv $diskImage $out/${filename}
     '' else ''
-      ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${format} ${compress} $diskImage $out/${filename}
+      ${pkgs.qemu-utils}/bin/qemu-img convert -f raw -O ${format} ${compress} $diskImage $out/${filename}
     ''}
     diskImage=$out/${filename}
   '';
@@ -573,6 +573,7 @@ let format' = format; in let
         # In this throwaway resource, we only have /dev/vda, but the actual VM may refer to another disk for bootloader, e.g. /dev/vdb
         # Use this option to create a symlink from vda to any arbitrary device you want.
         ${optionalString (config.boot.loader.grub.device != "/dev/vda") ''
+            mkdir -p $(dirname ${config.boot.loader.grub.device})
             ln -s /dev/vda ${config.boot.loader.grub.device}
         ''}
 

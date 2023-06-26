@@ -10,15 +10,15 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "urbit";
-  version = "2.3";
+  version = "2.9";
 
   src = fetchzip {
     url = "https://github.com/urbit/vere/releases/download/vere-v${version}/${platform}.tgz";
     sha256 = {
-      x86_64-linux = "sha256-7rPkEgJdCDkfz58VYOH2AH6s/048pySpmff0tfRkPqU=";
-      aarch64-linux = "sha256-8P0BNyaV+VxS2cl3ac2Ey7YC1b2A+DbfZZVpaI3agJw=";
-      x86_64-darwin = "sha256-EHYr3lG2WeHaFjO7CNcz5Ygv5MYzuFcCoX36hEXZVoo=";
-      aarch64-darwin = "sha256-lPuavLA73NtMC/yS/L1XwPljPnWw+9mcrw4RrqbVrnA=";
+      x86_64-linux = "sha256-CX3KoB5NNZBfikARh0ikeKQocaGIhbWcZsTFWOFk5oI=";
+      aarch64-linux = "sha256-PHVh4ktUe2HIPyudiwEUNuAfwOu4yCI9lxgbjrIllSU=";
+      x86_64-darwin = "sha256-lACh1UYtGrZUw+dtR0Ye6zqdtgp7llV9EkUoGOi+V4c=";
+      aarch64-darwin = "sha256-IRVMIriFVEsv69yUCxsiUaEgIlc618tf9dHiz76D+ug=";
     }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
   };
 
@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
     maintainers = [ maintainers.matthew-levan ];
     license = licenses.mit;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

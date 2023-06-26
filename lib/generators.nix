@@ -431,7 +431,7 @@ ${expr "" v}
 
   /*
    Translate a simple Nix expression to Lua representation with occasional
-   Lua-inlines that can be construted by mkLuaInline function.
+   Lua-inlines that can be constructed by mkLuaInline function.
 
    Configuration:
      * multiline - by default is true which results in indented block-like view.

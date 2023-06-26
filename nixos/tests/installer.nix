@@ -286,7 +286,7 @@ let
     makeTest {
       inherit enableOCR;
       name = "installer-" + name;
-      meta = with pkgs.lib.maintainers; {
+      meta = {
         # put global maintainers here, individuals go into makeInstallerTest fkt call
         maintainers = (meta.maintainers or []);
       };
@@ -298,7 +298,12 @@ let
             ../modules/profiles/installation-device.nix
             ../modules/profiles/base.nix
             extraInstallerConfig
+            ./common/auto-format-root-device.nix
           ];
+
+          # In systemdStage1, also automatically format the device backing the
+          # root filesystem.
+          virtualisation.fileSystems."/".autoFormat = systemdStage1;
 
           # builds stuff in the VM, needs more juice
           virtualisation.diskSize = 8 * 1024;
@@ -335,9 +340,6 @@ let
             desktop-file-utils
             docbook5
             docbook_xsl_ns
-            (docbook-xsl-ns.override {
-              withManOptDedupPatch = true;
-            })
             kbd.dev
             kmod.dev
             libarchive.dev
@@ -988,5 +990,40 @@ in {
           "mount -o defaults,subvol=boot LABEL=root /mnt/boot",
       )
     '';
+  };
+} // optionalAttrs systemdStage1 {
+  stratisRoot = makeInstallerTest "stratisRoot" {
+    createPartitions = ''
+      machine.succeed(
+        "sgdisk --zap-all /dev/vda",
+        "sgdisk --new=1:0:+100M --typecode=0:ef00 /dev/vda", # /boot
+        "sgdisk --new=2:0:+1G --typecode=0:8200 /dev/vda", # swap
+        "sgdisk --new=3:0:+5G --typecode=0:8300 /dev/vda", # /
+        "udevadm settle",
+
+        "mkfs.vfat /dev/vda1",
+        "mkswap /dev/vda2 -L swap",
+        "swapon -L swap",
+        "stratis pool create my-pool /dev/vda3",
+        "stratis filesystem create my-pool nixos",
+        "udevadm settle",
+
+        "mount /dev/stratis/my-pool/nixos /mnt",
+        "mkdir -p /mnt/boot",
+        "mount /dev/vda1 /mnt/boot"
+      )
+    '';
+    bootLoader = "systemd-boot";
+    extraInstallerConfig = { modulesPath, ...}: {
+      config = {
+        services.stratis.enable = true;
+        environment.systemPackages = [
+          pkgs.stratis-cli
+          pkgs.thin-provisioning-tools
+          pkgs.lvm2.bin
+          pkgs.stratisd.initrd
+        ];
+      };
+    };
   };
 }

@@ -1,10 +1,10 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, fetchPypi }:
 
 python3Packages.buildPythonApplication rec {
   pname = "updog";
   version = "1.4";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "7n/ddjF6eJklo+T79+/zBxSHryebc2W9gxwxsb2BbF4=";
   };

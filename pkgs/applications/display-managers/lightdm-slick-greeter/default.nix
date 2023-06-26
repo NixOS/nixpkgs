@@ -7,10 +7,12 @@
 , intltool
 , autoreconfHook
 , wrapGAppsHook
+, cinnamon
 , lightdm
 , gtk3
 , pixman
 , libcanberra
+, libgnomekbd
 , libX11
 , libXext
 , linkFarm
@@ -20,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lightdm-slick-greeter";
-  version = "1.6.1";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "slick-greeter";
     rev = version;
-    sha256 = "sha256-k/E3bR63kesHQ/we+ctC0UEYE5YdZ6Lv5lYuXqCOvKA=";
+    sha256 = "sha256-40RyGWn32ppPjsuPljGBO6o7bu2rKYBweDycRS7xAVA=";
   };
 
   nativeBuildInputs = [
@@ -40,10 +42,12 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    cinnamon.xapp
     lightdm
     gtk3
     pixman
     libcanberra
+    libgnomekbd # needed by XApp.KbdLayoutController
     libX11
     libXext
   ];
@@ -61,6 +65,10 @@ stdenv.mkDerivation rec {
 
     substituteInPlace src/session-list.vala \
       --replace "/usr/share" "${placeholder "out"}/share"
+
+    # We prefer stable path here.
+    substituteInPlace data/x.dm.slick-greeter.gschema.xml \
+      --replace "/usr/share/onboard" "/run/current-system/sw/share/onboard"
 
     patchShebangs files/usr/bin/*
   '';

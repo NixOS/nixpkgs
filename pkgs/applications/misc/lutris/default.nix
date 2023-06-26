@@ -32,6 +32,8 @@
 , pypresence
 , pyyaml
 , requests
+, protobuf
+, moddb
 
   # commands that lutris needs
 , xrandr
@@ -73,13 +75,13 @@ let
 in
 buildPythonApplication rec {
   pname = "lutris-unwrapped";
-  version = "0.5.12";
+  version = "0.5.13";
 
   src = fetchFromGitHub {
     owner = "lutris";
     repo = "lutris";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-rsiXm7L/M85ot6NrTyy//lMRFlLPJYve9y6Erg9Ugxg=";
+    rev = "v${version}";
+    hash = "sha256-ectrfbIkPhIqfhkavDpBCNdLPnGQhCnfFYwTf2IxB50=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
@@ -113,6 +115,8 @@ buildPythonApplication rec {
     pypresence
     pyyaml
     requests
+    protobuf
+    moddb
   ];
 
   postPatch = ''

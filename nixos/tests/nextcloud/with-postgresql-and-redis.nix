@@ -25,6 +25,7 @@ in {
           redis = true;
           memcached = false;
         };
+        database.createLocally = true;
         config = {
           dbtype = "pgsql";
           inherit adminuser;
@@ -88,5 +89,8 @@ in {
         "${withRcloneEnv} ${diffSharedFile}"
     )
     nextcloud.wait_until_succeeds("journalctl -u nextcloud-notify_push | grep -q \"Sending ping to ${adminuser}\"")
+
+    # redis cache should not be empty
+    nextcloud.fail('test "[]" = "$(redis-cli --json KEYS "*")"')
   '';
 })) args

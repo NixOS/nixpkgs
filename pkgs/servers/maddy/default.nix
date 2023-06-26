@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "maddy";
-  version = "0.6.3";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "foxcpp";
     repo = "maddy";
     rev = "v${version}";
-    sha256 = "sha256-vf+jkXerdwvQhtyiOObBRxh8sYMEcgXC5vNzm5wquBs=";
+    sha256 = "sha256-EMw07yTFP0aBSuGDWivB8amuxWLFHhYV6J9faTEW5z4=";
   };
 
-  vendorSha256 = "sha256-10cLNl9jWYX8XIKQkCxJ+/ymZC1YJRHUJWZQhq7zeV4=";
+  vendorSha256 = "sha256-LyfkETZPkhJKN8CEivNp7Se4IBpzyAtmCM1xil4n2po=";
 
   tags = [ "libpam" ];
 

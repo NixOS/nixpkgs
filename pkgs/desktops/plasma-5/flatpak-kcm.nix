@@ -4,6 +4,7 @@
 , kcmutils
 , kconfig
 , kdeclarative
+, kitemmodels
 }:
 
 mkDerivation {
@@ -14,5 +15,6 @@ mkDerivation {
     kcmutils
     kconfig
     kdeclarative
+    kitemmodels
   ];
 }

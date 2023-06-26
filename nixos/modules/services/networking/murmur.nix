@@ -313,7 +313,7 @@ in
     systemd.services.murmur = {
       description = "Murmur Chat Service";
       wantedBy    = [ "multi-user.target" ];
-      after       = [ "network-online.target" ];
+      after       = [ "network.target" ];
       preStart    = ''
         ${pkgs.envsubst}/bin/envsubst \
           -o /run/murmur/murmurd.ini \

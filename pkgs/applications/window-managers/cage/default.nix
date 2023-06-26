@@ -29,6 +29,10 @@ stdenv.mkDerivation rec {
     systemd libGL libX11
   ];
 
+  # https://github.com/cage-kiosk/cage/issues/231
+  # cage will segfault on start with `-m last` without this
+  CFLAGS = "-O0";
+
   mesonFlags = [ "-Dxwayland=${lib.boolToString (xwayland != null)}" ];
 
   postFixup = lib.optionalString (xwayland != null) ''

@@ -5,7 +5,7 @@
 , perl, perlPackages, python3Packages, pkg-config
 , libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr
 , brotli, cairo, pixman, xorg, clisp, biber, woff2, xxHash
-, makeWrapper, shortenPerlShebang
+, makeWrapper, shortenPerlShebang, useFixedHashes
 }:
 
 # Useful resource covering build options:
@@ -16,6 +16,10 @@ let
 
   year = toString ((import ./tlpdb.nix)."00texlive.config").year;
   version = year; # keep names simple for now
+
+  # detect and stop redundant rebuilds that may occur when building new fixed hashes
+  assertFixedHash = name: src:
+    if ! useFixedHashes || src ? outputHash then src else throw "The TeX Live package '${src.pname}' must have a fixed hash before building '${name}'.";
 
   common = {
     src = fetchurl {
@@ -202,6 +206,14 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
       url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=1009196;filename=reproducible_exception_strings.patch;msg=5";
       sha256 = "sha256-RNZoEeTcWnrLaltcYrhNIORh42fFdwMzBfxMRWVurbk=";
     })
+    # fixes a security-issue in luatex that allows arbitrary code execution even with shell-escape disabled, see https://tug.org/~mseven/luatex.html
+    (fetchpatch {
+      name = "CVE-2023-32700.patch";
+      url = "https://tug.org/~mseven/luatex-files/2022/patch";
+      hash = "sha256-o9ENLc1ZIIOMX6MdwpBIgrR/Jdw6tYLmAyzW8i/FUbY=";
+      excludes = [  "build.sh" ];
+      stripLen = 1;
+    })
   ];
 
   hardeningDisable = [ "format" ];
@@ -361,7 +373,7 @@ latexindent = perlPackages.buildPerlPackage rec {
   pname = "latexindent";
   inherit (src) version;
 
-  src = lib.head (builtins.filter (p: p.tlType == "run") texlive.latexindent.pkgs);
+  src = assertFixedHash pname (lib.head (builtins.filter (p: p.tlType == "run") texlive.latexindent.pkgs));
 
   outputs = [ "out" ];
 
@@ -393,7 +405,7 @@ pygmentex = python3Packages.buildPythonApplication rec {
   inherit (src) version;
   format = "other";
 
-  src = lib.head (builtins.filter (p: p.tlType == "run") texlive.pygmentex.pkgs);
+  src = assertFixedHash pname (lib.head (builtins.filter (p: p.tlType == "run") texlive.pygmentex.pkgs));
 
   propagatedBuildInputs = with python3Packages; [ pygments chardet ];
 
@@ -429,7 +441,7 @@ pygmentex = python3Packages.buildPythonApplication rec {
 texlinks = stdenv.mkDerivation rec {
   name = "texlinks";
 
-  src = lib.head (builtins.filter (p: p.tlType == "run") texlive.texlive-scripts-extra.pkgs);
+  src = assertFixedHash name (lib.head (builtins.filter (p: p.tlType == "run") texlive.texlive-scripts-extra.pkgs));
 
   dontBuild = true;
   doCheck = false;

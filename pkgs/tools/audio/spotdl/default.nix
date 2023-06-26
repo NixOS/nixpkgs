@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchPypi
 , fetchFromGitHub
 , ffmpeg
 }:
@@ -9,7 +10,7 @@ let
     packageOverrides = self: super: {
       ytmusicapi = super.ytmusicapi.overridePythonAttrs (old: rec {
         version = "0.25.1";
-        src = self.fetchPypi {
+        src = fetchPypi {
           inherit (old) pname;
           inherit version;
           hash = "sha256-uc/fgDetSYaCRzff0SzfbRhs3TaKrfE2h6roWkkj8yQ=";
@@ -19,7 +20,7 @@ let
   };
 in python.pkgs.buildPythonApplication rec {
   pname = "spotdl";
-  version = "4.1.8";
+  version = "4.1.10";
 
   format = "pyproject";
 
@@ -27,7 +28,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "spotDL";
     repo = "spotify-downloader";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iE5d9enSbONqVxKW7H7N+1TmBp6nVGtiQvxJxV7R/1o=";
+    hash = "sha256-SmyUoMOlBJZTJH19NwTKbz/vo7Oh4tGHCQrW5DVZQWQ=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -56,7 +57,7 @@ in python.pkgs.buildPythonApplication rec {
     syncedlyrics
     typing-extensions
     setuptools # for pkg_resources
-  ];
+  ] ++ python-slugify.optional-dependencies.unidecode;
 
   nativeCheckInputs = with python.pkgs; [
     pytestCheckHook

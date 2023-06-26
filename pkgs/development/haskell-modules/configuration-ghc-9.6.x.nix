@@ -77,8 +77,8 @@ self: super: {
   aeson = doDistribute self.aeson_2_1_2_1;
   memory = doDistribute self.memory_0_18_0;
 
-  ghc-lib = doDistribute self.ghc-lib_9_6_1_20230312;
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_6_1_20230312;
+  ghc-lib = doDistribute self.ghc-lib_9_6_2_20230523;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_6_2_20230523;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_6_0_0;
 
   # allows mtl, template-haskell, text and transformers
@@ -103,8 +103,7 @@ self: super: {
 
   # Forbids base >= 4.18, fix proposed: https://github.com/sjakobi/newtype-generics/pull/25
   newtype-generics = jailbreakForCurrentVersion super.newtype-generics "0.6.2";
-  # Forbids base >= 4.18, fix proposed: https://github.com/well-typed/cborg/pull/312
-  cborg = jailbreakForCurrentVersion super.cborg "0.2.8.0";
+
   cborg-json = jailbreakForCurrentVersion super.cborg-json "0.2.5.0";
   serialise = jailbreakForCurrentVersion super.serialise "0.2.6.0";
 
@@ -155,13 +154,22 @@ self: super: {
 
   # 2023-04-03: plugins disabled for hls 1.10.0.0 based on
   #
-  haskell-language-server = super.haskell-language-server.override {
-    hls-ormolu-plugin = null;
-    hls-floskell-plugin = null;
-    hls-fourmolu-plugin = null;
-    hls-hlint-plugin = null;
-    hls-stylish-haskell-plugin = null;
-  };
+  haskell-language-server =
+    let
+      # TODO: HLS-2.0.0.0 added support for the foumolu plugin for ghc-9.6.
+      # However, putting together all the overrides to get the latest
+      # version of fourmolu compiling together with ghc-9.6 and HLS is a
+      # little annoying, so currently fourmolu has been disabled.  We should
+      # try to enable this at some point in the future.
+      hlsWithFlags = disableCabalFlag "fourmolu" super.haskell-language-server;
+    in
+    hlsWithFlags.override {
+      hls-ormolu-plugin = null;
+      hls-floskell-plugin = null;
+      hls-fourmolu-plugin = null;
+      hls-hlint-plugin = null;
+      hls-stylish-haskell-plugin = null;
+    };
 
   MonadRandom = super.MonadRandom_0_6;
   unix-compat = super.unix-compat_0_7;

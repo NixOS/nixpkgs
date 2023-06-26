@@ -12,19 +12,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nurl";
-  version = "0.3.11";
+  version = "0.3.12";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nurl";
     rev = "v${version}";
-    hash = "sha256-erIC7JAluPs/ToXxjpSpSI6vB1hJVXywQTT+aARenOc=";
+    hash = "sha256-L9lYFPUk8B34vEtHZZ/9v1cEzQXoNo3Rc0e9/lwMrU0=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "nix-compat-0.1.0" = "sha256-J9MedxcVcH5DdRxdqD8cb5YRC/SjZ0vQTCFBMLVMQPo=";
+      "nix-compat-0.1.0" = "sha256-8QP9qEUtCvSvv1LcMPg04RrSagpINZeh4o2CBMzUjn4=";
     };
   };
 

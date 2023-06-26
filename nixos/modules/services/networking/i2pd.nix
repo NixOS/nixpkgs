@@ -169,15 +169,15 @@ let
         (boolOpt "enabled" proto.enable)
         (strOpt "address" proto.address)
         (intOpt "port" proto.port)
-        ] ++ (if proto ? keys then optionalNullString "keys" proto.keys else [])
-        ++ (if proto ? auth then optionalNullBool "auth" proto.auth else [])
-        ++ (if proto ? user then optionalNullString "user" proto.user else [])
-        ++ (if proto ? pass then optionalNullString "pass" proto.pass else [])
-        ++ (if proto ? strictHeaders then optionalNullBool "strictheaders" proto.strictHeaders else [])
-        ++ (if proto ? hostname then optionalNullString "hostname" proto.hostname else [])
-        ++ (if proto ? outproxy then optionalNullString "outproxy" proto.outproxy else [])
-        ++ (if proto ? outproxyPort then optionalNullInt "outproxyport" proto.outproxyPort else [])
-        ++ (if proto ? outproxyEnable then optionalNullBool "outproxy.enabled" proto.outproxyEnable else []);
+        ] ++ (optionals (proto ? keys) (optionalNullString "keys" proto.keys))
+        ++ (optionals (proto ? auth) (optionalNullBool "auth" proto.auth))
+        ++ (optionals (proto ? user) (optionalNullString "user" proto.user))
+        ++ (optionals (proto ? pass) (optionalNullString "pass" proto.pass))
+        ++ (optionals (proto ? strictHeaders) (optionalNullBool "strictheaders" proto.strictHeaders))
+        ++ (optionals (proto ? hostname) (optionalNullString "hostname" proto.hostname))
+        ++ (optionals (proto ? outproxy) (optionalNullString "outproxy" proto.outproxy))
+        ++ (optionals (proto ? outproxyPort) (optionalNullInt "outproxyport" proto.outproxyPort))
+        ++ (optionals (proto ? outproxyEnable) (optionalNullBool "outproxy.enabled" proto.outproxyEnable));
         in (concatStringsSep "\n" protoOpts)
       ));
   in
@@ -192,21 +192,14 @@ let
         "type = client"
         (intOpt "port" tun.port)
         (strOpt "destination" tun.destination)
-        ] ++ (if tun ? destinationPort then optionalNullInt "destinationport" tun.destinationPort else [])
-        ++ (if tun ? keys then
-            optionalNullString "keys" tun.keys else [])
-        ++ (if tun ? address then
-            optionalNullString "address" tun.address else [])
-        ++ (if tun ? inbound.length then
-            optionalNullInt "inbound.length" tun.inbound.length else [])
-        ++ (if tun ? inbound.quantity then
-            optionalNullInt "inbound.quantity" tun.inbound.quantity else [])
-        ++ (if tun ? outbound.length then
-            optionalNullInt "outbound.length" tun.outbound.length else [])
-        ++ (if tun ? outbound.quantity then
-            optionalNullInt "outbound.quantity" tun.outbound.quantity else [])
-        ++ (if tun ? crypto.tagsToSend then
-            optionalNullInt "crypto.tagstosend" tun.crypto.tagsToSend else []);
+        ] ++ (optionals (tun ? destinationPort) (optionalNullInt "destinationport" tun.destinationPort))
+        ++ (optionals (tun ? keys) (optionalNullString "keys" tun.keys))
+        ++ (optionals (tun ? address) (optionalNullString "address" tun.address))
+        ++ (optionals (tun ? inbound.length) (optionalNullInt "inbound.length" tun.inbound.length))
+        ++ (optionals (tun ? inbound.quantity) (optionalNullInt "inbound.quantity" tun.inbound.quantity))
+        ++ (optionals (tun ? outbound.length) (optionalNullInt "outbound.length" tun.outbound.length))
+        ++ (optionals (tun ? outbound.quantity) (optionalNullInt "outbound.quantity" tun.outbound.quantity))
+        ++ (optionals (tun ? crypto.tagsToSend) (optionalNullInt "crypto.tagstosend" tun.crypto.tagsToSend));
         in concatStringsSep "\n" outTunOpts))
     (flip map
       (collect (tun: tun ? port && tun ? address) cfg.inTunnels)
@@ -215,14 +208,10 @@ let
         "type = server"
         (intOpt "port" tun.port)
         (strOpt "host" tun.address)
-      ] ++ (if tun ? destination then
-            optionalNullString "destination" tun.destination else [])
-        ++ (if tun ? keys then
-            optionalNullString "keys" tun.keys else [])
-        ++ (if tun ? inPort then
-            optionalNullInt "inport" tun.inPort else [])
-        ++ (if tun ? accessList then
-            optionalEmptyList "accesslist" tun.accessList else []);
+      ] ++ (optionals (tun ? destination) (optionalNullString "destination" tun.destination))
+        ++ (optionals (tun ? keys) (optionalNullString "keys" tun.keys))
+        ++ (optionals (tun ? inPort) (optionalNullInt "inport" tun.inPort))
+        ++ (optionals (tun ? accessList) (optionalEmptyList "accesslist" tun.accessList));
         in concatStringsSep "\n" inTunOpts))];
     in pkgs.writeText "i2pd-tunnels.conf" opts;
 

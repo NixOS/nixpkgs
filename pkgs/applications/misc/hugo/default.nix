@@ -1,17 +1,25 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, installShellFiles, buildPackages }:
+{ stdenv
+, lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, buildPackages
+, testers
+, hugo
+}:
 
 buildGoModule rec {
   pname = "hugo";
-  version = "0.111.3";
+  version = "0.114.1";
 
   src = fetchFromGitHub {
     owner = "gohugoio";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-PgconAixlSgRHqmfRdOtcpVJyThZIKAB9Pm4AUvYVGQ=";
+    hash = "sha256-kez84MWr/ld74S2Pv0U4WyeZAbdAdrjg8eOsISeuzbg=";
   };
 
-  vendorHash = "sha256-2a6+s0xLlj3VzXp9zbZgIi7WJShbUQH48tUG9Slm770=";
+  vendorHash = "sha256-dE2mWCfBr0Ss6I42b+cZAXuK63fxWad1vuZETW59cXI=";
 
   doCheck = false;
 
@@ -33,6 +41,12 @@ buildGoModule rec {
       --fish <(${emulator} $out/bin/hugo completion fish) \
       --zsh  <(${emulator} $out/bin/hugo completion zsh)
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = hugo;
+    command = "hugo version";
+    version = "v${version}";
+  };
 
   meta = with lib; {
     description = "A fast and modern static website engine";

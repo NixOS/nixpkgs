@@ -5,6 +5,7 @@
 , nixosTests
 , cargo-pgx_0_7_1
 , nix-update-script
+, stdenv
 }:
 
 (buildPgxExtension.override {cargo-pgx = cargo-pgx_0_7_1;})rec {
@@ -41,6 +42,6 @@
     license = licenses.asl20;
 
     # as it needs to be used with timescaledb, simply use the condition from there
-    broken = versionOlder postgresql.version "12";
+    broken = versionOlder postgresql.version "12" || stdenv.isDarwin;
   };
 }

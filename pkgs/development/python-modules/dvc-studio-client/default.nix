@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dvc-studio-client";
-  version = "0.9.0";
+  version = "0.10.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-yiNhvemeN3Dbs8/UvdTsy0K/FORoAy27tvT4ElwFxRk=";
+    hash = "sha256-RhIHjTaNokuWlafG+UjzOmD7ByL3+CaRZTM96wbkxqY=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

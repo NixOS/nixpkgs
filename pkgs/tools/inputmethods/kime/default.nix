@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, rustc, cargo, fetchFromGitHub, pkg-config, cmake, extra-cmake-modules, llvmPackages
+{ lib, stdenv, rustPlatform, rustc, cargo, fetchFromGitHub, pkg-config, cmake, extra-cmake-modules
 , withWayland ? true
 , withIndicator ? true, dbus, libdbusmenu
 , withXim ? true, xorg, cairo
@@ -94,18 +94,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    llvmPackages.clang
-    llvmPackages.libclang
-    llvmPackages.bintools
     cmake
     extra-cmake-modules
+    rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
     rustc
     cargo
   ];
 
   RUST_BACKTRACE = 1;
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   meta = with lib; {
     homepage = "https://github.com/Riey/kime";

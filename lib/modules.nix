@@ -21,7 +21,6 @@ let
     isBool
     isFunction
     isList
-    isPath
     isString
     length
     mapAttrs
@@ -134,11 +133,6 @@ let
             ${if prefix == []
               then null  # unset => visible
               else "internal"} = true;
-            # TODO: hidden during the markdown transition to not expose downstream
-            # users of the docs infra to markdown if they're not ready for it.
-            # we don't make this visible conditionally because it can impact
-            # performance (https://github.com/NixOS/nixpkgs/pull/208407#issuecomment-1368246192)
-            visible = false;
             # TODO: Change the type of this option to a submodule with a
             # freeformType, so that individual arguments can be documented
             # separately
@@ -910,6 +904,40 @@ let
     else opt // { type = opt.type.substSubModules opt.options; options = []; };
 
 
+  /*
+    Merge an option's definitions in a way that preserves the priority of the
+    individual attributes in the option value.
+
+    This does not account for all option semantics, such as readOnly.
+
+    Type:
+      option -> attrsOf { highestPrio, value }
+  */
+  mergeAttrDefinitionsWithPrio = opt:
+        let
+            defsByAttr =
+              lib.zipAttrs (
+                lib.concatLists (
+                  lib.concatMap
+                    ({ value, ... }@def:
+                      map
+                        (lib.mapAttrsToList (k: value: { ${k} = def // { inherit value; }; }))
+                        (pushDownProperties value)
+                    )
+                    opt.definitionsWithLocations
+                )
+              );
+        in
+          assert opt.type.name == "attrsOf" || opt.type.name == "lazyAttrsOf";
+          lib.mapAttrs
+                (k: v:
+                  let merging = lib.mergeDefinitions (opt.loc ++ [k]) opt.type.nestedTypes.elemType v;
+                  in {
+                    value = merging.mergedValue;
+                    inherit (merging.defsFinal') highestPrio;
+                  })
+                defsByAttr;
+
   /* Properties. */
 
   mkIf = condition: content:
@@ -1146,14 +1174,11 @@ let
     use = id;
   };
 
-  /* Transitional version of mkAliasOptionModule that uses MD docs. */
-  mkAliasOptionModuleMD = from: to: doRename {
-    inherit from to;
-    visible = true;
-    warn = false;
-    use = id;
-    markdown = true;
-  };
+  /* Transitional version of mkAliasOptionModule that uses MD docs.
+
+     This function is no longer necessary and merely an alias of `mkAliasOptionModule`.
+  */
+  mkAliasOptionModuleMD = mkAliasOptionModule;
 
   /* mkDerivedConfig : Option a -> (a -> Definition b) -> Definition b
 
@@ -1175,7 +1200,7 @@ let
       (opt.highestPrio or defaultOverridePriority)
       (f opt.value);
 
-  doRename = { from, to, visible, warn, use, withPriority ? true, markdown ? false }:
+  doRename = { from, to, visible, warn, use, withPriority ? true }:
     { config, options, ... }:
     let
       fromOpt = getAttrFromPath from options;
@@ -1186,9 +1211,7 @@ let
     {
       options = setAttrByPath from (mkOption {
         inherit visible;
-        description = if markdown
-          then lib.mdDoc "Alias of {option}`${showOption to}`."
-          else "Alias of <option>${showOption to}</option>.";
+        description = "Alias of {option}`${showOption to}`.";
         apply = x: use (toOf config);
       } // optionalAttrs (toType != null) {
         type = toType;
@@ -1256,6 +1279,7 @@ private //
     importJSON
     importTOML
     mergeDefinitions
+    mergeAttrDefinitionsWithPrio
     mergeOptionDecls  # should be private?
     mkAfter
     mkAliasAndWrapDefinitions

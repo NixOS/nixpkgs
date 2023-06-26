@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "calysto-scheme";
-  version = "1.4.7";
+  version = "1.4.8";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Calysto";
     repo = "calysto_scheme";
-    rev = "v${version}";
-    hash = "sha256-5InImTbucggjf/tl8K31ZtLrwu5hqvggl7sYb0eqIEg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-gTBXdjm6Ry6DpjO9tP+acYxM+DQDh4dZQF+pyXrUCiI=";
   };
 
   propagatedBuildInputs = [

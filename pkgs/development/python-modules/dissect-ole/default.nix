@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-ole";
-  version = "3.4";
+  version = "3.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.ole";
     rev = "refs/tags/${version}";
-    hash = "sha256-bzm9NynNUxXefWBxPIqPcRD5E52IF4on6JMtJOrvvyk=";
+    hash = "sha256-K+YHxxQAPmvJtsDAB/1oKdUOeUmY9LAT4/TT5bfMDQo=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

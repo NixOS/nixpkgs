@@ -18,7 +18,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "eartag";
-  version = "0.3.3";
+  version = "0.4.1";
   format = "other";
 
   src = fetchFromGitLab {
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     owner = "knuxify";
     repo = pname;
     rev = version;
-    sha256 = "sha256-120voKmlEDsVSxNfqmwBvTB90dQUwnf2CtxvOKqi8+U=";
+    sha256 = "sha256-awH+SA0xef1dMDqfLOg5htYH5ywWzK2xbWWSaan0aRg=";
   };
 
   postPatch = ''
@@ -60,6 +60,7 @@ python3Packages.buildPythonApplication rec {
     mutagen
     pytaglib
     python-magic
+    pyacoustid
   ];
 
   dontWrapGApps = true;

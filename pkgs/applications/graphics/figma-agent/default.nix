@@ -4,12 +4,11 @@
 , pkg-config
 , fontconfig
 , freetype
-, libclang
 }:
 let
   inherit (rustPlatform) buildRustPackage bindgenHook;
 
-  version = "0.2.7";
+  version = "0.2.8";
 in
 buildRustPackage {
   pname = "figma-agent";
@@ -19,20 +18,20 @@ buildRustPackage {
     owner = "neetly";
     repo = "figma-agent-linux";
     rev = version;
-    sha256 = "sha256-Cq1hWNwJLBY9Bb41WFJxnr9fcygFZ8eNsn5cPXmGTyw=";
+    sha256 = "sha256-GtbONBAXoJ3AdpsWGk4zBCtGQr446siMtuj3or27wYw=";
   };
 
-  cargoSha256 = "sha256-Gc94Uk/Ikxjnb541flQL7AeblgU/yS6zQ/187ZGRYco=";
+  cargoHash = "sha256-EmBeRdnA59PdzSEX2x+sVYk/Cs7K3k0idDjbuEzI9j4=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    bindgenHook
+  ];
 
   buildInputs = [
     fontconfig
     freetype
-    bindgenHook
   ];
-
-  LIBCLANG_PATH = "${libclang.lib}/lib";
 
   doCheck = true;
 

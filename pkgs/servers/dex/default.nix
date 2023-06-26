@@ -33,6 +33,5 @@ buildGoModule rec {
     homepage = "https://github.com/dexidp/dex";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley techknowlogick ];
-    platforms = platforms.unix;
   };
 }

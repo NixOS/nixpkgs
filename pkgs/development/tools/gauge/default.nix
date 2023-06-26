@@ -20,6 +20,5 @@ buildGoModule rec {
     homepage = "https://gauge.org";
     license = licenses.asl20;
     maintainers = [ maintainers.vdemeester ];
-    platforms = platforms.unix;
   };
 }

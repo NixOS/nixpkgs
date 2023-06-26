@@ -1,5 +1,12 @@
 [package]
+name = "im_using_workspaces"
 version = { workspace = true }
+publish = false
+keywords = [
+    "workspace",
+    "other_thing",
+    "third_thing",
+]
 
 [dependencies]
 foo = { workspace = true, features = ["cat"] }

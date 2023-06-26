@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mu";
-  version = "1.10.3";
+  version = "1.10.4";
 
   src = fetchFromGitHub {
     owner = "djcb";
     repo = "mu";
     rev = "v${version}";
-    hash = "sha256-AqIPdKdNKLnAHIlqgs8zzm7j+iwNvDFWslvp8RjQPnI=";
+    hash = "sha256-vwStqrw/fPYUpBhBsLX0MPXtBtP5LwU0AYmUbP+Ywgo=";
   };
 
   postPatch = ''
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   # AOT native-comp, mostly copied from pkgs/build-support/emacs/generic.nix
-  postInstall = lib.optionalString (emacs.nativeComp or false) ''
+  postInstall = lib.optionalString (emacs.withNativeCompilation or false) ''
     mkdir -p $out/share/emacs/native-lisp
     export EMACSLOADPATH=$out/share/emacs/site-lisp/mu4e:
     export EMACSNATIVELOADPATH=$out/share/emacs/native-lisp:
@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
     find $out/share/emacs -type f -name '*.el' -print0 \
       | xargs -0 -I {} -n 1 -P $NIX_BUILD_CORES sh -c \
           "emacs --batch --eval '(setq large-file-warning-threshold nil)' -f batch-native-compile {} || true"
+  '' + ''
+    emacs --batch -l package --eval "(package-generate-autoloads \"mu4e\" \"$out/share/emacs/site-lisp/mu4e\")"
   '';
 
   buildInputs = [ emacs glib gmime3 texinfo xapian ];

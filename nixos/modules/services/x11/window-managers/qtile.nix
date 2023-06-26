@@ -40,7 +40,7 @@ in
         description = lib.mdDoc ''
           Extra Python packages available to Qtile.
           An example would be to include `python3Packages.qtile-extras`
-          for additional unoffical widgets.
+          for additional unofficial widgets.
         '';
         example = literalExpression ''
           python3Packages: with python3Packages; [

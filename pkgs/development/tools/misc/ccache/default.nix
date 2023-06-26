@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ccache";
-  version = "4.8";
+  version = "4.8.2";
 
   src = fetchFromGitHub {
     owner = "ccache";
     repo = "ccache";
     rev = "refs/tags/v${finalAttrs.version}";
-    sha256 = "sha256-X7Pv+yEQaKPdWTiKq67kSAyimyKvLSCYr4EjLlw+J0U=";
+    sha256 = "sha256-wft9T0XzTJhN/85kV+pIAUqTvcIBClbj+nHPQK0ncVE=";
   };
 
   outputs = [ "out" "man" ];
@@ -59,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
         "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
       ] ++ lib.optionals stdenv.isDarwin [
         "test.basedir"
+        "test.fileclone" # flaky on hydra (possibly filesystem-specific?)
         "test.multi_arch"
         "test.nocpp2"
       ];

@@ -1,19 +1,31 @@
 diff --git a/src/Makevars.in b/src/Makevars.in
-index 4441634..665a2dd 100644
+index dead2df..b86e3de 100644
 --- a/src/Makevars.in
 +++ b/src/Makevars.in
-@@ -20,10 +20,9 @@ export PKG_LDFLAGS=@LDFLAGS@
+@@ -22,20 +22,19 @@ export PKG_LDFLAGS=@LDFLAGS@
  all: copying $(SHLIB)
  
  #copy hdf5 library headers to package include
--copying: blosc/libH5Zblosc.so bzip2/libH5Zbz2.so lzf/libH5Zlzf.so
-+copying: bzip2/libH5Zbz2.so lzf/libH5Zlzf.so
+-copying: libH5Zblosc.so libH5Zbz2.so libH5Zlzf.so 
++copying: libH5Zbz2.so libH5Zlzf.so libH5Zzstd.so
  	mkdir -p "${USER_LIB_DIR}"
  	cp ${BZIP2_LIB} "${USER_LIB_DIR}"
 -	cp ${BLOSC_LIB} "${USER_LIB_DIR}"
  	cp ${LZF_LIB} "${USER_LIB_DIR}"
+ #	cp ${VBZ_LIB} "${USER_LIB_DIR}"
+ 	cp ${ZSTD_LIB} "${USER_LIB_DIR}"
+-	
++
+ #libH5Zvbz.so: libH5Zzstd.so
+ #	$(MAKE) -C vbz
  
- blosc/libH5Zblosc.so:
+ libH5Zblosc.so: libH5Zzstd.so
+ 	$(MAKE) -C blosc
+-	
++
+ libH5Zzstd.so:
+ 	$(MAKE) -C zstd
+ 
 diff --git a/src/bzip2/Makefile b/src/bzip2/Makefile
 index 449bbe7..154354e 100644
 --- a/src/bzip2/Makefile

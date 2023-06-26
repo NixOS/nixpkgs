@@ -49,5 +49,6 @@ buildGoModule rec {
     changelog = "https://github.com/ankitpokhrel/jira-cli/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ bryanasdev000 anthonyroussel ];
+    mainProgram = "jira";
   };
 }

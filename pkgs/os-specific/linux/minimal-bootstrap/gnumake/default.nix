@@ -45,7 +45,7 @@ let
         ./configure \
           --build i686-pc-linux-gnu \
           --host i686-pc-linux-gnu \
-          CC="${tinycc-mes}/bin/tcc -static" \
+          CC="${tinycc.compiler}/bin/tcc -B ${tinycc.libs}/lib" \
           ac_cv_func_dup=no
     - `ac_cv_func_dup` disabled as mes-libc doesn't implement tmpfile()
 
@@ -148,13 +148,13 @@ in
 kaem.runCommand "${pname}-${version}" {
   inherit pname version;
 
-  nativeBuildInputs = [ tinycc gnupatch ];
+  nativeBuildInputs = [ tinycc.compiler gnupatch ];
 
   meta = with lib; {
     description = "A tool to control the generation of non-source files from sources";
     homepage = "https://www.gnu.org/software/make";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = teams.minimal-bootstrap.members;
     mainProgram = "make";
     platforms = platforms.unix;
   };
@@ -174,11 +174,11 @@ kaem.runCommand "${pname}-${version}" {
   cp lib/fnmatch.in.h lib/fnmatch.h
 
   # Compile
-  alias CC="tcc ${lib.concatStringsSep " " CFLAGS}"
+  alias CC="tcc -B ${tinycc.libs}/lib ${lib.concatStringsSep " " CFLAGS}"
   ${lib.concatMapStringsSep "\n" (f: "CC -c ${f}") sources}
 
   # Link
-  CC -static -o make ${lib.concatStringsSep " " objects}
+  CC -o make ${lib.concatStringsSep " " objects}
 
   # Check
   ./make --version

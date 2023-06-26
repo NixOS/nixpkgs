@@ -6,6 +6,7 @@
 , cmake
 , ninja
 , python3
+, gobject-introspection
 , wrapGAppsHook
 , wrapQtAppsHook
 , extra-cmake-modules
@@ -13,8 +14,9 @@
 , qtwayland
 , qtsvg
 , qtimageformats
-, qt5compat
 , gtk3
+, boost
+, fmt
 , libdbusmenu
 , lz4
 , xxHash
@@ -52,9 +54,10 @@
 , libsysprof-capture
 , libpsl
 , brotli
-, microsoft_gsl
+, microsoft-gsl
 , rlottie
 , stdenv
+, nix-update-script
 }:
 
 # Main reference:
@@ -73,15 +76,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "4.8.1";
-  # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
+  version = "4.8.4";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "0mxxfh70dffkrq76nky3pwrk10s1q4ahxx2ddb58dz8igq6pl4zi";
+    hash = "sha256-DRVFngQ4geJx2/7pT1VJzkcBZnVGgDvcGGUr9r38gSU=";
   };
 
   patches = [
@@ -114,6 +116,7 @@ stdenv.mkDerivation rec {
     cmake
     ninja
     python3
+    gobject-introspection
     wrapGAppsHook
     wrapQtAppsHook
     extra-cmake-modules
@@ -124,8 +127,9 @@ stdenv.mkDerivation rec {
     qtwayland
     qtsvg
     qtimageformats
-    qt5compat
     gtk3
+    boost
+    fmt
     libdbusmenu
     lz4
     xxHash
@@ -161,7 +165,7 @@ stdenv.mkDerivation rec {
     libsysprof-capture
     libpsl
     brotli
-    microsoft_gsl
+    microsoft-gsl
     rlottie
   ];
 
@@ -173,6 +177,11 @@ stdenv.mkDerivation rec {
     # See: https://github.com/NixOS/nixpkgs/pull/130827#issuecomment-885212649
     "-DDESKTOP_APP_USE_PACKAGED_FONTS=OFF"
   ];
+
+  preBuild = ''
+    # for cppgir to locate gir files
+    export GI_GIR_PATH="$XDG_DATA_DIRS"
+  '';
 
   postFixup = ''
     # This is necessary to run Telegram in a pure environment.
@@ -186,7 +195,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit tg_owt;
-    updateScript = ./update.py;
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

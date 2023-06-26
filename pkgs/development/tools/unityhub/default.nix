@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, dpkg, makeWrapper, buildFHSEnv
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, makeWrapper
+, buildFHSEnv
 , extraPkgs ? pkgs: [ ]
 , extraLibs ? pkgs: [ ]
 }:
@@ -62,7 +67,7 @@ stdenv.mkDerivation rec {
 
       # Unity Hub additional dependencies
       libva
-      openssl_1_1
+      openssl
       cairo
       xdg-utils
       libnotify

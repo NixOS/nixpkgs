@@ -27,6 +27,7 @@
 , tpmSupport ? true
 , uringSupport ? stdenv.isLinux, liburing
 , canokeySupport ? false, canokey-qemu
+, capstoneSupport ? true, capstone
 , enableDocs ? true
 , hostCpuOnly ? false
 , hostCpuTargets ? (if hostCpuOnly
@@ -47,11 +48,11 @@ stdenv.mkDerivation rec {
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests";
-  version = "8.0.0";
+  version = "8.0.2";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${version}.tar.xz";
-    sha256 = "u2DwNBUxGB1sw5ad0ZoBPQQnqH+RgZOXDZrbkRMeVtA=";
+    sha256 = "8GCr1DX75nlBJeLDmFaP/Dz6VABCWWkHqLGO3KNM9qU=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]
@@ -94,7 +95,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals libiscsiSupport [ libiscsi ]
     ++ lib.optionals smbdSupport [ samba ]
     ++ lib.optionals uringSupport [ liburing ]
-    ++ lib.optionals canokeySupport [ canokey-qemu ];
+    ++ lib.optionals canokeySupport [ canokey-qemu ]
+    ++ lib.optionals capstoneSupport [ capstone ];
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
 
@@ -175,7 +177,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional libiscsiSupport "--enable-libiscsi"
     ++ lib.optional smbdSupport "--smbd=${samba}/bin/smbd"
     ++ lib.optional uringSupport "--enable-linux-io-uring"
-    ++ lib.optional canokeySupport "--enable-canokey";
+    ++ lib.optional canokeySupport "--enable-canokey"
+    ++ lib.optional capstoneSupport "--enable-capstone";
 
   dontWrapGApps = true;
 

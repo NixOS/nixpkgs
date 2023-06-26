@@ -26,6 +26,5 @@ buildGoModule {
     homepage = "https://github.com/leijurv/gb";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ babbaj ];
-    platforms = platforms.unix;
   };
 }

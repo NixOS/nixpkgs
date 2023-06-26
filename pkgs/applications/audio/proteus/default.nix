@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = toString [
     # Support JACK output in the standalone application:
     "-DJUCE_JACK"
-    # Accomodate -flto:
+    # Accommodate -flto:
     "-ffat-lto-objects"
   ];
 

@@ -5,8 +5,8 @@
 
 let
   # Compare with https://github.com/draios/sysdig/blob/dev/cmake/modules/falcosecurity-libs.cmake
-  libsRev = "0.10.5";
-  libsSha256 = "sha256-5a5ePcMHAlniJ8sU/5kKdRp5YkJ6tcr4h5Ru4Oc2kQY=";
+  libsRev = "0.11.0";
+  libsSha256 = "sha256-QvRTz3yMS6i+qdiSG51wvho9D7w/dMQhY72OYd3qOgU=";
 
   # Compare with https://github.com/falcosecurity/libs/blob/master/cmake/modules/valijson.cmake#L17
   valijson = fetchFromGitHub {
@@ -16,11 +16,12 @@ let
     sha256 = "sha256-ZD19Q2MxMQd3yEKbY90GFCrerie5/jzgO8do4JQDoKM=";
   };
 
+  # https://github.com/draios/sysdig/blob/0.31.5/cmake/modules/driver.cmake
   driver = fetchFromGitHub {
     owner = "falcosecurity";
     repo = "libs";
-    rev = libsRev;
-    sha256 = libsSha256;
+    rev = "5.0.1+driver";
+    sha256 = "sha256-CQ6QTcyTnThpJHDXgOM1Zdp5SG7rngp9XtEM+2mS8ro=";
   };
 
 in
@@ -34,6 +35,14 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-RuoPqVulATtn7jSga/8fECs7weNfjt/YFh7iHmfCKjw=";
   };
+
+  # to fix the build against the latest kernel
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/draios/sysdig/compare/35ded9aab87801281e22898242e24e0bc63873b2...954e6fc6238f21d4870a491395d68a7dd3062aa9.patch";
+      sha256 = "sha256-gnLURnv8FW5LvqjbreCf9DPGdBcn7rfizGeznFqJ+Fk=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake perl installShellFiles pkg-config ];
   buildInputs = [
@@ -84,8 +93,11 @@ stdenv.mkDerivation rec {
     "-DCREATE_TEST_TARGETS=OFF"
   ] ++ lib.optional (kernel == null) "-DBUILD_DRIVER=OFF";
 
-  # needed since luajit-2.1.0-beta3
-  env.NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg -DluaL_getn(L,i)=((int)lua_objlen(L,i))";
+  env.NIX_CFLAGS_COMPILE =
+   # needed since luajit-2.1.0-beta3
+   "-DluaL_reg=luaL_Reg -DluaL_getn(L,i)=((int)lua_objlen(L,i)) " +
+   # fix compiler warnings been treated as errors
+   "-Wno-error";
 
   preConfigure = ''
     if ! grep -q "${libsRev}" cmake/modules/falcosecurity-libs.cmake; then
@@ -114,9 +126,13 @@ stdenv.mkDerivation rec {
       if test -f "$out/lib/modules/${kernel.modDirVersion}/extra/scap.ko"; then
           sed -i "s#$kernel_dev#................................#g" $out/lib/modules/${kernel.modDirVersion}/extra/scap.ko
       else
-          xz -d $out/lib/modules/${kernel.modDirVersion}/extra/scap.ko.xz
-          sed -i "s#$kernel_dev#................................#g" $out/lib/modules/${kernel.modDirVersion}/extra/scap.ko
-          xz $out/lib/modules/${kernel.modDirVersion}/extra/scap.ko
+          for i in $out/lib/modules/${kernel.modDirVersion}/{extra,updates}/scap.ko.xz; do
+            if test -f "$i"; then
+              xz -d $i
+              sed -i "s#$kernel_dev#................................#g" ''${i%.xz}
+              xz -9 ''${i%.xz}
+            fi
+          done
       fi
     '';
 

@@ -57,5 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.AndersonTorres ];
     platforms = lib.platforms.unix;
+    mainProgram = "2048";
   };
 })

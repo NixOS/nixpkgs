@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-8NoLv7pHbBauPhz9hiJW0wkVkR96uqGxbOYu5lMZJ4Q=";
   };
 
+  outputs = [ "out" "dev" ];
+
   configureFlags = [
     (lib.enableFeature fontconfigSupport "fontconfig")
     (lib.enableFeature rasterizerSupport "rasterizer")

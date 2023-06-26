@@ -17,7 +17,6 @@ buildGoModule rec {
     changelog = "https://github.com/restic/rest-server/blob/${src.rev}/CHANGELOG.md";
     description = "A high performance HTTP server that implements restic's REST backend API";
     homepage = "https://github.com/restic/rest-server";
-    platforms = platforms.unix;
     license = licenses.bsd2;
     maintainers = with maintainers; [ dotlambda ];
   };

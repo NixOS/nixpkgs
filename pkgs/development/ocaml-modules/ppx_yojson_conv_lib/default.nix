@@ -2,17 +2,15 @@
 
 buildDunePackage rec {
   pname = "ppx_yojson_conv_lib";
-  version = "0.15.0";
+  version = "0.16.0";
 
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.02.3";
+  minimalOCamlVersion = "4.02.3";
 
   src = fetchFromGitHub {
     owner = "janestreet";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Hpg4AKAe7Q5P5UkBpH+5l1nZbIVA2Dr1Q30D4zkrjGo=";
+    hash = "sha256-TOf6DKyvc+RsSWsLi//LXW+J0sd5uJtF/HFQllcL7No=";
   };
 
   propagatedBuildInputs = [ yojson ];

@@ -4,15 +4,15 @@
 , kernel
 }:
 
-stdenv.mkDerivation rec {
-  pname = "ivsc-drivers";
-  version = "unstable-2023-01-06";
+stdenv.mkDerivation {
+  pname = "ivsc-driver";
+  version = "unstable-2023-03-10";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "ivsc-driver";
-    rev = "94ecb88b3ac238d9145ac16230d6e0779bb4fd32";
-    hash = "sha256-Q7iyKw4WFSX42E4AtoW/zYRKpknWZSU66V5VPAx6AjA=";
+    rev = "c8db12b907e2e455d4d5586e5812d1ae0eebd571";
+    hash = "sha256-OM9PljvaMKrk72BFeSCqaABFeAws+tOdd3oC2jyNreE=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = "https://github.com/intel/ivsc-drivers";
+    homepage = "https://github.com/intel/ivsc-driver";
     description = "Intel Vision Sensing Controller kernel driver";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ hexa ];

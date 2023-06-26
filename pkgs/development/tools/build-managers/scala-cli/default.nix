@@ -73,6 +73,7 @@ stdenv.mkDerivation {
     license = licenses.asl20;
     description = "Command-line tool to interact with the Scala language";
     maintainers = [ maintainers.kubukoz ];
+    inherit platforms;
   };
 
   passthru.updateScript = callPackage ./update.nix { } { inherit platforms pname version; };

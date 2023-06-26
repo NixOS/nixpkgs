@@ -16,13 +16,13 @@ lib.checkListOfEnum "${pname}: available color variants" [ "standard" "green" "g
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2023-02-01";
+  version = "2023-06-07";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    hash = "sha256-Plm05+5r6p9MabLmmh8kWitALGFalruBbhAgBhPCjRo=";
+    hash = "sha256-drEAjIY/lacqncSeVeNmeRX6v4PnLvGo66Na1fuFXRg=";
   };
 
   nativeBuildInputs = [ gtk3 jdupes ];

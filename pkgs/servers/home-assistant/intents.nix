@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-intents";
-  version = "2023.4.26";
+  version = "2023.6.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -28,10 +28,15 @@ buildPythonPackage rec {
     owner = "home-assistant";
     repo = "intents";
     rev = "refs/tags/${version}";
-    hash = "sha256-l22+scT/4qIU5qWlWURr5wVEBoWNXGqYEaS3IVwG1Zs=";
+    hash = "sha256-ZfPOxTFPQNdZ3Tq8p410RHlLGej+FOqhafD+91MRbRo=";
   };
 
   sourceRoot = "source/package";
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "2023.4.26" "${version}"
+  '';
 
   nativeBuildInputs = [
     hassil

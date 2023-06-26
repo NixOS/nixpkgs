@@ -69,7 +69,7 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 # This fix would not be necessary if ANY of the above were false:
 #  - If Nix used native headers for each different MacOS version, aligned_alloc
 #    would be in the headers on Catalina.
-#  - If Nix used the same libary binaries for each MacOS version, aligned_alloc
+#  - If Nix used the same library binaries for each MacOS version, aligned_alloc
 #    would not be in the library binaries.
 #  - If Catalina did not include aligned_alloc, this wouldn't be a problem.
 #  - If the configure scripts looked for header presence as well as
@@ -77,8 +77,12 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 #  - If GCC allowed implicit declaration of symbols, it would not fail during
 #    compilation even if the configure scripts did not check header presence.
 #
-+ lib.optionalString (hostPlatform.isDarwin) ''
-  export ac_cv_func_aligned_alloc=no
++ lib.optionalString (buildPlatform.isDarwin) ''
+    export build_configargs=ac_cv_func_aligned_alloc=no
+'' + lib.optionalString (hostPlatform.isDarwin) ''
+    export host_configargs=ac_cv_func_aligned_alloc=no
+'' + lib.optionalString (targetPlatform.isDarwin) ''
+    export target_configargs=ac_cv_func_aligned_alloc=no
 ''
 
 # In order to properly install libgccjit on macOS Catalina, strip(1)

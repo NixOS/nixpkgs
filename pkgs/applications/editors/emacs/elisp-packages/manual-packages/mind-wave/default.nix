@@ -47,14 +47,14 @@
 # ];
 melpaBuild rec {
   pname = "mind-wave";
-  version = "20230322.1348"; # 13:48 UTC
+  version = "20230523.0332"; # 03:32 UTC
   src = pkgs.fetchFromGitHub {
     owner = "manateelazycat";
     repo = "mind-wave";
-    rev = "2d94f553a394ce73bcb91490b81e0fc042baa8d3";
-    sha256 = "sha256-6tmcPYAEch5bX5hEHMiQGDNYEMUOvnxF1Vq0VVpBsYo=";
+    rev = "5109162b74872091c5090a28389bef8f7020274c";
+    sha256 = "sha256-ZyXrpb0GLWSGnMsVIGL9qALSBCeIWNF0UwkCFgCKnu8=";
   };
-  commit = "2d94f553a394ce73bcb91490b81e0fc042baa8d3";
+  commit = "5109162b74872091c5090a28389bef8f7020274c";
   # elisp dependencies
   packageRequires = [
     pkgs.emacsPackages.markdown-mode

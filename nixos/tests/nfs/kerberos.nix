@@ -1,7 +1,5 @@
 import ../make-test-python.nix ({ pkgs, lib, ... }:
 
-with lib;
-
 let
   krb5 =
     { enable = true;

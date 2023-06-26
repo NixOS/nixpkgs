@@ -59,6 +59,6 @@ buildPythonPackage rec {
     homepage = "http://wrf-python.rtfd.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ mhaselsteiner ];
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+    broken = stdenv.isDarwin;
   };
 }

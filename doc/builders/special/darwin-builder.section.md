@@ -62,7 +62,7 @@ builders-use-substitutes = true
 $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
 ```
 
-## Example flake usage
+## Example flake usage {#sec-darwin-builder-example-flake}
 
 ```
 {
@@ -120,7 +120,7 @@ $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
 }
 ```
 
-## Reconfiguring the builder
+## Reconfiguring the builder {#sec-darwin-builder-reconfiguring}
 
 Initially you should not change the builder configuration else you will not be
 able to use the binary cache. However, after you have the builder running locally

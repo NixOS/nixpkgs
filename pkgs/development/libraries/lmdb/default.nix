@@ -46,6 +46,9 @@ stdenv.mkDerivation rec {
     Cflags: -I$dev/include
     Libs: -L$out/lib -llmdb
     EOF
+
+    # Expected by Rust libraries.
+    ln -s lmdb.pc "$dev/lib/pkgconfig/liblmdb.pc"
   '';
 
   meta = with lib; {

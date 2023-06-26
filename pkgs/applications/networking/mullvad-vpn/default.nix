@@ -1,11 +1,36 @@
-{ stdenv, lib, fetchurl, dpkg
-, alsa-lib, atk, cairo, cups, dbus, expat, fontconfig, freetype
-, gdk-pixbuf, glib, pango, nspr, nss, gtk3, mesa
-, libGL, wayland, xorg, autoPatchelfHook, systemd, libnotify, libappindicator
+{ stdenv
+, lib
+, fetchurl
+, dpkg
+, alsa-lib
+, atk
+, cairo
+, cups
+, dbus
+, expat
+, fontconfig
+, freetype
+, gdk-pixbuf
+, glib
+, pango
+, nspr
+, nss
+, gtk3
+, mesa
+, libGL
+, wayland
+, xorg
+, autoPatchelfHook
+, systemd
+, libnotify
+, libappindicator
 , makeWrapper
+, coreutils
+, gnugrep
 }:
 
-let deps = [
+let
+  deps = [
     alsa-lib
     atk
     cairo
@@ -77,7 +102,9 @@ stdenv.mkDerivation rec {
     ln -s $out/share/mullvad/mullvad-{gui,vpn} $out/bin/
     ln -sf $out/share/mullvad/resources/mullvad-problem-report $out/bin/mullvad-problem-report
 
-    wrapProgram $out/bin/mullvad-vpn --set MULLVAD_DISABLE_UPDATE_NOTIFICATION 1
+    wrapProgram $out/bin/mullvad-vpn \
+      --set MULLVAD_DISABLE_UPDATE_NOTIFICATION 1 \
+      --prefix PATH : ${lib.makeBinPath [ coreutils gnugrep ]}
 
     wrapProgram $out/bin/mullvad-daemon \
         --set-default MULLVAD_RESOURCE_DIR "$out/share/mullvad/resources"

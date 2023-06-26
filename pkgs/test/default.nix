@@ -86,6 +86,8 @@ with pkgs;
 
   coq = callPackage ./coq {};
 
+  dotnet = recurseIntoAttrs (callPackages ./dotnet { });
+
   makeHardcodeGsettingsPatch = callPackage ./make-hardcode-gsettings-patch { };
 
   makeWrapper = callPackage ./make-wrapper { };

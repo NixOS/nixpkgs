@@ -43,6 +43,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  # A fix for cxxopts >=3.1
+  postPatch = ''
+    substituteInPlace src/cli.cpp \
+      --replace "cxxopts::OptionException" "cxxopts::exceptions::exception"
+  '';
 
   # CMake needs to be run by setuptools rather than by its hook
   dontConfigure = true;

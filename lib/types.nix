@@ -211,7 +211,7 @@ rec {
   # nixos/doc/manual/development/option-types.xml!
   types = rec {
 
-    raw = mkOptionType rec {
+    raw = mkOptionType {
       name = "raw";
       description = "raw value";
       descriptionClass = "noun";
@@ -775,9 +775,11 @@ rec {
           };
           binOp = lhs: rhs: {
             class =
-              if lhs.class == null then rhs.class
-              else if rhs.class == null then lhs.class
-              else if lhs.class == rhs.class then lhs.class
+              # `or null` was added for backwards compatibility only. `class` is
+              # always set in the current version of the module system.
+              if lhs.class or null == null then rhs.class or null
+              else if rhs.class or null == null then lhs.class or null
+              else if lhs.class or null == rhs.class then lhs.class or null
               else throw "A submoduleWith option is declared multiple times with conflicting class values \"${toString lhs.class}\" and \"${toString rhs.class}\".";
             modules = lhs.modules ++ rhs.modules;
             specialArgs =

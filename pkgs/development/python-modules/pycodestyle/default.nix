@@ -18,6 +18,13 @@ buildPythonPackage rec {
     hash = "sha256-NHGHvbR2Mp2Y9pXCE9cpWoRtEVL/T+m6y4qVkLjucFM=";
   };
 
+  patches = [
+    # https://github.com/PyCQA/pycodestyle/issues/1151
+    # Applies a modified version of an upstream patch that only applied
+    # to Python 3.12.
+    ./python-3.11.4-compat.patch
+  ];
+
   # https://github.com/PyCQA/pycodestyle/blob/2.10.0/tox.ini#L13
   checkPhase = ''
     ${python.interpreter} -m pycodestyle --statistics pycodestyle.py

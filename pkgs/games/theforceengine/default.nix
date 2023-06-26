@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "theforceengine";
-  version = "1.09.100";
+  version = "1.09.200";
 
   src = fetchFromGitHub {
     owner = "luciusDXL";
     repo = "TheForceEngine";
     rev = "v${version}";
-    sha256 = "sha256-nw9yp/StaSi5thafVT1V5YA2ZCYGWNoHUvQTpK90Foc=";
+    sha256 = "sha256-r3fNhiPl6fjrIbdLoNIyTETw3lpPZCQYlTA2QJgiDgw=";
   };
 
   nativeBuildInputs = [

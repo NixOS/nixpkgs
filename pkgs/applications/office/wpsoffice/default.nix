@@ -2,19 +2,20 @@
 , stdenv
 , fetchurl
 , dpkg
-, wrapGAppsHook
-, wrapQtAppsHook
 , autoPatchelfHook
 , alsa-lib
+, at-spi2-core
 , libtool
+, libxkbcommon
 , nspr
 , mesa
 , libtiff
-, cups
 , udev
+, gtk3
+, qtbase
 , xorg
+, cups
 , pango
-, makeWrapper
 , useChineseVersion ? false
 }:
 
@@ -33,33 +34,41 @@ stdenv.mkDerivation rec {
   unpackCmd = "dpkg -x $src .";
   sourceRoot = ".";
 
-  postUnpack = ''
-    # distribution is missing libkappessframework.so, so we should not let
-    # autoPatchelfHook fail on the following dead libraries
-    rm -r opt/kingsoft/wps-office/office6/addons/pdfbatchcompression
-
-    # Remove the following libraries because they depend on qt4
-    rm -r opt/kingsoft/wps-office/office6/{librpcetapi.so,librpcwpsapi.so,librpcwppapi.so,libavdevice.so.58.10.100,libmediacoder.so}
-    rm -r opt/kingsoft/wps-office/office6/addons/wppcapturer/libwppcapturer.so
-    rm -r opt/kingsoft/wps-office/office6/addons/wppencoder/libwppencoder.so
-  '';
-
-  nativeBuildInputs = [ dpkg wrapGAppsHook wrapQtAppsHook makeWrapper autoPatchelfHook ];
+  nativeBuildInputs = [
+    dpkg
+    autoPatchelfHook
+  ];
 
   buildInputs = [
     alsa-lib
-    xorg.libXdamage
-    xorg.libXtst
+    at-spi2-core
     libtool
+    libxkbcommon
     nspr
     mesa
     libtiff
     udev
+    gtk3
+    qtbase
+    xorg.libXdamage
+    xorg.libXtst
+    xorg.libXv
   ];
+
+  dontWrapQtApps = true;
 
   runtimeDependencies = map lib.getLib [
     cups
     pango
+  ];
+
+  autoPatchelfIgnoreMissingDeps = [
+    # distribution is missing libkappessframework.so
+    "libkappessframework.so"
+    # qt4 support is deprecated
+    "libQtCore.so.4"
+    "libQtNetwork.so.4"
+    "libQtXml.so.4"
   ];
 
   installPhase = ''
@@ -79,23 +88,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  dontWrapQtApps = true;
-  dontWrapGApps = true;
-
   preFixup = ''
     # The following libraries need libtiff.so.5, but nixpkgs provides libtiff.so.6
-    patchelf --replace-needed libtiff.so.5 libtiff.so $out/opt/kingsoft/wps-office/office6/{libpdfmain.so,libqpdfpaint.so,qt/plugins/imageformats/libqtiff.so}
+    patchelf --replace-needed libtiff.so.5 libtiff.so $out/opt/kingsoft/wps-office/office6/{libpdfmain.so,libqpdfpaint.so,qt/plugins/imageformats/libqtiff.so,addons/pdfbatchcompression/libpdfbatchcompressionapp.so}
     # dlopen dependency
     patchelf --add-needed libudev.so.1 $out/opt/kingsoft/wps-office/office6/addons/cef/libcef.so
-  '';
-
-  postFixup = ''
-    for f in "$out"/bin/*; do
-      echo "Wrapping $f"
-      wrapProgram "$f" \
-        "''${gappsWrapperArgs[@]}" \
-        "''${qtWrapperArgs[@]}"
-    done
   '';
 
   meta = with lib; {

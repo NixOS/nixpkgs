@@ -9,13 +9,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "shotman";
-  version = "0.4.1";
+  version = "0.4.3";
 
   src = fetchFromSourcehut {
     owner = "~whynothugo";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-u8vnRNxi7wLn0M2VZu9YTZuSAM/0afHRP01vve9tD9c=";
+    hash = "sha256-c2fgP6XB/fqKfsjqRRQpOFzHZyF/a9tLAKIGdKFAcSQ=";
   };
 
   cargoLock = {

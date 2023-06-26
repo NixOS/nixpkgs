@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/threathunters-io/laurel";
     changelog = "https://github.com/threathunters-io/laurel/releases/tag/v${version}";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ indeednotjames ];
+    maintainers = with maintainers; [ emilylange ];
     platforms = platforms.linux;
   };
 }

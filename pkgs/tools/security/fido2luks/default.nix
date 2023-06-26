@@ -3,9 +3,6 @@
 , fetchFromGitHub
 , cryptsetup
 , pkg-config
-, clang
-, llvmPackages
-, fetchpatch
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,13 +16,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-bXwaFiRHURvS5KtTqIj+3GlGNbEulDgMDP51ZiO1w9o=";
   };
 
-  nativeBuildInputs = [ pkg-config clang ];
+  nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
 
   buildInputs = [ cryptsetup ];
-
-  configurePhase = ''
-    export LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib"
-  '';
 
   cargoSha256 = "sha256-MPji87jYJjYtDAXO+v/Z4XRtCKo+ftsNvmlBrM9iMTk=";
 

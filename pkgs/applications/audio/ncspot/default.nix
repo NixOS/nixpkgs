@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ncspot";
-  version = "0.13.2";
+  version = "0.13.3";
 
   src = fetchFromGitHub {
     owner = "hrkfdn";
     repo = "ncspot";
     rev = "v${version}";
-    hash = "sha256-DdJa4ax/v86OgO+IAsiFA8/u6pEGcCw+N/3MLXzz8DM=";
+    hash = "sha256-AXe/ysNYSWC4cuzvN4fLmDyeBxpzciDo8PFjXdzFMl0=";
   };
 
-  cargoHash = "sha256-HkpFboXgHbJMYJFabJ58Syy1ag+InwqkeJAw8MxAr0A=";
+  cargoHash = "sha256-y7Vaf4jp2Zds0KsYqF0JBWsbq9IQVu6n0TMo3oGL14A=";
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optional withClipboard python3;
@@ -56,6 +56,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Cross-platform ncurses Spotify client written in Rust, inspired by ncmpc and the likes";
     homepage = "https://github.com/hrkfdn/ncspot";
+    changelog = "https://github.com/hrkfdn/ncspot/releases/tag/v${version}";
     license = licenses.bsd2;
     maintainers = [ maintainers.marsam ];
   };

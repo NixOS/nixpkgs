@@ -31,13 +31,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "open62541";
-  version = "1.3.5";
+  version = "1.3.6";
 
   src = fetchFromGitHub {
     owner = "open62541";
     repo = "open62541";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-X0kdMKSqKAJvmrd1YcYe1mJpFONqPCALA09xwd6o7BQ=";
+    hash = "sha256-cmD01D49pHEHN0QQtE5RXv0YZ/MPIWnubeUY6BH4DrU=";
     fetchSubmodules = true;
   };
 
@@ -90,10 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preCheck = let
     disabledTests =
-      lib.optionals (withEncryption == "mbedtls") [
-        "encryption_basic128rsa15"
-      ]
-      ++ lib.optionals withPubSub [
+      lib.optionals withPubSub [
         # "Cannot set socket option IP_ADD_MEMBERSHIP"
         "pubsub_publish"
         "check_pubsub_get_state"

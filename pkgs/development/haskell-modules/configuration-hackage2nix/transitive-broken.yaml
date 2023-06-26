@@ -1265,7 +1265,6 @@ dont-distribute-packages:
  - distributed-process-systest
  - distributed-process-task
  - distributed-process-tests
- - distributed-process-zookeeper
  - distributed-static
  - distribution-plot
  - dixi
@@ -1283,7 +1282,6 @@ dont-distribute-packages:
  - doc-review
  - domain
  - domain-aeson
- - domain-aeson_0_1_1_1
  - domain-cereal
  - domaindriven
  - dormouse-client
@@ -1448,6 +1446,7 @@ dont-distribute-packages:
  - feature-flipper-postgres
  - fedora-composes
  - fedora-img-dl
+ - fedora-repoquery
  - feed-gipeda
  - feed-translator
  - feed2lj
@@ -1514,7 +1513,7 @@ dont-distribute-packages:
  - fpnla-examples
  - frame-markdown
  - freckle-app
- - freckle-app_1_9_0_0
+ - freckle-app_1_9_0_2
  - free-functors
  - free-game
  - free-theorems-counterexamples
@@ -1541,7 +1540,6 @@ dont-distribute-packages:
  - functor-combo
  - funflow
  - funflow-nix
- - fungll-combinators
  - funion
  - funnyprint
  - funsat
@@ -1934,6 +1932,8 @@ dont-distribute-packages:
  - hakyll-ogmarkup
  - hakyll-shortcut-links
  - halberd
+ - halide-JuicyPixels
+ - halide-arrayfire
  - hall-symbols
  - halma-gui
  - halma-telegram-bot
@@ -2597,6 +2597,7 @@ dont-distribute-packages:
  - libmolude
  - libraft
  - librato
+ - libssh2-conduit
  - libxml-enumerator
  - lifted-base-tf
  - lightning-haskell
@@ -3004,10 +3005,9 @@ dont-distribute-packages:
  - padKONTROL
  - pairing
  - panda
- - pandoc-crossref_0_3_15_2
+ - pandoc-crossref_0_3_16_0
  - pandoc-highlighting-extensions
  - pandoc-japanese-filters
- - pandoc-symreg
  - pandora-io
  - papa
  - papa-base
@@ -3120,13 +3120,13 @@ dont-distribute-packages:
  - plugins-auto
  - png-file
  - pngload
- - pocket-dns
  - point-octree
  - pointless-lenses
  - pointless-rewrite
  - poker
  - polh-lexicon
  - polydata
+ - polyglot
  - polysemy-RandomFu
  - polysemy-account
  - polysemy-account-api
@@ -3571,6 +3571,7 @@ dont-distribute-packages:
  - servant-openapi3
  - servant-postgresql
  - servant-pushbullet-client
+ - servant-queryparam-openapi3
  - servant-rate-limit
  - servant-reason
  - servant-server-namedargs
@@ -3741,7 +3742,6 @@ dont-distribute-packages:
  - stackage-setup
  - stackage-upload
  - stackage2nix
- - stackctl
  - stan
  - starrover2
  - stateful-mtl
@@ -4309,5 +4309,4 @@ dont-distribute-packages:
  - zoom-cache
  - zoom-cache-pcm
  - zoom-cache-sndfile
- - zoovisitor
  - zuramaru

@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "zigbee2mqtt";
-  version = "1.30.4";
+  version = "1.31.2";
 
   src = fetchFromGitHub {
     owner = "Koenkk";
     repo = "zigbee2mqtt";
     rev = version;
-    hash = "sha256-jS5O52frZY+OVLtMZkjZQskKuHs5T8zKTwjGKh77EAo=";
+    hash = "sha256-Pl/v1Uj+6VpuAXBVpCmcuioRGtYYNektXI96HBXn+Ck=";
   };
 
-  npmDepsHash = "sha256-71BbMBt0vXsuL8senZ7IvT3Y3OtvewQtWk1bzKUBtjI=";
+  npmDepsHash = "sha256-ZbfR/dcIdiy/0FlPPodAgRvEW/muXSP5qfmQR7ym3lM=";
 
   nativeBuildInputs = [
     python3

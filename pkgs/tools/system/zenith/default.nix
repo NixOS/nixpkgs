@@ -5,7 +5,6 @@
 , IOKit
 , nvidiaSupport ? false
 , makeWrapper
-, llvmPackages
 }:
 
 assert nvidiaSupport -> stdenv.isLinux;
@@ -34,12 +33,10 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [ llvmPackages.clang ] ++ lib.optional nvidiaSupport makeWrapper;
-  buildInputs = [ llvmPackages.libclang ] ++ lib.optionals stdenv.isDarwin [ IOKit ];
+  nativeBuildInputs = [ rustPlatform.bindgenHook ] ++ lib.optional nvidiaSupport makeWrapper;
+  buildInputs = lib.optionals stdenv.isDarwin [ IOKit ];
 
   buildFeatures = lib.optional nvidiaSupport "nvidia";
-
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   postInstall = lib.optionalString nvidiaSupport ''
     wrapProgram $out/bin/zenith \

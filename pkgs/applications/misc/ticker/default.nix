@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "ticker";
-  version = "4.5.10";
+  version = "4.5.14";
 
   src = fetchFromGitHub {
     owner = "achannarasappa";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-2CELRY6V7/6PcC5s4XjOqadxXc5SbS0vstqLEej3xnI=";
+    hash = "sha256-WpU0fxkdNqr8zF6eGOlbaV9dp6sZyNZ1J7Uq+yGBnUs=";
   };
 
   vendorHash = "sha256-c7wU9LLRlS9kOhE4yAiKAs/npQe8lvSwPcd+/D8o9rk=";
@@ -30,6 +30,6 @@ buildGoModule rec {
     homepage = "https://github.com/achannarasappa/ticker";
     changelog = "https://github.com/achannarasappa/ticker/releases/tag/v${version}";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ siraben ];
+    maintainers = with maintainers; [ siraben sarcasticadmin ];
   };
 }

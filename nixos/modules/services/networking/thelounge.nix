@@ -25,6 +25,8 @@ in
   options.services.thelounge = {
     enable = mkEnableOption (lib.mdDoc "The Lounge web IRC client");
 
+    package = mkPackageOptionMD pkgs "thelounge" { };
+
     public = mkOption {
       type = types.bool;
       default = false;
@@ -93,11 +95,11 @@ in
       serviceConfig = {
         User = "thelounge";
         StateDirectory = baseNameOf dataDir;
-        ExecStart = "${pkgs.thelounge}/bin/thelounge start";
+        ExecStart = "${getExe cfg.package} start";
       };
     };
 
-    environment.systemPackages = [ pkgs.thelounge ];
+    environment.systemPackages = [ cfg.package ];
   };
 
   meta = {

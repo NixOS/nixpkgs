@@ -98,11 +98,11 @@
     md5name = "89c5c6665337f56fd2db36bc3805a5619709d51fb136e51937072f63fcc717a7-cppunit-1.15.1.tar.gz";
   }
   {
-    name = "curl-7.88.1.tar.xz";
-    url = "https://dev-www.libreoffice.org/src/curl-7.88.1.tar.xz";
-    sha256 = "1dae31b2a7c1fe269de99c0c31bb488346aab3459b5ffca909d6938249ae415f";
+    name = "curl-8.0.1.tar.xz";
+    url = "https://dev-www.libreoffice.org/src/curl-8.0.1.tar.xz";
+    sha256 = "0a381cd82f4d00a9a334438b8ca239afea5bfefcfa9a1025f2bf118e79e0b5f0";
     md5 = "";
-    md5name = "1dae31b2a7c1fe269de99c0c31bb488346aab3459b5ffca909d6938249ae415f-curl-7.88.1.tar.xz";
+    md5name = "0a381cd82f4d00a9a334438b8ca239afea5bfefcfa9a1025f2bf118e79e0b5f0-curl-8.0.1.tar.xz";
   }
   {
     name = "libe-book-0.1.3.tar.xz";
@@ -329,11 +329,11 @@
     md5name = "b8e892d8627c41888ff121e921455b9e2d26836978f2359173d19825da62b8fc-graphite2-minimal-1.3.14.tgz";
   }
   {
-    name = "harfbuzz-4.3.0.tar.xz";
-    url = "https://dev-www.libreoffice.org/src/harfbuzz-4.3.0.tar.xz";
-    sha256 = "a49628f4c4c8e6d8df95ef44935a93446cf2e46366915b0e3ca30df21fffb530";
+    name = "harfbuzz-7.1.0.tar.xz";
+    url = "https://dev-www.libreoffice.org/src/harfbuzz-7.1.0.tar.xz";
+    sha256 = "f135a61cd464c9ed6bc9823764c188f276c3850a8dc904628de2a87966b7077b";
     md5 = "";
-    md5name = "a49628f4c4c8e6d8df95ef44935a93446cf2e46366915b0e3ca30df21fffb530-harfbuzz-4.3.0.tar.xz";
+    md5name = "f135a61cd464c9ed6bc9823764c188f276c3850a8dc904628de2a87966b7077b-harfbuzz-7.1.0.tar.xz";
   }
   {
     name = "hsqldb_1_8_0.zip";
@@ -546,11 +546,11 @@
     md5name = "52ced4943f35bd7d0818a38298c1528ca4ac8a54440fd71134a07d2d1370a262-xmlsec1-1.2.34.tar.gz";
   }
   {
-    name = "libxml2-2.10.3.tar.xz";
-    url = "https://dev-www.libreoffice.org/src/libxml2-2.10.3.tar.xz";
-    sha256 = "5d2cc3d78bec3dbe212a9d7fa629ada25a7da928af432c93060ff5c17ee28a9c";
+    name = "libxml2-2.10.4.tar.xz";
+    url = "https://dev-www.libreoffice.org/src/libxml2-2.10.4.tar.xz";
+    sha256 = "ed0c91c5845008f1936739e4eee2035531c1c94742c6541f44ee66d885948d45";
     md5 = "";
-    md5name = "5d2cc3d78bec3dbe212a9d7fa629ada25a7da928af432c93060ff5c17ee28a9c-libxml2-2.10.3.tar.xz";
+    md5name = "ed0c91c5845008f1936739e4eee2035531c1c94742c6541f44ee66d885948d45-libxml2-2.10.4.tar.xz";
   }
   {
     name = "libxslt-1.1.35.tar.xz";

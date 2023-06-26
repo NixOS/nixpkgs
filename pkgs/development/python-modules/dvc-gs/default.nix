@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "dvc-gs";
-  version = "2.22.0";
+  version = "2.22.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UzYW2iU/GvLJd4q6ErcLQRoAehyFF3PrMTjb8PEtmNE=";
+    hash = "sha256-IKDwdSfolZwv8TvHHicVV42PYeULhskv8csbkiJzLbk=";
   };
 
   # Prevent circular dependency
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   # Network access is needed for tests
   doCheck = false;
 
-  pythonCheckImports = [ "dvc_gs" ];
+  pythonImportsCheck = [ "dvc_gs" ];
 
   meta = with lib; {
     description = "gs plugin for dvc";

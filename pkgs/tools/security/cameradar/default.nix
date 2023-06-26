@@ -37,5 +37,9 @@ buildGoModule rec {
     homepage = "https://github.com/Ullaakut/cameradar";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
+    # Upstream issue, doesn't build with latest curl, see
+    # https://github.com/Ullaakut/cameradar/issues/320
+    # https://github.com/andelf/go-curl/issues/84
+    broken = true;
   };
 }

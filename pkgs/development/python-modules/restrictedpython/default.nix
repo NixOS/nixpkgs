@@ -3,6 +3,7 @@
 , fetchPypi
 , pytest-mock
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 }:
 
@@ -22,6 +23,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [
+    "test_compile__compile_restricted_exec__5"
   ];
 
   pythonImportsCheck = [

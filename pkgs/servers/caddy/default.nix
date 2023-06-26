@@ -46,7 +46,7 @@ buildGoModule {
     $out/bin/caddy manpage --directory manpages
     installManPage manpages/*
 
-    installShellCompletion --cmd metal \
+    installShellCompletion --cmd caddy \
       --bash <($out/bin/caddy completion bash) \
       --fish <($out/bin/caddy completion fish) \
       --zsh <($out/bin/caddy completion zsh)
@@ -64,6 +64,6 @@ buildGoModule {
     homepage = "https://caddyserver.com";
     description = "Fast and extensible multi-platform HTTP/1-2-3 web server with automatic HTTPS";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Br1ght0ne indeednotjames techknowlogick ];
+    maintainers = with maintainers; [ Br1ght0ne emilylange techknowlogick ];
   };
 }

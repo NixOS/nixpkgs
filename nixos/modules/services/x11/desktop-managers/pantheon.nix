@@ -113,6 +113,7 @@ in
 
       services.xserver.displayManager.sessionCommands = ''
         if test "$XDG_CURRENT_DESKTOP" = "Pantheon"; then
+            true
             ${concatMapStrings (p: ''
               if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
                 export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
@@ -227,11 +228,16 @@ in
       xdg.icons.enable = true;
 
       xdg.portal.enable = true;
-      xdg.portal.extraPortals = with pkgs.pantheon; [
+      xdg.portal.extraPortals = [
+        # Some Pantheon apps enforce portal usage, we need this for e.g. notifications.
+        # Currently we have buildPortalsInGnome enabled, if you run into issues related
+        # to https://github.com/flatpak/xdg-desktop-portal/issues/656 please report to us.
+        pkgs.xdg-desktop-portal-gtk
+      ] ++ (with pkgs.pantheon; [
         elementary-files
         elementary-settings-daemon
         xdg-desktop-portal-pantheon
-      ];
+      ]);
 
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";

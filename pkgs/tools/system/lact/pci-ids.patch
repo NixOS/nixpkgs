@@ -1,0 +1,10 @@
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -18,7 +18,7 @@ use std::{
+ };
+ use tracing::trace;
+ 
+-const DB_PATHS: &[&str] = &["/usr/share/hwdata/pci.ids", "/usr/share/misc/pci.ids"];
++const DB_PATHS: &[&str] = &["@hwdata@/share/hwdata/pci.ids"];
+ #[cfg(feature = "online")]
+ const URL: &str = "https://pci-ids.ucw.cz/v2.2/pci.ids";

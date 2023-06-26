@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "llfuse";
-  version = "1.4.3";
+  version = "1.4.4";
 
   format = "pyproject";
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "python-llfuse";
     repo = "python-llfuse";
     rev = "refs/tags/release-${version}";
-    hash = "sha256-37l6HrAKrXtEhlWTIdlw3L6wCGeOA7IW/aaJn3wf4QY=";
+    hash = "sha256-qsnmhnZsK0j9dPhXT9mymQTzVHmmGnB5vgONatxDLIo=";
   };
 
   nativeBuildInputs = [ cython pkg-config setuptools ];

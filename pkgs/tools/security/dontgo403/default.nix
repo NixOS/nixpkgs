@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "dontgo403";
-  version = "0.8.1";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "devploit";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Gpr2L7iSdMBqwMzdYDtdzyZYu+Uwjn1wZvw4LTr8xWI=";
+    hash = "sha256-WGI98IUyvcPGD9IbIF1ZWa72Dnork6xE+XoVYUx1zAc=";
   };
 
-  vendorHash = "sha256-he/+M8NffvMLTdFQy5E2EnqLXkS/tK6eUGXTBKZSZCw=";
+  vendorHash = "sha256-IGnTbuaQH8A6aKyahHMd2RyFRh4WxZ3Vx/A9V3uelRg=";
 
   meta = with lib; {
     description = "Tool to bypass 40X response codes";

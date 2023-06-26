@@ -1,5 +1,5 @@
 { lib
-, fetchurl
+, fetchPypi
 , buildPythonPackage
 , numpy
 , scikit-learn
@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "hmmlearn";
-  version = "0.2.8";
+  version = "0.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
-  src = fetchurl {
-    url = "mirror://pypi/h/hmmlearn/${pname}-${version}.tar.gz";
-    hash = "sha256-aWkx49zmgBzJt4xin1QwYd1+tnpxFVsD0bOeoXKipfk=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-0TqR6jaV34gUZePTYTLX7vToTUg/S6U4pLRuJLXqEA8=";
   };
 
   buildInputs = [
