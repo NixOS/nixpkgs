@@ -1498,8 +1498,8 @@ self: super: {
 
   # Fix build with newer monad-logger: https://github.com/obsidiansystems/monad-logger-extras/pull/5
   monad-logger-extras = appendPatch (fetchpatch {
-    url = "https://github.com/obsidiansystems/monad-logger-extras/commit/ffebbb46263690d641f30264563f687f3e8d4952.patch";
-    sha256 = "sha256-tt5328mnePwzZU6HRCN04Ak879Pj4M+CjLwY4/X1fxQ=";
+    url = "https://github.com/obsidiansystems/monad-logger-extras/commit/55d414352e740a5ecacf313732074d9b4cf2a6b3.patch";
+    sha256 = "sha256-xsQbr/QIrgWR0uwDPtV0NRTbVvP0tR9bY9NMe1JzqOw=";
   }) super.monad-logger-extras;
 
   # Fails with encoding problems, likely needs locale data.
