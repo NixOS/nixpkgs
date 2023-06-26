@@ -3,7 +3,6 @@
 , buildPythonPackage
 , commonmark
 , fetchFromGitHub
-, flit-core
 , linkify-it-py
 , markdown
 , mdurl
@@ -25,7 +24,7 @@
 buildPythonPackage rec {
   pname = "markdown-it-py";
   version = "2.2.0";
-  format = "pyproject";
+  format = "flit";
 
   disabled = pythonOlder "3.6";
 
@@ -36,9 +35,13 @@ buildPythonPackage rec {
     hash = "sha256-qdRU1BxczFDGoIEtl0ZMkKNn4p5tec8YuPt5ZwX5fYM=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  # fix downstrem usage of markdown-it-py[linkify]
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace \
+        'linkify = ["linkify-it-py~=1.0"]' \
+        'linkify = ["linkify-it-py"]'
+  '';
 
   propagatedBuildInputs = [
     mdurl
