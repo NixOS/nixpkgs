@@ -560,6 +560,7 @@ with lib.maintainers; {
       emilytrau
       ericson2314
       jk
+      siraben
     ];
     scope = "Maintain the minimal-bootstrap toolchain and related packages.";
     shortName = "Minimal Bootstrap";
