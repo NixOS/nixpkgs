@@ -138,7 +138,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
+  postPatch = ''
     rm net/raptorq/tests/raptorq.rs
   '';
 
