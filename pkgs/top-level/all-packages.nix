@@ -5561,9 +5561,9 @@ with pkgs;
 
   mat2 = with python3.pkgs; toPythonApplication mat2;
 
-  maxfetch = callPackage ../misc/maxfetch { };
-
   maxcso = callPackage ../tools/archivers/maxcso { };
+
+  maxfetch = callPackage ../misc/maxfetch { };
 
   medusa = callPackage ../tools/security/medusa { };
 
