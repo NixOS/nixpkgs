@@ -1,4 +1,4 @@
-{ lib, stdenv, libressl, fetchzip, pkg-config, libxcrypt }:
+{ lib, stdenv, libressl, fetchzip, pkg-config, libxcrypt, curl, sqlite }:
 
 stdenv.mkDerivation rec {
   pname = "pounce";
@@ -9,9 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-6PGiaU5sOwqO4V2PKJgIi3kI2jXsBOldEH51D7Sx9tg=";
   };
 
-  buildInputs = [ libressl libxcrypt ];
+  buildInputs = [ libressl libxcrypt curl sqlite ];
 
   nativeBuildInputs = [ pkg-config ];
+
+  configureFlags = [ "--enable-notify" "--enable-palaver" ];
 
   buildFlags = [ "all" ];
 
