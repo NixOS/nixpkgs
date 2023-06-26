@@ -3,9 +3,9 @@
 , buildPythonPackage
 , CoreServices
 , eventlet
-, fetchpatch
 , fetchPypi
 , flaky
+, isPyPy
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
@@ -39,10 +39,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    eventlet
     flaky
     pytest-timeout
     pytestCheckHook
+  ] ++ lib.optionals (!isPyPy) [
+    eventlet
   ] ++ passthru.optional-dependencies.watchmedo;
 
   postPatch = ''
@@ -54,7 +55,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     "--deselect=tests/test_emitter.py::test_create_wrong_encoding"
     "--deselect=tests/test_emitter.py::test_close"
-  ] ++ lib.optionals (stdenv.isDarwin) [
+  ] ++ lib.optionals stdenv.isDarwin [
     # fails to stop process in teardown
     "--deselect=tests/test_0_watchmedo.py::test_auto_restart_subprocess_termination"
     # assert cap.out.splitlines(keepends=False).count('+++++ 0') == 2 != 3
@@ -89,7 +90,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # tests timeout easily
     "tests/test_inotify_buffer.py"
-  ] ++ lib.optionals (stdenv.isDarwin) [
+  ] ++ lib.optionals stdenv.isDarwin [
     # segfaults the testsuite
     "tests/test_emitter.py"
     # unsupported on x86_64-darwin
