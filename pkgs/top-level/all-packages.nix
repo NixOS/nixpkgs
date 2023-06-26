@@ -28558,6 +28558,8 @@ with pkgs;
 
   freepats = callPackage ../data/misc/freepats { };
 
+  game-devices-udev-rules = callPackage ../os-specific/linux/game-devices-udev-rules { };
+
   garamond-libre = callPackage ../data/fonts/garamond-libre { };
 
   g15daemon = callPackage ../os-specific/linux/g15daemon { };
