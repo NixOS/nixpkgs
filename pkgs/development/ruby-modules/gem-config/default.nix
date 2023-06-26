@@ -25,7 +25,7 @@
 , cairo, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
-, bundler, libsass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
+, bundler, libsass, dart-sass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
 , CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libmaxminddb, libyaml
 , autoSignDarwinBinariesHook, fetchpatch
 }@args:
@@ -705,6 +705,16 @@ in
     # https://github.com/NixOS/nixpkgs/issues/19098
     buildFlags = [ "--disable-lto" ];
   });
+
+  sass-embedded = attrs: {
+    # Patch the Rakefile to use our dart-sass and not try to fetch anything.
+    dontBuild = false;
+    postPatch = ''
+      substituteInPlace ext/sass/Rakefile \
+        --replace \'dart-sass/sass\' \'${dart-sass}/bin/sass\' \
+        --replace ' => %w[dart-sass]' ""
+    '';
+  };
 
   scrypt = attrs: lib.optionalAttrs stdenv.isDarwin {
     dontBuild = false;
