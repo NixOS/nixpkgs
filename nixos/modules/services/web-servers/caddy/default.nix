@@ -346,10 +346,11 @@ in
 
     security.acme.certs =
       let
-        certCfg = map (useACMEHost: nameValuePair useACMEHost {
+        certCfg = map (hostOpts: nameValuePair hostOpts.useACMEHost {
+          extraDomainNames = hostOpts.serverAliases;
           group = mkDefault cfg.group;
           reloadServices = [ "caddy.service" ];
-        }) acmeHosts;
+        }) acmeVHosts;
       in
         listToAttrs certCfg;
 
