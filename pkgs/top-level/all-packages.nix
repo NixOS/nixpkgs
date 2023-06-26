@@ -29450,8 +29450,9 @@ with pkgs;
 
   qmapshack = libsForQt5.callPackage ../applications/gis/qmapshack { };
 
-  saga = libsForQt5.callPackage ../applications/gis/saga {
+  saga = callPackage ../applications/gis/saga {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
+    inherit (libsForQt5) dxflib;
   };
 
   spatialite_gui = callPackage ../applications/gis/spatialite-gui {
