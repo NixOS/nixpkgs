@@ -2105,6 +2105,8 @@ with pkgs;
     util-linux = if stdenv.isLinux then util-linuxMinimal else util-linux;
   };
 
+  git-relevant-history = callPackage ../applications/version-management/git-relevant-history { };
+
   git-remote-codecommit = python3Packages.callPackage ../applications/version-management/git-remote-codecommit { };
 
   gitRepo = git-repo;
@@ -14432,6 +14434,10 @@ with pkgs;
 
   yj = callPackage ../development/tools/yj { };
 
+  yaydl = callPackage ../tools/video/yaydl {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   zarchive = callPackage ../tools/archivers/zarchive { };
 
   zprint = callPackage ../development/tools/zprint { };
@@ -19168,8 +19174,8 @@ with pkgs;
 
   openai-whisper = with python3.pkgs; toPythonApplication openai-whisper;
 
-  openai-whisper-cpp = callPackage ../tools/audio/openai-whisper-cpp {
-    inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
+  openai-whisper-cpp = darwin.apple_sdk_11_0.callPackage ../tools/audio/openai-whisper-cpp {
+    inherit (darwin.apple_sdk_11_0.frameworks) Accelerate CoreGraphics CoreML CoreVideo;
   };
 
   opengrok = callPackage ../development/tools/misc/opengrok { };
@@ -26544,6 +26550,8 @@ with pkgs;
   sampler = callPackage ../applications/misc/sampler { };
 
   scalr-cli = callPackage ../tools/admin/scalr-cli { };
+
+  scaphandre = callPackage ../servers/scaphandre { };
 
   shairplay = callPackage ../servers/shairplay { avahi = avahi-compat; };
 
@@ -40336,10 +40344,7 @@ with pkgs;
 
   yabasic = callPackage ../development/interpreters/yabasic { };
 
-  wasm-pack = callPackage ../development/tools/wasm-pack {
-    inherit (darwin.apple_sdk.frameworks) Security;
-    libressl = libressl_3_6;
-  };
+  wasm-pack = callPackage ../development/tools/wasm-pack { };
 
   wasynth = callPackage ../development/tools/wasynth { };
 
