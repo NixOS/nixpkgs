@@ -158,6 +158,7 @@ let
         # When other derivations wrap this one, any unmodified files
         # found here should be included as-is, for tooling compatibility.
         sdk = unwrapped;
+        engine-artifact-updater = callPackage ./engine-artifacts/updater { };
       };
 
       meta = with lib; {
