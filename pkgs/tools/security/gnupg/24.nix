@@ -13,11 +13,11 @@ assert guiSupport -> enableMinimal == false;
 
 stdenv.mkDerivation rec {
   pname = "gnupg";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
-    hash = "sha256-HXkVjdAdmSQx3S4/rLif2slxJ/iXhOosthDGAPsMFIM=";
+    hash = "sha256-drceWutEO/2RDOnLyCgbYXyDQWh6+2e65FWHeXK1neg=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
