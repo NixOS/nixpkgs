@@ -7,6 +7,8 @@
 , fetchFromGitHub
 , fetchYarnDeps
 , nixosTests
+, vips
+, nodePackages
 }:
 
 let
@@ -19,6 +21,13 @@ let
       postInstall = ''
         LIBSASS_EXT=auto yarn --offline run build
         rm build/config.gypi
+      '';
+    };
+    sharp = {
+      nativeBuildInputs = [ pkg-config nodePackages.semver ];
+      buildInputs = [ vips ];
+      postInstall = ''
+        yarn --offline run install
       '';
     };
   };
@@ -63,6 +72,10 @@ mkYarnPackage {
     mkdir $out
     cp -R ./deps/lemmy-ui/dist $out
     cp -R ./node_modules $out
+  '';
+
+  postInstall = ''
+    echo 'export const VERSION = "${version}";' > $out/libexec/lemmy-ui/deps/lemmy-ui/src/shared/version.ts
   '';
 
   distPhase = "true";
