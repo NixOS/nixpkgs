@@ -61,10 +61,11 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,$pname,share/pixmaps,libexec/${pname}}
+    mkdir -p $out/{bin,$pname,share/pixmaps,libexec/${pname},share/icons/hicolor/scalable/apps}
     cp -a . $out/$pname
     [[ -f $out/$pname/bin/${loName}.png ]] && ln -s $out/$pname/bin/${loName}.png $out/share/pixmaps/${pname}.png
-    [[ -f $out/$pname/bin/${loName}.svg ]] && ln -s $out/$pname/bin/${loName}.svg $out/share/pixmaps/${pname}.svg
+    [[ -f $out/$pname/bin/${loName}.svg ]] && ln -s $out/$pname/bin/${loName}.svg $out/share/pixmaps/${pname}.svg \
+      && ln -s $out/$pname/bin/${loName}.svg $out/share/icons/hicolor/scalable/apps/${pname}.svg
     mv bin/fsnotifier* $out/libexec/${pname}/.
 
     jdk=${jdk.home}
