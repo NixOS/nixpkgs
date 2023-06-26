@@ -623,6 +623,9 @@ self: super: {
   # 2023-06-26: Test failure: https://hydra.nixos.org/build/224869905
   comfort-blas = dontCheck super.comfort-blas;
 
+  # 2022-06-26: Too strict lower bound on semialign.
+  trie-simple = doJailbreak super.trie-simple;
+
   # These test suites run for ages, even on a fast machine. This is nuts.
   Random123 = dontCheck super.Random123;
   systemd = dontCheck super.systemd;
