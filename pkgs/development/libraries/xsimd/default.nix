@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [ "-DBUILD_TESTS=ON" ];
+  cmakeFlags = [
+    "-DBUILD_TESTS=${if (doCheck && stdenv.hostPlatform == stdenv.buildPlatform) then "ON" else "OFF"}"
+  ];
 
   doCheck = true;
   nativeCheckInputs = [ gtest ];
