@@ -316,6 +316,8 @@ with pkgs;
 
   atomic-operator = callPackage ../tools/security/atomic-operator { };
 
+  atomic-swap = callPackage ../applications/blockchains/atomic-swap { };
+
   avro-tools = callPackage ../development/tools/avro-tools { };
 
   bacnet-stack = callPackage ../tools/networking/bacnet-stack { };
@@ -1679,6 +1681,8 @@ with pkgs;
 
   kaufkauflist = callPackage ../applications/misc/kaufkauflist { };
 
+  kicli = callPackage ../tools/misc/kicli { };
+
   ksmbd-tools = callPackage ../os-specific/linux/ksmbd-tools { };
 
   ksnip = libsForQt5.callPackage ../tools/misc/ksnip { };
@@ -3026,7 +3030,7 @@ with pkgs;
 
   astc-encoder = callPackage ../tools/graphics/astc-encoder { };
 
-  asymptote = callPackage ../tools/graphics/asymptote {
+  asymptote = libsForQt5.callPackage ../tools/graphics/asymptote {
     texLive = texlive.combine { inherit (texlive) scheme-small epsf cm-super texinfo media9 ocgx2 collection-latexextra; };
   };
 
@@ -4497,6 +4501,8 @@ with pkgs;
   wl-color-picker = callPackage ../tools/wayland/wl-color-picker { };
 
   wl-mirror = callPackage ../tools/wayland/wl-mirror { };
+
+  wl-screenrec = callPackage ../tools/wayland/wl-screenrec { };
 
   wlogout = callPackage ../tools/wayland/wlogout { };
 
@@ -6653,6 +6659,8 @@ with pkgs;
   bluetooth_battery = python3Packages.callPackage ../applications/misc/bluetooth_battery { };
 
   bombardier = callPackage ../tools/networking/bombardier { };
+
+  caeml = callPackage ../applications/networking/mailreaders/caeml { };
 
   calyx-vpn = libsForQt5.callPackage ../tools/networking/bitmask-vpn {
     provider = "calyx";
@@ -27557,6 +27565,8 @@ with pkgs;
     };
     checkMeta = callPackage ../stdenv/generic/check-meta.nix { };
   });
+  minimal-bootstrap-sources = callPackage ../os-specific/linux/minimal-bootstrap/stage0-posix/bootstrap-sources.nix { };
+  make-minimal-bootstrap-sources = callPackage ../os-specific/linux/minimal-bootstrap/stage0-posix/make-bootstrap-sources.nix { };
 
   mingetty = callPackage ../os-specific/linux/mingetty { };
 
