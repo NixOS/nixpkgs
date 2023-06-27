@@ -26,6 +26,8 @@ in
             site_name = "Lemmy FTW";
             admin_email = "mightyiam@example.com";
           };
+          # https://github.com/LemmyNet/lemmy/blob/50efb1d519c63a7007a07f11cc8a11487703c70d/crates/utils/src/settings/mod.rs#L52
+          database.uri = "postgres:///lemmy?host=/run/postgresql&user=lemmy";
         };
         caddy.enable = true;
       };
