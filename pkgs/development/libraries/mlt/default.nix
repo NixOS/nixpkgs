@@ -28,7 +28,7 @@
 , enablePython ? false
 , python3
 , swig
-, enableQt ? true
+, enableQt ? false
 , libsForQt5
 , enableSDL1 ? stdenv.isLinux
 , SDL
