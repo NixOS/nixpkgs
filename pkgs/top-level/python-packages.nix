@@ -11901,6 +11901,8 @@ self: super: with self; {
 
   subzerod = callPackage ../development/python-modules/subzerod { };
 
+  succulent = callPackage ../development/python-modules/succulent { };
+
   sumo = callPackage ../development/python-modules/sumo { };
 
   sumtypes = callPackage ../development/python-modules/sumtypes { };
