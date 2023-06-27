@@ -3137,6 +3137,7 @@ broken-packages:
   - linx-gateway
   - lipsum-gen
   - liquid
+  - liquidhaskell
   - liquidhaskell-cabal
   - Liquorice
   - list-fusion-probe
@@ -4518,7 +4519,6 @@ broken-packages:
   - resource-embed
   - respond
   - restartable
-  - rest-rewrite
   - restyle
   - resumable-exceptions
   - rethinkdb

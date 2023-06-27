@@ -720,6 +720,17 @@ self: super: builtins.intersectAttrs super {
     '';
   }) super.sbv;
 
+  rest-rewrite = overrideCabal (drv: {
+    testToolDepends = (drv.testToolDepends or [ ]) ++ [ pkgs.graphviz pkgs.z3 ];
+
+    # Test suite 'rest' relies on the relative dir graphs/ existing. This
+    # is a problem for "out of tree" builds, as the directory is not copied
+    # over.
+    postPatch = ''
+      mkdir graphs
+    '';
+  }) super.rest-rewrite;
+
   # The test-suite requires a running PostgreSQL server.
   Frames-beam = dontCheck super.Frames-beam;
 
