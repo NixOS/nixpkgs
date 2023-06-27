@@ -172,6 +172,8 @@ let
       withPython3 ? true
     , withNodeJs ? false
     , withRuby ? true
+    # perl is problematic https://github.com/NixOS/nixpkgs/issues/132368
+    , withPerl ? false
 
     # so that we can pass the full neovim config while ignoring it
     , ...
@@ -181,6 +183,7 @@ let
         python = false;
         python3 = withPython3;
         ruby = withRuby;
+        perl = withPerl;
       };
 
       genProviderCommand = prog: withProg:
