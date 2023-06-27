@@ -41222,4 +41222,6 @@ with pkgs;
   charasay = callPackage ../tools/misc/charasay { };
 
   waylyrics = callPackage ../applications/audio/waylyrics { };
+
+  gitrs = callPackage ../tools/misc/gitrs { };
 }
