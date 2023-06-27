@@ -12443,9 +12443,7 @@ with pkgs;
 
   seqdiag = with python3Packages; toPythonApplication seqdiag;
 
-  sequoia = callPackage ../tools/security/sequoia {
-    pythonPackages = python3Packages;
-  };
+  sequoia-sq = callPackage ../tools/security/sequoia-sq { };
 
   sequoia-chameleon-gnupg = callPackage ../tools/security/sequoia-chameleon-gnupg { };
 
