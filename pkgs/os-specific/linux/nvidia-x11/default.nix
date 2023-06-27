@@ -18,6 +18,8 @@ let
     else a;
 in
 rec {
+  mkDriver = generic;
+
   # Official Unix Drivers - https://www.nvidia.com/en-us/drivers/unix/
   # Branch/Maturity data - http://people.freedesktop.org/~aplattner/nvidia-versions.txt
 
