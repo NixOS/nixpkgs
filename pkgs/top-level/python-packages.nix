@@ -11977,6 +11977,8 @@ self: super: with self; {
 
   tago = callPackage ../development/python-modules/tago { };
 
+  tagoio-sdk = callPackage ../development/python-modules/tagoio-sdk { };
+
   tahoma-api = callPackage ../development/python-modules/tahoma-api { };
 
   tailer = callPackage ../development/python-modules/tailer { };
