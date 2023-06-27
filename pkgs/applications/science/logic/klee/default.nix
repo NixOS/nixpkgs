@@ -45,30 +45,24 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "klee";
-  version = "2.3";
+  version = "3.0";
 
   src = fetchFromGitHub {
     owner = "klee";
     repo = "klee";
     rev = "v${version}";
-    sha256 = "sha256-E1c6K6Q+LAWm342W8I00JI6+LMvqmULHZLkv9Kj5RmY=";
+    hash = "sha256-y5lWmtIcLAthQ0oHYQNd+ir75YaxHZR9Jgiz+ZUFQjY=";
   };
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
     cryptominisat
     gperftools
-    lit # Configure phase checking for lit
     llvm
     sqlite
     stp
     z3
   ];
-
-  nativeBuildInputs = [
-    clang
-    cmake
-  ];
-
   nativeCheckInputs = [
     gtest
 
@@ -83,8 +77,9 @@ in stdenv.mkDerivation rec {
   in [
     "-DCMAKE_BUILD_TYPE=${if debug then "Debug" else if !debug && includeDebugInfo then "RelWithDebInfo" else "MinSizeRel"}"
     "-DKLEE_RUNTIME_BUILD_TYPE=${if debugRuntime then "Debug" else "Release"}"
+    "-DLLVMCC=${clang}/bin/clang"
+    "-DLLVMCXX=${clang}/bin/clang++"
     "-DKLEE_ENABLE_TIMESTAMP=${onOff false}"
-    "-DENABLE_KLEE_UCLIBC=${onOff true}"
     "-DKLEE_UCLIBC_PATH=${kleeuClibc}"
     "-DENABLE_KLEE_ASSERTS=${onOff asserts}"
     "-DENABLE_POSIX_RUNTIME=${onOff true}"

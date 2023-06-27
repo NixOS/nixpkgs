@@ -26,12 +26,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
-  version = "5.2";
+  version = "5.3";
 
   # raw source code doesn't work out of box; fetchFromGitHub not usable
   src = fetchurl {
     url = "https://github.com/Gnucash/gnucash/releases/download/${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-SCYXa35wu4ifmcIG+v+t2JJijXhSVxXp9xKOz0ixRoA=";
+    hash = "sha256-FFjLCMWF6unXJL7G8oErzAO76D7SlKRqeJeqqwGm8Vo=";
   };
 
   nativeBuildInputs = [

@@ -13,7 +13,7 @@
 }:
 
 let
-  version = "16.0.5";
+  version = "16.1.0";
   package_version = "v${lib.versions.major version}";
   gitaly_package = "gitlab.com/gitlab-org/gitaly/${package_version}";
 
@@ -24,10 +24,10 @@ let
       owner = "gitlab-org";
       repo = "gitaly";
       rev = "v${version}";
-      sha256 = "sha256-YhqKMFDjjL2I82m51GdKNVO8vdJPppDKZDBQGskpyA4=";
+      sha256 = "sha256-+Fnj9fgQQtyGMWOL5NkNON/N9p6POjAtpF2O06iKh90=";
     };
 
-    vendorSha256 = "sha256-KBhTI70eReZGSd7RxwGXcUGa0wDo7q5tU9fUhrLeFO0=";
+    vendorSha256 = "sha256-6oOFQGPwiMRQrESXsQsGzvWz9bCb0VTYIyyG/C2b3nA=";
 
     ldflags = [ "-X ${gitaly_package}/internal/version.version=${version}" "-X ${gitaly_package}/internal/version.moduleVersion=${version}" ];
 
