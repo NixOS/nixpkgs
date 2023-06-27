@@ -69,7 +69,7 @@
 , speexSupport       ? true,           speex
 , swiftSupport       ? stdenv.isDarwin && stdenv.isAarch64, swift
 , theoraSupport      ? true,           libtheora
-, vaapiSupport       ? stdenv.isLinux, libva
+, vaapiSupport       ? x11Support || waylandSupport, libva
 , vapoursynthSupport ? false,          vapoursynth
 , vdpauSupport       ? true,           libvdpau
 , xineramaSupport    ? stdenv.isLinux, libXinerama
@@ -79,9 +79,10 @@
 }:
 
 let
-  inherit (darwin.apple_sdk_11_0.frameworks) AVFoundation CoreFoundation CoreMedia Cocoa CoreAudio MediaPlayer;
+  inherit (darwin.apple_sdk_11_0.frameworks)
+    AVFoundation CoreFoundation CoreMedia Cocoa CoreAudio MediaPlayer Accelerate;
   luaEnv = lua.withPackages (ps: with ps; [ luasocket ]);
-in stdenv.mkDerivation (self: {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "mpv";
   version = "0.35.1";
 
@@ -90,7 +91,7 @@ in stdenv.mkDerivation (self: {
   src = fetchFromGitHub {
     owner = "mpv-player";
     repo = "mpv";
-    rev = "v${self.version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-CoYTX9hgxLo72YdMoa0sEywg4kybHbFsypHk1rCM6tM=";
   };
 
@@ -182,7 +183,7 @@ in stdenv.mkDerivation (self: {
     ++ lib.optionals zimgSupport        [ zimg ]
     ++ lib.optionals stdenv.isLinux     [ nv-codec-headers ]
     ++ lib.optionals stdenv.isDarwin    [ libiconv ]
-    ++ lib.optionals stdenv.isDarwin    [ CoreFoundation Cocoa CoreAudio MediaPlayer ]
+    ++ lib.optionals stdenv.isDarwin    [ CoreFoundation Cocoa CoreAudio MediaPlayer Accelerate ]
     ++ lib.optionals (stdenv.isDarwin && swiftSupport) [ AVFoundation CoreMedia ];
 
   postBuild = lib.optionalString stdenv.isDarwin ''
@@ -199,7 +200,7 @@ in stdenv.mkDerivation (self: {
     cp ../TOOLS/mpv_identify.sh $out/bin
     cp ../TOOLS/umpv $out/bin
     cp $out/share/applications/mpv.desktop $out/share/applications/umpv.desktop
-    sed -i '/Icon=/ ! s/mpv/umpv/g' $out/share/applications/umpv.desktop
+    sed -i '/Icon=/ ! s/mpv/umpv/g; s/^Exec=.*/Exec=umpv %U/' $out/share/applications/umpv.desktop
   '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     cp -r mpv.app $out/Applications
@@ -232,7 +233,7 @@ in stdenv.mkDerivation (self: {
       mpv is a free and open-source general-purpose video player, based on the
       MPlayer and mplayer2 projects, with great improvements above both.
     '';
-    changelog = "https://github.com/mpv-player/mpv/releases/tag/v${self.version}";
+    changelog = "https://github.com/mpv-player/mpv/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres fpletz globin ma27 tadeokondrak ];
     platforms = platforms.unix;

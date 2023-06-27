@@ -10,7 +10,7 @@ with pkgs.lib;
 let
 
   # The configuration to install.
-  makeConfig = { bootLoader, grubVersion, grubDevice, grubIdentifier, grubUseEfi
+  makeConfig = { bootLoader, grubDevice, grubIdentifier, grubUseEfi
                , extraConfig, forceGrubReinstallCount ? 0
                }:
     pkgs.writeText "configuration.nix" ''
@@ -29,11 +29,6 @@ let
         ${optionalString systemdStage1 "boot.initrd.systemd.enable = true;"}
 
         ${optionalString (bootLoader == "grub") ''
-          boot.loader.grub.version = ${toString grubVersion};
-          ${optionalString (grubVersion == 1) ''
-            boot.loader.grub.splashImage = null;
-          ''}
-
           boot.loader.grub.extraConfig = "serial; terminal_output serial";
           ${if grubUseEfi then ''
             boot.loader.grub.device = "nodev";
@@ -70,11 +65,11 @@ let
   # disk, and then reboot from the hard disk.  It's parameterized with
   # a test script fragment `createPartitions', which must create
   # partitions and filesystems.
-  testScriptFun = { bootLoader, createPartitions, grubVersion, grubDevice, grubUseEfi
+  testScriptFun = { bootLoader, createPartitions, grubDevice, grubUseEfi
                   , grubIdentifier, preBootCommands, postBootCommands, extraConfig
                   , testSpecialisationConfig
                   }:
-    let iface = if grubVersion == 1 then "ide" else "virtio";
+    let iface = "virtio";
         isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
         bios  = if pkgs.stdenv.isAarch64 then "QEMU_EFI.fd" else "OVMF.fd";
     in if !isEfi && !pkgs.stdenv.hostPlatform.isx86 then ''
@@ -122,7 +117,7 @@ let
           machine.succeed("cat /mnt/etc/nixos/hardware-configuration.nix >&2")
           machine.copy_from_host(
               "${ makeConfig {
-                    inherit bootLoader grubVersion grubDevice grubIdentifier
+                    inherit bootLoader grubDevice grubIdentifier
                             grubUseEfi extraConfig;
                   }
               }",
@@ -193,7 +188,7 @@ let
           # doesn't know about the host-guest sharing mechanism.
           machine.copy_from_host_via_shell(
               "${ makeConfig {
-                    inherit bootLoader grubVersion grubDevice grubIdentifier
+                    inherit bootLoader grubDevice grubIdentifier
                             grubUseEfi extraConfig;
                     forceGrubReinstallCount = 1;
                   }
@@ -222,7 +217,7 @@ let
       # doesn't know about the host-guest sharing mechanism.
       machine.copy_from_host_via_shell(
           "${ makeConfig {
-                inherit bootLoader grubVersion grubDevice grubIdentifier
+                inherit bootLoader grubDevice grubIdentifier
                 grubUseEfi extraConfig;
                 forceGrubReinstallCount = 2;
               }
@@ -284,14 +279,14 @@ let
     { createPartitions, preBootCommands ? "", postBootCommands ? "", extraConfig ? ""
     , extraInstallerConfig ? {}
     , bootLoader ? "grub" # either "grub" or "systemd-boot"
-    , grubVersion ? 2, grubDevice ? "/dev/vda", grubIdentifier ? "uuid", grubUseEfi ? false
+    , grubDevice ? "/dev/vda", grubIdentifier ? "uuid", grubUseEfi ? false
     , enableOCR ? false, meta ? {}
     , testSpecialisationConfig ? false
     }:
     makeTest {
       inherit enableOCR;
       name = "installer-" + name;
-      meta = with pkgs.lib.maintainers; {
+      meta = {
         # put global maintainers here, individuals go into makeInstallerTest fkt call
         maintainers = (meta.maintainers or []);
       };
@@ -303,7 +298,12 @@ let
             ../modules/profiles/installation-device.nix
             ../modules/profiles/base.nix
             extraInstallerConfig
+            ./common/auto-format-root-device.nix
           ];
+
+          # In systemdStage1, also automatically format the device backing the
+          # root filesystem.
+          virtualisation.fileSystems."/".autoFormat = systemdStage1;
 
           # builds stuff in the VM, needs more juice
           virtualisation.diskSize = 8 * 1024;
@@ -316,10 +316,9 @@ let
           # installer. This ensures the target disk (/dev/vda) is
           # the same during and after installation.
           virtualisation.emptyDiskImages = [ 512 ];
-          virtualisation.bootDevice =
-            if grubVersion == 1 then "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive2" else "/dev/vdb";
-          virtualisation.qemu.diskInterface =
-            if grubVersion == 1 then "scsi" else "virtio";
+          virtualisation.rootDevice = "/dev/vdb";
+          virtualisation.bootLoaderDevice = "/dev/vda";
+          virtualisation.qemu.diskInterface = "virtio";
 
           # We don't want to have any networking in the guest whatsoever.
           # Also, if any vlans are enabled, the guest will reboot
@@ -341,9 +340,7 @@ let
             desktop-file-utils
             docbook5
             docbook_xsl_ns
-            (docbook-xsl-ns.override {
-              withManOptDedupPatch = true;
-            })
+            kbd.dev
             kmod.dev
             libarchive.dev
             libxml2.bin
@@ -370,8 +367,7 @@ let
             # curl's tarball, we see what it's trying to download
             curl
           ]
-          ++ optional (bootLoader == "grub" && grubVersion == 1) pkgs.grub
-          ++ optionals (bootLoader == "grub" && grubVersion == 2) (let
+          ++ optionals (bootLoader == "grub") (let
             zfsSupport = lib.any (x: x == "zfs")
               (extraInstallerConfig.boot.supportedFilesystems or []);
           in [
@@ -390,7 +386,7 @@ let
 
       testScript = testScriptFun {
         inherit bootLoader createPartitions preBootCommands postBootCommands
-                grubVersion grubDevice grubIdentifier grubUseEfi extraConfig
+                grubDevice grubIdentifier grubUseEfi extraConfig
                 testSpecialisationConfig;
       };
     };
@@ -873,26 +869,6 @@ in {
     '';
   };
 
-  # Test a basic install using GRUB 1.
-  grub1 = makeInstallerTest "grub1" rec {
-    createPartitions = ''
-      machine.succeed(
-          "flock ${grubDevice} parted --script ${grubDevice} -- mklabel msdos"
-          + " mkpart primary linux-swap 1M 1024M"
-          + " mkpart primary ext2 1024M -1s",
-          "udevadm settle",
-          "mkswap ${grubDevice}-part1 -L swap",
-          "swapon -L swap",
-          "mkfs.ext3 -L nixos ${grubDevice}-part2",
-          "mount LABEL=nixos /mnt",
-          "mkdir -p /mnt/tmp",
-      )
-    '';
-    grubVersion = 1;
-    # /dev/sda is not stable, even when the SCSI disk number is.
-    grubDevice = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive1";
-  };
-
   # Test using labels to identify volumes in grub
   simpleLabels = makeInstallerTest "simpleLabels" {
     createPartitions = ''
@@ -1014,5 +990,40 @@ in {
           "mount -o defaults,subvol=boot LABEL=root /mnt/boot",
       )
     '';
+  };
+} // optionalAttrs systemdStage1 {
+  stratisRoot = makeInstallerTest "stratisRoot" {
+    createPartitions = ''
+      machine.succeed(
+        "sgdisk --zap-all /dev/vda",
+        "sgdisk --new=1:0:+100M --typecode=0:ef00 /dev/vda", # /boot
+        "sgdisk --new=2:0:+1G --typecode=0:8200 /dev/vda", # swap
+        "sgdisk --new=3:0:+5G --typecode=0:8300 /dev/vda", # /
+        "udevadm settle",
+
+        "mkfs.vfat /dev/vda1",
+        "mkswap /dev/vda2 -L swap",
+        "swapon -L swap",
+        "stratis pool create my-pool /dev/vda3",
+        "stratis filesystem create my-pool nixos",
+        "udevadm settle",
+
+        "mount /dev/stratis/my-pool/nixos /mnt",
+        "mkdir -p /mnt/boot",
+        "mount /dev/vda1 /mnt/boot"
+      )
+    '';
+    bootLoader = "systemd-boot";
+    extraInstallerConfig = { modulesPath, ...}: {
+      config = {
+        services.stratis.enable = true;
+        environment.systemPackages = [
+          pkgs.stratis-cli
+          pkgs.thin-provisioning-tools
+          pkgs.lvm2.bin
+          pkgs.stratisd.initrd
+        ];
+      };
+    };
   };
 }

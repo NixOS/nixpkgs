@@ -3,7 +3,9 @@
   extra-cmake-modules, kdoctools,
   akonadi, akonadi-search, grantlee, grantleetheme, kcmutils, kcompletion,
   kcrash, kdbusaddons, ki18n, kontactinterface, kparts,
-  kpimtextedit, kxmlgui, libkdepim, libkleo, mailcommon, pimcommon, prison,
+  kpimtextedit,
+  kuserfeedback,
+  kxmlgui, libkdepim, libkleo, mailcommon, pimcommon, prison,
   qgpgme, qtbase,
 }:
 
@@ -19,6 +21,7 @@ mkDerivation {
   buildInputs = [
     akonadi akonadi-search grantlee grantleetheme kcmutils kcompletion kcrash
     kdbusaddons ki18n kontactinterface kparts kpimtextedit
+    kuserfeedback
     kxmlgui libkdepim libkleo mailcommon pimcommon prison qgpgme qtbase
   ];
   postInstall = ''

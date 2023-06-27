@@ -17,6 +17,11 @@ with lib;
 
   config = mkIf config.boot.growPartition {
 
+    assertions = [{
+      assertion = !config.boot.initrd.systemd.enable;
+      message = "systemd stage 1 does not support 'boot.growPartition' yet.";
+    }];
+
     boot.initrd.extraUtilsCommands = ''
       copy_bin_and_libs ${pkgs.gawk}/bin/gawk
       copy_bin_and_libs ${pkgs.gnused}/bin/sed

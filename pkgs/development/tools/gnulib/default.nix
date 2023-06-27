@@ -26,6 +26,17 @@ stdenv.mkDerivation {
   # do not change headers to not update all vendored build files
   dontFixup = true;
 
+  passthru = {
+    # This patch is used by multiple other packages (currently:
+    # gnused, gettext) which contain vendored copies of gnulib.
+    # Without it, compilation will fail with error messages about
+    # "__LDBL_REDIR1_DECL" or similar on platforms with longdouble
+    # redirects (currently powerpc64).  Once all of those other
+    # packages make a release with a newer gnulib we can drop this
+    # patch.
+    longdouble-redirect-patch = ./gnulib-longdouble-redirect.patch;
+  };
+
   meta = with lib; {
     description = "Central location for code to be shared among GNU packages";
     homepage = "https://www.gnu.org/software/gnulib/";

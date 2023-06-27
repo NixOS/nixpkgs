@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spirv-cross";
-  version = "1.3.239.0";
+  version = "1.3.250.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Cross";
     rev = "sdk-${finalAttrs.version}";
-    hash = "sha256-Awtsz4iMuS3JuvaYHRxjo56EnnZPjo9YGfeYAi7lmJY=";
+    hash = "sha256-H4UkR/EiBWpdhdPHNBrdRkl4eN8kD9gEOzpnwfFSdpI=";
   };
 
   nativeBuildInputs = [ cmake python3 ];

@@ -1,28 +1,26 @@
-{ buildGoModule
+{ lib
+, buildGoModule
 , fetchFromGitHub
-, lib
-, writeScript
 }:
 
-let
-  otelcontribcol = writeScript "otelcontribcol" ''
-    echo 'ERROR: otelcontribcol is now in `pkgs.opentelemetry-collector-contrib`, call the collector with `otelcorecol` or move to `pkgs.opentelemetry-collector-contrib`' >&2
-    exit 1
-  '';
-in
 buildGoModule rec {
   pname = "opentelemetry-collector";
-  version = "0.71.0";
+  version = "0.79.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector";
     rev = "v${version}";
-    sha256 = "sha256-Y6HSz81edWklXhTbaK9LvdwmgNPRMtI1BD0IfcjWl3I=";
+    hash = "sha256-OTddX0hTrcxvU1XI5DSXOYPhVrn3dJ9Ryvr/wf1AHQ0=";
   };
   # there is a nested go.mod
   sourceRoot = "source/cmd/otelcorecol";
-  vendorHash = "sha256-Zi9Rkfm+y0jZySwMJxAa5Sx/r5WAYvOVez3J0yQza2w=";
+  vendorHash = "sha256-Efsgogk3C7oroniRPrl5GwTogBk7lT0XPkbz0ygJh48=";
+
+  # upstream strongly recommends disabling CGO
+  # additionally dependencies have had issues when GCO was enabled that weren't caught upstream
+  # https://github.com/open-telemetry/opentelemetry-collector/blob/main/CONTRIBUTING.md#using-cgo
+  CGO_ENABLED = 0;
 
   preBuild = ''
     # set the build version, can't be done via ldflags
@@ -31,14 +29,10 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  postInstall = ''
-    cp ${otelcontribcol} $out/bin/otelcontribcol
-  '';
-
   meta = with lib; {
     homepage = "https://github.com/open-telemetry/opentelemetry-collector";
     changelog = "https://github.com/open-telemetry/opentelemetry-collector/blob/v${version}/CHANGELOG.md";
-    description = "OpenTelemetry Collector offers a vendor-agnostic implementation on how to receive, process and export telemetry data";
+    description = "A vendor-agnostic implementation on how to receive, process and export telemetry data";
     longDescription = ''
       The OpenTelemetry Collector offers a vendor-agnostic implementation on how
       to receive, process and export telemetry data. In addition, it removes the
@@ -48,5 +42,6 @@ buildGoModule rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ uri-canva jk ];
+    mainProgram = "otelcorecol";
   };
 }

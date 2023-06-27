@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchPypi
 , pkgsCross
 , avrdude
 , dfu-programmer
@@ -11,12 +12,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "qmk";
-  version = "1.1.1";
+  version = "1.1.2";
   format = "pyproject";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3QKOCevNYfi9+MuCkp36/A4AfZelo4A7RYGbRkF3Mmk=";
+    hash = "sha256-+HH4jxoMoxujGgCdcWQX5GvFOKT4347eaoAckHbCKZg=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

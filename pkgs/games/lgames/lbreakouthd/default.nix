@@ -8,13 +8,13 @@
 , SDL2_ttf
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lbreakouthd";
-  version = "1.1.1";
+  version = "1.1.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lgames/lbreakouthd-${self.version}.tar.gz";
-    hash = "sha256-ljnZpuV9HPPR5bgdbyE8gUtb4m+JppxGm3MV691sw7E=";
+    url = "mirror://sourceforge/lgames/lbreakouthd-${finalAttrs.version}.tar.gz";
+    hash = "sha256-BpF583f2if4FeJ2Fi/8GZYuh5T37GXdNq/Ww4LM65wY=";
   };
 
   buildInputs = [
@@ -27,7 +27,7 @@ stdenv.mkDerivation (self: {
   hardeningDisable = [ "format" ];
 
   passthru.updateScript = directoryListingUpdater {
-    inherit (self) pname version;
+    inherit (finalAttrs) pname version;
     url = "https://lgames.sourceforge.io/LBreakoutHD/";
     extraRegex = "(?!.*-win(32|64)).*";
   };

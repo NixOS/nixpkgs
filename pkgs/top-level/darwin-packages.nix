@@ -100,15 +100,21 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     bintools = self.binutils-unwrapped;
   };
 
-  cctools = callPackage ../os-specific/darwin/cctools/port.nix {
-    stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
-  };
+  cctools = self.cctools-port;
 
   cctools-apple = callPackage ../os-specific/darwin/cctools/apple.nix {
     stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
   };
 
-  # TODO: remove alias.
+  cctools-llvm = callPackage ../os-specific/darwin/cctools/llvm.nix {
+    stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
+  };
+
+  cctools-port = callPackage ../os-specific/darwin/cctools/port.nix {
+    stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
+  };
+
+  # TODO(@connorbaker): See https://github.com/NixOS/nixpkgs/issues/229389.
   cf-private = self.apple_sdk.frameworks.CoreFoundation;
 
   DarwinTools = callPackage ../os-specific/darwin/DarwinTools { };
@@ -215,8 +221,6 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   # As the name says, this is broken, but I don't want to lose it since it's a direction we want to go in
   # libdispatch-broken = callPackage ../os-specific/darwin/swift-corelibs/libdispatch.nix { };
-
-  darling = callPackage ../os-specific/darwin/darling/default.nix { };
 
   libtapi = callPackage ../os-specific/darwin/libtapi {};
 

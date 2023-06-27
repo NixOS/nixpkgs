@@ -19,18 +19,17 @@
 , python3
 , sqlite
 , wrapGAppsHook
-, zeromq
 }:
 
 stdenv.mkDerivation rec {
   pname = "horizon-eda";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "horizon-eda";
     repo = "horizon";
     rev = "v${version}";
-    sha256 = "sha256-R827l7WxyeCPQFXSzFcn4nE4AZBAOQ7s5QylDpxbw3U=";
+    sha256 = "sha256-UcjbDJR6shyETpanNkRoH8LF8r6gFjsyNHVSCMHKqS8=";
   };
 
   buildInputs = [
@@ -48,7 +47,6 @@ stdenv.mkDerivation rec {
     podofo
     python3
     sqlite
-    zeromq
   ];
 
   nativeBuildInputs = [

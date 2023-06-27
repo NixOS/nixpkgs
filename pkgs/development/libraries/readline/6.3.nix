@@ -11,7 +11,8 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "dev" "man" "doc" "info" ];
 
-  propagatedBuildInputs = [ncurses];
+  strictDeps = true;
+  propagatedBuildInputs = [ ncurses ];
 
   patchFlags = [ "-p0" ];
 

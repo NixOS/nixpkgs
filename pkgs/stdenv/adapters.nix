@@ -95,18 +95,20 @@ rec {
   makeStaticDarwin = stdenv: stdenv.override (old: {
     # extraBuildInputs are dropped in cross.nix, but darwin still needs them
     extraBuildInputs = [ pkgs.buildPackages.darwin.CF ];
-    mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
-      NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "")
+    mkDerivationFromStdenv = withOldMkDerivation old (stdenv: mkDerivationSuper: args:
+    (mkDerivationSuper args).overrideAttrs (finalAttrs: {
+      NIX_CFLAGS_LINK = toString (finalAttrs.NIX_CFLAGS_LINK or "")
         + lib.optionalString (stdenv.cc.isGNU or false) " -static-libgcc";
-      nativeBuildInputs = (args.nativeBuildInputs or []) ++ [
-        (pkgs.buildPackages.makeSetupHook {
-          name = "darwin-portable-libSystem-hook";
-          substitutions = {
-            libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";
-          };
-        } ./darwin/portable-libsystem.sh)
-      ];
-    });
+      nativeBuildInputs = (finalAttrs.nativeBuildInputs or [])
+        ++ lib.optional stdenv.hasCC [
+          (pkgs.buildPackages.makeSetupHook {
+            name = "darwin-portable-libSystem-hook";
+            substitutions = {
+              libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";
+            };
+          } ./darwin/portable-libsystem.sh)
+        ];
+    }));
   });
 
   # Puts all the other ones together
@@ -176,7 +178,7 @@ rec {
     stdenv.override (old: {
       mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
         dontStrip = true;
-        env.NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " -ggdb -Og";
+        env = (args.env or {}) // { NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " -ggdb -Og"; };
       });
     });
 
@@ -219,7 +221,8 @@ rec {
   impureUseNativeOptimizations = stdenv:
     stdenv.override (old: {
       mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
-        env.NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " -march=native";
+        env = (args.env or {}) // { NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " -march=native"; };
+
         NIX_ENFORCE_NO_NATIVE = false;
 
         preferLocalBuild = true;
@@ -244,7 +247,7 @@ rec {
   withCFlags = compilerFlags: stdenv:
     stdenv.override (old: {
       mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
-        env.NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " ${toString compilerFlags}";
+        env = (args.env or {}) // { NIX_CFLAGS_COMPILE = toString (args.env.NIX_CFLAGS_COMPILE or "") + " ${toString compilerFlags}"; };
       });
     });
 }

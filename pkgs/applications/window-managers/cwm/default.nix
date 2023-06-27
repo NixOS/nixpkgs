@@ -12,8 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-lkjsxGMXOrnu4cUiV/TO7yzd9FzM297MhaFKauqmiHo=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libX11 libXinerama libXrandr libXft bison ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ pkg-config bison ];
+  buildInputs = [ libX11 libXinerama libXrandr libXft ];
 
   prePatch = ''sed -i "s@/usr/local@$out@" Makefile'';
 

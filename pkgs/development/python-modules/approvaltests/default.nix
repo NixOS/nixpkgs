@@ -19,7 +19,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "8.2.0";
+  version = "8.2.5";
   pname = "approvaltests";
   format = "setuptools";
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7OeFOPBOs+SXKOQGKxiigVvoY50+bqRo+oDbVYTMQxU=";
+    hash = "sha256-guZR996UBqWsBnZx2kdSffkPzkMRfS48b1XcM5L8+I4=";
   };
 
   propagatedBuildInputs = [

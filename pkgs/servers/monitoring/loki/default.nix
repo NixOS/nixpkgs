@@ -8,17 +8,17 @@
 }:
 
 buildGoModule rec {
-  version = "2.7.4";
+  version = "2.8.2";
   pname = "grafana-loki";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
     owner = "grafana";
     repo = "loki";
-    sha256 = "sha256-afa4uInoNyEgNDJ7nB1yr+YYoOsU+S7XWhKvkeApgRQ=";
+    rev = "v${version}";
+    hash = "sha256-29cpDLIwKw0CaYaNGv31E7sNTaRepymjvAZ8TL4RpxY=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   subPackages = [
     # TODO split every executable into its own package
@@ -27,6 +27,8 @@ buildGoModule rec {
     "clients/cmd/promtail"
     "cmd/logcli"
   ];
+
+  tags = ["promtail_journal_enabled"];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = lib.optionals stdenv.isLinux [ systemd.dev ];
@@ -48,13 +50,11 @@ buildGoModule rec {
     "-X ${t}.Revision=unknown"
   ];
 
-  doCheck = true;
-
   meta = with lib; {
     description = "Like Prometheus, but for logs";
     license = with licenses; [ agpl3Only asl20 ];
     homepage = "https://grafana.com/oss/loki/";
-    maintainers = with maintainers; [ willibutz globin mmahut ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/grafana/loki/releases/tag/v${version}";
+    maintainers = with maintainers; [ willibutz globin mmahut emilylange ];
   };
 }

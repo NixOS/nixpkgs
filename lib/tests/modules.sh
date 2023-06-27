@@ -61,6 +61,18 @@ checkConfigError() {
 # Shorthand meta attribute does not duplicate the config
 checkConfigOutput '^"one two"$' config.result ./shorthand-meta.nix
 
+checkConfigOutput '^true$' config.result ./test-mergeAttrDefinitionsWithPrio.nix
+
+# types.pathInStore
+checkConfigOutput '".*/store/5lz9p8xhf89kb1c1kk6jxrzskaiygnlh-bash-5.2-p15.drv"' config.pathInStore.ok1 ./types.nix
+checkConfigOutput '".*/store/xfb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15"' config.pathInStore.ok2 ./types.nix
+checkConfigOutput '".*/store/xfb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15/bin/bash"' config.pathInStore.ok3 ./types.nix
+checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ""' config.pathInStore.bad1 ./types.nix
+checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ".*/store"' config.pathInStore.bad2 ./types.nix
+checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ".*/store/"' config.pathInStore.bad3 ./types.nix
+checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ".*/store/.links"' config.pathInStore.bad4 ./types.nix
+checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: "/foo/bar"' config.pathInStore.bad5 ./types.nix
+
 # Check boolean option.
 checkConfigOutput '^false$' config.enable ./declare-enable.nix
 checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*: true' config.enable ./define-enable.nix
@@ -166,6 +178,7 @@ checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*' 
 checkConfigOutput '^true$' "$@" ./define-module-check.nix
 
 # Check coerced value.
+set --
 checkConfigOutput '^"42"$' config.value ./declare-coerced-value.nix
 checkConfigOutput '^"24"$' config.value ./declare-coerced-value.nix ./define-value-string.nix
 checkConfigError 'A definition for option .* is not.*string or signed integer convertible to it.*. Definition values:\n\s*- In .*: \[ \]' config.value ./declare-coerced-value.nix ./define-value-list.nix
@@ -181,6 +194,11 @@ checkConfigOutput '^true$' config.enableAlias ./alias-with-priority.nix
 checkConfigOutput '^false$' config.enable ./alias-with-priority-can-override.nix
 checkConfigOutput '^false$' config.enableAlias ./alias-with-priority-can-override.nix
 
+# Check mkPackageOption
+checkConfigOutput '^"hello"$' config.package.pname ./declare-mkPackageOption.nix
+checkConfigError 'The option .undefinedPackage. is used but not defined' config.undefinedPackage ./declare-mkPackageOption.nix
+checkConfigOutput '^null$' config.nullablePackage ./declare-mkPackageOption.nix
+
 # submoduleWith
 
 ## specialArgs should work
@@ -189,7 +207,7 @@ checkConfigOutput '^"foo"$' config.submodule.foo ./declare-submoduleWith-special
 ## shorthandOnlyDefines config behaves as expected
 checkConfigOutput '^true$' config.submodule.config ./declare-submoduleWith-shorthand.nix ./define-submoduleWith-shorthand.nix
 checkConfigError 'is not of type `boolean' config.submodule.config ./declare-submoduleWith-shorthand.nix ./define-submoduleWith-noshorthand.nix
-checkConfigError "You're trying to declare a value of type \`bool'\n\s*rather than an attribute-set for the option" config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-shorthand.nix
+checkConfigError "You're trying to define a value of type \`bool'\n\s*rather than an attribute set for the option" config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-shorthand.nix
 checkConfigOutput '^true$' config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-noshorthand.nix
 
 ## submoduleWith should merge all modules in one swoop
@@ -254,6 +272,8 @@ checkConfigError 'A definition for option .* is not of type .*' \
 ## Freeform modules
 # Assigning without a declared option should work
 checkConfigOutput '^"24"$' config.value ./freeform-attrsOf.nix ./define-value-string.nix
+# Shorthand modules interpret `meta` and `class` as config items
+checkConfigOutput '^true$' options._module.args.value.result ./freeform-attrsOf.nix ./define-freeform-keywords-shorthand.nix
 # No freeform assignments shouldn't make it error
 checkConfigOutput '^{ }$' config ./freeform-attrsOf.nix
 # but only if the type matches
@@ -358,6 +378,24 @@ checkConfigOutput 'ok' config.freeformItems.foo.bar ./adhoc-freeformType-survive
 # Anonymous submodules don't get nixed by import resolution/deduplication
 # because of an `extendModules` bug, issue 168767.
 checkConfigOutput '^1$' config.sub.specialisation.value ./extendModules-168767-imports.nix
+
+# Class checks, evalModules
+checkConfigOutput '^{ }$' config.ok.config ./class-check.nix
+checkConfigOutput '"nixos"' config.ok.class ./class-check.nix
+checkConfigError 'The module .*/module-class-is-darwin.nix was imported into nixos instead of darwin.' config.fail.config ./class-check.nix
+checkConfigError 'The module foo.nix#darwinModules.default was imported into nixos instead of darwin.' config.fail-anon.config ./class-check.nix
+
+# Class checks, submoduleWith
+checkConfigOutput '^{ }$' config.sub.nixosOk ./class-check.nix
+checkConfigError 'The module .*/module-class-is-darwin.nix was imported into nixos instead of darwin.' config.sub.nixosFail.config ./class-check.nix
+
+# submoduleWith type merge with different class
+checkConfigError 'A submoduleWith option is declared multiple times with conflicting class values "darwin" and "nixos".' config.sub.mergeFail.config ./class-check.nix
+
+# _type check
+checkConfigError 'Could not load a value as a module, because it is of type "flake", in file .*/module-imports-_type-check.nix' config.ok.config ./module-imports-_type-check.nix
+checkConfigOutput '^true$' "$@" config.enable ./declare-enable.nix ./define-enable-with-top-level-mkIf.nix
+checkConfigError 'Could not load a value as a module, because it is of type "configuration", in file .*/import-configuration.nix.*please only import the modules that make up the configuration.*' config ./import-configuration.nix
 
 # doRename works when `warnings` does not exist.
 checkConfigOutput '^1234$' config.c.d.e ./doRename-basic.nix

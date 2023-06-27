@@ -14,7 +14,7 @@ in buildGoModule rec {
     runHook preBuild
     cd librclone
     go build --buildmode=c-shared -o librclone${ext} github.com/rclone/rclone/librclone
-    runHook postBuildd
+    runHook postBuild
   '';
 
   installPhase = ''

@@ -23,13 +23,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "openshadinglanguage";
-  version = "1.11.17.0";
+  version = "1.12.12.0";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenShadingLanguage";
     rev = "v${version}";
-    sha256 = "sha256-2OOkLnHLz+vmSeEDQl12SrJBTuWwbnvoTatnvm8lpbA=";
+    hash = "sha256-kxfDhqF8uTdLqt99rTOk8TWBdN5NF7zm98CT0DbLrW0=";
   };
 
   cmakeFlags = [
@@ -41,6 +41,7 @@ in stdenv.mkDerivation rec {
     # Override defaults.
     "-DLLVM_DIRECTORY=${llvm}"
     "-DLLVM_CONFIG=${llvm.dev}/bin/llvm-config"
+    "-DLLVM_BC_GENERATOR=${clang}/bin/clang++"
 
     # Set C++11 to C++14 required for LLVM10+
     "-DCMAKE_CXX_STANDARD=14"

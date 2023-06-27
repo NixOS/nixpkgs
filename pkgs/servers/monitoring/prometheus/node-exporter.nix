@@ -5,17 +5,17 @@
 
 buildGoModule rec {
   pname = "node_exporter";
-  version = "1.5.0";
+  version = "1.6.0";
   rev = "v${version}";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "prometheus";
     repo = "node_exporter";
-    sha256 = "sha256-jzgf7XVqtqHf5Uqkcr/0epC0R0fw7l7acr+F8jZ6M68=";
+    sha256 = "sha256-Aw1tdaiyr3wv3Ti3CFn2T80WRjEZaACwotKKJGY9I6Y=";
   };
 
-  vendorSha256 = "sha256-k4Wolrp/mebwA6ZLftCNVFOdHoXHcJZI9JWrhBxX5Pk=";
+  vendorHash = "sha256-hn2cMKhLl5qsm4sZErs6PXTs8yajowxw9a9vtHe5cAk=";
 
   # FIXME: tests fail due to read-only nix store
   doCheck = false;

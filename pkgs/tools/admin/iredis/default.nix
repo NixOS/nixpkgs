@@ -1,4 +1,4 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, fetchPypi }:
 
 with python3Packages;
 
@@ -12,14 +12,16 @@ buildPythonApplication rec {
     sha256 = "d1e4e7936d0be456f70a39abeb1c97d931f66ccd60e891f4fd796ffb06dfeaf9";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'click = "^7.0"' 'click = "*"' \
-      --replace 'wcwidth = "0.1.9"' 'wcwidth = "*"'
-  '';
+  pythonRelaxDeps = [
+    "configobj"
+    "wcwidth"
+    "click"
+    "packaging"
+  ];
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

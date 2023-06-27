@@ -1,9 +1,9 @@
 { lib
-, buildFHSUserEnv
+, buildFHSEnv
 , sparrow-unwrapped
 }:
 
-buildFHSUserEnv {
+buildFHSEnv {
   name = "sparrow";
 
   runScript = "${sparrow-unwrapped}/bin/sparrow";

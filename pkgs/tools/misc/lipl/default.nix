@@ -14,7 +14,12 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ZeYz9g06vMsOk3YDmy0I+8e6BtLfweXqVH5uRt+mtes=";
   };
 
-  cargoHash = "sha256-hcvC12dd6KDi7kYilXtBtyDQQG62YPMvSZA5trFqwWc=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "cmd_lib-0.7.8" = "sha256-FyJZkxhKwHyGEmeLZfcvLe1D6h7XY5tvsHbANQk+D+4=";
+    };
+  };
 
   meta = with lib; {
     description = "A command line tool to analyse the output over time of custom shell commands";

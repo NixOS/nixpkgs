@@ -1,14 +1,11 @@
-{ lib, stdenv, fetchurl, buildPackages, perl, coreutils
+{ lib, stdenv, fetchurl, buildPackages, perl, coreutils, writeShellScript
+, makeWrapper
 , withCryptodev ? false, cryptodev
 , withZlib ? false, zlib
 , enableSSL2 ? false
 , enableSSL3 ? false
 , enableKTLS ? stdenv.isLinux
 , static ? stdenv.hostPlatform.isStatic
-# Used to avoid cross compiling perl, for example, in darwin bootstrap tools.
-# This will cause c_rehash to refer to perl via the environment, but otherwise
-# will produce a perfectly functional openssl binary and library.
-, withPerl ? stdenv.hostPlatform == stdenv.buildPlatform
 # path to openssl.cnf file. will be placed in $etc/etc/ssl/openssl.cnf to replace the default
 , conf ? null
 , removeReferencesTo
@@ -72,12 +69,11 @@ let
       !(stdenv.hostPlatform.useLLVM or false) &&
       stdenv.cc.isGNU;
 
-    nativeBuildInputs = [ perl ]
+    nativeBuildInputs =
+         lib.optional (!stdenv.hostPlatform.isWindows) makeWrapper
+      ++ [ perl ]
       ++ lib.optionals static [ removeReferencesTo ];
     buildInputs = lib.optional withCryptodev cryptodev
-      # perl is included to allow the interpreter path fixup hook to set the
-      # correct interpreter in c_rehash.
-      ++ lib.optional withPerl perl
       ++ lib.optional withZlib zlib;
 
     # TODO(@Ericson2314): Improve with mass rebuild
@@ -172,22 +168,20 @@ let
 
       # 'etc' is a separate output on static builds only.
       etc=$out
-    '') + lib.optionalString (!stdenv.hostPlatform.isWindows)
-      # Fix bin/c_rehash's perl interpreter line
-      #
-      # - openssl 1_0_2: embeds a reference to buildPackages.perl
-      # - openssl 1_1:   emits "#!/usr/bin/env perl"
-      #
-      # In the case of openssl_1_0_2, reset the invalid reference and let the
-      # interpreter hook take care of it.
-      #
-      # In both cases, if withPerl = false, the intepreter line is expected be
-      # "#!/usr/bin/env perl"
-    ''
-      substituteInPlace $out/bin/c_rehash --replace ${buildPackages.perl}/bin/perl "/usr/bin/env perl"
-    '' + ''
+    '') + ''
       mkdir -p $bin
       mv $out/bin $bin/bin
+
+    '' + lib.optionalString (!stdenv.hostPlatform.isWindows)
+      # makeWrapper is broken for windows cross (https://github.com/NixOS/nixpkgs/issues/120726)
+    ''
+      # c_rehash is a legacy perl script with the same functionality
+      # as `openssl rehash`
+      # this wrapper script is created to maintain backwards compatibility without
+      # depending on perl
+      makeWrapper $bin/bin/openssl $bin/bin/c_rehash \
+        --add-flags "rehash"
+    '' + ''
 
       mkdir $dev
       mv $out/include $dev/
@@ -226,10 +220,12 @@ let
 
 in {
 
-
+  # If you do upgrade here, please update in pkgs/top-level/release.nix
+  # the permitted insecure version to ensure it gets cached for our users
+  # and backport this to stable release (23.05).
   openssl_1_1 = common {
-    version = "1.1.1t";
-    sha256 = "sha256-je6bJL2x3L8MPR6bAvuPa/IhZegH9Fret8lndTaFnTs=";
+    version = "1.1.1u";
+    sha256 = "sha256-4vjYS1I+7NBse+diaDA3AwD7zBU4a/UULXJ1j2lj68Y=";
     patches = [
       ./1.1/nix-ssl-cert-file.patch
 
@@ -238,11 +234,16 @@ in {
        else ./use-etc-ssl-certs.patch)
     ];
     withDocs = true;
+    extraMeta = {
+      knownVulnerabilities = [
+        "OpenSSL 1.1 is reaching its end of life on 2023/09/11 and cannot be supported through the NixOS 23.05 release cycle. https://www.openssl.org/blog/blog/2023/03/28/1.1.1-EOL/"
+      ];
+    };
   };
 
   openssl_3 = common {
-    version = "3.0.8";
-    sha256 = "sha256-bBPSvzj98x6sPOKjRwc2c/XWMmM5jx9p0N9KQSU+Sz4=";
+    version = "3.0.9";
+    sha256 = "sha256-6xqwR4FHQ2D3fDGKuJ2MWgOrw45j1lpgPKu/GwCh3JA=";
     patches = [
       ./3.0/nix-ssl-cert-file.patch
 

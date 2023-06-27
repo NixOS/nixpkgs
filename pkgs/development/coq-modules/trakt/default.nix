@@ -9,7 +9,7 @@ mkCoqDerivation {
 
   inherit version;
   defaultVersion = with lib.versions; lib.switch [ coq.version ] [
-    { cases = [ (range "8.13" "8.16") ]; out = "1.0"; }
+    { cases = [ (range "8.13" "8.17") ]; out = "1.0"; }
   ] null;
 
   propagatedBuildInputs = [ coq-elpi ];

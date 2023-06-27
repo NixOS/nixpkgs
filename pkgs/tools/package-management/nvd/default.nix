@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nvd";
-  version = "0.2.0";
+  version = "0.2.3";
 
   src = fetchFromGitLab {
     owner = "khumba";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-kOPcQP2tSym69qSOBwVc2XFO8+uy7bgYIQq4L/orS+A=";
+    sha256 = "sha256:005nh24j01s0hd5j0g0qp67wpivpjwryxyyh6y44jijb4arrfrjf";
   };
 
   buildInputs = [ python3 ];

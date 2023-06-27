@@ -53,7 +53,6 @@ with pkgs;
 
   pkg-config = recurseIntoAttrs (callPackage ../top-level/pkg-config/tests.nix { });
 
-  rustCustomSysroot = callPackage ./rust-sysroot {};
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate/test { };
   importCargoLock = callPackage ../build-support/rust/test/import-cargo-lock { };
 
@@ -70,6 +69,7 @@ with pkgs;
   trivial-builders = recurseIntoAttrs {
     writeStringReferencesToFile = callPackage ../build-support/trivial-builders/test/writeStringReferencesToFile.nix {};
     writeTextFile = callPackage ../build-support/trivial-builders/test/write-text-file.nix {};
+    writeShellScript = callPackage ../build-support/trivial-builders/test/write-shell-script.nix {};
     references = callPackage ../build-support/trivial-builders/test/references.nix {};
     overriding = callPackage ../build-support/trivial-builders/test-overriding.nix {};
     concat = callPackage ../build-support/trivial-builders/test/concat-test.nix {};
@@ -85,6 +85,8 @@ with pkgs;
   cue-validation = callPackage ./cue {};
 
   coq = callPackage ./coq {};
+
+  dotnet = recurseIntoAttrs (callPackages ./dotnet { });
 
   makeHardcodeGsettingsPatch = callPackage ./make-hardcode-gsettings-patch { };
 

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "f3d";
-  version = "1.3.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "f3d-app";
     repo = "f3d";
     rev = "v${version}";
-    hash = "sha256-dOpiX7xJWDKHqPLGvlgv7NHgfzyeZhJd898+KzAmD4Q=";
+    hash = "sha256-od8Wu8+HyQb8qTA6C4kiw5hNI2WPBs/EMt321BJDZoc=";
   };
 
   nativeBuildInputs = [ cmake ];

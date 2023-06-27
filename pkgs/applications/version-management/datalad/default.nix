@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, installShellFiles, python3, git }:
+{ lib, stdenv, fetchFromGitHub, installShellFiles, python3, git, git-annex }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "datalad";
-  version = "0.16.5";
+  version = "0.18.3";
 
   src = fetchFromGitHub {
     owner = "datalad";
     repo = pname;
     rev = version;
-    hash = "sha256-F5UFW0/XqntrHclpj3TqoAwuHJbiiv5a7/4MnFoJ1dE=";
+    hash = "sha256-vqO37o5NxQk+gHfvhM1I2ea9/q9ZaLWkDEyPYJKEPcs";
   };
 
   nativeBuildInputs = [ installShellFiles git ];
@@ -24,6 +24,9 @@ python3.pkgs.buildPythonApplication rec {
     patool
     tqdm
     annexremote
+    looseversion
+    setuptools
+    git-annex
 
     # downloaders-extra
     # requests-ftp # not in nixpkgs yet
@@ -66,10 +69,13 @@ python3.pkgs.buildPythonApplication rec {
     installShellCompletion --cmd datalad \
          --bash <($out/bin/datalad shell-completion) \
          --zsh  <($out/bin/datalad shell-completion)
+    wrapProgram $out/bin/datalad --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 
   # no tests
   doCheck = false;
+
+  pythonImportsCheck = [ "datalad" ];
 
   meta = with lib; {
     description = "Keep code, data, containers under control with git and git-annex";

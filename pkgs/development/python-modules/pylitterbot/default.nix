@@ -4,6 +4,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
+, poetry-dynamic-versioning
 , pyjwt
 , pytest-aiohttp
 , pytest-freezegun
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pylitterbot";
-  version = "2023.1.2";
+  version = "2023.4.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -22,12 +23,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "natekspencer";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-PSg0u4Beg0OVUMxaBCPxJSVO/MxBvCpDu2rQhiYT9OM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-zB/LJGEPJ3uZEoVQiLQUCWqLo9YLXN6vge3RhIwA5D4=";
   };
 
   nativeBuildInputs = [
     poetry-core
+    poetry-dynamic-versioning
   ];
 
   propagatedBuildInputs = [
@@ -43,12 +45,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    # https://github.com/natekspencer/pylitterbot/issues/73
-    substituteInPlace pyproject.toml \
-      --replace 'deepdiff = "^5.8.1"' 'deepdiff = ">=5.8.1"'
-  '';
-
   pythonImportsCheck = [
     "pylitterbot"
   ];
@@ -56,7 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Modulefor controlling a Litter-Robot";
     homepage = "https://github.com/natekspencer/pylitterbot";
-    changelog = "https://github.com/natekspencer/pylitterbot/releases/tag/${version}";
+    changelog = "https://github.com/natekspencer/pylitterbot/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

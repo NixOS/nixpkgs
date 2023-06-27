@@ -1,5 +1,5 @@
-{ stdenv, lib, autoPatchelfHook, fetchzip, libunwind, libuuid, icu, curl
-, darwin, makeWrapper, less, openssl_1_1, pam, lttng-ust }:
+{ stdenv, lib, autoPatchelfHook, fetchurl, libunwind, libuuid, icu, curl
+, darwin, makeWrapper, less, openssl, pam, lttng-ust }:
 
 let archString = if stdenv.isAarch64 then "arm64"
                  else if stdenv.isx86_64 then "x64"
@@ -7,26 +7,28 @@ let archString = if stdenv.isAarch64 then "arm64"
     platformString = if stdenv.isDarwin then "osx"
                      else if stdenv.isLinux then "linux"
                      else throw "unsupported platform";
-    platformSha = if (stdenv.isDarwin && stdenv.isx86_64) then "sha256-JKB7Oy+3KWtVo1Aqmc7vZiO88FrF9+8N/tdGlvIQolM="
-                     else if (stdenv.isDarwin && stdenv.isAarch64) then "sha256-9UwB1tT2VaW+favw/KWPziFMSRWcw7AqeeZvbaGOBqc="
-                     else if (stdenv.isLinux && stdenv.isx86_64) then "sha256-kAcT9av4PFZfYqpS0XwKC0IiquUcVtN30Mq649PUnSM="
-                     else if (stdenv.isLinux && stdenv.isAarch64) then "sha256-3Lm9WYVcfkEVfji/h52VqFy1Jo1AiSQ22JhEGiCPzzM="
-                     else throw "unsupported platform";
+    platformHash = {
+      x86_64-darwin = "sha256-FX3OyVzwU+Ms2tgjpZ4dPdjeJx2H5541dQZAjhI3n1U=";
+      aarch64-darwin = "sha256-Dg7FRF5inRnzP6tjDhIgHTJ1J2EQXnegqimZPK574WQ=";
+      x86_64-linux = "sha256-6F1VROE6kk+LLEpdwtQ6vkbkZjP4no0TjTnAqurLmXY=";
+      aarch64-linux = "sha256-NO4E2TOUIYyUFJmi3zKJzOyP0/rTPTZgJZcebVNkSfk=";
+    }.${stdenv.hostPlatform.system} or (throw "unsupported platform");
     platformLdLibraryPath = if stdenv.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH"
                      else if stdenv.isLinux then "LD_LIBRARY_PATH"
                      else throw "unsupported platform";
-                     libraries = [ libunwind libuuid icu curl openssl_1_1 ] ++
+                     libraries = [ libunwind libuuid icu curl openssl ] ++
                        (if stdenv.isLinux then [ pam lttng-ust ] else [ darwin.Libsystem ]);
 in
 stdenv.mkDerivation rec {
   pname = "powershell";
-  version = "7.3.2";
+  version = "7.3.4";
 
-  src = fetchzip {
+  src = fetchurl {
     url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-${platformString}-${archString}.tar.gz";
-    sha256 = platformSha;
-    stripRoot = false;
+    hash = platformHash;
   };
+
+  sourceRoot = ".";
 
   strictDeps = true;
   buildInputs = [ less ] ++ libraries;
@@ -42,17 +44,13 @@ stdenv.mkDerivation rec {
 
     cp -r * $pslibs
 
-    rm -f $pslibs/libcrypto${ext}.1.0.0
-    rm -f $pslibs/libssl${ext}.1.0.0
-
     # At least the 7.1.4-osx package does not have the executable bit set.
     chmod a+x $pslibs/pwsh
 
-    ls $pslibs
-  '' + lib.optionalString (!stdenv.isDarwin && !stdenv.isAarch64) ''
-    patchelf --replace-needed libcrypto${ext}.1.0.0 libcrypto${ext}.1.1 $pslibs/libmi.so
-    patchelf --replace-needed libssl${ext}.1.0.0 libssl${ext}.1.1 $pslibs/libmi.so
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (stdenv.isLinux && stdenv.isx86_64) ''
+    patchelf --replace-needed libcrypto${ext}.1.0.0 libcrypto${ext} $pslibs/libmi.so
+    patchelf --replace-needed libssl${ext}.1.0.0 libssl${ext} $pslibs/libmi.so
+  '' + lib.optionalString stdenv.isLinux ''
     patchelf --replace-needed liblttng-ust${ext}.0 liblttng-ust${ext}.1 $pslibs/libcoreclrtraceptprovider.so
   '' + ''
 

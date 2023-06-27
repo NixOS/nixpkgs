@@ -12,7 +12,7 @@ GEM
       pyu-ruby-sasl (~> 0.0.3.2)
       rubyntlm (~> 0.3.4)
     pyu-ruby-sasl (0.0.3.3)
-    rack (2.2.6.2)
+    rack (2.2.7)
     rubyntlm (0.3.4)
 
 PLATFORMS
@@ -25,4 +25,4 @@ DEPENDENCIES
   rubyntlm (= 0.3.4)
 
 BUNDLED WITH
-   2.4.6
+   2.4.10

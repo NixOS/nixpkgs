@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPyPy
 , nose
 }:
 
@@ -12,6 +13,9 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-o/UIXTfvfj4ATEup+bPkDFT/GQHNER8FFFrjE6fGfRs=";
   };
+
+  # nose is unavailable on pypy
+  doCheck = !isPyPy;
 
   nativeCheckInputs = [
     nose

@@ -126,6 +126,13 @@ rec {
   # and respect the compatibility matrix at
   # https://docs.gradle.org/current/userguide/compatibility.html
 
+  gradle_8 = gen {
+    version = "8.0.1";
+    nativeVersion = "0.22-milestone-24";
+    sha256 = "02g9i1mrpdydj8d6395cv6a4ny9fw3z7sjzr7n6l6a9zx65masqv";
+    defaultJava = jdk17;
+  };
+
   gradle_7 = gen {
     version = "7.6.1";
     nativeVersion = "0.22-milestone-24";

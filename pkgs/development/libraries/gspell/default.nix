@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , buildPackages
 , fetchurl
 , pkg-config
@@ -12,23 +13,23 @@
 , vala
 , gobject-introspection
 , gnome
-, gtk-mac-integration
 }:
 
 stdenv.mkDerivation rec {
   pname = "gspell";
-  version = "1.12.0";
+  version = "1.12.1";
 
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "QNKFDxu26HdSRvoeOUOLNsqvvbraHSihn6HKB+H/gq0=";
+    sha256 = "jsRPMgUuiW/N1JJuuBSjJuOaUEfiUe7HuQVvvZREsPE=";
   };
 
   patches = [
     # Extracted from: https://github.com/Homebrew/homebrew-core/blob/2a27fb86b08afc7ae6dff79cf64aafb8ecc93275/Formula/gspell.rb#L125-L149
+    # Dropped the GTK_MAC_* changes since gtk-mac-integration is not needed since 1.12.1
     ./0001-Darwin-build-fix.patch
   ];
 
@@ -45,8 +46,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3
     icu
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    gtk-mac-integration
   ];
 
   propagatedBuildInputs = [

@@ -12,20 +12,34 @@
 
 buildGoModule rec {
   pname = "hub";
-  version = "unstable-2022-04-04";
+  version = "unstable-2022-12-01";
 
   src = fetchFromGitHub {
     owner = "github";
     repo = pname;
-    rev = "363513a0f822a8bde5b620e5de183702280d4ace";
-    sha256 = "sha256-jipZHmGtPTsztTeVZofaMReU4AEU9k6mdw9YC4KKB1Q=";
+    rev = "38bcd4ae469e5f53f01901340b715c7658ab417a";
+    hash = "sha256-V2GvwKj0m2UXxE42G23OHXyAsTrVRNw1p5CAaJxGYog=";
   };
+
+  patches = [
+    # Fix `fish` completions
+    (fetchpatch {
+      url = "https://github.com/github/hub/pull/3036.patch";
+      hash = "sha256-pR/OkGa2ICR4n1pLNx8E2UTtLeDwFtXxeeTB94KFjC4=";
+    })
+    # Fix `bash` completions
+    (fetchpatch {
+      url = "https://github.com/github/hub/pull/2948.patch";
+      hash = "sha256-jGFFIvSKEIpTQY0Wz63cqciUk25MzPHv5Z1ox8l7wmo=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs script/
+    sed -i 's/^var Version = "[^"]\+"$/var Version = "${version}"/' version/version.go
   '';
 
-  vendorSha256 = "sha256-wQH8V9jRgh45JGs4IfYS1GtmCIYdo93JG1UjJ0BGxXk=";
+  vendorHash = "sha256-wQH8V9jRgh45JGs4IfYS1GtmCIYdo93JG1UjJ0BGxXk=";
 
   # Only needed to build the man-pages
   excludedPackages = [ "github.com/github/hub/md2roff-bin" ];

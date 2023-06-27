@@ -1,4 +1,4 @@
-{ useLua ? !stdenv.isDarwin
+{ useLua ? true
 , usePcre ? true
 , withPrometheusExporter ? true
 , stdenv, lib, fetchurl, nixosTests
@@ -11,11 +11,11 @@ assert usePcre -> pcre != null;
 
 stdenv.mkDerivation rec {
   pname = "haproxy";
-  version = "2.7.3";
+  version = "2.8.0";
 
   src = fetchurl {
     url = "https://www.haproxy.org/download/${lib.versions.majorMinor version}/src/${pname}-${version}.tar.gz";
-    sha256 = "sha256-sX5RuWUxhDtKmdLDtiGCgbyYi/Ykyf+Q4Z8MvLol0Gc=";
+    sha256 = "sha256-Yc2vtdt+kXTQdXuOS83pODUjBvt8yP8rX1XCbdSKbPc=";
   };
 
   buildInputs = [ openssl zlib libxcrypt ]

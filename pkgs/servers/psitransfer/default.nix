@@ -7,13 +7,12 @@
 { stdenv
 , pkgs
 , lib
-, nodejs-14_x
+, nodejs_18
 , fetchzip
 }:
 
 let
-  # nodejs-16_x fails with ENOTCACHED
-  nodejs = nodejs-14_x;
+  nodejs = nodejs_18;
 
   nodePackages = import ./node-composition.nix {
     inherit pkgs nodejs;
@@ -25,7 +24,7 @@ let
   combined = psitransfer.override rec {
     # version is not defined in source package.json
     # version must also be maintained in node-packages.json for node2nix
-    version = "2.0.1";
+    version = "2.1.2";
 
     # override node2nix package src to pull pre-built release of same version
     src = fetchzip {

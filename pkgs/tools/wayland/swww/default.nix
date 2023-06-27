@@ -1,16 +1,16 @@
 { config, lib, pkgs, fetchFromGitHub, rustPlatform, pkg-config, lz4, libxkbcommon }:
 rustPlatform.buildRustPackage rec {
   pname = "swww";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "Horus645";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-1SmCeIlcjOX3yCvpfqQ82uq4h2xlGhX9OCwKb6jGK78=";
+    hash = "sha256-58zUi6tftTvNoc/R/HO4RDC7n+NODKOrBCHH8QntKSY=";
   };
 
-  cargoSha256 = "sha256-08YM9yTCRJPHdOc1+7F3guYiP3y1WSi3/hzlDRVpitc=";
+  cargoSha256 = "sha256-hL5rOf0G+UBO8kyRXA1TqMCta00jGSZtF7n8ibjGi9k=";
   buildInputs = [ lz4 libxkbcommon ];
   doCheck = false; # Integration tests do not work in sandbox environment
   nativeBuildInputs = [ pkg-config ];

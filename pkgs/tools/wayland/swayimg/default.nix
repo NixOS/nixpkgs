@@ -4,6 +4,7 @@
 , meson
 , ninja
 , pkg-config
+, wayland-scanner
 , wayland
 , wayland-protocols
 , json_c
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
 
   buildInputs = [
     bash-completion

@@ -33,13 +33,13 @@
 
 stdenv.mkDerivation rec {
   pname = "proxysql";
-  version = "2.5.1";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "sysown";
     repo = pname;
     rev = version;
-    hash = "sha256-Z85/oSV2TUKEoum09G6OHNw6K/Evt1wMCcleTcc96EY=";
+    hash = "sha256-D/AUjndpu4QJmlgLBXRqMj9gsHYitEYhHVMQzoab1ik=";
   };
 
   patches = [
@@ -171,5 +171,6 @@ stdenv.mkDerivation rec {
     description = "High-performance MySQL proxy";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ ajs124 ];
+    platforms = platforms.unix;
   };
 }

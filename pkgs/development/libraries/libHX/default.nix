@@ -11,12 +11,11 @@ stdenv.mkDerivation rec {
 
   patches = [];
 
-  nativeBuildInputs = [ autoconf automake ];
-  buildInputs = [ libtool ];
+  nativeBuildInputs = [ autoconf automake libtool ];
 
   preConfigure = ''
     sh autogen.sh
-    '';
+  '';
 
   meta = with lib; {
     homepage = "https://libhx.sourceforge.net/";

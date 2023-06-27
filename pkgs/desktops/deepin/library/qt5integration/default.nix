@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qt5integration";
-  version = "5.6.4";
+  version = "5.6.6";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-MZkhTvjTyBrlntgFq2F3iGK7WvfmnGJQLk5B1OM5kQo=";
+    sha256 = "sha256-7b18ydyy/TIEGDkFAoium1LSx3Qs4I4pYpMfehOBZbY=";
   };
 
   nativeBuildInputs = [

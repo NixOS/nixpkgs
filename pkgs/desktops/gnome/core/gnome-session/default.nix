@@ -25,18 +25,19 @@
 , libepoxy
 , bash
 , gnome-session-ctl
+, gnomeShellSupport ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-session";
   # Also bump ./ctl.nix when bumping major version.
-  version = "43.0";
+  version = "44.0";
 
   outputs = [ "out" "sessions" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-session/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "P7mUlQE4XIwUYY548XjZUt+YrYyRCA9MXhVoxzk64fI=";
+    sha256 = "zPgpqWUmE16en5F1JlFdNqUJK9+jFvNzfdjFpSTb8sY=";
   };
 
   patches = [
@@ -113,7 +114,7 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/libexec/gnome-session-binary" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --suffix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH" \
-      --suffix XDG_DATA_DIRS : "${gnome.gnome-shell}/share"\
+      ${lib.optionalString gnomeShellSupport "--suffix XDG_DATA_DIRS : \"${gnome.gnome-shell}/share\""} \
       --suffix XDG_CONFIG_DIRS : "${gnome.gnome-settings-daemon}/etc/xdg"
   '';
 

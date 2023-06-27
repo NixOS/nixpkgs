@@ -1,5 +1,4 @@
 { mkDerivation
-, lib
 , extra-cmake-modules
 , kauth
 , kcompletion
@@ -13,7 +12,6 @@
 , kwidgetsaddons
 , kwindowsystem
 , plasma-framework
-, qtbase
 , qtscript
 , qtwebengine
 , qtx11extras

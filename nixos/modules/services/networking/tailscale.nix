@@ -60,6 +60,7 @@ in {
         config.networking.resolvconf.package # for configuring DNS in some configs
         pkgs.procps     # for collecting running services (opt-in feature)
         pkgs.glibc      # for `getent` to look up user shells
+        pkgs.kmod       # required to pass tailscale's v6nat check
       ];
       serviceConfig.Environment = [
         "PORT=${toString cfg.port}"

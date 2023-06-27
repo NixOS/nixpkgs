@@ -1,5 +1,5 @@
 { config, stdenv, lib, fetchurl, fetchzip, boost, cmake, ffmpeg, gettext, glew
-, ilmbase, libXi, libX11, libXext, libXrender
+, ilmbase, libepoxy, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, libwebp, libGLU, libGL, openal, opencolorio, openexr, openimagedenoise, openimageio, openjpeg, python310Packages
 , openvdb, libXxf86vm, tbb, alembic
@@ -11,6 +11,7 @@
 , spaceNavSupport ? stdenv.isLinux, libspnav
 , makeWrapper
 , pugixml, llvmPackages, SDL, Cocoa, CoreGraphics, ForceFeedback, OpenAL, OpenGL
+, waylandSupport ? stdenv.isLinux, pkg-config, wayland, wayland-protocols, libffi, libdecor, libxkbcommon, dbus
 , potrace
 , openxr-loader
 , embree, gmp, libharu
@@ -27,29 +28,39 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "3.3.1";
+  version = "3.5.1";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    hash = "sha256-KtpI8L+KDKgCuYfXV0UgEuH48krPTSNFOwnC1ZURjMo=";
+    hash = "sha256-vXQox+bLpakAIWJpwyER3/qrrxvbVHLyMZZeYVF0qAk=";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
 
-  nativeBuildInputs = [ cmake makeWrapper python310Packages.wrapPython llvmPackages.llvm.dev ]
-    ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
+  nativeBuildInputs =
+    [ cmake makeWrapper python310Packages.wrapPython llvmPackages.llvm.dev
+    ]
+    ++ lib.optionals cudaSupport [ addOpenGLRunpath ]
+    ++ lib.optionals waylandSupport [ pkg-config ];
   buildInputs =
     [ boost ffmpeg gettext glew ilmbase
       freetype libjpeg libpng libsamplerate libsndfile libtiff libwebp
-      opencolorio openexr openimagedenoise openimageio openjpeg python zlib zstd fftw jemalloc
+      opencolorio openexr openimageio openjpeg python zlib zstd fftw jemalloc
       alembic
       (opensubdiv.override { inherit cudaSupport; })
       tbb
-      embree
       gmp
       pugixml
       potrace
       libharu
+      libepoxy
+    ]
+    ++ lib.optionals waylandSupport [
+      wayland wayland-protocols libffi libdecor libxkbcommon dbus
+    ]
+    ++ lib.optionals (!stdenv.isAarch64) [
+      openimagedenoise
+      embree
     ]
     ++ (if (!stdenv.isDarwin) then [
       libXi libX11 libXext libXrender
@@ -120,6 +131,15 @@ stdenv.mkDerivation rec {
       "-DWITH_IMAGE_OPENJPEG=ON"
       "-DWITH_OPENCOLLADA=${if colladaSupport then "ON" else "OFF"}"
     ]
+    ++ lib.optionals waylandSupport [
+      "-DWITH_GHOST_WAYLAND=ON"
+      "-DWITH_GHOST_WAYLAND_DBUS=ON"
+      "-DWITH_GHOST_WAYLAND_DYNLOAD=OFF"
+      "-DWITH_GHOST_WAYLAND_LIBDECOR=ON"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+      "-DWITH_CYCLES_EMBREE=OFF"
+    ]
     ++ lib.optionals stdenv.isDarwin [
       "-DWITH_CYCLES_OSL=OFF" # requires LLVM
       "-DWITH_OPENVDB=OFF" # OpenVDB currently doesn't build on darwin
@@ -163,6 +183,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  passthru = { inherit python; };
+
   meta = with lib; {
     description = "3D Creation/Animation/Publishing System";
     homepage = "https://www.blender.org";
@@ -170,7 +192,8 @@ stdenv.mkDerivation rec {
     # say: "We've decided to cancel the BL offering for an indefinite period."
     # OptiX, enabled with cudaSupport, is non-free.
     license = with licenses; [ gpl2Plus ] ++ optional cudaSupport unfree;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
+    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ goibhniu veprbl ];
   };
 }

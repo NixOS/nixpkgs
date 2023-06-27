@@ -27,6 +27,8 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
         machine.succeed("[ -e /dev/pts/ptmx ]") # /dev/pts
         machine.succeed("[ -e /run/keys ]") # /run/keys
 
+    with subtest("groups work"):
+        machine.fail("journalctl -b 0 | grep 'systemd-udevd.*Unknown group.*ignoring'")
 
     with subtest("growfs works"):
         oldAvail = machine.succeed("df --output=avail / | sed 1d")

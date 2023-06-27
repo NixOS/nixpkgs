@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = "https://quantlib.org";
     platforms = platforms.unix;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ candyc1oud ];
+    maintainers = [];
   };
 }

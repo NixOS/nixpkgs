@@ -63,6 +63,7 @@ buildDunePackage rec {
     mirage-clock-unix
     ipaddr-cstruct
   ];
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "OCaml TCP/IP networking stack, used in MirageOS";

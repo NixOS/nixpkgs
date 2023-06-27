@@ -1,8 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, appstream-glib
-, clutter
 , gjs
 , glib
 , gobject-introspection
@@ -21,14 +19,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "43.1";
+  version = "44.0";
   pname = "gpaste";
 
   src = fetchFromGitHub {
     owner = "Keruspe";
     repo = "GPaste";
     rev = "v${version}";
-    sha256 = "sha256-wOxhaYWX76jSur3uh75vDfAedbiLh2ikoMuobCZx3jE=";
+    sha256 = "sha256-mYbyu3IIF6pQz1oEqEWLe7jdR99M3LxiMiRR9x7qFh8=";
   };
 
   patches = [
@@ -47,7 +45,6 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    appstream-glib
     gobject-introspection
     meson
     ninja
@@ -58,7 +55,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    clutter # required by mutter-clutter
     gjs
     glib
     gtk3
@@ -70,7 +66,6 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgcr3=false" # Build with gcr4
     "-Dcontrol-center-keybindings-dir=${placeholder "out"}/share/gnome-control-center/keybindings"
     "-Ddbus-services-dir=${placeholder "out"}/share/dbus-1/services"
     "-Dsystemd-user-unit-dir=${placeholder "out"}/etc/systemd/user"

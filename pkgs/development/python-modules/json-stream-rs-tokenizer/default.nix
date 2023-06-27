@@ -1,7 +1,11 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , rustPlatform
+, cargo
+, darwin
+, rustc
 , setuptools-rust
 , json-stream-rs-tokenizer
 , json-stream
@@ -9,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "json-stream-rs-tokenizer";
-  version = "0.4.13";
+  version = "0.4.16";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "smheidrich";
     repo = "py-json-stream-rs-tokenizer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9pJi80V7WKvsgtp0ffItWnjoOvFvfE/Sz6y2VlsU+wQ=";
+    hash = "sha256-MnYkCAI8x65kU0EoTRf4ZVsbjNravjokepX4yViu7go=";
   };
 
   postPatch = ''
@@ -26,17 +30,19 @@ buildPythonPackage rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src postPatch;
     name = "${pname}-${version}";
-    hash = "sha256-TjRdHSXHmF6fzCshX1I4Sq+A/fEmBHDPGZvJUxL13aM=";
+    hash = "sha256-HwWH8/UWKWOdRmyCVQtNqJxXD55f6zxLY0LhR7JU9ro=";
   };
 
   nativeBuildInputs = [
     setuptools-rust
-  ]
-  ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.libiconv
+  ];
 
   # Tests depend on json-stream, which depends on this package.
   # To avoid infinite recursion, we only enable tests when building passthru.tests.

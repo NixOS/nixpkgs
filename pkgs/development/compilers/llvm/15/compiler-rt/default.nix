@@ -48,14 +48,12 @@ stdenv.mkDerivation {
     "-DCOMPILER_RT_BUILD_MEMPROF=OFF"
     "-DCOMPILER_RT_BUILD_ORC=OFF" # may be possible to build with musl if necessary
   ] ++ lib.optionals (useLLVM || bareMetal) [
-     "-DCOMPILER_RT_BUILD_PROFILE=OFF"
+    "-DCOMPILER_RT_BUILD_PROFILE=OFF"
   ] ++ lib.optionals ((useLLVM && !haveLibc) || bareMetal) [
     "-DCMAKE_C_COMPILER_WORKS=ON"
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
     "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
     "-DCMAKE_SIZEOF_VOID_P=${toString (stdenv.hostPlatform.parsed.cpu.bits / 8)}"
-  ] ++ lib.optionals (useLLVM && !haveLibc) [
-    "-DCMAKE_C_FLAGS=-nodefaultlibs"
   ] ++ lib.optionals (useLLVM) [
     "-DCOMPILER_RT_BUILD_BUILTINS=ON"
     #https://stackoverflow.com/questions/53633705/cmake-the-c-compiler-is-not-able-to-compile-a-simple-test-program
@@ -97,8 +95,6 @@ stdenv.mkDerivation {
     substituteInPlace cmake/builtin-config-ix.cmake \
       --replace 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
   '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace cmake/builtin-config-ix.cmake \
-      --replace 'set(ARM64 arm64 arm64e)' 'set(ARM64)'
     substituteInPlace cmake/config-ix.cmake \
       --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
   '' + lib.optionalString (useLLVM) ''
@@ -108,6 +104,10 @@ stdenv.mkDerivation {
       --replace "#include <assert.h>" ""
     substituteInPlace lib/builtins/cpu_model.c \
       --replace "#include <assert.h>" ""
+  '';
+
+  preConfigure = lib.optionalString (useLLVM && !haveLibc) ''
+    cmakeFlagsArray+=(-DCMAKE_C_FLAGS="-nodefaultlibs -ffreestanding")
   '';
 
   # Hack around weird upsream RPATH bug

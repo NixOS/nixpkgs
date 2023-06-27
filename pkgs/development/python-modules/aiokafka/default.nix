@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aiokafka";
-  version = "0.8.0";
+  version = "0.8.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-g7xUB5RfjG4G7J9Upj3KXKSePa+VDit1Zf8pWHfui1o=";
+    hash = "sha256-O5cDP0PWFrxNSdwWqUUkErUKf1Tt9agKJqWIjd4jGqk=";
   };
 
   nativeBuildInputs = [

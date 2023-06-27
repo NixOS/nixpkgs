@@ -13,7 +13,7 @@ in
 
   agda2-mode = callPackage ./manual-packages/agda2-mode { };
 
-  bqn-mode = callPackage ./manual-packages/bqn-mode { };
+  beancount = callPackage ./manual-packages/beancount { };
 
   cask = callPackage ./manual-packages/cask { };
 
@@ -24,8 +24,6 @@ in
   elisp-ffi = callPackage ./manual-packages/elisp-ffi { };
 
   emacspeak = callPackage ./manual-packages/emacspeak { };
-
-  ement = callPackage ./manual-packages/ement { };
 
   ess-R-object-popup = callPackage ./manual-packages/ess-R-object-popup { };
 
@@ -39,8 +37,6 @@ in
 
   haskell-unicode-input-method = callPackage ./manual-packages/haskell-unicode-input-method { };
 
-  header-file-mode = callPackage ./manual-packages/header-file-mode { };
-
   helm-words = callPackage ./manual-packages/helm-words { };
 
   idris2-mode = callPackage ./manual-packages/idris2-mode { };
@@ -50,6 +46,8 @@ in
   isearch-prop = callPackage ./manual-packages/isearch-prop { };
 
   jam-mode = callPackage ./manual-packages/jam-mode { };
+
+  ligo-mode = callPackage ./manual-packages/ligo-mode { };
 
   llvm-mode = callPackage ./manual-packages/llvm-mode { };
 
@@ -77,11 +75,15 @@ in
 
   tree-sitter-langs = callPackage ./manual-packages/tree-sitter-langs { final = self; };
 
+  treesit-grammars = callPackage ./manual-packages/treesit-grammars { };
+
   tsc = callPackage ./manual-packages/tsc { };
 
   urweb-mode = callPackage ./manual-packages/urweb-mode { };
 
   voicemacs = callPackage ./manual-packages/voicemacs { };
+
+  wat-mode = callPackage ./manual-packages/wat-mode { };
 
   yes-no = callPackage ./manual-packages/yes-no { };
 

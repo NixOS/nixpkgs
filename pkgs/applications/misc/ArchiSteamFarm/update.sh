@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=./. -i bash -p curl gnused jq common-updater-scripts
+#!nix-shell -I nixpkgs=./. -i bash -p curl gnused jq common-updater-scripts nix-prefetch prefetch-npm-deps
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 

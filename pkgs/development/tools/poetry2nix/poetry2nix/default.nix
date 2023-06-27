@@ -1,11 +1,10 @@
 { pkgs ? import <nixpkgs> { }
 , lib ? pkgs.lib
-, poetry ? null
 , poetryLib ? import ./lib.nix { inherit lib pkgs; stdenv = pkgs.stdenv; }
 }:
 let
   # Poetry2nix version
-  version = "1.40.1";
+  version = "1.41.0";
 
   inherit (poetryLib) isCompatible readTOML normalizePackageName normalizePackageSet;
 
@@ -18,7 +17,7 @@ let
   toPluginAble = (import ./plugins.nix { inherit pkgs lib; }).toPluginAble;
 
   # List of known build systems that are passed through from nixpkgs unmodified
-  knownBuildSystems = builtins.fromJSON (builtins.readFile ./known-build-systems.json);
+  knownBuildSystems = lib.importJSON ./known-build-systems.json;
   nixpkgsBuildSystems = lib.subtractLists [ "poetry" "poetry-core" ] knownBuildSystems;
 
   mkInputAttrs =
@@ -157,7 +156,7 @@ lib.makeScope pkgs.newScope (self: {
       };
       getFunctorFn = fn: if builtins.typeOf fn == "set" then fn.__functor else fn;
 
-      poetryPkg = pkgs.callPackage ./pkgs/poetry { inherit python; };
+      poetryPkg = pkgs.callPackage ./pkgs/poetry { inherit python; poetry2nix = self; };
 
       scripts = pyProject.tool.poetry.scripts or { };
       hasScripts = scripts != { };
@@ -506,7 +505,7 @@ lib.makeScope pkgs.newScope (self: {
 
     Can be overriden by calling defaultPoetryOverrides.overrideOverlay which takes an overlay function
   */
-  defaultPoetryOverrides = self.mkDefaultPoetryOverrides (import ./overrides { inherit pkgs lib poetryLib; });
+  defaultPoetryOverrides = self.mkDefaultPoetryOverrides (import ./overrides { inherit pkgs lib; });
 
   /*
     Convenience functions for specifying overlays with or without the poerty2nix default overrides

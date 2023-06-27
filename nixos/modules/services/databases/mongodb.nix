@@ -142,7 +142,7 @@ in
           User = cfg.user;
           PIDFile = cfg.pidFile;
           Type = "forking";
-          TimeoutStartSec=120; # intial creating of journal can take some time
+          TimeoutStartSec=120; # initial creating of journal can take some time
           PermissionsStartOnly = true;
         };
 

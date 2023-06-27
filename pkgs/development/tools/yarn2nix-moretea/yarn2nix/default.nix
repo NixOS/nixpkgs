@@ -99,9 +99,17 @@ in rec {
           ""
       ) (builtins.attrNames pkgConfig));
 
-      workspaceJSON = pkgs.writeText
-        "${name}-workspace-package.json"
-        (builtins.toJSON { private = true; workspaces = ["deps/**"]; resolutions = packageResolutions; }); # scoped packages need second splat
+      # build-time JSON generation to avoid IFD
+      # see https://nixos.wiki/wiki/Import_From_Derivation
+      workspaceJSON = pkgs.runCommand "${name}-workspace-package.json"
+        {
+          nativeBuildInputs = [ pkgs.jq ];
+          inherit packageJSON;
+          passAsFile = [ "baseJSON" ];
+          baseJSON = builtins.toJSON { private = true; workspaces = [ "deps/**" ]; resolutions = packageResolutions; };
+        } ''
+        jq --slurpfile packageJSON "$packageJSON" '.resolutions = $packageJSON[0].resolutions + .resolutions' <"$baseJSONPath" >$out
+      '';
 
       workspaceDependencyLinks = lib.concatMapStringsSep "\n"
         (dep: ''

@@ -2,7 +2,7 @@
   mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
   boost, gpgme, kcmutils, kdbusaddons, kiconthemes, kitemmodels, kmime,
-  knotifications, kwindowsystem, kxmlgui, libkleo, kcrash
+  knotifications, kwindowsystem, kxmlgui, libkleo, kcrash, kpipewire
 }:
 
 mkDerivation {
@@ -12,7 +12,7 @@ mkDerivation {
 
   buildInputs = [
     boost gpgme kcmutils kdbusaddons kiconthemes kitemmodels kmime
-    knotifications kwindowsystem kxmlgui libkleo kcrash
+    knotifications kwindowsystem kxmlgui libkleo kcrash kpipewire
   ];
 
   meta = {

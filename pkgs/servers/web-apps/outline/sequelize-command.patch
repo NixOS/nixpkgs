@@ -1,15 +1,22 @@
 diff --git a/server/utils/startup.ts b/server/utils/startup.ts
-index 7554b854..6641f805 100644
+index 444de475..b883f71a 100644
 --- a/server/utils/startup.ts
 +++ b/server/utils/startup.ts
-@@ -8,9 +8,7 @@ import Team from "@server/models/Team";
- export function checkPendingMigrations() {
-   try {
-     const commandResult = execSync(
--      `yarn sequelize db:migrate:status${
--        env.PGSSLMODE === "disable" ? " --env=production-ssl-disabled" : ""
--      }`
-+      "outline-sequelize db:migrate:status"
-     );
-     const commandResultArray = Buffer.from(commandResult)
-       .toString("utf-8")
+@@ -8,7 +8,7 @@ import Team from "@server/models/Team";
+ 
+ function getPendingMigrations() {
+   const commandResult = execSync(
+-    `yarn sequelize db:migrate:status${
++    `outline-sequelize db:migrate:status${
+       env.PGSSLMODE === "disable" ? " --env=production-ssl-disabled" : ""
+     }`
+   );
+@@ -26,7 +26,7 @@ function getPendingMigrations() {
+ function runMigrations() {
+   Logger.info("database", "Running migrations...");
+   const cmdResult = execSync(
+-    `yarn db:migrate${
++    `outline-sequelize db:migrate${
+       env.PGSSLMODE === "disable" ? " --env=production-ssl-disabled" : ""
+     }`
+   );

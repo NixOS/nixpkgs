@@ -12,12 +12,13 @@
 , pytest-httpx
 , pytest-timeout
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "denonavr";
-  version = "0.11.1";
-  format = "setuptools";
+  version = "0.11.2";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -25,8 +26,12 @@ buildPythonPackage rec {
     owner = "ol-iver";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-iYekqqhrcN1rbclFVSbJSF5ky19WsBLKlTxAa2HULqY=";
+    hash = "sha256-Sa5pfvSzshgwHh9LGWPBVIC7pXouZbTmSMYncT46phU=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     asyncstdlib

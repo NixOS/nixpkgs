@@ -46,12 +46,6 @@ rec {
       //
       (drv.passthru or {})
       //
-      # TODO(@Artturin): remove before release 23.05 and only have __spliced.
-      (lib.optionalAttrs (drv ? crossDrv && drv ? nativeDrv) {
-        crossDrv = overrideDerivation drv.crossDrv f;
-        nativeDrv = overrideDerivation drv.nativeDrv f;
-      })
-      //
       lib.optionalAttrs (drv ? __spliced) {
         __spliced = {} // (lib.mapAttrs (_: sDrv: overrideDerivation sDrv f) drv.__spliced);
       });
@@ -176,7 +170,7 @@ rec {
       # Only show the error for the first missing argument
       error = errorForArg (lib.head missingArgs);
 
-    in if missingArgs == [] then makeOverridable f allArgs else throw error;
+    in if missingArgs == [] then makeOverridable f allArgs else abort error;
 
 
   /* Like callPackage, but for a function that returns an attribute

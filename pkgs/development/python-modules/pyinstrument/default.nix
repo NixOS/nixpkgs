@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "pyinstrument";
-  version = "4.1.1";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "joerick";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-4gM60UhzN+VnNMTHw6NSU7/LUPHaMgg105D+dO6SDfg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-HvPapa3b9/Wc4ClaMOmCAIeHS7H4V9aCR9JCDol2ElE=";
   };
 
   # Module import recursion

@@ -7,7 +7,7 @@
 , async_unix
 , cohttp
 , conduit-async
-, core_unix
+, core_unix ? null
 , uri
 , uri-sexp
 , logs

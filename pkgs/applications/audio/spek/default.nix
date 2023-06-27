@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "spek";
-  version = "0.8.4";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "alexkay";
     repo = "spek";
     rev = "v${version}";
-    sha256 = "sha256-JLQx5LlnVe1TT1KVO3/QSVRqYL+pAMCxoDWrnkUNmRU=";
+    sha256 = "sha256-VYt2so2k3Rk3sLSV1Tf1G2pESYiXygrKr9Koop8ChCg=";
   };
 
   nativeBuildInputs = [ autoreconfHook intltool pkg-config wrapGAppsHook ];

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , fetchsvn
 , pkg-config
-, sconsPackages
+, scons
 , libGLU
 , libGL
 , SDL2
@@ -33,7 +33,7 @@ let
       sha256 = "sha256-DrzRF4WzwEXCNALq0jz8nHWZ1oYTEsdrvSYVYI1WkTI=";
     };
 
-    nativeBuildInputs = [ pkg-config sconsPackages.scons_latest ];
+    nativeBuildInputs = [ pkg-config scons ];
     buildInputs = [ libGLU libGL SDL2 SDL2_image libvorbis bullet curl gettext ];
 
     patches = [

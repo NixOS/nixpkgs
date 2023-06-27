@@ -11,15 +11,16 @@
 , mono
 , mpv
 , tesseract4
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "subtitleedit";
-  version = "3.6.11";
+  version = "3.6.13";
 
   src = fetchzip {
     url = "https://github.com/SubtitleEdit/subtitleedit/releases/download/${version}/SE${lib.replaceStrings [ "." ] [ "" ] version}.zip";
-    sha256 = "00w9jx704in3hbnzp0i7bhqkhbl0h5mahc5izwa980b67w08dc26";
+    sha256 = "sha256-LoACcpeK1s6EyM5svnsncTENLAEuRqonNLaQ2q4UFxM=";
     stripRoot = false;
   };
 
@@ -78,6 +79,8 @@ stdenv.mkDerivation rec {
       categories = [ "Video" ];
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A subtitle editor";

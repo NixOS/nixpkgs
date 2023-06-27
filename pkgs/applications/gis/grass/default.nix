@@ -1,29 +1,37 @@
 { lib, stdenv, fetchFromGitHub, flex, bison, pkg-config, zlib, libtiff, libpng, fftw
-, cairo, readline, ffmpeg, makeWrapper, wxGTK32, libiconv, netcdf, blas
+, cairo, readline, ffmpeg, makeWrapper, wxGTK32, libiconv, libxml2, netcdf, blas
 , proj, gdal, geos, sqlite, postgresql, libmysqlclient, python3Packages, proj-datumgrid
 , zstd, pdal, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "grass";
-  version = "8.2.0";
+  version = "8.3.0";
 
   src = with lib; fetchFromGitHub {
     owner = "OSGeo";
     repo = "grass";
     rev = version;
-    sha256 = "sha256-VK9FCqIwHGmeJe5lk12lpAGcsC1aPRBiI+XjACXjDd4=";
+    hash = "sha256-YHQtvp/AYMWme46yIc4lE/izjqVePnPxn3GY5RRfPq4=";
   };
 
   nativeBuildInputs = [
     pkg-config bison flex makeWrapper wrapGAppsHook
-    gdal geos libmysqlclient netcdf pdal
+    gdal # for `gdal-config`
+    geos # for `geos-config`
+    netcdf # for `nc-config`
+    libmysqlclient # for `mysql_config`
   ] ++ (with python3Packages; [ python-dateutil numpy wxPython_4_2 ]);
 
   buildInputs = [
-    cairo zlib proj libtiff libpng fftw sqlite
+    cairo zlib proj libtiff libpng libxml2 fftw sqlite
     readline ffmpeg postgresql blas wxGTK32
     proj-datumgrid zstd
+    gdal
+    geos
+    netcdf
+    libmysqlclient
+    pdal
   ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   strictDeps = true;
@@ -88,11 +96,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://grass.osgeo.org/";
     description = "GIS software suite used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ mpickering willcohen ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; teams.geospatial.members ++ [ mpickering ];
+    platforms = platforms.all;
   };
 }

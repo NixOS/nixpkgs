@@ -6,7 +6,6 @@
 , mypy-extensions
 , numpy
 , pydantic
-, pytest-mypy-plugins
 , pytestCheckHook
 , pythonOlder
 , typing-extensions
@@ -15,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "psygnal";
-  version = "0.8.1";
+  version = "0.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -24,7 +23,7 @@ buildPythonPackage rec {
     owner = "pyapp-kit";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-+VO2OlDzBECkasLBvZWDsqDeooU6CnRFjeI/ISLWAnA=";
+    hash = "sha256-9rYG0XqwFJQojnvM5ygm1RVu9NbeFASns0llOGKaP+4=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -42,7 +41,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     numpy
     pydantic
-    pytest-mypy-plugins
     pytestCheckHook
     wrapt
   ];

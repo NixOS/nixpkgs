@@ -7,13 +7,13 @@
 
 nimPackages.buildNimPackage rec {
   pname = "nitter";
-  version = "unstable-2022-06-04";
+  version = "unstable-2023-05-19";
 
   src = fetchFromGitHub {
     owner = "zedeus";
     repo = "nitter";
-    rev = "138826fb4fbdec73fc6fee2e025fda88f7f2fb49";
-    hash = "sha256-fdzVfzmEFIej6Kb/K9MQyvbN8aN3hO7RetHL53cD59k=";
+    rev = "e3b3b38a2d43a83b5fc2239ab41e864ee686fb2f";
+    hash = "sha256-1BEZcrraPc9qOWLy3Bq8M8G5P4fUmb2IX+T+cStHpmQ=";
   };
 
   patches = [
@@ -56,7 +56,7 @@ nimPackages.buildNimPackage rec {
     homepage = "https://github.com/zedeus/nitter";
     description = "Alternative Twitter front-end";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ erdnaxe ];
+    maintainers = with maintainers; [ erdnaxe infinidoge ];
     mainProgram = "nitter";
   };
 

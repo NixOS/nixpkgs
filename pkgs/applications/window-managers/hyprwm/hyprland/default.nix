@@ -13,6 +13,7 @@
 , libxcb
 , libxkbcommon
 , mesa
+, pango
 , pciutils
 , systemd
 , udis86
@@ -35,27 +36,27 @@ let
   '';
 in
 assert assertXWayland;
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + lib.optionalString debug "-debug";
-  version = "0.23.0beta";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
-    repo = "hyprland";
-    rev = "v${version}";
-    hash = "sha256-aPSmhgof4nIJquHmtxxirIMVv439wTYYCwf1ekS96gA=";
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-LPih0Q//p8IurXG9kGRVGAqV4AUKVYj9xkk3sYYAj6I=";
   };
 
   patches = [
     # make meson use the provided dependencies instead of the git submodules
-    "${src}/nix/meson-build.patch"
+    "${finalAttrs.src}/nix/meson-build.patch"
   ];
 
   postPatch = ''
     # Fix hardcoded paths to /usr installation
     sed -i "s#/usr#$out#" src/render/OpenGL.cpp
     substituteInPlace meson.build \
-      --replace "@GIT_COMMIT_HASH@" '${version}' \
+      --replace "@GIT_COMMIT_HASH@" '${finalAttrs.src.rev}' \
       --replace "@GIT_DIRTY@" ""
   '';
 
@@ -64,11 +65,13 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    wayland-scanner
   ];
 
   outputs = [
     "out"
     "man"
+    "dev"
   ];
 
   buildInputs =
@@ -83,7 +86,7 @@ stdenv.mkDerivation rec {
       udis86
       wayland
       wayland-protocols
-      wayland-scanner
+      pango
       pciutils
       (wlroots.override { inherit enableXWayland hidpiXWayland nvidiaPatches; })
     ]
@@ -101,7 +104,6 @@ stdenv.mkDerivation rec {
     (lib.optional withSystemd "-Dsystemd=enabled")
   ];
 
-
   passthru.providedSessions = [ "hyprland" ];
 
   meta = with lib; {
@@ -112,4 +114,4 @@ stdenv.mkDerivation rec {
     mainProgram = "Hyprland";
     platforms = wlroots.meta.platforms;
   };
-}
+})

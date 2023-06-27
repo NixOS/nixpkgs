@@ -9,6 +9,7 @@
 , dpkg
 , writeScript
 , bash
+, strip-nondeterminism
 , tor
 , zip
 , xz
@@ -41,7 +42,15 @@ stdenv.mkDerivation rec {
     sha256 = "0jisxzajsc4wfvxabvfzd0x9y1fxzg39fkhap1781q7wyi4ry9kd";
   };
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems imagemagick dpkg zip xz ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    dpkg
+    imagemagick
+    makeWrapper
+    strip-nondeterminism
+    xz
+    zip
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -64,8 +73,9 @@ stdenv.mkDerivation rec {
 
     mkdir -p native/linux/x64/
     cp ${bisq-tor} ./tor
-    tar -cJf native/linux/x64/tor.tar.xz tor
+    tar --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cJf native/linux/x64/tor.tar.xz tor
     zip -r opt/bisq/lib/app/desktop-${version}-all.jar native
+    strip-nondeterminism opt/bisq/lib/app/desktop-${version}-all.jar
   '';
 
   installPhase = ''

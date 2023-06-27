@@ -41,7 +41,7 @@ let
 
 in runCommand buildah-unwrapped.name {
   name = "${buildah-unwrapped.pname}-wrapper-${buildah-unwrapped.version}";
-  inherit (buildah-unwrapped) pname version;
+  inherit (buildah-unwrapped) pname version passthru;
 
   preferLocalBuild = true;
 

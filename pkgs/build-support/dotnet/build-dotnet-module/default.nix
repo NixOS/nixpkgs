@@ -12,6 +12,7 @@
 , nuget-to-nix
 , cacert
 , coreutils
+, runtimeShellPackage
 }:
 
 { name ? "${args.pname}-${args.version}"
@@ -74,7 +75,10 @@
 , buildType ? "Release"
   # If set to true, builds the application as a self-contained - removing the runtime dependency on dotnet
 , selfContainedBuild ? false
-  # Whether to explicitly enable UseAppHost when building
+  # Whether to use an alternative wrapper, that executes the application DLL using the dotnet runtime from the user environment. `dotnet-runtime` is provided as a default in case no .NET is installed
+  # This is useful for .NET tools and applications that may need to run under different .NET runtimes
+, useDotnetFromEnv ? false
+  # Whether to explicitly enable UseAppHost when building. This is redundant if useDotnetFromEnv is enabledz
 , useAppHost ? true
   # The dotnet SDK to use.
 , dotnet-sdk ? dotnetCorePackages.sdk_6_0
@@ -158,7 +162,7 @@ stdenvNoCC.mkDerivation (args // {
   # gappsWrapperArgs gets included when wrapping for dotnet, as to avoid double wrapping
   dontWrapGApps = args.dontWrapGApps or true;
 
-  inherit selfContainedBuild useAppHost;
+  inherit selfContainedBuild useAppHost useDotnetFromEnv;
 
   passthru = {
     inherit nuget-source;
@@ -176,14 +180,14 @@ stdenvNoCC.mkDerivation (args // {
           # Note that toString is necessary here as it results in the path at
           # eval time (i.e. to the file in your local Nixpkgs checkout) rather
           # than the Nix store path of the path after it's been imported.
-          if lib.isPath nugetDeps && !lib.hasPrefix "/nix/store/" (toString nugetDeps)
+          if lib.isPath nugetDeps && !lib.hasPrefix "${builtins.storeDir}/" (toString nugetDeps)
           then toString nugetDeps
           else ''$(mktemp -t "${pname}-deps-XXXXXX.nix")'';
       in
       writeShellScript "fetch-${pname}-deps" ''
         set -euo pipefail
 
-        export PATH="${lib.makeBinPath [ coreutils dotnet-sdk (nuget-to-nix.override { inherit dotnet-sdk; }) ]}"
+        export PATH="${lib.makeBinPath [ coreutils runtimeShellPackage dotnet-sdk (nuget-to-nix.override { inherit dotnet-sdk; }) ]}"
 
         for arg in "$@"; do
             case "$arg" in
@@ -261,6 +265,9 @@ stdenvNoCC.mkDerivation (args // {
         cd "$src"
         echo "Restoring project..."
 
+        ${dotnet-sdk}/bin/dotnet tool restore
+        cp -r $HOME/.nuget/packages/* $tmp/nuget_pkgs || true
+
         for rid in "${lib.concatStringsSep "\" \"" runtimeIds}"; do
             (( ''${#projectFiles[@]} == 0 )) && dotnetRestore "" "$rid"
 
@@ -268,6 +275,8 @@ stdenvNoCC.mkDerivation (args // {
                 dotnetRestore "$project" "$rid"
             done
         done
+        # Second copy, makes sure packages restored by ie. paket are included
+        cp -r $HOME/.nuget/packages/* $tmp/nuget_pkgs || true
 
         echo "Succesfully restored project"
 
@@ -284,4 +293,8 @@ stdenvNoCC.mkDerivation (args // {
   } // args.passthru or { };
 
   meta = (args.meta or { }) // { inherit platforms; };
-})
+}
+  # ICU tries to unconditionally load files from /usr/share/icu on Darwin, which makes builds fail
+  # in the sandbox, so disable ICU on Darwin. This, as far as I know, shouldn't cause any built packages
+  # to behave differently, just the dotnet build tool.
+  // lib.optionalAttrs stdenvNoCC.isDarwin { DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = 1; })

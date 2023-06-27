@@ -16,17 +16,11 @@ stdenv.mkDerivation rec {
     hash = "sha512-f7tBgIykcIdkwcFjBKk5ooD/5Bsyrd/0OFr7LNCwWFYeE4DH3XA7UR7YjArkwqUVCVBByr82EOaacw0g1blOkw==";
   };
 
-  patches = [
-    (fetchpatch {
-      # https://github.com/raspberrypi/userland/pull/670
-      url = "https://github.com/raspberrypi/userland/commit/37cb44f314ab1209fe2a0a2449ef78893b1e5f62.patch";
-      sha256 = "1fbrbkpc4cc010ji8z4ll63g17n6jl67kdy62m74bhlxn72gg9rw";
-    })
-  ];
-
   nativeBuildInputs = [ cmake pkg-config ];
   cmakeFlags = [
-    (if (stdenv.hostPlatform.isAarch64) then "-DARM64=ON" else "-DARM64=OFF")
+    # -DARM64=ON disables all targets that only build on 32-bit ARM; this allows
+    # the package to build on aarch64 and other architectures
+    "-DARM64=${if stdenv.hostPlatform.isAarch32 then "OFF" else "ON"}"
     "-DVMCS_INSTALL_PREFIX=${placeholder "out"}"
   ];
 

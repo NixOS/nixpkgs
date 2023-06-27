@@ -2,14 +2,14 @@
 
 let
   pname = "psalm";
-  version = "5.4.0";
+  version = "5.9.0";
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/vimeo/psalm/releases/download/${version}/psalm.phar";
-    sha256 = "sha256-d5jf68s+LppUDwERQaqr+ry8L+Zmob8VwetYkQ+vIUg=";
+    sha256 = "sha256-56vLT/t+3f5ZyH1pFmgy4vtSMQcDYLQZIF/iIkwd2vM=";
   };
 
   dontUnpack = true;

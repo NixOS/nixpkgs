@@ -1,6 +1,6 @@
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
-from typing import Any, cast, Optional
+from typing import cast, Optional
 
 from .md import md_escape, md_make_code, Renderer
 

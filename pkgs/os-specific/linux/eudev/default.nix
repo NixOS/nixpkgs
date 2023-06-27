@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "eudev";
-  version = "3.2.11";
+  version = "3.2.12";
 
   src = fetchFromGitHub {
     owner = "eudev-project";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-W5nL4hicQ4fxz5rqoP+hhkE1tVn8lJZjMq4UaiXH6jc=";
+    hash = "sha256-x9l+W8zuFYwG0m9JOIDbEf1x6yeBW36HnJws/buc7HI=";
   };
 
   nativeBuildInputs = [

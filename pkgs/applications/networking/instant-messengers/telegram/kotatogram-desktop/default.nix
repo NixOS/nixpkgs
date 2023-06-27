@@ -16,7 +16,7 @@
 , kwayland
 , lz4
 , xxHash
-, ffmpeg
+, ffmpeg_4
 , openalSoft
 , minizip
 , libopus
@@ -29,7 +29,7 @@
 , jemalloc
 , rnnoise
 , abseil-cpp
-, microsoft_gsl
+, microsoft-gsl
 , wayland
 , libicns
 , Cocoa
@@ -132,7 +132,7 @@ stdenv.mkDerivation rec {
     qtsvg
     lz4
     xxHash
-    ffmpeg
+    ffmpeg_4
     openalSoft
     minizip
     libopus
@@ -140,7 +140,7 @@ stdenv.mkDerivation rec {
     tl-expected
     rnnoise
     tg_owt
-    microsoft_gsl
+    microsoft-gsl
   ] ++ lib.optionals stdenv.isLinux [
     kwayland
     alsa-lib
@@ -199,7 +199,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     binName=${if stdenv.isLinux then "kotatogram-desktop" else "Kotatogram"}
     remove-references-to -t ${stdenv.cc.cc} $out/bin/$binName
-    remove-references-to -t ${microsoft_gsl} $out/bin/$binName
+    remove-references-to -t ${microsoft-gsl} $out/bin/$binName
     remove-references-to -t ${tg_owt.dev} $out/bin/$binName
   '';
 

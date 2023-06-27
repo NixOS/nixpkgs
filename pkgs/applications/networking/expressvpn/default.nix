@@ -1,5 +1,5 @@
 { autoPatchelfHook
-, buildFHSUserEnv
+, buildFHSEnv
 , dpkg
 , fetchurl
 , inotify-tools
@@ -41,7 +41,7 @@ let
     '';
   };
 
-  expressvpndFHS = buildFHSUserEnv {
+  expressvpndFHS = buildFHSEnv {
     name = "expressvpnd";
 
     # When connected, it directly creates/deletes resolv.conf to change the DNS entries.

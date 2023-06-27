@@ -19,13 +19,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ruffle";
-  version = "nightly-2022-12-16";
+  version = "nightly-2023-04-10";
 
   src = fetchFromGitHub {
     owner = "ruffle-rs";
     repo = pname;
     rev = version;
-    sha256 = "sha256-VOaXn/dJB0AbuZ8owBbUYEPrL/H8DM73MhwhBjxq2Pg=";
+    sha256 = "sha256-u5Ri9KnYzE3JedUP9fGgYeG8G9uxrL6/zt3KPiKjhU0=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +71,25 @@ rustPlatform.buildRustPackage rec {
       "''${gappsWrapperArgs[@]}"
   '';
 
-  cargoSha256 = "sha256-h5qshincT48zYvbNLMXcvxw7Ovupnn9c93lpqY7oNtc=";
+  cargoBuildFlags = [ "--workspace" ];
+
+  # Currently, buildRustPackage can't handle having both the Crates.io dasp-0.11
+  # and the git dasp-0.11, as it tries to symlink both to the same place. For
+  # now, unify both dasp versions to the (newer) Git version.
+  # Related issues: #22177, #183344
+  cargoPatches = [ ./unify-dasp-version.patch ];
+
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "dasp-0.11.0" = "sha256-CZNgTLL4IG7EJR2xVp9X9E5yre8foY6VX2hUMRawxiI=";
+      "flash-lso-0.5.0" = "sha256-9uH3quxRzLtmHJs5WF/GRxWkXL/KFyOl182HKcHNnuc=";
+      "gc-arena-0.2.2" = "sha256-/H9VcTesBD+IA7bUf208b0HQ/cIUDAz9TJBBywf6akA=";
+      "h263-rs-0.1.0" = "sha256-4kBg09VHyiQTvUbvcTb5g/BVcOpRFZ1fVEuRWXv5XwE=";
+      "nellymoser-rs-0.1.2" = "sha256-GykDQc1XwySOqfxW/OcSxkKCFJyVmwSLy/CEBcwcZJs=";
+      "nihav_codec_support-0.1.0" = "sha256-rE9AIiQr+PnHC9xfDQULndSfFHSX4sqKkCAQYVNaJcQ=";
+    };
+  };
 
   meta = with lib; {
     description = "An Adobe Flash Player emulator written in the Rust programming language.";

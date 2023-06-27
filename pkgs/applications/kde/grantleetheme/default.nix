@@ -16,4 +16,8 @@ mkDerivation {
     grantlee ki18n kiconthemes knewstuff kservice kxmlgui qtbase
   ];
   propagatedBuildInputs = [ grantlee kiconthemes knewstuff ];
+  postInstall = ''
+    # added as an include directory by cmake files and fails to compile if it's missing
+    mkdir -p "$dev/include/KF5"
+  '';
 }

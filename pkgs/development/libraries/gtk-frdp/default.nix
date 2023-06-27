@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gtk-frdp";
-  version = "unstable-2022-04-11";
+  version = "unstable-2023-04-14";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = pname;
-    rev = "d7f408fb23adc01db14c708b35b74a317418de4b";
-    sha256 = "EyReJX3f7G5+EEB/gbLTnrxdltedbzm7Bg02hCb+XO0=";
+    rev = "9af99d95ed532128c1856e7a1bfd0b59dd61a35f";
+    sha256 = "cz4JJ/NKBYBv5bw18BBfwtWtxPWGBmrwSHgTZ1hS3Qk=";
   };
 
   nativeBuildInputs = [
@@ -39,9 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = unstableGitUpdater {
-      branch = "gtk-frdp-0-1";
-    };
+    updateScript = unstableGitUpdater { };
   };
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [

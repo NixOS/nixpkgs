@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "unearth";
-  version = "0.7.2";
+  version = "0.9.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4jQbp7meQxlVoQzT2gwVqw1CpfnLPx4/Rg30K8M5bc8=";
+    hash = "sha256-cgWDKwhwBdG3RpA6U1yn0NtTgcH2Id3AApBSTVav0hc=";
   };
 
   nativeBuildInputs = [

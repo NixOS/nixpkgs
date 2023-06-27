@@ -8,7 +8,7 @@
 }:
 
 assert lib.elem ui [ "terminal" "curses" ];
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "2048-cli";
   version = "unstable-2019-12-10";
 
@@ -57,5 +57,6 @@ stdenv.mkDerivation (self: {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.AndersonTorres ];
     platforms = lib.platforms.unix;
+    mainProgram = "2048";
   };
 })

@@ -26,8 +26,12 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = with python3.pkgs; [
-    pytest-runner
-    pytest
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # uses unsupported crypt method
+    "test_htpasswd_crypt"
   ];
 
   meta = with lib; {

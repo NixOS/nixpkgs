@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, nawk, groff, icon-lang, useIcon ? true }:
 
-lib.fix (noweb: stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "noweb";
   version = "2.12";
 
@@ -70,8 +70,10 @@ lib.fix (noweb: stdenv.mkDerivation rec {
 
   outputs = [ "out" "tex" ];
 
-  tlType = "run";
-  passthru.pkgs = [ noweb.tex ];
+  passthru = {
+    tlType = "run";
+    pkgs = [ finalAttrs.finalPackage.tex ];
+  };
 
   meta = with lib; {
     description = "A simple, extensible literate-programming tool";

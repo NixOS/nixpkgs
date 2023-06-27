@@ -47,14 +47,23 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mkvtoolnix";
-  version = "74.0.0";
+  version = "77.0";
 
   src = fetchFromGitLab {
     owner = "mbunkus";
     repo = "mkvtoolnix";
     rev = "release-${version}";
-    sha256 = "sha256-p8rIAHSqYCOlNbuxisQlIkMh2OArc+MOYn1kgC5kJsc=";
+    sha256 = "t+kfFS5c8w+c9wxNh59nceFesfdMy8qvHlUqDbZAxkk=";
   };
+
+  patches = [
+    # Fix compatiblity with fmt 10.0. Remove with the next release
+    (fetchpatch {
+      url = "https://gitlab.com/mbunkus/mkvtoolnix/-/commit/24716ce95bf5b10d685611de23489045cf2ca5cc.patch";
+      hash = "sha256-vOm3FmXL3mHzs3RHCJ9gbTLSe3xhSXo8IfgA+s0cFjY=";
+      includes = [ "src/common/codec.h" ];
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook

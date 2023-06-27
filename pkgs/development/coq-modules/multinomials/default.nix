@@ -9,6 +9,7 @@
 
   inherit version;
   defaultVersion =  with lib.versions; lib.switch [ coq.version mathcomp.version ] [
+      { cases = [ (isGe "8.15") (isGe "1.15.0") ];      out = "1.6.0"; }
       { cases = [ (isGe "8.10") (isGe "1.13.0") ];      out = "1.5.6"; }
       { cases = [ (range "8.10" "8.16") (range "1.12.0" "1.15.0") ]; out = "1.5.5"; }
       { cases = [ (range "8.10" "8.12") "1.12.0" ];             out = "1.5.3"; }
@@ -18,6 +19,7 @@
       { cases = [ "8.6"                 (range "1.6" "1.7") ];  out = "1.1"; }
     ] null;
   release = {
+    "1.6.0".sha256 = "sha256-lEM+sjqajIOm1c3lspHqcSIARgMR9RHbTQH4veHLJfU=";
     "1.5.6".sha256 = "sha256-cMixgc34T9Ic6v+tYmL49QUNpZpPV5ofaNuHqblX6oY=";
     "1.5.5".sha256 = "sha256-VdXA51vr7DZl/wT/15YYMywdD7Gh91dMP9t7ij47qNQ=";
     "1.5.4".sha256 = "0s4sbh4y88l125hdxahr56325hdhxxdmqmrz7vv8524llyv3fciq";

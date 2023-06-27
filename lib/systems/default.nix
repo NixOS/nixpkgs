@@ -9,6 +9,24 @@ rec {
   examples = import ./examples.nix { inherit lib; };
   architectures = import ./architectures.nix { inherit lib; };
 
+  /*
+    Elaborated systems contain functions, which means that they don't satisfy
+    `==` for a lack of reflexivity.
+
+    They might *appear* to satisfy `==` reflexivity when the same exact value is
+    compared to itself, because object identity is used as an "optimization";
+    compare the value with a reconstruction of itself, e.g. with `f == a: f a`,
+    or perhaps calling `elaborate` twice, and one will see reflexivity fail as described.
+
+    Hence a custom equality test.
+
+    Note that this does not canonicalize the systems, so you'll want to make sure
+    both arguments have been `elaborate`-d.
+  */
+  equals =
+    let removeFunctions = a: lib.filterAttrs (_: v: !builtins.isFunction v) a;
+    in a: b: removeFunctions a == removeFunctions b;
+
   /* List of all Nix system doubles the nixpkgs flake will expose the package set
      for. All systems listed here must be supported by nixpkgs as `localSystem`.
 
@@ -50,6 +68,7 @@ rec {
         else if final.isFreeBSD             then "fblibc"
         else if final.isNetBSD              then "nblibc"
         else if final.isAvr                 then "avrlibc"
+        else if final.isGhcjs               then null
         else if final.isNone                then "newlib"
         # TODO(@Ericson2314) think more about other operating systems
         else                                     "native/impure";
@@ -120,7 +139,7 @@ rec {
         ({
           linux-kernel = args.linux-kernel or {};
           gcc = args.gcc or {};
-          rustc = args.rust or {};
+          rustc = args.rustc or {};
         } // platforms.select final)
         linux-kernel gcc rustc;
 
@@ -136,6 +155,7 @@ rec {
         else if final.isPower then "powerpc"
         else if final.isRiscV then "riscv"
         else if final.isS390 then "s390"
+        else if final.isLoongArch64 then "loongarch"
         else final.parsed.cpu.name;
 
       qemuArch =
@@ -143,6 +163,7 @@ rec {
         else if final.isS390 && !final.isS390x then null
         else if final.isx86_64 then "x86_64"
         else if final.isx86 then "i386"
+        else if final.isMips64 then "mips64${lib.optionalString final.isLittleEndian "el"}"
         else final.uname.processor;
 
       # Name used by UEFI for architectures.
@@ -185,12 +206,12 @@ rec {
               pulseSupport = false;
               smbdSupport = false;
               seccompSupport = false;
+              enableDocs = false;
               hostCpuTargets = [ "${final.qemuArch}-linux-user" ];
             };
             wine = (pkgs.winePackagesFor "wine${toString final.parsed.cpu.bits}").minimal;
           in
-          if final.parsed.kernel.name == pkgs.stdenv.hostPlatform.parsed.kernel.name &&
-            pkgs.stdenv.hostPlatform.canExecute final
+          if pkgs.stdenv.hostPlatform.canExecute final
           then "${pkgs.runtimeShell} -c '\"$@\"' --"
           else if final.isWindows
           then "${wine}/bin/wine${lib.optionalString (final.parsed.cpu.bits == 64) "64"}"

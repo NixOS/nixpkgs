@@ -11,10 +11,14 @@ stdenv.mkDerivation rec{
 
   prePatch = ''
     sed -i -e "s|/usr/local/bin|$out/bin|g" -e "s|/usr/share|$out/share|g" Makefile antiword.h
-    substituteInPlace Makefile --replace "gcc" "cc"
+    substituteInPlace Makefile --replace "gcc" '$(CC)'
   '';
 
   patches = [ ./10_fix_buffer_overflow_wordole_c_CVE-2014-8123.patch ];
+
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
   installTargets = [ "global_install" ];
 

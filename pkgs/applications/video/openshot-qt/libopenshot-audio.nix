@@ -13,6 +13,7 @@
 , libXrandr
 , pkg-config
 , zlib
+, Accelerate
 , AGL
 , Cocoa
 , Foundation
@@ -20,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libopenshot-audio";
-  version = "0.3.0";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "libopenshot-audio";
     rev = "v${version}";
-    sha256 = "sha256-b3BZ275oJTxWfBWtdZetUQw0t7QznL0Q0lP7cKy/avg=";
+    sha256 = "sha256-PLpB9sy9xehipN5S9okCHm1mPm5MaZMVaFqCBvFUiTw=";
   };
 
   patches = [
@@ -43,18 +44,19 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals stdenv.isLinux [
     alsa-lib
   ] ++ (if stdenv.isDarwin then [
-      AGL
-      Cocoa
-      Foundation
-      zlib
-    ] else [
-      libX11
-      libXcursor
-      libXext
-      libXft
-      libXinerama
-      libXrandr
-    ]);
+    Accelerate
+    AGL
+    Cocoa
+    Foundation
+    zlib
+  ] else [
+    libX11
+    libXcursor
+    libXext
+    libXft
+    libXinerama
+    libXrandr
+  ]);
 
   doCheck = false;
 

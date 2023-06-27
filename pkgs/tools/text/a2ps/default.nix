@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "a2ps";
-  version = "4.15.1";
+  version = "4.15.4";
 
   src = fetchurl {
     url = "mirror://gnu/a2ps/a2ps-${version}.tar.gz";
-    hash = "sha256-l5dwi6AoBa/DtbkeBsuOrJe4WEOpDmbP3mp8Y8oEKyo=";
+    hash = "sha256-SgY/hLqJ2GvhSmcEyjX9EwCDtXLxN2tDmht5tnsgbdc=";
   };
 
   postPatch = ''

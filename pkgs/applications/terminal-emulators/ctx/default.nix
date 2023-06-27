@@ -1,44 +1,62 @@
 { lib
 , stdenv
 , fetchgit
+, pkg-config
+, xxd
 , SDL2
 , alsa-lib
 , babl
+, bash
+, cairo
 , curl
 , libdrm # Not documented
-, pkg-config
 , enableFb ? false
 , nixosTests
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ctx";
-  version = "0.pre+date=2021-10-09";
+  version = "unstable-2023-06-05";
 
   src = fetchgit {
     name = "ctx-source"; # because of a dash starting the directory
     url = "https://ctx.graphics/.git/";
-    rev = "d11d0d1a719a3c77712528e2feed8c0878e0ea64";
-    sha256 = "sha256-Az3POgdvDOVaaRtzLlISDODhAKbefpGx5KgwO3dttqs=";
+    rev = "2eb3886919d0a0b8c305e4f9e18428dad5e73ca0";
+    sha256 = "sha256-PLUyGArxLU742IKIgpzxdBdc94mWWSkHNFoXGW8L/Zo=";
   };
+
+  patches = [
+    ./0001-Make-arch-detection-optional-and-fix-targets.patch
+  ];
+
+  postPatch = ''
+    patchShebangs ./tools/gen_fs.sh
+  '';
+
+  strictDeps = true;
+
+  env.ARCH = stdenv.hostPlatform.parsed.cpu.arch;
 
   nativeBuildInputs = [
     pkg-config
+    xxd
   ];
 
   buildInputs = [
     SDL2
     alsa-lib
     babl
+    bash # for ctx-audioplayer
+    cairo
     curl
     libdrm
   ];
 
   configureScript = "./configure.sh";
   configureFlags = lib.optional enableFb "--enable-fb";
+  configurePlatforms = [];
   dontAddPrefix = true;
-
-  hardeningDisable = [ "format" ];
+  dontDisableStatic = true;
 
   installFlags = [
     "PREFIX=${placeholder "out"}"

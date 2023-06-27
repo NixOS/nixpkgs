@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "hut";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromSourcehut {
     owner = "~emersion";
     repo = "hut";
     rev = "v${version}";
-    sha256 = "sha256-g9KbOtZaBAgy/iBBh/Tv5ULJNnNzwzZpA6DOynl+dnk=";
+    sha256 = "sha256-kr5EWQ3zHUp/oNPZV2d3j9AyoEmHEX8/rETiMKTBi3s=";
   };
 
-  vendorSha256 = "sha256-vuAx8B34Za+GEtekFOUaY07hBk3O2OaJ1JmulbIhwbs=";
+  vendorHash = "sha256-aoqGb7g8UEC/ydmL3GbWGy3HDD1kfDJOMeUP4nO9waA=";
 
   nativeBuildInputs = [
     scdoc

@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openseachest";
-  version = "23.03";
+  version = "23.03.1";
 
   src = fetchFromGitHub {
     owner = "Seagate";
     repo = "openSeaChest";
     rev = "v${version}";
-    sha256 = "sha256-D/TvT+LnAVhkQ32U+VdW7AA3BfKurmK4mwIY8vwXIpc=";
+    sha256 = "sha256-jDCCozHeOazB3cM/9TlwHq1pu7yTiD818jykHeQ+RBo=";
     fetchSubmodules = true;
   };
 

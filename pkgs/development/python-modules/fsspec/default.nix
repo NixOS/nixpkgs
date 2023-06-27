@@ -13,8 +13,6 @@
 , requests
 , smbprotocol
 , tqdm
-
-# optionals
 , adlfs
 , dask
 , distributed
@@ -31,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "fsspec";
-  version = "2022.10.0";
+  version = "2023.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -40,7 +38,7 @@ buildPythonPackage rec {
     owner = "fsspec";
     repo = "filesystem_spec";
     rev = version;
-    hash = "sha256-+lPt/zqI3Mkt+QRNXq+Dxm3h/ryZJsfrmayVi/BTtbg=";
+    hash = "sha256-qkvhmXJNxA8v+kbZ6ulxJAQr7ReQpb+JkbhOUnL59KM=";
   };
 
   propagatedBuildInputs = [
@@ -137,6 +135,9 @@ buildPythonPackage rec {
     # test accesses this remote ftp server:
     # https://ftp.fau.de/debian-cd/current/amd64/log/success
     "test_find"
+    # Tests want to access S3
+    "test_urlpath_inference_errors"
+    "test_mismatch"
   ] ++ lib.optionals (stdenv.isDarwin) [
     # works locally on APFS, fails on hydra with AssertionError comparing timestamps
     # darwin hydra builder uses HFS+ and has only one second timestamp resolution

@@ -2,7 +2,7 @@
 
 { alsa-lib
 , bash
-, buildFHSUserEnv
+, buildFHSEnv
 , cacert
 , coreutils
 , dbus
@@ -38,7 +38,7 @@
 , makeWrapper
 , ncurses5
 , nspr
-, nss
+, nss_latest
 , pciutils
 , pkgsi686Linux
 , ps
@@ -146,7 +146,7 @@ let
           libXfixes
           libGL
           nspr
-          nss
+          nss_latest
           systemd
 
           # For GTKLookAndFeel
@@ -178,7 +178,7 @@ let
   # Android Studio downloads prebuilt binaries as part of the SDK. These tools
   # (e.g. `mksdcard`) have `/lib/ld-linux.so.2` set as the interpreter. An FHS
   # environment is used as a work around for that.
-  fhsEnv = buildFHSUserEnv {
+  fhsEnv = buildFHSEnv {
     name = "${drvName}-fhs-env";
     multiPkgs = pkgs: [
       ncurses5
@@ -227,6 +227,7 @@ in runCommand
         canary = [ alapshin ];
         dev = canary;
       }."${channel}";
+      mainProgram = pname;
     };
   }
   ''

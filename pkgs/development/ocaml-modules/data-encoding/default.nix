@@ -5,7 +5,7 @@
 , either
 , ezjsonm
 , zarith
-, zarith_stubs_js
+, zarith_stubs_js ? null
 , hex
 , json-data-encoding
 , json-data-encoding-bson
@@ -16,7 +16,7 @@
 
 buildDunePackage rec {
   pname = "data-encoding";
-  version = "0.6";
+  version = "0.7.1";
 
   duneVersion = "3";
   minimalOCamlVersion = "4.10";
@@ -25,7 +25,7 @@ buildDunePackage rec {
     owner = "nomadic-labs";
     repo = "data-encoding";
     rev = "v${version}";
-    hash = "sha256-oQEV7lTG+/q1UcPsepPM4yN4qia6tEtRPkTkTVdGXE0=";
+    hash = "sha256-V3XiCCtoU+srOI+KVSJshtaSJLBJ4m4o10GpBfdYKCU=";
   };
 
   propagatedBuildInputs = [

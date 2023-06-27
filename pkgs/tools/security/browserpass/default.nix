@@ -1,4 +1,14 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, gnupg }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, gnupg
+, makeWrapper
+, autoPatchelfHook
+, testers
+, browserpass
+}:
+
 buildGoModule rec {
   pname = "browserpass";
   version = "3.1.0";
@@ -10,11 +20,11 @@ buildGoModule rec {
     sha256 = "sha256-UZzOPRRiCUIG7uSSp9AEPMDN/+4cgyK47RhrI8oUx8U=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
   vendorHash = "sha256-CjuH4ANP2bJDeA+o+1j+obbtk5/NVLet/OFS3Rms4r0=";
 
-  doCheck = false;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   postPatch = ''
     # Because this Makefile will be installed to be used by the user, patch
@@ -32,8 +42,10 @@ buildGoModule rec {
   '';
 
   buildPhase = ''
-    make
+    make browserpass
   '';
+
+  checkTarget = "test";
 
   installPhase = ''
     make install
@@ -45,6 +57,11 @@ buildGoModule rec {
     mkdir -p $out/lib/mozilla/native-messaging-hosts
     ln -s $out/lib/browserpass/hosts/firefox/*.json $out/lib/mozilla/native-messaging-hosts
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = browserpass;
+    command = "browserpass --version";
+  };
 
   meta = with lib; {
     description = "Browserpass native client app";

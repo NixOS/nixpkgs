@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "watchlog";
-  version = "1.197.0";
+  version = "1.213.0";
 
   src = fetchFromGitLab {
     owner = "kevincox";
     repo = "watchlog";
     rev = "v${version}";
-    sha256 = "sha256-6/SF+bsf4KAVdbda8AmeNxZiOZsyU2MfGmR4b+geETE=";
+    sha256 = "sha256-UNywUEhhJy2cJIwl/S9hRReoBfkzvNoN0c4mxp7PuG0=";
   };
 
-  cargoSha256 = "sha256-8lBHsWGzu0h+hHsFK4DuPz6cTsgOT3JZFbsecJskdok=";
+  cargoSha256 = "sha256-HBlfSgR96XIUBj2ZyHi1qaEKP8jG9kcrxJmhIGWjfUE=";
 
   meta = {
     description = "Easier monitoring of live logs";
@@ -25,5 +25,6 @@ rustPlatform.buildRustPackage rec {
 
     # Dependency only supports Linux + Windows: https://github.com/mentaljam/standard_paths/tree/master/src
     platforms = with lib.platforms; linux ++ windows;
+    mainProgram = "wl";
   };
 }

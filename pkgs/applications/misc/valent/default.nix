@@ -5,9 +5,11 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, vala
+, wrapGAppsHook4
 , evolution-data-server-gtk4
 , glib
+, glib-networking
 , gnutls
 , gst_all_1
 , json-glib
@@ -20,14 +22,14 @@
 
 stdenv.mkDerivation rec {
   pname = "valent";
-  version = "unstable-2023-03-02";
+  version = "unstable-2023-06-11";
 
   src = fetchFromGitHub {
     owner = "andyholmes";
     repo = "valent";
-    rev = "4b60f28f46bc948c5f3b30189bb9b5fbe29d2745";
+    rev = "e6a121efa7eb7b432517d610de4deea6dfa876b0";
     fetchSubmodules = true;
-    sha256 = "sha256-ltf/srQLqtqE71sxEh7VTQqXy2wOpTSdGDsjITOt3f8=";
+    hash = "sha256-8X4Yu8VY5ehptJN1KtsCuoECtEZNLZMzOvU91j8UmDk=";
   };
 
   nativeBuildInputs = [
@@ -35,12 +37,14 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    vala
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     evolution-data-server-gtk4
     glib
+    glib-networking
     gnutls
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -61,7 +65,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/andyholmes/valent/";
     changelog = "https://github.com/andyholmes/valent/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ gpl3Plus cc0 ];
-    maintainers = with maintainers; [ federicoschonborn ];
+    maintainers = with maintainers; [ federicoschonborn aleksana ];
     platforms = platforms.linux;
   };
 }

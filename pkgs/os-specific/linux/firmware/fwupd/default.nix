@@ -2,7 +2,6 @@
 
 { stdenv
 , lib
-, fetchurl
 , fetchFromGitHub
 , gi-docgen
 , pkg-config
@@ -28,7 +27,6 @@
 , ninja
 , gcab
 , gnutls
-, pandoc
 , protobufc
 , python3
 , wrapGAppsNoGuiHook
@@ -60,6 +58,7 @@
 
 let
   python = python3.withPackages (p: with p; [
+    jinja2
     pygobject3
     setuptools
   ]);
@@ -124,7 +123,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "1.8.12";
+  version = "1.9.2";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -135,7 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     rev = finalAttrs.version;
-    hash = "sha256-a4F7skyukl4jW3apGi1ie/EcuGlkZoszyZdtLFuJewA=";
+    hash = "sha256-ESBTT7KO4WZKS5ArXZI0pxQpfFK4h4HbClaITm5bxfU=";
   };
 
   patches = [
@@ -171,7 +170,6 @@ stdenv.mkDerivation (finalAttrs: {
     valgrind
     gcab
     gnutls
-    pandoc
     protobufc # for protoc
     python
     wrapGAppsNoGuiHook
@@ -264,6 +262,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs \
       contrib/generate-version-script.py \
+      contrib/generate-man.py \
       po/test-deps
 
     substituteInPlace data/installed-tests/fwupdmgr-p2p.sh \
@@ -298,16 +297,6 @@ stdenv.mkDerivation (finalAttrs: {
     echo "12345678901234567890123456789012" > machine-id
     export NIX_REDIRECTS=/etc/machine-id=$(realpath machine-id) \
     LD_PRELOAD=${libredirect}/lib/libredirect.so
-  '';
-
-  preInstall = ''
-    # We have pkexec on PATH so Meson will try to use it when installation fails
-    # due to being unable to write to e.g. /etc.
-    # Let’s pretend we already ran pkexec –
-    # the pkexec on PATH would complain it lacks setuid bit,
-    # obscuring the underlying error.
-    # https://github.com/mesonbuild/meson/blob/492cc9bf95d573e037155b588dc5110ded4d9a35/mesonbuild/minstall.py#L558
-    export PKEXEC_UID=-1
   '';
 
   postInstall = ''
@@ -350,12 +339,11 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     filesInstalledToEtc = [
       "fwupd/bios-settings.d/README.md"
-      "fwupd/daemon.conf"
+      "fwupd/fwupd.conf"
       "fwupd/remotes.d/lvfs-testing.conf"
       "fwupd/remotes.d/lvfs.conf"
       "fwupd/remotes.d/vendor.conf"
       "fwupd/remotes.d/vendor-directory.conf"
-      "fwupd/uefi_capsule.conf"
       "pki/fwupd/GPG-KEY-Linux-Foundation-Firmware"
       "pki/fwupd/GPG-KEY-Linux-Vendor-Firmware-Service"
       "pki/fwupd/LVFS-CA.pem"
@@ -365,12 +353,6 @@ stdenv.mkDerivation (finalAttrs: {
       "grub.d/35_fwupd"
     ] ++ lib.optionals haveDell [
       "fwupd/remotes.d/dell-esrt.conf"
-    ] ++ lib.optionals haveRedfish [
-      "fwupd/redfish.conf"
-    ] ++ lib.optionals haveMSR [
-      "fwupd/msr.conf"
-    ] ++ lib.optionals isx86 [
-      "fwupd/thunderbolt.conf"
     ];
 
     # DisabledPlugins key in fwupd/daemon.conf
@@ -405,7 +387,7 @@ stdenv.mkDerivation (finalAttrs: {
           assert len(passthru_etc - package_etc) == 0, f'fwupd package lists the following paths in passthru.filesInstalledToEtc that are not contained in /etc: {passthru_etc - package_etc}'
 
           config = configparser.RawConfigParser()
-          config.read('${finalAttrs.finalPackage}/etc/fwupd/daemon.conf')
+          config.read('${finalAttrs.finalPackage}/etc/fwupd/fwupd.conf')
           package_disabled_plugins = config.get('fwupd', 'DisabledPlugins').rstrip(';').split(';')
           passthru_disabled_plugins = ${listToPy finalAttrs.passthru.defaultDisabledPlugins}
           assert package_disabled_plugins == passthru_disabled_plugins, f'Default disabled plug-ins in the package {package_disabled_plugins} do not match those listed in passthru.defaultDisabledPlugins {passthru_disabled_plugins}'

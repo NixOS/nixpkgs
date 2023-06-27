@@ -7,20 +7,21 @@
 , alsa-lib
 , dbus
 , fontconfig
+, libsixel
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "spotify-player";
-  version = "0.12.1";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "aome510";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-KHbeCnsdHP7Zsj9KeVLuumcVOW6m7Tz1GgBBQ25Rbyo=";
+    hash = "sha256-+YPtu3hsKvk2KskVSpqcFufnWL5PxN8+xbkcz/JXW6g=";
   };
 
-  cargoHash = "sha256-51xKCiGdvJ8k9ArWBCazJGgRljqHxZiyTdes4i7JZH8=";
+  cargoHash = "sha256-WgQ+v9dJyriqq7+WpXpPhjdwm2Sr0jozA1oW2inSPik=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,6 +33,7 @@ rustPlatform.buildRustPackage rec {
     alsa-lib
     dbus
     fontconfig
+    libsixel
   ];
 
   buildNoDefaultFeatures = true;
@@ -41,6 +43,10 @@ rustPlatform.buildRustPackage rec {
     "media-control"
     "image"
     "lyric-finder"
+    "daemon"
+    "notify"
+    "streaming"
+    "sixel"
   ];
 
   meta = with lib; {

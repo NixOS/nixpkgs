@@ -1,27 +1,28 @@
 { lib
 , fetchFromGitHub
-, llvmPackages
+, llvmPackages_12
 , boost
 , cmake
-, gtest
 , spdlog
 , libxml2
 , libffi
 , Foundation
+, testers
 }:
 
 let
+  llvmPackages = llvmPackages_12;
   stdenv = llvmPackages.stdenv;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wasmedge";
-  version = "0.11.2";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "WasmEdge";
     repo = "WasmEdge";
-    rev = version;
-    sha256 = "sha256-P2Y2WK6G8aEK1Q4hjrS9X+2WbOfy4brclB/+SWP5LTM=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-pBaa90jvR4tLgVOBZEJOEUY2+VnBmdSN5kkJMB8wdUA=";
   };
 
   nativeBuildInputs = [
@@ -46,12 +47,21 @@ stdenv.mkDerivation rec {
     "-DWASMEDGE_FORCE_DISABLE_LTO=ON"
   ];
 
+  postPatch = ''
+    echo -n $version > VERSION
+  '';
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+  };
+
   meta = with lib; {
     homepage = "https://wasmedge.org/";
     license = with licenses; [ asl20 ];
     description = "A lightweight, high-performance, and extensible WebAssembly runtime for cloud native, edge, and decentralized applications";
     maintainers = with maintainers; [ dit7ya ];
-    # error: no member named 'utimensat' in the global namespace
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    platforms = platforms.all;
   };
-}
+})

@@ -19,6 +19,9 @@ stdenv.mkDerivation rec {
   patches = [
     # https://github.com/Edward-Wu/srt-live-server/pull/94
     ./fix-insecure-printfs.patch
+
+    # https://github.com/Edward-Wu/srt-live-server/pull/127  # adds `#include <ctime>`
+    ./add-ctime-include.patch
   ];
 
   buildInputs = [ srt zlib ];

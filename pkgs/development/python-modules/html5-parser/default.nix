@@ -1,22 +1,59 @@
-{ lib, buildPythonPackage, fetchPypi, pkgs, pkg-config, chardet, lxml }:
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, chardet
+, fetchFromGitHub
+, lxml
+, pkg-config
+, pkgs
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "html5-parser";
-  version = "0.4.10";
+  version = "0.4.11";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f9294418c0da95c2d5facc19d3dc32941093a6b8e3b3e4b36cc7b5a1697fbca4";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "kovidgoyal";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-l7cCt+zX+qOujS6noc1/p7mELqrHae3eiKQNXBxLm7o=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  propagatedBuildInputs = [ chardet lxml pkgs.libxml2 ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
-  doCheck = false; # No such file or directory: 'run_tests.py'
+  buildInputs = [
+    pkgs.libxml2
+  ];
+
+  propagatedBuildInputs = [
+    chardet
+    lxml
+  ];
+
+  nativeCheckInputs = [
+    beautifulsoup4
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "html5_parser"
+  ];
+
+  pytestFlagsArray = [
+    "test/*.py"
+  ];
 
   meta = with lib; {
     description = "Fast C based HTML 5 parsing for python";
     homepage = "https://html5-parser.readthedocs.io";
     license = licenses.asl20;
+    maintainers = with maintainers; [ ];
   };
 }

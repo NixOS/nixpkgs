@@ -1,69 +1,98 @@
 { stdenv
 , lib
+, fetchurl
 , fetchFromGitHub
-, autoreconfHook
-, cinnamon-desktop
-, file
-, gdk-pixbuf
-, glib
-, gobject-introspection
-, gtk-doc
-, gtk3
-, intltool
-, itstool
-, libtool
-, libxml2
 , pkg-config
-, shared-mime-info
-, wrapGAppsHook
-, xapp
-, yelp-tools
+, meson
+, ninja
+, exiv2
+, libheif
+, libjpeg
+, libtiff
+, gst_all_1
+, libraw
+, libsoup
 , libsecret
-, webkitgtk
-, libwebp
+, glib
+, gtk3
+, gsettings-desktop-schemas
 , librsvg
+, libwebp
 , json-glib
-, gnome
-, clutter
+, webkitgtk
+, lcms2
+, bison
+, flex
+, clutter-gtk
+, wrapGAppsHook
+, shared-mime-info
+, python3
+, desktop-file-utils
+, itstool
+, xapp
 }:
 
 stdenv.mkDerivation rec {
   pname = "pix";
-  version = "2.8.9";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-7g0j1cWgNtWlqKWzBnngUA2WNr8Zh8YO/jJ8OdTII7Y=";
+    sha256 = "sha256-sKmdJOuT4Ioy5DmWN9ly+9bqSn4frcVPD5qMTKtxtiQ=";
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
-    autoreconfHook
-    cinnamon-desktop
-    gdk-pixbuf
-    gnome.gnome-common
-    gobject-introspection
-    gtk-doc
-    intltool
+    bison
+    desktop-file-utils
+    flex
     itstool
-    libtool
+    meson
+    ninja
     pkg-config
-    yelp-tools
+    python3
+    wrapGAppsHook
   ];
 
   buildInputs = [
+    clutter-gtk
+    exiv2
     glib
+    gsettings-desktop-schemas
+    gst_all_1.gst-plugins-base
+    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
     gtk3
-    xapp
-    libsecret
-    webkitgtk
-    libwebp
-    librsvg
     json-glib
-    clutter
+    lcms2
+    libheif
+    libjpeg
+    libraw
+    librsvg
+    libsecret
+    libsoup
+    libtiff
+    libwebp
+    webkitgtk
+    xapp
   ];
+
+  postPatch = ''
+    chmod +x pix/make-pix-h.py
+
+    patchShebangs data/gschemas/make-enums.py \
+      pix/make-pix-h.py \
+      po/make-potfiles-in.py \
+      postinstall.py \
+      pix/make-authors-tab.py
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
+  '';
 
   meta = with lib; {
     description = "A generic image viewer from Linux Mint";

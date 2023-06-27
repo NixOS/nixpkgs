@@ -1,9 +1,9 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , alsa-lib
 , appstream-glib
+, cargo
 , cmake
 , desktop-file-utils
 , glib
@@ -17,6 +17,7 @@
 , poppler
 , python3
 , rustPlatform
+, rustc
 , shared-mime-info
 , wrapGAppsHook4
 , AudioUnit
@@ -24,28 +25,23 @@
 
 stdenv.mkDerivation rec {
   pname = "rnote";
-  version = "0.5.18";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "flxzt";
     repo = "rnote";
     rev = "v${version}";
-    hash = "sha256-N07Y9kmGvMFS0Kq4i2CltJvNTuqbXausZZGjAQRDmNU=";
+    hash = "sha256-PkC2w14xM+5ai/RuF0rCUpUCxX3hFNB+fq2RkebPKGQ=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-ckYmoZLPPo/3WsdA0ir7iBJDqKn7ZAkN0f110ADSBC0=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "ink-stroke-modeler-rs-0.1.0" = "sha256-1abfrPehOGc/ye/iFIwYPd6HJX6P8OP2vGBSJfeo+c8=";
+      "librsvg-2.56.0" = "sha256-4poP7xsoylmnKaUWuJ0tnlgEMpw9iJrM3dvt4IaFi7w=";
+      "piet-0.6.2" = "sha256-If0qiZkgXeLvsrECItV9/HmhTk1H52xmVO7cUsD9dcU=";
+    };
   };
-
-  patches = [
-    # https://github.com/flxzt/rnote/pull/569
-    (fetchpatch {
-      url = "https://github.com/flxzt/rnote/commit/8585b446c08b246f3d55359026415cb3d242d44e.patch";
-      hash = "sha256-ePpTQ/3mzZTNjU9P4vTu9CM0vX8+r8b6njuj7hDgFCg=";
-    })
-  ];
 
   nativeBuildInputs = [
     appstream-glib # For appstream-util
@@ -57,13 +53,17 @@ stdenv.mkDerivation rec {
     python3 # For the postinstall script
     rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.cargo
-    rustPlatform.rust.rustc
+    cargo
+    rustc
     shared-mime-info # For update-mime-database
     wrapGAppsHook4
   ];
 
   dontUseCmakeConfigure = true;
+
+  mesonFlags = [
+    (lib.mesonBool "cli" true)
+  ];
 
   buildInputs = [
     glib
@@ -82,7 +82,6 @@ stdenv.mkDerivation rec {
     pushd build-aux
     chmod +x cargo_build.py meson_post_install.py
     patchShebangs cargo_build.py meson_post_install.py
-    substituteInPlace meson_post_install.py --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
     popd
   '';
 

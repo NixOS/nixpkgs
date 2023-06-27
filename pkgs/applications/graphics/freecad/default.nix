@@ -39,7 +39,7 @@
 , soqt
 , spaceNavSupport ? stdenv.isLinux
 , swig
-, vtk_8
+, vtk
 , wrapQtAppsHook
 , wrapGAppsHook
 , xercesc
@@ -97,7 +97,7 @@ mkDerivation rec {
     shiboken2
     soqt
     swig
-    vtk_8
+    vtk
     xercesc
     zlib
   ] ++ lib.optionals spaceNavSupport [
@@ -134,6 +134,7 @@ mkDerivation rec {
   qtWrapperArgs = [
     "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
     "--prefix PATH : ${libredwg}/bin"
+    "--set QT_QPA_PLATFORM xcb"
   ];
 
   postFixup = ''

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, gobject-introspection, vala, gtk-doc, docbook_xsl, glib }:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, gobject-introspection, vala, gtk-doc, docbook_xsl, glib, mesonEmulatorHook }:
 
 # TODO: Add installed tests once https://gitlab.gnome.org/World/libcloudproviders/issues/4 is fixed
 
@@ -17,7 +17,18 @@ stdenv.mkDerivation rec {
     "-Denable-gtk-doc=true"
   ];
 
-  nativeBuildInputs = [ meson ninja pkg-config gobject-introspection vala gtk-doc docbook_xsl ];
+  strictDeps = true;
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    vala
+    gtk-doc
+    docbook_xsl
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   buildInputs = [ glib ];
 

@@ -35,7 +35,7 @@ def generate_grammar(item):
 
     generated = f"""  {lang} = buildGrammar {{
     language = "{lang}";
-    version = "{rev[:7]}";
+    version = "0.0.0+rev={rev[:7]}";
     src = """
 
     generated += subprocess.check_output(["nurl", url, rev, "--indent=4"], text=True)

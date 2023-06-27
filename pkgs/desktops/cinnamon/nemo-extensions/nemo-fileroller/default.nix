@@ -10,16 +10,12 @@
 , gnome
 }:
 
+let
+  srcs = import ../srcs.nix { inherit fetchFromGitHub; };
+in
 stdenv.mkDerivation rec {
   pname = "nemo-fileroller";
-  version = "5.6.1";
-
-  src = fetchFromGitHub {
-    owner = "linuxmint";
-    repo = "nemo-extensions";
-    rev = "nemo-fileroller-${version}";
-    sha256 = "sha256-dPmAHuJ0ZRTAwhnMMZEu1e9+qZRYCnlaaoCdUP45W+s=";
-  };
+  inherit (srcs) version src;
 
   sourceRoot = "${src.name}/nemo-fileroller";
 

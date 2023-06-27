@@ -14,6 +14,7 @@ This will dramatically improve the experience :
 
 import json
 import os
+import sys
 from pathlib import Path
 
 XDG_CONFIG_HOME = os.environ.get("XDG_CONFIG_HOME") or os.path.join(
@@ -25,7 +26,11 @@ settings_path_temp = Path(f"{XDG_CONFIG_HOME}/@configDirName@/settings.json.tmp"
 
 if os.path.exists(settings_path):
     with settings_path.open(encoding="utf-8") as settings_file:
-        settings = json.load(settings_file)
+        try:
+            settings = json.load(settings_file)
+        except json.JSONDecodeError:
+            print("[Nix] settings.json is malformed, letting Discord fix itself")
+            sys.exit(0)
 else:
     settings = {}
 

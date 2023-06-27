@@ -82,7 +82,7 @@ let
 
       rm -r $out/share/gnome-session
       rm -r $out/share/xsessions
-      rm -r $out/libexec
+      rm $out/libexec/gnome-flashback-metacity
     '';
 
     nativeBuildInputs = [

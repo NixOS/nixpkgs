@@ -7,8 +7,9 @@
 , ncurses, readline, gmp, mpfr, expat, libipt, zlib, zstd, dejagnu, sourceHighlight
 
 , pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
-, enableDebuginfod ? false, elfutils
+, enableDebuginfod ? lib.meta.availableOn stdenv.hostPlatform elfutils, elfutils
 , guile ? null
+, hostCpuOnly ? false
 , safePaths ? [
    # $debugdir:$datadir/auto-load are whitelisted by default by GDB
    "$debugdir" "$datadir/auto-load"
@@ -27,12 +28,12 @@ in
 assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
-  pname = targetPrefix + basename;
-  version = "13.1";
+  pname = targetPrefix + basename + lib.optionalString hostCpuOnly "-host-cpu-only";
+  version = "13.2";
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}-${version}.tar.xz";
-    hash = "sha256-EVrVwY1ppr4qsViC02XdoqIhHBT0gLNQLG66V24ulaA=";
+    hash = "sha256-/Vvrt74YM6vbbgI8L0mKNUSYKB350FUj2JFbq+uJPwo=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -94,7 +95,8 @@ stdenv.mkDerivation rec {
     "--program-prefix=${targetPrefix}"
 
     "--disable-werror"
-    "--enable-targets=all" "--enable-64-bit-bfd"
+  ] ++ lib.optional (!hostCpuOnly) "--enable-targets=all" ++ [
+    "--enable-64-bit-bfd"
     "--disable-install-libbfd"
     "--disable-shared" "--enable-static"
     "--with-system-zlib"

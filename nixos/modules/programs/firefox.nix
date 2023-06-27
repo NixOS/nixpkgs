@@ -201,6 +201,7 @@ in
     nativeMessagingHosts = mapAttrs (_: v: mkEnableOption (mdDoc v)) {
       browserpass = "Browserpass support";
       bukubrow = "Bukubrow support";
+      euwebid = "Web eID support";
       ff2mpv = "ff2mpv support";
       fxCast = "fx_cast support";
       gsconnect = "GSConnect support";
@@ -217,6 +218,8 @@ in
         extraPrefs = cfg.autoConfig;
         extraNativeMessagingHosts = with pkgs; optionals nmh.ff2mpv [
           ff2mpv
+        ] ++ optionals nmh.euwebid [
+          web-eid-app
         ] ++ optionals nmh.gsconnect [
           gnomeExtensions.gsconnect
         ] ++ optionals nmh.jabref [
@@ -230,6 +233,7 @@ in
     nixpkgs.config.firefox = {
       enableBrowserpass = nmh.browserpass;
       enableBukubrow = nmh.bukubrow;
+      enableEUWebID = nmh.euwebid;
       enableTridactylNative = nmh.tridactyl;
       enableUgetIntegrator = nmh.ugetIntegrator;
       enableFXCastBridge = nmh.fxCast;

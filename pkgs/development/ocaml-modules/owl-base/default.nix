@@ -2,13 +2,13 @@
 
 buildDunePackage rec {
   pname = "owl-base";
-  version = "1.0.2";
+  version = "1.1";
 
   duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/owlbarn/owl/releases/download/${version}/owl-${version}.tbz";
-    hash = "sha256-ONIQzmwcLwljH9WZUUMOTzZLWuA2xx7RsyzlWbKikmM=";
+    hash = "sha256-mDYCZ2z33VTEvc6gV4JTecIXA/vHIWuU37BADGl/yog=";
   };
 
   minimalOCamlVersion = "4.10";

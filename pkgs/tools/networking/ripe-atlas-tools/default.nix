@@ -6,13 +6,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ripe-atlas-tools";
-  version = "3.0.3";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "RIPE-NCC";
     repo = "ripe-atlas-tools";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-tNojduSNjJc8yOkDbuFLKoASqIV4P3mGuNbiIcf6Nac=";
+    hash = "sha256-aETSDXCVteTruRKV/8Aw3R/bprB6txOsXrFvoZOxIus=";
   };
 
   postPatch = ''
@@ -29,15 +29,16 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
+    ipy
+    pyopenssl
+    python-dateutil
+    pyyaml
+    requests
     ripe-atlas-cousteau
     ripe-atlas-sagan
-    ujson
-    ipy
-    python-dateutil
-    requests
+    typing-extensions
     tzlocal
-    pyyaml
-    pyopenssl
+    ujson
   ];
 
   preBuild = ''
@@ -89,6 +90,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "RIPE ATLAS project tools";
     homepage = "https://github.com/RIPE-NCC/ripe-atlas-tools";
+    changelog = "https://github.com/RIPE-NCC/ripe-atlas-tools/blob/v${version}/CHANGES.rst";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ raitobezarius ];
   };

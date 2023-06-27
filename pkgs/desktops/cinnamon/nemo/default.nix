@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "5.6.4";
+  version = "5.8.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-zvELN9ggfmfIEPeD0VEWM25kRi8RWA/aKlrdO5dKX1k=";
+    sha256 = "sha256-/GwtTklOkhCkbBMQLl4dKUnlZwN6FX2kqxN7cJVaVwE=";
   };
 
   patches = [
@@ -66,6 +66,13 @@ stdenv.mkDerivation rec {
     # use locales from cinnamon-translations
     "--localedir=${cinnamon-translations}/share/locale"
   ];
+
+  preFixup = ''
+    # Used for some non-fd.o icons (e.g. xapp-text-case-symbolic)
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${xapp}/share"
+    )
+  '';
 
   # Taken from libnemo-extension.pc.
   passthru.extensiondir = "lib/nemo/extensions-3.0";

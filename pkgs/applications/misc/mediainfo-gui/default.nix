@@ -5,14 +5,16 @@ let
   inherit (darwin.apple_sdk.frameworks) Cocoa;
 in
 stdenv.mkDerivation rec {
-  version = "22.12";
   pname = "mediainfo-gui";
+  version = "23.04";
+
   src = fetchurl {
     url = "https://mediaarea.net/download/source/mediainfo/${version}/mediainfo_${version}.tar.xz";
-    sha256 = "sha256-kyuCc59zjn22A89bsXByBzGp58YdFFwqVKq7PNC3U7w=";
+    sha256 = "sha256-Uiut1rHk6LV+giW6e0nvgn35ffTLaLbU/HkQ92xf32k=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
+
   buildInputs = [ libmediainfo wxGTK32 desktop-file-utils libSM imagemagick ]
     ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 

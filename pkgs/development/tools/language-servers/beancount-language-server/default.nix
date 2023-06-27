@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "beancount-language-server";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "polarmutex";
     repo = "beancount-language-server";
     rev = "v${version}";
-    sha256 = "sha256-X3Mun5ZooipUkkcgEOC7ou0d1upABjmMs9MegPBXPyQ=";
+    hash = "sha256-9IkbEOG6xcmpowsLj/RHnMFGQxh02JMQsTVli4hvs/M=";
   };
 
-  cargoHash = "sha256-OI/MGcFOJHEZJfqCz/+CxHB3VSn6joS7L7FqRYrS4us=";
+  cargoHash = "sha256-qhN2//hhCaKpm0HAiUL/CfdrtvAXgR34vXBECB8UDxE=";
 
   doInstallCheck = true;
   postInstallCheck = ''
@@ -28,4 +28,3 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ polarmutex ];
   };
 }
-

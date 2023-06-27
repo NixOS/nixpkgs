@@ -1,31 +1,5 @@
-diff --git a/packages/flutter_tools/lib/src/asset.dart b/packages/flutter_tools/lib/src/asset.dart
-index ed42baea29..12941f733a 100644
---- a/packages/flutter_tools/lib/src/asset.dart
-+++ b/packages/flutter_tools/lib/src/asset.dart
-@@ -11,11 +11,11 @@ import 'base/file_system.dart';
- import 'base/logger.dart';
- import 'base/platform.dart';
- import 'build_info.dart';
--import 'cache.dart';
- import 'convert.dart';
- import 'dart/package_map.dart';
- import 'devfs.dart';
- import 'flutter_manifest.dart';
-+import 'globals.dart' as globals;
- import 'license_collector.dart';
- import 'project.dart';
- 
-@@ -504,7 +504,7 @@ class ManifestAssetBundle implements AssetBundle {
-         }
-         final Uri entryUri = _fileSystem.path.toUri(asset);
-         result.add(_Asset(
--          baseDir: _fileSystem.path.join(Cache.flutterRoot!, 'bin', 'cache', 'artifacts', 'material_fonts'),
-+          baseDir: _fileSystem.path.join(globals.fsUtils.homeDirPath!, '.cache', 'flutter', 'artifacts', 'material_fonts'),
-           relativeUri: Uri(path: entryUri.pathSegments.last),
-           entryUri: entryUri,
-           package: null,
 diff --git a/packages/flutter_tools/lib/src/cache.dart b/packages/flutter_tools/lib/src/cache.dart
-index defc86cc20..7fdf14d112 100644
+index dd80b1e46e..8e54517765 100644
 --- a/packages/flutter_tools/lib/src/cache.dart
 +++ b/packages/flutter_tools/lib/src/cache.dart
 @@ -22,6 +22,7 @@ import 'base/user_messages.dart';
@@ -36,7 +10,7 @@ index defc86cc20..7fdf14d112 100644
  
  const String kFlutterRootEnvironmentVariableName = 'FLUTTER_ROOT'; // should point to //flutter/ (root of flutter/flutter repo)
  const String kFlutterEngineEnvironmentVariableName = 'FLUTTER_ENGINE'; // should point to //engine/src/ (root of flutter/engine repo)
-@@ -322,8 +323,13 @@ class Cache {
+@@ -318,8 +319,13 @@ class Cache {
        return;
      }
      assert(_lock == null);
@@ -51,7 +25,7 @@ index defc86cc20..7fdf14d112 100644
      try {
        _lock = lockFile.openSync(mode: FileMode.write);
      } on FileSystemException catch (e) {
-@@ -382,8 +388,7 @@ class Cache {
+@@ -378,8 +384,7 @@ class Cache {
  
    String get devToolsVersion {
      if (_devToolsVersion == null) {
@@ -61,12 +35,3 @@ index defc86cc20..7fdf14d112 100644
        if (!devToolsDir.existsSync()) {
          throw Exception('Could not find directory at ${devToolsDir.path}');
        }
-@@ -536,7 +541,7 @@ class Cache {
-     if (_rootOverride != null) {
-       return _fileSystem.directory(_fileSystem.path.join(_rootOverride!.path, 'bin', 'cache'));
-     } else {
--      return _fileSystem.directory(_fileSystem.path.join(flutterRoot!, 'bin', 'cache'));
-+      return _fileSystem.directory(_fileSystem.path.join(globals.fsUtils.homeDirPath!, '.cache', 'flutter'));
-     }
-   }
- 

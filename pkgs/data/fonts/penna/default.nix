@@ -4,12 +4,12 @@ let
   majorVersion = "0";
   minorVersion = "100";
 in
-stdenvNoCC.mkDerivation (self: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "penna";
   version = "${majorVersion}.${minorVersion}";
 
   src = fetchzip {
-    url = "https://dotcolon.net/download/fonts/${self.pname}_${majorVersion}${minorVersion}.zip";
+    url = "https://dotcolon.net/download/fonts/${finalAttrs.pname}_${majorVersion}${minorVersion}.zip";
     hash = "sha256-fmCJnEaoUGdW9JK3J7JSm5D4qOMRW7qVKPgVE7uCH5w=";
     stripRoot = false;
   };
@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation (self: {
   '';
 
   meta = with lib; {
-    homepage = "http://dotcolon.net/font/${self.pname}/";
+    homepage = "http://dotcolon.net/font/${finalAttrs.pname}/";
     description = "Geometric sans serif designed by Sora Sagano";
     longDescription = ''
      Penna is a geometric sans serif designed by Sora Sagano,

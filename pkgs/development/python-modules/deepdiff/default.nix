@@ -8,6 +8,7 @@
 , jsonpickle
 , numpy
 , pytestCheckHook
+, python-dateutil
 , pyyaml
 , toml
 , pythonOlder
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "deepdiff";
-  version = "6.2.3";
+  version = "6.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "seperman";
     repo = "deepdiff";
     rev = "refs/tags/${version}";
-    hash = "sha256-rlMksUi+R48fIEjVv2E3yOETDezTghZ8+Zsypu8fAnQ=";
+    hash = "sha256-txZ1X1J8DwueDRpLP3OuRA+S9hc5G3YCmEG+AS6ZAkI=";
   };
 
   postPatch = ''
@@ -50,6 +51,7 @@ buildPythonPackage rec {
     jsonpickle
     numpy
     pytestCheckHook
+    python-dateutil
   ] ++ passthru.optional-dependencies.cli;
 
   pythonImportsCheck = [

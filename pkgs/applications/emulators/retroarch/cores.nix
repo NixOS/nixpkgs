@@ -7,6 +7,7 @@
 , curl
 , fetchFromGitHub
 , ffmpeg
+, ffmpeg_4
 , fluidsynth
 , gettext
 , hexdump
@@ -41,7 +42,7 @@
 }:
 
 let
-  hashesFile = builtins.fromJSON (builtins.readFile ./hashes.json);
+  hashesFile = lib.importJSON ./hashes.json;
 
   getCoreSrc = core:
     fetchFromGitHub (builtins.getAttr core hashesFile);
@@ -425,6 +426,14 @@ in
     };
   };
 
+  fuse = mkLibretroCore {
+    core = "fuse";
+    meta = {
+      description = "A port of the Fuse Unix Spectrum Emulator to libretro";
+      license = lib.licenses.gpl3Only;
+    };
+  };
+
   gambatte = mkLibretroCore {
     core = "gambatte";
     meta = {
@@ -755,7 +764,7 @@ in
   ppsspp = mkLibretroCore {
     core = "ppsspp";
     extraNativeBuildInputs = [ cmake pkg-config python3 ];
-    extraBuildInputs = [ libGLU libGL libzip ffmpeg snappy xorg.libX11 ];
+    extraBuildInputs = [ libGLU libGL libzip ffmpeg_4 snappy xorg.libX11 ];
     makefile = "Makefile";
     cmakeFlags = [
       "-DLIBRETRO=ON"
@@ -966,6 +975,14 @@ in
     meta = {
       description = "Port of TIC-80 to libretro";
       license = lib.licenses.mit;
+    };
+  };
+
+  twenty-fortyeight = mkLibretroCore {
+    core = "2048";
+    meta = {
+      description = "Port of 2048 puzzle game to the libretro API";
+      license = lib.licenses.unlicense;
     };
   };
 

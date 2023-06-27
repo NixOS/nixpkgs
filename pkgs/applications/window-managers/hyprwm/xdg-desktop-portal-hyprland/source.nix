@@ -2,14 +2,17 @@
 , fetchFromGitHub
 , wayland
 }:
+let
+  version = "0.4.0";
+in
 {
-  version = "unstable-2023-03-16";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "xdg-desktop-portal-hyprland";
-    rev = "85f49f4d6c9c398428117e9bdb588f53f09e52e0";
-    hash = "sha256-qed+BV0NBt1egGCBEM7d5MiZJevQb8jd1WybfFM53Ak=";
+    rev = "v${version}";
+    hash = "sha256-r+XMyOoRXq+hlfjayb+fyi9kq2JK48TrwuNIAXqlj7U=";
   };
 
   meta = with lib; {

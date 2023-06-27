@@ -10,22 +10,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "termusic";
-  version = "0.7.9";
+  version = "0.7.10";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-ytAKINcZwLyHWbzShxfxRKx4BepM0G2BYdLgwR48g7w=";
+    hash = "sha256-m0hi5u4BcRcEDEpg1BoWXc25dfhD6+OJtqSZfSdV0HM=";
   };
 
-  cargoHash = "sha256-yxFF5Yqj+xTB3FAJUtgcIeAEHR44JA1xONxGFdG0yS0=";
-
-  patches = [
-    (fetchpatch {
-      name = "fix-panic-when-XDG_AUDIO_DIR-not-set.patch";
-      url = "https://github.com/tramhao/termusic/commit/b6006b22901f1f865a2e3acf7490fd3fa520ca5e.patch";
-      hash = "sha256-1ukQ0y5IRdOndsryuqXI9/zyhCDQ5NIeTan4KCynAv0=";
-    })
-  ];
+  cargoHash = "sha256-A83gLsaPm6t4nm7DJfcp9z1huDU/Sfy9gunP8pzBiCA=";
 
   nativeBuildInputs = [
     pkg-config

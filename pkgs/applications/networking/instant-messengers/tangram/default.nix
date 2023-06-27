@@ -18,20 +18,20 @@
 , ninja
 , pkg-config
 , python3
-, webkitgtk_5_0
+, webkitgtk_6_0
 , blueprint-compiler
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "tangram";
-  version = "2.0";
+  version = "3.0";
 
   src = fetchFromGitHub {
     owner = "sonnyp";
     repo = "Tangram";
     rev = "v${version}";
-    hash = "sha256-ocHE8IztiNm9A1hbzzHXstWpPaOau/IrQ44ccxbsGb0=";
+    hash = "sha256-6QOkvsYFgFFyxnDlA5Xpl3FnsSZOj9ooehCPOmpKe8M=";
     fetchSubmodules = true;
   };
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gtk4
     libadwaita
-    webkitgtk_5_0
+    webkitgtk_6_0
   ] ++ (with gst_all_1; [
     gstreamer
     gst-libav
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/meson.build --replace "/app/bin/blueprint-compiler" "blueprint-compiler"
-    substituteInPlace {src/,}re.sonny.Tangram troll/gjspack/bin/gjspack \
+    substituteInPlace src/bin.js troll/gjspack/bin/gjspack \
       --replace "#!/usr/bin/env -S gjs -m" "#!${gjs}/bin/gjs -m"
   '';
 

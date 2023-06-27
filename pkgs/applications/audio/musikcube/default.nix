@@ -32,13 +32,13 @@
 
 stdenv.mkDerivation rec {
   pname = "musikcube";
-  version = "0.99.6";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "clangen";
     repo = pname;
     rev = version;
-    sha256 = "sha256-D25P254iaOsS0TyAKAiarDP37D4U9Dw7mdvUin/Qblc=";
+    hash = "sha512-ahKPmChHRVpOQcgt0fOYumlsMApeN4MWwywE9F0edeN0Xr3Vp830mWGzEBJvMvGI/lnU/1rd7tREaHfm1vCJaw==";
   };
 
   outputs = [ "out" "dev" ];
@@ -86,9 +86,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A fully functional terminal-based music player, library, and streaming audio server";
+    description = "Terminal-based music player, library, and streaming audio server";
     homepage = "https://musikcube.com/";
-    maintainers = with maintainers; [ aanderse srapenne ];
+    maintainers = with maintainers; [ aanderse srapenne afh ];
     license = licenses.bsd3;
     platforms = platforms.all;
   };

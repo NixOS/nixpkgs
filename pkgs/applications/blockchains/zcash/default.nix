@@ -1,17 +1,17 @@
 { autoreconfHook, boost180, cargo, coreutils, curl, cxx-rs, db62, fetchFromGitHub
-, hexdump, lib, libevent, libsodium, makeWrapper, rust, rustPlatform
-, pkg-config, Security, stdenv, testers, utf8cpp, util-linux, zcash, zeromq
+, git, hexdump, lib, libevent, libsodium, makeWrapper, rust, rustPlatform
+, pkg-config, Security, stdenv, testers, tl-expected, utf8cpp, util-linux, zcash, zeromq
 }:
 
 rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
   pname = "zcash";
-  version = "5.3.0";
+  version = "5.4.2";
 
   src = fetchFromGitHub {
     owner = "zcash";
     repo  = "zcash";
     rev = "v${version}";
-    hash = "sha256-mlABKZDYYC3y+KlXQVFqdcm46m8K9tbOCqk4lM4shp8=";
+    hash = "sha256-XGq/cYUo43FcpmRDO2YiNLCuEQLsTFLBFC4M1wM29l8=";
   };
 
   prePatch = lib.optionalString stdenv.isAarch64 ''
@@ -20,15 +20,16 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
       --replace "linker = \"aarch64-linux-gnu-gcc\"" ""
   '';
 
-  cargoHash = "sha256-6uhtOaBsgMw59Dy6yivZYUEWDsYfpInA7VmJrqxDS/4=";
+  cargoHash = "sha256-Mz8mr/RDcOfwJvXhY19rZmWHP8mUeEf9GYD+3JAPNOw=";
 
-  nativeBuildInputs = [ autoreconfHook cargo cxx-rs hexdump makeWrapper pkg-config ];
+  nativeBuildInputs = [ autoreconfHook cargo cxx-rs git hexdump makeWrapper pkg-config ];
 
   buildInputs = [
     boost180
     db62
     libevent
     libsodium
+    tl-expected
     utf8cpp
     zeromq
   ] ++ lib.optionals stdenv.isDarwin [

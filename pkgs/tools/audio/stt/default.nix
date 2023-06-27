@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, autoPatchelfHook, bzip2, lzma }:
+{ stdenv, lib, fetchurl, autoPatchelfHook, bzip2, xz }:
 
 stdenv.mkDerivation rec {
   pname = "stt";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bzip2
-    lzma
+    xz
     stdenv.cc.cc.lib
   ];
 

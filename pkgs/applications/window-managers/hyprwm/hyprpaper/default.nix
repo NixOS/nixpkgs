@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpaper";
-  version = "unstable-2022-09-30";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
-    repo = "hyprpaper";
-    rev = "8f4c712950ad6a9bc7c7281c15a63f5fa06ba92b";
-    hash = "sha256-KojBifIOkJ2WmO/lRjQIgPgUnX5Eu10U4VDg+1MB2co=";
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-/ehJbAtSJS86NlqHVOeR2ViBKlImKH4guFVPacTmCr8=";
   };
 
   nativeBuildInputs = [
@@ -57,7 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs.src.meta) homepage;
     description = "A blazing fast wayland wallpaper utility";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ wozeparrot ];
+    maintainers = with maintainers; [ wozeparrot fufexan ];
     inherit (wayland.meta) platforms;
+    broken = stdenv.isDarwin;
   };
 })

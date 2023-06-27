@@ -68,6 +68,8 @@ buildPythonPackage rec {
     "--asyncio-mode=strict"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "A minimal low-level HTTP client";
     homepage = "https://github.com/encode/httpcore";

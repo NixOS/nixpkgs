@@ -2,8 +2,10 @@
 , stdenv
 , anyio
 , buildPythonPackage
+, cargo
 , fetchFromGitHub
 , rustPlatform
+, rustc
 , setuptools-rust
 , pythonOlder
 , dirty-equals
@@ -17,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "watchfiles";
-  version = "0.18.1";
+  version = "0.19.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,13 +28,13 @@ buildPythonPackage rec {
     owner = "samuelcolvin";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-XEhu6M1hFi3/gAKZcei7KJSrIhhlZhlvZvbfyA6VLR4=";
+    hash = "sha256-NmmeoaIfFMNKCcjH6tPnkpflkN35bKlT76MqF9W8LBc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-IWONA3o+2emJ7cKEw5xYSMdWzGuUSwn1B70zUDzj7Cw=";
+    hash = "sha256-9ruk3PMcWNLOIGth5fo91/miyF17lgERWL3F4y4as18=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [
@@ -41,12 +43,11 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
+    cargo
+    rustc
+  ];
 
   propagatedBuildInputs = [
     anyio

@@ -9,7 +9,7 @@
 , gtkmm3
 , pcre
 , swig
-, antlr4_9
+, antlr4_12
 , sudo
 , mysql
 , libxml2
@@ -46,16 +46,14 @@ let
   inherit (python3.pkgs) paramiko pycairo pyodbc;
 in stdenv.mkDerivation rec {
   pname = "mysql-workbench";
-  version = "8.0.32";
+  version = "8.0.33";
 
   src = fetchurl {
-    url = "http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-${version}-src.tar.gz";
-    sha256 = "sha256-ruGdYTG0KPhRnUdlfaZjt1r/tAhA1XeAtjDgu/K9okI=";
+    url = "https://cdn.mysql.com//Downloads/MySQLGUITools/mysql-workbench-community-${version}-src.tar.gz";
+    sha256 = "a6c9b05ee6f8accd45203d8234a43415da65ddc8118d427dd1a2ef2a209261bc";
   };
 
   patches = [
-    ./fix-gdal-includes.patch
-
     (substituteAll {
       src = ./hardcode-paths.patch;
       catchsegv = "${glibc.bin}/bin/catchsegv";
@@ -79,11 +77,11 @@ in stdenv.mkDerivation rec {
     })
   ];
 
-  # 1. have it look for 4.9.3 instead of 4.9.1
+  # 1. have it look for 4.12.0 instead of 4.11.1
   # 2. for some reason CMakeCache.txt is part of source code
   preConfigure = ''
     substituteInPlace CMakeLists.txt \
-      --replace "antlr-4.9.1-complete.jar" "antlr-4.9.3-complete.jar"
+      --replace "antlr-4.11.1-complete.jar" "antlr-4.12.0-complete.jar"
     rm -f build/CMakeCache.txt
   '';
 
@@ -100,7 +98,7 @@ in stdenv.mkDerivation rec {
     gtk3
     gtkmm3
     libX11
-    antlr4_9.runtime.cpp
+    antlr4_12.runtime.cpp
     python3
     mysql
     libxml2
@@ -157,7 +155,7 @@ in stdenv.mkDerivation rec {
     # mysql-workbench 8.0.21 depends on libmysqlconnectorcpp 1.1.8.
     # Newer versions of connector still provide the legacy library when enabled
     # but the headers are in a different location.
-    "-DWITH_ANTLR_JAR=${antlr4_9.jarLocation}"
+    "-DWITH_ANTLR_JAR=${antlr4_12.jarLocation}"
     "-DMySQLCppConn_INCLUDE_DIR=${libmysqlconnectorcpp}/include/jdbc"
   ];
 

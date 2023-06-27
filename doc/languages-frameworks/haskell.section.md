@@ -108,7 +108,7 @@ haskell.compiler.ghcjs                   ghcjs-8.10.7
 Each of those compiler versions has a corresponding attribute set built using
 it. However, the non-standard package sets are not tested regularly and, as a
 result, contain fewer working packages. The corresponding package set for GHC
-9.4.4 is `haskell.packages.ghc944`. In fact `haskellPackages` is just an alias
+9.4.5 is `haskell.packages.ghc945`. In fact `haskellPackages` is just an alias
 for `haskell.packages.ghc927`:
 
 ```console
@@ -160,7 +160,7 @@ All `haskell.packages.*` package sets use the same package descriptions and the 
 of versions by default. There are however GHC version specific override `.nix`
 files to loosen this a bit.
 
-### Dependency resolution
+### Dependency resolution {#haskell-dependency-resolution}
 
 Normally when you build Haskell packages with `cabal-install`, `cabal-install`
 does dependency resolution. It will look at all Haskell package versions known
@@ -230,7 +230,7 @@ specification, test suites, benchmarks etc. by compiling and invoking the
 package's `Setup.hs`. It does *not* use or invoke the `cabal-install` binary,
 but uses the underlying `Cabal` library instead.
 
-### General arguments
+### General arguments {#haskell-derivation-args}
 
 `pname`
 : Package name, assumed to be the same as on Hackage (if applicable)
@@ -275,6 +275,15 @@ Defaults to `true`.
 `doHaddockQuickjump`
 : Whether to generate an index for interactive navigation of the HTML documentation.
 Defaults to `true` if supported.
+
+`doInstallIntermediates`
+: Whether to install intermediate build products (files written to `dist/build`
+by GHC during the build process). With `enableSeparateIntermediatesOutput`,
+these files are instead installed to [a separate `intermediates`
+output.][multiple-outputs] The output can then be passed into a future build of
+the same package with the `previousIntermediates` argument to support
+incremental builds. See [“Incremental builds”](#haskell-incremental-builds) for
+more information. Defaults to `false`.
 
 `enableLibraryProfiling`
 : Whether to enable [profiling][profiling] for libraries contained in the
@@ -371,6 +380,12 @@ Defaults to `false`.
 : Whether to install documentation to a separate `doc` output.
 Is automatically enabled if `doHaddock` is `true`.
 
+`enableSeparateIntermediatesOutput`
+: When `doInstallIntermediates` is true, whether to install intermediate build
+products to a separate `intermediates` output. See [“Incremental
+builds”](#haskell-incremental-builds) for more information. Defaults to
+`false`.
+
 `allowInconsistentDependencies`
 : If enabled, allow multiple versions of the same Haskell package in the
 dependency tree at configure time. Often in such a situation compilation would
@@ -380,6 +395,11 @@ later fail because of type mismatches. Defaults to `false`.
 : Build and install a special object file for GHCi. This improves performance
 when loading the library in the REPL, but requires extra build time and
 disk space. Defaults to `false`.
+
+`previousIntermediates`
+: If non-null, intermediate build artifacts are copied from this input to
+`dist/build` before performing compiling. See [“Incremental
+builds”](#haskell-incremental-builds) for more information. Defaults to `null`.
 
 `buildTarget`
 : Name of the executable or library to build and install.
@@ -479,7 +499,7 @@ are especially useful when writing [overrides](#haskell-overriding-haskell-packa
 when you want to make sure that they are definitely included. However, it is
 recommended to use the more accurate ones listed above when possible.
 
-### Meta attributes
+### Meta attributes {#haskell-derivation-meta}
 
 `haskellPackages.mkDerivation` accepts the following attributes as direct
 arguments which are transparently set in `meta` of the resulting derivation. See
@@ -495,6 +515,54 @@ the [Meta-attributes section](#chap-meta) for their documentation.
     * `maintainers`
     * `broken`
     * `hydraPlatforms`
+
+### Incremental builds {#haskell-incremental-builds}
+
+`haskellPackages.mkDerivation` supports incremental builds for GHC 9.4 and
+newer with the `doInstallIntermediates`, `enableSeparateIntermediatesOutput`,
+and `previousIntermediates` arguments.
+
+The basic idea is to first perform a full build of the package in question,
+save its intermediate build products for later, and then copy those build
+products into the build directory of an incremental build performed later.
+Then, GHC will use those build artifacts to avoid recompiling unchanged
+modules.
+
+For more detail on how to store and use incremental build products, see
+[Gabriella Gonzalez’ blog post “Nixpkgs support for incremental Haskell
+builds”.][incremental-builds] motivation behind this feature.
+
+An incremental build for [the `turtle` package][turtle] can be performed like
+so:
+
+```nix
+let
+  pkgs = import <nixpkgs> {};
+  inherit (pkgs) haskell;
+  inherit (haskell.lib.compose) overrideCabal;
+
+  # Incremental builds work with GHC >=9.4.
+  turtle = haskell.packages.ghc944.turtle;
+
+  # This will do a full build of `turtle`, while writing the intermediate build products
+  # (compiled modules, etc.) to the `intermediates` output.
+  turtle-full-build-with-incremental-output = overrideCabal (drv: {
+    doInstallIntermediates = true;
+    enableSeparateIntermediatesOutput = true;
+  }) turtle;
+
+  # This will do an incremental build of `turtle` by copying the previously
+  # compiled modules and intermediate build products into the source tree
+  # before running the build.
+  #
+  # GHC will then naturally pick up and reuse these products, making this build
+  # complete much more quickly than the previous one.
+  turtle-incremental-build = overrideCabal (drv: {
+    previousIntermediates = turtle-full-build-with-incremental-output.intermediates;
+  }) turtle;
+in
+  turtle-incremental-build
+```
 
 ## Development environments {#haskell-development-environments}
 
@@ -714,7 +782,7 @@ editor plugin to achieve this.
 
 ## Overriding Haskell packages {#haskell-overriding-haskell-packages}
 
-### Overriding a single package
+### Overriding a single package {#haskell-overriding-a-single-package}
 
 <!-- TODO(@sternenseemann): we should document /somewhere/ that base == null etc. -->
 
@@ -803,7 +871,7 @@ lib.pipe my-haskell-package [
 ]
 ```
 
-#### `haskell.lib.compose`
+#### `haskell.lib.compose` {#haskell-haskell.lib.compose}
 
 The base interface for all overriding is the following function:
 
@@ -826,7 +894,7 @@ following overview. Refer to the
 [documentation of `haskellPackages.mkDerivation`](#haskell-mkderivation)
 for a more detailed description of the effects of the respective arguments.
 
-##### Packaging Helpers
+##### Packaging Helpers {#haskell-packaging-helpers}
 
 `overrideSrc { src, version } drv`
 : Replace the source used for building `drv` with the path or derivation given
@@ -875,7 +943,7 @@ sometimes necessary when working with versioned packages in
 altogether. Useful if it fails to evaluate cleanly and is causing
 noise in the evaluation errors tab on Hydra.
 
-##### Development Helpers
+##### Development Helpers {#haskell-development-helpers}
 
 `sdistTarball drv`
 : Create a source distribution tarball like those found on Hackage
@@ -913,7 +981,7 @@ for debugging with e.g. `gdb`.
 
 <!-- TODO(@sternenseemann): shellAware -->
 
-##### Trivial Helpers
+##### Trivial Helpers {#haskell-trivial-helpers}
 
 `doJailbreak drv`
 : Sets the `jailbreak` argument to `true` for `drv`.
@@ -989,7 +1057,7 @@ benchmark component.
 `dontBenchmark drv`
 : Set `doBenchmark` to `false` for `drv`.
 
-`setBuildTargets list drv`
+`setBuildTargets drv list`
 : Sets the `buildTarget` argument for `drv` so that the targets specified in `list` are built.
 
 `doCoverage drv`
@@ -998,7 +1066,7 @@ benchmark component.
 `dontCoverage drv`
 : Sets the `doCoverage` argument to `false` for `drv`.
 
-#### Library functions in the Haskell package sets
+#### Library functions in the Haskell package sets {#haskell-package-set-lib-functions}
 
 Some library functions depend on packages from the Haskell package sets. Thus they are
 exposed from those instead of from `haskell.lib.compose` which can only access what is
@@ -1062,7 +1130,7 @@ it does for the unstable branches.
 
 ## F.A.Q. {#haskell-faq}
 
-### Why is topic X not covered in this section? Why is section Y missing?
+### Why is topic X not covered in this section? Why is section Y missing? {#haskell-why-not-covered}
 
 We have been working on [moving the nixpkgs Haskell documentation back into the
 nixpkgs manual](https://github.com/NixOS/nixpkgs/issues/121403). Since this
@@ -1083,8 +1151,11 @@ on the issue linked above.
 [haskell.nix]: https://input-output-hk.github.io/haskell.nix/index.html
 [HLS user guide]: https://haskell-language-server.readthedocs.io/en/latest/configuration.html#configuring-your-editor
 [hoogle]: https://wiki.haskell.org/Hoogle
+[incremental-builds]: https://www.haskellforall.com/2022/12/nixpkgs-support-for-incremental-haskell.html
 [jailbreak-cabal]: https://github.com/NixOS/jailbreak-cabal/
+[multiple-outputs]: https://nixos.org/manual/nixpkgs/stable/#chap-multiple-output
 [optparse-applicative-completions]: https://github.com/pcapriotti/optparse-applicative/blob/7726b63796aa5d0df82e926d467f039b78ca09e2/README.md#bash-zsh-and-fish-completions
 [profiling-detail]: https://cabal.readthedocs.io/en/latest/cabal-project.html#cfg-field-profiling-detail
 [profiling]: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/profiling.html
 [search.nixos.org]: https://search.nixos.org
+[turtle]: https://hackage.haskell.org/package/turtle

@@ -1,13 +1,13 @@
 { lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, copyDesktopItems, unzip
-, appimage-run }:
+, appimage-run, nix-update-script }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ldtk";
-  version = "1.2.5";
+  version = "1.3.3";
 
   src = fetchurl {
-    url = "https://github.com/deepnight/ldtk/releases/download/v${version}/ubuntu-distribution.zip";
-    sha256 = "sha256-kx4GOENYYbS09HxAiCCvqm/ztc32sdB39W8uv6D+R+A=";
+    url = "https://github.com/deepnight/ldtk/releases/download/v${finalAttrs.version}/ubuntu-distribution.zip";
+    hash = "sha256-egvAe4nAzPDBeTaAzrqhlDsG60bGNnKXB5Vt16vIZrQ";
   };
 
   nativeBuildInputs = [ unzip makeWrapper copyDesktopItems appimage-run ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     runHook preUnpack
 
     unzip $src
-    appimage-run -x src 'LDtk ${version} installer.AppImage'
+    appimage-run -x src 'LDtk ${finalAttrs.version} installer.AppImage'
 
     runHook postUnpack
   '';
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 'LDtk ${version} installer.AppImage' $out/share/ldtk.AppImage
+    install -Dm644 'LDtk ${finalAttrs.version} installer.AppImage' $out/share/ldtk.AppImage
     makeWrapper ${appimage-run}/bin/appimage-run $out/bin/ldtk \
       --add-flags $out/share/ldtk.AppImage
     install -Dm644 src/ldtk.png $out/share/icons/hicolor/1024x1024/apps/ldtk.png
@@ -47,12 +47,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
-    homepage = "https://ldtk.io/";
     description = "Modern, lightweight and efficient 2D level editor";
+    homepage = "https://ldtk.io/";
+    changelog = "https://github.com/deepnight/ldtk/releases/tag/v${finalAttrs.version}";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ felschr ];
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
   };
-}
+})

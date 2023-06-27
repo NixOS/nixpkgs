@@ -12,11 +12,11 @@ assert ldapSupport -> openldap != null;
 
 stdenv.mkDerivation rec {
   pname = "apr-util";
-  version = "1.6.1";
+  version = "1.6.3";
 
   src = fetchurl {
     url = "mirror://apache/apr/${pname}-${version}.tar.bz2";
-    sha256 = "0nq3s1yn13vplgl6qfm09f7n0wm08malff9s59bqf9nid9xjzqfk";
+    sha256 = "sha256-pBB243EHRjJsOUUEKZStmk/KwM4Cd92P6gdv7DyXcrU=";
   };
 
   patches = [ ./fix-libxcrypt-build.patch ]
@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
     # Always replacing the link flag with a generic link flag seems to help though, so let's do that for now.
     lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
       substituteInPlace Makefile \
+        --replace "-ldb-6.9" "-ldb"
+      substituteInPlace apu-1-config \
         --replace "-ldb-6.9" "-ldb"
   '';
 

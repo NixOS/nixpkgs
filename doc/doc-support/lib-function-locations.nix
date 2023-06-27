@@ -1,6 +1,6 @@
 { pkgs, nixpkgs ? { }, libsets }:
 let
-  revision = pkgs.lib.trivial.revisionWithDefault (nixpkgs.revision or "master");
+  revision = pkgs.lib.trivial.revisionWithDefault (nixpkgs.rev or "master");
 
   libDefPos = prefix: set:
     builtins.concatMap

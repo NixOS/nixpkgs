@@ -31,6 +31,7 @@ let
                   maintainers = with lib.maintainers; [ adisbladis aminechikhaoui eelco rob domenkozar ];
                   platforms = lib.platforms.unix;
                   license = lib.licenses.lgpl3;
+                  mainProgram = "nixops";
                 };
 
               }
@@ -67,6 +68,24 @@ let
             '';
 
           };
+        })
+
+        (self: super: {
+          cryptography = super.cryptography.overridePythonAttrs (old: {
+            meta = old.meta // {
+              knownVulnerabilities = old.meta.knownVulnerabilities or [ ]
+                ++ lib.optionals (lib.versionOlder old.version "39.0.1") [
+                  "CVE-2022-4304"
+                  "CVE-2023-0215"
+                  "CVE-2023-0216"
+                  "CVE-2023-0217"
+                  "CVE-2023-0401"
+                  "CVE-2022-4203"
+                  "CVE-2022-4450"
+                  "CVE-2023-23931"
+                ];
+            };
+          });
         })
 
       ];

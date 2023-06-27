@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "bimmer-connected";
-  version = "0.13.0";
+  version = "0.13.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "bimmerconnected";
     repo = "bimmer_connected";
     rev = "refs/tags/${version}";
-    hash = "sha256-o6rCxSJtWqcHqcrhKaVSxEfFLDBikUU9jAszRjihM2o=";
+    hash = "sha256-JnrM2LuvqGHxec2C8eYjO++ejZ2jXIi8XmxpIw/tSxs=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +50,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/bimmerconnected/bimmer_connected/releases/tag/${version}";
     description = "Library to read data from the BMW Connected Drive portal";
     homepage = "https://github.com/bimmerconnected/bimmer_connected";
     license = licenses.asl20;

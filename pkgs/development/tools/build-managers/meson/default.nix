@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchPypi
 , fetchpatch
 , installShellFiles
 , ninja
@@ -12,18 +13,23 @@
 , OpenGL
 , AppKit
 , Cocoa
+, libxcrypt
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.0.0";
+  version = "1.1.1";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qlCkukVXwl59SERqv96FeVfc31g4X/++Zwug6O+szgU=";
+    hash = "sha256-0EtUH5fKQ5+4L6t9DUgJiL5L1OYlY6XKNfrbVAByexw=";
   };
 
   patches = [
+    # Fix Meson tests that fail when the Nix store is case-sensitive APFS.
+    # https://github.com/mesonbuild/meson/pull/11820
+    ./darwin-case-sensitive-fs.patch
+
     # Meson is currently inspecting fewer variables than autoconf does, which
     # makes it harder for us to use setup hooks, etc.  Taken from
     # https://github.com/mesonbuild/meson/pull/6827
@@ -71,13 +77,6 @@ python3.pkgs.buildPythonApplication rec {
         "docs/yaml/objects/dep.yaml"
       ];
     })
-
-    # tests: avoid unexpected failure when cmake is not installed
-    # https://github.com/mesonbuild/meson/pull/11321
-    (fetchpatch {
-      url = "https://github.com/mesonbuild/meson/commit/a38ad3039d0680f3ac34a6dc487776c79c48acf3.patch";
-      hash = "sha256-9YaXwc+F3Pw4BjuOXqva4MD6DAxX1k5WLbn0xzwuEmw=";
-    })
   ];
 
   setupHook = ./setup-hook.sh;
@@ -120,6 +119,10 @@ python3.pkgs.buildPythonApplication rec {
       --replace "python3 -c " "${python3.interpreter} -c "
   '';
 
+  buildInputs = lib.optionals (python3.pythonOlder "3.9") [
+    libxcrypt
+  ];
+
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
@@ -140,7 +143,7 @@ python3.pkgs.buildPythonApplication rec {
       code.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ jtojnar mbe AndersonTorres ];
+    maintainers = with maintainers; [ mbe AndersonTorres ];
     inherit (python3.meta) platforms;
   };
 }

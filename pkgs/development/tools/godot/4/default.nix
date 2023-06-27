@@ -53,13 +53,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "godot";
-  version = "4.0-stable";
+  version = "4.0.3-stable";
 
   src = fetchFromGitHub {
     owner = "godotengine";
     repo = "godot";
     rev = version;
-    hash = "sha256-BaSIHTV7LFV5VqjW+q7u/t/DR6JS6vxfREab6EdKYPU=";
+    hash = "sha256-g9+CV3HsiJqiSJpZvK0N7BqKzp2Pvi6otjRLsFdmWGk=";
   };
 
   nativeBuildInputs = [
@@ -109,14 +109,15 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p "$out/bin"
-    cp bin/godot.* $out/bin/godot
+    cp bin/godot.* $out/bin/godot4
 
     installManPage misc/dist/linux/godot.6
 
     mkdir -p "$out"/share/{applications,icons/hicolor/scalable/apps}
-    cp misc/dist/linux/org.godotengine.Godot.desktop "$out/share/applications/"
-    substituteInPlace "$out/share/applications/org.godotengine.Godot.desktop" \
-      --replace "Exec=godot" "Exec=$out/bin/godot"
+    cp misc/dist/linux/org.godotengine.Godot.desktop "$out/share/applications/org.godotengine.Godot4.desktop"
+    substituteInPlace "$out/share/applications/org.godotengine.Godot4.desktop" \
+      --replace "Exec=godot" "Exec=$out/bin/godot4" \
+      --replace "Godot Engine" "Godot Engine 4"
     cp icon.svg "$out/share/icons/hicolor/scalable/apps/godot.svg"
     cp icon.png "$out/share/icons/godot.png"
   '';
@@ -125,7 +126,7 @@ stdenv.mkDerivation rec {
     homepage = "https://godotengine.org";
     description = "Free and Open Source 2D and 3D game engine";
     license = licenses.mit;
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ twey shiryel ];
   };
 }

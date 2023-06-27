@@ -36,8 +36,16 @@ in
             while ! exec 2> /dev/${qemu-common.qemuSerialDevice}; do sleep 0.1; done
             echo "connecting to host..." >&2
             stty -F /dev/hvc0 raw -echo # prevent nl -> cr/nl conversion
-            echo
-            PS1= exec /bin/sh
+            # The following line is essential since it signals to
+            # the test driver that the shell is ready.
+            # See: the connect method in the Machine class.
+            echo "Spawning backdoor root shell..."
+            # Passing the terminal device makes bash run non-interactively.
+            # Otherwise we get errors on the terminal because bash tries to
+            # setup things like job control.
+            # Note: calling bash explicitly here instead of sh makes sure that
+            # we can also run non-NixOS guests during tests.
+            PS1= exec /usr/bin/env bash --norc /dev/hvc0
           '';
         serviceConfig.KillSignal = "SIGHUP";
       };
@@ -107,10 +115,12 @@ in
       ShowStatus=no
       # Allow very slow start
       DefaultTimeoutStartSec=300
+      DefaultDeviceTimeoutSec=300
     '';
     systemd.user.extraConfig = ''
       # Allow very slow start
       DefaultTimeoutStartSec=300
+      DefaultDeviceTimeoutSec=300
     '';
 
     boot.initrd.systemd.extraConfig = config.systemd.extraConfig;

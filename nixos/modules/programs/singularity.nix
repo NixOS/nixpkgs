@@ -25,9 +25,9 @@ in
       type = types.nullOr types.package;
       default = null;
       description = mdDoc ''
-        This option provides access to the overriden result of `programs.singularity.package`.
+        This option provides access to the overridden result of `programs.singularity.package`.
 
-        For example, the following configuration makes all the Nixpkgs packages use the overriden `singularity`:
+        For example, the following configuration makes all the Nixpkgs packages use the overridden `singularity`:
         ```Nix
         { config, lib, pkgs, ... }:
         {
@@ -42,7 +42,7 @@ in
         }
         ```
 
-        Use `lib.mkForce` to forcefully specify the overriden package.
+        Use `lib.mkForce` to forcefully specify the overridden package.
       '';
     };
     enableFakeroot = mkOption {

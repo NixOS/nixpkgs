@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "netdata";
-  version = "1.0.3";
+  version = "1.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-netdata";
-    rev = version;
-    hash = "sha256-vrXXvCoZ1jErlxTcjGbtA8Uio7UDxnt3aNb9FQ0PkrU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-XWlUSKGgndHtJjzA0mYvhCkJsRJ1SUbl8DGdmyFUmoo=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API for interacting with Netdata";
     homepage = "https://github.com/home-assistant-ecosystem/python-netdata";
+    changelog = "https://github.com/home-assistant-ecosystem/python-netdata/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

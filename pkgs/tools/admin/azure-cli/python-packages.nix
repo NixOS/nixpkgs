@@ -1,4 +1,4 @@
-{ stdenv, python3, lib, src, version }:
+{ stdenv, python3, fetchPypi, lib, src, version }:
 
 let
   buildAzureCliPackage = with py.pkgs; buildPythonPackage;
@@ -8,7 +8,7 @@ let
     package.overrideAttrs(oldAttrs: rec {
       inherit version;
 
-      src = py.pkgs.fetchPypi {
+      src = fetchPypi {
         inherit (oldAttrs) pname;
         inherit version hash extension;
       };
@@ -315,7 +315,7 @@ let
       azure-appconfiguration = super.azure-appconfiguration.overrideAttrs(oldAttrs: rec {
         version = "1.1.1";
 
-        src = super.fetchPypi {
+        src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-uDzSy2PZMiXehOJ6u/wFkhL43id2b0xY3Tq7g53/C+Q=";
@@ -326,7 +326,7 @@ let
       azure-graphrbac = super.azure-graphrbac.overrideAttrs(oldAttrs: rec {
         version = "0.60.0";
 
-        src = super.fetchPypi {
+        src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-0Lti2L+OGWuQPzlxukr6RI5P4U6DlOv83ZQdhNYuyv4=";
@@ -336,7 +336,7 @@ let
 
       azure-storage-blob = super.azure-storage-blob.overrideAttrs(oldAttrs: rec {
         version = "1.5.0";
-        src = super.fetchPypi {
+        src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-8YeoeOehkfTgmBWZBPcrQUbPcOGquvZISrS6cvxvJSw=";
@@ -345,7 +345,7 @@ let
 
       azure-storage-common = super.azure-storage-common.overrideAttrs(oldAttrs: rec {
         version = "1.4.2";
-        src = super.fetchPypi {
+        src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-Tsh8dTfUV+yVJS4ORkd+LBzPM3dP/v0F2FRGgssK5AE=";
@@ -354,7 +354,7 @@ let
 
       azure-synapse-artifacts = super.azure-synapse-artifacts.overrideAttrs(oldAttrs: rec {
         version = "0.14.0";
-        src = super.fetchPypi {
+        src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-Q1gGq7EZ/JvYjD7y0mp3kEy15QKZI84UQTdlIBoQLMs=";
@@ -367,7 +367,7 @@ let
 
       azure-synapse-accesscontrol = super.azure-synapse-accesscontrol.overrideAttrs(oldAttrs: rec {
         version = "0.5.0";
-        src = super.fetchPypi {
+        src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-g14ySiByqPgkJGRH8EnIRJO9Q6H2usS5FOeMCQiUuwQ=";
@@ -377,7 +377,7 @@ let
 
       azure-synapse-managedprivateendpoints = super.azure-synapse-managedprivateendpoints.overrideAttrs(oldAttrs: rec {
         version = "0.3.0";
-        src = super.fetchPypi {
+        src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-fN1IuZ9fjxgRZv6qh9gg6v6KYpnKlXfnoLqfZCDXoRY=";
@@ -387,7 +387,7 @@ let
 
       azure-synapse-spark = super.azure-synapse-spark.overrideAttrs(oldAttrs: rec {
         version = "0.2.0";
-        src = super.fetchPypi {
+        src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-OQ5brhweEIrtN2iP4I5NacdC9t3YUiGIVhhqSs3FMuI=";
@@ -397,7 +397,7 @@ let
 
       azure-keyvault = super.azure-keyvault.overrideAttrs(oldAttrs: rec {
         version = "1.1.0";
-        src = super.fetchPypi {
+        src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
           extension = "zip";
@@ -413,7 +413,7 @@ let
 
       azure-keyvault-administration = super.azure-keyvault-administration.overridePythonAttrs(oldAttrs: rec {
         version = "4.0.0b3";
-        src = super.fetchPypi {
+        src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
           extension = "zip";
@@ -423,7 +423,7 @@ let
 
       azure-keyvault-keys = super.azure-keyvault-keys.overridePythonAttrs(oldAttrs: rec {
         version = "4.8.0b2";
-        src = super.fetchPypi {
+        src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
           extension = "zip";
@@ -436,7 +436,7 @@ let
       azure-mgmt-datalake-analytics = super.azure-mgmt-datalake-analytics.overrideAttrs(oldAttrs: rec {
         version = "0.2.1";
 
-        src = super.fetchPypi {
+        src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-THlg0JT1hH2aRWwYuKPI5gxCjjCAo5BfHJQ9gbpjUaQ=";
@@ -453,7 +453,7 @@ let
       azure-mgmt-datalake-store = super.azure-mgmt-datalake-store.overrideAttrs(oldAttrs: rec {
         version = "0.5.0";
 
-        src = super.fetchPypi {
+        src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-k3bTVJVmHRn4rMVgT2ewvFlJOxg1u8SA+aGVL5ABekw=";
@@ -470,7 +470,7 @@ let
       adal = super.adal.overridePythonAttrs(oldAttrs: rec {
         version = "1.2.7";
 
-        src = super.fetchPypi {
+        src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-109FuBMXRU2W6YL9HFDm+1yZrCIjcorqh2RDOjn1ZvE=";
@@ -483,7 +483,7 @@ let
       msal = super.msal.overridePythonAttrs(oldAttrs: rec {
         version = "1.20.0";
 
-        src = super.fetchPypi {
+        src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-eDRM1MkdYTSlk7Xj5FVB5mbje3R/+KYxbDZo3R5qtrI=";
@@ -493,7 +493,7 @@ let
       semver = super.semver.overridePythonAttrs(oldAttrs: rec {
         version = "2.13.0";
 
-        src = super.fetchPypi {
+        src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-+g/ici7hw/V+rEeIIMOlri9iSvgmTL35AAyYD/f3Xj8=";
@@ -512,7 +512,7 @@ let
       knack = super.knack.overridePythonAttrs(oldAttrs: rec {
         version = "0.10.1";
 
-        src = super.fetchPypi {
+        src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-xXKBKCl+bSaXkQhc+Wwv/fzvWM+DxjSly5LrA7KSmDg=";
@@ -522,7 +522,7 @@ let
       argcomplete = super.argcomplete.overridePythonAttrs(oldAttrs: rec {
         version = "2.0.0";
 
-        src = super.fetchPypi {
+        src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-Y3KteMidZiA1EBQYriU2aERbORdVz+lOpS8bnSJCWyA=";
@@ -533,7 +533,7 @@ let
         name = "sshtunnel-${version}";
         version = "0.1.5";
 
-        src = super.fetchPypi {
+        src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-yBP9zajoHDk2/+rEfLac+y0fXnetDeZWxtq1au69kkk=";

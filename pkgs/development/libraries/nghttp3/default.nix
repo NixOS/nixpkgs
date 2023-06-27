@@ -1,28 +1,28 @@
 { lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config, file
+, cmake
 , cunit, ncurses
 , curlHTTP3
 }:
 
 stdenv.mkDerivation rec {
   pname = "nghttp3";
-  version = "0.9.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-N4wgk21D1I0tNrKoTGWBtq3neeamCI8axQnFxdT1Txg=";
+    hash = "sha256-jbD//8BNqzX2T2F0JH+Vsoi/D+8HZIPXGnHoj3hzqPk=";
   };
 
   outputs = [ "out" "dev" "doc" ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config file ];
+  nativeBuildInputs = [ cmake ];
   nativeCheckInputs = [ cunit ncurses ];
 
-  preConfigure = ''
-    substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file
-  '';
+  cmakeFlags = [
+    "-DENABLE_STATIC_LIB=OFF"
+  ];
 
   doCheck = true;
   enableParallelBuilding = true;

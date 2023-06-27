@@ -16,14 +16,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2023.3.1";
+  version = "2023.6.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-h35V6tg6TewqJiZ4T5t6RNNaT2JEzqhbnJgH6xqqqzs=";
+    hash = "sha256-ne9Su7Tp0p1fWQ6ivvWPkdEskTZpqIjQvh26D3Ta4Sc=";
   };
 
   postPatch = ''
@@ -49,12 +49,12 @@ python.pkgs.buildPythonApplication rec {
     colorama
     cryptography
     esphome-dashboard
-    ifaddr
     kconfiglib
     paho-mqtt
     pillow
     platformio
     protobuf
+    pyparsing
     pyserial
     pyyaml
     requests
@@ -97,6 +97,7 @@ python.pkgs.buildPythonApplication rec {
   };
 
   meta = with lib; {
+    changelog = "https://github.com/esphome/esphome/releases/tag/${version}";
     description = "Make creating custom firmwares for ESP32/ESP8266 super easy";
     homepage = "https://esphome.io/";
     license = with licenses; [

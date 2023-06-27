@@ -12,33 +12,21 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "elementary-gtk-theme";
-  version = "7.0.1";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "stylesheet";
     rev = version;
-    sha256 = "sha256-KUo9IbB10JRgFrn6I5y4+34PEihuwp78b+YsX2Wqip8=";
+    sha256 = "sha256-ZR0FJ8DkPlO1Zatvxv3NghAVBPo2j+1m0k4C+gvYPVA=";
   };
 
   patches = [
-    # All patches listed below are fixes for Epiphany 44.
-    # https://github.com/elementary/browser/discussions/82
+    # Headerbars: fix missing default-decoration
+    # https://github.com/elementary/stylesheet/pull/1258
     (fetchpatch {
-      url = "https://github.com/elementary/stylesheet/commit/c0028159dd5a7767ead9a12e9a4cfb693159c823.patch";
-      sha256 = "sha256-JgJ6FoE2aSTmjJ7klAoYXITbxJwy1HFGvr6F6lVQysY=";
-    })
-    (fetchpatch {
-      url = "https://github.com/elementary/stylesheet/commit/2b9aa7aabce8ab2656340de41f7d5194ddd62078.patch";
-      sha256 = "sha256-84sCbVw3JChw25FIKG4eFbj3EkDioefJp5Q938TwXPc=";
-    })
-    (fetchpatch {
-      url = "https://github.com/elementary/stylesheet/commit/88682d3e931fdd46682d3ac8f1f1e700e2514c56.patch";
-      sha256 = "sha256-2/yYO9Upt33bZembRRuvcfwpQunD1hhJ/BC2DZSuWPk=";
-    })
-    (fetchpatch {
-      url = "https://github.com/elementary/stylesheet/commit/bb15232abc6167a305b4404467498d11901aea69.patch";
-      sha256 = "sha256-L6y61CVRTakSHDvFanhbpsSzLkiSp5Dsm0Fg3RKccQk=";
+      url = "https://github.com/elementary/stylesheet/commit/9cea2383bec8f90d25f1e9b854b5221737487521.patch";
+      sha256 = "sha256-6komROS4+nxwoGoKoiDmnrTfLNZAvnTU6hIEOQQfmxc=";
     })
   ];
 

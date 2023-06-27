@@ -19,25 +19,23 @@
 
 buildPythonPackage rec {
   pname = "fastapi-mail";
-  version = "1.2.6";
+  version = "1.3.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sabuhish";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-PL/0swFiAG8HlvxnsEqwEEec1CIsA3qFer3LKyS2y/Y=";
+    hash = "sha256-ttVzjmMZe1iWn2J7N5pcol4GFnKv3CB3DOQkZU2HnHg=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'version = "1.2.2"' 'version = "${version}"' \
+      --replace 'version = "1.2.5"' 'version = "${version}"' \
       --replace 'aiosmtplib = "^2.0"' 'aiosmtplib = "*"' \
       --replace 'pydantic = "^1.8"' 'pydantic = "*"' \
-      --replace 'starlette = "^0.22.0"' 'starlette = "*"' \
-      --replace 'black = "^22.12.0"' ""
   '';
 
   nativeBuildInputs = [

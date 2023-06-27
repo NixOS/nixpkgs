@@ -9,6 +9,7 @@
 , pixman
 , pkg-config
 , substituteAll
+, wayland-scanner
 , wayland
 , wayland-protocols
 , wlroots_0_16
@@ -22,20 +23,21 @@
 let
   wlroots = wlroots_0_16;
 in
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dwl";
   version = "0.4";
 
   src = fetchFromGitHub {
     owner = "djpohly";
     repo = "dwl";
-    rev = "v${self.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-OW7K7yMYSzqZWpQ9Vmpy8EgdWvyv3q1uh8A40f6AQF4=";
   };
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [
@@ -61,17 +63,19 @@ stdenv.mkDerivation (self: {
                  else writeText "config.def.h" conf;
   in lib.optionalString (conf != null) "cp ${configFile} config.def.h";
 
+  makeFlags = [
+    "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config"
+    "WAYLAND_SCANNER=wayland-scanner"
+    "PREFIX=$(out)"
+    "MANDIR=$(man)/share/man/man1"
+  ];
+
   preBuild = ''
     makeFlagsArray+=(
       XWAYLAND=${lib.optionalString enableXWayland "-DXWAYLAND"}
       XLIBS=${lib.optionalString enableXWayland "xcb\\ xcb-icccm"}
     )
   '';
-
-  installFlags = [
-    "PREFIX=$(out)"
-    "MANDIR=$(man)/share/man/man1"
-  ];
 
   meta = {
     homepage = "https://github.com/djpohly/dwl/";
@@ -87,7 +91,7 @@ stdenv.mkDerivation (self: {
       - Limited to 2000 SLOC to promote hackability
       - Tied to as few external dependencies as possible
     '';
-    changelog = "https://github.com/djpohly/dwl/releases/tag/v${self.version}";
+    changelog = "https://github.com/djpohly/dwl/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.AndersonTorres ];
     inherit (wayland.meta) platforms;

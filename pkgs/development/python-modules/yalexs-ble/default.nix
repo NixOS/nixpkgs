@@ -5,6 +5,7 @@
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
+, lru-dict
 , poetry-core
 , pytest-asyncio
 , pytestCheckHook
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "yalexs-ble";
-  version = "2.1.1";
+  version = "2.1.18";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-tYdm6XrjltQtN9m23GB9WDWLbXb4pMNiLQWpxxeqsLY=";
+    hash = "sha256-bLxKq/MNbVIv9CV67NeOqn49cYu7gwcBnbZEtlreQzQ=";
   };
 
   nativeBuildInputs = [
@@ -34,6 +35,7 @@ buildPythonPackage rec {
     bleak
     bleak-retry-connector
     cryptography
+    lru-dict
   ];
 
   nativeCheckInputs = [

@@ -6,16 +6,15 @@
 let
   py = python3.override {
     packageOverrides = self: super: {
-
-      dpath = super.dpath.overridePythonAttrs (oldAttrs: rec {
-        version = "1.5.0";
-        src = oldAttrs.src.override {
-          inherit version;
-          hash = "sha256-SWYVtOqEI20Y4NKGEi3nSGmmDg+H4sfsZ4f/KGxINhs=";
+      cyclonedx-python-lib = super.cyclonedx-python-lib.overridePythonAttrs (oldAttrs: rec {
+        version = "2.7.1";
+        src = fetchFromGitHub {
+          owner = "CycloneDX";
+          repo = "cyclonedx-python-lib";
+          rev = "v${version}";
+          hash = "sha256-c/KhoJOa121/h0n0GUazjUFChnUo05ThD+fuZXc5/Pk=";
         };
-        doCheck = false;
       });
-
     };
   };
 in
@@ -23,14 +22,14 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.3.96";
+  version = "2.3.301";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-jQ5VaOvJkxhZ0fHrNmkuFK+qmRUNdzR5XCWqWv1iBs4=";
+    hash = "sha256-jhyMQZGy9iNbT5M+gp0/oB4Ke3nX3cCX4N8cgRXkbeY=";
   };
 
   patches = [
@@ -38,17 +37,20 @@ buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "bc-detect-secrets"
     "bc-python-hcl2"
-    "pycep-parser"
+    "dpath"
+    "license-expression"
     "networkx"
+    "pycep-parser"
   ];
 
-  nativeBuildInputs = with py.pkgs; [
+  nativeBuildInputs = [
     pythonRelaxDepsHook
     setuptools-scm
   ];
 
-  propagatedBuildInputs = with py.pkgs; [
+  propagatedBuildInputs = [
     aiodns
     aiohttp
     aiomultiprocess
@@ -73,13 +75,16 @@ buildPythonApplication rec {
     jmespath
     jsonschema
     junit-xml
+    license-expression
     networkx
+    openai
     packaging
     policyuniverse
     prettytable
     pycep-parser
     pyyaml
     semantic-version
+    spdx-tools
     tabulate
     termcolor
     tqdm
@@ -87,7 +92,7 @@ buildPythonApplication rec {
     update_checker
   ];
 
-  nativeCheckInputs = with py.pkgs; [
+  nativeCheckInputs = [
     aioresponses
     mock
     pytest-asyncio
@@ -114,8 +119,12 @@ buildPythonApplication rec {
     # Tests are comparing console output
     "cli"
     "console"
-    # Starting to fail after 2.3.96
-    "test_runner_verify_secrets_skip"
+    # Starting to fail after 2.3.205
+    "test_non_multiline_pair"
+    "test_secret_value_in_keyword"
+    "test_runner_verify_secrets_skip_invalid_suppressed"
+    "test_runner_verify_secrets_skip_all_no_effect"
+    "test_runner"
   ];
 
   disabledTestPaths = [

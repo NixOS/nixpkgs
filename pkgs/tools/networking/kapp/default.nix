@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kapp";
-  version = "0.54.1";
+  version = "0.57.1";
 
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "carvel-kapp";
     rev = "v${version}";
-    sha256 = "sha256-q9Am9ryrvmvuUCmHNCsf1iZz0wdaO87C1Gbvi40cKIA=";
+    sha256 = "sha256-JNo6+WlMcIUGb/36GM6ofvJBIJnF4oRocdYsEw7V1Ks=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   subPackages = [ "cmd/kapp" ];
 

@@ -1,12 +1,23 @@
-{ borgbackup, coreutils, lib, python3Packages, systemd, installShellFiles, borgmatic, testers }:
+{ lib
+, stdenv
+, borgbackup
+, coreutils
+, python3Packages
+, fetchPypi
+, systemd
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, installShellFiles
+, borgmatic
+, testers
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
-  version = "1.7.8";
+  version = "1.7.14";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+lYyCPKgaWZPUkIGjgmBES6vg1ZbgZ5b6WKmpqAcyhM=";
+    sha256 = "sha256-rABJfdrV+D2v6yHpAbzj/0MSGc9bo49pwXEC45Mmmlk=";
   };
 
   nativeCheckInputs = with python3Packages; [ flexmock pytestCheckHook pytest-cov ];
@@ -31,7 +42,7 @@ python3Packages.buildPythonApplication rec {
   postInstall = ''
     installShellCompletion --cmd borgmatic \
       --bash <($out/bin/borgmatic --bash-completion)
-
+  '' + lib.optionalString enableSystemd ''
     mkdir -p $out/lib/systemd/system
     cp sample/systemd/borgmatic.timer $out/lib/systemd/system/
     # there is another "sleep", so choose the one with the space after it

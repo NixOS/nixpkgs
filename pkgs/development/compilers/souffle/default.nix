@@ -10,22 +10,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "souffle";
-  version = "2.3";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner  = "souffle-lang";
     repo   = "souffle";
     rev    = version;
-    sha256 = "sha256-wdTBSmyA2I+gaSV577NNKA2oY2fdVTGmvV7h15NY1tU=";
+    sha256 = "sha256-5g2Ikbfm5nQrsgGntZZ/VbjqSDOj0AP/mnH1nW2b4co=";
   };
 
   patches = [
     ./threads.patch
-    (fetchpatch {
-      name = "missing-override.patch";
-      url = "https://github.com/souffle-lang/souffle/commit/da2d778f0cca94f206686546fa56b9ffc738ad75.patch";
-      sha256 = "Oefm3vRRwOyom94oGSOK2w9m23gkbJ++9gcWrdLlkyk=";
-    })
   ];
 
   hardeningDisable = lib.optionals stdenv.isDarwin [ "strictoverflow" ];

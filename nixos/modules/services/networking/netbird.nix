@@ -41,9 +41,10 @@ in {
       documentation = [ "https://netbird.io/docs/" ];
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      path = with pkgs; [
+        openresolv
+      ];
       serviceConfig = {
-        AmbientCapabilities = [ "CAP_NET_ADMIN" ];
-        DynamicUser = true;
         Environment = [
           "NB_CONFIG=/var/lib/netbird/config.json"
           "NB_LOG_FILE=console"

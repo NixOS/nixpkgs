@@ -8,22 +8,21 @@
 , pytestCheckHook
 , pythonOlder
 , requests
-, six
 }:
 
 buildPythonPackage rec {
   pname = "pyopnsense";
-  version = "0.3.0";
+  version = "0.4.0";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06rssdb3zhccnm63z96mw5yd38d9i99fgigfcdxn9divalbbhp5a";
+    hash = "sha256-3DKlVrOtMa55gTu557pgojRpdgrO5pEZ3L+9gKoW9yg=";
   };
 
   propagatedBuildInputs = [
     pbr
-    six
     requests
   ];
 
@@ -34,11 +33,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pyopnsense" ];
+  pythonImportsCheck = [
+    "pyopnsense"
+  ];
 
   meta = with lib; {
     description = "Python client for the OPNsense API";
     homepage = "https://github.com/mtreinish/pyopnsense";
+    changelog = "https://github.com/mtreinish/pyopnsense/releases/tag/${version}";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };

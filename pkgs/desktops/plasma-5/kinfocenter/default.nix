@@ -2,7 +2,6 @@
 , lib
 , extra-cmake-modules
 , kdoctools
-, qtbase
 , qttools
 , kcmutils
 , kcompletion

@@ -6,13 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "stratis-cli";
-  version = "3.5.0";
+  version = "3.5.3";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-IfvI8DVjm68SewHtQbhGGU1oku4eZnF7cRyeVPB/Ctk=";
+    hash = "sha256-YoPi2AtP6qZPMrlxbDAD0sDEKrSBHLLRcHbNLxlXXCk=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -32,7 +33,6 @@ python3Packages.buildPythonApplication rec {
   disabledTestPaths = [
     # tests below require dbus daemon
     "tests/whitebox/integration"
-    "tests/whitebox/monkey_patching"
   ];
 
   pythonImportsCheck = [ "stratis_cli" ];

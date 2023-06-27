@@ -23,13 +23,12 @@
 , limesuite
 , libbladeRF
 , mbelib
-, mkDerivation
 , ninja
-, ocl-icd
 , opencv3
 , pkg-config
 , qtcharts
 , qtdeclarative
+, qtgamepad
 , qtgraphicaleffects
 , qtlocation
 , qtmultimedia
@@ -45,21 +44,22 @@
 , sgp4
 , soapysdr-with-plugins
 , uhd
+, wrapQtAppsHook
 , zlib
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "sdrangel";
-  version = "7.10.0";
+  version = "7.15.0";
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "sdrangel";
     rev = "v${version}";
-    hash = "sha256-hsYt7zGG6CSWeQ9A3GPt65efjZGPu33O5pIhnZjFgmY=";
+    hash = "sha256-APDrVujz/2ZYqxGggabAj8ght72Vuf+oMS/kuVaWkWM=";
   };
 
-  nativeBuildInputs = [ cmake ninja pkg-config ];
+  nativeBuildInputs = [ cmake ninja pkg-config wrapQtAppsHook ];
 
   buildInputs = [
     airspy
@@ -86,6 +86,7 @@ mkDerivation rec {
     opencv3
     qtcharts
     qtdeclarative
+    qtgamepad
     qtgraphicaleffects
     qtlocation
     qtmultimedia
@@ -106,15 +107,11 @@ mkDerivation rec {
 
   cmakeFlags = [
     "-DAPT_DIR=${aptdec}"
-    "-DDAB_INCLUDE_DIR:PATH=${dab_lib}/include/dab_lib"
-    "-DLIBSERIALDV_INCLUDE_DIR:PATH=${serialdv}/include/serialdv"
-    "-DLIMESUITE_INCLUDE_DIR:PATH=${limesuite}/include"
-    "-DLIMESUITE_LIBRARY:FILEPATH=${limesuite}/lib/libLimeSuite${stdenv.hostPlatform.extensions.sharedLibrary}"
+    "-DDAB_DIR=${dab_lib}"
     "-DSGP4_DIR=${sgp4}"
     "-DSOAPYSDR_DIR=${soapysdr-with-plugins}"
+    "-Wno-dev"
   ];
-
-  LD_LIBRARY_PATH = "${ocl-icd}/lib";
 
   meta = with lib; {
     description = "Software defined radio (SDR) software";
@@ -123,7 +120,7 @@ mkDerivation rec {
     '';
     homepage = "https://github.com/f4exb/sdrangel";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ alkeryn ];
+    maintainers = with maintainers; [ alkeryn Tungsten842 ];
     platforms = platforms.unix;
   };
 }

@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.8.1)
+    addressable (2.8.4)
       public_suffix (>= 2.0.2, < 6.0)
     faraday (2.7.4)
       faraday-net_http (>= 2.0, < 3.1)
@@ -24,4 +24,4 @@ DEPENDENCIES
   sawyer (= 0.9.2)
 
 BUNDLED WITH
-   2.4.6
+   2.4.10

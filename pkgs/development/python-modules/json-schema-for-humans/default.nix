@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "json-schema-for-humans";
-  version = "0.44.3";
+  version = "0.44.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "coveooss";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-qja4mYl8G/t3FqFoVToLo76XthJ4RXF4y6odkPZDoq4=";
+    hash = "sha256-+RsJdlGMrjW2GFFLUcQBMwBnBlhST0knCleh2e3d10A=";
   };
 
   postPatch = ''

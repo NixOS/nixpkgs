@@ -1,5 +1,4 @@
 { fetchFromGitHub
-, fetchpatch
 , glib
 , gobject-introspection
 , gtk3
@@ -23,7 +22,7 @@
 
 stdenv.mkDerivation rec {
   pname = "xapp";
-  version = "2.4.2";
+  version = "2.6.1";
 
   outputs = [ "out" "dev" ];
 
@@ -31,17 +30,12 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-etB+q7FIwbApTUk8RohAy3kHX8Vb4cSY/qkvhj94yTM=";
+    hash = "sha256-ZxIPiDLcMHEmlnrImctI2ZfH3AIOjB4m/RPGipJ7koM=";
   };
 
-  patches = [
-    # xapp-sn-watcher crashes on cinnamon with glib 2.76.0
-    # https://github.com/linuxmint/xapp/issues/165
-    (fetchpatch {
-      url = "https://github.com/linuxmint/xapp/commit/3ef9861d6228c2061fbde2c0554be5ae6f42befa.patch";
-      sha256 = "sha256-7hYXA43UQpBLLjRVPoACc8xdhKyKnt3cDUBL4PhEtJY=";
-    })
-  ];
+  # Recommended by upstream, which enables the build of xapp-debug.
+  # https://github.com/linuxmint/xapp/issues/169#issuecomment-1574962071
+  mesonBuildType = "debugoptimized";
 
   nativeBuildInputs = [
     meson
@@ -80,20 +74,15 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     chmod +x schemas/meson_install_schemas.py # patchShebangs requires executable file
-
-    patchShebangs \
-      libxapp/g-codegen.py \
-      meson-scripts/g-codegen.py \
-      schemas/meson_install_schemas.py
+    patchShebangs schemas/meson_install_schemas.py
 
     # Patch pastebin & inxi location
     sed "s|/usr/bin/pastebin|$out/bin/pastebin|" -i scripts/upload-system-info
     sed "s|'inxi'|'${inxi}/bin/inxi'|" -i scripts/upload-system-info
-
-    # Patch gtk3 module target dir
-    substituteInPlace libxapp/meson.build \
-         --replace "gtk3_dep.get_pkgconfig_variable('libdir')" "'$out'"
   '';
+
+  # Fix gtk3 module target dir. Proper upstream solution should be using define_variable.
+  PKG_CONFIG_GTK__3_0_LIBDIR = "${placeholder "out"}/lib";
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/xapp";

@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "eccodes";
-  version = "2.28.0";
+  version = "2.30.2";
 
   src = fetchurl {
     url = "https://confluence.ecmwf.int/download/attachments/45757960/eccodes-${version}-Source.tar.gz";
-    sha256 = "sha256-KDE0exUXr569cN08rYiugYqESNTmyGcapyhhfnNDHNU=";
+    sha256 = "sha256-ObleQiGxFtyBhlbQTIKIQFXUiuuqKZDCWeqM3/2kJYI=";
   };
 
   postPatch = ''

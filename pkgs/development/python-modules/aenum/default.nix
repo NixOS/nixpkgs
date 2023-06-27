@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "aenum";
-  version = "3.1.11";
+  version = "3.1.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rtLCc1R65yoNXuhpcZwCpkPaFr9QfICVj6rcfgOOP3M=";
+    hash = "sha256-PlMckYYKgfiF9+bpfSGa6XcsuJlYAIR4iTXa19l0LvA=";
   };
 
   nativeCheckInputs = [

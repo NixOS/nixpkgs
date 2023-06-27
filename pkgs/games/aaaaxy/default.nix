@@ -12,21 +12,24 @@
 , libXxf86vm
 , go-licenses
 , pkg-config
+, zip
+, advancecomp
+, nixosTests
 }:
 
 buildGoModule rec {
   pname = "aaaaxy";
-  version = "1.3.372";
+  version = "1.4.18";
 
   src = fetchFromGitHub {
     owner = "divVerent";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-vm3wA8lzoaJ5iGwf2nZ0EvoSATHGftQ77lwdEjGe2RU=";
+    hash = "sha256-g2xUBh0zRB+9awYEr15ay0k+EyAiWmGG5UfZatE24/8=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-WEK7j7FMiue0Fl1R+To5GKwvM03pjc1nKig/wePEAAY=";
+  vendorHash = "sha256-9SeNXOl1wEcG/CtNuuYQ8Y5XEw2GYAIQ2lXk5lgXsN8=";
 
   buildInputs = [
     alsa-lib
@@ -38,13 +41,21 @@ buildGoModule rec {
   nativeBuildInputs = [
     go-licenses
     pkg-config
+    zip
+    advancecomp
   ];
+
+  outputs = [ "out" "testing_infra" ];
 
   postPatch = ''
     # Without patching, "go run" fails with the error message:
     # package github.com/google/go-licenses: no Go files in /build/source/vendor/github.com/google/go-licenses
     substituteInPlace scripts/build-licenses.sh --replace \
       '$GO run ''${GO_FLAGS} github.com/google/go-licenses' 'go-licenses'
+
+    patchShebangs scripts/
+    substituteInPlace scripts/regression-test-demo.sh \
+      --replace 'sh scripts/run-timedemo.sh' "$testing_infra/scripts/run-timedemo.sh"
   '';
 
   makeFlags = [
@@ -63,19 +74,15 @@ buildGoModule rec {
     install -Dm644 'aaaaxy.png' -t "$out/share/icons/hicolor/128x128/apps/"
     install -Dm644 'aaaaxy.desktop' -t "$out/share/applications/"
     install -Dm644 'io.github.divverent.aaaaxy.metainfo.xml' -t "$out/share/metainfo/"
+
+    install -Dm755 'scripts/run-timedemo.sh' -t "$testing_infra/scripts/"
+    install -Dm755 'scripts/regression-test-demo.sh' -t "$testing_infra/scripts/"
+    install -Dm644 'assets/demos/benchmark.dem' -t "$testing_infra/assets/demos/"
   '';
 
-  checkPhase = ''
-    runHook preCheck
-
-    # Can't get GLX to work even though it seems to work in their CI system:
-    # [FATAL] RunGame exited abnormally: APIUnavailable: GLX: GLX extension not found
-    # xvfb-run sh scripts/regression-test-demo.sh aaaaxy \
-    #   "on track for Any%, All Paths and No Teleports" \
-    #   ./aaaaxy assets/demos/benchmark.dem
-
-    runHook postCheck
-  '';
+  passthru.tests = {
+    aaaaxy = nixosTests.aaaaxy;
+  };
 
   strictDeps = true;
 

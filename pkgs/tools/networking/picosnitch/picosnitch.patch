@@ -1,0 +1,111 @@
+diff --git a/picosnitch.py b/picosnitch.py
+index a3dbb07..2b74f3e 100755
+--- a/picosnitch.py
++++ b/picosnitch.py
+@@ -1356,7 +1356,7 @@ def ui_loop(stdscr: curses.window, splash: str, con: sqlite3.Connection) -> int:
+             update_query = False
+         if execute_query:
+             try:
+-                with open("/run/picosnitch.pid", "r") as f:
++                with open("/run/picosnitch/picosnitch.pid", "r") as f:
+                     run_status = "pid: " + f.read().strip()
+             except Exception:
+                 run_status = "not running"
+@@ -1603,7 +1603,7 @@ def ui_dash():
+         return cmdline
+     def serve_layout():
+         try:
+-            with open("/run/picosnitch.pid", "r") as f:
++            with open("/run/picosnitch/picosnitch.pid", "r") as f:
+                 run_status = "pid: " + f.read().strip()
+         except Exception:
+             run_status = "not running"
+@@ -1771,7 +1771,7 @@ def main():
+     # master copy of the snitch dictionary, all subprocesses only receive a static copy of it from this point in time
+     snitch = read_snitch()
+     # start picosnitch process monitor
+-    with open("/run/picosnitch.pid", "r") as f:
++    with open("/run/picosnitch/picosnitch.pid", "r") as f:
+         assert int(f.read().strip()) == os.getpid()
+     if __name__ == "__main__" or sys.argv[1] == "start-no-daemon":
+         sys.exit(main_process(snitch))
+@@ -1818,7 +1818,7 @@ def start_picosnitch():
+     RestartSec=5
+     Environment="SUDO_UID={os.getenv("SUDO_UID")}" "SUDO_USER={os.getenv("SUDO_USER")}" "DBUS_SESSION_BUS_ADDRESS={os.getenv("DBUS_SESSION_BUS_ADDRESS")}" "PYTHON_USER_SITE={site.USER_SITE}"
+     ExecStart={sys.executable} "{os.path.abspath(__file__)}" start-no-daemon
+-    PIDFile=/run/picosnitch.pid
++    PIDFile=/run/picosnitch/picosnitch.pid
+ 
+     [Install]
+     WantedBy=multi-user.target
+@@ -1832,12 +1832,12 @@ def start_picosnitch():
+                 subprocess.Popen(["bash", "-c", f'let i=0; rm {BASE_PATH}/dash; while [[ ! -f {BASE_PATH}/dash || "$i" -gt 30 ]]; do let i++; sleep 1; done; rm {BASE_PATH}/dash && /usr/bin/env python3 -m webbrowser -t http://{os.getenv("HOST", "localhost")}:{os.getenv("PORT", "5100")}'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+         if os.getuid() != 0:
+             args = ["sudo", "-E", sys.executable, os.path.abspath(__file__), sys.argv[1]]
+-            os.execvp("sudo", args)
++            assert sys.argv[1] not in ["start", "stop", "restart", "start-no-daemon"], "picosnitch requires root privileges to run"
+         with open("/proc/self/status", "r") as f:
+             proc_status = f.read()
+             capeff = int(proc_status[proc_status.find("CapEff:")+8:].splitlines()[0].strip(), base=16)
+             cap_sys_admin = 2**21
+-            assert capeff & cap_sys_admin, "Missing capability CAP_SYS_ADMIN"
++            assert sys.argv[1] not in ["start", "stop", "restart", "start-no-daemon"] or (capeff & cap_sys_admin), "Missing capability CAP_SYS_ADMIN"
+         assert importlib.util.find_spec("bcc"), "Requires BCC https://github.com/iovisor/bcc/blob/master/INSTALL.md"
+         tmp_snitch = read_snitch()
+         con = sqlite3.connect(os.path.join(BASE_PATH, "snitch.db"))
+@@ -1883,8 +1883,8 @@ def start_picosnitch():
+             except Exception as e:
+                 print("Warning: %s%s on line %s" % (type(e).__name__, str(e.args), sys.exc_info()[2].tb_lineno), file=sys.stderr)
+         if sys.argv[1] in ["start", "stop", "restart"]:
+-            if os.path.exists("/usr/lib/systemd/system/picosnitch.service"):
+-                print("Found /usr/lib/systemd/system/picosnitch.service but you are not using systemctl")
++            if os.path.exists("/usr/lib/systemd/system/picosnitch.service") or os.path.exists("/etc/systemd/system/picosnitch.service"):
++                print("Found picosnitch.service but you are not using systemctl")
+                 if sys.stdin.isatty():
+                     confirm = input(f"Did you intend to run `systemctl {sys.argv[1]} picosnitch` (y/N)? ")
+                     if confirm.lower().startswith("y"):
+@@ -1893,15 +1893,15 @@ def start_picosnitch():
+         class PicoDaemon(Daemon):
+             def run(self):
+                 main()
+-        daemon = PicoDaemon("/run/picosnitch.pid")
++        daemon = PicoDaemon("/run/picosnitch/picosnitch.pid")
+         if sys.argv[1] == "start":
+-            print("starting picosnitch daemon")
++            print("starting picosnitch daemon, WARNING: built in daemon mode is not supported on Nix, use picosnitch start-no-daemon or systemctl instead")
+             daemon.start()
+         elif sys.argv[1] == "stop":
+-            print("stopping picosnitch daemon")
++            print("stopping picosnitch daemon, WARNING: built in daemon mode is not supported on Nix, use picosnitch start-no-daemon or systemctl instead")
+             daemon.stop()
+         elif sys.argv[1] == "restart":
+-            print("restarting picosnitch daemon")
++            print("restarting picosnitch daemon, WARNING: built in daemon mode is not supported on Nix, use picosnitch start-no-daemon or systemctl instead")
+             daemon.restart()
+         elif sys.argv[1] == "status":
+             daemon.status()
+@@ -1912,11 +1912,12 @@ def start_picosnitch():
+             print("Wrote /usr/lib/systemd/system/picosnitch.service\nYou can now run picosnitch using systemctl")
+             return 0
+         elif sys.argv[1] == "start-no-daemon":
+-            assert not os.path.exists("/run/picosnitch.pid")
++            assert not os.path.exists("/run/picosnitch/picosnitch.pid")
+             def delpid():
+-                os.remove("/run/picosnitch.pid")
++                os.remove("/run/picosnitch/picosnitch.pid")
+             atexit.register(delpid)
+-            with open("/run/picosnitch.pid", "w") as f:
++            os.makedirs("/run/picosnitch", exist_ok=True)
++            with open("/run/picosnitch/picosnitch.pid", "w") as f:
+                 f.write(str(os.getpid()) + "\n")
+             print("starting picosnitch in simple mode")
+             print(f"using config and log files from: {BASE_PATH}")
+@@ -1927,7 +1928,7 @@ def start_picosnitch():
+             assert dash.__version__ and pandas.__version__ and plotly.__version__
+             print(f"serving web gui on http://{os.getenv('HOST', 'localhost')}:{os.getenv('PORT', '5100')}")
+             args = ["bash", "-c", f"sudo -i -u {os.getenv('SUDO_USER')} touch {BASE_PATH}/dash; nohup {sys.executable} \"{os.path.abspath(__file__)}\" start-dash > /dev/null 2>&1 &"]
+-            os.execvp("bash", args)
++            return ui_dash()
+         elif sys.argv[1] == "start-dash":
+             return ui_dash()
+         elif sys.argv[1] == "view":

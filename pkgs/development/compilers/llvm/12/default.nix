@@ -5,7 +5,7 @@
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 , targetLlvm
 # This is the default binutils, but with *this* version of LLD rather
-# than the default LLVM verion's, if LLD is the choice. We use these for
+# than the default LLVM version's, if LLD is the choice. We use these for
 # the `useLLVM` bootstrapping below.
 , bootBintoolsNoLibc ?
     if stdenv.targetPlatform.linker == "lld"
@@ -105,7 +105,8 @@ let
 
     # pick clang appropriate for package set we are targeting
     clang =
-      /**/ if stdenv.targetPlatform.useLLVM or false then tools.clangUseLLVM
+      /**/ if stdenv.targetPlatform.libc == null then tools.clangNoLibc
+      else if stdenv.targetPlatform.useLLVM or false then tools.clangUseLLVM
       else if (pkgs.targetPackages.stdenv or stdenv).cc.isGNU then tools.libstdcxxClang
       else tools.libcxxClang;
 
@@ -134,11 +135,23 @@ let
       inherit (libraries) libunwind;
     };
 
-    lldb = callPackage ./lldb {
-      inherit llvm_meta;
-      inherit (darwin) libobjc bootstrap_cmds;
-      inherit (darwin.apple_sdk.libs) xpc;
-      inherit (darwin.apple_sdk.frameworks) Foundation Carbon Cocoa;
+    lldb = callPackage ../common/lldb.nix {
+      src = fetch "lldb" "0g3pj1m3chafavpr35r9fynm85y2hdyla6klj0h28khxs2613i78";
+      patches =
+        let
+          resourceDirPatch = callPackage ({ runCommand, libclang }: (runCommand "resource-dir.patch"
+            {
+              clangLibDir = "${libclang.lib}/lib";
+            } ''
+            substitute '${./lldb/resource-dir.patch}' "$out" --subst-var clangLibDir
+          '')) { };
+        in
+        [
+          ./lldb/procfs.patch
+          resourceDirPatch
+          ./lldb/gnu-install-dirs.patch
+        ];
+      inherit llvm_meta release_version;
     };
 
     # Below, is the LLVM bootstrapping logic. It handles building a

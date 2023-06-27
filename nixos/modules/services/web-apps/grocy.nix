@@ -117,7 +117,9 @@ in {
 
       # PHP 8.0 is the only version which is supported/tested by upstream:
       # https://github.com/grocy/grocy/blob/v3.3.0/README.md#how-to-install
-      phpPackage = pkgs.php80;
+      # Compatibility with PHP 8.1 is available on their development branch:
+      # https://github.com/grocy/grocy/commit/38a4ad8ec480c29a1bff057b3482fd103b036848
+      phpPackage = pkgs.php81;
 
       inherit (cfg.phpfpm) settings;
 

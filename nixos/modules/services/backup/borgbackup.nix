@@ -66,6 +66,7 @@ let
       ${mkKeepArgs cfg} \
       ${optionalString (cfg.prune.prefix != null) "--glob-archives ${escapeShellArg "${cfg.prune.prefix}*"}"} \
       $extraPruneArgs
+    borg compact $extraArgs $extraCompactArgs
     ${cfg.postPrune}
   '');
 
@@ -108,7 +109,7 @@ let
       };
       environment = {
         BORG_REPO = cfg.repo;
-        inherit (cfg) extraArgs extraInitArgs extraCreateArgs extraPruneArgs;
+        inherit (cfg) extraArgs extraInitArgs extraCreateArgs extraPruneArgs extraCompactArgs;
       } // (mkPassEnv cfg) // cfg.environment;
     };
 
@@ -638,6 +639,15 @@ in {
             example = "--save-space";
           };
 
+          extraCompactArgs = mkOption {
+            type = types.str;
+            description = lib.mdDoc ''
+              Additional arguments for {command}`borg compact`.
+              Can also be set at runtime using `$extraCompactArgs`.
+            '';
+            default = "";
+            example = "--cleanup-commits";
+          };
         };
       }
     ));

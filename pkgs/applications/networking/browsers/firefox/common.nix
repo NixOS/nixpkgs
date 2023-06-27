@@ -30,6 +30,7 @@
 , cargo
 , dump_syms
 , makeWrapper
+, mimalloc
 , nodejs
 , perl
 , pkg-config
@@ -54,6 +55,7 @@
 , gnum4
 , gtk3
 , icu
+, icu72
 , libGL
 , libGLU
 , libevent
@@ -88,8 +90,8 @@
 , ffmpegSupport ? true
 , gssSupport ? true, libkrb5
 , jackSupport ? stdenv.isLinux, libjack2
-, jemallocSupport ? true, jemalloc
-, ltoSupport ? (stdenv.isLinux && stdenv.is64bit), overrideCC, buildPackages
+, jemallocSupport ? !stdenv.hostPlatform.isMusl, jemalloc
+, ltoSupport ? (stdenv.isLinux && stdenv.is64bit && !stdenv.hostPlatform.isRiscV), overrideCC, buildPackages
 , pgoSupport ? (stdenv.isLinux && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
 , pipewireSupport ? waylandSupport && webrtcSupport
 , pulseaudioSupport ? stdenv.isLinux, libpulseaudio
@@ -103,11 +105,11 @@
 # WARNING: NEVER set any of the options below to `true` by default.
 # Set to `!privacySupport` or `false`.
 
-, crashreporterSupport ? !privacySupport, curl
+, crashreporterSupport ? !privacySupport && !stdenv.hostPlatform.isRiscV && !stdenv.hostPlatform.isMusl, curl
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
 , mlsAPISupport ? geolocationSupport
-, webrtcSupport ? !privacySupport
+, webrtcSupport ? !privacySupport && !stdenv.hostPlatform.isRiscV
 
 # digital rights managemewnt
 
@@ -203,7 +205,7 @@ let
 
 in
 
-buildStdenv.mkDerivation ({
+buildStdenv.mkDerivation {
   pname = "${pname}-unwrapped";
   inherit version;
 
@@ -221,13 +223,34 @@ buildStdenv.mkDerivation ({
     "profilingPhase"
   ];
 
-  patches = lib.optionals (lib.versionOlder version "102.6.0") [
+  patches = lib.optionals (lib.versionAtLeast version "112.0" && lib.versionOlder version "113.0") [
     (fetchpatch {
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1773259
-      name = "rust-cbindgen-0.24.2-compat.patch";
-      url = "https://raw.githubusercontent.com/canonical/firefox-snap/5622734942524846fb0eb7108918c8cd8557fde3/patches/fix-ftbfs-newer-cbindgen.patch";
-      hash = "sha256-+wNZhkDB3HSknPRD4N6cQXY7zMT/DzNXx29jQH0Gb1o=";
+      # Crash when desktop scaling does not divide window scale on Wayland
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1803016
+      name = "mozbz1803016.patch";
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/1068e0955cfb";
+      hash = "sha256-iPqmofsmgvlFNm+mqVPbdgMKmP68ANuzYu+PzfCpoNA=";
     })
+  ] ++ lib.optionals (lib.versionOlder version "114.0") [
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1830040
+    # https://hg.mozilla.org/mozilla-central/rev/cddb250a28d8
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/community/firefox/avoid-redefinition.patch?id=2f620d205ed0f9072bbd7714b5ec1b7bf6911c12";
+      hash = "sha256-fLUYaJwhrC/wF24HkuWn2PHqz7LlAaIZ1HYjRDB2w9A=";
+    })
+  ]
+  ++ lib.optionals (lib.versionOlder version "109") [
+    # cherry-pick bindgen change to fix build with clang 16
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/community/firefox-esr/bindgen.patch?id=4c4b0c01c808657fffc5b796c56108c57301b28f";
+      hash = "sha256-lTvgT358M4M2vedZ+A6xSKsBYhSN+McdmEeR9t75MLU=";
+    })
+  ]
+  ++ lib.optionals (lib.versionOlder version "111") [
+    # cherry-pick mp4parse change fixing build with Rust 1.70+
+    # original change: https://github.com/mozilla/mp4parse-rust/commit/8b5b652d38e007e736bb442ccd5aa5ed699db100
+    # vendored to update checksums
+    ./mp4parse-rust-170.patch
   ]
   ++ lib.optional (lib.versionOlder version "111") ./env_var_for_system_dir-ff86.patch
   ++ lib.optional (lib.versionAtLeast version "111") ./env_var_for_system_dir-ff111.patch
@@ -299,25 +322,37 @@ buildStdenv.mkDerivation ({
     # RBox WASM Sandboxing
     export WASM_CC=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}cc
     export WASM_CXX=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}c++
- '' + lib.optionalString pgoSupport ''
-   if [ -e "$TMPDIR/merged.profdata" ]; then
-     echo "Configuring with profiling data"
-     for i in "''${!configureFlagsArray[@]}"; do
-       if [[ ''${configureFlagsArray[i]} = "--enable-profile-generate=cross" ]]; then
-         unset 'configureFlagsArray[i]'
-       fi
-     done
-     configureFlagsArray+=(
-       "--enable-profile-use=cross"
-       "--with-pgo-profile-path="$TMPDIR/merged.profdata""
-       "--with-pgo-jarlog="$TMPDIR/jarlog""
-     )
-   else
-     echo "Configuring to generate profiling data"
-     configureFlagsArray+=(
-       "--enable-profile-generate=cross"
-     )
-   fi
+  '' + lib.optionalString pgoSupport ''
+    if [ -e "$TMPDIR/merged.profdata" ]; then
+      echo "Configuring with profiling data"
+      for i in "''${!configureFlagsArray[@]}"; do
+        if [[ ''${configureFlagsArray[i]} = "--enable-profile-generate=cross" ]]; then
+          unset 'configureFlagsArray[i]'
+        fi
+      done
+      configureFlagsArray+=(
+        "--enable-profile-use=cross"
+        "--with-pgo-profile-path="$TMPDIR/merged.profdata""
+        "--with-pgo-jarlog="$TMPDIR/jarlog""
+      )
+      ${lib.optionalString stdenv.hostPlatform.isMusl ''
+        LDFLAGS="$OLD_LDFLAGS"
+        unset OLD_LDFLAGS
+      ''}
+    else
+      echo "Configuring to generate profiling data"
+      configureFlagsArray+=(
+        "--enable-profile-generate=cross"
+      )
+      ${lib.optionalString stdenv.hostPlatform.isMusl
+      # Set the rpath appropriately for the profiling run
+      # During the profiling run, loading libraries from $out would fail,
+      # since the profiling build has not been installed to $out
+      ''
+        OLD_LDFLAGS="$LDFLAGS"
+        LDFLAGS="-Wl,-rpath,$(pwd)/mozobj/dist/${binaryName}"
+      ''}
+    fi
   '' + lib.optionalString googleAPISupport ''
     # Google API key used by Chromium and Firefox.
     # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
@@ -334,6 +369,10 @@ buildStdenv.mkDerivation ({
     configureFlagsArray+=("--with-mozilla-api-keyfile=$TMPDIR/mls-api-key")
   '' + lib.optionalString (enableOfficialBranding && !stdenv.is32bit) ''
     export MOZILLA_OFFICIAL=1
+  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
+    # linking firefox hits the vm.max_map_count kernel limit with the default musl allocator
+    # TODO: Default vm.max_map_count has been increased, retest without this
+    export LD_PRELOAD=${mimalloc}/lib/libmimalloc.so
   '';
 
   # firefox has a different definition of configurePlatforms from nixpkgs, see configureFlags
@@ -403,7 +442,6 @@ buildStdenv.mkDerivation ({
     freetype
     glib
     gtk3
-    icu
     libffi
     libGL
     libGLU
@@ -431,6 +469,9 @@ buildStdenv.mkDerivation ({
     zip
     zlib
   ]
+  # icu73 changed how it follows symlinks which breaks in the firefox sandbox
+  # https://bugzilla.mozilla.org/show_bug.cgi?id=1839287
+  ++ [ (if (lib.versionAtLeast version "115") then icu else icu72) ]
   ++ [ (if (lib.versionAtLeast version "103") then nss_latest else nss_esr) ]
   ++ lib.optional  alsaSupport alsa-lib
   ++ lib.optional  jackSupport libjack2
@@ -473,6 +514,12 @@ buildStdenv.mkDerivation ({
   makeFlags = extraMakeFlags;
   separateDebugInfo = enableDebugSymbols;
   enableParallelBuilding = true;
+  env = lib.optionalAttrs stdenv.hostPlatform.isMusl {
+    # Firefox relies on nonstandard behavior of the glibc dynamic linker. It re-uses
+    # previously loaded libraries even though they are not in the rpath of the newly loaded binary.
+    # On musl we have to explicity set the rpath to include these libraries.
+    LDFLAGS = "-Wl,-rpath,${placeholder "out"}/lib/${binaryName}";
+  };
 
   # tests were disabled in configureFlags
   doCheck = false;
@@ -511,6 +558,7 @@ buildStdenv.mkDerivation ({
   '';
 
   passthru = {
+    inherit application extraPatches;
     inherit updateScript;
     inherit version;
     inherit alsaSupport;
@@ -542,4 +590,4 @@ buildStdenv.mkDerivation ({
   dontUpdateAutotoolsGnuConfigScripts = true;
 
   requiredSystemFeatures = [ "big-parallel" ];
-})
+}

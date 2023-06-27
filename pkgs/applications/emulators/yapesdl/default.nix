@@ -5,14 +5,14 @@
 , SDL2
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yapesdl";
   version = "0.71.2";
 
   src = fetchFromGitHub {
     owner = "calmopyrin";
     repo = "yapesdl";
-    rev = "v${self.version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-QGF3aS/YSzdGxHONKyA/iTewEVYsjBAsKARVMXkFV2k=";
   };
 

@@ -11,7 +11,12 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-V4WztquClcBQF74c8WalWITT+SRymEawLXmvTflNEGk=";
   };
 
-  cargoHash = "sha256-34lI4zI1JMYek3sCXOWw08EqhaI1bqTGFPxeEYmEbXQ=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "criterion-0.3.6" = "sha256-biFm0+AjKLwV9yHgCaK6E6L6W+6sRbnY2QOKVhv/1C8=";
+    };
+  };
 
   # thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: invalid option '--test-threads''
   doCheck = false;

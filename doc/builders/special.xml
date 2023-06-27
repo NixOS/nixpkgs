@@ -9,4 +9,5 @@
  <xi:include href="special/makesetuphook.section.xml" />
  <xi:include href="special/mkshell.section.xml" />
  <xi:include href="special/darwin-builder.section.xml" />
+ <xi:include href="special/vm-tools.section.xml" />
 </chapter>

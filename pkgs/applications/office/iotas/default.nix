@@ -14,12 +14,12 @@
 , libsecret
 , libadwaita
 , gtksourceview5
-, webkitgtk_5_0
+, webkitgtk_6_0
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "iotas";
-  version = "0.1.9";
+  version = "0.1.14";
   format = "other";
 
   src = fetchFromGitLab {
@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "cheywood";
     repo = pname;
     rev = version;
-    hash = "sha256-TdsqxpJq2+hoLHcJ58JQ20TWerZMXL3wkT9oIlVkrk4=";
+    hash = "sha256-IvKjvsHJdoFmDvsM1/kFPikYbBLUEQ57DKr1T+Jyw7w=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ python3.pkgs.buildPythonApplication rec {
     libsecret
     libadwaita
     gtksourceview5
-    webkitgtk_5_0
+    webkitgtk_6_0
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -56,7 +56,6 @@ python3.pkgs.buildPythonApplication rec {
     requests
     markdown-it-py
     linkify-it-py
-    mdit-py-plugins
   ];
 
   # prevent double wrapping

@@ -35,6 +35,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/mrene/minidsp-rs";
     license = licenses.asl20;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = [maintainers.adamcstephens];
+    maintainers = [maintainers.adamcstephens maintainers.mrene];
   };
 }

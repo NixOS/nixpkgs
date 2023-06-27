@@ -1,9 +1,14 @@
-{ lib, stdenv, fetchurl, nixosTests }:
+{ lib, stdenv, fetchurl, nixosTests
+, nextcloud27Packages
+, nextcloud26Packages
+, nextcloud25Packages
+}:
 
 let
   generic = {
-    version, sha256,
-    eol ? false, extraVulnerabilities ? []
+    version, sha256
+  , eol ? false, extraVulnerabilities ? []
+  , packages
   }: let
     major = lib.versions.major version;
   in stdenv.mkDerivation rec {
@@ -18,7 +23,10 @@ let
     # This patch is only necessary for NC version <26.
     patches = lib.optional (lib.versionOlder major "26") (./patches + "/v${major}/0001-Setup-remove-custom-dbuser-creation-behavior.patch");
 
-    passthru.tests = nixosTests.nextcloud;
+    passthru = {
+      tests = nixosTests.nextcloud;
+      inherit packages;
+    };
 
     installPhase = ''
       runHook preInstall
@@ -39,19 +47,34 @@ let
     };
   };
 in {
-  nextcloud24 = generic {
-    version = "24.0.11";
-    sha256 = "sha256-ipsg4rulhRnatEW9VwUJLvOEtX5ZiK7MXK3AU8Q9qIo=";
-  };
+  nextcloud24 = throw ''
+    Nextcloud v24 has been removed from `nixpkgs` as the support for is dropped
+    by upstream in 2023-04. Please upgrade to at least Nextcloud v25 by declaring
+
+        services.nextcloud.package = pkgs.nextcloud25;
+
+    in your NixOS config.
+
+    WARNING: if you were on Nextcloud 23 you have to upgrade to Nextcloud 24
+    first on 22.11 because Nextcloud doesn't support upgrades across multiple major versions!
+  '';
 
   nextcloud25 = generic {
-    version = "25.0.5";
-    sha256 = "sha256-xtxjLYPGK9V0GvUzXcE7awzeYQZNPNmlHuDmtHeMqaU=";
+    version = "25.0.8";
+    sha256 = "sha256-Ia6afooDCNDZsGSoh5dddZvLUE3fU+jU6sy6MrxUMVs=";
+    packages = nextcloud25Packages;
   };
 
   nextcloud26 = generic {
-    version = "26.0.0";
-    sha256 = "sha256-8WMVA2Ou6TZuy1zVJZv2dW7U8HPOp4tfpRXK2noNDD0=";
+    version = "26.0.3";
+    sha256 = "sha256-pagQy818Pc/yXyKAkyHy7UHtfMBgEgRImskOJYBgtck=";
+    packages = nextcloud26Packages;
+  };
+
+  nextcloud27 = generic {
+    version = "27.0.0";
+    sha256 = "sha256-PTEqCbk0WsBYdY3XtAWb888LHw8ddHJRtvrDWFumUz8=";
+    packages = nextcloud27Packages;
   };
 
   # tip: get the sha with:

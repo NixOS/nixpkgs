@@ -10,7 +10,7 @@
 , libX11
 , libass
 , openal
-, ffmpeg
+, ffmpeg_4
 , libuchardet
 , alsa-lib
 , libpulseaudio
@@ -30,7 +30,7 @@ mkDerivation rec {
     libX11
     libass
     openal
-    ffmpeg
+    ffmpeg_4
     libuchardet
     alsa-lib
     libpulseaudio

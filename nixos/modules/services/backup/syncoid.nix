@@ -87,6 +87,8 @@ in
   options.services.syncoid = {
     enable = mkEnableOption (lib.mdDoc "Syncoid ZFS synchronization service");
 
+    package = lib.mkPackageOptionMD pkgs "sanoid" {};
+
     interval = mkOption {
       type = types.str;
       default = "hourly";
@@ -331,7 +333,7 @@ in
               ExecStopPost =
                 (map (buildUnallowCommand c.localSourceAllow) (localDatasetName c.source)) ++
                 (map (buildUnallowCommand c.localTargetAllow) (localDatasetName c.target));
-              ExecStart = lib.escapeShellArgs ([ "${pkgs.sanoid}/bin/syncoid" ]
+              ExecStart = lib.escapeShellArgs ([ "${cfg.package}/bin/syncoid" ]
                 ++ optionals c.useCommonArgs cfg.commonArgs
                 ++ optional c.recursive "-r"
                 ++ optionals (c.sshKey != null) [ "--sshkey" c.sshKey ]

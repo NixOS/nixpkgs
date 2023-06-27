@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "tifffile";
-  version = "2023.2.3";
+  version = "2023.4.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RY31rZpSF/Zo7dY23Bn7xzYGK/eKrII6uEzbrp3o6qY=";
+    hash = "sha256-L6mfmJDKq5GdkyoKyqnQ9YQ9wu81lOISljky4gcTut0=";
   };
 
   propagatedBuildInputs = [
@@ -47,6 +47,8 @@ buildPythonPackage rec {
     "test_write_imagej_raw"
     # https://github.com/cgohlke/tifffile/issues/142
     "test_func_bitorder_decode"
+    # Test file is missing
+    "test_issue_invalid_predictor"
   ];
 
   pythonImportsCheck = [

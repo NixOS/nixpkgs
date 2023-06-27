@@ -20,13 +20,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pitivi";
-  version = "2022.06";
+  version = "2023.03";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/pitivi/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "Uz0448bSEcK9DpXiuWsPCDO98NXUd6zgffYRWDUGyDg=";
+    sha256 = "PX1OFEeavqMPvF613BKgxwErxqW2huw6mQxo8YpBS/M=";
   };
 
   patches = [

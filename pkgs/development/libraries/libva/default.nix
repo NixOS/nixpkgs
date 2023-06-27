@@ -6,24 +6,25 @@
 # for passthru.tests
 , intel-compute-runtime
 , intel-media-driver
-, ffmpeg
 , mpv
-, vaapiIntel
+, intel-vaapi-driver
 , vlc
 }:
 
 stdenv.mkDerivation rec {
   pname = "libva" + lib.optionalString minimal "-minimal";
-  version = "2.17.0";
+  version = "2.18.0";
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "libva";
     rev    = version;
-    sha256 = "sha256-Vw62xgWzaaWKQWIZDYpVpOgEUQGUNToImEAo6lwiFFU=";
+    sha256 = "sha256-VD+CTF0QLfzrUr4uFiyDlZux3MqsyyuJF/cXuhOFzwo=";
   };
 
   outputs = [ "dev" "out" ];
+
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [ meson pkg-config ninja wayland-scanner ];
 
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     # other drivers depending on libva and selected application users.
     # Please get a confirmation from the maintainer before adding more applications.
-    inherit intel-compute-runtime intel-media-driver vaapiIntel mpv vlc;
+    inherit intel-compute-runtime intel-media-driver intel-vaapi-driver mpv vlc;
   };
 
   meta = with lib; {

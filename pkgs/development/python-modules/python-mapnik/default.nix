@@ -8,7 +8,7 @@
 , pillow
 , pycairo
 , pkg-config
-, boost
+, boost182
 , cairo
 , harfbuzz
 , icu
@@ -23,6 +23,7 @@
 , sqlite
 , nose
 , pytestCheckHook
+, stdenv
 }:
 
 buildPythonPackage rec {
@@ -60,7 +61,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     mapnik
-    boost
+    boost182
     cairo
     harfbuzz
     icu
@@ -98,6 +99,9 @@ buildPythonPackage rec {
   preCheck = ''
     # import from $out
     rm -r mapnik
+  '' + lib.optionalString stdenv.isDarwin ''
+    # Replace the hardcoded /tmp references with $TMPDIR
+    sed -i "s,/tmp,$TMPDIR,g" test/python_tests/*.py
   '';
 
   # https://github.com/mapnik/python-mapnik/issues/255
@@ -106,6 +110,7 @@ buildPythonPackage rec {
     "test_compare_map"
     "test_dataraster_coloring"
     "test_dataraster_query_point"
+    "test_geometry_type"
     "test_good_files"
     "test_layer_init"
     "test_load_save_map"
@@ -128,13 +133,15 @@ buildPythonPackage rec {
     "test_visual_zoom_all_rendering1"
     "test_visual_zoom_all_rendering2"
     "test_wgs84_inverse_forward"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_passing_pycairo_context_pdf"
   ];
 
   pythonImportsCheck = [ "mapnik" ];
 
   meta = with lib; {
     description = "Python bindings for Mapnik";
-    maintainers = with maintainers; [ erictapen ];
+    maintainers = with maintainers; [ ];
     homepage = "https://mapnik.org";
     license = licenses.lgpl21Plus;
   };

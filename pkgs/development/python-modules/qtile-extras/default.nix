@@ -34,7 +34,7 @@ buildPythonPackage rec {
   ];
   checkInputs = [
     pytest-asyncio
-    qtile.unwrapped
+    qtile
     pulseaudio
     keyring
     requests

@@ -25,8 +25,12 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     mkdir -p "$out/bin"
-    mv Nanosaur Data ReadMe.txt "$out/"
-    makeWrapper $out/Nanosaur $out/bin/Nanosaur --chdir "$out"
+    mkdir -p "$out/share/Nanosaur"
+    mv Data ReadMe.txt "$out/share/Nanosaur/"
+    install -Dm755 {.,$out/bin}/Nanosaur
+    wrapProgram $out/bin/Nanosaur --chdir "$out/share/Nanosaur"
+    install -Dm644 $src/packaging/nanosaur.desktop $out/share/applications/nanosaur.desktop
+    install -Dm644 $src/packaging/nanosaur-desktopicon.png $out/share/pixmaps/nanosaur-desktopicon.png
     runHook postInstall
   '';
 

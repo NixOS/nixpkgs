@@ -100,6 +100,22 @@ let self = rec {
 
   vfs-libarchive = callPackage ../applications/video/kodi/addons/vfs-libarchive { };
 
+  visualization-fishbmc = callPackage ../applications/video/kodi/addons/visualization-fishbmc { };
+
+  visualization-goom = callPackage ../applications/video/kodi/addons/visualization-goom { };
+
+  visualization-matrix = callPackage ../applications/video/kodi/addons/visualization-matrix { };
+
+  visualization-pictureit = callPackage ../applications/video/kodi/addons/visualization-pictureit { };
+
+  visualization-projectm = callPackage ../applications/video/kodi/addons/visualization-projectm { };
+
+  visualization-shadertoy = callPackage ../applications/video/kodi/addons/visualization-shadertoy { };
+
+  visualization-spectrum = callPackage ../applications/video/kodi/addons/visualization-spectrum { };
+
+  visualization-starburst = callPackage ../applications/video/kodi/addons/visualization-starburst { };
+
   visualization-waveform = callPackage ../applications/video/kodi/addons/visualization-waveform { };
 
   youtube = callPackage ../applications/video/kodi/addons/youtube { };
@@ -119,6 +135,8 @@ let self = rec {
   future = callPackage ../applications/video/kodi/addons/future { };
 
   idna = callPackage ../applications/video/kodi/addons/idna { };
+
+  infotagger = callPackage ../applications/video/kodi/addons/infotagger { };
 
   inputstream-adaptive = callPackage ../applications/video/kodi/addons/inputstream-adaptive { };
 

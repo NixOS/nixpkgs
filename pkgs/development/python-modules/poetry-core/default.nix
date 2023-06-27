@@ -73,6 +73,8 @@ buildPythonPackage rec {
     "poetry"
   ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-int-conversion";
+
   meta = with lib; {
     changelog = "https://github.com/python-poetry/poetry-core/blob/${src.rev}/CHANGELOG.md";
     description = "Core utilities for Poetry";

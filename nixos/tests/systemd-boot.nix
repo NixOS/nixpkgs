@@ -207,11 +207,17 @@ in
     nodes = {
       inherit common;
 
-      machine = { pkgs, ... }: {
+      machine = { pkgs, nodes, ... }: {
         imports = [ common ];
         boot.loader.systemd-boot.extraFiles = {
           "efi/fruits/tomato.efi" = pkgs.netbootxyz-efi;
         };
+
+        # These are configs for different nodes, but we'll use them here in `machine`
+        system.extraDependencies = [
+          nodes.common.system.build.toplevel
+          nodes.with_netbootxyz.system.build.toplevel
+        ];
       };
 
       with_netbootxyz = { pkgs, ... }: {
@@ -221,9 +227,9 @@ in
     };
 
     testScript = { nodes, ... }: let
-      originalSystem = nodes.machine.config.system.build.toplevel;
-      baseSystem = nodes.common.config.system.build.toplevel;
-      finalSystem = nodes.with_netbootxyz.config.system.build.toplevel;
+      originalSystem = nodes.machine.system.build.toplevel;
+      baseSystem = nodes.common.system.build.toplevel;
+      finalSystem = nodes.with_netbootxyz.system.build.toplevel;
     in ''
       machine.succeed("test -e /boot/efi/fruits/tomato.efi")
       machine.succeed("test -e /boot/efi/nixos/.extra-files/efi/fruits/tomato.efi")
@@ -249,6 +255,32 @@ in
           machine.succeed("test -e /boot/efi/netbootxyz/netboot.xyz.efi")
           machine.succeed("test -e /boot/efi/nixos/.extra-files/loader/entries/o_netbootxyz.conf")
           machine.succeed("test -e /boot/efi/nixos/.extra-files/efi/netbootxyz/netboot.xyz.efi")
+    '';
+  };
+
+  # Some UEFI firmwares fail on large reads. Now that systemd-boot loads initrd
+  # itself, systems with such firmware won't boot without this fix
+  uefiLargeFileWorkaround = makeTest {
+    name = "uefi-large-file-workaround";
+
+    nodes.machine = { pkgs, ... }: {
+      imports = [common];
+      virtualisation.efi.OVMF = pkgs.OVMF.overrideAttrs (old: {
+        # This patch deliberately breaks the FAT driver in EDK2 to
+        # exhibit (part of) the firmware bug that we are testing
+        # for. Files greater than 10MiB will fail to be read in a
+        # single Read() call, so systemd-boot will fail to load the
+        # initrd without a workaround. The number 10MiB was chosen
+        # because if it were smaller than the kernel size, even the
+        # LoadImage call would fail, which is not the failure mode
+        # we're testing for. It needs to be between the kernel size
+        # and the initrd size.
+        patches = old.patches or [] ++ [ ./systemd-boot-ovmf-broken-fat-driver.patch ];
+      });
+    };
+
+    testScript = ''
+      machine.wait_for_unit("multi-user.target")
     '';
   };
 }

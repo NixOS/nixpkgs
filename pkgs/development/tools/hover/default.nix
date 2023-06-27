@@ -1,6 +1,6 @@
 { lib
 , buildGoModule
-, buildFHSUserEnv
+, buildFHSEnv
 , binutils
 , dejavu_fonts
 , pkg-config
@@ -84,7 +84,7 @@ let
   };
 
 in
-buildFHSUserEnv rec {
+buildFHSEnv rec {
   name = pname;
   targetPkgs = pkgs: [
     binutils

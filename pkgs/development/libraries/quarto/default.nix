@@ -7,16 +7,18 @@
 , nodePackages
 , rWrapper
 , rPackages
+, extraRPackages ? []
 , makeWrapper
 , python3
+, extraPythonPackages ? ps: with ps; []
 }:
 
 stdenv.mkDerivation rec {
   pname = "quarto";
-  version = "1.2.335";
+  version = "1.2.475";
   src = fetchurl {
     url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${version}/quarto-${version}-linux-amd64.tar.gz";
-    sha256 = "sha256-f9b6vDiE/CDsPE8/AseWVTXPZH14wOQtUskMv42Xhcg=";
+    sha256 = "sha256-oyKjDlTKt2fIzirOqgNRrpuM7buNCG5mmgIztPa28rY=";
   };
 
   nativeBuildInputs = [
@@ -42,8 +44,8 @@ stdenv.mkDerivation rec {
       --prefix QUARTO_PANDOC : ${pandoc}/bin/pandoc \
       --prefix QUARTO_ESBUILD : ${esbuild}/bin/esbuild \
       --prefix QUARTO_DART_SASS : ${nodePackages.sass}/bin/sass \
-      --prefix QUARTO_R : ${rWrapper.override { packages = [ rPackages.rmarkdown]; }}/bin/R \
-      --prefix QUARTO_PYTHON : ${python3.withPackages (ps: with ps; [ jupyter ipython ])}/bin/python3
+      ${lib.optionalString (rWrapper != null) "--prefix QUARTO_R : ${rWrapper.override { packages = [ rPackages.rmarkdown ] ++ extraRPackages; }}/bin/R"} \
+      ${lib.optionalString (python3 != null) "--prefix QUARTO_PYTHON : ${python3.withPackages (ps: with ps; [ jupyter ipython ] ++ (extraPythonPackages ps))}/bin/python3"}
   '';
 
   installPhase = ''
@@ -68,7 +70,7 @@ stdenv.mkDerivation rec {
     homepage = "https://quarto.org/";
     changelog = "https://github.com/quarto-dev/quarto-cli/releases/tag/v${version}";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ mrtarantoga ];
+    maintainers = with maintainers; [ minijackson mrtarantoga ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode binaryBytecode ];
   };

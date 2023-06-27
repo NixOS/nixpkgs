@@ -4,15 +4,15 @@
 , qbe
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "harec";
-  version = "unstable-2023-02-08";
+  version = "unstable-2023-04-25";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "harec";
-    rev = "4730fa6b835f08c44bd7991cc8b264fbc27d752b";
-    hash = "sha256-XOhZWdmkMAuXbj7svILJI3wI7RF9OAb/OE1uGel4/vE=";
+    rev = "068e8da091f9053726251bc221abf40fdea630ff";
+    hash = "sha256-PPR0d+6JJRzPURW7AznloBSrtylMJExNCGCxFMl2LsA=";
   };
 
   nativeBuildInputs = [

@@ -47,13 +47,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.1-4";
+  version = "7.1.1-11";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     rev = finalAttrs.version;
-    hash = "sha256-NGtctktlaKIZ3KZUysXBUTHtvAe29RYW3Q4SL6/Eufw=";
+    hash = "sha256-/CZRnNy/p87sEcH94RkRYgYXexFSU0Bm809pcvDFdV4=";
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big

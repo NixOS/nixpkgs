@@ -6,6 +6,7 @@
 , devtools
 , email-validator
 , fetchFromGitHub
+, fetchpatch
 , pytest-mock
 , pytestCheckHook
 , python-dotenv
@@ -18,6 +19,7 @@
 , withDocs ? (stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.isDarwin && pythonAtLeast "3.10")
 , ansi2html
 , markdown-include
+, mike
 , mkdocs
 , mkdocs-exclude
 , mkdocs-material
@@ -31,7 +33,8 @@
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "1.10.5";
+  version = "1.10.9";
+  format = "setuptools";
 
   outputs = [
     "out"
@@ -42,11 +45,20 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "samuelcolvin";
+    owner = "pydantic";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-hcjnFqHTQiCIJh7L9JfpHHTm8GEZ+Vac6HO59cbEpWM=";
+    hash = "sha256-POqMxBJUFFS1TnO9h5W7jYwFlukBOng0zbtq4kzmMB4=";
   };
+
+  patches = [
+    # Fixes racy doctests build failures on really fast machines
+    # FIXME: remove after next release
+    (fetchpatch {
+      url = "https://github.com/pydantic/pydantic/pull/6103/commits/f05014a30340e608155683aaca17d275f93a0380.diff";
+      hash = "sha256-sr47hpl37SSFFbK+/h3hGlF6Pl6L8XPKDU0lZZV7Vzs=";
+    })
+  ];
 
   postPatch = ''
     sed -i '/flake8/ d' Makefile
@@ -64,6 +76,7 @@ buildPythonPackage rec {
     ansi2html
     markdown-include
     mdx-truly-sane-lists
+    mike
     mkdocs
     mkdocs-exclude
     mkdocs-material
@@ -75,16 +88,23 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     devtools
-    email-validator
     pyupgrade
-    python-dotenv
     typing-extensions
   ];
+
+  passthru.optional-dependencies = {
+    dotenv = [
+      python-dotenv
+    ];
+    email = [
+      email-validator
+    ];
+  };
 
   nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   pytestFlagsArray = [
     # https://github.com/pydantic/pydantic/issues/4817
@@ -112,8 +132,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pydantic" ];
 
   meta = with lib; {
-    homepage = "https://github.com/samuelcolvin/pydantic";
     description = "Data validation and settings management using Python type hinting";
+    homepage = "https://github.com/pydantic/pydantic";
+    changelog = "https://github.com/pydantic/pydantic/blob/v${version}/HISTORY.md";
     license = licenses.mit;
     maintainers = with maintainers; [ wd15 ];
   };

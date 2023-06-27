@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, cargo
 , desktop-file-utils
 , glib
 , gtk4
@@ -8,6 +9,7 @@
 , ninja
 , pkg-config
 , rustPlatform
+, rustc
 , wrapGAppsHook4
 , gtksourceview5
 , libadwaita
@@ -17,19 +19,21 @@
 
 stdenv.mkDerivation rec {
   pname = "pods";
-  version = "1.0.6";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "marhkb";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ZryzNlEj/2JTp5FJiDzXN9v1DvczfebqEOrJP+dKaRw=";
+    sha256 = "sha256-9gSLjnBExxLhbrsD2nYPwoUCmc2gE+afblQOcnWPap0=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    sha256 = "sha256-OgvlRnii4T4HcFPiGkcLcagyHCg+lWXCXQ9XdXjHDbQ=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "containers-api-0.8.0" = "sha256-jttd4n45OcsWWBu7nAL0Ny0ILjsAKtAIQN+Vkv34gdM=";
+      "podman-api-0.10.0" = "sha256-P3a/OgH26EFWJjYkEob4Cg90U5cR/fBF0LcFlosJlcU=";
+    };
   };
 
   nativeBuildInputs = [
@@ -40,8 +44,8 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.cargo
-    rustPlatform.rust.rustc
+    cargo
+    rustc
     wrapGAppsHook4
   ];
 

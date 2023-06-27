@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, pythonAtLeast
 , pythonOlder
 , buildPythonPackage
 
@@ -64,6 +65,11 @@ buildPythonPackage {
     pytest-django
     pytest-mock
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = lib.optionals (pythonAtLeast "3.11") [
+    # DeprecationWarning: 'cgi' is deprecated and slated for removal in Python 3.13
+    "-W" "ignore::DeprecationWarning"
   ];
 
   disabledTests = [

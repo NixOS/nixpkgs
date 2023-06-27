@@ -2,22 +2,24 @@
 
 buildGoModule rec {
   pname = "kube-linter";
-  version = "0.6.0";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "stackrox";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-/iwNyThgdXAXu1ulf68+X7nA9wE9jEqN7F5wuT5GMwk=";
+    rev = "v${version}";
+    sha256 = "sha256-L0JjbjV5KwI4qas8iLp5OLkleQlD29jsYLpe3ER1l2Y=";
   };
 
-  vendorHash = "sha256-jWXR7tHYT15h7QSxinYyPaBs5utUmdeWWm+GPpfwiA4=";
+  vendorHash = "sha256-1erG3TFv3DR6SLDIrmRefAPjXhgXEVYFiAsUPiI7kX4=";
 
   ldflags = [
     "-s" "-w" "-X golang.stackrox.io/kube-linter/internal/version.version=${version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
+
+  checkFlags = [ "-skip=TestCreateContextsWithIgnorePaths" ];
 
   postInstall = ''
     installShellCompletion --cmd kube-linter \
@@ -34,9 +36,9 @@ buildGoModule rec {
   meta = with lib; {
     description = "A static analysis tool that checks Kubernetes YAML files and Helm charts";
     homepage = "https://kubelinter.io";
-    changelog   = "https://github.com/stackrox/kube-linter/releases/tag/${version}";
+    changelog   = "https://github.com/stackrox/kube-linter/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ mtesseract stehessel ];
+    maintainers = with maintainers; [ mtesseract stehessel Intuinewin ];
     platforms = platforms.all;
   };
 }

@@ -13,6 +13,8 @@ in stdenv.mkDerivation {
   name = "cc-wrapper-test";
 
   buildCommand = ''
+    set -o pipefail
+
     NIX_DEBUG=1 $CC -v
     NIX_DEBUG=1 $CXX -v
 
@@ -41,6 +43,27 @@ in stdenv.mkDerivation {
         $CC ${staticLibc} -static-pie -o cc-static-pie ${./cc-main.c}
         ${emulator} ./cc-static-pie
       ''}
+    ''}
+
+    ${# See: https://github.com/llvm/llvm-project/commit/ed1d07282cc9d8e4c25d585e03e5c8a1b6f63a74
+      # `gcc` does not support this so we gate the test on `clang`
+      lib.optionalString stdenv.cc.isClang ''
+        printf "checking whether cc-wrapper accepts -- followed by positional (file) args..." >&2
+        mkdir -p positional
+
+        # Make sure `--` is not parsed as a "non flag arg"; we should get an
+        # input file error here and *not* a linker error.
+        { ! $CC --; } |& grep -q "no input files"
+
+        # And that positional file args _must_ be files (this is just testing
+        # that we remembered to put the `--` back in the args to the compiler):
+        { ! $CC -c -- -o foo ${./foo.c}; } \
+          |& grep -q "no such file or directory: '-o'"
+
+        # Now check that we accept single and multiple positional file args:
+        $CC -c -DVALUE=42 -o positional/foo.o -- ${./foo.c}
+        $CC -o positional/main -- positional/foo.o ${./ldflags-main.c}
+        ${emulator} ./positional/main
     ''}
 
     printf "checking whether compiler uses NIX_CFLAGS_COMPILE... " >&2

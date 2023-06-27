@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "gudhi";
-  version = "3.4.1";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "GUDHI";
     repo = "gudhi-devel";
     rev = "tags/gudhi-release-${version}";
     fetchSubmodules = true;
-    sha256 = "1m03qazzfraxn62l1cb11icjz4x8q2sg9c2k3syw5v0yv9ndgx1v";
+    sha256 = "sha256-f2ajy4muG9vuf4JarGWZmdk/LF9OYd2KLSaGyY6BQrY=";
   };
 
   patches = [ ./remove_explicit_PYTHONPATH.patch ];

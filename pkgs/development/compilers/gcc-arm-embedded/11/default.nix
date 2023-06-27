@@ -3,6 +3,8 @@
 , fetchurl
 , ncurses5
 , python38
+, libxcrypt-legacy
+, runtimeShell
 }:
 
 stdenv.mkDerivation rec {
@@ -38,8 +40,19 @@ stdenv.mkDerivation rec {
     find $out -type f | while read f; do
       patchelf "$f" > /dev/null 2>&1 || continue
       patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f" || true
-      patchelf --set-rpath ${lib.makeLibraryPath [ "$out" stdenv.cc.cc ncurses5 python38 ]} "$f" || true
+      patchelf --set-rpath ${lib.makeLibraryPath [ "$out" stdenv.cc.cc ncurses5 python38 libxcrypt-legacy ]} "$f" || true
     done
+  '';
+
+  postFixup = ''
+    mv $out/bin/arm-none-eabi-gdb $out/bin/arm-none-eabi-gdb-unwrapped
+    cat <<EOF > $out/bin/arm-none-eabi-gdb
+    #!${runtimeShell}
+    export PYTHONPATH=${python38}/lib/python3.8
+    export PYTHONHOME=${python38}/bin/python3.8
+    exec $out/bin/arm-none-eabi-gdb-unwrapped "\$@"
+    EOF
+    chmod +x $out/bin/arm-none-eabi-gdb
   '';
 
   meta = with lib; {

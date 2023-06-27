@@ -446,6 +446,15 @@ let
         };
       };
 
+      zfs = mkOption {
+        default = config.security.pam.zfs.enable;
+        defaultText = literalExpression "config.security.pam.zfs.enable";
+        type = types.bool;
+        description = lib.mdDoc ''
+          Enable unlocking and mounting of encrypted ZFS home dataset at login.
+        '';
+      };
+
       text = mkOption {
         type = types.nullOr types.lines;
         description = lib.mdDoc "Contents of the PAM service file.";
@@ -474,6 +483,9 @@ let
           '' +
           optionalString cfg.mysqlAuth ''
             account sufficient ${pkgs.pam_mysql}/lib/security/pam_mysql.so config_file=/etc/security/pam_mysql.conf
+          '' +
+          optionalString (config.services.kanidm.enablePam) ''
+            account sufficient ${pkgs.kanidm}/lib/pam_kanidm.so ignore_unknown_user
           '' +
           optionalString (config.services.sssd.enable && cfg.sssdStrictAccess==false) ''
             account sufficient ${pkgs.sssd}/lib/security/pam_sss.so
@@ -556,7 +568,8 @@ let
               || cfg.googleAuthenticator.enable
               || cfg.gnupg.enable
               || cfg.failDelay.enable
-              || cfg.duoSecurity.enable))
+              || cfg.duoSecurity.enable
+              || cfg.zfs))
             (
               optionalString config.services.homed.enable ''
                 auth optional ${config.systemd.package}/lib/security/pam_systemd_home.so
@@ -569,6 +582,9 @@ let
               '' +
               optionalString config.security.pam.enableFscrypt ''
                 auth optional ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so
+              '' +
+              optionalString cfg.zfs ''
+                auth optional ${config.boot.zfs.package}/lib/security/pam_zfs_key.so homes=${config.security.pam.zfs.homes}
               '' +
               optionalString cfg.pamMount ''
                 auth optional ${pkgs.pam_mount}/lib/security/pam_mount.so disable_interactive
@@ -604,6 +620,9 @@ let
           optionalString use_ldap ''
             auth sufficient ${pam_ldap}/lib/security/pam_ldap.so use_first_pass
           '' +
+          optionalString config.services.kanidm.enablePam ''
+            auth sufficient ${pkgs.kanidm}/lib/pam_kanidm.so ignore_unknown_user use_first_pass
+          '' +
           optionalString config.services.sssd.enable ''
             auth sufficient ${pkgs.sssd}/lib/security/pam_sss.so use_first_pass
           '' +
@@ -620,13 +639,16 @@ let
           optionalString config.services.homed.enable ''
             password sufficient ${config.systemd.package}/lib/security/pam_systemd_home.so
           '' + ''
-            password sufficient pam_unix.so nullok sha512
+            password sufficient pam_unix.so nullok yescrypt
           '' +
           optionalString config.security.pam.enableEcryptfs ''
             password optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so
           '' +
           optionalString config.security.pam.enableFscrypt ''
             password optional ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so
+          '' +
+          optionalString cfg.zfs ''
+            password optional ${config.boot.zfs.package}/lib/security/pam_zfs_key.so homes=${config.security.pam.zfs.homes}
           '' +
           optionalString cfg.pamMount ''
             password optional ${pkgs.pam_mount}/lib/security/pam_mount.so
@@ -637,8 +659,11 @@ let
           optionalString cfg.mysqlAuth ''
             password sufficient ${pkgs.pam_mysql}/lib/security/pam_mysql.so config_file=/etc/security/pam_mysql.conf
           '' +
+          optionalString config.services.kanidm.enablePam ''
+            password sufficient ${pkgs.kanidm}/lib/pam_kanidm.so
+          '' +
           optionalString config.services.sssd.enable ''
-            password sufficient ${pkgs.sssd}/lib/security/pam_sss.so use_authtok
+            password sufficient ${pkgs.sssd}/lib/security/pam_sss.so
           '' +
           optionalString config.security.pam.krb5.enable ''
             password sufficient ${pam_krb5}/lib/security/pam_krb5.so use_first_pass
@@ -685,6 +710,10 @@ let
             session [success=1 default=ignore] pam_succeed_if.so service = systemd-user
             session optional ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so
           '' +
+          optionalString cfg.zfs ''
+            session [success=1 default=ignore] pam_succeed_if.so service = systemd-user
+            session optional ${config.boot.zfs.package}/lib/security/pam_zfs_key.so homes=${config.security.pam.zfs.homes} ${optionalString config.security.pam.zfs.noUnmount "nounmount"}
+          '' +
           optionalString cfg.pamMount ''
             session optional ${pkgs.pam_mount}/lib/security/pam_mount.so disable_interactive
           '' +
@@ -693,6 +722,9 @@ let
           '' +
           optionalString cfg.mysqlAuth ''
             session optional ${pkgs.pam_mysql}/lib/security/pam_mysql.so config_file=/etc/security/pam_mysql.conf
+          '' +
+          optionalString config.services.kanidm.enablePam ''
+            session optional ${pkgs.kanidm}/lib/pam_kanidm.so
           '' +
           optionalString config.services.sssd.enable ''
             session optional ${pkgs.sssd}/lib/security/pam_sss.so
@@ -1202,6 +1234,34 @@ in
       };
     };
 
+    security.pam.zfs = {
+      enable = mkOption {
+        default = false;
+        type = types.bool;
+        description = lib.mdDoc ''
+          Enable unlocking and mounting of encrypted ZFS home dataset at login.
+        '';
+      };
+
+      homes = mkOption {
+        example = "rpool/home";
+        default = "rpool/home";
+        type = types.str;
+        description = lib.mdDoc ''
+          Prefix of home datasets. This value will be concatenated with
+          `"/" + <username>` in order to determine the home dataset to unlock.
+        '';
+      };
+
+      noUnmount = mkOption {
+        default = false;
+        type = types.bool;
+        description = lib.mdDoc ''
+          Do not unmount home dataset on logout.
+        '';
+      };
+    };
+
     security.pam.enableEcryptfs = mkEnableOption (lib.mdDoc "eCryptfs PAM module (mounting ecryptfs home directory on login)");
     security.pam.enableFscrypt = mkEnableOption (lib.mdDoc ''
       Enables fscrypt to automatically unlock directories with the user's login password.
@@ -1238,12 +1298,19 @@ in
           Only one of users.motd and users.motdFile can be set.
         '';
       }
+      {
+        assertion = config.security.pam.zfs.enable -> (config.boot.zfs.enabled || config.boot.zfs.enableUnstable);
+        message = ''
+          `security.pam.zfs.enable` requires enabling ZFS (`boot.zfs.enabled` or `boot.zfs.enableUnstable`).
+        '';
+      }
     ];
 
     environment.systemPackages =
       # Include the PAM modules in the system path mostly for the manpages.
       [ pkgs.pam ]
       ++ optional config.users.ldap.enable pam_ldap
+      ++ optional config.services.kanidm.enablePam pkgs.kanidm
       ++ optional config.services.sssd.enable pkgs.sssd
       ++ optionals config.security.pam.krb5.enable [pam_krb5 pam_ccreds]
       ++ optionals config.security.pam.enableOTPW [ pkgs.otpw ]
@@ -1309,6 +1376,9 @@ in
       '' +
       optionalString use_ldap ''
          mr ${pam_ldap}/lib/security/pam_ldap.so,
+      '' +
+      optionalString config.services.kanidm.enablePam ''
+        mr ${pkgs.kanidm}/lib/pam_kanidm.so,
       '' +
       optionalString config.services.sssd.enable ''
         mr ${pkgs.sssd}/lib/security/pam_sss.so,
@@ -1378,7 +1448,10 @@ in
         mr ${pkgs.plasma5Packages.kwallet-pam}/lib/security/pam_kwallet5.so,
       '' +
       optionalString config.virtualisation.lxc.lxcfs.enable ''
-        mr ${pkgs.lxc}/lib/security/pam_cgfs.so
+        mr ${pkgs.lxc}/lib/security/pam_cgfs.so,
+      '' +
+      optionalString (isEnabled (cfg: cfg.zfs)) ''
+        mr ${config.boot.zfs.package}/lib/security/pam_zfs_key.so,
       '' +
       optionalString config.services.homed.enable ''
         mr ${config.systemd.package}/lib/security/pam_systemd_home.so

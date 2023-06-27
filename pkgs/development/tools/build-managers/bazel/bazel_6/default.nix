@@ -24,12 +24,12 @@
 }:
 
 let
-  version = "6.1.1";
+  version = "6.2.0";
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-a5APJtZ2x+yh0uff+bcYkNq9P/WcqyotIXi8igOVNCo=";
+    hash = "sha256-8ej3iGN6xXTUcdYZ0glrqsoEoZtXoDQ5ngeWM9tEGUU=";
   };
 
   # Update with
@@ -295,10 +295,10 @@ stdenv.mkDerivation rec {
         sha256 = "1mm4awx6sa0myiz9j4hwp71rpr7yh8vihf3zm15n2ii6xb82r31k";
       };
 
-    in (if !stdenv.hostPlatform.isDarwin then {
+    in (lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
       # `extracted` doesn’t work on darwin
       shebang = callPackage ../shebang-test.nix { inherit runLocal extracted bazelTest distDir; bazel = bazel_self;};
-    } else {}) // {
+    }) // {
       bashTools = callPackage ../bash-tools-test.nix { inherit runLocal bazelTest distDir; bazel = bazel_self;};
       cpp = callPackage ../cpp-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazel_self;};
       java = callPackage ../java-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazel_self;};
@@ -394,6 +394,7 @@ stdenv.mkDerivation rec {
       for wrapper in "''${wrappers[@]}"; do
         sed -i -e "s,/usr/bin/gcc,${stdenv.cc}/bin/clang,g" $wrapper
         sed -i -e "s,/usr/bin/install_name_tool,${cctools}/bin/install_name_tool,g" $wrapper
+        sed -i -e "s,/usr/bin/xcrun install_name_tool,${cctools}/bin/install_name_tool,g" $wrapper
       done
     '';
 

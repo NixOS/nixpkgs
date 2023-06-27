@@ -68,6 +68,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/espressif/esptool";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ hexa ];
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
   };
 }

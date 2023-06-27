@@ -60,9 +60,6 @@ self: super: {
   # https://mail.haskell.org/pipermail/haskell-cafe/2022-October/135613.html
   language-javascript_0_7_0_0 = dontCheck super.language-javascript_0_7_0_0;
 
-  th-desugar = self.th-desugar_1_14;
-  vector = dontCheck super.vector;
-
   # Apply patches from head.hackage.
   language-haskell-extract = appendPatch (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/language-haskell-extract-0.2.4.patch";
@@ -72,9 +69,6 @@ self: super: {
   # Tests depend on `parseTime` which is no longer available
   hourglass = dontCheck super.hourglass;
 
-  # For -fghc-lib see cabal.project in haskell-language-server.
-  stylish-haskell = enableCabalFlag "ghc-lib" super.stylish-haskell;
-
   # Needs to match ghc version
   ghc-tags = doDistribute self.ghc-tags_1_5;
 
@@ -83,6 +77,10 @@ self: super: {
 
   # https://github.com/sjakobi/bsb-http-chunked/issues/38
   bsb-http-chunked = dontCheck super.bsb-http-chunked;
+
+  # https://github.com/NixOS/cabal2nix/issues/554
+  # https://github.com/clash-lang/clash-compiler/blob/f0f6275e19b8c672f042026c478484c5fd45191d/README.md#ghc-compatibility
+  clash-prelude = dontDistribute (markBroken super.clash-prelude);
 
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
   hiedb = dontCheck super.hiedb;

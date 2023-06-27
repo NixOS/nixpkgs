@@ -1,4 +1,4 @@
-{ lib, appleDerivation, xcbuild, ncurses, libutil }:
+{ lib, appleDerivation, xcbuild, ncurses, libutil, Libc }:
 
 appleDerivation {
   # We can't just run the root build, because https://github.com/facebook/xcbuild/issues/264
@@ -6,6 +6,8 @@ appleDerivation {
   patchPhase = ''
     substituteInPlace adv_cmds.xcodeproj/project.pbxproj \
       --replace '/usr/lib/libtermcap.dylib' 'libncurses.dylib'
+    substituteInPlace colldef/scan.l \
+      --replace 'static orderpass = 0;' 'static int orderpass = 0;'
   '';
 
   # pkill requires special private headers that are unavailable in
@@ -42,7 +44,7 @@ appleDerivation {
   '';
 
   nativeBuildInputs = [ xcbuild ];
-  buildInputs = [ ncurses libutil ];
+  buildInputs = [ ncurses libutil Libc ];
 
   meta = {
     platforms = lib.platforms.darwin;

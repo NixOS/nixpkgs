@@ -15,13 +15,13 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "R";
-  version = "4.2.2";
+  version = "4.3.0";
 
   src = let
     inherit (finalAttrs) pname version;
   in fetchurl {
     url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-D/YrQuxRr6VxPK7nxP3noMRZQLo5vvjFyUh/7wyVPfU=";
+    sha256 = "sha256-RdzEi2zyfTYQIPd/3ho5IJ6Ze4FAKzZjyhwBAFampgk=";
   };
 
   dontUseImakeConfigure = true;
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     bzip2 gfortran libX11 libXmu libXt libXt libjpeg libpng libtiff ncurses
     pango pcre2 perl readline texLive xz zlib less texinfo graphviz icu
-    bison imake which blas lapack curl tcl tk jdk
+    bison imake which blas lapack curl tcl tk jdk tzdata
   ] ++ lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ];
 
   patches = [
@@ -73,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
       FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
       JAVA_HOME="${jdk}"
       RANLIB=$(type -p ranlib)
+      r_cv_have_curl728=yes
       R_SHELL="${stdenv.shell}"
   '' + lib.optionalString stdenv.isDarwin ''
       --disable-R-framework

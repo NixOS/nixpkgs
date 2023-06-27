@@ -4,14 +4,14 @@
 , griffe
 , mkdocs-material
 , mkdocstrings
-, pdm-pep517
+, pdm-backend
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "mkdocstrings-python";
-  version = "0.8.3";
+  version = "0.10.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,11 +20,11 @@ buildPythonPackage rec {
     owner = "mkdocstrings";
     repo = "python";
     rev = version;
-    hash = "sha256-JGk6oJQ6mcLtn7SDtltsLPT+CxPZNRbq8bnY9pMcXHc=";
+    hash = "sha256-VGPlOHQNtXrfmcne93xDIxN20KDGlTQrjeAKhX/L6K0=";
   };
 
   nativeBuildInputs = [
-    pdm-pep517
+    pdm-backend
   ];
 
   propagatedBuildInputs = [
@@ -40,7 +40,6 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'license = "ISC"' 'license = {text = "ISC"}' \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
   pythonImportsCheck = [

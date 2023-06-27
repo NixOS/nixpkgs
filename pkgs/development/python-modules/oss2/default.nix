@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "oss2";
-  version = "2.16.0";
+  version = "2.17.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aliyun";
     repo = "aliyun-oss-python-sdk";
-    rev = version;
-    hash = "sha256-Q8U7zMlqpKSoW99MBm9p0AnrGZY7M9oRNImMNJaEjSw=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-EL6qbtVyOJ2RGw3sZiRJouqVNLBMUKGycAZl31M1+oQ=";
   };
 
   nativeBuildInputs = [
@@ -57,10 +57,13 @@ buildPythonPackage rec {
     # Tests require network access
     "tests/test_api_base.py"
     "tests/test_async_fetch_task.py"
+    "tests/test_bucket_access_monitor.py"
     "tests/test_bucket_cname.py"
     "tests/test_bucket_inventory.py"
     "tests/test_bucket_meta_query.py"
     "tests/test_bucket_replication.py"
+    "tests/test_bucket_resource_group.py"
+    "tests/test_bucket_style.py"
     "tests/test_bucket_transfer_acceleration.py"
     "tests/test_bucket_versioning.py"
     "tests/test_bucket_worm.py"
@@ -105,6 +108,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Alibaba Cloud OSS SDK for Python";
     homepage = "https://github.com/aliyun/aliyun-oss-python-sdk";
+    changelog = "https://github.com/aliyun/aliyun-oss-python-sdk/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

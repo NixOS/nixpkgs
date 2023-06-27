@@ -2,22 +2,20 @@
 
 buildGoModule rec {
   pname = "protonmail-bridge";
-  version = "3.0.18";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "ProtonMail";
     repo = "proton-bridge";
     rev = "v${version}";
-    hash = "sha256-0gQnMhjwW2NEJwafqndStQ33dIu82lW6ntXFRCpbmm4=";
+    hash = "sha256-1gllk6pRMEf4hYUN/i4jHZ5zwx9C+eoTOn3h+w7Pr0U=";
   };
 
-  vendorHash = "sha256-lHMcVcaoBwjE2ikEZPeZexC5XvhkAtvHnDci7UAa4vg=";
+  vendorHash = "sha256-41Le59X4TW105X3q+r3U1y1hZLz7Hup7TS/zP2E4v0M=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libsecret ];
-
-  proxyVendor = true; # Bridge uses some C headers so we have to enable proxyVendor
 
   preBuild = ''
     patchShebangs ./utils/
@@ -38,7 +36,7 @@ buildGoModule rec {
   ];
 
   postInstall = ''
-    mv $out/bin/Desktop-Bridge $out/bin/bridge # The cli is named like that in the upstream repo
+    mv $out/bin/Desktop-Bridge $out/bin/protonmail-bridge # The cli is named like that in other distro packages
   '';
 
   meta = with lib; {

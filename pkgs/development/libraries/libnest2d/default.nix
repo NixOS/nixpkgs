@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, cmake, clipper, nlopt, boost, python3 }:
+{ lib, stdenv, fetchFromGitHub, cmake, clipper, nlopt, boost }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "4.12.0";
   pname = "libnest2d";
 
@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
     rev = "31391fd173249ad9b906390058e13b09238fadc8";
     sha256 = "1hzqi4z55x76rss3xk7hfqhy9hcaq2jaav5jqxa1aqmbvarr2gla";
   };
+
+  postPatch = ''
+    substituteInPlace {,examples/}CMakeLists.txt \
+      --replace "set(CMAKE_CXX_STANDARD 11)" "set(CMAKE_CXX_STANDARD 14)"
+  '';
 
   propagatedBuildInputs = [ clipper nlopt boost ];
   nativeBuildInputs = [ cmake ];

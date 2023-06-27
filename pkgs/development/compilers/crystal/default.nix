@@ -20,6 +20,7 @@
 , llvmPackages
 , makeWrapper
 , openssl
+, pcre2
 , pcre
 , pkg-config
 , readline
@@ -40,7 +41,6 @@ let
   };
 
   arch = archs.${stdenv.system} or (throw "system ${stdenv.system} not supported");
-  isAarch64Darwin = stdenv.system == "aarch64-darwin";
 
   nativeCheckInputs = [ git gmp openssl readline libxml2 libyaml libffi ];
 
@@ -71,17 +71,6 @@ let
       meta.platforms = lib.attrNames sha256s;
     };
 
-  commonBuildInputs = extraBuildInputs: [
-    boehmgc
-    pcre
-    libevent
-    libyaml
-    zlib
-    libxml2
-    openssl
-  ] ++ extraBuildInputs
-  ++ lib.optionals stdenv.isDarwin [ libiconv ];
-
   generic = (
     { version
     , sha256
@@ -90,7 +79,7 @@ let
     , extraBuildInputs ? [ ]
     , buildFlags ? [ "all" "docs" "release=1"]
     }:
-    lib.fix (compiler: stdenv.mkDerivation {
+    stdenv.mkDerivation (finalAttrs: {
       pname = "crystal";
       inherit buildFlags doCheck version;
 
@@ -170,7 +159,16 @@ let
 
       strictDeps = true;
       nativeBuildInputs = [ binary makeWrapper which pkg-config llvmPackages.llvm ];
-      buildInputs = commonBuildInputs extraBuildInputs;
+      buildInputs = [
+        boehmgc
+        (if lib.versionAtLeast version "1.8" then pcre2 else pcre)
+        libevent
+        libyaml
+        zlib
+        libxml2
+        openssl
+      ] ++ extraBuildInputs
+      ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
       makeFlags = [
         "CRYSTAL_CONFIG_VERSION=${version}"
@@ -200,7 +198,7 @@ let
           --suffix PATH : ${lib.makeBinPath [ pkg-config llvmPackages.clang which ]} \
           --suffix CRYSTAL_PATH : lib:$lib/crystal \
           --suffix CRYSTAL_LIBRARY_PATH : ${
-            lib.makeLibraryPath (commonBuildInputs extraBuildInputs)
+            lib.makeLibraryPath finalAttrs.buildInputs
           }
         install -dm755 $lib/crystal
         cp -r src/* $lib/crystal/
@@ -236,7 +234,7 @@ let
 
       passthru.buildBinary = binary;
       passthru.buildCrystalPackage = callPackage ./build-package.nix {
-        crystal = compiler;
+        crystal = finalAttrs.finalPackage;
       };
 
       meta = with lib; {
@@ -269,10 +267,16 @@ rec {
   };
 
   crystal_1_7 = generic {
-    version = "1.7.2";
-    sha256 = "sha256-Bwd9Gmtwa/0oLhps3fc8GqBlB4o31LCR1Sf98Pz4i90=";
+    version = "1.7.3";
+    sha256 = "sha256-ULhLGHRIZbsKhaMvNhc+W74BwNgfEjHcMnVNApWY+EE=";
     binary = binaryCrystal_1_2;
   };
 
-  crystal = crystal_1_7;
+  crystal_1_8 = generic {
+    version = "1.8.2";
+    sha256 = "sha256-YAORdipzpC9CrFgZUFlFfjzlJQ6ZeA2ekVu8IfPOxR8=";
+    binary = binaryCrystal_1_2;
+  };
+
+  crystal = crystal_1_8;
 }

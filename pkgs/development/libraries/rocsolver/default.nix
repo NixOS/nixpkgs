@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocsolver";
-  version = "5.4.2";
+  version = "5.4.4";
 
   outputs = [
     "out"
@@ -81,6 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = finalAttrs.src.owner;
     repo = finalAttrs.src.repo;
   };
+
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
     description = "ROCm LAPACK implementation";

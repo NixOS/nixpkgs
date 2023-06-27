@@ -1,17 +1,15 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles }:
+{ lib, rustPlatform, fetchCrate, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "scraper";
-  version = "0.15.0";
+  version = "0.17.1";
 
-  src = fetchFromGitHub {
-    owner = "causal-agent";
-    repo = "scraper";
-    rev = "v${version}";
-    hash = "sha256-K0MeZeS60gxo0/kBCaffNVQrR5S1HDoq77hnC//LMQg=";
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-SVrQi9VxTzUHkdFdieOAIBhKvyrZqi3xKGooHkCEmhQ=";
   };
 
-  cargoHash = "sha256-2IvfJaYyX7ZA1y3TETydb7wXRER4CfH69xEvnxKCFTc=";
+  cargoHash = "sha256-/Lut38gFO4XtrBHXr4sfcII+bWgcCDrHf5/PKPrDiDs=";
 
   nativeBuildInputs = [ installShellFiles ];
 

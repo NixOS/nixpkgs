@@ -44,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "1.4.1";
+  version = "1.4.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-jNRFtEhaswG5RmFxpVcchIe6u2BCyoeNzneWR+9SuCY=";
+    hash = "sha256-AiRQFZA5+M1niTzj1RO2lx0QFOMmSzpQo1gzauyTblg=";
   };
 
   nativeBuildInputs = [
@@ -150,6 +150,11 @@ buildPythonPackage rec {
   pythonNamespaces = [
     "poetry"
   ];
+
+  # Unset ambient PYTHONPATH in the wrapper, so Poetry only ever runs with its own,
+  # isolated set of dependencies. This works because the correct PYTHONPATH is set
+  # in the Python script, which runs after the wrapper.
+  makeWrapperArgs = ["--unset PYTHONPATH"];
 
   meta = with lib; {
     changelog = "https://github.com/python-poetry/poetry/blob/${src.rev}/CHANGELOG.md";

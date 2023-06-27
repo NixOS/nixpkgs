@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, perl, which
+{ lib, stdenv, fetchFromGitHub, fetchpatch, perl, which
 # Most packages depending on openblas expect integer width to match
 # pointer width, but some expect to use 32-bit integers always
 # (for compatibility with reference BLAS).
@@ -106,6 +106,13 @@ let
       DYNAMIC_ARCH = setDynamicArch false;
       USE_OPENMP = true;
     };
+
+    loongarch64-linux = {
+      BINARY = 64;
+      TARGET = setTarget "LOONGSONGENERIC";
+      DYNAMIC_ARCH = setDynamicArch false;
+      USE_OPENMP = true;
+    };
   };
 in
 
@@ -145,6 +152,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-F6cXPqQai4kA5zrsa8E0Q7dD9zZHlwZ+B16EOGNXoXs=";
   };
 
+  patches = lib.optionals stdenv.hostPlatform.isLoongArch64 [
+    # https://github.com/xianyi/OpenBLAS/pull/3626
+    (fetchpatch {
+      name = "openblas-0.3.21-fix-loong.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sci-libs/openblas/files/openblas-0.3.21-fix-loong.patch?id=37ee4c70278eb41181f69e175575b0152b941655";
+      hash = "sha256-iWy11l3wEvzNV08LbhOjnSPj1SjPH8RMnb3ORz7V+gc";
+    })
+  ];
+
   postPatch = ''
     # cc1: error: invalid feature modifier 'sve2' in '-march=armv8.5-a+sve+sve2+bf16'
     substituteInPlace Makefile.arm64 --replace "+sve2+bf16" ""
@@ -183,6 +199,7 @@ stdenv.mkDerivation rec {
     FC = "${stdenv.cc.targetPrefix}gfortran";
     CC = "${stdenv.cc.targetPrefix}${if stdenv.cc.isClang then "clang" else "cc"}";
     PREFIX = placeholder "out";
+    OPENBLAS_INCLUDE_DIR = "${placeholder "dev"}/include";
     NUM_THREADS = 64;
     INTERFACE64 = blas64;
     NO_STATIC = !enableStatic;
@@ -218,7 +235,7 @@ stdenv.mkDerivation rec {
 Name: $alias
 Version: ${version}
 Description: $alias provided by the OpenBLAS package.
-Cflags: -I$out/include
+Cflags: -I$dev/include
 Libs: -L$out/lib -lopenblas
 EOF
     done

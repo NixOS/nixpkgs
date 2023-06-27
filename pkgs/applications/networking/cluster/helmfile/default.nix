@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "helmfile";
-  version = "0.151.0";
+  version = "0.154.0";
 
   src = fetchFromGitHub {
     owner = "helmfile";
     repo = "helmfile";
     rev = "v${version}";
-    sha256 = "sha256-hzsxuvHzdjNRqTk4yEBZhT/j1fVCAk+843kY4MsN0AM=";
+    sha256 = "sha256-AKrTpV5Ky94H610iYO31/CBuZkTd1OcxX5Tl0GjNWaA=";
   };
 
-  vendorHash = "sha256-f0K3/xF+nJvlhtLAyLOah2RaZbaEqD8C28cPCLyaCXI=";
+  vendorHash = "sha256-PenQxs5Ds5GQ2LSlFRdpNUN8Y+jKCFSllMncWZwaL4c=";
 
   doCheck = false;
 
@@ -37,6 +37,5 @@ buildGoModule rec {
     homepage = "https://helmfile.readthedocs.io/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pneumaticat yurrriq ];
-    platforms = lib.platforms.unix;
   };
 }

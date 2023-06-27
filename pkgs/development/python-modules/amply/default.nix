@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "amply";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rXF7SQtrcFWQn6oZXoKkQytwb4+VhUBQFy9Ckx5HhCY=";
+    hash = "sha256-YUIRA8z44QZnFxFf55F2ENgx1VHGjTGhEIdqW2x4rqQ=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

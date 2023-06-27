@@ -70,5 +70,8 @@ buildPythonPackage rec {
     changelog = "https://github.com/databricks/databricks-sql-python/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ harvidsen ];
+    # No SQLAlchemy 2.0 support
+    # https://github.com/databricks/databricks-sql-python/issues/91
+    broken = true;
   };
 }

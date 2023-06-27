@@ -5,10 +5,10 @@
 
 let
   pname = "sonixd";
-  version = "0.15.4";
+  version = "0.15.5";
   src = fetchurl {
     url = "https://github.com/jeffvli/sonixd/releases/download/v${version}/Sonixd-${version}-linux-x86_64.AppImage";
-    sha256 = "sha256-n4n16S8ktPiVc0iyjVNNIyo9oEIBwGIuzj0xgm/ETeo=";
+    sha256 = "sha256-j8B+o/CJ5SsZPMNbugyP3T9Kb+xuxlVxH02loxlwwDg=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in

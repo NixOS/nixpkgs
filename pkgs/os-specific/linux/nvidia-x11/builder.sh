@@ -3,7 +3,7 @@ source $stdenv/setup
 
 unpackManually() {
     skip=$(sed 's/^skip=//; t; d' $src)
-    tail -n +$skip $src | xz -d | tar xvf -
+    tail -n +$skip $src | bsdtar xvf -
     sourceRoot=.
 }
 
@@ -125,6 +125,12 @@ installPhase() {
             install -Dm644 -t $i/lib/nvidia/wine/ nvngx.dll _nvngx.dll
         fi
     done
+
+
+    # OptiX tries loading `$ORIGIN/nvoptix.bin` first
+    if [ -e nvoptix.bin ]; then
+        install -Dm444 -t $out/lib/ nvoptix.bin
+    fi
 
     if [ -n "$bin" ]; then
         # Install the X drivers.

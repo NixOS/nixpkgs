@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "jaraco-abode";
-  version = "4.1.0";
+  version = "5.0.1";
 
   disabled = pythonOlder "3.7";
 
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "jaraco";
     repo = "jaraco.abode";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MD8Piwgm+WStEKX+LP0sCezRI4gdHmHis/XMJ8Vuw04=";
+    hash = "sha256-vKlvZrgRKv2C43JLfl4Wum4Icz9yOKEaB6qKapZ0rwQ=";
   };
 
   postPatch = ''
@@ -86,6 +86,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/jaraco/jaraco.abode/blob/${src.rev}/CHANGES.rst";
     homepage = "https://github.com/jaraco/jaraco.abode";
     description = "Library interfacing to the Abode home security system";
     license = licenses.mit;

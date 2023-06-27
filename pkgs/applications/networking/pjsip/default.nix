@@ -1,4 +1,5 @@
 { lib
+, testers
 , stdenv
 , fetchFromGitHub
 , fetchpatch
@@ -11,17 +12,16 @@
 , Security
 , python3
 , pythonSupport ? true
-, pjsip
 , runCommand
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pjsip";
   version = "2.13";
 
   src = fetchFromGitHub {
-    owner = pname;
+    owner = finalAttrs.pname;
     repo = "pjproject";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-yzszmm3uIyXtYFgZtUP3iswLx4u/8UbFt80Ln25ToFE=";
   };
 
@@ -64,8 +64,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/bin
     cp pjsip-apps/bin/pjsua-* $out/bin/pjsua
-    mkdir -p $out/share/${pname}-${version}/samples
-    cp pjsip-apps/bin/samples/*/* $out/share/${pname}-${version}/samples
+    mkdir -p $out/share/${finalAttrs.pname}-${finalAttrs.version}/samples
+    cp pjsip-apps/bin/samples/*/* $out/share/${finalAttrs.pname}-${finalAttrs.version}/samples
   '' + lib.optionalString pythonSupport ''
     (cd pjsip-apps/src/swig/python && \
       python setup.py install --prefix=$py
@@ -98,10 +98,25 @@ stdenv.mkDerivation rec {
         install_name_tool -id $lib "''${change_args[@]}" $lib
       fi
     done
+
+    # Rewrite library references for all executables.
+    find "$out" -executable -type f | while read executable; do
+      install_name_tool "''${change_args[@]}" "$executable"
+    done
   '';
 
   # We need the libgcc_s.so.1 loadable (for pthread_cancel to work)
   dontPatchELF = true;
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = "pjsua --version";
+  };
+
+  passthru.tests.pkg-config = testers.hasPkgConfigModule {
+    package = finalAttrs.finalPackage;
+    moduleName = "libpjproject";
+  };
 
   passthru.tests.python-pjsua2 = runCommand "python-pjsua2" { } ''
     ${(python3.withPackages (pkgs: [ pkgs.pjsua2 ])).interpreter} -c "import pjsua2" > $out
@@ -115,4 +130,4 @@ stdenv.mkDerivation rec {
     mainProgram = "pjsua";
     platforms = platforms.linux ++ platforms.darwin;
   };
-}
+})

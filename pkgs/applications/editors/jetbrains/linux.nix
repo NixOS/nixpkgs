@@ -1,6 +1,6 @@
 { stdenv, lib, makeDesktopItem, makeWrapper, patchelf, writeText
 , coreutils, gnugrep, which, git, unzip, libsecret, libnotify, e2fsprogs
-, vmopts ? null
+, python3, vmopts ? null
 }:
 
 { pname, product, productShort ? product, version, src, wmClass, jdk, meta, extraLdPath ? [], extraWrapperArgs ? [] }@args:
@@ -61,17 +61,18 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,$pname,share/pixmaps,libexec/${pname}}
+    mkdir -p $out/{bin,$pname,share/pixmaps,libexec/${pname},share/icons/hicolor/scalable/apps}
     cp -a . $out/$pname
     [[ -f $out/$pname/bin/${loName}.png ]] && ln -s $out/$pname/bin/${loName}.png $out/share/pixmaps/${pname}.png
-    [[ -f $out/$pname/bin/${loName}.svg ]] && ln -s $out/$pname/bin/${loName}.svg $out/share/pixmaps/${pname}.svg
+    [[ -f $out/$pname/bin/${loName}.svg ]] && ln -s $out/$pname/bin/${loName}.svg $out/share/pixmaps/${pname}.svg \
+      && ln -s $out/$pname/bin/${loName}.svg $out/share/icons/hicolor/scalable/apps/${pname}.svg
     mv bin/fsnotifier* $out/libexec/${pname}/.
 
     jdk=${jdk.home}
     item=${desktopItem}
 
     makeWrapper "$out/$pname/bin/${loName}.sh" "$out/bin/${pname}" \
-      --prefix PATH : "$out/libexec/${pname}:${lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
+      --prefix PATH : "$out/libexec/${pname}:${lib.makeBinPath [ jdk coreutils gnugrep which git python3 ]}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath ([
         # Some internals want libstdc++.so.6
         stdenv.cc.cc.lib libsecret e2fsprogs

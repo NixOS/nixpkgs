@@ -4,6 +4,8 @@
 , fetchPypi
 , fetchpatch
 , pythonOlder
+# build_requires
+, setuptools
 # install_requires
 , attrs
 , charset-normalizer
@@ -55,6 +57,10 @@ buildPythonPackage rec {
       --replace "charset-normalizer >=2.0, < 3.0" "charset-normalizer >=2.0, < 4.0"
   '';
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     attrs
     charset-normalizer
@@ -74,6 +80,7 @@ buildPythonPackage rec {
     idna-ssl
   ];
 
+  # NOTE: pytest-xdist cannot be added because it is flaky. See https://github.com/NixOS/nixpkgs/issues/230597 for more info.
   nativeCheckInputs = [
     async_generator
     freezegun
@@ -116,7 +123,7 @@ buildPythonPackage rec {
   '' + lib.optionalString stdenv.isDarwin ''
     # Work around "OSError: AF_UNIX path too long"
     export TMPDIR="/tmp"
-   '';
+  '';
 
   meta = with lib; {
     changelog = "https://github.com/aio-libs/aiohttp/blob/v${version}/CHANGES.rst";

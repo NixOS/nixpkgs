@@ -1,19 +1,19 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchPypi
 , poetry-core
-, pydantic
 , pytestCheckHook
 , pythonOlder
+, python-dotenv
 , pytz
 , requests
+, typing-extensions
 , yarl
 }:
 
 buildPythonPackage rec {
   pname = "transmission-rpc";
-  version = "4.1.3";
+  version = "4.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Trim21";
     repo = "transmission-rpc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GF2dXvtYgXTjdcellyCPFFTjp4Y6PKb2ihQETfomgU4=";
+    hash = "sha256-kcrPUBpx8puhG4de55tDGDmOnJPAOZzr+zC5gRd8b0s=";
   };
 
   nativeBuildInputs = [
@@ -30,11 +30,12 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    pydantic
     requests
+    typing-extensions
   ];
 
   nativeCheckInputs = [
+    python-dotenv
     pytz
     pytestCheckHook
     yarl
@@ -52,6 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module that implements the Transmission bittorent client RPC protocol";
     homepage = "https://github.com/Trim21/transmission-rpc";
+    changelog = "https://github.com/trim21/transmission-rpc/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ eyjhb ];
   };

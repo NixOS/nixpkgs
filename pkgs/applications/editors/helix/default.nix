@@ -1,20 +1,20 @@
-{ fetchzip, lib, rustPlatform, installShellFiles, makeWrapper }:
+{ fetchzip, lib, rustPlatform, git, installShellFiles, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
   pname = "helix";
-  version = "22.12";
+  version = "23.05";
 
   # This release tarball includes source code for the tree-sitter grammars,
   # which is not ordinarily part of the repository.
   src = fetchzip {
     url = "https://github.com/helix-editor/helix/releases/download/${version}/helix-${version}-source.tar.xz";
-    sha256 = "sha256-En6SOyAPNPPzDGdm2XTjbGG0NQFGBVzjjoyCbdnHFao=";
+    hash = "sha256-3ZEToXwW569P7IFLqz6Un8rClnWrW5RiYKmRVFt7My8=";
     stripRoot = false;
   };
 
-  cargoSha256 = "sha256-oSS0LkLg2JSRLYoF0+FVQzFUJtFuVKtU2MWYenmFC0s=";
+  cargoHash = "sha256-/LCtfyDAA2JuioBD/CDMv6OOxM0B9A3PpuVP/YY5oF0=";
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  nativeBuildInputs = [ git installShellFiles makeWrapper ];
 
   postInstall = ''
     # not needed at runtime
@@ -36,6 +36,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://helix-editor.com";
     license = licenses.mpl20;
     mainProgram = "hx";
-    maintainers = with maintainers; [ danth yusdacra ];
+    maintainers = with maintainers; [ danth yusdacra zowoq ];
   };
 }

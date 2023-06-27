@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
-    description = "Library for Voronoi intergration of electron densities";
+    description = "Library for Voronoi integration of electron densities";
     homepage = "https://brehm-research.de/libvori.php";
     license = with licenses; [ lgpl3Only ];
     platforms = platforms.unix;

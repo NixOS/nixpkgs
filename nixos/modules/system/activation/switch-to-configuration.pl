@@ -655,7 +655,7 @@ foreach my $device (keys(%{$cur_swaps})) {
         # "systemctl stop" here because systemd has lots of alias
         # units that prevent a stop from actually calling
         # "swapoff".
-        if ($action ne "dry-activate") {
+        if ($action eq "dry-activate") {
             print STDERR "would stop swap device: $device\n";
         } else {
             print STDERR "stopping swap device: $device\n";

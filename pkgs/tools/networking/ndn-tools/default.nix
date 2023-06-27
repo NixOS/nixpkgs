@@ -21,6 +21,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-28sPgo2nq5AhIzZmvDz38echGPzKDzNm2J6iIao4yL8=";
   };
 
+  # Hacky workaround for new pcap-config.
+  postPatch = ''
+    patch -p1 <<EOF
+      --- a/tools/dump/wscript
+      +++ b/tools/dump/wscript
+      @@ -5 +5 @@
+      -    conf.check_cfg(package='libpcap', uselib_store='PCAP',
+      +    conf.check_cfg(package="", uselib_store='PCAP',
+    EOF
+  '';
+
   nativeBuildInputs = [ pkg-config sphinx wafHook ];
   buildInputs = [ libpcap ndn-cxx openssl ];
 

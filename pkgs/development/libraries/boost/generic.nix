@@ -31,9 +31,6 @@ assert enableShared || enableStatic;
 
 assert enableNumpy -> enablePython;
 
-# Boost <1.69 can't be built on linux with clang >8, because pth was removed
-assert with lib; (stdenv.isLinux && toolset == "clang" && versionAtLeast stdenv.cc.version "8.0.0") -> versionAtLeast version "1.69";
-
 let
 
   variant = lib.concatStringsSep ","
@@ -53,26 +50,12 @@ let
   # To avoid library name collisions
   layout = if taggedLayout then "tagged" else "system";
 
-  # Versions of b2 before 1.65 have job limits; specifically:
-  #   - Versions before 1.58 support up to 64 jobs[0]
-  #   - Versions before 1.65 support up to 256 jobs[1]
-  #
-  # [0]: https://github.com/boostorg/build/commit/0ef40cb86728f1cd804830fef89a6d39153ff632
-  # [1]: https://github.com/boostorg/build/commit/316e26ca718afc65d6170029284521392524e4f8
-  jobs =
-    if lib.versionOlder version "1.58" then
-      "$(($NIX_BUILD_CORES<=64 ? $NIX_BUILD_CORES : 64))"
-    else if lib.versionOlder version "1.65" then
-      "$(($NIX_BUILD_CORES<=256 ? $NIX_BUILD_CORES : 256))"
-    else
-      "$NIX_BUILD_CORES";
-
   needUserConfig = stdenv.hostPlatform != stdenv.buildPlatform || useMpi || (stdenv.isDarwin && enableShared);
 
   b2Args = lib.concatStringsSep " " ([
     "--includedir=$dev/include"
     "--libdir=$out/lib"
-    "-j${jobs}"
+    "-j$NIX_BUILD_CORES"
     "--layout=${layout}"
     "variant=${variant}"
     "threading=${threading}"
@@ -89,7 +72,10 @@ let
                     then if lib.versionOlder version "1.78" then "mips1" else "mips"
                     else if stdenv.hostPlatform.parsed.cpu.name == "s390x" then "s390x"
                     else toString stdenv.hostPlatform.parsed.cpu.family}"
-    "binary-format=${toString stdenv.hostPlatform.parsed.kernel.execFormat.name}"
+    # env in host triplet for Mach-O is "macho", but boost binary format for Mach-O is "mach-o"
+    "binary-format=${if stdenv.hostPlatform.parsed.kernel.execFormat == lib.systems.parse.execFormats.macho
+                     then "mach-o"
+                     else toString stdenv.hostPlatform.parsed.kernel.execFormat.name}"
     "target-os=${toString stdenv.hostPlatform.parsed.kernel.name}"
 
     # adapted from table in boost manual
@@ -121,30 +107,7 @@ stdenv.mkDerivation {
 
   patches = patches
   ++ lib.optional stdenv.isDarwin ./darwin-no-system-python.patch
-  # Fix boost-context segmentation faults on ppc64 due to ABI violation
-  ++ lib.optional (lib.versionAtLeast version "1.61" &&
-               lib.versionOlder version "1.71") (fetchpatch {
-    url = "https://github.com/boostorg/context/commit/2354eca9b776a6739112833f64754108cc0d1dc5.patch";
-    sha256 = "067m4bjpmcanqvg28djax9a10avmdwhlpfx6gn73kbqqq70dnz29";
-    stripLen = 1;
-    extraPrefix = "libs/context/";
-  })
-  # Fix compiler warning with GCC >= 8; TODO: patch may apply to older versions
-  ++ lib.optional (lib.versionAtLeast version "1.65" && lib.versionOlder version "1.67")
-    (fetchpatch {
-      url = "https://github.com/boostorg/mpl/commit/f48fd09d021db9a28bd7b8452c175897e1af4485.patch";
-      sha256 = "15d2a636hhsb1xdyp44x25dyqfcaws997vnp9kl1mhzvxjzz7hb0";
-      stripLen = 1;
-    })
-  ++ lib.optional (lib.versionAtLeast version "1.65" && lib.versionOlder version "1.70") (fetchpatch {
-    # support for Mips64n64 appeared in boost-context 1.70; this patch won't apply to pre-1.65 cleanly
-    url = "https://github.com/boostorg/context/commit/e3f744a1862164062d579d1972272d67bdaa9c39.patch";
-    sha256 = "sha256-qjQy1b4jDsIRrI+UYtcguhvChrMbGWO0UlEzEJHYzRI=";
-    stripLen = 1;
-    extraPrefix = "libs/context/";
-  })
-  ++ lib.optional (lib.versionAtLeast version "1.70" && lib.versionOlder version "1.73") ./cmake-paths.patch
-  ++ lib.optional (lib.versionAtLeast version "1.73") ./cmake-paths-173.patch
+  ++ [ ./cmake-paths-173.patch ]
   ++ lib.optional (version == "1.77.0") (fetchpatch {
     url = "https://github.com/boostorg/math/commit/7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b.patch";
     relative = "include";
@@ -156,18 +119,13 @@ stdenv.mkDerivation {
     description = "Collection of C++ libraries";
     license = licenses.boost;
     platforms = platforms.unix ++ platforms.windows;
-    badPlatforms = optional (versionOlder version "1.59") "aarch64-linux"
-                 ++ optional ((versionOlder version "1.57") || version == "1.58") "x86_64-darwin"
-                 ++ optionals (versionOlder version "1.73") lib.platforms.riscv;
     maintainers = with maintainers; [ hjones2199 ];
 
     broken =
       # boost-context lacks support for the N32 ABI on mips64.  The build
       # will succeed, but packages depending on boost-context will fail with
       # a very cryptic error message.
-      stdenv.hostPlatform.isMips64n32 ||
-      # the patch above does not apply cleanly to pre-1.65 boost
-      (stdenv.hostPlatform.isMips64n64 && (versionOlder version "1.65"));
+      stdenv.hostPlatform.isMips64n32;
   };
 
   passthru = {
@@ -227,7 +185,7 @@ stdenv.mkDerivation {
     ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = [ expat zlib bzip2 libiconv ]
     ++ lib.optional (lib.versionAtLeast version "1.69") zstd
-    ++ lib.optional (lib.versionAtLeast version "1.65") xz
+    ++ [ xz ]
     ++ lib.optional enableIcu icu
     ++ lib.optionals enablePython [ libxcrypt python ]
     ++ lib.optional enableNumpy python.pkgs.numpy;

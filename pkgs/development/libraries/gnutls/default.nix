@@ -2,7 +2,6 @@
 , perl, gmp, autoconf, automake, libidn2, libiconv
 , unbound, dns-root-data, gettext, util-linux
 , cxxBindings ? !stdenv.hostPlatform.isStatic # tries to link libstdc++.so
-, guileBindings ? config.gnutls.guile or false, guile
 , tpmSupport ? false, trousers, which, nettools, libunistring
 , withP11-kit ? !stdenv.hostPlatform.isStatic, p11-kit
 , Security  # darwin Security.framework
@@ -22,7 +21,6 @@
 , samba
 }:
 
-assert guileBindings -> guile != null;
 let
 
   # XXX: Gnulib's `test-select' fails on FreeBSD:
@@ -74,19 +72,13 @@ stdenv.mkDerivation rec {
     "--with-unbound-root-key-file=${dns-root-data}/root.key"
     (lib.withFeature withP11-kit "p11-kit")
     (lib.enableFeature cxxBindings "cxx")
-  ] ++ lib.optionals guileBindings [
-    "--enable-guile"
-    "--with-guile-site-dir=\${out}/share/guile/site"
-    "--with-guile-site-ccache-dir=\${out}/share/guile/site"
-    "--with-guile-extension-dir=\${out}/share/guile/site"
   ];
 
   enableParallelBuilding = true;
 
   buildInputs = [ lzo lzip libtasn1 libidn2 zlib gmp libunistring unbound gettext libiconv ]
     ++ lib.optional (withP11-kit) p11-kit
-    ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
-    ++ lib.optional guileBindings guile;
+    ++ lib.optional (tpmSupport && stdenv.isLinux) trousers;
 
   nativeBuildInputs = [ perl pkg-config ]
     ++ lib.optionals doCheck [ which nettools util-linux ];

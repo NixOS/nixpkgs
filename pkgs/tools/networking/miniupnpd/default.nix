@@ -8,11 +8,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "miniupnpd";
-  version = "2.3.1";
+  version = "2.3.3";
 
   src = fetchurl {
     url = "https://miniupnp.tuxfamily.org/files/miniupnpd-${version}.tar.gz";
-    sha256 = "0crv975qqppnj27jba96yysq2911y49vjd74sp9vnjb54z0d9pyi";
+    sha256 = "sha256-b9cBn5Nv+IxB58gi9G8QtRvXLWZZePZYZIPedbMMNr8=";
   };
 
   buildInputs = [ iptables-legacy libuuid openssl ];

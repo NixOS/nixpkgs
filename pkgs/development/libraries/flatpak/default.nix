@@ -54,14 +54,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flatpak";
-  version = "1.14.2";
+  version = "1.14.4";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs = [ "out" "dev" "man" "doc" "devdoc" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${finalAttrs.version}/flatpak-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-yAcR6s9CqZB49jlqplVV3Wv3PuxjF3a3np17cmK293Q="; # Taken from https://github.com/flatpak/flatpak/releases/
+    sha256 = "sha256-ijTb0LZ8Q051mLmOxpCVPQRvDbJuSArq+0bXKuxxZ5k="; # Taken from https://github.com/flatpak/flatpak/releases/
   };
 
   patches = [
@@ -203,7 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Linux application sandboxing and distribution framework";
     homepage = "https://flatpak.org/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 })

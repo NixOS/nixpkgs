@@ -62,8 +62,6 @@ in {
 
   ghc-source-gen = checkAgainAfter super.ghc-source-gen "0.4.3.0" "fails to build" (markBroken super.ghc-source-gen);
 
-  lucid = jailbreakForCurrentVersion super.lucid "2.11.1";
-
   haskell-src-meta = doJailbreak super.haskell-src-meta;
 
   # Tests fail in GHC 9.2
@@ -71,9 +69,7 @@ in {
 
   # Jailbreaks & Version Updates
 
-  # Jailbreak to allow quickcheck-instances-0.3.28 (too strict lower bound)
-  aeson = doDistribute (doJailbreak self.aeson_2_1_2_1);
-
+  aeson = doDistribute self.aeson_2_1_2_1;
   assoc = doJailbreak super.assoc;
   async = doJailbreak super.async;
   base64-bytestring = doJailbreak super.base64-bytestring;
@@ -85,15 +81,13 @@ in {
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
   ghc-byteorder = doJailbreak super.ghc-byteorder;
-  ghc-lib = doDistribute self.ghc-lib-parser_9_4_4_20221225;
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_4_4_20221225;
+  ghc-lib = doDistribute self.ghc-lib_9_4_5_20230430;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_4_5_20230430;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_4_0_0;
   hackage-security = doJailbreak super.hackage-security;
   hashable-time = doJailbreak super.hashable-time;
   HTTP = overrideCabal (drv: { postPatch = "sed -i -e 's,! Socket,!Socket,' Network/TCP.hs"; }) (doJailbreak super.HTTP);
   integer-logarithms = overrideCabal (drv: { postPatch = "sed -i -e 's, <1.1, <1.3,' integer-logarithms.cabal"; }) (doJailbreak super.integer-logarithms);
-  indexed-traversable = doJailbreak super.indexed-traversable;
-  indexed-traversable-instances = doJailbreak super.indexed-traversable-instances;
   lifted-async = doJailbreak super.lifted-async;
   lukko = doJailbreak super.lukko;
   lzma-conduit = doJailbreak super.lzma-conduit;
@@ -107,15 +101,11 @@ in {
   rope-utf16-splay = doDistribute self.rope-utf16-splay_0_4_0_0;
   shake-cabal = doDistribute self.shake-cabal_0_2_2_3;
   libmpd = doJailbreak super.libmpd;
-  base-orphans = dontCheck super.base-orphans;
-
-  # Note: Any compilation fixes need to be done on the versioned attributes,
-  # since those are used for the internal dependencies between the versioned
-  # hspec packages in configuration-common.nix.
-  hspec = self.hspec_2_10_9;
-  hspec-core = self.hspec-core_2_10_9;
-  hspec-meta = self.hspec-meta_2_10_5;
-  hspec-discover = self.hspec-discover_2_10_9;
+  generics-sop = doJailbreak super.generics-sop;
+  microlens-th = doJailbreak super.microlens-th;
+  # generically needs base-orphans for 9.4 only
+  base-orphans = dontCheck (doDistribute super.base-orphans);
+  generically = addBuildDepend self.base-orphans super.generically;
 
   # the dontHaddock is due to a GHC panic. might be this bug, not sure.
   # https://gitlab.haskell.org/ghc/ghc/-/issues/21619
@@ -125,18 +115,18 @@ in {
   hedgehog = doDistribute (dontHaddock super.hedgehog_1_2);
   # tasty-hedgehog > 1.3 necessary to work with hedgehog 1.2:
   # https://github.com/qfpl/tasty-hedgehog/pull/63
-  tasty-hedgehog = self.tasty-hedgehog_1_4_0_0;
+  tasty-hedgehog = self.tasty-hedgehog_1_4_0_1;
 
   # https://github.com/dreixel/syb/issues/38
   syb = dontCheck super.syb;
 
   splitmix = doJailbreak super.splitmix;
-  th-desugar = self.th-desugar_1_14;
+  th-desugar = doDistribute self.th-desugar_1_15;
+  th-abstraction = doDistribute self.th-abstraction_0_5_0_0;
   time-compat = doJailbreak super.time-compat;
   tomland = doJailbreak super.tomland;
   type-equality = doJailbreak super.type-equality;
   unordered-containers = doJailbreak super.unordered-containers;
-  vector = dontCheck super.vector;
   vector-binary-instances = doJailbreak super.vector-binary-instances;
 
   hpack = overrideCabal (drv: {
@@ -147,7 +137,7 @@ in {
     ] ++ drv.testFlags or [];
   }) (doJailbreak super.hpack);
 
-  lens = doDistribute self.lens_5_2_1;
+  lens = doDistribute self.lens_5_2_2;
 
   # Apply patches from head.hackage.
   language-haskell-extract = appendPatch (pkgs.fetchpatch {
@@ -184,18 +174,8 @@ in {
   })
     self.ghc-exactprint_1_6_1_1;
 
-  # 2023-02-01: plugins disabled for hls 1.9.0.0 based on
-  # https://haskell-language-server.readthedocs.io/en/latest/support/plugin-support.html#current-plugin-support-tiers
-  haskell-language-server = super.haskell-language-server.override {
-    hls-eval-plugin = null;
-    hls-ormolu-plugin = null;     # This plugin is supposed to work, but fails to compile.
-    hls-floskell-plugin = null;   # This plugin is supposed to work, but fails to compile.
-    hls-rename-plugin = null;     # This plugin is supposed to work, but fails to compile.
-    hls-stylish-haskell-plugin = null;
-  };
-
   # needed to build servant
-  http-api-data = super.http-api-data_0_5;
+  http-api-data = super.http-api-data_0_5_1;
   attoparsec-iso8601 = super.attoparsec-iso8601_1_1_0_0;
 
   # requires newer versions to work with GHC 9.4
@@ -207,17 +187,11 @@ in {
   servant-swagger = doJailbreak super.servant-swagger;
   servant-client-core = doJailbreak super.servant-client-core;
   servant-client = doJailbreak super.servant-client;
-  relude = doJailbreak super.relude;
+  # https://github.com/kowainik/relude/issues/436
+  relude = dontCheck (doJailbreak super.relude);
 
-  cborg = appendPatch (pkgs.fetchpatch {
-    name = "cborg-support-ghc-9.4.patch";
-    url = "https://github.com/well-typed/cborg/pull/304.diff";
-    sha256 = "sha256-W4HldlESKOVkTPhz9nkFrvbj9akCOtF1SbIt5eJqtj8=";
-    relative = "cborg";
-  }) super.cborg;
-
-  # https://github.com/tweag/ormolu/issues/941
   ormolu = doDistribute self.ormolu_0_5_3_0;
+  # https://github.com/tweag/ormolu/issues/941
   fourmolu = overrideCabal (drv: {
     libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
   }) (disableCabalFlag "fixity-th" super.fourmolu_0_10_1_0);
@@ -231,9 +205,6 @@ in {
   cairo = __CabalEagerPkgConfigWorkaround (doJailbreak super.cairo);
   pango = __CabalEagerPkgConfigWorkaround (doJailbreak super.pango);
 
-  # The gtk2hs setup hook provided by this package lacks the ppOrdering field that
-  # recent versions of Cabal require. This leads to builds like cairo and glib
-  # failing during the Setup.hs phase: https://github.com/gtk2hs/gtk2hs/issues/323.
-  gtk2hs-buildtools = appendPatch ./patches/gtk2hs-buildtools-fix-ghc-9.4.x.patch super.gtk2hs-buildtools;
-
+  # Pending text-2.0 support https://github.com/gtk2hs/gtk2hs/issues/327
+  gtk = doJailbreak super.gtk;
 }

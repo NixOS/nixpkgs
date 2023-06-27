@@ -3,18 +3,16 @@
 , fetchurl
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "byacc";
-  version = "20230219";
+  version = "20230521";
 
   src = fetchurl {
-    urls = let
-      inherit (self) pname version;
-    in [
-      "https://invisible-mirror.net/archives/byacc/${pname}-${version}.tgz"
-      "ftp://ftp.invisible-island.net/byacc/${pname}-${version}.tgz"
+    urls = [
+      "https://invisible-mirror.net/archives/byacc/byacc-${finalAttrs.version}.tgz"
+      "ftp://ftp.invisible-island.net/byacc/byacc-${finalAttrs.version}.tgz"
     ];
-    hash = "sha256-NrlyptSul1hN0YaSX7vDl9JssgYyp2wvUqx2U80IG1g=";
+    hash = "sha256-WtkVp9WDOqOKXjG9B3UFZmApw142Xf+Faf5FmOqp/vI=";
   };
 
   configureFlags = [

@@ -10,6 +10,7 @@
 , texinfo
 , ncurses
 , pcre
+, pkg-config
 , buildPackages }:
 
 let
@@ -32,7 +33,7 @@ stdenv.mkDerivation {
   ];
 
   strictDeps = true;
-  nativeBuildInputs = [ autoreconfHook perl groff texinfo pcre]
+  nativeBuildInputs = [ autoreconfHook perl groff texinfo pkg-config ]
                       ++ lib.optionals stdenv.isLinux [ util-linux yodl ];
 
   buildInputs = [ ncurses pcre ];
@@ -56,6 +57,11 @@ stdenv.mkDerivation {
     "zsh_cv_sys_dynamic_strip_lib=yes"
   ];
 
+  preConfigure = ''
+    # use pkg-config instead of pcre-config
+    configureFlagsArray+=("PCRECONF=''${PKG_CONFIG} libpcre")
+  '';
+
   # the zsh/zpty module is not available on hydra
   # so skip groups Y Z
   checkFlags = map (T: "TESTNUM=${T}") (lib.stringToCharacters "ABCDEVW");
@@ -71,7 +77,7 @@ if test -e /etc/NIXOS; then
   else
     emulate bash
     alias shopt=false
-    if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]; then
+    if [ -z "\$__NIXOS_SET_ENVIRONMENT_DONE" ]; then
       . /etc/set-environment
     fi
     unalias shopt

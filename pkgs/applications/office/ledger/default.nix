@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ledger";
-  version = "3.3.1";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner  = "ledger";
     repo   = "ledger";
     rev    = "v${version}";
-    hash   = "sha256-CnMzsFKBNiXmatgY7aiK8UCqIL6qifA4KbV6BJaza40=";
+    hash   = "sha256-Uym4s8EyzXHlISZqThcb6P1H5bdgD9vmdIOLkk5ikG0=";
   };
 
   outputs = [ "out" "dev" ] ++ lib.optionals usePython [ "py" ];

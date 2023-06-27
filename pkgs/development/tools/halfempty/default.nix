@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, glib, util-linux, scowl }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, glib, hexdump, scowl }:
 
 stdenv.mkDerivation rec {
   pname = "halfempty";
@@ -11,8 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-YGq6fneAMo2jCpLPrjzRJ0eeOsStKaK5L+lwQfqcfpY=";
   };
 
-  nativeBuildInputs = [ pkg-config util-linux ];
+  nativeBuildInputs = [ pkg-config hexdump ];
   buildInputs = [ glib ];
+
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   enableParallelBuilding = true;
 
@@ -41,5 +43,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/googleprojectzero/halfempty/";
     maintainers = with lib.maintainers; [ fpletz ];
     license = with lib.licenses; [ asl20 ];
+    platforms = lib.platforms.unix;
   };
 }

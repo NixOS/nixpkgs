@@ -21,7 +21,7 @@
 , pytest-mock
 , python-dateutil
 , pythonOlder
-, scikitimage
+, scikit-image
 , scipy
 , setuptools-scm
 , sqlalchemy
@@ -62,7 +62,7 @@ buildPythonPackage rec {
       sqlalchemy
     ];
     image = [
-      scikitimage
+      scikit-image
       scipy
     ];
     net = [
@@ -159,5 +159,6 @@ buildPythonPackage rec {
     homepage = "https://sunpy.org";
     license = licenses.bsd2;
     maintainers = with maintainers; [ costrouc ];
+    broken = true;
   };
 }

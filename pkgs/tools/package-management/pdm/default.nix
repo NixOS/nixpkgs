@@ -1,4 +1,4 @@
-{ lib, python3, fetchFromGitHub, fetchurl }:
+{ lib, python3, fetchFromGitHub, fetchPypi }:
 let
   python = python3.override {
     # override resolvelib due to
@@ -8,12 +8,12 @@ let
     # see here for more details: https://github.com/NixOS/nixpkgs/pull/155380/files#r786255738
     packageOverrides = self: super: {
       resolvelib = super.resolvelib.overridePythonAttrs (attrs: rec {
-        version = "0.9.0";
+        version = "1.0.1";
         src = fetchFromGitHub {
           owner = "sarugaku";
           repo = "resolvelib";
           rev = "/refs/tags/${version}";
-          hash = "sha256-xzu8sMNMihJ80vezMdGkOT5Etx08qy3T/TkEn5EAY48=";
+          hash = "sha256-oxyPn3aFPOyx/2aP7Eg2ThtPbyzrFT1JzWqy6GqNbzM=";
         };
       });
     };
@@ -24,22 +24,22 @@ in
 with python.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "2.4.6";
+  version = "2.7.0";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-g+fQxq2kwhNXXEJG2n5n4f9GMkmmLsjpHoay152fcVQ=";
+    hash = "sha256-4dyu/neMFX/U1RuI0ZEBzdbONIHvdWyvpy1Gu5iMAcg=";
   };
 
   nativeBuildInputs = [
-    pdm-pep517
+    pdm-backend
   ];
 
   propagatedBuildInputs = [
     blinker
-    cachecontrol
+    cacheyou
     certifi
     findpython
     installer
@@ -68,6 +68,7 @@ buildPythonApplication rec {
     pytest-mock
     pytest-rerunfailures
     pytest-xdist
+    pytest-httpserver
   ];
 
   pytestFlagsArray = [

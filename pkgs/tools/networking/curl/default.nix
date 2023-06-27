@@ -5,7 +5,7 @@
 , gsaslSupport ? false, gsasl
 , gssSupport ? with stdenv.hostPlatform; (
     !isWindows &&
-    # disable gss becuase of: undefined reference to `k5_bcmp'
+    # disable gss because of: undefined reference to `k5_bcmp'
     # a very sad story re static: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=439039
     !isStatic &&
     # the "mig" tool does not configure its compiler correctly. This could be
@@ -22,6 +22,7 @@
 , rtmpSupport ? false, rtmpdump
 , scpSupport ? zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin, libssh2
 , wolfsslSupport ? false, wolfssl
+, rustlsSupport ? false, rustls-ffi
 , zlibSupport ? true, zlib
 , zstdSupport ? false, zstd
 
@@ -42,20 +43,18 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-assert !(gnutlsSupport && opensslSupport);
-assert !(gnutlsSupport && wolfsslSupport);
-assert !(opensslSupport && wolfsslSupport);
+assert !((lib.count (x: x) [ gnutlsSupport opensslSupport wolfsslSupport rustlsSupport ]) > 1);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
-  version = "7.88.1";
+  version = "8.1.1";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.bz2"
       "https://github.com/curl/curl/releases/download/curl-${finalAttrs.version}/curl-${finalAttrs.version}.tar.bz2"
     ];
-    hash = "sha256-giS0XM4Sq94DnBLcBxG36oWxBLmtU01uTFtOGIphyQc=";
+    hash = "sha256-UdKvcieZE7XUyrH+Hzi5RM9wkEyIvuJGtb1XWETnA1o=";
   };
 
   patches = [
@@ -89,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     optional rtmpSupport rtmpdump ++
     optional scpSupport libssh2 ++
     optional wolfsslSupport wolfssl ++
+    optional rustlsSupport rustls-ffi ++
     optional zlibSupport zlib ++
     optional zstdSupport zstd;
 
@@ -104,11 +104,12 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.enableFeature c-aresSupport "ares")
       (lib.enableFeature ldapSupport "ldap")
       (lib.enableFeature ldapSupport "ldaps")
-      # The build fails when using wolfssl with --with-ca-fallback
-      (lib.withFeature (!wolfsslSupport) "ca-fallback")
+      # --with-ca-fallback is only supported for openssl and gnutls https://github.com/curl/curl/blame/curl-8_0_1/acinclude.m4#L1640
+      (lib.withFeature (opensslSupport || gnutlsSupport) "ca-fallback")
       (lib.withFeature http3Support "nghttp3")
       (lib.withFeature http3Support "ngtcp2")
       (lib.withFeature rtmpSupport "librtmp")
+      (lib.withFeature rustlsSupport "rustls")
       (lib.withFeature zstdSupport "zstd")
       (lib.withFeatureAs brotliSupport "brotli" (lib.getDev brotli))
       (lib.withFeatureAs gnutlsSupport "gnutls" (lib.getDev gnutls))
@@ -129,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
       # Without this curl might detect /etc/ssl/cert.pem at build time on macOS, causing curl to ignore NIX_SSL_CERT_FILE.
       "--without-ca-bundle"
       "--without-ca-path"
-    ] ++ lib.optionals (!gnutlsSupport && !opensslSupport && !wolfsslSupport) [
+    ] ++ lib.optionals (!gnutlsSupport && !opensslSupport && !wolfsslSupport && !rustlsSupport) [
       "--without-ssl"
     ];
 
@@ -170,7 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit opensslSupport openssl;
     tests = {
       withCheck = finalAttrs.finalPackage.overrideAttrs (_: { doCheck = true; });
-      fetchpatch = tests.fetchpatch.simple.override { fetchpatch = fetchpatch.override { fetchurl = useThisCurl fetchurl; }; };
+      fetchpatch = tests.fetchpatch.simple.override { fetchpatch = (fetchpatch.override { fetchurl = useThisCurl fetchurl; }) // { version = 1; }; };
       curlpp = useThisCurl curlpp;
       coeurl = useThisCurl coeurl;
       haskell-curl = useThisCurl haskellPackages.curl;

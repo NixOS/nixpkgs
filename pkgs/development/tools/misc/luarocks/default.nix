@@ -17,14 +17,14 @@
 , installShellFiles
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "luarocks";
   version = "3.9.1";
 
   src = fetchFromGitHub {
     owner = "luarocks";
     repo = "luarocks";
-    rev = "v${self.version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-G6HDap3pspeQtGDBq+ukN7kftDaT/CozMVdYM60F6HI=";
   };
 
@@ -76,7 +76,7 @@ stdenv.mkDerivation (self: {
               --suffix LUA_CPATH ";" "$(echo "$out"/lib/lua/*/)?.so" \
               --suffix LUA_CPATH ";" "$(echo "$out"/share/lua/*/)?/init.lua" \
               --suffix PATH : ${lib.makeBinPath ([ unzip ] ++
-                lib.optionals (self.pname == "luarocks-nix") [ file nix-prefetch-git ])}
+                lib.optionals (finalAttrs.pname == "luarocks-nix") [ file nix-prefetch-git ])}
         }
     done
   '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

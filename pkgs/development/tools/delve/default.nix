@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "delve";
-  version = "1.20.1";
+  version = "1.20.2";
 
   src = fetchFromGitHub {
     owner = "go-delve";
     repo = "delve";
     rev = "v${version}";
-    sha256 = "sha256-X1vds6+brQ5pl7MG2/n0CqCoS0nbjnQUcIgJqji/u60=";
+    sha256 = "sha256-NHVgNoMa/K1wVbXKycd7sdxfCpLYY6kn2uSfJWUpq1o=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   subPackages = [ "cmd/dlv" ];
 

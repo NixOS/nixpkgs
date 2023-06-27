@@ -22,6 +22,9 @@ qmakePrePhase() {
         qmakeFlags+=( "CONFIG+=release" )
     fi
 
+    # do the stripping ourselves (needed for separateDebugInfo)
+    qmakeFlags+=( "CONFIG+=nostrip" )
+
     qmakeFlags+=( "${qmakeFlags_orig[@]}" )
 }
 prePhases+=" qmakePrePhase"
@@ -36,6 +39,11 @@ qmakeConfigurePhase() {
     if ! [[ -v enableParallelBuilding ]]; then
         enableParallelBuilding=1
         echo "qmake: enabled parallel building"
+    fi
+
+    if ! [[ -v enableParallelInstalling ]]; then
+        enableParallelInstalling=1
+        echo "qmake: enabled parallel installing"
     fi
 
     runHook postConfigure

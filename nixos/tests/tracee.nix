@@ -1,5 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "tracee-integration";
+  meta.maintainers = pkgs.tracee.meta.maintainers;
+
   nodes = {
     machine = { config, pkgs, ... }: {
       # EventFilters/trace_only_events_from_new_containers and
@@ -7,11 +9,11 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       # require docker/dockerd
       virtualisation.docker.enable = true;
 
-      environment.systemPackages = [
+      environment.systemPackages = with pkgs; [
         # required by Test_EventFilters/trace_events_from_ls_and_which_binary_in_separate_scopes
-        pkgs.which
+        which
         # build the go integration tests as a binary
-        (pkgs.tracee.overrideAttrs (oa: {
+        (tracee.overrideAttrs (oa: {
           pname = oa.pname + "-integration";
           postPatch = oa.postPatch or "" + ''
             # prepare tester.sh (which will be embedded in the test binary)
@@ -20,10 +22,11 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             # fix the test to look at nixos paths for running programs
             substituteInPlace tests/integration/integration_test.go \
               --replace "bin=/usr/bin/" "comm=" \
+              --replace "binary=/usr/bin/" "comm=" \
               --replace "/usr/bin/dockerd" "dockerd" \
               --replace "/usr/bin" "/run/current-system/sw/bin"
           '';
-          nativeBuildInputs = oa.nativeBuildInputs or [ ] ++ [ pkgs.makeWrapper ];
+          nativeBuildInputs = oa.nativeBuildInputs or [ ] ++ [ makeWrapper ];
           buildPhase = ''
             runHook preBuild
             # just build the static lib we need for the go test binary
@@ -34,6 +37,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             runHook postBuild
           '';
           doCheck = false;
+          outputs = [ "out" ];
           installPhase = ''
             mkdir -p $out/bin
             mv $GOPATH/tracee-integration $out/bin/

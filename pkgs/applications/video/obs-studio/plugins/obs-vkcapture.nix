@@ -7,7 +7,10 @@
 , wayland
 , wayland-scanner
 , obs-studio
+, libffi
 , libX11
+, libXau
+, libXdmcp
 , libxcb
 , vulkan-headers
 , vulkan-loader
@@ -15,15 +18,15 @@
 , obs-vkcapture32
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "obs-vkcapture";
-  version = "1.3.0";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "nowrep";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-xtIcIT9lWw73Et9WgyEUznwy1X947Rv5nTiM+t0qYaM=";
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-pvJzzDbsmsu46C8Jki+eMfCZLejkgvqns2hVNDtpSk0=";
   };
 
   cmakeFlags = lib.optionals stdenv.isi686 [
@@ -35,7 +38,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake extra-cmake-modules ninja wayland-scanner ];
   buildInputs = [
     libGL
+    libffi
     libX11
+    libXau
+    libXdmcp
     libxcb
     vulkan-headers
     vulkan-loader
@@ -54,8 +60,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "OBS Linux Vulkan/OpenGL game capture";
     homepage = "https://github.com/nowrep/obs-vkcapture";
+    changelog = "https://github.com/nowrep/obs-vkcapture/releases/tag/v${finalAttrs.version}";
     maintainers = with maintainers; [ atila pedrohlc ];
     license = licenses.gpl2Only;
     platforms = platforms.linux;
   };
-}
+})

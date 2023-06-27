@@ -1,4 +1,10 @@
 {
+    "2048": {
+      "owner": "libretro",
+      "repo": "libretro-2048",
+      "rev": "331c1de588ed8f8c370dcbc488e5434a3c09f0f2",
+      "sha256": "gPrAmoBnfuTnW6t699pqS43vE6t0ca3jZcqTNRaJipA="
+    },
     "atari800": {
         "owner": "libretro",
         "repo": "libretro-atari800",
@@ -179,6 +185,12 @@
         "repo": "freeintv",
         "rev": "9a65ec6e31d48ad0dae1f381c1ec61c897f970cb",
         "sha256": "ZeWw/K6i04XRympqZ6sQG/yjN8cJglVcIkxpyRHx424="
+    },
+    "fuse": {
+        "owner": "libretro",
+        "repo": "fuse-libretro",
+        "rev": "847dbbd6f787823ac9a5dfacdd68ab181063374e",
+        "sha256": "jzS7SFALV/YjI77ST+IWHwUsuhT+Zr5w4t6C7O8yzFM="
     },
     "gambatte": {
         "owner": "libretro",

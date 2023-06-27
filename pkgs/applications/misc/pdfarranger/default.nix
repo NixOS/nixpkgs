@@ -47,5 +47,6 @@ python3Packages.buildPythonApplication rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ symphorien ];
     license = licenses.gpl3Plus;
+    changelog = "https://github.com/pdfarranger/pdfarranger/releases/tag/${version}";
   };
 }

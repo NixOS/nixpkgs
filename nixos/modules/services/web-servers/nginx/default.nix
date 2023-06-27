@@ -31,6 +31,7 @@ let
 
   # Mime.types values are taken from brotli sample configuration - https://github.com/google/ngx_brotli
   # and Nginx Server Configs - https://github.com/h5bp/server-configs-nginx
+  # "text/html" is implicitly included in {brotli,gzip,zstd}_types
   compressMimeTypes = [
     "application/atom+xml"
     "application/geo+json"
@@ -55,7 +56,6 @@ let
     "text/calendar"
     "text/css"
     "text/csv"
-    "text/html"
     "text/javascript"
     "text/markdown"
     "text/plain"
@@ -102,10 +102,26 @@ let
     proxy_set_header        X-Forwarded-Server $host;
   '';
 
+  proxyCachePathConfig = concatStringsSep "\n" (mapAttrsToList (name: proxyCachePath: ''
+    proxy_cache_path ${concatStringsSep " " [
+      "/var/cache/nginx/${name}"
+      "keys_zone=${proxyCachePath.keysZoneName}:${proxyCachePath.keysZoneSize}"
+      "levels=${proxyCachePath.levels}"
+      "use_temp_path=${if proxyCachePath.useTempPath then "on" else "off"}"
+      "inactive=${proxyCachePath.inactive}"
+      "max_size=${proxyCachePath.maxSize}"
+    ]};
+  '') (filterAttrs (name: conf: conf.enable) cfg.proxyCachePath));
+
+  toUpstreamParameter = key: value:
+    if builtins.isBool value
+    then lib.optionalString value key
+    else "${key}=${toString value}";
+
   upstreamConfig = toString (flip mapAttrsToList cfg.upstreams (name: upstream: ''
     upstream ${name} {
       ${toString (flip mapAttrsToList upstream.servers (name: server: ''
-        server ${name} ${optionalString server.backup "backup"};
+        server ${name} ${concatStringsSep " " (mapAttrsToList toUpstreamParameter server)};
       ''))}
       ${upstream.extraConfig}
     }
@@ -184,8 +200,9 @@ let
         brotli_types ${lib.concatStringsSep " " compressMimeTypes};
       ''}
 
-      ${optionalString cfg.recommendedGzipSettings ''
+      ${optionalString cfg.recommendedGzipSettings
         # https://docs.nginx.com/nginx/admin-guide/web-server/compression/
+      ''
         gzip on;
         gzip_static on;
         gzip_vary on;
@@ -240,17 +257,9 @@ let
 
       server_tokens ${if cfg.serverTokens then "on" else "off"};
 
-      ${optionalString cfg.proxyCache.enable ''
-        proxy_cache_path /var/cache/nginx keys_zone=${cfg.proxyCache.keysZoneName}:${cfg.proxyCache.keysZoneSize}
-                                          levels=${cfg.proxyCache.levels}
-                                          use_temp_path=${if cfg.proxyCache.useTempPath then "on" else "off"}
-                                          inactive=${cfg.proxyCache.inactive}
-                                          max_size=${cfg.proxyCache.maxSize};
-      ''}
-
       ${cfg.commonHttpConfig}
 
-      ${vhosts}
+      ${proxyCachePathConfig}
 
       ${optionalString cfg.statusPage ''
         server {
@@ -268,6 +277,8 @@ let
           }
         }
       ''}
+
+      ${vhosts}
 
       ${cfg.appendHttpConfig}
     }''}
@@ -298,33 +309,54 @@ let
         onlySSL = vhost.onlySSL || vhost.enableSSL;
         hasSSL = onlySSL || vhost.addSSL || vhost.forceSSL;
 
+        # First evaluation of defaultListen based on a set of listen lines.
+        mkDefaultListenVhost = listenLines:
+          # If this vhost has SSL or is a SSL rejection host.
+          # We enable a TLS variant for lines without explicit ssl or ssl = true.
+          optionals (hasSSL || vhost.rejectSSL)
+            (map (listen: { port = cfg.defaultSSLListenPort; ssl = true; } // listen)
+            (filter (listen: !(listen ? ssl) || listen.ssl) listenLines))
+          # If this vhost is supposed to serve HTTP
+          # We provide listen lines for those without explicit ssl or ssl = false.
+          ++ optionals (!onlySSL)
+            (map (listen: { port = cfg.defaultHTTPListenPort; ssl = false; } // listen)
+            (filter (listen: !(listen ? ssl) || !listen.ssl) listenLines));
+
         defaultListen =
           if vhost.listen != [] then vhost.listen
           else
+          if cfg.defaultListen != [] then mkDefaultListenVhost
+            # Cleanup nulls which will mess up with //.
+            # TODO: is there a better way to achieve this? i.e. mergeButIgnoreNullPlease?
+            (map (listenLine: filterAttrs (_: v: (v != null)) listenLine) cfg.defaultListen)
+          else
             let addrs = if vhost.listenAddresses != [] then vhost.listenAddresses else cfg.defaultListenAddresses;
-            in optionals (hasSSL || vhost.rejectSSL) (map (addr: { inherit addr; port = cfg.defaultSSLListenPort; ssl = true; }) addrs)
-              ++ optionals (!onlySSL) (map (addr: { inherit addr; port = cfg.defaultHTTPListenPort; ssl = false; }) addrs);
+            in mkDefaultListenVhost (map (addr: { inherit addr; }) addrs);
+
 
         hostListen =
           if vhost.forceSSL
             then filter (x: x.ssl) defaultListen
             else defaultListen;
 
-        listenString = { addr, port, ssl, extraParameters ? [], ... }:
-          (if ssl && vhost.http3 then "
-          # UDP listener for **QUIC+HTTP/3
-          listen ${addr}:${toString port} http3 "
+        listenString = { addr, port, ssl, proxyProtocol ? false, extraParameters ? [], ... }:
+          # UDP listener for QUIC transport protocol.
+          (optionalString (ssl && vhost.quic) ("
+            listen ${addr}:${toString port} quic "
           + optionalString vhost.default "default_server "
           + optionalString vhost.reuseport "reuseport "
-          + optionalString (extraParameters != []) (concatStringsSep " " extraParameters)
-          + ";" else "")
+          + optionalString (extraParameters != []) (concatStringsSep " "
+            (let inCompatibleParameters = [ "ssl" "proxy_protocol" "http2" ];
+                isCompatibleParameter = param: !(any (p: p == param) inCompatibleParameters);
+            in filter isCompatibleParameter extraParameters))
+          + ";"))
           + "
-
             listen ${addr}:${toString port} "
           + optionalString (ssl && vhost.http2) "http2 "
           + optionalString ssl "ssl "
           + optionalString vhost.default "default_server "
           + optionalString vhost.reuseport "reuseport "
+          + optionalString proxyProtocol "proxy_protocol "
           + optionalString (extraParameters != []) (concatStringsSep " " extraParameters)
           + ";";
 
@@ -363,6 +395,10 @@ let
         server {
           ${concatMapStringsSep "\n" listenString hostListen}
           server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
+          ${optionalString (hasSSL && vhost.quic) ''
+            http3 ${if vhost.http3 then "on" else "off"};
+            http3_hq ${if vhost.http3_hq then "on" else "off"};
+          ''}
           ${acmeLocation}
           ${optionalString (vhost.root != null) "root ${vhost.root};"}
           ${optionalString (vhost.globalRedirect != null) ''
@@ -384,9 +420,10 @@ let
             ssl_conf_command Options KTLS;
           ''}
 
-          ${optionalString (hasSSL && vhost.http3) ''
+          ${optionalString (hasSSL && vhost.quic && vhost.http3)
             # Advertise that HTTP/3 is available
-            add_header Alt-Svc 'h3=":443"; ma=86400' always;
+          ''
+            add_header Alt-Svc 'h3=":$server_port"; ma=86400';
           ''}
 
           ${mkBasicAuth vhostName vhost}
@@ -476,7 +513,8 @@ in
         default = false;
         type = types.bool;
         description = lib.mdDoc ''
-          Enable recommended brotli settings. Learn more about compression in Brotli format [here](https://github.com/google/ngx_brotli/blob/master/README.md).
+          Enable recommended brotli settings.
+          Learn more about compression in Brotli format [here](https://github.com/google/ngx_brotli/).
 
           This adds `pkgs.nginxModules.brotli` to `services.nginx.additionalModules`.
         '';
@@ -487,6 +525,18 @@ in
         type = types.bool;
         description = lib.mdDoc ''
           Enable recommended gzip settings.
+          Learn more about compression in Gzip format [here](https://docs.nginx.com/nginx/admin-guide/web-server/compression/).
+        '';
+      };
+
+      recommendedZstdSettings = mkOption {
+        default = false;
+        type = types.bool;
+        description = lib.mdDoc ''
+          Enable recommended zstd settings.
+          Learn more about compression in Zstd format [here](https://github.com/tokers/zstd-nginx-module).
+
+          This adds `pkgs.nginxModules.zstd` to `services.nginx.additionalModules`.
         '';
       };
 
@@ -495,16 +545,6 @@ in
         type = types.bool;
         description = lib.mdDoc ''
           Whether to enable recommended proxy settings if a vhost does not specify the option manually.
-        '';
-      };
-
-      recommendedZstdSettings = mkOption {
-        default = false;
-        type = types.bool;
-        description = lib.mdDoc ''
-          Enable recommended zstd settings. Learn more about compression in Zstd format [here](https://github.com/tokers/zstd-nginx-module).
-
-          This adds `pkgs.nginxModules.zstd` to `services.nginx.additionalModules`.
         '';
       };
 
@@ -517,6 +557,49 @@ in
         '';
       };
 
+      defaultListen = mkOption {
+        type = with types; listOf (submodule {
+          options = {
+            addr = mkOption {
+              type = str;
+              description = lib.mdDoc "IP address.";
+            };
+            port = mkOption {
+              type = nullOr port;
+              description = lib.mdDoc "Port number.";
+              default = null;
+            };
+            ssl  = mkOption {
+              type = nullOr bool;
+              default = null;
+              description = lib.mdDoc "Enable SSL.";
+            };
+            proxyProtocol = mkOption {
+              type = bool;
+              description = lib.mdDoc "Enable PROXY protocol.";
+              default = false;
+            };
+            extraParameters = mkOption {
+              type = listOf str;
+              description = lib.mdDoc "Extra parameters of this listen directive.";
+              default = [ ];
+              example = [ "backlog=1024" "deferred" ];
+            };
+          };
+        });
+        default = [];
+        example = literalExpression ''[
+          { addr = "10.0.0.12"; proxyProtocol = true; ssl = true; }
+          { addr = "0.0.0.0"; }
+          { addr = "[::0]"; }
+        ]'';
+        description = lib.mdDoc ''
+          If vhosts do not specify listen, use these addresses by default.
+          This option takes precedence over {option}`defaultListenAddresses` and
+          other listen-related defaults options.
+        '';
+      };
+
       defaultListenAddresses = mkOption {
         type = types.listOf types.str;
         default = [ "0.0.0.0" ] ++ optional enableIPv6 "[::0]";
@@ -524,6 +607,7 @@ in
         example = literalExpression ''[ "10.0.0.12" "[2002:a00:1::]" ]'';
         description = lib.mdDoc ''
           If vhosts do not specify listenAddresses, use these addresses by default.
+          This is akin to writing `defaultListen = [ { addr = "0.0.0.0" } ]`.
         '';
       };
 
@@ -629,7 +713,7 @@ in
           Configuration lines appended to the generated Nginx
           configuration file. Commonly used by different modules
           providing http snippets. {option}`appendConfig`
-          can be specified more than once and it's value will be
+          can be specified more than once and its value will be
           concatenated (contrary to {option}`config` which
           can be set only once).
         '';
@@ -796,10 +880,10 @@ in
           '';
       };
 
-      proxyCache = mkOption {
-        type = types.submodule {
+      proxyCachePath = mkOption {
+        type = types.attrsOf (types.submodule ({ ... }: {
           options = {
-            enable = mkEnableOption (lib.mdDoc "Enable proxy cache");
+            enable = mkEnableOption (lib.mdDoc "this proxy cache path entry");
 
             keysZoneName = mkOption {
               type = types.str;
@@ -857,9 +941,12 @@ in
               description = lib.mdDoc "Set maximum cache size";
             };
           };
-        };
+        }));
         default = {};
-        description = lib.mdDoc "Configure proxy cache";
+        description = lib.mdDoc ''
+          Configure a proxy cache path entry.
+          See <http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_path> for documentation.
+        '';
       };
 
       resolver = mkOption {
@@ -902,6 +989,7 @@ in
           options = {
             servers = mkOption {
               type = types.attrsOf (types.submodule {
+                freeformType = types.attrsOf (types.oneOf [ types.bool types.int types.str ]);
                 options = {
                   backup = mkOption {
                     type = types.bool;
@@ -915,9 +1003,11 @@ in
               });
               description = lib.mdDoc ''
                 Defines the address and other parameters of the upstream servers.
+                See [the documentation](https://nginx.org/en/docs/http/ngx_http_upstream_module.html#server)
+                for the available parameters.
               '';
               default = {};
-              example = { "127.0.0.1:8000" = {}; };
+              example = lib.literalMD "see [](#opt-services.nginx.upstreams)";
             };
             extraConfig = mkOption {
               type = types.lines;
@@ -932,14 +1022,23 @@ in
           Defines a group of servers to use as proxy target.
         '';
         default = {};
-        example = literalExpression ''
-          "backend_server" = {
-            servers = { "127.0.0.1:8000" = {}; };
-            extraConfig = ''''
+        example = {
+          "backend" = {
+            servers = {
+              "backend1.example.com:8080" = { weight = 5; };
+              "backend2.example.com" = { max_fails = 3; fail_timeout = "30s"; };
+              "backend3.example.com" = {};
+              "backup1.example.com" = { backup = true; };
+              "backup2.example.com" = { backup = true; };
+            };
+            extraConfig = ''
               keepalive 16;
-            '''';
+            '';
           };
-        '';
+          "memcached" = {
+            servers."unix:/run//memcached/memcached.sock" = {};
+          };
+        };
       };
 
       virtualHosts = mkOption {
@@ -970,6 +1069,12 @@ in
       The Nginx log directory has been moved to /var/log/nginx, the cache directory
       to /var/cache/nginx. The option services.nginx.stateDir has been removed.
     '')
+    (mkRenamedOptionModule [ "services" "nginx" "proxyCache" "inactive" ] [ "services" "nginx" "proxyCachePath" "" "inactive" ])
+    (mkRenamedOptionModule [ "services" "nginx" "proxyCache" "useTempPath" ] [ "services" "nginx" "proxyCachePath" "" "useTempPath" ])
+    (mkRenamedOptionModule [ "services" "nginx" "proxyCache" "levels" ] [ "services" "nginx" "proxyCachePath" "" "levels" ])
+    (mkRenamedOptionModule [ "services" "nginx" "proxyCache" "keysZoneSize" ] [ "services" "nginx" "proxyCachePath" "" "keysZoneSize" ])
+    (mkRenamedOptionModule [ "services" "nginx" "proxyCache" "keysZoneName" ] [ "services" "nginx" "proxyCachePath" "" "keysZoneName" ])
+    (mkRenamedOptionModule [ "services" "nginx" "proxyCache" "enable" ] [ "services" "nginx" "proxyCachePath" "" "enable" ])
   ];
 
   config = mkIf cfg.enable {
@@ -1025,6 +1130,40 @@ in
         message = ''
           Options services.nginx.service.virtualHosts.<name>.enableACME and
           services.nginx.virtualHosts.<name>.useACMEHost are mutually exclusive.
+        '';
+      }
+
+      {
+        assertion = cfg.package.pname != "nginxQuic" -> all (host: !host.quic) (attrValues virtualHosts);
+        message = ''
+          services.nginx.service.virtualHosts.<name>.quic requires using nginxQuic package,
+          which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`.
+        '';
+      }
+
+      {
+        # The idea is to understand whether there is a virtual host with a listen configuration
+        # that requires ACME configuration but has no HTTP listener which will make deterministically fail
+        # this operation.
+        # Options' priorities are the following at the moment:
+        # listen (vhost) > defaultListen (server) > listenAddresses (vhost) > defaultListenAddresses (server)
+        assertion =
+        let
+          hasAtLeastHttpListener = listenOptions: any (listenLine: if listenLine ? proxyProtocol then !listenLine.proxyProtocol else true) listenOptions;
+          hasAtLeastDefaultHttpListener = if cfg.defaultListen != [] then hasAtLeastHttpListener cfg.defaultListen else (cfg.defaultListenAddresses != []);
+        in
+          all (host:
+            let
+              hasAtLeastVhostHttpListener = if host.listen != [] then hasAtLeastHttpListener host.listen else (host.listenAddresses != []);
+              vhostAuthority = host.listen != [] || (cfg.defaultListen == [] && host.listenAddresses != []);
+            in
+              # Either vhost has precedence and we need a vhost specific http listener
+              # Either vhost set nothing and inherit from server settings
+              host.enableACME -> ((vhostAuthority && hasAtLeastVhostHttpListener) || (!vhostAuthority && hasAtLeastDefaultHttpListener))
+          ) (attrValues virtualHosts);
+        message = ''
+          services.nginx.virtualHosts.<name>.enableACME requires a HTTP listener
+          to answer to ACME requests.
         '';
       }
     ] ++ map (name: mkCertOwnershipAssertion {

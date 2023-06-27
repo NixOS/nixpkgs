@@ -5,6 +5,7 @@ buildDunePackage rec {
   version = "0.20";
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "c-cube";
@@ -12,6 +13,8 @@ buildDunePackage rec {
     rev = "v${version}";
     sha256 = "sha256-d3gleiaPEDJTbHtieL4oAq1NlA/0NtzdW9SA1sItFeQ=";
   };
+
+  patches = [ ./bytes.patch ];
 
   meta = {
     description = "Core qcheck library";

@@ -4,7 +4,7 @@
 , ladspa-sdk
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tap-plugins";
   version = "unstable-2020-12-09";
 

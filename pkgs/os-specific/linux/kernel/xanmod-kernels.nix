@@ -3,14 +3,14 @@
 let
   # These names are how they are designated in https://xanmod.org.
   ltsVariant = {
-    version = "6.1.16";
-    hash = "sha256-w44mynSAcxx9jpTfj/3LiB2eZKzOBzH2rBKzvXqKQJU=";
+    version = "6.1.35";
+    hash = "sha256-CfrM2CNaGUTfkVteudL8xnAuCdZJxD5pUEC1YW9LiuU=";
     variant = "lts";
   };
 
   mainVariant = {
-    version = "6.2.3";
-    hash = "sha256-C3Vwgk3UyD638CYeO2z+GBjmCTMVC2fwU7HyX8bxgxg=";
+    version = "6.3.9";
+    hash = "sha256-t1fKPZ+giANPmhM4zGoGtYWJF6rDnbpJaoHILl3nyRI=";
     variant = "main";
   };
 
@@ -52,7 +52,7 @@ let
 
     extraMeta = {
       branch = lib.versions.majorMinor version;
-      maintainers = with lib.maintainers; [ fortuneteller2k lovesegfault atemu ];
+      maintainers = with lib.maintainers; [ fortuneteller2k lovesegfault atemu shawn8901 ];
       description = "Built with custom settings and new features built to provide a stable, responsive and smooth desktop experience";
       broken = stdenv.isAarch64;
     };

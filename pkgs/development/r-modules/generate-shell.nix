@@ -15,7 +15,6 @@ stdenv.mkDerivation {
     (rWrapper.override {
       packages = with rPackages; [
         data_table
-        jsonlite
         parallel
         BiocManager
       ];

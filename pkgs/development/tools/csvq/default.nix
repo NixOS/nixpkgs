@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "csvq";
-  version = "1.17.11";
+  version = "1.18.1";
 
   src = fetchFromGitHub {
     owner = "mithrandie";
     repo = "csvq";
     rev = "v${version}";
-    sha256 = "sha256-jhj03xpWBcLVCCk1S9nsi8O6x1/IVwNT3voGfWBg2iw=";
+    sha256 = "sha256-1UK+LSMKryoUf2UWbGt8MU3zs5hH2WdpA2v/jBaIHYE=";
   };
 
-  vendorSha256 = "sha256-C+KQHSp4aho+DPlkaYegjYSaoSHaLiQOa1WJXIn9FdQ=";
+  vendorHash = "sha256-byBYp+iNnnsAXR+T3XmdwaeeBG8oB1EgNkDabzgUC98=";
 
   meta = with lib; {
     description = "SQL-like query language for CSV";

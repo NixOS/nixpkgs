@@ -355,6 +355,7 @@ rec {
   # PLIST handling
   toPlist = {}: v: let
     isFloat = builtins.isFloat or (x: false);
+    isPath = x: builtins.typeOf x == "path";
     expr = ind: x:  with builtins;
       if x == null  then "" else
       if isBool x   then bool ind x else
@@ -362,6 +363,7 @@ rec {
       if isString x then str ind x else
       if isList x   then list ind x else
       if isAttrs x  then attrs ind x else
+      if isPath x   then str ind (toString x) else
       if isFloat x  then float ind x else
       abort "generators.toPlist: should never happen (v = ${v})";
 
@@ -426,4 +428,99 @@ ${expr "" v}
       abort "generators.toDhall: cannot convert a null to Dhall"
     else
       builtins.toJSON v;
+
+  /*
+   Translate a simple Nix expression to Lua representation with occasional
+   Lua-inlines that can be constructed by mkLuaInline function.
+
+   Configuration:
+     * multiline - by default is true which results in indented block-like view.
+     * indent - initial indent.
+     * asBindings - by default generate single value, but with this use attrset to set global vars.
+
+   Attention:
+     Regardless of multiline parameter there is no trailing newline.
+
+   Example:
+     generators.toLua {}
+       {
+         cmd = [ "typescript-language-server" "--stdio" ];
+         settings.workspace.library = mkLuaInline ''vim.api.nvim_get_runtime_file("", true)'';
+       }
+     ->
+      {
+        ["cmd"] = {
+          "typescript-language-server",
+          "--stdio"
+        },
+        ["settings"] = {
+          ["workspace"] = {
+            ["library"] = (vim.api.nvim_get_runtime_file("", true))
+          }
+        }
+      }
+
+   Type:
+     toLua :: AttrSet -> Any -> String
+  */
+  toLua = {
+    /* If this option is true, the output is indented with newlines for attribute sets and lists */
+    multiline ? true,
+    /* Initial indentation level */
+    indent ? "",
+    /* Interpret as variable bindings */
+    asBindings ? false,
+  }@args: v:
+    with builtins;
+    let
+      innerIndent = "${indent}  ";
+      introSpace = if multiline then "\n${innerIndent}" else " ";
+      outroSpace = if multiline then "\n${indent}" else " ";
+      innerArgs = args // {
+        indent = if asBindings then indent else innerIndent;
+        asBindings = false;
+      };
+      concatItems = concatStringsSep ",${introSpace}";
+      isLuaInline = { _type ? null, ... }: _type == "lua-inline";
+
+      generatedBindings =
+          assert lib.assertMsg (badVarNames == []) "Bad Lua var names: ${toPretty {} badVarNames}";
+          libStr.concatStrings (
+            lib.attrsets.mapAttrsToList (key: value: "${indent}${key} = ${toLua innerArgs value}\n") v
+            );
+
+      # https://en.wikibooks.org/wiki/Lua_Programming/variable#Variable_names
+      matchVarName = match "[[:alpha:]_][[:alnum:]_]*(\\.[[:alpha:]_][[:alnum:]_]*)*";
+      badVarNames = filter (name: matchVarName name == null) (attrNames v);
+    in
+    if asBindings then
+      generatedBindings
+    else if v == null then
+      "nil"
+    else if isInt v || isFloat v || isString v || isBool v then
+      builtins.toJSON v
+    else if isList v then
+      (if v == [ ] then "{}" else
+      "{${introSpace}${concatItems (map (value: "${toLua innerArgs value}") v)}${outroSpace}}")
+    else if isAttrs v then
+      (
+        if isLuaInline v then
+          "(${v.expr})"
+        else if v == { } then
+          "{}"
+        else
+          "{${introSpace}${concatItems (
+            lib.attrsets.mapAttrsToList (key: value: "[${builtins.toJSON key}] = ${toLua innerArgs value}") v
+            )}${outroSpace}}"
+      )
+    else
+      abort "generators.toLua: type ${typeOf v} is unsupported";
+
+  /*
+   Mark string as Lua expression to be inlined when processed by toLua.
+
+   Type:
+     mkLuaInline :: String -> AttrSet
+  */
+  mkLuaInline = expr: { _type = "lua-inline"; inherit expr; };
 }

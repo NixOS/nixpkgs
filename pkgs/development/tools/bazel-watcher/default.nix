@@ -45,7 +45,7 @@ buildBazelPackage rec {
   bazel = bazel_5;
   bazelFlags = [ "--override_repository=rules_proto=${rulesProto}" ];
   bazelBuildFlags = lib.optionals stdenv.cc.isClang [ "--cxxopt=-x" "--cxxopt=c++" "--host_cxxopt=-x" "--host_cxxopt=c++" ];
-  bazelTarget = "//cmd/ibazel";
+  bazelTargets = [ "//cmd/ibazel" ];
 
   fetchConfigured = false; # we want to fetch all dependencies, regardless of the current system
   fetchAttrs = {
@@ -82,7 +82,7 @@ buildBazelPackage rec {
       rm -rf $bazelOut/external/com_google_protobuf
     '';
 
-    sha256 = "sha256-le8IepS+IGVX45Gj1aicPjYOkuUA+VVUy/PEeKLNYss=";
+    sha256 = "sha256-lC9e5Z2cxLAeWXkiFGmcB6aOaurMvwrP/k5jl3gCfAc=";
   };
 
   buildAttrs = {

@@ -13,11 +13,13 @@
 , pytest-golden
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
+, pyyaml
 }:
 
 buildPythonPackage rec {
   pname = "ical";
-  version = "4.2.9";
+  version = "4.5.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -26,8 +28,16 @@ buildPythonPackage rec {
     owner = "allenporter";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-p1cvs+xLin2WK2zyqQFd1vWKzt+LU2mpDSieOgA7Qf8=";
+    hash = "sha256-UcuJ23yzpRHDUFlwov692UyLXP/9Qb4F+IJIszo12/M=";
   };
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "tzdata"
+  ];
 
   propagatedBuildInputs = [
     emoji
@@ -44,10 +54,8 @@ buildPythonPackage rec {
     pytest-benchmark
     pytest-golden
     pytestCheckHook
+    pyyaml
   ];
-
-  # https://github.com/allenporter/ical/issues/136
-  disabledTests = [ "test_all_zoneinfo" ];
 
   pythonImportsCheck = [
     "ical"

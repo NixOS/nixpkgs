@@ -1,17 +1,24 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+}:
 
-buildGoModule rec {
+let
   pname = "lefthook";
-  version = "1.3.7";
+  version = "1.4.3";
+in
+buildGoModule rec {
+  inherit pname version;
 
   src = fetchFromGitHub {
-    rev = "v${version}";
     owner = "evilmartians";
     repo = "lefthook";
-    hash = "sha256-6wVzl2hu6bH2dqB/m/kgUQxRxOxMQltcGlo/TIIgh/Y=";
+    rev = "v${version}";
+    hash = "sha256-y3oTGFZ3AXlNVt3NDfjM3audxZ4/zqt1SME+2g8nut8=";
   };
 
-  vendorHash = "sha256-cMRl+TqSLlfoAja+JNaNKfHDR9fkvMTWdB1FT3XxPd4=";
+  vendorHash = "sha256-xeOWbfKy+LeInxcRM9evE/kmqlWlKy0mcHopWpc/DO0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -26,11 +33,11 @@ buildGoModule rec {
       --zsh <($out/bin/lefthook completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast and powerful Git hooks manager for any type of projects";
     homepage = "https://github.com/evilmartians/lefthook";
     changelog = "https://github.com/evilmartians/lefthook/raw/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rencire ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 }

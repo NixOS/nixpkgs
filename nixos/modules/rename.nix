@@ -1,7 +1,10 @@
 { lib, pkgs, ... }:
 
-with lib;
-
+let
+  inherit (lib)
+    mkAliasOptionModuleMD
+    mkRemovedOptionModule;
+in
 {
   imports = [
     /*
@@ -52,12 +55,14 @@ with lib;
     (mkRemovedOptionModule [ "services" "couchpotato" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "dd-agent" ] "dd-agent was removed from nixpkgs in favor of the newer datadog-agent.")
     (mkRemovedOptionModule [ "services" "dnscrypt-proxy" ] "Use services.dnscrypt-proxy2 instead")
+    (mkRemovedOptionModule [ "services" "exhibitor" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "firefox" "syncserver" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "flashpolicyd" ] "The flashpolicyd module has been removed. Adobe Flash Player is deprecated.")
     (mkRemovedOptionModule [ "services" "fourStore" ] "The fourStore module has been removed")
     (mkRemovedOptionModule [ "services" "fourStoreEndpoint" ] "The fourStoreEndpoint module has been removed")
     (mkRemovedOptionModule [ "services" "fprot" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "frab" ] "The frab module has been removed")
+    (mkRemovedOptionModule [ "services" "ihatemoney" ] "The ihatemoney module has been removed for lack of downstream maintainer")
     (mkRemovedOptionModule [ "services" "kippo" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "mailpile" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "marathon" ] "The corresponding package was removed from nixpkgs.")
@@ -106,8 +111,9 @@ with lib;
     (mkRemovedOptionModule [ "services" "openfire" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "riak" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "cryptpad" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "rtsp-simple-server" ] "Package has been completely rebranded by upstream as mediamtx, and thus the service and the package were renamed in NixOS as well.")
 
-    (mkRemovedOptionModule [ "i18n" "inputMethod" "fcitx" ] "The fcitx module has been removed. Plesae use fcitx5 instead")
+    (mkRemovedOptionModule [ "i18n" "inputMethod" "fcitx" ] "The fcitx module has been removed. Please use fcitx5 instead")
 
     # Do NOT add any option renames here, see top of the file
   ];

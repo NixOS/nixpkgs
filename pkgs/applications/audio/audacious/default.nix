@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "audacious";
-  version = "4.3";
+  version = "4.3.1";
 
   src = fetchurl {
     url = "http://distfiles.audacious-media-player.org/audacious-${version}.tar.bz2";
-    sha256 = "sha256-J1hNyEXH5w24ySZ5kJRfFzIqHsyA/4tFLpypFqDOkJE=";
+    sha256 = "sha256-heniaEFQW1HjQu5yotBfGb74lPVnoCnrs/Pgwa20IEI=";
   };
 
   nativeBuildInputs = [

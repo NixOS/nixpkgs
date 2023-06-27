@@ -7,6 +7,7 @@
 , wayland
 , pango
 , wayland-protocols
+, wayland-scanner
 , conf ? null
 }:
 
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-PBxCy1dZrOL1nmhVDQozvF0XL79uKMhhERGNpPPzaRU=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
   buildInputs = [ pango wayland wayland-protocols ];
 
   prePatch = ''

@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "dasel";
-  version = "2.1.1";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "TomWright";
     repo = "dasel";
     rev = "v${version}";
-    sha256 = "sha256-27tQEWnirDhqYt5smRFwADa9wKXSk6yXR8+mXvJVtYI=";
+    sha256 = "sha256-/1CTtRTLgMlmFeubq3ebGnA9Do1mW6TtAXsCwi1JFmk=";
   };
 
-  vendorHash = "sha256-GO5Vg8zsXfjMBzRDC1/s/SYpviKUf59JB14vauKVFcE=";
+  vendorHash = "sha256-cLf0MzEAykmtnPjT2vGOSPwIXJP6BhxheUaicT7o/X4=";
 
   ldflags = [
     "-s" "-w" "-X github.com/tomwright/dasel/v2/internal.Version=${version}"
@@ -42,7 +42,6 @@ buildGoModule rec {
     homepage = "https://github.com/TomWright/dasel";
     changelog = "https://github.com/TomWright/dasel/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ _0x4A6F ];
   };
 }

@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
 
 , SDL2
 , cmake
@@ -26,25 +28,41 @@
 }:
 
 let
-  openrct2-version = "0.4.3";
+  openrct2-version = "0.4.5";
 
   # Those versions MUST match the pinned versions within the CMakeLists.txt
   # file. The REPLAYS repository from the CMakeLists.txt is not necessary.
-  objects-version = "1.3.7";
+  objects-version = "1.3.11";
+  openmsx-version = "1.3.0";
+  opensfx-version = "1.0.3";
   title-sequences-version = "0.4.0";
 
   openrct2-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     rev = "v${openrct2-version}";
-    sha256 = "sha256-TAe9b7uqdC8XzwDWZkyYKFV+Rn2AeR3MMBZ1lo9pRis=";
+    sha256 = "sha256-TMtaEqui3gUd+j3LwF7VsHiBtbYZMu6Rvo1aMkkU9LY=";
   };
 
   objects-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "objects";
     rev = "v${objects-version}";
-    sha256 = "sha256-6c6bbXFi6iqmOOfqggXv3DyYgo4+eiPUIDnkKAAhX5s=";
+    sha256 = "sha256-fA2Kz4GALu6IP7ulbwpAFt3dz6NCPgyB0CWy5uOLBQY=";
+  };
+
+  openmsx-src = fetchFromGitHub {
+    owner = "OpenRCT2";
+    repo = "OpenMusic";
+    rev = "v${openmsx-version}";
+    sha256 = "sha256-bp+uwTy2ZFMCK8Dq4YVACpQSwo8v1te+NQGwdqViIjU=";
+  };
+
+  opensfx-src = fetchFromGitHub {
+    owner = "OpenRCT2";
+    repo = "OpenSoundEffects";
+    rev = "v${opensfx-version}";
+    sha256 = "sha256-AMuCpq1Hszi2Vikto/cX9g81LwBDskaRMTLxNzU0/Gk=";
   };
 
   title-sequences-src = fetchFromGitHub {
@@ -91,6 +109,8 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DDOWNLOAD_OBJECTS=OFF"
+    "-DDOWNLOAD_OPENMSX=OFF"
+    "-DDOWNLOAD_OPENSFX=OFF"
     "-DDOWNLOAD_TITLE_SEQUENCES=OFF"
   ];
 
@@ -100,18 +120,26 @@ stdenv.mkDerivation {
   ];
 
   postUnpack = ''
+    mkdir -p $sourceRoot/data/assetpack
+
     cp -r ${objects-src}         $sourceRoot/data/object
+    cp -r ${openmsx-src}         $sourceRoot/data/assetpack/openrct2.music.alternative.parkap
+    cp -r ${opensfx-src}         $sourceRoot/data/assetpack/openrct2.sound.parkap
     cp -r ${title-sequences-src} $sourceRoot/data/sequence
   '';
 
-  preConfigure = ''
+  preConfigure =
     # Verify that the correct version of each third party repository is used.
-
-    grep -q '^set(OBJECTS_VERSION "${objects-version}")$' CMakeLists.txt \
-      || (echo "OBJECTS_VERSION differs!"; exit 1)
-    grep -q '^set(TITLE_SEQUENCE_VERSION "${title-sequences-version}")$' CMakeLists.txt \
-      || (echo "TITLE_SEQUENCE_VERSION differs!"; exit 1)
-  '';
+    (let
+      versionCheck = cmakeKey: version: ''
+        grep -q '^set(${cmakeKey}_VERSION "${version}")$' CMakeLists.txt \
+          || (echo "${cmakeKey} differs from expected version!"; exit 1)
+      '';
+    in
+    (versionCheck "OBJECTS" objects-version) +
+    (versionCheck "OPENMSX" openmsx-version) +
+    (versionCheck "OPENSFX" opensfx-version) +
+    (versionCheck "TITLE_SEQUENCE" title-sequences-version));
 
   preFixup = "ln -s $out/share/openrct2 $out/bin/data";
 

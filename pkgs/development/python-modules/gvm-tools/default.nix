@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "gvm-tools";
-  version = "23.3.0";
+  version = "23.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-sv34PwOEWGsIgSNpUcqvwjJ+6FSrmpXNB5gc47EjFU0=";
+    hash = "sha256-L7GR50nlcm2EQ6YxLAfieQJ+vPUrCrj72KNSY73LFko=";
   };
 
   nativeBuildInputs = [

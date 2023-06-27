@@ -11,10 +11,10 @@
 mkXfceDerivation {
   category = "thunar-plugins";
   pname  = "thunar-archive-plugin";
-  version = "0.5.0";
+  version = "0.5.1";
   odd-unstable = false;
 
-  sha256 = "sha256-3a42chfv4UQYkvWKCX0FShAcEwt9icJARTHGEgs6/8M=";
+  sha256 = "sha256-TV70IaZClIyQnMGsJEPN0VxHzZAS5F5jSTLm8VwYuwI=";
 
   nativeBuildInputs = [
     intltool

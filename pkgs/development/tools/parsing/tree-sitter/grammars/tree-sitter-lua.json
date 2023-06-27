@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/MunifTanjim/tree-sitter-lua",
-  "rev": "fb30e8cb605e2ebd6c643e6981325a63fbbde320",
-  "date": "2022-10-31T13:56:07+06:00",
-  "path": "/nix/store/ifpy40hx70sg9syjr3d35ngrfkmmqi18-tree-sitter-lua",
-  "sha256": "1hhffz45ilni4g9idsbpp1aymdjkjnyd4491xbdmr47bglf9cgc1",
+  "rev": "dcc44f7473ecec4d7b99af0a9529705d98a769f1",
+  "date": "2023-05-13T02:02:51+06:00",
+  "path": "/nix/store/079khfz0609hqllhwp08c2y96j2jkbwr-tree-sitter-lua",
+  "sha256": "13rmng6y6q653s0yk1ahbppjmxwcbr80h5kgr53q43bq9khjrjxx",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

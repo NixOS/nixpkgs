@@ -3,7 +3,7 @@
 , fetchurl
 , fetchFromGitHub
 , lib
-, gradle
+, gradle_7
 , perl
 , makeWrapper
 , openjdk17
@@ -12,21 +12,23 @@
 , autoPatchelfHook
 , icoutils
 , xcbuild
-, protobuf3_17
+, protobuf
 , libredirect
 }:
 
 let
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
-  version = "10.2.3";
+  version = "10.3.1";
 
   src = fetchFromGitHub {
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
     rev = "Ghidra_${version}_build";
-    sha256 = "sha256-YhjKRlFlF89H05NsTS69SB108rNiiWijvZZY9fR+Ebc=";
+    hash = "sha256-KYZAu+15rcTkdfVQdKgAlVv3FxREUH0IIgYBb0qjdO8=";
   };
+
+  gradle = gradle_7;
 
   desktopItem = makeDesktopItem {
     name = "ghidra";
@@ -43,7 +45,14 @@ let
     cat >>Ghidra/Debug/Debugger-gadp/build.gradle <<HERE
 protobuf {
   protoc {
-    path = '${protobuf3_17}/bin/protoc'
+    path = '${protobuf}/bin/protoc'
+  }
+}
+HERE
+    cat >>Ghidra/Debug/Debugger-isf/build.gradle <<HERE
+protobuf {
+  protoc {
+    path = '${protobuf}/bin/protoc'
   }
 }
 HERE
@@ -104,7 +113,7 @@ HERE
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-Z4RS3IzDP8V3SrrwOuX/hTlX7fs3woIhR8GPK/tFAzs=";
+    outputHash = "sha256-HveS3f8XHpJqefc4djYmnYfd01H2OBFK5PLNOsHAqlc=";
   };
 
 in stdenv.mkDerivation rec {
@@ -169,6 +178,7 @@ in stdenv.mkDerivation rec {
     ];
     license = licenses.asl20;
     maintainers = with maintainers; [ roblabla ];
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 
 }

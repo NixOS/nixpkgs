@@ -2,12 +2,12 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "JuliaMono-ttf";
-  version = "0.048";
+  version = "0.050";
 
   src = fetchzip {
     url = "https://github.com/cormullion/juliamono/releases/download/v${version}/${pname}.tar.gz";
     stripRoot = false;
-    hash = "sha256-KSyJMlQclEj2CR+5uSYLmPtseWiDIUuahaPDx7Tn/bw=";
+    hash = "sha256-XySK+o0ROfmvII5Yvb/3HbLepRTaeVNEZwSVbhsZDsE=";
   };
 
   installPhase = ''

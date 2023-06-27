@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "pyvizio";
-  version = "0.1.60";
+  version = "0.1.61";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-RwwZDb4mQJZw8w1sTFJ0eM3az4pDQbVLGtA+anyKEJM=";
+    sha256 = "sha256-AtqMWe2zgRqOp5S9oKq7keHNHM8pnTmV1mfGiVzygTc=";
   };
 
   propagatedBuildInputs = [

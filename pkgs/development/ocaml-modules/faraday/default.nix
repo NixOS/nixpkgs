@@ -5,6 +5,7 @@ buildDunePackage rec {
   version = "0.8.2";
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "inhabitedtype";

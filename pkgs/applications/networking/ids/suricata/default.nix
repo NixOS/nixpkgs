@@ -34,11 +34,11 @@
 in
 stdenv.mkDerivation rec {
   pname = "suricata";
-  version = "6.0.10";
+  version = "6.0.13";
 
   src = fetchurl {
     url = "https://www.openinfosecfoundation.org/download/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Wb/Rv12cFZYib6SBW/dmQ85ZaYhmwQeiYmnEgfElxNc=";
+    hash = "sha256-4J8vgA0ODNL5fyHFBZUMzD27nOXP6AjflWe22EmjEFU=";
   };
 
   nativeBuildInputs = [
@@ -121,12 +121,13 @@ stdenv.mkDerivation rec {
 
   postConfigure = ''
     # Avoid unintended clousure growth.
-    sed -i 's|/nix/store/\(.\{8\}\)[^-]*-|/nix/store/\1...-|g' ./src/build-info.h
+    sed -i 's|${builtins.storeDir}/\(.\{8\}\)[^-]*-|${builtins.storeDir}/\1...-|g' ./src/build-info.h
   '';
 
   hardeningDisable = [ "stackprotector" ];
 
   installFlags = [
+    "e_datadir=\${TMPDIR}"
     "e_localstatedir=\${TMPDIR}"
     "e_logdir=\${TMPDIR}"
     "e_logcertsdir=\${TMPDIR}"

@@ -3,10 +3,7 @@
 { lib, stdenv, fetchFromGitHub, cmake, makeWrapper
 , pkg-config, libX11, libuuid, xz, vtk, Cocoa }:
 
-stdenv.mkDerivation rec {
-  pname = "itk";
-  inherit version;
-
+let
   itkGenericLabelInterpolatorSrc = fetchFromGitHub {
     owner = "InsightSoftwareConsortium";
     repo = "ITKGenericLabelInterpolator";
@@ -20,6 +17,18 @@ stdenv.mkDerivation rec {
     rev = "24825c8d246e941334f47968553f0ae388851f0c";
     hash = "sha256-deJbza36c0Ohf9oKpO2T4po37pkyI+2wCSeGL4r17Go=";
   };
+
+  itkSimpleITKFiltersSrc = fetchFromGitHub {
+    owner = "InsightSoftwareConsortium";
+    repo = "ITKSimpleITKFilters";
+    rev = "bb896868fc6480835495d0da4356d5db009592a6";
+    hash = "sha256-MfaIA0xxA/pzUBSwnAevr17iR23Bo5iQO2cSyknS3o4=";
+  };
+in
+
+stdenv.mkDerivation {
+  pname = "itk";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "InsightSoftwareConsortium";
@@ -36,6 +45,7 @@ stdenv.mkDerivation rec {
       --replace "@OPENJPEG_INSTALL_LIB_DIR@" "@OPENJPEG_INSTALL_FULL_LIB_DIR@"
     ln -sr ${itkGenericLabelInterpolatorSrc} Modules/External/ITKGenericLabelInterpolator
     ln -sr ${itkAdaptiveDenoisingSrc} Modules/External/ITKAdaptiveDenoising
+    ln -sr ${itkSimpleITKFiltersSrc} Modules/External/ITKSimpleITKFilters
   '';
 
   cmakeFlags = [
@@ -45,6 +55,7 @@ stdenv.mkDerivation rec {
     "-DModule_ITKMINC=ON"
     "-DModule_ITKIOMINC=ON"
     "-DModule_ITKIOTransformMINC=ON"
+    "-DModule_SimpleITKFilters=ON"
     "-DModule_ITKVtkGlue=ON"
     "-DModule_ITKReview=ON"
     "-DModule_MGHIO=ON"
@@ -69,7 +80,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Insight Segmentation and Registration Toolkit";
-    homepage = "https://www.itk.org/";
+    homepage = "https://www.itk.org";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [viric];
   };

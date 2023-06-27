@@ -8,7 +8,7 @@ A package set is available for each CUDA version, so for example
 `cudaPackages_11_6`. Within each set is a matching version of the above listed
 packages. Additionally, other versions of the packages that are packaged and
 compatible are available as well. For example, there can be a
-`cudaPackages.cudnn_8_3_2` package.
+`cudaPackages.cudnn_8_3` package.
 
 To use one or more CUDA packages in an expression, give the expression a `cudaPackages` parameter, and in case CUDA is optional
 ```nix
@@ -27,8 +27,8 @@ package set to make it the default. This guarantees you get a consistent package
 set.
 ```nix
 mypkg = let
-  cudaPackages = cudaPackages_11_5.overrideScope' (final: prev {
-    cudnn = prev.cudnn_8_3_2;
+  cudaPackages = cudaPackages_11_5.overrideScope' (final: prev: {
+    cudnn = prev.cudnn_8_3;
   }});
 in callPackage { inherit cudaPackages; };
 ```

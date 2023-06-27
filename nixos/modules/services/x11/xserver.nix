@@ -121,7 +121,7 @@ let
           fi
         done
 
-        for i in $(find ${toString cfg.modules} -type d); do
+        for i in $(find ${toString cfg.modules} -type d | sort); do
           if test $(echo $i/*.so* | wc -w) -ne 0; then
             echo "  ModulePath \"$i\"" >> $out
           fi
@@ -776,7 +776,7 @@ in
         xorg.xf86inputevdev.out
       ];
 
-    system.extraDependencies = singleton (pkgs.runCommand "xkb-validated" {
+    system.checks = singleton (pkgs.runCommand "xkb-validated" {
       inherit (cfg) xkbModel layout xkbVariant xkbOptions;
       nativeBuildInputs = with pkgs.buildPackages; [ xkbvalidate ];
       preferLocalBuild = true;

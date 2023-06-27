@@ -1,7 +1,7 @@
 { lib, stdenv, buildPecl, php, valgrind, pcre2, fetchFromGitHub }:
 
 let
-  version = "5.0.1";
+  version = "5.0.3";
 in buildPecl {
   inherit version;
   pname = "swoole";
@@ -10,7 +10,7 @@ in buildPecl {
     owner = "swoole";
     repo = "swoole-src";
     rev = "v${version}";
-    sha256 = "sha256-d0xccbfOmebWR14oTUviWz/mB5IA7iXn0uUWxTQRd9w=";
+    sha256 = "sha256-xadseYMbA+llzTf9JFIitJK2iR0dN8vAjv3n9/e7FGs=";
   };
 
   buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.isDarwin) [ valgrind ];

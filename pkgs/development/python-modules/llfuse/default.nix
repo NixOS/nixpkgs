@@ -8,23 +8,26 @@
 , pkg-config
 , pytestCheckHook
 , python
+, setuptools
 , which
 }:
 
 buildPythonPackage rec {
   pname = "llfuse";
-  version = "1.4.2";
+  version = "1.4.4";
+
+  format = "pyproject";
 
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "python-llfuse";
     repo = "python-llfuse";
-    rev = "release-${version}";
-    hash = "sha256-TnZnv439fLvg0WM96yx0dPSSz8Mrae6GDC9LiLFrgQ8=";
+    rev = "refs/tags/release-${version}";
+    hash = "sha256-qsnmhnZsK0j9dPhXT9mymQTzVHmmGnB5vgONatxDLIo=";
   };
 
-  nativeBuildInputs = [ cython pkg-config ];
+  nativeBuildInputs = [ cython pkg-config setuptools ];
 
   buildInputs = [ fuse ];
 
@@ -48,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python bindings for the low-level FUSE API";
     homepage = "https://github.com/python-llfuse/python-llfuse";
+    changelog = "https://github.com/python-llfuse/python-llfuse/raw/release-${version}/Changes.rst";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ bjornfor dotlambda ];

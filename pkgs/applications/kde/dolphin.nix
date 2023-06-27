@@ -5,7 +5,7 @@
   kcompletion, kconfig, kcoreaddons, kdbusaddons,
   kfilemetadata, ki18n, kiconthemes, kinit, kio, knewstuff, knotifications,
   kparts, ktexteditor, kwindowsystem, phonon, solid,
-  wayland, qtwayland
+  kuserfeedback, wayland, qtwayland, qtx11extras
 }:
 
 mkDerivation {
@@ -23,7 +23,9 @@ mkDerivation {
     kcoreaddons kdbusaddons kfilemetadata ki18n kiconthemes
     kinit kio knewstuff knotifications kparts ktexteditor kwindowsystem
     phonon solid
+    kuserfeedback
     wayland qtwayland
+    qtx11extras
   ];
   outputs = [ "out" "dev" ];
 }

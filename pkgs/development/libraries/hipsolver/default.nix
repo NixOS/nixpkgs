@@ -18,7 +18,7 @@
 # Can also use cuSOLVER
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipsolver";
-  version = "5.4.2";
+  version = "5.4.4";
 
   outputs = [
     "out"

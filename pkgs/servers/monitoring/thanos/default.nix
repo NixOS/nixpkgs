@@ -1,18 +1,26 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
 buildGoModule rec {
   pname = "thanos";
-  version = "0.30.2";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "thanos-io";
     repo = "thanos";
-    sha256 = "sha256-3IkqaWMQGJssxsAF+BZphEpufR4G5E5bYJvioSO2hJ4=";
+    sha256 = "sha256-EJZGc4thu0WhVSSRolIRYg39S81Cgm+JHwpW5eE7mDc=";
   };
 
-  vendorHash = "sha256-JtjVdr23wI5ZM5LlFApWurTTzLkLI4nzA9/bWoOrGSM=";
+  patches = [
+    # https://github.com/thanos-io/thanos/pull/6126
+    (fetchpatch {
+      url = "https://github.com/thanos-io/thanos/commit/a4c218bd690259fc0c78fe67e0739bd33d38541e.patch";
+      hash = "sha256-Hxc1s5IXAyw01/o4JvOXuyYuOFy0+cBUv3OkRv4DCXs=";
+    })
+  ];
 
-  doCheck = false;
+  vendorHash = "sha256-8+MUMux6v/O2syVyTx758yUBfJkertzibz6yFB05nWk=";
+
+  doCheck = true;
 
   subPackages = "cmd/thanos";
 
@@ -29,6 +37,5 @@ buildGoModule rec {
     homepage = "https://github.com/thanos-io/thanos";
     license = licenses.asl20;
     maintainers = with maintainers; [ basvandijk ];
-    platforms = platforms.unix;
   };
 }

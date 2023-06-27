@@ -4,7 +4,6 @@
 , fetchPypi
 , fetchpatch
 , python
-, pythonAtLeast
 , scripttest
 , pytz
 , pbr
@@ -20,21 +19,18 @@ buildPythonPackage rec {
   pname = "sqlalchemy-migrate";
   version = "0.13.0";
 
-  # using deprecated inspect.getargspec function
-  # https://bugs.launchpad.net/sqlalchemy-migrate/+bug/2003619
-  disabled = pythonAtLeast "3.11";
-
   src = fetchPypi {
     inherit pname version;
     sha256 = "1y0lcqii7b4vp7yh9dyxrl4i77hi8jkkw7d06mgdw2h458ljxh0b";
   };
 
-  # See: https://review.openstack.org/#/c/608382/
   patches = [
+    # See: https://review.openstack.org/#/c/608382/
     (fetchpatch {
       url = "https://github.com/openstack/sqlalchemy-migrate/pull/18.patch";
       sha256 = "1qyfq2m7w7xqf0r9bc2x42qcra4r9k9l9g1jy5j0fvlb6bvvjj07";
     })
+    ./python3.11-comp.diff
   ];
 
   postPatch = ''

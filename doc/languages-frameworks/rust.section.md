@@ -50,6 +50,11 @@ package. `cargoHash256` is used for traditional Nix SHA-256 hashes,
 such as the one in the example above. `cargoHash` should instead be
 used for [SRI](https://www.w3.org/TR/SRI/) hashes. For example:
 
+Exception: If the application has cargo `git` dependencies, the `cargoHash`/`cargoSha256`
+approach will not work, and you will need to copy the `Cargo.lock` file of the application
+to nixpkgs and continue with the next section for specifying the options of the`cargoLock`
+section.
+
 ```nix
   cargoHash = "sha256-l1vL2ZdtDRxSGvP0X/l3nMw8+6WF67KPutJEzUROjg8=";
 ```
@@ -157,7 +162,7 @@ required to build a rust package. A simple fix is to use:
 
 ```nix
 postPatch = ''
-  cp ${./Cargo.lock} Cargo.lock
+  ln -s ${./Cargo.lock} Cargo.lock
 '';
 ```
 
@@ -530,7 +535,9 @@ directory of the `tokenizers` project's source archive, we use
 ```nix
 { fetchFromGitHub
 , buildPythonPackage
+, cargo
 , rustPlatform
+, rustc
 , setuptools-rust
 }:
 
@@ -553,11 +560,12 @@ buildPythonPackage rec {
 
   sourceRoot = "source/bindings/python";
 
-  nativeBuildInputs = [ setuptools-rust ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+  nativeBuildInputs = [
+    cargo
+    rustPlatform.cargoSetupHook
+    rustc
+    setuptools-rust
+  ];
 
   # ...
 }

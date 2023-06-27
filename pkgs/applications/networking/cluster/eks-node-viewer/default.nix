@@ -1,23 +1,37 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, testers, eks-node-viewer }:
 
 buildGoModule rec {
   pname = "eks-node-viewer";
-  version = "0.2.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-utn0OJX3NLCyAV4F01GIkvh/KFPv7vfLQMwso7x7yCw";
+    sha256 = "sha256-k8WCD/FirC62WSmcgM5PmTs/hZEmR9xpneyZ1orcoMI=";
   };
 
-  vendorSha256 = "sha256-28TKZYZM2kddXAusxmjhrKFy+ATU7kZM4Ad7zvP/F3A";
+  vendorHash = "sha256-nUVFQruesP6a74s4UfVrd+2P2lmn1NyVrJBS2dR2QdI=";
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=main.builtBy=nixpkgs"
+    "-X=main.commit=${src.rev}"
+    "-X=main.version=${version}"
+  ];
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = eks-node-viewer;
+    };
+  };
 
   meta = with lib; {
     description = "Tool to visualize dynamic node usage within a cluster";
     homepage = "https://github.com/awslabs/eks-node-viewer";
-    changelog = "https://github.com/awslabs/eks-node-viewer/releases/tag/${version}";
-    license = licenses.afl20;
+    changelog = "https://github.com/awslabs/eks-node-viewer/releases/tag/${src.rev}";
+    license = licenses.asl20;
     maintainers = [ maintainers.ivankovnatsky ];
   };
 }

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "sqlite-utils";
-  version = "3.30";
+  version = "3.32.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MABcEtXxNEVln3kXZr62qZAMJfRCvqH5gPIdOLdfbjM=";
+    hash = "sha256-bCj+Mvzr1lihaR3t+k0RFJmtMCzAE5xaWJOlkNRhhIo=";
   };
 
   postPatch = ''
@@ -49,6 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python CLI utility and library for manipulating SQLite databases";
     homepage = "https://github.com/simonw/sqlite-utils";
+    changelog = "https://github.com/simonw/sqlite-utils/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ meatcar techknowlogick ];
   };

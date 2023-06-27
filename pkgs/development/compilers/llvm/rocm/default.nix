@@ -28,7 +28,10 @@
 let
   # Stage 1
   # Base
-  llvm = callPackage ./llvm.nix { };
+  llvm = callPackage ./llvm.nix {
+    requiredSystemFeatures = [ "big-parallel" ];
+    isBroken = stdenv.isAarch64; # https://github.com/RadeonOpenCompute/ROCm/issues/1831#issuecomment-1278205344
+  };
 
   # Projects
   clang-unwrapped = callPackage ./llvm.nix rec {

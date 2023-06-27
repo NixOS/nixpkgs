@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , autoPatchelfHook
-, buildFHSUserEnv
+, buildFHSEnv
 , cairo
 , dpkg
 , fetchurl
@@ -109,10 +109,10 @@ in
 
   /*
   * We can patch the runescape launcher, but it downloads a client at runtime and checks it for changes.
-  * For that we need use a buildFHSUserEnv.
+  * For that we need use a buildFHSEnv.
   * FHS simulates a classic linux shell
   */
-  buildFHSUserEnv {
+  buildFHSEnv {
     name = "RuneScape";
     targetPkgs = pkgs: [
       runescape

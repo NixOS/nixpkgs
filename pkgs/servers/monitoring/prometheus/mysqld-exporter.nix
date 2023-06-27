@@ -3,12 +3,11 @@
 buildGoModule rec {
   pname = "mysqld_exporter";
   version = "0.14.0";
-  rev = "v${version}";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "prometheus";
     repo = "mysqld_exporter";
+    rev = "v${version}";
     sha256 = "sha256-SMcpQNygv/jVLNuQP8V6BH/CmSt5Y4dzYPsboTH2dos=";
   };
 
@@ -17,7 +16,7 @@ buildGoModule rec {
   ldflags = let t = "github.com/prometheus/common/version"; in [
     "-s" "-w"
     "-X ${t}.Version=${version}"
-    "-X ${t}.Revision=${rev}"
+    "-X ${t}.Revision=${src.rev}"
     "-X ${t}.Branch=unknown"
     "-X ${t}.BuildUser=nix@nixpkgs"
     "-X ${t}.BuildDate=unknown"
@@ -33,6 +32,5 @@ buildGoModule rec {
     homepage = "https://github.com/prometheus/mysqld_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley globin ];
-    platforms = platforms.unix;
   };
 }

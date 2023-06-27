@@ -10,8 +10,13 @@ let
     InterfacePeers = {
       eth1 = [ "tcp://192.168.1.200:12345" ];
     };
-    MulticastInterfaces = [ "eth1" ];
-    LinkLocalTCPPort = 54321;
+    MulticastInterfaces = [ {
+      Regex = ".*";
+      Beacon = true;
+      Listen = true;
+      Port = 54321;
+      Priority = 0;
+    } ];
     PublicKey = "2b6f918b6c1a4b54d6bcde86cf74e074fb32ead4ee439b7930df2aa60c825186";
     PrivateKey = "0c4a24acd3402722ce9277ed179f4a04b895b49586493c25fbaed60653d857d62b6f918b6c1a4b54d6bcde86cf74e074fb32ead4ee439b7930df2aa60c825186";
   };
@@ -115,8 +120,12 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
           settings = {
             IfTAPMode = true;
             IfName = "ygg0";
-            MulticastInterfaces = [ "eth1" ];
-            LinkLocalTCPPort = 43210;
+            MulticastInterfaces = [
+              {
+                Port = 43210;
+              }
+            ];
+            openMulticastPort = true;
           };
           persistentKeys = true;
         };

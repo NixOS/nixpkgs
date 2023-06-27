@@ -49,6 +49,9 @@ in stdenv.mkDerivation rec {
     ++ lib.optional withPerlTools perlWithPkgs;
 
   enableParallelBuilding = true;
+  # Missing dependencies during relinking:
+  #   ./.libs/libnetsnmpagent.so: file not recognized: file format not recognized
+  enableParallelInstalling = false;
   doCheck = false;  # tries to use networking
 
   postInstall = ''

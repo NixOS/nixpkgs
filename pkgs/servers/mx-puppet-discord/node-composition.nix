@@ -2,7 +2,7 @@
 
 {pkgs ? import ../../.. {
     inherit system;
-  }, system ? builtins.currentSystem, nodejs ? pkgs."nodejs-14_x"}:
+  }, system ? builtins.currentSystem, nodejs ? pkgs."nodejs_14"}:
 
 let
   nodeEnv = import ../../development/node-packages/node-env.nix {

@@ -94,9 +94,6 @@ stdenv.mkDerivation rec {
       libGLESv2 = lib.makeLibraryPath [
         xorg.libX11 xorg.libXext xorg.libxcb wayland
       ];
-      libsmartscreen = lib.makeLibraryPath [
-        libuuid stdenv.cc.cc.lib
-      ];
       libsmartscreenn = lib.makeLibraryPath [
         libuuid
       ];
@@ -132,10 +129,6 @@ stdenv.mkDerivation rec {
       opt/microsoft/${shortName}/libGLESv2.so
 
     patchelf \
-      --set-rpath "${libPath.libsmartscreen}" \
-      opt/microsoft/${shortName}/libsmartscreen.so
-
-    patchelf \
       --set-rpath "${libPath.libsmartscreenn}" \
       opt/microsoft/${shortName}/libsmartscreenn.so
 
@@ -149,7 +142,7 @@ stdenv.mkDerivation rec {
     cp -R opt usr/bin usr/share $out
 
     ${if channel == "stable"
-      then ""
+      then "ln -sf $out/bin/${longName} $out/bin/${baseName}-${channel}"
       else "ln -sf $out/opt/microsoft/${shortName}/${baseName}-${channel} $out/opt/microsoft/${shortName}/${baseName}"}
 
     ln -sf $out/opt/microsoft/${shortName}/${longName} $out/bin/${longName}

@@ -4,14 +4,12 @@
 , fetchFromGitHub
 , fetchYarnDeps
 , makeWrapper
-, symlinkJoin
 , CoreFoundation
 , AppKit
 , libfido2
 , nodejs
 , openssl
 , pkg-config
-, protobuf
 , Security
 , stdenv
 , xdg-utils
@@ -24,7 +22,8 @@
 , version
 , hash
 , vendorHash
-, cargoHash
+, cargoHash ? null
+, cargoLock ? null
 , yarnHash
 }:
 let
@@ -39,7 +38,7 @@ let
 
   rdpClient = rustPlatform.buildRustPackage rec {
     pname = "teleport-rdpclient";
-    inherit cargoHash;
+    inherit cargoHash cargoLock;
     inherit version src;
 
     buildAndTestSubdir = "lib/srv/desktop/rdp/rdpclient";
@@ -161,5 +160,8 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ arianvp justinas sigma tomberek freezeboy ];
     platforms = platforms.unix;
+    # go-libfido2 is broken on platforms with less than 64-bit because it defines an array
+    # which occupies more than 31 bits of address space.
+    broken = stdenv.hostPlatform.parsed.cpu.bits < 64;
   };
 }

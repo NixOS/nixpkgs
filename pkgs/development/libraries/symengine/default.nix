@@ -1,27 +1,24 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
 , gmp
 , flint
 , mpfr
 , libmpc
-, catch
+, withShared ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "symengine";
-  version = "0.9.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "symengine";
     repo = "symengine";
     rev = "v${version}";
-    sha256 = "sha256-5KpxBusJCuwrfFWHbrRKlH6Ic7YivYqz2m+BCbNfZp0=";
+    hash = "sha256-qTu0vS9K6rrr/0SXKpGC9P1QSN/AN7hyO/4DrGvhxWM=";
   };
-
-  postPatch = ''
-    cp ${catch}/include/catch/catch.hpp symengine/utilities/catch/catch.hpp
-  '';
 
   nativeBuildInputs = [ cmake ];
 
@@ -33,13 +30,14 @@ stdenv.mkDerivation rec {
     "-DWITH_SYMENGINE_THREAD_SAFE=yes"
     "-DWITH_MPC=yes"
     "-DBUILD_FOR_DISTRIBUTION=yes"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # error: unrecognized instruction mnemonic, did you mean: bit, cnt, hint, ins, not?
+    "-DBUILD_TESTS=OFF"
+  ] ++ lib.optionals withShared [
+    "-DBUILD_SHARED_LIBS=ON"
   ];
 
   doCheck = true;
-
-  checkPhase = ''
-    ctest
-  '';
 
   meta = with lib; {
     description = "A fast symbolic manipulation library";

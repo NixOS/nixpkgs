@@ -1,14 +1,21 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchgit, installShellFiles }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, fetchgit
+, installShellFiles
+, testers
+, scorecard
+}:
 
 buildGoModule rec {
   pname = "scorecard";
-  version = "4.10.2";
+  version = "4.10.5";
 
   src = fetchFromGitHub {
     owner = "ossf";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-GQs+wBq47sn3h8I87p+HErBmLMs8Dzh9xj3xMYDsXm4=";
+    sha256 = "sha256-ysdgdU/Et87NxpdSTZuTtLJOv5uaYGVHDGyCj6kKuUQ=";
     # populate values otherwise taken care of by goreleaser,
     # unfortunately these require us to use git. By doing
     # this in postFetch we can delete .git afterwards and
@@ -22,7 +29,7 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorSha256 = "sha256-W213KQu4FuJcT/cJOvS+WMw1fXBcSoZ4yssI06JAIc8=";
+  vendorHash = "sha256-6wIzg9gbH+nAE4sZg+C3NZZbVzbEcovhGwajBZ7ZjdY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -66,6 +73,12 @@ buildGoModule rec {
     # $out/bin/scorecard version 2>&1 | grep "v${version}"
     runHook postInstallCheck
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = scorecard;
+    command = "scorecard version";
+    version = "v${version}";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/ossf/scorecard";

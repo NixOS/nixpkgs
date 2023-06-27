@@ -1,0 +1,93 @@
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -4258,7 +4258,7 @@ dependencies = [
+ [[package]]
+ name = "warg-api"
+ version = "0.1.0"
+-source = "git+https://github.com/bytecodealliance/registry#f0e45fc765e24e7bb6671f568ee4d3f80a723689"
++source = "git+https://github.com/bytecodealliance/registry?rev=a19e85a48f806599e3709332aa102623a0084277#a19e85a48f806599e3709332aa102623a0084277"
+ dependencies = [
+  "serde",
+  "serde_with",
+@@ -4270,7 +4270,7 @@ dependencies = [
+ [[package]]
+ name = "warg-client"
+ version = "0.1.0"
+-source = "git+https://github.com/bytecodealliance/registry#f0e45fc765e24e7bb6671f568ee4d3f80a723689"
++source = "git+https://github.com/bytecodealliance/registry?rev=a19e85a48f806599e3709332aa102623a0084277#a19e85a48f806599e3709332aa102623a0084277"
+ dependencies = [
+  "anyhow",
+  "async-trait",
+@@ -4303,7 +4303,7 @@ dependencies = [
+ [[package]]
+ name = "warg-crypto"
+ version = "0.1.0"
+-source = "git+https://github.com/bytecodealliance/registry#f0e45fc765e24e7bb6671f568ee4d3f80a723689"
++source = "git+https://github.com/bytecodealliance/registry?rev=a19e85a48f806599e3709332aa102623a0084277#a19e85a48f806599e3709332aa102623a0084277"
+ dependencies = [
+  "anyhow",
+  "base64 0.21.2",
+@@ -4322,7 +4322,7 @@ dependencies = [
+ [[package]]
+ name = "warg-protocol"
+ version = "0.1.0"
+-source = "git+https://github.com/bytecodealliance/registry#f0e45fc765e24e7bb6671f568ee4d3f80a723689"
++source = "git+https://github.com/bytecodealliance/registry?rev=a19e85a48f806599e3709332aa102623a0084277#a19e85a48f806599e3709332aa102623a0084277"
+ dependencies = [
+  "anyhow",
+  "base64 0.21.2",
+@@ -4347,7 +4347,7 @@ dependencies = [
+ [[package]]
+ name = "warg-server"
+ version = "0.1.0"
+-source = "git+https://github.com/bytecodealliance/registry#f0e45fc765e24e7bb6671f568ee4d3f80a723689"
++source = "git+https://github.com/bytecodealliance/registry?rev=a19e85a48f806599e3709332aa102623a0084277#a19e85a48f806599e3709332aa102623a0084277"
+ dependencies = [
+  "anyhow",
+  "axum",
+@@ -4355,7 +4355,6 @@ dependencies = [
+  "clap",
+  "futures",
+  "indexmap",
+- "reqwest",
+  "serde",
+  "tempfile",
+  "thiserror",
+@@ -4365,6 +4364,7 @@ dependencies = [
+  "tower-http",
+  "tracing",
+  "tracing-subscriber",
++ "url",
+  "warg-api",
+  "warg-crypto",
+  "warg-protocol",
+@@ -4375,7 +4375,7 @@ dependencies = [
+ [[package]]
+ name = "warg-transparency"
+ version = "0.1.0"
+-source = "git+https://github.com/bytecodealliance/registry#f0e45fc765e24e7bb6671f568ee4d3f80a723689"
++source = "git+https://github.com/bytecodealliance/registry?rev=a19e85a48f806599e3709332aa102623a0084277#a19e85a48f806599e3709332aa102623a0084277"
+ dependencies = [
+  "anyhow",
+  "pbjson",
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -9,9 +9,9 @@ cargo = "0.71.0"
+ cargo-util = "0.2.4"
+ clap = { version = "4.3.3", features = ["derive"] }
+ toml_edit = { version = "0.19.10", features = ["serde"] }
+-warg-protocol = { git = "https://github.com/bytecodealliance/registry" }
+-warg-crypto = { git = "https://github.com/bytecodealliance/registry" }
+-warg-client = { git = "https://github.com/bytecodealliance/registry" }
++warg-protocol = { git = "https://github.com/bytecodealliance/registry", rev = "a19e85a48f806599e3709332aa102623a0084277" }
++warg-crypto = { git = "https://github.com/bytecodealliance/registry", rev = "a19e85a48f806599e3709332aa102623a0084277" }
++warg-client = { git = "https://github.com/bytecodealliance/registry", rev = "a19e85a48f806599e3709332aa102623a0084277" }
+ wit-bindgen-core = "0.7.0"
+ wit-bindgen-rust = "0.7.0"
+ wit-bindgen-rust-lib = "0.7.0"
+@@ -47,4 +47,4 @@ default = ["pretty_env_logger"]
+ assert_cmd = "2.0.11"
+ predicates = "3.0.3"
+ wasmparser = "0.107.0"
+-warg-server = { git = "https://github.com/bytecodealliance/registry" }
++warg-server = { git = "https://github.com/bytecodealliance/registry", rev = "a19e85a48f806599e3709332aa102623a0084277" }

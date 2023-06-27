@@ -17,7 +17,7 @@
 , cloog ? null
 , isl ? null
 , zlib ? null
-, gnatboot ? null
+, gnat-bootstrap ? null
 , flex ? null
 , boehmgc ? null
 , zip ? null
@@ -51,7 +51,7 @@ in
   ++ optionals (perl != null) [ perl ]
   ++ optionals javaAwtGtk [ pkg-config ]
   ++ optionals (with stdenv.targetPlatform; isVc4 || isRedox && flex != null) [ flex ]
-  ++ optionals langAda [ gnatboot ]
+  ++ optionals langAda [ gnat-bootstrap ]
   # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
   # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
   ++ optionals buildPlatform.isDarwin [ gnused ]

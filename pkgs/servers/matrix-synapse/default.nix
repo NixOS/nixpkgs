@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3, openssl, rustPlatform
+{ lib, stdenv, fetchFromGitHub, python3, openssl, cargo, rustPlatform, rustc
 , enableSystemd ? lib.meta.availableOn stdenv.hostPlatform python3.pkgs.systemd
 , nixosTests
 , enableRedis ? true
@@ -12,37 +12,35 @@ in
 with python3.pkgs;
 buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.79.0";
+  version = "1.86.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-2MHP4Gu+C5yyXObbd7NLYWCy1E0L7fUwpzYsoD7ULDo=";
+    hash = "sha256-vSNAISWTTT3IAeA8hxQhQNp9T3soey4vgh7v+BxI+K0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-yDKs6KRStjJMC/48dZcyQ4OmBXY1TombjH/ZDfBJbSc=";
+    hash = "sha256-lPLhh5FkxpBUQ5UH6eAfUIyGvHIcZHmbYBT5QUW/W4k=";
   };
 
   postPatch = ''
     # Remove setuptools_rust from runtime dependencies
     # https://github.com/matrix-org/synapse/blob/v1.69.0/pyproject.toml#L177-L185
     sed -i '/^setuptools_rust =/d' pyproject.toml
-    sed -i 's/^frozendict = ">=1,!=2.1.2,<2.3.5"/frozendict = ">=1,!=2.1.2,<2.3.6"/g' pyproject.toml
   '';
 
   nativeBuildInputs = [
     poetry-core
     rustPlatform.cargoSetupHook
     setuptools-rust
-  ] ++ (with rustPlatform.rust; [
     cargo
     rustc
-  ]);
+  ];
 
   buildInputs = [ openssl ];
 
@@ -52,8 +50,8 @@ buildPythonApplication rec {
     bleach
     canonicaljson
     daemonize
-    frozendict
     ijson
+    immutabledict
     jinja2
     jsonschema
     lxml
@@ -88,13 +86,13 @@ buildPythonApplication rec {
 
   doCheck = !stdenv.isDarwin;
 
-  checkPhase = ''
+  checkPhase = let testFlags = lib.optionalString (!stdenv.isAarch64) "-j $NIX_BUILD_CORES"; in ''
     runHook preCheck
 
     # remove src module, so tests use the installed module instead
     rm -rf ./synapse
 
-    PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial -j $NIX_BUILD_CORES tests
+    PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial ${testFlags} tests
 
     runHook postCheck
   '';

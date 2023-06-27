@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "gsd";
-  version = "2.8.0";
+  version = "3.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "glotzerlab";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-S2BEEGifHt4ZXOxCEtwXh7wr/n1fI+gwImnrEJmYjzI=";
+    hash = "sha256-jfik8Rz4gqBNQn8cb20VcSUodupS/FNgpQJtW/DMzPY=";
   };
 
   nativeBuildInputs = [

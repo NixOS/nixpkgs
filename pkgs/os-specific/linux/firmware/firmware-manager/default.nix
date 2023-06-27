@@ -2,45 +2,43 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, xz
+, cargo
 , pkg-config
+, rustc
 , openssl
-, dbus
-, glib
 , udev
-, cairo
-, pango
-, atk
-, gdk-pixbuf
 , gtk3
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "firmware-manager";
-  version = "unstable-2022-12-09";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = pname;
-    rev = "9be8160346689bd74f95db7897884a91fa48afe3";
-    sha256 = "sha256-zZk2RVghhKxETSVv/Jtv8Wq6+ITx/BudE/o7h4jKk5M=";
+    rev = version;
+    hash = "sha256-Q+LJJ4xK583fAcwuOFykt6GKT0rVJgmTt+zUX4o4Tm4=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    sha256 = "sha256-3drsOmlmy1xXRWg7WMDNN+iuVmPYf60sDLIdCvu4rEw=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "ecflash-0.1.0" = "sha256-W613wbW54R65/rs6oiPAH/qov2OVEjMMszpUJdX4TxI=";
+      "system76-firmware-1.0.51" = "sha256-+GPz7uKygGnFUptQEGYWkEdHgxBc65kLZqpwZqtwets=";
+    };
   };
 
   postPatch = ''
     substituteInPlace Makefile --replace '$(DESTDIR)/etc' '$(DESTDIR)$(prefix)/etc'
   '';
 
-  nativeBuildInputs = with rustPlatform; [
-    rust.cargo
-    rust.rustc
+  nativeBuildInputs = [
+    cargo
+    rustc
     pkg-config
-    cargoSetupHook
+    rustPlatform.cargoSetupHook
     wrapGAppsHook
   ];
 

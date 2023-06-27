@@ -71,12 +71,12 @@ let
     let
       name = last (builtins.split "/" nameOrPath);
     in
-    pkgs.runCommand name (if (types.str.check content) then {
+    pkgs.runCommand name ((if (types.str.check content) then {
       inherit content;
       passAsFile = [ "content" ];
     } else {
       contentPath = content;
-    } // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) {
+    }) // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) {
       # post-link-hook expects codesign_allocate to be in PATH
       # https://github.com/NixOS/nixpkgs/issues/154203
       # https://github.com/NixOS/nixpkgs/issues/148189
@@ -264,8 +264,8 @@ let
   makeScriptWriter {
     interpreter =
       if libraries == []
-      then "${python}/bin/python"
-      else "${python.withPackages (ps: libraries)}/bin/python"
+      then python.interpreter
+      else (python.withPackages (ps: libraries)).interpreter
     ;
     check = optionalString python.isPy3k (writeDash "pythoncheck.sh" ''
       exec ${buildPythonPackages.flake8}/bin/flake8 --show-source ${ignoreAttribute} "$1"

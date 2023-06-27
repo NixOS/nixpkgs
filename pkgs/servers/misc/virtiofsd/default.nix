@@ -1,17 +1,26 @@
-{ lib, stdenv, rustPlatform, fetchFromGitLab, libcap_ng, libseccomp }:
+{ lib, stdenv, rustPlatform, fetchFromGitLab, fetchpatch, libcap_ng, libseccomp }:
 
 rustPlatform.buildRustPackage rec {
   pname = "virtiofsd";
-  version = "1.5.1";
+  version = "1.6.1";
 
   src = fetchFromGitLab {
     owner = "virtio-fs";
     repo = "virtiofsd";
     rev = "v${version}";
-    sha256 = "sha256-FQKZVkPD4DQKMduWW2g9vD1vvaFlU6QpNEj+g3yeE2Q=";
+    sha256 = "/KL1LH/3txWrZPjvuYmSkNb93euB+Whd2YofIuf/cMg=";
   };
 
-  cargoHash = "sha256-scKbu69lrEfUpErs6gZyZOGb3OwCzDThbs6O0ZtJX/8=";
+  patches = [
+    # fixes SIGSYS when seccomp filtering is on
+    # https://gitlab.com/virtio-fs/virtiofsd/-/issues/104
+    (fetchpatch {
+      url = "https://gitlab.com/virtio-fs/virtiofsd/-/commit/a9141cae72e6785ca10a758c22c7a5690a1fc955.patch";
+      hash = "sha256-uO8nVdNMGOkd3ThTTw23BykDP9w4I+lEx91447zxcgo=";
+    })
+  ];
+
+  cargoHash = "sha256-EkDop9v75IIIWEK+QI5v58lO20RxgJab/scFmn26idU=";
 
   LIBCAPNG_LIB_PATH = "${lib.getLib libcap_ng}/lib";
   LIBCAPNG_LINK_TYPE =

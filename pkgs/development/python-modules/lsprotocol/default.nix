@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "lsprotocol";
-  version = "2022.0.0a10";
+  version = "2023.0.0a2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-IAFNEWpBRVAGcJNIV1bog9K2nANRw/qJfCJ9+Wu/yJc=";
+    hash = "sha256-AEvs2fb8nhWEFMyLvwNv9HoxxxE50/KW3TGZ5pDf4dc=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +43,14 @@ buildPythonPackage rec {
     jsonschema
     pyhamcrest
   ];
+
+  preBuild = ''
+    cd packages/python
+  '';
+
+  preCheck = ''
+    cd ../../
+  '';
 
   checkPhase = ''
     runHook preCheck

@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "python-heatclient";
-  version = "3.2.0";
+  version = "3.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LYjRjDeZp7LQeQFXLogyGy4LEgawTQED+5qRu799tWM=";
+    hash = "sha256-opBb9Zf60kgMtBNis2c+22VGS7psFEDPYvlz7WyKIHs=";
   };
 
   propagatedBuildInputs = [

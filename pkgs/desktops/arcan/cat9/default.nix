@@ -3,7 +3,7 @@
 , fetchFromGitHub
 }:
 
-stdenvNoCC.mkDerivation (self: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cat9";
   version = "unstable-2023-02-11";
 

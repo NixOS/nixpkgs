@@ -21,15 +21,15 @@
 , libXdmcp
 , debug ? false
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpicker" + lib.optionalString debug "-debug";
-  version = "unstable-2023-03-09";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
-    repo = "hyprpicker";
-    rev = "234c2da51a71941c0cd2ee380f42de365f90dd6f";
-    hash = "sha256-wb1oXsaM0AkThPJGjn0Ytxt8vbBQG+mg2AGY0uxhUJ0=";
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-k+rG5AZjz47Q6bpVcTK7r4s7Avg3O+1iw+skK+cn0rk=";
   };
 
   cmakeFlags = lib.optional debug "-DCMAKE_BUILD_TYPE=Debug";
@@ -92,4 +92,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ fufexan ];
     platforms = wayland.meta.platforms;
   };
-}
+})

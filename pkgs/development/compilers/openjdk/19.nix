@@ -9,9 +9,6 @@
 , headless ? stdenv.targetPlatform.isGhcjs
 , enableJavaFX ? false, openjfx
 , enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
-# Hold back make-4.4 as 4.4.1 breaks the build:
-#   https://github.com/NixOS/nixpkgs/issues/219513
-, gnumake44
 }:
 
 let
@@ -20,6 +17,9 @@ let
     interim = ".0.2";
     build = "7";
   };
+
+  # when building a headless jdk, also bootstrap it with a headless jdk
+  openjdk-bootstrap = openjdk19-bootstrap.override { gtkSupport = !headless; };
 
   openjdk = stdenv.mkDerivation {
     pname = "openjdk" + lib.optionalString headless "-headless";
@@ -32,11 +32,11 @@ let
       hash = "sha256-pBEHmBtIgG4Czou4C/zpBBYZEDImvXiLoA5CjOzpeyI=";
     };
 
-    nativeBuildInputs = [ gnumake44 pkg-config autoconf unzip ensureNewerSourcesForZipFilesHook ];
+    nativeBuildInputs = [ pkg-config autoconf unzip ensureNewerSourcesForZipFilesHook ];
     buildInputs = [
       cpio file which zip perl zlib cups freetype alsa-lib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
-      libXi libXinerama libXcursor libXrandr fontconfig openjdk19-bootstrap
+      libXi libXinerama libXcursor libXrandr fontconfig openjdk-bootstrap
     ] ++ lib.optionals (!headless && enableGnome2) [
       gtk3 gnome_vfs GConf glib
     ];
@@ -63,6 +63,14 @@ let
         url = "https://git.alpinelinux.org/aports/plain/testing/openjdk19/FixNullPtrCast.patch?id=93dc07f97ff716b647c5f57c6224901ea06da560";
         hash = "sha256-H4X3Yip5bCpXMH7MSu9BgXIOYRVUBMZPZW8EvZSWI5k=";
       })
+
+      # Fix build for gnumake-4.4.1:
+      #   https://github.com/openjdk/jdk/pull/12992
+      (fetchpatch {
+        name = "gnumake-4.4.1";
+        url = "https://github.com/openjdk/jdk/commit/9341d135b855cc208d48e47d30cd90aafa354c36.patch";
+        hash = "sha256-Qcm3ZmGCOYLZcskNjj7DYR85R4v07vYvvavrVOYL8vg=";
+      })
     ] ++ lib.optionals (!headless && enableGnome2) [
       ./swing-use-gtk-jdk13.patch
     ];
@@ -72,8 +80,13 @@ let
       patchShebangs --build configure
     '';
 
+    # JDK's build system attempts to specifically detect
+    # and special-case WSL, and we don't want it to do that,
+    # so pass the correct platform names explicitly
+    configurePlatforms = ["build" "host"];
+
     configureFlags = [
-      "--with-boot-jdk=${openjdk19-bootstrap.home}"
+      "--with-boot-jdk=${openjdk-bootstrap.home}"
       "--with-version-build=${version.build}"
       "--with-version-opt=nixos"
       "--with-version-pre="
@@ -168,7 +181,7 @@ let
       done
     '';
 
-    disallowedReferences = [ openjdk19-bootstrap ];
+    disallowedReferences = [ openjdk-bootstrap ];
 
     pos = builtins.unsafeGetAttrPos "feature" version;
     meta = import ./meta.nix lib version.feature;
