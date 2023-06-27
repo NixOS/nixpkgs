@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "bitbox02";
-  version = "6.1.1";
+  version = "6.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mVA0CdbGGJn44R6xHnophmsnVMsCwDrPNM3vmXVa7dg=";
+    hash = "sha256-zt4G45nJjtU2/tbYpCEgjaoA+Xtpe9g2OpQaxfMzCb8=";
   };
 
   propagatedBuildInputs = [ base58 ecdsa hidapi noiseprotocol protobuf semver typing-extensions ];
