@@ -1,34 +1,41 @@
 { config
 , lib
+, stdenv
 , fetchFromGitHub
 , cmake
-, SDL
+, pkg-config
+, which
+, wrapQtAppsHook
+, SDL2
 , ffmpeg
+, fftw
 , frei0r
-, libjack2
 , libdv
+, libjack2
 , libsamplerate
 , libvorbis
 , libxml2
 , movit
-, pkg-config
-, sox
+, opencv4
 , qtbase
 , qtsvg
-, fftw
-, vid-stab
-, opencv4
-, ladspa-sdk
-, gitUpdater
-, ladspaPlugins
+, rtaudio
 , rubberband
-, mkDerivation
-, which
+, sox
+, vid-stab
+, darwin
 , cudaSupport ? config.cudaSupport or false
-, cudaPackages ? {}
+, cudaPackages ? { }
+, jackrackSupport ? stdenv.isLinux
+, ladspa-sdk
+, ladspaPlugins
+, pythonSupport ? false
+, python3
+, swig
+, gitUpdater
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "mlt";
   version = "7.16.0";
 
@@ -36,39 +43,47 @@ mkDerivation rec {
     owner = "mltframework";
     repo = "mlt";
     rev = "v${version}";
-    sha256 = "sha256-Ed9CHaeJ8Rkrvfq/dZVOn/5lhHLH7B6A1Qf2xOQfWik=";
+    hash = "sha256-Ed9CHaeJ8Rkrvfq/dZVOn/5lhHLH7B6A1Qf2xOQfWik=";
   };
 
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    which
+    wrapQtAppsHook
+  ] ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+  ] ++ lib.optionals pythonSupport [
+    python3
+    swig
+  ];
+
   buildInputs = [
-    SDL
+    SDL2
     ffmpeg
+    fftw
     frei0r
-    libjack2
     libdv
+    libjack2
     libsamplerate
     libvorbis
     libxml2
     movit
+    opencv4
     qtbase
     qtsvg
+    rtaudio
+    rubberband
     sox
-    fftw
     vid-stab
-    opencv4
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.Accelerate
+  ] ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+  ] ++ lib.optionals jackrackSupport [
     ladspa-sdk
     ladspaPlugins
-    rubberband
-  ] ++ lib.optionals cudaSupport (with cudaPackages; [
-    cuda_cudart
-  ]);
-
-  nativeBuildInputs = [
-    cmake
-    which
-    pkg-config
-  ] ++ lib.optionals cudaSupport (with cudaPackages; [
-    cuda_nvcc
-  ]);
+  ];
 
   outputs = [ "out" "dev" ];
 
@@ -76,10 +91,13 @@ mkDerivation rec {
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
     "-DMOD_OPENCV=ON"
+  ] ++ lib.optionals pythonSupport [
+    "-DSWIG_PYTHON=ON"
   ];
 
   qtWrapperArgs = [
     "--prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1"
+  ] ++ lib.optionals jackrackSupport [
     "--prefix LADSPA_PATH : ${ladspaPlugins}/lib/ladspa"
   ];
 
@@ -99,8 +117,8 @@ mkDerivation rec {
   meta = with lib; {
     description = "Open source multimedia framework, designed for television broadcasting";
     homepage = "https://www.mltframework.org/";
-    license = licenses.gpl3;
+    license = with licenses; [ lgpl21Plus gpl2Plus ];
     maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
