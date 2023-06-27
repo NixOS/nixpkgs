@@ -13321,6 +13321,8 @@ with pkgs;
 
   tran = callPackage ../tools/networking/tran { };
 
+  transfer-sh = callPackage ../servers/transfer-sh { };
+
   trayscale = callPackage ../applications/networking/trayscale { };
 
   tpmmanager = libsForQt5.callPackage ../applications/misc/tpmmanager { };
