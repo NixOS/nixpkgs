@@ -23351,7 +23351,7 @@ with pkgs;
 
   mlc = callPackage ../tools/system/mlc { };
 
-  mlt = callPackage ../development/libraries/mlt { };
+  mlt = libsForQt5.mlt;
 
   mlib = callPackage ../development/libraries/mlib { };
 
