@@ -31,6 +31,10 @@ rustPlatform.buildRustPackage rec {
     ./tokio-macros.patch
   ];
 
+  preConfigure = ''
+    echo 'pub const VERSION: &str = "${version}";' > crates/utils/src/version.rs
+  '';
+
   cargoSha256 = pinData.serverCargoSha256;
 
   buildInputs = [ postgresql ]
