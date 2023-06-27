@@ -2559,6 +2559,8 @@ self: super: with self; {
 
   diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
 
+  diffimg = callPackage ../development/python-modules/diffimg { };
+
   digital-ocean = callPackage ../development/python-modules/digitalocean { };
 
   digi-xbee = callPackage ../development/python-modules/digi-xbee { };
@@ -4879,6 +4881,8 @@ self: super: with self; {
 
   imageio-ffmpeg = callPackage ../development/python-modules/imageio-ffmpeg { };
 
+  image-diff = callPackage ../development/python-modules/image-diff { };
+
   image-go-nord = callPackage ../development/python-modules/image-go-nord { };
 
   imagesize = callPackage ../development/python-modules/imagesize { };
@@ -4896,6 +4900,8 @@ self: super: with self; {
   img2pdf = callPackage ../development/python-modules/img2pdf { };
 
   imgaug = callPackage ../development/python-modules/imgaug { };
+
+  imgdiff = callPackage ../development/python-modules/imgdiff { };
 
   imgsize = callPackage ../development/python-modules/imgsize { };
 
@@ -9698,6 +9704,8 @@ self: super: with self; {
   pytest-httpserver = callPackage ../development/python-modules/pytest-httpserver { };
 
   pytest-httpx = callPackage ../development/python-modules/pytest-httpx { };
+
+  pytest-image-diff = callPackage ../development/python-modules/pytest-image-diff { };
 
   pytest-instafail = callPackage ../development/python-modules/pytest-instafail { };
 
