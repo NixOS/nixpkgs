@@ -24,7 +24,7 @@ let
     if [[ "$USER" != ${user} ]]; then
       sudo='exec /run/wrappers/bin/sudo -u ${user}'
     fi
-    $sudo ${cfg.phpPackage}/bin/php artisan "$@"
+    $sudo ${phpPackage}/bin/php artisan "$@"
   '';
   dbSocket = {
     "pgsql" = "/run/postgresql";
@@ -380,6 +380,12 @@ in {
       };
 
       script = ''
+        # Before running any PHP program, cleanup the code cache.
+        # It's necessary if you upgrade the application otherwise you might
+        # try to import non-existent modules.
+        rm -f ${cfg.runtimeDir}/app.php
+        rm -rf ${cfg.runtimeDir}/cache/*
+
         # Concatenate non-secret .env and secret .env
         rm -f ${cfg.dataDir}/.env
         cp --no-preserve=all ${configFile} ${cfg.dataDir}/.env
@@ -405,11 +411,6 @@ in {
 
         # Install Horizon
         # FIXME: require write access to public/ — should be done as part of install — pixelfed-manage horizon:publish
-
-        # Before running any PHP program, cleanup the bootstrap.
-        # It's necessary if you upgrade the application otherwise you might
-        # try to import non-existent modules.
-        rm -rf ${cfg.runtimeDir}/bootstrap/*
 
         # Perform the first migration.
         [[ ! -f ${cfg.dataDir}/.initial-migration ]] && pixelfed-manage migrate --force && touch ${cfg.dataDir}/.initial-migration

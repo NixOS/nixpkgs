@@ -3,7 +3,10 @@
 }:
 
 lib.makeScope newScope (self: with self; {
-  inherit (import ./bootstrap-sources.nix) version hex0-seed src;
+  inherit (self.callPackage ./bootstrap-sources.nix {})
+    version hex0-seed minimal-bootstrap-sources;
+
+  src = minimal-bootstrap-sources;
 
   m2libc = src + "/M2libc";
 

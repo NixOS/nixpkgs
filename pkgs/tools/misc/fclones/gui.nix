@@ -1,6 +1,6 @@
 { lib
 , rustPlatform
-, fetchCrate
+, fetchFromGitHub
 , pkg-config
 , wrapGAppsHook4
 , gdk-pixbuf
@@ -12,14 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fclones-gui";
-  version = "0.1.2";
+  version = "0.1.4";
 
-  src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-ge2l414kYHK3y4V837GTQ5sSxVRlU8ZYyGdBj4+vUL8=";
+  src = fetchFromGitHub {
+    owner = "pkolaczk";
+    repo = "fclones-gui";
+    rev = "v${version}";
+    hash = "sha256-zJ5TqFmvUL1nKR8E+jGR4K6OGHJ4ckRky+bdKW0T30s=";
   };
 
-  cargoHash = "sha256-rDAUA75KCWlhf13bCucV5w9WAJ+Uw+s8sUCCeWBYJeA=";
+  cargoHash = "sha256-QT4ZxjarPkEqJLKPsGAaMIaSUmKWZ1xtxWMe2uXaUek=";
 
   nativeBuildInputs = [
     pkg-config
@@ -36,7 +38,8 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Interactive duplicate file remover";
-    homepage = "https://github.com/pkolaczk/fclones/tree/main/fclones-gui";
+    homepage = "https://github.com/pkolaczk/fclones-gui";
+    changelog = "https://github.com/pkolaczk/fclones-gui/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
   };

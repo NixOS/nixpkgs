@@ -3,9 +3,11 @@
 , lib
 , fetchFromGitHub
 , cmake
+, libffi
 , libpng
 , libjpeg
 , mesa
+, libGL
 , eigen
 , openblas
 , blas
@@ -43,11 +45,14 @@ stdenv.mkDerivation rec {
     llvmPackages.lld
     llvmPackages.openmp
     llvmPackages.libclang
+    libffi
     libpng
     libjpeg
-    mesa
     eigen
     openblas
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    mesa
+    libGL
   ];
 
   nativeBuildInputs = [ cmake ];
@@ -57,6 +62,6 @@ stdenv.mkDerivation rec {
     homepage = "https://halide-lang.org";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ck3d atila ];
+    maintainers = with maintainers; [ ck3d atila twesterhout ];
   };
 }

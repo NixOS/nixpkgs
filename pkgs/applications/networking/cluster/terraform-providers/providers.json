@@ -164,13 +164,13 @@
     "vendorHash": null
   },
   "bitbucket": {
-    "hash": "sha256-T9e3IQHe6uCdllRTctJg/aG1QmPFR6V4ryw79yX2k/o=",
+    "hash": "sha256-Sby7Dvu4UWzdbQWa/GLMkDzlK7foaFApy4yLNBOJgck=",
     "homepage": "https://registry.terraform.io/providers/DrFaust92/bitbucket",
     "owner": "DrFaust92",
     "repo": "terraform-provider-bitbucket",
-    "rev": "v2.33.0",
+    "rev": "v2.34.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-ebkUF+Xv9diwUYXYt/WK+0tWheqL1cgA665VbGLmvvo="
+    "vendorHash": "sha256-AcUw5i3st7VfAnpy/6nTYfTv3rOAN2jm4rUmEKcSrXM="
   },
   "brightbox": {
     "hash": "sha256-yKoYjrZs6EOX1pdDuF+LOu/jZ3fidZJBU7yhSp6qSFU=",
@@ -363,11 +363,11 @@
     "vendorHash": "sha256-2iVEcpESaEdgTcmlQ6Wynuxv8RmPFlhF+BVDSjHmclM="
   },
   "exoscale": {
-    "hash": "sha256-DD6CkdZ9KCCkPCgPyWXaAvHfHyn9rYXRsXg9BVJkELM=",
+    "hash": "sha256-dLA9BWW4ghD1OSZaZtFfv8ipS+2lTeNRr1YD3E8ewpI=",
     "homepage": "https://registry.terraform.io/providers/exoscale/exoscale",
     "owner": "exoscale",
     "repo": "terraform-provider-exoscale",
-    "rev": "v0.49.0",
+    "rev": "v0.50.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -474,13 +474,13 @@
     "vendorHash": "sha256-fqVBnAivVekV+4tpkl+E6eNA3wi8mhLevJRCs3W7L2g="
   },
   "grafana": {
-    "hash": "sha256-5V0TW80GQKa2JHrSf9SlsCrT9jTTQK+SMRa/OCIrthE=",
+    "hash": "sha256-J5Fn3JGp7jXAA04RJ3FFKqLpB4hekd0yFA8zkfPPQ+4=",
     "homepage": "https://registry.terraform.io/providers/grafana/grafana",
     "owner": "grafana",
     "repo": "terraform-provider-grafana",
-    "rev": "v1.41.0",
+    "rev": "v1.42.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-CRqUSPXap8lXRa/yIDnG11F/D+IdylY3JzkV6bXmzwY="
+    "vendorHash": "sha256-8FgjFIgEx3pA6vKo7m9e6gASrpp5cPtN7A2US2GASy8="
   },
   "gridscale": {
     "hash": "sha256-OzOI//WXMHzHSbsqLSAfVpt756SbF3Uv0r/7MsVMjzY=",
@@ -1234,11 +1234,11 @@
     "vendorHash": null
   },
   "vsphere": {
-    "hash": "sha256-XVMTKYb9RuK5sErVHsP0j5otUEioxp6C7GV7/J6OYVA=",
+    "hash": "sha256-lWMtsBRAirNI7dNXI7APzS1AbPmkz5fsbpCdd/0XBRc=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/vsphere",
     "owner": "hashicorp",
     "repo": "terraform-provider-vsphere",
-    "rev": "v2.4.0",
+    "rev": "v2.4.1",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-wKKrBSJkbdqqnDLoS+jhvI26rOzvMWjjsN8wh67Le5U="
   },

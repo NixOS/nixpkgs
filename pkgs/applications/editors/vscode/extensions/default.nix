@@ -587,6 +587,22 @@ let
         };
       };
 
+      brandonkirbyson.solarized-palenight = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "solarized-palenight";
+          publisher = "BrandonKirbyson";
+          version = "1.0.1";
+          sha256 = "sha256-vVbaHSaBX6QzpnYMQlpPsJU1TQYJEBe8jq95muzwN0o=";
+        };
+        meta = {
+          description = " A solarized-palenight theme for vscode";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=BrandonKirbyson.solarized-palenight";
+          homepage = "https://github.com/BrandonKirbyson/Solarized-Palenight";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.sebtm ];
+        };
+      };
+
       brettm12345.nixfmt-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "nixfmt-vscode";

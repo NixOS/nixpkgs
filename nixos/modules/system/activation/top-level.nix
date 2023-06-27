@@ -260,10 +260,10 @@ in
     };
 
     system.extraDependencies = mkOption {
-      type = types.listOf types.package;
+      type = types.listOf types.pathInStore;
       default = [];
       description = lib.mdDoc ''
-        A list of packages that should be included in the system
+        A list of paths that should be included in the system
         closure but generally not visible to users.
 
         This option has also been used for build-time checks, but the
