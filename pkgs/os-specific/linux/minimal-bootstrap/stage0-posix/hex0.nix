@@ -9,7 +9,7 @@ derivationWithMeta {
   pname = "hex0";
   builder = hex0-seed;
   args = [
-    "${src}/bootstrap-seeds/POSIX/x86/hex0_x86.hex0"
+    "${src}/x86/hex0_x86.hex0"
     (placeholder "out")
   ];
 
