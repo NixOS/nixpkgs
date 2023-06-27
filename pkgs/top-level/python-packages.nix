@@ -9462,6 +9462,8 @@ self: super: with self; {
 
   pysingleton = callPackage ../development/python-modules/pysingleton { };
 
+  pyslim = callPackage ../development/python-modules/pyslim { };
+
   pyslurm = callPackage ../development/python-modules/pyslurm {
     inherit (pkgs) slurm;
   };
