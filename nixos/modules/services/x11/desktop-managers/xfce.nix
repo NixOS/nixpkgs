@@ -86,7 +86,7 @@ in
       shared-mime-info # for update-mime-database
 
       # For a polkit authentication agent
-      polkit_gnome
+      xfce-polkit
 
       # Needed by Xfce's xinitrc script
       xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
