@@ -1670,6 +1670,8 @@ self: super: {
         sha256 = "sha256-J8N4+HUQ6vlJBCwCyxv8Fv5HSbtiim64Qh1n9CaRe1o=";
         stripLen = 1;
       })
+      # https://github.com/hercules-ci/hercules-ci-agent/pull/526
+      ./patches/hercules-ci-agent-cachix-1.6.patch
     ])
     (self.generateOptparseApplicativeCompletions [ "hercules-ci-agent" ])
   ];
