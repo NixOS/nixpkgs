@@ -63,7 +63,7 @@ Sample template for a package update review is provided below.
 - [ ] executables tested on ARCHITECTURE
 - [ ] all depending packages build
 - [ ] patches have a comment describing either the upstream URL or a reason why the patch wasn't upstreamed
-- [ ] patches that are remotely available are fetched with `fetchpatch`
+- [ ] patches that are remotely available are fetched rather than vendored
 
 ##### Possible improvements
 
@@ -108,7 +108,7 @@ Sample template for a new package review is provided below.
 - [ ] the list of `phases` is not overridden
 - [ ] when a phase (like `installPhase`) is overridden it starts with `runHook preInstall` and ends with `runHook postInstall`.
 - [ ] patches have a comment describing either the upstream URL or a reason why the patch wasn't upstreamed
-- [ ] patches that are remotely available are fetched with `fetchpatch`
+- [ ] patches that are remotely available are fetched rather than vendored
 
 ##### Possible improvements
 
