@@ -5,8 +5,6 @@
 , cmake
 , pkg-config
 , which
-, wrapQtAppsHook
-, SDL2
 , ffmpeg
 , fftw
 , frei0r
@@ -17,8 +15,6 @@
 , libxml2
 , movit
 , opencv4
-, qtbase
-, qtsvg
 , rtaudio
 , rubberband
 , sox
@@ -26,12 +22,18 @@
 , darwin
 , cudaSupport ? config.cudaSupport or false
 , cudaPackages ? { }
-, jackrackSupport ? stdenv.isLinux
+, enableJackrack ? stdenv.isLinux
 , ladspa-sdk
 , ladspaPlugins
-, pythonSupport ? false
+, enablePython ? false
 , python3
 , swig
+, enableQt ? true
+, libsForQt5
+, enableSDL1 ? stdenv.isLinux
+, SDL
+, enableSDL2 ? true
+, SDL2
 , gitUpdater
 }:
 
@@ -50,16 +52,16 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     which
-    wrapQtAppsHook
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
-  ] ++ lib.optionals pythonSupport [
+  ] ++ lib.optionals enablePython [
     python3
     swig
+  ] ++ lib.optionals enableQt [
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    SDL2
     ffmpeg
     fftw
     frei0r
@@ -70,8 +72,6 @@ stdenv.mkDerivation rec {
     libxml2
     movit
     opencv4
-    qtbase
-    qtsvg
     rtaudio
     rubberband
     sox
@@ -80,9 +80,16 @@ stdenv.mkDerivation rec {
     darwin.apple_sdk_11_0.frameworks.Accelerate
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
-  ] ++ lib.optionals jackrackSupport [
+  ] ++ lib.optionals enableJackrack [
     ladspa-sdk
     ladspaPlugins
+  ] ++ lib.optionals enableQt [
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
+  ] ++ lib.optionals enableSDL1 [
+    SDL
+  ] ++ lib.optionals enableSDL2 [
+    SDL2
   ];
 
   outputs = [ "out" "dev" ];
@@ -91,13 +98,13 @@ stdenv.mkDerivation rec {
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
     "-DMOD_OPENCV=ON"
-  ] ++ lib.optionals pythonSupport [
+  ] ++ lib.optionals enablePython [
     "-DSWIG_PYTHON=ON"
   ];
 
   qtWrapperArgs = [
     "--prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1"
-  ] ++ lib.optionals jackrackSupport [
+  ] ++ lib.optionals enableJackrack [
     "--prefix LADSPA_PATH : ${ladspaPlugins}/lib/ladspa"
   ];
 
