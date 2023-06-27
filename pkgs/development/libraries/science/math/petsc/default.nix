@@ -11,6 +11,7 @@
 , petsc-withp4est ? true
 , p4est
 , zlib                  # propagated by p4est but required by petsc
+, withHypre ? true, hypre
 }:
 
 # This version of PETSc does not support a non-MPI p4est build
@@ -68,6 +69,10 @@ stdenv.mkDerivation rec {
       ''}
       "--with-blas=1"
       "--with-lapack=1"
+      ${lib.optionalString withHypre ''
+        "--with-hypre=1"
+        "--with-hypre-dir=${hypre}"
+      ''}
     )
   '';
 
