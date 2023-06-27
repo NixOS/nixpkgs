@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fastnetmon-advanced";
-  version = "2.0.337";
+  version = "2.0.342";
 
   src = fetchurl {
     url = "https://repo.fastnetmon.com/fastnetmon_ubuntu_jammy/pool/fastnetmon/f/fastnetmon/fastnetmon_${version}_amd64.deb";
-    hash = "sha256-lYXJ0Q0iUiWk/n/I71BsKnnoRJh3a2EJT3EWV4+pQbM=";
+    hash = "sha256-H4e7ftuL39xxDYs2zVhgVI8voDBR2TQLWlWSBg3At2s=";
   };
 
   nativeBuildInputs = [
@@ -40,8 +40,11 @@ stdenv.mkDerivation rec {
     cp -r opt/fastnetmon/app/bin $out/bin
     cp -r opt/fastnetmon/libraries $out/libexec/fastnetmon
 
-    ln -s $out/libexec/fastnetmon/libraries/gobgp_2_27_0/gobgpd $out/bin/fnm-gobgpd
-    ln -s $out/libexec/fastnetmon/libraries/gobgp_2_27_0/gobgp $out/bin/fnm-gobgp
+    readlink usr/sbin/gobgpd
+    readlink usr/bin/gobgp
+
+    ln -s $(readlink usr/sbin/gobgpd | sed "s:/opt/fastnetmon:$out/libexec/fastnetmon:") $out/bin/fnm-gobgpd
+    ln -s $(readlink usr/bin/gobgp | sed "s:/opt/fastnetmon:$out/libexec/fastnetmon:") $out/bin/fnm-gobgp
 
     addAutoPatchelfSearchPath $out/libexec/fastnetmon/libraries
   '';
