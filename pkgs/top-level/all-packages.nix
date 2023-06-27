@@ -25458,6 +25458,8 @@ with pkgs;
 
   alps = callPackage ../servers/alps { };
 
+  anuko-time-tracker = callPackage ../servers/web-apps/anuko-time-tracker { };
+
   apache-directory-server = callPackage ../servers/ldap/apache-directory-server { };
 
   apacheHttpd_2_4 = callPackage ../servers/http/apache-httpd/2.4.nix {

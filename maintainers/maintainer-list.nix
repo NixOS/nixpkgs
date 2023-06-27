@@ -10591,6 +10591,12 @@
     githubId = 1699466;
     name = "Michael Peyton Jones";
   };
+  michaelshmitty = {
+    name = "Michael Smith";
+    email = "shmitty@protonmail.com";
+    github = "michaelshmitty";
+    githubId = 114845;
+  };
   michalrus = {
     email = "m@michalrus.com";
     github = "michalrus";
