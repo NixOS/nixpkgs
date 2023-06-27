@@ -38,9 +38,6 @@ let
       export PAGER=cat
       cacheDir=$TEST_ROOT/binary-cache
 
-      mkdir -p $NIX_CONF_DIR
-      echo "experimental-features = nix-command" >> $NIX_CONF_DIR/nix.conf
-
       nix-store --init
 
       cp -r ${../.} lib
