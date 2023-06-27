@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "prboom-plus";
-  version = "2.6.2";
+  version = "2.6.66";
 
   src = fetchFromGitHub {
     owner = "coelckers";
     repo = "prboom-plus";
     rev = "v${version}";
-    sha256 = "iK70PMRLJiZHcK1jCQ2s88LgEMbcfG2pXjwCDVG7zUM=";
+    sha256 = "sha256-moU/bZ2mS1QfKPP6HaAwWP1nRNZ4Ue5DFl9zBBrJiHw=";
   };
 
   sourceRoot = "source/prboom2";
