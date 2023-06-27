@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "knot-dns";
-  version = "3.2.7";
+  version = "3.2.8";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "d3b7872ac8aa80f7f54ddb1bb3b1e2f90ec55f7270a2c4a9338eab42b7d2767b";
+    sha256 = "ef419a428f327def77780bc90eda763b51e6121fe548543da84b9eb96a261a6e";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -28,12 +28,6 @@ stdenv.mkDerivation rec {
     ./dont-create-run-time-dirs.patch
     ./runtime-deps.patch
   ];
-
-  # Upstream mistake in 3.2.7: too strict constraint.
-  postPatch = ''
-    substituteInPlace configure.ac \
-      --replace 'libngtcp2 = 0.13.0' 'libngtcp2 = 0.13.1'
-  '';
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [

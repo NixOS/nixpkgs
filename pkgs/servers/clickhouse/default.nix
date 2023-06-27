@@ -1,6 +1,7 @@
 { lib
 , llvmPackages
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , ninja
 , python3
@@ -27,14 +28,15 @@ let
     else llvmPackages.stdenv).mkDerivation;
 in mkDerivation rec {
   pname = "clickhouse";
-  version = "23.3.3.52";
+  version = "23.3.5.9";
 
   src = fetchFromGitHub rec {
     owner = "ClickHouse";
     repo = "ClickHouse";
     rev = "v${version}-lts";
     fetchSubmodules = true;
-    hash = "sha256-fVwwMj0WbyCbe4WfpYMGVM6vXFgHsjg9MUZbNyd+a/w=";
+    name = "clickhouse-${rev}.tar.gz";
+    hash = "sha256-soF0L69oi95r0zgzPL0DfDhhXfRKekN5u/4+/mt8QwM=";
     postFetch = ''
       # delete files that make the source too big
       rm -rf $out/contrib/llvm-project/llvm/test
@@ -44,6 +46,18 @@ in mkDerivation rec {
       # fix case insensitivity on macos https://github.com/NixOS/nixpkgs/issues/39308
       rm -rf $out/contrib/sysroot/linux-*
       rm -rf $out/contrib/liburing/man
+
+      # compress to not exceed the 2GB output limit
+      # try to make a deterministic tarball
+      tar -I 'gzip -n' \
+        --sort=name \
+        --mtime=1970-01-01 \
+        --owner=0 --group=0 \
+        --numeric-owner --mode=go=rX,u+rw,a-s \
+        --transform='s@^@source/@S' \
+        -cf temp  -C "$out" .
+      rm -r "$out"
+      mv temp "$out"
     '';
   };
 
@@ -142,8 +156,10 @@ in mkDerivation rec {
     "-DENABLE_TESTS=OFF"
     "-DCOMPILER_CACHE=disabled"
     "-DENABLE_EMBEDDED_COMPILER=ON"
-    "-DWERROR=OFF"
   ];
+
+  # https://github.com/ClickHouse/ClickHouse/issues/49988
+  hardeningDisable = [ "fortify" ];
 
   postInstall = ''
     rm -rf $out/share/clickhouse-test
