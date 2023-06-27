@@ -6526,6 +6526,8 @@ self: super: with self; {
 
   msoffcrypto-tool = callPackage ../development/python-modules/msoffcrypto-tool { };
 
+  msprime = callPackage ../development/python-modules/msprime { };
+
   mss = callPackage ../development/python-modules/mss { };
 
   msrestazure = callPackage ../development/python-modules/msrestazure { };
