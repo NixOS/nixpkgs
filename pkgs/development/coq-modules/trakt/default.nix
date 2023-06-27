@@ -21,7 +21,7 @@ mkCoqDerivation {
   meta = with lib; {
     description = "A generic goal preprocessing tool for proof automation tactics in Coq";
     maintainers = with maintainers; [ siraben ];
-    license = licenses.cecill-b;
+    license = licenses.lgpl3Plus;
     platforms = platforms.unix;
   };
 }
