@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub,bash }:
+{ stdenv, lib, fetchFromGitHub,bash }:
 stdenv.mkDerivation rec {
   name = "maxfetch-${version}";
   version = "1.0";
@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jobcmax";
     repo = "maxfetch";
-    rev = "6ef37bc7780221894d6daff118a4866cc846aed8";
-    sha256 = "sha256-9rw51wo01N/pKFOZjuX/onHJ0nODwSx5SCabpXE/JFc=";
+    rev = "574ba113e7cb6e99168f9aa43ef0e124607299dc";
+    sha256 = "sha256-gdKVoeT6PhB/j5X//ZbcIrAfUoP4LeZKF2LEK+6J8wk=";
   };
 
   nativeBuildInputs = [ ];
@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     chmod +x maxfetch
-    sed -i '/uptime/d' maxfetch
   '';
 
   installPhase = ''
