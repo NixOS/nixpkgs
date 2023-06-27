@@ -17,13 +17,13 @@
 }:
 
 let
-  version = "1.16.3";
+  version = "1.16.5";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DudTg7d92/9WwaPtr2PrvojcGxZ8z3Z2oYA0LcrkxZI=";
+    hash = "sha256-suwXFqq3QSdY0KzSpr6NKPwm6xtMBR8aP5VV3XTynqI=";
   };
 
   # Use specific package versions required by paperless-ngx
@@ -130,6 +130,7 @@ python.pkgs.buildPythonApplication rec {
     h11
     hiredis
     httptools
+    httpx
     humanfriendly
     humanize
     hyperlink
