@@ -98,9 +98,11 @@ let self = rec {
 
   osmc-skin = callPackage ../applications/video/kodi/addons/osmc-skin { };
 
-  vfs-sftp = callPackage ../applications/video/kodi/addons/vfs-sftp { };
-
   vfs-libarchive = callPackage ../applications/video/kodi/addons/vfs-libarchive { };
+
+  vfs-rar = callPackage ../applications/video/kodi/addons/vfs-rar { };
+
+  vfs-sftp = callPackage ../applications/video/kodi/addons/vfs-sftp { };
 
   visualization-fishbmc = callPackage ../applications/video/kodi/addons/visualization-fishbmc { };
 
