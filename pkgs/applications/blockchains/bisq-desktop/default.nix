@@ -15,7 +15,7 @@
 }:
 
 let
-  bisq-launcher = writeScript "bisq-launcher" ''
+  bisq-launcher = args: writeScript "bisq-launcher" ''
     #! ${bash}/bin/bash
 
     # This is just a comment to convince Nix that Tor is a
@@ -23,7 +23,7 @@ let
     # whereas Nix only scans for hashes in uncompressed text.
     # ${bisq-tor}
 
-    JAVA_TOOL_OPTIONS="-XX:+UseG1GC -XX:MaxHeapFreeRatio=10 -XX:MinHeapFreeRatio=5 -XX:+UseStringDeduplication" bisq-desktop-wrapped "$@"
+    JAVA_TOOL_OPTIONS="-XX:+UseG1GC -XX:MaxHeapFreeRatio=10 -XX:MinHeapFreeRatio=5 -XX:+UseStringDeduplication ${args}" bisq-desktop-wrapped "$@"
   '';
 
   bisq-tor = writeScript "bisq-tor" ''
@@ -52,6 +52,15 @@ stdenv.mkDerivation rec {
       genericName = "Decentralized bitcoin exchange";
       categories = [ "Network" "P2P" ];
     })
+
+    (makeDesktopItem {
+      name = "Bisq-hidpi";
+      exec = "bisq-desktop-hidpi";
+      icon = "bisq";
+      desktopName = "Bisq ${version} (HiDPI)";
+      genericName = "Decentralized bitcoin exchange";
+      categories = [ "Network" "P2P" ];
+    })
   ];
 
   unpackPhase = ''
@@ -77,7 +86,10 @@ stdenv.mkDerivation rec {
     makeWrapper ${openjdk11}/bin/java $out/bin/bisq-desktop-wrapped \
       --add-flags "-jar $out/lib/desktop-${version}-all.jar bisq.desktop.app.BisqAppMain"
 
-    makeWrapper ${bisq-launcher} $out/bin/bisq-desktop \
+    makeWrapper ${bisq-launcher ""} $out/bin/bisq-desktop \
+      --prefix PATH : $out/bin
+
+    makeWrapper ${bisq-launcher "-Dglass.gtk.uiScale=2.0"} $out/bin/bisq-desktop-hidpi \
       --prefix PATH : $out/bin
 
     for n in 16 24 32 48 64 96 128 256; do
