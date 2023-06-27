@@ -64,6 +64,7 @@ mkYarnPackage {
     export HOME=$PWD/yarn_home
 
     ln -sf $PWD/node_modules $PWD/deps/lemmy-ui/
+    echo 'export const VERSION = "${version}";' > $PWD/deps/lemmy-ui/src/shared/version.ts
 
     yarn --offline build:prod
   '';
@@ -72,10 +73,6 @@ mkYarnPackage {
     mkdir $out
     cp -R ./deps/lemmy-ui/dist $out
     cp -R ./node_modules $out
-  '';
-
-  postInstall = ''
-    echo 'export const VERSION = "${version}";' > $out/libexec/lemmy-ui/deps/lemmy-ui/src/shared/version.ts
   '';
 
   distPhase = "true";
