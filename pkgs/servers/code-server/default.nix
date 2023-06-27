@@ -54,19 +54,17 @@ let
     sed -i 's/${version}/${esbuild'.version}/g' ${path}/node_modules/esbuild/lib/main.js
     ln -s -f ${esbuild'}/bin/esbuild ${path}/node_modules/esbuild/bin/esbuild
   '';
-
-  commit = "2798322b03e7f446f59c5142215c11711ed7a427";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "code-server";
-  version = "4.14.0";
+  version = "4.14.1";
 
   src = fetchFromGitHub {
     owner = "coder";
     repo = "code-server";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-MJ/FCYAdWNG0joTAdvIWYqAplOoRiDRWvE9bM/V3QHo=";
+    hash = "sha256-j7pFh731C8HUGT+M/JvnJoDZoPH9AdfA9TxxSx1vuBM=";
   };
 
   yarnCache = stdenv.mkDerivation {
@@ -131,12 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
     export HOME=$PWD
 
     patchShebangs ./ci
-
-    # inject git commit
-    substituteInPlace ./ci/build/build-vscode.sh \
-      --replace '$(git rev-parse HEAD)' "${commit}"
-    substituteInPlace ./ci/build/build-release.sh \
-      --replace '$(git rev-parse HEAD)' "${commit}"
   '';
 
   configurePhase = ''
