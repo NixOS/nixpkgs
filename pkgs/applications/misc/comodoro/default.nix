@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "comodoro";
-  version = "0.0.8";
+  version = "0.0.9";
 
   src = fetchFromGitHub {
     owner = "soywod";
     repo = "comodoro";
     rev = "v${version}";
-    sha256 = "rGnVXyfWJkPHfpf1gRGbDJ6Y1ycKOOcCZ+Jx35fUo6M=";
+    hash = "sha256-pxe3Nv1N85uWsiv4s0wtD++zlZZgMADH51f5RMK9huA=";
   };
 
-  cargoSha256 = "jpshuavywCLN03xD/gFgQeGbKtmHq5pULbxd+RUbaDk=";
+  cargoSha256 = "E5oHeMow9MrVrlDX+v0tX9Nv3gHUxDNUpRAT5jPa+DI=";
 
   nativeBuildInputs = lib.optional (installManPages || installShellCompletions) installShellFiles;
 
