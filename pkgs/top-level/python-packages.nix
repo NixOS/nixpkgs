@@ -2503,6 +2503,8 @@ self: super: with self; {
 
   demes = callPackage ../development/python-modules/demes { };
 
+  demesdraw = callPackage ../development/python-modules/demesdraw { };
+
   demetriek = callPackage ../development/python-modules/demetriek { };
 
   demjson3 = callPackage ../development/python-modules/demjson3 { };
