@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, love, zip, fetchpatch, makeWrapper
-, makeDesktopItem, copyDesktopItems }:
+{ lib
+, copyDesktopItems
+, fetchFromGitHub
+, fetchpatch
+, fetchurl
+, love
+, makeDesktopItem
+, makeWrapper
+, stdenv
+, strip-nondeterminism
+, zip
+}:
 
 stdenv.mkDerivation rec {
   pname = "orthorobot";
@@ -29,7 +39,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ makeWrapper zip copyDesktopItems ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+    strip-nondeterminism
+    zip
+  ];
 
   patches = [
     # support for love11
@@ -42,6 +57,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     zip -9 -r orthorobot.love ./*
+    strip-nondeterminism --type zip orthorobot.love
     install -Dm444 -t $out/share/games/lovegames/ orthorobot.love
     makeWrapper ${love}/bin/love $out/bin/orthorobot \
                 --add-flags $out/share/games/lovegames/orthorobot.love

@@ -9,7 +9,7 @@ derivationWithMeta {
   pname = "kaem-minimal";
   builder = hex0;
   args = [
-    "${src}/bootstrap-seeds/POSIX/x86/kaem-minimal.hex0"
+    "${src}/x86/kaem-minimal.hex0"
     (placeholder "out")
   ];
 

@@ -58,6 +58,7 @@ $a}
     s/"lppl1\.3a"/"lppl13a"/g
     s/"lppl1\.3c"/"lppl13c"/g
     s/"other-free"/"free"/g
+    s/"opl"/"opubl"/g
     s/"pd"/"publicDomain"/g
 
     s/^catalogue-license (.*)/  license = [ \1 ];/p

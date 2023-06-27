@@ -1,5 +1,4 @@
-# Packaged resources required for the first bootstrapping stage.
-# Contains source code and 256-byte hex0 binary seed.
+# Packaged source files for the first bootstrapping stage.
 #
 # We don't have access to utilities such as fetchgit and fetchzip since this
 # is this is part of the bootstrap process and would introduce a circular
@@ -9,23 +8,29 @@
 #
 # To build:
 #
-#   nix-build pkgs/os-specific/linux/minimal-bootstrap/stage0-posix/make-bootstrap-sources.nix
-#   => ./result/stage0-posix-$version-$rev-source.nar.xz
+#   nix-build '<nixpkgs>' -o sources.nar.xz -A make-minimal-bootstrap-sources
 #
 
-{ pkgs ? import ../../../../.. {} }:
+{ lib
+, fetchFromGitHub
+, runCommand
+, nix
+, xz
+}:
 let
-  inherit (pkgs) callPackage runCommand fetchFromGitHub nix xz;
-
-  inherit (import ./bootstrap-sources.nix) name rev;
+  inherit (import ./bootstrap-sources.nix { }) name rev;
 
   src = fetchFromGitHub {
     owner = "oriansj";
     repo = "stage0-posix";
     inherit rev;
-    sha256 = "sha256-ZRG0k49MxL1UTZhuMTvPoEprdSpJRNVy8QhLE6k+etg=";
+    sha256 = "sha256-FpMp7z+B3cR3LkQ+PooH/b1/NlxH8NHVJNWifaPWt4U=";
     fetchSubmodules = true;
     postFetch = ''
+      # Seed binaries will be fetched separately
+      echo "Removing seed binaries"
+      rm -rf $out/bootstrap-seeds/*
+
       # Remove vendored/duplicate M2libc's
       echo "Removing duplicate M2libc"
       rm -rf \
@@ -35,12 +40,20 @@ let
         $out/mescc-tools-extra/M2libc
     '';
   };
+
 in
-runCommand name {
+runCommand "${name}.nar.xz" {
   nativeBuildInputs = [ nix xz ];
 
   passthru = { inherit src; };
+
+  meta = with lib; {
+    description = "Packaged sources for the first bootstrapping stage";
+    homepage = "https://github.com/oriansj/stage0-posix";
+    license = licenses.gpl3Plus;
+    maintainers = teams.minimal-bootstrap.members;
+    platforms = platforms.all;
+  };
 } ''
-  mkdir $out
-  nix-store --dump ${src} | xz -c > "$out/${name}.nar.xz"
+  nix-store --dump ${src} | xz -c > $out
 ''

@@ -2622,6 +2622,12 @@
     githubId = 82591;
     name = "Carl Sverre";
   };
+  carlthome = {
+    name = "Carl Thomé";
+    email = "carlthome@gmail.com";
+    github = "carlthome";
+    githubId = 1595907;
+  };
   carpinchomug = {
     email = "aki.suda@protonmail.com";
     github = "carpinchomug";
