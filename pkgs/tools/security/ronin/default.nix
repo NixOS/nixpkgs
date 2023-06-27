@@ -1,18 +1,19 @@
-{ pkgs, lib, bundlerApp, bundlerUpdateScript }:
+{ lib, bundlerEnv, bundlerUpdateScript, defaultGemConfig, yasm }:
 
-bundlerApp {
-  pname = "ronin";
+bundlerEnv {
+  name = "ronin";
   gemdir = ./.;
-  exes = [
-    "ronin"
-    "ronin-db"
-    "ronin-exploits"
-    "ronin-fuzzer"
-    "ronin-payloads"
-    "ronin-repos"
-    "ronin-vulns"
-    "ronin-web"
-  ];
+
+  gemConfig = defaultGemConfig // {
+    ronin-code-asm = attrs: {
+      dontBuild = false;
+      postPatch = ''
+        substituteInPlace lib/ronin/code/asm/program.rb \
+          --replace "YASM::Command.run(" "YASM::Command.run(
+          command_path: '${yasm}/bin/yasm',"
+      '';
+    };
+  };
 
   passthru.updateScript = bundlerUpdateScript "ronin";
 

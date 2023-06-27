@@ -41,7 +41,7 @@ let
     fetchSubmodules = true;
   };
 
-  update-all-grammars = callPackage ./update.nix {};
+  update-all-grammars = callPackage ./update.nix { };
 
   fetchGrammar = (v: fetchgit { inherit (v) url rev sha256 fetchSubmodules; });
 
@@ -62,6 +62,7 @@ let
           inherit version;
           src = grammar.src or (fetchGrammar grammar);
           location = grammar.location or null;
+          generate = grammar.generate or false;
         };
       grammars' = import ./grammars { inherit lib; } // extraGrammars;
       grammars = grammars' //
@@ -111,7 +112,7 @@ rustPlatform.buildRustPackage {
   inherit src version cargoSha256;
 
   buildInputs =
-    lib.optionals stdenv.isDarwin [ Security CoreServices];
+    lib.optionals stdenv.isDarwin [ Security CoreServices ];
   nativeBuildInputs =
     [ which ]
     ++ lib.optionals webUISupport [ emscripten ];

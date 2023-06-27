@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, writeText, nixosTests }:
+{ lib, stdenvNoCC, fetchurl, nixosTests }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "mediawiki";
   version = "1.39.3";
 
@@ -13,18 +13,14 @@ stdenv.mkDerivation rec {
     sed -i 's|$vars = Installer::getExistingLocalSettings();|$vars = null;|' includes/installer/CliInstaller.php
   '';
 
-  installPhase = let
-    phpConfig = writeText "LocalSettings.php" ''
-      <?php
-        return require(getenv('MEDIAWIKI_CONFIG'));
-      ?>
-    '';
-  in ''
+  installPhase = ''
     runHook preInstall
 
     mkdir -p $out/share/mediawiki
     cp -r * $out/share/mediawiki
-    cp ${phpConfig} $out/share/mediawiki/LocalSettings.php
+    echo "<?php
+      return require(getenv('MEDIAWIKI_CONFIG'));
+    ?>" > $out/share/mediawiki/LocalSettings.php
 
     runHook postInstall
   '';
