@@ -27298,6 +27298,8 @@ with pkgs;
 
   libcgroup = callPackage ../os-specific/linux/libcgroup { };
 
+  libdatachannel = callPackage ../development/libraries/libdatachannel { };
+
   libkrun = callPackage ../development/libraries/libkrun {
     inherit (darwin.apple_sdk.frameworks) Hypervisor;
   };
