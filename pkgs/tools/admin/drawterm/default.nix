@@ -1,7 +1,16 @@
 { stdenv
 , lib
 , fetchgit
+, installShellFiles
 , xorg
+, pkg-config
+, wayland-scanner
+, pipewire
+, wayland
+, wayland-protocols
+, libxkbcommon
+, wlr-protocols
+, config
 }:
 
 stdenv.mkDerivation rec {
@@ -14,24 +23,30 @@ stdenv.mkDerivation rec {
     sha256 = "ebqw1jqeRC0FWeUIO/HaEovuwzU6+B48TjZbVJXByvA=";
   };
 
-  buildInputs = [
-    xorg.libX11
-    xorg.libXt
-  ];
+  nativeBuildInputs = [ installShellFiles ] ++ {
+    linux = [ pkg-config wayland-scanner ];
+    unix = [];
+  }."${config}" or (throw "unsupported CONF");
+
+
+  buildInputs = {
+    linux = [ pipewire wayland wayland-protocols libxkbcommon wlr-protocols ];
+    unix = [ xorg.libX11 xorg.libXt ];
+  }."${config}" or (throw "unsupported CONF");
 
   # TODO: macos
-  makeFlags = [ "CONF=unix" ];
+  makeFlags = [ "CONF=${config}" ];
 
   installPhase = ''
     install -Dm755 -t $out/bin/ drawterm
-    install -Dm644 -t $out/man/man1/ drawterm.1
+    installManPage drawterm.1
   '';
 
   meta = with lib; {
-    description = "Connect to Plan9 CPU servers from other operating systems.";
+    description = "Connect to Plan 9 CPU servers from other operating systems.";
     homepage = "https://drawterm.9front.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ luc65r ];
+    maintainers = with maintainers; [ luc65r moody ];
     platforms = platforms.linux;
   };
 }
