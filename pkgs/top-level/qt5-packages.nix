@@ -154,9 +154,7 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   maui-core = libsForQt5.callPackage ../development/libraries/maui-core { };
 
-  mlt = callPackage ../development/libraries/mlt/qt-5.nix {
-    stdenv = if pkgs.stdenv.isDarwin then pkgs.darwin.apple_sdk_11_0.stdenv else pkgs.stdenv;
-  };
+  mlt = pkgs.darwin.apple_sdk_11_0.callPackage ../development/libraries/mlt/qt-5.nix { };
 
   phonon = callPackage ../development/libraries/phonon { };
 
