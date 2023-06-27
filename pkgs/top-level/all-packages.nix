@@ -7203,6 +7203,8 @@ with pkgs;
 
   ecmtools = callPackage ../tools/cd-dvd/ecm-tools { };
 
+  erofs-utils = callPackage ../tools/filesystems/erofs-utils { };
+
   e2tools = callPackage ../tools/filesystems/e2tools { };
 
   e2fsprogs = callPackage ../tools/filesystems/e2fsprogs { };
@@ -27064,8 +27066,6 @@ with pkgs;
   dsd = callPackage ../applications/radio/dsd { };
 
   dstat = callPackage ../os-specific/linux/dstat { };
-
-  erofs-utils = callPackage ../os-specific/linux/erofs-utils { };
 
   evdev-proto = callPackage ../os-specific/bsd/freebsd/evdev-proto { };
 
