@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "C++ python bytecode disassembler and decompiler";
-    homepage = "https://github.com/zrax/pycdcgpl";
+    homepage = "https://github.com/zrax/pycdc";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ siraben ];
     platforms = platforms.all;
