@@ -15048,6 +15048,10 @@ with pkgs;
 
   crystal2nix = callPackage ../development/compilers/crystal2nix { };
 
+  crystalline = callPackage ../development/tools/language-servers/crystalline {
+    llvmPackages = llvmPackages_15;
+  };
+
   icr = callPackage ../development/tools/icr { };
 
   scry = callPackage ../development/tools/scry { crystal = crystal_1_2; };
