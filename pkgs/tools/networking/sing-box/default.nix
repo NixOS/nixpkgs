@@ -6,6 +6,7 @@
 , buildPackages
 , coreutils
 , nix-update-script
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -58,7 +59,10 @@ buildGoModule rec {
     install -Dm444 -t "$out/lib/systemd/system/" release/config/sing-box{,@}.service
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) sing-box; };
+  };
 
   meta = with lib;{
     homepage = "https://sing-box.sagernet.org";
