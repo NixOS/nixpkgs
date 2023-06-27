@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       SBT, but can also be extended to support any other language or platform via
       modules (written in Java or Scala) or through an external subprocesses.
     '';
-    maintainers = with maintainers; [ scalavision ];
+    maintainers = with maintainers; [ scalavision zenithal ];
     platforms = lib.platforms.all;
   };
 }
