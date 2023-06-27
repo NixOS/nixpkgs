@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, fuse, libuuid, lz4 }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, fuse, util-linux, lz4
+, fuseSupport ? stdenv.isLinux
+}:
 
 stdenv.mkDerivation rec {
   pname = "erofs-utils";
@@ -12,14 +14,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ fuse libuuid lz4 ];
+  buildInputs = [ util-linux lz4 ]
+    ++ lib.optionals fuseSupport [ fuse ];
 
-  configureFlags = [ "--enable-fuse" ];
+  configureFlags = lib.optionals fuseSupport [ "--enable-fuse" ];
 
   meta = with lib; {
     description = "Userspace utilities for linux-erofs file system";
     license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ ehmry ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ ehmry nikstur ];
+    platforms = platforms.unix;
   };
 }

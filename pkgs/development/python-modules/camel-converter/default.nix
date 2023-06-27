@@ -9,16 +9,16 @@
 
 buildPythonPackage rec {
   pname = "camel-converter";
-  version = "3.0.0";
+  version = "3.0.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sanders41";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-SUuSaQU6o2OtjDNrDcO3nS0EZH2ammEkP7AEp4H5ysI=";
+    hash = "sha256-t0wZ03xMNuBEUeXC+DizNSVJmnlt2SH9f0qw6F4UXg8=";
   };
 
   postPatch = ''

@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flowblade";
-  version = "2.8.0.3";
+  version = "2.10.0.2";
 
   src = fetchFromGitHub {
     owner = "jliljebl";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/EkI3qiceB5eKTVQnpG+z4e6yaE9hDtn6I+iN/J+h/g=";
+    sha256 = "sha256-lXMVtWsTyMaGIpEglHvnUgDSaFlnWtB3lSyg6ljNIdQ=";
   };
 
   buildInputs = [
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     makeWrapper $out/flowblade/flowblade $out/bin/flowblade \
       --set FREI0R_PATH ${frei0r}/lib/frei0r-1 \
       --set LADSPA_PATH ${ladspaPlugins}/lib/ladspa \
+      --prefix PATH : "${lib.makeBinPath [ ffmpeg ]}" \
       ''${gappsWrapperArgs[@]}
 
     runHook postInstall

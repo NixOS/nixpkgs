@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "steamship";
-  version = "2.17.7";
+  version = "2.17.11";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NkSyX+ajNFwkgO0Lq4UfrvjADgHXiT2oLp2RCQDJv0w=";
+    hash = "sha256-Jy7ORAMnrBSeDZob3KcAnqhLBI1az/g6s30BYPA0bTE=";
   };
 
   pythonRelaxDeps = [
