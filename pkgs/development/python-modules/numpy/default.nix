@@ -5,6 +5,7 @@
 , gfortran
 , hypothesis
 , pytest
+, pytest-xdist
 , typing-extensions
 , blas
 , lapack
@@ -18,7 +19,7 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 let
   cfg = writeTextFile {
     name = "site.cfg";
-    text = (lib.generators.toINI {} {
+    text = lib.generators.toINI {} {
       ${blas.implementation} = {
         include_dirs = "${lib.getDev blas}/include:${lib.getDev lapack}/include";
         library_dirs = "${blas}/lib:${lapack}/lib";
@@ -35,7 +36,7 @@ let
         library_dirs = "${blas}/lib";
         runtime_library_dirs = "${blas}/lib";
       };
-    });
+    };
   };
 in buildPythonPackage rec {
   pname = "numpy";
@@ -76,6 +77,7 @@ in buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest
+    pytest-xdist
     hypothesis
     typing-extensions
   ];
