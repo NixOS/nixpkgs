@@ -43,6 +43,13 @@ buildPythonPackage rec {
     ++ lib.optionals (lib.versionAtLeast version "7.1.0") [ libxcb ]
     ++ lib.optionals (isPyPy) [ tk libX11 ];
 
+  # In preConfigure below, LDFLAGS is set so setuptools tries to append those
+  # flags to LDSHARED and LDCXXSHARED. Both of those default to the values read
+  # from `sysconfig.get_config_vars()` which contains only the former, not the
+  # latter on PyPy. We set LDCXXSHARED to a dummy empty string here to prevent
+  # failure.
+  LDCXXSHARED = lib.optionalString isPyPy "";
+
   # NOTE: we use LCMS_ROOT as WEBP root since there is not other setting for webp.
   # NOTE: The Pillow install script will, by default, add paths like /usr/lib
   # and /usr/include to the search paths. This can break things when building
