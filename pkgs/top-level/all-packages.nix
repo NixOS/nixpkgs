@@ -12449,6 +12449,8 @@ with pkgs;
 
   sequoia-sqv = callPackage ../tools/security/sequoia-sqv { };
 
+  sequoia-sqop = callPackage ../tools/security/sequoia-sqop { };
+
   sequoia-chameleon-gnupg = callPackage ../tools/security/sequoia-chameleon-gnupg { };
 
   sewer = callPackage ../tools/admin/sewer { };
