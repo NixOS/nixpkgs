@@ -56,6 +56,7 @@ in
 
     systemd.services.sing-box = {
       preStart = ''
+        umask 0077
         mkdir -p /etc/sing-box
         ${utils.genJqSecretsReplacementSnippet cfg.settings "/etc/sing-box/config.json"}
       '';
