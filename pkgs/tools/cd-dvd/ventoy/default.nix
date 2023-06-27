@@ -51,14 +51,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ventoy";
-  version = "1.0.91";
+  version = "1.0.93";
 
-  src = let
-    inherit (finalAttrs) version;
-  in fetchurl {
-    url = "https://github.com/ventoy/Ventoy/releases/download/v${version}/ventoy-${version}-linux.tar.gz";
-    hash = "sha256-9vsFdOxsW1Cs06gVPvQusju2+wp4PpBwbHZUugwb3co=";
-  };
+  src =
+    let
+      inherit (finalAttrs) version;
+    in
+    fetchurl {
+      url = "https://github.com/ventoy/Ventoy/releases/download/v${version}/ventoy-${version}-linux.tar.gz";
+      hash = "sha256-oz5IVq0QsPX90N4EBold2QQ8/CY4XF+KcQ41L+TR4iI=";
+    };
 
   patches = [
     ./000-nixos-sanitization.patch
@@ -112,7 +114,8 @@ stdenv.mkDerivation (finalAttrs: {
       terminal = false;
       categories = [ "Utility" ];
       startupNotify = true;
-    })];
+    })
+  ];
 
   dontConfigure = true;
   dontBuild = true;
@@ -183,7 +186,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.ventoy.net";
     description = "A New Bootable USB Solution";
     longDescription = ''
@@ -200,9 +203,9 @@ stdenv.mkDerivation (finalAttrs: {
       800+ image files are tested.  90%+ distros in DistroWatch supported.
     '';
     changelog = "https://www.ventoy.net/doc_news.html";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "mipsel-linux" ];
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })
