@@ -41077,4 +41077,6 @@ with pkgs;
   reindeer = callPackage ../development/tools/reindeer { };
 
   charasay = callPackage ../tools/misc/charasay { };
+
+  gdlauncher = callPackage ../games/gdlauncher { };
 }
