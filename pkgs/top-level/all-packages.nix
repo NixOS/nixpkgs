@@ -37247,7 +37247,10 @@ with pkgs;
 
   otto-matic = callPackage ../games/otto-matic { };
 
-  openraPackages_2019 = import ../games/openra_2019 pkgs.__splicedPackages;
+  openraPackages_2019 = import ../games/openra_2019 {
+    inherit lib;
+    pkgs = pkgs.__splicedPackages;
+  };
 
   openra_2019 = openraPackages_2019.engines.release;
 
