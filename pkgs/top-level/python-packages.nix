@@ -12528,6 +12528,8 @@ self: super: with self; {
 
   trytond = callPackage ../development/python-modules/trytond { };
 
+  tskit = callPackage ../development/python-modules/tskit { };
+
   ttach = callPackage ../development/python-modules/ttach { };
 
   ttls = callPackage ../development/python-modules/ttls { };
