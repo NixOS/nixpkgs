@@ -7039,6 +7039,8 @@ with pkgs;
     deluged
     deluge;
 
+  deepfilter-ladspa = callPackage ../development/libraries/deepfilter-ladspa { };
+
   deluge-2_x = deluge;
 
   desktop-file-utils = callPackage ../tools/misc/desktop-file-utils { };
