@@ -7203,6 +7203,8 @@ with pkgs;
 
   ecmtools = callPackage ../tools/cd-dvd/ecm-tools { };
 
+  erofs-utils = callPackage ../tools/filesystems/erofs-utils { };
+
   e2tools = callPackage ../tools/filesystems/e2tools { };
 
   e2fsprogs = callPackage ../tools/filesystems/e2fsprogs { };
@@ -9697,6 +9699,8 @@ with pkgs;
   netperf = callPackage ../applications/networking/netperf { };
 
   netsniff-ng = callPackage ../tools/networking/netsniff-ng { };
+
+  networkminer = callPackage ../tools/security/networkminer { };
 
   nixpacks = callPackage ../applications/virtualization/nixpacks { };
 
@@ -12443,9 +12447,7 @@ with pkgs;
 
   seqdiag = with python3Packages; toPythonApplication seqdiag;
 
-  sequoia = callPackage ../tools/security/sequoia {
-    pythonPackages = python3Packages;
-  };
+  sequoia-sq = callPackage ../tools/security/sequoia-sq { };
 
   sequoia-chameleon-gnupg = callPackage ../tools/security/sequoia-chameleon-gnupg { };
 
@@ -13643,6 +13645,8 @@ with pkgs;
 
   usbmuxd2 = callPackage ../tools/misc/usbmuxd2 { };
 
+  usort = with python3Packages; toPythonApplication usort;
+
   ustreamer = callPackage ../applications/video/ustreamer { };
 
   usync = callPackage ../applications/misc/usync { };
@@ -14020,6 +14024,8 @@ with pkgs;
   };
 
   udunits = callPackage ../development/libraries/udunits { };
+
+  ufmt = with python3Packages; toPythonApplication ufmt;
 
   uftp = callPackage ../servers/uftp { };
 
@@ -15041,6 +15047,10 @@ with pkgs;
     crystal;
 
   crystal2nix = callPackage ../development/compilers/crystal2nix { };
+
+  crystalline = callPackage ../development/tools/language-servers/crystalline {
+    llvmPackages = llvmPackages_15;
+  };
 
   icr = callPackage ../development/tools/icr { };
 
@@ -20032,6 +20042,8 @@ with pkgs;
 
   ayatana-ido = callPackage ../development/libraries/ayatana-ido { };
 
+  ayatana-webmail = callPackage ../applications/networking/mailreaders/ayatana-webmail { };
+
   babl = callPackage ../development/libraries/babl { };
 
   backward-cpp = callPackage ../development/libraries/backward-cpp { };
@@ -20688,9 +20700,9 @@ with pkgs;
 
   flyway = callPackage ../development/tools/flyway { };
 
-  inherit (callPackages ../development/libraries/fmt { }) fmt_8 fmt_9;
+  inherit (callPackages ../development/libraries/fmt { }) fmt_8 fmt_9 fmt_10;
 
-  fmt = fmt_9;
+  fmt = fmt_10;
 
   fplll = callPackage ../development/libraries/fplll { };
   fplll_20160331 = callPackage ../development/libraries/fplll/20160331.nix { };
@@ -21529,7 +21541,7 @@ with pkgs;
 
   indicator-sound-switcher = callPackage ../applications/audio/indicator-sound-switcher { };
 
-  indilib = callPackage ../development/libraries/science/astronomy/indilib { };
+  indilib = darwin.apple_sdk_11_0.callPackage ../development/libraries/science/astronomy/indilib { };
   indi-full = callPackage ../development/libraries/science/astronomy/indilib/indi-full.nix { };
 
   inih = callPackage ../development/libraries/inih { };
@@ -21570,6 +21582,7 @@ with pkgs;
 
   ispc = callPackage ../development/compilers/ispc {
     inherit (llvmPackages) stdenv;
+    xcode = darwin.xcode_14;
   };
 
   isso = callPackage ../servers/isso {
@@ -23343,7 +23356,7 @@ with pkgs;
 
   mlc = callPackage ../tools/system/mlc { };
 
-  mlt = callPackage ../development/libraries/mlt { };
+  mlt = darwin.apple_sdk_11_0.callPackage ../development/libraries/mlt { };
 
   mlib = callPackage ../development/libraries/mlib { };
 
@@ -25452,6 +25465,8 @@ with pkgs;
 
   alps = callPackage ../servers/alps { };
 
+  anuko-time-tracker = callPackage ../servers/web-apps/anuko-time-tracker { };
+
   apache-directory-server = callPackage ../servers/ldap/apache-directory-server { };
 
   apacheHttpd_2_4 = callPackage ../servers/http/apache-httpd/2.4.nix {
@@ -27057,8 +27072,6 @@ with pkgs;
 
   dstat = callPackage ../os-specific/linux/dstat { };
 
-  erofs-utils = callPackage ../os-specific/linux/erofs-utils { };
-
   evdev-proto = callPackage ../os-specific/bsd/freebsd/evdev-proto { };
 
   fscryptctl = callPackage ../os-specific/linux/fscryptctl { };
@@ -27291,6 +27304,8 @@ with pkgs;
   libax25 = callPackage ../development/libraries/libax25 { };
 
   libcgroup = callPackage ../os-specific/linux/libcgroup { };
+
+  libdatachannel = callPackage ../development/libraries/libdatachannel { };
 
   libkrun = callPackage ../development/libraries/libkrun {
     inherit (darwin.apple_sdk.frameworks) Hypervisor;
@@ -27759,7 +27774,9 @@ with pkgs;
 
   octomap = callPackage ../development/libraries/octomap { };
 
-  odin = callPackage ../development/compilers/odin { };
+  odin = callPackage ../development/compilers/odin {
+    inherit (pkgs.darwin.apple_sdk_11_0) MacOSX-SDK;
+  };
 
   odp-dpdk = callPackage ../os-specific/linux/odp-dpdk { };
 
@@ -31081,6 +31098,8 @@ with pkgs;
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-beta = wrapFirefox firefox-beta-unwrapped { };
   firefox-devedition = wrapFirefox firefox-devedition-unwrapped { };
+
+  firefox-mobile = callPackage ../applications/networking/browsers/firefox/mobile-config.nix { };
 
   firefox-esr = firefox-esr-102;
   firefox-esr-102 = wrapFirefox firefox-esr-102-unwrapped { };
@@ -37228,7 +37247,10 @@ with pkgs;
 
   otto-matic = callPackage ../games/otto-matic { };
 
-  openraPackages_2019 = import ../games/openra_2019 pkgs.__splicedPackages;
+  openraPackages_2019 = import ../games/openra_2019 {
+    inherit lib;
+    pkgs = pkgs.__splicedPackages;
+  };
 
   openra_2019 = openraPackages_2019.engines.release;
 
@@ -37480,6 +37502,8 @@ with pkgs;
   steamcmd = steamPackages.steamcmd;
 
   steam-acf = callPackage ../tools/games/steam-acf { };
+
+  steamback = python311.pkgs.callPackage ../tools/games/steamback { };
 
   protontricks = python3Packages.callPackage ../tools/package-management/protontricks {
     inherit winetricks steam-run yad;

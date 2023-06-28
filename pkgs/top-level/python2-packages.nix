@@ -71,8 +71,6 @@ with self; with super; {
 
   scandir = callPackage ../development/python2-modules/scandir { };
 
-  sequoia = disabled super.sequoia;
-
   setuptools = callPackage ../development/python2-modules/setuptools { };
 
   setuptools-scm = callPackage ../development/python2-modules/setuptools-scm { };

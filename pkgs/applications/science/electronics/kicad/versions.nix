@@ -25,23 +25,23 @@
   };
   "kicad-unstable" = {
     kicadVersion = {
-      version =			"2023-04-14";
+      version =			"2023-06-24";
       src = {
-        rev =			"4a3f77cd9dac9dc5921eb9beaa63d0d3c9c051e5";
-        sha256 =		"06dsiyvr7zn3cp13w0y63d1qmjlhzsqlvajkximg3pw5mmiljxrr";
+        rev =			"1c1849ec1a6614247abe4c623c086def2b3192e0";
+        sha256 =		"0faf4fw7nrfwdrl4pjqdyfzqbvb9jd4nk4aq83v1w358yqyk7zg9";
       };
     };
     libVersion = {
-      version =			"2023-04-14";
+      version =			"2023-06-24";
       libSources = {
-        symbols.rev =		"38d4e7e1ab6a9b5d9eee85f687e60467753b2135";
-        symbols.sha256 =	"0df6fx9b19v6sxrfyggbisw72y66kiwqi05k8mldsgiw6q55gbkc";
+        symbols.rev =		"43456780d309682f6da4a6f14710355b06fc4c5d";
+        symbols.sha256 =	"1ql2w3q3dv13ascw8s0hzwda486763qma7i2m877jw3p78gjhldr";
         templates.rev =		"867eef383a0f61015cb69677d5c632d78a2ea01a";
         templates.sha256 =	"1qi20mrsfn4fxmr1fyphmil2i9p2nzmwk5rlfchc5aq2194nj3lq";
-        footprints.rev =	"4da055a2d572ff87e7ecea97cf358ed8c1d46dfc";
-        footprints.sha256 =	"1xb84284dmcb7mbvzlrxb4v4km3ih7gq856h8cglf9jn8wzlnvrk";
-        packages3d.rev =	"0f43a0962437feb53bd2083e9f39efffb5a5dd90";
-        packages3d.sha256 =	"1nkk4325jh89vh52ykfnf9pz1k3jk5017gz6r2cia2v4b3jadi31";
+        footprints.rev =	"6a59a2d3940dbab7b3e8254a5b9bf06cc5330301";
+        footprints.sha256 =	"0jlz0ln9vzj1av1fmw8ma8kfqlb8w0r9vrfng19bkc3cgh9lvh9x";
+        packages3d.rev =	"8a2c5c4c85457832f3320902456d066d29561806";
+        packages3d.sha256 =	"0dmssyhqd94d9wj8w7g7xjan560b2rwcs540sgl0rc77cw2jify8";
       };
     };
   };

@@ -1439,6 +1439,12 @@
     githubId = 453170;
     name = "Alastair Pharo";
   };
+  astavie = {
+    email = "astavie@pm.me";
+    github = "astavie";
+    githubId = 7745457;
+    name = "Astavie";
+  };
   astro = {
     email = "astro@spaceboyz.net";
     github = "astro";
@@ -4215,6 +4221,14 @@
     github = "dominikh";
     githubId = 39825;
     name = "Dominik Honnef";
+  };
+  donovanglover = {
+    github = "donovanglover";
+    githubId = 2374245;
+    name = "Donovan Glover";
+    keys = [{
+      fingerprint = "EE7D 158E F9E7 660E 0C33  86B2 8FC5 F7D9 0A5D 8F4D";
+    }];
   };
   doriath = {
     email = "tomasz.zurkowski@gmail.com";
@@ -10585,6 +10599,12 @@
     githubId = 1699466;
     name = "Michael Peyton Jones";
   };
+  michaelshmitty = {
+    name = "Michael Smith";
+    email = "shmitty@protonmail.com";
+    github = "michaelshmitty";
+    githubId = 114845;
+  };
   michalrus = {
     email = "m@michalrus.com";
     github = "michalrus";
@@ -16688,6 +16708,12 @@
     github = "thorstenweber83";
     githubId = 9413924;
     name = "Thorsten Weber";
+  };
+  twesterhout = {
+    name = "Tom Westerhout";
+    matrix = "@twesterhout:matrix.org";
+    github = "twesterhout";
+    githubId = 14264576;
   };
   twey = {
     email = "twey@twey.co.uk";

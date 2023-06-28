@@ -297,6 +297,7 @@ mapAliases ({
   scikitimage = scikit-image; # added 2023-05-14
   scikitlearn = scikit-learn; # added 2021-07-21
   selectors34 = throw "selectors34 has been removed: functionality provided by Python itself; archived by upstream."; # added 2021-06-10
+  sequoia = throw "python3Packages.sequoia was replaced by pysequoia - built from a dedicated repository, with a new API."; # added 2023-06-24
   setuptools_scm = setuptools-scm; # added 2021-06-03
   sharkiqpy = sharkiq; # added 2022-05-21
   ssh-mitm = throw "ssh-mitm was removed in favor of the top-level ssh-mitm"; # added 2023-05-09

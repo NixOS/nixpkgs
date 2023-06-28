@@ -466,6 +466,10 @@ self: super: {
     '';
   });
 
+  executor-nvim = super.executor-nvim.overrideAttrs (old: {
+    dependencies = with self; [ nui-nvim ];
+  });
+
   fcitx-vim = super.fcitx-vim.overrideAttrs (old: {
     passthru.python3Dependencies = ps: with ps; [ dbus-python ];
     meta = {

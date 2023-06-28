@@ -2559,6 +2559,8 @@ self: super: with self; {
 
   diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
 
+  diffimg = callPackage ../development/python-modules/diffimg { };
+
   digital-ocean = callPackage ../development/python-modules/digitalocean { };
 
   digi-xbee = callPackage ../development/python-modules/digi-xbee { };
@@ -4879,6 +4881,8 @@ self: super: with self; {
 
   imageio-ffmpeg = callPackage ../development/python-modules/imageio-ffmpeg { };
 
+  image-diff = callPackage ../development/python-modules/image-diff { };
+
   image-go-nord = callPackage ../development/python-modules/image-go-nord { };
 
   imagesize = callPackage ../development/python-modules/imagesize { };
@@ -4896,6 +4900,8 @@ self: super: with self; {
   img2pdf = callPackage ../development/python-modules/img2pdf { };
 
   imgaug = callPackage ../development/python-modules/imgaug { };
+
+  imgdiff = callPackage ../development/python-modules/imgdiff { };
 
   imgsize = callPackage ../development/python-modules/imgsize { };
 
@@ -6456,6 +6462,8 @@ self: super: with self; {
 
   more-properties = callPackage ../development/python-modules/more-properties { };
 
+  moreorless = callPackage ../development/python-modules/moreorless { };
+
   moretools = callPackage ../development/python-modules/moretools { };
 
   morfessor = callPackage ../development/python-modules/morfessor { };
@@ -7059,6 +7067,8 @@ self: super: with self; {
 
   omegaconf = callPackage ../development/python-modules/omegaconf { };
 
+  omemo-dr = callPackage ../development/python-modules/omemo-dr { };
+
   ome-zarr = callPackage ../development/python-modules/ome-zarr { };
 
   omnikinverter = callPackage ../development/python-modules/omnikinverter { };
@@ -7584,6 +7594,8 @@ self: super: with self; {
 
   phonenumbers = callPackage ../development/python-modules/phonenumbers { };
 
+  pkgutil-resolve-name = callPackage ../development/python-modules/pkgutil-resolve-name { };
+
   micloud = callPackage ../development/python-modules/micloud { };
 
   msgraph-core = callPackage ../development/python-modules/msgraph-core { };
@@ -7822,6 +7834,8 @@ self: super: with self; {
   pysabnzbd = callPackage ../development/python-modules/pysabnzbd { };
 
   pysbd = callPackage ../development/python-modules/pysbd { };
+
+  pysequoia = callPackage ../development/python-modules/pysequoia { };
 
   pyschemes = callPackage ../development/python-modules/pyschemes { };
 
@@ -9693,6 +9707,8 @@ self: super: with self; {
 
   pytest-httpx = callPackage ../development/python-modules/pytest-httpx { };
 
+  pytest-image-diff = callPackage ../development/python-modules/pytest-image-diff { };
+
   pytest-instafail = callPackage ../development/python-modules/pytest-instafail { };
 
   pytest-isort = callPackage ../development/python-modules/pytest-isort { };
@@ -11149,11 +11165,6 @@ self: super: with self; {
 
   seqeval = callPackage ../development/python-modules/seqeval { };
 
-  sequoia = disabledIf isPyPy (toPythonModule (pkgs.sequoia.override {
-    pythonPackages = self;
-    pythonSupport = true;
-  }));
-
   serialio = callPackage ../development/python-modules/serialio { };
 
   serpent = callPackage ../development/python-modules/serpent { };
@@ -11814,6 +11825,8 @@ self: super: with self; {
 
   stdlib-list = callPackage ../development/python-modules/stdlib-list { };
 
+  stdlibs = callPackage ../development/python-modules/stdlibs { };
+
   steamodd = callPackage ../development/python-modules/steamodd { };
 
   steamship = callPackage ../development/python-modules/steamship { };
@@ -12454,6 +12467,8 @@ self: super: with self; {
 
   trackpy = callPackage ../development/python-modules/trackpy { };
 
+  trailrunner = callPackage ../development/python-modules/trailrunner {};
+
   trainer = callPackage ../development/python-modules/trainer {};
 
   traitlets = callPackage ../development/python-modules/traitlets { };
@@ -12710,6 +12725,8 @@ self: super: with self; {
     inherit (pkgs.xorg) libX11 libXext;
   };
 
+  ufmt = callPackage ../development/python-modules/ufmt { };
+
   ufo2ft = callPackage ../development/python-modules/ufo2ft { };
 
   ufoLib2 = callPackage ../development/python-modules/ufoLib2 { };
@@ -12866,6 +12883,8 @@ self: super: with self; {
 
   ush = callPackage ../development/python-modules/ush { };
 
+  usort = callPackage ../development/python-modules/usort { };
+
   utils = callPackage ../development/python-modules/utils { };
 
   uuid = callPackage ../development/python-modules/uuid { };
@@ -12981,6 +13000,8 @@ self: super: with self; {
   vncdo = callPackage ../development/python-modules/vncdo { };
 
   vobject = callPackage ../development/python-modules/vobject { };
+
+  volatile = callPackage ../development/python-modules/volatile { };
 
   volkszaehler = callPackage ../development/python-modules/volkszaehler { };
 

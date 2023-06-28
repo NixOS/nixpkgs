@@ -107,6 +107,7 @@ in {
   allTerminfo = handleTest ./all-terminfo.nix {};
   alps = handleTest ./alps.nix {};
   amazon-init-shell = handleTest ./amazon-init-shell.nix {};
+  anuko-time-tracker = handleTest ./anuko-time-tracker.nix {};
   apcupsd = handleTest ./apcupsd.nix {};
   apfs = runTest ./apfs.nix;
   apparmor = handleTest ./apparmor.nix {};
@@ -645,6 +646,7 @@ in {
   pulseaudio = discoverTests (import ./pulseaudio.nix);
   qboot = handleTestOn ["x86_64-linux" "i686-linux"] ./qboot.nix {};
   qemu-vm-restrictnetwork = handleTest ./qemu-vm-restrictnetwork.nix {};
+  qemu-vm-volatile-root = runTest ./qemu-vm-volatile-root.nix;
   quorum = handleTest ./quorum.nix {};
   quake3 = handleTest ./quake3.nix {};
   qownnotes = handleTest ./qownnotes.nix {};
@@ -686,6 +688,7 @@ in {
   shiori = handleTest ./shiori.nix {};
   signal-desktop = handleTest ./signal-desktop.nix {};
   simple = handleTest ./simple.nix {};
+  sing-box = handleTest ./sing-box.nix {};
   slurm = handleTest ./slurm.nix {};
   smokeping = handleTest ./smokeping.nix {};
   snapcast = handleTest ./snapcast.nix {};
