@@ -2351,6 +2351,8 @@ self: super: with self; {
 
   dask-glm = callPackage ../development/python-modules/dask-glm { };
 
+  dask-histogram = callPackage ../development/python-modules/dask-histogram { };
+
   dask-image = callPackage ../development/python-modules/dask-image { };
 
   dask-jobqueue = callPackage ../development/python-modules/dask-jobqueue { };
