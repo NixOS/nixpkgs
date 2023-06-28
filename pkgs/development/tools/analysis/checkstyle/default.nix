@@ -29,7 +29,8 @@ stdenvNoCC.mkDerivation rec {
       adheres to a coding standard. By default it supports the Sun Code
       Conventions, but is highly configurable.
     '';
-    homepage = "http://checkstyle.sourceforge.net/";
+    homepage = "https://checkstyle.org/";
+    changelog = "https://checkstyle.org/releasenotes.html#Release_${version}";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.lgpl21;
     maintainers = with maintainers; [ pSub ];
