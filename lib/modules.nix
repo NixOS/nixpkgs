@@ -501,10 +501,11 @@ let
       # not their values.  The values are forwarding the result of the
       # evaluation of the option.
       context = name: ''while evaluating the module argument `${name}' in "${key}":'';
-      extraArgs = builtins.mapAttrs (name: _:
-        builtins.addErrorContext (context name)
-          (args.${name} or config._module.args.${name})
-      ) (lib.functionArgs f);
+      extraArgs = zipAttrsWith (_: builtins.head) (mapAttrsToList (name: optional:
+        optionalAttrs (!optional || args?${name} || config._module.args?${name}) {
+          ${name} = builtins.addErrorContext (context name) (args.${name} or config._module.args.${name});
+        }
+      ) (lib.functionArgs f));
 
       # Note: we append in the opposite order such that we can add an error
       # context on the explicit arguments of "args" too. This update
