@@ -6,8 +6,8 @@ index 2416360..08de818 100644
  
  requirements = [
      "requests<3.0",
--    "legendary-gl==0.20.31",
-+    "legendary-gl~=0.20.31",
+-    "legendary-gl==0.20.32",
++    "legendary-gl~=0.20.32",
      "setuptools",
      "wheel",
      "PyQt5",
