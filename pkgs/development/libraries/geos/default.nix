@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "geos";
-  version = "3.11.2";
+  version = "3.12.0";
 
   src = fetchurl {
     url = "https://download.osgeo.org/geos/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-sfB3ZpSBxaPmKv/EnpbrBvKBmHpdNv2rIlIX5bgl5Mw=";
+    hash = "sha256-2W25YBElkXijVVWg9tbnWnOeUqSVprKqXvs9dTkPvDk=";
   };
 
   nativeBuildInputs = [ cmake ];
