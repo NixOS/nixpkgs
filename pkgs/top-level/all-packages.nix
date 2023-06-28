@@ -10953,9 +10953,7 @@ with pkgs;
 
   onlykey = callPackage ../tools/security/onlykey { node_webkit = nwjs; };
 
-  ooniprobe-cli = callPackage ../tools/networking/ooniprobe-cli {
-    buildGoModule = buildGo119Module; # go 1.20 build failure
-  };
+  ooniprobe-cli = callPackage ../tools/networking/ooniprobe-cli { };
 
   openapi-generator-cli = callPackage ../tools/networking/openapi-generator-cli { jre = pkgs.jre_headless; };
   openapi-generator-cli-unstable = callPackage ../tools/networking/openapi-generator-cli/unstable.nix { jre = pkgs.jre_headless; };
