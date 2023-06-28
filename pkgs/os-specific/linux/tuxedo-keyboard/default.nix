@@ -2,13 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname = "tuxedo-keyboard-${kernel.version}";
-  version = "3.2.5";
+  version = "unstable-2023-06-19";
+  # using unstable for now to allow building on linux kernels >= 6.4
+  # switch back to stable once a release containing 04112f65ec4099d43bca8c00acc61f3a2c0e185f is available
 
   src = fetchFromGitHub {
     owner = "tuxedocomputers";
     repo = "tuxedo-keyboard";
-    rev = "v${version}";
-    hash = "sha256-pSGshUyim06Sqkp5QFzhUjeIz/N3aORvVt6DEyzQLaU=";
+    rev = "04112f65ec4099d43bca8c00acc61f3a2c0e185f";
+    hash = "sha256-SkSv9XHIMU+DplzJBegifBB88/AEGSqOf01GX7rtvXM=";
   };
 
   buildInputs = [
