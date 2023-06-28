@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre }:
+{ lib, stdenvNoCC, fetchurl, makeBinaryWrapper, jre }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   version = "10.12.1";
   pname = "checkstyle";
 
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-K6pQjcvofybGEtRz1sTVhP534SoJsChg2psngVMIyrY=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
   buildInputs = [ jre ];
 
   dontUnpack = true;
