@@ -162,6 +162,20 @@ let
         '';
       };
 
+      fprintAuthAfterPassword = mkOption {
+        default = false;
+        type = types.bool;
+        description = lib.mdDoc ''
+          If true, prompt for a password before reading a fingerprint.
+          If `allowNullPassword` is also set to true, then if an
+          empty password is entered, pam will proceed to
+          fingerprint authentication. These two options combined
+          allows use of a password if you cannot `Ctrl+C`
+          fingerprint authentication (due to the
+          lack of a shell).
+        '';
+      };
+
       oathAuth = mkOption {
         default = config.security.pam.oath.enable;
         defaultText = literalExpression "config.security.pam.oath.enable";
@@ -548,9 +562,9 @@ let
           (let yubi = config.security.pam.yubico; in optionalString cfg.yubicoAuth ''
             auth ${yubi.control} ${pkgs.yubico-pam}/lib/security/pam_yubico.so mode=${toString yubi.mode} ${optionalString (yubi.challengeResponsePath != null) "chalresp_path=${yubi.challengeResponsePath}"} ${optionalString (yubi.mode == "client") "id=${toString yubi.id}"} ${optionalString yubi.debug "debug"}
           '') +
-          optionalString cfg.fprintAuth ''
-            auth sufficient ${pkgs.fprintd}/lib/security/pam_fprintd.so
-          '' +
+          (optionalString (cfg.fprintAuth && !cfg.fprintAuthAfterPassword) ''
+            auth sufficient ${fprintd}/lib/security/pam_fprintd.so
+          '') +
           # Modules in this block require having the password set in PAM_AUTHTOK.
           # pam_unix is marked as 'sufficient' on NixOS which means nothing will run
           # after it succeeds. Certain modules need to run after pam_unix
@@ -613,6 +627,9 @@ let
           '' +
           optionalString cfg.unixAuth ''
             auth sufficient pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} ${optionalString cfg.nodelay "nodelay"} likeauth try_first_pass
+          '' +
+          optionalString (cfg.fprintAuth && cfg.fprintAuthAfterPassword) ''
+            auth sufficient ${fprintd}/lib/security/pam_fprintd.so
           '' +
           optionalString cfg.otpwAuth ''
             auth sufficient ${pkgs.otpw}/lib/security/pam_otpw.so
@@ -768,7 +785,7 @@ let
   };
 
 
-  inherit (pkgs) pam_krb5 pam_ccreds;
+  inherit (pkgs) pam_krb5 pam_ccreds fprintd;
 
   use_ldap = (config.users.ldap.enable && config.users.ldap.loginPam);
   pam_ldap = if config.users.ldap.daemon.enable then pkgs.nss_pam_ldapd else pkgs.pam_ldap;
@@ -1313,6 +1330,9 @@ in
       ++ optional config.services.kanidm.enablePam pkgs.kanidm
       ++ optional config.services.sssd.enable pkgs.sssd
       ++ optionals config.security.pam.krb5.enable [pam_krb5 pam_ccreds]
+      ++ optionals
+        (builtins.any (service: service.fprintAuth == true)
+          (builtins.attrValues config.security.pam.services)) [ fprintd ]
       ++ optionals config.security.pam.enableOTPW [ pkgs.otpw ]
       ++ optionals config.security.pam.oath.enable [ pkgs.oath-toolkit ]
       ++ optionals config.security.pam.p11.enable [ pkgs.pam_p11 ]
@@ -1399,7 +1419,7 @@ in
         mr ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so,
       '' +
       optionalString (isEnabled (cfg: cfg.fprintAuth)) ''
-        mr ${pkgs.fprintd}/lib/security/pam_fprintd.so,
+        mr ${fprintd}/lib/security/pam_fprintd.so,
       '' +
       optionalString (isEnabled (cfg: cfg.u2fAuth)) ''
         mr ${pkgs.pam_u2f}/lib/security/pam_u2f.so,
