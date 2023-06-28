@@ -3,7 +3,7 @@ with import <nixpkgs> {};
 
 stdenv.mkDerivation rec {
   pname = "cairo-lang";
-  version = "2.0.0-rc4";
+  version = "2.0.0-rc6";
 
   src = fetchurl {
     url = "https://github.com/starkware-libs/cairo/archive/refs/tags/v${version}.tar.gz";
