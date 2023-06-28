@@ -41112,4 +41112,6 @@ with pkgs;
   reindeer = callPackage ../development/tools/reindeer { };
 
   charasay = callPackage ../tools/misc/charasay { };
+
+  waylyrics = callPackage ../applications/audio/waylyrics { };
 }
