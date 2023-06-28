@@ -951,6 +951,8 @@ with pkgs;
 
   mongosh = callPackage ../development/tools/mongosh { };
 
+  mya = callPackage ../applications/misc/mya { };
+
   mysql-shell = callPackage ../development/tools/mysql-shell {
     inherit (darwin) cctools developer_cmds DarwinTools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
