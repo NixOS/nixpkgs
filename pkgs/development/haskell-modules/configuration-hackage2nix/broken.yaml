@@ -1145,7 +1145,6 @@ broken-packages:
   - dhrun
   - dia-base
   - diagrams-boolean
-  - diagrams-builder
   - diagrams-pdf
   - diagrams-qrcode
   - diagrams-rubiks-cube

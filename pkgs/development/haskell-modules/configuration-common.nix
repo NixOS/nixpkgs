@@ -2697,8 +2697,27 @@ self: super: {
   # https://github.com/kseo/sfnt2woff/issues/1
   sfnt2woff = doJailbreak super.sfnt2woff;
 
-  # 2023-03-05: restrictive bounds on base https://github.com/diagrams/diagrams-gtk/issues/11
-  diagrams-gtk = doJailbreak super.diagrams-gtk;
+  # 2023-06-28: https://github.com/diagrams/diagrams-builder/pull/36
+  diagrams-builder =
+    overrideCabal (drv: assert drv.version == "0.8.0.5" && drv.revision == "5"; {
+      patches = [ ./patches/diagrams-builder-fix-ps.patch ];
+      # Hackage revisions insert CRLF line endings, so we need to convert it
+      # back to LF before applying the patch
+      prePatch = drv.prePatch or "" + ''
+        "${lib.getBin pkgs.buildPackages.dos2unix}/bin/dos2unix" *.cabal
+      '';
+    }) super.diagrams-builder;
+
+  # 2023-07-08: Restrictive upper bound on base: https://github.com/diagrams/diagrams-cairo/pull/80
+  diagrams-cairo = doJailbreak super.diagrams-cairo;
+
+  # 2023-06-28: https://github.com/diagrams/diagrams-pandoc/pull/21
+  # diagrams-pandoc = assert super.diagrams-pandoc.version == "0.3.1"; doJailbreak super.diagrams-pandoc;
+  diagrams-pandoc = assert super.diagrams-pandoc.version == "0.3.1"; appendPatch (pkgs.fetchpatch {
+    url = "https://github.com/diagrams/diagrams-pandoc/pull/21.patch";
+    hash = "sha256-2V7sn614sBkej2T14QOvBkNDoHbMvwI9taiERHWWA4U=";
+  }) super.diagrams-pandoc;
+
 
   # 2023-03-13: restrictive bounds on validation-selective (>=0.1.0 && <0.2).
   # Get rid of this in the next release: https://github.com/kowainik/tomland/commit/37f16460a6dfe4606d48b8b86c13635d409442cd

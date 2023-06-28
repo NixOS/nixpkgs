@@ -1,0 +1,113 @@
+From 17645bc8ef0328c68275ece2747b93677239f81b Mon Sep 17 00:00:00 2001
+From: Berk Ozkutuk <ozkutuk@protonmail.com>
+Date: Mon, 26 Jun 2023 03:21:27 +0200
+Subject: [PATCH] Fix PS backend and support GHC 9.4 for all flags
+
+Fix Postscript backend
+
+- Relax upper bound on diagrams-postscript
+- Fix broken file writing logic
+
+Relax some bounds for GHC 9.4
+
+Allow `lens == 5.2` for all backends
+Allow `base-orphans == 0.9`
+---
+ diagrams-builder.cabal           | 13 +++++++------
+ src/tools/diagrams-builder-ps.hs | 16 +++++++++++++++-
+ 2 files changed, 22 insertions(+), 7 deletions(-)
+
+diff --git a/diagrams-builder.cabal b/diagrams-builder.cabal
+index 189398a..10eae0c 100644
+--- a/diagrams-builder.cabal
++++ b/diagrams-builder.cabal
+@@ -49,7 +49,7 @@ library
+                        Diagrams.Builder.Modules
+                        Diagrams.Builder.CmdLine
+-  build-depends:       base >= 4.10 && < 4.17,
+-                       base-orphans >= 0.3 && < 0.9,
++  build-depends:       base >= 4.10 && < 4.18,
++                       base-orphans >= 0.3 && < 0.10,
+                        mtl >= 2.1 && < 2.3,
+                        diagrams-lib >= 1.4 && < 1.5,
+                        hint >= 0.4 && < 0.10,
+@@ -118,7 +118,7 @@ executable diagrams-builder-cairo
+                        diagrams-lib >= 1.4 && < 1.5,
+                        diagrams-cairo >= 1.4 && < 1.5,
+                        cmdargs >= 0.6 && < 0.11,
+-                       lens >= 4.0 && < 5.2
++                       lens >= 4.0 && < 5.3
+ 
+ executable diagrams-builder-svg
+   main-is:             diagrams-builder-svg.hs
+@@ -157,9 +157,10 @@ executable diagrams-builder-ps
+                        directory,
+                        diagrams-builder,
+                        diagrams-lib >= 1.4 && < 1.5,
+-                       diagrams-postscript >= 1.4 && < 1.5,
++                       diagrams-postscript >= 1.4 && < 1.6,
+                        cmdargs >= 0.6 && < 0.11,
+-                       lens >= 3.8 && < 5.2
++                       lens >= 3.8 && < 5.3,
++                       bytestring >= 0.9.2 && < 0.12
+ 
+ executable diagrams-builder-rasterific
+   main-is:             diagrams-builder-rasterific.hs
+@@ -179,7 +180,7 @@ executable diagrams-builder-rasterific
+                        diagrams-lib >= 1.4 && < 1.5,
+                        diagrams-rasterific >= 1.4 && < 1.5,
+                        cmdargs >= 0.6 && < 0.11,
+-                       lens >= 3.8 && < 5.2,
++                       lens >= 3.8 && < 5.3,
+                        JuicyPixels >= 3.1.5 && < 3.4
+ 
+ executable diagrams-builder-pgf
+@@ -201,5 +202,5 @@ executable diagrams-builder-pgf
+                        diagrams-pgf >= 1.4 && < 1.5,
+                        bytestring >= 0.10.2 && < 0.12,
+                        cmdargs >= 0.6 && < 0.11,
+-                       lens >= 3.8 && < 5.2,
++                       lens >= 3.8 && < 5.3,
+                        texrunner
+diff --git a/src/tools/diagrams-builder-ps.hs b/src/tools/diagrams-builder-ps.hs
+index a852a64..cb892d0 100644
+--- a/src/tools/diagrams-builder-ps.hs
++++ b/src/tools/diagrams-builder-ps.hs
+@@ -1,11 +1,14 @@
+ {-# LANGUAGE DeriveDataTypeable #-}
+ {-# LANGUAGE RecordWildCards    #-}
++{-# LANGUAGE CPP                #-}
+ 
+ module Main where
+ 
++import qualified Data.ByteString.Builder     as B
+ import           System.Directory            (copyFile,
+                                               createDirectoryIfMissing)
+ import qualified System.FilePath             as FP
++import qualified System.IO                   as IO
+ 
+ import           System.Console.CmdArgs
+ 
+@@ -37,10 +40,21 @@ compileExample (Build{..}) = do
+     InterpErr ierr  -> putStrLn ("Error while compiling " ++ srcFile) >>
+                        putStrLn (ppInterpError ierr)
+     Skipped hash    -> copyFile (mkFile (hashToHexStr hash)) outFile
+-    OK hash act     -> do act >> copyFile (mkFile (hashToHexStr hash)) outFile
++    OK hash builder -> do
++      let cached = mkFile (hashToHexStr hash)
++      writeBuilder cached builder
++      copyFile cached outFile
+  where
+    mkFile base = dir FP.</> base FP.<.> "eps"
+ 
++writeBuilder :: FilePath -> B.Builder -> IO ()
++#if MIN_VERSION_bytestring(0,11,2)
++writeBuilder fp b = B.writeFile fp b
++#else
++writeBuilder fp b = IO.withBinaryFile fp IO.WriteMode (`B.hPutBuilder` b)
++#endif
++{-# INLINE writeBuilder #-}
++
+ build :: Build
+ build =
+   defaultBuildOpts
