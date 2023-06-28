@@ -33,6 +33,7 @@
 , gnused ? null
 , cloog ? null # unused; just for compat with gcc4, as we override the parameter on some places
 , buildPackages
+, callPackage
 }:
 
 assert langJava     -> zip != null && unzip != null
@@ -370,5 +371,5 @@ lib.pipe (stdenv.mkDerivation ({
      '';}
 ))
 [
-  (callPackage ../common/libgcc.nix   { inherit version langC langCC langJit targetPlatform hostPlatform withoutTargetLibc; })
+  (callPackage ../common/libgcc.nix   { inherit version langC langCC langJit targetPlatform hostPlatform withoutTargetLibc enableShared; })
 ]

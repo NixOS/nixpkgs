@@ -26,6 +26,7 @@
 , gnused ? null
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , buildPackages
+, callPackage
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -292,5 +293,5 @@ lib.pipe (stdenv.mkDerivation ({
 
 // optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
 )) [
-  (callPackage ../common/libgcc.nix   { inherit version langC langCC langJit targetPlatform hostPlatform withoutTargetLibc; })
+  (callPackage ../common/libgcc.nix   { inherit version langC langCC langJit targetPlatform hostPlatform withoutTargetLibc enableShared; })
 ]

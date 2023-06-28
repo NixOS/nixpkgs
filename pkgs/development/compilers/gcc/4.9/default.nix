@@ -29,6 +29,7 @@
 , withoutTargetLibc ? false
 , gnused ? null
 , buildPackages
+, callPackage
 }:
 
 assert langJava     -> zip != null && unzip != null
@@ -352,5 +353,5 @@ lib.pipe (stdenv.mkDerivation ({
      '';}
 ))
 [
-  (callPackage ../common/libgcc.nix   { inherit version langC langCC langJit targetPlatform hostPlatform withoutTargetLibc; })
+  (callPackage ../common/libgcc.nix   { inherit version langC langCC langJit targetPlatform hostPlatform withoutTargetLibc enableShared; })
 ]
