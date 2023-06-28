@@ -16,14 +16,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cloud-init";
-  version = "23.2";
+  version = "23.2.1";
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "cloud-init";
     rev = "refs/tags/${version}";
-    hash = "sha256-/bhezXS5GunlgID7e/QaTC4UsQ2hDvS5HnG8Wphk64k=";
+    hash = "sha256-2e05ExF6JOeFR0BUd/iCIYV0XoKTgoI7xz20GQ/bmO4=";
   };
 
   patches = [
@@ -127,6 +127,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/canonical/cloud-init";
     description = "Provides configuration and customization of cloud instance";
+    changelog = "https://github.com/canonical/cloud-init/raw/${version}/ChangeLog";
     license = with licenses; [ asl20 gpl3Plus ];
     maintainers = with maintainers; [ illustris jfroche ];
     platforms = platforms.all;
