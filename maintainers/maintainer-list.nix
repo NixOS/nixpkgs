@@ -1790,7 +1790,7 @@
     githubId = 54442153;
   };
   baronleonardo = {
-    name = "Baron Leonardo"
+    name = "Baron Leonardo";
     email = "mohamed.a.elmeligy@protonmail.com";
     github = "baronleonardo";
     githubId = 4940383;
