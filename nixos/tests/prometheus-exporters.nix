@@ -1085,6 +1085,22 @@ let
       '';
     };
 
+    scaphandre = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        boot.kernelModules = [ "intel_rapl_common" ];
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-scaphandre-exporter.service")
+        wait_for_open_port(8080)
+        wait_until_succeeds(
+            "curl -sSf 'localhost:8080/metrics'"
+        )
+      '';
+    };
+
     shelly = {
       exporterConfig = {
         enable = true;
