@@ -71,7 +71,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Replaces the Mach-O Dynamic Library Stub files in Apple's SDKs to reduce the size";
     homepage = "https://github.com/tpoechtrager/apple-libtapi";
-    license = licenses.apsl20;
+    license = licenses.ncsa;
     maintainers = with maintainers; [ matthewbauer ];
   };
 }
