@@ -1719,6 +1719,8 @@ self: super: with self; {
 
   connio = callPackage ../development/python-modules/connio { };
 
+  correctionlib = callPackage ../development/python-modules/correctionlib { };
+
   coqpit = callPackage ../development/python-modules/coqpit { };
 
   cepa = callPackage ../development/python-modules/cepa { };
