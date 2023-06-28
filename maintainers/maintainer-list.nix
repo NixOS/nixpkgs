@@ -3170,6 +3170,12 @@
     name = "Changsheng Wu";
     githubId = 2083950;
   };
+  conni2461 = {
+    email = "simon.hauser@outlook.com";
+    github = "Conni2461";
+    name = "Simon Hauser";
+    githubId = 15233006;
+  };
   connorbaker = {
     email = "connor.baker@tweag.io";
     matrix = "@connorbaker:matrix.org";
