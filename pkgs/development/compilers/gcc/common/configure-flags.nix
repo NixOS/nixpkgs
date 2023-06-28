@@ -135,6 +135,8 @@ let
       # We pick "/" path to effectively avoid sysroot offset and make it work
       # as a native case.
       "--with-build-sysroot=/"
+      # Same with the stdlibc++ headers embedded in the gcc output
+      "--with-gxx-include-dir=${placeholder "out"}/include/c++/${version}/"
     ]
 
     # Basic configuration
