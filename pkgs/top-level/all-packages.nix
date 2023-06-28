@@ -11771,6 +11771,8 @@ with pkgs;
 
   rc = callPackage ../shells/rc { };
 
+  rc-9front = callPackage ../shells/rc-9front { };
+
   rcon = callPackage ../tools/networking/rcon { };
 
   rconc = callPackage ../tools/networking/rconc { };
