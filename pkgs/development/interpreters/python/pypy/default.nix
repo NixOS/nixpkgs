@@ -89,6 +89,11 @@ in with passthru; stdenv.mkDerivation rec {
       src = ./sqlite_paths.patch;
       inherit (sqlite) out dev;
     })
+  ] ++ lib.optionals isPy3k [
+    # fix sitepackages detection adding prefix twice
+    ./site-prefix.patch
+    # fix paths to our site-packages and similar
+    ./sysconfig-paths.patch
   ];
 
   postPatch = ''
@@ -113,16 +118,17 @@ in with passthru; stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,include,lib,${executable}-c}
+    mkdir -p $out/{bin,include,${if isPy38OrNewer then sitePackages else "lib/${libPrefix}/${sitePackages}"},lib/${libPrefix}/bin}
 
-    cp -R {include,lib_pypy,lib-python,${executable}-c} $out/${executable}-c
+    cp -R {include,lib_pypy,lib-python} $out/lib/${libPrefix}
     cp lib${executable}-c${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/
-    ln -s $out/${executable}-c/${executable}-c $out/bin/${executable}
+    cp -R ${executable}-c $out/lib/${libPrefix}/bin
+    ln -s $out/lib/${libPrefix}/bin/${executable}-c $out/bin/${executable}
     ${lib.optionalString isPy39OrNewer "ln -s $out/bin/${executable} $out/bin/pypy3"}
 
     # other packages expect to find stuff according to libPrefix
-    ln -s $out/${executable}-c/include $out/include/${libPrefix}
-    ln -s $out/${executable}-c/lib-python/${if isPy3k then "3" else pythonVersion} $out/lib/${libPrefix}
+    ln -s $out/lib/${libPrefix}/include/${libPrefix} $out/include/${libPrefix}
+    ln -s $out/lib/${libPrefix}/lib-python/${if isPy3k then "3" else pythonVersion} $out/lib/${libPrefix}
 
     # Include a sitecustomize.py file
     cp ${../sitecustomize.py} $out/${if isPy38OrNewer then sitePackages else "lib/${libPrefix}/${sitePackages}"}/sitecustomize.py
@@ -130,12 +136,12 @@ in with passthru; stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  preFixup = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -change @rpath/lib${executable}-c.dylib $out/lib/lib${executable}-c.dylib $out/bin/${executable}
   '' + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
-    mkdir -p $out/${executable}-c/pypy/bin
-    mv $out/bin/${executable} $out/${executable}-c/pypy/bin/${executable}
-    ln -s $out/${executable}-c/pypy/bin/${executable} $out/bin/${executable}
+    mkdir -p $out/lib/${libPrefix}/pypy/bin
+    mv $out/bin/${executable} $out/lib/${libPrefix}/bin/${executable}
+    ln -s $out/lib/${libPrefix}/bin/${executable} $out/bin/${executable}
   '';
 
   setupHook = python-setup-hook sitePackages;
