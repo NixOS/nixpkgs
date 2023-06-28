@@ -646,6 +646,7 @@ in {
   pulseaudio = discoverTests (import ./pulseaudio.nix);
   qboot = handleTestOn ["x86_64-linux" "i686-linux"] ./qboot.nix {};
   qemu-vm-restrictnetwork = handleTest ./qemu-vm-restrictnetwork.nix {};
+  qemu-vm-volatile-root = runTest ./qemu-vm-volatile-root.nix;
   quorum = handleTest ./quorum.nix {};
   quake3 = handleTest ./quake3.nix {};
   qownnotes = handleTest ./qownnotes.nix {};

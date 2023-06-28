@@ -988,29 +988,29 @@ self: super: builtins.intersectAttrs super {
   domaindriven-core = dontCheck super.domaindriven-core;
 
   cachix-api = overrideCabal (drv: {
-    version = "1.5";
+    version = "1.6";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      rev = "v1.5";
-      sha256 = "sha256-bt8FFtDSJpBckx3dIjW5Xdvj8aVCm78R3VTpjK5F3Ac=";
+      rev = "v1.6";
+      sha256 = "sha256-54ujAZYNigAn1oJAfupUtZHa0WRQbCQGLEfLmkw8iFc=";
     };
     postUnpack = "sourceRoot=$sourceRoot/cachix-api";
     postPatch = ''
-      sed -i 's/1.4.2/1.5/' cachix-api.cabal
+      sed -i 's/1.5/1.6/' cachix-api.cabal
     '';
   }) super.cachix-api;
   cachix = overrideCabal (drv: {
-    version = "1.5";
+    version = "1.6";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      rev = "v1.5";
-      sha256 = "sha256-bt8FFtDSJpBckx3dIjW5Xdvj8aVCm78R3VTpjK5F3Ac=";
+      rev = "v1.6";
+      sha256 = "sha256-54ujAZYNigAn1oJAfupUtZHa0WRQbCQGLEfLmkw8iFc=";
     };
     postUnpack = "sourceRoot=$sourceRoot/cachix";
     postPatch = ''
-      sed -i 's/1.4.2/1.5/' cachix.cabal
+      sed -i 's/1.5/1.6/' cachix.cabal
     '';
   }) (lib.pipe
         (super.cachix.override {
@@ -1021,8 +1021,7 @@ self: super: builtins.intersectAttrs super {
         [
          (addBuildTool self.hercules-ci-cnix-store.nixPackage)
          (addBuildTool pkgs.pkg-config)
-         (addBuildDepend self.inline-c-cpp)
-         (addBuildDepend self.hercules-ci-cnix-store)
+         (addBuildDepend self.ascii-progress)
         ]
   );
 

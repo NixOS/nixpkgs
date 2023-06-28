@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "frogmouth";
-  version = "0.6.0";
+  version = "0.7.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "frogmouth";
     rev = "v${version}";
-    hash = "sha256-BgJdcdIgYNZUJLWDgUWIDyiSSAkLdePYus3IYQo/QpY=";
+    hash = "sha256-XKIGZ100aK5ZCsPxxakXhymYXXFYo7S+chMFs7jwXtw=";
   };
 
   nativeBuildInputs = [
@@ -28,6 +28,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "httpx"
     "xdg"
   ];
 
