@@ -36,6 +36,7 @@
 , faiss
 , spacy
 , nltk
+, wikipedia
 , beautifulsoup4
 , tiktoken
 , jinja2
@@ -177,7 +178,7 @@ buildPythonPackage rec {
       transformers
       spacy
       nltk
-      # wikipedia
+      wikipedia
       beautifulsoup4
       tiktoken
       torch
