@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-bluetooth";
-  version = "2.1.8";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "12rasf8wy3cqnfjlm9s2qnx4drzx0w0yviagkng3kspdzm3vzsqy";
+    sha256 = "sha256-t8Sn8NQW7WueinPkJdn8hd0oCJ3uFeRJliggSFHoaZU=";
   };
 
   nativeBuildInputs = [
