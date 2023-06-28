@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "automatic-timezoned";
-  version = "1.0.100";
+  version = "1.0.102";
 
   src = fetchFromGitHub {
     owner = "maxbrunet";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-RyfUJJ4XgC8mNss4mPMxogQ4nL1uvPwDisVPtgF6+OU=";
+    sha256 = "sha256-4iHQ6mYG6DZa5RYPHW791J9kFqMDM9W+T3ufOg43u5g=";
   };
 
-  cargoHash = "sha256-Dp8UUMWAOYdNAljktrMHpPxTIPDCY/VPWA33kzZNCuc=";
+  cargoHash = "sha256-i98kWlkaijWNVycbkqrjo4GrQPz8wmZTO3vQaqukCuI=";
 
   meta = with lib; {
     description = "Automatically update system timezone based on location";
