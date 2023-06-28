@@ -408,14 +408,35 @@ rec {
 
   mkSystem = components:
     assert types.parsedPlatform.check components;
-    assert ((components.kernel == kernels.ghcjs) != (components.cpu == cpuTypes.javascript))
-           -> throw "cpu==\"javascript\" and kernel==\"ghcjs\" are valid only with each other; you attempted to use cpu==\"${components.cpu.name}\" with kernel==\"${components.kernel.name}\"";
-    assert !(lib.elem components.kernel.name (components.abi.kernels or [ components.kernel.name ])) && !(isVc4 components)
-            -> throw "kernel ${components.kernel.name} does not allow abi ${components.abi.name}";
-    assert !(isVc4 components -> (with components; vendor.name == "" && kernel.name == "" && abi.name == "elf"))
-            -> throw (with components; "Broadcom VC4 CPUs may be used only in the grandfathered nonstandard triple `vc4-elf`; you tried to create ${cpu.name}-${vendor.name}-${kernel.name}-${abi.name}");
-    assert !(isJavaScript components -> (with components; (vendor.name == "unknown" || vendor.name == "") && kernel == kernels.ghcjs && abi == abis.unknown))
-            -> throw (with components; "The special `javascript` \"cpu\" may be used only in the grandfathered nonstandard triple `javascript-unknown-ghcjs`; you tried to create ${cpu.name}-${vendor.name}-${kernel.name}-${abi.name}");
+    assert with components;
+      (kernel == kernels.ghcjs) != (cpu == cpuTypes.javascript)
+      -> throw ''
+        cpu "javascript" and kernel "ghcjs" are valid only with each other;
+        you attempted to use cpu "${components.cpu.name}" with kernel
+        "${components.kernel.name}"
+      '';
+    assert with components;
+      !(lib.elem kernel.name (abi.kernels or [ kernel.name ])) &&
+      !(isVc4 components)
+       -> throw ''
+         kernel ${components.kernel.name} does not allow abi ${components.abi.name}
+       '';
+    assert with components;
+      !(isVc4 components -> (with components; vendor.name == "" && kernel.name == "" && abi.name == "elf"))
+       -> throw ''
+         Broadcom VC4 CPUs may be used only in the nonstandard triple "vc4-elf".
+         You tried to create "${cpu.name}-${vendor.name}-${kernel.name}-${abi.name}".
+       '';
+    assert with components;
+      !(isJavaScript components ->
+        (vendor.name == "unknown" || vendor.name == "") &&
+        kernel == kernels.ghcjs &&
+        abi == abis.unknown)
+      -> throw ''
+      The special "javascript" cpu may be used only in the nonstandard triple
+      "javascript-unknown-ghcjs".  You tried to create
+      "${cpu.name}-${vendor.name}-${kernel.name}-${abi.name}"
+      '';
 
     setType "system" components;
 
