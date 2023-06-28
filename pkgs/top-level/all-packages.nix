@@ -37604,6 +37604,8 @@ with pkgs;
 
   trackballs = callPackage ../games/trackballs { };
 
+  try = callPackage ../tools/admin/try { };
+
   tumiki-fighters = callPackage ../games/tumiki-fighters { };
 
   tuxpaint = callPackage ../games/tuxpaint { };
