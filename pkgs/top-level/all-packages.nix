@@ -18360,7 +18360,6 @@ with pkgs;
   bpftools = callPackage ../os-specific/linux/bpftools { };
 
   bcc = callPackage ../os-specific/linux/bcc {
-    python = python3;
     llvmPackages = llvmPackages_14;
   };
 
