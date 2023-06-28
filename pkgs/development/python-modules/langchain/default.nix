@@ -17,6 +17,7 @@
 , bash
   # optional dependencies
 , anthropic
+, clarifai
 , cohere
 , openai
 , nlpcloud
@@ -123,6 +124,7 @@ buildPythonPackage rec {
   passthru.optional-dependencies = {
     llms = [
       anthropic
+      clarifai
       cohere
       openai
       nlpcloud
@@ -139,6 +141,9 @@ buildPythonPackage rec {
     ];
     text_helpers = [
       chardet
+    ];
+    clarifai = [
+      clarifai
     ];
     cohere = [
       cohere
@@ -157,6 +162,7 @@ buildPythonPackage rec {
     ];
     all = [
       anthropic
+      clarifai
       cohere
       openai
       nlpcloud
