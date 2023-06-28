@@ -4366,12 +4366,12 @@
   };
   dsuetin = {
     name = "Danil Suetin";
-    email = "suetin085@gmail.com";
+    email = "suetin085+nixpkgs@protonmail.com";
     matrix = "@dani0854:matrix.org";
     github = "dani0854";
     githubId = 32674935;
     keys = [{
-      fingerprint = "6CC2 D713 6703 0D86 CA29  C71F 23B5 AA6F A374 F2FE";
+      fingerprint = "E033 FE26 0E62 224B B35C  75C9 DE8B 9CED 0696 C600";
     }];
   };
   dsymbol = {
