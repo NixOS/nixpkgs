@@ -6145,6 +6145,8 @@ self: super: with self; {
 
   matplotlib-inline = callPackage ../development/python-modules/matplotlib-inline { };
 
+  matplotlib-sixel = callPackage ../development/python-modules/matplotlib-sixel { };
+
   matplotx = callPackage ../development/python-modules/matplotx { };
 
   matrix-api-async = callPackage ../development/python-modules/matrix-api-async { };
