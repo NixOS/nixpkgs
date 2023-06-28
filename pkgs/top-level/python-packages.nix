@@ -7586,6 +7586,8 @@ self: super: with self; {
 
   pgspecial = callPackage ../development/python-modules/pgspecial { };
 
+  pgvector = callPackage ../development/python-modules/pgvector { };
+
   phe = callPackage ../development/python-modules/phe { };
 
   phik = callPackage ../development/python-modules/phik { };
