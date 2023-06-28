@@ -65,6 +65,7 @@ let
     "redis"
     "rspamd"
     "rtl_433"
+    "scaphandre"
     "script"
     "shelly"
     "snmp"
@@ -300,6 +301,21 @@ in
       message = ''
         Please specify either 'services.prometheus.exporters.sql.configuration' or
           'services.prometheus.exporters.sql.configFile'
+      '';
+    } {
+      assertion = cfg.scaphandre.enable -> (pkgs.stdenv.hostPlatform.isx86_64 == true);
+      message = ''
+        Only x86_64 host platform architecture is not supported.
+      '';
+    } {
+      assertion = cfg.scaphandre.enable -> ((lib.kernel.whenHelpers pkgs.linux.version).whenOlder "5.11" true).condition == false;
+      message = ''
+        A kernel version newer than '5.11' is required. ${pkgs.linux.version}
+      '';
+    } {
+      assertion = cfg.scaphandre.enable -> (builtins.elem "intel_rapl_common" config.boot.kernelModules);
+      message = ''
+        Please enable 'intel_rapl_common' in 'boot.kernelModules'.
       '';
     } ] ++ (flip map (attrNames exporterOpts) (exporter: {
       assertion = cfg.${exporter}.firewallFilter != null -> cfg.${exporter}.openFirewall;
