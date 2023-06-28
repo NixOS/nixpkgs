@@ -804,6 +804,10 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
+  neorg = super.neorg.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim ];
+  });
+
   neo-tree-nvim = super.neo-tree-nvim.overrideAttrs (old: {
     dependencies = with self; [ plenary-nvim nui-nvim ];
   });
