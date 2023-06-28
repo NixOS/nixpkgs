@@ -44,6 +44,7 @@
 , google-api-python-client
 , pypdf
 , networkx
+, pgvector
 , psycopg2
 , boto3
 , pyowm
@@ -189,7 +190,7 @@ buildPythonPackage rec {
       # nomic
       # aleph-alpha-client
       # deeplake
-      # pgvector
+      pgvector
       psycopg2
       boto3
       pyowm
