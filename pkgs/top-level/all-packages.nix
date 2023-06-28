@@ -15685,8 +15685,8 @@ with pkgs;
      then haskell.packages.native-bignum.ghc96
      # Prefer native-bignum to avoid linking issues with gmp
      else if stdenv.hostPlatform.isStatic
-     then haskell.packages.native-bignum.ghc92
-     else haskell.packages.ghc92);
+     then haskell.packages.native-bignum.ghc94
+     else haskell.packages.ghc94);
 
   # haskellPackages.ghc is build->host (it exposes the compiler used to build the
   # set, similarly to stdenv.cc), but pkgs.ghc should be host->target to be more
@@ -15699,8 +15699,8 @@ with pkgs;
   ghc = targetPackages.haskellPackages.ghc or
     # Prefer native-bignum to avoid linking issues with gmp
     (if stdenv.targetPlatform.isStatic
-       then haskell.compiler.native-bignum.ghc92
-       else haskell.compiler.ghc92);
+       then haskell.compiler.native-bignum.ghc94
+       else haskell.compiler.ghc94);
 
   alex = haskell.lib.compose.justStaticExecutables haskellPackages.alex;
 
@@ -17261,7 +17261,7 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
-  jacinda = haskell.lib.compose.justStaticExecutables haskell.packages.ghc92.jacinda;
+  jacinda = haskell.lib.compose.justStaticExecutables haskellPackages.jacinda;
 
   janet = callPackage ../development/interpreters/janet { };
 
