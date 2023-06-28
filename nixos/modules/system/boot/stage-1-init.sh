@@ -3,6 +3,7 @@
 targetRoot=/mnt-root
 console=tty1
 verbose="@verbose@"
+enableRekeyProcedure=false
 
 info() {
     if [[ -n "$verbose" ]]; then
@@ -157,6 +158,12 @@ if [ -d "/.initrd-secrets" ]; then
     for secret in $(cd "/.initrd-secrets"; find . -type f); do
         mkdir -p $(dirname "/$secret")
         cp "/.initrd-secrets/$secret" "$secret"
+
+        # Automatic remediation provisions for the following vulnerability:
+        # https://github.com/NixOS/calamares-nixos-extensions/security/advisories/GHSA-3rvf-24q2-24ww
+        if [ "$secret" == "crypto_keyfile.bin" ] ; then
+            enableRekeyProcedure=true
+        fi
     done
 fi
 
@@ -221,6 +228,9 @@ for o in $(cat /proc/cmdline); do
             ;;
         boot.panic_on_fail|stage1panic=1)
             panicOnFail=1
+            ;;
+        nixos.rekey)
+            enableRekeyProcedure=true
             ;;
         root=*)
             # If a root device is specified on the kernel command

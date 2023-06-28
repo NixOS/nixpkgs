@@ -13,6 +13,18 @@ let
         exit 1
     }
 
+    ask_for_confirmation() {
+      local confirmationMessage="$1"
+      while true; do
+        read -p "$confirmationMessage " yn
+        case $yn in
+          [Yy]* ) return 0;;
+          [Nn]* ) return 1;;
+          * ) echo "Please answer yes or no.";;
+        esac
+      done
+    }
+
     dev_exist() {
         local target="$1"
         if [ -e $target ]; then
@@ -108,6 +120,27 @@ let
   '';
 
   preCommands = ''
+    # Inform we will proceed to rekeying
+    enableRekeyProcedure=true
+    if [ "$enableRekeyProcedure" = true ]; then
+        echo "[1;31m<<< @distroName@ Rekey Procedure will run >>>[0m"
+        echo "[1;31mWe will prompt you the old passphrase and the new passphrase for each LUKS device[0m"
+        echo "[1;31mIf you want to skip rekeying for a specific device, just do xxx[0m"
+        echo "[1;31mYou can refer to all currently available paths such as initrd-secrets[0m"
+        echo "[1;31mPlease ensure you have a backup of your data now or reboot and perform a backup of your valuables[0m"
+        echo "[1;31mWhen the re-encryption process will run, do not shutdown or lose power, otherwise your data might be corrupted, consider yourself warned.[0m"
+        echo "[1;31mYou can do this by using any Linux distribution manually also[0m"
+        echo "[1;31mIf you wonder why the rekeying process got enabled, this might be related to the security vulnerability GHSA-3rvf-24q2-24ww and this is auto-remediation, it will disappear when your bootables won't contain a crypto_keyfile.bin anymore.[0m"
+        while true; do
+          read -p "Do you want to proceed? " yn
+          case $yn in
+            [Yy]* ) break;;
+            [Nn]* ) exit 1;;
+            * ) echo "Please answer yes or no.";;
+          esac
+        done
+    fi
+
     # A place to store crypto things
 
     # A ramfs is used here to ensure that the file used to update
@@ -143,6 +176,11 @@ let
 
   openCommand = name: dev: assert name == dev.name;
   let
+    # TODO: use cipher parameters
+    resilienceMode = "journal";
+    csreencrypt = "cryptsetup reencrypt ${dev.device} --resilience ${resilienceMode}"
+    # FIXME: check what happens with an external header…
+      + optionalString (dev.header != null) " --header=${dev.header} --encrypt";
     csopen = "cryptsetup luksOpen ${dev.device} ${dev.name}"
            + optionalString dev.allowDiscards " --allow-discards"
            + optionalString dev.bypassWorkqueues " --perf-no_read_workqueue --perf-no_write_workqueue"
@@ -156,12 +194,23 @@ let
 
     ${optionalString (dev.header != null) ''
       wait_target "header" ${dev.header} || die "${dev.header} is unavailable"
-    ''}
+      ''}
+
+    rekey_for_current_device() {
+      echo "[1;31m<<< Re-encryption procedure for ${dev.device} will start >>>[0m"
+      if ask_for_confirmation "Run re-encryption?"; then
+        echo "[1;31m<<< Re-encryption procedure for ${dev.device} will now run >>>[0m"
+        perform_csoperation_normally "${csreencrypt}"
+      else
+        echo "[1;31m<<< Re-encryption procedure for ${dev.device} is skipped >>>[0m"
+      fi
+    }
 
     try_empty_passphrase() {
+      local csoperation="$1"
         ${if dev.tryEmptyPassphrase then ''
              echo "Trying empty passphrase!"
-             echo "" | ${csopen}
+             echo -n "" | $csoperation --key-file=-
              cs_status=$?
              if [ $cs_status -eq 0 ]; then
                  return 0
@@ -171,8 +220,8 @@ let
         '' else "return 1"}
     }
 
-
-    do_open_passphrase() {
+    do_csoperation_with_passphrase() {
+        local csoperation="$1"
         local passphrase
 
         while true; do
@@ -202,7 +251,7 @@ let
                 fi
             done
             echo -n "Verifying passphrase for ${dev.device}..."
-            echo -n "$passphrase" | ${csopen} --key-file=-
+            echo -n "$passphrase" | "$csoperation" --key-file=-
             if [ $? == 0 ]; then
                 echo " - success"
                 ${if luks.reusePassphrases then ''
@@ -220,10 +269,11 @@ let
     }
 
     # LUKS
-    open_normally() {
+    perform_csoperation_normally() {
+        local csoperation="$1"
         ${if (dev.keyFile != null) then ''
         if wait_target "key file" ${dev.keyFile}; then
-            ${csopen} --key-file=${dev.keyFile} \
+            $csoperation --key-file=${dev.keyFile} \
               ${optionalString (dev.keyFileSize != null) "--keyfile-size=${toString dev.keyFileSize}"} \
               ${optionalString (dev.keyFileOffset != null) "--keyfile-offset=${toString dev.keyFileOffset}"}
             cs_status=$?
@@ -232,7 +282,7 @@ let
               if ! try_empty_passphrase; then
                 ${if dev.fallbackToPassword then "echo" else "die"} "${dev.keyFile} is unavailable"
                 echo " - failing back to interactive password prompt"
-                do_open_passphrase
+                do_csoperation_with_passphrase "$csoperation"
               fi
             fi
         else
@@ -240,12 +290,12 @@ let
             if ! try_empty_passphrase; then
                ${if dev.fallbackToPassword then "echo" else "die"} "${dev.keyFile} is unavailable"
                echo " - failing back to interactive password prompt"
-               do_open_passphrase
+               do_csoperation_with_passphrase "$csoperation"
             fi
         fi
         '' else ''
            if ! try_empty_passphrase; then
-              do_open_passphrase
+              do_csoperation_with_passphrase "$csoperation"
            fi
         ''}
     }
@@ -376,7 +426,7 @@ let
             do_open_yubikey
         else
             echo "No YubiKey found, falling back to non-YubiKey open procedure"
-            open_normally
+            perform_csoperation_normally "${csopen}"
         fi
     }
     ''}
@@ -441,7 +491,7 @@ let
             do_open_gpg_card
         else
             echo "No GPG Card found, falling back to normal open procedure"
-            open_normally
+            perform_csoperation_normally "${csopen}"
         fi
     }
     ''}
@@ -465,7 +515,7 @@ let
           fido2luks open${optionalString dev.allowDiscards " --allow-discards"} ${dev.device} ${dev.name} "${builtins.concatStringsSep "," fido2luksCredentials}" --await-dev ${toString dev.fido2.gracePeriod} --salt string:$passphrase
         if [ $? -ne 0 ]; then
           echo "No FIDO2 key found, falling back to normal open procedure"
-          open_normally
+          perform_csoperation_normally "${csopen}"
         fi
     }
     ''}
@@ -473,10 +523,14 @@ let
     # commands to run right before we mount our device
     ${dev.preOpenCommands}
 
+    if [ "$enableRekeyProcedure" = true ]; then
+      rekey_for_current_device
+    fi
+
     ${if (luks.yubikeySupport && (dev.yubikey != null)) || (luks.gpgSupport && (dev.gpgCard != null)) || (luks.fido2Support && fido2luksCredentials != []) then ''
     open_with_hardware
     '' else ''
-    open_normally
+    perform_csoperation_normally "${csopen}"
     ''}
 
     # commands to run right after we mounted our device
