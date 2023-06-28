@@ -286,6 +286,7 @@ dont-distribute-packages:
  - MuCheck-SmallCheck
  - MutationOrder
  - NGLess
+ - NTRU
  - NaperianNetCDF
  - NaturalLanguageAlphabets
  - NearContextAlgebra
@@ -676,6 +677,7 @@ dont-distribute-packages:
  - ascii-table
  - ascii-th_1_2_0_0
  - ascii_1_7_0_0
+ - asic
  - assert4hs-hspec
  - assert4hs-tasty
  - assimp
@@ -1116,6 +1118,10 @@ dont-distribute-packages:
  - cryptoids
  - cryptoids-class
  - cryptol
+ - crypton-connection
+ - crypton-x509-store
+ - crypton-x509-system
+ - crypton-x509-validation
  - crystalfontz
  - csound-catalog
  - csound-controllers
@@ -1441,6 +1447,7 @@ dont-distribute-packages:
  - feed-translator
  - feed2lj
  - feed2twitter
+ - feedback
  - fei-base
  - fei-dataiter
  - fei-datasets
@@ -1513,6 +1520,7 @@ dont-distribute-packages:
  - freelude
  - freer-converse
  - fresnel-fused-effects
+ - friday-juicypixels
  - front
  - frpnow-gloss
  - frpnow-gtk
@@ -2268,6 +2276,7 @@ dont-distribute-packages:
  - htsn-import
  - http-client-auth
  - http-client-rustls
+ - http-client-tls_0_3_6_2
  - http-enumerator
  - http2-client-grpc
  - http2-grpc-proto-lens
@@ -2325,6 +2334,7 @@ dont-distribute-packages:
  - ideas-math-types
  - ideas-statistics
  - ige-mac-integration
+ - igrf
  - ihaskell-rlangqq
  - ihttp
  - imap
@@ -2885,6 +2895,7 @@ dont-distribute-packages:
  - nettle-openflow
  - network-anonymous-i2p
  - network-anonymous-tor
+ - network-conduit-tls_1_4_0
  - network-connection
  - network-enumerator
  - network-hans
@@ -3186,6 +3197,7 @@ dont-distribute-packages:
  - protobuf-native
  - protocol-buffers-descriptor
  - protocol-buffers-descriptor-fork
+ - proton
  - psql
  - ptera
  - ptera-core
@@ -3222,6 +3234,7 @@ dont-distribute-packages:
  - queryparser-presto
  - queryparser-vertica
  - queuelike
+ - quic
  - quickbench
  - quickcheck-poly
  - quickcheck-regex
@@ -3429,6 +3442,7 @@ dont-distribute-packages:
  - rose-trie
  - roshask
  - rosmsg-bin
+ - rounded-hw
  - roundtrip-xml
  - route-generator
  - route-planning
@@ -3444,6 +3458,7 @@ dont-distribute-packages:
  - runtime-arbitrary
  - rv
  - s-expression
+ - safe-coloured-text-layout-gen
  - safe-coupling
  - safe-plugins
  - safer-file-handles
@@ -3774,6 +3789,10 @@ dont-distribute-packages:
  - swapper
  - sweet-egison
  - switch
+ - sydtest-amqp
+ - sydtest-webdriver-screenshot
+ - sydtest-webdriver-yesod
+ - sydtest-yesod
  - sylvia
  - sym-plot
  - symantic-atom
@@ -3869,6 +3888,7 @@ dont-distribute-packages:
  - tlex-encoding
  - tlex-th
  - tls-extra
+ - tls_1_7_0
  - tn
  - to-string-instances
  - toboggan
@@ -4084,6 +4104,7 @@ dont-distribute-packages:
  - waldo
  - warp-grpc
  - warp-quic
+ - warp_3_3_27
  - warped
  - wavesurfer
  - wavy
@@ -4144,6 +4165,7 @@ dont-distribute-packages:
  - wumpus-drawing
  - wumpus-microprint
  - wumpus-tree
+ - wuss_2_0_1_4
  - wx
  - wxAsteroids
  - wxFruit
