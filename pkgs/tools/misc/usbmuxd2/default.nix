@@ -1,6 +1,7 @@
 { lib
 , clangStdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , pkg-config
 , libimobiledevice
@@ -16,7 +17,7 @@
       owner = "tihmstar";
       repo = pname;
       rev = "017d71edb0a12ff4fa01a39d12cd297d8b3d8d34";
-      sha256 = "sha256-NrSl/BeKe3wahiYTHGRVSq3PLgQfu76kHCC5ziY7cgQ=";
+      hash = "sha256-NrSl/BeKe3wahiYTHGRVSq3PLgQfu76kHCC5ziY7cgQ=";
     };
     postPatch = ''
       # Set package version so we don't require git
@@ -45,6 +46,14 @@ clangStdenv.mkDerivation rec {
     rev = "753b79eaf317c56df6c8b1fb6da5847cc54a0bb0";
     hash = "sha256-T9bt3KOJwFpdPeFuXfBhkBZNaNzix3Q3D47vASR+fVg=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "libplist-2.3.0-compatibility.patch";
+      url = "https://github.com/tihmstar/usbmuxd2/commit/e527bce2360afc22c95542f1252f94c994f45c72.patch";
+      hash = "sha256-ig4j4z2HH8gitXxZYW9fm74Ix9XmJeX2Lz9HBCuDsuk=";
+    })
+  ];
 
   postPatch = ''
     # Set package version so we don't require git
