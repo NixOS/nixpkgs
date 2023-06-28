@@ -5,6 +5,7 @@
 , mpi4py
 , numpy
 , precice
+, pkgconfig
 , pythonOlder
 }:
 
@@ -24,6 +25,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cython
+    pkgconfig
   ];
 
   propagatedBuildInputs = [
