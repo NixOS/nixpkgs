@@ -171,9 +171,6 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.database.createLocally -> cfg.database.type == "mysql";
-        message = "services.limesurvey.createLocally is currently only supported for database type 'mysql'";
-      }
       { assertion = cfg.database.createLocally -> cfg.database.user == user;
         message = "services.limesurvey.database.user must be set to ${user} if services.limesurvey.database.createLocally is set true";
       }
@@ -220,6 +217,16 @@ in
           ensurePermissions = {
             "${cfg.database.name}.*" = "SELECT, CREATE, INSERT, UPDATE, DELETE, ALTER, DROP, INDEX";
           };
+        }
+      ];
+    };
+
+    services.postgresql = mkIf pgsqlLocal {
+      enable = true;
+      ensureDatabases = [ cfg.database.name ];
+      ensureUsers = [
+        { name = cfg.database.user;
+          ensurePermissions = { "DATABASE ${cfg.database.name}" = "ALL PRIVILEGES"; };
         }
       ];
     };
