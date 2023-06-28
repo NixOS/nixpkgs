@@ -1,16 +1,43 @@
 { lib
 , stdenv
+, version
 , langC
 , langCC
 , langJit
+, targetPlatform
+, hostPlatform
+, crossStageStatic
 }:
 
-let
+drv: lib.pipe drv
+
+([
+
+  (pkg: pkg.overrideAttrs (previousAttrs:
+    lib.optionalAttrs (
+      targetPlatform != hostPlatform &&
+      targetPlatform.libc == "msvcrt" &&
+      crossStageStatic
+    ) {
+      makeFlags = [ "all-gcc" "all-target-libgcc" ];
+      installTargets = "install-gcc install-target-libgcc";
+    }))
+
+] ++
+
+# nixpkgs did not add the "libgcc" output until gcc11.  In theory
+# the following condition can be changed to `true`, but that has not
+# been tested.
+lib.optional (lib.versionAtLeast version "11.0")
+
+(let
   enableLibGccOutput =
     (with stdenv; targetPlatform == hostPlatform) &&
     !langJit &&
     !stdenv.hostPlatform.isDarwin &&
-    !stdenv.hostPlatform.isStatic;
+    !stdenv.hostPlatform.isStatic
+    ;
+
 in
 (pkg: pkg.overrideAttrs (previousAttrs: lib.optionalAttrs ((!langC) || langJit || enableLibGccOutput) {
   outputs = previousAttrs.outputs ++ lib.optionals enableLibGccOutput [ "libgcc" ];
@@ -97,4 +124,5 @@ in
     + ''
       patchelf --set-rpath "" $libgcc/lib/libgcc_s.so.1
     '');
-}))
+}))))
+

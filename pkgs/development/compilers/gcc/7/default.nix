@@ -23,6 +23,7 @@
 , gnused ? null
 , cloog ? null # unused; just for compat with gcc4, as we override the parameter on some places
 , buildPackages
+, callPackage
 }:
 
 # Make sure we get GNU sed.
@@ -148,7 +149,7 @@ let majorVersion = "7";
 
 in
 
-stdenv.mkDerivation ({
+lib.pipe (stdenv.mkDerivation ({
   pname = "${crossNameAddon}${name}";
   inherit version;
 
@@ -298,10 +299,8 @@ stdenv.mkDerivation ({
   };
 }
 
-// optionalAttrs (targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt" && crossStageStatic) {
-  makeFlags = [ "all-gcc" "all-target-libgcc" ];
-  installTargets = "install-gcc install-target-libgcc";
-}
-
 // optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
-)
+))
+[
+  (callPackage ../common/libgcc.nix   { inherit version langC langCC langJit targetPlatform hostPlatform crossStageStatic; })
+]
