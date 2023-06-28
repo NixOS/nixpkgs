@@ -1066,6 +1066,18 @@ benchmark component.
 `dontCoverage drv`
 : Sets the `doCoverage` argument to `false` for `drv`.
 
+`enableExecutableProfiling drv`
+: Sets the `enableExecutableProfiling` argument to `true` for `drv`.
+
+`disableExecutableProfiling drv`
+: Sets the `enableExecutableProfiling` argument to `false` for `drv`.
+
+`enableLibraryProfiling drv`
+: Sets the `enableLibraryProfiling` argument to `true` for `drv`.
+
+`disableLibraryProfiling drv`
+: Sets the `enableLibraryProfiling` argument to `false` for `drv`.
+
 #### Library functions in the Haskell package sets {#haskell-package-set-lib-functions}
 
 Some library functions depend on packages from the Haskell package sets. Thus they are
