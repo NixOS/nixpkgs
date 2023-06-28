@@ -9739,8 +9739,6 @@ self: super: with self; {
 
   pytest-order = callPackage ../development/python-modules/pytest-order { };
 
-  pytest-ordering = callPackage ../development/python-modules/pytest-ordering { };
-
   pytest-param-files = callPackage ../development/python-modules/pytest-param-files { };
 
   pytest-playwright = callPackage ../development/python-modules/pytest-playwright {};
