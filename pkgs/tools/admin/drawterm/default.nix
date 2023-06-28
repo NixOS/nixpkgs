@@ -2,6 +2,7 @@
 , lib
 , fetchgit
 , installShellFiles
+, makeWrapper
 , xorg
 , pkg-config
 , wayland-scanner
@@ -10,6 +11,7 @@
 , wayland-protocols
 , libxkbcommon
 , wlr-protocols
+, pulseaudio
 , config
 }:
 
@@ -25,9 +27,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ installShellFiles ] ++ {
     linux = [ pkg-config wayland-scanner ];
-    unix = [];
+    unix = [ makeWrapper ];
   }."${config}" or (throw "unsupported CONF");
-
 
   buildInputs = {
     linux = [ pipewire wayland wayland-protocols libxkbcommon wlr-protocols ];
@@ -37,10 +38,20 @@ stdenv.mkDerivation rec {
   # TODO: macos
   makeFlags = [ "CONF=${config}" ];
 
-  installPhase = ''
-    install -Dm755 -t $out/bin/ drawterm
-    installManPage drawterm.1
+  installPhase = {
+    linux = ''
+      install -Dm755 -t $out/bin/ drawterm
+    '';
+    unix = ''
+      # wrapping the oss output with pulse seems to be the easiest
+      mv drawterm drawterm.bin
+      install -Dm755 -t $out/bin/ drawterm.bin
+      makeWrapper ${pulseaudio}/bin/padsp $out/bin/drawterm --add-flags $out/bin/drawterm.bin
+     '';
+  }."${config}" or (throw "unsupported CONF")  + ''
+      installManPage drawterm.1
   '';
+
 
   meta = with lib; {
     description = "Connect to Plan 9 CPU servers from other operating systems.";
