@@ -1943,6 +1943,12 @@
     github = "beardhatcode";
     githubId = 662538;
   };
+  beeb = {
+    name = "Valentin Bersier";
+    email = "hi@beeb.li";
+    github = "beeb";
+    githubId = 703631;
+  };
   beezow = {
     name = "beezow";
     email = "zbeezow@gmail.com";
