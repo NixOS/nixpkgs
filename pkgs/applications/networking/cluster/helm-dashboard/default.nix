@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "helm-dashboard";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "komodorio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ukapQRTn19sNTnJ0PHc8sp8x+k1qFb3ioHZHvVtToVU=";
+    sha256 = "sha256-hjIo2AEXNcFK0z4op59NnC2R8GspF5t808DZ72AxgMw=";
   };
 
   vendorHash = "sha256-ROffm1SGYnhUcp46nzQ951eaeQdO1pb+f8AInm0eSq0=";
