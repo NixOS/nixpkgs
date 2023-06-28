@@ -192,6 +192,8 @@ self: super: builtins.intersectAttrs super {
   # Link the proper version.
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
 
+  threadscope = enableSeparateBinOutput super.threadscope;
+
   # Use the default version of mysql to build this package (which is actually mariadb).
   # test phase requires networking
   mysql = dontCheck super.mysql;
@@ -214,6 +216,55 @@ self: super: builtins.intersectAttrs super {
     '';
   }) super.nvvm;
 
+  # hledger* overrides
+  inherit (
+    let
+      # Copy hledger man pages from the source tarball into the proper place.
+      # It always contains the relevant man page(s) at the top level. For
+      # hledger it additionally has all the other man pages in embeddedfiles/
+      # which we ignore.
+      installHledgerManPages = overrideCabal (drv: {
+        buildTools = drv.buildTools or [] ++ [
+          pkgs.buildPackages.installShellFiles
+        ];
+        postInstall = ''
+          for i in $(seq 1 9); do
+            installManPage *.$i
+          done
+
+          install -v -Dm644 *.info* -t "$out/share/info/"
+        '';
+      });
+
+      hledgerWebTestFix = overrideCabal (drv: {
+        preCheck = ''
+          ${drv.preCheck or ""}
+          export HOME="$(mktemp -d)"
+        '';
+      });
+    in
+    {
+      hledger = installHledgerManPages super.hledger;
+      hledger-web = installHledgerManPages (hledgerWebTestFix super.hledger-web);
+      hledger-ui = installHledgerManPages super.hledger-ui;
+
+      hledger_1_30_1 = installHledgerManPages
+        (doDistribute (super.hledger_1_30_1.override {
+          hledger-lib = self.hledger-lib_1_30;
+        }));
+      hledger-web_1_30 = installHledgerManPages (hledgerWebTestFix
+        (doDistribute (super.hledger-web_1_30.override {
+          hledger = self.hledger_1_30_1;
+          hledger-lib = self.hledger-lib_1_30;
+        })));
+    }
+  ) hledger
+    hledger-web
+    hledger-ui
+    hledger_1_30_1
+    hledger-web_1_30
+    ;
+
   cufft = overrideCabal (drv: {
     preConfigure = ''
       export CUDA_PATH=${pkgs.cudatoolkit}
@@ -232,6 +283,13 @@ self: super: builtins.intersectAttrs super {
   sfml-audio = appendConfigureFlag "--extra-include-dirs=${pkgs.openal}/include/AL" super.sfml-audio;
 
   # avoid compiling twice by providing executable as a separate output (with small closure size)
+  cabal-fmt = enableSeparateBinOutput super.cabal-fmt;
+  hindent = enableSeparateBinOutput super.hindent;
+  releaser  = enableSeparateBinOutput super.releaser;
+  eventlog2html = enableSeparateBinOutput super.eventlog2html;
+  ghc-debug-brick  = enableSeparateBinOutput super.ghc-debug-brick;
+  nixfmt  = enableSeparateBinOutput super.nixfmt;
+  calligraphy = enableSeparateBinOutput super.calligraphy;
   niv = enableSeparateBinOutput (self.generateOptparseApplicativeCompletions [ "niv" ] super.niv);
   ghcid = enableSeparateBinOutput super.ghcid;
   ormolu = self.generateOptparseApplicativeCompletions [ "ormolu" ] (enableSeparateBinOutput super.ormolu);
@@ -264,18 +322,18 @@ self: super: builtins.intersectAttrs super {
   gio = lib.pipe super.gio
     [ (disableHardening ["fortify"])
       (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools)
-      (addPkgconfigDepends (with pkgs; [ glib pcre2 util-linux pcre ]
-                                       ++ (if pkgs.stdenv.isLinux then [libselinux libsepol] else [])))
+      (addPkgconfigDepends (with pkgs; [ glib pcre2 pcre ]
+                                       ++ lib.optionals pkgs.stdenv.isLinux [ util-linux libselinux libsepol ]))
     ];
   glib = disableHardening ["fortify"] (addPkgconfigDepend pkgs.glib (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools super.glib));
   gtk3 = disableHardening ["fortify"] (super.gtk3.override { inherit (pkgs) gtk3; });
   gtk = lib.pipe super.gtk (
     [ (disableHardening ["fortify"])
       (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools)
-      (addPkgconfigDepends (with pkgs; [ gtk2 pcre2 util-linux pcre fribidi
+      (addPkgconfigDepends (with pkgs; [ gtk2 pcre2 pcre fribidi
                                          libthai libdatrie xorg.libXdmcp libdeflate
                                         ]
-                                       ++ (if pkgs.stdenv.isLinux then [libselinux libsepol] else [])))
+                                       ++ lib.optionals pkgs.stdenv.isLinux [ util-linux libselinux libsepol ]))
     ] ++
     ( if pkgs.stdenv.isDarwin then [(appendConfigureFlag "-fhave-quartz-gtk")] else [] )
   );
@@ -970,7 +1028,8 @@ self: super: builtins.intersectAttrs super {
         wrapProgram "$out/bin/nvfetcher" --prefix 'PATH' ':' "${
           pkgs.lib.makeBinPath [
             pkgs.nvchecker
-            pkgs.nix-prefetch
+            pkgs.nix # nix-prefetch-url
+            pkgs.nix-prefetch-git
             pkgs.nix-prefetch-docker
           ]
         }"
@@ -1239,4 +1298,9 @@ self: super: builtins.intersectAttrs super {
   # Disable checks to break dependency loop with SCalendar
   scalendar = dontCheck super.scalendar;
 
+  halide-haskell = super.halide-haskell.override { Halide = pkgs.halide; };
+  # Sydtest has a brittle test suite that will only work with the exact
+
+  # versions that it ships with.
+  sydtest = dontCheck super.sydtest;
 }

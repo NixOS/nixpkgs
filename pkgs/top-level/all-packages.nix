@@ -39839,7 +39839,7 @@ with pkgs;
 
   alejandra = callPackage ../tools/nix/alejandra { };
 
-  nixfmt = haskell.lib.compose.justStaticExecutables haskellPackages.nixfmt;
+  nixfmt = haskellPackages.nixfmt.bin;
 
   nixpkgs-fmt = callPackage ../tools/nix/nixpkgs-fmt { };
 
