@@ -109,6 +109,14 @@ in
 
       package = mkPackageOption pkgs "searx" { };
 
+      enableRedis = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Wether to enable redis which is required for eg. the limiter component.
+        '';
+      };
+
       runInUwsgi = mkOption {
         type = types.bool;
         default = false;
@@ -147,6 +155,11 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
+
+    redis.servers.searx = lib.mkIf config.services.searx.enableRedis {
+      enable = true;
+      user = "searx";
+    };
 
     users.users.searx =
       { description = "Searx daemon user";
@@ -194,6 +207,8 @@ in
     services.searx.settings = {
       # merge NixOS settings with defaults settings.yml
       use_default_settings = mkDefault true;
+    } // lib.optionalAttrs cfg.enableRedis {
+      redis.url = "unix://${config.services.redis.servers.searx.unixSocket}";
     };
 
     services.uwsgi = mkIf (cfg.runInUwsgi) {
