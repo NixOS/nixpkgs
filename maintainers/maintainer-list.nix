@@ -5797,12 +5797,6 @@
     githubId = 34658064;
     name = "Grace Dinh";
   };
-  passivelemon = {
-    email = "jeremyseber@gmail.com";
-    github = "PassiveLemon";
-    githubId = 72527881;
-    name = "PassiveLemon";
-  };
   gebner = {
     email = "gebner@gebner.org";
     github = "gebner";
