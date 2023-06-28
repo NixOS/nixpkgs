@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    glib
     pkg-config
   ];
 
   buildInputs = [
+    glib
     libxfce4ui
     gtk3
     polkit
