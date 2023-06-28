@@ -36,12 +36,8 @@ in
 {
 
   imports = [
-    (mkRenamedOptionModule
-      [ "services" "searx" "configFile" ]
-      [ "services" "searx" "settingsFile" ])
+    (mkRenamedOptionModule [ "services" "searx" "configFile" ] [ "services" "searx" "settingsFile" ])
   ];
-
-  ###### interface
 
   options = {
 
@@ -111,12 +107,7 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.searx;
-        defaultText = literalExpression "pkgs.searx";
-        description = lib.mdDoc "searx package to use.";
-      };
+      package = mkPackageOption pkgs "searx" { };
 
       runInUwsgi = mkOption {
         type = types.bool;
@@ -153,9 +144,6 @@ in
     };
 
   };
-
-
-  ###### implementation
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
