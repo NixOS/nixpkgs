@@ -22,10 +22,6 @@ in
     system.systemBuilderArgs = {
       activationScript = config.system.activationScripts.script;
       dryActivationScript = config.system.dryActivationScript;
-      installBootLoader = config.system.build.installBootLoader;
-      localeArchive = "${config.i18n.glibcLocales}/lib/locale/locale-archive";
-      distroId = config.system.nixos.distroId;
-      perl = pkgs.perl.withPackages (p: with p; [ ConfigIniFiles FileSlurp ]);
     };
 
     system.systemBuilderCommands = ''

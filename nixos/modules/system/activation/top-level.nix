@@ -336,6 +336,16 @@ in
         '';
 
     system.systemBuilderArgs = {
+
+      # Legacy environment variables. These were used by the activation script,
+      # but some other script might still depend on them, although unlikely.
+      installBootLoader = config.system.build.installBootLoader;
+      localeArchive = "${config.i18n.glibcLocales}/lib/locale/locale-archive";
+      distroId = config.system.nixos.distroId;
+      perl = pkgs.perl.withPackages (p: with p; [ ConfigIniFiles FileSlurp ]);
+      # End if legacy environment variables
+
+
       # Not actually used in the builder. `passedChecks` is just here to create
       # the build dependencies. Checks are similar to build dependencies in the
       # sense that if they fail, the system build fails. However, checks do not
