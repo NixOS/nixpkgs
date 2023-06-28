@@ -14,7 +14,7 @@
 }:
 
 let
-  version = "4.7.8";
+  version = "4.8.7";
   geph-meta = with lib; {
     description = "A modular Internet censorship circumvention system designed specifically to deal with national filtering.";
     homepage = "https://geph.io";
@@ -31,10 +31,10 @@ in
       owner = "geph-official";
       repo = pname;
       rev = "v${version}";
-      hash = "sha256-DVGbLyFgraQMSIUAqDehF8DqbnvcaeWbuLVgiSQY3KE=";
+      hash = "sha256-E65gHTNX+KqpecdZn6GvDdkpcwmy+HD/8aNwfELot8E=";
     };
 
-    cargoHash = "sha256-uBq6rjUnKEscwhu60HEZffLvuXcArz+AiR52org+qKw=";
+    cargoHash = "sha256-RKSjYyhUck91lg1pk4ZGEhU0nztwcd4b7G3OFsAtx9M=";
 
     nativeBuildInputs = [ perl ];
 
