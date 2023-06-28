@@ -39455,6 +39455,8 @@ with pkgs;
 
   gummy = callPackage ../tools/misc/gummy { };
 
+  hashpump = callPackage ../tools/misc/hashpump { };
+
   hck = callPackage ../tools/text/hck { };
 
   helm = callPackage ../applications/audio/helm { };
