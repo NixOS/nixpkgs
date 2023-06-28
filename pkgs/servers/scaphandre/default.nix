@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage rec {
     description = "Electrical power consumption metrology agent";
     homepage = "https://github.com/hubblo-org/scaphandre";
     license = licenses.asl20;
-    platforms = platforms.linux;
+    platforms = with platforms; [ "x86_64-linux"];
     maintainers = with maintainers; [ gaelreyrol ];
   };
 }

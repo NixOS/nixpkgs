@@ -103,6 +103,9 @@ in {
 
       ./nixbuild.patch
       # Load libraries at runtime by absolute path
+
+      ./extra-mangling.patch
+      # Mangle store paths of modules to prevent runtime dependence.
     ] ++ lib.optional (!stdenv.hostPlatform.isWindows) ./toLocation.patch;
 
     configurePhase = ''

@@ -12449,6 +12449,10 @@ with pkgs;
 
   sequoia-sq = callPackage ../tools/security/sequoia-sq { };
 
+  sequoia-sqv = callPackage ../tools/security/sequoia-sqv { };
+
+  sequoia-sqop = callPackage ../tools/security/sequoia-sqop { };
+
   sequoia-chameleon-gnupg = callPackage ../tools/security/sequoia-chameleon-gnupg { };
 
   sewer = callPackage ../tools/admin/sewer { };
@@ -36800,6 +36804,7 @@ with pkgs;
   };
 
   devilutionx = callPackage ../games/devilutionx {
+    fmt = fmt_9;
     SDL2 = SDL2.override {
       withStatic = true;
     };
@@ -38937,9 +38942,7 @@ with pkgs;
   gap-full = lowPrio (gap.override { packageSet = "full"; });
 
   geogebra = callPackage ../applications/science/math/geogebra { };
-  geogebra6 = callPackage ../applications/science/math/geogebra/geogebra6.nix {
-    electron = electron_14;
-   };
+  geogebra6 = callPackage ../applications/science/math/geogebra/geogebra6.nix { };
 
   maxima = callPackage ../applications/science/math/maxima {
     lisp-compiler = sbcl;
@@ -40621,7 +40624,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
   };
 
-  spdlog = callPackage ../development/libraries/spdlog { };
+  spdlog = callPackage ../development/libraries/spdlog {
+    fmt = fmt_9;
+  };
 
   dart = callPackage ../development/compilers/dart { };
 

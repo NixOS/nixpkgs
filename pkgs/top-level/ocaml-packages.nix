@@ -56,8 +56,6 @@ let
 
     awa = callPackage ../development/ocaml-modules/awa { mtime = mtime_1; };
 
-    awa-lwt = callPackage ../development/ocaml-modules/awa/lwt.nix { mtime = mtime_1; };
-
     awa-mirage = callPackage ../development/ocaml-modules/awa/mirage.nix { mtime = mtime_1; };
 
     ### B ###

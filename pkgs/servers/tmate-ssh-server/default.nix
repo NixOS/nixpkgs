@@ -10,26 +10,45 @@
 , libevent
 , ncurses
 , ruby
-, msgpack
+, msgpack-c
 , libssh
 , nixosTests
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tmate-ssh-server";
-  version = "unstable-2021-10-17";
+  version = "unstable-2023-06-02";
 
   src = fetchFromGitHub {
     owner = "tmate-io";
     repo = "tmate-ssh-server";
-    rev = "1f314123df2bb29cb07427ed8663a81c8d9034fd";
-    sha256 = "sha256-9/xlMvtkNWUBRYYnJx20qEgtEcjagH2NtEKZcDOM1BY=";
+    rev = "d7334ee4c3c8036c27fb35c7a24df3a88a15676b";
+    sha256 = "sha256-V3p0vagt13YjQPdqpbSatx5DnIEXL4t/kfxETSFYye0=";
   };
 
-  dontUseCmakeConfigure = true;
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace 'msgpack >= 1.2.0' 'msgpack-c >= 1.2.0'
+  '';
 
-  buildInputs = [ libtool zlib openssl libevent ncurses ruby msgpack libssh ];
-  nativeBuildInputs = [ autoreconfHook cmake pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    cmake
+    pkg-config
+  ];
+
+  buildInputs = [
+    libtool
+    zlib
+    openssl
+    libevent
+    ncurses
+    ruby
+    msgpack-c
+    libssh
+  ];
+
+  dontUseCmakeConfigure = true;
 
   passthru.tests.tmate-ssh-server = nixosTests.tmate-ssh-server;
 
