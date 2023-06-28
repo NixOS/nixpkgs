@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ncopa/xfce-polkit";
     license = [ licenses.gpl2Plus ];
     platforms = platforms.unix;
-    maintainers = teams.xfce.members ++ with maintainers; [ baronleonardo ];
+    maintainers = teams.xfce.members ++ (with maintainers; [ baronleonardo ]);
   };
 }
