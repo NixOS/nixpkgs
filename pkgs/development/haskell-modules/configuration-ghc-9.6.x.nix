@@ -74,7 +74,6 @@ self: super: {
   th-abstraction = doDistribute self.th-abstraction_0_5_0_0;
   th-desugar = doDistribute self.th-desugar_1_15;
   turtle = doDistribute self.turtle_1_6_1;
-  aeson = doDistribute self.aeson_2_1_2_1;
   memory = doDistribute self.memory_0_18_0;
   semigroupoids = doDistribute self.semigroupoids_6_0_0_1;
   bifunctors = doDistribute self.bifunctors_5_6_1;

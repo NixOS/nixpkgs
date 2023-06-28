@@ -69,7 +69,6 @@ in {
 
   # Jailbreaks & Version Updates
 
-  aeson = doDistribute self.aeson_2_1_2_1;
   assoc = doJailbreak super.assoc;
   async = doJailbreak super.async;
   base64-bytestring = doJailbreak super.base64-bytestring;

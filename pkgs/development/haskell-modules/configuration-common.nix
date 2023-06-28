@@ -188,10 +188,8 @@ self: super: {
     in
     {
       aeson = aesonQuickCheckPatch super.aeson;
-      aeson_2_1_2_1 = aesonQuickCheckPatch super.aeson_2_1_2_1;
     }
   ) aeson
-    aeson_2_1_2_1
     ;
 
   # 2023-06-28: Test error: https://hydra.nixos.org/build/225565149
