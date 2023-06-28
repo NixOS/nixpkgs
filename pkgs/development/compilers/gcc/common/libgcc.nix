@@ -4,6 +4,7 @@
 , langC
 , langCC
 , langJit
+, enableShared
 , targetPlatform
 , hostPlatform
 , withoutTargetLibc
@@ -18,7 +19,7 @@ drv: lib.pipe drv
   (pkg: pkg.overrideAttrs (previousAttrs:
     lib.optionalAttrs (
       targetPlatform != hostPlatform &&
-      targetPlatform.libc == "msvcrt" &&
+      enableShared &&
       withoutTargetLibc
     ) {
       makeFlags = [ "all-gcc" "all-target-libgcc" ];
@@ -33,11 +34,15 @@ drv: lib.pipe drv
 lib.optional (lib.versionAtLeast version "11.0")
 
 (let
+  targetPlatformSlash =
+    if hostPlatform.config == targetPlatform.config
+    then ""
+    else "${targetPlatform.config}/";
+
   enableLibGccOutput =
-    (with stdenv; targetPlatform == hostPlatform) &&
     !langJit &&
     !stdenv.hostPlatform.isDarwin &&
-    !stdenv.hostPlatform.isStatic
+    enableShared
     ;
 
 in
@@ -52,6 +57,10 @@ in
     lib.optionalString (!langC) ''
       rm -f $out/lib/libgcc_s.so*
     ''
+    + lib.optionalString (hostPlatform.config != targetPlatform.config) ''
+      mkdir -p $lib/lib/
+      ln -s ${targetPlatformSlash}lib $lib/lib
+    ''
 
     # TODO(amjoseph): remove the `libgcc_s.so` symlinks below and replace them
     # with a `-L${gccForLibs.libgcc}/lib` in cc-wrapper's
@@ -64,10 +73,10 @@ in
     + lib.optionalString enableLibGccOutput (''
       # move libgcc from lib to its own output (libgcc)
       mkdir -p $libgcc/lib
-      mv    $lib/lib/libgcc_s.so      $libgcc/lib/
-      mv    $lib/lib/libgcc_s.so.1    $libgcc/lib/
-      ln -s $libgcc/lib/libgcc_s.so   $lib/lib/
-      ln -s $libgcc/lib/libgcc_s.so.1 $lib/lib/
+      mv    $lib/${targetPlatformSlash}lib/libgcc_s.so      $libgcc/lib/
+      mv    $lib/${targetPlatformSlash}lib/libgcc_s.so.1    $libgcc/lib/
+      ln -s $libgcc/lib/libgcc_s.so   $lib/${targetPlatformSlash}lib/
+      ln -s $libgcc/lib/libgcc_s.so.1 $lib/${targetPlatformSlash}lib/
     ''
     #
     # Nixpkgs ordinarily turns dynamic linking into pseudo-static linking:
