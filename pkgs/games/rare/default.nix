@@ -19,7 +19,7 @@ buildPythonApplication rec {
     owner = "Dummerle";
     repo = "Rare";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-7KER9gCpqjEKikQTVHsvwX6efCb9L0ut6OBjjLBW2tI=";
+    hash = "sha256-7KER9gCpqjEKikQTVHsvwX6efCb9L0ut6OBjjLBW2tI=";
   };
 
   nativeBuildInputs = [
