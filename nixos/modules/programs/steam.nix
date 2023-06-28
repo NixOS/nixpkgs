@@ -106,6 +106,23 @@ in {
         };
       };
     };
+
+    extraCompatPackages = mkOption {
+      type = with types; listOf package;
+      default = [];
+      defaultText = literalExpression "[]";
+      example = literalExpression ''
+        with pkgs; [
+          luxtorpeda
+          proton-ge
+        ]
+      '';
+      description = lib.mdDoc ''
+        Extra packages to be used as compatibility tools for Steam on Linux. Packages will be included
+        in the `STEAM_EXTRA_COMPAT_TOOLS_PATHS` environmental variable. For more information see
+        <https://github.com/ValveSoftware/steam-for-linux/issues/6310">.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -132,6 +149,12 @@ in {
     hardware.pulseaudio.support32Bit = config.hardware.pulseaudio.enable;
 
     hardware.steam-hardware.enable = true;
+
+    # Append the extra compatibility packages to whatever else the env variable was populated with.
+    # For more information see https://github.com/ValveSoftware/steam-for-linux/issues/6310#issuecomment-511630263
+    environment.sessionVariables = mkIf (cfg.extraCompatPackages != []) {
+      STEAM_EXTRA_COMPAT_TOOLS_PATHS = strings.makeBinPath cfg.extraCompatPackages;
+    };
 
     environment.systemPackages = [
       cfg.package
