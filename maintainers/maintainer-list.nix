@@ -2524,7 +2524,7 @@
   };
   cafkafk = {
     email = "christina@cafkafk.com";
-    matrix = "@cafkafk:matrix.cafkafk.com";
+    matrix = "@cafkafk:m.cafkafk.com";
     name = "Christina Sørensen";
     github = "cafkafk";
     githubId = 89321978;
@@ -13188,6 +13188,12 @@
     github = "progval";
     githubId = 406946;
     name = "Valentin Lorentz";
+  };
+  proofconstruction = {
+    email = "source@proof.construction";
+    github = "proofconstruction";
+    githubId = 74747193;
+    name = "Alexander Groleau";
   };
   proofofkeags = {
     email = "keagan.mcclelland@gmail.com";

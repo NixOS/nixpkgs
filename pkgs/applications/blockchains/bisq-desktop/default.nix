@@ -16,7 +16,7 @@
 }:
 
 let
-  bisq-launcher = writeScript "bisq-launcher" ''
+  bisq-launcher = args: writeScript "bisq-launcher" ''
     #! ${bash}/bin/bash
 
     # This is just a comment to convince Nix that Tor is a
@@ -24,7 +24,7 @@ let
     # whereas Nix only scans for hashes in uncompressed text.
     # ${bisq-tor}
 
-    JAVA_TOOL_OPTIONS="-XX:+UseG1GC -XX:MaxHeapFreeRatio=10 -XX:MinHeapFreeRatio=5 -XX:+UseStringDeduplication" bisq-desktop-wrapped "$@"
+    JAVA_TOOL_OPTIONS="-XX:+UseG1GC -XX:MaxHeapFreeRatio=10 -XX:MinHeapFreeRatio=5 -XX:+UseStringDeduplication ${args}" bisq-desktop-wrapped "$@"
   '';
 
   bisq-tor = writeScript "bisq-tor" ''
@@ -35,11 +35,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bisq-desktop";
-  version = "1.9.9";
+  version = "1.9.10";
 
   src = fetchurl {
     url = "https://github.com/bisq-network/bisq/releases/download/v${version}/Bisq-64bit-${version}.deb";
-    sha256 = "0jisxzajsc4wfvxabvfzd0x9y1fxzg39fkhap1781q7wyi4ry9kd";
+    sha256 = "1p6hwamc3vzhfg4dgrmh0vf8cxi9s46a14pjnjdyg9zgn4dyr1nm";
   };
 
   nativeBuildInputs = [
@@ -58,6 +58,15 @@ stdenv.mkDerivation rec {
       exec = "bisq-desktop";
       icon = "bisq";
       desktopName = "Bisq ${version}";
+      genericName = "Decentralized bitcoin exchange";
+      categories = [ "Network" "P2P" ];
+    })
+
+    (makeDesktopItem {
+      name = "Bisq-hidpi";
+      exec = "bisq-desktop-hidpi";
+      icon = "bisq";
+      desktopName = "Bisq ${version} (HiDPI)";
       genericName = "Decentralized bitcoin exchange";
       categories = [ "Network" "P2P" ];
     })
@@ -87,7 +96,10 @@ stdenv.mkDerivation rec {
     makeWrapper ${openjdk11}/bin/java $out/bin/bisq-desktop-wrapped \
       --add-flags "-jar $out/lib/desktop-${version}-all.jar bisq.desktop.app.BisqAppMain"
 
-    makeWrapper ${bisq-launcher} $out/bin/bisq-desktop \
+    makeWrapper ${bisq-launcher ""} $out/bin/bisq-desktop \
+      --prefix PATH : $out/bin
+
+    makeWrapper ${bisq-launcher "-Dglass.gtk.uiScale=2.0"} $out/bin/bisq-desktop-hidpi \
       --prefix PATH : $out/bin
 
     for n in 16 24 32 48 64 96 128 256; do

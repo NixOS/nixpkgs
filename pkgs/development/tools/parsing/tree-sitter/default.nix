@@ -72,7 +72,8 @@ let
         { tree-sitter-typescript = grammars'.tree-sitter-typescript // { location = "typescript"; }; } //
         { tree-sitter-tsx = grammars'.tree-sitter-typescript // { location = "tsx"; }; } //
         { tree-sitter-markdown = grammars'.tree-sitter-markdown // { location = "tree-sitter-markdown"; }; } //
-        { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; };
+        { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; } //
+        { tree-sitter-wing = grammars'.tree-sitter-wing // { location = "libs/tree-sitter-wing"; generate = true; }; };
     in
     lib.mapAttrs build (grammars);
 

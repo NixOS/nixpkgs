@@ -64,5 +64,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Etaash-mathamsetty/trigger-control";
     license = licenses.mit;
     maintainers = with maintainers; [ azuwis ];
+    platforms = platforms.all;
   };
 }
