@@ -6,7 +6,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/IBM/plex/releases/download/v${version}/OpenType.zip";
-    hash = "sha256-VwJyZMH10FXDxc7T7m8sl7raUlrarSM0Snjruo1ICHU=";
+    hash = "sha256-RvD/aeZrvltJiuAHqYMNaRsjLgTdcC1/5zqlcd4qKAA=";
   };
 
   installPhase = ''
