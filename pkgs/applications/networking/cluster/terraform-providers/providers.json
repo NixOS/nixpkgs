@@ -218,13 +218,13 @@
     "vendorHash": "sha256-qIgr+ynaNSfNx1iW5RJrNHvEnlr46dBzIi+5IXYn+3Q="
   },
   "cloudflare": {
-    "hash": "sha256-bunkrh9m7w47704G8Pq6S7bmhhcVIVP1yk+/AGG28Wg=",
+    "hash": "sha256-/sTKLSoExqssC2pi3LHva8uRolZl+kBDmm8bNNW5+Es=",
     "homepage": "https://registry.terraform.io/providers/cloudflare/cloudflare",
     "owner": "cloudflare",
     "repo": "terraform-provider-cloudflare",
-    "rev": "v4.8.0",
+    "rev": "v4.9.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-xqVaZj0NEtcT64TThkFh2AJ03wiXCAhgYSddaUBlGAc="
+    "vendorHash": "sha256-bY5CXHEEYmJ3IoA+byc8sQMNVpUq+6efY/WolIRXdxU="
   },
   "cloudfoundry": {
     "hash": "sha256-SFA0rG80BWaJHwvAWEugdVd3nR+YGflyYONOuoS++P8=",
