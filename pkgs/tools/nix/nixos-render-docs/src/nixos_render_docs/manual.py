@@ -409,7 +409,7 @@ class ManualHTMLRenderer(RendererMixin, HTMLRenderer):
             ]
             examples = (
                 '<div class="list-of-examples">'
-                '<p><strong>List of Examples</strong><p>'
+                '<p><strong>List of Examples</strong></p>'
                 f'<dl>{"".join(examples_entries)}</dl>'
                 '</div>'
             )
