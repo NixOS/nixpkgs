@@ -1,4 +1,4 @@
-{ lib, stdenv, makeDesktopItem, copyDesktopItems, icoutils, fdupes, imagemagick, jdk11, fetchzip }:
+{ lib, stdenv, makeDesktopItem, icoutils, fdupes, imagemagick, jdk11, fetchzip }:
 # TODO: JDK16 causes STM32CubeMX to crash right now, so we fixed the version to JDK11
 # This may be fixed in a future version of STM32CubeMX. This issue has been reported to ST:
 # https://community.st.com/s/question/0D53W00000jnOzPSAU/stm32cubemx-crashes-on-launch-with-openjdk16
@@ -17,17 +17,21 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ icoutils fdupes imagemagick copyDesktopItems ];
-  desktopItems = [
-    (makeDesktopItem {
-      name = "stm32CubeMX";
-      exec = "stm32cubemx";
-      desktopName = "STM32CubeMX";
-      categories = [ "Development" ];
-      comment = "STM32Cube initialization code generator";
-      icon = "stm32cubemx";
-    })
-  ];
+  nativeBuildInputs = [ icoutils fdupes imagemagick ];
+  desktopItem = makeDesktopItem {
+    name = "STM32CubeMX";
+    exec = "stm32cubemx";
+    desktopName = "STM32CubeMX";
+    categories = [ "Development" ];
+    icon = "stm32cubemx";
+    comment = meta.description;
+    terminal = false;
+    startupNotify = false;
+    mimeTypes = [
+      "x-scheme-handler/sgnl"
+      "x-scheme-handler/signalcaptcha"
+    ];
+  };
 
   buildCommand = ''
     mkdir -p $out/{bin,opt/STM32CubeMX,share/applications}
@@ -55,18 +59,7 @@ stdenv.mkDerivation rec {
       fi
     done;
 
-    cat << EOF > $out/share/applications/stm32cubemx.desktop
-    [Desktop Entry]
-    Name=STM32CubeMX
-    Exec=stm32cubemx %F
-    Terminal=false
-    Type=Application
-    Icon=stm32cubemx
-    StartupWMClass=STM32CubeMX
-    Comment=A graphical tool for configuring STM32 microcontrollers and microprocessors
-    MimeType=x-scheme-handler/sgnl;x-scheme-handler/signalcaptcha;
-    Categories=Programming;
-    EOF
+    cp ${desktopItem}/share/applications/*.desktop $out/share/applications
   '';
 
   meta = with lib; {
