@@ -172,6 +172,27 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
   };
 
+  csharp-language-server-protocol = buildDotnetModule rec {
+    pname = "csharp-language-server-protocol";
+    version = "0.19.7";
+
+    src = fetchFromGitHub {
+      owner = "OmniSharp";
+      repo = pname;
+      rev = "v${version}";
+      sha256 = "sha256-dWlS+6J8cmqvQUzF8wpEWn2NeMdEXH/QSr/U9CqaR4M=";
+    };
+
+    useAppHost = false;
+
+    dotnetPackFlags = [ "-p:PackageIcon=" ];
+
+    nugetDeps = ../development/dotnet-modules/csharp-language-server-protocol-deps.nix;
+
+    dontPublish = true;
+    packNupkg = true;
+  };
+
   MonoAddins = buildDotnetPackage rec {
     pname = "Mono.Addins";
     version = "1.2";

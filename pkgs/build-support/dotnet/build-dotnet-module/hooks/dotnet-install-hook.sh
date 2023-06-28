@@ -51,12 +51,14 @@ dotnetInstallHook() {
              ${dotnetFlags[@]}
     }
 
-    if (( "${#projectFile[@]}" == 0 )); then
-        dotnetPublish
-    else
-        for project in ${projectFile[@]}; do
-            dotnetPublish "$project"
-        done
+    if [[ -z "${dontPublish-}" ]]; then
+        if (( "${#projectFile[@]}" == 0 )); then
+            dotnetPublish
+        else
+            for project in ${projectFile[@]}; do
+                dotnetPublish "$project"
+            done
+        fi
     fi
 
     if [[ "${packNupkg-}" ]]; then
