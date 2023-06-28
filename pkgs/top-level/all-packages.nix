@@ -2065,6 +2065,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  git-graph = callPackage ../applications/version-management/git-graph { };
+
   git-hound = callPackage ../applications/version-management/git-hound { };
 
   git-hub = callPackage ../applications/version-management/git-hub { };
@@ -5521,6 +5523,8 @@ with pkgs;
 
   long-shebang = callPackage ../misc/long-shebang { };
 
+  lssecret = callPackage ../misc/lssecret {};
+
   lowdown = callPackage ../tools/typesetting/lowdown { };
 
   numatop = callPackage ../os-specific/linux/numatop { };
@@ -7835,6 +7839,8 @@ with pkgs;
   foremost = callPackage ../tools/system/foremost { };
 
   forktty = callPackage ../os-specific/linux/forktty { };
+
+  fortran-fpm = callPackage ../tools/package-management/fortran-fpm { };
 
   fortune = callPackage ../tools/misc/fortune { };
 
@@ -10951,9 +10957,7 @@ with pkgs;
 
   onlykey = callPackage ../tools/security/onlykey { node_webkit = nwjs; };
 
-  ooniprobe-cli = callPackage ../tools/networking/ooniprobe-cli {
-    buildGoModule = buildGo119Module; # go 1.20 build failure
-  };
+  ooniprobe-cli = callPackage ../tools/networking/ooniprobe-cli { };
 
   openapi-generator-cli = callPackage ../tools/networking/openapi-generator-cli { jre = pkgs.jre_headless; };
   openapi-generator-cli-unstable = callPackage ../tools/networking/openapi-generator-cli/unstable.nix { jre = pkgs.jre_headless; };
@@ -11655,6 +11659,8 @@ with pkgs;
   profile-cleaner = callPackage ../tools/misc/profile-cleaner { };
 
   profile-sync-daemon = callPackage ../tools/misc/profile-sync-daemon { };
+
+  projectable = callPackage ../applications/file-managers/projectable { };
 
   projectlibre = callPackage ../applications/misc/projectlibre {
     jre = jre8;
@@ -12449,9 +12455,15 @@ with pkgs;
 
   sequoia-sq = callPackage ../tools/security/sequoia-sq { };
 
+  sequoia-sqv = callPackage ../tools/security/sequoia-sqv { };
+
+  sequoia-sqop = callPackage ../tools/security/sequoia-sqop { };
+
   sequoia-chameleon-gnupg = callPackage ../tools/security/sequoia-chameleon-gnupg { };
 
   sewer = callPackage ../tools/admin/sewer { };
+
+  sexp = callPackage ../development/libraries/sexp { };
 
   sfeed = callPackage ../tools/misc/sfeed { };
 
@@ -13039,6 +13051,8 @@ with pkgs;
   };
 
   tagtime = callPackage ../applications/misc/tagtime { };
+
+  tailer = callPackage ../tools/misc/tailer { };
 
   inherit (callPackages ../applications/networking/taler { })
     taler-exchange taler-merchant;
@@ -27262,13 +27276,6 @@ with pkgs;
 
   iwd = callPackage ../os-specific/linux/iwd { };
 
-  jfbview = callPackage ../os-specific/linux/jfbview {
-    imlib2 = imlib2Full;
-  };
-  jfbpdf = jfbview.override {
-    imageSupport = false;
-  };
-
   jool-cli = callPackage ../os-specific/linux/jool/cli.nix { };
 
   juju = callPackage ../applications/networking/juju { };
@@ -27612,6 +27619,8 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0) Libsystem;
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit Security;
   };
+
+  nushellFull = nushell.override { additionalFeatures = p: p ++ ["dataframe" "extra"]; };
 
   nu_scripts = callPackage ../shells/nushell/nu_scripts { };
 
@@ -36205,6 +36214,7 @@ with pkgs;
 
   cryptop = python3.pkgs.callPackage ../applications/blockchains/cryptop { };
 
+  dcrctl = callPackage ../applications/blockchains/dcrctl { };
   dcrd = callPackage ../applications/blockchains/dcrd { };
   dcrwallet = callPackage ../applications/blockchains/dcrwallet { };
 
@@ -36800,6 +36810,7 @@ with pkgs;
   };
 
   devilutionx = callPackage ../games/devilutionx {
+    fmt = fmt_9;
     SDL2 = SDL2.override {
       withStatic = true;
     };
@@ -38937,9 +38948,7 @@ with pkgs;
   gap-full = lowPrio (gap.override { packageSet = "full"; });
 
   geogebra = callPackage ../applications/science/math/geogebra { };
-  geogebra6 = callPackage ../applications/science/math/geogebra/geogebra6.nix {
-    electron = electron_14;
-   };
+  geogebra6 = callPackage ../applications/science/math/geogebra/geogebra6.nix { };
 
   maxima = callPackage ../applications/science/math/maxima {
     lisp-compiler = sbcl;
@@ -39447,6 +39456,8 @@ with pkgs;
   gummi = callPackage ../applications/misc/gummi { };
 
   gummy = callPackage ../tools/misc/gummy { };
+
+  hashpump = callPackage ../tools/misc/hashpump { };
 
   hck = callPackage ../tools/text/hck { };
 
@@ -40621,7 +40632,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
   };
 
-  spdlog = callPackage ../development/libraries/spdlog { };
+  spdlog = callPackage ../development/libraries/spdlog {
+    fmt = fmt_9;
+  };
 
   dart = callPackage ../development/compilers/dart { };
 
@@ -41101,4 +41114,6 @@ with pkgs;
   reindeer = callPackage ../development/tools/reindeer { };
 
   charasay = callPackage ../tools/misc/charasay { };
+
+  waylyrics = callPackage ../applications/audio/waylyrics { };
 }

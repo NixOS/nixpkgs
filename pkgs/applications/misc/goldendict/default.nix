@@ -1,6 +1,7 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, pkg-config
+{ lib, stdenv, fetchFromGitHub, pkg-config
 , libXtst, libvorbis, hunspell, lzo, xz, bzip2, libiconv
 , qtbase, qtsvg, qtwebkit, qtx11extras, qttools, qmake
+, wrapQtAppsHook
 , withCC ? true, opencc
 , withEpwing ? true, libeb
 , withExtraTiff ? true, libtiff
@@ -8,20 +9,19 @@
 , withMultimedia ? true
 , withZim ? true, zstd }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "goldendict";
-  version = "2022-05-10";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "goldendict";
     repo = pname;
-    rev = "f810c6bd724e61977b4e94ca2d8abfa5bd766379";
-    sha256 = "sha256-gNM+iahoGQy8TlNFLQx5ksITzQznv7MWMX/88QCTnL0";
+    rev = "v${version}";
+    hash = "sha256-80o8y+mbzpyMQYUGHYs/zgQT23nLVCs7Jcr8FbbXn8M=";
   };
 
   patches = [
     ./0001-dont-check-for-updates.patch
-  ] ++ lib.optionals stdenv.isDarwin [
     ./0001-dont-use-maclibs.patch
   ];
 
@@ -31,7 +31,7 @@ mkDerivation rec {
       --replace "opencc.2" "opencc"
   '';
 
-  nativeBuildInputs = [ pkg-config qmake ];
+  nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook ];
   buildInputs = [
     qtbase qtsvg qtwebkit qttools
     libvorbis hunspell xz lzo

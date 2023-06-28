@@ -39,11 +39,6 @@ python3Packages.buildPythonApplication rec {
     "--prefix PYTHONPATH : ${placeholder "out"}/lib/${python3Packages.python.libPrefix}/site-packages"
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/xonsh \
-      $makeWrapperArgs
-  '';
-
   disabledTests = [
     # fails on sandbox
     "test_colorize_file"

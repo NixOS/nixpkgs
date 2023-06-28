@@ -16,7 +16,7 @@ buildPecl rec {
   meta = with lib; {
     description = "Datadog Tracing PHP Client";
     homepage = "https://github.com/DataDog/dd-trace-php";
-    license = licenses.apsl20;
+    license = with licenses; [ asl20 /* or */ bsd3 ];
     maintainers = teams.php.members;
   };
 }

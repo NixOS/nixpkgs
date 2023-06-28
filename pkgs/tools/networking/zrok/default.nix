@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.bandresen ];
     platforms = [ "x86_64-linux" "aarch64-linux" "armv7l-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.apsl20;
+    license = lib.licenses.asl20;
   };
 
 }

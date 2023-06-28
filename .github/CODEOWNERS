@@ -293,9 +293,9 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/development/compilers/dotnet  @IvarWithoutBones
 
 # Node.js
-/pkgs/build-support/node/build-npm-package      @winterqt
-/pkgs/build-support/node/fetch-npm-deps         @winterqt
-/doc/languages-frameworks/javascript.section.md @winterqt
+/pkgs/build-support/node/build-npm-package      @lilyinstarlight @winterqt
+/pkgs/build-support/node/fetch-npm-deps         @lilyinstarlight @winterqt
+/doc/languages-frameworks/javascript.section.md @lilyinstarlight @winterqt
 
 # OCaml
 /pkgs/build-support/ocaml           @ulrikstrid

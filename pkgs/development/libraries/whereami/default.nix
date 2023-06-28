@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fixDarwinDylibNames
 }:
 let
   libExt = stdenv.hostPlatform.extensions.sharedLibrary;
@@ -15,6 +16,8 @@ stdenv.mkDerivation rec {
     rev = "ba364cd54fd431c76c045393b6522b4bff547f50";
     sha256 = "XhRqW0wdXzlmyBf1cjqtQvztuyV4buxVl19Q0uyEOhk=";
   };
+
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   makeFlags = [
     "-C_gnu-make"

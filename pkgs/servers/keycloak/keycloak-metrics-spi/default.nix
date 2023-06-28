@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/aerogear/keycloak-metrics-spi";
     description = "Keycloak Service Provider that adds a metrics endpoint";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.apsl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ benley ];
   };
 }
