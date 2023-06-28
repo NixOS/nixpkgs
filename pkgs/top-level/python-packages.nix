@@ -9783,10 +9783,6 @@ self: super: with self; {
 
   pytest-runner = callPackage ../development/python-modules/pytest-runner { };
 
-  pytest-sanic = callPackage ../development/python-modules/pytest-sanic {
-    sanic = self.sanic.override { doCheck = false; };
-  };
-
   pytest-server-fixtures = callPackage ../development/python-modules/pytest-server-fixtures { };
 
   pytest-services = callPackage ../development/python-modules/pytest-services { };
