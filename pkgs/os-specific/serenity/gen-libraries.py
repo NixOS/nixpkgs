@@ -25,7 +25,8 @@ for name in library_names:
             name_to_path[name] = l
             path_stem_to_name[l.stem] = name
             found = True
-            break
+            if l.suffixes[0] == ".so":
+                break
     if not found:
         print(f"ERROR: library for {name} not found")
         exit(1)

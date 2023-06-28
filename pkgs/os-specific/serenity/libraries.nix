@@ -3,7 +3,7 @@
 { libraries }: with libraries;
 {
   LibArchive                = { inherit LibC LibCore; };
-  LibAudio                  = { inherit LibC LibCore LibIPC LibThreading LibUnicode; };
+  LibAudio                  = { inherit LibC LibCore LibCrypto LibIPC LibThreading LibUnicode; };
   LibC                      = { inherit LibSystem; };
   LibCMake                  = { inherit LibC LibSyntax; };
   LibCards                  = { inherit LibC LibConfig LibCore LibGUI LibGfx; };
@@ -67,7 +67,7 @@
   LibVideo                  = { inherit LibAudio LibC LibCore LibGfx LibIPC LibThreading; };
   LibVirtGPU                = { inherit LibC LibCore; };
   LibWasm                   = { inherit LibC LibCore LibJS; };
-  LibWeb                    = { inherit LibC LibCore LibCrypto LibGL LibGUI LibGemini LibGfx LibHTTP LibIDL LibIPC LibJS LibLocale LibMarkdown LibRegex LibSoftGPU LibSyntax LibTextCodec LibUnicode LibVideo LibWasm LibXML; };
+  LibWeb                    = { inherit LibAudio LibC LibCore LibCrypto LibGL LibGUI LibGemini LibGfx LibHTTP LibIDL LibIPC LibJS LibLocale LibMarkdown LibRegex LibSoftGPU LibSyntax LibTextCodec LibUnicode LibVideo LibWasm LibXML; };
   LibWebSocket              = { inherit LibC LibCore LibCrypto LibTLS; };
   LibWebView                = { inherit LibC LibCore LibFileSystemAccessClient LibGUI LibGfx LibIPC LibProtocol LibWeb; };
   LibX86                    = { inherit LibC; };
