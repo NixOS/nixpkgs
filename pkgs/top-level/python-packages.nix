@@ -1707,6 +1707,8 @@ self: super: with self; {
 
   cexprtk = callPackage ../development/python-modules/cexprtk { };
 
+  coffea = callPackage ../development/python-modules/coffea { };
+
   cohere = callPackage ../development/python-modules/cohere { };
 
   coincurve = callPackage ../development/python-modules/coincurve {
