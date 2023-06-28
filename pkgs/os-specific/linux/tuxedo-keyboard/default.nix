@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-SkSv9XHIMU+DplzJBegifBB88/AEGSqOf01GX7rtvXM=";
   };
 
+  patches = [ ./dmi_string_in.patch ];
+
   buildInputs = [
     pahole
     linuxHeaders

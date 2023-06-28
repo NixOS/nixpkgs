@@ -1,0 +1,24 @@
+diff --git a/src/tuxedo_io/tuxedo_io.c b/src/tuxedo_io/tuxedo_io.c
+index f420819..3e0481d 100644
+--- a/src/tuxedo_io/tuxedo_io.c
++++ b/src/tuxedo_io/tuxedo_io.c
+@@ -49,19 +49,6 @@ static u32 id_check_uniwill;
+ 
+ static struct uniwill_device_features_t *uw_feats;
+ 
+-/**
+- * strstr version of dmi_match
+- */
+-static bool dmi_string_in(enum dmi_field f, const char *str)
+-{
+-	const char *info = dmi_get_system_info(f);
+-
+-	if (info == NULL || str == NULL)
+-		return info == str;
+-
+-	return strstr(info, str) != NULL;
+-}
+-
+ static u32 clevo_identify(void)
+ {
+ 	return clevo_get_active_interface_id(NULL) == 0 ? 1 : 0;
