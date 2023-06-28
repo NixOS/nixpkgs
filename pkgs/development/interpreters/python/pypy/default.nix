@@ -87,6 +87,9 @@ in with passthru; stdenv.mkDerivation rec {
       src = ./sqlite_paths.patch;
       inherit (sqlite) out dev;
     })
+  ] ++ lib.optionals isPy3k [
+    # add missing LDCXXSHARED to sysconfig.get_config_vars() to prevent type errors when compiling eg. Pillow
+    ./sysconfig-config-vars.patch
   ];
 
   postPatch = ''
