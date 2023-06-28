@@ -13189,6 +13189,12 @@
     githubId = 406946;
     name = "Valentin Lorentz";
   };
+  proofconstruction = {
+    email = "source@proof.construction";
+    github = "proofconstruction";
+    githubId = 74747193;
+    name = "Alexander Groleau";
+  };
   proofofkeags = {
     email = "keagan.mcclelland@gmail.com";
     github = "ProofOfKeags";
