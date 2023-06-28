@@ -1126,7 +1126,7 @@ in
                 It will notify, via the UI, when a new version is available.
                 The check itself will not prompt any auto-updates of the Grafana software, nor will it send any sensitive information.
               '';
-              default = true;
+              default = false;
               type = types.bool;
             };
 

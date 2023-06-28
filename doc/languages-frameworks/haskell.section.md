@@ -23,7 +23,7 @@ installing and using them.
 
 All of these packages are originally defined in the `haskellPackages` package
 set and are re-exposed with a reduced dependency closure for convenience.
-(see `justStaticExecutables` below)
+(see `justStaticExecutables` or `separateBinOutput` below)
 
 The `haskellPackages` set includes at least one version of every package from
 Hackage as well as some manually injected packages. This amounts to a lot of

@@ -96,6 +96,7 @@
   tree-sitter-verilog = lib.importJSON ./tree-sitter-verilog.json;
   tree-sitter-vim = lib.importJSON ./tree-sitter-vim.json;
   tree-sitter-vue = lib.importJSON ./tree-sitter-vue.json;
+  tree-sitter-wing = lib.importJSON ./tree-sitter-wing.json;
   tree-sitter-yaml = lib.importJSON ./tree-sitter-yaml.json;
   tree-sitter-yang = lib.importJSON ./tree-sitter-yang.json;
   tree-sitter-zig = lib.importJSON ./tree-sitter-zig.json;
