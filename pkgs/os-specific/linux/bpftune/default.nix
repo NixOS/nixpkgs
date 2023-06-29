@@ -7,6 +7,7 @@
 , libbpf
 , libcap
 , libnl
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -54,6 +55,10 @@ stdenv.mkDerivation rec {
   hardeningDisable = [
     "stackprotector"
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) bpftune;
+  };
 
   meta = with lib; {
     description = "BPF-based auto-tuning of Linux system parameters";
