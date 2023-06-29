@@ -27460,6 +27460,8 @@ with pkgs;
   linux_5_15_hardened = linuxKernel.kernels.linux_5_15_hardened;
   linuxPackages_6_1_hardened = linuxKernel.packages.linux_6_1_hardened;
   linux_6_1_hardened = linuxKernel.kernels.linux_6_1_hardened;
+  linuxPackages_6_3_hardened = linuxKernel.packages.linux_6_3_hardened;
+  linux_6_3_hardened = linuxKernel.kernels.linux_6_3_hardened;
 
   # Hardkernel (Odroid) kernels.
   linuxPackages_hardkernel_latest = linuxKernel.packageAliases.linux_hardkernel_latest;
