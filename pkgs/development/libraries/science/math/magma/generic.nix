@@ -113,13 +113,17 @@ stdenv.mkDerivation {
     lapack
     blas
   ] ++ lists.optionals cudaSupport (with cudaPackages; [
-    cuda_cudart
-    libcublas # cublas_v2.h
-    libcusparse # cusparse.h
+    cuda_cudart.dev # cuda_runtime.h
+    cuda_cudart.lib # cudart
+    cuda_cudart.static # cudart_static
+    libcublas.dev # cublas_v2.h
+    libcublas.lib # cublas
+    libcusparse.dev # cusparse.h
+    libcusparse.lib # cusparse
   ] ++ lists.optionals (strings.versionOlder cudaVersion "11.8") [
-    cuda_nvprof # <cuda_profiler_api.h>
+    cuda_nvprof.dev # <cuda_profiler_api.h>
   ] ++ lists.optionals (strings.versionAtLeast cudaVersion "11.8") [
-    cuda_profiler_api # <cuda_profiler_api.h>
+    cuda_profiler_api.dev # <cuda_profiler_api.h>
   ]) ++ lists.optionals rocmSupport [
     hip
     hipblas
