@@ -4,6 +4,7 @@
 , setuptools-scm
 , pythonOlder
 , importlib-metadata
+, callPackage
 }:
 
 buildPythonPackage rec {
@@ -28,6 +29,9 @@ buildPythonPackage rec {
 
   # To prevent infinite recursion with pytest
   doCheck = false;
+  passthru.tests = {
+    pytest = callPackage ./tests.nix { };
+  };
 
   meta = {
     changelog = "https://github.com/pytest-dev/pluggy/blob/${src.rev}/CHANGELOG.rst";
