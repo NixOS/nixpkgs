@@ -1,6 +1,7 @@
 { stdenv,
   backendStdenv,
   lib,
+  lndir,
   zlib,
   useCudatoolkitRunfile ? false,
   cudaVersion,
@@ -10,14 +11,6 @@
   autoPatchelfHook,
   autoAddOpenGLRunpathHook,
   fetchurl,
-  # The distributed version of CUDNN includes both dynamically liked .so files,
-  # as well as statically linked .a files.  However, CUDNN is quite large
-  # (multiple gigabytes), so you can save some space in your nix store by
-  # removing the statically linked libraries if you are not using them.
-  #
-  # Setting this to true removes the statically linked .a files.
-  # Setting this to false keeps these statically linked .a files.
-  removeStatic ? false,
 }: {
   version,
   url,
@@ -48,10 +41,15 @@ in
   backendStdenv.mkDerivation {
     pname = "cudatoolkit-${cudaMajorVersion}-cudnn";
     version = versionTriple;
+    strictDeps = true;
+    outputs = ["out" "lib" "static" "dev"];
 
     src = fetchurl {
       inherit url hash;
     };
+
+    # We do need some other phases, like configurePhase, so the multiple-output setup hook works.
+    dontBuild = true;
 
     # Check and normalize Runpath against DT_NEEDED using autoPatchelf.
     # Prepend /run/opengl-driver/lib using addOpenGLRunpath for dlopen("libcudacuda.so")
@@ -74,27 +72,49 @@ in
     #
     # Note also that version <=8.3.0 contained a subdirectory "lib64/" but in
     # version 8.3.2 it seems to have been renamed to simply "lib/".
+    #
+    # doc and dev have special output handling. Other outputs need to be moved to their own
+    # output.
+    # Note that moveToOutput operates on all outputs:
+    # https://github.com/NixOS/nixpkgs/blob/2920b6fc16a9ed5d51429e94238b28306ceda79e/pkgs/build-support/setup-hooks/multiple-outputs.sh#L105-L107
     installPhase =
       ''
         runHook preInstall
 
-        mkdir -p $out
-        cp -a include $out/include
-        [ -d "lib/" ] && cp -a lib $out/lib
-        [ -d "lib64/" ] && cp -a lib64 $out/lib64
-      ''
-      + strings.optionalString removeStatic ''
-        rm -f $out/lib/*.a
-        rm -f $out/lib64/*.a
-      ''
-      + ''
+        mkdir -p "$out"
+        mv * "$out"
+        moveToOutput "lib64" "$lib"
+        moveToOutput "lib" "$lib"
+        moveToOutput "**/*.a" "$static"
+
         runHook postInstall
       '';
 
     # Without --add-needed autoPatchelf forgets $ORIGIN on cuda>=8.0.5.
     postFixup = strings.optionalString (strings.versionAtLeast versionTriple "8.0.5") ''
-      patchelf $out/lib/libcudnn.so --add-needed libcudnn_cnn_infer.so
-      patchelf $out/lib/libcudnn_ops_infer.so --add-needed libcublas.so --add-needed libcublasLt.so
+      patchelf $lib/lib/libcudnn.so --add-needed libcudnn_cnn_infer.so
+      patchelf $lib/lib/libcudnn_ops_infer.so --add-needed libcublas.so --add-needed libcublasLt.so
+    '';
+
+    # The out output leverages the same functionality which backs the `symlinkJoin` function in
+    # Nixpkgs:
+    # https://github.com/NixOS/nixpkgs/blob/d8b2a92df48f9b08d68b0132ce7adfbdbc1fbfac/pkgs/build-support/trivial-builders/default.nix#L510
+    #
+    # That should allow us to emulate "fat" default outputs without having to actually create them.
+    #
+    # It is important that this run after the autoPatchelfHook, otherwise the symlinks in out will reference libraries in lib, creating a circular dependency.
+    postPhases = ["postPatchelf"];
+    # For each output, create a symlink to it in the out output.
+    # NOTE: We must recreate the out output here, because the setup hook will have deleted it
+    # if it was empty.
+    # NOTE: Do not use optionalString based on whether `outputs` contains only `out` -- phases
+    # which are empty strings are skipped/unset and result in errors of the form "command not
+    # found: <customPhaseName>".
+    postPatchelf = ''
+      mkdir -p "$out"
+      ${lib.meta.getExe lndir} "$lib" "$out"
+      ${lib.meta.getExe lndir} "$static" "$out"
+      ${lib.meta.getExe lndir} "$dev" "$out"
     '';
 
     passthru = {
@@ -110,6 +130,19 @@ in
 
       majorVersion = versions.major versionTriple;
     };
+
+    # Setting propagatedBuildInputs to false will prevent outputs known to the multiple-outputs
+    # from depending on `out` by default.
+    # https://github.com/NixOS/nixpkgs/blob/2920b6fc16a9ed5d51429e94238b28306ceda79e/pkgs/build-support/setup-hooks/multiple-outputs.sh#L196
+    # Indeed, we want to do the opposite -- fat "out" outputs that contain all the other outputs.
+    propagatedBuildOutputs = false;
+
+    # By default, if the dev output exists it just uses that.
+    # However, because we disabled propagatedBuildOutputs, dev doesn't contain libraries or
+    # anything of the sort. To remedy this, we set outputSpecified to true, and use
+    # outputsToInstall, which tells Nix which outputs to use when the package name is used
+    # unqualified (that is, without an explicit output).
+    outputSpecified = true;
 
     meta = with lib; {
       # Check that the cudatoolkit version satisfies our min/max constraints (both
@@ -127,5 +160,8 @@ in
       license = licenses.unfree;
       platforms = ["x86_64-linux"];
       maintainers = with maintainers; [mdaiter samuela];
+      # Force the use of the default, fat output by default (even though `dev` exists, which
+      # causes Nix to prefer that output over the others if outputSpecified isn't set).
+      outputsToInstall = ["out"];
     };
   }
