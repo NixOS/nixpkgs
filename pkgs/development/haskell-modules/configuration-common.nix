@@ -422,7 +422,7 @@ self: super: {
   streamly-lmdb = super.streamly-lmdb.override {
     streamly =
       assert (builtins.compareVersions pkgs.haskellPackages.streamly.version "0.9.0" < 0);
-        pkgs.haskellPackages.streamly_0_9_0;
+        self.streamly_0_9_0;
   };
 
   # base bound
