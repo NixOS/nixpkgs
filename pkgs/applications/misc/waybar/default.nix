@@ -16,6 +16,7 @@
 , howard-hinnant-date
 , libinotify-kqueue
 , libxkbcommon
+, fmt
 , cavaSupport     ? true,  alsa-lib, fftw, iniparser, ncurses, pipewire, portaudio, SDL2
 , evdevSupport    ? true,  libevdev
 , inputSupport    ? true,  libinput
@@ -78,7 +79,7 @@ stdenv.mkDerivation rec {
   strictDeps = false;
 
   buildInputs = with lib;
-    [ wayland wlroots gtkmm3 libsigcxx jsoncpp spdlog gtk-layer-shell howard-hinnant-date libxkbcommon ]
+    [ wayland wlroots gtkmm3 libsigcxx jsoncpp spdlog gtk-layer-shell howard-hinnant-date libxkbcommon fmt ]
     ++ optional  (!stdenv.isLinux) libinotify-kqueue
     ++ optional  cavaSupport   alsa-lib
     ++ optional  cavaSupport   iniparser

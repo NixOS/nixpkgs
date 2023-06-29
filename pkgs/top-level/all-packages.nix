@@ -31878,7 +31878,9 @@ with pkgs;
 
   rootbar = callPackage ../applications/misc/rootbar { };
 
-  waybar = callPackage ../applications/misc/waybar { };
+  waybar = callPackage ../applications/misc/waybar {
+    fmt = fmt_9;
+  };
 
   waycorner = callPackage ../applications/misc/waycorner { };
 
