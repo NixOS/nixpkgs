@@ -10,6 +10,7 @@
 , librosa
 , numpy
 , onnxruntime
+, piper-phonemize
 , pytorch-lightning
 , torch
 }:
@@ -48,6 +49,7 @@ buildPythonPackage {
     librosa
     numpy
     onnxruntime
+    piper-phonemize
     pytorch-lightning
     torch
   ];
