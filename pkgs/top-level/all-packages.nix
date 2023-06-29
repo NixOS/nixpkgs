@@ -13503,6 +13503,8 @@ with pkgs;
 
   tuhi = callPackage ../applications/misc/tuhi { };
 
+  tui-journal = callPackage ../applications/misc/tui-journal { };
+
   tuir = callPackage ../applications/misc/tuir { };
 
   tuifeed = callPackage ../applications/networking/feedreaders/tuifeed {
