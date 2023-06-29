@@ -5617,6 +5617,12 @@
     githubId = 134872;
     name = "Sergei Lukianov";
   };
+  fsagbuya = {
+    email = "fa@m-labs.ph";
+    github = "fsagbuya";
+    githubId = 77672306;
+    name = "Florian Agbuya";
+  };
   fstamour = {
     email = "fr.st-amour@gmail.com";
     github = "fstamour";
