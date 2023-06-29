@@ -151,13 +151,13 @@ in {
   '';
 
   preConfigure = (originalAttrs.preConfigure or "") + ''
-    if test -n "$newlibSrc"; then
-        tar xvf "$newlibSrc" -C ..
-        ln -s ../newlib-*/newlib newlib
-        # Patch to get armvt5el working:
-        sed -i -e 's/ arm)/ arm*)/' newlib/configure.host
-    fi
+  '' + lib.optionalString (finalAttrs.newlibSrc or false) ''
+    tar xvf "$newlibSrc" -C ..
+    ln -s ../newlib-*/newlib newlib
+    # Patch to get armvt5el working:
+    sed -i -e 's/ arm)/ arm*)/' newlib/configure.host
 
+  '' + ''
     # Bug - they packaged zlib
     if test -d "zlib"; then
         # This breaks the build without-headers, which should build only
