@@ -2,11 +2,12 @@
 , makeScopeWithSplicing, generateSplicesForMkScope
 , buildPackages
 , bsdSetupHook, makeSetupHook, fetchcvs, groff, mandoc, byacc, flex
-, zlib, bsdbuild, bmake
-, writeShellScript, writeText, runtimeShell, symlinkJoin
+, bmake
+, writeText, symlinkJoin
 }:
 
 let
+  openbsdVersion = "7.3";
   inherit (buildPackages.buildPackages) rsync;
 
   fetchOpenBSD = path: version: sha256: fetchcvs {
@@ -116,8 +117,8 @@ in makeScopeWithSplicing
   ## START BOOTSTRAPPING
   ##
   compat = mkDerivation (let
-    version = "7.2";
-    commonDeps = [ zlib ];
+    version = openbsdVersion;
+    commonDeps = [ ];
   in {
     path = "tools/compat";
     sha256 = "1vsxg7136nlhc72vpa664vs22874xh7ila95nkmsd8crn3z3cyn0";
@@ -215,9 +216,9 @@ in makeScopeWithSplicing
         --subst-var-by version ${version}
     '';
     extraPaths = with self; [ include.src libc.src libutil.src
-      (fetchOpenBSD "external/bsd/flex" "7.2" "0h98jpfj7vx5zh7vd7bk6b1hmzgkcb757a8j6d9zgygxxv13v43m")
-      (fetchOpenBSD "sys/sys" "7.2" "0zawhw51klaigqqwkx0lzrx3mim2jywrc24cm7c66qsf1im9awgd")
-      (fetchOpenBSD "common/include/rpc/types.h" "7.2" "0n2df12mlc3cbc48jxq35yzl1y7ghgpykvy7jnfh898rdhac7m9a")
+      (fetchOpenBSD "external/bsd/flex" openbsdVersion "0h98jpfj7vx5zh7vd7bk6b1hmzgkcb757a8j6d9zgygxxv13v43m")
+      (fetchOpenBSD "sys/sys" openbsdVersion "0zawhw51klaigqqwkx0lzrx3mim2jywrc24cm7c66qsf1im9awgd")
+      (fetchOpenBSD "common/include/rpc/types.h" openbsdVersion "0n2df12mlc3cbc48jxq35yzl1y7ghgpykvy7jnfh898rdhac7m9a")
     ] ++ libutil.extraPaths ++ _mainLibcExtraPaths;
   });
 
@@ -225,15 +226,15 @@ in makeScopeWithSplicing
     pname = "fts";
     path = "include/fts.h";
     sha256 = "01d4fpxvz1pgzfk5xznz5dcm0x0gdzwcsfm1h3d0xc9kc6hj2q77";
-    version = "7.2";
+    version = openbsdVersion;
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook rsync
     ];
     #propagatedBuildInputs = with self; compatIfNeeded;
     extraPaths = with self; [
-      (fetchOpenBSD "lib/libc/gen/fts.c" "7.2" "1a8hmf26242nmv05ipn3ircxb0jqmmi66rh78kkyi9vjwkfl3qn7")
-      (fetchOpenBSD "lib/libc/include/namespace.h" "7.2" "0kksr3pdwdc1cplqf5z12ih4cml6l11lqrz91f7hjjm64y7785kc")
-      (fetchOpenBSD "lib/libc/gen/fts.3" "7.2" "1asxw0n3fhjdadwkkq3xplfgqgl3q32w1lyrvbakfa3gs0wz5zc1")
+      (fetchOpenBSD "lib/libc/gen/fts.c" openbsdVersion "1a8hmf26242nmv05ipn3ircxb0jqmmi66rh78kkyi9vjwkfl3qn7")
+      (fetchOpenBSD "lib/libc/include/namespace.h" openbsdVersion "0kksr3pdwdc1cplqf5z12ih4cml6l11lqrz91f7hjjm64y7785kc")
+      (fetchOpenBSD "lib/libc/gen/fts.3" openbsdVersion "1asxw0n3fhjdadwkkq3xplfgqgl3q32w1lyrvbakfa3gs0wz5zc1")
     ];
     skipIncludesPhase = true;
     buildPhase = ''
@@ -260,7 +261,7 @@ in makeScopeWithSplicing
   # Don't add this to nativeBuildInputs directly.  Use statHook instead.
   stat = mkDerivation {
     path = "usr.bin/stat";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "18nqwlndfc34qbbgqx5nffil37jfq9aw663ippasfxd2hlyc106x";
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
@@ -284,7 +285,7 @@ in makeScopeWithSplicing
 
   tsort = mkDerivation {
     path = "usr.bin/tsort";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "1dqvf9gin29nnq3c4byxc7lfd062pg7m84843zdy6n0z63hnnwiq";
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
@@ -294,7 +295,7 @@ in makeScopeWithSplicing
 
   lorder = mkDerivation {
     path = "usr.bin/lorder";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "0rjf9blihhm0n699vr2bg88m4yjhkbxh6fxliaay3wxkgnydjwn2";
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
@@ -311,8 +312,8 @@ in makeScopeWithSplicing
   ##
   make = mkDerivation {
     path = "usr.bin/make";
-    sha256 = "sha256-hhxQ88GWjyKlqODv66uYAG8mtjSFp2cpqqaOVXdEMls=";
-    version = "7.2";
+    sha256 = "";
+    version = openbsdVersion;
 
     buildInputs = with self; [ include ];
 
@@ -356,39 +357,39 @@ in makeScopeWithSplicing
       make -C $BSDSRCDIR/share/mk FILESDIR=$out/share/mk install
     '';
     extraPaths = [
-      (fetchOpenBSD "share/mk" "7.2" "0w9x77cfnm6zwy40slradzi0ip9gz80x6lk7pvnlxzsr2m5ra5sy")
+      (fetchOpenBSD "share/mk" openbsdVersion "0w9x77cfnm6zwy40slradzi0ip9gz80x6lk7pvnlxzsr2m5ra5sy")
     ];
   };
 
   mtree = mkDerivation {
     path = "usr.sbin/mtree";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "04p7w540vz9npvyb8g8hcf2xa05phn1y88hsyrcz3vwanvpc0yv9";
     extraPaths = with self; [ mknod.src ];
   };
 
   mknod = mkDerivation {
     path = "sbin/mknod";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "1d9369shzwgixz3nph991i8q5vk7hr04py3n9avbfbhzy4gndqs2";
   };
 
   getent = mkDerivation {
     path = "usr.bin/getent";
     sha256 = "1qngywcmm0y7nl8h3n8brvkxq4jw63szbci3kc1q6a6ndhycbbvr";
-    version = "7.2";
+    version = openbsdVersion;
     patches = [ ./getent.patch ];
   };
 
   getconf = mkDerivation {
     path = "usr.bin/getconf";
     sha256 = "122vslz4j3h2mfs921nr2s6m078zcj697yrb75rwp2hnw3qz4s8q";
-    version = "7.2";
+    version = openbsdVersion;
   };
 
   locale = mkDerivation {
     path = "usr.bin/locale";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "0kk6v9k2bygq0wf9gbinliqzqpzs9bgxn0ndyl2wcv3hh2bmsr9p";
     patches = [ ./locale.patch ];
     NIX_CFLAGS_COMPILE = "-DYESSTR=__YESSTR -DNOSTR=__NOSTR";
@@ -396,25 +397,25 @@ in makeScopeWithSplicing
 
   rpcgen = mkDerivation {
     path = "usr.bin/rpcgen";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "1kfgfx54jg98wbg0d95p0rvf4w0302v8fz724b0bdackdsrd4988";
   };
 
   genassym = mkDerivation {
     path = "usr.bin/genassym";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "1acl1dz5kvh9h5806vkz2ap95rdsz7phmynh5i3x5y7agbki030c";
   };
 
   gencat = mkDerivation {
     path = "usr.bin/gencat";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "0gd463x1hg36bhr7y0xryb5jyxk0z0g7xvy8rgk82nlbnlnsbbwb";
   };
 
   tic = mkDerivation {
     path = "tools/tic";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "092y7db7k4kh2jq8qc55126r5qqvlb8lq8mhmy5ipbi36hwb4zrz";
     HOSTPROG = "tic";
     #buildInputs = with self; compatIfNeeded;
@@ -425,14 +426,14 @@ in makeScopeWithSplicing
     makeFlags = defaultMakeFlags ++ [ "TOOLDIR=$(out)" ];
     extraPaths = with self; [
       libterminfo.src
-      (fetchOpenBSD "usr.bin/tic" "7.2" "1mwdfg7yx1g43ss378qsgl5rqhsxskqvsd2mqvrn38qw54i8v5i1")
-      (fetchOpenBSD "tools/Makefile.host" "7.2" "15b4ab0n36lqj00j5lz2xs83g7l8isk3wx1wcapbrn66qmzz2sxy")
+      (fetchOpenBSD "usr.bin/tic" openbsdVersion "1mwdfg7yx1g43ss378qsgl5rqhsxskqvsd2mqvrn38qw54i8v5i1")
+      (fetchOpenBSD "tools/Makefile.host" openbsdVersion "15b4ab0n36lqj00j5lz2xs83g7l8isk3wx1wcapbrn66qmzz2sxy")
     ];
   };
 
   uudecode = mkDerivation {
     path = "usr.bin/uudecode";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "00a3zmh15pg4vx6hz0kaa5mi8d2b1sj4h512d7p6wbvxq6mznwcn";
     NIX_CFLAGS_COMPILE = lib.optional stdenv.isLinux "-DNO_BASE64";
     NIX_LDFLAGS = lib.optional stdenv.isDarwin "-lresolv";
@@ -440,14 +441,14 @@ in makeScopeWithSplicing
 
   cksum = mkDerivation {
     path = "usr.bin/cksum";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "0msfhgyvh5c2jmc6qjnf12c378dhw32ffsl864qz4rdb2b98rfcq";
     meta.platforms = lib.platforms.openbsd;
   };
 
   config = mkDerivation {
     path = "usr.bin/config";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "1yz3n4hncdkk6kp595fh2q5lg150vpqg8iw2dccydkyw4y3hgsjj";
     NIX_CFLAGS_COMPILE = [ "-DMAKE_BOOTSTRAP" ];
     nativeBuildInputs = with buildPackages.openbsd; [
@@ -464,13 +465,14 @@ in makeScopeWithSplicing
   ##
   ## START HEADERS
   ##
-  include = mkDerivation {
+  includes = mkDerivation {
     path = "include";
-    version = "7.2";
-    sha256 = "";
+    version = openbsdVersion;
+    sha256 = "sha256-+N+0KJpXdWBGP2J5rfD2OgFR/8bihFwepQNNSBb5Dxo=";
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
-      mandoc groff rsync rpcgen
+      #mandoc groff rsync rpcgen
+      bmake
     ];
 
     dontBuild = true;
@@ -490,17 +492,25 @@ in makeScopeWithSplicing
       makeFlags=''${makeFlags/INCSDIR/INCSDIR0}
     '';
 
+    installPhase = ''
+      runHook preInstall
+
+      bmake includes
+
+      runHook postInstall
+    '';
+
     extraPaths = with self; [ ];
     headersOnly = true;
     noCC = true;
     meta.platforms = lib.platforms.openbsd;
-    makeFlags = defaultMakeFlags ++ [ "RPCGEN_CPP=${buildPackages.stdenv.cc.cc}/bin/cpp" ];
+    makeFlags = defaultMakeFlags;
   };
 
   sys-headers = mkDerivation {
     pname = "sys-headers";
     path = "sys";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "";
 
     # multiple header dirs, see above
@@ -569,14 +579,14 @@ in makeScopeWithSplicing
   ##
   libarch = mkDerivation {
     path = "lib/libarch";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "6ssenRhuSwp0Jn71ErT0PrEoCJ+cIYRztwdL4QTDZsQ=";
     meta.platforms = lib.platforms.openbsd;
   };
 
   libutil = mkDerivation {
     path = "lib/libutil";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "";
     extraPaths = with self; [ libc.src sys.src ];
     nativeBuildInputs = with buildPackages.openbsd; [
@@ -589,7 +599,7 @@ in makeScopeWithSplicing
 
   libedit = mkDerivation {
     path = "lib/libedit";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "1wqhngraxwqk4jgrf5f18jy195yrp7c06n1gf31pbplq79mg1bcj";
     buildInputs = with self; [ libterminfo libcurses ];
     #propagatedBuildInputs = with self; compatIfNeeded;
@@ -610,7 +620,7 @@ in makeScopeWithSplicing
 
   libterminfo = mkDerivation {
     path = "lib/libterminfo";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "0pq05k3dj0dfsczv07frnnji92mazmy2qqngqbx2zgqc1x251414";
     nativeBuildInputs = with buildPackages.openbsd; [
       bsdSetupHook openbsdSetupHook
@@ -630,13 +640,13 @@ in makeScopeWithSplicing
       make -C $BSDSRCDIR/share/terminfo $makeFlags BINDIR=$out/share install
     '';
     extraPaths = with self; [
-      (fetchOpenBSD "share/terminfo" "7.2" "1vh9rl4w8118a9qdpblfxmv1wkpm83rm9gb4rzz5bpm56i6d7kk7")
+      (fetchOpenBSD "share/terminfo" openbsdVersion "1vh9rl4w8118a9qdpblfxmv1wkpm83rm9gb4rzz5bpm56i6d7kk7")
     ];
   };
 
   libcurses = mkDerivation {
     path = "lib/libcurses";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "0pd0dggl3w4bv5i5h0s1wrc8hr66n4hkv3zlklarwfdhc692fqal";
     buildInputs = with self; [ libterminfo ];
     NIX_CFLAGS_COMPILE = [
@@ -658,20 +668,20 @@ in makeScopeWithSplicing
 
   column = mkDerivation {
     path = "usr.bin/column";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "0r6b0hjn5ls3j3sv6chibs44fs32yyk2cg8kh70kb4cwajs4ifyl";
   };
 
   libossaudio = mkDerivation {
     path = "lib/libossaudio";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "16l3bfy6dcwqnklvh3x0ps8ld1y504vf57v9rx8f9adzhb797jh0";
     meta.platforms = lib.platforms.openbsd;
   };
 
   librpcsvc = mkDerivation {
     path = "lib/librpcsvc";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "1q34pfiyjbrgrdqm46jwrsqms49ly6z3b0xh1wg331zga900vq5n";
     makeFlags = defaultMakeFlags ++ [ "INCSDIR=$(out)/include/rpcsvc" ];
     meta.platforms = lib.platforms.openbsd;
@@ -683,7 +693,7 @@ in makeScopeWithSplicing
 
   librt = mkDerivation {
     path = "lib/librt";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "07f8mpjcqh5kig5z5sp97fg55mc4dz6aa1x5g01nv2pvbmqczxc6";
     meta.platforms = lib.platforms.openbsd;
     extraPaths = with self; [ libc.src ] ++ libc.extraPaths;
@@ -695,7 +705,7 @@ in makeScopeWithSplicing
 
   libcrypt = mkDerivation {
     path = "lib/libcrypt";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "0siqan1wdqmmhchh2n8w6a8x1abbff8n4yb6jrqxap3hqn8ay54g";
     SHLIBINSTALLDIR = "$(out)/lib";
     meta.platforms = lib.platforms.openbsd;
@@ -704,7 +714,7 @@ in makeScopeWithSplicing
   libpci = mkDerivation {
     pname = "libpci";
     path = "lib/libpci";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "+IOEO1Bw3/H3iCp3uk3bwsFZbvCqN5Ciz70irnPl8E8=";
     NIX_CFLAGS_COMPILE = [ "-I." ];
     meta.platforms = lib.platforms.openbsd;
@@ -714,7 +724,7 @@ in makeScopeWithSplicing
   libpthread-headers = mkDerivation {
     pname = "libpthread-headers";
     path = "lib/libpthread";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "";
     installPhase = "includesPhase";
     dontBuild = true;
@@ -734,7 +744,7 @@ in makeScopeWithSplicing
 
   libresolv = mkDerivation {
     path = "lib/libresolv";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "1am74s74mf1ynwz3p4ncjkg63f78a1zjm983q166x4sgzps15626";
     meta.platforms = lib.platforms.openbsd;
     extraPaths = with self; [ libc.src ];
@@ -742,7 +752,7 @@ in makeScopeWithSplicing
 
   libm = mkDerivation {
     path = "lib/libm";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "1apwfr26shdmbqqnmg7hxf7bkfxw44ynqnnnghrww9bnhqdnsy92";
     SHLIBINSTALLDIR = "$(out)/lib";
     meta.platforms = lib.platforms.openbsd;
@@ -751,7 +761,7 @@ in makeScopeWithSplicing
 
   i18n_module = mkDerivation {
     path = "lib/i18n_module";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "0w6y5v3binm7gf2kn7y9jja8k18rhnyl55cvvfnfipjqdxvxd9jd";
     meta.platforms = lib.platforms.openbsd;
     extraPaths = with self; [ libc.src ];
@@ -759,7 +769,7 @@ in makeScopeWithSplicing
 
   csu = mkDerivation {
     path = "lib/csu";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "0al5jfazvhlzn9hvmnrbchx4d0gm282hq5gp4xs2zmj9ycmf6d03";
     meta.platforms = lib.platforms.openbsd;
     nativeBuildInputs = with buildPackages.openbsd; [
@@ -773,7 +783,7 @@ in makeScopeWithSplicing
 
   ld_elf_so = mkDerivation {
     path  = "libexec/ld.elf_so";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "0ia9mqzdljly0vqfwflm5mzz55k7qsr4rw2bzhivky6k30vgirqa";
     meta.platforms = lib.platforms.openbsd;
     LIBC_PIC = "${self.libc}/lib/libc_pic.a";
@@ -792,7 +802,7 @@ in makeScopeWithSplicing
 
   libc = mkDerivation {
     path = "lib/libc";
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "";
     USE_FORT = "yes";
     MKPROFILE = "no";
@@ -859,7 +869,7 @@ in makeScopeWithSplicing
   dict = mkDerivation {
     path = "share/dict";
     noCC = true;
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "0svfc0byk59ri37pyjslv4c4rc7zw396r73mr593i78d39q5g3ad";
     makeFlags = defaultMakeFlags ++ [ "BINDIR=$(out)/share" ];
   };
@@ -867,7 +877,7 @@ in makeScopeWithSplicing
   misc = mkDerivation {
     path = "share/misc";
     noCC = true;
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "1j2cdssdx6nncv8ffj7f7ybl7m9hadjj8vm8611skqdvxnjg6nbc";
     makeFlags = defaultMakeFlags ++ [ "BINDIR=$(out)/share" ];
   };
@@ -875,7 +885,7 @@ in makeScopeWithSplicing
   man = mkDerivation {
     path = "share/man";
     noCC = true;
-    version = "7.2";
+    version = openbsdVersion;
     sha256 = "1l4lmj4kmg8dl86x94sr45w0xdnkz8dn4zjx0ipgr9bnq98663zl";
     # man0 generates a man.pdf using ps2pdf, but doesn't install it later,
     # so we can avoid the dependency on ghostscript

@@ -8,7 +8,7 @@ mergeOpenBSDSourceDir() {
 }
 
 addOpenBSDMakeFlags() {
-  makeFlags="INCSDIR=${!outputDev}/include $makeFlags"
+  makeFlags="DESTDIR=${!outputDev}/usr/include $makeFlags"
 }
 
 postUnpackHooks+=(mergeOpenBSDSourceDir)
