@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, enableMultilib
 }:
 
 originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
@@ -188,16 +189,22 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
   preInstall = ''
     mkdir -p "$out/''${targetConfig}/lib"
     mkdir -p "''${!outputLib}/''${targetConfig}/lib"
-    # Make ‘lib64’ symlinks to ‘lib’.
-    if [ -n "$linkLib64toLib" ]; then
-        ln -s lib "$out/''${targetConfig}/lib64"
-        ln -s lib "''${!outputLib}/''${targetConfig}/lib64"
-    fi
-    # Make ‘lib32’ symlinks to ‘lib’.
-    if [ -n "$linkLib32toLib" ]; then
-        ln -s lib "$out/''${targetConfig}/lib32"
-        ln -s lib "''${!outputLib}/''${targetConfig}/lib32"
-    fi
+  '' +
+  # Make `lib64` symlinks to `lib`.
+  lib.optionalString (!enableMultilib && stdenv.hostPlatform.is64bit && !stdenv.hostPlatform.isMips64n32) ''
+    ln -s lib "$out/''${targetConfig}/lib64"
+    ln -s lib "''${!outputLib}/''${targetConfig}/lib64"
+  '' +
+  # On mips platforms, gcc follows the IRIX naming convention:
+  #
+  #  $PREFIX/lib   = mips32
+  #  $PREFIX/lib32 = mips64n32
+  #  $PREFIX/lib64 = mips64
+  #
+  # Make `lib32` symlinks to `lib`.
+  lib.optionalString (!enableMultilib && stdenv.targetPlatform.isMips64n32) ''
+    ln -s lib "$out/''${targetConfig}/lib32"
+    ln -s lib "''${!outputLib}/''${targetConfig}/lib32"
   '';
 
   postInstall = ''
