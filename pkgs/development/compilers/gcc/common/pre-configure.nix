@@ -120,7 +120,8 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
   (lib.optionalString (!stdenv.targetPlatform.isPower) ''
     echo 'libgcc.a: crti.o crtn.o' >> libgcc/Makefile.in
   '' + ''
-    echo 'SHLIB_LC=' >> libgcc/Makefile.in
+    find libgcc/config -name t-\* \
+      -exec sed -i 's/\(SHLIB_LC.*=.*\)-lc\b/\1/' {} \;
   '')
 
 + lib.optionalString (!enableMultilib && hostPlatform.is64bit && !hostPlatform.isMips64n32) ''
