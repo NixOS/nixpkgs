@@ -5,8 +5,11 @@ use serde_json::{Map, Value};
 use std::{
     fs, io,
     process::{Command, Stdio},
+    thread,
+    time::Duration,
 };
 use tempfile::{tempdir, TempDir};
+use ureq::{Error, ErrorKind, Response};
 use url::Url;
 
 pub mod lock;
@@ -103,7 +106,7 @@ impl Package {
 
         let specifics = match get_hosted_git_url(&resolved)? {
             Some(hosted) => {
-                let mut body = ureq::get(hosted.as_str()).call()?.into_reader();
+                let mut body = get_response(hosted.as_str())?.into_reader();
 
                 let workdir = tempdir()?;
 
@@ -154,8 +157,7 @@ impl Package {
             Specifics::Registry { .. } => {
                 let mut body = Vec::new();
 
-                ureq::get(self.url.as_str())
-                    .call()?
+                get_response(self.url.as_str())?
                     .into_reader()
                     .read_to_end(&mut body)?;
 
@@ -187,6 +189,31 @@ impl Package {
             Specifics::Git { .. } => None,
         }
     }
+}
+
+#[allow(clippy::result_large_err)]
+fn get_response(url: &str) -> Result<Response, Error> {
+    for _ in 0..4 {
+        match ureq::get(url).call() {
+            Err(Error::Status(503 | 429, r)) => {
+                let retry: Option<u64> = r.header("retry-after").and_then(|h| h.parse().ok());
+                let retry = retry.unwrap_or(5);
+                eprintln!("{} for {}, retry in {}", r.status(), r.get_url(), retry);
+                thread::sleep(Duration::from_secs(retry));
+            }
+            Err(Error::Transport(t)) => match t.kind() {
+                ErrorKind::ConnectionFailed | ErrorKind::Dns | ErrorKind::Io => {
+                    let retry = 5;
+                    eprintln!("{} for {}, retry in {}", t.kind(), url, retry);
+                    thread::sleep(Duration::from_secs(retry));
+                }
+                _ => return Err(Error::Transport(t)),
+            },
+            result => return result,
+        };
+    }
+    // Ran out of retries; try one last time and return whatever result we get.
+    ureq::get(url).call()
 }
 
 #[allow(clippy::case_sensitive_file_extension_comparisons)]

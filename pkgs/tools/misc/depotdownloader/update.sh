@@ -3,7 +3,6 @@
 
 set -eou pipefail
 
-depsFile="$(realpath "$(dirname "${BASH_SOURCE[0]}")/deps.nix")"
 currentVersion="$(nix eval --raw -f . depotdownloader.version)"
 latestVersion="$(curl -s ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} "https://api.github.com/repos/SteamRE/DepotDownloader/releases?per_page=1" \
     | jq -r '.[].name' | cut -d' ' -f2)"
@@ -14,4 +13,4 @@ if [[ "$currentVersion" = "$latestVersion" ]]; then
 fi
 
 update-source-version depotdownloader "$latestVersion"
-$(nix-build -A depotdownloader.fetch-deps --no-out-link) "$depsFile"
+$(nix-build -A depotdownloader.fetch-deps --no-out-link)
