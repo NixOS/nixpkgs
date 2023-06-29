@@ -477,6 +477,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
+  cmakerc = callPackage ../development/libraries/cmakerc { };
+
   cmark = callPackage ../development/libraries/cmark { };
 
   cmark-gfm = callPackage ../development/libraries/cmark-gfm { };
