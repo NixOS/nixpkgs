@@ -22,12 +22,12 @@ let
     # The loosely held nixpkgs convention for SBCL is to keep the last two
     # versions.
     # https://github.com/NixOS/nixpkgs/pull/200994#issuecomment-1315042841
-    "2.3.4" = {
-      sha256 = "sha256-8RtHZMbqvbJ+WpxGshcgTRG82lNOc7+XBz1Xgx0gnE4=";
-    };
-
     "2.3.5" = {
       sha256 = "sha256-ickHIM+dBdvNkNaQ44GiUUwPGAcVng1yIiIMWowtUYY=";
+    };
+
+    "2.3.6" = {
+      sha256 = "sha256-tEFMpNmnR06NiE19YyN+LynvRZ39WoSEJKnD+lUdGbk=";
     };
   };
 
