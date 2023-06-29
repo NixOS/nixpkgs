@@ -166,13 +166,13 @@ in {
         rm -Rf zlib
     fi
 
-    if test -n "$crossMingw" -a -n "$withoutTargetLibc"; then
-        mkdir -p ../mingw
-        # --with-build-sysroot expects that:
-        cp -R $libcCross/include ../mingw
-        configureFlags="$configureFlags --with-build-sysroot=`pwd`/.."
-    fi
+  '' + lib.optionalString (finalAttrs.crossMingw && finalAttrs.withoutTargetLibc) ''
+    mkdir -p ../mingw
+    # --with-build-sysroot expects that:
+    cp -R $libcCross/include ../mingw
+    configureFlags="$configureFlags --with-build-sysroot=`pwd`/.."
 
+  '' + ''
     # Perform the build in a different directory.
     mkdir ../build
     cd ../build
