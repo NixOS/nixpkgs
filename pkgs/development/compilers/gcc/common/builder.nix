@@ -214,9 +214,9 @@ in {
     moveToOutput "${targetConfigSlash}lib/lib*.dll.a" "${builtins.placeholder "lib"}"
     moveToOutput "share/gcc-*/python" "${builtins.placeholder "lib"}"
 
-    if [ -z "$enableShared" ]; then
-        moveToOutput "${targetConfigSlash}lib/lib*.a" "${builtins.placeholder "lib"}"
-    fi
+  '' + lib.optionalString (!finalAttrs.enableShared) ''
+    moveToOutput "${targetConfigSlash}lib/lib*.a" "${builtins.placeholder "lib"}"
+  '' + ''
 
     for i in "${builtins.placeholder "lib"}/${ifNullThen targetConfig ""}"/lib/*.{la,py}; do
         substituteInPlace "$i" --replace "$out" "${builtins.placeholder "lib"}"
