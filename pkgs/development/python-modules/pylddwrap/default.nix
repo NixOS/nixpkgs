@@ -56,5 +56,8 @@ buildPythonPackage rec {
     changelog = "https://github.com/Parquery/pylddwrap/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ thiagokokada ];
+    # should work in any Unix platform that uses glibc, except for darwin
+    # since it has its own tool (`otool`)
+    badPlatforms = platforms.darwin;
   };
 }
