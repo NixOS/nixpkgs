@@ -1,13 +1,21 @@
 { lib
 , stdenv
+, version
 , langC
 , langCC
 , langJit
+, targetPlatform
+, hostPlatform
+, crossStageStatic
+, enableShared
 }:
+
+assert !stdenv.targetPlatform.hasSharedLibraries -> !enableShared;
 
 let
   enableLibGccOutput =
     (with stdenv; targetPlatform == hostPlatform) &&
+    lib.versionAtLeast version "11.0" && # nixpkgs did not add the "libgcc" output until gcc11.
     !langJit &&
     !stdenv.hostPlatform.isDarwin &&
     !stdenv.hostPlatform.isStatic;

@@ -7,8 +7,8 @@
 , profiledCompiler ? false
 , langJit ? false
 , staticCompiler ? false
-, enableShared ? !stdenv.targetPlatform.isStatic
-, enableLTO ? !stdenv.hostPlatform.isStatic
+, enableShared ? stdenv.targetPlatform.hasSharedLibraries
+, enableLTO ? stdenv.hostPlatform.hasSharedLibraries
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man)
 , gmp, mpfr, libmpc, gettext, which, patchelf, binutils
@@ -149,7 +149,7 @@ let majorVersion = "7";
 
 in
 
-stdenv.mkDerivation ({
+lib.pipe (stdenv.mkDerivation ({
   pname = "${crossNameAddon}${name}";
   inherit version;
 
@@ -302,4 +302,7 @@ stdenv.mkDerivation ({
 }
 
 // optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
-)
+))
+[
+  (callPackage ../common/libgcc.nix   { inherit version langC langCC langJit targetPlatform hostPlatform enableShared crossStageStatic; })
+]

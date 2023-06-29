@@ -8,8 +8,8 @@
 , profiledCompiler ? false
 , langJit ? false
 , staticCompiler ? false
-, enableShared ? !stdenv.targetPlatform.isStatic
-, enableLTO ? !stdenv.hostPlatform.isStatic
+, enableShared ? stdenv.targetPlatform.hasSharedLibraries
+, enableLTO ? stdenv.hostPlatform.hasSharedLibraries
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man); required for Java
 , gmp, mpfr, libmpc, gettext, which, patchelf, binutils
@@ -210,7 +210,7 @@ in
 # We need all these X libraries when building AWT with GTK.
 assert x11Support -> (filter (x: x == null) ([ gtk2 libart_lgpl ] ++ xlibs)) == [];
 
-stdenv.mkDerivation ({
+lib.pipe (stdenv.mkDerivation ({
   pname = "${crossNameAddon}${name}";
   inherit version;
 
@@ -350,4 +350,7 @@ stdenv.mkDerivation ({
        target="$(echo "$out/libexec/gcc"/*/*/ecj*)"
        patchelf --set-rpath "$(patchelf --print-rpath "$target"):$out/lib" "$target"
      '';}
-)
+))
+[
+  (callPackage ../common/libgcc.nix   { inherit version langC langCC langJit targetPlatform hostPlatform enableShared crossStageStatic; })
+]
