@@ -8196,6 +8196,13 @@
     githubId = 21160136;
     name = "Julien Moutinho";
   };
+  Julow = {
+    email = "jules@j3s.fr";
+    matrix = "@juloo:matrix.org";
+    github = "Julow";
+    githubId = 2310568;
+    name = "Jules Aguillon";
+  };
   jumper149 = {
     email = "felixspringer149@gmail.com";
     github = "jumper149";
