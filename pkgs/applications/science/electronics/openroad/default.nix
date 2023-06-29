@@ -8,7 +8,7 @@
 , git
 , python3
 , swig4
-, boost17x
+, boost179
 , cbc       # for clp
 , cimg
 , clp       # for or-tools
@@ -55,7 +55,7 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    boost17x
+    boost179
     cbc
     cimg
     clp
