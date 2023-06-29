@@ -37,11 +37,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-cMer7CSLOXv3jc9huVA3Oy5cjXjOX9XuEXpIWau1BNQ=";
   };
 
-  outputs = [
-    "out"
-    "dev"
-  ];
-
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -52,17 +47,9 @@ stdenv.mkDerivation rec {
     onnxruntime
   ];
 
-  ainstallPhase = ''
-    runHook preInstall
-    
-    install -d $out/lib
-    install ./libpiper_phonemize.so $out/lib
-
-    install -d $dev/include/piper_phonemize
-    install -D ../src/*.hpp $dev/include
-    
-    runHook postInstall
-  '';
+  passthru = {
+    espeak-ng = espeak-ng';
+  };
 
   meta = with lib; {
     description = "C++ library for converting text to phonemes for Piper";
