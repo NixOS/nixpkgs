@@ -8912,7 +8912,7 @@ with pkgs;
   inherit (callPackages ../tools/filesystems/irods rec {
     stdenv = llvmPackages.libcxxStdenv;
     libcxx = llvmPackages.libcxx;
-    boost = boost17x.override { inherit stdenv; };
+    boost = boost179.override { inherit stdenv; };
     fmt = fmt_8.override { inherit stdenv; };
     nanodbc_llvm = nanodbc.override { inherit stdenv; };
     avro-cpp_llvm = avro-cpp.override { inherit stdenv boost; };
@@ -11225,7 +11225,7 @@ with pkgs;
   oshka = callPackage ../development/tools/oshka { };
 
   osl = libsForQt5.callPackage ../development/compilers/osl {
-    boost = boost17x;
+    boost = boost179;
   };
 
   osqp = callPackage ../development/libraries/science/math/osqp { };
@@ -14495,7 +14495,7 @@ with pkgs;
   };
 
   xtreemfs = callPackage ../tools/filesystems/xtreemfs {
-    boost = boost17x;
+    boost = boost179;
   };
 
   xurls = callPackage ../tools/text/xurls { };
@@ -20249,9 +20249,7 @@ with pkgs;
     boost182
   ;
 
-  boost17x = boost179;
-  boost18x = boost182;
-  boost = boost17x;
+  boost = boost179;
 
   boost_process = callPackage ../development/libraries/boost-process { };
 
@@ -21560,8 +21558,8 @@ with pkgs;
   hpp-fcl = callPackage ../development/libraries/hpp-fcl { };
 
   hpx = callPackage ../development/libraries/hpx {
-    boost = boost17x;
-    asio = asio.override { boost = boost17x; };
+    boost = boost179;
+    asio = asio.override { boost = boost179; };
   };
 
   hspell = callPackage ../development/libraries/hspell { };
@@ -26400,14 +26398,14 @@ with pkgs;
 
   mongodb-4_4 = callPackage ../servers/nosql/mongodb/4.4.nix {
     sasl = cyrus_sasl;
-    boost = boost17x.override { enableShared = false; };
+    boost = boost179.override { enableShared = false; };
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
 
   mongodb-5_0 = callPackage ../servers/nosql/mongodb/5.0.nix {
     sasl = cyrus_sasl;
-    boost = boost17x.override { enableShared = false; };
+    boost = boost179.override { enableShared = false; };
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
@@ -36336,19 +36334,19 @@ with pkgs;
 
   bitcoin  = libsForQt5.callPackage ../applications/blockchains/bitcoin {
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
-    boost = boost17x;
+    boost = boost179;
     withGui = true;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
   bitcoind = callPackage ../applications/blockchains/bitcoin {
-    boost = boost17x;
+    boost = boost179;
     withGui = false;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
   bitcoind-knots = callPackage ../applications/blockchains/bitcoin-knots {
-    boost = boost17x;
+    boost = boost179;
     withGui = false;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
@@ -36370,11 +36368,11 @@ with pkgs;
   besu = callPackage ../applications/blockchains/besu { };
 
   bitcoin-abc  = libsForQt5.callPackage ../applications/blockchains/bitcoin-abc {
-    boost = boost17x;
+    boost = boost179;
     withGui = true;
   };
   bitcoind-abc = callPackage ../applications/blockchains/bitcoin-abc {
-    boost = boost17x;
+    boost = boost179;
     mkDerivation = stdenv.mkDerivation;
     withGui = false;
   };
@@ -36401,11 +36399,11 @@ with pkgs;
   dcrwallet = callPackage ../applications/blockchains/dcrwallet { };
 
   dogecoin  = libsForQt5.callPackage ../applications/blockchains/dogecoin {
-    boost = boost17x;
+    boost = boost179;
     withGui = true;
   };
   dogecoind = callPackage ../applications/blockchains/dogecoin {
-    boost = boost17x;
+    boost = boost179;
     withGui = false;
   };
 
@@ -36452,13 +36450,13 @@ with pkgs;
 
   groestlcoin  = libsForQt5.callPackage ../applications/blockchains/groestlcoin {
     stdenv = darwin.apple_sdk_11_0.stdenv;
-    boost = boost17x;
+    boost = boost179;
     withGui = true;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
   groestlcoind = callPackage ../applications/blockchains/groestlcoin {
-    boost = boost17x;
+    boost = boost179;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
@@ -36495,11 +36493,11 @@ with pkgs;
   };
 
   monero-gui = libsForQt5.callPackage ../applications/blockchains/monero-gui {
-    boost = boost17x;
+    boost = boost179;
   };
 
   oxen = callPackage ../applications/blockchains/oxen
-    { stdenv = gcc10StdenvCompat; boost = boost17x; };
+    { stdenv = gcc10StdenvCompat; boost = boost179; };
 
   masari = callPackage ../applications/blockchains/masari { };
 
@@ -36528,7 +36526,7 @@ with pkgs;
   stellar-core = callPackage ../applications/blockchains/stellar-core { };
 
   sumokoin = callPackage ../applications/blockchains/sumokoin {
-    boost = boost17x;
+    boost = boost179;
   };
 
   solana-cli = callPackage ../applications/blockchains/solana { };
@@ -36554,11 +36552,11 @@ with pkgs;
   torq = callPackage ../applications/blockchains/torq { };
 
   vertcoin  = libsForQt5.callPackage ../applications/blockchains/vertcoin {
-    boost = boost17x;
+    boost = boost179;
     withGui = true;
   };
   vertcoind = callPackage ../applications/blockchains/vertcoin {
-    boost = boost17x;
+    boost = boost179;
     withGui = false;
   };
 
