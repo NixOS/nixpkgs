@@ -9,6 +9,7 @@ edition = "2021"
 anyhow = "1.0.71"
 base64 = "0.21.2"
 digest = "0.10.7"
+env_logger = "0.10.0"
 isahc = { version = "1.7.2", default_features = false }
 rayon = "1.7.0"
 serde = { version = "1.0.164", features = ["derive"] }
