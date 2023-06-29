@@ -5,8 +5,7 @@ set -e
 
 shopt -s nullglob
 
-export PATH=/empty
-for i in @path@; do PATH=$PATH:$i/bin; done
+export PATH='@path@'
 
 usage() {
     echo "usage: $0 -c <path-to-default-configuration> [-d <boot-dir>]" >&2
@@ -23,6 +22,8 @@ while getopts "c:d:" opt; do
         \?) usage ;;
     esac
 done
+
+[ -z "$default" ] && usage
 
 echo "updating the boot generations directory..."
 
@@ -82,7 +83,6 @@ addEntry() {
     fi
 
     echo $(readlink -f $path) > $outdir/$generation-system
-    echo $(readlink -f $path/init) > $outdir/$generation-init
     cp $path/kernel-params $outdir/$generation-cmdline.txt
     echo $initrd > $outdir/$generation-initrd
     echo $kernel > $outdir/$generation-kernel
@@ -95,7 +95,6 @@ addEntry() {
         copyForced $dtb "$dst"
         filesCopied[$dst]=1
       done
-      cp "$(readlink -f "$path/init")" $target/nixos-init
       echo "`cat $path/kernel-params` init=$path/init" >$target/cmdline.txt
     fi
 }
@@ -111,29 +110,6 @@ for generation in $(
     link=/nix/var/nix/profiles/system-$generation-link
     addEntry $link $generation
 done
-
-# Add the firmware files
-fwdir=@firmware@/share/raspberrypi/boot/
-copyForced $fwdir/bootcode.bin  $target/bootcode.bin
-copyForced $fwdir/fixup.dat     $target/fixup.dat
-copyForced $fwdir/fixup4.dat    $target/fixup4.dat
-copyForced $fwdir/fixup4cd.dat  $target/fixup4cd.dat
-copyForced $fwdir/fixup4db.dat  $target/fixup4db.dat
-copyForced $fwdir/fixup4x.dat   $target/fixup4x.dat
-copyForced $fwdir/fixup_cd.dat  $target/fixup_cd.dat
-copyForced $fwdir/fixup_db.dat  $target/fixup_db.dat
-copyForced $fwdir/fixup_x.dat   $target/fixup_x.dat
-copyForced $fwdir/start.elf     $target/start.elf
-copyForced $fwdir/start4.elf    $target/start4.elf
-copyForced $fwdir/start4cd.elf  $target/start4cd.elf
-copyForced $fwdir/start4db.elf  $target/start4db.elf
-copyForced $fwdir/start4x.elf   $target/start4x.elf
-copyForced $fwdir/start_cd.elf  $target/start_cd.elf
-copyForced $fwdir/start_db.elf  $target/start_db.elf
-copyForced $fwdir/start_x.elf   $target/start_x.elf
-
-# Add the config.txt
-copyForced @configTxt@ $target/config.txt
 
 # Remove obsolete files from $target and $target/old.
 for fn in $target/old/*linux* $target/old/*initrd-initrd* $target/bcm*.dtb; do

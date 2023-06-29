@@ -4,44 +4,32 @@ with lib;
 
 let
   cfg = config.boot.loader.raspberryPi;
-
-  builderUboot = import ./uboot-builder.nix { inherit pkgs configTxt; inherit (cfg) version; };
-  builderGeneric = import ./raspberrypi-builder.nix { inherit pkgs configTxt; };
-
-  builder =
-    if cfg.uboot.enable then
-      "${builderUboot} -g ${toString cfg.uboot.configurationLimit} -t ${timeoutStr} -c"
-    else
-      "${builderGeneric} -c";
-
   blCfg = config.boot.loader;
-  timeoutStr = if blCfg.timeout == null then "-1" else toString blCfg.timeout;
 
-  isAarch64 = pkgs.stdenv.hostPlatform.isAarch64;
-  optional = pkgs.lib.optionalString;
 
-  configTxt =
-    pkgs.writeText "config.txt" (''
-      # U-Boot used to need this to work, regardless of whether UART is actually used or not.
-      # TODO: check when/if this can be removed.
-      enable_uart=1
+  firmwareBuilder = pkgs.callPackage ./firmware-builder.nix {
+    inherit (cfg) version;
+    ubootEnabled = cfg.uboot.enable;
+  };
+  raspberryPiBuilder = pkgs.callPackage ./raspberrypi-builder.nix { };
 
-      # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
-      # when attempting to show low-voltage or overtemperature warnings.
-      avoid_warnings=1
-    '' + optional isAarch64 ''
-      # Boot in 64-bit mode.
-      arm_64bit=1
-    '' + (if cfg.uboot.enable then ''
-      kernel=u-boot-rpi.bin
-    '' else ''
-      kernel=kernel.img
-      initramfs initrd followkernel
-    '') + optional (cfg.firmwareConfig != null) cfg.firmwareConfig);
+  builder = pkgs.writeScript "install-raspberrypi-bootloader.sh" (''
+    #!${pkgs.runtimeShell}
+    '${firmwareBuilder}' -d '${cfg.firmwareDir}' -c '${configTxt}'
+  '' + (if cfg.uboot.enable then ''
+    ${config.boot.loader.generic-extlinux-compatible.installCmd} -c "$@"
+  '' else ''
+    '${raspberryPiBuilder}' -d '${cfg.firmwareDir}' -c "$@"
+  ''));
 
+  configTxt = pkgs.writeText "config.txt" cfg.firmwareConfig;
 in
 
 {
+  imports = [
+    (mkRenamedOptionModule [ "boot" "loader" "raspberryPi" "uboot" "configurationLimit" ] [ "boot" "loader" "generic-extlinux-compatible" "configurationLimit" ])
+  ];
+
   options = {
 
     boot.loader.raspberryPi = {
@@ -61,32 +49,21 @@ in
         description = lib.mdDoc "";
       };
 
-      uboot = {
-        enable = mkOption {
-          default = false;
-          type = types.bool;
-          description = lib.mdDoc ''
-            Enable using uboot as bootmanager for the raspberry pi.
-          '';
-        };
-
-        configurationLimit = mkOption {
-          default = 20;
-          example = 10;
-          type = types.int;
-          description = lib.mdDoc ''
-            Maximum number of configurations in the boot menu.
-          '';
-        };
-
-      };
+      uboot.enable = mkEnableOption (lib.mdDoc "U-Boot as the bootloader for the Raspberry Pi");
 
       firmwareConfig = mkOption {
-        default = null;
-        type = types.nullOr types.lines;
+        type = types.lines;
         description = lib.mdDoc ''
           Extra options that will be appended to `/boot/config.txt` file.
           For possible values, see: https://www.raspberrypi.com/documentation/computers/config_txt.html
+        '';
+      };
+
+      firmwareDir = mkOption {
+        default = "/boot";
+        type = types.path;
+        description = lib.mdDoc ''
+          Mount point of the firmware partition.
         '';
       };
     };
@@ -98,8 +75,25 @@ in
       message = "Only Raspberry Pi >= 3 supports aarch64.";
     };
 
-    system.build.installBootLoader = builder;
-    system.boot.loader.id = "raspberrypi";
+    boot.loader.raspberryPi.firmwareConfig = mkBefore (''
+      # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
+      # when attempting to show low-voltage or overtemperature warnings.
+      avoid_warnings=1
+    '' + optionalString pkgs.stdenv.hostPlatform.isAarch64 ''
+      # Boot in 64-bit mode.
+      arm_64bit=1
+    '' + (if cfg.uboot.enable then ''
+      kernel=u-boot-rpi.bin
+    '' else ''
+      kernel=kernel.img
+      initramfs initrd followkernel
+    ''));
+
+    boot.loader.generic-extlinux-compatible.enable = mkIf cfg.uboot.enable true;
+
+    # Override the generic-extlinux-compatible builder (if enabled) with our own
+    system.build.installBootLoader = mkForce builder;
+    system.boot.loader.id = mkForce "raspberrypi";
     system.boot.loader.kernelFile = pkgs.stdenv.hostPlatform.linux-kernel.target;
   };
 }
