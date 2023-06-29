@@ -1,6 +1,6 @@
 { buildPythonPackage
 , lib
-, fetchPypi
+, fetchFromGitHub
 , setuptools-scm
 , pythonOlder
 , importlib-metadata
@@ -8,15 +8,19 @@
 
 buildPythonPackage rec {
   pname = "pluggy";
-  version = "1.0.0";
+  version = "1.2.0";
   format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "4224373bacce55f955a878bf9cfa763c1e360858e330072059e10bad68531159";
+  src = fetchFromGitHub {
+    owner = "pytest-dev";
+    repo = "pluggy";
+    rev = "refs/tags/${version}";
+    hash = "sha256-SzJu7ITdmUgusn8sz6fRBpxTMQncWIViP5NCAj4q4GM=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
     importlib-metadata
@@ -26,6 +30,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
+    changelog = "https://github.com/pytest-dev/pluggy/blob/${src.rev}/CHANGELOG.rst";
     description = "Plugin and hook calling mechanisms for Python";
     homepage = "https://github.com/pytest-dev/pluggy";
     license = lib.licenses.mit;
