@@ -403,14 +403,6 @@ self: super: {
         pkgs.haskellPackages.streamly_0_9_0;
   };
 
-  # The package requires streamly == 0.9.*.
-  # (We can remove this once the assert starts failing.)
-  streamly-lmdb = super.streamly-lmdb.override {
-    streamly =
-      assert (builtins.compareVersions pkgs.haskellPackages.streamly.version "0.9.0" < 0);
-        pkgs.haskellPackages.streamly_0_9_0;
-  };
-
   # base bound
   digit = doJailbreak super.digit;
 
