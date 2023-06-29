@@ -480,9 +480,6 @@ let
       # package sets (like Cabal, jailbreak-cabal) are
       # working as expected.
       cabal-install = released;
-      Cabal_3_6_3_0 = released;
-      Cabal_3_8_1_0 = released;
-      Cabal-syntax_3_8_1_0 = released;
       Cabal_3_10_1_0 = released;
       Cabal-syntax_3_10_1_0 = released;
       cabal2nix = lib.subtractLists [

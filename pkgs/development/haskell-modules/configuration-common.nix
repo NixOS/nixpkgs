@@ -19,15 +19,6 @@ in
 with haskellLib;
 
 self: super: {
-
-  # Make sure that Cabal 3.8.* can be built as-is
-  Cabal_3_8_1_0 = doDistribute (super.Cabal_3_8_1_0.override ({
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-  } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.2.5") {
-    # Use process core package when possible
-    process = self.process_1_6_17_0;
-  }));
-
   # Make sure that Cabal 3.10.* can be built as-is
   Cabal_3_10_1_0 = doDistribute (super.Cabal_3_10_1_0.override ({
     Cabal-syntax = self.Cabal-syntax_3_10_1_0;
@@ -2143,11 +2134,6 @@ self: super: {
     sha256 = "0l15ccfdys100jf50s9rr4p0d0ikn53bkh7a9qlk9i0y0z5jc6x1";
   }) super.basic-cpuid;
 
-  # Needs Cabal >= 3.4
-  chs-cabal = super.chs-cabal.override {
-    Cabal = self.Cabal_3_6_3_0;
-  };
-
   # 2021-08-18: streamly-posix was released with hspec 2.8.2, but it works with older versions too.
   streamly-posix = doJailbreak super.streamly-posix;
 
@@ -2311,7 +2297,7 @@ self: super: {
 
   cabal-fmt = doJailbreak (super.cabal-fmt.override {
     # Needs newer Cabal-syntax version.
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+    Cabal-syntax = self.Cabal-syntax_3_10_1_0;
   });
 
   # Tests require ghc-9.2.
