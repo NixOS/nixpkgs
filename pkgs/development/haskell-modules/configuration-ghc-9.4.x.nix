@@ -108,10 +108,7 @@ in {
 
   # the dontHaddock is due to a GHC panic. might be this bug, not sure.
   # https://gitlab.haskell.org/ghc/ghc/-/issues/21619
-  #
-  # We need >= 1.1.2 for ghc-9.4 support, but we don't have 1.1.x in
-  # hackage-packages.nix
-  hedgehog = doDistribute (dontHaddock super.hedgehog_1_2);
+  hedgehog = dontHaddock super.hedgehog;
   # tasty-hedgehog > 1.3 necessary to work with hedgehog 1.2:
   # https://github.com/qfpl/tasty-hedgehog/pull/63
   tasty-hedgehog = self.tasty-hedgehog_1_4_0_1;
@@ -136,8 +133,6 @@ in {
     ] ++ drv.testFlags or [];
   }) (doJailbreak super.hpack);
 
-  lens = doDistribute self.lens_5_2_2;
-
   # Apply patches from head.hackage.
   language-haskell-extract = appendPatch (pkgs.fetchpatch {
     url = "https://gitlab.haskell.org/ghc/head.hackage/-/raw/dfd024c9a336c752288ec35879017a43bd7e85a0/patches/language-haskell-extract-0.2.4.patch";
@@ -146,8 +141,6 @@ in {
 
   # Tests depend on `parseTime` which is no longer available
   hourglass = dontCheck super.hourglass;
-
-  memory = super.memory_0_18_0;
 
   # https://github.com/sjakobi/bsb-http-chunked/issues/38
   bsb-http-chunked = dontCheck super.bsb-http-chunked;
