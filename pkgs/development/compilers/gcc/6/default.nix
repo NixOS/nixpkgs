@@ -9,8 +9,8 @@
 , profiledCompiler ? false
 , langJit ? false
 , staticCompiler ? false
-, enableShared ? !stdenv.targetPlatform.isStatic
-, enableLTO ? !stdenv.hostPlatform.isStatic
+, enableShared ? stdenv.targetPlatform.hasSharedLibraries
+, enableLTO ? stdenv.hostPlatform.hasSharedLibraries
 , texinfo ? null
 , flex
 , perl ? null # optional, for texi2pod (then pod2man); required for Java
@@ -368,5 +368,5 @@ lib.pipe (stdenv.mkDerivation ({
      '';}
 ))
 [
-  (callPackage ../common/libgcc.nix   { inherit version langC langCC langJit targetPlatform hostPlatform crossStageStatic; })
+  (callPackage ../common/libgcc.nix   { inherit version langC langCC langJit targetPlatform hostPlatform enableShared crossStageStatic; })
 ]

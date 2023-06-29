@@ -7,7 +7,10 @@
 , targetPlatform
 , hostPlatform
 , crossStageStatic
+, enableShared
 }:
+
+assert !stdenv.targetPlatform.hasSharedLibraries -> !enableShared;
 
 drv: lib.pipe drv
 
