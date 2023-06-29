@@ -12,5 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   doBuild = false;
+  buildInputs = [ date ];
+
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 }
