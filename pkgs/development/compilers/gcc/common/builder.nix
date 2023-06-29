@@ -179,9 +179,9 @@ in {
     configureScript=../$sourceRoot/configure
   '';
 
+  # Avoid store paths when embedding ./configure flags into gcc.
+  # Mangled arguments are still useful when reporting bugs upstream.
   postConfigure = ''
-    # Avoid store paths when embedding ./configure flags into gcc.
-    # Mangled arguments are still useful when reporting bugs upstream.
     sed -e "/TOPLEVEL_CONFIGURE_ARGUMENTS=/ s|$NIX_STORE/[a-z0-9]\{32\}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" -i Makefile
   '';
 
@@ -206,8 +206,8 @@ in {
     ln -s lib "${builtins.placeholder "lib"}/${ifNullThen targetConfig ""}/lib32"
   '';
 
+  # Move runtime libraries to lib output.
   postInstall = ''
-    # Move runtime libraries to lib output.
     moveToOutput "${targetConfigSlash}lib/lib*.so*" "${builtins.placeholder "lib"}"
     moveToOutput "${targetConfigSlash}lib/lib*.la"  "${builtins.placeholder "lib"}"
     moveToOutput "${targetConfigSlash}lib/lib*.dylib" "${builtins.placeholder "lib"}"
