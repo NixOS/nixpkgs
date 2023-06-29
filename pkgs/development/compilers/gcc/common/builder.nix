@@ -222,15 +222,15 @@ in {
         substituteInPlace "$i" --replace "$out" "${builtins.placeholder "lib"}"
     done
 
-    if [ -n "$enableMultilib" ]; then
-        moveToOutput "${targetConfigSlash}lib64/lib*.so*" "${builtins.placeholder "lib"}"
-        moveToOutput "${targetConfigSlash}lib64/lib*.la"  "${builtins.placeholder "lib"}"
-        moveToOutput "${targetConfigSlash}lib64/lib*.dylib" "${builtins.placeholder "lib"}"
+  '' + lib.optionalString (finalAttrs.enableMultilib) ''
+    moveToOutput "${targetConfigSlash}lib64/lib*.so*" "${builtins.placeholder "lib"}"
+    moveToOutput "${targetConfigSlash}lib64/lib*.la"  "${builtins.placeholder "lib"}"
+    moveToOutput "${targetConfigSlash}lib64/lib*.dylib" "${builtins.placeholder "lib"}"
 
-        for i in "${builtins.placeholder "lib"}/${ifNullThen targetConfig ""}"/lib64/*.{la,py}; do
-            substituteInPlace "$i" --replace "$out" "${builtins.placeholder "lib"}"
-        done
-    fi
+    for i in "${builtins.placeholder "lib"}/${ifNullThen targetConfig ""}"/lib64/*.{la,py}; do
+        substituteInPlace "$i" --replace "$out" "${builtins.placeholder "lib"}"
+    done
+  '' + ''
 
     # Remove `fixincl' to prevent a retained dependency on the
     # previous gcc.
