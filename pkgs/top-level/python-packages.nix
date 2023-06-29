@@ -9322,6 +9322,8 @@ self: super: with self; {
 
   pyrate-limiter = callPackage ../development/python-modules/pyrate-limiter { };
 
+  pyreaderwriterlock = callPackage ../development/python-modules/pyreaderwriterlock { };
+
   pyreadstat = callPackage ../development/python-modules/pyreadstat {
     inherit (pkgs.darwin) libiconv;
   };
