@@ -20131,7 +20131,7 @@ with pkgs;
     boost182
   ;
 
-  boost = boost179;
+  boost = boost181;
 
   boost_process = callPackage ../development/libraries/boost-process { };
 
