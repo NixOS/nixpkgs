@@ -5960,6 +5960,12 @@
     githubId = 25820499;
     name = "Roman Kretschmer";
   };
+  goatchurchprime = {
+    email = "julian@goatchurch.org.uk";
+    github = "goatchurchprime";
+    githubId = 677254;
+    name = "Julian Todd";
+  };
   gobidev = {
     email = "adrian.groh@t-online.de";
     github = "Gobidev";
