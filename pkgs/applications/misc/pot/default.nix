@@ -34,11 +34,6 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source/src-tauri";
 
-  postUnpack = ''
-    sed -i -e 's/dev/v1/' source/src-tauri/Cargo.toml
-    cp ${./Cargo.lock} source/src-tauri/Cargo.lock
-  '';
-
   postPatch = ''
     substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
       --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
@@ -81,7 +76,7 @@ stdenv.mkDerivation rec {
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "tauri-plugin-single-instance-0.0.0" = "sha256-9eclolp+Gb8qF/KYIRiOoCJbMJLI8LyWLQu82npI7mQ=";
+      "tauri-plugin-single-instance-0.0.0" = "sha256-M6uGcf4UWAU+494wAK/r2ta1c3IZ07iaURLwJJR9F3U=";
       "tauri-plugin-autostart-0.0.0" = "sha256-9eclolp+Gb8qF/KYIRiOoCJbMJLI8LyWLQu82npI7mQ=";
       "enigo-0.1.2" = "sha256-99VJ0WYD8jV6CYUZ1bpYJBwIE2iwOZ9SjOvyA2On12Q=";
       "selection-0.1.0" = "sha256-85NUACRi7TjyMNKVz93G+W1EXKIVZZge/h/HtDwiW/Q=";
