@@ -21,7 +21,6 @@
 , libwebp
 , libX11
 , json-glib
-, webkitgtk
 , lcms2
 , bison
 , flex
@@ -31,6 +30,7 @@
 , python3
 , desktop-file-utils
 , itstool
+, withWebservices ? true, webkitgtk
 }:
 
 stdenv.mkDerivation rec {
@@ -78,11 +78,11 @@ stdenv.mkDerivation rec {
     libtiff
     libwebp
     libX11
-    webkitgtk
-  ];
+  ] ++ lib.optional withWebservices webkitgtk;
 
   mesonFlags = [
     "-Dlibchamplain=true"
+    (lib.mesonBool "webservices" withWebservices)
   ];
 
   postPatch = ''
