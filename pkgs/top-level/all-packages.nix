@@ -3548,6 +3548,8 @@ with pkgs;
 
   github-commenter = callPackage ../development/tools/github-commenter { };
 
+  github-copilot-intellij-agent = callPackage ../development/tools/github-copilot-intellij-agent { };
+
   github-desktop = callPackage ../applications/version-management/github-desktop {
     openssl = openssl_1_1;
     curl = curl.override { openssl = openssl_1_1; };
