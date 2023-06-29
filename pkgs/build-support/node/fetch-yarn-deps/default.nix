@@ -6,6 +6,8 @@ let
     sha512 = "sha512-GpSwvyXOcOOlV70vbnzjj4fW5xW/FdUF6nQEt1ENy7m4ZCczi1+/buVUPAqmGfqznsORNFzUMjctTIp8a9tuCQ==";
   };
 
+  tests = callPackage ./tests {};
+
 in {
   prefetch-yarn-deps = stdenv.mkDerivation {
     name = "prefetch-yarn-deps";
@@ -37,6 +39,8 @@ in {
 
       runHook postInstall
     '';
+
+    passthru = { inherit tests; };
   };
 
   fetchYarnDeps = let
@@ -74,6 +78,6 @@ in {
     } // hash_ // (removeAttrs args ["src" "name" "hash" "sha256"]));
 
   in lib.setFunctionArgs f (lib.functionArgs f) // {
-    tests = callPackage ./tests {};
+    inherit tests;
   };
 }
