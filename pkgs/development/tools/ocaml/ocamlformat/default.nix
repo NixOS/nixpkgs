@@ -12,6 +12,7 @@ rec {
   ocamlformat_0_22_4 = ocamlformat.override { version = "0.22.4"; };
   ocamlformat_0_23_0 = ocamlformat.override { version = "0.23.0"; };
   ocamlformat_0_24_1 = ocamlformat.override { version = "0.24.1"; };
+  ocamlformat_0_25_1 = ocamlformat.override { version = "0.25.1"; };
 
   ocamlformat = callPackage ./generic.nix {};
 }

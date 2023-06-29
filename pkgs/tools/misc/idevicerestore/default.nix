@@ -12,18 +12,14 @@
 
 stdenv.mkDerivation rec {
   pname = "idevicerestore";
-  version = "1.0.0+date=2022-05-22";
+  version = "1.0.0+date=2023-05-23";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
-    rev = "f80a876b3598de4eb551bafcb279947c527fae33";
-    hash = "sha256-I9zZQcZFd0hfeEJM7jltJtVJ6V5C5rA/S8gINiCnJdY=";
+    rev = "609f7f058487596597e8e742088119fdd46729df";
+    hash = "sha256-VXtXAitPC1+pxZlkGBg+u6yYhyM/jVpSgDO/6dXh5V4=";
   };
-
-  postPatch = ''
-    echo '${version}' > .tarball-version
-  '';
 
   nativeBuildInputs = [
     autoreconfHook
@@ -40,6 +36,10 @@ stdenv.mkDerivation rec {
     # https://github.com/libimobiledevice/idevicerestore/blob/8a882038b2b1e022fbd19eaf8bea51006a373c06/README#L20
     # because they are inherited `libimobiledevice`.
   ];
+
+  preAutoreconf = ''
+    export RELEASE_VERSION=${version}
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/libimobiledevice/idevicerestore";
