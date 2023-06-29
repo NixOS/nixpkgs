@@ -1052,11 +1052,11 @@
     "vendorHash": "sha256-NO1r/EWLgH1Gogru+qPeZ4sW7FuDENxzNnpLSKstnE8="
   },
   "spotinst": {
-    "hash": "sha256-tKcZj6YY3J2fPDQtDrPltOoEid+128KK+axG/nUMK8Q=",
+    "hash": "sha256-6hiyVMN9LoMLYs5Nuj1tcvQtfQABRqvB1KJmAu7hn48=",
     "homepage": "https://registry.terraform.io/providers/spotinst/spotinst",
     "owner": "spotinst",
     "repo": "terraform-provider-spotinst",
-    "rev": "v1.123.0",
+    "rev": "v1.124.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-zjQLAT3GQbOn7Riltoy8QHnlGp5GwwmjdwMudOMaJho="
   },
