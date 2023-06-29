@@ -40202,6 +40202,8 @@ with pkgs;
 
   trufflehog = callPackage ../tools/security/trufflehog { };
 
+  tunnelx = callPackage ../applications/gis/tunnelx { };
+
   tvbrowser = callPackage ../applications/misc/tvbrowser { };
 
   tvheadend = callPackage ../servers/tvheadend { };
