@@ -17903,6 +17903,8 @@ with pkgs;
 
   phpunit = callPackage ../development/tools/misc/phpunit { };
 
+  teller = callPackage ../development/tools/teller { };
+
   ### DEVELOPMENT / TOOLS / LANGUAGE-SERVERS
 
   ansible-language-server = callPackage ../development/tools/language-servers/ansible-language-server { };
