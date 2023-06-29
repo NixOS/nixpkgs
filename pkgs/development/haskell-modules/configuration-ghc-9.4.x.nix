@@ -109,9 +109,6 @@ in {
   # the dontHaddock is due to a GHC panic. might be this bug, not sure.
   # https://gitlab.haskell.org/ghc/ghc/-/issues/21619
   hedgehog = dontHaddock super.hedgehog;
-  # tasty-hedgehog > 1.3 necessary to work with hedgehog 1.2:
-  # https://github.com/qfpl/tasty-hedgehog/pull/63
-  tasty-hedgehog = self.tasty-hedgehog_1_4_0_1;
 
   # https://github.com/dreixel/syb/issues/38
   syb = dontCheck super.syb;
@@ -167,7 +164,6 @@ in {
     self.ghc-exactprint_1_6_1_3;
 
   # needed to build servant
-  http-api-data = super.http-api-data_0_5_1;
   attoparsec-iso8601 = super.attoparsec-iso8601_1_1_0_0;
 
   # requires newer versions to work with GHC 9.4
