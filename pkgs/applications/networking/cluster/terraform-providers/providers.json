@@ -935,11 +935,11 @@
     "vendorHash": "sha256-j+3qtGlueKZgf0LuNps4Wc9G3EmpSgl8ZNSLqslyizI="
   },
   "rancher2": {
-    "hash": "sha256-tkr1zqHeIMrselvnlv+n7kTM89T7zYW82UeQPucG50I=",
+    "hash": "sha256-hzcJOWbOh/HKYl9mKpo59/Mw2tjnfs36fQzSyFdKfFw=",
     "homepage": "https://registry.terraform.io/providers/rancher/rancher2",
     "owner": "rancher",
     "repo": "terraform-provider-rancher2",
-    "rev": "v3.0.1",
+    "rev": "v3.0.2",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-RSHI994zW7rzA/SJ/Ioilg7mQB/VbDInSeZ9IaEYVIc="
   },
