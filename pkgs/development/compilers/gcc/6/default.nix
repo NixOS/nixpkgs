@@ -199,7 +199,7 @@ in
 # We need all these X libraries when building AWT with GTK.
 assert x11Support -> (filter (x: x == null) ([ gtk2 libart_lgpl ] ++ xlibs)) == [];
 
-lib.pipe ((callPackage ../common/builder.nix {}) ({
+lib.pipe ((callFile ../common/builder.nix {}) ({
   pname = "${crossNameAddon}${name}";
   inherit version;
 

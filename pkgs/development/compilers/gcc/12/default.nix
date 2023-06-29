@@ -201,7 +201,7 @@ let majorVersion = "12";
 
 in
 
-lib.pipe ((callPackage ../common/builder.nix {}) ({
+lib.pipe ((callFile ../common/builder.nix {}) ({
   pname = "${crossNameAddon}${name}";
   inherit version;
 
