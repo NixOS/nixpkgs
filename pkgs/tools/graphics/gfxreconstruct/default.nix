@@ -63,5 +63,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/LunarG/gfxreconstruct/";
     license = licenses.mit;
     maintainers = with maintainers; [ Flakebi ];
+    platforms = platforms.linux;
   };
 }
