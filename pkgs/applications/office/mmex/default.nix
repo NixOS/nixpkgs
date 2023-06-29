@@ -17,14 +17,14 @@
 
 stdenv.mkDerivation rec {
   pname = "money-manager-ex";
-  version = "1.6.3";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "moneymanagerex";
     repo = "moneymanagerex";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-TQgJ2Q4Z7+OtwuwkfPBgm2BmMKML9nmyFLSkmKJ1RE4=";
+    hash = "sha256-/0gKjkInu2TDe6MJPRLQJrfmk49YcwWSf/Rl9WdJsnk=";
   };
 
   postPatch = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
