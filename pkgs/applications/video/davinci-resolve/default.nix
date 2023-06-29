@@ -18,7 +18,7 @@
 , glib
 , libarchive
 , libxcrypt
-, python311
+, python3
 , aprutil
 , makeDesktopItem
 , copyDesktopItems
@@ -31,10 +31,10 @@ let
       version = "18.1.4";
 
       nativeBuildInputs = [
-        unzip
         (appimage-run.override { buildFHSEnv = buildFHSEnvChroot; } )
         addOpenGLRunpath
         copyDesktopItems
+        unzip
       ];
 
       # Pretty sure, there are missing dependencies ...
@@ -166,34 +166,53 @@ in
 buildFHSEnv {
   name = "davinci-resolve";
   targetPkgs = pkgs: with pkgs; [
-    librsvg
-    libGLU
-    libGL
+    alsa-lib
+    aprutil
+    bzip2
+    davinci
     dbus
+    expat
+    fontconfig
+    freetype
+    glib
+    libGL
+    libGLU
+    libarchive
+    libcap
+    librsvg
+    libtool
+    libuuid
+    libxcrypt # provides libcrypt.so.1
+    libxkbcommon
+    nspr
+    ocl-icd
+    opencl-headers
+    python3
+    python3.pkgs.numpy
+    udev
+    xdg-utils # xdg-open needed to open URLs
     xorg.libICE
     xorg.libSM
+    xorg.libX11
+    xorg.libXcomposite
+    xorg.libXcursor
+    xorg.libXdamage
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXi
+    xorg.libXinerama
+    xorg.libXrandr
+    xorg.libXrender
+    xorg.libXtst
     xorg.libXxf86vm
     xorg.libxcb
-    udev
-    opencl-headers
-    alsa-lib
-    xorg.libX11
-    xorg.libXext
-    expat
+    xorg.xcbutil
+    xorg.xcbutilimage
+    xorg.xcbutilkeysyms
+    xorg.xcbutilrenderutil
+    xorg.xcbutilwm
+    xorg.xkeyboardconfig
     zlib
-    libuuid
-    bzip2
-    libtool
-    ocl-icd
-    glib
-    libarchive
-    libxcrypt # provides libcrypt.so.1
-    xdg-utils # xdg-open needed to open URLs
-    # python2
-    # currently they want python 3.6 which is EOL
-    python311
-    python311.pkgs.numpy
-    aprutil
   ];
 
   runScript = "${bash}/bin/bash ${
