@@ -182,6 +182,18 @@ fn main() -> anyhow::Result<()> {
         process::exit(1);
     }
 
+    if let Ok(jobs) = env::var("NIX_BUILD_CORES") {
+        if !jobs.is_empty() {
+            rayon::ThreadPoolBuilder::new()
+                .num_threads(
+                    jobs.parse()
+                        .expect("NIX_BUILD_CORES must be a whole number"),
+                )
+                .build_global()
+                .unwrap();
+        }
+    }
+
     if args[1] == "--fixup-lockfile" {
         let lock = serde_json::from_str(&fs::read_to_string(&args[2])?)?;
 
