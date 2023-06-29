@@ -1,6 +1,6 @@
 {
-  lib, fetchgit, rustPlatform, pkg-config, openssl, fuse3, libuuid, acl,
-  libxcrypt, git, installShellFiles, sphinx, stdenv,
+  lib, fetchgit, rustPlatform, pkg-config, openssl, fuse3, libuuid,
+  acl, libxcrypt, git, installShellFiles, sphinx, stdenv, fetchpatch
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -37,9 +37,17 @@ rustPlatform.buildRustPackage rec {
   sourceRoot = "proxmox-backup";
 
   cargoPatches = [
-    ./0001-re-route-dependencies-not-available-on-crates.io-to-.patch
-    ./0002-docs-drop-all-but-client-man-pages.patch
-    ./0003-docs-Add-target-path-fixup-variable.patch
+    (fetchpatch {
+      name = "0001-re-route-dependencies-not-available-on-crates.io-to-.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/0001-re-route-dependencies-not-available-on-crates.io-to-.patch?h=proxmox-backup-client&id=83a1f4dfcb04bd181b11954b1d9f5ddfcb72b3d0";
+      hash = "sha256-2YZtjbpYSbRk6rmpjKJeIO+V0YN5PrKsISONXMj4RG0=";
+    })
+    (fetchpatch {
+      name = "0002-docs-drop-all-but-client-man-pages.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/0002-docs-drop-all-but-client-man-pages.patch?h=proxmox-backup-client&id=83a1f4dfcb04bd181b11954b1d9f5ddfcb72b3d0";
+      hash = "sha256-oJKQs4SwJvX5Zd0/l/vVr66aPO7Y4AC8byJHg9t1IhY=";
+    })
+    ./0001-docs-Add-target-path-fixup-variable.patch
   ];
 
   postPatch = ''
