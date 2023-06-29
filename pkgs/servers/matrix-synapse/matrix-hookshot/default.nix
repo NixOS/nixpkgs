@@ -10,7 +10,9 @@
 , rustPlatform
 , rustc
 , napi-rs-cli
+, pkg-config
 , nodejs
+, openssl
 }:
 
 let
@@ -44,8 +46,11 @@ mkYarnPackage rec {
     "@matrix-org/matrix-sdk-crypto-nodejs" = "${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs";
   };
 
+  extraBuildInputs = [ openssl ];
+
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
+    pkg-config
     cargo
     rustc
     napi-rs-cli
