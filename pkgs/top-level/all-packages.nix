@@ -7951,6 +7951,8 @@ with pkgs;
 
   fusee-launcher = callPackage ../development/tools/fusee-launcher { };
 
+  fusee-nano = callPackage ../development/tools/fusee-nano { };
+
   fverb = callPackage ../applications/audio/fverb { };
 
   fwknop = callPackage ../tools/security/fwknop {
