@@ -159,7 +159,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.etc."powerdns-recursor".source = configDir;
+    environment.etc."pdns-recursor".source = configDir;
 
     services.pdns-recursor.settings = mkDefaultAttrs {
       local-address = cfg.dns.address;

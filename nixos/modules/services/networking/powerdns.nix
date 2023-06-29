@@ -38,7 +38,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.etc.powerdns.source = finalConfigDir;
+    environment.etc.pdns.source = finalConfigDir;
 
     systemd.packages = [ pkgs.pdns ];
 

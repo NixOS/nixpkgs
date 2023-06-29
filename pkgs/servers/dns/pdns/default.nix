@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-libsodium"
     "--with-sqlite3"
     "--with-libcrypto=${openssl.dev}"
-    "sysconfdir=/etc/powerdns"
+    "sysconfdir=/etc/pdns"
   ];
 
   # nix destroy with-modules arguments, when using configureFlags
@@ -81,9 +81,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # We want the various utilities to look for the powerdns config in
-  # /etc/powerdns, but to actually install the sample config file in
+  # /etc/pdns, but to actually install the sample config file in
   # $out
-  installFlags = [ "sysconfdir=$(out)/etc/powerdns" ];
+  installFlags = [ "sysconfdir=$(out)/etc/pdns" ];
 
   enableParallelBuilding = true;
   doCheck = true;
