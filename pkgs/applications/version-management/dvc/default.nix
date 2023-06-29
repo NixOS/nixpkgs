@@ -89,6 +89,8 @@ python3.pkgs.buildPythonApplication rec {
   # Tests require access to real cloud services
   doCheck = false;
 
+  pythonImportsCheck = [ "dvc" "dvc.api" ];
+
   meta = with lib; {
     description = "Version Control System for Machine Learning Projects";
     homepage = "https://dvc.org";
