@@ -5,20 +5,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "proxmox-backup-client";
-  version = "2.4.1";
+  version = "3.0.1";
 
   srcs = [
     (fetchgit {
       url = "git://git.proxmox.com/git/proxmox-backup.git";
       rev = "v${version}";
       name = "proxmox-backup";
-      hash = "sha256-DWzNRi675ZP9HGc/uPvnV/FBTJUNZ4K5RtU9NFRQCcA=";
+      hash = "sha256-a6dPBZBBh//iANXoPmOdgxYO0qNszOYI3QtrjQr4Cxc=";
     })
     (fetchgit {
       url = "git://git.proxmox.com/git/proxmox.git";
-      rev = "5df815f660e4f3793e974eb8130224538350bb12";
+      rev = "2a070da0651677411a245f1714895235b1caf584";
       name = "proxmox";
-      hash = "sha256-Vn1poqkIWcR2rNiAr+ENLNthgk3pMCivzXnUX9hvZBw=";
+      hash = "sha256-WH6oW2MB2yN1Y2zqOuXewI9jHqev/xLcJtb7D1J4aUE=";
     })
     (fetchgit {
       url = "git://git.proxmox.com/git/proxmox-fuse.git";
