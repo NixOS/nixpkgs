@@ -173,6 +173,8 @@ fn map_cache() -> anyhow::Result<HashMap<Url, String>> {
 }
 
 fn main() -> anyhow::Result<()> {
+    env_logger::init();
+
     let args = env::args().collect::<Vec<_>>();
 
     if args.len() < 2 {
