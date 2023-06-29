@@ -56,6 +56,7 @@ let
     "nut"
     "openldap"
     "openvpn"
+    "php-fpm"
     "pihole"
     "postfix"
     "postgres"
