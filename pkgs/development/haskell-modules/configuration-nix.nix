@@ -1076,7 +1076,6 @@ self: super: builtins.intersectAttrs super {
     '';
   }) (lib.pipe
         (super.cachix.override {
-          fsnotify = dontCheck super.fsnotify_0_4_1_0;
           hnix-store-core = super.hnix-store-core_0_6_1_0;
           nix = self.hercules-ci-cnix-store.nixPackage;
         })
