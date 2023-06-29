@@ -2845,11 +2845,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videovmware = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, udev, libpciaccess, libX11, libXext, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-vmware";
-    version = "13.3.0";
+    version = "13.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-vmware-13.3.0.tar.bz2";
-      sha256 = "0v06qhm059klq40m2yx4wypzb7h53aaassbjfmm6clcyclj1k5s7";
+      url = "mirror://xorg/individual/driver/xf86-video-vmware-13.4.0.tar.xz";
+      sha256 = "06mq7spifsrpbwq9b8kn2cn61xq6mpkq6lvh4qi6xk2yxpjixlxf";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
