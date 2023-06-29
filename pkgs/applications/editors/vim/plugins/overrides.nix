@@ -804,6 +804,10 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
+  neorg = super.neorg.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim ];
+  });
+
   neo-tree-nvim = super.neo-tree-nvim.overrideAttrs (old: {
     dependencies = with self; [ plenary-nvim nui-nvim ];
   });
@@ -933,7 +937,7 @@ self: super: {
         pname = "sg-nvim-rust";
         inherit (old) version src;
 
-        cargoHash = "sha256-lYyIWNn10wFU97k6c2F5fCtHKMP5Y5tW41cvMRWXzTk=";
+        cargoHash = "sha256-IRp4avOvM2tz2oC1Cwr4W/d4i0pzawcZLP+c1+jnm+I=";
 
         nativeBuildInputs = [ pkg-config ];
 

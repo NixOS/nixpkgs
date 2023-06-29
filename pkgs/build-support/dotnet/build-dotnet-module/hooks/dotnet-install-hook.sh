@@ -40,15 +40,15 @@ dotnetInstallHook() {
 
     dotnetPack() {
         local -r project="${1-}"
-         env dotnet pack ${project-} \
-             -p:ContinuousIntegrationBuild=true \
-             -p:Deterministic=true \
-             --output "$out/share" \
-             --configuration "@buildType@" \
-             --no-build \
+        env dotnet pack ${project-} \
+            -p:ContinuousIntegrationBuild=true \
+            -p:Deterministic=true \
+            --output "$out/share" \
+            --configuration "@buildType@" \
+            --no-build \
             --runtime "@runtimeId@" \
-             ${dotnetPackFlags[@]}  \
-             ${dotnetFlags[@]}
+            ${dotnetPackFlags[@]}  \
+            ${dotnetFlags[@]}
     }
 
     if (( "${#projectFile[@]}" == 0 )); then
