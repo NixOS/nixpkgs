@@ -6,6 +6,7 @@
 , unzip
 , appimage-run
 , addOpenGLRunpath
+, dbus
 , libGLU
 , xorg
 , buildFHSEnv
@@ -17,30 +18,36 @@
 , glib
 , libarchive
 , libxcrypt
-, python2
+, python311
 , aprutil
+, makeDesktopItem
+, copyDesktopItems
 }:
 
 let
   davinci = (
     stdenv.mkDerivation rec {
       pname = "davinci-resolve";
-      version = "17.4.3";
+      version = "18.1.4";
 
       nativeBuildInputs = [
         unzip
         (appimage-run.override { buildFHSEnv = buildFHSEnvChroot; } )
         addOpenGLRunpath
+        copyDesktopItems
       ];
 
       # Pretty sure, there are missing dependencies ...
-      buildInputs = [ libGLU xorg.libXxf86vm ];
+      buildInputs = [
+        libGLU
+        xorg.libXxf86vm
+      ];
 
       src = runCommandLocal "${pname}-src.zip"
         rec {
           outputHashMode = "recursive";
           outputHashAlgo = "sha256";
-          outputHash = "0hq374n26mbcds8f1z644cvnh4h2rjdrbxxxbj4p34mx9b04ab28";
+          outputHash = "sha256-yUKT1x5LrzdGLDZjZDeTvNgRAzeR+rn18AGY5Mn+5As=";
 
           impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
@@ -49,7 +56,8 @@ let
           # ENV VARS
           SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
-          DOWNLOADID = "5efad1a052e8471989f662338d5247f1";
+          # Get linux.downloadId from HTTP response on https://www.blackmagicdesign.com/products/davinciresolve
+          DOWNLOADID = "6449dc76e0b845bcb7399964b00a3ec4";
           REFERID = "263d62f31cbb49e0868005059abcb0c9";
           SITEURL = "https://www.blackmagicdesign.com/api/register/us/download/${DOWNLOADID}";
 
@@ -73,28 +81,28 @@ let
 
         } ''
         RESOLVEURL=$(curl \
-          -s \
-          -H 'Host: www.blackmagicdesign.com' \
-          -H 'Accept: application/json, text/plain, */*' \
-          -H 'Origin: https://www.blackmagicdesign.com' \
-          -H "$USERAGENT" \
-          -H 'Content-Type: application/json;charset=UTF-8' \
-          -H "Referer: https://www.blackmagicdesign.com/support/download/$REFERID/Linux" \
-          -H 'Accept-Encoding: gzip, deflate, br' \
-          -H 'Accept-Language: en-US,en;q=0.9' \
-          -H 'Authority: www.blackmagicdesign.com' \
-          -H 'Cookie: _ga=GA1.2.1849503966.1518103294; _gid=GA1.2.953840595.1518103294' \
+          --silent \
+          --header 'Host: www.blackmagicdesign.com' \
+          --header 'Accept: application/json, text/plain, */*' \
+          --header 'Origin: https://www.blackmagicdesign.com' \
+          --header "$USERAGENT" \
+          --header 'Content-Type: application/json;charset=UTF-8' \
+          --header "Referer: https://www.blackmagicdesign.com/support/download/$REFERID/Linux" \
+          --header 'Accept-Encoding: gzip, deflate, br' \
+          --header 'Accept-Language: en-US,en;q=0.9' \
+          --header 'Authority: www.blackmagicdesign.com' \
+          --header 'Cookie: _ga=GA1.2.1849503966.1518103294; _gid=GA1.2.953840595.1518103294' \
           --data-ascii "$REQJSON" \
           --compressed \
           "$SITEURL")
 
         curl \
           --retry 3 --retry-delay 3 \
-          -H "Host: sw.blackmagicdesign.com" \
-          -H "Upgrade-Insecure-Requests: 1" \
-          -H "$USERAGENT" \
-          -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8" \
-          -H "Accept-Language: en-US,en;q=0.9" \
+          --header "Host: sw.blackmagicdesign.com" \
+          --header "Upgrade-Insecure-Requests: 1" \
+          --header "$USERAGENT" \
+          --header "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8" \
+          --header "Accept-Language: en-US,en;q=0.9" \
           --compressed \
           "$RESOLVEURL" \
           > $out
@@ -135,6 +143,23 @@ let
         done
         ln -s $out/libs/libcrypto.so.1.1 $out/libs/libcrypt.so.1
       '';
+
+      desktopItems = [
+        (makeDesktopItem {
+          name = "davinci-resolve";
+          desktopName = "Davinci Resolve";
+          genericName = "Video Editor";
+          exec = "resolve";
+          # icon = "DV_Resolve";
+          comment = "Professional video editing, color, effects and audio post-processing";
+          categories = [
+            "AudioVideo"
+            "AudioVideoEditing"
+            "Video"
+            "Graphics"
+          ];
+        })
+      ];
     }
   );
 in
@@ -144,6 +169,7 @@ buildFHSEnv {
     librsvg
     libGLU
     libGL
+    dbus
     xorg.libICE
     xorg.libSM
     xorg.libXxf86vm
@@ -163,9 +189,10 @@ buildFHSEnv {
     libarchive
     libxcrypt # provides libcrypt.so.1
     xdg-utils # xdg-open needed to open URLs
-    python2
+    # python2
     # currently they want python 3.6 which is EOL
-    #python3
+    python311
+    python311.pkgs.numpy
     aprutil
   ];
 
@@ -180,8 +207,8 @@ buildFHSEnv {
   }";
 
   meta = with lib; {
-    description = "Professional Video Editing, Color, Effects and Audio Post";
-    homepage = "https://www.blackmagicdesign.com/products/davinciresolve/";
+    description = "Professional video editing, color, effects and audio post-processing";
+    homepage = "https://www.blackmagicdesign.com/products/davinciresolve";
     license = licenses.unfree;
     maintainers = with maintainers; [ jshcmpbll ];
     platforms = platforms.linux;
