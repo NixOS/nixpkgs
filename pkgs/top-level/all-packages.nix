@@ -9755,9 +9755,8 @@ with pkgs;
 
   npmHooks = callPackage ../build-support/node/build-npm-package/hooks { };
 
-  inherit (callPackage ../build-support/node/fetch-npm-deps {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  }) fetchNpmDeps prefetch-npm-deps;
+  inherit (callPackage ../build-support/node/fetch-npm-deps { })
+    fetchNpmDeps prefetch-npm-deps;
 
   nodePackages_latest = dontRecurseIntoAttrs nodejs_latest.pkgs;
 

@@ -16,6 +16,7 @@ use walkdir::WalkDir;
 
 mod cacache;
 mod parse;
+mod util;
 
 fn cache_map_path() -> Option<PathBuf> {
     env::var_os("CACHE_MAP_PATH").map(PathBuf::from)
