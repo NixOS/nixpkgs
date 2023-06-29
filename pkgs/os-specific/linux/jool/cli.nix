@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, libnl, iptables }:
+{ nixosTests, lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, libnl, iptables }:
 
 let
   sourceAttrs = (import ./source.nix) { inherit fetchFromGitHub; };
@@ -23,6 +23,11 @@ stdenv.mkDerivation {
   prePatch = ''
     sed -e 's%^XTABLES_SO_DIR = .*%XTABLES_SO_DIR = '"$out"'/lib/xtables%g' -i src/usr/iptables/Makefile
   '';
+
+
+  passthru.tests = {
+    inherit (nixosTests) jool;
+  };
 
   meta = with lib; {
     homepage = "https://www.jool.mx/";
