@@ -1341,6 +1341,12 @@ let
     textshaping = old.textshaping.overrideAttrs (attrs: {
       env.NIX_LDFLAGS = "-lfribidi -lharfbuzz";
     });
+
+    torch = old.torch.overrideAttrs (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+      '';
+    });
   };
 in
   self
