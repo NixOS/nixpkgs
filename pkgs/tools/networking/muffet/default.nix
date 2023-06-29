@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "muffet";
-  version = "2.8.1";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "raviqqe";
     repo = "muffet";
     rev = "v${version}";
-    hash = "sha256-SQtAT4vK1jLwwMha/HuJjh3BtDTdxV7BDgmwxlK+lqc=";
+    hash = "sha256-68M/c1qA1JcW2usGMmlKSZRYtFSxn6zHanFepljlw9Q=";
   };
 
-  vendorHash = "sha256-/qK4x44J2fDSXxGK3kczWY4NZVPPhRo4NMnyxV6W6CY=";
+  vendorHash = "sha256-NTQlhLlSPh9+Il08T9I2qc+BqIo9RniOFG9Dgeez1QA=";
 
   meta = with lib; {
     description = "A website link checker which scrapes and inspects all pages in a website recursively";
