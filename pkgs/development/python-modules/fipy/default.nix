@@ -17,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "fipy";
-  version = "3.4.3";
+  version = "3.4.4";
 
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "fipy";
-    rev = version;
-    hash = "sha256-oTg/5fGXqknWBh1ShdAOdOwX7lVDieIoM5aALcOWFqY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-XZpm+gzysR2OXBcxWUEjP1PlaLuOL2NpmeKMCH+OEb4=";
   };
 
   propagatedBuildInputs = [
