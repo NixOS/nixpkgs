@@ -394,7 +394,7 @@ dependencies = [
 
 [[package]]
 name = "ankisyncd"
-version = "1.1.0"
+version = "1.1.4"
 dependencies = [
  "actix-multipart",
  "actix-web",

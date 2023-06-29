@@ -2,7 +2,7 @@
 
 let
   pname = "ankisyncd";
-  version = "1.1.3";
+  version = "1.1.4";
 
   # anki-sync-server-rs expects anki sources in the 'anki' folder
   # of its own source tree, with a patch applied (mostly to make
@@ -12,7 +12,7 @@ let
       owner = "ankicommunity";
       repo = "anki-sync-server-rs";
       rev = version;
-      hash = "sha256-y7X4jsPBykdpWXXaybdy6+XL3F2wZ9c9NvFornCes3M=";
+      hash = "sha256-iL4lJJAV4SrNeRX3s0ZpJ//lrwoKjLsltlX4d2wP6O0=";
     };
   } ''
     cp -r "$src/." "$out"
