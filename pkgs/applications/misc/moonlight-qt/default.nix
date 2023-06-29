@@ -16,7 +16,12 @@
 , libopus
 , ffmpeg
 , wayland
+, darwin
 }:
+
+let
+  inherit (darwin.apple_sdk_11_0.frameworks) AVFoundation AppKit AudioUnit VideoToolbox;
+in
 
 stdenv.mkDerivation rec {
   pname = "moonlight-qt";
@@ -30,6 +35,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [ ./darwin.diff ];
+
   nativeBuildInputs = [
     wrapQtAppsHook
     pkg-config
@@ -40,16 +47,29 @@ stdenv.mkDerivation rec {
     qtquickcontrols2
     SDL2
     SDL2_ttf
+    openssl
+    libopus
+    ffmpeg
+  ] ++ lib.optionals stdenv.isLinux [
     libva
     libvdpau
     libxkbcommon
     alsa-lib
     libpulseaudio
-    openssl
-    libopus
-    ffmpeg
     wayland
+  ] ++ lib.optionals stdenv.isDarwin [
+    AVFoundation
+    AppKit
+    AudioUnit
+    VideoToolbox
   ];
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir $out/Applications $out/bin
+    mv app/Moonlight.app $out/Applications
+    rm -r $out/Applications/Moonlight.app/Contents/Frameworks
+    ln -s $out/Applications/Moonlight.app/Contents/MacOS/Moonlight $out/bin/moonlight
+  '';
 
   meta = with lib; {
     description = "Play your PC games on almost any device";
