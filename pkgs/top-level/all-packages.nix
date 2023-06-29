@@ -11917,6 +11917,8 @@ with pkgs;
 
   qrcp = callPackage ../tools/networking/qrcp { };
 
+  qrscan = callPackage ../tools/misc/qrscan { };
+
   qtikz = libsForQt5.callPackage ../applications/graphics/ktikz { };
 
   qtspim = libsForQt5.callPackage ../development/tools/misc/qtspim { };
