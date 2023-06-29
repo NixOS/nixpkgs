@@ -8,6 +8,9 @@ buildDunePackage rec {
     sha256 = "sha256-IxLA0jaIPdX9Zn/GL8UHDJYjA1UBW6leGbZmp64YMjI=";
   };
 
+  minimalOCamlVersion = "4.14";
+
+  doCheck = true;
   checkInputs = [ qcheck qcheck-alcotest alcotest ];
 
   meta = with lib; {
