@@ -139,10 +139,7 @@ self: super: {
 
   # For -fghc-lib see cabal.project in haskell-language-server.
   stylish-haskell = if lib.versionAtLeast super.ghc.version "9.2"
-    then enableCabalFlag "ghc-lib"
-      (if lib.versionAtLeast super.ghc.version "9.4"
-       then super.stylish-haskell_0_14_4_0
-       else super.stylish-haskell)
+    then enableCabalFlag "ghc-lib" super.stylish-haskell
     else super.stylish-haskell;
 
   ###########################################
@@ -723,11 +720,6 @@ self: super: {
   #    then self.buildHaskellPackages.doctest-discover
   #    else dontCheck super.doctest-discover);
   doctest-discover = dontCheck super.doctest-discover;
-
-  # Test suite is missing an import from hspec
-  # https://github.com/haskell-works/tasty-discover/issues/9
-  # https://github.com/commercialhaskell/stackage/issues/6584#issuecomment-1326522815
-  tasty-discover = assert super.tasty-discover.version == "4.2.2"; dontCheck super.tasty-discover;
 
   # Too strict lower bound on tasty-hedgehog
   # https://github.com/qfpl/tasty-hedgehog/issues/70

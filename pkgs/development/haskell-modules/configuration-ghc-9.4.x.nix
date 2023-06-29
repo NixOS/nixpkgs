@@ -150,7 +150,6 @@ in {
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
   hiedb = dontCheck super.hiedb;
 
-  hlint = self.hlint_3_5;
   hls-hlint-plugin = super.hls-hlint-plugin.override {
     inherit (self) hlint;
   };
