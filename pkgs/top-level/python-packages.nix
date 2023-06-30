@@ -6218,6 +6218,7 @@ self: super: with self; {
   mdformat-mkdocs = callPackage ../development/python-modules/mdformat-mkdocs { };
   mdformat-nix-alejandra = callPackage ../development/python-modules/mdformat-nix-alejandra { };
   mdformat-simple-breaks = callPackage ../development/python-modules/mdformat-simple-breaks { };
+  mdformat-tables = callPackage ../development/python-modules/mdformat-tables { };
 
   mdit-py-plugins = callPackage ../development/python-modules/mdit-py-plugins { };
 
