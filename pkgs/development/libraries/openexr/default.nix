@@ -39,6 +39,10 @@ stdenv.mkDerivation rec {
     # Backport gcc-13 fix:
     #   https://github.com/AcademySoftwareFoundation/openexr/pull/1264
     ./gcc-13.patch
+
+    # Split IlmImfTest to avoid ctest timeout:
+    #   https://github.com/NixOS/nixpkgs/pull/234754#issuecomment-1611387839
+    ./split-IlmImf-tests.patch
   ];
 
   # tests are determined to use /var/tmp on unix

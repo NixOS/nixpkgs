@@ -1,0 +1,17 @@
+
+# Split IlmImfTest per test SUITE to avoid ctest timeout.
+# For reference:
+# https://github.com/AcademySoftwareFoundation/openexr/blob/983fed9fe11393b8fabea65fa2582af69fb91e63/OpenEXR/IlmImfTest/main.cpp#L287
+diff --git a/OpenEXR/IlmImfTest/CMakeLists.txt b/OpenEXR/IlmImfTest/CMakeLists.txt
+index 60c88afd..192a3f13 100644
+--- a/OpenEXR/IlmImfTest/CMakeLists.txt
++++ b/OpenEXR/IlmImfTest/CMakeLists.txt
+@@ -72,4 +72,7 @@ set_target_properties(IlmImfTest PROPERTIES
+ if(WIN32 AND (BUILD_SHARED_LIBS OR OPENEXR_BUILD_BOTH_STATIC_SHARED))
+   target_compile_definitions(IlmImfTest PRIVATE OPENEXR_DLL)
+ endif()
+-add_test(NAME OpenEXR.IlmImf COMMAND $<TARGET_FILE:IlmImfTest>)
++add_test(NAME OpenEXR.IlmImf_basic COMMAND $<TARGET_FILE:IlmImfTest> basic)
++add_test(NAME OpenEXR.IlmImf_core COMMAND $<TARGET_FILE:IlmImfTest> core)
++add_test(NAME OpenEXR.IlmImf_deep COMMAND $<TARGET_FILE:IlmImfTest> deep)
++add_test(NAME OpenEXR.IlmImf_multi COMMAND $<TARGET_FILE:IlmImfTest> multi)
