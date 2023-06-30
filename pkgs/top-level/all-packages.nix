@@ -33855,6 +33855,8 @@ with pkgs;
   pencil = callPackage ../applications/graphics/pencil {
   };
 
+  pentestgpt = callPackage ../tools/security/pentestgpt { };
+
   perseus = callPackage ../applications/science/math/perseus { };
 
   petrifoo = callPackage ../applications/audio/petrifoo {
