@@ -358,6 +358,7 @@ in {
       [ "preDeviceCommands" ]
       [ "preLVMCommands" ]
       [ "postDeviceCommands" ]
+      [ "postResumeCommands" ]
       [ "postMountCommands" ]
       [ "extraUdevRulesCommands" ]
       [ "extraUtilsCommands" ]
