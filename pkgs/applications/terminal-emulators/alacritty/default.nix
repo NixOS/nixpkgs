@@ -104,7 +104,7 @@ rustPlatform.buildRustPackage rec {
       # As a workaround, strip manually before running patchelf.
       $STRIP -S $out/bin/alacritty
 
-      patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
+      patchelf --add-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
     ''
   ) + ''
 
