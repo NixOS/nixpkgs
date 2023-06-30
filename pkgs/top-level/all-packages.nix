@@ -26913,6 +26913,8 @@ with pkgs;
 
   ### OS-SPECIFIC
 
+  airbuddy = callPackage ../os-specific/darwin/airbuddy { };
+
   afuse = callPackage ../os-specific/linux/afuse { };
 
   autofs5 = callPackage ../os-specific/linux/autofs { };
