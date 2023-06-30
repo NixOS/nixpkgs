@@ -40,6 +40,13 @@ stdenv.mkDerivation {
     ./0006-System-CF-framework-compatibility.patch
     # Link against the nixpkgs ICU instead of using Apple’s vendored version.
     ./0007-Use-nixpkgs-icu.patch
+    # Don’t link against libcurl. This breaks a cycle between CF and curl, which depends on CF and
+    # uses the SystemConfiguration framework to support NAT64.
+    # This is safe because the symbols provided in CFURLSessionInterface are not provided by the
+    # system CoreFoundation. They are meant to be used by the implementation of `NSURLSession` in
+    # swift-corelibs-foundation, which is not built because it is not fully compatible with the
+    # system Foundation used on Darwin.
+    ./0008-Dont-link-libcurl.patch
   ];
 
   postPatch = ''

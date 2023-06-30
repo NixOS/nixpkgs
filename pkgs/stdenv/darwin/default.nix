@@ -50,7 +50,6 @@ let
   inherit (localSystem) system;
 
   useAppleSDKLibs = localSystem.isAarch64;
-  haveKRB5 = localSystem.isx86_64;
 
   commonImpureHostDeps = [
     "/bin/sh"
@@ -819,19 +818,19 @@ in
   #
   # CF requires:
   # - aarch64-darwin: libobjc (due to being apple_sdk.frameworks.CoreFoundation instead of swift-corefoundation)
-  # - x86_64-darwin: brotli curl libidn2 libiconv libkrb5 libssh2 libunistring libxml2 icu nghttp2 openssl zlib zstd
+  # - x86_64-darwin: libiconv libxml2 icu zlib
   (prevStage:
     # previous stage2-Libsystem stdenv:
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      autoconf automake bash binutils-unwrapped bison cmake cmakeMinimal coreutils cpio
-      cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu libedit libtool m4 ninja
-      openbsm openldap openpam openssh patchutils pbzx perl pkg-config.pkg-config python3
-      python3Minimal scons serf sqlite subversion sysctl.provider texinfo unzip which xz
+      autoconf automake bash binutils-unwrapped bison brotli cmake cmakeMinimal coreutils
+      cpio curl cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu libedit libidn2
+      libkrb5 libssh2 libtool libunistring m4 nghttp2 ninja openbsm openldap openpam openssh
+      openssl patchutils pbzx perl pkg-config.pkg-config python3 python3Minimal scons serf
+      sqlite subversion sysctl.provider texinfo unzip which xz zstd
     ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      brotli curl libffi libiconv libidn2 libkrb5 libssh2 libunistring libxml2 ncurses
-      nghttp2 openssl zlib zstd
+      libffi libiconv libxml2 ncurses zlib zstd
     ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [
@@ -857,22 +856,11 @@ in
 
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
-        autoconf automake bash bison cmake cmakeMinimal coreutils cpio cyrus_sasl db ed
-        expat flex gettext gmp gnugrep groff libedit libtool m4 ncurses ninja openbsm
-        openldap openpam openssh patchutils pbzx perl pkg-config python3 python3Minimal
-        scons serf sqlite subversion sysctl texinfo unzip which xz;
-
-      # Even though linking against the SystemConfiguration framework is patched out in nixpkgs,
-      # curl tries to link against CoreFoundation anyway. This is obviously problematic when curl
-      # CF depends on curl. This was not necessary in the past because the stdenv used to link
-      # curl against `@rpath/CoreFoundation.framework/Versions/A/CoreFoundation` without setting
-      # the rpath in the dylib. The current stdenv instead opts not to link it at all.
-      curl = super.curl.overrideAttrs (old: {
-        postPatch = (old.postPatch or "") + ''
-          substituteInPlace configure \
-            --replace 'build_for_macos="yes"' 'build_for_macos="no"'
-        '';
-      });
+        autoconf automake bash bison brotli cmake cmakeMinimal coreutils cpio curl
+        cyrus_sasl db ed expat flex gettext gmp gnugrep groff libedit libidn2 libkrb5
+        libssh2 libtool libunistring m4 ncurses nghttp2 ninja openbsm openldap openpam
+        openssh openssl patchutils pbzx perl pkg-config python3 python3Minimal scons serf
+        sqlite subversion sysctl texinfo unzip which xz zstd;
 
       # Avoid pulling in a full python and its extra dependencies for the llvm/clang builds.
       libxml2 = super.libxml2.override { pythonSupport = false; };
@@ -958,14 +946,14 @@ in
   (prevStage:
     # previous stage2-CF stdenv:
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      autoconf automake bash bison cmake cmakeMinimal coreutils cpio cyrus_sasl db ed expat
-      flex gettext gmp gnugrep groff libedit libtool m4 ncurses ninja openbsm openldap
-      openpam openssh patchutils pbzx perl pkg-config.pkg-config python3 python3Minimal
-      scons serf sqlite subversion sysctl.provider texinfo unzip which xz
+      autoconf automake bash bison brotli cmake cmakeMinimal coreutils cpio curl cyrus_sasl
+      db ed expat flex gettext gmp gnugrep groff libedit libidn2 libkrb5 libssh2 libtool
+      libunistring m4 ncurses nghttp2 ninja openbsm openldap openpam openssh openssl
+      patchutils pbzx perl pkg-config.pkg-config python3 python3Minimal scons serf sqlite
+      subversion sysctl.provider texinfo unzip which xz zstd
     ]);
     assert lib.all isBuiltByNixpkgsCompiler (with prevStage; [
-      binutils-unwrapped brotli curl icu libffi libiconv libidn2 libkrb5 libssh2
-      libunistring libxml2 nghttp2 openssl zlib zstd
+      binutils-unwrapped icu libffi libiconv libxml2 zlib
     ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [
@@ -993,15 +981,14 @@ in
 
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
-        autoconf automake bash binutils binutils-unwrapped bison cmake cmakeMinimal
-        coreutils cpio cyrus_sasl db ed expat flex gettext gmp gnugrep groff libedit libtool
-        m4 ninja openbsm openldap openpam openssh patchutils pbzx perl pkg-config python3
-        python3Minimal scons sed serf sharutils sqlite subversion sysctl texinfo unzip which
-        xz
+        autoconf automake bash binutils binutils-unwrapped bison brotli cmake cmakeMinimal
+        coreutils cpio curl cyrus_sasl db ed expat flex gettext gmp gnugrep groff libedit
+        libidn2 libkrb5 libssh2 libtool libunistring m4 nghttp2 ninja openbsm openldap
+        openpam openssh openssl patchutils pbzx perl pkg-config python3 python3Minimal scons
+        sed serf sharutils sqlite subversion sysctl texinfo unzip which xz zstd
 
         # CF dependencies - don’t rebuild them.
-        brotli curl icu libiconv libidn2 libkrb5 libssh2 libunistring libxml2 nghttp2
-        openssl zlib zstd;
+        icu libiconv libxml2 zlib;
 
       # Disable tests because they use dejagnu, which fails to run.
       libffi = super.libffi.override { doCheck = false; };
@@ -1038,15 +1025,15 @@ in
   (prevStage:
     # previous stage3 stdenv:
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      autoconf automake bash bison cmake cmakeMinimal coreutils cpio cyrus_sasl db ed expat
-      flex gettext gmp gnugrep groff libedit libtool m4 ninja openbsm openldap openpam
-      openssh patchutils pbzx perl pkg-config.pkg-config python3 python3Minimal scons serf
-      sqlite subversion sysctl.provider texinfo unzip which xz
+      autoconf automake bash bison brotli cmake cmakeMinimal coreutils cpio curl cyrus_sasl
+      db ed expat flex gettext gmp gnugrep groff libedit libidn2 libkrb5 libssh2 libtool
+      libunistring m4 nghttp2 ninja openbsm openldap openpam openssh openssl patchutils pbzx
+      perl pkg-config.pkg-config python3 python3Minimal scons serf sqlite subversion
+      sysctl.provider texinfo unzip which xz zstd
     ]);
 
     assert lib.all isBuiltByNixpkgsCompiler (with prevStage; [
-      binutils-unwrapped brotli curl icu libffi libiconv libidn2 libkrb5 libssh2
-      libunistring libxml2 ncurses nghttp2 openssl zlib zstd
+      binutils-unwrapped icu libffi libiconv libxml2 zlib
     ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [
@@ -1078,7 +1065,7 @@ in
         python3Minimal scons serf sqlite subversion sysctl texinfo unzip which
 
         # CF dependencies - don’t rebuild them.
-        brotli curl libidn2 icu libkrb5 libssh2 libunistring nghttp2 openssl zstd
+        icu
 
         # LLVM dependencies - don’t rebuild them.
         libffi libiconv libxml2 ncurses zlib;
@@ -1261,12 +1248,10 @@ in
         bash
         binutils.bintools
         binutils.bintools.lib
-        brotli.lib
         bzip2.bin
         bzip2.out
         cc.expand-response-params
         coreutils
-        curl.out
         darwin.binutils
         darwin.binutils.bintools
         diffutils
@@ -1285,25 +1270,20 @@ in
         icu.out
         libffi.out
         libiconv
-        libidn2.out
-        libssh2.out
         libunistring.out
         libxml2.out
         ncurses.dev
         ncurses.man
         ncurses.out
-        nghttp2.lib
         openbsm
         openpam
-        openssl.out
         patch
         xz.bin
         xz.out
         zlib.dev
         zlib.out
-        zstd.out
-      ])
-      ++ lib.optional haveKRB5 prevStage.libkrb5
+      ]
+      ++ lib.optionals doSign [ openssl.out ])
       ++ lib.optionals localSystem.isAarch64 [
         prevStage.updateAutotoolsGnuConfigScriptsHook
         prevStage.gnu-config
