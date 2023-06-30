@@ -6214,6 +6214,7 @@ self: super: with self; {
   mdformat-beautysh = callPackage ../development/python-modules/mdformat-beautysh { };
   mdformat-footnote = callPackage ../development/python-modules/mdformat-footnote { };
   mdformat-frontmatter = callPackage ../development/python-modules/mdformat-frontmatter { };
+  mdformat-gfm = callPackage ../development/python-modules/mdformat-gfm { };
 
   mdit-py-plugins = callPackage ../development/python-modules/mdit-py-plugins { };
 
