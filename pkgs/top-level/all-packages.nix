@@ -30521,6 +30521,8 @@ with pkgs;
 
   dwmblocks = callPackage ../applications/misc/dwmblocks { };
 
+  dwmblocks-async = callPackage ../applications/misc/dwmblocks-async { };
+
   dwmbar = callPackage ../applications/misc/dwmbar { };
 
   dwm-status = callPackage ../applications/window-managers/dwm/dwm-status.nix { };

@@ -13079,6 +13079,12 @@
     githubId = 4201956;
     name = "pongo1231";
   };
+  poptart = {
+    email = "poptart@hosakacorp.net";
+    github = "terrorbyte";
+    githubId = 1601039;
+    name = "Cale Black";
+  };
   portothree = {
     name = "Gustavo Porto";
     email = "gus@p8s.co";
