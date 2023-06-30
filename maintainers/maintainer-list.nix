@@ -17992,6 +17992,16 @@
       fingerprint = "9F19 3AE8 AA25 647F FC31  46B5 416F 303B 43C2 0AC3";
     }];
   };
+  yvan = {
+    email = "yvan@sraka.xyz";
+    github = "yvan-sraka";
+    githubId = 705213;
+    keys = [{
+      fingerprint = "FE9A 953C 97E4 54FE 6598  BFDD A4FB 3EAA 6F45 2379";
+    }];
+    matrix = "@/yvan:matrix.org";
+    name = "Yvan Sraka";
+  };
   yvesf = {
     email = "yvesf+nix@xapek.org";
     github = "yvesf";
