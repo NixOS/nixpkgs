@@ -38,6 +38,8 @@ stdenv.mkDerivation {
     # versioning and drops the prefix and suffix, so the dynamic library is named `CoreFoundation`
     # instead of `libCoreFoundation.dylib`.
     ./0006-System-CF-framework-compatibility.patch
+    # Link against the nixpkgs ICU instead of using Apple’s vendored version.
+    ./0007-Use-nixpkgs-icu.patch
   ];
 
   postPatch = ''
