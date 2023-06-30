@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, makeSetupHook, ninja, python3, curl, libxml2, objc4, ICU }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, makeSetupHook, ninja, launchd, libdispatch, python3, curl, libxml2, objc4, ICU }:
 
 let
   # 10.12 adds a new sysdir.h that our version of CF in the main derivation depends on, but
@@ -22,9 +22,15 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ ninja python3 ];
-  buildInputs = [ curl libxml2 objc4 ICU ];
+  buildInputs = [ (lib.getDev launchd) libdispatch libxml2 objc4 ICU ];
 
-  patches = [ ./0001-Add-missing-TARGET_OS_-defines.patch ];
+  patches = [
+    ./0001-Add-missing-TARGET_OS_-defines.patch
+    # CFMessagePort.h uses `bootstrap_check_in` without declaring it, which is defined in the launchd headers.
+    ./0002-Add-missing-launchd-header.patch
+    # CFURLComponents fails to build with clang 16 due to an invalid pointer conversion. This is fixed upstream.
+    ./0003-Fix-incompatible-pointer-conversion.patch
+  ];
 
   postPatch = ''
     cd CoreFoundation
