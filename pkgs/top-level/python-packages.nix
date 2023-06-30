@@ -6211,6 +6211,7 @@ self: super: with self; {
   md2gemini = callPackage ../development/python-modules/md2gemini { };
 
   mdformat = callPackage ../development/python-modules/mdformat { };
+  mdformat-beautysh = callPackage ../development/python-modules/mdformat-beautysh { };
 
   mdit-py-plugins = callPackage ../development/python-modules/mdit-py-plugins { };
 
