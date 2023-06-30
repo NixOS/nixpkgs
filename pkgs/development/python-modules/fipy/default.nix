@@ -13,11 +13,15 @@
 , stdenv
 , openssh
 , fetchFromGitHub
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "fipy";
   version = "3.4.4";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "usnistgov";
@@ -36,16 +40,22 @@ buildPythonPackage rec {
     future
     scikit-fmm
     openssh
-  ] ++ lib.optionals (!stdenv.isDarwin) [ gmsh ];
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    gmsh
+  ];
 
-  nativeCheckInputs = lib.optionals (!stdenv.isDarwin) [ gmsh ];
+  nativeCheckInputs = lib.optionals (!stdenv.isDarwin) [
+    gmsh
+  ];
 
   checkPhase = ''
     export OMPI_MCA_plm_rsh_agent=${openssh}/bin/ssh
     ${python.interpreter} setup.py test --modules
   '';
 
-  pythonImportsCheck = [ "fipy" ];
+  pythonImportsCheck = [
+    "fipy"
+  ];
 
   meta = with lib; {
     homepage = "https://www.ctcms.nist.gov/fipy/";
