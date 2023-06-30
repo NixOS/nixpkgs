@@ -15,14 +15,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.14.3";
+  version = "0.15.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4LojjH6ft9RfftBBFNWmC2pl/YXfgZCXhkZFsELTgCE=";
+    hash = "sha256-pu0MqNXNQfvxo2VHpiEYIz1OvplydCYPKU/NsZD0mJw=";
   };
 
   postPatch = let
@@ -60,6 +60,7 @@ python.pkgs.buildPythonApplication rec {
     bnunicodenormalizer
     coqpit
     einops
+    encodec
     flask
     fsspec
     g2pkk
