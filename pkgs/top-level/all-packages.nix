@@ -16945,9 +16945,7 @@ with pkgs;
   swiftpm2nix = callPackage ../development/tools/swiftpm2nix { };
 
   swiProlog = callPackage ../development/compilers/swi-prolog {
-    openssl = openssl_1_1;
     inherit (darwin.apple_sdk.frameworks) Security;
-    jdk = openjdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
   swiPrologWithGui = swiProlog.override { withGui = true; };
 
