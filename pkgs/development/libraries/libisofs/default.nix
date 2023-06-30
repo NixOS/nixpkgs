@@ -2,15 +2,22 @@
 
 stdenv.mkDerivation rec {
   pname = "libisofs";
-  version = "1.5.4";
+  version = "1.5.6.pl01";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "http://files.libburnia-project.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-qqDtgKdQGXkxb1BbCwF/Kcug6lRjt1EUO60sNgIVqI4=";
+    hash = "sha256-rB/TONZBdEyh+xVnkXGIt5vIwlBoMt1WiF/smGVrnyU=";
   };
 
-  buildInputs = [ attr zlib ];
-  propagatedBuildInputs = [ acl ];
+  buildInputs = [
+    acl
+    attr
+    zlib
+  ];
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "http://libburnia-project.org/";

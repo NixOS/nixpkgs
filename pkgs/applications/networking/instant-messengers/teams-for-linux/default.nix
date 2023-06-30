@@ -15,20 +15,20 @@
 , which
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "teams-for-linux";
-  version = "1.1.6";
+  version = "1.1.8";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-UDCMQqDN7MZ5tHZJts00IryMpRr07TPSGwxFdcq0fdI=";
+    repo = "teams-for-linux";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-YbO5bDHbquuiokIyepqE8nM+IZDW+x6rzJqnzeqoS8Q=";
   };
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    sha256 = "sha256-Zk3TAoGAPeki/ogfNl/XqeBBn6N/kbNcktRHEyqPOAA=";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
+    hash = "sha256-Zk3TAoGAPeki/ogfNl/XqeBBn6N/kbNcktRHEyqPOAA=";
   };
 
   patches = [
@@ -87,22 +87,22 @@ stdenv.mkDerivation rec {
   '';
 
   desktopItems = [(makeDesktopItem {
-    name = pname;
-    exec = pname;
-    icon = pname;
+    name = finalAttrs.pname;
+    exec = finalAttrs.pname;
+    icon = finalAttrs.pname;
     desktopName = "Microsoft Teams for Linux";
-    comment = meta.description;
+    comment = finalAttrs.meta.description;
     categories = [ "Network" "InstantMessaging" "Chat" ];
   })];
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial Microsoft Teams client for Linux";
     homepage = "https://github.com/IsmaelMartinez/teams-for-linux";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ muscaln lilyinstarlight ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ muscaln lilyinstarlight ];
+    platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
   };
-}
+})

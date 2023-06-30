@@ -5617,6 +5617,12 @@
     githubId = 134872;
     name = "Sergei Lukianov";
   };
+  fsagbuya = {
+    email = "fa@m-labs.ph";
+    github = "fsagbuya";
+    githubId = 77672306;
+    name = "Florian Agbuya";
+  };
   fstamour = {
     email = "fr.st-amour@gmail.com";
     github = "fstamour";
@@ -5810,6 +5816,12 @@
     github = "gdamjan";
     githubId = 81654;
     name = "Damjan Georgievski";
+  };
+  gdd = {
+    email = "gabriel.doriath.dohler@ens.fr";
+    github = "gabriel-doriath-dohler";
+    githubId = 40209356;
+    name = "Gabriel Doriath Döhler";
   };
   gdinh = {
     email = "nix@contact.dinh.ai";

@@ -12003,6 +12003,8 @@ with pkgs;
 
   rc = callPackage ../shells/rc { };
 
+  rc-9front = callPackage ../shells/rc-9front { };
+
   rcon = callPackage ../tools/networking/rcon { };
 
   rconc = callPackage ../tools/networking/rconc { };
@@ -26911,6 +26913,8 @@ with pkgs;
 
   ### OS-SPECIFIC
 
+  airbuddy = callPackage ../os-specific/darwin/airbuddy { };
+
   afuse = callPackage ../os-specific/linux/afuse { };
 
   autofs5 = callPackage ../os-specific/linux/autofs { };
@@ -26979,6 +26983,8 @@ with pkgs;
   ath9k-htc-blobless-firmware-unstable =
     callPackage ../os-specific/linux/firmware/ath9k { enableUnstable = true; };
 
+  bartender = callPackage ../os-specific/darwin/bartender { };
+
   b43Firmware_5_1_138 = callPackage ../os-specific/linux/firmware/b43-firmware/5.1.138.nix { };
 
   b43Firmware_6_30_163_46 = callPackage ../os-specific/linux/firmware/b43-firmware/6.30.163.46.nix { };
@@ -27040,6 +27046,8 @@ with pkgs;
   cpustat = callPackage ../os-specific/linux/cpustat { };
 
   cockroachdb = callPackage ../servers/sql/cockroachdb { };
+
+  coconutbattery = callPackage ../os-specific/darwin/coconutbattery { };
 
   conky = callPackage ../os-specific/linux/conky ({
     lua = lua5_3_compat;

@@ -93,6 +93,14 @@
   - pkgs/development/nim-packages/**/*
   - pkgs/top-level/nim-packages.nix
 
+"6.topic: nodejs":
+  - doc/languages-frameworks/javascript.section.md
+  - pkgs/build-support/node/**/*
+  - pkgs/development/node-packages/**/*
+  - pkgs/development/tools/yarn/*
+  - pkgs/development/tools/yarn2nix-moretea/**/*
+  - pkgs/development/web/nodejs/*
+
 "6.topic: ocaml":
   - doc/languages-frameworks/ocaml.section.md
   - pkgs/development/compilers/ocaml/**/*
