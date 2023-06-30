@@ -76,7 +76,7 @@ lib.composeManyExtensions [
         (drv: attr: addBuildSystem {
           inherit drv self attr;
         })
-        super.${attr}
+        (super.${attr} or null)
         systems)
       buildSystems)
 
@@ -211,8 +211,7 @@ lib.composeManyExtensions [
               [ pkgs.darwin.apple_sdk.frameworks.Security pkgs.libiconv ];
             nativeBuildInputs = with pkgs;
               (old.nativeBuildInputs or [ ])
-                ++ lib.optionals (lib.versionAtLeast old.version "4")
-                [ rustc cargo rustPlatform.cargoSetupHook self.setuptools-rust ];
+                ++ lib.optionals (lib.versionAtLeast old.version "4") [ rustc cargo pkgs.rustPlatform.cargoSetupHook self.setuptools-rust ];
           } // lib.optionalAttrs (lib.versionAtLeast old.version "4") {
             cargoDeps =
               pkgs.rustPlatform.fetchCargoTarball
@@ -384,6 +383,8 @@ lib.composeManyExtensions [
             "39.0.2" = "sha256-Admz48/GS2t8diz611Ciin1HKQEyMDEwHxTpJ5tZ1ZA=";
             "40.0.0" = "sha256-/TBANavYria9YrBpMgjtFyqg5feBcloETcYJ8fdBgkI=";
             "40.0.1" = "sha256-gFfDTc2QWBWHBCycVH1dYlCsWQMVcRZfOBIau+njtDU=";
+            "40.0.2" = "sha256-cV4GTfbVYanElXOVmynvrru2wJuWvnT1Z1tQKXdkbg0=";
+            "41.0.1" = "sha256-38q81vRf8QHR8lFRM2KbH7Ng5nY7nmtWRMoPWS9VO/U=";
           }.${version} or (
             lib.warn "Unknown cryptography version: '${version}'. Please update getCargoHash." lib.fakeHash
           );
@@ -401,8 +402,7 @@ lib.composeManyExtensions [
               nativeBuildInputs = (old.nativeBuildInputs or [ ])
                 ++ lib.optionals (lib.versionAtLeast old.version "3.4") [ self.setuptools-rust ]
                 ++ lib.optional (!self.isPyPy) pyBuildPackages.cffi
-                ++ lib.optional (lib.versionAtLeast old.version "3.5" && !isWheel)
-                (with pkgs; [ rustPlatform.cargoSetupHook cargo rustc ])
+                ++ lib.optional (lib.versionAtLeast old.version "3.5" && !isWheel) [ pkgs.rustPlatform.cargoSetupHook pkgs.cargo pkgs.rustc ]
                 ++ [ pkg-config ]
               ;
               buildInputs = (old.buildInputs or [ ])
@@ -429,6 +429,11 @@ lib.composeManyExtensions [
         postPatch = ''
           substituteInPlace setup.py --replace 'setuptools>=50.3.2,<51.0.0' 'setuptools'
         '';
+      });
+
+      cysystemd = super.cysystemd.overridePythonAttrs (old: {
+        buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.systemd ];
+        nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.pkg-config ];
       });
 
       daphne = super.daphne.overridePythonAttrs (old: {
@@ -580,6 +585,8 @@ lib.composeManyExtensions [
 
       duckdb = super.duckdb.overridePythonAttrs (old: {
         postPatch = lib.optionalString (!(old.src.isWheel or false)) ''
+          cd tools/pythonpkg
+
           substituteInPlace setup.py \
             --replace 'multiprocessing.cpu_count()' "$NIX_BUILD_CORES" \
             --replace 'setuptools_scm<7.0.0' 'setuptools_scm'
@@ -595,11 +602,13 @@ lib.composeManyExtensions [
         '';
       };
 
-      eth-keyfile = super.eth-keyfile.overridePythonAttrs {
+      eth-keyfile = super.eth-keyfile.overridePythonAttrs (old: {
         preConfigure = ''
           substituteInPlace setup.py --replace \'setuptools-markdown\' ""
         '';
-      };
+
+        propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ self.setuptools ];
+      });
 
       eth-keys = super.eth-keys.overridePythonAttrs {
         preConfigure = ''
@@ -607,15 +616,8 @@ lib.composeManyExtensions [
         '';
       };
 
-      # remove eth-hash dependency because eth-hash also depends on eth-utils causing a cycle.
-      eth-utils = super.eth-utils.overridePythonAttrs (old: {
-        propagatedBuildInputs =
-          builtins.filter (i: i.pname != "eth-hash") old.propagatedBuildInputs;
-        preConfigure = ''
-          ${old.preConfigure or ""}
-          sed -i '/eth-hash/d' setup.py
-        '';
-      });
+      # FIXME: this is a workaround for https://github.com/nix-community/poetry2nix/issues/1161
+      eth-utils = super.eth-utils.override { preferWheel = true; };
 
       evdev = super.evdev.overridePythonAttrs (old: {
         preConfigure = ''
@@ -984,14 +986,21 @@ lib.composeManyExtensions [
         ];
       });
 
-      jsondiff = super.jsondiff.overridePythonAttrs (
-        old: {
-          preBuild = (old.preBuild or "") + ''
-            substituteInPlace setup.py \
-              --replace "'jsondiff=jsondiff.cli:main_deprecated'," ""
-          '';
-        }
-      );
+      jsondiff =
+        if lib.versionOlder "2.0.0"
+        then
+          super.jsondiff.overridePythonAttrs
+            (
+              old: {
+                preBuild = lib.optionalString (!(old.src.isWheel or false)) (
+                  (old.preBuild or "") + ''
+                    substituteInPlace setup.py \
+                      --replace "'jsondiff=jsondiff.cli:main_deprecated'," ""
+                  ''
+                );
+              }
+            )
+        else super.jsondiff;
 
       jsonslicer = super.jsonslicer.overridePythonAttrs (old: {
         nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.pkgconfig ];
@@ -1085,29 +1094,38 @@ lib.composeManyExtensions [
         }
       );
 
+      llama-cpp-python = super.llama-cpp-python.overridePythonAttrs (
+        old: {
+          buildInputs = with pkgs; lib.optionals stdenv.isDarwin [
+            darwin.apple_sdk.frameworks.Accelerate
+          ];
+          nativeBuildInputs = [ pkgs.cmake ] ++ (old.nativeBuildInputs or [ ]);
+          preBuild = ''
+            cd "$OLDPWD"
+          '';
+        }
+      );
+
       llvmlite = super.llvmlite.overridePythonAttrs (
         old:
         let
-          llvm =
-            if lib.versionAtLeast old.version "0.37.0" then
-              pkgs.llvmPackages_11.llvm
-            else if (lib.versionOlder old.version "0.37.0" && lib.versionAtLeast old.version "0.34.0") then
-              pkgs.llvmPackages_10.llvm
-            else if (lib.versionOlder old.version "0.34.0" && lib.versionAtLeast old.version "0.33.0") then
-              pkgs.llvmPackages_9.llvm
-            else if (lib.versionOlder old.version "0.33.0" && lib.versionAtLeast old.version "0.29.0") then
-              pkgs.llvmPackages_8.llvm
-            else if (lib.versionOlder old.version "0.28.0" && lib.versionAtLeast old.version "0.27.0") then
-              pkgs.llvmPackages_7.llvm
-            else if (lib.versionOlder old.version "0.27.0" && lib.versionAtLeast old.version "0.23.0") then
-              pkgs.llvmPackages_6.llvm or throw "LLVM6 has been removed from nixpkgs; upgrade llvmlite or use older nixpkgs"
-            else if (lib.versionOlder old.version "0.23.0" && lib.versionAtLeast old.version "0.21.0") then
-              pkgs.llvmPackages_5.llvm or throw "LLVM5 has been removed from nixpkgs; upgrade llvmlite or use older nixpkgs"
-            else
-              pkgs.llvm; # Likely to fail.
+          # see https://github.com/numba/llvmlite#compatibility
+          llvm_version = toString (
+            if lib.versionAtLeast old.version "0.40.0" then 14
+            else if lib.versionAtLeast old.version "0.37.0" then 11
+            else if lib.versionAtLeast old.version "0.34.0" && !stdenv.buildPlatform.isAarch64 then 10
+            else if lib.versionAtLeast old.version "0.33.0" then 9
+            else if lib.versionAtLeast old.version "0.29.0" then 8
+            else if lib.versionAtLeast old.version "0.27.0" then 7
+            else if lib.versionAtLeast old.version "0.23.0" then 6
+            else if lib.versionAtLeast old.version "0.21.0" then 5
+            else 4
+          );
+          llvm = pkgs."llvmPackages_${llvm_version}".llvm or (throw "LLVM${llvm_version} has been removed from nixpkgs; upgrade llvmlite or use older nixpkgs");
         in
         {
-          nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.llvm ];
+          inherit llvm;
+          nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.llvmlite.llvm ];
 
           # Disable static linking
           # https://github.com/numba/llvmlite/issues/93
@@ -1143,6 +1161,17 @@ lib.composeManyExtensions [
         old: {
           nativeBuildInputs = with pkgs.buildPackages; (old.nativeBuildInputs or [ ]) ++ [ pkg-config libxml2.dev libxslt.dev ] ++ lib.optionals stdenv.isDarwin [ xcodebuild ];
           buildInputs = with pkgs; (old.buildInputs or [ ]) ++ [ libxml2 libxslt ];
+        }
+      );
+
+      markdown-it-py = super.markdown-it-py.overridePythonAttrs (
+        old: {
+          propagatedBuildInputs = builtins.filter (i: i.pname != "mdit-py-plugins") old.propagatedBuildInputs;
+          preConfigure = lib.optionalString (!(old.src.isWheel or false)) (
+            (old.preConfigure or "") + ''
+              substituteInPlace pyproject.toml --replace 'plugins = ["mdit-py-plugins"]' 'plugins = []'
+            ''
+          );
         }
       );
 
@@ -1285,6 +1314,14 @@ lib.composeManyExtensions [
             buildInputs = (old.buildInputs or [ ]) ++ [ self.setuptools self.setuptools-scm self.setuptools-scm-git-archive ];
           });
 
+      munch = super.munch.overridePythonAttrs (
+        old: {
+          # Latest version of pypi imports pkg_resources at runtime, so setuptools is needed at runtime. :(
+          # They fixed this last year but never released a new version.
+          propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ self.setuptools ];
+        }
+      );
+
       mpi4py = super.mpi4py.overridePythonAttrs (
         old:
         let
@@ -1317,22 +1354,30 @@ lib.composeManyExtensions [
       );
 
       mypy = super.mypy.overridePythonAttrs (
-        old: {
-          buildInputs = (old.buildInputs or [ ]) ++ [
-            self.types-typed-ast
-            self.types-setuptools
-          ]
-            ++ lib.optional (lib.strings.versionAtLeast old.version "0.990") self.types-psutil
-          ;
+        old:
+        let
           # Compile mypy with mypyc, which makes mypy about 4 times faster. The compiled
           # version is also the default in the wheels on Pypi that include binaries.
           # is64bit: unfortunately the build would exhaust all possible memory on i686-linux.
           MYPY_USE_MYPYC = stdenv.buildPlatform.is64bit;
 
+          envAttrs =
+            if old ? env
+            then { env = old.env // { inherit MYPY_USE_MYPYC; }; }
+            else { inherit MYPY_USE_MYPYC; };
+        in
+        {
+          buildInputs = (old.buildInputs or [ ]) ++ [
+            self.types-typed-ast
+            self.types-setuptools
+          ]
+          ++ lib.optional (lib.strings.versionAtLeast old.version "0.990") self.types-psutil
+          ;
+
           # when testing reduce optimisation level to drastically reduce build time
           # (default is 3)
           # MYPYC_OPT_LEVEL = 1;
-        } // lib.optionalAttrs (old.format != "wheel") {
+        } // envAttrs // lib.optionalAttrs (old.format != "wheel") {
           # FIXME: Remove patch after upstream has decided the proper solution.
           #        https://github.com/python/mypy/pull/11143
           patches = (old.patches or [ ]) ++ lib.optionals ((lib.strings.versionAtLeast old.version "0.900") && lib.strings.versionOlder old.version "0.940") [
@@ -1421,6 +1466,37 @@ lib.composeManyExtensions [
         }
       );
 
+      # The following are dependencies of torch >= 2.0.0.
+      # torch doesn't officially support system CUDA, unless you build it yourself.
+      nvidia-cudnn-cu11 = super.nvidia-cudnn-cu11.overridePythonAttrs (attrs: {
+        autoPatchelfIgnoreMissingDeps = true;
+        # (Bytecode collision happens with nvidia-cuda-nvrtc-cu11.)
+        postFixup = ''
+          rm -r $out/${self.python.sitePackages}/nvidia/{__pycache__,__init__.py}
+        '';
+        propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
+          self.nvidia-cublas-cu11
+        ];
+      });
+
+      nvidia-cuda-nvrtc-cu11 = super.nvidia-cuda-nvrtc-cu11.overridePythonAttrs (_: {
+        # (Bytecode collision happens with nvidia-cudnn-cu11.)
+        postFixup = ''
+          rm -r $out/${self.python.sitePackages}/nvidia/{__pycache__,__init__.py}
+        '';
+      });
+
+      nvidia-cusolver-cu11 = super.nvidia-cusolver-cu11.overridePythonAttrs (attrs: {
+        autoPatchelfIgnoreMissingDeps = true;
+        # (Bytecode collision happens with nvidia-cusolver-cu11.)
+        postFixup = ''
+          rm -r $out/${self.python.sitePackages}/nvidia/{__pycache__,__init__.py}
+        '';
+        propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
+          self.nvidia-cublas-cu11
+        ];
+      });
+
       omegaconf = super.omegaconf.overridePythonAttrs (
         old: {
           nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.jdk ];
@@ -1473,6 +1549,7 @@ lib.composeManyExtensions [
           buildInputs = [
             self.scikit-build
           ] ++ lib.optionals stdenv.isDarwin (with pkgs.darwin.apple_sdk.frameworks; [
+            Accelerate
             AVFoundation
             Cocoa
             CoreMedia
@@ -1522,11 +1599,12 @@ lib.composeManyExtensions [
             "3.8.6" = "sha256-8T//q6nQoZhh8oJWDCeQf3gYRew58dXAaxkYELY4CJM=";
             "3.8.7" = "sha256-JBO8nl0sC+XIn17vI7hC8+nA1HYI9jfvZrl9nCE3k1s=";
             "3.8.8" = "sha256-AK4HtqPKg2O2FeLHCbY9o+N1BV4QFMNaHVE1NaFYHa4=";
+            "3.8.10" = "sha256-AcrTEHv7GYtGe4fXYsM24ElrzfhnOxLYlaon1ZrlD4A=";
           }.${version} or (
             lib.warn "Unknown orjson version: '${version}'. Please update getCargoHash." lib.fakeHash
           );
         in
-        super.orjson.overridePythonAttrs (old: {
+        super.orjson.overridePythonAttrs (old: if old.src.isWheel or false then { } else {
           cargoDeps = pkgs.rustPlatform.fetchCargoTarball {
             inherit (old) src;
             name = "${old.pname}-${old.version}";
@@ -1574,6 +1652,10 @@ lib.composeManyExtensions [
         postInstall = old.postInstall or "" + ''
           installManPage docs/man/*.[1-9]
         '';
+      });
+
+      pao = super.pao.overridePythonAttrs (old: {
+        propagatedBuildInputs = old.propagatedBuildInputs or [ ] ++ [ self.pyutilib ];
       });
 
       paramiko = super.paramiko.overridePythonAttrs (old: {
@@ -1754,6 +1836,10 @@ lib.composeManyExtensions [
                   pkgs.cmake
                 ];
 
+                buildInputs = (old.buildInputs or [ ]) ++ [
+                  _arrow-cpp
+                ];
+
                 preBuild = ''
                   export PYARROW_PARALLEL=$NIX_BUILD_CORES
                 '';
@@ -1901,6 +1987,10 @@ lib.composeManyExtensions [
         }
       );
 
+      pynetbox = super.pynetbox.overridePythonAttrs (old: {
+        propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ self.setuptools ];
+      });
+
       pynput = super.pynput.overridePythonAttrs (old: {
         nativeBuildInputs = (old.nativeBuildInputs or [ ])
           ++ [ self.sphinx ];
@@ -2006,6 +2096,7 @@ lib.composeManyExtensions [
             --replace "find_library('snap7')" "\"${pkgs.snap7}/lib/libsnap7.so\""
         '';
       });
+
 
       pytoml = super.pytoml.overridePythonAttrs (
         old: {
@@ -2145,6 +2236,16 @@ lib.composeManyExtensions [
       python-olm = super.python-olm.overridePythonAttrs (
         old: {
           buildInputs = old.buildInputs or [ ] ++ [ pkgs.olm ];
+        }
+      );
+
+      python-pam = super.python-pam.overridePythonAttrs (
+        old: {
+          postPatch = ''
+            substituteInPlace src/pam/__internals.py \
+            --replace 'find_library("pam")' '"${pkgs.pam}/lib/libpam.so"' \
+            --replace 'find_library("pam_misc")' '"${pkgs.pam}/lib/libpam_misc.so"'
+          '';
         }
       );
 
@@ -2492,61 +2593,33 @@ lib.composeManyExtensions [
         preferWheel = true;
       };
 
-      torch = lib.makeOverridable
-        ({ enableCuda ? false
-         , cudatoolkit ? pkgs.cudatoolkit_10_1
-         , pkg ? super.torch
-         }: pkg.overrideAttrs (old:
-          {
-            preConfigure =
-              if (!enableCuda) then ''
-                export USE_CUDA=0
-              '' else ''
-                export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${cudatoolkit}/targets/x86_64-linux/lib"
-              '';
-            preFixup = lib.optionalString (!enableCuda) ''
-              # For some reason pytorch retains a reference to libcuda even if it
-              # is explicitly disabled with USE_CUDA=0.
-              find $out -name "*.so" -exec ${pkgs.patchelf}/bin/patchelf --remove-needed libcuda.so.1 {} \;
-            '';
-            buildInputs =
-              (old.buildInputs or [ ])
-              ++ [ self.typing-extensions ]
-              ++ lib.optionals enableCuda [
-                pkgs.linuxPackages.nvidia_x11
-                pkgs.nccl.dev
-                pkgs.nccl.out
-              ];
-            propagatedBuildInputs = [
-              self.numpy
-              self.future
-              self.typing-extensions
-            ];
-          })
-        )
-        { };
+      torch = super.torch.overridePythonAttrs (old: {
+        # torch has an auto-magical way to locate the cuda libraries from site-packages.
+        autoPatchelfIgnoreMissingDeps = true;
+        propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [
+          self.numpy
+        ];
+      });
 
-      torchvision = lib.makeOverridable
-        ({ enableCuda ? false
-         , cudatoolkit ? pkgs.cudatoolkit_10_1
-         , pkg ? super.torchvision
-         }: pkg.overrideAttrs (old: {
+      torchvision = super.torchvision.overridePythonAttrs (old: {
+        autoPatchelfIgnoreMissingDeps = true;
 
-          # without that autoPatchelfHook will fail because cudatoolkit is not in LD_LIBRARY_PATH
-          autoPatchelfIgnoreMissingDeps = true;
-          buildInputs = (old.buildInputs or [ ])
-            ++ [ self.torch ]
-            ++ lib.optionals enableCuda [
-            cudatoolkit
-          ];
-          preConfigure =
-            if (enableCuda) then ''
-              export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${self.torch}/${self.python.sitePackages}/torch/lib:${lib.makeLibraryPath [ cudatoolkit "${cudatoolkit}" ]}"
-            '' else ''
-              export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${self.torch}/${self.python.sitePackages}/torch/lib"
-            '';
-        }))
-        { };
+        # (no patchelf on darwin, since no elves there.)
+        preFixup = lib.optionals (!stdenv.isDarwin) ''
+          addAutoPatchelfSearchPath "${self.torch}/${self.python.sitePackages}/torch/lib"
+        '';
+
+        buildInputs = (old.buildInputs or [ ]) ++ [
+          self.torch
+        ];
+      });
+
+      # Circular dependency between triton and torch (see https://github.com/openai/triton/issues/1374)
+      # You can remove this once triton publishes a new stable build and torch takes it.
+      triton = super.triton.overridePythonAttrs (old: {
+        propagatedBuildInputs = builtins.filter (e: e.pname != "torch") old.propagatedBuildInputs;
+        pipInstallFlags = [ "--no-deps" ];
+      });
 
       typed_ast = super.typed-ast.overridePythonAttrs (old: {
         nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
@@ -2958,6 +3031,11 @@ lib.composeManyExtensions [
               '';
             }
         );
+
+      flake8-mutable = super.flake8-mutable.overridePythonAttrs
+        (old: { buildInputs = old.buildInputs or [ ] ++ [ self.pytest-runner ]; });
+      pydantic = super.pydantic.overridePythonAttrs
+        (old: { buildInputs = old.buildInputs or [ ] ++ [ pkgs.libxcrypt ]; });
 
       y-py = super.y-py.override {
         preferWheel = true;

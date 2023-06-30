@@ -8414,6 +8414,12 @@
     githubId = 37185887;
     name = "Calvin Kim";
   };
+  keenanweaver = {
+    email = "keenanweaver@protonmail.com";
+    name = "Keenan Weaver";
+    github = "keenanweaver";
+    githubId = 37268985;
+  };
   keksbg = {
     email = "keksbg@riseup.net";
     name = "Stella";

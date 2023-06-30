@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   pname = "python-tado";
-  version = "0.15.0";
+  version = "0.16.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";

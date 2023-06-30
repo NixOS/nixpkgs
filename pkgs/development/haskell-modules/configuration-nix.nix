@@ -958,9 +958,6 @@ self: super: builtins.intersectAttrs super {
   # Pass the correct libarchive into the package.
   streamly-archive = super.streamly-archive.override { archive = pkgs.libarchive; };
 
-  # Pass the correct lmdb into the package.
-  streamly-lmdb = super.streamly-lmdb.override { lmdb = pkgs.lmdb; };
-
   hlint = overrideCabal (drv: {
     postInstall = ''
       install -Dm644 data/hlint.1 -t "$out/share/man/man1"
