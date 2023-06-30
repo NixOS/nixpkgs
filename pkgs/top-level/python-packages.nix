@@ -412,6 +412,8 @@ self: super: with self; {
 
   alembic = callPackage ../development/python-modules/alembic { };
 
+  alexapy = callPackage ../development/python-modules/alexapy { };
+
   algebraic-data-types = callPackage ../development/python-modules/algebraic-data-types { };
 
   aliyun-python-sdk-cdn = callPackage ../development/python-modules/aliyun-python-sdk-cdn { };
@@ -3259,6 +3261,8 @@ self: super: with self; {
   enaml = callPackage ../development/python-modules/enaml { };
 
   enamlx = callPackage ../development/python-modules/enamlx { };
+
+  encodec = callPackage ../development/python-modules/encodec { };
 
   energyflip-client = callPackage ../development/python-modules/energyflip-client { };
 
@@ -6505,6 +6509,10 @@ self: super: with self; {
   mpldatacursor = callPackage ../development/python-modules/mpldatacursor { };
 
   mplfinance = callPackage ../development/python-modules/mplfinance { };
+
+  mplhep = callPackage ../development/python-modules/mplhep { };
+
+  mplhep-data = callPackage ../development/python-modules/mplhep-data { };
 
   mplleaflet = callPackage ../development/python-modules/mplleaflet { };
 

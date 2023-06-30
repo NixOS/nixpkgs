@@ -33,6 +33,7 @@
 , gnused ? null
 , cloog ? null # unused; just for compat with gcc4, as we override the parameter on some places
 , buildPackages
+, callPackage
 }:
 
 assert langJava     -> zip != null && unzip != null
@@ -198,7 +199,7 @@ in
 # We need all these X libraries when building AWT with GTK.
 assert x11Support -> (filter (x: x == null) ([ gtk2 libart_lgpl ] ++ xlibs)) == [];
 
-stdenv.mkDerivation ({
+lib.pipe (stdenv.mkDerivation ({
   pname = "${crossNameAddon}${name}";
   inherit version;
 
@@ -358,11 +359,6 @@ stdenv.mkDerivation ({
   };
 }
 
-// optionalAttrs (targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt" && crossStageStatic) {
-  makeFlags = [ "all-gcc" "all-target-libgcc" ];
-  installTargets = "install-gcc install-target-libgcc";
-}
-
 // optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
 
 // optionalAttrs (langJava && !stdenv.hostPlatform.isDarwin) {
@@ -370,4 +366,7 @@ stdenv.mkDerivation ({
        target="$(echo "$out/libexec/gcc"/*/*/ecj*)"
        patchelf --set-rpath "$(patchelf --print-rpath "$target"):$out/lib" "$target"
      '';}
-)
+))
+[
+  (callPackage ../common/libgcc.nix   { inherit version langC langCC langJit targetPlatform hostPlatform crossStageStatic; })
+]

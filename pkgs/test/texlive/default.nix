@@ -222,10 +222,7 @@
         "convertgls2bib" "ctan-o-mat" "ctanify" "ctanupload" "dtxgen" "ebong" "epspdftk" "exceltex" "gsx" "htcontext"
         "installfont-tl" "kanji-fontmap-creator" "ketcindy" "latex-git-log" "latex2nemeth" "ltxfileinfo" "match_parens"
         "pdfannotextractor" "purifyeps" "pythontex" "svn-multi" "texexec" "texosquery" "texosquery-jre5"
-        "texosquery-jre8" "texplate" "tlcockpit" "tlmgr" "tlshell" "ulqda" "xhlatex" ]
-        # texluajitc is seemingly outdated and broken on native Linux aarch64
-        # some info at https://github.com/NixOS/nixpkgs/pull/239804#issuecomment-1609832232
-        ++ lib.optional (with stdenv; isAarch64 && isLinux) "texluajitc";
+        "texosquery-jre8" "texplate" "tlcockpit" "tlmgr" "tlshell" "ulqda" "xhlatex" ];
       # (1) binaries requiring -v
       shortVersion = [ "devnag" "diadia" "pmxchords" "ptex2pdf" "simpdftex" "ttf2afm" ];
       # (1) binaries requiring --help or -h

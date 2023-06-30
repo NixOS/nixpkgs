@@ -1066,6 +1066,18 @@ benchmark component.
 `dontCoverage drv`
 : Sets the `doCoverage` argument to `false` for `drv`.
 
+`enableExecutableProfiling drv`
+: Sets the `enableExecutableProfiling` argument to `true` for `drv`.
+
+`disableExecutableProfiling drv`
+: Sets the `enableExecutableProfiling` argument to `false` for `drv`.
+
+`enableLibraryProfiling drv`
+: Sets the `enableLibraryProfiling` argument to `true` for `drv`.
+
+`disableLibraryProfiling drv`
+: Sets the `enableLibraryProfiling` argument to `false` for `drv`.
+
 #### Library functions in the Haskell package sets {#haskell-package-set-lib-functions}
 
 Some library functions depend on packages from the Haskell package sets. Thus they are
@@ -1139,6 +1151,124 @@ covered in the old [haskell4nix docs](https://haskell4nix.readthedocs.io/).
 
 If you feel any important topic is not documented at all, feel free to comment
 on the issue linked above.
+
+### How to enable or disable profiling builds globally? {#haskell-faq-override-profiling}
+
+By default, Nixpkgs builds a profiling version of each Haskell library. The
+exception to this rule are some platforms where it is disabled due to concerns
+over output size. You may want to…
+
+* …enable profiling globally so that you can build a project you are working on
+  with profiling ability giving you insight in the time spent across your code
+  and code you depend on using [GHC's profiling feature][profiling].
+
+* …disable profiling (globally) to reduce the time spent building the profiling
+  versions of libraries which a significant amount of build time is spent on
+  (although they are not as expensive as the “normal” build of a Haskell library).
+
+::: {.note}
+The method described below affects the build of all libraries in the
+respective Haskell package set as well as GHC. If your choices differ from
+Nixpkgs' default for your (host) platform, you will lose the ability to
+substitute from the official binary cache.
+
+If you are concerned about build times and thus want to disable profiling, it
+probably makes sense to use `haskell.lib.compose.disableLibraryProfiling` (see
+[](#haskell-trivial-helpers)) on the packages you are building locally while
+continuing to substitute their dependencies and GHC.
+:::
+
+Since we need to change the profiling settings for the desired Haskell package
+set _and_ GHC (as the core libraries like `base`, `filepath` etc. are bundled
+with GHC), it is recommended to use overlays for Nixpkgs to change them.
+Since the interrelated parts, i.e. the package set and GHC, are connected
+via the Nixpkgs fixpoint, we need to modify them both in a way that preserves
+their connection (or else we'd have to wire it up again manually). This is
+achieved by changing GHC and the package set in seperate overlays to prevent
+the package set from pulling in GHC from `prev`.
+
+The result is two overlays like the ones shown below. Adjustable parts are
+annotated with comments, as are any optional or alternative ways to achieve
+the desired profiling settings without causing too many rebuilds.
+
+<!-- TODO(@sternenseemann): buildHaskellPackages != haskellPackages with this overlay,
+affected by https://github.com/NixOS/nixpkgs/issues/235960 which needs to be fixed
+properly still.
+-->
+
+```nix
+let
+  # Name of the compiler and package set you want to change. If you are using
+  # the default package set `haskellPackages`, you need to look up what version
+  # of GHC it currently uses (note that this is subject to change).
+  ghcName = "ghc92";
+  # Desired new setting
+  enableProfiling = true;
+in
+
+[
+  # The first overlay modifies the GHC derivation so that it does or does not
+  # build profiling versions of the core libraries bundled with it. It is
+  # recommended to only use such an overlay if you are enabling profiling on a
+  # platform that doesn't by default, because compiling GHC from scratch is
+  # quite expensive.
+  (final: prev:
+  let
+    inherit (final) lib;
+  in
+
+  {
+    haskell = lib.recursiveUpdate prev.haskell {
+      compiler.${ghcName} = prev.haskell.compiler.${ghcName}.override {
+        # Unfortunately, the GHC setting is named differently for historical reasons
+        enableProfiledLibs = enableProfiling;
+      };
+    };
+  })
+
+  (final: prev:
+  let
+    inherit (final) lib;
+    haskellLib = final.haskell.lib.compose;
+  in
+
+  {
+    haskell = lib.recursiveUpdate prev.haskell {
+      packages.${ghcName} = prev.haskell.packages.${ghcName}.override {
+        overrides = hfinal: hprev: {
+          mkDerivation = args: hprev.mkDerivation (args // {
+            # Since we are forcing our ideas upon mkDerivation, this change will
+            # affect every package in the package set.
+            enableLibraryProfiling = enableProfiling;
+
+            # To actually use profiling on an executable, executable profiling
+            # needs to be enabled for the executable you want to profile. You
+            # can either do this globally or…
+            enableExecutableProfiling = enableProfiling;
+          });
+
+          # …only for the package that contains an executable you want to profile.
+          # That saves on unnecessary rebuilds for packages that you only depend
+          # on for their library, but also contain executables (e.g. pandoc).
+          my-executable = haskellLib.enableExecutableProfiling hprev.my-executable;
+
+          # If you are disabling profiling to save on build time, but want to
+          # retain the ability to substitute from the binary cache. Drop the
+          # override for mkDerivation above and instead have an override like
+          # this for the specific packages you are building locally and want
+          # to make cheaper to build.
+          my-library = haskellLib.disableLibraryProfiling hprev.my-library;
+        };
+      };
+    };
+  })
+]
+```
+
+<!-- TODO(@sternenseemann): write overriding mkDerivation, overriding GHC, and
+overriding the entire package set sections and link to them from here where
+relevant.
+-->
 
 [Stackage]: https://www.stackage.org
 [cabal-project-files]: https://cabal.readthedocs.io/en/latest/cabal-project.html

@@ -350,15 +350,10 @@ lib.pipe (stdenv.mkDerivation ({
   };
 }
 
-// optionalAttrs (targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt" && crossStageStatic) {
-  makeFlags = [ "all-gcc" "all-target-libgcc" ];
-  installTargets = "install-gcc install-target-libgcc";
-}
-
 // optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
 ))
 [
-  (callPackage ../common/libgcc.nix   { inherit langC langCC langJit; })
+  (callPackage ../common/libgcc.nix   { inherit version langC langCC langJit targetPlatform hostPlatform crossStageStatic; })
   (callPackage ../common/checksum.nix { inherit langC langCC; })
 ]
 
