@@ -429,6 +429,8 @@ with pkgs;
 
   chatgpt-retrieval-plugin = callPackage ../servers/chatgpt-retrieval-plugin { };
 
+  mswatch = callPackage ../applications/networking/mailreaders/mswatch { };
+
   chef-cli = callPackage ../tools/misc/chef-cli { };
 
   checkov = callPackage ../development/tools/analysis/checkov {
