@@ -81,6 +81,7 @@ in {
           The variables are
           - `TPM2TOOLS_TCTI`
           - `TPM2_PKCS11_TCTI`
+          - `TSS2_FAPICONF`
         '';
         type = lib.types.bool;
         default = false;
@@ -139,17 +140,21 @@ in {
       };
       users.groups.${cfg.tssGroup} = lib.mkIf (cfg.tssGroup == "tss") {};
 
-      environment.variables = lib.mkIf cfg.tctiEnvironment.enable (
-        lib.attrsets.genAttrs [
-          "TPM2TOOLS_TCTI"
-          "TPM2_PKCS11_TCTI"
-        ] (_: ''${cfg.tctiEnvironment.interface}:${
-          if cfg.tctiEnvironment.interface == "tabrmd" then
+      environment.variables = let
+        tctiOption = if cfg.tctiEnvironment.interface == "tabrmd" then
             cfg.tctiEnvironment.tabrmdConf
           else
-            cfg.tctiEnvironment.deviceConf
-        }'')
-      );
+            cfg.tctiEnvironment.deviceConf;
+        tctiStr = "${cfg.tctiEnvironment.interface}:${tctiOption}";
+      in lib.mkIf cfg.tctiEnvironment.enable {
+        TPM2TOOLS_TCTI = tctiStr;
+        TPM2_PKCS11_TCTI = tctiStr;
+        TSS2_FAPICONF = pkgs.runCommand "fapi-config.json" { } ''
+          cp ${pkgs.tpm2-tss}/etc/tpm2-tss/fapi-config.json $out
+          sed -i 's|/nix/store/[^/]*/var|/var|' $out
+          sed -i 's|"tcti":.*$|"tcti": "${tctiStr}",|' $out
+        '';
+      };
     }
 
     (lib.mkIf cfg.abrmd.enable {
