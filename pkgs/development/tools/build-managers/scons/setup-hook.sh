@@ -72,7 +72,7 @@ sconsCheckPhase() {
     runHook postCheck
 }
 
-if [ -z "${buildPhase-}" ]; then
+if [ -z "${dontUseSconsBuild-}" -a -z "${buildPhase-}" ]; then
     buildPhase=sconsBuildPhase
 fi
 
@@ -80,6 +80,6 @@ if [ -z "${dontUseSconsInstall-}" -a -z "${installPhase-}" ]; then
     installPhase=sconsInstallPhase
 fi
 
-if [ -z "${checkPhase-}" ]; then
+if [ -z "${dontUseSconsCheck-}" -a -z "${checkPhase-}" ]; then
     checkPhase=sconsCheckPhase
 fi
