@@ -12935,6 +12935,32 @@ with self; {
     };
   };
 
+  LatexIndent = buildPerlPackage rec {
+    pname = "latexindent.pl";
+    version = "3.21";
+
+    src = fetchFromGitHub {
+      owner = "cmhughes";
+      repo = pname;
+      rev = "V${version}";
+      hash = "sha256-STXHOzsshyN7rc2VtJxxt6La4UPGpRYlMO8TX1Jd7pM=";
+    };
+
+    outputs = [ "out" ];
+
+    propagatedBuildInputs = [ FileHomeDir YAMLTiny ];
+
+    preBuild = ''
+      patchShebangs ./latexindent.pl
+    '';
+
+    meta = {
+      description = "Perl script to add indentation to LaTeX files";
+      homepage = "https://github.com/cmhughes/latexindent.pl";
+      license = lib.licenses.gpl3Plus;
+    };
+  };
+
   LaTeXML = buildPerlPackage rec {
     pname = "LaTeXML";
     version = "0.8.7";
