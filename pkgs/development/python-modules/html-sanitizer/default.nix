@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "matthiask";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-1JSdi1PFM+N+UuEPfgWkOZw8S2PZ4ntadU0wnVJNnjw=";
   };
 
@@ -43,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Allowlist-based and very opinionated HTML sanitizer";
     homepage = "https://github.com/matthiask/html-sanitizer";
+    changelog = "https://github.com/matthiask/html-sanitizer/blob/${version}/CHANGELOG.rst";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };
