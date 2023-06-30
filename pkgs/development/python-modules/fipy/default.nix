@@ -19,7 +19,7 @@
 buildPythonPackage rec {
   pname = "fipy";
   version = "3.4.4";
-  format = "pyproject";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
