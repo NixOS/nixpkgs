@@ -19,7 +19,7 @@ drv: lib.pipe drv
   (pkg: pkg.overrideAttrs (previousAttrs:
     lib.optionalAttrs (
       targetPlatform != hostPlatform &&
-      enableShared &&
+      (enableShared || targetPlatform.libc == "msvcrt") &&
       withoutTargetLibc
     ) {
       makeFlags = [ "all-gcc" "all-target-libgcc" ];
@@ -40,6 +40,7 @@ lib.optional (lib.versionAtLeast version "11.0")
     else "${targetPlatform.config}/";
 
   enableLibGccOutput =
+    (!stdenv.targetPlatform.isWindows || (with stdenv; targetPlatform == hostPlatform)) &&
     !langJit &&
     !stdenv.hostPlatform.isDarwin &&
     enableShared
