@@ -2,6 +2,7 @@
 , pkg-config, autoreconfHook, autoconf-archive, makeWrapper, patchelf
 , tpm2-tss, tpm2-tools, opensc, openssl, sqlite, python3, glibc, libyaml
 , abrmdSupport ? true, tpm2-abrmd ? null
+, fapiSupport ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -40,6 +41,8 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
   dontPatchELF = true;
+
+  configureFlags = lib.optional (!fapiSupport) "--enable-fapi=no";
 
   # To be able to use the userspace resource manager, the RUNPATH must
   # explicitly include the tpm2-abrmd shared libraries.
