@@ -5892,6 +5892,8 @@ self: super: with self; {
 
   lit = callPackage ../development/python-modules/lit { };
 
+  litemapy = callPackage ../development/python-modules/litemapy { };
+
   littleutils = callPackage ../development/python-modules/littleutils { };
 
   livelossplot = callPackage ../development/python-modules/livelossplot { };
