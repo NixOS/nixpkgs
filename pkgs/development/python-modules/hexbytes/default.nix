@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "hexbytes";
-  version = "0.3.0";
+  version = "0.3.1";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "hexbytes";
     rev = "v${version}";
-    hash = "sha256-EDFE5MUc+XMwe8BaXkz/DRchAZbS86X+AcShi5rx83M=";
+    hash = "sha256-19oY/VPP6qkxHCkIgpC28fOOYKEYcNbVVGoHJmMmOl8=";
   };
 
   nativeCheckInputs = [
