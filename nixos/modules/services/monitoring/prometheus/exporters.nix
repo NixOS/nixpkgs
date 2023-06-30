@@ -58,6 +58,7 @@ let
     "nut"
     "openldap"
     "openvpn"
+    "pgbouncer"
     "php-fpm"
     "pihole"
     "postfix"
@@ -313,6 +314,25 @@ in
           'services.prometheus.exporters.nextcloud.tokenFile'
       '';
     } {
+      assertion =  cfg.pgbouncer.enable -> (
+        (cfg.pgbouncer.connectionStringFile != null || cfg.pgbouncer.connectionString != "")
+      );
+        message = ''
+          PgBouncer exporter needs either connectionStringFile or connectionString configured"
+        '';
+    } {
+      assertion = cfg.pgbouncer.enable -> (
+        config.services.pgbouncer.ignoreStartupParameters != null && builtins.match ".*extra_float_digits.*" config.services.pgbouncer.ignoreStartupParameters != null
+        );
+        message = ''
+          Prometheus PgBouncer exporter requires including `extra_float_digits` in services.pgbouncer.ignoreStartupParameters
+
+          Example:
+          services.pgbouncer.ignoreStartupParameters = extra_float_digits;
+
+          See https://github.com/prometheus-community/pgbouncer_exporter#pgbouncer-configuration
+        '';
+    } {
       assertion = cfg.sql.enable -> (
         (cfg.sql.configFile == null) != (cfg.sql.configuration == null)
       );
@@ -350,12 +370,24 @@ in
         `openFirewall' is set to `true'!
       '';
     })) ++ config.services.prometheus.exporters.assertions;
-    warnings = [(mkIf (config.services.prometheus.exporters.idrac.enable && config.services.prometheus.exporters.idrac.configurationPath != null) ''
-        Configuration file in `services.prometheus.exporters.idrac.configurationPath` may override
-        `services.prometheus.exporters.idrac.listenAddress` and/or `services.prometheus.exporters.idrac.port`.
-        Consider using `services.prometheus.exporters.idrac.configuration` instead.
-      ''
-    )] ++ config.services.prometheus.exporters.warnings;
+    warnings = [
+      (mkIf (config.services.prometheus.exporters.idrac.enable && config.services.prometheus.exporters.idrac.configurationPath != null) ''
+          Configuration file in `services.prometheus.exporters.idrac.configurationPath` may override
+          `services.prometheus.exporters.idrac.listenAddress` and/or `services.prometheus.exporters.idrac.port`.
+          Consider using `services.prometheus.exporters.idrac.configuration` instead.
+        ''
+      )
+      (mkIf
+        (cfg.pgbouncer.enable && cfg.pgbouncer.connectionString != "") ''
+          config.services.prometheus.exporters.pgbouncer.connectionString is insecure. Use connectionStringFile instead.
+        ''
+      )
+      (mkIf
+        (cfg.pgbouncer.enable && config.services.pgbouncer.authType != "any") ''
+          Admin user (with password or passwordless) MUST exist in the services.pgbouncer.authFile if authType other than any is used.
+        ''
+      )
+    ] ++ config.services.prometheus.exporters.warnings;
   }] ++ [(mkIf config.services.minio.enable {
     services.prometheus.exporters.minio.minioAddress  = mkDefault "http://localhost:9000";
     services.prometheus.exporters.minio.minioAccessKey = mkDefault config.services.minio.accessKey;
