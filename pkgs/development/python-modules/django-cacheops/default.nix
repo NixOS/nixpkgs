@@ -58,5 +58,8 @@ buildPythonPackage rec {
     changelog = "https://github.com/Suor/django-cacheops/blob/${version}/CHANGELOG";
     license = licenses.bsd3;
     maintainers = with maintainers; [ onny ];
+    # No support for funcy > 2
+    # https://github.com/Suor/django-cacheops/issues/454
+    broken = true;
   };
 }
