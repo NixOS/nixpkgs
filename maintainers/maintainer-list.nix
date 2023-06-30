@@ -17992,7 +17992,7 @@
       fingerprint = "9F19 3AE8 AA25 647F FC31  46B5 416F 303B 43C2 0AC3";
     }];
   };
-  yvan = {
+  yvan-sraka = {
     email = "yvan@sraka.xyz";
     github = "yvan-sraka";
     githubId = 705213;
