@@ -1,6 +1,19 @@
-{
-  lib, fetchgit, rustPlatform, pkg-config, openssl, fuse3, libuuid,
-  acl, libxcrypt, git, installShellFiles, sphinx, stdenv, fetchpatch
+{ lib,
+  fetchgit,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  fuse3,
+  libuuid,
+  acl,
+  libxcrypt,
+  git,
+  installShellFiles,
+  sphinx,
+  stdenv,
+  fetchpatch,
+  testers,
+  proxmox-backup-client,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -91,6 +104,11 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ git pkg-config rustPlatform.bindgenHook installShellFiles sphinx ];
   buildInputs = [ openssl fuse3 libuuid acl libxcrypt ];
+
+  passthru.tests.version = testers.testVersion {
+    package = proxmox-backup-client;
+    command = "${pname} version";
+  };
 
   meta = with lib; {
     description = "The command line client for Proxmox Backup Server";
