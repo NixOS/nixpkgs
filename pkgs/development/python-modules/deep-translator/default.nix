@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "deep-translator";
-  version = "1.11.1";
+  version = "1.11.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "deep_translator";
     inherit version;
-    hash = "sha256-Q73sKqin8R8dUsMS9EjYXlxWDCSQb9R8wvvh4OXl6GY=";
+    hash = "sha256-gBJgxpIxE4cH6oiglV5ITbfUDiEMngrg93Ny/9pfS/U=";
   };
 
   nativeBuildInputs = [
