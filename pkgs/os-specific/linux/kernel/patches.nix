@@ -66,4 +66,12 @@
       hash = "sha256-DYPWgraXPNeFkjtuDYkFXHnCJ4yDewrukM2CCAqC2BE=";
     };
   };
+
+  fix-amdgpu-5_15 = {
+    name = "fix-amdgpu-crash";
+    patch = fetchpatch {
+      url = "https://lore.kernel.org/stable/20230628111636.23300-1-mario.limonciello@amd.com/raw";
+      sha256 = "sha256-eAzy+bMiOJwzssOuvrMu7gmmV3PZezaDuVwwx7zNt6M=";
+    };
+  };
 }
