@@ -7064,6 +7064,11 @@
     githubId = 1817528;
     name = "Igor Polyakov";
   };
+  iquerejeta = {
+    github = "iquerejeta";
+    githubId = 31273774;
+    name = "Inigo Querejeta-Azurmendi";
+  };
   irenes = {
     name = "Irene Knapp";
     email = "ireneista@gmail.com";
