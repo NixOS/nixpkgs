@@ -24,7 +24,6 @@ in
 
     plugins = mkOption {
       type = types.listOf types.package;
-      default = [ pkgs.ccid ];
       defaultText = literalExpression "[ pkgs.ccid ]";
       example = literalExpression "[ pkgs.pcsc-cyberjack ]";
       description = lib.mdDoc "Plugin packages to be used for PCSC-Lite.";
@@ -55,6 +54,8 @@ in
 
     environment.systemPackages = [ package ];
     systemd.packages = [ (getBin package) ];
+
+    services.pcscd.plugins = [ pkgs.ccid ];
 
     systemd.sockets.pcscd.wantedBy = [ "sockets.target" ];
 
