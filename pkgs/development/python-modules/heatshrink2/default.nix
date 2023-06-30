@@ -5,14 +5,14 @@
 
 buildPythonPackage rec {
   pname = "heatshrink2";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "eerimoq";
     repo = "pyheatshrink";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-P3IofGbW4x+erGCyxIPvD9aNHIJ/GjjWgno4n95SQoQ=";
+    hash = "sha256-JthHYq78SYr49+sTNtLZ8GjtrHcr1dzXcPskTrb4M3o=";
   };
 
   pythonImportsCheck = [ "heatshrink2" ];
