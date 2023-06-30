@@ -11,6 +11,15 @@ in {
     services.auto-cpufreq = {
       enable = mkEnableOption (lib.mdDoc "auto-cpufreq daemon");
 
+      package = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.auto-cpufreq;
+        defaultText = lib.literalExpression "pkgs.auto-cpufreq";
+        description = lib.mdDoc ''
+          The package to use for auto-cpufreq
+        '';
+      };
+
       settings = mkOption {
         description = lib.mdDoc ''
           Configuration for `auto-cpufreq`.
@@ -26,10 +35,10 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.auto-cpufreq ];
+    environment.systemPackages = [ cfg.package ];
 
     systemd = {
-      packages = [ pkgs.auto-cpufreq ];
+      packages = [ cfg.package ];
       services.auto-cpufreq = {
         # Workaround for https://github.com/NixOS/nixpkgs/issues/81138
         wantedBy = [ "multi-user.target" ];
@@ -37,7 +46,7 @@ in {
 
         serviceConfig.ExecStart = [
           ""
-          "${lib.getExe pkgs.auto-cpufreq} --daemon --config ${cfgFile}"
+          "${lib.getExe cfg.package} --daemon --config ${cfgFile}"
         ];
       };
     };
