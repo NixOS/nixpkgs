@@ -80,13 +80,13 @@ let
           self: super: {
             octoprint = self.buildPythonPackage rec {
               pname = "OctoPrint";
-              version = "1.9.0";
+              version = "1.9.1";
 
               src = fetchFromGitHub {
                 owner = "OctoPrint";
                 repo = "OctoPrint";
                 rev = version;
-                hash = "sha256-gTWQSqgksZMxdaZ7V3hmnqXlZ+OMI86RX0lC8z1AEzI=";
+                hash = "sha256-T0kK9JaaX8+hUxsnG/TftGPHWwkhPDx4nqGrplmIiI0=";
               };
 
               propagatedBuildInputs = with self; [
