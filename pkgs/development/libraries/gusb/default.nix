@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   pname = "gusb";
   version = "0.4.6";
 
-  outputs = [ "bin" "out" "dev" ];
+  outputs = [ "bin" "out" "dev" "devdoc" ];
 
   src = fetchFromGitHub {
     owner = "hughsie";
@@ -42,6 +42,10 @@ stdenv.mkDerivation rec {
   ];
 
   strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     meson
@@ -69,6 +73,12 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = false; # tests try to access USB
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    ls -la "$out/share/doc"
+    moveToOutput "share/doc" "$devdoc"
+  '';
 
   meta = with lib; {
     description = "GLib libusb wrapper";
