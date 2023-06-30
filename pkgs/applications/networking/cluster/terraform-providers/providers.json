@@ -854,13 +854,13 @@
     "vendorHash": "sha256-W7UGOtyFsIMXPqFDnde2XlzU7klR7Fs00mSuJ9ID20A="
   },
   "openstack": {
-    "hash": "sha256-UGs2Os7cWSd69ekzyoDLwzJxhGgUJbDJyrCIc6ipcwY=",
+    "hash": "sha256-Iauu0sQf8wq4Ev8JflxrthXYe99YDnt5ZzWQ/q3Bjfw=",
     "homepage": "https://registry.terraform.io/providers/terraform-provider-openstack/openstack",
     "owner": "terraform-provider-openstack",
     "repo": "terraform-provider-openstack",
-    "rev": "v1.51.1",
+    "rev": "v1.52.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-62q67aaOZA3fQmyL8bEHB+W497bcx9Xy7kKrbkjkbaI="
+    "vendorHash": "sha256-NnB8deqIeiB66Kba9LWT62fyI23HL57VcsTickoTRwI="
   },
   "opentelekomcloud": {
     "hash": "sha256-UtgVaX7gRp9+0KQTKLPeQmPZ1eg4LgEiNb7FTcF3eKA=",
