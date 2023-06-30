@@ -14751,7 +14751,8 @@ with pkgs;
 
   rush = callPackage ../shells/rush { };
 
-  xonsh = callPackage ../shells/xonsh { };
+  xonsh = callPackage ../shells/xonsh/wrapper.nix { };
+  xonsh-unwrapped = callPackage ../shells/xonsh { };
 
   zsh = callPackage ../shells/zsh { };
 
