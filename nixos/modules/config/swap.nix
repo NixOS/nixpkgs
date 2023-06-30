@@ -252,7 +252,10 @@ in
           let realDevice' = escapeSystemdPath sw.realDevice;
           in nameValuePair "mkswap-${sw.deviceName}"
           { description = "Initialisation of swap device ${sw.device}";
-            requires = [ "systemd-modules-load.service" ];
+            # The mkswap service fails for file-backed swap devices if the
+            # loop module has not been loaded before the service runs.
+            # We add an ordering constraint to run after systemd-modules-load to
+            # avoid this race condition.
             after = [ "systemd-modules-load.service" ];
             wantedBy = [ "${realDevice'}.swap" ];
             before = [ "${realDevice'}.swap" ];
