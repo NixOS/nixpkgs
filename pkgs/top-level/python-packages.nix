@@ -10478,6 +10478,8 @@ self: super: with self; {
 
   quart-cors = callPackage ../development/python-modules/quart-cors { };
 
+  qudida = callPackage ../development/python-modules/qudida { };
+
   querystring_parser = callPackage ../development/python-modules/querystring-parser { };
 
   questionary = callPackage ../development/python-modules/questionary { };
