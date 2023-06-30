@@ -6,9 +6,9 @@ buildPecl {
   version = "2.2.3";
   sha256 = "sha256-WTfrlyLd9tZGJnmc+gJFmP8kUuoVeZLk5nMxolP5AjY=";
 
-  configureFlags = [ "--with-yaml=${libyaml}" ];
+  configureFlags = [ "--with-yaml=${libyaml.dev}" ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config libyaml ];
 
   meta = {
     description = "YAML-1.1 parser and emitter";
