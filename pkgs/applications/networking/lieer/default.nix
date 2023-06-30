@@ -1,13 +1,17 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{ lib
+, fetchFromGitHub
+, python3Packages
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "lieer";
   version = "1.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "gauteh";
     repo = "lieer";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     sha256 = "sha256-2LujfvsxMHHmYjYOnLJaLdSlzDeej+ehUr4YfVe903U=";
   };
 
@@ -21,7 +25,10 @@ python3Packages.buildPythonApplication rec {
 
   # no tests
   doCheck = false;
-  pythonImportsCheck = [ "lieer" ];
+
+  pythonImportsCheck = [
+    "lieer"
+  ];
 
   meta = with lib; {
     description = "Fast email-fetching and two-way tag synchronization between notmuch and GMail";
