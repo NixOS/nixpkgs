@@ -2,16 +2,9 @@
 , stdenv
 , fetchgit
 , fetchFromGitHub
-, fetchurl
-, writeShellScript
 , runCommand
 , which
-, formats
 , rustPlatform
-, jq
-, nix-prefetch-git
-, xe
-, curl
 , emscripten
 , Security
 , callPackage
@@ -120,10 +113,10 @@ rustPlatform.buildRustPackage {
 
   postPatch = lib.optionalString (!webUISupport) ''
     # remove web interface
-    sed -e '/pub mod web_ui/d' \
+    sed -e '/pub mod playground/d' \
         -i cli/src/lib.rs
-    sed -e 's/web_ui,//' \
-        -e 's/web_ui::serve(&current_dir.*$/println!("ERROR: web-ui is not available in this nixpkgs build; enable the webUISupport"); std::process::exit(1);/' \
+    sed -e 's/playground,//' \
+        -e 's/playground::serve(&current_dir.*$/println!("ERROR: web-ui is not available in this nixpkgs build; enable the webUISupport"); std::process::exit(1);/' \
         -i cli/src/main.rs
   '';
 

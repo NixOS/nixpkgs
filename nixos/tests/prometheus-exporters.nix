@@ -6,7 +6,7 @@
 let
   inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
   inherit (pkgs.lib) concatStringsSep maintainers mapAttrs mkMerge
-    removeSuffix replaceStrings singleton splitString;
+    removeSuffix replaceStrings singleton splitString makeBinPath;
 
   /*
     * The attrset `exporterTests` contains one attribute
@@ -911,6 +911,47 @@ let
         wait_for_unit("openvpn-test.service")
         wait_for_unit("prometheus-openvpn-exporter.service")
         succeed("curl -sSf http://localhost:9176/metrics | grep 'openvpn_up{.*} 1'")
+      '';
+    };
+
+    php-fpm = {
+      nodeName = "php_fpm";
+      exporterConfig = {
+        enable = true;
+        environmentFile = pkgs.writeTextFile {
+          name = "/tmp/prometheus-php-fpm-exporter.env";
+          text = ''
+            PHP_FPM_SCRAPE_URI="tcp://127.0.0.1:9000/status"
+          '';
+        };
+      };
+      metricProvider = {
+        users.users."php-fpm-exporter" = {
+          isSystemUser = true;
+          group  = "php-fpm-exporter";
+        };
+        users.groups."php-fpm-exporter" = {};
+        services.phpfpm.pools."php-fpm-exporter" = {
+          user = "php-fpm-exporter";
+          group = "php-fpm-exporter";
+          settings = {
+            "pm" = "dynamic";
+            "pm.max_children" = 32;
+            "pm.max_requests" = 500;
+            "pm.start_servers" = 2;
+            "pm.min_spare_servers" = 2;
+            "pm.max_spare_servers" = 5;
+            "pm.status_path" = "/status";
+            "listen" = "127.0.0.1:9000";
+            "listen.allowed_clients" = "127.0.0.1";
+          };
+          phpEnv."PATH" = makeBinPath [ pkgs.php ];
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("phpfpm-php-fpm-exporter.service")
+        wait_for_unit("prometheus-php-fpm-exporter.service")
+        succeed("curl -sSf http://localhost:9253/metrics | grep 'phpfpm_up{.*} 1'")
       '';
     };
 

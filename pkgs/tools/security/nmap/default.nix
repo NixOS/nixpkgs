@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, libpcap, pkg-config, openssl, lua5_3
+{ lib, stdenv, fetchurl, libpcap, pkg-config, openssl, lua5_4
 , pcre, libssh2
 , withLua ? true
 }:
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    (if withLua then "--with-liblua=${lua5_3}" else "--without-liblua")
+    (if withLua then "--with-liblua=${lua5_4}" else "--without-liblua")
     "--with-liblinear=included"
     "--without-ndiff"
     "--without-zenmap"

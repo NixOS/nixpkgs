@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     description = "DisplayLink DL-5xxx, DL-41xx and DL-3x00 Driver for Linux";
     homepage = "https://www.displaylink.com/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ abbradar peterhoeg eyjhb ];
+    maintainers = with maintainers; [ abbradar ];
     platforms = [ "x86_64-linux" "i686-linux" ];
     hydraPlatforms = [];
   };

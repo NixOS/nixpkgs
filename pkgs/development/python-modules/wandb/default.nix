@@ -256,9 +256,12 @@ buildPythonPackage rec {
     "tests/pytest_tests/unit_tests/test_lib/test_filesystem.py"
   ];
 
-  # Disable test that fails on darwin due to issue with python3Packages.psutil:
-  # https://github.com/giampaolo/psutil/issues/1219
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = [
+    # Timing sensitive
+    "test_login_timeout"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Disable test that fails on darwin due to issue with python3Packages.psutil:
+    # https://github.com/giampaolo/psutil/issues/1219
     "test_tpu_system_stats"
   ];
 

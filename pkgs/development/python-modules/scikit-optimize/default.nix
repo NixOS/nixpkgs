@@ -39,5 +39,6 @@ buildPythonPackage rec {
     homepage = "https://scikit-optimize.github.io/";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
+    broken = true; # It will fix by https://github.com/scikit-optimize/scikit-optimize/pull/1123
   };
 }
