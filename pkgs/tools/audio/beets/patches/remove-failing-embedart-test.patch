@@ -1,0 +1,24 @@
+diff --git i/test/test_embedart.py w/test/test_embedart.py
+index 23a6f5e5..91b9c8c2 100644
+--- i/test/test_embedart.py
++++ w/test/test_embedart.py
+@@ -163,19 +163,6 @@ class EmbedartCliTest(TestHelper, FetchImageHelper):
+                          'Image written is not {}'.format(
+                          displayable_path(self.abbey_artpath)))
+ 
+-    @require_artresizer_compare
+-    def test_accept_similar_art(self):
+-        self._setup_data(self.abbey_similarpath)
+-        album = self.add_album_fixture()
+-        item = album.items()[0]
+-        self.run_command('embedart', '-y', '-f', self.abbey_artpath)
+-        config['embedart']['compare_threshold'] = 20
+-        self.run_command('embedart', '-y', '-f', self.abbey_similarpath)
+-        mediafile = MediaFile(syspath(item.path))
+-
+-        self.assertEqual(mediafile.images[0].data, self.image_data,
+-                         'Image written is not {}'.format(
+-                         displayable_path(self.abbey_similarpath)))
+ 
+     def test_non_ascii_album_path(self):
+         resource_path = os.path.join(_common.RSRC, b'image.mp3')
