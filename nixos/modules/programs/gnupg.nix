@@ -75,9 +75,7 @@ in
       defaultText = literalMD ''matching the configured desktop environment'';
       description = lib.mdDoc ''
         Which pinentry interface to use. If not null, the path to the
-        pinentry binary will be passed to gpg-agent via commandline and
-        thus overrides the pinentry option in gpg-agent.conf in the user's
-        home directory.
+        pinentry binary will be set in /etc/gnupg/gpg-agent.conf.
         If not set at all, it'll pick an appropriate flavor depending on the
         system configuration (qt flavor for lxqt and plasma5, gtk2 for xfce
         4.12, gnome3 on all other systems with X enabled, ncurses otherwise).
