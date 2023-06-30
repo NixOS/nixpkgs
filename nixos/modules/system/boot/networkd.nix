@@ -1897,7 +1897,7 @@ let
 
   bridgeVLANOptions = {
     options = {
-      bridgeMDBConfig = mkOption {
+      bridgeVLANConfig = mkOption {
         default = {};
         example = { VLAN = 20; };
         type = types.addCheck (types.attrsOf unitOption) check.network.sectionBridgeVLAN;
@@ -2384,17 +2384,6 @@ let
       description = lib.mdDoc ''
         Each attribute in this set specifies an option in the
         `[QuickFairQueueingClass]` section of the unit.  See
-        {manpage}`systemd.network(5)` for details.
-      '';
-    };
-
-    bridgeVLANConfig = mkOption {
-      default = {};
-      example = { VLAN = "10-20"; };
-      type = types.addCheck (types.attrsOf unitOption) check.network.sectionBridgeVLAN;
-      description = lib.mdDoc ''
-        Each attribute in this set specifies an option in the
-        `[BridgeVLAN]` section of the unit.  See
         {manpage}`systemd.network(5)` for details.
       '';
     };
