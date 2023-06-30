@@ -43,6 +43,7 @@ let
       # it seems to need it to transform fonts
       xdvi.deps = (orig.xdvi.deps or []) ++  [ "metafont" ];
 
+      # TODO: remove when updating to texlive-2023, metadata has been corrected in the TeX catalogue
       # tlpdb lists license as "unknown", but the README says lppl13: http://mirrors.ctan.org/language/arabic/arabi-add/README
       arabi-add.license = [  "lppl13c" ];
 
