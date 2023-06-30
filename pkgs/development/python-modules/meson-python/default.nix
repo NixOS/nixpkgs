@@ -1,25 +1,32 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
 , colorama
+, cython
+, fetchPypi
+, git
 , meson
 , ninja
 , pyproject-metadata
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
 , tomli
 , typing-extensions
-, pythonOlder
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "meson-python";
-  version = "0.12.1";
+  version = "0.13.2";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;
     pname = "meson_python";
-    hash = "sha256-PVs+WB1wpYqXucEWp16Xp2zEtMfnX6Blj8g5I3Hi8sI=";
+    hash = "sha256-gLyd6Jis0260uUWvqveitMoAGJxRhw1TXjKXYZEM+Oo=";
   };
 
   nativeBuildInputs = [
@@ -40,18 +47,28 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  # Ugly work-around. Drop ninja dependency.
-  # We already have ninja, but it comes without METADATA.
-  # Building ninja-python-distributions is the way to go.
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace "'ninja'," ""
-  '';
+  nativeCheckInputs = [
+    cython
+    git
+    pytest-mock
+    pytestCheckHook
+    wheel
+  ];
 
-  meta = {
+  pythonImportsCheck = [
+    "mesonpy"
+  ];
+
+  disabledTestPaths = [
+    # Issue with subprocess
+    "tests/test_pep518.py"
+  ];
+
+  meta = with lib; {
     changelog = "https://github.com/mesonbuild/meson-python/blob/${version}/CHANGELOG.rst";
     description = "Meson Python build backend (PEP 517)";
     homepage = "https://github.com/mesonbuild/meson-python";
-    license = [ lib.licenses.mit ];
-    maintainers = [ lib.maintainers.fridh ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ fridh ];
   };
 }
