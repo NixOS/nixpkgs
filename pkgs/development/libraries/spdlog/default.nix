@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, fmt
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+# Although we include upstream patches that fix compilation with fmt_10, we
+# still use fmt_9 because this dependency is propagated, and many of spdlog's
+# reverse dependencies don't support fmt_10 yet.
+, fmt_9
 , staticBuild ? stdenv.hostPlatform.isStatic
 
 # tests
@@ -29,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake ];
-  propagatedBuildInputs = [ fmt ];
+  propagatedBuildInputs = [ fmt_9 ];
 
   cmakeFlags = [
     "-DSPDLOG_BUILD_SHARED=${if staticBuild then "OFF" else "ON"}"
