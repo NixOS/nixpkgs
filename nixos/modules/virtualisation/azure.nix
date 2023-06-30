@@ -50,6 +50,10 @@ in {
     services.openssh.settings.PasswordAuthentication = mkDefault false;
     services.openssh.settings.ClientAliveInterval = 180;
 
+    # Azure Bastion do not support nixos default Macs so need to add one
+    # that Azure support.
+    services.openssh.settings.Macs = lib.mkOptionDefault [ "hmac-sha2-512" ];
+
     # Force getting the hostname from Azure
     networking.hostName = mkDefault "";
 
