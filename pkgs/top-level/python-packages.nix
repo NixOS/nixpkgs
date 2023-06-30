@@ -6213,6 +6213,7 @@ self: super: with self; {
   mdformat = callPackage ../development/python-modules/mdformat { };
   mdformat-beautysh = callPackage ../development/python-modules/mdformat-beautysh { };
   mdformat-footnote = callPackage ../development/python-modules/mdformat-footnote { };
+  mdformat-frontmatter = callPackage ../development/python-modules/mdformat-frontmatter { };
 
   mdit-py-plugins = callPackage ../development/python-modules/mdit-py-plugins { };
 
