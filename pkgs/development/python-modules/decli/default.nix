@@ -1,8 +1,9 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, setuptools
+, fetchFromGitHub
+, pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -12,13 +13,19 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-7YjMuUdwHo5VCbeUX9pW4VDirHSmnyXUeshe8wqwwPA=";
+  src = fetchFromGitHub {
+    owner = "woile";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FZYKNKkQExx/YBn5y/W0+0aMlenuwEctYTL7LAXMZGE=";
   };
 
   nativeBuildInputs = [
     setuptools
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
