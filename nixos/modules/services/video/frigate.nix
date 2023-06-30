@@ -271,7 +271,7 @@ in
               sub_filter '"/BASE_PATH/monacoeditorwork/' '"$http_x_ingress_path/assets/';
               sub_filter 'return"/BASE_PATH/"' 'return window.baseUrl';
               sub_filter '<body>' '<body><script>window.baseUrl="$http_x_ingress_path/";</script>';
-              sub_filter_types text/css application/javascript;
+              sub_filter_types text/css text/javascript;
               sub_filter_once off;
             '';
           };
