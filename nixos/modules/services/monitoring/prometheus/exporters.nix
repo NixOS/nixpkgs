@@ -304,19 +304,19 @@ in
           'services.prometheus.exporters.sql.configFile'
       '';
     } {
-      assertion = cfg.scaphandre.enable -> (pkgs.stdenv.hostPlatform.isx86_64 == true);
+      assertion = cfg.scaphandre.enable -> (pkgs.stdenv.targetPlatform.isx86_64 == true);
       message = ''
-        Only x86_64 host platform architecture is not supported.
+        Scaphandre only support x86_64 architectures.
       '';
     } {
       assertion = cfg.scaphandre.enable -> ((lib.kernel.whenHelpers pkgs.linux.version).whenOlder "5.11" true).condition == false;
       message = ''
-        A kernel version newer than '5.11' is required. ${pkgs.linux.version}
+        Scaphandre requires a kernel version newer than '5.11', '${pkgs.linux.version}' given.
       '';
     } {
       assertion = cfg.scaphandre.enable -> (builtins.elem "intel_rapl_common" config.boot.kernelModules);
       message = ''
-        Please enable 'intel_rapl_common' in 'boot.kernelModules'.
+        Scaphandre needs 'intel_rapl_common' kernel module to be enabled. Please add it in 'boot.kernelModules'.
       '';
     } ] ++ (flip map (attrNames exporterOpts) (exporter: {
       assertion = cfg.${exporter}.firewallFilter != null -> cfg.${exporter}.openFirewall;
