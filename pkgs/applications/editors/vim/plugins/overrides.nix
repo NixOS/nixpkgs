@@ -128,6 +128,12 @@
 }:
 
 self: super: {
+  alpha-nvim = super.alpha-nvim.overrideAttrs(oa: {
+    dependencies = [
+      self.nvim-web-devicons # required by the startify theme
+    ];
+    nvimRequireCheck = "alpha";
+  });
 
   autosave-nvim = super.autosave-nvim.overrideAttrs(old: {
     dependencies = with super; [ plenary-nvim ];
