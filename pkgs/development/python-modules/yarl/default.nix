@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , pythonAtLeast
 , pythonOlder
 , idna
@@ -21,6 +22,14 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-SdQ0AsbjATrQl4YCv2v1MoU1xI0ZIwS5G5ejxnkLFWI=";
   };
+
+  patches = [
+    # https://github.com/aio-libs/yarl/issues/876
+    (fetchpatch {
+      url = "https://github.com/aio-libs/yarl/commit/0a94c6e4948e00fff072c0cf367afbf4ac36f906.patch";
+      hash = "sha256-bqT46OLZLkBef8FQ1L95ITD70mC3+WIkr3+h2ekKrvE=";
+    })
+  ];
 
   postPatch = ''
     sed -i '/^addopts/d' setup.cfg
