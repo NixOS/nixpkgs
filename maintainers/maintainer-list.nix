@@ -632,6 +632,12 @@
     githubId = 43479487;
     name = "Titouan Biteau";
   };
+  aldoborrero = {
+    email = "aldoborrero+nixos@pm.me";
+    github = "aldoborrero";
+    githubId = 82811;
+    name = "Aldo Borrero";
+  };
   aleksana = {
     email = "me@aleksana.moe";
     github = "Aleksanaa";
