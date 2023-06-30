@@ -24,6 +24,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Backup a github user or organization";
     homepage = "https://github.com/josegonzalez/python-github-backup";
+    changelog = "https://github.com/josegonzalez/python-github-backup/blob/${version}/CHANGES.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };
