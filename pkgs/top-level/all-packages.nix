@@ -18014,12 +18014,14 @@ with pkgs;
   apacheAnt_1_9 = callPackage ../development/tools/build-managers/apache-ant/1.9.nix { };
   ant = apacheAnt;
 
-  apacheKafka = apacheKafka_3_3;
+  apacheKafka = apacheKafka_3_5;
   apacheKafka_2_8 = callPackage ../servers/apache-kafka { majorVersion = "2.8"; };
   apacheKafka_3_0 = callPackage ../servers/apache-kafka { majorVersion = "3.0"; };
   apacheKafka_3_1 = callPackage ../servers/apache-kafka { majorVersion = "3.1"; };
   apacheKafka_3_2 = callPackage ../servers/apache-kafka { majorVersion = "3.2"; };
   apacheKafka_3_3 = callPackage ../servers/apache-kafka { majorVersion = "3.3"; };
+  apacheKafka_3_4 = callPackage ../servers/apache-kafka { majorVersion = "3.4"; };
+  apacheKafka_3_5 = callPackage ../servers/apache-kafka { majorVersion = "3.5"; };
 
   kt = callPackage ../tools/misc/kt { };
 
