@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, hatchling
 , lxml
 , beautifulsoup4
 , pytestCheckHook
@@ -9,8 +10,8 @@
 
 buildPythonPackage rec {
   pname = "html-sanitizer";
-  version = "1.9.3";
-  format = "setuptools";
+  version = "2.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -18,8 +19,12 @@ buildPythonPackage rec {
     owner = "matthiask";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-1JSdi1PFM+N+UuEPfgWkOZw8S2PZ4ntadU0wnVJNnjw=";
+    hash = "sha256-t9mwsieFwdRPkOcnOc66lau+S9naK6Ys79zgIv3+3qw=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     lxml
