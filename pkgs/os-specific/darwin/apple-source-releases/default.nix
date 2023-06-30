@@ -334,5 +334,10 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
                                      # rather than previous versions.
                       { }."${namePath}" or namePath;
                  in import ./macos-10.13.6.nix
-                      { applePackage' = applePackageMapping; };
+                      { applePackage' = applePackageMapping; }
+                 // { bsdmake = applePackageMapping
+                        "bsdmake" "24" "developer-tools-313"
+                        "sha256-CW8zP5QZMhWTGp+rhrm8oHE/vSLsRlv1VRAGe1OUDmI="
+                        {};
+                    };
 }
