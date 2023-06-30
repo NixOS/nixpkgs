@@ -190,7 +190,11 @@ stdenv.mkDerivation rec {
       "''${gappsWrapperArgs[@]}" \
       "''${qtWrapperArgs[@]}" \
       --prefix LD_LIBRARY_PATH : "${xorg.libXcursor}/lib" \
-      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
+      `# workaround for https://bugs.kde.org/show_bug.cgi?id=471443` \
+      `# Low-res Images in Qt Apps when using fractional scaling` \
+      --unset  QT_SCREEN_SCALE_FACTORS \
+      --unset  QT_SCALE_FACTOR
   '';
 
   passthru = {
