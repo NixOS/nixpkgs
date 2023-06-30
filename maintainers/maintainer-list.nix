@@ -5817,6 +5817,12 @@
     githubId = 81654;
     name = "Damjan Georgievski";
   };
+  gdd = {
+    email = "gabriel.doriath.dohler@ens.fr";
+    github = "gabriel-doriath-dohler";
+    githubId = 40209356;
+    name = "Gabriel Doriath Döhler";
+  };
   gdinh = {
     email = "nix@contact.dinh.ai";
     github = "gdinh";
