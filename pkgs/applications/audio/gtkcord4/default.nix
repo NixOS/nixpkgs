@@ -18,13 +18,13 @@
 
 buildGoModule rec {
   pname = "gtkcord4";
-  version = "0.0.11";
+  version = "0.0.11-1";
 
   src = fetchFromGitHub {
     owner = "diamondburned";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-0d656gjfFlgNdKbPJK+6KIU7zvp88j3bGIlGPwJNRdM=";
+    hash = "sha256-GkjUURmPS1KOwgYn7kO9/oGIUX9fnSgYjyU7PHXtE5w=";
   };
 
   nativeBuildInputs = [
@@ -57,7 +57,7 @@ buildGoModule rec {
     install -D -m 444 internal/icons/png/logo.png $out/share/icons/hicolor/256x256/apps/gtkcord4.png
   '';
 
-  vendorHash = "sha256-+zbaRaGOF6w8C7lmtd3k5Rh/0a+OnqTL9Qhg1ErTHBo=";
+  vendorHash = "sha256-RJ6dLa5EzfLMPR3LMIplFhmph+tcdsieiB5Uv95lqIs=";
 
   meta = with lib; {
     description = "GTK4 Discord client in Go, attempt #4.";
