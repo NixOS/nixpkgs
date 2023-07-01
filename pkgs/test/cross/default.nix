@@ -139,6 +139,7 @@ let
     pkgs.pkgsCross.mips64el-linux-gnuabi64.stdenv
     pkgs.pkgsCross.mips64el-linux-gnuabin32.stdenv
     pkgs.pkgsCross.mingwW64.stdenv
+    pkgs.pkgsCross.s390.stdenv
   ];
 
 in {
