@@ -12,7 +12,7 @@
 , profile ? ""
 , targetPkgs ? pkgs: []
 , multiPkgs ? pkgs: []
-, multiArch ? true # Whether to include 32bit packages
+, multiArch ? false # Whether to include 32bit packages
 , extraBuildCommands ? ""
 , extraBuildCommandsMulti ? ""
 , extraOutputsToInstall ? []
