@@ -87,6 +87,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Open-source software for simulating the dynamics of closed and open quantum systems";
     homepage = "https://qutip.org/";
+    changelog = "https://github.com/qutip/qutip/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fabiangd ];
   };
