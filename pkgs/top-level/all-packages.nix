@@ -7846,6 +7846,8 @@ with pkgs;
 
   fpart = callPackage ../tools/misc/fpart { };
 
+  fpattern = callPackage ../development/libraries/fpattern { };
+
   fping = callPackage ../tools/networking/fping { };
 
   fpm = callPackage ../tools/package-management/fpm { };
