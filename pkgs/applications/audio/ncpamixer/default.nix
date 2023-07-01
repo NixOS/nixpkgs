@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ncpamixer";
-  version = "1.3.3.3";
+  version = "1.3.3.4";
 
   src = fetchFromGitHub {
     owner = "fulhax";
     repo = "ncpamixer";
     rev = version;
-    sha256 = "sha256-TxSfiBSsCAImzCXv6o64Jy7tSefpYCkU0xtuHx26Ss4=";
+    sha256 = "sha256-JvIxq9CYFR/4p03e2LeJbLn3NUNwhRNF0GlqN6aPfMo=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
