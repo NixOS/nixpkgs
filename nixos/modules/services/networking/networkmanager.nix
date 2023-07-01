@@ -35,7 +35,6 @@ let
       rc-manager =
         if config.networking.resolvconf.enable then "resolvconf"
         else "unmanaged";
-      firewall-backend = cfg.firewallBackend;
     })
     (mkSection "keyfile" {
       unmanaged-devices =
@@ -232,15 +231,6 @@ in
         '';
       };
 
-      firewallBackend = mkOption {
-        type = types.enum [ "iptables" "nftables" "none" ];
-        default = "iptables";
-        description = lib.mdDoc ''
-          Which firewall backend should be used for configuring masquerading with shared mode.
-          If set to none, NetworkManager doesn't manage the configuration at all.
-        '';
-      };
-
       logLevel = mkOption {
         type = types.enum [ "OFF" "ERR" "WARN" "INFO" "DEBUG" "TRACE" ];
         default = "WARN";
@@ -411,6 +401,9 @@ in
       Consider setting system-wide host entries using networking.hosts, provide
       them via the DNS server in your network, or use environment.etc
       to add a file into /etc/NetworkManager/dnsmasq.d reconfiguring hostsdir.
+    '')
+    (mkRemovedOptionModule [ "networking" "networkmanager" "firewallBackend" ] ''
+      This option was removed as NixOS is now using iptables-nftables-compat even when using iptables, therefore Networkmanager now uses the nftables backend unconditionally.
     '')
   ];
 
