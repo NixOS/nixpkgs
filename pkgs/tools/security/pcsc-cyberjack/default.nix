@@ -2,17 +2,18 @@
 
 let
   version = "3.99.5";
-  suffix = "SP13";
+  suffix = "SP15";
   tarBall = "${version}final.${suffix}";
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "pcsc-cyberjack";
   inherit version;
 
   src = fetchurl {
     url =
-      "http://support.reiner-sct.de/downloads/LINUX/V${version}_${suffix}/${pname}_${tarBall}.tar.gz";
-    sha256 = "1lx4bfz4riz7j77sl65akyxzww0ygm63w0c1b75knr1pijlv8d3b";
+      "https://support.reiner-sct.de/downloads/LINUX/V${version}_${suffix}/${pname}_${tarBall}.tar.bz2";
+    sha256 = "sha256-rLfCgyRQcYdWcTdnxLPvUAgy1lLtUbNRELkQsR69Rno=";
   };
 
   outputs = [ "out" "tools" ];
