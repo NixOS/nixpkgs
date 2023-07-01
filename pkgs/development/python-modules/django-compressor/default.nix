@@ -11,20 +11,14 @@
 
 buildPythonPackage rec {
   pname = "django-compressor";
-  version = "4.3.1";
+  version = "4.4";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "django_compressor";
     inherit version;
-    hash = "sha256-aIWMDabMCZzCmgIthsO6iu0RTanXCe7OsNe4GBtfiUI=";
+    hash = "sha256-GwrMnPup9pvDjnxB2psNcKILyVWHtkP/75YJz0YGT2c=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "rcssmin == 1.1.0" "rcssmin>=1.1.0" \
-      --replace "rjsmin == 1.2.0" "rjsmin>=1.2.0"
-  '';
 
   propagatedBuildInputs = [
     rcssmin
@@ -48,7 +42,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Compresses linked and inline JavaScript or CSS into single cached files";
-    homepage = "https://django-compressor.readthedocs.org/en/latest/";
+    homepage = "https://django-compressor.readthedocs.org/";
+    changelog = "https://github.com/django-compressor/django-compressor/blob/${version}/docs/changelog.txt";
     license = licenses.mit;
     maintainers = with maintainers; [ desiderius ];
   };
