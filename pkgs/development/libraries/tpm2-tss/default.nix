@@ -53,6 +53,9 @@ stdenv.mkDerivation rec {
     # Do not rely on dynamic loader path
     # TCTI loader relies on dlopen(), this patch prefixes all calls with the output directory
     ./no-dynamic-loader-path.patch
+    # Backport of https://github.com/tpm2-software/tpm2-tss/commit/306490c8d848c367faa2d9df81f5e69dab46ffb5
+    # Does not apply cleanly because of tests
+    ./CVE-2023-22745.patch
   ];
 
   postPatch = ''
@@ -91,6 +94,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tpm2-software/tpm2-tss";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ baloo ];
   };
 }
