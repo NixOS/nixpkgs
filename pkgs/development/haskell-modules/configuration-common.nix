@@ -395,14 +395,6 @@ self: super: {
   # 2022-02-14: Strict upper bound: https://github.com/psibi/streamly-bytestring/issues/30
   streamly-bytestring = dontCheck (doJailbreak super.streamly-bytestring);
 
-  # The package requires streamly == 0.9.*.
-  # (We can remove this once the assert starts failing.)
-  streamly-archive = super.streamly-archive.override {
-    streamly =
-      assert (builtins.compareVersions pkgs.haskellPackages.streamly.version "0.9.0" < 0);
-        pkgs.haskellPackages.streamly_0_9_0;
-  };
-
   # base bound
   digit = doJailbreak super.digit;
 
