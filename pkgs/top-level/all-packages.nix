@@ -18722,6 +18722,8 @@ with pkgs;
 
   fastddsgen = callPackage ../development/tools/fastddsgen { };
 
+  fastgron = callPackage ../development/tools/fastgron { };
+
   findbugs = callPackage ../development/tools/analysis/findbugs { };
 
   findnewest = callPackage ../development/tools/misc/findnewest { };
