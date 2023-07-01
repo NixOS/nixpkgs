@@ -279,6 +279,8 @@ config.security.apparmor.includes = {
     r /var/lib/acme/*/chain.pem,
     r /var/lib/acme/*/fullchain.pem,
 
+    r /etc/pki/tls/certs/,
+
     '' + lib.concatMapStringsSep "\n" etcRule [
       "ssl/certs/ca-certificates.crt"
       "ssl/certs/ca-bundle.crt"
