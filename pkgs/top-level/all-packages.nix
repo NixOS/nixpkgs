@@ -5033,6 +5033,10 @@ with pkgs;
 
   flitter = callPackage ../tools/misc/flitter { };
 
+  flowgger = callPackage ../tools/misc/flowgger {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
   frangipanni = callPackage ../tools/text/frangipanni { };
 
   frawk = callPackage ../tools/text/frawk { };
