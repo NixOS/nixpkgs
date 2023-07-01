@@ -1,6 +1,8 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, testers
+, tailer
 }:
 
 buildGoModule rec {
@@ -21,6 +23,12 @@ buildGoModule rec {
     "-w"
     "-X=main.version=${version}"
   ];
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = tailer;
+    };
+  };
 
   meta = with lib; {
     description = "A CLI tool to insert lines when command output stops";
