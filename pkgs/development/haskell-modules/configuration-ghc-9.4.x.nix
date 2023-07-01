@@ -93,7 +93,6 @@ in {
   regex-posix = doJailbreak super.regex-posix;
   resolv = doJailbreak super.resolv;
   singleton-bool = doJailbreak super.singleton-bool;
-  shake-cabal = doDistribute self.shake-cabal_0_2_2_3;
   libmpd = doJailbreak super.libmpd;
   generics-sop = doJailbreak super.generics-sop;
   microlens-th = doJailbreak super.microlens-th;

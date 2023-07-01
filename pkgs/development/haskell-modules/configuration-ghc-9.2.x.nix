@@ -75,6 +75,9 @@ self: super: {
   # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
   hlint = enableCabalFlag "ghc-lib" super.hlint;
 
+  # 0.2.2.3 requires Cabal >= 3.8
+  shake-cabal = doDistribute self.shake-cabal_0_2_2_2;
+
   # https://github.com/sjakobi/bsb-http-chunked/issues/38
   bsb-http-chunked = dontCheck super.bsb-http-chunked;
 
