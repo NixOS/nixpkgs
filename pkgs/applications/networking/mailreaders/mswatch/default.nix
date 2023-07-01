@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchzip
+, fetchsvn
 , pkg-config
 , autoreconfHook
 , bison
@@ -8,14 +8,15 @@
 , glib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mswatch";
   # Stable release won't compile successfully
   version = "unstable-2018-11-21";
 
-  src = fetchzip {
-    url = "https://sourceforge.net/code-snapshots/svn/m/ms/mswatch/code/mswatch-code-r369-trunk.zip";
-    hash = "sha256-czwwhchTizfgVmeknQGLijYgaFSP/45pD2yhDKj5BKw=";
+  src = fetchsvn {
+    url = "svn://svn.code.sf.net/p/mswatch/code/trunk";
+    rev = "369";
+    sha256 = "sha256-czwwhchTizfgVmeknQGLijYgaFSP/45pD2yhDKj5BKw=";
   };
   nativeBuildInputs = [
     pkg-config
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A command-line Linux utility that efficiently directs mail synchronization between a pair of mailboxes.";
+    description = "A command-line Linux utility that efficiently directs mail synchronization between a pair of mailboxes";
     homepage = "https://mswatch.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

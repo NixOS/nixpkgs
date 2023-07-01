@@ -12,13 +12,13 @@
 
 mkDerivation rec {
   pname = "maui-core";
-  version = "0.5.6";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "Nitrux";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-58ja76N7LrJ0f/SsNMYr7Z9hdW60PwsNlTkHQ+NEdUM=";
+    sha256 = "sha256-o0Xwh9w0cClMw85FwpQB9CNWoSnzARxs6aGfvCA4BhA=";
   };
 
   nativeBuildInputs = [
