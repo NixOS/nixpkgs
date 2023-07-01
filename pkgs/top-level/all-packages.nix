@@ -37172,6 +37172,8 @@ with pkgs;
 
   mars = callPackage ../games/mars { };
 
+  mchprs = callPackage ../games/mchprs { };
+
   megaglest = callPackage ../games/megaglest { };
 
   methane = callPackage ../games/methane { };
