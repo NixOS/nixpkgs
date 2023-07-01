@@ -27957,6 +27957,8 @@ with pkgs;
 
   pam_ccreds = callPackage ../os-specific/linux/pam_ccreds { };
 
+  pam_dp9ik = callPackage ../os-specific/linux/pam_dp9ik { };
+
   pam_gnupg = callPackage ../os-specific/linux/pam_gnupg { };
 
   pam_krb5 = callPackage ../os-specific/linux/pam_krb5 { };
