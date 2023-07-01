@@ -6531,8 +6531,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "willothy";
       repo = "nvim-cokeline";
-      rev = "02284b9987af8bc48f45d5090ca593c09773e74d";
-      sha256 = "1qmi593ffa9szcv2sff4kbldijndz466m3pas38pzasrazw03cmi";
+      rev = "bd34d316a3b4787802cb2a524d9b9d33008726b9";
+      sha256 = "08kvr5891x87vhpqr2r1mn3nn0k5pyxj7g52ldzdlzdfzhdx2wwl";
     };
     meta.homepage = "https://github.com/willothy/nvim-cokeline/";
   };
