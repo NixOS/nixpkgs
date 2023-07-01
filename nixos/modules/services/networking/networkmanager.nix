@@ -30,8 +30,7 @@ let
   configFile = pkgs.writeText "NetworkManager.conf" (lib.concatStringsSep "\n" [
     (mkSection "main" {
       plugins = "keyfile";
-      dhcp = cfg.dhcp;
-      dns = cfg.dns;
+      inherit (cfg) dhcp dns;
       # If resolvconf is disabled that means that resolv.conf is managed by some other module.
       rc-manager =
         if config.networking.resolvconf.enable then "resolvconf"
@@ -340,20 +339,20 @@ in
         default = [ ];
         example = literalExpression ''
           [ {
-                source = pkgs.writeText "upHook" '''
+            source = pkgs.writeText "upHook" '''
+              if [ "$2" != "up" ]; then
+                logger "exit: event $2 != up"
+                exit
+              fi
 
-                  if [ "$2" != "up" ]; then
-                      logger "exit: event $2 != up"
-                      exit
-                  fi
-
-                  # coreutils and iproute are in PATH too
-                  logger "Device $DEVICE_IFACE coming up"
-              ''';
-              type = "basic";
-          } ]'';
+              # coreutils and iproute are in PATH too
+              logger "Device $DEVICE_IFACE coming up"
+            ''';
+            type = "basic";
+          } ]
+        '';
         description = lib.mdDoc ''
-          A list of scripts which will be executed in response to  network  events.
+          A list of scripts which will be executed in response to network events.
         '';
       };
 
