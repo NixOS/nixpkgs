@@ -15,7 +15,11 @@ buildGoModule rec {
 
   subPackages = [ "cmd/ghz" "cmd/ghz-web" ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=main.version=${version}"
+  ];
 
   meta = with lib; {
     description = "Simple gRPC benchmarking and load testing tool";
