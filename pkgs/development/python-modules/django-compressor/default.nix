@@ -7,6 +7,12 @@
 , beautifulsoup4
 , brotli
 , pytestCheckHook
+, django-sekizai
+, pytest-django
+, csscompressor
+, calmjs
+, jinja2
+, python
 }:
 
 buildPythonPackage rec {
@@ -21,22 +27,31 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    beautifulsoup4
+    calmjs
+    django-appconf
+    jinja2
     rcssmin
     rjsmin
-    django-appconf
   ];
 
-  pythonImportsCheck = [
-    "compressor"
-  ];
-
-  doCheck = false; # missing package django-sekizai
-
-  nativeCheckInputs = [
+  checkInputs = [
     beautifulsoup4
     brotli
+    csscompressor
+    django-sekizai
     pytestCheckHook
+    pytest-django
   ];
+
+  # Getting error: compressor.exceptions.OfflineGenerationError: You have
+  # offline compression enabled but key "..." is missing from offline manifest.
+  # You may need to run "python manage.py compress"
+  disabledTestPaths = [
+    "compressor/tests/test_offline.py"
+  ];
+
+  pythonImportsCheck = [ "compressor" ];
 
   DJANGO_SETTINGS_MODULE = "compressor.test_settings";
 
