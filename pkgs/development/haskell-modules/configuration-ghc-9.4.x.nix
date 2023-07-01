@@ -80,9 +80,6 @@ in {
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
   ghc-byteorder = doJailbreak super.ghc-byteorder;
-  ghc-lib = doDistribute self.ghc-lib_9_4_5_20230430;
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_4_5_20230430;
-  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_4_0_0;
   hackage-security = doJailbreak super.hackage-security;
   hashable-time = doJailbreak super.hashable-time;
   HTTP = overrideCabal (drv: { postPatch = "sed -i -e 's,! Socket,!Socket,' Network/TCP.hs"; }) (doJailbreak super.HTTP);
@@ -93,11 +90,9 @@ in {
   parallel = doJailbreak super.parallel;
   path = doJailbreak super.path;
   polyparse = overrideCabal (drv: { postPatch = "sed -i -e 's, <0.11, <0.12,' polyparse.cabal"; }) (doJailbreak super.polyparse);
-  primitive = dontCheck (doJailbreak self.primitive_0_7_4_0);
   regex-posix = doJailbreak super.regex-posix;
   resolv = doJailbreak super.resolv;
   singleton-bool = doJailbreak super.singleton-bool;
-  rope-utf16-splay = doDistribute self.rope-utf16-splay_0_4_0_0;
   shake-cabal = doDistribute self.shake-cabal_0_2_2_3;
   libmpd = doJailbreak super.libmpd;
   generics-sop = doJailbreak super.generics-sop;
@@ -114,8 +109,6 @@ in {
   syb = dontCheck super.syb;
 
   splitmix = doJailbreak super.splitmix;
-  th-desugar = doDistribute self.th-desugar_1_15;
-  th-abstraction = doDistribute self.th-abstraction_0_5_0_0;
   time-compat = doJailbreak super.time-compat;
   tomland = doJailbreak super.tomland;
   type-equality = doJailbreak super.type-equality;
