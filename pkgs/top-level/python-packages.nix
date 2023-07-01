@@ -7735,6 +7735,8 @@ self: super: with self; {
 
   pygti = callPackage ../development/python-modules/pygti { };
 
+  pyheck = callPackage ../development/python-modules/pyheck { };
+
   pyheos = callPackage ../development/python-modules/pyheos { };
 
   pyhiveapi = callPackage ../development/python-modules/pyhiveapi { };
