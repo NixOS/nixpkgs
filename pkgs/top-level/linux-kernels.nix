@@ -205,16 +205,8 @@ in {
 
     linux_testing_bcachefs = callPackage ../os-specific/linux/kernel/linux-testing-bcachefs.nix {
       # Pinned on the last version which Kent's commits can be cleany rebased up.
-      kernel = buildLinux rec {
-        version = "6.1.3";
-        modDirVersion = lib.versions.pad 3 version;
-        extraMeta.branch = lib.versions.majorMinor version;
-        src = fetchurl {
-          url = "mirror://kernel/linux/kernel/v6.x/linux-${version}.tar.xz";
-          hash = "sha256-bcia56dRPkM8WXxzRu1/9L/RFepDo7XiemvbOMVYAxc=";
-        };
-      };
-      kernelPatches = linux_6_1.kernelPatches;
+      kernel = linux_6_4;
+      kernelPatches = linux_6_4.kernelPatches;
    };
 
     linux_hardkernel_4_14 = callPackage ../os-specific/linux/kernel/linux-hardkernel-4.14.nix {

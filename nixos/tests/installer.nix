@@ -834,7 +834,7 @@ in {
         "keyctl link @u @s",
         "echo password | mkfs.bcachefs -L root --encrypted /dev/vda3",
         "echo password | bcachefs unlock /dev/vda3",
-        "mount -t bcachefs /dev/vda3 /mnt",
+        "echo password | mount -t bcachefs /dev/vda3 /mnt",
         "mkfs.ext3 -L boot /dev/vda1",
         "mkdir -p /mnt/boot",
         "mount /dev/vda1 /mnt/boot",
