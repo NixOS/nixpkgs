@@ -10883,6 +10883,8 @@ self: super: with self; {
 
   rpdb = callPackage ../development/python-modules/rpdb { };
 
+  rpds-py = callPackage ../development/python-modules/rpds-py { };
+
   rpi-bad-power = callPackage ../development/python-modules/rpi-bad-power { };
 
   rpi-gpio = callPackage ../development/python-modules/rpi-gpio { };
