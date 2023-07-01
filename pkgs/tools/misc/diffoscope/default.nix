@@ -21,7 +21,6 @@
 , enableBloat ? true
 , enableUnfree ? false
 , enjarify
-, fetchpatch
 , fetchurl
 , file
 , findutils
@@ -44,8 +43,10 @@
 , jdk
 , libarchive
 , libcaca
+, libxmlb
 , llvm
 , lz4
+, lzip
 , mono
 , ocaml
 , odt2txt
@@ -79,11 +80,11 @@
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "233";
+  version = "243";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    sha256 = "sha256-A2GYnhdjkzSFnMsy99FmckiOsbRdymAdtjp55hyFLp4=";
+    hash = "sha256-lqI9MOZJxgHZ87kax343t6Wylzv1NWcQZ1cMWgmpnRo=";
   };
 
   outputs = [
@@ -93,11 +94,6 @@ python3.pkgs.buildPythonApplication rec {
 
   patches = [
     ./ignore_links.patch
-    # test_text_proper_indentation requires file >= 5.44
-    (fetchpatch {
-      url = "https://salsa.debian.org/reproducible-builds/diffoscope/-/commit/9fdb78ec0bbc69f1980499dfdcbf6f1dd5e55cc8.patch";
-      sha256 = "sha256-F0N3L9yymj2NjeIKtSnOEDsxPe+ZTb0m/M4f8LPRHg0=";
-    })
   ];
 
   postPatch = ''
@@ -118,7 +114,10 @@ python3.pkgs.buildPythonApplication rec {
   # To help figuring out what's missing from the list, run: ./pkgs/tools/misc/diffoscope/list-missing-tools.sh
   #
   # Still missing these tools:
+  # aapt2
+  # dexdump
   # docx2txt
+  # getfacl
   # lipo
   # otool
   # r2pipe
@@ -143,7 +142,9 @@ python3.pkgs.buildPythonApplication rec {
     gzip
     html2text
     libarchive
+    libxmlb
     lz4
+    lzip
     openssl
     pgpdump
     sng
@@ -214,7 +215,7 @@ python3.pkgs.buildPythonApplication rec {
     ++ lib.optionals stdenv.isLinux [ oggvideotools ]
     # This doesn't work on aarch64-darwin
     ++ lib.optionals (stdenv.hostPlatform != "aarch64-darwin") [ gnumeric ]
-    # `apktool` depend on `build-tools` which requires Android SDK acceptance, therefore, the whole thing is unfree.
+    # apktool depend on build-tools which requires Android SDK acceptance, therefore, the whole thing is unfree
     ++ lib.optionals enableUnfree [ apktool ]
   ));
 
@@ -223,7 +224,7 @@ python3.pkgs.buildPythonApplication rec {
   ] ++ pythonPath;
 
   pytestFlagsArray = [
-    # always show more information when tests fail
+    # Always show more information when tests fail
     "-vv"
   ];
 
@@ -237,7 +238,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_diff_meta"
     "test_diff_meta2"
 
-    # fails because it fails to determine llvm version
+    # Fails because it fails to determine llvm version
     "test_item3_deflate_llvm_bitcode"
   ] ++ lib.optionals stdenv.isDarwin [
     # Disable flaky tests on Darwin
@@ -246,7 +247,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_symlink_root"
   ];
 
-  # flaky tests on Darwin
+  # Flaky tests on Darwin
   disabledTestPaths = lib.optionals stdenv.isDarwin [
     "tests/comparators/test_git.py"
     "tests/comparators/test_java.py"
