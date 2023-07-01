@@ -4414,7 +4414,7 @@ with pkgs;
 
   comma = callPackage ../tools/package-management/comma { };
 
-  commitizen = python3Packages.callPackage ../applications/version-management/commitizen { };
+  commitizen = callPackage ../applications/version-management/commitizen { };
 
   common-licenses = callPackage ../data/misc/common-licenses { };
 
