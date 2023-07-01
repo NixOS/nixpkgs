@@ -10,6 +10,10 @@ stdenv.mkDerivation {
 
   src = sourceAttrs.src;
 
+  patches = [
+    ./validate-config.patch
+  ];
+
   outputs = [
     "out"
     "man"
