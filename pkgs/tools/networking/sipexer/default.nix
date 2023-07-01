@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "miconda";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/AVOC8Tx5XMDiKmLBq2xUiJaA3K3TnWVXPE+Vzx862I=";
+    hash = "sha256-/AVOC8Tx5XMDiKmLBq2xUiJaA3K3TnWVXPE+Vzx862I=";
   };
 
   vendorSha256 = "sha256-q2uNqKZc6Zye7YimPDrg40o68Fo4ux4fygjVjJdhqQU=";
