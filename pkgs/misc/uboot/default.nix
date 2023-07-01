@@ -446,4 +446,13 @@ in {
     BL31 = "${armTrustedFirmwareRK3399}/bl31.elf";
     filesToInstall = [ "u-boot.itb" "idbloader.img"];
   };
+
+  ubootTeresA64 = buildUBoot {
+    defconfig = "teres_i_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    # Build without SCP as it's not packaged -- https://github.com/NixOS/nixpkgs/issues/240846
+    extraMakeFlags = [ "SCP=/dev/null" ];
+    filesToInstall = [ "u-boot-sunxi-with-spl.bin" ];
+  };
 }

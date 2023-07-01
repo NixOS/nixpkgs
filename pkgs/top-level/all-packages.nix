@@ -21678,6 +21678,7 @@ in
   inherit (callPackage ../misc/uboot {})
     buildUBoot
     ubootTools
+    ubootTeresA64
     ubootA20OlinuxinoLime
     ubootBananaPi
     ubootBananaPim3
