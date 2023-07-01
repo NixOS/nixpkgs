@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-music";
-  version = "6.2.27";
+  version = "6.2.28";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0adAAQe9WG1G+JcxD4ypYyYE4MrRijfuj/VBno2WsLk=";
+    sha256 = "sha256-rSaB8kIbpyPuhw3vWLWlXgY6xJpxLL8DktgcBoca0L0=";
   };
 
   postPatch = ''

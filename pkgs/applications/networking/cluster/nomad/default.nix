@@ -51,7 +51,7 @@ rec {
   # Upstream partially documents used Go versions here
   # https://github.com/hashicorp/nomad/blob/master/contributing/golang.md
 
-  nomad = nomad_1_4;
+  nomad = nomad_1_5;
 
   nomad_1_2 = generic {
     buildGoModule = buildGo120Module;

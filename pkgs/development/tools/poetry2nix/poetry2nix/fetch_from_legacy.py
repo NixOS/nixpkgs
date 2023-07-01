@@ -78,7 +78,7 @@ response = urllib.request.urlopen(req, context=context)
 index = response.read()
 
 parser = Pep503()
-parser.feed(str(index))
+parser.feed(str(index, "utf-8"))
 if package_filename not in parser.sources:
     print(
         "The file %s has not be found in the index %s" % (package_filename, index_url)

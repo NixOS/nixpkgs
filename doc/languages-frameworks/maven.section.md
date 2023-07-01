@@ -165,6 +165,39 @@ The build will fail, and tell you the expected `outputHash` to place. When you'v
 
 If your package uses _SNAPSHOT_ dependencies or _version ranges_; there is a strong likelihood that over-time your output hash will change since the resolved dependencies may change. Hence this method is less recommended then using `buildMaven`.
 
+#### Stable Maven plugins {#stable-maven-plugins}
+
+Maven defines default versions for its core plugins, e.g. `maven-compiler-plugin`.
+If your project does not override these versions, an upgrade of Maven will change the version of the used plugins.
+This changes the output of the first invocation and the plugins required by the second invocation.
+However, since a hash is given for the output of the first invocation, the second invocation will simply fail
+because the requested plugins are missing.
+This will prevent automatic upgrades of Maven: the manual fix for this is to change the hash of the first invocation.
+
+To make sure that your package does not add manual effort when upgrading Maven, explicitly define versions for all
+plugins. You can check if this is the case by adding the following plugin to your (parent) POM:
+
+```xml
+<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-enforcer-plugin</artifactId>
+  <version>3.3.0</version>
+  <executions>
+    <execution>
+      <id>enforce-plugin-versions</id>
+      <goals>
+        <goal>enforce</goal>
+      </goals>
+      <configuration>
+        <rules>
+          <requirePluginVersions />
+        </rules>
+      </configuration>
+    </execution>
+  </executions>
+</plugin>
+```
+
 ## Building a JAR {#building-a-jar}
 
 Regardless of which strategy is chosen above, the step to build the derivation is the same.

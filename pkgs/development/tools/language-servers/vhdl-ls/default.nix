@@ -5,13 +5,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "vhdl-ls";
-  version = "0.64.0";
+  version = "0.65.0";
 
   src = fetchFromGitHub {
     owner = "VHDL-LS";
     repo = "rust_hdl";
     rev = "v${version}";
-    hash = "sha256-j5WRJJBUPKW3W+kY5hdqdZxxGkIAoEcW+A2pp23MX6Q=";
+    hash = "sha256-B+jzTrV5Kk4VOgr+5l0F5+cXzfb0aErKaiH50vIdLq4=";
   };
 
   # No Cargo.lock upstream, see:
