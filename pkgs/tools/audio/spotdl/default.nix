@@ -96,6 +96,7 @@ in python.pkgs.buildPythonApplication rec {
     "test_preload_song"
     "test_song_from_search_term"
     "test_song_from_url"
+    "test_yt_search"
   ];
 
   makeWrapperArgs = [
