@@ -15,6 +15,7 @@
 , gsettings-desktop-schemas
 , wrapGAppsHook
 , gtk-doc
+, gobject-introspection
 , docbook-xsl-nons
 , ninja
 , libsoup
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
     vala
     wrapGAppsHook
     gtk-doc
+    gobject-introspection
     docbook-xsl-nons
   ];
 
