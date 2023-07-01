@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "graphtage";
-  version = "0.2.8";
+  version = "0.2.9";
 
   disabled = pythonOlder "3.6";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "trailofbits";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-qp3NMN/aeWhr4z6qqh/s4OHebQccyIjSzWIy7P1RruI=";
+    hash = "sha256-GK83qSXFSCK/tiIfNfsaDfViDVzdhQNT90kB9wiTLbk=";
   };
 
   postPatch = ''
