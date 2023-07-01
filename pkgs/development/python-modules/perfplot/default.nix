@@ -2,11 +2,9 @@
 , buildPythonPackage
 , fetchFromGitHub
 , flit-core
-, dufte
 , matplotlib
+, matplotx
 , numpy
-, pipdate
-, tqdm
 , rich
 , pytestCheckHook
 , pythonOlder
@@ -30,12 +28,10 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    dufte
     matplotlib
+    matplotx
     numpy
-    pipdate
     rich
-    tqdm
   ];
 
   nativeCheckInputs = [
@@ -49,6 +45,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/nschloe/perfplot";
     license = licenses.mit;
     maintainers = with maintainers; [ costrouc ];
-    broken = true; # missing matplotx dependency
   };
 }
