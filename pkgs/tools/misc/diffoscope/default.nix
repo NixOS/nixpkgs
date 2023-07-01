@@ -1,11 +1,78 @@
-{ lib, stdenv, fetchurl, python3Packages, docutils, help2man, installShellFiles, fetchpatch
-, abootimg, acl, apksigcopier, apksigner, apktool, binutils-unwrapped-all-targets, bzip2, cbfstool, cdrkit, colord, colordiff, coreutils, cpio, db, diffutils, dtc
-, e2fsprogs, enjarify, file, findutils, fontforge-fonttools, ffmpeg, fpc, gettext, ghc, ghostscriptX, giflib, gnumeric, gnupg, gnutar
-, gzip, html2text, hdf5, imagemagick, jdk, libarchive, libcaca, llvm, lz4, mono, ocaml, oggvideotools, openssh, openssl, pdftk, pgpdump, poppler_utils, procyon, qemu, R
-, radare2, sng, sqlite, squashfsTools, tcpdump, ubootTools, odt2txt, unzip, wabt, xmlbeans, xxd, xz, zip, zstd
+{ lib
+, stdenv
+, abootimg
+, acl
+, apksigcopier
+, apksigner
+, apktool
+, binutils-unwrapped-all-targets
+, bzip2
+, cbfstool
+, cdrkit
+, colord
+, colordiff
+, coreutils
+, cpio
+, db
+, diffutils
+, docutils
+, dtc
+, e2fsprogs
 , enableBloat ? true
 , enableUnfree ? false
-# updater only
+, enjarify
+, fetchpatch
+, fetchurl
+, file
+, findutils
+, fontforge-fonttools
+, ffmpeg
+, fpc
+, gettext
+, ghc
+, ghostscriptX
+, giflib
+, gnumeric
+, gnupg
+, gnutar
+, gzip
+, hdf5
+, help2man
+, html2text
+, imagemagick
+, installShellFiles
+, jdk
+, libarchive
+, libcaca
+, llvm
+, lz4
+, mono
+, ocaml
+, odt2txt
+, oggvideotools
+, openssh
+, openssl
+, pdftk
+, pgpdump
+, poppler_utils
+, procyon
+, python3Packages
+, qemu
+, R
+, radare2
+, sng
+, sqlite
+, squashfsTools
+, tcpdump
+, ubootTools
+, unzip
+, wabt
+, xmlbeans
+, xxd
+, xz
+, zip
+, zstd
+  # updater only
 , writeScript
 }:
 
@@ -19,7 +86,10 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-A2GYnhdjkzSFnMsy99FmckiOsbRdymAdtjp55hyFLp4=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   patches = [
     ./ignore_links.patch
@@ -38,40 +108,119 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace doc/Makefile --replace "../bin" "$out/bin"
   '';
 
-  nativeBuildInputs = [ docutils help2man installShellFiles ];
+  nativeBuildInputs = [
+    docutils
+    help2man
+    installShellFiles
+  ];
 
   # Most of the non-Python dependencies here are optional command-line tools for various file-format parsers.
   # To help figuring out what's missing from the list, run: ./pkgs/tools/misc/diffoscope/list-missing-tools.sh
   #
-  # Still missing these tools: docx2txt lipo otool r2pipe
+  # Still missing these tools:
+  # docx2txt
+  # lipo
+  # otool
+  # r2pipe
+  #
   # We filter automatically all packages for the host platform (some dependencies are not supported on Darwin, aarch64, etc.).
   pythonPath = lib.filter (lib.meta.availableOn stdenv.hostPlatform) ([
-      binutils-unwrapped-all-targets bzip2 colordiff coreutils cpio db diffutils
-      e2fsprogs file findutils fontforge-fonttools gettext gnutar gzip
-      html2text libarchive lz4 openssl pgpdump sng sqlite squashfsTools unzip xxd
-      xz zip zstd cdrkit dtc
+    binutils-unwrapped-all-targets
+    bzip2
+    cdrkit
+    colordiff
+    coreutils
+    cpio
+    db
+    diffutils
+    dtc
+    e2fsprogs
+    file
+    findutils
+    fontforge-fonttools
+    gettext
+    gnutar
+    gzip
+    html2text
+    libarchive
+    lz4
+    openssl
+    pgpdump
+    sng
+    sqlite
+    squashfsTools
+    unzip
+    xxd
+    xz
+    zip
+    zstd
+  ]
+  ++ (with python3Packages; [
+    argcomplete
+    debian
+    defusedxml
+    jsbeautifier
+    jsondiff
+    libarchive-c
+    progressbar33
+    pypdf2
+    python-magic
+    pyxattr
+    rpm
+    tlsh
+  ])
+  ++ lib.optionals enableBloat (
+    [
+      abootimg
+      apksigcopier
+      apksigner
+      cbfstool
+      colord
+      enjarify
+      ffmpeg
+      fpc
+      ghc
+      ghostscriptX
+      giflib
+      gnupg
+      hdf5
+      imagemagick
+      jdk
+      libcaca
+      llvm
+      mono
+      ocaml
+      odt2txt
+      openssh
+      pdftk
+      poppler_utils
+      procyon
+      qemu
+      R
+      radare2
+      tcpdump
+      ubootTools
+      wabt
+      xmlbeans
     ]
     ++ (with python3Packages; [
-      argcomplete debian defusedxml jsondiff jsbeautifier libarchive-c
-      python-magic progressbar33 pypdf2 tlsh pyxattr rpm
+      androguard
+      binwalk
+      guestfs
+      h5py
+      pdfminer-six
     ])
-    ++ lib.optionals enableBloat (
-      [
-        apksigcopier apksigner enjarify ffmpeg fpc ghc ghostscriptX giflib gnupg pdftk
-        hdf5 imagemagick libcaca llvm jdk mono ocaml odt2txt openssh
-        poppler_utils procyon qemu R tcpdump wabt radare2 xmlbeans
-        abootimg cbfstool colord ubootTools
-      ]
-      ++ (with python3Packages; [ androguard binwalk h5py pdfminer-six guestfs ])
-      # oggvideotools is broken on Darwin, please put it back when it will be fixed?
-      ++ lib.optionals stdenv.isLinux [ oggvideotools ]
-      # This doesn't work on aarch64-darwin
-      ++ lib.optionals (stdenv.hostPlatform != "aarch64-darwin") [ gnumeric ]
-      # `apktool` depend on `build-tools` which requires Android SDK acceptance, therefore, the whole thing is unfree.
-      ++ lib.optionals enableUnfree [ apktool ]
-    ));
+    # oggvideotools is broken on Darwin, please put it back when it will be fixed?
+    ++ lib.optionals stdenv.isLinux [ oggvideotools ]
+    # This doesn't work on aarch64-darwin
+    ++ lib.optionals (stdenv.hostPlatform != "aarch64-darwin") [ gnumeric ]
+    # `apktool` depend on `build-tools` which requires Android SDK acceptance, therefore, the whole thing is unfree.
+    ++ lib.optionals enableUnfree [ apktool ]
+  ));
 
-  nativeCheckInputs = with python3Packages; [ pytestCheckHook ] ++ pythonPath;
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+  ] ++ pythonPath;
 
   pytestFlagsArray = [
     # always show more information when tests fail
@@ -106,7 +255,7 @@ python3Packages.buildPythonApplication rec {
     "tests/comparators/test_macho.py"
   ];
 
-   passthru = {
+  passthru = {
     updateScript = writeScript "update-diffoscope" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p curl pcre common-updater-scripts
@@ -117,7 +266,7 @@ python3Packages.buildPythonApplication rec {
       newVersion="$(curl -s https://diffoscope.org/ | pcregrep -o1 'Latest release: ([0-9]+)')"
       update-source-version ${pname} "$newVersion"
     '';
-   };
+  };
 
   meta = with lib; {
     description = "Perform in-depth comparison of files, archives, and directories";
