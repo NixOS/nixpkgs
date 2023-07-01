@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "chamber";
-  version = "2.13.0";
+  version = "2.13.1";
 
   src = fetchFromGitHub {
     owner = "segmentio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1alRyAwT+vlzj7L6KG62R7PRKbMkevowUdD6he4ZQ/I=";
+    sha256 = "sha256-F4JVAW6aKbEofTshF6vny5hnTFnfUKuRyc9zaUxSjG4=";
   };
 
   CGO_ENABLED = 0;
 
-  vendorHash = "sha256-pyC2iMGx1seSBR3f316oNM0YiN3y1489uybpgHyN8NM=";
+  vendorHash = "sha256-xFZmTsX5OrLu1AkKDHaa5N277J5dLGf5F9ATWirtnXY=";
 
   ldflags = [ "-s" "-w" "-X main.Version=v${version}" ];
 

@@ -348,6 +348,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  blst = callPackage ../development/libraries/blst { };
+
   bodyclose = callPackage ../development/tools/bodyclose { };
 
   bootstrap-studio = callPackage ../development/web/bootstrap-studio { };
@@ -11386,6 +11388,8 @@ with pkgs;
   pdf2odt = callPackage ../tools/typesetting/pdf2odt { };
 
   pdfcrack = callPackage ../tools/security/pdfcrack { };
+
+  pdfposter = callPackage ../applications/misc/pdfposter { };
 
   pdfsandwich = callPackage ../tools/typesetting/pdfsandwich { };
 
