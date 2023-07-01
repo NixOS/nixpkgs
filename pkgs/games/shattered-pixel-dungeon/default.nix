@@ -6,6 +6,8 @@
 , perl
 , jre
 , libpulseaudio
+, makeDesktopItem
+, copyDesktopItems
 }:
 
 let
@@ -52,26 +54,52 @@ let
     outputHash = "sha256-i4k5tdo07E1NJwywroaGvRjZ+/xrDp6ra+GTYwTB7uk=";
   };
 
+  desktopItem = makeDesktopItem {
+    name = "shattered-pixel-dungeon";
+    desktopName = "Shattered Pixel Dungeon";
+    comment = "An open-source traditional roguelike dungeon crawler";
+    icon = "shattered-pixel-dungeon";
+    exec = "shattered-pixel-dungeon";
+    terminal = false;
+    categories = [ "Game" "AdventureGame" ];
+    keywords = [ "roguelike" "dungeon" "crawler" ];
+  };
+
 in stdenv.mkDerivation rec {
   inherit pname version src patches postPatch;
 
-  nativeBuildInputs = [ gradle perl makeWrapper ];
+  nativeBuildInputs = [ gradle perl makeWrapper copyDesktopItems ];
+
+  desktopItems = [ desktopItem ];
 
   buildPhase = ''
+    runHook preBuild
+
     export GRADLE_USER_HOME=$(mktemp -d)
     # https://github.com/gradle/gradle/issues/4426
     ${lib.optionalString stdenv.isDarwin "export TERM=dumb"}
     # point to offline repo
     sed -ie "s#repositories {#repositories { maven { url '${deps}' };#g" build.gradle
     gradle --offline --no-daemon desktop:release
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm644 desktop/build/libs/desktop-${version}.jar $out/share/shattered-pixel-dungeon.jar
     mkdir $out/bin
     makeWrapper ${jre}/bin/java $out/bin/shattered-pixel-dungeon \
       --prefix LD_LIBRARY_PATH : ${libpulseaudio}/lib \
       --add-flags "-jar $out/share/shattered-pixel-dungeon.jar"
+
+    for s in 16 32 48 64 128 256; do
+      install -Dm644 desktop/src/main/assets/icons/icon_$s.png \
+        $out/share/icons/hicolor/''${s}x$s/apps/shattered-pixel-dungeon.png
+    done
+
+    runHook postInstall
   '';
 
   passthru.tests = {
