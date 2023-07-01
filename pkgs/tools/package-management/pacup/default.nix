@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, python3
 , buildPythonApplication
 , poetry-core
 , httpx
@@ -8,6 +7,7 @@
 , typer
 , packaging
 }:
+
 buildPythonApplication rec {
   name = "pacup";
   version = "1.1.0";
@@ -20,9 +20,9 @@ buildPythonApplication rec {
     hash = "sha256-Hl/Gq/cZz4RGYKTuyDlrhATAUYEzKEuYIm0JdToN/ZY=";
   };
 
-  nativeBuildInputs = with python3; [ poetry-core ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = with python3; [ httpx rich typer packaging ];
+  propagatedBuildInputs = [ httpx rich typer packaging ];
 
   meta = with lib; {
     description = "Help maintainers update pacscripts";
@@ -33,5 +33,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/pacstall/pacup";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ zahrun ];
+    broken = true; # requires older typer version, update requires httpx 0.24.X
   };
 }
