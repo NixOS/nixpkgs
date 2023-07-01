@@ -132,6 +132,7 @@ python3Packages.buildPythonApplication rec {
       project and was formerly known as "debbindiff".
     '';
     homepage = "https://diffoscope.org/";
+    changelog = "https://diffoscope.org/news/diffoscope-${version}-released/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dezgeg danielfullmer raitobezarius ];
     platforms = platforms.unix;
