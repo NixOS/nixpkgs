@@ -1,20 +1,17 @@
-{ stdenv, lib, fetchFromGitHub, openssl, pkg-config }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-stdenv.mkDerivation {
+buildGoModule rec {
   name = "sigtop";
-  version = "unstable-2022-05-27";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "tbvdm";
     repo = "sigtop";
-    # `portable` branch
-    rev = "945c5844d25e2b130809334cbc8f3fa1cd85aaf9";
-    sha256 = "sha256-6Ifs8fsNpE3AstNt3Elyy908sQ4JzE1H8DbUeWhGnLE=";
+    rev = "v${version}";
+    sha256 = "sha256-U+S+VXRkedq2LkO9Fw/AfNS97GvFEfjD8dq/VMlBOv4=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = [ openssl ];
+  vendorHash = "sha256-xrJ/KLM/f/HVPL4MJzRc1xDlO4e+Iu2lcPG4GnjFRBo=";
 
   makeFlags = [
     "PREFIX=\${out}"
@@ -23,6 +20,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Utility to export messages, attachments and other data from Signal Desktop";
     license = licenses.isc;
+    platforms = platforms.darwin;
     maintainers = with maintainers; [ fricklerhandwerk ];
   };
 }
