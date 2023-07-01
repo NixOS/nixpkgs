@@ -12,6 +12,7 @@
 , profile ? ""
 , targetPkgs ? pkgs: []
 , multiPkgs ? pkgs: []
+, multiArch ? true # Whether to include 32bit packages
 , extraBuildCommands ? ""
 , extraBuildCommandsMulti ? ""
 , extraOutputsToInstall ? []
@@ -35,8 +36,8 @@
 let
   inherit (stdenv) is64bit;
 
-  # use of glibc_multi is only supported on x86_64-linux
-  isMultiBuild = stdenv.system == "x86_64-linux";
+  # "use of glibc_multi is only supported on x86_64-linux"
+  isMultiBuild = multiArch && stdenv.system == "x86_64-linux";
   isTargetBuild = !isMultiBuild;
 
   # list of packages (usually programs) which are only be installed for the
