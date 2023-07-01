@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ unzip xmlto docbook_xml_dtd_45 docbook_xsl zip rsync python3 ];
+
   buildInputs = [ erlang elixir libxml2 libxslt glibcLocales ]
     ++ lib.optionals stdenv.isDarwin [ AppKit Carbon Cocoa ];
 
@@ -56,6 +57,7 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
     "RMQ_ERLAPP_DIR=${placeholder "out"}"
   ];
+
   installTargets = [ "install" "install-man" ];
 
   preBuild = ''
@@ -86,6 +88,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.rabbitmq.com/";
     description = "An implementation of the AMQP messaging protocol";
+    changelog = "https://github.com/rabbitmq/rabbitmq-server/releases/tag/v${version}";
     license = licenses.mpl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ turion ];
