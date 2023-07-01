@@ -70,6 +70,8 @@ buildDotnetModule rec {
     categories = [ "Game" ];
   })];
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Hollow Knight mod installer and manager";
     homepage = "https://github.com/fifty-six/Scarab";
