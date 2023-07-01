@@ -28884,6 +28884,8 @@ with pkgs;
 
   rtw88-firmware = callPackage ../os-specific/linux/firmware/rtw88-firmware { };
 
+  r8152-udev-rules = callPackage ../os-specific/linux/r8152-udev-rules { };
+
   rvvm = callPackage ../applications/virtualization/rvvm { };
 
   s3ql = callPackage ../tools/backup/s3ql { };
