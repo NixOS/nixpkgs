@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ast-grep";
-  version = "0.5.2";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "ast-grep";
     repo = "ast-grep";
-    rev = "v${version}";
-    hash = "sha256-4bslw+BADUQO9cUCEYZ1U4eRdr/2652Shty+NVY0ZYI=";
+    rev = version;
+    hash = "sha256-iU7UtyF5isyc4G3vYu7f1bU7U38HsgkzNF+LctE08ds=";
   };
 
-  cargoHash = "sha256-ed6hc7MIo/Hu1JY7yy6dYHbaTZ9S+T0dh/2H3sTT52Y=";
+  cargoHash = "sha256-30cYsRj10uFUlxhr7kgOy3I0m9qtq6kVNednX7OSQUk=";
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''
@@ -34,6 +34,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://ast-grep.github.io/";
     changelog = "https://github.com/ast-grep/ast-grep/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ montchr ];
+    maintainers = with maintainers; [ montchr lord-valen ];
   };
 }
