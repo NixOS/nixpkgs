@@ -23110,6 +23110,7 @@ with pkgs;
     };
   };
   libxcrypt-legacy = libxcrypt.override { enableHashes = "all"; };
+  libxcrypt-headers = libxcrypt.override { headersOnly = true; };
 
   libxdg_basedir = callPackage ../development/libraries/libxdg-basedir { };
 

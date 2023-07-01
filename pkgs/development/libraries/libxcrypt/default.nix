@@ -1,13 +1,14 @@
-{ lib, stdenv, fetchurl, perl
+{ lib, stdenv, stdenvNoCC, buildPackages, fetchurl, perl
 # Update the enabled crypt scheme ids in passthru when the enabled hashes change
 , enableHashes ? "strong"
+, headersOnly ? false
 , nixosTests
 , runCommand
 , python3
 }:
 
-stdenv.mkDerivation (finalAttrs: {
-  pname = "libxcrypt";
+(if headersOnly then stdenvNoCC else stdenv).mkDerivation (finalAttrs: {
+  pname = "libxcrypt" + lib.optionalString headersOnly "-headers";
   version = "4.4.35";
 
   src = fetchurl {
@@ -17,6 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
+  ] ++ lib.optionals (!headersOnly) [
     "man"
   ];
 
@@ -32,9 +34,15 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ];
 
+  depsBuildBuild = lib.optionals headersOnly [
+    buildPackages.stdenv.cc
+  ];
+
   enableParallelBuilding = true;
 
-  doCheck = true;
+  installTargets = lib.optional headersOnly "install-nodist_includeHEADERS";
+
+  doCheck = !headersOnly;
 
   passthru = {
     tests = {
