@@ -63,10 +63,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
               }
               "attr4"
             ];
-            gitCrypt = {
-              enable = true;
-              keyFile = ./gitCryptKey;
-            };
+            gitCryptKeyFile = ./gitCryptKey;
             failLogInCommitMsg = true;
           };
           ssh = {
