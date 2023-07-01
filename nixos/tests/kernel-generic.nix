@@ -31,6 +31,7 @@ let
       linux_5_10_hardened
       linux_5_15_hardened
       linux_6_1_hardened
+      linux_6_3_hardened
 
       linux_testing;
   };
