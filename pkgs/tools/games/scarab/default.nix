@@ -1,7 +1,6 @@
 { lib
 , buildDotnetModule
 , fetchFromGitHub
-, dotnetCorePackages
 , glibc
 , zlib
 , libX11
@@ -10,7 +9,7 @@
 , fontconfig
 , gtk3
 , copyDesktopItems
-, graphicsmagick
+, icoutils
 , wrapGAppsHook
 , makeDesktopItem
 }:
@@ -46,14 +45,19 @@ buildDotnetModule rec {
 
   nativeBuildInputs = [
     copyDesktopItems
-    graphicsmagick
+    icoutils
     wrapGAppsHook
   ];
 
   postFixup = ''
-    # Icon for the desktop file
-    mkdir -p $out/share/icons/hicolor/256x256/apps/
-    gm convert $src/Scarab/Assets/omegamaggotprime.ico $out/share/icons/hicolor/256x256/apps/scarab.png
+    # Icons for the desktop file
+    icotool -x $src/Scarab/Assets/omegamaggotprime.ico
+
+    sizes=(256 128 64 48 32 16)
+    for i in ''${!sizes[@]}; do
+      size=''${sizes[$i]}x''${sizes[$i]}
+      install -D omegamaggotprime_''$((i+1))_''${size}x32.png $out/share/icons/hicolor/$size/apps/scarab.png
+    done
   '';
 
   desktopItems = [(makeDesktopItem {
