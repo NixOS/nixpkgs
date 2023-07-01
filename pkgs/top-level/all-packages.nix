@@ -36249,6 +36249,8 @@ with pkgs;
 
   clightning = callPackage ../applications/blockchains/clightning { };
 
+  clilol = callPackage ../applications/networking/clilol { };
+
   besu = callPackage ../applications/blockchains/besu { };
 
   bitcoin-abc  = libsForQt5.callPackage ../applications/blockchains/bitcoin-abc {
