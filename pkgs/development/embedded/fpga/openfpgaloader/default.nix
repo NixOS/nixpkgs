@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     libusb1
     hidapi
     zlib
-  ] ++ lib.optionals (!stdenv.isDarwin) [ udev ];
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform udev) [ udev ];
 
   meta = with lib; {
     description = "Universal utility for programming FPGAs";
