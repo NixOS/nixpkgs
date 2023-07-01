@@ -17,6 +17,7 @@
 , openssl
 , pam
 , perl
+, pkg-config
 , python3
 , which
 , xkbcomp
@@ -28,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "turbovnc";
-  version = "3.0.1";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "TurboVNC";
     repo = "turbovnc";
     rev = version;
-    sha256 = "sha256-GRY6aW6Kvy5sDQRiOVz2cUgKEG0IMveh80S26/rGWdM=";
+    sha256 = "sha256-akkkbDb5ZHTG5GEEeDm1ns60GedQ+DnFXgVMZumRQHc=";
   };
 
   # TODO:
@@ -53,6 +54,7 @@ stdenv.mkDerivation rec {
     cmake
     makeWrapper
     openjdk_headless
+    pkg-config
     python3
   ];
 
