@@ -11121,6 +11121,8 @@ with pkgs;
 
   owncast = callPackage ../servers/owncast { };
 
+  owntracks-recorder = callPackage ../servers/owntracks-recorder { };
+
   update-dotdee = with python3Packages; toPythonApplication update-dotdee;
 
   update-nix-fetchgit = haskell.lib.compose.justStaticExecutables haskellPackages.update-nix-fetchgit;
