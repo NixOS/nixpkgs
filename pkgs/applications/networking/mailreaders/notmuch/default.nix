@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv
+{ fetchurl, lib, stdenv, makeWrapper
 , pkg-config, gnupg
 , xapian, gmime3, sfsexp, talloc, zlib
 , doxygen, perl, texinfo
@@ -10,7 +10,7 @@
 , which, dtach, openssl, bash, gdb, man, git
 , withEmacs ? true
 , withRuby ? true
-, withSfsexp ? true
+, withSfsexp ? true # also installs notmuch-git, which requires sexp-support
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
     texinfo                   # (optional) documentation -> doc/INSTALL
     pythonPackages.cffi
   ] ++ lib.optional withEmacs emacs
-    ++ lib.optional withRuby ruby;
+    ++ lib.optional withRuby ruby
+    ++ lib.optional withSfsexp makeWrapper;
 
   buildInputs = [
     gnupg                     # undefined dependencies
@@ -117,6 +118,12 @@ stdenv.mkDerivation rec {
       SHELL=$SHELL \
       $makeFlags "''${makeFlagsArray[@]}" \
       $installFlags "''${installFlagsArray[@]}"
+  ''
+  # notmuch-git (https://notmuchmail.org/doc/latest/man1/notmuch-git.html) does not work without
+  # sexp-support, so there is no point in installing if we're building without it.
+  + lib.optionalString withSfsexp ''
+    cp notmuch-git $out/bin/notmuch-git
+    wrapProgram $out/bin/notmuch-git --prefix PATH : $out/bin:${lib.getBin git}/bin
   '';
 
   passthru = {
