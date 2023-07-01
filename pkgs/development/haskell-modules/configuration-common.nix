@@ -2502,11 +2502,6 @@ self: super: {
   # https://github.com/tweag/webauthn/issues/166
   webauthn = dontCheck super.webauthn;
 
-  # Too strict lower bound on hspec
-  wai-token-bucket-ratelimiter =
-    assert lib.versionOlder self.hspec.version "2.10";
-    doJailbreak super.wai-token-bucket-ratelimiter;
-
   # doctest <0.19
   polysemy = doJailbreak super.polysemy;
 
