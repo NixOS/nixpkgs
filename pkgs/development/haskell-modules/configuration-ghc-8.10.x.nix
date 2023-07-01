@@ -50,6 +50,9 @@ self: super: {
 
   # Need the Cabal-syntax-3.6.0.0 fake package for Cabal < 3.8 to allow callPackage and the constraint solver to work
   Cabal-syntax = self.Cabal-syntax_3_6_0_0;
+  # These core package only exist for GHC >= 9.4. The best we can do is feign
+  # their existence to callPackages, but their is no shim for lower GHC versions.
+  system-cxx-std-lib = null;
 
   # Additionally depends on OneTuple for GHC < 9.0
   base-compat-batteries = addBuildDepend self.OneTuple super.base-compat-batteries;
