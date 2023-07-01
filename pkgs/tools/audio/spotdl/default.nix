@@ -20,7 +20,7 @@ let
   };
 in python.pkgs.buildPythonApplication rec {
   pname = "spotdl";
-  version = "4.1.10";
+  version = "4.1.11";
 
   format = "pyproject";
 
@@ -28,7 +28,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "spotDL";
     repo = "spotify-downloader";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SmyUoMOlBJZTJH19NwTKbz/vo7Oh4tGHCQrW5DVZQWQ=";
+    hash = "sha256-I/53JapzTo6VXss82/F0qO/Etwd4i6ZP9FPjaFRHwV0=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -85,8 +85,8 @@ in python.pkgs.buildPythonApplication rec {
     "test_album_from_string"
     "test_album_from_url"
     "test_album_length"
-    "test_artist_from_url"
     "test_artist_from_string"
+    "test_artist_from_url"
     "test_convert"
     "test_download_ffmpeg"
     "test_download_song"
@@ -96,6 +96,7 @@ in python.pkgs.buildPythonApplication rec {
     "test_preload_song"
     "test_song_from_search_term"
     "test_song_from_url"
+    "test_yt_search"
   ];
 
   makeWrapperArgs = [
