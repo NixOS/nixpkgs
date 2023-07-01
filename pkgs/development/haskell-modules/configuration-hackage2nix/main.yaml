@@ -57,8 +57,9 @@ default-package-overrides:
   - lsp-test == 0.14.*
 
 extra-packages:
-  - Cabal == 3.2.*                      # required as newer version on ghc 8.6 and 8.8
-  - Cabal == 3.6.*                      # required as newer version on ghc 8.10 and 9.0
+  - Cabal-syntax == 3.6.*               # Dummy package that ensures packages depending on Cabal-syntax can work for Cabal < 3.8
+  - Cabal == 3.2.*
+  - Cabal == 3.6.*
   - Cabal-syntax == 3.10.*              # newest version required for cabal-install and other packages
   - cachix < 1.4                        # 2023-04-02: cachix 1.4{,.1} have known on multi-user Nix systems
   - directory == 1.3.7.*                # required to build cabal-install 3.10.* with GHC 9.2
