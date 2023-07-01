@@ -4191,6 +4191,8 @@ self: super: with self; {
 
   goodwe = callPackage ../development/python-modules/goodwe { };
 
+  google = callPackage ../development/python-modules/google { };
+
   google-ai-generativelanguage = callPackage ../development/python-modules/google-ai-generativelanguage { };
 
   google-api-core = callPackage ../development/python-modules/google-api-core { };
@@ -7796,6 +7798,8 @@ self: super: with self; {
   pycketcasts = callPackage ../development/python-modules/pycketcasts { };
 
   pycontrol4 = callPackage ../development/python-modules/pycontrol4 { };
+
+  pycookiecheat = callPackage ../development/python-modules/pycookiecheat { };
 
   pycoolmasternet-async = callPackage ../development/python-modules/pycoolmasternet-async { };
 
