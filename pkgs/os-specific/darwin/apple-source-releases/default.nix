@@ -335,5 +335,10 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
                                      # rather than previous versions.
                       { }."${namePath}" or namePath;
                  in import ./macos-10.13.6.nix
-                      { applePackage' = applePackageMapping; };
+                      { applePackage' = applePackageMapping; }
+                 // { launchd = applePackageMapping
+                        "launchd" "842.92.1" "macos-10.9.2"
+                        "sha256-dmV0UK7hG9wvTr+F4Z47nCFXcVZCV+cQ46WbE0DBtJs="
+                        {};
+                    };
 }
