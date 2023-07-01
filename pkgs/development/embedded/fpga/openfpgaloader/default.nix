@@ -26,10 +26,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libftdi1
     libusb1
-    udev
     hidapi
     zlib
-  ];
+  ] ++ lib.optionals (!stdenv.isDarwin) [ udev ];
 
   meta = with lib; {
     description = "Universal utility for programming FPGAs";
