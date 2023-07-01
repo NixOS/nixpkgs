@@ -3,19 +3,13 @@
 , pythonOlder
 , fetchFromGitHub
 , poetry-core
-
-# propagates
 , importlib-resources
 , jsonschema
 , jsonschema-spec
 , lazy-object-proxy
 , openapi-schema-validator
 , pyyaml
-
-# optional
 , requests
-
-# tests
 , mock
 , pytestCheckHook
 }:
@@ -27,7 +21,6 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  # no tests via pypi sdist
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = pname;
@@ -61,7 +54,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # network access
+    # Test require network access
     "test_default_valid"
     "test_urllib_valid"
     "test_valid"
