@@ -46,6 +46,13 @@ lib.optional (lib.versionAtLeast version "11.0")
     enableShared
     ;
 
+    # For some reason libgcc_s.so has major-version "2" on m68k but
+    # "1" everywhere else.  Might be worth changing this to "*".
+    libgcc_s-version-major =
+      if targetPlatform.isM68k
+      then "2"
+      else "1";
+
 in
 (pkg: pkg.overrideAttrs (previousAttrs: lib.optionalAttrs ((!langC) || langJit || enableLibGccOutput) {
   outputs = previousAttrs.outputs ++ lib.optionals enableLibGccOutput [ "libgcc" ];
@@ -75,9 +82,9 @@ in
       # move libgcc from lib to its own output (libgcc)
       mkdir -p $libgcc/lib
       mv    $lib/${targetPlatformSlash}lib/libgcc_s.so      $libgcc/lib/
-      mv    $lib/${targetPlatformSlash}lib/libgcc_s.so.1    $libgcc/lib/
+      mv    $lib/${targetPlatformSlash}lib/libgcc_s.so.${libgcc_s-version-major}    $libgcc/lib/
       ln -s $libgcc/lib/libgcc_s.so   $lib/${targetPlatformSlash}lib/
-      ln -s $libgcc/lib/libgcc_s.so.1 $lib/${targetPlatformSlash}lib/
+      ln -s $libgcc/lib/libgcc_s.so.${libgcc_s-version-major} $lib/${targetPlatformSlash}lib/
     ''
     #
     # Nixpkgs ordinarily turns dynamic linking into pseudo-static linking:
@@ -134,7 +141,7 @@ in
     #    another eliminates the ability to make these queries.
     #
     + ''
-      patchelf --set-rpath "" $libgcc/lib/libgcc_s.so.1
+      patchelf --set-rpath "" $libgcc/lib/libgcc_s.so.${libgcc_s-version-major}
     '');
 }))))
 
