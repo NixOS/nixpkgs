@@ -54,6 +54,13 @@ self: super: {
   # Additionally depends on OneTuple for GHC < 9.0
   base-compat-batteries = addBuildDepend self.OneTuple super.base-compat-batteries;
 
+  # For GHC < 9.4, some packages need data-array-byte as an extra dependency
+  primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
+  hashable = addBuildDepends [
+    self.data-array-byte
+    self.base-orphans
+  ] super.hashable;
+
   # Pick right versions for GHC-specific packages
   ghc-api-compat = doDistribute (unmarkBroken self.ghc-api-compat_8_10_7);
 
@@ -139,8 +146,6 @@ self: super: {
   OneTuple = super.OneTuple.override {
     ghc-prim = self.hashable;
   };
-
-  hashable = addBuildDepend self.base-orphans super.hashable;
 
   # Doesn't build with 9.0, see https://github.com/yi-editor/yi/issues/1125
   yi-core = doDistribute (markUnbroken super.yi-core);

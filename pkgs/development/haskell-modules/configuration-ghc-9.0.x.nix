@@ -63,20 +63,19 @@ self: super: {
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
   hackage-security = doJailbreak super.hackage-security;
-  hashable =
-    pkgs.lib.pipe
-      super.hashable
-      [ (overrideCabal (drv: { postPatch = "sed -i -e 's,integer-gmp .*<1.1,integer-gmp < 2,' hashable.cabal"; }))
-        doJailbreak
-        dontCheck
-        (addBuildDepend self.base-orphans)
-      ];
+
+  # For GHC < 9.4, some packages need data-array-byte as an extra dependency
+  primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
+  hashable = addBuildDepends [
+    self.data-array-byte
+    self.base-orphans
+  ] super.hashable;
+
   hashable-time = doJailbreak super.hashable-time;
   HTTP = overrideCabal (drv: { postPatch = "sed -i -e 's,! Socket,!Socket,' Network/TCP.hs"; }) (doJailbreak super.HTTP);
   integer-logarithms = overrideCabal (drv: { postPatch = "sed -i -e 's,integer-gmp <1.1,integer-gmp < 2,' integer-logarithms.cabal"; }) (doJailbreak super.integer-logarithms);
   lukko = doJailbreak super.lukko;
   parallel = doJailbreak super.parallel;
-  primitive = doJailbreak (dontCheck super.primitive);
   regex-posix = doJailbreak super.regex-posix;
   resolv = doJailbreak super.resolv;
   singleton-bool = doJailbreak super.singleton-bool;

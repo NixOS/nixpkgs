@@ -55,6 +55,10 @@ self: super: {
   # weeder == 2.5.* requires GHC 9.4
   weeder = doDistribute self.weeder_2_4_1;
 
+  # For GHC < 9.4, some packages need data-array-byte as an extra dependency
+  hashable = addBuildDepends [ self.data-array-byte ] super.hashable;
+  primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
+
   # Jailbreaks & Version Updates
   hashable-time = doJailbreak super.hashable-time;
 
