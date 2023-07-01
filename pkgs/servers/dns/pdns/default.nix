@@ -69,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-libsodium"
     "--with-sqlite3"
     "--with-libcrypto=${openssl.dev}"
+    "sysconfdir=/etc/pdns"
   ];
 
   # nix destroy with-modules arguments, when using configureFlags
@@ -78,6 +79,11 @@ stdenv.mkDerivation (finalAttrs: {
       "--with-dynmodules=bind geoip gmysql godbc gpgsql gsqlite3 ldap lmdb lua2 pipe remote tinydns"
     )
   '';
+
+  # We want the various utilities to look for the powerdns config in
+  # /etc/pdns, but to actually install the sample config file in
+  # $out
+  installFlags = [ "sysconfdir=$(out)/etc/pdns" ];
 
   enableParallelBuilding = true;
   doCheck = true;
