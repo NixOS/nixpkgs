@@ -235,6 +235,7 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
   # Not a library, but we do want it to be built for every qt version there
   # is, to allow users to choose the right build if needed.
   sddm = callPackage ../applications/display-managers/sddm { };
+  sddm-catppuccin = callPackage ../applications/display-managers/sddm/sddm-catppuccin.nix {};
 
   signond = callPackage ../development/libraries/signond {};
 
