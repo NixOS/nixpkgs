@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "dparse";
-  version = "0.6.2";
+  version = "0.6.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1FJVvaIfmYvH3fKv1eYlBbphNHVrotQqhMVrCCZhTf4=";
+    hash = "sha256-J7uLS8rv7DmXaXuj9uBrJEcgC6JzwLCFw9ASoEVxtSg=";
   };
 
   propagatedBuildInputs = [
