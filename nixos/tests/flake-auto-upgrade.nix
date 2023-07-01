@@ -63,6 +63,10 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
               }
               "attr4"
             ];
+            gitCrypt = {
+              enable = true;
+              keyFile = ./gitCryptKey;
+            };
             failLogInCommitMsg = true;
           };
           ssh = {
@@ -107,7 +111,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
           };
           networking.firewall.allowedTCPPorts = [ 80 ];
 
-          environment.systemPackages = [ pkgs.git ];
+          environment.systemPackages = [ pkgs.git pkgs.git-crypt ];
 
           services.openssh = {
             enable = true;
@@ -128,55 +132,63 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
 
         };
     };
-    testScript = { nodes, ... }:
-      let
-
-      in ''
-        start_all()
-        gitweb.wait_for_unit("lighttpd.service")
-        gitweb.succeed("${pkgs.git}/bin/git init --bare ${repohome}")
-        gitweb.succeed("${pkgs.git}/bin/git clone ${repohome}")
-        # set the main branch
-        gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git checkout -b main")
-        # we can only bush a branch if it contains a commit
-        gitweb.succeed("touch ./git/file")
-        gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git add git/file")
-        gitweb.succeed("${pkgs.git}/bin/git config --global user.email \"<>\"")
-        gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git commit -m \"Initial commit\"")
-        gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git push --set-upstream origin main")
-        gitweb.wait_for_open_port(22)
-        gitweb.wait_for_open_port(80)
-        builder.wait_for_unit("multi-user.target")
-        builder.fail("stat /var/lib/flake-auto-upgrade-ssh/fakeFlake")
-        builder.systemctl("start flake-auto-upgrade-ssh")
-        # flake is added
-        builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-ssh/repo/fakeFlake")
-        # attr1 is build
-        builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-ssh/repo/result1")
-        # change own for lighttpd
-        gitweb.succeed("chown lighttpd:lighttpd -R ${repohome}")
-        builder.systemctl("start flake-auto-upgrade-http")
-        # flake is changed again
-        builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-http/repo/fakeFlake")
-        assert "2 /var/lib/flake-auto-upgrade-http/repo/fakeFlake" in builder.wait_until_succeeds("wc -l /var/lib/flake-auto-upgrade-http/repo/fakeFlake")
-        # attr1 is build
-        builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-http/repo/result1")
-        # attr4 is build
-        builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-http/repo/result4")
-        # make build of attr1 fail
-        builder.succeed("touch /var/lib/flake-auto-upgrade-http/repo/failFile")
-        builder.sleep(1)
-        builder.systemctl("start flake-auto-upgrade-http")
-        # attr3 is build
-        builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-http/repo/result3")
-        # attr4 is build
-        builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-http/repo/result4")
-        # flake is changed again
-        assert "3 /var/lib/flake-auto-upgrade-http/repo/fakeFlake" in builder.succeed("wc -l /var/lib/flake-auto-upgrade-http/repo/fakeFlake")
-        # Build failure is recorded in the commit message
-        gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git fetch")
-        gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git checkout update")
-        assert "attr1 failed" in gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git log")
-        assert "attr2 failed" in gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git log")
-      '';
+    testScript = { nodes, ... }: ''
+      start_all()
+      gitweb.wait_for_unit("lighttpd.service")
+      gitweb.succeed("${pkgs.git}/bin/git init --bare ${repohome} -b main")
+      gitweb.succeed("${pkgs.git}/bin/git clone ${repohome}")
+      # set the main branch
+      gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git checkout -b main")
+      # we can only bush a branch if it contains a commit
+      gitweb.succeed("echo \"dummy content\" > ./file")
+      gitweb.succeed("echo \"file filter=git-crypt diff=git-crypt\" > ./.gitattributes")
+      gitweb.succeed("cd git; ${pkgs.git-crypt}/bin/git-crypt unlock ${
+        ./gitCryptKey
+      }")
+      gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git add file")
+      gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git add .gitattributes")
+      gitweb.succeed("${pkgs.git}/bin/git config --global user.email \"<>\"")
+      gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git commit -m \"Initial commit\"")
+      gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git push --set-upstream origin main")
+      gitweb.wait_for_open_port(22)
+      gitweb.wait_for_open_port(80)
+      builder.wait_for_unit("multi-user.target")
+      builder.fail("stat /var/lib/flake-auto-upgrade-ssh/fakeFlake")
+      builder.systemctl("start flake-auto-upgrade-ssh")
+      # flake is added
+      builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-ssh/repo/fakeFlake")
+      # attr1 is build
+      builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-ssh/repo/result1")
+      # git-crypt file is encrypted
+      builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-ssh/repo/file")
+      assert "data" in builder.succeed("${pkgs.file}/bin/file /var/lib/flake-auto-upgrade-ssh/repo/file")
+      # change own for lighttpd
+      gitweb.succeed("chown lighttpd:lighttpd -R ${repohome}")
+      builder.systemctl("start flake-auto-upgrade-http")
+      # flake is changed again
+      builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-http/repo/fakeFlake")
+      assert "2 /var/lib/flake-auto-upgrade-http/repo/fakeFlake" in builder.wait_until_succeeds("wc -l /var/lib/flake-auto-upgrade-http/repo/fakeFlake")
+      # attr1 is build
+      builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-http/repo/result1")
+      # attr4 is build
+      builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-http/repo/result4")
+      # git-crypt file is decrypted
+      builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-http/repo/file")
+      assert "ASCII text" in builder.succeed("${pkgs.file}/bin/file /var/lib/flake-auto-upgrade-http/repo/file")
+      # make build of attr1 fail
+      builder.succeed("touch /var/lib/flake-auto-upgrade-http/repo/failFile")
+      builder.sleep(1)
+      builder.systemctl("start flake-auto-upgrade-http")
+      # attr3 is build
+      builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-http/repo/result3")
+      # attr4 is build
+      builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-http/repo/result4")
+      # flake is changed again
+      assert "3 /var/lib/flake-auto-upgrade-http/repo/fakeFlake" in builder.succeed("wc -l /var/lib/flake-auto-upgrade-http/repo/fakeFlake")
+      # Build failure is recorded in the commit message
+      gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git fetch")
+      gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git checkout update")
+      assert "attr1 failed" in gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git log")
+      assert "attr2 failed" in gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git log")
+    '';
   })
