@@ -359,6 +359,12 @@
     githubId = 1517066;
     name = "Aiken Cairncross";
   };
+  accelbread = {
+    name = "Archit Gupta";
+    email = "archit@accelbread.com";
+    github = "accelbread";
+    githubId = 9895679;
+  };
   aciceri = {
     name = "Andrea Ciceri";
     email = "andrea.ciceri@autistici.org";
