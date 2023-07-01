@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "millet";
-  version = "0.12.0";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "azdavis";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-WoawuH0fuhVrTEtcdfkKpJUQBcbMnbybDST4DDkJEqM=";
+    hash = "sha256-qfBDwbAbj4XoZeH0hyS09iUfg0G1X1RjpVOSd+2twT0=";
   };
 
   cargoLock = {

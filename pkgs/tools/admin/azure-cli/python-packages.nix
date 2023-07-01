@@ -32,10 +32,12 @@ let
           azure-common
           azure-cli-telemetry
           azure-data-tables
+          azure-mgmt-appcontainers
           azure-mgmt-core
           azure-mgmt-resource
           colorama
           cryptography
+          distro
           humanfriendly
           jmespath
           knack
@@ -105,7 +107,7 @@ let
         '';
       };
 
-      antlr4-python3-runtime = super.antlr4-python3-runtime.override(_: {
+      antlr4-python3-runtime = super.antlr4-python3-runtime.override (_: {
         antlr4 = super.pkgs.antlr4_9;
       });
 
@@ -136,38 +138,35 @@ let
       azure-mgmt-policyinsights = overrideAzureMgmtPackage super.azure-mgmt-policyinsights "1.1.0b2" "zip"
         "sha256-e+I5MdbbX7WhxHCj1Ery3z2WUrJtpWGD1bhLbqReb58=";
 
-      azure-mgmt-rdbms = overrideAzureMgmtPackage super.azure-mgmt-rdbms "10.2.0b5" "zip"
-        "sha256-YaokPCleAiwM893QFU+tbhL+8UngvGGshdeEBDCVTu4=";
+      azure-mgmt-rdbms = overrideAzureMgmtPackage super.azure-mgmt-rdbms "10.2.0b8" "zip"
+        "sha256-OyA0O10UMx8BKUvxTQU6/eZupuKoxFQk2kvd/qINjFU=";
 
-      azure-mgmt-recoveryservices = overrideAzureMgmtPackage super.azure-mgmt-recoveryservices "2.1.0" "zip"
-        "sha256-2DeOemVpkjeI/hUdG04IuHU2h3cmk3oG4kr1wIDvdbM=";
+      azure-mgmt-recoveryservices = overrideAzureMgmtPackage super.azure-mgmt-recoveryservices "2.2.0" "zip"
+        "sha256-2rU5Mc5tcSHEaej4LeiJ/WwWjk3fZFdd7MIwqmHgRss=";
 
-      azure-mgmt-recoveryservicesbackup = overrideAzureMgmtPackage super.azure-mgmt-recoveryservicesbackup "5.1.0b1" "zip"
-        "sha256-4djPfDzj9ql5WFn5fafLZWRKbofvb1Y7j05S77ly75s=";
+      azure-mgmt-recoveryservicesbackup = overrideAzureMgmtPackage super.azure-mgmt-recoveryservicesbackup "6.0.0" "zip"
+        "sha256-lIEYi/jvF9pYbnH+clUzfU0fExlY+dZojIyZRtTLQh8=";
 
-      azure-mgmt-resource = overrideAzureMgmtPackage super.azure-mgmt-resource "21.1.0b1" "zip"
-        "sha256-oiC5k+Mg9KJn940jMxG4AB9Pom+t/DWRA5KRv8HO0HI=";
-
-      azure-mgmt-appconfiguration = overrideAzureMgmtPackage super.azure-mgmt-appconfiguration "2.2.0" "zip"
-        "sha256-R2COS22pCtFp3oV98LLn/X2LkPOVUCasEONhFIhEdBQ=";
+      azure-mgmt-appconfiguration = overrideAzureMgmtPackage super.azure-mgmt-appconfiguration "3.0.0" "zip"
+        "sha256-FJhuVgqNjdRIegP4vUISrAtHvvVle5VQFVITPm4HLEw=";
 
       azure-mgmt-cognitiveservices = overrideAzureMgmtPackage super.azure-mgmt-cognitiveservices "13.3.0" "zip"
         "sha256-v1pTNPH0ujRm4VMt95Uw6d07lF8bgM3XIa3NJIbNLFI=";
 
-      azure-mgmt-compute = overrideAzureMgmtPackage super.azure-mgmt-compute "29.0.0" "zip"
-        "sha256-wkRmH/3MMxeTZr7KQMZQbjPHs2GSxAjJFZlSp75pUPI=";
+      azure-mgmt-compute = overrideAzureMgmtPackage super.azure-mgmt-compute "29.1.0" "zip"
+        "sha256-LVobrn9dMHyh6FDX6D/tnIOdT2NbEKS40/i8YJisKIg=";
 
       azure-mgmt-consumption = overrideAzureMgmtPackage super.azure-mgmt-consumption "2.0.0" "zip"
         "sha256-moWonzDyJNJhdJviC0YWoOuJSFhvfw8gVzuOoy8mUYk=";
 
-      azure-mgmt-containerinstance = overrideAzureMgmtPackage super.azure-mgmt-containerinstance "9.1.0" "zip"
-        "sha256-IhZLDFkTize8SLptR2v2NRUrxCjctCC1IaFLjCXHl60=";
+      azure-mgmt-containerinstance = overrideAzureMgmtPackage super.azure-mgmt-containerinstance "10.1.0" "zip"
+        "sha256-eNQ3rbKFdPRIyDjtXwH5ztN4GWCYBh3rWdn3AxcEwX4=";
 
-      azure-mgmt-containerservice = overrideAzureMgmtPackage super.azure-mgmt-containerservice "21.1.0" "zip"
-        "sha256-5EOythXO7spLzzlqDWrwcdkkJAMH9W8OBv96rYaWxAY=";
+      azure-mgmt-containerservice = overrideAzureMgmtPackage super.azure-mgmt-containerservice "23.0.0" "zip"
+      "sha256-V8IUTQvbUSOpsqkGfBqLo4DVIB7fryYMVx6WpfWzOnc=";
 
-      azure-mgmt-cosmosdb = overrideAzureMgmtPackage super.azure-mgmt-cosmosdb "8.0.0" "zip"
-        "sha256-/6ySVfCjr1YiiZIZJElrd1EfirV+TJvE/FvKs7UhoKo=";
+      azure-mgmt-cosmosdb = overrideAzureMgmtPackage super.azure-mgmt-cosmosdb "9.2.0" "zip"
+        "sha256-PAaBkR77Ho2YI5I+lmazR/8vxEZWpbvM427yRu1ET0k=";
 
       azure-mgmt-databoxedge = overrideAzureMgmtPackage super.azure-mgmt-databoxedge "1.0.0" "zip"
         "sha256-BAkAYrwejwDC9FMVo7zrD7OzR57BR01xuINC4TSZsIc=";
@@ -178,8 +177,8 @@ let
       azure-mgmt-eventgrid = overrideAzureMgmtPackage super.azure-mgmt-eventgrid "10.2.0b2" "zip"
         "sha256-QcHY1wCwQyVOEdUi06/wEa4dqJH5Ccd33gJ1Sju0qZA=";
 
-      azure-mgmt-imagebuilder = overrideAzureMgmtPackage super.azure-mgmt-imagebuilder "1.1.0" "zip"
-        "sha256-2EWfTsl5y3Sw4P8d5X7TKxYmO4PagUTNv/SFKdjY2Ss=";
+      azure-mgmt-imagebuilder = overrideAzureMgmtPackage super.azure-mgmt-imagebuilder "1.2.0" "zip"
+        "sha256-XmGIzw+yGYgdaNGZJClFRl531BGsQUH+HESUXGVK6TI=";
 
       azure-mgmt-iothub = overrideAzureMgmtPackage super.azure-mgmt-iothub "2.3.0" "zip"
         "sha256-ml+koj52l5o0toAcnsGtsw0tGnO5F/LKq56ovzdmx/A=";
@@ -196,8 +195,8 @@ let
       azure-mgmt-devtestlabs = overrideAzureMgmtPackage super.azure-mgmt-devtestlabs "4.0.0" "zip"
         "sha256-WVScTEBo8mRmsQl7V0qOUJn7LNbIvgoAOVsG07KeJ40=r";
 
-      azure-mgmt-netapp = overrideAzureMgmtPackage super.azure-mgmt-netapp "9.0.1" "zip"
-        "sha256-PYRMOWaJUXrRgqW3+pLBY+L6HvU1WlPvaatFe4O7RY8=";
+      azure-mgmt-netapp = overrideAzureMgmtPackage super.azure-mgmt-netapp "10.0.0" "zip"
+        "sha256-9+cXsY8Qr5ds9lYw39duWdcqm6QUTedQbjn8x6zJoyE=";
 
       azure-mgmt-dns = overrideAzureMgmtPackage super.azure-mgmt-dns "8.0.0" "zip"
         "sha256-QHwtrLM1E/++nKS+Wt216dS64Mt++mE8P31THve/jeg=";
@@ -223,11 +222,11 @@ let
       azure-mgmt-media = overrideAzureMgmtPackage super.azure-mgmt-media "9.0.0" "zip"
         "sha256-TI7l8sSQ2QUgPqiE3Cu/F67Wna+KHbQS3fuIjOb95ZM=";
 
-      azure-mgmt-msi = super.azure-mgmt-msi.overridePythonAttrs (old: rec {
-        version = "6.1.0";
+      azure-mgmt-msi = super.azure-mgmt-msi.overridePythonAttrs(old: rec {
+        version = "7.0.0";
         src = old.src.override {
           inherit version;
-          hash = "sha256-lS8da3Al1z1pMLDBf6ZtWc1UFUVgkN1qpKTxt4VXdlQ=";
+          hash = "sha256-ctRsmmJ4PsTqthm+nRt4/+u9qhZNQG/TA/FjA/NyVrI=";
         };
       });
 
@@ -237,8 +236,8 @@ let
       azure-mgmt-web = overrideAzureMgmtPackage super.azure-mgmt-web "7.0.0" "zip"
         "sha256-WvyNgfiliEt6qawqy8Le8eifhxusMkoZbf6YcyY1SBA=";
 
-      azure-mgmt-redhatopenshift = overrideAzureMgmtPackage super.azure-mgmt-redhatopenshift "1.1.0" "zip"
-        "sha256-Tq8h3fvajxIG2QjtCyHCQDE2deBDioxLLaQQek/O24U=";
+      azure-mgmt-redhatopenshift = overrideAzureMgmtPackage super.azure-mgmt-redhatopenshift "1.2.0" "zip"
+        "sha256-ZU4mKTzny9tsKDrFSU+lll5v6oDivYJlXDriWJLAYec=";
 
       azure-mgmt-redis = overrideAzureMgmtPackage super.azure-mgmt-redis "14.1.0" "zip"
         "sha256-LO92Wc2+VvsEKiOjVSHXw2o3D69NQlL58m+YqWl6+ig=";
@@ -246,8 +245,8 @@ let
       azure-mgmt-reservations = overrideAzureMgmtPackage super.azure-mgmt-reservations "2.0.0" "zip"
         "sha256-5vXdXiRubnzPk4uTFeNHR6rwiHSGbeUREX9eW1pqC3E=";
 
-      azure-mgmt-search = overrideAzureMgmtPackage super.azure-mgmt-search "8.0.0" "zip"
-        "sha256-qW1QyIUHIzopPnVyAt7q2YDGeAj0Mrjol8TfHKCI2n4=";
+      azure-mgmt-search = overrideAzureMgmtPackage super.azure-mgmt-search "9.0.0" "zip"
+        "sha256-Gc+qoTa1EE4/YmJvUSqVG+zZ50wfohvWOe/fLJ/vgb0=";
 
       azure-mgmt-security = overrideAzureMgmtPackage super.azure-mgmt-security "3.0.0" "zip"
         "sha256-vLp874V/awKi2Yr+sH+YcbFij6M9iGGrE4fnMufbP4Q=";
@@ -255,11 +254,11 @@ let
       azure-mgmt-signalr = overrideAzureMgmtPackage super.azure-mgmt-signalr "1.1.0" "zip"
         "sha256-lUNIDyP5W+8aIX7manfMqaO2IJJm/+2O+Buv+Bh4EZE=";
 
-      azure-mgmt-sql = overrideAzureMgmtPackage super.azure-mgmt-sql "4.0.0b6" "zip"
-        "sha256-1/0VGMW9yZsilJ0yNjhFzVO7WbJlB4yJmDL/RxpQLKc=";
+      azure-mgmt-sql = overrideAzureMgmtPackage super.azure-mgmt-sql "4.0.0b10" "zip"
+        "sha256-QHvbO6Toh5QflMIaNYmxXBy0Dmw++RVdim3HEDtLBrQ=";
 
-      azure-mgmt-sqlvirtualmachine = overrideAzureMgmtPackage super.azure-mgmt-sqlvirtualmachine "1.0.0b4" "zip"
-        "sha256-IB/ihVFm8WrJ2ZZfALp167Sq4u0cvIq1hllNriJxaz0=";
+      azure-mgmt-sqlvirtualmachine = overrideAzureMgmtPackage super.azure-mgmt-sqlvirtualmachine "1.0.0b5" "zip"
+        "sha256-ZFgJflgynRSxo+B+Vso4eX1JheWlDQjfJ9QmupXypMc=";
 
       azure-mgmt-synapse = overrideAzureMgmtPackage super.azure-mgmt-synapse "2.1.0b5" "zip"
         "sha256-5E6Yf1GgNyNVjd+SeFDbhDxnOA6fOAG6oojxtCP4m+k=";
@@ -273,32 +272,32 @@ let
       azure-mgmt-eventhub = overrideAzureMgmtPackage super.azure-mgmt-eventhub "10.1.0" "zip"
         "sha256-MZqhSBkwypvEefhoEWEPsBUFidWYD7qAX6edcBDDSSA=";
 
-      azure-mgmt-keyvault = overrideAzureMgmtPackage super.azure-mgmt-keyvault "10.1.0" "zip"
-        "sha256-DpO+6FvsNwjjcz2ImhHpColHVNpPUMgCtEMrfUzfAaA=";
+      azure-mgmt-keyvault = overrideAzureMgmtPackage super.azure-mgmt-keyvault "10.2.0" "zip"
+        "sha256-QZbbdvgCbPleZnPpYTZI/Cgmeus8Kb5uyXuobnf6Ox4=";
 
       azure-mgmt-cdn = overrideAzureMgmtPackage super.azure-mgmt-cdn "12.0.0" "zip"
         "sha256-t8PuIYkjS0r1Gs4pJJJ8X9cz8950imQtbVBABnyMnd0=";
 
-      azure-mgmt-containerregistry = overrideAzureMgmtPackage super.azure-mgmt-containerregistry "10.0.0" "zip"
-        "sha256-HjejK28Em5AeoQ20o4fucnXTlAwADF/SEpVfHn9anZk=";
+      azure-mgmt-containerregistry = overrideAzureMgmtPackage super.azure-mgmt-containerregistry "10.1.0" "zip"
+        "sha256-VrX9YfYNvlA8+eNqHCp35BAeQZzQKakZs7ZZKwT8oYc=";
 
       azure-mgmt-monitor = overrideAzureMgmtPackage super.azure-mgmt-monitor "5.0.0" "zip"
         "sha256-eL9KJowxTF7hZJQQQCNJZ7l+rKPFM8wP5vEigt3ZFGE=";
 
-      azure-mgmt-advisor =  overrideAzureMgmtPackage super.azure-mgmt-advisor "9.0.0" "zip"
+      azure-mgmt-advisor = overrideAzureMgmtPackage super.azure-mgmt-advisor "9.0.0" "zip"
         "sha256-/ECLNzFf6EeBtRkST4yxuKwQsvQkHkOdDT4l/WyhjXs=";
 
       azure-mgmt-applicationinsights = overrideAzureMgmtPackage super.azure-mgmt-applicationinsights "1.0.0" "zip"
         "sha256-woeix9703hn5LAwxugKGf6xvW433G129qxkoi7RV/Fs=";
 
-      azure-mgmt-authorization = overrideAzureMgmtPackage super.azure-mgmt-authorization "0.61.0" "zip"
-        "sha256-9czuo63QTpRF6ohJLxXuz2wSbwQG2WfJX25It5vo23U=";
+      azure-mgmt-authorization = overrideAzureMgmtPackage super.azure-mgmt-authorization "3.0.0" "zip"
+        "sha256-Cl1/aDvzNyI2uEHNvUZ39rCO185BuZnD5kTUKGJSBX0=";
 
       azure-mgmt-storage = overrideAzureMgmtPackage super.azure-mgmt-storage "21.0.0" "zip"
         "sha256-brE+7s+JGVsrX0e+Bnnj8niI79e9ITLux+vLznXLE3c=";
 
-      azure-mgmt-servicebus = overrideAzureMgmtPackage super.azure-mgmt-servicebus "8.1.0" "zip"
-        "sha256-R8Narn7eC7j59tDjsgbk9lF0PcOgOwSnzoMp3Qu0rmg=";
+      azure-mgmt-servicebus = overrideAzureMgmtPackage super.azure-mgmt-servicebus "8.2.0" "zip"
+        "sha256-i+kgjxQdmnifaNuNIZdU/3gGn9j5OQ6fdkS7laO+nsI=";
 
       azure-mgmt-servicefabric = overrideAzureMgmtPackage super.azure-mgmt-servicefabric "1.0.0" "zip"
         "sha256-3jXhF5EoMsGp6TEJqNJMq5T1VwOpCHsuscWwZVs7GRM=";
@@ -309,8 +308,8 @@ let
       azure-mgmt-hdinsight = overrideAzureMgmtPackage super.azure-mgmt-hdinsight "9.0.0" "zip"
         "sha256-QevcacDR+B0l3TBDjBT/9DMfZmOfVYBbkYuWSer/54o=";
 
-      azure-multiapi-storage = overrideAzureMgmtPackage super.azure-multiapi-storage "1.0.0" "tar.gz"
-        "sha256-x5v3e3/poSm+JMt0SWI1lcM6YAUcP+o2Sn8TluXOyIg=";
+      azure-multiapi-storage = overrideAzureMgmtPackage super.azure-multiapi-storage "1.1.0" "tar.gz"
+        "sha256-VvNI+mhi2nCFBAXUEL5ph3xj/cBRMf2Mo2uXIgKC+oc=";
 
       azure-appconfiguration = super.azure-appconfiguration.overrideAttrs(oldAttrs: rec {
         version = "1.1.1";
@@ -353,11 +352,11 @@ let
       });
 
       azure-synapse-artifacts = super.azure-synapse-artifacts.overrideAttrs(oldAttrs: rec {
-        version = "0.14.0";
+        version = "0.15.0";
         src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
-          hash = "sha256-Q1gGq7EZ/JvYjD7y0mp3kEy15QKZI84UQTdlIBoQLMs=";
+          hash = "sha256-XxryuN5HVuY9h6ioSEv9nwzkK6wYLupvFOCJqX82eWE=";
           extension = "zip";
         };
         propagatedBuildInputs = with super; oldAttrs.propagatedBuildInputs ++ [
@@ -376,11 +375,11 @@ let
       });
 
       azure-synapse-managedprivateendpoints = super.azure-synapse-managedprivateendpoints.overrideAttrs(oldAttrs: rec {
-        version = "0.3.0";
+        version = "0.4.0";
         src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
-          hash = "sha256-fN1IuZ9fjxgRZv6qh9gg6v6KYpnKlXfnoLqfZCDXoRY=";
+          hash = "sha256-kA6urM/9zQEBKySKfQSQCMkoB7dJ7dHJB0ypJIVUwX4=";
           extension = "zip";
         };
       });
@@ -405,19 +404,23 @@ let
         };
 
         propagatedBuildInputs = with self; [
-          azure-common azure-nspkg msrest msrestazure cryptography
+          azure-common
+          azure-nspkg
+          msrest
+          msrestazure
+          cryptography
         ];
         pythonNamespaces = [ "azure" ];
         pythonImportsCheck = [ ];
       });
 
       azure-keyvault-administration = super.azure-keyvault-administration.overridePythonAttrs(oldAttrs: rec {
-        version = "4.0.0b3";
+        version = "4.3.0";
         src = fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
           extension = "zip";
-          hash = "sha256-d3tJWObM3plRurzfqWmHkn5CqVL9ekQfn9AeDc/KxLQ=";
+          hash = "sha256-PuKjui0OP0ODNErjbjJ90hOgee97JDrVT2sh+MufxWY=";
         };
       });
 
@@ -549,6 +552,14 @@ let
         };
       });
 
+      azure-mgmt-resource = super.azure-mgmt-resource.overridePythonAttrs(oldAttrs: rec {
+        version = "22.0.0";
+
+        src = oldAttrs.src.override {
+          inherit version;
+          hash = "sha256-/rXZeeGLUvLP0CO0oKM+VKb3bMaiUtyM117OLGMpjpQ=";
+        };
+      });
     };
   };
 in

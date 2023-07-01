@@ -1,4 +1,8 @@
 { lib, stdenv
+, addOpenGLRunpath
+, config
+, cudaPackages ? {}
+, cudaSupport ? config.cudaSupport or false
 , fetchurl
 , makeWrapper
 , opencl-headers
@@ -15,7 +19,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-sl4Qd7zzSQjMjxjBppouyYsEeyy88PURRNzzuh4Leyo=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+  ] ++ lib.optionals cudaSupport [
+    addOpenGLRunpath
+  ];
+
   buildInputs = [ opencl-headers xxHash ];
 
   makeFlags = [
@@ -34,8 +43,20 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  postFixup = ''
-    wrapProgram $out/bin/hashcat --prefix LD_LIBRARY_PATH : ${ocl-icd}/lib
+  postFixup = let
+    LD_LIBRARY_PATH = builtins.concatStringsSep ":" ([
+      "${ocl-icd}/lib"
+    ] ++ lib.optionals cudaSupport [
+      "${cudaPackages.cudatoolkit}/lib"
+    ]);
+  in ''
+    wrapProgram $out/bin/hashcat \
+      --prefix LD_LIBRARY_PATH : ${lib.escapeShellArg LD_LIBRARY_PATH}
+  '' + lib.optionalString cudaSupport ''
+    for program in $out/bin/hashcat $out/bin/.hashcat-wrapped; do
+      isELF "$program" || continue
+      addOpenGLRunpath "$program"
+    done
   '';
 
   meta = with lib; {
