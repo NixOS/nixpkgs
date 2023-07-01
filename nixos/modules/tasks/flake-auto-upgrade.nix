@@ -262,9 +262,9 @@ in {
             };
 
             persistent = mkOption {
-              default = true;
+              default = false;
               type = types.bool;
-              example = false;
+              example = true;
               description = lib.mdDoc ''
                 Takes a boolean argument. If true, the time when the service
                 unit was last triggered is stored on disk. When the timer is
