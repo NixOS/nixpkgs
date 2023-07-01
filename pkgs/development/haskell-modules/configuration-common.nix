@@ -1634,13 +1634,10 @@ self: super: {
     hspec-discover = self.hspec-discover_2_11_1;
     hspec-core = self.hspec-core_2_11_1;
   });
-  hspec-discover_2_11_1 = doDistribute (super.hspec-discover_2_11_1.override {
-    hspec-meta = self.hspec-meta_2_10_5;
-  });
+  hspec-discover_2_11_1 = doDistribute super.hspec-discover_2_11_1;
   # Need to disable tests to prevent an infinite recursion if hspec-core_2_11_1
   # is overlayed to hspec-core.
   hspec-core_2_11_1 = doDistribute (dontCheck (super.hspec-core_2_11_1.override {
-    hspec-meta = self.hspec-meta_2_10_5;
     hspec-expectations = self.hspec-expectations_0_8_3;
   }));
 
