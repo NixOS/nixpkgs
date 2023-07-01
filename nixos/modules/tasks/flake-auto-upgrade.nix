@@ -40,8 +40,13 @@ let
             esac
           '';
         })
-        { EMAIL = "<>"; }
+        {
+          EMAIL = "<>";
+          HOME = "/var/lib/${name}";
+        }
       ];
+      path =
+        mkMerge [ (mkIf cfg.gitCrypt.enable [ pkgs.git-crypt ]) [ pkgs.git ] ];
       serviceConfig = mkMerge [
         {
           type = "oneshot";
@@ -71,11 +76,14 @@ let
           cd repo || exit
           ${pkgs.git}/bin/git fetch
         fi
+        ${lib.optionalString cfg.gitCrypt.enable ''
+          ${pkgs.git-crypt}/bin/git-crypt unlock ${cfg.gitCrypt.keyFile}
+        ''}
         rm -f ./*.log
         if ${pkgs.git}/bin/git checkout ${cfg.updateBranch};
         then
           # We don't pull because a force push could have happend in the meantime
-          ${pkgs.git}/bin/git reset --hard origin/${cfg.updateBranch}
+          ${pkgs.git}/bin/git reset --hard origin/${cfg.updateBranch} || true
         else
           ${pkgs.git}/bin/git checkout -b ${cfg.updateBranch}
         fi
@@ -157,6 +165,24 @@ in {
                   };
                 };
               });
+            };
+            gitCrypt = mkOption {
+              type = types.nullOr (types.submodule {
+                options = {
+                  enable = mkOption {
+                    default = false;
+                    example = true;
+                    description = (lib.mdDoc "Use git-crypt to decrypt files");
+                    type = types.bool;
+                  };
+                  keyFile = mkOption {
+                    type = types.path;
+                    description =
+                      lib.mdDoc "Path of git-crypt key for decryption";
+                  };
+                };
+              });
+              default = { enable = false; };
             };
             updateBranch = mkOption {
               type = types.str;
