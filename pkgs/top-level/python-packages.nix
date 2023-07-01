@@ -10619,6 +10619,8 @@ self: super: with self; {
 
   reedsolo = callPackage ../development/python-modules/reedsolo { };
 
+  referencing = callPackage ../development/python-modules/referencing { };
+
   reflink = callPackage ../development/python-modules/reflink { };
 
   regenmaschine = callPackage ../development/python-modules/regenmaschine { };
