@@ -70,6 +70,11 @@ let
       "--disable-libatomic" # requires libc
       "--disable-decimal-float" # requires libc
       "--disable-libmpx" # requires libc
+    ] ++ lib.optionals targetPlatform.isS390 [
+      # without target libc headers, gcc for S390 is unable to
+      # detect the correct ctors/dtors style, so we must enable it
+      # explicitly:
+      "--enable-initfini-array"
     ] ++ lib.optionals crossMingw [
       "--with-headers=${lib.getDev libcCross}/include"
       "--with-gcc"
