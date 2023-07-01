@@ -5877,6 +5877,8 @@ with pkgs;
 
   pscale = callPackage ../development/tools/pscale { };
 
+  pulsarctl = callPackage ../tools/admin/pulsarctl { };
+
   psstop = callPackage ../tools/system/psstop { };
 
   precice = callPackage ../development/libraries/precice { };
