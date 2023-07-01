@@ -56,7 +56,7 @@
 , pgpdump
 , poppler_utils
 , procyon
-, python3Packages
+, python3
 , qemu
 , R
 , radare2
@@ -77,7 +77,7 @@
 }:
 
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
   version = "233";
 
@@ -155,7 +155,7 @@ python3Packages.buildPythonApplication rec {
     zip
     zstd
   ]
-  ++ (with python3Packages; [
+  ++ (with python3.pkgs; [
     argcomplete
     debian
     defusedxml
@@ -203,7 +203,7 @@ python3Packages.buildPythonApplication rec {
       wabt
       xmlbeans
     ]
-    ++ (with python3Packages; [
+    ++ (with python3.pkgs; [
       androguard
       binwalk
       guestfs
@@ -218,7 +218,7 @@ python3Packages.buildPythonApplication rec {
     ++ lib.optionals enableUnfree [ apktool ]
   ));
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ] ++ pythonPath;
 
