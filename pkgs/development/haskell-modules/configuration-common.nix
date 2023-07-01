@@ -996,20 +996,12 @@ self: super: {
   restless-git = dontCheck super.restless-git;
 
   # requires git at test-time *and* runtime, but we'll just rely on users to
-  # bring their own git at runtime
+  # bring their own git at runtime. Additionally, sensei passes `-package
+  # hspec-meta` to GHC in the tests, but doesn't depend on it itself.
   sensei = overrideCabal (drv: {
-    testHaskellDepends = drv.testHaskellDepends or [] ++ [ self.hspec-meta_2_10_5 ];
+    testHaskellDepends = drv.testHaskellDepends or [] ++ [ self.hspec-meta ];
     testToolDepends = drv.testToolDepends or [] ++ [ pkgs.git ];
-  }) (super.sensei.override {
-    hspec = self.hspec_2_11_1;
-    hspec-wai = self.hspec-wai.override {
-      hspec = self.hspec_2_11_1;
-    };
-    hspec-contrib = self.hspec-contrib.override {
-      hspec-core = self.hspec-core_2_11_1;
-    };
-    fsnotify = self.fsnotify_0_4_1_0;
-  });
+  }) super.sensei;
 
   # Depends on broken fluid.
   fluid-idl-http-client = markBroken super.fluid-idl-http-client;
