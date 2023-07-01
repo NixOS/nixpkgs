@@ -201,6 +201,17 @@ in
       } // hardening;
     };
 
+    system.checks = lib.singleton (pkgs.runCommand "jool-validated" {
+      nativeBuildInputs = [ pkgs.buildPackages.jool-cli ];
+      preferLocalBuild = true;
+    } ''
+      printf 'Validating Jool configuration... '
+      ${lib.optionalString cfg.siit.enable "jool_siit file check ${siitConf}"}
+      ${lib.optionalString cfg.nat64.enable "jool file check ${nat64Conf}"}
+      printf 'ok\n'
+      touch "$out"
+    '');
+
     networking.jool.nat64.config = mkDefaultAttrs defaultNat64;
     networking.jool.siit.config  = mkDefaultAttrs defaultSiit;
 
