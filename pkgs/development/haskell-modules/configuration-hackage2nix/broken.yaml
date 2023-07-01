@@ -2760,7 +2760,6 @@ broken-packages:
   - instant-generics
   - instapaper-sender
   - instinct
-  - integer-conversion # dependency missing in job https://hydra.nixos.org/build/225563519 at 2023-06-28
   - integer-pure
   - integer-simple
   - intensional-datatys
