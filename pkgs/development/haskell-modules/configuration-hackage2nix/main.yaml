@@ -134,7 +134,6 @@ extra-packages:
   - weeder == 2.3.*                     # 2022-05-31: preserve for GHC 9.0.2
   - weeder == 2.4.*                     # 2023-02-02: preserve for GHC 9.2.*
   - commonmark-extensions < 0.2.3.3     # 2022-12-17: required by emanote 1.0.0.0 (to avoid a bug in 0.2.3.3)
-  - ShellCheck == 0.8.0                 # 2022-12-28: required by haskell-ci 0.14.3
   - retrie < 1.2.0.0                    # 2022-12-30: required for hls on ghc < 9.2
   - ghc-tags == 1.5.*                   # 2023-02-18: preserve for ghc-lib == 9.2.*
   - fourmolu == 0.10.1.0                # 2023-04-18: for hls-fourmolu-plugin 1.1.1.0
