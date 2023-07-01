@@ -425,11 +425,6 @@ self: super: {
   opencv = dontCheck (appendPatch ./patches/opencv-fix-116.patch super.opencv);
   opencv-extra = dontCheck (appendPatch ./patches/opencv-fix-116.patch super.opencv-extra);
 
-  # Too strict lower bound on hspec
-  graphql =
-    assert lib.versionOlder self.hspec.version "2.10";
-    doJailbreak super.graphql;
-
   # https://github.com/ekmett/structures/issues/3
   structures = dontCheck super.structures;
 
