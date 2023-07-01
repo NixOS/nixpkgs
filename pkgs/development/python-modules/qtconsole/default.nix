@@ -4,6 +4,7 @@
 , ipykernel
 , jupyter-core
 , jupyter-client
+, ipython_genutils
 , pygments
 , pyqt5
 , pytestCheckHook
@@ -27,6 +28,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     ipykernel
+    ipython_genutils
     jupyter-core
     jupyter-client
     pygments
