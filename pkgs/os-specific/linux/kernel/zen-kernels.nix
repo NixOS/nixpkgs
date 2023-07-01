@@ -11,9 +11,9 @@ let
   };
   # ./update-zen.py lqx
   lqxVariant = {
-    version = "6.3.4"; #lqx
-    suffix = "lqx1"; #lqx
-    sha256 = "06xkcrd4wjpj23dnrfbyxyx1699vxzswb3r6p2xjwmpy44j5wjgf"; #lqx
+    version = "6.3.11"; #lqx
+    suffix = "lqx2"; #lqx
+    sha256 = "0hpzafw2zwy25ss4cwj6mm8pr1nnv680m8bfcal29f7gaxbm96k8"; #lqx
     isLqx = true;
   };
   zenKernelsFor = { version, suffix, sha256, isLqx }: buildLinux (args // {
