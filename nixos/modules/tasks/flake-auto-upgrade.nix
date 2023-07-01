@@ -51,7 +51,7 @@ let
       ];
       serviceConfig = mkMerge [
         {
-          type = "oneshot";
+          Type = "oneshot";
           CapabilityBoundingSet = "";
           LockPersonality = true;
           ProtectHostname = true;
