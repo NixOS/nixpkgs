@@ -8,11 +8,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   appres = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto, libXt }: stdenv.mkDerivation {
     pname = "appres";
-    version = "1.0.5";
+    version = "1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/appres-1.0.5.tar.bz2";
-      sha256 = "0a2r4sxky3k7b3kdb5pbv709q9b5zi3gxjz336wl66f828vqkbgz";
+      url = "mirror://xorg/individual/app/appres-1.0.6.tar.xz";
+      sha256 = "02sr4f1bm3y1w24gsvjfzvbpac1kgkq27v1s68q87bd1l3i5f8lb";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -40,11 +40,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   bitmap = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, xbitmaps, libXmu, xorgproto, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "bitmap";
-    version = "1.0.9";
+    version = "1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/bitmap-1.0.9.tar.gz";
-      sha256 = "0kzbv5wh02798l77y9y8d8sjkmzm9cvsn3rjh8a86v5waj50apsb";
+      url = "mirror://xorg/individual/app/bitmap-1.1.0.tar.xz";
+      sha256 = "141nhfmrg14axvix2mc34vfs07gmki3k14qq1vqy7v7f5yf8g1lf";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -56,11 +56,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   editres = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "editres";
-    version = "1.0.7";
+    version = "1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/editres-1.0.7.tar.bz2";
-      sha256 = "04awfwmy3f9f0bchidc4ssbgrbicn5gzasg3jydpfnp5513d76h8";
+      url = "mirror://xorg/individual/app/editres-1.0.8.tar.xz";
+      sha256 = "1ydn32x9qh2zkn90w6nfv33gcq75z67w93bakkykadl8n7zmvkw3";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -782,11 +782,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   iceauth = callPackage ({ stdenv, pkg-config, fetchurl, libICE, xorgproto }: stdenv.mkDerivation {
     pname = "iceauth";
-    version = "1.0.8";
+    version = "1.0.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/iceauth-1.0.8.tar.bz2";
-      sha256 = "1ik0mdidmyvy48hn8p2hwvf3535rf3m96hhf0mvcqrbj44x23vp6";
+      url = "mirror://xorg/individual/app/iceauth-1.0.9.tar.xz";
+      sha256 = "01cc816fvdkkfcnqnyvgcshcip2jzjivwa8hzdvsz0snak5xzf9c";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -798,11 +798,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   ico = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
     pname = "ico";
-    version = "1.0.5";
+    version = "1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/ico-1.0.5.tar.bz2";
-      sha256 = "0gvpwfk9kvlfn631dgizc45qc2qqjn9pavdp2q7qb3drkvr64fyp";
+      url = "mirror://xorg/individual/app/ico-1.0.6.tar.xz";
+      sha256 = "01a4kykayckxzi4jzggaz3wh9qjcr6f4iykhvq7jhlz767a6kwrq";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1519,11 +1519,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   listres = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
     pname = "listres";
-    version = "1.0.4";
+    version = "1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/listres-1.0.4.tar.bz2";
-      sha256 = "041bxkvv6f92sm3hhm977c4gdqdv5r1jyxjqcqfi8vkrg3s2j4ka";
+      url = "mirror://xorg/individual/app/listres-1.0.5.tar.xz";
+      sha256 = "17fwfjh0xrvg7jj4h32pa8ns4hq4r11z61kh2xsqvsyjwyxh0anf";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1599,11 +1599,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   oclock = callPackage ({ stdenv, pkg-config, fetchurl, libxkbfile, libX11, libXext, libXmu, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "oclock";
-    version = "1.0.4";
+    version = "1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/oclock-1.0.4.tar.bz2";
-      sha256 = "1zmfzfmdp42nvapf0qz1bc3i3waq5sjrpkgfw64qs4nmq30wy86c";
+      url = "mirror://xorg/individual/app/oclock-1.0.5.tar.xz";
+      sha256 = "0p4nqfrhy1srqqzbamp7afa54clbydbhprd1nxbd12g8anb9f2cg";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1615,11 +1615,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   sessreg = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto }: stdenv.mkDerivation {
     pname = "sessreg";
-    version = "1.1.2";
+    version = "1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/sessreg-1.1.2.tar.bz2";
-      sha256 = "0crczl25zynkrslmm8sjaxszhrh4i33m7h5fg4wfdb3k8aarxjyz";
+      url = "mirror://xorg/individual/app/sessreg-1.1.3.tar.xz";
+      sha256 = "1hmc9wsfgl2wmy0kccwa4brxbv02w5wiz5hrz72dsz87x1fwsah2";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1629,29 +1629,29 @@ self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  setxkbmap = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libxkbfile }: stdenv.mkDerivation {
+  setxkbmap = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libxkbfile, libXrandr }: stdenv.mkDerivation {
     pname = "setxkbmap";
-    version = "1.3.2";
+    version = "1.3.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/setxkbmap-1.3.2.tar.bz2";
-      sha256 = "1xdrxs65v7d0rw1yaz0vsz55w4hxym99216p085ya9978j379wlg";
+      url = "mirror://xorg/individual/app/setxkbmap-1.3.4.tar.xz";
+      sha256 = "1pps0x66512y3f7v6xgnb6gjbllsgi4q5zxmjcdiv60fsia8b3dy";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ libX11 libxkbfile ];
+    buildInputs = [ libX11 libxkbfile libXrandr ];
     meta.platforms = lib.platforms.unix;
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   smproxy = callPackage ({ stdenv, pkg-config, fetchurl, libICE, libSM, libXmu, libXt }: stdenv.mkDerivation {
     pname = "smproxy";
-    version = "1.0.6";
+    version = "1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/smproxy-1.0.6.tar.bz2";
-      sha256 = "0rkjyzmsdqmlrkx8gy2j4q6iksk58hcc92xzdprkf8kml9ar3wbc";
+      url = "mirror://xorg/individual/app/smproxy-1.0.7.tar.xz";
+      sha256 = "01gkz4n2pfxiklzzx3ghnm9shx3626jcriwvrs3pvawxrhvr5aaa";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1663,11 +1663,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   transset = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
     pname = "transset";
-    version = "1.0.2";
+    version = "1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/transset-1.0.2.tar.bz2";
-      sha256 = "088v8p0yfn4r3azabp6662hqikfs2gjb9xmjjd45gnngwwp19b2b";
+      url = "mirror://xorg/individual/app/transset-1.0.3.tar.xz";
+      sha256 = "1zp6ldxb3h2zsr4nmkb8aj8ia8v3qvjj3w85by5xh3fxvlq8zqqz";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1677,18 +1677,18 @@ self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  twm = callPackage ({ stdenv, pkg-config, fetchurl, libICE, libSM, libX11, libXext, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
+  twm = callPackage ({ stdenv, pkg-config, fetchurl, libICE, libSM, libX11, libXext, libXmu, xorgproto, libXrandr, libXt }: stdenv.mkDerivation {
     pname = "twm";
-    version = "1.0.10";
+    version = "1.0.12";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/twm-1.0.10.tar.bz2";
-      sha256 = "1ms5cj1w3g26zg6bxdv1j9hl0pxr4300qnv003cz1q3cl7ffljb4";
+      url = "mirror://xorg/individual/app/twm-1.0.12.tar.xz";
+      sha256 = "1r5gfv1gvcjn39v7n6znpnvifwhlw2zf8gfrxq8vph84vva03wma";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ libICE libSM libX11 libXext libXmu xorgproto libXt ];
+    buildInputs = [ libICE libSM libX11 libXext libXmu xorgproto libXrandr libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -1711,11 +1711,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   viewres = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXmu, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "viewres";
-    version = "1.0.5";
+    version = "1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/viewres-1.0.5.tar.bz2";
-      sha256 = "1mz319kfmvcrdpi22dmdr91mif1j0j3ck1f8mmnz5g1r9kl1in2y";
+      url = "mirror://xorg/individual/app/viewres-1.0.7.tar.xz";
+      sha256 = "0a66mz27gcsxd1qq1ij0w8dv4wjvszgbf5ygw5dga40sbc464nmi";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1791,11 +1791,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcalc = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, xorgproto, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xcalc";
-    version = "1.1.0";
+    version = "1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xcalc-1.1.0.tar.bz2";
-      sha256 = "1sxmlcb0sb3h4z05kl5l0kxnhrc0h8c74p9m3zdc7bv58jaldmym";
+      url = "mirror://xorg/individual/app/xcalc-1.1.2.tar.xz";
+      sha256 = "1m0wzhjvc88kmx12ykdml5rqlz9h2iki9mkfdngji53y8nhxyy45";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1935,11 +1935,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xclock = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXft, libxkbfile, libXmu, xorgproto, libXrender, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xclock";
-    version = "1.0.9";
+    version = "1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xclock-1.0.9.tar.bz2";
-      sha256 = "1fr3q4rszgx7x2zxy2ip592a3fgx20hfwac49p2l5b7jqsr1ying";
+      url = "mirror://xorg/individual/app/xclock-1.1.1.tar.xz";
+      sha256 = "0b3l1zwz2b1cn46f8pd480b835j9anadf929vqpll107iyzylz6z";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1951,11 +1951,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcmsdb = callPackage ({ stdenv, pkg-config, fetchurl, libX11 }: stdenv.mkDerivation {
     pname = "xcmsdb";
-    version = "1.0.5";
+    version = "1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xcmsdb-1.0.5.tar.bz2";
-      sha256 = "1ik7gzlp2igz183x70883000ygp99r20x3aah6xhaslbpdhm6n75";
+      url = "mirror://xorg/individual/app/xcmsdb-1.0.6.tar.xz";
+      sha256 = "0magrza0i5qwpf0zlpqjychp3bzxgdw3p5v616xl4nbxag2fwxrw";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1965,29 +1965,29 @@ self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xcompmgr = callPackage ({ stdenv, pkg-config, fetchurl, libXcomposite, libXdamage, libXext, libXfixes, libXrender }: stdenv.mkDerivation {
+  xcompmgr = callPackage ({ stdenv, pkg-config, fetchurl, libXcomposite, libXdamage, libXext, libXfixes, xorgproto, libXrender }: stdenv.mkDerivation {
     pname = "xcompmgr";
-    version = "1.1.8";
+    version = "1.1.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xcompmgr-1.1.8.tar.bz2";
-      sha256 = "0hvjkanrdlvk3ln5a1jx3c9ggziism2jr1na7jl3zyk0y3sdm28b";
+      url = "mirror://xorg/individual/app/xcompmgr-1.1.9.tar.xz";
+      sha256 = "1w564walyqi3bqnnl8l2d949v64smipdw2q8lnrixl3jhrlvcxa8";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ libXcomposite libXdamage libXext libXfixes libXrender ];
+    buildInputs = [ libXcomposite libXdamage libXext libXfixes xorgproto libXrender ];
     meta.platforms = lib.platforms.unix;
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xconsole = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xconsole";
-    version = "1.0.7";
+    version = "1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xconsole-1.0.7.tar.bz2";
-      sha256 = "1q2ib1626i5da0nda09sp3vzppjrcn82fff83cw7hwr0vy14h56i";
+      url = "mirror://xorg/individual/app/xconsole-1.0.8.tar.xz";
+      sha256 = "195vhqjrzjf4kkzmy0kx50n1bv2kj9fg7mi18mm2w3p4d3q6ljkv";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1997,18 +1997,18 @@ self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xcursorgen = callPackage ({ stdenv, pkg-config, fetchurl, libpng, libX11, libXcursor }: stdenv.mkDerivation {
+  xcursorgen = callPackage ({ stdenv, pkg-config, fetchurl, libpng, libX11, libXcursor, xorgproto }: stdenv.mkDerivation {
     pname = "xcursorgen";
-    version = "1.0.7";
+    version = "1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xcursorgen-1.0.7.tar.bz2";
-      sha256 = "0ggbv084cavp52hjgcz3vdj0g018axs0m23c03lpc5sgn92gidim";
+      url = "mirror://xorg/individual/app/xcursorgen-1.0.8.tar.xz";
+      sha256 = "16yc82k4vp7icmf9247z4v38r65pdf032mrpzxj5wa2fggi3rcrj";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ libpng libX11 libXcursor ];
+    buildInputs = [ libpng libX11 libXcursor xorgproto ];
     meta.platforms = lib.platforms.unix;
   }) {};
 
@@ -2031,11 +2031,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xdm = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXau, libXaw, libXdmcp, libXext, libXft, libXinerama, libXmu, libXpm, xorgproto, libXrender, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xdm";
-    version = "1.1.12";
+    version = "1.1.14";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xdm-1.1.12.tar.bz2";
-      sha256 = "1x17hdymf6rd8jmh4n1sd4g5a8ayr5w94nwjw84qs2fs5pvq7lhd";
+      url = "mirror://xorg/individual/app/xdm-1.1.14.tar.xz";
+      sha256 = "0prx5h0xmv08yvm0axzh74a90cyc1s1dcv98jpjwjzkr6rbg56ry";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2047,11 +2047,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xdpyinfo = callPackage ({ stdenv, pkg-config, fetchurl, libdmx, libX11, libxcb, libXcomposite, libXext, libXi, libXinerama, xorgproto, libXrender, libXtst, libXxf86dga, libXxf86misc, libXxf86vm }: stdenv.mkDerivation {
     pname = "xdpyinfo";
-    version = "1.3.2";
+    version = "1.3.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xdpyinfo-1.3.2.tar.bz2";
-      sha256 = "0ldgrj4w2fa8jng4b3f3biaj0wyn8zvya88pnk70d7k12pcqw8rh";
+      url = "mirror://xorg/individual/app/xdpyinfo-1.3.4.tar.xz";
+      sha256 = "0aw2yhx4ys22231yihkzhnw9jsyzksl4yyf3sx0689npvf0sbbd8";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2063,11 +2063,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xdriinfo = callPackage ({ stdenv, pkg-config, fetchurl, libGL, xorgproto, libX11 }: stdenv.mkDerivation {
     pname = "xdriinfo";
-    version = "1.0.6";
+    version = "1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xdriinfo-1.0.6.tar.bz2";
-      sha256 = "0lcx8h3zd11m4w8wf7dyp89826d437iz78cyrix436bqx31x5k6r";
+      url = "mirror://xorg/individual/app/xdriinfo-1.0.7.tar.xz";
+      sha256 = "0d7p9fj3znq0av9pjgi2kphqaz5w7b9hxlz63zbxs69bknp8p0yx";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2079,11 +2079,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xev = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto, libXrandr }: stdenv.mkDerivation {
     pname = "xev";
-    version = "1.2.4";
+    version = "1.2.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xev-1.2.4.tar.bz2";
-      sha256 = "1ql592pdhddhkipkrsxn929y9l2nn02a5fh2z3dx47kmzs5y006p";
+      url = "mirror://xorg/individual/app/xev-1.2.5.tar.xz";
+      sha256 = "1hbfwcnbyz4w13fbhnghl0vdhf6w9f9pb7jgjwrhykkii51ilin9";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2927,11 +2927,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xfd = callPackage ({ stdenv, pkg-config, fetchurl, libxkbfile, fontconfig, libXaw, libXft, libXmu, xorgproto, libXrender, libXt, gettext, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xfd";
-    version = "1.1.3";
+    version = "1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xfd-1.1.3.tar.bz2";
-      sha256 = "0n6r1v8sm0z0ycqch035xpm46nv5v4mav3kxh36883l3ln5r6bqr";
+      url = "mirror://xorg/individual/app/xfd-1.1.4.tar.xz";
+      sha256 = "1zbnj0z28dx2rm2h7pjwcz7z1jnl28gz0v9xn3hs2igxcvxhyiym";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2941,29 +2941,29 @@ self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xfontsel = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
+  xfontsel = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xfontsel";
-    version = "1.0.6";
+    version = "1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xfontsel-1.0.6.tar.bz2";
-      sha256 = "0700lf6hx7dg88wq1yll7zjvf9gbwh06xff20yffkxb289y0pai5";
+      url = "mirror://xorg/individual/app/xfontsel-1.1.0.tar.xz";
+      sha256 = "1d6ifx6sw97mmr00bhfakyx2f94w14yswxc68sw49zmvawrjq18p";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
     nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
-    buildInputs = [ libX11 libXaw libXmu libXt ];
+    buildInputs = [ libX11 libXaw libXmu xorgproto libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xfs = callPackage ({ stdenv, pkg-config, fetchurl, libXfont2, xorgproto, xtrans }: stdenv.mkDerivation {
     pname = "xfs";
-    version = "1.2.0";
+    version = "1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xfs-1.2.0.tar.bz2";
-      sha256 = "0q4q4rbzx159sfn2n52y039fki6nc6a39qdfxa78yjc3aw8i48nv";
+      url = "mirror://xorg/individual/app/xfs-1.2.1.tar.xz";
+      sha256 = "1rn1l76z4l133491wb1klixbwb8az5cnrzwx37fb3vnpmplc72ix";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2975,11 +2975,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xfsinfo = callPackage ({ stdenv, pkg-config, fetchurl, libFS, xorgproto }: stdenv.mkDerivation {
     pname = "xfsinfo";
-    version = "1.0.6";
+    version = "1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xfsinfo-1.0.6.tar.bz2";
-      sha256 = "1mmir5i7gm71xc0ba8vnizi4744vsd31hknhi4cmgvg6kadqngla";
+      url = "mirror://xorg/individual/app/xfsinfo-1.0.7.tar.xz";
+      sha256 = "0x48p4hk0lds2s8nwzgfl616r99s28ydx02zs7p1fxxs3i2wmwwj";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2991,11 +2991,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xgamma = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto, libXxf86vm }: stdenv.mkDerivation {
     pname = "xgamma";
-    version = "1.0.6";
+    version = "1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xgamma-1.0.6.tar.bz2";
-      sha256 = "1lr2nb1fhg5fk2fchqxdxyl739602ggwhmgl2wiv5c8qbidw7w8f";
+      url = "mirror://xorg/individual/app/xgamma-1.0.7.tar.xz";
+      sha256 = "13xw2fqp9cs7xj3nqi8khqxv81rk0dd8khp59xgs2lw9bbldly8w";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3007,11 +3007,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xgc = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xgc";
-    version = "1.0.5";
+    version = "1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xgc-1.0.5.tar.bz2";
-      sha256 = "0pigvjd3i9fchmj1inqy151aafz3dr0vq1h2zizdb2imvadqv0hl";
+      url = "mirror://xorg/individual/app/xgc-1.0.6.tar.xz";
+      sha256 = "0h5jm2946f5m1g8a3qh1c01h3zrsjjivi09vi9rmij2frvdvp1vv";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3039,11 +3039,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xinit = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
     pname = "xinit";
-    version = "1.4.1";
+    version = "1.4.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xinit-1.4.1.tar.bz2";
-      sha256 = "1fdbakx59vyh474skjydj1bbglpby3y03nl7mxn0z9v8gdhqz6yy";
+      url = "mirror://xorg/individual/app/xinit-1.4.2.tar.xz";
+      sha256 = "08qz6f6yhis6jdcp6hzspql6ib9a9zp0ddhhbac1b7zg4a6xrn5p";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3055,11 +3055,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xinput = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext, libXi, libXinerama, libXrandr }: stdenv.mkDerivation {
     pname = "xinput";
-    version = "1.6.3";
+    version = "1.6.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xinput-1.6.3.tar.bz2";
-      sha256 = "1vb6xdd1xmk5f7pwc5zcbxfray5sf1vbnscqwf2yl8lv7gfq38im";
+      url = "mirror://xorg/individual/app/xinput-1.6.4.tar.xz";
+      sha256 = "1j2pf28c54apr56v1fmvprp657n6x4sdrv8f24rx3138cl6x015d";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3087,11 +3087,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xkbevd = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libxkbfile }: stdenv.mkDerivation {
     pname = "xkbevd";
-    version = "1.1.4";
+    version = "1.1.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xkbevd-1.1.4.tar.bz2";
-      sha256 = "0sprjx8i86ljk0l7ldzbz2xlk8916z5zh78cafjv8k1a63js4c14";
+      url = "mirror://xorg/individual/app/xkbevd-1.1.5.tar.xz";
+      sha256 = "0swjhk33fp15060hhzycmk288ys51wwm6l7p9xy4blz95mq7nd9q";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3103,11 +3103,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xkbprint = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libxkbfile, xorgproto }: stdenv.mkDerivation {
     pname = "xkbprint";
-    version = "1.0.4";
+    version = "1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xkbprint-1.0.4.tar.bz2";
-      sha256 = "04iyv5z8aqhabv7wcpvbvq0ji0jrz1666vw6gvxkvl7szswalgqb";
+      url = "mirror://xorg/individual/app/xkbprint-1.0.6.tar.xz";
+      sha256 = "1c57kb8d8cbf720n9bcjhhaqpk08lac0sk4l0jp8j0mryw299k4r";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3119,11 +3119,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xkbutils = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXaw, libXt }: stdenv.mkDerivation {
     pname = "xkbutils";
-    version = "1.0.4";
+    version = "1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xkbutils-1.0.4.tar.bz2";
-      sha256 = "0c412isxl65wplhl7nsk12vxlri29lk48g3p52hbrs3m0awqm8fj";
+      url = "mirror://xorg/individual/app/xkbutils-1.0.5.tar.xz";
+      sha256 = "197f4pgw3jdnlp7sj37f3xf15ayad20sl7vvg2rvx0j5qplsi97n";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3151,11 +3151,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xkill = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXmu, xorgproto }: stdenv.mkDerivation {
     pname = "xkill";
-    version = "1.0.5";
+    version = "1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xkill-1.0.5.tar.bz2";
-      sha256 = "0szzd9nzn0ybkhnfyizb876irwnjsnb78rcaxx6prb71jmmbpw65";
+      url = "mirror://xorg/individual/app/xkill-1.0.6.tar.xz";
+      sha256 = "01xrmqw498hqlhn6l1sq89s31k6sjf6xlij6a08pnrvmqiwama75";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3167,11 +3167,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xload = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt, gettext, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xload";
-    version = "1.1.3";
+    version = "1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xload-1.1.3.tar.bz2";
-      sha256 = "01sr6yd6yhyyfgn88l867w6h9dn5ikcynaz5rwji6xqxhw1lhkpk";
+      url = "mirror://xorg/individual/app/xload-1.1.4.tar.xz";
+      sha256 = "0c9h6w4bd1q3k4cy8v56sc3v9cg94cpg3xr057sf096v428vjil3";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3183,11 +3183,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xlsatoms = callPackage ({ stdenv, pkg-config, fetchurl, libxcb }: stdenv.mkDerivation {
     pname = "xlsatoms";
-    version = "1.1.3";
+    version = "1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xlsatoms-1.1.3.tar.bz2";
-      sha256 = "10m3a046jvaw5ywx4y65kl84lsxqan70gww1g1r7cf96ijaqz1jp";
+      url = "mirror://xorg/individual/app/xlsatoms-1.1.4.tar.xz";
+      sha256 = "1dviriynilkw0jwl0s2h8y95pwh8cxj95cnmllkd6rn0args3gzl";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3199,11 +3199,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xlsclients = callPackage ({ stdenv, pkg-config, fetchurl, libxcb }: stdenv.mkDerivation {
     pname = "xlsclients";
-    version = "1.1.4";
+    version = "1.1.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xlsclients-1.1.4.tar.bz2";
-      sha256 = "1h8931sn34mcip6vpi4v7hdmr1r58gkbw4s2p97w98kykks2lgvp";
+      url = "mirror://xorg/individual/app/xlsclients-1.1.5.tar.xz";
+      sha256 = "1qxsav5gicsfwv1dqlcfpj47vy9i30i7iysrfx5aql02wxbyxfk8";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3215,11 +3215,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xlsfonts = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
     pname = "xlsfonts";
-    version = "1.0.6";
+    version = "1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xlsfonts-1.0.6.tar.bz2";
-      sha256 = "0s6kxgv78chkwsqmhw929f4pf91gq63f4yvixxnan1h00cx0pf49";
+      url = "mirror://xorg/individual/app/xlsfonts-1.0.7.tar.xz";
+      sha256 = "0r84wp4352hbfcaybqp2khipm40293byvrfyrlslrd37m52njwkv";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3231,11 +3231,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xmag = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xmag";
-    version = "1.0.6";
+    version = "1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xmag-1.0.6.tar.bz2";
-      sha256 = "0qg12ifbbk9n8fh4jmyb625cknn8ssj86chd6zwdiqjin8ivr8l7";
+      url = "mirror://xorg/individual/app/xmag-1.0.7.tar.xz";
+      sha256 = "0qblrqrhxml2asgbck53a1v7c4y7ap7jcyqjg500h1i7bb63d680";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3247,11 +3247,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xmessage = callPackage ({ stdenv, pkg-config, fetchurl, libXaw, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xmessage";
-    version = "1.0.5";
+    version = "1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xmessage-1.0.5.tar.bz2";
-      sha256 = "0a90kfm0qz8cn2pbpqfyqrc5s9bfvvy14nj848ynvw56wy0zng9p";
+      url = "mirror://xorg/individual/app/xmessage-1.0.6.tar.xz";
+      sha256 = "04kahkk3kd6p1xlzf0jwfgnrb5z2r3y55q3p12b6n59py52wbsnj";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3263,11 +3263,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xmodmap = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
     pname = "xmodmap";
-    version = "1.0.10";
+    version = "1.0.11";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xmodmap-1.0.10.tar.bz2";
-      sha256 = "0z28331i2pm16x671fa9qwsfqdmr6a43bzwmp0dm17a3sx0hjgs7";
+      url = "mirror://xorg/individual/app/xmodmap-1.0.11.tar.xz";
+      sha256 = "10byhzdfv1xckqc3d2v52xg1ggxn5j806x4450l3ig5hyxl82bws";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3375,11 +3375,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xpr = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXmu, xorgproto }: stdenv.mkDerivation {
     pname = "xpr";
-    version = "1.0.5";
+    version = "1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xpr-1.0.5.tar.bz2";
-      sha256 = "07qy9lwjvxighcmg6qvjkgagad3wwvidrfx0jz85lgynz3qy0dmr";
+      url = "mirror://xorg/individual/app/xpr-1.1.0.tar.xz";
+      sha256 = "1iaphm96kha6bzz34cj82r2lp5hrdpqwdca04iij4rinflab3fx0";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3407,11 +3407,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xrandr = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto, libXrandr, libXrender }: stdenv.mkDerivation {
     pname = "xrandr";
-    version = "1.5.1";
+    version = "1.5.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xrandr-1.5.1.tar.xz";
-      sha256 = "0ql75s1n3dm2m3g1ilb9l6hqh15r0v709bgghpwazy3jknpnvivv";
+      url = "mirror://xorg/individual/app/xrandr-1.5.2.tar.xz";
+      sha256 = "0h7jy4c5zgrr06fimnnxhy5ba782b1n4aik29g6bln4h1mwy9gn8";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3423,11 +3423,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xrdb = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXmu, xorgproto }: stdenv.mkDerivation {
     pname = "xrdb";
-    version = "1.2.1";
+    version = "1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xrdb-1.2.1.tar.bz2";
-      sha256 = "1d78prd8sfszq2rwwlb32ksph4fymf988lp75aj8iysg44f06pag";
+      url = "mirror://xorg/individual/app/xrdb-1.2.2.tar.xz";
+      sha256 = "1x1ka0zbcw66a06jvsy92bvnsj9vxbvnq1hbn1az4f0v4fmzrx9i";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3439,11 +3439,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xrefresh = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
     pname = "xrefresh";
-    version = "1.0.6";
+    version = "1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xrefresh-1.0.6.tar.bz2";
-      sha256 = "0lv3rlshh7s0z3aqx5ahnnf8cl082m934bk7gv881mz8nydznz98";
+      url = "mirror://xorg/individual/app/xrefresh-1.0.7.tar.xz";
+      sha256 = "07hvfw3rdv8mzqmm9ax5z8kw544insdd152f2z8868ply8sxdwd9";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3471,11 +3471,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xsetroot = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xbitmaps, libXcursor, libXmu, xorgproto }: stdenv.mkDerivation {
     pname = "xsetroot";
-    version = "1.1.2";
+    version = "1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xsetroot-1.1.2.tar.bz2";
-      sha256 = "0z21mqvmdl6rl63q77479wgkfygnll57liza1i3va7sr4fx45i0h";
+      url = "mirror://xorg/individual/app/xsetroot-1.1.3.tar.xz";
+      sha256 = "1l9qcv4mldj70slnmfg56nv7yh9j9ca1x795bl26whmlkrdb90b0";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3485,29 +3485,29 @@ self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xsm = callPackage ({ stdenv, pkg-config, fetchurl, libICE, libSM, libX11, libXaw, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
+  xsm = callPackage ({ stdenv, pkg-config, fetchurl, libICE, libSM, libX11, libXaw, xorgproto, libXt, wrapWithXFileSearchPathHook }: stdenv.mkDerivation {
     pname = "xsm";
-    version = "1.0.4";
+    version = "1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xsm-1.0.4.tar.bz2";
-      sha256 = "09a4ss1fnrh1sgm21r4n5pivawf34paci3rn6mscyljf7a4vcd4r";
+      url = "mirror://xorg/individual/app/xsm-1.0.5.tar.xz";
+      sha256 = "0bgvwvj99yqivy4dyxrfa0anwvh5d634gz0w43zy8cn17ymgsc4w";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
     nativeBuildInputs = [ pkg-config wrapWithXFileSearchPathHook ];
-    buildInputs = [ libICE libSM libX11 libXaw libXt ];
+    buildInputs = [ libICE libSM libX11 libXaw xorgproto libXt ];
     meta.platforms = lib.platforms.unix;
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xstdcmap = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXmu, xorgproto }: stdenv.mkDerivation {
     pname = "xstdcmap";
-    version = "1.0.4";
+    version = "1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xstdcmap-1.0.4.tar.bz2";
-      sha256 = "12vgzsxv4rw25frkgjyli6w6hy10lgpvsx9wzw2v5l5a3qzqp286";
+      url = "mirror://xorg/individual/app/xstdcmap-1.0.5.tar.xz";
+      sha256 = "1061b95j08mlwpadyilmpbzfgmm08z69k8nrkbn9k11rg7ilfn1n";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3551,11 +3551,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xvinfo = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto, libXv }: stdenv.mkDerivation {
     pname = "xvinfo";
-    version = "1.1.4";
+    version = "1.1.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xvinfo-1.1.4.tar.bz2";
-      sha256 = "0gz7fvxavqlrqynpfbrm2nc9yx8h0ksnbnv34fj7n1q6cq6j4lq3";
+      url = "mirror://xorg/individual/app/xvinfo-1.1.5.tar.xz";
+      sha256 = "0164qpbjmxxa1rbvh6ay1iz2qnp9hl1745k9pk6195kdnbn73piy";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3567,11 +3567,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xwd = callPackage ({ stdenv, pkg-config, fetchurl, libxkbfile, libX11, xorgproto }: stdenv.mkDerivation {
     pname = "xwd";
-    version = "1.0.8";
+    version = "1.0.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xwd-1.0.8.tar.bz2";
-      sha256 = "06q36fh55r62ms0igfxsanrn6gv8lh794q1bw9xzw51p2qs2papv";
+      url = "mirror://xorg/individual/app/xwd-1.0.9.tar.xz";
+      sha256 = "0gxx3y9zlh13jgwkayxljm6i58ng8jc1xzqv2g8s7d3yjj21n4nw";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3583,11 +3583,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xwininfo = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libxcb, xorgproto }: stdenv.mkDerivation {
     pname = "xwininfo";
-    version = "1.1.4";
+    version = "1.1.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xwininfo-1.1.4.tar.bz2";
-      sha256 = "00avrpw4h5mr1klp41lv2j4dmq465v6l5kb5bhm4k5ml8sm9i543";
+      url = "mirror://xorg/individual/app/xwininfo-1.1.6.tar.xz";
+      sha256 = "0gr5m4lyvkil3cl63zf0sw7bq5qgraqrnvddk6xgk3a42xy8j61m";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3599,11 +3599,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xwud = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
     pname = "xwud";
-    version = "1.0.5";
+    version = "1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xwud-1.0.5.tar.bz2";
-      sha256 = "1a8hdgy40smvblnh3s9f0vkqckl68nmivx7d48zk34m8z18p16cr";
+      url = "mirror://xorg/individual/app/xwud-1.0.6.tar.xz";
+      sha256 = "1zhsih1l3x1038fi1wi9npvfnn8j7580ca73saixjg5sbv8qq134";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
