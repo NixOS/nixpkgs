@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "okta-aws-cli";
-  version = "1.0.1";
+  version = "1.0.2";
 
   subPackages = [ "cmd/okta-aws-cli" ];
 
@@ -10,10 +10,10 @@ buildGoModule rec {
     owner  = "okta";
     repo   = "okta-aws-cli";
     rev    = "v${version}";
-    sha256 = "1qlc04fydcqnifbhrzdw63wq3ndzsyzp4s1bdvfhvizbhdi03mpp";
+    sha256 = "sha256-gC5/KwtawVfCx6C5kP0/ZesEzn9XxrPX/X8E8Mb/KUE=";
   };
 
-  vendorSha256 = "1gzaadpf9zrci7yv88f434mvc7gralb7dj6wl6r4vsv3qk291680";
+  vendorHash = "sha256-AJmQxMRj602yodzIdhZV+R22KxnEIbT9iSz/5G5T6r8=";
 
   ldflags = [ "-s" "-w" ];
 
