@@ -2416,6 +2416,12 @@
     github = "bryanhonof";
     githubId = 5932804;
   };
+  bryceberger = {
+    name = "Bryce Berger";
+    email = "bryce.z.berger@gmail.com";
+    github = "bryceberger";
+    githubId = 9222441;
+  };
   bsima = {
     email = "ben@bsima.me";
     github = "bsima";

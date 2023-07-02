@@ -29522,6 +29522,8 @@ with pkgs;
 
   victor-mono = callPackage ../data/fonts/victor-mono { };
 
+  vimix-cursor-theme = callPackage ../data/icons/vimix-cursor-theme { };
+
   vimix-gtk-themes = callPackage ../data/themes/vimix {
     inherit (gnome) gnome-shell;
   };
