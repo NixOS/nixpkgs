@@ -10756,6 +10756,8 @@ with pkgs;
 
   pcmsolver = callPackage ../development/libraries/pcmsolver { };
 
+  pegasus-frontend = libsForQt5.callPackage ../games/pegasus-frontend {};
+
   pgbadger = perlPackages.callPackage ../tools/misc/pgbadger { };
 
   pffft = callPackage ../development/libraries/pffft { };
@@ -12847,6 +12849,8 @@ with pkgs;
   socat = callPackage ../tools/networking/socat { };
 
   sockperf = callPackage ../tools/networking/sockperf { };
+
+  softnet = callPackage ../tools/networking/softnet { };
 
   solaar = callPackage ../applications/misc/solaar { };
 
@@ -23511,6 +23515,8 @@ with pkgs;
   nanoflann = callPackage ../development/libraries/nanoflann { };
 
   nanomsg = callPackage ../development/libraries/nanomsg { };
+
+  nanosvg = callPackage ../development/libraries/nanosvg { };
 
   nanovna-saver = libsForQt5.callPackage ../applications/science/electronics/nanovna-saver { };
 
@@ -34620,6 +34626,8 @@ with pkgs;
   styx = callPackage ../applications/misc/styx { };
 
   sway-launcher-desktop = callPackage ../applications/misc/sway-launcher-desktop { };
+
+  tart = callPackage ../applications/virtualization/tart { };
 
   tecoc = callPackage ../applications/editors/tecoc { };
 

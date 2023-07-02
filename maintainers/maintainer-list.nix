@@ -16008,6 +16008,13 @@
     githubId = 1755789;
     name = "Robert Irelan";
   };
+  tengkuizdihar = {
+    name = "Tengku Izdihar";
+    email = "tengkuizdihar@gmail.com";
+    matrix = "@tengkuizdihar:matrix.org";
+    github = "tengkuizdihar";
+    githubId = 22078730;
+  };
   tennox = {
     email = "tennox+nix@txlab.io";
     github = "tennox";
