@@ -1,27 +1,30 @@
 { lib
-, stdenv
-, buildPythonPackage
-, cython
-, ninja
-, setuptools-scm
-, setuptools
-, fetchPypi
-, gn
-, pytestCheckHook
-, xcodebuild
 , ApplicationServices
 , OpenGL
+, buildPythonPackage
+, cython
+, fetchPypi
+, gn
+, isPyPy
+, ninja
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, setuptools-scm
+, stdenv
+, xcodebuild
 }:
 
 buildPythonPackage rec {
   pname = "skia-pathops";
-  version = "0.7.4";
+  version = "0.8.0";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "skia-pathops";
     inherit version;
     extension = "zip";
-    hash = "sha256-Ci/e6Ht62wGMv6bpXvnkKZ7WOwCAvidnejD/77ypE1A=";
+    hash = "sha256-0SrxzvKL5KbzNgZdBtMeO006bCKFB6gdOgxZbXignO4=";
   };
 
   postPatch = ''
@@ -50,8 +53,10 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python access to operations on paths using the Skia library";
-    homepage = "https://skia.org/dev/present/pathops";
+    homepage = "https://github.com/fonttools/skia-pathops";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.BarinovMaxim ];
+    # ERROR at //gn/BUILDCONFIG.gn:87:14: Script returned non-zero exit code.
+    broken = isPyPy;
   };
 }
