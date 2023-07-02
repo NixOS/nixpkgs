@@ -672,11 +672,16 @@ dont-distribute-packages:
  - arithmetic-circuits
  - array-forth
  - arraylist
+ - ascii
  - ascii-cows
- - ascii-superset_1_3_0_0
+ - ascii-numbers
+ - ascii-numbers_1_2_0_1
+ - ascii-superset
+ - ascii-superset_1_3_0_1
  - ascii-table
- - ascii-th_1_2_0_0
- - ascii_1_7_0_0
+ - ascii-th
+ - ascii-th_1_2_0_1
+ - ascii_1_7_0_1
  - asic
  - assert4hs-hspec
  - assert4hs-tasty
@@ -971,9 +976,6 @@ dont-distribute-packages:
  - clash-ghc
  - clash-lib
  - clash-lib-hedgehog
- - clash-multisignal
- - clash-prelude-hedgehog
- - clash-prelude-quickcheck
  - clash-shake
  - clash-systemverilog
  - clash-verilog
@@ -1096,7 +1098,6 @@ dont-distribute-packages:
  - cqrs-test
  - cqrs-testkit
  - crackNum
- - crackNum_3_4
  - craft
  - craftwerk-cairo
  - craftwerk-gtk
@@ -1118,10 +1119,6 @@ dont-distribute-packages:
  - cryptoids
  - cryptoids-class
  - cryptol
- - crypton-connection
- - crypton-x509-store
- - crypton-x509-system
- - crypton-x509-validation
  - crystalfontz
  - csound-catalog
  - csound-controllers
@@ -1509,7 +1506,6 @@ dont-distribute-packages:
  - fpnla-examples
  - frame-markdown
  - freckle-app
- - freckle-app_1_9_0_3
  - free-functors
  - free-game
  - free-theorems-counterexamples
@@ -2245,11 +2241,6 @@ dont-distribute-packages:
  - hsfacter
  - hsinspect-lsp
  - hslogstash
- - hslua-cli
- - hslua-module-zip
- - hslua-objectorientation_2_3_0
- - hslua-packaging_2_3_0
- - hslua_2_3_0
  - hspec-expectations-pretty
  - hspec-pg-transact
  - hspec-setup
@@ -2276,7 +2267,6 @@ dont-distribute-packages:
  - htsn-import
  - http-client-auth
  - http-client-rustls
- - http-client-tls_0_3_6_2
  - http-enumerator
  - http2-client-grpc
  - http2-grpc-proto-lens
@@ -2327,7 +2317,6 @@ dont-distribute-packages:
  - hyperpublic
  - i
  - iException
- - ice40-prim
  - ide-backend
  - ide-backend-server
  - ideas-math
@@ -2446,6 +2435,8 @@ dont-distribute-packages:
  - json-pointer-hasql
  - json-query
  - json-rpc-client
+ - json-spec
+ - json-spec-openapi
  - json-togo
  - json-tokens
  - json2-hdbc
@@ -2607,7 +2598,6 @@ dont-distribute-packages:
  - linux-ptrace
  - lio-eci11
  - lio-simple
- - lion
  - liquid-base
  - liquid-bytestring
  - liquid-containers
@@ -2895,7 +2885,6 @@ dont-distribute-packages:
  - nettle-openflow
  - network-anonymous-i2p
  - network-anonymous-tor
- - network-conduit-tls_1_4_0
  - network-connection
  - network-enumerator
  - network-hans
@@ -2997,7 +2986,6 @@ dont-distribute-packages:
  - padKONTROL
  - pairing
  - panda
- - pandoc-crossref_0_3_16_0
  - pandoc-highlighting-extensions
  - pandoc-japanese-filters
  - pandora-io
@@ -3022,6 +3010,7 @@ dont-distribute-packages:
  - parsley-garnish
  - passman-cli
  - patch-image
+ - path-text-utf8_0_0_2_0
  - patterns
  - pcap-enumerator
  - pcapng
@@ -3192,6 +3181,9 @@ dont-distribute-packages:
  - proplang
  - prosidyc
  - proto-lens-descriptors
+ - proto-lens-protobuf-types
+ - proto-lens-protoc
+ - proto-lens-setup
  - proto3-suite
  - proto3-wire
  - protobuf-native
@@ -3234,7 +3226,6 @@ dont-distribute-packages:
  - queryparser-presto
  - queryparser-vertica
  - queuelike
- - quic
  - quickbench
  - quickcheck-poly
  - quickcheck-regex
@@ -3345,14 +3336,10 @@ dont-distribute-packages:
  - regions-monadstf
  - regions-mtl
  - registry-aeson
- - registry-aeson_0_3_0_0
  - registry-hedgehog
  - registry-hedgehog-aeson
- - registry-hedgehog-aeson_0_3_0_0
- - registry-hedgehog_0_8_0_0
  - registry-messagepack
  - registry-options
- - registry-options_0_2_0_0
  - regular-extras
  - regular-web
  - regular-xmlpickler
@@ -3847,6 +3834,12 @@ dont-distribute-packages:
  - temporal-csound
  - ten-lens
  - ten-unordered-containers
+ - tensorflow
+ - tensorflow-core-ops
+ - tensorflow-logging
+ - tensorflow-opgen
+ - tensorflow-ops
+ - tensorflow-proto
  - terminal-text
  - terrahs
  - test-sandbox-compose
@@ -3888,7 +3881,6 @@ dont-distribute-packages:
  - tlex-encoding
  - tlex-th
  - tls-extra
- - tls_1_7_0
  - tn
  - to-string-instances
  - toboggan
@@ -4104,7 +4096,6 @@ dont-distribute-packages:
  - waldo
  - warp-grpc
  - warp-quic
- - warp_3_3_27
  - warped
  - wavesurfer
  - wavy
@@ -4165,7 +4156,6 @@ dont-distribute-packages:
  - wumpus-drawing
  - wumpus-microprint
  - wumpus-tree
- - wuss_2_0_1_4
  - wx
  - wxAsteroids
  - wxFruit
