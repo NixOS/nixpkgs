@@ -42,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for doing dirty (but extremely useful) things with equals";
     homepage = "https://github.com/samuelcolvin/dirty-equals";
+    changelog = "https://github.com/samuelcolvin/dirty-equals/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
