@@ -140,7 +140,7 @@ in {
       };
       users.groups.${cfg.tssGroup} = lib.mkIf (cfg.tssGroup == "tss") {};
 
-      environment.variables = let
+      environment.sessionVariables = let
         tctiOption = if cfg.tctiEnvironment.interface == "tabrmd" then
             cfg.tctiEnvironment.tabrmdConf
           else
