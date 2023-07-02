@@ -1923,11 +1923,16 @@ let
         mktplcRef = {
           name = "magit";
           publisher = "kahole";
-          version = "0.6.40";
-          sha256 = "sha256-AwkjfKBlAl6hTRN1nE6UuUuDXMJUXXDK2+3YzUp9drc=";
+          version = "0.6.43";
+          sha256 = "sha256-DPLlQ2IliyvzW8JvgVlGKNd2JjD/RbclNXU3gEFVhOE=";
         };
         meta = {
+          changelog = "https://marketplace.visualstudio.com/items/kahole.magit/changelog";
+          description = "Magit for VSCode";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=kahole.magit";
+          homepage = "https://github.com/kahole/edamagit";
           license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.azd325 ];
         };
       };
 
