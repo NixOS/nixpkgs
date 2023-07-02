@@ -2,24 +2,25 @@
 , buildPythonPackage
 , fetchFromGitHub
 , hatchling
+, pydantic
+, pytest-examples
 , pytestCheckHook
 , pythonOlder
 , pytz
-, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "dirty-equals";
-  version = "0.5.0";
+  version = "0.6.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-yYptO6NPhQRlF0T2eXliw2WBms9uqTZVzdYzGj9pCug=";
+    hash = "sha256-j+EqsKVRG2DDka1G3Px8ExYZt8QkqHkhojRnAHObdR4=";
   };
 
   nativeBuildInputs = [
@@ -28,10 +29,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pytz
-    typing-extensions
   ];
 
   nativeCheckInputs = [
+    pydantic
+    pytest-examples
     pytestCheckHook
   ];
 
