@@ -3127,13 +3127,6 @@
     githubId = 718298;
     name = "Michael Livshin";
   };
-  CobaltCause = {
-    name = "Charles Hall";
-    email = "charles@computer.surgery";
-    github = "CobaltCause";
-    githubId = 7003738;
-    matrix = "@charles:computer.surgery";
-  };
   cobalt = {
     name = "Cobalt";
 
@@ -3143,6 +3136,13 @@
     keys = [{
       fingerprint = "6F56 756B C71F EF26 941F  B9DA 1184 0F5F 47F3 CE96";
     }];
+  };
+  CobaltCause = {
+    name = "Charles Hall";
+    email = "charles@computer.surgery";
+    github = "CobaltCause";
+    githubId = 7003738;
+    matrix = "@charles:computer.surgery";
   };
   cobbal = {
     email = "andrew.cobb@gmail.com";
