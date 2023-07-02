@@ -72,11 +72,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   encodings = callPackage ({ stdenv, pkg-config, fetchurl, mkfontscale }: stdenv.mkDerivation {
     pname = "encodings";
-    version = "1.0.5";
+    version = "1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/encodings-1.0.5.tar.bz2";
-      sha256 = "0caafx0yqqnqyvbalxhh3mb0r9v36xmcy5zjhygb2i508dhy35mx";
+      url = "mirror://xorg/individual/font/encodings-1.0.7.tar.xz";
+      sha256 = "193hxaygxy2msmf8cyps8jdi0kxga84hj47qv7diqlhn7gsajf9s";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -88,11 +88,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontadobe100dpi = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     pname = "font-adobe-100dpi";
-    version = "1.0.3";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-adobe-100dpi-1.0.3.tar.bz2";
-      sha256 = "0m60f5bd0caambrk8ksknb5dks7wzsg7g7xaf0j21jxmx8rq9h5j";
+      url = "mirror://xorg/individual/font/font-adobe-100dpi-1.0.4.tar.xz";
+      sha256 = "1kwwbaiqnfm3pcysy9gw0g9xhpgmhjcd6clp7zajhqq5br2gyymn";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -106,11 +106,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontadobe75dpi = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     pname = "font-adobe-75dpi";
-    version = "1.0.3";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-adobe-75dpi-1.0.3.tar.bz2";
-      sha256 = "02advcv9lyxpvrjv8bjh1b797lzg6jvhipclz49z8r8y98g4l0n6";
+      url = "mirror://xorg/individual/font/font-adobe-75dpi-1.0.4.tar.xz";
+      sha256 = "04drk4wi176524lxjwfrnkr3dwz1hysabqfajpj6klfypqnsd08j";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -124,11 +124,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontadobeutopia100dpi = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     pname = "font-adobe-utopia-100dpi";
-    version = "1.0.4";
+    version = "1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-adobe-utopia-100dpi-1.0.4.tar.bz2";
-      sha256 = "19dd9znam1ah72jmdh7i6ny2ss2r6m21z9v0l43xvikw48zmwvyi";
+      url = "mirror://xorg/individual/font/font-adobe-utopia-100dpi-1.0.5.tar.xz";
+      sha256 = "0jq27gs5xpwkghggply5pr215lmamrnpr6x5iia76schg8lyr17v";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -142,11 +142,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontadobeutopia75dpi = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     pname = "font-adobe-utopia-75dpi";
-    version = "1.0.4";
+    version = "1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-adobe-utopia-75dpi-1.0.4.tar.bz2";
-      sha256 = "152wigpph5wvl4k9m3l4mchxxisgsnzlx033mn5iqrpkc6f72cl7";
+      url = "mirror://xorg/individual/font/font-adobe-utopia-75dpi-1.0.5.tar.xz";
+      sha256 = "0q3pg4imdbwwiq2g8a1rypjrgmb33n0r5j9qqnh4ywnh69cj89m7";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -160,11 +160,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontadobeutopiatype1 = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, mkfontscale }: stdenv.mkDerivation {
     pname = "font-adobe-utopia-type1";
-    version = "1.0.4";
+    version = "1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-adobe-utopia-type1-1.0.4.tar.bz2";
-      sha256 = "0xw0pdnzj5jljsbbhakc6q9ha2qnca1jr81zk7w70yl9bw83b54p";
+      url = "mirror://xorg/individual/font/font-adobe-utopia-type1-1.0.5.tar.xz";
+      sha256 = "15snyyy3rk75fikz1hs80nybxai1aynybl0gw32hffv98yy81cjc";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -194,11 +194,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontarabicmisc = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     pname = "font-arabic-misc";
-    version = "1.0.3";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-arabic-misc-1.0.3.tar.bz2";
-      sha256 = "1x246dfnxnmflzf0qzy62k8jdpkb6jkgspcjgbk8jcq9lw99npah";
+      url = "mirror://xorg/individual/font/font-arabic-misc-1.0.4.tar.xz";
+      sha256 = "0rrlcqbyx9y7hnhbkjir8rs6jkfqyalj1zvhr8niv2n7a8dydzs6";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -212,11 +212,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontbh100dpi = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     pname = "font-bh-100dpi";
-    version = "1.0.3";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-bh-100dpi-1.0.3.tar.bz2";
-      sha256 = "10cl4gm38dw68jzln99ijix730y7cbx8np096gmpjjwff1i73h13";
+      url = "mirror://xorg/individual/font/font-bh-100dpi-1.0.4.tar.xz";
+      sha256 = "07mb9781c9yxzp3ifw317v4fbnmg9qyqv0244zfspylihkz5x3zx";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -230,11 +230,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontbh75dpi = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     pname = "font-bh-75dpi";
-    version = "1.0.3";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-bh-75dpi-1.0.3.tar.bz2";
-      sha256 = "073jmhf0sr2j1l8da97pzsqj805f7mf9r2gy92j4diljmi8sm1il";
+      url = "mirror://xorg/individual/font/font-bh-75dpi-1.0.4.tar.xz";
+      sha256 = "1nkwkqdl946xc4xknhi1pnxdww6rxrv013c7nk5x6ganfg0dh9k0";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -248,11 +248,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontbhlucidatypewriter100dpi = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     pname = "font-bh-lucidatypewriter-100dpi";
-    version = "1.0.3";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-bh-lucidatypewriter-100dpi-1.0.3.tar.bz2";
-      sha256 = "1fqzckxdzjv4802iad2fdrkpaxl4w0hhs9lxlkyraq2kq9ik7a32";
+      url = "mirror://xorg/individual/font/font-bh-lucidatypewriter-100dpi-1.0.4.tar.xz";
+      sha256 = "1wp87pijbydkpcmawsyas7vwhad2xg1mkkwigga2jjh9lknhkv3n";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -266,11 +266,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontbhlucidatypewriter75dpi = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     pname = "font-bh-lucidatypewriter-75dpi";
-    version = "1.0.3";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-bh-lucidatypewriter-75dpi-1.0.3.tar.bz2";
-      sha256 = "0cfbxdp5m12cm7jsh3my0lym9328cgm7fa9faz2hqj05wbxnmhaa";
+      url = "mirror://xorg/individual/font/font-bh-lucidatypewriter-75dpi-1.0.4.tar.xz";
+      sha256 = "1xg86mb9qigf5v0wx0q2shn8qaabsapamj627xllzw31mhwjqkl6";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -284,11 +284,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontbhttf = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, mkfontscale }: stdenv.mkDerivation {
     pname = "font-bh-ttf";
-    version = "1.0.3";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-bh-ttf-1.0.3.tar.bz2";
-      sha256 = "0pyjmc0ha288d4i4j0si4dh3ncf3jiwwjljvddrb0k8v4xiyljqv";
+      url = "mirror://xorg/individual/font/font-bh-ttf-1.0.4.tar.xz";
+      sha256 = "0misxkpjc2bir20m01z355sfk3lbpjnshphjzl32p364006zk9c5";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -302,11 +302,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontbhtype1 = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, mkfontscale }: stdenv.mkDerivation {
     pname = "font-bh-type1";
-    version = "1.0.3";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-bh-type1-1.0.3.tar.bz2";
-      sha256 = "1hb3iav089albp4sdgnlh50k47cdjif9p4axm0kkjvs8jyi5a53n";
+      url = "mirror://xorg/individual/font/font-bh-type1-1.0.4.tar.xz";
+      sha256 = "19kjdm0cx766yj9vwkyv7gyg1q4bjag5g500s7nnppmb0vnc7phr";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -320,11 +320,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontbitstream100dpi = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     pname = "font-bitstream-100dpi";
-    version = "1.0.3";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-bitstream-100dpi-1.0.3.tar.bz2";
-      sha256 = "1kmn9jbck3vghz6rj3bhc3h0w6gh0qiaqm90cjkqsz1x9r2dgq7b";
+      url = "mirror://xorg/individual/font/font-bitstream-100dpi-1.0.4.tar.xz";
+      sha256 = "19y1j1v65890x8yn6a47jqljfax3ihfrd25xbzgypxz4xy1cc71d";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -338,11 +338,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontbitstream75dpi = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     pname = "font-bitstream-75dpi";
-    version = "1.0.3";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-bitstream-75dpi-1.0.3.tar.bz2";
-      sha256 = "13plbifkvfvdfym6gjbgy9wx2xbdxi9hfrl1k22xayy02135wgxs";
+      url = "mirror://xorg/individual/font/font-bitstream-75dpi-1.0.4.tar.xz";
+      sha256 = "09pq7dvyyxj6kvps1dm3qr15pjwh9iq9118fryqc5a94fkc39sxa";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -354,13 +354,31 @@ self: with self; {
   }) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  fontbitstreamtype1 = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, mkfontscale }: stdenv.mkDerivation {
-    pname = "font-bitstream-type1";
-    version = "1.0.3";
+  fontbitstreamspeedo = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, mkfontscale }: stdenv.mkDerivation {
+    pname = "font-bitstream-speedo";
+    version = "1.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-bitstream-type1-1.0.3.tar.bz2";
-      sha256 = "1256z0jhcf5gbh1d03593qdwnag708rxqa032izmfb5dmmlhbsn6";
+      url = "mirror://xorg/individual/font/font-bitstream-speedo-1.0.2.tar.gz";
+      sha256 = "0wmy58cd3k7w2j4v20icnfs8z3b61qj3vqdx958z18w00h9mzsmf";
+    };
+    hardeningDisable = [ "bindnow" "relro" ];
+    strictDeps = true;
+    nativeBuildInputs = [ pkg-config mkfontscale ];
+    buildInputs = [ fontutil ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
+    postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`$PKG_CONFIG' '';
+    meta.platforms = lib.platforms.unix;
+  }) {};
+
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
+  fontbitstreamtype1 = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, mkfontscale }: stdenv.mkDerivation {
+    pname = "font-bitstream-type1";
+    version = "1.0.4";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = "mirror://xorg/individual/font/font-bitstream-type1-1.0.4.tar.xz";
+      sha256 = "0a669193ivi2lxk3v692kq1pqavaswlpi9hbi8ib8bfp9j5j6byy";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -374,11 +392,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontcronyxcyrillic = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     pname = "font-cronyx-cyrillic";
-    version = "1.0.3";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-cronyx-cyrillic-1.0.3.tar.bz2";
-      sha256 = "0ai1v4n61k8j9x2a1knvfbl2xjxk3xxmqaq3p9vpqrspc69k31kf";
+      url = "mirror://xorg/individual/font/font-cronyx-cyrillic-1.0.4.tar.xz";
+      sha256 = "12dpsvif85z1m6jvq9g91lmzj0rll5rh3871mbvdpzyb1p7821yw";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -392,11 +410,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontcursormisc = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     pname = "font-cursor-misc";
-    version = "1.0.3";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-cursor-misc-1.0.3.tar.bz2";
-      sha256 = "0dd6vfiagjc4zmvlskrbjz85jfqhf060cpys8j0y1qpcbsrkwdhp";
+      url = "mirror://xorg/individual/font/font-cursor-misc-1.0.4.tar.xz";
+      sha256 = "10prshcmmm5ccczyq7yaadz92k23ls9rjl10hjh8rjqka1cwkn95";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -410,11 +428,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontdaewoomisc = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     pname = "font-daewoo-misc";
-    version = "1.0.3";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-daewoo-misc-1.0.3.tar.bz2";
-      sha256 = "1s2bbhizzgbbbn5wqs3vw53n619cclxksljvm759h9p1prqdwrdw";
+      url = "mirror://xorg/individual/font/font-daewoo-misc-1.0.4.tar.xz";
+      sha256 = "0cagg963v94paq1l9l7g5kyv7df8q31b4zcbhv5rh07kr0yqng7n";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -428,11 +446,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontdecmisc = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     pname = "font-dec-misc";
-    version = "1.0.3";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-dec-misc-1.0.3.tar.bz2";
-      sha256 = "0yzza0l4zwyy7accr1s8ab7fjqkpwggqydbm2vc19scdby5xz7g1";
+      url = "mirror://xorg/individual/font/font-dec-misc-1.0.4.tar.xz";
+      sha256 = "1xqs2qg21h5xg519810hw4bvykjdpf0xgk0xwp0bxy4g3lh6inc2";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -446,11 +464,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontibmtype1 = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, mkfontscale }: stdenv.mkDerivation {
     pname = "font-ibm-type1";
-    version = "1.0.3";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-ibm-type1-1.0.3.tar.bz2";
-      sha256 = "1pyjll4adch3z5cg663s6vhi02k8m6488f0mrasg81ssvg9jinzx";
+      url = "mirror://xorg/individual/font/font-ibm-type1-1.0.4.tar.xz";
+      sha256 = "0zyfc0mxkzlrbpdn16rj25abf2hcqb592zkks550rm26paamwff4";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -464,11 +482,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontisasmisc = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     pname = "font-isas-misc";
-    version = "1.0.3";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-isas-misc-1.0.3.tar.bz2";
-      sha256 = "0rx8q02rkx673a7skkpnvfkg28i8gmqzgf25s9yi0lar915sn92q";
+      url = "mirror://xorg/individual/font/font-isas-misc-1.0.4.tar.xz";
+      sha256 = "1z1qqi64hbp297f6ryiswa4ikfn7mcwnb8nadyglni6swsxrbra7";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -482,11 +500,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontjismisc = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     pname = "font-jis-misc";
-    version = "1.0.3";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-jis-misc-1.0.3.tar.bz2";
-      sha256 = "0rdc3xdz12pnv951538q6wilx8mrdndpkphpbblszsv7nc8cw61b";
+      url = "mirror://xorg/individual/font/font-jis-misc-1.0.4.tar.xz";
+      sha256 = "1l7spyq93rhydsdnsh46alcfbn2irz664vd209lamxviqkvfzlbq";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -500,11 +518,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontmicromisc = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     pname = "font-micro-misc";
-    version = "1.0.3";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-micro-misc-1.0.3.tar.bz2";
-      sha256 = "1dldxlh54zq1yzfnrh83j5vm0k4ijprrs5yl18gm3n9j1z0q2cws";
+      url = "mirror://xorg/individual/font/font-micro-misc-1.0.4.tar.xz";
+      sha256 = "0hzryqyml0bzzw91vqdmzdlb7dm18jmyz0mxy6plks3sppbbkq1f";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -518,11 +536,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontmisccyrillic = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     pname = "font-misc-cyrillic";
-    version = "1.0.3";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-misc-cyrillic-1.0.3.tar.bz2";
-      sha256 = "0q2ybxs8wvylvw95j6x9i800rismsmx4b587alwbfqiw6biy63z4";
+      url = "mirror://xorg/individual/font/font-misc-cyrillic-1.0.4.tar.xz";
+      sha256 = "14z9x174fidjn65clkd2y1l6pxspmvphizap9a8h2h06adzil0kn";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -536,11 +554,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontmiscethiopic = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, mkfontscale }: stdenv.mkDerivation {
     pname = "font-misc-ethiopic";
-    version = "1.0.3";
+    version = "1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-misc-ethiopic-1.0.3.tar.bz2";
-      sha256 = "19cq7iq0pfad0nc2v28n681fdq3fcw1l1hzaq0wpkgpx7bc1zjsk";
+      url = "mirror://xorg/individual/font/font-misc-ethiopic-1.0.5.tar.xz";
+      sha256 = "04mnd620s9wkdid9wnf181yh5vf0n7l096nc3z4zdvm1w7kafja7";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -554,11 +572,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontmiscmeltho = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, mkfontscale }: stdenv.mkDerivation {
     pname = "font-misc-meltho";
-    version = "1.0.3";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-misc-meltho-1.0.3.tar.bz2";
-      sha256 = "148793fqwzrc3bmh2vlw5fdiwjc2n7vs25cic35gfp452czk489p";
+      url = "mirror://xorg/individual/font/font-misc-meltho-1.0.4.tar.xz";
+      sha256 = "06ajsqjd20zsk9a44bl5i1mv1r9snil6l2947hk8z2bqf30mxgk3";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -572,11 +590,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontmiscmisc = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     pname = "font-misc-misc";
-    version = "1.1.2";
+    version = "1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-misc-misc-1.1.2.tar.bz2";
-      sha256 = "150pq6n8n984fah34n3k133kggn9v0c5k07igv29sxp1wi07krxq";
+      url = "mirror://xorg/individual/font/font-misc-misc-1.1.3.tar.xz";
+      sha256 = "1vcgc6lbc53fqaz8alhxcb6f231hhvj9hn2nkzg1mclbymhy7avr";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -590,11 +608,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontmuttmisc = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     pname = "font-mutt-misc";
-    version = "1.0.3";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-mutt-misc-1.0.3.tar.bz2";
-      sha256 = "13qghgr1zzpv64m0p42195k1kc77pksiv059fdvijz1n6kdplpxx";
+      url = "mirror://xorg/individual/font/font-mutt-misc-1.0.4.tar.xz";
+      sha256 = "095vd33kqd157j6xi4sjxwdsjpwpgqliifa8nkybq8rcw7s5j8xi";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -608,11 +626,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontschumachermisc = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     pname = "font-schumacher-misc";
-    version = "1.1.2";
+    version = "1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-schumacher-misc-1.1.2.tar.bz2";
-      sha256 = "0nkym3n48b4v36y4s927bbkjnsmicajarnf6vlp7wxp0as304i74";
+      url = "mirror://xorg/individual/font/font-schumacher-misc-1.1.3.tar.xz";
+      sha256 = "0w40lr214n39al449fnm4k1bpyj3fjrhz2yxqd6a6m8yvc69z14b";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -626,11 +644,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontscreencyrillic = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     pname = "font-screen-cyrillic";
-    version = "1.0.4";
+    version = "1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-screen-cyrillic-1.0.4.tar.bz2";
-      sha256 = "0yayf1qlv7irf58nngddz2f1q04qkpr5jwp4aja2j5gyvzl32hl2";
+      url = "mirror://xorg/individual/font/font-screen-cyrillic-1.0.5.tar.xz";
+      sha256 = "1h75zn1rp7bdv6av4cnrajpaq6fkd7dx1lc7aijpw32qrnw8nxcg";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -644,11 +662,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontsonymisc = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     pname = "font-sony-misc";
-    version = "1.0.3";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-sony-misc-1.0.3.tar.bz2";
-      sha256 = "1xfgcx4gsgik5mkgkca31fj3w72jw9iw76qyrajrsz1lp8ka6hr0";
+      url = "mirror://xorg/individual/font/font-sony-misc-1.0.4.tar.xz";
+      sha256 = "0swlhjmmagrfkip4i9yq7cr56hains1j41mjs05nxc6c7y19zc76";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -662,11 +680,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontsunmisc = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     pname = "font-sun-misc";
-    version = "1.0.3";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-sun-misc-1.0.3.tar.bz2";
-      sha256 = "1q6jcqrffg9q5f5raivzwx9ffvf7r11g6g0b125na1bhpz5ly7s8";
+      url = "mirror://xorg/individual/font/font-sun-misc-1.0.4.tar.xz";
+      sha256 = "17yvhk1hlajm3q57r09q8830zz7cnckrg8hgzajgyyljdl8xv16x";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -696,11 +714,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontutil = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
     pname = "font-util";
-    version = "1.3.3";
+    version = "1.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-util-1.3.3.tar.xz";
-      sha256 = "1lpb5qd2drilql4wl644m682hvmv67hdbbisnrm0ah4wfy8ci4g7";
+      url = "mirror://xorg/individual/font/font-util-1.4.0.tar.xz";
+      sha256 = "0z8gsi0bz5nnpsl008fyb4isrkrqrmhxjar5ywwpx30j83wlnwlz";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -712,11 +730,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontwinitzkicyrillic = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     pname = "font-winitzki-cyrillic";
-    version = "1.0.3";
+    version = "1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-winitzki-cyrillic-1.0.3.tar.bz2";
-      sha256 = "181n1bgq8vxfxqicmy1jpm1hnr6gwn1kdhl6hr4frjigs1ikpldb";
+      url = "mirror://xorg/individual/font/font-winitzki-cyrillic-1.0.4.tar.xz";
+      sha256 = "1a4pz8f7hz6nn9xirz2k1j81ykl3lwrpi1ydmzipciy15l984v9v";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -730,11 +748,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontxfree86type1 = callPackage ({ stdenv, pkg-config, fetchurl, fontutil, mkfontscale }: stdenv.mkDerivation {
     pname = "font-xfree86-type1";
-    version = "1.0.4";
+    version = "1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-xfree86-type1-1.0.4.tar.bz2";
-      sha256 = "0jp3zc0qfdaqfkgzrb44vi9vi0a8ygb35wp082yz7rvvxhmg9sya";
+      url = "mirror://xorg/individual/font/font-xfree86-type1-1.0.5.tar.xz";
+      sha256 = "0ds8xbgxy9h0bqn2p38vylfzn8cqkp7n51kwmw1c18ayi9w2qg59";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
