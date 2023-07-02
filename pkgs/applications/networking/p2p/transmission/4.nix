@@ -14,6 +14,9 @@
 , libb64
 , libutp
 , libdeflate
+, utf8cpp
+, fmt
+, libpsl
 , miniupnpc
 , dht
 , libnatpmp
@@ -64,6 +67,23 @@ stdenv.mkDerivation rec {
       "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
     ];
 
+  postPatch = ''
+    # Clean third-party libraries to ensure system ones are used.
+    # Excluding gtest since it is hardcoded to vendored version. The rest of the listed libraries are not packaged.
+    pushd third-party
+    for f in *; do
+        if [[ ! $f =~ googletest|wildmat|fast_float|wide-integer|jsonsl ]]; then
+            rm -r "$f"
+        fi
+    done
+    popd
+    rm \
+      cmake/FindFmt.cmake \
+      cmake/FindUtfCpp.cmake
+    # Upstream uses different config file name.
+    substituteInPlace CMakeLists.txt --replace 'find_package(UtfCpp)' 'find_package(utf8cpp)'
+  '';
+
   nativeBuildInputs = [
     pkg-config
     cmake
@@ -74,17 +94,20 @@ stdenv.mkDerivation rec {
   ;
 
   buildInputs = [
-    openssl
     curl
-    libevent
-    zlib
-    pcre
-    libb64
-    libutp
-    libdeflate
-    miniupnpc
     dht
+    fmt
+    libb64
+    libdeflate
+    libevent
     libnatpmp
+    libpsl
+    libutp
+    miniupnpc
+    openssl
+    pcre
+    utf8cpp
+    zlib
   ]
   ++ lib.optionals enableQt [ qt5.qttools qt5.qtbase ]
   ++ lib.optionals enableGTK3 [ gtkmm3 xorg.libpthreadstubs ]
@@ -101,7 +124,7 @@ stdenv.mkDerivation rec {
       include <abstractions/nameservice>
       include <abstractions/ssl_certs>
       include "${apparmorRulesFromClosure { name = "transmission-daemon"; } ([
-        curl libevent openssl pcre zlib libdeflate libnatpmp miniupnpc
+        curl libevent openssl pcre zlib libdeflate libpsl libnatpmp miniupnpc
       ] ++ lib.optionals enableSystemd [ systemd ]
         ++ lib.optionals stdenv.isLinux [ inotify-tools ]
       )}"
