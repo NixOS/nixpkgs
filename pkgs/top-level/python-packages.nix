@@ -7207,6 +7207,8 @@ self: super: with self; {
 
   openrazer-daemon = callPackage ../development/python-modules/openrazer/daemon.nix { };
 
+  openrgb-python = callPackage ../development/python-modules/openrgb-python { };
+
   openrouteservice = callPackage ../development/python-modules/openrouteservice { };
 
   opensearch-py = callPackage ../development/python-modules/opensearch-py { };
