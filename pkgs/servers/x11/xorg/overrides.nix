@@ -855,14 +855,6 @@ self: super:
       "--with-launchdaemons-dir=\${out}/LaunchDaemons"
       "--with-launchagents-dir=\${out}/LaunchAgents"
     ];
-    patches = [
-      # don't unset DBUS_SESSION_BUS_ADDRESS in startx
-      (fetchpatch {
-        name = "dont-unset-DBUS_SESSION_BUS_ADDRESS.patch";
-        url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/40f3ac0a31336d871c76065270d3f10e922d06f3/trunk/fs46369.patch";
-        sha256 = "18kb88i3s9nbq2jxl7l2hyj6p56c993hivk8mzxg811iqbbawkp7";
-      })
-    ];
     postPatch = ''
       # Avoid replacement of word-looking cpp's builtin macros in Nix's cross-compiled paths
       substituteInPlace Makefile.in --replace "PROGCPPDEFS =" "PROGCPPDEFS = -Dlinux=linux -Dunix=unix"
