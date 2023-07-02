@@ -61,7 +61,13 @@ self: super: {
   cabal2spec = super.cabal2spec.override { Cabal = self.Cabal_3_2_1_0; };
 
   # Additionally depends on OneTuple for GHC < 9.0
-  base-compat-batteries = addBuildDepend self.OneTuple super.base-compat-batteries;
+  # https://github.com/haskell-compat/base-compat/issues/91
+  base-compat-batteries = addBuildDepend self.OneTuple (overrideCabal (drv: {
+    postPatch = ''
+      ${drv.postPatch or ""}
+      sed -i 's/OneTuple >= 0.3 && < 0.4/OneTuple/' *.cabal
+    '';
+  }) super.base-compat-batteries);
 
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
