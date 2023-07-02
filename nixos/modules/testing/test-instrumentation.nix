@@ -14,7 +14,7 @@ in
   config = {
 
     systemd.services.backdoor =
-      { wantedBy = [ "multi-user.target" ];
+      { wantedBy = [ "sysinit.target" ];
         requires = [ "dev-hvc0.device" "dev-${qemu-common.qemuSerialDevice}.device" ];
         after = [ "dev-hvc0.device" "dev-${qemu-common.qemuSerialDevice}.device" ];
         script =
