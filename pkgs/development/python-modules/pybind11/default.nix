@@ -23,7 +23,7 @@ let
     substitutions = {
       out = placeholder "out";
       pythonInterpreter = python.pythonOnBuildForHost.interpreter;
-      pythonIncludeDir = "${python}/include/python${python.pythonVersion}";
+      pythonIncludeDir = "${python}/include/${python.libPrefix}";
       pythonSitePackages = "${python}/${python.sitePackages}";
     };
   } ./setup-hook.sh;
