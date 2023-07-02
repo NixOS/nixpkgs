@@ -1,33 +1,99 @@
-{ lib, stdenv, fetchurl, python3Packages, docutils, help2man, installShellFiles, fetchpatch
-, abootimg, acl, apksigcopier, apksigner, apktool, binutils-unwrapped-all-targets, bzip2, cbfstool, cdrkit, colord, colordiff, coreutils, cpio, db, diffutils, dtc
-, e2fsprogs, enjarify, file, findutils, fontforge-fonttools, ffmpeg, fpc, gettext, ghc, ghostscriptX, giflib, gnumeric, gnupg, gnutar
-, gzip, html2text, hdf5, imagemagick, jdk, libarchive, libcaca, llvm, lz4, mono, ocaml, oggvideotools, openssh, openssl, pdftk, pgpdump, poppler_utils, procyon, qemu, R
-, radare2, sng, sqlite, squashfsTools, tcpdump, ubootTools, odt2txt, unzip, wabt, xmlbeans, xxd, xz, zip, zstd
+{ lib
+, stdenv
+, abootimg
+, acl
+, apksigcopier
+, apksigner
+, apktool
+, binutils-unwrapped-all-targets
+, bzip2
+, cbfstool
+, cdrkit
+, colord
+, colordiff
+, coreutils
+, cpio
+, db
+, diffutils
+, docutils
+, dtc
+, e2fsprogs
 , enableBloat ? true
 , enableUnfree ? false
-# updater only
+, enjarify
+, fetchurl
+, file
+, findutils
+, fontforge-fonttools
+, ffmpeg
+, fpc
+, gettext
+, ghc
+, ghostscriptX
+, giflib
+, gnumeric
+, gnupg
+, gnutar
+, gzip
+, hdf5
+, help2man
+, html2text
+, imagemagick
+, installShellFiles
+, jdk
+, libarchive
+, libcaca
+, libxmlb
+, llvm
+, lz4
+, lzip
+, mono
+, ocaml
+, odt2txt
+, oggvideotools
+, openssh
+, openssl
+, pdftk
+, pgpdump
+, poppler_utils
+, procyon
+, python3
+, qemu
+, R
+, radare2
+, sng
+, sqlite
+, squashfsTools
+, tcpdump
+, ubootTools
+, unzip
+, wabt
+, xmlbeans
+, xxd
+, xz
+, zip
+, zstd
+  # updater only
 , writeScript
 }:
 
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "233";
+  version = "243";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    sha256 = "sha256-A2GYnhdjkzSFnMsy99FmckiOsbRdymAdtjp55hyFLp4=";
+    hash = "sha256-lqI9MOZJxgHZ87kax343t6Wylzv1NWcQZ1cMWgmpnRo=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   patches = [
     ./ignore_links.patch
-    # test_text_proper_indentation requires file >= 5.44
-    (fetchpatch {
-      url = "https://salsa.debian.org/reproducible-builds/diffoscope/-/commit/9fdb78ec0bbc69f1980499dfdcbf6f1dd5e55cc8.patch";
-      sha256 = "sha256-F0N3L9yymj2NjeIKtSnOEDsxPe+ZTb0m/M4f8LPRHg0=";
-    })
   ];
 
   postPatch = ''
@@ -38,43 +104,127 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace doc/Makefile --replace "../bin" "$out/bin"
   '';
 
-  nativeBuildInputs = [ docutils help2man installShellFiles ];
+  nativeBuildInputs = [
+    docutils
+    help2man
+    installShellFiles
+  ];
 
   # Most of the non-Python dependencies here are optional command-line tools for various file-format parsers.
   # To help figuring out what's missing from the list, run: ./pkgs/tools/misc/diffoscope/list-missing-tools.sh
   #
-  # Still missing these tools: docx2txt lipo otool r2pipe
+  # Still missing these tools:
+  # aapt2
+  # dexdump
+  # docx2txt
+  # getfacl
+  # lipo
+  # otool
+  # r2pipe
+  #
   # We filter automatically all packages for the host platform (some dependencies are not supported on Darwin, aarch64, etc.).
   pythonPath = lib.filter (lib.meta.availableOn stdenv.hostPlatform) ([
-      binutils-unwrapped-all-targets bzip2 colordiff coreutils cpio db diffutils
-      e2fsprogs file findutils fontforge-fonttools gettext gnutar gzip
-      html2text libarchive lz4 openssl pgpdump sng sqlite squashfsTools unzip xxd
-      xz zip zstd cdrkit dtc
+    binutils-unwrapped-all-targets
+    bzip2
+    cdrkit
+    colordiff
+    coreutils
+    cpio
+    db
+    diffutils
+    dtc
+    e2fsprogs
+    file
+    findutils
+    fontforge-fonttools
+    gettext
+    gnutar
+    gzip
+    html2text
+    libarchive
+    libxmlb
+    lz4
+    lzip
+    openssl
+    pgpdump
+    sng
+    sqlite
+    squashfsTools
+    unzip
+    xxd
+    xz
+    zip
+    zstd
+  ]
+  ++ (with python3.pkgs; [
+    argcomplete
+    debian
+    defusedxml
+    jsbeautifier
+    jsondiff
+    libarchive-c
+    progressbar33
+    pypdf2
+    python-magic
+    pyxattr
+    rpm
+    tlsh
+  ])
+  ++ lib.optionals enableBloat (
+    [
+      abootimg
+      apksigcopier
+      apksigner
+      cbfstool
+      colord
+      enjarify
+      ffmpeg
+      fpc
+      ghc
+      ghostscriptX
+      giflib
+      gnupg
+      hdf5
+      imagemagick
+      jdk
+      libcaca
+      llvm
+      mono
+      ocaml
+      odt2txt
+      openssh
+      pdftk
+      poppler_utils
+      procyon
+      qemu
+      R
+      radare2
+      tcpdump
+      ubootTools
+      wabt
+      xmlbeans
     ]
-    ++ (with python3Packages; [
-      argcomplete debian defusedxml jsondiff jsbeautifier libarchive-c
-      python-magic progressbar33 pypdf2 tlsh pyxattr rpm
+    ++ (with python3.pkgs; [
+      androguard
+      binwalk
+      guestfs
+      h5py
+      pdfminer-six
     ])
-    ++ lib.optionals enableBloat (
-      [
-        apksigcopier apksigner enjarify ffmpeg fpc ghc ghostscriptX giflib gnupg pdftk
-        hdf5 imagemagick libcaca llvm jdk mono ocaml odt2txt openssh
-        poppler_utils procyon qemu R tcpdump wabt radare2 xmlbeans
-        abootimg cbfstool colord ubootTools
-      ]
-      ++ (with python3Packages; [ androguard binwalk h5py pdfminer-six guestfs ])
-      # oggvideotools is broken on Darwin, please put it back when it will be fixed?
-      ++ lib.optionals stdenv.isLinux [ oggvideotools ]
-      # This doesn't work on aarch64-darwin
-      ++ lib.optionals (stdenv.hostPlatform != "aarch64-darwin") [ gnumeric ]
-      # `apktool` depend on `build-tools` which requires Android SDK acceptance, therefore, the whole thing is unfree.
-      ++ lib.optionals enableUnfree [ apktool ]
-    ));
+    # oggvideotools is broken on Darwin, please put it back when it will be fixed?
+    ++ lib.optionals stdenv.isLinux [ oggvideotools ]
+    # This doesn't work on aarch64-darwin
+    ++ lib.optionals (stdenv.hostPlatform != "aarch64-darwin") [ gnumeric ]
+    # apktool depend on build-tools which requires Android SDK acceptance, therefore, the whole thing is unfree
+    ++ lib.optionals enableUnfree [ apktool ]
+  ));
 
-  nativeCheckInputs = with python3Packages; [ pytestCheckHook ] ++ pythonPath;
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
+  ] ++ pythonPath;
 
   pytestFlagsArray = [
-    # always show more information when tests fail
+    # Always show more information when tests fail
     "-vv"
   ];
 
@@ -88,7 +238,7 @@ python3Packages.buildPythonApplication rec {
     "test_diff_meta"
     "test_diff_meta2"
 
-    # fails because it fails to determine llvm version
+    # Fails because it fails to determine llvm version
     "test_item3_deflate_llvm_bitcode"
   ] ++ lib.optionals stdenv.isDarwin [
     # Disable flaky tests on Darwin
@@ -97,7 +247,7 @@ python3Packages.buildPythonApplication rec {
     "test_symlink_root"
   ];
 
-  # flaky tests on Darwin
+  # Flaky tests on Darwin
   disabledTestPaths = lib.optionals stdenv.isDarwin [
     "tests/comparators/test_git.py"
     "tests/comparators/test_java.py"
@@ -106,7 +256,7 @@ python3Packages.buildPythonApplication rec {
     "tests/comparators/test_macho.py"
   ];
 
-   passthru = {
+  passthru = {
     updateScript = writeScript "update-diffoscope" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p curl pcre common-updater-scripts
@@ -117,7 +267,7 @@ python3Packages.buildPythonApplication rec {
       newVersion="$(curl -s https://diffoscope.org/ | pcregrep -o1 'Latest release: ([0-9]+)')"
       update-source-version ${pname} "$newVersion"
     '';
-   };
+  };
 
   meta = with lib; {
     description = "Perform in-depth comparison of files, archives, and directories";
@@ -132,6 +282,7 @@ python3Packages.buildPythonApplication rec {
       project and was formerly known as "debbindiff".
     '';
     homepage = "https://diffoscope.org/";
+    changelog = "https://diffoscope.org/news/diffoscope-${version}-released/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dezgeg danielfullmer raitobezarius ];
     platforms = platforms.unix;
