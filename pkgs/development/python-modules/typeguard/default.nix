@@ -1,26 +1,41 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchPypi
-, pythonOlder
-, lib
-, setuptools-scm
+, glibcLocales
+, importlib-metadata
+, mypy
 , pytestCheckHook
-, typing-extensions
-, sphinxHook
+, pythonOlder
+, setuptools-scm
 , sphinx-autodoc-typehints
 , sphinx-rtd-theme
-, glibcLocales
+, sphinxHook
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "typeguard";
-  version = "2.13.3";
-  disabled = pythonOlder "3.5";
-  outputs = [ "out" "doc" ];
+  version = "4.0.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
+
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00edaa8da3a133674796cf5ea87d9f4b4c367d77476e185e80251cc13dfbb8c4";
+    hash = "sha256-GU+z28sG6pyvcIjzvv7gFN5XlhaJ+chZrFI5se9h2Yc=";
   };
+
+  LC_ALL = "en_US.utf-8";
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace " --cov" ""
+  '';
 
   nativeBuildInputs = [
     glibcLocales
@@ -30,27 +45,25 @@ buildPythonPackage rec {
     sphinx-rtd-theme
   ];
 
-  LC_ALL = "en_US.utf-8";
-
-  postPatch = ''
-    substituteInPlace setup.cfg --replace " --cov" ""
-  '';
-
-  nativeCheckInputs = [ pytestCheckHook typing-extensions ];
-
-  disabledTestPaths = [
-    # mypy tests aren't passing with latest mypy
-    "tests/mypy"
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    typing-extensions
   ];
 
-  disabledTests = [
-    # not compatible with python3.10
-    "test_typed_dict"
+  nativeCheckInputs = [
+    mypy
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "typeguard"
   ];
 
   meta = with lib; {
     description = "This library provides run-time type checking for functions defined with argument type annotations";
     homepage = "https://github.com/agronholm/typeguard";
+    changelog = "https://github.com/agronholm/typeguard/blob/${version}/docs/versionhistory.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
