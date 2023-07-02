@@ -1637,7 +1637,11 @@ self: super: with self; {
 
   callee = callPackage ../development/python-modules/callee { };
 
+  calmjs = callPackage ../development/python-modules/calmjs { };
+
   calmjs-parse = callPackage ../development/python-modules/calmjs-parse { };
+
+  calmjs-types = callPackage ../development/python-modules/calmjs-types { };
 
   calysto = callPackage ../development/python-modules/calysto { };
 
@@ -2874,6 +2878,8 @@ self: super: with self; {
   djangorestframework-simplejwt = callPackage ../development/python-modules/djangorestframework-simplejwt { };
 
   django-reversion = callPackage ../development/python-modules/django-reversion { };
+
+  django-sekizai = callPackage ../development/python-modules/django-sekizai { };
 
   django-sesame = callPackage ../development/python-modules/django-sesame { };
 
@@ -4190,6 +4196,8 @@ self: super: with self; {
   goocalendar = callPackage ../development/python-modules/goocalendar { };
 
   goodwe = callPackage ../development/python-modules/goodwe { };
+
+  google = callPackage ../development/python-modules/google { };
 
   google-ai-generativelanguage = callPackage ../development/python-modules/google-ai-generativelanguage { };
 
@@ -7797,6 +7805,8 @@ self: super: with self; {
 
   pycontrol4 = callPackage ../development/python-modules/pycontrol4 { };
 
+  pycookiecheat = callPackage ../development/python-modules/pycookiecheat { };
+
   pycoolmasternet-async = callPackage ../development/python-modules/pycoolmasternet-async { };
 
   pyfibaro = callPackage ../development/python-modules/pyfibaro { };
@@ -10499,8 +10509,6 @@ self: super: with self; {
   qmk-dotty-dict = callPackage ../development/python-modules/qmk-dotty-dict { };
 
   r2pipe = callPackage ../development/python-modules/r2pipe { };
-
-  rabbitpy = callPackage ../development/python-modules/rabbitpy { };
 
   rachiopy = callPackage ../development/python-modules/rachiopy { };
 

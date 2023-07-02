@@ -32,11 +32,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "6.21.0";
+  version = "6.22.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-gGgXnJbGbp6uK9tFK6wqHBKf+zWidF5u5wI2lclrJGk=";
+    hash = "sha256-TBXdEf6MBP64heY6uAaVJtZc+SnhF4BNJghcCuTopUc=";
   };
 
   # https://sources.debian.org/patches/calibre/${finalAttrs.version}+dfsg-1
