@@ -7,7 +7,7 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "parquet-tools";
-  version = "0.2.12";
+  version = "0.2.14";
 
   format = "pyproject";
 
@@ -15,7 +15,7 @@ buildPythonApplication rec {
     owner = "ktrueda";
     repo = "parquet-tools";
     rev = "refs/tags/${version}";
-    hash = "sha256-5bK+kW550DgBhcH5INozwGKKjM+xXblmFg2Tu2rnos4=";
+    hash = "sha256-2jIwDsxB+g37zV9hLc2VNC5YuZXTpTmr2aQ72AeHYJo=";
   };
 
   postPatch = ''
