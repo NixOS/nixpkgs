@@ -72,7 +72,7 @@ config.security.apparmor.includes = {
 
     # bash inspects filesystems at startup
     # and /etc/mtab is linked to /proc/mounts
-    @{PROC}/mounts
+    r @{PROC}/mounts,
 
     # system-wide bash configuration
     '' + lib.concatMapStringsSep "\n" etcRule [
