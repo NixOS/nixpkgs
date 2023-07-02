@@ -327,8 +327,6 @@ self: super: {
   # https://github.com/techtangents/ablist/issues/1
   ABList = dontCheck super.ABList;
 
-  pandoc-cli = throwIfNot (versionOlder super.pandoc.version "3.0.0") "pandoc-cli contains the pandoc executable starting with 3.0, this needs to be considered now." (markBroken (dontDistribute super.pandoc-cli));
-
   inline-c-cpp = overrideCabal (drv: {
     patches = drv.patches or [] ++ [
       (fetchpatch {
@@ -1787,6 +1785,36 @@ self: super: {
 
   # https://github.com/jgm/pandoc/issues/7163
   pandoc = dontCheck super.pandoc;
+
+  # This is sort of an unfortunate situation.
+  #
+  # Since pandoc-3, the actual `pandoc` executable is in the pandoc-cli
+  # package.  It is no longer distributed in the pandoc package itself.  So for
+  # people that want to use the `pandoc` cli tool, they must use pandoc-cli.
+  #
+  # The unfortunate thing is that LTS-21 includes pandoc-3.0, but there is no
+  # release of pandoc-cli that supports pandoc-3.0.  The earliest release
+  # of pandoc-cli effectively requires pandoc-3.1.  We need a bunch of
+  # overrides to be able to build pandoc-cli with pandoc-3.0.
+  pandoc-cli = super.pandoc-cli.overrideScope (self: super: {
+    # pandoc-cli requires pandoc >= 3.1
+    pandoc = self.pandoc_3_1_4;
+
+    # pandoc depends on crypton-connection, which requires tls >= 1.7
+    tls = self.tls_1_7_0;
+
+    # pandoc depends on http-client-tls, which only starts depending
+    # on crypton-connection in http-client-tls-0.3.6.2.
+    http-client-tls = self.http-client-tls_0_3_6_2;
+
+    # pandoc requires recent versions of skylighting
+    skylighting = self.skylighting_0_13_3;
+    skylighting-core = self.skylighting-core_0_13_3;
+
+    # broken in haskellPackages
+    pandoc-lua-engine = markUnbroken super.pandoc-lua-engine;
+    pandoc-server = markUnbroken super.pandoc-server;
+  });
 
   crypton-x509 =
     lib.pipe
