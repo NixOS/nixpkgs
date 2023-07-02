@@ -13017,6 +13017,8 @@ self: super: with self; {
 
   vilfo-api-client = callPackage ../development/python-modules/vilfo-api-client { };
 
+  vina = callPackage ../applications/science/chemistry/autodock-vina/python-bindings.nix { };
+
   vincenty = callPackage ../development/python-modules/vincenty { };
 
   vine = callPackage ../development/python-modules/vine { };
