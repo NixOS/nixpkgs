@@ -8085,6 +8085,8 @@ self: super: with self; {
 
   polyline = callPackage ../development/python-modules/polyline { };
 
+  Polygon3 = callPackage ../development/python-modules/Polygon3 { };
+
   pomegranate = callPackage ../development/python-modules/pomegranate { };
 
   pontos = callPackage ../development/python-modules/pontos { };
