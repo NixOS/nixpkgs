@@ -19,6 +19,8 @@ mavenWithJdk.buildMavenPackage rec {
   nativeBuildInputs = [ mavenWithJdk makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/java
     install -Dm644 target/ftl-mod-manager-${version}.jar $out/share/java
     install -Dm644 target/modman.jar $out/share/java
@@ -26,6 +28,8 @@ mavenWithJdk.buildMavenPackage rec {
     makeWrapper ${wrapper} $out/bin/${pname} \
       --suffix PATH : ${lib.makeBinPath [ jdk ]} \
       --set jar_file "$out/share/java/modman.jar"
+
+    runHook postInstall
   '';
 
   wrapper = ./wrapper.sh;
