@@ -4414,7 +4414,7 @@ with pkgs;
 
   comma = callPackage ../tools/package-management/comma { };
 
-  commitizen = python3Packages.callPackage ../applications/version-management/commitizen { };
+  commitizen = callPackage ../applications/version-management/commitizen { };
 
   common-licenses = callPackage ../data/misc/common-licenses { };
 
@@ -5036,6 +5036,10 @@ with pkgs;
   fits-cloudctl = callPackage ../tools/admin/fits-cloudctl { };
 
   flitter = callPackage ../tools/misc/flitter { };
+
+  flowgger = callPackage ../tools/misc/flowgger {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   frangipanni = callPackage ../tools/text/frangipanni { };
 
@@ -5872,6 +5876,8 @@ with pkgs;
   ps_mem = callPackage ../tools/system/ps_mem { };
 
   pscale = callPackage ../development/tools/pscale { };
+
+  pulsarctl = callPackage ../tools/admin/pulsarctl { };
 
   psstop = callPackage ../tools/system/psstop { };
 
@@ -7867,6 +7873,8 @@ with pkgs;
   };
 
   fpart = callPackage ../tools/misc/fpart { };
+
+  fpattern = callPackage ../development/libraries/fpattern { };
 
   fping = callPackage ../tools/networking/fping { };
 
@@ -11120,6 +11128,8 @@ with pkgs;
   oui = callPackage ../tools/networking/oui { };
 
   owncast = callPackage ../servers/owncast { };
+
+  owntracks-recorder = callPackage ../servers/owntracks-recorder { };
 
   update-dotdee = with python3Packages; toPythonApplication update-dotdee;
 
@@ -18020,12 +18030,14 @@ with pkgs;
   apacheAnt_1_9 = callPackage ../development/tools/build-managers/apache-ant/1.9.nix { };
   ant = apacheAnt;
 
-  apacheKafka = apacheKafka_3_3;
+  apacheKafka = apacheKafka_3_5;
   apacheKafka_2_8 = callPackage ../servers/apache-kafka { majorVersion = "2.8"; };
   apacheKafka_3_0 = callPackage ../servers/apache-kafka { majorVersion = "3.0"; };
   apacheKafka_3_1 = callPackage ../servers/apache-kafka { majorVersion = "3.1"; };
   apacheKafka_3_2 = callPackage ../servers/apache-kafka { majorVersion = "3.2"; };
   apacheKafka_3_3 = callPackage ../servers/apache-kafka { majorVersion = "3.3"; };
+  apacheKafka_3_4 = callPackage ../servers/apache-kafka { majorVersion = "3.4"; };
+  apacheKafka_3_5 = callPackage ../servers/apache-kafka { majorVersion = "3.5"; };
 
   kt = callPackage ../tools/misc/kt { };
 
@@ -18722,6 +18734,8 @@ with pkgs;
 
   fastddsgen = callPackage ../development/tools/fastddsgen { };
 
+  fastgron = callPackage ../development/tools/fastgron { };
+
   findbugs = callPackage ../development/tools/analysis/findbugs { };
 
   findnewest = callPackage ../development/tools/misc/findnewest { };
@@ -19366,6 +19380,8 @@ with pkgs;
   process-viewer = callPackage ../applications/misc/process-viewer { };
 
   procodile = callPackage ../tools/system/procodile { };
+
+  protox = callPackage ../development/tools/misc/protox { };
 
   proxmove = callPackage ../tools/admin/proxmove { };
 
@@ -33858,6 +33874,8 @@ with pkgs;
 
   pencil = callPackage ../applications/graphics/pencil {
   };
+
+  pentestgpt = callPackage ../tools/security/pentestgpt { };
 
   perseus = callPackage ../applications/science/math/perseus { };
 

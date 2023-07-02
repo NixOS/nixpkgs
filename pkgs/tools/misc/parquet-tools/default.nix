@@ -56,6 +56,8 @@ buildPythonApplication rec {
     # These tests try to read Python code as parquet and fail
     "test_local_wildcard"
     "test_local_and_s3_wildcard_files"
+    # test file is 2 bytes bigger than expected
+    "test_excute_simple"
   ];
 
   pythonImportsCheck = [

@@ -1,79 +1,60 @@
-{ buildPythonApplication
-, charset-normalizer
-, colorama
+{ lib
 , commitizen
-, decli
 , fetchFromGitHub
 , git
-, jinja2
-, lib
-, packaging
-, poetry-core
-, py
-, pytest-freezer
-, pytest-mock
-, pytest-regressions
-, pytestCheckHook
-, pyyaml
-, questionary
-, termcolor
+, python3
 , testers
-, tomlkit
-, typing-extensions
-, argcomplete
-, nix-update-script
-, pre-commit
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "commitizen";
-  version = "2.42.1";
+  version = "3.5.2";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-lrZfMqmslwx3B2WkvFosm3EmCHgpZEA/fOzR6UYf6f8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4m3NCnGUX9lHCk6czwzxXLqf8GLi2u2A/crBZYTyplA=";
   };
 
-  format = "pyproject";
+  pythonRelaxDeps = [
+    "decli"
+  ];
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+    pythonRelaxDepsHook
+  ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'charset-normalizer = "^2.1.0"' 'charset-normalizer = "*"' \
-      --replace 'argcomplete = ">=1.12.1,<2.1"' 'argcomplete = ">=1.12.1"'
-  '';
-
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
+    argcomplete
     charset-normalizer
-    termcolor
-    questionary
     colorama
     decli
-    tomlkit
+    importlib-metadata
     jinja2
-    pyyaml
-    argcomplete
-    typing-extensions
     packaging
+    pyyaml
+    questionary
+    termcolor
+    tomlkit
+  ];
+
+  nativeCheckInputs = with python3.pkgs; [
+    argcomplete
+    deprecated
+    git
+    py
+    pytest-freezer
+    pytest-mock
+    pytest-regressions
+    pytestCheckHook
   ];
 
   doCheck = true;
 
-  nativeCheckInputs = [
-    pre-commit
-    py
-    pytestCheckHook
-    pytest-freezer
-    pytest-mock
-    pytest-regressions
-    argcomplete
-    git
-  ];
-
-  # the tests require a functional git installation
+  # The tests require a functional git installation
   # which requires a valid HOME directory.
   preCheck = ''
     export HOME="$(mktemp -d)"
@@ -101,7 +82,6 @@ buildPythonApplication rec {
       package = commitizen;
       command = "cz version";
     };
-    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

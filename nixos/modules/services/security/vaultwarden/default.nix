@@ -59,7 +59,12 @@ in {
 
     config = mkOption {
       type = attrsOf (nullOr (oneOf [ bool int str ]));
-      default = {};
+      default = {
+        config = {
+          ROCKET_ADDRESS = "::1"; # default to localhost
+          ROCKET_PORT = 8222;
+        };
+      };
       example = literalExpression ''
         {
           DOMAIN = "https://bitwarden.example.com";
