@@ -1792,7 +1792,7 @@ self: super: {
   #
   # The unfortunate thing is that LTS-21 includes no possible build plan for
   # pandoc-cli, because pandoc-cli pandoc-lua-engine are not in LTS 21.
-  # To get pandoc-lua-engine building we need either to downgrade a ton 
+  # To get pandoc-lua-engine building we need either to downgrade a ton
   # of hslua-module-* packages from stackage or use pandoc 3.1 although
   # LTS contains pandoc 3.0.
   inherit (let
