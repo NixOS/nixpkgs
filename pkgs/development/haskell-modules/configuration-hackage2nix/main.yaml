@@ -124,7 +124,7 @@ extra-packages:
   - pantry == 0.5.2.1                   # needed for stack-2.7.3
   - path == 0.9.0                       # 2021-12-03: path version building with stackage genvalidity and GHC 9.0.2
   - relude == 0.7.0.0                   # 2022-02-25: Needed for ema 0.6
-  - resolv == 0.1.1.2                   # required to build cabal-install-3.0.0.0 with pre ghc-8.8.x
+  - resolv < 0.2                        # required to build cabal-install-3.10.1.0 with Stackage LTS 21
   - sbv == 7.13                         # required for pkgs.petrinizer
   - stylish-haskell == 0.13.0.0         # 2022-09-19: needed for hls on ghc 8.8
   - tasty-hspec == 1.1.6                # 2022-04-07: Needed for elm-format

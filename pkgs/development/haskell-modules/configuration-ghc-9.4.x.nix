@@ -91,7 +91,6 @@ in {
   path = doJailbreak super.path;
   polyparse = overrideCabal (drv: { postPatch = "sed -i -e 's, <0.11, <0.12,' polyparse.cabal"; }) (doJailbreak super.polyparse);
   regex-posix = doJailbreak super.regex-posix;
-  resolv = doJailbreak super.resolv;
   singleton-bool = doJailbreak super.singleton-bool;
   libmpd = doJailbreak super.libmpd;
   generics-sop = doJailbreak super.generics-sop;

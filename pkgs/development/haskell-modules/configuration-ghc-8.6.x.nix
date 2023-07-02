@@ -80,9 +80,6 @@ self: super: {
   # Break out of "yaml >=0.10.4.0 && <0.11": https://github.com/commercialhaskell/stack/issues/4485
   stack = doJailbreak super.stack;
 
-  # Newer versions don't compile.
-  resolv = self.resolv_0_1_1_2;
-
   # cabal2nix needs the latest version of Cabal, and the one
   # hackage-db uses must match, so take the latest
   cabal2nix = super.cabal2nix.overrideScope (self: super: { Cabal = self.Cabal_3_2_1_0; });

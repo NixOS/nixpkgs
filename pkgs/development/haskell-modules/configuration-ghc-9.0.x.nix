@@ -80,7 +80,6 @@ self: super: {
   lukko = doJailbreak super.lukko;
   parallel = doJailbreak super.parallel;
   regex-posix = doJailbreak super.regex-posix;
-  resolv = doJailbreak super.resolv;
   singleton-bool = doJailbreak super.singleton-bool;
   split = doJailbreak super.split;
   tar = doJailbreak super.tar;

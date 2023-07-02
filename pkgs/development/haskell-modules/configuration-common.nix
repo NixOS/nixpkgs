@@ -33,7 +33,12 @@ self: super: {
     let
       # !!! Use cself/csuper inside for the actual overrides
       cabalInstallOverlay = cself: csuper:
-        lib.optionalAttrs (lib.versionOlder self.ghc.version "9.6") {
+        {
+          # Needs to be upgraded compared to Stackage LTS 21
+          cabal-install-solver = cself.cabal-install-solver_3_10_1_0;
+          # Needs to be downgraded compared to Stackage LTS 21
+          resolv = cself.resolv_0_1_2_0;
+        } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.6") {
           Cabal = cself.Cabal_3_10_1_0;
           Cabal-syntax = cself.Cabal-syntax_3_10_1_0;
         } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.4") {
@@ -302,7 +307,7 @@ self: super: {
 
   # Tests require older versions of tasty.
   hzk = dontCheck super.hzk;
-  resolv = doJailbreak super.resolv;
+  resolv_0_1_2_0 = doJailbreak super.resolv_0_1_2_0;
 
   # Tests require a Kafka broker running locally
   haskakafka = dontCheck super.haskakafka;
@@ -1029,9 +1034,6 @@ self: super: {
 
   # jailbreak tasty < 1.2 until servant-docs > 0.11.3 is on hackage.
   snap-templates = doJailbreak super.snap-templates; # https://github.com/snapframework/snap-templates/issues/22
-
-  # https://github.com/haskell-hvr/resolv/pull/6
-  resolv_0_1_1_2 = dontCheck super.resolv_0_1_1_2;
 
   # The test suite does not know how to find the 'alex' binary.
   alex = overrideCabal (drv: {
