@@ -164,7 +164,6 @@ self: super:
   });
 
   xdm = super.xdm.overrideAttrs (attrs: {
-    patches = (attrs.patches or []) ++ [ ./xdm-fix-header-inclusion.patch ];
     buildInputs = attrs.buildInputs ++ [ libxcrypt ];
     configureFlags = attrs.configureFlags or [] ++ [
       "ac_cv_path_RAWCPP=${stdenv.cc.targetPrefix}cpp"
