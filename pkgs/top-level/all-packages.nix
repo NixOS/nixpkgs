@@ -4609,6 +4609,8 @@ with pkgs;
 
   crunch = callPackage ../tools/security/crunch { };
 
+  crunchy-cli = callPackage ../applications/video/crunchy-cli { };
+
   crudini = callPackage ../tools/misc/crudini { };
 
   csv2odf = callPackage ../applications/office/csv2odf { };
