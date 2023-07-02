@@ -580,6 +580,8 @@ self: super: with self; {
 
   appthreat-vulnerability-db = callPackage ../development/python-modules/appthreat-vulnerability-db { };
 
+  apricot-select = callPackage ../development/python-modules/apricot-select { };
+
   aprslib = callPackage ../development/python-modules/aprslib { };
 
   apscheduler = callPackage ../development/python-modules/apscheduler { };
