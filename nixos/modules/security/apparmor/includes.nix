@@ -211,6 +211,9 @@ config.security.apparmor.includes = {
   "abstractions/nis" = ''
     include "${pkgs.apparmor-profiles}/etc/apparmor.d/abstractions/nis"
   '';
+  "abstractions/nss-systemd" = ''
+    include "${pkgs.apparmor-profiles}/etc/apparmor.d/abstractions/nss-systemd"
+  '';
   "abstractions/nvidia" = ''
     include "${pkgs.apparmor-profiles}/etc/apparmor.d/abstractions/nvidia"
     ${etcRule "vdpau_wrapper.cfg"}
