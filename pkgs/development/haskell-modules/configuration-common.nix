@@ -1236,6 +1236,10 @@ self: super: {
   # https://github.com/erikd/hjsmin/issues/32
   hjsmin = dontCheck super.hjsmin;
 
+  # too strict bounds on text in the test suite
+  # https://github.com/audreyt/string-qq/pull/3
+  string-qq = doJailbreak super.string-qq;
+
   # Remove for hail > 0.2.0.0
   hail = overrideCabal (drv: {
     patches = [
