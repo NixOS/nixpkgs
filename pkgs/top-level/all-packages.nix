@@ -10756,6 +10756,8 @@ with pkgs;
 
   pcmsolver = callPackage ../development/libraries/pcmsolver { };
 
+  pegasus-frontend = libsForQt5.callPackage ../games/pegasus-frontend {};
+
   pgbadger = perlPackages.callPackage ../tools/misc/pgbadger { };
 
   pffft = callPackage ../development/libraries/pffft { };
