@@ -27,7 +27,7 @@ self: with self; {
     version = "1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "https://xorg.freedesktop.org/archive/individual/util/bdftopcf-1.1.1.tar.xz";
+      url = "mirror://xorg/individual/util/bdftopcf-1.1.1.tar.xz";
       sha256 = "026rzs92h9jsc7r0kvvyvwhm22q0805gp38rs14x6ghg7kam7j8i";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -1442,7 +1442,7 @@ self: with self; {
     version = "0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "https://xcb.freedesktop.org/dist/libpthread-stubs-0.4.tar.bz2";
+      url = "mirror://xorg/individual/xcb/libpthread-stubs-0.4.tar.bz2";
       sha256 = "0cz7s9w8lqgzinicd4g36rjg08zhsbyngh0w68c3np8nlc8mkl74";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -1826,7 +1826,7 @@ self: with self; {
     version = "0.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "https://xcb.freedesktop.org/dist/xcb-util-0.4.1.tar.xz";
+      url = "mirror://xorg/individual/xcb/xcb-util-0.4.1.tar.xz";
       sha256 = "04p54r0zjc44fpw1hdy4rhygv37sx2vr2lllxjihykz5v2xkpgjs";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -1842,7 +1842,7 @@ self: with self; {
     version = "0.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "https://xcb.freedesktop.org/dist/xcb-util-cursor-0.1.3.tar.bz2";
+      url = "mirror://xorg/individual/xcb/xcb-util-cursor-0.1.3.tar.bz2";
       sha256 = "0krr4rcw6r42cncinzvzzdqnmxk3nrgpnadyg2h8k9x10q3hm885";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -1858,7 +1858,7 @@ self: with self; {
     version = "1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "https://xcb.freedesktop.org/dist/xcb-util-errors-1.0.1.tar.xz";
+      url = "mirror://xorg/individual/xcb/xcb-util-errors-1.0.1.tar.xz";
       sha256 = "0mzkh3xj1n690dw8hrdhyjykd71ib0ls9n5cgf9asna2k1xwha2n";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -1874,7 +1874,7 @@ self: with self; {
     version = "0.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "https://xcb.freedesktop.org/dist/xcb-util-image-0.4.1.tar.xz";
+      url = "mirror://xorg/individual/xcb/xcb-util-image-0.4.1.tar.xz";
       sha256 = "0g8dwknrlz96k176qxh8ar84x9kpppci9b978zyp24nvvbjqxbfc";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -1890,7 +1890,7 @@ self: with self; {
     version = "0.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "https://xcb.freedesktop.org/dist/xcb-util-keysyms-0.4.1.tar.xz";
+      url = "mirror://xorg/individual/xcb/xcb-util-keysyms-0.4.1.tar.xz";
       sha256 = "0f66snk179hmp8ppgv1zp9y7pl1vzn52znpikm1fsaj1ji90l9kw";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -1906,7 +1906,7 @@ self: with self; {
     version = "0.3.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "https://xcb.freedesktop.org/dist/xcb-util-renderutil-0.3.10.tar.xz";
+      url = "mirror://xorg/individual/xcb/xcb-util-renderutil-0.3.10.tar.xz";
       sha256 = "1fh4dnlwlqyccrhmmwlv082a7mxc7ss7vmzmp7xxp39dwbqd859y";
     };
     hardeningDisable = [ "bindnow" "relro" ];
@@ -1922,7 +1922,7 @@ self: with self; {
     version = "0.4.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "https://xcb.freedesktop.org/dist/xcb-util-wm-0.4.2.tar.xz";
+      url = "mirror://xorg/individual/xcb/xcb-util-wm-0.4.2.tar.xz";
       sha256 = "02wai17mxfbvlnj4l4bjbvah97rccdivzvd7mrznhr32s0hlxhv2";
     };
     hardeningDisable = [ "bindnow" "relro" ];
