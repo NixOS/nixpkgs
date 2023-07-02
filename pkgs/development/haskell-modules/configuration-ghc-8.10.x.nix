@@ -145,10 +145,12 @@ self: super: {
   # weeder 2.3.0 no longer supports GHC 8.10
   weeder = doDistribute (doJailbreak self.weeder_2_2_0);
 
-  # OneTuple needs hashable instead of ghc-prim for GHC < 9
-  OneTuple = super.OneTuple.override {
+  # OneTuple needs hashable (instead of ghc-prim) and foldable1-classes-compat for GHC < 9
+  OneTuple = addBuildDepends [
+    self.foldable1-classes-compat
+  ] (super.OneTuple.override {
     ghc-prim = self.hashable;
-  };
+  });
 
   # Doesn't build with 9.0, see https://github.com/yi-editor/yi/issues/1125
   yi-core = doDistribute (markUnbroken super.yi-core);

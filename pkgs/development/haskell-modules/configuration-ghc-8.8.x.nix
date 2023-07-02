@@ -148,10 +148,12 @@ self: super: {
   # has a restrictive lower bound on Cabal
   fourmolu = doJailbreak super.fourmolu;
 
-  # OneTuple needs hashable instead of ghc-prim for GHC < 9
-  OneTuple = super.OneTuple.override {
+  # OneTuple needs hashable (instead of ghc-prim) and foldable1-classes-compat for GHC < 9
+  OneTuple = addBuildDepends [
+    self.foldable1-classes-compat
+  ] (super.OneTuple.override {
     ghc-prim = self.hashable;
-  };
+  });
 
   # Temporarily disabled blaze-textual for GHC >= 9.0 causing hackage2nix ignoring it
   # https://github.com/paul-rouse/mysql-simple/blob/872604f87044ff6d1a240d9819a16c2bdf4ed8f5/Database/MySQL/Internal/Blaze.hs#L4-L10
