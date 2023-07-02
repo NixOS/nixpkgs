@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "func";
-  version = "1.7.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "knative";
     repo = "func";
     rev = "knative-v${version}";
-    sha256 = "sha256-LrWRY22deh+YL/cLb+ZwK93okVPgysBoMCmo2MrbqIs=";
+    hash = "sha256-x/SrRkgeLvjcd9LNgMGOf5TLU1GXpjY2Z2MyxrBZckc=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   subPackages = [ "cmd/func" ];
 

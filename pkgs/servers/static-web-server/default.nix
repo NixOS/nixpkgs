@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, darwin }:
+{ lib, rustPlatform, fetchFromGitHub, stdenv, darwin, nixosTests }:
 
 rustPlatform.buildRustPackage rec {
   pname = "static-web-server";
@@ -23,6 +23,13 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::handle_not_modified"
     "--skip=handle_precondition"
   ];
+
+  # Need to copy in the systemd units for systemd.packages to discover them
+  postInstall = ''
+    install -Dm444 -t $out/lib/systemd/system/ systemd/static-web-server.{service,socket}
+  '';
+
+  passthru.tests = { inherit (nixosTests) static-web-server; };
 
   meta = with lib; {
     description = "An asynchronus web server for static files-serving";

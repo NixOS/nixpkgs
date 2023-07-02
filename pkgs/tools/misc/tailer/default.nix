@@ -1,22 +1,34 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, testers
+, tailer
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "tailer";
-  version = "unstable-2023-06-26";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "hionay";
     repo = "tailer";
-    rev = "2f32e2640a220c990ae419d1562889971c9ed535";
-    hash = "sha256-L+5HlUv6g2o6ghqp8URfR7k5NlWqFhVBmEIsEjGy7aU=";
+    rev = "v${version}";
+    hash = "sha256-gPezz2ksqdCffgdAHwU2NMTar2glp5YGfA5C+tMYPtE=";
   };
 
   vendorHash = "sha256-nQqSvfN+ed/g5VkbD6XhZNA1G3CGGfwFDdadJ5+WoD0=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=main.version=${version}"
+  ];
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = tailer;
+    };
+  };
 
   meta = with lib; {
     description = "A CLI tool to insert lines when command output stops";

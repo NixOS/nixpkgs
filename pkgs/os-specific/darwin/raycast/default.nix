@@ -4,14 +4,14 @@
 , undmg
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "raycast";
-  version = "1.53.4";
+  version = "1.54.1";
 
   src = fetchurl {
     name = "Raycast.dmg";
-    url = "https://releases.raycast.com/releases/${version}/download?build=universal";
-    sha256 = "sha256-bkNlGHCpYnHlKdzDyKGPF5jnoq2cSe1sdg9W2DwVrWc=";
+    url = "https://releases.raycast.com/releases/${finalAttrs.version}/download?build=universal";
+    hash = "sha256-lnP0wSTC7oCji24RSk1fY+QSwoYioMPtvOb4Ey1MzVY=";
   };
 
   dontPatch = true;
@@ -35,9 +35,9 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "Control your tools with a few keystrokes";
     homepage = "https://raycast.app/";
-    license = licenses.unfree;
+    license = with licenses; [ unfree ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ lovesegfault stepbrobd ];
-    platforms = platforms.darwin;
+    platforms = [ "aarch64-darwin" "x86_64-darwin" ];
   };
-}
+})
