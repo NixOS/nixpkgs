@@ -1786,35 +1786,44 @@ self: super: {
   # https://github.com/jgm/pandoc/issues/7163
   pandoc = dontCheck super.pandoc;
 
-  # This is sort of an unfortunate situation.
-  #
   # Since pandoc-3, the actual `pandoc` executable is in the pandoc-cli
   # package.  It is no longer distributed in the pandoc package itself.  So for
   # people that want to use the `pandoc` cli tool, they must use pandoc-cli.
   #
-  # The unfortunate thing is that LTS-21 includes pandoc-3.0, but there is no
-  # release of pandoc-cli that supports pandoc-3.0.  The earliest release
-  # of pandoc-cli effectively requires pandoc-3.1.  We need a bunch of
-  # overrides to be able to build pandoc-cli with pandoc-3.0.
-  pandoc-cli = super.pandoc-cli.overrideScope (self: super: {
-    # pandoc-cli requires pandoc >= 3.1
-    pandoc = self.pandoc_3_1_4;
+  # The unfortunate thing is that LTS-21 includes no possible build plan for
+  # pandoc-cli, because pandoc-cli pandoc-lua-engine are not in LTS 21.
+  # To get pandoc-lua-engine building we need either to downgrade a ton 
+  # of hslua-module-* packages from stackage or use pandoc 3.1 although
+  # LTS contains pandoc 3.0.
+  inherit (let
+    pandoc-cli-overlay = self: super: {
+      # pandoc-cli requires pandoc >= 3.1
+      pandoc = self.pandoc_3_1_4;
 
-    # pandoc depends on crypton-connection, which requires tls >= 1.7
-    tls = self.tls_1_7_0;
+      # pandoc depends on crypton-connection, which requires tls >= 1.7
+      tls = self.tls_1_7_0;
 
-    # pandoc depends on http-client-tls, which only starts depending
-    # on crypton-connection in http-client-tls-0.3.6.2.
-    http-client-tls = self.http-client-tls_0_3_6_2;
+      # pandoc depends on http-client-tls, which only starts depending
+      # on crypton-connection in http-client-tls-0.3.6.2.
+      http-client-tls = self.http-client-tls_0_3_6_2;
 
-    # pandoc requires recent versions of skylighting
-    skylighting = self.skylighting_0_13_3;
-    skylighting-core = self.skylighting-core_0_13_3;
-
-    # broken in haskellPackages
-    pandoc-lua-engine = markUnbroken super.pandoc-lua-engine;
-    pandoc-server = markUnbroken super.pandoc-server;
-  });
+      # pandoc requires recent versions of skylighting
+      skylighting = self.skylighting_0_13_3;
+      skylighting-core = self.skylighting-core_0_13_3;
+    };
+  in {
+    pandoc-cli = super.pandoc-cli.overrideScope pandoc-cli-overlay;
+    pandoc_3_1_4 = doDistribute (super.pandoc_3_1_4.overrideScope pandoc-cli-overlay);
+    skylighting_0_13_3 = doDistribute (super.skylighting_0_13_3.overrideScope pandoc-cli-overlay);
+    skylighting-core_0_13_3 = doDistribute (super.skylighting-core_0_13_3.overrideScope pandoc-cli-overlay);
+    pandoc-lua-engine = super.pandoc-lua-engine.overrideScope pandoc-cli-overlay;
+  })
+    pandoc-cli
+    pandoc_3_1_4
+    skylighting_0_13_3
+    skylighting-core_0_13_3
+    pandoc-lua-engine
+    ;
 
   crypton-x509 =
     lib.pipe
