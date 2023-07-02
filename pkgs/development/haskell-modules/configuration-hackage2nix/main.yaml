@@ -158,7 +158,6 @@ package-maintainers:
     - password
     - password-instances
     - pretty-simple
-    - purenix
     - stack
     - termonad
   centromere:
