@@ -53,6 +53,7 @@ let
   args = removeAttrs args' [ "overrideModAttrs" "vendorSha256" "vendorHash" ];
 
   GO111MODULE = "on";
+  GOTOOLCHAIN = "local";
 
   goModules = if (vendorHash == null) then "" else
   (stdenv.mkDerivation {
@@ -62,7 +63,7 @@ let
 
     inherit (args) src;
     inherit (go) GOOS GOARCH;
-    inherit GO111MODULE;
+    inherit GO111MODULE GOTOOLCHAIN;
 
     # The following inheritence behavior is not trivial to expect, and some may
     # argue it's not ideal. Changing it may break vendor hashes in Nixpkgs and
@@ -151,7 +152,7 @@ let
     inherit (go) GOOS GOARCH;
 
     GOFLAGS = lib.optionals (!proxyVendor) [ "-mod=vendor" ] ++ lib.optionals (!allowGoReference) [ "-trimpath" ];
-    inherit CGO_ENABLED enableParallelBuilding GO111MODULE;
+    inherit CGO_ENABLED enableParallelBuilding GO111MODULE GOTOOLCHAIN;
 
     configurePhase = args.configurePhase or (''
       runHook preConfigure
