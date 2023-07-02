@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sexp";
-  version = "0.8.6";
+  version = "0.8.7";
 
   src = fetchFromGitHub {
     owner = "rnpgp";
     repo = "sexp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-NpDSoBxEM8g/SugLmT8E5+YZPDFIGHa4eXLjdzQxaiw=";
+    hash = "sha256-E1ESN3JKCWYBt1o37d7EVcgARnwGKS6mxua+0m1RMlM=";
   };
 
   buildInputs = [ zlib bzip2 ];
