@@ -12848,6 +12848,8 @@ with pkgs;
 
   sockperf = callPackage ../tools/networking/sockperf { };
 
+  softnet = callPackage ../tools/networking/softnet { };
+
   solaar = callPackage ../applications/misc/solaar { };
 
   solanum = callPackage ../servers/irc/solanum {
@@ -34622,6 +34624,8 @@ with pkgs;
   styx = callPackage ../applications/misc/styx { };
 
   sway-launcher-desktop = callPackage ../applications/misc/sway-launcher-desktop { };
+
+  tart = callPackage ../applications/virtualization/tart { };
 
   tecoc = callPackage ../applications/editors/tecoc { };
 
