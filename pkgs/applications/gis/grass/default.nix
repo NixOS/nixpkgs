@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, callPackage
 , fetchFromGitHub
 , makeWrapper
 , wrapGAppsHook
@@ -31,7 +32,7 @@
 , zstd
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "grass";
   version = "8.3.0";
 
@@ -140,6 +141,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.tests = {
+    grass = callPackage ./tests.nix { grass = finalAttrs.finalPackage; };
+  };
+
   meta = with lib; {
     description = "GIS software suite used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization";
     homepage = "https://grass.osgeo.org/";
@@ -147,4 +152,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; teams.geospatial.members ++ [ mpickering ];
     platforms = platforms.all;
   };
-}
+})
