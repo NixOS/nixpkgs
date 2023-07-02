@@ -71,20 +71,16 @@ self: super: {
       cabal-install = super.cabal-install.overrideScope cabalInstallOverlay;
       cabal-install-solver = super.cabal-install-solver.overrideScope cabalInstallOverlay;
 
-      guardian = lib.pipe
-        # Needs cabal-install >= 3.8 /as well as/ matching Cabal
-        (super.guardian.overrideScope (self: super:
-          cabalInstallOverlay self super // {
-            # Needs at least path-io 1.8.0 due to canonicalizePath changes
-            path-io = self.path-io_1_8_1;
-          }
-        ))
-        [
-          # Tests need internet access (run stack)
-          dontCheck
-          # May as well…
-          (self.generateOptparseApplicativeCompletions [ "guardian" ])
-        ];
+      # Needs cabal-install >= 3.8 /as well as/ matching Cabal
+      guardian =
+        lib.pipe
+          (super.guardian.overrideScope cabalInstallOverlay)
+          [
+            # Tests need internet access (run stack)
+            dontCheck
+            # May as well…
+            (self.generateOptparseApplicativeCompletions [ "guardian" ])
+          ];
     }
   ) cabal-install
     cabal-install-solver
