@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, testers, ghz }:
 
 buildGoModule rec {
   pname = "ghz";
@@ -15,7 +15,21 @@ buildGoModule rec {
 
   subPackages = [ "cmd/ghz" "cmd/ghz-web" ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=main.version=${version}"
+  ];
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = ghz;
+    };
+    web-version = testers.testVersion {
+      package = ghz;
+      command = "ghz-web -v";
+    };
+  };
 
   meta = with lib; {
     description = "Simple gRPC benchmarking and load testing tool";
