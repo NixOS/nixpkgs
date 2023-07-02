@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "cons";
-  version = "0.4.5";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "pythological";
     repo = "python-cons";
-    rev = "fbeedfc8a3d1bff4ba179d492155cdd55538365e";
-    hash = "sha256-ivHFep9iYPvyiBIZKMAzqrLGnQkeuxd0meYMZwZFFH0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-XssERKiv4A8x7dZhLeFSciN6RCEfGs0or3PAQiYSPII=";
   };
 
   propagatedBuildInputs = [
