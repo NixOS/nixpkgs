@@ -1788,6 +1788,28 @@ self: super: {
   # https://github.com/jgm/pandoc/issues/7163
   pandoc = dontCheck super.pandoc;
 
+  crypton-x509 =
+    lib.pipe
+      super.crypton-x509
+      [
+        # Mistype in a dependency in a test.
+        # https://github.com/kazu-yamamoto/crypton-certificate/pull/3
+        (appendPatch
+          (fetchpatch {
+            name = "crypton-x509-rename-dep.patch";
+            url = "https://github.com/kazu-yamamoto/crypton-certificate/commit/5281ff115a18621407b41f9560fd6cd65c602fcc.patch";
+            hash = "sha256-pLzuq+baSDn+MWhtYIIBOrE1Js+tp3UsaEZy5MhWAjY=";
+            relative = "x509";
+          })
+        )
+        # There is a revision in crypton-x509, so the above patch won't
+        # apply because of line endings in revised .cabal files.
+        (overrideCabal {
+           editedCabalFile = null;
+           revision = null;
+        })
+      ];
+
   # * doctests don't work without cabal
   #   https://github.com/noinia/hgeometry/issues/132
   # * Too strict version bound on vector-builder

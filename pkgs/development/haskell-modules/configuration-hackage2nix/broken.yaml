@@ -956,7 +956,6 @@ broken-packages:
   - crypto-keys-ssh
   - crypto-multihash
   - crypto-numbers
-  - crypton-x509 # failure building test suite 'test-x509' in job https://hydra.nixos.org/build/225569131 at 2023-06-28
   - crypto-pubkey-openssh
   - crypto-random-effect
   - crypto-simple
