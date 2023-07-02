@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "gopsuinfo";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "gopsuinfo";
     rev = "v${version}";
-    sha256 = "sha256-kivxuy0fdSfF5zAKiflTkYsb6jdeQ75Or7WmbadxsrY=";
+    sha256 = "sha256-h+CdiQh7IguCduIMCCI/UPIUAdXlNSHdkz6hrG10h3c=";
   };
 
   vendorHash = "sha256-S2ZHfrbEjPDweazwWbMbEMcMl/i+8Nru0G0e7RjOJMk=";
