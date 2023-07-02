@@ -23512,6 +23512,8 @@ with pkgs;
 
   nanomsg = callPackage ../development/libraries/nanomsg { };
 
+  nanosvg = callPackage ../development/libraries/nanosvg { };
+
   nanovna-saver = libsForQt5.callPackage ../applications/science/electronics/nanovna-saver { };
 
   nanotts = callPackage ../tools/audio/nanotts { };
