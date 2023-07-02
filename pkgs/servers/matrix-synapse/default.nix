@@ -86,21 +86,29 @@ buildPythonApplication rec {
 
   doCheck = !stdenv.isDarwin;
 
-  checkPhase = let testFlags = lib.optionalString (!stdenv.isAarch64) "-j $NIX_BUILD_CORES"; in ''
+  checkPhase = ''
     runHook preCheck
 
     # remove src module, so tests use the installed module instead
     rm -rf ./synapse
 
-    PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial ${testFlags} tests
+    # high parallelisem makes test suite unstable
+    # upstream uses 2 cores but 4 seems to be also stable
+    # https://github.com/matrix-org/synapse/blob/develop/.github/workflows/latest_deps.yml#L103
+    if (( $NIX_BUILD_CORES > 4)); then
+      NIX_BUILD_CORES=4
+    fi
+
+    PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial -j $NIX_BUILD_CORES tests
 
     runHook postCheck
   '';
 
-  passthru.tests = { inherit (nixosTests) matrix-synapse; };
-  passthru.plugins = plugins;
-  passthru.tools = tools;
-  passthru.python = python3;
+  passthru = {
+    tests = { inherit (nixosTests) matrix-synapse; };
+    inherit plugins tools;
+    python = python3;
+  };
 
   meta = with lib; {
     homepage = "https://matrix.org";
