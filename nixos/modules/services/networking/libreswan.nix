@@ -14,7 +14,7 @@ let
     nonchars = filter (x : !(elem x.value chars))
                (imap0 (i: v: {ind = i; value = v;}) (stringToCharacters str));
   in
-    lib.optionalString (length nonchars != 0)
+    lib.optionalString (nonchars != [ ])
       (substring (head nonchars).ind (add 1 (sub (last nonchars).ind (head nonchars).ind)) str);
   indent = str: concatStrings (concatMap (s: ["  " (trim [" " "\t"] s) "\n"]) (splitString "\n" str));
   configText = indent (toString cfg.configSetup);
