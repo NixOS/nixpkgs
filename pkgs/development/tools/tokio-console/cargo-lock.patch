@@ -1,0 +1,22 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 845e3dc..19eaab4 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -267,7 +267,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "console-subscriber"
+-version = "0.1.8"
++version = "0.1.9"
+ dependencies = [
+  "console-api",
+  "crossbeam-channel",
+@@ -1433,7 +1433,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "tokio-console"
+-version = "0.1.7"
++version = "0.1.8"
+ dependencies = [
+  "atty",
+  "clap",

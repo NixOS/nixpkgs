@@ -6,18 +6,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tokio-console";
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "tokio-rs";
     repo = "console";
     rev = "tokio-console-v${version}";
-    sha256 = "sha256-yTNLKpBkzzN0X73CjN/UXRGjAGOnCCgJa6A6loA6baM=";
+    sha256 = "089wabzhbdd3s23n3qandwqmfwg3l7rrv9sn12x8a0xczr9kh30m";
   };
 
-  cargoSha256 = "sha256-K/auhqlL/K6RYE0lHyvSUqK1cOwJBBZD3QTUevZzLXQ=";
+  cargoSha256 = "sha256-tJErAv+7HLUDLG/UhbzrIY90o/ak9jjvVnI3nlQzQO4=";
 
   nativeBuildInputs = [ protobuf ];
+
+  cargoPatches = [ ./cargo-lock.patch ];
 
   # uses currently unstable tokio features
   RUSTFLAGS = "--cfg tokio_unstable";
