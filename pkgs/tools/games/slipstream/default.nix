@@ -1,30 +1,29 @@
 { lib, fetchFromGitHub, stdenv, makeWrapper, buildMaven, maven, jdk8 }:
 let
-  settings = (buildMaven ./project-info.json).settings;
   jdk = jdk8;
+  mavenWithJdk = maven.override { inherit jdk; };
 in
-stdenv.mkDerivation (finalAttrs: {
+mavenWithJdk.buildMavenPackage rec {
   pname = "slipstream";
   version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "Vhati";
     repo = "Slipstream-Mod-Manager";
-    rev = "v${finalAttrs.version}";
+    rev = "v${version}";
     hash = "sha256-F+o94Oh9qxVdfgwdmyOv+WZl1BjQuzhQWaVrAgScgIU=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ (maven.override { inherit jdk; }) ];
+  mvnHash = "sha256-oDtUitsfZPiDtyfzzw1yMNBCKyP6rHczKZT/SPPJYGE=";
 
-  buildPhase = "mvn --offline --settings=${settings} package";
+  nativeBuildInputs = [ mavenWithJdk makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/share/java
-    install -Dm644 target/ftl-mod-manager-${finalAttrs.version}.jar $out/share/java
+    install -Dm644 target/ftl-mod-manager-${version}.jar $out/share/java
     install -Dm644 target/modman.jar $out/share/java
 
-    makeWrapper ${finalAttrs.wrapper} $out/bin/${finalAttrs.pname} \
+    makeWrapper ${wrapper} $out/bin/${pname} \
       --suffix PATH : ${lib.makeBinPath [ jdk ]} \
       --set jar_file "$out/share/java/modman.jar"
   '';
@@ -37,4 +36,4 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2;
     maintainers = with maintainers; [ mib ];
   };
-})
+}
