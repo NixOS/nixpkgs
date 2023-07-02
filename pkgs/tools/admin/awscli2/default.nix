@@ -10,8 +10,13 @@
 
 let
   py = python3 // {
-    pkgs = python3.pkgs.overrideScope (self: super: {
-      # nothing right now
+    pkgs = python3.pkgs.overrideScope (final: prev: {
+      ruamel-yaml = prev.ruamel-yaml.overridePythonAttrs (prev: {
+        src = prev.src.override {
+          version = "0.17.21";
+          hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
+        };
+      });
     });
   };
 
@@ -105,7 +110,7 @@ with py.pkgs; buildPythonApplication rec {
     tests.version = testers.testVersion {
       package = awscli2;
       command = "aws --version";
-      version = version;
+      inherit version;
     };
   };
 
