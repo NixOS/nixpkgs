@@ -129,7 +129,7 @@ in with passthru; stdenv.mkDerivation rec {
     ${lib.optionalString isPy39OrNewer "ln -s $out/bin/${executable} $out/bin/pypy3"}
 
     # other packages expect to find stuff according to libPrefix
-    ln -s $out/lib/${libPrefix}/include $out/include/${libPrefix}
+    ln -s $out/lib/${libPrefix}/include/${libPrefix} $out/include/${libPrefix}
     ln -s $out/lib/${libPrefix}/lib-python/${if isPy3k then "3" else pythonVersion} $out/lib/${libPrefix}
 
     # Include a sitecustomize.py file
