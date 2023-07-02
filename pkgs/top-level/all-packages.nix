@@ -17050,6 +17050,8 @@ with pkgs;
 
   vyper = with python3Packages; toPythonApplication vyper;
 
+  wazero = callPackage ../development/interpreters/wazero { };
+
   wcc = callPackage ../development/compilers/wcc { };
 
   wla-dx = callPackage ../development/compilers/wla-dx { };
