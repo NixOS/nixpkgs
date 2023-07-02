@@ -86,6 +86,7 @@ let
     inherit CGO_ENABLED enableParallelBuilding;
 
     GO111MODULE = "off";
+    GOTOOLCHAIN = "local";
     GOFLAGS = lib.optionals (!allowGoReference) [ "-trimpath" ];
 
     GOARM = toString (lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
