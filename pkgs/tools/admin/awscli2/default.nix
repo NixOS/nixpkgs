@@ -10,8 +10,13 @@
 
 let
   py = python3 // {
-    pkgs = python3.pkgs.overrideScope (self: super: {
-      # nothing right now
+    pkgs = python3.pkgs.overrideScope (final: prev: {
+      ruamel-yaml = prev.ruamel-yaml.overridePythonAttrs (prev: {
+        src = prev.src.override {
+          version = "0.17.21";
+          hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
+        };
+      });
     });
   };
 
@@ -27,11 +32,6 @@ with py.pkgs; buildPythonApplication rec {
     rev = version;
     hash = "sha256-KrNVVmH0sfk2WaHlAcc2ElO23vyxG4u777twvFKBAD4=";
   };
-
-  postPatch = ''
-    substituteInPlace requirements/bootstrap.txt \
-      --replace "pip>=22.0.0,<23.0.0" "pip>=22.0.0,<24.0.0"
-  '';
 
   nativeBuildInputs = [
     flit-core
