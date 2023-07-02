@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-msc";
-    rev = "${version}";
+    rev = version;
     hash = "sha256-CVyjSo+QFDLcow6XAcudhQ7LOnbCSHeYVTzTMh7KEwg=";
   };
 
