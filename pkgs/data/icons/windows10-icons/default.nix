@@ -1,11 +1,13 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitHub }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "windows10-icons";
   version = "1.0";
 
-  src = fetchurl {
-    url = "https://github.com/B00merang-Artwork/Windows-10/archive/refs/tags/${finalAttrs.version}.tar.gz";
-    hash = "sha256-ZGuLyOBNOANIicqs7zhGy2ZVmV8YBdh7P/e8Cykkmq4=";
+  src = fetchFromGitHub {
+    owner = "B00merang-Artwork";
+    repo = "Windows-10";
+    rev = "${finalAttrs.version}";
+    hash = "sha256-Yz6a7FcgPfzz4w8cKp8oq7/usIBUUZV7qhVmDewmzrI=";
   };
 
   installPhase = ''
