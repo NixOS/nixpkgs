@@ -16,6 +16,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-IhaeM/stU9O48reT/mUadSkZDz0JXKCXjSRw8TMesTY=";
 
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=main.version=${version}"
+  ];
+
   meta = with lib; {
     description = "top-like tool for monitoring NATS servers";
     homepage = "https://github.com/nats-io/nats-top";
