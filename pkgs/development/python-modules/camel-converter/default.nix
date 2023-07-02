@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "camel-converter";
-  version = "3.0.1";
+  version = "3.0.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "sanders41";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-t0wZ03xMNuBEUeXC+DizNSVJmnlt2SH9f0qw6F4UXg8=";
+    hash = "sha256-XKtWR9dmSMfqkJYUHDQtWBLG3CHrbrI5lNtPUTShmBE=";
   };
 
   postPatch = ''
@@ -42,6 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "camel_converter"
+  ];
+
+  disabledTests = [
+    # AttributeError: 'Test' object has no attribute 'model_dump'
+    "test_camel_config"
   ];
 
   meta = with lib; {

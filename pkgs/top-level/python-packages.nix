@@ -10625,6 +10625,8 @@ self: super: with self; {
 
   reedsolo = callPackage ../development/python-modules/reedsolo { };
 
+  referencing = callPackage ../development/python-modules/referencing { };
+
   reflink = callPackage ../development/python-modules/reflink { };
 
   regenmaschine = callPackage ../development/python-modules/regenmaschine { };
@@ -10888,6 +10890,8 @@ self: super: with self; {
   rpcq = callPackage ../development/python-modules/rpcq { };
 
   rpdb = callPackage ../development/python-modules/rpdb { };
+
+  rpds-py = callPackage ../development/python-modules/rpds-py { };
 
   rpi-bad-power = callPackage ../development/python-modules/rpi-bad-power { };
 

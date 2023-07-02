@@ -164,7 +164,6 @@ self: super:
   });
 
   xdm = super.xdm.overrideAttrs (attrs: {
-    patches = (attrs.patches or []) ++ [ ./xdm-fix-header-inclusion.patch ];
     buildInputs = attrs.buildInputs ++ [ libxcrypt ];
     configureFlags = attrs.configureFlags or [] ++ [
       "ac_cv_path_RAWCPP=${stdenv.cc.targetPrefix}cpp"
@@ -855,14 +854,6 @@ self: super:
       "--with-bundle-id-prefix=org.nixos.xquartz"
       "--with-launchdaemons-dir=\${out}/LaunchDaemons"
       "--with-launchagents-dir=\${out}/LaunchAgents"
-    ];
-    patches = [
-      # don't unset DBUS_SESSION_BUS_ADDRESS in startx
-      (fetchpatch {
-        name = "dont-unset-DBUS_SESSION_BUS_ADDRESS.patch";
-        url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/40f3ac0a31336d871c76065270d3f10e922d06f3/trunk/fs46369.patch";
-        sha256 = "18kb88i3s9nbq2jxl7l2hyj6p56c993hivk8mzxg811iqbbawkp7";
-      })
     ];
     postPatch = ''
       # Avoid replacement of word-looking cpp's builtin macros in Nix's cross-compiled paths
