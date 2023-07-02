@@ -1,49 +1,41 @@
-From fbc1488e8da0175e9c9bdf5892f8a65c71f2a266 Mon Sep 17 00:00:00 2001
+From 206084d2e08198b0b5b67733c407bd3fb74affb1 Mon Sep 17 00:00:00 2001
 From: Jiajie Chen <c@jia.je>
-Date: Fri, 15 Jul 2022 18:33:15 +0800
+Date: Sun, 2 Jul 2023 22:43:27 +0800
 Subject: [PATCH] Do not download sources in cmake
 
 ---
- src/solvers/CMakeLists.txt | 20 +-------------------
- 1 file changed, 1 insertion(+), 19 deletions(-)
+ src/solvers/CMakeLists.txt | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
 
 diff --git a/src/solvers/CMakeLists.txt b/src/solvers/CMakeLists.txt
-index 744def486..5b719a78a 100644
+index 8bfcf4d13c..6ba858a461 100644
 --- a/src/solvers/CMakeLists.txt
 +++ b/src/solvers/CMakeLists.txt
-@@ -106,31 +106,13 @@ elseif("${sat_impl}" STREQUAL "glucose")
- elseif("${sat_impl}" STREQUAL "cadical")
-     message(STATUS "Building solvers with cadical")
+@@ -123,16 +123,6 @@ foreach(SOLVER ${sat_impl})
+     elseif("${SOLVER}" STREQUAL "cadical")
+         message(STATUS "Building solvers with cadical")
  
--    download_project(PROJ cadical
--        URL https://github.com/arminbiere/cadical/archive/rel-1.4.1.tar.gz
--        PATCH_COMMAND true
--        COMMAND CXX=${CMAKE_CXX_COMPILER} ./configure -O3 -s CXXFLAGS=-std=c++14
--        URL_MD5 b44874501a175106424f4bd5de29aa59
--    )
+-        download_project(PROJ cadical
+-            URL https://github.com/arminbiere/cadical/archive/rel-1.5.3.tar.gz
+-            PATCH_COMMAND patch -p1 -i ${CBMC_SOURCE_DIR}/../scripts/cadical-1.5.3-patch
+-            COMMAND cmake -E copy ${CBMC_SOURCE_DIR}/../scripts/cadical_CMakeLists.txt CMakeLists.txt
+-            COMMAND ./configure
+-            URL_MD5 265b1a715000ed3c5b6de36ddd1278a0
+-        )
 -
-     message(STATUS "Building CaDiCaL")
--    execute_process(COMMAND make -j WORKING_DIRECTORY ${cadical_SOURCE_DIR})
- 
-     target_compile_definitions(solvers PUBLIC
-         SATCHECK_CADICAL HAVE_CADICAL
-     )
- 
--    add_library(cadical STATIC IMPORTED)
+-        add_subdirectory(${cadical_SOURCE_DIR} ${cadical_BINARY_DIR})
 -
--    set_target_properties(
--        cadical
--        PROPERTIES IMPORTED_LOCATION ${cadical_SOURCE_DIR}/build/libcadical.a
--    )
--
--    target_include_directories(solvers
--      PUBLIC
--      ${cadical_SOURCE_DIR}/src
--    )
-+    target_include_directories(solvers PUBLIC ${cadical_INCLUDE_DIR})
+         target_compile_definitions(solvers PUBLIC
+             SATCHECK_CADICAL HAVE_CADICAL
+         )
+@@ -140,6 +130,7 @@ foreach(SOLVER ${sat_impl})
+         target_include_directories(solvers
+             PUBLIC
+             ${cadical_SOURCE_DIR}/src
++	    ${cadical_INCLUDE_DIR}
+         )
  
-     target_link_libraries(solvers cadical)
- elseif("${sat_impl}" STREQUAL "ipasir-cadical")
+         target_link_libraries(solvers cadical)
 -- 
-2.35.1
+2.40.1
 
