@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , fetchFromGitHub
 , buildGoModule
 , wrapGAppsHook
@@ -20,9 +19,10 @@ buildGoModule rec {
     owner = "yktoo";
     repo = "ymuse";
     rev = "v${version}";
-    sha256 = "sha256-3QgBbK7AK9/uQ6Z7DNIJxa1oXrxvvHDQ/Z2QOf7yfS4=";
+    hash = "sha256-3QgBbK7AK9/uQ6Z7DNIJxa1oXrxvvHDQ/Z2QOf7yfS4=";
   };
-  vendorSha256 = "sha256-7oYYZWpvWzeHlp6l9bLeHcLITLZPVY5eZdfHSE+ZHW8=";
+
+  vendorHash = "sha256-7oYYZWpvWzeHlp6l9bLeHcLITLZPVY5eZdfHSE+ZHW8=";
 
   nativeBuildInputs = [
     pkg-config

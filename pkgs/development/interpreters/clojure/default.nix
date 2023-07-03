@@ -71,6 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
     update-source-version clojure "$latest_version"
   '';
 
+  passthru.jdk = jdk;
+
   meta = with lib; {
     description = "A Lisp dialect for the JVM";
     homepage = "https://clojure.org/";

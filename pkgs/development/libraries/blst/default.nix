@@ -14,17 +14,55 @@ stdenv.mkDerivation ( finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    ./build.sh
+    ./build.sh ${lib.optionalString stdenv.targetPlatform.isWindows "flavour=mingw64"}
+    ./build.sh -shared ${lib.optionalString stdenv.targetPlatform.isWindows "flavour=mingw64"}
 
     runHook postBuild
   '';
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib
-    cp ./libblst.a $out/lib/
+    mkdir -p $out/{lib,include}
+    for lib in libblst.{a,so,dylib}; do
+      if [ -f $lib ]; then
+        cp $lib $out/lib/
+      fi
+    done
+    cp bindings/{blst.h,blst_aux.h} $out/include
+
+    for lib in blst.dll; do
+      if [ -f $lib ]; then
+        mkdir -p $out/bin
+        cp $lib $out/bin/
+      fi
+    done
+
+    mkdir -p $out/lib/pkgconfig
+    cat <<EOF > $out/lib/pkgconfig/libblst.pc
+    prefix=$out
+    exec_prefix=''\\''${prefix}
+    libdir=''\\''${exec_prefix}/lib
+    includedir=''\\''${prefix}/include
+
+    Name: libblst
+    Description: ${finalAttrs.meta.description}
+    URL: ${finalAttrs.meta.homepage}
+    Version: ${finalAttrs.version}
+
+    Cflags: -I''\\''${includedir}
+    Libs: -L''\\''${libdir} -lblst
+    Libs.private:
+    EOF
 
     runHook postInstall
+  '';
+
+  # ensure we have the right install id set.  Otherwise the library
+  # wouldn't be found during install.  The alternative would be to work
+  # lib.optional stdenv.isDarwin "LDFLAGS=-Wl,-install_name,$(out)/lib/libblst.dylib";
+  # into the setup.sh
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -id $out/lib/libblst.dylib $out/lib/libblst.dylib
   '';
 
   doCheck = true;

@@ -430,8 +430,6 @@ in {
 
     rtl8189fs = callPackage ../os-specific/linux/rtl8189fs { };
 
-    rtl8723bs = callPackage ../os-specific/linux/rtl8723bs { };
-
     rtl8723ds = callPackage ../os-specific/linux/rtl8723ds { };
 
     rtl8812au = callPackage ../os-specific/linux/rtl8812au { };
@@ -563,6 +561,7 @@ in {
   } // lib.optionalAttrs config.allowAliases {
     ati_drivers_x11 = throw "ati drivers are no longer supported by any kernel >=4.1"; # added 2021-05-18;
     sch_cake = throw "sch_cake was added in mainline kernel version 4.19"; # Added 2023-06-14
+    rtl8723bs = throw "rtl8723bs was added in mainline kernel version 4.12"; # Added 2023-06-14
     xmm7360-pci = throw "Support for the XMM7360 WWAN card was added to the iosm kmod in mainline kernel version 5.18";
   });
 

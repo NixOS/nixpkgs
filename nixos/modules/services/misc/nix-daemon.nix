@@ -656,7 +656,7 @@ in
           to view the current value. By default it is empty.
 
           Nix configurations defined under {option}`nix.*` will be translated and applied to this
-          option. In addition, configuration specified in {option}`nix.extraOptions` which will be appended
+          option. In addition, configuration specified in {option}`nix.extraOptions` will be appended
           verbatim to the resulting config file.
         '';
       };
