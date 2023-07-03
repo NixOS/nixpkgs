@@ -14823,9 +14823,6 @@
   "python-ptrace": [
     "setuptools"
   ],
-  "python-pushover": [
-    "setuptools"
-  ],
   "python-rabbitair": [
     "setuptools"
   ],
