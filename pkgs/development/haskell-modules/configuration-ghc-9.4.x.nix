@@ -170,8 +170,15 @@ in {
   cairo = __CabalEagerPkgConfigWorkaround (doJailbreak super.cairo);
   pango = __CabalEagerPkgConfigWorkaround (doJailbreak super.pango);
 
+  gi-atk = __CabalEagerPkgConfigWorkaround super.gi-atk;
   gi-cairo = __CabalEagerPkgConfigWorkaround super.gi-cairo;
+  gi-gdkpixbuf = __CabalEagerPkgConfigWorkaround super.gi-gdkpixbuf;
+  gi-gio = __CabalEagerPkgConfigWorkaround super.gi-gio;
   gi-glib = __CabalEagerPkgConfigWorkaround super.gi-glib;
+  gi-gobject = __CabalEagerPkgConfigWorkaround super.gi-gobject;
+  gi-gmodule = __CabalEagerPkgConfigWorkaround super.gi-gmodule;
+  gi-harfbuzz = __CabalEagerPkgConfigWorkaround super.gi-harfbuzz;
+  gi-pango = __CabalEagerPkgConfigWorkaround super.gi-pango;
   haskell-gi = __CabalEagerPkgConfigWorkaround super.haskell-gi;
   haskell-gi-base = __CabalEagerPkgConfigWorkaround super.haskell-gi-base;
 
