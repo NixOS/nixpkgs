@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, acl, attr, zlib }:
+{ lib, stdenv, fetchurl, acl, attr, libiconv, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "libisofs";
@@ -11,9 +11,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-rB/TONZBdEyh+xVnkXGIt5vIwlBoMt1WiF/smGVrnyU=";
   };
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.isLinux [
     acl
     attr
+  ] ++ lib.optionals stdenv.isDarwin [
+    libiconv
+  ] ++ [
     zlib
   ];
 
@@ -24,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "A library to create an ISO-9660 filesystem with extensions like RockRidge or Joliet";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ abbradar vrthra ];
-    platforms = with platforms; linux;
+    platforms = with platforms; unix;
   };
 }
