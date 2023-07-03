@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "snakemake";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Y/z7asYSRgDyDWmvfmX4y6fOMSpp0X9uhDx327YF2TI=";
+    hash = "sha256-UfUzvDo5OE1LGCBBGoDpxG96RKOaShbqu5TOOILG3AY=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
