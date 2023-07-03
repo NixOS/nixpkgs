@@ -55,7 +55,6 @@ in {
         intel2200BGFirmware
         rtl8192su-firmware
         rt5677-firmware
-        rtl8723bs-firmware
         rtl8761b-firmware
         rtw88-firmware
         zd1211fw

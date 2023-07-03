@@ -7897,6 +7897,8 @@ self: super: with self; {
 
   pysolcast = callPackage ../development/python-modules/pysolcast { };
 
+  pysubs2 = callPackage ../development/python-modules/pysubs2 { };
+
   pysqlitecipher = callPackage ../development/python-modules/pysqlitecipher { };
 
   pysyncthru = callPackage ../development/python-modules/pysyncthru { };
@@ -11736,8 +11738,6 @@ self: super: with self; {
   sphinx-markdown-tables = callPackage ../development/python-modules/sphinx-markdown-tables { };
 
   sphinx-material = callPackage ../development/python-modules/sphinx-material { };
-
-  sphinx-navtree = callPackage ../development/python-modules/sphinx-navtree { };
 
   sphinx-mdinclude = callPackage ../development/python-modules/sphinx-mdinclude { };
 

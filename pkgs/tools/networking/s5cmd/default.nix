@@ -2,16 +2,19 @@
 
 buildGoModule rec {
   pname = "s5cmd";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "peak";
     repo = "s5cmd";
     rev = "v${version}";
-    sha256 = "sha256-9G0GSMNLYeIrbq7zctM3OCRcEZF1giEt+u5g3lTX96M=";
+    hash = "sha256-uH6KE3sTPc2FfqOxr6cB3A8DOq+VjGsJ3KoK8riOKXk=";
   };
 
   vendorSha256 = null;
+
+  # Skip e2e tests requiring network access
+  excludedPackages = [ "./e2e" ];
 
   meta = with lib; {
     homepage = "https://github.com/peak/s5cmd";

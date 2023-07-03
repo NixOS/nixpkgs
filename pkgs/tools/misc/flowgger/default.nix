@@ -37,6 +37,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/awslabs/flowgger";
     description = "A fast, simple and lightweight data collector written in Rust";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ earthengine ];
+    maintainers = with maintainers; [];
   };
 }
