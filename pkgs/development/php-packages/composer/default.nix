@@ -2,11 +2,11 @@
 
 mkDerivation rec {
   pname = "composer";
-  version = "2.5.7";
+  version = "2.5.8";
 
   src = fetchurl {
     url = "https://github.com/composer/composer/releases/download/${version}/composer.phar";
-    sha256 = "sha256-klbEwcgDudDLemahq2xzfkjEPMbfe47J7CSXpyS/RN4=";
+    hash = "sha256-8Hk0+tRPkEjA3IdaUGzKMcwnlNauv8GGfzsfv0jc4sU=";
   };
 
   dontUnpack = true;
@@ -23,11 +23,11 @@ mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "Dependency Manager for PHP";
-    license = licenses.mit;
-    homepage = "https://getcomposer.org/";
+  meta = {
     changelog = "https://github.com/composer/composer/releases/tag/${version}";
-    maintainers = with maintainers; [ offline ] ++ teams.php.members;
+    description = "Dependency Manager for PHP";
+    homepage = "https://getcomposer.org/";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ offline ] ++ lib.teams.php.members;
   };
 }
