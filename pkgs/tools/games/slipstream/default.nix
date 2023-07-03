@@ -1,6 +1,5 @@
-{ lib, fetchFromGitHub, stdenv, makeWrapper, buildMaven, maven, jdk8 }:
+{ lib, fetchFromGitHub, stdenv, makeWrapper, buildMaven, maven, jdk }:
 let
-  jdk = jdk8;
   mavenWithJdk = maven.override { inherit jdk; };
 in
 mavenWithJdk.buildMavenPackage rec {

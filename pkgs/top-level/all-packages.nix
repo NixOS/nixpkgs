@@ -1783,7 +1783,9 @@ with pkgs;
 
   sitespeed-io = callPackage ../tools/networking/sitespeed-io { };
 
-  slipstream = callPackage ../tools/games/slipstream { };
+  slipstream = callPackage ../tools/games/slipstream {
+    jdk = jdk8;
+  };
 
   sorted-grep = callPackage ../tools/text/sorted-grep { };
 
