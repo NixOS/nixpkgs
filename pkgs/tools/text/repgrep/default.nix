@@ -42,5 +42,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/acheronfail/repgrep/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ mit asl20 unlicense ];
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "rgr";
   };
 }

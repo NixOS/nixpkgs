@@ -1591,6 +1591,8 @@ with pkgs;
 
   donkey = callPackage ../tools/security/donkey { };
 
+  dualsensectl = callPackage ../tools/games/dualsensectl { };
+
   dwarfs = callPackage ../tools/filesystems/dwarfs { };
 
   etlegacy = callPackage ../games/etlegacy { lua = lua5_4; };
@@ -3778,6 +3780,8 @@ with pkgs;
 
   grandperspective = callPackage ../os-specific/darwin/grandperspective { };
 
+  hexfiend = callPackage ../os-specific/darwin/hexfiend { };
+
   grb = callPackage ../applications/misc/grb { };
 
   kerf   = kerf_1; /* kerf2 is WIP */
@@ -4606,6 +4610,8 @@ with pkgs;
   crowdsec = callPackage ../tools/security/crowdsec { };
 
   crunch = callPackage ../tools/security/crunch { };
+
+  crunchy-cli = callPackage ../applications/video/crunchy-cli { };
 
   crudini = callPackage ../tools/misc/crudini { };
 
@@ -5912,6 +5918,8 @@ with pkgs;
   profetch = callPackage ../tools/misc/profetch { };
 
   psrecord = python3Packages.callPackage ../tools/misc/psrecord { };
+
+  pyenv = callPackage ../development/tools/pyenv { };
 
   r53-ddns = callPackage ../applications/networking/r53-ddns { };
 
@@ -9538,6 +9546,8 @@ with pkgs;
 
   matrix-conduit = callPackage ../servers/matrix-conduit { };
 
+  matrix-sliding-sync = callPackage ../servers/matrix-synapse/sliding-sync { };
+
   matrix-synapse = callPackage ../servers/matrix-synapse { };
 
   matrix-synapse-plugins = recurseIntoAttrs matrix-synapse.plugins;
@@ -10755,6 +10765,8 @@ with pkgs;
   pasystray = callPackage ../tools/audio/pasystray { };
 
   pcmsolver = callPackage ../development/libraries/pcmsolver { };
+
+  pegasus-frontend = libsForQt5.callPackage ../games/pegasus-frontend {};
 
   pgbadger = perlPackages.callPackage ../tools/misc/pgbadger { };
 
@@ -12848,6 +12860,8 @@ with pkgs;
 
   sockperf = callPackage ../tools/networking/sockperf { };
 
+  softnet = callPackage ../tools/networking/softnet { };
+
   solaar = callPackage ../applications/misc/solaar { };
 
   solanum = callPackage ../servers/irc/solanum {
@@ -13604,6 +13618,8 @@ with pkgs;
   ubidump = python3Packages.callPackage ../tools/filesystems/ubidump { };
 
   ubi_reader = callPackage ../tools/filesystems/ubi_reader { };
+
+  ubpm = libsForQt5.callPackage ../applications/misc/ubpm { };
 
   ubridge = callPackage ../tools/networking/ubridge { };
 
@@ -16800,6 +16816,7 @@ with pkgs;
   cargo-sync-readme = callPackage ../development/tools/rust/cargo-sync-readme { };
   cargo-tally = callPackage ../development/tools/rust/cargo-tally { };
   cargo-temp = callPackage ../development/tools/rust/cargo-temp { };
+  cargo-toml-lint = callPackage ../development/tools/rust/cargo-toml-lint { };
   cargo-udeps = callPackage ../development/tools/rust/cargo-udeps {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
@@ -17126,7 +17143,8 @@ with pkgs;
 
   angelscript = callPackage ../development/interpreters/angelscript { };
 
-  babashka = callPackage ../development/interpreters/clojure/babashka.nix { };
+  babashka-unwrapped = callPackage ../development/interpreters/babashka { };
+  babashka = callPackage ../development/interpreters/babashka/wrapped.nix { };
 
   # BQN interpreters and compilers
 
@@ -17673,6 +17691,8 @@ with pkgs;
   rubyPackages_3_2 = recurseIntoAttrs ruby_3_2.gems;
 
   mruby = callPackage ../development/compilers/mruby { };
+
+  samplebrain = libsForQt5.callPackage ../applications/audio/samplebrain { };
 
   scsh = callPackage ../development/interpreters/scsh { };
 
@@ -23512,6 +23532,8 @@ with pkgs;
 
   nanomsg = callPackage ../development/libraries/nanomsg { };
 
+  nanosvg = callPackage ../development/libraries/nanosvg { };
+
   nanovna-saver = libsForQt5.callPackage ../applications/science/electronics/nanovna-saver { };
 
   nanotts = callPackage ../tools/audio/nanotts { };
@@ -27864,6 +27886,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  ols = callPackage ../development/tools/ols { };
+
   openpam = callPackage ../development/libraries/openpam { };
 
   openbsm = callPackage ../development/libraries/openbsm { };
@@ -28012,8 +28036,6 @@ with pkgs;
   rt5677-firmware = callPackage ../os-specific/linux/firmware/rt5677 { };
 
   rtl8192su-firmware = callPackage ../os-specific/linux/firmware/rtl8192su-firmware { };
-
-  rtl8723bs-firmware = callPackage ../os-specific/linux/firmware/rtl8723bs-firmware { };
 
   rtl8761b-firmware = callPackage ../os-specific/linux/firmware/rtl8761b-firmware { };
 
@@ -30514,7 +30536,8 @@ with pkgs;
     buildServerGui = false;
   };
 
-  drawterm = callPackage ../tools/admin/drawterm { };
+  drawterm = callPackage ../tools/admin/drawterm { config = "unix"; };
+  drawterm-wayland = callPackage ../tools/admin/drawterm { config = "linux";  };
 
   droopy = python3Packages.callPackage ../applications/networking/droopy { };
 
@@ -34621,6 +34644,8 @@ with pkgs;
 
   sway-launcher-desktop = callPackage ../applications/misc/sway-launcher-desktop { };
 
+  tart = callPackage ../applications/virtualization/tart { };
+
   tecoc = callPackage ../applications/editors/tecoc { };
 
   viber = callPackage ../applications/networking/instant-messengers/viber { };
@@ -36600,6 +36625,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
+  doomrunner = qt5.callPackage ../games/doom-ports/doomrunner { };
+
   chocolate-doom = callPackage ../games/doom-ports/chocolate-doom { };
 
   crispy-doom = callPackage ../games/doom-ports/crispy-doom { };
@@ -37209,6 +37236,8 @@ with pkgs;
   marble-marcher-ce = callPackage ../games/marble-marcher-ce { };
 
   mars = callPackage ../games/mars { };
+
+  mchprs = callPackage ../games/mchprs { };
 
   megaglest = callPackage ../games/megaglest { };
 
@@ -38013,6 +38042,8 @@ with pkgs;
     vlcSupport = true;
     gstreamerSupport = true;
   };
+
+  autodock-vina = callPackage ../applications/science/chemistry/autodock-vina { };
 
   dkh = callPackage ../applications/science/chemistry/dkh { };
 
@@ -39848,6 +39879,7 @@ with pkgs;
 
   nix-delegate = haskell.lib.compose.justStaticExecutables haskellPackages.nix-delegate;
   nix-deploy = haskell.lib.compose.justStaticExecutables haskellPackages.nix-deploy;
+  nix-derivation = haskell.lib.compose.justStaticExecutables haskellPackages.nix-derivation;
   nix-diff = haskell.lib.compose.justStaticExecutables haskellPackages.nix-diff;
 
   nix-du = callPackage ../tools/package-management/nix-du {
@@ -41196,4 +41228,6 @@ with pkgs;
   charasay = callPackage ../tools/misc/charasay { };
 
   waylyrics = callPackage ../applications/audio/waylyrics { };
+
+  gitrs = callPackage ../tools/misc/gitrs { };
 }

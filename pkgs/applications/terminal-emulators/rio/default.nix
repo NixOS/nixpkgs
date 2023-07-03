@@ -10,6 +10,7 @@
 , fontconfig
 , libGL
 , vulkan-loader
+, libxkbcommon
 
 , withX11 ? true
 , libX11
@@ -18,7 +19,7 @@
 , libXrandr
 , libxcb
 
-, withWayland ? false
+, withWayland ? true
 , wayland
 }:
 let
@@ -26,6 +27,7 @@ let
     (lib.getLib gcc-unwrapped)
     fontconfig
     libGL
+    libxkbcommon
     vulkan-loader
   ] ++ lib.optionals withX11 [
     libX11
@@ -39,16 +41,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "rio";
-  version = "0.0.7";
+  version = "0.0.8";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
     rev = "v${version}";
-    hash = "sha256-SiDYOhwuxksmIp7hvrA3TX1TFB4PsojnOa8FpYvi9q0=";
+    hash = "sha256-NonIMGBASbkbc5JsHKwfaZ9dGQt1f8+hFh/FFyIlIZs=";
   };
 
-  cargoHash = "sha256-A5hMJUHdewhMPcCZ3ogqhQLW7FAmXks8f8l5tTtyBac=";
+  cargoHash = "sha256-4IJJtLa25aZkFwkMYpnYyRQLeqoBwncgCjorF6Gx6pk=";
 
   nativeBuildInputs = [
     autoPatchelfHook

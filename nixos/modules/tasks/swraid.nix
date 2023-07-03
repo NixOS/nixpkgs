@@ -5,8 +5,12 @@
 in {
 
   options.boot.initrd.services.swraid = {
-    enable = (lib.mkEnableOption (lib.mdDoc "swraid support using mdadm")) // {
-      visible = false; # only has effect when the new stage 1 is in place
+    enable = lib.mkEnableOption (lib.mdDoc "swraid support using mdadm") // {
+      description = ''
+        *This will only be used when systemd is used in stage 1.*
+
+        Whether to enable swraid support using mdadm.
+      '';
     };
 
     mdadmConf = lib.mkOption {

@@ -6,15 +6,19 @@
 , pytest
 , pybind11
 , setuptools-scm
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyamg";
-  version = "5.0.0";
+  version = "5.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6rlnIo9hQ0LOI8e01rvKJa2LknpFy3Ym0e8XyfBioC4=";
+    hash = "sha256-XwSKAXQzQ64NTIYjBgBzhs+5sURTxHrf2tJ363mkbVA=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Algebraic Multigrid Solvers in Python";
     homepage = "https://github.com/pyamg/pyamg";
+    changelog = "https://github.com/pyamg/pyamg/blob/v${version}/changelog.md";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };
