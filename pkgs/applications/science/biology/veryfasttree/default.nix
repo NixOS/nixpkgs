@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake, llvmPackages}:
 
 stdenv.mkDerivation rec {
   pname   = "veryfasttree";
@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
+  buildInputs = lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   installPhase = ''
     install -m755 -D VeryFastTree $out/bin/VeryFastTree
@@ -22,5 +23,6 @@ stdenv.mkDerivation rec {
     license     = licenses.gpl3Plus;
     homepage    = "https://github.com/citiususc/veryfasttree";
     maintainers = with maintainers; [ thyol ];
+    platforms   = platforms.all;
   };
 }
