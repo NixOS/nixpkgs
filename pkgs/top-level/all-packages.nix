@@ -1711,6 +1711,8 @@ with pkgs;
 
   linux-router-without-wifi = linux-router.override { useWifiDependencies = false; };
 
+  maxfetch = callPackage ../tools/misc/maxfetch { };
+
   mbidled = callPackage ../tools/networking/mbidled { };
 
   metapixel = callPackage ../tools/graphics/metapixel { };
