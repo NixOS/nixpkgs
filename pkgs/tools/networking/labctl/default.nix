@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "labctl";
-  version = "0.0.15";
+  version = "0.0.20";
 
   src = fetchFromGitHub {
     owner = "labctl";
     repo = "labctl";
     rev = "v${version}";
-    hash = "sha256-txleZMgj/06PmP8Bv1J6n/2ywViNFqlgdCNzaTrY58c=";
+    hash = "sha256-gLdcPT82hkttESxwjk1mCzuaUxcwm0dULil634u7qg8=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

@@ -1,11 +1,9 @@
 { fetchFromGitHub
-, gcc
 , lib
 , libnl
 , libpcap
 , pkg-config
 , stdenv
-, writeShellScriptBin
 }:
 stdenv.mkDerivation rec {
   pname = "nmrpflash";
@@ -23,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libnl libpcap ];
 
   PREFIX = "${placeholder "out"}";
-  STANDALONE_VERSION = "${version}";
+  STANDALONE_VERSION = version;
 
   preInstall = ''
     mkdir -p $out/bin
