@@ -14,6 +14,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-kOXpPMck5OvhLt6A3xY0Bjx6hVaSaFkZv+YLVWyb0J4=";
   };
 
+  # Appears to fail on Rosetta and Musl on aarch64: https://github.com/NixOS/nixpkgs/pull/233306
+  postPatch = if stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64) then ''
+    sed -i 's:gnulib-tests::g' Makefile.in
+  '' else null;
+
   outputs = [ "out" "info" ];
 
   nativeBuildInputs = [ (lib.getBin xz) ];
