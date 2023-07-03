@@ -6,11 +6,15 @@
 , pytest
 , pybind11
 , setuptools-scm
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyamg";
   version = "5.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
