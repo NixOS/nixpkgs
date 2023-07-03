@@ -2364,6 +2364,11 @@ self: super: {
     vty = self.vty_5_35_1;
   });
 
+  # Too strict bounds on text and tls
+  # https://github.com/barrucadu/irc-conduit/issues/54
+  irc-conduit = doJailbreak super.irc-conduit;
+  irc-client = doJailbreak super.irc-client;
+
   # 2022-02-25: Unmaintained and to strict upper bounds
   paths = doJailbreak super.paths;
 
