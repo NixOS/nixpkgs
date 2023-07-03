@@ -17137,7 +17137,8 @@ with pkgs;
 
   angelscript = callPackage ../development/interpreters/angelscript { };
 
-  babashka = callPackage ../development/interpreters/clojure/babashka.nix { };
+  babashka-unwrapped = callPackage ../development/interpreters/babashka { };
+  babashka = callPackage ../development/interpreters/babashka/wrapped.nix { };
 
   # BQN interpreters and compilers
 
@@ -28027,8 +28028,6 @@ with pkgs;
   rt5677-firmware = callPackage ../os-specific/linux/firmware/rt5677 { };
 
   rtl8192su-firmware = callPackage ../os-specific/linux/firmware/rtl8192su-firmware { };
-
-  rtl8723bs-firmware = callPackage ../os-specific/linux/firmware/rtl8723bs-firmware { };
 
   rtl8761b-firmware = callPackage ../os-specific/linux/firmware/rtl8761b-firmware { };
 
