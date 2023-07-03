@@ -6138,7 +6138,7 @@ in with self; {
   arrApply = derive2 { name="arrApply"; version="2.2"; sha256="0bp30622md9zzdgv9g1kqp5k450cd5yzpqji51wwcjp8l347fb6y"; depends=[Rcpp RcppArmadillo]; };
   arrangements = derive2 { name="arrangements"; version="1.1.9"; sha256="0nrlyxgn6667l2rb1q5rvps1anld9aq88qqr3ch2i6zchnqxrdg9"; depends=[gmp R6]; };
   arrayhelpers = derive2 { name="arrayhelpers"; version="1.1-0"; sha256="02rl530qxi1idiqpmzg5wr9vl5c7phizhpj64k5pn8xq9zfxbpaz"; depends=[svUnit]; };
-  arrow = derive2 { name="arrow"; version="11.0.0.3"; sha256="1bvf04pmxckz3is04acsl7a86lha5b6qrxb2zmn8w8glymqr94zb"; depends=[assertthat bit64 cpp11 glue purrr R6 rlang tidyselect vctrs]; };
+  arrow = derive2 { name="arrow"; version="12.0.0"; sha256="1hv18ksaghifj4jjdy1cf2ic0rrgfi7jbjpzxb7v6r3bbshs9vwi"; depends=[assertthat bit64 cpp11 glue purrr R6 rlang tidyselect vctrs]; };
   ars = derive2 { name="ars"; version="0.6"; sha256="0zs1rk3i7pc9wcvxrvjcls194mfbvmkz7cb6pwd1cm3fzjwsyxsp"; depends=[]; };
   arse = derive2 { name="arse"; version="1.0.0"; sha256="0ssaalc058m09gfcr1n0s729rx2plia3zkhlynj67drclyvhyb0i"; depends=[dplyr pracma]; };
   arsenal = derive2 { name="arsenal"; version="3.6.3"; sha256="0qvs3ld28djnjnggdhqjwq8sbv8zz322qahlvf7dnx35yqf6xkms"; depends=[knitr]; };
