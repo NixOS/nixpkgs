@@ -3864,6 +3864,8 @@ with pkgs;
 
   flood = callPackage ../applications/networking/p2p/flood { };
 
+  flood-for-transmission = callPackage ../applications/networking/p2p/flood-for-transmission { };
+
   font-config-info = callPackage ../tools/misc/font-config-info { };
 
   foxdot = with python3Packages; toPythonApplication foxdot;
