@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "6.3.0";
+  version = "6.4.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-37KpjbluemU8/8ZpMzWhpGbimjS2rFKL5I814dJ2ZzI=";
+    sha256 = "sha256-TFG43svH5NoVn/sGb1kM+5Pb+a9/+GsWR85Ct8F5onI=";
   };
 
   patches = [
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
 
     # fix build on musl. applied anywhere to prevent patchrot.
     (fetchpatch {
-      url = "https://git.alpinelinux.org/aports/plain/main/iproute2/min.patch?id=4b78dbe29d18151402052c56af43cc12d04b1a69";
-      sha256 = "sha256-0ROZQAN3mUPPgggictr23jyA4JDG7m9vmBUhgRp4ExY=";
+      url = "https://git.alpinelinux.org/aports/plain/main/iproute2/include.patch?id=bd46efb8a8da54948639cebcfa5b37bd608f1069";
+      sha256 = "sha256-NpNnSXQntuzzpjswE42yzo7nqmrQgI5YcHR2kp9NEwA=";
     })
   ];
 
