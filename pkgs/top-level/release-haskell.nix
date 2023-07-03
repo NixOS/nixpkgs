@@ -482,15 +482,9 @@ let
       cabal-install = released;
       Cabal_3_10_1_0 = released;
       Cabal-syntax_3_10_1_0 = released;
-      cabal2nix = lib.subtractLists [
-        compilerNames.ghc962
-      ] released;
-      cabal2nix-unstable = lib.subtractLists [
-        compilerNames.ghc962
-      ] released;
-      funcmp = lib.subtractLists [
-        compilerNames.ghc962
-      ] released;
+      cabal2nix = released;
+      cabal2nix-unstable = released;
+      funcmp = released;
       haskell-language-server = lib.subtractLists [
         # Support ceased as of 1.9.0.0
         compilerNames.ghc884
@@ -504,9 +498,7 @@ let
       hpack = released;
       hsdns = released;
       jailbreak-cabal = released;
-      language-nix = lib.subtractLists [
-        compilerNames.ghc962
-      ] released;
+      language-nix = released;
       large-hashable = [
         compilerNames.ghc928
       ];
