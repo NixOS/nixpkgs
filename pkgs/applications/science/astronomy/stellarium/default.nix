@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "stellarium";
-  version = "23.1";
+  version = "23.2";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${version}";
-    hash = "sha256-7jzS3pRklPsCTgCr3nrywfHCNlBDHuyuGGvrVoI9+A0=";
+    hash = "sha256-8Iheb/9wjf0u10ZQRkLMLNN2s7P++Fqcr26iatiKcTo=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
