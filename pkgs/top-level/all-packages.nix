@@ -21012,6 +21012,10 @@ with pkgs;
     stdenv = gccCrossLibcStdenv; # doesn't compile without gcc
   };
 
+  glibcHeaders = callPackage ../development/libraries/glibc/headers.nix {
+    stdenv = stdenvNoCC;
+  };
+
   muslCross = musl.override {
     stdenv = crossLibcStdenv;
   };

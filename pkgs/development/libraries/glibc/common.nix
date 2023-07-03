@@ -218,7 +218,7 @@ stdenv.mkDerivation ({
 
     configureScript="`pwd`/../$sourceRoot/configure"
 
-    ${lib.optionalString (stdenv.cc.libc != null)
+    ${lib.optionalString (stdenv.cc.libc or null != null)
       ''makeFlags="$makeFlags BUILD_LDFLAGS=-Wl,-rpath,${stdenv.cc.libc}/lib OBJDUMP=${stdenv.cc.bintools.bintools}/bin/objdump"''
     }
 
