@@ -5,6 +5,10 @@
 let
 
   cfg = config.programs.xonsh;
+  package = cfg.package.overridePythonAttrs (old: {
+    python3 = pkgs.python3.withPackages (ps: cfg.xontribs);
+    propagatedBuildInputs = old.propagatedBuildInputs ++ cfg.xontribs;
+  });
 
 in
 
@@ -30,6 +34,22 @@ in
         default = "";
         description = "Control file to customize your shell behavior.";
         type = lib.types.lines;
+      };
+
+      xontribs = lib.mkOption {
+        default = [];
+        description = ''
+          Add the listed xontribs to the package options. Available xontribs are
+          under xonsh.xontribs.
+
+          Take care in using this option along with manually defining the package
+          option above, as the two can result in conflicting sets of build dependencies.
+          This option assumes that the package option has an overridable argument
+          called `extraPackages`, so if you override the package option but also
+          intend to use this option, be sure that your resulting package still honors
+          the necessary option.
+        '';
+        example = "xontribs = with pkgs.xonsh.xontribs; [ xontrib-vox xontrib-abbrevs ];";
       };
 
     };
@@ -64,11 +84,13 @@ in
       ${cfg.config}
     '';
 
-    environment.systemPackages = [ cfg.package ];
-
-    environment.shells = [
-      "/run/current-system/sw/bin/xonsh"
-      "${lib.getExe cfg.package}"
+    environment.systemPackages = [
+      package
     ];
+
+    environment.shells =
+      [ "/run/current-system/sw/bin/xonsh"
+        "${lib.getExe package}"
+      ];
   };
 }
