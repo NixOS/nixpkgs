@@ -8572,6 +8572,22 @@ with self; {
     };
   };
 
+  EvalSafe = buildPerlPackage rec {
+    pname = "Eval-Safe";
+    version = "0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MATHIAS/Eval-Safe/Eval-Safe-${version}.tar.gz";
+      hash = "sha256-VaUsIz4troYRP58Zs09hftz8hBb5vs5nEme9GBGxIRE=";
+    };
+    outputs = [ "out" ];
+    meta = with lib; {
+      description = "Simplified safe evaluation of Perl code";
+      homepage = "https://github.com/mkende/perl-eval-safe";
+      license = licenses.mit;
+      maintainers = with maintainers; [ figsoda ];
+    };
+  };
+
   ExcelWriterXLSX = buildPerlPackage {
     pname = "Excel-Writer-XLSX";
     version = "1.09";
