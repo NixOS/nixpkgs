@@ -435,6 +435,7 @@ in {
   lxd = handleTest ./lxd.nix {};
   lxd-nftables = handleTest ./lxd-nftables.nix {};
   lxd-image-server = handleTest ./lxd-image-server.nix {};
+  lxd-ui = handleTest ./lxd-ui.nix {};
   #logstash = handleTest ./logstash.nix {};
   lorri = handleTest ./lorri/default.nix {};
   maddy = discoverTests (import ./maddy { inherit handleTest; });
