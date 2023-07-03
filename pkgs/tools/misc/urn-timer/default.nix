@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation {
   pname = "urn-timer";
-  version = "unstable-2023-03-18";
+  version = "unstable-2023-07-01";
 
   src = fetchFromGitHub {
     owner = "paoloose";
     repo = "urn";
-    rev = "09c075607a6e26307665b45095e133d6805f0aeb";
-    hash = "sha256-0/V1KQxwHhpcruEsll0+JNtgT/6vEkpt+ff3SlsHYr8=";
+    rev = "8efdabcdd806b3b8997b82925d26209e6da8311b";
+    hash = "sha256-lQVdHD3IkITJ2P2zimhFLTxmOzZkdWOg/RhR2xlBLJU=";
   };
 
   postPatch = ''
