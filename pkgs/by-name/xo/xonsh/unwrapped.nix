@@ -21,18 +21,12 @@ python3.pkgs.buildPythonApplication {
     owner = "xonsh";
     repo = "xonsh";
     rev = "refs/tags/${version}";
-    hash = "sha256-mHOCkUGiSSPmkIQ4tgRZIaCTLgnx39SMwug5EIx/jrU=";
+    hash = "sha256-ZrPKKa/vl06QAjGr16ZzKF/DAByFHr6ze2WVOCa+wf8=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
     setuptools
     wheel
-  ];
-
-  propagatedBuildInputs = with python3.pkgs; [
-    ply
-    prompt-toolkit
-    pygments
   ];
 
   env.LC_ALL = "en_US.UTF-8";
@@ -75,17 +69,6 @@ python3.pkgs.buildPythonApplication {
     "tests/completers/test_bash_completer.py"
   ];
 
-  nativeCheckInputs = [
-    git
-    glibcLocales
-  ] ++ (with python3.pkgs; [
-    pip
-    pyte
-    pytest-mock
-    pytest-subprocess
-    pytestCheckHook
-  ]);
-
   preCheck = ''
     export HOME=$TMPDIR
   '';
@@ -103,6 +86,6 @@ python3.pkgs.buildPythonApplication {
     description = "A Python-ish, BASHwards-compatible shell";
     changelog = "https://github.com/xonsh/xonsh/raw/${version}/CHANGELOG.rst";
     license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ AndersonTorres greg ];
   };
 }
