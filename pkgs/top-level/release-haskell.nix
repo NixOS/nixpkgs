@@ -509,6 +509,9 @@ let
       language-nix = lib.subtractLists [
         compilerNames.ghc962
       ] released;
+      large-hashable = [
+        compilerNames.ghc928
+      ];
       nix-paths = released;
       titlecase = released;
       ghc-api-compat = [

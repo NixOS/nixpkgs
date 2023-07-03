@@ -2142,6 +2142,12 @@ self: super: {
         "-n" "^Data.LargeHashable.Tests.Inspection:genericSumGetsOptimized$"
       ];
     }))
+    # https://github.com/factisresearch/large-hashable/issues/25
+    # Currently broken with text >= 2.0
+    (overrideCabal (lib.optionalAttrs (lib.versionAtLeast self.ghc.version "9.4") {
+      broken = true;
+      hydraPlatforms = [];
+    }))
   ];
 
   # BSON defaults to requiring network instead of network-bsd which is
