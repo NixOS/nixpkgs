@@ -62,16 +62,19 @@ let
     ++ (if withoutTargetLibc then [
       "--disable-libssp"
       "--disable-nls"
+    ] ++ lib.optionals (targetPlatform.libc != "glibc") [
       "--without-headers"
       "--disable-threads"
+    ] ++ [
       "--disable-libgomp"
       "--disable-libquadmath"
       (lib.enableFeature enableShared "shared")
       "--disable-libatomic" # requires libc
       "--disable-decimal-float" # requires libc
       "--disable-libmpx" # requires libc
-    ] ++ lib.optionals crossMingw [
+    ] ++ lib.optionals (crossMingw || targetPlatform.libc == "glibc") [
       "--with-headers=${lib.getDev libcCross}/include"
+    ] ++ lib.optionals crossMingw [
       "--with-gcc"
       "--with-gnu-as"
       "--with-gnu-ld"
@@ -112,7 +115,7 @@ let
       "--with-mpfr-lib=${mpfr.out}/lib"
       "--with-mpc=${libmpc}"
     ]
-    ++ lib.optionals (!withoutTargetLibc) [
+    ++ lib.optionals (!withoutTargetLibc || (targetPlatform.libc == "glibc" && libcCross!=null)) [
       (if libcCross == null
        then "--with-native-system-header-dir=${lib.getDev stdenv.cc.libc}/include"
        else "--with-native-system-header-dir=${lib.getDev libcCross}${libcCross.incdir or "/include"}")

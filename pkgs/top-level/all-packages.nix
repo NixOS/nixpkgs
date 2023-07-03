@@ -21026,6 +21026,11 @@ with pkgs;
   in     if libc == "msvcrt" then targetPackages.windows.mingw_w64_headers or windows.mingw_w64_headers
     else if libc == "nblibc" then targetPackages.netbsdCross.headers or netbsdCross.headers
     else if libc == "libSystem" && stdenv.targetPlatform.isAarch64 then targetPackages.darwin.LibsystemCross or darwin.LibsystemCross
+    # If ${targetPackages.glibc}/include/stdio.h does not exist during the
+    # configurePhase of pkgsCross.*.gcc.libgcc, the stack unwinder will be
+    # silently disabled.  The resulting libgcc_s.so will deliberately crash any
+    # process which attempts to use `pthread_cleanup_push()` or similar calls.
+    else if libc == "glibc" then targetPackages.glibcHeaders or glibcHeaders
     else null;
 
   # We can choose:
