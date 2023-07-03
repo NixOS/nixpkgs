@@ -13775,6 +13775,8 @@ with pkgs;
 
   versus = callPackage ../applications/networking/versus { };
 
+  veryl = callPackage ../development/compilers/veryl { };
+
   vexctl = callPackage ../tools/security/vexctl { };
 
   vgrep = callPackage ../tools/text/vgrep { };
