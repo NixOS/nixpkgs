@@ -1060,6 +1060,7 @@ in {
       services.redis.servers.nextcloud = lib.mkIf cfg.configureRedis {
         enable = true;
         user = "nextcloud";
+        port = 0;
       };
 
       services.nextcloud = lib.mkIf cfg.configureRedis {
