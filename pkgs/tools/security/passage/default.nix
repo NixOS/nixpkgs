@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     sha256 = "1val8wl9kzlxj4i1rrh2iiyf97w9akffvr0idvbkdb09hfzz4lz8";
   };
 
-  patches = lib.optional stdenv.isDarwin [
+  patches = [
     (substituteAll {
       src = ./darwin-getopt-path.patch;
       GETOPT = "${getopt}/bin/getopt";
