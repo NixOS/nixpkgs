@@ -2108,9 +2108,10 @@ self: super: {
   gi-gtk-declarative-app-simple = doJailbreak super.gi-gtk-declarative-app-simple;
 
   # 2023-04-09: haskell-ci needs Cabal-syntax 3.10
-  haskell-ci = super.haskell-ci.overrideScope (self: super: {
+  # 2023-07-03: allow lattices-2.2, waiting on https://github.com/haskell-CI/haskell-ci/pull/664
+  haskell-ci = doJailbreak (super.haskell-ci.overrideScope (self: super: {
     Cabal-syntax = self.Cabal-syntax_3_10_1_0;
-  });
+  }));
 
   large-hashable = lib.pipe (super.large-hashable.override {
     # https://github.com/factisresearch/large-hashable/commit/5ec9d2c7233fc4445303564047c992b693e1155c
