@@ -3,28 +3,38 @@
 , stdenv
 , fetchFromGitHub
 , nix-update-script
-, qmake
-, pkg-config
-, qtbase
-, qtmultimedia
 , libvorbis
+, pkg-config
+, qmake
+, qtbase
+, qttools
+, qtmultimedia
 , rtmidi
 }:
 
 mkDerivation rec {
   pname = "ptcollab";
-  version = "0.6.4.5";
+  version = "0.6.4.6";
 
   src = fetchFromGitHub {
     owner = "yuxshao";
     repo = "ptcollab";
     rev = "v${version}";
-    sha256 = "sha256-O7CNPMS0eRcqt2xAtyEFyLSV8U2xbxuV1DpBxZAFwQs=";
+    hash = "sha256-G0QQV0mvrrBAC2LSy45/NnEbHHA8/E0SZKJXvuVidRE=";
   };
 
-  nativeBuildInputs = [ qmake pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    qmake
+    qttools
+  ];
 
-  buildInputs = [ qtbase qtmultimedia libvorbis rtmidi ];
+  buildInputs = [
+    libvorbis
+    qtbase
+    qtmultimedia
+    rtmidi
+  ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Move appbundles to Applications before wrapping happens
