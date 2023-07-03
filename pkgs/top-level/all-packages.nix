@@ -3780,6 +3780,8 @@ with pkgs;
 
   grandperspective = callPackage ../os-specific/darwin/grandperspective { };
 
+  hexfiend = callPackage ../os-specific/darwin/hexfiend { };
+
   grb = callPackage ../applications/misc/grb { };
 
   kerf   = kerf_1; /* kerf2 is WIP */
