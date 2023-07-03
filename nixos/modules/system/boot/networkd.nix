@@ -170,7 +170,7 @@ let
           "batadv"
         ])
         (assertByteFormat "MTUBytes")
-        (assertMacAddress "MACAddress")
+        (assertNetdevMacAddress "MACAddress")
       ];
 
       sectionVLAN = checkUnitConfig "VLAN" [
