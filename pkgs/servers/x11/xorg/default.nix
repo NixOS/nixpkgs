@@ -2127,11 +2127,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputjoystick = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-input-joystick";
-    version = "1.6.3";
+    version = "1.6.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-input-joystick-1.6.3.tar.bz2";
-      sha256 = "1awfq496d082brgjbr60lhm6jvr9537rflwxqdfqwfzjy3n6jxly";
+      url = "mirror://xorg/individual/driver/xf86-input-joystick-1.6.4.tar.xz";
+      sha256 = "1lnc6cvrg81chb2hj3jphgx7crr4ab8wn60mn8f9nsdwza2w8plh";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2143,11 +2143,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputkeyboard = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-input-keyboard";
-    version = "1.9.0";
+    version = "2.0.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-input-keyboard-1.9.0.tar.bz2";
-      sha256 = "12032yg412kyvnmc5fha1in7mpi651d8sa1bk4138s2j2zr01jgp";
+      url = "mirror://xorg/individual/driver/xf86-input-keyboard-2.0.0.tar.xz";
+      sha256 = "1fgya6a0pzsb8ynp2qhx3bqg6nfc4y2sw9wmk7zd8pqplbqzsrij";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2159,11 +2159,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputlibinput = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libinput, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-input-libinput";
-    version = "1.2.0";
+    version = "1.3.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-input-libinput-1.2.0.tar.bz2";
-      sha256 = "1xk9b05csndcgcj8kbb6fkwa3c7njzzxc6qvz9bvy77y2k2s63gq";
+      url = "mirror://xorg/individual/driver/xf86-input-libinput-1.3.0.tar.xz";
+      sha256 = "1fqsik2hdibz7zx7bb2rkh6wadz0p31xpd50ljsnij9bl8hblihl";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2175,11 +2175,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputmouse = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-input-mouse";
-    version = "1.9.3";
+    version = "1.9.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-input-mouse-1.9.3.tar.bz2";
-      sha256 = "1iawr1wyl2qch1mqszcs0s84i92mh4xxprflnycbw1adc18b7v4k";
+      url = "mirror://xorg/individual/driver/xf86-input-mouse-1.9.5.tar.xz";
+      sha256 = "0s4rzp7aqpbqm4474hg4bz7i7vg3ir93ck2q12if4lj3nklqmpjg";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2191,11 +2191,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputsynaptics = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libevdev, libX11, libXi, xorgserver, libXtst }: stdenv.mkDerivation {
     pname = "xf86-input-synaptics";
-    version = "1.9.1";
+    version = "1.9.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-input-synaptics-1.9.1.tar.bz2";
-      sha256 = "0xhm03qywwfgkpfl904d08lx00y28m1b6lqmks5nxizixwk3by3s";
+      url = "mirror://xorg/individual/driver/xf86-input-synaptics-1.9.2.tar.xz";
+      sha256 = "0f1cjs9haxhjybfh2lh579s15i2q0q19whynpda3giizj6mlmymq";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2207,11 +2207,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputvmmouse = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, udev, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-input-vmmouse";
-    version = "13.1.0";
+    version = "13.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-input-vmmouse-13.1.0.tar.bz2";
-      sha256 = "06ckn4hlkpig5vnivl0zj8a7ykcgvrsj8b3iccl1pgn1gaamix8a";
+      url = "mirror://xorg/individual/driver/xf86-input-vmmouse-13.2.0.tar.xz";
+      sha256 = "1f1rlgp1rpsan8k4ax3pzhl1hgmfn135r31m80pjxw5q19c7gw2n";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2223,11 +2223,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputvoid = callPackage ({ stdenv, pkg-config, fetchurl, xorgserver, xorgproto }: stdenv.mkDerivation {
     pname = "xf86-input-void";
-    version = "1.4.1";
+    version = "1.4.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-input-void-1.4.1.tar.bz2";
-      sha256 = "171k8b8s42s3w73l7ln9jqwk88w4l7r1km2blx1vy898c854yvpr";
+      url = "mirror://xorg/individual/driver/xf86-input-void-1.4.2.tar.xz";
+      sha256 = "11bqy2djgb82c1g8ylpfwp3wjw4x83afi8mqyn5fvqp03kidh4d2";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2271,11 +2271,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoark = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-ark";
-    version = "0.7.5";
+    version = "0.7.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-ark-0.7.5.tar.bz2";
-      sha256 = "07p5vdsj2ckxb6wh02s61akcv4qfg6s1d5ld3jn3lfaayd3f1466";
+      url = "mirror://xorg/individual/driver/xf86-video-ark-0.7.6.tar.xz";
+      sha256 = "0p88blr3zgy47jc4aqivc6ypj4zq9pad1cl70wwz9xig29w9xk2s";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2287,11 +2287,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoast = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-ast";
-    version = "1.1.5";
+    version = "1.1.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-ast-1.1.5.tar.bz2";
-      sha256 = "1pm2cy81ma7ldsw0yfk28b33h9z2hcj5rccrxhfxfgvxsiavrnqy";
+      url = "mirror://xorg/individual/driver/xf86-video-ast-1.1.6.tar.xz";
+      sha256 = "1bqdjcxi8fj48821322djdqnrla2i48wqckdf364zagrqyllyxbm";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2335,11 +2335,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videocirrus = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-cirrus";
-    version = "1.5.3";
+    version = "1.6.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-cirrus-1.5.3.tar.bz2";
-      sha256 = "1asifc6ld2g9kap15vfhvsvyl69lj7pw3d9ra9mi4najllh7pj7d";
+      url = "mirror://xorg/individual/driver/xf86-video-cirrus-1.6.0.tar.xz";
+      sha256 = "00b468w01hqjczfqz42v2vqhb14db4wazcqi1w29lgfyhc0gmwqf";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2351,11 +2351,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videodummy = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-dummy";
-    version = "0.3.8";
+    version = "0.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-dummy-0.3.8.tar.bz2";
-      sha256 = "1fcm9vwgv8wnffbvkzddk4yxrh3kc0np6w65wj8k88q7jf3bn4ip";
+      url = "mirror://xorg/individual/driver/xf86-video-dummy-0.4.1.tar.xz";
+      sha256 = "1byzsdcnlnzvkcqrzaajzc3nzm7y7ydrk9bjr4x9lx8gznkj069m";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2383,11 +2383,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videogeode = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-geode";
-    version = "2.11.19";
+    version = "2.11.21";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-geode-2.11.19.tar.bz2";
-      sha256 = "0zn9gb49grds5mcs1dlrx241k2w1sgqmx4i5x7v6159xxqhlqsf6";
+      url = "mirror://xorg/individual/driver/xf86-video-geode-2.11.21.tar.xz";
+      sha256 = "07lzbyxss0m5i4j58z43zri2baawci9q1ykv1g828wqi2hzsqml2";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2431,11 +2431,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoi128 = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-i128";
-    version = "1.4.0";
+    version = "1.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-i128-1.4.0.tar.bz2";
-      sha256 = "1snhpv1igrhifcls3r498kjd14ml6x2xvih7zk9xlsd1ymmhlb4g";
+      url = "mirror://xorg/individual/driver/xf86-video-i128-1.4.1.tar.xz";
+      sha256 = "0imwmkam09wpp3z3iaw9i4hysxicrrax7i3p0l2glgp3zw9var3h";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2495,11 +2495,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videoneomagic = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-neomagic";
-    version = "1.3.0";
+    version = "1.3.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-neomagic-1.3.0.tar.bz2";
-      sha256 = "0r4h673kw8fl7afc30anwbjlbhp82mg15fvaxf470xg7z983k0wk";
+      url = "mirror://xorg/individual/driver/xf86-video-neomagic-1.3.1.tar.xz";
+      sha256 = "153lzhq0vahg3875wi8hl9rf4sgizs41zmfg6hpfjw99qdzaq7xn";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2543,11 +2543,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videonv = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-nv";
-    version = "2.1.21";
+    version = "2.1.22";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-nv-2.1.21.tar.bz2";
-      sha256 = "0bdk3pc5y0n7p53q4gc2ff7bw16hy5hwdjjxkm5j3s7hdyg6960z";
+      url = "mirror://xorg/individual/driver/xf86-video-nv-2.1.22.tar.xz";
+      sha256 = "126j60dgnmiahjk5mxbnaav23hv7nvxvh49vhn6qg2f3nlnr6632";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2639,11 +2639,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videos3virge = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-s3virge";
-    version = "1.11.0";
+    version = "1.11.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-s3virge-1.11.0.tar.bz2";
-      sha256 = "06d1v5s7xf00y18x12cz11sk00rgn0yq95w66kmgzy465pzxvj84";
+      url = "mirror://xorg/individual/driver/xf86-video-s3virge-1.11.1.tar.xz";
+      sha256 = "1qzfcq3rlpfdb6qxz8hrp9py1q11vyzl4iqxip1vpgfnfn83vl6f";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2655,11 +2655,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videosavage = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-savage";
-    version = "2.3.9";
+    version = "2.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-savage-2.3.9.tar.bz2";
-      sha256 = "11pcrsdpdrwk0mrgv83s5nsx8a9i4lhmivnal3fjbrvi3zdw94rc";
+      url = "mirror://xorg/individual/driver/xf86-video-savage-2.4.0.tar.xz";
+      sha256 = "1z81nqwaqqy9sc7pywkw4q9mijpvjx9w8xxr7d13k2nhzlng0v5k";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2687,11 +2687,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videosis = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-sis";
-    version = "0.11.0";
+    version = "0.12.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-sis-0.11.0.tar.bz2";
-      sha256 = "0srvrhydjnynfb7b1s145rgmsk4f71iz0ag4icpmb05944d90xr1";
+      url = "mirror://xorg/individual/driver/xf86-video-sis-0.12.0.tar.gz";
+      sha256 = "00j7i2r81496w27rf4nq9gc66n6nizp3fi7nnywrxs81j1j3pk4v";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2847,11 +2847,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videovesa = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-vesa";
-    version = "2.5.0";
+    version = "2.6.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-vesa-2.5.0.tar.bz2";
-      sha256 = "0nf6ai74c60xk96kgr8q9mx6lrxm5id3765ws4d801irqzrj85hz";
+      url = "mirror://xorg/individual/driver/xf86-video-vesa-2.6.0.tar.xz";
+      sha256 = "1ccvaigb1f1kz8nxxjmkfn598nabd92p16rx1g35kxm8n5qjf20h";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2863,11 +2863,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videovmware = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, udev, libpciaccess, libX11, libXext, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-vmware";
-    version = "13.3.0";
+    version = "13.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-vmware-13.3.0.tar.bz2";
-      sha256 = "0v06qhm059klq40m2yx4wypzb7h53aaassbjfmm6clcyclj1k5s7";
+      url = "mirror://xorg/individual/driver/xf86-video-vmware-13.4.0.tar.xz";
+      sha256 = "06mq7spifsrpbwq9b8kn2cn61xq6mpkq6lvh4qi6xk2yxpjixlxf";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2879,11 +2879,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videovoodoo = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-video-voodoo";
-    version = "1.2.5";
+    version = "1.2.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-voodoo-1.2.5.tar.bz2";
-      sha256 = "1s6p7yxmi12q4y05va53rljwyzd6ry492r1pgi7wwq6cznivhgly";
+      url = "mirror://xorg/individual/driver/xf86-video-voodoo-1.2.6.tar.xz";
+      sha256 = "00pn5826aazsdipf7ny03s1lypzid31fmswl8y2hrgf07bq76ab2";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
