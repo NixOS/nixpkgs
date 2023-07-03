@@ -24,6 +24,7 @@ stdenv.mkDerivation {
     description = "A fetching program written in shell";
     homepage = "https://github.com/jobcmax/maxfetch";
     license = licenses.gpl2Only;
+    maintainers = with maintainers; [ justinlime ];
     platforms = platforms.linux;
   };
 }
