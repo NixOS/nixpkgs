@@ -36457,6 +36457,8 @@ with pkgs;
 
   colobot = callPackage ../games/colobot { };
 
+  corsix-th = callPackage ../games/corsix-th { };
+
   enigma = callPackage ../games/enigma { };
 
   everspace = callPackage ../games/everspace { };
