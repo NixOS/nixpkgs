@@ -158,5 +158,7 @@ stdenv.mkDerivation rec {
     license = with lib.licenses; [ gpl2Plus mit ];
     maintainers = with lib.maintainers; [ astsmtl ];
     platforms = lib.platforms.unix;
+    # Needs macOS >= 10.14.6
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
