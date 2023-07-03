@@ -10,10 +10,8 @@ let
     withGraphviz ? false
   }:
   let
-    # Patches from the openembedded-core project to build vala without graphviz
-    # support. We need to apply an additional patch to allow building when the
-    # header file isn't available at all, but that patch (./gvc-compat.patch)
-    # can be shared between all versions of Vala so far.
+    # Build vala (valadoc) without graphviz support. Inspired from the openembedded-core project.
+    # https://github.com/openembedded/openembedded-core/blob/a5440d4288e09d3e/meta/recipes-devtools/vala/vala/disable-graphviz.patch
     graphvizPatch =
       {
         "0.48" = ./disable-graphviz-0.46.1.patch;
@@ -47,7 +45,7 @@ let
     # If we're disabling graphviz, apply the patches and corresponding
     # configure flag. We also need to override the path to the valac compiler
     # so that it can be used to regenerate documentation.
-    patches        = lib.optionals disableGraphviz [ graphvizPatch ./gvc-compat.patch ];
+    patches        = lib.optionals disableGraphviz [ graphvizPatch ];
     configureFlags = lib.optional  disableGraphviz "--disable-graphviz";
     # when cross-compiling ./compiler/valac is valac for host
     # so add the build vala in nativeBuildInputs
