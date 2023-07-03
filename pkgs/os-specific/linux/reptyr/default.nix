@@ -3,14 +3,14 @@
 let
   python = python3.withPackages (p: [ p.pexpect ]);
 in stdenv.mkDerivation rec {
-  version = "0.9.0";
+  version = "0.10.0";
   pname = "reptyr";
 
   src = fetchFromGitHub {
     owner = "nelhage";
     repo = "reptyr";
     rev = "reptyr-${version}";
-    sha256 = "sha256-gM3aMEqk71RWUN1NxByd21tIzp6PmJ54Cqrh5MsjHtI=";
+    sha256 = "sha256-jlO/ykrwGJkgKiPxfRQEX4TSksrbPQhkQs+QddwqaQ4=";
   };
 
   makeFlags = [ "PREFIX=" "DESTDIR=$(out)" ];

@@ -1,10 +1,10 @@
 {
   "aci": {
-    "hash": "sha256-EmYgUWRZoIJ+wZIe4E7MlRep+uVveCbeBNDBgG7ryr8=",
+    "hash": "sha256-MF1YeTzKmua4C6Ay9QQGjVzjYCEZtyGW2wrMQH5Un/k=",
     "homepage": "https://registry.terraform.io/providers/CiscoDevNet/aci",
     "owner": "CiscoDevNet",
     "repo": "terraform-provider-aci",
-    "rev": "v2.8.0",
+    "rev": "v2.9.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -46,11 +46,11 @@
     "vendorHash": "sha256-Z7HlUJ5VuQ7rBhoprmvS6HwNZ53iUoBnfXzKTV43bzE="
   },
   "alicloud": {
-    "hash": "sha256-RtxWaEcDSC2lZX6eiqEnJJMj/spvFjqjUP1Ao0p8S2Q=",
+    "hash": "sha256-SYzc8mvLdSHWR75+Fy4Egn2BO8t89aowYHhZ6MlyEIU=",
     "homepage": "https://registry.terraform.io/providers/aliyun/alicloud",
     "owner": "aliyun",
     "repo": "terraform-provider-alicloud",
-    "rev": "v1.207.0",
+    "rev": "v1.207.1",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },

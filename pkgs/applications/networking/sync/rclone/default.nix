@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "rclone";
-  version = "1.62.2";
+  version = "1.63.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nG3XW6OGzfbvkBmlmeOCnVRFun3EWIVLLvMXGhOAi+4=";
+    hash = "sha256-ojP1Uf9iP6kOlzW8qsUx1SnMRxFZLsgkjFD4LVH0oTI=";
   };
 
-  vendorSha256 = "sha256-UA6PlhKxJ9wpg3mbiJ4Mqc4npwEBa93qi6WrQR8JQSk=";
+  vendorSha256 = "sha256-0YenfRa5udTrajPLI1ZMV+NYDHKO++M0KvIvr4gYLLc=";
 
   subPackages = [ "." ];
 
@@ -54,6 +54,6 @@ buildGoModule rec {
     homepage = "https://rclone.org";
     changelog = "https://github.com/rclone/rclone/blob/v${version}/docs/content/changelog.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ danielfullmer marsam SuperSandro2000 ];
+    maintainers = with maintainers; [ marsam SuperSandro2000 ];
   };
 }

@@ -1591,6 +1591,8 @@ with pkgs;
 
   donkey = callPackage ../tools/security/donkey { };
 
+  dualsensectl = callPackage ../tools/games/dualsensectl { };
+
   dwarfs = callPackage ../tools/filesystems/dwarfs { };
 
   etlegacy = callPackage ../games/etlegacy { lua = lua5_4; };
@@ -4607,6 +4609,8 @@ with pkgs;
 
   crunch = callPackage ../tools/security/crunch { };
 
+  crunchy-cli = callPackage ../applications/video/crunchy-cli { };
+
   crudini = callPackage ../tools/misc/crudini { };
 
   csv2odf = callPackage ../applications/office/csv2odf { };
@@ -5912,6 +5916,8 @@ with pkgs;
   profetch = callPackage ../tools/misc/profetch { };
 
   psrecord = python3Packages.callPackage ../tools/misc/psrecord { };
+
+  pyenv = callPackage ../development/tools/pyenv { };
 
   r53-ddns = callPackage ../applications/networking/r53-ddns { };
 
@@ -10756,6 +10762,8 @@ with pkgs;
 
   pcmsolver = callPackage ../development/libraries/pcmsolver { };
 
+  pegasus-frontend = libsForQt5.callPackage ../games/pegasus-frontend {};
+
   pgbadger = perlPackages.callPackage ../tools/misc/pgbadger { };
 
   pffft = callPackage ../development/libraries/pffft { };
@@ -12848,6 +12856,8 @@ with pkgs;
 
   sockperf = callPackage ../tools/networking/sockperf { };
 
+  softnet = callPackage ../tools/networking/softnet { };
+
   solaar = callPackage ../applications/misc/solaar { };
 
   solanum = callPackage ../servers/irc/solanum {
@@ -14789,6 +14799,9 @@ with pkgs;
 
   _4th = callPackage ../development/compilers/4th { };
 
+  temurin-bin-20 = javaPackages.compiler.temurin-bin.jdk-20;
+  temurin-jre-bin-20 = javaPackages.compiler.temurin-bin.jre-20;
+
   temurin-bin-19 = javaPackages.compiler.temurin-bin.jdk-19;
   temurin-jre-bin-19 = javaPackages.compiler.temurin-bin.jre-19;
 
@@ -15878,7 +15891,7 @@ with pkgs;
 
   hugs = callPackage ../development/interpreters/hugs { };
 
-  inherit (javaPackages) openjfx11 openjfx15 openjfx17 openjfx19;
+  inherit (javaPackages) openjfx11 openjfx15 openjfx17 openjfx19 openjfx20;
   openjfx = openjfx17;
 
   openjdk8-bootstrap = javaPackages.compiler.openjdk8-bootstrap;
@@ -15907,6 +15920,11 @@ with pkgs;
   openjdk19_headless = javaPackages.compiler.openjdk19.headless;
   jdk19 = openjdk19;
   jdk19_headless = openjdk19_headless;
+
+  openjdk20 = javaPackages.compiler.openjdk20;
+  openjdk20_headless = javaPackages.compiler.openjdk20.headless;
+  jdk20 = openjdk20;
+  jdk20_headless = openjdk20_headless;
 
   /* default JDK */
   jdk = jdk19;
@@ -16792,6 +16810,7 @@ with pkgs;
   cargo-sync-readme = callPackage ../development/tools/rust/cargo-sync-readme { };
   cargo-tally = callPackage ../development/tools/rust/cargo-tally { };
   cargo-temp = callPackage ../development/tools/rust/cargo-temp { };
+  cargo-toml-lint = callPackage ../development/tools/rust/cargo-toml-lint { };
   cargo-udeps = callPackage ../development/tools/rust/cargo-udeps {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
@@ -23504,6 +23523,8 @@ with pkgs;
 
   nanomsg = callPackage ../development/libraries/nanomsg { };
 
+  nanosvg = callPackage ../development/libraries/nanosvg { };
+
   nanovna-saver = libsForQt5.callPackage ../applications/science/electronics/nanovna-saver { };
 
   nanotts = callPackage ../tools/audio/nanotts { };
@@ -25939,6 +25960,8 @@ with pkgs;
   jitsi-meet-prosody = callPackage ../misc/jitsi-meet-prosody { };
 
   jitsi-videobridge = callPackage ../servers/jitsi-videobridge { };
+
+  kamailio = callPackage ../servers/sip/kamailio { };
 
   kanidm = callPackage ../servers/kanidm { };
 
@@ -30504,7 +30527,8 @@ with pkgs;
     buildServerGui = false;
   };
 
-  drawterm = callPackage ../tools/admin/drawterm { };
+  drawterm = callPackage ../tools/admin/drawterm { config = "unix"; };
+  drawterm-wayland = callPackage ../tools/admin/drawterm { config = "linux";  };
 
   droopy = python3Packages.callPackage ../applications/networking/droopy { };
 
@@ -34611,6 +34635,8 @@ with pkgs;
 
   sway-launcher-desktop = callPackage ../applications/misc/sway-launcher-desktop { };
 
+  tart = callPackage ../applications/virtualization/tart { };
+
   tecoc = callPackage ../applications/editors/tecoc { };
 
   viber = callPackage ../applications/networking/instant-messengers/viber { };
@@ -37200,6 +37226,8 @@ with pkgs;
 
   mars = callPackage ../games/mars { };
 
+  mchprs = callPackage ../games/mchprs { };
+
   megaglest = callPackage ../games/megaglest { };
 
   methane = callPackage ../games/methane { };
@@ -37761,6 +37789,8 @@ with pkgs;
 
   widelands = callPackage ../games/widelands { };
 
+  wolfstoneextract = callPackage ../games/wolfstoneextract { };
+
   worldofgoo = callPackage ../games/worldofgoo { };
 
   xboard =  callPackage ../games/xboard { };
@@ -38001,6 +38031,8 @@ with pkgs;
     vlcSupport = true;
     gstreamerSupport = true;
   };
+
+  autodock-vina = callPackage ../applications/science/chemistry/autodock-vina { };
 
   dkh = callPackage ../applications/science/chemistry/dkh { };
 
@@ -39836,6 +39868,7 @@ with pkgs;
 
   nix-delegate = haskell.lib.compose.justStaticExecutables haskellPackages.nix-delegate;
   nix-deploy = haskell.lib.compose.justStaticExecutables haskellPackages.nix-deploy;
+  nix-derivation = haskell.lib.compose.justStaticExecutables haskellPackages.nix-derivation;
   nix-diff = haskell.lib.compose.justStaticExecutables haskellPackages.nix-diff;
 
   nix-du = callPackage ../tools/package-management/nix-du {
