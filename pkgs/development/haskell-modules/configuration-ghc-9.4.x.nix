@@ -186,6 +186,9 @@ in {
   haskell-gi = __CabalEagerPkgConfigWorkaround super.haskell-gi;
   haskell-gi-base = __CabalEagerPkgConfigWorkaround super.haskell-gi-base;
 
+  # Cabal 3.8 bug workaround for applications using haskell-gi family of libraries
+  termonad = __CabalEagerPkgConfigWorkaround super.termonad;
+
   # Pending text-2.0 support https://github.com/gtk2hs/gtk2hs/issues/327
   gtk = doJailbreak super.gtk;
 }
