@@ -1,8 +1,14 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, sphinx, sphinxcontrib-tikz }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, sphinx
+, sphinxcontrib-tikz
+}:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-bayesnet";
   version = "0.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
