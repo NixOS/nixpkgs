@@ -17523,6 +17523,37 @@ with self; {
     };
   };
 
+  NeovimExt = buildPerlPackage rec {
+    pname = "Neovim-Ext";
+    version = "0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JA/JACQUESG/Neovim-Ext-${version}.tar.gz";
+      hash = "sha256-bSzrMGLJZzfbpVbLIEYxMPxABocbJbfE9mzTgZ1FBLg=";
+    };
+    propagatedBuildInputs = [
+      ClassAccessor
+      EvalSafe
+      IOAsync
+      MsgPackRaw
+    ];
+    checkInputs = [
+      ArchiveZip
+      FileSlurper
+      FileWhich
+      ProcBackground
+      TestPod
+      TestPodCoverage
+    ];
+    # TODO: fix tests
+    doCheck = false;
+    meta = with lib; {
+      description = "Perl bindings for Neovim";
+      homepage = "https://github.com/jacquesg/p5-Neovim-Ext";
+      license = with licenses; [ gpl1Plus /* or */ artistic1 ];
+      maintainers = with maintainers; [ figsoda ];
+    };
+  };
+
   NetIdent = buildPerlPackage {
     pname = "Net-Ident";
     version = "1.25";
