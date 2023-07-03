@@ -5,12 +5,15 @@
 , pythonRelaxDepsHook
 , rapidfuzz
 , click
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "jiwer";
   version = "3.0.2";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jitsi";
@@ -33,7 +36,9 @@ buildPythonPackage rec {
     "rapidfuzz"
   ];
 
-  pythonImportsCheck = [ "jiwer" ];
+  pythonImportsCheck = [
+    "jiwer"
+  ];
 
   meta = with lib; {
     description = "A simple and fast python package to evaluate an automatic speech recognition system";
