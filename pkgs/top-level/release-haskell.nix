@@ -501,9 +501,7 @@ let
       hlint = lib.subtractLists [
         compilerNames.ghc962
       ] released;
-      hpack = lib.subtractLists [
-        compilerNames.ghc962
-      ] released;
+      hpack = released;
       hsdns = released;
       jailbreak-cabal = released;
       language-nix = lib.subtractLists [
