@@ -19,7 +19,7 @@
 , libXrandr
 , libxcb
 
-, withWayland ? false
+, withWayland ? true
 , wayland
 }:
 let
