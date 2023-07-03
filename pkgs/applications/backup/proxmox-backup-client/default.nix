@@ -49,17 +49,27 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "proxmox-backup";
 
+  # These patches are essentially un-upstreamable, due to being "workarounds" related to the
+  # project structure.
   cargoPatches = [
+    # A lot of Rust crates `proxmox-backup-client` depends on are only available through git (or
+    # Debian packages). This patch redirects all these dependencies to a local, relative path, which
+    # works in combination with the other three repos being checked out.
     (fetchpatch {
       name = "0001-re-route-dependencies-not-available-on-crates.io-to-.patch";
       url = "https://aur.archlinux.org/cgit/aur.git/plain/0001-re-route-dependencies-not-available-on-crates.io-to-.patch?h=proxmox-backup-client&id=83a1f4dfcb04bd181b11954b1d9f5ddfcb72b3d0";
       hash = "sha256-2YZtjbpYSbRk6rmpjKJeIO+V0YN5PrKsISONXMj4RG0=";
     })
+    # This patch prevents the generation of the man-pages for other components inside the repo,
+    # which would require them too be built too. Thus avoid wasting resources and just skip them.
     (fetchpatch {
       name = "0002-docs-drop-all-but-client-man-pages.patch";
       url = "https://aur.archlinux.org/cgit/aur.git/plain/0002-docs-drop-all-but-client-man-pages.patch?h=proxmox-backup-client&id=83a1f4dfcb04bd181b11954b1d9f5ddfcb72b3d0";
       hash = "sha256-oJKQs4SwJvX5Zd0/l/vVr66aPO7Y4AC8byJHg9t1IhY=";
     })
+    # `make docs` assumes that the binaries are located under `target/{debug,release}`, but due
+    # to how `buildRustPackage` works, they get put under `target/$RUSTC_TARGET/{debug,release}`.
+    # This patch simply fixes that up.
     ./0001-docs-Add-target-path-fixup-variable.patch
   ];
 
