@@ -935,6 +935,8 @@ with pkgs;
 
   pacup = python3Packages.callPackage ../tools/package-management/pacup { };
 
+  patcher9x = callPackage ../development/tools/patcher9x { };
+
   perseus-cli = callPackage ../development/tools/perseus-cli {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
