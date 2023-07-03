@@ -12894,6 +12894,12 @@
       fingerprint = "D03B 218C AE77 1F77 D7F9  20D9 823A 6154 4264 08D3";
     }];
   };
+  piturnah = {
+    email = "peterhebden6@gmail.com";
+    github = "piturnah";
+    githubId = 20472367;
+    name = "Peter Hebden";
+  };
   piperswe = {
     email = "contact@piperswe.me";
     github = "piperswe";
