@@ -17411,6 +17411,22 @@ with self; {
     };
   };
 
+  MsgPackRaw = buildPerlPackage rec {
+    pname = "MsgPack-Raw";
+    version = "0.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JA/JACQUESG/MsgPack-Raw-${version}.tar.gz";
+      hash = "sha256-hVnitkzZjZmrxmbt8qTIckyVNGEmFq8R9OsLvQ1CLaw=";
+    };
+    checkInputs = [ TestPod TestPodCoverage ];
+    meta = with lib; {
+      description = "Perl bindings to the msgpack C library";
+      homepage = "https://github.com/jacquesg/p5-MsgPack-Raw";
+      license = with licenses; [ gpl1Plus /* or */ artistic1 ];
+      maintainers = with maintainers; [ figsoda ];
+    };
+  };
+
   MusicBrainzDiscID = buildPerlPackage {
     pname = "MusicBrainz-DiscID";
     version = "0.06";
