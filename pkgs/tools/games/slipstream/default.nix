@@ -25,14 +25,15 @@ mavenWithJdk.buildMavenPackage rec {
     install -Dm644 target/ftl-mod-manager-${version}.jar $out/share/java
     install -Dm644 target/modman.jar $out/share/java
 
-    makeWrapper ${wrapper} $out/bin/${pname} \
-      --suffix PATH : ${lib.makeBinPath [ jdk ]} \
-      --set jar_file "$out/share/java/modman.jar"
+    makeWrapper ${jdk}/bin/java $out/bin/${pname} \
+      --run 'echo $XDG_DATA_HOME > $HOME/debug' \
+      --run '_dir="''${XDG_DATA_HOME:-$HOME/.local/share}/slipstream"' \
+      --run 'mkdir -p $_dir/{mods,backup}' \
+      --run 'cd $_dir' \
+      --append-flags "-jar $out/share/java/modman.jar"
 
     runHook postInstall
   '';
-
-  wrapper = ./wrapper.sh;
 
   meta = with lib; {
     description = "A mod manager for FTL: Faster Than Light";
