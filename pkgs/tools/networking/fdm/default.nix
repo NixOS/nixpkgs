@@ -14,6 +14,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ openssl tdb zlib flex bison ];
 
+  postInstall = ''
+    install fdm-sanitize $out/bin
+    mkdir -p $out/share/doc/${pname}
+    install -m644 MANUAL $out/share/doc/${pname}
+    cp -R examples $out/share/doc/${pname}
+  '';
 
   meta = with lib; {
     description = "Mail fetching and delivery tool - should do the job of getmail and procmail";
