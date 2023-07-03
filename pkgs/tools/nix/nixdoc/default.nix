@@ -2,38 +2,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nixdoc";
-  version = "1.0.1";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
-    owner = "tazjin";
+    owner = "nix-community";
     repo  = "nixdoc";
     rev = "v${version}";
-    sha256 = "14d4dq06jdqazxvv7fq5872zy0capxyb0fdkp8qg06gxl1iw201s";
+    sha256 = "sha256-8pp6xlmdb3kZ6unTiO4yRruyEZ//GIHZF1k8f4kQr9Q=";
   };
 
-  patches = [
-    # Support nested identifiers https://github.com/nix-community/nixdoc/pull/27
-    (fetchpatch {
-      url = "https://github.com/nix-community/nixdoc/pull/27/commits/ea542735bf675fe2ccd37edaffb9138d1a8c1b7e.patch";
-      sha256 = "1fmz44jv2r9qsnjxvkkjfb0safy69l4x4vx1g5gisrp8nwdn94rj";
-    })
-  ];
+  cargoSha256 = "sha256-k8/+BBMjQCsrgCi33fTdiSukaAZlg6XU3NwXaJdGYVw=";
 
   buildInputs =  lib.optionals stdenv.isDarwin [ darwin.Security ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "arenatree-0.1.1" = "sha256-b3VVbYnWsjSjFMxvkfpJt13u+VC6baOIWD4qm1Gco4Q=";
-      "rnix-0.4.1" = "sha256-C1L/qXk6AimH7COrBlqpUA3giftaOYm/qNxs7rQgETA=";
-    };
-  };
-
   meta = with lib; {
     description = "Generate documentation for Nix functions";
-    homepage    = "https://github.com/tazjin/nixdoc";
+    homepage    = "https://github.com/nix-community/nixdoc";
     license     = [ licenses.gpl3 ];
-    maintainers = [ maintainers.tazjin ];
+    maintainers = [ maintainers.asymmetric ];
     platforms   = platforms.unix;
   };
 }
