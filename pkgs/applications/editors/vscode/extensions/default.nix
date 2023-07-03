@@ -930,8 +930,8 @@ let
         mktplcRef = {
           name = "composer-php-vscode";
           publisher = "devsense";
-          version = "1.34.13295";
-          sha256 = "sha256-1gmw9GKG6ak/TIDq8aI63KmiHhup9EsCS583Oc6jQ0I=";
+          version = "1.36.13428";
+          sha256 = "sha256-dzRuD0XBWU+xUtr86eN8zbZ6bVIq1BP0/EqgQG4JbvY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DEVSENSE.composer-php-vscode/changelog";
@@ -948,25 +948,25 @@ let
           sources = {
             "x86_64-linux" = {
               arch = "linux-x64";
-              sha256 = "sha256-L56vG9U2fqtaZIXQ5xepwLibOs/WyHQj/t2EIY7ZXvM=";
+              sha256 = "sha256-x4Vsr/79vZuNPGQqwOVdIMi2Ba9DfnKM1AjxCZbzJms=";
             };
             "x86_64-darwin" = {
               arch = "darwin-x64";
-              sha256 = "0rx2dkaz0qpmck1k4hg0jpksixhwcrq0sndimx0f44jcnc7aby21";
+              sha256 = "0c9jcjavkjiv92cd4wrvgcv70igghi5ha96hg7h63cgmxg7b87gk";
             };
             "aarch64-linux" = {
               arch = "linux-arm64";
-              sha256 = "13swwh1br6ry64hlq1yjbrbq71vyg44h0pb907zdjabwim27y88x";
+              sha256 = "0b3w3ssxymf9p1h4amnqimbsjf1wpxsi55b05wgqwh2w2zfxd91l";
             };
             "aarch64-darwin" = {
               arch = "darwin-arm64";
-              sha256 = "0fsisxc3vcyqk634xbk2rdcw2g8ablv3n46y6bz20i0npa4clhpa";
+              sha256 = "0mdqa9w1p6cmli6976v4wi0sw9r4p5prkj7lzfd1877wk11c9c73";
             };
           };
         in {
           name = "phptools-vscode";
           publisher = "devsense";
-          version = "1.34.13295";
+          version = "1.36.13428";
         } // sources.${stdenv.system};
 
         nativeBuildInputs = [
@@ -997,8 +997,8 @@ let
         mktplcRef = {
           name = "profiler-php-vscode";
           publisher = "devsense";
-          version = "1.34.13295";
-          sha256 = "sha256-ZGklnPnSaHCGCRukVHie5ShvX94rXp2z3e/5PP2dq7I=";
+          version = "1.36.13428";
+          sha256 = "sha256-/CT83LdQkEvsWrQX30bgnklgGKduYC0LqZ8gaexqu60=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DEVSENSE.profiler-php-vscode/changelog";
