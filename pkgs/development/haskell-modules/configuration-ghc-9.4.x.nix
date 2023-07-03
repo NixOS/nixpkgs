@@ -170,6 +170,11 @@ in {
   cairo = __CabalEagerPkgConfigWorkaround (doJailbreak super.cairo);
   pango = __CabalEagerPkgConfigWorkaround (doJailbreak super.pango);
 
+  gi-cairo = __CabalEagerPkgConfigWorkaround super.gi-cairo;
+  gi-glib = __CabalEagerPkgConfigWorkaround super.gi-glib;
+  haskell-gi = __CabalEagerPkgConfigWorkaround super.haskell-gi;
+  haskell-gi-base = __CabalEagerPkgConfigWorkaround super.haskell-gi-base;
+
   # Pending text-2.0 support https://github.com/gtk2hs/gtk2hs/issues/327
   gtk = doJailbreak super.gtk;
 }
