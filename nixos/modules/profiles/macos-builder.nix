@@ -177,7 +177,7 @@ in
         Please inspect the trace of the following command to figure out which module
         has a dependency on stateVersion.
 
-          nix-instantiate --attr darwin.builder --show-trace
+          nix-instantiate --attr darwin.linux-builder --show-trace
       '');
     };
 

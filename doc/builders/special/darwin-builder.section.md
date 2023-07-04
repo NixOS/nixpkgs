@@ -1,8 +1,12 @@
-# darwin.builder {#sec-darwin-builder}
+# darwin.linux-builder {#sec-darwin-builder}
 
-`darwin.builder` provides a way to bootstrap a Linux builder on a macOS machine.
+`darwin.linux-builder` provides a way to bootstrap a Linux builder on a macOS machine.
 
 This requires macOS version 12.4 or later.
+
+The builder runs on host port 31022 by default.
+You can change it by overriding `virtualisation.darwin-builder.hostPort`.
+See the [example](#sec-darwin-builder-example-flake).
 
 You will also need to be a trusted user for your Nix installation.  In other
 words, your `/etc/nix/nix.conf` should have something like:
@@ -14,7 +18,7 @@ extra-trusted-users = <your username goes here>
 To launch the builder, run the following flake:
 
 ```ShellSession
-$ nix run nixpkgs#darwin.builder
+$ nix run nixpkgs#darwin.linux-builder
 ```
 
 That will prompt you to enter your `sudo` password:
