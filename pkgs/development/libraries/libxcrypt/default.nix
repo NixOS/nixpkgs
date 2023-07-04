@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-hashes=${enableHashes}"
     "--enable-obsolete-api=glibc"
     "--disable-failure-tokens"
-  ] ++ lib.optionals (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.libc == "bionic") [
+    # required for musl, android, march=native
     "--disable-werror"
   ];
 
