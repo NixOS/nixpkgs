@@ -150,6 +150,7 @@ stdenv.mkDerivation (rec {
     LIB          = ${zlib.out}/lib
     OLD_ZLIB     = False
     GZIP_OS_CODE = AUTO_DETECT
+    USE_ZLIB_NG  = False
     EOF
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
