@@ -9611,6 +9611,8 @@ with pkgs;
 
   lazycli = callPackage ../tools/misc/lazycli { };
 
+  lavat = callPackage ../tools/misc/lavat { };
+
   lcdf-typetools = callPackage ../tools/misc/lcdf-typetools { };
 
   ldapdomaindump = with python3Packages; toPythonApplication ldapdomaindump;
