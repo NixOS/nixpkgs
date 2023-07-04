@@ -2495,6 +2495,10 @@ self: super: {
   # likely safe to remove when the assertion starts failing.
   optics = assert super.optics.version == "0.4.2"; dontCheck super.optics;
 
+  # Upper bounds are too strict:
+  # https://github.com/velveteer/hermes/pull/22
+  hermes-json = doJailbreak super.hermes-json;
+
   # Disabling doctests.
   regex-tdfa = overrideCabal {
     testTarget = "regex-tdfa-unittest";
