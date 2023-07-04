@@ -110,4 +110,32 @@
       versionSuffix = "esr";
     };
   };
+
+  firefox-esr-115 = buildMozillaMach rec {
+    pname = "firefox-esr-115";
+    version = "115.0esr";
+    applicationName = "Mozilla Firefox ESR";
+    src = fetchurl {
+      url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
+      sha512 = "377ab48989ec17b64bd06fed8dd80dde50c06dd4120a6ca1c2fe90a20c85d1c0ef6143a73daeb0271fb20a04b0fb53d837e116b56c63718d517b07ed4243a3e9";
+    };
+
+    meta = {
+      changelog = "https://www.mozilla.org/en-US/firefox/${lib.removeSuffix "esr" version}/releasenotes/";
+      description = "A web browser built from Firefox Extended Support Release source tree";
+      homepage = "http://www.mozilla.com/en-US/firefox/";
+      maintainers = with lib.maintainers; [ hexa ];
+      platforms = lib.platforms.unix;
+      badPlatforms = lib.platforms.darwin;
+      broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
+                                             # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
+      license = lib.licenses.mpl20;
+    };
+    tests = [ nixosTests.firefox-esr-115 ];
+    updateScript = callPackage ./update.nix {
+      attrPath = "firefox-esr-115-unwrapped";
+      versionPrefix = "115";
+      versionSuffix = "esr";
+    };
+  };
 }
