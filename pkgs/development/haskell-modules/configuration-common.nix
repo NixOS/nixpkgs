@@ -289,7 +289,10 @@ self: super: {
     # `git-annex-shell` by making `shell = haskellPackages.git-annex`.
     # https://git-annex.branchable.com/git-annex-shell/
     passthru.shellPath = "/bin/git-annex-shell";
-  }) super.git-annex;
+  }) (super.git-annex.overrideScope (self: _: {
+    # https://github.com/haskell-pkg-janitors/unix-compat/issues/3
+    unix-compat = self.unix-compat_0_6;
+  }));
 
   # Too strict bounds on servant
   # Pending a hackage revision: https://github.com/berberman/arch-web/commit/5d08afee5b25e644f9e2e2b95380a5d4f4aa81ea#commitcomment-89230555
