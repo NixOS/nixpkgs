@@ -5359,6 +5359,8 @@ with pkgs;
 
   flashfocus = callPackage ../misc/flashfocus { };
 
+  flashprint = libsForQt5.callPackage ../applications/misc/flashprint/default.nix { };
+
   qt-video-wlr = libsForQt5.callPackage ../applications/misc/qt-video-wlr { };
 
   fwup = callPackage ../tools/misc/fwup {
