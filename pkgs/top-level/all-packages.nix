@@ -12514,7 +12514,7 @@ with pkgs;
 
   sewer = callPackage ../tools/admin/sewer { };
 
-  sexp = callPackage ../development/libraries/sexp { };
+  sexpp = callPackage ../development/libraries/sexpp { };
 
   sfeed = callPackage ../tools/misc/sfeed { };
 
