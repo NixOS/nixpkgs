@@ -47,7 +47,6 @@ let
       };
     });
 
-  flutter2Patches = getPatches ./patches/flutter2;
   flutter3Patches = getPatches ./patches/flutter3;
 in
 {
@@ -74,17 +73,5 @@ in
       aarch64-linux = "sha256-pYmClIqOo0sRPOkrcF4xQbo0mHlrr1TkhT1fnNyYNck=";
     };
     patches = flutter3Patches;
-  };
-
-  v2 = mkFlutter {
-    version = "2.10.5";
-    engineVersion = "57d3bac3dd5cb5b0e464ab70e7bc8a0d8cf083ab";
-    dartVersion = "2.16.2";
-    hash = "sha256-MxaWvlcCfXN8gsC116UMzqb4LgixHL3YjrGWy7WYgW4=";
-    dartHash = {
-      x86_64-linux = "sha256-vxKxysg6e3Qxtlp4dLxOZaBtgHGtl7XYd73zFZd9yJc=";
-      aarch64-linux = "sha256-ZfpR6fj/a9Bsgrg31Z/uIJaCHIWtcQH3VTTVkDJKkwA=";
-    };
-    patches = flutter2Patches;
   };
 }
