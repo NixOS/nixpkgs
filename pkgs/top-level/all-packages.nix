@@ -16863,6 +16863,8 @@ with pkgs;
     ocamlformat_0_22_4 ocamlformat_0_23_0 ocamlformat_0_24_1 ocamlformat_0_25_1
     ocamlformat_0_26_0;
 
+  inherit (ocamlPackages) odig;
+
   orc = callPackage ../development/compilers/orc { };
 
   orocos-kdl = callPackage ../development/libraries/orocos-kdl { };

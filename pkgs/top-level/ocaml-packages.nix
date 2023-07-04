@@ -1332,6 +1332,8 @@ let
 
     odate = callPackage ../development/ocaml-modules/odate { };
 
+    odig = callPackage ../development/ocaml-modules/odig { };
+
     odoc = callPackage ../development/ocaml-modules/odoc { };
 
     odoc-parser = callPackage ../development/ocaml-modules/odoc-parser { };
