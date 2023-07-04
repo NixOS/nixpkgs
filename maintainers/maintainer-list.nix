@@ -7435,6 +7435,12 @@
     githubId = 8685505;
     name = "Jen-Chieh Shen";
   };
+  jcspeegs = {
+    email = "justin@speegs.com";
+    github = "jcspeegs";
+    githubId = 34928409;
+    name = "Justin Speegle";
+  };
   jcumming = {
     email = "jack@mudshark.org";
     github = "jcumming";
