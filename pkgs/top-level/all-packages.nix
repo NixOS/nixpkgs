@@ -31203,6 +31203,7 @@ with pkgs;
   firefox-beta-unwrapped = firefoxPackages.firefox-beta;
   firefox-devedition-unwrapped = firefoxPackages.firefox-devedition;
   firefox-esr-102-unwrapped = firefoxPackages.firefox-esr-102;
+  firefox-esr-115-unwrapped = firefoxPackages.firefox-esr-115;
   firefox-esr-unwrapped = firefoxPackages.firefox-esr-102;
 
   firefox = wrapFirefox firefox-unwrapped { };
@@ -31213,6 +31214,7 @@ with pkgs;
 
   firefox-esr = firefox-esr-102;
   firefox-esr-102 = wrapFirefox firefox-esr-102-unwrapped { };
+  firefox-esr-115 = wrapFirefox firefox-esr-115-unwrapped { };
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
     inherit (gnome) adwaita-icon-theme;

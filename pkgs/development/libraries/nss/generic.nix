@@ -16,6 +16,7 @@
   # https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_Tech_Notes/nss_tech_note6
   enableFIPS ? false
 , nixosTests
+, nss_latest
 }:
 
 let
@@ -189,10 +190,10 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  passthru.tests = lib.optionalAttrs (lib.versionOlder version "3.69") {
-    inherit (nixosTests) firefox-esr-91;
-  } // lib.optionalAttrs (lib.versionAtLeast version "3.69") {
-    inherit (nixosTests) firefox firefox-esr-102;
+  passthru.tests = lib.optionalAttrs (lib.versionOlder version nss_latest.version) {
+    inherit (nixosTests) firefox-esr-102;
+  } // lib.optionalAttrs (lib.versionAtLeast version nss_latest.version) {
+    inherit (nixosTests) firefox firefox-esr-115;
   };
 
   meta = with lib; {
