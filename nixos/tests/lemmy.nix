@@ -28,17 +28,11 @@ in
           # https://github.com/LemmyNet/lemmy/blob/50efb1d519c63a7007a07f11cc8a11487703c70d/crates/utils/src/settings/mod.rs#L52
           database.uri = "postgres:///lemmy?host=/run/postgresql&user=lemmy";
         };
-        secretFile = /etc/lemmy-config.hjson;
+        adminPasswordFile = /etc/lemmy-admin-password.txt;
         caddy.enable = true;
       };
 
-      environment.etc."lemmy-config.hjson".text = ''
-        {
-          "setup": {
-            "admin_password": "ThisIsWhatIUseEverywhereTryIt"
-          }
-        }
-      '';
+      environment.etc."lemmy-admin-password.txt".text = "ThisIsWhatIUseEverywhereTryIt";
 
       networking.firewall.allowedTCPPorts = [ 80 ];
 
