@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "0.28";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dr-prodigy";
