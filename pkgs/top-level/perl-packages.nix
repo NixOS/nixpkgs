@@ -8572,6 +8572,22 @@ with self; {
     };
   };
 
+  EvalSafe = buildPerlPackage rec {
+    pname = "Eval-Safe";
+    version = "0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MATHIAS/Eval-Safe/Eval-Safe-${version}.tar.gz";
+      hash = "sha256-VaUsIz4troYRP58Zs09hftz8hBb5vs5nEme9GBGxIRE=";
+    };
+    outputs = [ "out" ];
+    meta = with lib; {
+      description = "Simplified safe evaluation of Perl code";
+      homepage = "https://github.com/mkende/perl-eval-safe";
+      license = licenses.mit;
+      maintainers = with maintainers; [ figsoda ];
+    };
+  };
+
   ExcelWriterXLSX = buildPerlPackage {
     pname = "Excel-Writer-XLSX";
     version = "1.09";
@@ -17395,6 +17411,22 @@ with self; {
     };
   };
 
+  MsgPackRaw = buildPerlPackage rec {
+    pname = "MsgPack-Raw";
+    version = "0.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JA/JACQUESG/MsgPack-Raw-${version}.tar.gz";
+      hash = "sha256-hVnitkzZjZmrxmbt8qTIckyVNGEmFq8R9OsLvQ1CLaw=";
+    };
+    checkInputs = [ TestPod TestPodCoverage ];
+    meta = with lib; {
+      description = "Perl bindings to the msgpack C library";
+      homepage = "https://github.com/jacquesg/p5-MsgPack-Raw";
+      license = with licenses; [ gpl1Plus /* or */ artistic1 ];
+      maintainers = with maintainers; [ figsoda ];
+    };
+  };
+
   MusicBrainzDiscID = buildPerlPackage {
     pname = "MusicBrainz-DiscID";
     version = "0.06";
@@ -17488,6 +17520,37 @@ with self; {
       description = "Keep imports and functions out of your namespace";
       homepage = "https://search.cpan.org/dist/namespace-clean";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  NeovimExt = buildPerlPackage rec {
+    pname = "Neovim-Ext";
+    version = "0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JA/JACQUESG/Neovim-Ext-${version}.tar.gz";
+      hash = "sha256-bSzrMGLJZzfbpVbLIEYxMPxABocbJbfE9mzTgZ1FBLg=";
+    };
+    propagatedBuildInputs = [
+      ClassAccessor
+      EvalSafe
+      IOAsync
+      MsgPackRaw
+    ];
+    checkInputs = [
+      ArchiveZip
+      FileSlurper
+      FileWhich
+      ProcBackground
+      TestPod
+      TestPodCoverage
+    ];
+    # TODO: fix tests
+    doCheck = false;
+    meta = with lib; {
+      description = "Perl bindings for Neovim";
+      homepage = "https://github.com/jacquesg/p5-Neovim-Ext";
+      license = with licenses; [ gpl1Plus /* or */ artistic1 ];
+      maintainers = with maintainers; [ figsoda ];
     };
   };
 
