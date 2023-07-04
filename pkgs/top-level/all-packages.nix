@@ -6982,8 +6982,6 @@ with pkgs;
 
   ddcutil = callPackage ../tools/misc/ddcutil { };
 
-  ddclient = callPackage ../tools/networking/ddclient { };
-
   dd_rescue = callPackage ../tools/system/dd_rescue { };
 
   ddh = callPackage ../tools/system/ddh { };
