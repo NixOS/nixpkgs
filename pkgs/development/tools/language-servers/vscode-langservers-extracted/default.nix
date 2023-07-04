@@ -1,4 +1,4 @@
-{ lib, stdenv, buildNpmPackage, fetchFromGitHub, vscode, vscode-extensions }:
+{ lib, stdenv, buildNpmPackage, fetchFromGitHub, vscodium, vscode-extensions }:
 buildNpmPackage rec {
   pname = "vscode-langservers-extracted";
   version = "4.7.0";
@@ -17,8 +17,8 @@ buildNpmPackage rec {
       inherit (vscode-extensions.dbaeumer) vscode-eslint;
       extensions =
         if stdenv.isDarwin
-        then "${vscode}/Applications/Visual\\ Studio\\ Code.app/Contents/Resources/app/extensions"
-        else "${vscode}/lib/vscode/resources/app/extensions";
+        then "${vscodium}/Applications/VSCodium.app/Contents/Resources/app/extensions"
+        else "${vscodium}/lib/vscode/resources/app/extensions";
     in
     ''
       npx babel ${extensions}/css-language-features/server/dist/node \
