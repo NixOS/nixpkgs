@@ -1890,6 +1890,8 @@ let
 
     buildOasisPackage = callPackage ../build-support/ocaml/oasis.nix { };
 
+    buildTopkgPackage = callPackage ../build-support/ocaml/topkg.nix { };
+
     # Apps from all-packages, to be eventually removed
 
     google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse { };
