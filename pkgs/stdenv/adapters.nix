@@ -100,7 +100,7 @@ rec {
       NIX_CFLAGS_LINK = toString (finalAttrs.NIX_CFLAGS_LINK or "")
         + lib.optionalString (stdenv.cc.isGNU or false) " -static-libgcc";
       nativeBuildInputs = (finalAttrs.nativeBuildInputs or [])
-        ++ lib.optional stdenv.hasCC [
+        ++ lib.optionals stdenv.hasCC [
           (pkgs.buildPackages.makeSetupHook {
             name = "darwin-portable-libSystem-hook";
             substitutions = {
