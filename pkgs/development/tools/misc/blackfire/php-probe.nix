@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
       fi
 
       for source in ${lib.concatStringsSep " " (builtins.attrNames finalAttrs.passthru.updateables)}; do
-        update-source-version "$UPDATE_NIX_ATTR_PATH.updateables.$source" "0" "${lib.fakeSha256}"
+        update-source-version "$UPDATE_NIX_ATTR_PATH.updateables.$source" "0" "sha256-${lib.fakeSha256}"
         update-source-version "$UPDATE_NIX_ATTR_PATH.updateables.$source" "$NEW_VERSION"
       done
     '';
@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
         createUpdateable = path: _value:
           lib.nameValuePair
             (createName path)
-            (finalAttrs.self.overrideAttrs (attrs: {
+            (finalAttrs.finalPackage.overrideAttrs (attrs: {
               src = makeSource (createSourceParams path);
             }));
 
