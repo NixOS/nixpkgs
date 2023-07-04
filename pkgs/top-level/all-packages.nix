@@ -5352,6 +5352,8 @@ with pkgs;
 
   hyprland-protocols = callPackage ../applications/window-managers/hyprwm/hyprland-protocols { };
 
+  hyprland-relative-workspace = callPackage ../applications/misc/hyprland-relative-workspace { };
+
   hyprland-share-picker = libsForQt5.callPackage ../applications/window-managers/hyprwm/xdg-desktop-portal-hyprland/hyprland-share-picker.nix { };
 
   hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper { };
