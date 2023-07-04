@@ -240,9 +240,7 @@ with pkgs;
 
   anders = callPackage ../applications/science/logic/anders { };
 
-  ankisyncd = callPackage ../servers/ankisyncd {
-    python3 = python39;
-  };
+  ankisyncd = callPackage ../servers/ankisyncd { };
 
   ariang = callPackage ../servers/ariang { };
 
@@ -558,6 +556,10 @@ with pkgs;
   dtv-scan-tables = callPackage ../data/misc/dtv-scan-tables { };
 
   dufs = callPackage ../servers/http/dufs {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
+  dynein = callPackage ../development/tools/database/dynein {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
@@ -8416,6 +8418,8 @@ with pkgs;
 
   halftone = callPackage ../applications/graphics/halftone { };
 
+  halloy = callPackage ../applications/networking/irc/halloy { };
+
   harminv = callPackage ../development/libraries/science/chemistry/harminv { };
 
   igrep = callPackage ../tools/text/igrep {
@@ -9033,6 +9037,8 @@ with pkgs;
   ipxe = callPackage ../tools/misc/ipxe { };
 
   irker = callPackage ../servers/irker { };
+
+  iroh = callPackage ../applications/networking/iroh { };
 
   ised = callPackage ../tools/misc/ised { };
 
@@ -12514,7 +12520,7 @@ with pkgs;
 
   sewer = callPackage ../tools/admin/sewer { };
 
-  sexp = callPackage ../development/libraries/sexp { };
+  sexpp = callPackage ../development/libraries/sexpp { };
 
   sfeed = callPackage ../tools/misc/sfeed { };
 
@@ -17058,6 +17064,8 @@ with pkgs;
     vala;
 
   vyper = with python3Packages; toPythonApplication vyper;
+
+  wazero = callPackage ../development/interpreters/wazero { };
 
   wcc = callPackage ../development/compilers/wcc { };
 
@@ -31203,6 +31211,7 @@ with pkgs;
   firefox-beta-unwrapped = firefoxPackages.firefox-beta;
   firefox-devedition-unwrapped = firefoxPackages.firefox-devedition;
   firefox-esr-102-unwrapped = firefoxPackages.firefox-esr-102;
+  firefox-esr-115-unwrapped = firefoxPackages.firefox-esr-115;
   firefox-esr-unwrapped = firefoxPackages.firefox-esr-102;
 
   firefox = wrapFirefox firefox-unwrapped { };
@@ -31213,6 +31222,7 @@ with pkgs;
 
   firefox-esr = firefox-esr-102;
   firefox-esr-102 = wrapFirefox firefox-esr-102-unwrapped { };
+  firefox-esr-115 = wrapFirefox firefox-esr-115-unwrapped { };
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
     inherit (gnome) adwaita-icon-theme;
@@ -38163,6 +38173,10 @@ with pkgs;
   deepdiff = with python3Packages; toPythonApplication deepdiff;
 
   deepsea = callPackage ../tools/security/deepsea { };
+
+  deepsecrets = callPackage ../tools/security/deepsecrets {
+    python3 = python311;
+  };
 
   deeptools = callPackage ../applications/science/biology/deeptools { python = python3; };
 
