@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   patches = [
     (substituteAll {
       src = ./darwin-getopt-path.patch;
-      GETOPT = "${getopt}/bin/getopt";
+      inherit getopt;
     })
   ];
 
