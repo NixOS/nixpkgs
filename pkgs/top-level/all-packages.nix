@@ -38168,6 +38168,10 @@ with pkgs;
 
   deepsea = callPackage ../tools/security/deepsea { };
 
+  deepsecrets = callPackage ../tools/security/deepsecrets {
+    python3 = python311;
+  };
+
   deeptools = callPackage ../applications/science/biology/deeptools { python = python3; };
 
   deep-translator = with python3Packages; toPythonApplication deep-translator;
