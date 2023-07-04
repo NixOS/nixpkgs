@@ -10,7 +10,7 @@
 
 buildDunePackage rec {
   pname = "ssl";
-  version = "0.5.13";
+  version = "0.6.0";
 
   duneVersion = "3";
 
@@ -18,7 +18,7 @@ buildDunePackage rec {
     owner = "savonet";
     repo = "ocaml-ssl";
     rev = version;
-    sha256 = "sha256-Ws7QZOvZVy0QixMiBFJZEOnYzYlCWrZ1d95gOp/a5a0=";
+    sha256 = "sha256-zi5Ue6qOlLfsfPjzIwjjR+6ztSS2NwJmB1cCcVVC5TY=";
   };
 
   nativeBuildInputs = [ pkg-config ];
