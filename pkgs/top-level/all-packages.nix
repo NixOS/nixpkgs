@@ -3780,6 +3780,8 @@ with pkgs;
 
   grandperspective = callPackage ../os-specific/darwin/grandperspective { };
 
+  hexfiend = callPackage ../os-specific/darwin/hexfiend { };
+
   grb = callPackage ../applications/misc/grb { };
 
   kerf   = kerf_1; /* kerf2 is WIP */
@@ -9544,6 +9546,8 @@ with pkgs;
 
   matrix-conduit = callPackage ../servers/matrix-conduit { };
 
+  matrix-sliding-sync = callPackage ../servers/matrix-synapse/sliding-sync { };
+
   matrix-synapse = callPackage ../servers/matrix-synapse { };
 
   matrix-synapse-plugins = recurseIntoAttrs matrix-synapse.plugins;
@@ -13615,6 +13619,8 @@ with pkgs;
 
   ubi_reader = callPackage ../tools/filesystems/ubi_reader { };
 
+  ubpm = libsForQt5.callPackage ../applications/misc/ubpm { };
+
   ubridge = callPackage ../tools/networking/ubridge { };
 
   ubertooth = callPackage ../applications/radio/ubertooth { };
@@ -17137,7 +17143,8 @@ with pkgs;
 
   angelscript = callPackage ../development/interpreters/angelscript { };
 
-  babashka = callPackage ../development/interpreters/clojure/babashka.nix { };
+  babashka-unwrapped = callPackage ../development/interpreters/babashka { };
+  babashka = callPackage ../development/interpreters/babashka/wrapped.nix { };
 
   # BQN interpreters and compilers
 
@@ -17684,6 +17691,8 @@ with pkgs;
   rubyPackages_3_2 = recurseIntoAttrs ruby_3_2.gems;
 
   mruby = callPackage ../development/compilers/mruby { };
+
+  samplebrain = libsForQt5.callPackage ../applications/audio/samplebrain { };
 
   scsh = callPackage ../development/interpreters/scsh { };
 
@@ -27877,6 +27886,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  ols = callPackage ../development/tools/ols { };
+
   openpam = callPackage ../development/libraries/openpam { };
 
   openbsm = callPackage ../development/libraries/openbsm { };
@@ -28025,8 +28036,6 @@ with pkgs;
   rt5677-firmware = callPackage ../os-specific/linux/firmware/rt5677 { };
 
   rtl8192su-firmware = callPackage ../os-specific/linux/firmware/rtl8192su-firmware { };
-
-  rtl8723bs-firmware = callPackage ../os-specific/linux/firmware/rtl8723bs-firmware { };
 
   rtl8761b-firmware = callPackage ../os-specific/linux/firmware/rtl8761b-firmware { };
 
@@ -30767,6 +30776,10 @@ with pkgs;
   helix = callPackage ../applications/editors/helix { };
 
   icesl = callPackage ../applications/misc/icesl { };
+
+  input-leap = libsForQt5.callPackage ../applications/misc/input-leap {
+    avahi = avahi.override { withLibdnssdCompat = true; };
+  };
 
   karlender = callPackage ../applications/office/karlender { };
 
@@ -36616,6 +36629,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
+  doomrunner = qt5.callPackage ../games/doom-ports/doomrunner { };
+
   chocolate-doom = callPackage ../games/doom-ports/chocolate-doom { };
 
   crispy-doom = callPackage ../games/doom-ports/crispy-doom { };
@@ -41217,4 +41232,6 @@ with pkgs;
   charasay = callPackage ../tools/misc/charasay { };
 
   waylyrics = callPackage ../applications/audio/waylyrics { };
+
+  gitrs = callPackage ../tools/misc/gitrs { };
 }

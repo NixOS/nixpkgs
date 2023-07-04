@@ -2,40 +2,34 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
-, bzip2
 , oniguruma
 , openssl
-, xz
-, zstd
 , stdenv
 , darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "oranda";
-  version = "0.0.3";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "axodotdev";
     repo = "oranda";
     rev = "v${version}";
-    hash = "sha256-MT0uwLDrofCFyyYiUOogF2kNs6EPS1qxPz0gdK+Tkkg=";
+    hash = "sha256-bhMScPxf1svC6C8MvSHsVFrNzJYCkcR4mPJzK4OIoOU=";
   };
 
-  cargoHash = "sha256-dAnZc1VvOubfn7mnpttaB6FotN3Xc+t9Qn0n5uzv1Qg=";
+  cargoHash = "sha256-Zan5dTW/2k4rOl20lQwJWnzIiytKF2i+1oEW4o3k/vQ=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
   buildInputs = [
-    bzip2
     oniguruma
     openssl
-    xz
-    zstd
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.CoreServices
   ];
 
   # requires internet access
@@ -45,7 +39,6 @@ rustPlatform.buildRustPackage rec {
 
   env = {
     RUSTONIG_SYSTEM_LIBONIG = true;
-    ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
   meta = with lib; {

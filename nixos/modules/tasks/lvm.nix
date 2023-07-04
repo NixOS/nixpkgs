@@ -25,8 +25,12 @@ in {
     boot.vdo.enable = mkEnableOption (lib.mdDoc "support for booting from VDOLVs");
   };
 
-  options.boot.initrd.services.lvm.enable = (mkEnableOption (lib.mdDoc "enable booting from LVM2 in the initrd")) // {
-    visible = false;
+  options.boot.initrd.services.lvm.enable = mkEnableOption (lib.mdDoc "booting from LVM2 in the initrd") // {
+    description = lib.mdDoc ''
+      *This will only be used when systemd is used in stage 1.*
+
+      Whether to enable booting from LVM2 in the initrd.
+    '';
   };
 
   config = mkMerge [

@@ -632,6 +632,12 @@
     githubId = 43479487;
     name = "Titouan Biteau";
   };
+  aldoborrero = {
+    email = "aldoborrero+nixos@pm.me";
+    github = "aldoborrero";
+    githubId = 82811;
+    name = "Aldo Borrero";
+  };
   aleksana = {
     email = "me@aleksana.moe";
     github = "Aleksanaa";
@@ -4485,12 +4491,6 @@
     github = "earldouglas";
     githubId = 424946;
     name = "James Earl Douglas";
-  };
-  earthengine = {
-    email = "earthengine@skiff.com";
-    github = "ee2500";
-    githubId = 134107129;
-    name = "EarthEngine";
   };
   ebbertd = {
     email = "daniel@ebbert.nrw";
@@ -10405,6 +10405,15 @@
     githubId = 683809;
     name = "Jeffrey Brent McBeth";
   };
+  mccurdyc = {
+    email = "mccurdyc22@gmail.com";
+    github = "mccurdyc";
+    githubId = 5546264;
+    name = "Colton J. McCurdy";
+    keys = [{
+      fingerprint = "D709 03C8 0BE9 ACDC 14F0  3BFB 77BF E531 397E DE94";
+    }];
+  };
   mcmtroffaes = {
     email = "matthias.troffaes@gmail.com";
     github = "mcmtroffaes";
@@ -14945,6 +14954,11 @@
     github = "shyim";
     githubId = 6224096;
     name = "Soner Sayakci";
+  };
+  shymega = {
+    name = "Dom Rodriguez";
+    github = "shymega";
+    githubId = 1334592;
   };
   siddharthist = {
     email = "langston.barrett@gmail.com";
