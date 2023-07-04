@@ -155,8 +155,7 @@ python3.pkgs.buildPythonApplication rec {
     xz
     zip
     zstd
-  ]
-  ++ (with python3.pkgs; [
+  ] ++ (with python3.pkgs; [
     argcomplete
     debian
     defusedxml
@@ -169,54 +168,53 @@ python3.pkgs.buildPythonApplication rec {
     pyxattr
     rpm
     tlsh
+  ]) ++ lib.optionals enableBloat ([
+    abootimg
+    apksigcopier
+    apksigner
+    cbfstool
+    colord
+    enjarify
+    ffmpeg
+    fpc
+    ghc
+    ghostscriptX
+    giflib
+    gnumeric
+    gnupg
+    hdf5
+    imagemagick
+    jdk
+    libcaca
+    llvm
+    mono
+    ocaml
+    odt2txt
+    oggvideotools
+    openssh
+    pdftk
+    poppler_utils
+    procyon
+    qemu
+    R
+    radare2
+    tcpdump
+    ubootTools
+    wabt
+    xmlbeans
+  ] ++ (with python3.pkgs; [
+    androguard
+    binwalk
+    guestfs
+    h5py
+    pdfminer-six
   ])
-  ++ lib.optionals enableBloat (
-    [
-      abootimg
-      apksigcopier
-      apksigner
-      cbfstool
-      colord
-      enjarify
-      ffmpeg
-      fpc
-      ghc
-      ghostscriptX
-      giflib
-      gnupg
-      hdf5
-      imagemagick
-      jdk
-      libcaca
-      llvm
-      mono
-      ocaml
-      odt2txt
-      openssh
-      pdftk
-      poppler_utils
-      procyon
-      qemu
-      R
-      radare2
-      tcpdump
-      ubootTools
-      wabt
-      xmlbeans
-    ]
-    ++ (with python3.pkgs; [
-      androguard
-      binwalk
-      guestfs
-      h5py
-      pdfminer-six
-    ])
-    # oggvideotools is broken on Darwin, please put it back when it will be fixed?
-    ++ lib.optionals stdenv.isLinux [ oggvideotools ]
-    # This doesn't work on aarch64-darwin
-    ++ lib.optionals (stdenv.hostPlatform != "aarch64-darwin") [ gnumeric ]
-    # apktool depend on build-tools which requires Android SDK acceptance, therefore, the whole thing is unfree
-    ++ lib.optionals enableUnfree [ apktool ]
+  # oggvideotools is broken on Darwin, please put it back when it will be fixed?
+  ++ lib.optionals stdenv.isLinux [ oggvideotools ]
+  # This doesn't work on aarch64-darwin
+  ++ lib.optionals (stdenv.hostPlatform != "aarch64-darwin") [ gnumeric ]
+  # apktool depend on build-tools which requires Android SDK acceptance, therefore, the whole thing is unfree
+  ++ lib.optionals enableUnfree [ apktool ]
   ));
 
   nativeCheckInputs = with python3.pkgs; [
