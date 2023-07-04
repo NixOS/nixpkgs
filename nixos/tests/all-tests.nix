@@ -592,6 +592,7 @@ in {
   peertube = handleTestOn ["x86_64-linux"] ./web-apps/peertube.nix {};
   peroxide = handleTest ./peroxide.nix {};
   pgadmin4 = handleTest ./pgadmin4.nix {};
+  pgbouncer = handleTest ./pgbouncer.nix {};
   pgjwt = handleTest ./pgjwt.nix {};
   pgmanage = handleTest ./pgmanage.nix {};
   phosh = handleTest ./phosh.nix {};
