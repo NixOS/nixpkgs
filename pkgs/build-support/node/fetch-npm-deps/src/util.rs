@@ -1,8 +1,9 @@
+use backoff::{retry, ExponentialBackoff};
 use isahc::{
     config::{CaCertificate, Configurable, RedirectPolicy, SslOption},
     Body, Request, RequestExt,
 };
-use std::{env, path::Path, thread, time::Duration};
+use std::{env, path::Path};
 use url::Url;
 
 pub fn get_url(url: &Url) -> Result<Body, isahc::Error> {
@@ -24,26 +25,21 @@ pub fn get_url(url: &Url) -> Result<Body, isahc::Error> {
     Ok(request.body(())?.send()?.into_body())
 }
 
-pub fn get_url_with_retry(url: &Url) -> anyhow::Result<Body> {
-    // Retry up to 4 times, returning any valid result
-    for _ in 0..4 {
-        match get_url(url) {
-            Err(err) => {
-                if err.is_network() || err.is_timeout() {
-                    // Retry transient errors after a few seconds
-                    thread::sleep(Duration::from_secs(5));
-                } else {
-                    // Propagate all other errors immediately
-                    return Err(err.into());
-                }
+pub fn get_url_with_retry(url: &Url) -> Result<Body, isahc::Error> {
+    retry(ExponentialBackoff::default(), || {
+        get_url(url).map_err(|err| {
+            if err.is_network() || err.is_timeout() {
+                backoff::Error::transient(err)
+            } else {
+                backoff::Error::permanent(err)
             }
-            Ok(response) => {
-                // Return valid response immediately
-                return Ok(response);
-            }
-        }
-    }
-
-    // Retry one last time and return whatever happens
-    Ok(get_url(url)?)
+        })
+    })
+    .map_err(|backoff_err| match backoff_err {
+        backoff::Error::Permanent(err)
+        | backoff::Error::Transient {
+            err,
+            retry_after: _,
+        } => err,
+    })
 }

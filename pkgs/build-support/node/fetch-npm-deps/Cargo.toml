@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.71"
+backoff = "0.4.0"
 base64 = "0.21.2"
 digest = "0.10.7"
 env_logger = "0.10.0"
