@@ -3129,11 +3129,9 @@
   };
   cobalt = {
     name = "Cobalt";
-
     email = "cobalt@cobalt.rocks";
     github = "Chaostheorie";
     githubId = 42151227;
-
     keys = [{
       fingerprint = "6F56 756B C71F EF26 941F  B9DA 1184 0F5F 47F3 CE96";
     }];
