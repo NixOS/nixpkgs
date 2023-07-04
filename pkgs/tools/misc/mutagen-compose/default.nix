@@ -2,16 +2,20 @@
 
 buildGoModule rec {
   pname = "mutagen-compose";
-  version = "0.16.2";
+  version = "0.16.5";
 
   src = fetchFromGitHub {
     owner = "mutagen-io";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-x8tgdrb4WtjCaa28A4+fL/lUgMYaN71bEyQ1iDayNHM=";
+    sha256 = "sha256-Rn3aXwez/WUGpuRvA6lkuECchpYek8KDMh6xzZOV9v0=";
   };
 
-  vendorSha256 = "sha256-FJEB7rii6DcWyGqrmPEKOZTy27tG+CkZ2xUY+cpKakE=";
+  patches = [
+    ./1.16.5-CVE-2023-30844.patch
+  ];
+
+  vendorSha256 = "sha256-LhZlwWVb3Xix7h6ja1UTBr/4Py6tNEZT/lMgBeUmrHA=";
 
   doCheck = false;
 
