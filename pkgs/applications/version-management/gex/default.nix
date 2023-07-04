@@ -3,26 +3,24 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
-, openssl
-# waiting on gex to update to libgit2-sys >= 0.15
-, libgit2_1_5
+, libgit2
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gex";
-  version = "0.3.8";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "Piturnah";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-pjyS0H25wdcexpzZ2vVzGTwDPzyvA9PDgzz81yLGTOY=";
+    hash = "sha256-eRforLvRVSrFWnI5UZEWr1L4UM3ABjAIvui1E1hzk5s=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl libgit2_1_5 ];
+  buildInputs = [ libgit2 ];
 
-  cargoHash = "sha256-+FwXm3QN9bt//dWqzkBzsGigyl1SSY4/P29QtV75V6M=";
+  cargoHash = "sha256-OEaNERozmJL8gYe33V/m4HQNHi2I4KHpI6PTwFQkPSs=";
 
   meta = with lib; {
     description = "Git Explorer: cross-platform git workflow improvement tool inspired by Magit";
