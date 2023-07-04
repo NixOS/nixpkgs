@@ -923,13 +923,6 @@ self: super:
   });
 
   xorgcffiles = super.xorgcffiles.overrideAttrs (attrs: {
-    patches = [
-      (fetchpatch {
-        name = "add-aarch64-darwin-support.patch";
-        url = "https://gitlab.freedesktop.org/xorg/util/cf/-/commit/8d88c559b177e832b581c8ac0aa383b6cf79e0d0.patch";
-        sha256 = "sha256-wCijdmlUtVgOh9Rp/LJrg1ObYm4OPTke5Xwu0xC0ap4=";
-      })
-    ];
     postInstall = lib.optionalString stdenv.isDarwin ''
       substituteInPlace $out/lib/X11/config/darwin.cf --replace "/usr/bin/" ""
     '';
