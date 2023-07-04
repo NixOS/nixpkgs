@@ -90,7 +90,6 @@ extra-packages:
   - haddock-api == 2.23.*               # required on GHC < 8.10.x
   - haddock-library ==1.7.*             # required by stylish-cabal-0.5.0.0
   - happy == 1.19.12                    # for ghcjs
-  - hermes-json == 0.2.*                # 2023-03-22: for nix-output-monitor-2.0.0.5
   - hinotify == 0.3.9                   # for xmonad-0.26: https://github.com/kolmodin/hinotify/issues/29
   - hlint == 3.2.8                      # 2022-09-21: needed for hls on ghc 8.8
   - hlint == 3.4.1                      # 2022-09-21: needed for hls with ghc-lib-parser 9.2
