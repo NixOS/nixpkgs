@@ -3,7 +3,9 @@
 # This script lists all the optional command-line tools that diffoscope can use
 # (i.e. `diffoscope --list-tools`) but are missing from the Nix expression.
 
-diffoscope=$(nix-build --no-out-link -E 'with import ./. {}; diffoscope.override { enableBloat = true; }')/bin/diffoscope
+set -eou pipefail
+
+diffoscope=$(nix-build --no-out-link -E 'with import ./. {}; diffoscope.override { enableBloat = true; enableUnfree = true; }')/bin/diffoscope
 
 required=$($diffoscope --list-tools | \
     grep '^External-Tools-Required:' | \
