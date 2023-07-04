@@ -21,6 +21,11 @@ let
         expr = repeatedOverrides.entangled.pname == "a-better-figlet-with-blackjack";
         expected = true;
       })
+      ({
+        name = "overriding-using-only-attrset";
+        expr = (pkgs.hello.overrideAttrs { pname = "hello-overriden"; }).pname == "hello-overriden";
+        expected = true;
+      })
     ];
 
   addEntangled = origOverrideAttrs: f:
