@@ -9038,6 +9038,8 @@ with pkgs;
 
   irker = callPackage ../servers/irker { };
 
+  iroh = callPackage ../applications/networking/iroh { };
+
   ised = callPackage ../tools/misc/ised { };
 
   isl = isl_0_20;
