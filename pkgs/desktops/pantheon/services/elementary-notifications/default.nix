@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , meson
 , ninja
@@ -19,24 +18,14 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-notifications";
-  version = "6.0.3";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "notifications";
     rev = version;
-    sha256 = "sha256-B1wo1N4heG872klFJOBKOEds0+6aqtvkTGefi97bdU8=";
+    sha256 = "sha256-i7fSKnP4W12cfax5IXm/Zgy5vP5z7S43S80gvzWpFCE=";
   };
-
-  patches = [
-    # Backports https://github.com/elementary/notifications/pull/184
-    # Needed for https://github.com/elementary/wingpanel-indicator-notifications/pull/252
-    # Should be part of next bump
-    (fetchpatch {
-      url = "https://github.com/elementary/notifications/commit/bd159979dbe3dbe6f3f1da7acd8e0721cc20ef80.patch";
-      sha256 = "sha256-cOfeXwoMVgvbA29axyN7HtYKTgCtGxAPrB2PA/x8RKY=";
-    })
-  ];
 
   nativeBuildInputs = [
     glib # for glib-compile-schemas
