@@ -11786,9 +11786,10 @@
   };
   NotAShelf = {
     name = "NotAShelf";
-    email = "itsashelf@gmail.com";
+    email = "raf@notashelf.dev";
     github = "NotAShelf";
     githubId = 62766066;
+    matrix = "@raf:notashelf.dev";
   };
   notbandali = {
     name = "Amin Bandali";
