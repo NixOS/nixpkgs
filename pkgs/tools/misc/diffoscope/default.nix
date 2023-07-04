@@ -117,7 +117,6 @@ python3.pkgs.buildPythonApplication rec {
   # aapt2
   # dexdump
   # docx2txt
-  # getfacl
   # lipo
   # otool
   # r2pipe
@@ -170,6 +169,7 @@ python3.pkgs.buildPythonApplication rec {
     tlsh
   ]) ++ lib.optionals enableBloat ([
     abootimg
+    acl
     apksigcopier
     apksigner
     cbfstool
