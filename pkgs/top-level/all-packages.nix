@@ -11534,6 +11534,8 @@ with pkgs;
 
   PageEdit = libsForQt5.callPackage ../applications/office/PageEdit { };
 
+  pagefind = libsForQt5.callPackage ../applications/misc/pagefind { };
+
   paging-calculator  = callPackage ../development/tools/paging-calculator { };
 
   pagmo2 = callPackage ../development/libraries/pagmo2 { };
