@@ -2490,6 +2490,11 @@ self: super: {
     testTarget = "tests";
   }) super.conduit-aeson;
 
+  # Tests have a dependency on a certain version of the inspection-testing
+  # library.  This is fixed in the next point release, so this override is
+  # likely safe to remove when the assertion starts failing.
+  optics = assert super.optics.version == "0.4.2"; dontCheck super.optics;
+
   # Disabling doctests.
   regex-tdfa = overrideCabal {
     testTarget = "regex-tdfa-unittest";
