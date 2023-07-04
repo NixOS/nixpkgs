@@ -11,13 +11,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "autodock-vina";
-  version = "1.2.3";
+  version = "1.2.5";
 
   src = fetchFromGitHub {
     owner = "ccsb-scripps";
     repo = "autodock-vina";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-oOpwhRmpS5WfnuqxkjxGsGtrofPxUt8bH9ggzm5rrR8=";
+    hash = "sha256-yguUMEX0tn75wKrPKyqlCYbBFaEwC5b1s3k9xept1Fw=";
   };
 
   sourceRoot =
