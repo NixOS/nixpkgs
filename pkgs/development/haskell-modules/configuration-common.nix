@@ -419,6 +419,7 @@ self: super: {
   # Too strict bounds on algebraic-graphs and bytestring
   # https://github.com/haskell-nix/hnix-store/issues/180
   hnix-store-core = doJailbreak super.hnix-store-core;
+  hnix-store-core_0_6_1_0 = doDistribute (doJailbreak super.hnix-store-core_0_6_1_0);
 
   # Fails for non-obvious reasons while attempting to use doctest.
   focuslist = dontCheck super.focuslist;
