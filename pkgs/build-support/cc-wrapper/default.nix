@@ -106,7 +106,12 @@ let
   isGccArchSupported = arch:
     if targetPlatform.isPower then false else # powerpc does not allow -march=
     if isGNU then
-      { # Intel
+      { # Generic
+        x86-64-v2 = versionAtLeast ccVersion "11.0";
+        x86-64-v3 = versionAtLeast ccVersion "11.0";
+        x86-64-v4 = versionAtLeast ccVersion "11.0";
+
+        # Intel
         skylake        = versionAtLeast ccVersion "6.0";
         skylake-avx512 = versionAtLeast ccVersion "6.0";
         cannonlake     = versionAtLeast ccVersion "8.0";
@@ -117,6 +122,7 @@ let
         tigerlake      = versionAtLeast ccVersion "10.0";
         knm            = versionAtLeast ccVersion "8.0";
         alderlake      = versionAtLeast ccVersion "12.0";
+
         # AMD
         znver1         = versionAtLeast ccVersion "6.0";
         znver2         = versionAtLeast ccVersion "9.0";
@@ -124,12 +130,18 @@ let
         znver4         = versionAtLeast ccVersion "13.0";
       }.${arch} or true
     else if isClang then
-      { # Intel
+      { #Generic
+        x86-64-v2 = versionAtLeast ccVersion "12.0";
+        x86-64-v3 = versionAtLeast ccVersion "12.0";
+        x86-64-v4 = versionAtLeast ccVersion "12.0";
+
+        # Intel
         cannonlake     = versionAtLeast ccVersion "5.0";
         icelake-client = versionAtLeast ccVersion "7.0";
         icelake-server = versionAtLeast ccVersion "7.0";
         knm            = versionAtLeast ccVersion "7.0";
         alderlake      = versionAtLeast ccVersion "16.0";
+
         # AMD
         znver1         = versionAtLeast ccVersion "4.0";
         znver2         = versionAtLeast ccVersion "9.0";
