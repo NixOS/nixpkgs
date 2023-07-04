@@ -4,6 +4,7 @@
 , nixosTests
 , runCommand
 , python3
+, fetchpatch
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,6 +15,12 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://github.com/besser82/libxcrypt/releases/download/v${finalAttrs.version}/libxcrypt-${finalAttrs.version}.tar.xz";
     hash = "sha256-qMk1UFtV8d8NF/i/1ZRox8Zwmh0xgxsPjj4EWrj9RV0=";
   };
+
+  patches = [
+    # Fix for build with perl 5.38.0
+    # https://github.com/besser82/libxcrypt/commit/95d6e03ae37f4ec948474d111105bbdd2938aba2.patch
+    ./gen-crypt-h-support-perl538.patch
+  ];
 
   outputs = [
     "out"
@@ -31,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     perl
   ];
+
 
   enableParallelBuilding = true;
 
