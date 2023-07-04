@@ -94,6 +94,8 @@ with pkgs.lib;
     makeTest {
       name = "non-default-filesystems-erofs";
 
+      meta.maintainers = with maintainers; [ nikstur ];
+
       nodes.machine = _: {
         virtualisation.qemu.drives = [{
           name = "non-default-filesystem";
