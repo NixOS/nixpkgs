@@ -5593,6 +5593,12 @@
     githubId = 609279;
     name = "Isaac Shapira";
   };
+  freyacodes = {
+    email = "freya@arbjerg.dev";
+    github = "freyacodes";
+    githubId = 2582617;
+    name = "Freya Arbjerg";
+  };
   fricklerhandwerk = {
     email = "valentin@fricklerhandwerk.de";
     github = "fricklerhandwerk";
