@@ -85,17 +85,18 @@ rec {
         # is why we use the more obscure "bfd" and not "binutils" for this
         # choice.
         else                                     "bfd";
-      extensions = rec {
-        sharedLibrary = assert final.hasSharedLibraries;
-          /**/ if final.isDarwin  then ".dylib"
+      extensions = lib.optionalAttrs final.hasSharedLibraries {
+        sharedLibrary =
+          if      final.isDarwin  then ".dylib"
           else if final.isWindows then ".dll"
           else                         ".so";
+      } // {
         staticLibrary =
           /**/ if final.isWindows then ".lib"
           else                         ".a";
         library =
-          /**/ if final.isStatic then staticLibrary
-          else                        sharedLibrary;
+          /**/ if final.isStatic then final.extensions.staticLibrary
+          else                        final.extensions.sharedLibrary;
         executable =
           /**/ if final.isWindows then ".exe"
           else                         "";
