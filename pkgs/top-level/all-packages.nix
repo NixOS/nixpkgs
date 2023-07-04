@@ -41105,6 +41105,7 @@ with pkgs;
   btcdeb = callPackage ../applications/blockchains/btcdeb { };
 
   jami = qt6Packages.callPackage ../applications/networking/instant-messengers/jami {
+    fmt = fmt_9;
     # TODO: remove once `udev` is `systemdMinimal` everywhere.
     udev = systemdMinimal;
     jack = libjack2;
