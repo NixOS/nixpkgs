@@ -1,7 +1,7 @@
 { abiCompat ? null,
   callPackage,
   lib, stdenv, makeWrapper, fetchurl, fetchpatch, fetchFromGitLab, buildPackages,
-  automake, autoconf, libiconv, libtool, intltool,
+  automake, autoconf, libiconv, libtool, intltool, gettext, python3, perl,
   freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm, netbsd,
   ncompress,
@@ -538,10 +538,20 @@ self: super:
   });
 
   xkeyboardconfig = super.xkeyboardconfig.overrideAttrs (attrs: {
-    prePatch = "patchShebangs rules/merge.py";
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ intltool libxslt ];
-    configureFlags = [ "--with-xkb-rules-symlink=xorg" ];
-
+    prePatch = ''
+      patchShebangs rules/merge.py rules/compat/map-variants.py rules/xml2lst.pl
+    '';
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [
+      meson
+      ninja
+      python3
+      perl
+      libxslt # xsltproc
+      gettext # msgfmt
+    ];
+    mesonFlags = [
+      (lib.mesonBool "xorg-rules-symlinks" true)
+    ];
     # 1: compatibility for X11/xkb location
     # 2: I think pkg-config/ is supposed to be in /lib/
     postInstall = ''
