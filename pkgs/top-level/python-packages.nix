@@ -1931,6 +1931,8 @@ self: super: with self; {
 
   click-odoo = callPackage ../development/python-modules/click-odoo { };
 
+  click-odoo-contrib = callPackage ../development/python-modules/click-odoo-contrib { };
+
   click-option-group = callPackage ../development/python-modules/click-option-group { };
 
   click-plugins = callPackage ../development/python-modules/click-plugins { };
