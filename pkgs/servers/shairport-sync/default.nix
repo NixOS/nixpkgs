@@ -39,13 +39,13 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "4.2";
   pname = "shairport-sync";
+  version = "4.2";
 
   src = fetchFromGitHub {
-    rev = "refs/tags/${version}";
     repo = "shairport-sync";
     owner = "mikebrady";
+    rev = "refs/tags/${version}";
     hash = "sha256-ru2iaXSgS+w2ktqGLGC9SiYztkmmOQVzHaeLwMqvMzk=";
   };
 
