@@ -1326,14 +1326,21 @@ self: super: {
     Cabal-syntax = self.Cabal-syntax_3_10_1_0;
   }));
 
-  # 2022-03-12: Pick patches from master for compat with Stackage Nightly
-  # 2022-12-07: Lift bounds to allow dependencies shipped with LTS-20
-  #             https://github.com/jgm/gitit/pull/683
+  # 2022-03-12: Pick patches from master for compat with Stackage LTS-21
+  # 2023-07-04: Lift bounds to allow dependencies shipped with LTS-21
+  # Both patches can be dropped when gitit-0.15.1.1 is part of nixpkgs
   gitit = appendPatches [
     (fetchpatch {
       name = "gitit-fix-build-with-hoauth2-2.3.0.patch";
       url = "https://github.com/jgm/gitit/commit/fd534c0155eef1790500c834e612ab22cf9b67b6.patch";
       sha256 = "0hmlqkavn8hr0b4y4hxs1yyg0r79ylkzhzwy1dzbb3a2q86ydd2f";
+    })
+    (fetchpatch {
+      name = "gitit-stackage-lts-21.patch";
+      url = "https://github.com/jgm/gitit/commit/4f81022f976f3eac623748dfc67487ccdcdc1684.patch";
+      sha256 = "1a0qcw1aq9ax0a6wm35ybqc21h9i3ydv1iiq7vp3nnm5ka0ry7yh";
+      # Intermediate patches would be required to make this apply, let's use jailbreak
+      excludes = [ "gitit.cabal" "stack.yaml" ];
     })
   ] (doJailbreak super.gitit);
 
