@@ -25,11 +25,11 @@
 , requests
 , requests-toolbelt
 , shellingham
-, tomlkit
 , trove-classifiers
 , urllib3
 , virtualenv
 , xattr
+, tomlkit
 , tomli
 , importlib-metadata
 , cachy
@@ -44,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "1.4.2";
+  version = "1.5.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-AiRQFZA5+M1niTzj1RO2lx0QFOMmSzpQo1gzauyTblg=";
+    hash = "sha256-1zqfGzSI5RDACSNcz0tLA4VKMFwE5uD/YqOkgpzg2nQ=";
   };
 
   nativeBuildInputs = [
@@ -141,6 +141,7 @@ buildPythonPackage rec {
     "test_prepare_directory"
     "test_prepare_directory_with_extensions"
     "test_prepare_directory_editable"
+    "test_installer_with_pypi_repository"
   ] ++ lib.optionals (pythonAtLeast "3.10") [
     # RuntimeError: 'auto_spec' might be a typo; use unsafe=True if this is intended
     "test_info_setup_complex_pep517_error"
