@@ -91,3 +91,9 @@ some nested anchors
  - *‌more stuff in same deflist‌*
    
    foo""".replace(' ', ' ')
+
+def test_images() -> None:
+    c = Converter({})
+    assert c._render("![*alt text*](foo \"title \\\"quoted\\\" text\")") == (
+        "![*alt text*](foo \"title \\\"quoted\\\" text\")"
+    )

@@ -13619,6 +13619,8 @@ with pkgs;
 
   ubi_reader = callPackage ../tools/filesystems/ubi_reader { };
 
+  ubpm = libsForQt5.callPackage ../applications/misc/ubpm { };
+
   ubridge = callPackage ../tools/networking/ubridge { };
 
   ubertooth = callPackage ../applications/radio/ubertooth { };
@@ -30774,6 +30776,10 @@ with pkgs;
   helix = callPackage ../applications/editors/helix { };
 
   icesl = callPackage ../applications/misc/icesl { };
+
+  input-leap = libsForQt5.callPackage ../applications/misc/input-leap {
+    avahi = avahi.override { withLibdnssdCompat = true; };
+  };
 
   karlender = callPackage ../applications/office/karlender { };
 
