@@ -5594,6 +5594,8 @@ self: super: with self; {
 
   language-tags = callPackage ../development/python-modules/language-tags { };
 
+  lanms-neo = callPackage ../development/python-modules/lanms-neo { };
+
   lark = callPackage ../development/python-modules/lark { };
 
   laspy = callPackage ../development/python-modules/laspy { };
@@ -8084,6 +8086,8 @@ self: super: with self; {
   policyuniverse = callPackage ../development/python-modules/policyuniverse { };
 
   polyline = callPackage ../development/python-modules/polyline { };
+
+  Polygon3 = callPackage ../development/python-modules/Polygon3 { };
 
   pomegranate = callPackage ../development/python-modules/pomegranate { };
 

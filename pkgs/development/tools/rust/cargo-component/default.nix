@@ -4,7 +4,6 @@
 , fetchpatch
 , curl
 , pkg-config
-, protobuf
 , libgit2
 , openssl
 , zlib
@@ -14,40 +13,36 @@
 
 rustPlatform.buildRustPackage {
   pname = "cargo-component";
-  version = "unstable-2023-06-20";
+  version = "unstable-2023-06-22";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "cargo-component";
-    rev = "277728b729577540fdd5977a59a4e51c061c6fcb";
-    hash = "sha256-Uu+S4TRbtei78ZNkYNkwHiIot0L7fUODJgd5xDjw8rg=";
+    rev = "bd98521c6e13640593ad676d8b6f1e64054755d4";
+    hash = "sha256-5r3g158Ujdbpb0NZI1DIu3TGpc3G9XDmXg+mq+/Dayc=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "warg-api-0.1.0" = "sha256-GYmHrGCmEMYCi8S+hd0CuBxkwF4BM1B9pJ1TOGCqHuk=";
+      "warg-api-0.1.0" = "sha256-M1hbgWqibbq7upfvNarcqAM0fbWL8Z7y+pWpBfVqxiI=";
     };
   };
 
   patches = [
-    # update dependencies to make it work when dependencies are vendored
-    # https://github.com/bytecodealliance/registry/pull/138
-    ./update-registry.patch
-
-    # fix build when it is not in a git repository
-    # https://github.com/bytecodealliance/cargo-component/pull/92
+    # update warg dependencies to make cargo-component work when dependencies
+    # are vendored, since the fix has already been merged in warg
+    # https://github.com/bytecodealliance/cargo-component/pull/93
     (fetchpatch {
-      name = "export-wasi-adapter-version-even-if-git-fails.patch";
-      url = "https://github.com/bytecodealliance/cargo-component/commit/9b2517fe2c4dbb1077a8785fd79c677ad1b7fc6b.patch";
-      hash = "sha256-nY8ltBb8H7zkE2JLhXJiBOMwTM8CVvkXTSHTUyMqamo=";
+      name = "update-warg-dependencies.patch";
+      url = "https://github.com/bytecodealliance/cargo-component/commit/dac67f9eb465efaf11f445bc949bd87f7039a472.patch";
+      hash = "sha256-tFJtQJtHAmw4xZ9ADLyQn9+QRxHU1iZZbfXGYaPajg8=";
     })
   ];
 
   nativeBuildInputs = [
     curl
     pkg-config
-    protobuf
   ];
 
   buildInputs = [
