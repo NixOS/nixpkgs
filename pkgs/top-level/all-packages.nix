@@ -559,6 +559,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  dynein = callPackage ../development/tools/database/dynein {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   ea = callPackage ../tools/misc/ea { };
 
   each = callPackage ../tools/text/each { };
