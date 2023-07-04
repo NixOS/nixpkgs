@@ -3506,8 +3506,6 @@ with pkgs;
 
   fedifetcher = callPackage ../tools/misc/fedifetcher { };
 
-  fitnesstrax = callPackage ../applications/misc/fitnesstrax { };
-
   flavours = callPackage ../applications/misc/flavours { };
 
   flirc = libsForQt5.callPackage ../applications/video/flirc {
