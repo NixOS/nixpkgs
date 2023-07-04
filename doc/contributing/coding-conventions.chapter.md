@@ -224,6 +224,8 @@ There are a few naming guidelines:
 
 Example: Given a project had its latest releases `2.2` in November 2021, and `3.0` in January 2022, a commit authored on March 15, 2022 for an upcoming bugfix release `2.2.1` would have `version = "2.2-unstable-2022-03-15"`.
 
+(Reviewers: you can often check that a package's unstable version is correct, or get a suggestion for what to use instead, by running [`maintainers/scripts/check-unstable-version.sh $PR_NUMBER`](https://github.com/NixOS/nixpkgs/blob/master/maintainers/scripts/check-unstable-version.sh). This script isn't foolproof; common sense and this manual take precedence.)
+
 - Dashes in the package `pname` _should_ be preserved in new variable names, rather than converted to underscores or camel cased — e.g., `http-parser` instead of `http_parser` or `httpParser`. The hyphenated style is preferred in all three package names.
 
 - If there are multiple versions of a package, this _should_ be reflected in the variable names in `all-packages.nix`, e.g. `json-c_0_9` and `json-c_0_11`. If there is an obvious “default” version, make an attribute like `json-c = json-c_0_9;`. See also [](#sec-versioning)
