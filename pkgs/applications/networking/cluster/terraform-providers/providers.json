@@ -191,13 +191,13 @@
     "vendorHash": "sha256-AJcPxiuglHpsHUIa5sJMtY7MRN5JrW/tfkz3+5Bv9AU="
   },
   "checkly": {
-    "hash": "sha256-ZJQdH1ot/ygnM4Q2rihzHFH67ge6zfVrPASgV0lUs34=",
+    "hash": "sha256-UXIni594P85sgS8XVLoJ0+UTBeUS0XC+oj98KJUfghg=",
     "homepage": "https://registry.terraform.io/providers/checkly/checkly",
     "owner": "checkly",
     "repo": "terraform-provider-checkly",
-    "rev": "v1.6.6",
+    "rev": "v1.6.7",
     "spdx": null,
-    "vendorHash": "sha256-feuFwaV463o+7jpv2jl2R4Bm9Tv2w4R03/0ne0kImIU="
+    "vendorHash": "sha256-ATj1tGTS7FnEQDa6KuDQITGuVimP0A4sdlUNJ6RNIqI="
   },
   "ciscoasa": {
     "hash": "sha256-xzc44FEy2MPo51Faq/VFwg411JK9e0kQucpt0vdN8yg=",
