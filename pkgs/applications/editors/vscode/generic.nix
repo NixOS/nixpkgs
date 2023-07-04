@@ -12,13 +12,9 @@
 
 # Attributes inherit from specific versions
 , version, src, meta, sourceRoot, commandLineArgs
-, executableName, longName, shortName, pname, updateScript
+, executableName, longName, shortName, pname, updateScript, sourceExecutableName
 , dontFixup ? false
 , rev ? null, vscodeServer ? null
-
-# sourceExecutableName is the name of the binary in the source archive, over
-# which we have no control
-, sourceExecutableName ? executableName
 
 , useVSCodeRipgrep ? false
 , ripgrep

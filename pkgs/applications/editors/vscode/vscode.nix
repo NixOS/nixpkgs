@@ -5,6 +5,12 @@
 , nixosTests
 , srcOnly
 , isInsiders ? false
+# sourceExecutableName is the name of the binary in the source archive over
+# which we have no control and it is needed to run the insider version as
+# documented in https://nixos.wiki/wiki/Visual_Studio_Code#Insiders_Build
+# On MacOS the insider binary is still called code instead of code-insiders as
+# of 04-07-2023.
+, sourceExecutableName ? "code" + lib.optionalString (isInsiders && stdenv.isLinux) "-insiders"
 , commandLineArgs ? ""
 , useVSCodeRipgrep ? stdenv.isDarwin
 }:
@@ -43,7 +49,7 @@ in
     executableName = "code" + lib.optionalString isInsiders "-insiders";
     longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
     shortName = "Code" + lib.optionalString isInsiders " - Insiders";
-    inherit commandLineArgs useVSCodeRipgrep;
+    inherit commandLineArgs useVSCodeRipgrep sourceExecutableName;
 
     src = fetchurl {
       name = "VSCode_${version}_${plat}.${archive_fmt}";
