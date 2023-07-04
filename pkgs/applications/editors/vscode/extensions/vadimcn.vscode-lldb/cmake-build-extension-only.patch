@@ -1,8 +1,7 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 6ae4dfb..519f544 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -16,13 +16,6 @@ endif()
+@@ -16,13 +16,6 @@
  set(VERSION "${VERSION}${VERSION_SUFFIX}")
  message("Version ${VERSION}")
  
@@ -16,11 +15,11 @@ index 6ae4dfb..519f544 100644
  if (CMAKE_SYSROOT)
      set(CMAKE_C_FLAGS "--sysroot=${CMAKE_SYSROOT} ${CMAKE_C_FLAGS}")
      set(CMAKE_CXX_FLAGS "--sysroot=${CMAKE_SYSROOT} ${CMAKE_CXX_FLAGS}")
-@@ -93,16 +86,6 @@ configure_file(package.json ${CMAKE_CURRENT_BINARY_DIR}/package.json @ONLY)
+@@ -102,16 +95,6 @@
  configure_file(webpack.config.js ${CMAKE_CURRENT_BINARY_DIR}/webpack.config.js @ONLY)
  file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/package-lock.json DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
  
--# Run 'npm install'
+-# Install node_modules
 -execute_process(
 -    COMMAND ${NPM} ci # like install, but actually respects package-lock file.
 -    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
@@ -30,10 +29,10 @@ index 6ae4dfb..519f544 100644
 -    message(FATAL_ERROR "npm intall failed: ${Result}")
 -endif()
 -
- # Copy it back, so we can commit the lock file.
- file(COPY ${CMAKE_CURRENT_BINARY_DIR}/package-lock.json DESTINATION ${CMAKE_CURRENT_SOURCE_DIR})
- 
-@@ -154,6 +137,7 @@ add_custom_target(tests
+ # Resolve $refs
+ execute_process(
+     COMMAND ${WithEnv} NODE_PATH=${CMAKE_CURRENT_BINARY_DIR}/node_modules node ${CMAKE_CURRENT_SOURCE_DIR}/tools/prep-package.js ${CMAKE_CURRENT_BINARY_DIR}/package.json ${CMAKE_CURRENT_BINARY_DIR}/package.json
+@@ -169,6 +152,7 @@
  
  add_copy_file(PackageFiles ${CMAKE_CURRENT_SOURCE_DIR}/README.md ${CMAKE_CURRENT_BINARY_DIR}/README.md)
  add_copy_file(PackageFiles ${CMAKE_CURRENT_SOURCE_DIR}/CHANGELOG.md ${CMAKE_CURRENT_BINARY_DIR}/CHANGELOG.md)
@@ -41,7 +40,7 @@ index 6ae4dfb..519f544 100644
  add_copy_file(PackageFiles ${CMAKE_CURRENT_SOURCE_DIR}/images/lldb.png ${CMAKE_CURRENT_BINARY_DIR}/images/lldb.png)
  add_copy_file(PackageFiles ${CMAKE_CURRENT_SOURCE_DIR}/images/user.svg ${CMAKE_CURRENT_BINARY_DIR}/images/user.svg)
  add_copy_file(PackageFiles ${CMAKE_CURRENT_SOURCE_DIR}/images/users.svg ${CMAKE_CURRENT_BINARY_DIR}/images/users.svg)
-@@ -170,6 +154,7 @@ add_custom_target(dev_debugging
+@@ -185,6 +169,7 @@
  set(PackagedFilesBootstrap
      README.md
      CHANGELOG.md
@@ -49,4 +48,3 @@ index 6ae4dfb..519f544 100644
      extension.js
      images/*
      syntaxes/*
-
