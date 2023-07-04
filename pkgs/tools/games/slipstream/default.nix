@@ -45,5 +45,6 @@ mavenWithJdk.buildMavenPackage rec {
     homepage = "https://github.com/Vhati/Slipstream-Mod-Manager";
     license = licenses.gpl2;
     maintainers = with maintainers; [ mib ];
+    platforms = platforms.all;
   };
 }
