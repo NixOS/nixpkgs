@@ -156,6 +156,7 @@
   ./programs/darling.nix
   ./programs/dconf.nix
   ./programs/digitalbitbox/default.nix
+  ./programs/direnv.nix
   ./programs/dmrconfig.nix
   ./programs/droidcam.nix
   ./programs/environment.nix
