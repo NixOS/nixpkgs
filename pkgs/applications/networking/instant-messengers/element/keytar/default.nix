@@ -15,6 +15,8 @@ in stdenv.mkDerivation rec {
     hash = pinData.srcHash;
   };
 
+  depsBuildBuild = [ pkg-config ];
+
   nativeBuildInputs = [
     nodejs python3 pkg-config
     npmHooks.npmConfigHook
