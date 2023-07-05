@@ -39989,6 +39989,8 @@ with pkgs;
 
   resp-app = libsForQt5.callPackage ../applications/misc/resp-app { };
 
+  responder = callPackage ../tools/security/responder { };
+
   resumed = callPackage ../applications/misc/resumed { };
 
   robin-map = callPackage ../development/libraries/robin-map { };
