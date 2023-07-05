@@ -1,11 +1,9 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 
 # dependencies
 , cyrus_sasl
-, db
 , groff
 , libsodium
 , libtool
@@ -46,7 +44,6 @@ stdenv.mkDerivation rec {
     (cyrus_sasl.override {
       inherit openssl;
     })
-    db
     libsodium
     libtool
     openssl
