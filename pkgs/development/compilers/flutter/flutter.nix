@@ -5,6 +5,7 @@
 , src
 , lib
 , stdenv
+, darwin
 , git
 , which
 }:
@@ -18,6 +19,8 @@ let
       outputs = [ "out" "cache" ];
 
       buildInputs = [ git ];
+      nativeBuildInputs = [ ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
 
       preConfigure = ''
         if [ "$(< bin/internal/engine.version)" != '${engineVersion}' ]; then
@@ -69,8 +72,8 @@ let
 
         # Certain prebuilts should be replaced with Nix-built (or at least Nix-patched) equivalents.
         rm -r \
-          bin/cache/dart-sdk \
-          bin/cache/artifacts/engine
+          $FLUTTER_ROOT/bin/cache/dart-sdk \
+          $FLUTTER_ROOT/bin/cache/artifacts/engine
       '';
 
       installPhase = ''
@@ -84,7 +87,8 @@ let
       '';
 
       doInstallCheck = true;
-      nativeInstallCheckInputs = [ which ];
+      nativeInstallCheckInputs = [ which ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
       installCheckPhase = ''
         runHook preInstallCheck
 
@@ -112,7 +116,7 @@ let
         '';
         homepage = "https://flutter.dev";
         license = licenses.bsd3;
-        platforms = [ "x86_64-linux" "aarch64-linux" ];
+        platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
         maintainers = with maintainers; [ babariviere ericdallo FlafyDev gilice hacker1024 ];
       };
     };
