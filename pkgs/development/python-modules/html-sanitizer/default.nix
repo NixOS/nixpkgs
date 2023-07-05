@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "html-sanitizer";
-  version = "2.1";
+  version = "2.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "matthiask";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-t9mwsieFwdRPkOcnOc66lau+S9naK6Ys79zgIv3+3qw=";
+    hash = "sha256-WU5wdTvCzYEw1eiuTLcFImvydzxWANfmDQCmEgyU9h4=";
   };
 
   nativeBuildInputs = [
