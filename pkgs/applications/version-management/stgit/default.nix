@@ -59,24 +59,22 @@ rustPlatform.buildRustPackage rec {
                 ${docbook_xml_dtd_45}/xml/dtd/docbook/docbookx.dtd
   '';
 
-  makeFlags = lib.strings.concatStringsSep " " [
+  makeFlags = [
     "prefix=${placeholder "out"}"
-    "MAN_BASE_URL=${placeholder "out"}/share/man"
     "XMLTO_EXTRA=--skip-validation"
     "PERL_PATH=${perl}/bin/perl"
   ];
 
-  buildPhase = ''
-    make all ${makeFlags}
-  '';
+  dontCargoBuild = true;
+  buildFlags = [ "all" ];
 
-  checkPhase = ''
-    make test ${makeFlags}
-  '';
+  dontCargoCheck = true;
+  checkTarget = "test";
 
-  installPhase = ''
-    make install install-man install-html ${makeFlags}
+  dontCargoInstall = true;
+  installTargets = [ "install" "install-man" "install-html" ];
 
+  postInstall = ''
     wrapProgram $out/bin/stg --prefix PATH : ${lib.makeBinPath [ git ]}
 
     installShellCompletion --cmd stg \
