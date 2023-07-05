@@ -5,7 +5,7 @@
 , extraProfile ? "" # string to append to profile
 , extraArgs ? "" # arguments to always pass to steam
 , extraEnv ? { } # Environment variables to pass to Steam
-, withGameSpecificLibraries ? true # exclude game specific libraries
+, withGameSpecificLibraries ? true # include game specific libraries
 }:
 
 let
@@ -189,6 +189,7 @@ in buildFHSEnv rec {
     libxcrypt # Alien Isolation, XCOM 2, Company of Heroes 2
     mono
     ncurses # Crusader Kings III
+    openssl
     xorg.xkeyboardconfig
     xorg.libpciaccess
     xorg.libXScrnSaver # Dead Cells
@@ -211,6 +212,7 @@ in buildFHSEnv rec {
     alsa-lib
 
     # Loop Hero
+    # FIXME: Also requires openssl_1_1, which is EOL. Either find an alternative solution, or remove these dependencies (if not needed by other games)
     libidn2
     libpsl
     nghttp2.lib
