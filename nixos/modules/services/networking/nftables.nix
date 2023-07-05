@@ -41,6 +41,24 @@ in
       '';
     };
 
+    networking.nftables.checkRulesetRedirects = mkOption {
+      type = types.addCheck (types.attrsOf types.path) (attrs: all types.path.check (attrNames attrs));
+      default = {
+        "/etc/protocols" = "${pkgs.buildPackages.iana-etc}/etc/protocols";
+        "/etc/services" = "${pkgs.buildPackages.iana-etc}/etc/services";
+      };
+      defaultText = literalExpression ''
+        {
+          "/etc/protocols" = "''${pkgs.buildPackages.iana-etc}/etc/protocols";
+          "/etc/services" = "''${pkgs.buildPackages.iana-etc}/etc/services";
+        }
+      '';
+      description = mdDoc ''
+        Set of paths that should be intercepted and rewritten while checking the ruleset
+        using `pkgs.buildPackages.libredirect`.
+      '';
+    };
+
     networking.nftables.preCheckRuleset = mkOption {
       type = types.lines;
       default = "";
@@ -144,7 +162,7 @@ in
           checkPhase = lib.optionalString cfg.checkRuleset ''
             cp $out ruleset.conf
             ${cfg.preCheckRuleset}
-            export NIX_REDIRECTS=/etc/protocols=${pkgs.buildPackages.iana-etc}/etc/protocols:/etc/services=${pkgs.buildPackages.iana-etc}/etc/services
+            export NIX_REDIRECTS=${escapeShellArg (concatStringsSep ":" (mapAttrsToList (n: v: "${n}=${v}") cfg.checkRulesetRedirects))}
             LD_PRELOAD="${pkgs.buildPackages.libredirect}/lib/libredirect.so ${pkgs.buildPackages.lklWithFirewall.lib}/lib/liblkl-hijack.so" \
               ${pkgs.buildPackages.nftables}/bin/nft --check --file ruleset.conf
           '';
