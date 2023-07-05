@@ -11845,6 +11845,8 @@ with pkgs;
 
   pystring = callPackage ../development/libraries/pystring { };
 
+  quark-goldleaf = callPackage ../applications/misc/quark-goldleaf { };
+
   raysession = python3Packages.callPackage ../applications/audio/raysession {
     inherit (qt5) qttools;
   };
