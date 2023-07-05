@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ SDL2 zlib ];
   hardeningDisable = [ "format" ];
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=RelWithDebInfo" ];
+  cmakeBuildType = "RelWithDebInfo";
 
   postPatch = ''
     substituteInPlace third_party/fpattern/CMakeLists.txt --replace "FetchContent_Populate" "#FetchContent_Populate"
