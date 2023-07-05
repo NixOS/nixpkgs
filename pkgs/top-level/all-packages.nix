@@ -39004,6 +39004,8 @@ with pkgs;
     guile = guile_2_0;
   };
 
+  gedit = callPackage ../applications/editors/gedit { };
+
   gerbv = callPackage ../applications/science/electronics/gerbv {
     cairo = cairo.override { x11Support = true; };
   };
