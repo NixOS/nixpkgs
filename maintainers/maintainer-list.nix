@@ -5147,6 +5147,12 @@
       fingerprint = "FC1D 3E4F CBCA 80DF E870  6397 C811 6E3A 0C1C A76A";
     }];
   };
+  exploitoverload = {
+    email = "nix@exploitoverload.com";
+    github = "exploitoverload";
+    githubId = 99678549;
+    name = "Asier Armenteros";
+  };
   extends = {
     email = "sharosari@gmail.com";
     github = "ImExtends";
