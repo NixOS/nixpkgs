@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "stoken";
-  version = "0.92";
+  version = "0.93";
 
   src = fetchFromGitHub {
     owner = "cernekee";
     repo = "stoken";
     rev = "v${version}";
-    sha256 = "0q7cv8vy5b2cslm57maqb6jsm7s4rwacjyv6gplwp26yhm38hw7y";
+    hash = "sha256-8N7TXdBu37eXWIKCBdaXVW0pvN094oRWrdlcy9raddI=";
   };
 
   strictDeps = true;
