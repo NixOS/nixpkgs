@@ -7296,6 +7296,8 @@ self: super: with self; {
 
   openwrt-ubus-rpc = callPackage ../development/python-modules/openwrt-ubus-rpc { };
 
+  opower = callPackage ../development/python-modules/opower { };
+
   opsdroid_get_image_size = callPackage ../development/python-modules/opsdroid_get_image_size { };
 
   opt-einsum = callPackage ../development/python-modules/opt-einsum { };
