@@ -41,8 +41,10 @@ stdenv.mkDerivation rec {
   outputs = [ "out" ] ++ lib.optional (!headersOnly) "dev";
 
   prePatch = ''
-    cd ../${basename}
+    cd ../
     chmod -R u+w .
+    cd ${basename}
+    patch -d ../llvm -p1 -i "${../libcxxabi/wasm.patch}"
   '';
 
   patches = [
