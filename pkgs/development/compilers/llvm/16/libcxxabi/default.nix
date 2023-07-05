@@ -69,10 +69,26 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (stdenv.hostPlatform.useLLVM or false) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"
-  ] ++ lib.optionals stdenv.hostPlatform.isWasm [
-    "-DLIBCXXABI_ENABLE_THREADS=OFF"
-    "-DLIBCXXABI_ENABLE_EXCEPTIONS=OFF"
-  ] ++ lib.optionals (!enableShared) [
+  ] ++ lib.optionals stdenv.hostPlatform.isWasm (
+    [
+      "-DLIBCXXABI_ENABLE_EXCEPTIONS=OFF"
+      # CMake tests for -fno-exceptions together with -lc++ -lc++abi which fails
+      # here, without -fno-exceptions, libc++abi is unusable later.
+      # See also: https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=260005
+      # TODO(@sternenseemann): make this unconditional?
+      "-DCXX_SUPPORTS_FNO_EXCEPTIONS_FLAG=ON"
+    ]
+    ++ (if stdenv.cc.libc.hasThreads then [
+      "-DLIBCXXABI_ENABLE_THREADS=ON"
+      "-DLIBCXXABI_HAS_PTHREAD_API=ON"
+      "-DLIBCXXABI_HAS_EXTERNAL_THREAD_API=OFF"
+      "-DLIBCXXABI_BUILD_EXTERNAL_THREAD_LIBRARY=OFF"
+      "-DLIBCXXABI_HAS_WIN32_THREAD_API=OFF"
+    ] else [
+      "-DLIBCXXABI_ENABLE_THREADS=OFF"
+    ])
+  )
+  ++ lib.optionals (!enableShared) [
     "-DLIBCXXABI_ENABLE_SHARED=OFF"
   ];
 

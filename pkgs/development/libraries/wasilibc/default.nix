@@ -2,13 +2,16 @@
 , buildPackages
 , fetchFromGitHub
 , lib
+# Enable experimental wasilibc pthread support
+, enableThreads ? false
+# For tests
 , firefox-unwrapped
 , firefox-esr-unwrapped
 }:
 
 let
   pname = "wasilibc";
-  version = "19";
+  version = "20";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -17,7 +20,7 @@ stdenv.mkDerivation {
     owner = "WebAssembly";
     repo = "wasi-libc";
     rev = "refs/tags/wasi-sdk-${version}";
-    hash = "sha256-yQSKoSil/C/1lIHwEO9eQKC/ye3PJIFGYjHyNDn61y4=";
+    sha256 = "0knm5ch499dksmv1k0kh7356pjd9n1gjn0p3vp9bw57mn478zp8z";
     fetchSubmodules = true;
   };
 
@@ -38,8 +41,7 @@ stdenv.mkDerivation {
       "SYSROOT_LIB:=$SYSROOT_LIB"
       "SYSROOT_INC:=$SYSROOT_INC"
       "SYSROOT_SHARE:=$SYSROOT_SHARE"
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1773200
-      "BULK_MEMORY_SOURCES:="
+      "THREAD_MODEL=${if enableThreads then "posix" else "single"}"
     )
 
   '';
@@ -53,8 +55,11 @@ stdenv.mkDerivation {
     ln -s $share/share/undefined-symbols.txt $out/lib/wasi.imports
   '';
 
-  passthru.tests = {
-    inherit firefox-unwrapped firefox-esr-unwrapped;
+  passthru = {
+    tests = {
+      inherit firefox-unwrapped firefox-esr-unwrapped;
+    };
+    hasThreads = enableThreads;
   };
 
   meta = with lib; {
