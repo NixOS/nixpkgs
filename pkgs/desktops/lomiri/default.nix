@@ -11,6 +11,7 @@ let
     cmake-extras = callPackage ./development/cmake-extras { };
     deviceinfo = callPackage ./development/deviceinfo { };
     gmenuharness = callPackage ./development/gmenuharness { };
+    libusermetrics = callPackage ./development/libusermetrics { };
     lomiri-api = callPackage ./development/lomiri-api { };
   };
 in
