@@ -242,7 +242,6 @@ rustPlatform.buildRustPackage rec {
 }
 ```
 
-
 ### Cross compilation {#cross-compilation}
 
 By default, Rust packages are compiled for the host platform, just like any
