@@ -51,6 +51,7 @@
 , mobile-broadband-provider-info
 , runtimeShell
 , buildPackages
+, libnmOnly ? false
 }:
 
 let
@@ -91,8 +92,8 @@ stdenv.mkDerivation rec {
     "-Dpppd=${ppp}/bin/pppd"
     "-Diptables=${iptables}/bin/iptables"
     "-Dnft=${nftables}/bin/nft"
-    "-Dmodem_manager=true"
-    "-Dnmtui=true"
+    (lib.mesonBool "modem_manager" (!libnmOnly))
+    (lib.mesonBool "nmtui" (!libnmOnly))
     "-Ddnsmasq=${dnsmasq}/bin/dnsmasq"
     "-Dqt=false"
 
@@ -145,15 +146,18 @@ stdenv.mkDerivation rec {
     ppp
     libndp
     curl
-    mobile-broadband-provider-info
-    bluez5
-    dnsmasq
-    modemmanager
-    readline
-    newt
-    libsoup
     jansson
     dbus # used to get directory paths with pkg-config during configuration
+  ] ++ lib.optionals libnmOnly [
+    # for nmtui
+    newt
+    readline
+    # for plugins
+    bluez5
+    dnsmasq
+    libsoup
+    mobile-broadband-provider-info
+    modemmanager
   ];
 
   propagatedBuildInputs = [ gnutls libgcrypt ];
@@ -197,6 +201,12 @@ stdenv.mkDerivation rec {
     # We are using a symlink that will be overridden during installation.
     mkdir -p ${placeholder "out"}/lib
     ln -s $PWD/src/libnm-client-impl/libnm.so.0 ${placeholder "out"}/lib/libnm.so.0
+  '';
+
+  # upstream does not offer a way to only compile libnm and we cannot just move libnm to a different output
+  # without regenerating the git files
+  postInstall = lib.optionalString libnmOnly ''
+    rm -rf $out/{,s}bin/
   '';
 
   postFixup = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''

@@ -10687,6 +10687,8 @@ with pkgs;
 
   networkmanager = callPackage ../tools/networking/networkmanager { };
 
+  libnm = networkmanager.override { libnmOnly = true; };
+
   networkmanager-iodine = callPackage ../tools/networking/networkmanager/iodine { };
 
   networkmanager-openvpn = callPackage ../tools/networking/networkmanager/openvpn { };
