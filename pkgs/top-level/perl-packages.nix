@@ -862,15 +862,22 @@ with self; {
 
   AppMusicChordPro = buildPerlPackage {
     pname = "App-Music-ChordPro";
-    version = "0.977";
+    version = "6.010";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JV/JV/App-Music-ChordPro-0.977.tar.gz";
-      hash = "sha256-EPOVabK2KSct2zQIUxdb0E3YTHEHLOqzcSW2xga58T0=";
+      url = "mirror://cpan/authors/id/J/JV/JV/App-Music-ChordPro-6.010.tar.gz";
+      hash = "sha256-SqTkbR2bWIMcU5gSRf2WW6s1ckHtJVPkxj/bBO9X4kM=";
     };
     buildInputs = [ PodParser ];
-    propagatedBuildInputs = [ AppPackager FileLoadLines IOString ImageInfo PDFAPI2 StringInterpolateNamed TextLayout ]
+    propagatedBuildInputs = [ AppPackager FileLoadLines FileHomeDir IOString ImageInfo PDFAPI2 StringInterpolateNamed TextLayout ]
       ++ lib.optionals (!stdenv.isDarwin) [ Wx ];
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+
+    # Delete tests that fail when version env var is set, see
+    # https://github.com/ChordPro/chordpro/issues/293
+    patchPhase = ''
+      rm t/320_subst.t t/321_subst.t t/322_subst.t
+    '';
+
     postInstall = lib.optionalString stdenv.isDarwin ''
       shortenPerlShebang $out/bin/chordpro
       rm $out/bin/wxchordpro # Wx not supported on darwin
