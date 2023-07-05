@@ -17970,6 +17970,8 @@ with pkgs;
 
   ansible-doctor = callPackage ../tools/admin/ansible/doctor.nix { };
 
+  dbus-test-runner = callPackage ../development/tools/dbus-test-runner { };
+
   phpunit = callPackage ../development/tools/misc/phpunit { };
 
   teller = callPackage ../development/tools/teller { };
@@ -22506,6 +22508,14 @@ with pkgs;
   liboping = callPackage ../development/libraries/liboping { };
 
   libplist = callPackage ../development/libraries/libplist { };
+
+  libqtdbusmock = libsForQt5.callPackage ../development/libraries/libqtdbusmock {
+    inherit (lomiri) cmake-extras;
+  };
+
+  libqtdbustest = libsForQt5.callPackage ../development/libraries/libqtdbustest {
+    inherit (lomiri) cmake-extras;
+  };
 
   libre = callPackage ../development/libraries/libre { };
 
@@ -37953,6 +37963,8 @@ with pkgs;
   gnome-2048 = callPackage ../desktops/gnome/games/gnome-2048 { };
 
   gnustep = recurseIntoAttrs (callPackage ../desktops/gnustep { });
+
+  lomiri = recurseIntoAttrs (callPackage ../desktops/lomiri { });
 
   lumina = recurseIntoAttrs (callPackage ../desktops/lumina { });
 
