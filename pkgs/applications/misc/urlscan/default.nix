@@ -20,11 +20,14 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false; # No tests available
 
-  pythonImportsCheck = [ "urlscan" ];
+  pythonImportsCheck = [
+    "urlscan"
+  ];
 
   meta = with lib; {
     description = "Mutt and terminal url selector (similar to urlview)";
     homepage = "https://github.com/firecat53/urlscan";
+    changelog = "https://github.com/firecat53/urlscan/releases/tag/${version}";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dpaetzel jfrankenau ];
   };
