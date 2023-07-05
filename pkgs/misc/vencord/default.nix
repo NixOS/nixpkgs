@@ -4,16 +4,17 @@
 , substituteAll
 , esbuild
 , buildGoModule
+, buildWebExtension ? false
 }:
 buildNpmPackage rec {
-  pname = "vencord-web-extension";
-  version = "1.1.6";
+  pname = "vencord";
+  version = "1.2.8";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     rev = "v${version}";
-    sha256 = "sha256-V9fzSoRqVlk9QqpzzR2x+aOwGHhQhQiSjXZWMC0uLnQ=";
+    sha256 = "sha256-l3h4LrpMQ944i4QivKeL3dhZxZCr5uG29pQMY1XNbqc=";
   };
 
   ESBUILD_BINARY_PATH = lib.getExe (esbuild.override {
@@ -32,9 +33,9 @@ buildNpmPackage rec {
   # Supresses an error about esbuild's version.
   npmRebuildFlags = [ "|| true" ];
 
-  npmDepsHash = "sha256-jKSdeyQ8oHw7ZGby0XzDg4O8mtH276ykVuBcw7dU/Ls=";
+  npmDepsHash = "sha256-m+hczXog03Gz81CP/blkRJPaTrEhmLQFvVtOfWKYQL4=";
   npmFlags = [ "--legacy-peer-deps" ];
-  npmBuildScript = "buildWeb";
+  npmBuildScript = if buildWebExtension then "buildWeb" else "build";
 
   prePatch = ''
     cp ${./package-lock.json} ./package-lock.json
@@ -47,14 +48,16 @@ buildNpmPackage rec {
     })
   ];
 
-  installPhase = ''
-    cp -r dist/extension-unpacked $out
+  installPhase = if buildWebExtension then ''
+    cp -r dist/chromium-unpacked/ $out
+  '' else ''
+    cp -r dist/ $out
   '';
 
   meta = with lib; {
     description = "Vencord web extension";
     homepage = "https://github.com/Vendicated/Vencord";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ FlafyDev NotAShelf ];
+    maintainers = with maintainers; [ FlafyDev NotAShelf Scrumplex ];
   };
 }
