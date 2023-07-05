@@ -41,7 +41,7 @@ in
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
     version = "1.81.0";
-    pname = "vscode";
+    pname = "vscode" + lib.optionalString isInsiders "-insiders";
 
     # This is used for VS Code - Remote SSH test
     rev = "6445d93c81ebe42c4cbd7a60712e0b17d9463e97";
