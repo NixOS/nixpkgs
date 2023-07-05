@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation {
 
     # This is in a function that reverse dependencies use to determine where to install their files to
     substituteInPlace src/QmlPlugins/QmlPluginsConfig.cmake \
-      --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_BINDIR}/../${qtbase.qtQmlPrefix}"
+      --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
   '';
 
   strictDeps = true;
