@@ -9638,6 +9638,8 @@ self: super: with self; {
 
   pystache = callPackage ../development/python-modules/pystache { };
 
+  pystardict = callPackage ../development/python-modules/pystardict { };
+
   pystemd = callPackage ../development/python-modules/pystemd {
     inherit (pkgs) systemd;
   };
