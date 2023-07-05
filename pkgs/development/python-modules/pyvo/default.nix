@@ -52,6 +52,9 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # touches network
     "pyvo/dal/tests/test_datalink.py"
+    # astropy.utils.exceptions.AstropyWarning: leap-second auto-update failed due to the following exception: IERSStaleWarning('leap-second file is expired.')
+    "pyvo/auth/tests/test_auth.py"
+    "pyvo/dal/tests/test_tap.py"
   ];
 
   pythonImportsCheck = [ "pyvo" ];

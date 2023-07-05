@@ -2,6 +2,7 @@
 , stdenv
 , substituteAll
 , fetchurl
+, fetchpatch
 , pkg-config
 , gettext
 , docbook-xsl-nons
@@ -63,7 +64,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk+3";
-  version = "3.24.37";
+  version = "3.24.37"; # for 23.05 we stay on this ver for now as discussed in #237452
 
   outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
   outputBin = "dev";
@@ -83,6 +84,13 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./patches/3.0-immodules.cache.patch
     ./patches/3.0-Xft-setting-fallback-compute-DPI-properly.patch
+    (fetchpatch {
+      # wayland: Don't crash without xdg_activation_v1
+      # https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/5743
+      # https://github.com/NixOS/nixpkgs/issues/237452
+      url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/d8190aae3ff2f0a63a8fb72922fb117b5ab34b6a.patch";
+      sha256 = "sha256-FzWQnStjus51U80dQccMMYxyw4H/5S3/B7EizIwU0Ak=";
+    })
   ] ++ lib.optionals stdenv.isDarwin [
     # X11 module requires <gio/gdesktopappinfo.h> which is not installed on Darwin
     # let’s drop that dependency in similar way to how other parts of the library do it
