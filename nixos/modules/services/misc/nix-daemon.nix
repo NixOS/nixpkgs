@@ -300,22 +300,6 @@ in
         '';
       };
 
-      checkConfig = mkOption {
-        type = types.bool;
-        default = true;
-        description = lib.mdDoc ''
-          If enabled, checks that Nix can parse the generated nix.conf.
-        '';
-      };
-
-      checkAllErrors = mkOption {
-        type = types.bool;
-        default = true;
-        description = lib.mdDoc ''
-          If enabled, checks the nix.conf parsing for any kind of error. When disabled, checks only for unknown settings.
-        '';
-      };
-
       registry = mkOption {
         type = types.attrsOf (types.submodule (
           let
