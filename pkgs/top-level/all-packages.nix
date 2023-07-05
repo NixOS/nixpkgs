@@ -34213,7 +34213,7 @@ with pkgs;
 
   pwdsafety = callPackage ../tools/security/pwdsafety { };
 
-  pyrosimple = python3Packages.callPackage ../applications/networking/p2p/pyrosimple { };
+  pyrosimple = callPackage ../applications/networking/p2p/pyrosimple { };
 
   qbittorrent = libsForQt5.callPackage ../applications/networking/p2p/qbittorrent { };
   qbittorrent-nox = qbittorrent.override {
