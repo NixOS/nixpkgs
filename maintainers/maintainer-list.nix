@@ -15952,6 +15952,15 @@
     githubId = 506181;
     name = "Peter Marheine";
   };
+  tarnacious = {
+    name = "Tarn Barford";
+    email = "tarn@tarnbarford.net";
+    github = "tarnacious";
+    githubId = 170085;
+    keys = [{
+      fingerprint = "93AF D786 C784 F7A6 6206  969E 02A7 0172 0778 ECD5";
+    }];
+  };
   tasmo = {
     email = "tasmo@tasmo.de";
     github = "tasmo";
