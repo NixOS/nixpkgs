@@ -232,12 +232,12 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/tests/prometheus-exporters.nix                        @WilliButz
 
 # PHP interpreter, packages, extensions, tests and documentation
-/doc/languages-frameworks/php.section.md          @aanderse @etu @globin @ma27 @talyz
-/nixos/tests/php                                  @aanderse @etu @globin @ma27 @talyz
-/pkgs/build-support/build-pecl.nix                @aanderse @etu @globin @ma27 @talyz
-/pkgs/development/interpreters/php       @jtojnar @aanderse @etu @globin @ma27 @talyz
-/pkgs/development/php-packages                    @aanderse @etu @globin @ma27 @talyz
-/pkgs/top-level/php-packages.nix         @jtojnar @aanderse @etu @globin @ma27 @talyz
+/doc/languages-frameworks/php.section.md          @aanderse @drupol @etu @globin @ma27 @talyz
+/nixos/tests/php                                  @aanderse @drupol @etu @globin @ma27 @talyz
+/pkgs/build-support/build-pecl.nix                @aanderse @drupol @etu @globin @ma27 @talyz
+/pkgs/development/interpreters/php       @jtojnar @aanderse @drupol @etu @globin @ma27 @talyz
+/pkgs/development/php-packages                    @aanderse @drupol @etu @globin @ma27 @talyz
+/pkgs/top-level/php-packages.nix         @jtojnar @aanderse @drupol @etu @globin @ma27 @talyz
 
 # Podman, CRI-O modules and related
 /nixos/modules/virtualisation/containers.nix @zowoq @adisbladis

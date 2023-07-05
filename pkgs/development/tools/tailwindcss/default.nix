@@ -2,12 +2,12 @@
 , fetchurl
 , stdenv
 , runCommand
-, tailwindcss-bin
+, tailwindcss
 ,
 }:
 let
   inherit (stdenv.hostPlatform) system;
-  throwSystem = throw "tailwindcss-bin has not been packaged for ${system} yet.";
+  throwSystem = throw "tailwindcss has not been packaged for ${system} yet.";
 
   plat = {
     aarch64-darwin = "macos-arm64";
@@ -26,7 +26,7 @@ let
   }.${system} or throwSystem;
 in
 stdenv.mkDerivation rec {
-  pname = "tailwindcss-bin";
+  pname = "tailwindcss";
   version = "3.3.2";
 
   src = fetchurl {
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests.helptext = runCommand "tailwindcss-test-helptext" { } ''
-    ${tailwindcss-bin}/bin/tailwindcss --help > $out
+    ${tailwindcss}/bin/tailwindcss --help > $out
   '';
   passthru.updateScript = ./update.sh;
 
