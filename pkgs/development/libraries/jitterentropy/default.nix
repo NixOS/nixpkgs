@@ -16,7 +16,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   hardeningDisable = [ "fortify" ]; # avoid warnings
 
+  # prevent jitterentropy from builtin strip to allow controlling this from the derivation's
+  # settings. Also fixes a strange issue, where this strip may fail when cross-compiling.
   installFlags = [
+    "INSTALL_STRIP=install"
     "PREFIX=${placeholder "out"}"
   ];
 
