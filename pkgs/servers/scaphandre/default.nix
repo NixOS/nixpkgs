@@ -5,9 +5,12 @@
 , pkg-config
 , openssl
 , powercap
+, nix-update-script
 , runCommand
 , dieHook
 , nixosTests
+, testers
+, scaphandre
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -38,17 +41,25 @@ rustPlatform.buildRustPackage rec {
     runHook postCheck
   '';
 
-  passthru.tests = {
-    stdout = self: runCommand "${pname}-test" {
-      buildInputs = [
-        self
-        dieHook
-      ];
-    } ''
-      ${self}/bin/scaphandre stdout -t 4 > $out  || die "Scaphandre failed to measure consumption"
-      [ -s $out ]
-    '';
-    vm = nixosTests.scaphandre;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      stdout = self: runCommand "${pname}-test" {
+        buildInputs = [
+          self
+          dieHook
+        ];
+      } ''
+        ${self}/bin/scaphandre stdout -t 4 > $out  || die "Scaphandre failed to measure consumption"
+        [ -s $out ]
+      '';
+      vm = nixosTests.scaphandre;
+      version = testers.testVersion {
+        inherit version;
+        package = scaphandre;
+        command = "scaphandre --version";
+      };
+    };
   };
 
   meta = with lib; {

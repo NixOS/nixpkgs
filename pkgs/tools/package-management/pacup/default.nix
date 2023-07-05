@@ -1,28 +1,35 @@
 { lib
 , fetchFromGitHub
 , python3
-, buildPythonApplication
-, poetry-core
-, httpx
-, rich
-, typer
-, packaging
 }:
-buildPythonApplication rec {
+
+python3.pkgs.buildPythonApplication rec {
   name = "pacup";
-  version = "1.1.0";
+  version = "2.0.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pacstall";
     repo = name;
-    rev = version;
-    hash = "sha256-Hl/Gq/cZz4RGYKTuyDlrhATAUYEzKEuYIm0JdToN/ZY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ItO38QyxNHftKPQZAPO7596ddBfX0a1nfVVqgx7BfwI=";
   };
 
-  nativeBuildInputs = with python3; [ poetry-core ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'httpx = ">=0.24,<0.25"' 'httpx = "*"'
+  '';
 
-  propagatedBuildInputs = with python3; [ httpx rich typer packaging ];
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
+    httpx
+    rich
+    typer
+    packaging
+  ];
 
   meta = with lib; {
     description = "Help maintainers update pacscripts";
@@ -31,6 +38,7 @@ buildPythonApplication rec {
       It semi-automates the tedious task of updating pacscripts, and aims to make it a fun process for the maintainer!
     '';
     homepage = "https://github.com/pacstall/pacup";
+    changelog = "https://github.com/pacstall/pacup/releases/tag/${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ zahrun ];
   };

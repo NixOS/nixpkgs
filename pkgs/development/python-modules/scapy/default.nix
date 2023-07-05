@@ -48,7 +48,7 @@ buildPythonPackage rec {
     ++ lib.optional withCryptography cryptography
     ++ lib.optional withVoipSupport sox
     ++ lib.optional withPlottingSupport matplotlib
-    ++ lib.optionals withGraphicsSupport [ pyx texlive.combined.scheme-minimal graphviz imagemagick ];
+    ++ lib.optionals withGraphicsSupport [ pyx texlive.combined.scheme-basic graphviz imagemagick ];
 
   # Running the tests seems too complicated:
   doCheck = false;

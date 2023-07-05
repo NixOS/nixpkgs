@@ -3031,6 +3031,8 @@ self: super: with self; {
     inherit (pkgs) graphviz;
   };
 
+  dotwiz = callPackage ../development/python-modules/dotwiz { };
+
   dotmap = callPackage ../development/python-modules/dotmap { };
 
   downloader-cli = callPackage ../development/python-modules/downloader-cli { };
@@ -3537,6 +3539,8 @@ self: super: with self; {
   fasteners = callPackage ../development/python-modules/fasteners { };
 
   fastentrypoints = callPackage ../development/python-modules/fastentrypoints { };
+
+  faster-fifo = callPackage ../development/python-modules/faster-fifo { };
 
   faster-whisper = callPackage ../development/python-modules/faster-whisper { };
 
@@ -5141,6 +5145,8 @@ self: super: with self; {
 
   itypes = callPackage ../development/python-modules/itypes { };
 
+  iwlib = callPackage ../development/python-modules/iwlib { };
+
   j2cli = callPackage ../development/python-modules/j2cli { };
 
   jaconv = callPackage ../development/python-modules/jaconv { };
@@ -5593,6 +5599,8 @@ self: super: with self; {
   language-data = callPackage ../development/python-modules/language-data { };
 
   language-tags = callPackage ../development/python-modules/language-tags { };
+
+  lanms-neo = callPackage ../development/python-modules/lanms-neo { };
 
   lark = callPackage ../development/python-modules/lark { };
 
@@ -7841,6 +7849,8 @@ self: super: with self; {
 
   pygti = callPackage ../development/python-modules/pygti { };
 
+  pyheck = callPackage ../development/python-modules/pyheck { };
+
   pyheos = callPackage ../development/python-modules/pyheos { };
 
   pyhiveapi = callPackage ../development/python-modules/pyhiveapi { };
@@ -8084,6 +8094,8 @@ self: super: with self; {
   policyuniverse = callPackage ../development/python-modules/policyuniverse { };
 
   polyline = callPackage ../development/python-modules/polyline { };
+
+  Polygon3 = callPackage ../development/python-modules/Polygon3 { };
 
   pomegranate = callPackage ../development/python-modules/pomegranate { };
 

@@ -509,6 +509,7 @@ mapAliases ({
   firmwareLinuxNonfree = linux-firmware; # Added 2022-01-09
   fish-foreign-env = throw "fish-foreign-env has been replaced with fishPlugins.foreign-env"; # Added 2020-12-29, modified 2021-01-10
   fishfight = jumpy; # Added 2022-08-03
+  fitnesstrax = throw "fitnesstrax was removed from nixpkgs because it disappeared upstream and no longer compiles"; # added 2023-07-04
   flameGraph = throw "'flameGraph' has been renamed to/replaced by 'flamegraph'"; # Converted to throw 2022-02-22
   flashplayer-standalone-debugger = throw "flashplayer-standalone-debugger has been removed as Adobe Flash Player is now deprecated"; # Added 2021-02-07
   flashplayer-standalone = throw "flashplayer-standalone has been removed as Adobe Flash Player is now deprecated"; # Added 2021-02-07
@@ -519,6 +520,7 @@ mapAliases ({
   flink_1_5 = throw "flink_1_5 was removed, use flink instead"; # Added 2021-01-25
   flutter-beta = throw "Non-stable versions of Flutter have been removed. You can use flutterPackages.mkFlutter to generate a package for other Flutter versions"; # Added 2020-01-15
   flutter-dev = throw "Non-stable versions of Flutter have been removed. You can use flutterPackages.mkFlutter to generate a package for other Flutter versions"; # Added 2020-01-15
+  flutter2 = throw "flutter2 has been removed because it isn't updated anymore, and no packages in nixpkgs use it. If you still need it, use flutter.mkFlutter to get a custom version"; # Added 2023-07-03
   flvtool2 = throw "flvtool2 has been removed"; # Added 2020-11-03
   fme = throw "fme was removed, because it is old and uses Glade, a discontinued library"; # Added 2022-01-26
   foldingathome = fahclient; # Added 2020-09-03
@@ -841,6 +843,7 @@ mapAliases ({
   lastfmsubmitd = throw "lastfmsubmitd was removed from nixpkgs as the project is abandoned"; # Added 2022-01-01
   latinmodern-math = lmmath;
   letsencrypt = throw "'letsencrypt' has been renamed to/replaced by 'certbot'"; # Converted to throw 2022-02-22
+  lfs = dysk; # Added 2023-07-03
   libGL_driver = throw "'libGL_driver' has been renamed to/replaced by 'mesa.drivers'"; # Converted to throw 2022-02-22
   libaudit = throw "'libaudit' has been renamed to/replaced by 'audit'"; # Converted to throw 2022-02-22
   libayatana-indicator-gtk2 = throw "'libayatana-indicator-gtk2' has been removed from nixpkgs, as gtk2 is deprecated"; # Added 2022-10-18
@@ -1541,6 +1544,7 @@ mapAliases ({
   sepolgen = throw "sepolgen was merged into selinux-python"; # Added 2021-11-11
   session-desktop-appimage = session-desktop;
   sequoia = sequoia-sq; # Added 2023-06-26
+  sexp = sexpp; # Added 2023-07-03
   sget = throw "sget has been removed from nixpkgs, as it is not supported upstream anymore see https://github.com/sigstore/sget/issues/145"; # Added 2023-05-26
   shared_mime_info = throw "'shared_mime_info' has been renamed to/replaced by 'shared-mime-info'"; # Converted to throw 2022-02-22
   inherit (libsForQt5.mauiPackages) shelf; # added 2022-05-17
