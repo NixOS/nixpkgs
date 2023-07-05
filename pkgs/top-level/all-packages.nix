@@ -36959,6 +36959,8 @@ with pkgs;
 
   exult = callPackage ../games/exult { };
 
+  fallout2-ce = callPackage ../games/fallout2-ce { };
+
   flare = callPackage ../games/flare {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
