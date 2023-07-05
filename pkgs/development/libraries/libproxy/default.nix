@@ -6,7 +6,7 @@
 , cmake
 , zlib
 , dbus
-, networkmanager
+, libnm
 , enableJavaScript ? stdenv.isDarwin || lib.meta.availableOn stdenv.hostPlatform duktape
 , duktape
 , pcre
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   ] else [
     glib
     dbus
-    networkmanager
+    libnm
   ]);
 
   cmakeFlags = [

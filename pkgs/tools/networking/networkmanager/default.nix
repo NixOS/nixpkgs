@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
     curl
     jansson
     dbus # used to get directory paths with pkg-config during configuration
-  ] ++ lib.optionals libnmOnly [
+  ] ++ lib.optionals (!libnmOnly) [
     # for nmtui
     newt
     readline
