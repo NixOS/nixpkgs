@@ -145,20 +145,6 @@ in
           you should increase this value.
         '';
       };
-
-      nixPath = mkOption {
-        type = types.listOf types.str;
-        default = [
-          "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
-          "nixos-config=/etc/nixos/configuration.nix"
-          "/nix/var/nix/profiles/per-user/root/channels"
-        ];
-        description = lib.mdDoc ''
-          The default Nix expression search path, used by the Nix
-          evaluator to look up paths enclosed in angle brackets
-          (e.g. `<nixpkgs>`).
-        '';
-      };
     };
   };
 
@@ -242,14 +228,7 @@ in
       };
 
     # Set up the environment variables for running Nix.
-    environment.sessionVariables = cfg.envVars // { NIX_PATH = cfg.nixPath; };
-
-    environment.extraInit =
-      ''
-        if [ -e "$HOME/.nix-defexpr/channels" ]; then
-          export NIX_PATH="$HOME/.nix-defexpr/channels''${NIX_PATH:+:$NIX_PATH}"
-        fi
-      '';
+    environment.sessionVariables = cfg.envVars;
 
     nix.nrBuildUsers = mkDefault (
       if cfg.settings.auto-allocate-uids or false then 0
