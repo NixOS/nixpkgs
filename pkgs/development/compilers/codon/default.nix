@@ -15,13 +15,13 @@
 }:
 
 let
-  version = "0.16.1";
+  version = "0.16.3";
 
   src = fetchFromGitHub {
     owner = "exaloop";
     repo = "codon";
     rev = "v${version}";
-    hash = "sha256-s2GqiFcekXRts8BU5CSmTrkFZ9xLqq4A5MybhB1o1Gg=";
+    hash = "sha256-cfdb/DxrLS3F4MK31l/17j/R6IWlh85blWEsLDqDCDI=";
   };
 
   depsDir = "deps";
@@ -55,7 +55,7 @@ let
   };
 
   codon-deps = stdenv.mkDerivation {
-    name = "codon-deps-${version}.tar.gz";
+    name = "codon-deps.tar.gz";
 
     inherit src;
 
@@ -92,8 +92,6 @@ let
         "sha256-KfemYV42xBAhsPbwTkzdc3GxCVHiWRbyUZORPWxx4vg="
       else
         "sha256-a1zGSpbMjfQBrcgW/aiIdKX8+uI3p/S9pgZjHe2HtWs=";
-
-    outputHashAlgo = "sha256";
   };
 in
 stdenv.mkDerivation {
