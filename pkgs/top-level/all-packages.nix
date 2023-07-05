@@ -1815,7 +1815,7 @@ with pkgs;
 
   systeroid = callPackage ../tools/system/systeroid { };
 
-  tailwindcss-bin = callPackage ../development/tools/tailwindcss { };
+  tailwindcss = callPackage ../development/tools/tailwindcss { };
 
   tauon = callPackage ../applications/audio/tauon { };
 
