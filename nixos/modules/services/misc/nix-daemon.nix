@@ -77,21 +77,6 @@ let
         '');
     };
 
-  legacyConfMappings = {
-    useSandbox = "sandbox";
-    buildCores = "cores";
-    maxJobs = "max-jobs";
-    sandboxPaths = "extra-sandbox-paths";
-    binaryCaches = "substituters";
-    trustedBinaryCaches = "trusted-substituters";
-    binaryCachePublicKeys = "trusted-public-keys";
-    autoOptimiseStore = "auto-optimise-store";
-    requireSignedBinaryCaches = "require-sigs";
-    trustedUsers = "trusted-users";
-    allowedUsers = "allowed-users";
-    systemFeatures = "system-features";
-  };
-
   semanticConfType = with types;
     let
       confAtom = nullOr
@@ -117,7 +102,7 @@ in
     (mkRenamedOptionModuleWith { sinceRelease = 2205; from = [ "nix" "daemonIONiceLevel" ]; to = [ "nix" "daemonIOSchedPriority" ]; })
     (mkRenamedOptionModuleWith { sinceRelease = 2211; from = [ "nix" "readOnlyStore" ]; to = [ "boot" "readOnlyNixStore" ]; })
     (mkRemovedOptionModule [ "nix" "daemonNiceLevel" ] "Consider nix.daemonCPUSchedPolicy instead.")
-  ] ++ mapAttrsToList (oldConf: newConf: mkRenamedOptionModuleWith { sinceRelease = 2205; from = [ "nix" oldConf ]; to = [ "nix" "settings" newConf ]; }) legacyConfMappings;
+  ];
 
   ###### interface
 
