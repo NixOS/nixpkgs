@@ -1,0 +1,13 @@
+diff --git a/server/config.ts b/server/config.ts
+index 543a8135..9744f00d 100644
+--- a/server/config.ts
++++ b/server/config.ts
+@@ -145,7 +145,7 @@ class Config {
+ 	}
+ 
+ 	getPackagesPath() {
+-		return path.join(this.#homePath, "packages");
++		return process.env.THELOUNGE_PACKAGES || path.join(this.#homePath, "packages");
+ 	}
+ 
+ 	getPackageModulePath(packageName: string) {

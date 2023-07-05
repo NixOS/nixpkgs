@@ -1,0 +1,35 @@
+diff --git a/src/components/VencordSettings/UpdaterTab.tsx b/src/components/VencordSettings/UpdaterTab.tsx
+index 4d0b86c..0f1d87f 100644
+--- a/src/components/VencordSettings/UpdaterTab.tsx
++++ b/src/components/VencordSettings/UpdaterTab.tsx
+@@ -249,4 +249,4 @@ function Updater() {
+     );
+ }
+ 
+-export default IS_WEB ? null : wrapTab(Updater, "Updater");
++export default null;
+diff --git a/src/plugins/_core/settings.tsx b/src/plugins/_core/settings.tsx
+index 3ea5a43..da63213 100644
+--- a/src/plugins/_core/settings.tsx
++++ b/src/plugins/_core/settings.tsx
+@@ -105,7 +105,7 @@ export default definePlugin({
+                 label: "Themes",
+                 element: require("@components/VencordSettings/ThemesTab").default,
+             },
+-            !IS_WEB && {
++            false && !IS_WEB && {
+                 section: "VencordUpdater",
+                 label: "Updater",
+                 element: require("@components/VencordSettings/UpdaterTab").default,
+diff --git a/src/utils/updater.ts b/src/utils/updater.ts
+index 2e2bfe1..5ebd06e 100644
+--- a/src/utils/updater.ts
++++ b/src/utils/updater.ts
+@@ -38,6 +38,7 @@ async function Unwrap<T>(p: Promise<IpcRes<T>>) {
+ }
+ 
+ export async function checkForUpdates() {
++    return false;
+     changes = await Unwrap(VencordNative.updater.getUpdates());
+     if (changes.some(c => c.hash === gitHash)) {
+         isNewer = true;

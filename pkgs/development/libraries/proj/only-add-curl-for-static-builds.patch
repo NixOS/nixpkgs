@@ -1,0 +1,55 @@
+From 831063f8206cab1ad3e90b204a1c3f8c87c3d5cc Mon Sep 17 00:00:00 2001
+From: Even Rouault <even.rouault@spatialys.com>
+Date: Tue, 5 Jul 2022 19:40:53 +0200
+Subject: [PATCH] proj-config.cmake generation: only add find_dependency(CURL)
+ for static builds
+
+---
+ cmake/project-config.cmake.in | 30 +++++++++++++++++-------------
+ 1 file changed, 17 insertions(+), 13 deletions(-)
+
+diff --git a/cmake/project-config.cmake.in b/cmake/project-config.cmake.in
+index 40dbaaa2..c1ecd601 100644
+--- a/cmake/project-config.cmake.in
++++ b/cmake/project-config.cmake.in
+@@ -15,20 +15,24 @@ include(CMakeFindDependencyMacro)
+ 
+ cmake_policy(PUSH)
+ cmake_policy(SET CMP0012 NEW)
+-if("@ENABLE_TIFF@")
+-    find_dependency(TIFF)
++if(NOT "@BUILD_SHARED_LIBS@")
++    if("@ENABLE_TIFF@")
++        find_dependency(TIFF)
++    endif()
+ endif()
+-if("@CURL_ENABLED@")
+-  # Chainload CURL usage requirements
+-  find_dependency(CURL)
+-  # Target CURL::libcurl only defined since CMake 3.12
+-  if(NOT TARGET CURL::libcurl)
+-      add_library(CURL::libcurl INTERFACE IMPORTED)
+-      set_target_properties(CURL::libcurl PROPERTIES
+-        INTERFACE_INCLUDE_DIRECTORIES "${CURL_INCLUDE_DIRS}"
+-        INTERFACE_LINK_LIBRARIES      "${CURL_LIBRARIES}"
+-      )
+-  endif()
++if(NOT "@BUILD_SHARED_LIBS@")
++    if("@CURL_ENABLED@")
++      # Chainload CURL usage requirements
++      find_dependency(CURL)
++      # Target CURL::libcurl only defined since CMake 3.12
++      if(NOT TARGET CURL::libcurl)
++          add_library(CURL::libcurl INTERFACE IMPORTED)
++          set_target_properties(CURL::libcurl PROPERTIES
++            INTERFACE_INCLUDE_DIRECTORIES "${CURL_INCLUDE_DIRS}"
++            INTERFACE_LINK_LIBRARIES      "${CURL_LIBRARIES}"
++          )
++      endif()
++    endif()
+ endif()
+ cmake_policy(POP)
+ 
+-- 
+2.39.2
+

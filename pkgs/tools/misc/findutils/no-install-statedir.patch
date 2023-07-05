@@ -1,0 +1,11 @@
+--- a/locate/Makefile.in
++++ b/locate/Makefile.in
+@@ -2357,7 +2357,7 @@ updatedb: updatedb.sh Makefile
+ 	chmod +x $@
+ 
+ install-data-hook:
+-	$(top_srcdir)/build-aux/mkinstalldirs $(DESTDIR)$(localstatedir)
++	#$(top_srcdir)/build-aux/mkinstalldirs $(DESTDIR)$(localstatedir)
+ 
+ dblocation.texi:
+ 	echo '@set LOCATE_DB $(LOCATE_DB)' > $@.tmp

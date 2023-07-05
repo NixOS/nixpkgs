@@ -1,0 +1,37 @@
+From f8c83b48774d152f9bc590db83c032235ef502a9 Mon Sep 17 00:00:00 2001
+From: Jan Klass <kissaki@posteo.de>
+Date: Sat, 24 Jun 2023 17:57:59 +0200
+Subject: [PATCH] test: Fix missing tokio test macro dependency
+
+The tests make use of the `#[tokio::test]` macro, but the tokio dependency default feature does not include them. Running cargo test fails.
+
+By including the `macros` feature on the tokio dependency, cargo test will work.
+
+---
+
+cargo test fails with
+
+```
+error[E0433]: failed to resolve: could not find `test` in `tokio`
+   --> src\scheduled_tasks.rs:295:12
+    |
+295 |   #[tokio::test]
+    |            ^^^^ could not find `test` in `tokio`
+```
+---
+ Cargo.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Cargo.toml b/Cargo.toml
+index 430deb082c..d4c5ab8ef0 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -89,7 +89,7 @@ anyhow = "1.0.71"
+ diesel_ltree = "0.3.0"
+ typed-builder = "0.10.0"
+ serial_test = "0.9.0"
+-tokio = "1.28.2"
++tokio = { version = "1.28.2", features = ["macros"] }
+ sha2 = "0.10.6"
+ regex = "1.8.4"
+ once_cell = "1.18.0"

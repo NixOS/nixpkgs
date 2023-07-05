@@ -1,0 +1,42 @@
+diff --git a/gnutls/library/__init__.py b/gnutls/library/__init__.py
+index c1d898a..b87bd2e 100644
+--- a/gnutls/library/__init__.py
++++ b/gnutls/library/__init__.py
+@@ -18,35 +18,19 @@ def _library_locations(abi_version):
+     system = _get_system_name()
+     if system == "darwin":
+         library_names = ["libgnutls.%d.dylib" % abi_version]
+-        dynamic_loader_env_vars = ["DYLD_LIBRARY_PATH", "LD_LIBRARY_PATH"]
+-        additional_paths = ["/usr/local/lib", "/opt/local/lib", "/sw/lib"]
+     elif system == "windows":
+         library_names = ["libgnutls-%d.dll" % abi_version]
+-        dynamic_loader_env_vars = ["PATH"]
+-        additional_paths = ["."]
+     elif system == "cygwin":
+         library_names = ["cyggnutls-%d.dll" % abi_version]
+-        dynamic_loader_env_vars = ["LD_LIBRARY_PATH"]
+-        additional_paths = ["/usr/bin"]
+     else:
+         # Debian uses libgnutls-deb0.so.28, go figure
+         library_names = [
+             "libgnutls.so.%d" % abi_version,
+             "libgnutls-deb0.so.%d" % abi_version,
+         ]
+-        dynamic_loader_env_vars = ["LD_LIBRARY_PATH"]
+-        additional_paths = ["/usr/local/lib"]
+     for library_name in library_names:
+-        for path in (
+-            path
+-            for env_var in dynamic_loader_env_vars
+-            for path in os.environ.get(env_var, "").split(":")
+-            if os.path.isdir(path)
+-        ):
+-            yield os.path.join(path, library_name)
+-        yield library_name
+-        for path in additional_paths:
+-            yield os.path.join(path, library_name)
++        path = "@gnutlslib@"
++        yield os.path.join(path, library_name)
+ 
+ 
+ def _load_library(abi_versions):

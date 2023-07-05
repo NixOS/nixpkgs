@@ -1,0 +1,21 @@
+diff --git a/src/modules/espeak.c b/src/modules/espeak.c
+index 94a01197..9bb34475 100644
+--- a/src/modules/espeak.c
++++ b/src/modules/espeak.c
+@@ -898,13 +898,13 @@ static SPDVoice **espeak_list_synthesis_voices()
+ 				path = g_strdup_printf("%s/mbrola/%s", espeak_data, voicename);
+ 				if (access(path, O_RDONLY) != 0) {
+ 					g_free(path);
+-					path = g_strdup_printf("/usr/share/mbrola/%s", voicename);
++					path = g_strdup_printf("@mbrola@/share/mbrola/%s", voicename);
+ 					if (access(path, O_RDONLY) != 0) {
+ 						g_free(path);
+-						path = g_strdup_printf("/usr/share/mbrola/%s/%s", voicename, voicename);
++						path = g_strdup_printf("@mbrola@/share/mbrola/%s/%s", voicename, voicename);
+ 						if (access(path, O_RDONLY) != 0) {
+ 							g_free(path);
+-							path = g_strdup_printf("/usr/share/mbrola/voices/%s", voicename);
++							path = g_strdup_printf("@mbrola@/share/mbrola/voices/%s", voicename);
+ 							if (access(path, O_RDONLY) != 0) {
+ 								g_free(path);
+ 								espeak_mbrola[j] = NULL;

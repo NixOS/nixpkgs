@@ -1,0 +1,28 @@
+From c02f2e040dd1e7664777c5a705272e4eb7bfb569 Mon Sep 17 00:00:00 2001
+From: Vincent Breitmoser <look@my.amazin.horse>
+Date: Thu, 10 Jun 2021 14:09:19 +0200
+Subject: [PATCH] vfs0090: add missing explicit dependencies in meson.build
+
+Make all dependencies explicit, so they can be found when building with Nix.
+
+---
+ meson.build | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/meson.build b/meson.build
+index 54a7ca4..88f8793 100644
+--- a/meson.build
++++ b/meson.build
+@@ -17,6 +17,9 @@ udev_dep = dependency('udev')
+ vfs009x_deps += libfprint_tod_dep
+ vfs009x_deps += dependency('nss')
+ vfs009x_deps += dependency('openssl')
++vfs009x_deps += dependency('gusb')
++vfs009x_deps += dependency('libfprint-2')
++vfs009x_deps += dependency('glib-2.0')
+ 
+ vfs0090_deps += dependency('pixman-1')
+ 
+-- 
+2.31.1
+

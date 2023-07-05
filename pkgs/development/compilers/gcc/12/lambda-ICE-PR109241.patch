@@ -1,0 +1,77 @@
+https://gcc.gnu.org/PR109241
+
+Fix ICE on ccache.
+
+From 396a4e76afec30d2461638f569cae18955eb4ad2 Mon Sep 17 00:00:00 2001
+From: Jason Merrill <jason@redhat.com>
+Date: Wed, 22 Mar 2023 16:11:47 -0400
+Subject: [PATCH] c++: local class in nested generic lambda [PR109241]
+
+In this testcase, the tree walk to look for bare parameter packs was
+confused by finding a type with no TREE_BINFO.  But it should be fine that
+it's unset; we already checked for unexpanded packs at parse time.
+
+I also tried doing the partial instantiation of the local class, which is
+probably the long-term direction we want to go, but for stage 4 let's go
+with this safer change.
+
+	PR c++/109241
+
+gcc/cp/ChangeLog:
+
+	* pt.cc (find_parameter_packs_r): Handle null TREE_BINFO.
+
+gcc/testsuite/ChangeLog:
+
+	* g++.dg/cpp1y/lambda-generic-local-class2.C: New test.
+---
+ gcc/cp/pt.cc                                        | 12 ++++++++----
+ .../g++.dg/cpp1y/lambda-generic-local-class2.C      | 13 +++++++++++++
+ 2 files changed, 21 insertions(+), 4 deletions(-)
+ create mode 100644 gcc/testsuite/g++.dg/cpp1y/lambda-generic-local-class2.C
+
+diff --git a/gcc/cp/pt.cc b/gcc/cp/pt.cc
+index c7f4a95a723..79bc9c014c8 100644
+--- a/gcc/cp/pt.cc
++++ b/gcc/cp/pt.cc
+@@ -4106,10 +4106,14 @@ find_parameter_packs_r (tree *tp, int *walk_subtrees, void* data)
+     case TAG_DEFN:
+       t = TREE_TYPE (t);
+       if (CLASS_TYPE_P (t))
+-	/* Local class, need to look through the whole definition.  */
+-	for (tree bb : BINFO_BASE_BINFOS (TYPE_BINFO (t)))
+-	  cp_walk_tree (&BINFO_TYPE (bb), &find_parameter_packs_r,
+-			ppd, ppd->visited);
++	{
++	  /* Local class, need to look through the whole definition.
++	     TYPE_BINFO might be unset for a partial instantiation.  */
++	  if (TYPE_BINFO (t))
++	    for (tree bb : BINFO_BASE_BINFOS (TYPE_BINFO (t)))
++	      cp_walk_tree (&BINFO_TYPE (bb), &find_parameter_packs_r,
++			    ppd, ppd->visited);
++	}
+       else
+ 	/* Enum, look at the values.  */
+ 	for (tree l = TYPE_VALUES (t); l; l = TREE_CHAIN (l))
+diff --git a/gcc/testsuite/g++.dg/cpp1y/lambda-generic-local-class2.C b/gcc/testsuite/g++.dg/cpp1y/lambda-generic-local-class2.C
+new file mode 100644
+index 00000000000..83856de1f41
+--- /dev/null
++++ b/gcc/testsuite/g++.dg/cpp1y/lambda-generic-local-class2.C
+@@ -0,0 +1,13 @@
++// PR c++/109241
++// { dg-do compile { target c++14 } }
++// { dg-options "" } no pedantic
++
++void g() {
++  [](auto) {
++    [](auto) {
++      ({
++        struct A {};
++      });
++    };
++  }(1);
++}
+-- 
+2.40.1
+

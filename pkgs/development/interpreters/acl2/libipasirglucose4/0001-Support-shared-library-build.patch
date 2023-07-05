@@ -1,0 +1,46 @@
+From 0f48e046f44624f4d4d8255ac5bd26397a38f16c Mon Sep 17 00:00:00 2001
+From: Keshav Kini <keshav.kini@gmail.com>
+Date: Sun, 23 Feb 2020 14:09:30 -0800
+Subject: [PATCH] Support shared library build
+
+Patch taken from [the ACL2 Books documentation][1].
+
+- Add " -fPIC" to the CXXFLAGS to build position-independent code,
+  required for shared libraries.
+
+- Add the line "export CXXFLAGS" below the setting of CXXFLAGS, so that
+  those flags apply to the recursive make of the core solver library.
+
+- Fix a typo: replace the occurrence of "CXXLAGS" with "CXXFLAGS".
+
+[1]: http://www.cs.utexas.edu/users/moore/acl2/v8-2/combined-manual/index.html?topic=IPASIR____BUILDING-AN-IPASIR-SOLVER-LIBRARY
+---
+ makefile | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/makefile b/makefile
+index 07121de..4e85c4b 100755
+--- a/makefile
++++ b/makefile
+@@ -29,7 +29,8 @@ TARGET=libipasir$(SIG).a
+ 
+ CXX=g++  
+ 
+-CXXFLAGS= -g -std=c++11 -Wall -DNDEBUG -O3
++CXXFLAGS= -g -std=c++11 -Wall -DNDEBUG -O3 -fPIC
++export CXXFLAGS
+ 
+ #-----------------------------------------------------------------------#
+ #- REQUIRED TOP RULES --------------------------------------------------#
+@@ -67,7 +68,7 @@ libipasir$(SIG).a: .FORCE
+ #-----------------------------------------------------------------------#
+ 
+ ipasir$(NAME)glue.o: ipasir$(NAME)glue.cc ipasir.h makefile
+-	$(CXX) -g  -std=c++11 $(CXXLAGS) \
++	$(CXX) -g  -std=c++11 $(CXXFLAGS) \
+ 	  -DVERSION=\"$(VERSION)\" \
+ 	  -I$(DIR) -I$(DIR)/core -c ipasir$(NAME)glue.cc
+ 
+-- 
+2.23.1
+

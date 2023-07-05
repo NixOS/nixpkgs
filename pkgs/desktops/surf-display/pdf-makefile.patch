@@ -1,0 +1,24 @@
+diff --git a/Makefile b/Makefile
+index 1081d64..499160c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -13,19 +13,10 @@ man::
+ 	gzip -9 -c -n data/surf-display.1 > data/surf-display.1.gz
+ 
+ install:
+-	if [ ! -e data/surf-display.pdf.gz ]; then \
+-	    echo "Run 'make build' first, before running 'sudo make install'."; \
+-	    exit -1; \
+-	fi
+-
+         # script
+ 	mkdir -p $(DESTDIR)$(PREFIX)/bin/
+ 	install -m 0755 bin/surf-display $(DESTDIR)$(PREFIX)/bin/
+ 
+-	# LaTeX Beamer PDF: Impressive HowTo
+-	mkdir -p $(DESTDIR)$(PREFIX)/share/doc/surf-display/
+-	install -m 0644 data/*.pdf.gz $(DESTDIR)$(PREFIX)/share/doc/surf-display/
+-
+ 	# man page
+ 	mkdir -p $(DESTDIR)$(PREFIX)/share/man/man1
+ 	install -m 0644 data/*.1.gz $(DESTDIR)$(PREFIX)/share/man/man1/

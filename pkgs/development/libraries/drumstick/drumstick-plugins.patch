@@ -1,0 +1,14 @@
+Make it look for its plugin in its own installation directory.
+
+Without this vmpk fails to start with "Unable to initialize all MIDI drivers".
+
+--- a/library/rt/backendmanager.cpp
++++ b/library/rt/backendmanager.cpp
+@@ -159,6 +159,7 @@ namespace rt {
+         foreach(const QString& path, QCoreApplication::libraryPaths()) {
+             d->appendDir( path + QDir::separator() + QSTR_DRUMSTICK, result );
+         }
++        d->appendDir( "@out@/lib/" + QSTR_DRUMSTICK, result );
+         return result;
+     }
+ 

@@ -1,0 +1,16 @@
+--- a/Rox-Filer/src/configure	2011-10-09 16:32:14.000000000 +0200
++++ b/Rox-Filer/src/configure	2016-03-20 09:26:31.640891863 +0100
+@@ -2132,13 +2132,6 @@
+ 
+ 
+ ac_config_headers="$ac_config_headers config.h"
+-
+-
+- if [ -f configure ]; then
+-	as_fn_error $? "Please run configure from the build directory (try ../AppRun --compile)" "$LINENO" 5
+-	exit 1
+-fi
+-
+ ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'

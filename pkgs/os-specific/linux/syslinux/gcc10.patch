@@ -1,0 +1,33 @@
+diff --git a/dos/string.h b/dos/string.h
+index f648de2..a502132 100644
+--- a/dos/string.h
++++ b/dos/string.h
+@@ -5,12 +5,13 @@
+ #ifndef _STRING_H
+ #define _STRING_H
+ 
++#include <stddef.h>
++
+ /* Standard routines */
+ #define memcpy(a,b,c)	__builtin_memcpy(a,b,c)
+ #define memmove(a,b,c)	__builtin_memmove(a,b,c)
+ #define memset(a,b,c)	__builtin_memset(a,b,c)
+ #define strcpy(a,b)	__builtin_strcpy(a,b)
+-#define strlen(a)	__builtin_strlen(a)
+ 
+ /* This only returns true or false */
+ static inline int memcmp(const void *__m1, const void *__m2, unsigned int __n)
+@@ -21,6 +22,13 @@ static inline int memcmp(const void *__m1, const void *__m2, unsigned int __n)
+     return rv;
+ }
+ 
++static inline size_t strlen(const char *s)
++{
++    size_t len = 0;
++    while (*s++) len++;
++    return len;
++}
++
+ extern char *strchr(const char *s, int c);
+ 
+ #endif /* _STRING_H */

@@ -1,0 +1,27 @@
+diff --git a/auto/install b/auto/install
+index d884487..dccc411 100644
+--- a/auto/install
++++ b/auto/install
+@@ -148,12 +148,6 @@ install:	build $NGX_INSTALL_PERL_MODULES
+ 		|| cp conf/nginx.conf '\$(DESTDIR)$NGX_CONF_PATH'
+ 	cp conf/nginx.conf '\$(DESTDIR)$NGX_CONF_PREFIX/nginx.conf.default'
+ 
+-	test -d '\$(DESTDIR)`dirname "$NGX_PID_PATH"`' \\
+-		|| mkdir -p '\$(DESTDIR)`dirname "$NGX_PID_PATH"`'
+-
+-	test -d '\$(DESTDIR)`dirname "$NGX_HTTP_LOG_PATH"`' \\
+-		|| mkdir -p '\$(DESTDIR)`dirname "$NGX_HTTP_LOG_PATH"`'
+-
+ 	test -d '\$(DESTDIR)$NGX_PREFIX/html' \\
+ 		|| cp -R $NGX_HTML '\$(DESTDIR)$NGX_PREFIX'
+ END
+@@ -161,9 +155,6 @@ END
+ 
+ if test -n "$NGX_ERROR_LOG_PATH"; then
+     cat << END                                                >> $NGX_MAKEFILE
+-
+-	test -d '\$(DESTDIR)`dirname "$NGX_ERROR_LOG_PATH"`' \\
+-		|| mkdir -p '\$(DESTDIR)`dirname "$NGX_ERROR_LOG_PATH"`'
+ END
+ 
+ fi

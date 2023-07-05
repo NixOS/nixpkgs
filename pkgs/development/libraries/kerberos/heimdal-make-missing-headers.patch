@@ -1,0 +1,10 @@
+--- a/lib/hx509/Makefile.am 2018-03-21 15:41:38.622968809 +0100
++++ b/lib/hx509/Makefile.am 2018-03-21 15:41:32.655162197 +0100
+@@ -9,6 +9,8 @@
+	sel-gram.h			\
+	$(gen_files_ocsp:.x=.c)		\
+	$(gen_files_pkcs10:.x=.c)	\
++	ocsp_asn1.h			\
++	pkcs10_asn1.h			\
+	hx509_err.c			\
+	hx509_err.h
