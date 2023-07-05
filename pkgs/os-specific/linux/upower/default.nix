@@ -27,7 +27,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "upower";
-  version = "1.90.0";
+  version = "1.90.2";
 
   outputs = [ "out" "dev" ]
     ++ lib.optionals withDocs [ "devdoc" ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "upower";
     repo = "upower";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+C/4dDg6WTLpBgkpNyxjthSdqYdaTLC8vG6jG1LNJ7w=";
+    hash = "sha256-7WzMAJuf1czU8ZalsEU/NwCXYqTGvcqEqxFt5ocgt48=";
   };
 
   patches = lib.optionals (stdenv.hostPlatform.system == "i686-linux") [
