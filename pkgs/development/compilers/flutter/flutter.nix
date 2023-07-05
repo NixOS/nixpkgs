@@ -3,68 +3,13 @@
 , patches
 , dart
 , src
-, includedEngineArtifacts ? {
-    common = [
-      "flutter_patched_sdk"
-      "flutter_patched_sdk_product"
-    ];
-    platform = { };
-  }
-
 , lib
-, callPackage
 , stdenv
-, runCommandLocal
-, symlinkJoin
-, lndir
 , git
 , which
 }:
 
 let
-  engineArtifactDirectory =
-    let
-      engineArtifacts = callPackage ./engine-artifacts { inherit engineVersion; };
-    in
-    runCommandLocal "flutter-engine-artifacts-${version}" { }
-      (
-        let
-          mkCommonArtifactLinkCommand = { artifact }:
-            ''
-              mkdir -p $out/common
-              ${lndir}/bin/lndir -silent ${artifact} $out/common
-            '';
-          mkPlatformArtifactLinkCommand = { artifact, os, architecture, variant ? null }:
-            let
-              artifactDirectory = "${os}-${architecture}${lib.optionalString (variant != null) "-${variant}"}";
-            in
-            ''
-              mkdir -p $out/${artifactDirectory}
-                ${lndir}/bin/lndir -silent ${artifact} $out/${artifactDirectory}
-            '';
-        in
-        ''
-          ${
-            builtins.concatStringsSep "\n"
-              ((map (name: mkCommonArtifactLinkCommand {
-                artifact = engineArtifacts.common.${name};
-              }) (if includedEngineArtifacts ? common then includedEngineArtifacts.common else [ ])) ++
-              (builtins.foldl' (commands: os: commands ++
-                (builtins.foldl' (commands: architecture: commands ++
-                  (builtins.foldl' (commands: variant: commands ++
-                    (map (artifact: mkPlatformArtifactLinkCommand {
-                      inherit artifact os architecture variant;
-                    }) engineArtifacts.platform.${os}.${architecture}.variants.${variant}))
-                  (map (artifact: mkPlatformArtifactLinkCommand {
-                    inherit artifact os architecture;
-                  }) engineArtifacts.platform.${os}.${architecture}.base)
-                  includedEngineArtifacts.platform.${os}.${architecture}))
-                [] (builtins.attrNames includedEngineArtifacts.platform.${os})))
-              [] (builtins.attrNames (if includedEngineArtifacts ? platform then includedEngineArtifacts.platform else { }))))
-          }
-        ''
-      );
-
   unwrapped =
     stdenv.mkDerivation {
       name = "flutter-${version}-unwrapped";
@@ -134,7 +79,6 @@ let
         mkdir -p $out
         cp -r . $out
         ln -sf ${dart} $out/bin/cache/dart-sdk
-        ln -sf ${engineArtifactDirectory} $out/bin/cache/artifacts/engine
 
         runHook postInstall
       '';
@@ -153,7 +97,7 @@ let
       '';
 
       passthru = {
-        inherit dart;
+        inherit dart engineVersion;
         # The derivation containing the original Flutter SDK files.
         # When other derivations wrap this one, any unmodified files
         # found here should be included as-is, for tooling compatibility.
