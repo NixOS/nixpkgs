@@ -15833,6 +15833,12 @@
     githubId = 143103;
     name = "Attila Sztupak";
   };
+  szucsitg = {
+    name = "Adam Szucs-Matyas";
+    email = "szucsitg@gmail.com";
+    github = "szucsitg";
+    githubId = 32290917;
+  };
   t184256 = {
     email = "monk@unboiled.info";
     github = "t184256";
