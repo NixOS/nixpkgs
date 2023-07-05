@@ -1,9 +1,9 @@
 { lib
-, python3Packages
 , fetchFromGitHub
+, python3
 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "urlscan";
   version = "0.9.10";
 
@@ -14,11 +14,12 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-lCOOVAdsr5LajBGY7XUi4J5pJqm5rOH5IMKhA6fju5w=";
   };
 
-  propagatedBuildInputs = [
-    python3Packages.urwid
+  propagatedBuildInputs = with python3.pkgs; [
+    urwid
   ];
 
-  doCheck = false; # No tests available
+  # No tests available
+  doCheck = false;
 
   pythonImportsCheck = [
     "urlscan"
