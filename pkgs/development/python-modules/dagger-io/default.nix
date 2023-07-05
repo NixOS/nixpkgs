@@ -1,28 +1,23 @@
-# pkgs = import (fetchTarball {
-# 	url = "https://github.com/NixOS/nixpkgs/archive/nixpkgs-unstable.tar.gz";
-# 	sha256 = "sha256:0s4hvb6zgbi3nqnh2r4q129q4672fv65cy02mxchddz7p5hg5sma";
-# }) {};
-
-{
-buildPythonPackage,
-fetchFromGitHub,
-pythonOlder,
-poetry-core,
-anyio,
-attrs,
-cattrs,
-graphql-core,
-gql,
-httpx,
-beartype,
-platformdirs,
-typing-extensions,
-rich,
-typer,
-strawberry-graphql,
-shellingham,
-colorama,
-} :
+{ lib
+, anyio
+, attrs
+, beartype
+, buildPythonPackage
+, cattrs
+, colorama
+, fetchFromGitHub
+, gql
+, graphql-core
+, httpx
+, platformdirs
+, poetry-core
+, pythonOlder
+, rich
+, shellingham
+, strawberry-graphql
+, typer
+, typing-extensions
+}:
 
 buildPythonPackage rec {
   pname = "dagger-io";
@@ -30,31 +25,37 @@ buildPythonPackage rec {
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
-  
-  src = fetchFromGitHub
-    {
+
+  src = fetchFromGitHub {
       owner = "dagger";
       repo = "dagger";
       rev = version;
       sha256 = "sha256-9QQ6aDCkTWNq5KOSGF6FH6UQrOYa51ctW3CMcGrCJAQ=";
-    } + "/sdk/python";
-  doCheck = false;
+  } + "/sdk/python";
 
   propagatedBuildInputs = [
-    poetry-core
     anyio
     attrs
-    cattrs
-    graphql-core
-    gql
-    httpx
     beartype
-    platformdirs
-    typing-extensions
-    rich
-    typer
-    strawberry-graphql
-    shellingham
+    cattrs
     colorama
+    gql
+    graphql-core
+    httpx
+    platformdirs
+    poetry-core
+    rich
+    shellingham
+    strawberry-graphql
+    typer
+    typing-extensions
   ];
+  meta = with lib; {
+    description = "Dagger is a programmable CI/CD engine that runs your pipelines in containers.";
+    homepage = "https://github.com/dagger/dagger";
+    changelog = "https://github.com/dagger/dagger/releases/tag/${version}";
+    license = licenses.asl20 ;
+    # Just commented until I got into maintainers-list.
+    # maintainers = with maintainers; [ rayanpiro ];
+  };
 }
