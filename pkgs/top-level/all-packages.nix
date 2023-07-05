@@ -240,9 +240,7 @@ with pkgs;
 
   anders = callPackage ../applications/science/logic/anders { };
 
-  ankisyncd = callPackage ../servers/ankisyncd {
-    python3 = python39;
-  };
+  ankisyncd = callPackage ../servers/ankisyncd { };
 
   ariang = callPackage ../servers/ariang { };
 
@@ -558,6 +556,10 @@ with pkgs;
   dtv-scan-tables = callPackage ../data/misc/dtv-scan-tables { };
 
   dufs = callPackage ../servers/http/dufs {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
+  dynein = callPackage ../development/tools/database/dynein {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
@@ -935,7 +937,7 @@ with pkgs;
 
   pacproxy = callPackage ../tools/networking/pacproxy { };
 
-  pacup = python3Packages.callPackage ../tools/package-management/pacup { };
+  pacup = callPackage ../tools/package-management/pacup { };
 
   perseus-cli = callPackage ../development/tools/perseus-cli {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -1596,6 +1598,8 @@ with pkgs;
   dualsensectl = callPackage ../tools/games/dualsensectl { };
 
   dwarfs = callPackage ../tools/filesystems/dwarfs { };
+
+  dysk = callPackage ../tools/filesystems/dysk { };
 
   etlegacy = callPackage ../games/etlegacy { lua = lua5_4; };
 
@@ -8416,6 +8420,8 @@ with pkgs;
 
   halftone = callPackage ../applications/graphics/halftone { };
 
+  halloy = callPackage ../applications/networking/irc/halloy { };
+
   harminv = callPackage ../development/libraries/science/chemistry/harminv { };
 
   igrep = callPackage ../tools/text/igrep {
@@ -9034,6 +9040,8 @@ with pkgs;
 
   irker = callPackage ../servers/irker { };
 
+  iroh = callPackage ../applications/networking/iroh { };
+
   ised = callPackage ../tools/misc/ised { };
 
   isl = isl_0_20;
@@ -9455,8 +9463,6 @@ with pkgs;
   liquidsoap = callPackage ../tools/audio/liquidsoap/full.nix {
     ffmpeg = ffmpeg-full;
   };
-
-  lfs = callPackage ../tools/filesystems/lfs { };
 
   linuxwave = callPackage ../tools/audio/linuxwave { };
 
@@ -12228,6 +12234,8 @@ with pkgs;
 
   rnv = callPackage ../tools/text/xml/rnv { };
 
+  roam-research = callPackage ../applications/office/roam-research { };
+
   rosie = callPackage ../tools/text/rosie { };
 
   rounded-mgenplus = callPackage ../data/fonts/rounded-mgenplus { };
@@ -12514,7 +12522,7 @@ with pkgs;
 
   sewer = callPackage ../tools/admin/sewer { };
 
-  sexp = callPackage ../development/libraries/sexp { };
+  sexpp = callPackage ../development/libraries/sexpp { };
 
   sfeed = callPackage ../tools/misc/sfeed { };
 
@@ -17058,6 +17066,8 @@ with pkgs;
     vala;
 
   vyper = with python3Packages; toPythonApplication vyper;
+
+  wazero = callPackage ../development/interpreters/wazero { };
 
   wcc = callPackage ../development/compilers/wcc { };
 
@@ -28058,6 +28068,8 @@ with pkgs;
 
   schedtool = callPackage ../os-specific/linux/schedtool { };
 
+  sddm-chili-theme = libsForQt5.callPackage ../data/themes/chili-sddm { };
+
   sdparm = callPackage ../os-specific/linux/sdparm { };
 
   sdrangel = libsForQt5.callPackage ../applications/radio/sdrangel { };
@@ -31203,6 +31215,7 @@ with pkgs;
   firefox-beta-unwrapped = firefoxPackages.firefox-beta;
   firefox-devedition-unwrapped = firefoxPackages.firefox-devedition;
   firefox-esr-102-unwrapped = firefoxPackages.firefox-esr-102;
+  firefox-esr-115-unwrapped = firefoxPackages.firefox-esr-115;
   firefox-esr-unwrapped = firefoxPackages.firefox-esr-102;
 
   firefox = wrapFirefox firefox-unwrapped { };
@@ -31213,6 +31226,7 @@ with pkgs;
 
   firefox-esr = firefox-esr-102;
   firefox-esr-102 = wrapFirefox firefox-esr-102-unwrapped { };
+  firefox-esr-115 = wrapFirefox firefox-esr-115-unwrapped { };
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
     inherit (gnome) adwaita-icon-theme;
@@ -35634,6 +35648,8 @@ with pkgs;
 
   whispers = with python3Packages; toPythonApplication whispers;
 
+  whisper-ctranslate2 = callPackage ../tools/audio/whisper-ctranslate2 { };
+
   waon = callPackage ../applications/audio/waon { };
 
   warp = callPackage ../applications/networking/warp { };
@@ -38163,6 +38179,10 @@ with pkgs;
   deepdiff = with python3Packages; toPythonApplication deepdiff;
 
   deepsea = callPackage ../tools/security/deepsea { };
+
+  deepsecrets = callPackage ../tools/security/deepsecrets {
+    python3 = python311;
+  };
 
   deeptools = callPackage ../applications/science/biology/deeptools { python = python3; };
 

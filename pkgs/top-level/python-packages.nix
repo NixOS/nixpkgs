@@ -3031,6 +3031,8 @@ self: super: with self; {
     inherit (pkgs) graphviz;
   };
 
+  dotwiz = callPackage ../development/python-modules/dotwiz { };
+
   dotmap = callPackage ../development/python-modules/dotmap { };
 
   downloader-cli = callPackage ../development/python-modules/downloader-cli { };
@@ -3537,6 +3539,8 @@ self: super: with self; {
   fasteners = callPackage ../development/python-modules/fasteners { };
 
   fastentrypoints = callPackage ../development/python-modules/fastentrypoints { };
+
+  faster-fifo = callPackage ../development/python-modules/faster-fifo { };
 
   faster-whisper = callPackage ../development/python-modules/faster-whisper { };
 
@@ -5140,6 +5144,8 @@ self: super: with self; {
   itunespy = callPackage ../development/python-modules/itunespy { };
 
   itypes = callPackage ../development/python-modules/itypes { };
+
+  iwlib = callPackage ../development/python-modules/iwlib { };
 
   j2cli = callPackage ../development/python-modules/j2cli { };
 
@@ -7842,6 +7848,8 @@ self: super: with self; {
   pygnmi = callPackage ../development/python-modules/pygnmi { };
 
   pygti = callPackage ../development/python-modules/pygti { };
+
+  pyheck = callPackage ../development/python-modules/pyheck { };
 
   pyheos = callPackage ../development/python-modules/pyheos { };
 

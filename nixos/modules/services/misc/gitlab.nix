@@ -1644,6 +1644,7 @@ in {
         nodejs
         procps
         gnupg
+        gzip
       ];
       serviceConfig = {
         Type = "notify";
