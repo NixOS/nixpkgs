@@ -13,6 +13,7 @@
 , git
 , perl
 , darwin
+, libiconv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -36,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   nativeCheckInputs = [
     git perl
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.system_cmds darwin.libiconv
+    darwin.system_cmds libiconv
   ];
 
   patches = [
