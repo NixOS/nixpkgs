@@ -21,13 +21,13 @@
 
 mkDerivation rec {
   pname = "organicmaps";
-  version = "2023.05.08-7";
+  version = "2023.06.04-13";
 
   src = fetchFromGitHub {
     owner = "organicmaps";
     repo = "organicmaps";
     rev = "${version}-android";
-    sha256 = "sha256-V7qTi5NiZf+1voZSHfuAyfMeTeiYfs/CoOQ2zweKmaU=";
+    hash = "sha256-HoEOKN99ClR1sa8YFZcS9XomtXnTRdAXS0iQEdDrhvc=";
     fetchSubmodules = true;
   };
 
@@ -62,6 +62,7 @@ mkDerivation rec {
 
   # Yes, this is PRE configure. The configure phase uses cmake
   preConfigure = ''
+    patchShebangs 3party/boost/tools/build/src/engine/build.sh
     bash ./configure.sh
   '';
 
