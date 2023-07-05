@@ -1,9 +1,12 @@
 { lib
 , stdenv
+, darwin
 , callPackage
 , flutter
 , supportsLinuxDesktop ? stdenv.hostPlatform.isLinux
-, supportsAndroid ? stdenv.hostPlatform.isx86_64
+, supportsAndroid ? (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isDarwin)
+, supportsDarwin ? stdenv.hostPlatform.isDarwin
+, supportsIOS ? stdenv.hostPlatform.isDarwin
 , includedEngineArtifacts ? {
     common = [
       "flutter_patched_sdk"
@@ -12,6 +15,10 @@
     platform = {
       android = lib.optionalAttrs supportsAndroid
         ((lib.genAttrs [ "arm" "arm64" "x64" ] (architecture: [ "profile" "release" ])) // { x86 = [ "jit-release" ]; });
+      darwin = lib.optionalAttrs supportsDarwin
+        ((lib.genAttrs [ "arm64" "x64" ] (architecture: [ "profile" "release" ])));
+      ios = lib.optionalAttrs supportsIOS
+        ((lib.genAttrs [ "" ] (architecture: [ "profile" "release" ])));
       linux = lib.optionalAttrs supportsLinuxDesktop
         (lib.genAttrs ((lib.optional stdenv.hostPlatform.isx86_64 "x64") ++ (lib.optional stdenv.hostPlatform.isAarch64 "arm64"))
           (architecture: [ "debug" "profile" "release" ]));
@@ -158,7 +165,9 @@ let
 in
 (callPackage ./sdk-symlink.nix { }) (runCommandLocal "flutter-wrapped"
 {
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
 
   passthru = flutter.passthru // {
     inherit (flutter) version;
