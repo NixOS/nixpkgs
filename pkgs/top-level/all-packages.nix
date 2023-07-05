@@ -19509,6 +19509,8 @@ with pkgs;
   regclient = callPackage ../development/tools/regclient { };
   inherit (regclient) regbot regctl regsync;
 
+  regex-cli = callPackage ../development/tools/misc/regex-cli { };
+
   reno = callPackage ../development/tools/reno { };
 
   re2c = callPackage ../development/tools/parsing/re2c { };
