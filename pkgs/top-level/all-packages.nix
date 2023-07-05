@@ -9105,6 +9105,8 @@ with pkgs;
 
   jekyll = callPackage ../applications/misc/jekyll { };
 
+  jello = with python3Packages; toPythonApplication jello;
+
   jen = callPackage ../tools/text/jen { };
 
   jet = callPackage ../development/tools/jet { };
