@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "smplayer";
-  version = "22.7.0";
+  version = "23.6.0";
 
   src = fetchFromGitHub {
     owner = "smplayer-dev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-vU+M5aCCGSA+IwJXTLMYvno/Qei+5Hwck3Q/Ah7N09s=";
+    hash = "sha256-xGy6/9aUftBTSo9HJ3zyuRSagqimP9XvXKP/4oBQTo4=";
   };
 
   nativeBuildInputs = [
