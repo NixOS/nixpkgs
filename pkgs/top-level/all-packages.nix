@@ -16348,7 +16348,7 @@ with pkgs;
 
   ocaml-crunch = ocamlPackages.crunch.bin;
 
-  inherit (callPackage ../development/tools/ocaml/ocamlformat { })
+  inherit (ocamlPackages)
     ocamlformat # latest version
     ocamlformat_0_19_0 ocamlformat_0_20_0 ocamlformat_0_20_1 ocamlformat_0_21_0
     ocamlformat_0_22_4 ocamlformat_0_23_0 ocamlformat_0_24_1 ocamlformat_0_25_1;

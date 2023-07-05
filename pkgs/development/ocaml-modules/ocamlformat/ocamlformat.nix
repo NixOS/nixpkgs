@@ -1,12 +1,7 @@
-{ lib, callPackage, ocaml-ng, version ? "0.25.1" }:
+{ lib, callPackage, buildDunePackage, re, ocamlformat-lib, menhir
+, version ? "0.25.1" }:
 
-with ocaml-ng.ocamlPackages;
-
-let
-  inherit (callPackage ../../../ocaml-modules/ocamlformat/generic.nix {
-    inherit version;
-  })
-    src library_deps;
+let inherit (callPackage ./generic.nix { inherit version; }) src library_deps;
 
 in buildDunePackage {
   pname = "ocamlformat";
