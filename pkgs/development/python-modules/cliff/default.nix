@@ -1,23 +1,27 @@
 { lib
-, buildPythonPackage
-, fetchPypi
 , autopage
+, buildPythonPackage
+, callPackage
 , cmd2
+, fetchPypi
 , importlib-metadata
 , installShellFiles
 , openstackdocstheme
 , pbr
 , prettytable
 , pyparsing
+, pythonOlder
 , pyyaml
-, stevedore
 , sphinx
-, callPackage
+, stevedore
 }:
 
 buildPythonPackage rec {
   pname = "cliff";
   version = "4.3.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -52,10 +56,12 @@ buildPythonPackage rec {
     installManPage doc/build/man/cliff.1
   '';
 
-  # check in passthru.tests.pytest to escape infinite recursion with stestr
+  # Check is done in passthru.tests.pytest to escape infinite recursion with stestr
   doCheck = false;
 
-  pythonImportsCheck = [ "cliff" ];
+  pythonImportsCheck = [
+    "cliff"
+  ];
 
   passthru.tests = {
     pytest = callPackage ./tests.nix { };
