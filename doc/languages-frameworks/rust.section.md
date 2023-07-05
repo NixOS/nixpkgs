@@ -213,7 +213,7 @@ rustPlatform.buildRustPackage rec {
 }
 ```
 
-### Cargo Workspaces {#workspaces}
+### Cargo Workspaces {#rust-cargo-workspaces}
 
 If your project uses cargo workspaces, and if you wish to compile only one of the crates in the workspace,
 use the `buildAndTestSubdir` option of `buildRustPackage`.
