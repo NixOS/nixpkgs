@@ -91,8 +91,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Gedit";
-    description = "Official text editor of the GNOME desktop environment";
-    maintainers = teams.gnome.members;
+    description = "Former GNOME text editor";
+    maintainers = [ ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
