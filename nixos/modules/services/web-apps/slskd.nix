@@ -80,6 +80,7 @@ in {
             url_base = mkOption {
               type = path;
               default = config.services.slskd.nginx.contextPath;
+              defaultText = "config.services.slskd.nginx.contextPath";
             };
           };
 
