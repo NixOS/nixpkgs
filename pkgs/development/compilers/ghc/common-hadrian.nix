@@ -10,6 +10,7 @@
 
 { lib
 , stdenv
+, pkgsBuildBuild
 , pkgsBuildTarget
 , pkgsHostTarget
 , targetPackages
@@ -295,6 +296,10 @@ stdenv.mkDerivation ({
     export RANLIB="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ranlib"
     export READELF="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}readelf"
     export STRIP="${bintoolsFor.strip}/bin/${bintoolsFor.strip.targetPrefix}strip"
+    # CC_FOR_BUILD etc. become CC_STAGE0
+    export CC_STAGE0="$CC_FOR_BUILD"
+    export AR_STAGE0="$AR_FOR_BUILD"
+    export LD_STAGE0="$LD_FOR_BUILD"
   '' + lib.optionalString (stdenv.targetPlatform.linker == "cctools") ''
     export OTOOL="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}otool"
     export INSTALL_NAME_TOOL="${bintoolsFor.install_name_tool}/bin/${bintoolsFor.install_name_tool.targetPrefix}install_name_tool"
@@ -415,6 +420,10 @@ stdenv.mkDerivation ({
 
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
+
+  depsBuildBuild = [
+    pkgsBuildBuild.targetPackages.stdenv.cc
+  ];
 
   buildInputs = [ perl bash ] ++ (libDeps hostPlatform);
 
