@@ -19619,6 +19619,8 @@ with pkgs;
 
   lurk = callPackage ../development/tools/lurk { };
 
+  lutgen = callPackage ../applications/graphics/lutgen { };
+
   maizzle = callPackage ../development/tools/maizzle { };
 
   malt = callPackage ../development/tools/profiling/malt { };
