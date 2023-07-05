@@ -16359,6 +16359,8 @@ with pkgs;
 
   lessc = nodePackages.less;
 
+  lilex = callPackage ../data/fonts/lilex { };
+
   liquibase = callPackage ../development/tools/database/liquibase { };
 
   lizardfs = callPackage ../tools/filesystems/lizardfs { };
