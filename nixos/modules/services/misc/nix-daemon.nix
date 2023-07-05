@@ -263,11 +263,6 @@ in
     system.activationScripts.nix = stringAfter [ "etc" "users" ]
       ''
         install -m 0755 -d /nix/var/nix/{gcroots,profiles}/per-user
-
-        # Subscribe the root user to the NixOS channel by default.
-        if [ ! -e "/root/.nix-channels" ]; then
-            echo "${config.system.defaultChannel} nixos" > "/root/.nix-channels"
-        fi
       '';
 
     # Legacy configuration conversion.
