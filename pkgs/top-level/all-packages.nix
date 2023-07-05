@@ -937,7 +937,7 @@ with pkgs;
 
   pacproxy = callPackage ../tools/networking/pacproxy { };
 
-  pacup = python3Packages.callPackage ../tools/package-management/pacup { };
+  pacup = callPackage ../tools/package-management/pacup { };
 
   perseus-cli = callPackage ../development/tools/perseus-cli {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -1598,6 +1598,8 @@ with pkgs;
   dualsensectl = callPackage ../tools/games/dualsensectl { };
 
   dwarfs = callPackage ../tools/filesystems/dwarfs { };
+
+  dysk = callPackage ../tools/filesystems/dysk { };
 
   etlegacy = callPackage ../games/etlegacy { lua = lua5_4; };
 
@@ -9462,8 +9464,6 @@ with pkgs;
     ffmpeg = ffmpeg-full;
   };
 
-  lfs = callPackage ../tools/filesystems/lfs { };
-
   linuxwave = callPackage ../tools/audio/linuxwave { };
 
   littlefs-fuse = callPackage ../tools/filesystems/littlefs-fuse { };
@@ -12233,6 +12233,8 @@ with pkgs;
   rnr = callPackage ../tools/text/rnr { };
 
   rnv = callPackage ../tools/text/xml/rnv { };
+
+  roam-research = callPackage ../applications/office/roam-research { };
 
   rosie = callPackage ../tools/text/rosie { };
 
@@ -28066,6 +28068,8 @@ with pkgs;
 
   schedtool = callPackage ../os-specific/linux/schedtool { };
 
+  sddm-chili-theme = libsForQt5.callPackage ../data/themes/chili-sddm { };
+
   sdparm = callPackage ../os-specific/linux/sdparm { };
 
   sdrangel = libsForQt5.callPackage ../applications/radio/sdrangel { };
@@ -35643,6 +35647,8 @@ with pkgs;
   wafw00f = callPackage ../tools/security/wafw00f { };
 
   whispers = with python3Packages; toPythonApplication whispers;
+
+  whisper-ctranslate2 = callPackage ../tools/audio/whisper-ctranslate2 { };
 
   waon = callPackage ../applications/audio/waon { };
 

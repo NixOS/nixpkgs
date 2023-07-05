@@ -20,6 +20,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           }
         }
       '';
+      services.caddy.enableReload = true;
 
       specialisation.etag.configuration = {
         services.caddy.extraConfig = lib.mkForce ''
@@ -54,9 +55,9 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
   testScript = { nodes, ... }:
     let
-      etagSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/etag";
-      justReloadSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/config-reload";
-      multipleConfigs = "${nodes.webserver.config.system.build.toplevel}/specialisation/multiple-configs";
+      etagSystem = "${nodes.webserver.system.build.toplevel}/specialisation/etag";
+      justReloadSystem = "${nodes.webserver.system.build.toplevel}/specialisation/config-reload";
+      multipleConfigs = "${nodes.webserver.system.build.toplevel}/specialisation/multiple-configs";
     in
     ''
       url = "http://localhost/example.html"
@@ -96,6 +97,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
               "${justReloadSystem}/bin/switch-to-configuration test >&2"
           )
           webserver.wait_for_open_port(8080)
+          webserver.fail("journalctl -u caddy | grep -q -i stopped")
+          webserver.succeed("journalctl -u caddy | grep -q -i reloaded")
 
       with subtest("multiple configs are correctly merged"):
           webserver.succeed(
