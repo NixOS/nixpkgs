@@ -55,6 +55,7 @@ rec {
           else builtins.unsafeGetAttrPos "testScript" t)
     , extraPythonPackages ? (_ : [])
     , interactive ? {}
+    , ...
     } @ t: let
     testConfig =
       (evalTest {
