@@ -13328,6 +13328,12 @@
     githubId = 145816;
     name = "David McKay";
   };
+  rayanpiro = {
+    email = "red_ink@hotmail.es";
+    github = "rayanpiro";
+    githubId = 46218596;
+    name = "rayanpiro";
+  };
   razvan = {
     email = "razvan.panda@gmail.com";
     github = "razvan-flavius-panda";
