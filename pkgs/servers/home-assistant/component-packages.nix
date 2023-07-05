@@ -2011,8 +2011,9 @@
     "keyboard" = ps: with ps; [
     ]; # missing inputs: pyuserinput
     "keyboard_remote" = ps: with ps; [
+      asyncinotify
       evdev
-    ]; # missing inputs: asyncinotify
+    ];
     "keymitt_ble" = ps: with ps; [
       pymicrobot
       aioesphomeapi
