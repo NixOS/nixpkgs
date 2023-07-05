@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jitterentropy";
-  version = "3.3.1";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "smuellerDD";
     repo = "jitterentropy-library";
     rev = "v${version}";
-    hash = "sha256-go7eGwBoZ58LkgKL7t8oZSc1cFlE6fPOT/ML3Aa8+CM=";
+    hash = "sha256-GSGlupTN1o8BbTN287beqYSRFDaXOk6SlIRvtjpvmhQ=";
   };
 
   outputs = [ "out" "dev" ];
