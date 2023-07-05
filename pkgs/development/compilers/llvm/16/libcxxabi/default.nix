@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
     # CMake however checks for this anyways; this flag tells it not to. See:
     # https://github.com/llvm/llvm-project/blob/4bd3f3759259548e159aeba5c76efb9a0864e6fa/llvm/runtimes/CMakeLists.txt#L243
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
+    "-DCMAKE_C_COMPILER_WORKS=ON"
   ] ++ lib.optionals (stdenv.hostPlatform.useLLVM or false) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"
