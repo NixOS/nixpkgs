@@ -813,6 +813,12 @@
       fingerprint = "B422 CFB1 C9EF 73F7 E1E2 698D F53E 3233 42F7 A6D3A";
     }];
   };
+  alxsimon = {
+    email = "alexis.simon@normalesup.org";
+    github = "alxsimon";
+    githubId = 9567176;
+    name = "Alexis Simon";
+  };
   alyaeanyx = {
     email = "alyaeanyx@mailbox.org";
     github = "alyaeanyx";
