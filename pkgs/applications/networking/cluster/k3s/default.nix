@@ -22,6 +22,7 @@ in
 
   # 1_27 can be built with the same builder as 1_26
   k3s_1_27 = common ((import ./1_27/versions.nix) // {
-    updateScript = ./1_27/update-script.sh;
+    multicallContainerd = true;
+    updateScript = [ ./update-script.sh "27" ];
   }) { };
 }
