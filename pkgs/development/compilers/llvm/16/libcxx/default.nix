@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
       # libcxx appears to require unwind and doesn't pull it in via other means.
       "-DLIBCXX_ADDITIONAL_LIBRARIES=unwind"
     ] ++ lib.optionals stdenv.hostPlatform.isWasm [
-      "-DLIBCXX_ENABLE_THREADS=OFF"
+      "-DLIBCXX_ENABLE_THREADS=${if stdenv.cc.libc.hasThreads then "ON" else "OFF"}"
       "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
       "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
       "-DUNIX=ON" # Required otherwise libc++ fails to detect the correct linker

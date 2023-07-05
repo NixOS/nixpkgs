@@ -71,12 +71,22 @@ stdenv.mkDerivation rec {
     # pkgsLLVM.libcxxabi (which uses clangNoCompilerRtWithLibc).
     "-DCMAKE_EXE_LINKER_FLAGS=-nostdlib"
     "-DCMAKE_SHARED_LINKER_FLAGS=-nostdlib"
-  ] ++ lib.optionals stdenv.hostPlatform.isWasm [
-    "-DCMAKE_C_COMPILER_WORKS=ON"
-    "-DLIBCXXABI_ENABLE_THREADS=OFF"
-    "-DLIBCXXABI_ENABLE_EXCEPTIONS=OFF"
-    "-DUNIX=ON" # Required otherwise libc++ fails to detect the correct linker
-  ] ++ lib.optionals (!enableShared) [
+  ] ++ lib.optionals stdenv.hostPlatform.isWasm (
+    [
+      "-DCMAKE_C_COMPILER_WORKS=ON"
+      "-DLIBCXXABI_ENABLE_EXCEPTIONS=OFF"
+      "-DUNIX=ON" # Required otherwise libc++ fails to detect the correct linker
+    ]
+    ++ (if stdenv.cc.libc.hasThreads then [
+      "-DLIBCXXABI_ENABLE_THREADS=ON"
+      "-DLIBCXXABI_HAS_PTHREAD_API=ON"
+      "-DLIBCXXABI_HAS_EXTERNAL_THREAD_API=OFF"
+      "-DLIBCXXABI_BUILD_EXTERNAL_THREAD_LIBRARY=OFF"
+      "-DLIBCXXABI_HAS_WIN32_THREAD_API=OFF"
+    ] else [
+      "-DLIBCXXABI_ENABLE_THREADS=OFF"
+    ])
+  ) ++ lib.optionals (!enableShared) [
     "-DLIBCXXABI_ENABLE_SHARED=OFF"
   ];
 
