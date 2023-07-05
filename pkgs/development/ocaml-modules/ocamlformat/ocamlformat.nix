@@ -1,6 +1,5 @@
-{ lib, callPackage, ocaml-ng, version ? "0.25.1" }:
-
-with ocaml-ng.ocamlPackages;
+{ lib, callPackage, buildDunePackage, re, ocamlformat-lib, menhir
+, version ? "0.25.1" }:
 
 let inherit (callPackage ./generic.nix { inherit version; }) src library_deps;
 

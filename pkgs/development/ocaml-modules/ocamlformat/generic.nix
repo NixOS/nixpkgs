@@ -1,10 +1,10 @@
-{ lib, fetchurl, ocaml-ng, version }:
+{ lib, fetchurl, version, astring, base, camlp-streams, cmdliner_1_0
+, cmdliner_1_1, csexp, dune-build-info, either, fix, fpath, menhirLib, menhirSdk
+, ocaml-version, ocp-indent, odoc-parser, result, stdio, uuseg, uutf }:
 
 # The ocamlformat package have been split into two in version 0.25.1:
 # one for the library and one for the executable.
 # Both have the same sources and very similar dependencies.
-
-with ocaml-ng.ocamlPackages;
 
 rec {
   tarballName = "ocamlformat-${version}.tbz";
