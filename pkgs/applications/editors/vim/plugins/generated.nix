@@ -9316,6 +9316,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-telescope/telescope-symbols.nvim/";
   };
 
+  telescope-telekasten-nvim = buildVimPluginsFrom2Nix {
+    pname = "telekasten.nvim";
+    version = "2023-07-10";
+    src = fetchFromGitHub {
+      owner = "renerocksai";
+      repo = "telekasten.nvim";
+      rev = "3f14aad233894cd49737e056b9a9195a55997ec8";
+      sha256 = "hGQ+Wykp7iiDlWfTDr/++TnKzLaA0Ms0L1NVG10/iQI=";
+    };
+    meta.homepage = "https://github.com/renerocksai/telekasten.nvim";
+  };
+
   telescope-ui-select-nvim = buildVimPluginFrom2Nix {
     pname = "telescope-ui-select.nvim";
     version = "2022-04-30";
