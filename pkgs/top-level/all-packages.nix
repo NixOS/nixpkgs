@@ -12619,6 +12619,8 @@ with pkgs;
 
   signumone-ks = callPackage ../applications/misc/signumone-ks { };
 
+  sigtop = callPackage ../tools/backup/sigtop { };
+
   silc_client = callPackage ../applications/networking/instant-messengers/silc-client { };
 
   silc_server = callPackage ../servers/silc-server { };
