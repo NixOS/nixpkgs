@@ -3,6 +3,8 @@
 
 set -x -eu -o pipefail
 
+MINOR_VERSION="${1:?Must provide a minor version number, like '26', as the only argument}"
+
 WORKDIR=$(mktemp -d)
 trap "rm -rf ${WORKDIR}" EXIT
 
@@ -10,12 +12,15 @@ NIXPKGS_ROOT="$(git rev-parse --show-toplevel)"/
 NIXPKGS_K3S_PATH=$(cd $(dirname ${BASH_SOURCE[0]}); pwd -P)/
 cd ${NIXPKGS_K3S_PATH}
 
+cd 1_${MINOR_VERSION}
+
+
 LATEST_TAG_RAWFILE=${WORKDIR}/latest_tag.json
 curl --silent -f ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
     https://api.github.com/repos/k3s-io/k3s/releases > ${LATEST_TAG_RAWFILE}
 
 LATEST_TAG_NAME=$(jq 'map(.tag_name)' ${LATEST_TAG_RAWFILE} | \
-    grep -v -e rc -e engine | tail -n +2 | head -n -1 | sed 's|[", ]||g' | sort -rV | head -n1)
+    grep -v -e rc -e engine | tail -n +2 | head -n -1 | sed 's|[", ]||g' | sort -rV | grep -E "^v1\.${MINOR_VERSION}\." | head -n1)
 
 K3S_VERSION=$(echo ${LATEST_TAG_NAME} | sed 's/^v//')
 
@@ -76,8 +81,9 @@ CNIPLUGINS_VERSION=$(grep 'VERSION_CNIPLUGINS=' ${FILE_SCRIPTS_VERSION} \
 CNIPLUGINS_SHA256=$(nix-prefetch-url --quiet --unpack \
     "https://github.com/rancher/plugins/archive/refs/tags/v${CNIPLUGINS_VERSION}.tar.gz")
 
-CONTAINERD_VERSION=$(grep 'VERSION_CONTAINERD=' ${FILE_SCRIPTS_VERSION} \
-    | cut -d'=' -f2 | sed -e 's/"//g' -e 's/^v//')
+# mimics https://github.com/k3s-io/k3s/blob/v1.26.5%2Bk3s1/scripts/version.sh#L25
+CONTAINERD_VERSION=$(grep github.com/containerd/containerd ${FILE_GO_MOD} \
+    | head -n1 | awk '{print $4}' | sed -e 's/^v//')
 CONTAINERD_SHA256=$(nix-prefetch-url --quiet --unpack \
     "https://github.com/k3s-io/containerd/archive/refs/tags/v${CONTAINERD_VERSION}.tar.gz")
 
@@ -108,20 +114,24 @@ cat >versions.nix <<EOF
 EOF
 
 set +e
-K3S_VENDOR_SHA256=$(nix-prefetch -I nixpkgs=${NIXPKGS_ROOT} "{ sha256 }: (import ${NIXPKGS_ROOT}. {}).k3s.go-modules.overrideAttrs (_: { vendorSha256 = sha256; })")
+K3S_VENDOR_SHA256=$(nix-prefetch -I nixpkgs=${NIXPKGS_ROOT} "{ sha256 }: (import ${NIXPKGS_ROOT}. {}).k3s_1_${MINOR_VERSION}.go-modules.overrideAttrs (_: { vendorSha256 = sha256; })")
 set -e
 
 if [ -n "${K3S_VENDOR_SHA256:-}" ]; then
-    sed "s|${FAKE_HASH}|${K3S_VENDOR_SHA256}|g" ./versions.nix
+    sed -i "s|${FAKE_HASH}|${K3S_VENDOR_SHA256}|g" ./versions.nix
 else
     echo "Update failed. K3S_VENDOR_SHA256 is empty."
     exit 1
 fi
 
-# `git` flag here is to be used by local maintainers to speed up the bump process
-if [ $# -eq 1 ] && [ "$1" = "git" ]; then
-    OLD_VERSION="$(nix-instantiate --eval -E "with import $NIXPKGS_ROOT. {}; k3s.version or (builtins.parseDrvName k3s.name).version" | tr -d '"')"
-    git switch -c "package-k3s-${K3S_VERSION}"
-    git add "$NIXPKGS_K3S_PATH"/default.nix
-    git commit -m "k3s: ${OLD_VERSION} -> ${K3S_VERSION}"
-fi
+# Implement commit
+# See https://nixos.org/manual/nixpkgs/stable/#var-passthru-updateScript-commit
+OLD_VERSION="$(nix-instantiate --eval -E "with import $NIXPKGS_ROOT. {}; k3s.version or (builtins.parseDrvName k3s.name).version" | tr -d '"')"
+cat <<EOF
+[{
+    "attrPath": "k3s_1_${MINOR_VERSION}",
+    "oldVersion": "$OLD_VERSION",
+    "newVersion": "$K3S_VERSION",
+    "files": ["$PWD/versions.nix","$PWD/chart-versions.nix"]
+}]
+EOF

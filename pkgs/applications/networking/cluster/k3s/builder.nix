@@ -1,3 +1,35 @@
+lib:
+{
+  # git tag
+  k3sVersion,
+  # commit hash
+  k3sCommit,
+  k3sRepoSha256 ? lib.fakeHash,
+  k3sVendorSha256 ? lib.fakeHash,
+  # taken from ./scripts/version.sh VERSION_ROOT https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L47
+  k3sRootVersion,
+  k3sRootSha256 ? lib.fakeHash,
+  # Based on the traefik charts here: https://github.com/k3s-io/k3s/blob/d71ab6317e22dd34673faa307a412a37a16767f6/scripts/download#L29-L32
+  # see also https://github.com/k3s-io/k3s/blob/d71ab6317e22dd34673faa307a412a37a16767f6/manifests/traefik.yaml#L8
+  chartVersions,
+  # taken from ./scripts/version.sh VERSION_CNIPLUGINS https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L45
+  k3sCNIVersion,
+  k3sCNISha256 ? lib.fakeHash,
+  # taken from ./scripts/version.sh VERSION_CONTAINERD
+  containerdVersion,
+  containerdSha256 ? lib.fakeHash,
+  # run `grep github.com/kubernetes-sigs/cri-tools go.mod | head -n1 | awk '{print $4}'` in the k3s repo at the tag
+  criCtlVersion,
+  updateScript ? null,
+  # multicallContainerd is a temporary variable for migrating k3s versions
+  # forward, and can be removed once all callers set it.
+  # It is here so we can update 1.26 and 1.27 independently, but they'll both migrate to this.
+  # This variable controls whether we build with containerd as a separate
+  # binary, or as a k3s multicall. Upstream k3s changed this in 1.27.2 and
+  # 1.26.5. See https://github.com/k3s-io/k3s/issues/7419 for more context
+  multicallContainerd ? false,
+}:
+
 # builder.nix contains a "builder" expression that, given k3s version and hash
 # variables, creates a package for that version.
 # Due to variance in k3s's build process, this builder only works for k3s 1.26+
@@ -30,30 +62,6 @@
 , sqlite
 , nixosTests
 , pkgsBuildBuild
-}:
-
-{
-  # git tag
-  k3sVersion,
-  # commit hash
-  k3sCommit,
-  k3sRepoSha256 ? lib.fakeHash,
-  k3sVendorSha256 ? lib.fakeHash,
-  # taken from ./scripts/version.sh VERSION_ROOT https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L47
-  k3sRootVersion,
-  k3sRootSha256 ? lib.fakeHash,
-  # Based on the traefik charts here: https://github.com/k3s-io/k3s/blob/d71ab6317e22dd34673faa307a412a37a16767f6/scripts/download#L29-L32
-  # see also https://github.com/k3s-io/k3s/blob/d71ab6317e22dd34673faa307a412a37a16767f6/manifests/traefik.yaml#L8
-  chartVersions,
-  # taken from ./scripts/version.sh VERSION_CNIPLUGINS https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L45
-  k3sCNIVersion,
-  k3sCNISha256 ? lib.fakeHash,
-  # taken from ./scripts/version.sh VERSION_CONTAINERD
-  containerdVersion,
-  containerdSha256 ? lib.fakeHash,
-  # run `grep github.com/kubernetes-sigs/cri-tools go.mod | head -n1 | awk '{print $4}'` in the k3s repo at the tag
-  criCtlVersion,
-  updateScript ? null,
 }:
 
 # k3s is a kinda weird derivation. One of the main points of k3s is the
@@ -185,21 +193,28 @@ let
     subPackages = [ "cmd/server" ];
     ldflags = versionldflags;
 
-    tags = [ "libsqlite3" "linux" ];
+    tags = [ "libsqlite3" "linux" ] ++ lib.optional multicallContainerd "ctrd";
 
     # create the multicall symlinks for k3s
     postInstall = ''
       mv $out/bin/server $out/bin/k3s
       pushd $out
       # taken verbatim from https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/build#L105-L113
-      ln -s k3s ./bin/k3s-agent
-      ln -s k3s ./bin/k3s-server
-      ln -s k3s ./bin/k3s-etcd-snapshot
-      ln -s k3s ./bin/k3s-secrets-encrypt
-      ln -s k3s ./bin/k3s-certificate
-      ln -s k3s ./bin/kubectl
       ln -s k3s ./bin/crictl
       ln -s k3s ./bin/ctr
+      ln -s k3s ./bin/k3s-agent
+      ln -s k3s ./bin/k3s-certificate
+      ln -s k3s ./bin/k3s-completion
+      ln -s k3s ./bin/k3s-etcd-snapshot
+      ln -s k3s ./bin/k3s-secrets-encrypt
+      ln -s k3s ./bin/k3s-server
+      ln -s k3s ./bin/k3s-token
+      ln -s k3s ./bin/kubectl
+    '' + lib.optionalString multicallContainerd ''
+      # for the multicall binary, also do containerd per
+      # https://github.com/k3s-io/k3s/blob/v1.27.2%2Bk3s1/scripts/build#L136-L146
+      ln -s k3s ./bin/containerd
+    '' + ''
       popd
     '';
 
@@ -207,6 +222,8 @@ let
       description = "The various binaries that get packaged into the final k3s binary";
     };
   };
+  # For the multicall binary, only used for the shim
+  # https://github.com/k3s-io/k3s/blob/v1.27.2%2Bk3s1/scripts/build#L153
   k3sContainerd = buildGoModule {
     pname = "k3s-containerd";
     version = containerdVersion;
@@ -218,7 +235,7 @@ let
     };
     vendorSha256 = null;
     buildInputs = [ btrfs-progs ];
-    subPackages = [ "cmd/containerd" "cmd/containerd-shim-runc-v2" ];
+    subPackages = [ "cmd/containerd-shim-runc-v2" ] ++ lib.optional (!multicallContainerd) "cmd/containerd";
     ldflags = versionldflags;
   };
 in
@@ -226,6 +243,7 @@ buildGoModule rec {
   pname = "k3s";
   version = k3sVersion;
 
+  tags = [ "libsqlite3" "linux" ] ++ lib.optional multicallContainerd "ctrd";
   src = k3sRepo;
   vendorSha256 = k3sVendorSha256;
 
@@ -262,6 +280,7 @@ buildGoModule rec {
     ethtool
     util-linux # kubelet wants 'nsenter' from util-linux: https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-705994388
     conntrack-tools
+    runc
   ];
 
   buildInputs = k3sRuntimeDeps;
@@ -278,7 +297,6 @@ buildGoModule rec {
     k3sCNIPlugins
     k3sContainerd
     k3sServer
-    runc
   ];
 
   # We override most of buildPhase due to peculiarities in k3s's build.
@@ -292,9 +310,9 @@ buildGoModule rec {
     # copy needed 'go generate' inputs into place
     mkdir -p ./bin/aux
     rsync -a --no-perms ${k3sServer}/bin/ ./bin/
-    ln -vsf ${runc}/bin/runc ./bin/runc
     ln -vsf ${k3sCNIPlugins}/bin/cni ./bin/cni
-    ln -vsf ${k3sContainerd}/bin/* ./bin/
+    ln -vsf ${k3sContainerd}/bin/containerd-shim-runc-v2 ./bin
+    ${lib.optionalString (!multicallContainerd) "ln -vsf ${k3sContainerd}/bin/containerd ./bin/"}
     rsync -a --no-perms --chmod u=rwX ${k3sRoot}/etc/ ./etc/
     mkdir -p ./build/static/charts
 

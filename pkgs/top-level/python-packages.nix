@@ -2517,6 +2517,10 @@ self: super: with self; {
 
   deluge-client = callPackage ../development/python-modules/deluge-client { };
 
+  demes = callPackage ../development/python-modules/demes { };
+
+  demesdraw = callPackage ../development/python-modules/demesdraw { };
+
   demetriek = callPackage ../development/python-modules/demetriek { };
 
   demjson3 = callPackage ../development/python-modules/demjson3 { };
@@ -6586,6 +6590,8 @@ self: super: with self; {
 
   msoffcrypto-tool = callPackage ../development/python-modules/msoffcrypto-tool { };
 
+  msprime = callPackage ../development/python-modules/msprime { };
+
   mss = callPackage ../development/python-modules/mss { };
 
   msrestazure = callPackage ../development/python-modules/msrestazure { };
@@ -6829,6 +6835,8 @@ self: super: with self; {
   nevow = callPackage ../development/python-modules/nevow { };
 
   newversion = callPackage ../development/python-modules/newversion { };
+
+  newick = callPackage ../development/python-modules/newick { };
 
   nexia = callPackage ../development/python-modules/nexia { };
 
@@ -9539,6 +9547,8 @@ self: super: with self; {
   pysimplegui = callPackage ../development/python-modules/pysimplegui { };
 
   pysingleton = callPackage ../development/python-modules/pysingleton { };
+
+  pyslim = callPackage ../development/python-modules/pyslim { };
 
   pyslurm = callPackage ../development/python-modules/pyslurm {
     inherit (pkgs) slurm;
@@ -12608,6 +12618,8 @@ self: super: with self; {
   trustme = callPackage ../development/python-modules/trustme { };
 
   trytond = callPackage ../development/python-modules/trytond { };
+
+  tskit = callPackage ../development/python-modules/tskit { };
 
   ttach = callPackage ../development/python-modules/ttach { };
 

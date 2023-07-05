@@ -813,6 +813,12 @@
       fingerprint = "B422 CFB1 C9EF 73F7 E1E2 698D F53E 3233 42F7 A6D3A";
     }];
   };
+  alxsimon = {
+    email = "alexis.simon@normalesup.org";
+    github = "alxsimon";
+    githubId = 9567176;
+    name = "Alexis Simon";
+  };
   alyaeanyx = {
     email = "alyaeanyx@mailbox.org";
     github = "alyaeanyx";
@@ -5580,6 +5586,12 @@
     github = "Fresheyeball";
     githubId = 609279;
     name = "Isaac Shapira";
+  };
+  fricklerhandwerk = {
+    email = "valentin@fricklerhandwerk.de";
+    github = "fricklerhandwerk";
+    githubId = 6599296;
+    name = "Valentin Gagarin";
   };
   fridh = {
     email = "fridh@fridh.nl";
