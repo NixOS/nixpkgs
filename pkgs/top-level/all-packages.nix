@@ -19913,6 +19913,8 @@ with pkgs;
 
   wails = callPackage ../development/tools/wails { };
 
+  wasmer-pack = callPackage ../development/tools/misc/wasmer-pack { };
+
   whatsapp-for-linux = callPackage ../applications/networking/instant-messengers/whatsapp-for-linux { };
 
   whatstyle = callPackage ../development/tools/misc/whatstyle {
