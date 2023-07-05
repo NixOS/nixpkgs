@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
       description = "Python based ingestor for BloodHound, based on Impacket.";
       homepage = "https://github.com/fox-it/BloodHound.py";
-      platforms = [ "x86_64-linux" ]; 
+      platforms = [ "x86_64-linux" ];
       license = licenses.mit;
       maintainers = with maintainers; [ exploitoverload ];
     };
