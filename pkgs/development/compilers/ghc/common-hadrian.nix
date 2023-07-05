@@ -166,6 +166,10 @@
     && !stdenv.hostPlatform.isMusl
   )
 
+, minify
+, moreutils
+, doMinifyDocs ? enableDocs && lib.meta.availableOn minify stdenv.buildPlatform
+
 , # Whether to disable the large address space allocator
   # necessary fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
   disableLargeAddressSpace ? stdenv.targetPlatform.isiOS
@@ -402,6 +406,9 @@ stdenv.mkDerivation ({
     autoSignDarwinBinariesHook
   ] ++ lib.optionals enableDocs [
     sphinx
+  ] ++ lib.optionals doMinifyDocs [
+    minify
+    moreutils # sponge
   ];
 
   # For building runtime libs
@@ -469,6 +476,10 @@ stdenv.mkDerivation ({
 
     # Install the bash completion file.
     install -Dm 644 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
+  '' + lib.optionalString doMinifyDocs ''
+    find "$doc" \
+      -type f -and '(' -name '*.html' -or -name '*.css' -or -name '*.js' ')' \
+      -exec sh -c 'minify $1 | sponge $1' -- '{}' \;
   '';
 
   passthru = {
