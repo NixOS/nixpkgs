@@ -12,42 +12,42 @@
 let
   phpMajor = lib.versions.majorMinor php.version;
 
-  version = "1.87.2";
+  version = "1.88.1";
 
   hashes = {
     "x86_64-linux" = {
       system = "amd64";
       hash = {
-        "8.1" = "sha256-FEb0NBJpwoYaNdEHEn4TkSQR7VShGpHptaDIRKwrmkQ=";
-        "8.2" = "sha256-itB0Zm1Mog18F8vIHn9AZMYMzafLQR0v5zcOgqy1ouI=";
+        "8.1" = "sha256-8t/9+USw4cun8kIsCkcFl/672rtgEBy6SgRMEzl47VU=";
+        "8.2" = "sha256-/sVDxfhJXMQZb1CdRh+qBjCt3gdYci65BN23K9Kfcys=";
       };
     };
     "i686-linux" = {
       system = "i386";
       hash = {
-        "8.1" = "sha256-0bX2frll0ne6H6o7HNH4TRV2D+NDe11mVvqwhvSDg9E=";
-        "8.2" = "sha256-U6zmbEkRr3+9yVwUgQ1+SBNK0zWD92S2KBOHJ1gMmjM=";
+        "8.1" = "sha256-ASZKa40D6dpNyzQhqci0+fEUoduyuyoJbWvY2UjVmxA=";
+        "8.2" = "sha256-CWSTPXPr0ZCcGnkDNIh8HhDf53gNy663IWLqIRObv28=";
       };
     };
     "aarch64-linux" = {
       system = "arm64";
       hash = {
-        "8.1" = "sha256-agLQVI3u7ENcWLDRx7YSEBZobRnwEaKAmFpIU5AXhqo=";
-        "8.2" = "sha256-Y2bUYaymoZ/Ct5a7K+5U+zNh9ZKUaq0Oal/v04nzuaU=";
+        "8.1" = "sha256-HST8U3DJ1s+ricPQ7Q4bY/eZE+mSnGaJuLKwFpLb0JI=";
+        "8.2" = "sha256-uPCIlYw9i0MFPbca+GWyzpK4oHOOmTUxR46yEBB48mg=";
       };
     };
     "aarch64-darwin" = {
       system = "arm64";
       hash = {
-        "8.1" = "sha256-ovTtwXPut9jCvxVyd5mQzrfJPCy+rQvUi4c74NrBzY4=";
-        "8.2" = "sha256-8hybE62l8vSwbqpcrnj/lI2Wjy8R3wuO04zwofLi9EY=";
+        "8.1" = "sha256-4JJ7m4/ybVzu/yBtfpSwuSIKor7s80Xlt7FH3K8PwTU=";
+        "8.2" = "sha256-BW6c/qKWeOkJUBYf8TFGz7aYKPUb9kKzyfNGSv1XOhE=";
       };
     };
     "x86_64-darwin" = {
       system = "amd64";
       hash = {
-        "8.1" = "sha256-WsHH/XJboHeRhxpYY0WtXEJwOsGNFtfexBShC/J7GaQ=";
-        "8.2" = "sha256-w3Vu7CTFebn59i1FYVCYHiOadTIPlPCkQ1QHEfvHWig=";
+        "8.1" = "sha256-O6gZwHNIFCXuC2r4yPMuk/wg1LbsMu6aRJmwbRR3B8s=";
+        "8.2" = "sha256-l4wTdt5fGIbGPqCT3/EiRTNovyGQOV1ZRzPjYvlHQIg=";
       };
     };
   };
@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
       fi
 
       for source in ${lib.concatStringsSep " " (builtins.attrNames finalAttrs.passthru.updateables)}; do
-        update-source-version "$UPDATE_NIX_ATTR_PATH.updateables.$source" "0" "${lib.fakeSha256}"
+        update-source-version "$UPDATE_NIX_ATTR_PATH.updateables.$source" "0" "sha256-${lib.fakeSha256}"
         update-source-version "$UPDATE_NIX_ATTR_PATH.updateables.$source" "$NEW_VERSION"
       done
     '';
@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
         createUpdateable = path: _value:
           lib.nameValuePair
             (createName path)
-            (finalAttrs.self.overrideAttrs (attrs: {
+            (finalAttrs.finalPackage.overrideAttrs (attrs: {
               src = makeSource (createSourceParams path);
             }));
 
