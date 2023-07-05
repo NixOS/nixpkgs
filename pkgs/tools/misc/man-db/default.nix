@@ -1,5 +1,5 @@
 { buildPackages
-, db
+, gdbm
 , fetchurl
 , groff
 , gzip
@@ -28,7 +28,9 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ autoreconfHook groff makeWrapper pkg-config zstd ];
-  buildInputs = [ libpipeline db groff ]; # (Yes, 'groff' is both native and build input)
+  buildInputs = [ libpipeline ]
+    ++ lib.optionals (!stdenv.isDarwin) [ gdbm ]
+    ++ [ groff ]; # (Yes, 'groff' is both native and build input)
   nativeCheckInputs = [ libiconv /* for 'iconv' binary */ ];
 
   patches = [ ./systemwide-man-db-conf.patch ];
