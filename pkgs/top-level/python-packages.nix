@@ -5233,6 +5233,8 @@ self: super: with self; {
 
   jeepney = callPackage ../development/python-modules/jeepney { };
 
+  jello = callPackage ../development/python-modules/jello { };
+
   jellyfin-apiclient-python = callPackage ../development/python-modules/jellyfin-apiclient-python { };
 
   jellyfish = callPackage ../development/python-modules/jellyfish { };
