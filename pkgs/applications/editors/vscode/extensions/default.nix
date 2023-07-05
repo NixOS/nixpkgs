@@ -2456,6 +2456,22 @@ let
         };
       };
 
+      mskelton.npm-outdated = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "npm-outdated";
+          publisher = "mskelton";
+          version = "2.2.0";
+          sha256 = "sha256-kHItIlTW+PIVXrLgzdGAoPeR6sWKuKl/QyJ5+TIv3/E=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/mskelton.npm-outdated/changelog";
+          description = "Shows which packages are outdated in an npm project";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=mskelton.npm-outdated";
+          homepage = "https://github.com/mskelton/vscode-npm-outdated";
+          license = lib.licenses.isc;
+        };
+      };
+
       mvllow.rose-pine = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "mvllow";
