@@ -360,16 +360,6 @@ in
           A system-wide flake registry.
         '';
       };
-
-      extraOptions = mkOption {
-        type = types.lines;
-        default = "";
-        example = ''
-          keep-outputs = true
-          keep-derivations = true
-        '';
-        description = lib.mdDoc "Additional text appended to {file}`nix.conf`.";
-      };
     };
   };
 
