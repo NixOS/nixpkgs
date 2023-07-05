@@ -63,7 +63,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Execute commands inside your runbooks, docs, and READMEs";
     homepage = "https://runme.dev";
-    changelog = "https://github.com/stateful/runme/releases/tag/v${src.rev}";
+    changelog = "https://github.com/stateful/runme/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ figsoda ];
   };
