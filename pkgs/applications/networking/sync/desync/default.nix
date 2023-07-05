@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "desync";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "folbricht";
     repo = "desync";
-    sha256 = "sha256-vyW5zR6Dw860LUj7sXFgwzU1AZDoPMoQ4G0xsK4L6+w=";
+    sha256 = "sha256-kwYRspzfTBl9FtPrpd55VBYiCzaG7M83EM5nbqdBG/Q=";
   };
 
-  vendorSha256 = "sha256-RMM/WFIUg2Je3yAgshif3Nkhm8G3bh6EhHCHTAvMXUc=";
+  vendorHash = "sha256-1RuqlDU809mtGn0gOFH/AW6HJo1cQqt8spiLp3/FpcI=";
 
   # nix builder doesn't have access to test data; tests fail for reasons unrelated to binary being bad.
   doCheck = false;
