@@ -17,6 +17,7 @@
   ./config/mysql.nix
   ./config/networking.nix
   ./config/nix.nix
+  ./config/nix-remote-build.nix
   ./config/no-x-libs.nix
   ./config/nsswitch.nix
   ./config/power-management.nix
