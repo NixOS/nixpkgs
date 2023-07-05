@@ -37437,6 +37437,8 @@ with pkgs;
 
   epson-201106w = callPackage ../misc/drivers/epson-201106w { };
 
+  epson-tm-m30ii = callPackage ../misc/drivers/epson-tm-m30ii { };
+
   epson-workforce-635-nx625-series = callPackage ../misc/drivers/epson-workforce-635-nx625-series { };
 
   foomatic-db = callPackage ../misc/cups/drivers/foomatic-db {};
