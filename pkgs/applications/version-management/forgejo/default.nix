@@ -16,11 +16,10 @@
 , stdenv
 , fetchFromGitea
 , buildNpmPackage
-, writeShellApplication
 }:
 
 let
-  frontend = buildNpmPackage rec {
+  frontend = buildNpmPackage {
     pname = "forgejo-frontend";
     inherit (forgejo) src version;
 
@@ -111,12 +110,12 @@ buildGoModule rec {
     tests = nixosTests.forgejo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "A self-hosted lightweight software forge";
     homepage = "https://forgejo.org";
-    changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ emilylange urandom ];
+    changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/${src.rev}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emilylange urandom ];
     broken = stdenv.isDarwin;
     mainProgram = "gitea";
   };
