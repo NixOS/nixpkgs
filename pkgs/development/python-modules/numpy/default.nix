@@ -18,7 +18,7 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 let
   cfg = writeTextFile {
     name = "site.cfg";
-    text = (lib.generators.toINI {} {
+    text = lib.generators.toINI {} {
       ${blas.implementation} = {
         include_dirs = "${lib.getDev blas}/include:${lib.getDev lapack}/include";
         library_dirs = "${blas}/lib:${lapack}/lib";
@@ -35,7 +35,7 @@ let
         library_dirs = "${blas}/lib";
         runtime_library_dirs = "${blas}/lib";
       };
-    });
+    };
   };
 in buildPythonPackage rec {
   pname = "numpy";
@@ -55,6 +55,14 @@ in buildPythonPackage rec {
     # patch to distutils.
     ./numpy-distutils-C++.patch
   ];
+
+  postPatch = ''
+    # fails with multiple errors because we are not using the pinned setuptools version
+    # see https://github.com/numpy/numpy/blob/v1.25.0/pyproject.toml#L7
+    #   error: option --single-version-externally-managed not recognized
+    #   TypeError: dist must be a Distribution instance
+    rm numpy/core/tests/test_cython.py
+  '';
 
   nativeBuildInputs = [ gfortran cython ];
   buildInputs = [ blas lapack ];
@@ -83,7 +91,7 @@ in buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
     pushd "$out"
-    ${python.interpreter} -c 'import numpy; numpy.test("fast", verbose=10)'
+    ${python.interpreter} -c 'import numpy, sys; sys.exit(numpy.test("fast", verbose=10) is False)'
     popd
     runHook postCheck
   '';
