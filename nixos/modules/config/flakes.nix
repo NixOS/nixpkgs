@@ -1,3 +1,10 @@
+/*
+  Manages the flake registry.
+
+  See also
+   - ./nix.nix
+   - ./nix-channel.nix
+ */
 { config, lib, ... }:
 let
   inherit (lib)

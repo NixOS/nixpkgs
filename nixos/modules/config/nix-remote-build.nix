@@ -1,3 +1,10 @@
+/*
+  Manages the remote build configuration, /etc/nix/machines
+
+  See also
+   - ./nix.nix
+   - nixos/modules/services/system/nix-daemon.nix
+ */
 { config, lib, ... }:
 
 let

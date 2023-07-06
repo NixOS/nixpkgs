@@ -1,3 +1,10 @@
+/*
+  Declares what makes the nix-daemon work on systemd.
+
+  See also
+   - nixos/modules/config/nix.nix: the nix.conf
+   - nixos/modules/config/nix-remote-build.nix: the nix.conf
+*/
 { config, lib, pkgs, ... }:
 
 with lib;
