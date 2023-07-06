@@ -40,5 +40,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/rmeissner/py-eth-sig-utils";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
+    # TODO: upstream is stale and doesn't not work with the new `eth-abi` package any more.
+    broken = true;
   };
 }
