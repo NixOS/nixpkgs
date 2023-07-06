@@ -40,5 +40,6 @@ in stdenv.mkDerivation {
     platforms = platforms.linux;
     homepage = "http://gpredict.oz9aec.net/";
     maintainers = [ maintainers.markuskowa maintainers.cmcdragonkai ];
+    mainProgram = "gpredict";
   };
 }
