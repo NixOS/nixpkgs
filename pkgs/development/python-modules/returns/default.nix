@@ -43,10 +43,6 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  preCheck = ''
-    rm -rf returns/contrib/mypy
-  '';
-
   nativeCheckInputs = [
     anyio
     curio
@@ -57,6 +53,14 @@ buildPythonPackage rec {
     pytest-subtests
     setuptools
     trio
+  ];
+
+  preCheck = ''
+    rm -rf returns/contrib/mypy
+  '';
+
+  pythonImportsCheck = [
+    "returns"
   ];
 
   pytestFlagsArray = [
