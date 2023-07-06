@@ -14,6 +14,9 @@ let
     else
       builtins.throw "Check if '${msg}' was resolved in ${pkg.pname} ${pkg.version} and update or remove this";
   jailbreakForCurrentVersion = p: v: checkAgainAfter p v "bad bounds" (doJailbreak p);
+
+  # Workaround for a ghc-9.6 issue: https://gitlab.haskell.org/ghc/ghc/-/issues/23392
+  disableParallelBuilding = overrideCabal (drv: { enableParallelBuilding = false; });
 in
 
 self: super: {
@@ -207,7 +210,6 @@ self: super: {
     gi-glib
     gi-gmodule
     gi-gobject
-    gi-gtk
     gi-harfbuzz
     gi-pango
     gi-xlib
@@ -218,6 +220,9 @@ self: super: {
     pango
     taffybar
   ;
+
+  # Avoid triggering an issue in ghc-9.6.2
+  gi-gtk = disableParallelBuilding (__CabalEagerPkgConfigWorkaround super.gi-gtk);
 
   # Pending text-2.0 support https://github.com/gtk2hs/gtk2hs/issues/327
   gtk = doJailbreak super.gtk;
