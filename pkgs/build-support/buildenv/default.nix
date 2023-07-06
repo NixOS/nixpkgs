@@ -1,6 +1,5 @@
 # buildEnv creates a tree of symlinks to the specified paths.  This is
-# a fork of the buildEnv in the Nix distribution.  Most changes should
-# eventually be merged back into the Nix distribution.
+# a fork of the hardcoded buildEnv in the Nix distribution.
 
 { buildPackages, runCommand, lib, substituteAll }:
 
