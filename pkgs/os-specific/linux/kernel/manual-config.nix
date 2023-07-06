@@ -134,7 +134,10 @@ stdenv.mkDerivation ({
     fi
   '';
 
-  postUnpack = ''
+  # https://github.com/NixOS/nixpkgs/pull/221707 added the following
+  # postUnpack, which broke the build on powerpc by creating cyclic
+  # outpath references, so we disable it on that platform.
+  postUnpack = lib.optionalString (!stdenv.hostPlatform.isPower) ''
     mv -Tv "$sourceRoot" source 2>/dev/null || :
     export sourceRoot=$PWD/source
   '';
@@ -312,7 +315,7 @@ stdenv.mkDerivation ({
     unlink $out/lib/modules/${modDirVersion}/build
     unlink $out/lib/modules/${modDirVersion}/source
 
-    mkdir $dev/lib/modules/${modDirVersion}/build
+    mkdir $dev/lib/modules/${modDirVersion}/{build,source}
 
     cd $dev/lib/modules/${modDirVersion}/source
 
