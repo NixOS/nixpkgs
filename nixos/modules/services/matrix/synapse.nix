@@ -770,6 +770,14 @@ in {
           NixOps is in use.
         '';
       };
+
+      configureRedisLocally = lib.mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Whether to automatically configure a local redis server for matrix-synapse.
+        '';
+      };
     };
   };
 
@@ -793,6 +801,11 @@ in {
         '';
       }
     ];
+
+    services.matrix-synapse.settings.redis = lib.mkIf cfg.configureRedisLocally {
+      enabled = true;
+      path = config.services.redis.servers.matrix-synapse.unixSocket;
+    };
 
     services.matrix-synapse.configFile = configFile;
     services.matrix-synapse.package = wrapped;
@@ -885,6 +898,11 @@ in {
           }
         ];
       };
+
+    services.redis.servers.matrix-synapse = lib.mkIf cfg.configureRedisLocally {
+      enable = true;
+      user = "matrix-synapse";
+    };
 
     environment.systemPackages = [ registerNewMatrixUser ];
   };
