@@ -1,3 +1,11 @@
+/*
+  Manages the things that are needed for a traditional nix-channel based
+  configuration to work.
+
+  See also
+   - ./nix.nix
+   - ./flakes.nix
+ */
 { config, lib, ... }:
 let
   inherit (lib)

@@ -1,5 +1,11 @@
 /*
-  Manages /etc/nix.conf, build machines and any nix-specific global config files.
+  Manages /etc/nix.conf.
+
+  See also
+   - ./nix-channel.nix
+   - ./flakes.nix
+   - ./nix-remote-build.nix
+   - nixos/modules/services/system/nix-daemon.nix
  */
 { config, lib, pkgs, ... }:
 
