@@ -420,5 +420,6 @@ in
     (mkRenamedOptionModule [ "services" "kubo" "gatewayAddress" ] [ "services" "kubo" "settings" "Addresses" "Gateway" ])
     (mkRenamedOptionModule [ "services" "kubo" "apiAddress" ] [ "services" "kubo" "settings" "Addresses" "API" ])
     (mkRenamedOptionModule [ "services" "kubo" "swarmAddress" ] [ "services" "kubo" "settings" "Addresses" "Swarm" ])
+    (mkRenamedOptionModule [ "services" "kubo" "settings" "Experimental" "AcceleratedDHTClient" ] [ "services" "kubo" "settings" "Routing" "AcceleratedDHTClient" ])
   ];
 }

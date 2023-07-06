@@ -14,6 +14,7 @@ let
     filter
     foldl'
     getAttrFromPath
+    hasAttrByPath
     head
     id
     imap1
@@ -1203,6 +1204,7 @@ let
   doRename = { from, to, visible, warn, use, withPriority ? true }:
     { config, options, ... }:
     let
+      fromOptIsDefined = hasAttrByPath from options;
       fromOpt = getAttrFromPath from options;
       toOf = attrByPath to
         (abort "Renaming error: option `${showOption to}' does not exist.");
@@ -1218,7 +1220,7 @@ let
       });
       config = mkMerge [
         (optionalAttrs (options ? warnings) {
-          warnings = optional (warn && fromOpt.isDefined)
+          warnings = optional (warn && fromOptIsDefined && fromOpt.isDefined)
             "The option `${showOption from}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption to}'.";
         })
         (if withPriority
