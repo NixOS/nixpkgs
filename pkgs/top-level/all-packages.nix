@@ -9335,6 +9335,8 @@ with pkgs;
 
   kismet = callPackage ../applications/networking/sniffers/kismet { };
 
+  kitchenowl = callPackage ../applications/misc/kitchenowl { };
+
   kiterunner = callPackage ../tools/security/kiterunner { };
 
   klick = callPackage ../applications/audio/klick { };
