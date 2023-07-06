@@ -6,6 +6,7 @@
 , callPackage
 , neovimUtils
 , vimUtils
+, perl
 }:
 neovim:
 
@@ -19,6 +20,7 @@ let
     , withPython2 ? false
     , withPython3 ? true,  python3Env ? python3
     , withNodeJs ? false
+    , withPerl ? false
     , rubyEnv ? null
     , vimAlias ? false
     , viAlias ? false
@@ -32,7 +34,7 @@ let
     # entry to load in packpath
     , packpathDirs
     , ...
-  }@args:
+  }:
   let
 
     wrapperArgsStr = if lib.isString wrapperArgs then wrapperArgs else lib.escapeShellArgs wrapperArgs;
@@ -50,8 +52,10 @@ let
           ]
           ;
 
-    providerLuaRc = neovimUtils.generateProviderRc args;
-    # providerLuaRc = "toto";
+    providerLuaRc = neovimUtils.generateProviderRc {
+      inherit withPython3 withNodeJs withPerl;
+      withRuby = rubyEnv != null;
+    };
 
     # If configure != {}, we can't generate the rplugin.vim file with e.g
     # NVIM_SYSTEM_RPLUGIN_MANIFEST *and* NVIM_RPLUGIN_MANIFEST env vars set in
@@ -85,6 +89,9 @@ let
       ''
       + lib.optionalString withNodeJs ''
         ln -s ${nodePackages.neovim}/bin/neovim-node-host $out/bin/nvim-node
+      ''
+      + lib.optionalString withPerl ''
+        ln -s ${perl}/bin/perl $out/bin/nvim-perl
       ''
       + lib.optionalString vimAlias ''
         ln -s $out/bin/nvim $out/bin/vim

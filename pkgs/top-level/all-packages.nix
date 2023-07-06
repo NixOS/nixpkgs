@@ -2860,6 +2860,8 @@ with pkgs;
 
   lifecycled = callPackage ../tools/misc/lifecycled { };
 
+  lil-pwny = callPackage ../tools/security/lil-pwny { };
+
   lilo = callPackage ../tools/misc/lilo { };
 
   logseq = callPackage ../applications/misc/logseq { };
@@ -14088,8 +14090,8 @@ with pkgs;
 
   tre = callPackage ../development/libraries/tre { };
 
-  tremor-rs = callPackage ../tools/misc/tremor-rs {
-    inherit (darwin.apple_sdk.frameworks) Security;
+  tremor-rs = darwin.apple_sdk_11_0.callPackage ../tools/misc/tremor-rs {
+    inherit (darwin.apple_sdk_11_0.frameworks) Security;
   };
 
   tremor-language-server = callPackage ../tools/misc/tremor-rs/ls.nix { };
