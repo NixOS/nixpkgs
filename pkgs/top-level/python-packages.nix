@@ -6101,6 +6101,8 @@ self: super: with self; {
 
   manifest-ml = callPackage ../development/python-modules/manifest-ml { };
 
+  manifestoo = callPackage ../development/python-modules/manifestoo { };
+
   manifestoo-core = callPackage ../development/python-modules/manifestoo-core { };
 
   manifestparser = callPackage ../development/python-modules/marionette-harness/manifestparser.nix { };
