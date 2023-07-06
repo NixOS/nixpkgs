@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
     changelog = "https://raw.githubusercontent.com/liquibase/liquibase/v${version}/changelog.txt";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ jsoo1 ];
     platforms = with platforms; unix;
   };
 }
