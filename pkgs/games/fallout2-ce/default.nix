@@ -24,9 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeBuildType = "RelWithDebInfo";
 
   postPatch = ''
-    substituteInPlace third_party/fpattern/CMakeLists.txt --replace "FetchContent_Populate" "#FetchContent_Populate"
-    substituteInPlace third_party/fpattern/CMakeLists.txt --replace "{fpattern_SOURCE_DIR}" "${fpattern}/include"
-    substituteInPlace third_party/fpattern/CMakeLists.txt --replace "$/nix/" "/nix/"
+    substituteInPlace third_party/fpattern/CMakeLists.txt \
+      --replace "FetchContent_Populate" "#FetchContent_Populate" \
+      --replace "{fpattern_SOURCE_DIR}" "${fpattern}/include" \
+      --replace "$/nix/" "/nix/"
   '';
 
   installPhase = ''
