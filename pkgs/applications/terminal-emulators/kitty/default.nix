@@ -100,7 +100,7 @@ buildPythonApplication rec {
   CGO_ENABLED = 0;
   GOFLAGS = "-trimpath";
 
-  go-modules = (buildGoModule {
+  goModules = (buildGoModule {
     pname = "kitty-go-modules";
     inherit src vendorHash version;
   }).go-modules;
@@ -109,7 +109,7 @@ buildPythonApplication rec {
     export GOCACHE=$TMPDIR/go-cache
     export GOPATH="$TMPDIR/go"
     export GOPROXY=off
-    cp -r --reflink=auto ${go-modules} vendor
+    cp -r --reflink=auto $goModules vendor
   '';
 
   buildPhase = let
