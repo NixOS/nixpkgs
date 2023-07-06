@@ -5,14 +5,14 @@
 , lib
 , makeWrapper
 , monkeysAudio
-, perl534Packages
+, perlPackages
 , sox
 , stdenv
 , wavpack
 , zlib
 }:
 
-perl534Packages.buildPerlPackage rec {
+perlPackages.buildPerlPackage rec {
   pname = "slimserver";
   version = "8.3.1";
 
@@ -25,7 +25,7 @@ perl534Packages.buildPerlPackage rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ perl534Packages.CryptOpenSSLRSA perl534Packages.IOSocketSSL ];
+  buildInputs = [ perlPackages.CryptOpenSSLRSA perlPackages.IOSocketSSL ];
 
   prePatch = ''
     rm -rf Bin
