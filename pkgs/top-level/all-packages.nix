@@ -32259,6 +32259,8 @@ with pkgs;
   jackmix = libsForQt5.callPackage ../applications/audio/jackmix { };
   jackmix_jack1 = jackmix.override { jack = jack1; };
 
+  jack-link = callPackage ../tools/audio/jack-link { };
+
   jaeles = callPackage ../tools/security/jaeles { };
 
   jalv = callPackage ../applications/audio/jalv { };
