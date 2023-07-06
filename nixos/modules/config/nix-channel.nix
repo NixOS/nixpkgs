@@ -4,7 +4,7 @@
 
   See also
    - ./nix.nix
-   - ./flakes.nix
+   - ./nix-flakes.nix
  */
 { config, lib, ... }:
 let

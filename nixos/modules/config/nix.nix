@@ -3,7 +3,7 @@
 
   See also
    - ./nix-channel.nix
-   - ./flakes.nix
+   - ./nix-flakes.nix
    - ./nix-remote-build.nix
    - nixos/modules/services/system/nix-daemon.nix
  */
