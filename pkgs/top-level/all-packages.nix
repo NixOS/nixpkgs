@@ -28214,6 +28214,12 @@ with pkgs;
 
   twingate = callPackage ../applications/networking/twingate { };
 
+  # Upstream Crust
+  inherit (callPackage ../misc/crust {})
+    buildCrust
+    crustTeresA64
+    ;
+
   # Upstream U-Boots:
   inherit (callPackage ../misc/uboot {})
     buildUBoot
