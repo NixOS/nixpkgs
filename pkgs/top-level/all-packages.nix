@@ -35881,6 +35881,8 @@ with pkgs;
 
   x42-gmsynth = callPackage ../applications/audio/x42-gmsynth { };
 
+  x42-mclk = callPackage ../applications/audio/x42-mclk { };
+
   x42-plugins = callPackage ../applications/audio/x42-plugins { };
 
   xannotate = callPackage ../tools/X11/xannotate { };
