@@ -1,7 +1,6 @@
 { lib
 , isPyPy
 , pythonOlder
-, fetchPypi
 , fetchFromGitHub
 , buildPythonPackage
 
@@ -41,7 +40,7 @@
 
 buildPythonPackage rec {
   pname = "SQLAlchemy";
-  version = "2.0.17";
+  version = "2.0.18";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -50,7 +49,7 @@ buildPythonPackage rec {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
     rev = "refs/tags/rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-thwPqyxhojyHZpo7LK6nl69Z1B1Z6+WR1dAdlVrgiaY=";
+    hash = "sha256-juZIFlmgwGFFhv+3DsMx6k1QRcGLQyTOwR5Hii8A68c=";
   };
 
   nativeBuildInputs =[
@@ -143,6 +142,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # typing correctness, not interesting
     "test/ext/mypy"
+    "test/typing"
     # slow and high memory usage, not interesting
     "test/aaa_profiling"
   ];
