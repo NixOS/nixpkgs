@@ -13,12 +13,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   env.NIX_CFLAGS_COMPILE = toString [
-    "-std=c++11"
-    (lib.optional stdenv.cc.isClang "-Wno-error=c++11-narrowing")
+    (lib.optionalString stdenv.cc.isGNU "-std=c++11")
+    (lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing")
+    (lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) "-Dfinite=isfinite")
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Computational Morphometry Toolkit ";
     longDescription = ''A software toolkit for computational morphometry of
       biomedical images, CMTK comprises a set of command line tools and a
