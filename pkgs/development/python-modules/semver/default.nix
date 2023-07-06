@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "semver";
-  version = "3.0.0";
+  version = "3.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "python-semver";
     repo = "python-semver";
     rev = "refs/tags/${version}";
-    hash = "sha256-ErLmKZswoNgsY82epNUmJDVs065JvSwz3zY+y8jQ0e8=";
+    hash = "sha256-vVi0+Pq8VpYMy73JSrvi9ranOzvFaHpcPZRt8gMkkFs=";
   };
 
   nativeBuildInputs = [
