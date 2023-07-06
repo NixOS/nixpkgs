@@ -1,4 +1,4 @@
-{ lib, python3, fetchFromGitHub, fetchPypi }:
+{ lib, python3, fetchFromGitHub, fetchPypi, nix-update-script }:
 let
   python = python3.override {
     # override resolvelib due to
@@ -88,6 +88,8 @@ buildPythonApplication rec {
   ];
 
   __darwinAllowLocalNetworking = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://pdm.fming.dev";
