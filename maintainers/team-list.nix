@@ -477,6 +477,15 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
+  lomiri = {
+    members = [
+      OPNA2608
+    ];
+    scope = "Maintain Lomiri desktop environment and related packages.";
+    shortName = "Lomiri";
+    enableFeatureFreezePing = true;
+  };
+
   lumiguide = {
     # Verify additions by approval of an already existing member of the team.
     members = [

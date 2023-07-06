@@ -12,25 +12,18 @@
 , installShellFiles
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "exa";
-  version = "0.10.1";
+  version = "unstable-2023-03-01";
 
   src = fetchFromGitHub {
     owner = "ogham";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-vChsy/FrJEzTO5O+XFycPMP3jqOeea/hfsC0jJbqUVI=";
+    repo = "exa";
+    rev = "c697d066702ab81ce0684fedb4c638e0fc0473e8";
+    hash = "sha256-sSEnZLL0n7Aw72fPNJmyRxSLXCMC5uWwfTy2fpsuo6c=";
   };
 
-  # Cargo.lock is outdated
-  cargoPatches = [ ./update-cargo-lock.diff ];
-
-  cargoSha256 = "sha256-ah8IjShmivS6IWL3ku/4/j+WNr/LdUnh1YJnPdaFdcM=";
-
-  # FIXME: LTO is broken with rustc 1.61, see https://github.com/rust-lang/rust/issues/97255
-  # remove this with rustc 1.61.1+
-  CARGO_PROFILE_RELEASE_LTO = "false";
+  cargoHash = "sha256-/sxiQMWix4GR12IzuvXbx56mZhbcFpd+NJ49S2N+jzw=";
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles pandoc ];
   buildInputs = [ zlib ]
@@ -46,13 +39,10 @@ rustPlatform.buildRustPackage rec {
     pandoc --standalone -f markdown -t man man/exa_colors.5.md > man/exa_colors.5
     installManPage man/exa.1 man/exa_colors.5
     installShellCompletion \
-      --name exa completions/completions.bash \
-      --name exa.fish completions/completions.fish \
-      --name _exa completions/completions.zsh
+      --bash completions/bash/exa \
+      --fish completions/fish/exa.fish \
+      --zsh completions/zsh/_exa
   '';
-
-  # Some tests fail, but Travis ensures a proper build
-  doCheck = false;
 
   meta = with lib; {
     description = "Replacement for 'ls' written in Rust";
@@ -64,7 +54,7 @@ rustPlatform.buildRustPackage rec {
       for a directory, or recursing into directories with a tree view. exa is
       written in Rust, so it’s small, fast, and portable.
     '';
-    changelog = "https://github.com/ogham/exa/releases/tag/v${version}";
+    changelog = "https://github.com/ogham/exa/releases";
     homepage = "https://the.exa.website";
     license = licenses.mit;
     maintainers = with maintainers; [ ehegnes lilyball globin fortuneteller2k ];

@@ -1,5 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, nix-update-script }:
-
+{ lib, buildGoModule, fetchFromGitHub, nix-update-script, makeWrapper, monero-cli }:
 let
   pname = "atomic-swap";
   version = "0.4.1";
@@ -22,6 +21,12 @@ buildGoModule {
     "cmd/bootnode"
   ];
 
+  nativeBuildInputs = [ makeWrapper ];
+
+  postInstall = ''
+    wrapProgram $out/bin/swapd --prefix PATH : ${lib.makeBinPath [ monero-cli ]}
+  '';
+
   # integration tests require network access
   doCheck = false;
 
@@ -30,7 +35,7 @@ buildGoModule {
   meta = with lib; {
     homepage = "https://github.com/AthanorLabs/atomic-swap";
     description = "ETH-XMR atomic swap implementation";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ happysalada ];
+    license = with licenses; [ lgpl3Only ];
+    maintainers = with maintainers; [ happysalada lord-valen ];
   };
 }
