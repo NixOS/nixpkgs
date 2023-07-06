@@ -1,5 +1,6 @@
 {
-  "version": "0.18.0",
+  "serverVersion": "0.18.0",
+  "uiVersion": "0.18.0",
   "serverSha256": "sha256-KzEelj2/+wfp570Vw1+FoqiYZd1PxELTdopGSeel97E=",
   "serverCargoSha256": "sha256-p1ZytuaXouKFkKjsEsaNjndoioTSVVM2pf72qE8/qyM=",
   "uiSha256": "sha256-pB6uEL9gDwvsi+FbooKBhTCJ+Qmc6Vl2bBTMiL1hUJI=",
