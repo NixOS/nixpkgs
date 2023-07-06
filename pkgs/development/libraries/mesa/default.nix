@@ -30,6 +30,7 @@
     ] ++ lib.optionals stdenv.hostPlatform.isx86 [
       "iris" # new Intel, could work on non-x86 with PCIe cards, but doesn't build as of 22.3.4
       "crocus" # Intel legacy, x86 only
+      "i915" # Intel extra legacy, x86 only
     ]
   else [ "auto" ]
 , vulkanDrivers ?

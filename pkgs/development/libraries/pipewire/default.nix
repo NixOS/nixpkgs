@@ -66,6 +66,7 @@
 , mysofaSupport ? true
 , libmysofa
 , tinycompress
+, ffado
 }:
 
 let
@@ -73,7 +74,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.71";
+    version = "0.3.72";
 
     outputs = [
       "out"
@@ -91,7 +92,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-NPYWl+WeI/z70gNHX1BAKslGFX634D7XrV04vuJgGOo=";
+      sha256 = "sha256-AbATW+uRU4HcYHxvqigqdRwZyLln3yc/hpgWDQ50cPs=";
     };
 
     patches = [
@@ -126,6 +127,7 @@ let
     buildInputs = [
       alsa-lib
       dbus
+      ffado
       glib
       libjack2
       libusb1
@@ -221,6 +223,7 @@ let
 
     meta = with lib; {
       description = "Server and user space API to deal with multimedia pipelines";
+      changelog = "https://gitlab.freedesktop.org/pipewire/pipewire/-/releases/${version}";
       homepage = "https://pipewire.org/";
       license = licenses.mit;
       platforms = platforms.linux;

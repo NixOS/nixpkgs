@@ -515,9 +515,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsysvinit-path="
     "-Dsysvrcnd-path="
 
-    "-Dsulogin-path=${util-linux}/bin/sulogin"
-    "-Dmount-path=${util-linux}/bin/mount"
-    "-Dumount-path=${util-linux}/bin/umount"
+    "-Dsulogin-path=${util-linux.login}/bin/sulogin"
+    "-Dnologin-path=${util-linux.login}/bin/nologin"
+    "-Dmount-path=${util-linux.mount}/bin/mount"
+    "-Dumount-path=${util-linux.mount}/bin/umount"
     "-Dcreate-log-dirs=false"
 
     # Use cgroupsv2. This is already the upstream default, but better be explicit.
@@ -568,8 +569,8 @@ stdenv.mkDerivation (finalAttrs: {
             "man/systemd-makefs@.service.xml"
           ];
         }
-        { search = "/sbin/swapon"; replacement = "${lib.getBin util-linux}/sbin/swapon"; where = [ "src/core/swap.c" "src/basic/unit-def.h" ]; }
-        { search = "/sbin/swapoff"; replacement = "${lib.getBin util-linux}/sbin/swapoff"; where = [ "src/core/swap.c" ]; }
+        { search = "/sbin/swapon"; replacement = "${util-linux.swap}/sbin/swapon"; where = [ "src/core/swap.c" "src/basic/unit-def.h" ]; }
+        { search = "/sbin/swapoff"; replacement = "${util-linux.swap}/sbin/swapoff"; where = [ "src/core/swap.c" ]; }
         {
           search = "/bin/echo";
           replacement = "${coreutils}/bin/echo";

@@ -71,7 +71,7 @@ for flag in "${!hardeningEnableMap[@]}"; do
       # NB: we do not use `+=` here, because PIE flags must occur before any PIC flags
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling CFlags -fPIE >&2; fi
       hardeningCFlags=('-fPIE' "${hardeningCFlags[@]}")
-      if [[ ! (" $* " =~ " -shared " || " $* " =~ " -static ") ]]; then
+      if [[ ! (" ${params[*]} " =~ " -shared " || " ${params[*]} " =~ " -static ") ]]; then
         if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling LDFlags -pie >&2; fi
         hardeningCFlags=('-pie' "${hardeningCFlags[@]}")
       fi
