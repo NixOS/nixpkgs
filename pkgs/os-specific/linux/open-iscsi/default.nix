@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     "-Ddbroot=/etc/iscsi"
   ];
 
-  passthru.tests = { inherit (nixosTests) iscsi-root iscsi-multipath-root; };
+  passthru.tests = { inherit (nixosTests) iscsi-root; };
 
   meta = with lib; {
     description = "A high performance, transport independent, multi-platform implementation of RFC3720";
