@@ -9,6 +9,8 @@
 , vala
 , gobject-introspection
 , fetchpatch
+, glibcLocales
+, umockdev
 }:
 
 stdenv.mkDerivation rec {
@@ -59,10 +61,12 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  mesonFlags = [
-    # There's a dependency cycle with umockdev and the tests fail to LD_PRELOAD anyway
-    "-Dtests=disabled"
+  checkInputs = [
+    glibcLocales
+    umockdev
   ];
+
+  doCheck = true;
 
   passthru = {
     updateScript = gnome.updateScript {
