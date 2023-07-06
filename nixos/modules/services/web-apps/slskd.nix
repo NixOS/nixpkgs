@@ -11,6 +11,12 @@ in {
     package = mkPackageOptionMD pkgs "slskd" { };
 
     nginx = mkOption {
+      description = lib.mdDoc "options for nginx";
+      example = {
+        enable = true;
+        domain = "example.com";
+        contextPath = "/slskd";
+      };
       type = submodule ({name, config, ...}: {
         options = {
           enable = mkEnableOption "enable nginx as a reverse proxy";
@@ -81,13 +87,16 @@ in {
               type = path;
               default = config.services.slskd.nginx.contextPath;
               defaultText = "config.services.slskd.nginx.contextPath";
+              description = lib.mdDoc ''
+                The context path, i.e., the last part of the slskd URL
+              '';
             };
           };
 
           shares = {
             directories = mkOption {
               type = listOf str;
-              description = ''
+              description = lib.mdDoc ''
                 Paths to your shared directories. See
                 [documentation](https://github.com/slskd/slskd/blob/master/docs/config.md#directories)
                 for advanced usage
