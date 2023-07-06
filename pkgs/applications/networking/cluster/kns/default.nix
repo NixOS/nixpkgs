@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "kns";
-  version = "unstable-2022-03-03";
+  version = "unstable-2022-04-25";
 
   src = fetchFromGitHub {
     owner = "blendle";
     repo = pname;
-    rev = "adddff3690d6bde62844e68e0edf304023927a9b";
-    sha256 = "sha256-zcJaH+Uyc/rCDRlQi+lSKaG7z4VWlNZ13klDnvL3Jgc=";
+    rev = "86502949c31432bd95895cfb26d1c5893c533d5c";
+    sha256 = "sha256-8AR/fEKPAfiKCZrp/AyJo3Ic8dH7SfncYZSdQA2GywQ=";
   };
 
   strictDeps = true;
