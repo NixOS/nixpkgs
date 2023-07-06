@@ -27924,12 +27924,12 @@ with self; {
 
   XSParseKeyword = buildPerlModule {
     pname = "XS-Parse-Keyword";
-    version = "0.25";
+    version = "0.34";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Keyword-0.25.tar.gz";
-      hash = "sha256-9e2zDPfH8iDQxsMdwetVQDKECpnHwpgxT1zD/vZscsc=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Keyword-0.34.tar.gz";
+      hash = "sha256-EDPdtAmSTZ1Cs4MEodeXRaBDSrxrBJHrErbIu5bx1sE=";
     };
-    buildInputs = [ ExtUtilsCChecker ];
+    buildInputs = [ ExtUtilsCChecker Test2Suite ];
     perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
     meta = {
       description = "XS functions to assist in parsing keyword syntax";
