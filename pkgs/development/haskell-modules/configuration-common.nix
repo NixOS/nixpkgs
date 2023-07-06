@@ -134,6 +134,23 @@ self: super: {
     then enableCabalFlag "ghc-lib" super.stylish-haskell
     else super.stylish-haskell;
 
+  hiedb =
+    lib.pipe
+      super.hiedb
+      [
+        # hiedb-0.4.3.0 does not yet support algebraic-graphs-0.7.  This patch works
+        # around the issue.
+        # https://github.com/wz1000/HieDb/pull/44
+        (appendPatch
+          (pkgs.fetchpatch {
+            name = "hiedb-algebraic-graphs-0.7.patch";
+            url = "https://github.com/wz1000/HieDB/commit/4ac8e6735321872b9d5d15a9cac492add5555234.patch";
+            hash = "sha256-Iu+M8r+DrpoxUCG6yekgbW+GffoNjjRksnwUJ6jojhE=";
+          }))
+        # Patch does not actually bump the bound in the .cabal file.
+        doJailbreak
+      ];
+
   ###########################################
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
