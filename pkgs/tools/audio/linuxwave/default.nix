@@ -5,7 +5,7 @@
 , zig
 }:
 
-stdenv.mkDerivation rec {
+zig.buildZigPackage rec {
   pname = "linuxwave";
   version = "0.1.4";
 
@@ -19,37 +19,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     installShellFiles
-    zig
   ];
 
-  postConfigure = ''
-    export XDG_CACHE_HOME=$(mktemp -d)
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-
-    zig build -Drelease-safe -Dcpu=baseline
-
-    runHook postBuild
-  '';
-
-  checkPhase = ''
-    runHook preCheck
-
-    zig build test
-
-    runHook postCheck
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    zig build -Drelease-safe -Dcpu=baseline --prefix $out install
-
+  postInstall = ''
     installManPage man/linuxwave.1
-
-    runHook postInstall
   '';
 
   meta = with lib; {
