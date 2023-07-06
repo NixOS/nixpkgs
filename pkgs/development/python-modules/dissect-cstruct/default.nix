@@ -9,16 +9,16 @@
 
 buildPythonPackage rec {
   pname = "dissect-cstruct";
-  version = "3.7";
+  version = "3.8";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.cstruct";
     rev = "refs/tags/${version}";
-    hash = "sha256-K+crraBIMCtT5WsGgyxoAZ49ff7ZUHga2qYtih6w0Ug=";
+    hash = "sha256-ART7m0OR0KjkZYHXDoNGJDX0v7h+FgctAaWXNFohGV8=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
