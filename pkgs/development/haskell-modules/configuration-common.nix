@@ -129,10 +129,14 @@ self: super: {
   # https://github.com/supki/ldap-client/issues/18
   ldap-client-og = dontCheck super.ldap-client-og;
 
-  # For -fghc-lib see cabal.project in haskell-language-server.
-  stylish-haskell = if lib.versionAtLeast super.ghc.version "9.2"
-    then enableCabalFlag "ghc-lib" super.stylish-haskell
-    else super.stylish-haskell;
+  stylish-haskell =
+    # Too-strict upper bounds, no Hackage revisions
+    doJailbreak
+      # For -fghc-lib see cabal.project in haskell-language-server.
+      (if lib.versionAtLeast super.ghc.version "9.2"
+       then enableCabalFlag "ghc-lib" super.stylish-haskell
+       else super.stylish-haskell
+      );
 
   hiedb =
     lib.pipe
