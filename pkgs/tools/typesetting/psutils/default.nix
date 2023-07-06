@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
       Makefile.unix > Makefile
   '';
 
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+
   preInstall = ''
     mkdir -p $out/bin $out/share/man/man1
   '';
