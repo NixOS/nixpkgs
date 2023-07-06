@@ -20,6 +20,8 @@
 , armTrustedFirmwareRK3328
 , armTrustedFirmwareRK3399
 , armTrustedFirmwareS905
+, crustTeresA64
+, pkgsCross
 , buildPackages
 }:
 
@@ -540,6 +542,21 @@ in {
     defconfig = "sopine_baseboard_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  # Refer to https://nixos.wiki/wiki/NixOS_on_ARM/OLIMEX_Teres-A64
+  ubootTeresA64 = buildUBoot {
+    defconfig = "teres_i_defconfig";
+    extraMeta = {
+      platforms = ["aarch64-linux"];
+      maintainers = with lib.maintainers; [ kreyren ];
+    };
+    BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    # U-Boot requires crust built using OpenRISC 1000 compiler for power management
+    SCP = if stdenv.hostPlatform.isOr1k
+      then "${crustTeresA64}/scp.bin"
+      else "${pkgsCross.or1k.crustTeresA64}/scp.bin";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 

@@ -28267,6 +28267,7 @@ with pkgs;
     ubootROCPCRK3399
     ubootSheevaplug
     ubootSopine
+    ubootTeresA64
     ubootUtilite
     ubootWandboard
     ;
