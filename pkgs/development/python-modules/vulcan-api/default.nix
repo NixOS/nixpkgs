@@ -51,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for UONET+ e-register API";
     homepage = "https://vulcan-api.readthedocs.io/";
+    changelog = "https://github.com/kapi2289/vulcan-api/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
