@@ -61,7 +61,6 @@ let
     '';
 
     nativeBuildInputs = [
-      ncurses # tools/kwboot
       bc
       bison
       dtc
@@ -73,6 +72,9 @@ let
       ]))
       swig
       which # for scripts/dtc-version.sh
+      ncurses # tools/kwboot
+      libuuid # tools/mkeficapsule
+      gnutls # tools/mkeficapsule
     ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
 
