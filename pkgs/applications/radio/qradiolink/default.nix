@@ -83,5 +83,6 @@ gnuradio3_8.pkgs.mkDerivation rec {
     license = licenses.agpl3;
     maintainers = [ maintainers.markuskowa ];
     platforms = platforms.linux;
+    mainProgram = "qradiolink";
   };
 }
