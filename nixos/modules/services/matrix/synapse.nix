@@ -525,7 +525,17 @@ in {
                   names = [ "federation" ];
                   compress = false;
                 }];
-              }];
+              }] ++ lib.optional hasWorkers {
+                port = 9093;
+                bind_addresses = [ "127.0.0.1" ];
+                type = "http";
+                tls = false;
+                x_forwarded = false;
+                resources = [{
+                  names = [ "replication" ];
+                  compress = false;
+                }];
+              };
               description = lib.mdDoc ''
                 List of ports that Synapse should listen on, their purpose and their configuration.
               '';
@@ -767,7 +777,18 @@ in {
               type = types.bool;
               default = false;
               description = lib.mdDoc ''
-                Whether to enable matrix synapse workers
+                Whether to enable matrix synapse workers.
+
+                ::: {.note}
+                  Enabling this will add a replication listener to the default
+                  value of `services.matrix-synapse.settings.listeners` and configure that
+                  listener as `services.matrix-synapse.settings.instance_map.main`.
+                  If you set either of those options, make sure to configure a replication
+                  listener yourself.
+
+                  A redis server is required for running workers. A local one can be enabled
+                  using `services.matrix-synapse.configureRedisLocally`.
+                :::
               '';
             };
             config = lib.mkOption {
@@ -843,12 +864,39 @@ in {
           automatically by setting `services.matrix-synapse.configureRedisLocally = true`.
         '';
       }
+      {
+        assertion =
+          let
+            main = cfg.settings.instance_map.main;
+            listener = lib.findFirst
+              (
+                listener:
+                  listener.port == main.port
+                  && (lib.any (resource: lib.any (name: name == "replication") resource.names) listener.resources)
+                  && (lib.any (bind: bind == main.host || bind == "0.0.0.0") listener.bind_addresses)
+              )
+              null
+              cfg.settings.listeners;
+          in
+          hasWorkers -> (listener != null);
+        message = ''
+          Workers for matrix-synapse require setting `services.matrix-synapse.settings.instance_map.main`
+          to any listener configured in `services.matrix-synapse.settings.listeners` with a `"replication"`
+          resource.
+
+          This is done by default unless you manually configure either of those settings.
+        '';
+      }
     ];
 
     services.matrix-synapse.settings.redis = lib.mkIf cfg.configureRedisLocally {
       enabled = true;
       path = config.services.redis.servers.matrix-synapse.unixSocket;
     };
+    services.matrix-synapse.settings.instance_map.main = lib.mkIf hasWorkers (lib.mkDefault {
+      host = "127.0.0.1";
+      port = 9093;
+    });
 
     services.matrix-synapse.configFile = configFile;
     services.matrix-synapse.package = wrapped;
