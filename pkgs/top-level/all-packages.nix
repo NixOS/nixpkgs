@@ -509,6 +509,12 @@ with pkgs;
 
   colorpicker = callPackage ../tools/misc/colorpicker { };
 
+  colorstorm = callPackage ../applications/misc/colorstorm {
+    zigHook = zigHook.override {
+      zig = buildPackages.zig_0_9;
+    };
+  };
+
   comedilib = callPackage ../development/libraries/comedilib {  };
 
   commix = callPackage ../tools/security/commix { };
