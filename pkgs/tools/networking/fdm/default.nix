@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "nicm";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Gqpz+N1ELU5jQpPJAG9s8J9UHWOJNhkT+s7+xuQazd0=";
+    hash = "sha256-Gqpz+N1ELU5jQpPJAG9s8J9UHWOJNhkT+s7+xuQazd0=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Mail fetching and delivery tool - should do the job of getmail and procmail";
     maintainers = with maintainers; [ raskin ];
-    platforms = with platforms; linux;
+    platforms = with platforms; linux ++ darwin;
     homepage = "https://github.com/nicm/fdm";
     downloadPage = "https://github.com/nicm/fdm/releases";
     license = licenses.isc;

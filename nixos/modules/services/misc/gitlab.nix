@@ -152,6 +152,7 @@ let
         api_url = "http://${config.services.dockerRegistry.listenAddress}:${toString config.services.dockerRegistry.port}/";
         issuer = cfg.registry.issuer;
       };
+      elasticsearch.indexer_path = "${pkgs.gitlab-elasticsearch-indexer}/bin/gitlab-elasticsearch-indexer";
       extra = {};
       uploads.storage_path = cfg.statePath;
       pages = optionalAttrs cfg.pages.enable {
@@ -1644,6 +1645,7 @@ in {
         nodejs
         procps
         gnupg
+        gzip
       ];
       serviceConfig = {
         Type = "notify";

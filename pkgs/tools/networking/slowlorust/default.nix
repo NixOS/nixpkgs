@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -12,13 +13,16 @@ rustPlatform.buildRustPackage rec {
     owner = "MJVL";
     repo = pname;
     rev = version;
-    sha256 = "c4NWkQ/QvlUo1YoV2s7rWB6wQskAP5Qp1WVM23wvV3c=";
+    hash = "sha256-c4NWkQ/QvlUo1YoV2s7rWB6wQskAP5Qp1WVM23wvV3c=";
   };
 
-  cargoSha256 = "Wu1mm+yJw2SddddxC5NfnMWLr+dplnRxH3AJ1/mTAKM=";
+  cargoHash = "sha256-Wu1mm+yJw2SddddxC5NfnMWLr+dplnRxH3AJ1/mTAKM=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    Security
+  ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Lightweight slowloris (HTTP DoS) tool";
     homepage = "https://github.com/MJVL/slowlorust";
     license = licenses.mit;

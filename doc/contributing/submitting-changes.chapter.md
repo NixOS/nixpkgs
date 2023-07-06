@@ -214,24 +214,11 @@ The last checkbox is fits [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blo
 - Hydra builds for master and staging should not be used as testing platform, it’s a build farm for changes that have been already tested.
 - When changing the bootloader installation process, extra care must be taken. Grub installations cannot be rolled back, hence changes may break people’s installations forever. For any non-trivial change to the bootloader please file a PR asking for review, especially from \@edolstra.
 
-```{.graphviz caption="Staging workflow"}
-digraph {
-    "small changes" [shape=none]
-    "mass-rebuilds and other large changes" [shape=none]
-    "critical security fixes" [shape=none]
-    "broken staging-next fixes" [shape=none]
-
-    "small changes" -> master
-    "mass-rebuilds and other large changes" -> staging
-    "critical security fixes" -> master
-    "broken staging-next fixes" -> "staging-next"
-
-    "staging-next" -> master [color="#E85EB0"] [label="stabilization ends"] [fontcolor="#E85EB0"]
-    "staging" -> "staging-next" [color="#E85EB0"] [label="stabilization starts"] [fontcolor="#E85EB0"]
-
-    master -> "staging-next" -> staging [color="#5F5EE8"] [label="every six hours (GitHub Action)"] [fontcolor="#5F5EE8"]
-}
-```
+::: {.figure #fig-staging-workflow}
+# Staging workflow
+<!-- generated from ./staging-workflow.dot using: dot -Tsvg staging-workflow.dot > staging-workflow.svg -->
+![Staging workflow](./staging-workflow.svg)
+:::
 
 [This GitHub Action](https://github.com/NixOS/nixpkgs/blob/master/.github/workflows/periodic-merge-6h.yml) brings changes from `master` to `staging-next` and from `staging-next` to `staging` every 6 hours; these are the blue arrows in the diagram above.  The purple arrows in the diagram above are done manually and much less frequently.  You can get an idea of how often these merges occur by looking at the git history.
 

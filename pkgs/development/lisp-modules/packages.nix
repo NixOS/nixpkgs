@@ -273,14 +273,14 @@ let
     };
   };
 
-  cl-colors2_0_5_3 = build-asdf-system {
+  cl-colors2_0_5_4 = build-asdf-system {
     inherit (super.cl-colors2) pname systems lispLibs;
-    version = "0.5.3";
+    version = "0.5.4";
 
     src = pkgs.fetchgit {
       url = "https://notabug.org/cage/cl-colors2";
-      rev = "refs/tags/v0.5.3";
-      sha256 = "sha256-anYkLJoNOVBQoXzWVBgbEusQDdud0RA8nZzedl8V93w=";
+      rev = "refs/tags/v0.5.4";
+      sha256 = "sha256-JbT1BKjaXDwdlzHLPjX1eg0RMIOT86R17SPgbe2h+tA=";
     };
   };
 
@@ -396,12 +396,12 @@ let
 
   nyxt-gtk = build-asdf-system {
     inherit (super.nyxt) pname;
-    version = "3.1.0";
+    version = "3.3.0";
 
     lispLibs = with super; [
       self.nasdf-unstable
       self.prompter
-      self.cl-colors2_0_5_3
+      self.cl-colors2_0_5_4
       self.njson_1_0_0
       self.nsymbols_0_3_1
       self.nclasses_0_5_0
@@ -464,8 +464,8 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nyxt";
-      rev = "3.1.0";
-      sha256 = "sha256-H3AlslECb/VvIC6zAGkLNTaGJ/nb97J6RXAN8sEgAgY=";
+      rev = "3.3.0";
+      sha256 = "sha256-hSu+XGb87yzZPbJgcUhU81VGhNdMiN6GKspGQJU+SxY=";
     };
 
     nativeBuildInputs = [ pkgs.makeWrapper ];

@@ -129,6 +129,16 @@ rec {
     libc = "newlib";
   };
 
+  mips64-embedded = {
+    config = "mips64-none-elf";
+    libc = "newlib";
+  };
+
+  mips-embedded = {
+    config = "mips-none-elf";
+    libc = "newlib";
+  };
+
   loongarch64-linux = {
     config = "loongarch64-unknown-linux-gnu";
   };

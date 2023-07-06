@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy27
@@ -36,6 +37,10 @@ buildPythonPackage rec {
     numpy
     msgpack
   ];
+
+  preBuild = if (stdenv.hostPlatform.isx86 && !stdenv.hostPlatform.avx2Support) then ''
+    export DISABLE_NUMCODECS_AVX2=
+  '' else null;
 
   nativeCheckInputs = [
     pytestCheckHook

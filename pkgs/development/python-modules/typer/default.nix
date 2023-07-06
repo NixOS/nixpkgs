@@ -58,8 +58,8 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_scripts"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # likely related to https://github.com/sarugaku/shellingham/issues/35
+    # Likely related to https://github.com/sarugaku/shellingham/issues/35
+    # fails also on Linux
     "test_show_completion"
     "test_install_completion"
   ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [

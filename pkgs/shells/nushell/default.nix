@@ -8,7 +8,6 @@
 , pkg-config
 , python3
 , xorg
-, libiconv
 , Libsystem
 , AppKit
 , Security
@@ -22,16 +21,17 @@
 , nix-update-script
 }:
 
-rustPlatform.buildRustPackage (
-  let
-    version = "0.82.0";
-    pname = "nushell";
-  in {
-  inherit version pname;
+let
+  version = "0.82.0";
+in
+
+rustPlatform.buildRustPackage {
+  pname = "nushell";
+  inherit version;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "nushell";
+    repo = "nushell";
     rev = version;
     hash = "sha256-D/R+/60Lo2rLUA/313CTJQookqSNtbD7LnVf0vBC9Qc=";
   };
@@ -43,31 +43,21 @@ rustPlatform.buildRustPackage (
     ++ lib.optionals stdenv.isDarwin [ rustPlatform.bindgenHook ];
 
   buildInputs = [ openssl zstd ]
-    ++ lib.optionals stdenv.isDarwin [ zlib libiconv Libsystem Security ]
+    ++ lib.optionals stdenv.isDarwin [ zlib Libsystem Security ]
     ++ lib.optionals (withDefaultFeatures && stdenv.isLinux) [ xorg.libX11 ]
     ++ lib.optionals (withDefaultFeatures && stdenv.isDarwin) [ AppKit nghttp2 libgit2 ];
 
-  buildFeatures = additionalFeatures [ (lib.optional withDefaultFeatures "default") ];
+  buildNoDefaultFeatures = !withDefaultFeatures;
+  buildFeatures = additionalFeatures [ ];
 
-  # TODO investigate why tests are broken on darwin
-  # failures show that tests try to write to paths
-  # outside of TMPDIR
-  doCheck = doCheck && !stdenv.isDarwin;
+  inherit doCheck;
 
   checkPhase = ''
     runHook preCheck
     echo "Running cargo test"
-    HOME=$TMPDIR cargo test
+    HOME=$(mktemp -d) cargo test
     runHook postCheck
   '';
-
-  meta = with lib; {
-    description = "A modern shell written in Rust";
-    homepage = "https://www.nushell.sh/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne johntitor marsam ];
-    mainProgram = "nu";
-  };
 
   passthru = {
     shellPath = "/bin/nu";
@@ -76,4 +66,12 @@ rustPlatform.buildRustPackage (
     };
     updateScript = nix-update-script { };
   };
-})
+
+  meta = with lib; {
+    description = "A modern shell written in Rust";
+    homepage = "https://www.nushell.sh/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ Br1ght0ne johntitor marsam ];
+    mainProgram = "nu";
+  };
+}

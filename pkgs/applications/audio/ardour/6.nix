@@ -185,6 +185,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://ardour.org/";
     license = licenses.gpl2Plus;
+    mainProgram = "ardour6";
     platforms = platforms.linux;
     maintainers = with maintainers; [ goibhniu magnetophon mitchmindtree ];
   };
