@@ -9886,17 +9886,18 @@ with self; {
     };
   };
 
-  FinanceQuote = buildPerlPackage {
+  FinanceQuote = buildPerlPackage rec {
     pname = "Finance-Quote";
-    version = "1.56";
+    version = "1.57";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BP/BPSCHUCK/Finance-Quote-1.56.tar.gz";
-      hash = "sha256-ER1vBY5kZLdIXAGPidDhiR/OC5aNnG+6G/JU1hLHpKs=";
+      url = "mirror://cpan/authors/id/B/BP/BPSCHUCK/Finance-Quote-${version}.tar.gz";
+      hash = "sha256-dm7dUw+RRp+MGiU6nVs4jX167PTMiihFL0SHASOTQs4=";
     };
     buildInputs = [ DateManip DateRange DateSimple DateTime DateTimeFormatISO8601 StringUtil TestKwalitee TestPerlCritic TestPod TestPodCoverage ];
-    propagatedBuildInputs = [ DateTimeFormatStrptime Encode HTMLTableExtract HTMLTokeParserSimple HTMLTree HTMLTreeBuilderXPath HTTPCookies JSON IOCompress LWPProtocolHttps Readonly StringUtil SpreadsheetXLSX TextTemplate TryTiny WebScraper XMLLibXML libwwwperl ];
+    propagatedBuildInputs = [ DateManip DateTimeFormatStrptime Encode HTMLTableExtract HTMLTokeParserSimple HTMLTree HTMLTreeBuilderXPath HTTPCookies JSON IOCompress IOString LWPProtocolHttps Readonly StringUtil SpreadsheetXLSX TextTemplate TryTiny WebScraper XMLLibXML libwwwperl ];
     meta = {
       homepage = "https://finance-quote.sourceforge.net/";
+      changelog = "https://github.com/finance-quote/finance-quote/releases/tag/v${version}";
       description = "Get stock and mutual fund quotes from various exchanges";
       license = with lib.licenses; [ gpl2Plus ];
       maintainers = with lib.maintainers; [ nevivurn ];
