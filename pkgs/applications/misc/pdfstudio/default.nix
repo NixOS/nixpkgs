@@ -40,6 +40,10 @@ in
       sha256 = "sha256-QXNsH1T+ItV3s9r8CnwgRUo1mhVbe8LkEun9gUmlVQg=";
     };
     jdk = jdk17;
+
+    # Bad hash, got sha256-afRhx9VCVRFUJoUnqs1bzF0yXpz3yEgLiFjMRB9xvsk=
+    # Likely unstable.
+    broken = true;
   };
 
   pdfstudio2021 = callPackage ./common.nix rec {
