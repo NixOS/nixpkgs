@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , zig
 , wayland
@@ -18,7 +17,7 @@
 , xwaylandSupport ? true
 }:
 
-stdenv.mkDerivation rec {
+zig.buildZigPackage rec {
   pname = "river";
   version = "0.2.4";
 
@@ -30,7 +29,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ zig wayland xwayland scdoc pkg-config ];
+  nativeBuildInputs = [ wayland xwayland scdoc pkg-config ];
 
   buildInputs = [
     wayland-protocols
@@ -44,16 +43,16 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional xwaylandSupport libX11;
 
   dontConfigure = true;
+  strictDeps = false; # This needs to be disabled for the build to work.
 
   preBuild = ''
     export HOME=$TMPDIR
   '';
 
-  installPhase = ''
-    runHook preInstall
-    zig build -Drelease-safe -Dcpu=baseline ${lib.optionalString xwaylandSupport "-Dxwayland"} -Dman-pages --prefix $out install
+  zigBuildFlags = [ "-Dman-pages" ] ++ lib.optional xwaylandSupport "-Dxwayland";
+
+  postInstall = ''
     install contrib/river.desktop -Dt $out/share/wayland-sessions
-    runHook postInstall
   '';
 
   /* Builder patch install dir into river to get default config
@@ -62,7 +61,7 @@ stdenv.mkDerivation rec {
   */
   installFlags = [ "DESTDIR=$(out)" ];
 
-  passthru.providedSessions = ["river"];
+  passthru.providedSessions = [ "river" ];
 
   meta = with lib; {
     changelog = "https://github.com/ifreund/river/releases/tag/v${version}";
