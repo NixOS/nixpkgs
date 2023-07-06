@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
 , curl
 , pkg-config
 , libgit2
@@ -13,32 +12,21 @@
 
 rustPlatform.buildRustPackage {
   pname = "cargo-component";
-  version = "unstable-2023-06-22";
+  version = "unstable-2023-07-05";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "cargo-component";
-    rev = "bd98521c6e13640593ad676d8b6f1e64054755d4";
-    hash = "sha256-5r3g158Ujdbpb0NZI1DIu3TGpc3G9XDmXg+mq+/Dayc=";
+    rev = "84ad1dc2c383dd3335953f9d1b059aeef9a5833e";
+    hash = "sha256-C066dXuGpl9bwKRh5kgN0DOjaEke84cj5ustYrM867I=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "warg-api-0.1.0" = "sha256-M1hbgWqibbq7upfvNarcqAM0fbWL8Z7y+pWpBfVqxiI=";
+      "warg-api-0.1.0" = "sha256-ElLwaOv0ifi8og2SJ6XZkjZX83IXoveicAUPBok/MLE=";
     };
   };
-
-  patches = [
-    # update warg dependencies to make cargo-component work when dependencies
-    # are vendored, since the fix has already been merged in warg
-    # https://github.com/bytecodealliance/cargo-component/pull/93
-    (fetchpatch {
-      name = "update-warg-dependencies.patch";
-      url = "https://github.com/bytecodealliance/cargo-component/commit/dac67f9eb465efaf11f445bc949bd87f7039a472.patch";
-      hash = "sha256-tFJtQJtHAmw4xZ9ADLyQn9+QRxHU1iZZbfXGYaPajg8=";
-    })
-  ];
 
   nativeBuildInputs = [
     curl
