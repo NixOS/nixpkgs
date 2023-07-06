@@ -210,4 +210,14 @@ self: super: {
                      })
     super.libmpd;
 
+  # Apply patch from PR with mtl-2.3 fix.
+  ConfigFile = overrideCabal (drv: {
+    editedCabalFile = null;
+    buildDepends = drv.buildDepends or [] ++ [ self.HUnit ];
+    patches = [(pkgs.fetchpatch {
+      name = "ConfigFile-pr-12.patch";
+      url = "https://github.com/jgoerzen/configfile/pull/12.patch";
+      sha256 = "sha256-b7u9GiIAd2xpOrM0MfILHNb6Nt7070lNRIadn2l3DfQ=";
+    })];
+  }) super.ConfigFile;
 }
