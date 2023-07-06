@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fs-uae-launcher";
-  version = "3.0.5";
+  version = "3.1.68";
 
   src = fetchurl {
-    url = "https://fs-uae.net/stable/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1dknra4ngz7bpppwqghmza1q68pn1yaw54p9ba0f42zwp427ly97";
+    url = "https://fs-uae.net/files/FS-UAE-Launcher/Stable/${version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-42EERC2yeODx0HPbwr4vmpN80z6WSWi3WzJMOT+OwDA=";
   };
 
   nativeBuildInputs = [
