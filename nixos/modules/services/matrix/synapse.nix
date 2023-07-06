@@ -10,13 +10,10 @@ let
   finalSettings = lib.filterAttrsRecursive (_: v: v != null) cfg.settings;
   configFile = format.generate "homeserver.yaml" finalSettings;
 
-  pluginsEnv = cfg.package.python.buildEnv.override {
-    extraLibs = cfg.plugins;
-  };
-
   usePostgresql = cfg.settings.database.name == "psycopg2";
   hasLocalPostgresDB = let args = cfg.settings.database.args; in
     usePostgresql && (!(args ? host) || (elem args.host [ "localhost" "127.0.0.1" "::1" ]));
+  hasWorkers = cfg.workers.enable && (cfg.workers.config != { });
 
   registerNewMatrixUser =
     let
@@ -758,6 +755,45 @@ in {
         };
       };
 
+      workers = lib.mkOption {
+        default = { };
+        description = lib.mdDoc ''
+          Options for configuring workers. See `services.matrix-synapse.workers.enable`
+          for a more detailed description.
+        '';
+        type = types.submodule {
+          options = {
+            enable = lib.mkOption {
+              type = types.bool;
+              default = false;
+              description = lib.mdDoc ''
+                Whether to enable matrix synapse workers
+              '';
+            };
+            config = lib.mkOption {
+              type = types.attrsOf (types.submodule {
+                freeformType = format.type;
+                options = {
+                  worker_listeners = lib.mkOption {
+                    default = [ ];
+                    type = types.listOf listenerType;
+                    description = lib.mdDoc ''
+                      List of ports that this worker should listen on, their purpose and their configuration.
+                    '';
+                  };
+                };
+              });
+              default = { };
+              description = lib.mdDoc ''
+                List of workers to configure. See the
+                [worker documention](https://matrix-org.github.io/synapse/latest/workers.html#worker-configuration)
+                for possible values.
+              '';
+            };
+          };
+        };
+      };
+
       extraConfigFiles = mkOption {
         type = types.listOf types.path;
         default = [ ];
@@ -800,6 +836,13 @@ in {
           For further information about this update, please read the release-notes of 20.03 carefully.
         '';
       }
+      {
+        assertion = hasWorkers -> cfg.settings.redis.enabled;
+        message = ''
+          Workers for matrix-synapse require configuring a redis instance. This can be done
+          automatically by setting `services.matrix-synapse.configureRedisLocally = true`.
+        '';
+      }
     ];
 
     services.matrix-synapse.settings.redis = lib.mkIf cfg.configureRedisLocally {
@@ -825,11 +868,26 @@ in {
       gid = config.ids.gids.matrix-synapse;
     };
 
+    systemd.targets.matrix-synapse = lib.mkIf hasWorkers {
+      description = "Synapse Matrix parent target";
+      after = [ "network.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
+      wantedBy = [ "multi-user.target" ];
+    };
+
     systemd.services =
       let
+        targetConfig =
+          if hasWorkers
+          then {
+            partOf = [ "matrix-synapse.target" ];
+            wantedBy = [ "matrix-synapse.target" ];
+            unitConfig.ReloadPropagatedFrom = "matrix-synapse.target";
+          }
+          else {
+            after = [ "network.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
+            wantedBy = [ "multi-user.target" ];
+          };
         baseServiceConfig = {
-          after = [ "network.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
-          wantedBy = [ "multi-user.target" ];
           environment = optionalAttrs (cfg.withJemalloc) {
             LD_PRELOAD = "${pkgs.jemalloc}/lib/libjemalloc.so";
           };
@@ -869,7 +927,31 @@ in {
             SystemCallArchitectures = "native";
             SystemCallFilter = [ "@system-service" "~@resources" "~@privileged" ];
           };
-        };
+        }
+        // targetConfig;
+        genWorkerService = name: workerCfg:
+          let
+            finalWorkerCfg = workerCfg // { worker_name = name; };
+            workerConfigFile = format.generate "worker-${name}.yaml" finalWorkerCfg;
+          in
+          {
+            name = "matrix-synapse-worker-${name}";
+            value = lib.mkMerge [
+              baseServiceConfig
+              {
+                description = "Synapse Matrix worker ${name}";
+                # make sure the main process starts first for potential database migrations
+                after = [ "matrix-synapse.service" ];
+                serviceConfig = {
+                  ExecStart = ''
+                    ${cfg.package}/bin/synapse_worker \
+                      ${ concatMapStringsSep "\n  " (x: "--config-path ${x} \\") ([ configFile workerConfigFile ] ++ cfg.extraConfigFiles) }
+                      --keys-directory ${cfg.dataDir}
+                  '';
+                };
+              }
+            ];
+          };
       in
       {
         matrix-synapse = lib.mkMerge [
@@ -897,7 +979,8 @@ in {
             };
           }
         ];
-      };
+      }
+      // (lib.mapAttrs' genWorkerService cfg.workers.config);
 
     services.redis.servers.matrix-synapse = lib.mkIf cfg.configureRedisLocally {
       enable = true;
