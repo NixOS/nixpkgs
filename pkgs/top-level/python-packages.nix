@@ -1165,6 +1165,8 @@ self: super: with self; {
 
   paddle_bfloat = callPackage ../development/python-modules/paddle_bfloat { };
 
+  paddle2onnx = callPackage ../development/python-modules/paddle2onnx { };
+
   pulumi = callPackage ../development/python-modules/pulumi { inherit (pkgs) pulumi; };
 
   pulumi-aws = callPackage ../development/python-modules/pulumi-aws { };
