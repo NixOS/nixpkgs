@@ -80,7 +80,7 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.0.220";
+  version = "0.0.229";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -89,7 +89,7 @@ buildPythonPackage rec {
     owner = "hwchase17";
     repo = "langchain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Br9j2mmLFxW3MHIY93m85mAVrvWVc6bnSlI71OwT8mY=";
+    hash = "sha256-9hPF+0bEcFGH2oop3e513kBp6UeUEBlPXD+2pZ4dCi0=";
   };
 
   postPatch = ''
@@ -230,10 +230,6 @@ buildPythonPackage rec {
       langchainplus-sdk
     ];
   };
-
-  pythonRelaxDeps = [
-    "langchainplus-sdk"
-  ];
 
   nativeCheckInputs = [
     pytestCheckHook
