@@ -14,6 +14,9 @@ let
     else
       builtins.throw "Check if '${msg}' was resolved in ${pkg.pname} ${pkg.version} and update or remove this";
   jailbreakForCurrentVersion = p: v: checkAgainAfter p v "bad bounds" (doJailbreak p);
+
+  # Workaround for a ghc-9.6 issue: https://gitlab.haskell.org/ghc/ghc/-/issues/23392
+  disableParallelBuilding = overrideCabal (drv: { enableParallelBuilding = false; });
 in
 
 self: super: {
@@ -186,16 +189,40 @@ self: super: {
     hie-compat
     xmonad-contrib              # mtl >=1 && <2.3
     dbus       # template-haskell >=2.18 && <2.20, transformers <0.6, unix <2.8
+    gi-cairo-connector          # mtl <2.3
   ;
 
-  # Apply workaround for Cabal 3.8 bug https://github.com/haskell/cabal/issues/8455
-  # by making `pkg-config --static` happy. Note: Cabal 3.9 is also affected, so
-  # the GHC 9.6 configuration may need similar overrides eventually.
-  X11-xft = __CabalEagerPkgConfigWorkaround super.X11-xft;
-  # Jailbreaks for https://github.com/gtk2hs/gtk2hs/issues/323#issuecomment-1416723309
-  glib = __CabalEagerPkgConfigWorkaround (doJailbreak super.glib);
-  cairo = __CabalEagerPkgConfigWorkaround (doJailbreak super.cairo);
-  pango = __CabalEagerPkgConfigWorkaround (doJailbreak super.pango);
+  # Apply workaround for Cabal 3.9 bug https://github.com/haskell/cabal/issues/8455
+  # by making `pkg-config --static` happy. Note: Cabal 3.8 is also affected, so
+  # the GHC 9.4 configuration needs similar overrides.
+  inherit (pkgs.lib.mapAttrs (_: __CabalEagerPkgConfigWorkaround) super)
+    X11-xft
+    cairo
+    gi-atk
+    gi-cairo
+    gi-cairo-render
+    gi-dbusmenu
+    gi-dbusmenugtk3
+    gi-gdk
+    gi-gdkpixbuf
+    gi-gdkx11
+    gi-gio
+    gi-glib
+    gi-gmodule
+    gi-gobject
+    gi-harfbuzz
+    gi-pango
+    gi-xlib
+    glib
+    gtk-sni-tray
+    haskell-gi
+    haskell-gi-base
+    pango
+    taffybar
+  ;
+
+  # Avoid triggering an issue in ghc-9.6.2
+  gi-gtk = disableParallelBuilding (__CabalEagerPkgConfigWorkaround super.gi-gtk);
 
   # Pending text-2.0 support https://github.com/gtk2hs/gtk2hs/issues/327
   gtk = doJailbreak super.gtk;
@@ -210,4 +237,20 @@ self: super: {
                      })
     super.libmpd;
 
+  # Apply patch from PR with mtl-2.3 fix.
+  ConfigFile = overrideCabal (drv: {
+    editedCabalFile = null;
+    buildDepends = drv.buildDepends or [] ++ [ self.HUnit ];
+    patches = [(pkgs.fetchpatch {
+      name = "ConfigFile-pr-12.patch";
+      url = "https://github.com/jgoerzen/configfile/pull/12.patch";
+      sha256 = "sha256-b7u9GiIAd2xpOrM0MfILHNb6Nt7070lNRIadn2l3DfQ=";
+    })];
+  }) super.ConfigFile;
+
+  # Use newer version of warp with has the openFd signature change for
+  # compatibility with unix>=2.8.0.
+  warp = self.warp_3_3_28;
+  # The curl executable is required for withApplication tests.
+  warp_3_3_28 = addTestToolDepend pkgs.curl super.warp_3_3_28;
 }
