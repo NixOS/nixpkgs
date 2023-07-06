@@ -218,6 +218,12 @@ in {
       '';
     };
 
+    enableCompressedAssets = mkOption {
+      type = types.bool;
+      default = true;
+      description = lib.mdDoc "Whether to use gzip and brotli pre-compressed artifacts for lower CPU usage and transfer size but bigger storage size.";
+    };
+
     maxUploadSize = mkOption {
       default = "512M";
       type = types.str;
@@ -734,8 +740,8 @@ in {
         '');
 
       services.nextcloud.package = with pkgs;
-        mkDefault (
-          if pkgs ? nextcloud
+        let
+          pkg = if pkgs ? nextcloud
             then throw ''
               The `pkgs.nextcloud`-attribute has been removed. If it's supposed to be the default
               nextcloud defined in an overlay, please set `services.nextcloud.package` to
@@ -744,8 +750,16 @@ in {
           else if versionOlder stateVersion "22.11" then nextcloud24
           else if versionOlder stateVersion "23.05" then nextcloud25
           else if versionOlder stateVersion "23.11" then nextcloud26
-          else nextcloud27
-        );
+          else nextcloud27;
+        in
+          mkDefault (
+            if cfg.enableCompressedAssets then
+              symlinkJoin {
+                inherit (pkg) name version;
+                paths = [ pkg.out pkg.compressed ];
+              }
+            else pkg
+          );
 
       services.nextcloud.phpPackage =
         if versionOlder cfg.package.version "26" then pkgs.php81
