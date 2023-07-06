@@ -169,3 +169,17 @@ if __name__ == "__main__":
     pin = Pin(version, version, filename=os.path.join(SCRIPT_DIR, "pin.json"))
     make_server_pin(pin, "lemmy-server")
     make_ui_pin(pin, "package.json", "lemmy-ui")
+
+    # Create release candidate pin
+    #
+    # lemmy-server and lemmy-ui does not necessarily have the same release cadence
+    # for release candidates (currently lemmy-server is on rc9 while lemmy-ui is on rc10)
+    server_version = get_latest_tag(OWNER, SERVER_REPO)
+    ui_version = get_latest_tag(OWNER, UI_REPO)
+    pin = Pin(
+        server_version,
+        ui_version,
+        filename=os.path.join(SCRIPT_DIR, "pin-unstable.json"),
+    )
+    make_server_pin(pin, "lemmy-serverUnstable")
+    make_ui_pin(pin, "package-unstable.json", "lemmy-uiUnstable")

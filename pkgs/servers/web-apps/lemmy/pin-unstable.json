@@ -1,0 +1,8 @@
+{
+  "serverVersion": "0.18.1-rc.10",
+  "uiVersion": "0.18.1-rc.11",
+  "serverSha256": "sha256-PKLS9QngdRDnmtpvffZ4/tvoLWYQR8hghujB++rkrag=",
+  "serverCargoSha256": "sha256-Z1KwTNchADS3BXnJiwryiLlqZ2/7Lki3T5MjVFGI9bM=",
+  "uiSha256": "sha256-vdXsg/LJk2vo76GmIUhI21uQyS6Zq3R08XdhvTpRVac=",
+  "uiYarnDepsSha256": "sha256-/T1PQ0XsGY82/RlLq94hJgv8Yx1bIf2gcklhgtPu1RM="
+}

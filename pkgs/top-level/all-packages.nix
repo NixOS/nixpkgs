@@ -26022,13 +26022,12 @@ with pkgs;
 
   leafnode = callPackage ../servers/news/leafnode { };
 
-  lemmy-server = callPackage ../servers/web-apps/lemmy/server.nix {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
-  lemmy-ui = callPackage ../servers/web-apps/lemmy/ui.nix {
-    nodejs = nodejs_18;
-  };
+  inherit (recurseIntoAttrs (callPackage ../servers/web-apps/lemmy { }))
+    lemmy-server
+    lemmy-serverUnstable
+    lemmy-ui
+    lemmy-uiUnstable
+    ;
 
   lightgbm = callPackage ../development/libraries/lightgbm { };
 

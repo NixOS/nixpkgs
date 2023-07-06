@@ -1,3 +1,6 @@
+{ pin
+, patches ? [ ]
+}:
 { lib
 , stdenv
 , rustPlatform
@@ -11,7 +14,7 @@
 , nixosTests
 }:
 let
-  pinData = lib.importJSON ./pin.json;
+  pinData = lib.importJSON pin;
   version = pinData.serverVersion;
 in
 rustPlatform.buildRustPackage rec {
@@ -26,10 +29,7 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  patches = [
-    # `cargo test` fails as `tokio::test` relies on the macros feature which wasn't specified in Cargo.toml
-    ./tokio-macros.patch
-  ];
+  inherit patches;
 
   preConfigure = ''
     echo 'pub const VERSION: &str = "${version}";' > crates/utils/src/version.rs

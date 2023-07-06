@@ -1,3 +1,6 @@
+{ pin
+, packageJSON
+}:
 { lib
 , mkYarnPackage
 , libsass
@@ -12,7 +15,7 @@
 }:
 
 let
-  pinData = lib.importJSON ./pin.json;
+  pinData = lib.importJSON pin;
 
   pkgConfig = {
     node-sass = {
@@ -49,7 +52,8 @@ mkYarnPackage {
 
   extraBuildInputs = [ libsass ];
 
-  packageJSON = ./package.json;
+  inherit packageJSON;
+
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
     sha256 = pinData.uiYarnDepsSha256;
