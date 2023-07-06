@@ -1778,7 +1778,8 @@
       pyialarm
     ];
     "iammeter" = ps: with ps; [
-    ]; # missing inputs: iammeter
+      iammeter
+    ];
     "iaqualink" = ps: with ps; [
       h2
       iaqualink
