@@ -42,5 +42,6 @@ mkDerivation rec {
     maintainers = with maintainers; [ ck3d markuskowa ];
     license = licenses.gpl2Only;
     platforms = [ "x86_64-linux" "i686-linux" ] ++ platforms.darwin;
+    mainProgram = "welle-io";
   };
 }
