@@ -4,11 +4,15 @@ with lib;
 
 let
   cfg = config.services.matrix-synapse;
-  format = pkgs.formats.yaml {};
+  format = pkgs.formats.yaml { };
 
   # remove null values from the final configuration
   finalSettings = lib.filterAttrsRecursive (_: v: v != null) cfg.settings;
   configFile = format.generate "homeserver.yaml" finalSettings;
+
+  pluginsEnv = cfg.package.python.buildEnv.override {
+    extraLibs = cfg.plugins;
+  };
 
   usePostgresql = cfg.settings.database.name == "psycopg2";
   hasLocalPostgresDB = let args = cfg.settings.database.args; in
@@ -154,7 +158,106 @@ in {
 
   ];
 
-  options = {
+  options = let
+    listenerType = types.submodule {
+      options = {
+        port = mkOption {
+          type = types.port;
+          example = 8448;
+          description = lib.mdDoc ''
+            The port to listen for HTTP(S) requests on.
+          '';
+        };
+
+        bind_addresses = mkOption {
+          type = types.listOf types.str;
+          default = [
+            "::1"
+            "127.0.0.1"
+          ];
+          example = literalExpression ''
+            [
+              "::"
+              "0.0.0.0"
+            ]
+          '';
+          description = lib.mdDoc ''
+            IP addresses to bind the listener to.
+          '';
+        };
+
+        type = mkOption {
+          type = types.enum [
+            "http"
+            "manhole"
+            "metrics"
+            "replication"
+          ];
+          default = "http";
+          example = "metrics";
+          description = lib.mdDoc ''
+            The type of the listener, usually http.
+          '';
+        };
+
+        tls = mkOption {
+          type = types.bool;
+          default = true;
+          example = false;
+          description = lib.mdDoc ''
+            Whether to enable TLS on the listener socket.
+          '';
+        };
+
+        x_forwarded = mkOption {
+          type = types.bool;
+          default = false;
+          example = true;
+          description = lib.mdDoc ''
+            Use the X-Forwarded-For (XFF) header as the client IP and not the
+            actual client IP.
+          '';
+        };
+
+        resources = mkOption {
+          type = types.listOf (types.submodule {
+            options = {
+              names = mkOption {
+                type = types.listOf (types.enum [
+                  "client"
+                  "consent"
+                  "federation"
+                  "keys"
+                  "media"
+                  "metrics"
+                  "openid"
+                  "replication"
+                  "static"
+                ]);
+                description = lib.mdDoc ''
+                  List of resources to host on this listener.
+                '';
+                example = [
+                  "client"
+                ];
+              };
+              compress = mkOption {
+                type = types.bool;
+                description = lib.mdDoc ''
+                  Should synapse compress HTTP responses to clients that support it?
+                  This should be disabled if running synapse behind a load balancer
+                  that can do automatic compression.
+                '';
+              };
+            };
+          });
+          description = lib.mdDoc ''
+            List of HTTP resources to serve on this listener.
+          '';
+        };
+      };
+    };
+  in {
     services.matrix-synapse = {
       enable = mkEnableOption (lib.mdDoc "matrix.org synapse");
 
@@ -251,7 +354,7 @@ in {
       };
 
       settings = mkOption {
-        default = {};
+        default = { };
         description = mdDoc ''
           The primary synapse configuration. See the
           [sample configuration](https://github.com/matrix-org/synapse/blob/v${pkgs.matrix-synapse-unwrapped.version}/docs/sample_config.yaml)
@@ -409,118 +512,21 @@ in {
             };
 
             listeners = mkOption {
-              type = types.listOf (types.submodule {
-                options = {
-                  port = mkOption {
-                    type = types.port;
-                    example = 8448;
-                    description = lib.mdDoc ''
-                      The port to listen for HTTP(S) requests on.
-                    '';
-                  };
-
-                  bind_addresses = mkOption {
-                    type = types.listOf types.str;
-                    default = [
-                      "::1"
-                      "127.0.0.1"
-                    ];
-                    example = literalExpression ''
-                    [
-                      "::"
-                      "0.0.0.0"
-                    ]
-                    '';
-                    description = lib.mdDoc ''
-                     IP addresses to bind the listener to.
-                    '';
-                  };
-
-                  type = mkOption {
-                    type = types.enum [
-                      "http"
-                      "manhole"
-                      "metrics"
-                      "replication"
-                    ];
-                    default = "http";
-                    example = "metrics";
-                    description = lib.mdDoc ''
-                      The type of the listener, usually http.
-                    '';
-                  };
-
-                  tls = mkOption {
-                    type = types.bool;
-                    default = true;
-                    example = false;
-                    description = lib.mdDoc ''
-                      Whether to enable TLS on the listener socket.
-                    '';
-                  };
-
-                  x_forwarded = mkOption {
-                    type = types.bool;
-                    default = false;
-                    example = true;
-                    description = lib.mdDoc ''
-                      Use the X-Forwarded-For (XFF) header as the client IP and not the
-                      actual client IP.
-                    '';
-                  };
-
-                  resources = mkOption {
-                    type = types.listOf (types.submodule {
-                      options = {
-                        names = mkOption {
-                          type = types.listOf (types.enum [
-                            "client"
-                            "consent"
-                            "federation"
-                            "keys"
-                            "media"
-                            "metrics"
-                            "openid"
-                            "replication"
-                            "static"
-                          ]);
-                          description = lib.mdDoc ''
-                            List of resources to host on this listener.
-                          '';
-                          example = [
-                            "client"
-                          ];
-                        };
-                        compress = mkOption {
-                          type = types.bool;
-                          description = lib.mdDoc ''
-                            Should synapse compress HTTP responses to clients that support it?
-                            This should be disabled if running synapse behind a load balancer
-                            that can do automatic compression.
-                          '';
-                        };
-                      };
-                    });
-                    description = lib.mdDoc ''
-                      List of HTTP resources to serve on this listener.
-                    '';
-                  };
-                };
-              });
-              default = [ {
+              type = types.listOf listenerType;
+              default = [{
                 port = 8008;
                 bind_addresses = [ "127.0.0.1" ];
                 type = "http";
                 tls = false;
                 x_forwarded = true;
-                resources = [ {
+                resources = [{
                   names = [ "client" ];
                   compress = true;
                 } {
                   names = [ "federation" ];
                   compress = false;
-                } ];
-              } ];
+                }];
+              }];
               description = lib.mdDoc ''
                 List of ports that Synapse should listen on, their purpose and their configuration.
               '';
@@ -534,7 +540,7 @@ in {
               default = if versionAtLeast config.system.stateVersion "18.03"
                 then "psycopg2"
                 else "sqlite3";
-               defaultText = literalExpression ''
+              defaultText = literalExpression ''
                 if versionAtLeast config.system.stateVersion "18.03"
                 then "psycopg2"
                 else "sqlite3"
@@ -551,10 +557,10 @@ in {
                 psycopg2 = "matrix-synapse";
               }.${cfg.settings.database.name};
               defaultText = literalExpression ''
-              {
-                sqlite3 = "''${${options.services.matrix-synapse.dataDir}}/homeserver.db";
-                psycopg2 = "matrix-synapse";
-              }.''${${options.services.matrix-synapse.settings}.database.name};
+                {
+                  sqlite3 = "''${${options.services.matrix-synapse.dataDir}}/homeserver.db";
+                  psycopg2 = "matrix-synapse";
+                }.''${${options.services.matrix-synapse.settings}.database.name};
               '';
               description = lib.mdDoc ''
                 Name of the database when using the psycopg2 backend,
@@ -622,7 +628,7 @@ in {
 
             url_preview_ip_range_whitelist = mkOption {
               type = types.listOf types.str;
-              default = [];
+              default = [ ];
               description = lib.mdDoc ''
                 List of IP address CIDR ranges that the URL preview spider is allowed
                 to access even if they are specified in url_preview_ip_range_blacklist.
@@ -644,7 +650,7 @@ in {
                     on how to configure it properly.
                   ''))
                   (types.attrsOf types.str));
-              default = [];
+              default = [ ];
               example = literalExpression ''
                 [
                   { scheme = "http"; } # no http previews
@@ -690,7 +696,7 @@ in {
 
             turn_uris = mkOption {
               type = types.listOf types.str;
-              default = [];
+              default = [ ];
               example = [
                 "turn:turn.example.com:3487?transport=udp"
                 "turn:turn.example.com:3487?transport=tcp"
@@ -727,12 +733,12 @@ in {
                   };
                 };
               });
-              default = [ {
+              default = [{
                 server_name = "matrix.org";
                 verify_keys = {
                   "ed25519:auto" = "Noi6WqcDj0QmPxCNQqgezwTlBKrfqehY1u2FyWP9uYw";
                 };
-              } ];
+              }];
               description = lib.mdDoc ''
                 The trusted servers to download signing keys from.
               '';
@@ -752,7 +758,7 @@ in {
 
       extraConfigFiles = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = lib.mdDoc ''
           Extra config files to include.
 
@@ -767,7 +773,8 @@ in {
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion = hasLocalPostgresDB -> config.services.postgresql.enable;
+      {
+        assertion = hasLocalPostgresDB -> config.services.postgresql.enable;
         message = ''
           Cannot deploy matrix-synapse with a configuration for a local postgresql database
             and a missing postgresql service. Since 20.03 it's mandatory to manually configure the
@@ -803,65 +810,79 @@ in {
       gid = config.ids.gids.matrix-synapse;
     };
 
-    systemd.services.matrix-synapse = {
-      description = "Synapse Matrix homeserver";
-      after = [ "network.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
-      wantedBy = [ "multi-user.target" ];
-      preStart = ''
-        ${cfg.package}/bin/synapse_homeserver \
-          --config-path ${configFile} \
-          --keys-directory ${cfg.dataDir} \
-          --generate-keys
-      '';
-      environment = optionalAttrs (cfg.withJemalloc) {
-        LD_PRELOAD = "${pkgs.jemalloc}/lib/libjemalloc.so";
-      };
-      serviceConfig = {
-        Type = "notify";
-        User = "matrix-synapse";
-        Group = "matrix-synapse";
-        WorkingDirectory = cfg.dataDir;
-        ExecStartPre = [ ("+" + (pkgs.writeShellScript "matrix-synapse-fix-permissions" ''
-          chown matrix-synapse:matrix-synapse ${cfg.settings.signing_key_path}
-          chmod 0600 ${cfg.settings.signing_key_path}
-        '')) ];
-        ExecStart = ''
-          ${cfg.package}/bin/synapse_homeserver \
-            ${ concatMapStringsSep "\n  " (x: "--config-path ${x} \\") ([ configFile ] ++ cfg.extraConfigFiles) }
-            --keys-directory ${cfg.dataDir}
-        '';
-        ExecReload = "${pkgs.util-linux}/bin/kill -HUP $MAINPID";
-        Restart = "on-failure";
-        UMask = "0077";
+    systemd.services =
+      let
+        baseServiceConfig = {
+          after = [ "network.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
+          wantedBy = [ "multi-user.target" ];
+          environment = optionalAttrs (cfg.withJemalloc) {
+            LD_PRELOAD = "${pkgs.jemalloc}/lib/libjemalloc.so";
+          };
+          serviceConfig = {
+            Type = "notify";
+            User = "matrix-synapse";
+            Group = "matrix-synapse";
+            WorkingDirectory = cfg.dataDir;
+            ExecReload = "${pkgs.util-linux}/bin/kill -HUP $MAINPID";
+            Restart = "on-failure";
+            UMask = "0077";
 
-        # Security Hardening
-        # Refer to systemd.exec(5) for option descriptions.
-        CapabilityBoundingSet = [ "" ];
-        LockPersonality = true;
-        NoNewPrivileges = true;
-        PrivateDevices = true;
-        PrivateTmp = true;
-        PrivateUsers = true;
-        ProcSubset = "pid";
-        ProtectClock = true;
-        ProtectControlGroups = true;
-        ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectProc = "invisible";
-        ProtectSystem = "strict";
-        ReadWritePaths = [ cfg.dataDir ];
-        RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@resources" "~@privileged" ];
+            # Security Hardening
+            # Refer to systemd.exec(5) for option descriptions.
+            CapabilityBoundingSet = [ "" ];
+            LockPersonality = true;
+            NoNewPrivileges = true;
+            PrivateDevices = true;
+            PrivateTmp = true;
+            PrivateUsers = true;
+            ProcSubset = "pid";
+            ProtectClock = true;
+            ProtectControlGroups = true;
+            ProtectHome = true;
+            ProtectHostname = true;
+            ProtectKernelLogs = true;
+            ProtectKernelModules = true;
+            ProtectKernelTunables = true;
+            ProtectProc = "invisible";
+            ProtectSystem = "strict";
+            ReadWritePaths = [ cfg.dataDir ];
+            RemoveIPC = true;
+            RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+            RestrictNamespaces = true;
+            RestrictRealtime = true;
+            RestrictSUIDSGID = true;
+            SystemCallArchitectures = "native";
+            SystemCallFilter = [ "@system-service" "~@resources" "~@privileged" ];
+          };
+        };
+      in
+      {
+        matrix-synapse = lib.mkMerge [
+          baseServiceConfig
+          {
+            description = "Synapse Matrix homeserver";
+            preStart = ''
+              ${cfg.package}/bin/synapse_homeserver \
+                --config-path ${configFile} \
+                --keys-directory ${cfg.dataDir} \
+                --generate-keys
+            '';
+            serviceConfig = {
+              ExecStartPre = [
+                ("+" + (pkgs.writeShellScript "matrix-synapse-fix-permissions" ''
+                  chown matrix-synapse:matrix-synapse ${cfg.settings.signing_key_path}
+                  chmod 0600 ${cfg.settings.signing_key_path}
+                ''))
+              ];
+              ExecStart = ''
+                ${cfg.package}/bin/synapse_homeserver \
+                  ${ concatMapStringsSep "\n  " (x: "--config-path ${x} \\") ([ configFile ] ++ cfg.extraConfigFiles) }
+                  --keys-directory ${cfg.dataDir}
+              '';
+            };
+          }
+        ];
       };
-    };
 
     environment.systemPackages = [ registerNewMatrixUser ];
   };
