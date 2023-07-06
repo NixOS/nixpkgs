@@ -1163,6 +1163,10 @@ self: super: with self; {
 
   pad4pi = callPackage ../development/python-modules/pad4pi { };
 
+  paddle_bfloat = callPackage ../development/python-modules/paddle_bfloat { };
+
+  paddle2onnx = callPackage ../development/python-modules/paddle2onnx { };
+
   pulumi = callPackage ../development/python-modules/pulumi { inherit (pkgs) pulumi; };
 
   pulumi-aws = callPackage ../development/python-modules/pulumi-aws { };
@@ -6859,6 +6863,8 @@ self: super: with self; {
     enableApp = false; # build only libnghttp2 ...
     enablePython = true; # ... and its Python bindings
   })).python;
+
+  nh3 = callPackage ../development/python-modules/nh3 { };
 
   niaaml = callPackage ../development/python-modules/niaaml { };
 
@@ -12612,6 +12618,8 @@ self: super: with self; {
   trio-asyncio = callPackage ../development/python-modules/trio-asyncio { };
 
   trio-websocket = callPackage ../development/python-modules/trio-websocket { };
+
+  tritonclient = callPackage ../development/python-modules/tritonclient { };
 
   troposphere = callPackage ../development/python-modules/troposphere { };
 
