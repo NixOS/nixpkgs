@@ -227,6 +227,7 @@ in {
                   "client"
                   "consent"
                   "federation"
+                  "health"
                   "keys"
                   "media"
                   "metrics"
@@ -242,9 +243,10 @@ in {
                 ];
               };
               compress = mkOption {
+                default = false;
                 type = types.bool;
                 description = lib.mdDoc ''
-                  Should synapse compress HTTP responses to clients that support it?
+                  Whether synapse should compress HTTP responses to clients that support it.
                   This should be disabled if running synapse behind a load balancer
                   that can do automatic compression.
                 '';
