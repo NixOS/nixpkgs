@@ -1,14 +1,15 @@
 { lib
 , anyio
-, curio
 , buildPythonPackage
+, curio
 , fetchFromGitHub
 , httpx
 , hypothesis
 , poetry-core
-, pytestCheckHook
 , pytest-aio
 , pytest-subtests
+, pytestCheckHook
+, pythonOlder
 , setuptools
 , trio
 , typing-extensions
@@ -18,6 +19,8 @@ buildPythonPackage rec {
   pname = "returns";
   version = "0.21.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dry-python";
