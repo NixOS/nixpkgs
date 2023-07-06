@@ -51,5 +51,6 @@ mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = [ maintainers.markuskowa ];
     platforms =  platforms.linux;
+    mainProgram = "guglielmo";
   };
 }
