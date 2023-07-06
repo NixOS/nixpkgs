@@ -69,6 +69,8 @@ let
       ++ lib.optionals wrapRc [ "--add-flags" "-u ${writeText "init.vim" neovimRcContent}" ]
       ++ commonWrapperArgs
       ;
+
+    perlEnv = perl.withPackages (p: [ p.NeovimExt p.Appcpanminus ]);
   in
   assert withPython2 -> throw "Python2 support has been removed from the neovim wrapper, please remove withPython2 and python2Env.";
 
@@ -91,7 +93,7 @@ let
         ln -s ${nodePackages.neovim}/bin/neovim-node-host $out/bin/nvim-node
       ''
       + lib.optionalString withPerl ''
-        ln -s ${perl}/bin/perl $out/bin/nvim-perl
+        ln -s ${perlEnv}/bin/perl $out/bin/nvim-perl
       ''
       + lib.optionalString vimAlias ''
         ln -s $out/bin/nvim $out/bin/vim
