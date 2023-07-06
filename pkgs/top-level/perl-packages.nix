@@ -1705,10 +1705,10 @@ with self; {
 
   BKeywords = buildPerlPackage rec {
     pname = "B-Keywords";
-    version = "1.24";
+    version = "1.26";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RU/RURBAN/B-Keywords-1.24.tar.gz";
-      hash = "sha256-pc9rsoXQbRfO4id4O3I7snQhP9QVOl3uMR0kDhFpYG4=";
+      url = "mirror://cpan/authors/id/R/RU/RURBAN/B-Keywords-1.26.tar.gz";
+      hash = "sha256-LaoVXS8mf7De3Yf4pMT7VmOHn8EGUXse4lg1Pvh67TQ=";
     };
     meta = {
       description = "Lists of reserved barewords and symbol names";
