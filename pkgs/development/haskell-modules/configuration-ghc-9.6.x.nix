@@ -186,6 +186,7 @@ self: super: {
     hie-compat
     xmonad-contrib              # mtl >=1 && <2.3
     dbus       # template-haskell >=2.18 && <2.20, transformers <0.6, unix <2.8
+    gi-cairo-connector          # mtl <2.3
   ;
 
   # Apply workaround for Cabal 3.8 bug https://github.com/haskell/cabal/issues/8455
