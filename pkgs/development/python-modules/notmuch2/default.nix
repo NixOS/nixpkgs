@@ -13,6 +13,7 @@ buildPythonPackage {
 
   sourceRoot = "notmuch-${notmuch.version}/bindings/python-cffi";
 
+  nativeBuildInputs = [ cffi ];
   buildInputs = [ python notmuch cffi ];
 
   # since notmuch 0.35, this package expects _notmuch_config.py that is
