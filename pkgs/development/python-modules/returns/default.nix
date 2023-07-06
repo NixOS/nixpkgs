@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "returns";
-  version = "0.20.0";
+  version = "0.21.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dry-python";
     repo = "returns";
     rev = "refs/tags/${version}";
-    hash = "sha256-28WYjrjmu3hQ8+Snuvl3ykTd86eWYI97AE60p6SVwDQ=";
+    hash = "sha256-oYOCoh/pF2g4KGWC2mEnFD+zm2CKL+3x5JjzuZ3QHVQ=";
   };
 
   postPatch = ''
