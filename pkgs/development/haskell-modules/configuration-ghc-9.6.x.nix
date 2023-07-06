@@ -220,4 +220,10 @@ self: super: {
       sha256 = "sha256-b7u9GiIAd2xpOrM0MfILHNb6Nt7070lNRIadn2l3DfQ=";
     })];
   }) super.ConfigFile;
+
+  # Use newer version of warp with has the openFd signature change for
+  # compatibility with unix>=2.8.0.
+  warp = self.warp_3_3_28;
+  # The curl executable is required for withApplication tests.
+  warp_3_3_28 = addTestToolDepend pkgs.curl super.warp_3_3_28;
 }
