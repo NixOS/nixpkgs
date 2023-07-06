@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, gitUpdater
 , jre
 , makeWrapper
 , mysqlSupport ? true
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/liquibase/liquibase/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-mIuHNNo/L5h2RvpTN0jZt6ri+Il0H9aSL4auOjIepjU=";
+    hash = "sha256-mIuHNNo/L5h2RvpTN0jZt6ri+Il0H9aSL4auOjIepjU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -71,6 +72,15 @@ stdenv.mkDerivation rec {
       EOF
       chmod +x $out/bin/liquibase
     '';
+
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/liquibase/liquibase";
+    rev-prefix = "v";
+    # The latest versions are in the 4.xx series.  I am not sure where
+    # 10.10.10 and 5.0.0 came from, though it appears like they are
+    # for the commercial product.
+    ignoredVersions = "10.10.10|5.0.0|.*-beta.*";
+  };
 
   meta = with lib; {
     description = "Version Control for your database";
