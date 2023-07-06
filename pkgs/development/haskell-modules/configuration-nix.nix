@@ -117,6 +117,7 @@ self: super: builtins.intersectAttrs super {
     hls-floskell-plugin
     hls-fourmolu-plugin
     hls-cabal-plugin
+    hls-overloaded-record-dot-plugin
   ;
 
   # PLUGINS WITH DISABLED TESTS
