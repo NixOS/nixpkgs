@@ -136,7 +136,7 @@ let
     pkgs.pkgsCross.arm-embedded.stdenv
     pkgs.pkgsCross.m68k.stdenv
     pkgs.pkgsCross.aarch64-multiplatform.pkgsBuildTarget.gcc
-    #pkgs.pkgsCross.powernv.pkgsBuildTarget.gcc
+    pkgs.pkgsCross.powernv.pkgsBuildTarget.gcc
     pkgs.pkgsCross.mips64el-linux-gnuabi64.stdenv
     pkgs.pkgsCross.mips64el-linux-gnuabin32.stdenv
     pkgs.pkgsCross.mingwW64.stdenv
