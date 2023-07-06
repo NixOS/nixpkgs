@@ -10503,6 +10503,8 @@ self: super: with self; {
 
   qds_sdk = callPackage ../development/python-modules/qds_sdk { };
 
+  qgrid = callPackage ../development/python-modules/qgrid { };
+
   qiling = callPackage ../development/python-modules/qiling { };
 
   qimage2ndarray = callPackage ../development/python-modules/qimage2ndarray { };
