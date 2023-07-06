@@ -28,6 +28,7 @@
 , pytest-localserver
 , pytest-watch
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , rq
 , sanic
@@ -131,6 +132,9 @@ buildPythonPackage rec {
   disabledTests = [
     # Issue with the asseration
     "test_auto_enabling_integrations_catches_import_error"
+  ] ++ lib.optionals (pythonAtLeast "3.11") [
+    # Backwards incompatible changes in ipadddress parsing
+    "test_parse_url"
   ];
 
   disabledTestPaths = [
