@@ -3,15 +3,18 @@
 , fetchFromGitHub
 , fetchpatch
 , gitUpdater
-, cmake
-, pkg-config
-, makeWrapper
-, SDL2
 , alsa-lib
+, cmake
+, Cocoa
+, CoreAudio
+, Foundation
 , libjack2
 , lhasa
+, makeWrapper
 , perl
+, pkg-config
 , rtmidi
+, SDL2
 , zlib
 , zziplib
 }:
@@ -36,14 +39,28 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
     makeWrapper
     pkg-config
   ];
 
+  # Requires `ibtool`, but the version in `xib2nib` is not capable of
+  # building these apps. Build them using `ibtool` from Xcode, but don't allow any other binaries
+  # into the sandbox. Note that the CLT are not supported because `ibtool` requires Xcode.
+  sandboxProfile = lib.optionalString stdenv.isDarwin ''
+    (allow process-exec
+      (literal "/usr/bin/ibtool")
+      (regex "/Xcode.app/Contents/Developer/usr/bin/ibtool")
+      (regex "/Xcode.app/Contents/Developer/usr/bin/xcodebuild"))
+    (allow file-read*)
+    (deny file-read* (subpath "/usr/local") (with no-log))
+    (allow file-write* (subpath "/private/var/folders"))
+  '';
+
   buildInputs = [
-    alsa-lib
     lhasa
     libjack2
     perl
@@ -51,14 +68,22 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     zlib
     zziplib
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    Cocoa
+    CoreAudio
+    Foundation
   ];
 
   cmakeFlags = [
     # Somehow this does not get set automatically
-    "-DSDL2MAIN_LIBRARY=${SDL2}/lib/libSDL2.so"
+    "-DSDL2MAIN_LIBRARY=${SDL2}/lib/libSDL2${stdenv.hostPlatform.extensions.sharedLibrary}"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DIBTOOL=/usr/bin/ibtool"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm644 $src/resources/milkytracker.desktop $out/share/applications/milkytracker.desktop
     install -Dm644 $src/resources/pictures/carton.png $out/share/pixmaps/milkytracker.png
     install -Dm644 $src/resources/milkytracker.appdata $out/share/appdata/milkytracker.appdata.xml
@@ -72,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Music tracker application, similar to Fasttracker II";
     homepage = "https://milkytracker.org/";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ OPNA2608 ];
   };
 })
