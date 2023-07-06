@@ -6862,6 +6862,8 @@ self: super: with self; {
     enablePython = true; # ... and its Python bindings
   })).python;
 
+  nh3 = callPackage ../development/python-modules/nh3 { };
+
   niaaml = callPackage ../development/python-modules/niaaml { };
 
   nianet = callPackage ../development/python-modules/nianet { };
