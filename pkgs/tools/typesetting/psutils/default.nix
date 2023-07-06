@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     description = "Collection of useful utilities for manipulating PS documents";
     homepage = "http://knackered.knackered.org/angus/psutils/";
     license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
   };
 }
