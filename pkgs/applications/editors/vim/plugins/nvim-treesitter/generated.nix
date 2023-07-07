@@ -821,12 +821,12 @@
   };
   hoon = buildGrammar {
     language = "hoon";
-    version = "0.0.0+rev=5b61ea6";
+    version = "0.0.0+rev=89271df";
     src = fetchFromGitHub {
       owner = "urbit-pilled";
       repo = "tree-sitter-hoon";
-      rev = "5b61ea6129dd6841140fa0d16172ca5d105526fd";
-      hash = "sha256-MY+nm0bKZXkgNCRF1/eBezll/uSfg2SnUTh7icQXuOg=";
+      rev = "89271dfe18f20aa71cbe5ef813252a8f98901240";
+      hash = "sha256-UdYucPGeAFexjSxx1RHMWPPJ7KFQs41c+Vi8BSM+Yj0=";
     };
     meta.homepage = "https://github.com/urbit-pilled/tree-sitter-hoon";
   };
@@ -1153,12 +1153,12 @@
   };
   matlab = buildGrammar {
     language = "matlab";
-    version = "0.0.0+rev=835cdab";
+    version = "0.0.0+rev=676117e";
     src = fetchFromGitHub {
       owner = "acristoffers";
       repo = "tree-sitter-matlab";
-      rev = "835cdab0e105ccc670cf08193a958d1661f3e52b";
-      hash = "sha256-VhSBGkevPJSOjaEYLMR4+QfPwdO+ophtkYzLpSjgJ4k=";
+      rev = "676117eafa64afedc8380a921a77cd9f2244bc6b";
+      hash = "sha256-VB+SO89WAAPh1wj4E1nuHLzNNixBQrF3HcUeqrqV5dk=";
     };
     meta.homepage = "https://github.com/acristoffers/tree-sitter-matlab";
   };
@@ -2010,15 +2010,15 @@
   };
   v = buildGrammar {
     language = "v";
-    version = "0.0.0+rev=519e0f6";
+    version = "0.0.0+rev=e14fdf6";
     src = fetchFromGitHub {
-      owner = "vlang";
-      repo = "vls";
-      rev = "519e0f64007a40852e59bb72ff1b6e2375068664";
-      hash = "sha256-ps5VmLSDoc5PF/rGhNAmKkOBsuVxgjn+ZQTit8MGyvk=";
+      owner = "v-analyzer";
+      repo = "v-analyzer";
+      rev = "e14fdf6e661b10edccc744102e4ccf0b187aa8ad";
+      hash = "sha256-ERtjgmnXzXyuKLxVy6Pi89B59BaB87JIzZqaWMZPR9k=";
     };
     location = "tree_sitter_v";
-    meta.homepage = "https://github.com/vlang/vls";
+    meta.homepage = "https://github.com/v-analyzer/v-analyzer";
   };
   vala = buildGrammar {
     language = "vala";
@@ -2110,12 +2110,12 @@
   };
   wing = buildGrammar {
     language = "wing";
-    version = "0.0.0+rev=0835281";
+    version = "0.0.0+rev=b9fa34c";
     src = fetchFromGitHub {
       owner = "winglang";
       repo = "wing";
-      rev = "0835281a20ec380fc52a1179de908c951d8d447d";
-      hash = "sha256-9WQRzvvwIMPdQldKNszc/Eu2JXJ1JzVkO3kDIyHr2iw=";
+      rev = "b9fa34ca30af7ef40d35cb844fd8677872ddf0bd";
+      hash = "sha256-3Fce0WD/pLRlM5hpJLvul9Q9vOE1tOky9u3yWIkL4WQ=";
     };
     location = "libs/tree-sitter-wing";
     generate = true;

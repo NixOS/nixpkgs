@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "psd-tools";
-  version = "1.9.27";
+  version = "1.9.28";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "psd-tools";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-kF9L1n9QjGvUKGyAbIypZlnoYCHNz5kSxgquteCmFas=";
+    hash = "sha256-+oxXuZaHkLPuMIsiFOkvW6VLuGxpV7YKs6Gxp/lexVQ=";
   };
 
   nativeBuildInputs = [

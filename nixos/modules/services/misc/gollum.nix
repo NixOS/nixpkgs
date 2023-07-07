@@ -154,5 +154,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ erictapen bbenno ];
+  meta.maintainers = with lib.maintainers; [ erictapen bbenno joscha ];
 }

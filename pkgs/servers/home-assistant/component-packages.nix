@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2023.7.0";
+  version = "2023.7.1";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -1778,7 +1778,8 @@
       pyialarm
     ];
     "iammeter" = ps: with ps; [
-    ]; # missing inputs: iammeter
+      iammeter
+    ];
     "iaqualink" = ps: with ps; [
       h2
       iaqualink

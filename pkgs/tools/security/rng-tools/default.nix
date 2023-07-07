@@ -7,23 +7,25 @@
 , psmisc
 , argp-standalone
 , openssl
+, libcap
 , jitterentropy, withJitterEntropy ? true
   # WARNING: DO NOT USE BEACON GENERATED VALUES AS SECRET CRYPTOGRAPHIC KEYS
   # https://www.nist.gov/programs-projects/nist-randomness-beacon
 , curl, jansson, libxml2, withNistBeacon ? false
 , libp11, opensc, withPkcs11 ? true
 , rtl-sdr, withRtlsdr ? true
+, withQrypt ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "rng-tools";
-  version = "6.15";
+  version = "6.16";
 
   src = fetchFromGitHub {
     owner = "nhorman";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-km+MEng3VWZF07sdvGLbAG/vf8/A1DxhA/Xa2Y+LAEQ=";
+    hash = "sha256-9pXQhG2nbu6bq4BnBgEOyyUBNkQTI5RhWmJIoLtFU+c=";
   };
 
   nativeBuildInputs = [ autoreconfHook libtool pkg-config ];
@@ -33,14 +35,16 @@ stdenv.mkDerivation rec {
     (lib.withFeature   (withNistBeacon)    "nistbeacon")
     (lib.withFeature   (withPkcs11)        "pkcs11")
     (lib.withFeature   (withRtlsdr)        "rtlsdr")
+    (lib.withFeature   (withQrypt)         "qrypt")
   ];
 
-  buildInputs = [ openssl ]
+  buildInputs = [ openssl libcap ]
     ++ lib.optionals stdenv.hostPlatform.isMusl [ argp-standalone ]
     ++ lib.optionals withJitterEntropy [ jitterentropy ]
     ++ lib.optionals withNistBeacon    [ curl jansson libxml2 ]
     ++ lib.optionals withPkcs11        [ libp11 libp11.passthru.openssl ]
-    ++ lib.optionals withRtlsdr        [ rtl-sdr ];
+    ++ lib.optionals withRtlsdr        [ rtl-sdr ]
+    ++ lib.optionals withQrypt         [ curl jansson ];
 
   enableParallelBuilding = true;
 

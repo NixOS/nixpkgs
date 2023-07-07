@@ -1,18 +1,18 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gtk-doc
 , docbook_xml_dtd_43, python3, gobject-introspection, glib, udev, kmod, parted
-, cryptsetup, lvm2, dmraid, util-linux, libbytesize, libndctl, nss, volume_key
+, cryptsetup, lvm2, util-linux, libbytesize, libndctl, nss, volume_key
 , libxslt, docbook_xsl, gptfdisk, libyaml, autoconf-archive
 , thin-provisioning-tools, makeWrapper, e2fsprogs, libnvme, keyutils
 }:
 stdenv.mkDerivation rec {
   pname = "libblockdev";
-  version = "3.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "libblockdev";
     rev = "${version}-1";
-    sha256 = "sha256-pdS3rMqAgNdYSyXN2ItvOmDO9MEEiHTgPWFVc24N6VE=";
+    sha256 = "sha256-WnHcRKRxfdSRmOW2K/vn1WQ4iPm0uS0Td0cWXaeo5hk=";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
