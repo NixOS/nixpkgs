@@ -11,14 +11,16 @@ let
 
   # The configuration to install.
   makeConfig = { bootLoader, grubDevice, grubIdentifier, grubUseEfi
-               , extraConfig, forceGrubReinstallCount ? 0
+               , extraConfig, forceGrubReinstallCount ? 0, flake ? false
                }:
     pkgs.writeText "configuration.nix" ''
       { config, lib, pkgs, modulesPath, ... }:
 
       { imports =
           [ ./hardware-configuration.nix
-            <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
+            ${if flake
+              then "" # Still included, but via installer/flake.nix
+              else "<nixpkgs/nixos/modules/testing/test-instrumentation.nix>"}
           ];
 
         networking.hostName = "thatworked";
@@ -69,7 +71,7 @@ let
   # partitions and filesystems.
   testScriptFun = { bootLoader, createPartitions, grubDevice, grubUseEfi
                   , grubIdentifier, preBootCommands, postBootCommands, extraConfig
-                  , testSpecialisationConfig
+                  , testSpecialisationConfig, testFlakeSwitch
                   }:
     let iface = "virtio";
         isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
@@ -284,6 +286,75 @@ let
 
       ${postBootCommands}
       machine.shutdown()
+    ''
+    + optionalString testFlakeSwitch ''
+      ${preBootCommands}
+      machine.start()
+
+      with subtest("Configure system with flake"):
+        # TODO: evaluate as user?
+        machine.succeed("""
+          mkdir /root/my-config
+          mv /etc/nixos/hardware-configuration.nix /root/my-config/
+          mv /etc/nixos/secret /root/my-config/
+          rm /etc/nixos/configuration.nix
+        """)
+        machine.copy_from_host_via_shell(
+          "${ makeConfig {
+                inherit bootLoader grubDevice grubIdentifier
+                        grubUseEfi extraConfig;
+                forceGrubReinstallCount = 1;
+                flake = true;
+              }
+          }",
+          "/root/my-config/configuration.nix",
+        )
+        machine.copy_from_host_via_shell(
+          "${./installer/flake.nix}",
+          "/root/my-config/flake.nix",
+        )
+        machine.succeed("""
+          # for some reason the image does not have `pkgs.path`, so
+          # we use readlink to find a Nixpkgs source.
+          pkgs=$(readlink -f /nix/var/nix/profiles/per-user/root/channels)/nixos
+          if ! [[ -e $pkgs/pkgs/top-level/default.nix ]]; then
+            echo 1>&2 "$pkgs does not seem to be a nixpkgs source. Please fix the test so that pkgs points to a nixpkgs source.";
+            exit 1;
+          fi
+          sed -e s^@nixpkgs@^$pkgs^ -i /root/my-config/flake.nix
+        """)
+
+      with subtest("Switch to flake based config"):
+        machine.succeed("nixos-rebuild switch --flake /root/my-config#xyz")
+
+      ${postBootCommands}
+      machine.shutdown()
+
+      ${preBootCommands}
+      machine.start()
+
+      machine.wait_for_unit("multi-user.target")
+
+      with subtest("nix-channel command is not available anymore"):
+        machine.succeed("! which nix-channel")
+
+      with subtest("Evaluate flake config in fresh env without nix-channel"):
+        machine.succeed("nixos-rebuild switch --flake /root/my-config#xyz")
+
+      with subtest("Evaluate flake config in fresh env without channel profiles"):
+        machine.succeed("""
+          (
+            exec 1>&2
+            rm -v /root/.nix-channels
+            rm -vrf ~/.nix-defexpr
+            rm -vrf /nix/var/nix/profiles/per-user/root/channels*
+          )
+        """)
+        machine.succeed("nixos-rebuild switch --flake /root/my-config#xyz")
+
+      ${postBootCommands}
+      machine.shutdown()
+
     '';
 
 
@@ -294,6 +365,7 @@ let
     , grubDevice ? "/dev/vda", grubIdentifier ? "uuid", grubUseEfi ? false
     , enableOCR ? false, meta ? {}
     , testSpecialisationConfig ? false
+    , testFlakeSwitch ? false
     }:
     makeTest {
       inherit enableOCR;
@@ -397,7 +469,7 @@ let
       testScript = testScriptFun {
         inherit bootLoader createPartitions preBootCommands postBootCommands
                 grubDevice grubIdentifier grubUseEfi extraConfig
-                testSpecialisationConfig;
+                testSpecialisationConfig testFlakeSwitch;
       };
     };
 
@@ -447,6 +519,10 @@ let
           "mount LABEL=nixos /mnt",
       )
     '';
+  };
+
+  simple-test-config-flake = simple-test-config // {
+    testFlakeSwitch = true;
   };
 
   simple-uefi-grub-config = {
@@ -502,6 +578,8 @@ in {
   # The (almost) simplest partitioning scheme: a swap partition and
   # one big filesystem partition.
   simple = makeInstallerTest "simple" simple-test-config;
+
+  switchToFlake = makeInstallerTest "switch-to-flake" simple-test-config-flake;
 
   # Test cloned configurations with the simple grub configuration
   simpleSpecialised = makeInstallerTest "simpleSpecialised" (simple-test-config // specialisation-test-extraconfig);
