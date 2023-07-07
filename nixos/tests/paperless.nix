@@ -7,6 +7,7 @@ import ./make-test-python.nix ({ lib, ... }: {
     services.paperless = {
       enable = true;
       passwordFile = builtins.toFile "password" "admin";
+      extraConfig.PAPERLESS_CONSUMER_IGNORE_PATTERN = builtins.toJSON [".DS_STORE/*" "desktop.ini"];
     };
   };
 
@@ -52,5 +53,18 @@ import ./make-test-python.nix ({ lib, ... }: {
 
         metadata = json.loads(machine.succeed("curl -u admin:admin -fs localhost:28981/api/documents/2/metadata/"))
         assert "original_checksum" in metadata
+
+    # Check that the management script still works and the JSON-encoded
+    # variable has been passed properly everywhere
+    with subtest("JSON encoding for systemd unit and manage command works"):
+        machine.succeed("/var/lib/paperless/paperless-manage document_exporter /tmp")
+
+        manage_encoding = machine.succeed("grep PAPERLESS_CONSUMER_IGNORE_PATTERN /var/lib/paperless/paperless-manage").strip()
+        manage_encoding = manage_encoding.strip()
+        assert """export PAPERLESS_CONSUMER_IGNORE_PATTERN='[".DS_STORE/*","desktop.ini"]'""" == manage_encoding, manage_encoding
+        systemd_encoding = machine.succeed("grep PAPERLESS_CONSUMER_IGNORE_PATTERN /etc/systemd/system/paperless-web.service")
+        systemd_encoding = systemd_encoding.strip()
+        assert r"""Environment="PAPERLESS_CONSUMER_IGNORE_PATTERN=[\".DS_STORE/*\",\"desktop.ini\"]" """.strip() == systemd_encoding, systemd_encoding
+
   '';
 })

@@ -28,7 +28,7 @@ let
 
   manage =
     let
-      setupEnv = lib.concatStringsSep "\n" (mapAttrsToList (name: val: "export ${name}=\"${val}\"") env);
+      setupEnv = lib.concatStringsSep "\n" (mapAttrsToList (name: val: "export ${name}=${escapeShellArg val}") env);
     in
     pkgs.writeShellScript "manage" ''
       ${setupEnv}
@@ -180,6 +180,12 @@ in
 
         See [the documentation](https://paperless-ngx.readthedocs.io/en/latest/configuration.html)
         for available options.
+
+        Note that some options (like `PAPERLESS_CONSUMER_IGNORE_PATTERN`) have
+        JSON values. Use `builtins.toJSON` to ensure proper quoting:
+        ```nix
+        extraConfig.PAPERLESS_CONSUMER_IGNORE_PATTERN = builtins.toJSON [".DS_STORE/*" "desktop.ini"];
+        ```
       '';
       example = {
         PAPERLESS_OCR_LANGUAGE = "deu+eng";
