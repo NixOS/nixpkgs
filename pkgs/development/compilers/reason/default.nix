@@ -1,30 +1,31 @@
-{ lib, callPackage, stdenv, makeWrapper, fetchurl, ocaml, findlib, dune_2
+{ lib, callPackage, stdenv, makeWrapper, fetchurl, ocaml, findlib, dune_3
 , ncurses
 , fix, menhir, menhirLib, menhirSdk, merlin-extend, ppxlib, utop, cppo, ppx_derivers
 }:
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-reason";
-  version = "3.8.1";
+  version = "3.8.2";
 
   src = fetchurl {
     url = "https://github.com/reasonml/reason/releases/download/${version}/reason-${version}.tbz";
-    sha256 = "sha256-v827CfYrTBCPJubcOAQxYT5N5LBl348UNk7+Ss6o5BQ=";
+    sha256 = "sha256-etzEXbILje+CrfJxIhH7jthEMoSJdS6O33QoG8HrLvI=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
     makeWrapper
     menhir
+    ocaml
+    menhir
+    cppo
+    dune_3
+    findlib
   ];
 
   buildInputs = [
-    cppo
-    dune_2
-    findlib
     fix
-    menhir
     menhirSdk
-    ocaml
     ppxlib
     utop
   ] ++ lib.optional (lib.versionOlder ocaml.version "4.07") ncurses;

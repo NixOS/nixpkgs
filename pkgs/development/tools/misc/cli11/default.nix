@@ -10,18 +10,18 @@
 
 stdenv.mkDerivation rec {
   pname = "cli11";
-  version = "2.2.0";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "CLIUtils";
     repo = "CLI11";
     rev = "v${version}";
-    sha256 = "sha256-emTIaoUyTINbAAn9tw1r3zLTQt58N8A1zoP+0y41yKo=";
+    sha256 = "sha256-x3/kBlf5LdzkTO4NYOKanZBfcU4oK+fJw9L7cf88LsY=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  checkInputs = [ boost python3 catch2 ];
+  nativeCheckInputs = [ boost python3 catch2 ];
 
   doCheck = true;
 

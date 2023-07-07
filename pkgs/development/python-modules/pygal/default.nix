@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-KSP5XS5RWTCqWplyGdzO+/PZK36vX8HJ/ruVsJk1/bI=";
+    hash = "sha256-KSP5XS5RWTCqWplyGdzO+/PZK36vX8HJ/ruVsJk1/bI=";
   };
 
   postPatch = ''
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     png = [ cairosvg ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pyquery
     pytestCheckHook
   ] ++ passthru.optional-dependencies.png;

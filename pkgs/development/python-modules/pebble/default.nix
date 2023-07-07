@@ -1,20 +1,32 @@
-{ lib, stdenv, buildPythonPackage, isPy27, fetchPypi, pytestCheckHook }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "pebble";
-  version = "5.0.0";
-  disabled = isPy27;
+  version = "5.0.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Pebble";
     inherit version;
-    sha256 = "sha256-rdKgfXHmZphfG9AkAkeH3XkPcfGi27n1+sA3y7NY4M4=";
+    hash = "sha256-vc/Z6n4K7biVsgQXfBnm1lQ9mWL040AuurIXUASGPag=";
   };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   doCheck = !stdenv.isDarwin;
 
-  checkInputs = [
-    pytestCheckHook
+  pythonImportsCheck = [
+    "pebble"
   ];
 
   meta = with lib; {

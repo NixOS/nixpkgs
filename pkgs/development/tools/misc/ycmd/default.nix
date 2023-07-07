@@ -2,7 +2,7 @@
 , withGocode ? true, gocode
 , withGodef ? true, godef
 , withGotools? true, gotools
-, withTypescript ? true, nodePackages
+, withTypescript ? true, typescript
 , abseil-cpp, boost, llvmPackages
 , fixDarwinDylibNames, Cocoa
 }:
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   buildPhase = ''
     export EXTRA_CMAKE_ARGS="-DPATH_TO_LLVM_ROOT=${llvmPackages.libllvm} -DUSE_SYSTEM_ABSEIL=true"
-    ${python.interpreter} build.py --system-libclang --clang-completer --ninja
+    ${python.pythonForBuild.interpreter} build.py --system-libclang --clang-completer --ninja
   '';
 
   dontConfigure = true;
@@ -77,7 +77,7 @@ stdenv.mkDerivation {
     ln -sf ${gotools}/bin/gopls $TARGET
   '' + lib.optionalString withTypescript ''
     TARGET=$out/lib/ycmd/third_party/tsserver
-    ln -sf ${nodePackages.typescript} $TARGET
+    ln -sf ${typescript} $TARGET
   '';
 
   # fixup the argv[0] and replace __file__ with the corresponding path so

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "boundary";
-  version = "0.10.5";
+  version = "0.13.0";
 
   src =
     let
@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
         aarch64-darwin = "darwin_arm64";
       };
       sha256 = selectSystem {
-        x86_64-linux = "sha256-lVv+mC9pNYzQes9k8KqkrHULuwETSHUCBF0FNw7kR+8=";
-        aarch64-linux = "sha256-0GVANhtzrAJUl4hktgiCdzUMhlhh7jyMAWS7/DyVuiU=";
-        x86_64-darwin = "sha256-N14Lynd/Q/eIGrM6ljAKnZdse/ShkvPaKSz6Q9DtYC0=";
-        aarch64-darwin = "sha256-iScNf6YM5nUjBqWMWb0eM5j9f3WiVvWOtjq7eoABfUM=";
+        x86_64-linux = "sha256-nz3b5EMuzZgwqh1guSyOuSqwmZpPOhY6jb/7CL65Q7c=";
+        aarch64-linux = "sha256-fyYdm5E9iuGcs6TxrwbbCC7/NU9p35T/2nEOdv7yU9k=";
+        x86_64-darwin = "sha256-xx16xCghd6t9BYrQAYqJTVdrS2G8qNQ5l4gG9SfDwRI=";
+        aarch64-darwin = "sha256-z/aHLRqybf7UiZue608VYDlKdIenEVVmMdd/XvIzXsc=";
       };
     in
     fetchzip {
@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = true;
   dontPatchShebangs = true;
+  dontStrip = true;
 
   passthru.updateScript = ./update.sh;
 
@@ -64,5 +65,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mpl20;
     maintainers = with maintainers; [ jk techknowlogick ];
+    platforms = platforms.unix;
   };
 }

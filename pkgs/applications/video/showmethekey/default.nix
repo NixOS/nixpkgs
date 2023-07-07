@@ -1,46 +1,40 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, glib
 , meson
 , ninja
 , libevdev
 , json-glib
-, cairo
-, pango
 , libinput
 , gtk4
-, wrapGAppsHook
+, wrapGAppsHook4
 , libxkbcommon
 , pkg-config
 }:
 stdenv.mkDerivation rec {
   pname = "showmethekey";
-  version = "1.7.3";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "AlynxZhou";
-    repo = "showmethekey";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hq4X4dG25YauMjsNXC6Flco9pEpVj3EM2JiFWbRrPaA=";
+    hash = "sha256-iWZjOhugGD7GikcIKaJimfLrTDaGQeYgmp17N03Meb8=";
   };
 
   nativeBuildInputs = [
-    glib
     meson
     ninja
-    cairo
-    pango
     json-glib
     pkg-config
-    libevdev
-    libinput
-    libxkbcommon
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     gtk4
+    libevdev
+    libinput
+    libxkbcommon
   ];
 
   meta = with lib; {

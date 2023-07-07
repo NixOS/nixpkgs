@@ -9,7 +9,7 @@ readarray -t providers < <(
   jq -r 'to_entries
   | map_values(.value + { alias: .key })
   | .[]
-  | select(."provider-source-address"?)
+  | select(."homepage"?)
   | .alias' providers.json
 )
 
@@ -21,5 +21,5 @@ ${providers[*]}
 EOF
 
 for provider in "${providers[@]}"; do
-  ./update-provider "$@" "${provider}"
+  ./update-provider --no-spdx "$@" "${provider}"
 done

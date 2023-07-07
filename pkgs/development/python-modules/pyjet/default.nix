@@ -9,7 +9,7 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-0g0fCf0FIwde5Vsc/BJxjgMcs5llpD8JqOgFbMjOooc=";
+    hash = "sha256-0g0fCf0FIwde5Vsc/BJxjgMcs5llpD8JqOgFbMjOooc=";
   };
 
   nativeBuildInputs = [ cython ];
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     importlib-resources
   ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   checkPhase = ''
     mv pyjet _pyjet
     pytest tests/

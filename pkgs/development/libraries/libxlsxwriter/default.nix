@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , minizip
 , python3
 , zlib
@@ -9,22 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libxlsxwriter";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "jmcnamara";
     repo = "libxlsxwriter";
     rev = "RELEASE_${version}";
-    sha256 = "sha256-Ef1CipwUEJW/VYx/q98lN0PSxj8c3DbIuql8qU6mTRs=";
+    hash = "sha256-fC03LwZIUkEsAs9TN0n2z0iSOGPAtVCeuW5rxC7Ek7Q=";
   };
-
-  patches = [
-    # https://github.com/jmcnamara/libxlsxwriter/pull/357
-    (fetchpatch {
-      url = "https://github.com/jmcnamara/libxlsxwriter/commit/723629976ede5e6ec9b03ef970381fed06ef95f0.patch";
-      sha256 = "14aw698b5svvbhvadc2vr71isck3k02zdv8xjsa7c33n8331h20g";
-    })
-  ];
 
   nativeBuildInputs = [
     python3.pkgs.pytest

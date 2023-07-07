@@ -7,16 +7,16 @@
 
 stdenv.mkDerivation rec {
   pname = "diffutils";
-  version = "3.8";
+  version = "3.10";
 
   src = fetchurl {
     url = "mirror://gnu/diffutils/diffutils-${version}.tar.xz";
-    sha256 = "sha256-pr3X0bMSZtEcT03mwbdI1GB6sCMa9RiPwlM9CuJDj+w=";
+    hash = "sha256-kOXpPMck5OvhLt6A3xY0Bjx6hVaSaFkZv+YLVWyb0J4=";
   };
 
   outputs = [ "out" "info" ];
 
-  nativeBuildInputs = [ xz.bin ];
+  nativeBuildInputs = [ (lib.getBin xz) ];
   /* If no explicit coreutils is given, use the one from stdenv. */
   buildInputs = [ coreutils ];
 
@@ -26,10 +26,13 @@ stdenv.mkDerivation rec {
     lib.optional (coreutils != null) "PR_PROGRAM=${coreutils}/bin/pr"
     ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "gl_cv_func_getopt_gnu=yes";
 
+  doCheck = true;
+
   meta = with lib; {
     homepage = "https://www.gnu.org/software/diffutils/diffutils.html";
     description = "Commands for showing the differences between files (diff, cmp, etc.)";
     license = licenses.gpl3;
     platforms = platforms.unix;
+    maintainers = with maintainers; [ das_j ];
   };
 }

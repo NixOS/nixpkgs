@@ -109,13 +109,7 @@ in
 {
   options = {
     services.logcheck = {
-      enable = mkOption {
-        default = false;
-        type = types.bool;
-        description = lib.mdDoc ''
-          Enable the logcheck cron job.
-        '';
-      };
+      enable = mkEnableOption (lib.mdDoc "logcheck cron job");
 
       user = mkOption {
         default = "logcheck";

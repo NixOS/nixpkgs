@@ -1,5 +1,5 @@
-{ fetchurl, fetchFromGitLab }:
-let src = builtins.fromJSON (builtins.readFile ./src.json);
+{ lib, fetchurl, fetchFromGitLab }:
+let src = lib.importJSON ./src.json;
 in
 {
   inherit (src) packageVersion;

@@ -23,12 +23,12 @@
 
 buildPythonPackage rec {
   pname = "oslo-utils";
-  version = "6.0.0";
+  version = "6.1.0";
 
   src = fetchPypi {
     pname = "oslo.utils";
     inherit version;
-    sha256 = "sha256-CpLiTESWht7CgAlXZr4+uOV/EyXNpMbyEpVBVk5ei6g=";
+    hash = "sha256-drwBCNUKypcraP7IKY55G1+8vrmlGifGmGtBsKamLus=";
   };
 
   postPatch = ''
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ddt
     eventlet
     fixtures

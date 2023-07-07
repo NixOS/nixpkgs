@@ -109,8 +109,6 @@ export NIX_CC${role_post}=@out@
 
 export CC${role_post}=@named_cc@
 export CXX${role_post}=@named_cxx@
-export CC${role_post}=@named_cc@
-export CXX${role_post}=@named_cxx@
 
 # If unset, assume the default hardening flags.
 : ${NIX_HARDENING_ENABLE="fortify stackprotector pic strictoverflow format relro bindnow"}

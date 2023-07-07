@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "turnt";
-  version = "1.8.0";
+  version = "1.10.0";
   format = "flit";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c6cfcb68a3353032c4ce6fff352196e723d05f9cee23eaf4f36d4dcfd89b8e49";
+    hash = "sha256-pwUNmUvyUYxke39orGkziL3DVRWoJY5AQLz/pTyf3M8=";
   };
 
   propagatedBuildInputs = [

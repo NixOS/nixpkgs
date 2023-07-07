@@ -1,6 +1,6 @@
 {lib, mkCoqDerivation, coq, python27, version ? null }:
 
-with lib; mkCoqDerivation rec {
+mkCoqDerivation rec {
   pname = "fiat";
   owner = "mit-plv";
   repo = "fiat";
@@ -29,6 +29,6 @@ with lib; mkCoqDerivation rec {
   meta = {
     homepage = "http://plv.csail.mit.edu/fiat/";
     description = "A library for the Coq proof assistant for synthesizing efficient correct-by-construction programs from declarative specifications";
-    maintainers = with maintainers; [ jwiegley ];
+    maintainers = with lib.maintainers; [ jwiegley ];
   };
 }

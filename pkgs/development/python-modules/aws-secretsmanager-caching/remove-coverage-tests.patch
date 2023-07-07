@@ -1,0 +1,14 @@
+diff --git a/setup.cfg b/setup.cfg
+index 5aa81b2..0c02ded 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -3,9 +3,6 @@ xfail_strict = true
+ addopts = 
+ 	--verbose
+ 	--doctest-modules
+-	--cov aws_secretsmanager_caching
+-	--cov-fail-under 90
+-	--cov-report term-missing
+ 	--ignore doc/
+ 
+ [aliases]

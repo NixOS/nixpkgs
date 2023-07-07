@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "uriparser";
-  version = "0.9.6";
+  version = "0.9.7";
 
   # Release tarball differs from source tarball
   src = fetchurl {
     url = "https://github.com/uriparser/uriparser/releases/download/${pname}-${version}/${pname}-${version}.tar.bz2";
-    sha256 = "9ce4c3f151e78579f23937b44abecb428126863ad02e594e115e882353de905b";
+    sha256 = "sha256-0n3qDItvb7l5jwfK7e8c2WpuP8XGGJWWd04Zr6fd3tc=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     "-DURIPARSER_BUILD_DOCS=OFF"
   ] ++ lib.optional (!doCheck) "-DURIPARSER_BUILD_TESTS=OFF";
 
-  checkInputs = [ gtest ];
+  nativeCheckInputs = [ gtest ];
   doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
 
   meta = with lib; {

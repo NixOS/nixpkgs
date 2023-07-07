@@ -25,15 +25,9 @@
 , pcre
 , pkg-config
 , which
+, wrapGAppsHook
 , wxGTK
 , zlib
-
-, CoreText
-, CoreFoundation
-, AppKit
-, Carbon
-, IOKit
-, Cocoa
 
 , spellcheckSupport ? true
 , hunspell ? null
@@ -51,6 +45,7 @@
 , portaudio ? null
 
 , useBundledLuaJIT ? false
+, darwin
 }:
 
 assert spellcheckSupport -> (hunspell != null);
@@ -62,6 +57,7 @@ assert portaudioSupport -> (portaudio != null);
 let
   luajit52 = luajit.override { enable52Compat = true; };
   inherit (lib) optional;
+  inherit (darwin.apple_sdk.frameworks) CoreText CoreFoundation AppKit Carbon IOKit Cocoa;
 in
 stdenv.mkDerivation rec {
   pname = "aegisub";
@@ -80,6 +76,7 @@ stdenv.mkDerivation rec {
     pkg-config
     which
     cmake
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -130,7 +127,13 @@ stdenv.mkDerivation rec {
     ./remove-bundled-luajit.patch
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${luajit52}/include";
+  # error: unknown type name 'NSUInteger'
+  postPatch = ''
+    substituteInPlace src/dialog_colorpicker.cpp \
+      --replace "NSUInteger" "size_t"
+  '';
+
+  env.NIX_CFLAGS_COMPILE = "-I${luajit52}/include";
   NIX_CFLAGS_LINK = "-L${luajit52}/lib";
 
   configurePhase = ''
@@ -153,7 +156,7 @@ stdenv.mkDerivation rec {
     # The Aegisub sources are itself BSD/ISC, but they are linked against GPL'd
     # softwares - so the resulting program will be GPL
     license = licenses.bsd3;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres wegank ];
     platforms = platforms.unix;
   };
 }

@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "nerdctl";
-  version = "0.23.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WA/jkS6kArc+wZFzIpBekViVOVPafG6o1vPCVqXbBNs=";
+    hash = "sha256-30T5HXQz57Uwgly6HcMroEC/qwynm6nB4B3uwDC2WHo=";
   };
 
-  vendorSha256 = "sha256-fR1793YcYMcemOHF6Pj32z1q8fxvwFJTFryDFHLL+Do=";
+  vendorHash = "sha256-zsIRdPNoUrlN2FWSlHN8+8yi74CGxW6pX8TYNHtPJ3A=";
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
@@ -53,7 +53,7 @@ buildGoModule rec {
     changelog = "https://github.com/containerd/nerdctl/releases/tag/v${version}";
     description = "A Docker-compatible CLI for containerd";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jk ];
+    maintainers = with maintainers; [ jk developer-guy ];
     platforms = platforms.linux;
   };
 }

@@ -9,6 +9,8 @@ in {
   options.services.plausible = {
     enable = mkEnableOption (lib.mdDoc "plausible");
 
+    package = mkPackageOptionMD pkgs "plausible" { };
+
     releaseCookiePath = mkOption {
       type = with types; either str path;
       description = lib.mdDoc ''
@@ -180,12 +182,12 @@ in {
 
     services.epmd.enable = true;
 
-    environment.systemPackages = [ pkgs.plausible ];
+    environment.systemPackages = [ cfg.package ];
 
     systemd.services = mkMerge [
       {
         plausible = {
-          inherit (pkgs.plausible.meta) description;
+          inherit (cfg.package.meta) description;
           documentation = [ "https://plausible.io/docs/self-hosting" ];
           wantedBy = [ "multi-user.target" ];
           after = optional cfg.database.clickhouse.setup "clickhouse.service"
@@ -233,7 +235,7 @@ in {
             SMTP_USER_NAME = cfg.mail.smtp.user;
           });
 
-          path = [ pkgs.plausible ]
+          path = [ cfg.package ]
             ++ optional cfg.database.postgres.setup config.services.postgresql.package;
           script = ''
             export CONFIG_DIR=$CREDENTIALS_DIRECTORY
@@ -241,10 +243,10 @@ in {
             export RELEASE_COOKIE="$(< $CREDENTIALS_DIRECTORY/RELEASE_COOKIE )"
 
             # setup
-            ${pkgs.plausible}/createdb.sh
-            ${pkgs.plausible}/migrate.sh
+            ${cfg.package}/createdb.sh
+            ${cfg.package}/migrate.sh
             ${optionalString cfg.adminUser.activate ''
-              if ! ${pkgs.plausible}/init-admin.sh | grep 'already exists'; then
+              if ! ${cfg.package}/init-admin.sh | grep 'already exists'; then
                 psql -d plausible <<< "UPDATE users SET email_verified=true;"
               fi
             ''}
@@ -292,5 +294,5 @@ in {
   };
 
   meta.maintainers = with maintainers; [ ma27 ];
-  meta.doc = ./plausible.xml;
+  meta.doc = ./plausible.md;
 }

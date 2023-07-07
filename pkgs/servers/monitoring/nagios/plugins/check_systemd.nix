@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
     find test -name "*.py" -execdir sed -i "s@./check_systemd.py@$out/bin/check_systemd@" '{}' ";"
     export PATH=$PATH:$out/bin
   '';
-  checkInputs = [ python3Packages.pytestCheckHook ];
+  nativeCheckInputs = [ python3Packages.pytestCheckHook ];
 
   meta = with lib; {
     description = "Nagios / Icinga monitoring plugin to check systemd for failed units";

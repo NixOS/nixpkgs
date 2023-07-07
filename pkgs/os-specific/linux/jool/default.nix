@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, kernel }:
 
 let
   sourceAttrs = (import ./source.nix) { inherit fetchFromGitHub; };

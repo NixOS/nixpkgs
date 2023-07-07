@@ -9,26 +9,31 @@
 , libsysprof-capture
 , sqlite
 , glib-networking
+, buildPackages
 , gobject-introspection
-, withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , vala
-, withVala ? stdenv.buildPlatform == stdenv.hostPlatform
 , libpsl
 , python3
+, gi-docgen
 , brotli
 , libnghttp2
 }:
 
 stdenv.mkDerivation rec {
   pname = "libsoup";
-  version = "3.0.7";
+  version = "3.4.2";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-69+QzzWZwRrLtoGKnZ4/ydLGjlbrgpuTlilyaD4b98g=";
+    sha256 = "sha256-eMj6N8sVLUDsjEoUjWFV4vaUfz8WAqfNo6Ma1A9e4vM=";
   };
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     meson
@@ -37,8 +42,8 @@ stdenv.mkDerivation rec {
     glib
     python3
   ] ++ lib.optionals withIntrospection [
+    gi-docgen
     gobject-introspection
-  ] ++ lib.optionals withVala [
     vala
   ];
 
@@ -59,17 +64,16 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dtls_check=false" # glib-networking is a runtime dependency, not a compile-time dependency
     "-Dgssapi=disabled"
-    "-Dvapi=${if withVala then "enabled" else "disabled"}"
-    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
     "-Dntlm=disabled"
     # Requires wstest from autobahn-testsuite.
     "-Dautobahn=disabled"
-    # Requires quart Python module.
-    "-Dhttp2_tests=disabled"
     # Requires gnutls, not added for closure size.
     "-Dpkcs11_tests=disabled"
-  ] ++ lib.optionals (!stdenv.isLinux) [
-    "-Dsysprof=disabled"
+
+    (lib.mesonEnable "docs" withIntrospection)
+    (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "sysprof" stdenv.isLinux)
+    (lib.mesonEnable "vapi" withIntrospection)
   ];
 
   # TODO: For some reason the pkg-config setup hook does not pick this up.
@@ -80,6 +84,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs libsoup/
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {

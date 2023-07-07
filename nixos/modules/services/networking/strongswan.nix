@@ -4,7 +4,7 @@ let
 
   inherit (builtins) toFile;
   inherit (lib) concatMapStringsSep concatStringsSep mapAttrsToList
-                mkIf mkEnableOption mkOption types literalExpression;
+                mkIf mkEnableOption mkOption types literalExpression optionalString;
 
   cfg = config.services.strongswan;
 
@@ -34,8 +34,8 @@ let
 
   strongswanConf = {setup, connections, ca, secretsFile, managePlugins, enabledPlugins}: toFile "strongswan.conf" ''
     charon {
-      ${if managePlugins then "load_modular = no" else ""}
-      ${if managePlugins then ("load = " + (concatStringsSep " " enabledPlugins)) else ""}
+      ${optionalString managePlugins "load_modular = no"}
+      ${optionalString managePlugins ("load = " + (concatStringsSep " " enabledPlugins))}
       plugins {
         stroke {
           secrets_file = ${secretsFile}

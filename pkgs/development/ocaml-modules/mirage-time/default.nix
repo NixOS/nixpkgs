@@ -1,19 +1,19 @@
-{ lib, buildDunePackage, fetchurl, ocaml_lwt }:
+{ lib, buildDunePackage, fetchurl, lwt }:
 
 buildDunePackage rec {
-  minimumOCamlVersion = "4.06";
+  minimalOCamlVersion = "4.08";
 
   pname = "mirage-time";
   version = "3.0.0";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-time/releases/download/v${version}/mirage-time-v${version}.tbz";
-    sha256 = "sha256-DUCUm1jix+i3YszIzgZjRQRiM8jJXQ49F6JC/yicvXw=";
+    hash = "sha256-DUCUm1jix+i3YszIzgZjRQRiM8jJXQ49F6JC/yicvXw=";
   };
 
-  propagatedBuildInputs = [ ocaml_lwt ];
+  propagatedBuildInputs = [ lwt ];
 
   meta = with lib; {
     homepage = "https://github.com/mirage/mirage-time";

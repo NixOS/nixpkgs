@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   prePatch = ''
     substituteInPlace ./config.h --replace \
       "#include \"ascii/gnu.h\"" "#include \"ascii/nixos.h\""
+
+    sed '1i#include <array>' -i config.h # gcc12
   '';
 
   # Fixes installation path

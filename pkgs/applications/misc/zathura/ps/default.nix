@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "zathura-ps";
-  version = "0.2.6";
+  version = "0.2.7";
 
   src = fetchurl {
     url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
-    sha256 = "0wygq89nyjrjnsq7vbpidqdsirjm6iq4w2rijzwpk2f83ys8bc3y";
+    sha256 = "0ilf63wxn1yzis9m3qs8mxbk316yxdzwxrrv86wpiygm9hhgk5sq";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config gettext ];

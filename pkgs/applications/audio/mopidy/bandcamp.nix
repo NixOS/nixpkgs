@@ -1,9 +1,9 @@
-{ lib, python3Packages, mopidy }:
+{ lib, python3Packages, fetchPypi, mopidy }:
 
 python3Packages.buildPythonApplication rec {
   pname = "Mopidy-Bandcamp";
   version = "1.1.5";
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-wg9zcOKfZQRhpyA1Cu5wvdwKpmrlcr2m9mrqBHgUXAQ=";
   };

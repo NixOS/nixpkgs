@@ -2,16 +2,17 @@
 
 buildGoModule rec {
   pname = "argocd";
-  version = "2.4.12";
+  version = "2.7.6";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-cd";
     rev = "v${version}";
-    sha256 = "sha256-U3Qct7wL/oJDgU+PXL5UMMTsQo4maeKShDwU2crSWxk=";
+    sha256 = "sha256-YEQ5vLE13FzcE0dt/RRxuM2qRuvuHrTgGlF+3D4aox4=";
   };
 
-  vendorSha256 = "sha256-n6elT6ETOtbZsFqfwMo9d2qqamS8jdrROjFjStNkalc=";
+  proxyVendor = true; # darwin/linux hash mismatch
+  vendorHash = "sha256-PQys3jXpwBsBQAMLW6WUUsIc+l1knSAvUicQug9fCmU=";
 
   # Set target as ./cmd per cli-local
   # https://github.com/argoproj/argo-cd/blob/master/Makefile#L227
@@ -26,7 +27,7 @@ buildGoModule rec {
       "-X ${package_url}.gitCommit=${src.rev}"
       "-X ${package_url}.gitTag=${src.rev}"
       "-X ${package_url}.gitTreeState=clean"
-      "-X ${package_url}.kubectlVersion=v0.23.1"
+      "-X ${package_url}.kubectlVersion=v0.24.2"
       # NOTE: Update kubectlVersion when upgrading this package with
       # https://github.com/argoproj/argo-cd/blob/v${version}/go.mod#L95
       # Per https://github.com/argoproj/argo-cd/blob/master/Makefile#L18
@@ -58,6 +59,6 @@ buildGoModule rec {
     downloadPage = "https://github.com/argoproj/argo-cd";
     homepage = "https://argo-cd.readthedocs.io/en/stable/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ shahrukh330 bryanasdev000 ];
+    maintainers = with maintainers; [ shahrukh330 bryanasdev000 qjoly ];
   };
 }

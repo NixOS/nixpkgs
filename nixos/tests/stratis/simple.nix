@@ -8,7 +8,7 @@ import ../make-test-python.nix ({ pkgs, ... }:
 
     nodes.machine = { pkgs, ... }: {
       services.stratis.enable = true;
-      virtualisation.emptyDiskImages = [ 1024 1024 1024 1024 ];
+      virtualisation.emptyDiskImages = [ 2048 1024 1024 1024 ];
     };
 
     testScript = ''

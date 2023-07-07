@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "libvips";
     repo = "pyvips";
     rev = "v${version}";
-    sha256 = "sha256-9S7h3bkm+QP78cpemYS7l3c8t+wXsJ5MUAP2T50R/Mc=";
+    hash = "sha256-9S7h3bkm+QP78cpemYS7l3c8t+wXsJ5MUAP2T50R/Mc=";
   };
 
   nativeBuildInputs = [ pkgconfig pkg-config ];
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ cffi ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace pyvips/__init__.py \

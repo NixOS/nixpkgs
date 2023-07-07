@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "terrascan";
-  version = "1.15.2";
+  version = "1.18.1";
 
   src = fetchFromGitHub {
     owner = "accurics";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-lxieqHOmkazkBnwfKLVYy0TE7rfrKcLBENeABdmWpXI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-w0ZOkPw8Y6Z1hyZecZfjd/YrTP8v6S0jNhgNzLjMRrY=";
   };
 
-  vendorSha256 = "sha256-EfHcCk2NkicSPeJYgHJT2kh9EwLldksET75ZQambrWA=";
+  vendorHash = "sha256-0WkOIgIA1fKn2SeS5QFeLGCGMstdlkU+eDRUVAs3ETA=";
 
   # Tests want to download a vulnerable Terraform project
   doCheck = false;
@@ -27,6 +27,7 @@ buildGoModule rec {
       500+ polices and support for Terraform and Kubernetes.
     '';
     homepage = "https://github.com/accurics/terrascan";
+    changelog = "https://github.com/tenable/terrascan/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

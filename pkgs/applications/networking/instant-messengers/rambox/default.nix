@@ -1,29 +1,41 @@
-{ stdenv, callPackage, fetchurl, lib }:
+{ appimageTools, lib, fetchurl, makeDesktopItem }:
 
 let
-  mkRambox = opts: callPackage (import ./rambox.nix opts) {};
-in
-mkRambox rec {
   pname = "rambox";
-  version = "0.7.9";
+  version = "2.1.3";
 
-  src = {
-    x86_64-linux = fetchurl {
-      url = "https://github.com/ramboxapp/community-edition/releases/download/${version}/Rambox-${version}-linux-x86_64.AppImage";
-      sha256 = "19y4cmrfp79dr4hgl698imp4f3l1nhgvhh76j5laxg46ld71knil";
-    };
-    i686-linux = fetchurl {
-      url = "https://github.com/ramboxapp/community-edition/releases/download/${version}/Rambox-${version}-linux-i386.AppImage";
-      sha256 = "13wiciyshyrabq2mvnssl2d6svia1kdvwx3dl26249iyif96xxvq";
-    };
-  }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+  src = fetchurl {
+    url = "https://github.com/ramboxapp/download/releases/download/v${version}/Rambox-${version}-linux-x64.AppImage";
+    sha256 = "sha256-wvjCr1U+/1/GtebMNWJjizzegqZ+wWXUrmOshYtMq6o=";
+  };
+
+  desktopItem = (makeDesktopItem {
+    desktopName = "Rambox";
+    name = pname;
+    exec = "rambox";
+    icon = pname;
+    categories = [ "Network" ];
+  });
+
+  appimageContents = appimageTools.extractType2 {
+    inherit pname version src;
+  };
+in
+appimageTools.wrapType2 {
+  inherit pname version src;
+
+  extraInstallCommands = ''
+    mkdir -p $out/share/applications $out/share/icons/hicolor/256x256/apps
+    ln -sf rambox-${version} $out/bin/${pname}
+    install -Dm644 ${appimageContents}/usr/share/icons/hicolor/256x256/apps/rambox*.png $out/share/icons/hicolor/256x256/apps/${pname}.png
+    install -Dm644 ${desktopItem}/share/applications/* $out/share/applications
+  '';
 
   meta = with lib; {
-    description = "Free and Open Source messaging and emailing app that combines common web applications into one";
-    homepage = "https://rambox.pro";
-    license = licenses.mit;
-    maintainers = with maintainers; [];
-    platforms = [ "i686-linux" "x86_64-linux" ];
-    hydraPlatforms = [];
+    description = "Workspace Simplifier - a cross-platform application organizing web services into Workspaces similar to browser profiles";
+    homepage = "https://rambox.app";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ nazarewk ];
+    platforms = [ "x86_64-linux" ];
   };
 }

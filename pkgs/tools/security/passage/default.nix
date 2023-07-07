@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, makeBinaryWrapper, bash, age, git ? null
-, xclip ? null }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeBinaryWrapper
+, substituteAll
+, bash
+, age
+, getopt
+, git ? null
+, xclip ? null
+# Used to pretty-print list of all stored passwords, but is not needed to fetch
+# or store password by its name. Most users would want this dependency.
+, tree ? null
+}:
 
 stdenv.mkDerivation {
   pname = "passage";
@@ -12,9 +24,16 @@ stdenv.mkDerivation {
     sha256 = "1val8wl9kzlxj4i1rrh2iiyf97w9akffvr0idvbkdb09hfzz4lz8";
   };
 
+  patches = [
+    (substituteAll {
+      src = ./darwin-getopt-path.patch;
+      inherit getopt;
+    })
+  ];
+
   nativeBuildInputs = [ makeBinaryWrapper ];
 
-  extraPath = lib.makeBinPath [ age git xclip ];
+  extraPath = lib.makeBinPath [ age git xclip tree ];
 
   # Using $0 is bad, it causes --help to mention ".passage-wrapped".
   postInstall = ''

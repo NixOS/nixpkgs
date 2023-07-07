@@ -1,17 +1,25 @@
 { lib, stdenv, fetchFromGitHub, bc, python3, bison, flex, fuse, libarchive
-, buildPackages }:
+, buildPackages
+
+, firewallSupport ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "lkl";
-  version = "2022-05-18";
+
+  # NOTE: pinned to the last known version that doesn't have a hang in cptofs.
+  # Please verify `nix build -f nixos/release-combined.nix nixos.ova` works
+  # before attempting to update again.
+  # ref: https://github.com/NixOS/nixpkgs/pull/219434
+  version = "2022-08-08";
 
   outputs = [ "dev" "lib" "out" ];
 
   src = fetchFromGitHub {
     owner  = "lkl";
     repo   = "linux";
-    rev  = "10c7b5dee8c424cc2ab754e519ecb73350283ff9";
-    sha256 = "sha256-D3HQdKzhB172L62a+8884bNhcv7vm/c941wzbYtbf4I=";
+    rev  = "ffbb4aa67b3e0a64f6963f59385a200d08cb2d8b";
+    sha256 = "sha256-24sNREdnhkF+P+3P0qEh2tF1jHKF7KcbFSn/rPK2zWs=";
   };
 
   nativeBuildInputs = [ bc bison flex python3 ];
@@ -26,6 +34,11 @@ stdenv.mkDerivation rec {
 
     # Fixup build with newer Linux headers: https://github.com/lkl/linux/pull/484
     sed '1i#include <linux/sockios.h>' -i tools/lkl/lib/hijack/xlate.c
+  '' + lib.optionalString stdenv.isi686 ''
+    echo CONFIG_KALLSYMS=n >> arch/lkl/configs/defconfig
+    echo CONFIG_KALLSYMS_BASE_RELATIVE=n >> arch/lkl/configs/defconfig
+  '' + lib.optionalString firewallSupport ''
+    cat ${./lkl-defconfig-enable-nftables} >> arch/lkl/configs/defconfig
   '';
 
   installPhase = ''
@@ -48,6 +61,10 @@ stdenv.mkDerivation rec {
   #   crypto/jitterentropy.c:54:3: error: #error "The CPU Jitter random number generator must not be compiled with optimizations. See documentation. Use the compiler switch -O0 for compiling jitterentropy.c."
   hardeningDisable = [ "format" "fortify" ];
 
+  # Fixes the following error when using liblkl-hijack.so on aarch64-linux:
+  # symbol lookup error: liblkl-hijack.so: undefined symbol: __aarch64_ldadd4_sync
+  env.NIX_CFLAGS_LINK = "-lgcc_s";
+
   makeFlags = [
     "-C tools/lkl"
     "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
@@ -67,6 +84,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/lkl/linux/";
     platforms   = platforms.linux; # Darwin probably works too but I haven't tested it
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ copumpkin ];
+    maintainers = with maintainers; [ copumpkin raitobezarius ];
   };
 }

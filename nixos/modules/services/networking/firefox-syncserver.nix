@@ -11,14 +11,19 @@ let
 
   format = pkgs.formats.toml {};
   settings = {
-    database_url = dbURL;
     human_logs = true;
+    syncstorage = {
+      database_url = dbURL;
+    };
     tokenserver = {
       node_type = "mysql";
       database_url = dbURL;
       fxa_email_domain = "api.accounts.firefox.com";
       fxa_oauth_server_url = "https://oauth.accounts.firefox.com/v1";
       run_migrations = true;
+      # if JWK caching is not enabled the token server must verify tokens
+      # using the fxa api, on a thread pool with a static size.
+      additional_blocking_threads_for_fxa_requests = 10;
     } // lib.optionalAttrs cfg.singleNode.enable {
       # Single-node mode is likely to be used on small instances with little
       # capacity. The default value (0.1) can only ever release capacity when
@@ -29,6 +34,44 @@ let
     };
   };
   configFile = format.generate "syncstorage.toml" (lib.recursiveUpdate settings cfg.settings);
+  setupScript = pkgs.writeShellScript "firefox-syncserver-setup" ''
+        set -euo pipefail
+        shopt -s inherit_errexit
+
+        schema_configured() {
+          mysql ${cfg.database.name} -Ne 'SHOW TABLES' | grep -q services
+        }
+
+        update_config() {
+          mysql ${cfg.database.name} <<"EOF"
+            BEGIN;
+
+            INSERT INTO `services` (`id`, `service`, `pattern`)
+              VALUES (1, 'sync-1.5', '{node}/1.5/{uid}')
+              ON DUPLICATE KEY UPDATE service='sync-1.5', pattern='{node}/1.5/{uid}';
+            INSERT INTO `nodes` (`id`, `service`, `node`, `available`, `current_load`,
+                                 `capacity`, `downed`, `backoff`)
+              VALUES (1, 1, '${cfg.singleNode.url}', ${toString cfg.singleNode.capacity},
+              0, ${toString cfg.singleNode.capacity}, 0, 0)
+              ON DUPLICATE KEY UPDATE node = '${cfg.singleNode.url}', capacity=${toString cfg.singleNode.capacity};
+
+            COMMIT;
+        EOF
+        }
+
+
+        for (( try = 0; try < 60; try++ )); do
+          if ! schema_configured; then
+            sleep 2
+          else
+            update_config
+            exit 0
+          fi
+        done
+
+        echo "Single-node setup failed"
+        exit 1
+      '';
 in
 
 {
@@ -207,12 +250,12 @@ in
       wantedBy = [ "multi-user.target" ];
       requires = lib.mkIf dbIsLocal [ "mysql.service" ];
       after = lib.mkIf dbIsLocal [ "mysql.service" ];
+      restartTriggers = lib.optional cfg.singleNode.enable setupScript;
       environment.RUST_LOG = cfg.logLevel;
       serviceConfig = {
         User = defaultUser;
         Group = defaultUser;
-        ExecStart = "${cfg.package}/bin/syncstorage --config ${configFile}";
-        Stderr = "journal";
+        ExecStart = "${cfg.package}/bin/syncserver --config ${configFile}";
         EnvironmentFile = lib.mkIf (cfg.secrets != null) "${cfg.secrets}";
 
         # hardening
@@ -252,56 +295,7 @@ in
       requires = [ "firefox-syncserver.service" ] ++ lib.optional dbIsLocal "mysql.service";
       after = [ "firefox-syncserver.service" ] ++ lib.optional dbIsLocal "mysql.service";
       path = [ config.services.mysql.package ];
-      script = ''
-        set -euo pipefail
-        shopt -s inherit_errexit
-
-        schema_configured() {
-          mysql ${cfg.database.name} -Ne 'SHOW TABLES' | grep -q services
-        }
-
-        services_configured() {
-          [ 1 != $(mysql ${cfg.database.name} -Ne 'SELECT COUNT(*) < 1 FROM `services`') ]
-        }
-
-        create_services() {
-          mysql ${cfg.database.name} <<"EOF"
-            BEGIN;
-
-            INSERT INTO `services` (`id`, `service`, `pattern`)
-              VALUES (1, 'sync-1.5', '{node}/1.5/{uid}');
-            INSERT INTO `nodes` (`id`, `service`, `node`, `available`, `current_load`,
-                                 `capacity`, `downed`, `backoff`)
-              VALUES (1, 1, '${cfg.singleNode.url}', ${toString cfg.singleNode.capacity},
-                      0, ${toString cfg.singleNode.capacity}, 0, 0);
-
-            COMMIT;
-        EOF
-        }
-
-        update_nodes() {
-          mysql ${cfg.database.name} <<"EOF"
-            UPDATE `nodes`
-              SET `capacity` = ${toString cfg.singleNode.capacity}
-              WHERE `id` = 1;
-        EOF
-        }
-
-        for (( try = 0; try < 60; try++ )); do
-          if ! schema_configured; then
-            sleep 2
-          elif services_configured; then
-            update_nodes
-            exit 0
-          else
-            create_services
-            exit 0
-          fi
-        done
-
-        echo "Single-node setup failed"
-        exit 1
-      '';
+      serviceConfig.ExecStart = [ "${setupScript}" ];
     };
 
     services.nginx.virtualHosts = lib.mkIf cfg.singleNode.enableNginx {
@@ -309,11 +303,11 @@ in
         enableACME = cfg.singleNode.enableTLS;
         forceSSL = cfg.singleNode.enableTLS;
         locations."/" = {
-          proxyPass = "http://localhost:${toString cfg.settings.port}";
-          # source mentions that this header should be set
-          extraConfig = ''
-            add_header X-Content-Type-Options nosniff;
-          '';
+          proxyPass = "http://127.0.0.1:${toString cfg.settings.port}";
+          # We need to pass the Host header that matches the original Host header. Otherwise,
+          # Hawk authentication will fail (because it assumes that the client and server see
+          # the same value of the Host header).
+          recommendedProxySettings = true;
         };
       };
     };
@@ -321,8 +315,6 @@ in
 
   meta = {
     maintainers = with lib.maintainers; [ pennae ];
-    # Don't edit the docbook xml directly, edit the md and generate it:
-    # `pandoc firefox-syncserver.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > firefox-syncserver.xml`
-    doc = ./firefox-syncserver.xml;
+    doc = ./firefox-syncserver.md;
   };
 }

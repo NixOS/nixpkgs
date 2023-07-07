@@ -1,22 +1,27 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-let
-  version = "1.008";
+stdenvNoCC.mkDerivation rec {
   pname = "b612";
-in fetchFromGitHub {
-  name = "${pname}-font-${version}";
-  owner = "polarsys";
-  repo = "b612";
-  rev = version;
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
-    mkdir -p $out/share/fonts/truetype/${pname}
-    cp fonts/ttf/*.ttf $out/share/fonts/truetype/${pname}
+  version = "1.008";
+
+  src = fetchFromGitHub {
+    owner = "polarsys";
+    repo = "b612";
+    rev = version;
+    hash = "sha256-uyBC8UNOwztCHXhR9XZuWDwrty0eClbo0E+gI1PmjEg=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/fonts/truetype
+    mv fonts/ttf/*.ttf $out/share/fonts/truetype
+
+    runHook postInstall
   '';
-  sha256 = "0r3lana1q9w3siv8czb3p9rrb5d9svp628yfbvvmnj7qvjrmfsiq";
 
   meta = with lib; {
-    homepage = "http://b612-font.com/";
+    homepage = "https://b612-font.com/";
     description = "Highly legible font family for use on aircraft cockpit screens";
     longDescription = ''
       B612 is the result of a research project initiated by Airbus. The font
@@ -31,8 +36,8 @@ in fetchFromGitHub {
       variants of the font. This one, baptized B612 in reference to the
       imaginary asteroid of the aviator Saint‑Exupéry, benefited from a complete
       hinting on all the characters.
-      '';
-    license = with licenses; [ ofl epl10 bsd3 ] ;
+    '';
+    license = with licenses; [ ofl epl10 bsd3 ];
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.all;
   };

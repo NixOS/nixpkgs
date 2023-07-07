@@ -23,8 +23,6 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
-    attrPath = "xfce.${pname}";
     rev-prefix = "v";
   };
 

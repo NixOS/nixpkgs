@@ -1,49 +1,71 @@
 { lib
 , buildPythonPackage
+, email-validator
 , fetchFromGitHub
 , flask
 , flask-wtf
+, markupsafe
 , mongoengine
-, six
-, nose
-, rednose
-, coverage
-, email-validator
+, pythonOlder
+, setuptools
+, setuptools-scm
+, typing-extensions
+, wtforms
 }:
 
 buildPythonPackage rec {
   pname = "flask-mongoengine";
   version = "1.0.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MongoEngine";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "10g9b13ls2msnhv8j44gslrfxa2ppqz2y1xjn2a4gg4m9mdjv8b2";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-YqEtW02VvEeUsLIHLz6+V6juMtWPEIk2tLoKTUdY6YE=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     email-validator
     flask
     flask-wtf
     mongoengine
-    six
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
   ];
 
-  # they set test requirements to setup_requirements...
-  buildInputs = [
-    nose
-    rednose
-    coverage
-  ];
+  passthru.optional-dependencies = {
+    wtf = [
+      flask-wtf
+      wtforms
+    ] ++ wtforms.optional-dependencies.email;
+    # toolbar = [
+    #   flask-debugtoolbar
+    # ];
+    legacy = [
+      markupsafe
+    ];
+  };
 
-  # tests require working mongodb connection
+  # Tests require working mongodb connection
   doCheck = false;
 
+  pythonImportsCheck = [
+    "flask_mongoengine"
+  ];
+
   meta = with lib; {
-    description = "Flask-MongoEngine is a Flask extension that provides integration with MongoEngine and WTF model forms";
+    description = "Flask extension that provides integration with MongoEngine and WTF model forms";
     homepage = "https://github.com/mongoengine/flask-mongoengine";
+    changelog = "https://github.com/MongoEngine/flask-mongoengine/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

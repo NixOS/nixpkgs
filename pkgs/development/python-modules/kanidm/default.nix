@@ -43,7 +43,7 @@ buildPythonPackage {
     toml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-mock
     pytestCheckHook

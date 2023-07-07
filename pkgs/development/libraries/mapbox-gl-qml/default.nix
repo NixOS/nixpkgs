@@ -11,13 +11,13 @@
 
 mkDerivation rec {
   pname = "mapbox-gl-qml";
-  version = "2.0.1";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "rinigus";
     repo = "mapbox-gl-qml";
     rev = version;
-    hash = "sha256-EVZbQXV8pI0QTqFDTTynVglsqX1O5oK0Pl5Y/wp+/q0=";
+    hash = "sha256-zZcD85nOZZ067FRvSuzE8lr2gyuVxpcZGp44D4ayc3Q=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

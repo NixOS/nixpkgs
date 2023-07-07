@@ -71,16 +71,17 @@ mkDerivation rec {
 
   unpackPhase = ''
     # deb file contains a setuid binary, so 'dpkg -x' doesn't work here
-    dpkg --fsys-tarfile ${src} | tar --extract
+    mkdir deb
+    dpkg --fsys-tarfile ${src} | tar --extract -C deb
   '';
 
   installPhase =''
     runHook preInstall
 
     mkdir $out
-    mv usr/* $out/
-    rmdir usr
-    mv * $out/
+    mv deb/usr/* $out/
+    rmdir deb/usr
+    mv deb/* $out/
     rm $out/bin/google-earth-pro $out/opt/google/earth/pro/googleearth
 
     # patch and link googleearth binary

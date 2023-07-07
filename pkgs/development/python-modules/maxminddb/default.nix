@@ -11,17 +11,17 @@
 
 buildPythonPackage rec {
   pname = "maxminddb";
-  version = "2.2.0";
+  version = "2.3.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e37707ec4fab115804670e0fb7aedb4b57075a8b6f80052bdc648d3c005184e5";
+    sha256 = "sha256-Egkg3d2VXzKuSMIHxs72/V3Ih0qIm6lLDywfc27N8wg=";
   };
 
   buildInputs = [ libmaxminddb ];
 
-  checkInputs = [ nose mock ];
+  nativeCheckInputs = [ nose mock ];
 
   # Tests are broken for macOS on python38
   doCheck = !(stdenv.isDarwin && pythonAtLeast "3.8");

@@ -9,18 +9,18 @@
 
 buildGoModule rec {
   pname = "k3sup";
-  version = "0.12.3";
+  version = "0.12.13";
 
   src = fetchFromGitHub {
     owner = "alexellis";
     repo = "k3sup";
     rev = version;
-    sha256 = "sha256-2S/VnxVb056aPxFd5LxtUdaNlosHLlu7Tl/RQbY/zpA=";
+    sha256 = "sha256-lnr2zMp6gpOM1DtUFIniDd38zR1qnXCmcftlt7dL6P4=";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
-  vendorSha256 = "sha256-97m8xz46lvTtZoxO2+pjWmZyZnB2atPuVzYgS9DV+gI=";
+  vendorHash = "sha256-97m8xz46lvTtZoxO2+pjWmZyZnB2atPuVzYgS9DV+gI=";
 
   postConfigure = ''
     substituteInPlace vendor/github.com/alexellis/go-execute/pkg/v1/exec.go \

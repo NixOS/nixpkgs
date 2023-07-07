@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "searxng";
-  version = "unstable-2022-09-01";
+  version = "unstable-2023-06-26";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "174e5242569812618af4ebd9a646ba2a6ded5459";
-    sha256 = "sha256-Q1+4HkgOoTRtW5XYWpC5dpukkrjG5fP0585soo/srmQ=";
+    rev = "da7c30291dcf53cc5b3d98f9aada5615cd1593a9";
+    sha256 = "sha256-kbNw/YgcBZNkmn2nmsnEnc9Y8MJg3zGFdW1x9GIo+dM=";
   };
 
   postPatch = ''
@@ -26,13 +26,14 @@ python3.pkgs.buildPythonApplication rec {
     babel
     certifi
     python-dateutil
+    fasttext-predict
     flask
-    flaskbabel
+    flask-babel
     brotli
     jinja2
-    langdetect
     lxml
     pygments
+    pytomlpp
     pyyaml
     redis
     uvloop
@@ -50,12 +51,15 @@ python3.pkgs.buildPythonApplication rec {
     # Create a symlink for easier access to static data
     mkdir -p $out/share
     ln -s ../${python3.sitePackages}/searx/static $out/share/
+
+    # copy config schema for the limiter
+    cp searx/botdetection/limiter.toml $out/${python3.sitePackages}/searx/botdetection/limiter.toml
   '';
 
   meta = with lib; {
     homepage = "https://github.com/searxng/searxng";
     description = "A fork of Searx, a privacy-respecting, hackable metasearch engine";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ kranzes ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

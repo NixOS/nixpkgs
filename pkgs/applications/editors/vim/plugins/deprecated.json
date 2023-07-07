@@ -11,6 +11,10 @@
         "date": "2020-03-27",
         "new": "vim-gist"
     },
+    "lua-dev-nvim": {
+        "date": "2022-10-20",
+        "new": "neodev-nvim"
+    },
     "nvim-bufferline-lua": {
         "date": "2021-08-22",
         "new": "bufferline-nvim"

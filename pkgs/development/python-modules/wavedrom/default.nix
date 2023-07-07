@@ -35,7 +35,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cairosvg
     pillow
     pytestCheckHook

@@ -1,5 +1,4 @@
 { buildPythonPackage
-, sanic
 , sanic-testing
 , pytest-asyncio
 , pytestCheckHook
@@ -10,14 +9,15 @@ buildPythonPackage {
   inherit (sanic-testing) version;
 
   src = sanic-testing.testsout;
+  format = "other";
 
   dontBuild = true;
   dontInstall = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-    sanic
+    sanic-testing
   ];
 
   pythonImportsCheck = [

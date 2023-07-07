@@ -28,9 +28,8 @@ stdenv.mkDerivation {
       --add-flags "-O $out/share/metamorphose2/metamorphose2.py -w=3"
   '';
 
-  buildInput = [ gettext python3 ];
   nativeBuildInputs = [ makeWrapper ];
-  propagatedBuildInputs = with python3.pkgs; [ mutagen wxPython_4_1 pillow six ];
+  propagatedBuildInputs = with python3.pkgs; [ mutagen wxPython_4_2 pillow six ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

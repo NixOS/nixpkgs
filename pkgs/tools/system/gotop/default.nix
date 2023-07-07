@@ -2,34 +2,33 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
-, fetchpatch
 , installShellFiles
 , IOKit
 }:
 
 buildGoModule rec {
   pname = "gotop";
-  version = "4.1.4";
+  version = "4.2.0";
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "xxxserxxx";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-jAUlaj9Nv/ipzxAkG2myd9DIboHj7IarNMVk/FQ274g=";
+    hash = "sha256-W7a3QnSIR95N88RqU2sr6oEDSqOXVfAwacPvS219+1Y=";
   };
 
-  patches = [
-    # To remove after https://github.com/xxxserxxx/gotop/pull/234 is merged
-    (fetchpatch {
-      url = "https://github.com/xxxserxxx/gotop/commit/3e3243fa1f046c126bf9cb34d55a12963b3ac116.patch";
-      sha256 = "sha256-4q4dBTPpVfgXvApzUXdEEzIe31PoLHUK4mBWth6qCIg=";
-    })
-  ];
-
   proxyVendor = true;
-  vendorSha256 = "sha256-Sq9ol9bZb0BfR/C8phcMSEjG9qgWyTmwpo/TS30j3Vk=";
+  vendorSha256 = "sha256-KLeVSrPDS1lKsKFemRmgxT6Pxack3X3B/btSCOUSUFY=";
 
   ldflags = [ "-s" "-w" "-X main.Version=v${version}" ];
+
+  # prevent `error: 'TARGET_OS_MAC' is not defined`
+  env.CGO_CFLAGS = "-Wno-undef-prefix";
 
   nativeBuildInputs = [ installShellFiles ];
 

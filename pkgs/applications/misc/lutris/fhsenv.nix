@@ -1,4 +1,4 @@
-{ lib, buildFHSUserEnv, lutris-unwrapped
+{ lib, buildFHSEnv, lutris-unwrapped
 , extraPkgs ? pkgs: [ ]
 , extraLibraries ? pkgs: [ ]
 , steamSupport ? true
@@ -13,7 +13,7 @@ let
     libXxf86vm libXinerama libSM libXv libXaw libXi libXcursor libXcomposite
   ];
 
-in buildFHSUserEnv {
+in buildFHSEnv {
   name = "lutris";
 
   runScript = "lutris";
@@ -24,13 +24,16 @@ in buildFHSUserEnv {
     # Adventure Game Studio
     allegro dumb
 
+    # Curl
+    libnghttp2
+
     # Desmume
     lua agg soundtouch openal desktop-file-utils atk
 
     # DGen // TODO: libarchive is broken
 
     # Dolphin
-    bluez ffmpeg gettext portaudio wxGTK30 miniupnpc mbedtls lzo sfml gsm
+    bluez ffmpeg gettext portaudio miniupnpc mbedtls_2 lzo sfml gsm
     wavpack orc nettle gmp pcre vulkan-loader
 
     # DOSBox
@@ -61,6 +64,9 @@ in buildFHSUserEnv {
 
     # Osmose
     qt4
+
+    # Overwatch 2
+    libunwind
 
     # PPSSPP
     glew snappy
@@ -122,6 +128,15 @@ in buildFHSUserEnv {
     ln -sf ${lutris-unwrapped}/share/applications $out/share
     ln -sf ${lutris-unwrapped}/share/icons $out/share
   '';
+
+  # allows for some gui applications to share IPC
+  # this fixes certain issues where they don't render correctly
+  unshareIpc = false;
+
+  # Some applications such as Natron need access to MIT-SHM or other
+  # shared memory mechanisms. Unsharing the pid namespace
+  # breaks the ability for application to reference shared memory.
+  unsharePid = false;
 
   meta = {
     inherit (lutris-unwrapped.meta)

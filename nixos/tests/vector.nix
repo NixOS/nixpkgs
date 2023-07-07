@@ -21,7 +21,7 @@ with pkgs.lib;
               type = "file";
               inputs = [ "journald" ];
               path = "/var/lib/vector/logs.log";
-              encoding = { codec = "ndjson"; };
+              encoding = { codec = "json"; };
             };
           };
         };
@@ -31,7 +31,7 @@ with pkgs.lib;
     # ensure vector is forwarding the messages appropriately
     testScript = ''
       machine.wait_for_unit("vector.service")
-      machine.succeed("test -f /var/lib/vector/logs.log")
+      machine.wait_for_file("/var/lib/vector/logs.log")
     '';
   };
 }

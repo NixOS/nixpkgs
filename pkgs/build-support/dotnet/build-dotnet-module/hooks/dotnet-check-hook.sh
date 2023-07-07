@@ -7,10 +7,21 @@ dotnetCheckHook() {
     runHook preCheck
 
     if [ "${disabledTests-}" ]; then
-        disabledTestsFlag="--filter FullyQualifiedName!=@disabledTests@"
+        local -r disabledTestsFlag="--filter @disabledTests@"
     fi
 
-    for project in ${testProjectFile[@]}; do
+    if [ "${enableParallelBuilding-}" ]; then
+        local -r maxCpuFlag="$NIX_BUILD_CORES"
+    else
+        local -r maxCpuFlag="1"
+    fi
+
+    for project in ${testProjectFile[@]-${projectFile[@]}}; do
+        runtimeIdFlags=()
+        if [[ "$project" == *.csproj ]]; then
+            runtimeIdFlags=("--runtime @runtimeId@")
+        fi
+
         env "LD_LIBRARY_PATH=@libraryPath@" \
             dotnet test "$project" \
               -maxcpucount:$maxCpuFlag \
@@ -20,6 +31,7 @@ dotnetCheckHook() {
               --no-build \
               --logger "console;verbosity=normal" \
               ${disabledTestsFlag-} \
+              ${runtimeIdFlags[@]} \
               "${dotnetTestFlags[@]}"  \
               "${dotnetFlags[@]}"
     done

@@ -4,7 +4,6 @@
 , pythonOlder
 , fetchPypi
 , watchdog
-, dataclasses
 , ephemeral-port-reserve
 , pytest-timeout
 , pytest-xprocess
@@ -16,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "werkzeug";
-  version = "2.2.2";
+  version = "2.2.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Werkzeug";
     inherit version;
-    sha256 = "sha256-fqLUgyLMfA+LOiFe1z6r17XXXQtQ4xqwBihsz/ngC48=";
+    hash = "sha256-LhzMlBfU2jWLnebxdOOsCUOR6h1PvvLWZ4ZdgZ39Cv4=";
   };
 
   propagatedBuildInputs = [
@@ -32,11 +31,9 @@ buildPythonPackage rec {
   ] ++ lib.optionals (!stdenv.isDarwin) [
     # watchdog requires macos-sdk 10.13+
     watchdog
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ephemeral-port-reserve
     pytest-timeout
     pytest-xprocess

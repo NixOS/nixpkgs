@@ -1,5 +1,6 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
+, defusedxml
 , fetchPypi
 , pbr
 , cliff
@@ -14,6 +15,7 @@
 , oslo-serialization
 , oslo-utils
 , fixtures
+, pythonOlder
 , pyyaml
 , subunit
 , stevedore
@@ -26,18 +28,22 @@
 , python
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "tempest";
-  version = "31.1.0";
+  version = "35.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-EaDFnIxaAGBDViAVzMjZev3jXmb3NIlMlcg4BiwoAq4=";
+    hash = "sha256-TKGgOAOqa+1f3yXIkWxt2bVx4UT/IfQpc9rNB4fLkw0=";
   };
 
   propagatedBuildInputs = [
     pbr
     cliff
+    defusedxml
     jsonschema
     testtools
     paramiko
@@ -57,7 +63,7 @@ buildPythonApplication rec {
     debtcollector
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     stestr
     hacking
     oslotest

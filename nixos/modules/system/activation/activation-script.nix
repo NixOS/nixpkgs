@@ -217,7 +217,8 @@ in
       ''
         # Various log/runtime directories.
 
-        mkdir -m 1777 -p /var/tmp
+        mkdir -p /var/tmp
+        chmod 1777 /var/tmp
 
         # Empty, immutable home directory of many system accounts.
         mkdir -p /var/empty
@@ -231,7 +232,8 @@ in
 
     system.activationScripts.usrbinenv = if config.environment.usrbinenv != null
       then ''
-        mkdir -m 0755 -p /usr/bin
+        mkdir -p /usr/bin
+        chmod 0755 /usr/bin
         ln -sfn ${config.environment.usrbinenv} /usr/bin/.env.tmp
         mv /usr/bin/.env.tmp /usr/bin/env # atomically replace /usr/bin/env
       ''
@@ -251,7 +253,8 @@ in
           if mountpoint -q "$mountPoint"; then
             local options="remount,$options"
           else
-            mkdir -m 0755 -p "$mountPoint"
+            mkdir -p "$mountPoint"
+            chmod 0755 "$mountPoint"
           fi
           mount -t "$fsType" -o "$options" "$device" "$mountPoint"
         }

@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "mmctl";
-  version = "7.3.0";
+  version = "7.10.3";
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "mmctl";
     rev = "v${version}";
-    sha256 = "sha256-4v88+3P9knVYBwbdDT6y9TrHPRwCzXHSclKKiy6dWs8=";
+    sha256 = "sha256-ANoisFJnTEUgL0xKGaS19jqAHX3MT9RR4BO7hz/vm6E=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   checkPhase = "make test";
 

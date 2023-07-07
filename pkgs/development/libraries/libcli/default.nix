@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, libxcrypt }:
 
 stdenv.mkDerivation rec {
   pname = "libcli";
@@ -18,9 +18,16 @@ stdenv.mkDerivation rec {
       })
     ];
 
+  buildInputs = [ libxcrypt ];
+
   enableParallelBuilding = true;
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "AR=${stdenv.cc.targetPrefix}ar" "PREFIX=$(out)" ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=address"
+  ];
 
   meta = with lib; {
     description = "Emulate a Cisco-style telnet command-line interface";

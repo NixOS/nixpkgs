@@ -7,15 +7,30 @@
 
 stdenv.mkDerivation rec {
   pname = "file";
-  version = "5.42";
+  version = "5.44";
 
   src = fetchurl {
     urls = [
       "https://astron.com/pub/file/${pname}-${version}.tar.gz"
       "https://distfiles.macports.org/file/${pname}-${version}.tar.gz"
     ];
-    sha256 = "sha256-wHb7TQKcdAc/FcQzYe9XLPuGhAfTRxkLqDSvOxY5sOQ=";
+    sha256 = "sha256-N1HH+6jbyDHLjXzIr/IQNUWbjOUVXviwiAon0ChHXzs=";
   };
+
+  outputs = [ "out" "dev" "man" ];
+
+  patches = [
+    # Backport fix to identification for pyzip files.
+    # Needed for strip-nondeterminism.
+    # https://salsa.debian.org/reproducible-builds/strip-nondeterminism/-/issues/20
+    ./pyzip.patch
+
+    # Backport fix for --uncompress always detecting contents as "empty"
+    (fetchurl {
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-apps/file/files/file-5.44-decompress-empty.patch?h=dfc57da515a2aaf085bea68267cc727f1bfaa691";
+      hash = "sha256-fUzRQAlLWczBmR5iA1Gk66mHjP40MJcMdgCtm2+u1SQ=";
+    })
+  ];
 
   strictDeps = true;
   enableParallelBuilding = true;
@@ -24,7 +39,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib ]
     ++ lib.optional stdenv.hostPlatform.isWindows libgnurx;
 
-  doCheck = true;
+  # https://bugs.astron.com/view.php?id=382
+  doCheck = !stdenv.buildPlatform.isMusl;
 
   makeFlags = lib.optional stdenv.hostPlatform.isWindows "FILE_COMPILE=file";
 

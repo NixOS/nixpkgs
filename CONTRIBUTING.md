@@ -38,11 +38,15 @@ Below is a short excerpt of some points in there:
     The old config generation system used impure shell scripts and could break in specific circumstances (see #1234).
 
 * `meta.description` should:
+  * Be short, just one sentence.
   * Be capitalized.
   * Not start with the package name.
-  * Not have a period at the end.
+    * More generally, it should not refer to the package name.
+  * Not end with a period (or any punctuation for that matter).
+  * Aim to inform while avoiding subjective language.
 * `meta.license` must be set and fit the upstream license.
   * If there is no upstream license, `meta.license` should default to `lib.licenses.unfree`.
+  * If in doubt, try to contact the upstream developers for clarification.
 * `meta.maintainers` must be set.
 
 See the nixpkgs manual for more details on [standard meta-attributes](https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes).
@@ -51,16 +55,32 @@ See the nixpkgs manual for more details on [standard meta-attributes](https://ni
 
 In addition to writing properly formatted commit messages, it's important to include relevant information so other developers can later understand *why* a change was made. While this information usually can be found by digging code, mailing list/Discourse archives, pull request discussions or upstream changes, it may require a lot of work.
 
-For package version upgrades and such a one-line commit message is usually sufficient.
+Package version upgrades usually allow for simpler commit messages, including attribute name, old and new version, as well as a reference to the relevant release notes/changelog. Every once in a while a package upgrade requires more extensive changes, and that subsequently warrants a more verbose message.
+
+Pull requests should not be squash merged in order to keep complete commit messages and GPG signatures intact and must not be when the change doesn't make sense as a single commit.
+This means that, when addressing review comments in order to keep the pull request in an always mergeable status, you will sometimes need to rewrite your branch's history and then force-push it with `git push --force-with-lease`.
+Useful git commands that can help a lot with this are `git commit --patch --amend` and `git rebase --interactive`. For more details consult the git man pages or online resources like [git-rebase.io](https://git-rebase.io/) or [The Pro Git Book](https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History).
+
+## Testing changes
+
+To run the main types of tests locally:
+
+- Run package-internal tests with `nix-build --attr pkgs.PACKAGE.passthru.tests`
+- Run [NixOS tests](https://nixos.org/manual/nixos/unstable/#sec-nixos-tests) with `nix-build --attr nixosTest.NAME`, where `NAME` is the name of the test listed in `nixos/tests/all-tests.nix`
+- Run [global package tests](https://nixos.org/manual/nixpkgs/unstable/#sec-package-tests) with `nix-build --attr tests.PACKAGE`, where `PACKAGE` is the name of the test listed in `pkgs/test/default.nix`
+- See `lib/tests/NAME.nix` for instructions on running specific library tests
 
 ## Rebasing between branches (i.e. from master to staging)
 
 From time to time, changes between branches must be rebased, for example, if the
 number of new rebuilds they would cause is too large for the target branch. When
 rebasing, care must be taken to include only the intended changes, otherwise
-many CODEOWNERS will be inadvertently requested for review.  To achieve this,
+many CODEOWNERS will be inadvertently requested for review. To achieve this,
 rebasing should not be performed directly on the target branch, but on the merge
-base between the current and target branch.
+base between the current and target branch. As an additional precautionary measure,
+you should temporarily mark the PR as draft for the duration of the operation.
+This reduces the probability of mass-pinging people. (OfBorg might still
+request a couple of persons for reviews though.)
 
 In the following example, we assume that the current branch, called `feature`,
 is based on `master`, and we rebase it onto the merge base between
@@ -94,21 +114,51 @@ git status
 git push origin feature --force-with-lease
 ```
 
+### Something went wrong and a lot of people were pinged
+
+It happens. Remember to be kind, especially to new contributors.
+There is no way back, so the pull request should be closed and locked
+(if possible). The changes should be re-submitted in a new PR, in which the people
+originally involved in the conversation need to manually be pinged again.
+No further discussion should happen on the original PR, as a lot of people
+are now subscribed to it.
+
+The following message (or a version thereof) might be left when closing to
+describe the situation, since closing and locking without any explanation
+is kind of rude:
+
+```markdown
+It looks like you accidentally mass-pinged a bunch of people, which are now subscribed
+and getting notifications for everything in this pull request. Unfortunately, they
+cannot be automatically unsubscribed from the issue (removing review request does not
+unsubscribe), therefore development cannot continue in this pull request anymore.
+
+Please open a new pull request with your changes, link back to this one and ping the
+people actually involved in here over there.
+
+In order to avoid this in the future, there are instructions for how to properly
+rebase between branches in our [contribution guidelines](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#rebasing-between-branches-ie-from-master-to-staging).
+Setting your pull request to draft prior to rebasing is strongly recommended.
+In draft status, you can preview the list of people that are about to be requested
+for review, which allows you to sidestep this issue.
+This is not a bulletproof method though, as OfBorg still does review requests even on draft PRs.
+```
+
 ## Backporting changes
 
 Follow these steps to backport a change into a release branch in compliance with the [commit policy](https://nixos.org/nixpkgs/manual/#submitting-changes-stable-release-branches).
 
-You can add a label such as `backport release-22.05` to a PR, so that merging it will
+You can add a label such as `backport release-23.05` to a PR, so that merging it will
 automatically create a backport (via [a GitHub Action](.github/workflows/backport.yml)).
-This also works for PR's that have already been merged, and might take a couple of minutes to trigger.
+This also works for pull requests that have already been merged, and might take a couple of minutes to trigger.
 
 You can also create the backport manually:
 
 1. Take note of the commits in which the change was introduced into `master` branch.
-2. Check out the target _release branch_, e.g. `release-22.05`. Do not use a _channel branch_ like `nixos-22.05` or `nixpkgs-22.05-darwin`.
+2. Check out the target _release branch_, e.g. `release-23.05`. Do not use a _channel branch_ like `nixos-23.05` or `nixpkgs-23.05-darwin`.
 3. Create a branch for your change, e.g. `git checkout -b backport`.
 4. When the reason to backport is not obvious from the original commit message, use `git cherry-pick -xe <original commit>` and add a reason. Otherwise use `git cherry-pick -x <original commit>`. That's fine for minor version updates that only include security and bug fixes, commits that fixes an otherwise broken package or similar. Please also ensure the commits exists on the master branch; in the case of squashed or rebased merges, the commit hash will change and the new commits can be found in the merge message at the bottom of the master pull request.
-5. Push to GitHub and open a backport pull request. Make sure to select the release branch (e.g. `release-22.05`) as the target branch of the pull request, and link to the pull request in which the original change was comitted to `master`. The pull request title should be the commit title with the release version as prefix, e.g. `[22.05]`.
+5. Push to GitHub and open a backport pull request. Make sure to select the release branch (e.g. `release-23.05`) as the target branch of the pull request, and link to the pull request in which the original change was committed to `master`. The pull request title should be the commit title with the release version as prefix, e.g. `[23.05]`.
 6. When the backport pull request is merged and you have the necessary privileges you can also replace the label `9.needs: port to stable` with `8.has: port to stable` on the original pull request. This way maintainers can keep track of missing backports easier.
 
 ## Criteria for Backporting changes
@@ -119,16 +169,6 @@ Anything that does not cause user or downstream dependency regressions can be ba
 - Version updates which include new functionality (but no breaking changes)
 - Services which require a client to be up-to-date regardless. (E.g. `spotify`, `steam`, or `discord`)
 - Security critical applications (E.g. `firefox`)
-
-## Generating 22.11 Release Notes
-
-Documentation in nixpkgs is transitioning to a markdown-centric workflow. Release notes now require a translation step to convert from markdown to a compatible docbook document.
-
-Steps for updating 22.11 Release notes:
-
-1. Edit `nixos/doc/manual/release-notes/rl-2211.section.md` with the desired changes
-2. Run `./nixos/doc/manual/md-to-db.sh` to render `nixos/doc/manual/from_md/release-notes/rl-2211.section.xml`
-3. Include changes to `rl-2211.section.md` and `rl-2211.section.xml` in the same commit.
 
 ## Reviewing contributions
 

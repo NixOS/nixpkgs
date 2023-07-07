@@ -1,47 +1,58 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, testers
+, datree
+}:
 
 buildGoModule rec {
   pname = "datree";
-  version = "1.6.29";
+  version = "1.9.9";
 
   src = fetchFromGitHub {
     owner = "datreeio";
     repo = "datree";
-    rev = version;
-    hash = "sha256-RFm7I9HTI3M0fdGOz4ZXHtQY4Pm86SOz9pcIQLqb7/U=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-GNZvrn0aTunzpd5XUXjgEzpXAW2h6TNdqlI/Sso+lxs=";
   };
 
-  vendorSha256 = "sha256-mEtnZO4AZEcnEHuiAWguT8VelD0yLj1rytl6gPkPKBg=";
+  vendorHash = "sha256-ECVKofvmLuFAFvncq63hYUaYW8/2+F4gZr8wIGQyrdU=";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
-    "-extldflags '-static'"
     "-s"
     "-w"
     "-X github.com/datreeio/datree/cmd.CliVersion=${version}"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
-
-  doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/datree version | grep ${version} > /dev/null
-  '';
+  tags = [ "main" ];
 
   postInstall = ''
-    for shell in bash fish zsh; do
-      $out/bin/datree completion $shell > datree.$shell
-      installShellCompletion datree.$shell
-    done
+    installShellCompletion \
+      --cmd datree \
+      --bash <($out/bin/datree completion bash) \
+      --fish <($out/bin/datree completion fish) \
+      --zsh <($out/bin/datree completion zsh)
   '';
 
-  doCheck = true;
+  passthru.tests.version = testers.testVersion {
+    package = datree;
+    command = "datree version";
+  };
 
   meta = with lib; {
-    description =
-      "CLI tool to ensure K8s manifests and Helm charts follow best practices as well as your organization’s policies";
+    description = "CLI tool to ensure K8s manifests and Helm charts follow best practices";
+    longDescription = ''
+      Datree provides an E2E policy enforcement solution to run automatic checks
+      for rule violations. Datree can be used on the command line, admission
+      webhook, or even as a kubectl plugin to run policies against Kubernetes
+      objects.
+    '';
     homepage = "https://datree.io/";
-    license = [ licenses.asl20 ];
-    maintainers = [ maintainers.jceb ];
-    mainProgram = "datree";
+    changelog = "https://github.com/datreeio/datree/releases/tag/${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ azahi jceb ];
   };
 }

@@ -26,7 +26,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     # So that we can ssh into the VM, see e.g.
     # http://blog.patapon.info/nixos-local-vm/#accessing-the-vm-with-ssh
     services.openssh.enable = true;
-    services.openssh.permitRootLogin = "yes";
+    services.openssh.settings.PermitRootLogin = "yes";
     users.extraUsers.root.password = "";
     users.mutableUsers = false;
   };

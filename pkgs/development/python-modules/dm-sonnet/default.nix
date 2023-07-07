@@ -1,43 +1,59 @@
 { lib
-, fetchFromGitHub
 , buildPythonPackage
-, numpy
-, tabulate
-, six
+, click
 , dm-tree
-, absl-py
-, wrapt
 , docutils
+, etils
+, fetchFromGitHub
+, fetchpatch
+, numpy
+, pythonOlder
+, tabulate
 , tensorflow
-, tensorflow-datasets }:
+, tensorflow-datasets
+, wrapt
+}:
 
 buildPythonPackage rec {
   pname = "dm-sonnet";
   version = "2.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = "sonnet";
     rev = "v${version}";
-    sha256 = "sha256-YSMeH5ZTfP1OdLBepsxXAVczBG/ghSjCWjoz/I+TFl8=";
+    hash = "sha256-YSMeH5ZTfP1OdLBepsxXAVczBG/ghSjCWjoz/I+TFl8=";
   };
 
-  buildInputs = [
-    absl-py
-    dm-tree
-    numpy
-    six
-    tabulate
-    wrapt
+  patches = [
+    (fetchpatch {
+      name = "replace-np-bool-with-np-bool_.patch";
+      url = "https://github.com/deepmind/sonnet/commit/df5d099d4557a9a81a0eb969e5a81ed917bcd612.patch";
+      hash = "sha256-s7abl83osD4wa0ZhqgDyjqQ3gagwGYCdQifwFqhNp34=";
+    })
   ];
 
   propagatedBuildInputs = [
+    dm-tree
+    etils
+    numpy
     tabulate
-    tensorflow
-  ];
+    wrapt
+  ] ++ etils.optional-dependencies.epath;
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    tensorflow = [
+      tensorflow
+    ];
+  };
+
+  nativeCheckInputs = [
+    click
     docutils
+    tensorflow
     tensorflow-datasets
   ];
 

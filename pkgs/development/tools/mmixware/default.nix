@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   # Workaround build failure on -fno-common toolchains:
   #   ld: mmix-config.o:(.bss+0x600): multiple definition of `buffer'; /build/ccDuGrwH.o:(.bss+0x20): first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   nativeBuildInputs = [ tetex ];
   enableParallelBuilding = true;

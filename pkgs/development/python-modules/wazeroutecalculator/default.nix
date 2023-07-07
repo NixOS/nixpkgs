@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "WazeRouteCalculator";
     inherit version;
-    sha256 = "sha256-DB5oWthWNwamFG3kNxA/kmUBOVogoSg5LI2KrI39s4M=";
+    hash = "sha256-DB5oWthWNwamFG3kNxA/kmUBOVogoSg5LI2KrI39s4M=";
   };
 
   propagatedBuildInputs = [

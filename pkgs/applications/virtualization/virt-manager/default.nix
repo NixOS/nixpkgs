@@ -26,7 +26,6 @@ python3.pkgs.buildPythonApplication rec {
     wrapGAppsHook
     libvirt-glib vte dconf gtk-vnc gnome.adwaita-icon-theme avahi
     gsettings-desktop-schemas libosinfo gtksourceview4
-    gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
   ] ++ lib.optional spiceSupport spice-gtk;
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -60,7 +59,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace "'--owner=root:root'" "'--owner=0:0'"
   '';
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
     cpio
     cdrtools

@@ -1,17 +1,23 @@
-{ fetchzip }:
+{ lib, stdenvNoCC, fetchurl }:
 
-fetchzip {
-  name = "bakoma-ttf";
+stdenvNoCC.mkDerivation rec {
+  pname = "bakoma-ttf";
+  version = "2.2";
 
-  url = "http://tarballs.nixos.org/sha256/1j1y3cq6ys30m734axc0brdm2q9n2as4h32jws15r7w5fwr991km";
+  src = fetchurl {
+    name = "${pname}.tar.bz2";
+    url = "http://tarballs.nixos.org/sha256/1j1y3cq6ys30m734axc0brdm2q9n2as4h32jws15r7w5fwr991km";
+    hash = "sha256-dYaUMneFn1yC5lIMSLQSNmFRW16AdUXGqWBobzAbPsg=";
+  };
 
-  postFetch = ''
-    tar xjvf $downloadedFile --strip-components=1
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/truetype
     cp ttf/*.ttf $out/share/fonts/truetype
-  '';
 
-  sha256 = "0g7i723n00cqx2va05z1h6v3a2ar69gqw4hy6pjj7m0ml906rngc";
+    runHook postInstall
+  '';
 
   meta = {
     description = "TrueType versions of the Computer Modern and AMS TeX Fonts";

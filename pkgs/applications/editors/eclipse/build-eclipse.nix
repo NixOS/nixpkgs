@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     categories = [ "Development" ];
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper perl ];
   buildInputs = [
     fontconfig freetype glib gsettings-desktop-schemas gtk jdk libX11
     libXrender libXtst libsecret zlib
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     tar xfvz $src -C $out
 
     # Patch binaries.
-    interpreter=$(echo ${stdenv.cc.libc}/lib/ld-linux*.so.2)
+    interpreter="$(cat $NIX_BINTOOLS/nix-support/dynamic-linker)"
     libCairo=$out/eclipse/libcairo-swt.so
     patchelf --set-interpreter $interpreter $out/eclipse/eclipse
     [ -f $libCairo ] && patchelf --set-rpath ${lib.makeLibraryPath [ freetype fontconfig libX11 libXrender zlib ]} $libCairo
@@ -53,14 +53,14 @@ stdenv.mkDerivation rec {
     ln -s $out/eclipse/icon.xpm $out/share/pixmaps/eclipse.xpm
 
     # ensure eclipse.ini does not try to use a justj jvm, as those aren't compatible with nix
-    ${perl}/bin/perl -i -p0e 's|-vm\nplugins/org.eclipse.justj.*/jre/bin\n||' $out/eclipse/eclipse.ini
+    perl -i -p0e 's|-vm\nplugins/org.eclipse.justj.*/jre/bin.*\n||' $out/eclipse/eclipse.ini
   ''; # */
 
   meta = {
-    homepage = "http://www.eclipse.org/";
+    homepage = "https://www.eclipse.org/";
     inherit description;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 
 }

@@ -1,13 +1,23 @@
-{ lib, stdenv, fetchurl, makeWrapper, writeText
-, autoconf, ncurses, graphviz, doxygen
+{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, writeText
+, graphviz, doxygen
 , ocamlPackages, ltl2ba, coq, why3
 , gdk-pixbuf, wrapGAppsHook
 }:
+
+let why3_1_5 = why3.overrideAttrs (o: rec {
+    version = "1.5.1";
+    src = fetchurl {
+      url = "https://why3.gitlabpages.inria.fr/releases/${o.pname}-${version}.tar.gz";
+      hash = "sha256-vNR7WeiSvg+763GcovoZBFDfncekJMeqNegP4fVw06I=";
+    };
+  }); in
+let why3 = why3_1_5; in
 
 let
   mkocamlpath = p: "${p}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib";
   runtimeDeps = with ocamlPackages; [
     apron.dev
+    bigarray-compat
     biniou
     camlzip
     easy-format
@@ -16,6 +26,7 @@ let
     num
     ocamlgraph
     ppx_deriving
+    ppx_deriving_yojson
     ppx_import
     stdlib-shims
     why3
@@ -34,31 +45,46 @@ in
 
 stdenv.mkDerivation rec {
   pname = "frama-c";
-  version = "25.0";
-  slang   = "Manganese";
+  version = "26.1";
+  slang   = "Iron";
 
   src = fetchurl {
-    url    = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
-    sha256 = "sha256-Ii3O/NJyBTVAv1ts/zae/Ee4HCjzYOthZmnD8wqLwp8=";
+    url  = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
+    hash = "sha256-UT7ajIyu8e5vzrz2oBKDDrtZqUacgUP/TRi0/kz9Qkg=";
   };
 
-  preConfigure = lib.optionalString stdenv.cc.isClang "configureFlagsArray=(\"--with-cpp=clang -E -C\")";
+  patches = [
+    (fetchpatch {
+      name = "fixes-yojson-2_1-support.patch";
+      url = "https://git.frama-c.com/pub/frama-c/-/commit/647eace02ed8dac46e75452898c3470f82576818.patch";
+      hash = "sha256-XfLi4kW1Y2MCLjHHQZAD8DvXvfZuDH3OKd9hlTV0XCw=";
+    })
+  ];
 
-  postConfigure = "patchShebangs src/plugins/value/gen-api.sh";
+  postConfigure = "patchShebangs src/plugins/eva/gen-api.sh";
 
-  nativeBuildInputs = [ autoconf wrapGAppsHook ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ wrapGAppsHook ] ++ (with ocamlPackages; [ ocaml findlib dune_3 ]);
 
   buildInputs = with ocamlPackages; [
-    ncurses ocaml findlib ltl2ba ocamlgraph yojson menhirLib camlzip
+    dune-site dune-configurator
+    ltl2ba ocamlgraph yojson menhirLib camlzip
     lablgtk3 lablgtk3-sourceview3 coq graphviz zarith apron why3 mlgmpidl doxygen
-    ppx_deriving ppx_import
+    ppx_deriving ppx_import ppx_deriving_yojson
     gdk-pixbuf
   ];
 
-  enableParallelBuilding = true;
+  buildPhase = ''
+    runHook preBuild
+    dune build -j$NIX_BUILD_CORES --release @install
+    runHook postBuild
+  '';
+
+  installFlags = [ "PREFIX=$(out)" ];
 
   preFixup = ''
-     gappsWrapperArgs+=(--prefix OCAMLPATH ':' ${ocamlpath})
+     gappsWrapperArgs+=(--prefix OCAMLPATH ':' ${ocamlpath}:$out/lib/)
   '';
 
   # Allow loading of external Frama-C plugins

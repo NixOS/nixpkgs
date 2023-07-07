@@ -19,7 +19,7 @@ appleDerivation {
 
   # Workaround build failure on -fno-common toolchains:
   #   duplicate symbol '_chdname' in: ar_io.o tty_subs.o
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   # temporary install phase until xcodebuild has "install" support
   installPhase = ''

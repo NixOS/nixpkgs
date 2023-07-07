@@ -15,7 +15,6 @@
 , libxml2
 , meson
 , ninja
-, packagekit
 , pkg-config
 , python3
 , vala
@@ -25,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "3.10.0";
+  version = "7.3.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Y3ueicw6Hn6lw24hdPeJohGol6l7UlQFIefYsBVY6Hg=";
+    sha256 = "sha256-Lj3j812XaCIN+TFSDAvIgtl49n5jG4fVlAFvrWqngpM=";
   };
 
   nativeBuildInputs = [
@@ -55,11 +54,13 @@ stdenv.mkDerivation rec {
     libhandy
     libsoup
     libxml2
-    packagekit
     polkit
   ];
 
   mesonFlags = [
+    # We don't have a working nix packagekit backend yet.
+    "-Dpackagekit_backend=false"
+    "-Dubuntu_drivers_backend=false"
     "-Dpayments=false"
     "-Dcurated=false"
   ];
@@ -70,9 +71,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

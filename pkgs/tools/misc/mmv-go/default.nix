@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "mmv-go";
-  version = "0.1.4";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "itchyny";
     repo = "mmv";
     rev = "v${version}";
-    sha256 = "sha256-n7yW+0cabJGDgppt6Qcj7ID3sD85094NDOPk2o9xDwY=";
+    sha256 = "sha256-DNLiW0QX7WrBslwVCbvydLnE6JAcfcRALYqwsK/J5x0=";
   };
 
-  vendorSha256 = "sha256-3Xk8S2Em28r5R7894Ubo2OOlGhrKplV/gY4ftCjPvMo=";
+  vendorHash = "sha256-HHGiMSBu3nrIChSYaEu9i22nwhLKgVQkPvbTMHBWwAE=";
 
   ldflags = [ "-s" "-w" "-X main.revision=${src.rev}" ];
 

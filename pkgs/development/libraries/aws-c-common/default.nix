@@ -2,18 +2,18 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, coreutils
+, nix
 }:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-common";
-  version = "0.7.4";
+  version = "0.8.15";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9k+/yvvQmq/aX4c3vmfZNtKD1PuYo27IUoNUQw0Adgc=";
+    sha256 = "sha256-AemFZZwfHdjqX/sXUw1fpusICOa3C7rT6Ofsz5bGYOQ=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -42,6 +42,10 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  passthru.tests = {
+    inherit nix;
+  };
 
   meta = with lib; {
     description = "AWS SDK for C common core";

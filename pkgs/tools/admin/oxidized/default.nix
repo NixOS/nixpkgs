@@ -6,7 +6,7 @@ bundlerApp {
 
   inherit ruby;
 
-  exes = [ "oxidized" "oxidized-web" "oxidized-script" ];
+  exes = [ "oxidized" "oxs" ];
 
   passthru.updateScript = bundlerUpdateScript "oxidized";
 
@@ -14,7 +14,7 @@ bundlerApp {
     description = "A network device configuration backup tool. It's a RANCID replacement!";
     homepage    = "https://github.com/ytti/oxidized";
     license     = licenses.asl20;
-    maintainers = with maintainers; [ willibutz nicknovitski ];
+    maintainers = with maintainers; [ willibutz nicknovitski netali ];
     platforms   = platforms.linux;
   };
 }

@@ -4,7 +4,7 @@
 [R⁵RS](https://schemers.org/Documents/Standards/R5RS/HTML/)-compliant Scheme
 compiler. It includes an interactive mode and a custom package format, "eggs".
 
-## Using Eggs
+## Using Eggs {#sec-chicken-using}
 
 Eggs described in nixpkgs are available inside the
 `chickenPackages.chickenEggs` attrset. Including an egg as a build input is
@@ -22,7 +22,7 @@ might write:
 Both `chicken` and its eggs have a setup hook which configures the environment
 variables `CHICKEN_INCLUDE_PATH` and `CHICKEN_REPOSITORY_PATH`.
 
-## Updating Eggs
+## Updating Eggs {#sec-chicken-updating-eggs}
 
 nixpkgs only knows about a subset of all published eggs. It uses
 [egg2nix](https://github.com/the-kenny/egg2nix) to generate a
@@ -36,7 +36,7 @@ $ cd pkgs/development/compilers/chicken/5/
 $ egg2nix eggs.scm > eggs.nix
 ```
 
-## Adding Eggs
+## Adding Eggs {#sec-chicken-adding-eggs}
 
 When we run `egg2nix`, we obtain one collection of eggs with
 mutually-compatible versions. This means that when we add new eggs, we may

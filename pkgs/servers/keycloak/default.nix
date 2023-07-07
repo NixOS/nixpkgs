@@ -3,7 +3,6 @@
 , fetchzip
 , makeWrapper
 , jre
-, writeText
 , nixosTests
 , callPackage
 
@@ -13,14 +12,20 @@
 
 stdenv.mkDerivation rec {
   pname = "keycloak";
-  version = "19.0.2";
+  version = "21.1.2";
 
   src = fetchzip {
     url = "https://github.com/keycloak/keycloak/releases/download/${version}/keycloak-${version}.zip";
-    sha256 = "sha256-Ze9VE2gtLxoZpyqbeisvHdOu8yFPwAKnDMpfA3FXWy8=";
+    hash = "sha256-yux9LyGkdwQekNWKAx3Oara0D5Qca8g7fgPGeTiF2n4=";
   };
 
   nativeBuildInputs = [ makeWrapper jre ];
+
+  patches = [
+    # Make home.dir and config.dir configurable through the
+    # KC_HOME_DIR and KC_CONF_DIR environment variables.
+    ./config_vars.patch
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -37,6 +42,8 @@ stdenv.mkDerivation rec {
     ${lib.concatMapStringsSep "\n" (pl: "install_plugin ${lib.escapeShellArg pl}") plugins}
   '' + ''
     patchShebangs bin/kc.sh
+    export KC_HOME_DIR=$(pwd)
+    export KC_CONF_DIR=$(pwd)/conf
     bin/kc.sh build
 
     runHook postBuild
@@ -54,9 +61,6 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    substituteInPlace $out/bin/kc.sh --replace ${lib.escapeShellArg "-Dkc.home.dir='$DIRNAME'/../"} '-Dkc.home.dir=$KC_HOME_DIR'
-    substituteInPlace $out/bin/kc.sh --replace ${lib.escapeShellArg "-Djboss.server.config.dir='$DIRNAME'/../conf"} '-Djboss.server.config.dir=$KC_CONF_DIR'
-
     for script in $(find $out/bin -type f -executable); do
       wrapProgram "$script" --set JAVA_HOME ${jre} --prefix PATH : ${jre}/bin
     done

@@ -1,52 +1,43 @@
 { lib
 , buildPythonPackage
-, fetchpatch
 , fetchFromGitHub
-
-# propagates
+, fetchpatch
 , jinja2
 , lxml
+, mock
 , ncclient
 , netaddr
+, nose
 , ntc-templates
 , paramiko
 , pyparsing
 , pyserial
+, pythonOlder
 , pyyaml
 , scp
 , six
 , transitions
 , yamlordereddictloader
-
-# tests
-, mock
-, nose
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "junos-eznc";
-  version = "2.6.3";
+  version = "2.6.7";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Juniper";
     repo = "py-junos-eznc";
-    rev = version;
-    hash = "sha256-XhQJwtS518AzSwyaWE392nfNdYe9+iYHvXxQsjJfzI8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-+hGybznip5RpJm89MLg9JO4B/y50OIdgtmV2FIpZShU=";
   };
 
-  patches = [
-    (fetchpatch {
-      # Fixes tests with lxml>=4.8.0; remove > 2.6.3
-      url = "https://github.com/Juniper/py-junos-eznc/commit/048f750bb7357b6f6b9db8ad64bea479298c74fb.patch";
-      hash = "sha256-DYVj0BNPwDSbxDrzHhaq4F4kz1bliXB6Au3I63mRauc=";
-    })
-  ];
-
   postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "ncclient==0.6.9" "ncclient"
+    # https://github.com/Juniper/py-junos-eznc/issues/1236
+    substituteInPlace lib/jnpr/junos/utils/scp.py \
+      --replace "inspect.getargspec" "inspect.getfullargspec"
   '';
 
   propagatedBuildInputs = [
@@ -65,7 +56,7 @@ buildPythonPackage rec {
     yamlordereddictloader
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     nose
   ];
@@ -74,11 +65,14 @@ buildPythonPackage rec {
     nosetests -v -a unit --exclude=test_sw_put_ftp
   '';
 
-  pythonImportsCheck = [ "jnpr.junos" ];
+  pythonImportsCheck = [
+    "jnpr.junos"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/Juniper/py-junos-eznc";
+    changelog = "https://github.com/Juniper/py-junos-eznc/releases/tag/${version}";
     description = "Junos 'EZ' automation for non-programmers";
+    homepage = "https://github.com/Juniper/py-junos-eznc";
     license = licenses.asl20;
     maintainers = with maintainers; [ xnaveira ];
   };

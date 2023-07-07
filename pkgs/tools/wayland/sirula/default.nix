@@ -28,5 +28,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/DorianRudolph/sirula";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ twitchyliquid64 ];
+    platforms = platforms.linux;
   };
 }

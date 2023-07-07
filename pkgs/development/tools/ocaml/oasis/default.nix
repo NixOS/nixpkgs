@@ -1,14 +1,12 @@
 { lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, ocamlmod, ocamlify }:
 
 stdenv.mkDerivation {
-  version = "0.4.10";
+  version = "0.4.11";
   pname = "ocaml-oasis";
 
-  # You must manually update the url, not just the version. OCamlforge keys off
-  # the number after download.php, not the filename.
   src = fetchurl {
-    url = "https://forge.ocamlcore.org/frs/download.php/1694/oasis-0.4.10.tar.gz";
-    sha256 = "13ah03pbcvrjv5lmx971hvkm9rvbvimska5wmjfvgvd20ca0gn8w";
+    url = "https://download.ocamlcore.org/oasis/oasis/0.4.11/oasis-0.4.11.tar.gz";
+    hash = "sha256-GLc97vTtbpqDM38ks7vi3tZSaLP/cwn8wA0l5X4dwS4=";
   };
 
   createFindlibDestdir = true;
@@ -40,10 +38,10 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Configure, build and install system for OCaml projects";
-    homepage = "http://oasis.forge.ocamlcore.org/";
+    homepage = "https://github.com/ocaml/oasis";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ vbgl maggesi ];
     mainProgram = "oasis";
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
   };
 }

@@ -14,7 +14,7 @@ buildPythonPackage rec {
   dontBuild = true;
   dontInstall = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pygments
   ];

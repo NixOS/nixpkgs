@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "notify";
-  version = "1.0.2";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-VRMwyVaTUJ+dDqewDGNZR1jH2EmDq1b42he7andh+/Q=";
+    sha256 = "sha256-CXzxrY8G7Zh5xafuiIY9SsPkrYoSkMt15v2KLZBs0Jo=";
   };
 
-  vendorSha256 = "sha256-JsEKtE3N7C+BA3SanYwX17uJcFmbzPMWl5tUYPLCRdQ=";
+  vendorSha256 = "sha256-tjaVEmOd/MJnDcS/mhvw95ZZ8giaUDTdDTyAMbjTckM=";
 
   modRoot = ".";
   subPackages = [
@@ -26,7 +26,7 @@ buildGoModule rec {
   doCheck = false;
 
   passthru = {
-    updateScript = nix-update-script { attrPath = pname; };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

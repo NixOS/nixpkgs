@@ -1,44 +1,49 @@
-{ poetry2nix, pkgs, lib }:
+{ lib
+, python3
+, fetchFromGitHub
+}:
 
-let
-  pythonPackages = (poetry2nix.mkPoetryPackages {
-    projectDir = ./.;
-    overrides = [
-      poetry2nix.defaultPoetryOverrides
-      (import ./poetry-git-overlay.nix { inherit pkgs; })
-      (self: super: {
+python3.pkgs.buildPythonApplication rec {
+  pname = "rmfuse";
+  version = "unstable-2021-06-06";
 
-        rmfuse = super.rmfuse.overridePythonAttrs(old: {
-          meta = old.meta // {
-            description = "RMfuse provides access to your reMarkable Cloud files in the form of a FUSE filesystem.";
-            longDescription = ''
-              RMfuse provides access to your reMarkable Cloud files in the form of a FUSE filesystem. These files are exposed either in their original format, or as PDF files that contain your annotations. This lets you manage files in the reMarkable Cloud using the same tools you use on your local system.
-            '';
-            license = lib.licenses.mit;
-            homepage = "https://github.com/rschroll/rmfuse";
-            maintainers = [ lib.maintainers.adisbladis ];
-          };
-        });
+  format = "pyproject";
 
-        reportlab = let
-          ft = pkgs.freetype.overrideAttrs (oldArgs: { dontDisableStatic = true; });
-        in super.reportlab.overridePythonAttrs(old: {
-          postPatch = ''
-            substituteInPlace setup.py \
-              --replace "mif = findFile(d,'ft2build.h')" "mif = findFile('${lib.getDev ft}','ft2build.h')"
-          '';
+  src = fetchFromGitHub {
+    owner = "rschroll";
+    repo = "rmfuse";
+    rev = "3796b8610c8a965a60a417fc0bf8ea5200b71fd2";
+    hash = "sha256-W3kS6Kkmp8iWMOYFL7r1GyjSQvFotBXQCuTMK0vyHQ8=";
+  };
 
-          NIX_CFLAGS_COMPILE = "-I${pkgs.freetype}/include/freetype2";
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'bidict = "^' 'bidict = ">='
+  '';
 
-          nativeBuildInputs = old.nativeBuildInputs ++ [
-            pkgs.pkg-config
-          ];
-          buildInputs = old.buildInputs ++ [
-            pkgs.freetype
-          ];
-        });
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+  ];
 
-      })
-    ];
-  }).python.pkgs;
-in pythonPackages.rmfuse
+  propagatedBuildInputs = with python3.pkgs; [
+    bidict
+    rmrl
+    rmcl
+    pyfuse3
+    xdg
+  ];
+
+  meta = {
+    description = "FUSE access to the reMarkable Cloud";
+    homepage = "https://github.com/rschroll/rmfuse";
+    license = lib.licenses.mit;
+    longDescription = ''
+      RMfuse provides access to your reMarkable Cloud files in the form of a
+      FUSE filesystem. These files are exposed either in their original format,
+      or as PDF files that contain your annotations. This lets you manage files
+      in the reMarkable Cloud using the same tools you use on your local
+      system.
+    '';
+    maintainers = with lib.maintainers; [ adisbladis ];
+  };
+}

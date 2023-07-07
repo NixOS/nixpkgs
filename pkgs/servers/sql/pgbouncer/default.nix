@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pgbouncer";
-  version = "1.17.0";
+  version = "1.19.1";
 
   src = fetchurl {
-    url = "https://pgbouncer.github.io/downloads/files/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ZXMJt7xceoXL9wqaRBtTX3gkEjCB6rt7qG0ANJolbiM=";
+    url = "https://www.pgbouncer.org/downloads/files/${version}/${pname}-${version}.tar.gz";
+    hash = "sha256-WMPv+btywYEzso4fA0/Vk1bqdigcZeEnQyyhAcIIo5Q=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -14,8 +14,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = "https://pgbouncer.github.io";
+    homepage = "https://www.pgbouncer.org/";
     description = "Lightweight connection pooler for PostgreSQL";
+    changelog = "https://github.com/pgbouncer/pgbouncer/releases/tag/pgbouncer_${replaceStrings ["."] ["_"] version}";
     license = licenses.isc;
     maintainers = with maintainers; [ _1000101 ];
     platforms = platforms.all;

@@ -12,7 +12,7 @@ buildPythonPackage rec {
     owner = "flyte";
     repo = "apcaccess";
     rev = version;
-    sha256 = "sha256-XLoNRh6MgXCfRtWD9NpVZSyroW6E9nRYw6Grxa+AQkc=";
+    hash = "sha256-XLoNRh6MgXCfRtWD9NpVZSyroW6E9nRYw6Grxa+AQkc=";
   };
 
   postPatch = ''
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     "apcaccess"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

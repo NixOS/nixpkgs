@@ -2,7 +2,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "zscroll";
-  version = "1.0";
+  version = "2.0.1";
 
   # don't prefix with python version
   namePrefix = "";
@@ -10,8 +10,8 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "noctuid";
     repo = "zscroll";
-    rev = "v${version}";
-    sha256 = "0rf9m1czy19hzpcp8dq9c5zawk0nhwfzzjxlhk9r2n06lhb81ig5";
+    rev = version;
+    sha256 = "sha256-gEluWzCbztO4N1wdFab+2xH7l9w5HqZVzp2LrdjHSRM=";
   };
 
   doCheck = false;
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "A text scroller for use with panels and shells";
     homepage = "https://github.com/noctuid/zscroll";
-    license = licenses.bsd2;
+    license = licenses.gpl3Plus;
     platforms = platforms.all;
   };
 }

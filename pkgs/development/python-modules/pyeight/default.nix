@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyeight";
-  version = "0.3.1";
+  version = "0.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "mezz64";
     repo = "pyEight";
     rev = version;
-    sha256 = "sha256-vW64m8XQZ9XfgjlZph47JFyOsxWtCbIJZBZVwsTrjLs=";
+    hash = "sha256-JYmhEZQw11qPNV2jZhP+0VFb387kNom70R3C13PM7kc=";
   };
 
   propagatedBuildInputs = [

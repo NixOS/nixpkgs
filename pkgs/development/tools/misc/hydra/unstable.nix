@@ -4,10 +4,8 @@
 , perlPackages
 , buildEnv
 , makeWrapper
-, libtool
 , unzip
 , pkg-config
-, sqlite
 , libpqxx
 , top-git
 , mercurial
@@ -22,7 +20,6 @@
 , prometheus-cpp
 , nukeReferences
 , git
-, boehmgc
 , nlohmann_json
 , docbook_xsl
 , openssh
@@ -46,7 +43,6 @@
 , cacert
 , glibcLocales
 , fetchFromGitHub
-, fetchpatch
 , nixosTests
 }:
 
@@ -127,43 +123,34 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hydra";
-  version = "2022-09-08";
+  version = "2023-06-25";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "d6cbf227cba90cf281f72f464393d75a45f2f3a8";
-    sha256 = "sha256-eMStY0/cS/blRGyyp1DUpP3N0SxYZrxah+hNJeKwDSw=";
+    rev = "526e8bd7441d1beb271ff89bbca3604077ecffdb";
+    sha256 = "sha256-VRNI3H/WUTi7VTNLwO/I0gMnJ6ZMYRbBfgdsAj+TmP4=";
   };
 
-  patches = [
-    # https://github.com/NixOS/hydra/pull/1215: scmdiff: Hardcode --git-dir
-    (fetchpatch {
-      url = "https://github.com/NixOS/hydra/commit/b6ea85a601ddac9cb0716d8cb4d446439fa0778f.patch";
-      sha256 = "sha256-QHjwLYQucdkBs6OsFI8kWo5ugkPXXlTgdbGFxKBHAHo=";
-    })
+  buildInputs = [
+    libpqxx
+    top-git
+    mercurial
+    darcs
+    subversion
+    breezy
+    openssl
+    bzip2
+    libxslt
+    nix
+    perlDeps
+    perl
+    pixz
+    boost
+    postgresql
+    nlohmann_json
+    prometheus-cpp
   ];
-
-  buildInputs =
-    [
-      libpqxx
-      top-git
-      mercurial
-      darcs
-      subversion
-      breezy
-      openssl
-      bzip2
-      libxslt
-      nix
-      perlDeps
-      perl
-      pixz
-      boost
-      postgresql
-      nlohmann_json
-      prometheus-cpp
-    ];
 
   hydraPath = lib.makeBinPath (
     [
@@ -196,7 +183,7 @@ stdenv.mkDerivation rec {
     nukeReferences
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cacert
     foreman
     glibcLocales
@@ -207,7 +194,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/xml/xsl/docbook" ];
 
-  NIX_CFLAGS_COMPILE = "-pthread";
+  env.NIX_CFLAGS_COMPILE = "-pthread";
 
   OPENLDAP_ROOT = openldap;
 

@@ -12,7 +12,7 @@ buildPythonApplication rec {
     psutil matplotlib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 

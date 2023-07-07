@@ -1,5 +1,12 @@
-{ buildPythonPackage, fetchFromGitHub, lib, packaging, pillow, tesseract, substituteAll
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, packaging
+, pillow
+, tesseract
+, substituteAll
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -11,7 +18,7 @@ buildPythonPackage rec {
     owner = "madmaze";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-CyKXtaIE/8iPLqi0GHVUgTeJDYZyWBjkRvOKJJKCxZo=";
+    hash = "sha256-CyKXtaIE/8iPLqi0GHVUgTeJDYZyWBjkRvOKJJKCxZo=";
   };
 
   patches = [
@@ -19,6 +26,10 @@ buildPythonPackage rec {
       src = ./tesseract-binary.patch;
       drv = tesseract;
     })
+  ];
+
+  nativeBuildInputs = [
+    setuptools
   ];
 
   buildInputs = [
@@ -30,7 +41,7 @@ buildPythonPackage rec {
     pillow
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://pypi.org/project/pytesseract/";

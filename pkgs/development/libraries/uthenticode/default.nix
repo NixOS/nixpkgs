@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DBUILD_TESTS=1" "-DUSE_EXTERNAL_GTEST=1" ];
 
   nativeBuildInputs = [ cmake ];
-  checkInputs = [ gtest ];
+  nativeCheckInputs = [ gtest ];
   buildInputs = [ pe-parse openssl ];
 
   doCheck = true;

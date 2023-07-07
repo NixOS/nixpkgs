@@ -29,7 +29,7 @@ in
           };
 
           port = mkOption {
-            type = types.int;
+            type = types.port;
             default = 33445;
             description = lib.mdDoc "Listening port (UDP).";
           };

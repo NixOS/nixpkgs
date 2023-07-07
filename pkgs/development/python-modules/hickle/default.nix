@@ -12,8 +12,10 @@
 }:
 
 buildPythonPackage rec {
-  pname   = "hickle";
+  pname = "hickle";
   version = "5.0.2";
+  format = "setuptools";
+
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
@@ -27,11 +29,23 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ h5py numpy dill ];
 
-  checkInputs = [
-    pytestCheckHook scipy pandas astropy
+  nativeCheckInputs = [
+    pytestCheckHook
+    scipy
+    pandas
+    astropy
   ];
 
   pythonImportsCheck = [ "hickle" ];
+
+  disabledTests = [
+    # broken in 5.0.2 with recent NumPy
+    # see https://github.com/telegraphic/hickle/issues/174
+    "test_scalar_compression"
+    # broken in 5.0.2 with python 3.11
+    # see https://github.com/telegraphic/hickle/issues/169
+    "test_H5NodeFilterProxy"
+  ];
 
   meta = {
     description = "Serialize Python data to HDF5";

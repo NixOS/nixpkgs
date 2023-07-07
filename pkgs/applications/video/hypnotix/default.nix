@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hypnotix";
-  version = "2.9";
+  version = "3.4";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "hypnotix";
     rev = version;
-    hash = "sha256-jjCyO6lyhqH4xeNp5uy/KqNr5Mvv+45pJGHFOXNi0rk=";
+    hash = "sha256-Oxv70bFheKhlYyLdGcn0Hja+LAmn6RHfAh5FIjghD9o=";
   };
 
   patches = [
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxmint/hypnotix";
     changelog = "https://github.com/linuxmint/hypnotix/blob/${src.rev}/debian/changelog";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ dotlambda bobby285271 ];
     platforms = lib.platforms.linux;
   };
 }

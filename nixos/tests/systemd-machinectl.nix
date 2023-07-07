@@ -1,4 +1,4 @@
-import ./make-test-python.nix (
+import ./make-test-python.nix ({ pkgs, ... }:
   let
 
     container = {
@@ -18,6 +18,7 @@ import ./make-test-python.nix (
     };
 
     containerSystem = (import ../lib/eval-config.nix {
+      inherit (pkgs) system;
       modules = [ container ];
     }).config.system.build.toplevel;
 
@@ -40,6 +41,17 @@ import ./make-test-python.nix (
       systemd.targets.machines.wants = [ "systemd-nspawn@${containerName}.service" ];
 
       virtualisation.additionalPaths = [ containerSystem ];
+
+      # not needed, but we want to test the nspawn file generation
+      systemd.nspawn.${containerName} = { };
+
+      systemd.services."systemd-nspawn@${containerName}" = {
+        serviceConfig.Environment = [
+          # Disable tmpfs for /tmp
+          "SYSTEMD_NSPAWN_TMPFS_TMP=0"
+        ];
+        overrideStrategy = "asDropin";
+      };
     };
 
     testScript = ''
@@ -90,6 +102,9 @@ import ./make-test-python.nix (
       # Test machinectl stop
       machine.succeed("machinectl stop ${containerName}");
       machine.wait_until_succeeds("test $(systemctl is-active systemd-nspawn@${containerName}) = inactive");
+
+      # Test tmpfs for /tmp
+      machine.fail("mountpoint /tmp");
 
       # Show to to delete the container
       machine.succeed("chattr -i ${containerRoot}/var/empty");

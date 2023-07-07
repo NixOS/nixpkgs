@@ -1,5 +1,4 @@
 { lib
-, asynctest
 , buildPythonPackage
 , fetchFromGitHub
 , pyserial
@@ -12,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "zigpy-xbee";
-  version = "0.15.0";
+  version = "0.18.1";
   # https://github.com/Martiusweb/asynctest/issues/152
   # broken by upstream python bug with asynctest and
   # is used exclusively by home-assistant with python 3.8
@@ -21,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-xbee";
-    rev = version;
-    sha256 = "sha256-NT7d5JWaVZOrk32uYh0z0sI9RA4eJYYIa2D/Ei81KjY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-vR+oLshiIYmMdAvir+TGBqVkTGXKAVnUWnQPR3YwuUk=";
   };
 
   buildInputs = [
@@ -31,19 +30,18 @@ buildPythonPackage rec {
     zigpy
   ];
 
-  checkInputs = [
-    asynctest
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
   disabledTests = [
-    # assertion failure
-    # E       assert ff:ff:ff:ff:ff:ff:ff:ff is None
-    "test_startup_api_mode_config_fails"
+    # https://github.com/zigpy/zigpy-xbee/issues/126
+    "test_form_network"
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/zigpy/zigpy-xbee/releases/tag/${version}";
     description = "A library which communicates with XBee radios for zigpy";
     homepage = "https://github.com/zigpy/zigpy-xbee";
     license = licenses.gpl3Plus;

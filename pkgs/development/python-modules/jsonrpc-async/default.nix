@@ -27,7 +27,7 @@ buildPythonPackage rec {
     jsonrpc-base
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook
   ];

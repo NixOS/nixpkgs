@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, pcre-cpp
+, pcre2
 , sqlite
 , ncurses
 , readline
@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lnav";
-  version = "0.11.0";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "tstack";
     repo = "lnav";
     rev = "v${version}";
-    sha256 = "sha256-SkaJvIfFKD7xzxm3qnYUltKEpQRNNn6KkRwMP6eWte4=";
+    sha256 = "sha256-OuxxcXpdpSxrDdiUqRbEaXvCZBAcWvE4YwaMtLKSqCM=";
   };
 
   patches = [ ./0001-Forcefully-disable-docs-build.patch ];
@@ -38,11 +38,12 @@ stdenv.mkDerivation rec {
     autoconf
     automake
     zlib
+    curl.dev
   ];
   buildInputs = [
     bzip2
     ncurses
-    pcre-cpp
+    pcre2
     readline
     sqlite
     curl
@@ -66,7 +67,7 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://github.com/tstack/lnav/releases";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ dochang ma27 ];
+    maintainers = with maintainers; [ dochang ];
     platforms = platforms.unix;
   };
 

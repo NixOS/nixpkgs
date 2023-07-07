@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-videos";
-  version = "2.8.4";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "videos";
     rev = version;
-    sha256 = "sha256-IUIY/WgGPVRYk9O+ZocopoBF7TlLnTtScNwO6gDCALw=";
+    sha256 = "sha256-G961ndONwHiqdeO26Ulxkg71ByfdFMAV35VFzu4TQ3M=";
   };
 
   nativeBuildInputs = [
@@ -59,9 +59,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

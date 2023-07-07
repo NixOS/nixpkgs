@@ -1,6 +1,6 @@
 { lib, stdenv
 , autoPatchelfHook
-, buildFHSUserEnv
+, buildFHSEnv
 , dpkg
 , fetchurl
 , gcc-unwrapped
@@ -35,7 +35,7 @@ let
     installPhase = "cp -ar usr $out";
   };
 in
-buildFHSUserEnv {
+buildFHSEnv {
   name = fahclient.name;
 
   targetPkgs = pkgs': [

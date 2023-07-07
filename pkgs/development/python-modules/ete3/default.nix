@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "ete3";
-  version = "3.1.2";
+  version = "3.1.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4fc987b8c529889d6608fab1101f1455cb5cbd42722788de6aea9c7d0a8e59e9";
+    sha256 = "sha256-BqO3+o7ZAYewdqjbvlsbYqzulCAdPG6CL1X0SWAe9vI=";
   };
 
 

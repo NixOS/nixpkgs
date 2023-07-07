@@ -16,6 +16,8 @@ let
     };
 
     nodes.server = {
+      nixpkgs.config = config;
+
       services.unifi = {
         enable = true;
         unifiPackage = unifi;

@@ -1,16 +1,19 @@
 { lib, stdenv, fetchurl, zlib, libX11, libXext, libSM, libICE, libxkbcommon, libxshmfence
 , libXfixes, libXt, libXi, libXcursor, libXScrnSaver, libXcomposite, libXdamage, libXtst, libXrandr
-, alsa-lib, dbus, cups, libexif, ffmpeg, systemd, libva
+, alsa-lib, dbus, cups, libexif, ffmpeg, systemd, libva, libGL
 , freetype, fontconfig, libXft, libXrender, libxcb, expat
 , libuuid
 , libxml2
 , glib, gtk3, pango, gdk-pixbuf, cairo, atk, at-spi2-atk, at-spi2-core
+, qt5
 , libdrm, mesa
+, vulkan-loader
 , nss, nspr
 , patchelf, makeWrapper
+, wayland, pipewire
 , isSnapshot ? false
 , proprietaryCodecs ? false, vivaldi-ffmpeg-codecs ? null
-, enableWidevine ? false, vivaldi-widevine ? null
+, enableWidevine ? false, widevine-cdm ? null
 , commandLineArgs ? ""
 , pulseSupport ? stdenv.isLinux, libpulseaudio
 }:
@@ -20,11 +23,19 @@ let
   vivaldiName = if isSnapshot then "vivaldi-snapshot" else "vivaldi";
 in stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "5.4.2753.47";
+  version = "6.0.2979.22";
+
+  suffix = {
+    aarch64-linux = "arm64";
+    x86_64-linux = "amd64";
+  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
-    url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}-1_amd64.deb";
-    sha256 = "1p155mcrmfz395yajxa6fqjk1paac216kim26i3r56wah5329gmr";
+    url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}-1_${suffix}.deb";
+    hash = {
+      aarch64-linux = "sha256-x7wBbd7BdurnWGFeHD5kYb5t0/zGEXQaUwbHnNA4iME=";
+      x86_64-linux = "sha256-uN2nBWlullxpOZP2PzVCwKcNmO9XmDS3WiFOcp0dOqg=";
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   unpackPhase = ''
@@ -34,13 +45,17 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ patchelf makeWrapper ];
 
+  dontWrapQtApps = true;
+
   buildInputs = [
     stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE libxcb libxkbcommon libxshmfence
     libXi libXft libXcursor libXfixes libXScrnSaver libXcomposite libXdamage libXtst libXrandr
     atk at-spi2-atk at-spi2-core alsa-lib dbus cups gtk3 gdk-pixbuf libexif ffmpeg systemd libva
-    freetype fontconfig libXrender libuuid expat glib nss nspr
+    qt5.qtbase
+    freetype fontconfig libXrender libuuid expat glib nss nspr libGL
     libxml2 pango cairo
-    libdrm mesa
+    libdrm mesa vulkan-loader
+    wayland pipewire
   ] ++ lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs
     ++ lib.optional pulseSupport libpulseaudio;
 
@@ -57,6 +72,10 @@ in stdenv.mkDerivation rec {
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "${libPath}" \
         opt/${vivaldiName}/$f
+    done
+
+    for f in libGLESv2.so libqt5_shim.so ; do
+      patchelf --set-rpath "${libPath}" opt/${vivaldiName}/$f
     done
   '' + lib.optionalString proprietaryCodecs ''
     ln -s ${vivaldi-ffmpeg-codecs}/lib/libffmpeg.so opt/${vivaldiName}/libffmpeg.so.''${version%\.*\.*}
@@ -89,13 +108,18 @@ in stdenv.mkDerivation rec {
     done
     wrapProgram "$out/bin/vivaldi" \
       --add-flags ${lib.escapeShellArg commandLineArgs} \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --set-default FONTCONFIG_FILE "${fontconfig.out}/etc/fonts/fonts.conf" \
+      --set-default FONTCONFIG_PATH "${fontconfig.out}/etc/fonts" \
       --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/ \
       ${lib.optionalString enableWidevine "--suffix LD_LIBRARY_PATH : ${libPath}"}
   '' + lib.optionalString enableWidevine ''
-    ln -sf ${vivaldi-widevine}/share/google/chrome/WidevineCdm $out/opt/${vivaldiName}/WidevineCdm
+    ln -sf ${widevine-cdm}/share/google/chrome/WidevineCdm $out/opt/${vivaldiName}/WidevineCdm
   '' + ''
     runHook postInstall
   '';
+
+  passthru.updateScript = ./update-vivaldi.sh;
 
   meta = with lib; {
     description = "A Browser for our Friends, powerful and personal";
@@ -103,6 +127,6 @@ in stdenv.mkDerivation rec {
     license     = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ otwieracz badmutex ];
-    platforms   = [ "x86_64-linux" ];
+    platforms   = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

@@ -25,6 +25,8 @@
 let
   mkFlag = optSet: flag: if optSet then "-D${flag}=ON" else "-D${flag}=OFF";
 
+  isCross = stdenv.buildPlatform != stdenv.hostPlatform;
+
   cmakeCommonFlags = [
     "-Wno-dev"
     (mkFlag custatsSupport "DETAILED_CU_STATS")
@@ -32,7 +34,8 @@ let
     (mkFlag ppaSupport "ENABLE_PPA")
     (mkFlag vtuneSupport "ENABLE_VTUNE")
     (mkFlag werrorSupport "WARNINGS_AS_ERRORS")
-  ];
+    # Potentially riscv cross could be fixed by providing the correct CMAKE_SYSTEM_PROCESSOR flag
+  ] ++ lib.optional (isCross && stdenv.hostPlatform.isRiscV) "-DENABLE_ASSEMBLY=OFF";
 
   cmakeStaticLibFlags = [
     "-DHIGH_BIT_DEPTH=ON"
@@ -81,6 +84,8 @@ stdenv.mkDerivation rec {
       url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-libs/x265/files/test-ns.patch?id=1d1de341e1404a46b15ae3e84bc400d474cf1a2c";
       sha256 = "0zg3g53l07yh7ar5c241x50y5zp7g8nh8rh63ad4bdpchpc2f52d";
     })
+    # Fix detection of NEON (and armv6 build) :
+    ./fix-neon-detection.patch
   ];
 
   postPatch = ''
@@ -107,7 +112,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_SHARED=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
     "-DHIGH_BIT_DEPTH=OFF"
     "-DENABLE_HDR10_PLUS=ON"
-  ] ++ [
+    (mkFlag (isCross && stdenv.hostPlatform.isAarch) "CROSS_COMPILE_ARM")
     (mkFlag cliSupport "ENABLE_CLI")
     (mkFlag unittestsSupport "ENABLE_TESTS")
   ] ++ lib.optionals (multibitdepthSupport) [

@@ -1,28 +1,32 @@
-{ buildPythonPackage
-, fetchPypi
-, pytest
-, tqdm
+{ lib
+, buildPythonPackage
 , docopt
+, fetchFromGitHub
+, pytestCheckHook
 , requests
 , jsonpatch
 , schema
 , responses
-, lib
-, glibcLocales
 , setuptools
+, tqdm
 , urllib3
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "internetarchive";
-  version = "3.0.2";
+  version = "3.5.0";
+
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-3oVkZcLvaFIYTQi/1ZwMoBkEhls3OiezgwNKxrQSjrY=";
+  # no tests data included in PyPI tarball
+  src = fetchFromGitHub {
+    owner = "jjjake";
+    repo = "internetarchive";
+    rev = "v${version}";
+    hash = "sha256-apBzx1qMHEA0wiWh82sS7I+AaiMEoAchhPsrtAgujbQ=";
   };
 
   propagatedBuildInputs = [
@@ -35,16 +39,30 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  checkInputs = [ pytest responses glibcLocales ];
+  nativeCheckInputs = [
+    responses
+    pytestCheckHook
+  ];
 
-  # tests depend on network
-  doCheck = false;
+  disabledTests = [
+    # Tests require network access
+    "test_get_item_with_kwargs"
+    "test_upload"
+    "test_upload_metadata"
+    "test_upload_queue_derive"
+    "test_upload_validate_identifie"
+    "test_upload_validate_identifier"
+  ];
 
-  checkPhase = ''
-    LC_ALL=en_US.utf-8 pytest tests
-  '';
+  disabledTestPaths = [
+    # Tests require network access
+    "tests/cli/test_ia.py"
+    "tests/cli/test_ia_download.py"
+  ];
 
-  pythonImportsCheck = [ "internetarchive" ];
+  pythonImportsCheck = [
+    "internetarchive"
+  ];
 
   meta = with lib; {
     description = "A Python and Command-Line Interface to Archive.org";

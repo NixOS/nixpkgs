@@ -2,6 +2,7 @@
 , fetchurl
 , python3
 , pkg-config
+, cmocka
 , readline
 , talloc
 , libxslt
@@ -9,15 +10,16 @@
 , docbook_xml_dtd_42
 , which
 , wafHook
+, libxcrypt
 }:
 
 stdenv.mkDerivation rec {
   pname = "tevent";
-  version = "0.10.2";
+  version = "0.14.1";
 
   src = fetchurl {
     url = "mirror://samba/tevent/${pname}-${version}.tar.gz";
-    sha256 = "15k6i8ad5lpxfjsjyq9h64zlyws8d3cm0vwdnaw8z1xjwli7hhpq";
+    sha256 = "sha256-74X8qoD/0jUQNrpLNHYw/vKhrD2pZKfxggRmutA80A0=";
   };
 
   nativeBuildInputs = [
@@ -32,9 +34,18 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     python3
+    cmocka
     readline # required to build python
     talloc
+    libxcrypt
   ];
+
+  # otherwise the configure script fails with
+  # PYTHONHASHSEED=1 missing! Don't use waf directly, use ./configure and make!
+  preConfigure = ''
+    export PKGCONFIG="$PKG_CONFIG"
+    export PYTHONHASHSEED=1
+  '';
 
   wafPath = "buildtools/bin/waf";
 
@@ -42,6 +53,11 @@ stdenv.mkDerivation rec {
     "--bundled-libraries=NONE"
     "--builtin-libraries=replace"
   ];
+
+  # python-config from build Python gives incorrect values when cross-compiling.
+  # If python-config is not found, the build falls back to using the sysconfig
+  # module, which works correctly in all cases.
+  PYTHON_CONFIG = "/invalid";
 
   meta = with lib; {
     description = "An event system based on the talloc memory management library";

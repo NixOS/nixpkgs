@@ -1,42 +1,25 @@
-{ lib, rustPlatform, fetchFromGitHub
-, libsodium, openssl
-, pkg-config
-, fetchpatch
-}:
+{ lib, rustPlatform, fetchFromGitHub, nix-update-script }:
 
-with rustPlatform;
-
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "tox-node";
-  version = "0.1.1";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "tox-rs";
-    repo = "tox-node";
+    repo = "tox";
     rev = "v${version}";
-    sha256 = "sha256-tB6v2NEBdTNHf89USdQOr/pV0mbxxb8ftOYPPJMvz5Y=";
+    sha256 = "sha256-3ZRpri3WxwHjMq88TxRJAaTXMui8N1uLek+q8g5PGD4=";
   };
 
-  cargoPatches = [
-    # update cargo lock
-    (fetchpatch {
-      url = "https://github.com/tox-rs/tox-node/commit/63712d49d84e55df7bba9710e129780bbc636de3.patch";
-      sha256 = "sha256-jI6b5IHsAuGuM+7sPCdFnOOuV6K9rBmc5QqU5x72Fl0=";
-    })
-  ];
+  buildAndTestSubdir = "tox_node";
 
-  buildInputs = [ libsodium openssl ];
-  nativeBuildInputs = [ pkg-config ];
+  cargoSha256 = "sha256-L5IvYA32W8cTnuWjeljge5X+LZ912ugtcvEKXLqYZ+k=";
 
-  SODIUM_USE_PKG_CONFIG = "yes";
-
-  doCheck = false;
-
-  cargoSha256 = "sha256-yHsYjKJJNjepvcNszj4XQ0DbOY3AEJMZOnz0cAiwO1A=";
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A server application to run tox node written in pure Rust";
-    homepage = "https://github.com/tox-rs/tox-node";
+    homepage = "https://github.com/tox-rs/tox";
     license = [ licenses.gpl3Plus ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ suhr kurnevsky ];

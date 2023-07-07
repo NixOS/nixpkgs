@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake
 , airspy, soapysdr
+, libobjc, IOKit, Security
 } :
 
 stdenv.mkDerivation rec {
@@ -14,7 +15,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ airspy soapysdr ];
+  buildInputs = [ airspy soapysdr ]
+    ++ lib.optionals stdenv.isDarwin [ libobjc IOKit Security ];
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
 
@@ -23,6 +25,6 @@ stdenv.mkDerivation rec {
     description = "SoapySDR plugin for Airspy devices";
     license = licenses.mit;
     maintainers = with maintainers; [ markuskowa ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

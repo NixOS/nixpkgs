@@ -39,7 +39,9 @@ mapAttrs (channel: chromiumPkg: makeTest {
   name = "chromium-${channel}";
   meta = {
     maintainers = with maintainers; [ aszlig primeos ];
+  } // optionalAttrs (chromiumPkg.meta ? timeout) {
     # https://github.com/NixOS/hydra/issues/591#issuecomment-435125621
+    # Note: optionalAttrs is used since meta.timeout is not set for Google Chrome
     inherit (chromiumPkg.meta) timeout;
   };
 
@@ -65,6 +67,9 @@ mapAttrs (channel: chromiumPkg: makeTest {
     from contextlib import contextmanager
 
 
+    major_version = "${versions.major (getVersion chromiumPkg.name)}"
+
+
     # Run as user alice
     def ru(cmd):
         return "su - ${user} -c " + shlex.quote(cmd)
@@ -84,7 +89,6 @@ mapAttrs (channel: chromiumPkg: makeTest {
             binary = pname
         # Add optional CLI options:
         options = []
-        major_version = "${versions.major (getVersion chromiumPkg.name)}"
         if major_version > "95" and not pname.startswith("google-chrome"):
             # Workaround to avoid a GPU crash:
             options.append("--use-gl=swiftshader")
@@ -162,6 +166,8 @@ mapAttrs (channel: chromiumPkg: makeTest {
         clipboard = machine.succeed(
             ru("${pkgs.xclip}/bin/xclip -o")
         )
+        if url == "chrome://gpu":
+            clipboard = ""  # TODO: We cannot copy the text via Ctrl+a
         print(f"{description} window content:\n{clipboard}")
         with machine.nested(description):
             yield clipboard
@@ -242,9 +248,10 @@ mapAttrs (channel: chromiumPkg: makeTest {
         machine.screenshot("after_copy_from_chromium")
 
 
-    with test_new_win("gpu_info", "chrome://gpu", "chrome://gpu"):
+    with test_new_win("gpu_info", "chrome://gpu", "GPU Internals"):
         # To check the text rendering (catches regressions like #131074):
         machine.wait_for_text("Graphics Feature Status")
+        # TODO: Fix copying all of the text to the clipboard
 
 
     with test_new_win("version_info", "chrome://version", "About Version") as clipboard:

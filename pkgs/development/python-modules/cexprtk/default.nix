@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "cexprtk";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-c7QXB+oXzkRveiPpNrW/HY8pMtpZx/RtDpJMVE7fY/A=";
+    hash = "sha256-QhftIybufVPO/YbLFycR4qYEAtQMcRPP5jKS6o6dFZg=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "cexprtk" ];
 

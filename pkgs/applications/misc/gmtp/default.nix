@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   #   ld: gmtp-preferences.o:src/main.h:72: multiple definition of
   #     `scrolledwindowMain'; gmtp-about.o:src/main.h:72: first defined here
   # TODO: can be removed when 1.4.0 is released.
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   preFixup = ''
     gappsWrapperArgs+=(--add-flags "--datapath $out/share");

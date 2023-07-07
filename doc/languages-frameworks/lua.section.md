@@ -129,16 +129,21 @@ Let's present the luarocks way first and the manual one in a second time.
 ### Packaging a library on luarocks {#packaging-a-library-on-luarocks}
 
 [Luarocks.org](https://luarocks.org/) is the main repository of lua packages.
-The site proposes two types of packages, the rockspec and the src.rock
+The site proposes two types of packages, the `rockspec` and the `src.rock`
 (equivalent of a [rockspec](https://github.com/luarocks/luarocks/wiki/Rockspec-format) but with the source).
-These packages can have different build types such as `cmake`, `builtin` etc .
 
-Luarocks-based packages are generated in pkgs/development/lua-modules/generated-packages.nix from
-the whitelist maintainers/scripts/luarocks-packages.csv and updated by running maintainers/scripts/update-luarocks-packages.
+Luarocks-based packages are generated in [pkgs/development/lua-modules/generated-packages.nix](https://github.com/NixOS/nixpkgs/tree/master/pkgs/development/lua-modules/generated-packages.nix) from
+the whitelist maintainers/scripts/luarocks-packages.csv and updated by running
+the script
+[maintainers/scripts/update-luarocks-packages](https://github.com/NixOS/nixpkgs/tree/master/maintainers/scripts/update-luarocks-packages):
+
+```sh
+./maintainers/scripts/update-luarocks-packages update
+```
 
 [luarocks2nix](https://github.com/nix-community/luarocks) is a tool capable of generating nix derivations from both rockspec and src.rock (and favors the src.rock).
 The automation only goes so far though and some packages need to be customized.
-These customizations go in `pkgs/development/lua-modules/overrides.nix`.
+These customizations go in [pkgs/development/lua-modules/overrides.nix](https://github.com/NixOS/nixpkgs/tree/master/pkgs/development/lua-modules/overrides.nix).
 For instance if the rockspec defines `external_dependencies`, these need to be manually added to the overrides.nix.
 
 You can try converting luarocks packages to nix packages with the command `nix-shell -p luarocks-nix` and then `luarocks nix PKG_NAME`.
@@ -183,7 +188,7 @@ luaposix = buildLuarocksPackage {
 
   src = fetchurl {
     url    = "https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/luaposix-34.0.4-1.src.rock";
-    sha256 = "0yrm5cn2iyd0zjd4liyj27srphvy0gjrjx572swar6zqr4dwjqp2";
+    hash = "sha256-4mLJG8n4m6y4Fqd0meUDfsOb9RHSR0qa/KD5KCwrNXs=";
   };
   disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
   propagatedBuildInputs = [ bit32 lua std_normalize ];
@@ -200,7 +205,7 @@ luaposix = buildLuarocksPackage {
 The `buildLuarocksPackage` delegates most tasks to luarocks:
 
 * it adds `luarocks` as an unpacker for `src.rock` files (zip files really).
-* configurePhase` writes a temporary luarocks configuration file which location
+* `configurePhase` writes a temporary luarocks configuration file which location
 is exported via the environment variable `LUAROCKS_CONFIG`.
 * the `buildPhase` does nothing.
 * `installPhase` calls `luarocks make --deps-mode=none --tree $out` to build and

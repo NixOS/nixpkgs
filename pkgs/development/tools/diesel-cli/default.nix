@@ -25,15 +25,15 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "diesel-cli";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchCrate {
     inherit version;
     crateName = "diesel_cli";
-    sha256 = "sha256-PBfVLqm9vEbf1tDTx4v8U1amYwC0hpYTAYcWyfHB84g=";
+    hash = "sha256-FdmjfywvDD3mo1d1pUQMYvebo5AUTa99gQbQuOWmZZk=";
   };
 
-  cargoSha256 = "sha256-8bvJwdZEdIChFUdTVL+EyjzqI+OAJaVMOOyspReSFzc=";
+  cargoHash = "sha256-onPzM9E53VUogZdIu3jAeB4dL3MC2FP3b6QWZ5Tr3j0=";
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
 

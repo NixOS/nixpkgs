@@ -8,18 +8,18 @@
 
 buildPythonPackage rec {
   pname = "prometheus-flask-exporter";
-  version = "0.20.3";
+  version = "0.22.4";
 
   src = fetchFromGitHub {
     owner = "rycus86";
     repo = "prometheus_flask_exporter";
     rev = version;
-    sha256 = "sha256-l9Iw9fvXQMXzq1y/4Dml8uLPJWyqX6SDIXptJVw3cVQ=";
+    hash = "sha256-GAQ80J7at8Apqu+DUMN3+rLi/lrNv5Y7w/DKpUN2iu8=";
   };
 
   propagatedBuildInputs = [ flask prometheus-client ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   pytestFlagsArray = [ "tests/" ];
 
   meta = with lib; {

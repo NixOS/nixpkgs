@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ regex ];
 
-  checkInputs =  [ pytest ];
+  nativeCheckInputs =  [ pytest ];
   checkPhase = ''
     pytest
   '';

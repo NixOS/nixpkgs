@@ -1,9 +1,8 @@
 { lib
 , stdenv
 , buildPackages
-, autoreconfHook
+, pkg-config
 , fetchurl
-, fetchpatch
 , libedit
 , runCommand
 , dash
@@ -11,38 +10,24 @@
 
 stdenv.mkDerivation rec {
   pname = "dash";
-  version = "0.5.11.5";
+  version = "0.5.12";
 
   src = fetchurl {
     url = "http://gondor.apana.org.au/~herbert/dash/files/${pname}-${version}.tar.gz";
-    sha256 = "sha256-23eBEIkfeTeYXym/I0EP4cXWaVAnYPWE5U4OeynhI70=";
+    sha256 = "sha256-akdKxG6LCzKRbExg32lMggWNMpfYs4W3RQgDDKSo8oo=";
   };
 
-  hardeningDisable = [ "format" ];
-
-  patches = [
-    (fetchpatch {
-      # Dash executes code when noexec ("-n") is specified
-      # https://www.openwall.com/lists/oss-security/2020/11/11/3
-      url = "https://git.kernel.org/pub/scm/utils/dash/dash.git/patch/?id=29d6f2148f10213de4e904d515e792d2cf8c968e";
-      sha256 = "0aadb7aaaan6jxmi6icv4p5gqx7k510yszaqsa29b5giyxz5l9i1";
-    })
-
-    # aarch64-darwin fix from upstream; remove on next release
-    (fetchpatch {
-      url = "https://git.kernel.org/pub/scm/utils/dash/dash.git/patch/?id=6f6d1f2da03468c0e131fdcbdcfa9771ffca2614";
-      sha256 = "16iz2ylkyhpxqq411ns8pjk8rizh6afhavvsf052wvzsnmmlvfbw";
-    })
-  ];
-
   strictDeps = true;
-  # configure.ac patched; remove on next release
-  nativeBuildInputs = [ autoreconfHook ];
+
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isStatic [ pkg-config ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   buildInputs = [ libedit ];
 
   configureFlags = [ "--with-libedit" ];
+  preConfigure = lib.optional stdenv.hostPlatform.isStatic ''
+    export LIBS="$(''${PKG_CONFIG:-pkg-config} --libs --static libedit)"
+  '';
 
   enableParallelBuilding = true;
 

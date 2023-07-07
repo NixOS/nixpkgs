@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , jupyter_console
-, jupyter_core
+, jupyter-core
 , pygments
 , termcolor
 , txzmq
@@ -15,12 +15,12 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-YxV6xC7GS5NXyMPRZN9YIJxamgP2etwrZUAZjk5PjtU=";
+    hash = "sha256-YxV6xC7GS5NXyMPRZN9YIJxamgP2etwrZUAZjk5PjtU=";
   };
 
   propagatedBuildInputs = [
     jupyter_console
-    jupyter_core
+    jupyter-core
     pygments
     termcolor
     txzmq

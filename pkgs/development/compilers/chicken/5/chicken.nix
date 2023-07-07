@@ -29,11 +29,15 @@ stdenv.mkDerivation rec {
   ] ++ (lib.optionals stdenv.isDarwin [
     "XCODE_TOOL_PATH=${darwin.binutils.bintools}/bin"
     "C_COMPILER=$(CC)"
+    "CXX_COMPILER=$(CXX)"
     "LINKER_OPTIONS=-headerpad_max_install_names"
+    "POSTINSTALL_PROGRAM=install_name_tool"
   ]);
 
   nativeBuildInputs = [
     makeWrapper
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    darwin.autoSignDarwinBinariesHook
   ];
 
   buildInputs = lib.optionals (bootstrap-chicken != null) [
@@ -62,7 +66,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://call-cc.org/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ corngood ];
+    maintainers = with lib.maintainers; [ corngood nagy konst-aa ];
     platforms = lib.platforms.unix;
     description = "A portable compiler for the Scheme programming language";
     longDescription = ''

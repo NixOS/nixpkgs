@@ -1,11 +1,13 @@
-{ stdenv, nixosTests, lib, fetchurl, pkg-config, jansson, pcre
+{ stdenv, nixosTests, lib, pkg-config, jansson, pcre, libxcrypt
+, expat, zlib
 # plugins: list of strings, eg. [ "python2" "python3" ]
 , plugins ? []
 , pam, withPAM ? stdenv.isLinux
-, systemd, withSystemd ? stdenv.isLinux
+, systemd, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , libcap, withCap ? stdenv.isLinux
 , python2, python3, ncurses
 , ruby, php
+, makeWrapper, fetchFromGitHub
 }:
 
 let php-embed = php.override {
@@ -59,22 +61,24 @@ in
 
 stdenv.mkDerivation rec {
   pname = "uwsgi";
-  version = "2.0.20";
+  version = "2.0.21";
 
-  src = fetchurl {
-    url = "https://projects.unbit.it/downloads/${pname}-${version}.tar.gz";
-    sha256 = "1yfz5h07rxzrqf1rdj5fzhk47idgglxj7kqr8zl8lgcpv1kriaw8";
+  src = fetchFromGitHub {
+    owner = "unbit";
+    repo = "uwsgi";
+    rev = version;
+    sha256 = "sha256-TUASYDyG+p1tlhmqi+ivaC7aW6UZBrPTFQUTYys5ICE=";
   };
 
   patches = [
         ./no-ext-session-php_session.h-on-NixOS.patch
         ./additional-php-ldflags.patch
-        ./missing-arginfo-php8.patch # https://github.com/unbit/uwsgi/issues/2356
   ];
 
-  nativeBuildInputs = [ python3 pkg-config ];
+  nativeBuildInputs = [ python3 pkg-config makeWrapper ];
 
-  buildInputs =  [ jansson pcre ]
+  buildInputs =  [ jansson pcre libxcrypt ]
+              ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ expat zlib ]
               ++ lib.optional withPAM pam
               ++ lib.optional withSystemd systemd
               ++ lib.optional withCap libcap
@@ -124,6 +128,11 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -Dm755 uwsgi $out/bin/uwsgi
     ${lib.concatMapStringsSep "\n" (x: x.install or "") needed}
+  '';
+
+  postFixup = lib.optionalString (builtins.any (x: x.name == "php") needed)
+  ''
+    wrapProgram $out/bin/uwsgi --set PHP_INI_SCAN_DIR ${php-embed}/lib
   '';
 
   meta = with lib; {

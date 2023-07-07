@@ -37,7 +37,7 @@ python3Packages.buildPythonApplication rec {
     python3Packages.pygobject3
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     xvfb-run
   ];
 

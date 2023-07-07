@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchurl, fetchpatch, perl, texinfo }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, perl
+, texinfo
+
+# for passthru.tests
+, gnutls
+, samba
+, qemu
+}:
 
 stdenv.mkDerivation rec {
   pname = "libtasn1";
@@ -27,6 +38,10 @@ stdenv.mkDerivation rec {
     "export DYLD_LIBRARY_PATH=`pwd`/lib/.libs"
   else
     null;
+
+  passthru.tests = {
+    inherit gnutls samba qemu;
+  };
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/libtasn1/";

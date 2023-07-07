@@ -16,14 +16,14 @@ buildPythonPackage rec {
     repo = "plux";
     # Request for proper tags: https://github.com/localstack/plux/issues/4
     rev = "a412ab0a0d7d17c3b5e1f560b7b31dc1876598f7";
-    sha256 = "sha256-zFwrRc93R4cXah7zYXjVLBIeBpDedsInxuyXOyBI8SA=";
+    hash = "sha256-zFwrRc93R4cXah7zYXjVLBIeBpDedsInxuyXOyBI8SA=";
   };
 
   propagatedBuildInputs = [
     stevedore
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -6,17 +6,17 @@
 
 buildGoModule rec {
   pname = "zfsbackup";
-  version = "unstable-2021-05-26";
-  rev = "2d4534b920d3c57552667e1c6da9978b3a9278f0";
+  version = "unstable-2022-09-23";
+  rev = "a30f1a44bcae5f64cfb36a12926242a968a759c6";
 
   src = fetchFromGitHub {
     owner = "someone1";
     repo = "zfsbackup-go";
     inherit rev;
-    sha256 = "sha256-slVwXXGLvq+eAlqzD8p1fnc17CGUBY0Z68SURBBuf2k=";
+    sha256 = "sha256-ZJ7gtT4AdMLEs2+hJa2Sia0hSoQd3CftdqRsH/oJxd8=";
   };
 
-  vendorSha256 = "sha256-jpxp8RKDBrkBBaY89QnKYGWFI/DUURUVX8cPJ/qoLrg=";
+  vendorSha256 = "sha256-aYAficUFYYhZygfQZyczP49CeouAKKZJW8IFlkFh9lI=";
 
   ldflags = [ "-w" "-s" ];
 

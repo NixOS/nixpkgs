@@ -47,12 +47,12 @@ let
 
 in
 stdenv.mkDerivation rec {
-  version = "1.20.3";
+  version = "1.22.1";
   pname = "mupdf";
 
   src = fetchurl {
     url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
-    sha256 = "sha256-a2AHD27sIOjYfStc0iz0kCAxGjzxXuEJmOPl9fmEses=";
+    sha256 = "sha256-1i88DkVuu8QucfWkfw+M0SzsK/Co1yt541+jWmU4slo=";
   };
 
   patches = [ ./0001-Use-command-v-in-favor-of-which.patch

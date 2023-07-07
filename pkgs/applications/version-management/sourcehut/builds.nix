@@ -12,27 +12,27 @@
 , unzip
 }:
 let
-  version = "0.81.0";
+  version = "0.83.0";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "builds.sr.ht";
     rev = version;
-    sha256 = "sha256-oUSzanRFZ2dQTgm/VuNhqUaUAPq7ffxR7OtBKtE61DE=";
+    hash = "sha256-u/y+sYu/09LypWI/ngghbge5SvkuLQpray10j0SjlOo=";
   };
 
   buildsrht-api = buildGoModule ({
     inherit src version;
     pname = "buildsrht-api";
     modRoot = "api";
-    vendorSha256 = "sha256-roTwqtg4Y846PNtLdRN/LV3Jd0LVElqjFy3DJcrwoaI=";
-  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
+    vendorHash = "sha256-DfVWr/4J4ZrhHpy9CXPaAQcbag/9FmDgiexcNo0lEsk=";
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion= "0.17.20"; });
 
   buildsrht-worker = buildGoModule {
     inherit src version;
     sourceRoot = "source/worker";
     pname = "buildsrht-worker";
-    vendorSha256 = "sha256-Pf1M9a43eK4jr6QMi6kRHA8DodXQU0pqq9ua5VC3ER0=";
+    vendorHash = "sha256-y5RFPbtaGmgPpiV2Q3njeWORGZF1TJRjAbY6VgC1hek=";
   };
 in
 buildPythonPackage rec {
@@ -43,8 +43,6 @@ buildPythonPackage rec {
     substituteInPlace Makefile \
       --replace "all: api worker" ""
   '';
-
-  nativeBuildInputs = srht.nativeBuildInputs;
 
   propagatedBuildInputs = [
     srht

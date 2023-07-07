@@ -13,6 +13,7 @@ in
 python3Packages.buildPythonApplication rec {
   pname = "tremc";
   version = "0.9.2";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "tremc";
@@ -39,7 +40,7 @@ python3Packages.buildPythonApplication rec {
     ipy
     pyperclip
   ] ++
-  lib.optional useGeoIP GeoIP;
+  lib.optional useGeoIP geoip;
 
   dontBuild = true;
   doCheck = false;

@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "tchellomello";
     repo = "python-amcrest";
     rev = version;
-    sha256 = "sha256-An7MnGtZsmEZU/y6E0sivdexFD6HJRTB1juXqHfbDzE=";
+    hash = "sha256-An7MnGtZsmEZU/y6E0sivdexFD6HJRTB1juXqHfbDzE=";
   };
 
   propagatedBuildInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
     responses

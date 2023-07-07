@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.isDarwin;
   # There are some non-thread safe tests that can fail
   enableParallelChecking = false;
-  checkInputs = [ perl ];
+  nativeCheckInputs = [ perl ];
 
   GTEST_FILTER =
     let

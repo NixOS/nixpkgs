@@ -20,6 +20,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
   }; in {
     pomerium = { pkgs, lib, ... }: {
       imports = [ (base "192.168.1.1") ];
+      environment.systemPackages = with pkgs; [ chromium ];
       services.pomerium = {
         enable = true;
         settings = {
@@ -97,6 +98,12 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         )
         pomerium.succeed(
             "curl -L --resolve login.required:80:127.0.0.1 http://login.required | grep 'hello I am login page'"
+        )
+
+    with subtest("ui"):
+        pomerium.succeed(
+          # check for a string that only appears if the UI is displayed correctly
+            "chromium --no-sandbox --headless --disable-gpu --dump-dom --host-resolver-rules='MAP login.required 127.0.0.1:80' http://login.required/.pomerium | grep 'contact your administrator'"
         )
   '';
 })

@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ fake-useragent faker ];
 
-  checkInputs = [ pytestCheckHook scrapy pytest-cov pytest-mock ];
+  nativeCheckInputs = [ pytestCheckHook scrapy pytest-cov pytest-mock ];
 
   meta = with lib; {
     description = "Random User-Agent middleware based on fake-useragent";

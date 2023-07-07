@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "bond-async";
-  version = "0.1.22";
+  version = "0.1.23";
 
   disabled = pythonOlder "3.7";
 
@@ -20,14 +20,14 @@ buildPythonPackage rec {
     owner = "bondhome";
     repo = "bond-async";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wU1niuzHwNmrmyjcTlBIKrBf1wMbHHFlIBxFNHUwDw4=";
+    hash = "sha256-Kht2O/+F7Nw78p1Q6NGugm2bfAwZAUWAs30htoWkafI=";
   };
 
   propagatedBuildInputs = [
     aiohttp
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     pytest-asyncio
     pytestCheckHook
@@ -40,6 +40,7 @@ buildPythonPackage rec {
   meta = {
     description = "Asynchronous Python wrapper library over Bond Local API";
     homepage = "https://github.com/bondhome/bond-async";
+    changelog = "https://github.com/bondhome/bond-async/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

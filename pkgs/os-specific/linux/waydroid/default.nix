@@ -1,31 +1,44 @@
-{ stdenv
-, lib
+{ lib
 , fetchFromGitHub
 , python3Packages
 , dnsmasq
+, gawk
 , getent
+, gobject-introspection
+, gtk3
 , kmod
 , lxc
 , iproute2
 , iptables
-, nftables
 , util-linux
-, which
+, wrapGAppsHook
 , xclip
+, runtimeShell
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "waydroid";
-  version = "1.3.0";
+  version = "1.4.1";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-6osDGYyFuyPDeK1QFowh414j3laD8i4bqPgCeJmsszE=";
+    sha256 = "sha256-0AkNzMIumvgnVcLKX72E2+Eg54Y9j7tdIYPsroOTLWA=";
   };
 
+  buildInputs = [
+    gtk3
+  ];
+
+  nativeBuildInputs = [
+    gobject-introspection
+    wrapGAppsHook
+  ];
+
   propagatedBuildInputs = with python3Packages; [
+    dbus-python
     gbinder-python
     pyclip
     pygobject3
@@ -35,24 +48,34 @@ python3Packages.buildPythonApplication rec {
   dontUsePipInstall = true;
   dontUseSetuptoolsCheck = true;
   dontWrapPythonPrograms = true;
+  dontWrapGApps = true;
 
   installPhase = ''
-    make install DESTDIR=$out PREFIX= USE_SYSTEMD=0 USE_NFTABLES=1
+    make install PREFIX=$out USE_SYSTEMD=0
+  '';
 
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+
+    patchShebangs --host $out/lib/waydroid/data/scripts
     wrapProgram $out/lib/waydroid/data/scripts/waydroid-net.sh \
-       --prefix PATH ":" ${lib.makeBinPath [ dnsmasq getent iproute2 nftables ]}
+      --prefix PATH ":" ${lib.makeBinPath [ dnsmasq getent iproute2 iptables ]}
 
     wrapPythonProgramsIn $out/lib/waydroid/ "${lib.concatStringsSep " " [
       "$out"
+      python3Packages.dbus-python
       python3Packages.gbinder-python
       python3Packages.pygobject3
       python3Packages.pyclip
+      gawk
       kmod
       lxc
       util-linux
-      which
       xclip
     ]}"
+
+    substituteInPlace $out/lib/waydroid/tools/helpers/*.py \
+      --replace '"sh"' '"${runtimeShell}"'
   '';
 
   meta = with lib; {

@@ -8,13 +8,13 @@
 , ncurses
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yabasic";
-  version = "2.90.2";
+  version = "2.90.3";
 
   src = fetchurl {
-    url = "http://www.yabasic.de/download/${pname}-${version}.tar.gz";
-    hash = "sha256-ff5j0cJ1i2HWIsYjwzx5FFtZfchWsGRF2AZtbDXrNJw=";
+    url = "http://www.yabasic.de/download/yabasic-${finalAttrs.version}.tar.gz";
+    hash = "sha256-ItmlkraNUE0qlq1RghUJcDq4MHb6HRKNoIRylugjboA=";
   };
 
   buildInputs = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://2484.de/yabasic/";
     description = "Yet another BASIC";
     longDescription = ''
@@ -36,8 +36,9 @@ stdenv.mkDerivation rec {
       and has a comprehensive documentation; it is small, simple, open-source
       and free.
    '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.all;
+    changelog = "https://2484.de/yabasic/whatsnew.html";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.all;
   };
-}
+})

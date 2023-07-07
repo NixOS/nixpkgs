@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , check
 , flex
@@ -8,19 +9,20 @@
 , which
 , elfutils
 , libelf
+, libffi
 , llvm
 , zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "nvc";
-  version = "1.7.1";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "nickg";
     repo = pname;
     rev = "r${version}";
-    sha256 = "sha256-OcRwhhX93E8LHUeFzgjGxw6OANACOUJmY4i0JKjtHfI=";
+    hash = "sha256-xB2COtYgbg00rrOWTbcBocRnqF5682jUG2eS7I71Ln4=";
   };
 
   nativeBuildInputs = [
@@ -32,16 +34,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    libffi
     llvm
     zlib
-  ] ++ [
-    (if stdenv.isLinux then elfutils else libelf)
+  ] ++ lib.optionals stdenv.isLinux [
+    elfutils
+  ] ++ lib.optionals (!stdenv.isLinux) [
+    libelf
   ];
-
-  # TODO: recheck me on next release
-  postPatch = lib.optionalString stdenv.isLinux ''
-    sed -i "/vhpi4/d" test/regress/testlist.txt
-  '';
 
   preConfigure = ''
     mkdir build
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     description = "VHDL compiler and simulator";
     homepage = "https://www.nickg.me.uk/nvc/";
     license = licenses.gpl3Plus;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ wegank ];
+    platforms = platforms.unix;
   };
 }

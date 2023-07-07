@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, freezegun
 , mock
 , nose2
 , pytz
@@ -10,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "duo-client";
-  version = "4.4.0";
+  version = "4.7.1";
 
   src = fetchFromGitHub {
     owner = "duosecurity";
     repo = "duo_client_python";
-    rev = version;
-    sha256 = "sha256-2sodExb66+Y+aPvm+DkibPt0Bvwqjii+EoBWaopdq+E=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-nnKujvhOtuNnlFrbmYtD7L++S7DK0Qqrc0LyAVYe7Xg=";
   };
 
   postPatch = ''
@@ -30,17 +31,21 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    freezegun
     mock
     nose2
     pytz
   ];
 
-  pythonImportsCheck = [ "duo_client" ];
+  pythonImportsCheck = [
+    "duo_client"
+  ];
 
   meta = with lib; {
     description = "Python library for interacting with the Duo Auth, Admin, and Accounts APIs";
     homepage = "https://github.com/duosecurity/duo_client_python";
+    changelog = "https://github.com/duosecurity/duo_client_python/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

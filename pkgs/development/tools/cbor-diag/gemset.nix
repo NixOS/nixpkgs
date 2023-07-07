@@ -1,34 +1,64 @@
 {
-  cbor-diag = {
-    dependencies = ["json" "neatjson" "treetop"];
+  cbor-canonical = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0pd0k4malg1l7w3ck5glh9w0hrsvknk8rp32vrir74yww1g6yplv";
+      sha256 = "1fhj51s5d9b9spw096sb0p92bgilw9hrsay383563dh913j2jn11";
       type = "gem";
     };
-    version = "0.5.6";
+    version = "0.1.2";
   };
-  json = {
+  cbor-deterministic = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0sx97bm9by389rbzv8r1f43h06xcz8vwi3h5jv074gvparql7lcx";
+      sha256 = "1w1mg4mn1dhlxlbijxpzja8m8ggrjs0hzkzvnaazw9zm1ji6dpba";
       type = "gem";
     };
-    version = "2.2.0";
+    version = "0.1.3";
+  };
+  cbor-diag = {
+    dependencies = ["cbor-canonical" "cbor-deterministic" "cbor-packed" "json_pure" "neatjson" "treetop"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0k57gminnhz5fmnclrixdp1f2mg8d6zjnbbf67glaqpxf08a99j6";
+      type = "gem";
+    };
+    version = "0.8.4";
+  };
+  cbor-packed = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1dijyj7rivi39h34f32fx7k4xvngldf569i0372n1z6w01nv761l";
+      type = "gem";
+    };
+    version = "0.1.5";
+  };
+  json_pure = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0kn736pb52j8b9xxq6l8wqp2chs74aa14vfnp0rijjn086m8b4f3";
+      type = "gem";
+    };
+    version = "2.6.3";
   };
   neatjson = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0fa2v7b6433j0iqh5iq9r71v7a5xabgjvqwsbl21vcsac7vf3ncw";
+      sha256 = "0wm1lq8yl6rzysh3wg6fa55w5534k6ppiz0qb7jyvdy582mk5i0s";
       type = "gem";
     };
-    version = "0.9";
+    version = "0.10.5";
   };
   polyglot = {
     groups = ["default"];
@@ -46,9 +76,9 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0g31pijhnv7z960sd09lckmw9h8rs3wmc8g4ihmppszxqm99zpv7";
+      sha256 = "0adc8qblz8ii668r3rksjx83p675iryh52rvdvysimx2hkbasj7d";
       type = "gem";
     };
-    version = "1.6.10";
+    version = "1.6.12";
   };
 }

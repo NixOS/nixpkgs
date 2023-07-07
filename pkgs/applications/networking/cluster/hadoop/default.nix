@@ -10,7 +10,7 @@
 , which
 , bzip2
 , cyrus_sasl
-, protobuf3_7
+, protobuf
 , snappy
 , zlib
 , zstd
@@ -37,7 +37,7 @@ let
       doCheck = true;
 
       nativeBuildInputs = [ makeWrapper ]
-        ++ optional (stdenv.isLinux && (nativeLibs != [ ] || libPatches != "")) [ autoPatchelfHook ];
+        ++ optionals (stdenv.isLinux && (nativeLibs != [ ] || libPatches != "")) [ autoPatchelfHook ];
       buildInputs = [ openssl ] ++ nativeLibs;
 
       installPhase = ''
@@ -92,14 +92,13 @@ in
     pname = "hadoop";
     platformAttrs = rec {
         x86_64-linux = {
-          version = "3.3.3";
-          hash = "sha256-+nHGG7qkJxKa7wn+wCizTdVCxlrZD9zOxefvk9g7h2Q=";
+          version = "3.3.5";
+          hash = "sha256-RG4FypL6I6YGF6ixeUbe3kcoGvFQQEFhfLfV9i50JSo=";
         };
         x86_64-darwin = x86_64-linux;
         aarch64-linux = {
-          version = "3.3.1";
-          hash = "sha256-v1Om2pk0wsgKBghRD2wgTSHJoKd3jkm1wPKAeDcKlgI=";
-          meta.knownVulnerabilities = [ "CVE-2021-37404" "CVE-2021-33036" ];
+          version = "3.3.5";
+          hash = "sha256-qcKjbE881isauWBxIv+NY0UFbYit704/Re8Kdl6x1LA=";
         };
         aarch64-darwin = aarch64-linux;
     };
@@ -107,7 +106,7 @@ in
     jdk = jdk11_headless;
     inherit openssl;
     # TODO: Package and add Intel Storage Acceleration Library
-    nativeLibs = [ stdenv.cc.cc.lib protobuf3_7 zlib snappy ];
+    nativeLibs = [ stdenv.cc.cc.lib protobuf zlib snappy ];
     libPatches = ''
       ln -s ${getLib cyrus_sasl}/lib/libsasl2.so $out/lib/${untarDir}/lib/native/libsasl2.so.2
       ln -s ${getLib openssl}/lib/libcrypto.so $out/lib/${untarDir}/lib/native/
@@ -119,18 +118,21 @@ in
       patchelf --add-rpath ${jdk.home}/lib/server $out/lib/${untarDir}/lib/native/libnativetask.so.1.0.0
       # Java 8 has libjvm.so at a different path
       patchelf --add-rpath ${jdk.home}/jre/lib/amd64/server $out/lib/${untarDir}/lib/native/libnativetask.so.1.0.0
+      # NixOS/nixpkgs#193370
+      # This workaround is needed to use protobuf 3.19
+      patchelf --replace-needed libprotobuf.so.18 libprotobuf.so $out/lib/${untarDir}/lib/native/libhdfspp.so
     '';
     tests = nixosTests.hadoop;
   };
   hadoop_3_2 = common rec {
     pname = "hadoop";
     platformAttrs.x86_64-linux = {
-      version = "3.2.3";
-      hash = "sha256-Q2/a1LcKutpJoGySB0qlCcYE2bvC/HoG/dp9nBikuNU=";
+      version = "3.2.4";
+      hash = "sha256-qt2gpMr+NHuiVR+/zFRzRyRKG725/ZNBIM69z9J9wNw=";
     };
     jdk = jdk8_headless;
     # not using native libs because of broken openssl_1_0_2 dependency
-    # can be manually overriden
+    # can be manually overridden
     tests = nixosTests.hadoop_3_2;
   };
   hadoop2 = common rec {

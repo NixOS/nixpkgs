@@ -17,12 +17,11 @@
 , libGL ? null
 , libGLU ? null
 , wxGTK ? null
-, wxmac ? null
 , xorg ? null
 , parallelBuild ? false
 , systemd
 , wxSupport ? true
-, systemdSupport ? stdenv.isLinux # systemd support in epmd
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd # systemd support in epmd
   # updateScript deps
 , writeScript
 , common-updater-scripts
@@ -72,7 +71,7 @@
 }:
 
 assert wxSupport -> (if stdenv.isDarwin
-then wxmac != null
+then wxGTK != null
 else libGL != null && libGLU != null && wxGTK != null && xorg != null);
 
 assert odbcSupport -> unixODBC != null;
@@ -80,7 +79,7 @@ assert javacSupport -> openjdk11 != null;
 
 let
   inherit (lib) optional optionals optionalAttrs optionalString;
-  wxPackages2 = if stdenv.isDarwin then [ wxmac ] else wxPackages;
+  wxPackages2 = if stdenv.isDarwin then [ wxGTK ] else wxPackages;
 
 in
 stdenv.mkDerivation ({
@@ -129,6 +128,8 @@ stdenv.mkDerivation ({
     ++ optional wxSupport "--enable-wx"
     ++ optional systemdSupport "--enable-systemd"
     ++ optional stdenv.isDarwin "--enable-darwin-64bit"
+    # make[3]: *** [yecc.beam] Segmentation fault: 11
+    ++ optional (stdenv.isDarwin && stdenv.isx86_64) "--disable-jit"
     ++ configureFlags;
 
   # install-docs will generate and install manpages and html docs
@@ -157,7 +158,7 @@ stdenv.mkDerivation ({
         latest=$(list-git-tags --url=https://github.com/erlang/otp.git | sed -n 's/^OTP-${major}/${major}/p' | sort -V | tail -1)
         if [ "$latest" != "${version}" ]; then
           nixpkgs="$(git rev-parse --show-toplevel)"
-          nix_file="$nixpkgs/pkgs/development/interpreters/erlang/R${major}.nix"
+          nix_file="$nixpkgs/pkgs/development/interpreters/erlang/${major}.nix"
           update-source-version ${baseName}R${major} "$latest" --version-key=version --print-changes --file="$nix_file"
         else
           echo "${baseName}R${major} is already up-to-date"

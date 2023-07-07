@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitea
-, fetchpatch
 , giflib
 , imlib2
 , libXft
@@ -13,23 +12,15 @@
 
 stdenv.mkDerivation rec {
   pname = "nsxiv";
-  version = "30";
+  version = "31";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "nsxiv";
     repo = "nsxiv";
     rev = "v${version}";
-    hash = "sha256-swzTdQ6ow1At4bKRORqz6fb0Ej92yU9rlI/OgcinPu4=";
+    hash = "sha256-X1ZMr5OADs9GIe/kp/kEqKMMHZMymd58m9+f0SPzn7s=";
   };
-
-  patches = [
-    # Fix build failure when _SC_PHYS_PAGES is not defined
-    (fetchpatch {
-      url = "https://codeberg.org/nsxiv/nsxiv/commit/1a50bff9f300f84e93a6e7035657e6029e7e8183.patch";
-      hash = "sha256-PpUqGVWaJ06EVu3tBKVzOh8HYvT6wAG3bvY6wUD+dTM=";
-    })
-  ];
 
   buildInputs = [
     giflib
@@ -71,5 +62,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres sikmir ];
     platforms = platforms.unix;
+    changelog = "https://codeberg.org/nsxiv/nsxiv/src/tag/${src.rev}/etc/CHANGELOG.md";
   };
 }

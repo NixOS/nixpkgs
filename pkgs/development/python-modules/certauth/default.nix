@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "ikreymer";
     repo = "certauth";
     rev = "ad2bae5d40a9e45519fc1f2cd7678174bbc55b3d"; # Repo has no git tags
-    sha256 = "sha256-Rso5N0jb9k7bdorjPIUMNiZZPnzwbkxFNiTpsJ9pco0=";
+    hash = "sha256-Rso5N0jb9k7bdorjPIUMNiZZPnzwbkxFNiTpsJ9pco0=";
   };
 
   propagatedBuildInputs = [
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     tldextract
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-cov
   ];

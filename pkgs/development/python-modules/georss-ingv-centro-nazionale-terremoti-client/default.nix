@@ -17,14 +17,14 @@ buildPythonPackage rec {
     owner = "exxamalte";
     repo = "python-georss-ingv-centro-nazionale-terremoti-client";
     rev = "v${version}";
-    sha256 = "sha256-zqjo70NzpUt5zNEar0P1sl/gMb+ZcS+7GX7QGuFjMYY=";
+    hash = "sha256-zqjo70NzpUt5zNEar0P1sl/gMb+ZcS+7GX7QGuFjMYY=";
   };
 
   propagatedBuildInputs = [
     georss-client
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

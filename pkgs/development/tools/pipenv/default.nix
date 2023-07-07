@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , python3
+, fetchPypi
 , installShellFiles
 }:
 
@@ -23,11 +24,11 @@ let
 
 in buildPythonApplication rec {
   pname = "pipenv";
-  version = "2022.9.8";
+  version = "2023.2.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-tt//Bt6lbjut6S/CZ8LaHwgHxcewkD7vYRX9uJnCtLY=";
+    sha256 = "sha256-GKPrpRnjbVnw1af5xCvSaFIeS5t7PRvWrc8TFWkyMnU=";
   };
 
   LC_ALL = "en_US.UTF-8";

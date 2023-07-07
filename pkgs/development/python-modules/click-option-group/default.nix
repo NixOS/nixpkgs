@@ -8,22 +8,22 @@
 
 buildPythonPackage rec {
   pname = "click-option-group";
-  version = "0.5.3";
+  version = "0.5.6";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "click-contrib";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1w0692s8fabncpggpwl2d4dfqjjlmcia271rrb8hcz0r6nvw98ak";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-uR5rIZPPT6pRk/jJEy2rZciOXrHWVWN6BfGroQ3znas=";
   };
 
   propagatedBuildInputs = [
     click
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

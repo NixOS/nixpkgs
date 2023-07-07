@@ -1,21 +1,29 @@
-{ lib, fetchFromGitHub, buildDunePackage
-, calendar, csv, hex, ppx_deriving, ppx_sexp_conv, re, rresult, sexplib
+{ lib, fetchFromGitHub, fetchpatch, buildDunePackage, ocaml
+, calendar, camlp-streams, csv, hex, ppx_deriving, ppx_sexp_conv, re, rresult, sexplib
 }:
+
+let with-camlp-streams = lib.optional (lib.versionAtLeast ocaml.version "5.0"); in
 
 buildDunePackage rec {
   pname = "pgocaml";
-  version = "4.2.2-dev-20210111";
+  version = "4.3.0";
   src = fetchFromGitHub {
     owner = "darioteixeira";
     repo = "pgocaml";
-    rev = "1bb0025deeb3d14029afdcc69aaa7847026e243e";
-    sha256 = "11inbjf87gclc2xmpq56ag4cm4467y9q9hjgbdn69fa1bman2zn2";
+    rev = version;
+    hash = "sha256-W1fbRnU1l61qqxfVY2qiBnVpGD81xrBO8k0tWr+RXMY=";
   };
 
-  minimumOCamlVersion = "4.08";
-  useDune2 = true;
+  # Compatibility with OCaml ≥ 5.0
+  patches = with-camlp-streams (fetchpatch {
+    url = "https://github.com/darioteixeira/pgocaml/commit/906a289dc57da4971e312c31eedd26d81e902ed5.patch";
+    hash = "sha256-/v9Jheg98GhrcD2gcsQpPvq7YiIrvJj22SKvrBRlR9Y=";
+  });
 
-  propagatedBuildInputs = [ calendar csv hex ppx_deriving ppx_sexp_conv re rresult sexplib ];
+  minimalOCamlVersion = "4.08";
+
+  propagatedBuildInputs = [ calendar csv hex ppx_deriving ppx_sexp_conv re rresult sexplib ]
+  ++ with-camlp-streams camlp-streams;
 
   meta = with lib; {
     description = "An interface to PostgreSQL databases for OCaml applications";

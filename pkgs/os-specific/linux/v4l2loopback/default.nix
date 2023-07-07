@@ -2,14 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "v4l2loopback";
-  version = "unstable-2021-07-13-${kernel.version}";
+  version = "unstable-2023-02-19-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "umlaeute";
     repo = "v4l2loopback";
-    rev = "baf9de279afc7a7c7513e9c40a0c9ff88f456af4";
-    sha256 = "sha256-uglYTeqz81fgkKYYU9Cw8x9+S088jGxDEGkb3rmkhrw==";
+    rev = "fb410fc7af40e972058809a191fae9517b9313af";
+    hash = "sha256-gLFtR7s+3LUQ0BZxHbmaArHbufuphbtAX99nxJU3c84=";
   };
+
+  patches = [
+    # fix bug https://github.com/umlaeute/v4l2loopback/issues/535
+    ./revert-pr518.patch
+  ];
 
   hardeningDisable = [ "format" "pic" ];
 

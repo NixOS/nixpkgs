@@ -15,22 +15,21 @@
     "cmd/kube-controller-manager"
     "cmd/kube-proxy"
     "cmd/kube-scheduler"
-    "test/e2e/e2e.test"
   ]
 }:
 
 buildGoModule rec {
   pname = "kubernetes";
-  version = "1.23.11";
+  version = "1.27.3";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "sha256-fjB5O3kuU09megWGgU7f3otmWD/a31xVV1Dap2+xFkw=";
+    hash = "sha256-g/YRwhhGjeBhbSFS/6xJbljTTMiwJHE3WRySwJlzKys=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 

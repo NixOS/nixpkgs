@@ -84,13 +84,11 @@ let
     ''
   ) vrrpInstances);
 
-  virtualIpLine = (ip:
-    ip.addr
+  virtualIpLine = ip: ip.addr
     + optionalString (notNullOrEmpty ip.brd) " brd ${ip.brd}"
     + optionalString (notNullOrEmpty ip.dev) " dev ${ip.dev}"
     + optionalString (notNullOrEmpty ip.scope) " scope ${ip.scope}"
-    + optionalString (notNullOrEmpty ip.label) " label ${ip.label}"
-  );
+    + optionalString (notNullOrEmpty ip.label) " label ${ip.label}";
 
   notNullOrEmpty = s: !(s == null || s == "");
 

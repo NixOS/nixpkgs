@@ -7,7 +7,7 @@ index 83188ce..3439cdb 100644
  
  ifeq ($(PLAT),linux)
 -LIBS=-lX11 -lXi -lpthread -lGL -lm -ldl
-+LIBS=-lSDL2 -lpthread -lGL -lm -ldl -lcurl -lopenal
++LIBS=-lX11 -lXi -lpthread -lGL -lm -ldl -lcurl -lopenal
  endif
  
  ifeq ($(PLAT),sunos)

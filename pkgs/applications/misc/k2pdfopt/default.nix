@@ -1,4 +1,4 @@
-{ lib, stdenv, runCommand, fetchzip, fetchurl, fetchpatch, fetchFromGitHub
+{ lib, stdenv, runCommand, fetchzip, fetchurl, fetchFromGitHub
 , cmake, pkg-config, zlib, libpng, makeWrapper
 , enableGSL ? true, gsl
 , enableGhostScript ? true, ghostscript
@@ -7,8 +7,6 @@
 , enableGOCR ? false, gocr # Disabled by default due to crashes
 , enableTesseract ? true, leptonica, tesseract4
 }:
-
-with lib;
 
 # k2pdfopt is a pain to package. It requires modified versions of mupdf,
 # leptonica, and tesseract.  Instead of shipping patches for these upstream
@@ -140,12 +138,12 @@ in stdenv.mkDerivation rec {
     };
   in
     [ zlib libpng ] ++
-    optional enableGSL gsl ++
-    optional enableGhostScript ghostscript ++
-    optional enableMuPDF mupdf_modded ++
-    optional enableDJVU djvulibre ++
-    optional enableGOCR gocr ++
-    optionals enableTesseract [ leptonica_modded tesseract_modded ];
+    lib.optional enableGSL gsl ++
+    lib.optional enableGhostScript ghostscript ++
+    lib.optional enableMuPDF mupdf_modded ++
+    lib.optional enableDJVU djvulibre ++
+    lib.optional enableGOCR gocr ++
+    lib.optionals enableTesseract [ leptonica_modded tesseract_modded ];
 
   dontUseCmakeBuildDir = true;
 
@@ -157,7 +155,7 @@ in stdenv.mkDerivation rec {
     install -D -m 755 k2pdfopt $out/bin/k2pdfopt
   '';
 
-  preFixup = optionalString enableTesseract ''
+  preFixup = lib.optionalString enableTesseract ''
     wrapProgram $out/bin/k2pdfopt --set-default TESSDATA_PREFIX ${tesseract4}/share/tessdata
   '';
 

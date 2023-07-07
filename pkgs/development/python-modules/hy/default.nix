@@ -1,22 +1,18 @@
 { lib
 , astor
 , buildPythonPackage
-, colorama
 , fetchFromGitHub
 , funcparserlib
 , hy
 , pytestCheckHook
 , python
 , pythonOlder
-, rply
 , testers
-, toPythonApplication
-, hyDefinedPythonPackages ? python-packages: [ ] /* Packages like with python.withPackages */
 }:
 
 buildPythonPackage rec {
   pname = "hy";
-  version = "1.0a4";
+  version = "0.26.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,34 +20,32 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hylang";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-MBzp3jqBg/kH233wcgYYHc+Yg9GuOaBsXIfjFDihD1E=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Ow3FAiH97lSaI3oSx702+jgScfNgf+JstuDpgPSB8LM=";
   };
 
   # https://github.com/hylang/hy/blob/1.0a4/get_version.py#L9-L10
   HY_VERSION = version;
 
   propagatedBuildInputs = [
-    colorama
     funcparserlib
-    rply # TODO: remove on the next release
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [
+  ] ++
+  lib.optionals (pythonOlder "3.9") [
     astor
-  ]
-  # for backwards compatibility with removed pkgs/development/interpreters/hy
-  # See: https://github.com/NixOS/nixpkgs/issues/171428
-  ++ (hyDefinedPythonPackages python.pkgs);
+  ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
+  preCheck = ''
+    # For test_bin_hy
+    export PATH="$out/bin:$PATH"
+  '';
+
   disabledTests = [
-    # Don't test the binary
-    "test_bin_hy"
-    "test_hystartup"
-    "est_hy2py_import"
+    "test_circular_macro_require"
+    "test_macro_require"
   ];
 
   pythonImportsCheck = [ "hy" ];
@@ -61,10 +55,17 @@ buildPythonPackage rec {
       package = hy;
       command = "hy -v";
     };
-    # also for backwards compatibility with removed pkgs/development/interpreters/hy
-    withPackages = python-packages: (toPythonApplication hy).override {
-      hyDefinedPythonPackages = python-packages;
-    };
+    # For backwards compatibility with removed pkgs/development/interpreters/hy
+    # Example usage:
+    #   hy.withPackages (ps: with ps; [ hyrule requests ])
+    withPackages = python-packages:
+      (python.withPackages
+        (ps: (python-packages ps) ++ [ ps.hy ])).overrideAttrs (old: {
+          name = "${hy.name}-env";
+          meta = lib.mergeAttrs (builtins.removeAttrs hy.meta [ "license" ]) {
+            mainProgram = "hy";
+          };
+        });
   };
 
   meta = with lib; {

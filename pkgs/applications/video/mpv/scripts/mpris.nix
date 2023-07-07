@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mpv-mpris";
-  version = "0.8.1";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "hoyon";
     repo = "mpv-mpris";
     rev = version;
-    sha256 = "ugEiQZA1vQCVwyv3ViM84Qz8lhRvy17vcxjayYevTAs=";
+    sha256 = "sha256-7kPpCfiWe58V4fBOsEVvGoGeNIlMUAyD1fqS5/8k/e4=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jfrankenau ];
+    changelog = "https://github.com/hoyon/mpv-mpris/releases/tag/${version}";
   };
 }

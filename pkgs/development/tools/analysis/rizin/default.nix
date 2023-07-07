@@ -14,6 +14,7 @@
 , lz4
 , xxHash
 , meson
+, python3
 , cmake
 , ninja
 , capstone
@@ -22,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rizin";
-  version = "0.4.1";
+  version = "0.5.2";
 
   src = fetchurl {
     url = "https://github.com/rizinorg/rizin/releases/download/v${version}/rizin-src-v${version}.tar.xz";
-    sha256 = "sha256-Zp2Va5l4IKNuQjzzXUgqqZhJJUuWWM72hERZkS39v7g=";
+    hash = "sha256-cauA/DyKycgKEAANg4EoryigXTGg7hg5AMLFxuNQ7KM=";
   };
 
   mesonFlags = [
@@ -43,7 +44,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     meson
-    meson.python3.pkgs.pyyaml
+    (python3.withPackages (pp: with pp; [
+      pyyaml
+    ]))
     ninja
     cmake
   ];
@@ -78,6 +81,14 @@ stdenv.mkDerivation rec {
     tree-sitter
     xxHash
   ];
+
+  postPatch = ''
+    # find_installation without arguments uses Meson’s Python interpreter,
+    # which does not have any extra modules.
+    # https://github.com/mesonbuild/meson/pull/9904
+    substituteInPlace meson.build \
+      --replace "import('python').find_installation()" "find_program('python3')"
+  '';
 
   meta = {
     description = "UNIX-like reverse engineering framework and command-line toolset.";

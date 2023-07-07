@@ -1,10 +1,10 @@
-diff --git a/modules/setting/setting.go b/modules/setting/setting.go
-index 45e55a2..9d18ee4 100644
---- a/modules/setting/setting.go
-+++ b/modules/setting/setting.go
-@@ -667,7 +667,7 @@ func NewContext() {
+diff --git a/modules/setting/server.go b/modules/setting/server.go
+index 183906268..fa02e8915 100644
+--- a/modules/setting/server.go
++++ b/modules/setting/server.go
+@@ -319,7 +319,7 @@ func loadServerFrom(rootCfg ConfigProvider) {
  	OfflineMode = sec.Key("OFFLINE_MODE").MustBool()
- 	DisableRouterLog = sec.Key("DISABLE_ROUTER_LOG").MustBool()
+ 	Log.DisableRouterLog = sec.Key("DISABLE_ROUTER_LOG").MustBool()
  	if len(StaticRootPath) == 0 {
 -		StaticRootPath = AppWorkPath
 +		StaticRootPath = "@data@"

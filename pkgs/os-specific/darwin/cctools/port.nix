@@ -3,6 +3,7 @@
 , libuuid
 , libobjc ? null, maloader ? null
 , enableTapiSupport ? true, libtapi
+, fetchpatch
 }:
 
 let
@@ -19,13 +20,17 @@ assert (!stdenv.hostPlatform.isDarwin) -> maloader != null;
 
 stdenv.mkDerivation {
   pname = "${targetPrefix}cctools-port";
-  version = "949.0.1";
+  version = "973.0.1";
 
   src = fetchFromGitHub {
     owner  = "tpoechtrager";
     repo   = "cctools-port";
-    rev    = "43f32a4c61b5ba7fde011e816136c550b1b3146f";
-    sha256 = "10yc5smiczzm62q6ijqccc58bwmfhc897f3bwa5i9j98csqsjj0k";
+    # This is the commit before: https://github.com/tpoechtrager/cctools-port/pull/114
+    # That specific change causes trouble for us (see the PR discussion), but
+    # is also currently the last commit on master at the time of writing, so we
+    # can just go back one step.
+    rev    = "457dc6ddf5244ebf94f28e924e3a971f1566bd66";
+    sha256 = "0ns12q7vg9yand4dmdsps1917cavfbw67yl5q7bm6kb4ia5kkx13";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -35,7 +40,19 @@ stdenv.mkDerivation {
     ++ lib.optionals stdenv.isDarwin [ libobjc ]
     ++ lib.optional enableTapiSupport libtapi;
 
-  patches = [ ./ld-ignore-rpath-link.patch ./ld-rpath-nonfinal.patch ];
+  patches = [
+    ./ld-ignore-rpath-link.patch
+    ./ld-rpath-nonfinal.patch
+    (fetchpatch {
+      url = "https://github.com/tpoechtrager/cctools-port/commit/4a734070cd2838e49658464003de5b92271d8b9e.patch";
+      hash = "sha256-72KaJyu7CHXxJJ1GNq/fz+kW1RslO3UaKI91LhBtiXA=";
+    })
+    (fetchpatch {
+      url = "https://github.com/MercuryTechnologies/cctools-port/commit/025899b7b3593dedb0c681e689e57c0e7bbd9b80.patch";
+      hash = "sha256-SWVUzFaJHH2fu9y8RcU3Nx/QKx60hPE5zFx0odYDeQs=";
+    })
+  ]
+    ++ lib.optional stdenv.isDarwin ./darwin-no-memstream.patch;
 
   __propagatedImpureHostDeps = [
     # As far as I can tell, otool from cctools is the only thing that depends on these two, and we should fix them
@@ -64,32 +81,99 @@ stdenv.mkDerivation {
       --replace "-isystem /usr/local/include -isystem /usr/pkg/include" "" \
       --replace "-L/usr/local/lib" "" \
 
-    substituteInPlace cctools/include/Makefile \
-      --replace "/bin/" ""
+    # Appears to use new libdispatch API not available in macOS SDK 10.12.
+    substituteInPlace cctools/ld64/src/ld/libcodedirectory.c \
+      --replace "#define LIBCD_PARALLEL 1" ""
 
     patchShebangs tools
     sed -i -e 's/which/type -P/' tools/*.sh
-
-    # Workaround for https://www.sourceware.org/bugzilla/show_bug.cgi?id=11157
-    cat > cctools/include/unistd.h <<EOF
-    #ifdef __block
-    #  undef __block
-    #  include_next "unistd.h"
-    #  define __block __attribute__((__blocks__(byref)))
-    #else
-    #  include_next "unistd.h"
-    #endif
-    EOF
 
     cd cctools
   '';
 
   preInstall = ''
-    pushd include
-    make DSTROOT=$out/include RC_OS=common install
+    installManPage ar/ar.{1,5}
+
+    # The makefile rules for installing headers are missing in 973.0.1.
+    # The below is derived from 949.0.1.
+    mkdir -p $dev/include/mach-o/i386
+    mkdir -p $dev/include/mach-o/ppc
+    mkdir -p $dev/include/mach-o/x86_64
+    mkdir -p $dev/include/mach-o/arm
+    mkdir -p $dev/include/mach-o/arm64
+    mkdir -p $dev/include/mach-o/m68k
+    mkdir -p $dev/include/mach-o/sparc
+    mkdir -p $dev/include/mach-o/hppa
+    mkdir -p $dev/include/mach-o/i860
+    mkdir -p $dev/include/mach-o/m88k
+    mkdir -p $dev/include/dyld
+    mkdir -p $dev/include/cbt
+
+    pushd include/mach-o
+    install -c -m 444  arch.h ldsyms.h reloc.h \
+      stab.h loader.h fat.h swap.h getsect.h nlist.h \
+      ranlib.h $dev/include/mach-o
     popd
 
-    installManPage ar/ar.{1,5}
+    pushd include/mach-o/i386
+    install -c -m 444  swap.h \
+      $dev/include/mach-o/i386
+    popd
+
+    pushd include/mach-o/ppc
+    install -c -m 444  reloc.h swap.h \
+      $dev/include/mach-o/ppc
+    popd
+
+    pushd include/mach-o/x86_64
+    install -c -m 444  reloc.h \
+      $dev/include/mach-o/x86_64
+    popd
+
+    pushd include/mach-o/arm
+    install -c -m 444  reloc.h \
+      $dev/include/mach-o/arm
+    popd
+
+    pushd include/mach-o/arm64
+    install -c -m 444  reloc.h \
+      $dev/include/mach-o/arm64
+    popd
+
+    pushd include/mach-o/m68k
+    install -c -m 444  swap.h \
+      $dev/include/mach-o/m68k
+    popd
+
+    pushd include/mach-o/sparc
+    install -c -m 444  reloc.h swap.h \
+      $dev/include/mach-o/sparc
+    popd
+
+    pushd include/mach-o/hppa
+    install -c -m 444  reloc.h swap.h \
+      $dev/include/mach-o/hppa
+    popd
+
+    pushd include/mach-o/i860
+    install -c -m 444  reloc.h swap.h \
+      $dev/include/mach-o/i860
+    popd
+
+    pushd include/mach-o/m88k
+    install -c -m 444  reloc.h swap.h \
+      $dev/include/mach-o/m88k
+    popd
+
+    pushd include/stuff
+    install -c -m 444  bool.h \
+      $dev/include/dyld
+    popd
+
+    pushd include/cbt
+    install -c -m 444  libsyminfo.h \
+      $dev/include/cbt
+    popd
   '';
 
   passthru = {

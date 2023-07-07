@@ -3,17 +3,16 @@
 { pname
 , version ? defaultVersion
 , hash
-, minimumOCamlVersion ? "4.11"
+, minimalOCamlVersion ? "4.11"
 , doCheck ? true
 , buildInputs ? []
-, strictDeps ? true
 , ...}@args:
 
 buildDunePackage (args // {
-  useDune2 = true;
-  inherit version buildInputs strictDeps;
+  duneVersion = "3";
+  inherit version buildInputs;
 
-  inherit minimumOCamlVersion;
+  inherit minimalOCamlVersion;
 
   src = fetchFromGitHub {
     owner = "janestreet";

@@ -12,7 +12,7 @@ in
 {
   options = {
     services.galene = {
-      enable = mkEnableOption (lib.mdDoc "Galene Service.");
+      enable = mkEnableOption (lib.mdDoc "Galene Service");
 
       stateDir = mkOption {
         default = defaultstateDir;
@@ -191,7 +191,7 @@ in
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           SystemCallArchitectures = "native";
-          SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+          SystemCallFilter = [ "@system-service" "~@privileged" ];
           UMask = "0077";
         }
       ];

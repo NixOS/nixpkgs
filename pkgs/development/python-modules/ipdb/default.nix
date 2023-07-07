@@ -1,24 +1,41 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
+, decorator
 , ipython
 , isPyPy
-, mock
-, toml
+, tomli
+, setuptools
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "ipdb";
-  version = "0.13.9";
+  version = "0.13.13";
+  format = "pyproject";
+
   disabled = isPyPy;  # setupterm: could not find terminfo database
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "951bd9a64731c444fd907a5ce268543020086a697f6be08f7cc2c9a752a278c5";
+    hash = "sha256-46xgGO8FEm1EKvaAqthjAG7BnQIpBWGsiLixwLDPxyY=";
   };
 
-  propagatedBuildInputs = [ ipython toml ];
-  checkInputs = [ mock ];
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    ipython
+    decorator
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ];
+
+  nativeCheckInputs = [
+    unittestCheckHook
+  ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

@@ -1,13 +1,26 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 fixupOutputHooks+=('convertDesktopFiles $prefix')
 
 # Get a param out of a desktop file. First parameter is the file and the second
-# is a pattern of the key who's value we should fetch.
+# is the key who's value we should fetch.
 getDesktopParam() {
-    local file="$1";
-    local pattern="$2";
+    local file="$1"
+    local key="$2"
+    local line k v
 
-    awk -F "=" "/${pattern}/ {print \$2}" "${file}"
+    while read -r line; do
+        if [[ "$line" = *=* ]]; then
+            k="${line%%=*}"
+            v="${line#*=}"
+
+            if [[ "$k" = "$key" ]]; then
+                echo "$v"
+                return
+            fi
+        fi
+    done < "$file"
+
+    return 1
 }
 
 # Convert a freedesktop.org icon theme for a given app to a .icns file. When possible, missing
@@ -41,21 +54,30 @@ convertIconTheme() {
             $((iconSize - 2))x$((iconSize - 2))${scaleSuffix}
         )
 
+        local fallbackIcon=
+
         for iconIndex in "${!candidateIcons[@]}"; do
             for maybeSize in "${validSizes[@]}"; do
                 icon=${candidateIcons[$iconIndex]}
                 if [[ $icon = */$maybeSize/* ]]; then
                     if [[ $maybeSize = $exactSize ]]; then
                         echo "fixed $icon"
+                        return 0
                     else
                         echo "threshold $icon"
+                        return 0
                     fi
-                elif [[ -a $icon ]]; then
-                  echo "fallback $icon"
+                elif [[ -a $icon && -z "$fallbackIcon" ]]; then
+                    fallbackIcon="$icon"
                 fi
-                return 0
             done
         done
+
+        if [[ -n "$fallbackIcon" ]]; then
+            echo "fallback $fallbackIcon"
+            return 0
+        fi
+
         echo "scalable"
     }
 
@@ -68,6 +90,7 @@ convertIconTheme() {
         local density=$((72 * scale))x$((72 * scale))
         local dim=$((iconSize * scale))
 
+        echo "desktopToDarwinBundle: resizing icon $in to $out, size $dim" >&2
         magick convert -scale "${dim}x${dim}" -density "$density" -units PixelsPerInch "$in" "$out"
     }
 
@@ -80,6 +103,8 @@ convertIconTheme() {
         if [[ $in != '-' ]]; then
             local density=$((72 * scale))x$((72 * scale))
             local dim=$((iconSize * scale))
+
+            echo "desktopToDarwinBundle: rasterizing svg $in to $out, size $dim" >&2
             rsvg-convert --keep-aspect-ratio --width "$dim" --height "$dim" "$in" --output "$out"
             magick convert -density "$density" -units PixelsPerInch "$out" "$out"
         else
@@ -121,6 +146,7 @@ convertIconTheme() {
                 local icon=${iconResult#* }
                 local scaleSuffix=${scales[$scale]}
                 local result=${resultdir}/${iconSize}x${iconSize}${scales[$scale]}${scaleSuffix:+x}.png
+                echo "desktopToDarwinBundle: using $type icon $icon for size $iconSize$scaleSuffix" >&2
                 case $type in
                     fixed)
                         local density=$((72 * scale))x$((72 * scale))
@@ -190,14 +216,14 @@ processExecFieldCodes() {
 convertDesktopFile() {
     local -r file=$1
     local -r sharePath=$(dirname "$(dirname "$file")")
-    local -r name=$(getDesktopParam "${file}" "^Name")
+    local -r name=$(getDesktopParam "${file}" "Name")
     local -r macOSExec=$(getDesktopParam "${file}" "X-macOS-Exec")
     if [[ "$macOSExec" ]]; then
       local -r exec="$macOSExec"
     else
       local -r exec=$(processExecFieldCodes "${file}")
     fi
-    local -r iconName=$(getDesktopParam "${file}" "^Icon")
+    local -r iconName=$(getDesktopParam "${file}" "Icon")
     local -r squircle=$(getDesktopParam "${file}" "X-macOS-SquircleIcon")
 
     mkdir -p "${!outputBin}/Applications/${name}.app/Contents/MacOS"

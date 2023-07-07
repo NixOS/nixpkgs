@@ -53,8 +53,8 @@ stdenv.mkDerivation rec {
 
   # ncurses is a hidden dependency of waf when checking python
   buildInputs = lib.optionals pythonSupport [ castxml ncurses ]
-    ++ lib.optional enableDoxygen [ doxygen graphviz imagemagick ]
-    ++ lib.optional withManual [ dia tetex ghostscript texlive.combined.scheme-medium ];
+    ++ lib.optionals enableDoxygen [ doxygen graphviz imagemagick ]
+    ++ lib.optionals withManual [ dia tetex ghostscript texlive.combined.scheme-medium ];
 
   propagatedBuildInputs = [ pythonEnv ];
 
@@ -101,11 +101,12 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "fortify" "strictoverflow"];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     homepage = "http://www.nsnam.org";
     license = licenses.gpl3;
     description = "A discrete time event network simulator";
     platforms = with platforms; unix;
     maintainers = with maintainers; [ teto rgrunbla ];
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = (stdenv.isDarwin && stdenv.isAarch64) || (stdenv.isLinux && stdenv.isAarch64);
   };
 }

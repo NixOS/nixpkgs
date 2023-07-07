@@ -60,13 +60,12 @@ in {
 
       serviceConfig = {
         ExecStartPre = lib.optional (cfg.secretFile != null)
-          (pkgs.writeShellScript "pre-start" ''
+          ("+" + pkgs.writeShellScript "pre-start" ''
             umask 077
             export $(xargs < ${cfg.secretFile})
             ${pkgs.envsubst}/bin/envsubst -i "${configFile}" > ${finalConfigFile}
             chown go-neb ${finalConfigFile}
           '');
-        PermissionsStartOnly = true;
         RuntimeDirectory = "go-neb";
         ExecStart = "${pkgs.go-neb}/bin/go-neb";
         User = "go-neb";

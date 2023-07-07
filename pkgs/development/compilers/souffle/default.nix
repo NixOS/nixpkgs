@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , bash-completion, perl, ncurses, zlib, sqlite, libffi
 , mcpp, cmake, bison, flex, doxygen, graphviz
 , makeWrapper
@@ -10,14 +10,20 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "souffle";
-  version = "2.3";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner  = "souffle-lang";
     repo   = "souffle";
     rev    = version;
-    sha256 = "sha256-wdTBSmyA2I+gaSV577NNKA2oY2fdVTGmvV7h15NY1tU=";
+    sha256 = "sha256-5g2Ikbfm5nQrsgGntZZ/VbjqSDOj0AP/mnH1nW2b4co=";
   };
+
+  patches = [
+    ./threads.patch
+  ];
+
+  hardeningDisable = lib.optionals stdenv.isDarwin [ "strictoverflow" ];
 
   nativeBuildInputs = [ bison cmake flex mcpp doxygen graphviz makeWrapper perl ];
   buildInputs = [ bash-completion ncurses zlib sqlite libffi ];
@@ -35,7 +41,6 @@ stdenv.mkDerivation rec {
   outputs = [ "out" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "A translator of declarative Datalog programs into the C++ language";
     homepage    = "https://souffle-lang.github.io/";
     platforms   = platforms.unix;

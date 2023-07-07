@@ -9,13 +9,15 @@
 
 buildDunePackage rec {
   pname = "tsdl-mixer";
-  version = "0.3.2";
+  version = "0.5";
+
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "sanette";
     repo = pname;
     rev = version;
-    sha256 = "sha256-UDRhwnanrn87/PYVnacur1z/LsKuUu2G+0QQXjTw/IE=";
+    hash = "sha256-HGtO5iO3lxuVa707MDIhw0pgDZLHt9qY+Rd24sFkags=";
   };
 
   buildInputs = [
@@ -32,6 +34,6 @@ buildDunePackage rec {
     description = "SDL2_mixer bindings to go with Tsdl";
     homepage = "https://github.com/sanette/tsdl-mixer";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ superherointj ];
+    maintainers = with maintainers; [ ];
   };
 }

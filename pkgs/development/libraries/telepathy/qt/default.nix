@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config python ];
   propagatedBuildInputs = [ qtbase telepathy-farstream telepathy-glib ];
   buildInputs = [ dbus-glib ];
-  checkInputs = [ dbus.daemon dbus-python ];
+  nativeCheckInputs = [ dbus dbus-python ];
 
   # No point in building tests if they are not run
   # On 0.9.7, they do not even build with QT4
@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     description = "Telepathy Qt bindings";
     homepage = "https://telepathy.freedesktop.org/components/telepathy-qt/";
     license = licenses.lgpl21;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -1,17 +1,27 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, libxfce4util, xfce4-panel,
-  libxfce4ui, gtk3, exo, xfce }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, intltool
+, libxfce4util
+, xfce4-panel
+, libxfce4ui
+, glib
+, gtk3
+, gitUpdater
+}:
 
 let
   category = "panel-plugins";
 in
 
 stdenv.mkDerivation rec {
-  pname  = "xfce4-mpc-plugin";
-  version = "0.5.2";
+  pname = "xfce4-mpc-plugin";
+  version = "0.5.3";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-7v54t7a5UxKzpSgUt/Yy3JKXDBs+lTXeYWMVdJv2d2A=";
+    sha256 = "sha256-BGf7TRrNmC08PguJy0EBmUaFBST/Ge0PZYqNVse3Zk0=";
   };
 
   nativeBuildInputs = [
@@ -23,11 +33,14 @@ stdenv.mkDerivation rec {
     libxfce4util
     libxfce4ui
     xfce4-panel
+    glib
     gtk3
-    exo
   ];
 
-  passthru.updateScript = xfce.archiveUpdater { inherit category pname version; };
+  passthru.updateScript = gitUpdater {
+    url = "https://gitlab.xfce.org/panel-plugins/${pname}";
+    rev-prefix = "${pname}-";
+  };
 
   meta = with lib; {
     homepage = "https://docs.xfce.org/panel-plugins/xfce4-mpc-plugin";

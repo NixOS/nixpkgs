@@ -47,6 +47,6 @@ stdenv.mkDerivation {
     license = licenses.unfree;
     mainProgram = "p4d";
     platforms = builtins.attrNames srcs;
-    maintainers = with maintainers; [ impl ];
+    maintainers = with maintainers; [ corngood impl ];
   };
 }

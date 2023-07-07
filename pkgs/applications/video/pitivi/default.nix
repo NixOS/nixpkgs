@@ -20,13 +20,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pitivi";
-  version = "2022.06";
+  version = "2023.03";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/pitivi/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "Uz0448bSEcK9DpXiuWsPCDO98NXUd6zgffYRWDUGyDg=";
+    sha256 = "PX1OFEeavqMPvF613BKgxwErxqW2huw6mQxo8YpBS/M=";
   };
 
   patches = [
@@ -44,10 +44,10 @@ python3.pkgs.buildPythonApplication rec {
     itstool
     python3
     wrapGAppsHook
+    gobject-introspection
   ];
 
   buildInputs = [
-    gobject-introspection
     gtk3
     libpeas
     librsvg
@@ -77,12 +77,6 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     patchShebangs ./getenvvar.py
   '';
-
-  # Fixes error
-  #     Couldn’t recognize the image file format for file ".../share/pitivi/pixmaps/asset-proxied.svg"
-  # at startup, see https://github.com/NixOS/nixpkgs/issues/56943
-  # and https://github.com/NixOS/nixpkgs/issues/89691#issuecomment-714398705.
-  strictDeps = false;
 
   passthru = {
     updateScript = gnome.updateScript {

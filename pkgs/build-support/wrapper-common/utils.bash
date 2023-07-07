@@ -84,10 +84,15 @@ mangleVarSingle() {
     done
 }
 
-skip () {
+skip() {
     if (( "${NIX_DEBUG:-0}" >= 1 )); then
         echo "skipping impure path $1" >&2
     fi
+}
+
+reject() {
+    echo "impure path \`$1' used in link" >&2
+    exit 1
 }
 
 
@@ -104,13 +109,13 @@ badPath() {
     # directory (including the build directory).
     test \
         "$p" != "/dev/null" -a \
-        "${p#${NIX_STORE}}"     = "$p" -a \
-        "${p#${NIX_BUILD_TOP}}" = "$p" -a \
-        "${p#/tmp}"             = "$p" -a \
-        "${p#${TMP:-/tmp}}"     = "$p" -a \
-        "${p#${TMPDIR:-/tmp}}"  = "$p" -a \
-        "${p#${TEMP:-/tmp}}"    = "$p" -a \
-        "${p#${TEMPDIR:-/tmp}}" = "$p"
+        "${p#"${NIX_STORE}"}"     = "$p" -a \
+        "${p#"${NIX_BUILD_TOP}"}" = "$p" -a \
+        "${p#/tmp}"               = "$p" -a \
+        "${p#"${TMP:-/tmp}"}"     = "$p" -a \
+        "${p#"${TMPDIR:-/tmp}"}"  = "$p" -a \
+        "${p#"${TEMP:-/tmp}"}"    = "$p" -a \
+        "${p#"${TEMPDIR:-/tmp}"}" = "$p"
 }
 
 expandResponseParams() {

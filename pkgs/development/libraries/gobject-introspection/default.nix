@@ -21,15 +21,22 @@
 , gobject-introspection-unwrapped
 , nixStoreDir ? builtins.storeDir
 , x11Support ? true
+, testers
 }:
 
 # now that gobject-introspection creates large .gir files (eg gtk3 case)
 # it may be worth thinking about using multiple derivation outputs
 # In that case its about 6MB which could be separated
 
+let
+  pythonModules = pp: [
+    pp.mako
+    pp.markdown
+  ];
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gobject-introspection";
-  version = "1.72.0";
+  version = "1.76.1";
 
   # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
   # by pygobject3 (and maybe others), but it's only searched in $out
@@ -38,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gobject-introspection/${lib.versions.majorMinor finalAttrs.version}/gobject-introspection-${finalAttrs.version}.tar.xz";
-    sha256 = "Av6OWQhh2I+DBg3TnNpcyqYLLaHSHQ+VSZMBsYa+qrw=";
+    sha256 = "GWF4v2Q0VQHc3E2EabNqpv6ASJNU7+cct8uKuCo3OL8=";
   };
 
   patches = [
@@ -58,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     meson
     ninja
@@ -67,15 +76,17 @@ stdenv.mkDerivation (finalAttrs: {
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_45
-    python3
+    # Build definition checks for the Python modules needed at runtime by importing them.
+    (buildPackages.python3.withPackages pythonModules)
     finalAttrs.setupHook # move .gir files
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ gobject-introspection-unwrapped ];
+    # can't use canExecute, we need prebuilt when cross
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ gobject-introspection-unwrapped ];
 
   buildInputs = [
-    python3
+    (python3.withPackages pythonModules)
   ];
 
-  checkInputs = lib.optionals stdenv.isDarwin [
+  nativeCheckInputs = lib.optionals stdenv.isDarwin [
     cctools # for otool
   ];
 
@@ -86,19 +97,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "--datadir=${placeholder "dev"}/share"
-    "-Ddoctool=disabled"
     "-Dcairo=disabled"
     "-Dgtk_doc=${lib.boolToString (stdenv.hostPlatform == stdenv.buildPlatform)}"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     "-Dgi_cross_ldd_wrapper=${substituteAll {
       name = "g-ir-scanner-lddwrapper";
       isExecutable = true;
       src = ./wrappers/g-ir-scanner-lddwrapper.sh;
       inherit (buildPackages) bash;
-      buildobjdump = "${buildPackages.stdenv.cc.bintools}/bin/objdump";
+      buildlddtree = "${buildPackages.pax-utils}/bin/lddtree";
     }}"
-    "-Dgi_cross_use_prebuilt_gi=true"
     "-Dgi_cross_binary_wrapper=${stdenv.hostPlatform.emulator buildPackages}"
+    # can't use canExecute, we need prebuilt when cross
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-Dgi_cross_use_prebuilt_gi=true"
   ];
 
   doCheck = !stdenv.isAarch64;
@@ -137,12 +149,14 @@ stdenv.mkDerivation (finalAttrs: {
       packageName = "gobject-introspection";
       versionPolicy = "odd-unstable";
     };
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   meta = with lib; {
     description = "A middleware layer between C libraries and language bindings";
     homepage = "https://gi.readthedocs.io/";
     maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 artturin ]);
+    pkgConfigModules = [ "gobject-introspection-1.0" ];
     platforms = platforms.unix;
     license = with licenses; [ gpl2 lgpl2 ];
 

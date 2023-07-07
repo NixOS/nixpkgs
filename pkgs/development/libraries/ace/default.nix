@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ace";
-  version = "7.0.8";
+  version = "7.0.11";
 
   src = fetchurl {
     url = "https://download.dre.vanderbilt.edu/previous_versions/ACE-${version}.tar.bz2";
-    sha256 = "sha256-bZQKtNIdTzCbwE3T/fF7e/1CETG4S42Hq8S9RDxCZdw=";
+    sha256 = "sha256-r+LRiu/u1qMcbrjkSr8ErnemX6zvhgvc5cLWu8AQhww=";
   };
 
   enableParallelBuilding = true;
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config libtool ];
   buildInputs = [ perl ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=format-security"
   ];
 

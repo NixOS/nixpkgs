@@ -14,16 +14,15 @@
 
 buildPythonPackage rec {
   pname = "jaraco-test";
-  version = "5.1.0";
+  version = "5.3.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
-
-  format = "pyproject";
 
   src = fetchPypi {
     pname = "jaraco.test";
     inherit version;
-    sha256 = "04a7503c0c78cd057bd6b5f16ad1e3379b911b619df6694480a564ebc214c0a8";
+    hash = "sha256-f2f8xTlTgXGCPlqp+dA04ulRLOTzVNEb39hNtytGHUA=";
   };
 
   nativeBuildInputs = [
@@ -39,16 +38,19 @@ buildPythonPackage rec {
     jaraco_collections
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "jaraco.test" ];
+  pythonImportsCheck = [
+    "jaraco.test"
+  ];
 
-  meta = {
+  meta = with lib; {
     description = "Testing support by jaraco";
     homepage = "https://github.com/jaraco/jaraco.test";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    changelog = "https://github.com/jaraco/jaraco.test/blob/v${version}/CHANGES.rst";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, binutils-unwrapped, patchelf, asterisk }:
 stdenv.mkDerivation rec {
   pname = "asterisk-module-sccp";
-  version = "4.3.4";
+  version = "4.3.5";
 
   src = fetchFromGitHub {
     owner = "chan-sccp";
     repo = "chan-sccp";
     rev = "v${version}";
-    sha256 = "sha256-YGHK4A03Ba/tnVTnu9VuhIy/xQ5C/7ZX8h9mxqKsnZI=";
+    sha256 = "sha256-Lonsh7rx3C17LU5pZpZuFxlki0iotDt+FivggFJbldU=";
   };
 
   nativeBuildInputs = [ patchelf ];

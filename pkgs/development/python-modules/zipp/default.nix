@@ -9,14 +9,14 @@
 
 let zipp = buildPythonPackage rec {
   pname = "zipp";
-  version = "3.8.1";
+  version = "3.15.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-BbRfHuj4B9DMkoSFykCgfLSRzwkv9YfA35yx/RVISNI=";
+    hash = "sha256-ESkprWSdqUHCPeUPNWorVXDJVLZRUGQrzN1mvxlNIks=";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,7 @@ let zipp = buildPythonPackage rec {
   # Prevent infinite recursion with pytest
   doCheck = false;
 
-  checkInputs = [
+  nativeCheckInputs = [
     func-timeout
     jaraco_itertools
   ];

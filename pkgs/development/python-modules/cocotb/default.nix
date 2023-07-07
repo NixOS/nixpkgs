@@ -1,10 +1,11 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , setuptools
 , setuptools-scm
 , cocotb-bus
+, find-libpython
 , pytestCheckHook
 , swig
 , verilog
@@ -12,20 +13,19 @@
 
 buildPythonPackage rec {
   pname = "cocotb";
-  version = "1.6.2";
+  version = "1.7.2";
 
-  # - we need to use the tarball from PyPi
-  #   or the full git checkout (with .git)
-  # - using fetchFromGitHub will cause a build failure,
-  #   because it does not include required metadata
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-SY+1727DbWMg6CnmHw8k/VP0dwBRYszn+YyyvZXgvUs=";
+  # pypi source doesn't include tests
+  src = fetchFromGitHub {
+    owner = "cocotb";
+    repo = "cocotb";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-gLOYwljqnYkGsdbny7+f93QgroLBaLLnDBRpoCe8uEg=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  buildInputs = [ setuptools ];
+  buildInputs = [ setuptools find-libpython ];
 
   postPatch = ''
     patchShebangs bin/*.py
@@ -51,11 +51,13 @@ buildPythonPackage rec {
     ./0001-Patch-LDCXXSHARED-for-macOS-along-with-LDSHARED.patch
   ];
 
-  checkInputs = [ cocotb-bus pytestCheckHook swig verilog ];
-
-  checkPhase = ''
+  nativeCheckInputs = [ cocotb-bus pytestCheckHook swig verilog ];
+  preCheck = ''
     export PATH=$out/bin:$PATH
+    mv cocotb cocotb.hidden
   '';
+
+  pythonImportsCheck = [ "cocotb" ];
 
   meta = with lib; {
     description = "Coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python";

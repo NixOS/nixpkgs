@@ -29,7 +29,7 @@ NixOS provides two ways to select the outputs to install for packages listed in 
 `nix-env` lacks an easy way to select the outputs to install. When installing a package, `nix-env` always installs the outputs listed in `meta.outputsToInstall`, even when the user explicitly selects an output.
 
 ::: {.warning}
-`nix-env` silenty disregards the outputs selected by the user, and instead installs the outputs from `meta.outputsToInstall`. For example,
+`nix-env` silently disregards the outputs selected by the user, and instead installs the outputs from `meta.outputsToInstall`. For example,
 
 ```ShellSession
 $ nix-env -iA nixpkgs.coreutils.info

@@ -20,6 +20,9 @@ in
   ###### interface
 
   options = {
+    boot.kernel.enable = mkEnableOption (lib.mdDoc "the Linux kernel. This is useful for systemd-like containers which do not require a kernel") // {
+      default = true;
+    };
 
     boot.kernel.features = mkOption {
       default = {};
@@ -59,14 +62,57 @@ in
         configuration.  For instance, if you use the NVIDIA X driver,
         then it also needs to contain an attribute
         {var}`nvidia_x11`.
+
+        Please note that we strictly support kernel versions that are
+        maintained by the Linux developers only. More information on the
+        availability of kernel versions is documented
+        [in the Linux section of the manual](https://nixos.org/manual/nixos/unstable/index.html#sec-kernel-config).
       '';
     };
 
     boot.kernelPatches = mkOption {
       type = types.listOf types.attrs;
       default = [];
-      example = literalExpression "[ pkgs.kernelPatches.ubuntu_fan_4_4 ]";
-      description = lib.mdDoc "A list of additional patches to apply to the kernel.";
+      example = literalExpression ''
+        [
+          {
+            name = "foo";
+            patch = ./foo.patch;
+            extraStructuredConfig.FOO = lib.kernel.yes;
+            features.foo = true;
+          }
+        ]
+      '';
+      description = lib.mdDoc ''
+        A list of additional patches to apply to the kernel.
+
+        Every item should be an attribute set with the following attributes:
+
+        ```nix
+        {
+          name = "foo";                 # descriptive name, required
+
+          patch = ./foo.patch;          # path or derivation that contains the patch source
+                                        # (required, but can be null if only config changes
+                                        # are needed)
+
+          extraStructuredConfig = {     # attrset of extra configuration parameters
+            FOO = lib.kernel.yes;       # (without the CONFIG_ prefix, optional)
+          };                            # values should generally be lib.kernel.yes,
+                                        # lib.kernel.no or lib.kernel.module
+
+          features = {                  # attrset of extra "features" the kernel is considered to have
+            foo = true;                 # (may be checked by other NixOS modules, optional)
+          };
+
+          extraConfig = "CONFIG_FOO y"; # extra configuration options in string form
+                                        # (deprecated, use extraStructuredConfig instead, optional)
+        }
+        ```
+
+        There's a small set of existing kernel patches in Nixpkgs, available as `pkgs.kernelPatches`,
+        that follow this format and can be used directly.
+      '';
     };
 
     boot.kernel.randstructSeed = mkOption {
@@ -258,7 +304,7 @@ in
           ];
       })
 
-      (mkIf (!config.boot.isContainer) {
+      (mkIf config.boot.kernel.enable {
         system.build = { inherit kernel; };
 
         system.modulesTree = [ kernel ] ++ config.boot.extraModulePackages;

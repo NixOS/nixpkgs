@@ -10,10 +10,8 @@
 , gtk3
 , libxml2
 , libhandy
-, webkitgtk
+, webkitgtk_4_1
 , folks
-, libgdata
-, sqlite
 , glib-networking
 , granite
 , evolution-data-server
@@ -23,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-mail";
-  version = "7.0.0";
+  version = "7.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "mail";
     rev = version;
-    sha256 = "sha256-DO3nybH7tb/ISrSQ3+Oj612m64Ov6X0GAWePMbKjCc4=";
+    sha256 = "sha256-dvDlvn8KvFmiP/NClRtHNEs5gPTUjlzgTYmgIaCfoLw=";
   };
 
   nativeBuildInputs = [
@@ -48,11 +46,9 @@ stdenv.mkDerivation rec {
     glib-networking
     granite
     gtk3
-    libgdata
     libgee
     libhandy
-    sqlite
-    webkitgtk
+    webkitgtk_4_1
   ];
 
   postPatch = ''
@@ -61,9 +57,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

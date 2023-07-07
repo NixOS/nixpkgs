@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dmlive";
-  version = "unstable-2022-08-22";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "THMonster";
     repo = pname;
-    rev = "fd4fa1859f05350658db598a50d29f59d22b55a1";
-    hash = "sha256-NVabHLxPHi7hWoztthPmVC5VRKQKglpytuUQOY1Hzrw=";
+    rev = "53c55cb3c087bc00a882331307d210c2965b04d1"; # no tag
+    hash = "sha256-k15IjNGiY0ISEyWxlhZST4dtink/OtoJtv4/8nUn7qY=";
   };
 
-  cargoHash = "sha256-TziP7n9Xgi/wHaiF/NI6noMp1iR6vRuAXxvKJwQHbTw=";
+  cargoHash = "sha256-0zOwqxD3WX/4e19ywpghdfoGmh2KC+70HbTSYkVHzUA=";
 
   OPENSSL_NO_VENDOR = true;
 

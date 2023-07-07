@@ -15,10 +15,10 @@ buildPythonPackage rec {
     owner = "dsoprea";
     repo = "PythonEtcdClient";
     rev = version;
-    sha256 = "sha256-h+jYIRSNdrGkW3tBV1ifIDEXU46EQGyeJoz/Mxym4pI=";
+    hash = "sha256-h+jYIRSNdrGkW3tBV1ifIDEXU46EQGyeJoz/Mxym4pI=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e '13,14d;37d' setup.py
   '';
 
@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "A Python etcd client that just works";
     homepage = "https://github.com/dsoprea/PythonEtcdClient";
     license = licenses.gpl2;
+    maintainers = with maintainers; [ ];
   };
-
 }

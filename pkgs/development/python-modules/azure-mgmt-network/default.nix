@@ -9,7 +9,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "21.0.1";
+  version = "23.1.0";
   pname = "azure-mgmt-network";
   format = "setuptools";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    hash = "sha256-7PduPg0JK4f/3q/b5pq58TjqVk+Iu+vxa+aJKDnScy8=";
+    hash = "sha256-NxcmmRE4MdfOG7naNcY1AHxzz/xUmoWlj1VUK1SxK/M=";
   };
 
   propagatedBuildInputs = [

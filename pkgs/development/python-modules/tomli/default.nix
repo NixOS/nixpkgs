@@ -21,12 +21,12 @@ buildPythonPackage rec {
     owner = "hukkin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-v0ZMrHIIaGeORwD4JiBeLthmnKZODK5odZVL0SY4etA=";
+    hash = "sha256-v0ZMrHIIaGeORwD4JiBeLthmnKZODK5odZVL0SY4etA=";
   };
 
   nativeBuildInputs = [ flit-core ];
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "tomli" ];
 

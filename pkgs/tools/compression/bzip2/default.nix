@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl
 , linkStatic ? with stdenv.hostPlatform; isStatic || isCygwin
 , autoreconfHook
+, testers
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -8,7 +9,9 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: let
+  inherit (finalAttrs) version;
+in {
   pname = "bzip2";
   version = "1.0.8";
 
@@ -53,12 +56,15 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/libbz2.so.1.0.* $out/lib/libbz2.so.1.0
   '';
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     description = "High-quality data compression program";
     homepage = "https://www.sourceware.org/bzip2";
     changelog = "https://sourceware.org/git/?p=bzip2.git;a=blob;f=CHANGES;hb=HEAD";
     license = licenses.bsdOriginal;
+    pkgConfigModules = [ "bzip2" ];
     platforms = platforms.all;
     maintainers = with maintainers; [ mic92 ];
   };
-}
+})

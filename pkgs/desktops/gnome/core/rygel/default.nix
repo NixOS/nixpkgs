@@ -10,13 +10,13 @@
 , wrapGAppsHook
 , python3
 , glib
-, gssdp
-, gupnp
+, gssdp_1_6
+, gupnp_1_6
 , gupnp-av
 , gupnp-dlna
 , gst_all_1
 , libgee
-, libsoup
+, libsoup_3
 , gtk3
 , libmediaart
 , sqlite
@@ -28,14 +28,14 @@
 
 stdenv.mkDerivation rec {
   pname = "rygel";
-  version = "0.40.4";
+  version = "0.42.3";
 
   # TODO: split out lib
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "c22K2+hhX2y8j8//mEXcmF/RDhZinaI2tLUtvt8KNIs=";
+    sha256 = "D97CEoU36LVcPFQNCoDcfCSaspFT9L4Bl6XzECWlpaA=";
   };
 
   patches = [
@@ -56,12 +56,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    gssdp
-    gupnp
+    gssdp_1_6
+    gupnp_1_6
     gupnp-av
     gupnp-dlna
     libgee
-    libsoup
+    libsoup_3
     gtk3
     libmediaart
     sqlite

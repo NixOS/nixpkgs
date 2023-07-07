@@ -1,20 +1,27 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, testers, ginkgo }:
 
 buildGoModule rec {
   pname = "ginkgo";
-  version = "2.1.6";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "onsi";
     repo = "ginkgo";
     rev = "v${version}";
-    sha256 = "sha256-Tgf91nbW1eYcInX+HccAW5ajzOY/BI9fVb5JC0kbI84=";
+    sha256 = "sha256-0BnvIGqAm1N4xbZiqq/iouXkvDWfpZvBA0gKMcB+WYU=";
   };
-  vendorSha256 = "sha256-QXrRsDaWoPp4mbgS7nV/5c5Z5Ca6PyoDpfrjvtoHK4Q=";
+  vendorHash = "sha256-jpCib0bwb5MtaHhM+d3dFxIXwyMGvxdo+Vgv6PKVp7w=";
 
   # integration tests expect more file changes
   # types tests are missing CodeLocation
   excludedPackages = [ "integration" "types" ];
+
+  __darwinAllowLocalNetworking = true;
+
+  passthru.tests.version = testers.testVersion {
+    package = ginkgo;
+    command = "ginkgo version";
+  };
 
   meta = with lib; {
     homepage = "https://onsi.github.io/ginkgo/";

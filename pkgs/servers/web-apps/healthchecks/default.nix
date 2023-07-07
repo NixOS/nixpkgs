@@ -8,43 +8,32 @@ let
   py = python3.override {
     packageOverrides = final: prev: {
       django = prev.django_4;
-      fido2 = prev.fido2.overridePythonAttrs (old: rec {
-        version = "0.9.3";
-        src = prev.fetchPypi {
-          pname = "fido2";
-          inherit version;
-          sha256 = "sha256-tF6JphCc/Lfxu1E3dqotZAjpXEgi+DolORi5RAg0Zuw=";
-        };
-      });
     };
   };
 in
 py.pkgs.buildPythonApplication rec {
   pname = "healthchecks";
-  version = "2.2.1";
+  version = "2.8.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "healthchecks";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-C+NUvs5ijbj/l8G1sjSXvUJDNSOTVFAStfS5KtYFpUs=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-lJ0AZJpznet2YKPIyMOx5ZdETZB8de5vp7sydfndxZg=";
   };
 
   propagatedBuildInputs = with py.pkgs; [
     apprise
-    cffi
     cron-descriptor
     cronsim
-    cryptography
     django
     django-compressor
     fido2
     minio
     psycopg2
-    py
+    pycurl
     pyotp
-    requests
     segno
     statsd
     whitenoise

@@ -1,73 +1,83 @@
 # Notes on maintaining/upgrading
 
-## Upgrading texlive.bin
+## Upgrading `texlive.bin`
 
-texlive contains a few binaries, defined in bin.nix and released once a year.
+`texlive` contains a few binaries, defined in `bin.nix` and released once a year.
 
 In order to reduce closure size for users who just need a few of them, we split it into
-packages such as core, core-big, xvdi, etc. This requires making assumptions
+packages such as `core`, `core-big`, `xdvi`, etc. This requires making assumptions
 about dependencies between the projects that may change between releases; if
 you upgrade you may have to do some work here.
 
-
 ## Updating the package set
 
-texlive contains several thousand packages from CTAN, defined in pkgs.nix.
+`texlive` contains several thousand packages from CTAN, defined in `tlpdb.nix`.
 
 The CTAN mirrors are not version-controlled and continuously moving,
 with more than 100 updates per month.
 
-To create a consistent and reproducible package set in nixpkgs, we snapshot CTAN
-and generate nix expressions for all packages in texlive at that point.
+To create a consistent and reproducible package set in nixpkgs, we generate nix
+expressions for all packages in TeX Live at a certain day.
 
-We mirror CTAN sources of this snapshot on community-operated servers and on IPFS.
-
-To upgrade the package snapshot, follow this process:
-
-
-### Snapshot sources and texlive package database
-
-Mirror the current CTAN archive to our mirror(s) and IPFS (URLs in `default.nix`).
-See https://tug.org/texlive/acquire-mirror.html for instructions.
-
+To upgrade the package snapshot, follow this process.
 
 ### Upgrade package information from texlive package database
 
+Update `version` in `default.nix` with the day of the new snapshot, the new TeX
+Live year, and the final status of the snapshot. Then update
+`texlive.tlpdbxz.hash` to match the new hash of `texlive.tlpdb.xz` and run
 
 ```bash
-curl -L https://texlive.info/tlnet-archive/$YEAR/$MONTH/$DAY/tlnet/tlpkg/texlive.tlpdb.xz \
-         | xzcat | sed -rn -f ./tl2nix.sed | uniq > ./pkgs.nix
+nix-build ../../../../.. -A texlive.tlpdb.nix --no-out-link
 ```
 
-This will download the daily snapshot of the CTAN package database `texlive.tlpdb.xz`
-and regenerate all of the sha512 hashes for the current upstream distribution in `pkgs.nix`.
+This will download either the daily or the final snapshot of the TeX Live
+package database `texlive.tlpdb.xz` and extract the relevant package info
+(including version numbers and sha512 hashes) for the selected upstream
+distribution.
 
-Use the url
+Finally, replace `tlpdb.nix` with the generated file. Note that if the
+`version` info does not match the metadata of `tlpdb.nix` (as found in the
+`00texlive.config` package), TeX Live packages will not evaluate.
 
-https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$YEAR/tlnet-final/tlpkg/texlive.tlpdb.xz
-
-for the final TeX Live release.
+The test `pkgs.tests.texlive.tlpdbNix` verifies that the file `tlpdb.nix`
+in Nixpkgs matches the one that generated from `texlive.tlpdb.xz`.
 
 ### Build packages locally and generate fix hashes
 
-To save disk space and prevent unnecessary rebuilds, texlive packages are built
-as fixed-output derivations whose hashes are contained in `fixedHashes.nix`.
+To prevent unnecessary rebuilds, texlive packages are built as fixed-output
+derivations whose hashes are contained in `fixed-hashes.nix`.
 
-Updating the list of fixed hashes requires a local build of *all* packages,
-which is a resource-intensive process:
-
+Updating the list of fixed hashes requires a local build of all new packages,
+which is a resource-intensive process. First build the hashes for the new
+packages. Consider tweaking the `-j` option to maximise core usage.
 
 ```bash
-# move fixedHashes away, otherwise build will fail on updated packages
-mv fixedHashes.nix fixedHashes-old.nix
-# start with empty fixedHashes
-echo '{}' > fixedHashes.nix
-
-nix-build ../../../../.. -Q --no-out-link -A texlive.scheme-full.pkgs | ./fixHashes.awk > ./fixedHashes-new.nix
-
-mv fixedHashes-new.nix fixedHashes.nix
+nix-build generate-fixed-hashes.nix -A newHashes -j 8
 ```
+
+Then build the Nix expression containing all the hashes, old and new. This step
+cannot be parallelized because it relies on 'import from derivation'.
+
+```bash
+nix-build generate-fixed-hashes.nix -A fixedHashesNix
+```
+
+Finally, copy the result to `fixed-hashes.nix`.
+
+**Warning.** The expression `fixedHashesNix` reuses the *previous* fixed hashes
+when possible. This is based on two assumptions: that `.tar.xz` archives with
+the same names remain identical in time (which is the intended behaviour of
+CTAN and the various mirrors) and that the build recipe continues to produce
+the same output. Should those assumptions not hold, remove the previous fixed
+hashes for the relevant package, or for all packages.
 
 ### Commit changes
 
-Commit the updated `pkgs.nix` and `fixedHashes.nix` to the repository.
+Commit the updated `tlpdb.nix` and `fixed-hashes.nix` to the repository with
+a message like
+
+> texlive: 2022-final -> 2023.20230401
+
+Please make sure to follow the [CONTRIBUTING](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md)
+guidelines.

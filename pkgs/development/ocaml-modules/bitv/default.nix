@@ -17,8 +17,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook which ocaml findlib ];
 
-  strictDeps = true;
-
   createFindlibDestdir = true;
 
   meta = {

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "marshmallow-oneofschema";
-  version = "3.0.1";
+  version = "3.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "marshmallow-code";
     repo = pname;
     rev = version;
-    hash = "sha256-x0v8WkfjGkP2668QIQiewQViYFDIS2zBWMULcDThWas=";
+    hash = "sha256-Em2jQmvI5IiWREeOX/JAcdOQlpwP7k+cbCirkh82sf0=";
   };
 
   propagatedBuildInputs = [
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -35,6 +35,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/marshmallow-code/marshmallow-oneofschema/blob/${src.rev}/CHANGELOG.rst";
     description = "Marshmallow library extension that allows schema (de)multiplexing";
     homepage = "https://github.com/marshmallow-code/marshmallow-oneofschema";
     license = licenses.mit;

@@ -8,13 +8,13 @@
 , pyproj
 , pytestCheckHook
 , pythonOlder
-, Rtree
+, rtree
 , shapely
 }:
 
 buildPythonPackage rec {
   pname = "geopandas";
-  version = "0.11.0";
+  version = "0.13.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "geopandas";
-    rev = "v${version}";
-    hash = "sha256-w3F2Uqr/+DdG2Td5YmHdF/LII2y29rQkGK5ooMUcfRk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-8H0IO+Oabl1ZOHHvMFHnPEyW0xH/G4wuUtkZrsP6K3k=";
   };
 
   propagatedBuildInputs = [
@@ -34,9 +34,9 @@ buildPythonPackage rec {
     shapely
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
-    Rtree
+    rtree
   ];
 
   doCheck = !stdenv.isDarwin;
@@ -47,8 +47,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Requires network access
-    "test_read_file_remote_geojson_url"
-    "test_read_file_remote_zipfile_url"
+    "test_read_file_url"
   ];
 
   pytestFlagsArray = [
@@ -62,7 +61,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python geospatial data analysis framework";
     homepage = "https://geopandas.org";
+    changelog = "https://github.com/geopandas/geopandas/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ knedlsepp ];
+    maintainers = teams.geospatial.members;
   };
 }

@@ -78,7 +78,7 @@ pythonPackages.buildPythonApplication rec {
     future
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gnupg # Add 'gpg' to PATH.
     gnutar # Add 'tar' to PATH.
     librsync # Add 'rdiff' to PATH.

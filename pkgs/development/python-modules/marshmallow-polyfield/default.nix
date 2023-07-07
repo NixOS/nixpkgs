@@ -16,14 +16,14 @@ buildPythonPackage rec {
     owner = "Bachmann1234";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-oF5LBuDK4kqsAcKwidju+wFjigjy4CNbJ6bfWpGO1yQ=";
+    hash = "sha256-oF5LBuDK4kqsAcKwidju+wFjigjy4CNbJ6bfWpGO1yQ=";
   };
 
   propagatedBuildInputs = [
     marshmallow
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

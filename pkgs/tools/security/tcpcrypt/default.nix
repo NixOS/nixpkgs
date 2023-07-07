@@ -3,8 +3,6 @@
 , libcap, libpcap, libnfnetlink, libnetfilter_conntrack, libnetfilter_queue
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "tcpcrypt";
   version = "0.5";
@@ -21,11 +19,11 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" ];
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ openssl libpcap ]
-    ++ optionals stdenv.isLinux [ libcap libnfnetlink libnetfilter_conntrack libnetfilter_queue ];
+    ++ lib.optionals stdenv.isLinux [ libcap libnfnetlink libnetfilter_conntrack libnetfilter_queue ];
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     broken = stdenv.isDarwin;
     homepage = "http://tcpcrypt.org/";
     description = "Fast TCP encryption";

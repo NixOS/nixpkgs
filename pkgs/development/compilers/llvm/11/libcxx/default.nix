@@ -1,6 +1,10 @@
-{ lib, stdenv, llvm_meta, fetch, fetchpatch, cmake, python3, libcxxabi, llvm, fixDarwinDylibNames, version
+{ lib, stdenv, llvm_meta, fetch, fetchpatch, cmake, python3, llvm, fixDarwinDylibNames, version
+, cxxabi ? if stdenv.hostPlatform.isFreeBSD then libcxxrt else libcxxabi
+, libcxxabi, libcxxrt
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
+
+assert stdenv.isDarwin -> cxxabi.pname == "libcxxabi";
 
 stdenv.mkDerivation {
   pname = "libcxx";
@@ -42,13 +46,13 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake python3 ]
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  buildInputs = [ libcxxabi ];
+  buildInputs = [ cxxabi ];
 
   cmakeFlags = [
-    "-DLIBCXX_CXX_ABI=libcxxabi"
+    "-DLIBCXX_CXX_ABI=${cxxabi.pname}"
   ] ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
     ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
-    ++ lib.optional stdenv.hostPlatform.isWasm [
+    ++ lib.optionals stdenv.hostPlatform.isWasm [
       "-DLIBCXX_ENABLE_THREADS=OFF"
       "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
       "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
@@ -67,8 +71,23 @@ stdenv.mkDerivation {
       stdenv.hostPlatform != stdenv.buildPlatform
     ) "-DCMAKE_SYSTEM_VERSION=20.1.0";
 
+  preInstall = lib.optionalString (stdenv.isDarwin) ''
+    for file in lib/*.dylib; do
+      if [ -L "$file" ]; then continue; fi
+
+      baseName=$(basename $(${stdenv.cc.targetPrefix}otool -D $file | tail -n 1))
+      installName="$out/lib/$baseName"
+      abiName=$(echo "$baseName" | sed -e 's/libc++/libc++abi/')
+
+      for other in $(${stdenv.cc.targetPrefix}otool -L $file | awk '$1 ~ "/libc\\+\\+abi" { print $1 }'); do
+        ${stdenv.cc.targetPrefix}install_name_tool -change $other ${cxxabi}/lib/$abiName $file
+      done
+    done
+  '';
+
   passthru = {
     isLLVM = true;
+    inherit cxxabi;
   };
 
   meta = llvm_meta // {

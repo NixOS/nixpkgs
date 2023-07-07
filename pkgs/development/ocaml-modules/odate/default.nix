@@ -15,8 +15,6 @@ buildDunePackage rec {
     sha256 = "1dk33lr0g2jnia2gqsm6nnc7nf256qgkm3v30w477gm6y2ppfm3h";
   };
 
-  strictDeps = true;
-
   nativeBuildInputs = [ menhir ];
 
   # Ensure compatibility of v0.6 with menhir ≥ 20220210

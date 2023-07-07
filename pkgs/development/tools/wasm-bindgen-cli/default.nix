@@ -12,20 +12,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasm-bindgen-cli";
-  version = "0.2.82";
+  version = "0.2.84";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-BQ8v3rCLUvyCCdxo5U+NHh30l9Jwvk9Sz8YQv6fa0SU=";
+    sha256 = "sha256-0rK+Yx4/Jy44Fw5VwJ3tG243ZsyOIBBehYU54XP/JGk=";
   };
 
-  cargoSha256 = "sha256-mP85+qi2KA0GieaBzbrQOBqYxBZNRJipvd2brCRGyOM=";
+  cargoSha256 = "sha256-vcpxcRlW1OKoD64owFF6mkxSqmNrvY+y3Ckn5UwEQ50=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ curl Security ];
 
-  checkInputs = [ nodejs ];
+  nativeCheckInputs = [ nodejs ];
 
   # other tests require it to be ran in the wasm-bindgen monorepo
   cargoTestFlags = [ "--test=interface-types" ];

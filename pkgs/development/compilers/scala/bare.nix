@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, makeWrapper, jre, ncurses }:
 
 stdenv.mkDerivation rec {
-  version = "3.1.3";
+  version = "3.3.0";
   pname = "scala-bare";
 
   src = fetchurl {
     url = "https://github.com/lampepfl/dotty/releases/download/${version}/scala3-${version}.tar.gz";
-    sha256 = "sha256-nh7v3Kt3stKpBXs9b3gwFZHpwnUTySQT88NTp3CT8tc=";
+    hash = "sha256-Bk7lCKjjucaYQxAsg2qomJQUgCK/N688JqlGTfoQFHU=";
   };
 
   propagatedBuildInputs = [ jre ncurses.dev ] ;
@@ -17,7 +17,9 @@ stdenv.mkDerivation rec {
     mv * $out
   '';
 
-  fixupPhase = ''
+  # Use preFixup instead of fixupPhase
+  # because we want the default fixupPhase as well
+  preFixup = ''
         bin_files=$(find $out/bin -type f ! -name common)
         for f in $bin_files ; do
           wrapProgram $f --set JAVA_HOME ${jre} --prefix PATH : '${ncurses.dev}/bin'

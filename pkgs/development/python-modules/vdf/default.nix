@@ -16,7 +16,7 @@ buildPythonPackage rec {
     hash = "sha256-6ozglzZZNKDtADkHwxX2Zsnkh6BE8WbcRcC9HkTTgPU=";
   };
 
-  checkInputs = [ mock pytestCheckHook ];
+  nativeCheckInputs = [ mock pytestCheckHook ];
   pythonImportsCheck = [ "vdf" ];
 
   meta = with lib; {

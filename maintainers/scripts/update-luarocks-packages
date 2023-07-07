@@ -26,7 +26,8 @@ log = logging.getLogger()
 log.addHandler(logging.StreamHandler())
 
 ROOT = Path(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))).parent.parent # type: ignore
-from pluginupdate import Editor, update_plugins, FetchConfig, CleanEnvironment
+import pluginupdate
+from pluginupdate import update_plugins, FetchConfig, CleanEnvironment
 
 PKG_LIST="maintainers/scripts/luarocks-packages.csv"
 TMP_FILE="$(mktemp)"
@@ -70,7 +71,7 @@ class LuaPlugin:
         return self.name.replace(".", "-")
 
 # rename Editor to LangUpdate/ EcosystemUpdater
-class LuaEditor(Editor):
+class LuaEditor(pluginupdate.Editor):
     def get_current_plugins(self):
         return []
 
@@ -86,6 +87,9 @@ class LuaEditor(Editor):
                 plugin = LuaPlugin(**row)
                 luaPackages.append(plugin)
         return luaPackages
+
+    def update(self, args):
+        update_plugins(self, args)
 
     def generate_nix(
         self,
@@ -203,11 +207,7 @@ def main():
         default_out = ROOT.joinpath(GENERATED_NIXFILE)
         )
 
-    parser = editor.create_parser()
-    args = parser.parse_args()
-
-    update_plugins(editor, args)
-
+    editor.run()
 
 if __name__ == "__main__":
 

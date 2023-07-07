@@ -3,6 +3,7 @@
 , isPy27
 , fetchPypi
 , pythonOlder
+, setuptools
 , importlib-metadata
 , pytestCheckHook
 }:
@@ -16,12 +17,16 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-r0SCigkUpOiba4MDf80+dLjOjjruVNILh/raWfvjXA0=";
+    hash = "sha256-r0SCigkUpOiba4MDf80+dLjOjjruVNILh/raWfvjXA0=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

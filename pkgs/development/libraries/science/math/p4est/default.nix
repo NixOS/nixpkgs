@@ -9,7 +9,7 @@
 
 let
   inherit (p4est-sc) debugEnable mpiSupport;
-  dbg = if debugEnable then "-dbg" else "";
+  dbg = lib.optionalString debugEnable "-dbg";
   withMetis = p4est-withMetis;
 in
 stdenv.mkDerivation {

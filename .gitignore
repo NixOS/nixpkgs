@@ -2,6 +2,8 @@
 ,*
 .*.swp
 .*.swo
+.\#*
+\#*\#
 .idea/
 .vscode/
 outputs/

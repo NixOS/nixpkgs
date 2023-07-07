@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, freetype, fontconfig, libunwind, libtool, flex, bison }:
+{ lib, stdenv, fetchurl, freetype, libtool, flex, bison, pkg-config }:
 
 stdenv.mkDerivation {
   pname = "ttf-mkfontdir";
@@ -20,11 +20,21 @@ stdenv.mkDerivation {
       ./cstring.patch # also fixes some other compilation issues (freetype includes)
     ];
 
-  preInstall = ''
-    mkdir -p $out; makeFlags="DESTDIR=$out BINDIR=/bin"
+  # cross-compilation fixes:
+  # - fix libtool, the reason it does not work in nativeBuildInputs is complicated
+  #   see https://github.com/NixOS/nixpkgs/pull/192878 for more info
+  # - freetype-config doesn't properly support cross-compilation, but is just a thin
+  #   wrapper around pkg-config anyways
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "libtool " "${libtool}/bin/libtool --tag=CXX " \
+      --replace "freetype-config" "${stdenv.cc.targetPrefix}pkg-config freetype2"
   '';
 
-  buildInputs = [freetype fontconfig libunwind libtool flex bison];
+  makeFlags = [ "DESTDIR=${placeholder "out"}" "BINDIR=/bin" "CXX=${stdenv.cc.targetPrefix}c++" ];
+
+  nativeBuildInputs = [ flex bison pkg-config ];
+  buildInputs = [ freetype ];
 
   meta = {
     description = "Create fonts.dir for TTF font directory";

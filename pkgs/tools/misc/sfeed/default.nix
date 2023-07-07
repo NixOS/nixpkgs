@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "sfeed";
-  version = "1.5";
+  version = "1.8";
 
   src = fetchgit {
     url = "git://git.codemadness.org/sfeed";
     rev = version;
-    sha256 = "sha256-OF6xVzvTMbe8Yo64MIg7Cs91XtTBD5GtwAKUbQGYffA=";
+    sha256 = "sha256-oosBwLCVZDy29RNxLXie0IPRUxAmT6qJlQGHypWScuk=";
   };
 
   buildInputs = [ ncurses ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" ];
 
   # otherwise does not find SIGWINCH
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-D_DARWIN_C_SOURCE";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-D_DARWIN_C_SOURCE";
 
   meta = with lib; {
     homepage = "https://codemadness.org/sfeed-simple-feed-parser.html";

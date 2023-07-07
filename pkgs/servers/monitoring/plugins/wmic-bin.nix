@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoPatchelfHook, popt }:
+{ stdenv, lib, fetchFromGitHub, autoPatchelfHook, popt, libxcrypt-legacy }:
 
 stdenv.mkDerivation rec {
   pname = "wmic-bin";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1w1mdbiwz37wzry1q38h8dyjaa6iggmsb9wcyhhlawwm1vj50w48";
   };
 
-  buildInputs = [ popt ];
+  buildInputs = [ popt libxcrypt-legacy ];
 
   nativeBuildInputs = [ autoPatchelfHook ];
 

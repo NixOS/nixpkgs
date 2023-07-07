@@ -1,13 +1,14 @@
 { config, lib, pkgs, ... }:
 let
   cfg = config.virtualisation.podman;
-  toml = pkgs.formats.toml { };
   json = pkgs.formats.json { };
 
   inherit (lib) mkOption types;
 
   podmanPackage = (pkgs.podman.override {
     extraPackages = cfg.extraPackages
+      # setuid shadow
+      ++ [ "/run/wrappers" ]
       ++ lib.optional (builtins.elem "zfs" config.boot.supportedFilesystems) config.boot.zfs.package;
   });
 
@@ -27,24 +28,13 @@ let
     done
   '';
 
-  net-conflist = pkgs.runCommand "87-podman-bridge.conflist"
-    {
-      nativeBuildInputs = [ pkgs.jq ];
-      extraPlugins = builtins.toJSON cfg.defaultNetwork.extraPlugins;
-      jqScript = ''
-        . + { "plugins": (.plugins + $extraPlugins) }
-      '';
-    } ''
-    jq <${cfg.package}/etc/cni/net.d/87-podman-bridge.conflist \
-      --argjson extraPlugins "$extraPlugins" \
-      "$jqScript" \
-      >$out
-  '';
-
 in
 {
   imports = [
-    ./dnsname.nix
+    (lib.mkRemovedOptionModule [ "virtualisation" "podman" "defaultNetwork" "dnsname" ]
+      "Use virtualisation.podman.defaultNetwork.settings.dns_enabled instead.")
+    (lib.mkRemovedOptionModule [ "virtualisation" "podman" "defaultNetwork" "extraPlugins" ]
+      "Netavark isn't compatible with CNI plugins.")
     ./network-socket.nix
   ];
 
@@ -109,6 +99,37 @@ in
       '';
     };
 
+    autoPrune = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Whether to periodically prune Podman resources. If enabled, a
+          systemd timer will run `podman system prune -f`
+          as specified by the `dates` option.
+        '';
+      };
+
+      flags = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        example = [ "--all" ];
+        description = lib.mdDoc ''
+          Any additional flags passed to {command}`podman system prune`.
+        '';
+      };
+
+      dates = mkOption {
+        default = "weekly";
+        type = types.str;
+        description = lib.mdDoc ''
+          Specification (in the format described by
+          {manpage}`systemd.time(7)`) of the time at
+          which the prune will occur.
+        '';
+      };
+    };
+
     package = lib.mkOption {
       type = types.package;
       default = podmanPackage;
@@ -118,26 +139,42 @@ in
       '';
     };
 
-    defaultNetwork.extraPlugins = lib.mkOption {
-      type = types.listOf json.type;
-      default = [ ];
+    defaultNetwork.settings = lib.mkOption {
+      type = json.type;
+      default = { };
+      example = lib.literalExpression "{ dns_enabled = true; }";
       description = lib.mdDoc ''
-        Extra CNI plugin configurations to add to podman's default network.
+        Settings for podman's default network.
       '';
     };
 
   };
 
-  config = lib.mkIf cfg.enable (lib.mkMerge [
+  config = lib.mkIf cfg.enable
     {
       environment.systemPackages = [ cfg.package ]
         ++ lib.optional cfg.dockerCompat dockerCompat;
 
-      environment.etc."cni/net.d/87-podman-bridge.conflist".source = net-conflist;
+      # https://github.com/containers/podman/blob/097cc6eb6dd8e598c0e8676d21267b4edb11e144/docs/tutorials/basic_networking.md#default-network
+      environment.etc."containers/networks/podman.json" = lib.mkIf (cfg.defaultNetwork.settings != { }) {
+        source = json.generate "podman.json" ({
+          dns_enabled = false;
+          driver = "bridge";
+          id = "0000000000000000000000000000000000000000000000000000000000000000";
+          internal = false;
+          ipam_options = { driver = "host-local"; };
+          ipv6_enabled = false;
+          name = "podman";
+          network_interface = "podman0";
+          subnets = [{ gateway = "10.88.0.1"; subnet = "10.88.0.0/16"; }];
+        } // cfg.defaultNetwork.settings);
+      };
 
       virtualisation.containers = {
         enable = true; # Enable common /etc/containers configuration
-        containersConf.settings = lib.optionalAttrs cfg.enableNvidia {
+        containersConf.settings = {
+          network.network_backend = "netavark";
+        } // lib.optionalAttrs cfg.enableNvidia {
           engine = {
             conmon_env_vars = [ "PATH=${lib.makeBinPath [ pkgs.nvidia-podman ]}" ];
             runtimes.nvidia = [ "${pkgs.nvidia-podman}/bin/nvidia-container-runtime" ];
@@ -147,16 +184,25 @@ in
 
       systemd.packages = [ cfg.package ];
 
-      systemd.services.podman.serviceConfig = {
-        ExecStart = [ "" "${cfg.package}/bin/podman $LOGGING system service" ];
+      systemd.services.podman-prune = {
+        description = "Prune podman resources";
+
+        restartIfChanged = false;
+        unitConfig.X-StopOnRemoval = false;
+
+        serviceConfig.Type = "oneshot";
+
+        script = ''
+          ${cfg.package}/bin/podman system prune -f ${toString cfg.autoPrune.flags}
+        '';
+
+        startAt = lib.optional cfg.autoPrune.enable cfg.autoPrune.dates;
+        after = [ "podman.service" ];
+        requires = [ "podman.service" ];
       };
 
       systemd.sockets.podman.wantedBy = [ "sockets.target" ];
       systemd.sockets.podman.socketConfig.SocketGroup = "podman";
-
-      systemd.user.services.podman.serviceConfig = {
-        ExecStart = [ "" "${cfg.package}/bin/podman $LOGGING system service" ];
-      };
 
       systemd.user.sockets.podman.wantedBy = [ "sockets.target" ];
 
@@ -190,6 +236,5 @@ in
           '';
         }
       ];
-    }
-  ]);
+    };
 }

@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub, nixosTests, stdenv }:
+{ lib, buildGoPackage, fetchFromGitHub, stdenv }:
 
 buildGoPackage rec {
   pname = "etcd";
@@ -24,13 +24,12 @@ buildGoPackage rec {
     install -Dm755 bin/* bin/functional/cmd/* -t $out/bin
   '';
 
-  passthru.tests = { inherit (nixosTests) etcd etcd-cluster; };
-
   meta = with lib; {
     description = "Distributed reliable key-value store for the most critical data of a distributed system";
     license = licenses.asl20;
     homepage = "https://etcd.io/";
     maintainers = with maintainers; [ offline zowoq ];
     broken = stdenv.isDarwin; # outdated golang.org/x/sys
+    knownVulnerabilities = [ "CVE-2023-32082" ];
   };
 }

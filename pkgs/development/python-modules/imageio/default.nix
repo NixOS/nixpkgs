@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, isPy27
+, pythonOlder
 , fetchPypi
 , substituteAll
 , imageio-ffmpeg
@@ -16,15 +16,17 @@
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.19.3";
-  disabled = isPy27;
+  version = "2.28.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    sha256 = "sha256-DJ34DkLy7mi+qSAB5/z2EqoUmRDv4EDrdX9c4yMlCuE=";
     inherit pname version;
+    hash = "sha256-XbUIe+XIFOz34sfTChoVyX7Kl9jCbzHdxU12fUpDvOg=";
   };
 
-  patches = [
+  patches = lib.optionals (!stdenv.isDarwin) [
     (substituteAll {
       src = ./libgl-path.patch;
       libgl = "${libGL.out}/lib/libGL${stdenv.hostPlatform.extensions.sharedLibrary}";
@@ -37,7 +39,7 @@ buildPythonPackage rec {
     pillow
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     fsspec
     psutil
     pytestCheckHook
@@ -63,8 +65,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for reading and writing a wide range of image, video, scientific, and volumetric data formats";
-    homepage = "http://imageio.github.io/";
+    homepage = "https://imageio.readthedocs.io";
+    changelog = "https://github.com/imageio/imageio/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ Luflosi ];
   };
 }

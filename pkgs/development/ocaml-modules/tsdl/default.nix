@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, ctypes, result, SDL2, pkg-config, ocb-stubblr }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, ctypes, result, SDL2, pkg-config
+, AudioToolbox, Cocoa, CoreAudio, CoreVideo, ForceFeedback }:
 
 if lib.versionOlder ocaml.version "4.03"
 then throw "tsdl is not available for OCaml ${ocaml.version}"
@@ -6,21 +7,25 @@ else
 
 let
   pname = "tsdl";
-  version = "0.9.8";
+  version = "1.0.0";
   webpage = "https://erratique.ch/software/${pname}";
 in
 
 stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-${pname}-${version}";
+  pname = "ocaml${ocaml.version}-${pname}";
+  inherit version;
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "sha256-zjXz2++42FHmbE0nIDeryNQeX+avGwh9rwAs8O0pZYU=";
+    hash = "sha256-XdgzCj9Uqplt/8Jk8rSFaQf8zu+9SZa8b9ZIlW/gjyE=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [ pkg-config ocaml findlib ocamlbuild topkg ];
   buildInputs = [ topkg ];
-  propagatedBuildInputs = [ SDL2 ctypes ];
+  propagatedBuildInputs = [ SDL2 ctypes ]
+    ++ lib.optionals stdenv.isDarwin [ AudioToolbox Cocoa CoreAudio CoreVideo ForceFeedback ];
 
   preConfigure = ''
     # The following is done to avoid an additional dependency (ncurses)

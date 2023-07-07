@@ -18,6 +18,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace '\$'{exec_prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR}
+  '';
+
   meta = with lib; {
     description = "Opensource implementation of both encoder and decoder of the ITU G729 Annex A/B speech codec";
     homepage = "https://linphone.org/technical-corner/bcg729";

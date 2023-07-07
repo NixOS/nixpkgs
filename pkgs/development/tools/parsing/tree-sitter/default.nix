@@ -2,37 +2,29 @@
 , stdenv
 , fetchgit
 , fetchFromGitHub
-, fetchurl
-, writeShellScript
 , runCommand
 , which
-, formats
 , rustPlatform
-, jq
-, nix-prefetch-git
-, xe
-, curl
 , emscripten
 , Security
 , callPackage
 , linkFarm
-
+, CoreServices
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableStatic ? stdenv.hostPlatform.isStatic
 , webUISupport ? false
 , extraGrammars ? { }
 }:
 
-# TODO: move to carnix or https://github.com/kolloch/crate2nix
 let
   # to update:
   # 1) change all these hashes
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
-  # 3) OPTIONAL: Set GITHUB_TOKEN env variable to avoid api rate limit
+  # 3) Set GITHUB_TOKEN env variable to avoid api rate limit (Use a Personal Access Token from https://github.com/settings/tokens It does not need any permissions)
   # 4) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.20.6";
-  sha256 = "sha256-zaxy8VCfJKK8NtfuFFojmmP5a19FP1zO/eB5q1EoQPw=";
-  cargoSha256 = "sha256-sOOhzm2nz+HC6dvT+8hj/wh19o+OB2zQ6Uz+H89txSA=";
+  version = "0.20.8";
+  sha256 = "sha256-278zU5CLNOwphGBUa4cGwjBqRJ87dhHMzFirZB09gYM=";
+  cargoSha256 = "sha256-0avy53pmR7CztDrL+5WAmlqpZwd/EA3Fh10hfPXyXZc=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
@@ -42,9 +34,7 @@ let
     fetchSubmodules = true;
   };
 
-  update-all-grammars = import ./update.nix {
-    inherit writeShellScript nix-prefetch-git curl jq xe src formats lib;
-  };
+  update-all-grammars = callPackage ./update.nix { };
 
   fetchGrammar = (v: fetchgit { inherit (v) url rev sha256 fetchSubmodules; });
 
@@ -54,14 +44,18 @@ let
     '' + (lib.concatStrings (lib.mapAttrsToList
       (name: grammar: "ln -s ${if grammar ? src then grammar.src else fetchGrammar grammar} $out/${name}\n")
       (import ./grammars { inherit lib; }))));
+
+  buildGrammar = callPackage ./grammar.nix { };
+
   builtGrammars =
     let
-      change = name: grammar:
-        callPackage ./grammar.nix { } {
-          language = if grammar ? language then grammar.language else name;
+      build = name: grammar:
+        buildGrammar {
+          language = grammar.language or name;
           inherit version;
-          source = if grammar ? src then grammar.src else fetchGrammar grammar;
-          location = if grammar ? location then grammar.location else null;
+          src = grammar.src or (fetchGrammar grammar);
+          location = grammar.location or null;
+          generate = grammar.generate or false;
         };
       grammars' = import ./grammars { inherit lib; } // extraGrammars;
       grammars = grammars' //
@@ -71,9 +65,10 @@ let
         { tree-sitter-typescript = grammars'.tree-sitter-typescript // { location = "typescript"; }; } //
         { tree-sitter-tsx = grammars'.tree-sitter-typescript // { location = "tsx"; }; } //
         { tree-sitter-markdown = grammars'.tree-sitter-markdown // { location = "tree-sitter-markdown"; }; } //
-        { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; };
+        { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; } //
+        { tree-sitter-wing = grammars'.tree-sitter-wing // { location = "libs/tree-sitter-wing"; generate = true; }; };
     in
-    lib.mapAttrs change (grammars);
+    lib.mapAttrs build (grammars);
 
   # Usage:
   # pkgs.tree-sitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])
@@ -111,17 +106,17 @@ rustPlatform.buildRustPackage {
   inherit src version cargoSha256;
 
   buildInputs =
-    lib.optionals stdenv.isDarwin [ Security ];
+    lib.optionals stdenv.isDarwin [ Security CoreServices ];
   nativeBuildInputs =
     [ which ]
     ++ lib.optionals webUISupport [ emscripten ];
 
   postPatch = lib.optionalString (!webUISupport) ''
     # remove web interface
-    sed -e '/pub mod web_ui/d' \
+    sed -e '/pub mod playground/d' \
         -i cli/src/lib.rs
-    sed -e 's/web_ui,//' \
-        -e 's/web_ui::serve(&current_dir.*$/println!("ERROR: web-ui is not available in this nixpkgs build; enable the webUISupport"); std::process::exit(1);/' \
+    sed -e 's/playground,//' \
+        -e 's/playground::serve(&current_dir.*$/println!("ERROR: web-ui is not available in this nixpkgs build; enable the webUISupport"); std::process::exit(1);/' \
         -i cli/src/main.rs
   '';
 
@@ -145,7 +140,7 @@ rustPlatform.buildRustPackage {
     updater = {
       inherit update-all-grammars;
     };
-    inherit grammars builtGrammars withPlugins allGrammars;
+    inherit grammars buildGrammar builtGrammars withPlugins allGrammars;
 
     tests = {
       # make sure all grammars build
@@ -168,6 +163,6 @@ rustPlatform.buildRustPackage {
       * Dependency-free so that the runtime library (which is written in pure C) can be embedded in any application
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ Profpatsch oxalica ];
+    maintainers = with maintainers; [ oxalica Profpatsch ];
   };
 }

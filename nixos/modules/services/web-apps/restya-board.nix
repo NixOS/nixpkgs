@@ -69,7 +69,7 @@ in
         };
 
         listenPort = mkOption {
-          type = types.int;
+          type = types.port;
           default = 3000;
           description = lib.mdDoc ''
             Listen port for the virtualhost to use.
@@ -132,7 +132,7 @@ in
         };
 
         port = mkOption {
-          type = types.int;
+          type = types.port;
           default = 25;
           description = lib.mdDoc ''
             Port used to connect to SMTP server.

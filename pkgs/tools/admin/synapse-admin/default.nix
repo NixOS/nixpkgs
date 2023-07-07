@@ -1,19 +1,17 @@
 { lib
-, stdenv
 , fetchFromGitHub
-, fetchzip
 , mkYarnPackage
 , baseUrl ? null
 }:
 
 mkYarnPackage rec {
   pname = "synapse-admin";
-  version = "0.8.5";
+  version = "0.8.7";
   src = fetchFromGitHub {
     owner = "Awesome-Technologies";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0miHtEJ5e8MaqGc4ezPvwhGjoCZyOE7md0DUCC/ZOfk=";
+    sha256 = "sha256-kvQBzrCu1sgDccKhr0i2DgDmO5z6u6s+vw5KymttoK4=";
   };
 
   yarnNix = ./yarn.nix;
@@ -22,6 +20,9 @@ mkYarnPackage rec {
 
   NODE_ENV = "production";
   ${if baseUrl != null then "REACT_APP_SERVER" else null} = baseUrl;
+
+  # error:0308010C:digital envelope routines::unsupported
+  NODE_OPTIONS = "--openssl-legacy-provider";
 
   buildPhase = ''
     runHook preBuild

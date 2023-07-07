@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "miniconfig";
     repo = "python-openevse-wifi";
     rev = "v${version}";
-    sha256 = "sha256-7+BC5WG0JoyHNjgsoJBQRVDpmdXMJCV4bMf6pIaS5qo=";
+    hash = "sha256-7+BC5WG0JoyHNjgsoJBQRVDpmdXMJCV4bMf6pIaS5qo=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     requests-mock
     pytestCheckHook
   ];
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "switch-to-poetry-core.patch";
       url = "https://github.com/miniconfig/python-openevse-wifi/commit/1083868dd9f39a8ad7bb17f02cea1b8458e5b82d.patch";
-      sha256 = "sha256-XGeyi/PchBju1ICgL/ZCDGCbWwIJmLAcHuKaj+kDsI0=";
+      hash = "sha256-XGeyi/PchBju1ICgL/ZCDGCbWwIJmLAcHuKaj+kDsI0=";
     })
   ];
 

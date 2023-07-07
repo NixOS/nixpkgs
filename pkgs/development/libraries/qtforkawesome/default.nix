@@ -18,13 +18,13 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "qtforkawesome";
-  version = "0.0.4";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-J3F+ikz6gQqV+JsOX8EpMOWoTmI6UK5KndFALUo4oiU=";
+    sha256 = "sha256-9e2TCg3itYtHZSvzCoaiIZmgsCMIoebh6C/XWtKz/2Q=";
   };
 
   buildInputs = [
@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
     description = "Library that bundles ForkAwesome for use within Qt applications";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ doronbehar ];
-    platforms   = platforms.linux;
+    platforms   = platforms.linux ++ platforms.darwin;
   };
 }
 

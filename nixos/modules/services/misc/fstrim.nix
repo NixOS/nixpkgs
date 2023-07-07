@@ -34,7 +34,7 @@ in {
 
     systemd.timers.fstrim = {
       timerConfig = {
-        OnCalendar = cfg.interval;
+        OnCalendar = [ "" cfg.interval ];
       };
       wantedBy = [ "timers.target" ];
     };

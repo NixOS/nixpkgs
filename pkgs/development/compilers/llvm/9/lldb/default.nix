@@ -1,5 +1,6 @@
 { lib, stdenv, llvm_meta
 , fetch
+, fetchpatch
 , cmake
 , zlib
 , ncurses
@@ -13,6 +14,7 @@
 , version
 , darwin
 , makeWrapper
+, perl
 , lit
 }:
 
@@ -25,12 +27,27 @@ stdenv.mkDerivation rec {
   patches = [
     ./procfs.patch
     ./gnu-install-dirs.patch
+
+    # Fix darwin build
+    (fetchpatch {
+      name = "lldb-use-system-debugserver-fix.patch";
+      url = "https://github.com/llvm-mirror/lldb/commit/be770754cc43da22eacdb70c6203f4582eeb011f.diff";
+      sha256 = "sha256-tKkk6sn//0Hu0nlzoKWs5fXMWc+O2JAWOEJ1ZnaLuVU=";
+      excludes = [ "packages/*" ];
+      postFetch = ''
+        substituteInPlace "$out" --replace add_lldb_tool_subdirectory add_subdirectory
+      '';
+    })
+    ./lldb-gdb-remote-no-libcompress.patch
   ];
 
   outputs = [ "out" "lib" "dev" ];
 
   nativeBuildInputs = [
     cmake python3 which swig lit makeWrapper
+  ] ++ lib.optionals stdenv.isDarwin [
+    # for scripts/generate-vers.pl
+    perl
   ];
 
   buildInputs = [
@@ -42,6 +59,7 @@ stdenv.mkDerivation rec {
     darwin.bootstrap_cmds
     darwin.apple_sdk.frameworks.Carbon
     darwin.apple_sdk.frameworks.Cocoa
+    darwin.apple_sdk.frameworks.DebugSymbols
   ];
 
   CXXFLAGS = "-fno-rtti";
@@ -52,6 +70,9 @@ stdenv.mkDerivation rec {
     "-DClang_DIR=${libclang.dev}/lib/cmake"
     "-DLLVM_EXTERNAL_LIT=${lit}/bin/lit"
     "-DLLDB_CODESIGN_IDENTITY=" # codesigning makes nondeterministic
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Building debugserver requires the proprietary libcompression
+    "-DLLDB_USE_SYSTEM_DEBUGSERVER=ON"
   ] ++ lib.optionals doCheck [
     "-DLLDB_TEST_C_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
     "-DLLDB_TEST_CXX_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++"
@@ -59,8 +80,11 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
+  doInstallCheck = true;
+
   installCheckPhase = ''
     if [ ! -e "$lib/${python3.sitePackages}/lldb/_lldb.so" ] ; then
+        echo "ERROR: python files not installed where expected!";
         return 1;
     fi
   '';
@@ -80,7 +104,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = llvm_meta // {
-    broken = stdenv.isDarwin;
+    broken = stdenv.isDarwin && stdenv.isAarch64;
     homepage = "https://lldb.llvm.org/";
     description = "A next-generation high-performance debugger";
     longDescription = ''

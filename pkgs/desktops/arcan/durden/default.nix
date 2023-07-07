@@ -1,17 +1,17 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 }:
 
-stdenv.mkDerivation (finalPackages: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "durden";
-  version = "unstable-2022-07-16";
+  version = "unstable-2023-01-19";
 
   src = fetchFromGitHub {
     owner = "letoram";
     repo = "durden";
-    rev = "4c9eaf1550d34e10565b545e0f96b1f6b8d26dcd";
-    hash = "sha256-1d+Kg17nxNQeVT/iVa5oPXu96Ivvas9AO/H+NxhB4Yo=";
+    rev = "bba1bcc8992ea5826fd3b1c798cb271141b7c8e2";
+    hash = "sha256-PK9ObMJ3SbHZLnLjxk4smh5N0WaM/2H/Y+T5vKBdHWA=";
   };
 
   dontConfigure = true;

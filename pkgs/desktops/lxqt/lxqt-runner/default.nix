@@ -15,18 +15,18 @@
 , menu-cache
 , muparser
 , pcre
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
   pname = "lxqt-runner";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "hnuzoHKXqM6xEzN0jvHVjVWUXRxuwdhD3BiBfFMmZSk=";
+    sha256 = "iC0XTdgB1+hwMfc/45JiEfAhwadbFOgTTJj9Kvxx+l4=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +49,7 @@ mkDerivation rec {
     pcre
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-runner";

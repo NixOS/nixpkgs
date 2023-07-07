@@ -6,16 +6,16 @@
 
 buildPythonPackage rec {
   pname = "timeago";
-  version = "1.0.15";
+  version = "1.0.16";
 
   src = fetchFromGitHub {
     owner = "hustcc";
     repo = pname;
     rev = version;
-    sha256 = "03vm7c02l4g2d1x33w382i1psk8i3an7xchk69yinha33fjj1cag";
+    sha256 = "sha256-PqORJKAVrjezU/yP2ky3gb1XsM8obDI3GQzi+mok/OM=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

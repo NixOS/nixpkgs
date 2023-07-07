@@ -16,6 +16,7 @@
 , chrome-trace
 , dune_3
 , csexp
+, result
 , pp
 , cmdliner
 , ordering
@@ -25,8 +26,8 @@
 buildDunePackage rec {
   pname = "lsp";
   inherit (jsonrpc) version src;
-  duneVersion = if lib.versionAtLeast version "1.10.0" then "3" else "2";
-  minimumOCamlVersion =
+  duneVersion = "3";
+  minimalOCamlVersion =
     if lib.versionAtLeast version "1.7.0" then
       "4.12"
     else
@@ -74,7 +75,6 @@ buildDunePackage rec {
       [ pp re ppx_yojson_conv_lib octavius dune-build-info omd cmdliner ocamlformat-rpc-lib ]
     else
       [
-        cppo
         ppx_yojson_conv_lib
         ocaml-syntax-shims
         octavius
@@ -83,11 +83,34 @@ buildDunePackage rec {
         cmdliner
       ];
 
-  propagatedBuildInputs = [
-    csexp
-    jsonrpc
-    uutf
-  ] ++ lib.optional (lib.versionOlder version "1.7.0") stdlib-shims;
+  nativeBuildInputs = lib.optional (lib.versionOlder version "1.7.0") cppo;
+
+  propagatedBuildInputs =
+    if lib.versionAtLeast version "1.14.0" then [
+      jsonrpc
+      ppx_yojson_conv_lib
+      uutf
+    ] else if lib.versionAtLeast version "1.10.0" then [
+      dyn
+      jsonrpc
+      ordering
+      ppx_yojson_conv_lib
+      stdune
+      uutf
+    ] else if lib.versionAtLeast version "1.7.0" then [
+      csexp
+      jsonrpc
+      pp
+      ppx_yojson_conv_lib
+      result
+      uutf
+    ] else [
+      csexp
+      jsonrpc
+      ppx_yojson_conv_lib
+      stdlib-shims
+      uutf
+    ];
 
   meta = jsonrpc.meta // {
     description = "LSP protocol implementation in OCaml";

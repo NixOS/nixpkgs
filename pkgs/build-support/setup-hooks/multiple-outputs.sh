@@ -4,16 +4,33 @@ preFixupHooks+=(_multioutDocs)
 preFixupHooks+=(_multioutDevs)
 postFixupHooks+=(_multioutPropagateDev)
 
-# Assign the first string containing nonempty variable to the variable named $1
+# _assignFirst varName otherVarNames*
+#
+# Set the value of the variable named $varName to the first of otherVarNames
+# that refers to a non-empty variable name.
+#
+# If none of otherVarNames refers to a non-empty variable, the error message is
+# specific to this function's use case, which is setting up the output variables.
 _assignFirst() {
     local varName="$1"
+    local _var
     local REMOVE=REMOVE # slightly hacky - we allow REMOVE (i.e. not a variable name)
     shift
-    while (( $# )); do
-        if [ -n "${!1-}" ]; then eval "${varName}"="$1"; return; fi
-        shift
+    for _var in "$@"; do
+        if [ -n "${!_var-}" ]; then eval "${varName}"="${_var}"; return; fi
     done
-    echo "Error: _assignFirst found no valid variant!"
+    echo
+    echo "error: _assignFirst: could not find a non-empty variable whose name to assign to ${varName}."
+    echo "       The following variables were all unset or empty:"
+    echo "           $*"
+    if [ -z "${out:-}" ]; then
+        echo '       If you do not want an "out" output in your derivation, make sure to define'
+        echo '       the other specific required outputs. This can be achieved by picking one'
+        echo "       of the above as an output."
+        echo '       You do not have to remove "out" if you want to have a different default'
+        echo '       output, because the first output is taken as a default.'
+        echo
+    fi
     return 1 # none found
 }
 
@@ -47,7 +64,7 @@ _overrideFirst outputInfo "info" "$outputBin"
 
 # Add standard flags to put files into the desired outputs.
 _multioutConfig() {
-    if [ "$outputs" = "out" ] || [ -z "${setOutputFlags-1}" ]; then return; fi;
+    if [ "$(getAllOutputNames)" = "out" ] || [ -z "${setOutputFlags-1}" ]; then return; fi;
 
     # try to detect share/doc/${shareDocName}
     # Note: sadly, $configureScript detection comes later in configurePhase,
@@ -66,19 +83,17 @@ _multioutConfig() {
         fi
     fi
 
-    configureFlags="\
-        --bindir=${!outputBin}/bin --sbindir=${!outputBin}/sbin \
-        --includedir=${!outputInclude}/include --oldincludedir=${!outputInclude}/include \
-        --mandir=${!outputMan}/share/man --infodir=${!outputInfo}/share/info \
-        --docdir=${!outputDoc}/share/doc/${shareDocName} \
-        --libdir=${!outputLib}/lib --libexecdir=${!outputLib}/libexec \
-        --localedir=${!outputLib}/share/locale \
-        $configureFlags"
+    prependToVar configureFlags \
+        --bindir="${!outputBin}"/bin --sbindir="${!outputBin}"/sbin \
+        --includedir="${!outputInclude}"/include --oldincludedir="${!outputInclude}"/include \
+        --mandir="${!outputMan}"/share/man --infodir="${!outputInfo}"/share/info \
+        --docdir="${!outputDoc}"/share/doc/"${shareDocName}" \
+        --libdir="${!outputLib}"/lib --libexecdir="${!outputLib}"/libexec \
+        --localedir="${!outputLib}"/share/locale
 
-    installFlags="\
-        pkgconfigdir=${!outputDev}/lib/pkgconfig \
-        m4datadir=${!outputDev}/share/aclocal aclocaldir=${!outputDev}/share/aclocal \
-        $installFlags"
+    prependToVar installFlags \
+        pkgconfigdir="${!outputDev}"/lib/pkgconfig \
+        m4datadir="${!outputDev}"/share/aclocal aclocaldir="${!outputDev}"/share/aclocal
 }
 
 
@@ -88,13 +103,13 @@ NIX_NO_SELF_RPATH=1
 
 
 # Move subpaths that match pattern $1 from under any output/ to the $2 output/
-# Beware: only globbing patterns are accepted, e.g.: * ? {foo,bar}
+# Beware: only globbing patterns are accepted, e.g.: * ? [abc]
 # A special target "REMOVE" is allowed: moveToOutput foo REMOVE
 moveToOutput() {
     local patt="$1"
     local dstOut="$2"
     local output
-    for output in $outputs; do
+    for output in $(getAllOutputNames); do
         if [ "${!output}" = "$dstOut" ]; then continue; fi
         local srcPath
         for srcPath in "${!output}"/$patt; do
@@ -124,9 +139,9 @@ moveToOutput() {
 
             # remove empty directories, printing iff at least one gets removed
             local srcParent="$(readlink -m "$srcPath/..")"
-            if rmdir "$srcParent"; then
+            if [ -n "$(find "$srcParent" -maxdepth 0 -type d -empty 2>/dev/null)" ]; then
                 echo "Removing empty $srcParent/ and (possibly) its parents"
-                rmdir -p --ignore-fail-on-non-empty "$(readlink -m "$srcParent/..")" \
+                rmdir -p --ignore-fail-on-non-empty "$srcParent" \
                     2> /dev/null || true # doesn't ignore failure for some reason
             fi
         done
@@ -149,7 +164,7 @@ _multioutDocs() {
 
 # Move development-only stuff to the desired outputs.
 _multioutDevs() {
-    if [ "$outputs" = "out" ] || [ -z "${moveToDev-1}" ]; then return; fi;
+    if [ "$(getAllOutputNames)" = "out" ] || [ -z "${moveToDev-1}" ]; then return; fi;
     moveToOutput include "${!outputInclude}"
     # these files are sometimes provided even without using the corresponding tool
     moveToOutput lib/pkgconfig "${!outputDev}"
@@ -166,10 +181,10 @@ _multioutDevs() {
 
 # Make the "dev" propagate other outputs needed for development.
 _multioutPropagateDev() {
-    if [ "$outputs" = "out" ]; then return; fi;
+    if [ "$(getAllOutputNames)" = "out" ]; then return; fi;
 
     local outputFirst
-    for outputFirst in $outputs; do
+    for outputFirst in $(getAllOutputNames); do
         break
     done
     local propagaterOutput="$outputDev"

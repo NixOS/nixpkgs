@@ -14,11 +14,12 @@
 , gst_all_1
 , libsoup_3
 , libadwaita
+, nix-update-script
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dialect";
-  version = "2.0.2";
+  version = "2.1.1";
 
   format = "other";
 
@@ -27,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-55vqxS0ySV8lItxLl1J+wLvPtmR87HzGfAiOKuhigFA=";
+    hash = "sha256-ytZnolQTOj0dpv+ouN1N7sypr1LxSN/Uhp7qP0ZOTHE=";
   };
 
   nativeBuildInputs = [
@@ -68,6 +69,10 @@ python3.pkgs.buildPythonApplication rec {
 
   # handle setup hooks better
   strictDeps = false;
+
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/dialect-app/dialect";

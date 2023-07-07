@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchPypi
 , enableTelemetry ? false
 }:
 
@@ -7,7 +8,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
   version = "1.53.0";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash = "sha256-kIW+aGYuS+JgOMsPbeLgPSgLFNKLSqHaZ1CHpjs/IVI=";
   };

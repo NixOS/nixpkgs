@@ -14,13 +14,13 @@ let
 
   bees = stdenv.mkDerivation rec {
     pname = "bees";
-    version = "0.7";
+    version = "0.9.3";
 
     src = fetchFromGitHub {
       owner = "Zygo";
       repo = "bees";
       rev = "v${version}";
-      sha256 = "sha256-hD6/pMRnQgPqL1M6QOuRka6ESJv9kjeKy+29nRMTY1o=";
+      sha256 = "sha256-krG8TzfOz3m7h3GfkBU+NJz7EdlXiWOOXY8bQRq9z4Q=";
     };
 
     buildInputs = [
@@ -56,10 +56,10 @@ let
     meta = with lib; {
       homepage = "https://github.com/Zygo/bees";
       description = "Block-oriented BTRFS deduplication service";
+      longDescription = "Best-Effort Extent-Same: bees finds not just identical files, but also identical extents within files that differ";
       license = licenses.gpl3;
       platforms = platforms.linux;
       maintainers = with maintainers; [ chaduffy ];
-      longDescription = "Best-Effort Extent-Same: bees finds not just identical files, but also identical extents within files that differ";
     };
   };
 

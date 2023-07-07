@@ -1,0 +1,56 @@
+From e7357c383188dd735592bd9f2202d2afcfffa39d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Mustafa=20=C3=87al=C4=B1=C5=9Fkan?= <muscaln@protonmail.com>
+Date: Sun, 11 Sep 2022 17:08:33 +0300
+Subject: [PATCH 3/3] Use out path as build id on darwin
+
+
+diff --git a/builder/buildid.go b/builder/buildid.go
+index e6527700..65cb08e8 100644
+--- a/builder/buildid.go
++++ b/builder/buildid.go
+@@ -3,8 +3,6 @@ package builder
+ import (
+ 	"bytes"
+ 	"debug/elf"
+-	"debug/macho"
+-	"encoding/binary"
+ 	"fmt"
+ 	"io"
+ 	"os"
+@@ -53,30 +51,9 @@ func ReadBuildID() ([]byte, error) {
+ 			return goID, nil
+ 		}
+ 	case "darwin":
+-		// Read the LC_UUID load command, which contains the equivalent of a
+-		// build ID.
+-		file, err := macho.NewFile(f)
+-		if err != nil {
+-			return nil, err
+-		}
+-		for _, load := range file.Loads {
+-			// Unfortunately, the debug/macho package doesn't support the
+-			// LC_UUID command directly. So we have to read it from
+-			// macho.LoadBytes.
+-			load, ok := load.(macho.LoadBytes)
+-			if !ok {
+-				continue
+-			}
+-			raw := load.Raw()
+-			command := binary.LittleEndian.Uint32(raw)
+-			if command != 0x1b {
+-				// Looking for the LC_UUID load command.
+-				// LC_UUID is defined here as 0x1b:
+-				// https://opensource.apple.com/source/xnu/xnu-4570.71.2/EXTERNAL_HEADERS/mach-o/loader.h.auto.html
+-				continue
+-			}
+-			return raw[4:], nil
+-		}
++		// On darwin, os.Executable() returns broken path in nix build environment
++		// So we are using $out path as build id since its also unique
++		return []byte("OUT_PATH"), nil
+ 	default:
+ 		// On other platforms (such as Windows) there isn't such a convenient
+ 		// build ID. Luckily, Go does have an equivalent of the build ID, which
+-- 
+2.37.2
+

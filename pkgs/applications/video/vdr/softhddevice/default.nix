@@ -12,12 +12,12 @@
 }:
 stdenv.mkDerivation rec {
   pname = "vdr-softhddevice";
-  version = "1.9.0";
+  version = "1.9.7";
 
   src = fetchFromGitHub {
     owner = "ua0lnj";
     repo = "vdr-plugin-softhddevice";
-    sha256 = "sha256-IqG1Jr+fV4MMyTTOUGY34HNqS8qvAH+CSi2IEyVGVFo=";
+    sha256 = "sha256-SviAuV+71pxnuEcmoLQkA1yti2jAAuG7yZZDlf3cODc=";
     rev = "v${version}";
   };
 
@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/ua0lnj/vdr-plugin-softhddevice";
+    inherit (src.meta) homepage;
     description = "VDR SoftHDDevice Plug-in";
     maintainers = [ maintainers.ck3d ];
     license = licenses.gpl2;
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    inherit (vdr.meta) platforms;
   };
 
 }

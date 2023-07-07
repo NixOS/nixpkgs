@@ -12,7 +12,7 @@
 , bsuite
 , frozendict
 , dm-env
-, scikitimage
+, scikit-image
 , rlax
 , distrax
 , tensorflow-probability
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   dontBuild = true;
   dontInstall = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     bsuite
     chex
     cloudpickle
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     pytestCheckHook
     optax
     rlax
-    scikitimage
+    scikit-image
     tensorflow
     tensorflow-probability
   ];

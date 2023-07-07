@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, fetchpatch
 , django
 , djangorestframework
 , python
@@ -9,14 +10,23 @@
 
 buildPythonPackage rec {
   pname = "django-taggit";
-  version = "3.0.0";
+  version = "3.1.0";
   format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-5kW4491PhZidXvXFo9Xrvlut9dHlG1PkLQr3JiQLALk=";
+    hash = "sha256-yPLk6uOHk5CJs9ddHYZJ4AiICXDAaM6dDoL4f9XilQg=";
   };
+
+  patches = [
+    (fetchpatch {
+      # Django 4.2 support; https://github.com/jazzband/django-taggit/pull/850
+      url = "https://github.com/jazzband/django-taggit/commit/5f19cfbaa14e8d6d4d1679529eb168a87ca97908.patch";
+      hash = "sha256-KcsiACLy3+1JoFquu//Kz+iAySZQAVIuBEKzNZaaR9s=";
+    })
+  ];
 
   propagatedBuildInputs = [
     django
@@ -26,7 +36,7 @@ buildPythonPackage rec {
     "taggit"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     djangorestframework
   ];
 
@@ -42,8 +52,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Simple tagging for django";
     homepage = "https://github.com/jazzband/django-taggit";
+    changelog = "https://github.com/jazzband/django-taggit/blob/${version}/CHANGELOG.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ desiderius ];
   };
-
 }

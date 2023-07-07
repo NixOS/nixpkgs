@@ -28,6 +28,12 @@ buildPythonPackage rec {
 
   dontConfigure = true;
 
+  postPatch = ''
+    # PEP440 support was removed in newer setuptools, https://github.com/nexB/container-inspector/pull/51
+    substituteInPlace setup.cfg \
+      --replace ">=3.7.*" ">=3.7"
+  '';
+
   nativeBuildInputs = [
     setuptools-scm
   ];
@@ -39,7 +45,7 @@ buildPythonPackage rec {
     commoncode
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -50,6 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Suite of analysis utilities and command line tools for container images";
     homepage = "https://github.com/nexB/container-inspector";
+    changelog = "https://github.com/nexB/container-inspector/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

@@ -1,26 +1,22 @@
-{ lib, buildDunePackage, ocaml, fetchurl
-, bigarray-compat, alcotest, astring, fpath, bos, findlib, pkg-config
+{ lib, buildDunePackage, fetchurl
+, alcotest, pkg-config
 }:
 
 buildDunePackage rec {
   pname = "bigarray-overlap";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchurl {
-    url = "https://github.com/dinosaure/overlap/releases/download/v${version}/bigarray-overlap-v${version}.tbz";
-    sha256 = "1v86avafsbyxjccy0y9gny31s2jzb0kd42v3mhcalklx5f044lcy";
+    url = "https://github.com/dinosaure/overlap/releases/download/v${version}/bigarray-overlap-${version}.tbz";
+    hash = "sha256-L1IKxHAFTjNYg+upJUvyi2Z23bV3U8+1iyLPhK4aZuA=";
   };
 
-  minimumOCamlVersion = "4.07";
-  useDune2 = true;
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
-  strictDeps = !doCheck;
-
-  propagatedBuildInputs = [ bigarray-compat ];
-
-  nativeBuildInputs = [ findlib pkg-config ];
-  checkInputs = [ alcotest astring fpath bos ];
-  doCheck = lib.versionAtLeast ocaml.version "4.08";
+  nativeBuildInputs = [ pkg-config ];
+  checkInputs = [ alcotest ];
+  doCheck = true;
 
   meta = with lib; {
     homepage = "https://github.com/dinosaure/overlap";

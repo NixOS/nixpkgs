@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-media-driver";
-  version = "22.5.2";
+  version = "23.1.6";
 
   outputs = [ "out" "dev" ];
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "media-driver";
     rev = "intel-media-${version}";
-    sha256 = "sha256-3WqmTM68XdQfGibkVAT1S9N7Cn8eviNM6qUeF8qogtc=";
+    sha256 = "sha256-Z1xBU+4SdwknXpYUS8EwEURNIsg2+R/U0CcW3FW325M=";
   };
 
   patches = [
@@ -33,12 +33,6 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/multimedia-team/intel-media-driver-non-free/-/raw/master/debian/patches/0002-Remove-settings-based-on-ARCH.patch";
       sha256 = "sha256-f4M0CPtAVf5l2ZwfgTaoPw7sPuAP/Uxhm5JSHEGhKT0=";
     })
-    # fix compilation on i686-linux
-    (fetchpatch {
-      url = "https://github.com/intel/media-driver/commit/5ee502b84eb70f0d677a3b49d624c356b3f0c2b1.patch";
-      revert = true;
-      sha256 = "sha256-yRS10BKD5IkW8U0PxmyB7ryQiLwrqeetm0NivnoM224=";
-    })
   ];
 
   cmakeFlags = [
@@ -46,9 +40,10 @@ stdenv.mkDerivation rec {
     "-DLIBVA_DRIVERS_PATH=${placeholder "out"}/lib/dri"
     # Works only on hosts with suitable CPUs.
     "-DMEDIA_RUN_TEST_SUITE=OFF"
+    "-DMEDIA_BUILD_FATAL_WARNINGS=OFF"
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.hostPlatform.system == "i686-linux") "-D_FILE_OFFSET_BITS=64";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.hostPlatform.system == "i686-linux") "-D_FILE_OFFSET_BITS=64";
 
   nativeBuildInputs = [ cmake pkg-config ];
 
@@ -75,6 +70,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/intel/media-driver/releases/tag/intel-media-${version}";
     license = with licenses; [ bsd3 mit ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jfrankenau SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

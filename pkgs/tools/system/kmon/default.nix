@@ -1,24 +1,26 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles, python3, libxcb }:
+{ lib, rustPlatform, fetchFromGitHub, installShellFiles, libxcb }:
 
 rustPlatform.buildRustPackage rec {
   pname = "kmon";
-  version = "1.6.0";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0sjRTbTLtBUTyx6+HnihL9TggoeIOqX9zKRaXjBUfE0=";
+    sha256 = "sha256-lB6vJqb6/Qwj3odCJzyQ0+xEl5V/ZPj9cAJGNfiYAOY=";
   };
 
-  cargoSha256 = "sha256-QMJ3Rpgcfrza2zFiA5LFBuYedn+VnffzpyzAGeC0PSM=";
+  cargoSha256 = "sha256-Ff5vGc90VxmyKQSsjUfoI1NL95DmD1SJx3eC1SP6rt4=";
 
-  nativeBuildInputs = [ installShellFiles python3 ];
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [ libxcb ];
 
   postInstall = ''
-    installManPage man/kmon.8
+    installManPage $releaseDir/../man/kmon.8
+    installShellCompletion $releaseDir/../completions/kmon.{bash,fish} \
+      --zsh $releaseDir/../completions/_kmon
   '';
 
   meta = with lib; {

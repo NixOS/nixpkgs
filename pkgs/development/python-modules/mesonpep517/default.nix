@@ -3,6 +3,7 @@
 , fetchPypi
 , meson
 , ninja
+, setuptools
 , toml
 }:
 
@@ -15,8 +16,12 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Fyo7JfLqHJqbahEjVDt/0xJxOfVLqLn3xNJ4lSB7KIw=";
+    hash = "sha256-Fyo7JfLqHJqbahEjVDt/0xJxOfVLqLn3xNJ4lSB7KIw=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [ toml ];
 

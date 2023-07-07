@@ -119,7 +119,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Clozure Common Lisp";
     homepage    = "https://ccl.clozure.com/";
-    maintainers = with maintainers; [ raskin tohl ];
+    maintainers = lib.teams.lisp.members;
     platforms   = attrNames options;
     # assembler failures during build, x86_64-darwin broken since 2020-10-14
     broken      = (stdenv.isDarwin && stdenv.isx86_64);

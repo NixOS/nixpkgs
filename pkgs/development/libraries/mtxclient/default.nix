@@ -1,26 +1,28 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , cmake
 , pkg-config
-, openssl
-, olm
-, spdlog
-, nlohmann_json
 , coeurl
-, libevent
 , curl
+, libevent
+, nlohmann_json
+, olm
+, openssl
+, re2
+, spdlog
 }:
 
 stdenv.mkDerivation rec {
   pname = "mtxclient";
-  version = "0.8.2";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "mtxclient";
     rev = "v${version}";
-    sha256 = "sha256-x2c+wZWAWYoKxSqEezoInw3SwcGo9dQNDvuq7racLBA=";
+    hash = "sha256-r+bD2L5+3AwkdYa3FwsM+yf7V5w+6ZJC92CMdVeYLJQ=";
   };
 
   postPatch = ''
@@ -39,14 +41,16 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
   ];
+
   buildInputs = [
-    spdlog
-    nlohmann_json
-    openssl
-    olm
     coeurl
-    libevent
     curl
+    libevent
+    nlohmann_json
+    olm
+    openssl
+    re2
+    spdlog
   ];
 
   meta = with lib; {

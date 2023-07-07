@@ -10,9 +10,9 @@ let
     src = ./stage-2-init.sh;
     shellDebug = "${pkgs.bashInteractive}/bin/bash";
     shell = "${pkgs.bash}/bin/bash";
-    inherit (config.boot) systemdExecutable extraSystemdUnitPaths;
+    inherit (config.boot) readOnlyNixStore systemdExecutable extraSystemdUnitPaths;
+    inherit (config.system.nixos) distroName;
     isExecutable = true;
-    inherit (config.nix) readOnlyStore;
     inherit useHostResolvConf;
     inherit (config.system.build) earlyMountScript;
     path = lib.makeBinPath ([
@@ -39,6 +39,17 @@ in
         type = types.lines;
         description = lib.mdDoc ''
           Shell commands to be executed just before systemd is started.
+        '';
+      };
+
+      readOnlyNixStore = mkOption {
+        type = types.bool;
+        default = true;
+        description = lib.mdDoc ''
+          If set, NixOS will enforce the immutability of the Nix store
+          by making {file}`/nix/store` a read-only bind
+          mount.  Nix will automatically make the store writable when
+          needed.
         '';
       };
 

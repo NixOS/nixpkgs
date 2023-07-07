@@ -1,8 +1,0 @@
-*** a/Makefile  1970-01-01 01:00:01.000000000 +0100
---- b/Makefile  2022-06-21 23:36:10.023460654 +0200
-*************** endif
-*** 109,110 ****
---- 109,111 ----
-  LIBOPENAL = -lopenal
-+ LIBOPENGL = -lGL
-  RELEASE_NAME = linux

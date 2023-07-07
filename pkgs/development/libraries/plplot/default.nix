@@ -3,14 +3,13 @@
 , fetchurl
 , cmake
 , enableWX ? false
-, wxGTK31, wxmac
+, wxGTK32
+, Cocoa
 , enableXWin ? false
-, libX11
+, xorg
 }:
 
-let
-  wxWidgets = (if stdenv.isDarwin then wxmac else wxGTK31);
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname   = "plplot";
   version = "5.15.0";
 
@@ -21,15 +20,15 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = lib.optional enableWX wxWidgets
-    ++ lib.optional enableXWin libX11;
+  buildInputs = lib.optional enableWX wxGTK32
+    ++ lib.optional (enableWX && stdenv.isDarwin) Cocoa
+    ++ lib.optional enableXWin xorg.libX11;
 
   passthru = {
+    inherit (xorg) libX11;
     inherit
       enableWX
-      wxWidgets
       enableXWin
-      libX11
     ;
   };
 

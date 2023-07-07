@@ -1,10 +1,8 @@
 import ./make-test-python.nix ({ lib, ... }:
 
-with lib;
-
 {
   name = "polaris";
-  meta.maintainers = with maintainers; [ pbsds ];
+  meta.maintainers = with lib.maintainers; [ pbsds ];
 
   nodes.machine =
     { pkgs, ... }: {

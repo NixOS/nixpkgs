@@ -1,18 +1,22 @@
-{ lib, fetchzip }:
-let
+{ lib, stdenvNoCC, fetchzip }:
+
+stdenvNoCC.mkDerivation rec {
+  pname = "cascadia-code";
   version = "2111.01";
-in
-fetchzip {
-  name = "cascadia-code-${version}";
 
-  url = "https://github.com/microsoft/cascadia-code/releases/download/v${version}/CascadiaCode-${version}.zip";
+  src = fetchzip {
+    url = "https://github.com/microsoft/cascadia-code/releases/download/v${version}/CascadiaCode-${version}.zip";
+    stripRoot = false;
+    hash = "sha256-v9Vm5X80wEvorMhIlRw3MnyuSOdBpTl9ibBPpmm1vig=";
+  };
 
-  sha256 = "sha256-kUVTQ/oMZztNf22sDbQBpQW0luSc5nr5sxWU5etLDec=";
+  installPhase = ''
+    runHook preInstall
 
-  postFetch = ''
-    mkdir -p $out/share/fonts/
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
+    install -Dm644 otf/static/*.otf -t $out/share/fonts/opentype
+    install -Dm644 ttf/static/*.ttf -t $out/share/fonts/truetype
+
+    runHook postInstall
   '';
 
   meta = with lib; {

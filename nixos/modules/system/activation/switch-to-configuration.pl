@@ -84,7 +84,7 @@ EOF
 
 # This is a NixOS installation if it has /etc/NIXOS or a proper
 # /etc/os-release.
-if (!-f "/etc/NIXOS" && (read_file("/etc/os-release", err_mode => "quiet") // "") !~ /^ID="?nixos"?/msx) {
+if (!-f "/etc/NIXOS" && (read_file("/etc/os-release", err_mode => "quiet") // "") !~ /^ID="?@distroId@"?/msx) {
     die("This is not a NixOS installation!\n");
 }
 
@@ -655,7 +655,7 @@ foreach my $device (keys(%{$cur_swaps})) {
         # "systemctl stop" here because systemd has lots of alias
         # units that prevent a stop from actually calling
         # "swapoff".
-        if ($action ne "dry-activate") {
+        if ($action eq "dry-activate") {
             print STDERR "would stop swap device: $device\n";
         } else {
             print STDERR "stopping swap device: $device\n";

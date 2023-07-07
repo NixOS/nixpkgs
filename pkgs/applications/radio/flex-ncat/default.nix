@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "flex-ncat";
-  version = "0.1-20220505.0";
+  version = "0.2-20230126.0";
 
   src = fetchFromGitHub {
     owner = "kc2g-flex-tools";
     repo = "nCAT";
     rev = "v${version}";
-    hash = "sha256-Jqoqy+W5sKfg7U/F2OpK1jAVM8rm1Tbr4RHG/mMVE0g=";
+    hash = "sha256-2taQQVTgAFyqtS06zZ+4Qmr/JIqU6mxNQYvxt+L/Mtc=";
   };
 
-  vendorSha256 = "sha256-mWZRaPbmSPBUhTCWSkU33zOOq79ylEbnjPG3gLkWeQY=";
+  vendorHash = "sha256-Tv6sbfWNOHYwA7v1SpNeM9aHs+3DSFv4V4qxllxrzJc=";
 
   meta = with lib; {
     homepage = "https://github.com/kc2g-flex-tools/nCAT";

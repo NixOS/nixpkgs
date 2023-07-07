@@ -6,17 +6,20 @@
 , gettext
 , fcitx5
 , librime
+, rime-data
+, symlinkJoin
+, rimeDataPkgs ? [ rime-data ]
 }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-rime";
-  version = "5.0.14";
+  version = "5.0.16";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-EvYNeBmP2c+kDQ4GQU0SyGhxK4jolxMmhAaoVyINmfg=";
+    sha256 = "sha256-YAunuxdMlv1KOj2/xXstb/Uhm97G9D9rxb35AbNgMaE=";
   };
 
   cmakeFlags = [
@@ -35,7 +38,14 @@ stdenv.mkDerivation rec {
     librime
   ];
 
-  patches = [ ./fcitx5-rime-with-nix-env-variable.patch ];
+  rimeDataDrv = symlinkJoin {
+    name = "fcitx5-rime-data";
+    paths = rimeDataPkgs;
+  };
+
+  postInstall = ''
+    cp -r "${rimeDataDrv}/share/rime-data/." $out/share/rime-data/
+  '';
 
   meta = with lib; {
     description = "RIME support for Fcitx5";

@@ -1,5 +1,5 @@
-{ lib, version, hostPlatform, targetPlatform
-, gnatboot ? null
+{ lib, version, buildPlatform, hostPlatform, targetPlatform
+, gnat-bootstrap ? null
 , langAda ? false
 , langJava ? false
 , langJit ? false
@@ -9,7 +9,7 @@
 }:
 
 assert langJava -> lib.versionOlder version "7";
-assert langAda -> gnatboot != null; let
+assert langAda -> gnat-bootstrap != null; let
   needsLib
     =  (lib.versionOlder version "7" && (langJava || langGo))
     || (lib.versions.major version == "4" && lib.versions.minor version == "9" && targetPlatform.isDarwin);
@@ -21,7 +21,32 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 '' + lib.optionalString needsLib ''
   export lib=$out;
 '' + lib.optionalString langAda ''
-  export PATH=${gnatboot}/bin:$PATH
+  export PATH=${gnat-bootstrap}/bin:$PATH
+''
+
+# On x86_64-darwin, the gnat-bootstrap bootstrap compiler that we need to build a
+# native GCC with Ada support emits assembly that is accepted by the Clang
+# integrated assembler, but not by the GNU assembler in cctools-port that Nix
+# usually in the x86_64-darwin stdenv.  In particular, x86_64-darwin gnat-bootstrap
+# emits MOVQ as the mnemonic for quadword interunit moves, such as between XMM
+# and general registers (e.g "movq %xmm0, %rbp"); the cctools-port assembler,
+# however, only recognises MOVD for such moves.
+#
+# Therefore, for native x86_64-darwin builds that support Ada, we have to use
+# the Clang integrated assembler to build (at least stage 1 of) GCC, but have to
+# target GCC at the cctools-port GNU assembler.  In the wrapped x86_64-darwin
+# gnat-bootstrap, the former is provided as `as`, while the latter is provided as
+# `gas`.
+#
++ lib.optionalString (
+    langAda
+    && buildPlatform == hostPlatform
+    && hostPlatform == targetPlatform
+    && targetPlatform.isx86_64
+    && targetPlatform.isDarwin
+  ) ''
+  export AS_FOR_BUILD=${gnat-bootstrap}/bin/as
+  export AS_FOR_TARGET=${gnat-bootstrap}/bin/gas
 ''
 
 # NOTE 2020/3/18: This environment variable prevents configure scripts from
@@ -44,7 +69,7 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 # This fix would not be necessary if ANY of the above were false:
 #  - If Nix used native headers for each different MacOS version, aligned_alloc
 #    would be in the headers on Catalina.
-#  - If Nix used the same libary binaries for each MacOS version, aligned_alloc
+#  - If Nix used the same library binaries for each MacOS version, aligned_alloc
 #    would not be in the library binaries.
 #  - If Catalina did not include aligned_alloc, this wouldn't be a problem.
 #  - If the configure scripts looked for header presence as well as
@@ -52,8 +77,12 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 #  - If GCC allowed implicit declaration of symbols, it would not fail during
 #    compilation even if the configure scripts did not check header presence.
 #
-+ lib.optionalString (hostPlatform.isDarwin) ''
-  export ac_cv_func_aligned_alloc=no
++ lib.optionalString (buildPlatform.isDarwin) ''
+    export build_configargs=ac_cv_func_aligned_alloc=no
+'' + lib.optionalString (hostPlatform.isDarwin) ''
+    export host_configargs=ac_cv_func_aligned_alloc=no
+'' + lib.optionalString (targetPlatform.isDarwin) ''
+    export target_configargs=ac_cv_func_aligned_alloc=no
 ''
 
 # In order to properly install libgccjit on macOS Catalina, strip(1)

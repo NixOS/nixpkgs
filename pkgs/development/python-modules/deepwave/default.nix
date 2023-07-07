@@ -18,14 +18,14 @@ let
 in
 buildPythonPackage rec {
   pname = "deepwave";
-  version = "0.0.14";
+  version = "0.0.18";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "ar4";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-k1MUrnIkllxGIpkEScTZBEDBBNHgJHxau1e/L8TOEKc=";
+    hash = "sha256-DOOy+B12jgwJzQ90qzX50OFxYLPRcVdVYSE5gi3pqDM=";
   };
 
   # unable to find ninja although it is available, most likely because it looks for its pip version
@@ -50,7 +50,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ torch pybind11 ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     which
     scipy
     pytest-xdist

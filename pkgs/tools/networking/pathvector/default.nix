@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "pathvector";
-  version = "6.0.2";
+  version = "6.3.2";
 
   src = fetchFromGitHub {
     owner = "natesales";
     repo = "pathvector";
     rev = "v${version}";
-    sha256 = "sha256-Rr7SVvi2K20qFTd4Gd2BzBTVIa/lCeBAJHLZ6iV2aSw=";
+    sha256 = "sha256-TqGasguEAcA5ET2E/uFjgIl7IHI2v9m5EaXpIMG3T8c=";
   };
 
-  vendorSha256 = "sha256-bqfYILEGgbnla7EUrzjIO2mMAuL6e4WI2OHUwOr6i+g=";
+  vendorHash = "sha256-hgUuntT6jMWI14qDE3Yjm5W8UqQ6CcvoILmSDaVEZac=";
 
   CGO_ENABLED = 0;
 

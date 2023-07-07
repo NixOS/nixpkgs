@@ -15,6 +15,7 @@
 , swig
 , which
 , armTrustedFirmwareAllwinner
+, armTrustedFirmwareAllwinnerH6
 , armTrustedFirmwareAllwinnerH616
 , armTrustedFirmwareRK3328
 , armTrustedFirmwareRK3399
@@ -23,10 +24,10 @@
 }:
 
 let
-  defaultVersion = "2022.07";
+  defaultVersion = "2023.01";
   defaultSrc = fetchurl {
     url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    hash = "sha256-krCOtJwk2hTBrb9wpxro83zFPutCMOhZrYtnM9E9z14=";
+    hash = "sha256-aUI7rTgPiaCRZjbonm3L0uRRLVhDCNki0QOdHkMxlQ8=";
   };
   buildUBoot = lib.makeOverridable ({
     version ? null
@@ -60,6 +61,7 @@ let
     '';
 
     nativeBuildInputs = [
+      ncurses # tools/kwboot
       bc
       bison
       dtc
@@ -118,7 +120,7 @@ let
     dontStrip = true;
 
     meta = with lib; {
-      homepage = "http://www.denx.de/wiki/U-Boot/";
+      homepage = "https://www.denx.de/wiki/U-Boot/";
       description = "Boot loader for embedded systems";
       license = licenses.gpl2;
       maintainers = with maintainers; [ bartsch dezgeg samueldr lopsided98 ];
@@ -207,6 +209,47 @@ in {
     postInstall = ''
       mkdir -p $out/spl
       cp spl/u-boot-spl $out/spl/
+    '';
+  };
+
+  # Flashing instructions:
+  # dd if=u-boot.gxl.sd.bin of=<sdcard> conv=fsync,notrunc bs=512 skip=1 seek=1
+  # dd if=u-boot.gxl.sd.bin of=<sdcard> conv=fsync,notrunc bs=1 count=444
+  ubootLibreTechCC = let
+    firmwareImagePkg = fetchFromGitHub {
+      owner = "LibreELEC";
+      repo = "amlogic-boot-fip";
+      rev = "4369a138ca24c5ab932b8cbd1af4504570b709df";
+      sha256 = "sha256-mGRUwdh3nW4gBwWIYHJGjzkezHxABwcwk/1gVRis7Tc=";
+      meta.license = lib.licenses.unfreeRedistributableFirmware;
+    };
+  in
+  assert stdenv.buildPlatform.system == "x86_64-linux"; # aml_encrypt_gxl is a x86_64 binary
+  buildUBoot {
+    defconfig = "libretech-cc_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = ["u-boot.bin"];
+    postBuild = ''
+      # Copy binary files & tools from LibreELEC/amlogic-boot-fip, and u-boot build to working dir
+      mkdir $out tmp
+      cp ${firmwareImagePkg}/lepotato/{acs.bin,bl2.bin,bl21.bin,bl30.bin,bl301.bin,bl31.img} \
+         ${firmwareImagePkg}/lepotato/{acs_tool.py,aml_encrypt_gxl,blx_fix.sh} \
+         u-boot.bin tmp/
+      cd tmp
+      python3 acs_tool.py bl2.bin bl2_acs.bin acs.bin 0
+
+      bash -e blx_fix.sh bl2_acs.bin zero bl2_zero.bin bl21.bin bl21_zero.bin bl2_new.bin bl2
+      [ -f zero ] && rm zero
+
+      bash -e blx_fix.sh bl30.bin zero bl30_zero.bin bl301.bin bl301_zero.bin bl30_new.bin bl30
+      [ -f zero ] && rm zero
+
+      ./aml_encrypt_gxl --bl2sig --input bl2_new.bin --output bl2.n.bin.sig
+      ./aml_encrypt_gxl --bl3enc --input bl30_new.bin --output bl30_new.bin.enc
+      ./aml_encrypt_gxl --bl3enc --input bl31.img --output bl31.img.enc
+      ./aml_encrypt_gxl --bl3enc --input u-boot.bin --output bl33.bin.enc
+      ./aml_encrypt_gxl --bootmk --output $out/u-boot.gxl \
+        --bl2 bl2.n.bin.sig --bl30 bl30_new.bin.enc --bl31 bl31.img.enc --bl33 bl33.bin.enc
     '';
   };
 
@@ -323,6 +366,13 @@ in {
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
+  ubootOrangePi3 = buildUBoot {
+    defconfig = "orangepi_3_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareAllwinnerH6}/bl31.bin";
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
   ubootPcduino3Nano = buildUBoot {
     defconfig = "Linksprite_pcDuino3_Nano_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
@@ -371,13 +421,6 @@ in {
 
   ubootQemuRiscv64Smode = buildUBoot {
     defconfig = "qemu-riscv64_smode_defconfig";
-    extraPatches = [
-      # https://patchwork.ozlabs.org/project/uboot/patch/20220128134713.2322800-1-alexandre.ghiti@canonical.com/
-      (fetchpatch {
-        url = "https://patchwork.ozlabs.org/series/283391/mbox/";
-        sha256 = "sha256-V0jDpx6O4bFzuaOQejdrRnLiWb5LBTx47T0TZqNtMXk=";
-      })
-    ];
     extraMeta.platforms = ["riscv64-linux"];
     filesToInstall = ["u-boot.bin"];
   };

@@ -30,7 +30,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-flakes
     pytest-mock
     pytest-socket
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "switch-to-poetry-core.patch";
       url = "https://github.com/niksite/url-normalize/commit/b8557b10c977b191cc9d37e6337afe874a24ad08.patch";
-      sha256 = "sha256-SVCQATV9V6HbLmjOHs7V7eBagO0PuqZLubIJghBYfQQ=";
+      hash = "sha256-SVCQATV9V6HbLmjOHs7V7eBagO0PuqZLubIJghBYfQQ=";
     })
   ];
 

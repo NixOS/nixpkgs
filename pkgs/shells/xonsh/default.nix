@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "xonsh";
-  version = "0.13.3";
+  version = "0.14.0";
 
   # fetch from github because the pypi package ships incomplete tests
   src = fetchFromGitHub {
     owner = "xonsh";
     repo = "xonsh";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-COm+MZUbiFTB5EaOB+1+lIef1IfhQ95Ya1MmnJXGu6A=";
+    sha256 = "sha256-ZrPKKa/vl06QAjGr16ZzKF/DAByFHr6ze2WVOCa+wf8=";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -38,11 +38,6 @@ python3Packages.buildPythonApplication rec {
   makeWrapperArgs = [
     "--prefix PYTHONPATH : ${placeholder "out"}/lib/${python3Packages.python.libPrefix}/site-packages"
   ];
-
-  postInstall = ''
-    wrapProgram $out/bin/xonsh \
-      $makeWrapperArgs
-  '';
 
   disabledTests = [
     # fails on sandbox
@@ -75,7 +70,7 @@ python3Packages.buildPythonApplication rec {
     HOME=$TMPDIR
   '';
 
-  checkInputs = [ glibcLocales git ] ++
+  nativeCheckInputs = [ glibcLocales git ] ++
     (with python3Packages; [ pyte pytestCheckHook pytest-mock pytest-subprocess ]);
 
   propagatedBuildInputs = with python3Packages; [ ply prompt-toolkit pygments ];
@@ -85,7 +80,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://xon.sh/";
     changelog = "https://github.com/xonsh/xonsh/raw/${version}/CHANGELOG.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ spwhitt vrthra ];
+    maintainers = with maintainers; [ vrthra ];
   };
 
   passthru = {

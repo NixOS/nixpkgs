@@ -5,13 +5,13 @@
 
 buildGoModule {
   pname = "demoit";
-  version = "unstable-2020-06-11";
+  version = "unstable-2022-09-03";
 
   src = fetchFromGitHub {
     owner = "dgageot";
     repo = "demoit";
-    rev = "5762b169e7f2fc18913874bf52323ffbb906ce84";
-    sha256 = "1jcjqr758d29h3y9ajvzhy1xmxfix5mwhylz6jwhy5nmk28bjzx9";
+    rev = "258780987922e46abde8e848247af0a9435e3099";
+    sha256 = "sha256-yRfdnqk93GOTBa0zZrm4K3AkUqxGmlrwlKYcD6CtgRg=";
   };
   vendorSha256 = null;
   subPackages = [ "." ];

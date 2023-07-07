@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "multus-cni";
-  version = "3.9.1";
+  version = "3.9.3";
 
   src = fetchFromGitHub {
     owner = "k8snetworkplumbingwg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-U5Ji+f7ckynBVMb4xsmoRZzYJx8obMO+bO9TU6GqcW0=";
+    sha256 = "sha256-43cFBrFM2jvD/SJ+QT1JQkr593jkdzAAvYlVUAQArEw=";
   };
 
   ldflags = [
@@ -21,7 +21,7 @@ buildGoModule rec {
     mv $GOPATH/bin/cmd $GOPATH/bin/multus
   '';
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   # Some of the tests require accessing a k8s cluster
   doCheck = false;

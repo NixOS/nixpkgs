@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "censys";
-  version = "2.1.8";
+  version = "2.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "censys";
     repo = "censys-python";
-    rev = "v${version}";
-    hash = "sha256-iPCFflibEqA286j+7Vp4ZQaO9e6Bp+o7A/a7DELJcxA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-CtW6EN9oH/OIZ4XaoSuKlMYK9Mh/ewRs6y34xbfY234=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     parameterized
     pytest-mock
     pytestCheckHook

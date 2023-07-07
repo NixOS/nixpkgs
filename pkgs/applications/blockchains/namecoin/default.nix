@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "namecoin" + lib.optionalString (!withGui) "d";
-  version = "23.0";
+  version = "25.0";
 
   src = fetchFromGitHub {
     owner = "namecoin";
     repo = "namecoin-core";
     rev = "nc${version}";
-    sha256 = "sha256-MfqJ7EcJvlQ01Mr1RQpXVNUlGIwNqFTxrVwGa+Hus+A=";
+    sha256 = "sha256-2KMK5Vb8osuaKbzI1aaPSYg+te+v9CEcGUkrVI6Fk54=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Decentralized open source information registration and transfer system based on the Bitcoin cryptocurrency";
     homepage = "https://namecoin.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ infinisil ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

@@ -6,6 +6,7 @@
 , cmdliner
 , containers
 , ezjsonm
+, findlib
 , menhir
 , menhirLib
 , ppx_deriving
@@ -13,6 +14,8 @@
 , uuseg
 , uutf
 , yuujinchou
+, ounit2
+, qcheck
 }:
 
 let
@@ -26,7 +29,9 @@ let
       sha256 = "sha256:15v1cggm7awp11iwl3lzpaar91jzivhdxggp5mr48gd28kfipzk2";
     };
 
-    propagatedBuildInputs = [ ezjsonm ];
+    duneVersion = "3";
+
+    propagatedBuildInputs = [ ezjsonm findlib ];
 
     meta = {
       description = "Extensible Library Management and Path Resolution";
@@ -43,6 +48,8 @@ let
       rev = "8dce50e7d759d482b82565090e550d3860d64729";
       sha256 = "sha256:1xb754fha4s0bgjfqjxzqljvalmkfdwdn5y4ycsp51wiah235bsy";
     };
+
+    duneVersion = "3";
 
     propagatedBuildInputs = [ bwd ];
 
@@ -61,6 +68,7 @@ buildDunePackage {
   version = "unstable-2022-04-28";
 
   minimalOCamlVersion = "4.13";
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "RedPRL";
@@ -70,12 +78,13 @@ buildDunePackage {
   };
 
   nativeBuildInputs = [
-    cmdliner
     menhir
-    ppxlib
   ];
 
-  buildInputs = [ containers ];
+  buildInputs = [
+    cmdliner
+    ppxlib
+  ];
 
   propagatedBuildInputs = [
     bantorra
@@ -87,6 +96,12 @@ buildDunePackage {
     uuseg
     uutf
     yuujinchou
+    containers
+  ];
+
+  checkInputs = [
+    ounit2
+    qcheck
   ];
 
   meta = with lib; {

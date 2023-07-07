@@ -1,26 +1,65 @@
-{ fetchurl, lib, stdenv, meson, ninja, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_412, pkg-config, glib, gtk3, cairo, sqlite, gnome
-, clutter-gtk, libsoup, gobject-introspection /*, libmemphis */ }:
+{ fetchurl
+, lib
+, stdenv
+, meson
+, ninja
+, vala
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_412
+, pkg-config
+, glib
+, gtk3
+, cairo
+, sqlite
+, gnome
+, clutter-gtk
+, libsoup
+, libsoup_3
+, gobject-introspection /*, libmemphis */
+, withLibsoup3 ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "libchamplain";
-  version = "0.12.20";
+  version = "0.12.21";
+
+  outputs = [ "out" "dev" ]
+    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0rihpb0npqpihqcdz4w03rq6xl7jdckfqskvv9diq2hkrnzv8ch2";
+    sha256 = "qRXNFyoMUpRMVXn8tGg/ioeMVxv16SglS12v78cn5ac=";
   };
 
-  outputs = [ "out" "dev" "devdoc" ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    vala
+  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_412
+  ];
 
-  nativeBuildInputs = [ meson ninja pkg-config gobject-introspection vala gtk-doc docbook_xsl docbook_xml_dtd_412 ];
+  buildInputs = [
+    sqlite
+    (if withLibsoup3 then libsoup_3 else libsoup)
+  ];
 
-  buildInputs = [ sqlite libsoup ];
-
-  propagatedBuildInputs = [ glib gtk3 cairo clutter-gtk ];
+  propagatedBuildInputs = [
+    glib
+    gtk3
+    cairo
+    clutter-gtk
+  ];
 
   mesonFlags = [
-    "-Dgtk_doc=true"
+    (lib.mesonBool "gtk_doc" (stdenv.buildPlatform == stdenv.hostPlatform))
     "-Dvapi=true"
+    (lib.mesonBool "libsoup3" withLibsoup3)
   ];
 
   passthru = {
@@ -44,7 +83,7 @@ stdenv.mkDerivation rec {
        OpenCycleMap, OpenAerialMap, and Maps for free.
     '';
 
-     maintainers = teams.gnome.members;
-     platforms = platforms.gnu ++ platforms.linux;  # arbitrary choice
+    maintainers = teams.gnome.members ++ teams.pantheon.members;
+    platforms = platforms.gnu ++ platforms.linux; # arbitrary choice
   };
 }

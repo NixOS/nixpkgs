@@ -1,8 +1,8 @@
-diff --git i/data/org.gnome.Shell.Extensions.GSConnect.desktop.in w/data/org.gnome.Shell.Extensions.GSConnect.desktop.in
-index ffb23342..b405c73b 100644
---- i/data/org.gnome.Shell.Extensions.GSConnect.desktop.in
-+++ w/data/org.gnome.Shell.Extensions.GSConnect.desktop.in
-@@ -1,7 +1,7 @@
+diff --git a/data/org.gnome.Shell.Extensions.GSConnect.desktop.in b/data/org.gnome.Shell.Extensions.GSConnect.desktop.in
+index 3fb887c3..e8cbe1bd 100644
+--- a/data/org.gnome.Shell.Extensions.GSConnect.desktop.in
++++ b/data/org.gnome.Shell.Extensions.GSConnect.desktop.in
+@@ -5,7 +5,7 @@
  [Desktop Entry]
  Type=Application
  Name=GSConnect
@@ -11,11 +11,12 @@ index ffb23342..b405c73b 100644
  Terminal=false
  NoDisplay=true
  Icon=org.gnome.Shell.Extensions.GSConnect
-diff --git i/src/extension.js w/src/extension.js
-index 5f32aa68..872c0c61 100644
---- i/src/extension.js
-+++ w/src/extension.js
-@@ -1,5 +1,7 @@
+diff --git a/src/extension.js b/src/extension.js
+index 3fae443a..7aa19842 100644
+--- a/src/extension.js
++++ b/src/extension.js
+@@ -4,6 +4,8 @@
+ 
  'use strict';
  
 +'@typelibPath@'.split(':').forEach(path => imports.gi.GIRepository.Repository.prepend_search_path(path));
@@ -23,15 +24,16 @@ index 5f32aa68..872c0c61 100644
  const Gio = imports.gi.Gio;
  const GObject = imports.gi.GObject;
  const Gtk = imports.gi.Gtk;
-diff --git i/src/prefs.js w/src/prefs.js
-index 07e93099..1c166710 100644
---- i/src/prefs.js
-+++ w/src/prefs.js
-@@ -1,5 +1,7 @@
+diff --git a/src/prefs.js b/src/prefs.js
+index b8860c82..d6292606 100644
+--- a/src/prefs.js
++++ b/src/prefs.js
+@@ -4,6 +4,8 @@
+ 
  'use strict';
  
 +'@typelibPath@'.split(':').forEach(path => imports.gi.GIRepository.Repository.prepend_search_path(path));
 +
- const Gio = imports.gi.Gio;
- const GLib = imports.gi.GLib;
- const Gtk = imports.gi.Gtk;
+ const {Gio, GLib, Adw} = imports.gi;
+ 
+ // Bootstrap

@@ -18,6 +18,5 @@ buildGoModule rec {
     homepage = "https://github.com/kbudde/rabbitmq_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
   };
 }

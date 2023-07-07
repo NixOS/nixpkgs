@@ -2,10 +2,10 @@
 , nodejs ? pkgs.nodejs
 , yarn ? pkgs.yarn
 , allowAliases ? pkgs.config.allowAliases
-}:
+}@inputs:
 
 let
-  inherit (pkgs) stdenv lib fetchurl linkFarm callPackage git rsync makeWrapper runCommandLocal;
+  inherit (pkgs) stdenv lib callPackage git rsync runCommandLocal;
 
   compose = f: g: x: f (g x);
   id = x: x;
@@ -58,7 +58,6 @@ in rec {
     "--offline"
     "--frozen-lockfile"
     "--ignore-engines"
-    "--ignore-scripts"
   ];
 
   mkYarnModules = {
@@ -70,6 +69,9 @@ in rec {
     yarnNix ? mkYarnNix { inherit yarnLock; },
     offlineCache ? importOfflineCache yarnNix,
     yarnFlags ? [ ],
+    ignoreScripts ? true,
+    nodejs ? inputs.nodejs,
+    yarn ? inputs.yarn.override { nodejs = nodejs; },
     pkgConfig ? {},
     preBuild ? "",
     postBuild ? "",
@@ -97,9 +99,17 @@ in rec {
           ""
       ) (builtins.attrNames pkgConfig));
 
-      workspaceJSON = pkgs.writeText
-        "${name}-workspace-package.json"
-        (builtins.toJSON { private = true; workspaces = ["deps/**"]; resolutions = packageResolutions; }); # scoped packages need second splat
+      # build-time JSON generation to avoid IFD
+      # see https://nixos.wiki/wiki/Import_From_Derivation
+      workspaceJSON = pkgs.runCommand "${name}-workspace-package.json"
+        {
+          nativeBuildInputs = [ pkgs.jq ];
+          inherit packageJSON;
+          passAsFile = [ "baseJSON" ];
+          baseJSON = builtins.toJSON { private = true; workspaces = [ "deps/**" ]; resolutions = packageResolutions; };
+        } ''
+        jq --slurpfile packageJSON "$packageJSON" '.resolutions = $packageJSON[0].resolutions + .resolutions' <"$baseJSONPath" >$out
+      '';
 
       workspaceDependencyLinks = lib.concatMapStringsSep "\n"
         (dep: ''
@@ -141,7 +151,7 @@ in rec {
 
         ${workspaceDependencyLinks}
 
-        yarn install ${lib.escapeShellArgs (defaultYarnFlags ++ yarnFlags)}
+        yarn install ${lib.escapeShellArgs (defaultYarnFlags ++ lib.optional ignoreScripts "--ignore-scripts" ++ yarnFlags)}
 
         ${lib.concatStringsSep "\n" postInstall}
 
@@ -169,6 +179,8 @@ in rec {
     src,
     packageJSON ? src + "/package.json",
     yarnLock ? src + "/yarn.lock",
+    nodejs ? inputs.nodejs,
+    yarn ? inputs.yarn.override { nodejs = nodejs; },
     packageOverrides ? {},
     ...
   }@attrs:
@@ -226,7 +238,7 @@ in rec {
         inherit name;
         value = mkYarnPackage (
           builtins.removeAttrs attrs ["packageOverrides"]
-          // { inherit src packageJSON yarnLock packageResolutions workspaceDependencies; }
+          // { inherit src packageJSON yarnLock nodejs yarn packageResolutions workspaceDependencies; }
           // lib.attrByPath [name] {} packageOverrides
         );
       })
@@ -241,6 +253,8 @@ in rec {
     yarnLock ? src + "/yarn.lock",
     yarnNix ? mkYarnNix { inherit yarnLock; },
     offlineCache ? importOfflineCache yarnNix,
+    nodejs ? inputs.nodejs,
+    yarn ? inputs.yarn.override { nodejs = nodejs; },
     yarnFlags ? [ ],
     yarnPreBuild ? "",
     yarnPostBuild ? "",
@@ -268,7 +282,7 @@ in rec {
         preBuild = yarnPreBuild;
         postBuild = yarnPostBuild;
         workspaceDependencies = workspaceDependenciesTransitive;
-        inherit packageJSON pname version yarnLock offlineCache yarnFlags pkgConfig packageResolutions;
+        inherit packageJSON pname version yarnLock offlineCache nodejs yarn yarnFlags pkgConfig packageResolutions;
       };
 
       publishBinsFor_ = unlessNull publishBinsFor [pname];
@@ -303,7 +317,7 @@ in rec {
         workspaceDependenciesTransitive;
 
     in stdenv.mkDerivation (builtins.removeAttrs attrs ["yarnNix" "pkgConfig" "workspaceDependencies" "packageResolutions"] // {
-      inherit src pname;
+      inherit src version pname;
 
       name = baseName;
 
@@ -376,11 +390,10 @@ in rec {
 
       meta = {
         inherit (nodejs.meta) platforms;
-        description = packageJSON.description or "";
-        homepage = packageJSON.homepage or "";
-        version = packageJSON.version or "";
-        license = if packageJSON ? license then getLicenseFromSpdxId packageJSON.license else "";
-      } // (attrs.meta or {});
+      } // lib.optionalAttrs (package ? description) { inherit (package) description; }
+        // lib.optionalAttrs (package ? homepage) { inherit (package) homepage; }
+        // lib.optionalAttrs (package ? license) { license = getLicenseFromSpdxId package.license; }
+        // (attrs.meta or {});
     });
 
   yarn2nix = mkYarnPackage {
@@ -413,7 +426,7 @@ in rec {
     # we import package.json from the unfiltered source
     packageJSON = ./package.json;
 
-    yarnFlags = defaultYarnFlags ++ ["--production=true"];
+    yarnFlags = defaultYarnFlags ++ [ "--ignore-scripts" "--production=true" ];
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
 

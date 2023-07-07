@@ -10,17 +10,26 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-pipewire-audio-capture";
-  version = "1.0.4";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "dimtpap";
     repo = pname;
-    rev = "${version}";
-    sha256 = "OX27NTUsceEC8kHqlM+oeGjPxguake6lwaXFYsoEqKU=";
+    rev = version;
+    sha256 = "sha256-gcOH8gJuP03MxhJbgl941yTtm2XIHmqHWVwkRCVATkQ=";
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config ];
   buildInputs = [ obs-studio pipewire ];
+
+  cmakeFlags = [
+    "-DLIBOBS_INCLUDE_DIR=${obs-studio.src}/libobs"
+    "-Wno-dev"
+  ];
+
+  preConfigure = ''
+    cp ${obs-studio.src}/cmake/external/ObsPluginHelpers.cmake cmake/FindLibObs.cmake
+  '';
 
   meta = with lib; {
     description = " Audio device and application capture for OBS Studio using PipeWire ";

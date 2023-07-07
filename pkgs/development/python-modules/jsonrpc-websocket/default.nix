@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "emlove";
     repo = "jsonrpc-websocket";
     rev = version;
-    sha256 = "sha256-xSOITOVtsNMEDrq610l8LNipLdyMWzKOQDedQEGaNOQ=";
+    hash = "sha256-xSOITOVtsNMEDrq610l8LNipLdyMWzKOQDedQEGaNOQ=";
   };
 
   propagatedBuildInputs = [
@@ -27,13 +27,13 @@ buildPythonPackage rec {
     jsonrpc-base
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
   ];
 
   pytestFlagsArray = [
-    "--asyncio-mode=legacy"
+    "--asyncio-mode=auto"
     "tests.py"
   ];
 

@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, cctools, which }:
 
 buildPythonPackage rec {
   pname = "miniupnpc";
@@ -9,8 +9,9 @@ buildPythonPackage rec {
     sha256 = "0ca94zz7sr2x57j218aypxqcwkr23n8js30f3yrvvqbg929nr93y";
   };
 
+  nativeBuildInputs = lib.optionals stdenv.isDarwin [ cctools which ];
+
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "miniUPnP client";
     homepage = "http://miniupnp.free.fr/";
     license = licenses.mit;

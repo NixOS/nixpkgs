@@ -5,20 +5,25 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "circup";
-  version = "1.1.3";
+  version = "1.2.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "adafruit";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-BCAsCwQCKMtmjISMVKDblRdev87K4EfX5D2Ot0L5PoQ=";
+    hash = "sha256-a1s5a1AhZZ06lBvFjm5E0IuWXE4flLvwVjDgViXI62c=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
+  pythonRelaxDeps = [
+    "semver"
+  ];
+
   nativeBuildInputs = with python3.pkgs; [
     setuptools-scm
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -31,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
     update_checker
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
 
@@ -46,6 +51,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "CircuitPython library updater";
     homepage = "https://github.com/adafruit/circup";
+    changelog = "https://github.com/adafruit/circup/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

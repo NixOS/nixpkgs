@@ -15,6 +15,13 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ openobex ];
 
+  # https://sourceforge.net/p/openobex/bugs/66/
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace '\$'{prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
+      --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
+  '';
+
   # There's no such thing like "bluetooth" library; possibly they meant "bluez" but it links correctly without this.
   postFixup = ''
     sed -i 's,^Requires: bluetooth,Requires:,' $out/lib/pkgconfig/obexftp.pc

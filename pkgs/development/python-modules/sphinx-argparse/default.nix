@@ -7,11 +7,12 @@
 
 buildPythonPackage rec {
   pname = "sphinx-argparse";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "82151cbd43ccec94a1530155f4ad34f251aaca6a0ffd5516d7fadf952d32dc1e";
+    pname = "sphinx_argparse";
+    inherit version;
+    hash = "sha256-4PNBhOtW8S+s53T7yHuICr25AXoJmNHsVZsmfpaX5Ek=";
   };
 
   postPatch = ''
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

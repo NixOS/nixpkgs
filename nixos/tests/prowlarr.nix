@@ -1,10 +1,8 @@
 import ./make-test-python.nix ({ lib, ... }:
 
-with lib;
-
 {
   name = "prowlarr";
-  meta.maintainers = with maintainers; [ jdreaver ];
+  meta.maintainers = with lib.maintainers; [ jdreaver ];
 
   nodes.machine =
     { pkgs, ... }:

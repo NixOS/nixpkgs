@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "owncast";
-  version = "0.0.12";
+  version = "0.0.13";
 
   src = fetchFromGitHub {
     owner = "owncast";
     repo = "owncast";
     rev = "v${version}";
-    sha256 = "sha256-i/MxF+8ytpbVzGyRLbfHx7sR2bHEvAYdiwAc5TNrafc=";
+    sha256 = "sha256-hbZtdJbCB+67KXtApSRAO7Srye+UO0FbilKftQH6ESE=";
   };
 
   vendorSha256 = "sha256-sQRNf+eT9JUbYne/3E9LoY0K+c7MlxtIbGmTa3VkHvI=";

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, perl, gmp, mpfr, ocaml, findlib, camlidl, apron }:
+{ stdenv, lib, fetchurl, gnumake42, perl, gmp, mpfr, ocaml, findlib, camlidl, apron }:
 
 stdenv.mkDerivation rec {
   version = "1.1";
@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1nymykskq1yx87y4xl6hl9i4q6kv0qaq25rniqgl1bfn883p1ysc";
   };
 
-  nativeBuildInputs = [ perl ocaml findlib camlidl ];
+  # fails with make 4.4
+  nativeBuildInputs = [ gnumake42 perl ocaml findlib camlidl ];
 
   propagatedBuildInputs = [ apron gmp mpfr ];
 
@@ -30,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "http://elina.ethz.ch/";
     license = lib.licenses.lgpl3;
     maintainers = [ lib.maintainers.vbgl ];
-    inherit (ocaml.meta) platforms;
+    platforms = lib.intersectLists ocaml.meta.platforms lib.platforms.x86;
   };
 }

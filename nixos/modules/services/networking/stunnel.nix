@@ -78,7 +78,7 @@ in
 
       servers = mkOption {
         description = lib.mdDoc ''
-          Define the server configuations.
+          Define the server configurations.
 
           See "SERVICE-LEVEL OPTIONS" in {manpage}`stunnel(8)`.
         '';
@@ -154,8 +154,8 @@ in
     environment.systemPackages = [ pkgs.stunnel ];
 
     environment.etc."stunnel.cfg".text = ''
-      ${ if cfg.user != null then "setuid = ${cfg.user}" else "" }
-      ${ if cfg.group != null then "setgid = ${cfg.group}" else "" }
+      ${ optionalString (cfg.user != null) "setuid = ${cfg.user}" }
+      ${ optionalString (cfg.group != null) "setgid = ${cfg.group}" }
 
       debug = ${cfg.logLevel}
 

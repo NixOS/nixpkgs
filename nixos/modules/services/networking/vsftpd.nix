@@ -168,7 +168,7 @@ in
 
           The default is a file containing the users from {option}`userlist`.
 
-          If explicitely set to null userlist_file will not be set in vsftpd's config file.
+          If explicitly set to null userlist_file will not be set in vsftpd's config file.
         '';
       };
 
@@ -305,7 +305,7 @@ in
 
     # If you really have to access root via FTP use mkOverride or userlistDeny
     # = false and whitelist root
-    services.vsftpd.userlist = if cfg.userlistDeny then ["root"] else [];
+    services.vsftpd.userlist = optional cfg.userlistDeny "root";
 
     systemd = {
       tmpfiles.rules = optional cfg.anonymousUser

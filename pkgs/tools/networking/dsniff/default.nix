@@ -1,5 +1,5 @@
 { gcc9Stdenv, lib, fetchFromGitLab, autoreconfHook, libpcap, db, glib, libnet, libnids, symlinkJoin, openssl
-, rpcsvc-proto, libtirpc, libnsl
+, rpcsvc-proto, libtirpc, libnsl, libnl
 }:
 
 # We compile with GCC 9 since GCC 10 segfaults on the code
@@ -59,9 +59,9 @@ in gcc9Stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook rpcsvc-proto ];
-  buildInputs = [ glib pcap libtirpc libnsl ];
-  NIX_CFLAGS_LINK = "-lglib-2.0 -lpthread -ldl -ltirpc";
-  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+  buildInputs = [ glib pcap libtirpc libnsl libnl ];
+  NIX_CFLAGS_LINK = "-lglib-2.0 -lpthread -ltirpc -lnl-3 -lnl-genl-3";
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
   postPatch = ''
     for patch in debian/patches/*.patch; do
       patch < $patch

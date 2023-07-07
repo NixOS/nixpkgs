@@ -12,21 +12,23 @@
 , itstool
 , libxml2
 , gtk4
+, libadwaita
 , glib
 , atk
 , gobject-introspection
+, vala
 , wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
   pname = "ghex";
-  version = "42.3";
+  version = "44.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/ghex/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "rdQPirJJIdsw0nvljwAnMgGXfYf9yNeezq36iw41Te8=";
+    sha256 = "QEvfZJ6qE5IqgK4y8Z/kDnHw7g9GHEXtrHKIigDq1sI=";
   };
 
   nativeBuildInputs = [
@@ -38,22 +40,25 @@ stdenv.mkDerivation rec {
     pkg-config
     gi-docgen
     gobject-introspection
+    vala
     wrapGAppsHook4
   ];
 
   buildInputs = [
     gtk4
+    libadwaita
     atk
     glib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     appstream-glib
     desktop-file-utils
   ];
 
   mesonFlags = [
     "-Dgtk_doc=true"
+    "-Dvapi=true"
   ] ++ lib.optionals stdenv.isDarwin [
     # mremap does not exist on darwin
     "-Dmmap-buffer-backend=false"
@@ -74,7 +79,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Ghex";
     description = "Hex editor for GNOME desktop environment";
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
   };

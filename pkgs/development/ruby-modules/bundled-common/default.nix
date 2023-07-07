@@ -56,9 +56,9 @@ let
   else
     let
       gem = gems.${pname};
-      version = gem.version;
+      suffix = gem.suffix;
     in
-      "${pname}-${version}";
+      "${pname}-${suffix}";
 
   pname' = if pname != null then
     pname
@@ -66,9 +66,8 @@ let
     name;
 
   copyIfBundledByPath = { bundledByPath ? false, ...}:
-  (if bundledByPath then
-      assert gemFiles.gemdir != null; "cp -a ${gemFiles.gemdir}/* $out/" #*/
-    else ""
+  (lib.optionalString bundledByPath (
+      assert gemFiles.gemdir != null; "cp -a ${gemFiles.gemdir}/* $out/") #*/
   );
 
   maybeCopyAll = pkgname: if pkgname == null then "" else
@@ -119,6 +118,7 @@ let
 
     passthru = rec {
       inherit ruby bundler gems confFiles envPaths;
+      inherit (gems.${pname}) gemType;
 
       wrappedRuby = stdenv.mkDerivation {
         name = "wrapped-ruby-${pname'}";

@@ -29,11 +29,17 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DNoVoip=True" ]; # libtgvoip required
 
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ "-U__ARM_NEON__" ]);
+
   meta = with lib; {
     homepage = "https://github.com/ars3niy/tdlib-purple";
     description = "libpurple Telegram plugin using tdlib";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.unix;
+
+    # tdlib-purple is not actively maintained and currently not
+    # compatible with recent versions of tdlib
+    broken = true;
   };
 }

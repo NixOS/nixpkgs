@@ -48,6 +48,8 @@ stdenv.mkDerivation rec {
         --replace "/etc/udev/rules.d" "lib/udev/rules.d" \
         --replace "/lib/firmware" "lib/firmware"
     done
+
+    sed '1i#include <ctime>' -i indi-duino/libfirmata/src/firmata.cpp # gcc12
   '';
 
   cmakeFlags = [

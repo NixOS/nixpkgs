@@ -14,6 +14,7 @@
 , zlib
 , python3
 , ncurses
+, darwin
 }:
 
 let
@@ -33,23 +34,23 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnatcoll-${component}";
-  version = "22.0.0";
+  version = "23.0.0";
 
   src = fetchFromGitHub {
     owner = "AdaCore";
     repo = "gnatcoll-bindings";
     rev = "v${version}";
-    sha256 = "0wbwnd6jccwfd4jdxbnzhc0jhm8ad4phz6y9b1gk8adykkk6jcz4";
+    sha256 = "1jnnfsvll4jh6ip0fww4mh2cm61h7dzpxz3zaa2psrc1w54x34nn";
   };
-
-  patches = [
-    ./omp-setup-text-mode.patch
-  ];
 
   nativeBuildInputs = [
     gprbuild
     gnat
     python3
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.CoreFoundation
   ];
 
   # propagate since gprbuild needs to find referenced .gpr files

@@ -1,12 +1,15 @@
-{ stdenv, fetchurl, perl, lib, moarvm }:
+{ stdenv, fetchFromGitHub, perl, lib, moarvm }:
 
 stdenv.mkDerivation rec {
   pname = "nqp";
-  version = "2022.07";
+  version = "2023.06";
 
-  src = fetchurl {
-    url = "https://github.com/raku/nqp/releases/download/${version}/nqp-${version}.tar.gz";
-    hash = "sha256-WAgcEG1nKlQGAY/WmRLI1IX9Er8iWVEyXFDJKagjImg=";
+  src = fetchFromGitHub {
+    owner = "raku";
+    repo = "nqp";
+    rev = version;
+    hash = "sha256-VfSVNEBRW6Iz3qUeICFXu3pp92NGgAkOrThXF8a/82A=";
+    fetchSubmodules = true;
   };
 
   buildInputs = [ perl ];

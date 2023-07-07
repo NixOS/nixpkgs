@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pymavlink";
-  version = "2.4.35";
+  version = "2.4.39";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-P2pqcxI6w9cw4b26g5ad5CeW9Sf1fNN0FGiIzOWfOCU=";
+    hash = "sha256-rS1EZGGAcWEi7MK565oii+KUaqACruLrWXNcB/aXPek=";
   };
 
   propagatedBuildInputs = [ future lxml ];

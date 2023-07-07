@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildPythonPackage
-, wxPython_4_0
+, wxPython_4_2
 , python
 }:
 
@@ -16,8 +16,7 @@ buildPythonPackage rec {
     sha256 = "0fv8gwlbcj000qq34inbwgxf0xgibs590dsyqnw0mmyb7f1iq210";
   };
 
-  # timeline is not compatible with wxPython_4_1. reported upstream
-  propagatedBuildInputs = [ wxPython_4_0 ];
+  propagatedBuildInputs = [ wxPython_4_2 ];
 
   checkPhase = ''
     runHook preCheck

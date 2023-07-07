@@ -1,42 +1,43 @@
 { lib
+, autopep8
 , buildPythonPackage
-, python
-, pythonAtLeast
+, django
+, factory_boy
 , fetchFromGitHub
 , fetchpatch
-, django
+, freezegun
+, gprof2dot
+, jinja2
+, mock
+, networkx
+, pillow
+, pydot
 , pygments
-, simplejson
+, python
 , python-dateutil
+, pythonOlder
+, pytz
 , requests
 , setuptools-scm
+, simplejson
 , sqlparse
-, jinja2
-, autopep8
-, pytz
-, pillow
-, mock
-, gprof2dot
-, freezegun
-, contextlib2
-, networkx
-, pydot
-, factory_boy
 }:
 
 buildPythonPackage rec {
   pname = "django-silk";
-  version = "5.0.1";
+  version = "5.0.3";
+  format = "setuptools";
 
-  # pypi tarball doesn't include test project
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-silk";
-    rev = version;
-    hash = "sha256-U2lj0B85cf2xu0o7enuLJB5YKaIt6gMvn+TgxleLslk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-91FcOqAYZK7/RCKgXjbQEPUQ2cZRFi7NzVLQF+MMDRI=";
   };
 
-  # "test_time_taken" tests aren't suitable for reproducible execution, but django's
+  # "test_time_taken" tests aren't suitable for reproducible execution, but Django's
   # test runner doesn't have an easy way to ignore tests - so instead prevent it from picking
   # them up as tests
   postPatch = ''
@@ -46,14 +47,39 @@ buildPythonPackage rec {
       --replace 'use_scm_version=True' 'version="${version}"'
   '';
 
-  nativeBuildInputs = [ setuptools-scm ];
-  buildInputs = [ mock ];
-  propagatedBuildInputs = [
-    django pygments simplejson python-dateutil requests
-    sqlparse jinja2 autopep8 pytz pillow gprof2dot
+  nativeBuildInputs = [
+    setuptools-scm
   ];
 
-  checkInputs = [ freezegun contextlib2 networkx pydot factory_boy ];
+  buildInputs = [
+    mock
+  ];
+
+  propagatedBuildInputs = [
+    autopep8
+    django
+    gprof2dot
+    jinja2
+    pillow
+    pygments
+    python-dateutil
+    pytz
+    requests
+    simplejson
+    sqlparse
+  ];
+
+  nativeCheckInputs = [
+    freezegun
+    networkx
+    pydot
+    factory_boy
+  ];
+
+  pythonImportsCheck = [
+    "silk"
+  ];
+
   checkPhase = ''
     runHook preCheck
 
@@ -67,8 +93,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Silky smooth profiling for the Django Framework";
     homepage = "https://github.com/jazzband/django-silk";
+    changelog = "https://github.com/jazzband/django-silk/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ ris ];
   };
-
 }

@@ -12,7 +12,7 @@ buildPythonPackage rec {
     owner = "xdg";
     repo = pname;
     rev = "rel-${version}";
-    sha256 = "sha256-TrFQzfkXabmfpGYwhxD1UVY1F645KycfSPPrMJFAe+0=";
+    hash = "sha256-TrFQzfkXabmfpGYwhxD1UVY1F645KycfSPPrMJFAe+0=";
   };
 
   # Tests failed (errors=4, failures=4) on NixOS

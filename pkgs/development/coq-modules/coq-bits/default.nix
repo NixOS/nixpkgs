@@ -1,10 +1,10 @@
 { lib, mkCoqDerivation, coq, mathcomp-algebra, version ? null }:
 
-with lib; mkCoqDerivation {
+mkCoqDerivation {
   pname = "coq-bits";
   repo = "bits";
   inherit version;
-  defaultVersion = with versions; switch coq.coq-version [
+  defaultVersion = with lib.versions; lib.switch coq.coq-version [
     { case = range "8.10" "8.16"; out = "1.1.0"; }
     { case = range "8.7"  "8.15"; out = "1.0.0"; }
   ] null;
@@ -14,7 +14,7 @@ with lib; mkCoqDerivation {
 
   propagatedBuildInputs = [ mathcomp-algebra ];
 
-  meta = {
+  meta = with lib; {
     description = "A formalization of bitset operations in Coq";
     license = licenses.asl20;
     maintainers = with maintainers; [ ptival ];

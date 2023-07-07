@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-zigbuild";
-  version = "0.12.3";
+  version = "0.16.12";
 
   src = fetchFromGitHub {
     owner = "messense";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-qwOlYy9pNAKEJDgt3ML4dxDwlkyPIVO+X/q/YijEHo0=";
+    sha256 = "sha256-qrttPpbmh8yL80naXeOosBDjxKjWRxmsVHJLRzLOehQ=";
   };
 
-  cargoSha256 = "sha256-8x2B8WBN9u17HS58bAwMNPEoSabNX6KzyPBLEvaGOBk=";
+  cargoSha256 = "sha256-6bGRV1qYF+VWJjA5qS6PYx/4iLvsIDABxkN2N3AYXAU=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -23,6 +23,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A tool to compile Cargo projects with zig as the linker";
     homepage = "https://github.com/messense/cargo-zigbuild";
+    changelog = "https://github.com/messense/cargo-zigbuild/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
   };

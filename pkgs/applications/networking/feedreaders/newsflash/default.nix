@@ -2,38 +2,45 @@
 , stdenv
 , rustPlatform
 , fetchFromGitLab
+, cargo
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, rustc
+, wrapGAppsHook4
 , gdk-pixbuf
 , glib
-, gtk3
-, libhandy
+, gtk4
+, libadwaita
+, libxml2
 , openssl
 , sqlite
 , webkitgtk
 , glib-networking
 , librsvg
 , gst_all_1
-, xdg-utils
+, gitUpdater
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "newsflash";
-  version = "1.5.1";
+  version = "2.3.0";
 
   src = fetchFromGitLab {
     owner = "news-flash";
     repo = "news_flash_gtk";
-    rev = version;
-    hash = "sha256-fLG7oYt+gdl3Lwnu6c7VLJWSHCFY5LyNeDKoUNGg3Yw=";
+    rev = "refs/tags/v.${finalAttrs.version}";
+    sha256 = "sha256-sW2yO6aZqhiyrIT4B8iBmum+36vcQMg4NsFxInJm7hM=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-dQlbK3SfY6p1xinroXz5wcaBbq2LuDM9sMlfJ6ueTTg=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "javascriptcore6-0.1.0" = "sha256-7w8CDY13dCRlFc77XxJ2/xZqlKSjqM0eiOvILOrJ4ic=";
+      "news-flash-2.3.0-alpha.0" = "sha256-phoZmTY1YVZIIktqLMnal9H5SMgNWwx7m+7AMtDcFJM=";
+      "newsblur_api-0.2.0" = "sha256-6vnFeJbdFeIau2rpUk9o72DD2ZCqicljmQjFVhY71NI=";
+      "article_scraper-2.0.0-alpha.0" = "sha256-HPEKZc7O7pbgcwR2l0kD/5442W1hzrfMadc0amrjxwI=";
+    };
   };
 
   patches = [
@@ -46,29 +53,29 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs .
+    patchShebangs build-aux/cargo.sh
   '';
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
 
     # Provides setup hook to fix "Unrecognized image file format"
     gdk-pixbuf
 
     # Provides glib-compile-resources to compile gresources
     glib
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
-    gtk3
-    libhandy
+    gtk4
+    libadwaita
+    libxml2
     openssl
     sqlite
     webkitgtk
@@ -86,12 +93,9 @@ stdenv.mkDerivation rec {
     gst-plugins-bad
   ]);
 
-  preFixup = ''
-    gappsWrapperArgs+=(--suffix PATH : "${lib.makeBinPath [
-      # Open links in browser
-      xdg-utils
-    ]}")
-  '';
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v.";
+  };
 
   meta = with lib; {
     description = "A modern feed reader designed for the GNOME desktop";
@@ -99,5 +103,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kira-bruneau stunkymonkey ];
     platforms = platforms.unix;
+    mainProgram = "com.gitlab.newsflash";
   };
-}
+})

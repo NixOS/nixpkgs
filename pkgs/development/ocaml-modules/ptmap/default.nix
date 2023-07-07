@@ -14,8 +14,6 @@ buildDunePackage rec {
     sha256 = "1apk61fc1y1g7x3m3c91fnskvxp6i0vk5nxwvipj56k7x2pzilgb";
   };
 
-  strictDeps = true;
-
   buildInputs = [ stdlib-shims ];
   propagatedBuildInputs = [ seq ];
 

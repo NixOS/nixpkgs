@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-wQBSCGLNaQhdEO4ah+kSief1n2s9m9Yiv1iygE5rmqs=";
+    hash = "sha256-wQBSCGLNaQhdEO4ah+kSief1n2s9m9Yiv1iygE5rmqs=";
   };
 
   # FAIL: test_sanitize_remove_script_elem (genshi.filters.tests.html.HTMLSanitizerTestCase)

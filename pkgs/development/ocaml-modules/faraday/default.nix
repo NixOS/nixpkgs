@@ -2,22 +2,21 @@
 
 buildDunePackage rec {
   pname = "faraday";
-  version = "0.8.1";
+  version = "0.8.2";
 
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.02";
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "inhabitedtype";
     repo = pname;
     rev = version;
-    sha256 = "sha256-eeR+nst/r2iFxCDmRS+LGr3yl/o27DcsS30YAu1GJmc=";
+    sha256 = "sha256-wR4kDocR1t3OLRuudXH8IccYde552O6Gvo5BHNxRbAI=";
   };
 
   checkInputs = [ alcotest ];
   propagatedBuildInputs = [ bigstringaf ];
-  doCheck = lib.versionAtLeast ocaml.version "4.08";
+  doCheck = true;
 
   meta = {
     description = "Serialization library built for speed and memory efficiency";

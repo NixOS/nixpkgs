@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-firmware";
-  version = "42.2";
+  version = "43.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "gnome-firmware";
     rev = version;
-    sha256 = "L0R2lXU69I6NI7Srq5s+8N9261Ic8B7FVaaXNjz2Ll0=";
+    sha256 = "oplypNSj028cVBn+eJxNm5pJltp7Cw5Oto/L39pI0vA=";
   };
 
   nativeBuildInputs = [
@@ -55,7 +55,6 @@ stdenv.mkDerivation rec {
   ];
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
     ignoredVersions = "(alpha|beta|rc).*";
   };
 

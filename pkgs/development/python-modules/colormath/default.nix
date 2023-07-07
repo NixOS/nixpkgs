@@ -17,12 +17,12 @@ buildPythonPackage rec {
     owner = "gtaylor";
     repo = "python-colormath";
     rev = "4a076831fd5136f685aa7143db81eba27b2cd19a";
-    sha256 = "sha256-eACVPIQFgiGiVmQ/PjUxP/UH/hBOsCywz5PlgpA4dk4=";
+    hash = "sha256-eACVPIQFgiGiVmQ/PjUxP/UH/hBOsCywz5PlgpA4dk4=";
   };
 
   propagatedBuildInputs = [ networkx numpy ];
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
   checkPhase = "nosetests";
 

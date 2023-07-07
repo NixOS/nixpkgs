@@ -1,4 +1,4 @@
-{ stdenv, lib, buildFHSUserEnv, callPackage, makeDesktopItem, writeScript
+{ stdenv, lib, buildFHSEnvChroot, callPackage, makeDesktopItem, writeScript
 , supportedDevices ? [ "Arria II" "Cyclone V" "Cyclone IV" "Cyclone 10 LP" "MAX II/V" "MAX 10 FPGA" ]
 , unwrapped ? callPackage ./quartus.nix { inherit supportedDevices; }
 }:
@@ -13,7 +13,7 @@ let
     categories = [ "Development" ];
   };
 # I think modelsim_ase/linux/vlm checksums itself, so use FHSUserEnv instead of `patchelf`
-in buildFHSUserEnv rec {
+in buildFHSEnvChroot rec {
   name = "quartus-prime-lite"; # wrapped
 
   targetPkgs = pkgs: with pkgs; [
@@ -44,6 +44,7 @@ in buildFHSUserEnv rec {
     xorg.libXext
     xorg.libXrender
     libudev0-shim
+    libxcrypt-legacy
   ];
 
   passthru = { inherit unwrapped; };

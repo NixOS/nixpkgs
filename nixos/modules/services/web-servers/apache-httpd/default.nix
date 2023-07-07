@@ -18,7 +18,7 @@ let
     sed -i $out/bin/apachectl -e 's|$HTTPD -t|$HTTPD -t -f /etc/httpd/httpd.conf|'
   '';
 
-  php = cfg.phpPackage.override { apacheHttpd = pkg; };
+  php = cfg.phpPackage.override { apxs2Support = true; apacheHttpd = pkg; };
 
   phpModuleName = let
     majorVersion = lib.versions.major (lib.getVersion php);
@@ -168,7 +168,7 @@ let
         <VirtualHost ${concatMapStringsSep " " (listen: "${listen.ip}:${toString listen.port}") listen}>
             ServerName ${hostOpts.hostName}
             ${concatMapStrings (alias: "ServerAlias ${alias}\n") hostOpts.serverAliases}
-            ServerAdmin ${adminAddr}
+            ${optionalString (adminAddr != null) "ServerAdmin ${adminAddr}"}
             <IfModule mod_ssl.c>
                 SSLEngine off
             </IfModule>
@@ -187,7 +187,7 @@ let
         <VirtualHost ${concatMapStringsSep " " (listen: "${listen.ip}:${toString listen.port}") listenSSL}>
             ServerName ${hostOpts.hostName}
             ${concatMapStrings (alias: "ServerAlias ${alias}\n") hostOpts.serverAliases}
-            ServerAdmin ${adminAddr}
+            ${optionalString (adminAddr != null) "ServerAdmin ${adminAddr}"}
             SSLEngine on
             SSLCertificateFile ${sslServerCert}
             SSLCertificateKeyFile ${sslServerKey}
@@ -455,8 +455,9 @@ in
       };
 
       adminAddr = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         example = "admin@example.org";
+        default = null;
         description = lib.mdDoc "E-mail address of the server administrator.";
       };
 
@@ -657,6 +658,13 @@ in
         message = ''
           Options `services.httpd.virtualHosts.<name>.enableACME` and
           `services.httpd.virtualHosts.<name>.useACMEHost` are mutually exclusive.
+        '';
+      }
+      {
+        assertion = cfg.enablePHP -> php.ztsSupport;
+        message = ''
+          The php package provided by `services.httpd.phpPackage` is not built with zts support. Please
+          ensure the php has zts support by settings `services.httpd.phpPackage = php.override { ztsSupport = true; }`
         '';
       }
     ] ++ map (name: mkCertOwnershipAssertion {

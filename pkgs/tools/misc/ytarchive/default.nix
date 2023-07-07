@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, makeBinaryWrapper, ffmpeg }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch, makeBinaryWrapper, ffmpeg }:
 
 buildGoModule rec {
   pname = "ytarchive";
-  version = "unstable-2022-05-28";
+  version = "unstable-2023-02-21";
 
   src = fetchFromGitHub {
     owner = "Kethsar";
     repo = "ytarchive";
-    rev = "8d48052f432ec6f78c6aed326e8a1db31ee8e706";
-    sha256 = "sha256-IsG0YPVBzsbHLNs1m/AruDmm0n7vwN9Fj1KMOoQJQ+c=";
+    rev = "90aaf17b5e86eec52a95752e3c2dba4f54ee1068";
+    hash = "sha256-JRjQRbMqtd04/aO6NkInoDqfOrHnDrXj4C4/URiU6yo=";
   };
 
-  vendorSha256 = "sha256-r9fDFSCDItQ7YSj9aTY1LXRrFE9T3XD0X36ywCfu0R8=";
+  vendorHash = "sha256-sjwQ/zEYJRkeWUDB7TzV8z+kET8lVRnQkXYbZbcUeHY=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 

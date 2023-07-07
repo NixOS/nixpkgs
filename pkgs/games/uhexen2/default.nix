@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     runHook preBuild
     for makefile in "''${makeFiles[@]}"; do
           local flagsArray=(
-            -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES
+            -j$NIX_BUILD_CORES
             SHELL=$SHELL
             $makeFlags "''${makeFlagsArray[@]}"
             $buildFlags "''${buildFlagsArray[@]}"
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       HoT includes countless bug fixes, improved music, sound and video modes, opengl improvements,
       support for many operating systems and architectures, and documentation among many others.
     '';
-    homepage = "http://uhexen2.sourceforge.net/";
+    homepage = "https://uhexen2.sourceforge.net/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ xdhampus ];
     platforms = platforms.all;

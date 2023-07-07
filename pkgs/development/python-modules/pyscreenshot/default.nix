@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , isPy3k
-, EasyProcess
+, easyprocess
 , entrypoint2
 , jeepney
 , mss
@@ -11,15 +11,15 @@
 
 buildPythonPackage rec {
   pname = "pyscreenshot";
-  version = "3.0";
+  version = "3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dd4fdfaeb617483913a6b16845b9f428de5db28758979f4b6cf8f236d292b908";
+    sha256 = "sha256-jA6T8K72amv+Vahqv87WvTlq5LT2zB428EoorSYlWU0=";
   };
 
   propagatedBuildInputs = [
-    EasyProcess
+    easyprocess
     entrypoint2
     pillow
   ] ++ lib.optionals (isPy3k) [

@@ -1,14 +1,17 @@
 { lib
+, async-timeout
 , buildPythonPackage
 , fetchFromGitHub
+, pillow
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "aioslimproto";
-  version = "2.1.1";
-  format = "setuptools";
+  version = "2.3.2";
+  format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
@@ -16,10 +19,19 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Er7UsJDBDXD8CQSkUIOeO78HQaCsrRycU18LOjBpv/w=";
+    hash = "sha256-vKIqBbWQNgv1v73P6K51K+yaqXgC1BtllZ59yTNPr2g=";
   };
 
-  checkInputs = [
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    async-timeout
+    pillow
+  ];
+
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -35,6 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to control Squeezebox players";
     homepage = "https://github.com/home-assistant-libs/aioslimproto";
+    changelog = "https://github.com/home-assistant-libs/aioslimproto/releases/tag/${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

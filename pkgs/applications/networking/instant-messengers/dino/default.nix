@@ -1,37 +1,48 @@
 { lib, stdenv, fetchFromGitHub
 , vala, cmake, ninja, wrapGAppsHook, pkg-config, gettext
-, gobject-introspection, gnome, glib, gdk-pixbuf, gtk3, glib-networking
-, xorg, libXdmcp, libxkbcommon
+, gobject-introspection, glib, gdk-pixbuf, gtk4, glib-networking
+, libadwaita
 , libnotify, libsoup, libgee
-, librsvg, libsignal-protocol-c
+, libsignal-protocol-c
 , libgcrypt
-, libepoxy
-, at-spi2-core
 , sqlite
-, dbus
 , gpgme
-, pcre
+, pcre2
 , qrencode
 , icu
 , gspell
-, srtp, libnice, gnutls, gstreamer, gst-plugins-base, gst-plugins-good, webrtc-audio-processing
- }:
+, srtp
+, libnice
+, gnutls
+, gstreamer
+, gst-plugins-base
+, gst-plugins-good
+, gst-plugins-bad
+, gst-vaapi
+, webrtc-audio-processing
+}:
 
 stdenv.mkDerivation rec {
   pname = "dino";
-  version = "0.3.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
     rev = "v${version}";
-    sha256 = "sha256-L5a5QlF9qlr4X/hGTabbbvOE5J1x/UVneWl/BRAa29Q=";
+    sha256 = "sha256-85Sh3UwoMaa+bpL81gIKtkpCeRl1mXbs8Odux1FURdQ=";
   };
+
+  postPatch = ''
+    # don't overwrite manually set version information
+    substituteInPlace CMakeLists.txt \
+      --replace "include(ComputeVersion)" ""
+  '';
 
   nativeBuildInputs = [
     vala
     cmake
-    ninja
+    ninja # https://github.com/dino/dino/issues/230
     pkg-config
     wrapGAppsHook
     gettext
@@ -40,40 +51,45 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qrencode
     gobject-introspection
-    glib-networking
     glib
+    glib-networking # required for TLS support
+    libadwaita
     libgee
-    gnome.adwaita-icon-theme
     sqlite
     gdk-pixbuf
-    gtk3
+    gtk4
     libnotify
     gpgme
     libgcrypt
     libsoup
-    pcre
-    libepoxy
-    at-spi2-core
-    dbus
+    pcre2
     icu
     libsignal-protocol-c
-    librsvg
     gspell
     srtp
     libnice
     gnutls
     gstreamer
     gst-plugins-base
-    gst-plugins-good
+    gst-plugins-good # contains rtpbin, required for VP9
+    gst-plugins-bad # required for H264, MSDK
+    gst-vaapi # required for VAAPI
     webrtc-audio-processing
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    xorg.libxcb
-    xorg.libpthreadstubs
-    libXdmcp
-    libxkbcommon
   ];
 
-  cmakeFlags = ["-DBUILD_TESTS=yes"];
+  cmakeFlags = [
+    "-DBUILD_TESTS=true"
+    "-DRTP_ENABLE_H264=true"
+    "-DRTP_ENABLE_MSDK=true"
+    "-DRTP_ENABLE_VAAPI=true"
+    "-DRTP_ENABLE_VP9=true"
+    "-DVERSION_FOUND=true"
+    "-DVERSION_IS_RELEASE=true"
+    "-DVERSION_FULL=${version}"
+  ];
+
+  # Undefined symbols for architecture arm64: "_gpg_strerror"
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lgpg-error";
 
   doCheck = true;
   checkPhase = ''

@@ -10,13 +10,13 @@
 
 let cg3 = stdenv.mkDerivation rec {
   pname = "cg3";
-  version = "1.3.7";
+  version = "1.3.9";
 
   src = fetchFromGitHub {
     owner = "GrammarSoft";
     repo = "${pname}";
     rev = "v${version}";
-    sha256 = "Ena3dGoZsXOIY6mbvnfI0H7QqRifoxWIBKQrK3yQSmY=";
+    sha256 = "sha256-TiEhhk90w5GibGZ4yalIf+4qLA8NoU6+GIPN6QNTz2A=";
   };
 
   nativeBuildInputs = [
@@ -29,6 +29,11 @@ let cg3 = stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+
+  postFixup = ''
+    substituteInPlace "$out"/lib/pkgconfig/cg3.pc \
+      --replace '=''${prefix}//' '=/'
+  '';
 
   passthru.tests.minimal = runCommand "${pname}-test" {
       buildInputs = [

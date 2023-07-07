@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# shellcheck shell=bash
 
 declare -a autoPatchelfLibs
 declare -a extraAutoPatchelfLibs
@@ -53,7 +53,7 @@ autoPatchelf() {
         esac
     done
 
-    local ignoreMissingDepsArray=($autoPatchelfIgnoreMissingDeps)
+    readarray -td' ' ignoreMissingDepsArray < <(echo -n "$autoPatchelfIgnoreMissingDeps")
     if [ "$autoPatchelfIgnoreMissingDeps" == "1" ]; then
         echo "autoPatchelf: WARNING: setting 'autoPatchelfIgnoreMissingDeps" \
              "= true;' is deprecated and will be removed in a future release." \
@@ -61,6 +61,7 @@ autoPatchelf() {
         ignoreMissingDepsArray=( "*" )
     fi
 
+    local appendRunpathsArray=($appendRunpaths)
     local runtimeDependenciesArray=($runtimeDependencies)
     @pythonInterpreter@ @autoPatchelfScript@                            \
         ${norecurse:+--no-recurse}                                      \
@@ -68,7 +69,8 @@ autoPatchelf() {
         --paths "$@"                                                    \
         --libs "${autoPatchelfLibs[@]}"                                 \
                "${extraAutoPatchelfLibs[@]}"                            \
-        --runtime-dependencies "${runtimeDependenciesArray[@]/%//lib}"
+        --runtime-dependencies "${runtimeDependenciesArray[@]/%//lib}"  \
+        --append-rpaths "${appendRunpathsArray[@]}"
 }
 
 # XXX: This should ultimately use fixupOutputHooks but we currently don't have
@@ -84,7 +86,7 @@ autoPatchelf() {
 # (Expressions don't expand in single quotes, use double quotes for that.)
 postFixupHooks+=('
     if [ -z "${dontAutoPatchelf-}" ]; then
-        autoPatchelf -- $(for output in $outputs; do
+        autoPatchelf -- $(for output in $(getAllOutputNames); do
             [ -e "${!output}" ] || continue
             echo "${!output}"
         done)

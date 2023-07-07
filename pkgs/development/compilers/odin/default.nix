@@ -1,31 +1,43 @@
 { lib
 , fetchFromGitHub
-, llvmPackages
+, llvmPackages_13
 , makeWrapper
 , libiconv
+, MacOSX-SDK
+, which
 }:
 
 let
+  llvmPackages = llvmPackages_13;
   inherit (llvmPackages) stdenv;
 in stdenv.mkDerivation rec {
   pname = "odin";
-  version = "0.13.0";
+  version = "dev-2023-05";
 
   src = fetchFromGitHub {
     owner = "odin-lang";
     repo = "Odin";
-    rev = "v${version}";
-    sha256 = "ke2HPxVtF/Lh74Tv6XbpM9iLBuXLdH1+IE78MAacfYY=";
+    rev = version;
+    sha256 = "sha256-qEewo2h4dpivJ7D4RxxBZbtrsiMJ7AgqJcucmanbgxY=";
   };
 
   nativeBuildInputs = [
-    makeWrapper
+    makeWrapper which
   ];
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
-  postPatch = ''
-    sed -i 's/^GIT_SHA=.*$/GIT_SHA=/' Makefile
+  LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
+
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    sed -i src/main.cpp \
+      -e 's|-syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk|-syslibroot ${MacOSX-SDK}|'
+  '' + ''
+    sed -i build_odin.sh \
+      -e 's/^GIT_SHA=.*$/GIT_SHA=/' \
+      -e 's/LLVM-C/LLVM/' \
+      -e 's/framework System/lSystem/'
+    patchShebangs build_odin.sh
   '';
 
   dontConfigure = true;
@@ -37,21 +49,26 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp odin $out/bin/odin
-    cp -r core $out/bin/core
 
-    wrapProgram $out/bin/odin --prefix PATH : ${lib.makeBinPath (with llvmPackages; [
-      bintools
-      llvm
-      clang
-      lld
-    ])}
+    mkdir -p $out/share
+    cp -r core $out/share/core
+    cp -r vendor $out/share/vendor
+
+    wrapProgram $out/bin/odin \
+      --prefix PATH : ${lib.makeBinPath (with llvmPackages; [
+        bintools
+        llvm
+        clang
+        lld
+      ])} \
+      --set-default ODIN_ROOT $out/share
   '';
 
   meta = with lib; {
     description = "A fast, concise, readable, pragmatic and open sourced programming language";
     homepage = "https://odin-lang.org/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ luc65r ];
-    platforms = platforms.x86_64;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ luc65r astavie ];
+    platforms = platforms.x86_64 ++ [ "aarch64-darwin" ];
   };
 }

@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ sqlite libtiff curl ];
 
-  checkInputs = [ gtest ];
+  nativeCheckInputs = [ gtest ];
 
   cmakeFlags = [
     "-DUSE_EXTERNAL_GTEST=ON"

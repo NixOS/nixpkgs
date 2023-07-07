@@ -18,6 +18,5 @@ buildGoModule rec {
     license = licenses.asl20;
     homepage = "https://github.com/cloudposse/github-commenter";
     maintainers = [ maintainers.mmahut ];
-    platforms = platforms.unix;
   };
 }

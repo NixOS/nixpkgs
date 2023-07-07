@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xdaliclock";
-  version = "2.45";
+  version = "2.47";
 
   src = fetchurl {
     url = "https://www.jwz.org/xdaliclock/${pname}-${version}.tar.gz";
-    hash = "sha256-GHjSUuRHCAVwWcDMRb2ng1aNbheu+xnUBNLqSpPkZeQ=";
+    hash = "sha256-1Jkv9iulvyY+b5KryDr8s+v8LU95hcVi7PJQsL1rUL4=";
   };
 
   # Note: don't change this to set sourceRoot, or updateAutotoolsGnuConfigScriptsHook

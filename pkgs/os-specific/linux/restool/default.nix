@@ -1,11 +1,12 @@
-{ stdenv, lib, fetchgit, bash, coreutils, dtc, file, gawk, gnugrep, gnused, pandoc, which }:
+{ stdenv, lib, fetchFromGitHub, bash, coreutils, dtc, file, gawk, gnugrep, gnused, pandoc, which }:
 
 stdenv.mkDerivation rec {
   pname = "restool";
   version = "2.4";
 
-  src = fetchgit {
-    url = "https://source.codeaurora.org/external/qoriq/qoriq-components/restool";
+  src = fetchFromGitHub {
+    owner = "nxp-qoriq";
+    repo = "restool";
     rev = "abd2f5b7181db9d03db9e6ccda0194923b73e9a2";
     sha256 = "sha256-ryTDyqSy39e8Omf7l8lK4mLWr8jccDhMVPldkVGSQVo=";
   };
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
       restool is a user space application providing the ability to dynamically
       create and manage DPAA2 containers and objects from Linux.
     '';
-    homepage = "https://source.codeaurora.org/external/qoriq/qoriq-components/restool/about/";
+    homepage = "https://github.com/nxp-qoriq/restool";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ delroth ];

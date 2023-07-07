@@ -1,46 +1,48 @@
 { lib
-, python3Packages
 , fetchFromGitHub
 , hiera-eyaml
 , python3
 }:
-let
-  py = python3.override {
-    packageOverrides = self: super: {
-      ruamel-yaml = super.ruamel-yaml.overridePythonAttrs(old: rec {
-        pname = "ruamel.yaml";
-        version = "0.17.10";
-        src = python3Packages.fetchPypi {
-          inherit pname version;
-          sha256 = "EGvI1txqD/fJGWpHVwQyA29B1Va3eca05hgIX1fjnmc=";
-        };
-      });
-    };
-  };
-in
-py.pkgs.buildPythonPackage rec {
+
+python3.pkgs.buildPythonApplication rec {
   pname = "yamlpath";
-  version = "3.6.3";
+  version = "3.8.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "wwkimball";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "4lLKMMsjVWbnfiaOzdBePOtOwPN8nui3Ux6e55YdGoo=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-6N2s/LWFa3mgMQ88rt3IaWk+b2PTWfT7z1mi+ioQEyU=";
   };
 
-  propagatedBuildInputs = with py.pkgs; [ ruamel-yaml ];
-  checkInputs = with py.pkgs; [ hiera-eyaml mock pytest-console-scripts pytestCheckHook ];
+  propagatedBuildInputs = with python3.pkgs; [
+    python-dateutil
+    ruamel-yaml
+  ];
+
+  nativeCheckInputs = with python3.pkgs; [
+    hiera-eyaml
+    mock
+    pytest-console-scripts
+    pytestCheckHook
+  ];
 
   preCheck = ''
     export PATH=$PATH:$out/bin
   '';
 
+  pythonImportsCheck = [
+    "yamlpath"
+  ];
+
   meta = with lib; {
-    homepage = "https://github.com/wwkimball/yamlpath";
     description = "Command-line processors for YAML/JSON/Compatible data";
+    homepage = "https://github.com/wwkimball/yamlpath";
+    changelog = "https://github.com/wwkimball/yamlpath/releases/tag/v${version}";
     longDescription = ''
-      Command-line get/set/merge/validate/scan/convert/diff processors for YAML/JSON/Compatible data using powerful, intuitive, command-line friendly syntax
+      Command-line get/set/merge/validate/scan/convert/diff processors for YAML/JSON/Compatible data
+      using powerful, intuitive, command-line friendly syntax
      '';
     license = licenses.isc;
     maintainers = with maintainers; [ Flakebi ];

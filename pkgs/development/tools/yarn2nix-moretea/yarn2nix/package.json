@@ -14,14 +14,15 @@
   "bin": {
     "yarn2nix": "bin/yarn2nix.js"
   },
-  "engines" : {
-    "node" : ">=8.0.0"
+  "engines": {
+    "node": ">=8.0.0"
   },
   "dependencies": {
     "@yarnpkg/lockfile": "^1.1.0",
     "deep-equal": "^1.0.1",
     "docopt": "^0.6.2",
-    "ramda": "^0.26.1"
+    "ramda": "^0.26.1",
+    "ssri": "^10.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",

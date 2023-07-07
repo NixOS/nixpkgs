@@ -67,11 +67,15 @@ in
 
     boot.initrd.network.flushBeforeStage2 = mkOption {
       type = types.bool;
-      default = true;
+      default = !config.boot.initrd.systemd.enable;
+      defaultText = "!config.boot.initrd.systemd.enable";
       description = lib.mdDoc ''
         Whether to clear the configuration of the interfaces that were set up in
         the initrd right before stage 2 takes over. Stage 2 will do the regular network
         configuration based on the NixOS networking options.
+
+        The default is false when systemd is enabled in initrd,
+        because the systemd-networkd documentation suggests it.
       '';
     };
 

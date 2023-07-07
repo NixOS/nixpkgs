@@ -202,7 +202,7 @@ in
       internal    = true;
       description = lib.mdDoc ''
         This option defines the path to the wrapper programs. It
-        should not be overriden.
+        should not be overridden.
       '';
     };
   };
@@ -283,7 +283,7 @@ in
         '';
 
     ###### wrappers consistency checks
-    system.extraDependencies = lib.singleton (pkgs.runCommandLocal
+    system.checks = lib.singleton (pkgs.runCommandLocal
       "ensure-all-wrappers-paths-exist" { }
       ''
         # make sure we produce output

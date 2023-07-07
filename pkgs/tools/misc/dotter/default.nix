@@ -10,25 +10,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dotter";
-  version = "0.12.14";
+  version = "0.12.15";
 
   src = fetchFromGitHub {
     owner = "SuperCuber";
     repo = "dotter";
     rev = "v${version}";
-    hash = "sha256-GGbUpjAcihJLNNo0OtkRGQ2RcT/75vDABlHs7Atzo1s=";
+    hash = "sha256-quMEwg/B4ey6zoxDZO2ce3/s1FX5xxmJfyAlt4YvFqE=";
   };
 
-  cargoHash = "sha256-uC0OwN73krM7QaQ4rtWV6IseKdZmiqrB8a6QGTs6fHE=";
+  cargoHash = "sha256-D8H95dE+th1mMzlLmd+fqU5VdlxdOSBHKSjvh21JhnE=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
-  checkInputs = [ which ];
+  nativeCheckInputs = [ which ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

@@ -1,6 +1,6 @@
-{ pkgs,  lib, stdenv, fetchurl, unzip, graylog }:
+{ lib, stdenv, fetchurl, unzip, graylog-5_0 }:
 
-with pkgs.lib;
+with lib;
 
 let
   glPlugin = a@{
@@ -17,7 +17,7 @@ let
       dontUnpack = true;
       nativeBuildInputs = [ unzip ];
       meta = a.meta // {
-        platforms = graylog.meta.platforms;
+        platforms = graylog-5_0.meta.platforms;
         maintainers = (a.meta.maintainers or []) ++ [ maintainers.fadenb ];
         sourceProvenance = with sourceTypes; [ binaryBytecode ];
       };
@@ -214,6 +214,20 @@ in {
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-slack";
       description = "Can notify Slack or Mattermost channels about triggered alerts in Graylog (Alarm Callback)";
+    };
+  };
+  smseagle = glPlugin rec {
+    name = "graylog-smseagle-${version}";
+    pluginName = "graylog-plugin-smseagle";
+    version = "1.0.1";
+    src = fetchurl {
+      url = "https://bitbucket.org/proximus/smseagle-graylog/raw/b99cfc349aafc7c94d4c2503f7c3c0bde67684d1/jar/graylog-plugin-smseagle-1.0.1.jar";
+      sha256 = "sha256-rvvftzPskXRGs1Z9dvd/wFbQoIoNtEQIFxMIpSuuvf0=";
+    };
+    meta = {
+      homepage = "https://bitbucket.org/proximus/smseagle-graylog/";
+      description = "Alert/notification callback plugin for integrating the SMSEagle into Graylog.";
+      license = lib.licenses.gpl3Only;
     };
   };
   snmp = glPlugin rec {

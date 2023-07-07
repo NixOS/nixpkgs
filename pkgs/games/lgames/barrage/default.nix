@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "barrage";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/lgames/${pname}-${version}.tar.gz";
-    hash = "sha256-p4iXq2qM9tU9QJO7irriBN36OiLFyrnnYiDkmH3naQQ=";
+    hash = "sha256-nFkkzT5AjcPfXsdxwvEsk4+RX9Py1mVqADvuoxE4Ha4=";
   };
 
   buildInputs = [

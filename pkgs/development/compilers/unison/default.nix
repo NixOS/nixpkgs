@@ -4,20 +4,20 @@
 , less
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unison-code-manager";
-  milestone_id = "M4";
-  version = "1.0.${milestone_id}-alpha";
+  milestone_id = "M4i";
+  version = "1.0.${finalAttrs.milestone_id}-alpha";
 
   src = if (stdenv.isDarwin) then
     fetchurl {
-      url = "https://github.com/unisonweb/unison/releases/download/release/${milestone_id}/ucm-macos.tar.gz";
-      sha256 = "A8i1jH9+W89M+XbmYx0knJsP5c/EdVE2T9L/EIL0USU=";
+      url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.milestone_id}/ucm-macos.tar.gz";
+      hash = "sha256-1Qp1SB5rCsVimZzRo1NOX8HBoMEGlIycJPm3zGTUuOw=";
     }
   else
     fetchurl {
-      url = "https://github.com/unisonweb/unison/releases/download/release/${milestone_id}/ucm-linux.tar.gz";
-      sha256 = "OqtJiKAsefw2fVjhtsYUe+qLPqXBPFkHUaMh26EJBJ4=";
+      url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.milestone_id}/ucm-linux.tar.gz";
+      hash = "sha256-Qx8vO/Vaz0VdCGXwIwRQIuMlp44hxCroQ7m7Y+m7aXk=";
     };
 
   # The tarball is just the prebuilt binary, in the archive root.
@@ -43,5 +43,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ mit bsd3 ];
     maintainers = [ maintainers.virusdave ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin" ];
+    mainProgram = "ucm";
   };
-}
+})

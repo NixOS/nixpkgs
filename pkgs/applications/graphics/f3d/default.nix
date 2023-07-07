@@ -2,20 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "f3d";
-  version = "1.3.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "f3d-app";
     repo = "f3d";
     rev = "v${version}";
-    hash = "sha256-dOpiX7xJWDKHqPLGvlgv7NHgfzyeZhJd898+KzAmD4Q=";
+    hash = "sha256-od8Wu8+HyQb8qTA6C4kiw5hNI2WPBs/EMt321BJDZoc=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ vtk_9 ]
-    ++ lib.optionals stdenv.isLinux [ libGL libX11 ]
-    ++ lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
+  buildInputs = [ vtk_9 ] ++ lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
 
   # conflict between VTK and Nixpkgs;
   # see https://github.com/NixOS/nixpkgs/issues/89167

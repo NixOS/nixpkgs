@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , installShellFiles
 , makeWrapper
 , pkg-config
@@ -9,41 +10,54 @@
 , readline
 , which
 , musl-fts
-# options
+  # options
 , conf ? null
 , withIcons ? false
 , withNerdIcons ? false
+, withEmojis ? false
 }:
 
 # Mutually exclusive options
-assert withIcons -> withNerdIcons == false;
-assert withNerdIcons -> withIcons == false;
+assert withIcons -> (withNerdIcons == false && withEmojis == false);
+assert withNerdIcons -> (withIcons == false && withEmojis == false);
+assert withEmojis -> (withIcons == false && withNerdIcons == false);
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nnn";
-  version = "4.6";
+  version = "4.8";
 
   src = fetchFromGitHub {
     owner = "jarun";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-+EAKOXZp1kxA2X3e16ItjPT7Sa3WZuP2oxOdXkceTIY=";
+    repo = "nnn";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-QbKW2wjhUNej3zoX18LdeUHqjNLYhEKyvPH2MXzp/iQ=";
   };
 
+  patches = [
+    # FIXME: remove for next release
+    (fetchpatch {
+      url = "https://github.com/jarun/nnn/commit/20e944f5e597239ed491c213a634eef3d5be735e.patch";
+      hash = "sha256-RxG3AU8i3lRPCjRVZPnej4m1No/SKtsHwbghj9JQ7RQ=";
+    })
+  ];
+
   configFile = lib.optionalString (conf != null) (builtins.toFile "nnn.h" conf);
-  preBuild = lib.optionalString (conf != null) "cp ${configFile} src/nnn.h";
+  preBuild = lib.optionalString (conf != null) "cp ${finalAttrs.configFile} src/nnn.h";
 
   nativeBuildInputs = [ installShellFiles makeWrapper pkg-config ];
   buildInputs = [ readline ncurses ] ++ lib.optional stdenv.hostPlatform.isMusl musl-fts;
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isMusl "-I${musl-fts}/include";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isMusl "-I${musl-fts}/include";
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isMusl "-lfts";
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ]
-    ++ lib.optional withIcons [ "O_ICONS=1" ]
-    ++ lib.optional withNerdIcons [ "O_NERD=1" ];
+  makeFlags = [ "PREFIX=$(out)" ]
+    ++ lib.optionals withIcons [ "O_ICONS=1" ]
+    ++ lib.optionals withNerdIcons [ "O_NERD=1" ]
+    ++ lib.optionals withEmojis [ "O_EMOJI=1" ];
 
   binPath = lib.makeBinPath [ file which ];
+
+  installTargets = [ "install" "install-desktop" ];
 
   postInstall = ''
     installShellCompletion --bash --name nnn.bash misc/auto-completion/bash/nnn-completion.bash
@@ -61,4 +75,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ jfrankenau Br1ght0ne ];
   };
-}
+})

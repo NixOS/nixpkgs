@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-polkit";
-  version = "1.26.0";
+  version = "1.26.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0kkjv025l1l8352m5ky1g7hmk7isgi3dnfnh7sqg9pyhml97i9dd";
+    sha256 = "9bewtd/FMwLEBAMkWZjrkSGvP1DnFmagmrc7slRSA1c=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
     description = "Integrates polkit authentication for MATE desktop";

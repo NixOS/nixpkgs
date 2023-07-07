@@ -14,7 +14,7 @@
   extra,
   fetchzip,
   filepath,
-  generic-optics,
+  hermes-json,
   HUnit,
   lib,
   lock-file,
@@ -22,26 +22,26 @@
   mtl,
   nix-derivation,
   optics,
-  process,
   random,
   relude,
   safe,
   stm,
-  streamly,
+  streamly-core,
+  strict,
+  strict-types,
   terminal-size,
   text,
   time,
-  unix,
-  vector,
+  typed-process,
   wcwidth,
   word8,
 }:
 mkDerivation {
   pname = "nix-output-monitor";
-  version = "1.1.3.0";
+  version = "2.0.0.6";
   src = fetchzip {
-    url = "https://github.com/maralorn/nix-output-monitor/archive/refs/tags/v1.1.3.0.tar.gz";
-    sha256 = "085phr84m0b056mj3c09gzcwv7b1wax7nhsg2qscahfz0q8f4ym7";
+    url = "https://github.com/maralorn/nix-output-monitor/archive/refs/tags/v2.0.0.6.tar.gz";
+    sha256 = "1adxg2bws7fqbmzfna5hr28fh8j10gvf57j6b0xbkhh4hgj4h9xd";
   };
   isLibrary = true;
   isExecutable = true;
@@ -57,22 +57,21 @@ mkDerivation {
     directory
     extra
     filepath
-    generic-optics
+    hermes-json
     lock-file
     MemoTrie
     mtl
     nix-derivation
     optics
-    random
     relude
     safe
     stm
-    streamly
+    streamly-core
+    strict
+    strict-types
     terminal-size
     text
     time
-    unix
-    vector
     wcwidth
     word8
   ];
@@ -88,22 +87,22 @@ mkDerivation {
     directory
     extra
     filepath
-    generic-optics
+    hermes-json
     lock-file
     MemoTrie
     mtl
     nix-derivation
     optics
-    random
     relude
     safe
     stm
-    streamly
+    streamly-core
+    strict
+    strict-types
     terminal-size
     text
     time
-    unix
-    vector
+    typed-process
     wcwidth
     word8
   ];
@@ -119,29 +118,30 @@ mkDerivation {
     directory
     extra
     filepath
-    generic-optics
+    hermes-json
     HUnit
     lock-file
     MemoTrie
     mtl
     nix-derivation
     optics
-    process
     random
     relude
     safe
     stm
-    streamly
+    streamly-core
+    strict
+    strict-types
     terminal-size
     text
     time
-    unix
-    vector
+    typed-process
     wcwidth
     word8
   ];
   homepage = "https://github.com/maralorn/nix-output-monitor";
   description = "Parses output of nix-build to show additional information";
   license = lib.licenses.agpl3Plus;
-  maintainers = with lib.maintainers; [maralorn];
+  mainProgram = "nom";
+  maintainers = [lib.maintainers.maralorn];
 }

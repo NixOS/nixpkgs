@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "grocy";
-  version = "3.3.1";
+  version = "3.3.2";
 
   src = fetchurl {
     url = "https://github.com/grocy/grocy/releases/download/v${version}/grocy_${version}.zip";
-    sha256 = "sha256-XqjYDha9wwfITEDRZsnH/ig+9q1/SfKIwQYg1svUaXM=";
+    sha256 = "sha256-KF4zxrC8rlRUaBKc4iLIt6TSAHMJ+tOWptMsVcixVWs=";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ma27 ];
     description = "ERP beyond your fridge - grocy is a web-based self-hosted groceries & household management solution for your home";
     homepage = "https://grocy.info/";
+    broken = true; # Not compatible with PHP 8.1
   };
 }

@@ -11,7 +11,7 @@
 , lxml
 , xlwt
 , xlrd
-, XlsxWriter
+, xlsxwriter
 , pyyaml
 , pytestCheckHook
 }:
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     lxml
     xlwt
     xlrd
-    XlsxWriter
+    xlsxwriter
     pyyaml
   ] ++ lib.optional (pythonOlder "3.5") typing;
 
@@ -48,7 +48,7 @@ buildPythonPackage rec {
       --replace "version = versioneer.get_version()" "version = \"${version}\""
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   # long_envvar_name_imports requires stable key value pair ordering
   pytestFlagsArray = [ "-s src/canmatrix" ];
   disabledTests = [ "long_envvar_name_imports" ];

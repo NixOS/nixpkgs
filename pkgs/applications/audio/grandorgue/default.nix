@@ -1,32 +1,57 @@
-{ lib, stdenv, fetchsvn, cmake, gcc, pkg-config, fftwFloat, alsa-lib
-, zlib, wavpack, wxGTK31, udev, jackaudioSupport ? false, libjack2
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, fftwFloat, alsa-lib
+, zlib, wavpack, wxGTK32, udev, jackaudioSupport ? false, libjack2
+, imagemagick, libicns, makeWrapper, Cocoa
 , includeDemo ? true }:
 
 stdenv.mkDerivation rec {
   pname = "grandorgue";
-  rev = "2333";
-  version = "0.3.1-r${rev}";
-  src = fetchsvn {
-    url = "https://svn.code.sf.net/p/ourorgan/svn/trunk";
-    inherit rev;
-    sha256 = "0xzjdc2g4gja2lpmn21xhdskv43qpbpzkbb05jfqv6ma2zwffzz1";
+  version = "3.11.0";
+
+  src = fetchFromGitHub {
+    owner = "GrandOrgue";
+    repo = pname;
+    rev = version;
+    fetchSubmodules = true;
+    sha256 = "sha256-l1KqER/vkNwgKLXIFUzHnYLw2ivGNP7hRiKhIOzn7pw=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  postPatch = ''
+    substituteInPlace resources/CMakeLists.txt \
+      --replace \
+        "iconutil -c icns \''${GENERATED_ICONS_DIR}" \
+        "png2icns \''${GENERATED_ICONS_DIR}/../GrandOrgue.icns \''${GENERATED_ICONS_DIR}/*{16,32,128,256,512,1024}.png" \
+  '';
 
-  buildInputs = [ pkg-config fftwFloat alsa-lib zlib wavpack wxGTK31 udev ]
+  nativeBuildInputs = [ cmake pkg-config imagemagick libicns makeWrapper ];
+
+  buildInputs = [ fftwFloat zlib wavpack wxGTK32 ]
+    ++ lib.optionals stdenv.isLinux [ alsa-lib udev ]
+    ++ lib.optionals stdenv.isDarwin [ Cocoa ]
     ++ lib.optional jackaudioSupport libjack2;
 
-  cmakeFlags = lib.optional (!jackaudioSupport) [
+  cmakeFlags = lib.optionals (!jackaudioSupport) [
     "-DRTAUDIO_USE_JACK=OFF"
     "-DRTMIDI_USE_JACK=OFF"
+    "-DGO_USE_JACK=OFF"
+    "-DINSTALL_DEPEND=OFF"
   ] ++ lib.optional (!includeDemo) "-DINSTALL_DEMO=OFF";
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-DTARGET_OS_IPHONE=0";
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/{Applications,bin,lib}
+    mv $out/GrandOrgue.app $out/Applications/
+    for lib in $out/Applications/GrandOrgue.app/Contents/MacOS/lib*; do
+      ln -s $lib $out/lib/
+    done
+    makeWrapper $out/{Applications/GrandOrgue.app/Contents/MacOS,bin}/GrandOrgue
+  '';
 
   meta = {
     description = "Virtual Pipe Organ Software";
-    homepage = "https://sourceforge.net/projects/ourorgan";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
+    homepage = "https://github.com/GrandOrgue/grandorgue";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.puzzlewolf ];
   };
 }

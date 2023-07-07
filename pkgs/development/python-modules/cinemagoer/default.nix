@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "cinemagoer";
-  version = "2022.2.11";
+  version = "2023.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8efe29dab44a7d275702f3160746015bd55c87b2eed85991dd57dda42594e6c6";
+    hash = "sha256-XOHXeuZUZwFhjxHlsVVqGdGO3srRttfZaXPsNJQbGPI=";
   };
 
   propagatedBuildInputs = [
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/cinemagoer/cinemagoer/";
     homepage = "https://cinemagoer.github.io/";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ superherointj ];
+    maintainers = with maintainers; [ ];
   };
 }

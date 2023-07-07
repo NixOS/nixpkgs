@@ -18,14 +18,10 @@ DEFAULT_NIX = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'git/defa
 
 
 def get_latest_chromium_build():
-    HISTORY_URL = 'https://omahaproxy.appspot.com/history?os=linux'
-    print(f'GET {HISTORY_URL}')
-    with urlopen(HISTORY_URL) as resp:
-        builds = csv.DictReader(iterdecode(resp, 'utf-8'))
-        for build in builds:
-            if build['channel'] != 'dev':
-                continue
-            return build
+    RELEASES_URL = 'https://versionhistory.googleapis.com/v1/chrome/platforms/linux/channels/dev/versions/all/releases?filter=endtime=none&order_by=version%20desc'
+    print(f'GET {RELEASES_URL}')
+    with urlopen(RELEASES_URL) as resp:
+        return json.load(resp)['releases'][0]
 
 
 def get_file_revision(revision, file_path):

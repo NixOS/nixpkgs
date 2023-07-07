@@ -1,4 +1,4 @@
-import ../make-test-python.nix ({ pkgs, ... }:
+import ../make-test-python.nix ({ pkgs, lib, k3s, ... }:
   let
     imageEnv = pkgs.buildEnv {
       name = "k3s-pause-image-env";
@@ -24,7 +24,7 @@ import ../make-test-python.nix ({ pkgs, ... }:
     '';
   in
   {
-    name = "k3s";
+    name = "${k3s.name}-single-node";
     meta = with pkgs.lib.maintainers; {
       maintainers = [ euank ];
     };
@@ -38,9 +38,16 @@ import ../make-test-python.nix ({ pkgs, ... }:
 
       services.k3s.enable = true;
       services.k3s.role = "server";
-      services.k3s.package = pkgs.k3s;
+      services.k3s.package = k3s;
       # Slightly reduce resource usage
-      services.k3s.extraFlags = "--no-deploy coredns,servicelb,traefik,local-storage,metrics-server --pause-image test.local/pause:local";
+      services.k3s.extraFlags = builtins.toString [
+        "--disable" "coredns"
+        "--disable" "local-storage"
+        "--disable" "metrics-server"
+        "--disable" "servicelb"
+        "--disable" "traefik"
+        "--pause-image" "test.local/pause:local"
+      ];
 
       users.users = {
         noprivs = {
@@ -57,7 +64,8 @@ import ../make-test-python.nix ({ pkgs, ... }:
       machine.wait_for_unit("k3s")
       machine.succeed("k3s kubectl cluster-info")
       machine.fail("sudo -u noprivs k3s kubectl cluster-info")
-      machine.succeed("k3s check-config")
+      '' # Fix-Me: Tests fail for 'aarch64-linux' as: "CONFIG_CGROUP_FREEZER: missing (fail)"
+      + lib.optionalString (!pkgs.stdenv.isAarch64) ''machine.succeed("k3s check-config")'' + ''
 
       machine.succeed(
           "${pauseImage} | k3s ctr image import -"
@@ -68,6 +76,9 @@ import ../make-test-python.nix ({ pkgs, ... }:
       machine.succeed("k3s kubectl apply -f ${testPodYaml}")
       machine.succeed("k3s kubectl wait --for 'condition=Ready' pod/test")
       machine.succeed("k3s kubectl delete -f ${testPodYaml}")
+
+      # regression test for #176445
+      machine.fail("journalctl -o cat -u k3s.service | grep 'ipset utility not found'")
 
       machine.shutdown()
     '';

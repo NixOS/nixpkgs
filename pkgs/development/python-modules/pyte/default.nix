@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "selectel";
     repo = pname;
     rev = version;
-    sha256 = "sha256-gLvsW4ou6bGq9CxT6XdX+r2ViMk7z+aejemrdLwJb3M=";
+    hash = "sha256-gLvsW4ou6bGq9CxT6XdX+r2ViMk7z+aejemrdLwJb3M=";
   };
 
   postPatch = ''
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ wcwidth ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyte" ];
 

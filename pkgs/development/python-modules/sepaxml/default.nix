@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "sepaxml";
-  version = "2.5.0";
+  version = "2.6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "raphaelm";
     repo = "python-sepaxml";
     rev = version;
-    hash = "sha256-9gPUAZ60q5o11eAnkzTBrFCpBUGxw3MGuKY4MtPxoSA=";
+    hash = "sha256-l5UMy0M3Ovzb6rcSAteGOnKdmBPHn4L9ZWY+YGOCn40=";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     xmlschema
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     lxml
     pytestCheckHook
   ];

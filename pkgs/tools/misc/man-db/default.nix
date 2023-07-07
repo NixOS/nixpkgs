@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "man-db";
-  version = "2.10.2";
+  version = "2.11.2";
 
   src = fetchurl {
     url = "mirror://savannah/man-db/man-db-${version}.tar.xz";
-    sha256 = "sha256-7peVTUkqE3MZA8nQcnubAeUIntvWlfDNtY1AWlr1UU0=";
+    sha256 = "sha256-z/oe5Ol0vnhkbEZQjm3S8358WJqqspOMwQZPBY/vn40=";
   };
 
   outputs = [ "out" "doc" ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   nativeBuildInputs = [ autoreconfHook groff makeWrapper pkg-config zstd ];
   buildInputs = [ libpipeline db groff ]; # (Yes, 'groff' is both native and build input)
-  checkInputs = [ libiconv /* for 'iconv' binary */ ];
+  nativeCheckInputs = [ libiconv /* for 'iconv' binary */ ];
 
   patches = [ ./systemwide-man-db-conf.patch ];
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     "--with-systemdtmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "--with-pager=less"
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "ac_cv_func__set_invalid_parameter_handler=no"
     "ac_cv_func_posix_fadvise=no"
     "ac_cv_func_mempcpy=no"

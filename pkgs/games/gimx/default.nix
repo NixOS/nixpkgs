@@ -37,7 +37,15 @@ in stdenv.mkDerivation rec {
       --replace "5E048E021001" "6F0E13020001"
   '';
 
-  makeFlags = "build-core";
+  makeFlags = [ "build-core" ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=address"
+    "-Wno-error=deprecated-declarations"
+    "-Wno-error=use-after-free"
+  ];
+
   installPhase = ''
     runHook preInstall
 

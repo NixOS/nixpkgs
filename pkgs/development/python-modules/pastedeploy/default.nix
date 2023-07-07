@@ -2,24 +2,40 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pastedeploy";
-  version = "2.1.1";
+  version = "3.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Pylons";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-9/8aM/G/EdapCZJlx0ZPzNbmw2uYjA1zGbNWJAWoeCU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-8MNeOcYPEYAfghZN/K/1v/tAAdgz/fCvuVnBoru+81Q=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  postPatch = ''
+    substituteInPlace pytest.ini \
+      --replace " --cov" ""
+  '';
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "paste.deploy"
+  ];
 
   meta = with lib; {
     description = "Load, configure, and compose WSGI applications and servers";
     homepage = "https://github.com/Pylons/pastedeploy";
+    changelog = "https://github.com/Pylons/pastedeploy/blob/${version}/docs/news.rst";
     license = licenses.mit;
     maintainers = teams.openstack.members;
   };

@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "eget";
-  version = "1.2.0";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "zyedidia";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-b1KQjYs9chx724HSSHhaMTQQBzTXx+ssrxNButJE6L0=";
+    sha256 = "sha256-OOqfZ2uS3sYBH9xrlQN1iSNdNE9RGi6qiDXfPgf2aB0=";
   };
 
-  vendorSha256 = "sha256-axJqi41Fj+MJnaLzSOnSws9/c/0dSkUAtaWkVXNmFxI=";
+  vendorSha256 = "sha256-A3lZtV0pXh4KxINl413xGbw2Pz7OzvIQiFSRubH428c=";
 
   ldflags = [ "-s" "-w" "-X main.Version=v${version}" ];
 
@@ -31,7 +31,7 @@ buildGoModule rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script { attrPath = pname; };
+    updateScript = nix-update-script { };
     tests.version = testers.testVersion {
       package = eget;
       command = "eget -v";

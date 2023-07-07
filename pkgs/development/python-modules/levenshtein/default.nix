@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -12,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "levenshtein";
-  version = "0.20.3";
+  version = "0.21.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "maxbachmann";
     repo = "Levenshtein";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oPG7qAzsUPKfLxjriS4/1fFjRu+FkceP87h2vC0OTBE=";
+    hash = "sha256-j28OQkJymkh6tIGYLoZLad7OUUImjZqXdqM2zU3haac=";
   };
 
   nativeBuildInputs = [
@@ -36,11 +37,15 @@ buildPythonPackage rec {
     rapidfuzz-cpp
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.cc.isClang && stdenv.isDarwin) [
+    "-fno-lto"  # work around https://github.com/NixOS/nixpkgs/issues/19098
+  ]);
+
   propagatedBuildInputs = [
     rapidfuzz
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchPypi
 }:
 
 let
@@ -31,7 +32,7 @@ python.pkgs.buildPythonApplication rec {
   pname = "archivebox";
   version = "0.6.2";
 
-  src = python.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-zHty7lTra6yab9d0q3EqsPG3F+lrnZL6PjQAbL1A2NY=";
   };

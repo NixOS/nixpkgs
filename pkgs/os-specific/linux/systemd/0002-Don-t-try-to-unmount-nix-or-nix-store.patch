@@ -12,10 +12,10 @@ https://github.com/NixOS/nixos/issues/126
  2 files changed, 4 insertions(+)
 
 diff --git a/src/shared/fstab-util.c b/src/shared/fstab-util.c
-index f683f05981..5a04c2c2a6 100644
+index 164e71a150..68e0766594 100644
 --- a/src/shared/fstab-util.c
 +++ b/src/shared/fstab-util.c
-@@ -40,6 +40,8 @@ bool fstab_is_extrinsic(const char *mount, const char *opts) {
+@@ -41,6 +41,8 @@ bool fstab_is_extrinsic(const char *mount, const char *opts) {
          /* Don't bother with the OS data itself */
          if (PATH_IN_SET(mount,
                          "/",
@@ -25,10 +25,10 @@ index f683f05981..5a04c2c2a6 100644
                          "/etc"))
                  return true;
 diff --git a/src/shutdown/umount.c b/src/shutdown/umount.c
-index 820aa8e286..653e43053d 100644
+index 61bd9d2601..a6243da417 100644
 --- a/src/shutdown/umount.c
 +++ b/src/shutdown/umount.c
-@@ -518,6 +518,8 @@ static int delete_md(MountPoint *m) {
+@@ -531,6 +531,8 @@ static int delete_md(MountPoint *m) {
  
  static bool nonunmountable_path(const char *path) {
          return path_equal(path, "/")

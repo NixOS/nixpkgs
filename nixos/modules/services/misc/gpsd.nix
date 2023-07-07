@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -8,11 +8,14 @@ let
   gid = config.ids.gids.gpsd;
   cfg = config.services.gpsd;
 
-in
-
-{
+in {
 
   ###### interface
+
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "gpsd" "device" ]
+      "Use `services.gpsd.devices` instead.")
+  ];
 
   options = {
 
@@ -22,17 +25,21 @@ in
         type = types.bool;
         default = false;
         description = lib.mdDoc ''
-          Whether to enable `gpsd', a GPS service daemon.
+          Whether to enable `gpsd`, a GPS service daemon.
         '';
       };
 
-      device = mkOption {
-        type = types.str;
-        default = "/dev/ttyUSB0";
+      devices = mkOption {
+        type = types.listOf types.str;
+        default = [ "/dev/ttyUSB0" ];
         description = lib.mdDoc ''
-          A device may be a local serial device for GPS input, or a URL of the form:
-               `[{dgpsip|ntrip}://][user:passwd@]host[:port][/stream]`
-          in which case it specifies an input source for DGPS or ntrip data.
+          List of devices that `gpsd` should subscribe to.
+
+          A device may be a local serial device for GPS input, or a
+          URL of the form:
+          `[{dgpsip|ntrip}://][user:passwd@]host[:port][/stream]` in
+          which case it specifies an input source for DGPS or ntrip
+          data.
         '';
       };
 
@@ -77,21 +84,28 @@ in
         '';
       };
 
+      listenany = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Listen on all addresses rather than just loopback.
+        '';
+      };
+
     };
 
   };
-
 
   ###### implementation
 
   config = mkIf cfg.enable {
 
-    users.users.gpsd =
-      { inherit uid;
-        group = "gpsd";
-        description = "gpsd daemon user";
-        home = "/var/empty";
-      };
+    users.users.gpsd = {
+      inherit uid;
+      group = "gpsd";
+      description = "gpsd daemon user";
+      home = "/var/empty";
+    };
 
     users.groups.gpsd = { inherit gid; };
 
@@ -101,12 +115,15 @@ in
       after = [ "network.target" ];
       serviceConfig = {
         Type = "forking";
-        ExecStart = ''
+        ExecStart = let
+          devices = utils.escapeSystemdExecArgs cfg.devices;
+        in ''
           ${pkgs.gpsd}/sbin/gpsd -D "${toString cfg.debugLevel}"  \
             -S "${toString cfg.port}"                             \
             ${optionalString cfg.readonly "-b"}                   \
             ${optionalString cfg.nowait "-n"}                     \
-            "${cfg.device}"
+            ${optionalString cfg.listenany "-G"}                  \
+            ${devices}
         '';
       };
     };

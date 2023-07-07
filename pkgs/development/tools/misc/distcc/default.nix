@@ -17,8 +17,8 @@ let
       sha256 = "0zjba1090awxkmgifr9jnjkxf41zhzc4f6mrnbayn3v6s77ca9x4";
     };
 
-  nativeBuildInputs = [ pkg-config autoconf automake ];
-    buildInputs = [popt avahi pkg-config python3 gtk3 which procps libiberty_static];
+    nativeBuildInputs = [ pkg-config autoconf automake ];
+    buildInputs = [popt avahi python3 gtk3 which procps libiberty_static];
     preConfigure =
     ''
       export CPATH=$(ls -d ${gcc.cc}/lib/gcc/*/${gcc.cc.version}/plugin/include)
@@ -27,10 +27,10 @@ let
                             CXXFLAGS="-O2 -fno-strict-aliasing"
           --mandir=$out/share/man
                             ${if sysconfDir == "" then "" else "--sysconfdir=${sysconfDir}"}
-                            ${if static then "LDFLAGS=-static" else ""}
-                            --with${if static == true || popt == null then "" else "out"}-included-popt
-                            --with${if avahi != null then "" else "out"}-avahi
-                            --with${if gtk3 != null then "" else "out"}-gtk
+                            ${lib.optionalString static "LDFLAGS=-static"}
+                            ${lib.withFeature (static == true || popt == null) "included-popt"}
+                            ${lib.withFeature (avahi != null) "avahi"}
+                            ${lib.withFeature (gtk3 != null) "gtk"}
                             --without-gnome
                             --enable-rfc2553
                             --disable-Werror   # a must on gcc 4.6

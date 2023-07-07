@@ -14,7 +14,7 @@ let
     genericName = "frogatto";
     categories = [ "Game" "ArcadeGame" ];
   };
-  version = "unstable-2020-12-04";
+  inherit (data) version;
 in buildEnv {
   name = "frogatto-${version}";
 

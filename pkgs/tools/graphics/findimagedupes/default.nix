@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "findimagedupes";
-  version = "2.19.1";
+  version = "2.20.1";
 
   # fetching this from GitHub does not contain the correct version number
   src = fetchurl {
     url = "http://www.jhnc.org/findimagedupes/findimagedupes-${version}.tar.gz";
-    sha256 = "sha256-5NBPoXNZays5wzpQYar4uZZb0P/zB7fdecE+SjkJjcI=";
+    sha256 = "sha256-VYqSnOD/Ntr0RnktJ/R0t+Z8+NRExA2mAHT2unPt9/o=";
   };
 
   # Work around the "unpacker appears to have produced no directories"

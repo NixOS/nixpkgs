@@ -11,6 +11,7 @@
 , SDL2
 , libtheora
 , libvorbis
+, libopus
 , openal
 , openalSoft
 , physfs
@@ -28,6 +29,9 @@
 
 , testers
 , warzone2100
+, nixosTests
+
+, gitUpdater
 
 , withVideos ? false
 }:
@@ -42,17 +46,18 @@ in
 
 stdenv.mkDerivation rec {
   inherit pname;
-  version  = "4.2.7";
+  version  = "4.3.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/releases/${version}/${pname}_src.tar.xz";
-    sha256 = "sha256-f1J84A7aRAmbGn48MD7eJ2+DX21q2UWwYAoXXdq7ALA=";
+    sha256 = "sha256-AdYI9vljjhTXyFffQK0znBv8IHoF2q/nFXrYZSo0BcM=";
   };
 
   buildInputs = [
     SDL2
     libtheora
     libvorbis
+    libopus
     openal
     openalSoft
     physfs
@@ -109,6 +114,11 @@ stdenv.mkDerivation rec {
       # The command always exits with code 1
       command = "(warzone2100 --version || [ $? -eq 1 ])";
     };
+    nixosTest = nixosTests.warzone2100;
+  };
+
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/Warzone2100/warzone2100";
   };
 
   meta = with lib; {

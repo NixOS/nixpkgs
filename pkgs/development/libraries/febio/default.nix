@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, boost, eigen, libxml2, mpi, python3
 , mklSupport ? true, mkl
+, substituteAll
 }:
 
 stdenv.mkDerivation rec {
@@ -14,12 +15,17 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./fix-cmake.patch  # cannot find mkl libraries without this
+    (substituteAll {
+      src = ./fix-cmake.patch;  # cannot find mkl libraries without this
+      so = stdenv.hostPlatform.extensions.sharedLibrary;
+    })
   ];
 
   cmakeFlags = lib.optional mklSupport "-DUSE_MKL=On"
     ++ lib.optional mklSupport "-DMKLROOT=${mkl}"
   ;
+
+  env.CXXFLAGS = lib.optionalString stdenv.isLinux "-include cstring";
 
   installPhase = ''
     runHook preInstall

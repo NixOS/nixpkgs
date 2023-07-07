@@ -1,23 +1,43 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
+, poetry-core
 , protobuf
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "biliass";
-  version = "1.3.4";
-  disabled = pythonOlder "3.6";
+  version = "1.3.7";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-kktK+6rLwYhkG7LiTBlgBbiIN8apweg4l8pJSTjKQU4=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "yutto-dev";
+    repo = "biliass";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Opb4rlGe+LDJZs3F7e/NZYfuMtHEWUZeMm8VZQfEzKI=";
   };
 
-  propagatedBuildInputs = [ protobuf ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  pythonImportsCheck = [ "biliass" ];
+  propagatedBuildInputs = [
+    protobuf
+  ];
+
+  doCheck = false; # test artifacts missing
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "biliass"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/yutto-dev/biliass";

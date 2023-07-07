@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gtkwave";
-  version = "3.3.111";
+  version = "3.3.115";
 
   src = fetchurl {
     url = "mirror://sourceforge/gtkwave/${pname}-gtk3-${version}.tar.gz";
-    sha256 = "0cv222qhgldfniz6zys52zhrynfsp5v0h8ia857lng7v33vw5qdl";
+    sha256 = "sha256-rbenwCsYygg1oGS2cvbNxR+HXEVLAYmnQ/LOi5HmSqU=";
   };
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook ];
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "VCD/Waveform viewer for Unix and Win32";
-    homepage = "http://gtkwave.sourceforge.net";
+    homepage = "https://gtkwave.sourceforge.net";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ thoughtpolice jiegec ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

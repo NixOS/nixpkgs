@@ -1,11 +1,11 @@
 { lib, mkCoqDerivation, coq, version ? null }:
 
-with lib; mkCoqDerivation {
+mkCoqDerivation {
   pname = "paco";
   owner = "snu-sf";
   inherit version;
-  defaultVersion = with versions; switch coq.coq-version [
-    { case = range "8.12" "8.16"; out = "4.1.2"; }
+  defaultVersion = with lib.versions; lib.switch coq.coq-version [
+    { case = range "8.12" "8.17"; out = "4.1.2"; }
     { case = range "8.9" "8.13"; out = "4.1.1"; }
     { case = range "8.6" "8.13"; out = "4.0.2"; }
     { case = isEq "8.5";         out = "1.2.8"; }
@@ -25,8 +25,8 @@ with lib; mkCoqDerivation {
   '';
 
   meta = {
-    homepage = "http://plv.mpi-sws.org/paco/";
+    homepage = "https://plv.mpi-sws.org/paco/";
     description = "A Coq library implementing parameterized coinduction";
-    maintainers = with maintainers; [ jwiegley ptival ];
+    maintainers = with lib.maintainers; [ jwiegley ptival ];
   };
 }

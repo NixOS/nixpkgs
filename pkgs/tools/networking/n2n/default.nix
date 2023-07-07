@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libcap }:
 
 stdenv.mkDerivation rec {
   pname = "n2n";
@@ -12,6 +12,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
+
+  buildInputs = [
+    libcap
+  ];
 
   postPatch = ''
     patchShebangs autogen.sh
@@ -27,6 +31,6 @@ stdenv.mkDerivation rec {
     description = "Peer-to-peer VPN";
     homepage = "https://www.ntop.org/products/n2n/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ malvo ];
+    maintainers = with maintainers; [ malte-v ];
   };
 }

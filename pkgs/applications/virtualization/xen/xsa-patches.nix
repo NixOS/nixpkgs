@@ -485,4 +485,9 @@ in {
       sha256 = "0lc94cx271z09r0mhxaypyd9d4740051p28idf5calx5228dqjgm";
     })
   ];
+
+  XSA_386 = (xsaPatch {
+    name = "386";
+    sha256 = "sha256-pAuLgt3sDeL73NSDqZCWxRGZk1tWaYlDbh7cUcJ4s+w=";
+  });
 }

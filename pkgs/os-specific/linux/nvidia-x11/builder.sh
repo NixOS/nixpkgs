@@ -1,8 +1,9 @@
+if [ -e .attrs.sh ]; then source .attrs.sh; fi
 source $stdenv/setup
 
 unpackManually() {
     skip=$(sed 's/^skip=//; t; d' $src)
-    tail -n +$skip $src | xz -d | tar xvf -
+    tail -n +$skip $src | bsdtar xvf -
     sourceRoot=.
 }
 
@@ -125,6 +126,12 @@ installPhase() {
         fi
     done
 
+
+    # OptiX tries loading `$ORIGIN/nvoptix.bin` first
+    if [ -e nvoptix.bin ]; then
+        install -Dm444 -t $out/lib/ nvoptix.bin
+    fi
+
     if [ -n "$bin" ]; then
         # Install the X drivers.
         mkdir -p $bin/lib/xorg/modules
@@ -153,7 +160,7 @@ installPhase() {
 
     if [ -n "$firmware" ]; then
         # Install the GSP firmware
-        install -Dm644 firmware/gsp.bin $firmware/lib/firmware/nvidia/$version/gsp.bin
+        install -Dm644 -t $firmware/lib/firmware/nvidia/$version firmware/gsp*.bin
     fi
 
     # All libs except GUI-only are installed now, so fixup them.

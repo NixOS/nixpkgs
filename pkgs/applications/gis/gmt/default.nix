@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     "-DGMT_INSTALL_MODULE_LINKS:BOOL=FALSE"
     "-DLICENSE_RESTRICTED=LGPL" # "GPL" and "no" also valid
   ] ++ (with stdenv;
-    lib.optional (!isDarwin) [
+    lib.optionals (!isDarwin) [
       "-DFFTW3_ROOT=${fftwSinglePrec.dev}"
       "-DLAPACK_LIBRARY=${lapack}/lib/liblapack.so"
       "-DBLAS_LIBRARY=${blas}/lib/libblas.so"

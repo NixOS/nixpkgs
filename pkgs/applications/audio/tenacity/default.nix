@@ -1,8 +1,10 @@
 { stdenv
 , lib
-, fetchFromSourcehut
+, fetchFromGitea
+, fetchpatch
 , cmake
-, wxGTK
+, wxGTK32
+, gtk3
 , pkg-config
 , python3
 , gettext
@@ -28,7 +30,7 @@
 , expat
 , libid3tag
 , libopus
-, ffmpeg
+, ffmpeg_5
 , soundtouch
 , pcre
 , portaudio
@@ -47,24 +49,27 @@
 
 stdenv.mkDerivation rec {
   pname = "tenacity";
-  version = "unstable-2021-10-18";
+  version = "1.3-beta2";
 
-  src = fetchFromSourcehut {
-    owner = "~tenacity";
-    repo = "tenacity";
-    rev = "697c0e764ccb19c1e2f3073ae08ecdac7aa710e4";
-    sha256 = "1fc9xz8lyl8si08wkzncpxq92vizan60c3640qr4kbnxg7vi2iy4";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "tenacityteam";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-9gWoqFa87neIvRnezWI3RyCAOU4wKEHPn/Hgj3/fol0=";
   };
 
   postPatch = ''
-    touch src/RevisionIdent.h
+    mkdir -p build/src/private
+    touch build/src/private/RevisionIdent.h
 
-    substituteInPlace src/FileNames.cpp \
-      --replace /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
+    substituteInPlace libraries/lib-files/FileNames.cpp \
+         --replace /usr/include/linux/magic.h \
+                   ${linuxHeaders}/include/linux/magic.h
   '';
 
   postFixup = ''
-    rm $out/tenacity
+    rm $out/audacity
     wrapProgram "$out/bin/tenacity" \
       --suffix AUDACITY_PATH : "$out/share/tenacity" \
       --suffix AUDACITY_MODULES_PATH : "$out/lib/tenacity/modules" \
@@ -72,7 +77,7 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH"
   '';
 
-  NIX_CFLAGS_COMPILE = "-D GIT_DESCRIBE=\"\"";
+  env.NIX_CFLAGS_COMPILE = "-D GIT_DESCRIBE=\"\"";
 
   # tenacity only looks for ffmpeg at runtime, so we need to link it in manually
   NIX_LDFLAGS = toString [
@@ -80,7 +85,6 @@ stdenv.mkDerivation rec {
     "-lavdevice"
     "-lavfilter"
     "-lavformat"
-    "-lavresample"
     "-lavutil"
     "-lpostproc"
     "-lswresample"
@@ -100,7 +104,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     alsa-lib
     expat
-    ffmpeg
+    ffmpeg_5
     file
     flac
     glib
@@ -123,8 +127,8 @@ stdenv.mkDerivation rec {
     sratom
     suil
     twolame
-    wxGTK
-    wxGTK.gtk
+    wxGTK32
+    gtk3
   ] ++ lib.optionals stdenv.isLinux [
     at-spi2-core
     dbus

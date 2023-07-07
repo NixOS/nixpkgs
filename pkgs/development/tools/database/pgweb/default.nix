@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "pgweb";
-  version = "0.11.12";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "sosedoff";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5BFTvfTXsz5ZerSoAudavT/C+SA/xkmVBtAOhAixcAE=";
+    sha256 = "sha256-NPuL7ffDLpnu0khJBIz+tItYyeHYPeOuTHXr4DjBgM0=";
   };
 
   postPatch = ''
@@ -16,7 +16,7 @@ buildGoModule rec {
     rm -f pkg/client/{client,dump}_test.go
   '';
 
-  vendorSha256 = "sha256-pXV1BodOEZs5sv7UE/C58SAyIUZW5Cp2gJD7g8EuWog=";
+  vendorSha256 = "sha256-W+Vybea4oppD4BHRqcyouQL79cF+y+sONY9MRggti20=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -28,6 +28,6 @@ buildGoModule rec {
     '';
     homepage = "https://sosedoff.github.io/pgweb/";
     license = licenses.mit;
-    maintainers = with maintainers; [ zupo ];
+    maintainers = with maintainers; [ zupo luisnquin ];
   };
 }

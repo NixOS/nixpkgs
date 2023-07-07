@@ -11,17 +11,18 @@
 , pcre2
 , gzip
 , perl
+, jq
 }:
 
 stdenv.mkDerivation rec {
   pname = "mympd";
-  version = "9.5.4";
+  version = "10.3.3";
 
   src = fetchFromGitHub {
     owner = "jcorporation";
     repo = "myMPD";
     rev = "v${version}";
-    sha256 = "sha256-0X/rEVfJ6zzX75R72xVntOfuCt8srp9PkiYOq3XbWPs=";
+    sha256 = "sha256-LqIaRFAXB3XMidC1Dypax/ucayot/IJPAvPwzHQeH9k=";
   };
 
   nativeBuildInputs = [
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
     cmake
     gzip
     perl
+    jq
   ];
   preConfigure = ''
     env MYMPD_BUILDDIR=$PWD/build ./build.sh createassets

@@ -1,40 +1,53 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, cchardet
+
+# propagates
 , chardet
-, cleo
-, clikit
-, pandas
 , regex
+, packaging
+
+# optionals
+, faust-cchardet
+, pandas
 , tabview
+# TODO: , wilderness
+
+# tests
 , python
-, unittestCheckHook
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "clevercsv";
-  version = "0.7.1";
+  version = "0.8.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "alan-turing-institute";
     repo = "CleverCSV";
-    rev = "v${version}";
-    sha256 = "sha256-ynS3G2ZcEqVlC2d6n5ZQ1Em5lh/dWESj9jEO8C4WzZQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/JveB6fpIJvR5byGcmO9XBuCbUw7yNTpSoDs68Wffmo=";
   };
 
   propagatedBuildInputs = [
-    cchardet
     chardet
-    cleo
-    clikit
-    pandas
     regex
-    tabview
+    packaging
   ];
 
-  checkInputs = [ unittestCheckHook ];
+  passthru.optional-dependencies = {
+    full = [
+      faust-cchardet
+      pandas
+      tabview
+      # TODO: wilderness
+    ];
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ] ++ passthru.optional-dependencies.full;
 
   pythonImportsCheck = [
     "clevercsv"
@@ -48,7 +61,14 @@ buildPythonPackage rec {
   '';
 
   # their ci only runs unit tests, there are also integration and fuzzing tests
-  unittestFlagsArray = [ "-v" "-f" "-s" "./tests/test_unit" ];
+  pytestFlagsArray = [
+    "./tests/test_unit"
+  ];
+
+  disabledTestPaths = [
+    # ModuleNotFoundError: No module named 'wilderness'
+    "tests/test_unit/test_console.py"
+  ];
 
   meta = with lib; {
     description = "CleverCSV is a Python package for handling messy CSV files";
@@ -59,7 +79,7 @@ buildPythonPackage rec {
       with CSV files.
     '';
     homepage = "https://github.com/alan-turing-institute/CleverCSV";
-    changelog = "https://github.com/alan-turing-institute/CleverCSV/blob/master/CHANGELOG.md";
+    changelog = "https://github.com/alan-turing-institute/CleverCSV/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

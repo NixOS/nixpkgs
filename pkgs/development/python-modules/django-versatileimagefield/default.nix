@@ -8,15 +8,15 @@
 
 buildPythonPackage rec {
   pname = "django-versatileimagefield";
-  version = "2.2";
+  version = "3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6569d5c3e13c69ab8912ba5100084aa5abcdcffb8d1f5abc085b226e7bbd65b3";
+    hash = "sha256-FlHbLtNthDz7F4jyYBRyopPZuoZyk2m29uVZERI1esc=";
   };
   propagatedBuildInputs = [ pillow python-magic ];
 
-  checkInputs = [ django ];
+  nativeCheckInputs = [ django ];
 
   # tests not included with pypi release
   doCheck = false;

@@ -1,19 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index eac270a..27610ec 100644
+index 62b857b..d21c7f4 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -53,10 +53,6 @@ set(SOURCES
- 
- if(COMGR_BUILD_SHARED_LIBS)
-   add_library(amd_comgr SHARED ${SOURCES})
--  # Windows doesn't have a strip utility, so CMAKE_STRIP won't be set.
--  if((CMAKE_BUILD_TYPE STREQUAL "Release") AND NOT ("${CMAKE_STRIP}" STREQUAL ""))
--    add_custom_command(TARGET amd_comgr POST_BUILD COMMAND ${CMAKE_STRIP} $<TARGET_FILE:amd_comgr>)
--  endif()
- else()
-   add_library(amd_comgr STATIC ${SOURCES})
- endif()
-@@ -141,8 +137,8 @@ if (UNIX)
+@@ -147,8 +147,8 @@ if (UNIX)
    list(APPEND AMD_COMGR_PUBLIC_LINKER_OPTIONS -pthread)
    if (NOT APPLE AND COMGR_BUILD_SHARED_LIBS)
      configure_file(
@@ -24,17 +13,7 @@ index eac270a..27610ec 100644
      list(APPEND AMD_COMGR_PRIVATE_LINKER_OPTIONS
        "-Wl,--version-script=${CMAKE_CURRENT_BINARY_DIR}/src/exportmap")
      # When building a shared library with -fsanitize=address we can't be
-@@ -154,6 +150,9 @@ if (UNIX)
-         -Wl,--no-undefined)
-     endif()
-   endif()
-+
-+  # Strip in release build
-+  set_target_properties(amd_comgr PROPERTIES LINK_FLAGS_RELEASE -s)
- elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-   list(APPEND AMD_COMGR_PRIVATE_COMPILE_OPTIONS
-     "/wd4244" #[[Suppress 'argument' : conversion from 'type1' to 'type2', possible loss of data]]
-@@ -169,10 +168,6 @@ endif()
+@@ -175,10 +175,6 @@ endif()
  # the shared header.
  list(APPEND AMD_COMGR_PRIVATE_COMPILE_DEFINITIONS AMD_COMGR_EXPORT)
  
@@ -45,100 +24,209 @@ index eac270a..27610ec 100644
  include(bc2h)
  include(opencl_pch)
  include(DeviceLibs)
-@@ -203,8 +198,11 @@ target_compile_definitions(amd_comgr
-   PRIVATE "${AMD_COMGR_PRIVATE_COMPILE_DEFINITIONS}")
- target_include_directories(amd_comgr
-   PUBLIC
--    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
--    $<INSTALL_INTERFACE:include>)
-+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>)
-+
+@@ -212,10 +208,14 @@ target_include_directories(amd_comgr
+     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+     $<INSTALL_INTERFACE:include>)
+ 
 +configure_file(
 +  include/amd_comgr.h.in
 +  include/amd_comgr.h @ONLY)
- 
++
  set(AMD_COMGR_CONFIG_NAME amd_comgr-config.cmake)
  set(AMD_COMGR_TARGETS_NAME amd_comgr-targets.cmake)
-@@ -220,29 +218,30 @@ if (NOT COMGR_BUILD_SHARED_LIBS)
+ set(AMD_COMGR_VERSION_NAME amd_comgr-config-version.cmake)
+-set(AMD_COMGR_PACKAGE_PREFIX ${CMAKE_INSTALL_LIBDIR}/cmake/amd_comgr)
++set(AMD_COMGR_PACKAGE_PREFIX cmake/amd_comgr)
+ 
+ # Generate the build-tree package.
+ set(AMD_COMGR_PREFIX_CODE)
+@@ -226,13 +226,13 @@ if (NOT COMGR_BUILD_SHARED_LIBS)
  endif()
  
  set(AMD_COMGR_TARGETS_PATH
 -  "${CMAKE_CURRENT_BINARY_DIR}/${AMD_COMGR_PACKAGE_PREFIX}/${AMD_COMGR_TARGETS_NAME}")
--set(AMD_COMGR_VERSION_PATH
++  "${CMAKE_CURRENT_BINARY_DIR}/lib/${AMD_COMGR_PACKAGE_PREFIX}/${AMD_COMGR_TARGETS_NAME}")
+ set(AMD_COMGR_VERSION_PATH
 -  "${CMAKE_CURRENT_BINARY_DIR}/${AMD_COMGR_PACKAGE_PREFIX}/${AMD_COMGR_VERSION_NAME}")
--export(TARGETS amd_comgr
++  "${CMAKE_CURRENT_BINARY_DIR}/lib/${AMD_COMGR_PACKAGE_PREFIX}/${AMD_COMGR_VERSION_NAME}")
+ export(TARGETS amd_comgr
 -  FILE "${AMD_COMGR_PACKAGE_PREFIX}/${AMD_COMGR_TARGETS_NAME}")
-+  "${AMD_COMGR_PACKAGE_PREFIX}/${AMD_COMGR_TARGETS_NAME}")
++  FILE "lib/${AMD_COMGR_PACKAGE_PREFIX}/${AMD_COMGR_TARGETS_NAME}")
  configure_file("cmake/${AMD_COMGR_CONFIG_NAME}.in"
 -  "${AMD_COMGR_PACKAGE_PREFIX}/${AMD_COMGR_CONFIG_NAME}"
-+  ${AMD_COMGR_CONFIG_NAME}
++  "lib/${AMD_COMGR_PACKAGE_PREFIX}/${AMD_COMGR_CONFIG_NAME}"
    @ONLY)
--write_basic_package_version_file("${AMD_COMGR_VERSION_PATH}"
-+write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/${AMD_COMGR_VERSION_NAME}"
+ write_basic_package_version_file("${AMD_COMGR_VERSION_PATH}"
    VERSION "${amd_comgr_VERSION}"
-   COMPATIBILITY SameMajorVersion)
- 
- install(TARGETS amd_comgr
-   EXPORT amd_comgr_export
--  COMPONENT amd-comgr
--  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
--  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
--  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
-+  COMPONENT amd-comgr)
-+install(EXPORT amd_comgr_export
-+  DESTINATION "${AMD_COMGR_PACKAGE_PREFIX}"
-+  FILE "${AMD_COMGR_TARGETS_NAME}")
- 
- install(FILES
-   "${CMAKE_CURRENT_BINARY_DIR}/include/amd_comgr.h"
-   COMPONENT amd-comgr
-   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-+install(FILES
-+  "${CMAKE_CURRENT_BINARY_DIR}/${AMD_COMGR_CONFIG_NAME}"
-+  "${CMAKE_CURRENT_BINARY_DIR}/${AMD_COMGR_VERSION_NAME}"
-+  COMPONENT amd-comgr
-+  DESTINATION ${AMD_COMGR_PACKAGE_PREFIX})
- 
- install(FILES
-   "README.md"
-@@ -251,37 +250,6 @@ install(FILES
-   COMPONENT amd-comgr
-   DESTINATION ${CMAKE_INSTALL_DATADIR}/amd_comgr)
- 
--# Generate the install-tree package.
--set(AMD_COMGR_PREFIX_CODE "
--# Derive absolute install prefix from config file path.
--get_filename_component(AMD_COMGR_PREFIX \"\${CMAKE_CURRENT_LIST_FILE}\" PATH)")
+@@ -266,7 +266,7 @@ install(FILES
+ set(AMD_COMGR_PREFIX_CODE "
+ # Derive absolute install prefix from config file path.
+ get_filename_component(AMD_COMGR_PREFIX \"\${CMAKE_CURRENT_LIST_FILE}\" PATH)")
 -string(REGEX REPLACE "/" ";" count "${AMD_COMGR_PACKAGE_PREFIX}")
--foreach(p ${count})
--  set(AMD_COMGR_PREFIX_CODE "${AMD_COMGR_PREFIX_CODE}
--get_filename_component(AMD_COMGR_PREFIX \"\${AMD_COMGR_PREFIX}\" PATH)")
--endforeach()
--
--if (NOT COMGR_BUILD_SHARED_LIBS)
--  string(APPEND AMD_COMGR_PREFIX_CODE "\ninclude(CMakeFindDependencyMacro)\n")
--  string(APPEND AMD_COMGR_PREFIX_CODE "find_dependency(Clang REQUIRED)\n")
--  string(APPEND AMD_COMGR_PREFIX_CODE "find_dependency(LLD REQUIRED)\n")
--endif()
--
--set(AMD_COMGR_TARGETS_PATH "\${AMD_COMGR_PREFIX}/${AMD_COMGR_PACKAGE_PREFIX}/${AMD_COMGR_TARGETS_NAME}")
--configure_file("cmake/${AMD_COMGR_CONFIG_NAME}.in"
--  "${CMAKE_CURRENT_BINARY_DIR}/${AMD_COMGR_CONFIG_NAME}.install"
--  @ONLY)
--install(FILES
--  "${CMAKE_CURRENT_BINARY_DIR}/${AMD_COMGR_CONFIG_NAME}.install"
--  DESTINATION "${AMD_COMGR_PACKAGE_PREFIX}"
--  RENAME "${AMD_COMGR_CONFIG_NAME}")
--install(EXPORT amd_comgr_export
--  DESTINATION "${AMD_COMGR_PACKAGE_PREFIX}"
--  FILE "${AMD_COMGR_TARGETS_NAME}")
--install(FILES
--  "${AMD_COMGR_VERSION_PATH}"
--  DESTINATION "${AMD_COMGR_PACKAGE_PREFIX}")
--
- set(CLANG_LIBS
-   clangFrontendTool)
++string(REGEX REPLACE "/" ";" count "${CMAKE_INSTALL_LIBDIR}/${AMD_COMGR_PACKAGE_PREFIX}")
+ foreach(p ${count})
+   set(AMD_COMGR_PREFIX_CODE "${AMD_COMGR_PREFIX_CODE}
+ get_filename_component(AMD_COMGR_PREFIX \"\${AMD_COMGR_PREFIX}\" PATH)")
+@@ -278,20 +278,20 @@ if (NOT COMGR_BUILD_SHARED_LIBS)
+   string(APPEND AMD_COMGR_PREFIX_CODE "find_dependency(LLD REQUIRED)\n")
+ endif()
  
+-set(AMD_COMGR_TARGETS_PATH "\${AMD_COMGR_PREFIX}/${AMD_COMGR_PACKAGE_PREFIX}/${AMD_COMGR_TARGETS_NAME}")
++set(AMD_COMGR_TARGETS_PATH "\${AMD_COMGR_PREFIX}/${CMAKE_INSTALL_LIBDIR}/${AMD_COMGR_PACKAGE_PREFIX}/${AMD_COMGR_TARGETS_NAME}")
+ configure_file("cmake/${AMD_COMGR_CONFIG_NAME}.in"
+-  "${CMAKE_CURRENT_BINARY_DIR}/${AMD_COMGR_CONFIG_NAME}.install"
++  "${AMD_COMGR_CONFIG_NAME}.install"
+   @ONLY)
+ install(FILES
+   "${CMAKE_CURRENT_BINARY_DIR}/${AMD_COMGR_CONFIG_NAME}.install"
+-  DESTINATION "${AMD_COMGR_PACKAGE_PREFIX}"
++  DESTINATION "${CMAKE_INSTALL_LIBDIR}/${AMD_COMGR_PACKAGE_PREFIX}"
+   RENAME "${AMD_COMGR_CONFIG_NAME}")
+ install(EXPORT amd_comgr_export
+-  DESTINATION "${AMD_COMGR_PACKAGE_PREFIX}"
++  DESTINATION "${CMAKE_INSTALL_LIBDIR}/${AMD_COMGR_PACKAGE_PREFIX}"
+   FILE "${AMD_COMGR_TARGETS_NAME}")
+ install(FILES
+   "${AMD_COMGR_VERSION_PATH}"
+-  DESTINATION "${AMD_COMGR_PACKAGE_PREFIX}")
++  DESTINATION "${CMAKE_INSTALL_LIBDIR}/${AMD_COMGR_PACKAGE_PREFIX}")
+ 
+ if(TARGET clangFrontendTool)
+   set(CLANG_LIBS
+diff --git a/cmake/DeviceLibs.cmake b/cmake/DeviceLibs.cmake
+index 27e9546..dfe1b57 100644
+--- a/cmake/DeviceLibs.cmake
++++ b/cmake/DeviceLibs.cmake
+@@ -1,8 +1,7 @@
+ set(INC_DIR ${CMAKE_CURRENT_BINARY_DIR}/include)
+ 
+ set(GEN_LIBRARY_INC_FILE ${INC_DIR}/libraries.inc)
+-
+-file(WRITE ${GEN_LIBRARY_INC_FILE} "// Automatically generated file; DO NOT EDIT.\n")
++set(GEN_LIBRARY_DEFS_INC_FILE ${INC_DIR}/libraries_defs.inc)
+ 
+ # cmake does not provide a way to query targets produced by a project,
+ # so we have to make one up. Ordinarily, individual library target
+@@ -23,6 +22,7 @@ if(NOT AMD_DEVICE_LIBS_TARGETS)
+   message(FATAL_ERROR "Could not find list of device libraries")
+ endif()
+ 
++set(TARGETS_INCLUDES "")
+ foreach(AMDGCN_LIB_TARGET ${AMD_DEVICE_LIBS_TARGETS})
+   set(header ${AMDGCN_LIB_TARGET}.inc)
+ 
+@@ -54,75 +54,52 @@ foreach(AMDGCN_LIB_TARGET ${AMD_DEVICE_LIBS_TARGETS})
+   add_custom_target(${AMDGCN_LIB_TARGET}_header DEPENDS ${INC_DIR}/${header})
+   add_dependencies(amd_comgr ${AMDGCN_LIB_TARGET}_header)
+ 
+-  file(APPEND ${GEN_LIBRARY_INC_FILE} "#include \"${header}\"\n")
++  list(APPEND TARGETS_INCLUDES "#include \"${header}\"")
++endforeach()
++
++list(JOIN TARGETS_INCLUDES "\n" TARGETS_INCLUDES)
++file(GENERATE OUTPUT ${GEN_LIBRARY_INC_FILE} CONTENT "${TARGETS_INCLUDES}")
++
++foreach(OPENCL_VERSION 1.2 2.0)
++  string(REPLACE . _ OPENCL_UNDERSCORE_VERSION ${OPENCL_VERSION})
++  add_custom_command(OUTPUT ${INC_DIR}/opencl${OPENCL_VERSION}-c.inc
++    COMMAND bc2h ${CMAKE_CURRENT_BINARY_DIR}/opencl${OPENCL_VERSION}-c.pch
++                 ${INC_DIR}/opencl${OPENCL_VERSION}-c.inc
++                 opencl${OPENCL_UNDERSCORE_VERSION}_c
++    DEPENDS bc2h ${CMAKE_CURRENT_BINARY_DIR}/opencl${OPENCL_VERSION}-c.pch
++    COMMENT "Generating opencl${OPENCL_VERSION}-c.inc"
++  )
++  set_property(DIRECTORY APPEND PROPERTY
++    ADDITIONAL_MAKE_CLEAN_FILES ${INC_DIR}/opencl${OPENCL_VERSION}-c.inc)
++  add_custom_target(opencl${OPENCL_VERSION}-c.inc_target DEPENDS ${INC_DIR}/opencl${OPENCL_VERSION}-c.inc)
++  add_dependencies(amd_comgr opencl${OPENCL_VERSION}-c.inc_target)
+ endforeach()
+ 
+-add_custom_command(OUTPUT ${INC_DIR}/opencl1.2-c.inc
+-  COMMAND bc2h ${CMAKE_CURRENT_BINARY_DIR}/opencl1.2-c.pch
+-               ${INC_DIR}/opencl1.2-c.inc
+-               opencl1_2_c
+-  DEPENDS bc2h ${CMAKE_CURRENT_BINARY_DIR}/opencl1.2-c.pch
+-  COMMENT "Generating opencl1.2-c.inc"
+-)
+-set_property(DIRECTORY APPEND PROPERTY
+-  ADDITIONAL_MAKE_CLEAN_FILES ${INC_DIR}/opencl1.2-c.inc)
+-add_custom_target(opencl1.2-c.inc_target DEPENDS ${INC_DIR}/opencl1.2-c.inc)
+-add_dependencies(amd_comgr opencl1.2-c.inc_target)
+-file(APPEND ${GEN_LIBRARY_INC_FILE} "#include \"opencl1.2-c.inc\"\n")
+-
+-add_custom_command(OUTPUT ${INC_DIR}/opencl2.0-c.inc
+-  COMMAND bc2h ${CMAKE_CURRENT_BINARY_DIR}/opencl2.0-c.pch
+-               ${INC_DIR}/opencl2.0-c.inc
+-               opencl2_0_c
+-  DEPENDS bc2h ${CMAKE_CURRENT_BINARY_DIR}/opencl2.0-c.pch
+-  COMMENT "Generating opencl2.0-c.inc"
+-)
+-set_property(DIRECTORY APPEND PROPERTY
+-  ADDITIONAL_MAKE_CLEAN_FILES ${INC_DIR}/opencl2.0-c.inc)
+-add_custom_target(opencl2.0-c.inc_target DEPENDS ${INC_DIR}/opencl2.0-c.inc)
+-add_dependencies(amd_comgr opencl2.0-c.inc_target)
+-file(APPEND ${GEN_LIBRARY_INC_FILE} "#include \"opencl2.0-c.inc\"\n")
+-
+-# Generate function to select libraries for a given GFXIP number.
+-file(APPEND ${GEN_LIBRARY_INC_FILE} "#include \"llvm/ADT/StringRef.h\"\n")
+-file(APPEND ${GEN_LIBRARY_INC_FILE}
+-  "static std::tuple<const char*, const void*, size_t> get_oclc_isa_version(llvm::StringRef gfxip) {")
++set(TARGETS_DEFS "")
++list(APPEND TARGETS_DEFS "#ifndef AMD_DEVICE_LIBS_TARGET\n#define AMD_DEVICE_LIBS_TARGET(t)\n#endif")
++list(APPEND TARGETS_DEFS "#ifndef AMD_DEVICE_LIBS_GFXIP\n#define AMD_DEVICE_LIBS_GFXIP(t, g)\n#endif")
++list(APPEND TARGETS_DEFS "#ifndef AMD_DEVICE_LIBS_FUNCTION\n#define AMD_DEVICE_LIBS_FUNCTION(t, f)\n#endif")
++list(APPEND TARGETS_DEFS "")
+ foreach(AMDGCN_LIB_TARGET ${AMD_DEVICE_LIBS_TARGETS})
++  list(APPEND TARGETS_DEFS "AMD_DEVICE_LIBS_TARGET(${AMDGCN_LIB_TARGET})")
++  # Generate function to select libraries for a given GFXIP number.
+   if (${AMDGCN_LIB_TARGET} MATCHES "^oclc_isa_version_.+$")
+     string(REGEX REPLACE "^oclc_isa_version_(.+)$" "\\1" gfxip ${AMDGCN_LIB_TARGET})
+-    file(APPEND ${GEN_LIBRARY_INC_FILE}
+-      "if (gfxip == \"${gfxip}\") return std::make_tuple(\"${AMDGCN_LIB_TARGET}.bc\", ${AMDGCN_LIB_TARGET}_lib, ${AMDGCN_LIB_TARGET}_lib_size);")
++    list(APPEND TARGETS_DEFS "AMD_DEVICE_LIBS_GFXIP(${AMDGCN_LIB_TARGET}, \"${gfxip}\")")
+   endif()
+-endforeach()
+-file(APPEND ${GEN_LIBRARY_INC_FILE}
+-  "return std::make_tuple(nullptr, nullptr, 0); }")
+-
+-# Generate function to select libraries for given feature.
+-foreach(AMDGCN_LIB_TARGET ${AMD_DEVICE_LIBS_TARGETS})
++  # Generate function to select libraries for given feature.
+   if (${AMDGCN_LIB_TARGET} MATCHES "^oclc_.*_on$")
+     string(REGEX REPLACE "^oclc_(.*)_on" "\\1" function ${AMDGCN_LIB_TARGET})
+-    file(APPEND ${GEN_LIBRARY_INC_FILE}
+-      "static std::tuple<const char*, const void*, size_t> get_oclc_${function}(bool on) { \
+-       return std::make_tuple( \
+-         on ? \"oclc_${function}_on_lib.bc\" : \"oclc_${function}_off_lib.bc\", \
+-         on ? oclc_${function}_on_lib : oclc_${function}_off_lib, \
+-         on ? oclc_${function}_on_lib_size : oclc_${function}_off_lib_size \
+-       ); }")
++    list(APPEND TARGETS_DEFS "AMD_DEVICE_LIBS_FUNCTION(${AMDGCN_LIB_TARGET}, ${function})")
+   endif()
+ endforeach()
+ 
+-# Generate function yield all libraries.
+-file(APPEND ${GEN_LIBRARY_INC_FILE} "\n#include \"llvm/ADT/ArrayRef.h\"\n")
+-file(APPEND ${GEN_LIBRARY_INC_FILE}
+-  "llvm::ArrayRef<std::tuple<llvm::StringRef, llvm::StringRef>> COMGR::getDeviceLibraries() { \
+-   static std::tuple<llvm::StringRef, llvm::StringRef> DeviceLibs[] = {")
+-foreach(AMDGCN_LIB_TARGET ${AMD_DEVICE_LIBS_TARGETS})
+-  file(APPEND ${GEN_LIBRARY_INC_FILE}
+-    "{\"${AMDGCN_LIB_TARGET}.bc\", llvm::StringRef(reinterpret_cast<const char *>(${AMDGCN_LIB_TARGET}_lib), ${AMDGCN_LIB_TARGET}_lib_size)},")
+-endforeach()
+-file(APPEND ${GEN_LIBRARY_INC_FILE}
+-  "}; \
+-   return DeviceLibs; \
+-   }")
++list(APPEND TARGETS_DEFS "")
++list(APPEND TARGETS_DEFS "#undef AMD_DEVICE_LIBS_TARGET")
++list(APPEND TARGETS_DEFS "#undef AMD_DEVICE_LIBS_GFXIP")
++list(APPEND TARGETS_DEFS "#undef AMD_DEVICE_LIBS_FUNCTION")
++
++list(JOIN TARGETS_DEFS "\n" TARGETS_DEFS)
++file(GENERATE OUTPUT ${GEN_LIBRARY_DEFS_INC_FILE} CONTENT "${TARGETS_DEFS}")
+ 
+ include_directories(${INC_DIR})
 diff --git a/cmake/bc2h.cmake b/cmake/bc2h.cmake
 index 146fe2b..9134985 100644
 --- a/cmake/bc2h.cmake
@@ -222,3 +310,56 @@ index 146fe2b..9134985 100644
  
  add_executable(bc2h ${CMAKE_CURRENT_BINARY_DIR}/bc2h.c)
  if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+diff --git a/src/comgr-device-libs.cpp b/src/comgr-device-libs.cpp
+index 4d2b914..80786d1 100644
+--- a/src/comgr-device-libs.cpp
++++ b/src/comgr-device-libs.cpp
+@@ -35,7 +35,7 @@
+ 
+ #include "comgr-device-libs.h"
+ #include "comgr.h"
+-#include "libraries.inc"
++#include "comgr-libraries.h"
+ #include "llvm/ADT/StringSwitch.h"
+ #include <cstdint>
+ 
+diff --git a/src/comgr-libraries.h b/src/comgr-libraries.h
+new file mode 100644
+index 0000000..3caa0a0
+--- /dev/null
++++ b/src/comgr-libraries.h
+@@ -0,0 +1,34 @@
++#include "libraries.inc"
++#include "opencl1.2-c.inc"
++#include "opencl2.0-c.inc"
++#include "llvm/ADT/StringRef.h"
++#include "llvm/ADT/ArrayRef.h"
++
++static std::tuple<const char*, const void*, size_t> get_oclc_isa_version(llvm::StringRef gfxip) {
++#define AMD_DEVICE_LIBS_GFXIP(target, target_gfxip) \
++  if (gfxip == target_gfxip) return std::make_tuple(#target ".bc", target##_lib, target##_lib_size);
++#include "libraries_defs.inc"
++
++  return std::make_tuple(nullptr, nullptr, 0);
++}
++
++#define AMD_DEVICE_LIBS_FUNCTION(target, function) \
++  static std::tuple<const char*, const void*, size_t> get_oclc_##function(bool on) { \
++    return std::make_tuple( \
++      on ? "oclc_" #function "_on_lib.bc" : "oclc_" #function "_off_lib.bc", \
++      on ? oclc_##function##_on_lib : oclc_##function##_off_lib, \
++      on ? oclc_##function##_on_lib_size : oclc_##function##_off_lib_size \
++    ); \
++  }
++#include "libraries_defs.inc"
++
++llvm::ArrayRef<std::tuple<llvm::StringRef, llvm::StringRef>> COMGR::getDeviceLibraries() {
++  static std::tuple<llvm::StringRef, llvm::StringRef> DeviceLibs[] = {
++#define AMD_DEVICE_LIBS_TARGET(target) \
++    {#target ".bc", llvm::StringRef(reinterpret_cast<const char *>(target##_lib), target##_lib_size)},
++#include "libraries_defs.inc"
++  };
++  return DeviceLibs;
++}
++
++

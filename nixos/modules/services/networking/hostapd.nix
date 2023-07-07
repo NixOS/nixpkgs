@@ -20,6 +20,8 @@ let
     ssid=${cfg.ssid}
     hw_mode=${cfg.hwMode}
     channel=${toString cfg.channel}
+    ieee80211n=1
+    ieee80211ac=1
     ${optionalString (cfg.countryCode != null) "country_code=${cfg.countryCode}"}
     ${optionalString (cfg.countryCode != null) "ieee80211d=1"}
 
@@ -34,6 +36,7 @@ let
 
     ${optionalString cfg.wpa ''
       wpa=2
+      wpa_pairwise=CCMP
       wpa_passphrase=${cfg.wpaPassphrase}
     ''}
     ${optionalString cfg.noScan "noscan=1"}
@@ -66,7 +69,6 @@ in
       };
 
       interface = mkOption {
-        default = "";
         example = "wlp2s0";
         type = types.str;
         description = lib.mdDoc ''
@@ -94,7 +96,8 @@ in
       };
 
       ssid = mkOption {
-        default = "nixos";
+        default = config.system.nixos.distroId;
+        defaultText = literalExpression "config.system.nixos.distroId";
         example = "mySpecialSSID";
         type = types.str;
         description = lib.mdDoc "SSID to be used in IEEE 802.11 management frames.";
@@ -199,7 +202,7 @@ in
 
     environment.systemPackages =  [ pkgs.hostapd ];
 
-    services.udev.packages = optional (cfg.countryCode != null) [ pkgs.crda ];
+    services.udev.packages = optionals (cfg.countryCode != null) [ pkgs.crda ];
 
     systemd.services.hostapd =
       { description = "hostapd wireless AP";

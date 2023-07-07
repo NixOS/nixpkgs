@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pmenu";
-  version = "3.0.1";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "phillbush";
     repo = "pmenu";
     rev = "v${version}";
-    sha256 = "sha256-xeOiJEOPz5QEMlWP6bWhTjmj4tfNqh3rsEVmnKvrKuM=";
+    sha256 = "sha256-bX1qiNUTxNFeS0hNc5dUqQLEgv22nHqJ0yW55CQlGw4=";
   };
 
   buildInputs = [

@@ -8,6 +8,7 @@ buildDunePackage rec {
   inherit (functoria-runtime) src version;
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   propagatedBuildInputs = [ ipaddr functoria-runtime fmt logs lwt ];
   checkInputs = [ alcotest ];

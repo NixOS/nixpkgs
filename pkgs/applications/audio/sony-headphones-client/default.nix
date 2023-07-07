@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "SonyHeadphonesClient";
-  version = "1.2";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "Plutoberth";
     repo = "SonyHeadphonesClient";
     rev = "v${version}";
-    sha256 = "sha256-oejXrs9X+R6Jydro0XIw2XifzFA7asDhpobtaE3//Hc=";
+    hash = "sha256-vhI97KheKzr87exCh4xNN7NDefcagdMu1tWSt67vLiU=";
     fetchSubmodules = true;
   };
 
@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
   sourceRoot = "./source/Client";
 
   cmakeFlags = [ "-Wno-dev" ];
-
-  patches = [ ./gcc.patch ];
 
   postPatch = ''
     substituteInPlace Constants.h \

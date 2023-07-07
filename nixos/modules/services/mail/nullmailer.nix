@@ -212,6 +212,9 @@ with lib;
 
     systemd.tmpfiles.rules = [
       "d /var/spool/nullmailer - ${cfg.user} - - -"
+      "d /var/spool/nullmailer/failed 750 ${cfg.user} - - -"
+      "d /var/spool/nullmailer/queue 750 ${cfg.user} - - -"
+      "d /var/spool/nullmailer/tmp 750 ${cfg.user} - - -"
     ];
 
     systemd.services.nullmailer = {
@@ -220,7 +223,6 @@ with lib;
       after = [ "network.target" ];
 
       preStart = ''
-        mkdir -p /var/spool/nullmailer/{queue,tmp,failed}
         rm -f /var/spool/nullmailer/trigger && mkfifo -m 660 /var/spool/nullmailer/trigger
       '';
 

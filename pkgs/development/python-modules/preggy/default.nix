@@ -5,7 +5,7 @@ buildPythonPackage rec {
   version = "1.4.4";
 
   propagatedBuildInputs = [ six unidecode ];
-  checkInputs = [ nose yanc ];
+  nativeCheckInputs = [ nose yanc ];
 
   src = fetchPypi {
     inherit pname version;

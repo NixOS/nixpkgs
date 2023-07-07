@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-D+M3JsIN8LUWg8GVweEzySHI7KaBb6cNHHn4pXoq55M=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-D+M3JsIN8LUWg8GVweEzySHI7KaBb6cNHHn4pXoq55M=";
   };
 
   propagatedBuildInputs = [
@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "AutoIt script ripper for Karton framework";
     homepage = "https://github.com/CERT-Polska/karton-autoit-ripper";
+    changelog = "https://github.com/CERT-Polska/karton-autoit-ripper/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };

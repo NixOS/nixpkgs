@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "mwilliamson";
     repo = pname;
     rev = version;
-    sha256 = "sha256-KOZN9oxPb91l8QVU07I49UMNXqox8j+oekA1fMtj6l8=";
+    hash = "sha256-KOZN9oxPb91l8QVU07I49UMNXqox8j+oekA1fMtj6l8=";
   };
 
   # Tests have additional requirements

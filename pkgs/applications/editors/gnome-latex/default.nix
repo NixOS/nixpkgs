@@ -15,18 +15,18 @@
 , gnome
 , glib
 , pkg-config
-, intltool
+, gettext
 , itstool
 , libxml2
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.40.0";
+  version = "3.44.0";
   pname = "gnome-latex";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "xad/55vUDjeOooyPRaZjJ/vIzFw7W48PCcAhfufMCpA=";
+    sha256 = "iL1TQL0ox+0Bx5ZqOgBzK72QJ3PfWsZZvmrRGAap50Q=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     wrapGAppsHook
     itstool
-    intltool
+    gettext
   ];
 
   buildInputs = [
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   passthru.updateScript = gnome.updateScript {
     packageName = pname;

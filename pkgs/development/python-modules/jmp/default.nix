@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "deepmind";
     repo = pname;
     rev = "260e5ba01f46b10c579a61393e6c7e546aeae93e";
-    sha256 = "sha256-BTHy/jNf6LeV+x3GTI9MDBWLK6A5z2Z1TQyBkHMTeuE=";
+    hash = "sha256-BTHy/jNf6LeV+x3GTI9MDBWLK6A5z2Z1TQyBkHMTeuE=";
   };
 
   # Wheel requires only `numpy`, but the import needs `jax`.
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     "jmp"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     jaxlib
     pytestCheckHook
   ];

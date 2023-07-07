@@ -1,195 +1,197 @@
-{ stdenv
-, binutils-unwrapped
-, clang
-, cmake
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
-, file
-, lib
-, libglvnd
-, libX11
-, libxml2
-, llvm
+, rocmUpdateScript
+, substituteAll
 , makeWrapper
-, numactl
-, perl
-, python3
+, hip-common
+, hipcc
 , rocclr
+, roctracer
+, cmake
+, perl
+, llvm
+, rocminfo
+, rocm-thunk
 , rocm-comgr
 , rocm-device-libs
-, rocm-opencl-runtime
 , rocm-runtime
-, rocm-thunk
-, rocminfo
-, substituteAll
-, writeScript
-, writeText
+, rocm-opencl-runtime
+, cudatoolkit
+, numactl
+, libxml2
+, libX11
+, libglvnd
+, doxygen
+, graphviz
+, fontconfig
+, python3Packages
+, buildDocs ? true
+, buildTests ? false
+, useNVIDIA ? false
 }:
 
 let
-  hip = stdenv.mkDerivation rec {
-    pname = "hip";
-    version = "5.2.3";
+  hipPlatform = if useNVIDIA then "nvidia" else "amd";
 
-    src = fetchFromGitHub {
-      owner = "ROCm-Developer-Tools";
-      repo = "HIP";
-      rev = "rocm-${version}";
-      hash = "sha256-QaN666Rku2Tkio2Gm5/3RD8D5JgmCZLe0Yun1fGxa8U=";
-    };
+  wrapperArgs = [
+    "--prefix PATH : $out/bin"
+    "--prefix LD_LIBRARY_PATH : ${rocm-runtime}"
+    "--set HIP_PLATFORM ${hipPlatform}"
+    "--set HIP_PATH $out"
+    "--set HIP_CLANG_PATH ${stdenv.cc}/bin"
+    "--set DEVICE_LIB_PATH ${rocm-device-libs}/amdgcn/bitcode"
+    "--set HSA_PATH ${rocm-runtime}"
+    "--set ROCM_PATH $out"
+  ] ++ lib.optionals useNVIDIA [
+    "--set CUDA_PATH ${cudatoolkit}"
+  ];
+in stdenv.mkDerivation (finalAttrs: {
+  pname = "hip-${hipPlatform}";
+  version = "5.4.4";
 
-    patches = [
-      (substituteAll {
-        src = ./hip-config-paths.patch;
-        inherit llvm;
-        rocm_runtime = rocm-runtime;
-      })
-    ];
-
-    # - fix bash paths
-    # - fix path to rocm_agent_enumerator
-    # - fix hcc path
-    # - fix hcc version parsing
-    # - add linker flags for libhsa-runtime64 and hc_am since libhip_hcc
-    #   refers to them.
-    prePatch = ''
-      for f in $(find bin -type f); do
-        sed -e 's,#!/usr/bin/perl,#!${perl}/bin/perl,' \
-            -e 's,#!/bin/bash,#!${stdenv.shell},' \
-            -i "$f"
-      done
-
-      substituteInPlace bin/hip_embed_pch.sh \
-        --replace '$LLVM_DIR/bin/' ""
-
-      sed 's,#!/usr/bin/python,#!${python3.interpreter},' -i hip_prof_gen.py
-
-      sed -e 's,$ROCM_AGENT_ENUM = "''${ROCM_PATH}/bin/rocm_agent_enumerator";,$ROCM_AGENT_ENUM = "${rocminfo}/bin/rocm_agent_enumerator";,' \
-          -e 's,^\($DEVICE_LIB_PATH=\).*$,\1"${rocm-device-libs}/amdgcn/bitcode";,' \
-          -e 's,^\($HIP_COMPILER=\).*$,\1"clang";,' \
-          -e 's,^\($HIP_RUNTIME=\).*$,\1"ROCclr";,' \
-          -e 's,^\([[:space:]]*$HSA_PATH=\).*$,\1"${rocm-runtime}";,'g \
-          -e 's,^\([[:space:]]*\)$HIP_CLANG_INCLUDE_PATH = abs_path("$HIP_CLANG_PATH/../lib/clang/$HIP_CLANG_VERSION/include");,\1$HIP_CLANG_INCLUDE_PATH = "${llvm}/lib/clang/$HIP_CLANG_VERSION/include";,' \
-          -e 's,^\([[:space:]]*$HIPCXXFLAGS .= " -isystem \\"$HIP_CLANG_INCLUDE_PATH/..\\"\)";,\1 -isystem ${rocm-runtime}/include";,' \
-          -e 's,$HIP_CLANG_PATH/../lib/clang/$HIP_CLANG_VERSION,$HIP_CLANG_PATH/../resource-root,g' \
-          -e 's,`file,`${file}/bin/file,g' \
-          -e 's,`readelf,`${binutils-unwrapped}/bin/readelf,' \
-          -e 's, ar , ${binutils-unwrapped}/bin/ar ,g' \
-          -i bin/hipcc.pl
-
-      sed -e 's,^\($HSA_PATH=\).*$,\1"${rocm-runtime}";,' \
-          -e 's,^\($HIP_CLANG_PATH=\).*$,\1"${clang}/bin";,' \
-          -e 's,^\($HIP_PLATFORM=\).*$,\1"amd";,' \
-          -e 's,$HIP_CLANG_PATH/llc,${llvm}/bin/llc,' \
-          -e 's, abs_path, Cwd::abs_path,' \
-          -i bin/hipconfig.pl
-
-      sed -e 's, abs_path, Cwd::abs_path,' -i bin/hipvars.pm
-    '';
-
-    buildPhase = "";
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p $out
-      cp -r * $out/
-
-      runHook postInstall
-    '';
-
-    meta = with lib; {
-      description = "C++ Heterogeneous-Compute Interface for Portability";
-      homepage = "https://github.com/ROCm-Developer-Tools/HIP";
-      license = licenses.mit;
-      maintainers = with maintainers; [ lovesegfault ];
-      platforms = platforms.linux;
-    };
-  };
-in
-stdenv.mkDerivation rec {
-  pname = "hip";
-  version = "5.2.3";
+  outputs = [
+    "out"
+  ] ++ lib.optionals buildDocs [
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "ROCm-Developer-Tools";
     repo = "hipamd";
-    rev = "rocm-${version}";
-    hash = "sha256-9YZBFn1jpOiX0X9rcpsFDNhas9vfxNkNnbsWSi7unPU=";
+    rev = "rocm-${finalAttrs.version}";
+    hash = "sha256-FcuylhkG7HqLYXH1J6ND6IVEIbDzHp7h7jg2ZZ4XoFM=";
   };
-
-  nativeBuildInputs = [ cmake python3 makeWrapper perl ];
-  buildInputs = [ libxml2 numactl libglvnd libX11 ];
-  propagatedBuildInputs = [
-    clang
-    llvm
-    rocm-comgr
-    rocm-device-libs
-    rocm-runtime
-    rocm-thunk
-    rocminfo
-  ];
 
   patches = [
     (substituteAll {
-      src = ./hipamd-config-paths.patch;
-      inherit llvm hip;
+      src = ./0000-fixup-paths.patch;
+      inherit llvm;
+      clang = stdenv.cc;
       rocm_runtime = rocm-runtime;
+    })
+
+    # https://github.com/ROCm-Developer-Tools/hipamd/commit/be33ec55acc104a59d01df5912261d007c7f3ee9
+    (fetchpatch {
+      url = "https://github.com/ROCm-Developer-Tools/hipamd/commit/be33ec55acc104a59d01df5912261d007c7f3ee9.patch";
+      hash = "sha256-eTC4mUIN1FwRce1n38uDOlITFL/vpcOhvnaZTo5R7lo=";
     })
   ];
 
-  preConfigure = ''
-    export HIP_CLANG_PATH=${clang}/bin
-    export DEVICE_LIB_PATH=${rocm-device-libs}/lib
-  '';
+  nativeBuildInputs = [
+    makeWrapper
+    cmake
+    perl
+    python3Packages.python
+    python3Packages.cppheaderparser
+  ] ++ lib.optionals buildDocs [
+    doxygen
+    graphviz
+    fontconfig
+  ];
+
+  buildInputs = [
+    numactl
+    libxml2
+    libX11
+    libglvnd
+  ];
+
+  propagatedBuildInputs = [
+    stdenv.cc
+    llvm
+    rocminfo
+    rocm-thunk
+    rocm-comgr
+    rocm-device-libs
+    rocm-runtime
+    rocm-opencl-runtime
+  ] ++ lib.optionals useNVIDIA [
+    cudatoolkit
+  ];
 
   cmakeFlags = [
-    "-DHIP_PLATFORM=amd"
-    "-DAMD_OPENCL_PATH=${rocm-opencl-runtime.src}"
-    "-DHIP_COMMON_DIR=${hip}"
+    "-DROCM_PATH=${rocminfo}"
+    "-DHIP_PLATFORM=${hipPlatform}"
+    "-DHIP_COMMON_DIR=${hip-common}"
+    "-DHIPCC_BIN_DIR=${hipcc}/bin"
+    "-DHIP_LLVM_ROOT=${stdenv.cc}"
     "-DROCCLR_PATH=${rocclr}"
-    "-DHIP_VERSION_BUILD_ID=0"
+    "-DAMD_OPENCL_PATH=${rocm-opencl-runtime.src}"
+    "-DPROF_API_HEADER_PATH=${roctracer.src}/inc/ext"
+    # Temporarily set variables to work around upstream CMakeLists issue
+    # Can be removed once https://github.com/ROCm-Developer-Tools/hipamd/issues/55 is fixed
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+  ] ++ lib.optionals buildTests [
+    "-DHIP_CATCH_TEST=1"
   ];
+
+  postPatch = ''
+    export HIP_CLANG_PATH=${stdenv.cc}/bin
+    patchShebangs src
+  '' + lib.optionalString buildDocs ''
+    export HOME=$(mktemp -d)
+    export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
+  '';
+
+  doCheck = buildTests;
+  checkTarget = "build_tests";
+
+  preCheck = lib.optionalString buildTests ''
+    export ROCM_PATH=$PWD
+    export DEVICE_LIB_PATH=${rocm-device-libs}/amdgcn/bitcode
+    patchShebangs bin
+  '';
 
   postInstall = ''
     patchShebangs $out/bin
-    wrapProgram $out/bin/hipcc --set HIP_PATH $out --set HSA_PATH ${rocm-runtime} --set HIP_CLANG_PATH ${clang}/bin --prefix PATH : ${llvm}/bin --set ROCM_PATH $out
-    wrapProgram $out/bin/hipconfig --set HIP_PATH $out --set HSA_PATH ${rocm-runtime} --set HIP_CLANG_PATH ${clang}/bin
+    cp -a $out/bin/hipcc $out/bin/hipcc-pl
+    cp -a $out/bin/hipconfig $out/bin/hipconfig-pl
+    wrapProgram $out/bin/hipcc --set HIP_USE_PERL_SCRIPTS 0
+    wrapProgram $out/bin/hipconfig --set HIP_USE_PERL_SCRIPTS 0
+    wrapProgram $out/bin/hipcc.bin ${lib.concatStringsSep " " wrapperArgs}
+    wrapProgram $out/bin/hipconfig.bin ${lib.concatStringsSep " " wrapperArgs}
+    wrapProgram $out/bin/hipcc-pl --set HIP_USE_PERL_SCRIPTS 1
+    wrapProgram $out/bin/hipconfig-pl --set HIP_USE_PERL_SCRIPTS 1
+    wrapProgram $out/bin/hipcc.pl ${lib.concatStringsSep " " wrapperArgs}
+    wrapProgram $out/bin/hipconfig.pl ${lib.concatStringsSep " " wrapperArgs}
   '';
 
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl jq common-updater-scripts nix-prefetch-github
-    version="$(curl -sL "https://api.github.com/repos/ROCm-Developer-Tools/HIP/tags" | jq '.[].name | split("-") | .[1] | select( . != null )' --raw-output | sort -n | tail -1)"
-    current_version="$(grep "version =" pkgs/development/compilers/hip/default.nix | head -n1 | cut -d'"' -f2)"
-    if [[ "$version" != "$current_version" ]]; then
-      tarball_meta="$(nix-prefetch-github ROCm-Developer-Tools HIP --rev "rocm-$version")"
-      tarball_hash="$(nix to-base64 sha256-$(jq -r '.sha256' <<< "$tarball_meta"))"
-      sed -i -z "pkgs/development/compilers/hip/default.nix" \
-        -e 's,version = "[^'"'"'"]*",version = "'"$version"'",1' \
-        -e 's,hash = "[^'"'"'"]*",hash = "sha256-'"$tarball_hash"'",1'
-    else
-      echo hip already up-to-date
-    fi
+  passthru = {
+    # All known and valid general GPU targets
+    # We cannot use this for each ROCm library, as each defines their own supported targets
+    # See: https://github.com/RadeonOpenCompute/ROCm/blob/77cbac4abab13046ee93d8b5bf410684caf91145/README.md#library-target-matrix
+    gpuTargets = lib.forEach [
+      "803"
+      "900"
+      "906"
+      "908"
+      "90a"
+      "1010"
+      "1012"
+      "1030"
+    ] (target: "gfx${target}");
 
-    version="$(curl -sL "https://api.github.com/repos/ROCm-Developer-Tools/hipamd/tags" | jq '.[].name | split("-") | .[1] | select( . != null )' --raw-output | sort -n | tail -1)"
-    current_version="$(grep "version =" pkgs/development/compilers/hip/default.nix | tail -n1 | cut -d'"' -f2)"
-    if [[ "$version" != "$current_version" ]]; then
-      tarball_meta="$(nix-prefetch-github ROCm-Developer-Tools hipamd --rev "rocm-$version")"
-      tarball_hash="$(nix to-base64 sha256-$(jq -r '.sha256' <<< "$tarball_meta"))"
-      sed -i -z "pkgs/development/compilers/hip/default.nix" \
-        -e 's,version = "[^'"'"'"]*",version = "'"$version"'",2' \
-        -e 's,hash = "[^'"'"'"]*",hash = "sha256-'"$tarball_hash"'",2'
-    else
-      echo hipamd already up-to-date
-    fi
-  '';
+    updateScript = rocmUpdateScript {
+      name = finalAttrs.pname;
+      owner = finalAttrs.src.owner;
+      repo = finalAttrs.src.repo;
+    };
+  };
 
   meta = with lib; {
-    description = "C++ Heterogeneous-Compute Interface for Portability";
+    description = "C++ Heterogeneous-Compute Interface for Portability specifically for AMD platform";
     homepage = "https://github.com/ROCm-Developer-Tools/hipamd";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lovesegfault ];
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
+    # Tests require GPU, also include issues
+    broken =
+      versions.minor finalAttrs.version != versions.minor hip-common.version ||
+      versions.minor finalAttrs.version != versions.minor hipcc.version ||
+      buildTests;
   };
-}
+})

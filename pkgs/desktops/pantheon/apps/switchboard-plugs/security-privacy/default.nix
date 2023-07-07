@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-security-privacy";
-  version = "2.4.0";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-jT8aYE36ZAeB9ng3RojVqxzmLtzpbsNRHPuDQ03XKcI=";
+    sha256 = "sha256-J3lUyLNyxlleD2jklXB2jMRvLY6WG5iccA2lIaJL3d4=";
   };
 
   nativeBuildInputs = [
@@ -57,9 +57,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

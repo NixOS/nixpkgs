@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jre_headless, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "trino-cli";
-  version = "392";
+  version = "418";
 
   jarfilename = "${pname}-${version}-executable.jar";
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://maven/io/trino/${pname}/${version}/${jarfilename}";
-    sha256 = "sha256-yqTKXmcRgsSSr4KAZ2NV7FrCGIxCU/V14XFEZmUTj1s=";
+    sha256 = "sha256-IVLQG+y2Uvph+0WE+BE2beDSCGzfgkOdclESi+szcZM=";
   };
 
   dontUnpack = true;
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
     install -D "$src" "$out/share/java/${jarfilename}"
 
-    makeWrapper ${jre}/bin/java $out/bin/trino \
+    makeWrapper ${jre_headless}/bin/java $out/bin/trino \
       --add-flags "-jar $out/share/java/${jarfilename}"
 
     runHook postInstall
@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     description = "The Trino CLI provides a terminal-based, interactive shell for running queries";
     homepage = "https://github.com/trinodb/trino";
     license = licenses.asl20;
-    maintainers = [ maintainers.regadas ];
+    maintainers = with maintainers; [ regadas cpcloud ];
   };
 }

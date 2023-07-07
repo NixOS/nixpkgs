@@ -5,16 +5,23 @@
 
 buildGoModule rec {
   pname = "httpx";
-  version = "1.2.4";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "httpx";
-    rev = "v${version}";
-    sha256 = "sha256-w4VELxmahqjfiMGXflSnhp5NKPi3HUucjxEUegljbVY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-VYFXxCKlVqueUk/uoD15ay+IWiFKDsBHp5WXZlajw70=";
   };
 
-  vendorSha256 = "sha256-9zLZyXrLvxwwkTwtpKxdGftzCZISZ/al98VnPiaMqGA=";
+  vendorHash = "sha256-1WamyEnDsuyv0ijHPJthS/ZZVXKrGu8LG8w5wMVoUS0=";
+
+  subPackages = [ "cmd/httpx" ];
+
+  ldflags = [ "-s" "-w" ];
+
+  # Tests require network access
+  doCheck = false;
 
   meta = with lib; {
     description = "Fast and multi-purpose HTTP toolkit";
@@ -24,6 +31,7 @@ buildGoModule rec {
       result reliability with increased threads.
     '';
     homepage = "https://github.com/projectdiscovery/httpx";
+    changelog = "https://github.com/projectdiscovery/httpx/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

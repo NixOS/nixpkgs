@@ -9,7 +9,7 @@
 
 , x11Support ? false
 
-, useSystemd ? stdenv.isLinux
+, useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 
 , # Whether to support the JACK sound system as a backend.
   jackaudioSupport ? false
@@ -36,7 +36,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "${if libOnly then "lib" else ""}pulseaudio";
+  pname = "${lib.optionalString libOnly "lib"}pulseaudio";
   version = "16.1";
 
   src = fetchurl {
@@ -48,9 +48,9 @@ stdenv.mkDerivation rec {
     # Install sysconfdir files inside of the nix store,
     # but use a conventional runtime sysconfdir outside the store
     ./add-option-for-installation-sysconfdir.patch
-    # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/merge_requests/654
+    # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/merge_requests/654 (merged)
     ./0001-Make-gio-2.0-optional-16.patch
-    # TODO (not sent upstream)
+    # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/merge_requests/746 (merged)
     ./0002-Ignore-SCM_CREDS-on-darwin.patch
     ./0003-Ignore-HAVE_CPUID_H-on-aarch64-darwin.patch
     ./0004-Prefer-HAVE_CLOCK_GETTIME-on-darwin.patch
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (!libOnly) (
       [ libasyncns webrtc-audio-processing ]
       ++ lib.optional jackaudioSupport libjack2
-      ++ lib.optionals x11Support [ xorg.xlibsWrapper xorg.libXtst xorg.libXi ]
+      ++ lib.optionals x11Support [ xorg.libICE xorg.libSM xorg.libX11 xorg.libXi xorg.libXtst ]
       ++ lib.optional useSystemd systemd
       ++ lib.optionals stdenv.isLinux [ alsa-lib udev ]
       ++ lib.optional airtunesSupport openssl
@@ -116,6 +116,11 @@ stdenv.mkDerivation rec {
     "-Dsysconfdir=/etc"
     "-Dsysconfdir_install=${placeholder "out"}/etc"
     "-Dudevrulesdir=${placeholder "out"}/lib/udev/rules.d"
+
+    # pulseaudio complains if its binary is moved after installation;
+    # this is needed so that wrapGApp can operate *without*
+    # renaming the unwrapped binaries (see below)
+    "--bindir=${placeholder "out"}/.bin-unwrapped"
   ]
   ++ lib.optional (stdenv.isLinux && useSystemd) "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
   ++ lib.optionals stdenv.isDarwin [
@@ -133,11 +138,11 @@ stdenv.mkDerivation rec {
   postInstall = lib.optionalString libOnly ''
     find $out/share -maxdepth 1 -mindepth 1 ! -name "vala" -prune -exec rm -r {} \;
     find $out/share/vala -maxdepth 1 -mindepth 1 ! -name "vapi" -prune -exec rm -r {} \;
-    rm -r $out/{bin,etc,lib/pulse-*}
+    rm -r $out/{.bin-unwrapped,etc,lib/pulse-*}
   ''
     + ''
     moveToOutput lib/cmake "$dev"
-    rm -f $out/bin/qpaeq # this is packaged by the "qpaeq" package now, because of missing deps
+    rm -f $out/.bin-unwrapped/qpaeq # this is packaged by the "qpaeq" package now, because of missing deps
   '';
 
   preFixup = lib.optionalString (stdenv.isLinux  && (stdenv.hostPlatform == stdenv.buildPlatform)) ''
@@ -150,6 +155,20 @@ stdenv.mkDerivation rec {
     for file in $out/lib/pulseaudio/modules/*.dylib; do
       ln -s "''$file" "''${file%.dylib}.so"
       ln -s "''$file" "$out/lib/pulseaudio/''$(basename ''$file .dylib).so"
+    done
+  ''
+  # put symlinks to binaries in `$prefix/bin`;
+  # then wrapGApp will *rename these symlinks* instead of
+  # the original binaries in `$prefix/.bin-unwrapped` (see above);
+  # when pulseaudio is looking for its own binary (it does!),
+  # it will be happy to find it in its original installation location
+  + lib.optionalString (!libOnly) ''
+    mkdir -p $out/bin
+    ln -st $out/bin $out/.bin-unwrapped/*
+
+    # Ensure that service files use the wrapped binaries.
+    find "$out" -name "*.service" | while read f; do
+        substituteInPlace "$f" --replace "$out/.bin-unwrapped/" "$out/bin/"
     done
   '';
 

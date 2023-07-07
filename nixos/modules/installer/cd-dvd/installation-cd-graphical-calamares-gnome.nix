@@ -31,7 +31,7 @@
   };
 
   # Theme calamares with GNOME theme
-  qt5 = {
+  qt = {
     enable = true;
     platformTheme = "gnome";
   };

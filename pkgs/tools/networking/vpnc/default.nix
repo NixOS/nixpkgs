@@ -32,6 +32,10 @@ stdenv.mkDerivation {
   '';
 
   enableParallelBuilding = true;
+  # Missing install depends:
+  #   install: target '...-vpnc-unstable-2021-11-04/share/doc/vpnc': No such file or directory
+  #   make: *** [Makefile:149: install-doc] Error 1
+  enableParallelInstalling = false;
 
   meta = with lib; {
     homepage = "https://davidepucci.it/doc/vpnc/";

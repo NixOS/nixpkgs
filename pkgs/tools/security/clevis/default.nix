@@ -1,32 +1,32 @@
 { lib
 , stdenv
+, asciidoc
+, coreutils
+, cryptsetup
+, curl
 , fetchFromGitHub
+, gnugrep
+, gnused
+, jansson
+, jose
+, libpwquality
+, luksmeta
+, makeWrapper
 , meson
 , ninja
 , pkg-config
-, asciidoc
-, makeWrapper
-, jansson
-, jose
-, cryptsetup
-, curl
-, libpwquality
-, luksmeta
-, coreutils
 , tpm2-tools
-, gnugrep
-, gnused
 }:
 
 stdenv.mkDerivation rec {
   pname = "clevis";
-  version = "18";
+  version = "19";
 
   src = fetchFromGitHub {
     owner = "latchset";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-m1UhyjD5ydSgCTBu6sECLlxFx0rnQxFnBA7frbdUqU8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-3J3ti/jRiv+p3eVvJD7u0ko28rPd8Gte0mCJaVaqyOs=";
   };
 
   postPatch = ''
@@ -42,15 +42,34 @@ stdenv.mkDerivation rec {
       --prefix PATH ':' "${lib.makeBinPath [tpm2-tools jose cryptsetup libpwquality luksmeta gnugrep gnused coreutils]}:${placeholder "out"}/bin"
   '';
 
-  nativeBuildInputs = [ meson ninja pkg-config asciidoc makeWrapper ];
-  buildInputs = [ jansson jose cryptsetup curl libpwquality luksmeta tpm2-tools ];
+  nativeBuildInputs = [
+    asciidoc
+    makeWrapper
+    meson
+    ninja
+    pkg-config
+  ];
 
-  outputs = [ "out" "man" ];
+  buildInputs = [
+    cryptsetup
+    curl
+    jansson
+    jose
+    libpwquality
+    luksmeta
+    tpm2-tools
+  ];
 
-  meta = {
+  outputs = [
+    "out"
+    "man"
+  ];
+
+  meta = with lib; {
     description = "Automated Encryption Framework";
     homepage = "https://github.com/latchset/clevis";
-    maintainers = with lib.maintainers; [ ];
-    license = lib.licenses.gpl3Plus;
+    changelog = "https://github.com/latchset/clevis/releases/tag/v${version}";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ];
   };
 }

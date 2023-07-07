@@ -1,0 +1,39 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Nicolas Benes <nbenes.gh@xandea.de>
+Date: Mon, 12 Jun 2023 11:29:32 +0200
+Subject: [PATCH] Fix quotes in test
+
+
+diff --git a/tests/test_basic.py b/tests/test_basic.py
+index 077e6c0..90bbdc3 100644
+--- a/tests/test_basic.py
++++ b/tests/test_basic.py
+@@ -43,8 +43,8 @@ def test_foobar(runner):
+ 
+ TEST_INVALID = """Usage: cli [OPTIONS] COMMAND [ARGS]...
+ {}
+-Error: No such command "bar".
+-""".format('Try "cli --help" for help.\n' if _click7 else '')
++Error: No such command 'bar'.
++""".format("Try 'cli --help' for help.\n" if _click7 else '')
+ 
+ 
+ def test_invalid(runner):
+diff --git a/tests/test_foobar.py b/tests/test_foobar.py
+index fd6c4e6..ab0ad5d 100644
+--- a/tests/test_foobar.py
++++ b/tests/test_foobar.py
+@@ -44,8 +44,8 @@ def test_foobar(runner):
+ 
+ TEST_INVALID = """Usage: cli [OPTIONS] COMMAND [ARGS]...
+ {}
+-Error: No such command "baz".
+-""".format('Try "cli --help" for help.\n' if _click7 else '')
++Error: No such command 'baz'.
++""".format("Try 'cli --help' for help.\n" if _click7 else '')
+ 
+ 
+ def test_invalid(runner):
+-- 
+2.40.1
+

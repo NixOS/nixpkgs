@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, jdk, gradle, makeDesktopItem, copyDesktopItems, perl, writeText, runtimeShell, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, jdk, gradle_7, makeDesktopItem, copyDesktopItems, perl, writeText, runtimeShell, makeWrapper }:
 let
   pname = "scenic-view";
   version = "11.0.2";
@@ -9,6 +9,8 @@ let
     rev = version;
     sha256 = "1idfh9hxqs4fchr6gvhblhvjqk4mpl4rnpi84vn1l3yb700z7dwy";
   };
+
+  gradle = gradle_7;
 
   deps = stdenv.mkDerivation {
     name = "${pname}-deps";

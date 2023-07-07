@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi, setuptools }:
 
 buildPythonPackage rec {
   pname = "autopage";
@@ -8,8 +8,12 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Ab4+5hu3FOkJD8xcEPTPVGw5YzHGIMauUKIyGyjtMZk=";
+    hash = "sha256-Ab4+5hu3FOkJD8xcEPTPVGw5YzHGIMauUKIyGyjtMZk=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   pythonImportsCheck = [ "autopage" ];
 

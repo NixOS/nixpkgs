@@ -4,13 +4,12 @@ stdenv.mkDerivation rec {
   pname = "zsh-clipboard";
   version = "1.0";
 
-  src = ./.;
-
+  dontUnpack = true;
   strictDeps = true;
   dontBuild = true;
 
   installPhase = ''
-    install -D -m0444 -t $out/share/zsh/plugins/clipboard ./clipboard.plugin.zsh
+    install -D -m0444 -T ${./clipboard.plugin.zsh} $out/share/zsh/plugins/clipboard/clipboard.plugin.zsh
   '';
 
   meta = with lib; {

@@ -1,8 +1,9 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, fetchzip
 , cmake
+, comic-neue
 , boost
 , catch2
 , inchi
@@ -15,32 +16,34 @@
 , numpy
 , pandas
 , pillow
-, git
+, memorymappingHook
 }:
 let
   external = {
-    avalon = fetchzip {
-      url = "http://sourceforge.net/projects/avalontoolkit/files/AvalonToolkit_1.2/AvalonToolkit_1.2.0.source.tar";
-      sha256 = "0nhxfxckb5a5qs0g148f55yarhncqjgjzcvdskkv9rxi2nrs7160";
-      stripRoot = false;
+    avalon = fetchFromGitHub {
+      owner = "rohdebe1";
+      repo = "ava-formake";
+      rev = "AvalonToolkit_2.0.4a";
+      hash = "sha256-ZyhrDBBv9XuXe1NY/Djiad86tGIJwCSTrxEMICHgSqk=";
     };
     yaehmop = fetchFromGitHub {
       owner = "greglandrum";
       repo = "yaehmop";
-      rev = "cfb5aeebbdf5ae93c4f4eeb14c7a507dea54ae9e";
-      sha256 = "sha256-QMnc5RyHlY3giw9QmrkGntiA+Srs7OhCIKs9GGo5DfQ=";
+      rev = "v2022.09.1";
+      hash = "sha256-QMnc5RyHlY3giw9QmrkGntiA+Srs7OhCIKs9GGo5DfQ=";
     };
     freesasa = fetchFromGitHub {
       owner = "mittinatten";
       repo = "freesasa";
-      rev = "2.1.1";
-      sha256 = "sha256-fUJvLDTVhpBWl9MavZwp0kAO5Df1QuHEKqe20CXNfcg=";
+      rev = "2.0.3";
+      hash = "sha256-7E+imvfDAJFnXQRWb5hNaSu+Xrf9NXeIKc9fl+o3yHQ=";
     };
   };
 in
 buildPythonPackage rec {
   pname = "rdkit";
-  version = "2022.03.5";
+  version = "2023.03.2";
+  format = "other";
 
   src =
     let
@@ -50,35 +53,39 @@ buildPythonPackage rec {
       owner = pname;
       repo = pname;
       rev = "Release_${versionTag}";
-      sha256 = "19idgilabh04cbr1qj6zgrgsfjm248mmfz6fsr0smrd68d0xnml9";
+      hash = "sha256-p1zJLMtIlO+0qKMO7ghDLrONNZFPTuc2QtOtB1LJPtc=";
     };
 
   unpackPhase = ''
-    mkdir -p source/External/AvalonTools/avalon source/External/YAeHMOP/yaehmop source/External/FreeSASA/freesasa
-    cp -r ${src}/* source
-    cp -r ${external.avalon}/SourceDistribution/* source/External/AvalonTools/avalon
-    cp -r ${external.yaehmop}/* source/External/YAeHMOP/yaehmop
-    cp -r ${external.freesasa}/* source/External/FreeSASA/freesasa
+    cp -r $src/* .
+    find . -type d -exec chmod +w {} +
 
-    find source -type d -exec chmod 755 {} +
-    cp source/External/FreeSASA/freesasa2.c source/External/FreeSASA/freesasa/src
-    ln -s ${rapidjson} source/External/rapidjson-1.1.0
+    mkdir External/AvalonTools/avalon
+    # In buildPhase, CMake patches the file in this directory
+    # see https://github.com/rdkit/rdkit/pull/5928
+    cp -r ${external.avalon}/* External/AvalonTools/avalon
+
+    mkdir External/YAeHMOP/yaehmop
+    ln -s ${external.yaehmop}/* External/YAeHMOP/yaehmop
+
+    mkdir -p External/FreeSASA/freesasa
+    cp -r ${external.freesasa}/* External/FreeSASA/freesasa
+    chmod +w External/FreeSASA/freesasa/src
+    cp External/FreeSASA/freesasa2.c External/FreeSASA/freesasa/src
+
+    ln -s ${rapidjson} External/rapidjson-1.1.0
+    ln -s ${comic-neue}/share/fonts/truetype/ComicNeue-Regular.ttf Data/Fonts/
   '';
-
-  sourceRoot = "source";
 
   nativeBuildInputs = [
     cmake
-    git # required by freesasa
   ];
 
   buildInputs = [
     boost
-    catch2
-    inchi
-    eigen
     cairo
-    rapidjson
+  ] ++ lib.optionals (stdenv.system == "x86_64-darwin") [
+    memorymappingHook
   ];
 
   propagatedBuildInputs = [
@@ -94,10 +101,6 @@ buildPythonPackage rec {
   dontUseSetuptoolsCheck = true;
 
   preConfigure = ''
-    # Don't want this contacting the git remote during the build
-    substituteInPlace External/YAeHMOP/CMakeLists.txt --replace \
-      'GIT_TAG master' 'DOWNLOAD_COMMAND true'
-
     # Since we can't expand with bash in cmakeFlags
     cmakeFlags="$cmakeFlags -DPYTHON_NUMPY_INCLUDE_PATH=$(${python}/bin/python -c 'import numpy; print(numpy.get_include())')"
     cmakeFlags="$cmakeFlags -DFREESASA_DIR=$PWD/External/FreeSASA/freesasa"
@@ -113,7 +116,6 @@ buildPythonPackage rec {
     "-DEIGEN3_INCLUDE_DIR=${eigen}/include/eigen3"
     "-DRDK_INSTALL_INTREE=OFF"
     "-DRDK_INSTALL_STATIC_LIBS=OFF"
-    "-DRDK_INSTALL_COMIC_FONTS=OFF"
     "-DRDK_BUILD_INCHI_SUPPORT=ON"
     "-DRDK_BUILD_AVALON_SUPPORT=ON"
     "-DRDK_BUILD_FREESASA_SUPPORT=ON"
@@ -144,15 +146,16 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [
-     "rdkit"
-     "rdkit.Chem"
-     "rdkit.Chem.AllChem"
+    "rdkit"
+    "rdkit.Chem"
+    "rdkit.Chem.AllChem"
   ];
 
   meta = with lib; {
     description = "Open source toolkit for cheminformatics";
-    maintainers = [ maintainers.rmcgibbo ];
+    maintainers = with maintainers; [ rmcgibbo natsukium ];
     license = licenses.bsd3;
     homepage = "https://www.rdkit.org";
+    changelog = "https://github.com/rdkit/rdkit/releases/tag/${src.rev}";
   };
 }

@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wesnoth";
-  version = "1.16.5";
+  version = "1.16.9";
 
   src = fetchFromGitHub {
     rev = version;
     owner = "wesnoth";
     repo = "wesnoth";
-    sha256 = "sha256-U01dMrbPRBliag/RKnwG1G2YEv7fiTh6+S+S5cO1Fx8=";
+    hash = "sha256-KtAPc2nsqSoHNsLTLom/yaUECn+IWBdBFpiMclrUHxM=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_net SDL2_ttf pango gettext boost
                   libvorbis fribidi dbus libpng pcre openssl icu ]
                 ++ lib.optionals stdenv.isDarwin [ Cocoa Foundation];
+
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework AppKit";
 
   meta = with lib; {
     description = "The Battle for Wesnoth, a free, turn-based strategy game with a fantasy theme";

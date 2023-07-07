@@ -1,6 +1,12 @@
-{ stdenv, lib, perl, cmake, ninja, writeText }:
-
-{ self, srcs, patches ? [ ] }:
+{ lib
+, stdenv
+, cmake
+, ninja
+, perl
+, moveBuildTree
+, srcs
+, patches ? [ ]
+}:
 
 args:
 
@@ -14,32 +20,21 @@ stdenv.mkDerivation (args // {
   patches = args.patches or patches.${pname} or [ ];
 
   buildInputs = args.buildInputs or [ ];
-  nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [
-    perl
-    cmake
-    ninja
-  ];
+  nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ cmake ninja perl ]
+    ++ lib.optionals stdenv.isDarwin [ moveBuildTree ];
   propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or [ ]);
+
+  moveToDev = false;
 
   outputs = args.outputs or [ "out" "dev" ];
 
   dontWrapQtApps = args.dontWrapQtApps or true;
-  postInstall = ''
-    if [ ! -z "$dev" ]; then
-      mkdir "$dev"
-      for dir in bin libexec mkspecs
-      do
-        moveToOutput "$dir" "$dev"
-      done
-    fi
-    ${args.postInstall or ""}
-  '';
 
   meta = with lib; {
     homepage = "https://www.qt.io/";
     description = "A cross-platform application framework for C++";
-    license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
+    license = with licenses; [ fdl13Plus gpl2Plus lgpl21Plus lgpl3Plus ];
     maintainers = with maintainers; [ milahu nickcao ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   } // (args.meta or { });
 })

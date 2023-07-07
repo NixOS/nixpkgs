@@ -1,8 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
-, substituteAll
 , makeWrapper
 
 , autoreconfHook
@@ -19,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rofi-emoji";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "Mange";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-YMQG0XO6zVei6GfBdgI7jtB7px12e+xvOMxZ1QHf5kQ=";
+    sha256 = "sha256-P7AHLwqicKYj5I0Rl9B5mdD/v9iW9aihkNo7enonRF4=";
   };
 
   patches = [

@@ -7,20 +7,20 @@
 , pims
 , pytestCheckHook
 , pythonOlder
-, scikitimage
+, scikit-image
 , scipy
 }:
 
 buildPythonPackage rec {
   pname = "dask-image";
-  version = "2021.12.0";
+  version = "2023.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Nb5JYmvQHD44khKBJqJ9XuMmahmKjjx+MNWervcS/Pk=";
+    hash = "sha256-M6qckhUG2DvBw2uY5pAJFyuvatC7owVlb6XWkkrzAys=";
   };
 
   propagatedBuildInputs = [
@@ -30,9 +30,9 @@ buildPythonPackage rec {
     pims
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
-    scikitimage
+    scikit-image
   ];
 
   postPatch = ''
@@ -45,7 +45,6 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Distributed image processing";
     homepage = "https://github.com/dask/dask-image";
     license = licenses.bsdOriginal;

@@ -33,7 +33,7 @@ mkDerivation rec {
       Many full-fledged games have been writen for the engine.
       Games can be created easily using the editor.
     '';
-    homepage = "http://www.solarus-games.org";
+    homepage = "https://www.solarus-games.org";
     license = licenses.gpl3;
     maintainers = [ ];
     platforms = platforms.linux;

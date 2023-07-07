@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cobalt";
-  version = "0.18.3";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "cobalt-org";
     repo = "cobalt.rs";
     rev = "v${version}";
-    sha256 = "sha256-GUN/TgAlIl9/libhA+qqYDYHhc1ZDvDymR/Ac8Mev3c=";
+    sha256 = "sha256-cW9Pj4dTBZ0UmHvrWpx0SREBBaEIb2aaX2cdCUdlFLw=";
   };
 
-  cargoSha256 = "sha256-u6C19QA3gMzBZIRoNDnfu1p8zkirSQKjNSQrSb8+qvs=";
+  cargoHash = "sha256-/xkZuGyinQdUGWix/SRtJMJ5nmpXJu39/LxJoTHnT4Q=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 

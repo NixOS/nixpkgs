@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fmtoy";
-  version = "unstable-2021-12-24";
+  version = "unstable-2022-12-23";
 
   src = fetchFromGitHub {
     owner = "vampirefrog";
     repo = "fmtoy";
-    rev = "0de6703b3373eb5bf19fd3deaae889286f330c21";
-    sha256 = "0sr6klkmjd2hd2kyb9y0x986d6lsy8bziizfc6cmhkqcq92fh45c";
+    rev = "78b61b5e9bc0c6874962dc4040456581c9999b36";
+    sha256 = "r5zbr6TCxzDiQvDsLQu/QwNfem1K4Ahaji0yIz/2yl0=";
   };
 
   postPatch = ''
@@ -63,9 +63,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/vampirefrog/fmtoy";
     description = "Tools for FM voices for Yamaha YM chips (OPL, OPM and OPN series)";
-    # Unknown license situation
+    # Unclear if gpl3Only or gpl3Plus
     # https://github.com/vampirefrog/fmtoy/issues/1
-    license = licenses.unfree;
+    license = licenses.gpl3;
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.all;
   };

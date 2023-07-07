@@ -11,13 +11,19 @@
 # }
 # (This advice was tested on the 1st November 2016.)
 
-{ lib, stdenv, fetchurl, cups, libusb-compat-0_1 }:
+{ lib
+, stdenv
+, cups
+, libusb-compat-0_1
+, fetchurl
+, patchPpdFilesHook
+}:
 
 # Do not bump lightly! Visit <http://www.bchemnet.com/suldr/supported.html>
 # to see what will break when upgrading. Consider a new versioned attribute.
 let
   installationPath = if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64" else "i386";
-  appendPath = if stdenv.hostPlatform.system == "x86_64-linux" then "64" else "";
+  appendPath = lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") "64";
   libPath = lib.makeLibraryPath [ cups libusb-compat-0_1 ] + ":$out/lib:${stdenv.cc.cc.lib}/lib${appendPath}";
 in stdenv.mkDerivation rec {
   pname = "samsung-UnifiedLinuxDriver";
@@ -28,10 +34,14 @@ in stdenv.mkDerivation rec {
     sha256 = "1vv3pzvqpg1dq3xjr8161x2yp3v7ca75vil56ranhw5pkjwq66x0";
   };
 
+  nativeBuildInputs = [ patchPpdFilesHook ];
+
   dontPatchELF = true;
   dontStrip = true;
 
   installPhase = ''
+    runHook preInstall
+
     cd Linux/${installationPath}
     mkdir -p $out/lib/cups/{backend,filter}
     install -Dm755 mfp $out/lib/cups/backend/
@@ -63,14 +73,17 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/share/cups/model/samsung
     cd -
     cd ../noarch/at_opt/share/ppd
-    for i in *.ppd; do
-      sed -i $i -e \
-        "s,pstosecps,$out/lib/cups/filter/pstosecps,g; \
-         s,pstospl,$out/lib/cups/filter/pstospl,g; \
-         s,rastertospl,$out/lib/cups/filter/rastertospl,g"
-    done;
     cp -r ./* $out/share/cups/model/samsung
+
+    runHook postInstall
   '';
+
+  ppdFileCommands = [
+    "pstosecps"
+    "pstospl"
+    "pstosplc"
+    "rastertospl"
+  ];
 
   meta = with lib; {
     description = "Samsung's Linux printing drivers; includes binaries without source code";

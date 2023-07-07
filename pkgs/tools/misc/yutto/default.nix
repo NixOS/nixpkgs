@@ -1,27 +1,22 @@
 { lib
-, buildPythonApplication
+, python3
 , fetchPypi
-, pythonOlder
-, poetry-core
-, aiohttp
-, aiofiles
-, biliass
-, dicttoxml
-, colorama
 , ffmpeg
-, makeWrapper
+, nix-update-script
 }:
+
+with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "yutto";
-  version = "2.0.0b13";
+  version = "2.0.0b24";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-XqfbvlaJoRPpwnaUA52KloOsEOIt3YM0cq36DZN6lR8=";
+    hash = "sha256-ZnRDGgJu78KoSHvznYhBNEDJihUm9rUdlb5tXmcpuTc=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +36,8 @@ buildPythonApplication rec {
   '';
 
   pythonImportsCheck = [ "yutto" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A Bilibili downloader";

@@ -9,12 +9,12 @@ buildPythonPackage rec {
     owner = "maxcountryman";
     repo = "flask-seasurf";
     rev = version;
-    sha256 = "sha256-L/ZUEqqHmsyXG5eShcITII36ttwQlZN5GBngo+GcCdw=";
+    hash = "sha256-L/ZUEqqHmsyXG5eShcITII36ttwQlZN5GBngo+GcCdw=";
   };
 
   propagatedBuildInputs = [ flask ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     unittestCheckHook
     mock
   ];

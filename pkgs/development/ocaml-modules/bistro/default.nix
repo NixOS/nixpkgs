@@ -7,7 +7,7 @@
 , bos
 , core
 , core_kernel
-, core_unix
+, core_unix ? null
 , lwt_react
 , ocamlgraph
 , ppx_sexp_conv
@@ -20,7 +20,7 @@ buildDunePackage rec {
   pname = "bistro";
   version = "unstable-2022-05-07";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "pveber";

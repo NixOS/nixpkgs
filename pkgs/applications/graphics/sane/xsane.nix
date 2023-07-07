@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitLab
 , sane-backends
 , sane-frontends
 , libX11
@@ -10,15 +10,19 @@
 , libusb-compat-0_1
 , gimpSupport ? false
 , gimp
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "xsane";
   version = "0.999";
 
-  src = fetchurl {
-    url = "http://www.xsane.org/download/xsane-${version}.tar.gz";
-    sha256 = "0jrb918sfb9jw3vmrz0z7np4q55hgsqqffpixs0ir5nwcwzd50jp";
+  src = fetchFromGitLab {
+    owner = "frontend";
+    group = "sane-project";
+    repo = pname;
+    rev = version;
+    hash = "sha256-oOg94nUsT9LLKnHocY0S5g02Y9a1UazzZAjpEI/s+yM=";
   };
 
   preConfigure = ''
@@ -31,11 +35,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpng libusb-compat-0_1 sane-backends sane-frontends libX11 gtk2 ]
     ++ lib.optional gimpSupport gimp;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     homepage = "http://www.sane-project.org/";
     description = "Graphical scanning frontend for sane";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ melling ];
   };
 }

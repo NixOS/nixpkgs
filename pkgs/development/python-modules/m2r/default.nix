@@ -20,7 +20,7 @@ buildPythonPackage rec {
     # fix tests in python 3.10
     (fetchpatch {
       url = "https://github.com/miyakogi/m2r/commit/58ee9cabdadf5e3deb13037f3052238f0f2bffcd.patch";
-      sha256 = "sha256-CN3PWmnk7xsn1wngRHuEWmDTP3HtVNxkFv0xzD2Zjlo=";
+      hash = "sha256-CN3PWmnk7xsn1wngRHuEWmDTP3HtVNxkFv0xzD2Zjlo=";
     })
     ./docutils-0.19-compat.patch
   ];
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ mistune docutils ];
 
-  checkInputs = [ pygments ];
+  nativeCheckInputs = [ pygments ];
 
   meta = with lib; {
     homepage = "https://github.com/miyakogi/m2r";

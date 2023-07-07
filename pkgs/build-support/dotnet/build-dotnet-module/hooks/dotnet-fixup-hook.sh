@@ -1,42 +1,51 @@
 # Inherit arguments from the derivation
-makeWrapperArgs=( ${makeWrapperArgs-} )
+declare -a derivationMakeWrapperArgs="( ${makeWrapperArgs-} )"
+makeWrapperArgs=( "${derivationMakeWrapperArgs[@]}" )
 
 # First argument is the executable you want to wrap,
 # the second is the destination for the wrapper.
 wrapDotnetProgram() {
+    local dotnetRootFlags=()
+
     if [ ! "${selfContainedBuild-}" ]; then
-        dotnetRootFlag=("--set" "DOTNET_ROOT" "@dotnetRuntime@")
+        if [ "${useDotnetFromEnv-}" ]; then
+            # if dotnet CLI is available, set DOTNET_ROOT based on it. Otherwise set to default .NET runtime
+            dotnetRootFlags+=("--run" 'command -v dotnet &>/dev/null && export DOTNET_ROOT="$(@dirname@ "$(@dirname@ "$(@which@ dotnet)")")" || export DOTNET_ROOT="@dotnetRuntime@"')
+            dotnetRootFlags+=("--suffix" "PATH" ":" "@dotnetRuntime@/bin")
+        else
+            dotnetRootFlags+=("--set" "DOTNET_ROOT" "@dotnetRuntime@")
+            dotnetRootFlags+=("--prefix" "PATH" ":" "@dotnetRuntime@/bin")
+        fi
     fi
 
     makeWrapper "$1" "$2" \
-        "${dotnetRootFlag[@]}" \
         --suffix "LD_LIBRARY_PATH" : "@runtimeDeps@" \
+        "${dotnetRootFlags[@]}" \
         "${gappsWrapperArgs[@]}" \
         "${makeWrapperArgs[@]}"
 
-    echo "Installed wrapper to: "$2""
+    echo "installed wrapper to "$2""
 }
 
 dotnetFixupHook() {
     echo "Executing dotnetFixupPhase"
 
-    if [ "${executables}" ]; then
+    if [ "${executables-}" ]; then
         for executable in ${executables[@]}; do
-            execPath="$out/lib/${pname}/$executable"
+            path="$out/lib/$pname/$executable"
 
-            if [[ -f "$execPath" && -x "$execPath" ]]; then
-                wrapDotnetProgram "$execPath" "$out/bin/$(basename "$executable")"
+            if test -x "$path"; then
+                wrapDotnetProgram "$path" "$out/bin/$(basename "$executable")"
             else
-                echo "Specified binary \"$executable\" is either not an executable, or does not exist!"
+                echo "Specified binary \"$executable\" is either not an executable or does not exist!"
+                echo "Looked in $path"
                 exit 1
             fi
         done
     else
-        for executable in $out/lib/${pname}/*; do
-            if [[ -f "$executable" && -x "$executable" && "$executable" != *"dll"* ]]; then
-                wrapDotnetProgram "$executable" "$out/bin/$(basename "$executable")"
-            fi
-        done
+        while IFS= read -d '' executable; do
+            wrapDotnetProgram "$executable" "$out/bin/$(basename "$executable")" \;
+        done < <(find "$out/lib/$pname" ! -name "*.dll" -executable -type f -print0)
     fi
 
     echo "Finished dotnetFixupPhase"

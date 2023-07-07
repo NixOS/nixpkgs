@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pax-utils";
-  version = "1.3.5";
+  version = "1.3.7";
 
   src = fetchurl {
     url = "mirror://gentoo/distfiles/${pname}-${version}.tar.xz";
-    sha256 = "sha256-8KWwPfIwiqLdeq9TuewLK0hFW4YSnkd6FkPeYpBKuHQ=";
+    sha256 = "sha256-EINi0pZo0lz3sMrcY7FaTBz8DbxxrcFRszxf597Ok5o=";
   };
 
   strictDeps = true;
@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ (python3.withPackages (p: with p; [ pyelftools ])) ];
 
   passthru.updateScript = gitUpdater {
-    inherit pname version;
     url = "https://anongit.gentoo.org/git/proj/pax-utils.git";
     rev-prefix = "v";
   };

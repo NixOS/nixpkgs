@@ -5,6 +5,7 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , typing-extensions
 , zeroconf
 }:
@@ -23,6 +24,10 @@ buildPythonPackage rec {
     hash = "sha256-CGr7NvnGRNTiKq5BpB/zmfgyd/2ggTbO0nj+Q+MavTs=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     cryptography
     zeroconf
@@ -30,7 +35,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

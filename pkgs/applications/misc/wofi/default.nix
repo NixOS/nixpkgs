@@ -1,13 +1,24 @@
-{ stdenv, lib, fetchhg, fetchpatch, pkg-config, meson, ninja, wayland, gtk3, wrapGAppsHook, installShellFiles }:
-
+{ stdenv
+, lib
+, fetchFromSourcehut
+, pkg-config
+, meson
+, ninja
+, wayland
+, gtk3
+, wrapGAppsHook
+, installShellFiles
+}:
 stdenv.mkDerivation rec {
   pname = "wofi";
-  version = "1.2.4";
+  version = "1.3";
 
-  src = fetchhg {
-    url = "https://hg.sr.ht/~scoopta/wofi";
+  src = fetchFromSourcehut {
+    repo = pname;
+    owner = "~scoopta";
     rev = "v${version}";
-    sha256 = "1bnf078fg1kwslzwm1mjxwcqqq3bhk1dzymwfw9gk3brqbxrl75c";
+    sha256 = "sha256-GxMjEXBPQniD+Yc9QZjd8TH4ILJAX5dNzrjxDawhy8w=";
+    vc = "hg";
   };
 
   nativeBuildInputs = [ pkg-config meson ninja wrapGAppsHook installShellFiles ];

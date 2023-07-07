@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "speijnik";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-DJzwvgvSA9Q0kpueUoQV64pdDDNA7WzGu7r+g5aqutk=";
+    hash = "sha256-DJzwvgvSA9Q0kpueUoQV64pdDDNA7WzGu7r+g5aqutk=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

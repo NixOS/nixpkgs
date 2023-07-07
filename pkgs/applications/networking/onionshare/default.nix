@@ -26,12 +26,12 @@
 }:
 
 let
-  version = "2.5";
+  version = "2.6";
   src = fetchFromGitHub {
     owner = "onionshare";
     repo = "onionshare";
     rev = "v${version}";
-    sha256 = "xCAM+tjjyDg/gqAXr4YNPhM8R3n9r895jktisAGlpZo=";
+    sha256 = "sha256-LA7XlzoCXUiG/9subTddAd22336wO9sOHCIBlQK4Ga4=";
   };
   meta = with lib; {
     description = "Securely and anonymously send and receive files";
@@ -94,7 +94,7 @@ rec {
       obfs4
     ];
 
-    checkInputs = [
+    nativeCheckInputs = [
       pytestCheckHook
     ];
 

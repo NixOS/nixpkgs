@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     "--enable-frontends=conf,mconf,nconf"
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=format-security";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=format-security";
 
   meta = with lib; {
     description = "Out of Linux tree packaging of the kconfig infrastructure";

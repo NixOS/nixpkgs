@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wibo";
-  version = "0.2.4";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "decompals";
     repo = "wibo";
     rev = version;
-    hash = "sha256-dpfKSiIWE9L5BLPH2t8RsUz7Ufkdo/5zn1dewaEgJl0=";
+    hash = "sha256-oq/i0Hb2y5pwDEvaqSyC4+6LH1oUbvDZ/62l+V3S7Uk=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       meta.license = lib.licenses.unfree;
     };
   in lib.optionalString doCheck ''
-    MWCIncludes=. ./wibo ${gc}/GC/2.7/mwcceppc.exe -c ../test/test.c
+    MWCIncludes=../test ./wibo ${gc}/GC/2.7/mwcceppc.exe -c ../test/test.c
     file test.o | grep "ELF 32-bit"
   '';
 

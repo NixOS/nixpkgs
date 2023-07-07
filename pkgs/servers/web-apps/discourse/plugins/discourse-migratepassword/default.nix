@@ -6,8 +6,8 @@ mkDiscoursePlugin {
   src = fetchFromGitHub {
     owner = "communiteq";
     repo = "discourse-migratepassword";
-    rev = "7d33a57b4bd2a37badc64d5eca57d7ca01d62937";
-    sha256 = "sha256-BDBXgsLVHYiSSjvN4Y13ffwfWk6nuVLoJE1YKgGmLTA=";
+    rev = "f78774242eb9bf49a72d2800a39a24eeaa3b401a";
+    sha256 = "sha256-QJO+ei9/l7ye+kWE9VmiIuNCiOH66kd3vds49qlIztY=";
   };
   meta = with lib; {
     homepage = "https://github.com/communiteq/discourse-migratepassword";

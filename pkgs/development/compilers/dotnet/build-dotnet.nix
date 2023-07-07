@@ -1,7 +1,6 @@
 { type
 , version
 , srcs
-, icu # passing icu as an argument, because dotnet 3.1 has troubles with icu71
 , packages ? null
 }:
 
@@ -15,7 +14,7 @@ assert if type == "sdk" then packages != null else true;
 , autoPatchelfHook
 , makeWrapper
 , libunwind
-, openssl_1_1
+, icu
 , libuuid
 , zlib
 , libkrb5
@@ -23,6 +22,8 @@ assert if type == "sdk" then packages != null else true;
 , lttng-ust_2_12
 , testers
 , runCommand
+, writeShellScript
+, mkNugetDeps
 }:
 
 let
@@ -39,6 +40,12 @@ let
     runtime = ".NET Runtime ${version}";
     sdk = ".NET SDK ${version}";
   };
+
+  packageDeps = if type == "sdk" then mkNugetDeps {
+    name = "${pname}-${version}-deps";
+    nugetDeps = packages;
+  } else null;
+
 in
 stdenv.mkDerivation (finalAttrs: rec {
   inherit pname version;
@@ -53,9 +60,6 @@ stdenv.mkDerivation (finalAttrs: rec {
     zlib
     icu
     libkrb5
-    # this must be before curl for autoPatchElf to find it
-    # curl brings in its own openssl
-    openssl_1_1
     curl
   ] ++ lib.optional stdenv.isLinux lttng-ust_2_12;
 
@@ -71,9 +75,16 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/bin
     cp -r ./ $out
+
+    mkdir -p $out/share/doc/$pname/$version
+    mv $out/LICENSE.txt $out/share/doc/$pname/$version/
+    mv $out/ThirdPartyNotices.txt $out/share/doc/$pname/$version/
+
     ln -s $out/dotnet $out/bin/dotnet
+
     runHook postInstall
   '';
 
@@ -111,18 +122,21 @@ stdenv.mkDerivation (finalAttrs: rec {
     export DOTNET_CLI_TELEMETRY_OPTOUT=1
   '';
 
-  passthru = rec {
-    inherit icu packages;
+  passthru = {
+    inherit icu;
+    packages = packageDeps;
 
-    runtimeIdentifierMap = {
-      "x86_64-linux" = "linux-x64";
-      "aarch64-linux" = "linux-arm64";
-      "x86_64-darwin" = "osx-x64";
-      "aarch64-darwin" = "osx-arm64";
-    };
-
-    # Convert a "stdenv.hostPlatform.system" to a dotnet RID
-    systemToDotnetRid = system: runtimeIdentifierMap.${system} or (throw "unsupported platform ${system}");
+    updateScript =
+      if type == "sdk" then
+      let
+        majorVersion =
+          with lib;
+          concatStringsSep "." (take 2 (splitVersion version));
+      in
+      writeShellScript "update-dotnet-${majorVersion}" ''
+        pushd pkgs/development/compilers/dotnet
+        exec ${./update.sh} "${majorVersion}"
+      '' else null;
 
     tests = {
       version = testers.testVersion {

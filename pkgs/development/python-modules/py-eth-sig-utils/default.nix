@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "rmeissner";
     repo = "py-eth-sig-utils";
     rev = "v${version}";
-    sha256 = "sha256-PNvEHH5w2ptntRGzqWrqlbIzJJsT60OXg/Dh5f6Wq9k=";
+    hash = "sha256-PNvEHH5w2ptntRGzqWrqlbIzJJsT60OXg/Dh5f6Wq9k=";
   };
 
   propagatedBuildInputs = [
@@ -25,6 +25,9 @@ buildPythonPackage rec {
     pycryptodome
     rlp
   ];
+
+  # lots of: isinstance() arg 2 must be a type or tuple of types
+  doCheck = false;
 
   checkPhase = ''
     ${python.interpreter} -m unittest
@@ -37,5 +40,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/rmeissner/py-eth-sig-utils";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
+    # TODO: upstream is stale and doesn't not work with the new `eth-abi` package any more.
+    broken = true;
   };
 }

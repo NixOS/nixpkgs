@@ -14,10 +14,10 @@
 , pam
 , xkeyboard_config
 , udisks2
-
 , waylandSupport ? false, wayland-protocols, xwayland
 , bluetoothSupport ? true, bluez5
 , pulseSupport ? !stdenv.isDarwin, libpulseaudio
+, directoryListingUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   version = "0.25.4";
 
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
+    url = "https://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
     sha256 = "sha256-VttdIGuCG5qIMdJucT5BCscLIlWm9D/N98Ae794jt6I=";
   };
 
@@ -70,6 +70,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional waylandSupport "-Dwl=true";
 
   passthru.providedSessions = [ "enlightenment" ];
+
+  passthru.updateScript = directoryListingUpdater { };
 
   meta = with lib; {
     description = "The Compositing Window Manager and Desktop Shell";

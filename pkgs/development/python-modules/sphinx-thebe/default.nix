@@ -7,13 +7,14 @@
 
 buildPythonPackage rec {
   pname = "sphinx-thebe";
-  version = "0.1.2";
+  version = "0.2.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "756f1dd6643f5abb491f8a27b22825b04f47e05c5d214bbb2e6b5d42b621b85e";
+    sha256 = "f4c8c1542054f991b73fcb28c4cf21697e42aba2f83f22348c1c851b82766583";
   };
 
   propagatedBuildInputs = [ sphinx ];

@@ -20,8 +20,8 @@ stdenv.mkDerivation rec{
   version = "2.3";
 
   src = fetchurl {
-    url = "https://m12-assets.unigine.com/d/Unigine_Sanctuary-${version}.run";
-    sha256 = "1m9r79q33hx213zg3c2kknnc7hi8jp2h88s9qynny4k4rg8vpa18";
+    url = "https://assets.unigine.com/d/Unigine_Sanctuary-${version}.run";
+    sha256 = "sha256-KKi70ctkEm+tx0kjBMWVKMLDrJ1TsPH+CKLDMXA6OdU=";
   };
 
   libPath = lib.makeLibraryPath [
@@ -94,5 +94,6 @@ stdenv.mkDerivation rec{
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.BarinovMaxim ];
     platforms = [ "x86_64-linux" "i686-linux" ];
+    mainProgram = "Sanctuary";
   };
 }

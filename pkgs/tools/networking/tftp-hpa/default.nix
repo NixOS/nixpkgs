@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: main.o:/build/tftp-hpa-5.2/tftp/main.c:98: multiple definition of
   #     `toplevel'; tftp.o:/build/tftp-hpa-5.2/tftp/tftp.c:51: first defined here
-  NIX_CFLAGS_COMPILE="-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   meta = with lib; {
     description = "TFTP tools - a lot of fixes on top of BSD TFTP";

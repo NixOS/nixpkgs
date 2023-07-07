@@ -5,33 +5,31 @@
 , ninja
 , pkg-config
 , scdoc
-, wrapGAppsHook
+, wrapGAppsHook4
 , gtk4
 , qrencode
 }:
 
 stdenv.mkDerivation rec {
   pname = "iwgtk";
-  version = "0.8";
+  version = "0.9";
 
   src = fetchFromGitHub {
     owner = "j-lentz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-89rzDxalZtQkwAKS6hKPVY87kOWPySwDeZrPs2rGs/k=";
+    sha256 = "sha256-/Nxti4PfYVLnIiBgtAuR3KGI8dULszuSdTp+2DzBfbs=";
   };
 
   # patch systemd service to pass necessary environments and use absolute paths
   patches = [ ./systemd-service.patch ];
 
-  nativeBuildInputs = [ meson ninja pkg-config scdoc wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja pkg-config scdoc wrapGAppsHook4 ];
 
   buildInputs = [ gtk4 qrencode ];
 
   postInstall = ''
-    mv $out/share/lib/systemd $out/share
-    rmdir $out/share/lib
-    substituteInPlace $out/share/systemd/user/iwgtk.service --subst-var out
+    substituteInPlace $out/lib/systemd/user/iwgtk.service --subst-var out
   '';
 
   meta = with lib; {

@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 # Remove gcc and python references
 , removeReferencesTo
@@ -28,7 +27,6 @@
 , libunwind
 , thrift
 , cppzmq
-, zeromq
 # Needed only if qt-gui is disabled, from some reason
 , icu
 # GUI related
@@ -71,7 +69,7 @@ let
         # building with boost 1.7x fails
         ++ lib.optionals (!(hasFeature "gr-qtgui")) [ icu ];
       pythonNative = with python.pkgs; [
-        Mako
+        mako
         six
       ];
     };
@@ -118,7 +116,7 @@ let
     gnuradio-companion = {
       pythonRuntime = with python.pkgs; [
         pyyaml
-        Mako
+        mako
         numpy
         pygobject3
       ];
@@ -142,6 +140,9 @@ let
     };
     gr-blocks = {
       cmakeEnableFlag = "GR_BLOCKS";
+      runtime = [
+        libsndfile
+      ];
     };
     gr-fec = {
       cmakeEnableFlag = "GR_FEC";
@@ -228,7 +229,7 @@ let
       runtime = [ gsl libsodium ];
     };
     gr-zeromq = {
-      runtime = [ cppzmq zeromq ];
+      runtime = [ cppzmq ];
       cmakeEnableFlag = "GR_ZEROMQ";
     };
     gr-network = {
@@ -260,7 +261,7 @@ let
   inherit (shared) hasFeature; # function
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit pname;
   inherit (shared)
     version
@@ -280,12 +281,14 @@ stdenv.mkDerivation rec {
     ./modtool-newmod-permissions.patch
   ];
   passthru = shared.passthru // {
-    # Deps that are potentially overriden and are used inside GR plugins - the same version must
+    # Deps that are potentially overridden and are used inside GR plugins - the same version must
     inherit
       boost
       volk
-      log4cpp
     ;
+    # Used by many gnuradio modules, the same attribute is present in
+    # gnuradio3.10 where there it's spdlog.
+    logLib = log4cpp;
   } // lib.optionalAttrs (hasFeature "gr-uhd") {
     inherit uhd;
   } // lib.optionalAttrs (hasFeature "gr-qtgui") {
@@ -296,7 +299,7 @@ stdenv.mkDerivation rec {
     # This is the only python reference worth removing, if needed.
     + lib.optionalString (!hasFeature "python-support") ''
       ${removeReferencesTo}/bin/remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
-      ${removeReferencesTo}/bin/remove-references-to -t ${python} $(readlink -f $out/lib/libgnuradio-runtime.so)
+      ${removeReferencesTo}/bin/remove-references-to -t ${python} $(readlink -f $out/lib/libgnuradio-runtime${stdenv.hostPlatform.extensions.sharedLibrary})
       ${removeReferencesTo}/bin/remove-references-to -t ${python.pkgs.pybind11} $out/lib/cmake/gnuradio/gnuradio-runtimeTargets.cmake
     ''
   ;

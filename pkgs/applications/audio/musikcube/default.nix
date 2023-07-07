@@ -1,51 +1,47 @@
-{ cmake
-, pkg-config
-, boost
+{ asio
+, cmake
 , curl
 , fetchFromGitHub
 , fetchpatch
 , ffmpeg
 , gnutls
 , lame
+, lib
 , libev
+, game-music-emu
 , libmicrohttpd
 , libopenmpt
 , mpg123
 , ncurses
-, lib
+, pkg-config
+, portaudio
 , stdenv
 , taglib
 # Linux Dependencies
 , alsa-lib
+, pipewireSupport ? !stdenv.hostPlatform.isDarwin, pipewire
 , pulseaudio
-, systemdSupport ? stdenv.isLinux
+, sndioSupport ? true, sndio
 , systemd
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 # Darwin Dependencies
 , Cocoa
 , SystemConfiguration
+, coreaudioSupport ? stdenv.hostPlatform.isDarwin, CoreAudio
 }:
 
 stdenv.mkDerivation rec {
   pname = "musikcube";
-  version = "0.98.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "clangen";
     repo = pname;
     rev = version;
-    sha256 = "sha256-bnwOxEcvRXWPuqtkv8YlpclvH/6ZtQvyvHy4mqJCwik=";
+    hash = "sha512-ahKPmChHRVpOQcgt0fOYumlsMApeN4MWwywE9F0edeN0Xr3Vp830mWGzEBJvMvGI/lnU/1rd7tREaHfm1vCJaw==";
   };
 
-  patches = []
-    ++ lib.optionals stdenv.isDarwin [
-      # Fix pending upstream inclusion for Darwin nixpkgs builds:
-      # https://github.com/clangen/musikcube/pull/531
-      (fetchpatch {
-        name = "darwin-build.patch";
-        url = "https://github.com/clangen/musikcube/commit/9077bb9fa6ddfe93ebb14bb8feebc8a0ef9b7ee4.patch";
-        sha256 = "sha256-Am9AGKDGMN5z+JJFJKdsBLrHf2neHFovgF/8I5EXLDA=";
-      })
-    ];
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
     cmake
@@ -53,16 +49,18 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    boost
+    asio
     curl
     ffmpeg
     gnutls
     lame
     libev
+    game-music-emu
     libmicrohttpd
     libopenmpt
     mpg123
     ncurses
+    portaudio
     taglib
   ] ++ lib.optionals systemdSupport [
     systemd
@@ -70,21 +68,27 @@ stdenv.mkDerivation rec {
     alsa-lib pulseaudio
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa SystemConfiguration
+  ] ++ lib.optionals coreaudioSupport [
+    CoreAudio
+  ] ++ lib.optionals sndioSupport [
+    sndio
+  ] ++ lib.optionals pipewireSupport [
+    pipewire
   ];
 
   cmakeFlags = [
     "-DDISABLE_STRIP=true"
   ];
 
-  postFixup = lib.optionals stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.isDarwin ''
     install_name_tool -add_rpath $out/share/${pname} $out/share/${pname}/${pname}
     install_name_tool -add_rpath $out/share/${pname} $out/share/${pname}/${pname}d
   '';
 
   meta = with lib; {
-    description = "A fully functional terminal-based music player, library, and streaming audio server";
+    description = "Terminal-based music player, library, and streaming audio server";
     homepage = "https://musikcube.com/";
-    maintainers = [ maintainers.aanderse ];
+    maintainers = with maintainers; [ aanderse srapenne afh ];
     license = licenses.bsd3;
     platforms = platforms.all;
   };

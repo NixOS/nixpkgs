@@ -2,18 +2,23 @@
 
 buildPythonApplication rec {
   pname = "frescobaldi";
-  version = "3.1.3";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner = "wbsoft";
     repo = "frescobaldi";
     rev = "v${version}";
-    sha256 = "1p8f4vn2dpqndw1dylmg7wms6vi69zcfj544c908s4r8rrmbycyf";
+    sha256 = "sha256-q340ChF7VZcbLMW/nd1so7WScsPfbdeJUjTzsY5dkec=";
   };
 
   propagatedBuildInputs = with python3Packages; [
-    lilypond pygame python-ly sip_4
-    pyqt5 poppler-qt5
+    qpageview
+    lilypond
+    pygame
+    python-ly
+    sip_4
+    pyqt5
+    poppler-qt5
     pyqtwebengine
   ];
 
@@ -30,7 +35,7 @@ buildPythonApplication rec {
 
   dontWrapQtApps = true;
   makeWrapperArgs = [
-      "\${qtWrapperArgs[@]}"
+    "\${qtWrapperArgs[@]}"
   ];
 
   meta = with lib; {

@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pineapple-pictures";
-  version = "0.6.3";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "BLumia";
     repo = "pineapple-pictures";
     rev = version;
-    sha256 = "sha256-9Nlrei3TxZr3tv0BtlfsKAvDJhQHgd21FzLnzitYF3U=";
+    hash = "sha256-fNme11zoQBoFz4qJxBWzA8qHPwwxirM9rxxT36tjiQs";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     qtsvg
-    exiv2.lib
+    exiv2
+  ];
+
+  cmakeFlags = [
+    "-DPREFER_QT_5=OFF"
   ];
 
   meta = with lib; {
@@ -35,6 +39,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/BLumia/pineapple-pictures";
     license = licenses.mit;
     platforms = platforms.linux;
+    mainProgram = "ppic";
     maintainers = with maintainers; [ rewine ];
   };
 }

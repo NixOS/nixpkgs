@@ -9,6 +9,24 @@ rec {
   examples = import ./examples.nix { inherit lib; };
   architectures = import ./architectures.nix { inherit lib; };
 
+  /*
+    Elaborated systems contain functions, which means that they don't satisfy
+    `==` for a lack of reflexivity.
+
+    They might *appear* to satisfy `==` reflexivity when the same exact value is
+    compared to itself, because object identity is used as an "optimization";
+    compare the value with a reconstruction of itself, e.g. with `f == a: f a`,
+    or perhaps calling `elaborate` twice, and one will see reflexivity fail as described.
+
+    Hence a custom equality test.
+
+    Note that this does not canonicalize the systems, so you'll want to make sure
+    both arguments have been `elaborate`-d.
+  */
+  equals =
+    let removeFunctions = a: lib.filterAttrs (_: v: !builtins.isFunction v) a;
+    in a: b: removeFunctions a == removeFunctions b;
+
   /* List of all Nix system doubles the nixpkgs flake will expose the package set
      for. All systems listed here must be supported by nixpkgs as `localSystem`.
 
@@ -20,7 +38,7 @@ rec {
   # necessary.
   #
   # `parsed` is inferred from args, both because there are two options with one
-  # clearly prefered, and to prevent cycles. A simpler fixed point where the RHS
+  # clearly preferred, and to prevent cycles. A simpler fixed point where the RHS
   # always just used `final.*` would fail on both counts.
   elaborate = args': let
     args = if lib.isString args' then { system = args'; }
@@ -47,9 +65,11 @@ rec {
         else if final.isUClibc              then "uclibc"
         else if final.isAndroid             then "bionic"
         else if final.isLinux /* default */ then "glibc"
-        else if final.isAvr                 then "avrlibc"
-        else if final.isNone                then "newlib"
+        else if final.isFreeBSD             then "fblibc"
         else if final.isNetBSD              then "nblibc"
+        else if final.isAvr                 then "avrlibc"
+        else if final.isGhcjs               then null
+        else if final.isNone                then "newlib"
         # TODO(@Ericson2314) think more about other operating systems
         else                                     "native/impure";
       # Choose what linker we wish to use by default. Someday we might also
@@ -61,7 +81,7 @@ rec {
       linker =
         /**/ if final.useLLVM or false      then "lld"
         else if final.isDarwin              then "cctools"
-        # "bfd" and "gold" both come from GNU binutils. The existance of Gold
+        # "bfd" and "gold" both come from GNU binutils. The existence of Gold
         # is why we use the more obscure "bfd" and not "binutils" for this
         # choice.
         else                                     "bfd";
@@ -100,7 +120,14 @@ rec {
         }.${final.parsed.kernel.name} or null;
 
          # uname -m
-         processor = final.parsed.cpu.name;
+         processor =
+           if final.isPower64
+           then "ppc64${lib.optionalString final.isLittleEndian "le"}"
+           else if final.isPower
+           then "ppc${lib.optionalString final.isLittleEndian "le"}"
+           else if final.isMips64
+           then "mips64"  # endianness is *not* included on mips64
+           else final.parsed.cpu.name;
 
          # uname -r
          release = null;
@@ -112,7 +139,7 @@ rec {
         ({
           linux-kernel = args.linux-kernel or {};
           gcc = args.gcc or {};
-          rustc = args.rust or {};
+          rustc = args.rustc or {};
         } // platforms.select final)
         linux-kernel gcc rustc;
 
@@ -128,18 +155,24 @@ rec {
         else if final.isPower then "powerpc"
         else if final.isRiscV then "riscv"
         else if final.isS390 then "s390"
+        else if final.isLoongArch64 then "loongarch"
         else final.parsed.cpu.name;
 
       qemuArch =
         if final.isAarch32 then "arm"
+        else if final.isS390 && !final.isS390x then null
         else if final.isx86_64 then "x86_64"
         else if final.isx86 then "i386"
-        else {
-          powerpc = "ppc";
-          powerpcle = "ppc";
-          powerpc64 = "ppc64";
-          powerpc64le = "ppc64le";
-        }.${final.parsed.cpu.name} or final.parsed.cpu.name;
+        else if final.isMips64 then "mips64${lib.optionalString final.isLittleEndian "el"}"
+        else final.uname.processor;
+
+      # Name used by UEFI for architectures.
+      efiArch =
+        if final.isx86_32 then "ia32"
+        else if final.isx86_64 then "x64"
+        else if final.isAarch32 then "arm"
+        else if final.isAarch64 then "aa64"
+        else final.parsed.cpu.name;
 
       darwinArch = {
         armv7a  = "armv7";
@@ -173,17 +206,16 @@ rec {
               pulseSupport = false;
               smbdSupport = false;
               seccompSupport = false;
+              enableDocs = false;
               hostCpuTargets = [ "${final.qemuArch}-linux-user" ];
             };
-            wine-name = "wine${toString final.parsed.cpu.bits}";
-            wine = (pkgs.winePackagesFor wine-name).minimal;
+            wine = (pkgs.winePackagesFor "wine${toString final.parsed.cpu.bits}").minimal;
           in
-          if final.parsed.kernel.name == pkgs.stdenv.hostPlatform.parsed.kernel.name &&
-            pkgs.stdenv.hostPlatform.canExecute final
+          if pkgs.stdenv.hostPlatform.canExecute final
           then "${pkgs.runtimeShell} -c '\"$@\"' --"
           else if final.isWindows
-          then "${wine}/bin/${wine-name}"
-          else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux
+          then "${wine}/bin/wine${lib.optionalString (final.parsed.cpu.bits == 64) "64"}"
+          else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux && final.qemuArch != null
           then "${qemu-user}/bin/qemu-${final.qemuArch}"
           else if final.isWasi
           then "${pkgs.wasmtime}/bin/wasmtime"

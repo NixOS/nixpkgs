@@ -10,7 +10,7 @@ let
     Connection = ${cfg.device.connection}
     SynchronizeTime = ${if cfg.device.synchronizeTime then "yes" else "no"}
     LogFormat = ${cfg.log.format}
-    ${if (cfg.device.pin != null) then "PIN = ${cfg.device.pin}" else ""}
+    ${optionalString (cfg.device.pin != null) "PIN = ${cfg.device.pin}"}
     ${cfg.extraConfig.gammu}
 
 
@@ -33,10 +33,10 @@ let
     ${optionalString (cfg.backend.service == "sql" && cfg.backend.sql.driver == "native_pgsql") (
       with cfg.backend; ''
         Driver = ${sql.driver}
-        ${if (sql.database!= null) then "Database = ${sql.database}" else ""}
-        ${if (sql.host != null) then "Host = ${sql.host}" else ""}
-        ${if (sql.user != null) then "User = ${sql.user}" else ""}
-        ${if (sql.password != null) then "Password = ${sql.password}" else ""}
+        ${optionalString (sql.database!= null) "Database = ${sql.database}"}
+        ${optionalString (sql.host != null) "Host = ${sql.host}"}
+        ${optionalString (sql.user != null) "User = ${sql.user}"}
+        ${optionalString (sql.password != null) "Password = ${sql.password}"}
       '')}
 
     ${cfg.extraConfig.smsd}
@@ -45,8 +45,8 @@ let
   initDBDir = "share/doc/gammu/examples/sql";
 
   gammuPackage = with cfg.backend; (pkgs.gammu.override {
-    dbiSupport = (service == "sql" && sql.driver == "sqlite");
-    postgresSupport = (service == "sql" && sql.driver == "native_pgsql");
+    dbiSupport = service == "sql" && sql.driver == "sqlite";
+    postgresSupport = service == "sql" && sql.driver == "native_pgsql";
   });
 
 in {
@@ -192,7 +192,7 @@ in {
           password = mkOption {
             type = types.nullOr types.str;
             default = null;
-            description = lib.mdDoc "User password used for connetion to the database";
+            description = lib.mdDoc "User password used for connection to the database";
           };
         };
       };

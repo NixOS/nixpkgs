@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "luispedro";
     repo = "mahotas";
     rev = "v${version}";
-    sha256 = "sha256-AmctF/9hLgHw6FUm0s61eCdcc12lBa1t0OkXclis//w=";
+    hash = "sha256-AmctF/9hLgHw6FUm0s61eCdcc12lBa1t0OkXclis//w=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace mahotas/io/freeimage.py \

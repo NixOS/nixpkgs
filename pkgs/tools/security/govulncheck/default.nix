@@ -1,17 +1,17 @@
 { lib, buildGoModule, fetchFromGitHub }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "govulncheck";
-  version = "unstable-2022-09-02";
+  version = "unstable-2023-03-22";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "vuln";
-    rev = "27dd78d2ca392c1738e54efe513a2ecb7bf46000";
-    sha256 = "sha256-G35y1V4W1nLZ+QGvIQwER9whBIBDFUVptrHx78orcI0=";
+    rev = "f2d9b5a6e023e7cd80347eb7ebca02ae19b28903";
+    sha256 = "sha256-zaeCEgFlv3Oxm4dIT/Evevww05JYEecekXO9UtIKLkU=";
   };
 
-  vendorSha256 = "sha256-9FH9nq5cEyhMxrrvfQAOWZ4aThMsU0HwlI+0W0uVHZ4=";
+  vendorSha256 = "sha256-RxdiZ3NN+EWVCiBPI0VIDuRI1/h4rnU4KCNn2WwZL7Q=";
 
   subPackages = [ "cmd/govulncheck" ];
 
@@ -27,15 +27,17 @@ buildGoModule rec {
     # - tries to builds govulncheck again
     rm cmd/govulncheck/main_command_118_test.go
     # - does go builds of example go files
-    rm vulncheck/binary_test.go
+    rm internal/vulncheck/binary_test.go
     # - just have resolution issues
-    rm vulncheck/{source,vulncheck}_test.go
+    rm internal/vulncheck/{source,vulncheck}_test.go
+    rm internal/govulncheck/callstacks_test.go
   '';
 
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     homepage = "https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck";
+    downloadPage = "https://github.com/golang/vuln";
     description = "The database client and tools for the Go vulnerability database, also known as vuln";
     longDescription = ''
       Govulncheck reports known vulnerabilities that affect Go code. It uses
@@ -59,6 +61,6 @@ buildGoModule rec {
       reported for a Linux build.
     '';
     license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ jk ];
+    maintainers = with maintainers; [ jk SuperSandro2000 ];
   };
 }

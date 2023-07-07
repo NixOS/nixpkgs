@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   # Workaround to build against upstream gcc-10 and clang-11.
   # Can be removed when next release contains
   #    https://github.com/simh/simh/issues/794
-  NIX_CFLAGS_COMPILE = [ "-fcommon" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-fcommon" ];
 
   makeFlags = [ "GCC=${stdenv.cc.targetPrefix}cc" "CC_STD=-std=c99" "LDFLAGS=-lm" ];
 

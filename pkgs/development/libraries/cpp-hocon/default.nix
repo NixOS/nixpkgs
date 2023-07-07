@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sed -i -e '/add_subdirectory(tests)/d' lib/CMakeLists.txt
   '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   nativeBuildInputs = [ cmake ];
 

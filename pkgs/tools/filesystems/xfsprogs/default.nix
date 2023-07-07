@@ -1,27 +1,32 @@
-{ lib, stdenv, buildPackages, fetchurl, autoconf, automake, gettext, libtool, pkg-config
+{ lib, stdenv, buildPackages, fetchurl, gettext, pkg-config
 , icu, libuuid, readline, inih, liburcu
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "xfsprogs";
-  version = "5.19.0";
+  version = "6.3.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/fs/xfs/xfsprogs/${pname}-${version}.tar.xz";
-    hash = "sha256-S2xsmMA2o39tkMgst/6UBdO1hW2TRWYgMtAf9LFAWSw=";
+    hash = "sha256-7Jh8nwvLLbKZG/+4DTUxULOJw6K3m2gwQR9wQq32mQw=";
   };
 
   outputs = [ "bin" "dev" "out" "doc" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
-    autoconf automake libtool gettext pkg-config
+    gettext pkg-config
     libuuid # codegen tool uses libuuid
+    liburcu # required by crc32selftest
   ];
   buildInputs = [ readline icu inih liburcu ];
   propagatedBuildInputs = [ libuuid ]; # Dev headers include <uuid/uuid.h>
 
   enableParallelBuilding = true;
+  # Install fails as:
+  #   make[1]: *** No rule to make target '\', needed by 'kmem.lo'.  Stop.
+  enableParallelInstalling = false;
 
   # @sbindir@ is replaced with /run/current-system/sw/bin to fix dependency cycles
   preConfigure = ''
@@ -29,7 +34,6 @@ stdenv.mkDerivation rec {
       substituteInPlace "$file" \
         --replace '@sbindir@' '/run/current-system/sw/bin'
     done
-    make configure
     patchShebangs ./install-sh
   '';
 
@@ -44,6 +48,10 @@ stdenv.mkDerivation rec {
   postInstall = ''
     find . -type d -name .libs | xargs rm -rf
   '';
+
+  passthru.tests = {
+    inherit (nixosTests.installer) lvm;
+  };
 
   meta = with lib; {
     homepage = "https://xfs.org/";

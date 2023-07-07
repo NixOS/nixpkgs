@@ -6,6 +6,7 @@
 
 # build
 , cython
+, setuptools
 
 # tests
 , aiofiles
@@ -27,18 +28,20 @@
 
 buildPythonPackage rec {
   pname = "falcon";
-  version = "3.1.0";
+  version = "3.1.1";
   format = "pyproject";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "falconry";
     repo = pname;
-    rev = version;
-    hash = "sha256-Y6bD0GCXhqpvMV+/i1v59p2qWZ91f2ey7sPQrVALY54=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-5Lhz4qI/x7yK9tqQg4CvYNug+fp9l6ErNGH1pVybZ6c=";
   };
 
-  nativeBuildInputs = lib.optionals (!isPyPy) [
+  nativeBuildInputs = [
+    setuptools
+  ] ++ lib.optionals (!isPyPy) [
     cython
   ];
 
@@ -52,7 +55,7 @@ buildPythonPackage rec {
     popd
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     # https://github.com/falconry/falcon/blob/master/requirements/tests
     pytestCheckHook
     pyyaml

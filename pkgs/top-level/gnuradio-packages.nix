@@ -16,18 +16,15 @@ let
 
   callPackage = self.newScope ({
     inherit (gnuradio)
-      # Packages that are potentially overriden and used as deps here.
+      # Packages that are potentially overridden and used as deps here.
       boost
       volk
+      logLib
     ;
     inherit mkDerivationWith mkDerivation;
   } // lib.optionalAttrs (gnuradio.hasFeature "gr-uhd") {
     inherit (gnuradio) uhd;
-  } // (if (lib.versionAtLeast gnuradio.versionAttr.major "3.10") then {
-    inherit (gnuradio) spdlog;
-  } else {
-    inherit (gnuradio) log4cpp;
-  }));
+  });
 in {
 
   inherit callPackage mkDerivation mkDerivationWith;

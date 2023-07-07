@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     CONFIG_IEEE80211R=y
     CONFIG_IEEE80211N=y
     CONFIG_IEEE80211AC=y
+    CONFIG_IEEE80211AX=y
     CONFIG_FULL_DYNAMIC_VLAN=y
     CONFIG_VLAN_NETLINK=y
     CONFIG_TLS=openssl
@@ -72,7 +73,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://hostap.epitest.fi";
+    homepage = "https://w1.fi/hostapd/";
     description = "A user space daemon for access point and authentication servers";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ninjatrappeur hexa ];

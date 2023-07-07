@@ -3,14 +3,14 @@
 let
   generator = pkgsBuildBuild.buildGoModule rec {
     pname = "v2ray-domain-list-community";
-    version = "20220908131416";
+    version = "20230627034247";
     src = fetchFromGitHub {
       owner = "v2fly";
       repo = "domain-list-community";
       rev = version;
-      sha256 = "sha256-LXtdyLINmUcyT2x9w7KCoLLifcYrSq6JN+2J9wbKjCI=";
+      hash = "sha256-9GrIvrLIU72oy12K/+1WaqOjvMJngKRNmkpwTq/9r9Q=";
     };
-    vendorSha256 = "sha256-CCY3CgjA1w4svzmkaI2Jt272Rrt5UOt5sbVDAWRRfzk=";
+    vendorHash = "sha256-dYaGR5ZBORANKAYuPAi9i+KQn2OAGDGTZxdyVjkcVi8=";
     meta = with lib; {
       description = "community managed domain list";
       homepage = "https://github.com/v2fly/domain-list-community";

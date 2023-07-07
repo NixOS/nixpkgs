@@ -1,0 +1,73 @@
+diff --git a/cmake/main.cmake b/cmake/main.cmake
+index 8c60c4214..194f33a21 100644
+--- a/cmake/main.cmake
++++ b/cmake/main.cmake
+@@ -15,15 +15,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ set(CMAKE_UNITY_BUILD_BATCH_SIZE 10)
+ set(CMAKE_CXX_EXTENSIONS OFF)
+ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+-list(APPEND BASE_LD_FLAGS_LIST
+-  -L${REDPANDA_DEPS_INSTALL_DIR}/lib
+-  -L${REDPANDA_DEPS_INSTALL_DIR}/lib64
+-  -fuse-ld=lld)
+-set(PKG_CONFIG_PATH_LIST
+-  ${REDPANDA_DEPS_INSTALL_DIR}/lib64/pkgconfig
+-  ${REDPANDA_DEPS_INSTALL_DIR}/share/pkgconfig
+-  ${REDPANDA_DEPS_INSTALL_DIR}/lib/pkgconfig
+-  )
+ 
+ list(APPEND BASE_CXX_FLAGS_LIST -fPIC)
+ list(APPEND BASE_C_FLAGS_LIST -fPIC)
+diff --git a/cmake/testing.cmake b/cmake/testing.cmake
+index 7f149dc82..7c57aa3dd 100644
+--- a/cmake/testing.cmake
++++ b/cmake/testing.cmake
+@@ -24,6 +24,7 @@ message(STATUS "RP_ENABLE_BENCHMARK_TESTS=${RP_ENABLE_BENCHMARK_TESTS}")
+ message(STATUS "RP_ENABLE_HONEY_BADGER_TESTS=${RP_ENABLE_HONEY_BADGER_TESTS}")
+ 
+ function (rp_test)
++  return()
+   set(options
+     INTEGRATION_TEST UNIT_TEST BENCHMARK_TEST HBADGER_TEST)
+   set(oneValueArgs BINARY_NAME TIMEOUT PREPARE_COMMAND POST_COMMAND)
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index eecd145ed..b9efa89b5 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -5,4 +5,5 @@ find_package(Boost REQUIRED
+     unit_test_framework)
+ find_package(absl REQUIRED)
+ add_subdirectory(v)
+-add_subdirectory(go/kreq-gen)
++# Don't build kafka-request-generator, it is needed only for tests
++# add_subdirectory(go/kreq-gen)
+diff --git a/src/v/CMakeLists.txt b/src/v/CMakeLists.txt
+index 075da485e..af7ede2bc 100644
+--- a/src/v/CMakeLists.txt
++++ b/src/v/CMakeLists.txt
+@@ -58,7 +58,9 @@ else()
+   if(${ENABLE_GIT_HASH})
+     message(FATAL_ERROR "ENABLE_GIT_HASH cannot be 'on' when ENABLE_GIT_VERSION is 'off'")
+   endif()
+-  set(GIT_VER "no_version")
++  if(NOT GIT_VER)
++    set(GIT_VER "no_version")
++  endif()
+ endif()
+ 
+ if(${ENABLE_GIT_HASH})
+@@ -71,8 +73,12 @@ if(${ENABLE_GIT_HASH})
+     set(GIT_CLEAN_DIRTY "")
+   endif()
+ else()
+-  set(GIT_SHA1 "000")
+-  set(GIT_CLEAN_DIRTY "-dev")
++  if(NOT GIT_SHA1)
++    set(GIT_SHA1 "000")
++  endif()
++  if(NOT GIT_CLEAN_DIRTY)
++    set(GIT_CLEAN_DIRTY "-dev")
++  endif()
+ endif()
+ 
+ configure_file(version.h.in version.h @ONLY)

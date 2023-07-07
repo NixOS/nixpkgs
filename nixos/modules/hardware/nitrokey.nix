@@ -22,6 +22,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.udev.packages = [ pkgs.nitrokey-udev-rules ];
+    services.udev.packages = [ pkgs.libnitrokey ];
   };
 }

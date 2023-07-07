@@ -5,29 +5,29 @@
 , fontconfig
 , libX11
 , libXft
-, libXinerama
 , libXpm
+, libXrandr
 , libXrender
 , conf ? null
 }:
 
 stdenv.mkDerivation rec {
   pname = "shod";
-  version = "2.4.0";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "phillbush";
     repo = "shod";
     rev = "v${version}";
-    sha256 = "sha256-jrPuI3ADppqaJ2y9GksiJZZd4LtN1P5yjWwlf9VuYDc=";
+    hash = "sha256-0bKp1BTIdYVBDVdeGnTVo76UtBxa4UbXLZihdjHS/og=";
   };
 
   buildInputs = [
     fontconfig
     libX11
     libXft
-    libXinerama
     libXpm
+    libXrandr
     libXrender
   ];
 

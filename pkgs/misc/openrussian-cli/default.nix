@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
     cp openrussian $out/bin
 
     wrapProgram $out/bin/openrussian \
-      --prefix LUA_PATH ';' '${lua.pkgs.lib.genLuaPathAbsStr luaEnv}' \
-      --prefix LUA_CPATH ';' '${lua.pkgs.lib.genLuaCPathAbsStr luaEnv}'
+      --prefix LUA_PATH ';' '${lua.pkgs.luaLib.genLuaPathAbsStr luaEnv}' \
+      --prefix LUA_CPATH ';' '${lua.pkgs.luaLib.genLuaCPathAbsStr luaEnv}'
 
     runHook postInstall
   '';

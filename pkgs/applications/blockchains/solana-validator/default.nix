@@ -4,15 +4,10 @@
 , fetchFromGitHub
 , lib
 , rustPlatform
-, IOKit
-, Security
-, AppKit
 , pkg-config
 , udev
 , zlib
 , protobuf
-, clang
-, llvm
 , openssl
 , libclang
 , rustfmt
@@ -63,17 +58,13 @@ rustPlatform.buildRustPackage rec {
 
   # partly inspired by https://github.com/obsidiansystems/solana-bridges/blob/develop/default.nix#L29
   inherit cargoSha256;
-  verifyCargoDeps = true;
 
   cargoBuildFlags = builtins.map (n: "--bin=${n}") solanaPkgs;
 
   # weird errors. see https://github.com/NixOS/nixpkgs/issues/52447#issuecomment-852079285
-  LIBCLANG_PATH = "${libclang.lib}/lib";
-  BINDGEN_EXTRA_CLANG_ARGS =
-    "-isystem ${libclang.lib}/lib/clang/${lib.getVersion clang}/include";
-  LLVM_CONFIG_PATH = "${llvm}/bin/llvm-config";
+  # LLVM_CONFIG_PATH = "${llvm}/bin/llvm-config";
 
-  nativeBuildInputs = [ clang llvm pkg-config protobuf rustfmt perl ];
+  nativeBuildInputs = [ pkg-config protobuf rustfmt perl rustPlatform.bindgenHook ];
   buildInputs =
     [ openssl zlib libclang hidapi ] ++ (lib.optionals stdenv.isLinux [ udev ]);
   strictDeps = true;
@@ -86,6 +77,8 @@ rustPlatform.buildRustPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ adjacentresearch ];
     platforms = platforms.unix;
+    # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin;
   };
   passthru.updateScript = ./update.sh;
 }

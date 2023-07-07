@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pylaunches";
-  version = "1.3.0";
+  version = "1.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,14 +19,14 @@ buildPythonPackage rec {
     owner = "ludeeus";
     repo = pname;
     rev = version;
-    sha256 = "1b41j384lqg3gc7dsmdzp7anrsymqgc1895lc5j8g43x2mfgbjnh";
+    sha256 = "sha256-bIcnYcbfAwjet3cg97y+ujFfY2916ANk4sw0sZoU59g=";
   };
 
   propagatedBuildInputs = [
     aiohttp
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytestCheckHook
     pytest-asyncio

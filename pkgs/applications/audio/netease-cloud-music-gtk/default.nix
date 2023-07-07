@@ -1,8 +1,8 @@
 { lib
 , stdenv
-, fetchpatch
 , fetchFromGitHub
 , rustPlatform
+, cargo
 , meson
 , ninja
 , pkg-config
@@ -11,6 +11,7 @@
 , appstream-glib
 , desktop-file-utils
 , libxml2
+, rustc
 , wrapGAppsHook4
 , openssl
 , dbus
@@ -22,26 +23,20 @@
 
 stdenv.mkDerivation rec {
   pname = "netease-cloud-music-gtk";
-  version = "2.0.2";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "gmg137";
     repo = pname;
     rev = version;
-    hash = "sha256-0pmuzdRQBdUS4ORh3zJQWb/hbhk7SY3P4QMwoy4Mgp8=";
+    hash = "sha256-A3mvf6TZ3+aiWA6rg9G5NMaDKvO0VQzwIM1t0MaTpTc=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "add-cargo-lock-for-2.0.2.patch";
-      url = "https://github.com/gmg137/netease-cloud-music-gtk/commit/21b5d40d49e661fe7bd35ed10bb8b883ef7fcd9f.patch";
-      hash = "sha256-pSgc+yJQMNyLPYUMc1Kp/Kr+++2tH8srIM5PgVeoZ+E=";
-    })
-  ];
-
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src patches;
-    hash = "sha256-7Z5i5Xqtk4ZbBXSVYg1e05ENa2swC88Ctd2paE60Yyo=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "netease-cloud-music-api-1.0.2" = "sha256-7Yp2ZBg5wHnDPtdPLwZQnqcSlVuGCrXpV5M/dp/IaOE=";
+    };
   };
 
   nativeBuildInputs = [
@@ -54,11 +49,10 @@ stdenv.mkDerivation rec {
     desktop-file-utils # update-desktop-database
     libxml2 # xmllint
     wrapGAppsHook4
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
     openssl

@@ -27,7 +27,7 @@ in
         variable (defaults to the value of
         {option}`system.nixos.version`).
 
-        Can be overriden by setting {env}`NIXOS_LABEL`.
+        Can be overridden by setting {env}`NIXOS_LABEL`.
 
         Useful for not loosing track of configurations built from different
         nixos branches/revisions, e.g.:

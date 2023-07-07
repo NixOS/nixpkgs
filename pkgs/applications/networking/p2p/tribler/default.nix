@@ -8,8 +8,7 @@
 }:
 
 let
-  libtorrent = (python3.pkgs.toPythonModule (
-    libtorrent-rasterbar-1_2_x.override { python = python3; })).python;
+  libtorrent = (python3.pkgs.toPythonModule (libtorrent-rasterbar-1_2_x)).python;
 in
 stdenv.mkDerivation rec {
   pname = "tribler";

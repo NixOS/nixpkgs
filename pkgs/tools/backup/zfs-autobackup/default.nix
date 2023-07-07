@@ -1,4 +1,4 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, fetchPypi }:
 
 let
   pythonPackages = python3Packages;
@@ -8,7 +8,7 @@ pythonPackages.buildPythonApplication rec {
   pname = "zfs_autobackup";
   version = "3.1";
 
-  src = pythonPackages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "42c22001717b3d7cfdae6297fedc11b2dd1eb2a4bd25b6bb1c9232dd3b70ad67";
   };

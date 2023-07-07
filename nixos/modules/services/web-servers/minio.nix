@@ -60,7 +60,7 @@ in
       '';
     };
 
-    rootCredentialsFile = mkOption  {
+    rootCredentialsFile = mkOption {
       type = types.nullOr types.path;
       default = null;
       description = lib.mdDoc ''
@@ -96,29 +96,62 @@ in
   config = mkIf cfg.enable {
     warnings = optional ((cfg.accessKey != "") || (cfg.secretKey != "")) "services.minio.`accessKey` and services.minio.`secretKey` are deprecated, please use services.minio.`rootCredentialsFile` instead.";
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.configDir}' - minio minio - -"
-    ] ++ (map (x:  "d '" + x + "' - minio minio - - ") cfg.dataDir);
+    systemd = lib.mkMerge [{
+      tmpfiles.rules = [
+        "d '${cfg.configDir}' - minio minio - -"
+      ] ++ (map (x: "d '" + x + "' - minio minio - - ") cfg.dataDir);
 
-    systemd.services.minio = {
-      description = "Minio Object Storage";
-      after = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        ExecStart = "${cfg.package}/bin/minio server --json --address ${cfg.listenAddress} --console-address ${cfg.consoleAddress} --config-dir=${cfg.configDir} ${toString cfg.dataDir}";
-        Type = "simple";
-        User = "minio";
-        Group = "minio";
-        LimitNOFILE = 65536;
-        EnvironmentFile = if (cfg.rootCredentialsFile != null) then cfg.rootCredentialsFile
-                          else if ((cfg.accessKey != "") || (cfg.secretKey != "")) then (legacyCredentials cfg)
-                          else null;
+      services.minio = {
+        description = "Minio Object Storage";
+        after = [ "network-online.target" ];
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig = {
+          ExecStart = "${cfg.package}/bin/minio server --json --address ${cfg.listenAddress} --console-address ${cfg.consoleAddress} --config-dir=${cfg.configDir} ${toString cfg.dataDir}";
+          Type = "simple";
+          User = "minio";
+          Group = "minio";
+          LimitNOFILE = 65536;
+          EnvironmentFile =
+            if (cfg.rootCredentialsFile != null) then cfg.rootCredentialsFile
+            else if ((cfg.accessKey != "") || (cfg.secretKey != "")) then (legacyCredentials cfg)
+            else null;
+        };
+        environment = {
+          MINIO_REGION = "${cfg.region}";
+          MINIO_BROWSER = "${if cfg.browser then "on" else "off"}";
+        };
       };
-      environment = {
-        MINIO_REGION = "${cfg.region}";
-        MINIO_BROWSER = "${if cfg.browser then "on" else "off"}";
-      };
-    };
+    }
+
+      (lib.mkIf (cfg.rootCredentialsFile != null) {
+        # The service will fail if the credentials file is missing
+        services.minio.unitConfig.ConditionPathExists = cfg.rootCredentialsFile;
+
+        # The service will not restart if the credentials file has
+        # been changed. This can cause stale root credentials.
+        paths.minio-root-credentials = {
+          wantedBy = [ "multi-user.target" ];
+
+          pathConfig = {
+            PathChanged = [ cfg.rootCredentialsFile ];
+            Unit = "minio-restart.service";
+          };
+        };
+
+        services.minio-restart = {
+          description = "Restart MinIO";
+
+          script = ''
+            systemctl restart minio.service
+          '';
+
+          serviceConfig = {
+            Type = "oneshot";
+            Restart = "on-failure";
+            RestartSec = 5;
+          };
+        };
+      })];
 
     users.users.minio = {
       group = "minio";

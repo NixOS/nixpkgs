@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "exchangelib";
-  version = "4.7.6";
+  version = "5.0.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -36,14 +36,15 @@ buildPythonPackage rec {
     owner = "ecederstrand";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Oarmdc2PuE4kQ/qUqQhuzdTpIrrMFCK72CrVmoSH1DI=";
+    hash = "sha256-oQ09/CvHIA4PAVqK6DeY3slHvQ1aPRqCC6ZuhubTN94=";
   };
 
   patches = [
     (fetchpatch {
-      name = "tests-timezones.patch";
-      url = "https://github.com/ecederstrand/exchangelib/commit/d5d386f54adec8ab02f871332b89e1176c214ba2.diff";
-      hash = "sha256-E3Ys6IDJ/yMsvi+1GKbwckkhbNrc9JLM/+GrPtUz+mY=";
+      name = "tests-timezones-2.patch";
+      url = "https://github.com/ecederstrand/exchangelib/commit/419eafcd9261bfd0617823ee437204d5556a8271.diff";
+      excludes = [ "tests/test_ewsdatetime.py" ];
+      hash = "sha256-dSp6NkNT5dHOg8XgDi8sR3t3hq46sNtPjUXva2YfFSU=";
     })
   ];
 
@@ -65,7 +66,7 @@ buildPythonPackage rec {
     backports-zoneinfo
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     flake8
     psutil
     python-dateutil
@@ -81,6 +82,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Client for Microsoft Exchange Web Services (EWS)";
     homepage = "https://github.com/ecederstrand/exchangelib";
+    changelog = "https://github.com/ecederstrand/exchangelib/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd2;
     maintainers = with maintainers; [ catern ];
   };

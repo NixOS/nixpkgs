@@ -1,7 +1,7 @@
 { buildPecl, fetchFromGitHub, lib, pkg-config, dlib }:
 let
   pname = "pdlib";
-  version = "1.0.2";
+  version = "1.1.0";
 in
 buildPecl {
   inherit pname version;
@@ -10,7 +10,7 @@ buildPecl {
     owner = "goodspb";
     repo = "pdlib";
     rev = "v${version}";
-    sha256 = "0qnmqwlw5vb2rvliap4iz9val6mal4qqixcw69pwskdw5jka6v5i";
+    sha256 = "sha256-AKZ3F2XzEQCeZkacSXBinxeGQrHBmqjP7mDGQ3RBAiE=";
   };
 
   nativeBuildInputs = [ pkg-config ];

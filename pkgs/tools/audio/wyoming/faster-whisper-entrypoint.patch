@@ -1,0 +1,29 @@
+diff --git a/setup.py b/setup.py
+index 1c0b2d2..bbff1d1 100644
+--- a/setup.py
++++ b/setup.py
+@@ -35,4 +35,9 @@ setup(
+         "Programming Language :: Python :: 3.10",
+     ],
+     keywords="rhasspy wyoming whisper",
++    entry_points={
++        'console_scripts': [
++            'wyoming-faster-whisper = wyoming_faster_whisper:__main__.run'
++        ]
++    }
+ )
+diff --git a/wyoming_faster_whisper/__main__.py b/wyoming_faster_whisper/__main__.py
+index 5557cc5..bb9d69f 100755
+--- a/wyoming_faster_whisper/__main__.py
++++ b/wyoming_faster_whisper/__main__.py
+@@ -131,5 +131,9 @@ async def main() -> None:
+ 
+ # -----------------------------------------------------------------------------
+ 
+-if __name__ == "__main__":
++def run():
+     asyncio.run(main())
++
++
++if __name__ == "__main__":
++    run()

@@ -1,7 +1,7 @@
-{ lib, python3 }:
+{ lib, python3, fetchPypi }:
 
 let
-  inherit (python3.pkgs) buildPythonApplication fetchPypi requests;
+  inherit (python3.pkgs) buildPythonApplication requests;
 in
 buildPythonApplication rec {
   pname = "tzupdate";

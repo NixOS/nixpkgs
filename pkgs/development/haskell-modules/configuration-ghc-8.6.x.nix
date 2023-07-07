@@ -38,7 +38,7 @@ self: super: {
   stm = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_5;
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
@@ -94,13 +94,13 @@ self: super: {
   # ghc versions prior to 8.8.x needs additional dependency to compile successfully.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser super.ghc-lib-parser-ex;
 
-  # This became a core library in ghc 8.10., so we don‘t have an "exception" attribute anymore.
+  # This became a core library in ghc 8.10., so we don’t have an "exception" attribute anymore.
   exceptions = super.exceptions_0_10_4;
 
   # Older compilers need the latest ghc-lib to build this package.
   hls-hlint-plugin = addBuildDepend self.ghc-lib super.hls-hlint-plugin;
 
-  # vector 0.12.2 indroduced doctest checks that don‘t work on older compilers
+  # vector 0.12.2 indroduced doctest checks that don’t work on older compilers
   vector = dontCheck super.vector;
 
   mmorph = super.mmorph_1_1_3;

@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "hwi";
-  version = "2.1.1";
+  version = "2.2.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bitcoin-core";
     repo = "HWI";
-    rev = version;
-    sha256 = "sha256-jsJjGezf2JrPYr3YNZGx23Jo14DbmM1S6bu7+xgZh58=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-vQJN2YXWGvYSVV9lemZyu61inc9iBFxf5nIlpIiRe+s=";
   };
 
   propagatedBuildInputs = [

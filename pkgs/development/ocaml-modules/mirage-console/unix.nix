@@ -5,6 +5,8 @@ buildDunePackage {
 
   inherit (mirage-console) version src;
 
+  duneVersion = "3";
+
   propagatedBuildInputs = [
     mirage-console
     cstruct

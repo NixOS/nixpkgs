@@ -2,38 +2,46 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, fetchurl
 
 , buildPackages
+, cargo
 , iproute2
 , lzo
 , openssl
 , pkg-config
 , ronn
+, rustc
 , zlib
 }:
 
 let
   pname = "zerotierone";
-  version = "1.10.1";
+  version = "1.10.6";
 
   src = fetchFromGitHub {
     owner = "zerotier";
     repo = "ZeroTierOne";
     rev = version;
-    sha256 = "sha256-Y0klfE7ANQl1uYMkRg+AaIiJYSVPT6zME7tDMg2xbOk=";
+    sha256 = "sha256-mapFKeF+8jMGkxSuHaw5oUdTdSQgAdxEwF/S6iyVLbY=";
   };
+
 in stdenv.mkDerivation {
   inherit pname version src;
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    src = "${src}/zeroidc";
-    name = "${pname}-${version}";
-    sha256 = "sha256-8K4zAXo85MT4pfIsg7DZAO+snfwzdo2TozVw17KhX4Q=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "jwt-0.16.0" = "sha256-P5aJnNlcLe9sBtXZzfqHdRvxNfm6DPBcfcKOVeLZxcM=";
+    };
   };
-  postPatch = "cp ${src}/zeroidc/Cargo.lock Cargo.lock";
+  postPatch = "cp ${./Cargo.lock} Cargo.lock";
 
   preConfigure = ''
+    cmp ./Cargo.lock ./zeroidc/Cargo.lock || {
+      echo 1>&2 "Please make sure that the derivation's Cargo.lock is identical to ./zeroidc/Cargo.lock!"
+      exit 1
+    }
+
     patchShebangs ./doc/build.sh
     substituteInPlace ./doc/build.sh \
       --replace '/usr/bin/ronn' '${buildPackages.ronn}/bin/ronn' \
@@ -47,8 +55,8 @@ in stdenv.mkDerivation {
     pkg-config
     ronn
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.cargo
-    rustPlatform.rust.rustc
+    cargo
+    rustc
   ];
   buildInputs = [
     iproute2
@@ -80,6 +88,8 @@ in stdenv.mkDerivation {
   '';
 
   outputs = [ "out" "man" ];
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Create flat virtual Ethernet networks of almost unlimited size";

@@ -1,36 +1,39 @@
 diff --git a/svr-chansession.c b/svr-chansession.c
-index e44299e..7ef750a 100644
+index 9ae2e60..2db7598 100644
 --- a/svr-chansession.c
 +++ b/svr-chansession.c
-@@ -893,6 +893,8 @@ static void addchildpid(struct ChanSess *chansess, pid_t pid) {
- static void execchild(void *user_data) {
- 	struct ChanSess *chansess = user_data;
+@@ -948,6 +948,8 @@ static void addchildpid(struct ChanSess *chansess, pid_t pid) {
+ static void execchild(const void *user_data) {
+ 	const struct ChanSess *chansess = user_data;
  	char *usershell = NULL;
-+	const char *path = DEFAULT_PATH;
++	const char *path = (getuid() == 0) ? DEFAULT_ROOT_PATH : DEFAULT_PATH;
 +	const char *ldpath = NULL;
- 
- 	/* with uClinux we'll have vfork()ed, so don't want to overwrite the
- 	 * hostkey. can't think of a workaround to clear it */
-@@ -905,6 +907,10 @@ static void execchild(void *user_data) {
+ 	char *cp = NULL;
+ 	char *envcp = getenv("LANG");
+ 	if (envcp != NULL) {
+@@ -965,6 +967,11 @@ static void execchild(const void *user_data) {
  	seedrandom();
  #endif
  
-+	if (getenv("PATH"))
++	if (getenv("PATH")) {
 +		path = getenv("PATH");
++	}
 +	ldpath = getenv("LD_LIBRARY_PATH");
 +
- 	/* clear environment */
+ 	/* clear environment if -e was not set */
  	/* if we're debugging using valgrind etc, we need to keep the LD_PRELOAD
  	 * etc. This is hazardous, so should only be used for debugging. */
-@@ -948,7 +954,10 @@ static void execchild(void *user_data) {
+@@ -1012,10 +1019,9 @@ static void execchild(const void *user_data) {
  	addnewvar("LOGNAME", ses.authstate.pw_name);
  	addnewvar("HOME", ses.authstate.pw_dir);
  	addnewvar("SHELL", get_user_shell());
--	addnewvar("PATH", DEFAULT_PATH);
+-	if (getuid() == 0) {
+-		addnewvar("PATH", DEFAULT_ROOT_PATH);
+-	} else {
+-		addnewvar("PATH", DEFAULT_PATH);
 +	addnewvar("PATH", path);
 +	if (ldpath != NULL) {
 +		addnewvar("LD_LIBRARY_PATH", ldpath);
-+	}
- 	if (chansess->term != NULL) {
- 		addnewvar("TERM", chansess->term);
  	}
+ 	if (cp != NULL) {
+ 		addnewvar("LANG", cp);

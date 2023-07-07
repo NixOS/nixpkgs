@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ssldump";
-  version = "1.5";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "adulau";
     repo = "ssldump";
     rev = "v${version}";
-    sha256 = "sha256-nk1sXQN9cPIZD7Xlg8CHmKySfvfWl2j0CGxmIyvA6z4=";
+    sha256 = "sha256-BFE42wWqnGGTTjwej3LkH4XW2M4jP7XNSKHLnF2GFJo=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An SSLv3/TLS network protocol analyzer";
-    homepage = "http://ssldump.sourceforge.net";
+    homepage = "https://ssldump.sourceforge.net";
     license = "BSD-style";
     maintainers = with maintainers; [ aycanirican ];
     platforms = platforms.unix;

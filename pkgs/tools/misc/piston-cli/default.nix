@@ -1,10 +1,11 @@
-{ stdenv, lib, python3Packages }:
+{ stdenv, lib, python3Packages, fetchPypi }:
 
 python3Packages.buildPythonApplication rec {
   pname = "piston-cli";
   version = "1.4.3";
+  format = "pyproject";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "qvDGVJcaMXUajdUQWl4W1dost8k0PsS9XX/o8uQrtfY=";
   };
@@ -13,6 +14,16 @@ python3Packages.buildPythonApplication rec {
 
   checkPhase = ''
     $out/bin/piston --help > /dev/null
+  '';
+
+  nativeBuildInputs = with python3Packages; [
+    poetry-core
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'rich = "^10.1.0"' 'rich = "*"' \
+      --replace 'PyYAML = "^5.4.1"' 'PyYAML = "*"'
   '';
 
   meta = with lib; {

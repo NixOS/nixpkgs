@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       ncurses as well so that you may render the virtual screen to the real
       screen when you need to.
     '';
-    homepage = "http://rote.sourceforge.net/";
+    homepage = "https://rote.sourceforge.net/";
     license = licenses.lgpl21;
     platforms = platforms.linux;
   };

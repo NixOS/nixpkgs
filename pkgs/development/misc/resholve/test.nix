@@ -20,7 +20,7 @@
 , runDemo ? false
 , binlore
 , sqlite
-, util-linux
+, unixtools
 , gawk
 , rlwrap
 , gnutar
@@ -29,7 +29,7 @@
 
 let
   default_packages = [ bash file findutils gettext ];
-  parsed_packages = [ coreutils sqlite util-linux gnused gawk findutils rlwrap gnutar bc ];
+  parsed_packages = [ coreutils sqlite unixtools.script gnused gawk findutils rlwrap gnutar bc ];
 in
 rec {
   module1 = resholve.mkDerivation {
@@ -127,7 +127,7 @@ rec {
     '';
     doCheck = true;
     buildInputs = [ resholve ];
-    checkInputs = [ coreutils bats python27 ];
+    nativeCheckInputs = [ coreutils bats python27 ];
     # LOGLEVEL="DEBUG";
 
     # default path
@@ -175,6 +175,13 @@ rec {
   resholvedScriptBin = resholve.writeScriptBin "resholved-script-bin" {
     inputs = [ file ];
     interpreter = "${bash}/bin/bash";
+  } ''
+    echo "Hello"
+    file .
+  '';
+  resholvedScriptBinNone = resholve.writeScriptBin "resholved-script-bin" {
+    inputs = [ file ];
+    interpreter = "none";
   } ''
     echo "Hello"
     file .

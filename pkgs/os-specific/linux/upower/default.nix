@@ -40,6 +40,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-+C/4dDg6WTLpBgkpNyxjthSdqYdaTLC8vG6jG1LNJ7w=";
   };
 
+  # Remove when this is fixed upstream:
+  # https://gitlab.freedesktop.org/upower/upower/-/issues/214
+  patches = lib.optional (stdenv.hostPlatform.system == "i686-linux")
+    ./i686-test-remove-battery-check.patch;
+
   strictDeps = true;
 
   depsBuildBuild = [
@@ -64,13 +69,13 @@ stdenv.mkDerivation rec {
     libusb1
     udev
     systemd
-    # Duplicate from checkInputs until https://github.com/NixOS/nixpkgs/issues/161570 is solved
+    # Duplicate from nativeCheckInputs until https://github.com/NixOS/nixpkgs/issues/161570 is solved
     umockdev
   ] ++ lib.optionals useIMobileDevice [
     libimobiledevice
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     python3.pkgs.dbus-python
     python3.pkgs.python-dbusmock
     python3.pkgs.pygobject3

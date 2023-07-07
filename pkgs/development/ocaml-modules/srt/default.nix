@@ -6,13 +6,16 @@
 
 buildDunePackage rec {
   pname = "srt";
-  version = "0.2.1";
+  version = "0.3.0";
+
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-srt";
     rev = "v${version}";
-    sha256 = "sha256-rnM50IzeiKOrpFf79jTHp+fXn0tdx+vrLuD3kzqLh5g=";
+    sha256 = "sha256-iD18bCbouBuMpuSzruDZJoYz2YyN080RK8BavUF3beY=";
   };
 
   buildInputs = [ dune-configurator ];

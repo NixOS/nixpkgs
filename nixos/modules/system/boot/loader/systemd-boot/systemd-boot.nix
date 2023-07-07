@@ -7,18 +7,20 @@ let
 
   efi = config.boot.loader.efi;
 
+  python3 = pkgs.python3.withPackages (ps: [ ps.packaging ]);
+
   systemdBootBuilder = pkgs.substituteAll {
     src = ./systemd-boot-builder.py;
 
     isExecutable = true;
 
-    inherit (pkgs) python3;
+    inherit python3;
 
     systemd = config.systemd.package;
 
     nix = config.nix.package.out;
 
-    timeout = if config.boot.loader.timeout != null then config.boot.loader.timeout else "";
+    timeout = optionalString (config.boot.loader.timeout != null) config.boot.loader.timeout;
 
     editor = if cfg.editor then "True" else "False";
 
@@ -28,9 +30,11 @@ let
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
 
-    memtest86 = if cfg.memtest86.enable then pkgs.memtest86-efi else "";
+    inherit (config.system.nixos) distroName;
 
-    netbootxyz = if cfg.netbootxyz.enable then pkgs.netbootxyz-efi else "";
+    memtest86 = optionalString cfg.memtest86.enable pkgs.memtest86-efi;
+
+    netbootxyz = optionalString cfg.netbootxyz.enable pkgs.netbootxyz-efi;
 
     copyExtraFiles = pkgs.writeShellScript "copy-extra-files" ''
       empty_file=$(${pkgs.coreutils}/bin/mktemp)
@@ -48,7 +52,7 @@ let
   };
 
   checkedSystemdBootBuilder = pkgs.runCommand "systemd-boot" {
-    nativeBuildInputs = [ pkgs.mypy ];
+    nativeBuildInputs = [ pkgs.mypy python3 ];
   } ''
     install -m755 ${systemdBootBuilder} $out
     mypy \
@@ -56,6 +60,12 @@ let
       --disallow-untyped-calls \
       --disallow-untyped-defs \
       $out
+  '';
+
+  finalSystemdBootBuilder = pkgs.writeScript "install-systemd-boot.sh" ''
+    #!${pkgs.runtimeShell}
+    ${checkedSystemdBootBuilder} "$@"
+    ${cfg.extraInstallCommands}
   '';
 in {
 
@@ -96,6 +106,22 @@ in {
 
         `null` means no limit i.e. all generations
         that were not garbage collected yet.
+      '';
+    };
+
+    extraInstallCommands = mkOption {
+      default = "";
+      example = ''
+        default_cfg=$(cat /boot/loader/loader.conf | grep default | awk '{print $2}')
+        init_value=$(cat /boot/loader/entries/$default_cfg | grep init= | awk '{print $2}')
+        sed -i "s|@INIT@|$init_value|g" /boot/custom/config_with_placeholder.conf
+      '';
+      type = types.lines;
+      description = lib.mdDoc ''
+        Additional shell commands inserted in the bootloader installer
+        script after generating menu entries. It can be used to expand
+        on extra boot entries that cannot incorporate certain pieces of
+        information (such as the resulting `init=` kernel parameter).
       '';
     };
 
@@ -277,7 +303,7 @@ in {
     ];
 
     system = {
-      build.installBootLoader = checkedSystemdBootBuilder;
+      build.installBootLoader = finalSystemdBootBuilder;
 
       boot.loader.id = "systemd-boot";
 

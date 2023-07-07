@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "makefun";
-  version = "1.15.0";
+  version = "1.15.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-WxEOcz2U96SdisJ7Hi1A8rsFAemMHYJeDZMtJpIN1d8=";
+    hash = "sha256-QLDxGLbe0NjXjHjx62ebi2skYuPBs+BfsbLajNRrSKU=";
   };
 
   postPatch = ''
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "shopify-themekit";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = "themekit";
     rev = "v${version}";
-    sha256 = "sha256-7uUKyaLzeiioW0TsEu82lJU0DoM1suwVcmacY1X0SEM=";
+    sha256 = "sha256-HtgA+R6THZ49WYtGlHS1EzekjuuGgPe657Y6ewraD4o=";
   };
 
   vendorSha256 = "sha256-8QpkYj0fQb4plzvk6yCrZho8rq9VBiLft/EO3cczciI=";

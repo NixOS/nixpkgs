@@ -23,7 +23,7 @@ in
       mode = mkOption {
         description = lib.mdDoc "Which mode to use";
         default = "boot";
-        type = types.enum [ "api" "boot" ];
+        type = types.enum [ "api" "boot" "quick" ];
       };
 
       debug = mkOption {
@@ -36,6 +36,12 @@ in
         type = types.bool;
         default = false;
         description = lib.mdDoc "Handle DHCP traffic without binding to the DHCP server port";
+      };
+
+      quick = mkOption {
+        description = lib.mdDoc "Which quick option to use";
+        default = "xyz";
+        type = types.enum [ "arch" "centos" "coreos" "debian" "fedora" "ubuntu" "xyz" ];
       };
 
       kernel = mkOption {
@@ -117,6 +123,8 @@ in
               then [ "boot" cfg.kernel ]
                    ++ optional (cfg.initrd != "") cfg.initrd
                    ++ optionals (cfg.cmdLine != "") [ "--cmdline" cfg.cmdLine ]
+              else if cfg.mode == "quick"
+              then [ "quick" cfg.quick ]
               else [ "api" cfg.apiServer ];
           in
             ''

@@ -17,28 +17,26 @@
 , plfit
 , python3
 , sourceHighlight
-, suitesparse
 , xmlto
 }:
 
+assert (blas.isILP64 == lapack.isILP64 &&
+        blas.isILP64 == arpack.isILP64 &&
+        !blas.isILP64);
+
 stdenv.mkDerivation rec {
   pname = "igraph";
-  version = "0.9.10";
+  version = "0.10.4";
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = pname;
     rev = version;
-    hash = "sha256-prDadHsNhDRkNp1i0niKIYxE0g85Zs0ngvUy6uK8evk=";
+    hash = "sha256-LsTOxUktGZcp46Ec9QH3+9C+VADMYTZZCjKF1gp36xk=";
   };
 
   postPatch = ''
     echo "${version}" > IGRAPH_VERSION
-  '' + lib.optionalString stdenv.isAarch64 ''
-    # https://github.com/igraph/igraph/issues/1694
-    substituteInPlace tests/CMakeLists.txt \
-      --replace "igraph_scg_grouping3" "" \
-      --replace "igraph_scg_semiprojectors2" ""
   '';
 
   outputs = [ "out" "dev" "doc" ];
@@ -64,7 +62,6 @@ stdenv.mkDerivation rec {
     lapack
     libxml2
     plfit
-    suitesparse
   ] ++ lib.optionals stdenv.cc.isClang [
     llvmPackages.openmp
   ];
@@ -74,7 +71,6 @@ stdenv.mkDerivation rec {
     "-DIGRAPH_USE_INTERNAL_LAPACK=OFF"
     "-DIGRAPH_USE_INTERNAL_ARPACK=OFF"
     "-DIGRAPH_USE_INTERNAL_GLPK=OFF"
-    "-DIGRAPH_USE_INTERNAL_CXSPARSE=OFF"
     "-DIGRAPH_USE_INTERNAL_GMP=OFF"
     "-DIGRAPH_USE_INTERNAL_PLFIT=OFF"
     "-DIGRAPH_GLPK_SUPPORT=ON"
@@ -97,7 +93,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The network analysis package";
+    description = "C library for complex network analysis and graph theory";
     homepage = "https://igraph.org/";
     changelog = "https://github.com/igraph/igraph/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl2Plus;

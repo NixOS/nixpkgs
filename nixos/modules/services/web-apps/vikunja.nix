@@ -56,6 +56,11 @@ in {
       type = types.str;
       description = lib.mdDoc "The Hostname under which the frontend is running.";
     };
+    port = mkOption {
+      type = types.port;
+      default = 3456;
+      description = lib.mdDoc "The TCP port exposed by the API.";
+    };
 
     settings = mkOption {
       type = format.type;
@@ -101,6 +106,7 @@ in {
         inherit (cfg.database) type host user database path;
       };
       service = {
+        interface = ":${toString cfg.port}";
         frontendurl = "${cfg.frontendScheme}://${cfg.frontendHostname}/";
       };
       files = {
@@ -132,7 +138,7 @@ in {
           tryFiles = "try_files $uri $uri/ /";
         };
         "~* ^/(api|dav|\\.well-known)/" = {
-          proxyPass = "http://localhost:3456";
+          proxyPass = "http://localhost:${toString cfg.port}";
           extraConfig = ''
             client_max_body_size 20M;
           '';

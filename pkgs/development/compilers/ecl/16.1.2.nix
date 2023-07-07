@@ -91,7 +91,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Lisp implementation aiming to be small, fast and easy to embed";
     license = licenses.mit;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = lib.teams.lisp.members;
     platforms = platforms.unix;
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

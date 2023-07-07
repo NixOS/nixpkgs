@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
+, setuptools
 , isPy27
 , fetchPypi
 , pkg-config
@@ -16,18 +17,20 @@
 , withWebKit ? false
 , withWebSockets ? false
 , withLocation ? false
+, withSerialPort ? false
+, withTools ? false
 }:
 
 buildPythonPackage rec {
   pname = "PyQt5";
-  version = "5.15.7";
+  version = "5.15.9";
   format = "pyproject";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-dVEhpSs6CMsHJ1wQ67lldtNuMg5XJZHbFs/bxVgQFZQ=";
+    hash = "sha256-3EHoQBqQ3D4raStBG9VJKrVZrieidCTu1L05FVZOxMA=";
   };
 
   patches = [
@@ -54,6 +57,17 @@ buildPythonPackage rec {
     EOF
   '';
 
+  enableParallelBuilding = true;
+  # HACK: paralellize compilation of make calls within pyqt's setup.py
+  # pkgs/stdenv/generic/setup.sh doesn't set this for us because
+  # make gets called by python code and not its build phase
+  # format=pyproject means the pip-build-hook hook gets used to build this project
+  # pkgs/development/interpreters/python/hooks/pip-build-hook.sh
+  # does not use the enableParallelBuilding flag
+  postUnpack = ''
+    export MAKEFLAGS+="''${enableParallelBuilding:+-j$NIX_BUILD_CORES}"
+  '';
+
   outputs = [ "out" "dev" ];
 
   dontWrapQtApps = true;
@@ -61,6 +75,7 @@ buildPythonPackage rec {
   nativeBuildInputs = with libsForQt5; [
     pkg-config
     qmake
+    setuptools
     lndir
     sip
     qtbase
@@ -73,6 +88,8 @@ buildPythonPackage rec {
     ++ lib.optional withWebKit qtwebkit
     ++ lib.optional withWebSockets qtwebsockets
     ++ lib.optional withLocation qtlocation
+    ++ lib.optional withSerialPort qtserialport
+    ++ lib.optional withTools qttools
   ;
 
   buildInputs = with libsForQt5; [
@@ -86,6 +103,8 @@ buildPythonPackage rec {
     ++ lib.optional withWebKit qtwebkit
     ++ lib.optional withWebSockets qtwebsockets
     ++ lib.optional withLocation qtlocation
+    ++ lib.optional withSerialPort qtserialport
+    ++ lib.optional withTools qttools
   ;
 
   propagatedBuildInputs = [
@@ -115,8 +134,10 @@ buildPythonPackage rec {
     ++ lib.optional withWebSockets "PyQt5.QtWebSockets"
     ++ lib.optional withWebKit "PyQt5.QtWebKit"
     ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
-    ++ lib.optional withConnectivity "PyQt5.QtConnectivity"
+    ++ lib.optional withConnectivity "PyQt5.QtBluetooth"
     ++ lib.optional withLocation "PyQt5.QtPositioning"
+    ++ lib.optional withSerialPort "PyQt5.QtSerialPort"
+    ++ lib.optional withTools "PyQt5.QtDesigner"
   ;
 
   meta = with lib; {

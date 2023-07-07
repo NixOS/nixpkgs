@@ -8,7 +8,6 @@
 , libftdi1
 , check
 , libserialport
-, librevisa
 , doxygen
 , glibmm
 , python
@@ -31,7 +30,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ doxygen pkg-config python ];
   buildInputs = [
-    libzip glib libusb1 libftdi1 check libserialport librevisa glibmm hidapi
+    libzip glib libusb1 libftdi1 check libserialport glibmm hidapi
   ] ++ lib.optionals stdenv.isLinux [ libieee1284 bluez ];
 
   strictDeps = true;

@@ -1,36 +1,28 @@
-{ mkDerivation, lib, fetchurl, cmake, exiv2, graphicsmagick, libraw, fetchpatch
-, qtbase, qtdeclarative, qtmultimedia, qtquickcontrols, qttools, qtgraphicaleffects
-, extra-cmake-modules, poppler, kimageformats, libarchive, libdevil
-}:
+{ mkDerivation, lib, fetchurl, cmake, exiv2, graphicsmagick, libraw
+, qtbase, qtdeclarative, qtmultimedia, qtquickcontrols2, qttools, qtgraphicaleffects
+, extra-cmake-modules, poppler, kimageformats, libarchive, pugixml, wrapQtAppsHook}:
 
 mkDerivation rec {
   pname = "photoqt";
-  version = "1.7.1";
+  version = "3.1";
 
   src = fetchurl {
     url = "https://${pname}.org/pkgs/${pname}-${version}.tar.gz";
-    sha256 = "1qvxdh3cbjcywqx0da2qp8z092660qyzv5yknqbps2zr12qqb103";
+    hash = "sha256-hihfqE7XIlSAxPg3Kzld3LrYS97wDH//GGqpBpBwFm0=";
   };
 
-  patches = [
-    # Fixes build with exiv2 0.27.1
-    (fetchpatch {
-      url = "https://gitlab.com/luspi/photoqt/commit/c6fd41478e818f3a651d40f96cab3d790e1c09a4.patch";
-      sha256 = "1j2pdr7hm3js7lswhb4qkf9sj9viclhjqz50qxpyd7pqrl1gf2va";
-    })
-  ];
-
-  nativeBuildInputs = [ cmake extra-cmake-modules qttools ];
+  nativeBuildInputs = [ cmake extra-cmake-modules qttools wrapQtAppsHook ];
 
   buildInputs = [
-    qtbase qtquickcontrols exiv2 graphicsmagick poppler
+    qtbase qtquickcontrols2 exiv2 graphicsmagick poppler
     qtmultimedia qtdeclarative libraw qtgraphicaleffects
-    kimageformats libarchive
+    kimageformats libarchive pugixml
   ];
 
   cmakeFlags = [
     "-DFREEIMAGE=OFF"
     "-DDEVIL=OFF"
+    "-DCHROMECAST=OFF"
   ];
 
   preConfigure = ''

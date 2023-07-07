@@ -8,6 +8,20 @@ with lib;
 {
   options = {
 
+    netboot.squashfsCompression = mkOption {
+      default = with pkgs.stdenv.hostPlatform; "xz -Xdict-size 100% "
+                + lib.optionalString isx86 "-Xbcj x86"
+                # Untested but should also reduce size for these platforms
+                + lib.optionalString isAarch "-Xbcj arm"
+                + lib.optionalString (isPower && is32bit && isBigEndian) "-Xbcj powerpc"
+                + lib.optionalString (isSparc) "-Xbcj sparc";
+      description = lib.mdDoc ''
+        Compression settings to use for the squashfs nix store.
+      '';
+      example = "zstd -Xcompression-level 6";
+      type = types.str;
+    };
+
     netboot.storeContents = mkOption {
       example = literalExpression "[ pkgs.stdenv ]";
       description = lib.mdDoc ''
@@ -77,6 +91,7 @@ with lib;
     # Create the squashfs image that contains the Nix store.
     system.build.squashfsStore = pkgs.callPackage ../../../lib/make-squashfs.nix {
       storeContents = config.netboot.storeContents;
+      comp = config.netboot.squashfsCompression;
     };
 
 

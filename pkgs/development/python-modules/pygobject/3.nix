@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pygobject";
-  version = "3.42.2";
+  version = "3.44.1";
 
   outputs = [ "out" "dev" ];
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "rehpXipwc4Sd0DFtMdhyjhXh4Lxx2f9tHAnoa+UryVc=";
+    sha256 = "PGgF0TIb6QzDLmSCFaViQw4NPW7c2o9MXnqdr/ytVxA=";
   };
 
   depsBuildBuild = [
@@ -42,8 +42,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    # # .so files link to these
-    gobject-introspection
+    # # .so files link to this
     glib
   ] ++ lib.optionals stdenv.isDarwin [
     ncurses

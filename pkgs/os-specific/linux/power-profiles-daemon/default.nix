@@ -2,6 +2,7 @@
 , lib
 , pkg-config
 , meson
+, mesonEmulatorHook
 , ninja
 , fetchFromGitLab
 , fetchpatch
@@ -24,16 +25,9 @@
 , nixosTests
 }:
 
-let
-  testPythonPkgs = ps: with ps; [
-    pygobject3
-    dbus-python
-    python-dbusmock
-  ];
-in
 stdenv.mkDerivation rec {
   pname = "power-profiles-daemon";
-  version = "0.12";
+  version = "0.13";
 
   outputs = [ "out" "devdoc" ];
 
@@ -42,7 +36,7 @@ stdenv.mkDerivation rec {
     owner = "hadess";
     repo = "power-profiles-daemon";
     rev = version;
-    sha256 = "sha256-2eMFPGVLwTBIlaB1zM3BzHrhydgBEm+kvx+VIZdUDPM=";
+    sha256 = "sha256-ErHy+shxZQ/aCryGhovmJ6KmAMt9OZeQGDbHIkC0vUE=";
   };
 
   nativeBuildInputs = [
@@ -58,6 +52,14 @@ stdenv.mkDerivation rec {
     gobject-introspection
     wrapGAppsNoGuiHook
     python3.pkgs.wrapPython
+    # checkInput but cheked for during the configuring
+    (python3.pythonForBuild.withPackages (ps: with ps; [
+      pygobject3
+      dbus-python
+      python-dbusmock
+    ]))
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
@@ -67,7 +69,7 @@ stdenv.mkDerivation rec {
     glib
     polkit
     python3 # for cli tool
-    # Duplicate from checkInputs until https://github.com/NixOS/nixpkgs/issues/161570 is solved
+    # Duplicate from nativeCheckInputs until https://github.com/NixOS/nixpkgs/issues/161570 is solved
     umockdev
   ];
 
@@ -78,16 +80,15 @@ stdenv.mkDerivation rec {
     python3.pkgs.pygobject3
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     umockdev
     dbus
-    (python3.withPackages testPythonPkgs)
   ];
 
   mesonFlags = [
     "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "-Dgtk_doc=true"
-    "-Dtests=true"
+    "-Dtests=${lib.boolToString (stdenv.buildPlatform.canExecute stdenv.hostPlatform)}"
   ];
 
   doCheck = true;
@@ -101,16 +102,6 @@ stdenv.mkDerivation rec {
     patchShebangs --build \
       tests/integration-test.py \
       tests/unittest_inspector.py
-  '';
-
-  preInstall = ''
-    # We have pkexec on PATH so Meson will try to use it when installation fails
-    # due to being unable to write to e.g. /etc.
-    # Let’s pretend we already ran pkexec –
-    # the pkexec on PATH would complain it lacks setuid bit,
-    # obscuring the underlying error.
-    # https://github.com/mesonbuild/meson/blob/492cc9bf95d573e037155b588dc5110ded4d9a35/mesonbuild/minstall.py#L558
-    export PKEXEC_UID=-1
   '';
 
   postCheck = ''
@@ -137,6 +128,6 @@ stdenv.mkDerivation rec {
     description = "Makes user-selected power profiles handling available over D-Bus";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jtojnar mvnetbiz ];
+    maintainers = with maintainers; [ mvnetbiz ];
   };
 }

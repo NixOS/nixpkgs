@@ -1,16 +1,14 @@
 { lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
-with lib;
-
 buildGoModule rec {
   pname = "kind";
-  version = "0.15.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     rev    = "v${version}";
     owner  = "kubernetes-sigs";
     repo   = "kind";
-    sha256 = "sha256-IDSWmNWHnTKOl6/N1Mz+OKOkZSBarpuN39CBsSjYhKY=";
+    sha256 = "sha256-5yDoxrsnmz8N0Y35juItLtyclTz+pSb75B1P716XPxU=";
   };
 
   patches = [
@@ -18,7 +16,7 @@ buildGoModule rec {
     ./kernel-module-path.patch
   ];
 
-  vendorSha256 = "sha256-FE1GvNgXkBt2cH4YB3jTsPXp91DSiYlniQLtMwvi384=";
+  vendorHash = "sha256-J/sJd2LLMBr53Z3sGrWgnWA8Ry+XqqfCEObqFyUD96g=";
 
   CGO_ENABLED = 0;
   GOFLAGS = [ "-trimpath" ];
@@ -36,11 +34,10 @@ buildGoModule rec {
     done
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Kubernetes IN Docker - local clusters for testing Kubernetes";
     homepage    = "https://github.com/kubernetes-sigs/kind";
     maintainers = with maintainers; [ offline rawkode ];
-    license     = lib.licenses.asl20;
-    platforms   = platforms.unix;
+    license     = licenses.asl20;
   };
 }

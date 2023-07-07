@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   #   ld: src/zfile.o:/build/source/src/log.h:12: multiple definition of
   #     `print_mtx'; src/ignore.o:/build/source/src/log.h:12: first defined here
   # TODO: remove once next release has https://github.com/ggreer/the_silver_searcher/pull/1377
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
   NIX_LDFLAGS = lib.optionalString stdenv.isLinux "-lgcc_s";
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

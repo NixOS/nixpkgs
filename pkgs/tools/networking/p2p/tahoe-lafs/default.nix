@@ -66,7 +66,7 @@ python3Packages.buildPythonApplication rec {
   ] ++ twisted.optional-dependencies.tls
     ++ twisted.optional-dependencies.conch;
 
-  checkInputs = with python3Packages; [ mock hypothesis twisted ];
+  nativeCheckInputs = with python3Packages; [ mock hypothesis twisted ];
 
   # Install the documentation.
   postInstall = ''

@@ -1,22 +1,49 @@
-{ lib, buildPythonPackage, fetchPypi
-, django, persisting-theory, six
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+
+# dependencies
+, django
+, persisting-theory
+, six
+
+# tests
+, djangorestframework
+, pytest-django
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "django-dynamic-preferences";
-  version = "1.14.0";
+  version = "1.15.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-wAq8uNUkBnOQpmUYz80yaDuHrTzGINWRNkn8dwe4CDM=";
+  src = fetchFromGitHub {
+    owner = "agateblue";
+    repo = "django-dynamic-preferences";
+    rev = "refs/tags/${version}";
+    hash = "sha256-S0PAlSrMOQ68mX548pZzARfau/lytXWC4S5uVO1rUmo=";
   };
 
-  propagatedBuildInputs = [ six django persisting-theory ];
+  buildInputs = [
+    django
+  ];
 
-  # django.core.exceptions.ImproperlyConfigured: Requested setting DYNAMIC_PREFERENCES, but settings are not configured. You must either define the environment variable DJANGO_SETTINGS_MODULE or call settings.configure() before accessing settings
-  doCheck = false;
+  propagatedBuildInputs = [
+    six
+    persisting-theory
+  ];
+
+  nativeCheckInputs = [
+    djangorestframework
+    pytestCheckHook
+    pytest-django
+  ];
+
+  env.DJANGO_SETTINGS = "tests.settings";
 
   meta = with lib; {
+    changelog = "https://github.com/agateblue/django-dynamic-preferences/blob/${version}/HISTORY.rst";
     homepage = "https://github.com/EliotBerriot/django-dynamic-preferences";
     description = "Dynamic global and instance settings for your django project";
     license = licenses.bsd3;

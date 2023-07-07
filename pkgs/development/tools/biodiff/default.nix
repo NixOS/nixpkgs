@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "biodiff";
-  version = "1.0.3";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "8051Enthusiast";
     repo = "biodiff";
     rev = "v${version}";
-    sha256 = "sha256-ZIZ6XpRuqhacpvi1kf7zvMszzbF8IvWrMlxAZnJJSxE=";
+    hash = "sha256-IrIRBozW2nNqt3/643jQ9sHT/YIpYhWeG749bTR4+60=";
   };
 
-  cargoSha256 = "sha256-/LrrHK9j6xg3J56ubM9RdkJeMn4nvpddUGMtHu2s6OE=";
+  cargoHash = "sha256-EkvZk5l2Jw/6Ejrz4gYFWz9IZLjz0Op/1z3BGBV07dA=";
 
   meta = with lib; {
     description = "Hex diff viewer using alignment algorithms from biology";

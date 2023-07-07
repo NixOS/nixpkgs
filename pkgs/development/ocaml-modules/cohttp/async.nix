@@ -7,7 +7,7 @@
 , async_unix
 , cohttp
 , conduit-async
-, core_unix
+, core_unix ? null
 , uri
 , uri-sexp
 , logs
@@ -27,6 +27,8 @@ buildDunePackage {
     version
     src
     ;
+
+  duneVersion = "3";
 
   buildInputs = [ ppx_sexp_conv ];
 

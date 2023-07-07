@@ -1,73 +1,100 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, fetchurl, xmlstarlet, makeWrapper, ant, jdk, rsync, javaPackages, libXxf86vm, gsettings-desktop-schemas }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, ant, unzip, makeWrapper, jdk, javaPackages, rsync, ffmpeg, batik, gsettings-desktop-schemas, xorg, wrapGAppsHook }:
+let
+  buildNumber = "1289";
+  vaqua = fetchurl {
+    name = "VAqua9.jar";
+    url = "https://violetlib.org/release/vaqua/9/VAqua9.jar";
+    sha256 = "cd0b82df8e7434c902ec873364bf3e9a3e6bef8b59cbf42433130d71bf1a779c";
+  };
 
+  jna = fetchurl {
+    name = "jna-5.10.0.zip";
+    url = "https://github.com/java-native-access/jna/archive/5.10.0.zip";
+    sha256 = "B5CakOQ8225xNsk2TMV8CbK3RcsLlb+pHzjaY5JNwg0=";
+  };
+
+  flatlaf = fetchurl {
+    name = "flatlaf-2.4.jar";
+    url = "https://repo1.maven.org/maven2/com/formdev/flatlaf/2.4/flatlaf-2.4.jar";
+    sha256 = "NVMYiCd+koNCJ6X3EiRx1Aj+T5uAMSJ9juMmB5Os+zc=";
+  };
+
+  lsp4j = fetchurl {
+    name = "org.eclipse.lsp4j-0.19.0.jar";
+    url = "https://repo1.maven.org/maven2/org/eclipse/lsp4j/org.eclipse.lsp4j/0.19.0/org.eclipse.lsp4j-0.19.0.jar";
+    sha256 = "sha256-1DI5D9KW+GL4gT1qjwVZveOl5KVOEjt6uXDwsFzi8Sg=";
+  };
+
+  lsp4j-jsonrpc = fetchurl {
+    name = "org.eclipse.lsp4j.jsonrpc-0.19.0.jar";
+    url = "https://repo1.maven.org/maven2/org/eclipse/lsp4j/org.eclipse.lsp4j.jsonrpc/0.19.0/org.eclipse.lsp4j.jsonrpc-0.19.0.jar";
+    sha256 = "sha256-ozYTkvv7k0psCeX/PbSM3/Bl17qT3upX3trt65lmM9I=";
+  };
+
+  gson = fetchurl {
+    name = "gson-2.9.1.jar";
+    url = "https://repo1.maven.org/maven2/com/google/code/gson/gson/2.9.1/gson-2.9.1.jar";
+    sha256 = "sha256-N4U04znm5tULFzb7Ort28cFdG+P0wTzsbVNkEuI9pgM=";
+  };
+
+in
 stdenv.mkDerivation rec {
   pname = "processing";
-  version = "3.5.4";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "processing";
-    repo = "processing";
-    rev = "processing-0270-${version}";
-    sha256 = "0cvv8jda9y8qnfcsziasyv3w7h3w22q78ihr23cm4an63ghxci58";
+    repo = "processing4";
+    rev = "processing-${buildNumber}-${version}";
+    sha256 = "sha256-OjTqANxzcW/RrAdqmVYAegrlLPu6w2pjzSyZyvUYIt4=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "oraclejdk-8u281-compat.patch";
-      url = "https://github.com/processing/processing/commit/7e176876173c93e3a00a922e7ae37951366d1761.patch";
-      sha256 = "g+zwpoIVgw7Sp6QWW3vyPZ/fKHk+o/YCY6xnrX8IGKo=";
-    })
-  ];
+  nativeBuildInputs = [ ant unzip makeWrapper wrapGAppsHook ];
+  buildInputs = [ jdk javaPackages.jogl_2_3_2 ant rsync ffmpeg batik ];
 
-  nativeBuildInputs = [ ant rsync makeWrapper ];
-  buildInputs = [ jdk ];
+  dontWrapGApps = true;
 
   buildPhase = ''
-    # use compiled jogl to avoid patchelf'ing .so files inside jars
-    rm core/library/*.jar
-    cp ${javaPackages.jogl_2_3_2}/share/java/*.jar core/library/
-
-    # do not download a file during build
-    ${xmlstarlet}/bin/xmlstarlet ed --inplace -P -d '//get[@src="http://download.processing.org/reference.zip"]' build/build.xml
-    install -D -m0444 ${fetchurl {
-                          # Use archive.org link for reproducibility until the following issue is fixed:
-                          # https://github.com/processing/processing/issues/5711
-                          url = "https://web.archive.org/web/20200406132357/https://download.processing.org/reference.zip";
-                          sha256 = "093hc7kc9wfxqgf5dzfmfp68pbsy8x647cj0a25vgjm1swi61zbi";
-                        }
-                       } ./java/reference.zip
-
-    # suppress "Not fond of this Java VM" message box
-    substituteInPlace app/src/processing/app/platform/LinuxPlatform.java \
-      --replace 'Messages.showWarning' 'if (false) Messages.showWarning'
-
-    ( cd build
-      substituteInPlace build.xml --replace "jre-download," ""  # do not download jre1.8.0_144
-      mkdir -p linux/jre1.8.0_144                               # fake dir to avoid error
-      ant build )
+    echo "tarring jdk"
+    tar --checkpoint=10000 -czf build/linux/jdk-17.0.5-amd64.tgz ${jdk}
+    cp ${ant}/lib/ant/lib/{ant.jar,ant-launcher.jar} app/lib/
+    mkdir -p core/library
+    ln -s ${javaPackages.jogl_2_3_2}/share/java/* core/library/
+    ln -s ${vaqua} app/lib/VAqua9.jar
+    ln -s ${flatlaf} app/lib/flatlaf.jar
+    ln -s ${lsp4j} java/mode/org.eclipse.lsp4j.jar
+    ln -s ${lsp4j-jsonrpc} java/mode/org.eclipse.lsp4j.jsonrpc.jar
+    ln -s ${gson} java/mode/gson.jar
+    unzip -qo ${jna} -d app/lib/
+    mv app/lib/{jna-5.10.0/dist/jna.jar,}
+    mv app/lib/{jna-5.10.0/dist/jna-platform.jar,}
+    ln -sf ${batik}/* java/libraries/svg/library/
+    cp java/libraries/svg/library/lib/batik-all-${batik.version}.jar java/libraries/svg/library/batik.jar
+    echo "tarring ffmpeg"
+    tar --checkpoint=10000 -czf build/shared/tools/MovieMaker/ffmpeg-5.0.1.gz ${ffmpeg}
+    cd build
+    ant build
+    cd ..
   '';
 
   installPhase = ''
-    mkdir $out
-    cp -dpR build/linux/work $out/${pname}
-
-    rmdir $out/${pname}/java
-    ln -s ${jdk} $out/${pname}/java
-
-    makeWrapper $out/${pname}/processing      $out/bin/processing \
-        --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name} \
-        --prefix _JAVA_OPTIONS " " -Dawt.useSystemAAFontSettings=lcd \
-        --prefix LD_LIBRARY_PATH : ${libXxf86vm}/lib
-    makeWrapper $out/${pname}/processing-java $out/bin/processing-java \
-        --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name} \
-        --prefix _JAVA_OPTIONS " " -Dawt.useSystemAAFontSettings=lcd \
-        --prefix LD_LIBRARY_PATH : ${libXxf86vm}/lib
+    mkdir -p $out/share/
+    cp -dpr build/linux/work $out/share/${pname}
+    rmdir $out/share/${pname}/java
+    ln -s ${jdk} $out/share/${pname}/java
+    makeWrapper $out/share/${pname}/processing $out/bin/processing \
+      ''${gappsWrapperArgs[@]} \
+      --prefix _JAVA_OPTIONS " " -Dawt.useSystemAAFontSettings=lcd
+    makeWrapper $out/share/${pname}/processing-java $out/bin/processing-java \
+      ''${gappsWrapperArgs[@]} \
+      --prefix _JAVA_OPTIONS " " -Dawt.useSystemAAFontSettings=lcd
   '';
 
   meta = with lib; {
     description = "A language and IDE for electronic arts";
     homepage = "https://processing.org";
-    license = licenses.gpl2Plus;
+    license = with licenses; [ gpl2Only lgpl21Only ];
     platforms = platforms.linux;
+    maintainers = with maintainers; [ evan-goode ];
   };
 }

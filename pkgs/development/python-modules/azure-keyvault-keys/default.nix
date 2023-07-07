@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "azure-keyvault-keys";
-  version = "4.6.1";
+  version = "4.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    hash = "sha256-D37DHSpOszn/nZavfysPW6O9KLXu4GGjjxt4hybJSa4=";
+    hash = "sha256-bAuy94MgKjSj5ex0hm5iEuWRrHEk8DuWadGwm2giS8Q=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     cryptography
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiohttp
     pytestCheckHook
   ];

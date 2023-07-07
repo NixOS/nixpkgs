@@ -18,7 +18,7 @@ let
 
   knot-cli-wrappers = pkgs.stdenv.mkDerivation {
     name = "knot-cli-wrappers";
-    buildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
     buildCommand = ''
       mkdir -p $out/bin
       makeWrapper ${cfg.package}/bin/knotc "$out/bin/knotc" \
@@ -43,7 +43,7 @@ in {
         type = types.listOf types.str;
         default = [];
         description = lib.mdDoc ''
-          List of additional command line paramters for knotd
+          List of additional command line parameters for knotd
         '';
       };
 

@@ -7,6 +7,7 @@ import ../make-test-python.nix ({...}: {
         enable = true;
         master = "master:7077";
       };
+      virtualisation.memorySize = 2048;
     };
     master = { config, pkgs, ... }: {
       services.spark.master = {

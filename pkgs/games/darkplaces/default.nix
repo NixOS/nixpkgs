@@ -7,7 +7,7 @@
 , libvorbis
 }:
 stdenv.mkDerivation rec {
-  name = "darkplaces";
+  pname = "darkplaces";
   version = "unstable-2022-05-10";
 
   src = fetchFromGitHub {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     SDL2
   ];
 
-  buildFlags = "release";
+  buildFlags = [ "release" ];
 
   installPhase = ''
     runHook preInstall

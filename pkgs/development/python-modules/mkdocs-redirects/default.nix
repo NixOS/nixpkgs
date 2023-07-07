@@ -1,26 +1,33 @@
 { lib
 , callPackage
-, buildPythonApplication
+, buildPythonPackage
 , fetchFromGitHub
 , mkdocs
+, pytestCheckHook
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "mkdocs-redirects";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "mkdocs";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-iJmNh81VVqaPWHL3d8u+hESlW3AhlCr/Ax9n5nOTd0o=";
+    hash = "sha256-+Ti+Z5gL5vVlQDt+KRw9nNHHKhRtEfguQe1K001DK9E=";
   };
 
   propagatedBuildInputs = [
     mkdocs
   ];
 
-  pythonImportsCheck = [ "mkdocs" ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "mkdocs_redirects"
+  ];
 
   meta = with lib; {
     description = "Open source plugin for Mkdocs page redirects";

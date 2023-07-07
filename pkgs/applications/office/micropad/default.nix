@@ -14,18 +14,18 @@ let
 in
   mkYarnPackage rec {
     pname = "micropad";
-    version = "3.30.6";
+    version = "4.2.1";
 
     src = fetchFromGitHub {
       owner = "MicroPad";
       repo = "Micropad-Electron";
       rev = "v${version}";
-      sha256 = "sha256-v3hnHG6FMW2xBU/DnenqjFizQv/OZ9cW99n/3SoENe8=";
+      sha256 = "sha256-XmnKhyb0JMWP0ZGzPvLPtpkgAemW/mdxunbFW9WV9lE=";
     };
 
     micropad-core = fetchzip {
       url = "https://github.com/MicroPad/MicroPad-Core/releases/download/v${version}/micropad.tar.xz";
-      hash = "sha256-aqshYbVrQg6tYtTlO91FGiH7DuueOA0OU5KGCVc7XvI=";
+      sha256 = "0mzyd2p4mmnc19ffvd4sd75x7xwb1g5masdaqpn2n3h91687jmsf";
     };
 
     packageJSON = ./package.json;
@@ -62,7 +62,7 @@ in
       # executable wrapper
       makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
         --add-flags "$out/share/micropad" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 
       runHook postInstall
     '';
@@ -83,6 +83,8 @@ in
         categories = ["Office"];
       })
     ];
+
+    passthru.updateScript = ./update.sh;
 
     meta = with lib; {
       description = "A powerful note-taking app that helps you organise + take notes without restrictions";

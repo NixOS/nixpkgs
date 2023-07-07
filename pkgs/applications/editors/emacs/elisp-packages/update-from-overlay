@@ -23,15 +23,24 @@ commit_change() {
         git commit -m "${MESSAGE}: updated $(date --iso) (from overlay)" -- "${FILENAME}"
 }
 
+test_packageset(){
+    local PKGSET="$1"
+
+    nix-instantiate --show-trace ../../../../../ -A "emacs.pkgs.$PKGSET"
+}
+
 download_change "elpa/elpa-generated.nix"
-nix-instantiate ../../../../../ -A emacs.pkgs.elpaPackages --show-trace
-commit_change "elpa-packages" "elpa-generated.nix"
-
+download_change "elpa/elpa-devel-generated.nix"
 download_change "melpa/recipes-archive-melpa.json"
-nix-instantiate --show-trace ../../../../../ -A emacs.pkgs.melpaStablePackages
-nix-instantiate --show-trace ../../../../../ -A emacs.pkgs.melpaPackages
-commit_change "melpa-packages" "recipes-archive-melpa.json"
-
 download_change "nongnu/nongnu-generated.nix"
-nix-instantiate --show-trace ../../../../../ -A emacs.pkgs.nongnuPackages
+
+test_packageset "nongnuPackages"
+test_packageset "elpaPackages"
+test_packageset "elpaDevelPackages"
+test_packageset "melpaStablePackages"
+test_packageset "melpaPackages"
+
+commit_change "elpa-packages" "elpa-generated.nix"
+commit_change "elpa-devel-packages" "elpa-devel-generated.nix"
+commit_change "melpa-packages" "recipes-archive-melpa.json"
 commit_change "nongnu-packages" "nongnu-generated.nix"

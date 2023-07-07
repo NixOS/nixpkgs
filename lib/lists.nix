@@ -198,8 +198,38 @@ rec {
     default:
     # Input list
     list:
-    let found = filter pred list;
-    in if found == [] then default else head found;
+    let
+      # A naive recursive implementation would be much simpler, but
+      # would also overflow the evaluator stack. We use `foldl'` as a workaround
+      # because it reuses the same stack space, evaluating the function for one
+      # element after another. We can't return early, so this means that we
+      # sacrifice early cutoff, but that appears to be an acceptable cost. A
+      # clever scheme with "exponential search" is possible, but appears over-
+      # engineered for now. See https://github.com/NixOS/nixpkgs/pull/235267
+
+      # Invariant:
+      # - if index < 0 then el == elemAt list (- index - 1) and all elements before el didn't satisfy pred
+      # - if index >= 0 then pred (elemAt list index) and all elements before (elemAt list index) didn't satisfy pred
+      #
+      # We start with index -1 and the 0'th element of the list, which satisfies the invariant
+      resultIndex = foldl' (index: el:
+        if index < 0 then
+          # No match yet before the current index, we need to check the element
+          if pred el then
+            # We have a match! Turn it into the actual index to prevent future iterations from modifying it
+            - index - 1
+          else
+            # Still no match, update the index to the next element (we're counting down, so minus one)
+            index - 1
+        else
+          # There's already a match, propagate the index without evaluating anything
+          index
+      ) (-1) list;
+    in
+    if resultIndex < 0 then
+      default
+    else
+      elemAt list resultIndex;
 
   /* Return true if function `pred` returns true for at least one
      element of `list`.
@@ -242,7 +272,7 @@ rec {
 
   /* Return a singleton list or an empty list, depending on a boolean
      value.  Useful when building lists with optional elements
-     (e.g. `++ optional (system == "i686-linux") firefox').
+     (e.g. `++ optional (system == "i686-linux") firefox`).
 
      Type: optional :: bool -> a -> [a]
 
@@ -283,7 +313,7 @@ rec {
   */
   toList = x: if isList x then x else [x];
 
-  /* Return a list of integers from `first' up to and including `last'.
+  /* Return a list of integers from `first` up to and including `last`.
 
      Type: range :: int -> int -> [int]
 
@@ -303,10 +333,22 @@ rec {
     else
       genList (n: first + n) (last - first + 1);
 
+  /* Return a list with `n` copies of an element.
+
+    Type: replicate :: int -> a -> [a]
+
+    Example:
+      replicate 3 "a"
+      => [ "a" "a" "a" ]
+      replicate 2 true
+      => [ true true ]
+  */
+  replicate = n: elem: genList (_: elem) n;
+
   /* Splits the elements of a list in two lists, `right` and
      `wrong`, depending on the evaluation of a predicate.
 
-     Type: (a -> bool) -> [a] -> { right :: [a], wrong :: [a] }
+     Type: (a -> bool) -> [a] -> { right :: [a]; wrong :: [a]; }
 
      Example:
        partition (x: x > 2) [ 5 1 2 3 4 ]
@@ -320,7 +362,7 @@ rec {
     ) { right = []; wrong = []; });
 
   /* Splits the elements of a list into many lists, using the return value of a predicate.
-     Predicate should return a string which becomes keys of attrset `groupBy' returns.
+     Predicate should return a string which becomes keys of attrset `groupBy` returns.
 
      `groupBy'` allows to customise the combining function and initial value
 
@@ -374,7 +416,7 @@ rec {
   /* Merges two lists of the same size together. If the sizes aren't the same
      the merging stops at the shortest.
 
-     Type: zipLists :: [a] -> [b] -> [{ fst :: a, snd :: b}]
+     Type: zipLists :: [a] -> [b] -> [{ fst :: a; snd :: b; }]
 
      Example:
        zipLists [ 1 2 ] [ "a" "b" ]

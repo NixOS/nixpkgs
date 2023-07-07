@@ -30,17 +30,24 @@ stdenv.mkDerivation rec {
     "-DLUCENE_STATIC_CONSTANT_SYNTAX_EXITCODE__TRYRUN_OUTPUT="
   ];
 
-  patches = # From debian
-    [ ./Fix-pkgconfig-file-by-adding-clucene-shared-library.patch
-      ./Fixing_ZLIB_configuration_in_shared_CMakeLists.patch
-      ./Install-contribs-lib.patch
-    ] ++ lib.optionals stdenv.isDarwin [ ./fix-darwin.patch ];
+  patches = [
+    # From debian
+    ./Fix-pkgconfig-file-by-adding-clucene-shared-library.patch
+    ./Fixing_ZLIB_configuration_in_shared_CMakeLists.patch
+    ./Install-contribs-lib.patch
+    # From arch
+    ./fix-missing-include-time.patch
+
+    # required for darwin and linux-musl
+    ./pthread-include.patch
+
+  ] ++ lib.optionals stdenv.isDarwin [ ./fix-darwin.patch ];
 
   # fails with "Unable to find executable:
   # /build/clucene-core-2.3.3.4/build/bin/cl_test"
   doCheck = false;
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
 
   meta = with lib; {
     description = "Core library for full-featured text search engine";
@@ -54,7 +61,7 @@ stdenv.mkDerivation rec {
 
       CLucene is a port of the very popular Java Lucene text search engine API.
     '';
-    homepage = "http://clucene.sourceforge.net";
+    homepage = "https://clucene.sourceforge.net";
     platforms = platforms.unix;
     license = with licenses; [ asl20 lgpl2 ];
   };

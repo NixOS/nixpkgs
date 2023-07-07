@@ -6,8 +6,8 @@ buildKodiAddon rec {
   version = "0.1.3.1";
 
   src = fetchzip {
-    url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
-    sha256 = "14m232p9hx925pbk8knsg994m1nbpa5278zmcrnfblh4z84gjv4x";
+    url = "https://mirrors.kodi.tv/addons/nexus/${namespace}/${namespace}-${version}.zip";
+    sha256 = "sha256-nWz5CPoE0uVsZvWjI4q6y4ZKUnraTjTXLSJ1mK4YopI=";
   };
 
   passthru = {

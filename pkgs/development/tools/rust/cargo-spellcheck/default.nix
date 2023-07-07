@@ -1,27 +1,26 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, libclang
 , stdenv
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-spellcheck";
-  version = "0.12.2";
+  version = "0.12.4";
 
   src = fetchFromGitHub {
     owner = "drahnr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-8HZBenv2bL6D8TXzjklEFUAnqk7LkYXjtEwxpTbbzr4=";
+    sha256 = "sha256-h9114HFWIsJn95pJ3QoDokNgAkE6KFjDt5Rt85vT7zw=";
   };
 
-  cargoSha256 = "sha256-zCk+b7jcR7yDpBUVfKXIozQkcsB+73HosdCmZW9abkA=";
+  cargoSha256 = "sha256-hYCDpSKi7HlqwdnMnfnKw46VpO+bhsV11kIu/4yMaBw=";
+
+  nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
   buildInputs = lib.optional stdenv.isDarwin Security;
-
-  LIBCLANG_PATH = "${libclang.lib}/lib";
 
   preCheck = "HOME=$(mktemp -d)";
 

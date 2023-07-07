@@ -17,7 +17,7 @@ in
 {
 
   meta = {
-    doc = ./pantheon.xml;
+    doc = ./pantheon.md;
     maintainers = teams.pantheon.members;
   };
 
@@ -113,6 +113,7 @@ in
 
       services.xserver.displayManager.sessionCommands = ''
         if test "$XDG_CURRENT_DESKTOP" = "Pantheon"; then
+            true
             ${concatMapStrings (p: ''
               if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
                 export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
@@ -169,6 +170,9 @@ in
       };
       services.udev.packages = [
         pkgs.pantheon.gnome-settings-daemon
+        # Force enable KMS modifiers for devices that require them.
+        # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1443
+        pkgs.pantheon.mutter
       ];
       systemd.packages = [
         pkgs.pantheon.gnome-settings-daemon
@@ -224,11 +228,16 @@ in
       xdg.icons.enable = true;
 
       xdg.portal.enable = true;
-      xdg.portal.extraPortals = with pkgs.pantheon; [
+      xdg.portal.extraPortals = [
+        # Some Pantheon apps enforce portal usage, we need this for e.g. notifications.
+        # Currently we have buildPortalsInGnome enabled, if you run into issues related
+        # to https://github.com/flatpak/xdg-desktop-portal/issues/656 please report to us.
+        pkgs.xdg-desktop-portal-gtk
+      ] ++ (with pkgs.pantheon; [
         elementary-files
         elementary-settings-daemon
         xdg-desktop-portal-pantheon
-      ];
+      ]);
 
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
@@ -250,10 +259,10 @@ in
       programs.bash.vteIntegration = mkDefault true;
       programs.zsh.vteIntegration = mkDefault true;
 
-      # Harmonize Qt5 applications under Pantheon
-      qt5.enable = true;
-      qt5.platformTheme = "gnome";
-      qt5.style = "adwaita";
+      # Harmonize Qt applications under Pantheon
+      qt.enable = true;
+      qt.platformTheme = "gnome";
+      qt.style = "adwaita";
 
       # Default Fonts
       fonts.fonts = with pkgs; [
@@ -306,7 +315,6 @@ in
       environment.systemPackages = with pkgs.pantheon; [
         contractor
         file-roller-contract
-        gnome-bluetooth-contract
       ];
 
       environment.pathsToLink = [

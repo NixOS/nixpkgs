@@ -9,7 +9,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-YJjts3xrgCPzeU1CWIoTv3WyygK0D/l5XIRry+DBtGw=";
+    hash = "sha256-YJjts3xrgCPzeU1CWIoTv3WyygK0D/l5XIRry+DBtGw=";
   };
 
   pythonNamespaces = [ "jaraco" ];
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ inflect more-itertools six ];
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   # tests no longer available through pypi
   doCheck = false;

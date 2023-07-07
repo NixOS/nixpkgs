@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "emoji";
-  version = "2.1.0";
+  version = "2.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,10 +16,10 @@ buildPythonPackage rec {
     owner = "carpedm20";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-mcbrlPD2BHjm4WJQZrymv+2wK2NUjv+qvpD/G7iCjwA=";
+    hash = "sha256-giR0feAzPnginmzV8lqs1mpDtdBl7dExg21MhaGeCSQ=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -34,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Emoji for Python";
     homepage = "https://github.com/carpedm20/emoji/";
+    changelog = "https://github.com/carpedm20/emoji/blob/v${version}/CHANGES.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ joachifm ];
   };

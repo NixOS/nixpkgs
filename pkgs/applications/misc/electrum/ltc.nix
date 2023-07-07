@@ -7,16 +7,6 @@
 , zbar
 , secp256k1
 , enableQt ? true
-# for updater.nix
-, writeScript
-, common-updater-scripts
-, bash
-, coreutils
-, curl
-, gnugrep
-, gnupg
-, gnused
-, nix
 }:
 
 let
@@ -29,6 +19,7 @@ let
 
   libzbar_name =
     if stdenv.isLinux then "libzbar.so.0"
+    else if stdenv.isDarwin then "libzbar.0.dylib"
     else "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   # Not provided in official source releases, which are what upstream signs.
@@ -80,7 +71,7 @@ python3.pkgs.buildPythonApplication {
     requests
     tlslite-ng
     # plugins
-    btchip
+    btchip-python
     ckcc-protocol
     keepkey
     trezor
@@ -118,7 +109,7 @@ python3.pkgs.buildPythonApplication {
     wrapQtApp $out/bin/electrum-ltc
   '';
 
-  checkInputs = with python3.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
 
   pytestFlagsArray = [ "electrum_ltc/tests" ];
 
@@ -130,21 +121,6 @@ python3.pkgs.buildPythonApplication {
   postCheck = ''
     $out/bin/electrum-ltc help >/dev/null
   '';
-
-  passthru.updateScript = import ./update.nix {
-    inherit lib;
-    inherit
-      writeScript
-      common-updater-scripts
-      bash
-      coreutils
-      curl
-      gnupg
-      gnugrep
-      gnused
-      nix
-    ;
-  };
 
   meta = with lib; {
     description = "Lightweight Litecoin Client";

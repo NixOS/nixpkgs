@@ -2,27 +2,28 @@ GEM
   remote: https://rubygems.org/
   specs:
     Ascii85 (1.1.0)
-    addressable (2.8.0)
-      public_suffix (>= 2.0.2, < 5.0)
+    addressable (2.8.1)
+      public_suffix (>= 2.0.2, < 6.0)
     afm (0.2.2)
-    asciidoctor (2.0.17)
-    asciidoctor-pdf (1.6.2)
+    asciidoctor (2.0.18)
+    asciidoctor-pdf (2.3.2)
       asciidoctor (~> 2.0)
       concurrent-ruby (~> 1.1)
+      matrix (~> 0.4)
       prawn (~> 2.4.0)
       prawn-icon (~> 3.0.0)
       prawn-svg (~> 0.32.0)
       prawn-table (~> 0.2.0)
       prawn-templates (~> 0.1.0)
-      safe_yaml (~> 1.0.0)
       treetop (~> 1.6.0)
     coderay (1.1.3)
-    concurrent-ruby (1.1.9)
-    css_parser (1.11.0)
+    concurrent-ruby (1.1.10)
+    css_parser (1.12.0)
       addressable
     hashery (2.1.2)
+    matrix (0.4.2)
     pdf-core (0.9.0)
-    pdf-reader (2.8.0)
+    pdf-reader (2.10.0)
       Ascii85 (~> 1.0)
       afm (~> 0.2.1)
       hashery (~> 2.0)
@@ -43,12 +44,11 @@ GEM
     prawn-templates (0.1.2)
       pdf-reader (~> 2.0)
       prawn (~> 2.2)
-    public_suffix (4.0.6)
+    public_suffix (5.0.0)
     pygments.rb (2.3.0)
     rexml (3.2.5)
-    rouge (3.27.0)
+    rouge (4.0.0)
     ruby-rc4 (0.1.5)
-    safe_yaml (1.0.5)
     treetop (1.6.11)
       polyglot (~> 0.3)
     ttfunk (1.7.0)
@@ -64,4 +64,4 @@ DEPENDENCIES
   rouge
 
 BUNDLED WITH
-   2.2.24
+   2.3.22

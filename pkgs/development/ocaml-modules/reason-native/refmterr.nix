@@ -4,6 +4,7 @@
   pname = "refmterr";
 
   nativeBuildInputs = [
+    atdgen
     reason
   ];
 

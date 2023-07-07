@@ -10,6 +10,7 @@
 , nativeBuildInputs ? []
 , propagatedBuildInputs ? []
 , checkInputs ? []
+, nativeCheckInputs ? []
 
 # true if we should skip the configuration phase altogether
 , dontConfigure ? false
@@ -27,7 +28,7 @@
 
 let
   inherit (tcl) stdenv;
-  inherit (lib) getBin optionalAttrs optionals;
+  inherit (lib) getBin optionalAttrs;
 
   defaultTclPkgConfigureFlags = [
     "--with-tcl=${tcl}/lib"
@@ -36,7 +37,7 @@ let
   ];
 
   self = (stdenv.mkDerivation ((builtins.removeAttrs attrs [
-    "addTclConfigureFlags" "checkPhase" "checkInputs" "doCheck"
+    "addTclConfigureFlags" "checkPhase" "checkInputs" "nativeCheckInputs" "doCheck"
   ]) // {
 
     buildInputs = buildInputs ++ [ tcl.tclPackageHook ];
@@ -47,8 +48,9 @@ let
 
     # Run tests after install, at which point we've done all TCLLIBPATH setup
     doCheck = false;
-    doInstallCheck = attrs.doCheck or ((attrs ? doInstallCheck) && attrs.doInstallCheck);
-    installCheckInputs = checkInputs ++ (optionals (attrs ? installCheckInputs) attrs.installCheckInputs);
+    doInstallCheck = attrs.doCheck or (attrs.doInstallCheck or false);
+    installCheckInputs = checkInputs ++ (attrs.installCheckInputs or []);
+    nativeInstallCheckInputs = nativeCheckInputs ++ (attrs.nativeInstallCheckInputs or []);
 
     # Add typical values expected by TEA for configureFlags
     configureFlags =

@@ -1,24 +1,26 @@
-{ lib, mkDerivationWith, fetchurl, python3Packages
+{ lib, mkDerivationWith, fetchFromGitHub, python3Packages
 , file, intltool, gobject-introspection, libgudev
-, udisks, gexiv2, gst_all_1, libnotify
+, udisks, gexiv2, gst_all_1, libnotify, ifuse, libimobiledevice
 , exiftool, gdk-pixbuf, libmediainfo, vmtouch
 }:
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "rapid-photo-downloader";
-  version = "0.9.18";
+  version = "0.9.34";
 
-  src = fetchurl {
-    url = "https://launchpad.net/rapid/pyqt/${version}/+download/${pname}-${version}.tar.gz";
-    sha256 = "15p7sssg6vmqbm5xnc4j5dr89d7gl7y5qyq44a240yl5aqkjnybw";
+  src = fetchFromGitHub {
+    owner = "damonlynch";
+    repo = "rapid-photo-downloader";
+    rev = "v${version}";
+    hash = "sha256-4VC1fwQh9L3c5tgLUaC36p9QHL4dR2vkWc2XlNl0Xzw=";
   };
 
-  # Disable version check and fix install tests
   postPatch = ''
+    # Drop broken version specifier
+    sed -i '/python_requires/d' setup.py
+    # Disable version check
     substituteInPlace raphodo/constants.py \
       --replace "disable_version_check = False" "disable_version_check = True"
-    substituteInPlace raphodo/rescan.py \
-      --replace "from preferences" "from raphodo.preferences"
   '';
 
   nativeBuildInputs = [
@@ -28,9 +30,15 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
 
   # Package has no generally usable unit tests.
   # The included doctests expect specific, hardcoded hardware to be present.
-  doCheck = false;
+  # Instead, we just make sure the program runs enough to report its version.
+  checkPhase = ''
+    export XDG_DATA_HOME=$(mktemp -d)
+    export QT_QPA_PLATFORM=offscreen
+    $out/bin/rapid-photo-downloader --detailed-version
+  '';
 
-  # NOTE: Without gobject-introspection in buildInputs, launching fails with
+  # NOTE: Without gobject-introspection in buildInputs and strictDeps = false,
+  #       launching fails with:
   #       "Namespace [Notify / GExiv2 / GUdev] not available"
   buildInputs = [
     gdk-pixbuf
@@ -46,7 +54,11 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     udisks
   ];
 
+  strictDeps = false;
+
   propagatedBuildInputs = with python3Packages; [
+    ifuse
+    libimobiledevice
     pyqt5
     pygobject3
     gphoto2
@@ -57,15 +69,19 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     arrow
     python-dateutil
     easygui
+    babel
     colour
+    pillow
+    pyheif
     pymediainfo
     sortedcontainers
-    rawkit
     requests
     colorlog
     pyprind
+    setuptools
+    show-in-file-manager
     tenacity
-  ];
+  ] ++ lib.optional (pythonOlder "3.8") importlib-metadata;
 
   preFixup = ''
     makeWrapperArgs+=(

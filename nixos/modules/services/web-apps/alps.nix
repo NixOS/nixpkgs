@@ -54,7 +54,7 @@ in {
     smtps = {
       port = mkOption {
         type = types.port;
-        default = 445;
+        default = 465;
         description = lib.mdDoc ''
           The SMTPS server port.
         '';
@@ -70,6 +70,23 @@ in {
         '';
       };
     };
+
+    package = mkOption {
+      internal = true;
+      type = types.package;
+      default = pkgs.alps;
+    };
+
+    args = mkOption {
+      internal = true;
+      type = types.listOf types.str;
+      default = [
+        "-addr" "${cfg.bindIP}:${toString cfg.port}"
+        "-theme" "${cfg.theme}"
+        "imaps://${cfg.imaps.host}:${toString cfg.imaps.port}"
+        "smtps://${cfg.smtps.host}:${toString cfg.smtps.port}"
+      ];
+    };
   };
 
   config = mkIf cfg.enable {
@@ -80,16 +97,35 @@ in {
       after = [ "network.target" "network-online.target" ];
 
       serviceConfig = {
-        ExecStart = ''
-          ${pkgs.alps}/bin/alps \
-            -addr ${cfg.bindIP}:${toString cfg.port} \
-            -theme ${cfg.theme} \
-            imaps://${cfg.imaps.host}:${toString cfg.imaps.port} \
-            smpts://${cfg.smtps.host}:${toString cfg.smtps.port}
-        '';
-        StateDirectory = "alps";
-        WorkingDirectory = "/var/lib/alps";
+        ExecStart = "${cfg.package}/bin/alps ${escapeShellArgs cfg.args}";
+        AmbientCapabilities = "";
+        CapabilityBoundingSet = "";
         DynamicUser = true;
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateIPC = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SocketBindAllow = cfg.port;
+        SocketBindDeny = "any";
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [ "@system-service" "~@privileged @obsolete" ];
       };
     };
   };

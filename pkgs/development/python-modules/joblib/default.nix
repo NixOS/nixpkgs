@@ -9,20 +9,21 @@
 , lz4
 , setuptools
 , sphinx
+, psutil
 }:
 
 
 buildPythonPackage rec {
   pname = "joblib";
-  version = "1.1.0";
+  version = "1.2.0";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4158fcecd13733f8be669be0683b96ebdbbd38d23559f54dca7205aea1bf1e35";
+    hash = "sha256-4c7kp55K8iiBFk8hjUMR9gB0GX+3B+CC6AO2H20TcBg=";
   };
 
-  checkInputs = [ sphinx numpydoc pytestCheckHook ];
+  nativeCheckInputs = [ sphinx numpydoc pytestCheckHook psutil ];
   propagatedBuildInputs = [ lz4 setuptools ];
 
   pytestFlagsArray = [ "joblib/test" ];

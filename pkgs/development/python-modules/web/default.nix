@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "web" ];
 
-  checkInputs = [ pytestCheckHook dbutils mysqlclient pymysql mysql-connector psycopg2 ];
+  nativeCheckInputs = [ pytestCheckHook dbutils mysqlclient pymysql mysql-connector psycopg2 ];
 
   meta = with lib; {
     description = "Makes web apps";

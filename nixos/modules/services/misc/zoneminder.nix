@@ -97,7 +97,7 @@ in {
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 8095;
         description = lib.mdDoc ''
           The port on which to listen.
@@ -283,7 +283,8 @@ in {
       phpfpm = lib.mkIf useNginx {
         pools.zoneminder = {
           inherit user group;
-          phpPackage = pkgs.php.withExtensions ({ enabled, all }: enabled ++ [ all.apcu ]);
+          phpPackage = pkgs.php.withExtensions (
+            { enabled, all }: enabled ++ [ all.apcu all.sysvsem ]);
           phpOptions = ''
             date.timezone = "${config.time.timeZone}"
           '';
@@ -326,6 +327,15 @@ in {
           fi
 
           ${zoneminder}/bin/zmupdate.pl -nointeractive
+          ${zoneminder}/bin/zmupdate.pl --nointeractive -f
+
+          # Update ZM's Nix store path in the configuration table. Do nothing if the config doesn't
+          # contain ZM's Nix store path.
+          ${config.services.mysql.package}/bin/mysql -u zoneminder zm << EOF
+            UPDATE Config
+              SET Value = REGEXP_REPLACE(Value, "^/nix/store/[^-/]+-zoneminder-[^/]+", "${pkgs.zoneminder}")
+              WHERE Name = "ZM_FONT_FILE_LOCATION";
+          EOF
         '';
         serviceConfig = {
           User = user;

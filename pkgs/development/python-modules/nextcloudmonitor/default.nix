@@ -6,13 +6,15 @@
 
 buildPythonPackage rec {
   pname = "nextcloudmonitor";
-  version = "1.2.0";
+  version = "1.4.0";
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "meichthys";
     repo = "nextcloud_monitor";
     rev = "v${version}";
-    sha256 = "0b0c7gzx1d5kgbsfj1lbrqsirc5g5br6v8w2njaj1ys03kj669cx";
+    hash = "sha256-jyC8oOFr5yVtIJNxVCLNTyFpJTdjHu8t6Xs4il45ysI=";
   };
 
   propagatedBuildInputs = [
@@ -25,6 +27,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "nextcloudmonitor" ];
 
   meta = with lib; {
+    changelog = "https://github.com/meichthys/nextcloud_monitor/blob/${src.rev}/README.md#change-log";
     description = "Python wrapper around nextcloud monitor api";
     homepage = "https://github.com/meichthys/nextcloud_monitor";
     license = licenses.mit;

@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "0v81745nx5gny2g05946k8j553j18a29ikmlyh6c3syq6c15k8cf";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 

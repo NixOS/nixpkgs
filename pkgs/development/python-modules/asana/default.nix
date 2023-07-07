@@ -6,12 +6,11 @@
 , requests
 , requests-oauthlib
 , responses
-, six
 }:
 
 buildPythonPackage rec {
   pname = "asana";
-  version = "1.0.0";
+  version = "3.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,16 +19,15 @@ buildPythonPackage rec {
     owner = "asana";
     repo = "python-asana";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-SbYTLGBCfKbjhyzM5OnVX6kxEMnofwPIyzwuJvYORhw=";
+    hash = "sha256-hvAyKGoNkX3bs7Mz2h7SnOa5T6J88c0YiTR/L8fgfi8=";
   };
 
   propagatedBuildInputs = [
     requests
     requests-oauthlib
-    six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     responses
   ];
@@ -41,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client library for Asana";
     homepage = "https://github.com/asana/python-asana";
+    changelog = "https://github.com/Asana/python-asana/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

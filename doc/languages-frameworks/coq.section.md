@@ -8,7 +8,7 @@ The Coq derivation is overridable through the `coq.override overrides`, where ov
 * `customOCamlPackages` (optional, defaults to `null`, which lets Coq choose a version automatically), which can be set to any of the ocaml packages attribute of `ocaml-ng` (such as `ocaml-ng.ocamlPackages_4_10` which is the default for Coq 8.11 for example).
 * `coq-version` (optional, defaults to the short version e.g. "8.10"), is a version number of the form "x.y" that indicates which Coq's version build behavior to mimic when using a source which is not a release. E.g. `coq.override { version = "d370a9d1328a4e1cdb9d02ee032f605a9d94ec7a"; coq-version = "8.10"; }`.
 
-The associated package set can be optained using `mkCoqPackages coq`, where `coq` is the derivation to use.
+The associated package set can be obtained using `mkCoqPackages coq`, where `coq` is the derivation to use.
 
 ## Coq packages attribute sets: `coqPackages` {#coq-packages-attribute-sets-coqpackages}
 
@@ -24,23 +24,23 @@ The recommended way of defining a derivation for a Coq library, is to use the `c
   * if it is a string of the form `"#N"`, and the domain is github, then it tries to download the current head of the pull request `#N` from github,
 * `defaultVersion` (optional). Coq libraries may be compatible with some specific versions of Coq only. The `defaultVersion` attribute is used when no `version` is provided (or if `version = null`) to select the version of the library to use by default, depending on the context. This selection will mainly depend on a `coq` version number but also possibly on other packages versions (e.g. `mathcomp`). If its value ends up to be `null`, the package is marked for removal in end-user `coqPackages` attribute set.
 * `release` (optional, defaults to `{}`), lists all the known releases of the library and for each of them provides an attribute set with at least a `sha256` attribute (you may put the empty string `""` in order to automatically insert a fake sha256, this will trigger an error which will allow you to find the correct sha256), each attribute set of the list of releases also takes optional overloading arguments for the fetcher as below (i.e.`domain`, `owner`, `repo`, `rev` assuming the default fetcher is used) and optional overrides for the result of the fetcher (i.e. `version` and `src`).
-* `fetcher` (optional, defaults to a generic fetching mechanism supporting github or gitlab based infrastructures), is a function that takes at least an `owner`, a `repo`, a `rev`, and a `sha256` and returns an attribute set with a `version` and `src`.
+* `fetcher` (optional, defaults to a generic fetching mechanism supporting github or gitlab based infrastructures), is a function that takes at least an `owner`, a `repo`, a `rev`, and a `hash` and returns an attribute set with a `version` and `src`.
 * `repo` (optional, defaults to the value of `pname`),
 * `owner` (optional, defaults to `"coq-community"`).
 * `domain` (optional, defaults to `"github.com"`), domains including the strings `"github"` or `"gitlab"` in their names are automatically supported, otherwise, one must change the `fetcher` argument to support them (cf `pkgs/development/coq-modules/heq/default.nix` for an example),
 * `releaseRev` (optional, defaults to `(v: v)`), provides a default mapping from release names to revision hashes/branch names/tags,
 * `displayVersion` (optional), provides a way to alter the computation of `name` from `pname`, by explaining how to display version numbers,
 * `namePrefix` (optional, defaults to `[ "coq" ]`), provides a way to alter the computation of `name` from `pname`, by explaining which dependencies must occur in `name`,
-* `nativeBuildInputs` (optional), is a list of executables that are required to build the current derivation, in addition to the default ones (namely `which`, `dune` and `ocaml` depending on whether `useDune2`, `useDune2ifVersion` and `mlPlugin` are set).
+* `nativeBuildInputs` (optional), is a list of executables that are required to build the current derivation, in addition to the default ones (namely `which`, `dune` and `ocaml` depending on whether `useDune`, `useDuneifVersion` and `mlPlugin` are set).
 * `extraNativeBuildInputs` (optional, deprecated), an additional list of derivation to add to `nativeBuildInputs`,
 * `overrideNativeBuildInputs` (optional) replaces the default list of derivation to which `nativeBuildInputs` and `extraNativeBuildInputs` adds extra elements,
 * `buildInputs` (optional), is a list of libraries and dependencies that are required to build and run the current derivation, in addition to the default one `[ coq ]`,
 * `extraBuildInputs` (optional, deprecated), an additional list of derivation to add to `buildInputs`,
 * `overrideBuildInputs` (optional) replaces the default list of derivation to which `buildInputs` and `extraBuildInputs` adds extras elements,
-* `propagatedBuildInputs` (optional) is passed as is to `mkDerivation`, we recommend to use this for Coq libraries and Coq plugin dependencies, as this makes sure the paths of the compiled libraries and plugins will always be added to the build environements of subsequent derivation, which is necessary for Coq packages to work correctly,
+* `propagatedBuildInputs` (optional) is passed as is to `mkDerivation`, we recommend to use this for Coq libraries and Coq plugin dependencies, as this makes sure the paths of the compiled libraries and plugins will always be added to the build environments of subsequent derivation, which is necessary for Coq packages to work correctly,
 * `mlPlugin` (optional, defaults to `false`). Some extensions (plugins) might require OCaml and sometimes other OCaml packages. Standard dependencies can be added by setting the current option to `true`. For a finer grain control, the `coq.ocamlPackages` attribute can be used in `nativeBuildInputs`, `buildInputs`, and `propagatedBuildInputs` to depend on the same package set Coq was built against.
-* `useDune2ifVersion` (optional, default to `(x: false)` uses Dune2 to build the package if the provided predicate evaluates to true on the version, e.g. `useDune2ifVersion = versions.isGe "1.1"`  will use dune if the version of the package is greater or equal to `"1.1"`,
-* `useDune2` (optional, defaults to `false`) uses Dune2 to build the package if set to true, the presence of this attribute overrides the behavior of the previous one.
+* `useDuneifVersion` (optional, default to `(x: false)` uses Dune to build the package if the provided predicate evaluates to true on the version, e.g. `useDuneifVersion = versions.isGe "1.1"`  will use dune if the version of the package is greater or equal to `"1.1"`,
+* `useDune` (optional, defaults to `false`) uses Dune to build the package if set to true, the presence of this attribute overrides the behavior of the previous one.
 * `opam-name` (optional, defaults to concatenating with a dash separator the components of `namePrefix` and `pname`), name of the Dune package to build.
 * `enableParallelBuilding` (optional, defaults to `true`), since it is activated by default, we provide a way to disable it.
 * `extraInstallFlags` (optional), allows to extend `installFlags` which initializes the variable `COQMF_COQLIB` so as to install in the proper subdirectory. Indeed Coq libraries should be installed in `$(out)/lib/coq/${coq.coq-version}/user-contrib/`. Such directories are automatically added to the `$COQPATH` environment variable by the hook defined in the Coq derivation.

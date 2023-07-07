@@ -1,27 +1,49 @@
 { lib
+, aiohttp
 , buildPythonPackage
 , fetchPypi
 , google-auth
 , google-cloud-testutils
 , google-crc32c
 , mock
-, pytestCheckHook
 , pytest-asyncio
+, pytestCheckHook
+, pythonOlder
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "google-resumable-media";
-  version = "2.3.3";
+  version = "2.5.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-J8UmIL02TRyBFuqsTqKvy/uBrpE5+zGZZS/KwXJL+2w=";
+    hash = "sha256-IYkx6OKypzpY6zVKKI4DoP1fscRYMmGsbkwHhmZGjJM=";
   };
 
-  propagatedBuildInputs = [ google-auth google-crc32c requests ];
+  propagatedBuildInputs = [
+    google-auth
+    google-crc32c
+  ];
 
-  checkInputs = [ google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
+  passthru.optional-dependencies = {
+    requests = [
+      requests
+    ];
+    aiohttp = [
+      aiohttp
+    ];
+  };
+
+  nativeCheckInputs = [
+    google-cloud-testutils
+    mock
+    pytest-asyncio
+    pytestCheckHook
+  ] ++ passthru.optional-dependencies.requests;
 
   preCheck = ''
     # prevent shadowing imports
@@ -40,6 +62,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Utilities for Google Media Downloads and Resumable Uploads";
     homepage = "https://github.com/GoogleCloudPlatform/google-resumable-media-python";
+    changelog = "https://github.com/googleapis/google-resumable-media-python/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

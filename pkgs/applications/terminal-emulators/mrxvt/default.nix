@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "1mqhmnlz32lvld9rc6c1hyz7gjw4anwf39yhbsjkikcgj1das0zl";
   };
 
-  buildInputs = [ libX11 libXft libXi xorgproto libSM libICE freetype pkg-config which ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ libX11 libXft libXi xorgproto libSM libICE freetype which ];
 
   configureFlags = [
     "--with-x"

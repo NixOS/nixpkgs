@@ -4,8 +4,9 @@
 , fetchpatch
 , scons
 , pkg-config
-, SDL
-, SDL_mixer
+, SDL2
+, SDL2_image
+, SDL2_mixer
 , libGLU
 , libGL
 , libpng
@@ -21,22 +22,24 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "dxx-rebirth";
-  version = "0.59.20200202";
+  version = "unstable-2023-03-23";
 
   src = fetchFromGitHub {
     owner = "dxx-rebirth";
     repo = "dxx-rebirth";
-    rev = "8ebb66c5c9c74ebb93d49741cc9545f2bb7fa05d";
-    sha256 = "1lsrlp47aby2m9hh7i3nv5rb0srlkmnq1w2ca6vyvlga9m9h7jrk";
+    rev = "841ebcc11d249febe48911bc239606ade3bd78b3";
+    hash = "sha256-cr5QdkKO/HNvtc2w4ynJixuLauhPCwtsSC3UEV7+C1A=";
   };
 
   nativeBuildInputs = [ pkg-config scons ];
 
-  buildInputs = [ libGLU libGL libpng physfs SDL SDL_mixer ];
+  buildInputs = [ libGLU libGL libpng physfs SDL2 SDL2_image SDL2_mixer ];
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = [
+  sconsFlags = [ "sdl2=1" ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-format-nonliteral"
     "-Wno-format-truncation"
   ];

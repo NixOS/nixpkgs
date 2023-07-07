@@ -23,6 +23,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  env = {
+    NIX_CFLAGS_COMPILE = "-DUSE_INTERP_RESULT";
+    NIX_LDFLAGS = "-ltcl";
+  };
+
   # If we don't create the directories ourselves, then 'make install' creates
   # files named 'bin' and 'lib'.
   preInstall = ''
@@ -54,6 +59,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.samba.org/ftp/paulus/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ khumba ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

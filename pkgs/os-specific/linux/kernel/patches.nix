@@ -57,4 +57,21 @@
     name = "export-rt-sched-migrate";
     patch = ./export-rt-sched-migrate.patch;
   };
+
+  CVE-2023-32233 = rec {
+    name = "CVE-2023-32233";
+    patch = fetchpatch {
+      name = name + ".patch";
+      url = "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/patch/?id=c1592a89942e9678f7d9c8030efa777c0d57edab";
+      hash = "sha256-DYPWgraXPNeFkjtuDYkFXHnCJ4yDewrukM2CCAqC2BE=";
+    };
+  };
+
+  fix-amdgpu-5_15 = {
+    name = "fix-amdgpu-crash";
+    patch = fetchpatch {
+      url = "https://lore.kernel.org/stable/20230628111636.23300-1-mario.limonciello@amd.com/raw";
+      sha256 = "sha256-eAzy+bMiOJwzssOuvrMu7gmmV3PZezaDuVwwx7zNt6M=";
+    };
+  };
 }

@@ -1,36 +1,36 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch }:
+{ lib
+, stdenv
+, fetchFromGitHub
+}:
 
-stdenv.mkDerivation {
-  version = "28";
+stdenv.mkDerivation (finalAttrs: {
   pname = "pforth";
+  version = "2.0.1";
+
   src = fetchFromGitHub {
     owner = "philburk";
     repo = "pforth";
-    rev = "9190005e32c6151b76ac707b30eeb4d5d9dd1d36";
-    sha256 = "0k3pmcgybsnwrxy75piyb2420r8d4ij190606js32j99062glr3x";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-vEjFeHSJl+yAtatYJEnu+r9hmOr/kZOgIbSUXR/c8WU=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "gnumake-4.3-fix.patch";
-      url = "https://github.com/philburk/pforth/commit/457cb99f57292bc855e53abcdcb7b12d6681e847.patch";
-      sha256 = "0x1bwx3pqb09ddjhmdli47lnk1ys4ny42819g17kfn8nkjs5hbx7";
-    })
-  ];
+  dontConfigure = true;
 
-  makeFlags = [ "SRCDIR=." ];
-  makefile = "build/unix/Makefile";
+  preBuild = ''
+    cd platforms/unix
+  '';
 
   installPhase = ''
     install -Dm755 pforth_standalone $out/bin/pforth
   '';
 
-
   meta = {
-    description = "Portable ANSI style Forth written in ANSI C";
     homepage = "http://www.softsynth.com/pforth/";
-    license = lib.licenses.publicDomain;
+    description = "Portable Portable ANS-like Forth written in ANSI 'C'";
+    changelog = "https://github.com/philburk/pforth/blob/v${finalAttrs.version}/RELEASES.md";
+    license = lib.licenses.bsd0;
+    maintainers = with lib.maintainers; [ AndersonTorres yrashk ];
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ yrashk ];
   };
-}
+})
+# TODO: option for install the non-standalone executable

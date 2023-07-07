@@ -22,9 +22,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl autoconf ];
   buildInputs = [ autoconf ];
 
-  # Disable indented log output from Make, otherwise "make.test" will
-  # fail.
-  preCheck = "unset NIX_INDENT_MAKE";
   doCheck = false; # takes _a lot_ of time, fails 11 of 782 tests
 
   # Don't fixup "#! /bin/sh" in Libtool, otherwise it will use the

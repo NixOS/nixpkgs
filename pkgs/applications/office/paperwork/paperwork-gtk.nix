@@ -22,7 +22,7 @@
 let
   documentation_deps = [
     (texlive.combine {
-      inherit (texlive) scheme-small wrapfig was;
+      inherit (texlive) scheme-small wrapfig gensymb;
     })
     xvfb-run
     imagemagick
@@ -45,6 +45,9 @@ python3Packages.buildPythonApplication rec {
 
   # Patch out a few paths that assume that we're using the FHS:
   postPatch = ''
+    substituteInPlace setup.py \
+      --replace python-Levenshtein Levenshtein
+
     chmod a+w -R ..
     patchShebangs ../tools
 
@@ -63,7 +66,9 @@ python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     # paperwork-shell needs to be re-wrapped with access to paperwork
-    cp ${python3Packages.paperwork-shell}/bin/.paperwork-cli-wrapped $out/bin/paperwork-cli
+    for exe in paperwork-cli paperwork-json; do
+      cp ${python3Packages.paperwork-shell}/bin/.$exe-wrapped $out/bin/$exe
+    done
     # install desktop files and icons
     XDG_DATA_HOME=$out/share $out/bin/paperwork-gtk install --user
 
@@ -83,7 +88,7 @@ python3Packages.buildPythonApplication rec {
     done
   '';
 
-  checkInputs = [ dbus.daemon ];
+  nativeCheckInputs = [ dbus ];
 
   nativeBuildInputs = [
     wrapGAppsHook
@@ -114,8 +119,11 @@ python3Packages.buildPythonApplication rec {
     # only need to run a virtual X server + dbus but also have a large enough
     # resolution, because the Cairo test tries to draw a 200x200 window.
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       $out/bin/paperwork-gtk chkdeps
+
+    $out/bin/paperwork-cli chkdeps
+    $out/bin/paperwork-json chkdeps
 
     # content of make test, without the dep on make install
     python -m unittest discover --verbose -s tests

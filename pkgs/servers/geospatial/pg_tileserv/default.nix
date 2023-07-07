@@ -22,6 +22,5 @@ buildGoModule rec {
     homepage = "https://github.com/CrunchyData/pg_tileserv";
     license = licenses.asl20;
     maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.unix;
   };
 }

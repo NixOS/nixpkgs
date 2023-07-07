@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchFromGitHub
 , jinja2
 , markdown
@@ -12,9 +12,9 @@
 , pythonOlder
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "mkdocstrings";
-  version = "0.19.0";
+  version = "0.21.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,9 +22,15 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-7OF1CrRnE4MYHuYD/pasnZpLe9lrbieGp4agnWAaKVo=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-pi0BEe/zhG/V9wh2CO91Cc7Mze93+2tbVo6/2LGQ6Nw=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'dynamic = ["version"]' 'version = "${version}"' \
+      --replace 'license = "ISC"' 'license = {text = "ISC"}'
+  '';
 
   nativeBuildInputs = [
     pdm-pep517
@@ -39,14 +45,9 @@ buildPythonApplication rec {
     pymdown-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
-  '';
 
   pythonImportsCheck = [
     "mkdocstrings"
@@ -57,9 +58,15 @@ buildPythonApplication rec {
     "tests/test_extension.py"
   ];
 
+  disabledTests = [
+    # Not all requirements are available
+    "test_disabling_plugin"
+  ];
+
   meta = with lib; {
     description = "Automatic documentation from sources for MkDocs";
     homepage = "https://github.com/mkdocstrings/mkdocstrings";
+    changelog = "https://github.com/mkdocstrings/mkdocstrings/blob/${version}/CHANGELOG.md";
     license = licenses.isc;
     maintainers = with maintainers; [ fab ];
   };

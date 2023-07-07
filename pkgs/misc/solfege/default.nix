@@ -1,6 +1,6 @@
 { lib, fetchurl, gettext, pkg-config, texinfo, wrapGAppsHook
 , buildPythonApplication, pycairo, pygobject3
-, gobject-introspection, gtk3, librsvg
+, gdk-pixbuf, gobject-introspection, gtk3, librsvg
 , alsa-utils, timidity, mpg123, vorbis-tools, csound, lilypond
 , automake, autoconf, txt2man
 }:
@@ -29,19 +29,17 @@ buildPythonApplication rec {
   nativeBuildInputs = [
     automake
     autoconf
-
+    gdk-pixbuf
     gettext
     pkg-config
     texinfo
     txt2man
 
-    # https://github.com/NixOS/nixpkgs/issues/56943#issuecomment-1131643663
     gobject-introspection
     wrapGAppsHook
   ];
 
   buildInputs = [
-    gobject-introspection
     gtk3
     librsvg
   ];

@@ -8,7 +8,8 @@
 , netpbm
 , imagemagick
 , dbus
-, xlibsWrapper
+, freetype
+, fontconfig
 , libGLU
 , libGL
 , shared-mime-info
@@ -40,7 +41,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk2
     dbus
-    xlibsWrapper
+    xorg.libXrender
+    freetype
+    fontconfig
     libGLU
     libGL
     tcl

@@ -16,12 +16,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  configureFlags = lib.optional stdenv.isDarwin "ac_cv_func_calloc_0_nonnull=yes";
+
   hardeningDisable = [ "format" ];
 
   meta = with lib; {
     description = "GNU barcode generator";
     maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux; # Maybe other non-darwin Unix
+    platforms = platforms.unix;
     downloadPage = "https://ftp.gnu.org/gnu/barcode/";
     homepage = "https://www.gnu.org/software/barcode/";
     license = licenses.gpl3;

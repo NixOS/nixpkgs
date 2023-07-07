@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-screensaver";
-  version = "5.4.4";
+  version = "5.8.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-D+SpAO4i4KGFWJI94LalTMB3j1YPvV63cKb34FDDprk=";
+    hash = "sha256-Y1veBgWTCs7HRBuMwN+eHu4oygGYIanaQigMGVfkSuI=";
   };
 
   nativeBuildInputs = [
@@ -89,8 +89,13 @@ stdenv.mkDerivation rec {
       -e s,/usr/share/cinnamon-screensaver,$out/share,g \
       -e s,/usr/share/iso-flag-png,${iso-flags-png-320x420}/share/iso-flags-png,g \
       {} +
+  '';
 
-    sed "s|/usr/share/locale|/run/current-system/sw/share/locale|g" -i ./src/cinnamon-screensaver-main.py
+  preFixup = ''
+    # https://github.com/NixOS/nixpkgs/issues/101881
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${gnome.caribou}/share"
+    )
   '';
 
   meta = with lib; {
