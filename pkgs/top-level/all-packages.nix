@@ -5864,6 +5864,8 @@ with pkgs;
 
   libnvme = callPackage ../os-specific/linux/libnvme { };
 
+  librenms = callPackage ../servers/monitoring/librenms { };
+
   libxnd = callPackage ../development/libraries/libxnd { };
 
   libz = callPackage ../development/libraries/libz { };
