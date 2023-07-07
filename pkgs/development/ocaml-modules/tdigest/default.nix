@@ -5,13 +5,13 @@
 
 buildDunePackage rec {
   pname = "tdigest";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "SGrondin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-R1uaCN/6NiW+jdGQiflwfihaidngvaWjJM7UFyR4vxs=";
+    sha256 = "sha256-pkJRJeEbBbAR1STb6v3Zu11twvHkAKAO0YjifRBFTDw=";
   };
 
   minimalOCamlVersion = "4.08";
