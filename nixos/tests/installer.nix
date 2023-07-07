@@ -338,6 +338,18 @@ let
       with subtest("nix-channel command is not available anymore"):
         machine.succeed("! which nix-channel")
 
+      # Note that the channel profile is still present on disk, but configured
+      # not to be used.
+      with subtest("builtins.nixPath is now empty"):
+        machine.succeed("""
+          [[ "[ ]" == "$(nix-instantiate builtins.nixPath --eval --expr)" ]]
+        """)
+
+      with subtest("<nixpkgs> does not resolve"):
+        machine.succeed("""
+          ! nix-instantiate '<nixpkgs>' --eval --expr
+        """)
+
       with subtest("Evaluate flake config in fresh env without nix-channel"):
         machine.succeed("nixos-rebuild switch --flake /root/my-config#xyz")
 

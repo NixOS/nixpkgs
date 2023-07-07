@@ -9,6 +9,7 @@
 { config, lib, ... }:
 let
   inherit (lib)
+    mkDefault
     mkIf
     mkOption
     stringAfter
@@ -88,9 +89,13 @@ in
       rm $out/bin/nix-channel
     '';
 
-    environment.sessionVariables = mkIf (cfg.nixPath != []) {
+    # NIX_PATH has a non-empty default according to Nix docs, so we don't unset
+    # it when empty.
+    environment.sessionVariables = {
       NIX_PATH = cfg.nixPath;
     };
+
+    nix.settings.nix-path = mkIf (! cfg.channel.enable) (mkDefault "");
 
     system.activationScripts.nix-channel = mkIf cfg.channel.enable
       (stringAfter [ "etc" "users" ] ''
