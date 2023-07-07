@@ -51,6 +51,10 @@ buildPythonPackage rec {
     requests-mock
   ];
 
+  pythonImportsCheck = [
+    "pvlib"
+  ];
+
   meta = with lib; {
     homepage = "https://pvlib-python.readthedocs.io";
     description = "Simulate the performance of photovoltaic energy systems";
