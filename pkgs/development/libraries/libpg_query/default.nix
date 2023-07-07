@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, which }:
+{ lib, stdenv, fetchFromGitHub, which, squawk }:
 
 stdenv.mkDerivation rec {
   pname = "libpg_query";
@@ -23,6 +23,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkTarget = "test";
+
+  passthru.tests = {
+    inherit squawk;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/pganalyze/libpg_query";
