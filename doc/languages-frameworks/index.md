@@ -42,4 +42,5 @@ swift.section.md
 texlive.section.md
 titanium.section.md
 vim.section.md
+zig.section.md
 ```
