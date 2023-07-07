@@ -1,4 +1,5 @@
-{ lib, fetchFromGitHub, buildDunePackage
+{ lib, fetchFromGitHub, nix-update-script
+, buildDunePackage
 , dune-site, camlp-streams
 }:
 
@@ -19,6 +20,8 @@ buildDunePackage rec {
     dune-site
     camlp-streams
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     inherit (src.meta) homepage;
