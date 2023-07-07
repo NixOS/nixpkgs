@@ -1,4 +1,5 @@
 { lib, stdenv, buildNpmPackage, fetchFromGitHub, vscodium, vscode-extensions }:
+
 buildNpmPackage rec {
   pname = "vscode-langservers-extracted";
   version = "4.7.0";
@@ -14,7 +15,6 @@ buildNpmPackage rec {
 
   buildPhase =
     let
-      inherit (vscode-extensions.dbaeumer) vscode-eslint;
       extensions =
         if stdenv.isDarwin
         then "${vscodium}/Applications/VSCodium.app/Contents/Resources/app/extensions"
@@ -29,7 +29,7 @@ buildNpmPackage rec {
         --out-dir lib/json-language-server/node/
       npx babel ${extensions}/markdown-language-features/server/dist/node \
         --out-dir lib/markdown-language-server/node/
-      cp -r ${vscode-eslint}/share/vscode/extensions/dbaeumer.vscode-eslint/server/out \
+      cp -r ${vscode-extensions.dbaeumer.vscode-eslint}/share/vscode/extensions/dbaeumer.vscode-eslint/server/out \
         lib/eslint-language-server
       mv lib/markdown-language-server/node/workerMain.js lib/markdown-language-server/node/main.js
     '';
