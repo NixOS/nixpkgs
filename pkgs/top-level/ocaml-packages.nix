@@ -147,9 +147,9 @@ let
 
     camlzip = callPackage ../development/ocaml-modules/camlzip { };
 
-    camomile =
+    camomile_1 =
       if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/camomile { }
+      then callPackage ../development/ocaml-modules/camomile/1.0.2.nix { }
       else callPackage ../development/ocaml-modules/camomile/0.8.5.nix { };
 
     caqti = callPackage ../development/ocaml-modules/caqti { };

@@ -1,4 +1,4 @@
-{ lib, fetchzip, buildDunePackage, camomile, result }:
+{ lib, fetchzip, buildDunePackage, camomile_1, result }:
 
 buildDunePackage rec {
   pname = "charInfo_width";
@@ -9,7 +9,7 @@ buildDunePackage rec {
     sha256 = "19mnq9a1yr16srqs8n6hddahr4f9d2gbpmld62pvlw1ps7nfrp9w";
   };
 
-  propagatedBuildInputs = [ camomile result ];
+  propagatedBuildInputs = [ camomile_1 result ];
 
   meta = {
     homepage = "https://bitbucket.org/zandoye/charinfo_width/";

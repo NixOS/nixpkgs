@@ -25,7 +25,7 @@ ocamlPackages.buildDunePackage {
   };
 
   patches = lib.lists.optional
-    (lib.strings.versionAtLeast "2.0.0" ocamlPackages.camomile.version)
+    (lib.strings.versionAtLeast "2.0.0" ocamlPackages.camomile_1.version)
     (fetchpatch {
       name = "camomile-1_x";
       url = "https://files.baturin.org/software/soupault/soupault-4.7.0-camomile-1.x.patch";
@@ -34,7 +34,7 @@ ocamlPackages.buildDunePackage {
 
   buildInputs = with ocamlPackages; [
     base64
-    camomile
+    camomile_1
     containers
     csv
     digestif

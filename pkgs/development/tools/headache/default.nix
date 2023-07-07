@@ -15,7 +15,7 @@ buildDunePackage rec {
 
   duneVersion = "3";
 
-  propagatedBuildInputs = [ camomile ];
+  propagatedBuildInputs = [ camomile_1 ];
 
   meta = with lib; {
     homepage = "https://github.com/frama-c/${pname}";

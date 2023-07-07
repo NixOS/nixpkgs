@@ -1,10 +1,10 @@
-{ lib, buildDunePackage, ocaml, ocaml_gettext, camomile, ounit, fileutils }:
+{ lib, buildDunePackage, ocaml, ocaml_gettext, camomile_1, ounit, fileutils }:
 
 buildDunePackage {
   pname = "gettext-camomile";
   inherit (ocaml_gettext) src version;
 
-  propagatedBuildInputs = [ camomile ocaml_gettext ];
+  propagatedBuildInputs = [ camomile_1 ocaml_gettext ];
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [ ounit fileutils ];
