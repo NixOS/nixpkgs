@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, ocamlPackages }:
+{ lib, fetchFromGitHub, nix-update-script, ocamlPackages }:
 
 with ocamlPackages;
 
@@ -16,6 +16,8 @@ buildDunePackage rec {
   propagatedBuildInputs = [
     camomile
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/frama-c/${pname}";
