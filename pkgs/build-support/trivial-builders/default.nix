@@ -404,18 +404,14 @@ rec {
           buildInputs = [ argbash ];
         } ''
         # Run argbash on the input
-        argbash -o "argbashed-script.sh" "${templateFile}"
-
-        # Copy the output script to the $out directory
-        mkdir -p $out
-        cp "argbashed-script.sh" "$out/argbashed-script.sh"
+        argbash -o "$out" "${templateFile}"
       '';
     in
     writeShellApplication {
       inherit name;
       inherit runtimeInputs;
       inherit checkPhase;
-      text = builtins.readFile "${argbashedText}/argbashed-script.sh";
+      text = builtins.readFile "${argbashedText}";
     };
 
   # Create a C binary
