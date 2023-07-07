@@ -7,6 +7,11 @@ import ./make-test-python.nix ({ lib, ... }: {
     services.paperless = {
       enable = true;
       passwordFile = builtins.toFile "password" "admin";
+
+      exporter.enable = true;
+      exporter.postScript = ''
+          echo "Hello World"
+      '';
     };
   };
 
@@ -62,5 +67,17 @@ import ./make-test-python.nix ({ lib, ... }: {
 
         metadata = json.loads(machine.succeed("curl -u admin:admin -fs localhost:28981/api/documents/3/metadata/"))
         assert "original_checksum" in metadata
+
+    # Check exporter config looks good
+    with subtest("Exporter config is good"):
+        machine.succeed("systemctl start paperless-exporter")
+        machine.wait_until_fails("systemctl status paperless-exporter")
+        output = machine.succeed("journalctl -u paperless-exporter.service")
+        assert "Hello World" in output
+        machine.succeed("ls -lah /var/lib/paperless/exports/manifest.json")
+        timers = machine.succeed("systemctl list-timers paperless-exporter")
+        assert "paperless-exporter.timer paperless-exporter.service" in timers
+        assert "1 timers listed." in timers
+
   '';
 })

@@ -213,9 +213,45 @@ in
       defaultText = literalExpression "pkgs.paperless-ngx";
       description = lib.mdDoc "The Paperless package to use.";
     };
+
+    exporter = {
+
+      enable = mkEnableOption (lib.mdDoc "Enable the paperless document exporter.");
+
+      directory = mkOption {
+        type = types.str;
+        default = cfg.dataDir + "/exports";
+        description = lib.mdDoc "Directory to store exports.";
+      };
+
+      calendar = mkOption {
+        type = types.nullOr types.str;
+        default = "01:30:00";
+        description = lib.mdDoc ''
+          Configured when to run the exporter.
+          (DayOfWeek Year-Month-Day Hour:Minute:Second).
+
+          Set this to `null` to disable the timer and trigger the
+          `paperless-exporter` service yourself.
+        '';
+      };
+
+      options = mkOption {
+         type = types.str;
+         default = "-c -d";
+         description = lib.mdDoc "Options to pass to the document exporter.";
+      };
+
+      postScript = mkOption {
+         type = types.lines;
+         default = "";
+         description = lib.mdDoc "Script to run after finishing the export.";
+      };
+    };
+
   };
 
-  config = mkIf cfg.enable {
+  config = mkMerge [(mkIf cfg.enable {
     services.redis.servers.paperless.enable = mkIf enableRedis true;
 
     systemd.tmpfiles.rules = [
@@ -392,5 +428,33 @@ in
         gid = config.ids.gids.paperless;
       };
     };
-  };
+  }) (mkIf (cfg.enable && cfg.exporter.enable) {
+
+    systemd.tmpfiles.rules = [
+      "d '${cfg.exporter.directory}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
+    ];
+
+    systemd.timers.paperless-exporter = lib.mkIf (cfg.exporter.calendar != null) {
+      description = "paperless exporter timer";
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = cfg.exporter.calendar;
+        AccuracySec = "5m";
+      };
+    };
+
+    systemd.services.paperless-exporter = {
+      description = "paperless exporter service";
+      serviceConfig.User = cfg.user;
+      script = ''
+        set -e
+        cd ${cfg.dataDir}
+        echo "Exporting documents ..."
+        ./paperless-manage document_exporter ${cfg.exporter.directory}  --no-progress-bar --no-color ${cfg.exporter.options}
+        echo "Running post script ..."
+        ${cfg.exporter.postScript}
+      '';
+    };
+  })];
+
 }
