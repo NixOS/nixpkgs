@@ -1,4 +1,5 @@
-{ lib, fetchFromGitHub, buildDunePackage
+{ lib, fetchFromGitHub, nix-update-script
+, buildDunePackage
 , core
 }:
 
@@ -18,6 +19,8 @@ buildDunePackage rec {
   propagatedBuildInputs = [
     core
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/SGrondin/${pname}";
