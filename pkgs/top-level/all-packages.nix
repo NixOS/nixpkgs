@@ -9548,6 +9548,8 @@ with pkgs;
 
   ix = callPackage ../tools/misc/ix { };
 
+  ixp-manager = callPackage ../servers/web-apps/ixp-manager { };
+
   jaaa = callPackage ../applications/audio/jaaa { };
 
   jackett = callPackage ../servers/jackett { };
