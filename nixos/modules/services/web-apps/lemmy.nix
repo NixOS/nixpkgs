@@ -250,9 +250,9 @@ in
 
         environment = {
           LEMMY_UI_HOST = "127.0.0.1:${toString cfg.ui.port}";
-          LEMMY_INTERNAL_HOST = "127.0.0.1:${toString cfg.settings.port}";
-          LEMMY_EXTERNAL_HOST = cfg.settings.hostname;
-          LEMMY_HTTPS = "false";
+          LEMMY_UI_LEMMY_INTERNAL_HOST = "127.0.0.1:${toString cfg.settings.port}";
+          LEMMY_UI_LEMMY_EXTERNAL_HOST = cfg.settings.hostname;
+          LEMMY_UI_HTTPS = "false";
         };
 
         documentation = [
