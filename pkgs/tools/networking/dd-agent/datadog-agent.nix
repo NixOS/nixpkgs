@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , cmake
-, buildGoModule
+, buildGo118Module
 , makeWrapper
 , fetchFromGitHub
 , pythonPackages
@@ -14,12 +14,12 @@
 
 let
   # keep this in sync with github.com/DataDog/agent-payload dependency
-  payloadVersion = "4.78.0";
+  payloadVersion = "5.0.89";
   python = pythonPackages.python;
   owner   = "DataDog";
   repo    = "datadog-agent";
   goPackagePath = "github.com/${owner}/${repo}";
-  version = "7.38.1";
+  version = "7.45.1";
 
   src = fetchFromGitHub {
     inherit owner repo;
@@ -35,7 +35,7 @@ let
     cmakeFlags = ["-DBUILD_DEMO=OFF" "-DDISABLE_PYTHON2=ON"];
   };
 
-in buildGoModule rec {
+in buildGo118Module rec {
   pname = "datadog-agent";
   inherit src version;
 
