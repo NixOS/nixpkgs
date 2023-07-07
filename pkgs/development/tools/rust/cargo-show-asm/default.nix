@@ -1,6 +1,6 @@
 { lib
 , rustPlatform
-, fetchFromGitHub
+, fetchCrate
 , installShellFiles
 , stdenv
 , nix-update-script
@@ -9,16 +9,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-show-asm";
-  version = "0.2.18";
+  version = "0.2.19";
 
-  src = fetchFromGitHub {
-    owner = "pacak";
-    repo = "cargo-show-asm";
-    rev = version;
-    hash = "sha256-K7hWXRS6bb9XZxIgZQeu22Gtt3WmXI63Xd97Unm6mHs=";
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-bIaEXlMIEQ2pnzjp7ll6iJFGAQjGb3HVBTbfGSPHrvg=";
   };
 
-  cargoHash = "sha256-fLvJyWoZ2ncbw8ksKfuQ/0oTYFOdzBBCrmtVbbMSXjo=";
+  cargoHash = "sha256-qmxd6qt8pL/5TWPDCiBQrvqb6r7VAJOrSR1OSpibQFU=";
 
   nativeBuildInputs = [
     installShellFiles
