@@ -417,9 +417,8 @@ class Machine:
 
     def send_monitor_command(self, command: str) -> str:
         """
-        Send a command to the QEMU monitor. This is rarely used, but allows
-        doing stuff such as attaching virtual USB disks to a running
-        machine.
+        Send a command to the QEMU monitor. This allows attaching
+        virtual USB disks to a running machine, among other things.
         """
         self.run_callbacks()
         message = f"{command}\n".encode()
@@ -630,9 +629,10 @@ class Machine:
 
     def console_interact(self) -> None:
         """
-        Allows you to directly interact with QEMU's stdin.
-        This should only be used during test development, not in production
-        tests.
+        Allows you to directly interact with QEMU's stdin, by forwarding
+        terminal input to the QEMU process.
+        This is for use with the interactive test driver, not for production
+        tests, which run unattended.
         Output from QEMU is only read line-wise. `Ctrl-c` kills QEMU and
         `Ctrl-d` closes console and returns to the test runner.
         """
@@ -885,12 +885,17 @@ class Machine:
         Copies a file from host to machine, e.g.,
         `copy_from_host("myfile", "/etc/my/important/file")`.
 
-        The first argument is the file on the host. The file needs to be
-        accessible while building the nix derivation. The second argument is
-        the location of the file on the machine.
+        The first argument is the file on the host. Note that the "host" refers
+        to the environment in which the test driver runs, which is typically the
+        Nix build sandbox.
+
+        The second argument is the location of the file on the machine that will
+        be written to.
 
         The file is copied via the `shared_dir` directory which is shared among
         all the VMs (using a temporary directory).
+        The access rights bits will mimic the ones from the host file and
+        user:group will be root:root.
         """
         host_src = Path(source)
         vm_target = Path(target)
@@ -995,7 +1000,7 @@ class Machine:
         """
         Wait until the supplied regular expressions match a line of the
         serial console output.
-        This method is useful when OCR is not possible or accurate enough.
+        This method is useful when OCR is not possible or inaccurate.
         """
         # Buffer the console output, this is needed
         # to match multiline regexes.
@@ -1026,6 +1031,9 @@ class Machine:
         """
         Simulate pressing keys on the virtual keyboard, e.g.,
         `send_key("ctrl-alt-delete")`.
+
+        Please also refer to the QEMU documentation for more information on the
+        input syntax: https://en.wikibooks.org/wiki/QEMU/Monitor#sendkey_keys
         """
         key = CHAR_TO_KEY.get(key, key)
         context = self.nested(f"sending key {repr(key)}") if log else nullcontext()
