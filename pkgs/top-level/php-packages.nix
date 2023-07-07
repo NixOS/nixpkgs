@@ -204,16 +204,13 @@ lib.makeScope pkgs.newScope (self: with self; {
   # or php.withExtensions to extend the functionality of the PHP
   # interpreter.
   # The extensions attributes is composed of three sections:
-  # 1. The contrib conditional extensions, which are only available on specific versions or system
+  # 1. The contrib conditional extensions, which are only available on specific PHP versions
   # 2. The contrib extensions available
   # 3. The core extensions
   extensions =
   # Contrib conditional extensions
    lib.optionalAttrs (!(lib.versionAtLeast php.version "8.3")) {
     blackfire = callPackage ../development/tools/misc/blackfire/php-probe.nix { inherit php; };
-  } // lib.optionalAttrs (!stdenv.isDarwin) {
-    # Only available on Linux: https://www.php.net/manual/en/inotify.requirements.php
-    inotify = callPackage ../development/php-packages/inotify { };
   } //
   # Contrib extensions
   {
@@ -238,6 +235,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     igbinary = callPackage ../development/php-packages/igbinary { };
 
     imagick = callPackage ../development/php-packages/imagick { };
+
+    inotify = callPackage ../development/php-packages/inotify { };
 
     mailparse = callPackage ../development/php-packages/mailparse { };
 
