@@ -135,8 +135,7 @@ let
   mkArtifactDerivation = { platform ? null, variant ? null, subdirectory ? null, archive, ... }@args:
     let
       artifactDirectory = if platform == null then null else "${platform}${lib.optionalString (variant != null) "-${variant}"}";
-      archiveExtension = ".${(lib.last (lib.splitString "." archive))}";
-      archiveBasename = lib.removeSuffix archiveExtension archive;
+      archiveBasename = lib.removeSuffix ".${(lib.last (lib.splitString "." archive))}" archive;
       overrideUnpackCmd = builtins.elem archive [ "FlutterEmbedder.framework.zip" "FlutterMacOS.framework.zip" ];
     in
     stdenv.mkDerivation ({
