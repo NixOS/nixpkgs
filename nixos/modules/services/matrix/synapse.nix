@@ -761,6 +761,28 @@ in {
               '';
             };
 
+            redis = lib.mkOption {
+              type = types.submodule {
+                freeformType = format.type;
+                options = {
+                  enabled = lib.mkOption {
+                    type = types.bool;
+                    default = false;
+                    description = lib.mdDoc ''
+                      Whether to use redis support
+                    '';
+                  };
+                };
+              };
+              default = { };
+              description = lib.mdDoc ''
+                Redis configuration for synapse.
+
+                See the
+                [upstream documentation](https://github.com/matrix-org/synapse/blob/v${pkgs.matrix-synapse-unwrapped.version}/usage/configuration/config_documentation.md#redis)
+                for available options.
+              '';
+            };
           };
         };
       };
@@ -795,6 +817,14 @@ in {
               type = types.attrsOf (types.submodule {
                 freeformType = format.type;
                 options = {
+                  worker_app = lib.mkOption {
+                    type = types.enum [
+                      "synapse.app.generic_worker"
+                      "synapse.app.media_repository"
+                    ];
+                    description = "Type of this worker";
+                    default = "synapse.app.generic_worker";
+                  };
                   worker_listeners = lib.mkOption {
                     default = [ ];
                     type = types.listOf listenerType;
@@ -809,6 +839,25 @@ in {
                 List of workers to configure. See the
                 [worker documention](https://matrix-org.github.io/synapse/latest/workers.html#worker-configuration)
                 for possible values.
+              '';
+              example = lib.literalExpression ''
+                {
+                  "federation_sender" = { };
+                  "federation_receiver" = {
+                    worker_listeners = [
+                      {
+                        type = "http";
+                        port = 8009;
+                        bind_addresses = [ "127.0.0.1" ];
+                        tls = false;
+                        x_forwarded = true;
+                        resources = [{
+                          names = [ "federation" ];
+                        }];
+                      }
+                    ];
+                  };
+                }
               '';
             };
           };

@@ -37,9 +37,7 @@ import ../make-test-python.nix ({ pkgs, ... }: {
           workers = {
             enable = true;
             config = {
-              "federation_sender" = {
-                worker_app = "synapse.app.generic_worker";
-              };
+              "federation_sender" = { };
             };
           };
         };
