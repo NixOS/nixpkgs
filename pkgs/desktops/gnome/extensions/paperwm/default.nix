@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "paperwm";
     repo = "PaperWM";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-QTeUbhqHi1fMhw5cgT5S6JGgDaPhBuMwn4nRcp7mSMU=";
+    hash = "sha256-oGBnQGtx2ku4cfgZkZ3OdHlVuiYR8hy1eYDWDZP3fn4=";
   };
 
   dontConfigure = true;
