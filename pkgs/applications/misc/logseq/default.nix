@@ -8,7 +8,10 @@
 , nix-update-script
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: let
+  inherit (finalAttrs) pname version src appimageContents;
+
+in {
   pname = "logseq";
   version = "0.9.10";
 
@@ -69,4 +72,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})
