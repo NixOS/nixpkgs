@@ -16693,6 +16693,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
   cargo-component = callPackage ../development/tools/rust/cargo-component { };
+  cargo-cranky = callPackage ../development/tools/rust/cargo-cranky { };
   cargo-criterion = callPackage ../development/tools/rust/cargo-criterion { };
   cargo-cyclonedx = callPackage ../development/tools/rust/cargo-cyclonedx {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration CoreFoundation;
@@ -19515,6 +19516,8 @@ with pkgs;
   regclient = callPackage ../development/tools/regclient { };
   inherit (regclient) regbot regctl regsync;
 
+  regex-cli = callPackage ../development/tools/misc/regex-cli { };
+
   reno = callPackage ../development/tools/reno { };
 
   re2c = callPackage ../development/tools/parsing/re2c { };
@@ -19918,6 +19921,8 @@ with pkgs;
   vtable-dumper = callPackage ../development/tools/misc/vtable-dumper { };
 
   wails = callPackage ../development/tools/wails { };
+
+  wasmer-pack = callPackage ../development/tools/misc/wasmer-pack { };
 
   whatsapp-for-linux = callPackage ../applications/networking/instant-messengers/whatsapp-for-linux { };
 
@@ -36139,6 +36144,8 @@ with pkgs;
   xnee = callPackage ../tools/X11/xnee { };
 
   xnotify = callPackage ../tools/X11/xnotify { };
+
+  xv = callPackage ../applications/graphics/xv { };
 
   xygrib = libsForQt5.callPackage ../applications/misc/xygrib { };
 

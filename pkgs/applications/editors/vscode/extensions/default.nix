@@ -372,13 +372,13 @@ let
         mktplcRef = {
           name = "Millet";
           publisher = "azdavis";
-          version = "0.3.5";
-          sha256 = "sha256-lQ7EMs6nsTEgP9BESMpyoZG7QVOe7DXzfg/iZr1+DCQ=";
+          version = "0.12.5";
+          sha256 = "sha256-gJIxCdoxWGThalY+qJ930UtRLFkvr34LfaSioAZH9TQ=";
         };
         nativeBuildInputs = [ jq moreutils ];
         postInstall = ''
           cd "$out/$installPrefix"
-          jq '.contributes.configuration.properties."millet.server.path".default = "${millet}/bin/lang-srv"' package.json | sponge package.json
+          jq '.contributes.configuration.properties."millet.server.path".default = "${millet}/bin/millet-ls"' package.json | sponge package.json
         '';
         meta = {
           description = "Standard ML support for VS Code";

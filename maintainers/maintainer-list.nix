@@ -5775,6 +5775,11 @@
     githubId = 7047019;
     name = "Florent Becker";
   };
+  galen = {
+    github = "galenhuntington";
+    githubId = 1851962;
+    name = "Galen Huntington";
+  };
   gamb = {
     email = "adam.gamble@pm.me";
     github = "gamb";
