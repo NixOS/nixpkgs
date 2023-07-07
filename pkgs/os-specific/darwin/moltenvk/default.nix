@@ -145,6 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     install_name_tool -id "$out/lib/libMoltenVK.dylib" "$out/lib/libMoltenVK.dylib"
     codesign -s - -f "$out/lib/libMoltenVK.dylib"
+    codesign -s - -f "$bin/bin/MoltenVKShaderConverter"
   '';
 
   passthru.updateScript = gitUpdater {
