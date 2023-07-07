@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/hiljusti/findup";
     description = "Search parent directories for sentinel files";
     license = licenses.mit;
-    maintainers = with maintainers; [ hiljusti ];
+    maintainers = with maintainers; [ booniepepper ];
   };
 }
