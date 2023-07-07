@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , enableMultilib
+, staticCompiler
 }:
 
 originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs //
@@ -16,11 +17,7 @@ in {
     export NIX_FIXINC_DUMMY="$NIX_BUILD_TOP/dummy"
     mkdir "$NIX_FIXINC_DUMMY"
 
-    if test "$staticCompiler" = "1"; then
-        EXTRA_LDFLAGS="-static"
-    else
-        EXTRA_LDFLAGS="-Wl,-rpath,${builtins.placeholder "lib"}/lib"
-    fi
+    EXTRA_LDFLAGS="${if staticCompiler then "-static" else "-Wl,-rpath,${builtins.placeholder "lib"}/lib"}"
 
     # GCC interprets empty paths as ".", which we don't want.
     if test -z "''${CPATH-}"; then unset CPATH; fi
