@@ -16,7 +16,7 @@ let
 
   lib = pkgs.lib;
 
-  manpageUrls = pkgs.path + "/doc/manpage-urls.json";
+  manpageUrls = pkgs.path + "/doc/src/manpage-urls.json";
 
   # We need to strip references to /nix/store/* from options,
   # including any `extraSources` if some modules came from elsewhere,
@@ -97,8 +97,8 @@ in rec {
       dst=$out/share/doc/nixos
       mkdir -p $dst
 
-      cp ${../../../doc/style.css} $dst/style.css
-      cp ${../../../doc/overrides.css} $dst/overrides.css
+      cp ${../../../doc/src/style.css} $dst/style.css
+      cp ${../../../doc/src/overrides.css} $dst/overrides.css
       cp -r ${pkgs.documentation-highlighter} $dst/highlightjs
 
       ${prepareManualFromMD}

@@ -92,7 +92,7 @@ in pkgs.stdenv.mkDerivation {
     nixos-render-docs
   ];
 
-  src = ./.;
+  src = ./src;
 
   postPatch = ''
     ln -s ${optionsDoc.optionsJSON}/share/doc/nixos/options.json ./config-options.json
