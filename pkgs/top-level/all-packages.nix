@@ -13494,6 +13494,8 @@ with pkgs;
 
   translatepy = with python3.pkgs; toPythonApplication translatepy;
 
+  transmit = libsForQt5.callPackage ../applications/networking/transmit { };
+
   trash-cli = callPackage ../tools/misc/trash-cli { };
 
   trashy = callPackage ../tools/misc/trashy { };
