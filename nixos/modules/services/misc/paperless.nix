@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, options, pkgs, lib, ... }:
 let
   cfg = config.services.paperless;
 
@@ -82,7 +82,7 @@ let
   };
 in
 {
-  meta.maintainers = with lib.maintainers; [ leona SuperSandro2000 erikarvstedt ];
+  meta.maintainers = with lib.maintainers; [ leona SuperSandro2000 erikarvstedt atemu theuni ];
 
   imports = [
     (lib.mkRenamedOptionModule [ "services" "paperless-ng" ] [ "services" "paperless" ])
@@ -252,9 +252,42 @@ in
         '';
       };
     };
+
+    exporter = {
+      enable = lib.mkEnableOption "regular automatic document exports";
+
+      directory = lib.mkOption {
+        type = lib.types.str;
+        default = cfg.dataDir + "/export";
+        defaultText = "\${dataDir}/export";
+        description = "Directory to store export.";
+      };
+
+      onCalendar = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = "01:30:00";
+        description = ''
+          When to run the exporter. See {manpage}`systemd.time(7)`.
+
+          `null` disables the timer; allowing you to run the
+          `paperless-exporter` service through other means.
+        '';
+      };
+
+      settings = lib.mkOption {
+        type = with lib.types; attrsOf anything;
+        default = {
+          "no-progress-bar" = true;
+          "no-color" = true;
+          "compare-checksums" = true;
+          "delete" = true;
+        };
+        description = "Settings to pass to the document exporter as CLI arguments.";
+      };
+    };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf cfg.enable (lib.mkMerge [ {
     services.redis.servers.paperless.enable = lib.mkIf enableRedis true;
 
     services.postgresql = lib.mkIf cfg.database.createLocally {
@@ -439,5 +472,40 @@ in
         gid = config.ids.gids.paperless;
       };
     };
-  };
+  }
+
+  (lib.mkIf cfg.exporter.enable {
+    systemd.tmpfiles.rules = [
+      "d '${cfg.exporter.directory}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
+    ];
+
+    services.paperless.exporter.settings = options.services.paperless.exporter.settings.default;
+
+    systemd.services.paperless-exporter = {
+      startAt = lib.defaultTo [] cfg.exporter.onCalendar;
+      serviceConfig = {
+        User = cfg.user;
+        WorkingDirectory = cfg.dataDir;
+      };
+      unitConfig = let
+        services = [
+          "paperless-consumer.service"
+          "paperless-scheduler.service"
+          "paperless-task-queue.service"
+          "paperless-web.service" ];
+      in {
+        # Shut down the paperless services while the exporter runs
+        Conflicts = services;
+        After = services;
+        # Bring them back up afterwards, regardless of pass/fail
+        OnFailure = services;
+        OnSuccess = services;
+      };
+      enableStrictShellChecks = true;
+      script = ''
+        ./paperless-manage document_exporter ${cfg.exporter.directory} ${lib.cli.toGNUCommandLineShell {} cfg.exporter.settings}
+      '';
+    };
+  })
+  ]);
 }
