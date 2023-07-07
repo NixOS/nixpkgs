@@ -21,6 +21,8 @@ let
             <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
           ];
 
+        networking.hostName = "thatworked";
+
         documentation.enable = false;
 
         # To ensure that we can rebuild the grub configuration on the nixos-rebuild
@@ -232,6 +234,11 @@ let
       machine = create_machine_named("boot-after-rebuild-switch")
       ${preBootCommands}
       machine.wait_for_unit("network.target")
+
+      # Sanity check, is it the configuration.nix we generated?
+      hostname = machine.succeed("hostname").strip()
+      assert hostname == "thatworked"
+
       ${postBootCommands}
       machine.shutdown()
 
