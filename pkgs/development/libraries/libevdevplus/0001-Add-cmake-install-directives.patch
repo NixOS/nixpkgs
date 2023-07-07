@@ -1,0 +1,41 @@
+From 7f208aaf21aa468013fc41e67c32f6a6c8c08249 Mon Sep 17 00:00:00 2001
+From: Jappie Klooster <jappieklooster@hotmail.com>
+Date: Fri, 2 Apr 2021 16:01:05 -0400
+Subject: [PATCH] Add cmake install directives
+
+To make nix builds work, it expect a make install command to
+be available.
+Adding these directives seems to fix the build.
+
+If it's no trouble to you, please add them.
+---
+ CMakeLists.txt | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f9db618..425d391 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -4,10 +4,17 @@ project(libevdevPlus)
+ set(SOURCE_FILES
+         evdevPlus.cpp evdevPlus.hpp CommonIncludes.hpp InputEvent.hpp Resource.cpp)
+ 
++include(GNUInstallDirs)
++
+ add_library(evdevPlus ${SOURCE_FILES})
+ target_include_directories(evdevPlus PUBLIC .)
+ 
+ add_executable(evdevPlus_test test.cpp)
+ target_link_libraries(evdevPlus_test evdevPlus)
+ 
+-configure_file(evdevPlus.pc.in evdevPlus.pc @ONLY)
+\ No newline at end of file
++configure_file(evdevPlus.pc.in evdevPlus.pc @ONLY)
++
++install(TARGETS evdevPlus
++        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
++install(FILES evdevPlus.hpp CommonIncludes.hpp InputEvent.hpp
++        DESTINATION include/)
+-- 
+2.29.2
+

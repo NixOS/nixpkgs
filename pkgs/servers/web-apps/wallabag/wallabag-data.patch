@@ -1,0 +1,32 @@
+diff --git a/app/AppKernel.php b/app/AppKernel.php
+index 347197e..902b558 100644
+--- a/app/AppKernel.php
++++ b/app/AppKernel.php
+@@ -69,19 +69,24 @@ class AppKernel extends Kernel
+         return __DIR__;
+     }
+ 
++    public function getProjectDir()
++    {
++        return getenv('WALLABAG_DATA') ?: dirname(__DIR__);
++    }
++
+     public function getCacheDir()
+     {
+-        return dirname(__DIR__) . '/var/cache/' . $this->getEnvironment();
++        return $this->getProjectDir() . '/var/cache/' . $this->getEnvironment();
+     }
+ 
+     public function getLogDir()
+     {
+-        return dirname(__DIR__) . '/var/logs';
++        return $this->getProjectDir() . '/var/logs';
+     }
+ 
+     public function registerContainerConfiguration(LoaderInterface $loader)
+     {
+-        $loader->load($this->getRootDir() . '/config/config_' . $this->getEnvironment() . '.yml');
++        $loader->load($this->getProjectDir() . '/app/config/config_' . $this->getEnvironment() . '.yml');
+ 
+         $loader->load(function ($container) {
+             if ($container->getParameter('use_webpack_dev_server')) {

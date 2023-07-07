@@ -1,0 +1,19 @@
+diff --git a/pysollib/util.py b/pysollib/util.py
+index 8de3f00..26f4bc7 100644
+--- a/pysollib/util.py
++++ b/pysollib/util.py
+@@ -110,13 +110,7 @@ class DataLoader:
+         head, tail = os.path.split(argv0)
+         if not head:
+             head = os.curdir
+-        # dir where placed startup script
+-        path.append(head)
+-        path.append(os.path.join(head, "data"))
+-        path.append(os.path.join(head, os.pardir, "data"))
+-        # dir where placed pysol package
+-        path.append(os.path.join(sys.path[0], "data"))
+-        path.append(os.path.join(sys.path[0], "pysollib", "data"))
++        path.append(os.path.join(head, "..", "share", "PySolFC"))
+         # from settings.py
+         path.extend(DATA_DIRS)
+         # check path for valid directories

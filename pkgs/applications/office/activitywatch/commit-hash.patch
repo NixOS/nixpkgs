@@ -1,0 +1,16 @@
+diff --git a/vue.config.js b/vue.config.js
+index 02c0699..0c4a014 100644
+--- a/vue.config.js
++++ b/vue.config.js
+@@ -4,10 +4,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
+ const { argv } = require('yargs');
+ 
+ // get git info from command line
+-const _COMMIT_HASH = require('child_process')
+-  .execSync('git rev-parse --short HEAD')
+-  .toString()
+-  .trim();
++const _COMMIT_HASH = "@commit_hash@";
+ console.info('Commit hash:', _COMMIT_HASH);
+ 
+ module.exports = {

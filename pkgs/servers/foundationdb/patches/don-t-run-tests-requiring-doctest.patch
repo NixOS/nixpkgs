@@ -1,0 +1,128 @@
+From 10c502fd36df24f1fdbdeff446982ff5247ba20e Mon Sep 17 00:00:00 2001
+From: Jente Hidskes Ankarberg <jente@griffin.sh>
+Date: Thu, 9 Feb 2023 12:40:21 +0100
+Subject: [PATCH] Don't run tests requiring doctest
+
+Doctest is unconditionally pulled in as an external project, which we can't do
+---
+ bindings/c/CMakeLists.txt | 59 ---------------------------------------
+ 1 file changed, 59 deletions(-)
+
+diff --git bindings/c/CMakeLists.txt bindings/c/CMakeLists.txt
+index b1a187b99..25b626819 100644
+--- a/bindings/c/CMakeLists.txt
++++ b/bindings/c/CMakeLists.txt
+@@ -84,7 +84,6 @@ if(NOT WIN32)
+     test/mako/mako.h
+     test/mako/utils.c
+     test/mako/utils.h)
+-  add_subdirectory(test/unit/third_party)
+   find_package(Threads REQUIRED)
+   set(UNIT_TEST_SRCS
+     test/unit/unit_tests.cpp
+@@ -93,10 +92,6 @@ if(NOT WIN32)
+ 
+   set(UNIT_TEST_VERSION_510_SRCS test/unit/unit_tests_version_510.cpp)
+   set(TRACE_PARTIAL_FILE_SUFFIX_TEST_SRCS test/unit/trace_partial_file_suffix_test.cpp)
+-  set(DISCONNECTED_TIMEOUT_UNIT_TEST_SRCS
+-    test/unit/disconnected_timeout_tests.cpp
+-    test/unit/fdb_api.cpp
+-    test/unit/fdb_api.hpp)
+ 
+   set(API_TESTER_SRCS
+     test/apitester/fdb_c_api_tester.cpp
+@@ -128,11 +123,7 @@ if(NOT WIN32)
+     add_library(fdb_c_txn_size_test OBJECT test/txn_size_test.c test/test.h)
+     add_library(fdb_c_client_memory_test OBJECT test/client_memory_test.cpp test/unit/fdb_api.cpp test/unit/fdb_api.hpp)
+     add_library(mako OBJECT ${MAKO_SRCS})
+-    add_library(fdb_c_setup_tests OBJECT test/unit/setup_tests.cpp)
+-    add_library(fdb_c_unit_tests OBJECT ${UNIT_TEST_SRCS})
+-    add_library(fdb_c_unit_tests_version_510 OBJECT ${UNIT_TEST_VERSION_510_SRCS})
+     add_library(trace_partial_file_suffix_test OBJECT ${TRACE_PARTIAL_FILE_SUFFIX_TEST_SRCS})
+-    add_library(disconnected_timeout_unit_tests OBJECT ${DISCONNECTED_TIMEOUT_UNIT_TEST_SRCS})
+     add_library(fdb_c_api_tester OBJECT ${API_TESTER_SRCS})
+   else()
+     add_executable(fdb_c_performance_test test/performance_test.c test/test.h)
+@@ -140,11 +131,7 @@ if(NOT WIN32)
+     add_executable(fdb_c_txn_size_test test/txn_size_test.c test/test.h)
+     add_executable(fdb_c_client_memory_test test/client_memory_test.cpp test/unit/fdb_api.cpp test/unit/fdb_api.hpp)
+     add_executable(mako ${MAKO_SRCS})
+-    add_executable(fdb_c_setup_tests test/unit/setup_tests.cpp)
+-    add_executable(fdb_c_unit_tests ${UNIT_TEST_SRCS})
+-    add_executable(fdb_c_unit_tests_version_510 ${UNIT_TEST_VERSION_510_SRCS})
+     add_executable(trace_partial_file_suffix_test ${TRACE_PARTIAL_FILE_SUFFIX_TEST_SRCS})
+-    add_executable(disconnected_timeout_unit_tests ${DISCONNECTED_TIMEOUT_UNIT_TEST_SRCS})
+     add_executable(fdb_c_api_tester ${API_TESTER_SRCS})
+     strip_debug_symbols(fdb_c_performance_test)
+     strip_debug_symbols(fdb_c_ryw_benchmark)
+@@ -155,20 +142,7 @@ if(NOT WIN32)
+   target_link_libraries(fdb_c_ryw_benchmark PRIVATE fdb_c Threads::Threads)
+   target_link_libraries(fdb_c_txn_size_test PRIVATE fdb_c Threads::Threads)
+   target_link_libraries(fdb_c_client_memory_test PRIVATE fdb_c Threads::Threads)
+-
+-  add_dependencies(fdb_c_setup_tests doctest)
+-  add_dependencies(fdb_c_unit_tests doctest)
+-  add_dependencies(fdb_c_unit_tests_version_510 doctest)
+-  add_dependencies(disconnected_timeout_unit_tests doctest)
+-  target_include_directories(fdb_c_setup_tests PUBLIC ${DOCTEST_INCLUDE_DIR})
+-  target_include_directories(fdb_c_unit_tests PUBLIC ${DOCTEST_INCLUDE_DIR})
+-  target_include_directories(fdb_c_unit_tests_version_510 PUBLIC ${DOCTEST_INCLUDE_DIR})
+-  target_include_directories(disconnected_timeout_unit_tests PUBLIC ${DOCTEST_INCLUDE_DIR})
+-  target_link_libraries(fdb_c_setup_tests PRIVATE fdb_c Threads::Threads)
+-  target_link_libraries(fdb_c_unit_tests PRIVATE fdb_c Threads::Threads fdbclient)
+-  target_link_libraries(fdb_c_unit_tests_version_510 PRIVATE fdb_c Threads::Threads)
+   target_link_libraries(trace_partial_file_suffix_test PRIVATE fdb_c Threads::Threads flow)
+-  target_link_libraries(disconnected_timeout_unit_tests PRIVATE fdb_c Threads::Threads)
+ 
+ if(USE_SANITIZER)
+   target_link_libraries(fdb_c_api_tester PRIVATE fdb_c toml11_target Threads::Threads fmt::fmt boost_asan)
+@@ -203,46 +177,13 @@ endif()
+     DEPENDS fdb_c
+     COMMENT "Copy libfdb_c to use as external client for test")
+   add_custom_target(external_client DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/libfdb_c_external.so)
+-  add_dependencies(fdb_c_unit_tests external_client)
+-  add_dependencies(disconnected_timeout_unit_tests external_client)
+   add_dependencies(fdb_c_api_tester external_client)
+ 
+-  add_fdbclient_test(
+-    NAME fdb_c_setup_tests
+-    COMMAND $<TARGET_FILE:fdb_c_setup_tests>)
+-  add_fdbclient_test(
+-    NAME fdb_c_unit_tests
+-    COMMAND $<TARGET_FILE:fdb_c_unit_tests>
+-            @CLUSTER_FILE@
+-            fdb)
+-  add_fdbclient_test(
+-    NAME fdb_c_unit_tests_version_510
+-    COMMAND $<TARGET_FILE:fdb_c_unit_tests_version_510>
+-            @CLUSTER_FILE@
+-            fdb)
+   add_fdbclient_test(
+     NAME trace_partial_file_suffix_test
+     COMMAND $<TARGET_FILE:trace_partial_file_suffix_test>
+             @CLUSTER_FILE@
+             fdb)
+-  add_fdbclient_test(
+-    NAME fdb_c_external_client_unit_tests
+-    COMMAND $<TARGET_FILE:fdb_c_unit_tests>
+-            @CLUSTER_FILE@
+-            fdb
+-            ${CMAKE_CURRENT_BINARY_DIR}/libfdb_c_external.so
+-            )
+-  add_unavailable_fdbclient_test(
+-    NAME disconnected_timeout_unit_tests
+-    COMMAND $<TARGET_FILE:disconnected_timeout_unit_tests>
+-            @CLUSTER_FILE@
+-            )
+-  add_unavailable_fdbclient_test(
+-    NAME disconnected_timeout_external_client_unit_tests
+-    COMMAND $<TARGET_FILE:disconnected_timeout_unit_tests>
+-            @CLUSTER_FILE@
+-            ${CMAKE_CURRENT_BINARY_DIR}/libfdb_c_external.so
+-            )
+   add_fdbclient_test(
+     NAME fdb_c_api_tests
+     DISABLE_LOG_DUMP
+-- 
+2.37.1 (Apple Git-137.1)
+

@@ -1,0 +1,42 @@
+Fixed error namespace for >=ghostscript-gpl-9.18
+
+https://bugs.gentoo.org/563540
+
+--- libspectre-0.2.7/libspectre/spectre-gs.c
++++ libspectre-0.2.7/libspectre/spectre-gs.c
+@@ -43,12 +43,12 @@
+ 	
+ 	if (code <= -100) {
+ 		switch (code) {
+-			case e_Fatal:
++			case gs_error_Fatal:
+ 				fprintf (stderr, "fatal internal error %d", code);
+ 				return TRUE;
+ 				break;
+ 
+-			case e_ExecStackUnderflow:
++			case gs_error_ExecStackUnderflow:
+ 				fprintf (stderr, "stack overflow %d", code);
+ 				return TRUE;
+ 				break;
+@@ -109,9 +109,9 @@
+ 		set = _spectre_strdup_printf ("%d %d translate\n", -x, -y);
+ 		error = gsapi_run_string_continue (ghostscript_instance, set, strlen (set),
+ 						   0, &exit_code);
+-		error = error == e_NeedInput ? 0 : error;
++		error = error == gs_error_NeedInput ? 0 : error;
+ 		free (set);
+-		if (error != e_NeedInput && critic_error_code (error)) {
++		if (error != gs_error_NeedInput && critic_error_code (error)) {
+ 			fclose (fd);
+ 			return FALSE;
+ 		}
+@@ -126,7 +126,7 @@
+ 		read = fread (buf, sizeof (char), to_read, fd);
+ 		error = gsapi_run_string_continue (ghostscript_instance,
+ 						   buf, read, 0, &exit_code);
+-		error = error == e_NeedInput ? 0 : error;
++		error = error == gs_error_NeedInput ? 0 : error;
+ 		left -= read;
+ 	}
+ 	

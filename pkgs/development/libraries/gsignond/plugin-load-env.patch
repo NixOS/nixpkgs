@@ -1,0 +1,35 @@
+diff --git a/src/gplugind/gsignond-plugin-loader.c b/src/gplugind/gsignond-plugin-loader.c
+index 5497b32..979e1b4 100644
+--- a/src/gplugind/gsignond-plugin-loader.c
++++ b/src/gplugind/gsignond-plugin-loader.c
+@@ -38,11 +38,10 @@ gsignond_load_plugin (
+     gchar *plugin_filename;
+     GSignondPlugin *plugin;
+ 
+-#   ifdef ENABLE_DEBUG
+     const gchar *env_val = g_getenv("SSO_GPLUGINS_DIR");
+     if (env_val)
+         plugin_path = env_val;
+-#   endif
++
+     plugin_filename = g_module_build_path (plugin_path, plugin_type);
+     plugin = gsignond_load_plugin_with_filename (plugin_type,
+                                                  plugin_filename);
+diff --git a/src/gplugind/main.c b/src/gplugind/main.c
+index 1c6cdb6..c85c623 100644
+--- a/src/gplugind/main.c
++++ b/src/gplugind/main.c
+@@ -93,11 +93,11 @@ _install_sighandlers (GMainLoop *main_loop)
+ static const gchar* _plugin_path(void)
+ {
+     const gchar *plugin_path = GSIGNOND_GPLUGINS_DIR;
+-#   ifdef ENABLE_DEBUG
++
+     const gchar *env_val = g_getenv("SSO_GPLUGINS_DIR");
+     if (env_val)
+         plugin_path = env_val;
+-#   endif
++
+     return plugin_path;
+ }
+ 

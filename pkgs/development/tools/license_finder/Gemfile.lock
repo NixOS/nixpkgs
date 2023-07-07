@@ -1,0 +1,26 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    license_finder (7.0.1)
+      bundler
+      rubyzip (>= 1, < 3)
+      thor (~> 1.2)
+      tomlrb (>= 1.3, < 2.1)
+      with_env (= 1.1.0)
+      xml-simple (~> 1.1.9)
+    rexml (3.2.5)
+    rubyzip (2.3.2)
+    thor (1.2.1)
+    tomlrb (2.0.1)
+    with_env (1.1.0)
+    xml-simple (1.1.9)
+      rexml
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  license_finder
+
+BUNDLED WITH
+   2.1.4

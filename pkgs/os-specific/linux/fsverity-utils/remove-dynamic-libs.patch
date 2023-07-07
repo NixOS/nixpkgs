@@ -1,0 +1,27 @@
+diff --git a/Makefile b/Makefile
+index 2304a21..697ccd4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -149,13 +149,11 @@ libfsverity.so.$(SOVERSION):$(SHARED_LIB_OBJ)
+ 	$(QUIET_CCLD) $(CC) -o $@ -Wl,-soname=$@ -shared $+ \
+ 		$(CFLAGS) $(LDFLAGS) $(LDLIBS)
+ 
+-DEFAULT_TARGETS += libfsverity.so.$(SOVERSION)
+ 
+ # Create the symlink libfsverity.so => libfsverity.so.$(SOVERSION)
+ libfsverity.so:libfsverity.so.$(SOVERSION)
+ 	$(QUIET_LN) ln -sf $+ $@
+ 
+-DEFAULT_TARGETS += libfsverity.so
+ 
+ ##############################################################################
+ 
+@@ -263,8 +261,6 @@ install:all
+ 	install -d $(DESTDIR)$(LIBDIR)/pkgconfig $(DESTDIR)$(INCDIR) $(DESTDIR)$(BINDIR)
+ 	install -m755 $(FSVERITY) $(DESTDIR)$(BINDIR)
+ 	install -m644 libfsverity.a $(DESTDIR)$(LIBDIR)
+-	install -m755 libfsverity.so.$(SOVERSION) $(DESTDIR)$(LIBDIR)
+-	ln -sf libfsverity.so.$(SOVERSION) $(DESTDIR)$(LIBDIR)/libfsverity.so
+ 	install -m644 include/libfsverity.h $(DESTDIR)$(INCDIR)
+ 	sed -e "s|@PREFIX@|$(PREFIX)|" \
+ 		-e "s|@LIBDIR@|$(LIBDIR)|" \

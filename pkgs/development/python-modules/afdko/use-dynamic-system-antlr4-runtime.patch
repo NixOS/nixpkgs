@@ -1,0 +1,53 @@
+commit 286b9c6e69691292dce4f2b4beaac8f886da184d
+Author: sternenseemann <sternenseemann@systemli.org>
+Date:   Tue Oct 5 18:16:10 2021 +0200
+
+    Link against system antlr4 runtime, dynamically
+    
+    Instead of cloning a antlr4 version from git, use the system one. Also
+    don't link it statically, but dynamically by default (the library is
+    called antlr4-runtime, not antlr4_static).
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 9ce80598..a75b6fb1 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -36,11 +36,11 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+ # https://www.antlr.org/download/antlr4-cpp-runtime-4.9.3-source.zip
+ # set(ANTLR4_ZIP_REPOSITORY "/path_to_antlr4_archive/a4.zip")
+ 
+-add_definitions(-DANTLR4CPP_STATIC)
+ set(ANTLR4_WITH_STATIC_CRT OFF)
+ # 4.9.3 is the latest ANTLR4 version
+ set(ANTLR4_TAG tags/4.9.3)
+-include(ExternalAntlr4Cpp)
++find_path(ANTLR4_HEADER antlr4-runtime.h PATH_SUFFIXES antlr4-runtime)
++set(ANTLR4_INCLUDE_DIRS ${ANTLR4_HEADER})
+ 
+ FIND_PACKAGE(LibXml2)
+ IF (NOT ${LibXml2_FOUND})
+diff --git a/c/makeotf/lib/cffread/CMakeLists.txt b/c/makeotf/lib/cffread/CMakeLists.txt
+index 9a400fde..5452d987 100644
+--- a/c/makeotf/lib/cffread/CMakeLists.txt
++++ b/c/makeotf/lib/cffread/CMakeLists.txt
+@@ -13,6 +13,6 @@ else ()
+     endif()
+ endif()
+ 
+-target_link_libraries(makeotf_cffread PUBLIC antlr4_static)
++target_link_libraries(makeotf_cffread PUBLIC antlr4-runtime)
+ 
+ target_compile_definitions(makeotf_cffread PRIVATE $<$<CONFIG:Debug>:CFF_DEBUG=1> CFF_T13_SUPPORT=0)
+diff --git a/c/makeotf/lib/hotconv/CMakeLists.txt b/c/makeotf/lib/hotconv/CMakeLists.txt
+index 3cceceea..9695ea21 100644
+--- a/c/makeotf/lib/hotconv/CMakeLists.txt
++++ b/c/makeotf/lib/hotconv/CMakeLists.txt
+@@ -69,7 +69,7 @@ add_library(hotconv STATIC
+ 
+ set_property(TARGET hotconv PROPERTY C_STANDARD 99)
+ target_include_directories(hotconv PRIVATE AFTER $<$<COMPILE_LANGUAGE:CXX>:${ANTLR4_INCLUDE_DIRS}>)
+-target_link_libraries(hotconv PUBLIC antlr4_static)
++target_link_libraries(hotconv PUBLIC antlr4-runtime)
+ 
+ if (${LibXml2_FOUND})
+     target_link_libraries(hotconv PUBLIC ${LIBXML2_LIBRARY})

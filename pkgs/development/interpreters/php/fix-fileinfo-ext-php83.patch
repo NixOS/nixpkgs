@@ -1,0 +1,14 @@
+diff --git a/ext/fileinfo/fileinfo.c b/ext/fileinfo/fileinfo.c
+index a6f3e64db6..c3047233db 100644
+--- a/ext/fileinfo/fileinfo.c
++++ b/ext/fileinfo/fileinfo.c
+@@ -14,6 +14,9 @@
+   +----------------------------------------------------------------------+
+ */
+
++#ifdef HAVE_CONFIG_H
++#include "config.h"
++#endif
+ #include "php.h"
+
+ #include "libmagic/magic.h"

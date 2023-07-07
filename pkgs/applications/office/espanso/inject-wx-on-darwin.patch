@@ -1,0 +1,223 @@
+From 6a7400c20831c5ff502c7336d6db2be743f156be Mon Sep 17 00:00:00 2001
+From: Nikola Knezevic <nikola.knezevic@imc.com>
+Date: Tue, 16 Aug 2022 22:28:46 +0200
+Subject: [PATCH] Build using system wx on darwin
+
+---
+ espanso-modulo/build.rs | 174 ++++------------------------------------
+ 1 file changed, 17 insertions(+), 157 deletions(-)
+
+diff --git a/espanso-modulo/build.rs b/espanso-modulo/build.rs
+index b8b889a..5d972ec 100644
+--- a/espanso-modulo/build.rs
++++ b/espanso-modulo/build.rs
+@@ -156,161 +156,6 @@ fn build_native() {
+   );
+ }
+ 
+-#[cfg(target_os = "macos")]
+-fn build_native() {
+-  use std::process::Command;
+-
+-  let project_dir =
+-    PathBuf::from(std::env::var("CARGO_MANIFEST_DIR").expect("missing CARGO_MANIFEST_DIR"));
+-  let wx_archive = project_dir.join("vendor").join(WX_WIDGETS_ARCHIVE_NAME);
+-  if !wx_archive.is_file() {
+-    panic!("could not find wxWidgets archive!");
+-  }
+-
+-  let out_dir = if let Ok(out_path) = std::env::var(WX_WIDGETS_BUILD_OUT_DIR_ENV_NAME) {
+-    println!(
+-      "detected wxWidgets build output directory override: {}",
+-      out_path
+-    );
+-    let path = PathBuf::from(out_path);
+-    std::fs::create_dir_all(&path).expect("unable to create wxWidgets out dir");
+-    path
+-  } else {
+-    PathBuf::from(std::env::var("OUT_DIR").expect("missing OUT_DIR"))
+-  };
+-  let out_wx_dir = out_dir.join("wx");
+-  println!("wxWidgets will be compiled into: {}", out_wx_dir.display());
+-
+-  let target_arch = match std::env::var("CARGO_CFG_TARGET_ARCH")
+-    .expect("unable to read target arch")
+-    .as_str()
+-  {
+-    "x86_64" => "x86_64",
+-    "aarch64" => "arm64",
+-    arch => panic!("unsupported arch {}", arch),
+-  };
+-
+-  let should_use_ci_m1_workaround =
+-    std::env::var("CI").unwrap_or_default() == "true" && target_arch == "arm64";
+-
+-  if !out_wx_dir.is_dir() {
+-    // Extract the wxWidgets archive
+-    let wx_archive =
+-      std::fs::File::open(&wx_archive).expect("unable to open wxWidgets source archive");
+-    let mut archive = zip::ZipArchive::new(wx_archive).expect("unable to read wxWidgets archive");
+-    archive
+-      .extract(&out_wx_dir)
+-      .expect("unable to extract wxWidgets source dir");
+-
+-    // Compile wxWidgets
+-    let build_dir = out_wx_dir.join("build-cocoa");
+-    std::fs::create_dir_all(&build_dir).expect("unable to create build-cocoa directory");
+-
+-    let mut handle = if should_use_ci_m1_workaround {
+-      // Because of a configuration problem on the GitHub CI pipeline,
+-      // we need to use a series of workarounds to build for M1 machines.
+-      // See: https://github.com/actions/virtual-environments/issues/3288#issuecomment-830207746
+-      Command::new(out_wx_dir.join("configure"))
+-        .current_dir(build_dir.to_string_lossy().to_string())
+-        .args(&[
+-          "--disable-shared",
+-          "--without-libtiff",
+-          "--without-liblzma",
+-          "--with-libjpeg=builtin",
+-          "--with-libpng=builtin",
+-          "--enable-universal-binary=arm64,x86_64",
+-        ])
+-        .spawn()
+-        .expect("failed to execute configure")
+-    } else {
+-      Command::new(out_wx_dir.join("configure"))
+-        .current_dir(build_dir.to_string_lossy().to_string())
+-        .args(&[
+-          "--disable-shared",
+-          "--without-libtiff",
+-          "--without-liblzma",
+-          "--with-libjpeg=builtin",
+-          "--with-libpng=builtin",
+-          &format!("--enable-macosx_arch={}", target_arch),
+-        ])
+-        .spawn()
+-        .expect("failed to execute configure")
+-    };
+-
+-    if !handle
+-      .wait()
+-      .expect("unable to wait for configure command")
+-      .success()
+-    {
+-      panic!("configure returned non-zero exit code!");
+-    }
+-
+-    let mut handle = Command::new("make")
+-      .current_dir(build_dir.to_string_lossy().to_string())
+-      .args(&["-j8"])
+-      .spawn()
+-      .expect("failed to execute make");
+-    if !handle
+-      .wait()
+-      .expect("unable to wait for make command")
+-      .success()
+-    {
+-      panic!("make returned non-zero exit code!");
+-    }
+-  }
+-
+-  // Make sure wxWidgets is compiled
+-  if !out_wx_dir.join("build-cocoa").is_dir() {
+-    panic!("wxWidgets is not compiled correctly, missing 'build-cocoa/' directory")
+-  }
+-
+-  // If using the M1 CI workaround, convert all the universal libraries to arm64 ones
+-  // This is needed until https://github.com/rust-lang/rust/issues/55235 is fixed
+-  if should_use_ci_m1_workaround {
+-    convert_fat_libraries_to_arm(&out_wx_dir.join("build-cocoa").join("lib"));
+-    convert_fat_libraries_to_arm(&out_wx_dir.join("build-cocoa"));
+-  }
+-
+-  let config_path = out_wx_dir.join("build-cocoa").join("wx-config");
+-  let cpp_flags = get_cpp_flags(&config_path);
+-
+-  let mut build = cc::Build::new();
+-  build
+-    .cpp(true)
+-    .file("src/sys/form/form.cpp")
+-    .file("src/sys/common/common.cpp")
+-    .file("src/sys/search/search.cpp")
+-    .file("src/sys/wizard/wizard.cpp")
+-    .file("src/sys/wizard/wizard_gui.cpp")
+-    .file("src/sys/welcome/welcome.cpp")
+-    .file("src/sys/welcome/welcome_gui.cpp")
+-    .file("src/sys/textview/textview.cpp")
+-    .file("src/sys/textview/textview_gui.cpp")
+-    .file("src/sys/troubleshooting/troubleshooting.cpp")
+-    .file("src/sys/troubleshooting/troubleshooting_gui.cpp")
+-    .file("src/sys/common/mac.mm");
+-  build.flag("-std=c++17");
+-
+-  for flag in cpp_flags {
+-    build.flag(&flag);
+-  }
+-
+-  build.compile("espansomodulosys");
+-
+-  // Render linker flags
+-
+-  generate_linker_flags(&config_path);
+-
+-  // On (older) OSX we need to link against the clang runtime,
+-  // which is hidden in some non-default path.
+-  //
+-  // More details at https://github.com/alexcrichton/curl-rust/issues/279.
+-  if let Some(path) = macos_link_search_path() {
+-    println!("cargo:rustc-link-lib=clang_rt.osx");
+-    println!("cargo:rustc-link-search={}", path);
+-  }
+-}
+-
+ #[cfg(target_os = "macos")]
+ fn convert_fat_libraries_to_arm(lib_dir: &Path) {
+   for entry in
+@@ -440,12 +285,17 @@ fn macos_link_search_path() -> Option<String> {
+   None
+ }
+ 
++#[cfg(not(target_os = "macos"))]
++fn macos_link_search_path() -> Option<String> {
++    return None
++}
++
+ // TODO: add documentation for linux
+ // Install wxWidgets:
+ // sudo apt install libwxgtk3.0-0v5 libwxgtk3.0-dev
+ //
+ // cargo run
+-#[cfg(target_os = "linux")]
++#[cfg(not(target_os = "windows"))]
+ fn build_native() {
+   // Make sure wxWidgets is installed
+   // Depending on the installation package, the 'wx-config' command might also be available as 'wx-config-gtk3',
+@@ -483,7 +333,8 @@ fn build_native() {
+     .file("src/sys/textview/textview.cpp")
+     .file("src/sys/textview/textview_gui.cpp")
+     .file("src/sys/troubleshooting/troubleshooting.cpp")
+-    .file("src/sys/troubleshooting/troubleshooting_gui.cpp");
++    .file("src/sys/troubleshooting/troubleshooting_gui.cpp")
++    .file("src/sys/common/mac.mm");
+   build.flag("-std=c++17");
+ 
+   for flag in cpp_flags {
+@@ -495,6 +346,15 @@ fn build_native() {
+   // Render linker flags
+ 
+   generate_linker_flags(&config_path);
++
++  // On (older) OSX we need to link against the clang runtime,
++  // which is hidden in some non-default path.
++  //
++  // More details at https://github.com/alexcrichton/curl-rust/issues/279.
++  if let Some(path) = macos_link_search_path() {
++    println!("cargo:rustc-link-lib=clang_rt.osx");
++    println!("cargo:rustc-link-search={}", path);
++  }
+ }
+ 
+ fn main() {
+-- 
+2.37.1
+

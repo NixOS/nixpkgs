@@ -1,0 +1,21 @@
+--- xjump/src/main.c	2018-02-20 09:15:15.608807657 +0100
++++ xjump-patched/src/main.c	2018-02-20 09:15:34.148949100 +0100
+@@ -604,18 +604,6 @@
+    * optimistic privilege dropping function. */
+   setgroups(0, NULL);
+ 
+-  if (setresgid(-1, realgid, realgid) != 0) {
+-    perror("Could not drop setgid privileges.  Aborting.");
+-    exit(1);
+-  }
+-
+-  /* Dropping user privileges must come last.
+-   * Otherwise we won't be able to drop group privileges anymore */
+-  if (setresuid(-1, realuid, realuid) != 0) {
+-    perror("Could not drop setuid privileges.  Aborting.");
+-    exit(1);
+-  }
+-
+   /* From now on we run with regular user privileges */
+ 
+   static XtActionsRec a_table[] = {

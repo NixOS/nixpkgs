@@ -1,0 +1,4676 @@
+--- foo2zjs/ChangeLog	2021-09-27 16:25:00.735904476 +0200
++++ foo2zjs/ChangeLog	2021-09-27 16:34:10.661647070 +0200
+@@ -89,10 +89,35 @@
+ 2014-04-08	Rick Richardson <rick.richardson@comcast.net>
+ 	* Upgrade to JBIGKIT 2.1
+ 
++2014-04-04	Dave Coffin <dcoffin@cybercom.net>
++	* fixed all known bugs in foo2hbpl1.c.  It now print multi-page
++	  color and grayscale documents without resetting printer.
++
+ 2014-04-01	Rick Richardson <rick.richardson@comcast.net>
+-	* foo2hbpl2 foomatic-db files and PPDs:
++	* foo2hbpl1, foo2hbpl2 foomatic-db files and PPDs:
+ 	    Bug with default PageSize.
+-	    PLEASE delete and recreate the foo2hbpl2 printers.
++	    PLEASE delete and recreate the foo2hbpl1, foo2hbpl2 printers.
++
++2014-03-30	Rick Richardson <rick.richardson@comcast.net>
++	* foo2hbpl1.c: Cleanup the code
++
++2014-03-25	Rick Richardson <rick.richardson@comcast.net>
++	* foomatic and PPD stuff for foo2hbpl1 printers: Halftone and ICM
++
++2014-03-24	Rick Richardson <rick.richardson@comcast.net>
++	* foomatic and PPD stuff for foo2hbpl1 printers
++	    preliminary for: Dell 1250c, Dell C1660w, Dell C1760nw,
++	    Epson AcuLaser C1700, Fuji-Xerox DocuPrint CP105b
++	* foo2hbpl1-wrapper: allow for gs 7.x or gs 8.x
++
++2014-03-24	Dave Coffin <dcoffin@cybercom.net>
++	* foo2hbpl1, foo2hbpl1-wrapper, et al: first cut at revision 1
++	    stuff.  Color works, mono doesn't. No multiple pages. Printer
++	    shows:
++		        Restart Printer
++			Contact Support
++			IfMessageReturns
++			016-313
+ 
+ 2014-03-22	Rick Richardson <rick.richardson@comcast.net>
+ 	* hbpldecode: another redundancy from Dave Coffin
+--- foo2zjs/Makefile	2020-11-27 20:57:33.000000000 +0100
++++ foo2zjs/Makefile	2021-09-27 16:56:23.363346705 +0200
+@@ -148,6 +148,8 @@
+ 		foo2hiperc.c \
+ 		foo2hiperc.1in \
+ 		hbpl.h \
++		foo2hbpl1.c \
++		foo2hbpl1.1in \
+ 		foo2hbpl2.c \
+ 		foo2hbpl2.1in \
+ 		foo2ddst.c \
+@@ -187,6 +189,8 @@
+ 		foo2slx-wrapper.1in \
+ 		foo2hiperc-wrapper.in \
+ 		foo2hiperc-wrapper.1in \
++		foo2hbpl1-wrapper.in \
++		foo2hbpl1-wrapper.1in \
+ 		foo2hbpl2-wrapper.in \
+ 		foo2hbpl2-wrapper.1in \
+ 		foo2ddst-wrapper.in \
+@@ -267,7 +271,7 @@
+ PROGS+=		foo2oak oakdecode
+ PROGS+=		foo2slx slxdecode
+ PROGS+=		foo2hiperc hipercdecode
+-PROGS+=		foo2hbpl2 hbpldecode
++PROGS+=		foo2hbpl1 foo2hbpl2 hbpldecode
+ PROGS+=		gipddecode
+ PROGS+=		foo2ddst ddstdecode
+ ifneq ($(CUPS_SERVERBIN),)
+@@ -279,7 +283,7 @@
+ endif
+ SHELLS=		foo2zjs-wrapper foo2oak-wrapper foo2hp2600-wrapper \
+ 		foo2xqx-wrapper foo2lava-wrapper foo2qpdl-wrapper \
+-		foo2slx-wrapper foo2hiperc-wrapper foo2hbpl2-wrapper \
++		foo2slx-wrapper foo2hiperc-wrapper foo2hbpl1-wrapper foo2hbpl2-wrapper \
+ 		foo2ddst-wrapper
+ SHELLS+=	foo2zjs-pstops
+ SHELLS+=	printer-profile
+@@ -291,7 +295,7 @@
+ MANPAGES+=	foo2qpdl-wrapper.1 foo2qpdl.1 qpdldecode.1
+ MANPAGES+=	foo2slx-wrapper.1 foo2slx.1 slxdecode.1
+ MANPAGES+=	foo2hiperc-wrapper.1 foo2hiperc.1 hipercdecode.1
+-MANPAGES+=	foo2hbpl2-wrapper.1 foo2hbpl2.1 hbpldecode.1
++MANPAGES+=	foo2hbpl1-wrapper.1 foo2hbpl1.1 foo2hbpl2-wrapper.1 foo2hbpl2.1 hbpldecode.1
+ MANPAGES+=	foo2ddst-wrapper.1 foo2ddst.1 ddstdecode.1
+ MANPAGES+=	gipddecode.1
+ MANPAGES+=	foo2zjs-pstops.1 arm2hpdl.1 usb_printerid.1
+@@ -485,6 +489,9 @@
+ foo2ddst: foo2ddst.o $(LIBJBG)
+ 	$(CC) $(CFLAGS) -o $@ foo2ddst.o $(LIBJBG)
+ 
++foo2hbpl1: foo2hbpl1.o
++	$(CC) $(CFLAGS) -o $@ foo2hbpl1.o
++
+ foo2hbpl2: foo2hbpl2.o $(LIBJBG)
+ 	$(CC) $(CFLAGS) -o $@ foo2hbpl2.o $(LIBJBG)
+ 
+@@ -519,6 +526,12 @@
+ 	    -e 's@^PREFIX=.*@PREFIX=$(PREFIX)@' || (rm -f $@ && exit 1)
+ 	chmod 555 $@
+ 
++foo2hbpl1-wrapper: foo2hbpl1-wrapper.in Makefile
++	[ ! -f $@ ] || chmod +w $@
++	sed < $@.in > $@ \
++	    -e 's@^PREFIX=.*@PREFIX=$(PREFIX)@' || (rm -f $@ && exit 1)
++	chmod 555 $@
++
+ foo2hbpl2-wrapper: foo2hbpl2-wrapper.in Makefile
+ 	[ ! -f $@ ] || chmod +w $@
+ 	sed < $@.in > $@ \
+@@ -1231,6 +1244,7 @@
+ 	-rm -f /usr/bin/foo2slx-wrapper /usr/bin/foo2slx /usr/bin/slxdecode
+ 	-rm -f /usr/bin/foo2hiperc-wrapper /usr/bin/foo2hiperc
+ 	-rm -f /usr/bin/hipercdecode
++	-rm -f /usr/bin/foo2hbpl1-wrapper /usr/bin/foo2hbpl1
+ 	-rm -f /usr/bin/foo2hbpl2-wrapper /usr/bin/foo2hbpl2
+ 	-rm -f /usr/bin/hbpldecode
+ 	-rm -f /usr/bin/foo2ddst-wrapper /usr/bin/foo2ddst /usr/bin/ddstdecode
+@@ -1265,7 +1279,7 @@
+ 	-rm -f foo2qpdl.o qpdldecode.o
+ 	-rm -f foo2slx.o slxdecode.o
+ 	-rm -f foo2hiperc.o hipercdecode.o
+-	-rm -f foo2hbpl2.o hbpldecode.o
++	-rm -f foo2hbpl1.o foo2hbpl2.o hbpldecode.o
+ 	-rm -f opldecode.o gipddecode.o
+ 	-rm -f foo2dsst.o ddstdecode.o
+ 	-rm -f command2foo2lava-pjl.o
+@@ -1513,6 +1527,10 @@
+ 	    *C3530*)	        driver=foo2hiperc;; \
+ 	    *C5[12568][05]0*)   driver=foo2hiperc;; \
+ 	    *CLP*|*CLX*|*6110*) driver=foo2qpdl;; \
++	    *1250*)		driver=foo2hbpl1;; \
++	    *1660*|*1760*)	driver=foo2hbpl1;; \
++	    *C1700*)		driver=foo2hbpl1;; \
++	    *CP105*)		driver=foo2hbpl1;; \
+ 	    *ML-167*)		driver=foo2qpdl;; \
+ 	    *6015*|*1355*)	driver=foo2hbpl2;; \
+ 	    *C1765*)		driver=foo2hbpl2;; \
+@@ -1607,6 +1625,8 @@
+ 	$(INSTALL) -c -m 644 foo2hiperc.1 $(MANDIR)/man1/
+ 	$(INSTALL) -c -m 644 foo2hiperc-wrapper.1 $(MANDIR)/man1/
+ 	$(INSTALL) -c -m 644 hipercdecode.1 $(MANDIR)/man1/
++	$(INSTALL) -c -m 644 foo2hbpl1.1 $(MANDIR)/man1/
++	$(INSTALL) -c -m 644 foo2hbpl1-wrapper.1 $(MANDIR)/man1/
+ 	$(INSTALL) -c -m 644 foo2hbpl2.1 $(MANDIR)/man1/
+ 	$(INSTALL) -c -m 644 foo2hbpl2-wrapper.1 $(MANDIR)/man1/
+ 	$(INSTALL) -c -m 644 hbpldecode.1 $(MANDIR)/man1/
+--- foo2zjs/PPD/Dell-1250c.ppd	1970-01-01 00:00:00.000000000 +0000
++++ foo2zjs/PPD/Dell-1250c.ppd	2014-04-01 11:06:30.000000000 +0000
+@@ -0,0 +1,433 @@
++*PPD-Adobe: "4.3"
++*%
++*% For information on using this, and to obtain the required backend
++*% script, consult http://www.openprinting.org/
++*%
++*% This file is published under the GNU General Public License
++*%
++*% PPD-O-MATIC (3.0.0 or newer) generated this PPD file. It is for use with 
++*% all programs and environments which use PPD files for dealing with
++*% printer capability information. The printer must be configured with the
++*% "foomatic-rip" backend filter script of Foomatic 3.0.0 or newer. This 
++*% file and "foomatic-rip" work together to support PPD-controlled printer
++*% driver option access with arbitrary free software printer drivers and
++*% printing spoolers.
++*%
++*% To save this file on your disk, wait until the download has completed
++*% (the animation of the browser logo must stop) and then use the
++*% "Save as..." command in the "File" menu of your browser or in the 
++*% pop-up manu when you click on this document with the right mouse button.
++*% DO NOT cut and paste this file into an editor with your mouse. This can
++*% introduce additional line breaks which lead to unexpected results.
++*%
++*% You may save this file as 'Dell-1250c-foo2hbpl1.ppd'
++*%
++*%
++*FormatVersion:	"4.3"
++*FileVersion:	"1.1"
++*LanguageVersion: English 
++*LanguageEncoding: ISOLatin1
++*PCFileName:	"FOO2HBPL.PPD"
++*Manufacturer:	"Dell"
++*Product:	"(1250c)"
++*cupsVersion:	1.0
++*cupsManualCopies: True
++*cupsModelNumber:  2
++*cupsFilter:	"application/vnd.cups-postscript 0 foomatic-rip"
++*%pprRIP:        foomatic-rip other
++*ModelName:     "Dell 1250c"
++*ShortNickName: "Dell 1250c foo2hbpl1"
++*NickName:      "Dell 1250c Foomatic/foo2hbpl1 (recommended)"
++*PSVersion:	"(3010.000) 550"
++*PSVersion:	"(3010.000) 651"
++*PSVersion:	"(3010.000) 652"
++*PSVersion:	"(3010.000) 653"
++*PSVersion:	"(3010.000) 704"
++*PSVersion:	"(3010.000) 705"
++*PSVersion:	"(3010.000) 800"
++*LanguageLevel:	"3"
++*ColorDevice:	True
++*DefaultColorSpace: RGB
++*FileSystem:	False
++*Throughput:	"1"
++*LandscapeOrientation: Plus90
++*TTRasterizer:	Type42
++*1284DeviceID: "DRV:Dfoo2hbpl1,R1,M0,TF;"
++
++*driverName foo2hbpl1/foo2hbpl1: ""
++*driverType F/Filter: ""
++*driverUrl: "http://foo2hbpl.rkkda.com/"
++*driverObsolete: False
++
++
++
++
++*HWMargins: 9 12.00 9 12
++*VariablePaperSize: True
++*MaxMediaWidth: 100000
++*MaxMediaHeight: 100000
++*NonUIOrderDependency: 135 AnySetup *CustomPageSize
++*CustomPageSize True: "pop pop pop pop pop
++%% FoomaticRIPOptionSetting: PageSize=Custom"
++*End
++*FoomaticRIPOptionSetting PageSize=Custom: "-pCustom.%0x%1 "
++*ParamCustomPageSize Width: 1 points 36 100000
++*ParamCustomPageSize Height: 2 points 36 100000
++*ParamCustomPageSize Orientation: 3 int 0 0
++*ParamCustomPageSize WidthOffset: 4 points 0 0
++*ParamCustomPageSize HeightOffset: 5 points 0 0
++
++*FoomaticIDs: Dell-1250c foo2hbpl1
++*FoomaticRIPCommandLine: "foo2hbpl1-wrapper %A"
++
++*OpenGroup: General/General
++
++*OpenUI *Quality/Printing Quality: PickOne
++*FoomaticRIPOption Quality: enum CmdLine A
++*OrderDependency: 110 AnySetup *Quality
++*DefaultQuality: normal
++*Quality draft/Draft: "%% FoomaticRIPOptionSetting: Quality=draft"
++*FoomaticRIPOptionSetting Quality=draft: " -t  "
++*Quality normal/Normal: "%% FoomaticRIPOptionSetting: Quality=normal"
++*FoomaticRIPOptionSetting Quality=normal: "  "
++*CloseUI: *Quality
++
++*OpenUI *ColorMode/Color Mode: PickOne
++*FoomaticRIPOption ColorMode: enum CmdLine A
++*OrderDependency: 120 AnySetup *ColorMode
++*DefaultColorMode: Monochrome
++*ColorMode Color/Color: "%% FoomaticRIPOptionSetting: ColorMode=Color"
++*FoomaticRIPOptionSetting ColorMode=Color: "-c "
++*ColorMode Monochrome/Monochrome: "%% FoomaticRIPOptionSetting: ColorMode=Monochrome"
++*FoomaticRIPOptionSetting ColorMode=Monochrome: " "
++*CloseUI: *ColorMode
++
++*OpenUI *PageSize/Page Size: PickOne
++*FoomaticRIPOption PageSize: enum CmdLine A
++*OrderDependency: 135 AnySetup *PageSize
++*DefaultPageSize: Letter
++*PageSize Letter/Letter: "%% FoomaticRIPOptionSetting: PageSize=Letter"
++*FoomaticRIPOptionSetting PageSize=Letter: "-p4 "
++*PageSize A4/A4: "%% FoomaticRIPOptionSetting: PageSize=A4"
++*FoomaticRIPOptionSetting PageSize=A4: "-p1 "
++*PageSize B5jis/B5 (JIS): "%% FoomaticRIPOptionSetting: PageSize=B5jis"
++*FoomaticRIPOptionSetting PageSize=B5jis: "-p2 "
++*PageSize Env10/Env #10: "%% FoomaticRIPOptionSetting: PageSize=Env10"
++*FoomaticRIPOptionSetting PageSize=Env10: "-p9 "
++*PageSize EnvC5/Env C5: "%% FoomaticRIPOptionSetting: PageSize=EnvC5"
++*FoomaticRIPOptionSetting PageSize=EnvC5: "-p11 "
++*PageSize EnvDL/Env DL: "%% FoomaticRIPOptionSetting: PageSize=EnvDL"
++*FoomaticRIPOptionSetting PageSize=EnvDL: "-p12 "
++*PageSize EnvMonarch/Env Monarch: "%% FoomaticRIPOptionSetting: PageSize=EnvMonarch"
++*FoomaticRIPOptionSetting PageSize=EnvMonarch: "-p10 "
++*PageSize Executive/Executive: "%% FoomaticRIPOptionSetting: PageSize=Executive"
++*FoomaticRIPOptionSetting PageSize=Executive: "-p5 "
++*PageSize FanfoldGermanLegal/Fanfold German Legal: "%% FoomaticRIPOptionSetting: PageSize=FanfoldGermanLegal"
++*FoomaticRIPOptionSetting PageSize=FanfoldGermanLegal: "-p6 "
++*PageSize Folio/Folio: "%% FoomaticRIPOptionSetting: PageSize=Folio"
++*FoomaticRIPOptionSetting PageSize=Folio: "-p6 "
++*PageSize Legal/Legal: "%% FoomaticRIPOptionSetting: PageSize=Legal"
++*FoomaticRIPOptionSetting PageSize=Legal: "-p7 "
++*CloseUI: *PageSize
++
++*OpenUI *PageRegion: PickOne
++*OrderDependency: 135 AnySetup *PageRegion
++*DefaultPageRegion: Letter
++*PageRegion Letter/Letter: "%% FoomaticRIPOptionSetting: PageSize=Letter"
++*PageRegion A4/A4: "%% FoomaticRIPOptionSetting: PageSize=A4"
++*PageRegion B5jis/B5 (JIS): "%% FoomaticRIPOptionSetting: PageSize=B5jis"
++*PageRegion Env10/Env #10: "%% FoomaticRIPOptionSetting: PageSize=Env10"
++*PageRegion EnvC5/Env C5: "%% FoomaticRIPOptionSetting: PageSize=EnvC5"
++*PageRegion EnvDL/Env DL: "%% FoomaticRIPOptionSetting: PageSize=EnvDL"
++*PageRegion EnvMonarch/Env Monarch: "%% FoomaticRIPOptionSetting: PageSize=EnvMonarch"
++*PageRegion Executive/Executive: "%% FoomaticRIPOptionSetting: PageSize=Executive"
++*PageRegion FanfoldGermanLegal/Fanfold German Legal: "%% FoomaticRIPOptionSetting: PageSize=FanfoldGermanLegal"
++*PageRegion Folio/Folio: "%% FoomaticRIPOptionSetting: PageSize=Folio"
++*PageRegion Legal/Legal: "%% FoomaticRIPOptionSetting: PageSize=Legal"
++*CloseUI: *PageRegion
++
++*DefaultImageableArea: Letter
++*ImageableArea Letter/Letter: "9 12.00 603 780.00"
++*ImageableArea A4/A4: "9 12.00 586 830.00"
++*ImageableArea B5jis/B5 (JIS): "9 12.00 509 715.00"
++*ImageableArea Env10/Env #10: "9 12.00 288 672.00"
++*ImageableArea EnvC5/Env C5: "9 12.00 450 637.00"
++*ImageableArea EnvDL/Env DL: "9 12.00 302 611.00"
++*ImageableArea EnvMonarch/Env Monarch: "9 12.00 270 528.00"
++*ImageableArea Executive/Executive: "9 12.00 513 744.00"
++*ImageableArea FanfoldGermanLegal/Fanfold German Legal: "9 12.00 603 996.00"
++*ImageableArea Folio/Folio: "9 12.00 603 924.00"
++*ImageableArea Legal/Legal: "9 12.00 603 996.00"
++
++*DefaultPaperDimension: Letter
++*PaperDimension Letter/Letter: "612 792"
++*PaperDimension A4/A4: "595 842"
++*PaperDimension B5jis/B5 (JIS): "518 727"
++*PaperDimension Env10/Env #10: "297 684"
++*PaperDimension EnvC5/Env C5: "459 649"
++*PaperDimension EnvDL/Env DL: "311 623"
++*PaperDimension EnvMonarch/Env Monarch: "279 540"
++*PaperDimension Executive/Executive: "522 756"
++*PaperDimension FanfoldGermanLegal/Fanfold German Legal: "612 1008"
++*PaperDimension Folio/Folio: "612 936"
++*PaperDimension Legal/Legal: "612 1008"
++
++*OpenUI *MediaType/Media Type: PickOne
++*FoomaticRIPOption MediaType: enum CmdLine A
++*OrderDependency: 150 AnySetup *MediaType
++*DefaultMediaType: plain
++*MediaType plain/Plain Paper: "%% FoomaticRIPOptionSetting: MediaType=plain"
++*FoomaticRIPOptionSetting MediaType=plain: "-m1 "
++*MediaType plain2/Plain Paper Side 2: "%% FoomaticRIPOptionSetting: MediaType=plain2"
++*FoomaticRIPOptionSetting MediaType=plain2: "-m8 "
++*MediaType bond/Bond: "%% FoomaticRIPOptionSetting: MediaType=bond"
++*FoomaticRIPOptionSetting MediaType=bond: "-m2 "
++*MediaType bond2/Bond Side 2: "%% FoomaticRIPOptionSetting: MediaType=bond2"
++*FoomaticRIPOptionSetting MediaType=bond2: "-m9 "
++*MediaType envelope/Envelope: "%% FoomaticRIPOptionSetting: MediaType=envelope"
++*FoomaticRIPOptionSetting MediaType=envelope: "-m6 "
++*MediaType labels/Labels: "%% FoomaticRIPOptionSetting: MediaType=labels"
++*FoomaticRIPOptionSetting MediaType=labels: "-m5 "
++*MediaType lwcard/Light Weight Card: "%% FoomaticRIPOptionSetting: MediaType=lwcard"
++*FoomaticRIPOptionSetting MediaType=lwcard: "-m3 "
++*MediaType lwcard2/Light Weight Card Side 2: "%% FoomaticRIPOptionSetting: MediaType=lwcard2"
++*FoomaticRIPOptionSetting MediaType=lwcard2: "-m10 "
++*MediaType lwgcard/Light Weight Glossy Card: "%% FoomaticRIPOptionSetting: MediaType=lwgcard"
++*FoomaticRIPOptionSetting MediaType=lwgcard: "-m4 "
++*MediaType lwgcard2/Light Weight Glossy Card Side 2: "%% FoomaticRIPOptionSetting: MediaType=lwgcard2"
++*FoomaticRIPOptionSetting MediaType=lwgcard2: "-m11 "
++*MediaType recycled/Recycled Paper: "%% FoomaticRIPOptionSetting: MediaType=recycled"
++*FoomaticRIPOptionSetting MediaType=recycled: "-m7 "
++*MediaType recycled2/Recycled Paper Side 2: "%% FoomaticRIPOptionSetting: MediaType=recycled2"
++*FoomaticRIPOptionSetting MediaType=recycled2: "-m12 "
++*CloseUI: *MediaType
++
++*OpenUI *Copies/Copies: PickOne
++*FoomaticRIPOption Copies: int CmdLine A
++*FoomaticRIPOptionPrototype Copies: "-n%s "
++*FoomaticRIPOptionRange Copies: 1 100
++*OrderDependency: 220 AnySetup *Copies
++*DefaultCopies: 1
++*FoomaticRIPDefaultCopies: 1
++*Copies 1/1: "%% FoomaticRIPOptionSetting: Copies=1"
++*Copies 2/2: "%% FoomaticRIPOptionSetting: Copies=2"
++*Copies 3/3: "%% FoomaticRIPOptionSetting: Copies=3"
++*Copies 4/4: "%% FoomaticRIPOptionSetting: Copies=4"
++*Copies 5/5: "%% FoomaticRIPOptionSetting: Copies=5"
++*Copies 6/6: "%% FoomaticRIPOptionSetting: Copies=6"
++*Copies 7/7: "%% FoomaticRIPOptionSetting: Copies=7"
++*Copies 8/8: "%% FoomaticRIPOptionSetting: Copies=8"
++*Copies 9/9: "%% FoomaticRIPOptionSetting: Copies=9"
++*Copies 10/10: "%% FoomaticRIPOptionSetting: Copies=10"
++*Copies 11/11: "%% FoomaticRIPOptionSetting: Copies=11"
++*Copies 12/12: "%% FoomaticRIPOptionSetting: Copies=12"
++*Copies 13/13: "%% FoomaticRIPOptionSetting: Copies=13"
++*Copies 14/14: "%% FoomaticRIPOptionSetting: Copies=14"
++*Copies 15/15: "%% FoomaticRIPOptionSetting: Copies=15"
++*Copies 16/16: "%% FoomaticRIPOptionSetting: Copies=16"
++*Copies 17/17: "%% FoomaticRIPOptionSetting: Copies=17"
++*Copies 18/18: "%% FoomaticRIPOptionSetting: Copies=18"
++*Copies 19/19: "%% FoomaticRIPOptionSetting: Copies=19"
++*Copies 20/20: "%% FoomaticRIPOptionSetting: Copies=20"
++*Copies 21/21: "%% FoomaticRIPOptionSetting: Copies=21"
++*Copies 22/22: "%% FoomaticRIPOptionSetting: Copies=22"
++*Copies 23/23: "%% FoomaticRIPOptionSetting: Copies=23"
++*Copies 24/24: "%% FoomaticRIPOptionSetting: Copies=24"
++*Copies 25/25: "%% FoomaticRIPOptionSetting: Copies=25"
++*Copies 26/26: "%% FoomaticRIPOptionSetting: Copies=26"
++*Copies 27/27: "%% FoomaticRIPOptionSetting: Copies=27"
++*Copies 28/28: "%% FoomaticRIPOptionSetting: Copies=28"
++*Copies 29/29: "%% FoomaticRIPOptionSetting: Copies=29"
++*Copies 30/30: "%% FoomaticRIPOptionSetting: Copies=30"
++*Copies 31/31: "%% FoomaticRIPOptionSetting: Copies=31"
++*Copies 32/32: "%% FoomaticRIPOptionSetting: Copies=32"
++*Copies 33/33: "%% FoomaticRIPOptionSetting: Copies=33"
++*Copies 34/34: "%% FoomaticRIPOptionSetting: Copies=34"
++*Copies 35/35: "%% FoomaticRIPOptionSetting: Copies=35"
++*Copies 36/36: "%% FoomaticRIPOptionSetting: Copies=36"
++*Copies 37/37: "%% FoomaticRIPOptionSetting: Copies=37"
++*Copies 38/38: "%% FoomaticRIPOptionSetting: Copies=38"
++*Copies 39/39: "%% FoomaticRIPOptionSetting: Copies=39"
++*Copies 40/40: "%% FoomaticRIPOptionSetting: Copies=40"
++*Copies 41/41: "%% FoomaticRIPOptionSetting: Copies=41"
++*Copies 42/42: "%% FoomaticRIPOptionSetting: Copies=42"
++*Copies 43/43: "%% FoomaticRIPOptionSetting: Copies=43"
++*Copies 44/44: "%% FoomaticRIPOptionSetting: Copies=44"
++*Copies 45/45: "%% FoomaticRIPOptionSetting: Copies=45"
++*Copies 46/46: "%% FoomaticRIPOptionSetting: Copies=46"
++*Copies 47/47: "%% FoomaticRIPOptionSetting: Copies=47"
++*Copies 48/48: "%% FoomaticRIPOptionSetting: Copies=48"
++*Copies 49/49: "%% FoomaticRIPOptionSetting: Copies=49"
++*Copies 50/50: "%% FoomaticRIPOptionSetting: Copies=50"
++*Copies 51/51: "%% FoomaticRIPOptionSetting: Copies=51"
++*Copies 52/52: "%% FoomaticRIPOptionSetting: Copies=52"
++*Copies 53/53: "%% FoomaticRIPOptionSetting: Copies=53"
++*Copies 54/54: "%% FoomaticRIPOptionSetting: Copies=54"
++*Copies 55/55: "%% FoomaticRIPOptionSetting: Copies=55"
++*Copies 56/56: "%% FoomaticRIPOptionSetting: Copies=56"
++*Copies 57/57: "%% FoomaticRIPOptionSetting: Copies=57"
++*Copies 58/58: "%% FoomaticRIPOptionSetting: Copies=58"
++*Copies 59/59: "%% FoomaticRIPOptionSetting: Copies=59"
++*Copies 60/60: "%% FoomaticRIPOptionSetting: Copies=60"
++*Copies 61/61: "%% FoomaticRIPOptionSetting: Copies=61"
++*Copies 62/62: "%% FoomaticRIPOptionSetting: Copies=62"
++*Copies 63/63: "%% FoomaticRIPOptionSetting: Copies=63"
++*Copies 64/64: "%% FoomaticRIPOptionSetting: Copies=64"
++*Copies 65/65: "%% FoomaticRIPOptionSetting: Copies=65"
++*Copies 66/66: "%% FoomaticRIPOptionSetting: Copies=66"
++*Copies 67/67: "%% FoomaticRIPOptionSetting: Copies=67"
++*Copies 68/68: "%% FoomaticRIPOptionSetting: Copies=68"
++*Copies 69/69: "%% FoomaticRIPOptionSetting: Copies=69"
++*Copies 70/70: "%% FoomaticRIPOptionSetting: Copies=70"
++*Copies 71/71: "%% FoomaticRIPOptionSetting: Copies=71"
++*Copies 72/72: "%% FoomaticRIPOptionSetting: Copies=72"
++*Copies 73/73: "%% FoomaticRIPOptionSetting: Copies=73"
++*Copies 74/74: "%% FoomaticRIPOptionSetting: Copies=74"
++*Copies 75/75: "%% FoomaticRIPOptionSetting: Copies=75"
++*Copies 76/76: "%% FoomaticRIPOptionSetting: Copies=76"
++*Copies 77/77: "%% FoomaticRIPOptionSetting: Copies=77"
++*Copies 78/78: "%% FoomaticRIPOptionSetting: Copies=78"
++*Copies 79/79: "%% FoomaticRIPOptionSetting: Copies=79"
++*Copies 80/80: "%% FoomaticRIPOptionSetting: Copies=80"
++*Copies 81/81: "%% FoomaticRIPOptionSetting: Copies=81"
++*Copies 82/82: "%% FoomaticRIPOptionSetting: Copies=82"
++*Copies 83/83: "%% FoomaticRIPOptionSetting: Copies=83"
++*Copies 84/84: "%% FoomaticRIPOptionSetting: Copies=84"
++*Copies 85/85: "%% FoomaticRIPOptionSetting: Copies=85"
++*Copies 86/86: "%% FoomaticRIPOptionSetting: Copies=86"
++*Copies 87/87: "%% FoomaticRIPOptionSetting: Copies=87"
++*Copies 88/88: "%% FoomaticRIPOptionSetting: Copies=88"
++*Copies 89/89: "%% FoomaticRIPOptionSetting: Copies=89"
++*Copies 90/90: "%% FoomaticRIPOptionSetting: Copies=90"
++*Copies 91/91: "%% FoomaticRIPOptionSetting: Copies=91"
++*Copies 92/92: "%% FoomaticRIPOptionSetting: Copies=92"
++*Copies 93/93: "%% FoomaticRIPOptionSetting: Copies=93"
++*Copies 94/94: "%% FoomaticRIPOptionSetting: Copies=94"
++*Copies 95/95: "%% FoomaticRIPOptionSetting: Copies=95"
++*Copies 96/96: "%% FoomaticRIPOptionSetting: Copies=96"
++*Copies 97/97: "%% FoomaticRIPOptionSetting: Copies=97"
++*Copies 98/98: "%% FoomaticRIPOptionSetting: Copies=98"
++*Copies 99/99: "%% FoomaticRIPOptionSetting: Copies=99"
++*Copies 100/100: "%% FoomaticRIPOptionSetting: Copies=100"
++*CloseUI: *Copies
++
++*CloseGroup: General
++
++*OpenGroup: Adjustment/Adjustment
++
++*OpenUI *halftone/Halftone Algorithm: PickOne
++*FoomaticRIPOption halftone: enum CmdLine A
++*OrderDependency: 110 AnySetup *halftone
++*Defaulthalftone: default
++*halftone default/Default: "%% FoomaticRIPOptionSetting: halftone=default"
++*FoomaticRIPOptionSetting halftone=default: "  "
++*halftone as/Accurate Screens (better): "%% FoomaticRIPOptionSetting: halftone=as"
++*FoomaticRIPOptionSetting halftone=as: " -qas  "
++*halftone standard/Standard: "%% FoomaticRIPOptionSetting: halftone=standard"
++*FoomaticRIPOptionSetting halftone=standard: " -q1  "
++*halftone wts/Well Tempered Screens (best): "%% FoomaticRIPOptionSetting: halftone=wts"
++*FoomaticRIPOptionSetting halftone=wts: " -qwts  "
++*CloseUI: *halftone
++
++*OpenUI *ICM/ICM Color Profile: PickOne
++*FoomaticRIPOption ICM: enum CmdLine A
++*OrderDependency: 300 AnySetup *ICM
++*DefaultICM: none
++*ICM none/No ICM color correction: "%% FoomaticRIPOptionSetting: ICM=none"
++*FoomaticRIPOptionSetting ICM=none: "-C10 -Gnone.icm "
++*ICM testing/File testing.icm: "%% FoomaticRIPOptionSetting: ICM=testing"
++*FoomaticRIPOptionSetting ICM=testing: "-C10 -Gtesting.icm "
++*ICM testing2/File testing2.icm: "%% FoomaticRIPOptionSetting: ICM=testing2"
++*FoomaticRIPOptionSetting ICM=testing2: "-C10 -Gtesting2.icm "
++*ICM testing3/File testing3.icm: "%% FoomaticRIPOptionSetting: ICM=testing3"
++*FoomaticRIPOptionSetting ICM=testing3: "-C10 -Gtesting3.icm "
++*CloseUI: *ICM
++
++*CloseGroup: Adjustment
++
++*OpenGroup: Miscellaneous/Miscellaneous
++
++*OpenUI *NupOrient/N-up Orientation: PickOne
++*FoomaticRIPOption NupOrient: enum CmdLine A
++*OrderDependency: 200 AnySetup *NupOrient
++*DefaultNupOrient: port
++*NupOrient land/Landscape: "%% FoomaticRIPOptionSetting: NupOrient=land"
++*FoomaticRIPOptionSetting NupOrient=land: "-ol "
++*NupOrient port/Portrait: "%% FoomaticRIPOptionSetting: NupOrient=port"
++*FoomaticRIPOptionSetting NupOrient=port: " "
++*NupOrient sea/Seascape: "%% FoomaticRIPOptionSetting: NupOrient=sea"
++*FoomaticRIPOptionSetting NupOrient=sea: "-os "
++*CloseUI: *NupOrient
++
++*OpenUI *NupPages/N-up Printing: PickOne
++*FoomaticRIPOption NupPages: enum CmdLine A
++*OrderDependency: 200 AnySetup *NupPages
++*DefaultNupPages: 1up
++*NupPages 1up/1-up: "%% FoomaticRIPOptionSetting: NupPages=1up"
++*FoomaticRIPOptionSetting NupPages=1up: " "
++*NupPages 2up/2-up: "%% FoomaticRIPOptionSetting: NupPages=2up"
++*FoomaticRIPOptionSetting NupPages=2up: "-2 "
++*NupPages 3up/3-up: "%% FoomaticRIPOptionSetting: NupPages=3up"
++*FoomaticRIPOptionSetting NupPages=3up: "-3 "
++*NupPages 4up/4-up: "%% FoomaticRIPOptionSetting: NupPages=4up"
++*FoomaticRIPOptionSetting NupPages=4up: "-4 "
++*NupPages 6up/6-up: "%% FoomaticRIPOptionSetting: NupPages=6up"
++*FoomaticRIPOptionSetting NupPages=6up: "-6 "
++*NupPages 8up/8-up: "%% FoomaticRIPOptionSetting: NupPages=8up"
++*FoomaticRIPOptionSetting NupPages=8up: "-8 "
++*NupPages 10up/10-up: "%% FoomaticRIPOptionSetting: NupPages=10up"
++*FoomaticRIPOptionSetting NupPages=10up: "-10 "
++*NupPages 12up/12-up: "%% FoomaticRIPOptionSetting: NupPages=12up"
++*FoomaticRIPOptionSetting NupPages=12up: "-12 "
++*NupPages 14up/14-up: "%% FoomaticRIPOptionSetting: NupPages=14up"
++*FoomaticRIPOptionSetting NupPages=14up: "-14 "
++*NupPages 15up/15-up: "%% FoomaticRIPOptionSetting: NupPages=15up"
++*FoomaticRIPOptionSetting NupPages=15up: "-15 "
++*NupPages 16up/16-up: "%% FoomaticRIPOptionSetting: NupPages=16up"
++*FoomaticRIPOptionSetting NupPages=16up: "-16 "
++*NupPages 18up/18-up: "%% FoomaticRIPOptionSetting: NupPages=18up"
++*FoomaticRIPOptionSetting NupPages=18up: "-18 "
++*CloseUI: *NupPages
++
++*CloseGroup: Miscellaneous
++
++
++*% Generic boilerplate PPD stuff as standard PostScript fonts and so on
++
++*DefaultFont: Courier
++*Font AvantGarde-Book: Standard "(001.006S)" Standard ROM
++*Font AvantGarde-BookOblique: Standard "(001.006S)" Standard ROM
++*Font AvantGarde-Demi: Standard "(001.007S)" Standard ROM
++*Font AvantGarde-DemiOblique: Standard "(001.007S)" Standard ROM
++*Font Bookman-Demi: Standard "(001.004S)" Standard ROM
++*Font Bookman-DemiItalic: Standard "(001.004S)" Standard ROM
++*Font Bookman-Light: Standard "(001.004S)" Standard ROM
++*Font Bookman-LightItalic: Standard "(001.004S)" Standard ROM
++*Font Courier: Standard "(002.004S)" Standard ROM
++*Font Courier-Bold: Standard "(002.004S)" Standard ROM
++*Font Courier-BoldOblique: Standard "(002.004S)" Standard ROM
++*Font Courier-Oblique: Standard "(002.004S)" Standard ROM
++*Font Helvetica: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Bold: Standard "(001.007S)" Standard ROM
++*Font Helvetica-BoldOblique: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Narrow-Bold: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow-BoldOblique: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow-Oblique: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Oblique: Standard "(001.006S)" Standard ROM
++*Font NewCenturySchlbk-Bold: Standard "(001.009S)" Standard ROM
++*Font NewCenturySchlbk-BoldItalic: Standard "(001.007S)" Standard ROM
++*Font NewCenturySchlbk-Italic: Standard "(001.006S)" Standard ROM
++*Font NewCenturySchlbk-Roman: Standard "(001.007S)" Standard ROM
++*Font Palatino-Bold: Standard "(001.005S)" Standard ROM
++*Font Palatino-BoldItalic: Standard "(001.005S)" Standard ROM
++*Font Palatino-Italic: Standard "(001.005S)" Standard ROM
++*Font Palatino-Roman: Standard "(001.005S)" Standard ROM
++*Font Symbol: Special "(001.007S)" Special ROM
++*Font Times-Bold: Standard "(001.007S)" Standard ROM
++*Font Times-BoldItalic: Standard "(001.009S)" Standard ROM
++*Font Times-Italic: Standard "(001.007S)" Standard ROM
++*Font Times-Roman: Standard "(001.007S)" Standard ROM
++*Font ZapfChancery-MediumItalic: Standard "(001.007S)" Standard ROM
++*Font ZapfDingbats: Special "(001.004S)" Standard ROM
++
+--- foo2zjs/PPD/Dell-C1660.ppd	1970-01-01 00:00:00.000000000 +0000
++++ foo2zjs/PPD/Dell-C1660.ppd	2014-04-01 11:06:30.000000000 +0000
+@@ -0,0 +1,433 @@
++*PPD-Adobe: "4.3"
++*%
++*% For information on using this, and to obtain the required backend
++*% script, consult http://www.openprinting.org/
++*%
++*% This file is published under the GNU General Public License
++*%
++*% PPD-O-MATIC (3.0.0 or newer) generated this PPD file. It is for use with 
++*% all programs and environments which use PPD files for dealing with
++*% printer capability information. The printer must be configured with the
++*% "foomatic-rip" backend filter script of Foomatic 3.0.0 or newer. This 
++*% file and "foomatic-rip" work together to support PPD-controlled printer
++*% driver option access with arbitrary free software printer drivers and
++*% printing spoolers.
++*%
++*% To save this file on your disk, wait until the download has completed
++*% (the animation of the browser logo must stop) and then use the
++*% "Save as..." command in the "File" menu of your browser or in the 
++*% pop-up manu when you click on this document with the right mouse button.
++*% DO NOT cut and paste this file into an editor with your mouse. This can
++*% introduce additional line breaks which lead to unexpected results.
++*%
++*% You may save this file as 'Dell-C1660-foo2hbpl1.ppd'
++*%
++*%
++*FormatVersion:	"4.3"
++*FileVersion:	"1.1"
++*LanguageVersion: English 
++*LanguageEncoding: ISOLatin1
++*PCFileName:	"FOO2HBPL.PPD"
++*Manufacturer:	"Dell"
++*Product:	"(C1660)"
++*cupsVersion:	1.0
++*cupsManualCopies: True
++*cupsModelNumber:  2
++*cupsFilter:	"application/vnd.cups-postscript 0 foomatic-rip"
++*%pprRIP:        foomatic-rip other
++*ModelName:     "Dell C1660"
++*ShortNickName: "Dell C1660 foo2hbpl1"
++*NickName:      "Dell C1660 Foomatic/foo2hbpl1 (recommended)"
++*PSVersion:	"(3010.000) 550"
++*PSVersion:	"(3010.000) 651"
++*PSVersion:	"(3010.000) 652"
++*PSVersion:	"(3010.000) 653"
++*PSVersion:	"(3010.000) 704"
++*PSVersion:	"(3010.000) 705"
++*PSVersion:	"(3010.000) 800"
++*LanguageLevel:	"3"
++*ColorDevice:	True
++*DefaultColorSpace: RGB
++*FileSystem:	False
++*Throughput:	"1"
++*LandscapeOrientation: Plus90
++*TTRasterizer:	Type42
++*1284DeviceID: "DRV:Dfoo2hbpl1,R1,M0,TF;"
++
++*driverName foo2hbpl1/foo2hbpl1: ""
++*driverType F/Filter: ""
++*driverUrl: "http://foo2hbpl.rkkda.com/"
++*driverObsolete: False
++
++
++
++
++*HWMargins: 9 12.00 9 12
++*VariablePaperSize: True
++*MaxMediaWidth: 100000
++*MaxMediaHeight: 100000
++*NonUIOrderDependency: 135 AnySetup *CustomPageSize
++*CustomPageSize True: "pop pop pop pop pop
++%% FoomaticRIPOptionSetting: PageSize=Custom"
++*End
++*FoomaticRIPOptionSetting PageSize=Custom: "-pCustom.%0x%1 "
++*ParamCustomPageSize Width: 1 points 36 100000
++*ParamCustomPageSize Height: 2 points 36 100000
++*ParamCustomPageSize Orientation: 3 int 0 0
++*ParamCustomPageSize WidthOffset: 4 points 0 0
++*ParamCustomPageSize HeightOffset: 5 points 0 0
++
++*FoomaticIDs: Dell-C1660 foo2hbpl1
++*FoomaticRIPCommandLine: "foo2hbpl1-wrapper %A"
++
++*OpenGroup: General/General
++
++*OpenUI *Quality/Printing Quality: PickOne
++*FoomaticRIPOption Quality: enum CmdLine A
++*OrderDependency: 110 AnySetup *Quality
++*DefaultQuality: normal
++*Quality draft/Draft: "%% FoomaticRIPOptionSetting: Quality=draft"
++*FoomaticRIPOptionSetting Quality=draft: " -t  "
++*Quality normal/Normal: "%% FoomaticRIPOptionSetting: Quality=normal"
++*FoomaticRIPOptionSetting Quality=normal: "  "
++*CloseUI: *Quality
++
++*OpenUI *ColorMode/Color Mode: PickOne
++*FoomaticRIPOption ColorMode: enum CmdLine A
++*OrderDependency: 120 AnySetup *ColorMode
++*DefaultColorMode: Monochrome
++*ColorMode Color/Color: "%% FoomaticRIPOptionSetting: ColorMode=Color"
++*FoomaticRIPOptionSetting ColorMode=Color: "-c "
++*ColorMode Monochrome/Monochrome: "%% FoomaticRIPOptionSetting: ColorMode=Monochrome"
++*FoomaticRIPOptionSetting ColorMode=Monochrome: " "
++*CloseUI: *ColorMode
++
++*OpenUI *PageSize/Page Size: PickOne
++*FoomaticRIPOption PageSize: enum CmdLine A
++*OrderDependency: 135 AnySetup *PageSize
++*DefaultPageSize: Letter
++*PageSize Letter/Letter: "%% FoomaticRIPOptionSetting: PageSize=Letter"
++*FoomaticRIPOptionSetting PageSize=Letter: "-p4 "
++*PageSize A4/A4: "%% FoomaticRIPOptionSetting: PageSize=A4"
++*FoomaticRIPOptionSetting PageSize=A4: "-p1 "
++*PageSize B5jis/B5 (JIS): "%% FoomaticRIPOptionSetting: PageSize=B5jis"
++*FoomaticRIPOptionSetting PageSize=B5jis: "-p2 "
++*PageSize Env10/Env #10: "%% FoomaticRIPOptionSetting: PageSize=Env10"
++*FoomaticRIPOptionSetting PageSize=Env10: "-p9 "
++*PageSize EnvC5/Env C5: "%% FoomaticRIPOptionSetting: PageSize=EnvC5"
++*FoomaticRIPOptionSetting PageSize=EnvC5: "-p11 "
++*PageSize EnvDL/Env DL: "%% FoomaticRIPOptionSetting: PageSize=EnvDL"
++*FoomaticRIPOptionSetting PageSize=EnvDL: "-p12 "
++*PageSize EnvMonarch/Env Monarch: "%% FoomaticRIPOptionSetting: PageSize=EnvMonarch"
++*FoomaticRIPOptionSetting PageSize=EnvMonarch: "-p10 "
++*PageSize Executive/Executive: "%% FoomaticRIPOptionSetting: PageSize=Executive"
++*FoomaticRIPOptionSetting PageSize=Executive: "-p5 "
++*PageSize FanfoldGermanLegal/Fanfold German Legal: "%% FoomaticRIPOptionSetting: PageSize=FanfoldGermanLegal"
++*FoomaticRIPOptionSetting PageSize=FanfoldGermanLegal: "-p6 "
++*PageSize Folio/Folio: "%% FoomaticRIPOptionSetting: PageSize=Folio"
++*FoomaticRIPOptionSetting PageSize=Folio: "-p6 "
++*PageSize Legal/Legal: "%% FoomaticRIPOptionSetting: PageSize=Legal"
++*FoomaticRIPOptionSetting PageSize=Legal: "-p7 "
++*CloseUI: *PageSize
++
++*OpenUI *PageRegion: PickOne
++*OrderDependency: 135 AnySetup *PageRegion
++*DefaultPageRegion: Letter
++*PageRegion Letter/Letter: "%% FoomaticRIPOptionSetting: PageSize=Letter"
++*PageRegion A4/A4: "%% FoomaticRIPOptionSetting: PageSize=A4"
++*PageRegion B5jis/B5 (JIS): "%% FoomaticRIPOptionSetting: PageSize=B5jis"
++*PageRegion Env10/Env #10: "%% FoomaticRIPOptionSetting: PageSize=Env10"
++*PageRegion EnvC5/Env C5: "%% FoomaticRIPOptionSetting: PageSize=EnvC5"
++*PageRegion EnvDL/Env DL: "%% FoomaticRIPOptionSetting: PageSize=EnvDL"
++*PageRegion EnvMonarch/Env Monarch: "%% FoomaticRIPOptionSetting: PageSize=EnvMonarch"
++*PageRegion Executive/Executive: "%% FoomaticRIPOptionSetting: PageSize=Executive"
++*PageRegion FanfoldGermanLegal/Fanfold German Legal: "%% FoomaticRIPOptionSetting: PageSize=FanfoldGermanLegal"
++*PageRegion Folio/Folio: "%% FoomaticRIPOptionSetting: PageSize=Folio"
++*PageRegion Legal/Legal: "%% FoomaticRIPOptionSetting: PageSize=Legal"
++*CloseUI: *PageRegion
++
++*DefaultImageableArea: Letter
++*ImageableArea Letter/Letter: "9 12.00 603 780.00"
++*ImageableArea A4/A4: "9 12.00 586 830.00"
++*ImageableArea B5jis/B5 (JIS): "9 12.00 509 715.00"
++*ImageableArea Env10/Env #10: "9 12.00 288 672.00"
++*ImageableArea EnvC5/Env C5: "9 12.00 450 637.00"
++*ImageableArea EnvDL/Env DL: "9 12.00 302 611.00"
++*ImageableArea EnvMonarch/Env Monarch: "9 12.00 270 528.00"
++*ImageableArea Executive/Executive: "9 12.00 513 744.00"
++*ImageableArea FanfoldGermanLegal/Fanfold German Legal: "9 12.00 603 996.00"
++*ImageableArea Folio/Folio: "9 12.00 603 924.00"
++*ImageableArea Legal/Legal: "9 12.00 603 996.00"
++
++*DefaultPaperDimension: Letter
++*PaperDimension Letter/Letter: "612 792"
++*PaperDimension A4/A4: "595 842"
++*PaperDimension B5jis/B5 (JIS): "518 727"
++*PaperDimension Env10/Env #10: "297 684"
++*PaperDimension EnvC5/Env C5: "459 649"
++*PaperDimension EnvDL/Env DL: "311 623"
++*PaperDimension EnvMonarch/Env Monarch: "279 540"
++*PaperDimension Executive/Executive: "522 756"
++*PaperDimension FanfoldGermanLegal/Fanfold German Legal: "612 1008"
++*PaperDimension Folio/Folio: "612 936"
++*PaperDimension Legal/Legal: "612 1008"
++
++*OpenUI *MediaType/Media Type: PickOne
++*FoomaticRIPOption MediaType: enum CmdLine A
++*OrderDependency: 150 AnySetup *MediaType
++*DefaultMediaType: plain
++*MediaType plain/Plain Paper: "%% FoomaticRIPOptionSetting: MediaType=plain"
++*FoomaticRIPOptionSetting MediaType=plain: "-m1 "
++*MediaType plain2/Plain Paper Side 2: "%% FoomaticRIPOptionSetting: MediaType=plain2"
++*FoomaticRIPOptionSetting MediaType=plain2: "-m8 "
++*MediaType bond/Bond: "%% FoomaticRIPOptionSetting: MediaType=bond"
++*FoomaticRIPOptionSetting MediaType=bond: "-m2 "
++*MediaType bond2/Bond Side 2: "%% FoomaticRIPOptionSetting: MediaType=bond2"
++*FoomaticRIPOptionSetting MediaType=bond2: "-m9 "
++*MediaType envelope/Envelope: "%% FoomaticRIPOptionSetting: MediaType=envelope"
++*FoomaticRIPOptionSetting MediaType=envelope: "-m6 "
++*MediaType labels/Labels: "%% FoomaticRIPOptionSetting: MediaType=labels"
++*FoomaticRIPOptionSetting MediaType=labels: "-m5 "
++*MediaType lwcard/Light Weight Card: "%% FoomaticRIPOptionSetting: MediaType=lwcard"
++*FoomaticRIPOptionSetting MediaType=lwcard: "-m3 "
++*MediaType lwcard2/Light Weight Card Side 2: "%% FoomaticRIPOptionSetting: MediaType=lwcard2"
++*FoomaticRIPOptionSetting MediaType=lwcard2: "-m10 "
++*MediaType lwgcard/Light Weight Glossy Card: "%% FoomaticRIPOptionSetting: MediaType=lwgcard"
++*FoomaticRIPOptionSetting MediaType=lwgcard: "-m4 "
++*MediaType lwgcard2/Light Weight Glossy Card Side 2: "%% FoomaticRIPOptionSetting: MediaType=lwgcard2"
++*FoomaticRIPOptionSetting MediaType=lwgcard2: "-m11 "
++*MediaType recycled/Recycled Paper: "%% FoomaticRIPOptionSetting: MediaType=recycled"
++*FoomaticRIPOptionSetting MediaType=recycled: "-m7 "
++*MediaType recycled2/Recycled Paper Side 2: "%% FoomaticRIPOptionSetting: MediaType=recycled2"
++*FoomaticRIPOptionSetting MediaType=recycled2: "-m12 "
++*CloseUI: *MediaType
++
++*OpenUI *Copies/Copies: PickOne
++*FoomaticRIPOption Copies: int CmdLine A
++*FoomaticRIPOptionPrototype Copies: "-n%s "
++*FoomaticRIPOptionRange Copies: 1 100
++*OrderDependency: 220 AnySetup *Copies
++*DefaultCopies: 1
++*FoomaticRIPDefaultCopies: 1
++*Copies 1/1: "%% FoomaticRIPOptionSetting: Copies=1"
++*Copies 2/2: "%% FoomaticRIPOptionSetting: Copies=2"
++*Copies 3/3: "%% FoomaticRIPOptionSetting: Copies=3"
++*Copies 4/4: "%% FoomaticRIPOptionSetting: Copies=4"
++*Copies 5/5: "%% FoomaticRIPOptionSetting: Copies=5"
++*Copies 6/6: "%% FoomaticRIPOptionSetting: Copies=6"
++*Copies 7/7: "%% FoomaticRIPOptionSetting: Copies=7"
++*Copies 8/8: "%% FoomaticRIPOptionSetting: Copies=8"
++*Copies 9/9: "%% FoomaticRIPOptionSetting: Copies=9"
++*Copies 10/10: "%% FoomaticRIPOptionSetting: Copies=10"
++*Copies 11/11: "%% FoomaticRIPOptionSetting: Copies=11"
++*Copies 12/12: "%% FoomaticRIPOptionSetting: Copies=12"
++*Copies 13/13: "%% FoomaticRIPOptionSetting: Copies=13"
++*Copies 14/14: "%% FoomaticRIPOptionSetting: Copies=14"
++*Copies 15/15: "%% FoomaticRIPOptionSetting: Copies=15"
++*Copies 16/16: "%% FoomaticRIPOptionSetting: Copies=16"
++*Copies 17/17: "%% FoomaticRIPOptionSetting: Copies=17"
++*Copies 18/18: "%% FoomaticRIPOptionSetting: Copies=18"
++*Copies 19/19: "%% FoomaticRIPOptionSetting: Copies=19"
++*Copies 20/20: "%% FoomaticRIPOptionSetting: Copies=20"
++*Copies 21/21: "%% FoomaticRIPOptionSetting: Copies=21"
++*Copies 22/22: "%% FoomaticRIPOptionSetting: Copies=22"
++*Copies 23/23: "%% FoomaticRIPOptionSetting: Copies=23"
++*Copies 24/24: "%% FoomaticRIPOptionSetting: Copies=24"
++*Copies 25/25: "%% FoomaticRIPOptionSetting: Copies=25"
++*Copies 26/26: "%% FoomaticRIPOptionSetting: Copies=26"
++*Copies 27/27: "%% FoomaticRIPOptionSetting: Copies=27"
++*Copies 28/28: "%% FoomaticRIPOptionSetting: Copies=28"
++*Copies 29/29: "%% FoomaticRIPOptionSetting: Copies=29"
++*Copies 30/30: "%% FoomaticRIPOptionSetting: Copies=30"
++*Copies 31/31: "%% FoomaticRIPOptionSetting: Copies=31"
++*Copies 32/32: "%% FoomaticRIPOptionSetting: Copies=32"
++*Copies 33/33: "%% FoomaticRIPOptionSetting: Copies=33"
++*Copies 34/34: "%% FoomaticRIPOptionSetting: Copies=34"
++*Copies 35/35: "%% FoomaticRIPOptionSetting: Copies=35"
++*Copies 36/36: "%% FoomaticRIPOptionSetting: Copies=36"
++*Copies 37/37: "%% FoomaticRIPOptionSetting: Copies=37"
++*Copies 38/38: "%% FoomaticRIPOptionSetting: Copies=38"
++*Copies 39/39: "%% FoomaticRIPOptionSetting: Copies=39"
++*Copies 40/40: "%% FoomaticRIPOptionSetting: Copies=40"
++*Copies 41/41: "%% FoomaticRIPOptionSetting: Copies=41"
++*Copies 42/42: "%% FoomaticRIPOptionSetting: Copies=42"
++*Copies 43/43: "%% FoomaticRIPOptionSetting: Copies=43"
++*Copies 44/44: "%% FoomaticRIPOptionSetting: Copies=44"
++*Copies 45/45: "%% FoomaticRIPOptionSetting: Copies=45"
++*Copies 46/46: "%% FoomaticRIPOptionSetting: Copies=46"
++*Copies 47/47: "%% FoomaticRIPOptionSetting: Copies=47"
++*Copies 48/48: "%% FoomaticRIPOptionSetting: Copies=48"
++*Copies 49/49: "%% FoomaticRIPOptionSetting: Copies=49"
++*Copies 50/50: "%% FoomaticRIPOptionSetting: Copies=50"
++*Copies 51/51: "%% FoomaticRIPOptionSetting: Copies=51"
++*Copies 52/52: "%% FoomaticRIPOptionSetting: Copies=52"
++*Copies 53/53: "%% FoomaticRIPOptionSetting: Copies=53"
++*Copies 54/54: "%% FoomaticRIPOptionSetting: Copies=54"
++*Copies 55/55: "%% FoomaticRIPOptionSetting: Copies=55"
++*Copies 56/56: "%% FoomaticRIPOptionSetting: Copies=56"
++*Copies 57/57: "%% FoomaticRIPOptionSetting: Copies=57"
++*Copies 58/58: "%% FoomaticRIPOptionSetting: Copies=58"
++*Copies 59/59: "%% FoomaticRIPOptionSetting: Copies=59"
++*Copies 60/60: "%% FoomaticRIPOptionSetting: Copies=60"
++*Copies 61/61: "%% FoomaticRIPOptionSetting: Copies=61"
++*Copies 62/62: "%% FoomaticRIPOptionSetting: Copies=62"
++*Copies 63/63: "%% FoomaticRIPOptionSetting: Copies=63"
++*Copies 64/64: "%% FoomaticRIPOptionSetting: Copies=64"
++*Copies 65/65: "%% FoomaticRIPOptionSetting: Copies=65"
++*Copies 66/66: "%% FoomaticRIPOptionSetting: Copies=66"
++*Copies 67/67: "%% FoomaticRIPOptionSetting: Copies=67"
++*Copies 68/68: "%% FoomaticRIPOptionSetting: Copies=68"
++*Copies 69/69: "%% FoomaticRIPOptionSetting: Copies=69"
++*Copies 70/70: "%% FoomaticRIPOptionSetting: Copies=70"
++*Copies 71/71: "%% FoomaticRIPOptionSetting: Copies=71"
++*Copies 72/72: "%% FoomaticRIPOptionSetting: Copies=72"
++*Copies 73/73: "%% FoomaticRIPOptionSetting: Copies=73"
++*Copies 74/74: "%% FoomaticRIPOptionSetting: Copies=74"
++*Copies 75/75: "%% FoomaticRIPOptionSetting: Copies=75"
++*Copies 76/76: "%% FoomaticRIPOptionSetting: Copies=76"
++*Copies 77/77: "%% FoomaticRIPOptionSetting: Copies=77"
++*Copies 78/78: "%% FoomaticRIPOptionSetting: Copies=78"
++*Copies 79/79: "%% FoomaticRIPOptionSetting: Copies=79"
++*Copies 80/80: "%% FoomaticRIPOptionSetting: Copies=80"
++*Copies 81/81: "%% FoomaticRIPOptionSetting: Copies=81"
++*Copies 82/82: "%% FoomaticRIPOptionSetting: Copies=82"
++*Copies 83/83: "%% FoomaticRIPOptionSetting: Copies=83"
++*Copies 84/84: "%% FoomaticRIPOptionSetting: Copies=84"
++*Copies 85/85: "%% FoomaticRIPOptionSetting: Copies=85"
++*Copies 86/86: "%% FoomaticRIPOptionSetting: Copies=86"
++*Copies 87/87: "%% FoomaticRIPOptionSetting: Copies=87"
++*Copies 88/88: "%% FoomaticRIPOptionSetting: Copies=88"
++*Copies 89/89: "%% FoomaticRIPOptionSetting: Copies=89"
++*Copies 90/90: "%% FoomaticRIPOptionSetting: Copies=90"
++*Copies 91/91: "%% FoomaticRIPOptionSetting: Copies=91"
++*Copies 92/92: "%% FoomaticRIPOptionSetting: Copies=92"
++*Copies 93/93: "%% FoomaticRIPOptionSetting: Copies=93"
++*Copies 94/94: "%% FoomaticRIPOptionSetting: Copies=94"
++*Copies 95/95: "%% FoomaticRIPOptionSetting: Copies=95"
++*Copies 96/96: "%% FoomaticRIPOptionSetting: Copies=96"
++*Copies 97/97: "%% FoomaticRIPOptionSetting: Copies=97"
++*Copies 98/98: "%% FoomaticRIPOptionSetting: Copies=98"
++*Copies 99/99: "%% FoomaticRIPOptionSetting: Copies=99"
++*Copies 100/100: "%% FoomaticRIPOptionSetting: Copies=100"
++*CloseUI: *Copies
++
++*CloseGroup: General
++
++*OpenGroup: Adjustment/Adjustment
++
++*OpenUI *halftone/Halftone Algorithm: PickOne
++*FoomaticRIPOption halftone: enum CmdLine A
++*OrderDependency: 110 AnySetup *halftone
++*Defaulthalftone: default
++*halftone default/Default: "%% FoomaticRIPOptionSetting: halftone=default"
++*FoomaticRIPOptionSetting halftone=default: "  "
++*halftone as/Accurate Screens (better): "%% FoomaticRIPOptionSetting: halftone=as"
++*FoomaticRIPOptionSetting halftone=as: " -qas  "
++*halftone standard/Standard: "%% FoomaticRIPOptionSetting: halftone=standard"
++*FoomaticRIPOptionSetting halftone=standard: " -q1  "
++*halftone wts/Well Tempered Screens (best): "%% FoomaticRIPOptionSetting: halftone=wts"
++*FoomaticRIPOptionSetting halftone=wts: " -qwts  "
++*CloseUI: *halftone
++
++*OpenUI *ICM/ICM Color Profile: PickOne
++*FoomaticRIPOption ICM: enum CmdLine A
++*OrderDependency: 300 AnySetup *ICM
++*DefaultICM: none
++*ICM none/No ICM color correction: "%% FoomaticRIPOptionSetting: ICM=none"
++*FoomaticRIPOptionSetting ICM=none: "-C10 -Gnone.icm "
++*ICM testing/File testing.icm: "%% FoomaticRIPOptionSetting: ICM=testing"
++*FoomaticRIPOptionSetting ICM=testing: "-C10 -Gtesting.icm "
++*ICM testing2/File testing2.icm: "%% FoomaticRIPOptionSetting: ICM=testing2"
++*FoomaticRIPOptionSetting ICM=testing2: "-C10 -Gtesting2.icm "
++*ICM testing3/File testing3.icm: "%% FoomaticRIPOptionSetting: ICM=testing3"
++*FoomaticRIPOptionSetting ICM=testing3: "-C10 -Gtesting3.icm "
++*CloseUI: *ICM
++
++*CloseGroup: Adjustment
++
++*OpenGroup: Miscellaneous/Miscellaneous
++
++*OpenUI *NupOrient/N-up Orientation: PickOne
++*FoomaticRIPOption NupOrient: enum CmdLine A
++*OrderDependency: 200 AnySetup *NupOrient
++*DefaultNupOrient: port
++*NupOrient land/Landscape: "%% FoomaticRIPOptionSetting: NupOrient=land"
++*FoomaticRIPOptionSetting NupOrient=land: "-ol "
++*NupOrient port/Portrait: "%% FoomaticRIPOptionSetting: NupOrient=port"
++*FoomaticRIPOptionSetting NupOrient=port: " "
++*NupOrient sea/Seascape: "%% FoomaticRIPOptionSetting: NupOrient=sea"
++*FoomaticRIPOptionSetting NupOrient=sea: "-os "
++*CloseUI: *NupOrient
++
++*OpenUI *NupPages/N-up Printing: PickOne
++*FoomaticRIPOption NupPages: enum CmdLine A
++*OrderDependency: 200 AnySetup *NupPages
++*DefaultNupPages: 1up
++*NupPages 1up/1-up: "%% FoomaticRIPOptionSetting: NupPages=1up"
++*FoomaticRIPOptionSetting NupPages=1up: " "
++*NupPages 2up/2-up: "%% FoomaticRIPOptionSetting: NupPages=2up"
++*FoomaticRIPOptionSetting NupPages=2up: "-2 "
++*NupPages 3up/3-up: "%% FoomaticRIPOptionSetting: NupPages=3up"
++*FoomaticRIPOptionSetting NupPages=3up: "-3 "
++*NupPages 4up/4-up: "%% FoomaticRIPOptionSetting: NupPages=4up"
++*FoomaticRIPOptionSetting NupPages=4up: "-4 "
++*NupPages 6up/6-up: "%% FoomaticRIPOptionSetting: NupPages=6up"
++*FoomaticRIPOptionSetting NupPages=6up: "-6 "
++*NupPages 8up/8-up: "%% FoomaticRIPOptionSetting: NupPages=8up"
++*FoomaticRIPOptionSetting NupPages=8up: "-8 "
++*NupPages 10up/10-up: "%% FoomaticRIPOptionSetting: NupPages=10up"
++*FoomaticRIPOptionSetting NupPages=10up: "-10 "
++*NupPages 12up/12-up: "%% FoomaticRIPOptionSetting: NupPages=12up"
++*FoomaticRIPOptionSetting NupPages=12up: "-12 "
++*NupPages 14up/14-up: "%% FoomaticRIPOptionSetting: NupPages=14up"
++*FoomaticRIPOptionSetting NupPages=14up: "-14 "
++*NupPages 15up/15-up: "%% FoomaticRIPOptionSetting: NupPages=15up"
++*FoomaticRIPOptionSetting NupPages=15up: "-15 "
++*NupPages 16up/16-up: "%% FoomaticRIPOptionSetting: NupPages=16up"
++*FoomaticRIPOptionSetting NupPages=16up: "-16 "
++*NupPages 18up/18-up: "%% FoomaticRIPOptionSetting: NupPages=18up"
++*FoomaticRIPOptionSetting NupPages=18up: "-18 "
++*CloseUI: *NupPages
++
++*CloseGroup: Miscellaneous
++
++
++*% Generic boilerplate PPD stuff as standard PostScript fonts and so on
++
++*DefaultFont: Courier
++*Font AvantGarde-Book: Standard "(001.006S)" Standard ROM
++*Font AvantGarde-BookOblique: Standard "(001.006S)" Standard ROM
++*Font AvantGarde-Demi: Standard "(001.007S)" Standard ROM
++*Font AvantGarde-DemiOblique: Standard "(001.007S)" Standard ROM
++*Font Bookman-Demi: Standard "(001.004S)" Standard ROM
++*Font Bookman-DemiItalic: Standard "(001.004S)" Standard ROM
++*Font Bookman-Light: Standard "(001.004S)" Standard ROM
++*Font Bookman-LightItalic: Standard "(001.004S)" Standard ROM
++*Font Courier: Standard "(002.004S)" Standard ROM
++*Font Courier-Bold: Standard "(002.004S)" Standard ROM
++*Font Courier-BoldOblique: Standard "(002.004S)" Standard ROM
++*Font Courier-Oblique: Standard "(002.004S)" Standard ROM
++*Font Helvetica: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Bold: Standard "(001.007S)" Standard ROM
++*Font Helvetica-BoldOblique: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Narrow-Bold: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow-BoldOblique: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow-Oblique: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Oblique: Standard "(001.006S)" Standard ROM
++*Font NewCenturySchlbk-Bold: Standard "(001.009S)" Standard ROM
++*Font NewCenturySchlbk-BoldItalic: Standard "(001.007S)" Standard ROM
++*Font NewCenturySchlbk-Italic: Standard "(001.006S)" Standard ROM
++*Font NewCenturySchlbk-Roman: Standard "(001.007S)" Standard ROM
++*Font Palatino-Bold: Standard "(001.005S)" Standard ROM
++*Font Palatino-BoldItalic: Standard "(001.005S)" Standard ROM
++*Font Palatino-Italic: Standard "(001.005S)" Standard ROM
++*Font Palatino-Roman: Standard "(001.005S)" Standard ROM
++*Font Symbol: Special "(001.007S)" Special ROM
++*Font Times-Bold: Standard "(001.007S)" Standard ROM
++*Font Times-BoldItalic: Standard "(001.009S)" Standard ROM
++*Font Times-Italic: Standard "(001.007S)" Standard ROM
++*Font Times-Roman: Standard "(001.007S)" Standard ROM
++*Font ZapfChancery-MediumItalic: Standard "(001.007S)" Standard ROM
++*Font ZapfDingbats: Special "(001.004S)" Standard ROM
++
+--- foo2zjs/PPD/Dell-C1760.ppd	1970-01-01 00:00:00.000000000 +0000
++++ foo2zjs/PPD/Dell-C1760.ppd	2014-04-01 11:06:30.000000000 +0000
+@@ -0,0 +1,433 @@
++*PPD-Adobe: "4.3"
++*%
++*% For information on using this, and to obtain the required backend
++*% script, consult http://www.openprinting.org/
++*%
++*% This file is published under the GNU General Public License
++*%
++*% PPD-O-MATIC (3.0.0 or newer) generated this PPD file. It is for use with 
++*% all programs and environments which use PPD files for dealing with
++*% printer capability information. The printer must be configured with the
++*% "foomatic-rip" backend filter script of Foomatic 3.0.0 or newer. This 
++*% file and "foomatic-rip" work together to support PPD-controlled printer
++*% driver option access with arbitrary free software printer drivers and
++*% printing spoolers.
++*%
++*% To save this file on your disk, wait until the download has completed
++*% (the animation of the browser logo must stop) and then use the
++*% "Save as..." command in the "File" menu of your browser or in the 
++*% pop-up manu when you click on this document with the right mouse button.
++*% DO NOT cut and paste this file into an editor with your mouse. This can
++*% introduce additional line breaks which lead to unexpected results.
++*%
++*% You may save this file as 'Dell-C1760-foo2hbpl1.ppd'
++*%
++*%
++*FormatVersion:	"4.3"
++*FileVersion:	"1.1"
++*LanguageVersion: English 
++*LanguageEncoding: ISOLatin1
++*PCFileName:	"FOO2HBPL.PPD"
++*Manufacturer:	"Dell"
++*Product:	"(C1760)"
++*cupsVersion:	1.0
++*cupsManualCopies: True
++*cupsModelNumber:  2
++*cupsFilter:	"application/vnd.cups-postscript 0 foomatic-rip"
++*%pprRIP:        foomatic-rip other
++*ModelName:     "Dell C1760"
++*ShortNickName: "Dell C1760 foo2hbpl1"
++*NickName:      "Dell C1760 Foomatic/foo2hbpl1 (recommended)"
++*PSVersion:	"(3010.000) 550"
++*PSVersion:	"(3010.000) 651"
++*PSVersion:	"(3010.000) 652"
++*PSVersion:	"(3010.000) 653"
++*PSVersion:	"(3010.000) 704"
++*PSVersion:	"(3010.000) 705"
++*PSVersion:	"(3010.000) 800"
++*LanguageLevel:	"3"
++*ColorDevice:	True
++*DefaultColorSpace: RGB
++*FileSystem:	False
++*Throughput:	"1"
++*LandscapeOrientation: Plus90
++*TTRasterizer:	Type42
++*1284DeviceID: "DRV:Dfoo2hbpl1,R1,M0,TF;"
++
++*driverName foo2hbpl1/foo2hbpl1: ""
++*driverType F/Filter: ""
++*driverUrl: "http://foo2hbpl.rkkda.com/"
++*driverObsolete: False
++
++
++
++
++*HWMargins: 9 12.00 9 12
++*VariablePaperSize: True
++*MaxMediaWidth: 100000
++*MaxMediaHeight: 100000
++*NonUIOrderDependency: 135 AnySetup *CustomPageSize
++*CustomPageSize True: "pop pop pop pop pop
++%% FoomaticRIPOptionSetting: PageSize=Custom"
++*End
++*FoomaticRIPOptionSetting PageSize=Custom: "-pCustom.%0x%1 "
++*ParamCustomPageSize Width: 1 points 36 100000
++*ParamCustomPageSize Height: 2 points 36 100000
++*ParamCustomPageSize Orientation: 3 int 0 0
++*ParamCustomPageSize WidthOffset: 4 points 0 0
++*ParamCustomPageSize HeightOffset: 5 points 0 0
++
++*FoomaticIDs: Dell-C1760 foo2hbpl1
++*FoomaticRIPCommandLine: "foo2hbpl1-wrapper %A"
++
++*OpenGroup: General/General
++
++*OpenUI *Quality/Printing Quality: PickOne
++*FoomaticRIPOption Quality: enum CmdLine A
++*OrderDependency: 110 AnySetup *Quality
++*DefaultQuality: normal
++*Quality draft/Draft: "%% FoomaticRIPOptionSetting: Quality=draft"
++*FoomaticRIPOptionSetting Quality=draft: " -t  "
++*Quality normal/Normal: "%% FoomaticRIPOptionSetting: Quality=normal"
++*FoomaticRIPOptionSetting Quality=normal: "  "
++*CloseUI: *Quality
++
++*OpenUI *ColorMode/Color Mode: PickOne
++*FoomaticRIPOption ColorMode: enum CmdLine A
++*OrderDependency: 120 AnySetup *ColorMode
++*DefaultColorMode: Monochrome
++*ColorMode Color/Color: "%% FoomaticRIPOptionSetting: ColorMode=Color"
++*FoomaticRIPOptionSetting ColorMode=Color: "-c "
++*ColorMode Monochrome/Monochrome: "%% FoomaticRIPOptionSetting: ColorMode=Monochrome"
++*FoomaticRIPOptionSetting ColorMode=Monochrome: " "
++*CloseUI: *ColorMode
++
++*OpenUI *PageSize/Page Size: PickOne
++*FoomaticRIPOption PageSize: enum CmdLine A
++*OrderDependency: 135 AnySetup *PageSize
++*DefaultPageSize: Letter
++*PageSize Letter/Letter: "%% FoomaticRIPOptionSetting: PageSize=Letter"
++*FoomaticRIPOptionSetting PageSize=Letter: "-p4 "
++*PageSize A4/A4: "%% FoomaticRIPOptionSetting: PageSize=A4"
++*FoomaticRIPOptionSetting PageSize=A4: "-p1 "
++*PageSize B5jis/B5 (JIS): "%% FoomaticRIPOptionSetting: PageSize=B5jis"
++*FoomaticRIPOptionSetting PageSize=B5jis: "-p2 "
++*PageSize Env10/Env #10: "%% FoomaticRIPOptionSetting: PageSize=Env10"
++*FoomaticRIPOptionSetting PageSize=Env10: "-p9 "
++*PageSize EnvC5/Env C5: "%% FoomaticRIPOptionSetting: PageSize=EnvC5"
++*FoomaticRIPOptionSetting PageSize=EnvC5: "-p11 "
++*PageSize EnvDL/Env DL: "%% FoomaticRIPOptionSetting: PageSize=EnvDL"
++*FoomaticRIPOptionSetting PageSize=EnvDL: "-p12 "
++*PageSize EnvMonarch/Env Monarch: "%% FoomaticRIPOptionSetting: PageSize=EnvMonarch"
++*FoomaticRIPOptionSetting PageSize=EnvMonarch: "-p10 "
++*PageSize Executive/Executive: "%% FoomaticRIPOptionSetting: PageSize=Executive"
++*FoomaticRIPOptionSetting PageSize=Executive: "-p5 "
++*PageSize FanfoldGermanLegal/Fanfold German Legal: "%% FoomaticRIPOptionSetting: PageSize=FanfoldGermanLegal"
++*FoomaticRIPOptionSetting PageSize=FanfoldGermanLegal: "-p6 "
++*PageSize Folio/Folio: "%% FoomaticRIPOptionSetting: PageSize=Folio"
++*FoomaticRIPOptionSetting PageSize=Folio: "-p6 "
++*PageSize Legal/Legal: "%% FoomaticRIPOptionSetting: PageSize=Legal"
++*FoomaticRIPOptionSetting PageSize=Legal: "-p7 "
++*CloseUI: *PageSize
++
++*OpenUI *PageRegion: PickOne
++*OrderDependency: 135 AnySetup *PageRegion
++*DefaultPageRegion: Letter
++*PageRegion Letter/Letter: "%% FoomaticRIPOptionSetting: PageSize=Letter"
++*PageRegion A4/A4: "%% FoomaticRIPOptionSetting: PageSize=A4"
++*PageRegion B5jis/B5 (JIS): "%% FoomaticRIPOptionSetting: PageSize=B5jis"
++*PageRegion Env10/Env #10: "%% FoomaticRIPOptionSetting: PageSize=Env10"
++*PageRegion EnvC5/Env C5: "%% FoomaticRIPOptionSetting: PageSize=EnvC5"
++*PageRegion EnvDL/Env DL: "%% FoomaticRIPOptionSetting: PageSize=EnvDL"
++*PageRegion EnvMonarch/Env Monarch: "%% FoomaticRIPOptionSetting: PageSize=EnvMonarch"
++*PageRegion Executive/Executive: "%% FoomaticRIPOptionSetting: PageSize=Executive"
++*PageRegion FanfoldGermanLegal/Fanfold German Legal: "%% FoomaticRIPOptionSetting: PageSize=FanfoldGermanLegal"
++*PageRegion Folio/Folio: "%% FoomaticRIPOptionSetting: PageSize=Folio"
++*PageRegion Legal/Legal: "%% FoomaticRIPOptionSetting: PageSize=Legal"
++*CloseUI: *PageRegion
++
++*DefaultImageableArea: Letter
++*ImageableArea Letter/Letter: "9 12.00 603 780.00"
++*ImageableArea A4/A4: "9 12.00 586 830.00"
++*ImageableArea B5jis/B5 (JIS): "9 12.00 509 715.00"
++*ImageableArea Env10/Env #10: "9 12.00 288 672.00"
++*ImageableArea EnvC5/Env C5: "9 12.00 450 637.00"
++*ImageableArea EnvDL/Env DL: "9 12.00 302 611.00"
++*ImageableArea EnvMonarch/Env Monarch: "9 12.00 270 528.00"
++*ImageableArea Executive/Executive: "9 12.00 513 744.00"
++*ImageableArea FanfoldGermanLegal/Fanfold German Legal: "9 12.00 603 996.00"
++*ImageableArea Folio/Folio: "9 12.00 603 924.00"
++*ImageableArea Legal/Legal: "9 12.00 603 996.00"
++
++*DefaultPaperDimension: Letter
++*PaperDimension Letter/Letter: "612 792"
++*PaperDimension A4/A4: "595 842"
++*PaperDimension B5jis/B5 (JIS): "518 727"
++*PaperDimension Env10/Env #10: "297 684"
++*PaperDimension EnvC5/Env C5: "459 649"
++*PaperDimension EnvDL/Env DL: "311 623"
++*PaperDimension EnvMonarch/Env Monarch: "279 540"
++*PaperDimension Executive/Executive: "522 756"
++*PaperDimension FanfoldGermanLegal/Fanfold German Legal: "612 1008"
++*PaperDimension Folio/Folio: "612 936"
++*PaperDimension Legal/Legal: "612 1008"
++
++*OpenUI *MediaType/Media Type: PickOne
++*FoomaticRIPOption MediaType: enum CmdLine A
++*OrderDependency: 150 AnySetup *MediaType
++*DefaultMediaType: plain
++*MediaType plain/Plain Paper: "%% FoomaticRIPOptionSetting: MediaType=plain"
++*FoomaticRIPOptionSetting MediaType=plain: "-m1 "
++*MediaType plain2/Plain Paper Side 2: "%% FoomaticRIPOptionSetting: MediaType=plain2"
++*FoomaticRIPOptionSetting MediaType=plain2: "-m8 "
++*MediaType bond/Bond: "%% FoomaticRIPOptionSetting: MediaType=bond"
++*FoomaticRIPOptionSetting MediaType=bond: "-m2 "
++*MediaType bond2/Bond Side 2: "%% FoomaticRIPOptionSetting: MediaType=bond2"
++*FoomaticRIPOptionSetting MediaType=bond2: "-m9 "
++*MediaType envelope/Envelope: "%% FoomaticRIPOptionSetting: MediaType=envelope"
++*FoomaticRIPOptionSetting MediaType=envelope: "-m6 "
++*MediaType labels/Labels: "%% FoomaticRIPOptionSetting: MediaType=labels"
++*FoomaticRIPOptionSetting MediaType=labels: "-m5 "
++*MediaType lwcard/Light Weight Card: "%% FoomaticRIPOptionSetting: MediaType=lwcard"
++*FoomaticRIPOptionSetting MediaType=lwcard: "-m3 "
++*MediaType lwcard2/Light Weight Card Side 2: "%% FoomaticRIPOptionSetting: MediaType=lwcard2"
++*FoomaticRIPOptionSetting MediaType=lwcard2: "-m10 "
++*MediaType lwgcard/Light Weight Glossy Card: "%% FoomaticRIPOptionSetting: MediaType=lwgcard"
++*FoomaticRIPOptionSetting MediaType=lwgcard: "-m4 "
++*MediaType lwgcard2/Light Weight Glossy Card Side 2: "%% FoomaticRIPOptionSetting: MediaType=lwgcard2"
++*FoomaticRIPOptionSetting MediaType=lwgcard2: "-m11 "
++*MediaType recycled/Recycled Paper: "%% FoomaticRIPOptionSetting: MediaType=recycled"
++*FoomaticRIPOptionSetting MediaType=recycled: "-m7 "
++*MediaType recycled2/Recycled Paper Side 2: "%% FoomaticRIPOptionSetting: MediaType=recycled2"
++*FoomaticRIPOptionSetting MediaType=recycled2: "-m12 "
++*CloseUI: *MediaType
++
++*OpenUI *Copies/Copies: PickOne
++*FoomaticRIPOption Copies: int CmdLine A
++*FoomaticRIPOptionPrototype Copies: "-n%s "
++*FoomaticRIPOptionRange Copies: 1 100
++*OrderDependency: 220 AnySetup *Copies
++*DefaultCopies: 1
++*FoomaticRIPDefaultCopies: 1
++*Copies 1/1: "%% FoomaticRIPOptionSetting: Copies=1"
++*Copies 2/2: "%% FoomaticRIPOptionSetting: Copies=2"
++*Copies 3/3: "%% FoomaticRIPOptionSetting: Copies=3"
++*Copies 4/4: "%% FoomaticRIPOptionSetting: Copies=4"
++*Copies 5/5: "%% FoomaticRIPOptionSetting: Copies=5"
++*Copies 6/6: "%% FoomaticRIPOptionSetting: Copies=6"
++*Copies 7/7: "%% FoomaticRIPOptionSetting: Copies=7"
++*Copies 8/8: "%% FoomaticRIPOptionSetting: Copies=8"
++*Copies 9/9: "%% FoomaticRIPOptionSetting: Copies=9"
++*Copies 10/10: "%% FoomaticRIPOptionSetting: Copies=10"
++*Copies 11/11: "%% FoomaticRIPOptionSetting: Copies=11"
++*Copies 12/12: "%% FoomaticRIPOptionSetting: Copies=12"
++*Copies 13/13: "%% FoomaticRIPOptionSetting: Copies=13"
++*Copies 14/14: "%% FoomaticRIPOptionSetting: Copies=14"
++*Copies 15/15: "%% FoomaticRIPOptionSetting: Copies=15"
++*Copies 16/16: "%% FoomaticRIPOptionSetting: Copies=16"
++*Copies 17/17: "%% FoomaticRIPOptionSetting: Copies=17"
++*Copies 18/18: "%% FoomaticRIPOptionSetting: Copies=18"
++*Copies 19/19: "%% FoomaticRIPOptionSetting: Copies=19"
++*Copies 20/20: "%% FoomaticRIPOptionSetting: Copies=20"
++*Copies 21/21: "%% FoomaticRIPOptionSetting: Copies=21"
++*Copies 22/22: "%% FoomaticRIPOptionSetting: Copies=22"
++*Copies 23/23: "%% FoomaticRIPOptionSetting: Copies=23"
++*Copies 24/24: "%% FoomaticRIPOptionSetting: Copies=24"
++*Copies 25/25: "%% FoomaticRIPOptionSetting: Copies=25"
++*Copies 26/26: "%% FoomaticRIPOptionSetting: Copies=26"
++*Copies 27/27: "%% FoomaticRIPOptionSetting: Copies=27"
++*Copies 28/28: "%% FoomaticRIPOptionSetting: Copies=28"
++*Copies 29/29: "%% FoomaticRIPOptionSetting: Copies=29"
++*Copies 30/30: "%% FoomaticRIPOptionSetting: Copies=30"
++*Copies 31/31: "%% FoomaticRIPOptionSetting: Copies=31"
++*Copies 32/32: "%% FoomaticRIPOptionSetting: Copies=32"
++*Copies 33/33: "%% FoomaticRIPOptionSetting: Copies=33"
++*Copies 34/34: "%% FoomaticRIPOptionSetting: Copies=34"
++*Copies 35/35: "%% FoomaticRIPOptionSetting: Copies=35"
++*Copies 36/36: "%% FoomaticRIPOptionSetting: Copies=36"
++*Copies 37/37: "%% FoomaticRIPOptionSetting: Copies=37"
++*Copies 38/38: "%% FoomaticRIPOptionSetting: Copies=38"
++*Copies 39/39: "%% FoomaticRIPOptionSetting: Copies=39"
++*Copies 40/40: "%% FoomaticRIPOptionSetting: Copies=40"
++*Copies 41/41: "%% FoomaticRIPOptionSetting: Copies=41"
++*Copies 42/42: "%% FoomaticRIPOptionSetting: Copies=42"
++*Copies 43/43: "%% FoomaticRIPOptionSetting: Copies=43"
++*Copies 44/44: "%% FoomaticRIPOptionSetting: Copies=44"
++*Copies 45/45: "%% FoomaticRIPOptionSetting: Copies=45"
++*Copies 46/46: "%% FoomaticRIPOptionSetting: Copies=46"
++*Copies 47/47: "%% FoomaticRIPOptionSetting: Copies=47"
++*Copies 48/48: "%% FoomaticRIPOptionSetting: Copies=48"
++*Copies 49/49: "%% FoomaticRIPOptionSetting: Copies=49"
++*Copies 50/50: "%% FoomaticRIPOptionSetting: Copies=50"
++*Copies 51/51: "%% FoomaticRIPOptionSetting: Copies=51"
++*Copies 52/52: "%% FoomaticRIPOptionSetting: Copies=52"
++*Copies 53/53: "%% FoomaticRIPOptionSetting: Copies=53"
++*Copies 54/54: "%% FoomaticRIPOptionSetting: Copies=54"
++*Copies 55/55: "%% FoomaticRIPOptionSetting: Copies=55"
++*Copies 56/56: "%% FoomaticRIPOptionSetting: Copies=56"
++*Copies 57/57: "%% FoomaticRIPOptionSetting: Copies=57"
++*Copies 58/58: "%% FoomaticRIPOptionSetting: Copies=58"
++*Copies 59/59: "%% FoomaticRIPOptionSetting: Copies=59"
++*Copies 60/60: "%% FoomaticRIPOptionSetting: Copies=60"
++*Copies 61/61: "%% FoomaticRIPOptionSetting: Copies=61"
++*Copies 62/62: "%% FoomaticRIPOptionSetting: Copies=62"
++*Copies 63/63: "%% FoomaticRIPOptionSetting: Copies=63"
++*Copies 64/64: "%% FoomaticRIPOptionSetting: Copies=64"
++*Copies 65/65: "%% FoomaticRIPOptionSetting: Copies=65"
++*Copies 66/66: "%% FoomaticRIPOptionSetting: Copies=66"
++*Copies 67/67: "%% FoomaticRIPOptionSetting: Copies=67"
++*Copies 68/68: "%% FoomaticRIPOptionSetting: Copies=68"
++*Copies 69/69: "%% FoomaticRIPOptionSetting: Copies=69"
++*Copies 70/70: "%% FoomaticRIPOptionSetting: Copies=70"
++*Copies 71/71: "%% FoomaticRIPOptionSetting: Copies=71"
++*Copies 72/72: "%% FoomaticRIPOptionSetting: Copies=72"
++*Copies 73/73: "%% FoomaticRIPOptionSetting: Copies=73"
++*Copies 74/74: "%% FoomaticRIPOptionSetting: Copies=74"
++*Copies 75/75: "%% FoomaticRIPOptionSetting: Copies=75"
++*Copies 76/76: "%% FoomaticRIPOptionSetting: Copies=76"
++*Copies 77/77: "%% FoomaticRIPOptionSetting: Copies=77"
++*Copies 78/78: "%% FoomaticRIPOptionSetting: Copies=78"
++*Copies 79/79: "%% FoomaticRIPOptionSetting: Copies=79"
++*Copies 80/80: "%% FoomaticRIPOptionSetting: Copies=80"
++*Copies 81/81: "%% FoomaticRIPOptionSetting: Copies=81"
++*Copies 82/82: "%% FoomaticRIPOptionSetting: Copies=82"
++*Copies 83/83: "%% FoomaticRIPOptionSetting: Copies=83"
++*Copies 84/84: "%% FoomaticRIPOptionSetting: Copies=84"
++*Copies 85/85: "%% FoomaticRIPOptionSetting: Copies=85"
++*Copies 86/86: "%% FoomaticRIPOptionSetting: Copies=86"
++*Copies 87/87: "%% FoomaticRIPOptionSetting: Copies=87"
++*Copies 88/88: "%% FoomaticRIPOptionSetting: Copies=88"
++*Copies 89/89: "%% FoomaticRIPOptionSetting: Copies=89"
++*Copies 90/90: "%% FoomaticRIPOptionSetting: Copies=90"
++*Copies 91/91: "%% FoomaticRIPOptionSetting: Copies=91"
++*Copies 92/92: "%% FoomaticRIPOptionSetting: Copies=92"
++*Copies 93/93: "%% FoomaticRIPOptionSetting: Copies=93"
++*Copies 94/94: "%% FoomaticRIPOptionSetting: Copies=94"
++*Copies 95/95: "%% FoomaticRIPOptionSetting: Copies=95"
++*Copies 96/96: "%% FoomaticRIPOptionSetting: Copies=96"
++*Copies 97/97: "%% FoomaticRIPOptionSetting: Copies=97"
++*Copies 98/98: "%% FoomaticRIPOptionSetting: Copies=98"
++*Copies 99/99: "%% FoomaticRIPOptionSetting: Copies=99"
++*Copies 100/100: "%% FoomaticRIPOptionSetting: Copies=100"
++*CloseUI: *Copies
++
++*CloseGroup: General
++
++*OpenGroup: Adjustment/Adjustment
++
++*OpenUI *halftone/Halftone Algorithm: PickOne
++*FoomaticRIPOption halftone: enum CmdLine A
++*OrderDependency: 110 AnySetup *halftone
++*Defaulthalftone: default
++*halftone default/Default: "%% FoomaticRIPOptionSetting: halftone=default"
++*FoomaticRIPOptionSetting halftone=default: "  "
++*halftone as/Accurate Screens (better): "%% FoomaticRIPOptionSetting: halftone=as"
++*FoomaticRIPOptionSetting halftone=as: " -qas  "
++*halftone standard/Standard: "%% FoomaticRIPOptionSetting: halftone=standard"
++*FoomaticRIPOptionSetting halftone=standard: " -q1  "
++*halftone wts/Well Tempered Screens (best): "%% FoomaticRIPOptionSetting: halftone=wts"
++*FoomaticRIPOptionSetting halftone=wts: " -qwts  "
++*CloseUI: *halftone
++
++*OpenUI *ICM/ICM Color Profile: PickOne
++*FoomaticRIPOption ICM: enum CmdLine A
++*OrderDependency: 300 AnySetup *ICM
++*DefaultICM: none
++*ICM none/No ICM color correction: "%% FoomaticRIPOptionSetting: ICM=none"
++*FoomaticRIPOptionSetting ICM=none: "-C10 -Gnone.icm "
++*ICM testing/File testing.icm: "%% FoomaticRIPOptionSetting: ICM=testing"
++*FoomaticRIPOptionSetting ICM=testing: "-C10 -Gtesting.icm "
++*ICM testing2/File testing2.icm: "%% FoomaticRIPOptionSetting: ICM=testing2"
++*FoomaticRIPOptionSetting ICM=testing2: "-C10 -Gtesting2.icm "
++*ICM testing3/File testing3.icm: "%% FoomaticRIPOptionSetting: ICM=testing3"
++*FoomaticRIPOptionSetting ICM=testing3: "-C10 -Gtesting3.icm "
++*CloseUI: *ICM
++
++*CloseGroup: Adjustment
++
++*OpenGroup: Miscellaneous/Miscellaneous
++
++*OpenUI *NupOrient/N-up Orientation: PickOne
++*FoomaticRIPOption NupOrient: enum CmdLine A
++*OrderDependency: 200 AnySetup *NupOrient
++*DefaultNupOrient: port
++*NupOrient land/Landscape: "%% FoomaticRIPOptionSetting: NupOrient=land"
++*FoomaticRIPOptionSetting NupOrient=land: "-ol "
++*NupOrient port/Portrait: "%% FoomaticRIPOptionSetting: NupOrient=port"
++*FoomaticRIPOptionSetting NupOrient=port: " "
++*NupOrient sea/Seascape: "%% FoomaticRIPOptionSetting: NupOrient=sea"
++*FoomaticRIPOptionSetting NupOrient=sea: "-os "
++*CloseUI: *NupOrient
++
++*OpenUI *NupPages/N-up Printing: PickOne
++*FoomaticRIPOption NupPages: enum CmdLine A
++*OrderDependency: 200 AnySetup *NupPages
++*DefaultNupPages: 1up
++*NupPages 1up/1-up: "%% FoomaticRIPOptionSetting: NupPages=1up"
++*FoomaticRIPOptionSetting NupPages=1up: " "
++*NupPages 2up/2-up: "%% FoomaticRIPOptionSetting: NupPages=2up"
++*FoomaticRIPOptionSetting NupPages=2up: "-2 "
++*NupPages 3up/3-up: "%% FoomaticRIPOptionSetting: NupPages=3up"
++*FoomaticRIPOptionSetting NupPages=3up: "-3 "
++*NupPages 4up/4-up: "%% FoomaticRIPOptionSetting: NupPages=4up"
++*FoomaticRIPOptionSetting NupPages=4up: "-4 "
++*NupPages 6up/6-up: "%% FoomaticRIPOptionSetting: NupPages=6up"
++*FoomaticRIPOptionSetting NupPages=6up: "-6 "
++*NupPages 8up/8-up: "%% FoomaticRIPOptionSetting: NupPages=8up"
++*FoomaticRIPOptionSetting NupPages=8up: "-8 "
++*NupPages 10up/10-up: "%% FoomaticRIPOptionSetting: NupPages=10up"
++*FoomaticRIPOptionSetting NupPages=10up: "-10 "
++*NupPages 12up/12-up: "%% FoomaticRIPOptionSetting: NupPages=12up"
++*FoomaticRIPOptionSetting NupPages=12up: "-12 "
++*NupPages 14up/14-up: "%% FoomaticRIPOptionSetting: NupPages=14up"
++*FoomaticRIPOptionSetting NupPages=14up: "-14 "
++*NupPages 15up/15-up: "%% FoomaticRIPOptionSetting: NupPages=15up"
++*FoomaticRIPOptionSetting NupPages=15up: "-15 "
++*NupPages 16up/16-up: "%% FoomaticRIPOptionSetting: NupPages=16up"
++*FoomaticRIPOptionSetting NupPages=16up: "-16 "
++*NupPages 18up/18-up: "%% FoomaticRIPOptionSetting: NupPages=18up"
++*FoomaticRIPOptionSetting NupPages=18up: "-18 "
++*CloseUI: *NupPages
++
++*CloseGroup: Miscellaneous
++
++
++*% Generic boilerplate PPD stuff as standard PostScript fonts and so on
++
++*DefaultFont: Courier
++*Font AvantGarde-Book: Standard "(001.006S)" Standard ROM
++*Font AvantGarde-BookOblique: Standard "(001.006S)" Standard ROM
++*Font AvantGarde-Demi: Standard "(001.007S)" Standard ROM
++*Font AvantGarde-DemiOblique: Standard "(001.007S)" Standard ROM
++*Font Bookman-Demi: Standard "(001.004S)" Standard ROM
++*Font Bookman-DemiItalic: Standard "(001.004S)" Standard ROM
++*Font Bookman-Light: Standard "(001.004S)" Standard ROM
++*Font Bookman-LightItalic: Standard "(001.004S)" Standard ROM
++*Font Courier: Standard "(002.004S)" Standard ROM
++*Font Courier-Bold: Standard "(002.004S)" Standard ROM
++*Font Courier-BoldOblique: Standard "(002.004S)" Standard ROM
++*Font Courier-Oblique: Standard "(002.004S)" Standard ROM
++*Font Helvetica: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Bold: Standard "(001.007S)" Standard ROM
++*Font Helvetica-BoldOblique: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Narrow-Bold: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow-BoldOblique: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow-Oblique: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Oblique: Standard "(001.006S)" Standard ROM
++*Font NewCenturySchlbk-Bold: Standard "(001.009S)" Standard ROM
++*Font NewCenturySchlbk-BoldItalic: Standard "(001.007S)" Standard ROM
++*Font NewCenturySchlbk-Italic: Standard "(001.006S)" Standard ROM
++*Font NewCenturySchlbk-Roman: Standard "(001.007S)" Standard ROM
++*Font Palatino-Bold: Standard "(001.005S)" Standard ROM
++*Font Palatino-BoldItalic: Standard "(001.005S)" Standard ROM
++*Font Palatino-Italic: Standard "(001.005S)" Standard ROM
++*Font Palatino-Roman: Standard "(001.005S)" Standard ROM
++*Font Symbol: Special "(001.007S)" Special ROM
++*Font Times-Bold: Standard "(001.007S)" Standard ROM
++*Font Times-BoldItalic: Standard "(001.009S)" Standard ROM
++*Font Times-Italic: Standard "(001.007S)" Standard ROM
++*Font Times-Roman: Standard "(001.007S)" Standard ROM
++*Font ZapfChancery-MediumItalic: Standard "(001.007S)" Standard ROM
++*Font ZapfDingbats: Special "(001.004S)" Standard ROM
++
+--- foo2zjs/PPD/Epson-AcuLaser_C1700.ppd	1970-01-01 00:00:00.000000000 +0000
++++ foo2zjs/PPD/Epson-AcuLaser_C1700.ppd	2014-04-01 11:06:31.000000000 +0000
+@@ -0,0 +1,433 @@
++*PPD-Adobe: "4.3"
++*%
++*% For information on using this, and to obtain the required backend
++*% script, consult http://www.openprinting.org/
++*%
++*% This file is published under the GNU General Public License
++*%
++*% PPD-O-MATIC (3.0.0 or newer) generated this PPD file. It is for use with 
++*% all programs and environments which use PPD files for dealing with
++*% printer capability information. The printer must be configured with the
++*% "foomatic-rip" backend filter script of Foomatic 3.0.0 or newer. This 
++*% file and "foomatic-rip" work together to support PPD-controlled printer
++*% driver option access with arbitrary free software printer drivers and
++*% printing spoolers.
++*%
++*% To save this file on your disk, wait until the download has completed
++*% (the animation of the browser logo must stop) and then use the
++*% "Save as..." command in the "File" menu of your browser or in the 
++*% pop-up manu when you click on this document with the right mouse button.
++*% DO NOT cut and paste this file into an editor with your mouse. This can
++*% introduce additional line breaks which lead to unexpected results.
++*%
++*% You may save this file as 'Epson-AcuLaser_C1700-foo2hbpl1.ppd'
++*%
++*%
++*FormatVersion:	"4.3"
++*FileVersion:	"1.1"
++*LanguageVersion: English 
++*LanguageEncoding: ISOLatin1
++*PCFileName:	"FOO2HBPL.PPD"
++*Manufacturer:	"Epson"
++*Product:	"(AcuLaser C1700)"
++*cupsVersion:	1.0
++*cupsManualCopies: True
++*cupsModelNumber:  2
++*cupsFilter:	"application/vnd.cups-postscript 0 foomatic-rip"
++*%pprRIP:        foomatic-rip other
++*ModelName:     "Epson AcuLaser C1700"
++*ShortNickName: "Epson AcuLaser C1700 foo2hbpl1"
++*NickName:      "Epson AcuLaser C1700 Foomatic/foo2hbpl1 (recommended)"
++*PSVersion:	"(3010.000) 550"
++*PSVersion:	"(3010.000) 651"
++*PSVersion:	"(3010.000) 652"
++*PSVersion:	"(3010.000) 653"
++*PSVersion:	"(3010.000) 704"
++*PSVersion:	"(3010.000) 705"
++*PSVersion:	"(3010.000) 800"
++*LanguageLevel:	"3"
++*ColorDevice:	True
++*DefaultColorSpace: RGB
++*FileSystem:	False
++*Throughput:	"1"
++*LandscapeOrientation: Plus90
++*TTRasterizer:	Type42
++*1284DeviceID: "DRV:Dfoo2hbpl1,R1,M0,TF;"
++
++*driverName foo2hbpl1/foo2hbpl1: ""
++*driverType F/Filter: ""
++*driverUrl: "http://foo2hbpl.rkkda.com/"
++*driverObsolete: False
++
++
++
++
++*HWMargins: 9 12.00 9 12
++*VariablePaperSize: True
++*MaxMediaWidth: 100000
++*MaxMediaHeight: 100000
++*NonUIOrderDependency: 135 AnySetup *CustomPageSize
++*CustomPageSize True: "pop pop pop pop pop
++%% FoomaticRIPOptionSetting: PageSize=Custom"
++*End
++*FoomaticRIPOptionSetting PageSize=Custom: "-pCustom.%0x%1 "
++*ParamCustomPageSize Width: 1 points 36 100000
++*ParamCustomPageSize Height: 2 points 36 100000
++*ParamCustomPageSize Orientation: 3 int 0 0
++*ParamCustomPageSize WidthOffset: 4 points 0 0
++*ParamCustomPageSize HeightOffset: 5 points 0 0
++
++*FoomaticIDs: Epson-AcuLaser_C1700 foo2hbpl1
++*FoomaticRIPCommandLine: "foo2hbpl1-wrapper %A"
++
++*OpenGroup: General/General
++
++*OpenUI *Quality/Printing Quality: PickOne
++*FoomaticRIPOption Quality: enum CmdLine A
++*OrderDependency: 110 AnySetup *Quality
++*DefaultQuality: normal
++*Quality draft/Draft: "%% FoomaticRIPOptionSetting: Quality=draft"
++*FoomaticRIPOptionSetting Quality=draft: " -t  "
++*Quality normal/Normal: "%% FoomaticRIPOptionSetting: Quality=normal"
++*FoomaticRIPOptionSetting Quality=normal: "  "
++*CloseUI: *Quality
++
++*OpenUI *ColorMode/Color Mode: PickOne
++*FoomaticRIPOption ColorMode: enum CmdLine A
++*OrderDependency: 120 AnySetup *ColorMode
++*DefaultColorMode: Monochrome
++*ColorMode Color/Color: "%% FoomaticRIPOptionSetting: ColorMode=Color"
++*FoomaticRIPOptionSetting ColorMode=Color: "-c "
++*ColorMode Monochrome/Monochrome: "%% FoomaticRIPOptionSetting: ColorMode=Monochrome"
++*FoomaticRIPOptionSetting ColorMode=Monochrome: " "
++*CloseUI: *ColorMode
++
++*OpenUI *PageSize/Page Size: PickOne
++*FoomaticRIPOption PageSize: enum CmdLine A
++*OrderDependency: 135 AnySetup *PageSize
++*DefaultPageSize: Letter
++*PageSize Letter/Letter: "%% FoomaticRIPOptionSetting: PageSize=Letter"
++*FoomaticRIPOptionSetting PageSize=Letter: "-p4 "
++*PageSize A4/A4: "%% FoomaticRIPOptionSetting: PageSize=A4"
++*FoomaticRIPOptionSetting PageSize=A4: "-p1 "
++*PageSize B5jis/B5 (JIS): "%% FoomaticRIPOptionSetting: PageSize=B5jis"
++*FoomaticRIPOptionSetting PageSize=B5jis: "-p2 "
++*PageSize Env10/Env #10: "%% FoomaticRIPOptionSetting: PageSize=Env10"
++*FoomaticRIPOptionSetting PageSize=Env10: "-p9 "
++*PageSize EnvC5/Env C5: "%% FoomaticRIPOptionSetting: PageSize=EnvC5"
++*FoomaticRIPOptionSetting PageSize=EnvC5: "-p11 "
++*PageSize EnvDL/Env DL: "%% FoomaticRIPOptionSetting: PageSize=EnvDL"
++*FoomaticRIPOptionSetting PageSize=EnvDL: "-p12 "
++*PageSize EnvMonarch/Env Monarch: "%% FoomaticRIPOptionSetting: PageSize=EnvMonarch"
++*FoomaticRIPOptionSetting PageSize=EnvMonarch: "-p10 "
++*PageSize Executive/Executive: "%% FoomaticRIPOptionSetting: PageSize=Executive"
++*FoomaticRIPOptionSetting PageSize=Executive: "-p5 "
++*PageSize FanfoldGermanLegal/Fanfold German Legal: "%% FoomaticRIPOptionSetting: PageSize=FanfoldGermanLegal"
++*FoomaticRIPOptionSetting PageSize=FanfoldGermanLegal: "-p6 "
++*PageSize Folio/Folio: "%% FoomaticRIPOptionSetting: PageSize=Folio"
++*FoomaticRIPOptionSetting PageSize=Folio: "-p6 "
++*PageSize Legal/Legal: "%% FoomaticRIPOptionSetting: PageSize=Legal"
++*FoomaticRIPOptionSetting PageSize=Legal: "-p7 "
++*CloseUI: *PageSize
++
++*OpenUI *PageRegion: PickOne
++*OrderDependency: 135 AnySetup *PageRegion
++*DefaultPageRegion: Letter
++*PageRegion Letter/Letter: "%% FoomaticRIPOptionSetting: PageSize=Letter"
++*PageRegion A4/A4: "%% FoomaticRIPOptionSetting: PageSize=A4"
++*PageRegion B5jis/B5 (JIS): "%% FoomaticRIPOptionSetting: PageSize=B5jis"
++*PageRegion Env10/Env #10: "%% FoomaticRIPOptionSetting: PageSize=Env10"
++*PageRegion EnvC5/Env C5: "%% FoomaticRIPOptionSetting: PageSize=EnvC5"
++*PageRegion EnvDL/Env DL: "%% FoomaticRIPOptionSetting: PageSize=EnvDL"
++*PageRegion EnvMonarch/Env Monarch: "%% FoomaticRIPOptionSetting: PageSize=EnvMonarch"
++*PageRegion Executive/Executive: "%% FoomaticRIPOptionSetting: PageSize=Executive"
++*PageRegion FanfoldGermanLegal/Fanfold German Legal: "%% FoomaticRIPOptionSetting: PageSize=FanfoldGermanLegal"
++*PageRegion Folio/Folio: "%% FoomaticRIPOptionSetting: PageSize=Folio"
++*PageRegion Legal/Legal: "%% FoomaticRIPOptionSetting: PageSize=Legal"
++*CloseUI: *PageRegion
++
++*DefaultImageableArea: Letter
++*ImageableArea Letter/Letter: "9 12.00 603 780.00"
++*ImageableArea A4/A4: "9 12.00 586 830.00"
++*ImageableArea B5jis/B5 (JIS): "9 12.00 509 715.00"
++*ImageableArea Env10/Env #10: "9 12.00 288 672.00"
++*ImageableArea EnvC5/Env C5: "9 12.00 450 637.00"
++*ImageableArea EnvDL/Env DL: "9 12.00 302 611.00"
++*ImageableArea EnvMonarch/Env Monarch: "9 12.00 270 528.00"
++*ImageableArea Executive/Executive: "9 12.00 513 744.00"
++*ImageableArea FanfoldGermanLegal/Fanfold German Legal: "9 12.00 603 996.00"
++*ImageableArea Folio/Folio: "9 12.00 603 924.00"
++*ImageableArea Legal/Legal: "9 12.00 603 996.00"
++
++*DefaultPaperDimension: Letter
++*PaperDimension Letter/Letter: "612 792"
++*PaperDimension A4/A4: "595 842"
++*PaperDimension B5jis/B5 (JIS): "518 727"
++*PaperDimension Env10/Env #10: "297 684"
++*PaperDimension EnvC5/Env C5: "459 649"
++*PaperDimension EnvDL/Env DL: "311 623"
++*PaperDimension EnvMonarch/Env Monarch: "279 540"
++*PaperDimension Executive/Executive: "522 756"
++*PaperDimension FanfoldGermanLegal/Fanfold German Legal: "612 1008"
++*PaperDimension Folio/Folio: "612 936"
++*PaperDimension Legal/Legal: "612 1008"
++
++*OpenUI *MediaType/Media Type: PickOne
++*FoomaticRIPOption MediaType: enum CmdLine A
++*OrderDependency: 150 AnySetup *MediaType
++*DefaultMediaType: plain
++*MediaType plain/Plain Paper: "%% FoomaticRIPOptionSetting: MediaType=plain"
++*FoomaticRIPOptionSetting MediaType=plain: "-m1 "
++*MediaType plain2/Plain Paper Side 2: "%% FoomaticRIPOptionSetting: MediaType=plain2"
++*FoomaticRIPOptionSetting MediaType=plain2: "-m8 "
++*MediaType bond/Bond: "%% FoomaticRIPOptionSetting: MediaType=bond"
++*FoomaticRIPOptionSetting MediaType=bond: "-m2 "
++*MediaType bond2/Bond Side 2: "%% FoomaticRIPOptionSetting: MediaType=bond2"
++*FoomaticRIPOptionSetting MediaType=bond2: "-m9 "
++*MediaType envelope/Envelope: "%% FoomaticRIPOptionSetting: MediaType=envelope"
++*FoomaticRIPOptionSetting MediaType=envelope: "-m6 "
++*MediaType labels/Labels: "%% FoomaticRIPOptionSetting: MediaType=labels"
++*FoomaticRIPOptionSetting MediaType=labels: "-m5 "
++*MediaType lwcard/Light Weight Card: "%% FoomaticRIPOptionSetting: MediaType=lwcard"
++*FoomaticRIPOptionSetting MediaType=lwcard: "-m3 "
++*MediaType lwcard2/Light Weight Card Side 2: "%% FoomaticRIPOptionSetting: MediaType=lwcard2"
++*FoomaticRIPOptionSetting MediaType=lwcard2: "-m10 "
++*MediaType lwgcard/Light Weight Glossy Card: "%% FoomaticRIPOptionSetting: MediaType=lwgcard"
++*FoomaticRIPOptionSetting MediaType=lwgcard: "-m4 "
++*MediaType lwgcard2/Light Weight Glossy Card Side 2: "%% FoomaticRIPOptionSetting: MediaType=lwgcard2"
++*FoomaticRIPOptionSetting MediaType=lwgcard2: "-m11 "
++*MediaType recycled/Recycled Paper: "%% FoomaticRIPOptionSetting: MediaType=recycled"
++*FoomaticRIPOptionSetting MediaType=recycled: "-m7 "
++*MediaType recycled2/Recycled Paper Side 2: "%% FoomaticRIPOptionSetting: MediaType=recycled2"
++*FoomaticRIPOptionSetting MediaType=recycled2: "-m12 "
++*CloseUI: *MediaType
++
++*OpenUI *Copies/Copies: PickOne
++*FoomaticRIPOption Copies: int CmdLine A
++*FoomaticRIPOptionPrototype Copies: "-n%s "
++*FoomaticRIPOptionRange Copies: 1 100
++*OrderDependency: 220 AnySetup *Copies
++*DefaultCopies: 1
++*FoomaticRIPDefaultCopies: 1
++*Copies 1/1: "%% FoomaticRIPOptionSetting: Copies=1"
++*Copies 2/2: "%% FoomaticRIPOptionSetting: Copies=2"
++*Copies 3/3: "%% FoomaticRIPOptionSetting: Copies=3"
++*Copies 4/4: "%% FoomaticRIPOptionSetting: Copies=4"
++*Copies 5/5: "%% FoomaticRIPOptionSetting: Copies=5"
++*Copies 6/6: "%% FoomaticRIPOptionSetting: Copies=6"
++*Copies 7/7: "%% FoomaticRIPOptionSetting: Copies=7"
++*Copies 8/8: "%% FoomaticRIPOptionSetting: Copies=8"
++*Copies 9/9: "%% FoomaticRIPOptionSetting: Copies=9"
++*Copies 10/10: "%% FoomaticRIPOptionSetting: Copies=10"
++*Copies 11/11: "%% FoomaticRIPOptionSetting: Copies=11"
++*Copies 12/12: "%% FoomaticRIPOptionSetting: Copies=12"
++*Copies 13/13: "%% FoomaticRIPOptionSetting: Copies=13"
++*Copies 14/14: "%% FoomaticRIPOptionSetting: Copies=14"
++*Copies 15/15: "%% FoomaticRIPOptionSetting: Copies=15"
++*Copies 16/16: "%% FoomaticRIPOptionSetting: Copies=16"
++*Copies 17/17: "%% FoomaticRIPOptionSetting: Copies=17"
++*Copies 18/18: "%% FoomaticRIPOptionSetting: Copies=18"
++*Copies 19/19: "%% FoomaticRIPOptionSetting: Copies=19"
++*Copies 20/20: "%% FoomaticRIPOptionSetting: Copies=20"
++*Copies 21/21: "%% FoomaticRIPOptionSetting: Copies=21"
++*Copies 22/22: "%% FoomaticRIPOptionSetting: Copies=22"
++*Copies 23/23: "%% FoomaticRIPOptionSetting: Copies=23"
++*Copies 24/24: "%% FoomaticRIPOptionSetting: Copies=24"
++*Copies 25/25: "%% FoomaticRIPOptionSetting: Copies=25"
++*Copies 26/26: "%% FoomaticRIPOptionSetting: Copies=26"
++*Copies 27/27: "%% FoomaticRIPOptionSetting: Copies=27"
++*Copies 28/28: "%% FoomaticRIPOptionSetting: Copies=28"
++*Copies 29/29: "%% FoomaticRIPOptionSetting: Copies=29"
++*Copies 30/30: "%% FoomaticRIPOptionSetting: Copies=30"
++*Copies 31/31: "%% FoomaticRIPOptionSetting: Copies=31"
++*Copies 32/32: "%% FoomaticRIPOptionSetting: Copies=32"
++*Copies 33/33: "%% FoomaticRIPOptionSetting: Copies=33"
++*Copies 34/34: "%% FoomaticRIPOptionSetting: Copies=34"
++*Copies 35/35: "%% FoomaticRIPOptionSetting: Copies=35"
++*Copies 36/36: "%% FoomaticRIPOptionSetting: Copies=36"
++*Copies 37/37: "%% FoomaticRIPOptionSetting: Copies=37"
++*Copies 38/38: "%% FoomaticRIPOptionSetting: Copies=38"
++*Copies 39/39: "%% FoomaticRIPOptionSetting: Copies=39"
++*Copies 40/40: "%% FoomaticRIPOptionSetting: Copies=40"
++*Copies 41/41: "%% FoomaticRIPOptionSetting: Copies=41"
++*Copies 42/42: "%% FoomaticRIPOptionSetting: Copies=42"
++*Copies 43/43: "%% FoomaticRIPOptionSetting: Copies=43"
++*Copies 44/44: "%% FoomaticRIPOptionSetting: Copies=44"
++*Copies 45/45: "%% FoomaticRIPOptionSetting: Copies=45"
++*Copies 46/46: "%% FoomaticRIPOptionSetting: Copies=46"
++*Copies 47/47: "%% FoomaticRIPOptionSetting: Copies=47"
++*Copies 48/48: "%% FoomaticRIPOptionSetting: Copies=48"
++*Copies 49/49: "%% FoomaticRIPOptionSetting: Copies=49"
++*Copies 50/50: "%% FoomaticRIPOptionSetting: Copies=50"
++*Copies 51/51: "%% FoomaticRIPOptionSetting: Copies=51"
++*Copies 52/52: "%% FoomaticRIPOptionSetting: Copies=52"
++*Copies 53/53: "%% FoomaticRIPOptionSetting: Copies=53"
++*Copies 54/54: "%% FoomaticRIPOptionSetting: Copies=54"
++*Copies 55/55: "%% FoomaticRIPOptionSetting: Copies=55"
++*Copies 56/56: "%% FoomaticRIPOptionSetting: Copies=56"
++*Copies 57/57: "%% FoomaticRIPOptionSetting: Copies=57"
++*Copies 58/58: "%% FoomaticRIPOptionSetting: Copies=58"
++*Copies 59/59: "%% FoomaticRIPOptionSetting: Copies=59"
++*Copies 60/60: "%% FoomaticRIPOptionSetting: Copies=60"
++*Copies 61/61: "%% FoomaticRIPOptionSetting: Copies=61"
++*Copies 62/62: "%% FoomaticRIPOptionSetting: Copies=62"
++*Copies 63/63: "%% FoomaticRIPOptionSetting: Copies=63"
++*Copies 64/64: "%% FoomaticRIPOptionSetting: Copies=64"
++*Copies 65/65: "%% FoomaticRIPOptionSetting: Copies=65"
++*Copies 66/66: "%% FoomaticRIPOptionSetting: Copies=66"
++*Copies 67/67: "%% FoomaticRIPOptionSetting: Copies=67"
++*Copies 68/68: "%% FoomaticRIPOptionSetting: Copies=68"
++*Copies 69/69: "%% FoomaticRIPOptionSetting: Copies=69"
++*Copies 70/70: "%% FoomaticRIPOptionSetting: Copies=70"
++*Copies 71/71: "%% FoomaticRIPOptionSetting: Copies=71"
++*Copies 72/72: "%% FoomaticRIPOptionSetting: Copies=72"
++*Copies 73/73: "%% FoomaticRIPOptionSetting: Copies=73"
++*Copies 74/74: "%% FoomaticRIPOptionSetting: Copies=74"
++*Copies 75/75: "%% FoomaticRIPOptionSetting: Copies=75"
++*Copies 76/76: "%% FoomaticRIPOptionSetting: Copies=76"
++*Copies 77/77: "%% FoomaticRIPOptionSetting: Copies=77"
++*Copies 78/78: "%% FoomaticRIPOptionSetting: Copies=78"
++*Copies 79/79: "%% FoomaticRIPOptionSetting: Copies=79"
++*Copies 80/80: "%% FoomaticRIPOptionSetting: Copies=80"
++*Copies 81/81: "%% FoomaticRIPOptionSetting: Copies=81"
++*Copies 82/82: "%% FoomaticRIPOptionSetting: Copies=82"
++*Copies 83/83: "%% FoomaticRIPOptionSetting: Copies=83"
++*Copies 84/84: "%% FoomaticRIPOptionSetting: Copies=84"
++*Copies 85/85: "%% FoomaticRIPOptionSetting: Copies=85"
++*Copies 86/86: "%% FoomaticRIPOptionSetting: Copies=86"
++*Copies 87/87: "%% FoomaticRIPOptionSetting: Copies=87"
++*Copies 88/88: "%% FoomaticRIPOptionSetting: Copies=88"
++*Copies 89/89: "%% FoomaticRIPOptionSetting: Copies=89"
++*Copies 90/90: "%% FoomaticRIPOptionSetting: Copies=90"
++*Copies 91/91: "%% FoomaticRIPOptionSetting: Copies=91"
++*Copies 92/92: "%% FoomaticRIPOptionSetting: Copies=92"
++*Copies 93/93: "%% FoomaticRIPOptionSetting: Copies=93"
++*Copies 94/94: "%% FoomaticRIPOptionSetting: Copies=94"
++*Copies 95/95: "%% FoomaticRIPOptionSetting: Copies=95"
++*Copies 96/96: "%% FoomaticRIPOptionSetting: Copies=96"
++*Copies 97/97: "%% FoomaticRIPOptionSetting: Copies=97"
++*Copies 98/98: "%% FoomaticRIPOptionSetting: Copies=98"
++*Copies 99/99: "%% FoomaticRIPOptionSetting: Copies=99"
++*Copies 100/100: "%% FoomaticRIPOptionSetting: Copies=100"
++*CloseUI: *Copies
++
++*CloseGroup: General
++
++*OpenGroup: Adjustment/Adjustment
++
++*OpenUI *halftone/Halftone Algorithm: PickOne
++*FoomaticRIPOption halftone: enum CmdLine A
++*OrderDependency: 110 AnySetup *halftone
++*Defaulthalftone: default
++*halftone default/Default: "%% FoomaticRIPOptionSetting: halftone=default"
++*FoomaticRIPOptionSetting halftone=default: "  "
++*halftone as/Accurate Screens (better): "%% FoomaticRIPOptionSetting: halftone=as"
++*FoomaticRIPOptionSetting halftone=as: " -qas  "
++*halftone standard/Standard: "%% FoomaticRIPOptionSetting: halftone=standard"
++*FoomaticRIPOptionSetting halftone=standard: " -q1  "
++*halftone wts/Well Tempered Screens (best): "%% FoomaticRIPOptionSetting: halftone=wts"
++*FoomaticRIPOptionSetting halftone=wts: " -qwts  "
++*CloseUI: *halftone
++
++*OpenUI *ICM/ICM Color Profile: PickOne
++*FoomaticRIPOption ICM: enum CmdLine A
++*OrderDependency: 300 AnySetup *ICM
++*DefaultICM: none
++*ICM none/No ICM color correction: "%% FoomaticRIPOptionSetting: ICM=none"
++*FoomaticRIPOptionSetting ICM=none: "-C10 -Gnone.icm "
++*ICM testing/File testing.icm: "%% FoomaticRIPOptionSetting: ICM=testing"
++*FoomaticRIPOptionSetting ICM=testing: "-C10 -Gtesting.icm "
++*ICM testing2/File testing2.icm: "%% FoomaticRIPOptionSetting: ICM=testing2"
++*FoomaticRIPOptionSetting ICM=testing2: "-C10 -Gtesting2.icm "
++*ICM testing3/File testing3.icm: "%% FoomaticRIPOptionSetting: ICM=testing3"
++*FoomaticRIPOptionSetting ICM=testing3: "-C10 -Gtesting3.icm "
++*CloseUI: *ICM
++
++*CloseGroup: Adjustment
++
++*OpenGroup: Miscellaneous/Miscellaneous
++
++*OpenUI *NupOrient/N-up Orientation: PickOne
++*FoomaticRIPOption NupOrient: enum CmdLine A
++*OrderDependency: 200 AnySetup *NupOrient
++*DefaultNupOrient: port
++*NupOrient land/Landscape: "%% FoomaticRIPOptionSetting: NupOrient=land"
++*FoomaticRIPOptionSetting NupOrient=land: "-ol "
++*NupOrient port/Portrait: "%% FoomaticRIPOptionSetting: NupOrient=port"
++*FoomaticRIPOptionSetting NupOrient=port: " "
++*NupOrient sea/Seascape: "%% FoomaticRIPOptionSetting: NupOrient=sea"
++*FoomaticRIPOptionSetting NupOrient=sea: "-os "
++*CloseUI: *NupOrient
++
++*OpenUI *NupPages/N-up Printing: PickOne
++*FoomaticRIPOption NupPages: enum CmdLine A
++*OrderDependency: 200 AnySetup *NupPages
++*DefaultNupPages: 1up
++*NupPages 1up/1-up: "%% FoomaticRIPOptionSetting: NupPages=1up"
++*FoomaticRIPOptionSetting NupPages=1up: " "
++*NupPages 2up/2-up: "%% FoomaticRIPOptionSetting: NupPages=2up"
++*FoomaticRIPOptionSetting NupPages=2up: "-2 "
++*NupPages 3up/3-up: "%% FoomaticRIPOptionSetting: NupPages=3up"
++*FoomaticRIPOptionSetting NupPages=3up: "-3 "
++*NupPages 4up/4-up: "%% FoomaticRIPOptionSetting: NupPages=4up"
++*FoomaticRIPOptionSetting NupPages=4up: "-4 "
++*NupPages 6up/6-up: "%% FoomaticRIPOptionSetting: NupPages=6up"
++*FoomaticRIPOptionSetting NupPages=6up: "-6 "
++*NupPages 8up/8-up: "%% FoomaticRIPOptionSetting: NupPages=8up"
++*FoomaticRIPOptionSetting NupPages=8up: "-8 "
++*NupPages 10up/10-up: "%% FoomaticRIPOptionSetting: NupPages=10up"
++*FoomaticRIPOptionSetting NupPages=10up: "-10 "
++*NupPages 12up/12-up: "%% FoomaticRIPOptionSetting: NupPages=12up"
++*FoomaticRIPOptionSetting NupPages=12up: "-12 "
++*NupPages 14up/14-up: "%% FoomaticRIPOptionSetting: NupPages=14up"
++*FoomaticRIPOptionSetting NupPages=14up: "-14 "
++*NupPages 15up/15-up: "%% FoomaticRIPOptionSetting: NupPages=15up"
++*FoomaticRIPOptionSetting NupPages=15up: "-15 "
++*NupPages 16up/16-up: "%% FoomaticRIPOptionSetting: NupPages=16up"
++*FoomaticRIPOptionSetting NupPages=16up: "-16 "
++*NupPages 18up/18-up: "%% FoomaticRIPOptionSetting: NupPages=18up"
++*FoomaticRIPOptionSetting NupPages=18up: "-18 "
++*CloseUI: *NupPages
++
++*CloseGroup: Miscellaneous
++
++
++*% Generic boilerplate PPD stuff as standard PostScript fonts and so on
++
++*DefaultFont: Courier
++*Font AvantGarde-Book: Standard "(001.006S)" Standard ROM
++*Font AvantGarde-BookOblique: Standard "(001.006S)" Standard ROM
++*Font AvantGarde-Demi: Standard "(001.007S)" Standard ROM
++*Font AvantGarde-DemiOblique: Standard "(001.007S)" Standard ROM
++*Font Bookman-Demi: Standard "(001.004S)" Standard ROM
++*Font Bookman-DemiItalic: Standard "(001.004S)" Standard ROM
++*Font Bookman-Light: Standard "(001.004S)" Standard ROM
++*Font Bookman-LightItalic: Standard "(001.004S)" Standard ROM
++*Font Courier: Standard "(002.004S)" Standard ROM
++*Font Courier-Bold: Standard "(002.004S)" Standard ROM
++*Font Courier-BoldOblique: Standard "(002.004S)" Standard ROM
++*Font Courier-Oblique: Standard "(002.004S)" Standard ROM
++*Font Helvetica: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Bold: Standard "(001.007S)" Standard ROM
++*Font Helvetica-BoldOblique: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Narrow-Bold: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow-BoldOblique: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow-Oblique: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Oblique: Standard "(001.006S)" Standard ROM
++*Font NewCenturySchlbk-Bold: Standard "(001.009S)" Standard ROM
++*Font NewCenturySchlbk-BoldItalic: Standard "(001.007S)" Standard ROM
++*Font NewCenturySchlbk-Italic: Standard "(001.006S)" Standard ROM
++*Font NewCenturySchlbk-Roman: Standard "(001.007S)" Standard ROM
++*Font Palatino-Bold: Standard "(001.005S)" Standard ROM
++*Font Palatino-BoldItalic: Standard "(001.005S)" Standard ROM
++*Font Palatino-Italic: Standard "(001.005S)" Standard ROM
++*Font Palatino-Roman: Standard "(001.005S)" Standard ROM
++*Font Symbol: Special "(001.007S)" Special ROM
++*Font Times-Bold: Standard "(001.007S)" Standard ROM
++*Font Times-BoldItalic: Standard "(001.009S)" Standard ROM
++*Font Times-Italic: Standard "(001.007S)" Standard ROM
++*Font Times-Roman: Standard "(001.007S)" Standard ROM
++*Font ZapfChancery-MediumItalic: Standard "(001.007S)" Standard ROM
++*Font ZapfDingbats: Special "(001.004S)" Standard ROM
++
+--- foo2zjs/PPD/Fuji_Xerox-DocuPrint_CP105.ppd	1970-01-01 00:00:00.000000000 +0000
++++ foo2zjs/PPD/Fuji_Xerox-DocuPrint_CP105.ppd	2014-04-01 11:06:31.000000000 +0000
+@@ -0,0 +1,433 @@
++*PPD-Adobe: "4.3"
++*%
++*% For information on using this, and to obtain the required backend
++*% script, consult http://www.openprinting.org/
++*%
++*% This file is published under the GNU General Public License
++*%
++*% PPD-O-MATIC (3.0.0 or newer) generated this PPD file. It is for use with 
++*% all programs and environments which use PPD files for dealing with
++*% printer capability information. The printer must be configured with the
++*% "foomatic-rip" backend filter script of Foomatic 3.0.0 or newer. This 
++*% file and "foomatic-rip" work together to support PPD-controlled printer
++*% driver option access with arbitrary free software printer drivers and
++*% printing spoolers.
++*%
++*% To save this file on your disk, wait until the download has completed
++*% (the animation of the browser logo must stop) and then use the
++*% "Save as..." command in the "File" menu of your browser or in the 
++*% pop-up manu when you click on this document with the right mouse button.
++*% DO NOT cut and paste this file into an editor with your mouse. This can
++*% introduce additional line breaks which lead to unexpected results.
++*%
++*% You may save this file as 'Fuji_Xerox-DocuPrint_CP105-foo2hbpl1.ppd'
++*%
++*%
++*FormatVersion:	"4.3"
++*FileVersion:	"1.1"
++*LanguageVersion: English 
++*LanguageEncoding: ISOLatin1
++*PCFileName:	"FOO2HBPL.PPD"
++*Manufacturer:	"Fuji Xerox"
++*Product:	"(DocuPrint CP105)"
++*cupsVersion:	1.0
++*cupsManualCopies: True
++*cupsModelNumber:  2
++*cupsFilter:	"application/vnd.cups-postscript 0 foomatic-rip"
++*%pprRIP:        foomatic-rip other
++*ModelName:     "Fuji Xerox DocuPrint CP105"
++*ShortNickName: "Fuji Xerox D.P. CP105 foo2hbpl1"
++*NickName:      "Fuji Xerox DocuPrint CP105 Foomatic/foo2hbpl1 (recommended)"
++*PSVersion:	"(3010.000) 550"
++*PSVersion:	"(3010.000) 651"
++*PSVersion:	"(3010.000) 652"
++*PSVersion:	"(3010.000) 653"
++*PSVersion:	"(3010.000) 704"
++*PSVersion:	"(3010.000) 705"
++*PSVersion:	"(3010.000) 800"
++*LanguageLevel:	"3"
++*ColorDevice:	True
++*DefaultColorSpace: RGB
++*FileSystem:	False
++*Throughput:	"1"
++*LandscapeOrientation: Plus90
++*TTRasterizer:	Type42
++*1284DeviceID: "DRV:Dfoo2hbpl1,R1,M0,TF;"
++
++*driverName foo2hbpl1/foo2hbpl1: ""
++*driverType F/Filter: ""
++*driverUrl: "http://foo2hbpl.rkkda.com/"
++*driverObsolete: False
++
++
++
++
++*HWMargins: 9 12.00 9 12
++*VariablePaperSize: True
++*MaxMediaWidth: 100000
++*MaxMediaHeight: 100000
++*NonUIOrderDependency: 135 AnySetup *CustomPageSize
++*CustomPageSize True: "pop pop pop pop pop
++%% FoomaticRIPOptionSetting: PageSize=Custom"
++*End
++*FoomaticRIPOptionSetting PageSize=Custom: "-pCustom.%0x%1 "
++*ParamCustomPageSize Width: 1 points 36 100000
++*ParamCustomPageSize Height: 2 points 36 100000
++*ParamCustomPageSize Orientation: 3 int 0 0
++*ParamCustomPageSize WidthOffset: 4 points 0 0
++*ParamCustomPageSize HeightOffset: 5 points 0 0
++
++*FoomaticIDs: Fuji_Xerox-DocuPrint_CP105 foo2hbpl1
++*FoomaticRIPCommandLine: "foo2hbpl1-wrapper %A"
++
++*OpenGroup: General/General
++
++*OpenUI *Quality/Printing Quality: PickOne
++*FoomaticRIPOption Quality: enum CmdLine A
++*OrderDependency: 110 AnySetup *Quality
++*DefaultQuality: normal
++*Quality draft/Draft: "%% FoomaticRIPOptionSetting: Quality=draft"
++*FoomaticRIPOptionSetting Quality=draft: " -t  "
++*Quality normal/Normal: "%% FoomaticRIPOptionSetting: Quality=normal"
++*FoomaticRIPOptionSetting Quality=normal: "  "
++*CloseUI: *Quality
++
++*OpenUI *ColorMode/Color Mode: PickOne
++*FoomaticRIPOption ColorMode: enum CmdLine A
++*OrderDependency: 120 AnySetup *ColorMode
++*DefaultColorMode: Monochrome
++*ColorMode Color/Color: "%% FoomaticRIPOptionSetting: ColorMode=Color"
++*FoomaticRIPOptionSetting ColorMode=Color: "-c "
++*ColorMode Monochrome/Monochrome: "%% FoomaticRIPOptionSetting: ColorMode=Monochrome"
++*FoomaticRIPOptionSetting ColorMode=Monochrome: " "
++*CloseUI: *ColorMode
++
++*OpenUI *PageSize/Page Size: PickOne
++*FoomaticRIPOption PageSize: enum CmdLine A
++*OrderDependency: 135 AnySetup *PageSize
++*DefaultPageSize: Letter
++*PageSize Letter/Letter: "%% FoomaticRIPOptionSetting: PageSize=Letter"
++*FoomaticRIPOptionSetting PageSize=Letter: "-p4 "
++*PageSize A4/A4: "%% FoomaticRIPOptionSetting: PageSize=A4"
++*FoomaticRIPOptionSetting PageSize=A4: "-p1 "
++*PageSize B5jis/B5 (JIS): "%% FoomaticRIPOptionSetting: PageSize=B5jis"
++*FoomaticRIPOptionSetting PageSize=B5jis: "-p2 "
++*PageSize Env10/Env #10: "%% FoomaticRIPOptionSetting: PageSize=Env10"
++*FoomaticRIPOptionSetting PageSize=Env10: "-p9 "
++*PageSize EnvC5/Env C5: "%% FoomaticRIPOptionSetting: PageSize=EnvC5"
++*FoomaticRIPOptionSetting PageSize=EnvC5: "-p11 "
++*PageSize EnvDL/Env DL: "%% FoomaticRIPOptionSetting: PageSize=EnvDL"
++*FoomaticRIPOptionSetting PageSize=EnvDL: "-p12 "
++*PageSize EnvMonarch/Env Monarch: "%% FoomaticRIPOptionSetting: PageSize=EnvMonarch"
++*FoomaticRIPOptionSetting PageSize=EnvMonarch: "-p10 "
++*PageSize Executive/Executive: "%% FoomaticRIPOptionSetting: PageSize=Executive"
++*FoomaticRIPOptionSetting PageSize=Executive: "-p5 "
++*PageSize FanfoldGermanLegal/Fanfold German Legal: "%% FoomaticRIPOptionSetting: PageSize=FanfoldGermanLegal"
++*FoomaticRIPOptionSetting PageSize=FanfoldGermanLegal: "-p6 "
++*PageSize Folio/Folio: "%% FoomaticRIPOptionSetting: PageSize=Folio"
++*FoomaticRIPOptionSetting PageSize=Folio: "-p6 "
++*PageSize Legal/Legal: "%% FoomaticRIPOptionSetting: PageSize=Legal"
++*FoomaticRIPOptionSetting PageSize=Legal: "-p7 "
++*CloseUI: *PageSize
++
++*OpenUI *PageRegion: PickOne
++*OrderDependency: 135 AnySetup *PageRegion
++*DefaultPageRegion: Letter
++*PageRegion Letter/Letter: "%% FoomaticRIPOptionSetting: PageSize=Letter"
++*PageRegion A4/A4: "%% FoomaticRIPOptionSetting: PageSize=A4"
++*PageRegion B5jis/B5 (JIS): "%% FoomaticRIPOptionSetting: PageSize=B5jis"
++*PageRegion Env10/Env #10: "%% FoomaticRIPOptionSetting: PageSize=Env10"
++*PageRegion EnvC5/Env C5: "%% FoomaticRIPOptionSetting: PageSize=EnvC5"
++*PageRegion EnvDL/Env DL: "%% FoomaticRIPOptionSetting: PageSize=EnvDL"
++*PageRegion EnvMonarch/Env Monarch: "%% FoomaticRIPOptionSetting: PageSize=EnvMonarch"
++*PageRegion Executive/Executive: "%% FoomaticRIPOptionSetting: PageSize=Executive"
++*PageRegion FanfoldGermanLegal/Fanfold German Legal: "%% FoomaticRIPOptionSetting: PageSize=FanfoldGermanLegal"
++*PageRegion Folio/Folio: "%% FoomaticRIPOptionSetting: PageSize=Folio"
++*PageRegion Legal/Legal: "%% FoomaticRIPOptionSetting: PageSize=Legal"
++*CloseUI: *PageRegion
++
++*DefaultImageableArea: Letter
++*ImageableArea Letter/Letter: "9 12.00 603 780.00"
++*ImageableArea A4/A4: "9 12.00 586 830.00"
++*ImageableArea B5jis/B5 (JIS): "9 12.00 509 715.00"
++*ImageableArea Env10/Env #10: "9 12.00 288 672.00"
++*ImageableArea EnvC5/Env C5: "9 12.00 450 637.00"
++*ImageableArea EnvDL/Env DL: "9 12.00 302 611.00"
++*ImageableArea EnvMonarch/Env Monarch: "9 12.00 270 528.00"
++*ImageableArea Executive/Executive: "9 12.00 513 744.00"
++*ImageableArea FanfoldGermanLegal/Fanfold German Legal: "9 12.00 603 996.00"
++*ImageableArea Folio/Folio: "9 12.00 603 924.00"
++*ImageableArea Legal/Legal: "9 12.00 603 996.00"
++
++*DefaultPaperDimension: Letter
++*PaperDimension Letter/Letter: "612 792"
++*PaperDimension A4/A4: "595 842"
++*PaperDimension B5jis/B5 (JIS): "518 727"
++*PaperDimension Env10/Env #10: "297 684"
++*PaperDimension EnvC5/Env C5: "459 649"
++*PaperDimension EnvDL/Env DL: "311 623"
++*PaperDimension EnvMonarch/Env Monarch: "279 540"
++*PaperDimension Executive/Executive: "522 756"
++*PaperDimension FanfoldGermanLegal/Fanfold German Legal: "612 1008"
++*PaperDimension Folio/Folio: "612 936"
++*PaperDimension Legal/Legal: "612 1008"
++
++*OpenUI *MediaType/Media Type: PickOne
++*FoomaticRIPOption MediaType: enum CmdLine A
++*OrderDependency: 150 AnySetup *MediaType
++*DefaultMediaType: plain
++*MediaType plain/Plain Paper: "%% FoomaticRIPOptionSetting: MediaType=plain"
++*FoomaticRIPOptionSetting MediaType=plain: "-m1 "
++*MediaType plain2/Plain Paper Side 2: "%% FoomaticRIPOptionSetting: MediaType=plain2"
++*FoomaticRIPOptionSetting MediaType=plain2: "-m8 "
++*MediaType bond/Bond: "%% FoomaticRIPOptionSetting: MediaType=bond"
++*FoomaticRIPOptionSetting MediaType=bond: "-m2 "
++*MediaType bond2/Bond Side 2: "%% FoomaticRIPOptionSetting: MediaType=bond2"
++*FoomaticRIPOptionSetting MediaType=bond2: "-m9 "
++*MediaType envelope/Envelope: "%% FoomaticRIPOptionSetting: MediaType=envelope"
++*FoomaticRIPOptionSetting MediaType=envelope: "-m6 "
++*MediaType labels/Labels: "%% FoomaticRIPOptionSetting: MediaType=labels"
++*FoomaticRIPOptionSetting MediaType=labels: "-m5 "
++*MediaType lwcard/Light Weight Card: "%% FoomaticRIPOptionSetting: MediaType=lwcard"
++*FoomaticRIPOptionSetting MediaType=lwcard: "-m3 "
++*MediaType lwcard2/Light Weight Card Side 2: "%% FoomaticRIPOptionSetting: MediaType=lwcard2"
++*FoomaticRIPOptionSetting MediaType=lwcard2: "-m10 "
++*MediaType lwgcard/Light Weight Glossy Card: "%% FoomaticRIPOptionSetting: MediaType=lwgcard"
++*FoomaticRIPOptionSetting MediaType=lwgcard: "-m4 "
++*MediaType lwgcard2/Light Weight Glossy Card Side 2: "%% FoomaticRIPOptionSetting: MediaType=lwgcard2"
++*FoomaticRIPOptionSetting MediaType=lwgcard2: "-m11 "
++*MediaType recycled/Recycled Paper: "%% FoomaticRIPOptionSetting: MediaType=recycled"
++*FoomaticRIPOptionSetting MediaType=recycled: "-m7 "
++*MediaType recycled2/Recycled Paper Side 2: "%% FoomaticRIPOptionSetting: MediaType=recycled2"
++*FoomaticRIPOptionSetting MediaType=recycled2: "-m12 "
++*CloseUI: *MediaType
++
++*OpenUI *Copies/Copies: PickOne
++*FoomaticRIPOption Copies: int CmdLine A
++*FoomaticRIPOptionPrototype Copies: "-n%s "
++*FoomaticRIPOptionRange Copies: 1 100
++*OrderDependency: 220 AnySetup *Copies
++*DefaultCopies: 1
++*FoomaticRIPDefaultCopies: 1
++*Copies 1/1: "%% FoomaticRIPOptionSetting: Copies=1"
++*Copies 2/2: "%% FoomaticRIPOptionSetting: Copies=2"
++*Copies 3/3: "%% FoomaticRIPOptionSetting: Copies=3"
++*Copies 4/4: "%% FoomaticRIPOptionSetting: Copies=4"
++*Copies 5/5: "%% FoomaticRIPOptionSetting: Copies=5"
++*Copies 6/6: "%% FoomaticRIPOptionSetting: Copies=6"
++*Copies 7/7: "%% FoomaticRIPOptionSetting: Copies=7"
++*Copies 8/8: "%% FoomaticRIPOptionSetting: Copies=8"
++*Copies 9/9: "%% FoomaticRIPOptionSetting: Copies=9"
++*Copies 10/10: "%% FoomaticRIPOptionSetting: Copies=10"
++*Copies 11/11: "%% FoomaticRIPOptionSetting: Copies=11"
++*Copies 12/12: "%% FoomaticRIPOptionSetting: Copies=12"
++*Copies 13/13: "%% FoomaticRIPOptionSetting: Copies=13"
++*Copies 14/14: "%% FoomaticRIPOptionSetting: Copies=14"
++*Copies 15/15: "%% FoomaticRIPOptionSetting: Copies=15"
++*Copies 16/16: "%% FoomaticRIPOptionSetting: Copies=16"
++*Copies 17/17: "%% FoomaticRIPOptionSetting: Copies=17"
++*Copies 18/18: "%% FoomaticRIPOptionSetting: Copies=18"
++*Copies 19/19: "%% FoomaticRIPOptionSetting: Copies=19"
++*Copies 20/20: "%% FoomaticRIPOptionSetting: Copies=20"
++*Copies 21/21: "%% FoomaticRIPOptionSetting: Copies=21"
++*Copies 22/22: "%% FoomaticRIPOptionSetting: Copies=22"
++*Copies 23/23: "%% FoomaticRIPOptionSetting: Copies=23"
++*Copies 24/24: "%% FoomaticRIPOptionSetting: Copies=24"
++*Copies 25/25: "%% FoomaticRIPOptionSetting: Copies=25"
++*Copies 26/26: "%% FoomaticRIPOptionSetting: Copies=26"
++*Copies 27/27: "%% FoomaticRIPOptionSetting: Copies=27"
++*Copies 28/28: "%% FoomaticRIPOptionSetting: Copies=28"
++*Copies 29/29: "%% FoomaticRIPOptionSetting: Copies=29"
++*Copies 30/30: "%% FoomaticRIPOptionSetting: Copies=30"
++*Copies 31/31: "%% FoomaticRIPOptionSetting: Copies=31"
++*Copies 32/32: "%% FoomaticRIPOptionSetting: Copies=32"
++*Copies 33/33: "%% FoomaticRIPOptionSetting: Copies=33"
++*Copies 34/34: "%% FoomaticRIPOptionSetting: Copies=34"
++*Copies 35/35: "%% FoomaticRIPOptionSetting: Copies=35"
++*Copies 36/36: "%% FoomaticRIPOptionSetting: Copies=36"
++*Copies 37/37: "%% FoomaticRIPOptionSetting: Copies=37"
++*Copies 38/38: "%% FoomaticRIPOptionSetting: Copies=38"
++*Copies 39/39: "%% FoomaticRIPOptionSetting: Copies=39"
++*Copies 40/40: "%% FoomaticRIPOptionSetting: Copies=40"
++*Copies 41/41: "%% FoomaticRIPOptionSetting: Copies=41"
++*Copies 42/42: "%% FoomaticRIPOptionSetting: Copies=42"
++*Copies 43/43: "%% FoomaticRIPOptionSetting: Copies=43"
++*Copies 44/44: "%% FoomaticRIPOptionSetting: Copies=44"
++*Copies 45/45: "%% FoomaticRIPOptionSetting: Copies=45"
++*Copies 46/46: "%% FoomaticRIPOptionSetting: Copies=46"
++*Copies 47/47: "%% FoomaticRIPOptionSetting: Copies=47"
++*Copies 48/48: "%% FoomaticRIPOptionSetting: Copies=48"
++*Copies 49/49: "%% FoomaticRIPOptionSetting: Copies=49"
++*Copies 50/50: "%% FoomaticRIPOptionSetting: Copies=50"
++*Copies 51/51: "%% FoomaticRIPOptionSetting: Copies=51"
++*Copies 52/52: "%% FoomaticRIPOptionSetting: Copies=52"
++*Copies 53/53: "%% FoomaticRIPOptionSetting: Copies=53"
++*Copies 54/54: "%% FoomaticRIPOptionSetting: Copies=54"
++*Copies 55/55: "%% FoomaticRIPOptionSetting: Copies=55"
++*Copies 56/56: "%% FoomaticRIPOptionSetting: Copies=56"
++*Copies 57/57: "%% FoomaticRIPOptionSetting: Copies=57"
++*Copies 58/58: "%% FoomaticRIPOptionSetting: Copies=58"
++*Copies 59/59: "%% FoomaticRIPOptionSetting: Copies=59"
++*Copies 60/60: "%% FoomaticRIPOptionSetting: Copies=60"
++*Copies 61/61: "%% FoomaticRIPOptionSetting: Copies=61"
++*Copies 62/62: "%% FoomaticRIPOptionSetting: Copies=62"
++*Copies 63/63: "%% FoomaticRIPOptionSetting: Copies=63"
++*Copies 64/64: "%% FoomaticRIPOptionSetting: Copies=64"
++*Copies 65/65: "%% FoomaticRIPOptionSetting: Copies=65"
++*Copies 66/66: "%% FoomaticRIPOptionSetting: Copies=66"
++*Copies 67/67: "%% FoomaticRIPOptionSetting: Copies=67"
++*Copies 68/68: "%% FoomaticRIPOptionSetting: Copies=68"
++*Copies 69/69: "%% FoomaticRIPOptionSetting: Copies=69"
++*Copies 70/70: "%% FoomaticRIPOptionSetting: Copies=70"
++*Copies 71/71: "%% FoomaticRIPOptionSetting: Copies=71"
++*Copies 72/72: "%% FoomaticRIPOptionSetting: Copies=72"
++*Copies 73/73: "%% FoomaticRIPOptionSetting: Copies=73"
++*Copies 74/74: "%% FoomaticRIPOptionSetting: Copies=74"
++*Copies 75/75: "%% FoomaticRIPOptionSetting: Copies=75"
++*Copies 76/76: "%% FoomaticRIPOptionSetting: Copies=76"
++*Copies 77/77: "%% FoomaticRIPOptionSetting: Copies=77"
++*Copies 78/78: "%% FoomaticRIPOptionSetting: Copies=78"
++*Copies 79/79: "%% FoomaticRIPOptionSetting: Copies=79"
++*Copies 80/80: "%% FoomaticRIPOptionSetting: Copies=80"
++*Copies 81/81: "%% FoomaticRIPOptionSetting: Copies=81"
++*Copies 82/82: "%% FoomaticRIPOptionSetting: Copies=82"
++*Copies 83/83: "%% FoomaticRIPOptionSetting: Copies=83"
++*Copies 84/84: "%% FoomaticRIPOptionSetting: Copies=84"
++*Copies 85/85: "%% FoomaticRIPOptionSetting: Copies=85"
++*Copies 86/86: "%% FoomaticRIPOptionSetting: Copies=86"
++*Copies 87/87: "%% FoomaticRIPOptionSetting: Copies=87"
++*Copies 88/88: "%% FoomaticRIPOptionSetting: Copies=88"
++*Copies 89/89: "%% FoomaticRIPOptionSetting: Copies=89"
++*Copies 90/90: "%% FoomaticRIPOptionSetting: Copies=90"
++*Copies 91/91: "%% FoomaticRIPOptionSetting: Copies=91"
++*Copies 92/92: "%% FoomaticRIPOptionSetting: Copies=92"
++*Copies 93/93: "%% FoomaticRIPOptionSetting: Copies=93"
++*Copies 94/94: "%% FoomaticRIPOptionSetting: Copies=94"
++*Copies 95/95: "%% FoomaticRIPOptionSetting: Copies=95"
++*Copies 96/96: "%% FoomaticRIPOptionSetting: Copies=96"
++*Copies 97/97: "%% FoomaticRIPOptionSetting: Copies=97"
++*Copies 98/98: "%% FoomaticRIPOptionSetting: Copies=98"
++*Copies 99/99: "%% FoomaticRIPOptionSetting: Copies=99"
++*Copies 100/100: "%% FoomaticRIPOptionSetting: Copies=100"
++*CloseUI: *Copies
++
++*CloseGroup: General
++
++*OpenGroup: Adjustment/Adjustment
++
++*OpenUI *halftone/Halftone Algorithm: PickOne
++*FoomaticRIPOption halftone: enum CmdLine A
++*OrderDependency: 110 AnySetup *halftone
++*Defaulthalftone: default
++*halftone default/Default: "%% FoomaticRIPOptionSetting: halftone=default"
++*FoomaticRIPOptionSetting halftone=default: "  "
++*halftone as/Accurate Screens (better): "%% FoomaticRIPOptionSetting: halftone=as"
++*FoomaticRIPOptionSetting halftone=as: " -qas  "
++*halftone standard/Standard: "%% FoomaticRIPOptionSetting: halftone=standard"
++*FoomaticRIPOptionSetting halftone=standard: " -q1  "
++*halftone wts/Well Tempered Screens (best): "%% FoomaticRIPOptionSetting: halftone=wts"
++*FoomaticRIPOptionSetting halftone=wts: " -qwts  "
++*CloseUI: *halftone
++
++*OpenUI *ICM/ICM Color Profile: PickOne
++*FoomaticRIPOption ICM: enum CmdLine A
++*OrderDependency: 300 AnySetup *ICM
++*DefaultICM: none
++*ICM none/No ICM color correction: "%% FoomaticRIPOptionSetting: ICM=none"
++*FoomaticRIPOptionSetting ICM=none: "-C10 -Gnone.icm "
++*ICM testing/File testing.icm: "%% FoomaticRIPOptionSetting: ICM=testing"
++*FoomaticRIPOptionSetting ICM=testing: "-C10 -Gtesting.icm "
++*ICM testing2/File testing2.icm: "%% FoomaticRIPOptionSetting: ICM=testing2"
++*FoomaticRIPOptionSetting ICM=testing2: "-C10 -Gtesting2.icm "
++*ICM testing3/File testing3.icm: "%% FoomaticRIPOptionSetting: ICM=testing3"
++*FoomaticRIPOptionSetting ICM=testing3: "-C10 -Gtesting3.icm "
++*CloseUI: *ICM
++
++*CloseGroup: Adjustment
++
++*OpenGroup: Miscellaneous/Miscellaneous
++
++*OpenUI *NupOrient/N-up Orientation: PickOne
++*FoomaticRIPOption NupOrient: enum CmdLine A
++*OrderDependency: 200 AnySetup *NupOrient
++*DefaultNupOrient: port
++*NupOrient land/Landscape: "%% FoomaticRIPOptionSetting: NupOrient=land"
++*FoomaticRIPOptionSetting NupOrient=land: "-ol "
++*NupOrient port/Portrait: "%% FoomaticRIPOptionSetting: NupOrient=port"
++*FoomaticRIPOptionSetting NupOrient=port: " "
++*NupOrient sea/Seascape: "%% FoomaticRIPOptionSetting: NupOrient=sea"
++*FoomaticRIPOptionSetting NupOrient=sea: "-os "
++*CloseUI: *NupOrient
++
++*OpenUI *NupPages/N-up Printing: PickOne
++*FoomaticRIPOption NupPages: enum CmdLine A
++*OrderDependency: 200 AnySetup *NupPages
++*DefaultNupPages: 1up
++*NupPages 1up/1-up: "%% FoomaticRIPOptionSetting: NupPages=1up"
++*FoomaticRIPOptionSetting NupPages=1up: " "
++*NupPages 2up/2-up: "%% FoomaticRIPOptionSetting: NupPages=2up"
++*FoomaticRIPOptionSetting NupPages=2up: "-2 "
++*NupPages 3up/3-up: "%% FoomaticRIPOptionSetting: NupPages=3up"
++*FoomaticRIPOptionSetting NupPages=3up: "-3 "
++*NupPages 4up/4-up: "%% FoomaticRIPOptionSetting: NupPages=4up"
++*FoomaticRIPOptionSetting NupPages=4up: "-4 "
++*NupPages 6up/6-up: "%% FoomaticRIPOptionSetting: NupPages=6up"
++*FoomaticRIPOptionSetting NupPages=6up: "-6 "
++*NupPages 8up/8-up: "%% FoomaticRIPOptionSetting: NupPages=8up"
++*FoomaticRIPOptionSetting NupPages=8up: "-8 "
++*NupPages 10up/10-up: "%% FoomaticRIPOptionSetting: NupPages=10up"
++*FoomaticRIPOptionSetting NupPages=10up: "-10 "
++*NupPages 12up/12-up: "%% FoomaticRIPOptionSetting: NupPages=12up"
++*FoomaticRIPOptionSetting NupPages=12up: "-12 "
++*NupPages 14up/14-up: "%% FoomaticRIPOptionSetting: NupPages=14up"
++*FoomaticRIPOptionSetting NupPages=14up: "-14 "
++*NupPages 15up/15-up: "%% FoomaticRIPOptionSetting: NupPages=15up"
++*FoomaticRIPOptionSetting NupPages=15up: "-15 "
++*NupPages 16up/16-up: "%% FoomaticRIPOptionSetting: NupPages=16up"
++*FoomaticRIPOptionSetting NupPages=16up: "-16 "
++*NupPages 18up/18-up: "%% FoomaticRIPOptionSetting: NupPages=18up"
++*FoomaticRIPOptionSetting NupPages=18up: "-18 "
++*CloseUI: *NupPages
++
++*CloseGroup: Miscellaneous
++
++
++*% Generic boilerplate PPD stuff as standard PostScript fonts and so on
++
++*DefaultFont: Courier
++*Font AvantGarde-Book: Standard "(001.006S)" Standard ROM
++*Font AvantGarde-BookOblique: Standard "(001.006S)" Standard ROM
++*Font AvantGarde-Demi: Standard "(001.007S)" Standard ROM
++*Font AvantGarde-DemiOblique: Standard "(001.007S)" Standard ROM
++*Font Bookman-Demi: Standard "(001.004S)" Standard ROM
++*Font Bookman-DemiItalic: Standard "(001.004S)" Standard ROM
++*Font Bookman-Light: Standard "(001.004S)" Standard ROM
++*Font Bookman-LightItalic: Standard "(001.004S)" Standard ROM
++*Font Courier: Standard "(002.004S)" Standard ROM
++*Font Courier-Bold: Standard "(002.004S)" Standard ROM
++*Font Courier-BoldOblique: Standard "(002.004S)" Standard ROM
++*Font Courier-Oblique: Standard "(002.004S)" Standard ROM
++*Font Helvetica: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Bold: Standard "(001.007S)" Standard ROM
++*Font Helvetica-BoldOblique: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Narrow-Bold: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow-BoldOblique: Standard "(001.007S)" Standard ROM
++*Font Helvetica-Narrow-Oblique: Standard "(001.006S)" Standard ROM
++*Font Helvetica-Oblique: Standard "(001.006S)" Standard ROM
++*Font NewCenturySchlbk-Bold: Standard "(001.009S)" Standard ROM
++*Font NewCenturySchlbk-BoldItalic: Standard "(001.007S)" Standard ROM
++*Font NewCenturySchlbk-Italic: Standard "(001.006S)" Standard ROM
++*Font NewCenturySchlbk-Roman: Standard "(001.007S)" Standard ROM
++*Font Palatino-Bold: Standard "(001.005S)" Standard ROM
++*Font Palatino-BoldItalic: Standard "(001.005S)" Standard ROM
++*Font Palatino-Italic: Standard "(001.005S)" Standard ROM
++*Font Palatino-Roman: Standard "(001.005S)" Standard ROM
++*Font Symbol: Special "(001.007S)" Special ROM
++*Font Times-Bold: Standard "(001.007S)" Standard ROM
++*Font Times-BoldItalic: Standard "(001.009S)" Standard ROM
++*Font Times-Italic: Standard "(001.007S)" Standard ROM
++*Font Times-Roman: Standard "(001.007S)" Standard ROM
++*Font ZapfChancery-MediumItalic: Standard "(001.007S)" Standard ROM
++*Font ZapfDingbats: Special "(001.004S)" Standard ROM
++
+--- foo2zjs/README	2014-04-03 19:49:11.000000000 +0000
++++ foo2zjs/README	2014-03-25 10:49:40.000000000 +0000
+@@ -128,6 +128,17 @@
+ 	- Oki C5100n/C5150n/C5200n
+ 	- Oki C5500n/C5600n/C5800n
+ 
++    FOO2HBPL1
++    ---------
++    foo2hbpl1 converts Ghostscript pbmraw, pgmraw, ppmraw, or pamcmyk32
++    output formats to monochrome or color HBPL version 1 streams.
++
++	- Dell 1250c
++	- Dell C1660
++	- Dell C1760
++	- Epson AcuLaser C1700
++	- Fuji-Xerox DocuPrint CP105
++
+     FOO2HBPL2
+     ---------
+     foo2hbpl2 converts Ghostscript pbmraw, bitcmyk, or pksmraw output  for‐
+--- foo2zjs/README.in	2014-04-03 19:43:10.000000000 +0000
++++ foo2zjs/README.in	2014-03-25 10:49:27.000000000 +0000
+@@ -128,6 +128,17 @@
+ 	- Oki C5100n/C5150n/C5200n
+ 	- Oki C5500n/C5600n/C5800n
+ 
++    FOO2HBPL1
++    ---------
++    foo2hbpl1 converts Ghostscript pbmraw, pgmraw, ppmraw, or pamcmyk32
++    output formats to monochrome or color HBPL version 1 streams.
++
++	- Dell 1250c
++	- Dell C1660
++	- Dell C1760
++	- Epson AcuLaser C1700
++	- Fuji-Xerox DocuPrint CP105
++
+     FOO2HBPL2
+     ---------
+     foo2hbpl2 converts Ghostscript pbmraw, bitcmyk, or pksmraw output  for‐
+--- foo2zjs/foo2hbpl1-wrapper.1in	1970-01-01 00:00:00.000000000 +0000
++++ foo2zjs/foo2hbpl1-wrapper.1in	2014-03-24 12:30:14.000000000 +0000
+@@ -0,0 +1,240 @@
++'\" t
++.TH foo2hbpl1-wrapper 1 "${MODpage}" "foo2hbpl1-wrapper ${MODver}"
++#ifndef OLDGROFF
++#include "macros.man"
++#endif
++'\"==========================================================================
++'\"	MANUAL PAGE SOURCE
++'\"==========================================================================
++.SH NAME
++foo2hbpl1-wrapper \- Convert Postscript into a ZJS printer stream
++.SH SYNOPSIS
++.B foo2hbpl1-wrapper
++.RI [ options "] [" ps-file ]
++.SH DESCRIPTION
++.B foo2hbpl1-wrapper
++is a Foomatic compatible printer wrapper for the \fBfoo2hbpl1\fP printer driver.
++This script reads a Postscript \fIps-file\fP or standard input
++and converts it to Zenographics ZjStream printer format
++for driving the
++Dell 1250c, Dell C1660w, Dell C1760w,
++Epson AcuLaser C1700,
++and Fuji-Xerox CP105b printers.
++.P
++This script can be used in a standalone fashion, but is intended to
++be called from a printer spooler system which uses the Foomatic
++printer database.
++
++.SH COMMAND LINE OPTIONS
++.SS Normal Options
++These are the options used to select the parameters of a
++print job that are usually controlled on a per job basis.
++.TP
++.BI \-c
++Print in color (else monochrome).
++.TP
++.BI \-C\0 colormode
++Color correction mode [0].
++.TS
++n l .
++10	ICM color profile (using -G *.icm file)
++.TE
++.TP
++.BI \-d\0 duplex
++Duplex code to send to printer [1].
++.TS
++| n l | n l | n l .
++1	off	2	long edge	3	short edge
++.TE
++.TP
++.BI \-m\0 media
++Media code to send to printer [1].
++.TS
++l r.
++_
++Media	HBPL
++_
++plain	1
++bond	2
++lwcard	3
++lwgcard	4
++labels	5
++envelope	6
++recycled	7
++plain2	8
++bond2	9
++lwcard2	10
++lwgcard2	11
++recycled2	12
++.TE
++.TP
++.BI \-p\0 paper
++Paper size code to send to printer [1].
++.TS
++l r.
++_
++Paper	HBPL
++_
++A4	1
++B5jis	2
++letter	4
++executive	5
++fanfold german legal	6
++folio	6
++legal	7
++env#10	9
++envMonarch	10
++envC5	11
++envDL	12
++.TE
++.TP
++.BI \-n\0 copies
++Number of copies [1].
++.TP
++.BI \-r\0 xres x yres
++Set device resolution in pixels/inch [1200x600].
++.TP
++.BI \-s\0 source
++Source (Input Slot) code to send to printer [7].
++.TS
++| n l | n l.
++1	upper	4	manual
++2	lower	7	auto
++.TE
++.TP
++.BI \-t
++Draft mode.  Every other pixel is white.
++.TP
++.BI \-T\0 density
++Print density (1-5).  The default is 3 (medium).
++.TP
++.BI "\-2 \-3 \-4 \-5 \-6 \-8 \-9 \-10 \-12 \-14 \-15 \-16 \-18"
++Print in N-up.  Requires the \fBpsutils\fP package.
++.TP
++.BI \-o\0 orient
++Orientation used for N-up.
++.TS
++l l l.
++Portrait	-op	(normal)
++Landscape	-ol	(rotated 90 degrees anticlockwise)
++Seascape	-os	(rotated 90 degrees clockwise)
++.TE
++.SS Printer Tweaking Options
++These are the options used to customize the operation of \fBfoo2hbpl1\fP
++for a particular printer.
++.TP
++.BI \-u\0 xoff x yoff
++Set the offset of the start of the printable region from the
++upper left corner, in pixels [varies with paper size].
++The defaults should work on the 2200DL and 2300DL, and have not
++been tested on any other printers.
++.TP
++.BI \-l\0 xoff x yoff
++Set the offset of the end of the printable region from the
++lower right corner, in pixels [varies with paper size].
++The defaults should work on the 2200DL and 2300DL, and have not
++been tested on any other printers.
++.TP
++.BI \-L\0 mask
++Send the logical clipping values from -u/-l in the ZjStream.
++\fBfoo2hbpl1-wrapper\fP always runs Ghostscript with the ideal page dimensions,
++so that the scale of the image is correct,
++regardless whether or not the printer has unprintable regions.
++This option is used to move the position of the clipped image
++back to where it belongs on the page.  The default is to send
++the amount which was clipped by -u and -l, and should be
++good in most cases.
++.TS
++l l.
++0	don't send any logical clipping amounts
++1	only send Y clipping amount
++2	only send X clipping amount
++3	send both X and Y clipping amounts
++.TE
++.TP
++.BI \-P
++Do not send START_PLANE codes on monochrome output.  May be
++needed by some monochrome-only printers, such as the
++HP LaserJet 1000.
++.TP
++.BI \-X\0 padlen
++Add extra zero padding to the end of BID segments.  The default is
++16 bytes.  Padding 16 bytes of zeroes
++is needed for older ZjStream printers, such as the Minolta 2200DL
++and HP LaserJet 1000, and seems harmless to newer ones, such as
++the Minolta 2300DL.  So the default should be good for all cases.
++.SS Color Tweaking Options
++These are the options used to control the quality of color output.
++Color correction is currently a WORK IN PROGRESS.
++.TP
++.BI \-g\0 gsopts
++Additional options to pass to Ghostscript, such as -g\(lq-dDITHERPPI=nnn\(rq,
++etc.  This option may appear more than once.
++.TP
++.BI \-G\0 profile.icm
++Convert \fIprofile.icm\fP to a Postscript color rendering
++dictionary (CRD) using \fBfoo2zjs-icc2ps\fP and
++adjust the printer colors by using the Postscript \fBsetcolorrendering\fP
++operator.  (WORK IN PROGRESS).
++.TP
++.BI \-G\0 gamma-file.ps
++Prepend \fIgamma-file.ps\fP to the Postscript input to perform
++color correction using the \fBsetcolortransfer\fP Postscript operator.
++For example, the file might contain:
++.br
++{0.333 exp} {0.333 exp} {0.333 exp} {0.333 exp} setcolortransfer
++.TP
++.BI \-I\0 intent
++Select profile intent from the ICM file.
++0=Perceptual, 1=Colorimetric, 2=Saturation, 3=Absolute.
++Default is 0 (perceptual).
++.SS Debugging Options
++These options are used for debugging \fBfoo2hbpl1\fP and its wrapper.
++.TP
++.BI \-S\0 plane
++Output just a single color plane from a color print and print it
++on the black plane.  The default is to output all color planes.
++.TS
++l l.
++1	Cyan
++2	Magenta
++3	Yellow
++4	Black
++.TE
++.TP
++.BI \-D\0 level
++Set Debug level [0].
++
++.SH EXAMPLES
++Create a monochrome ZjStream from a Postscript document,
++examine it, and then print it using a RAW print queue:
++
++.RS
++.nf
++foo2hbpl1-wrapper testpage.ps > testpage.prn
++hbpl1decode < testpage.prn
++lpr -P raw testpage.prn
++.fi
++.RE
++.P
++Create a color ZjStream stream from a Postscript document:
++
++.RS
++.nf
++foo2hbpl1-wrapper -c testpage.ps > testpage.prn
++.fi
++.RE
++
++.SH FILES
++.BR /usr/bin/foo2hbpl1-wrapper
++.SH SEE ALSO
++.BR foo2hbpl1 (1),
++.BR hbpldecode (1)
++.SH "AUTHOR"
++Rick Richardson <rick.richardson@comcast.net>
++.br
++${URLHBPL}/
++'\"
++'\"
++'\"
++.em pdf_outline
+--- foo2zjs/foo2hbpl1-wrapper.in	1970-01-01 00:00:00.000000000 +0000
++++ foo2zjs/foo2hbpl1-wrapper.in	2014-04-04 19:06:24.048060000 +0000
+@@ -0,0 +1,577 @@
++#!/bin/sh
++
++#* Copyright (C) 2013 Rick Richardson
++#*
++#* This program is free software; you can redistribute it and/or modify
++#* it under the terms of the GNU General Public License as published by
++#* the Free Software Foundation; either version 2 of the License, or
++#* (at your option) any later version.
++#*
++#* This program is distributed in the hope that it will be useful,
++#* but WITHOUT ANY WARRANTY; without even the implied warranty of
++#* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++#* GNU General Public License for more details.
++#*
++#* You should have received a copy of the GNU General Public License
++#* along with this program; if not, write to the Free Software
++#* Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++#*
++#* Authors: Rick Richardson <rick.richardson@comcast.net>
++
++VERSION='$Id: foo2hbpl1-wrapper.in,v 1.3 2014/03/24 23:14:24 rick Exp $'
++
++#
++# Printer Notes:
++#
++# Dell 1250c
++# Dell C1660w
++# Dell C1760w
++# Epson AcuLaser C1700
++# Fuji-Xerox DocuPrint CP105b
++#
++
++PROGNAME="$0"
++BASENAME=`basename $PROGNAME`
++PREFIX=/usr
++SHARE=$PREFIX/share/foo2hbpl
++PATH=$PATH:/sw/bin:/opt/local/bin
++
++#
++#	Log the command line, for debugging and problem reports
++#
++if [ -x /usr/bin/logger -o -x /bin/logger ]; then
++    logger -t "$BASENAME" -p lpr.info -- "$BASENAME $@" </dev/null
++fi
++
++usage() {
++	cat <<EOF
++Usage:
++	$BASENAME [options] [ps-file]
++
++	Foomatic printer wrapper for the foo2hbpl1 printer driver.
++	This script reads a Postscript ps-file or standard input
++	and converts it to a Xerox HBPL version 1 stream.
++
++Normal Options:
++-c		  Print in color (else monochrome)
++-C colormode	  Colormode [$COLORMODE]
++		    10=ICM RGB color profile (using -G *.icm file)
++-m media	  Media code to send to printer [$MEDIA]
++		    1=plain, 2=bond, 3=lwcard, 4=lwgcard, 5=labels,
++		    6=envelope, 7=recycled, 8=plain2, 9=bond2,
++		    10=lwcard2, 11=lwgcard2, 12=recycled2
++-p paper	  Paper code [$PAPER]
++		    letter, legal, a4, executive, env10, monarch,
++		    c5, envDL, isob5, jisb5, a5, folio, CustomWxH
++-n copies	  Number of copies [$COPIES]
++		  Resolution is always 600x600
++-t		  Draft mode.  Every other pixel is white.
++-2/-3/-4/-6/-8/-10/-12/-14/-15/-16/-18
++		  Print with N-up (requires psutils)
++-o orient	  For N-up: -op is portrait, -ol is landscape, -os is seascape.
++
++Printer Tweaking Options:
++-u left,top,right,bottom
++		  Clip (i.e. white-out) margins of specified width
++
++Color Tweaking Options:
++-g gsopts	  Additional options to pass to Ghostscript, such as
++		  -dDITHERPPI=nnn, etc.  May appear more than once. []
++-G profile.icm	  Convert profile.icm to a Postscript CRD using icc2ps and
++		  adjust colors using the setcolorrendering PS operator.
++		  $SHARE/icm/ will be searched for profile.icm.
++-I intent	  Select profile intent from ICM file [$INTENT]
++		  0=Perceptual, 1=Colorimetric, 2=Saturation, 3=Absolute
++-G gamma-file.ps  Prepend gamma-file to the Postscript input to perform
++		  color correction using the setcolortransfer PS operator.
++
++Debugging Options:
++-D lvl		  Set Debug level [$DEBUG]
++-V		  $VERSION
++EOF
++
++	exit 1
++}
++
++#
++#       Report an error and exit
++#
++error() {
++	echo "$BASENAME: $1" >&2
++	exit 1
++}
++
++dbgcmd() {
++	if [ $DEBUG -ge 1 ]; then
++	    echo "$@" >&2
++	fi
++	"$@"
++}
++
++#
++#	N-up-ify the job.  Requires psnup from psutils package
++#
++nup() {
++    case "$NUP" in
++    [2368]|1[0458])
++	tr '\r' '\n' | psnup $NUP_ORIENT -d2 -$NUP -m.3in -p$paper -q
++	;;
++    [49]|1[26])
++	tr '\r' '\n' | psnup $NUP_ORIENT -d2 -$NUP -m.5in -p$paper -q
++	;;
++    *)
++	error "Illegal call to nup()."
++	;;
++    esac
++}
++
++#
++#       Process the options
++#
++
++# Try to use a local copy of GhostScript 8.54, if available.  Otherwise,
++# fallback to whatever the Linux distro has installed (usually 7.07)
++#
++# N.B. := operator used here, when :- would be better, because "ash"
++# doesn't have :-
++if eval gs.foo -v >/dev/null 2>&1; then
++        GSBIN=${GSBIN:-gs.foo}
++else
++        GSBIN=${GSBIN:-gs}
++fi
++
++CMDLINE="$*"
++DEBUG=0
++COLOR=
++COLORMODE=default
++MODEL=0
++MEDIA=1		# plain
++COPIES=1
++PAPER=letter
++RES=600x600	# do not change this
++SOURCE=1
++NUP=
++CLIP_ALL=
++BC=
++AIB=
++NOPLANES=
++COLOR2MONO=
++GAMMAFILE=default
++INTENT=0
++GSOPTS=
++EXTRAPAD=
++SAVETONER=
++NUP_ORIENT=
++GSDEV=-sDEVICE=pgmraw
++# What mode to use if the user wants us to pick the "best" mode
++case `$GSBIN --version` in
++7*)	DEFAULTCOLORMODE=10
++	DEFAULTCOLORMODE=1
++	;;
++8.1*)
++	DEFAULTCOLORMODE=1
++	QUALITY=1
++	;;
++*)	DEFAULTCOLORMODE=1
++	;;
++esac
++while getopts "1:23456789o:b:cC:d:g:l:u:L:m:n:p:q:s:tz:ABS:D:G:I:PX:Vh?" opt
++do
++	case $opt in
++	b)	GSBIN="$OPTARG";;
++	c)	COLOR=-c;;
++	d)	DUPLEX="$OPTARG";;
++	g)	GSOPTS="$GSOPTS $OPTARG";;
++	m)	MEDIA="$OPTARG";;
++	n)	COPIES="$OPTARG";;
++	p)	PAPER="$OPTARG";;
++	q)	QUALITY="$OPTARG";;
++	s)	SOURCE="$OPTARG";;
++	t)	SAVETONER="-t";;
++	z)	MODEL="$OPTARG";;
++	u)	CLIP_ALL="-u $OPTARG";;
++	A)	AIB=-A;;
++	B)	BC=-B;;
++	C)	COLORMODE="$OPTARG";;
++	S)	COLOR2MONO="-S$OPTARG";;
++	D)	DEBUG="$OPTARG";;
++	G)	GAMMAFILE="$OPTARG";;
++	I)	INTENT="$OPTARG";;
++	P)	NOPLANES=-P;;
++	X)	EXTRAPAD="-X $OPTARG";;
++	[234689])	NUP="$opt";;
++	[57])	error "Can't find acceptable layout for $opt-up";;
++	1)	case "$OPTARG" in
++		[024568])	NUP="1$OPTARG";;
++		*)	error "Can't find acceptable layout for 1$OPTARG-up";;
++		esac
++		;;
++	o)	case "$OPTARG" in
++		l*)	NUP_ORIENT=-l;;
++		s*)	NUP_ORIENT=-r;;
++		p*|*)	NUP_ORIENT=;;
++		esac;;
++	V)	echo "$VERSION"; foo2hbpl -V; foo2zjs-pstops -V; exit 0;;
++	h|\?)
++		if [ "$CMDLINE" != "-?" -a "$CMDLINE" != -h ]; then
++		    echo "Illegal command:"
++		    echo "	$0 $CMDLINE"
++		    echo
++		fi
++		usage;;
++	esac
++done
++shift `expr $OPTIND - 1`
++
++#
++# If there is an argument left, take it as the file to print.
++# Else, the input comes from stdin.
++#
++if [ $# -ge 1 ]; then
++    if [ "$LPJOB" = "" ]; then
++	: # LPJOB="$1"
++    fi
++    exec < $1
++fi
++
++#
++#	Validate media code
++#
++case "$MEDIA" in
++1|plain)	MEDIA=1;;
++2|bond)		MEDIA=2;;
++3|lwcard)	MEDIA=3;;
++4|lwgcard)	MEDIA=4;;
++5|labels)	MEDIA=5;;
++6|envelope)	MEDIA=6;;
++7|recycled)	MEDIA=7;;
++8|plain2)	MEDIA=8;;
++9|bond2)	MEDIA=9;;
++10|lwcard2)	MEDIA=10;;
++11|lwgcard2)	MEDIA=11;;
++12|recycled2)	MEDIA=12;;
++[0-9]*)		;;
++*)		error "Unknown media code $MEDIA";;
++esac
++
++#
++#	Validate source (InputSlot) code
++#
++case "$SOURCE" in
++1|auto)		SOURCE=1;;
++2|manual)	SOURCE=2;;
++3|multi)	SOURCE=3;;
++4|tray1)	SOURCE=4;;
++[0-9]*)		;;
++*)		error "Unknown source code $SOURCE";;
++esac
++
++#
++#	Figure out the paper dimensions in pixels/inch, and set the
++#	default clipping region.  Unfortunately, this is a trouble
++#	area for ZjStream printers.  Various versions of ZjS print
++#	engines react differently when asked to print into their
++#	unprintable regions.
++#
++set_clipping() {
++
++    # Set clipping region if it isn't already set
++    if [ "$CLIP_ALL" = "" ]; then
++	CLIP_ALL="-u $1,$2,$3,$4"
++    fi
++}
++
++case "$PAPER" in
++Custom*x*)
++		# Command line only
++		XDIM=`echo "$PAPER" | sed -e "s/Custom.//" -e "s/x.*//" `
++		YDIM=`echo "$PAPER" | sed -e "s/.*x//" `
++		if [ "$XDIM" = "" -o "$YDIM" = "" ]; then
++		    error "Custom page size '$PAPER' != 1-99999"
++		fi
++		if [ "$XDIM" -eq 0 -o "$YDIM" -eq 0 ]; then
++		    error "Custom page size '$PAPER' != 1-99999"
++		fi
++		XDIM=`dc -e "$XDIM 600* 72/p"`
++		YDIM=`dc -e "$YDIM 600* 72/p"`
++		PAPER=21;        paper=letter;
++		DIM="${XDIM}x${YDIM}"
++		;;
++Custom*)
++		#%%BeginFeature: *CustomPageSize True
++		#216
++		#360
++		#0
++		#0
++		#0
++		#pop pop pop pop pop
++
++		#%%BeginFeature: *CustomPageSize True
++		#792.000000 612.000000 1 0.000000 0.000000
++		#pop pop pop pop pop
++
++		if [ $DEBUG = 0 ]; then
++		    TMPFILE=/tmp/cus$$
++		else
++		    TMPFILE=/tmp/custom.ps
++		fi
++		cat >$TMPFILE
++		exec <$TMPFILE
++
++		tmp=`head -n 10000 $TMPFILE \
++		    | sed -n '/CustomPageSize/{n;p;n;p;}' \
++		    | tr '\n' ' '`
++		case "$tmp" in
++		[0-9]*\ [0-9]*)
++		    XDIM=`echo "$tmp" | sed 's/ .*//'`
++		    YDIM=`echo "$tmp" | sed -e 's/^[^ ]* //' -e 's/ .*//'`
++		    ;;
++		*)
++		    if [ $DEBUG = 0 ]; then rm -f $TMPFILE; fi
++		    error "Custom page size [XY]DIM != 1-99999"
++		    ;;
++		esac
++		XDIM=`dc -e "$XDIM 600* 72/p"`
++		YDIM=`dc -e "$YDIM 600* 72/p"`
++		PAPER=21;        paper=letter;
++		DIM="${XDIM}x${YDIM}"
++		;;
++
++# Use names that Ghostscript recognizes, referring to
++# /usr/share/ghostscript/9.10/Resource/Init/gs_statd.ps
++# foo2hbpl1 will provide the appropriate numeric value
++
++letter)		DIM=5100x6600  ;;
++legal)		DIM=5100x8400  ;;
++a4)		DIM=4961x7016  ;;
++executive)	DIM=4350x6300  ;;
++env10)		DIM=2475x5700  ;;
++monarch)	DIM=2325x4500  ;;
++c5)		DIM=3827x5409  ;;
++envDL)		DIM=2599x5197  ;;
++isob5|b5)	DIM=4158x5906  ;;
++jisb5)		DIM=4299x6071  ;;
++a5)		DIM=3496x4961  ;;
++folio)		DIM=5100x7800  ;;
++pa4)		DIM=4961x6600  ;;
++archA)		DIM=5400x7200  ;;
++*)		error "Unimplemented paper code $PAPER";;
++esac
++
++#set_clipping 47 48 51 46	# exact values for Dell C1660w on letter paper
++ set_clipping 51 51 51 51	# default is 0.085 inches all around
++
++PAPERSIZE="-sPAPERSIZE=$PAPER";
++
++#
++# Filter thru psnup if N-up printing has been requested
++#
++case $NUP in
++[234689]|1[024568])	PREFILTER="nup";;
++*)			PREFILTER=cat;;
++esac
++if [ "$DEBUG" -ge 9 ]; then
++    PREFILTER="tee /tmp/$BASENAME.ps"
++fi
++
++#
++#	Overload -G.  If the file name ends with ".icm" or ".ICM"
++#	then convert the ICC color profile to a Postscript CRD,
++#	then prepend it to the users job.  Select the intent
++#	using the -I option.
++#
++
++create_crd() {
++    #
++    # Create a Postscript CRD
++    #
++    ICC2PS=$PREFIX/bin/foo2zjs-icc2ps
++    if [ -x $ICC2PS ]; then
++	case "$GAMMAFILE" in
++	none | none.icm | */none.icm)
++	    ;;
++	*)
++	    if [ -x /usr/bin/logger ]; then
++		logger -t "$BASENAME" -p lpr.info -- \
++		"`basename $ICC2PS` -o $GAMMAFILE -t$INTENT > $ICCTMP.crd.ps"
++	    fi
++	    $ICC2PS -o $GAMMAFILE -t$INTENT > $ICCTMP.crd.ps 2>$ICCTMP.log \
++		|| error "Problem converting .ICM file to Postscript"
++	    ;;
++	esac
++
++	PSTOPS_OPTS="$PSTOPS_OPTS -c"
++	cat > $ICCTMP.usecie.ps <<-EOF
++		%!PS-Adobe-3.0
++		<</UseCIEColor true>>setpagedevice
++	EOF
++	if [ "$QUALITY" = wts -o "$QUALITY" = as ]; then
++	    if [ "$QUALITY" = wts ]; then
++		cat >> $ICCTMP.usecie.ps <<-EOF
++		    << /UseWTS true >> setuserparams
++		EOF
++	    else
++		cat >> $ICCTMP.usecie.ps <<-EOF
++		    << /UseWTS false >> setuserparams
++		EOF
++	    fi
++	    cat >> $ICCTMP.usecie.ps <<-EOF
++		<<
++		    /AccurateScreens true
++		    /HalftoneType 1
++		    /HalftoneName (Round Dot Screen) cvn
++		    /SpotFunction { 180 mul cos exch 180 mul cos add 2 div}
++		    /Frequency 137
++		    /Angle 37
++		>> sethalftone
++		EOF
++	fi
++	cat > $ICCTMP.selcrd.ps <<-EOF
++		/Current /ColorRendering findresource setcolorrendering
++	EOF
++	case "$GAMMAFILE" in
++	none | none.icm | */none.icm) GAMMAFILE="$ICCTMP.usecie.ps";;
++	*)	GAMMAFILE="$ICCTMP.usecie.ps $ICCTMP.crd.ps $ICCTMP.selcrd.ps";;
++	esac
++    else
++	GAMMAFILE=
++    fi
++}
++
++if [ $DEBUG -gt 0 ]; then
++    ICCTMP=/tmp/icc
++else
++    ICCTMP=/tmp/icc$$
++fi
++
++if [ "" = "$COLOR" ]; then
++    COLORMODE=
++    GAMMAFILE=
++else
++    case "$COLORMODE" in
++    default)	COLORMODE=$DEFAULTCOLORMODE;;
++    esac
++    case "$GAMMAFILE" in
++    default)	GAMMAFILE=samclp300-0.icm;;
++    esac
++fi
++
++CRDBASE="$PREFIX/share/foo2hbpl/crd"
++case "$MODEL" in
++    0)	model=CLP-300;;
++    1)	model=CLP-600;;
++    2)	model=CLP-600;;
++    3)	model=CLP-600;;
++esac
++
++PSTOPS_OPTS="-n"
++
++case "$COLORMODE" in
++0|"")
++    # Monochrome
++    ;;
++10|icm)
++    # Use old ICM method
++    AIB=-A
++    BC=-B
++    case "$GAMMAFILE" in
++    none | none.icm | */none.icm)
++	create_crd
++	;;
++    *.icm|*.ICM|*.icc|*.ICC)
++	#
++	# Its really an .ICM file, not a gamma file.
++	#
++	# The file can be a full path name, or the name of a file in $SHARE/icm/
++	#
++	if [ -r "$GAMMAFILE" ]; then
++	    create_crd
++	elif [ -r "$SHARE/icm/$GAMMAFILE" ]; then
++	    GAMMAFILE="$SHARE/icm/$GAMMAFILE"
++	    create_crd
++	else
++	    GAMMAFILE=
++	fi
++	;;
++    esac
++    ;;
++1|crd)
++    # CRD
++    GAMMAFILE=""
++    GAMMAFILE="$GAMMAFILE $CRDBASE/${model}cms"
++    GAMMAFILE="$GAMMAFILE $CRDBASE/$SCREEN"
++    # Black text...
++    TMPFILE2=/tmp/black$$
++    cat $CRDBASE/black-text.ps - >$TMPFILE2
++    exec <$TMPFILE2
++    ;;
++*.crd)
++    GAMMAFILE="$CRDBASE/prolog.ps"
++    if [ -f $COLORMODE ]; then
++	GAMMAFILE="$GAMMAFILE $COLORMODE"
++    elif [ -f $CRDBASE/$COLORMODE ]; then
++	GAMMAFILE="$GAMMAFILE $CRDBASE/$COLORMODE"
++    else
++	error "Can't find CRD '$COLORMODE' in . or in $CRDBASE"
++    fi
++    GAMMAFILE="$GAMMAFILE $CRDBASE/$SCREEN"
++    ;;
++*)
++    error "Unknown color method '$COLORMODE'"
++    ;;
++esac
++
++if [ "" != "$COLOR" ]; then
++    GSDEV=-sDEVICE=pamcmyk32
++    $GSBIN --help | grep -q pamcmyk32 || GSDEV=-sDEVICE=ppmraw
++fi
++
++#
++#	Figure out USERNAME
++#
++if [ "$LPUSER" != "" ]; then
++    USER="$LPUSER@$LPHOST"
++else
++    USER=""
++fi
++
++#
++#	Main Program, just cobble together the pipeline and run it
++#
++#	The malarky with file descriptors 1 and 3 is to avoid a bug in
++#	(some versions?) of Ghostscript where Postscript's stdout gets
++#	intermingled with the printer drivers output, resulting in
++#	corrupted image data.
++#
++GS="$GSBIN -q -dBATCH -dSAFER -dQUIET -dNOPAUSE"
++
++foo2zjs-pstops $PSTOPS_OPTS | \
++$PREFILTER \
++| ($GS $PAPERSIZE -g$DIM -r$RES $GSDEV $GSOPTS \
++    -sOutputFile="|cat 1>&3" $GAMMAFILE -_ >/dev/null) 3>&1 \
++| foo2hbpl1 -m$MEDIA $CLIP_ALL -J "$LPJOB" -U "$USER"
++
++#
++#	Log the command line, for debugging and problem reports
++#
++if [ -x /usr/bin/logger ]; then
++    logger -t "$BASENAME" -p lpr.info -- \
++	"$GSBIN $PAPERSIZE -g$DIM -r$RES $GSDEV $GSOPTS $GAMMAFILE"
++    logger -t "$BASENAME" -p lpr.info -- \
++	"foo2hbpl1 -m$MEDIA $CLIP_ALL"
++fi
++
++#
++#	Remove cruft
++#
++if [ $DEBUG -eq 0 ]; then
++    for i in crd.ps log usecie.ps selcrd.ps
++    do
++	file="$ICCTMP.$i"
++	[ -f $file ] && rm -f $file
++    done
++    [ -f "$TMPFILE" ] && rm -f $TMPFILE
++    [ -f "$TMPFILE2" ] && rm -f $TMPFILE2
++fi
++
++exit 0
+--- foo2zjs/foo2hbpl1.1in	1970-01-01 00:00:00.000000000 +0000
++++ foo2zjs/foo2hbpl1.1in	2014-03-24 12:30:14.000000000 +0000
+@@ -0,0 +1,68 @@
++'\" t
++.TH foo2hbpl1 1 "${MODpage}" "foo2hbpl1 ${MODver}"
++#ifndef OLDGROFF
++#include "macros.man"
++#endif
++'\"==========================================================================
++'\"	MANUAL PAGE SOURCE
++'\"==========================================================================
++.SH NAME
++foo2hbpl1 \- Convert Ghostscript output to an HBPLv1 printer stream
++.SH SYNOPSIS
++.B foo2hbpl1
++.RI [ options "] <" pnm-or-pam-file " >" hbpl1-file
++.SH DESCRIPTION
++.B foo2hbpl1
++converts Ghostscript pbmraw, pgmraw, ppmraw, or pamcmyk32 output
++formats to monochrome or color HBPL version 1 streams, to drive the
++Dell 1250c, Dell C1660w, Dell C1760w,
++Epson AcuLaser C1700,
++and Fuji-Xerox CP105b printers.
++
++.SH COMMAND LINE OPTIONS
++.TP
++.BI \-J\0 filename
++Filename string to send to printer.
++.TP
++.BI \-U\0 username
++Username string to send to printer.
++.SH EXAMPLES
++Create a black and white ZJS stream:
++
++.RS
++.nf
++gs -q -dBATCH -dSAFER -dQUIET -dNOPAUSE \ 
++    -sPAPERSIZE=letter -r600x600 -sDEVICE=pgmraw \ 
++    -sOutputFile=- - < testpage.ps \ 
++| foo2hbpl1 >testpage.zm
++.fi
++.RE
++.P
++Create a color ZJS stream:
++
++.RS
++.nf
++gs -q -dBATCH -dSAFER -dQUIET -dNOPAUSE \ 
++    -sPAPERSIZE=letter -g5100x6600 -r600x600 -sDEVICE=pamcmyk32 \ 
++    -sOutputFile=- - < testpage.ps \ 
++| foo2hbpl1 >testpage.zc
++.fi
++.RE
++
++.SH FILES
++.BR /usr/bin/foo2hbpl1
++.SH SEE ALSO
++.BR foo2hbpl1-wrapper (1),
++.BR hbpldecode (1)
++.SH "AUTHOR"
++Rick Richardson <rick.richardson@comcast.net>
++.br
++Peter Korf <peter@niendo.de>
++.br
++Dave Coffin <dcoffin@cybercom.net>
++.br
++${URLHBPL}/
++'\"
++'\"
++'\"
++.em pdf_outline
+--- foo2zjs/foo2hbpl1.c	1970-01-01 00:00:00.000000000 +0000
++++ foo2zjs/foo2hbpl1.c	2014-04-04 18:18:29.692060000 +0000
+@@ -0,0 +1,692 @@
++/*
++
++GENERAL
++This program converts bilevel PBM, 8-bit PGM, 24-bit PPM, and 32-bit
++CMYK PAM files (output by Ghostscript as "pbmraw", "pgmraw", "ppmraw",
++and "pamcmyk32" respectively) to HBPL version 1 for the consumption
++of various Dell, Epson, and Fuji-Xerox printers.
++
++With this utility, you can print to some Dell and Fuji printers, such as these:
++    - Dell 1250c			B/W and Color
++    - Dell C1660			B/W and Color
++    - Dell C1760			B/W and Color
++    - Epson AcuLaser C1700		B/W and Color
++    - Fuji-Xerox DocuPrint CP105	B/W and Color
++
++AUTHORS
++This program was originally written by Dave Coffin in March 2014.
++
++LICENSE
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 2 of the License, or (at
++your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++
++You should have received a copy of the GNU General Public License
++along with this program; if not, write to the Free Software
++Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
++
++If you want to use this program under different license conditions,
++then contact the author for an arrangement.
++
++*/
++
++static char Version[] = "$Id: foo2hbpl1.c,v 1.3 2014/03/30 05:08:32 rick Exp $";
++
++#include <time.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <ctype.h>
++#include <string.h>
++#include <unistd.h>
++#include <stdarg.h>
++#ifdef linux
++    #include <sys/utsname.h>
++#endif
++
++/*
++ * Command line options
++ */
++int	MediaCode = 0;
++char	*Username = NULL;
++char	*Filename = NULL;
++int	Clip[] = { 8,8,8,8 };
++
++void
++usage(void)
++{
++    fprintf(stderr,
++"Usage:\n"
++"   foo2hbpl1 [options] <pamcmyk32-file >hbpl-file\n"
++"\n"
++"	Convert Ghostscript pbmraw, pgmraw, ppmraw, or pamcmyk32\n"
++"	format to HBPLv1, for the Dell C1660w and other printers.\n"
++"\n"
++"	gs -q -dBATCH -dSAFER -dQUIET -dNOPAUSE \\ \n"
++"		-sPAPERSIZE=letter -r600x600 -sDEVICE=pamcmyk32 \\ \n"
++"		-sOutputFile=- - < testpage.ps \\ \n"
++"	| foo2hbpl1 >testpage.zc\n"
++"\n"
++"Options:\n"
++"-m media	Media code to send to printer [1 or 6]\n"
++"		  1=plain, 2=bond, 3=lwcard, 4=lwgcard, 5=labels,\n"
++"		  6=envelope, 7=recycled, 8=plain2, 9=bond2,\n"
++"		  10=lwcard2, 11=lwgcard2, 12=recycled2\n"
++"-u left,top,right,bottom\n"
++"		Erase margins of specified width [%d,%d,%d,%d]\n"
++"-J filename	Filename string to send to printer\n"
++"-U username	Username string to send to printer\n"
++"-V		Version %s\n"
++	, Clip[0], Clip[1], Clip[2], Clip[3]
++	, Version);
++}
++
++void
++error(int fatal, char *fmt, ...)
++{
++    va_list ap;
++
++    va_start(ap, fmt);
++    vfprintf(stderr, fmt, ap);
++    va_end(ap);
++
++    if (fatal) exit(fatal);
++}
++
++struct stream
++{
++    unsigned char *buf;
++    int size, off, bits;
++};
++
++void
++putbits(struct stream *s, unsigned val, int nbits)
++{
++    if (s->off + 16 > s->size &&
++	!(s->buf = realloc(s->buf, s->size += 0x100000)))
++	    error (1, "Out of memory\n");
++    if (s->bits)
++    {
++	s->off--;
++	val |= s->buf[s->off] >> (8-s->bits) << nbits;
++	nbits += s->bits;
++    }
++    s->bits = nbits & 7;
++    while ((nbits -= 8) > 0)
++	s->buf[s->off++] = val >> nbits;
++    s->buf[s->off++] = val << -nbits;
++}
++
++/*
++   Runlengths are integers between 1 and 17057 encoded as follows:
++
++	1	00
++	2	01 0
++	3	01 1
++	4	100 0
++	5	100 1
++	6	101 00
++	7	101 01
++	8	101 10
++	9	101 11
++	10	110 0000
++	11	110 0001
++	12	110 0010
++	   ...
++	25	110 1111
++	26	111 000 000
++	27	111 000 001
++	28	111 000 010
++	29	111 000 011
++	   ...
++	33	111 000 111
++	34	111 001 000
++	   ...
++	41	111 001 111
++	42	111 010 000
++	50	111 011 0000
++	66	111 100 00000
++	98	111 101 000000
++	162	111 110 000000000
++	674	111 111 00000000000000
++	17057	111 111 11111111111111
++*/
++void
++put_len(struct stream *s, unsigned val)
++{
++    unsigned code[] =
++    {
++	  1, 0, 2,
++	  2, 2, 3,
++	  4, 8, 4,
++	  6, 0x14, 5,
++	 10, 0x60, 7,
++	 26, 0x1c0, 9,
++	 50, 0x3b0, 10,
++	 66, 0x780, 11,
++	 98, 0xf40, 12,
++	162, 0x7c00, 15,
++	674, 0xfc000, 20,
++	17058
++    };
++    int c = 0;
++
++    if (val < 1 || val > 17057) return;
++    while (val >= code[c+3]) c += 3;
++    putbits(s, val-code[c] + code[c+1], code[c+2]);
++}
++
++/*
++   CMYK byte differences are encoded as follows:
++
++	 0	000
++	+1	001
++	-1	010
++	 2	011s0	s = 0 for +, 1 for -
++	 3	011s1
++	 4	100s00
++	 5	100s01
++	 6	100s10
++	 7	100s11
++	 8	101s000
++	 9	101s001
++	    ...
++	 14	101s110
++	 15	101s111
++	 16	110s00000
++	 17	110s00001
++	 18	110s00010
++	    ...
++	 46	110s11110
++	 47	110s11111
++	 48	1110s00000
++	 49	1110s00001
++	    ...
++	 78	1110s11110
++	 79	1110s11111
++	 80	1111s000000
++	 81	1111s000001
++	    ...
++	 126	1111s101110
++	 127	1111s101111
++	 128	11111110000
++*/
++void
++put_diff(struct stream *s, signed char val)
++{
++    static unsigned short code[] =
++    {
++	 2,  3, 3, 1,
++	 4,  4, 3, 2,
++	 8,  5, 3, 3,
++	16,  6, 3, 5,
++	48, 14, 4, 5,
++	80, 15, 4, 6,
++	129
++    };
++    int sign, abs, c = 0;
++
++    switch (val)
++    {
++    case  0:  putbits(s, 0, 3);  return;
++    case  1:  putbits(s, 1, 3);  return;
++    case -1:  putbits(s, 2, 3);  return;
++    }
++    abs = ((sign = val < 0)) ? -val:val;
++    while (abs >= code[c+4]) c += 4;
++    putbits(s, code[c+1], code[c+2]);
++    putbits(s, sign, 1);
++    putbits(s, abs-code[c], code[c+3]);
++}
++
++void
++setle(unsigned char *c, int s, int i)
++{
++    while (s--)
++    {
++	*c++ = i;
++	i >>= 8;
++    }
++}
++
++void
++start_doc(int color)
++{
++    char reca[] = { 0x41,0x81,0xa1,0x00,0x82,0xa2,0x07,0x00,0x83,0xa2,0x01,0x00 };
++    time_t t;
++    struct tm *tmp;
++    char datestr[16], timestr[16];
++    char cname[128] = "My Computer";
++    char *mname[] =
++    {	"",
++	"NORMAL",
++	"THICK",
++	"HIGHQUALITY",
++	"COAT2",
++	"LABEL",
++	"ENVELOPE",
++	"RECYCLED",
++	"NORMALREV",
++	"THICKSIDE2",
++	"HIGHQUALITYREV",
++	"COATEDPAPER2REV",
++	"RECYCLEREV",
++    };
++
++    t = time(NULL);
++    tmp = localtime(&t);
++    strftime(datestr, sizeof datestr, "%m/%d/%Y", tmp);
++    strftime(timestr, sizeof timestr, "%H:%M:%S", tmp);
++
++    #ifdef linux
++    {
++	struct utsname u;
++
++	uname(&u);
++	strncpy(cname, u.nodename, 128);
++	cname[127] = 0;
++    }
++    #endif
++
++/* Lines end with \n, not \r\n */
++
++    printf(
++	"\033%%-12345X@PJL SET STRINGCODESET=UTF8\n"
++	"@PJL COMMENT DATE=%s\n"
++	"@PJL COMMENT TIME=%s\n"
++	"@PJL COMMENT DNAME=%s\n"
++	"@PJL JOB MODE=PRINTER\n"
++	"@PJL SET JOBATTR=\"@LUNA=%s\"\n"
++	"@PJL SET JOBATTR=\"@TRCH=OFF\"\n"
++	"@PJL SET DUPLEX=OFF\n"
++	"@PJL SET BINDING=LONGEDGE\n"
++	"@PJL SET IWAMANUALDUP=OFF\n"
++	"@PJL SET JOBATTR=\"@MSIP=%s\"\n"
++	"@PJL SET RENDERMODE=%s\n"
++	"@PJL SET ECONOMODE=OFF\n"
++	"@PJL SET RET=ON\n"
++	"@PJL SET JOBATTR=\"@IREC=OFF\"\n"
++	"@PJL SET JOBATTR=\"@TRAP=ON\"\n"
++	"@PJL SET JOBATTR=\"@JOAU=%s\"\n"
++	"@PJL SET JOBATTR=\"@CNAM=%s\"\n"
++	"@PJL SET COPIES=1\n"
++	"@PJL SET QTY=1\n"
++	"@PJL SET PAPERDIRECTION=SEF\n"
++	"@PJL SET RESOLUTION=600\n"
++	"@PJL SET BITSPERPIXEL=8\n"
++	"@PJL SET JOBATTR=\"@DRDM=XRC\"\n"
++	"@PJL SET JOBATTR=\"@TSCR=11\"\n"
++	"@PJL SET JOBATTR=\"@GSCR=11\"\n"
++	"@PJL SET JOBATTR=\"@ISCR=12\"\n"
++	"@PJL SET JOBATTR=\"@TTRC=11\"\n"
++	"@PJL SET JOBATTR=\"@GTRC=11\"\n"
++	"@PJL SET JOBATTR=\"@ITRC=12\"\n"
++	"@PJL SET JOBATTR=\"@TCPR=11\"\n"
++	"@PJL SET JOBATTR=\"@GCPR=11\"\n"
++	"@PJL SET JOBATTR=\"@ICPR=12\"\n"
++	"@PJL SET JOBATTR=\"@TUCR=11\"\n"
++	"@PJL SET JOBATTR=\"@GUCR=11\"\n"
++	"@PJL SET JOBATTR=\"@IUCR=12\"\n"
++	"@PJL SET JOBATTR=\"@BSPM=OFF\"\n"
++	"@PJL SET JOBATTR=\"@TDFT=0\"\n"
++	"@PJL SET JOBATTR=\"@GDFT=0\"\n"
++	"@PJL SET JOBATTR=\"@IDFT=0\"\n"
++	"@PJL ENTER LANGUAGE=HBPL\n"
++	, datestr, timestr
++	, Filename ? Filename : ""
++	, Username ? Username : ""
++	, mname[MediaCode]
++	, color ? "COLOR" : "GRAYSCALE"
++	, Username ? Username : ""
++	, cname);
++    fwrite (reca, 1, sizeof reca, stdout);
++}
++
++#define IP (((int *)image) + off)
++#define CP (((char *)image) + off)
++#define DP (((char *)image) + off*deep)
++#define BP(x) ((blank[(off+x) >> 3] << ((off+x) & 7)) & 128)
++#define put_token(s,x) putbits(s, huff[hsel][x] >> 4, huff[hsel][x] & 15)
++
++void
++encode_page(int color, int width, int height, char *image)
++{
++    unsigned char head[90] =
++    {
++	0x43,0x91,0xa1,0x00,0x92,0xa1,0x01,0x93,0xa1,0x01,0x94,0xa1,
++	0x00,0x95,0xc2,0x00,0x00,0x00,0x00,0x96,0xa1,0x00,0x97,0xc3,
++	0x00,0x00,0x00,0x00,0x98,0xa1,0x00,0x99,0xa4,0x01,0x00,0x00,
++	0x00,0x9a,0xc4,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x9b,
++	0xa1,0x00,0x9c,0xa1,0x01,0x9d,0xa1,0x00,0x9e,0xa1,0x02,0x9f,
++	0xa1,0x05,0xa0,0xa1,0x08,0xa1,0xa1,0x00,0xa2,0xc4,0x00,0x00,
++	0x00,0x00,0x00,0x00,0x00,0x00,0x51,0x52,0xa3,0xa1,0x00,0xa4,
++	0xb1,0xa4
++    };
++    unsigned char body[52] =
++    {
++	0x20,0x00,0x00,0x00,0x00,0x01,0x00,0x00,0x10,0x32,0x04,0x00,
++	0xa1,0x42,0x00,0x00,0x00,0x00,0xff
++    };
++    static short papers[] =
++    {	// Official sizes to nearest 1/600 inch
++	// will accept +-1.5mm (35/600 inch) tolerance
++	  0, 5100, 6600,	// Letter
++	  2, 5100, 8400,	// Legal
++	  4, 4961, 7016,	// A4
++	  6, 4350, 6300,	// Executive
++	 13, 2475, 5700,	// #10 envelope
++	 15, 2325, 4500,	// Monarch envelope
++	 17, 3827, 5409,	// C5 envelope
++	 19, 2599, 5197,	// DL envelope
++//	 ??, 4158, 5906,	// B5 ISO
++	 22, 4299, 6071,	// B5 JIS
++	 30, 3496, 4961,	// A5
++	410, 5100, 7800,	// Folio
++    };
++    static const unsigned short huff[2][8] =
++    {
++	{ 0x01,0x63,0x1c5,0x1d5,0x1e5,0x22,0x3e6 }, // for text & graphics
++	{ 0x22,0x63,0x1c5,0x1d5,0x1e5,0x01,0x3e6 }, // for images
++    };
++    unsigned char *blank;
++    static int pagenum = 0;
++    struct stream stream[5] = { { 0 } };
++    int dirs[] = { -1,0,-1,1,2 }, rotor[] = { 0,1,2,3,4 };
++    int i, j, row, col, deep, dir, run, try, bdir, brun, total;
++    int paper = 510, hsel = 0, off = 0, bit = 0, stat = 0;
++    int margin = width-96;
++
++    for (i = 0; i < sizeof papers / sizeof *papers; i++)
++	if (abs(width-papers[i+1]) < 36 && abs(height-papers[i+2]) < 36)
++	    paper = papers[i];
++    if (!MediaCode)
++	MediaCode = paper & 1 ? 6 : 1;
++    if (!pagenum)
++	start_doc(color);
++    head[12] = paper >> 1;
++    if (paper == 510)
++    {
++	setle (head+15, 2,  (width*254+300)/600);  // units of 0.1mm
++	setle (head+17, 2, (height*254+300)/600);
++	head[21] = 2;
++    }
++    width = -(-width & -8);
++    setle (head+33, 4, ++pagenum);
++    setle (head+39, 4, width);
++    setle (head+43, 4, height);
++    setle (head+70, 4, width);
++    setle (head+74, 4, height);
++    head[55] = 9 + color*130;
++    if (color)	body[6] = 1;
++    else	body[4] = 8;
++
++    deep = 1 + color*3;
++    for (i=1; i < 5; i++)
++	dirs[i] -= width;
++    if (!color) dirs[4] = -8;
++
++    blank = calloc(height+2, width/8);
++    memset (blank++, -color, width/8+1);
++    for (row = 1; row <= height; row++)
++    {
++	for (col = deep; col < deep*2; col++)
++	    image[row*width*deep + col] = -1;
++	for (col = 8; col < width*deep; col += 4)
++	    if (*(int *)(image + row*width*deep + col))
++	    {
++		for (col = 12; col < margin/8; col++)
++		    blank[row*(width/8)+col] = -1;
++		blank[row*(width/8)+col] = -2 << (~margin & 7);
++		break;
++	    }
++    }
++    memset (image, -color, (width+1)*deep);
++    image += (width+1)*deep;
++    blank += width/8;
++
++    while (off < width * height)
++    {
++	for (bdir = brun = dir = 0; dir < 5; dir++)
++	{
++	    try = dirs[rotor[dir]];
++	    for (run = 0; run < 17057; run++, try++)
++	    {
++		if (color)
++		{
++		    if (IP[run] != IP[try]) break;
++		}
++		else
++		    if (CP[run] != CP[try]) break;
++
++		if (BP(run) != BP(try)) break;
++	    }
++	    if (run > brun)
++	    {
++		bdir = dir;
++		brun = run;
++	    }
++	}
++	if (brun == 0)
++	{
++	    put_token(stream, 5);
++	    for (i = 0; i < deep; i++)
++		put_diff(stream+1+i, DP[i] - DP[i-deep]);
++	    bit = 0;
++	    off++;
++	    stat--;
++	    continue;
++	}
++	if (brun > width * height - off)
++	    brun = width * height - off;
++	if (bdir)
++	{
++	    j = rotor[bdir];
++	    for (i = bdir; i; i--)
++		rotor[i] = rotor[i-1];
++	    rotor[0] = j;
++	}
++	if ((off-1+brun)/width != (off-1)/width)
++	{
++	    if (abs(stat) > 8 && ((stat >> 31) & 1) != hsel)
++	    {
++		hsel ^= 1;
++		put_token(stream, 6);
++	    }
++	    stat = 0;
++	}
++	stat += bdir == bit;
++	put_token(stream, bdir - bit);
++	put_len(stream, brun);
++	bit = brun < 17057;
++	off += brun;
++    }
++
++    putbits(stream, 0xff, 8);
++    for (total = 48, i = 0; i <= deep; i++)
++    {
++	putbits(stream+i, 0xff, 8);
++	stream[i].off--;
++	setle (body+32 + i*4, 4, stream[i].off);
++	total += stream[i].off;
++    }
++    head[85] = 0xa2 + (total > 0xffff)*2;
++    setle (head+86, 4, total);
++    fwrite(head, 1, 88+(total > 0xffff)*2, stdout);
++    fwrite(body, 1, 48, stdout);
++    for (i = 0; i <= deep; i++)
++    {
++	fwrite(stream[i].buf, 1, stream[i].off, stdout);
++	free(stream[i].buf);
++    }
++    free(blank-width/8-1);
++    printf("SD");
++}
++#undef IP
++#undef CP
++#undef DP
++#undef BP
++#undef put_token
++
++int
++getint(FILE *fp)
++{
++    int c, ret;
++
++    for (;;)
++    {
++	while (isspace(c = fgetc(fp)));
++	if (c == '#')
++	    while (fgetc(fp) != '\n');
++	else break;
++    }
++    if (!isdigit(c)) return -1;
++    for (ret = c-'0'; isdigit(c = fgetc(fp)); )
++	ret = ret*10 + c-'0';
++    return ret;
++}
++
++void
++do_file(FILE *fp)
++{
++    int type, iwide, ihigh, ideep, imax, ibyte;
++    int wide, deep, byte, row, col, i, k;
++    char tupl[128], line[128];
++    unsigned char *image, *sp, *dp;
++
++    while ((type = fgetc(fp)) != EOF)
++    {
++	type = ((type - 'P') << 8) | fgetc(fp);
++	tupl[0] = iwide = ihigh = ideep = deep = imax = ibyte = -1;
++	switch (type)
++	{
++	case '4':
++	    deep = 1 + (ideep = 0);
++	    goto six;
++	case '5':
++	    deep = ideep = 1;
++	    goto six;
++	case '6':
++	    deep = 1 + (ideep = 3);
++six:	    iwide = getint(fp);
++	    ihigh = getint(fp);
++	    imax = type == '4' ? 255 : getint(fp);
++	    break;
++	case '7':
++	    do
++	    {
++		if (!fgets(line, 128, fp)) goto fail;
++		if (!strncmp(line, "WIDTH ",6))
++		    iwide = atoi(line + 6);
++		if (!strncmp(line, "HEIGHT ",7))
++		    ihigh = atoi(line + 7);
++		if (!strncmp(line, "DEPTH ",6))
++		    deep = ideep = atoi(line + 6);
++		if (!strncmp(line, "MAXVAL ",7))
++		    imax = atoi(line + 7);
++		if (!strncmp(line, "TUPLTYPE ",9))
++		    strcpy (tupl, line + 9);
++	    } while (strcmp(line, "ENDHDR\n"));
++	    if (ideep != 4 || strcmp(tupl, "CMYK\n")) goto fail;
++	    break;
++	default:
++	    goto fail;
++	}
++	if (iwide <= 0 || ihigh <= 0 || imax != 255) goto fail;
++	wide = -(-iwide & -8);
++        if (ideep)
++	    ibyte = iwide * ideep;
++	else
++	    ibyte = wide >> 3;
++	byte = wide * deep;
++	image = calloc (ihigh+2, byte);
++	for (row = 1; row <= ihigh; row++)
++	{
++	    i = fread (image, ibyte, 1, fp);
++	    sp = image;
++	    dp = image + row*byte;
++	    for (col = 0; col < iwide; col++)
++	    {
++		dp += deep;
++		switch (ideep)
++		{
++		case 0:
++		    *dp = ((image[col >> 3] >> (~col & 7)) & 1) * 255;
++		    break;
++		case 1:
++		    *dp = ~*sp;
++		    break;
++		case 3:
++		    for (k = sp[2], i = 0; i < 2; i++)
++			if (k < sp[i]) k = sp[i];
++		    *dp = ~k;
++		    for (i = 0; i < 3; i++)
++			dp[i+1] = k ? (k - sp[i]) * 255 / k : 255;
++		    break;
++		case 4:
++		    for (i=0; i < 4; i++)
++			dp[i] = sp[((i-1) & 3)];
++		    break;
++		}
++		sp += ideep;
++	    }
++	    for (i = 0; i < deep*Clip[0]; i++)
++		image[row*byte + deep+i] = 0;
++	    for (i = deep*(iwide-Clip[2]); i < byte; i++)
++		image[row*byte + deep+i] = 0;
++	}
++	memset(image+deep, 0, byte*(Clip[1]+1));
++	memset(image+deep + byte*(ihigh-Clip[3]+1), 0, byte*Clip[3]);
++	encode_page(deep > 1, iwide, ihigh, (char *) image);
++	free(image);
++    }
++    return;
++fail:
++    fprintf (stderr, "Not an acceptable PBM, PPM or PAM file!!!\n");
++}
++
++int
++main(int argc, char *argv[])
++{
++    int	c, i;
++
++    while ( (c = getopt(argc, argv, "m:u:J:U:V")) != EOF)
++	switch (c)
++	{
++	case 'm':  MediaCode = atoi(optarg); break;
++	case 'u':  if (sscanf(optarg, "%d,%d,%d,%d",
++			Clip, Clip+1, Clip+2, Clip+3) != 4)
++		      error(1, "Must specify four clipping margins!\n");
++		   break;
++	case 'J':  if (optarg[0]) Filename = optarg; break;
++	case 'U':  if (optarg[0]) Username = optarg; break;
++	case 'V':  printf("%s\n", Version); return 0;
++	default:   usage(); return 1;
++	}
++
++    argc -= optind;
++    argv += optind;
++
++    if (argc == 0)
++    {
++	do_file(stdin);
++    }
++    else
++    {
++	for (i = 0; i < argc; ++i)
++	{
++	    FILE *ifp;
++
++	    if (!(ifp = fopen(argv[i], "r")))
++		error(1, "Can't open '%s' for reading\n", argv[i]);
++	    do_file(ifp);
++	    fclose(ifp);
++	}
++    }
++    puts("B\033%-12345X@PJL EOJ");
++    return 0;
++}
+--- foo2zjs/foomatic-db/driver/foo2hbpl1.xml	1970-01-01 00:00:00.000000000 +0000
++++ foo2zjs/foomatic-db/driver/foo2hbpl1.xml	2014-03-24 16:18:13.000000000 +0000
+@@ -0,0 +1,21 @@
++<driver id="driver/foo2hbpl1">
++    <name>foo2hbpl1</name>
++    <url>http://foo2hbpl.rkkda.com/</url>
++    <execution>
++	<filter />
++	<prototype>foo2hbpl1-wrapper %A</prototype>
++    </execution>
++    <comments> <en>
++
++	This is a driver developed for the Dell 1250c, Dell C1660, Dell C1760,
++	Epson AcuLaser C1700, and the Fuji-Xerox DocuPrint cp105.
++
++    </en> </comments>
++    <printers>
++	<printer><id>printer/Dell-1250c</id></printer>
++	<printer><id>printer/Dell-C1660</id></printer>
++	<printer><id>printer/Dell-C1760</id></printer>
++	<printer><id>printer/Epson-AcuLaser_C1700</id></printer>
++	<printer><id>printer/Fuji_Xerox-DocuPrint_CP105</id></printer>
++    </printers>
++</driver>
+--- foo2zjs/foomatic-db/opt/foo2hbpl1-ColorMode.xml	1970-01-01 00:00:00.000000000 +0000
++++ foo2zjs/foomatic-db/opt/foo2hbpl1-ColorMode.xml	2014-03-24 15:31:46.000000000 +0000
+@@ -0,0 +1,38 @@
++<option type="enum" id="opt/foo2hbpl1-ColorMode">
++    <!-- A multilingual <comments> block can appear here, too;
++       it should be treated as documentation for the user. -->
++    <arg_longname> <en>Color Mode</en> </arg_longname>
++    <arg_shortname> <en>ColorMode</en> </arg_shortname>
++    <arg_execution>
++	<arg_group>General</arg_group>
++	<arg_order>120</arg_order>
++	<arg_spot>A</arg_spot>
++	<arg_required />
++	<arg_substitution />
++	<arg_proto>%s </arg_proto>
++    </arg_execution>
++    <constraints>
++	<constraint sense="true">
++	<driver>foo2hbpl1</driver>
++	<arg_defval>ev/foo2hbpl1-ColorMode-mono</arg_defval>
++	</constraint>
++    </constraints>
++    <enum_vals>
++	<enum_val id="ev/foo2hbpl1-ColorMode-mono">
++	    <ev_longname> <en>Monochrome</en> </ev_longname>
++	    <comments><en>
++		Prints in monochrome only
++	    </en></comments>
++	    <ev_shortname> <en>Monochrome</en> </ev_shortname>
++	    <ev_driverval></ev_driverval>
++	</enum_val>
++	<enum_val id="ev/foo2hbpl1-ColorMode-color">
++	    <ev_longname> <en>Color</en> </ev_longname>
++	    <comments><en>
++		Prints in color using the best compromise setting.
++	    </en></comments>
++	    <ev_shortname> <en>Color</en> </ev_shortname>
++	    <ev_driverval>-c</ev_driverval>
++	</enum_val>
++    </enum_vals>
++</option>
+--- foo2zjs/foomatic-db/opt/foo2hbpl1-ICM.xml	1970-01-01 00:00:00.000000000 +0000
++++ foo2zjs/foomatic-db/opt/foo2hbpl1-ICM.xml	2014-03-25 10:14:22.000000000 +0000
+@@ -0,0 +1,52 @@
++<option type="enum" id="opt/foo2hbpl1-ICM">
++    <comments>
++	<en>
++	This option controls which .ICM file to use for color correction.
++	ICM files are stored in directory /usr/share/foo2hbpl/icm/.
++	</en>
++    </comments>
++    <arg_longname> <en>ICM Color Profile</en> </arg_longname>
++    <arg_shortname> <en>ICM</en> </arg_shortname>
++    <arg_execution>
++	<arg_group>Adjustment</arg_group>
++	<arg_order>300</arg_order>
++	<arg_spot>A</arg_spot>
++	<arg_required />
++	<arg_substitution />
++	<arg_proto>%s </arg_proto>
++    </arg_execution>
++    <constraints>
++	<constraint sense="true">
++	    <driver>foo2hbpl1</driver>
++	    <arg_defval>ev/foo2hbpl1-ICM-none</arg_defval>
++	</constraint>
++    </constraints>
++    <enum_vals>
++	<enum_val id="ev/foo2hbpl1-ICM-none">
++	    <ev_longname> <en>No ICM color correction</en> </ev_longname>
++		<!-- A multilingual <comments> block can appear here, too;
++		 it should be treated as documentation for the user. -->
++	    <ev_shortname> <en>none</en> </ev_shortname>
++	    <ev_driverval>-C10 -Gnone.icm</ev_driverval>
++	</enum_val>
++
++        <enum_val id="ev/foo2hbpl1-ICM-testing">
++            <ev_longname> <en>File testing.icm</en> </ev_longname>
++            <ev_shortname> <en>testing</en> </ev_shortname>
++            <ev_driverval>-C10 -Gtesting.icm</ev_driverval>
++        </enum_val>
++
++        <enum_val id="ev/foo2hbpl1-ICM-testing2">
++            <ev_longname> <en>File testing2.icm</en> </ev_longname>
++            <ev_shortname> <en>testing2</en> </ev_shortname>
++            <ev_driverval>-C10 -Gtesting2.icm</ev_driverval>
++        </enum_val>
++
++        <enum_val id="ev/foo2hbpl1-ICM-testing3">
++            <ev_longname> <en>File testing3.icm</en> </ev_longname>
++            <ev_shortname> <en>testing3</en> </ev_shortname>
++            <ev_driverval>-C10 -Gtesting3.icm</ev_driverval>
++        </enum_val>
++
++    </enum_vals>
++</option>
+--- foo2zjs/foomatic-db/opt/foo2hbpl1-MediaType.xml	1970-01-01 00:00:00.000000000 +0000
++++ foo2zjs/foomatic-db/opt/foo2hbpl1-MediaType.xml	2014-03-24 15:50:56.000000000 +0000
+@@ -0,0 +1,82 @@
++<option type="enum" id="opt/foo2hbpl1-MediaType">
++    <!-- A multilingual <comments> block can appear here, too;
++       it should be treated as documentation for the user. -->
++    <arg_longname> <en>Media Type</en> </arg_longname>
++    <arg_shortname> <en>MediaType</en> </arg_shortname>
++    <arg_execution>
++	<arg_group>General</arg_group>
++	<arg_order>150</arg_order>
++	<arg_spot>A</arg_spot>
++	<arg_required />
++	<arg_substitution />
++	<arg_proto>-m%s </arg_proto>
++    </arg_execution>
++    <constraints>
++	<constraint sense="true">
++	<driver>foo2hbpl1</driver>
++	<arg_defval>ev/foo2hbpl1-MediaType-1</arg_defval>
++	</constraint>
++    </constraints>
++    <enum_vals>
++	<enum_val id="ev/foo2hbpl1-MediaType-1">
++	    <ev_longname> <en>Plain Paper</en> </ev_longname>
++	    <ev_shortname> <en>plain</en> </ev_shortname>
++	    <ev_driverval>1</ev_driverval>
++	</enum_val>
++	<enum_val id="ev/foo2hbpl1-MediaType-2">
++	    <ev_longname> <en>Bond</en> </ev_longname>
++	    <ev_shortname> <en>bond</en> </ev_shortname>
++	    <ev_driverval>2</ev_driverval>
++	</enum_val>
++	<enum_val id="ev/foo2hbpl1-MediaType-3">
++	    <ev_longname> <en>Light Weight Card</en> </ev_longname>
++	    <ev_shortname> <en>lwcard</en> </ev_shortname>
++	    <ev_driverval>3</ev_driverval>
++	</enum_val>
++	<enum_val id="ev/foo2hbpl1-MediaType-4">
++	    <ev_longname> <en>Light Weight Glossy Card</en> </ev_longname>
++	    <ev_shortname> <en>lwgcard</en> </ev_shortname>
++	    <ev_driverval>4</ev_driverval>
++	</enum_val>
++	<enum_val id="ev/foo2hbpl1-MediaType-5">
++	    <ev_longname> <en>Labels</en> </ev_longname>
++	    <ev_shortname> <en>labels</en> </ev_shortname>
++	    <ev_driverval>5</ev_driverval>
++	</enum_val>
++	<enum_val id="ev/foo2hbpl1-MediaType-6">
++	    <ev_longname> <en>Envelope</en> </ev_longname>
++	    <ev_shortname> <en>envelope</en> </ev_shortname>
++	    <ev_driverval>6</ev_driverval>
++	</enum_val>
++	<enum_val id="ev/foo2hbpl1-MediaType-7">
++	    <ev_longname> <en>Recycled Paper</en> </ev_longname>
++	    <ev_shortname> <en>recycled</en> </ev_shortname>
++	    <ev_driverval>7</ev_driverval>
++	</enum_val>
++	<enum_val id="ev/foo2hbpl1-MediaType-8">
++	    <ev_longname> <en>Plain Paper Side 2</en> </ev_longname>
++	    <ev_shortname> <en>plain2</en> </ev_shortname>
++	    <ev_driverval>8</ev_driverval>
++	</enum_val>
++	<enum_val id="ev/foo2hbpl1-MediaType-9">
++	    <ev_longname> <en>Bond Side 2</en> </ev_longname>
++	    <ev_shortname> <en>bond2</en> </ev_shortname>
++	    <ev_driverval>9</ev_driverval>
++	</enum_val>
++	<enum_val id="ev/foo2hbpl1-MediaType-10">
++	    <ev_longname> <en>Light Weight Card Side 2</en> </ev_longname>
++	    <ev_shortname> <en>lwcard2</en> </ev_shortname>
++	    <ev_driverval>10</ev_driverval>
++	</enum_val>
++	<enum_val id="ev/foo2hbpl1-MediaType-11">
++	    <ev_longname> <en>Light Weight Glossy Card Side 2</en></ev_longname>
++	    <ev_shortname> <en>lwgcard2</en> </ev_shortname>
++	    <ev_driverval>11</ev_driverval>
++	</enum_val>
++	<enum_val id="ev/foo2hbpl1-MediaType-12">
++	    <ev_longname> <en>Recycled Paper Side 2</en> </ev_longname>
++	    <ev_shortname> <en>recycled2</en> </ev_shortname>
++	    <ev_driverval>12</ev_driverval>
++	</enum_val>
++    </enum_vals>
++</option>
+--- foo2zjs/foomatic-db/opt/foo2hbpl1-PageSize.xml	1970-01-01 00:00:00.000000000 +0000
++++ foo2zjs/foomatic-db/opt/foo2hbpl1-PageSize.xml	2014-04-01 11:05:46.000000000 +0000
+@@ -0,0 +1,80 @@
++<option type="enum" id="opt/foo2hbpl1-PageSize">
++    <arg_longname> <en>Page Size</en> </arg_longname>
++    <arg_shortname> <en>PageSize</en> </arg_shortname>
++    <arg_execution>
++	<arg_group>General</arg_group>
++	<arg_order>135</arg_order>
++	<arg_spot>A</arg_spot>
++	<arg_required />
++	<arg_substitution />
++	<arg_proto>-p%s </arg_proto>
++    </arg_execution>
++    <constraints>
++	<constraint sense="true">
++	<driver>foo2hbpl1</driver>
++	<arg_defval>ev/foo2hbpl1-PageSize-4</arg_defval>
++	</constraint>
++    </constraints>
++    <enum_vals>
++	<enum_val id="ev/foo2hbpl1-PageSize-1">
++	    <ev_longname> <en>A4</en> </ev_longname>
++	    <ev_shortname> <en>A4</en> </ev_shortname>
++	    <ev_driverval>1</ev_driverval>
++	</enum_val>
++	<enum_val id="ev/foo2hbpl1-PageSize-2">
++	    <ev_longname> <en>B5 (JIS)</en> </ev_longname>
++	    <ev_shortname> <en>B5jis</en> </ev_shortname>
++	    <ev_driverval>2</ev_driverval>
++	</enum_val>
++	<enum_val id="ev/foo2hbpl1-PageSize-4">
++	    <ev_longname> <en>Letter</en> </ev_longname>
++	    <ev_shortname> <en>Letter</en> </ev_shortname>
++	    <ev_driverval>4</ev_driverval>
++	</enum_val>
++	<enum_val id="ev/foo2hbpl1-PageSize-5">
++	    <ev_longname> <en>Executive</en> </ev_longname>
++	    <ev_shortname> <en>Executive</en> </ev_shortname>
++	    <ev_driverval>5</ev_driverval>
++	</enum_val>
++	<enum_val id="ev/foo2hbpl1-PageSize-6">
++	    <ev_longname> <en>Fanfold German Legal</en> </ev_longname>
++	    <ev_shortname> <en>FanfoldGermanLegal</en> </ev_shortname>
++	    <ev_driverval>6</ev_driverval>
++	</enum_val>
++	<enum_val id="ev/foo2hbpl1-PageSize-6-alt">
++	    <ev_longname> <en>Folio</en> </ev_longname>
++	    <ev_shortname> <en>Folio</en> </ev_shortname>
++	    <ev_driverval>6</ev_driverval>
++	</enum_val>
++	<enum_val id="ev/foo2hbpl1-PageSize-7">
++	    <ev_longname> <en>Legal</en> </ev_longname>
++	    <ev_shortname> <en>Legal</en> </ev_shortname>
++	    <ev_driverval>7</ev_driverval>
++	</enum_val>
++	<enum_val id="ev/foo2hbpl1-PageSize-9">
++	    <ev_longname> <en>Env #10</en> </ev_longname>
++	    <ev_shortname> <en>Env10</en> </ev_shortname>
++	    <ev_driverval>9</ev_driverval>
++	</enum_val>
++	<enum_val id="ev/foo2hbpl1-PageSize-10">
++	    <ev_longname> <en>Env Monarch</en> </ev_longname>
++	    <ev_shortname> <en>EnvMonarch</en> </ev_shortname>
++	    <ev_driverval>10</ev_driverval>
++	</enum_val>
++	<enum_val id="ev/foo2hbpl1-PageSize-11">
++	    <ev_longname> <en>Env C5</en> </ev_longname>
++	    <ev_shortname> <en>EnvC5</en> </ev_shortname>
++	    <ev_driverval>11</ev_driverval>
++	</enum_val>
++	<enum_val id="ev/foo2hbpl1-PageSize-12">
++	    <ev_longname> <en>Env DL</en> </ev_longname>
++	    <ev_shortname> <en>EnvDL</en> </ev_shortname>
++	    <ev_driverval>12</ev_driverval>
++	</enum_val>
++	<enum_val id="ev/foo2hbpl1-PageSize-Custom">
++	    <ev_longname> <en>Custom</en> </ev_longname>
++	    <ev_shortname> <en>Custom</en> </ev_shortname>
++	    <ev_driverval>Custom.%0x%1</ev_driverval>
++	</enum_val>
++    </enum_vals>
++</option>
+--- foo2zjs/foomatic-db/opt/foo2xxx-Copies.xml	2014-04-03 22:23:27.000000000 +0000
++++ foo2zjs/foomatic-db/opt/foo2xxx-Copies.xml	2014-03-24 15:32:48.000000000 +0000
+@@ -65,6 +65,10 @@
+ 	    <arg_defval>1</arg_defval>
+ 	</constraint>
+ 	<constraint sense="true">
++	    <driver>foo2hbpl1</driver>
++	    <arg_defval>1</arg_defval>
++	</constraint>
++	<constraint sense="true">
+ 	    <driver>foo2hbpl2</driver>
+ 	    <arg_defval>1</arg_defval>
+ 	</constraint>
+--- foo2zjs/foomatic-db/opt/foo2xxx-Halftone.xml	2014-04-03 22:23:40.000000000 +0000
++++ foo2zjs/foomatic-db/opt/foo2xxx-Halftone.xml	2014-03-25 10:16:58.000000000 +0000
+@@ -68,6 +68,10 @@
+ 	    <arg_defval>ev/foo2xxx-Halftone-Default</arg_defval>
+ 	</constraint>
+ 	<constraint sense="true">
++	    <driver>foo2hbpl1</driver>
++	    <arg_defval>ev/foo2xxx-Halftone-Default</arg_defval>
++	</constraint>
++	<constraint sense="true">
+ 	    <driver>foo2hbpl2</driver>
+ 	    <arg_defval>ev/foo2xxx-Halftone-Default</arg_defval>
+ 	</constraint>
+--- foo2zjs/foomatic-db/opt/foo2xxx-Nup.xml	2014-04-03 22:24:01.000000000 +0000
++++ foo2zjs/foomatic-db/opt/foo2xxx-Nup.xml	2014-03-24 15:34:43.000000000 +0000
+@@ -65,6 +65,10 @@
+ 	    <arg_defval>ev/foo2xxx-Nup-1</arg_defval>
+ 	</constraint>
+ 	<constraint sense="true">
++	    <driver>foo2hbpl1</driver>
++	    <arg_defval>ev/foo2xxx-Nup-1</arg_defval>
++	</constraint>
++	<constraint sense="true">
+ 	    <driver>foo2hbpl2</driver>
+ 	    <arg_defval>ev/foo2xxx-Nup-1</arg_defval>
+ 	</constraint>
+--- foo2zjs/foomatic-db/opt/foo2xxx-NupOrient.xml	2014-04-03 22:23:50.000000000 +0000
++++ foo2zjs/foomatic-db/opt/foo2xxx-NupOrient.xml	2014-03-24 15:35:10.000000000 +0000
+@@ -65,6 +65,10 @@
+ 	    <arg_defval>ev/foo2xxx-NupOrient-port</arg_defval>
+ 	</constraint>
+ 	<constraint sense="true">
++	    <driver>foo2hbpl1</driver>
++	    <arg_defval>ev/foo2xxx-NupOrient-port</arg_defval>
++	</constraint>
++	<constraint sense="true">
+ 	    <driver>foo2hbpl2</driver>
+ 	    <arg_defval>ev/foo2xxx-NupOrient-port</arg_defval>
+ 	</constraint>
+--- foo2zjs/foomatic-db/opt/foo2xxx-Quality.xml	2014-04-03 22:24:12.000000000 +0000
++++ foo2zjs/foomatic-db/opt/foo2xxx-Quality.xml	2014-03-24 15:35:36.000000000 +0000
+@@ -68,6 +68,10 @@
+ 	    <arg_defval>ev/foo2xxx-Quality-Normal</arg_defval>
+ 	</constraint>
+ 	<constraint sense="true">
++	    <driver>foo2hbpl1</driver>
++	    <arg_defval>ev/foo2xxx-Quality-Normal</arg_defval>
++	</constraint>
++	<constraint sense="true">
+ 	    <driver>foo2hbpl2</driver>
+ 	    <arg_defval>ev/foo2xxx-Quality-Normal</arg_defval>
+ 	</constraint>
+--- foo2zjs/foomatic-db/printer/Dell-1250c.xml	1970-01-01 00:00:00.000000000 +0000
++++ foo2zjs/foomatic-db/printer/Dell-1250c.xml	2014-03-24 15:58:32.000000000 +0000
+@@ -0,0 +1,70 @@
++<printer id="printer/Dell-1250c">
++    <make>Dell</make>
++    <model>1250c</model>
++    <mechanism>
++	<laser/>
++	<color/>
++	<resolution>
++	    <dpi>
++		<x>600</x>
++		<y>600</y>
++	    </dpi>
++	</resolution>
++	<margins>
++	    <general>
++		<unit>inch</unit>
++		<top>0.085</top>
++		<bottom>0.085</bottom>
++		<left>0.085</left>
++		<right>0.085</right>
++	    </general>
++	</margins>
++<!--
++	<consumables>
++	    <comments> <en>
++		Toner Cyan (1000 prints) - $45
++		Toner Magenta (1000 prints) - $45
++		Toner Yellow (1000 prints) - $45
++		Toner Black (2000 prints) - $54
++		Waste Toner (5000 prints) - $10
++		Drum Kit (20000 prints) - $159
++	    </en> </comments>
++	    <partno>106R01271</partno>
++	    <partno>106R01272</partno>
++	    <partno>106R01273</partno>
++	    <partno>106R01274</partno>
++	    <partno>108R00722</partno>
++	    <partno>108R00744</partno>
++	</consumables>
++-->
++    </mechanism>
++    <url>http://www.pcmag.com/article2/0,2817,2380920,00.asp</url>
++    <lang>
++	<proprietary/>
++	<!--no pjl--><!--No "text"?-->
++    </lang>
++    <autodetect>
++<!--
++        <parallel>
++            <ieee1284>MFG:Xerox;CMD:SPLC;MDL:Phaser 6110;CLS:PRINTER;STATUS:BUSY;</ieee1284>
++            <manufacturer>Xerox</manufacturer>
++            <model>Phaser 6110</model>
++            <commandset>SPLC</commandset>
++        </parallel>
++-->
++	<snmp>
++	    <description>Dell 1250c</description>
++	</snmp>
++    </autodetect>
++    <functionality>C</functionality>
++    <driver>foo2hbpl1</driver>
++    <!--not "unverified"--><!--no "contrib_url"-->
++    <comments> <en>
++
++	The Dell 1250c is color printer with a 2014 street price of $200.
++
++	These printers are supported by the foo2hbpl1 open software printer
++	driver.
++
++    </en> </comments>
++</printer>
+--- foo2zjs/foomatic-db/printer/Dell-C1660.xml	1970-01-01 00:00:00.000000000 +0000
++++ foo2zjs/foomatic-db/printer/Dell-C1660.xml	2014-03-24 15:27:13.000000000 +0000
+@@ -0,0 +1,70 @@
++<printer id="printer/Dell-C1660">
++    <make>Dell</make>
++    <model>C1660</model>
++    <mechanism>
++	<laser/>
++	<color/>
++	<resolution>
++	    <dpi>
++		<x>600</x>
++		<y>600</y>
++	    </dpi>
++	</resolution>
++	<margins>
++	    <general>
++		<unit>inch</unit>
++		<top>0.085</top>
++		<bottom>0.085</bottom>
++		<left>0.085</left>
++		<right>0.085</right>
++	    </general>
++	</margins>
++<!--
++	<consumables>
++	    <comments> <en>
++		Toner Cyan (1000 prints) - $45
++		Toner Magenta (1000 prints) - $45
++		Toner Yellow (1000 prints) - $45
++		Toner Black (2000 prints) - $54
++		Waste Toner (5000 prints) - $10
++		Drum Kit (20000 prints) - $159
++	    </en> </comments>
++	    <partno>106R01271</partno>
++	    <partno>106R01272</partno>
++	    <partno>106R01273</partno>
++	    <partno>106R01274</partno>
++	    <partno>108R00722</partno>
++	    <partno>108R00744</partno>
++	</consumables>
++-->
++    </mechanism>
++    <url>http://accessories.us.dell.com/sna/productdetail.aspx?c=us&amp;cs=04&amp;l=en&amp;s=bsd&amp;sku=225-411</url>
++    <lang>
++	<proprietary/>
++	<!--no pjl--><!--No "text"?-->
++    </lang>
++    <autodetect>
++<!--
++        <parallel>
++            <ieee1284>MFG:Xerox;CMD:SPLC;MDL:Phaser 6110;CLS:PRINTER;STATUS:BUSY;</ieee1284>
++            <manufacturer>Xerox</manufacturer>
++            <model>Phaser 6110</model>
++            <commandset>SPLC</commandset>
++        </parallel>
++-->
++	<snmp>
++	    <description>Dell C1660</description>
++	</snmp>
++    </autodetect>
++    <functionality>C</functionality>
++    <driver>foo2hbpl1</driver>
++    <!--not "unverified"--><!--no "contrib_url"-->
++    <comments> <en>
++
++	The Dell C1660 is color printer with a 2014 street price of $200.
++
++	These printers are supported by the foo2hbpl1 open software printer
++	driver.
++
++    </en> </comments>
++</printer>
+--- foo2zjs/foomatic-db/printer/Dell-C1760.xml	1970-01-01 00:00:00.000000000 +0000
++++ foo2zjs/foomatic-db/printer/Dell-C1760.xml	2014-03-24 16:04:23.000000000 +0000
+@@ -0,0 +1,70 @@
++<printer id="printer/Dell-C1760">
++    <make>Dell</make>
++    <model>C1760</model>
++    <mechanism>
++	<laser/>
++	<color/>
++	<resolution>
++	    <dpi>
++		<x>600</x>
++		<y>600</y>
++	    </dpi>
++	</resolution>
++	<margins>
++	    <general>
++		<unit>inch</unit>
++		<top>0.085</top>
++		<bottom>0.085</bottom>
++		<left>0.085</left>
++		<right>0.085</right>
++	    </general>
++	</margins>
++<!--
++	<consumables>
++	    <comments> <en>
++		Toner Cyan (1000 prints) - $45
++		Toner Magenta (1000 prints) - $45
++		Toner Yellow (1000 prints) - $45
++		Toner Black (2000 prints) - $54
++		Waste Toner (5000 prints) - $10
++		Drum Kit (20000 prints) - $159
++	    </en> </comments>
++	    <partno>106R01271</partno>
++	    <partno>106R01272</partno>
++	    <partno>106R01273</partno>
++	    <partno>106R01274</partno>
++	    <partno>108R00722</partno>
++	    <partno>108R00744</partno>
++	</consumables>
++-->
++    </mechanism>
++    <url>http://accessories.us.dell.com/sna/productdetail.aspx?c=us&amp;cs=04&amp;l=en&amp;s=bsd&amp;sku=225-4111</url>
++    <lang>
++	<proprietary/>
++	<!--no pjl--><!--No "text"?-->
++    </lang>
++    <autodetect>
++<!--
++        <parallel>
++            <ieee1284>MFG:Xerox;CMD:SPLC;MDL:Phaser 6110;CLS:PRINTER;STATUS:BUSY;</ieee1284>
++            <manufacturer>Xerox</manufacturer>
++            <model>Phaser 6110</model>
++            <commandset>SPLC</commandset>
++        </parallel>
++-->
++	<snmp>
++	    <description>Dell C1760</description>
++	</snmp>
++    </autodetect>
++    <functionality>C</functionality>
++    <driver>foo2hbpl1</driver>
++    <!--not "unverified"--><!--no "contrib_url"-->
++    <comments> <en>
++
++	The Dell C1760 is color printer with a 2014 street price of $300.
++
++	These printers are supported by the foo2hbpl1 open software printer
++	driver.
++
++    </en> </comments>
++</printer>
+--- foo2zjs/foomatic-db/printer/Epson-AcuLaser_C1700.xml	1970-01-01 00:00:00.000000000 +0000
++++ foo2zjs/foomatic-db/printer/Epson-AcuLaser_C1700.xml	2014-03-24 16:13:45.000000000 +0000
+@@ -0,0 +1,71 @@
++<printer id="printer/Epson-AcuLaser_C1700">
++    <make>Epson</make>
++    <model>AcuLaser C1700</model>
++    <mechanism>
++	<laser/>
++	<color/>
++	<resolution>
++	    <dpi>
++		<x>600</x>
++		<y>600</y>
++	    </dpi>
++	</resolution>
++	<margins>
++	    <general>
++		<unit>inch</unit>
++		<top>0.085</top>
++		<bottom>0.085</bottom>
++		<left>0.085</left>
++		<right>0.085</right>
++	    </general>
++	</margins>
++<!--
++	<consumables>
++	    <comments> <en>
++		Toner Cyan (1000 prints) - $45
++		Toner Magenta (1000 prints) - $45
++		Toner Yellow (1000 prints) - $45
++		Toner Black (2000 prints) - $54
++		Waste Toner (5000 prints) - $10
++		Drum Kit (20000 prints) - $159
++	    </en> </comments>
++	    <partno>106R01271</partno>
++	    <partno>106R01272</partno>
++	    <partno>106R01273</partno>
++	    <partno>106R01274</partno>
++	    <partno>108R00722</partno>
++	    <partno>108R00744</partno>
++	</consumables>
++-->
++    </mechanism>
++    <url>http://www.epson.co.uk/gb/en/viewcon/corporatesite/products/mainunits/overview/10816</url>
++    <lang>
++	<proprietary/>
++	<!--no pjl--><!--No "text"?-->
++    </lang>
++    <autodetect>
++<!--
++        <parallel>
++            <ieee1284>MFG:Xerox;CMD:SPLC;MDL:Phaser 6110;CLS:PRINTER;STATUS:BUSY;</ieee1284>
++            <manufacturer>Xerox</manufacturer>
++            <model>Phaser 6110</model>
++            <commandset>SPLC</commandset>
++        </parallel>
++-->
++	<snmp>
++	    <description>Epson AcuLaser C1700</description>
++	</snmp>
++    </autodetect>
++    <functionality>C</functionality>
++    <driver>foo2hbpl1</driver>
++    <!--not "unverified"--><!--no "contrib_url"-->
++    <comments> <en>
++
++	The Epson AcuLaser C1700 is color printer with a 2014 street price
++	of $200.
++
++	These printers are supported by the foo2hbpl1 open software printer
++	driver.
++
++    </en> </comments>
++</printer>
+--- foo2zjs/foomatic-db/printer/Fuji_Xerox-DocuPrint_CP105.xml	1970-01-01 00:00:00.000000000 +0000
++++ foo2zjs/foomatic-db/printer/Fuji_Xerox-DocuPrint_CP105.xml	2014-03-24 16:17:06.000000000 +0000
+@@ -0,0 +1,71 @@
++<printer id="printer/Fuji_Xerox-DocuPrint_CP105">
++    <make>Fuji Xerox</make>
++    <model>DocuPrint CP105</model>
++    <mechanism>
++	<laser/>
++	<color/>
++	<resolution>
++	    <dpi>
++		<x>600</x>
++		<y>600</y>
++	    </dpi>
++	</resolution>
++	<margins>
++	    <general>
++		<unit>inch</unit>
++		<top>0.085</top>
++		<bottom>0.085</bottom>
++		<left>0.085</left>
++		<right>0.085</right>
++	    </general>
++	</margins>
++<!--
++	<consumables>
++	    <comments> <en>
++		Toner Cyan (1000 prints) - $45
++		Toner Magenta (1000 prints) - $45
++		Toner Yellow (1000 prints) - $45
++		Toner Black (2000 prints) - $54
++		Waste Toner (5000 prints) - $10
++		Drum Kit (20000 prints) - $159
++	    </en> </comments>
++	    <partno>106R01271</partno>
++	    <partno>106R01272</partno>
++	    <partno>106R01273</partno>
++	    <partno>106R01274</partno>
++	    <partno>108R00722</partno>
++	    <partno>108R00744</partno>
++	</consumables>
++-->
++    </mechanism>
++    <url>http://accessories.us.dell.com/sna/productdetail.aspx?c=us&amp;cs=04&amp;l=en&amp;s=bsd&amp;sku=225-411</url>
++    <lang>
++	<proprietary/>
++	<!--no pjl--><!--No "text"?-->
++    </lang>
++    <autodetect>
++<!--
++        <parallel>
++            <ieee1284>MFG:Xerox;CMD:SPLC;MDL:Phaser 6110;CLS:PRINTER;STATUS:BUSY;</ieee1284>
++            <manufacturer>Xerox</manufacturer>
++            <model>Phaser 6110</model>
++            <commandset>SPLC</commandset>
++        </parallel>
++-->
++	<snmp>
++	    <description>Fuji Xerox DocuPrint CP105</description>
++	</snmp>
++    </autodetect>
++    <functionality>C</functionality>
++    <driver>foo2hbpl1</driver>
++    <!--not "unverified"--><!--no "contrib_url"-->
++    <comments> <en>
++
++	The Fuji-Xerox DocuPrint CP105 is color printer with a 2014 street
++	price of $200.
++
++	These printers are supported by the foo2hbpl1 open software printer
++	driver.
++
++    </en> </comments>
++</printer>

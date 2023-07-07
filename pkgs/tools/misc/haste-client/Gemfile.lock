@@ -1,0 +1,19 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    faraday (0.17.3)
+      multipart-post (>= 1.2, < 3)
+    haste (0.2.3)
+      faraday (~> 0.9)
+      json
+    json (2.5.1)
+    multipart-post (2.1.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  haste
+
+BUNDLED WITH
+   2.1.4

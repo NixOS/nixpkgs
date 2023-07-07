@@ -1,0 +1,13 @@
+diff --git a/src/tw.c b/src/tw.c
+index 602f7b3..ca601cd 100644
+--- a/src/tw.c
++++ b/src/tw.c
+@@ -163,7 +163,7 @@ static struct json_object *task_exec_json(const char *opts)
+ 
+ 	free(cmd);
+ 
+-	if (o && is_error(o))
++	if (!o)
+ 		return NULL;
+ 
+ 	return o;

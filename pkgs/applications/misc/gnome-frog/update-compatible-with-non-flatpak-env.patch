@@ -1,0 +1,33 @@
+diff --git a/frog/config.py b/frog/config.py
+index 9837755..b73e4e3 100644
+--- a/frog/config.py
++++ b/frog/config.py
+@@ -30,10 +30,14 @@ import os
+ APP_ID = "com.github.tenderowl.frog"
+ RESOURCE_PREFIX = "/com/github/tenderowl/frog"
+ 
++# This is based from the XDG Base Directory specification.
++if not os.getenv('XDG_DATA_HOME'):
++    os.environ['XDG_DATA_HOME'] = os.path.expanduser("~/.local/share")
++
+ if not os.path.exists(os.path.join(os.environ['XDG_DATA_HOME'], 'tessdata')):
+     os.mkdir(os.path.join(os.environ['XDG_DATA_HOME'], 'tessdata'))
+ 
+ tessdata_url = "https://github.com/tesseract-ocr/tessdata/raw/main/"
+ tessdata_best_url = "https://github.com/tesseract-ocr/tessdata_best/raw/main/"
+ tessdata_dir = os.path.join(os.environ['XDG_DATA_HOME'], 'tessdata')
+-tessdata_config = f'--tessdata-dir {tessdata_dir} –psm 6'
++tessdata_config = f'–-psm 6 --tessdata-dir {tessdata_dir}'
+diff --git a/frog/language_manager.py b/frog/language_manager.py
+index 5752be6..4f6a908 100644
+--- a/frog/language_manager.py
++++ b/frog/language_manager.py
+@@ -156,7 +156,7 @@ class LanguageManager(GObject.GObject):
+             os.mkdir(tessdata_dir)
+ 
+         dest_path = os.path.join(tessdata_dir, 'eng.traineddata')
+-        source_path = pathlib.Path('/app/share/appdata/eng.traineddata')
++        source_path = pathlib.Path('@out@/share/appdata/eng.traineddata')
+         if os.path.exists(dest_path):
+             return
+ 

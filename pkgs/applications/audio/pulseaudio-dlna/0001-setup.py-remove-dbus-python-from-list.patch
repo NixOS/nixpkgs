@@ -1,0 +1,25 @@
+From a4bf7df795146c843696daee8c02826ba0034298 Mon Sep 17 00:00:00 2001
+From: Florian Klink <flokli@flokli.de>
+Date: Sun, 21 Nov 2021 12:04:48 +0100
+Subject: [PATCH] setup.py: remove dbus-python from list
+
+I wasn't able to convince setuptools to find this.
+---
+ setup.py | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index 61d6831..013fff3 100644
+--- a/setup.py
++++ b/setup.py
+@@ -42,7 +42,6 @@ setuptools.setup(
+     install_requires=[
+     'docopt',
+     'chardet',
+-    'dbus-python',
+     'docopt',
+     'requests',
+     'setproctitle',
+-- 
+2.33.1
+

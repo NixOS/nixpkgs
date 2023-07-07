@@ -1,0 +1,12 @@
+--- a/tests/testEnc.sh	2020-04-20 14:30:32.000000000 -0400
++++ b/tests/testEnc.sh	2020-10-21 22:09:25.000000000 -0400
+@@ -405,9 +405,6 @@
+             else
+                 # generate binary file out of base64
+                 DECODE="-d"
+-                if [ "`uname`" = "Darwin" ]; then
+-		    DECODE="-D"
+-                fi
+                 cat "$topfolder/$base_test_name.data" | base64 $DECODE > $tmpfile.3
+                 execEncTest "$res_success" \
+                     "" \

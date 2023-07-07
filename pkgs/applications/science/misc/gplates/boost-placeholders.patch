@@ -1,0 +1,75 @@
+diff --unified --recursive a/src/gui/TopologyTools.cc b/src/gui/TopologyTools.cc
+--- a/src/gui/TopologyTools.cc	2021-07-05 05:11:47.000000000 +0200
++++ b/src/gui/TopologyTools.cc	2022-12-07 22:35:20.444054124 +0100
+@@ -3448,7 +3448,7 @@
+ 			std::find_if(
+ 					d_visible_boundary_section_seq.begin(),
+ 					d_visible_boundary_section_seq.end(),
+-					boost::bind(&VisibleSection::d_section_info_index, _1) ==
++					boost::bind(&VisibleSection::d_section_info_index, boost::placeholders::_1) ==
+ 						boost::cref(section_index));
+ 
+ 	if (visible_section_iter == d_visible_boundary_section_seq.end())
+@@ -3467,7 +3467,7 @@
+ 			std::find_if(
+ 					d_visible_interior_section_seq.begin(),
+ 					d_visible_interior_section_seq.end(),
+-					boost::bind(&VisibleSection::d_section_info_index, _1) ==
++					boost::bind(&VisibleSection::d_section_info_index, boost::placeholders::_1) ==
+ 						boost::cref(section_index));
+ 
+ 	if (visible_section_iter == d_visible_interior_section_seq.end())
+diff --unified --recursive a/src/presentation/ReconstructionGeometryRenderer.cc b/src/presentation/ReconstructionGeometryRenderer.cc
+--- a/src/presentation/ReconstructionGeometryRenderer.cc	2021-07-05 05:11:50.000000000 +0200
++++ b/src/presentation/ReconstructionGeometryRenderer.cc	2022-12-07 22:36:11.117884262 +0100
+@@ -274,7 +274,7 @@
+ GPlatesPresentation::ReconstructionGeometryRenderer::RenderParamsPopulator::visit_reconstruct_visual_layer_params(
+ 		const ReconstructVisualLayerParams &params)
+ {
+-	d_render_params.show_vgp = boost::bind(&ReconstructVisualLayerParams::show_vgp, &params, _1, _2);
++	d_render_params.show_vgp = boost::bind(&ReconstructVisualLayerParams::show_vgp, &params, boost::placeholders::_1, boost::placeholders::_2);
+ 	d_render_params.vgp_draw_circular_error = params.get_vgp_draw_circular_error();
+ 	d_render_params.fill_polygons = params.get_fill_polygons();
+ 	d_render_params.fill_polylines = params.get_fill_polylines();
+diff --unified --recursive a/src/presentation/VisualLayerRegistry.cc b/src/presentation/VisualLayerRegistry.cc
+--- a/src/presentation/VisualLayerRegistry.cc	2021-07-05 05:11:50.000000000 +0200
++++ b/src/presentation/VisualLayerRegistry.cc	2022-12-07 22:38:12.950877614 +0100
+@@ -448,7 +448,7 @@
+ 			&GPlatesQtWidgets::ReconstructScalarCoverageLayerOptionsWidget::create,
+ 			boost::bind(
+ 					&ReconstructScalarCoverageVisualLayerParams::create,
+-					_1),
++					boost::placeholders::_1),
+ 			true);
+ 
+ 	registry.register_visual_layer_type(
+@@ -498,7 +498,7 @@
+ 					// NOTE: We pass in ViewState and not the GlobeAndMapWidget, obtained from
+ 					// ViewportWindow, because ViewportWindow is not yet available (a reference to
+ 					// it not yet been initialised inside ViewState) so accessing it would crash...
+-					_1, boost::ref(view_state)),
++					boost::placeholders::_1, boost::ref(view_state)),
+ 			true);
+ 
+ 	// DERIVED_DATA group.
+@@ -549,7 +549,7 @@
+ 			&GPlatesQtWidgets::VelocityFieldCalculatorLayerOptionsWidget::create,
+ 			boost::bind(
+ 					&VelocityFieldCalculatorVisualLayerParams::create,
+-					_1, boost::cref(view_state.get_rendered_geometry_parameters())),
++					boost::placeholders::_1, boost::cref(view_state.get_rendered_geometry_parameters())),
+ 			true);
+ 
+ 	using namespace  GPlatesUtils;
+diff --unified --recursive a/src/qt-widgets/ViewportWindow.cc b/src/qt-widgets/ViewportWindow.cc
+--- a/src/qt-widgets/ViewportWindow.cc	2021-08-05 05:44:01.000000000 +0200
++++ b/src/qt-widgets/ViewportWindow.cc	2022-12-07 22:39:20.487981302 +0100
+@@ -326,7 +326,7 @@
+ 			*d_geometry_operation_state_ptr,
+ 			*d_modify_geometry_state,
+ 			*d_measure_distance_state_ptr,
+-			boost::bind(&canvas_tool_status_message, boost::ref(*this), _1),
++			boost::bind(&canvas_tool_status_message, boost::ref(*this), boost::placeholders::_1),
+ 			get_view_state(),
+ 			*this);
+ 

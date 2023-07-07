@@ -1,0 +1,13 @@
+diff --git a/src/elpi_trace_elaborator.ml b/src/elpi_trace_elaborator.ml
+index ca13114d..093e7593 100644
+--- a/src/elpi_trace_elaborator.ml
++++ b/src/elpi_trace_elaborator.ml
+@@ -664,6 +664,6 @@ let main =
+ 
+   let cards = Trace.cards steps ~stack_frames ~aggregated_goal_success ~goal_text ~goal_attempts in
+ 
+-  let ob = Bi_outbuf.create_channel_writer stdout in
++  let ob = Buffer.create 17 in
+   write_trace ob cards;
+-  Bi_outbuf.flush_channel_writer ob
++  Buffer.output_buffer stdout ob

@@ -1,0 +1,10 @@
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -43,6 +43,7 @@
+         self.next_client_id = 0
+         self.env = {
+             'DISPLAY': display,
++            'PATH': os.environ['PATH']
+         }
+         self.env = extend_env_with_whitelist(self.env)
+         self.hlwm_process = hlwm_process

@@ -1,0 +1,176 @@
+diff -Naur ossec-hids-2.6-orig/install.sh ossec-hids-2.6/install.sh
+--- ossec-hids-2.6-orig/install.sh	2011-07-11 15:36:58.000000000 -0400
++++ ossec-hids-2.6/install.sh	2012-07-09 09:58:57.970692818 -0400
+@@ -119,14 +119,14 @@
+     # Generate the /etc/ossec-init.conf
+     VERSION_FILE="./src/VERSION"
+     VERSION=`cat ${VERSION_FILE}`
+-    chmod 700 ${OSSEC_INIT} > /dev/null 2>&1
+-    echo "DIRECTORY=\"${INSTALLDIR}\"" > ${OSSEC_INIT}
+-    echo "VERSION=\"${VERSION}\"" >> ${OSSEC_INIT}
+-    echo "DATE=\"`date`\"" >> ${OSSEC_INIT}
+-    echo "TYPE=\"${INSTYPE}\"" >> ${OSSEC_INIT}
+-    chmod 600 ${OSSEC_INIT}
+-    cp -pr ${OSSEC_INIT} ${INSTALLDIR}${OSSEC_INIT}
+-    chmod 644 ${INSTALLDIR}${OSSEC_INIT}
++    echo chmod 700 ${OSSEC_INIT} > /dev/null 2>&1
++    echo "DIRECTORY=\"${INSTALLDIR}\"" > ${INSTALLDIR}${OSSEC_INIT}
++    echo "VERSION=\"${VERSION}\"" >> ${INSTALLDIR}${OSSEC_INIT}
++    echo "DATE=\"`date`\"" >> ${INSTALLDIR}${OSSEC_INIT}
++    echo "TYPE=\"${INSTYPE}\"" >> ${INSTALLDIR}${OSSEC_INIT}
++    echo chmod 600 ${OSSEC_INIT}
++    echo cp -pr ${OSSEC_INIT} ${INSTALLDIR}${OSSEC_INIT}
++    echo chmod 644 ${INSTALLDIR}${OSSEC_INIT}
+ 
+ 
+     # If update_rules is set, we need to tweak
+@@ -926,11 +926,6 @@
+         catError "0x1-location";
+     fi
+ 
+-    # Must be root
+-    if [ ! "X$ME" = "Xroot" ]; then
+-        catError "0x2-beroot";
+-    fi
+-
+     # Checking dependencies
+     checkDependencies
+ 
+diff -Naur ossec-hids-2.6-orig/src/InstallAgent.sh ossec-hids-2.6/src/InstallAgent.sh
+--- ossec-hids-2.6-orig/src/InstallAgent.sh	2011-07-11 15:36:58.000000000 -0400
++++ ossec-hids-2.6/src/InstallAgent.sh	2012-07-09 09:56:12.061870552 -0400
+@@ -80,7 +80,7 @@
+ else
+     grep "^${USER}" /etc/passwd > /dev/null 2>&1
+     if [ ! $? = 0 ]; then
+-	/usr/sbin/groupadd ${GROUP}
++	echo /usr/sbin/groupadd ${GROUP}
+ 
+     # We first check if /sbin/nologin is present. If it is not,
+     # we look for bin/false. If none of them is present, we
+@@ -93,7 +93,7 @@
+             OSMYSHELL="/bin/false"
+         fi
+     fi        
+-	/usr/sbin/useradd -d ${DIR} -s ${OSMYSHELL} -g ${GROUP} ${USER}
++	echo /usr/sbin/useradd -d ${DIR} -s ${OSMYSHELL} -g ${GROUP} ${USER}
+     fi
+ fi
+ 
+@@ -105,31 +105,31 @@
+ done
+ 
+ # Default for all directories
+-chmod -R 550 ${DIR}
+-chown -R root:${GROUP} ${DIR}
++echo chmod -R 550 ${DIR}
++echo chown -R root:${GROUP} ${DIR}
+ 
+ # To the ossec queue (default for agentd to read)
+-chown -R ${USER}:${GROUP} ${DIR}/queue/ossec
+-chmod -R 770 ${DIR}/queue/ossec
++echo chown -R ${USER}:${GROUP} ${DIR}/queue/ossec
++echo chmod -R 770 ${DIR}/queue/ossec
+ 
+ # For the logging user
+-chown -R ${USER}:${GROUP} ${DIR}/logs
+-chmod -R 750 ${DIR}/logs
+-chmod -R 775 ${DIR}/queue/rids
+-touch ${DIR}/logs/ossec.log
+-chown ${USER}:${GROUP} ${DIR}/logs/ossec.log
+-chmod 664 ${DIR}/logs/ossec.log
+-
+-chown -R ${USER}:${GROUP} ${DIR}/queue/diff
+-chmod -R 750 ${DIR}/queue/diff
+-chmod 740 ${DIR}/queue/diff/* > /dev/null 2>&1
++echo chown -R ${USER}:${GROUP} ${DIR}/logs
++echo chmod -R 750 ${DIR}/logs
++echo chmod -R 775 ${DIR}/queue/rids
++echo touch ${DIR}/logs/ossec.log
++echo chown ${USER}:${GROUP} ${DIR}/logs/ossec.log
++echo chmod 664 ${DIR}/logs/ossec.log
++
++echo chown -R ${USER}:${GROUP} ${DIR}/queue/diff
++echo chmod -R 750 ${DIR}/queue/diff
++echo chmod 740 ${DIR}/queue/diff/* "> /dev/null 2>&1"
+ 
+ 
+ 
+ 
+ # For the etc dir
+-chmod 550 ${DIR}/etc
+-chown -R root:${GROUP} ${DIR}/etc
++echo chmod 550 ${DIR}/etc
++echo chown -R root:${GROUP} ${DIR}/etc
+ 
+ ls /etc/localtime > /dev/null 2>&1
+ if [ $? = 0 ]; then
+@@ -167,25 +167,25 @@
+ cp -pr ../etc/client.keys ${DIR}/etc/ > /dev/null 2>&1
+ cp -pr agentlessd/scripts/* ${DIR}/agentless/
+ 
+-chown root:${GROUP} ${DIR}/etc/internal_options.conf
+-chown root:${GROUP} ${DIR}/etc/local_internal_options.conf > /dev/null 2>&1
+-chown root:${GROUP} ${DIR}/etc/client.keys > /dev/null 2>&1
+-chown root:${GROUP} ${DIR}/agentless/*
+-chown ${USER}:${GROUP} ${DIR}/.ssh
+-chown -R root:${GROUP} ${DIR}/etc/shared
+-
+-chmod 550 ${DIR}/etc
+-chmod 440 ${DIR}/etc/internal_options.conf
+-chmod 440 ${DIR}/etc/local_internal_options.conf > /dev/null 2>&1
+-chmod 440 ${DIR}/etc/client.keys > /dev/null 2>&1
+-chmod -R 770 ${DIR}/etc/shared # ossec must be able to write to it
+-chmod 550 ${DIR}/agentless/*
+-chmod 700 ${DIR}/.ssh
++echo chown root:${GROUP} ${DIR}/etc/internal_options.conf
++echo chown root:${GROUP} ${DIR}/etc/local_internal_options.conf "> /dev/null 2>&1"
++echo chown root:${GROUP} ${DIR}/etc/client.keys "> /dev/null 2>&1"
++echo chown root:${GROUP} ${DIR}/agentless/*
++echo chown ${USER}:${GROUP} ${DIR}/.ssh
++echo chown -R root:${GROUP} ${DIR}/etc/shared
++
++echo chmod 550 ${DIR}/etc
++echo chmod 440 ${DIR}/etc/internal_options.conf
++echo chmod 440 ${DIR}/etc/local_internal_options.conf > /dev/null 2>&1
++echo chmod 440 ${DIR}/etc/client.keys > /dev/null 2>&1
++echo chmod -R 770 ${DIR}/etc/shared # ossec must be able to write to it
++echo chmod 550 ${DIR}/agentless/*
++echo chmod 700 ${DIR}/.ssh
+ 
+ 
+ # For the /var/run
+-chmod 770 ${DIR}/var/run
+-chown root:${GROUP} ${DIR}/var/run
++echo chmod 770 ${DIR}/var/run
++echo chown root:${GROUP} ${DIR}/var/run
+ 
+ 
+ # Moving the binary files
+@@ -201,11 +201,11 @@
+ sh ./init/fw-check.sh execute > /dev/null
+ cp -pr ../active-response/*.sh ${DIR}/active-response/bin/
+ cp -pr ../active-response/firewalls/*.sh ${DIR}/active-response/bin/
+-chmod 755 ${DIR}/active-response/bin/*
+-chown root:${GROUP} ${DIR}/active-response/bin/*
++echo chmod 755 ${DIR}/active-response/bin/*
++echo chown root:${GROUP} ${DIR}/active-response/bin/*
+ 
+-chown root:${GROUP} ${DIR}/bin/*
+-chmod 550 ${DIR}/bin/*
++echo chown root:${GROUP} ${DIR}/bin/*
++echo chmod 550 ${DIR}/bin/*
+ 
+ 
+ # Moving the config file
+@@ -221,8 +221,8 @@
+ else    
+     cp -pr ../etc/ossec-agent.conf ${DIR}/etc/ossec.conf
+ fi
+-chown root:${GROUP} ${DIR}/etc/ossec.conf
+-chmod 440 ${DIR}/etc/ossec.conf
++echo chown root:${GROUP} ${DIR}/etc/ossec.conf
++echo chmod 440 ${DIR}/etc/ossec.conf
+ 
+ 
+ 

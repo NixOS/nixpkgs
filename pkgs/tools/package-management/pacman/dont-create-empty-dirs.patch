@@ -1,0 +1,20 @@
+diff --git a/meson.build b/meson.build
+index c8ee42fd..610401ca 100644
+--- a/meson.build
++++ b/meson.build
+@@ -414,15 +414,6 @@ install_data(
+   'proto/proto.install',
+   install_dir : join_paths(DATAROOTDIR, 'pacman'))
+ 
+-foreach path : [
+-	join_paths(LOCALSTATEDIR, 'lib/pacman/'),
+-	join_paths(LOCALSTATEDIR, 'cache/pacman/pkg/'),
+-	join_paths(DATAROOTDIR, 'makepkg-template/'),
+-	join_paths(DATAROOTDIR, 'libalpm/hooks/'),
+-	]
+-	meson.add_install_script('sh', '-c', 'mkdir -p "$DESTDIR/@0@"'.format(path))
+-endforeach
+-
+ TEST_ENV = environment()
+ TEST_ENV.set('PMTEST_SCRIPTLIB_DIR', join_paths(meson.project_source_root(), 'scripts/library/'))
+ TEST_ENV.set('PMTEST_LIBMAKEPKG_DIR', join_paths(meson.project_build_root(), 'scripts/libmakepkg/'))

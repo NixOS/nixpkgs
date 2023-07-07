@@ -1,0 +1,12 @@
+http://permalink.gmane.org/gmane.comp.security.oss.general/19669
+
+--- a/magick/blob.c Sat Nov 07 14:49:16 2015 -0600
++++ b/magick/blob.c Sun May 29 14:12:57 2016 -0500
+@@ -68,6 +68,7 @@
+ */
+ #define DefaultBlobQuantum  65541
+ 
++#undef HAVE_POPEN
+ 
+ /*
+   Enum declarations.

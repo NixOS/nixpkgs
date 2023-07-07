@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "nixops-python-env"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^2.7"
+prettytable = "^1.0.1"
+boto = "^2.49.0"
+boto3 = "^1.17.97"
+hetzner = "^0.8.3"
+apache-libcloud = "^2.8.3"
+adal = "^1.2.7"
+pysqlite = "^2.8.3"
+datadog = "^0.42.0"
+python-digitalocean = "^1.17.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

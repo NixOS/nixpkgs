@@ -1,0 +1,39 @@
+diff -r 3414ab984249 modes/run.c
+--- a/modes/run.c	Tue Aug 11 19:07:49 2020 -0700
++++ b/modes/run.c	Sat Aug 22 13:39:52 2020 +0200
+@@ -91,23 +91,10 @@
+ 
+ 	char* path = strdup(getenv("PATH"));
+ 
+-	struct map* paths = map_init();
+-
+ 	char* save_ptr;
+ 	char* str = strtok_r(path, ":", &save_ptr);
+ 	do {
+ 
+-		str = realpath(str, NULL);
+-		if(str == NULL) {
+-			continue;
+-		}
+-		if(map_contains(paths, str)) {
+-			free(str);
+-			continue;
+-		}
+-
+-		map_put(paths, str, "true");
+-
+ 		DIR* dir = opendir(str);
+ 		if(dir == NULL) {
+ 			continue;
+@@ -132,11 +119,9 @@
+ 			}
+ 			free(full_path);
+ 		}
+-		free(str);
+ 		closedir(dir);
+ 	} while((str = strtok_r(NULL, ":", &save_ptr)) != NULL);
+ 	free(path);
+-	map_free(paths);
+ 	map_free(cached);
+ 	map_free(entries);
+ }

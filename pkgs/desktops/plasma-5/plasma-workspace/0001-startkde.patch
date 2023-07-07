@@ -1,0 +1,74 @@
+diff --git a/kcms/krdb/krdb.cpp b/kcms/krdb/krdb.cpp
+index 46363ddcb..d787f9993 100644
+--- a/kcms/krdb/krdb.cpp
++++ b/kcms/krdb/krdb.cpp
+@@ -468,7 +468,7 @@ void runRdb(unsigned int flags)
+     proc.execute();
+ 
+     // Needed for applications that don't set their own cursor.
+-    QProcess::execute(QStringLiteral("xsetroot"), {QStringLiteral("-cursor_name"), QStringLiteral("left_ptr")});
++    QProcess::execute(QStringLiteral(NIXPKGS_XSETROOT), {QStringLiteral("-cursor_name"), QStringLiteral("left_ptr")});
+ 
+     applyGtkStyles(1);
+     applyGtkStyles(2);
+diff --git a/startkde/plasma-session/startup.cpp b/startkde/plasma-session/startup.cpp
+index ffec07ebf..11e70fef8 100644
+--- a/startkde/plasma-session/startup.cpp
++++ b/startkde/plasma-session/startup.cpp
+@@ -176,7 +176,7 @@ Startup::Startup(QObject *parent)
+     }
+ 
+     // Keep for KF5; remove in KF6 (KInit will be gone then)
+-    QProcess::execute(QStringLiteral(CMAKE_INSTALL_FULL_LIBEXECDIR_KF5 "/start_kdeinit_wrapper"), QStringList());
++    QProcess::execute(QStringLiteral(NIXPKGS_START_KDEINIT_WRAPPER), QStringList());
+ 
+     KJob *phase1 = nullptr;
+     m_lock.reset(new QEventLoopLocker);
+diff --git a/startkde/startplasma-wayland.cpp b/startkde/startplasma-wayland.cpp
+index 04875c358..5822af37c 100644
+--- a/startkde/startplasma-wayland.cpp
++++ b/startkde/startplasma-wayland.cpp
+@@ -89,7 +89,7 @@ int main(int argc, char **argv)
+     out << "startplasma-wayland: Shutting down...\n";
+ 
+     // Keep for KF5; remove in KF6 (KInit will be gone then)
+-    runSync(QStringLiteral("kdeinit5_shutdown"), {});
++    runSync(QStringLiteral(NIXPKGS_KDEINIT5_SHUTDOWN), {});
+ 
+     out << "startplasmacompositor: Shutting down...\n";
+     cleanupPlasmaEnvironment(oldSystemdEnvironment);
+diff --git a/startkde/startplasma-x11.cpp b/startkde/startplasma-x11.cpp
+index 8e82e29c3..1ed176706 100644
+--- a/startkde/startplasma-x11.cpp
++++ b/startkde/startplasma-x11.cpp
+@@ -87,7 +87,7 @@ int main(int argc, char **argv)
+     out << "startkde: Shutting down...\n";
+ 
+     // Keep for KF5; remove in KF6 (KInit will be gone then)
+-    runSync(QStringLiteral("kdeinit5_shutdown"), {});
++    runSync(QStringLiteral(NIXPKGS_KDEINIT5_SHUTDOWN), {});
+ 
+     cleanupPlasmaEnvironment(oldSystemdEnvironment);
+ 
+diff --git a/startkde/startplasma.cpp b/startkde/startplasma.cpp
+index b0158c97d..c8f7fe223 100644
+--- a/startkde/startplasma.cpp
++++ b/startkde/startplasma.cpp
+@@ -50,7 +50,7 @@ void sigtermHandler(int signalNumber)
+ void messageBox(const QString &text)
+ {
+     out << text;
+-    runSync(QStringLiteral("xmessage"), {QStringLiteral("-geometry"), QStringLiteral("500x100"), text});
++    runSync(QStringLiteral(NIXPKGS_XMESSAGE), {QStringLiteral("-geometry"), QStringLiteral("500x100"), text});
+ }
+ 
+ QStringList allServices(const QLatin1String &prefix)
+@@ -484,7 +484,7 @@ QProcess *setupKSplash()
+         if (ksplashCfg.readEntry("Engine", QStringLiteral("KSplashQML")) == QLatin1String("KSplashQML")) {
+             p = new QProcess;
+             p->setProcessChannelMode(QProcess::ForwardedChannels);
+-            p->start(QStringLiteral("ksplashqml"), {ksplashCfg.readEntry("Theme", QStringLiteral("Breeze"))});
++            p->start(QStringLiteral(CMAKE_INSTALL_FULL_BINDIR "/ksplashqml"), {ksplashCfg.readEntry("Theme", QStringLiteral("Breeze"))});
+         }
+     }
+     return p;

@@ -1,0 +1,27 @@
+From 7ebe252a8488a63675d1c50c0faa1bdc5ff97889 Mon Sep 17 00:00:00 2001
+From: Linus Heckemann <git@sphalerite.org>
+Date: Fri, 5 Jan 2018 21:27:28 +0100
+Subject: [PATCH] Ignore missing data for installation
+
+This is for packaging vdrift separately from its data in nixpkgs.
+---
+ SConstruct | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/SConstruct b/SConstruct
+index 4394de0b..beef29a4 100644
+--- a/SConstruct
++++ b/SConstruct
+@@ -511,9 +511,6 @@ env.Alias(target = 'bin-package', source = bin_archive)
+ #----------------#
+ Export(['env', 'version', 'src_dir', 'bin_dir'])
+ if 'install' in COMMAND_LINE_TARGETS:
+-    if not os.path.isfile('data/SConscript'):
+-        raise 'VDrift data not found. Please make sure data is placed in vdrift directory. See README.md and http://wiki.vdrift.net.' 
+-    SConscript('data/SConscript')
+     # desktop appdata installation
+     install_desktop = env.Install(env['destdir'] + env['prefix'] + '/share/applications', 'vdrift.desktop')
+     install_appdata = env.Install(env['destdir'] + env['prefix'] + '/share/appdata', 'vdrift.appdata.xml')
+-- 
+2.15.0
+

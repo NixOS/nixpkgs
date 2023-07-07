@@ -1,0 +1,4 @@
+apiVersion: 1
+
+policies:
+  - receiver: "Test Contact Point"

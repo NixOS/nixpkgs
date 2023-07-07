@@ -1,0 +1,13 @@
+diff --git a/flake8_future_import.py b/flake8_future_import.py
+index 92c3fda..27a1a66 100755
+--- a/flake8_future_import.py
++++ b/flake8_future_import.py
+@@ -76,7 +76,7 @@ UNICODE_LITERALS = Feature(4, 'unicode_literals', (2, 6, 0), (3, 0, 0))
+ GENERATOR_STOP = Feature(5, 'generator_stop', (3, 5, 0), (3, 7, 0))
+ NESTED_SCOPES = Feature(6, 'nested_scopes', (2, 1, 0), (2, 2, 0))
+ GENERATORS = Feature(7, 'generators', (2, 2, 0), (2, 3, 0))
+-ANNOTATIONS = Feature(8, 'annotations', (3, 7, 0), (4, 0, 0))
++ANNOTATIONS = Feature(8, 'annotations', (3, 7, 0), (3, 10, 0))
+ 
+ 
+ # Order important as it defines the error code

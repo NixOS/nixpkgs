@@ -1,0 +1,22 @@
+diff --git a/configure b/configure
+index dfc1b3e..55577af 100755
+--- a/configure
++++ b/configure
+@@ -18,7 +18,7 @@ esac
+ # Some binaries that we'll need, and the places that we might find them.
+ 
+ IFS=:
+-binlist="uname:flex:gcc:wish:rm:cp:mkdir:chmod:sed"
++binlist="uname:flex:cc:wish:rm:cp:mkdir:chmod:sed"
+ pathlist=$PATH
+ libpathlist=$LIBS
+ incpathlist=$INCLUDES
+@@ -109,7 +109,7 @@ fi
+ # Splice it all in to Makefile.def to create the Makefile.
+ 
+ rm -f Makefile
+-sed -e "s __GCC__ $gcc g" -e "s __FLEX__ $flex g" -e "s __EXE__ $EXE g"     \
++sed -e "s __GCC__ $cc g" -e "s __FLEX__ $flex g" -e "s __EXE__ $EXE g"     \
+     -e "s*__OS_SIM_LIBS__*$OS_SIM_LIBS*g" -e "s __RM__ $rm g"               \
+     -e "s __CP__ $cp g" -e "s __MKDIR__ $mkdir g" -e "s __CHMOD__ $chmod g" \
+     -e "s __USE_READLINE__ $USE_READLINE g" -e "s*__RLLPATH__*$RLLPATH*g"   \

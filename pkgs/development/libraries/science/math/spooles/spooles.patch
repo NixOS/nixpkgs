@@ -1,0 +1,188 @@
+diff --git a/I2Ohash/src/util.c b/I2Ohash/src/util.c
+index 72d082e..f32f667 100644
+--- a/I2Ohash/src/util.c
++++ b/I2Ohash/src/util.c
+@@ -39,9 +39,10 @@ fflush(stdout) ;
+ */
+ loc1 = (key1 + 1) % hashtable->nlist ;
+ loc2 = (key2 + 1) % hashtable->nlist ;
+-loc  = (loc1*loc2) % hashtable->nlist ;
++long int loc3  = (long int)loc1*(long int)loc2 % hashtable->nlist ;
++loc =(int) loc3;
+ #if MYDEBUG > 0
+-fprintf(stdout, "\n loc1 = %d, loc2 = %d, loc3 = %d", loc1, loc2, loc) ;
++fprintf(stdout, "\n loc1 = %d, loc2 = %d, loc3 = %ld, loc = %d", loc1, loc2, loc3, loc) ;
+ fflush(stdout) ;
+ #endif
+ /*
+@@ -158,9 +159,10 @@ fflush(stdout) ;
+ #endif
+ loc1 = (key1 + 1) % hashtable->nlist ;
+ loc2 = (key2 + 1) % hashtable->nlist ;
+-loc  = (loc1*loc2) % hashtable->nlist ;
++long int loc3  = (long int)loc1*(long int)loc2 % hashtable->nlist ;
++loc =(int) loc3;
+ #if MYDEBUG > 0
+-fprintf(stdout, "\n loc1 = %d, loc2 = %d, loc3 = %d", loc1, loc2, loc) ;
++fprintf(stdout, "\n loc1 = %d, loc2 = %d, loc3 = %ld, loc = %d", loc1, loc2, loc3, loc) ;
+ fflush(stdout) ;
+ #endif
+ /*
+diff --git a/MPI/makefile b/MPI/makefile
+index 0c09f86..d25e70a 100644
+--- a/MPI/makefile
++++ b/MPI/makefile
+@@ -2,7 +2,7 @@ all_drivers :
+ 	cd drivers ; make drivers
+ 
+ lib :
+-	cd src ; make spoolesMPI.a
++	cd src ; make makeLib
+ 
+ clean :
+ 	cd src ; make clean
+diff --git a/MPI/src/makefile b/MPI/src/makefile
+index f7650b7..71e4c49 100644
+--- a/MPI/src/makefile
++++ b/MPI/src/makefile
+@@ -42,3 +42,8 @@ $(OBJ).a : \
+ 
+ clean :
+ 	- rm -f *.a *.o
++
++makeLib :
++	perl ../../makeLib > makeG
++	make -f makeG
++	rm -f makeG
+diff --git a/MT/makefile b/MT/makefile
+index 9b86a32..d25e70a 100644
+--- a/MT/makefile
++++ b/MT/makefile
+@@ -2,7 +2,7 @@ all_drivers :
+ 	cd drivers ; make drivers
+ 
+ lib :
+-	cd src ; make spoolesMT.a
++	cd src ; make makeLib
+ 
+ clean :
+ 	cd src ; make clean
+diff --git a/Make.inc b/Make.inc
+index f99eb8f..2de8a25 100644
+--- a/Make.inc
++++ b/Make.inc
+@@ -12,7 +12,7 @@
+ # for solaris
+ #
+ # CC = gcc
+-  CC = /usr/lang-4.0/bin/cc
++#  CC = /usr/lang-4.0/bin/cc
+ #
+ # for sgi
+ #
+@@ -28,7 +28,7 @@
+ # 
+ # OPTLEVEL = 
+ # OPTLEVEL = -g -v
+-  OPTLEVEL = -O
++  OPTLEVEL = -O3
+ # OPTLEVEL = -xO5 -v
+ # OPTLEVEL = -O3
+ # OPTLEVEL = -O4
+@@ -43,7 +43,7 @@
+ #  set any load flags
+ #
+ #  LDFLAGS = -Wl,+parallel -Wl,+tm,spp2000 # for hp exemplar
+-   LDFLAGS =
++#   LDFLAGS =
+ #
+ #---------------------------------------------------------------------
+ #
+@@ -103,7 +103,7 @@
+ #  MPI install library
+ #
+ # MPI_INSTALL_DIR = 
+-  MPI_INSTALL_DIR = /usr/local/mpich-1.0.13
++#  MPI_INSTALL_DIR = /usr/lib/openmpi
+ #
+ #---------------------------------------------------------------------
+ #
+@@ -142,6 +142,6 @@
+ #  MPI include path
+ #
+ # MPI_INCLUDE_DIR = 
+-  MPI_INCLUDE_DIR = -I$(MPI_INSTALL_DIR)/include
++#  MPI_INCLUDE_DIR = -I/usr/include/mpi
+ #
+ #---------------------------------------------------------------------
+diff --git a/Utilities/src/iohb.c b/Utilities/src/iohb.c
+index ac38f7b..ac34034 100644
+--- a/Utilities/src/iohb.c
++++ b/Utilities/src/iohb.c
+@@ -1725,7 +1725,7 @@ static void upcase(char* S)
+ 
+ static void IOHBTerminate(char* message) 
+ {
+-   fprintf(stderr,message);
++   fputs(message, stderr);
+    exit(1);
+ }
+ 
+diff --git a/makeLib b/makeLib
+index 1780f39..7697b06 100755
+--- a/makeLib
++++ b/makeLib
+@@ -64,14 +64,19 @@ foreach $src ( @srcnames ) {
+    $srcname = " \\\n     " . $src ;
+    print $srcname ;
+ }
++print "\n\n.SUFFIXES: .c .o .lo .a .so" ;
+ print "\n\nOBJ_FILES = \$\{SRC:.c=.o\}" ;
++print "\n\nLOBJ_FILES = \$\{SRC:.c=.lo\}" ;
+ print "\n\n" ;
+ print <<'EOF' ;
+ .c.o :
+-	$(PURIFY) $(CC) -c $(CFLAGS) $*.c -o $(OBJ)_$*.o
++	$(PURIFY) $(CC) -c $(CFLAGS) $*.c -o $(OBJ)_$*.o $(MPI_INCLUDE_DIR)
+ 
+-../../spooles.a : ${OBJ_FILES}
+-	$(AR) $(ARFLAGS) ../../spooles.a $(OBJ)_*.o
++.c.lo :
++	$(PURIFY) $(CC) -c $(CFLAGS) $*.c -fPIC -DPIC -o $(OBJ)_$*.lo $(MPI_INCLUDE_DIR)
++
++../../libspooles.a : ${OBJ_FILES} ${LOBJ_FILES}
++	$(AR) $(ARFLAGS) ../../libspooles.a $(OBJ)_*.o
+ 	rm -f $(OBJ)_*.o
+-	$(RANLIB) ../../spooles.a
++	$(RANLIB) ../../libspooles.a
+ EOF
+diff --git a/makefile b/makefile
+index f014c7d..7c8042a 100755
+--- a/makefile
++++ b/makefile
+@@ -124,7 +124,9 @@ lib :
+ 	cd ZV               ; make lib
+ 	cd misc             ; make lib
+ #cd MPI              ; make lib
+-#cd MT               ; make lib
++	cd MT               ; make lib
++	$(CC) -shared */*/*.lo -Wl,-soname,libspooles.so.2.2 -o libspooles.so.2.2 -lpthread -lm
++	ln -s libspooles.so.2.2 libspooles.so
+ 
+ global :
+ 	cd A2/src             ; make -f makeGlobalLib
+diff --git a/timings.h b/timings.h
+index 23df189..685800b 100644
+--- a/timings.h
++++ b/timings.h
+@@ -2,9 +2,8 @@
+ #define _TIMINGS_
+ #include <sys/time.h>
+ static struct timeval  TV ;
+-static struct timezone TZ ;
+ #define MARKTIME(t) \
+-   gettimeofday(&TV, &TZ) ; \
++   gettimeofday(&TV, NULL) ; \
+    t = (TV.tv_sec + 0.000001*TV.tv_usec)
+ #endif
+ 

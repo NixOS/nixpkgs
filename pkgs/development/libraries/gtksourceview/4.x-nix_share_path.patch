@@ -1,0 +1,11 @@
+--- a/gtksourceview/gtksourceutils.c
++++ b/gtksourceview/gtksourceutils.c
+@@ -232,6 +232,8 @@
+ 							 NULL));
+ 	}
+ 
++	g_ptr_array_add (dirs, g_build_filename (DATADIR, GSV_DATA_SUBDIR, basename, NULL));
++
+ 	g_ptr_array_add (dirs, NULL);
+ 
+ 	return (gchar **) g_ptr_array_free (dirs, FALSE);

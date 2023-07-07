@@ -1,0 +1,72 @@
+diff --git a/src/sdl/i_system.c b/src/sdl/i_system.c
+index 10c0747bf..861f00728 100644
+--- a/src/sdl/i_system.c
++++ b/src/sdl/i_system.c
+@@ -145,13 +145,7 @@ int TimeFunction(int requested_frequency);
+ 
+ // Locations for searching the srb2.pk3
+ #if defined (__unix__) || defined(__APPLE__) || defined (UNIXCOMMON)
+-#define DEFAULTWADLOCATION1 "/usr/local/share/games/SRB2"
+-#define DEFAULTWADLOCATION2 "/usr/local/games/SRB2"
+-#define DEFAULTWADLOCATION3 "/usr/share/games/SRB2"
+-#define DEFAULTWADLOCATION4 "/usr/games/SRB2"
+-#define DEFAULTSEARCHPATH1 "/usr/local/games"
+-#define DEFAULTSEARCHPATH2 "/usr/games"
+-#define DEFAULTSEARCHPATH3 "/usr/local"
++#define DEFAULTWADLOCATION1 "@wadlocation@"
+ #elif defined (_WIN32)
+ #define DEFAULTWADLOCATION1 "c:\\games\\srb2"
+ #define DEFAULTWADLOCATION2 "\\games\\srb2"
+@@ -2812,34 +2806,6 @@ static const char *locateWad(void)
+ 	if (((envstr = I_GetEnv("SRB2WADDIR")) != NULL) && isWadPathOk(envstr))
+ 		return envstr;
+ 
+-#ifndef NOCWD
+-	I_OutputMsg(",.");
+-	// examine current dir
+-	strcpy(returnWadPath, ".");
+-	if (isWadPathOk(returnWadPath))
+-		return NULL;
+-#endif
+-
+-
+-#ifdef CMAKECONFIG
+-#ifndef NDEBUG
+-	I_OutputMsg(","CMAKE_ASSETS_DIR);
+-	strcpy(returnWadPath, CMAKE_ASSETS_DIR);
+-	if (isWadPathOk(returnWadPath))
+-	{
+-		return returnWadPath;
+-	}
+-#endif
+-#endif
+-
+-#ifdef __APPLE__
+-	OSX_GetResourcesPath(returnWadPath);
+-	I_OutputMsg(",%s", returnWadPath);
+-	if (isWadPathOk(returnWadPath))
+-	{
+-		return returnWadPath;
+-	}
+-#endif
+ 
+ 	// examine default dirs
+ #ifdef DEFAULTWADLOCATION1
+@@ -2884,16 +2850,7 @@ static const char *locateWad(void)
+ 	if (isWadPathOk(returnWadPath))
+ 		return returnWadPath;
+ #endif
+-#ifndef NOHOME
+-	// find in $HOME
+-	I_OutputMsg(",HOME");
+-	if ((envstr = I_GetEnv("HOME")) != NULL)
+-	{
+-		WadPath = searchWad(envstr);
+-		if (WadPath)
+-			return WadPath;
+-	}
+-#endif
++
+ #ifdef DEFAULTSEARCHPATH1
+ 	// find in /usr/local
+ 	I_OutputMsg(", in:"DEFAULTSEARCHPATH1);
