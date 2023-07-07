@@ -3,6 +3,7 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
+, gitUpdater
 , cctools
 , sigtool
 , cereal
@@ -145,6 +146,10 @@ stdenv.mkDerivation (finalAttrs: {
     install_name_tool -id "$out/lib/libMoltenVK.dylib" "$out/lib/libMoltenVK.dylib"
     codesign -s - -f "$out/lib/libMoltenVK.dylib"
   '';
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = {
     description = "A Vulkan Portability implementation built on top of Apple’s Metal API";
