@@ -32352,6 +32352,8 @@ with pkgs;
 
   kail = callPackage ../tools/networking/kail {  };
 
+  kaleidoscope = libsForQt5.callPackage ../applications/misc/kaleidoscope { };
+
   kapitonov-plugins-pack = callPackage ../applications/audio/kapitonov-plugins-pack { };
 
   kapow = libsForQt5.callPackage ../applications/misc/kapow { };
