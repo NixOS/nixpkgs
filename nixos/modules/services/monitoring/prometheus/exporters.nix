@@ -49,6 +49,7 @@ let
     "mikrotik"
     "minio"
     "modemmanager"
+    "mysqld"
     "nextcloud"
     "nginx"
     "nginxlog"
@@ -294,6 +295,12 @@ in
       message = ''
         Please specify either 'services.prometheus.exporters.mail.configuration'
           or 'services.prometheus.exporters.mail.configFile'.
+      '';
+    } {
+      assertion = cfg.mysqld.runAsLocalSuperUser -> config.services.mysql.enable;
+      message = ''
+        The exporter is configured to run as 'services.mysql.user', but
+          'services.mysql.enable' is set to false.
       '';
     } {
       assertion = cfg.sql.enable -> (
