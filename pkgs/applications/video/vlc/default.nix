@@ -90,7 +90,6 @@
 , skins2Support ? !onlyLibVLC
 , waylandSupport ? true
 , withQt5 ? true
-, withLibcaca ? true
 }:
 
 # chromecastSupport requires TCP port 8010 to be open for it to work.
@@ -146,6 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     libarchive
     libass
     libbluray
+    libcaca
     libcddb
     libdc1394
     libdvbpsi
@@ -188,7 +188,6 @@ stdenv.mkDerivation (finalAttrs: {
     xcbutilkeysyms
     zlib
   ]
-  ++ optional withLibcaca libcaca
   ++ optional (!stdenv.hostPlatform.isAarch && !onlyLibVLC) live555
   ++ optional jackSupport libjack2
   ++ optionals chromecastSupport [ libmicrodns protobuf ]
