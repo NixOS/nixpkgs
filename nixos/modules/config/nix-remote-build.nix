@@ -50,10 +50,6 @@ let
 
 in
 {
-  imports = [
-    ./nix.nix
-  ];
-
   options = {
     nix = {
       buildMachines = mkOption {

@@ -40,8 +40,6 @@ in
 
 {
   imports = [
-    ../../config/nix.nix
-
     (mkRenamedOptionModuleWith { sinceRelease = 2205; from = [ "nix" "daemonIONiceLevel" ]; to = [ "nix" "daemonIOSchedPriority" ]; })
     (mkRenamedOptionModuleWith { sinceRelease = 2211; from = [ "nix" "readOnlyStore" ]; to = [ "boot" "readOnlyNixStore" ]; })
     (mkRemovedOptionModule [ "nix" "daemonNiceLevel" ] "Consider nix.daemonCPUSchedPolicy instead.")
