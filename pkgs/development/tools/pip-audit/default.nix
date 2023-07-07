@@ -2,41 +2,24 @@
 , fetchFromGitHub
 , python3
 }:
-let
-  py = python3.override {
-    packageOverrides = self: super: {
 
-      cyclonedx-python-lib = super.cyclonedx-python-lib.overridePythonAttrs (oldAttrs: rec {
-        version = "2.7.1";
-        src = fetchFromGitHub {
-          owner = "CycloneDX";
-          repo = "cyclonedx-python-lib";
-          rev = "v${version}";
-          hash = "sha256-c/KhoJOa121/h0n0GUazjUFChnUo05ThD+fuZXc5/Pk=";
-        };
-      });
-    };
-  };
-in
-with py.pkgs;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "pip-audit";
-  version = "2.5.6";
+  version = "2.6.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-hpzJtKtvhudT7OzZnuv6LbnMHnHIBYmQsAR1oRglvT0=";
+    hash = "sha256-Ja3LPKfrqs1evNzjOJ3oxh2vxqw8oZJDIsyZGT0q3PY=";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3.pkgs; [
     flit-core
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     cachecontrol
     cyclonedx-python-lib
     html5lib
@@ -47,7 +30,7 @@ buildPythonApplication rec {
     toml
   ] ++ cachecontrol.optional-dependencies.filecache;
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3.pkgs; [
     pretend
     pytestCheckHook
   ];

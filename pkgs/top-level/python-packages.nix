@@ -332,8 +332,6 @@ self: super: with self; {
 
   aiosql = callPackage ../development/python-modules/aiosql { };
 
-  aiosenseme = callPackage ../development/python-modules/aiosenseme { };
-
   aiosenz = callPackage ../development/python-modules/aiosenz { };
 
   aioserial = callPackage ../development/python-modules/aioserial { };
@@ -1165,6 +1163,10 @@ self: super: with self; {
 
   pad4pi = callPackage ../development/python-modules/pad4pi { };
 
+  paddle_bfloat = callPackage ../development/python-modules/paddle_bfloat { };
+
+  paddle2onnx = callPackage ../development/python-modules/paddle2onnx { };
+
   pulumi = callPackage ../development/python-modules/pulumi { inherit (pkgs) pulumi; };
 
   pulumi-aws = callPackage ../development/python-modules/pulumi-aws { };
@@ -1466,6 +1468,8 @@ self: super: with self; {
   });
 
   boschshcpy = callPackage ../development/python-modules/boschshcpy { };
+
+  bottombar = callPackage ../development/python-modules/bottombar { };
 
   boost-histogram = callPackage ../development/python-modules/boost-histogram {
     inherit (pkgs) boost;
@@ -4849,6 +4853,8 @@ self: super: with self; {
 
   i3-py = callPackage ../development/python-modules/i3-py { };
 
+  iammeter = callPackage ../development/python-modules/iammeter { };
+
   iapws = callPackage ../development/python-modules/iapws { };
 
   iaqualink = callPackage ../development/python-modules/iaqualink { };
@@ -5232,6 +5238,8 @@ self: super: with self; {
   jedi-language-server = callPackage ../development/python-modules/jedi-language-server { };
 
   jeepney = callPackage ../development/python-modules/jeepney { };
+
+  jello = callPackage ../development/python-modules/jello { };
 
   jellyfin-apiclient-python = callPackage ../development/python-modules/jellyfin-apiclient-python { };
 
@@ -6859,6 +6867,8 @@ self: super: with self; {
     enableApp = false; # build only libnghttp2 ...
     enablePython = true; # ... and its Python bindings
   })).python;
+
+  nh3 = callPackage ../development/python-modules/nh3 { };
 
   niaaml = callPackage ../development/python-modules/niaaml { };
 
@@ -8818,6 +8828,10 @@ self: super: with self; {
   pygreat = callPackage ../development/python-modules/pygreat { };
 
   pygrok = callPackage ../development/python-modules/pygrok { };
+
+  pygsl = callPackage ../development/python-modules/pygsl {
+    inherit (pkgs) gsl swig;
+  };
 
   pygtfs = callPackage ../development/python-modules/pygtfs { };
 
@@ -12608,6 +12622,8 @@ self: super: with self; {
   trio-asyncio = callPackage ../development/python-modules/trio-asyncio { };
 
   trio-websocket = callPackage ../development/python-modules/trio-websocket { };
+
+  tritonclient = callPackage ../development/python-modules/tritonclient { };
 
   troposphere = callPackage ../development/python-modules/troposphere { };
 

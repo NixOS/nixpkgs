@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "mechanicalsoup";
-  version = "1.2.0";
+  version = "1.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,9 +21,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MechanicalSoup";
     repo = "MechanicalSoup";
-    rev = "v${version}";
-    hash = "sha256-Q5oDAgAZYYUYqjDByXNXFNVKmRyjzIGVE4LN9j8vk4c=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-iZ2nwBxikf0cTTlxzcGvHJim4N6ZEqIhlK7t1WAYdms=";
   };
+
+  postPatch = ''
+    # Is in setup_requires but not used in setup.py
+    substituteInPlace setup.py \
+      --replace "'pytest-runner'" ""
+    substituteInPlace setup.cfg \
+      --replace " --cov --cov-config .coveragerc --flake8" ""
+  '';
 
   propagatedBuildInputs = [
     beautifulsoup4
@@ -38,14 +46,6 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  postPatch = ''
-    # Is in setup_requires but not used in setup.py
-    substituteInPlace setup.py \
-      --replace "'pytest-runner'" ""
-    substituteInPlace setup.cfg \
-      --replace " --cov --cov-config .coveragerc --flake8" ""
-  '';
-
   pythonImportsCheck = [
     "mechanicalsoup"
   ];
@@ -53,6 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for automating interaction with websites";
     homepage = "https://github.com/hickford/MechanicalSoup";
+    changelog = "https://github.com/MechanicalSoup/MechanicalSoup/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ jgillich fab ];
   };

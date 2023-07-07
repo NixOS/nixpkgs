@@ -57,6 +57,11 @@ stdenv.mkDerivation {
     "zsh_cv_sys_dynamic_strip_lib=yes"
   ];
 
+  postPatch = ''
+    substituteInPlace Src/Modules/pcre.mdd \
+      --replace 'pcre-config' 'true'
+  '';
+
   preConfigure = ''
     # use pkg-config instead of pcre-config
     configureFlagsArray+=("PCRECONF=''${PKG_CONFIG} libpcre")

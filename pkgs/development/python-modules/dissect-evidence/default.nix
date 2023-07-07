@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-evidence";
-  version = "3.5";
+  version = "3.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.evidence";
     rev = "refs/tags/${version}";
-    hash = "sha256-yJDrI4BgCXgKt4DdMyUE7Y7EzYk5utBVir6Ejm7NCDQ=";
+    hash = "sha256-0rDV7hMOUA18h4Mm4EnIL2NQO9wbVAh00P2V5t2YcZU=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

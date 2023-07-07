@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "linuxdoc-tools";
-  version = "0.9.82";
+  version = "0.9.83";
 
   src = fetchFromGitLab {
     owner = "agmartin";
     repo = "linuxdoc-tools";
     rev = version;
-    sha256 = "17v9ilh79av4n94vk4m52aq57ykb9myffxd2qr8kb8b3xnq5d36z";
+    sha256 = "sha256-1F3MDYJ9UH7ypgTSfYZV59PfLirlTmw6XBMEnz5Jtyk=";
   };
 
   outputs = [ "out" "man" "doc" ];

@@ -371,7 +371,7 @@ let
     pander = with pkgs; [ pandoc which ];
     pbdMPI = [ pkgs.mpi ];
     pbdPROF = [ pkgs.mpi ];
-    pbdZMQ = lib.optionals stdenv.isDarwin [ pkgs.which ];
+    pbdZMQ = [ pkgs.pkg-config ] ++ lib.optionals stdenv.isDarwin [ pkgs.which ];
     pdftools = [ pkgs.poppler.dev ];
     phytools = [ pkgs.which ];
     PKI = [ pkgs.openssl.dev ];
@@ -503,7 +503,7 @@ let
     svKomodo = [ pkgs.which ];
     nat = [ pkgs.which ];
     nat_templatebrains = [ pkgs.which ];
-    pbdZMQ = lib.optionals stdenv.isDarwin [ pkgs.darwin.binutils ];
+    pbdZMQ = [ pkgs.zeromq ] ++ lib.optionals stdenv.isDarwin [ pkgs.darwin.binutils ];
     bigmemory = lib.optionals stdenv.isLinux [ pkgs.libuuid.dev ];
     clustermq = [  pkgs.pkg-config ];
     RMark = [ pkgs.which ];

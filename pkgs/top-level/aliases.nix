@@ -1653,6 +1653,7 @@ mapAliases ({
   tangogps = foxtrotgps; # Added 2020-01-26
   taplo-cli = taplo; # Added 2022-07-30
   taplo-lsp = taplo; # Added 2022-07-30
+  taro = taproot-assets; # Added 2023-07-04
   tdesktop = telegram-desktop; # Added 2023-04-07
   tdm = throw "tdm has been removed because nobody can figure out how to fix OpenAL integration. Use precompiled binary and `steam-run` instead";
   teleconsole = throw "teleconsole is archived by upstream"; # Added 2022-04-05
@@ -1852,7 +1853,6 @@ mapAliases ({
   ); # Added 2022-08-02
   xpraGtk3 = throw "'xpraGtk3' has been renamed to/replaced by 'xpra'"; # Converted to throw 2022-02-22
   xtrt = throw "xtrt has been removed due to being abandoned"; # Added 2023-05-25
-  xv = xxv; # Added 2020-02-22
   xvidcap = throw "'xvidcap' has been removed because of a broken dependency"; # Added 2022-11-08
   xvfb_run = xvfb-run; # Added 2021-05-07
 

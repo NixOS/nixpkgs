@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
-  nativeCheckInputs = [ iputils ];
+  nativeCheckInputs = lib.optionals stdenv.isLinux [ iputils ];
 
   doInstallCheck = true;
   installCheckPhase = ''

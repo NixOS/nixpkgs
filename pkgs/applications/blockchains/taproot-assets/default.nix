@@ -4,19 +4,19 @@
 }:
 
 buildGoModule rec {
-  pname = "taro";
-  version = "0.1.0-alpha";
+  pname = "taproot-assets";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
-    repo = "taro";
+    repo = "taproot-assets";
     rev = "v${version}";
-    sha256 = "sha256-0kEdGHi+R9Ns3cVgHSpK/GMVqi8xU/xV831ogV2ErYM=";
+    hash = "sha256-DOtCnPnS5Oq5B4xaYmNCXxMYJ9fhPZ11OfPKXH7eKUg=";
   };
 
-  vendorSha256 = "sha256-huQZy62lx82lmuCQ7RQ+7SLMJIBYKfXbw+2ZkswPXxw=";
+  vendorHash = "sha256-fc++0M7Mnn1nJOkV2gzAVRQCp3vOqsO2OQNlOKaMmB4=";
 
-  subPackages = [ "cmd/tarocli" "cmd/tarod" ];
+  subPackages = [ "cmd/tapcli" "cmd/tapd" ];
 
   ldflags = [ "-s" "-w" ];
 

@@ -23,7 +23,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "bin" ];
 
-  nativeBuildInputs = [ cmake pkg-config gtest ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ cmake pkg-config ];
+
+  buildInputs = [ gtest ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_PREFIX=/"
