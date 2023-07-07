@@ -2307,6 +2307,12 @@
     githubId = 114830266;
     name = "Børlaag";
   };
+  bossley9 = {
+    email = "bossley.samuel@gmail.com";
+    github = "bossley9";
+    githubId = 35381535;
+    name = "Sam Bossley";
+  };
   bosu = {
     email = "boriss@gmail.com";
     github = "bosu";

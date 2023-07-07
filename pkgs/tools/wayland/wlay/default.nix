@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/atx/wlay";
     description = "Graphical output management for Wayland";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ bossley9 ];
     platforms = platforms.linux;
   };
 }
