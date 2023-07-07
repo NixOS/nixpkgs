@@ -4598,6 +4598,12 @@
     githubId = 54799;
     name = "Edward Tjörnhammar";
   };
+  ee2500 = {
+    email = "earthengine@skiff.com";
+    github = "ee2500";
+    githubId = 134107129;
+    name = "EarthEngine";
+  };
   eelco = {
     email = "edolstra+nixpkgs@gmail.com";
     github = "edolstra";
