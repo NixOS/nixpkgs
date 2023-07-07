@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "desktop-notifier";
-  version = "3.5.3";
+  version = "3.5.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "SamSchott";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-IA9LTsjO9se3Gx6Jm36m+tUxUHPjwmVCt9gAw1ZqDgg=";
+    hash = "sha256-rMbXGkI6nVgMPzD/vSbAjfouFb4sQkoBFrLxe7vlcDg=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     packaging
-  ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
   ] ++ lib.optionals stdenv.isLinux [
     dbus-next
