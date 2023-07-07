@@ -14222,6 +14222,8 @@ with pkgs;
     inherit (chickenPackages_4) eggDerivation fetchegg;
   };
 
+  ulid = callPackage ../development/tools/ulid { };
+
   ulogd = callPackage ../os-specific/linux/ulogd { };
 
   unar = callPackage ../tools/archivers/unar {
