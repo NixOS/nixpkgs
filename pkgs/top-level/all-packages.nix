@@ -12509,6 +12509,8 @@ with pkgs;
 
   rubocop = rubyPackages.rubocop;
 
+  ruby-lsp = rubyPackages.ruby-lsp;
+
   runningx = callPackage ../tools/X11/runningx { };
 
   rund = callPackage ../development/tools/rund { };
