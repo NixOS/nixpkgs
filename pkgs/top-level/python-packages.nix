@@ -7527,6 +7527,8 @@ self: super: with self; {
 
   papis-python-rofi = callPackage ../development/python-modules/papis-python-rofi { };
 
+  para = callPackage ../development/python-modules/para { };
+
   param = callPackage ../development/python-modules/param { };
 
   parameter-expansion-patched = callPackage ../development/python-modules/parameter-expansion-patched { };
