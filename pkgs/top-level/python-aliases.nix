@@ -210,6 +210,7 @@ mapAliases ({
   pur = throw "pur has been renamed to pkgs.pur"; # added 2021-11-08
   pushbullet = pushbullet-py;  # Added 2022-10-15
   Pweave = pweave; # added 2023-02-19
+  py-radix = throw "py-radix has been removed, since it abandoned"; # added 2023-07-07
   pyalmond = throw "pyalmond has been removed, since its API endpoints have been shutdown"; # added 2023-02-02
   pyblake2 = throw "pyblake2 is deprecated in favor of hashlib"; # added 2023-04-23
   pyblock = throw "pyblock has been removed, since it is abandoned and broken"; # added 2023-06-20
