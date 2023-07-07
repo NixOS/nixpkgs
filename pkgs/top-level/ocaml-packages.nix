@@ -151,6 +151,7 @@ let
       if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/camomile/1.0.2.nix { }
       else callPackage ../development/ocaml-modules/camomile/0.8.5.nix { };
+    camomile = callPackage ../development/ocaml-modules/camomile { };
 
     caqti = callPackage ../development/ocaml-modules/caqti { };
 

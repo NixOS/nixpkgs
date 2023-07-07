@@ -1,29 +1,24 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml, cppo }:
+{ lib, fetchFromGitHub, buildDunePackage
+, dune-site, camlp-streams
+}:
 
 buildDunePackage rec {
   pname = "camomile";
-  version = "1.0.2";
+  version = "2.0.0";
 
-  useDune2 = true;
+  minimalOCamlVersion = "4.13";
 
   src = fetchFromGitHub {
-    owner = "yoriyuki";
+    owner = "ocaml-community";
     repo = pname;
-    rev = version;
-    sha256 = "00i910qjv6bpk0nkafp5fg97isqas0bwjf7m6rz11rsxilpalzad";
+    rev = "v${version}";
+    hash = "sha256-HklX+VPD0Ta3Knv++dBT2rhsDSlDRH90k4Cj1YtWIa8=";
   };
 
-  nativeBuildInputs = [ cppo ];
-
-  configurePhase = ''
-    runHook preConfigure
-    ocaml configure.ml --share $out/share/camomile
-    runHook postConfigure
-  '';
-
-  postInstall = ''
-    echo "version = \"${version}\"" >> $out/lib/ocaml/${ocaml.version}/site-lib/camomile/META
-  '';
+  propagatedBuildInputs = [
+    dune-site
+    camlp-streams
+  ];
 
   meta = {
     inherit (src.meta) homepage;
