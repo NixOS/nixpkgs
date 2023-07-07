@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, zig, ncurses }:
 
-stdenv.mkDerivation rec {
+zig.buildZigPackage rec {
   pname = "ncdu";
   version = "2.2.2";
 
@@ -9,18 +9,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-kNkgAk51Ixi0aXds5X4Ds8cC1JMprZglruqzbDur+ZM=";
   };
 
-  XDG_CACHE_HOME="Cache"; # FIXME This should be set in stdenv
-
-  nativeBuildInputs = [
-    zig
-  ];
-
   buildInputs = [ ncurses ];
-
-  PREFIX = placeholder "out";
-
-  # Avoid CPU feature impurity, see https://github.com/NixOS/nixpkgs/issues/169461
-  ZIG_FLAGS = "-Drelease-safe -Dcpu=baseline";
 
   meta = with lib; {
     description = "Disk usage analyzer with an ncurses interface";
