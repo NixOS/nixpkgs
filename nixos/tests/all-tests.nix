@@ -801,6 +801,7 @@ in {
   tuptime = handleTest ./tuptime.nix {};
   turbovnc-headless-server = handleTest ./turbovnc-headless-server.nix {};
   tuxguitar = handleTest ./tuxguitar.nix {};
+  twingate = runTest ./twingate.nix;
   ucarp = handleTest ./ucarp.nix {};
   udisks2 = handleTest ./udisks2.nix {};
   ulogd = handleTest ./ulogd.nix {};
