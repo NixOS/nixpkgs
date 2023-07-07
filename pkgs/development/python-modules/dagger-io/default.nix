@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "dagger-io";
-  version = "v0.6.1";
+  version = "0.6.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
       owner = "dagger";
       repo = "dagger";
-      rev = version;
+      rev = "v${version}";
       sha256 = "sha256-9QQ6aDCkTWNq5KOSGF6FH6UQrOYa51ctW3CMcGrCJAQ=";
   } + "/sdk/python";
 
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dagger is a programmable CI/CD engine that runs your pipelines in containers.";
     homepage = "https://github.com/dagger/dagger";
-    changelog = "https://github.com/dagger/dagger/releases/tag/${version}";
+    changelog = "https://github.com/dagger/dagger/releases/tag/v${version}";
     license = licenses.asl20 ;
     # Just commented until I got into maintainers-list.
     # maintainers = with maintainers; [ rayanpiro ];
