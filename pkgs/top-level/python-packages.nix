@@ -1711,6 +1711,8 @@ self: super: with self; {
 
   celery-redbeat = callPackage ../development/python-modules/celery-redbeat { };
 
+  celery-singleton = callPackage ../development/python-modules/celery-singleton { };
+
   cement = callPackage ../development/python-modules/cement { };
 
   cemm = callPackage ../development/python-modules/cemm { };
@@ -2706,6 +2708,8 @@ self: super: with self; {
   django-bootstrap3 = callPackage ../development/python-modules/django-bootstrap3 { };
 
   django-bootstrap4 = callPackage ../development/python-modules/django-bootstrap4 { };
+
+  django-cachalot = callPackage ../development/python-modules/django-cachalot { };
 
   django-cache-url = callPackage ../development/python-modules/django-cache-url { };
 
@@ -7294,6 +7298,16 @@ self: super: with self; {
   opentelemetry-test-utils = callPackage ../development/python-modules/opentelemetry-test-utils { };
 
   opentelemetry-util-http = callPackage ../development/python-modules/opentelemetry-util-http { };
+
+  opentelemetry-instrumentation-requests = callPackage ../development/python-modules/opentelemetry-instrumentation-requests { };
+  opentelemetry-instrumentation-redis = callPackage ../development/python-modules/opentelemetry-instrumentation-redis { };
+  opentelemetry-instrumentation-psycopg2 = callPackage ../development/python-modules/opentelemetry-instrumentation-psycopg2 { };
+  opentelemetry-instrumentation-logging = callPackage ../development/python-modules/opentelemetry-instrumentation-logging { };
+  opentelemetry-instrumentation-grpc = callPackage ../development/python-modules/opentelemetry-instrumentation-grpc { };
+  opentelemetry-instrumentation-dbapi = callPackage ../development/python-modules/opentelemetry-instrumentation-dbapi { };
+  opentelemetry-instrumentation-celery = callPackage ../development/python-modules/opentelemetry-instrumentation-celery { };
+  opentelemetry-instrumentation-botocore = callPackage ../development/python-modules/opentelemetry-instrumentation-botocore { };
+  opentelemetry-instrumentation-aiohttp-client = callPackage ../development/python-modules/opentelemetry-instrumentation-aiohttp-client { };
 
   openturns = toPythonModule (pkgs.openturns.override {
     python3Packages = self;
