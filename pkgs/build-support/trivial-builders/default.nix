@@ -361,6 +361,7 @@ rec {
         ''
         else checkPhase;
     };
+
   /*
     Similar to writeShellApplication but runs the provided text through argbash
     to generate an options parser before using writeShellApplication under the hood.
