@@ -6728,6 +6728,8 @@ self: super: with self; {
 
   mwtypes = callPackage ../development/python-modules/mwtypes { };
 
+  mwxml = callPackage ../development/python-modules/mwxml { };
+
   mxnet = callPackage ../development/python-modules/mxnet { };
 
   myfitnesspal = callPackage ../development/python-modules/myfitnesspal { };
