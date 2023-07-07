@@ -594,7 +594,6 @@ with lib.maintainers; {
 
   nix = {
     members = [
-      Profpatsch
       eelco
       grahamc
       pierron
