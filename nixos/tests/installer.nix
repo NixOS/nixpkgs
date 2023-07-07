@@ -88,9 +88,14 @@ let
 
       qemu_flags = {"qemuFlags": assemble_qemu_flags()}
 
+      import os
+
+      image_dir = machine.state_dir
+      disk_image = os.path.join(image_dir, "machine.qcow2")
+
       hd_flags = {
           "hdaInterface": "${iface}",
-          "hda": "vm-state-machine/machine.qcow2",
+          "hda": disk_image,
       }
       ${optionalString isEfi ''
         hd_flags.update(
