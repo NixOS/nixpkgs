@@ -20029,6 +20029,8 @@ with pkgs;
 
   aften = callPackage ../development/libraries/aften { };
 
+  airflow = callPackage ../applications/video/airflow { };
+
   alure = callPackage ../development/libraries/alure { };
 
   alure2 = callPackage ../development/libraries/alure2 { };
