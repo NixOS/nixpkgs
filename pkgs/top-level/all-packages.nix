@@ -19848,6 +19848,8 @@ with pkgs;
 
   tree-sitter-grammars = recurseIntoAttrs tree-sitter.builtGrammars;
 
+  tree-sitter-grammars-wasm = recurseIntoAttrs tree-sitter.builtGrammarsWasm;
+
   trellis = callPackage ../development/embedded/fpga/trellis { };
 
   ttyd = callPackage ../servers/ttyd { };

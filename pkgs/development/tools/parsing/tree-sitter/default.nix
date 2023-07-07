@@ -70,6 +70,36 @@ let
     in
     lib.mapAttrs build (grammars);
 
+  buildGrammarWasm = callPackage ./grammar-wasm.nix { };
+
+  builtGrammarsWasm =
+    let
+      buildWasm = name: grammar:
+        buildGrammarWasm {
+          language = grammar.language or name;
+          inherit version;
+          src = grammar.src or (fetchGrammar grammar);
+          location = grammar.location or null;
+          generate = grammar.generate or false;
+          wasmName = grammar.wasmName or grammar.language or
+            (lib.strings.replaceStrings [ "-" ] [ "_" ]
+              (lib.strings.removePrefix "tree-sitter-" name));
+        };
+      grammars' = import ./grammars { inherit lib; } // extraGrammars;
+      grammars = grammars' //
+        { tree-sitter-ocaml = grammars'.tree-sitter-ocaml // { location = "ocaml"; }; } //
+        { tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // { location = "interface"; }; } //
+        { tree-sitter-org-nvim = grammars'.tree-sitter-org-nvim // { language = "org"; }; } //
+        { tree-sitter-typescript = grammars'.tree-sitter-typescript // { location = "typescript"; }; } //
+        { tree-sitter-tsx = grammars'.tree-sitter-typescript // { location = "tsx"; }; } //
+        { tree-sitter-markdown = grammars'.tree-sitter-markdown // { location = "tree-sitter-markdown"; }; } //
+        { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; } //
+        { tree-sitter-wing = grammars'.tree-sitter-wing // { location = "libs/tree-sitter-wing"; generate = true; }; };
+      wasmGrammars = grammars //
+        { tree-sitter-ql-dbscheme = grammars.tree-sitter-ql-dbscheme // { wasmName = "dbscheme"; }; };
+    in
+    lib.mapAttrs buildWasm (wasmGrammars);
+
   # Usage:
   # pkgs.tree-sitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])
   #
@@ -140,11 +170,12 @@ rustPlatform.buildRustPackage {
     updater = {
       inherit update-all-grammars;
     };
-    inherit grammars buildGrammar builtGrammars withPlugins allGrammars;
+    inherit grammars buildGrammar builtGrammars builtGrammarsWasm withPlugins allGrammars;
 
     tests = {
       # make sure all grammars build
       builtGrammars = lib.recurseIntoAttrs builtGrammars;
+      builtGrammarsWasm = lib.recurseIntoAttrs builtGrammarsWasm;
     };
   };
 
@@ -163,6 +194,6 @@ rustPlatform.buildRustPackage {
       * Dependency-free so that the runtime library (which is written in pure C) can be embedded in any application
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ oxalica Profpatsch ];
+    maintainers = with maintainers; [ oxalica Profpatsch aabccd021 ];
   };
 }
