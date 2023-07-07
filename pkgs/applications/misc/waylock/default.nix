@@ -9,7 +9,8 @@
 , libxkbcommon
 , pam
 }:
-stdenv.mkDerivation rec {
+
+zig.buildZigPackage rec {
   pname = "waylock";
   version = "0.6.2";
 
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ zig wayland scdoc pkg-config ];
+  nativeBuildInputs = [ wayland scdoc pkg-config ];
 
   buildInputs = [
     wayland-protocols
@@ -30,16 +31,9 @@ stdenv.mkDerivation rec {
   ];
 
   dontConfigure = true;
+  strictDeps = false;
 
-  preBuild = ''
-    export HOME=$TMPDIR
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    zig build -Drelease-safe -Dman-pages -Dcpu=baseline --prefix $out install
-    runHook postInstall
-  '';
+  zigBuildFlags = [ "-Dman-pages" ];
 
   meta = with lib; {
     homepage = "https://github.com/ifreund/waylock";
