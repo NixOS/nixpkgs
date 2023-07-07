@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "binaryen";
-  version = "113";
+  version = "114";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "binaryen";
     rev = "version_${version}";
-    hash = "sha256-w93LIlLRn3PmVNytjFg6KI4CQ9zQUUM9kySiWAtPbOA=";
+    hash = "sha256-bzHNIQy0AN8mIFGG+638p/MBSqlkWuaOzKGSsMDAPH4=";
   };
 
   nativeBuildInputs = [ cmake python3 ];
