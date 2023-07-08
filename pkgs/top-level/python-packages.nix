@@ -5652,6 +5652,8 @@ self: super: with self; {
 
   lazy_import = callPackage ../development/python-modules/lazy_import { };
 
+  lazy_imports = callPackage ../development/python-modules/lazy_imports { };
+
   lazy-loader = callPackage ../development/python-modules/lazy-loader { };
 
   lazy-object-proxy = callPackage ../development/python-modules/lazy-object-proxy { };
