@@ -8144,6 +8144,8 @@ self: super: with self; {
 
   posix_ipc = callPackage ../development/python-modules/posix_ipc { };
 
+  posthog = callPackage ../development/python-modules/posthog { };
+
   pot = callPackage ../development/python-modules/pot { };
 
   potentials = callPackage ../development/python-modules/potentials { };
