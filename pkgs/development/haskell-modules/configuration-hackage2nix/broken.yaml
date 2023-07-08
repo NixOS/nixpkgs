@@ -3853,7 +3853,6 @@ broken-packages:
   - pagure-hook-receiver
   - PandocAgda
   - pandoc-citeproc
-  - pandoc-emphasize-code
   - pandoc-filter-graphviz
   - pandoc-filter-indent
   - pandoc-include
