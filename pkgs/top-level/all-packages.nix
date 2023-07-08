@@ -27016,6 +27016,8 @@ with pkgs;
 
   acpitool = callPackage ../os-specific/linux/acpitool { };
 
+  aldente = callPackage ../os-specific/darwin/aldente { };
+
   alfred = callPackage ../os-specific/linux/batman-adv/alfred.nix { };
 
   alertmanager-bot = callPackage ../servers/monitoring/alertmanager-bot { };
