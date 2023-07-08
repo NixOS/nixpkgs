@@ -14,13 +14,13 @@
 
 mkDerivation rec {
   pname = "ptcollab";
-  version = "0.6.4.6";
+  version = "0.6.4.7";
 
   src = fetchFromGitHub {
     owner = "yuxshao";
     repo = "ptcollab";
     rev = "v${version}";
-    hash = "sha256-G0QQV0mvrrBAC2LSy45/NnEbHHA8/E0SZKJXvuVidRE=";
+    hash = "sha256-KYNov/HbKM2d8VVO8iyWA3XWFDE9iWeKkRCNC1xlPNw=";
   };
 
   nativeBuildInputs = [
