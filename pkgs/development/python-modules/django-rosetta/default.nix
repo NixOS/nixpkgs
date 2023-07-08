@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "django-rosetta";
-  version = "0.9.8";
+  version = "0.9.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "mbi";
     repo = "django-rosetta";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3AXwRxNWVkqW65xdqUwjHM1W5qhHXTjapqaM0Wmsebw=";
+    hash = "sha256-OuKgqGYBlzQNKKAJYFhNi+LnONB/mxINMj4VBAVWjqI=";
   };
 
   propagatedBuildInputs = [
