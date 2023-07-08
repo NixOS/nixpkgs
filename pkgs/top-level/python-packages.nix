@@ -552,6 +552,8 @@ self: super: with self; {
 
   anyio = callPackage ../development/python-modules/anyio { };
 
+  anyqt = callPackage ../development/python-modules/anyqt { };
+
   anytree = callPackage ../development/python-modules/anytree {
     inherit (pkgs) graphviz;
   };
