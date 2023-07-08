@@ -1,4 +1,4 @@
-{ lib, stdenv, runCommand, fetchFromSavannah, flex, bison, python3, autoconf, automake, libtool, bash
+{ lib, stdenv, runCommand, fetchFromSavannah, fetchpatch, flex, bison, python3, autoconf, automake, libtool, bash
 , rsync, gettext, ncurses, libusb-compat-0_1, freetype, qemu, lvm2, unifont, pkg-config
 , buildPackages
 , nixosTests
@@ -83,6 +83,14 @@ stdenv.mkDerivation rec {
   patches = [
     ./fix-bash-completion.patch
     ./add-hidden-menu-entries.patch
+
+    # Revert upstream commit that breaks reading XFS filesystems
+    # FIXME: remove when fixed upstream
+    (fetchpatch {
+      url = "https://git.savannah.gnu.org/cgit/grub.git/patch/?id=ef7850c757fb3dd2462a512cfa0ff19c89fcc0b1";
+      revert = true;
+      hash = "sha256-p8Kcv9d7ri4eJU6Fgqyzdj0hV5MHSe50AF02FPDJx2Y=";
+    })
   ];
 
   postPatch = if kbdcompSupport then ''
