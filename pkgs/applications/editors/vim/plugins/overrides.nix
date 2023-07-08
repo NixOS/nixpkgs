@@ -246,7 +246,7 @@ self: super: {
   };
 
   cmp-rg = super.cmp-rg.overrideAttrs {
-    dependencies = with self; [ nvim-cmp ripgrep ];
+    dependencies = with self; [ nvim-cmp ];
   };
 
   cmp-snippy = super.cmp-snippy.overrideAttrs {
