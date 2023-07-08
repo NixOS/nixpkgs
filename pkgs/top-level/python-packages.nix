@@ -7580,6 +7580,8 @@ self: super: with self; {
 
   oralb-ble = callPackage ../development/python-modules/oralb-ble { };
 
+  orange-canvas-core = callPackage ../development/python-modules/orange-canvas-core { };
+
   orderedmultidict = callPackage ../development/python-modules/orderedmultidict { };
 
   ordered-set = callPackage ../development/python-modules/ordered-set { };
