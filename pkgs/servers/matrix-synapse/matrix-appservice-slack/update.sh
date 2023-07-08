@@ -16,7 +16,7 @@ if [ -z "$version" ]; then
 fi
 
 src="https://raw.githubusercontent.com/matrix-org/matrix-appservice-slack/$version"
-src_hash=$(nix-prefetch-github matrix-org matrix-appservice-slack --rev ${version} | jq -r .sha256)
+src_hash=$(nix-prefetch-github matrix-org matrix-appservice-slack --rev ${version} | jq -r .hash)
 
 tmpdir=$(mktemp -d)
 trap 'rm -rf "$tmpdir"' EXIT
