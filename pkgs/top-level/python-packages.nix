@@ -7582,6 +7582,8 @@ self: super: with self; {
 
   orange-canvas-core = callPackage ../development/python-modules/orange-canvas-core { };
 
+  orange-widget-base = callPackage ../development/python-modules/orange-widget-base { };
+
   orderedmultidict = callPackage ../development/python-modules/orderedmultidict { };
 
   ordered-set = callPackage ../development/python-modules/ordered-set { };
