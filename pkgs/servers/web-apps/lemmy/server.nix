@@ -26,11 +26,6 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  patches = [
-    # `cargo test` fails as `tokio::test` relies on the macros feature which wasn't specified in Cargo.toml
-    ./tokio-macros.patch
-  ];
-
   preConfigure = ''
     echo 'pub const VERSION: &str = "${version}";' > crates/utils/src/version.rs
   '';
@@ -58,7 +53,7 @@ rustPlatform.buildRustPackage rec {
     description = "🐀 Building a federated alternative to reddit in rust";
     homepage = "https://join-lemmy.org/";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ happysalada billewanick ];
+    maintainers = with maintainers; [ happysalada billewanick adisbladis ];
     mainProgram = "lemmy_server";
   };
 }
