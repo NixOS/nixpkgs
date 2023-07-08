@@ -1,26 +1,66 @@
 { lib, ... }:
 rec {
   /*
-    Compute the fixed point of the given function `f`, which is usually an
-    attribute set that expects its final, non-recursive representation as an
-    argument:
+    `fix f` computes the fixed point of the given function `f`. In other words, the return value is `x` in `x = f x`.
 
-    ```
-    f = self: { foo = "foo"; bar = "bar"; foobar = self.foo + self.bar; }
+    `f` is usually returns an attribute set that expects its final, non-recursive representation as an argument.
+    `f` must be a lazy function.
+
+    **How it works**
+
+    For context, Nix lets you define attribute set values in terms of other attributes using the `rec { }` attribute set literal syntax.
+
+    ```nix
+    nix-repl> rec {
+      foo = "foo";
+      bar = "bar";
+      foobar = foo + bar;
+    }
+    { bar = "bar"; foo = "foo"; foobar = "foobar"; }
     ```
 
-    Nix evaluates this recursion until all references to `self` have been
-    resolved. At that point, the final result is returned and `f x = x` holds:
+    This is convenient when constructing a value to pass to a function for example, but a similar effect can be achieved with a `let` binding:
+
+    ```nix
+    nix-repl> let self = {
+      foo = "foo";
+      bar = "bar";
+      foobar = self.foo + self.bar;
+    }; in self
+    { bar = "bar"; foo = "foo"; foobar = "foobar"; }
+    ```
+
+    `let` bindings are nice, but as it is with `let` bindings in general, we may get more reuse out of the code by defining a function.
+
+    ```nix
+    nix-repl> f = self: {
+      foo = "foo";
+      bar = "bar";
+      foobar = self.foo + self.bar;
+    }
+    ```
+
+    This is where `fix` comes in. Note that the body of the `fix` function
+    looks a lot like our earlier `let` binding, and that's no coincidence.
+    Fix is no more than such a recursive `let` binding, but with everything
+    except the recursion factored out into a function parameter `f`.
+
+    ```nix
+    fix = f:
+      let self = f self; in self;
+    ```
+
+    So applying `fix` is another way to express our earlier examples.
 
     ```
     nix-repl> fix f
     { bar = "bar"; foo = "foo"; foobar = "foobar"; }
     ```
 
-    Type: fix :: (a -> a) -> a
+    This example did not _need_ `fix`, and arguably it shouldn't be used in such an example.
+    However, `fix` is useful when your `f` is a parameter, or when it is constructed from higher order functions.
 
-    See https://en.wikipedia.org/wiki/Fixed-point_combinator for further
-    details.
+    Type: fix :: (a -> a) -> a
   */
   fix = f: let x = f x; in x;
 
