@@ -8998,6 +8998,8 @@ with pkgs;
   iperf3 = callPackage ../tools/networking/iperf/3.nix { };
   iperf = iperf3;
 
+  iperf3d = callPackage ../tools/networking/iperf3d { };
+
   ipfetch = callPackage ../tools/networking/ipfetch { };
 
   ipfs-cluster = callPackage ../applications/networking/ipfs-cluster { };
