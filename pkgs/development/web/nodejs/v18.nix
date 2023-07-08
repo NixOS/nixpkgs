@@ -6,6 +6,7 @@ let
     python = python3;
   };
 
+  crossPatches = callPackage ./cross-patches.nix { };
 in
 buildNodejs {
   inherit enableNpm;
@@ -17,6 +18,5 @@ buildNodejs {
     ./revert-arm64-pointer-auth.patch
     ./node-npm-build-npm-package-logic.patch
     ./trap-handler-backport.patch
-    ./common-gypi-cross.patch
-  ];
+  ] ++ crossPatches;
 }
