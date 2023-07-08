@@ -9847,6 +9847,8 @@ self: super: with self; {
 
   pytest-param-files = callPackage ../development/python-modules/pytest-param-files { };
 
+  pytest-parallel = callPackage ../development/python-modules/pytest-parallel { };
+
   pytest-playwright = callPackage ../development/python-modules/pytest-playwright {};
 
   pytest-plt = callPackage ../development/python-modules/pytest-plt { };
