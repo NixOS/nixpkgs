@@ -11,34 +11,16 @@
 
 buildGoModule rec {
   pname = "pufferpanel";
-  version = "2.6.6";
+  version = "2.6.7";
 
   src = applyPatches {
     src = fetchFromGitHub {
       owner = "PufferPanel";
       repo = "PufferPanel";
       rev = "v${version}";
-      hash = "sha256-0Vyi47Rkpe3oODHfsl/7tCerENpiEa3EWBHhfTO/uu4=";
+      hash = "sha256-ay9NNcK+6QFobe/rwtZF8USl0vMbDZBg5z57fjA5VLw=";
     };
     patches = [
-      # Bump go-sqlite3 version to avoid a GNU C compiler error.
-      (fetchpatch {
-        url = "https://github.com/PufferPanel/PufferPanel/commit/dd7fc80c33c7618c98311af09c78c25b77658aef.patch";
-        hash = "sha256-ygMrhJoba8swoRBBii7BEiLihqOebLUtSH7os7W3s+k=";
-      })
-
-      # Fix errors in tests.
-      (fetchpatch {
-        url = "https://github.com/PufferPanel/PufferPanel/commit/ad6ab4b4368e1111292fadfb3d9f058fa399fa21.patch";
-        hash = "sha256-BzGfcWhzRrCHKkAhWf0uvXiiiutWqthn/ed7bN2hR8U=";
-      })
-
-      # AutoFill for OTP codes in Safari.
-      (fetchpatch {
-        url = "https://github.com/PufferPanel/PufferPanel/commit/0c59ef0fe935ef8b5c69e0b91b32ecc2c1458f5c.patch";
-        hash = "sha256-QpsEskw/xBhvesBGQQopiqXL0BRciF0j8KGcmKmJzeE=";
-      })
-
       # Bump sha1cd package, otherwise i686-linux fails to build.
       ./bump-sha1cd.patch
 
@@ -67,7 +49,7 @@ buildGoModule rec {
 
     src = "${src}/client";
 
-    npmDepsHash = "sha256-geQHIbYYCOWsPQYAPiwMhtC+kbgQs7LMHqNYomTPrxA=";
+    npmDepsHash = "sha256-oWFXtV/dxzHv3sfIi01l1lHE5tcJgpVq87XgS6Iy62g=";
 
     NODE_OPTIONS = "--openssl-legacy-provider";
     npmBuildFlags = [ "--" "--dest=${placeholder "out"}" ];
