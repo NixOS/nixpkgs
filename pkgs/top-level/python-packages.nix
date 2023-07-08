@@ -11586,6 +11586,8 @@ self: super: with self; {
 
   servefile = callPackage ../development/python-modules/servefile { };
 
+  serverfiles = callPackage ../development/python-modules/serverfiles { };
+
   serverlessrepo = callPackage ../development/python-modules/serverlessrepo { };
 
   service-identity = callPackage ../development/python-modules/service-identity { };
