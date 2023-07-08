@@ -11,6 +11,7 @@ let
       { name = "strings"; description = "string manipulation functions"; }
       { name = "versions"; description = "version string functions"; }
       { name = "trivial"; description = "miscellaneous functions"; }
+      { name = "fixedPoints"; baseName = "fixed-points"; description = "explicit recursion functions"; }
       { name = "lists"; description = "list manipulation functions"; }
       { name = "debug"; description = "debugging functions"; }
       { name = "options"; description = "NixOS / nixpkgs option handling"; }
