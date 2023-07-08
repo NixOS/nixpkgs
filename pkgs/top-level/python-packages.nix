@@ -8409,6 +8409,8 @@ self: super: with self; {
 
   pyalgotrade = callPackage ../development/python-modules/pyalgotrade { };
 
+  pyalpm = callPackage ../development/python-modules/pyalpm { };
+
   pyamg = callPackage ../development/python-modules/pyamg { };
 
   pyaml = callPackage ../development/python-modules/pyaml { };
