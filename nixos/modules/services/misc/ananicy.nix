@@ -56,7 +56,7 @@ in
         '';
         example = literalExpression ''
           '''
-            { "name": "eog", "type": "Image-View" }
+            { "name": "eog", "type": "Image-Viewer" }
             { "name": "fdupes", "type": "BG_CPUIO" }
           '''
         '';
