@@ -18,7 +18,7 @@ let
     owner = "plausible";
     repo = "analytics";
     rev = "v${version}";
-    sha256 = "1ckw5cd4z96jkjhmzjq7k3kzjj7bvj38i5xq9r43cz0sn7w3470k";
+    hash = "sha256-Exwy+LEafDZITriXiIbc60j555gHy1+hnNKkTxorfLI=";
   };
 
   # TODO consider using `mix2nix` as soon as it supports git dependencies.
