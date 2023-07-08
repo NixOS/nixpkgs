@@ -84,7 +84,7 @@ mkYarnPackage {
     description = "Building a federated alternative to reddit in rust";
     homepage = "https://join-lemmy.org/";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ happysalada billewanick ];
+    maintainers = with maintainers; [ happysalada billewanick adisbladis ];
     inherit (nodejs.meta) platforms;
   };
 }
