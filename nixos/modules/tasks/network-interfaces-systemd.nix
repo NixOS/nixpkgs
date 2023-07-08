@@ -44,7 +44,7 @@ let
       domains = override domains;
     };
 
-  genericDhcpNetworks = initrd: mkIf cfg.useDHCP {
+  genericDhcpNetworks = { initrd }: mkIf cfg.useDHCP {
     networks."99-ethernet-default-dhcp" = {
       # We want to match physical ethernet interfaces as commonly
       # found on laptops, desktops and servers, to provide an
@@ -182,7 +182,7 @@ in
     # Note this is if initrd.network.enable, not if
     # initrd.systemd.network.enable. By setting the latter and not the
     # former, the user retains full control over the configuration.
-    boot.initrd.systemd.network = mkMerge [(genericDhcpNetworks true) interfaceNetworks];
+    boot.initrd.systemd.network = mkMerge [(genericDhcpNetworks { initrd = true; }) interfaceNetworks];
   })
 
   (mkIf cfg.useNetworkd {
@@ -210,7 +210,7 @@ in
       mkMerge [ {
         enable = true;
       }
-      (genericDhcpNetworks false)
+      (genericDhcpNetworks { initrd = false; })
       interfaceNetworks
       (mkMerge (flip mapAttrsToList cfg.bridges (name: bridge: {
         netdevs."40-${name}" = {
