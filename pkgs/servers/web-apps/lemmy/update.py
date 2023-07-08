@@ -29,10 +29,10 @@ SERVER_REPO = "lemmy"
 class Pin:
     serverVersion: str
     uiVersion: str
-    serverSha256: str = ""
-    serverCargoSha256: str = ""
-    uiSha256: str = ""
-    uiYarnDepsSha256: str = ""
+    serverHash: str = ""
+    serverCargoHash: str = ""
+    uiHash: str = ""
+    uiYarnDepsHash: str = ""
 
     filename: Optional[str] = None
 
@@ -83,11 +83,7 @@ def prefetch_github(owner: str, repo: str, rev: str) -> str:
         stdout=subprocess.PIPE,
     )
 
-    sha256 = json.loads(proc.stdout)["sha256"]
-    if not sha256.startswith("sha256-"):  # Work around bug in nix-prefetch-github
-        return "sha256-" + sha256
-
-    return sha256
+    return json.loads(proc.stdout)["hash"]
 
 
 def get_latest_tag(owner: str, repo: str, prerelease: bool = False) -> str:
@@ -144,9 +140,9 @@ def get_fod_hash(attr: str) -> str:
 
 
 def make_server_pin(pin: Pin, attr: str) -> None:
-    pin.serverSha256 = prefetch_github(OWNER, SERVER_REPO, pin.serverVersion)
+    pin.serverHash = prefetch_github(OWNER, SERVER_REPO, pin.serverVersion)
     pin.write()
-    pin.serverCargoSha256 = get_fod_hash(attr)
+    pin.serverCargoHash = get_fod_hash(attr)
     pin.write()
 
 
@@ -159,9 +155,9 @@ def make_ui_pin(pin: Pin, package_json: str, attr: str) -> None:
         with open(os.path.join(SCRIPT_DIR, package_json), "wb") as fd:
             fd.write(resp.read())
 
-    pin.uiSha256 = prefetch_github(OWNER, UI_REPO, pin.uiVersion)
+    pin.uiHash = prefetch_github(OWNER, UI_REPO, pin.uiVersion)
     pin.write()
-    pin.uiYarnDepsSha256 = get_fod_hash(attr)
+    pin.uiYarnDepsHash = get_fod_hash(attr)
     pin.write()
 
 
