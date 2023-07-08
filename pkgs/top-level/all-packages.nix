@@ -7984,6 +7984,8 @@ with pkgs;
 
   fuse-7z-ng = callPackage ../tools/filesystems/fuse-7z-ng { };
 
+  fuse-archive = callPackage ../tools/filesystems/fuse-archive { };
+
   fuse-overlayfs = callPackage ../tools/filesystems/fuse-overlayfs { };
 
   fusee-interfacee-tk = callPackage ../applications/misc/fusee-interfacee-tk { };
