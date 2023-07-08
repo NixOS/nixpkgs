@@ -24300,6 +24300,8 @@ with pkgs;
 
   oneko = callPackage ../applications/misc/oneko { };
 
+  oneVPL = callPackage ../development/libraries/oneVPL { };
+
   oniguruma = callPackage ../development/libraries/oniguruma { };
 
   oobicpl = callPackage ../development/libraries/science/biology/oobicpl { };
