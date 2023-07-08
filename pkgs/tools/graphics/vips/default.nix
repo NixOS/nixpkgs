@@ -22,7 +22,7 @@
 , libtiff
 , fftw
 , lcms2
-, libpng
+, libspng
 , libimagequant
 , imagemagick
 , pango
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     libtiff
     fftw
     lcms2
-    libpng
+    libspng
     libimagequant
     imagemagick
     pango
@@ -101,7 +101,6 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dcgif=disabled"
-    "-Dspng=disabled"
     "-Dpdfium=disabled"
     "-Dnifti=disabled"
   ] ++ lib.optionals (!stdenv.isDarwin) [
