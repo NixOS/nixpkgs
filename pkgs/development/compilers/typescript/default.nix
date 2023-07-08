@@ -2,13 +2,13 @@
 
 buildNpmPackage rec {
   pname = "typescript";
-  version = "5.1.5";
+  version = "5.1.6";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "TypeScript";
     rev = "v${version}";
-    hash = "sha256-HdDzkDhlaTDUNmAsWlLUHuGAIgXGcgZW4dZAweaXrL0=";
+    hash = "sha256-YBAAiO7MBJ41VK6A9zeExB7ZSbbrQ23sVTHAqo+/H/w=";
   };
 
   npmDepsHash = "sha256-RHiUhhkzkr2Ra3wc1d13gE2WIZL49w7IEFEAZuBDTDI=";
