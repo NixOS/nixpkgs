@@ -1271,6 +1271,8 @@ self: super: with self; {
 
   batinfo = callPackage ../development/python-modules/batinfo { };
 
+  baycomp = callPackage ../development/python-modules/baycomp { };
+
   bayesian-optimization = callPackage ../development/python-modules/bayesian-optimization { };
 
   bayespy = callPackage ../development/python-modules/bayespy { };
