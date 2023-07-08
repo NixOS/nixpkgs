@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qtutilities";
-  version = "6.12.2";
+  version = "6.13.0";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-YYuTDUBTNKLmieb/pDljiN0T8NdaOb2aRmwkD85ZF38=";
+    hash = "sha256-gfGVVjtzpBGrPrp2k3fOIh54EAMSicyikF1CtaO74y8=";
   };
 
   buildInputs = [ qtbase cpp-utilities ];
