@@ -202,7 +202,7 @@ self: super: {
   };
 
   cmp-fish = super.cmp-fish.overrideAttrs {
-    dependencies = with self; [ nvim-cmp fish ];
+    dependencies = with self; [ nvim-cmp ];
   };
 
   cmp-fuzzy-buffer = super.cmp-fuzzy-buffer.overrideAttrs {
