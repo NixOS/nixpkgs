@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Legrandin";
     repo = "pycryptodome";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-xsfd+dbaNOPuD0ulvpLPBPtcFgmJqX1VuunwNMcqh+Q=";
   };
 
@@ -36,6 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Self-contained cryptographic library";
     homepage = "https://github.com/Legrandin/pycryptodome";
+    changelog = "https://github.com/Legrandin/pycryptodome/blob/v${version}/Changelog.rst";
     license = with licenses; [ bsd2 /* and */ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
