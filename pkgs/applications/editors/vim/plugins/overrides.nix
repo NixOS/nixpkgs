@@ -242,7 +242,7 @@ self: super: {
   };
 
   cmp-pandoc-nvim = super.cmp-pandoc-nvim.overrideAttrs {
-    dependencies = with self; [ nvim-cmp pandoc plenary-nvim ];
+    dependencies = with self; [ nvim-cmp plenary-nvim ];
   };
 
   cmp-rg = super.cmp-rg.overrideAttrs {
