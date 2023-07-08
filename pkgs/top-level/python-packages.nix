@@ -8244,6 +8244,8 @@ self: super: with self; {
 
   prompt-toolkit = callPackage ../development/python-modules/prompt-toolkit { };
 
+  prompthub-py = callPackage ../development/python-modules/prompthub-py { };
+
   property-manager = callPackage ../development/python-modules/property-manager { };
 
   protego = callPackage ../development/python-modules/protego { };
