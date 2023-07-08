@@ -1,6 +1,8 @@
 { config
-, lib
+, cudaCapabilities ? (config.cudaCapabilities or null)
+, cudaForwardCompat ? (config.cudaForwardCompat or true)
 , cudaVersion
+, lib
 }:
 
 # Type aliases
@@ -14,13 +16,13 @@ let
   # from improved performance, reduced file size, or greater hardware support by
   # passing a configuration based on your specific GPU environment.
   #
-  # config.cudaCapabilities :: List Capability
+  # cudaCapabilities :: List Capability
   # List of hardware generations to build.
   # E.g. [ "8.0" ]
   # Currently, the last item is considered the optional forward-compatibility arch,
   # but this may change in the future.
   #
-  # config.cudaForwardCompat :: Bool
+  # cudaForwardCompat :: Bool
   # Whether to include the forward compatibility gencode (+PTX)
   # to support future GPU generations.
   # E.g. true
@@ -165,6 +167,6 @@ assert (formatCapabilities { cudaCapabilities = [ "7.5" "8.6" ]; }) == {
   # dropDot :: String -> String
   inherit dropDot;
 } // formatCapabilities {
-  cudaCapabilities = config.cudaCapabilities or defaultCapabilities;
-  enableForwardCompat = config.cudaForwardCompat or true;
+  cudaCapabilities = if cudaCapabilities == null then defaultCapabilities else cudaCapabilities;
+  enableForwardCompat = cudaForwardCompat;
 }

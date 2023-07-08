@@ -6870,6 +6870,18 @@ with pkgs;
   cudaPackages_12_2 = callPackage ./cuda-packages.nix { cudaVersion = "12.2"; };
   cudaPackages_12 = cudaPackages_12_0;
 
+  cudaPackages_jetson = cudaPackages_11.overrideScope' (cuda-final: cuda-prev: {
+    cudaFlags = cuda-prev.cudaFlags.override {
+      cudaCapabilities = [
+        "5.3"
+        "6.2"
+        "7.2"
+        "8.7"
+      ];
+    };
+    manifestAttribute = if hostPlatform.system == "aarch64-linux" then "linux-aarch64" else null;
+  });
+
   # TODO: try upgrading once there is a cuDNN release supporting CUDA 12. No
   # such cuDNN release as of 2023-01-10.
   cudaPackages = recurseIntoAttrs cudaPackages_11;

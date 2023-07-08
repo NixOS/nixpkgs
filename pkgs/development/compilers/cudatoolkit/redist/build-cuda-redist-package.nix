@@ -13,7 +13,7 @@ attrs:
 let
   systemToManifestAttribute = {
     "x86_64-linux" = [ "linux-x86_64" ];
-    "aarch64-linux" = [ "linux-aarch64" "linux-sbsa" ];
+    "aarch64-linux" = [ "linux-sbsa" "linux-aarch64" ];
     "powerpc64le-linux" = [ "linux-ppc64le" ];
   };
   systemToManifestAttributeOrDefault = default: system:
