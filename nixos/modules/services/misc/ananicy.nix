@@ -25,6 +25,16 @@ in
         '';
       };
 
+      rulesProvider = mkOption {
+        type = types.package;
+        default = pkgs.ananicy;
+        defaultText = literalExpression "pkgs.ananicy";
+        example = literalExpression "pkgs.ananicy-cpp";
+        description = lib.mdDoc ''
+          Which package to copy default rules,types,cgroups from.
+        '';
+      };
+
       settings = mkOption {
         type = with types; attrsOf (oneOf [ int bool str ]);
         default = { };
@@ -87,7 +97,12 @@ in
       etc."ananicy.d".source = pkgs.runCommandLocal "ananicyfiles" { } ''
         mkdir -p $out
         # ananicy-cpp does not include rules or settings on purpose
-        cp -r ${pkgs.ananicy}/etc/ananicy.d/* $out
+        if [[ -d "${cfg.rulesProvider}/etc/ananicy.d/00-default" ]]; then
+          cp -r ${cfg.rulesProvider}/etc/ananicy.d/* $out
+        else
+          cp -r ${cfg.rulesProvider}/* $out
+        fi
+
         # configured through .setings
         rm -f $out/ananicy.conf
         cp ${configFile} $out/ananicy.conf
