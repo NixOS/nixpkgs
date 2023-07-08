@@ -40341,7 +40341,7 @@ with pkgs;
 
   soundmodem = callPackage ../applications/radio/soundmodem { };
 
-  soundOfSorting = callPackage ../misc/sound-of-sorting { };
+  sound-of-sorting = callPackage ../misc/sound-of-sorting { };
 
   sourceAndTags = callPackage ../misc/source-and-tags {
     hasktags = haskellPackages.hasktags;
