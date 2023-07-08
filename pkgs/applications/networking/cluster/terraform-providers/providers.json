@@ -46,11 +46,11 @@
     "vendorHash": "sha256-xZ0pS7XxfYGbG2kEw5FAjABDQZmektaI7OhToiFMXKk="
   },
   "alicloud": {
-    "hash": "sha256-SYzc8mvLdSHWR75+Fy4Egn2BO8t89aowYHhZ6MlyEIU=",
+    "hash": "sha256-F69Otml1zH5TtD6dRPIXc2pOq2aM8NEsTsnmJDQEdxk=",
     "homepage": "https://registry.terraform.io/providers/aliyun/alicloud",
     "owner": "aliyun",
     "repo": "terraform-provider-alicloud",
-    "rev": "v1.207.1",
+    "rev": "v1.207.2",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -390,13 +390,13 @@
     "vendorHash": null
   },
   "flexibleengine": {
-    "hash": "sha256-WO99FOJ6zZ0GPxoYwH55Ul0HTktH2UZ3yWRrwjk3qA4=",
+    "hash": "sha256-Y7rplfN7acrDWNO9Q4K3WaM5reFxi5ms012+wTm+EF0=",
     "homepage": "https://registry.terraform.io/providers/FlexibleEngineCloud/flexibleengine",
     "owner": "FlexibleEngineCloud",
     "repo": "terraform-provider-flexibleengine",
-    "rev": "v1.38.0",
+    "rev": "v1.39.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-DSdE0CkAIJje71/S64no9fMJMUhAnFiK3lWewvcyE14="
+    "vendorHash": "sha256-RqYzqKPzb5GcrzHnEDZC7GaBt1zP8g28Wo3WNAe07Ck="
   },
   "fly": {
     "hash": "sha256-9QB2fbggCKcJz8tkSYgq/X8r+MB2M76VCWXgsHARTkU=",
@@ -1034,11 +1034,11 @@
     "vendorHash": null
   },
   "snowflake": {
-    "hash": "sha256-QxqzIaDzVxvxnf10rLWl4CUUIvzWLsSyWHXBg5S1608=",
+    "hash": "sha256-Cou96AjZDi6GTz6i7+x/nJfwHkHrHB9E9g8RzX4/QKo=",
     "homepage": "https://registry.terraform.io/providers/Snowflake-Labs/snowflake",
     "owner": "Snowflake-Labs",
     "repo": "terraform-provider-snowflake",
-    "rev": "v0.67.0",
+    "rev": "v0.68.1",
     "spdx": "MIT",
     "vendorHash": "sha256-ZNkZ2GMSBZHz+L626VqT7pTeb8fSYkaCi84O5ggd1FM="
   },
@@ -1106,11 +1106,11 @@
     "vendorHash": "sha256-GNSKSlaFBj2P+z40U+0uwPSOuQBy+9vOVFfPe8p0A24="
   },
   "tencentcloud": {
-    "hash": "sha256-evdKIbPPaHMFOYb77vogr3h8n34fcJf0sJVw5GjaHc8=",
+    "hash": "sha256-BflyXfxfth9wjPCd8aW9maemjjHTzuL8KvxQsvRUKLw=",
     "homepage": "https://registry.terraform.io/providers/tencentcloudstack/tencentcloud",
     "owner": "tencentcloudstack",
     "repo": "terraform-provider-tencentcloud",
-    "rev": "v1.81.11",
+    "rev": "v1.81.12",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
