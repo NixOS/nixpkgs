@@ -5,7 +5,7 @@
 , autoPatchelfHook
 , autoAddOpenGLRunpathHook
 , manifestAttribute ? null
-}:
+}@inputs:
 
 pname:
 attrs:
@@ -27,15 +27,10 @@ let
 
   inherit (stdenv) system;
 
-  renames = {
-    manifestAttribute =
-      if manifestAttribute == null
-      then systemToManifestAttributeOrDefault "linux-x86_64" system
-      else manifestAttribute;
-  };
-in
-let
-  inherit (renames) manifestAttribute;
+  manifestAttribute =
+    if !inputs?manifestAttribute || inputs.manifestAttribute == null
+    then systemToManifestAttributeOrDefault "linux-x86_64" system
+    else inputs.manifestAttribute;
 
   # Generally, we avoid assertions in favour of setting the `meta.broken`
   # attribute, which can be overridden by the user. These tests are assertions
