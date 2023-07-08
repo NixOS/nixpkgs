@@ -18,6 +18,9 @@ in buildFHSEnv {
 
   runScript = "lutris";
 
+  # Many native and WINE games need 32bit
+  multiArch = true;
+
   targetPkgs = pkgs: with pkgs; [
     lutris-unwrapped
 
