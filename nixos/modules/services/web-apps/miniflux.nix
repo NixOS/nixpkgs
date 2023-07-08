@@ -130,5 +130,17 @@ in
       environment = cfg.config;
     };
     environment.systemPackages = [ cfg.package ];
+
+    security.apparmor.policies."bin.miniflux".profile = ''
+      include <tunables/global>
+      ${cfg.package}/bin/miniflux {
+        include <abstractions/base>
+        include <abstractions/nameservice>
+        include <abstractions/ssl_certs>
+        include "${pkgs.apparmorRulesFromClosure { name = "miniflux"; } cfg.package}"
+        r ${cfg.package}/bin/miniflux,
+        r @{sys}/kernel/mm/transparent_hugepage/hpage_pmd_size,
+      }
+    '';
   };
 }
