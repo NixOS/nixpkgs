@@ -12,7 +12,7 @@ Avoid build-only store references embedding into 'mutt -v'.
 +	# 'gcc -v' output embedded into 'mutt -v'. But also might be
 +	# ./configure-passed arguments.
 +	sed \
-+	    -e 's@'$NIX_STORE'/[a-z0-9]\{32\}-@/<<NIX>>/@g'
++	    -e "s|$NIX_STORE/[a-z0-9]\{32\}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g"
 +}
 +
  if ./txt2c test </dev/null >/dev/null 2>&1; then
