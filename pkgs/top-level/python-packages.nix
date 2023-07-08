@@ -11945,6 +11945,8 @@ self: super: with self; {
 
   stem = callPackage ../development/python-modules/stem { };
 
+  stemming = callPackage ../development/python-modules/stemming { };
+
   stestr = callPackage ../development/python-modules/stestr { };
 
   stevedore = callPackage ../development/python-modules/stevedore { };
