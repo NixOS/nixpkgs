@@ -1711,6 +1711,8 @@ self: super: with self; {
 
   celery-redbeat = callPackage ../development/python-modules/celery-redbeat { };
 
+  celery-singleton = callPackage ../development/python-modules/celery-singleton { };
+
   cement = callPackage ../development/python-modules/cement { };
 
   cemm = callPackage ../development/python-modules/cemm { };
@@ -2706,6 +2708,8 @@ self: super: with self; {
   django-bootstrap3 = callPackage ../development/python-modules/django-bootstrap3 { };
 
   django-bootstrap4 = callPackage ../development/python-modules/django-bootstrap4 { };
+
+  django-cachalot = callPackage ../development/python-modules/django-cachalot { };
 
   django-cache-url = callPackage ../development/python-modules/django-cache-url { };
 
