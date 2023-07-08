@@ -25,28 +25,28 @@ if ("$latest_version" === "$current_version") {
   echo $package_json > $directory/package.json
 
   const server_tarball_meta = $(nix-prefetch-github $owner $server_repo --rev $latest_rev --fetch-submodules)
-  const server_tarball_hash = "sha256-$(echo $server_tarball_meta | jq -r '.sha256')"
+  const server_tarball_hash = "$(echo $server_tarball_meta | jq -r '.hash')"
   const ui_tarball_meta = $(nix-prefetch-github $owner $ui_repo --rev $latest_rev --fetch-submodules)
-  const ui_tarball_hash = "sha256-$(echo $ui_tarball_meta | jq -r '.sha256')"
+  const ui_tarball_hash = "$(echo $ui_tarball_meta | jq -r '.hash')"
 
   jq ".version = \"$latest_version\" | \
-      .\"serverSha256\" = \"$server_tarball_hash\" | \
-      .\"uiSha256\" = \"$ui_tarball_hash\" | \
-      .\"serverCargoSha256\" = \"\" | \
-      .\"uiYarnDepsSha256\" = \"\"" $directory/pin.json | sponge $directory/pin.json
+      .\"serverHash\" = \"$server_tarball_hash\" | \
+      .\"uiHash\" = \"$ui_tarball_hash\" | \
+      .\"serverCargoHash\" = \"\" | \
+      .\"uiYarnDepsHash\" = \"\"" $directory/pin.json | sponge $directory/pin.json
 
-  const new_cargo_sha256 = $(nix-build $directory/../../../.. -A lemmy-server 2>&1 | \
+  const new_cargo_hash = $(nix-build $directory/../../../.. -A lemmy-server 2>&1 | \
     tail -n 2 | \
     head -n 1 | \
     sd '\s+got:\s+' '')
 
-  const new_offline_cache_sha256 = $(nix-build $directory/../../../.. -A lemmy-ui 2>&1 | \
+  const new_offline_cache_hash = $(nix-build $directory/../../../.. -A lemmy-ui 2>&1 | \
     tail -n 2 | \
     head -n 1 | \
     sd '\s+got:\s+' '')
 
-  jq ".\"serverCargoSha256\" = \"$new_cargo_sha256\" | \
-      .\"uiYarnDepsSha256\" = \"$new_offline_cache_sha256\"" \
+  jq ".\"serverCargoHash\" = \"$new_cargo_hash\" | \
+      .\"uiYarnDepsHash\" = \"$new_offline_cache_hash\"" \
     $directory/pin.json | sponge $directory/pin.json
 }
 

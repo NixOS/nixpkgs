@@ -40,7 +40,7 @@ let
     repo = name;
     rev = version;
     fetchSubmodules = true;
-    sha256 = pinData.uiSha256;
+    hash = pinData.uiHash;
   };
 in
 mkYarnPackage {
@@ -52,7 +52,7 @@ mkYarnPackage {
   packageJSON = ./package.json;
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    sha256 = pinData.uiYarnDepsSha256;
+    hash = pinData.uiYarnDepsHash;
   };
 
   yarnPreBuild = ''
