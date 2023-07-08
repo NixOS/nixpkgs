@@ -1,18 +1,19 @@
-{ lib, buildGoModule, fetchgit, qemu, docker, which, makeWrapper }:
+{ lib, buildGoModule, fetchFromGitHub, qemu, makeWrapper }:
 
 buildGoModule rec {
   pname = "out-of-tree";
-  version = "2.0.4";
+  version = "2.1.0";
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  src = fetchgit {
-    rev = "refs/tags/v${version}";
-    url = "https://code.dumpstack.io/tools/${pname}.git";
-    sha256 = "sha256-D2LiSDnF7g1h0XTulctCnZ+I6FZSLA0XRd9LQLOMP9c=";
+  src = fetchFromGitHub {
+    owner = "out-of-tree";
+    repo = "out-of-tree";
+    rev = "v${version}";
+    hash = "sha256-FXB3HM73sYKFaXrwOXXPVnsTGyZPHzU6Kf7JRAV2Cpw=";
   };
 
-  vendorSha256 = "sha256-p1dqzng3ak9lrnzrEABhE1TP1lM2Ikc8bmvp5L3nUp0=";
+  vendorHash = "sha256-p1dqzng3ak9lrnzrEABhE1TP1lM2Ikc8bmvp5L3nUp0=";
+
+  nativeBuildInputs = [ makeWrapper ];
 
   doCheck = false;
 
