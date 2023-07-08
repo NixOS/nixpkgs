@@ -214,7 +214,7 @@ self: super: {
   };
 
   cmp-git = super.cmp-git.overrideAttrs {
-    dependencies = with self; [ nvim-cmp curl git ];
+    dependencies = with self; [ nvim-cmp ];
   };
 
   cmp-greek = super.cmp-greek.overrideAttrs {
