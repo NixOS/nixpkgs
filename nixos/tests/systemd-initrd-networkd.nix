@@ -19,32 +19,42 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         inherit script;
       };
     };
-  in {
-    basic = { ... }: {
+    connectivityCheckModule = { ... }: {
       boot.initrd.network.enable = true;
 
       boot.initrd.systemd = {
         enable = true;
         # Enable network-online to fail the test in case of timeout
-        network.wait-online.timeout = 10;
+        network.wait-online.timeout = 200;
         network.wait-online.anyInterface = true;
         targets.network-online.requiredBy = [ "initrd.target" ];
         services.systemd-networkd-wait-online.requiredBy =
           [ "network-online.target" ];
 
-          initrdBin = [ pkgs.iproute2 pkgs.iputils pkgs.gnugrep ];
-          services.check = {
-            requiredBy = [ "initrd.target" ];
-            before = [ "initrd.target" ];
-            after = [ "network-online.target" ];
-            serviceConfig.Type = "oneshot";
-            path = [ pkgs.iproute2 pkgs.iputils pkgs.gnugrep ];
-            script = ''
-              ip addr | grep 10.0.2.15 || exit 1
-              ping -c1 10.0.2.2 || exit 1
-            '';
-          };
+        initrdBin = [ pkgs.iproute2 pkgs.iputils pkgs.gnugrep ];
+        services.check = {
+          requiredBy = [ "initrd.target" ];
+          before = [ "initrd.target" ];
+          after = [ "network-online.target" ];
+          serviceConfig.Type = "oneshot";
+          path = [ pkgs.iproute2 pkgs.iputils pkgs.gnugrep ];
+          script = ''
+            ip addr >&2
+            ip addr | grep 10.0.2.15 || exit 1
+            ping -c1 10.0.2.2 || exit 1
+          '';
+        };
       };
+    };
+  in {
+    basic = connectivityCheckModule;
+
+    # Does initrd networkd still get configured correctly when
+    # stage2 uses NetworkManager?
+    withNetworkManager = { ... }: {
+      imports = [ connectivityCheckModule ];
+      networking.networkmanager.enable = true;
+      boot.initrd.systemd.network.useDHCP = true;
     };
 
     doFlush = mkFlushTest true ''
@@ -68,8 +78,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     doFlush.wait_for_unit("multi-user.target")
     dontFlush.wait_for_unit("multi-user.target")
     # Make sure the systemd-network user was set correctly in initrd
-    basic.succeed("[ $(stat -c '%U,%G' /run/systemd/netif/links) = systemd-network,systemd-network ]")
-    basic.succeed("ip addr show >&2")
-    basic.succeed("ip route show >&2")
+    for machine in [ basic, withNetworkManager ]:
+      machine.succeed("[ $(stat -c '%U,%G' /run/systemd/netif/links) = systemd-network,systemd-network ]")
+      machine.succeed("ip addr show >&2")
+      machine.succeed("ip route show >&2")
   '';
 })
