@@ -7580,6 +7580,8 @@ self: super: with self; {
 
   oralb-ble = callPackage ../development/python-modules/oralb-ble { };
 
+  orange3 = callPackage ../development/python-modules/orange3 { };
+
   orange-canvas-core = callPackage ../development/python-modules/orange-canvas-core { };
 
   orange-widget-base = callPackage ../development/python-modules/orange-widget-base { };
