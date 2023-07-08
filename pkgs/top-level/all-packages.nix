@@ -23247,6 +23247,8 @@ with pkgs;
 
   yaml-cpp_0_3 = callPackage ../development/libraries/yaml-cpp/0.3.0.nix { };
 
+  yas = callPackage ../development/libraries/yas { };
+
   libyang = callPackage ../development/libraries/libyang { };
 
   libcyaml = callPackage ../development/libraries/libcyaml { };
