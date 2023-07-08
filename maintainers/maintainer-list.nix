@@ -2276,6 +2276,12 @@
       fingerprint = "17C7 95D4 871C 2F87 83C8  053D 0C61 C4E5 907F 76C8";
     }];
   };
+  booniepepper = {
+    name = "J.R. Hill";
+    email = "justin@so.dang.cool";
+    github = "booniepepper";
+    githubId = 17605298;
+  };
   bootstrap-prime = {
     email = "bootstrap.prime@gmail.com";
     github = "bootstrap-prime";
@@ -6561,13 +6567,6 @@
     github = "HikariNee";
     githubId = 72349937;
     name = "Hikari";
-  };
-
-  hiljusti = {
-    name = "J.R. Hill";
-    email = "hiljusti@so.dang.cool";
-    github = "hiljusti";
-    githubId = 17605298;
   };
   hirenashah = {
     email = "hiren@hiren.io";

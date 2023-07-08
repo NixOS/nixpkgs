@@ -25,6 +25,6 @@ rustPlatform.buildRustPackage rec {
     description = "Organizing CLI for people who don't love organizing.";
     homepage = "https://github.com/sigi-cli/sigi";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ hiljusti ];
+    maintainers = with maintainers; [ booniepepper ];
   };
 }
