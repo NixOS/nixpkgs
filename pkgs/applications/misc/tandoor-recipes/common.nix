@@ -6,10 +6,10 @@ rec {
     owner = "TandoorRecipes";
     repo = "recipes";
     rev = version;
-    sha256 = "sha256-cVrgmRDzuLzl2+4UcrLRdrP6ZFWMkavu9OEogNas2fA=";
+    hash = "sha256-cVrgmRDzuLzl2+4UcrLRdrP6ZFWMkavu9OEogNas2fA=";
   };
 
-  yarnSha256 = "sha256-0u9P/OsoThP8gonrzcnO5zhIboWMI1mTsXHlbt7l9oE=";
+  yarnHash = "sha256-0u9P/OsoThP8gonrzcnO5zhIboWMI1mTsXHlbt7l9oE=";
 
   meta = with lib; {
     homepage = "https://tandoor.dev/";
