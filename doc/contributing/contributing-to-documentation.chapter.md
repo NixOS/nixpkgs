@@ -2,26 +2,13 @@
 
 The sources of the Nixpkgs manual are in the [doc](https://github.com/NixOS/nixpkgs/tree/master/doc) subdirectory of the Nixpkgs repository. The manual is still partially written in DocBook but it is progressively being converted to [Markdown](#sec-contributing-markup).
 
-You can quickly check your edits with `make`:
+You can check your edits with `nix-build`:
 
 ```ShellSession
-$ cd /path/to/nixpkgs/doc
-$ nix-shell
-[nix-shell]$ make
+[nixpkgs]$ nix-build ./doc
 ```
 
-If you experience problems, run `make debug` to help understand the docbook errors.
-
-After making modifications to the manual, it's important to build it before committing. You can do that as follows:
-
-```ShellSession
-$ cd /path/to/nixpkgs/doc
-$ nix-shell
-[nix-shell]$ make clean
-[nix-shell]$ nix-build .
-```
-
-If the build succeeds, the manual will be in `./result/share/doc/nixpkgs/manual.html`.
+This makes the built manual available in `result/share/doc/nixpkgs/manual.html`.
 
 ## Syntax {#sec-contributing-markup}
 
