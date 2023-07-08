@@ -10762,6 +10762,8 @@ self: super: with self; {
 
   qbittorrent-api = callPackage ../development/python-modules/qbittorrent-api { };
 
+  qasync = callPackage ../development/python-modules/qasync { };
+
   qcelemental = callPackage ../development/python-modules/qcelemental { };
 
   qcengine = callPackage ../development/python-modules/qcengine { };
