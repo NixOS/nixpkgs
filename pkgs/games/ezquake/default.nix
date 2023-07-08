@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     owner = "QW-Group";
     repo = pname + "-source";
     rev = version;
-    sha256 = "sha256-mi/VDSZ+ybEAaZOhBGh/cSnrRUAB/h+WQZ4Aml0UfW4=";
     fetchSubmodules = true;
+    hash = "sha256-mi/VDSZ+ybEAaZOhBGh/cSnrRUAB/h+WQZ4Aml0UfW4=";
   };
 
   nativeBuildInputs = [ pkg-config ];
