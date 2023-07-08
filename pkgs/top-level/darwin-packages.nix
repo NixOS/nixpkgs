@@ -133,19 +133,9 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   sigtool = callPackage ../os-specific/darwin/sigtool { };
 
-  postLinkSignHook = pkgs.writeTextFile {
-    name = "post-link-sign-hook";
-    executable = true;
-
-    text = ''
-      if [ "$linkerOutput" != "/dev/null" ]; then
-        CODESIGN_ALLOCATE=${targetPrefix}codesign_allocate \
-          ${self.sigtool}/bin/codesign -f -s - "$linkerOutput"
-      fi
-    '';
-  };
-
   signingUtils = callPackage ../os-specific/darwin/signing-utils { };
+
+  postLinkSignHook = callPackage ../os-specific/darwin/signing-utils/post-link-sign-hook.nix { };
 
   autoSignDarwinBinariesHook = pkgs.makeSetupHook {
     name = "auto-sign-darwin-binaries-hook";
