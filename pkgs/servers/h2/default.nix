@@ -1,11 +1,11 @@
 { lib, stdenv, fetchzip, jre, makeWrapper }:
 stdenv.mkDerivation rec {
   pname = "h2";
-  version = "2.1.210";
+  version = "2.2.220";
 
   src = fetchzip {
-    url = "https://github.com/h2database/h2database/releases/download/version-${version}/h2-2022-01-17.zip";
-    sha256 = "0zcjblhjj98dsj954ia3by9vx5w7mix1dzi85jnvp18kxmbldmf4";
+    url = "https://github.com/h2database/h2database/releases/download/version-${version}/h2-2023-07-04.zip";
+    hash = "sha256-nSOkCZuHcy0GR4SRjx524+MLqxJyO1PRkImPOFR1yts=";
   };
 
   outputs = [ "out" "doc" ];
