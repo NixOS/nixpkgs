@@ -76,7 +76,7 @@ trap cleanup EXIT
 
 echo "Fetching source code $REVISION"
 JSON=$(nix-prefetch-github "$OWNER" "$REPO" --rev "$REVISION"  2> $WORK_DIR/nix-prefetch-git.out)
-SHA=$(echo "$JSON" | jq -r .sha256)
+HASH=$(echo "$JSON" | jq -r .hash)
 
 echo "Creating version.nix"
 echo "\"$VERSION\"" | sed 's/^"v/"/' > version.nix
@@ -88,7 +88,7 @@ cat > source.nix << EOF
     owner = "mastodon";
     repo = "mastodon";
     rev = "$REVISION";
-    sha256 = "$SHA";
+    hash = "$HASH";
   };
 in applyPatches {
   inherit src;
