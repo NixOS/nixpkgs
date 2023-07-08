@@ -38,6 +38,7 @@
         The supported variants are:
          - debug: Ocarina of Time Debug PAL GC (not Master Quest)
          - pal-gc: Ocarina of Time PAL GameCube (may lead to crashes and instability)
+         - pal-n64-11: Ocarina of Time PAL GameCube
 
         This is optional if you have imported an Ocarina of Time Master Quest ROM.
         If so, please set oot.enable to false and ootMq.enable to true.
@@ -48,6 +49,7 @@
       sha1 = {
         debug = "cee6bc3c2a634b41728f2af8da54d9bf8cc14099";
         pal-gc = "0227d7c0074f2d0ac935631990da8ec5914597b4";
+        pal-n64-11 = "cfbb98d392e4a9d39da8285d10cbef3974c2f012";
       }.${variant} or (throw "Unsupported romVariant ${variant}. Valid options are 'debug' and 'pal-gc'.");
     };
   }
