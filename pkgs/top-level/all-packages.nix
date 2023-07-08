@@ -18400,6 +18400,8 @@ with pkgs;
 
   catnip = callPackage ../tools/audio/catnip { };
 
+  catnip-gtk4 = callPackage ../tools/audio/catnip-gtk4 { };
+
   cbrowser = callPackage ../development/tools/misc/cbrowser { };
 
   cc-tool = callPackage ../development/embedded/cc-tool { };
