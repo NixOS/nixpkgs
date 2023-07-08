@@ -17428,6 +17428,8 @@ with pkgs;
 
   luau = callPackage ../development/interpreters/luau { };
 
+  lune = callPackage ../development/interpreters/lune { };
+
   toluapp = callPackage ../development/tools/toluapp {
     lua = lua5_1; # doesn't work with any other :(
   };
