@@ -219,6 +219,10 @@ self: super: {
   # There are numerical tests on random data, that may fail occasionally
   lapack = dontCheck super.lapack;
 
+  # Allow text-2.0.*
+  # https://github.com/jgm/cmark-hs/pull/15
+  cmark = doJailbreak super.cmark;
+
   # fix tests failure for base≥4.15 (https://github.com/kim/leveldb-haskell/pull/41)
   leveldb-haskell = appendPatch (fetchpatch {
     url = "https://github.com/kim/leveldb-haskell/commit/f5249081f589233890ddb1945ec548ca9fb717cf.patch";
