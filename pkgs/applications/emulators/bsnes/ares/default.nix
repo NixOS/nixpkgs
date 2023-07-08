@@ -86,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ Madouura AndersonTorres ];
     platforms = lib.platforms.unix;
+    broken = stdenv.isDarwin;
   };
 })
 # TODO: select between Qt and GTK3
