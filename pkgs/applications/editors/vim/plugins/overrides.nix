@@ -230,7 +230,7 @@ self: super: {
   };
 
   cmp-npm = super.cmp-npm.overrideAttrs {
-    dependencies = with self; [ nvim-cmp nodejs plenary-nvim ];
+    dependencies = with self; [ nvim-cmp plenary-nvim ];
   };
 
   cmp-nvim-lsp-signature-help = super.cmp-nvim-lsp-signature-help.overrideAttrs {
