@@ -34,12 +34,12 @@ sed -e "s/version =.*;/version = \"$TARGET_VERSION\";/g" \
 
 # update hash
 SRC_HASH="$(nix-instantiate --eval -A memos.src.outputHash | tr -d '"')"
-NEW_HASH="$(nix-prefetch-github usememos memos --rev v$TARGET_VERSION | jq -r .sha256)"
+NEW_HASH="$(nix-prefetch-github usememos memos --rev v$TARGET_VERSION | jq -r .hash)"
 
 replaceHash "$SRC_HASH" "$NEW_HASH"
 
-GO_HASH="$(nix-instantiate --eval -A memos.vendorSha256 | tr -d '"')"
-EMPTY_HASH="$(nix-instantiate --eval -A lib.fakeSha256 | tr -d '"')"
+GO_HASH="$(nix-instantiate --eval -A memos.vendorHash | tr -d '"')"
+EMPTY_HASH="$(nix-instantiate --eval -A lib.fakeHash | tr -d '"')"
 replaceHash "$GO_HASH" "$EMPTY_HASH"
 replaceHash "$EMPTY_HASH" "$(extractVendorHash "$GO_HASH")"
 

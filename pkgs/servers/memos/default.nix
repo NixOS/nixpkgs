@@ -6,7 +6,7 @@ let
     owner = "usememos";
     repo = "memos";
     rev = "v${version}";
-    sha256 = "VUY81ir7cPtuHodJhkSz3bmnoIeQH20kbg+duDcjfwM=";
+    hash = "sha256-VUY81ir7cPtuHodJhkSz3bmnoIeQH20kbg+duDcjfwM=";
   };
 
   frontend = buildNpmPackage {
@@ -32,7 +32,7 @@ buildGoModule rec {
 
   # check will unable to access network in sandbox
   doCheck = false;
-  vendorSha256 = "sha256-OztHMpOj7Ewmxu+pzPmzmtHBDe1sbzj805In37mFjzU=";
+  vendorHash = "sha256-OztHMpOj7Ewmxu+pzPmzmtHBDe1sbzj805In37mFjzU=";
 
   # Inject frontend assets into go embed
   prePatch = ''
