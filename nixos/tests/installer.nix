@@ -300,13 +300,11 @@ let
           rm /etc/nixos/configuration.nix
         """)
         machine.copy_from_host_via_shell(
-          "${ makeConfig {
-                inherit bootLoader grubDevice grubIdentifier
-                        grubUseEfi extraConfig;
-                forceGrubReinstallCount = 1;
-                flake = true;
-              }
-          }",
+          "${makeConfig {
+               inherit bootLoader grubDevice grubIdentifier grubUseEfi extraConfig;
+               forceGrubReinstallCount = 1;
+               flake = true;
+            }}",
           "/root/my-config/configuration.nix",
         )
         machine.copy_from_host_via_shell(
@@ -366,7 +364,6 @@ let
 
       ${postBootCommands}
       machine.shutdown()
-
     '';
 
 

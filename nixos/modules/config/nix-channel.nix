@@ -85,7 +85,7 @@ in
         fi
       '';
 
-    environment.extraSetup = mkIf (! cfg.channel.enable) ''
+    environment.extraSetup = mkIf (!cfg.channel.enable) ''
       rm $out/bin/nix-channel
     '';
 
