@@ -83,6 +83,13 @@
   - nixos/tests/mate.nix
   - pkgs/desktops/mate/**/*
 
+"6.topic: module system":
+  - lib/modules.nix
+  - lib/types.nix
+  - lib/options.nix
+  - lib/tests/modules.sh
+  - lib/tests/modules/**
+
 "6.topic: nixos":
   - nixos/**/*
   - pkgs/os-specific/linux/nixos-rebuild/**/*
