@@ -4520,6 +4520,8 @@ with pkgs;
 
   wdt = callPackage ../applications/networking/sync/wdt { };
 
+  wlay = callPackage ../tools/wayland/wlay { };
+
   wl-clip-persist = callPackage ../tools/wayland/wl-clip-persist { };
 
   wl-clipboard = callPackage ../tools/wayland/wl-clipboard { };
