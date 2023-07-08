@@ -28,7 +28,7 @@ fi
 version="${version#v}"
 
 # Woodpecker repository
-src_hash=$(nix-prefetch-github woodpecker-ci woodpecker --rev "v${version}" | jq -r .sha256)
+src_hash=$(nix-prefetch-github woodpecker-ci woodpecker --rev "v${version}" | jq -r .hash)
 
 # Front-end dependencies
 woodpecker_src="https://raw.githubusercontent.com/woodpecker-ci/woodpecker/v$version"
@@ -42,9 +42,8 @@ yarn_hash=$(prefetch-yarn-deps yarn.lock)
 popd
 
 # Use friendlier hashes
-src_hash=$(nix hash to-sri --type sha256 "$src_hash")
 yarn_hash=$(nix hash to-sri --type sha256 "$yarn_hash")
 
 sed -i -E -e "s#version = \".*\"#version = \"$version\"#" common.nix
-sed -i -E -e "s#srcSha256 = \".*\"#srcSha256 = \"$src_hash\"#" common.nix
-sed -i -E -e "s#yarnSha256 = \".*\"#yarnSha256 = \"$yarn_hash\"#" common.nix
+sed -i -E -e "s#srcHash = \".*\"#srcHash = \"$src_hash\"#" common.nix
+sed -i -E -e "s#yarnHash = \".*\"#yarnHash = \"$yarn_hash\"#" common.nix
