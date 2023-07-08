@@ -88,7 +88,8 @@ in
         mkdir -p $out
         # ananicy-cpp does not include rules or settings on purpose
         cp -r ${pkgs.ananicy}/etc/ananicy.d/* $out
-        rm $out/ananicy.conf
+        # configured through .setings
+        rm -f $out/ananicy.conf
         cp ${configFile} $out/ananicy.conf
         ${optionalString (cfg.extraRules != "") "cp ${extraRules} $out/nixRules.rules"}
         ${optionalString (cfg.extraTypes != "") "cp ${extraTypes} $out/nixTypes.types"}
@@ -115,6 +116,7 @@ in
         # https://gitlab.com/ananicy-cpp/ananicy-cpp/-/blob/master/src/config.cpp#L12
         loglevel = mkOD "warn"; # default is info but its spammy
         cgroup_realtime_workaround = mkOD config.systemd.enableUnifiedCgroupHierarchy;
+        log_applied_rule = mkOD false;
       } else {
         # https://github.com/Nefelim4ag/Ananicy/blob/master/ananicy.d/ananicy.conf
         check_disks_schedulers = mkOD true;
