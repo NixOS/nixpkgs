@@ -2634,6 +2634,23 @@ let
       '';
     };
 
+    useDHCP = mkOption {
+      default = config.networking.useDHCP;
+      defaultText = literalExpression "config.networking.useDHCP";
+      example = true;
+      visible = initrd;
+      type = types.bool;
+      description = lib.mdDoc ''
+        Whether to configure networkd to use DHCP to obtain an IP address and
+        other configuration for network interfaces that are not manually
+        configured.
+
+        This option is a duplicate of the primary systemd networking config, but
+        is necessary when using the networkd in initrd while managing the
+        primary (stage-2) using a different solution (e.g. NetworkManager)
+      '';
+    };
+
     links = mkOption {
       default = {};
       inherit visible;
