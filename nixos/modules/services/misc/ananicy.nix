@@ -6,6 +6,8 @@ let
   cfg = config.services.ananicy;
   configFile = pkgs.writeText "ananicy.conf" (generators.toKeyValue { } cfg.settings);
   extraRules = pkgs.writeText "extraRules" cfg.extraRules;
+  extraTypes = pkgs.writeText "extraTypes" cfg.extraTypes;
+  extraCgroups = pkgs.writeText "extraCgroups" cfg.extraCgroups;
   servicename = if ((lib.getName cfg.package) == (lib.getName pkgs.ananicy-cpp)) then "ananicy-cpp" else "ananicy";
 in
 {
@@ -48,7 +50,33 @@ in
             { "name": "fdupes", "type": "BG_CPUIO" }
           '''
         '';
-
+      };
+      extraTypes = mkOption {
+        type = types.str;
+        default = "";
+        description = lib.mdDoc ''
+          Extra types in json format on separate lines. See:
+          <https://gitlab.com/ananicy-cpp/ananicy-cpp/#types>
+        '';
+        example = literalExpression ''
+          '''
+            {"type": "my_type", "nice": 19, "other_parameter": "value"}
+            {"type": "compiler", "nice": 19, "sched": "batch", "ioclass": "idle"}
+          '''
+        '';
+      };
+      extraCgroups = mkOption {
+        type = types.str;
+        default = "";
+        description = lib.mdDoc ''
+          Extra cgroups in json format on separate lines. See:
+          <https://gitlab.com/ananicy-cpp/ananicy-cpp/#cgroups>
+        '';
+        example = literalExpression ''
+          '''
+            {"cgroup": "cpu80", "CPUQuota": 80}
+          '''
+        '';
       };
     };
   };
@@ -63,6 +91,8 @@ in
         rm $out/ananicy.conf
         cp ${configFile} $out/ananicy.conf
         ${optionalString (cfg.extraRules != "") "cp ${extraRules} $out/nixRules.rules"}
+        ${optionalString (cfg.extraTypes != "") "cp ${extraTypes} $out/nixTypes.types"}
+        ${optionalString (cfg.extraCgroups != "") "cp ${extraCgroups} $out/nixCgroups.cgroups"}
       '';
     };
 
