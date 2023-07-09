@@ -34,6 +34,8 @@ buildGoModule rec {
     export ldflags=''${ldflags//=${version}/=}
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   passthru.tests = { inherit (nixosTests) victoriametrics; };
 
   meta = with lib; {
