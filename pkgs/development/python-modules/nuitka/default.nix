@@ -60,6 +60,7 @@ buildPythonPackage rec {
     description = "Python compiler with full language support and CPython compatibility";
     license = licenses.asl20;
     homepage = "https://nuitka.net/";
+    changelog = "https://github.com/Nuitka/Nuitka/blob/${src.rev}/Changelog.rst";
   };
 
 }
