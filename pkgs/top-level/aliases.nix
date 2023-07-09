@@ -1470,6 +1470,7 @@ mapAliases ({
   radare2-cutter = cutter; # Added 2021-03-30
   railcar = throw "'railcar' has been removed, as the upstream project has been abandoned"; # Added 2022-06-27
   rambox-pro = rambox; # Added 2022-12-12
+  rarian = throw "rarian has been removed as unused"; # Added 2023-07-05
   raspberrypi-tools = throw "raspberrypi-tools has been removed in favor of identical 'libraspberrypi'"; # Added 2020-12-24
   rawdog = throw "rawdog has been removed from nixpkgs as it still requires python2"; # Added 2022-01-01
   rdiff_backup = throw "'rdiff_backup' has been renamed to/replaced by 'rdiff-backup'"; # Converted to throw 2022-02-22
@@ -1539,7 +1540,6 @@ mapAliases ({
   scollector = throw "'scollector' has been renamed to/replaced by 'bosun'"; # Converted to throw 2022-02-22
   scribusUnstable = throw "'scribusUnstable' has been renamed to 'scribus'"; # Added 2022-05-13
   scrollkeeper = throw "'scrollkeeper' has been removed due to deprecated LibXML2 headers"; # Added 2022-11-08
-  rarian = throw "rarian has been removed as unused"; # Added 2023-07-05
   scyther = throw "scyther has been removed since it currently only supports Python 2, see https://github.com/cascremers/scyther/issues/20"; # Added 2021-10-07
   sdlmame = mame; # Added 2019-10-30
   seeks = throw "seeks has been removed from nixpkgs, as it was unmaintained"; # Added 2020-06-21
@@ -1572,6 +1572,7 @@ mapAliases ({
   soldat-unstable = opensoldat; # Added 2022-07-02
   solr_8 = throw "'solr' has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2023-03-16
   solr = throw "'solr' has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2023-03-16
+  soundOfSorting = sound-of-sorting; # Added 2023-07-07
   spark2 = throw "'spark2' is no longer supported nixpkgs, please use 'spark'"; # Added 2023-05-08
   spark_2_4 = throw "'spark_2_4' is no longer supported nixpkgs, please use 'spark'"; # Added 2023-05-08
   spark_3_1 = throw "'spark_3_1' is no longer supported nixpkgs, please use 'spark'"; # Added 2023-05-08
@@ -1824,7 +1825,7 @@ mapAliases ({
 
   ### X ###
 
-  x11 = throw "'x11' has been renamed to/replaced by 'xlibsWrapper'"; # Converted to throw 2022-02-22
+  x11 = throw "'x11' has been renamed to/replaced by its constituents"; # Converted to throw 2022-02-22
   xara = throw "xara has been removed from nixpkgs. Unmaintained since 2006"; # Added 2020-06-24
   xbmc = throw "'xbmc' has been renamed to/replaced by 'kodi'"; # Converted to throw 2022-02-22
   xbmc-retroarch-advanced-launchers = kodi-retroarch-advanced-launchers; # Added 2021-11-19
