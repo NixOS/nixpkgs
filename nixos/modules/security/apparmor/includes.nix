@@ -62,7 +62,7 @@ config.security.apparmor.includes = {
     include "${pkgs.apparmor-profiles}/etc/apparmor.d/abstractions/base"
     r ${pkgs.stdenv.cc.libc}/share/locale/**,
     r ${pkgs.stdenv.cc.libc}/share/locale.alias,
-    ${lib.optionalString (pkgs.glibcLocales != null) "r ${pkgs.glibcLocales}/lib/locale/locale-archive,"}
+    r ${config.i18n.glibcLocales}/lib/locale/locale-archive,
     ${etcRule "localtime"}
     r ${pkgs.tzdata}/share/zoneinfo/**,
     r ${pkgs.stdenv.cc.libc}/share/i18n/**,
