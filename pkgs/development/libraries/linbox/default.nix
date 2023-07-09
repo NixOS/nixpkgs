@@ -52,6 +52,8 @@ stdenv.mkDerivation rec {
     "--enable-sage"
   ];
 
+  hardeningDisable = ["fortify3"];
+
   doCheck = true;
 
   enableParallelBuilding = true;
