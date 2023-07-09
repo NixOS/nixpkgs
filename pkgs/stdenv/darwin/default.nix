@@ -148,6 +148,8 @@ let
         stdenvNoCC = prevStage.ccWrapperStdenv;
       };
 
+      bash = prevStage.bash or bootstrapTools;
+
       thisStdenv = import ../generic {
         name = "${name}-stdenv-darwin";
 
@@ -159,18 +161,19 @@ let
 
         extraBuildInputs = [ prevStage.darwin.CF ];
 
-        preHook = ''
+        preHook = lib.optionalString (!isBuiltByNixpkgsCompiler bash) ''
           # Don't patch #!/interpreter because it leads to retained
           # dependencies on the bootstrapTools in the final stdenv.
           dontPatchShebangs=1
+        '' + ''
           ${commonPreHook prevStage}
           ${extraPreHook}
         '' + lib.optionalString (prevStage.darwin ? locale) ''
           export PATH_LOCALE=${prevStage.darwin.locale}/share/locale
         '';
 
-        shell = "${bootstrapTools}/bin/bash";
-        initialPath = [ bootstrapTools ];
+        shell = bash + "/bin/bash";
+        initialPath = [ bash bootstrapTools ];
 
         fetchurlBoot = import ../../build-support/fetchurl {
           inherit lib;
@@ -241,6 +244,8 @@ in
       # to refer to this stage directly, which violates the principle that each
       # stage should only access the stage that came before it.
       ccWrapperStdenv = self.stdenv;
+
+      bash = bootstrapTools;
 
       coreutils = bootstrapTools;
       gnugrep = bootstrapTools;
@@ -445,7 +450,7 @@ in
   # making sure both packages are present on x86_64-darwin and aarch64-darwin.
   (prevStage:
     # previous stage0 stdenv:
-    assert lib.all isFromBootstrapFiles (with prevStage; [ coreutils cpio gnugrep pbzx ]);
+    assert lib.all isFromBootstrapFiles (with prevStage; [ bash coreutils cpio gnugrep pbzx ]);
 
     assert lib.all isFromBootstrapFiles (with prevStage.darwin; [
       binutils-unwrapped cctools print-reexports rewrite-tbd sigtool system_cmds
@@ -727,7 +732,8 @@ in
     '';
   })
 
-  # This stage rebuilds Libsystem.
+  # This stage rebuilds Libsystem. It also rebuilds bash, which will be needed in later stages
+  # to use in patched shebangs (e.g., to make sure `icu-config` uses bash from nixpkgs).
   (prevStage:
     # previous stage-xclang stdenv:
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
@@ -764,12 +770,18 @@ in
 
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
-        autoconf automake bash binutils-unwrapped bison brotli cmake cmakeMinimal coreutils
+        autoconf automake binutils-unwrapped bison brotli cmake cmakeMinimal coreutils
         cpio curl cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu libedit libffi
         libiconv libidn2 libkrb5 libssh2 libtool libunistring libxml2 m4 ncurses nghttp2
         ninja openbsm openldap openpam openssh openssl patchutils pbzx perl pkg-config
         python3 python3Minimal scons serf sqlite subversion sysctl texinfo unzip which xz
         zlib zstd;
+
+      # Bash must be linked against the system CoreFoundation instead of the open-source one.
+      # Otherwise, there will be a dependency cycle: bash -> CF -> icu -> bash (for icu^dev).
+      bash = super.bash.overrideAttrs (super: {
+        buildInputs = super.buildInputs ++ [ self.darwin.apple_sdk.frameworks.CoreFoundation ];
+      });
 
       darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
         inherit (prevStage.darwin)
@@ -822,12 +834,14 @@ in
   (prevStage:
     # previous stage2-Libsystem stdenv:
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      autoconf automake bash binutils-unwrapped bison brotli cmake cmakeMinimal coreutils
+      autoconf automake binutils-unwrapped bison brotli cmake cmakeMinimal coreutils
       cpio curl cyrus_sasl db ed expat flex gettext gmp gnugrep groff icu libedit libidn2
       libkrb5 libssh2 libtool libunistring m4 nghttp2 ninja openbsm openldap openpam openssh
       openssl patchutils pbzx perl pkg-config.pkg-config python3 python3Minimal scons serf
       sqlite subversion sysctl.provider texinfo unzip which xz zstd
     ]);
+
+    assert lib.all isBuiltByNixpkgsCompiler (with prevStage; [ bash ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
       libffi libiconv libxml2 ncurses zlib zstd
@@ -946,14 +960,14 @@ in
   (prevStage:
     # previous stage2-CF stdenv:
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      autoconf automake bash bison brotli cmake cmakeMinimal coreutils cpio curl cyrus_sasl
+      autoconf automake bison brotli cmake cmakeMinimal coreutils cpio curl cyrus_sasl
       db ed expat flex gettext gmp gnugrep groff libedit libidn2 libkrb5 libssh2 libtool
       libunistring m4 ncurses nghttp2 ninja openbsm openldap openpam openssh openssl
       patchutils pbzx perl pkg-config.pkg-config python3 python3Minimal scons serf sqlite
       subversion sysctl.provider texinfo unzip which xz zstd
     ]);
     assert lib.all isBuiltByNixpkgsCompiler (with prevStage; [
-      binutils-unwrapped icu libffi libiconv libxml2 zlib
+      bash binutils-unwrapped icu libffi libiconv libxml2 zlib
     ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [
@@ -1025,7 +1039,7 @@ in
   (prevStage:
     # previous stage3 stdenv:
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      autoconf automake bash bison brotli cmake cmakeMinimal coreutils cpio curl cyrus_sasl
+      autoconf automake bison brotli cmake cmakeMinimal coreutils cpio curl cyrus_sasl
       db ed expat flex gettext gmp gnugrep groff libedit libidn2 libkrb5 libssh2 libtool
       libunistring m4 nghttp2 ninja openbsm openldap openpam openssh openssl patchutils pbzx
       perl pkg-config.pkg-config python3 python3Minimal scons serf sqlite subversion
@@ -1033,7 +1047,7 @@ in
     ]);
 
     assert lib.all isBuiltByNixpkgsCompiler (with prevStage; [
-      binutils-unwrapped icu libffi libiconv libxml2 zlib
+      bash binutils-unwrapped icu libffi libiconv libxml2 zlib
     ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [
@@ -1060,7 +1074,7 @@ in
 
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
-        autoconf automake bison cmake cmakeMinimal cpio cyrus_sasl db expat flex groff
+        autoconf automake bash bison cmake cmakeMinimal cpio cyrus_sasl db expat flex groff
         libedit libtool m4 ninja openldap openssh patchutils pbzx perl pkg-config python3
         python3Minimal scons serf sqlite subversion sysctl texinfo unzip which
 
