@@ -7,8 +7,6 @@
 , pkg-config
 , perl
 , fontconfig
-, copyDesktopItems
-, makeDesktopItem
 , glib
 , gtk3
 , openssl
@@ -92,7 +90,6 @@ rustPlatform.buildRustPackage rec {
     cmake
     pkg-config
     perl
-    copyDesktopItems
     wrapGAppsHook # FIX: No GSettings schemas are installed on the system
     gobject-introspection
   ];
@@ -116,18 +113,9 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
-    install -Dm0644 $src/extra/images/logo.svg $out/share/icons/hicolor/scalable/apps/lapce.svg
+    install -Dm0644 $src/extra/images/logo.svg $out/share/icons/hicolor/scalable/apps/dev.lapce.lapce.svg
+    install -Dm0644 $src/extra/linux/dev.lapce.lapce.desktop $out/share/applications/lapce.desktop
   '';
-
-  desktopItems = [ (makeDesktopItem {
-    name = "lapce";
-    exec = "lapce %F";
-    icon = "lapce";
-    desktopName = "Lapce";
-    comment = meta.description;
-    genericName = "Code Editor";
-    categories = [ "Development" "Utility" "TextEditor" ];
-  }) ];
 
   passthru.updateScript = nix-update-script { };
 
