@@ -3216,6 +3216,8 @@ self: super: with self; {
 
   edward = callPackage ../development/python-modules/edward { };
 
+  effdet = callPackage ../development/python-modules/effdet { };
+
   effect = callPackage ../development/python-modules/effect { };
 
   eggdeps = callPackage ../development/python-modules/eggdeps { };
