@@ -2,13 +2,34 @@
 let
   versions = if stdenv.isLinux then {
     stable = "0.0.27";
+    #
+    #
+    #
     ptb = "0.0.44";
+    #
+    #
+    #
     canary = "0.0.162";
+    #
+    #
+    #
     development = "0.0.217";
+    #
+    #
+    #
   } else {
     stable = "0.0.273";
+    #
+    #
+    #
     ptb = "0.0.59";
+    #
+    #
+    #
     canary = "0.0.283";
+    #
+    #
+    #
     development = "0.0.8778";
   };
   version = versions.${branch};
@@ -18,32 +39,53 @@ let
         url = "https://dl.discordapp.net/apps/linux/${version}/discord-${version}.tar.gz";
         sha256 = "sha256-6fHaiPBcv7TQVh+TatIEYXZ/LwPmnCmU/QWXKFgUR7U=";
       };
+      #
+      #
+      #
       ptb = fetchurl {
         url = "https://dl-ptb.discordapp.net/apps/linux/${version}/discord-ptb-${version}.tar.gz";
         sha256 = "lehrB2jTvMKIDt7QWK/UAkrzYnW5pAP4LRHfIvGpnzA=";
       };
+      #
+      #
+      #
       canary = fetchurl {
         url = "https://dl-canary.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
         sha256 = "sha256-eSWcwSw46hKJmDLxHtolBZgKrIS2QnTbVoYe0EI4Njs=";
       };
+      #
+      #
+      #
       development = fetchurl {
         url = "https://dl-development.discordapp.net/apps/linux/${version}/discord-development-${version}.tar.gz";
         sha256 = "sha256-fzNFKrYo5qckrWZAkkiK337czCt6nOM1O8FeG18Q8Y0=";
       };
+      #
+      #
+      #
     };
     x86_64-darwin = {
       stable = fetchurl {
         url = "https://dl.discordapp.net/apps/osx/${version}/Discord.dmg";
         sha256 = "1vz2g83gz9ks9mxwx7gl7kys2xaw8ksnywwadrpsbj999fzlyyal";
       };
+      #
+      #
+      #
       ptb = fetchurl {
         url = "https://dl-ptb.discordapp.net/apps/osx/${version}/DiscordPTB.dmg";
         sha256 = "sha256-LS7KExVXkOv8O/GrisPMbBxg/pwoDXIOo1dK9wk1yB8=";
       };
+      #
+      #
+      #
       canary = fetchurl {
         url = "https://dl-canary.discordapp.net/apps/osx/${version}/DiscordCanary.dmg";
         sha256 = "0mqpk1szp46mih95x42ld32rrspc6jx1j7qdaxf01whzb3d4pi9l";
       };
+      #
+      #
+      #
       development = fetchurl {
         url = "https://dl-development.discordapp.net/apps/osx/${version}/DiscordDevelopment.dmg";
         sha256 = "sha256-K4rlShYhmsjT2QHjb6+IbCXJFK+9REIx/gW68bcVSVc=";
