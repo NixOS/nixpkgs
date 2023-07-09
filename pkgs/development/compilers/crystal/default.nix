@@ -199,6 +199,9 @@ let
         wrapProgram $bin/bin/crystal \
           --suffix PATH : ${lib.makeBinPath [ pkg-config llvmPackages.clang which ]} \
           --suffix CRYSTAL_PATH : lib:$lib/crystal \
+          --suffix PKG_CONFIG_PATH : ${
+            lib.makeSearchPathOutput "dev" "lib/pkgconfig" finalAttrs.buildInputs
+          } \
           --suffix CRYSTAL_LIBRARY_PATH : ${
             lib.makeLibraryPath finalAttrs.buildInputs
           }
