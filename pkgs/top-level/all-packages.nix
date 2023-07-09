@@ -4522,6 +4522,8 @@ with pkgs;
 
   wdt = callPackage ../applications/networking/sync/wdt { };
 
+  wlay = callPackage ../tools/wayland/wlay { };
+
   wl-clip-persist = callPackage ../tools/wayland/wl-clip-persist { };
 
   wl-clipboard = callPackage ../tools/wayland/wl-clipboard { };
@@ -23247,6 +23249,8 @@ with pkgs;
 
   yaml-cpp_0_3 = callPackage ../development/libraries/yaml-cpp/0.3.0.nix { };
 
+  yas = callPackage ../development/libraries/yas { };
+
   libyang = callPackage ../development/libraries/libyang { };
 
   libcyaml = callPackage ../development/libraries/libcyaml { };
@@ -40337,7 +40341,7 @@ with pkgs;
 
   soundmodem = callPackage ../applications/radio/soundmodem { };
 
-  soundOfSorting = callPackage ../misc/sound-of-sorting { };
+  sound-of-sorting = callPackage ../misc/sound-of-sorting { };
 
   sourceAndTags = callPackage ../misc/source-and-tags {
     hasktags = haskellPackages.hasktags;
