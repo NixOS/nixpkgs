@@ -13526,6 +13526,8 @@ with pkgs;
 
   tuntox = callPackage ../tools/networking/tuntox { };
 
+  tunwg = callPackage ../tools/networking/tunwg { };
+
   omapd = callPackage ../tools/security/omapd { };
 
   ttf2pt1 = callPackage ../tools/misc/ttf2pt1 { };
