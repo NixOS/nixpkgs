@@ -41303,4 +41303,6 @@ with pkgs;
   waylyrics = callPackage ../applications/audio/waylyrics { };
 
   gitrs = callPackage ../tools/misc/gitrs { };
+
+  qrca = libsForQt5.callPackage ../applications/misc/qrca { };
 }
