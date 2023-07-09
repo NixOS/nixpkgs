@@ -7578,6 +7578,8 @@ self: super: with self; {
 
   pdfminer-six = callPackage ../development/python-modules/pdfminer-six { };
 
+  pdfplumber = callPackage ../development/python-modules/pdfplumber { };
+
   pdfrw = callPackage ../development/python-modules/pdfrw { };
 
   pdftotext = callPackage ../development/python-modules/pdftotext { };
