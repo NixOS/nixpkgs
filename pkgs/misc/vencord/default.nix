@@ -36,6 +36,7 @@ buildNpmPackage rec {
   npmDepsHash = "sha256-m+hczXog03Gz81CP/blkRJPaTrEhmLQFvVtOfWKYQL4=";
   npmFlags = [ "--legacy-peer-deps" ];
   npmBuildScript = if buildWebExtension then "buildWeb" else "build";
+  npmBuildFlags = [ "--" "--standalone" ];
 
   prePatch = ''
     cp ${./package-lock.json} ./package-lock.json
@@ -46,13 +47,15 @@ buildNpmPackage rec {
       src = ./replace-git.patch;
       inherit version;
     })
+    ./disable-updater-ui.patch
   ];
 
-  installPhase = if buildWebExtension then ''
-    cp -r dist/chromium-unpacked/ $out
-  '' else ''
-    cp -r dist/ $out
-  '';
+  installPhase =
+    if buildWebExtension then ''
+      cp -r dist/chromium-unpacked/ $out
+    '' else ''
+      cp -r dist/ $out
+    '';
 
   meta = with lib; {
     description = "Vencord web extension";
