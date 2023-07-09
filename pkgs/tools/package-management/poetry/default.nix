@@ -9,6 +9,19 @@ let
       poetry = self.callPackage ./unwrapped.nix { };
 
       # version overrides required by poetry and its plugins
+      cachecontrol = super.cachecontrol.overridePythonAttrs (old: rec {
+        version = "0.12.14";
+        format = "setuptools";
+        src = fetchFromGitHub {
+          owner = "ionrock";
+          repo = "cachecontrol";
+          rev = "v${version}";
+          hash = "sha256-BuBaKP7OAYoT+SPVhtE6l9U/KmN21OKTL6poV5a6+0c=";
+        };
+        nativeCheckInputs = old.nativeCheckInputs ++ [
+          self.lockfile
+        ];
+      });
       platformdirs = super.platformdirs.overridePythonAttrs (old: rec {
         version = "2.6.2";
         src = fetchFromGitHub {
