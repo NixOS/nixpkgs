@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , buildPythonPackage
 , poetry-core
 , pytestCheckHook
@@ -18,6 +19,14 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-QDfXgLkwh5rfyNZv0S7+cq6ubldXsbuCiTr6VYx8ZQs=";
   };
+
+  patches = [
+    # https://github.com/MousaZeidBaker/poetry-plugin-up/pull/24
+    (fetchpatch {
+      url = "https://github.com/MousaZeidBaker/poetry-plugin-up/commit/31d78c547896efd27c2be0956a982638f32b07f8.patch";
+      hash = "sha256-CkZgX/ES+VkfxBofxWeparXNjsdP4qcQ1I32zaBBmWo=";
+    })
+  ];
 
   nativeBuildInputs = [
     poetry-core
