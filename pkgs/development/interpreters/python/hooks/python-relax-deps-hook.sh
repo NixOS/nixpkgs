@@ -41,6 +41,8 @@
 #
 # Currently unsupported: URL specs (foo @ https://example.com/a.zip).
 
+echo "Sourcing python-relax-deps-hook.sh"
+
 _pythonRelaxDeps() {
     local -r metadata_file="$1"
 
