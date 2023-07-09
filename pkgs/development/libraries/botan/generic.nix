@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   pname = "botan";
   version = "${baseVersion}.${revision}";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchurl {
     name = "Botan-${version}.${sourceExtension}";
     urls = [
@@ -30,7 +32,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   configurePhase = ''
+    runHook preConfigure
     python configure.py --prefix=$out --with-bzip2 --with-zlib ${extraConfigureFlags}${lib.optionalString stdenv.cc.isClang " --cc=clang"}
+    runHook postConfigure
   '';
 
   enableParallelBuilding = true;
