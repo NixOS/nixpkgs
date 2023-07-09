@@ -3,8 +3,8 @@
 , dos2unix
 , fetchpatch
 , fetchPypi
-, isPy27
 , pytestCheckHook
+, pythonOlder
 , pandas
 , torch
 , scipy
@@ -13,11 +13,12 @@
 buildPythonPackage rec {
   pname = "slicer";
   version = "0.0.7";
-  disabled = isPy27;
+  format = "setuptools";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f5d5f7b45f98d155b9c0ba6554fa9770c6b26d5793a3e77a1030fb56910ebeec";
+    hash = "sha256-9dX3tF+Y0VW5wLplVPqXcMaybVeTo+d6EDD7VpEOvuw=";
   };
 
   prePatch = ''
