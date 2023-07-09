@@ -2,12 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ipmicfg";
-  version = "1.34.0";
-  buildVersion = "220906";
+  version = "1.34.2";
+  buildVersion = "230224";
 
   src = fetchzip {
-    url = "https://www.supermicro.com/wftp/utility/IPMICFG/IPMICFG_${version}_build.${buildVersion}.zip";
-    sha256 = "ZumCXuR7M2Ep7maBOBFk0UsxyRo4fBkf+9AVmkz4AF0=";
+    url =
+      "https://www.supermicro.com/wdl/utility/IPMICFG/IPMICFG_${version}_build.${buildVersion}.zip";
+    sha256 = "1s924y6f0lvmd2m0na1nh0vyqf8qpp34wc6ndi8fwga4ynj66l63";
   };
 
   installPhase = ''
@@ -22,14 +23,15 @@ stdenv.mkDerivation rec {
     ln -s "$out/opt/ipmicfg/IPMICFG-Linux.x86_64" "$out/bin/ipmicfg"
   '';
 
-   dontPatchShebangs = true; # There are no scripts and it complains about null bytes.
+  # There are no scripts and it complains about null bytes.
+  dontPatchShebangs = true;
 
-   meta = with lib; {
-     description = "Supermicro IPMI configuration tool";
-     homepage = "http://www.supermicro.com/products/nfo/ipmi.cfm";
-     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-     license = licenses.unfree;
-     platforms = [ "x86_64-linux" ];
-     maintainers = with maintainers; [ sorki ];
-   };
+  meta = with lib; {
+    description = "Supermicro IPMI configuration tool";
+    homepage = "http://www.supermicro.com/products/nfo/ipmi.cfm";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ sorki ];
+  };
 }
