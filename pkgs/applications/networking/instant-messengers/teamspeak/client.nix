@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
       url = "https://www.teamspeak.com/en/privacy-and-terms/";
       free = false;
     };
-    maintainers = with maintainers; [ lhvwb lukegb ];
+    maintainers = with maintainers; [ lhvwb lukegb atemu ];
     platforms = [ "x86_64-linux" ];
   };
 }
