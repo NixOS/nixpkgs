@@ -11270,6 +11270,8 @@ with pkgs;
 
   pacman = callPackage ../tools/package-management/pacman { };
 
+  namcap = callPackage ../tools/package-management/namcap { };
+
   paco = callPackage ../development/compilers/paco { };
 
   padthv1 = libsForQt5.callPackage ../applications/audio/padthv1 { };

@@ -1,0 +1,17 @@
+diff --git a/Namcap/package.py b/Namcap/package.py
+index b9302ae..c17df63 100644
+--- a/Namcap/package.py
++++ b/Namcap/package.py
+@@ -16,7 +16,11 @@ _pyalpm_version_tuple = tuple(int(n) for n in pyalpm.version().split("."))
+ if _pyalpm_version_tuple < (0, 5):
+     raise DeprecationWarning("pyalpm versions <0.5 are no longer supported")
+ 
+-pyalpm_handle = pycman.config.init_with_config("/etc/pacman.conf")
++if os.path.isfile("/etc/pacman.conf"):
++    pyalpm_handle = pycman.config.init_with_config("/etc/pacman.conf")
++else:
++    from warnings import warn
++    warn("/etc/pacman.conf doesn't exist. We'll not be able to load pacman repositories.")
+ 
+ DEPENDS_RE = re.compile(r"([^<>=:]+)([<>]?=.*)?(: .*)?")
+ SODEPENDS_RE = re.compile(r"([^:]+)(: .*)?")
