@@ -122,6 +122,7 @@ python3.pkgs.buildPythonApplication rec {
   # r2pipe
   #
   # We filter automatically all packages for the host platform (some dependencies are not supported on Darwin, aarch64, etc.).
+  # Packages which are marked broken for a platform are not automatically filtered to avoid accidentally removing them without noticing it.
   pythonPath = lib.filter (lib.meta.availableOn stdenv.hostPlatform) ([
     binutils-unwrapped-all-targets
     bzip2
