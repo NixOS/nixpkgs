@@ -81,6 +81,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
+  passthru.buildZigPackage = import ../../../build-support/zig/build-zig-package/default.nix {
+    inherit lib stdenv;
+    zig = finalAttrs.finalPackage;
+  };
+
   meta = {
     homepage = "https://ziglang.org/";
     description =
