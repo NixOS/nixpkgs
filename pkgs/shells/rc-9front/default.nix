@@ -1,12 +1,11 @@
-{
-lib
+{ lib
 , stdenv
 , fetchgit
 , byacc
 , installShellFiles
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rc-9front";
   version = "unstable-2022-11-01";
 
@@ -18,6 +17,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ byacc installShellFiles ];
+  enableParallelBuilding = true;
   patches = [ ./path.patch ];
 
   buildPhase = ''
