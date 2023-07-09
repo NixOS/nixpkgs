@@ -339,7 +339,15 @@ self: super: {
     postPatch = "sed -i s/home/tmp/ test/Spec.hs";
   }) super.shell-conduit;
 
-  cachix = self.generateOptparseApplicativeCompletions [ "cachix" ] super.cachix;
+  cachix = self.generateOptparseApplicativeCompletions [ "cachix" ]
+    # Adds a workaround to the API changes in the versions library
+    # Should be dropped by the next release
+    # https://github.com/cachix/cachix/pull/556
+    (appendPatch (fetchpatch {
+      url = "https://github.com/cachix/cachix/commit/078d2d2212d7533a6a4db000958bfc4373c4deeb.patch";
+      hash = "sha256-xfJaO2CuZWFHivq4gqbkNnTOWPiyFVjlwOPV6yibKH4=";
+      stripLen = 1;
+    }) super.cachix);
 
   # https://github.com/froozen/kademlia/issues/2
   kademlia = dontCheck super.kademlia;
@@ -1714,19 +1722,7 @@ self: super: {
   # waiting for aeson bump
   servant-swagger-ui-core = doJailbreak super.servant-swagger-ui-core;
 
-  hercules-ci-agent = lib.pipe super.hercules-ci-agent [
-    (appendPatches [
-      # https://github.com/hercules-ci/hercules-ci-agent/pull/507
-      (fetchpatch {
-        url = "https://github.com/hercules-ci/hercules-ci-agent/commit/f5c39d0cbde36a056419cab8d69a67302eb8b0e4.patch";
-        sha256 = "sha256-J8N4+HUQ6vlJBCwCyxv8Fv5HSbtiim64Qh1n9CaRe1o=";
-        stripLen = 1;
-      })
-      # https://github.com/hercules-ci/hercules-ci-agent/pull/526
-      ./patches/hercules-ci-agent-cachix-1.6.patch
-    ])
-    (self.generateOptparseApplicativeCompletions [ "hercules-ci-agent" ])
-  ];
+  hercules-ci-agent = self.generateOptparseApplicativeCompletions [ "hercules-ci-agent" ] super.hercules-ci-agent;
 
   # Test suite doesn't compile with aeson 2.0
   # https://github.com/hercules-ci/hercules-ci-agent/pull/387
