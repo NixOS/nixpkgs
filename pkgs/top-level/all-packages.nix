@@ -36856,6 +36856,8 @@ with pkgs;
     zig = buildPackages.zig_0_9;
   };
 
+  blackvoxel = callPackage ../games/blackvoxel { };
+
   blobby = callPackage ../games/blobby { };
 
   blobwars = callPackage ../games/blobwars { };
