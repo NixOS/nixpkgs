@@ -8,6 +8,7 @@
 , pytestCheckHook
 , pythonOlder
 , requests
+, testtools
 }:
 
 buildPythonPackage rec {
@@ -31,6 +32,7 @@ buildPythonPackage rec {
     mock
     pytest-cov
     pytestCheckHook
+    testtools
   ];
 
   pythonImportsCheck = [
