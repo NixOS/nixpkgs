@@ -47,19 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  # Requires `ibtool`, but the version in `xib2nib` is not capable of
-  # building these apps. Build them using `ibtool` from Xcode, but don't allow any other binaries
-  # into the sandbox. Note that the CLT are not supported because `ibtool` requires Xcode.
-  sandboxProfile = lib.optionalString stdenv.isDarwin ''
-    (allow process-exec
-      (literal "/usr/bin/ibtool")
-      (regex "/Xcode.app/Contents/Developer/usr/bin/ibtool")
-      (regex "/Xcode.app/Contents/Developer/usr/bin/xcodebuild"))
-    (allow file-read*)
-    (deny file-read* (subpath "/usr/local") (with no-log))
-    (allow file-write* (subpath "/private/var/folders"))
-  '';
-
   buildInputs = [
     lhasa
     libjack2
@@ -79,8 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     # Somehow this does not get set automatically
     "-DSDL2MAIN_LIBRARY=${SDL2}/lib/libSDL2${stdenv.hostPlatform.extensions.sharedLibrary}"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DIBTOOL=/usr/bin/ibtool"
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -98,6 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://milkytracker.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
+    # ibtool -> real Xcode -> I can't get that, and Ofborg can't test that
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [ OPNA2608 ];
   };
 })
