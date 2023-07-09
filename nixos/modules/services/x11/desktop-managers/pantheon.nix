@@ -174,11 +174,21 @@ in
         # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1443
         pkgs.pantheon.mutter
       ];
-      systemd.packages = [
-        pkgs.pantheon.gnome-settings-daemon
+      systemd.packages = with pkgs; [
+        gnome.gnome-session
+        pantheon.gala
+        pantheon.gnome-settings-daemon
+        pantheon.elementary-session-settings
       ];
       programs.dconf.enable = true;
       networking.networkmanager.enable = mkDefault true;
+
+      systemd.user.targets."gnome-session-x11-services".wants = [
+        "org.gnome.SettingsDaemon.XSettings.service"
+      ];
+      systemd.user.targets."gnome-session-x11-services-ready".wants = [
+        "org.gnome.SettingsDaemon.XSettings.service"
+      ];
 
       # Global environment
       environment.systemPackages = (with pkgs.pantheon; [
