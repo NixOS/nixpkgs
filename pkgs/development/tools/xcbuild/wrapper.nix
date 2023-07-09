@@ -112,7 +112,13 @@ runCommand "xcodebuild-${xcbuild.version}" {
   inherit (xcbuild) meta;
 
   # ensure that the toolchain goes in PATH
-  propagatedBuildInputs = [ "${toolchains}/XcodeDefault.xctoolchain" ];
+  propagatedBuildInputs = [
+    (runCommand "xcodebuild-xctoolchain-${xcbuild.version}" {} ''
+      mkdir -p $out
+      cp -r "${toolchains}/XcodeDefault.xctoolchain" $out
+    ''
+    )
+  ];
 
   passthru = {
     inherit xcbuild xcrun;
