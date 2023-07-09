@@ -24,23 +24,14 @@
 
 stdenv.mkDerivation rec {
   pname = "cups";
-  version = "2.4.2";
+  version = "2.4.5";
 
   src = fetchurl {
     url = "https://github.com/OpenPrinting/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
-    sha256 = "sha256-8DzLQLCH0eMJQKQOAUHcu6Jj85l0wg658lIQZsnGyQg=";
+    sha256 = "sha256-mkBN5V90UlsKaFHfDP3r+hIVrsDnwve+a5sJtpFvsAA=";
   };
 
   outputs = [ "out" "lib" "dev" "man" ];
-
-  patches = [
-    (fetchpatch {
-      # https://www.openwall.com/lists/oss-security/2023/06/01/1
-      name = "CVE-2023-32324.patch";
-      url = "https://github.com/OpenPrinting/cups/commit/fd8bc2d32589d1fd91fe1c0521be2a7c0462109e.patch";
-      hash = "sha256-Q0Pw+MC7KE5VEiugY+GFtvPERG8x6ngNHUsWTEaDCHA=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace cups/testfile.c \
