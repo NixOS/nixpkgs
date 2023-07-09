@@ -32843,6 +32843,11 @@ with pkgs;
 
   swayest-workstyle = callPackage ../applications/window-managers/sway/swayest-workstyle { };
 
+  volare-unwrapped = callPackage ../applications/window-managers/volare { };
+  volare = (sway.override {
+    sway-unwrapped = volare-unwrapped;
+  });
+
   tiramisu = callPackage ../applications/misc/tiramisu { };
 
   rlaunch = callPackage ../applications/misc/rlaunch { };

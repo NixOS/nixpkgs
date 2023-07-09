@@ -1,0 +1,10 @@
+diff --git a/config.in b/config.in
+--- a/config.in
++++ b/config.in
+@@ -213,5 +213,3 @@ client.focused          "#aaaacc" "#666699"    "#eeeeee"  "#aaaacc"    "#000000"
+ client.focused_inactive "#cfcfdf" "#9999bb"    "#000000"  "#000000"    "#000000"
+ client.unfocused        "#e7e7ff" "#b8b8c8"    "#000000"  "#000000"    "#000000"
+ font SourceSansPro, sans 10
+-
+-include @sysconfdir@/volare/config.d/*
+
