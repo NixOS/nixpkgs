@@ -9388,8 +9388,6 @@ self: super: with self; {
 
   pyradios = callPackage ../development/python-modules/pyradios { };
 
-  py-radix = callPackage ../development/python-modules/py-radix { };
-
   pyrainbird = callPackage ../development/python-modules/pyrainbird { };
 
   pyramid_beaker = callPackage ../development/python-modules/pyramid_beaker { };
@@ -13008,8 +13006,6 @@ self: super: with self; {
   validate-email = callPackage ../development/python-modules/validate-email { };
 
   validators = callPackage ../development/python-modules/validators { };
-
-  validictory = callPackage ../development/python-modules/validictory { };
 
   validobj = callPackage ../development/python-modules/validobj { };
 
