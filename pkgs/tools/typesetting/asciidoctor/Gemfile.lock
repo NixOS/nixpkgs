@@ -49,6 +49,8 @@ GEM
     rexml (3.2.5)
     rouge (4.0.0)
     ruby-rc4 (0.1.5)
+    temple (0.10.2)
+    thor (1.2.2)
     treetop (1.6.11)
       polyglot (~> 0.3)
     ttfunk (1.7.0)
@@ -64,4 +66,4 @@ DEPENDENCIES
   rouge
 
 BUNDLED WITH
-   2.3.22
+   2.4.13

@@ -1,6 +1,7 @@
 { lib, stdenv, buildGoModule, fetchFromGitHub, buildPackages, installShellFiles, fetchpatch
 , makeWrapper
 , enableCmount ? true, fuse, macfuse-stubs
+, librclone
 }:
 
 buildGoModule rec {
@@ -57,6 +58,10 @@ buildGoModule rec {
         --suffix PATH : "${lib.makeBinPath [ fuse ] }" \
         --prefix LD_LIBRARY_PATH : "${fuse}/lib"
     '';
+
+  passthru.tests = {
+    inherit librclone;
+  };
 
   meta = with lib; {
     description = "Command line program to sync files and directories to and from major cloud storage";

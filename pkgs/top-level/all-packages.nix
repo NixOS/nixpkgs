@@ -1679,6 +1679,8 @@ with pkgs;
 
   fabs = callPackage ../tools/backup/fabs { };
 
+  fm-tune = callPackage ../applications/radio/fm-tune { };
+
   fwbuilder = libsForQt5.callPackage ../tools/security/fwbuilder { };
 
   hblock = callPackage ../tools/networking/hblock { };
@@ -8997,6 +8999,8 @@ with pkgs;
   iperf2 = callPackage ../tools/networking/iperf/2.nix { };
   iperf3 = callPackage ../tools/networking/iperf/3.nix { };
   iperf = iperf3;
+
+  iperf3d = callPackage ../tools/networking/iperf3d { };
 
   ipfetch = callPackage ../tools/networking/ipfetch { };
 
