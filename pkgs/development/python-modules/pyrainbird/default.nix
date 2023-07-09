@@ -52,6 +52,8 @@ buildPythonPackage rec {
     requests
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     freezegun
     parameterized
