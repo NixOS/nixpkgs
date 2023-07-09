@@ -36623,6 +36623,8 @@ with pkgs;
 
   blockattack = callPackage ../games/blockattack { } ;
 
+  boswars = callPackage ../games/boswars { };
+
   colobot = callPackage ../games/colobot { };
 
   corsix-th = callPackage ../games/corsix-th { };
