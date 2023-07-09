@@ -4,6 +4,17 @@ with lib;
 
 let
   cfg = config.networking.iproute2;
+
+  etc_iproute2 = pkgs.stdenv.mkDerivation {
+    name = "etc-iproute2";
+    src = pkgs.iproute2;
+    buildPhase = ''
+      mkdir $out
+      ln -s $src/etc/iproute2/* $out/
+      rm -f $out/rt_tables
+      cat $src/etc/iproute2/rt_tables ${builtins.toFile "rt-tables_extra-config" cfg.rttablesExtraConfig} > $out/rt_tables
+    '';
+  };
 in
 {
   options.networking.iproute2 = {
@@ -17,16 +28,5 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    environment.etc."iproute2/bpf_pinning" = { mode = "0644"; text = fileContents "${pkgs.iproute2}/etc/iproute2/bpf_pinning"; };
-    environment.etc."iproute2/ematch_map"  = { mode = "0644"; text = fileContents "${pkgs.iproute2}/etc/iproute2/ematch_map";  };
-    environment.etc."iproute2/group"       = { mode = "0644"; text = fileContents "${pkgs.iproute2}/etc/iproute2/group";       };
-    environment.etc."iproute2/nl_protos"   = { mode = "0644"; text = fileContents "${pkgs.iproute2}/etc/iproute2/nl_protos";   };
-    environment.etc."iproute2/rt_dsfield"  = { mode = "0644"; text = fileContents "${pkgs.iproute2}/etc/iproute2/rt_dsfield";  };
-    environment.etc."iproute2/rt_protos"   = { mode = "0644"; text = fileContents "${pkgs.iproute2}/etc/iproute2/rt_protos";   };
-    environment.etc."iproute2/rt_realms"   = { mode = "0644"; text = fileContents "${pkgs.iproute2}/etc/iproute2/rt_realms";   };
-    environment.etc."iproute2/rt_scopes"   = { mode = "0644"; text = fileContents "${pkgs.iproute2}/etc/iproute2/rt_scopes";   };
-    environment.etc."iproute2/rt_tables"   = { mode = "0644"; text = (fileContents "${pkgs.iproute2}/etc/iproute2/rt_tables")
-                                                                   + (optionalString (cfg.rttablesExtraConfig != "") "\n\n${cfg.rttablesExtraConfig}"); };
-  };
+  config.environment.etc = optionalAttrs cfg.enable { iproute2.source = etc_iproute2; };
 }
