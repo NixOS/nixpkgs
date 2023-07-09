@@ -752,7 +752,13 @@ class Machine:
             while not shell_ready(timeout_secs=30):
                 self.log("Guest root shell did not produce any data yet...")
 
-            self.log(self.shell.recv(1024).decode())
+            while True:
+                chunk = self.shell.recv(1024)
+                self.log(f"Guest shell says: {chunk!r}")
+                # NOTE: for this to work, nothing must be printed after this line!
+                if b"Spawning backdoor root shell..." in chunk:
+                    break
+
             toc = time.time()
 
             self.log("connected to guest root shell")

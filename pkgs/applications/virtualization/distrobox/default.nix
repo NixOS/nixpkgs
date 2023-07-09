@@ -41,7 +41,7 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "https://distrobox.privatedns.org/";
     license = licenses.gpl3Only;
-    platforms = platforms.all;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ atila ];
   };
 }
