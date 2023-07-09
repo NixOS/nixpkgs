@@ -4,7 +4,6 @@
 , pytest
 , pytestCheckHook
 , pexpect
-, pytest-cov
 }:
 
 buildPythonPackage rec {
@@ -24,7 +23,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pexpect
-    pytest-cov
   ];
 
   disabledTests = [
