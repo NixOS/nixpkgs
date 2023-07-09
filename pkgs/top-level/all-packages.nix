@@ -10439,6 +10439,8 @@ with pkgs;
 
   mprime = callPackage ../tools/misc/mprime { };
 
+  mprime-primenet = callPackage ../tools/misc/mprime-primenet { };
+
   mpw = callPackage ../tools/security/mpw { };
 
   mr = callPackage ../applications/version-management/mr { };
