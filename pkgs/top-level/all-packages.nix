@@ -13345,6 +13345,8 @@ with pkgs;
 
   tldr-hs = haskellPackages.tldr;
 
+  tlsclient = callPackage ../tools/admin/tlsclient { };
+
   tlsx = callPackage ../tools/security/tlsx { };
 
   tmate = callPackage ../tools/misc/tmate { };
@@ -27954,6 +27956,8 @@ with pkgs;
   # pam_bioapi ( see http://www.thinkwiki.org/wiki/How_to_enable_the_fingerprint_reader )
 
   pam_ccreds = callPackage ../os-specific/linux/pam_ccreds { };
+
+  pam_dp9ik = callPackage ../os-specific/linux/pam_dp9ik { };
 
   pam_gnupg = callPackage ../os-specific/linux/pam_gnupg { };
 
