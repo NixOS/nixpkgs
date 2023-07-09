@@ -16,6 +16,13 @@ buildGoModule rec {
 
   vendorHash = "sha256-UpuwkQHcNg3rohr+AdALakIdHroIySlTnXHgoUdY+EQ=";
 
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=main.version=${version}"
+    "-X=main.commit=${src.rev}"
+  ];
+
   meta = with lib; {
     description = "Kubernetes object analysis with recommendations for improved reliability and security";
     homepage = "https://github.com/zegl/kube-score";
