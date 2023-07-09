@@ -238,6 +238,26 @@
     };
     version = "0.1.5";
   };
+  temple = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "09p32vp94sa1mbr0if0adf02yzc4ns00lsmpwns2xbkncwpzrqm4";
+      type = "gem";
+    };
+    version = "0.10.2";
+  };
+  thor = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0k7j2wn14h1pl4smibasw0bp66kg626drxb59z7rzflch99cd4rg";
+      type = "gem";
+    };
+    version = "1.2.2";
+  };
   treetop = {
     dependencies = ["polyglot"];
     groups = ["default"];

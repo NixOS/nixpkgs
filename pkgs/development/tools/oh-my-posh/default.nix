@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "oh-my-posh";
-  version = "17.5.2";
+  version = "17.6.0";
 
   src = fetchFromGitHub {
     owner = "jandedobbeleer";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-WNB4NzOvabShVHivDs027y6QmU71GMrYJehCB9jPlA8=";
+    hash = "sha256-mWHoiFal9WdASMe/Q7EJBp1Z2xu7Wq0i06xyqmi8q24=";
   };
 
   vendorHash = "sha256-fHwaCcN47+LkJYqRFSQgVddVuR1QfdFuSNDYFh1edM4=";
@@ -26,7 +26,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X github.com/jandedobbeleer/oh-my-posh/src/build.Version=${version}"
+    "-X github.com/jandedobbeleer/oh-my-posh/src/build.Date=1970-01-01T00:00:00Z"
   ];
 
   tags = [

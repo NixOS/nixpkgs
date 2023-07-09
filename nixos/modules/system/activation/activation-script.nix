@@ -204,6 +204,27 @@ in
         `/usr/bin/env`.
       '';
     };
+
+    system.build.installBootLoader = mkOption {
+      internal = true;
+      # "; true" => make the `$out` argument from switch-to-configuration.pl
+      #             go to `true` instead of `echo`, hiding the useless path
+      #             from the log.
+      default = "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
+      description = lib.mdDoc ''
+        A program that writes a bootloader installation script to the path passed in the first command line argument.
+
+        See `nixos/modules/system/activation/switch-to-configuration.pl`.
+      '';
+      type = types.unique {
+        message = ''
+          Only one bootloader can be enabled at a time. This requirement has not
+          been checked until NixOS 22.05. Earlier versions defaulted to the last
+          definition. Change your configuration to enable only one bootloader.
+        '';
+      } (types.either types.str types.package);
+    };
+
   };
 
 

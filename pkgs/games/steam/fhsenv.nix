@@ -61,6 +61,9 @@ let
 in buildFHSEnv rec {
   name = "steam";
 
+  # Steam still needs 32bit and various native games do too
+  multiArch = true;
+
   targetPkgs = pkgs: with pkgs; [
     steam
     # License agreement

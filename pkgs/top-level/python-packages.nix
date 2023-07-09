@@ -1655,6 +1655,8 @@ self: super: with self; {
 
   can = callPackage ../development/python-modules/can { };
 
+  canals = callPackage ../development/python-modules/canals { };
+
   canmatrix = callPackage ../development/python-modules/canmatrix { };
 
   canonicaljson = callPackage ../development/python-modules/canonicaljson { };
@@ -1710,6 +1712,8 @@ self: super: with self; {
   celery = callPackage ../development/python-modules/celery { };
 
   celery-redbeat = callPackage ../development/python-modules/celery-redbeat { };
+
+  celery-singleton = callPackage ../development/python-modules/celery-singleton { };
 
   cement = callPackage ../development/python-modules/cement { };
 
@@ -2706,6 +2710,8 @@ self: super: with self; {
   django-bootstrap3 = callPackage ../development/python-modules/django-bootstrap3 { };
 
   django-bootstrap4 = callPackage ../development/python-modules/django-bootstrap4 { };
+
+  django-cachalot = callPackage ../development/python-modules/django-cachalot { };
 
   django-cache-url = callPackage ../development/python-modules/django-cache-url { };
 
@@ -9652,6 +9658,8 @@ self: super: with self; {
 
   pystache = callPackage ../development/python-modules/pystache { };
 
+  pystardict = callPackage ../development/python-modules/pystardict { };
+
   pystemd = callPackage ../development/python-modules/pystemd {
     inherit (pkgs) systemd;
   };
@@ -11034,6 +11042,8 @@ self: super: with self; {
   sabyenc = callPackage ../development/python-modules/sabyenc { };
 
   sacn = callPackage ../development/python-modules/sacn { };
+
+  sacrebleu = callPackage ../development/python-modules/sacrebleu { };
 
   sacremoses = callPackage ../development/python-modules/sacremoses { };
 

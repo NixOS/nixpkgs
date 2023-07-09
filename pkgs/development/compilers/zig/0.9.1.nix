@@ -7,22 +7,14 @@
 , zlib
 }:
 
-let
-  zig_0_10_0 = fetchFromGitHub {
-    owner = "ziglang";
-    repo = "zig";
-    rev = "0.10.0";
-    hash = "sha256-DNs937N7PLQimuM2anya4npYXcj6cyH+dRS7AiOX7tw=";
-  };
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zig";
   version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "ziglang";
-    repo = pname;
-    rev = version;
+    repo = "zig";
+    rev = finalAttrs.version;
     hash = "sha256-x2c4c9RSrNWGqEngio4ArW7dJjW0gg+8nqBwPcR721k=";
   };
 
@@ -34,7 +26,14 @@ stdenv.mkDerivation rec {
   ];
 
   # TODO: remove on next upgrade
-  prePatch = ''
+  prePatch = let
+    zig_0_10_0 = fetchFromGitHub {
+      owner = "ziglang";
+      repo = "zig";
+      rev = "0.10.0";
+      hash = "sha256-DNs937N7PLQimuM2anya4npYXcj6cyH+dRS7AiOX7tw=";
+    };
+  in ''
     cp -R ${zig_0_10_0}/lib/libc/include/any-macos.13-any lib/libc/include/any-macos.13-any
     cp -R ${zig_0_10_0}/lib/libc/include/aarch64-macos.13-none lib/libc/include/aarch64-macos.13-gnu
     cp -R ${zig_0_10_0}/lib/libc/include/x86_64-macos.13-none lib/libc/include/x86_64-macos.13-gnu
@@ -68,18 +67,20 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+
   checkPhase = ''
     runHook preCheck
     ./zig test --cache-dir "$TMPDIR" -I $src/test $src/test/behavior.zig
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ziglang.org/";
     description =
       "General-purpose programming language and toolchain for maintaining robust, optimal, and reusable software";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aiotter andrewrk AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    changelog = "https://ziglang.org/download/${finalAttrs.version}/release-notes.html";
+    maintainers = with lib.maintainers; [ aiotter andrewrk AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-}
+})
