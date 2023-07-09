@@ -149,6 +149,17 @@ self: super: {
     };
   };
 
+  chadtree = super.chadtree.overrideAttrs {
+    passthru.python3Dependencies = ps: with ps; [
+      pynvim-pp
+      pyyaml
+      std2
+    ];
+
+    # We need some patches so it stops complaining about not being in a venv
+    patches = [ ./patches/chadtree/emulate-venv.patch ];
+  };
+
   ChatGPT-nvim = super.ChatGPT-nvim.overrideAttrs {
     dependencies = with self; [ nui-nvim plenary-nvim telescope-nvim ];
   };
