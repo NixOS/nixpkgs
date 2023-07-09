@@ -95,6 +95,8 @@ in {
       ${concatStringsSep "\n" (map (s: "VLAN=${s}") def.vlan)}
     '' + optionalString (def.macvlan != [ ]) ''
       ${concatStringsSep "\n" (map (s: "MACVLAN=${s}") def.macvlan)}
+    '' + optionalString (def.macvtap != [ ]) ''
+      ${concatStringsSep "\n" (map (s: "MACVTAP=${s}") def.macvtap)}
     '' + optionalString (def.vxlan != [ ]) ''
       ${concatStringsSep "\n" (map (s: "VXLAN=${s}") def.vxlan)}
     '' + optionalString (def.tunnel != [ ]) ''
