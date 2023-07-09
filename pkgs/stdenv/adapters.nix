@@ -105,6 +105,7 @@ rec {
             name = "darwin-portable-libSystem-hook";
             substitutions = {
               libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";
+              targetPrefix = stdenv.cc.bintools.targetPrefix;
             };
           } ./darwin/portable-libsystem.sh)
         ];
