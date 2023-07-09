@@ -83,7 +83,7 @@ pythonRelaxDepsHook() {
     local -r metadata_file="$unpack_dir/$pkg_name/$pkg_name.dist-info/METADATA"
 
     # We generally shouldn't have multiple wheel files, but let's be safer here
-    for wheel in "$pkg_name"*".whl"; do
+    while IFS= read -r -d '' wheel; do
         @pythonInterpreter@ -m wheel unpack --dest "$unpack_dir" "$wheel"
         rm -rf "$wheel"
 
@@ -96,7 +96,7 @@ pythonRelaxDepsHook() {
         fi
 
         @pythonInterpreter@ -m wheel pack "$unpack_dir/$pkg_name"
-    done
+    done <   <(find . -type f -name "$pkg_name*.whl" -print0)
 
     # Remove the folder since it will otherwise be in the dist output.
     rm -rf "$unpack_dir"
