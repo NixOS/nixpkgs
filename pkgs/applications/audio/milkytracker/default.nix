@@ -63,11 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     Foundation
   ];
 
-  cmakeFlags = [
-    # Somehow this does not get set automatically
-    "-DSDL2MAIN_LIBRARY=${SDL2}/lib/libSDL2${stdenv.hostPlatform.extensions.sharedLibrary}"
-  ];
-
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm644 $src/resources/milkytracker.desktop $out/share/applications/milkytracker.desktop
     install -Dm644 $src/resources/pictures/carton.png $out/share/pixmaps/milkytracker.png
