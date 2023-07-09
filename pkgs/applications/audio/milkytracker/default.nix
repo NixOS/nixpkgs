@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, makeWrapper
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, makeWrapper
 , SDL2, alsa-lib, libjack2, lhasa, perl, rtmidi, zlib, zziplib }:
 
 stdenv.mkDerivation rec {
@@ -11,6 +11,14 @@ stdenv.mkDerivation rec {
     rev    = "v${version}";
     sha256 = "025fj34gq2kmkpwcswcyx7wdxb89vm944dh685zi4bxx0hz16vvk";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-34927.patch";
+      url = "https://github.com/milkytracker/MilkyTracker/commit/3a5474f9102cbdc10fbd9e7b1b2c8d3f3f45d91b.patch";
+      hash = "sha256-YnN1Khcbct7iG7TdwxFU1XVCeKR/Zrhe+oMepvh8cRU=";
+    })
+  ];
 
   postPatch = ''
     # https://github.com/milkytracker/MilkyTracker/issues/262
