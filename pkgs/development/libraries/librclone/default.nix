@@ -8,7 +8,7 @@ let
   ext = stdenv.hostPlatform.extensions.sharedLibrary;
 in buildGoModule rec {
   pname = "librclone";
-  inherit (rclone) version src vendorSha256;
+  inherit (rclone) version src patches vendorSha256;
 
   buildPhase = ''
     runHook preBuild
