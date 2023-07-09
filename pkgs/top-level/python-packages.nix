@@ -6762,6 +6762,8 @@ self: super: with self; {
 
   nbdime = callPackage ../development/python-modules/nbdime { };
 
+  nbexec = callPackage ../development/python-modules/nbexec { };
+
   nbformat = callPackage ../development/python-modules/nbformat { };
 
   nbmerge = callPackage ../development/python-modules/nbmerge { };
