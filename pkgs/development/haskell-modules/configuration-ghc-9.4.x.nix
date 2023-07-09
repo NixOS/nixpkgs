@@ -183,6 +183,7 @@ in {
   haskell-gi = __CabalEagerPkgConfigWorkaround super.haskell-gi;
   haskell-gi-base = __CabalEagerPkgConfigWorkaround super.haskell-gi-base;
   svgcairo = __CabalEagerPkgConfigWorkaround super.svgcairo;
+  gtk3 = __CabalEagerPkgConfigWorkaround super.gtk3;
 
   # Cabal 3.8 bug workaround for applications using haskell-gi family of libraries
   termonad = __CabalEagerPkgConfigWorkaround super.termonad;
