@@ -1,6 +1,8 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, testers
+, kube-score
 }:
 
 buildGoModule rec {
@@ -22,6 +24,13 @@ buildGoModule rec {
     "-X=main.version=${version}"
     "-X=main.commit=${src.rev}"
   ];
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = kube-score;
+      command = "kube-score version";
+    };
+  };
 
   meta = with lib; {
     description = "Kubernetes object analysis with recommendations for improved reliability and security";
