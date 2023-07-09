@@ -1,9 +1,11 @@
 # Create a cctools-compatible bintools that uses equivalent tools from LLVM in place of the ones
 # from cctools when possible.
 
-{ lib, stdenv, makeWrapper, cctools-port, llvmPackages, enableManpages ? true }:
+{ lib, stdenv, makeWrapper, cctools-port, llvmPackages, enableManpages ? stdenv.targetPlatform == stdenv.hostPlatform }:
 
 let
+  inherit (stdenv) targetPlatform hostPlatform;
+
   cctoolsVersion = lib.getVersion cctools-port;
   llvmVersion = llvmPackages.release_version;
 
@@ -52,7 +54,7 @@ let
   ++ lib.optional (!useLLVMOtool) "otool"
   ++ lib.optional (!useLLVMStrip) "strip";
 
-  inherit (stdenv.cc) targetPrefix;
+  targetPrefix = lib.optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
 
   linkManPages = pkg: source: target: lib.optionalString enableManpages ''
     sourcePath=${pkg}/share/man/man1/${source}.1.gz
@@ -81,7 +83,7 @@ stdenv.mkDerivation {
     makeWrapper "${lib.getBin llvmPackages.clang-unwrapped}/bin/clang" "$out/bin/${targetPrefix}as" \
       --add-flags "-x assembler -integrated-as -c"
 
-    ln -s "${lib.getBin llvmPackages.bintools-unwrapped}/bin/llvm-ar" "$out/bin/${targetPrefix}ar"
+    ln -s "${lib.getBin llvmPackages.bintools-unwrapped}/bin/${targetPrefix}llvm-ar" "$out/bin/${targetPrefix}ar"
     ${linkManPages llvmPackages.llvm-manpages "llvm-ar" "ar"}
 
     for tool in ${toString llvm_bins}; do
