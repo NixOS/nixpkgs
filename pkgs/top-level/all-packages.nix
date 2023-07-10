@@ -509,6 +509,8 @@ with pkgs;
 
   copilot-cli = callPackage ../tools/admin/copilot-cli { };
 
+  countryfetch = callPackage ../tools/misc/countryfetch { };
+
   cp437 = callPackage ../tools/misc/cp437 { };
 
   cpm-cmake = callPackage ../development/tools/cpm-cmake { };
