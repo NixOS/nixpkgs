@@ -6520,6 +6520,8 @@ self: super: with self; {
 
   mullvad-api = callPackage ../development/python-modules/mullvad-api { };
 
+  mullvad-closest = callPackage ../development/python-modules/mullvad-closest { };
+
   mulpyplexer = callPackage ../development/python-modules/mulpyplexer { };
 
   multidict = callPackage ../development/python-modules/multidict { };

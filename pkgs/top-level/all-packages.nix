@@ -25957,6 +25957,8 @@ with pkgs;
 
   mullvad-browser = callPackage ../applications/networking/browsers/mullvad-browser { };
 
+  mullvad-closest = with python3Packages; toPythonApplication mullvad-closest;
+
   mycorrhiza = callPackage ../servers/mycorrhiza { };
 
   napalm = with python3Packages; toPythonApplication (
