@@ -37,9 +37,6 @@ let
     overridden = lib.recursiveUpdate orig {
       # overrides of texlive.tlpdb
 
-      # only *.po for tlmgr
-      texlive-msg-translations.hasTlpkg = false;
-
       # it seems to need it to transform fonts
       xdvi.deps = (orig.xdvi.deps or []) ++  [ "metafont" ];
 
