@@ -534,7 +534,7 @@ EOF
     }
 }
 if ($useSwraid) {
-    push @attrs, "boot.initrd.services.swraid.enable = true;\n\n";
+    push @attrs, "boot.swraid.enable = true;\n\n";
 }
 
 
