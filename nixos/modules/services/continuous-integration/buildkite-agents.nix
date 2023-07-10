@@ -238,7 +238,8 @@ in
           tagsStr = lib.concatStringsSep "," (lib.mapAttrsToList tagStr cfg.tags);
         in
           optionalString (cfg.privateSshKeyPath != null) ''
-            mkdir -m 0700 -p "${sshDir}"
+            mkdir -p "${sshDir}"
+            chmod 0700 "${sshDir}"
             install -m600 "${toString cfg.privateSshKeyPath}" "${sshDir}/id_rsa"
           '' + ''
             cat > "${cfg.dataDir}/buildkite-agent.cfg" <<EOF
