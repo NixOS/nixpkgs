@@ -3852,6 +3852,8 @@ self: super: with self; {
 
   flux-led = callPackage ../development/python-modules/flux-led { };
 
+  flyingsquid = callPackage ../development/python-modules/flyingsquid { };
+
   flynt = callPackage ../development/python-modules/flynt { };
 
   fn = callPackage ../development/python-modules/fn { };
