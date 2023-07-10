@@ -202,7 +202,7 @@ self: super: {
   };
 
   cmp-fish = super.cmp-fish.overrideAttrs {
-    dependencies = with self; [ nvim-cmp fish ];
+    dependencies = with self; [ nvim-cmp ];
   };
 
   cmp-fuzzy-buffer = super.cmp-fuzzy-buffer.overrideAttrs {
@@ -214,7 +214,7 @@ self: super: {
   };
 
   cmp-git = super.cmp-git.overrideAttrs {
-    dependencies = with self; [ nvim-cmp curl git ];
+    dependencies = with self; [ nvim-cmp ];
   };
 
   cmp-greek = super.cmp-greek.overrideAttrs {
@@ -230,7 +230,7 @@ self: super: {
   };
 
   cmp-npm = super.cmp-npm.overrideAttrs {
-    dependencies = with self; [ nvim-cmp nodejs plenary-nvim ];
+    dependencies = with self; [ nvim-cmp plenary-nvim ];
   };
 
   cmp-nvim-lsp-signature-help = super.cmp-nvim-lsp-signature-help.overrideAttrs {
@@ -242,11 +242,11 @@ self: super: {
   };
 
   cmp-pandoc-nvim = super.cmp-pandoc-nvim.overrideAttrs {
-    dependencies = with self; [ nvim-cmp pandoc plenary-nvim ];
+    dependencies = with self; [ nvim-cmp plenary-nvim ];
   };
 
   cmp-rg = super.cmp-rg.overrideAttrs {
-    dependencies = with self; [ nvim-cmp ripgrep ];
+    dependencies = with self; [ nvim-cmp ];
   };
 
   cmp-snippy = super.cmp-snippy.overrideAttrs {
