@@ -32330,7 +32330,9 @@ with pkgs;
   waycorner = callPackage ../applications/misc/waycorner { };
 
   waylock = callPackage ../applications/misc/waylock {
-    zig = buildPackages.zig_0_10;
+    zigHook = zigHook.override {
+      zig = buildPackages.zig_0_10;
+    };
   };
 
   wayshot = callPackage ../tools/misc/wayshot { };
