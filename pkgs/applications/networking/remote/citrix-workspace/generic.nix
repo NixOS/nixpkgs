@@ -82,9 +82,11 @@ stdenv.mkDerivation rec {
     libcxxabi
     libjpeg
     libpng12
+    libpulseaudio
     libsoup
     libvorbis
     libxml2
+    llvmPackages_12.libunwind
     mesa
     nspr
     nss
@@ -99,9 +101,7 @@ stdenv.mkDerivation rec {
     xorg.libXScrnSaver
     xorg.libXtst
     zlib
-  ] ++ lib.optional (lib.versionOlder version "20.04") e2fsprogs
-    ++ lib.optional (lib.versionAtLeast version "20.10") libpulseaudio
-    ++ lib.optional (lib.versionAtLeast version "21.12") llvmPackages_12.libunwind;
+  ];
 
   runtimeDependencies = [
     glib
@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
   installPhase = let
     icaFlag = program:
       if (builtins.match "selfservice(.*)" program) != null then "--icaroot"
-      else if (lib.versionAtLeast version "21.12" && builtins.match "wfica(.*)" program != null) then null
+      else if (builtins.match "wfica(.*)" program != null) then null
       else "-icaroot";
     wrap = program: ''
       wrapProgram $out/opt/citrix-icaclient/${program} \
@@ -143,8 +143,7 @@ stdenv.mkDerivation rec {
 
     mkWrappers = lib.concatMapStringsSep "\n";
 
-    toWrap = [ "wfica" "selfservice" "util/configmgr" "util/conncenter" "util/ctx_rehash" ]
-      ++ lib.optional (lib.versionOlder version "20.06") "selfservice_old";
+    toWrap = [ "wfica" "selfservice" "util/configmgr" "util/conncenter" "util/ctx_rehash" ];
   in ''
     runHook preInstall
 
