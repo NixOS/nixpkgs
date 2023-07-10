@@ -210,6 +210,16 @@
     mkdir "$out"
   '';
 
+  # verify that the restricted mode gets enabled when
+  # needed (detected by checking if it disallows --gscmd)
+  rpdfcrop = runCommand "texlive-test-rpdfcrop" {
+    nativeBuildInputs = [ (texlive.combine { inherit (texlive) scheme-infraonly pdfcrop; }) ];
+  } ''
+    ! (pdfcrop --gscmd echo $(command -v pdfcrop) 2>&1 || true) | grep 'restricted mode' >/dev/null
+    (rpdfcrop --gscmd echo $(command -v pdfcrop) 2>&1 || true) | grep 'restricted mode' >/dev/null
+    mkdir "$out"
+  '';
+
   # check that all binaries run successfully, in the following sense:
   # (1) run --version, -v, --help, -h successfully; or
   # (2) run --help, -h, or no argument with error code but show help text; or
