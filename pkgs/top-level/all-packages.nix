@@ -33315,7 +33315,10 @@ with pkgs;
   merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
 
   mepo = callPackage ../applications/misc/mepo {
-    zig = buildPackages.zig_0_9;
+    inherit (gnome) zenity;
+    zigHook = zigHook.override {
+      zig = buildPackages.zig_0_9;
+    };
   };
 
   meshcentral = callPackage ../tools/admin/meshcentral { };
