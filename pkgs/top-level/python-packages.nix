@@ -9280,6 +9280,8 @@ self: super: with self; {
 
   pyphotonfile = callPackage ../development/python-modules/pyphotonfile { };
 
+  pypika = callPackage ../development/python-modules/pypika { };
+
   pypillowfight = callPackage ../development/python-modules/pypillowfight { };
 
   pypinyin = callPackage ../development/python-modules/pypinyin { };
