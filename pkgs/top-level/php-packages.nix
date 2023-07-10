@@ -222,9 +222,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     couchbase = callPackage ../development/php-packages/couchbase { };
 
-    datadog_trace = pkgs.darwin.apple_sdk_11_0.callPackage ../development/php-packages/datadog_trace {
-      inherit (pkgs.darwin.apple_sdk_11_0.frameworks) Security CoreFoundation;
-      inherit (pkgs.darwin.apple_sdk_11_0) Libsystem;
+    datadog_trace = callPackage ../development/php-packages/datadog_trace {
+      inherit (pkgs) darwin;
     };
 
     ds = callPackage ../development/php-packages/ds { };
@@ -247,9 +246,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     memcached = callPackage ../development/php-packages/memcached { };
 
-    mongodb = pkgs.darwin.apple_sdk_11_0.callPackage ../development/php-packages/mongodb {
-      inherit (pkgs.darwin.apple_sdk_11_0.frameworks) Security;
-      inherit (pkgs.darwin.apple_sdk_11_0) Libsystem;
+    mongodb = callPackage ../development/php-packages/mongodb {
+      inherit (pkgs) darwin;
     };
 
     msgpack = callPackage ../development/php-packages/msgpack { };
