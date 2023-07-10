@@ -77,6 +77,19 @@ let
     zlib = nativePlatforms;
   };
 
+  emscriptenCommon = {
+    gmp = nativePlatforms;
+    boehmgc = nativePlatforms;
+    hello = nativePlatforms;
+    zlib = nativePlatforms;
+    openssl = nativePlatforms;
+    libxml2 = nativePlatforms;
+    iconv = nativePlatforms;
+    json_c = nativePlatforms;
+    sqlite = nativePlatforms;
+    ncurses = nativePlatforms;
+  };
+
   darwinCommon = {
     buildPackages.binutils = darwin;
   };
@@ -209,6 +222,7 @@ in
   android32 = mapTestOnCross lib.systems.examples.armv7a-android-prebuilt linuxCommon;
 
   wasi32 = mapTestOnCross lib.systems.examples.wasi32 wasiCommon;
+  emscripten = mapTestOnCross lib.systems.examples.emscripten emscriptenCommon;
 
   msp430 = mapTestOnCross lib.systems.examples.msp430 embedded;
   mmix = mapTestOnCross lib.systems.examples.mmix embedded;

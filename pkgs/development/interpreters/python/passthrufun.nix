@@ -43,7 +43,7 @@
         selfBuildBuild = pythonOnBuildForBuild.pkgs;
         selfBuildHost = pythonOnBuildForHost.pkgs;
         selfBuildTarget = pythonOnBuildForTarget.pkgs;
-        selfHostHost = pythonOnHostForHost.pkgs;
+        selfHostHost = pythonOnHostForHost.pkgs or {};
         selfTargetTarget = pythonOnTargetForTarget.pkgs or {}; # There is no Python TargetTarget.
       };
       hooks = import ./hooks/default.nix;

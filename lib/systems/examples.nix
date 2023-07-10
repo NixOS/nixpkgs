@@ -342,4 +342,11 @@ rec {
     # https://github.com/ghcjs/ghcjs/issues/53
     config = "javascript-unknown-ghcjs";
   };
+
+  # Emscripten
+  emscripten = {
+    config = "wasm32-unknown-emscripten";
+    useLLVM = true;
+    libc = null;
+  };
 }

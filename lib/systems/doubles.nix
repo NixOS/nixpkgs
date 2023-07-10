@@ -12,6 +12,9 @@ let
     # Darwin
     "x86_64-darwin" "i686-darwin" "aarch64-darwin" "armv7a-darwin"
 
+    # Emscripten
+    "wasm32-emscripten"
+
     # FreeBSD
     "i686-freebsd13" "x86_64-freebsd13"
 
@@ -109,6 +112,7 @@ in {
   openbsd       = filterDoubles predicates.isOpenBSD;
   unix          = filterDoubles predicates.isUnix;
   wasi          = filterDoubles predicates.isWasi;
+  emscripten    = filterDoubles predicates.isEmscripten;
   redox         = filterDoubles predicates.isRedox;
   windows       = filterDoubles predicates.isWindows;
   genode        = filterDoubles predicates.isGenode;

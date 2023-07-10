@@ -136,6 +136,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3Plus;
     platforms = platforms.all;
+    badPlatforms = lib.platforms.emscripten ++ lib.platforms.windows;
     maintainers = with maintainers; [ dtzWill ];
     mainProgram = "bash";
   };

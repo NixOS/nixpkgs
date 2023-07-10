@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, buildPackages, perl, coreutils, writeShellScript
+{ lib, stdenv, fetchurl, buildPackages, perl, coreutils
 , makeWrapper
 , withCryptodev ? false, cryptodev
 , withZlib ? false, zlib
@@ -18,6 +18,8 @@
 # files.
 
 let
+  useMakeWrapper = !stdenv.hostPlatform.isWindows && !stdenv.hostPlatform.isEmscripten;
+
   common = { version, sha256, patches ? [], withDocs ? false, extraMeta ? {} }:
    stdenv.mkDerivation (finalAttrs: {
     pname = "openssl";
@@ -70,7 +72,7 @@ let
       stdenv.cc.isGNU;
 
     nativeBuildInputs =
-         lib.optional (!stdenv.hostPlatform.isWindows) makeWrapper
+         lib.optional useMakeWrapper makeWrapper
       ++ [ perl ]
       ++ lib.optionals static [ removeReferencesTo ];
     buildInputs = lib.optional withCryptodev cryptodev
@@ -107,6 +109,8 @@ let
           else "./Configure linux-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
         else if stdenv.hostPlatform.isiOS
           then "./Configure ios${toString stdenv.hostPlatform.parsed.cpu.bits}-cross"
+        else if stdenv.hostPlatform.isEmscripten
+          then "./Configure no-engine no-dso no-dgram no-sock no-srtp no-stdio no-err no-ocsp no-psk no-ts no-asm"
         else
           throw "Not sure what configuration to use for ${stdenv.hostPlatform.config}"
       );
@@ -172,7 +176,7 @@ let
       mkdir -p $bin
       mv $out/bin $bin/bin
 
-    '' + lib.optionalString (!stdenv.hostPlatform.isWindows)
+    '' + lib.optionalString useMakeWrapper
       # makeWrapper is broken for windows cross (https://github.com/NixOS/nixpkgs/issues/120726)
     ''
       # c_rehash is a legacy perl script with the same functionality

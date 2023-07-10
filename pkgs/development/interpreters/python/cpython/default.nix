@@ -108,8 +108,12 @@ let
     pythonOnBuildForBuild = override pkgsBuildBuild.${pythonAttr};
     pythonOnBuildForHost = override pkgsBuildHost.${pythonAttr};
     pythonOnBuildForTarget = override pkgsBuildTarget.${pythonAttr};
-    pythonOnHostForHost = override pkgsHostHost.${pythonAttr};
-    pythonOnTargetForTarget = lib.optionalAttrs (lib.hasAttr pythonAttr pkgsTargetTarget) (override pkgsTargetTarget.${pythonAttr});
+    pythonOnHostForHost =
+      if stdenv.hostPlatform.isEmscripten then {} else
+      override pkgsHostHost.${pythonAttr};
+    pythonOnTargetForTarget =
+      if stdenv.hostPlatform.isEmscripten then {} else
+      lib.optionalAttrs (lib.hasAttr pythonAttr pkgsTargetTarget) (override pkgsTargetTarget.${pythonAttr});
   };
 
   version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";

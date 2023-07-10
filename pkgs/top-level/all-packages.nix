@@ -7478,10 +7478,6 @@ with pkgs;
 
   zzuf = callPackage ../tools/security/zzuf { };
 
-  ### DEVELOPMENT / EMSCRIPTEN
-
-  buildEmscriptenPackage = callPackage ../development/em-modules/generic { };
-
   carp = callPackage ../development/compilers/carp { };
 
   cholmod-extra = callPackage ../development/libraries/science/math/cholmod-extra { };
@@ -7495,10 +7491,16 @@ with pkgs;
   emscripten = callPackage ../development/compilers/emscripten {
     llvmPackages = llvmPackages_16;
   };
-
-  emscriptenPackages = recurseIntoAttrs (callPackage ./emscripten-packages.nix { });
-
-  emscriptenStdenv = stdenv // { mkDerivation = buildEmscriptenPackage; };
+  emscriptenCache = callPackage ../development/compilers/emscripten/cache.nix { };
+  emscriptenNoCache = emscripten.override { emscriptenCache = null; };
+  emscriptenPorts = callPackage ../development/compilers/emscripten/ports.nix {};
+  emscriptenFull = emscripten.override { emscriptenCache = emscriptenPorts.all; };
+  emscriptenCC = callPackage ../development/compilers/emscripten/cc.nix {};
+  emscriptenBintools = callPackage ../development/compilers/emscripten/bintools.nix {};
+  emscriptenCMakeSetupHook = makeSetupHook {
+    name = "emscripten-cmake-hook";
+    substitutions = { inherit emscripten; };
+  } ../build-support/setup-hooks/emscripten-cmake-hook.sh;
 
   efibootmgr = callPackage ../tools/system/efibootmgr { };
 
@@ -18311,8 +18313,9 @@ with pkgs;
   # In other words, try to only use this in wrappers, and only use those
   # wrappers from the next stage.
   bintools-unwrapped = let
-    inherit (stdenv.targetPlatform) linker;
-  in     if linker == "lld"     then llvmPackages.bintools-unwrapped
+    inherit (stdenv.targetPlatform) linker isEmscripten;
+  in     if isEmscripten        then emscriptenBintools.bintools
+    else if linker == "lld"     then llvmPackages.bintools-unwrapped
     else if linker == "cctools" then darwin.binutils-unwrapped
     else if linker == "bfd"     then binutils-unwrapped
     else if linker == "gold"    then binutils-unwrapped

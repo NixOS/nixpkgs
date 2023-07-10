@@ -425,6 +425,8 @@ rec {
      Example:
        escapeShellArg "esc'ape\nme"
        => "'esc'\\''ape\nme'"
+       escapeShellArg "escapeme"
+       => "'escapeme'"
   */
   escapeShellArg = arg: "'${replaceStrings ["'"] ["'\\''"] (toString arg)}'";
 
