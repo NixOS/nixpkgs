@@ -37,6 +37,8 @@ buildPythonPackage rec {
     requests-oauthlib
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     coreutils
     pytest-aiohttp
