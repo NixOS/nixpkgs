@@ -427,6 +427,37 @@
         [[ $failedCount = 0 ]]
       '';
 
+  # check that all scripts have a Nix shebang
+  shebangs = let
+      allPackages = with lib; concatLists (catAttrs "pkgs" (filter isAttrs (attrValues texlive)));
+      binPackages = lib.filter (p: p.tlType == "bin") allPackages;
+    in
+    runCommand "texlive-test-shebangs" { }
+      (''
+        echo "checking that all texlive scripts shebangs are in '$NIX_STORE'"
+        declare -i scriptCount=0 invalidCount=0
+      '' +
+      (lib.concatMapStrings
+        (pkg: ''
+          for bin in '${pkg.outPath}'/bin/* ; do
+            grep -I -q . "$bin" || continue  # ignore binary files
+            scriptCount=$((scriptCount + 1))
+            read -r cmdline < "$bin"
+            read -r interp <<< "$cmdline"
+            if [[ "$interp" != "#!$NIX_STORE"/* && "$interp" != "#! $NIX_STORE"/* ]] ; then
+              echo "error: non-nix shebang '$interp' in script '$bin'"
+              invalidCount=$((invalidCount + 1))
+            fi
+          done
+        '')
+        binPackages)
+      + ''
+        echo "checked $scriptCount scripts, found $invalidCount non-nix shebangs"
+        [[ $invalidCount -gt 0 ]] && exit 1
+        mkdir -p "$out"
+      ''
+      );
+
   # verify that the precomputed licensing information in default.nix
   # does indeed match the metadata of the individual packages.
   #
