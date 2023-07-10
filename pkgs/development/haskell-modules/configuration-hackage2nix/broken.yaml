@@ -4532,7 +4532,6 @@ broken-packages:
   - resource-embed
   - respond
   - restartable
-  - rest-rewrite
   - restyle
   - resumable-exceptions
   - rethinkdb
