@@ -7738,6 +7738,8 @@ self: super: with self; {
 
   pencompy = callPackage ../development/python-modules/pencompy { };
 
+  pgmpy = callPackage ../development/python-modules/pgmpy { };
+
   phonopy = callPackage ../development/python-modules/phonopy { };
 
   pixcat = callPackage ../development/python-modules/pixcat { };
