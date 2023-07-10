@@ -185,8 +185,9 @@ preConfigure() {
 
 
 postConfigure() {
-    # Don't store the configure flags in the resulting executables.
-    sed -e '/TOPLEVEL_CONFIGURE_ARGUMENTS=/d' -i Makefile
+    # Avoid store paths when embedding ./configure flags into gcc.
+    # Mangled arguments are still useful when reporting bugs upstream.
+    sed -e "/TOPLEVEL_CONFIGURE_ARGUMENTS=/ s|$NIX_STORE/[a-z0-9]\{32\}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" -i Makefile
 }
 
 
