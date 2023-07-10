@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "robustirc-bridge";
-  version = "1.8";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "robustirc";
     repo = "bridge";
     rev = "v${version}";
-    sha256 = "12jzil97147f978shdgm6whz7699db0shh0c1fzgrjh512dw502c";
+    hash = "sha256-8SNy3xqVahBuEXCrG21zIggXeahbzJtqtFMxfp+r48g=";
   };
 
-  vendorSha256 = "0lm8j2iz0yysgi0bbh78ca629kb6sxvyy9al3aj2587hpvy79q85";
+  vendorHash = "sha256-NBouR+AwQd7IszEcnYRxHFKtCdVTdfOWnzYjdZ5fXfs=";
 
   postInstall = ''
     install -D robustirc-bridge.1 $out/share/man/man1/robustirc-bridge.1

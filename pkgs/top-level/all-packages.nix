@@ -7984,6 +7984,8 @@ with pkgs;
 
   fuse-7z-ng = callPackage ../tools/filesystems/fuse-7z-ng { };
 
+  fuse-archive = callPackage ../tools/filesystems/fuse-archive { };
+
   fuse-overlayfs = callPackage ../tools/filesystems/fuse-overlayfs { };
 
   fusee-interfacee-tk = callPackage ../applications/misc/fusee-interfacee-tk { };
@@ -13345,6 +13347,8 @@ with pkgs;
 
   tldr-hs = haskellPackages.tldr;
 
+  tlsclient = callPackage ../tools/admin/tlsclient { };
+
   tlsx = callPackage ../tools/security/tlsx { };
 
   tmate = callPackage ../tools/misc/tmate { };
@@ -16664,7 +16668,7 @@ with pkgs;
   cargo2junit = callPackage ../development/tools/rust/cargo2junit { };
 
   cargo-espflash = callPackage ../development/tools/rust/cargo-espflash {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   cargo-web = callPackage ../development/tools/rust/cargo-web {
@@ -27954,6 +27958,8 @@ with pkgs;
   # pam_bioapi ( see http://www.thinkwiki.org/wiki/How_to_enable_the_fingerprint_reader )
 
   pam_ccreds = callPackage ../os-specific/linux/pam_ccreds { };
+
+  pam_dp9ik = callPackage ../os-specific/linux/pam_dp9ik { };
 
   pam_gnupg = callPackage ../os-specific/linux/pam_gnupg { };
 
