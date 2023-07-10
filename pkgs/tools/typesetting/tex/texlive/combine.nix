@@ -332,8 +332,7 @@ in (buildEnv {
         --replace 'uuid=osuuid(),' 'uuid="242be807-d17e-4792-8e39-aa93326fc871",'
       FORCE_SOURCE_DATE=1 TZ= faketime -f '@1980-01-01 00:00:00 x0.001' luatex --luaonly mtxrun.lua --generate
     fi
-  ''
-    + bin.cleanBrokenLinks +
+  '' +
   # Get rid of all log files. They are not needed, but take up space
   # and render the build unreproducible by their embedded timestamps
   # and other non-deterministic diagnostics.
