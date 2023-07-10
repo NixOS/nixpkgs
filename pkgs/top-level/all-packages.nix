@@ -18253,7 +18253,9 @@ with pkgs;
   vscode-langservers-extracted = callPackage ../development/tools/language-servers/vscode-langservers-extracted { };
 
   zls = callPackage ../development/tools/language-servers/zls {
-    zig = buildPackages.zig_0_10;
+    zigHook = zigHook.override {
+      zig = buildPackages.zig_0_10;
+    };
   };
 
   ansible-later = callPackage ../tools/admin/ansible/later.nix { };
