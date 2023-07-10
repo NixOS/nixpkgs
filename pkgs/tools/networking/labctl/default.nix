@@ -6,18 +6,18 @@
 
 buildGoModule rec {
   pname = "labctl";
-  version = "0.0.20";
+  version = "0.0.22";
 
   src = fetchFromGitHub {
     owner = "labctl";
     repo = "labctl";
     rev = "v${version}";
-    hash = "sha256-gLdcPT82hkttESxwjk1mCzuaUxcwm0dULil634u7qg8=";
+    hash = "sha256-84t7qhLafNyPLgHmFQUsizEn6Us44dDTercGEm9lup4=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  vendorHash = "sha256-JXFw/u8QaZKt+OjUWW0rPi9QDSkiqYyqcNCxyzvcDM4=";
+  vendorHash = "sha256-vJ9aTMVwKrqjckdfCMvheTSG+gEtMLLQuBCz8Wc5blE=";
 
   ldflags = [
     "-X=github.com/labctl/labctl/app.version=${version}"
