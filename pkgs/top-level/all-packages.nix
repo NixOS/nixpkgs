@@ -27923,6 +27923,8 @@ with pkgs;
 
   quicktemplate = callPackage ../development/tools/quicktemplate { };
 
+  wgo = callPackage ../development/tools/wgo { };
+
   linux_logo = callPackage ../tools/misc/linux-logo { };
 
   linux-pam = callPackage ../os-specific/linux/pam { };
