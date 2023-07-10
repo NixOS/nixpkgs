@@ -38022,8 +38022,6 @@ with pkgs;
 
   stone-kingdoms = callPackage ../games/stone-kingdoms { };
 
-  streamlit = python3Packages.callPackage ../applications/science/machine-learning/streamlit { };
-
   stt = callPackage ../tools/audio/stt { };
 
   stuntrally = callPackage ../games/stuntrally
@@ -38757,6 +38755,8 @@ with pkgs;
   nengo-gui = callPackage ../applications/science/machine-learning/nengo-gui { };
 
   sc2-headless = callPackage ../applications/science/machine-learning/sc2-headless { };
+
+  streamlit = with python3Packages; toPythonApplication streamlit;
 
   uarmsolver = callPackage ../applications/science/machine-learning/uarmsolver { };
 

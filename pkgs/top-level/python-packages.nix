@@ -12170,6 +12170,8 @@ self: super: with self; {
 
   streamlabswater = callPackage ../development/python-modules/streamlabswater { };
 
+  streamlit = callPackage ../development/python-modules/streamlit { };
+
   streamz = callPackage ../development/python-modules/streamz { };
 
   strenum =  callPackage ../development/python-modules/strenum { };

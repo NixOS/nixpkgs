@@ -1,7 +1,7 @@
 { lib
 , altair
 , blinker
-, buildPythonApplication
+, buildPythonPackage
 , cachetools
 , click
 , fetchPypi
@@ -25,7 +25,7 @@
 , watchdog
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "streamlit";
   version = "1.24.0";
   format = "setuptools";
