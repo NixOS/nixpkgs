@@ -119,7 +119,7 @@ in pkgs.stdenv.mkDerivation {
 
     nixos-render-docs manual html \
       --manpage-urls ./manpage-urls.json \
-      --revision ${pkgs.lib.trivial.revisionWithDefault (pkgs.rev or "master")} \
+      --revision ${pkgs.lib.trivial.revisionWithDefault (nixpkgs.rev or "master")} \
       --stylesheet style.css \
       --stylesheet overrides.css \
       --stylesheet highlightjs/mono-blue.css \
