@@ -1,0 +1,39 @@
+diff --git a/python/setup.py b/python/setup.py
+index dcfa5de..245f54e 100644
+--- a/python/setup.py
++++ b/python/setup.py
+@@ -53,7 +53,6 @@ setuptools.setup(
+     long_description_content_type="text/markdown",
+     url="https://github.com/alphacep/vosk-api",
+     packages=setuptools.find_packages(),
+-    package_data = {'vosk': ['*.so', '*.dll', '*.dyld']},
+     entry_points = {
+         'console_scripts': ['vosk-transcriber=vosk.transcriber.cli:main'],
+     },
+diff --git a/python/vosk/__init__.py b/python/vosk/__init__.py
+index 87cccad..d1c73b1 100644
+--- a/python/vosk/__init__.py
++++ b/python/vosk/__init__.py
+@@ -19,7 +19,7 @@ MODEL_DIRS = [os.getenv("VOSK_MODEL_PATH"), Path("/usr/share/vosk"),
+         Path.home() / "AppData/Local/vosk", Path.home() / ".cache/vosk"]
+ 
+ def open_dll():
+-    dlldir = os.path.abspath(os.path.dirname(__file__))
++    dlldir = "@vosk_api@/lib"
+     if sys.platform == "win32":
+         # We want to load dependencies too
+         os.environ["PATH"] = dlldir + os.pathsep + os.environ["PATH"]
+diff --git a/python/vosk_builder.py b/python/vosk_builder.py
+index 902910d..88bcac8 100644
+--- a/python/vosk_builder.py
++++ b/python/vosk_builder.py
+@@ -3,8 +3,7 @@
+ import os
+ from cffi import FFI
+ 
+-vosk_root=os.environ.get("VOSK_SOURCE", "..")
+-cpp_command = "cpp " + vosk_root + "/src/vosk_api.h"
++cpp_command = "cpp @vosk_api@/include/vosk_api.h"
+ 
+ ffibuilder = FFI()
+ ffibuilder.set_source("vosk.vosk_cffi", None)
