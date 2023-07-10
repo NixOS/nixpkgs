@@ -246,19 +246,18 @@
         "kpsewhere" "latex-git-log" "ltxfileinfo" "mendex" "perltex" "pn2pdf" "psbook" "psnup" "psresize" "purifyeps"
         "simpdftex" "tex2xindy" "texluac" "texluajitc" "urlbst" "yplan" ];
       shortHelp = [ "adhocfilelist" "authorindex" "bbl2bib" "bibdoiadd" "bibmradd" "biburl2doi" "bibzbladd" "ctanupload"
-        "disdvi" "dvibook" "dviconcat" "getmapdl" "latex2man" "listings-ext.sh" "lprsetup.sh" "pygmentex" ];
+        "disdvi" "dvibook" "dviconcat" "getmapdl" "latex2man" "listings-ext.sh" "pygmentex" ];
       # (2) binaries that return non-zero exit code even if correctly asked for help
       ignoreExitCode = [ "authorindex" "dvibook" "dviconcat" "dvipos" "extractres" "fig4latex" "fragmaster" "latex2man"
-        "latex-git-log" "listings-ext.sh" "lprsetup.sh" "pdf2dsc" "psbook" "psnup" "psresize" "purifyeps" "tex2xindy"
-        "texluac" "texluajitc" ];
+        "latex-git-log" "listings-ext.sh" "psbook" "psnup" "psresize" "purifyeps" "tex2xindy"  "texluac"
+        "texluajitc" ];
       # (2) binaries that print help on no argument, returning non-zero exit code
       noArg = [ "a2ping" "bg5+latex" "bg5+pdflatex" "bg5latex" "bg5pdflatex" "cef5latex" "cef5pdflatex" "ceflatex"
-        "cefpdflatex" "cefslatex" "cefspdflatex" "chkdvifont" "dvi2fax" "dvipdf" "dvired" "dviselect"
-        "dvitodvi" "eps2eps" "epsffit" "findhyph" "gbklatex" "gbkpdflatex" "komkindex" "kpsepath" "listbib"
-        "listings-ext" "mag" "mathspic" "mf2pt1" "mk4ht" "mkt1font" "mkgrkindex" "musixflx" "pdf2ps" "pdftosrc"
-        "pdfxup" "pedigree" "pfb2pfa" "pfbtopfa" "pk2bm" "pphs" "prepmx" "ps2pk" "ps2pdf*" "ps2ps*" "psselect" "pstops"
-        "rubibtex" "rubikrotation" "sjislatex" "sjispdflatex" "srcredact" "t4ht" "tex4ht" "texdiff" "texdirflatten"
-        "texplate" "tie" "ttf2kotexfont" "ttfdump" "vlna" "vpl2ovp" "vpl2vpl" "yplan" ];
+        "cefpdflatex" "cefslatex" "cefspdflatex" "chkdvifont" "dvi2fax" "dvired" "dviselect" "dvitodvi" "epsffit"
+        "findhyph" "gbklatex" "gbkpdflatex" "komkindex" "kpsepath" "listbib" "listings-ext" "mag" "mathspic" "mf2pt1"
+        "mk4ht" "mkt1font" "mkgrkindex" "musixflx" "pdf2ps" "pdftosrc" "pdfxup" "pedigree" "pfb2pfa" "pk2bm" "prepmx"
+        "ps2pk" "psselect" "pstops" "rubibtex" "rubikrotation" "sjislatex" "sjispdflatex" "srcredact" "t4ht" "tex4ht"
+        "texdiff" "texdirflatten" "texplate" "tie" "ttf2kotexfont" "ttfdump" "vlna" "vpl2ovp" "vpl2vpl" "yplan" ];
       # (3) binaries requiring a .tex file
       contextTest = [ "htcontext" ];
       latexTest = [ "de-macro" "e2pall" "htlatex" "htxelatex" "makeindex" "pslatex" "rumakeindex" "tpic2pdftex"
@@ -270,9 +269,6 @@
       ignored = [
         # compiled binaries
         "dt2dv" "dv2dt" "dvi2tty" "dvidvi" "dvispc" "otp2ocp" "outocp" "pmxab"
-
-        # ghostscript binaries
-        "gs" "gsx" "printafm"
 
         # GUI scripts that accept no argument or crash without a graphics server; please test manualy
         "epspdftk" "texdoctk" "xasy"
