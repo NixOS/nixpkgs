@@ -20,21 +20,21 @@ let
 
   pkg = pkgs.stdenv.mkDerivation rec {
     pname = "mediawiki-full";
-    version = src.version;
+    inherit (src) version;
     src = cfg.package;
 
     installPhase = ''
       mkdir -p $out
       cp -r * $out/
 
-      rm -rf $out/share/mediawiki/skins/*
-      rm -rf $out/share/mediawiki/extensions/*
-
+      # try removing directories before symlinking to allow overwriting any builtin extension or skin
       ${concatStringsSep "\n" (mapAttrsToList (k: v: ''
+        rm -rf $out/share/mediawiki/skins/${k}
         ln -s ${v} $out/share/mediawiki/skins/${k}
       '') cfg.skins)}
 
       ${concatStringsSep "\n" (mapAttrsToList (k: v: ''
+        rm -rf $out/share/mediawiki/extensions/${k}
         ln -s ${if v != null then v else "$src/share/mediawiki/extensions/${k}"} $out/share/mediawiki/extensions/${k}
       '') cfg.extensions)}
     '';
@@ -633,7 +633,7 @@ in
       ++ optional (cfg.webserver == "apache" && cfg.database.createLocally && cfg.database.type == "postgres") "postgresql.service";
 
     users.users.${user} = {
-      group = group;
+      inherit group;
       isSystemUser = true;
     };
     users.groups.${group} = {};
