@@ -52,13 +52,13 @@ let
     set  -s escape-time       ${toString cfg.escapeTime}
     set  -g history-limit     ${toString cfg.historyLimit}
 
+    ${cfg.extraConfig}
+
     ${lib.optionalString (cfg.plugins != []) ''
     # Run plugins
     ${lib.concatMapStringsSep "\n" (x: "run-shell ${x.rtp}") cfg.plugins}
 
     ''}
-
-    ${cfg.extraConfig}
   '';
 
 in {
