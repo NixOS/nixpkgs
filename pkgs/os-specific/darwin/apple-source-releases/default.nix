@@ -333,7 +333,9 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     "10.13.6" = let applePackageMapping = namePath: applePackage''
                       self."10.13.6" # Have packages depend on each other
                                      # rather than previous versions.
-                      { }."${namePath}" or namePath;
+                      { libdispatch = "libdispatch/10.13.6.nix";
+                      }."${namePath}"
+                      or namePath;
                  in import ./macos-10.13.6.nix
                       { applePackage' = applePackageMapping; };
 }
