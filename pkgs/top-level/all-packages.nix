@@ -24719,6 +24719,8 @@ with pkgs;
     python = python3;
   };
 
+  surgescript = callPackage ../development/libraries/surgescript { };
+
   sutils = callPackage ../tools/misc/sutils { };
 
   svrcore = callPackage ../development/libraries/svrcore { };
@@ -37416,6 +37418,8 @@ with pkgs;
   openmw-tes3mp = libsForQt5.callPackage ../games/openmw/tes3mp.nix { };
 
   opensoldat = callPackage ../games/opensoldat { };
+
+  opensurge = callPackage ../games/opensurge { };
 
   portmod = callPackage ../games/portmod { };
 
