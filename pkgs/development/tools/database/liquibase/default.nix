@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     in
     ''
       mkdir -p $out
-      mv ./{lib,licenses,internal/lib/liquibase-core.jar,internal/lib/postgresql.jar,internal/lib/picocli.jar} $out/
+      mv ./{lib,licenses,internal/lib/*.jar} $out/
 
       mkdir -p $out/share/doc/${pname}-${version}
       mv LICENSE.txt \
