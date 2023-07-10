@@ -1,7 +1,8 @@
 params: with params;
 # combine =
 args@{
-  pkgFilter ? (pkg: pkg.tlType == "run" || pkg.tlType == "bin" || pkg.pname == "core")
+  pkgFilter ? (pkg: pkg.tlType == "run" || pkg.tlType == "bin" || pkg.pname == "core"
+                    || pkg.hasManpages or false)
 , extraName ? "combined"
 , extraVersion ? ""
 , ...

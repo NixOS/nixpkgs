@@ -418,6 +418,8 @@ let
         pkg = attrs // {
           sha512 = attrs.sha512.${if tlType == "tlpkg" then "run" else tlType};
           inherit pname tlType version;
+        } // lib.optionalAttrs (attrs.hasManpages or false) {
+          hasManpages = true;
         };
         in mkPkg pkg;
       run = if (attrs.hasRunfiles or false) then mkPkgV "run"
@@ -531,7 +533,7 @@ let
       '';
 
   # create a derivation that contains an unpacked upstream TL package
-  mkPkg = { pname, tlType, revision, version, sha512, extraRevision ? "", postUnpack ? "", stripPrefix ? 1, ... }@args:
+  mkPkg = { pname, tlType, revision, version, sha512, extraRevision ? "", postUnpack ? "", stripPrefix ? 1, hasManpages ? false, ... }@args:
     let
       # the basename used by upstream (without ".tar.xz" suffix)
       urlName = mkURLName args;
@@ -557,7 +559,9 @@ let
             hasHyphens = args.hasHyphens or false;
           } // lib.optionalAttrs (tlType == "tlpkg" && args ? postactionScript) {
             postactionScript = args.postactionScript;
-          } // lib.optionalAttrs (tlType == "run" && args ? formats) { inherit (args) formats; };
+          }
+          // lib.optionalAttrs (tlType == "run" && args ? formats) { inherit (args) formats; }
+          // lib.optionalAttrs (tlType == "doc" && hasManpages) { hasManpages = true; };
         } // lib.optionalAttrs (fixedHash != null) {
           outputHash = fixedHash;
           outputHashAlgo = "sha256";

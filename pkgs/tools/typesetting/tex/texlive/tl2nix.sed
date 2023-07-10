@@ -81,6 +81,20 @@ $a}
   }
 
   # detect presence of notable files
+  /^docfiles /{
+    s/^.*$//  # ignore the first line
+
+    # read all files
+    :next-doc
+      N
+      s/\n / /   # remove newline
+      t next-doc # loop if the previous lines matched
+
+    / (texmf-dist|RELOC)\/doc\/man\//i\  hasManpages = true;
+
+    D # restart cycle
+  }
+
   /^runfiles /{
     s/^.*$//  # ignore the first line
 
