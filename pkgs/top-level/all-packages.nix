@@ -27355,7 +27355,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
-  btop = callPackage ../tools/system/btop {
+  btop = darwin.apple_sdk_11_0.callPackage ../tools/system/btop {
     stdenv = gcc12Stdenv;
   };
 
