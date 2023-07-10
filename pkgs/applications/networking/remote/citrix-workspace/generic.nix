@@ -3,7 +3,7 @@
 , heimdal, krb5, libsoup, libvorbis, speex, openssl, zlib, xorg, pango, gtk2
 , gnome2, mesa, nss, nspr, gtk_engines, freetype, dconf, libpng12, libxml2
 , libjpeg, libredirect, tzdata, cacert, systemd, libcxxabi, libcxx, e2fsprogs, symlinkJoin
-, libpulseaudio, pcsclite, glib-networking, llvmPackages_12
+, libpulseaudio, pcsclite, glib-networking, llvmPackages_12, opencv4
 
 , homepage, version, prefix, hash
 
@@ -88,6 +88,7 @@ stdenv.mkDerivation rec {
     mesa
     nspr
     nss
+    opencv4
     openssl'
     pango
     speex
@@ -198,6 +199,14 @@ stdenv.mkDerivation rec {
   # Make sure that `autoPatchelfHook` is executed before
   # running `ctx_rehash`.
   dontAutoPatchelf = true;
+  preFixup = ''
+    find $out/opt/citrix-icaclient/lib -name "libopencv_imgcodecs.so.*" | while read -r fname; do
+      # lib needs libtiff.so.5, but nixpkgs provides libtiff.so.6
+      patchelf --replace-needed libtiff.so.5 libtiff.so $fname
+      # lib needs libjpeg.so.8, but nixpkgs provides libjpeg.so.9
+      patchelf --replace-needed libjpeg.so.8 libjpeg.so $fname
+    done
+  '';
   postFixup = ''
     autoPatchelf -- "$out"
     $out/opt/citrix-icaclient/util/ctx_rehash
