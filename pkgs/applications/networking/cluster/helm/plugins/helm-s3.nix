@@ -18,6 +18,11 @@ buildGoModule rec {
     sed -i '/^hooks:/,+2 d' plugin.yaml
   '';
 
+  # NOTE: make test-unit, but skip awsutil, which needs internet access
+  checkPhase = ''
+    go test $(go list ./... | grep -vE '(awsutil|e2e)')
+  '';
+
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   subPackages = [ "cmd/helm-s3" ];
