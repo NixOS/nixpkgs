@@ -410,8 +410,9 @@ let
           msrestazure
           cryptography
         ];
-        pythonNamespaces = [ "azure" ];
-        pythonImportsCheck = [ ];
+
+        pythonNamespaces = [ "azure.keyvault" ];
+        pythonImportsCheck = [ "azure.keyvault" ];
       });
 
       azure-keyvault-administration = super.azure-keyvault-administration.overridePythonAttrs(oldAttrs: rec {
