@@ -204,6 +204,19 @@ let
       expr = (builtins.tryEval (subpath.normalise "..")).success;
       expected = false;
     };
+
+    testSubpathComponentsExample1 = {
+      expr = subpath.components ".";
+      expected = [ ];
+    };
+    testSubpathComponentsExample2 = {
+      expr = subpath.components "./foo//bar/./baz/";
+      expected = [ "foo" "bar" "baz" ];
+    };
+    testSubpathComponentsExample3 = {
+      expr = (builtins.tryEval (subpath.components "/foo")).success;
+      expected = false;
+    };
   };
 in
   if cases == [] then "Unit tests successful"
