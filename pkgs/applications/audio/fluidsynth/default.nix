@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, buildPackages, pkg-config, cmake
+{ stdenv, lib, fetchFromGitHub, fetchpatch, buildPackages, pkg-config, cmake
 , alsa-lib, glib, libjack2, libsndfile, libpulseaudio
 , AppKit, AudioUnit, CoreAudio, CoreMIDI, CoreServices
 }:
@@ -14,6 +14,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-BSJu3jB7b5G2ThXBUHUNnBGl55EXe3nIzdBdgfOWDSM=";
   };
 
+  patches = [
+    # Fixes bad CMAKE_INSTALL_PREFIX + CMAKE_INSTALL_LIBDIR concatenation for Darwin install name dir
+    # Remove when PR merged & in release
+    (fetchpatch {
+      name = "0001-Fix-incorrect-way-of-turning-CMAKE_INSTALL_LIBDIR-absolute.patch";
+      url = "https://github.com/FluidSynth/fluidsynth/pull/1261/commits/03cd38dd909fc24aa39553d869afbb4024416de8.patch";
+      hash = "sha256-nV+MbFttnbNBO4zWnPLpnnEuoiESkV9BGFlUS9tQQfk=";
+    })
+  ];
+
   outputs = [ "out" "dev" "man" ];
 
   nativeBuildInputs = [ buildPackages.stdenv.cc pkg-config cmake ];
@@ -24,8 +34,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-Denable-framework=off"
-    # set CMAKE_INSTALL_NAME_DIR to correct value on darwin
-    "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
   meta = with lib; {
