@@ -117,10 +117,12 @@ stdenv.mkDerivation rec {
 
     moveToOutput sbin/nologin "$login"
     moveToOutput sbin/sulogin "$login"
+    prefix=$login _moveSbin
     ln -svf "$login/bin/"* $bin/bin/
 
     moveToOutput sbin/swapon "$swap"
     moveToOutput sbin/swapoff "$swap"
+    prefix=$swap _moveSbin
     ln -svf "$swap/bin/"* $bin/bin/
 
     installShellCompletion --bash bash-completion/*
