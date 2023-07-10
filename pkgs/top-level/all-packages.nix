@@ -10201,6 +10201,8 @@ with pkgs;
 
   mailhog = callPackage ../servers/mail/mailhog { };
 
+  mailpit = callPackage ../servers/mail/mailpit { };
+
   mailnag = callPackage ../applications/networking/mailreaders/mailnag {
     availablePlugins = {
       # More are listed here: https://github.com/pulb/mailnag/#desktop-integration
