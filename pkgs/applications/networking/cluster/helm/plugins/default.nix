@@ -12,4 +12,6 @@
 
   helm-secrets = callPackage ./helm-secrets.nix { };
 
+  helm-mapkubeapis = callPackage ./helm-mapkubeapis.nix { };
+
 }
