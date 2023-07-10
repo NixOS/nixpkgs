@@ -1925,8 +1925,6 @@ in {
     inherit (pkgs.darwin) libiconv;
   };
 
-  cryptography_vectors = callPackage ../development/python-modules/cryptography/vectors.nix { };
-
   crytic-compile = callPackage ../development/python-modules/crytic-compile { };
 
   csrmesh  = callPackage ../development/python-modules/csrmesh { };

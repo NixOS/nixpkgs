@@ -1,10 +1,11 @@
-{ lib, stdenv
+{ lib
+, stdenv
+, callPackage
 , buildPythonPackage
 , fetchPypi
 , rustPlatform
 , setuptools-rust
 , openssl
-, cryptography_vectors
 , darwin
 , packaging
 , six
@@ -19,6 +20,9 @@
 , hypothesis
 }:
 
+let
+  cryptography-vectors = callPackage ./vectors.nix { };
+in
 buildPythonPackage rec {
   pname = "cryptography";
   version = "36.0.0"; # Also update the hash in vectors.nix
@@ -47,7 +51,7 @@ buildPythonPackage rec {
   ] ++ (with rustPlatform; [ rust.cargo rust.rustc ]);
 
   buildInputs = [ openssl ]
-             ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security libiconv ];
+    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security libiconv ];
   propagatedBuildInputs = [
     packaging
     six
@@ -56,7 +60,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    cryptography_vectors
+    cryptography-vectors
     hypothesis
     iso8601
     pretend
@@ -68,11 +72,11 @@ buildPythonPackage rec {
   pytestFlags = lib.concatStringsSep " " ([
     "--disable-pytest-warnings"
   ] ++
-    lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-      # aarch64-darwin forbids W+X memory, but this tests depends on it:
-      # * https://cffi.readthedocs.io/en/latest/using.html#callbacks
-      "--ignore=tests/hazmat/backends/test_openssl_memleak.py"
-    ]
+  lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # aarch64-darwin forbids W+X memory, but this tests depends on it:
+    # * https://cffi.readthedocs.io/en/latest/using.html#callbacks
+    "--ignore=tests/hazmat/backends/test_openssl_memleak.py"
+  ]
   );
 
   checkPhase = ''
