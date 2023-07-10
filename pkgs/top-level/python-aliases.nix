@@ -6,9 +6,9 @@ let
   # Removing recurseForDerivation prevents derivations of aliased attribute
   # set to appear while listing all the packages available.
   removeRecurseForDerivations = alias: with lib;
-      if alias.recurseForDerivations or false then
-            removeAttrs alias ["recurseForDerivations"]
-                else alias;
+    if alias.recurseForDerivations or false then
+      removeAttrs alias [ "recurseForDerivations" ]
+    else alias;
 
   # Disabling distribution prevents top-level aliases for non-recursed package
   # sets from building on Hydra.
@@ -19,18 +19,20 @@ let
 
   # Make sure that we are not shadowing something from
   # python-packages.nix.
-  checkInPkgs = n: alias: if builtins.hasAttr n super
-                          then throw "Alias ${n} is still in python-packages.nix"
-                          else alias;
+  checkInPkgs = n: alias:
+    if builtins.hasAttr n super
+    then throw "Alias ${n} is still in python-packages.nix"
+    else alias;
 
   mapAliases = aliases:
-    lib.mapAttrs (n: alias: removeDistribute
-                             (removeRecurseForDerivations
-                              (checkInPkgs n alias)))
-                     aliases;
+    lib.mapAttrs
+      (n: alias: removeDistribute
+        (removeRecurseForDerivations
+          (checkInPkgs n alias)))
+      aliases;
 in
 
-  ### Deprecated aliases - for backward compatibility
+### Deprecated aliases - for backward compatibility
 
 mapAliases ({
   anyjson = throw "anyjson has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
@@ -60,6 +62,7 @@ mapAliases ({
   faulthandler = throw "faulthandler is built into ${python.executable}"; # added 2021-07-12
   flask_login = flask-login; # added 2022-10-17
   flask_sqlalchemy = flask-sqlalchemy; # added 2022-07-30
+  flask_wtf = flask-wtf; # added 2022-05-24
   garminconnect-ha = garminconnect; # added 2022-02-05
   gitdb2 = throw "gitdb2 has been deprecated, use gitdb instead."; # added 2020-03-14
   glances = throw "glances has moved to pkgs.glances"; # added 2020-20-28
