@@ -1187,6 +1187,8 @@ with pkgs;
 
   ociTools = callPackage ../build-support/oci-tools { };
 
+  ocsinventory-agent = callPackage ../tools/misc/ocsinventory-agent { };
+
   octant = callPackage ../applications/networking/cluster/octant { };
   octant-desktop = callPackage ../applications/networking/cluster/octant/desktop.nix { };
   starboard-octant-plugin = callPackage ../applications/networking/cluster/octant/plugins/starboard-octant-plugin.nix { };
