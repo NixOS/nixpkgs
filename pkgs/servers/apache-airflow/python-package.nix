@@ -5,6 +5,7 @@
 , fetchFromGitHub
 , alembic
 , argcomplete
+, asgiref
 , attrs
 , blinker
 , cached-property
@@ -48,6 +49,7 @@
 , pathspec
 , pendulum
 , psutil
+, pydantic
 , pygments
 , pyjwt
 , python-daemon
@@ -58,6 +60,7 @@
 , pythonOlder
 , pyyaml
 , rich
+, rich-argparse
 , setproctitle
 , sqlalchemy
 , sqlalchemy-jsonfield
@@ -68,8 +71,10 @@
 , typing-extensions
 , unicodecsv
 , werkzeug
-, pytestCheckHook
 , freezegun
+, pytest-asyncio
+, pytestCheckHook
+, time-machine
 , mkYarnPackage
 , writeScript
 
@@ -77,7 +82,7 @@
 , enabledProviders ? []
 }:
 let
-  version = "2.5.1";
+  version = "2.6.0";
 
   airflow-src = fetchFromGitHub rec {
     owner = "apache";
@@ -86,7 +91,7 @@ let
     # Download using the git protocol rather than using tarballs, because the
     # GitHub archive tarballs don't appear to include tests
     forceFetchGit = true;
-    hash = "sha256-BuJfE6SONTNonUvacOAIdZe0QicdBtx7k186TJZpQOs=";
+    hash = "sha256-CsLOj68+tSOI7drZq6QH+C2EB/9trg5cFAYAQp/06m8=";
   };
 
   # airflow bundles a web interface, which is built using webpack by an undocumented shell script in airflow's source tree.
@@ -141,6 +146,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     alembic
     argcomplete
+    asgiref
     attrs
     blinker
     cached-property
@@ -183,6 +189,7 @@ buildPythonPackage rec {
     pathspec
     pendulum
     psutil
+    pydantic
     pygments
     pyjwt
     python-daemon
@@ -192,6 +199,7 @@ buildPythonPackage rec {
     python3-openid
     pyyaml
     rich
+    rich-argparse
     setproctitle
     sqlalchemy
     sqlalchemy-jsonfield
@@ -212,7 +220,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
+    pytest-asyncio
     pytestCheckHook
+    time-machine
   ];
 
   # By default, source code of providers is included but unusable due to missing
@@ -223,7 +233,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "colorlog>=4.0.2, <5.0" "colorlog" \
-      --replace "flask-appbuilder==4.1.4" "flask-appbuilder>=4.1.3" \
+      --replace "flask-appbuilder==4.3.0" "flask-appbuilder>=4.3.0" \
       --replace "pathspec~=0.9.0" "pathspec"
   '' + lib.optionalString stdenv.isDarwin ''
     # Fix failing test on Hydra
@@ -281,9 +291,6 @@ buildPythonPackage rec {
     cd ./pkgs/development/python-modules/apache-airflow
     curl -O https://raw.githubusercontent.com/apache/airflow/$new_version/airflow/www/yarn.lock
     curl -O https://raw.githubusercontent.com/apache/airflow/$new_version/airflow/www/package.json
-    # Revert this commit which seems to break with our version of yarn
-    # https://github.com/apache/airflow/commit/b9e133e40c2848b0d555051a99bf8d2816fd28a7
-    patch -p3 < 0001-Revert-fix-yarn-warning-from-d3-color-27139.patch
     yarn2nix > yarn.nix
 
     # update provider dependencies
@@ -293,7 +300,7 @@ buildPythonPackage rec {
   # Note on testing the web UI:
   # You can (manually) test the web UI as follows:
   #
-  #   nix shell .#python3Packages.apache-airflow
+  #   nix shell .#apache-airflow
   #   airflow db reset  # WARNING: this will wipe any existing db state you might have!
   #   airflow db init
   #   airflow standalone
