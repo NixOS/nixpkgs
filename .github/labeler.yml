@@ -64,6 +64,9 @@
   - pkgs/build-support/kernel/**/*
   - pkgs/os-specific/linux/kernel/**/*
 
+"6.topic: lib":
+  - lib/**
+
 "6.topic: lua":
   - pkgs/development/interpreters/lua-5/**/*
   - pkgs/development/interpreters/luajit/**/*
