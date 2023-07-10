@@ -44,6 +44,16 @@ in {
         cp -v ${pkgs.mdadm}/lib/udev/rules.d/*.rules $out/
       '';
 
+      extraUtilsCommands = ''
+        # Add RAID mdadm tool.
+        copy_bin_and_libs ${pkgs.mdadm}/sbin/mdadm
+        copy_bin_and_libs ${pkgs.mdadm}/sbin/mdmon
+      '';
+
+      extraUtilsCommandsTest = ''
+        $out/bin/mdadm --version
+      '';
+
       extraFiles."/etc/mdadm.conf".source = pkgs.writeText "mdadm.conf" config.boot.swraid.mdadmConf;
 
       systemd = {
