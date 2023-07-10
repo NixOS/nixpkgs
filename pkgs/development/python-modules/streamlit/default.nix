@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , altair
 , blinker
 , buildPythonPackage
@@ -7,19 +8,21 @@
 , fetchPypi
 , gitpython
 , importlib-metadata
-, jinja2
+, numpy
+, packaging
+, pandas
 , pillow
 , protobuf3
 , pyarrow
 , pydeck
 , pympler
+, python-dateutil
+, pythonOlder
 , requests
 , rich
-, semver
-, setuptools
 , tenacity
 , toml
-, tornado
+, typing-extensions
 , tzlocal
 , validators
 , watchdog
@@ -29,6 +32,8 @@ buildPythonPackage rec {
   pname = "streamlit";
   version = "1.24.1";
   format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version format;
@@ -42,21 +47,23 @@ buildPythonPackage rec {
     click
     gitpython
     importlib-metadata
-    jinja2
+    numpy
+    packaging
+    pandas
     pillow
     protobuf3
     pyarrow
     pydeck
     pympler
+    python-dateutil
     requests
     rich
-    semver
-    setuptools
     tenacity
     toml
-    tornado
+    typing-extensions
     tzlocal
     validators
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     watchdog
   ];
 
