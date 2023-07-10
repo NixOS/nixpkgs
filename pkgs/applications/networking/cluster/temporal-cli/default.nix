@@ -75,6 +75,8 @@ symlinkJoin rec {
     tctl
   ];
 
+  passthru = { inherit tctl tctl-next; };
+
   meta = with lib; {
     description = "Temporal CLI";
     homepage = "https://temporal.io";
