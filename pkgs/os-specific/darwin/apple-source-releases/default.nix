@@ -221,13 +221,23 @@ let
   macosPackages_11_0_1 = import ./macos-11.0.1.nix { inherit applePackage'; };
   developerToolsPackages_11_3_1 = import ./developer-tools-11.3.1.nix { inherit applePackage'; };
 
-  applePackage' = namePath: version: sdkName: sha256:
+  applePackage'' =
+    extra: namePath: version: sdkName: sha256:
     let
       pname = builtins.head (lib.splitString "/" namePath);
       appleDerivation' = stdenv: appleDerivation'' stdenv pname version sdkName sha256;
       appleDerivation = appleDerivation' stdenv;
-      callPackage = self.newScope { inherit appleDerivation' appleDerivation; python3 = pkgs.buildPackages.python3Minimal; };
-    in callPackage (./. + "/${namePath}");
+      callPackage = self.newScope (
+        {
+          inherit appleDerivation' appleDerivation;
+          python3 = pkgs.buildPackages.python3Minimal;
+        }
+        // extra
+      );
+    in
+    callPackage (./. + "/${namePath}");
+
+  applePackage' = applePackage'' { };
 
   applePackage = namePath: sdkName: sha256: let
     pname = builtins.head (lib.splitString "/" namePath);
@@ -327,8 +337,12 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     "10.13.6" =
       let
         applePackageMapping =
-          namePath: version: sdkName: sha256:
-          applePackage' ({ }."${namePath}" or namePath) version sdkName sha256;
+          namePath:
+          applePackage''
+            # Have packages depend on each other
+            # rather than previous versions.
+            self."10.13.6"
+            { }."${namePath}" or namePath;
       in
       import ./macos-10.13.6.nix { applePackage' = applePackageMapping; };
 }
