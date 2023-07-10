@@ -1,5 +1,5 @@
 { stdenv
-, php
+, buildPecl
 , fetchFromGitHub
 , lib
 , libiconv
@@ -10,11 +10,10 @@
 , openssl
 , snappy
 , zlib
-, Security
-, Libsystem
+, darwin
 }:
 
-php.buildPecl rec {
+buildPecl rec {
   pname = "mongodb";
   version = "1.16.1";
 
@@ -35,8 +34,8 @@ php.buildPecl rec {
     zlib
     pcre2
   ] ++ lib.optionals stdenv.isDarwin [
-    Security
-    Libsystem
+    darwin.apple_sdk_11_0.frameworks.Security
+    darwin.apple_sdk_11_0.Libsystem
     libiconv
   ];
 
