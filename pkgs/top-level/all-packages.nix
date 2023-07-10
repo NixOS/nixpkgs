@@ -9819,6 +9819,8 @@ with pkgs;
 
   node2nix = nodePackages.node2nix;
 
+  oauth2l = callPackage ../tools/networking/oauth2l { };
+
   openipmi = callPackage ../tools/system/openipmi { };
 
   ox = callPackage ../applications/editors/ox { };
