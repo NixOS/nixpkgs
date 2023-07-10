@@ -3019,7 +3019,7 @@ in {
 
   flask-sockets = callPackage ../development/python-modules/flask-sockets { };
 
-  flask_sqlalchemy = callPackage ../development/python-modules/flask-sqlalchemy { };
+  flask-sqlalchemy = callPackage ../development/python-modules/flask-sqlalchemy { };
 
   flask-sslify = callPackage ../development/python-modules/flask-sslify { };
 

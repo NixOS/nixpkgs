@@ -2,11 +2,11 @@
 , arrow
 , buildPythonPackage
 , colour
-, email_validator
+, email-validator
 , enum34
 , fetchPypi
 , flask
-, flask_sqlalchemy
+, flask-sqlalchemy
 , flask-babelex
 , flask-mongoengine
 , geoalchemy2
@@ -45,8 +45,8 @@ buildPythonPackage rec {
   checkInputs = [
     arrow
     colour
-    email_validator
-    flask_sqlalchemy
+    email-validator
+    flask-sqlalchemy
     flask-babelex
     flask-mongoengine
     geoalchemy2
@@ -60,6 +60,11 @@ buildPythonPackage rec {
     sqlalchemy-citext
     sqlalchemy-utils
     wtf-peewee
+  ];
+
+  disabledTests = [
+    # Incompatible with werkzeug 2.1
+    "test_mockview"
   ];
 
   disabledTestPaths = [

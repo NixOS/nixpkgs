@@ -10,7 +10,7 @@
 , flask-babel
 , flask_login
 , flask-openid
-, flask_sqlalchemy
+, flask-sqlalchemy
 , flask-wtf
 , flask-jwt-extended
 , jsonschema
@@ -62,7 +62,7 @@ buildPythonPackage rec {
     flask-jwt-extended
     flask_login
     flask-openid
-    flask_sqlalchemy
+    flask-sqlalchemy
     flask-wtf
     flask-jwt-extended
     jsonschema

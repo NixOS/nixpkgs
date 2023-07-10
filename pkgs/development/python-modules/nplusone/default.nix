@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , flake8
-, flask_sqlalchemy
+, flask-sqlalchemy
 , isPy27
 , mock
 , peewee
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     flake8
-    flask_sqlalchemy
+    flask-sqlalchemy
     mock
     peewee
     pytest-django
