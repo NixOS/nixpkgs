@@ -37145,7 +37145,9 @@ with pkgs;
   };
 
   blackshades = callPackage ../games/blackshades {
-    zig = buildPackages.zig_0_9;
+    zigHook = zigHook.override {
+      zig = buildPackages.zig_0_9;
+    };
   };
 
   blobby = callPackage ../games/blobby { };
