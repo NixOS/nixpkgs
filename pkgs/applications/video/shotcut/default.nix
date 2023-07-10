@@ -17,6 +17,7 @@
 , qmake
 , qttools
 , gitUpdater
+, wrapGAppsHook
 }:
 
 assert lib.versionAtLeast mlt.version "6.24.0";
@@ -32,7 +33,7 @@ mkDerivation rec {
     sha256 = "1y46n5gmlayfl46l0vhg5g5dbbc0sg909mxb68sia0clkaas8xrh";
   };
 
-  nativeBuildInputs = [ pkg-config qmake ];
+  nativeBuildInputs = [ pkg-config qmake wrapGAppsHook ];
   buildInputs = [
     SDL2
     frei0r
@@ -72,6 +73,12 @@ mkDerivation rec {
   postInstall = ''
     mkdir -p $out/share/shotcut
     cp -r src/qml $out/share/shotcut/
+  '';
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   passthru.updateScript = gitUpdater {
