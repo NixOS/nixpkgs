@@ -27,12 +27,12 @@
 
 buildPythonPackage rec {
   pname = "streamlit";
-  version = "1.24.0";
+  version = "1.24.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version format;
-    hash = "sha256-NSX6zpTHh5JzPFbWOja0iEUVDjume7UKGa20xZdagiU=";
+    hash = "sha256-/V8LZHmOlwY2RAj7WJt3WVMUpjFdE7LXULljx66X82I=";
   };
 
   propagatedBuildInputs = [
