@@ -153,7 +153,7 @@ in (buildEnv {
   (let
     hyphens = lib.filter (p: p.hasHyphens or false && p.tlType == "run") pkgList.splitBin.wrong;
     hyphenPNames = map (p: p.pname) hyphens;
-    formats = lib.filter (p: p.hasFormats or false && p.tlType == "run") pkgList.splitBin.wrong;
+    formats = lib.filter (p: p ? formats && p.tlType == "run") pkgList.splitBin.wrong;
     formatPNames = map (p: p.pname) formats;
     # sed expression that prints the lines in /start/,/end/ except for /end/
     section = start: end: "/${start}/,/${end}/{ /${start}/p; /${end}/!p; };\n";

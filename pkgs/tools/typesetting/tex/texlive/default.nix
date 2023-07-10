@@ -96,13 +96,12 @@ let
         # tarball of a collection/scheme itself only contains a tlobj file
         [( if (attrs.hasRunfiles or false) then mkPkgV "run"
             # the fake derivations are used for filtering of hyphenation patterns and formats
-          else {
+          else ({
             inherit pname version;
             tlType = "run";
-            hasFormats = attrs.hasFormats or false;
             hasHyphens = attrs.hasHyphens or false;
             tlDeps = map (n: tl.${n}) (attrs.deps or []);
-          }
+          } // lib.optionalAttrs (attrs ? formats) { inherit (attrs) formats; })
         )]
         ++ lib.optional (attrs.sha512 ? doc) (mkPkgV "doc")
         ++ lib.optional (attrs.sha512 ? source) (mkPkgV "source")
@@ -188,11 +187,10 @@ let
           } // lib.optionalAttrs (tlType == "run" && args ? deps) {
             tlDeps = map (n: tl.${n}) args.deps;
           } // lib.optionalAttrs (tlType == "run") {
-            hasFormats = args.hasFormats or false;
             hasHyphens = args.hasHyphens or false;
           } // lib.optionalAttrs (tlType == "tlpkg" && args ? postactionScript) {
             postactionScript = args.postactionScript;
-          };
+          } // lib.optionalAttrs (tlType == "run" && args ? formats) { inherit (args) formats; };
         } // lib.optionalAttrs (fixedHash != null) {
           outputHash = fixedHash;
           outputHashAlgo = "sha256";
