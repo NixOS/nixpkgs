@@ -82,7 +82,7 @@ buildPythonPackage rec {
     homepage = "https://streamlit.io/";
     changelog = "https://github.com/streamlit/streamlit/releases/tag/${version}";
     description = "The fastest way to build custom ML tools";
-    maintainers = with maintainers; [ yrashk ];
+    maintainers = with maintainers; [ natsukium yrashk ];
     license = licenses.asl20;
   };
 }
