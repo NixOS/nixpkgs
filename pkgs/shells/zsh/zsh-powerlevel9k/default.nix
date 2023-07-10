@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     description = "A beautiful theme for zsh";
     longDescription = ''
       To make use of this derivation, use
-      `programs.zsh.promptInit = "source ''${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";`
+      `programs.zsh.promptInit = "source ''${pkgs.zsh-powerlevel9k}/share/zsh-powerlevel9k/powerlevel9k.zsh-theme";`
     '';
     homepage = "https://github.com/bhilburn/powerlevel9k";
     license = lib.licenses.mit;

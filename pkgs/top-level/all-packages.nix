@@ -4290,6 +4290,8 @@ with pkgs;
 
   traefik-certs-dumper = callPackage ../tools/misc/traefik-certs-dumper { };
 
+  caffeine = callPackage ../tools/misc/caffeine { };
+
   calamares = libsForQt5.callPackage ../tools/misc/calamares {
     python = python3;
     boost = boost.override { enablePython = true; python = python3; };
@@ -4521,6 +4523,8 @@ with pkgs;
   wdomirror = callPackage ../tools/wayland/wdomirror { };
 
   wdt = callPackage ../applications/networking/sync/wdt { };
+
+  wlay = callPackage ../tools/wayland/wlay { };
 
   wl-clip-persist = callPackage ../tools/wayland/wl-clip-persist { };
 
@@ -4826,6 +4830,8 @@ with pkgs;
   dotenv-linter = callPackage ../development/tools/analysis/dotenv-linter {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  dotool = callPackage ../tools/dotool { };
 
   inherit (ocamlPackages) dot-merlin-reader;
 
@@ -5538,6 +5544,8 @@ with pkgs;
   lifeograph = callPackage ../applications/editors/lifeograph { };
 
   limitcpu = callPackage ../tools/misc/limitcpu { };
+
+  lineselect = callPackage ../tools/misc/lineselect { };
 
   link-grammar = callPackage ../tools/text/link-grammar { };
 
@@ -7975,6 +7983,8 @@ with pkgs;
   foundationdb = foundationdb71;
 
   fuse-7z-ng = callPackage ../tools/filesystems/fuse-7z-ng { };
+
+  fuse-archive = callPackage ../tools/filesystems/fuse-archive { };
 
   fuse-overlayfs = callPackage ../tools/filesystems/fuse-overlayfs { };
 
@@ -11702,6 +11712,8 @@ with pkgs;
 
   pretender = callPackage ../tools/security/pretender { };
 
+  prettierd = callPackage ../development/tools/prettierd { };
+
   pretty-simple = callPackage ../development/tools/pretty-simple { };
 
   prettyping = callPackage ../tools/networking/prettyping { };
@@ -13334,6 +13346,8 @@ with pkgs;
   tldr = callPackage ../tools/misc/tldr { };
 
   tldr-hs = haskellPackages.tldr;
+
+  tlsclient = callPackage ../tools/admin/tlsclient { };
 
   tlsx = callPackage ../tools/security/tlsx { };
 
@@ -16654,7 +16668,7 @@ with pkgs;
   cargo2junit = callPackage ../development/tools/rust/cargo2junit { };
 
   cargo-espflash = callPackage ../development/tools/rust/cargo-espflash {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   cargo-web = callPackage ../development/tools/rust/cargo-web {
@@ -19855,6 +19869,8 @@ with pkgs;
   tweak = callPackage ../applications/editors/tweak { };
 
   typical = callPackage ../development/tools/misc/typical { };
+
+  tyson = callPackage ../development/tools/misc/tyson { };
 
   uddup = callPackage ../tools/security/uddup { };
 
@@ -27942,6 +27958,8 @@ with pkgs;
   # pam_bioapi ( see http://www.thinkwiki.org/wiki/How_to_enable_the_fingerprint_reader )
 
   pam_ccreds = callPackage ../os-specific/linux/pam_ccreds { };
+
+  pam_dp9ik = callPackage ../os-specific/linux/pam_dp9ik { };
 
   pam_gnupg = callPackage ../os-specific/linux/pam_gnupg { };
 
@@ -40339,7 +40357,7 @@ with pkgs;
 
   soundmodem = callPackage ../applications/radio/soundmodem { };
 
-  soundOfSorting = callPackage ../misc/sound-of-sorting { };
+  sound-of-sorting = callPackage ../misc/sound-of-sorting { };
 
   sourceAndTags = callPackage ../misc/source-and-tags {
     hasktags = haskellPackages.hasktags;

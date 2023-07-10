@@ -3,6 +3,7 @@
 , fetchPypi
 , writeText
 , buildPythonPackage
+, isPyPy
 , pythonOlder
 
 # https://github.com/matplotlib/matplotlib/blob/main/doc/devel/dependencies.rst
@@ -39,7 +40,8 @@
 , pygobject3
 
 # Tk
-, enableTk ? !stdenv.isDarwin # darwin has its own "MacOSX" backend
+# Darwin has its own "MacOSX" backend, PyPy has tkagg backend and does not support tkinter
+, enableTk ? (!stdenv.isDarwin && !isPyPy)
 , tcl
 , tk
 , tkinter

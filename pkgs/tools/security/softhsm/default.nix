@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-crypto-backend=botan"
-    "--with-botan=${botan2}"
+    "--with-botan=${lib.getDev botan2}"
     "--sysconfdir=$out/etc"
     "--localstatedir=$out/var"
     ];
