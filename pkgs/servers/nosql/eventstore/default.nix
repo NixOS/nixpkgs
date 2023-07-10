@@ -8,6 +8,9 @@
 , stdenv
 , mono
 }:
+let
+  mainProgram = "EventStore.ClusterNode";
+in
 
 buildDotnetModule rec {
   pname = "EventStore";
@@ -31,7 +34,7 @@ buildDotnetModule rec {
 
   runtimeDeps = [ mono ];
 
-  executables = [ "EventStore.ClusterNode" ];
+  executables = [ mainProgram ];
 
   # This test has a problem running on macOS
   disabledTests = lib.optionals stdenv.isDarwin [
@@ -76,5 +79,6 @@ buildDotnetModule rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ puffnfresh mdarocha ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    inherit mainProgram;
   };
 }
