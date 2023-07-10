@@ -1,6 +1,6 @@
 { lib }:
 
-rec {
+{
 
   ## Simple (higher order) functions
 
@@ -161,7 +161,7 @@ rec {
   ## nixpkgs version strings
 
   /* Returns the current full nixpkgs version number. */
-  version = release + versionSuffix;
+  version = lib.trivial.release + lib.trivial.versionSuffix;
 
   /* Returns the current nixpkgs release number as string. */
   release = lib.strings.fileContents ../.version;
@@ -200,7 +200,7 @@ rec {
   /* Returns the current nixpkgs version suffix as string. */
   versionSuffix =
     let suffixFile = ../.version-suffix;
-    in if pathExists suffixFile
+    in if lib.pathExists suffixFile
     then lib.strings.fileContents suffixFile
     else "pre-git";
 
@@ -220,7 +220,7 @@ rec {
        else if lib.pathExists revisionFile then lib.fileContents revisionFile
        else default;
 
-  nixpkgsVersion = builtins.trace "`lib.nixpkgsVersion` is deprecated, use `lib.version` instead!" version;
+  nixpkgsVersion = builtins.trace "`lib.nixpkgsVersion` is deprecated, use `lib.version` instead!" lib.version;
 
   /* Determine whether the function is being called from inside a Nix
      shell.
@@ -354,14 +354,14 @@ rec {
 
     Type: bool -> string -> a -> a
   */
-  warnIf = cond: msg: if cond then warn msg else x: x;
+  warnIf = cond: msg: if cond then lib.warn msg else x: x;
 
   /*
     Like warnIf, but negated (warn if the first argument is `false`).
 
     Type: bool -> string -> a -> a
   */
-  warnIfNot = cond: msg: if cond then x: x else warn msg;
+  warnIfNot = cond: msg: if cond then x: x else lib.warn msg;
 
   /*
     Like the `assert b; e` expression, but with a custom error message and
@@ -411,7 +411,7 @@ rec {
 
   info = msg: builtins.trace "INFO: ${msg}";
 
-  showWarnings = warnings: res: lib.foldr (w: x: warn w x) res warnings;
+  showWarnings = warnings: res: lib.foldr lib.warn res warnings;
 
   ## Function annotations
 
@@ -446,7 +446,7 @@ rec {
      annotated with function args.
   */
   isFunction = f: builtins.isFunction f ||
-    (f ? __functor && isFunction (f.__functor f));
+    (f ? __functor && lib.isFunction (f.__functor f));
 
   /*
     Turns any non-callable values into constant functions.
@@ -463,7 +463,7 @@ rec {
   toFunction =
     # Any value
     v:
-    if isFunction v
+    if lib.isFunction v
     then v
     else k: v;
 
@@ -491,7 +491,7 @@ rec {
             "15" = "F";
           }.${toString d};
     in
-      lib.concatMapStrings toHexDigit (toBaseDigits 16 i);
+      lib.concatMapStrings toHexDigit (lib.toBaseDigits 16 i);
 
   /* `toBaseDigits base i` converts the positive integer i to a list of its
      digits in the given base. For example:
@@ -514,8 +514,8 @@ rec {
           in
             [r] ++ go q;
     in
-      assert (isInt base);
-      assert (isInt i);
+      assert (lib.isInt base);
+      assert (lib.isInt i);
       assert (base >= 2);
       assert (i >= 0);
       lib.reverseList (go i);
