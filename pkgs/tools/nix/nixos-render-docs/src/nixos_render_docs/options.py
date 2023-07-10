@@ -59,9 +59,11 @@ class BaseConverter(Converter[md.TR], Generic[md.TR]):
                 if self._revision == 'local':
                     href = f"https://github.com/NixOS/nixpkgs/blob/master/{loc}"
                 else:
-                    href = f"https://github.com/NixOS/nixpkgs/blob/{self._revision}/{loc}"
+                    revision = self._revision.removesuffix("-dirty")
+                    href = f"https://github.com/NixOS/nixpkgs/blob/{revision}/{loc}"
             else:
                 href = f"file://{loc}"
+
             # Print the filename and make it user-friendly by replacing the
             # /nix/store/<hash> prefix by the default location of nixos
             # sources.
@@ -71,6 +73,10 @@ class BaseConverter(Converter[md.TR], Generic[md.TR]):
                 name = f"<nixops/{loc[loc.find('/nix/') + 5:]}>"
             else:
                 name = loc
+
+            if self._revision.endswith("-dirty"):
+                name += " (modified)"
+
             return (href, name)
         else:
             return (loc['url'] if 'url' in loc else None, loc['name'])
