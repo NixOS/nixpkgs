@@ -5,10 +5,10 @@
 , apispec
 , colorama
 , click
-, email_validator
+, email-validator
 , flask
 , flask-babel
-, flask_login
+, flask-login
 , flask-openid
 , flask-sqlalchemy
 , flask-wtf
@@ -17,8 +17,8 @@
 , marshmallow
 , marshmallow-enum
 , marshmallow-sqlalchemy
-, pythonOlder
 , python-dateutil
+, pythonOlder
 , prison
 , pyjwt
 , pyyaml
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Flask-AppBuilder";
     inherit version;
-    sha256 = "sha256-8NaTr0RcnsVik/AB4g8QL+FkcRlgkkASFe8fXIvFt/A=";
+    hash = "sha256-8NaTr0RcnsVik/AB4g8QL+FkcRlgkkASFe8fXIvFt/A=";
   };
 
   patches = [
@@ -43,7 +43,7 @@ buildPythonPackage rec {
       # https://github.com/dpgaspar/Flask-AppBuilder/pull/1734
       name = "flask-appbuilder-wtf3.patch";
       url = "https://github.com/dpgaspar/Flask-AppBuilder/commit/bccb3d719cd3ceb872fe74a9ab304d74664fbf43.patch";
-      sha256 = "sha256-24mlS3HIs77wKOlwdHah5oks31OOmCBHmcafZT2ITOc=";
+      hash = "sha256-24mlS3HIs77wKOlwdHah5oks31OOmCBHmcafZT2ITOc=";
       excludes = [
         "requirements.txt"
         "setup.py"
@@ -56,11 +56,10 @@ buildPythonPackage rec {
     apispec
     colorama
     click
-    email_validator
+    email-validator
     flask
     flask-babel
-    flask-jwt-extended
-    flask_login
+    flask-login
     flask-openid
     flask-sqlalchemy
     flask-wtf
@@ -88,10 +87,12 @@ buildPythonPackage rec {
   # Majority of tests require network access or mongo
   doCheck = false;
 
-  pythonImportsCheck = [ "flask_appbuilder" ];
+  pythonImportsCheck = [
+    "flask_appbuilder"
+  ];
 
   meta = with lib; {
-    description = "Simple and rapid application development framework, built on top of Flask";
+    description = "Application development framework, built on top of Flask";
     homepage = "https://github.com/dpgaspar/flask-appbuilder/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ costrouc ];
