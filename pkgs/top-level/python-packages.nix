@@ -3513,6 +3513,8 @@ self: super: with self; {
 
   factory_boy = callPackage ../development/python-modules/factory_boy { };
 
+  fairscale = callPackage ../development/python-modules/fairscale { };
+
   faiss = toPythonModule (pkgs.faiss.override {
     pythonSupport = true;
     pythonPackages = self;
