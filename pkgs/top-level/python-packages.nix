@@ -7546,6 +7546,8 @@ self: super: with self; {
 
   pfzy = callPackage ../development/python-modules/pfzy { };
 
+  ping3 = callPackage ../development/python-modules/ping3 { };
+
   pg8000 = callPackage ../development/python-modules/pg8000 { };
 
   pgcli = callPackage ../development/python-modules/pgcli { };
