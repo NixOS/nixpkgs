@@ -20214,6 +20214,21 @@ with self; {
     };
   };
 
+  ProcPIDFile= buildPerlPackage {
+      pname = "Proc-PID-File";
+      version = "1.29";
+      src = fetchurl {
+        url = "mirror://cpan/authors/id/D/DM/DMITRI/Proc-PID-File-1.29.tar.gz";
+        hash = "sha256-O87aSd8YLT2BaLcMKlGyBW8v1FlQptBCipmS/TVc1KQ=";
+      };
+      # propagatedBuildInputs = [ ProcProcessTable ];
+      meta = {
+        description = "Manage process id files";
+        homepage = "https://github.com/dtikhonov/Proc-PID-File";
+        license = with lib.licenses; [ artistic1 gpl1Plus ];
+      };
+    };
+
   ProcFind = buildPerlPackage {
     pname = "Proc-Find";
     version = "0.051";
