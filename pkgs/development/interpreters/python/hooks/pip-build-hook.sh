@@ -7,6 +7,13 @@ pipBuildPhase() {
 
     mkdir -p dist
     echo "Creating a wheel..."
+    # HACK: there's no standard option to build in parallel
+    # but the most common advice to build a given python project
+    # in parallel is to set MAKEFLAGS
+    # so set MAKEFLAGS so any project internally using make will do so
+    # stdenv's hook only sets MAKEFLAGS while calling make in its own phases
+    # so this is necessary to ensure it's set while running `pip wheel`
+    MAKEFLAGS="$MAKEFLAGS${enableParallelBuilding:+ -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES}" \
     @pythonInterpreter@ -m pip wheel --verbose --no-index --no-deps --no-clean --no-build-isolation --wheel-dir dist .
     echo "Finished creating a wheel..."
 
