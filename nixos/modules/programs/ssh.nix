@@ -274,6 +274,15 @@ in
           for data integrity protection.
         '';
       };
+      identityAgent = mkOption {
+        type = types.nullOr (types.listOf types.str);
+        default = null;
+        example = [ " ~/.1password/agent.sock " ];
+        description = lib.mdDoc ''
+          Specifies the IdentityAgent that SSH is supposed to use, to allow you to use a different IdentityProvider,
+          such as 1Password
+        '';
+      };
     };
 
   };
@@ -316,6 +325,7 @@ in
         ${optionalString (cfg.kexAlgorithms != null) "KexAlgorithms ${concatStringsSep "," cfg.kexAlgorithms}"}
         ${optionalString (cfg.ciphers != null) "Ciphers ${concatStringsSep "," cfg.ciphers}"}
         ${optionalString (cfg.macs != null) "MACs ${concatStringsSep "," cfg.macs}"}
+        ${optionalString (cfg.identityAgent != null) "IdentityAgent ${concatStringsSep "," cfg.identityAgent}"}
       '';
 
     environment.etc."ssh/ssh_known_hosts".text = knownHostsText;
