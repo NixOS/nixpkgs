@@ -64,6 +64,9 @@
   - pkgs/build-support/kernel/**/*
   - pkgs/os-specific/linux/kernel/**/*
 
+"6.topic: lib":
+  - lib/**
+
 "6.topic: lua":
   - pkgs/development/interpreters/lua-5/**/*
   - pkgs/development/interpreters/luajit/**/*
@@ -82,6 +85,13 @@
   - nixos/modules/services/x11/desktop-managers/mate.nix
   - nixos/tests/mate.nix
   - pkgs/desktops/mate/**/*
+
+"6.topic: module system":
+  - lib/modules.nix
+  - lib/types.nix
+  - lib/options.nix
+  - lib/tests/modules.sh
+  - lib/tests/modules/**
 
 "6.topic: nixos":
   - nixos/**/*
