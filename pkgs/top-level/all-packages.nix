@@ -274,6 +274,8 @@ with pkgs;
 
   _0x =  callPackage ../tools/misc/0x { };
 
+  ASCIIpOrtal = callPackage ../games/ASCIIpOrtal { };
+
   atuin = callPackage ../tools/misc/atuin {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
@@ -23946,6 +23948,8 @@ with pkgs;
   pcre2 = callPackage ../development/libraries/pcre2 { };
 
   pdal = callPackage ../development/libraries/pdal { } ;
+
+  PDCurses = callPackage ../development/libraries/PDCurses { };
 
   pdf2xml = callPackage ../development/libraries/pdf2xml {} ;
 
