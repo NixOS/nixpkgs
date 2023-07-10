@@ -247,7 +247,10 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     memcached = callPackage ../development/php-packages/memcached { };
 
-    mongodb = callPackage ../development/php-packages/mongodb { };
+    mongodb = pkgs.darwin.apple_sdk_11_0.callPackage ../development/php-packages/mongodb {
+      inherit (pkgs.darwin.apple_sdk_11_0.frameworks) Security;
+      inherit (pkgs.darwin.apple_sdk_11_0) Libsystem;
+    };
 
     msgpack = callPackage ../development/php-packages/msgpack { };
 
