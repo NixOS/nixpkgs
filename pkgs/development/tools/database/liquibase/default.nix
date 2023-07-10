@@ -48,7 +48,10 @@ stdenv.mkDerivation rec {
     in
     ''
       mkdir -p $out
-      mv ./{lib,licenses,internal/lib/*.jar} $out/
+      mv ./{lib,licenses} $out/
+
+      mkdir -p $out/internal/lib
+      mv ./internal/lib/*.jar $out/internal/lib/
 
       mkdir -p $out/share/doc/${pname}-${version}
       mv LICENSE.txt \
@@ -63,6 +66,7 @@ stdenv.mkDerivation rec {
       #!/usr/bin/env bash
       # taken from the executable script in the source
       CP=""
+      ${addJars "$out/internal/lib"}
       ${addJars "$out/lib"}
       ${addJars "$out"}
       ${lib.concatStringsSep "\n" (map (p: addJars "${p}/share/java") extraJars)}
