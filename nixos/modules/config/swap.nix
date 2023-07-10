@@ -250,8 +250,11 @@ in
       let
         createSwapDevice = sw:
           let realDevice' = escapeSystemdPath sw.realDevice;
+              device' = escapeSystemdPath sw.device;
           in nameValuePair "mkswap-${sw.deviceName}"
           { description = "Initialisation of swap device ${sw.device}";
+            after = [ "${device'}.device" ];
+            requires = [ "${device'}.device" ];
             wantedBy = [ "${realDevice'}.swap" ];
             before = [ "${realDevice'}.swap" ];
             path = [ pkgs.util-linux pkgs.e2fsprogs ]
@@ -284,7 +287,6 @@ in
                 ''}
               '';
 
-            unitConfig.RequiresMountsFor = [ "${dirOf sw.device}" ];
             unitConfig.DefaultDependencies = false; # needed to prevent a cycle
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = sw.randomEncryption.enable;
