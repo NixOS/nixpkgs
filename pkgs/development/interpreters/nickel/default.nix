@@ -1,21 +1,28 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, python3
 , nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nickel";
-  version = "1.0.0";
+  version = "1.1.1";
 
   src  = fetchFromGitHub {
     owner = "tweag";
     repo = pname;
-    rev = "refs/tags/${version}"; # because pure ${version} doesn't work
-    hash = "sha256-8peoO3B5LHKiTUyDLpe0A2xg82LPI7l2vuGdyNhV478=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-bG0vNfKQpFQHDBfokvTpfXgVmKg6u/BcIz139pLwwsE=";
   };
 
-  cargoHash = "sha256-lrRCc5kUekUHrJTznR8xRiLVgQLJ/PsMP967PS41UJU=";
+  cargoHash = "sha256-qPKAozFXv94wgY99ugjsSuaN92SXZGgZwI2+7UlerHQ=";
+
+  cargoBuildFlags = [ "-p nickel-lang-cli" ];
+
+  nativeBuildInputs = [
+    python3
+  ];
 
   passthru.updateScript = nix-update-script { };
 
