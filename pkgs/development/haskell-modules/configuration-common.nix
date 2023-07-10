@@ -258,6 +258,10 @@ self: super: {
   # 2023-06-10: Too strict version bound on https://github.com/haskell/ThreadScope/issues/118
   threadscope = doJailbreak super.threadscope;
 
+  # hexstring is not compatible with newer versions of base16-bytestring
+  # See https://github.com/solatis/haskell-hexstring/issues/3
+  hexstring = appendPatch ./patches/hexstring-fix-base16-bytestring-compatibility.patch super.hexstring;
+
   # patat main branch has an unreleased commit that fixes the build by
   # relaxing restrictive upper boundaries. This can be removed once there's a
   # new release following version 0.8.8.0.

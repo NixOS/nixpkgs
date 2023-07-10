@@ -1,0 +1,31 @@
+diff --git a/src/Data/HexString.hs b/src/Data/HexString.hs
+index 7ac9a4c..2888292 100644
+--- a/src/Data/HexString.hs
++++ b/src/Data/HexString.hs
+@@ -12,7 +12,7 @@ import           Data.Aeson
+ import           Data.Word              (Word8)
+ 
+ import qualified Data.ByteString        as BS
+-import qualified Data.ByteString.Base16 as BS16 (decode, encode)
++import qualified Data.ByteString.Base16 as BS16 (decodeLenient, encode)
+ import qualified Data.ByteString.Lazy   as BSL
+ 
+ import qualified Data.Text              as T
+@@ -52,7 +52,7 @@ fromBinary = hexString . BS16.encode . BSL.toStrict . B.encode
+ 
+ -- | Converts a 'HexString' to a 'B.Binary' value
+ toBinary :: B.Binary a => HexString -> a
+-toBinary (HexString bs) = B.decode . BSL.fromStrict . fst . BS16.decode $ bs
++toBinary (HexString bs) = B.decode . BSL.fromStrict . BS16.decodeLenient $ bs
+ 
+ -- | Reads a 'BS.ByteString' as raw bytes and converts to hex representation. We
+ --   cannot use the instance Binary of 'BS.ByteString' because it provides
+@@ -62,7 +62,7 @@ fromBytes = hexString . BS16.encode
+ 
+ -- | Access to the raw bytes in a 'BS.ByteString' format.
+ toBytes :: HexString -> BS.ByteString
+-toBytes (HexString bs) = (fst . BS16.decode) bs
++toBytes (HexString bs) = BS16.decodeLenient bs
+ 
+ -- | Access to a 'T.Text' representation of the 'HexString'
+ toText :: HexString -> T.Text
