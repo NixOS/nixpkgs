@@ -568,7 +568,6 @@ broken-packages:
   - cabal-meta
   - cabal-mon
   - cabal-nirvana
-  - cabal-plan-bounds
   - cabal-progdeps
   - cabalQuery
   - CabalSearch

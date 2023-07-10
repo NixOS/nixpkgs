@@ -2080,6 +2080,11 @@ self: super: {
     Cabal-syntax = self.Cabal-syntax_3_10_1_0;
   });
 
+  # 2023-07-10: cabal-plan-bounds needs Cabal-syntax 3.10
+  cabal-plan-bounds = super.cabal-plan-bounds.overrideScope (self: super: {
+    Cabal-syntax = self.Cabal-syntax_3_10_1_0;
+  });
+
   large-hashable = lib.pipe (super.large-hashable.override {
     # https://github.com/factisresearch/large-hashable/commit/5ec9d2c7233fc4445303564047c992b693e1155c
     utf8-light = null;
