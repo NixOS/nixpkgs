@@ -222,7 +222,10 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     couchbase = callPackage ../development/php-packages/couchbase { };
 
-    datadog_trace = callPackage ../development/php-packages/datadog_trace { };
+    datadog_trace = pkgs.darwin.apple_sdk_11_0.callPackage ../development/php-packages/datadog_trace {
+      inherit (pkgs.darwin.apple_sdk_11_0.frameworks) Security CoreFoundation;
+      inherit (pkgs.darwin.apple_sdk_11_0) Libsystem;
+    };
 
     ds = callPackage ../development/php-packages/ds { };
 
