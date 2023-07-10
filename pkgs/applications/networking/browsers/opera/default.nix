@@ -1,142 +1,20 @@
-{ alsa-lib
-, atk
-, cairo
-, cups
-, curl
-, dbus
-, dpkg
-, expat
-, fetchurl
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, gtk3
-, gtk4
-, lib
-, libX11
-, libxcb
-, libXScrnSaver
-, libXcomposite
-, libXcursor
-, libXdamage
-, libXext
-, libXfixes
-, libXi
-, libXrandr
-, libXrender
-, libXtst
-, libdrm
-, libnotify
-, libpulseaudio
-, libuuid
-, libxshmfence
-, mesa
-, nspr
-, nss
-, pango
-, stdenv
-, systemd
-, at-spi2-atk
-, at-spi2-core
-, autoPatchelfHook
-, wrapGAppsHook
-, qt5
-, proprietaryCodecs ? false
-, vivaldi-ffmpeg-codecs
-}:
-
-let
-  mirror = "https://get.geo.opera.com/pub/opera/desktop";
-in
-stdenv.mkDerivation rec {
-  pname = "opera";
-  version = "100.0.4815.21";
-
-  src = fetchurl {
-    url = "${mirror}/${version}/linux/${pname}-stable_${version}_amd64.deb";
-    hash = "sha256-bDCj4ZtULO1JkuAsqy2ppcWOshgGRG03qlb3KV3CtSE=";
+{
+  stable = import ./browser.nix {
+    channel = "stable";
+    channelRoot = "opera/desktop";
+    version = "100.0.4815.30";
+    sha256 = "sha256-7JWN6SAqkrQeYAFU9IAgyr4kjS7FkTpX+qnn6wnfc7Q=";
   };
-
-  unpackPhase = "dpkg-deb -x $src .";
-
-  nativeBuildInputs = [
-    dpkg
-    autoPatchelfHook
-    wrapGAppsHook
-    qt5.wrapQtAppsHook
-  ];
-
-  buildInputs = [
-    alsa-lib
-    at-spi2-atk
-    at-spi2-core
-    atk
-    cairo
-    cups
-    curl
-    dbus
-    expat
-    fontconfig.lib
-    freetype
-    gdk-pixbuf
-    glib
-    gtk3
-    libX11
-    libXScrnSaver
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXtst
-    libdrm
-    libnotify
-    libuuid
-    libxcb
-    libxshmfence
-    mesa
-    nspr
-    nss
-    pango
-    stdenv.cc.cc.lib
-  ];
-
-  runtimeDependencies = [
-    # Works fine without this except there is no sound.
-    libpulseaudio.out
-
-    # This is a little tricky. Without it the app starts then crashes. Then it
-    # brings up the crash report, which also crashes. `strace -f` hints at a
-    # missing libudev.so.0.
-    (lib.getLib systemd)
-
-    # Error at startup:
-    # "Illegal instruction (core dumped)"
-    gtk3
-    gtk4
-  ] ++ lib.optionals proprietaryCodecs [
-    vivaldi-ffmpeg-codecs
-  ];
-
-  dontWrapQtApps = true;
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -r usr $out
-    cp -r usr/share $out/share
-    ln -s $out/usr/bin/opera $out/bin/opera
-  '';
-
-  meta = with lib; {
-    homepage = "https://www.opera.com";
-    description = "Faster, safer and smarter web browser";
-    platforms = [ "x86_64-linux" ];
-    license = licenses.unfree;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ kindrowboat ];
+  beta = import ./browser.nix {
+    channel = "beta";
+    channelRoot = "opera-beta";
+    version = "101.0.4843.5";
+    sha256 = "sha256-/ZzhfPtMB+cAPiQ8PnIJDlJU8kkAZ2Qi2LXHQj1arog=";
+  };
+  developer = import ./browser.nix {
+    channel = "developer";
+    channelRoot = "opera-developer";
+    version = "101.0.4843.0";
+    sha256 = "sha256-F31ybVEOQ6tJtsnZfQ9zi+Lphdw67s7SF1MRjwPBWdI=";
   };
 }
