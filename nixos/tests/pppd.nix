@@ -50,6 +50,7 @@ import ./make-test-python.nix (
               noauth
               debug
             '';
+            waitUntilReady = true;
           };
         };
         environment.etc."ppp/chap-secrets" = chap-secrets;
