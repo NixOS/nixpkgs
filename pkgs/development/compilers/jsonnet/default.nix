@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   pname = "jsonnet";
   version = "0.20.0";
-  outputs = ["out" "doc"];
+  outputs = [ "out" "doc" ];
 
   src = fetchFromGitHub {
     rev = "v${version}";
@@ -15,7 +15,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ jekyll cmake ];
   buildInputs = [ gtest ];
 
-  cmakeFlags = ["-DBUILD_STATIC_LIBS=ON" "-DUSE_SYSTEM_GTEST=ON" ];
+  cmakeFlags = [
+    "-DUSE_SYSTEM_GTEST=ON"
+    "-DBUILD_STATIC_LIBS=${if stdenv.hostPlatform.isStatic then "ON" else "OFF"}"
+    "-DBUILD_SHARED_BINARIES=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
+  ];
+
+  # https://github.com/google/jsonnet/issues/778
+  patches = [
+    ./fix-cpp-unresolved-symbols.patch
+  ];
 
   enableParallelBuilding = true;
 
