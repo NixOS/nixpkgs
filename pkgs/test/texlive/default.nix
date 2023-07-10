@@ -1,4 +1,4 @@
-{ lib, stdenv, runCommand, fetchurl, file, texlive, writeShellScript, writeText }:
+{ lib, stdenv, buildEnv, runCommand, fetchurl, file, texlive, writeShellScript, writeText }:
 
 {
 
@@ -270,6 +270,35 @@
         # requires Cinderella, not open source and not distributed via Nixpkgs
         "ketcindy"
       ];
+      # binaries that need a combined scheme and cannot work standalone
+      needScheme = [
+        # pfarrei: require working kpse to find lua module
+        "a5toa4"
+
+        # bibexport: requires kpsewhich
+        "bibexport"
+
+        # crossrefware: require bibtexperllibs under TEXMFROOT
+        "bbl2bib" "bibdoiadd" "bibmradd" "biburl2doi" "bibzbladd" "checkcites" "ltx2crossrefxml"
+
+        # require other texlive binaries in PATH
+        "allcm" "allec" "chkweb" "fontinst" "ht*" "installfont-tl" "kanji-config-updmap-sys" "kanji-config-updmap-user"
+        "kpse*" "latexfileversion" "mkocp" "mkofm" "mtxrunjit" "pdftex-quiet" "pslatex" "rumakeindex" "texconfig"
+        "texconfig-sys" "texexec" "texlinks" "texmfstart" "typeoutfileinfo" "wordcount" "xdvi" "xhlatex"
+
+        # misc luatex binaries searching for luatex in PATH
+        "citeproc-lua" "context" "contextjit" "ctanbib" "digestif" "epspdf" "l3build" "luafindfont" "luaotfload-tool"
+        "luatools" "make4ht" "pmxchords" "tex4ebook" "texdoc" "texlogsieve" "xindex"
+
+        # requires full TEXMFROOT (e.g. for config)
+        "mktexfmt" "mktexmf" "mktexpk" "mktextfm" "psnup" "psresize" "pstops" "tlmgr" "updmap" "webquiz"
+
+        # texlive-scripts: requires texlive.infra's TeXLive::TLUtils under TEXMFROOT
+        "fmtutil" "fmtutil-sys" "fmtutil-user"
+
+        # texlive-scripts: not used in nixpkgs, need updmap in PATH
+        "updmap-sys" "updmap-user"
+      ];
 
       # simple test files
       contextTestTex = writeText "context-test.tex" ''
@@ -287,13 +316,21 @@
         Hello.
         \bye
       '';
+
+      # link all binaries in single derivation
+      allPackages = with lib; concatLists (catAttrs "pkgs" (filter isAttrs (attrValues texlive)));
+      binPackages = lib.filter (p: p.tlType == "bin") allPackages;
+      binaries = buildEnv { name = "texlive-binaries"; paths = binPackages; };
     in
     runCommand "texlive-test-binaries"
       {
-        inherit contextTestTex latexTestTex texTestTex;
+        inherit binaries contextTestTex latexTestTex texTestTex;
         texliveScheme = texlive.combined.scheme-full;
       }
       ''
+        loadables="$(command -v bash)"
+        loadables="''${loadables%/bin/bash}/lib/bash"
+        enable -f "$loadables/realpath" realpath
         mkdir -p "$out"
         export HOME="$(mktemp -d)"
         declare -i binCount=0 ignoredCount=0 brokenCount=0 failedCount=0
@@ -302,8 +339,10 @@
         cp "$texTestTex" tex-test.tex
 
         testBin () {
+          path="$(realpath "$bin")"
+          path="''${path##*/}"
           if [[ -z "$ignoreExitCode" ]] ; then
-            "$bin" $args >"$out/$base.log" 2>&1
+            PATH="$path" "$bin" $args >"$out/$base.log" 2>&1
             ret=$?
             if [[ $ret == 0 ]] && grep -i 'command not found' "$out/$base.log" >/dev/null ; then
               echo "command not found when running '$base''${args:+ $args}'"
@@ -311,7 +350,7 @@
             fi
             return $ret
           else
-            "$bin" $args >"$out/$base.log" 2>&1
+            PATH="$path" "$bin" $args >"$out/$base.log" 2>&1
             ret=$?
             if [[ $ret == 0 ]] && grep -i 'command not found' "$out/$base.log" >/dev/null ; then
               echo "command not found when running '$base''${args:+ $args}'"
@@ -324,7 +363,7 @@
           fi
         }
 
-        for bin in ${texlive.combined.scheme-full}/bin/* ; do
+        for bin in "$binaries"/bin/* ; do
           base="''${bin##*/}"
           args=
           ignoreExitCode=
@@ -366,6 +405,15 @@
           case "$base" in
             ${lib.concatStringsSep "|" (ignoreExitCode ++ noArg)})
               ignoreExitCode=1 ;;
+          esac
+
+          case "$base" in
+            ${lib.concatStringsSep "|" needScheme})
+              bin="$texliveScheme/bin/$base"
+              if [[ ! -f "$bin" ]] ; then
+                ignoredCount=$((ignoredCount + 1))
+                continue
+              fi ;;
           esac
 
           if testBin ; then : ; else # preserve exit code
