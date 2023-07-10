@@ -1444,6 +1444,8 @@ self: super: with self; {
 
   boiboite-opener-framework = callPackage ../development/python-modules/boiboite-opener-framework { };
 
+  boilerpy3 = callPackage ../development/python-modules/boilerpy3 { };
+
   bokeh = callPackage ../development/python-modules/bokeh { };
 
   boltons = callPackage ../development/python-modules/boltons { };
@@ -5063,6 +5065,8 @@ self: super: with self; {
 
   ionhash = callPackage ../development/python-modules/ionhash { };
 
+  iopath = callPackage ../development/python-modules/iopath { };
+
   iotawattpy = callPackage ../development/python-modules/iotawattpy { };
 
   iowait = callPackage ../development/python-modules/iowait { };
@@ -5649,6 +5653,8 @@ self: super: with self; {
   lazy = callPackage ../development/python-modules/lazy { };
 
   lazy_import = callPackage ../development/python-modules/lazy_import { };
+
+  lazy_imports = callPackage ../development/python-modules/lazy_imports { };
 
   lazy-loader = callPackage ../development/python-modules/lazy-loader { };
 
@@ -6770,6 +6776,8 @@ self: super: with self; {
 
   nbdime = callPackage ../development/python-modules/nbdime { };
 
+  nbexec = callPackage ../development/python-modules/nbexec { };
+
   nbformat = callPackage ../development/python-modules/nbformat { };
 
   nbmerge = callPackage ../development/python-modules/nbmerge { };
@@ -7584,6 +7592,8 @@ self: super: with self; {
 
   pdfminer-six = callPackage ../development/python-modules/pdfminer-six { };
 
+  pdfplumber = callPackage ../development/python-modules/pdfplumber { };
+
   pdfrw = callPackage ../development/python-modules/pdfrw { };
 
   pdftotext = callPackage ../development/python-modules/pdftotext { };
@@ -8235,6 +8245,8 @@ self: super: with self; {
   promise = callPackage ../development/python-modules/promise { };
 
   prompt-toolkit = callPackage ../development/python-modules/prompt-toolkit { };
+
+  prompthub-py = callPackage ../development/python-modules/prompthub-py { };
 
   property-manager = callPackage ../development/python-modules/property-manager { };
 
@@ -9847,6 +9859,8 @@ self: super: with self; {
 
   pytest-param-files = callPackage ../development/python-modules/pytest-param-files { };
 
+  pytest-parallel = callPackage ../development/python-modules/pytest-parallel { };
+
   pytest-playwright = callPackage ../development/python-modules/pytest-playwright {};
 
   pytest-plt = callPackage ../development/python-modules/pytest-plt { };
@@ -10554,6 +10568,8 @@ self: super: with self; {
 
   quantum-gateway = callPackage ../development/python-modules/quantum-gateway { };
 
+  quantulum3 = callPackage ../development/python-modules/quantulum3 { };
+
   quart = callPackage ../development/python-modules/quart { };
 
   quart-cors = callPackage ../development/python-modules/quart-cors { };
@@ -10599,6 +10615,8 @@ self: super: with self; {
   range-typed-integers = callPackage ../development/python-modules/range-typed-integers { };
 
   rangehttpserver = callPackage ../development/python-modules/rangehttpserver { };
+
+  rank_bm25 = callPackage ../development/python-modules/rank_bm25 { };
 
   rapidfuzz = callPackage ../development/python-modules/rapidfuzz { };
 
@@ -11928,6 +11946,8 @@ self: super: with self; {
   steamship = callPackage ../development/python-modules/steamship { };
 
   stem = callPackage ../development/python-modules/stem { };
+
+  stemming = callPackage ../development/python-modules/stemming { };
 
   stestr = callPackage ../development/python-modules/stestr { };
 

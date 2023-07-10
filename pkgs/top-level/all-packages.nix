@@ -5709,9 +5709,7 @@ with pkgs;
 
   mpdris2 = callPackage ../tools/audio/mpdris2 { };
 
-  mpd-discord-rpc = callPackage ../tools/audio/mpd-discord-rpc {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  mpd-discord-rpc = callPackage ../tools/audio/mpd-discord-rpc { };
 
   mpd-mpris = callPackage ../tools/audio/mpd-mpris { };
 
@@ -6489,8 +6487,9 @@ with pkgs;
 
   inherit (callPackage ../applications/networking/remote/citrix-workspace { })
     citrix_workspace_23_02_0
+    citrix_workspace_23_07_0
   ;
-  citrix_workspace = citrix_workspace_23_02_0;
+  citrix_workspace = citrix_workspace_23_07_0;
 
   cmigemo = callPackage ../tools/text/cmigemo { };
 
@@ -35530,6 +35529,8 @@ with pkgs;
 
   viw = callPackage ../applications/editors/viw { };
 
+  virter = callPackage ../applications/virtualization/virter { };
+
   virt-viewer = callPackage ../applications/virtualization/virt-viewer { };
 
   virt-top = callPackage ../applications/virtualization/virt-top { };
@@ -38968,6 +38969,7 @@ with pkgs;
   tlaplus = callPackage ../applications/science/logic/tlaplus {
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
+  tlaplus18 = callPackage ../applications/science/logic/tlaplus/tlaplus18.nix {};
   tlaps = callPackage ../applications/science/logic/tlaplus/tlaps.nix {
     inherit (ocaml-ng.ocamlPackages_4_14_unsafe_string) ocaml;
   };
