@@ -6179,8 +6179,6 @@ self: super: with self; {
 
   mashumaro = callPackage ../development/python-modules/mashumaro { };
 
-  mask-rcnn = callPackage ../development/python-modules/mask-rcnn { };
-
   masky = callPackage ../development/python-modules/masky { };
 
   mastodon-py = callPackage ../development/python-modules/mastodon-py { };
