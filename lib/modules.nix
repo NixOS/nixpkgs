@@ -578,7 +578,7 @@ let
                   subtree
               ) configs);
       # extract the definitions for each loc
-      defnsByName' =
+      rawDefinitionsByName =
         zipAttrsWith (n: concatLists)
           (map (module: let subtree = module.config; in
               if !(builtins.isAttrs subtree) then
@@ -620,7 +620,7 @@ let
         let
           loc = prefix ++ [name];
           defns = defnsByName.${name} or [];
-          defns' = defnsByName'.${name} or [];
+          defns' = rawDefinitionsByName.${name} or [];
           optionDecls = filter (m: isOption m.options) decls;
         in
           if length optionDecls == length decls then
@@ -663,7 +663,7 @@ let
         # Propagate all unmatched definitions from nested option sets
         mapAttrs (n: v: v.unmatchedDefns) resultsByName
         # Plus the definitions for the current prefix that don't have a matching option
-        // removeAttrs defnsByName' (attrNames matchedOptions);
+        // removeAttrs rawDefinitionsByName (attrNames matchedOptions);
     in {
       inherit matchedOptions;
 
