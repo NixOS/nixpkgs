@@ -578,22 +578,22 @@ let
       # an attrset 'name' => list of submodules that define ‘name’.
       pushedDownDefinitionsByName =
         zipAttrsWith (n: concatLists)
-          (map (module: let subtree = module.config; in
+          (map (module:
                 mapAttrs
                   (n: value:
                     map (config: { inherit (module) file; inherit config; }) (pushDownProperties value)
                   )
-                  subtree
+                  module.config
               ) checkedConfigs);
       # extract the definitions for each loc
       rawDefinitionsByName =
         zipAttrsWith (n: concatLists)
-          (map (module: let subtree = module.config; in
+          (map (module:
                 mapAttrs
                   (n: value:
                     [{ inherit (module) file; inherit value; }]
                   )
-                subtree
+                  module.config
               ) checkedConfigs);
 
       # Convert an option tree decl to a submodule option decl
