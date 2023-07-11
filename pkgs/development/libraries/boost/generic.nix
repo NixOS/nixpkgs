@@ -134,6 +134,14 @@ stdenv.mkDerivation {
       relative = "include";
       hash = "sha256-dq4SVgxkPJSC7Fvr59VGnXkM4Lb09kYDaBksCHo9C0s=";
     })
+    # This fixes an issue in Python 3.11 about Py_TPFLAGS_HAVE_GC
+    (fetchpatch {
+      name = "python311-compatibility.patch";
+      url = "https://github.com/boostorg/python/commit/a218babc8daee904a83f550fb66e5cb3f1cb3013.patch";
+      hash = "sha256-IHxLtJBx0xSy7QEr8FbCPofsjcPuSYzgtPwDlx1JM+4=";
+      stripLen = 1;
+      extraPrefix = "libs/python/";
+    })
   ];
 
   meta = with lib; {
