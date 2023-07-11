@@ -551,9 +551,9 @@ let
                 ''
               else
                 mapAttrs
-                  (n: (module: option:
-                        [{ inherit (module) _file; options = option; }]
-                      ) module)
+                  (n: option:
+                    [{ inherit (module) _file; options = option; }]
+                  )
                   subtree
               ) options);
       # an attrset 'name' => list of submodules that define ‘name’.
@@ -572,9 +572,9 @@ let
                 ''
               else
                 mapAttrs
-                  (n: (module: value:
-                        map (config: { inherit (module) file; inherit config; }) (pushDownProperties value)
-                      ) module)
+                  (n: value:
+                    map (config: { inherit (module) file; inherit config; }) (pushDownProperties value)
+                  )
                   subtree
               ) configs);
       # extract the definitions for each loc
@@ -593,9 +593,9 @@ let
                 ''
               else
                 mapAttrs
-                  (n: (module: value:
-                        [{ inherit (module) file; inherit value; }]
-                      ) module)
+                  (n: value:
+                    [{ inherit (module) file; inherit value; }]
+                  )
                 subtree
               ) configs);
 
