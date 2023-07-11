@@ -24,10 +24,10 @@
 }:
 
 let
-  defaultVersion = "2023.04";
+  defaultVersion = "2023.07.02";
   defaultSrc = fetchurl {
-    url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    hash = "sha256-4xyskVRf9BtxzsXYwir9aVZFzW4qRCzNrKzWBTQGk0E=";
+    url = "https://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
+    hash = "sha256-a2pIWBwUq7D5W9h8GvTXQJIkBte4AQAqn5Ryf93gIdU=";
   };
   buildUBoot = lib.makeOverridable ({
     version ? null
