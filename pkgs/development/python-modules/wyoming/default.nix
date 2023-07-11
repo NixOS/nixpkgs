@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "wyoming";
-  version = "0.0.1";
+  version = "1.0.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EIUbKL8DNFNNGmLRcu12mlw4H+gAHmCUw09eLG0s8+M=";
+    hash = "sha256-1ztLbWJBl0YzfEwqaZPehP2xyUlSMknwuVxF7YphwwY=";
   };
 
   pythonImportsCheck = [
