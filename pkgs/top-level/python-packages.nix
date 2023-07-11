@@ -6343,6 +6343,8 @@ self: super: with self; {
 
   metar = callPackage ../development/python-modules/metar { };
 
+  metawear = callPackage ../development/python-modules/metawear { };
+
   meteoalertapi = callPackage ../development/python-modules/meteoalertapi { };
 
   meteocalc = callPackage ../development/python-modules/meteocalc { };
