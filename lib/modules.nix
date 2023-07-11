@@ -539,28 +539,8 @@ let
 
   mergeModules' = prefix: options: configs:
     let
-     /* byName is like foldAttrs, but will look for attributes to merge in the
-        specified attribute name.
-
-        byName "foo" (module: value: ["module.hidden=${module.hidden},value=${value}"])
-        [
-          {
-            hidden="baz";
-            foo={qux="bar"; gla="flop";};
-          }
-          {
-            hidden="fli";
-            foo={qux="gne"; gli="flip";};
-          }
-        ]
-        ===>
-        {
-          gla = [ "module.hidden=baz,value=flop" ];
-          gli = [ "module.hidden=fli,value=flip" ];
-          qux = [ "module.hidden=baz,value=bar" "module.hidden=fli,value=gne" ];
-        }
-      */
-      byName = attr: f: modules:
+      # an attrset 'name' => list of submodules that declare ‘name’.
+      declsByName = (attr: f: modules:
         zipAttrsWith (n: concatLists)
           (map (module: let subtree = module.${attr}; in
               if !(builtins.isAttrs subtree) then
@@ -579,17 +559,53 @@ let
                 '')
               else
                 mapAttrs (n: f module) subtree
-              ) modules);
-      # an attrset 'name' => list of submodules that declare ‘name’.
-      declsByName = byName "options" (module: option:
+              ) modules)) "options" (module: option:
           [{ inherit (module) _file; options = option; }]
         ) options;
       # an attrset 'name' => list of submodules that define ‘name’.
-      defnsByName = byName "config" (module: value:
+      defnsByName = (attr: f: modules:
+        zipAttrsWith (n: concatLists)
+          (map (module: let subtree = module.${attr}; in
+              if !(builtins.isAttrs subtree) then
+                throw (if attr == "config" then ''
+                  You're trying to define a value of type `${builtins.typeOf subtree}'
+                  rather than an attribute set for the option
+                  `${builtins.concatStringsSep "." prefix}'!
+
+                  This usually happens if `${builtins.concatStringsSep "." prefix}' has option
+                  definitions inside that are not matched. Please check how to properly define
+                  this option by e.g. referring to `man 5 configuration.nix'!
+                '' else ''
+                  An option declaration for `${builtins.concatStringsSep "." prefix}' has type
+                  `${builtins.typeOf subtree}' rather than an attribute set.
+                  Did you mean to define this outside of `options'?
+                '')
+              else
+                mapAttrs (n: f module) subtree
+              ) modules)) "config" (module: value:
           map (config: { inherit (module) file; inherit config; }) (pushDownProperties value)
         ) configs;
       # extract the definitions for each loc
-      defnsByName' = byName "config" (module: value:
+      defnsByName' = (attr: f: modules:
+        zipAttrsWith (n: concatLists)
+          (map (module: let subtree = module.${attr}; in
+              if !(builtins.isAttrs subtree) then
+                throw (if attr == "config" then ''
+                  You're trying to define a value of type `${builtins.typeOf subtree}'
+                  rather than an attribute set for the option
+                  `${builtins.concatStringsSep "." prefix}'!
+
+                  This usually happens if `${builtins.concatStringsSep "." prefix}' has option
+                  definitions inside that are not matched. Please check how to properly define
+                  this option by e.g. referring to `man 5 configuration.nix'!
+                '' else ''
+                  An option declaration for `${builtins.concatStringsSep "." prefix}' has type
+                  `${builtins.typeOf subtree}' rather than an attribute set.
+                  Did you mean to define this outside of `options'?
+                '')
+              else
+                mapAttrs (n: f module) subtree
+              ) modules)) "config" (module: value:
           [{ inherit (module) file; inherit value; }]
         ) configs;
 
