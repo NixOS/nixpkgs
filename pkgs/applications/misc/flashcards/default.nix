@@ -11,10 +11,12 @@
 , python3
 , desktop-file-utils
 , gobject-introspection
-, wrapGAppsHook4
+, wrapGAppsHook
+, python3Packages
 }:
 
 stdenv.mkDerivation rec {
+#python3.pkgs.buildPythonApplication rec {
   pname = "flashcards";
   version = "unstable-2023-06-11";
 
@@ -33,15 +35,45 @@ stdenv.mkDerivation rec {
     blueprint-compiler
     python3
     desktop-file-utils
-    wrapGAppsHook4
     gobject-introspection
+    gtk4
+    wrapGAppsHook
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
+    pycairo
+    pygobject3
+    lxml
+    gst-python
+    liblarch
+    caldav
+
     gtk4
     libadwaita
     gobject-introspection
+
   ];
+
+  buildInputs = [
+    gobject-introspection
+  ];
+
+  pythonPath = with python3Packages; [
+    pygobject3
+    click
+  ];
+
+  #strictDeps = true;
+
+  dontWrapGApps = true;
+
+  #postFixup = ''
+  #  makeWrapper ${python3.interpreter} $out/bin/flashcards \
+  #    --add-flags "$out/share/flashcards/flashcards/main.py" \
+  #    --prefix PYTHONPATH : "$PYTHONPATH" \
+  #    ''${makeWrapperArgs[@]} \
+  #    ''${gappsWrapperArgs[@]}
+  #'';
 
   meta = with lib; {
     description = "Simple and clean flashcard memorizing app";
