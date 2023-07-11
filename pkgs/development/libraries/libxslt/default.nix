@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
+  ] ++ lib.optionals cryptoSupport [
+    libgcrypt
   ];
 
   buildInputs = [
@@ -42,13 +44,15 @@ stdenv.mkDerivation rec {
     libxml2.py
     python
     ncurses
-  ] ++ lib.optionals cryptoSupport [
-    libgcrypt
   ];
 
   propagatedBuildInputs = [
     findXMLCatalogs
   ];
+
+  LIBGCRYPT_CFLAGS = lib.optionalString cryptoSupport "-I${libgcrypt.dev}/include";
+  LIBGCRYPT_LIBS = lib.optionalString cryptoSupport "-L${libgcrypt}/lib -lgcrypt";
+
 
   configureFlags = [
     "--without-debug"
@@ -56,8 +60,6 @@ stdenv.mkDerivation rec {
     "--without-debugger"
     (lib.withFeature pythonSupport "python")
     (lib.optionalString pythonSupport "PYTHON=${python.pythonForBuild.interpreter}")
-  ] ++ lib.optionals (!cryptoSupport) [
-    "--without-crypto"
   ];
 
   postFixup = ''
