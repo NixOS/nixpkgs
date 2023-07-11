@@ -177,7 +177,9 @@ backendStdenv.mkDerivation rec {
     "libcom_err.so.2"
   ];
 
-  preFixup = ''
+  preFixup = if lib.versionOlder version "11" then ''
+    patchelf $out/targets/*/lib/libnvrtc.so --add-needed libnvrtc-builtins.so
+  '' else ''
     patchelf $out/lib64/libnvrtc.so --add-needed libnvrtc-builtins.so
   '';
 
