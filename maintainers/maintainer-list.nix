@@ -15940,6 +15940,12 @@
     githubId = 321799;
     name = "Paul Colomiets";
   };
+  taj-ny = {
+    email = "nixpkgs@taj-ny.dev";
+    github = "taj-ny";
+    githubId = 79316397;
+    name = "Marcin Woźniak";
+  };
   takagiy = {
     email = "takagiy.4dev@gmail.com";
     github = "takagiy";
