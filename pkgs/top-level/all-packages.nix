@@ -17996,6 +17996,8 @@ with pkgs;
 
   dbus-test-runner = callPackage ../development/tools/dbus-test-runner { };
 
+  doq = callPackage ../development/tools/misc/doq { };
+
   phpunit = callPackage ../development/tools/misc/phpunit { };
 
   teller = callPackage ../development/tools/teller { };
