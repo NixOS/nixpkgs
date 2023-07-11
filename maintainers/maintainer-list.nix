@@ -4284,6 +4284,11 @@
     githubId = 10998835;
     name = "Doron Behar";
   };
+  dotemup = {
+    name = "Dote";
+    github = "dotemup";
+    githubId = 11077277;
+  };
   dotlambda = {
     email = "rschuetz17@gmail.com";
     matrix = "@robert:funklause.de";
