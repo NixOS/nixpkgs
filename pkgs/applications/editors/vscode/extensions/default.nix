@@ -2178,6 +2178,22 @@ let
         };
       };
 
+      mgt19937.typst-preview = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "typst-preview";
+          publisher = "mgt19937";
+          version = "0.6.0";
+          sha256 = "sha256-ZrsTtbD3oIUjxSC1osGYwTynwvDFQxuGeDglopBJGxA=";
+        };
+        meta = {
+          description = "Typst Preview is an extension for previewing your Typst files in vscode instantly";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=mgt19937.typst-preview";
+          homepage = "https://github.com/Enter-tainer/typst-preview-vscode";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.drupol ];
+        };
+      };
+
       mhutchie.git-graph = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "git-graph";
