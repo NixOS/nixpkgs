@@ -1,26 +1,26 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (7.0.5)
+    activesupport (7.0.6)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
     aws-eventstream (1.2.0)
-    aws-partitions (1.781.0)
-    aws-sdk-core (3.175.0)
+    aws-partitions (1.785.0)
+    aws-sdk-core (3.177.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.5)
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-kms (1.67.0)
-      aws-sdk-core (~> 3, >= 3.174.0)
+    aws-sdk-kms (1.70.0)
+      aws-sdk-core (~> 3, >= 3.177.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.126.0)
-      aws-sdk-core (~> 3, >= 3.174.0)
+    aws-sdk-s3 (1.128.0)
+      aws-sdk-core (~> 3, >= 3.177.0)
       aws-sdk-kms (~> 1)
-      aws-sigv4 (~> 1.4)
-    aws-sigv4 (1.5.2)
+      aws-sigv4 (~> 1.6)
+    aws-sigv4 (1.6.0)
       aws-eventstream (~> 1, >= 1.0.2)
     cli-format (0.2.2)
       activesupport
@@ -46,11 +46,11 @@ GEM
     jmespath (1.6.2)
     memoist (0.16.2)
     minitest (5.18.1)
-    mini_portile2 (2.8.2)
-    nokogiri (1.15.2)
+    nokogiri (1.15.3)
       racc (~> 1.4)
       mini_portile2 (~> 2.8.2)
     racc (1.7.1)
+    mini_portile2 (2.8.2)
     rainbow (3.1.1)
     render_me_pretty (0.9.0)
       activesupport
@@ -71,7 +71,7 @@ GEM
     rspec-mocks (3.12.5)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
-    rspec-support (3.12.0)
+    rspec-support (3.12.1)
     rspec-terraspace (0.3.3)
       activesupport
       memoist
@@ -79,7 +79,7 @@ GEM
       rspec
       zeitwerk
     rubyzip (2.3.2)
-    terraspace (2.2.7)
+    terraspace (2.2.8)
       activesupport
       bundler
       cli-format
@@ -123,7 +123,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  terraspace (~> 2.2.7)
+  terraspace (~> 2.2.8)
 
 BUNDLED WITH
    2.3.26

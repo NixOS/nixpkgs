@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=../../../../. -i bash -p common-updater-scripts internetarchive
+#!nix-shell -I nixpkgs=../../../../. -i bash -p common-updater-scripts jq
 
 set -eo pipefail
 
