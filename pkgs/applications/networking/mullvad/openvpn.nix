@@ -90,7 +90,9 @@ openvpn.overrideAttrs (oldAttrs:
         sha256 = "sha256-Via62wKVfMWHTmO7xIXXO7b5k0KYHs1D0JVg3qnXkeM=";
       })
     ];
-    postPatch = oldAttrs.postPatch or [ ] ++ [ "rm ./configure" ];
+    postPatch = oldAttrs.postPatch or "" + ''
+      rm ./configure
+    '';
 
     meta = oldAttrs.meta or { } // {
       description = "OpenVPN with Mullvad-specific patches applied";
