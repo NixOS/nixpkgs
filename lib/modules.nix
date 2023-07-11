@@ -557,7 +557,7 @@ let
                   subtree
               ) options);
       # an attrset 'name' => list of submodules that define ‘name’.
-      defnsByName =
+      pushedDownDefinitionsByName =
         zipAttrsWith (n: concatLists)
           (map (module: let subtree = module.config; in
               if !(builtins.isAttrs subtree) then
@@ -619,7 +619,7 @@ let
         # We're descending into attribute ‘name’.
         let
           loc = prefix ++ [name];
-          defns = defnsByName.${name} or [];
+          defns = pushedDownDefinitionsByName.${name} or [];
           defns' = rawDefinitionsByName.${name} or [];
           optionDecls = filter (m: isOption m.options) decls;
         in
