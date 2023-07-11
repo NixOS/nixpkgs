@@ -1,15 +1,17 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, coreutils, jq, findutils, nix  }:
+{ stdenv, lib, fetchFromGitHub, makeWrapper, coreutils, jq, findutils, nix, bash }:
 
 stdenv.mkDerivation rec {
   pname = "nixos-generators";
-  version = "1.5.0";
+  version = "1.7.0";
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nixos-generators";
     rev = version;
-    sha256 = "sha256-Icz/2Jl3eO4JnatU1iAFiMzVAQR9IDrsiqhOIvMkCS4=";
+    sha256 = "sha256-WecDwDY/hEcDQYzFnccCNa+5Umht0lfjx/d1qGDy/rQ=";
   };
+  strictDeps = true;
   nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ bash ];
   installFlags = [ "PREFIX=$(out)" ];
   postFixup = ''
     wrapProgram $out/bin/nixos-generate \
@@ -21,6 +23,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/nix-community/nixos-generators";
     license     = licenses.mit;
     maintainers = with maintainers; [ lassulus ];
+    mainProgram = "nixos-generate";
     platforms   = platforms.unix;
   };
 }

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hash-slinger";
-  version = "3.1";
+  version = "3.3";
 
   src = fetchFromGitHub {
     owner = "letoams";
     repo = pname;
     rev = version;
-    sha256 = "sha256-mhMUdZt846QjwRIh2m/4EE+93fUcCKc2FFeoFpzKYvk=";
+    sha256 = "sha256-c6IZHUFuhcccUWZYSOUGFbKpTtwMclIvEvDX8gE5d8o=";
   };
 
   pythonPath = with python3.pkgs; [

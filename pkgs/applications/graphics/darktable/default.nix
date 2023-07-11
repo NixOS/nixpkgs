@@ -14,6 +14,7 @@
 , desktop-file-utils
 , exiv2
 , glib
+, glib-networking
 , ilmbase
 , gtk3
 , intltool
@@ -26,6 +27,7 @@
 , libpng
 , librsvg
 , libtiff
+, libjxl
 , openexr_3
 , osm-gps-map
 , pkg-config
@@ -56,12 +58,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.8.1";
+  version = "4.4.0";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    sha256 = "1xmyn9haagizh8qqg91bm1lx3dq1v8failxj943mipnvaj80dvl1";
+    sha256 = "8887fc34abd97c4998b0888c3197e0c509d63bdeab2238906915319811f3b080";
   };
 
   nativeBuildInputs = [ cmake ninja llvm_13 pkg-config intltool perl desktop-file-utils wrapGAppsHook ];
@@ -71,6 +73,7 @@ stdenv.mkDerivation rec {
     curl
     exiv2
     glib
+    glib-networking
     gtk3
     ilmbase
     lcms2
@@ -81,6 +84,7 @@ stdenv.mkDerivation rec {
     libpng
     librsvg
     libtiff
+    libjxl
     openexr_3
     sqlite
     libxslt

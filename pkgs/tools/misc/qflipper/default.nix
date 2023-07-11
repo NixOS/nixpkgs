@@ -6,6 +6,7 @@
 , libusb1
 , libGL
 , qmake
+, wrapGAppsHook
 , wrapQtAppsHook
 , mkDerivation
 
@@ -19,37 +20,32 @@
 , qtquickcontrols2
 , qtgraphicaleffects
 , qtwayland
+, nix-update-script
 }:
 let
-  version = "1.0.1";
+  pname = "qFlipper";
+  version = "1.3.2";
+  sha256 = "sha256-n/vvLR4p7ZmQC+FuYOvarmgydfYwxRBRktzs7CfiNQg=";
   timestamp = "99999999999";
   commit = "nix-${version}";
-  hash = "sha256-vHBlrtQ06kjjXXGL/jSdpAPHgqb7Vn1c6jXZVXwxHPQ=";
-
-  udev_rules = ''
-    #Flipper Zero serial port
-    SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5740", ATTRS{manufacturer}=="Flipper Devices Inc.", TAG+="uaccess"
-    #Flipper Zero DFU
-    SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", ATTRS{manufacturer}=="STMicroelectronics", TAG+="uaccess"
-  '';
 
 in
 mkDerivation {
-  pname = "qFlipper";
-  inherit version;
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "flipperdevices";
     repo = "qFlipper";
     rev = version;
-    inherit hash;
     fetchSubmodules = true;
+    inherit sha256;
   };
 
   nativeBuildInputs = [
     pkg-config
     qmake
     qttools
+    wrapGAppsHook
     wrapQtAppsHook
   ];
 
@@ -75,6 +71,8 @@ mkDerivation {
     "CONFIG+=qtquickcompiler"
   ];
 
+  dontWrapGApps = true;
+
   postPatch = ''
     substituteInPlace qflipper_common.pri \
         --replace 'GIT_VERSION = unknown' 'GIT_VERSION = "${version}"' \
@@ -91,17 +89,17 @@ mkDerivation {
     cp qFlipper-cli $out/bin
 
     mkdir -p $out/etc/udev/rules.d
-    tee $out/etc/udev/rules.d/42-flipperzero.rules << EOF
-    ${udev_rules}
-    EOF
+    cp installer-assets/udev/42-flipperzero.rules $out/etc/udev/rules.d/
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Cross-platform desktop tool to manage your flipper device";
     homepage = "https://flipperzero.one/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ cab404 ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ]; # qtbase doesn't build yet on aarch64-darwin
   };
-
 }

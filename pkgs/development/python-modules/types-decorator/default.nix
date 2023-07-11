@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "types-decorator";
-  version = "5.1.5";
+  version = "5.1.8.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-CrPgAZyBGRIrXzD0IlUkcbkc8xOLPI69krQb1d3h3QI=";
+    hash = "sha256-Mt04D8iNDnofJ6hLoc5uKboK1CyqobiOe10n5h9uSWI=";
   };
 
   # Modules doesn't have tests

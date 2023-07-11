@@ -37,6 +37,10 @@ in stdenv.mkDerivation rec {
       url = "https://raw.githubusercontent.com/archlinux/svntogit-community/b3046e0e78b95440f135fcadb19a9eb531729a58/trunk/boost-1.74.patch";
       sha256 = "sha256-W8R1l7ZPcsfiIy1QBJvh0M8du0w1cnTg3PyAz65v4rE=";
     })
+    (fetchpatch {
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-gfx/iscan/files/iscan-3.65.0-sane-backends-1.1.patch";
+      sha256 = "sha256-AmMZ+/lrUMR7IU+S8MEn0Ji5pqOiD6izFJBsJ0tCCCw=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -56,7 +60,7 @@ in stdenv.mkDerivation rec {
     libusb1.dev
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=deprecated-declarations"
     "-Wno-error=parentheses"
     "-Wno-error=unused-variable"
@@ -69,6 +73,7 @@ in stdenv.mkDerivation rec {
     touch $out/etc/sane.d/dll.conf
 
     # absolute paths to convert & tesseract
+    sed -i '/\[AC_DEFINE(\[HAVE_IMAGE_MAGICK\], \[1\])/a \ MAGICK_CONVERT="${imagemagick}/bin/convert"' configure.ac
     substituteInPlace filters/magick.cpp \
       --replace 'convert ' '${imagemagick}/bin/convert '
     substituteInPlace filters/reorient.cpp \

@@ -1,7 +1,7 @@
 { lib
+, stdenv
 , mkDerivation
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , boost
 , cgal_5
@@ -23,23 +23,15 @@
 
 mkDerivation rec {
   pname = "cloudcompare";
-  version = "2.12.0";
+  version = "2.12.4";
 
   src = fetchFromGitHub {
     owner = "CloudCompare";
     repo = "CloudCompare";
     rev = "v${version}";
-    sha256 = "sha256-hu3ckVocExi9lvxelHAwKb/MZacH4CcCE+vIzElgP/A=";
+    sha256 = "sha256-rQ9/vS/fyRWGBL4UGPNSeeNsDtnRHEp9NCViBtu/QEs=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # fix issues compiling on aarch64. remove once upgraded past 2.12.0
-    (fetchpatch {
-      url = "https://github.com/CloudCompare/CloudCompare/commit/7e71861fdbd6ea704add5ba69343f47d8fc3d5ae.patch";
-      sha256 = "sha256-CRUPjxtKUbsqOyYsjKF+dRZ+E3rqrv5mS3ZaOay2wk8=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -96,7 +88,7 @@ mkDerivation rec {
     "-DPLUGIN_STANDARD_QM3C2=ON"
     "-DPLUGIN_STANDARD_QMPLANE=ON"
     "-DPLUGIN_STANDARD_QPOISSON_RECON=ON"
-    "-DPLUGIN_STANDARD_QRANSAC_SD=ON"
+    "-DPLUGIN_STANDARD_QRANSAC_SD=OFF" # not compatible with GPL, broken on non-x86
     "-DPLUGIN_STANDARD_QSRA=ON"
     "-DPLUGIN_STANDARD_QCLOUDLAYERS=ON"
   ];

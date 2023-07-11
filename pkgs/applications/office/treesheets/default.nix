@@ -1,35 +1,48 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, wxGTK
 , cmake
 , ninja
 , wrapGAppsHook
+, makeWrapper
+, wxGTK
+, Cocoa
 , unstableGitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "treesheets";
-  version = "unstable-2022-03-12";
+  version = "unstable-2023-07-08";
 
   src = fetchFromGitHub {
     owner = "aardappel";
     repo = "treesheets";
-    rev = "120c10d4d9ea1ce76db5c1bbd6f5d705b397b57d";
-    sha256 = "oXgOvvRoZpueEeWnD3jsc6y5RIAzkXzLeEe7BSErBpw=";
+    rev = "7c0967ed28e3d5b100a668015e38993dab7e3e34";
+    sha256 = "969Ogxcoto2pNVr5itijeYXqytJxgUJ8rH97P6K8O1A=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
     wrapGAppsHook
+    makeWrapper
   ];
 
   buildInputs = [
     wxGTK
+  ] ++ lib.optionals stdenv.isDarwin [
+    Cocoa
   ];
 
-  NIX_CFLAGS_COMPILE = "-DPACKAGE_VERSION=\"${builtins.replaceStrings [ "unstable-" ] [ "" ] version}\"";
+  env.NIX_CFLAGS_COMPILE = "-DPACKAGE_VERSION=\"${builtins.replaceStrings [ "unstable-" ] [ "" ] version}\"";
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    shopt -s extglob
+    mkdir -p $out/{share/treesheets,bin}
+    mv $out/!(share) $out/share/treesheets
+    makeWrapper $out/{share/treesheets,bin}/treesheets \
+      --chdir $out/share/treesheets
+  '';
 
   passthru = {
     updateScript = unstableGitUpdater { };
@@ -49,7 +62,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://strlen.com/treesheets/";
     maintainers = with maintainers; [ obadz avery ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.zlib;
   };
 }

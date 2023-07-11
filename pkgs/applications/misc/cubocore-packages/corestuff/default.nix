@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "corestuff";
-  version = "4.3.0";
+  version = "4.4.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-snzW6cqxIyiXJLOD5MoEqmzen1aZN4IALESaIWIOMro=";
+    sha256 = "sha256-F0kddb622W44MDkZOh4YTyFQ+J/UGGbkcrWXCSDYcek=";
   };
 
   patches = [

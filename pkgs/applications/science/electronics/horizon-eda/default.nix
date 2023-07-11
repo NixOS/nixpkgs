@@ -8,28 +8,28 @@
 , glm
 , gtkmm3
 , lib
+, libarchive
 , libgit2
 , librsvg
+, libspnav
 , libuuid
-, libzip
-, opencascade
+, opencascade-occt
 , pkg-config
 , podofo
 , python3
 , sqlite
 , wrapGAppsHook
-, zeromq
 }:
 
 stdenv.mkDerivation rec {
   pname = "horizon-eda";
-  version = "2.2.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "horizon-eda";
     repo = "horizon";
     rev = "v${version}";
-    sha256 = "sha256-MUS1dIsULDJ5DahCtDpbHZq56nltHShli7+uoW1/Tqw=";
+    sha256 = "sha256-UcjbDJR6shyETpanNkRoH8LF8r6gFjsyNHVSCMHKqS8=";
   };
 
   buildInputs = [
@@ -38,15 +38,15 @@ stdenv.mkDerivation rec {
     libepoxy
     glm
     gtkmm3
+    libarchive
     libgit2
     librsvg
+    libspnav
     libuuid
-    libzip
-    opencascade
+    opencascade-occt
     podofo
     python3
     sqlite
-    zeromq
   ];
 
   nativeBuildInputs = [
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  CASROOT = opencascade;
+  CASROOT = opencascade-occt;
 
   installFlags = [
     "INSTALL=${coreutils}/bin/install"

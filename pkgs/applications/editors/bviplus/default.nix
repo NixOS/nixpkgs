@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Ncurses based hex editor with a vim-like interface";
-    homepage = "http://bviplus.sourceforge.net";
+    homepage = "https://bviplus.sourceforge.net";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];

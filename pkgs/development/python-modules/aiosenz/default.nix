@@ -5,6 +5,7 @@
 , httpx
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -18,8 +19,12 @@ buildPythonPackage rec {
     owner = "milanmeu";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ODdWPS14zzptxuS6mff51f0s1SYnIqjF40DmvT0sL0w=";
+    hash = "sha256-ODdWPS14zzptxuS6mff51f0s1SYnIqjF40DmvT0sL0w=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     httpx

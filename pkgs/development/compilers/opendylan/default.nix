@@ -13,8 +13,9 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
+  nativeBuildInputs = [ makeWrapper autoconf automake ];
   buildInputs = (if stdenv.hostPlatform.system == "i686-linux" then [ mps ] else [ boehmgc ]) ++ [
-    opendylan-bootstrap boehmgc gnused autoconf automake perl makeWrapper
+    opendylan-bootstrap boehmgc perl
   ];
 
   preConfigure = if stdenv.hostPlatform.system == "i686-linux" then ''
@@ -38,5 +39,6 @@ stdenv.mkDerivation {
     description = "A multi-paradigm functional and object-oriented programming language";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+    broken = true; # last successful build 2020-12-11
   };
 }

@@ -3,7 +3,7 @@
 buildDunePackage rec {
   pname = "mustache";
   version = "3.1.0";
-  useDune2 = true;
+  duneVersion = "3";
   src = fetchFromGitHub {
     owner = "rgrinberg";
     repo = "ocaml-mustache";
@@ -11,7 +11,8 @@ buildDunePackage rec {
     sha256 = "19v8rk8d8lkfm2rmhdawfgadji6wa267ir5dprh4w9l1sfj8a1py";
   };
 
-  buildInputs = [ ezjsonm menhir ];
+  nativeBuildInputs = [ menhir ];
+  buildInputs = [ ezjsonm ];
   propagatedBuildInputs = [ menhirLib ];
 
   doCheck = true;

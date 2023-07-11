@@ -3,22 +3,25 @@
 , azure-core
 , buildPythonPackage
 , fetchPypi
-, futures ? null
 , isodate
-, isPy3k
 , msrestazure
+, pythonOlder
+, six
+, typing-extensions
 , uamqp
 }:
 
 buildPythonPackage rec {
   pname = "azure-servicebus";
-  version = "7.6.0";
+  version = "7.11.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-uZGxQ1Vl6wpBCMW1+80/CBuqelLV02yXf1sNlNtCpHU=";
+    hash = "sha256-JMmfs1d1EFilHJ1Dud4mGJynRHLx+Uq95nZM2D+NecE=";
   };
 
   propagatedBuildInputs = [
@@ -26,16 +29,15 @@ buildPythonPackage rec {
     azure-core
     isodate
     msrestazure
+    six
+    typing-extensions
     uamqp
-  ] ++ lib.optionals (!isPy3k) [
-    futures
   ];
 
-  # has no tests
+  # Tests require dev-tools
   doCheck = false;
 
-  # python2 will fail due to pep 420
-  pythonImportsCheck = lib.optionals isPy3k [
+  pythonImportsCheck = [
     "azure.servicebus"
   ];
 

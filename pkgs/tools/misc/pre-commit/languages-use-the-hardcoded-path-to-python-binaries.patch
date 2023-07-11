@@ -1,24 +1,24 @@
 diff --git a/pre_commit/languages/node.py b/pre_commit/languages/node.py
-index 26f4919..4885ec1 100644
+index 66d6136..e3f1bac 100644
 --- a/pre_commit/languages/node.py
 +++ b/pre_commit/languages/node.py
-@@ -82,7 +82,7 @@ def install_environment(
+@@ -83,7 +83,7 @@ def install_environment(
+     # https://msdn.microsoft.com/en-us/library/windows/desktop/aa365247(v=vs.85).aspx?f=255&MSPPError=-2147217396#maxpath
+     if sys.platform == 'win32':  # pragma: no cover
          envdir = fr'\\?\{os.path.normpath(envdir)}'
-     with clean_path_on_failure(envdir):
-         cmd = [
--            sys.executable, '-mnodeenv', '--prebuilt', '--clean-src', envdir,
-+            '@nodeenv@/bin/nodeenv', '--prebuilt', '--clean-src', envdir,
-         ]
-         if version != C.DEFAULT:
-             cmd.extend(['-n', version])
+-    cmd = [sys.executable, '-mnodeenv', '--prebuilt', '--clean-src', envdir]
++    cmd = ['@nodeenv@/bin/nodeenv', '--prebuilt', '--clean-src', envdir]
+     if version != C.DEFAULT:
+         cmd.extend(['-n', version])
+     cmd_output_b(*cmd)
 diff --git a/pre_commit/languages/python.py b/pre_commit/languages/python.py
-index 43b7280..f0f2338 100644
+index 976674e..485fe2d 100644
 --- a/pre_commit/languages/python.py
 +++ b/pre_commit/languages/python.py
-@@ -192,7 +192,7 @@ def install_environment(
+@@ -203,7 +203,7 @@ def install_environment(
          additional_dependencies: Sequence[str],
  ) -> None:
-     envdir = prefix.path(helpers.environment_dir(ENVIRONMENT_DIR, version))
+     envdir = lang_base.environment_dir(prefix, ENVIRONMENT_DIR, version)
 -    venv_cmd = [sys.executable, '-mvirtualenv', envdir]
 +    venv_cmd = ['@virtualenv@/bin/virtualenv', envdir]
      python = norm_version(version)

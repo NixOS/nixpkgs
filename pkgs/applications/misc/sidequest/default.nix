@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchurl, buildFHSUserEnv, makeDesktopItem, makeWrapper, atomEnv, libuuid, at-spi2-atk, icu, openssl, zlib }:
+{ stdenv, lib, fetchurl, buildFHSEnv, makeDesktopItem, makeWrapper, atomEnv, libuuid, libxkbcommon, libxshmfence, at-spi2-atk, icu, openssl, zlib }:
   let
     pname = "sidequest";
-    version = "0.10.24";
+    version = "0.10.33";
 
     desktopItem = makeDesktopItem rec {
       name = "SideQuest";
@@ -16,7 +16,7 @@
 
       src = fetchurl {
         url = "https://github.com/SideQuestVR/SideQuest/releases/download/v${version}/SideQuest-${version}.tar.xz";
-        sha256 = "0bnd16f22sgy67z3d6rf4z20n56ljxczsql455p2j6kck5f75lh4";
+        sha256 = "8ac3d97400a8e3ce86902b5bea7b8d042a092acd888d20e5139490a38507f995";
       };
 
       nativeBuildInputs = [ makeWrapper ];
@@ -38,7 +38,7 @@
           "$out/lib/SideQuest/sidequest"
       '';
     };
-  in buildFHSUserEnv {
+  in buildFHSEnv {
     name = "SideQuest";
 
     passthru = {
@@ -48,6 +48,7 @@
         description = "An open app store and side-loading tool for Android-based VR devices such as the Oculus Go, Oculus Quest or Moverio BT 300";
         homepage = "https://github.com/SideQuestVR/SideQuest";
         downloadPage = "https://github.com/SideQuestVR/SideQuest/releases";
+        sourceProvenance = with sourceTypes; [ binaryNativeCode ];
         license = licenses.mit;
         maintainers = with maintainers; [ joepie91 rvolosatovs ];
         platforms = [ "x86_64-linux" ];
@@ -58,6 +59,7 @@
       sidequest
       # Needed in the environment on runtime, to make QuestSaberPatch work
       icu openssl zlib
+      libxkbcommon libxshmfence
     ];
 
     extraInstallCommands = ''

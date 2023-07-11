@@ -2,22 +2,35 @@
 , callPackage
 , fetchPypi
 , packaging
+, typing-extensions
 , tomli
+, setuptools
+, pythonOlder
 , lib
 }:
 
 buildPythonPackage rec {
   pname = "setuptools-scm";
-  version = "6.4.2";
+  version = "7.1.0";
+  format = "pyproject";
 
   src = fetchPypi {
     pname = "setuptools_scm";
     inherit version;
-    sha256 = "sha256-aDOsZcbtlxGk1dImb4Akz6B8UzoOVfTBL27/KApanjA=";
+    hash = "sha256-bFCDRadxqtfVbr/w5wYovysOx1c3Yr6ZYCFHMN4njyc=";
   };
+
+  nativeBuildInputs = [
+    packaging
+    setuptools
+    typing-extensions
+  ];
 
   propagatedBuildInputs = [
     packaging
+    setuptools
+    typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
   ];
 
@@ -25,7 +38,7 @@ buildPythonPackage rec {
     "setuptools_scm"
   ];
 
-  # check in passhtru.tests.pytest to escape infinite recursion on pytest
+  # check in passthru.tests.pytest to escape infinite recursion on pytest
   doCheck = false;
 
   passthru.tests = {

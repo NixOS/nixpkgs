@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
+, hatchling
 , pytestCheckHook
 , markdown
 , pyyaml
@@ -38,30 +38,21 @@ let
 in
 buildPythonPackage rec {
   pname = "pymdown-extensions";
-  version = "9.1";
+  version = "9.9.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "facelessuser";
     repo = "pymdown-extensions";
-    rev = version;
-    sha256 = "sha256-II8Po8144h3wPFrzMbOB/qiCm2HseYrcZkyIZFGT+ek=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ld3NuBTjDJUN4ZK+eTwmmfzcB8XCtg8xaLMECo95+Cg=";
   };
 
-  patches = [
-    # this patch is needed to allow tests to pass for later versions of the
-    # markdown dependency
-    #
-    # it can be removed after the next pymdown-extensions release
-    (fetchpatch {
-      url = "https://github.com/facelessuser/pymdown-extensions/commit/8ee5b5caec8f9373e025f50064585fb9d9b71f86.patch";
-      sha256 = "sha256-jTHNcsV0zL0EkSTSj8zCGXXtpUaLnNPldmL+krZj3Gk=";
-    })
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [ markdown pygments ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pyyaml
   ];

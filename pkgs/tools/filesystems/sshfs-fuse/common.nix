@@ -24,9 +24,9 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson pkg-config ninja docutils makeWrapper ];
   buildInputs = [ fuse glib ];
-  checkInputs = [ which python3Packages.pytest ];
+  nativeCheckInputs = [ which python3Packages.pytest ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString
+  env.NIX_CFLAGS_COMPILE = lib.optionalString
     (stdenv.hostPlatform.system == "i686-linux")
     "-D_FILE_OFFSET_BITS=64";
 

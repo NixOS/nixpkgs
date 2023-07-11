@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
   buildPhase = "${stdenv.cc.targetPrefix}cc -o nmon ${src} -g -O2 -D JFS -D GETUSER -Wall -D LARGEMEM -lncurses -lm -g -D ${
     with stdenv.targetPlatform;
-    if isx86_32 || isx86_64 then "X86"
-    else if isAarch32 || isAarch64 then "ARM"
+    if isx86 then "X86"
+    else if isAarch then "ARM"
     else if isPower then "POWER"
     else "UNKNOWN"
   }";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "AIX & Linux Performance Monitoring tool";
-    homepage = "http://nmon.sourceforge.net";
+    homepage = "https://nmon.sourceforge.net";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ sveitser ];

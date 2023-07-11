@@ -10,8 +10,6 @@
 , gobject-introspection
 , vala
 , gtk-doc
-, nix
-, nlohmann_json ? null
 , boost
 , meson
 , ninja
@@ -24,15 +22,9 @@
 , enableCommandNotFound ? false
 , enableBashCompletion ? false
 , bash-completion ? null
-, enableSystemd ? stdenv.isLinux
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 }:
-let
-  nix_version = lib.removeSuffix nix.VERSION_SUFFIX nix.version;
-  useNlohmann = lib.versionAtLeast "2.7" nix_version;
-in
-
-assert useNlohmann -> nlohmann_json != null;
 
 stdenv.mkDerivation rec {
   pname = "packagekit";
@@ -43,25 +35,24 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "PackageKit";
     repo = "PackageKit";
-    rev = "33b847c49b4a42499e3c0f10fef62830c874e086";
-    sha256 = "UDpMswf0EBwcoHTqoWiztXnIAwM69nM+S9MPsR24amw=";
+    rev = "30bb82da8d4161330a6d7a20c9989149303421a1";
+    sha256 = "k2osc2v0OuGrNjwxdqn785RsbHEJP3p79PG9YqnVE3U=";
   };
 
   buildInputs = [
     glib
     polkit
     python3
-    gobject-introspection
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gtk3
     sqlite
-    nix
     boost
   ] ++ lib.optional enableSystemd systemd
-  ++ lib.optional useNlohmann nlohmann_json
   ++ lib.optional enableBashCompletion bash-completion;
   nativeBuildInputs = [
+    gobject-introspection
+    glib
     vala
     gettext
     pkg-config
@@ -76,7 +67,10 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     (if enableSystemd then "-Dsystemd=true" else "-Dsystem=false")
-    "-Dpackaging_backend=nix"
+    # often fails to build with nix updates
+    # and remounts /nix/store as rw
+    # https://github.com/NixOS/nixpkgs/issues/177946
+    #"-Dpackaging_backend=nix"
     "-Ddbus_sys=${placeholder "out"}/share/dbus-1/system.d"
     "-Ddbus_services=${placeholder "out"}/share/dbus-1/system-services"
     "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
@@ -110,7 +104,7 @@ stdenv.mkDerivation rec {
       a common set of abstractions that can be used by standard GUI and text
       mode package managers.
     '';
-    homepage = "http://www.packagekit.org/";
+    homepage = "https://github.com/PackageKit/PackageKit";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ matthewbauer ];

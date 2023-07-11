@@ -25,6 +25,7 @@ let
     path = makeBinPath [
       pkgs.jq
       nixos-enter
+      pkgs.util-linuxMinimal
     ];
   };
 
@@ -34,16 +35,14 @@ let
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
     perl = "${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl";
-    detectvirt = "${pkgs.systemd}/bin/systemd-detect-virt";
+    hostPlatformSystem = pkgs.stdenv.hostPlatform.system;
+    detectvirt = "${config.systemd.package}/bin/systemd-detect-virt";
     btrfs = "${pkgs.btrfs-progs}/bin/btrfs";
     inherit (config.system.nixos-generate-config) configuration desktopConfiguration;
     xserverEnabled = config.services.xserver.enable;
   };
 
-  nixos-option =
-    if lib.versionAtLeast (lib.getVersion config.nix.package) "2.4pre"
-    then null
-    else pkgs.nixos-option;
+  inherit (pkgs) nixos-option;
 
   nixos-version = makeProg {
     name = "nixos-version";
@@ -64,6 +63,9 @@ let
     name = "nixos-enter";
     src = ./nixos-enter.sh;
     inherit (pkgs) runtimeShell;
+    path = makeBinPath [
+      pkgs.util-linuxMinimal
+    ];
   };
 
 in
@@ -74,15 +76,15 @@ in
     configuration = mkOption {
       internal = true;
       type = types.str;
-      description = ''
-        The NixOS module that <literal>nixos-generate-config</literal>
-        saves to <literal>/etc/nixos/configuration.nix</literal>.
+      description = lib.mdDoc ''
+        The NixOS module that `nixos-generate-config`
+        saves to `/etc/nixos/configuration.nix`.
 
         This is an internal option. No backward compatibility is guaranteed.
         Use at your own risk!
 
         Note that this string gets spliced into a Perl script. The perl
-        variable <literal>$bootLoaderConfig</literal> can be used to
+        variable `$bootLoaderConfig` can be used to
         splice in the boot loader configuration.
       '';
     };
@@ -91,15 +93,15 @@ in
       internal = true;
       type = types.listOf types.lines;
       default = [];
-      description = ''
-        Text to preseed the desktop configuration that <literal>nixos-generate-config</literal>
-        saves to <literal>/etc/nixos/configuration.nix</literal>.
+      description = lib.mdDoc ''
+        Text to preseed the desktop configuration that `nixos-generate-config`
+        saves to `/etc/nixos/configuration.nix`.
 
         This is an internal option. No backward compatibility is guaranteed.
         Use at your own risk!
 
         Note that this string gets spliced into a Perl script. The perl
-        variable <literal>$bootLoaderConfig</literal> can be used to
+        variable `$bootLoaderConfig` can be used to
         splice in the boot loader configuration.
       '';
     };
@@ -109,7 +111,7 @@ in
     internal = true;
     type = types.bool;
     default = false;
-    description = ''
+    description = lib.mdDoc ''
       Disable nixos-rebuild, nixos-generate-config, nixos-installer
       and other NixOS tools. This is useful to shrink embedded,
       read-only systems which are not expected to be rebuild or
@@ -122,7 +124,7 @@ in
     system.nixos-generate-config.configuration = mkDefault ''
       # Edit this configuration file to define what should be installed on
       # your system.  Help is available in the configuration.nix(5) man page
-      # and in the NixOS manual (accessible by running ‘nixos-help’).
+      # and in the NixOS manual (accessible by running `nixos-help`).
 
       { config, pkgs, ... }:
 
@@ -158,10 +160,7 @@ in
       $desktopConfiguration
         # Configure keymap in X11
         # services.xserver.layout = "us";
-        # services.xserver.xkbOptions = {
-        #   "eurosign:e";
-        #   "caps:escape" # map caps to escape.
-        # };
+        # services.xserver.xkbOptions = "eurosign:e,caps:escape";
 
         # Enable CUPS to print documents.
         # services.printing.enable = true;
@@ -174,9 +173,13 @@ in
         # services.xserver.libinput.enable = true;
 
         # Define a user account. Don't forget to set a password with ‘passwd’.
-        # users.users.jane = {
+        # users.users.alice = {
         #   isNormalUser = true;
         #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+        #   packages = with pkgs; [
+        #     firefox
+        #     tree
+        #   ];
         # };
 
         # List packages installed in system profile. To search, run:
@@ -184,7 +187,6 @@ in
         # environment.systemPackages = with pkgs; [
         #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
         #   wget
-        #   firefox
         # ];
 
         # Some programs need SUID wrappers, can be configured further or are
@@ -206,9 +208,14 @@ in
         # Or disable the firewall altogether.
         # networking.firewall.enable = false;
 
+        # Copy the NixOS configuration file and link it from the resulting system
+        # (/run/current-system/configuration.nix). This is useful in case you
+        # accidentally delete configuration.nix.
+        # system.copySystemConfiguration = true;
+
         # This value determines the NixOS release from which the default
         # settings for stateful data, like file locations and database versions
-        # on your system were taken. It‘s perfectly fine and recommended to leave
+        # on your system were taken. It's perfectly fine and recommended to leave
         # this value at the release version of the first install of this system.
         # Before changing this value read the documentation for this option
         # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
@@ -222,9 +229,12 @@ in
         nixos-install
         nixos-rebuild
         nixos-generate-config
+        nixos-option
         nixos-version
         nixos-enter
-      ] ++ lib.optional (nixos-option != null) nixos-option;
+      ];
+
+    documentation.man.man-db.skipPackages = [ nixos-version ];
 
     system.build = {
       inherit nixos-install nixos-generate-config nixos-option nixos-rebuild nixos-enter;

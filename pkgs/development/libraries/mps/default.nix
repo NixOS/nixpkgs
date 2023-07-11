@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ sqlite ];
 
   # needed for 1.116.0 to build with gcc7
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-implicit-fallthrough"
     "-Wno-error=clobbered"
     "-Wno-error=cast-function-type"
@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
 
   meta = {
+    broken      = true;
     description = "A flexible memory management and garbage collection library";
     homepage    = "https://www.ravenbrook.com/project/mps";
     license     = lib.licenses.sleepycat;

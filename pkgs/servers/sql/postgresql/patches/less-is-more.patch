@@ -1,9 +1,9 @@
-diff -Naur postgresql-9.2.7-orig/src/bin/psql/print.h postgresql-9.2.7/src/bin/psql/print.h
---- postgresql-9.2.7-orig/src/bin/psql/print.h	2014-02-17 14:38:15.000000000 -0500
-+++ postgresql-9.2.7/src/bin/psql/print.h	2014-03-04 14:42:28.874014415 -0500
-@@ -178,7 +178,7 @@
- extern const printTextFormat *get_line_style(const printTableOpt *opt);
+diff -Naur postgresql-9.6.1-orig/src/include/fe_utils/print.h postgresql-9.6.1/src/include/fe_utils/print.h
+--- postgresql-9.6.1-orig/src/include/fe_utils/print.h	2016-11-22 21:39:29.148932827 +0100
++++ postgresql-9.6.1/src/include/fe_utils/print.h	2016-11-22 21:39:36.283626258 +0100
+@@ -18,7 +18,7 @@
  
+ /* This is not a particularly great place for this ... */
  #ifndef __CYGWIN__
 -#define DEFAULT_PAGER "more"
 +#define DEFAULT_PAGER "less"

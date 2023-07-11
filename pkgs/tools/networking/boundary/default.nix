@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "boundary";
-  version = "0.7.6";
+  version = "0.13.0";
 
   src =
     let
@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
         aarch64-darwin = "darwin_arm64";
       };
       sha256 = selectSystem {
-        x86_64-linux = "sha256-nsc8S63OUEo9db/hs9oA53Lk+amIsxB/O4TJCs4zdNw=";
-        aarch64-linux = "sha256-KttqYuF7xC88L49f7JKKr77FbKBihptoBIoemgFInm0=";
-        x86_64-darwin = "sha256-ov4CtiWsOU/AWfAo7x99RshW6+eU9lFD5ypo6MKyPM0=";
-        aarch64-darwin = "sha256-3E9fv8BSu7XXIwRmTrDECLNQKdoeUqitKbsTrXs+tTE=";
+        x86_64-linux = "sha256-nz3b5EMuzZgwqh1guSyOuSqwmZpPOhY6jb/7CL65Q7c=";
+        aarch64-linux = "sha256-fyYdm5E9iuGcs6TxrwbbCC7/NU9p35T/2nEOdv7yU9k=";
+        x86_64-darwin = "sha256-xx16xCghd6t9BYrQAYqJTVdrS2G8qNQ5l4gG9SfDwRI=";
+        aarch64-darwin = "sha256-z/aHLRqybf7UiZue608VYDlKdIenEVVmMdd/XvIzXsc=";
       };
     in
     fetchzip {
@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = true;
   dontPatchShebangs = true;
+  dontStrip = true;
 
   passthru.updateScript = ./update.sh;
 
@@ -61,7 +62,9 @@ stdenv.mkDerivation rec {
       and resilient. It can run in clouds, on-prem, secure enclaves and more,
       and does not require an agent to be installed on every end host.
     '';
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mpl20;
     maintainers = with maintainers; [ jk techknowlogick ];
+    platforms = platforms.unix;
   };
 }

@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "waypipe";
-  version = "0.8.2";
+  version = "0.8.6";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mstoeckl";
     repo = "waypipe";
     rev = "v${version}";
-    sha256 = "02q8l1qaahmd41h6v3r46akh7xlqz7fpwwsy15qww4jdvypg6vg4";
+    hash = "sha256-1VLPnP4BmF9Zha0uVsPjA/WbF/oLfZmdDX57SzqrV5A=";
   };
 
   strictDeps = true;

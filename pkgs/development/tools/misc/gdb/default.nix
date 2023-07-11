@@ -4,17 +4,19 @@
 , fetchurl, fetchpatch, pkg-config, perl, texinfo, setupDebugInfoDirs, buildPackages
 
 # Run time
-, ncurses, readline, gmp, mpfr, expat, libipt, zlib, dejagnu, sourceHighlight
+, ncurses, readline, gmp, mpfr, expat, libipt, zlib, zstd, dejagnu, sourceHighlight
 
 , pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
-, enableDebuginfod ? false, elfutils
+, enableDebuginfod ? lib.meta.availableOn stdenv.hostPlatform elfutils, elfutils
 , guile ? null
+, hostCpuOnly ? false
 , safePaths ? [
    # $debugdir:$datadir/auto-load are whitelisted by default by GDB
    "$debugdir" "$datadir/auto-load"
    # targetPackages so we get the right libc when cross-compiling and using buildPackages.gdb
    targetPackages.stdenv.cc.cc.lib
   ]
+, writeScript
 }:
 
 let
@@ -26,41 +28,33 @@ in
 assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
-  pname = targetPrefix + basename;
-  version = "11.2";
+  pname = targetPrefix + basename + lib.optionalString hostCpuOnly "-host-cpu-only";
+  version = "13.2";
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}-${version}.tar.xz";
-    hash = "sha256-FJfDanGIG4ZxqahKDuQPqreIyjDXuhnYRjw8x4cVLjI=";
+    hash = "sha256-/Vvrt74YM6vbbgI8L0mKNUSYKB350FUj2JFbq+uJPwo=";
   };
 
-  postPatch = if stdenv.isDarwin then ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace gdb/darwin-nat.c \
       --replace '#include "bfd/mach-o.h"' '#include "mach-o.h"'
-  '' else if stdenv.hostPlatform.isMusl then ''
+  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace sim/erc32/erc32.c  --replace sys/fcntl.h fcntl.h
+    substituteInPlace sim/erc32/interf.c  --replace sys/fcntl.h fcntl.h
+    substituteInPlace sim/erc32/sis.c  --replace sys/fcntl.h fcntl.h
     substituteInPlace sim/ppc/emul_unix.c --replace sys/termios.h termios.h
-  '' else null;
+  '';
 
   patches = [
     ./debug-info-from-env.patch
-
-    # Pull upstream fix for gcc-12. Will be included in gdb-12.
-    (fetchpatch {
-      name = "gcc-12.patch";
-      url = "https://sourceware.org/git/?p=binutils-gdb.git;a=patch;h=e97436b1b789dcdb6ffb502263f4c86f8bc22996";
-      sha256 = "1mpgw6s9qgnwhwyg3hagc6vhqhvia0l1s8nr22bcahwqxi3wvzcw";
-    })
   ] ++ lib.optionals stdenv.isDarwin [
     ./darwin-target-match.patch
-  ] ++ lib.optional stdenv.hostPlatform.isMusl (fetchpatch {
-    name = "musl-fix-pagesize-page_size.patch";
-    url = "https://sourceware.org/git/?p=binutils-gdb.git;a=patch;h=fd0975b96b16d96010dce439af9620d3dfb65426";
-    hash = "sha256-M3U7uIIFJnYu0g8/sMLJPhm02q7cGOi6pLjgsUUjeKI=";
-  });
+  ];
 
   nativeBuildInputs = [ pkg-config texinfo perl setupDebugInfoDirs ];
 
-  buildInputs = [ ncurses readline gmp mpfr expat libipt zlib guile sourceHighlight ]
+  buildInputs = [ ncurses readline gmp mpfr expat libipt zlib zstd guile sourceHighlight ]
     ++ lib.optional pythonSupport python3
     ++ lib.optional doCheck dejagnu
     ++ lib.optional enableDebuginfod (elfutils.override { enableDebuginfod = true; });
@@ -74,12 +68,19 @@ stdenv.mkDerivation rec {
   # darwin build fails with format hardening since v7.12
   hardeningDisable = lib.optionals stdenv.isDarwin [ "format" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
+  env.NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
 
   configurePlatforms = [ "build" "host" "target" ];
 
-  # GDB have to be built out of tree.
   preConfigure = ''
+    # remove precompiled docs, required for man gdbinit to mention /etc/gdb/gdbinit
+    rm gdb/doc/*.info*
+    rm gdb/doc/*.5
+    rm gdb/doc/*.1
+    # fix doc build https://sourceware.org/bugzilla/show_bug.cgi?id=27808
+    rm gdb/doc/GDBvn.texi
+
+    # GDB have to be built out of tree.
     mkdir _build
     cd _build
   '';
@@ -93,11 +94,16 @@ stdenv.mkDerivation rec {
     # subset of the platform description.
     "--program-prefix=${targetPrefix}"
 
-    "--enable-targets=all" "--enable-64-bit-bfd"
+    "--disable-werror"
+  ] ++ lib.optional (!hostCpuOnly) "--enable-targets=all" ++ [
+    "--enable-64-bit-bfd"
     "--disable-install-libbfd"
     "--disable-shared" "--enable-static"
     "--with-system-zlib"
     "--with-system-readline"
+
+    "--with-system-gdbinit=/etc/gdb/gdbinit"
+    "--with-system-gdbinit-dir=/etc/gdb/gdbinit.d"
 
     "--with-gmp=${gmp.dev}"
     "--with-mpfr=${mpfr.dev}"
@@ -105,6 +111,7 @@ stdenv.mkDerivation rec {
     "--with-auto-load-safe-path=${builtins.concatStringsSep ":" safePaths}"
   ] ++ lib.optional (!pythonSupport) "--without-python"
     ++ lib.optional stdenv.hostPlatform.isMusl "--disable-nls"
+    ++ lib.optional stdenv.hostPlatform.isStatic "--disable-inprocess-agent"
     ++ lib.optional enableDebuginfod "--with-debuginfod=yes";
 
   postInstall =
@@ -114,6 +121,20 @@ stdenv.mkDerivation rec {
 
   # TODO: Investigate & fix the test failures.
   doCheck = false;
+
+  passthru = {
+    updateScript = writeScript "update-gdb" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre common-updater-scripts
+
+      set -eu -o pipefail
+
+      # Expect the text in format of '<h3>GDB version 12.1</h3>'
+      new_version="$(curl -s https://www.sourceware.org/gdb/ |
+          pcregrep -o1 '<h3>GDB version ([0-9.]+)</h3>')"
+      update-source-version ${pname} "$new_version"
+    '';
+  };
 
   meta = with lib; {
     description = "The GNU Project debugger";
@@ -128,7 +149,8 @@ stdenv.mkDerivation rec {
 
     license = lib.licenses.gpl3Plus;
 
-    platforms = with platforms; linux ++ cygwin ++ darwin;
+    # GDB upstream does not support ARM darwin
+    platforms = with platforms; linux ++ cygwin ++ ["x86_64-darwin"];
     maintainers = with maintainers; [ pierron globin lsix ];
   };
 }

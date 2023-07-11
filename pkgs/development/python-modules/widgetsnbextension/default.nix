@@ -1,27 +1,31 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, jupyter-packaging
 , notebook
 , ipywidgets
 }:
 
 buildPythonPackage rec {
   pname = "widgetsnbextension";
-  version = "3.6.0";
+  version = "4.0.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6Ep6n8ubrz1XEG4YSnOJqPjrk1v3QaXrnWCqGMwCmoA=";
+    hash = "sha256-6mfBenzUrjWPj0bDswTEBpi8BCNzLj8nMyHuFBIyyL4=";
   };
 
-  propagatedBuildInputs = [ notebook ];
+  nativeBuildInputs = [
+    jupyter-packaging
+  ];
 
   # No tests in archive
   doCheck = false;
 
   meta = {
     description = "IPython HTML widgets for Jupyter";
-    homepage = "http://ipython.org/";
+    homepage = "https://github.com/jupyter-widgets/ipywidgets/tree/master/python/widgetsnbextension";
     license = ipywidgets.meta.license; # Build from same repo
     maintainers = with lib.maintainers; [ fridh ];
   };

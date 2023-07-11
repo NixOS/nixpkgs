@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , bison
 , flex
 , which
@@ -13,18 +13,22 @@
 , audioBackend ? "pulse" # "pulse", "alsa", or "jack"
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "miniaudicle";
-  version = "1.3.5.2";
+  version = "1.4.2.0";
 
-  src = fetchurl {
-    url = "https://audicle.cs.princeton.edu/mini/release/files/miniAudicle-${version}.tgz";
-    hash = "sha256-dakDz69uHbKZFj8z67CubmRXEQ5X6GuYqlCXXvLzqSI=";
+  src = fetchFromGitHub {
+    owner = "ccrma";
+    repo = "miniAudicle";
+    rev = "miniAudicle-${finalAttrs.version}";
+    hash = "sha256-NENpqgCCGiVzVE6rYqBu2RwkzWSiGHe7dZVwBfSomEo=";
+    fetchSubmodules = true;
   };
 
-  sourceRoot = "miniAudicle-${version}/src";
+  sourceRoot = "source/src";
 
   postPatch = ''
+    echo '#define GIT_REVISION "${finalAttrs.version}-NixOS"' > git-rev.h
     substituteInPlace miniAudicle.pro \
       --replace "/usr/local" $out
   '';
@@ -56,4 +60,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     broken = stdenv.isDarwin; # not attempted
   };
-}
+})

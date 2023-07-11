@@ -1,5 +1,5 @@
 { lib
-, asynctest
+, stdenv
 , aiohttp
 , blinker
 , buildPythonPackage
@@ -9,12 +9,13 @@
 , httpx
 , jinja2
 , jsonschema
-, Logbook
+, logbook
 , mock
 , pytest-asyncio
 , pytest-bdd
 , pytest-localserver
 , pytest-mock
+, pytest-random-order
 , pytestCheckHook
 , pythonOlder
 , sanic
@@ -24,11 +25,12 @@
 , tornado
 , urllib3
 , webob
+, wrapt
 }:
 
 buildPythonPackage rec {
   pname = "elastic-apm";
-  version = "6.9.1";
+  version = "6.17.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -36,8 +38,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "apm-agent-python";
-    rev = "v${version}";
-    sha256 = "sha256-IaCl39rhsFLQwvQdPcqKruV/Mo3f7WH91UVgMG/cnOc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Tyot/JswIiwxugjxyHcENDAGF9uxwaptTIZwU/GnjAU=";
   };
 
   propagatedBuildInputs = [
@@ -48,22 +50,23 @@ buildPythonPackage rec {
     starlette
     tornado
     urllib3
+    wrapt
   ];
 
-  checkInputs = [
-    asynctest
+  nativeCheckInputs = [
     ecs-logging
+    httpx
     jinja2
     jsonschema
-    Logbook
+    logbook
     mock
-    httpx
     pytest-asyncio
     pytest-bdd
-    pytest-mock
     pytest-localserver
-    sanic-testing
+    pytest-mock
+    pytest-random-order
     pytestCheckHook
+    sanic-testing
     structlog
     webob
   ];
@@ -75,6 +78,9 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Exclude tornado tests
     "tests/contrib/asyncio/tornado/tornado_tests.py"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Flaky tests on Darwin
+    "tests/utils/threading_tests.py"
   ];
 
   pythonImportsCheck = [
@@ -84,7 +90,9 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python agent for the Elastic APM";
     homepage = "https://github.com/elastic/apm-agent-python";
+    changelog = "https://github.com/elastic/apm-agent-python/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "elasticapm-run";
   };
 }

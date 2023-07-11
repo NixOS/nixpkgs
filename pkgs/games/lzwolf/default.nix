@@ -1,19 +1,38 @@
-{ stdenv, lib, fetchFromBitbucket, p7zip, cmake
-, SDL2, bzip2, zlib, libjpeg
-, libsndfile, mpg123
-, SDL2_net, SDL2_mixer }:
+{ stdenv
+, lib
+, fetchFromBitbucket
+, p7zip
+, cmake
+, SDL2
+, bzip2
+, zlib
+, libjpeg
+, libsndfile
+, mpg123
+, pkg-config
+, SDL2_net
+, SDL2_mixer
+}:
 
 stdenv.mkDerivation rec {
   pname = "lzwolf";
-  version = "unstable-2022-01-04";
+  # Fix-Me: Remember to remove SDL2_mixer pin (at top-level) on next lzwolf upgrade.
+  version = "unstable-2022-12-26";
 
   src = fetchFromBitbucket {
     owner = "linuxwolf6";
     repo = "lzwolf";
-    rev = "6e470316382b87378966f441e233760ce0ff478c";
-    sha256 = "sha256-IbZleY2FPyW3ORIGO2YFXQyAf1l9nDthpJjEKTTsilM=";
+    rev = "a24190604296e16941c601b57afe4350462fc659";
+    sha256 = "sha256-CtBdvk6LXb/ll92Fxig/M4t4QNj8dNFJYd8F99b47kQ=";
   };
-  nativeBuildInputs = [ p7zip cmake ];
+
+  postPatch = ''
+    # SDL2_net-2.2.0 changed CMake component name slightly.
+    substituteInPlace src/CMakeLists.txt \
+      --replace 'SDL2::SDL2_net' 'SDL2_net::SDL2_net'
+  '';
+
+  nativeBuildInputs = [ p7zip pkg-config cmake ];
   buildInputs = [
     SDL2 bzip2 zlib libjpeg SDL2_mixer SDL2_net libsndfile mpg123
   ];

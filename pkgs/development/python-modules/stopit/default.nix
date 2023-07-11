@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
+
 }:
 
 buildPythonPackage rec {
@@ -12,8 +14,12 @@ buildPythonPackage rec {
     owner = "glenfant";
     repo = pname;
     rev = version;
-    sha256 = "sha256-uXJUA70JOGWT2NmS6S7fPrTWAJZ0mZ/hICahIUzjfbw=";
+    hash = "sha256-uXJUA70JOGWT2NmS6S7fPrTWAJZ0mZ/hICahIUzjfbw=";
   };
+
+  propagatedBuildInputs = [
+    setuptools # for pkg_resources
+  ];
 
   pythonImportsCheck = [ "stopit" ];
 

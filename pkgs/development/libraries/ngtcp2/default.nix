@@ -1,33 +1,38 @@
 { lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config
-, cunit, file, ncurses
+, cmake
+, cunit, ncurses
 , libev, nghttp3, quictls
 , withJemalloc ? false, jemalloc
+, curlHTTP3
 }:
 
 stdenv.mkDerivation rec {
   pname = "ngtcp2";
-  version = "unstable-2022-04-11";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = pname;
-    rev = "825899c051ea2a1f06a0c4617f41782f37009a18";
-    sha256 = "sha256-VoSy0tyIXWNTmcVdsaiM9ijXLq41AOaPBajvsEIrfjo=";
+    rev = "v${version}";
+    hash = "sha256-FWNWpRuCUyqTIyLZkBFKrd2urjSCqHp20mBAXOcJm14=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config file ];
+  outputs = [ "out" "dev" "doc" ];
+
+  nativeBuildInputs = [ cmake ];
+  nativeCheckInputs = [ cunit ncurses ];
   buildInputs = [ libev nghttp3 quictls ] ++ lib.optional withJemalloc jemalloc;
-  checkInputs = [ cunit ncurses ];
 
-  preConfigure = ''
-    substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file
-  '';
-
-  outputs = [ "out" "dev" ];
+  cmakeFlags = [
+    "-DENABLE_STATIC_LIB=OFF"
+  ];
 
   doCheck = true;
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    inherit curlHTTP3;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/ngtcp2/ngtcp2";

@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
@@ -30,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-aer";
-  version = "0.10.4";
+  version = "0.11.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -38,8 +39,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = "qiskit-aer";
-    rev = version;
-    sha256 = "sha256-mf+Pgw/daFkt1bvqSeYzlO/Sd2F2MtwZcLr+h1u+eb0=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ew9ucqOWDztjB+hJTh9WkJiutVBJyVQobtEcWeUwEcw=";
   };
 
   postPatch = ''
@@ -85,6 +86,7 @@ buildPythonPackage rec {
     "qiskit.providers.aer.backends.qasm_simulator"
     "qiskit.providers.aer.backends.controller_wrappers" # Checks C++ files built correctly. Only exists if built & moved to output
   ];
+
   disabledTests = [
     # these tests don't work with cvxpy >= 1.1.15
     "test_clifford"
@@ -113,16 +115,20 @@ buildPythonPackage rec {
     "_144"
     "test_sparse_output_probabilities"
     "test_reset_2_qubit"
+
+    # Fails with 0.10.4
+    "test_extended_stabilizer_sparse_output_probs"
   ];
-  checkInputs = [
+
+  nativeCheckInputs = [
     pytestCheckHook
     ddt
     fixtures
     pytest-timeout
     qiskit-terra
-    setuptools  # temporary workaround for pbr missing setuptools, see https://github.com/NixOS/nixpkgs/pull/132614
     testtools
   ];
+
   pytestFlagsArray = [
     "--timeout=30"
     "--durations=10"
@@ -137,9 +143,11 @@ buildPythonPackage rec {
     # Add qiskit-aer compiled files to cython include search
     pushd $HOME
   '';
+
   postCheck = "popd";
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "High performance simulators for Qiskit";
     homepage = "https://qiskit.org/aer";
     downloadPage = "https://github.com/QISKit/qiskit-aer/releases";

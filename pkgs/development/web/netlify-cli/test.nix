@@ -1,13 +1,18 @@
 {
   curl,
+  darwin,
+  lib,
   netlify-cli,
   runCommand,
+  stdenv,
 }:
 
 runCommand "netlify-cli-test" {
   nativeBuildInputs = [
     netlify-cli
     curl
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.ps
   ];
   meta.timeout = 600;
 } ''

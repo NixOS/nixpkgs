@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , angr
 , buildPythonPackage
 , cmd2
@@ -29,7 +30,7 @@ buildPythonPackage rec {
     pygments
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     coreutils
     pytestCheckHook
   ];
@@ -39,18 +40,12 @@ buildPythonPackage rec {
       --replace "/bin/ls" "${coreutils}/bin/ls"
   '';
 
-  disabledTests = [
-    "test_sims"
-    "test_proper_termination"
-    "test_branching"
-    "test_morph"
-  ];
-
   pythonImportsCheck = [
     "angrcli"
   ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Python modules to allow easier interactive use of angr";
     homepage = "https://github.com/fmagin/angr-cli";
     license = with licenses; [ mit ];

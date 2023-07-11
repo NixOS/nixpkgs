@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kubedb-cli";
-  version = "0.25.0";
+  version = "0.34.0";
 
   src = fetchFromGitHub {
     owner = "kubedb";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-hRLju3nVLy0eDgqGeReHaF8p7oOlpo1T0IbLq4h/uwg=";
+    sha256 = "sha256-mrWE1MwcS0KYEQmJ8DSP5Sp5w6jpsDxvU03+KqfPDx4=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   # Don't compile the documentation stuff
   subPackages = [ "cmd/kubectl-dba" ];

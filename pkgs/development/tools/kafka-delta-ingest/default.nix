@@ -31,12 +31,18 @@ rustPlatform.buildRustPackage rec {
     rdkafka
   ];
 
-  cargoSha256 = "sha256-srSu3Rx58Ee2Y+8MVis1ACXBQ92u1mIvy1DNp0qJ4IA=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "deltalake-0.4.1" = "sha256-0v3n+qMbBhw53qPuZdhGSO+aqc6j8T577fnyEIQmPDU=";
+    };
+  };
 
   # many tests seem to require a running kafka instance
   doCheck = false;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A highly efficient daemon for streaming data from Kafka into Delta Lake";
     homepage = "https://github.com/delta-io/kafka-delta-ingest";
     license = licenses.asl20;

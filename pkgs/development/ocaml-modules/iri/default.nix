@@ -1,11 +1,11 @@
 { lib, buildDunePackage, fetchFromGitLab
-, sedlex_2, uunf, uutf
+, sedlex, uunf, uutf
 }:
 
 buildDunePackage rec {
   pname = "iri";
   version = "0.6.0";
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
@@ -15,7 +15,7 @@ buildDunePackage rec {
     sha256 = "sha256:0zk8nnwcyljkc1a556byncv6cn1vqhk4267z1lm15flh1k7chyax";
   };
 
-  propagatedBuildInputs = [ sedlex_2 uunf uutf ];
+  propagatedBuildInputs = [ sedlex uunf uutf ];
 
   meta = {
     description = "IRI (RFC3987) native OCaml implementation";

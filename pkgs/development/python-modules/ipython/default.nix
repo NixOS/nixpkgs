@@ -2,10 +2,11 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , pythonOlder
 
 # Build dependencies
-, glibcLocales
+, setuptools
 
 # Runtime dependencies
 , appnope
@@ -27,17 +28,17 @@
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "8.2.0";
+  version = "8.11.0";
   format = "pyproject";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-cOXrEyysWUo0tfeZvSUliQCZBfBRBHKK6mpAPsJRncE=";
+    sha256 = "735cede4099dbc903ee540307b9171fbfef4aa75cfcacc5a273b2cda2f02be04";
   };
 
-  buildInputs = [
-    glibcLocales
+  nativeBuildInputs = [
+    setuptools
   ];
 
   propagatedBuildInputs = [
@@ -55,8 +56,6 @@ buildPythonPackage rec {
     appnope
   ];
 
-  LC_ALL="en_US.UTF-8";
-
   pythonImportsCheck = [
     "IPython"
   ];
@@ -69,12 +68,15 @@ buildPythonPackage rec {
       --replace "--ipdoctest-modules" "--ipdoctest-modules --ignore=IPython/core/display.py"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     testpath
   ];
 
-  disabledTests = lib.optionals (stdenv.isDarwin) [
+  disabledTests = [
+    # UnboundLocalError: local variable 'child' referenced before assignment
+    "test_system_interrupt"
+  ] ++ lib.optionals (stdenv.isDarwin) [
     # FileNotFoundError: [Errno 2] No such file or directory: 'pbpaste'
     "test_clipboard_get"
   ];
@@ -82,6 +84,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "IPython: Productive Interactive Computing";
     homepage = "https://ipython.org/";
+    changelog = "https://github.com/ipython/ipython/blob/${version}/docs/source/whatsnew/version${lib.versions.major version}.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bjornfor fridh ];
   };

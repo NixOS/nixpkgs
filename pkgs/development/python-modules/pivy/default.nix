@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pivy";
-  version = "0.6.6";
+  version = "0.6.8";
 
   src = fetchFromGitHub {
     owner = "coin3d";
     repo = "pivy";
-    rev = version;
-    sha256 = "1xlynrbq22pb252r37r80b3myzap8hzhvknz4zfznfrsg9ykh8k2";
+    rev = "refs/tags/${version}";
+    hash = "sha256-y72nzZAelyRDR2JS73/0jo2x/XiDZpsERPZV3gzIhAI=";
   };
 
   dontUseCmakeConfigure = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     libXi libXext libSM libICE libX11
   ];
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-I${qtbase.dev}/include/QtCore"
     "-I${qtbase.dev}/include/QtGui"
     "-I${qtbase.dev}/include/QtOpenGL"

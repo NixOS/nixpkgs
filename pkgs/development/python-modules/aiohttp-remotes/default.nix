@@ -27,7 +27,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook
   ];
@@ -39,6 +39,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "aiohttp_remotes"
+  ];
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+    "--asyncio-mode=auto"
   ];
 
   meta = with lib; {

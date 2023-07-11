@@ -35,7 +35,7 @@ toRemove=()
 cleanup() {
     rm -rf "${toRemove[@]}"
 }
-trap cleanup EXIT SIGINT SIGQUIT ERR
+trap cleanup EXIT
 
 MKTEMP='mktemp --tmpdir nix-rebuild-amount-XXXXXXXX'
 

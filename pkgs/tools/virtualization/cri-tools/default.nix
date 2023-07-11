@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "cri-tools";
-  version = "1.23.0";
+  version = "1.27.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-b65GY08vykVp/PUBmBXKIfykyPEJRgGjgu7zBoXx3K0=";
+    sha256 = "sha256-5fBQkujOmxdiLkNuHL8y4QmuKQVGJuFlC7bRu+xElyk=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 

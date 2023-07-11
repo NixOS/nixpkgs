@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation rec {
   pname = "ofono";
-  version = "1.34";
+  version = "2.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchgit {
-    url = "git://git.kernel.org/pub/scm/network/ofono/ofono.git";
+    url = "https://git.kernel.org/pub/scm/network/ofono/ofono.git";
     rev = version;
-    sha256 = "sha256-mqltc+/RmQO8awP+J7p9fCVhNsEYA3SgxeV5Gkr1srg=";
+    sha256 = "sha256-GxQfh/ps5oM9G6B1EVgnjo8LqHD1hMqdnju1PCQq3kA=";
   };
 
   patches = [
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     homepage = "https://git.kernel.org/pub/scm/network/ofono/ofono.git";
     changelog = "https://git.kernel.org/pub/scm/network/ofono/ofono.git/plain/ChangeLog?h=${version}";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

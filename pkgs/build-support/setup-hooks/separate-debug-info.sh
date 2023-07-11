@@ -1,7 +1,7 @@
 export NIX_SET_BUILD_ID=1
 export NIX_LDFLAGS+=" --compress-debug-sections=zlib"
 export NIX_CFLAGS_COMPILE+=" -ggdb -Wa,--compress-debug-sections"
-dontStrip=1
+export RUSTFLAGS+=" -g"
 
 fixupOutputHooks+=(_separateDebugInfo)
 
@@ -10,6 +10,9 @@ _separateDebugInfo() {
 
     local dst="${debug:-$out}"
     if [ "$prefix" = "$dst" ]; then return 0; fi
+
+    # in case there is nothing to strip, don't fail the build
+    mkdir -p "$dst"
 
     dst="$dst/lib/debug/.build-id"
 
@@ -26,18 +29,21 @@ _separateDebugInfo() {
         fi
 
         # Extract the debug info.
-        header "separating debug info from $i (build ID $id)"
+        echo "separating debug info from $i (build ID $id)"
         mkdir -p "$dst/${id:0:2}"
 
         # This may fail, e.g. if the binary is for a different
         # architecture than we're building for.  (This happens with
         # firmware blobs in QEMU.)
         (
+            if [ -f "$dst/${id:0:2}/${id:2}.debug" ]
+            then
+                echo "separate-debug-info: warning: multiple files with build id $id found, overwriting"
+            fi
             $OBJCOPY --only-keep-debug "$i" "$dst/${id:0:2}/${id:2}.debug"
-            $STRIP --strip-debug "$i"
 
             # Also a create a symlink <original-name>.debug.
             ln -sfn ".build-id/${id:0:2}/${id:2}.debug" "$dst/../$(basename "$i")"
         ) || rmdir -p "$dst/${id:0:2}"
-    done < <(find "$prefix" -type f -print0)
+    done < <(find "$prefix" -type f -print0 | sort -z)
 }

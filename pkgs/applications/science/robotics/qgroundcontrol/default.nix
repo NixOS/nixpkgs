@@ -1,12 +1,10 @@
-{ lib, mkDerivation, fetchFromGitHub, SDL2
-, qtbase, qtcharts, qtlocation, qtserialport, qtsvg, qtquickcontrols2
-, qtgraphicaleffects, qtspeech, qtx11extras, qmake, qttools
-, gst_all_1, wayland, pkg-config
-}:
+{ lib, stdenv, fetchFromGitHub, SDL2, qtbase, qtcharts, qtlocation, qtserialport
+, qtsvg, qtquickcontrols2, qtgraphicaleffects, qtspeech, qtx11extras, qmake
+, qttools, gst_all_1, wayland, pkg-config, wrapQtAppsHook }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qgroundcontrol";
-  version = "4.2.0";
+  version = "4.2.6";
 
   qtInputs = [
     qtbase qtcharts qtlocation qtserialport qtsvg qtquickcontrols2
@@ -14,11 +12,16 @@ mkDerivation rec {
   ];
 
   gstInputs = with gst_all_1; [
-    gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad wayland
+    gstreamer
+    gst-plugins-base
+    (gst-plugins-good.override { qt5Support = true; })
+    gst-plugins-bad
+    gst-libav
+    wayland
   ];
 
   buildInputs = [ SDL2 ] ++ gstInputs ++ qtInputs;
-  nativeBuildInputs = [ pkg-config qmake qttools ];
+  nativeBuildInputs = [ pkg-config qmake qttools wrapQtAppsHook ];
 
   preConfigure = ''
     mkdir build
@@ -64,7 +67,7 @@ mkDerivation rec {
     owner = "mavlink";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-TBnJQKO9cwxP9q+bIB1CaGnm9npymJ3iEAD9kPJi9JA=";
+    sha256 = "sha256-mMeKDfylVEqLo1i2ucUBu287Og4472Ecp7Cge9Cw3kE=";
     fetchSubmodules = true;
   };
 
@@ -74,5 +77,6 @@ mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ lopsided98 ];
+    mainProgram = "QGroundControl";
   };
 }

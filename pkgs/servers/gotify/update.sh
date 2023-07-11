@@ -30,7 +30,7 @@ echo running nix-build for ui
 nix-build -A gotify-server.ui
 echo running nix-build for gotify itself in order to get vendorSha256
 set +e
-vendorSha256="$(nix-build -A gotify-server 2>&1 | grep "got:" | cut -d':' -f3)"
+vendorSha256="$(nix-build -A gotify-server 2>&1 | grep "got:" | cut -d':' -f2)"
 set -e
 printf '"%s"\n' "$vendorSha256" > $dirname/vendor-sha.nix
 tput setaf 2

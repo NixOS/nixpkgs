@@ -3,22 +3,25 @@
 , fetchPypi
 , nose
 , numpy
+, setuptools
 , setuptools-scm
 , six
+, glibcLocales
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pyfaidx";
-  version = "0.6.4";
-  format = "setuptools";
+  version = "0.7.2.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-e6O9yx30unSfdmWzTmoFKqToQkBqDflebfRxfMEj85I=";
+    hash = "sha256-MPDSCp49UzU/sg62m34i5vAaU+1PIbPhfdQI8L5QUaA=";
   };
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 
@@ -26,17 +29,16 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    glibcLocales
     nose
     numpy
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # PyPI releases don't ship all the needed files for the tests
-    "test_index_zero_length"
-    "test_fetch_zero_length"
-    "test_read_back_index"
+  disabledTestPaths = [
+    # FileNotFoundError: [Errno 2] No such file or directory: 'data/genes.fasta.gz'
+    "tests/test_Fasta_bgzip.py"
   ];
 
   pythonImportsCheck = [

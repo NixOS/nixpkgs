@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "backward";
-  version = "1.3";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner = "bombela";
     repo = "backward-cpp";
     rev = "v${version}";
-    sha256 = "1nx77qamal53rq8qxsjzax6ljawb345a1v3cqmfwa0hx26srxcln";
+    sha256 = "sha256-2k5PjwFxgA/2XPqJrPHxgSInM61FBEcieppBx+MAUKw=";
   };
 
   installPhase = ''

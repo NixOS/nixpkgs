@@ -2,6 +2,10 @@
 , rustPlatform
 , fetchgit
 , makeWrapper
+, pkg-config
+, glib
+, libopus
+, vips
 , ffmpeg
 , callPackage
 , unstableGitUpdater
@@ -9,20 +13,32 @@
 
 rustPlatform.buildRustPackage {
   pname = "faircamp";
-  version = "unstable-2022-01-19";
+  version = "unstable-2023-04-10";
 
   # TODO when switching to a stable release, use fetchFromGitea and add a
   # version test. Meanwhile, fetchgit is used to make unstableGitUpdater work.
   src = fetchgit {
     url = "https://codeberg.org/simonrepp/faircamp.git";
-    rev = "f8ffc7a35a12251b83966b35c63f72b4912f75a9";
-    sha256 = "sha256-9t42+813IPLUChbLkcwzoCr7FXSL1g+ZG6I3d+7pmec=";
+    rev = "21f775dc35a88c54015694f9757e81c97fa860ea";
+    hash = "sha256-aMSMMIGfoiqtg8Dj8QiCbUE40OKQXMXt4hvlvbXQLls=";
   };
 
-  cargoHash = "sha256-24ALBede3W8rjlBRdtL0aazRyK1RmNLdHF/bt5i4S5Y=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "enolib-0.1.0" = "sha256-0+T8RRQnqbIiIup/aDJgvxeV8sRV4YrlA9JVbQxMfF0=";
+    };
+  };
 
   nativeBuildInputs = [
     makeWrapper
+    pkg-config
+  ];
+
+  buildInputs = [
+    glib
+    libopus
+    vips
   ];
 
   postInstall = ''
@@ -48,7 +64,7 @@ rustPlatform.buildRustPackage {
       website for you automatically, otherwise you can use FTP or whichever
       means you prefer to do that manually.
     '';
-    homepage = "https://codeberg.org/simonrepp/faircamp";
+    homepage = "https://simonrepp.com/faircamp/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;

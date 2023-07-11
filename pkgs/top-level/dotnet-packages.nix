@@ -2,6 +2,7 @@
 , lib
 , pkgs
 , buildDotnetPackage
+, buildDotnetModule
 , fetchurl
 , fetchFromGitHub
 , fetchNuGet
@@ -53,8 +54,8 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   SharpZipLib = fetchNuGet {
     pname = "SharpZipLib";
-    version = "0.86.0";
-    sha256 = "01w2038gckfnq31pncrlgm7d0c939pwr1x4jj5450vcqpd4c41jr";
+    version = "1.3.3";
+    sha256 = "sha256-HWEQTKh9Ktwg/zIl079dAiH+ob2ShWFAqLgG6XgIMr4=";
     outputFiles = [ "lib/*" ];
   };
 
@@ -74,8 +75,8 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   RestSharp = fetchNuGet {
     pname = "RestSharp";
-    version = "105.2.3";
-    sha256 = "1br48124ppz80x92m84sfyil1gn23hxg2ml9i9hsd0lp86vlaa1m";
+    version = "106.12.0";
+    sha256 = "sha256-NGzveByJvCRtHlI2C8d/mLs3akyMm77NER8TUG6HiD4=";
     outputFiles = [ "lib/*" ];
   };
 
@@ -124,32 +125,19 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   # SOURCE PACKAGES
 
-  Boogie = buildDotnetPackage rec {
+  Boogie = buildDotnetModule rec {
     pname = "Boogie";
-    version = "2.4.1";
+    version = "2.15.7";
 
     src = fetchFromGitHub {
       owner = "boogie-org";
       repo = "boogie";
       rev = "v${version}";
-      sha256 = "13f6ifkh6gpy4bvx5zhgwmk3wd5rfxzl9wxwfhcj1c90fdrhwh1b";
+      sha256 = "16kdvkbx2zwj7m43cra12vhczbpj23wyrdnj0ygxf7np7c2aassp";
     };
 
-    # emulate `nuget restore Source/Boogie.sln`
-    # which installs in $srcdir/Source/packages
-    preBuild = ''
-      mkdir -p Source/packages/NUnit.2.6.3
-      ln -sn ${dotnetPackages.NUnit}/lib/dotnet/NUnit Source/packages/NUnit.2.6.3/lib
-    '';
-
-    buildInputs = [
-      dotnetPackages.NUnit
-      dotnetPackages.NUnitRunners
-    ];
-
-    xBuildFiles = [ "Source/Boogie.sln" ];
-
-    outputFiles = [ "Binaries/*" ];
+    projectFile = [ "Source/Boogie.sln" ];
+    nugetDeps = ../development/dotnet-modules/boogie-deps.nix;
 
     postInstall = ''
         mkdir -pv "$out/lib/dotnet/${pname}"
@@ -160,6 +148,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
         install -Dt $vimdir/syntax/ Util/vim/syntax/boogie.vim
         mkdir $vimdir/ftdetect
         echo 'au BufRead,BufNewFile *.bpl set filetype=boogie' > $vimdir/ftdetect/bpl.vim
+        mkdir -p $out/share/nvim
+        ln -s $out/share/vim-plugins/boogie $out/share/nvim/site
+    '';
+
+    postFixup = ''
+        ln -s "$out/bin/BoogieDriver" "$out/bin/boogie"
+        rm -f $out/bin/{Microsoft,NUnit3,System}.* "$out/bin"/*Tests
     '';
 
     meta = with lib; {
@@ -173,74 +168,6 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
       '';
       license = licenses.mspl;
       maintainers = [ maintainers.taktoa ];
-      platforms = with platforms; (linux ++ darwin);
-    };
-  };
-
-  Dafny = let
-    z3 = pkgs.z3.overrideAttrs (oldAttrs: rec {
-      version = "4.8.4";
-      name = "z3-${version}";
-
-      src = fetchFromGitHub {
-        owner = "Z3Prover";
-        repo = "z3";
-        rev = "z3-${version}";
-        sha256 = "014igqm5vwswz0yhz0cdxsj3a6dh7i79hvhgc3jmmmz3z0xm1gyn";
-      };
-    });
-    self' = pkgs.dotnetPackages.override ({
-      pkgs = pkgs // { inherit z3; };
-    });
-    Boogie = assert self'.Boogie.version == "2.4.1"; self'.Boogie;
-  in buildDotnetPackage rec {
-    pname = "Dafny";
-    version = "2.3.0";
-
-    src = fetchurl {
-      url = "https://github.com/Microsoft/dafny/archive/v${version}.tar.gz";
-      sha256 = "0s6ihx32kda7400lvdrq60l46c11nki8b6kalir2g4ic508f6ypa";
-    };
-
-    postPatch = ''
-      sed -i \
-        -e 's/ Visible="False"//' \
-        -e "s/Exists(\$(CodeContractsInstallDir))/Exists('\$(CodeContractsInstallDir)')/" \
-        Source/*/*.csproj
-    '';
-
-    preBuild = ''
-      ln -s ${z3} Binaries/z3
-    '';
-
-    buildInputs = [ Boogie ];
-
-    xBuildFiles = [ "Source/Dafny.sln" ];
-    xBuildFlags = [ "/p:Configuration=Checked" "/p:Platform=Any CPU" "/t:Rebuild" ];
-
-    outputFiles = [ "Binaries/*" ];
-
-    # Do not wrap the z3 executable, only dafny-related ones.
-    exeFiles = [ "Dafny*.exe" ];
-
-    # Dafny needs mono in its path.
-    makeWrapperArgs = "--set PATH ${mono}/bin";
-
-    # Boogie as an input is not enough. Boogie libraries need to be at the same
-    # place as Dafny ones. Same for "*.dll.mdb". No idea why or how to fix.
-    postFixup = ''
-      for lib in ${Boogie}/lib/dotnet/${Boogie.pname}/*.dll{,.mdb}; do
-        ln -s $lib $out/lib/dotnet/${pname}/
-      done
-      # We generate our own executable scripts
-      rm -f $out/lib/dotnet/${pname}/dafny{,-server}
-    '';
-
-    meta = with lib; {
-      description = "A programming language with built-in specification constructs";
-      homepage = "https://research.microsoft.com/dafny";
-      maintainers = with maintainers; [ layus ];
-      license = licenses.mit;
       platforms = with platforms; (linux ++ darwin);
     };
   };
@@ -286,13 +213,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   Nuget = buildDotnetPackage rec {
     pname = "Nuget";
-    version = "5.6.0.6489";
+    version = "6.3.1.1";
 
     src = fetchFromGitHub {
       owner = "mono";
       repo = "linux-packaging-nuget";
       rev = "upstream/${version}.bin";
-      sha256 = "sha256-71vjM7a+F0DNTY+dML3UBSkrVyXv/k5rdl7iXBKSpNM=";
+      sha256 = "sha256-D7F4B23HK5ElY68PYKVDsyi8OF0DLqqUqQzj5CpMfkc=";
     };
 
     # configurePhase breaks the binary and results in

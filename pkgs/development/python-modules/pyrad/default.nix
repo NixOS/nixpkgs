@@ -5,7 +5,7 @@
 , poetry-core
 , netaddr
 , six
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "pyradius";
     repo = pname;
     rev = version;
-    sha256 = "sha256-oqgkE0xG/8cmLeRZdGoHkaHbjtByeJwzBJwEdxH8oNY=";
+    hash = "sha256-oqgkE0xG/8cmLeRZdGoHkaHbjtByeJwzBJwEdxH8oNY=";
   };
 
   patches = [
@@ -43,11 +43,9 @@ buildPythonPackage rec {
       --replace "def testBindv6(self):" "def dontTestBindv6(self):"
   '';
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m unittest discover
-    runHook postCheck
-  '';
+  nativeCheckInputs = [
+    unittestCheckHook
+  ];
 
   pythonImportsCheck = [
     "pyrad"

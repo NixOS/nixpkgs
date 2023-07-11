@@ -1,34 +1,29 @@
-{
-  lib, stdenv,
-  fetchFromGitHub,
-  cmake,
-  gtest,
-  python3,
-  boost
+{ lib
+, stdenv
+, fetchFromGitHub
+, boost
+, catch2
+, cmake
+, gtest
+, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "cli11";
-  version = "1.9.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "CLIUtils";
     repo = "CLI11";
     rev = "v${version}";
-    sha256 = "0hbch0vk8irgmiaxnfqlqys65v1770rxxdfn3d23m2vqyjh0j9l6";
+    sha256 = "sha256-x3/kBlf5LdzkTO4NYOKanZBfcU4oK+fJw9L7cf88LsY=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  checkInputs = [ boost python3 ];
+  nativeCheckInputs = [ boost python3 catch2 ];
 
   doCheck = true;
-
-  preConfigure = ''
-    rm -rfv extern/googletest
-    ln -sfv ${gtest.src} extern/googletest
-    sed -i '/TrueFalseTest/d' tests/CMakeLists.txt
-  '';
 
   meta = with lib; {
     description = "Command line parser for C++11";

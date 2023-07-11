@@ -3,13 +3,13 @@
 
 mkDerivation rec {
   pname = "g2o";
-  version = "20201223";
+  version = "20230223";
 
   src = fetchFromGitHub {
     owner = "RainerKuemmerle";
     repo = pname;
     rev = "${version}_git";
-    sha256 = "sha256-Ik6uBz4Z4rc5+mPNdT8vlNZSBom4Tvt8Y6myBC/s0m8=";
+    sha256 = "sha256-J2Z3oRkyiinIfywBQvnq1Q8Z5WuzQXOVTZTwN8oivf0=";
   };
 
   # Removes a reference to gcc that is only used in a debug message
@@ -19,9 +19,6 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [ eigen suitesparse blas lapack libGLU qtbase libqglviewer ];
-
-  # Silence noisy warning
-  CXXFLAGS = "-Wno-deprecated-copy";
 
   dontWrapQtApps = true;
 

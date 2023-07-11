@@ -2,16 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cloc";
-  version = "1.92";
+  version = "1.96";
 
   src = fetchFromGitHub {
     owner = "AlDanial";
     repo = "cloc";
     rev = "v${version}";
-    sha256 = if stdenv.isDarwin then
-      "1hy1hskiw02b7xaxn2qz0v7znj14l49w1anx20z6rkcps7212l5l"
-    else
-      "sha256-tFARxNGXzWw+EN2qwBOhJEj7zwYfC9tVP0sAHqeGwcM=";
+    sha256 = "sha256-20vL+SX8Tbp6QxErDn76c6sLWnB1IJwHlQX4YAvj+Eg=";
   };
 
   setSourceRoot = ''

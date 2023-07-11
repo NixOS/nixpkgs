@@ -1,9 +1,7 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "vikunja";
 
-  meta = with lib.maintainers; {
-    maintainers = [ em0lar ];
-  };
+  meta.maintainers = with lib.maintainers; [ leona ];
 
   nodes = {
     vikunjaSqlite = { ... }: {
@@ -28,6 +26,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         };
         frontendScheme = "http";
         frontendHostname = "localhost";
+        port = 9090;
       };
       services.postgresql = {
         enable = true;
@@ -54,8 +53,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       vikunjaSqlite.succeed("curl --fail http://localhost")
 
       vikunjaPostgresql.wait_for_unit("vikunja-api.service")
-      vikunjaPostgresql.wait_for_open_port(3456)
-      vikunjaPostgresql.succeed("curl --fail http://localhost:3456/api/v1/info")
+      vikunjaPostgresql.wait_for_open_port(9090)
+      vikunjaPostgresql.succeed("curl --fail http://localhost:9090/api/v1/info")
 
       vikunjaPostgresql.wait_for_unit("nginx.service")
       vikunjaPostgresql.wait_for_open_port(80)

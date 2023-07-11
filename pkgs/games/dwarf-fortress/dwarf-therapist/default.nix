@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Tool to manage dwarves in a running game of Dwarf Fortress";
     maintainers = with maintainers; [ abbradar bendlas numinit jonringer ];
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms = platforms.x86;
     homepage = "https://github.com/Dwarf-Therapist/Dwarf-Therapist";
   };
 }

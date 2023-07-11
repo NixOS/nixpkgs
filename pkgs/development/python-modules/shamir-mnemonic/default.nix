@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "trezor";
     repo = "python-${pname}";
     rev = "v${version}";
-    sha256 = "sha256-b9tBXN9dBdAeGg3xf5ZBdd6kPpFzseJl6wRTTfNZEwo=";
+    hash = "sha256-b9tBXN9dBdAeGg3xf5ZBdd6kPpFzseJl6wRTTfNZEwo=";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     colorama
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "shamir_mnemonic" ];
 
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Reference implementation of SLIP-0039";
     homepage = "https://github.com/trezor/python-shamir-mnemonic";
     license = licenses.mit;
-    maintainers = with maintainers; [ _1000101 prusnak ];
+    maintainers = with maintainers; [ prusnak ];
   };
 }

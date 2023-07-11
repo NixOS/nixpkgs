@@ -3,32 +3,47 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
-, Babel
+, babel
 , markupsafe
 , pytestCheckHook
+, sphinxHook
+, pallets-sphinx-themes
+, sphinxcontrib-log-cabinet
+, sphinx-issues
+, enableDocumentation ? false
 }:
 
 buildPythonPackage rec {
   pname = "Jinja2";
-  version = "3.1.1";
+  version = "3.1.2";
+  outputs = [ "out" ] ++ lib.optional enableDocumentation "doc";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ZAvtS7UBy9FxlLPKzh3CEm9bYZzwaKcmuYGSoP3nSuk=";
+    hash = "sha256-MTUacCpAip51laj8YVD8P0O7a/fjGXcMvA2535Q36FI=";
   };
 
+  patches = lib.optionals enableDocumentation [ ./patches/import-order.patch ];
+
   propagatedBuildInputs = [
-    Babel
+    babel
     markupsafe
+  ];
+
+  nativeBuildInputs = lib.optionals enableDocumentation [
+    sphinxHook
+    sphinxcontrib-log-cabinet
+    pallets-sphinx-themes
+    sphinx-issues
   ];
 
   # Multiple tests run out of stack space on 32bit systems with python2.
   # See https://github.com/pallets/jinja/issues/1158
   doCheck = !stdenv.is32bit;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -49,6 +64,6 @@ buildPythonPackage rec {
       syntax. Then the template is passed data to render the final document.
       an optional sandboxed environment.
     '';
-    maintainers = with maintainers; [ pierron sjourdois ];
+    maintainers = with maintainers; [ pierron ];
   };
 }

@@ -1,7 +1,6 @@
 { symlinkJoin
 , makeWrapper
 , geany
-, lndir
 , vte
 }:
 

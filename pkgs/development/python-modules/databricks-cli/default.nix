@@ -1,40 +1,65 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
 , click
-, requests
-, tabulate
-, six
 , configparser
-, pytest
+, decorator
+, fetchFromGitHub
+, mock
+, oauthlib
+, pyjwt
+, pytestCheckHook
+, pythonOlder
+, requests
+, requests-mock
+, six
+, tabulate
 }:
 
 buildPythonPackage rec {
   pname = "databricks-cli";
-  version = "0.16.4";
+  version = "0.17.7";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-GBiQaBg7YY31bJft0W8Iq7WXhX98wPgPFHdNwuZ7WQY=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "databricks";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-Eg6qpoEvWlbOJbMIkbJiHfHVrglVfVNq/TCOhQxukl0=";
   };
-
-  checkInputs = [
-    pytest
-  ];
-
-  checkPhase = "pytest tests";
-  # tests folder is missing in PyPI
-  doCheck = false;
 
   propagatedBuildInputs = [
     click
-    requests
-    tabulate
-    six
     configparser
+    oauthlib
+    pyjwt
+    requests
+    requests-mock
+    six
+    tabulate
+  ];
+
+  nativeCheckInputs = [
+    decorator
+    mock
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # Disabled due to option parsing which we don't have
+    "integration/dbfs/test_integration.py"
+    "integration/workspace/test_integration.py"
+  ];
+
+  pythonImportsCheck = [
+    "databricks_cli"
   ];
 
   meta = with lib; {
+    description = "Command line interface for Databricks";
     homepage = "https://github.com/databricks/databricks-cli";
-    description = "A command line interface for Databricks";
+    changelog = "https://github.com/databricks/databricks-cli/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ tbenst ];
   };

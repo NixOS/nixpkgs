@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , pkg-config
 , meson
@@ -13,33 +12,30 @@
 , granite
 , libgee
 , libhandy
-, gettext
 , wrapGAppsHook
 , appstream
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-feedback";
-  version = "6.1.0";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "feedback";
     rev = version;
-    sha256 = "02wydbpa5qaa4xmmh4m7rbj4djbrn2i44zjakj5i6mzwjlj6sv5n";
+    sha256 = "sha256-QvqyaI9szZuYuE3D6o4zjr5J6mvEzNHqTBWii+gjyMc=";
   };
 
   patches = [
-    # Upstream code not respecting our localedir
-    # https://github.com/elementary/feedback/pull/48
-    (fetchpatch {
-      url = "https://github.com/elementary/feedback/commit/080005153977a86d10099eff6a5b3e68f7b12847.patch";
-      sha256 = "01710i90qsaqsrjs92ahwwj198bdrrif6mnw29l9har2rncfkfk2";
-    })
+    # The standard location to the metadata pool where metadata
+    # will be read from is likely hardcoded as /usr/share/metainfo
+    # https://github.com/ximion/appstream/blob/v0.15.2/src/as-pool.c#L117
+    # https://www.freedesktop.org/software/appstream/docs/chap-Metadata.html#spec-component-location
+    ./fix-metadata-path.patch
   ];
 
   nativeBuildInputs = [
-    gettext
     meson
     ninja
     pkg-config
@@ -63,9 +59,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

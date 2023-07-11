@@ -8,17 +8,21 @@
 , dask
 , distributed
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "stumpy";
-  version = "1.10.2";
+  version = "1.11.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "TDAmeritrade";
     repo = "stumpy";
-    rev = "v${version}";
-    sha256 = "1v17lxqgvkd3n33c2y1j1zy74xy92vsx2l89yhan89msnnb7aafr";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ARpXqZpWkbvIEDVkxA1SwlWoxq+3WO6tvv/e7WZ/25c=";
   };
 
   propagatedBuildInputs = [
@@ -27,11 +31,15 @@ buildPythonPackage rec {
     numba
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pandas
     dask
     distributed
     pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "stumpy"
   ];
 
   pytestFlagsArray = [
@@ -41,9 +49,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A powerful and scalable library that can be used for a variety of time series data mining tasks";
+    description = "Library that can be used for a variety of time series data mining tasks";
     homepage = "https://github.com/TDAmeritrade/stumpy";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

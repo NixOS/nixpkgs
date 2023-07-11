@@ -11,32 +11,22 @@
 
 buildPythonPackage rec {
   pname = "requests-toolbelt";
-  version = "0.9.1";
+  version = "0.10.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-loCJ1FhK1K18FxRU8KXG2sI5celHJSHqO21J1hCqb8A=";
+    hash = "sha256-YuCff/XMvakncqKfOUpJw61ssYHVaLEzdiayq7Yopj0=";
   };
 
   propagatedBuildInputs = [
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     betamax
     mock
-    pyopenssl
     pytestCheckHook
-  ];
-
-  patches = [
-    (fetchpatch {
-      # Fix collections.abc deprecation warning, https://github.com/requests/toolbelt/pull/246
-      name = "fix-collections-abc-deprecation.patch";
-      url = "https://github.com/requests/toolbelt/commit/7188b06330e5260be20bce8cbcf0d5ae44e34eaf.patch";
-      sha256 = "sha256-pRkG77sNglG/KsRX6JaPgk4QxmmSBXypFRp/vNA3ot4=";
-    })
   ];
 
   disabledTests = [

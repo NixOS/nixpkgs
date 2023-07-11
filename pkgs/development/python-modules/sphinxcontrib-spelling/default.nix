@@ -10,24 +10,39 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-spelling";
-  version = "7.3.2";
+  version = "8.0.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9d66dc4990749c5ac52e7eaf17e82f4dc6b4aff6515d26bbf48821829d41bd02";
+    hash = "sha256-GZ0KFpAq2Aw4fClm3J6xD1ZbH7FczOFyEEAtt8JEPlw=";
   };
 
-  propagatedBuildInputs = [ sphinx pyenchant pbr ]
-    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  nativeBuildInputs = [
+    pbr
+  ];
+
+  propagatedBuildInputs = [
+    sphinx
+    pyenchant
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ];
 
   # No tests included
   doCheck = false;
 
+  pythonImportsCheck = [
+    "sphinxcontrib.spelling"
+  ];
+
   meta = with lib; {
     description = "Sphinx spelling extension";
-    homepage = "https://bitbucket.org/dhellmann/sphinxcontrib-spelling";
-    maintainers = with maintainers; [ ];
+    homepage = "https://github.com/sphinx-contrib/spelling";
+    changelog = "https://github.com/sphinx-contrib/spelling/blob/${version}/docs/source/history.rst";
     license = licenses.bsd2;
+    maintainers = with maintainers; [ ];
   };
-
 }

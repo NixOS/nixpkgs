@@ -4,18 +4,17 @@ let
   INSTALL_PATH="${placeholder "out"}/share/fzf-tab";
 in stdenv.mkDerivation rec {
   pname = "zsh-fzf-tab";
-  version = "unstable-2022-02-10";
+  version = "unstable-2023-05-19";
 
   src = fetchFromGitHub {
     owner = "Aloxaf";
     repo = "fzf-tab";
-    rev = "e8145d541a35d8a03df49fbbeefa50c4a0076bbf";
-    sha256 = "h/3XP/BiNnUgQI29gEBl6RFee77WDhFyvsnTi1eRbKg=";
+    rev = "5a81e13792a1eed4a03d2083771ee6e5b616b9ab";
+    sha256 = "sha256-bIlnYKjjOC6h5/Gg7xBg+i2TBk+h82wmHgAJPhzMsek=";
   };
 
+  strictDeps = true;
   buildInputs = [ ncurses ];
-
-  patches = lib.optionals stdenv.isDarwin [ ./darwin.patch ];
 
   postConfigure = ''
     pushd modules

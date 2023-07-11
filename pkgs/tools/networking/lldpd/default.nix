@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lldpd";
-  version = "1.0.13";
+  version = "1.0.17";
 
   src = fetchurl {
     url = "https://media.luffy.cx/files/lldpd/${pname}-${version}.tar.gz";
-    sha256 = "sha256-1jmCf9iidyDRv9lLxS7KJK9j3cw8nS2mB4h3iInYRwE=";
+    sha256 = "sha256-k0MXfxRdK8pm7wPVlSgHnT8WY8YkseK50IJo79xhJ84=";
   };
 
   configureFlags = [

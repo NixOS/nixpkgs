@@ -1,4 +1,6 @@
-{ lib
+{ stdenv
+, lib
+, backports-zoneinfo
 , billiard
 , boto3
 , buildPythonPackage
@@ -13,25 +15,27 @@
 , moto
 , pymongo
 , pytest-celery
+, pytest-click
 , pytest-subtests
 , pytest-timeout
 , pytestCheckHook
+, python-dateutil
 , pythonOlder
-, pytz
+, tzdata
 , vine
 , nixosTests
 }:
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "5.2.3";
+  version = "5.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4s1BZnrZfU9qL0Zy0cam662hlMYZJTBYtfI3BKqtqoI=";
+    hash = "sha256-Hqul7hTYyMC+2PYGPl4Q2r288jUDqGHPDhC3Ih2Zyw0=";
   };
 
   propagatedBuildInputs = [
@@ -41,26 +45,26 @@ buildPythonPackage rec {
     click-plugins
     click-repl
     kombu
-    pytz
+    python-dateutil
+    tzdata
     vine
+  ]
+  ++ lib.optionals (pythonOlder "3.9") [
+    backports-zoneinfo
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     boto3
     case
     dnspython
     moto
     pymongo
     pytest-celery
+    pytest-click
     pytest-subtests
     pytest-timeout
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace requirements/default.txt \
-      --replace "setuptools>=59.1.1,<59.7.0" "setuptools"
-  '';
 
   disabledTestPaths = [
     # test_eventlet touches network
@@ -73,6 +77,11 @@ buildPythonPackage rec {
   disabledTests = [
     "msgpack"
     "test_check_privileges_no_fchown"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # too many open files on hydra
+    "test_cleanup"
+    "test_with_autoscaler_file_descriptor_safety"
+    "test_with_file_descriptor_safety"
   ];
 
   pythonImportsCheck = [

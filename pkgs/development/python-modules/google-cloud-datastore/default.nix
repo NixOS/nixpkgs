@@ -3,31 +3,42 @@
 , fetchPypi
 , google-api-core
 , google-cloud-core
-, libcst
-, proto-plus
-, mock
-, pytestCheckHook
-, pytest-asyncio
 , google-cloud-testutils
+, libcst
+, mock
+, proto-plus
+, protobuf
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-datastore";
-  version = "2.5.1";
+  version = "2.16.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1fpWovsg60uyAGps9QKXTdqV4WqZOOyeDFxX8YfgAMc=";
+    hash = "sha256-cQ7yfr37UDQPRnHFMq1MFSVmWYXpQhmE/81rlrV+NLs=";
   };
 
   propagatedBuildInputs = [
     google-api-core
     google-cloud-core
-    libcst
     proto-plus
-  ];
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    libcst = [
+      libcst
+    ];
+  };
+
+  nativeCheckInputs = [
     google-cloud-testutils
     mock
     pytestCheckHook
@@ -41,9 +52,11 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Requires credentials
+    "tests/system/test_aggregation_query.py"
     "tests/system/test_allocate_reserve_ids.py"
     "tests/system/test_query.py"
     "tests/system/test_put.py"
+    "tests/system/test_read_consistency.py"
     "tests/system/test_transaction.py"
   ];
 
@@ -56,6 +69,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Google Cloud Datastore API client library";
     homepage = "https://github.com/googleapis/python-datastore";
+    changelog = "https://github.com/googleapis/python-datastore/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

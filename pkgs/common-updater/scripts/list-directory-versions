@@ -1,0 +1,69 @@
+#!/usr/bin/env python
+
+import argparse
+import requests
+import os
+import subprocess
+import json
+import re
+from bs4 import BeautifulSoup
+
+parser = argparse.ArgumentParser(
+    description="Get all available versions listed for a package in a site."
+)
+
+parser.add_argument(
+    "--pname",
+    default=os.environ.get("UPDATE_NIX_PNAME"),
+    required="UPDATE_NIX_PNAME" not in os.environ,
+    help="name of the package",
+)
+parser.add_argument(
+    "--attr-path",
+    default=os.environ.get("UPDATE_NIX_ATTR_PATH"),
+    help="attribute path of the package",
+)
+parser.add_argument("--url", help="url of the page that lists the package versions")
+parser.add_argument("--file", help="file name for writing debugging information")
+
+parser.add_argument("--extra-regex", help="additional regex to filter versions with")
+
+
+if __name__ == "__main__":
+    args = parser.parse_args()
+
+    pname = args.pname
+
+    attr_path = args.attr_path or pname
+
+    url = args.url or json.loads(
+        subprocess.check_output(
+            [
+                "nix-instantiate",
+                "--json",
+                "--eval",
+                "-E",
+                f"with import ./. {{}}; dirOf (lib.head {attr_path}.src.urls)",
+            ],
+            text=True,
+        )
+    )
+
+    # print a debugging message
+    if args.file:
+        with open(args.file, "a") as f:
+            f.write(f"# Listing versions for {pname} from {url}\n")
+
+    page = requests.get(url)
+    soup = BeautifulSoup(page.content, "html.parser")
+    links = soup.find_all("a")
+    for link in links:
+        link_url = link.get("href", None)
+        if link_url is not None:
+            match = re.fullmatch(
+                rf"(.*/)?{args.pname}-([\d.]+?(-[\d\w.-]+?)?)(\.tar)?(\.[^.]*)", link_url
+            )
+            if match:
+                version = match.group(2)
+                if (not args.extra_regex) or re.fullmatch(args.extra_regex, version):
+                    print(version)

@@ -1,13 +1,20 @@
 { lib, stdenv, fetchurl, home ? "/var/lib/crowd"
 , port ? 8092, proxyUrl ? null, openidPassword ? "WILL_NEVER_BE_SET" }:
 
-stdenv.mkDerivation rec {
+let
+  optionalWarning = cond: msg:
+    if cond then lib.warn msg
+    else lib.id;
+in
+
+optionalWarning (openidPassword != "WILL_NEVER_BE_SET") "Using `crowdProperties` is deprecated!"
+(stdenv.mkDerivation rec {
   pname = "atlassian-crowd";
-  version = "4.4.0";
+  version = "5.0.1";
 
   src = fetchurl {
     url = "https://www.atlassian.com/software/crowd/downloads/binary/${pname}-${version}.tar.gz";
-    sha256 = "0ipfvdjs8v02y37rmihljy9lkb3ycz5hyc14mcg65ilsscsq3x91";
+    sha256 = "sha256-ccXSNuiXP0+b9WObboikqVd0nKH0Fi2gMVEF3+WAx5M=";
   };
 
   buildPhase = ''
@@ -44,6 +51,6 @@ stdenv.mkDerivation rec {
     description = "Single sign-on and identity management tool";
     homepage = "https://www.atlassian.com/software/crowd";
     license = licenses.unfree;
-    maintainers = with maintainers; [ fpletz globin ];
+    maintainers = with maintainers; [ globin ];
   };
-}
+})

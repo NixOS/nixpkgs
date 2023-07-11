@@ -1,15 +1,13 @@
-{ pkgs, newScope }:
+{ pkgs, lib }:
 
 let
-  callPackage = newScope self;
-
-  self = rec {
+  packages = self: with self; {
 
     # Update script tailored to mate packages from git repository
-    mateUpdateScript = { pname, version, odd-unstable ? true, url ? "https://pub.mate-desktop.org/releases" }:
-      pkgs.httpTwoLevelsUpdater {
-        inherit pname version odd-unstable url;
-        attrPath = "mate.${pname}";
+    mateUpdateScript = { pname, odd-unstable ? true, rev-prefix ? "v", url ? null }:
+      pkgs.gitUpdater {
+        inherit odd-unstable rev-prefix;
+        url = if url == null then "https://git.mate-desktop.org/${pname}" else url;
       };
 
     atril = callPackage ./atril { };
@@ -100,4 +98,4 @@ let
 
   };
 
-in self
+in lib.makeScope pkgs.newScope packages

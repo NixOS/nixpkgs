@@ -1,20 +1,20 @@
-{ buildGoModule
+{ lib
+, buildGoModule
 , fetchFromGitHub
-, lib
 }:
 
 buildGoModule rec {
   pname = "hakrawler";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "hakluke";
     repo = "hakrawler";
     rev = version;
-    sha256 = "sha256-g0hJGRPLgnWAeB25iIw/JRANrYowfRtAniDD/yAQWYk=";
+    hash = "sha256-ZJG5KlIlzaztG27NoSlILj0I94cm2xZq28qx1ebrSmc=";
   };
 
-  vendorSha256 = "sha256-VmMNUNThRP1jEAjZeJC4q1IvnQEDqoOM+7a0AnABQnU=";
+  vendorSha256 = "sha256-NzgFwPvuEZ2/Ks5dZNRJjzzCNPRGelQP/A6eZltqkmM=";
 
   meta = with lib; {
     description = "Web crawler for the discovery of endpoints and assets";

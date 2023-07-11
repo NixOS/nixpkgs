@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , alsa-lib
 , dbus
 , ell
@@ -11,7 +12,7 @@
 , pkg-config
 , python3
 , readline
-, systemd
+, systemdMinimal
 , udev
 , withExperimental ? false
 }: let
@@ -22,12 +23,20 @@
   ];
 in stdenv.mkDerivation rec {
   pname = "bluez";
-  version = "5.64";
+  version = "5.66";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${pname}-${version}.tar.xz";
-    sha256 = "sha256-rkN+ZbazBwwZi8WwEJ/pzeueqjhzgOIHL53mX+ih3jQ=";
+    sha256 = "sha256-Of6mS1kMlJKYSgwnqJ/CA+HNx0hmCG77j0aYZ3qytXQ=";
   };
+
+  patches = [
+    # replace use of a non-standard symbol to fix build with musl libc (pkgsMusl.bluez)
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/main/bluez/max-input.patch?id=32b31b484cb13009bd8081c4106e4cf064ec2f1f";
+      sha256 = "sha256-SczbXtsxBkCO+izH8XOBcrJEO2f7MdtYVT3+2fCV8wU=";
+    })
+  ];
 
   buildInputs = [
     alsa-lib
@@ -47,11 +56,11 @@ in stdenv.mkDerivation rec {
     python3.pkgs.wrapPython
   ];
 
-  outputs = [ "out" "dev" ] ++ lib.optional doCheck "test";
+  outputs = [ "out" "dev" "test" ];
 
   postPatch = ''
     substituteInPlace tools/hid2hci.rules \
-      --replace /sbin/udevadm ${systemd}/bin/udevadm \
+      --replace /sbin/udevadm ${systemdMinimal}/bin/udevadm \
       --replace "hid2hci " "$out/lib/udev/hid2hci "
     # Disable some tests:
     # - test-mesh-crypto depends on the following kernel settings:
@@ -95,7 +104,7 @@ in stdenv.mkDerivation rec {
 
   doCheck = stdenv.hostPlatform.isx86_64;
 
-  postInstall = lib.optionalString doCheck ''
+  postInstall = ''
     mkdir -p $test/{bin,test}
     cp -a test $test
     pushd $test/test
@@ -121,11 +130,16 @@ in stdenv.mkDerivation rec {
     mkdir $out/etc/bluetooth
     ln -s /etc/bluetooth/main.conf $out/etc/bluetooth/main.conf
 
+    # https://github.com/NixOS/nixpkgs/issues/204418
+    ln -s /etc/bluetooth/input.conf $out/etc/bluetooth/input.conf
+    ln -s /etc/bluetooth/network.conf $out/etc/bluetooth/network.conf
+
     # Add missing tools, ref https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/bluez
     for files in `find tools/ -type f -perm -755`; do
       filename=$(basename $files)
       install -Dm755 tools/$filename $out/bin/$filename
     done
+    install -Dm755 attrib/gatttool $out/bin/gatttool
   '';
 
   enableParallelBuilding = true;

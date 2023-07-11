@@ -1,19 +1,19 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "zabbixctl";
-  version = "unstable-2019-07-06";
-
-  goPackagePath = "github.com/kovetskiy/zabbixctl";
+  version = "unstable-2021-05-25";
 
   src = fetchFromGitHub {
     owner = "kovetskiy";
     repo = pname;
-    rev = "f2e856b7ab7d8ff9f494fe9f481bbaef18ea6ff7";
-    sha256 = "1lr3g9h3aa2px2kh5b2qcpj3aqyhqwq7kj1s9wifgmri9q7fsdzy";
+    rev = "872d73b12901b143898bffe3711b93a34ca75abe";
+    sha256 = "sha256-fWT3cgIHjHcKwFDjWIf3BUUUaVZ7hyc2ibkpU+AsW0I=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-BphQcPPmeNU7RDtaHJQxIoW8xxD86xWgqLBsLR08Tag=";
+
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     description = "Most effective way for operating in Zabbix Server";

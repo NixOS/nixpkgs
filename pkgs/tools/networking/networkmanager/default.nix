@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , substituteAll
-, intltool
+, gettext
 , pkg-config
 , fetchpatch
 , dbus
@@ -24,6 +24,7 @@
 , libselinux
 , audit
 , gobject-introspection
+, perl
 , modemmanager
 , openresolv
 , libndp
@@ -34,6 +35,7 @@
 , iputils
 , kmod
 , jansson
+, elfutils
 , gtk-doc
 , libxslt
 , docbook_xsl
@@ -43,22 +45,24 @@
 , openconnect
 , curl
 , meson
+, mesonEmulatorHook
 , ninja
 , libpsl
 , mobile-broadband-provider-info
 , runtimeShell
+, buildPackages
 }:
 
 let
-  pythonForDocs = python3.withPackages (pkgs: with pkgs; [ pygobject3 ]);
+  pythonForDocs = python3.pythonForBuild.withPackages (pkgs: with pkgs; [ pygobject3 ]);
 in
 stdenv.mkDerivation rec {
   pname = "networkmanager";
-  version = "1.36.4";
+  version = "1.42.6";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/${lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
-    sha256 = "YTBOk33ZJkcdVnFb3t57q3zKyCc1bmfycA00MxfNPFk=";
+    sha256 = "sha256-jDiKw3daxrzrYF+uIb4sPiYcr+YGeZSonw36RhDtAnk=";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
@@ -102,11 +106,14 @@ stdenv.mkDerivation rec {
     "-Ddhcpcanon=no"
 
     # Miscellaneous
-    "-Ddocs=true"
+    # almost cross-compiles, however fails with
+    # ** (process:9234): WARNING **: Failed to load shared library '/nix/store/...-networkmanager-aarch64-unknown-linux-gnu-1.38.2/lib/libnm.so.0' referenced by the typelib: /nix/store/...-networkmanager-aarch64-unknown-linux-gnu-1.38.2/lib/libnm.so.0: cannot open shared object file: No such file or directory
+    "-Ddocs=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
     # We don't use firewalld in NixOS
     "-Dfirewalld_zone=false"
     "-Dtests=no"
     "-Dcrypto=gnutls"
+    "-Dmobile_broadband_provider_info_database=${mobile-broadband-provider-info}/share/mobile-broadband-provider-info/serviceproviders.xml"
   ];
 
   patches = [
@@ -119,9 +126,16 @@ stdenv.mkDerivation rec {
     # Meson does not support using different directories during build and
     # for installation like Autotools did with flags passed to make install.
     ./fix-install-paths.patch
+
+    # Support for building with ppp 2.5.0
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/5df19f5b26c5921a401e63fb329e844a02d6b1f2.diff";
+      hash = "sha256-BDm0P2U4HENAtq7OowWVDxqALNbG0nr9k/CLdE61Sck=";
+    })
   ];
 
   buildInputs = [
+    gobject-introspection
     systemd
     libselinux
     audit
@@ -134,12 +148,12 @@ stdenv.mkDerivation rec {
     mobile-broadband-provider-info
     bluez5
     dnsmasq
-    gobject-introspection
     modemmanager
     readline
     newt
     libsoup
     jansson
+    dbus # used to get directory paths with pkg-config during configuration
   ];
 
   propagatedBuildInputs = [ gnutls libgcrypt ];
@@ -147,11 +161,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    intltool
+    gettext
     pkg-config
     vala
     gobject-introspection
-    dbus
+    perl
+    elfutils # used to find jansson soname
     # Docs
     gtk-doc
     libxslt
@@ -160,6 +175,8 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_42
     docbook_xml_dtd_43
     pythonForDocs
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   doCheck = false; # requires /sys, the net
@@ -167,6 +184,10 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs ./tools
     patchShebangs libnm/generate-setting-docs.py
+
+    # TODO: submit upstream
+    substituteInPlace meson.build \
+      --replace "'vala', req" "'vala', native: false, req"
   '';
 
   preBuild = ''
@@ -176,6 +197,11 @@ stdenv.mkDerivation rec {
     # We are using a symlink that will be overridden during installation.
     mkdir -p ${placeholder "out"}/lib
     ln -s $PWD/src/libnm-client-impl/libnm.so.0 ${placeholder "out"}/lib/libnm.so.0
+  '';
+
+  postFixup = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    cp -r ${buildPackages.networkmanager.devdoc} $devdoc
+    cp -r ${buildPackages.networkmanager.man} $man
   '';
 
   passthru = {

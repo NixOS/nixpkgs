@@ -1,26 +1,36 @@
 { buildPythonPackage
 , fetchPypi
 , fetchurl
-, pythonOlder
 , lib
 , nixosTests
+, python
+, pythonOlder
 
 # pythonPackages
-, tqdm
+, hatchling
 , dnspython
 , expiringdict
-, urllib3
-, requests
 , publicsuffix2
 , xmltodict
 , geoip2
+, urllib3
+, requests
 , imapclient
 , dateparser
+, mailsuite
+, elasticsearch
 , elasticsearch-dsl
 , kafka-python
-, mailsuite
+, tqdm
 , lxml
 , boto3
+, msgraph-core
+, azure-identity
+, google-api-core
+, google-api-python-client
+, google-auth
+, google-auth-httplib2
+, google-auth-oauthlib
 }:
 
 let
@@ -31,32 +41,54 @@ let
 in
 buildPythonPackage rec {
   pname = "parsedmarc";
-  version = "7.0.1";
+  version = "8.4.2";
 
   disabled = pythonOlder "3.7";
 
+  format = "pyproject";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1mi4hx410y7ikpfy1582lm252si0c3yryj0idqgqbx417fm21jjc";
+    hash = "sha256-6dP9zQI0jYiE+lUhmFBNp8Sv9povm9Pa4R4TuzAmEQk=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "elasticsearch<7.14.0" "elasticsearch"
+  '';
+
+  nativeBuildInputs = [
+    hatchling
+  ];
+
   propagatedBuildInputs = [
-    tqdm
     dnspython
     expiringdict
-    urllib3
-    requests
     publicsuffix2
     xmltodict
     geoip2
+    urllib3
+    requests
     imapclient
     dateparser
+    mailsuite
+    elasticsearch
     elasticsearch-dsl
     kafka-python
-    mailsuite
+    tqdm
     lxml
     boto3
+    msgraph-core
+    azure-identity
+    google-api-core
+    google-api-python-client
+    google-auth
+    google-auth-httplib2
+    google-auth-oauthlib
   ];
+
+  # no tests on PyPI, no tags on GitHub
+  doCheck = false;
 
   pythonImportsCheck = [ "parsedmarc" ];
 
@@ -66,6 +98,7 @@ buildPythonPackage rec {
   };
 
   meta = {
+    changelog = "https://github.com/domainaware/parsedmarc/blob/master/CHANGELOG.md#${lib.replaceStrings [ "." ] [ "" ] version}";
     description = "Python module and CLI utility for parsing DMARC reports";
     homepage = "https://domainaware.github.io/parsedmarc/";
     maintainers = with lib.maintainers; [ talyz ];

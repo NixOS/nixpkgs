@@ -3,18 +3,22 @@
 , fetchPypi
 , pillow
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "svg.path";
-  version = "5.1";
+  version = "6.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-CltSq7BGQNmC/3EI5N0wx4QDu0zZWMJLovCUdtXZIws=";
+    hash = "sha256-GiFZ+duJjfk8RjfP08yvfaH9Bz9Z+ppZUMc+RtSqGso=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pillow
     pytestCheckHook
   ];
@@ -24,7 +28,9 @@ buildPythonPackage rec {
     "test_image"
   ];
 
-  pythonImportsCheck = [ "svg.path" ];
+  pythonImportsCheck = [
+    "svg.path"
+  ];
 
   meta = with lib; {
     description = "SVG path objects and parser";

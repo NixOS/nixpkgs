@@ -1,19 +1,16 @@
 { lib
 , fetchurl
-, fetchpatch
 , pkg-config
 , gettext
 , itstool
 , python3
 , wrapGAppsHook
-, python3Packages
 , gst_all_1
 , gtk3
 , gobject-introspection
 , libpeas
 , librsvg
 , gnome
-, gnome-desktop
 , libnotify
 , gsound
 , meson
@@ -21,15 +18,15 @@
 , gsettings-desktop-schemas
 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "pitivi";
-  version = "2021.05";
+  version = "2023.03";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/pitivi/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "z1aTxGxCqw2hSi5Zv89LyIBgS0HpzTqo0uvcYIJ7dcc=";
+    sha256 = "PX1OFEeavqMPvF613BKgxwErxqW2huw6mQxo8YpBS/M=";
   };
 
   patches = [
@@ -37,13 +34,6 @@ python3Packages.buildPythonApplication rec {
     # and saves them to the generated binary. This would make the build-time
     # dependencies part of the closure so we remove it.
     ./prevent-closure-contamination.patch
-
-    # Fix build with meson 0.61
-    # https://gitlab.gnome.org/GNOME/pitivi/-/merge_requests/414
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/pitivi/-/commit/ddf2369d1fc6fddd63f676cc905a8b8e96291a4c.patch";
-      sha256 = "MC4naGnqhrYlFBFHZaSzbOzrqaNK5/Xv5jBmCu0fLQE=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -54,16 +44,14 @@ python3Packages.buildPythonApplication rec {
     itstool
     python3
     wrapGAppsHook
+    gobject-introspection
   ];
 
   buildInputs = [
-    gobject-introspection
     gtk3
     libpeas
     librsvg
-    gnome-desktop
     gsound
-    gnome.adwaita-icon-theme
     gsettings-desktop-schemas
     libnotify
   ] ++ (with gst_all_1; [
@@ -77,25 +65,18 @@ python3Packages.buildPythonApplication rec {
     gst-devtools
   ]);
 
-  pythonPath = with python3Packages; [
+  pythonPath = with python3.pkgs; [
     pygobject3
     gst-python
-    pyxdg
     numpy
     pycairo
     matplotlib
-    dbus-python
+    librosa
   ];
 
   postPatch = ''
     patchShebangs ./getenvvar.py
   '';
-
-  # Fixes error
-  #     Couldn’t recognize the image file format for file ".../share/pitivi/pixmaps/asset-proxied.svg"
-  # at startup, see https://github.com/NixOS/nixpkgs/issues/56943
-  # and https://github.com/NixOS/nixpkgs/issues/89691#issuecomment-714398705.
-  strictDeps = false;
 
   passthru = {
     updateScript = gnome.updateScript {

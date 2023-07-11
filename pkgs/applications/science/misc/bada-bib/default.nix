@@ -10,22 +10,24 @@
 , gnome
 , gobject-introspection
 , gtk4
+, gtksourceview5
+, libadwaita
 , libxml2
 , pkg-config
 , python3Packages
-, wrapGAppsHook4 }:
+, wrapGAppsHook4
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "bada-bib";
-  version = "0.6.1";
+  version = "0.8.0";
   format = "other";
-  strictDeps = false; # https://github.com/NixOS/nixpkgs/issues/56943
 
   src = fetchFromGitHub {
     owner = "RogerCrocker";
     repo = "BadaBib";
-    rev = "v${version}";
-    sha256 = "sha256-fuGGKBScdo9rI3tLSBWIcWEME8nSuct0IUyfmI7PzCc=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-mdAoJh3qOwtPX8cMCYw7MDDNy10GdhynnS8gtszJROI=";
   };
 
   nativeBuildInputs = [
@@ -42,9 +44,11 @@ python3Packages.buildPythonApplication rec {
     gdk-pixbuf
     glib
     gtk4
+    gtksourceview5
+    libadwaita
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     appstream-glib
     desktop-file-utils
   ];

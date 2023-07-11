@@ -1,15 +1,17 @@
 { lib, stdenv, fetchFromGitHub, llvmPackages, ncurses, cmake, libxml2
-, symlinkJoin, breakpointHook, cudaPackages, enableCUDA ? false }:
+, symlinkJoin, breakpointHook, cudaPackages, enableCUDA ? false
+, libobjc, Cocoa, Foundation
+}:
 
 let
-  luajitRev = "9143e86498436892cb4316550be4d45b68a61224";
+  luajitRev = "50936d784474747b4569d988767f1b5bab8bb6d0";
   luajitBase = "LuaJIT-${luajitRev}";
   luajitArchive = "${luajitBase}.tar.gz";
   luajitSrc = fetchFromGitHub {
     owner = "LuaJIT";
     repo = "LuaJIT";
     rev = luajitRev;
-    sha256 = "1zw1yr0375d6jr5x20zvkvk76hkaqamjynbswpl604w6r6id070b";
+    sha256 = "1g87pl014b5v6z2nnhiwn3wf405skawszfr5wdzyfbx00j3kgxd0";
   };
 
   llvmMerged = symlinkJoin {
@@ -30,22 +32,25 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "terra";
-  version = "1.0.0-beta3_${builtins.substring 0 7 src.rev}";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "terralang";
     repo = "terra";
-    rev = "99ff93f8c60c89bbe2dc7c63eab9bfe2f4c4833e";
-    sha256 = "0ww54xjvv6p8jwsh6hml3v527zgnv2gj58gpb818bbg4k1jwa5fl";
+    rev = "release-${version}";
+    sha256 = "0v9vpxcp9ybwnfljskqn41vjq7c0srdfv7qs890a6480pnk4kavd";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ llvmMerged ncurses libxml2 ] ++ lib.optional enableCUDA cuda;
+  buildInputs = [ llvmMerged ncurses libxml2 ]
+    ++ lib.optionals enableCUDA [ cuda ]
+    ++ lib.optionals stdenv.isDarwin [ libobjc Cocoa Foundation ];
 
   cmakeFlags = [
     "-DHAS_TERRA_VERSION=0"
     "-DTERRA_VERSION=${version}"
     "-DTERRA_LUA=luajit"
+    "-DTERRA_SKIP_LUA_DOWNLOAD=ON"
     "-DCLANG_RESOURCE_DIR=${llvmMerged}/lib/clang/${clangVersion}"
   ] ++ lib.optional enableCUDA "-DTERRA_ENABLE_CUDA=ON";
 
@@ -56,9 +61,6 @@ in stdenv.mkDerivation rec {
   patches = [ ./nix-cflags.patch ];
 
   postPatch = ''
-    sed -i '/file(DOWNLOAD "''${LUAJIT_URL}" "''${LUAJIT_TAR}")/d' \
-      cmake/Modules/GetLuaJIT.cmake
-
     substituteInPlace src/terralib.lua \
       --subst-var-by NIX_LIBC_INCLUDE ${lib.getDev stdenv.cc.libc}/include
   '';
@@ -82,8 +84,10 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A low-level counterpart to Lua";
     homepage = "https://terralang.org/";
-    platforms = platforms.x86_64;
-    maintainers = with maintainers; [ jb55 seylerius thoughtpolice ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [ jb55 seylerius thoughtpolice elliottslaughter ];
     license = licenses.mit;
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

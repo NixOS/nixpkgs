@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Brother MFC-L2740DW lpr driver";
     homepage = "http://www.brother.com/";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = [ lib.maintainers.Enzime ];

@@ -1,8 +1,11 @@
 { lib
 , stdenv
-, ansible
+, ansible-core
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
+, glibcLocales
+, importlib-metadata
 , mock
 , openssh
 , pbr
@@ -12,6 +15,7 @@
 , pytest-timeout
 , pytest-xdist
 , pytestCheckHook
+, pythonOlder
 , python-daemon
 , pyyaml
 , six
@@ -19,29 +23,43 @@
 
 buildPythonPackage rec {
   pname = "ansible-runner";
-  version = "2.1.3";
+  version = "2.3.3";
   format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2m5dD+gGDL5LnY7QbDYiGdu4GYu0C49WU29GZY2bnBo=";
+    hash = "sha256-OP9jXkuUeR3ilWyB4mWDbsSWWzDp7jXXL88ycdxGuYs=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-tests.patch";
+      url = "https://github.com/ansible/ansible-runner/commit/0d522c90cfc1f305e118705a1b3335ccb9c1633d.patch";
+      hash = "sha256-eTnQkftvjK0YHU+ovotRVSuVlvaVeXp5SvYk1DPCg88=";
+      excludes = [ ".github/workflows/ci.yml" "tox.ini" ];
+    })
+  ];
 
   nativeBuildInputs = [
     pbr
   ];
 
   propagatedBuildInputs = [
-    ansible
+    ansible-core
     psutil
     pexpect
     python-daemon
     pyyaml
     six
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
   ];
 
-  checkInputs = [
-    ansible # required to place ansible CLI onto the PATH in tests
+  nativeCheckInputs = [
+    ansible-core # required to place ansible CLI onto the PATH in tests
+    glibcLocales
     pytestCheckHook
     pytest-mock
     pytest-timeout
@@ -53,6 +71,8 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$(mktemp -d)
     export PATH="$PATH:$out/bin";
+    # avoid coverage flags
+    rm pytest.ini
   '';
 
   disabledTests = [
@@ -63,10 +83,6 @@ buildPythonPackage rec {
     "test_large_stdout_blob"
     # Failed: DID NOT RAISE <class 'RuntimeError'>
     "test_validate_pattern"
-  ] ++ lib.optional stdenv.isDarwin [
-    # test_process_isolation_settings is currently broken on Darwin Catalina
-    # https://github.com/ansible/ansible-runner/issues/413
-    "process_isolation_settings"
   ];
 
   disabledTestPaths = [

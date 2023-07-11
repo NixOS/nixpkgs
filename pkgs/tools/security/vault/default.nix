@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "vault";
-  version = "1.10.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    sha256 = "sha256-XgrEtAVfMcXbmAjwgIWME/v85QHJ11fUXapAZtS/lSw=";
+    sha256 = "sha256-kx60OMIw7F9osF1u6GGp/xfUXo9XUhHmsrh3gCud0iI=";
   };
 
-  vendorSha256 = "sha256-Bo0+HSG7NqaweMKPdl+kzB6RdbQsy2FAzmr7ZZVgcsg=";
+  vendorHash = "sha256-gQ+n/UtZn07lyi48sRCulZ7R4gtwKVu1tklFwRAUIZo=";
 
   subPackages = [ "." ];
 
@@ -38,13 +38,12 @@ buildGoModule rec {
       --prefix PATH ${lib.makeBinPath [ gawk glibc ]}
   '';
 
-  passthru.tests = { inherit (nixosTests) vault vault-postgresql; };
+  passthru.tests = { inherit (nixosTests) vault vault-postgresql vault-dev vault-agent; };
 
   meta = with lib; {
     homepage = "https://www.vaultproject.io/";
     description = "A tool for managing secrets";
     changelog = "https://github.com/hashicorp/vault/blob/v${version}/CHANGELOG.md";
-    platforms = platforms.linux ++ platforms.darwin;
     license = licenses.mpl20;
     maintainers = with maintainers; [ rushmorem lnl7 offline pradeepchhetri Chili-Man techknowlogick ];
   };

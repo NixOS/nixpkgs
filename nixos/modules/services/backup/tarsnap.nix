@@ -30,15 +30,15 @@ in
 
   options = {
     services.tarsnap = {
-      enable = mkEnableOption "periodic tarsnap backups";
+      enable = mkEnableOption (lib.mdDoc "periodic tarsnap backups");
 
       keyfile = mkOption {
         type = types.str;
         default = "/root/tarsnap.key";
-        description = ''
+        description = lib.mdDoc ''
           The keyfile which associates this machine with your tarsnap
           account.
-          Create the keyfile with <command>tarsnap-keygen</command>.
+          Create the keyfile with {command}`tarsnap-keygen`.
 
           Note that each individual archive (specified below) may also have its
           own individual keyfile specified. Tarsnap does not allow multiple
@@ -47,11 +47,11 @@ in
           archives specified, you should either spread out your backups to be
           far apart, or specify a separate key for each archive. By default
           every archive defaults to using
-          <literal>"/root/tarsnap.key"</literal>.
+          `"/root/tarsnap.key"`.
 
           It's recommended for backups that you generate a key for every archive
-          using <literal>tarsnap-keygen(1)</literal>, and then generate a
-          write-only tarsnap key using <literal>tarsnap-keymgmt(1)</literal>,
+          using `tarsnap-keygen(1)`, and then generate a
+          write-only tarsnap key using `tarsnap-keymgmt(1)`,
           and keep your master key(s) for a particular machine off-site.
 
           The keyfile name should be given as a string and not a path, to
@@ -67,18 +67,18 @@ in
                 type = types.str;
                 default = gcfg.keyfile;
                 defaultText = literalExpression "config.${opt.keyfile}";
-                description = ''
+                description = lib.mdDoc ''
                   Set a specific keyfile for this archive. This defaults to
-                  <literal>"/root/tarsnap.key"</literal> if left unspecified.
+                  `"/root/tarsnap.key"` if left unspecified.
 
                   Use this option if you want to run multiple backups
                   concurrently - each archive must have a unique key. You can
                   generate a write-only key derived from your master key (which
-                  is recommended) using <literal>tarsnap-keymgmt(1)</literal>.
+                  is recommended) using `tarsnap-keymgmt(1)`.
 
                   Note: every archive must have an individual master key. You
                   must generate multiple keys with
-                  <literal>tarsnap-keygen(1)</literal>, and then generate write
+                  `tarsnap-keygen(1)`, and then generate write
                   only keys from those.
 
                   The keyfile name should be given as a string and not a path, to
@@ -92,47 +92,47 @@ in
                 defaultText = literalExpression ''
                   "/var/cache/tarsnap/''${utils.escapeSystemdPath config.${options.keyfile}}"
                 '';
-                description = ''
+                description = lib.mdDoc ''
                   The cache allows tarsnap to identify previously stored data
                   blocks, reducing archival time and bandwidth usage.
 
                   Should the cache become desynchronized or corrupted, tarsnap
                   will refuse to run until you manually rebuild the cache with
-                  <command>tarsnap --fsck</command>.
+                  {command}`tarsnap --fsck`.
 
-                  Set to <literal>null</literal> to disable caching.
+                  Set to `null` to disable caching.
                 '';
               };
 
               nodump = mkOption {
                 type = types.bool;
                 default = true;
-                description = ''
-                  Exclude files with the <literal>nodump</literal> flag.
+                description = lib.mdDoc ''
+                  Exclude files with the `nodump` flag.
                 '';
               };
 
               printStats = mkOption {
                 type = types.bool;
                 default = true;
-                description = ''
+                description = lib.mdDoc ''
                   Print global archive statistics upon completion.
                   The output is available via
-                  <command>systemctl status tarsnap-archive-name</command>.
+                  {command}`systemctl status tarsnap-archive-name`.
                 '';
               };
 
               checkpointBytes = mkOption {
                 type = types.nullOr types.str;
                 default = "1GB";
-                description = ''
-                  Create a checkpoint every <literal>checkpointBytes</literal>
+                description = lib.mdDoc ''
+                  Create a checkpoint every `checkpointBytes`
                   of uploaded data (optionally specified using an SI prefix).
 
                   1GB is the minimum value. A higher value is recommended,
                   as checkpointing is expensive.
 
-                  Set to <literal>null</literal> to disable checkpointing.
+                  Set to `null` to disable checkpointing.
                 '';
               };
 
@@ -140,19 +140,18 @@ in
                 type = types.str;
                 default = "01:15";
                 example = "hourly";
-                description = ''
+                description = lib.mdDoc ''
                   Create archive at this interval.
 
                   The format is described in
-                  <citerefentry><refentrytitle>systemd.time</refentrytitle>
-                  <manvolnum>7</manvolnum></citerefentry>.
+                  {manpage}`systemd.time(7)`.
                 '';
               };
 
               aggressiveNetworking = mkOption {
                 type = types.bool;
                 default = false;
-                description = ''
+                description = lib.mdDoc ''
                   Upload data over multiple TCP connections, potentially
                   increasing tarsnap's bandwidth utilisation at the cost
                   of slowing down all other network traffic. Not
@@ -164,13 +163,13 @@ in
               directories = mkOption {
                 type = types.listOf types.path;
                 default = [];
-                description = "List of filesystem paths to archive.";
+                description = lib.mdDoc "List of filesystem paths to archive.";
               };
 
               excludes = mkOption {
                 type = types.listOf types.str;
                 default = [];
-                description = ''
+                description = lib.mdDoc ''
                   Exclude files and directories matching these patterns.
                 '';
               };
@@ -178,7 +177,7 @@ in
               includes = mkOption {
                 type = types.listOf types.str;
                 default = [];
-                description = ''
+                description = lib.mdDoc ''
                   Include only files and directories matching these
                   patterns (the empty list includes everything).
 
@@ -189,7 +188,7 @@ in
               lowmem = mkOption {
                 type = types.bool;
                 default = false;
-                description = ''
+                description = lib.mdDoc ''
                   Reduce memory consumption by not caching small files.
                   Possibly beneficial if the average file size is smaller
                   than 1 MB and the number of files is lower than the
@@ -200,9 +199,9 @@ in
               verylowmem = mkOption {
                 type = types.bool;
                 default = false;
-                description = ''
+                description = lib.mdDoc ''
                   Reduce memory consumption by a factor of 2 beyond what
-                  <literal>lowmem</literal> does, at the cost of significantly
+                  `lowmem` does, at the cost of significantly
                   slowing down the archiving process.
                 '';
               };
@@ -210,7 +209,7 @@ in
               maxbw = mkOption {
                 type = types.nullOr types.int;
                 default = null;
-                description = ''
+                description = lib.mdDoc ''
                   Abort archival if upstream bandwidth usage in bytes
                   exceeds this threshold.
                 '';
@@ -220,7 +219,7 @@ in
                 type = types.nullOr types.int;
                 default = null;
                 example = literalExpression "25 * 1000";
-                description = ''
+                description = lib.mdDoc ''
                   Upload bandwidth rate limit in bytes.
                 '';
               };
@@ -229,7 +228,7 @@ in
                 type = types.nullOr types.int;
                 default = null;
                 example = literalExpression "50 * 1000";
-                description = ''
+                description = lib.mdDoc ''
                   Download bandwidth rate limit in bytes.
                 '';
               };
@@ -237,21 +236,21 @@ in
               verbose = mkOption {
                 type = types.bool;
                 default = false;
-                description = ''
+                description = lib.mdDoc ''
                   Whether to produce verbose logging output.
                 '';
               };
               explicitSymlinks = mkOption {
                 type = types.bool;
                 default = false;
-                description = ''
+                description = lib.mdDoc ''
                   Whether to follow symlinks specified as archives.
                 '';
               };
               followSymlinks = mkOption {
                 type = types.bool;
                 default = false;
-                description = ''
+                description = lib.mdDoc ''
                   Whether to follow all symlinks in archive trees.
                 '';
               };
@@ -274,17 +273,17 @@ in
           }
         '';
 
-        description = ''
+        description = lib.mdDoc ''
           Tarsnap archive configurations. Each attribute names an archive
           to be created at a given time interval, according to the options
           associated with it. When uploading to the tarsnap server,
           archive names are suffixed by a 1 second resolution timestamp,
-          with the format <literal>%Y%m%d%H%M%S</literal>.
+          with the format `%Y%m%d%H%M%S`.
 
           For each member of the set is created a timer which triggers the
-          instanced <literal>tarsnap-archive-name</literal> service unit. You may use
-          <command>systemctl start tarsnap-archive-name</command> to
-          manually trigger creation of <literal>archive-name</literal> at
+          instanced `tarsnap-archive-name` service unit. You may use
+          {command}`systemctl start tarsnap-archive-name` to
+          manually trigger creation of `archive-name` at
           any time.
         '';
       };

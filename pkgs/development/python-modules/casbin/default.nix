@@ -1,15 +1,15 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, simpleeval
+, pytestCheckHook
 , pythonOlder
-, coveralls
+, simpleeval
 , wcmatch
 }:
 
 buildPythonPackage rec {
   pname = "casbin";
-  version = "1.15.5";
+  version = "1.20.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = "pycasbin";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-7q9zTuqdIUAiipA5kh8CwQa/TeiXGsKuGGvYYwTjObw=";
+    hash = "sha256-hvnOVyXaC74pMlERZQQlrk5keyWAvE/UONwErJ7RA5c=";
   };
 
   propagatedBuildInputs = [
@@ -26,21 +26,18 @@ buildPythonPackage rec {
     wcmatch
   ];
 
-  checkInputs = [
-    coveralls
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
-
-  checkPhase = ''
-    coverage run -m unittest discover -s tests -t tests
-  '';
 
   pythonImportsCheck = [
     "casbin"
   ];
 
   meta = with lib; {
-    description = "An authorization library that supports access control models like ACL, RBAC, ABAC in Python";
+    description = "Authorization library that supports access control models like ACL, RBAC and ABAC";
     homepage = "https://github.com/casbin/pycasbin";
+    changelog = "https://github.com/casbin/pycasbin/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ costrouc ];
   };

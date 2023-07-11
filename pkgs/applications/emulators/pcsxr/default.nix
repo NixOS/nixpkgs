@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, autoreconfHook, intltool, pkg-config, gtk3, SDL2, xorg
-, wrapGAppsHook, libcdio, nasm, ffmpeg, file
+, wrapGAppsHook, libcdio, nasm, ffmpeg_4, file
 , fetchpatch }:
 
 stdenv.mkDerivation rec {
@@ -52,9 +52,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook intltool pkg-config wrapGAppsHook ];
   buildInputs = [
-    gtk3 SDL2 xorg.libXv xorg.libXtst libcdio nasm ffmpeg file
+    gtk3 SDL2 xorg.libXv xorg.libXtst libcdio nasm ffmpeg_4 file
     xorg.libXxf86vm
   ];
+
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: AboutDlg.o:/build/pcsxr/gui/Linux.h:42: multiple definition of `cfgfile';
+  #     LnxMain.o:/build/pcsxr/gui/Linux.h:42: first defined here
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   dynarecTarget =
    if stdenv.isx86_64 then "x86_64"
@@ -80,8 +86,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Playstation 1 emulator";
-    homepage = "https://pcsxr.codeplex.com/";
+    homepage = "https://github.com/iCatButler/pcsxr";
     maintainers = with maintainers; [ rardiol ];
     license = licenses.gpl2Plus;
     platforms = platforms.all;

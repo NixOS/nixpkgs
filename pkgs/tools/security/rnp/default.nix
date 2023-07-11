@@ -10,21 +10,27 @@
 , json_c
 , pkg-config
 , python3
+, sexpp
 , zlib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rnp";
-  version = "0.16.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "rnpgp";
     repo = "rnp";
-    rev = "v${version}";
-    sha256 = "u0etVslTBF9fBqnpVBofYsm0uC/eR6gO3lhwzqua5Qw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-4fB7Sl9+ATrJTRnhbNG5BoW3XLxR7IP167RK96+gxj0=";
   };
 
-  buildInputs = [ zlib bzip2 json_c botan2 ];
+  buildInputs = [ zlib bzip2 json_c botan2 sexpp ];
+
+  patches = [
+    ./unbundle-sexpp.patch
+    ./sexp_sexpp_rename.patch
+  ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
@@ -36,14 +42,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ asciidoctor cmake gnupg gtest pkg-config python3 ];
 
-  # NOTE: check-only inputs should ideally be moved to checkInputs, but it
+  # NOTE: check-only inputs should ideally be moved to nativeCheckInputs, but it
   # would fail during buildPhase.
-  # checkInputs = [ gtest python3 ];
+  # nativeCheckInputs = [ gtest python3 ];
 
   outputs = [ "out" "lib" "dev" ];
 
   preConfigure = ''
-    echo "v${version}" > version.txt
+    echo "v${finalAttrs.version}" > version.txt
   '';
 
   meta = with lib; {
@@ -53,4 +59,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ ribose-jeffreylau ];
   };
-}
+})

@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "0kdr7w2fhgjpcf1k3l6an9im583iqkr6v8hb4q1zw30nh3bqkk0f";
   };
 
-  passthru.extras-require = {
+  passthru.optional-dependencies = {
     async = [
       aiofiles
     ];
@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   doCheck = pythonOlder "3.10"; # all tests result in RuntimeError on 3.10
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ]
-  ++ passthru.extras-require.async;
+  ++ passthru.optional-dependencies.async;
 
   pythonImportsCheck = [
     "ppadb.client"

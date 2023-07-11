@@ -5,7 +5,9 @@
 
 buildDunePackage rec {
   pname = "gluten-lwt";
-  inherit (gluten) doCheck meta src useDune2 version;
+  inherit (gluten) doCheck meta src version;
+
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     gluten

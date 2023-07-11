@@ -12,17 +12,21 @@
 , netifaces
 , os-service-types
 , pbr
+, pythonOlder
 , pyyaml
 , requestsexceptions
 }:
 
 buildPythonPackage rec {
   pname = "openstacksdk";
-  version = "0.61.0";
+  version = "1.3.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3eed308871230f0c53a8f58b6c5a358b184080c6b2c6bc69ab088eea057aa127";
+    hash = "sha256-+g/YOGv311SaOs65xOKai3BJp4GbhkD1awEFL4oQLMo=";
   };
 
   propagatedBuildInputs = [
@@ -47,7 +51,9 @@ buildPythonPackage rec {
     tests = callPackage ./tests.nix { };
   };
 
-  pythonImportsCheck = [ "openstack" ];
+  pythonImportsCheck = [
+    "openstack"
+  ];
 
   meta = with lib; {
     description = "An SDK for building applications to work with OpenStack";

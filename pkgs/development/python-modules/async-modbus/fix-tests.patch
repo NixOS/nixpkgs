@@ -1,0 +1,73 @@
+diff --git a/tests/test_async_modbus.py b/tests/test_async_modbus.py
+index b0bd3fd..6b8df87 100644
+--- a/tests/test_async_modbus.py
++++ b/tests/test_async_modbus.py
+@@ -194,7 +194,7 @@ async def test_read_coils(proto, slave_id, starting_address, expected_reply):
+             await coro
+     else:
+         reply = await coro
+-        assert (reply == expected_reply).all()
++        assert reply == expected_reply
+ 
+     server = Server(slave_id, starting_address, expected_reply)
+     client = AsyncClient(server, protocol)
+@@ -204,7 +204,7 @@ async def test_read_coils(proto, slave_id, starting_address, expected_reply):
+             await coro
+     else:
+         reply = await coro
+-        assert (reply == expected_reply).all()
++        assert reply == expected_reply
+ 
+ 
+ @pytest.mark.asyncio
+@@ -273,7 +273,7 @@ async def test_read_discrete_inputs(proto, slave_id, starting_address, expected_
+             await coro
+     else:
+         reply = await coro
+-        assert (reply == expected_reply).all()
++        assert reply == expected_reply
+ 
+     server = Server(slave_id, starting_address, expected_reply)
+     client = AsyncClient(server, protocol)
+@@ -283,7 +283,7 @@ async def test_read_discrete_inputs(proto, slave_id, starting_address, expected_
+             await coro
+     else:
+         reply = await coro
+-        assert (reply == expected_reply).all()
++        assert reply == expected_reply
+ 
+ 
+ @pytest.mark.asyncio
+@@ -306,7 +306,7 @@ async def test_read_holding_registers(
+             await coro
+     else:
+         reply = await coro
+-        assert (reply == expected_reply).all()
++        assert reply == expected_reply
+ 
+     server = Server(slave_id, starting_address, expected_reply)
+     client = AsyncClient(server, protocol)
+@@ -316,7 +316,7 @@ async def test_read_holding_registers(
+             await coro
+     else:
+         reply = await coro
+-        assert (reply == expected_reply).all()
++        assert reply == expected_reply
+ 
+ 
+ @pytest.mark.asyncio
+@@ -383,7 +383,7 @@ async def test_read_input_registers(proto, slave_id, starting_address, expected_
+             await coro
+     else:
+         reply = await coro
+-        assert (reply == expected_reply).all()
++        assert reply == expected_reply
+ 
+     server = Server(slave_id, starting_address, expected_reply)
+     client = AsyncClient(server, protocol)
+@@ -393,4 +393,4 @@ async def test_read_input_registers(proto, slave_id, starting_address, expected_
+             await coro
+     else:
+         reply = await coro
+-        assert (reply == expected_reply).all()
++        assert reply == expected_reply

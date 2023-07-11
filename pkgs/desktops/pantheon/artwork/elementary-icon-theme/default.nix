@@ -1,5 +1,5 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 , nix-update-script
 , meson
@@ -7,19 +7,19 @@
 , ninja
 , hicolor-icon-theme
 , gtk3
-, xorg
+, xcursorgen
 , librsvg
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "elementary-icon-theme";
-  version = "6.1.0";
+  version = "7.3.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "icons";
     rev = version;
-    sha256 = "sha256-WR4HV0nJKj0WeSFHXLK64O0LhX8myAJE4w0aztyhPn4=";
+    sha256 = "sha256-4ZXqIMXyb9MLd6EHmPn672Dbw992GYYU64oB+4p6jXY=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     python3
-    xorg.xcursorgen
+    xcursorgen
   ];
 
   propagatedBuildInputs = [
@@ -50,9 +50,7 @@ stdenv.mkDerivation rec {
   postFixup = "gtk-update-icon-cache $out/share/icons/elementary";
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

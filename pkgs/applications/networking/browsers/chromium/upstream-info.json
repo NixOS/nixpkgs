@@ -1,63 +1,63 @@
 {
   "stable": {
-    "version": "100.0.4896.127",
-    "sha256": "0kgq38dy9mjyc44556i9gxhlsgd7dfvv1xi1ibk92b4p7i2y6427",
-    "sha256bin64": "0mm6lix14bf4ca440dyccnq54z0qvn5c886ghfyzy2q0bqzbq4nh",
+    "version": "114.0.5735.198",
+    "sha256": "1shxlkass3s744mwc571cyzlb9cc8lxvi5wp35mzaldbxq7l9wx9",
+    "sha256bin64": "0367sks2z7xj130bszimznkjjimfdimknd7qzi68335y9qzl1y92",
     "deps": {
       "gn": {
-        "version": "2022-01-21",
+        "version": "2023-04-19",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "0725d7827575b239594fbc8fd5192873a1d62f44",
-        "sha256": "1dzdvcn2r5c9giknvasf3y5y4901kav7igivjvrpww66ywsj8fzr"
+        "rev": "5a004f9427a050c6c393c07ddb85cba8ff3849fa",
+        "sha256": "01xrh9m9m6x8lz0vxwdw2mrhrvnw93zpg09hwdhqakj06agf4jjk"
       }
     },
     "chromedriver": {
-      "version": "100.0.4896.60",
-      "sha256_linux": "0q9ddwhccd0jmzi8jksxlfjavmm913c9bmb4lz1ahxplsnxd8z31",
-      "sha256_darwin": "0q0ikhf5pkbrqln91fklbbfmqi33nfcjdg5dm7zb66b4alxwwas9",
-      "sha256_darwin_aarch64": "1vf3s0gq61riqsv85pr6xj0c2afdnv1b2w4gp2bwlfq4ffkfq38y"
+      "version": "114.0.5735.90",
+      "sha256_linux": "0i3g79c4vdi5mys295lpzmmh0pgxhh14mjmz9amhq5rrn7w7wy57",
+      "sha256_darwin": "0l0nzx64vrr2wggwdyrcv0xbv79avr431cppprl4dg62b39wkgba",
+      "sha256_darwin_aarch64": "0z549y1w855ljia5w8sf9w6398pnn89y28pg26ygqad888b3msql"
     }
   },
   "beta": {
-    "version": "101.0.4951.34",
-    "sha256": "1pqglzc8k31a4x06jn9pd6y8m4nmmb7rv5b3zancmh0d3z0nz3v5",
-    "sha256bin64": "1zhif47j8nqglaj1z3ism3dl6z8n5ilyyr835an32mf6igkfj217",
+    "version": "115.0.5790.40",
+    "sha256": "1ab034zrgyz0gwi0caz6y1nyr0p5yhbly50chnhvsr3k6gmidl58",
+    "sha256bin64": "02vzlz5z87n9lwdhxnzdzr5w85l3b828j0y1z6fzq7br90yr0pcw",
     "deps": {
       "gn": {
-        "version": "2022-03-14",
+        "version": "2023-05-19",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "bd99dbf98cbdefe18a4128189665c5761263bcfb",
-        "sha256": "0nql15ckjqkm001xajq3qyn4h4q80i7x6dm9zinxxr1a8q5lppx3"
+        "rev": "e9e83d9095d3234adf68f3e2866f25daf766d5c7",
+        "sha256": "0y07c18xskq4mclqiz3a63fz8jicz2kqridnvdhqdf75lhp61f8a"
       }
     }
   },
   "dev": {
-    "version": "102.0.4997.0",
-    "sha256": "05y9b426wcarq18faw5i79qrfqy158dinvba5d7lwrcjnbqyfr1f",
-    "sha256bin64": "0846y3dbs7vghrb8s2s57a2lk7a0x2dha5q0d915qrn29g5x9c6p",
+    "version": "116.0.5845.14",
+    "sha256": "1b8ak0yg7ymz0siw81g47fdl12bj7f7gdw2nd5wlgj3h0g0b0675",
+    "sha256bin64": "1hnis5m5l6ygihmwsy6qk12lz6gjcndfdnssb3l9pd7v3qwfpkp2",
     "deps": {
       "gn": {
-        "version": "2022-04-07",
+        "version": "2023-06-09",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "ae110f8b525009255ba1f9ae96982176d3bfad3d",
-        "sha256": "131y1v2m59hn7s00zc9p7rhfi956p744mp96g2i80f0i020dyl6w"
+        "rev": "4bd1a77e67958fb7f6739bd4542641646f264e5d",
+        "sha256": "14h9jqspb86sl5lhh6q0kk2rwa9zcak63f8drp7kb3r4dx08vzsw"
       }
     }
   },
   "ungoogled-chromium": {
-    "version": "100.0.4896.127",
-    "sha256": "0kgq38dy9mjyc44556i9gxhlsgd7dfvv1xi1ibk92b4p7i2y6427",
-    "sha256bin64": "0mm6lix14bf4ca440dyccnq54z0qvn5c886ghfyzy2q0bqzbq4nh",
+    "version": "114.0.5735.198",
+    "sha256": "1shxlkass3s744mwc571cyzlb9cc8lxvi5wp35mzaldbxq7l9wx9",
+    "sha256bin64": "0367sks2z7xj130bszimznkjjimfdimknd7qzi68335y9qzl1y92",
     "deps": {
       "gn": {
-        "version": "2022-01-21",
+        "version": "2023-04-19",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "0725d7827575b239594fbc8fd5192873a1d62f44",
-        "sha256": "1dzdvcn2r5c9giknvasf3y5y4901kav7igivjvrpww66ywsj8fzr"
+        "rev": "5a004f9427a050c6c393c07ddb85cba8ff3849fa",
+        "sha256": "01xrh9m9m6x8lz0vxwdw2mrhrvnw93zpg09hwdhqakj06agf4jjk"
       },
       "ungoogled-patches": {
-        "rev": "100.0.4896.127-1",
-        "sha256": "192kyhr0fa97csciv5kp496y9zwcsknwlrmdr4jic3rvv8ig1q9y"
+        "rev": "114.0.5735.198-1",
+        "sha256": "1zda5c7n43zviwj3n2r2zbhmylkrfy54hggq8cisbdrhhfn96vii"
       }
     }
   }

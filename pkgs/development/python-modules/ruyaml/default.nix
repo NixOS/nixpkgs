@@ -33,8 +33,12 @@ buildPythonPackage rec {
     distro
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
   ];
 
   pythonImportsCheck = [

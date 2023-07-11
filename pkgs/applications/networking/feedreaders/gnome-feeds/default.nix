@@ -61,13 +61,10 @@ python3.pkgs.buildPythonApplication rec {
     pillow
     pygments
     pygobject3
-    pyreadability
+    readability-lxml
     pytz
     requests
   ];
-
-  # https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
 
   dontWrapGApps = true;
 

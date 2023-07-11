@@ -1,12 +1,29 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, glib, libwnck, librsvg, libxml2, dconf, gtk3, mate, hicolor-icon-theme, gobject-introspection, wrapGAppsHook, mateUpdateScript }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, itstool
+, glib
+, libwnck
+, librsvg
+, libxml2
+, dconf
+, gtk3
+, mate
+, hicolor-icon-theme
+, gobject-introspection
+, wrapGAppsHook
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "mate-panel";
-  version = "1.26.2";
+  version = "1.26.3";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "rsT5jInFnnbMBlbtBILx2CkS9N7MZg8hyNAE5JPgVBA=";
+    sha256 = "8z8Q1SdFC6fpjMcKslWsSBMwqp5m28x8URtrqhcd4Ck=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +47,7 @@ stdenv.mkDerivation rec {
     hicolor-icon-theme
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   makeFlags = [
     "INTROSPECTION_GIRDIR=$(out)/share/gir-1.0/"
@@ -46,7 +63,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
     description = "The MATE panel";

@@ -28,9 +28,10 @@
 
 # Helper function for building a derivation for Franz and forks.
 
-{ pname, name, version, src, meta, extraBuildInputs ? [] }:
-
-stdenv.mkDerivation rec {
+{ pname, name, version, src, meta, extraBuildInputs ? [], ... } @ args:
+let
+  cleanedArgs = builtins.removeAttrs args [ "pname" "name" "version" "src" "meta" "extraBuildInputs" ];
+in stdenv.mkDerivation (rec {
   inherit pname version src meta;
 
   # Don't remove runtime deps.
@@ -85,9 +86,10 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   postFixup = ''
+    # make xdg-open overrideable at runtime
     wrapProgram $out/opt/${name}/${pname} \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDependencies}" \
-      --prefix PATH : ${xdg-utils}/bin \
+      --suffix PATH : ${xdg-utils}/bin \
       "''${gappsWrapperArgs[@]}"
   '';
-}
+} // cleanedArgs)

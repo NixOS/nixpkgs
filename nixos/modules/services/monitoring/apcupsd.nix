@@ -62,6 +62,21 @@ let
 
   );
 
+  # Ensure the CLI uses our generated configFile
+  wrappedBinaries = pkgs.runCommandLocal "apcupsd-wrapped-binaries"
+    { nativeBuildInputs = [ pkgs.makeWrapper ]; }
+    ''
+      for p in "${lib.getBin pkgs.apcupsd}/bin/"*; do
+          bname=$(basename "$p")
+          makeWrapper "$p" "$out/bin/$bname" --add-flags "-f ${configFile}"
+      done
+    '';
+
+  apcupsdWrapped = pkgs.symlinkJoin {
+    name = "apcupsd-wrapped";
+    # Put wrappers first so they "win"
+    paths = [ wrappedBinaries pkgs.apcupsd ];
+  };
 in
 
 {
@@ -75,7 +90,7 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable the APC UPS daemon. apcupsd monitors your UPS and
           permits orderly shutdown of your computer in the event of a power
           failure. User manual: http://www.apcupsd.com/manual/manual.html.
@@ -92,7 +107,7 @@ in
           MINUTES 5
         '';
         type = types.lines;
-        description = ''
+        description = lib.mdDoc ''
           Contents of the runtime configuration file, apcupsd.conf. The default
           settings makes apcupsd autodetect USB UPSes, limit network access to
           localhost and shutdown the system when the battery level is below 50
@@ -107,7 +122,7 @@ in
           doshutdown = "# shell commands to notify that the computer is shutting down";
         };
         type = types.attrsOf types.lines;
-        description = ''
+        description = lib.mdDoc ''
           Each attribute in this option names an apcupsd event and the string
           value it contains will be executed in a shell, in response to that
           event (prior to the default action). See "man apccontrol" for the
@@ -138,7 +153,7 @@ in
     } ];
 
     # Give users access to the "apcaccess" tool
-    environment.systemPackages = [ pkgs.apcupsd ];
+    environment.systemPackages = [ apcupsdWrapped ];
 
     # NOTE 1: apcupsd runs as root because it needs permission to run
     # "shutdown"

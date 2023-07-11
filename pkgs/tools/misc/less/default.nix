@@ -1,18 +1,31 @@
-{ lib, stdenv, fetchurl, ncurses, lessSecure ? false }:
+{ lib
+, stdenv
+, fetchurl
+, ncurses
+, pcre2
+}:
 
 stdenv.mkDerivation rec {
   pname = "less";
-  version = "600";
+  version = "633";
 
+  # Only tarballs on the website are valid releases,
+  # other versions, e.g. git tags are considered snapshots.
   src = fetchurl {
     url = "https://www.greenwoodsoftware.com/less/less-${version}.tar.gz";
-    sha256 = "sha256-ZjPWqis8xxevssIFd4x8QsRiD2Ox1oLz0SyYrwvnTSA=";
+    hash = "sha256-LyAdZLgouIrzbf5s/bo+CBns4uRG6+YiSBMgmq7+0E8=";
   };
 
-  configureFlags = [ "--sysconfdir=/etc" ] # Look for ‘sysless’ in /etc.
-    ++ lib.optional lessSecure [ "--with-secure" ];
+  configureFlags = [
+    # Look for ‘sysless’ in /etc.
+    "--sysconfdir=/etc"
+    "--with-regex=pcre2"
+  ];
 
-  buildInputs = [ ncurses ];
+  buildInputs = [
+    ncurses
+    pcre2
+  ];
 
   meta = with lib; {
     homepage = "https://www.greenwoodsoftware.com/less/";

@@ -4,7 +4,7 @@ Option types are a way to put constraints on the values a module option
 can take. Types are also responsible of how values are merged in case of
 multiple value definitions.
 
-## Basic Types {#sec-option-types-basic}
+## Basic types {#sec-option-types-basic}
 
 Basic types are the simplest available types in the module system. Basic
 types include multiple string types that mainly differ in how definition
@@ -20,10 +20,20 @@ merging is handled.
     coerced to a string. Even if derivations can be considered as
     paths, the more specific `types.package` should be preferred.
 
+`types.pathInStore`
+
+:   A path that is contained in the Nix store. This can be a top-level store
+    path like `pkgs.hello` or a descendant like `"${pkgs.hello}/bin/hello"`.
+
 `types.package`
 
 :   A top-level store path. This can be an attribute set pointing
     to a store path, like a derivation or a flake input.
+
+`types.enum` *`l`*
+
+:   One element of the list *`l`*, e.g. `types.enum [ "left" "right" ]`.
+    Multiple definitions cannot be merged.
 
 `types.anything`
 
@@ -31,9 +41,8 @@ merging is handled.
     together. This type is recommended when the option type is unknown.
 
     ::: {#ex-types-anything .example}
-    ::: {.title}
-    **Example: `types.anything` Example**
-    :::
+    ### `types.anything`
+
     Two definitions of this type like
 
     ```nix
@@ -87,15 +96,19 @@ merging is handled.
 :   A free-form attribute set.
 
     ::: {.warning}
-    This type will be deprecated in the future because it doesn\'t
+    This type will be deprecated in the future because it doesn't
     recurse into attribute sets, silently drops earlier attribute
-    definitions, and doesn\'t discharge `lib.mkDefault`, `lib.mkIf`
+    definitions, and doesn't discharge `lib.mkDefault`, `lib.mkIf`
     and co. For allowing arbitrary attribute sets, prefer
-    `types.attrsOf types.anything` instead which doesn\'t have these
+    `types.attrsOf types.anything` instead which doesn't have these
     problems.
     :::
 
-Integer-related types:
+`types.pkgs`
+
+:   A type for the top level Nixpkgs package set.
+
+### Numeric types {#sec-option-types-numeric}
 
 `types.int`
 
@@ -118,6 +131,10 @@ Integer-related types:
     from 0 to 2^n−1 respectively (e.g. `0`
     to `255` for 8 bits).
 
+`types.ints.between` *`lowest highest`*
+
+:   An integer between *`lowest`* and *`highest`* (both inclusive).
+
 `types.ints.positive`
 
 :   A positive integer (that is > 0).
@@ -127,11 +144,43 @@ Integer-related types:
 :   A port number. This type is an alias to
     `types.ints.u16`.
 
-String-related types:
+`types.float`
+
+:   A floating point number.
+
+    ::: {.warning}
+    Converting a floating point number to a string with `toString` or `toJSON`
+    may result in [precision loss](https://github.com/NixOS/nix/issues/5733).
+    :::
+
+`types.number`
+
+:   Either a signed integer or a floating point number. No implicit conversion
+    is done between the two types, and multiple equal definitions will only be
+    merged if they have the same type.
+
+`types.numbers.between` *`lowest highest`*
+
+:   An integer or floating point number between *`lowest`* and *`highest`* (both inclusive).
+
+`types.numbers.nonnegative`
+
+:   A nonnegative integer or floating point number (that is >= 0).
+
+`types.numbers.positive`
+
+:   A positive integer or floating point number (that is > 0).
+
+### String types {#sec-option-types-string}
 
 `types.str`
 
 :   A string. Multiple definitions cannot be merged.
+
+`types.separatedString` *`sep`*
+
+:   A string. Multiple definitions are concatenated with *`sep`*, e.g.
+    `types.separatedString "|"`.
 
 `types.lines`
 
@@ -144,7 +193,7 @@ String-related types:
 
 `types.envVar`
 
-:   A string. Multiple definitions are concatenated with a collon `":"`.
+:   A string. Multiple definitions are concatenated with a colon `":"`.
 
 `types.strMatching`
 
@@ -152,24 +201,9 @@ String-related types:
     definitions cannot be merged. The regular expression is processed
     using `builtins.match`.
 
-## Value Types {#sec-option-types-value}
+## Submodule types {#sec-option-types-submodule}
 
-Value types are types that take a value parameter.
-
-`types.enum` *`l`*
-
-:   One element of the list *`l`*, e.g. `types.enum [ "left" "right" ]`.
-    Multiple definitions cannot be merged.
-
-`types.separatedString` *`sep`*
-
-:   A string with a custom separator *`sep`*, e.g.
-    `types.separatedString "|"`.
-
-`types.ints.between` *`lowest highest`*
-
-:   An integer between *`lowest`* and *`highest`* (both inclusive). Useful
-    for creating types like `types.port`.
+Submodules are detailed in [Submodule](#section-option-types-submodule).
 
 `types.submodule` *`o`*
 
@@ -178,7 +212,6 @@ Value types are types that take a value parameter.
     value. Submodules are used in composed types to create modular
     options. This is equivalent to
     `types.submoduleWith { modules = toList o; shorthandOnlyDefinesConfig = true; }`.
-    Submodules are detailed in [Submodule](#section-option-types-submodule).
 
 `types.submoduleWith` { *`modules`*, *`specialArgs`* ? {}, *`shorthandOnlyDefinesConfig`* ? false }
 
@@ -197,7 +230,7 @@ Value types are types that take a value parameter.
     -   *`specialArgs`* An attribute set of extra arguments to be passed
         to the module functions. The option `_module.args` should be
         used instead for most arguments since it allows overriding.
-        *`specialArgs`* should only be used for arguments that can\'t go
+        *`specialArgs`* should only be used for arguments that can't go
         through the module fixed-point, because of infinite recursion or
         other problems. An example is overriding the `lib` argument,
         because `lib` itself is used to define `_module.args`, which
@@ -211,7 +244,7 @@ Value types are types that take a value parameter.
         In such a case it would allow the option to be set with
         `the-submodule.config = "value"` instead of requiring
         `the-submodule.config.config = "value"`. This is because
-        only when modules *don\'t* set the `config` or `options`
+        only when modules *don't* set the `config` or `options`
         keys, all keys are interpreted as option definitions in the
         `config` section. Enabling this option implicitly puts all
         attributes in the `config` section.
@@ -220,7 +253,26 @@ Value types are types that take a value parameter.
         requires using a function:
         `the-submodule = { ... }: { options = { ... }; }`.
 
-## Composed Types {#sec-option-types-composed}
+`types.deferredModule`
+
+:   Whereas `submodule` represents an option tree, `deferredModule` represents
+    a module value, such as a module file or a configuration.
+
+    It can be set multiple times.
+
+    Module authors can use its value in `imports`, in `submoduleWith`'s `modules`
+    or in `evalModules`' `modules` parameter, among other places.
+
+    Note that `imports` must be evaluated before the module fixpoint. Because
+    of this, deferred modules can only be imported into "other" fixpoints, such
+    as submodules.
+
+    One use case for this type is the type of a "default" module that allow the
+    user to affect all submodules in an `attrsOf submodule` at once. This is
+    more convenient and discoverable than expecting the module user to
+    type-merge with the `attrsOf submodule` option.
+
+## Composed types {#sec-option-types-composed}
 
 Composed types are types that take a type as parameter. `listOf
    int` and `either int str` are examples of composed types.
@@ -280,7 +332,7 @@ Composed types are types that take a type as parameter. `listOf
 :   Type *`t1`* or type *`t2`*, e.g. `with types; either int str`.
     Multiple definitions cannot be merged.
 
-`types.oneOf` \[ *`t1 t2`* \... \]
+`types.oneOf` \[ *`t1 t2`* ... \]
 
 :   Type *`t1`* or type *`t2`* and so forth, e.g.
     `with types; oneOf [ int str bool ]`. Multiple definitions cannot be
@@ -301,17 +353,19 @@ that are handled like a separate module.
 It takes a parameter *`o`*, that should be a set, or a function returning
 a set with an `options` key defining the sub-options. Submodule option
 definitions are type-checked accordingly to the `options` declarations.
-Of course, you can nest submodule option definitons for even higher
+Of course, you can nest submodule option definitions for even higher
 modularity.
 
 The option set can be defined directly
 ([Example: Directly defined submodule](#ex-submodule-direct)) or as reference
 ([Example: Submodule defined as a reference](#ex-submodule-reference)).
 
+Note that even if your submodule’s options all have a default value,
+you will still need to provide a default value (e.g. an empty attribute set)
+if you want to allow users to leave it undefined.
+
 ::: {#ex-submodule-direct .example}
-::: {.title}
-**Example: Directly defined submodule**
-:::
+### Directly defined submodule
 ```nix
 options.mod = mkOption {
   description = "submodule example";
@@ -330,9 +384,7 @@ options.mod = mkOption {
 :::
 
 ::: {#ex-submodule-reference .example}
-::: {.title}
-**Example: Submodule defined as a reference**
-:::
+### Submodule defined as a reference
 ```nix
 let
   modOptions = {
@@ -360,9 +412,7 @@ multiple definitions of the submodule option set
 ([Example: Definition of a list of submodules](#ex-submodule-listof-definition)).
 
 ::: {#ex-submodule-listof-declaration .example}
-::: {.title}
-**Example: Declaration of a list of submodules**
-:::
+### Declaration of a list of submodules
 ```nix
 options.mod = mkOption {
   description = "submodule example";
@@ -381,9 +431,7 @@ options.mod = mkOption {
 :::
 
 ::: {#ex-submodule-listof-definition .example}
-::: {.title}
-**Example: Definition of a list of submodules**
-:::
+### Definition of a list of submodules
 ```nix
 config.mod = [
   { foo = 1; bar = "one"; }
@@ -398,9 +446,7 @@ multiple named definitions of the submodule option set
 ([Example: Definition of attribute sets of submodules](#ex-submodule-attrsof-definition)).
 
 ::: {#ex-submodule-attrsof-declaration .example}
-::: {.title}
-**Example: Declaration of attribute sets of submodules**
-:::
+### Declaration of attribute sets of submodules
 ```nix
 options.mod = mkOption {
   description = "submodule example";
@@ -419,9 +465,7 @@ options.mod = mkOption {
 :::
 
 ::: {#ex-submodule-attrsof-definition .example}
-::: {.title}
-**Example: Definition of attribute sets of submodules**
-:::
+### Definition of attribute sets of submodules
 ```nix
 config.mod.one = { foo = 1; bar = "one"; };
 config.mod.two = { foo = 2; bar = "two"; };
@@ -441,9 +485,8 @@ Types are mainly characterized by their `check` and `merge` functions.
     ([Example: Overriding a type check](#ex-extending-type-check-2)).
 
     ::: {#ex-extending-type-check-1 .example}
-    ::: {.title}
-    **Example: Adding a type check**
-    :::
+    ### Adding a type check
+
     ```nix
     byte = mkOption {
       description = "An integer between 0 and 255.";
@@ -453,9 +496,8 @@ Types are mainly characterized by their `check` and `merge` functions.
     :::
 
     ::: {#ex-extending-type-check-2 .example}
-    ::: {.title}
-    **Example: Overriding a type check**
-    :::
+    ### Overriding a type check
+
     ```nix
     nixThings = mkOption {
       description = "words that start with 'nix'";
@@ -473,7 +515,7 @@ Types are mainly characterized by their `check` and `merge` functions.
     of strings, and `defs` the list of defined values as a list. It is
     possible to override a type merge function for custom needs.
 
-## Custom Types {#sec-option-types-custom}
+## Custom types {#sec-option-types-custom}
 
 Custom types can be created with the `mkOptionType` function. As type
 creation includes some more complex topics such as submodule handling,

@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.juniper-lang.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ wunderbrick ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

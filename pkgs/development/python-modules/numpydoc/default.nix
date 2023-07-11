@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "numpydoc";
-  version = "1.2.1";
+  version = "1.5.0";
   format = "setuptools";
 
   disabled = isPy27;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname;
     inherit version;
-    sha256 = "sha256-fOgm7Q1Uw/3JCXmSqNc6TUWdxGhhE1HGjkRP7ESkWvY=";
+    hash = "sha256-sNt7daMjZ6DiXCOzl4QsZeNEoSBlJNFsgGnwockbX0w=";
   };
 
   postPatch = ''
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     matplotlib
     pytestCheckHook
   ];

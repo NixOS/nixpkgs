@@ -1,27 +1,69 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, pkg-config, ncurses, python3, openssl, libgpg-error, gpgme, xorg, AppKit, Security, installShellFiles }:
+{ stdenv
+, lib
+, rustPlatform
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, python3
+, openssl
+, libgpg-error
+, gpgme
+, xorg
+, nettle
+, llvmPackages
+, clang
+, AppKit
+, Security
+, installShellFiles
+}:
 
-with rustPlatform;
-buildRustPackage rec {
-  version = "0.5.2";
+rustPlatform.buildRustPackage rec {
+  version = "0.6.4";
   pname = "ripasso-cursive";
 
   src = fetchFromGitHub {
     owner = "cortex";
     repo = "ripasso";
-    rev  = "release-${version}";
-    sha256 = "sha256-De/xCDzdRHCslD0j6vT8bwjcMTf5R8KZ32aaB3i+Nig=";
+    rev = "release-${version}";
+    hash = "sha256-9wBaFq2KVfLTd1j8ZPoUlmZJDW2UhvGBAaCGX+qg92s=";
   };
 
-  patches = [ ./fix-tests.patch ];
+  patches = [
+    ./fix-tests.patch
+  ];
 
-  cargoSha256 = "sha256-ZmHzxHV4uIxPlLkkOLJApPNLo0GGVj9EopoIwi/j6DE=";
+  cargoPatches = [
+    ./fix-build.patch
+  ];
+
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "qml-0.0.9" = "sha256-ILqvUaH7nSu2JtEs8ox7KroOzYnU5ai44k1HE4Bz5gg=";
+    };
+  };
 
   cargoBuildFlags = [ "-p ripasso-cursive" ];
 
-  nativeBuildInputs = [ pkg-config gpgme python3 installShellFiles ];
+  nativeBuildInputs = [
+    pkg-config
+    gpgme
+    python3
+    installShellFiles
+    clang
+    rustPlatform.bindgenHook
+  ];
+
   buildInputs = [
-    ncurses openssl libgpg-error gpgme xorg.libxcb
-  ] ++ lib.optionals stdenv.isDarwin [ AppKit Security ];
+    openssl
+    libgpg-error
+    gpgme
+    xorg.libxcb
+    nettle
+  ] ++ lib.optionals stdenv.isDarwin [
+    AppKit
+    Security
+  ];
 
   preCheck = ''
     export HOME=$TMPDIR

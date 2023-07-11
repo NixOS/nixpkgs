@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "wled";
-  version = "0.13.2";
+  version = "0.16.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-wled";
-    rev = "v${version}";
-    sha256 = "sha256-Rv0jaKkN6jQ7oiv1cBYx4HAr7IqPm57jZFykXayp0T0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-esINtvctvgl8AqNwCDVnGU+3j/UzEHqY8H1Rws1kQfs=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     yarl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook
@@ -59,6 +59,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Asynchronous Python client for WLED";
     homepage = "https://github.com/frenck/python-wled";
+    changelog = "https://github.com/frenck/python-wled/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

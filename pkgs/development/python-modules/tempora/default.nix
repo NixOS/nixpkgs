@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "tempora";
-  version = "5.0.1";
+  version = "5.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-y6Dxl6ZIg78+c2V++8AyTVvxcXnndpsThbTXXSbNkSc=";
+    hash = "sha256-txdkhsWUinUgHo0LIe8sI8qAhHQGDfRyGMkilb3OUnY=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     pytest-freezegun
     pytestCheckHook

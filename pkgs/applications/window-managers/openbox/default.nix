@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, python3
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, pkg-config, python3
 , libxml2, libXinerama, libXcursor, libXau, libXrandr, libICE, libSM
 , imlib2, pango, libstartup_notification, makeWrapper }:
 
@@ -44,6 +44,13 @@ stdenv.mkDerivation rec {
     (fetchurl {
       url = "https://raw.githubusercontent.com/archlinux/svntogit-community/90cb57ef53d952bb6ab4c33a184f815bbe1791c0/openbox/trunk/py3.patch";
       sha256 = "1ks99awlkhd5ph9kz94s1r6m1bfvh42g4rmxd14dyg5b421p1ljc";
+    })
+
+    # Fix crash with GLib 2.76. This is proposed on https://bugzilla.icculus.org/show_bug.cgi?id=6669
+    # and commited to a work branch in the upstream repo. See https://bugs.archlinux.org/task/77853.
+    (fetchpatch {
+      url = "https://github.com/Mikachu/openbox/commit/d41128e5a1002af41c976c8860f8299cfcd3cd72.patch";
+      sha256 = "sha256-4/aoI4y98JPybZ1MNI7egOhkroQgh/oeGnYrhNGX4t4=";
     })
   ];
 

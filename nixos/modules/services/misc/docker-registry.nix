@@ -15,9 +15,7 @@ let
     storage = {
       cache.blobdescriptor = blobCache;
       delete.enabled = cfg.enableDelete;
-    } // (if cfg.storagePath != null
-          then { filesystem.rootdirectory = cfg.storagePath; }
-          else {});
+    } // (optionalAttrs (cfg.storagePath != null) { filesystem.rootdirectory = cfg.storagePath; });
     http = {
       addr = "${cfg.listenAddress}:${builtins.toString cfg.port}";
       headers.X-Content-Type-Options = ["nosniff"];
@@ -47,16 +45,24 @@ let
 
 in {
   options.services.dockerRegistry = {
-    enable = mkEnableOption "Docker Registry";
+    enable = mkEnableOption (lib.mdDoc "Docker Registry");
+
+    package = mkOption {
+      type = types.package;
+      description = mdDoc "Which Docker registry package to use.";
+      default = pkgs.docker-distribution;
+      defaultText = literalExpression "pkgs.docker-distribution";
+      example = literalExpression "pkgs.gitlab-container-registry";
+    };
 
     listenAddress = mkOption {
-      description = "Docker registry host or ip to bind to.";
+      description = lib.mdDoc "Docker registry host or ip to bind to.";
       default = "127.0.0.1";
       type = types.str;
     };
 
     port = mkOption {
-      description = "Docker registry port to bind to.";
+      description = lib.mdDoc "Docker registry port to bind to.";
       default = 5000;
       type = types.port;
     };
@@ -64,7 +70,7 @@ in {
     storagePath = mkOption {
       type = types.nullOr types.path;
       default = "/var/lib/docker-registry";
-      description = ''
+      description = lib.mdDoc ''
         Docker registry storage path for the filesystem storage backend. Set to
         null to configure another backend via extraConfig.
       '';
@@ -73,40 +79,39 @@ in {
     enableDelete = mkOption {
       type = types.bool;
       default = false;
-      description = "Enable delete for manifests and blobs.";
+      description = lib.mdDoc "Enable delete for manifests and blobs.";
     };
 
-    enableRedisCache = mkEnableOption "redis as blob cache";
+    enableRedisCache = mkEnableOption (lib.mdDoc "redis as blob cache");
 
     redisUrl = mkOption {
       type = types.str;
       default = "localhost:6379";
-      description = "Set redis host and port.";
+      description = lib.mdDoc "Set redis host and port.";
     };
 
     redisPassword = mkOption {
       type = types.str;
       default = "";
-      description = "Set redis password.";
+      description = lib.mdDoc "Set redis password.";
     };
 
     extraConfig = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Docker extra registry configuration via environment variables.
       '';
       default = {};
       type = types.attrs;
     };
 
-    enableGarbageCollect = mkEnableOption "garbage collect";
+    enableGarbageCollect = mkEnableOption (lib.mdDoc "garbage collect");
 
     garbageCollectDates = mkOption {
       default = "daily";
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Specification (in the format described by
-        <citerefentry><refentrytitle>systemd.time</refentrytitle>
-        <manvolnum>7</manvolnum></citerefentry>) of the time at
+        {manpage}`systemd.time(7)`) of the time at
         which the garbage collect will occur.
       '';
     };
@@ -118,7 +123,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       script = ''
-        ${pkgs.docker-distribution}/bin/registry serve ${configFile}
+        ${cfg.package}/bin/registry serve ${configFile}
       '';
 
       serviceConfig = {
@@ -137,7 +142,7 @@ in {
       serviceConfig.Type = "oneshot";
 
       script = ''
-        ${pkgs.docker-distribution}/bin/registry garbage-collect ${configFile}
+        ${cfg.package}/bin/registry garbage-collect ${configFile}
         /run/current-system/systemd/bin/systemctl restart docker-registry.service
       '';
 
@@ -145,12 +150,10 @@ in {
     };
 
     users.users.docker-registry =
-      (if cfg.storagePath != null
-      then {
+      (optionalAttrs (cfg.storagePath != null) {
         createHome = true;
         home = cfg.storagePath;
-      }
-      else {}) // {
+      }) // {
         group = "docker-registry";
         isSystemUser = true;
       };

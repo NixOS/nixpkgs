@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , crystal
+, pcre2
 , shards
 , git
 , pkg-config
@@ -24,6 +25,7 @@
   # Specify binaries to build in the form { foo.src = "src/foo.cr"; }
   # The default `crystal build` options can be overridden with { foo.options = [ "--optionname" ]; }
 , crystalBinaries ? { }
+, enableParallelBuilding ? true
 , ...
 }@args:
 
@@ -47,9 +49,24 @@ let
     })
     (import shardsFile));
 
-  defaultOptions = [ "--release" "--progress" "--verbose" "--no-debug" ];
+  # We no longer use --no-debug in accordance with upstream's recommendation
+  defaultOptions = [ "--release" "--progress" "--verbose" ];
 
   buildDirectly = shardsFile == null || crystalBinaries != { };
+
+  mkCrystalBuildArgs = bin: attrs:
+    lib.concatStringsSep " " ([
+      "crystal"
+      "build"
+    ] ++ lib.optionals enableParallelBuilding [
+      "--threads"
+      "$NIX_BUILD_CORES"
+    ] ++ [
+      "-o"
+      bin
+      (attrs.src or (throw "No source file for crystal binary ${bin} provided"))
+      (lib.concatStringsSep " " (attrs.options or defaultOptions))
+    ]);
 
 in
 stdenv.mkDerivation (mkDerivationArgs // {
@@ -72,31 +89,25 @@ stdenv.mkDerivation (mkDerivationArgs // {
 
   PREFIX = placeholder "out";
 
+  inherit enableParallelBuilding;
+  strictDeps = true;
   buildInputs = args.buildInputs or [ ] ++ [ crystal ]
-    ++ lib.optional (format != "crystal") shards;
+    ++ lib.optional (lib.versionAtLeast crystal.version "1.8") pcre2;
 
   nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [
+    crystal
     git
     installShellFiles
     removeReferencesTo
     pkg-config
     which
-  ];
+  ] ++ lib.optional (format != "crystal") shards;
 
   buildPhase = args.buildPhase or (lib.concatStringsSep "\n" ([
     "runHook preBuild"
   ] ++ lib.optional (format == "make")
     "make \${buildTargets:-build} $makeFlags"
-  ++ lib.optionals (format == "crystal") (lib.mapAttrsToList
-    (bin: attrs: ''
-      crystal ${lib.escapeShellArgs ([
-        "build"
-        "-o"
-        bin
-        (attrs.src or (throw "No source file for crystal binary ${bin} provided"))
-      ] ++ (attrs.options or defaultOptions))}
-    '')
-    crystalBinaries)
+  ++ lib.optionals (format == "crystal") (lib.mapAttrsToList mkCrystalBuildArgs crystalBinaries)
   ++ lib.optional (format == "shards")
     "shards build --local --production ${lib.concatStringsSep " " (args.options or defaultOptions)}"
   ++ [ "runHook postBuild" ]));
@@ -141,6 +152,9 @@ stdenv.mkDerivation (mkDerivationArgs // {
 
   installCheckPhase = args.installCheckPhase or ''
     for f in $out/bin/*; do
+      if [ $f == $out/bin/*.dwarf ]; then
+        continue
+      fi
       $f --help > /dev/null
     done
   '';

@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
     ln -s ${systemd}/lib/libudev.so.1 $out/lib/libudev.so.0
 
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$out/PA"
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib xorg.libXdamage xorg.libXfixes gtk2 glib stdenv.glibc.out "$out" xorg.libXext pango udev xorg.libX11 xorg.libXcomposite alsa-lib atk nspr fontconfig cairo pango nss freetype gnome2.GConf gdk-pixbuf xorg.libXrender ]}:{stdenv.cc.cc.lib}/lib64:${stdenv.glibc.out}/lib64" "$out/host/CoherentUI_Host"
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib xorg.libXdamage xorg.libXfixes gtk2 glib stdenv.cc.libc "$out" xorg.libXext pango udev xorg.libX11 xorg.libXcomposite alsa-lib atk nspr fontconfig cairo pango nss freetype gnome2.GConf gdk-pixbuf xorg.libXrender ]}:{stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64" "$out/host/CoherentUI_Host"
 
-    wrapProgram $out/PA --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc.lib stdenv.glibc.out xorg.libX11 xorg.libXcursor gtk2 glib curl "$out" ]}:${stdenv.cc.cc.lib}/lib64:${stdenv.glibc.out}/lib64"
+    wrapProgram $out/PA --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc.lib stdenv.cc.libc xorg.libX11 xorg.libXcursor gtk2 glib curl "$out" ]}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64"
 
     for f in $out/lib/*; do
-      patchelf --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib curl xorg.libX11 stdenv.glibc.out xorg.libXcursor "$out" ]}:${stdenv.cc.cc.lib}/lib64:${stdenv.glibc.out}/lib64" $f
+      patchelf --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib curl xorg.libX11 stdenv.cc.libc xorg.libXcursor "$out" ]}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64" $f
     done
   '';
 

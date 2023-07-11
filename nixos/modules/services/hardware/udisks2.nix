@@ -1,10 +1,9 @@
 # Udisks daemon.
-
 { config, lib, pkgs, ... }:
-
 with lib;
 
 let
+  cfg = config.services.udisks2;
   settingsFormat = pkgs.formats.ini {
     listToValue = concatMapStringsSep "," (generators.mkValueStringDefault {});
   };
@@ -19,12 +18,15 @@ in
 
     services.udisks2 = {
 
-      enable = mkOption {
+      enable = mkEnableOption (mdDoc "udisks2, a DBus service that allows applications to query and manipulate storage devices");
+
+      mountOnMedia = mkOption {
         type = types.bool;
-        default = true;
-        description = ''
-          Whether to enable Udisks, a DBus service that allows
-          applications to query and manipulate storage devices.
+        default = false;
+        description = mdDoc ''
+          When enabled, instructs udisks2 to mount removable drives under `/media/` directory, instead of the
+          default, ACL-controlled `/run/media/$USER/`. Since `/media/` is not mounted as tmpfs by default, it
+          requires cleanup to get rid of stale mountpoints; enabling this option will take care of this at boot.
         '';
       };
 
@@ -51,10 +53,10 @@ in
           };
         };
         '';
-        description = ''
+        description = mdDoc ''
           Options passed to udisksd.
-          See <link xlink:href="http://manpages.ubuntu.com/manpages/latest/en/man5/udisks2.conf.5.html">here</link> and
-          drive configuration in <link xlink:href="http://manpages.ubuntu.com/manpages/latest/en/man8/udisks.8.html">here</link> for supported options.
+          See [here](http://manpages.ubuntu.com/manpages/latest/en/man5/udisks2.conf.5.html) and
+          drive configuration in [here](http://manpages.ubuntu.com/manpages/latest/en/man8/udisks.8.html) for supported options.
         '';
       };
 
@@ -69,15 +71,25 @@ in
 
     environment.systemPackages = [ pkgs.udisks2 ];
 
-    environment.etc = mapAttrs' (name: value: nameValuePair "udisks2/${name}" { source = value; } ) configFiles;
+    environment.etc = (mapAttrs' (name: value: nameValuePair "udisks2/${name}" { source = value; } ) configFiles) // {
+      # We need to make sure /etc/libblockdev/conf.d is populated to avoid
+      # warnings
+      "libblockdev/conf.d/00-default.cfg".source = "${pkgs.libblockdev}/etc/libblockdev/conf.d/00-default.cfg";
+      "libblockdev/conf.d/10-lvm-dbus.cfg".source = "${pkgs.libblockdev}/etc/libblockdev/conf.d/10-lvm-dbus.cfg";
+    };
 
     security.polkit.enable = true;
 
     services.dbus.packages = [ pkgs.udisks2 ];
 
-    systemd.tmpfiles.rules = [ "d /var/lib/udisks2 0755 root root -" ];
+    systemd.tmpfiles.rules = [ "d /var/lib/udisks2 0755 root root -" ]
+      ++ optional cfg.mountOnMedia "D! /media 0755 root root -";
 
     services.udev.packages = [ pkgs.udisks2 ];
+
+    services.udev.extraRules = optionalString cfg.mountOnMedia ''
+      ENV{ID_FS_USAGE}=="filesystem", ENV{UDISKS_FILESYSTEM_SHARED}="1"
+    '';
 
     systemd.packages = [ pkgs.udisks2 ];
   };

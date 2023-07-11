@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , installShellFiles
 , pbr
@@ -13,20 +13,21 @@
 , simplejson
 , sphinx
 , sphinxcontrib-programoutput
-, Babel
+, babel
 , osc-lib
 , python-keystoneclient
 , debtcollector
 , callPackage
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "python-manilaclient";
-  version = "3.3.0";
+  version = "4.4.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JFfkbJHmDQFbiWXw0Wp+0xSLyXowIHnsw7+5irZwhXo=";
+    hash = "sha256-iKBbR4h9J9OiQMHjUHxUVk+NbCRUYmIPtWxRwVVGQtY=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +46,7 @@ buildPythonApplication rec {
     prettytable
     requests
     simplejson
-    Babel
+    babel
     osc-lib
     python-keystoneclient
     debtcollector
@@ -64,7 +65,9 @@ buildPythonApplication rec {
     tests = callPackage ./tests.nix { };
   };
 
-  pythonImportsCheck = [ "manilaclient" ];
+  pythonImportsCheck = [
+    "manilaclient"
+  ];
 
   meta = with lib; {
     description = "Client library for OpenStack Manila API";

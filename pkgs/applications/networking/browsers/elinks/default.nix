@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, ncurses, xlibsWrapper, bzip2, zlib
+{ lib, stdenv, fetchFromGitHub, ncurses, libX11, bzip2, zlib
 , brotli, zstd, xz, openssl, autoreconfHook, gettext, pkg-config, libev
 , gpm, libidn, tre, expat
 , # Incompatible licenses, LGPLv3 - GPLv2
   enableGuile        ? false,                                         guile ? null
 , enablePython       ? false,                                         python ? null
-, enablePerl         ? (stdenv.hostPlatform == stdenv.buildPlatform), perl ? null
+, enablePerl         ? (!stdenv.isDarwin) && (stdenv.hostPlatform == stdenv.buildPlatform), perl ? null
 # re-add javascript support when upstream supports modern spidermonkey
 }:
 
@@ -13,17 +13,17 @@ assert enablePython -> python != null;
 
 stdenv.mkDerivation rec {
   pname = "elinks";
-  version = "0.15.0";
+  version = "0.16.1.1";
 
   src = fetchFromGitHub {
     owner = "rkd77";
     repo = "felinks";
     rev = "v${version}";
-    sha256 = "sha256-2TF0rbmjwhwV2AVUXjfzoprzpeqrETis3AFhMftpaZQ=";
+    sha256 = "sha256-u6QGhfi+uWeIzSUFuYHAH3Xu0Fky0yw2h4NOKgYFLsM=";
   };
 
   buildInputs = [
-    ncurses xlibsWrapper bzip2 zlib brotli zstd xz
+    ncurses libX11 bzip2 zlib brotli zstd xz
     openssl libidn tre expat libev
   ]
     ++ lib.optional stdenv.isLinux gpm
@@ -38,11 +38,13 @@ stdenv.mkDerivation rec {
     "--enable-finger"
     "--enable-html-highlight"
     "--enable-gopher"
+    "--enable-gemini"
     "--enable-cgi"
     "--enable-bittorrent"
     "--enable-nntp"
     "--enable-256-colors"
     "--enable-true-color"
+    "--with-brotli"
     "--with-lzma"
     "--with-libev"
     "--with-terminfo"

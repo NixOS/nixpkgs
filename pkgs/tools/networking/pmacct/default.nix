@@ -13,19 +13,19 @@
 , withPgSQL ? true, postgresql
 , withMysql ? true, libmysqlclient, zlib, numactl
 , gnutlsSupport ? false, gnutls
-, testVersion
+, testers
 , pmacct
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.7.7";
+  version = "1.7.8";
   pname = "pmacct";
 
   src = fetchFromGitHub {
     owner = "pmacct";
     repo = "pmacct";
     rev = "v${version}";
-    sha256 = "1pjaa44qj3y5dfwsd1a9r7a4riy7afza8phx2npcsyyarssxc63w";
+    sha256 = "sha256-AcgZ5/8d1U/zGs4QeOkgkZS7ttCW6gtUv/Xuf4O4VE0=";
   };
 
   nativeBuildInputs = [
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional gnutlsSupport "--enable-gnutls";
 
   passthru.tests = {
-    version = testVersion { package = pmacct; command = "pmacct -V"; };
+    version = testers.testVersion { package = pmacct; command = "pmacct -V"; };
   };
 
   meta = with lib; {

@@ -19,13 +19,13 @@ in
   ###### interface
   options = {
     services.ofono = {
-      enable = mkEnableOption "Ofono";
+      enable = mkEnableOption (lib.mdDoc "Ofono");
 
       plugins = mkOption {
         type = types.listOf types.package;
         default = [];
         example = literalExpression "[ pkgs.modem-manager-gui ]";
-        description = ''
+        description = lib.mdDoc ''
           The list of plugins to install.
         '';
       };

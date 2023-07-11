@@ -5,25 +5,23 @@
 , river
 , wayland
 , pkg-config
-, scdoc
 }:
 
 stdenv.mkDerivation rec {
   pname = "rivercarro";
-  version = "0.1.2";
+  version = "0.1.4";
 
   src = fetchFromSourcehut {
     owner = "~novakane";
     repo = pname;
     fetchSubmodules = true;
     rev = "v${version}";
-    sha256 = "07md837ki0yln464w8vgwyl3yjrvkz1p8alxlmwqfn4w45nqhw77";
+    sha256 = "sha256-eATbbwIt5ytEVLPodyq9vFF9Rs5S1xShpvNYQnfwdV4=";
   };
 
   nativeBuildInputs = [
     pkg-config
     river
-    scdoc
     wayland
     zig
   ];
@@ -36,7 +34,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    zig build -Drelease-safe -Dcpu=baseline -Dman-pages --prefix $out install
+    zig build -Drelease-safe -Dcpu=baseline --prefix $out install
     runHook postInstall
   '';
 

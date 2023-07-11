@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , meson, pkg-config, ninja
-, wayland, wayland-scanner, wlroots, wlr-protocols, gtk3
+, wayland, wayland-scanner, wlroots, wlr-protocols, gtk3, glib
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "8iMJK4O/sNIGPOBZQEfK47K6OjT6sxYFe19O2r/VSr8=";
   };
 
-  nativeBuildInputs = [ meson pkg-config ninja ];
+  strictDeps = true;
+  nativeBuildInputs = [ meson pkg-config ninja glib wayland-scanner ];
   buildInputs = [ wayland wlroots gtk3 ];
 
   postUnpack = ''

@@ -1,12 +1,12 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 , fetchurl
 , clickgen
 , unzip
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "bibata-extra-cursors";
   version = "1.0.1";
 
@@ -50,5 +50,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ dtzWill AdsonCicilioti ];
+    # unmaintained as of Nov 9, 2022. unable to be build with clickgen version 2.x
+    broken = true;
   };
 }

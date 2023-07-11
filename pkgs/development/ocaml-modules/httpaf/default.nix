@@ -6,7 +6,8 @@ buildDunePackage rec {
   pname = "httpaf";
   version = "0.7.1";
 
-  useDune2 = true;
+  duneVersion = "3";
+  minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "inhabitedtype";

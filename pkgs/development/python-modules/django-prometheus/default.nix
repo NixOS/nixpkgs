@@ -9,15 +9,15 @@
 
 buildPythonPackage rec {
   pname = "django-prometheus";
-  version = "2.2.0";
+  version = "2.3.1";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "korfuri";
     repo = pname;
-    rev = version;
-    sha256 = "1y1cmycc545xrys41jk8kia36hwnkwhkw26mlpfdjgb63vq30x1d";
+    rev = "v${version}";
+    hash = "sha256-JiLH+4mmNdb9BN81J5YFiMPna/3gaKUK6ARjmCa3fE8=";
   };
 
   patches = [
@@ -37,12 +37,13 @@ buildPythonPackage rec {
     "django_prometheus"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-django
     pytestCheckHook
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/korfuri/django-prometheus/releases/tag/v${version}";
     description = "Django middlewares to monitor your application with Prometheus.io";
     homepage = "https://github.com/korfuri/django-prometheus";
     license = licenses.asl20;

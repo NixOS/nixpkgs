@@ -12,19 +12,25 @@ let
     libudev0-shim
     nghttp2
     openssl
+    stdenv.cc.cc.lib
   ];
 in stdenv.mkDerivation rec {
   pname = "insomnia";
-  version = "2022.1.1";
+  version = "2023.2.2";
 
   src = fetchurl {
     url =
       "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.deb";
-    sha256 = "sha256-AaRiXGdKCzcsY4GEgLr5PO+f7STsR+p7ybGISdJlCVk=";
+    sha256 = "sha256-XM7OLr5ety95jjlVqNuQp3rD9laoe1uC1HNP66HJe5M=";
   };
 
-  nativeBuildInputs =
-    [ autoPatchelfHook dpkg makeWrapper gobject-introspection wrapGAppsHook ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    dpkg
+    makeWrapper
+    gobject-introspection
+    wrapGAppsHook
+  ];
 
   buildInputs = [
     alsa-lib
@@ -61,6 +67,7 @@ in stdenv.mkDerivation rec {
 
   dontBuild = true;
   dontConfigure = true;
+  dontWrapGApps = true;
 
   unpackPhase = "dpkg-deb -x $src .";
 
@@ -69,19 +76,19 @@ in stdenv.mkDerivation rec {
 
     mv usr/share/* $out/share/
     mv opt/Insomnia/* $out/share/insomnia
-    mv $out/share/insomnia/*.so $out/lib/
 
     ln -s $out/share/insomnia/insomnia $out/bin/insomnia
     sed -i 's|\/opt\/Insomnia|'$out'/bin|g' $out/share/applications/insomnia.desktop
   '';
 
   preFixup = ''
-    wrapProgram "$out/bin/insomnia" --prefix LD_LIBRARY_PATH : ${runtimeLibs}
+    wrapProgram "$out/bin/insomnia" "''${gappsWrapperArgs[@]}" --prefix LD_LIBRARY_PATH : ${runtimeLibs}
   '';
 
   meta = with lib; {
     homepage = "https://insomnia.rest/";
     description = "The most intuitive cross-platform REST API Client";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ markus1189 babariviere ];

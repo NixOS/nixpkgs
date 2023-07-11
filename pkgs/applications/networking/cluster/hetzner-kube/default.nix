@@ -44,6 +44,5 @@ buildGoModule rec {
     homepage = "https://github.com/xetys/hetzner-kube";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ eliasp ];
-    platforms = lib.platforms.unix;
   };
 }

@@ -2,6 +2,7 @@
 , stdenv
 , autoPatchelfHook
 , fetchurl
+, glib-networking
 , glibc
 , gcc-unwrapped
 , gtk3
@@ -10,6 +11,7 @@
 , makeDesktopItem
 , webkitgtk
 , wrapGAppsHook
+, writeScript
 }:
 let
   desktopItem = makeDesktopItem {
@@ -25,11 +27,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "PortfolioPerformance";
-  version = "0.57.1";
+  version = "0.64.1";
 
   src = fetchurl {
     url = "https://github.com/buchen/portfolio/releases/download/${version}/PortfolioPerformance-${version}-linux.gtk.x86_64.tar.gz";
-    sha256 = "sha256-uEEFkHyApf+TObcu+Yo5vBOs2Erq0IXGhbjzlEe8NmI=";
+    hash = "sha256-R3Cj24dZ2wD1c29zRLGnuJm3wfc9+n/sNNW316HT9N4=";
   };
 
   nativeBuildInputs = [
@@ -38,8 +40,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    glibc
     gcc-unwrapped
+    glib-networking
+    glibc
     libsecret
   ];
 
@@ -58,11 +61,20 @@ stdenv.mkDerivation rec {
     ln -s $out/portfolio/icon.xpm $out/share/pixmaps/portfolio.xpm
   '';
 
+  passthru.updateScript = writeScript "update.sh" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl jq common-updater-scripts
+    version="$(curl -sL "https://api.github.com/repos/buchen/portfolio/tags" | jq '.[0].name' --raw-output)"
+    update-source-version portfolio "$version"
+  '';
+
   meta = with lib; {
     description = "A simple tool to calculate the overall performance of an investment portfolio";
     homepage = "https://www.portfolio-performance.info/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.epl10;
     maintainers = with maintainers; [ elohmeier oyren shawn8901 ];
+    mainProgram = "portfolio";
     platforms = [ "x86_64-linux" ];
   };
 }

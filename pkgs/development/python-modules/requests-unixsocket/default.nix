@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , pbr
 , requests
 , pytestCheckHook
@@ -17,6 +18,15 @@ buildPythonPackage rec {
     hash = "sha256-KDBCg+qTV9Rf/1itWxHkdwjPv1gGgXqlmyo2Mijulx4=";
   };
 
+  patches = [
+    # https://github.com/msabramo/requests-unixsocket/pull/69
+    (fetchpatch {
+      name = "urllib3-2-compatibility.patch";
+      url = "https://github.com/msabramo/requests-unixsocket/commit/39b9c64847a52ddc8c6d14ff414a6a7a3f6358d9.patch";
+      hash = "sha256-DFtjhk33JLCu7FW6XI7uf2klNmwzvh2QNwxUb4W223Q=";
+    })
+  ];
+
   nativeBuildInputs = [
     pbr
   ];
@@ -25,7 +35,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     waitress
   ];

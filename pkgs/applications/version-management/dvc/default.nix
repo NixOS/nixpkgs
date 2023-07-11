@@ -10,66 +10,56 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dvc";
-  version = "2.9.5";
-  format = "setuptools";
+  version = "3.5.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = pname;
-    rev = version;
-    hash = "sha256-MviiA0ja1IaxMPlqu2dhIGBcdEXiEvBYnK9731dihMg=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-AQE8KQ5j/EgN1P2HFghWXgQJbBc+KYu8kwNeV0Tktho=";
   };
 
-  # make the patch apply
-  prePatch = ''
-    substituteInPlace setup.cfg \
-      --replace "scmrepo==0.0.7" "scmrepo==0.0.10"
-  '';
-
-  patches = [
-    ./dvc-daemon.patch
-    (fetchpatch {
-      url = "https://github.com/iterative/dvc/commit/ab54b5bdfcef3576b455a17670b8df27beb504ce.patch";
-      sha256 = "sha256-wzMK6Br7/+d3EEGpfPuQ6Trj8IPfehdUvOvX3HZlS+o=";
-    })
+  pythonRelaxDeps = [
+    "dvc-data"
+    "platformdirs"
   ];
 
   postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "grandalf==0.6" "grandalf>=0.6" \
-      --replace "scmrepo==0.0.13" "scmrepo"
     substituteInPlace dvc/daemon.py \
       --subst-var-by dvc "$out/bin/dcv"
   '';
 
   nativeBuildInputs = with python3.pkgs; [
+    pythonRelaxDepsHook
     setuptools-scm
-    setuptools-scm-git-archive
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
     appdirs
-    aiohttp-retry
     colorama
     configobj
-    configobj
-    dictdiffer
-    diskcache
     distro
     dpath
+    dvc-data
+    dvc-http
+    dvc-render
+    dvc-studio-client
+    dvc-task
     flatten-dict
     flufl_lock
     funcy
     grandalf
-    nanotime
+    hydra-core
+    iterative-telemetry
     networkx
+    packaging
     pathspec
-    ply
+    platformdirs
     psutil
     pydot
     pygtrie
     pyparsing
-    python-benedict
     requests
     rich
     ruamel-yaml
@@ -77,19 +67,19 @@ python3.pkgs.buildPythonApplication rec {
     shortuuid
     shtab
     tabulate
-    toml
+    tomlkit
     tqdm
     typing-extensions
     voluptuous
     zc_lockfile
-  ] ++ lib.optional enableGoogle [
-    google-cloud-storage
-  ] ++ lib.optional enableAWS [
-    boto3
-  ] ++ lib.optional enableAzure [
-    azure-storage-blob
-  ] ++ lib.optional enableSSH [
-    paramiko
+  ] ++ lib.optionals enableGoogle [
+    dvc-gs
+  ] ++ lib.optionals enableAWS [
+    dvc-s3
+  ] ++ lib.optionals enableAzure [
+    dvc-azure
+  ] ++ lib.optionals enableSSH [
+    dvc-ssh
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ] ++ lib.optionals (pythonOlder "3.9") [
@@ -99,9 +89,12 @@ python3.pkgs.buildPythonApplication rec {
   # Tests require access to real cloud services
   doCheck = false;
 
+  pythonImportsCheck = [ "dvc" "dvc.api" ];
+
   meta = with lib; {
     description = "Version Control System for Machine Learning Projects";
     homepage = "https://dvc.org";
+    changelog = "https://github.com/iterative/dvc/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ cmcdragonkai fab ];
   };

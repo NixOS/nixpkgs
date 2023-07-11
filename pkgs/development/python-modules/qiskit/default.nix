@@ -28,15 +28,15 @@ in
 buildPythonPackage rec {
   pname = "qiskit";
   # NOTE: This version denotes a specific set of subpackages. See https://qiskit.org/documentation/release_notes.html#version-history
-  version = "0.36.0";
+  version = "0.41.1";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = "qiskit";
-    rev = version;
-    sha256 = "sha256-zTdvROru56/HNpoHKSVe3pQZeDSMFmaTCUAr1FOaE5A=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ICJJvbekvpaBMnSf+NHbTiarb+Ye3NtktcRYAq8KaCs=";
   };
 
   propagatedBuildInputs = [
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     qiskit-terra
   ] ++ lib.optionals withOptionalPackages optionalQiskitPackages;
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
     "qiskit"

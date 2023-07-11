@@ -7,18 +7,18 @@
 
 buildPythonPackage rec {
   pname = "nocasedict";
-  version = "1.0.3";
+  version = "2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-giC5e6BrCOst7e13TEBsd+DKDVNSrnEkn2+dHyoXvXs=";
+    hash = "sha256-lgy2mfEgnagKw546tQqnNC/oyp9wYGwjRHpRBVBDXlA=";
   };
 
   propagatedBuildInputs = [
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

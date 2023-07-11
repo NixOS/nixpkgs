@@ -1,8 +1,6 @@
 { stdenv, lib, fetchurl, makeWrapper, jre, gnugrep, coreutils, writeScript
 , common-updater-scripts, git, gnused, nix, nixfmt, majorVersion }:
 
-with lib;
-
 let
   repo = "git@github.com:scala/scala.git";
 
@@ -20,14 +18,14 @@ let
     };
 
     "2.12" = {
-      version = "2.12.15";
-      sha256 = "F5RePKlHjQaoQ2BWqsa5r99g3q/cPjgsbAi2A5IberY=";
+      version = "2.12.18";
+      sha256 = "naIJCET+YPrbXln39F9aU3DBdnjcn7PYMmhDxETOA5g=";
       pname = "scala_2_12";
     };
 
     "2.13" = {
-      version = "2.13.8";
-      sha256 = "LLMdhGnGUYOfDpyDehqwZVDQMXJnUvVJBr4bneATFM8=";
+      version = "2.13.11";
+      sha256 = "YYLdgdICPM5SczPteFsaojqY6H3IVauji6SJLcaq8eM=";
       pname = "scala_2_13";
     };
   };
@@ -88,7 +86,7 @@ stdenv.mkDerivation rec {
           nixfmt
         ]
       }
-      versionSelect='v${versions.major version}.${versions.minor version}.*'
+      versionSelect='v${lib.versions.major version}.${lib.versions.minor version}.*'
       oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
       latestTag="$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags ${repo} "$versionSelect" | tail --lines=1 | cut --delimiter='/' --fields=3 | sed 's|^v||g')"
       if [ "$oldVersion" != "$latestTag" ]; then
@@ -102,7 +100,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = {
+  meta = with lib; {
     description = "A general purpose programming language";
     longDescription = ''
       Scala is a general purpose programming language designed to express

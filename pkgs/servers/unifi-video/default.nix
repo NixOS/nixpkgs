@@ -53,6 +53,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.ui.com";
     downloadPage = "https://www.ui.com/download/unifi-video/";
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     license = licenses.unfree;
     maintainers = [ maintainers.rsynnest ];
     platforms = [ "x86_64-linux" ];

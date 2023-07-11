@@ -2,19 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "doctest";
-  version = "2.4.7";
+  version = "2.4.11";
 
   src = fetchFromGitHub {
-    owner = "onqtam";
+    owner = "doctest";
     repo = "doctest";
-    rev = version;
-    sha256 = "sha256-pXUg+NHSCKOudkmDCU3ePZrvs8DlM/CEZntEd78oTJ0=";
+    rev = "v${version}";
+    sha256 = "sha256-hotO6QVpPn8unYTaQHFgi40A3oLUd++I3aTe293e4Aw=";
   };
 
   nativeBuildInputs = [ cmake ];
 
+  doCheck = true;
+
   meta = with lib; {
-    homepage = "https://github.com/onqtam/doctest";
+    homepage = "https://github.com/doctest/doctest";
     description = "The fastest feature-rich C++11/14/17/20 single-header testing framework";
     platforms = platforms.all;
     license = licenses.mit;

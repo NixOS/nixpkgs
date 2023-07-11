@@ -18,14 +18,11 @@ buildDunePackage rec {
     sha256 = "sha256-mgZooyfxrKBVQFn01B8PULmFUW9Zq5HJfgHCSJSkJo4=";
   };
 
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.05";
+  minimalOCamlVersion = "4.05";
 
   propagatedBuildInputs = [ zarith ];
 
-  # the tests fail for 4.05
-  doCheck = lib.versionAtLeast ocaml.version "4.06";
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [ ounit ];
 
   meta = {

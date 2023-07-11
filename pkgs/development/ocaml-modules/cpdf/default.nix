@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, ocaml, findlib, camlpdf, ncurses }:
 
-if !lib.versionAtLeast ocaml.version "4.10"
+if lib.versionOlder ocaml.version "4.10"
 then throw "cpdf is not available for OCaml ${ocaml.version}"
 else
 
@@ -31,10 +31,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://www.coherentpdf.com/";
-    platforms = ocaml.meta.platforms or [];
     description = "PDF Command Line Tools";
+    homepage = "https://www.coherentpdf.com/";
     license = licenses.unfree;
     maintainers = [ maintainers.vbgl ];
+    mainProgram = "cpdf";
+    inherit (ocaml.meta) platforms;
   };
 }

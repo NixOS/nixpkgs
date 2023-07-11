@@ -1,25 +1,37 @@
 { lib
 , python
 , buildPythonPackage
-, fetchPypi
-, pycares
-, pycurl
-, twisted
+, fetchFromGitHub
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "tornado";
-  version = "6.1";
+  version = "6.2.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "33c6e81d7bd55b468d2e793517c909b139960b6c790a60b7991b9b6b76fb9791";
+  src = fetchFromGitHub {
+    owner = "tornadoweb";
+    repo = "tornado";
+    rev = "v${version}";
+    hash = "sha256-IV0QN3GqoclFo9kWJVc21arypmBkvUClo86Zmt/Gv6E=";
   };
 
-  checkInputs = [
-    pycares
-    pycurl
-    twisted
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # additional tests that have extra dependencies, run slowly, or produce more output than a simple pass/fail
+    # https://github.com/tornadoweb/tornado/blob/v6.2.0/maint/test/README
+    "maint/test"
+
+    # AttributeError: 'TestIOStreamWebMixin' object has no attribute 'io_loop'
+    "tornado/test/iostream_test.py"
+  ];
+
+  disabledTests = [
+    # Exception: did not get expected log message
+    "test_unix_socket_bad_request"
   ];
 
   pythonImportsCheck = [ "tornado" ];

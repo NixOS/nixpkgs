@@ -3,11 +3,12 @@
 , httpServer ? false # build web interface for the daemon
 , client ? false # build amule remote gui
 , fetchFromGitHub
+, fetchpatch
 , stdenv
 , lib
 , cmake
 , zlib
-, wxGTK30-gtk3 # WxGTK 3.0 must be used because aMule does not yet work well with 3.1
+, wxGTK32
 , perl
 , cryptopp
 , libupnp
@@ -21,10 +22,11 @@
 }:
 
 # daemon and client are not build monolithic
-assert monolithic || (!monolithic && (enableDaemon || client));
+assert monolithic || (!monolithic && (enableDaemon || client || httpServer));
 
 stdenv.mkDerivation rec {
   pname = "amule"
+    + lib.optionalString httpServer "-web"
     + lib.optionalString enableDaemon "-daemon"
     + lib.optionalString client "-gui";
   version = "2.3.3";
@@ -36,11 +38,18 @@ stdenv.mkDerivation rec {
     sha256 = "1nm4vxgmisn1b6l3drmz0q04x067j2i8lw5rnf0acaapwlp8qwvi";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/a/amule/1%3A2.3.3-3/debian/patches/wx3.2.patch";
+      hash = "sha256-OX5Ef80bL+dQqHo2OBLZvzMUrU6aOHfsF7AtoE1r7rs=";
+    })
+  ];
+
   nativeBuildInputs = [ cmake gettext makeWrapper pkg-config ];
 
   buildInputs = [
     zlib
-    wxGTK30-gtk3
+    wxGTK32
     perl
     cryptopp.dev
     libupnp
@@ -53,7 +62,17 @@ stdenv.mkDerivation rec {
     "-DBUILD_DAEMON=${if enableDaemon then "ON" else "OFF"}"
     "-DBUILD_REMOTEGUI=${if client then "ON" else "OFF"}"
     "-DBUILD_WEBSERVER=${if httpServer then "ON" else "OFF"}"
+    # building only the daemon fails when these are not set... this is
+    # due to mistakes in the Amule cmake code, but it does not cause
+    # extra code to be built...
+    "-Dwx_NEED_GUI=ON"
+    "-Dwx_NEED_ADV=ON"
+    "-Dwx_NEED_NET=ON"
   ];
+
+  postPatch = ''
+    echo "find_package(Threads)" >> cmake/options.cmake
+  '';
 
   # aMule will try to `dlopen' libupnp and libixml, so help it
   # find them.
@@ -79,7 +98,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;
-    # cmake fails: Cannot specify link libraries for target "wxWidgets::ADV" which is not built by this project.
-    broken = enableDaemon;
+    # Undefined symbols for architecture arm64: "_FSFindFolder"
+    broken = stdenv.isDarwin;
   };
 }

@@ -1,31 +1,55 @@
-{ lib, stdenv, fetchurl, erlang, icu, openssl, spidermonkey_78
-, coreutils, bash, makeWrapper, python3, nixosTests }:
+{ lib
+, stdenv
+, fetchurl
+, erlang
+, icu
+, openssl
+, spidermonkey_91
+, python3
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
   pname = "couchdb";
-  version = "3.2.1";
+  version = "3.3.2";
 
-
-  # when updating this, please consider bumping the erlang/OTP version
-  # in all-packages.nix
   src = fetchurl {
     url = "mirror://apache/couchdb/source/${version}/apache-${pname}-${version}.tar.gz";
-    sha256 = "1y5cfic88drlr9qiwyj2p8xc9m9hcbvw77j5lwbp0cav78f2vphi";
+    hash = "sha256-PWgj1C0Qzw1PhsnE/lnJkyyJ1oV4/LbEtCeNx2kwjao=";
   };
 
-  buildInputs = [ erlang icu openssl spidermonkey_78 (python3.withPackages(ps: with ps; [ requests ]))];
   postPatch = ''
-    substituteInPlace src/couch/rebar.config.script --replace '/usr/include/mozjs-78' "${spidermonkey_78.dev}/include/mozjs-78"
+    substituteInPlace src/couch/rebar.config.script --replace '/usr/include/mozjs-91' "${spidermonkey_91.dev}/include/mozjs-91"
+    substituteInPlace configure --replace '/usr/include/''${SM_HEADERS}' "${spidermonkey_91.dev}/include/mozjs-91"
     patchShebangs bin/rebar
   '';
 
+  nativeBuildInputs = [
+    erlang
+  ];
+
+  buildInputs = [
+    icu
+    openssl
+    spidermonkey_91
+    (python3.withPackages(ps: with ps; [ requests ]))
+  ];
+
   dontAddPrefix= "True";
-  configureFlags = ["--spidermonkey-version=78"];
-  buildFlags = ["release"];
+
+  configureFlags = [
+    "--spidermonkey-version=91"
+  ];
+
+  buildFlags = [
+    "release"
+  ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out
     cp -r rel/couchdb/* $out
+    runHook postInstall
   '';
 
   passthru.tests = {

@@ -1,16 +1,17 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, six
-, pytest
 , mock
 , parameterized
+, pyelftools
+, pytestCheckHook
 , pythonOlder
+, six
 }:
 
 buildPythonPackage rec {
   pname = "aws-lambda-builders";
-  version = "1.14.0";
+  version = "1.34.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,28 +19,50 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-lambda-builders";
-    rev = "v${version}";
-    sha256 = "sha256-ypzo0cYvP8LV74cQMzHIFDk3LH0bbEB4UxPxRuqe2fc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-MjX0im9GX0mdWkumUoJUIBjPZl/Ok5+sR6Dgq6vVGKM=";
   };
 
   propagatedBuildInputs = [
     six
   ];
 
-  checkInputs = [
-    pytest
+  nativeCheckInputs = [
     mock
     parameterized
+    pyelftools
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    export PATH=$out/bin:$PATH
-    pytest tests/functional -k 'not can_invoke_pip'
-  '';
+  disabledTests = [
+    # CLI don't work in the sandbox
+    "test_run_hello_workflow"
+    # Don't tests integrations
+    "TestCustomMakeWorkflow"
+    "TestDotnet31"
+    "TestDotnet6"
+    "TestGoWorkflow"
+    "TestJavaGradle"
+    "TestJavaMaven"
+    "TestNodejsNpmWorkflow"
+    "TestNodejsNpmWorkflowWithEsbuild"
+    "TestPipRunner"
+    "TestPythonPipWorkflow"
+    "TestRubyWorkflow"
+    "TestRustCargo"
+    # Tests which are passing locally but not on Hydra
+    "test_copy_dependencies_action_1_multiple_files"
+    "test_move_dependencies_action_1_multiple_files"
+  ];
+
+  pythonImportsCheck = [
+    "aws_lambda_builders"
+  ];
 
   meta = with lib; {
+    description = "Tool to compile, build and package AWS Lambda functions";
     homepage = "https://github.com/awslabs/aws-lambda-builders";
-    description = "A tool to compile, build and package AWS Lambda functions";
+    changelog = "https://github.com/aws/aws-lambda-builders/releases/tag/v${version}";
     longDescription = ''
       Lambda Builders is a Python library to compile, build and package
       AWS Lambda functions for several runtimes & frameworks.

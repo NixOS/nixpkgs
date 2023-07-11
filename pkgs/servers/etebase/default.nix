@@ -1,44 +1,44 @@
-{ lib, stdenv, python3, fetchFromGitHub }:
-
-let
-  py = python3.override {
-    packageOverrides = self: super: {
-      django = super.django_3;
-    };
-  };
-in
-  with py.pkgs;
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, aiofiles
+, django_3
+, fastapi
+, msgpack
+, pynacl
+, redis
+, typing-extensions
+, withLdap ? true
+, python-ldap
+, withPostgres ? true
+, psycopg2
+, nix-update-script
+}:
 
 buildPythonPackage rec {
   pname = "etebase-server";
-  version = "0.8.3";
-  format = "pyproject";
+  version = "0.11.0";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "etesync";
     repo = "server";
-    rev = "v${version}";
-    sha256 = "sha256-rPs34uzb5veiOw74SACLrDm4Io0CYH9EL9IuV38CkPY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-+MSNX+CFmIQII+SFjM2TQKCgRMOTdsOIVAP8ur4WjQY=";
   };
 
   patches = [ ./secret.patch ];
 
-  propagatedBuildInputs = with pythonPackages; [
-    asgiref
-    cffi
-    django
-    django-cors-headers
-    djangorestframework
-    drf-nested-routers
+  propagatedBuildInputs = [
+    aiofiles
+    django_3
     fastapi
     msgpack
-    psycopg2
-    pycparser
     pynacl
-    pytz
-    six
-    sqlparse
-  ];
+    redis
+    typing-extensions
+  ] ++ lib.optional withLdap python-ldap
+    ++ lib.optional withPostgres psycopg2;
 
   installPhase = ''
     mkdir -p $out/bin $out/lib
@@ -48,9 +48,12 @@ buildPythonPackage rec {
     chmod +x $out/bin/etebase-server
   '';
 
+  passthru.updateScript = nix-update-script {};
+
   meta = with lib; {
     homepage = "https://github.com/etesync/server";
-    description = "An Etebase (EteSync 2.0) server so you can run your own.";
+    description = "An Etebase (EteSync 2.0) server so you can run your own";
+    changelog = "https://github.com/etesync/server/blob/${version}/ChangeLog.md";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ felschr ];
   };

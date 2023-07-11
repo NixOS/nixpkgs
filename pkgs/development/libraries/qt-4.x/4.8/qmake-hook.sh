@@ -8,6 +8,11 @@ qmakeConfigurePhase() {
         echo "qmake4Hook: enabled parallel building"
     fi
 
+    if ! [[ -v enableParallelInstalling ]]; then
+        enableParallelInstalling=1
+        echo "qmake: enabled parallel installing"
+    fi
+
     runHook postConfigure
 }
 

@@ -1,23 +1,32 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nix-update-script, testers, sptlrx }:
 
 buildGoModule rec {
   pname = "sptlrx";
-  version = "0.2.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "raitonoberu";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-b38DACSdnjwPsLMrkt0Ubpqpn/4SDAgrdSlp9iAcxfE=";
+    hash = "sha256-6GbefTWrhH6RdASmSrugd4xESkwqFVF5qwFmf0JUDTY=";
   };
 
-  vendorSha256 = "sha256-/fqWnRQBpLNoTwqrFDKqQuv1r9do1voysBhLuj223S0=";
+  vendorHash = "sha256-Ll5jUjpx4165BAE86/z95i4xa8fdKlfxqrUc/gDLqJ0=";
 
   ldflags = [ "-s" "-w" ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = sptlrx;
+      version = "v${version}"; # needed because testVersion uses grep -Fw
+    };
+  };
 
   meta = with lib; {
     description = "Spotify lyrics in your terminal";
     homepage = "https://github.com/raitonoberu/sptlrx";
+    changelog = "https://github.com/raitonoberu/sptlrx/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ MoritzBoehme ];
   };

@@ -6,25 +6,27 @@
 , buildPythonPackage
 , fetchFromGitHub
 , httpx
+, orjson
 , poetry-core
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, tenacity
 , wrapt
 }:
 
 buildPythonPackage rec {
   pname = "teslajsonpy";
-  version = "2.0.1";
+  version = "3.9.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "zabuldon";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-cplx6Zhqc/ft7l9dy1ian3zzgDqEfpO/0AF7ErX4wqk=";
+    hash = "sha256-6H8miS0tKB99ZkiBvqJ77NIsswJ+ivYt1VZOLwTQr24=";
   };
 
   nativeBuildInputs = [
@@ -37,10 +39,12 @@ buildPythonPackage rec {
     backoff
     beautifulsoup4
     httpx
+    orjson
+    tenacity
     wrapt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
@@ -52,6 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library to work with Tesla API";
     homepage = "https://github.com/zabuldon/teslajsonpy";
+    changelog = "https://github.com/zabuldon/teslajsonpy/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

@@ -63,10 +63,6 @@ python3.pkgs.buildPythonApplication rec {
     "-Dtests=false" # needs dbus
   ];
 
-  # Temporary fix
-  # See https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
-
   postPatch = ''
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
@@ -89,6 +85,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://wiki.gnome.org/Apps/DFeet";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ktosiek ];
+    maintainers = teams.gnome.members;
   };
 }

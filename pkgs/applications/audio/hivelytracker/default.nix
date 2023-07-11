@@ -2,36 +2,32 @@
 , stdenv
 , fetchFromGitHub
 , pkg-config
-, makeWrapper
 , SDL
 , SDL_image
 , SDL_ttf
-, gtk2
-, glib
+, gtk3
 }:
 
 stdenv.mkDerivation rec {
   pname = "hivelytracker";
-  version = "unstable-2020-08-19";
+  version = "1.9";
 
   src = fetchFromGitHub {
     owner = "pete-gordon";
     repo = "hivelytracker";
-    rev = "c8e3c7a5ee9f4a07cb4a941caecf7e4c4f4d40e0";
-    sha256 = "1nqianlf1msir6wqwapi7ys1vbmf6aik58wa54b6cn5v6kwxh75a";
+    rev = "V${lib.replaceStrings ["."] ["_"] version}";
+    sha256 = "148p320sd8phcpmj4m85ns5zly2dawbp8kgx9ryjfdk24pa88xg6";
   };
 
   nativeBuildInputs = [
     pkg-config
-    makeWrapper
   ];
 
   buildInputs = [
     SDL
     SDL_image
     SDL_ttf
-    gtk2
-    glib
+    gtk3
   ];
 
   makeFlags = [
@@ -40,28 +36,12 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
   ];
 
-  # TODO: try to exclude gtk and glib from darwin builds
-  NIX_CFLAGS_COMPILE = [
-    "-I${SDL}/include/SDL"
-    "-I${SDL_image}/include/SDL"
-    "-I${SDL_ttf}/include/SDL"
-    "-I${gtk2.dev}/include/gtk-2.0"
-    "-I${glib.dev}/include/glib-2.0"
-  ];
-
   # Also build the hvl2wav tool
   postBuild = ''
     make -C hvl2wav
   '';
 
   postInstall = ''
-    # https://github.com/pete-gordon/hivelytracker/issues/43
-    # Ideally we should patch the sources, but the program can't open
-    # files passed as arguments anyway, so this works well enough until the
-    # issue is fixed.
-    wrapProgram $out/bin/hivelytracker \
-      --chdir "$out/share/hivelytracker"
-
     # Also install the hvl2wav tool
     install -Dm755 hvl2wav/hvl2wav $out/bin/hvl2wav
   '';
@@ -86,4 +66,3 @@ stdenv.mkDerivation rec {
     broken = stdenv.isDarwin; # TODO: try to use xcbuild
   };
 }
-

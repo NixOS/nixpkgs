@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ readline gettext ncurses ];
 
-  NIX_CFLAGS_COMPILE = with lib; toString ((optionals stdenv.cc.isGNU [
+  env.NIX_CFLAGS_COMPILE = with lib; toString ((optionals stdenv.cc.isGNU [
     # Needed with GCC 8
     "-Wno-error=int-in-bool-context"
     "-Wno-error=class-memaccess"
@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
     "-Wno-error=maybe-uninitialized"
     # Needed with GCC 11
     "-Wno-error=misleading-indentation"
+    # Needed with GCC 12
+    "-Wno-error=nonnull"
+    "-Wno-error=stringop-overflow"
+    "-Wno-error=use-after-free"
    ]) ++ optional stdenv.cc.isClang "-Wno-error=null-dereference");
 
   patchPhase = lib.optionalString stdenv.isDarwin ''
@@ -33,6 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Free interpreter for the APL programming language";
     homepage    = "https://www.gnu.org/software/apl/";
     license     = licenses.gpl3Plus;

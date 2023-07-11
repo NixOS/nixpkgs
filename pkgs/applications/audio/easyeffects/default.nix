@@ -3,9 +3,11 @@
 , desktop-file-utils
 , fetchFromGitHub
 , calf
+, fftw
 , fftwFloat
-, fmt
+, fmt_9
 , glib
+, gsl
 , gtk4
 , itstool
 , libadwaita
@@ -23,7 +25,6 @@
 , nlohmann_json
 , pipewire
 , pkg-config
-, python3
 , rnnoise
 , rubberband
 , speexdsp
@@ -31,17 +32,18 @@
 , wrapGAppsHook4
 , zam-plugins
 , zita-convolver
+, soundtouch
 }:
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "6.2.4";
+  version = "7.0.5";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     rev = "v${version}";
-    sha256 = "sha256-g/qN1Tafh71HdPLHW43Zva9MK6G+qxSnb1aRisuwdBw=";
+    hash = "sha256-Z/0O8dVZ3J901OdOc1wF1XibNE/33b8oSqY6RKPDfzg=";
   };
 
   nativeBuildInputs = [
@@ -50,14 +52,15 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     wrapGAppsHook4
   ];
 
   buildInputs = [
+    fftw
     fftwFloat
-    fmt
+    fmt_9
     glib
+    gsl
     gtk4
     libadwaita
     libbs2b
@@ -71,15 +74,11 @@ stdenv.mkDerivation rec {
     pipewire
     rnnoise
     rubberband
+    soundtouch
     speexdsp
     tbb
     zita-convolver
   ];
-
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
 
   preFixup =
     let
@@ -106,8 +105,7 @@ stdenv.mkDerivation rec {
     description = "Audio effects for PipeWire applications.";
     homepage = "https://github.com/wwmm/easyeffects";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
-    badPlatforms = [ "aarch64-linux" ];
   };
 }

@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xfsdump";
-  version = "3.1.10";
+  version = "3.1.12";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/fs/xfs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-mqt6U6oFzUbtyXJp6/FFaqsrYKuMH/+q+KpJLwtfZRc=";
+    sha256 = "sha256-85xMGzBrLdfsl5wOlNYP5pCD0uz5rwUcrF7zvtdyx0o=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace Makefile \
       --replace "cp include/install-sh ." "cp -f include/install-sh ."
   '';

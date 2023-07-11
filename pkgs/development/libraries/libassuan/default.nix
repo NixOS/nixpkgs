@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ npth gettext ];
 
   configureFlags = [
+    # Required for cross-compilation.
     "--with-libgpg-error-prefix=${libgpg-error.dev}"
   ];
 
@@ -37,6 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "http://gnupg.org";
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.erictapen ];
+    maintainers = [ ];
   };
 }

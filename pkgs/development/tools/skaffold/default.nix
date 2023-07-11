@@ -1,28 +1,28 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, makeWrapper }:
 
 buildGoModule rec {
   pname = "skaffold";
-  version = "1.38.0";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "GoogleContainerTools";
     repo = "skaffold";
     rev = "v${version}";
-    sha256 = "sha256-Sy8DpCZEFps6Z4x57ESofNm2EZsPUCHzLz1icl1MOVE=";
+    hash = "sha256-IgTAUxA1Cfe0LaYKrKtbm1PELGic31XRdGMIoLDG6w0=";
   };
 
-  vendorSha256 = "sha256-RA2KgUjYB3y6sOQdnLSZjr52VosZSaRrVU0BXZvjB1M=";
+  vendorHash = null;
 
   subPackages = ["cmd/skaffold"];
 
-  ldflags = let t = "github.com/GoogleContainerTools/skaffold/pkg/skaffold"; in [
+  ldflags = let t = "github.com/GoogleContainerTools/skaffold/v2/pkg/skaffold"; in [
     "-s" "-w"
     "-X ${t}/version.version=v${version}"
     "-X ${t}/version.gitCommit=${src.rev}"
     "-X ${t}/version.buildDate=unknown"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -30,6 +30,8 @@ buildGoModule rec {
   '';
 
   postInstall = ''
+    wrapProgram $out/bin/skaffold --set SKAFFOLD_UPDATE_CHECK false
+
     installShellCompletion --cmd skaffold \
       --bash <($out/bin/skaffold completion bash) \
       --zsh <($out/bin/skaffold completion zsh)

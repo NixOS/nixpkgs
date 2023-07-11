@@ -10,17 +10,17 @@
 
 buildPythonPackage rec {
   pname = "proto-plus";
-  version = "1.20.3";
+  version = "1.22.2";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-8osiW8nmwU4gb7f46Zakb7LM2QJkjlEtSWq7anFqSuU=";
+    hash = "sha256-DozaPVpjTZiVt1xXPJNSwWSGy3XesOB4tf2jTbQkMWU=";
   };
 
   propagatedBuildInputs = [ protobuf ];
 
-  checkInputs = [ pytestCheckHook pytz googleapis-common-protos ];
+  nativeCheckInputs = [ pytestCheckHook pytz googleapis-common-protos ];
 
   pythonImportsCheck = [ "proto" ];
 

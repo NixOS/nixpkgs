@@ -1,23 +1,25 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-let
+stdenvNoCC.mkDerivation {
   pname = "junicode";
   version = "1.003";
-in
-fetchFromGitHub {
-  name = "${pname}-${version}";
 
-  owner = "psb1558";
-  repo = "Junicode-font";
-  rev = "55d816d91a5e19795d9b66edec478379ee2b9ddb";
+  src = fetchFromGitHub {
+    owner = "psb1558";
+    repo = "Junicode-font";
+    rev = "55d816d91a5e19795d9b66edec478379ee2b9ddb";
+    hash = "sha256-eTiMgI8prnpR4H6sqKRaB3Gcnt4C5QWZalRajWW49G4=";
+  };
 
-  postFetch = ''
+  installPhase = ''
+    runHook preInstall
+
     local out_ttf=$out/share/fonts/junicode-ttf
     mkdir -p $out_ttf
-    tar -f $downloadedFile -C $out_ttf --wildcards -x '*.ttf' --strip=2
-  '';
+    cp legacy/*.ttf $out_ttf
 
-  sha256 = "1v334gljmidh58kmrarz5pf348b0ac7vh25f1xs3gyvn78khh5nw";
+    runHook postInstall
+  '';
 
   meta = {
     homepage = "https://github.com/psb1558/Junicode-font";

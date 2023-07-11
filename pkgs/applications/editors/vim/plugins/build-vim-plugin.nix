@@ -1,52 +1,56 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , rtpPath
-, vim
-, vimGenDocHook
+, toVimPlugin
 }:
 
 rec {
-  addRtp = path: attrs: derivation:
-    derivation // { rtp = "${derivation}"; } // {
-      overrideAttrs = f: buildVimPlugin (attrs // f attrs);
+  addRtp = drv:
+    drv // {
+      rtp = lib.warn "`rtp` attribute is deprecated, use `outPath` instead." drv.outPath;
+      overrideAttrs = f: addRtp (drv.overrideAttrs f);
     };
 
-  buildVimPlugin = attrs@{
-    name ? "${attrs.pname}-${attrs.version}",
-    namePrefix ? "vimplugin-",
-    src,
-    unpackPhase ? "",
-    configurePhase ? "",
-    buildPhase ? "",
-    preInstall ? "",
-    postInstall ? "",
-    path ? ".",
-    addonInfo ? null,
-    ...
-  }:
-    addRtp "${rtpPath}/${path}" attrs (stdenv.mkDerivation (attrs // {
-      name = namePrefix + name;
+  buildVimPlugin =
+    { name ? "${attrs.pname}-${attrs.version}"
+    , namePrefix ? "vimplugin-"
+    , src
+    , unpackPhase ? ""
+    , configurePhase ? ""
+    , buildPhase ? ""
+    , preInstall ? ""
+    , postInstall ? ""
+    , path ? "."
+    , addonInfo ? null
+    , meta ? { }
+    , ...
+    }@attrs:
+    let
+      drv = stdenv.mkDerivation (attrs // {
+        name = namePrefix + name;
 
-      # dont move the doc folder since vim expects it
-      forceShare= [ "man" "info" ];
+        inherit unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
 
-      nativeBuildInputs = attrs.nativeBuildInputs or []
-      ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) vimGenDocHook;
-      inherit unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
+        installPhase = ''
+          runHook preInstall
 
-      installPhase = ''
-        runHook preInstall
+          target=$out/${rtpPath}/${path}
+          mkdir -p $out/${rtpPath}
+          cp -r . $target
 
-        target=$out/${rtpPath}/${path}
-        mkdir -p $out/${rtpPath}
-        cp -r . $target
+          runHook postInstall
+        '';
 
-        runHook postInstall
-      '';
-    }));
+        meta = {
+          platforms = lib.platforms.all;
+        } // meta;
+      });
+    in
+    addRtp (toVimPlugin drv);
 
   buildVimPluginFrom2Nix = attrs: buildVimPlugin ({
     # vim plugins may override this
     buildPhase = ":";
-    configurePhase =":";
+    configurePhase = ":";
   } // attrs);
 }

@@ -1,72 +1,126 @@
-{ mkDerivation
+{ lib
+, stdenv
 , fetchFromGitHub
 , SDL2
 , cmake
-, ffmpeg
+, copyDesktopItems
+, ffmpeg_4
 , glew
-, lib
+, libffi
+, libsForQt5
 , libzip
+, makeDesktopItem
+, makeWrapper
 , pkg-config
 , python3
-, qtbase
-, qtmultimedia
 , snappy
+, vulkan-loader
+, wayland
 , zlib
+, enableQt ? false
+, enableVulkan ? true
+, forceWayland ? false
 }:
 
-mkDerivation rec {
-  pname = "ppsspp";
-  version = "1.12.3";
+let
+  # experimental, see https://github.com/hrydgard/ppsspp/issues/13845
+  vulkanWayland = enableVulkan && forceWayland;
+  inherit (libsForQt5) qtbase qtmultimedia wrapQtAppsHook;
+in
+# Only SDL frontend needs to specify whether to use Wayland
+assert forceWayland -> !enableQt;
+stdenv.mkDerivation (finalAttrs: {
+  pname = "ppsspp"
+          + lib.optionalString enableQt "-qt"
+          + lib.optionalString (!enableQt) "-sdl"
+          + lib.optionalString forceWayland "-wayland";
+  version = "1.15.4";
 
   src = fetchFromGitHub {
     owner = "hrydgard";
-    repo = pname;
-    rev = "v${version}";
+    repo = "ppsspp";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    sha256 = "sha256-S16rTB0svksW5MwrPV/+qpTK4uKZ7mFcmbOyEmMmzhY=";
+    sha256 = "sha256-D94PLJfWalLk2kbS0PEHTMDdWxZW4YXwp3VQDHNZlRU=";
   };
 
   postPatch = ''
-    substituteInPlace git-version.cmake --replace unknown ${src.rev}
+    substituteInPlace git-version.cmake --replace unknown ${finalAttrs.src.rev}
     substituteInPlace UI/NativeApp.cpp --replace /usr/share $out/share
   '';
 
-  nativeBuildInputs = [ cmake pkg-config python3 ];
+  nativeBuildInputs = [
+    cmake
+    copyDesktopItems
+    makeWrapper
+    pkg-config
+    python3
+  ] ++ lib.optional enableQt wrapQtAppsHook;
 
   buildInputs = [
     SDL2
-    ffmpeg
-    glew
+    ffmpeg_4
+    (glew.override { enableEGL = forceWayland; })
     libzip
-    qtbase
-    qtmultimedia
     snappy
     zlib
-  ];
+  ] ++ lib.optionals enableQt [
+    qtbase
+    qtmultimedia
+  ] ++ lib.optional enableVulkan vulkan-loader
+  ++ lib.optionals vulkanWayland [ wayland libffi ];
 
   cmakeFlags = [
-    "-DHEADLESS=OFF"
+    "-DHEADLESS=${if enableQt then "OFF" else "ON"}"
     "-DOpenGL_GL_PREFERENCE=GLVND"
     "-DUSE_SYSTEM_FFMPEG=ON"
     "-DUSE_SYSTEM_LIBZIP=ON"
     "-DUSE_SYSTEM_SNAPPY=ON"
-    "-DUSING_QT_UI=ON"
+    "-DUSE_WAYLAND_WSI=${if vulkanWayland then "ON" else "OFF"}"
+    "-DUSING_QT_UI=${if enableQt then "ON" else "OFF"}"
   ];
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/share/ppsspp
-    install -Dm555 PPSSPPQt $out/bin/ppsspp
-    mv assets $out/share/ppsspp
-    runHook postInstall
-  '';
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "PPSSPP";
+      name = "ppsspp";
+      exec = "ppsspp";
+      icon = "ppsspp";
+      comment = "Play PSP games on your computer";
+      categories = [ "Game" "Emulator" ];
+    })
+  ];
 
-  meta = with lib; {
+  installPhase = let
+    vulkanPath = lib.makeLibraryPath [ vulkan-loader ];
+  in
+    ''
+      runHook preInstall
+
+      mkdir -p $out/share/{applications,ppsspp,icons}
+    '' + (if enableQt then ''
+      install -Dm555 PPSSPPQt $out/bin/ppsspp
+      wrapProgram $out/bin/ppsspp \
+    '' else ''
+      install -Dm555 PPSSPPHeadless $out/bin/ppsspp-headless
+      install -Dm555 PPSSPPSDL $out/share/ppsspp/
+      makeWrapper $out/share/ppsspp/PPSSPPSDL $out/bin/ppsspp \
+        --set SDL_VIDEODRIVER ${if forceWayland then "wayland" else "x11"} \
+    '') + lib.optionalString enableVulkan ''
+        --prefix LD_LIBRARY_PATH : ${vulkanPath} \
+    '' + "\n" + ''
+      mv assets $out/share/ppsspp
+      mv ../icons/hicolor $out/share/icons
+
+      runHook postInstall
+    '';
+
+  meta = {
     homepage = "https://www.ppsspp.org/";
-    description = "A HLE Playstation Portable emulator, written in C++";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.linux;
+    description = "A HLE Playstation Portable emulator, written in C++ ("
+                  + (if enableQt then "Qt" else "SDL + headless") + ")";
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
-}
-# TODO: add SDL headless port
+})

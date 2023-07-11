@@ -18,7 +18,6 @@ buildGoModule rec {
     description = "Prometheus service discovery for Equinix Metal";
     homepage = "https://github.com/packethost/prometheus-packet-sd";
     license = licenses.asl20;
-    platforms = platforms.unix;
     maintainers = [ ];
     mainProgram = "prometheus-packet-sd";
   };

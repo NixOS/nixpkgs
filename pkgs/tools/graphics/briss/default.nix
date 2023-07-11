@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://sourceforge.net/projects/briss/";
     description = "Java application for cropping PDF files";
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
   };

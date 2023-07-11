@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "autosuspend";
-  version = "4.1.1";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "languitar";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-UdHaz1JIofUrw9G/K40AVhBWdvMdTK4Wa7FWb6ntwr0=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-gS8NNks4GaIGl7cEqWSP53I4/tIV4LypkmZ5vNOjspY=";
   };
 
   postPatch = ''
@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
     dbus-python
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
     python-dbusmock
     pytest-httpserver

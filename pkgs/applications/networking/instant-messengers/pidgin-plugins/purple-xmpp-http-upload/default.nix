@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "purple-xmpp-upload";
-  version = "unstable-2017-12-31";
+  version = "unstable-2021-11-04";
 
   src = fetchFromGitHub {
     owner = "Junker";
     repo = "purple-xmpp-http-upload";
-    rev = "178096cbfc9df165c2dc1677666439969d212b37";
-    sha256 = "12l9rqlgb4i50xxrfnvwz9sqfk0d3c0m6l09mnvfixqi8illyvlp";
+    rev = "f370b4a2c474c6fe4098d929d8b7c18aeba87b6b";
+    sha256 = "0n05jybmibn44xb660p08vrrbanfsyjn17w1xm9gwl75fxxq8cdc";
   };
 
   buildInputs = [ pidgin glib libxml2 ];

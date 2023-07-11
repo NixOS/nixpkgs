@@ -26,8 +26,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Non-blocking streaming Unicode codec for OCaml";
     homepage = "https://erratique.ch/software/uutf";
-    inherit (ocaml.meta) platforms;
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
+    mainProgram = "utftrip";
+    inherit (ocaml.meta) platforms;
   };
 }

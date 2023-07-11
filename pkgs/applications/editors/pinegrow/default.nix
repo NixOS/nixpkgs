@@ -10,16 +10,36 @@
 , gtk3
 , wrapGAppsHook
 , makeWrapper
+, pinegrowVersion ? "7"
 }:
+
+let
+  # major version upgrade requires a new license. So keep version 6 around.
+  versions = {
+    "6" = {
+      version = "6.8";
+      src = fetchurl {
+        url = "https://download.pinegrow.com/PinegrowLinux64.${versions."6".version}.zip";
+        hash = "sha256-gqRmu0VR8Aj57UwYYLKICd4FnYZMhM6pTTSGIY5MLMk=";
+      };
+    };
+    "7" = {
+      version = "7.05.2";
+      src = fetchurl {
+        url = "https://github.com/Pinegrow/PinegrowReleases/releases/download/pg${builtins.substring 0 4 (versions."7".version)}/PinegrowLinux64.${versions."7".version}.zip";
+        hash = "sha256-Cvy4JwnQHMp7K0mKtIH8lk1bZ9hwa8nvtmimBK0UAf8=";
+      };
+    };
+  };
+in
 
 stdenv.mkDerivation rec {
   pname = "pinegrow";
-  version = "6.5";
+  # deactivate auto update, because an old 6.21 version is getting mixed up
+  # see e.g. https://github.com/NixOS/nixpkgs/pull/184460
+  version = versions.${pinegrowVersion}.version; # nixpkgs-update: no auto update
 
-  src = fetchurl {
-    url = "https://download.pinegrow.com/PinegrowLinux64.${version}.zip";
-    sha256 = "1l7cf5jgidpykaf68mzf92kywl1vxwl3fg43ibgr2rg4cnl1g82b";
-  };
+  src = versions.${pinegrowVersion}.src;
 
   nativeBuildInputs = [
     unzip
@@ -56,16 +76,16 @@ stdenv.mkDerivation rec {
     # folder and symlinked.
     unzip -q $src -d $out/opt/pinegrow
     substituteInPlace $out/opt/pinegrow/Pinegrow.desktop \
-      --replace 'Exec=sh -c "$(dirname %k)/PinegrowLibrary"' 'Exec=sh -c "$out/bin/Pinegrow"'
-    mv $out/opt/pinegrow/Pinegrow.desktop $out/share/applications/Pinegrow.desktop
-    ln -s $out/opt/pinegrow/PinegrowLibrary $out/bin/Pinegrow
+      --replace 'Exec=sh -c "$(dirname %k)/PinegrowLibrary"' 'Exec=sh -c "$out/bin/pinegrow"'
+    mv $out/opt/pinegrow/Pinegrow.desktop $out/share/applications/pinegrow.desktop
+    ln -s $out/opt/pinegrow/PinegrowLibrary $out/bin/pinegrow
 
     runHook postInstall
   '';
 
   # GSETTINGS_SCHEMAS_PATH is not set in installPhase
   preFixup = ''
-    wrapProgram $out/bin/Pinegrow \
+    wrapProgram $out/bin/pinegrow \
       ''${makeWrapperArgs[@]} \
       ''${gappsWrapperArgs[@]}
   '';
@@ -74,6 +94,7 @@ stdenv.mkDerivation rec {
     homepage = "https://pinegrow.com";
     description = "UI Web Editor";
     platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = with licenses; [ unfreeRedistributable ];
     maintainers = with maintainers; [ gador ];
   };

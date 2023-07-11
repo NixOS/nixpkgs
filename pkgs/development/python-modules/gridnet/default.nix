@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "gridnet";
-  version = "4.0.0";
+  version = "4.2.0";
 
   disabled = pythonOlder "3.9";
 
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-gridnet";
-    rev = "v${version}";
-    hash = "sha256-Ihs8qUx50tAUcRBsVArRhzoLcQUi1vbYh8sPyK75AEk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Enld68P9Cyq9Au4bsZQqPV26TL72pcmIm/Vg1DnheLk=";
   };
 
   postPatch = ''
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     yarl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook

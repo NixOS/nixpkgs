@@ -3,17 +3,19 @@
 stdenv.mkDerivation rec {
 
   pname = "cwm";
-  version = "6.7";
+  version = "7.1";
 
   src = fetchFromGitHub {
     owner = "leahneukirchen";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0f9xmki2hx10k8iisfzc7nm1l31zkf1r06pdgn06ar9w9nizrld9";
+    sha256 = "sha256-lkjsxGMXOrnu4cUiV/TO7yzd9FzM297MhaFKauqmiHo=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libX11 libXinerama libXrandr libXft bison ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ pkg-config bison ];
+  buildInputs = [ libX11 libXinerama libXrandr libXft ];
 
   prePatch = ''sed -i "s@/usr/local@$out@" Makefile'';
 

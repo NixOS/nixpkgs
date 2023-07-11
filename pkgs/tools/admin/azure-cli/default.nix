@@ -1,7 +1,7 @@
-{ stdenv, lib, python3, fetchFromGitHub, installShellFiles }:
+{ stdenv, lib, python3, fetchPypi, fetchFromGitHub, installShellFiles }:
 
 let
-  version = "2.34.1";
+  version = "2.49.0";
   srcName = "azure-cli-${version}-src";
 
   src = fetchFromGitHub {
@@ -9,12 +9,12 @@ let
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    sha256 = "sha256-BEEwxf3UTShKi3K/uBK1yMxyPCvybL/BbKsu8XAwu0M=";
+    hash = "sha256-4R89RD4mDdhLdpgHQ8QT48cX+GzTLrSYPCwg0xWM8Ss=";
   };
 
-  # put packages that needs to be overriden in the py package scope
+  # put packages that needs to be overridden in the py package scope
   py = import ./python-packages.nix {
-    inherit stdenv lib src version python3;
+    inherit stdenv lib src version python3 fetchPypi;
   };
 in
 py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
@@ -27,12 +27,9 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     substituteInPlace setup.py \
       --replace "chardet~=3.0.4" "chardet" \
       --replace "javaproperties~=0.5.1" "javaproperties" \
-      --replace "pytz==2019.1" "pytz" \
       --replace "scp~=0.13.2" "scp" \
-      --replace "PyNaCl~=1.4.0" "PyNaCl" \
-      --replace "jsondiff~=1.2.0" "jsondiff~=1.2" \
-      --replace "antlr4-python3-runtime~=4.7.2" "antlr4-python3-runtime~=4.7" \
-      --replace "mock~=4.0" "mock"
+      --replace "packaging>=20.9,<22.0" "packaging" \
+      --replace "fabric~=2.4" "fabric"
 
     # remove namespace hacks
     # remove urllib3 because it was added as 'urllib3[secure]', which doesn't get handled well
@@ -50,6 +47,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-cli-core
     azure-cli-telemetry
     azure-cosmos
+    azure-data-tables
     azure-datalake-store
     azure-functions-devops-build
     azure-graphrbac
@@ -57,11 +55,14 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-keyvault
     azure-keyvault-administration
     azure-keyvault-keys
+    azure-keyvault-certificates
+    azure-keyvault-secrets
     azure-loganalytics
     azure-mgmt-advisor
     azure-mgmt-apimanagement
     azure-mgmt-applicationinsights
     azure-mgmt-appconfiguration
+    azure-mgmt-appcontainers
     azure-mgmt-authorization
     azure-mgmt-batch
     azure-mgmt-batchai
@@ -131,16 +132,17 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-synapse-artifacts
     azure-synapse-managedprivateendpoints
     azure-synapse-spark
+    chardet
     colorama
     cryptography
     distro
-    Fabric
+    fabric
     jsmin
     knack
     mock
     paramiko
     pydocumentdb
-    PyGithub
+    pygithub
     pygments
     pynacl
     pyopenssl
@@ -159,7 +161,6 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     javaproperties
     jsondiff
     # urllib3[secure]
-    ipaddress
     # shell completion
     argcomplete
   ];
@@ -203,6 +204,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     "azure.mgmt.apimanagement"
     "azure.mgmt.applicationinsights"
     "azure.mgmt.appconfiguration"
+    "azure.mgmt.appcontainers"
     "azure.mgmt.authorization"
     "azure.mgmt.batch"
     "azure.mgmt.batchai"

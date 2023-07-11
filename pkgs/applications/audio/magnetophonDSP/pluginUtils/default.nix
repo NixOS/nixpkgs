@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ faust2jaqt faust2lv2 ];
 
+  dontWrapQtApps = true;
+
   buildPhase = ''
     for f in *.dsp
       do
@@ -28,8 +30,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/lv2
     mv *.lv2/ $out/lib/lv2
     mkdir -p $out/bin
-    cp * $out/bin/
-  '';
+    for f in $(find . -executable -type f); do
+      cp $f $out/bin/
+    done
+ '';
 
   meta = {
     description = "Some simple utility lv2 plugins";

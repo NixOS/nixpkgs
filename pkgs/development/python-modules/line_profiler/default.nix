@@ -8,18 +8,20 @@
 , scikit-build
 , cmake
 , pythonOlder
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "line-profiler";
-  version = "3.4.0";
+  version = "4.0.2";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6" || isPyPy;
 
   src = fetchPypi {
     pname = "line_profiler";
     inherit version;
-    sha256 = "b6b0a8100a2829358e31ef7c6f427b1dcf2b1d8e5d38b55b219719ecf758aee5";
+    hash = "sha256-JejJ1CSNxIkFgBhR/4p1ucdIJ6CHHRGNEQTY5D1/sPw=";
   };
 
   nativeBuildInputs = [
@@ -32,8 +34,8 @@ buildPythonPackage rec {
     ipython
   ];
 
-  checkInputs = [
-    ipython
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   dontUseCmakeConfigure = true;
@@ -53,6 +55,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Line-by-line profiler";
     homepage = "https://github.com/pyutils/line_profiler";
+    changelog = "https://github.com/pyutils/line_profiler/blob/v${version}/CHANGELOG.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fridh ];
   };

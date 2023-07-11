@@ -4,6 +4,11 @@
 , autoreconfHook
 , nix-update-script
 , python3
+
+# for passthru.tests
+, ninja
+, php
+, spamassassin
 }:
 
 stdenv.mkDerivation rec {
@@ -30,8 +35,9 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
+    updateScript = nix-update-script { };
+    tests = {
+      inherit ninja php spamassassin;
     };
   };
 

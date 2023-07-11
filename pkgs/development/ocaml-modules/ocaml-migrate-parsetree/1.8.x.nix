@@ -8,7 +8,7 @@ buildDunePackage rec {
    pname = "ocaml-migrate-parsetree";
    version = "1.8.0";
 
-   useDune2 = lib.versionAtLeast ocaml.version "4.08";
+   duneVersion = if lib.versionAtLeast ocaml.version "4.08" then "3" else "1";
 
    src = fetchFromGitHub {
      owner = "ocaml-ppx";

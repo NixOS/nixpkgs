@@ -1,50 +1,54 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, cargo
 , cmake
 , openssl
 , perl
 , pkg-config
+, python3
 , rustPlatform
 , sqlcipher
 , sqlite
 , fixDarwinDylibNames
 , CoreFoundation
 , Security
+, SystemConfiguration
 , libiconv
 }:
 
 stdenv.mkDerivation rec {
   pname = "libdeltachat";
-  version = "1.77.0";
+  version = "1.118.0";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-core-rust";
-    rev = version;
-    hash = "sha256-SEsa83PQ2r3PBJuJhTMeje1n2mZUt/f61DvoVPwyxvs=";
+    rev = "v${version}";
+    hash = "sha256-1vkmz7LFG420zYETYIf3ayOQEPp+hz7Dr7gULz1nJOs=";
   };
 
   patches = [
-    # https://github.com/deltachat/deltachat-core-rust/pull/2589
-    ./darwin-dylib.patch
     ./no-static-lib.patch
   ];
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-6srybgs1DGaE6iMrnRUWRnoQM00VCsZwMNdKQ2eqqxg=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "email-0.0.21" = "sha256-Ys47MiEwVZenRNfenT579Rb17ABQ4QizVFTWUq3+bAY=";
+      "encoded-words-0.2.0" = "sha256-KK9st0hLFh4dsrnLd6D8lC6pRFFs8W+WpZSGMGJcosk=";
+      "lettre-0.9.2" = "sha256-+hU1cFacyyeC9UGVBpS14BWlJjHy90i/3ynMkKAzclk=";
+      "quinn-proto-0.9.2" = "sha256-N1gD5vMsBEHO4Fz4ZYEKZA8eE/VywXNXssGcK6hjvpg=";
+    };
   };
 
   nativeBuildInputs = [
     cmake
     perl
     pkg-config
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-  ]) ++ lib.optionals stdenv.isDarwin [
+    rustPlatform.cargoSetupHook
+    cargo
+  ] ++ lib.optionals stdenv.isDarwin [
     fixDarwinDylibNames
   ];
 
@@ -55,19 +59,24 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     CoreFoundation
     Security
+    SystemConfiguration
     libiconv
   ];
 
-  checkInputs = with rustPlatform; [
+  nativeCheckInputs = with rustPlatform; [
     cargoCheckHook
   ];
+
+  passthru.tests = {
+    python = python3.pkgs.deltachat;
+  };
 
   meta = with lib; {
     description = "Delta Chat Rust Core library";
     homepage = "https://github.com/deltachat/deltachat-core-rust/";
-    changelog = "https://github.com/deltachat/deltachat-core-rust/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/deltachat/deltachat-core-rust/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda srapenne ];
     platforms = platforms.unix;
   };
 }

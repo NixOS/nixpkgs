@@ -16,7 +16,7 @@ assert extraSessionCommands != "" -> withBaseWrapper;
 with lib;
 
 let
-  sway = sway-unwrapped.override { inherit isNixOS enableXWayland; };
+  sway = sway-unwrapped.overrideAttrs (oa: { inherit isNixOS enableXWayland; });
   baseWrapper = writeShellScriptBin "sway" ''
      set -o errexit
      if [ ! "$_SWAY_WRAPPER_ALREADY_EXECUTED" ]; then
@@ -37,6 +37,7 @@ in symlinkJoin {
   paths = (optional withBaseWrapper baseWrapper)
     ++ [ sway ];
 
+  strictDeps = false;
   nativeBuildInputs = [ makeWrapper ]
     ++ (optional withGtkWrapper wrapGAppsHook);
 

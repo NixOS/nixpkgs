@@ -10,9 +10,9 @@ with lib;
     xdg.sounds.enable = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether to install files to support the
-        <link xlink:href="https://www.freedesktop.org/wiki/Specifications/sound-theme-spec/">XDG Sound Theme specification</link>.
+        [XDG Sound Theme specification](https://www.freedesktop.org/wiki/Specifications/sound-theme-spec/).
       '';
     };
   };

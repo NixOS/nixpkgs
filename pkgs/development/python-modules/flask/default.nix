@@ -10,29 +10,41 @@
 , werkzeug
 , pytestCheckHook
 , pythonOlder
+  # used in passthru.tests
+, flask-limiter
+, flask-restful
+, flask-restx
+, moto
 }:
 
 buildPythonPackage rec {
-  version = "2.1.1";
-  pname = "Flask";
+  pname = "flask";
+  version = "2.2.5";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-qMm9PlWOyZZG0Xepc5xB3x3tBilIC0yNKXVBLzyVGcg=";
+    pname = "Flask";
+    inherit version;
+    hash = "sha256-7e6bCn/yZiG9WowQ/0hK4oc3okENmbC7mmhQx/uXeqA=";
   };
 
   propagatedBuildInputs = [
-    asgiref
-    python-dotenv
     click
     itsdangerous
     jinja2
     werkzeug
   ] ++ lib.optional (pythonOlder "3.10") importlib-metadata;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
+
+  passthru.tests = {
+    inherit flask-limiter flask-restful flask-restx moto;
+  };
+  passthru.optional-dependencies = {
+    dotenv = [ python-dotenv ];
+    async = [ asgiref ];
+  };
 
   meta = with lib; {
     homepage = "https://flask.palletsprojects.com/";

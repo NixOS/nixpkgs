@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , pkg-config
 , python3
@@ -12,31 +11,28 @@
 , http-parser
 , libiconv
 , Security
+, staticBuild ? stdenv.hostPlatform.isStatic
+# for passthru.tests
+, libgit2-glib
+, python3Packages
 }:
 
 stdenv.mkDerivation rec {
   pname = "libgit2";
-  version = "1.4.0";
-  # also check the following packages for updates: python3.pkgs.pygit2 and libgit2-glib
+  version = "1.6.4";
+  # also check the following packages for updates: python3Packages.pygit2 and libgit2-glib
 
   src = fetchFromGitHub {
     owner = "libgit2";
     repo = "libgit2";
     rev = "v${version}";
-    sha256 = "sha256-21t7fD/5O+HIHUDEv8MqloDmAIm9sSpJYqreCD3Co2k=";
+    hash = "sha256-lW3mokVKsbknVj2xsxEbeZH4IdKZ0aIgGutzenS0Eh0=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/libgit2/libgit2/commit/8bc9eda779b2e2602fc74944aba5d39198e0642f.patch";
-      sha256 = "sha256-r2i4+WsrxIpSwH0g/AikBdAajBncXb1zz0uOQB0h1Jk=";
-    })
-  ];
-
   cmakeFlags = [
-    "-DTHREADSAFE=ON"
     "-DUSE_HTTP_PARSER=system"
     "-DUSE_SSH=ON"
+    "-DBUILD_SHARED_LIBS=${if staticBuild then "OFF" else "ON"}"
   ];
 
   nativeBuildInputs = [ cmake python3 pkg-config ];
@@ -48,11 +44,16 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # hangs. or very expensive?
 
-  meta = {
+  passthru.tests = {
+    inherit libgit2-glib;
+    inherit (python3Packages) pygit2;
+  };
+
+  meta = with lib; {
     description = "Linkable library implementation of Git that you can use in your application";
     homepage = "https://libgit2.org/";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

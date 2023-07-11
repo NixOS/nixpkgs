@@ -85,8 +85,8 @@ stdenv.mkDerivation rec {
     ++ [ (lib.optionalString stdenv.isAarch32 "-DCMAKE_CXX_FLAGS=-Wno-psabi") ]
   ;
 
-  # Python + Mako are always required for the build itself but not necessary for runtime.
-  pythonEnv = python3.withPackages (ps: with ps; [ Mako ]
+  # Python + mako are always required for the build itself but not necessary for runtime.
+  pythonEnv = python3.withPackages (ps: with ps; [ mako ]
     ++ optionals (enableLibuhd_Python_api) [ numpy setuptools ]
     ++ optionals (enableUtils) [ requests six ]
   );
@@ -143,6 +143,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "USRP Hardware Driver (for Software Defined Radio)";
     longDescription = ''
       The USRP Hardware Driver (UHD) software is the hardware driver for all

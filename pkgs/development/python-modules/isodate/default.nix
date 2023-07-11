@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
+, unittestCheckHook
 , six
 }:
 
@@ -16,9 +16,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s src/isodate/tests
-  '';
+  nativeCheckInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "-s" "src/isodate/tests" ];
 
   meta = with lib; {
     description = "ISO 8601 date/time parser";

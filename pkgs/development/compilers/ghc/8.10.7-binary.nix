@@ -137,6 +137,7 @@ let
           # instead of `libtinfo.so.*.`
           { nixPackage = ncurses6; fileToCheckFor = "libncursesw.so.6"; }
         ];
+        isHadrian = true;
       };
     };
   };
@@ -270,6 +271,20 @@ stdenv.mkDerivation rec {
     lib.optionalString stdenv.isLinux ''
       find . -type f -executable -exec patchelf \
           --interpreter ${stdenv.cc.bintools.dynamicLinker} {} \;
+    '' +
+    # The hadrian install Makefile uses 'xxx' as a temporary placeholder in path
+    # substitution. Which can break the build if the store path / prefix happens
+    # to contain this string. This will be fixed with 9.4 bindists.
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/21402
+    ''
+      # Detect hadrian Makefile by checking for the target that has the problem
+      if grep '^update_package_db' ghc-${version}*/Makefile > /dev/null; then
+        echo Hadrian bindist, applying workaround for xxx path substitution.
+        # based on https://gitlab.haskell.org/ghc/ghc/-/commit/dd5fecb0e2990b192d92f4dfd7519ecb33164fad.patch
+        substituteInPlace ghc-${version}*/Makefile --replace 'xxx' '\0xxx\0'
+      else
+        echo Not a hadrian bindist, not applying xxx path workaround.
+      fi
     '';
 
   # fix for `configure: error: Your linker is affected by binutils #16177`
@@ -402,6 +417,13 @@ stdenv.mkDerivation rec {
 
     # Our Cabal compiler name
     haskellCompilerName = "ghc-${version}";
+  } // lib.optionalAttrs (binDistUsed.isHadrian or false) {
+    # Normal GHC derivations expose the hadrian derivation used to build them
+    # here. In the case of bindists we just make sure that the attribute exists,
+    # as it is used for checking if a GHC derivation has been built with hadrian.
+    # The isHadrian mechanism will become obsolete with GHCs that use hadrian
+    # exclusively, i.e. 9.6 (and 9.4?).
+    hadrian = null;
   };
 
   meta = rec {

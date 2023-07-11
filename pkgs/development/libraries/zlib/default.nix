@@ -8,6 +8,7 @@
 # the `.pc` file lists only the main output's lib dir.
 # If false, and if `{ static = true; }`, the .a stays in the main output.
 , splitStaticOutput ? shared && static
+, testers
 }:
 
 # Without either the build will actually still succeed because the build
@@ -21,16 +22,20 @@ assert shared || static;
 
 assert splitStaticOutput -> static;
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zlib";
-  version = "1.2.12";
+  version = "1.2.13";
 
-  src = fetchurl {
-    urls =
-      [ "https://www.zlib.net/fossils/zlib-${version}.tar.gz"  # stable archive path
-        "mirror://sourceforge/libpng/zlib/${version}/zlib-${version}.tar.gz"
-      ];
-    sha256 = "91844808532e5ce316b3c010929493c0244f3d37593afd6de04f71821d5136d9";
+  src = let
+    inherit (finalAttrs) version;
+  in fetchurl {
+    urls = [
+      # This URL works for 1.2.13 only; hopefully also for future releases.
+      "https://github.com/madler/zlib/releases/download/v${version}/zlib-${version}.tar.gz"
+      # Stable archive path, but captcha can be encountered, causing hash mismatch.
+      "https://www.zlib.net/fossils/zlib-${version}.tar.gz"
+    ];
+    hash = "sha256-s6JN6XqP28g1uYMxaVAQMLiXcDG8tUs7OsE3QPhGqzA=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -40,16 +45,19 @@ stdenv.mkDerivation (rec {
       --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
   '';
 
-  patches = [
-    ./fix-configure-issue-cross.patch
-  ];
-
+  strictDeps = true;
   outputs = [ "out" "dev" ]
     ++ lib.optional splitStaticOutput "static";
   setOutputFlags = false;
   outputDoc = "dev"; # single tiny man3 page
 
-  # For zlib's ./configure (as of verion 1.2.11), the order
+  dontConfigure = stdenv.hostPlatform.libc == "msvcrt";
+
+  preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    export CHOST=${stdenv.hostPlatform.config}
+  '';
+
+  # For zlib's ./configure (as of version 1.2.11), the order
   # of --static/--shared flags matters!
   # `--shared --static` builds only static libs, while
   # `--static --shared` builds both.
@@ -94,7 +102,7 @@ stdenv.mkDerivation (rec {
 
   # As zlib takes part in the stdenv building, we don't want references
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
-  NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-static-libgcc";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-static-libgcc";
 
   # We don't strip on static cross-compilation because of reports that native
   # stripping corrupted the target library; see commit 12e960f5 for the report.
@@ -120,20 +128,13 @@ stdenv.mkDerivation (rec {
     "SHARED_MODE=1"
   ];
 
-  passthru = {
-    inherit version;
-  };
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
     homepage = "https://zlib.net";
     description = "Lossless data-compression library";
     license = licenses.zlib;
     platforms = platforms.all;
+    pkgConfigModules = [ "zlib" ];
   };
-} // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
-  preConfigure = ''
-    export CHOST=${stdenv.hostPlatform.config}
-  '';
-} // lib.optionalAttrs (stdenv.hostPlatform.libc == "msvcrt") {
-  dontConfigure = true;
 })

@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./META.patch ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [ pkg-config unzip ocaml automake gnum4 autoconf findlib ];
   buildInputs = [ freetype lablgtk cairo gdk-pixbuf gtk2 pango ];
 
@@ -43,6 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "http://cairographics.org/cairo-ocaml";
     description = "ocaml bindings for cairo library";
     license = lib.licenses.gpl2;
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
   };
 }

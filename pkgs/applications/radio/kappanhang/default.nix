@@ -20,6 +20,7 @@ buildGoModule rec {
     homepage = "https://github.com/nonoo/kappanhang";
     description = "Remote control for Icom radio transceivers";
     license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ mvs ];
   };
 }

@@ -21,8 +21,8 @@ in {
       mkdir libexec
       tar --strip-components=1 -xf ${yarnpkg-lockfile-tar} package/index.js
       mv index.js libexec/yarnpkg-lockfile.js
-      cp ${./index.js} libexec/index.js
-      patchShebangs libexec/index.js
+      cp ${./.}/*.js libexec/
+      patchShebangs libexec
 
       runHook postBuild
     '';
@@ -34,6 +34,7 @@ in {
       cp -r libexec $out
       makeWrapper $out/libexec/index.js $out/bin/prefetch-yarn-deps \
         --prefix PATH : ${lib.makeBinPath [ coreutils nix-prefetch-git nix ]}
+      makeWrapper $out/libexec/fixup.js $out/bin/fixup-yarn-lock
 
       runHook postInstall
     '';
@@ -42,31 +43,36 @@ in {
   fetchYarnDeps = let
     f = {
       name ? "offline",
-      yarnLock,
+      src ? null,
       hash ? "",
       sha256 ? "",
-    }: let
+      ...
+    }@args: let
       hash_ =
         if hash != "" then { outputHashAlgo = null; outputHash = hash; }
         else if sha256 != "" then { outputHashAlgo = "sha256"; outputHash = sha256; }
         else { outputHashAlgo = "sha256"; outputHash = lib.fakeSha256; };
-    in stdenv.mkDerivation {
+    in stdenv.mkDerivation ({
       inherit name;
 
-      dontUnpack = true;
+      dontUnpack = src == null;
       dontInstall = true;
 
       nativeBuildInputs = [ prefetch-yarn-deps ];
       GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
       buildPhase = ''
+        runHook preBuild
+
+        yarnLock=''${yarnLock:=$PWD/yarn.lock}
         mkdir -p $out
-        (cd $out; prefetch-yarn-deps --verbose --builder ${yarnLock})
+        (cd $out; prefetch-yarn-deps --verbose --builder $yarnLock)
+
+        runHook postBuild
       '';
 
       outputHashMode = "recursive";
-      inherit (hash_) outputHashAlgo outputHash;
-    };
+    } // hash_ // (removeAttrs args ["src" "name" "hash" "sha256"]));
 
   in lib.setFunctionArgs f (lib.functionArgs f) // {
     tests = callPackage ./tests {};

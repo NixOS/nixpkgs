@@ -16,7 +16,7 @@
 , requests
 , setuptools
 , six
-, typing
+, typing-extensions
 , watchdog
 , websocket-client
 , wheel
@@ -24,14 +24,23 @@
 
 buildPythonPackage rec {
   pname = "chalice";
-  version = "1.26.6";
+  version = "1.28.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-6Y5pJg6N/F97zvkyo4r6MoThi79kI53AvlHNOmOCpFA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-m3pSD4fahBW6Yt/w07Co4fTZD7k6as5cPwoK5QSry6M=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "inquirer>=2.7.0,<3.0.0" "inquirer" \
+      --replace "pip>=9,<23.1" "pip" \
+  '';
 
   propagatedBuildInputs = [
     attrs
@@ -44,26 +53,18 @@ buildPythonPackage rec {
     pyyaml
     setuptools
     six
+    typing-extensions
     wheel
     watchdog
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    typing
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     mock
     pytestCheckHook
     requests
     websocket-client
   ];
-
-  postPatch = ''
-    sed -i setup.py -e "/pip>=/c\'pip',"
-    substituteInPlace setup.py \
-      --replace "typing==3.6.4" "typing" \
-      --replace "jmespath>=0.9.3,<1.0.0" "jmespath>=0.9.3,<2.0.0"
-  '';
 
   disabledTestPaths = [
     # Don't check the templates and the sample app
@@ -89,13 +90,20 @@ buildPythonPackage rec {
     # https://github.com/aws/chalice/issues/1850
     "test_resolve_endpoint"
     "test_endpoint_from_arn"
+    # Tests require dist
+    "test_setup_tar_gz_hyphens_in_name"
+    "test_both_tar_gz"
+    "test_both_tar_bz2"
   ];
 
-  pythonImportsCheck = [ "chalice" ];
+  pythonImportsCheck = [
+    "chalice"
+  ];
 
   meta = with lib; {
     description = "Python Serverless Microframework for AWS";
     homepage = "https://github.com/aws/chalice";
+    changelog = "https://github.com/aws/chalice/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ costrouc ];
   };

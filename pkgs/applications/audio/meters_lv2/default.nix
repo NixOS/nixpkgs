@@ -14,8 +14,8 @@
 
 stdenv.mkDerivation rec {
   pname = "meters.lv2";
-  version = "0.9.10";
-  robtkVersion = "0.6.2";
+  version = "0.9.20";
+  robtkVersion = "0.7.5";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ lv2 libGLU libGL gtk2 cairo pango fftwFloat libjack2 ];
@@ -24,20 +24,24 @@ stdenv.mkDerivation rec {
     owner = "x42";
     repo = "meters.lv2";
     rev = "v${version}";
-    sha256 = "sha256-u2KIsaia0rAteQoEh6BLNCiRHFufHYF95z6J/EMgeSE=";
+    sha256 = "sha256-eGXTbE83bJEDqTBltL6ZX9qa/OotCFmUxpE/aLqGELU=";
   };
 
   robtkSrc = fetchFromGitHub {
     owner = "x42";
     repo = "robtk";
     rev = "v${robtkVersion}";
-    sha256 = "sha256-zeRMobfKW0+wJwYVem74tglitkI6DSoK75Auywcu4Tw=";
+    sha256 = "sha256-L1meipOco8esZl+Pgqgi/oYVbhimgh9n8p9Iqj3dZr0=";
   };
 
   postUnpack = ''
     rm -rf $sourceRoot/robtk/
     ln -s ${robtkSrc} $sourceRoot/robtk
   '';
+
+  postPatch = ''
+    substituteInPlace Makefile --replace "-msse -msse2 -mfpmath=sse" ""
+  ''; # remove x86-specific flags
 
   meter_VERSION = version;
   enableParallelBuilding = true;

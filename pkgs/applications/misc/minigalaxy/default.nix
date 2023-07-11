@@ -16,13 +16,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "minigalaxy";
-  version = "1.1.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "sharkwouter";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-BbtwLuG5TH/+06Ez8+mwSAjG1IWg9/3uxzjmgPHczAw=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-bpNtdMYBl2dJ4PQsxkhm/Y+3A0dD/Y2XC0VaUYyRhvM=";
   };
 
   checkPhase = ''
@@ -34,15 +34,15 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     gettext
     wrapGAppsHook
+    gobject-introspection
   ];
 
   buildInputs = [
     glib-networking
-    gobject-introspection
     gtk3
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     glibcLocales
     pytest
     tox
@@ -60,6 +60,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   # Run Linux games using the Steam Runtime by using steam-run in the wrapper
+  # FIXME: not working with makeBinaryWrapper
   postFixup = ''
     sed -e 's#exec -a "$0"#exec -a "$0" ${steam-run}/bin/steam-run#' -i $out/bin/minigalaxy
   '';

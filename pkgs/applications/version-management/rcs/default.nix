@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, buildPackages, diffutils, ed, lzip }:
+{ lib, stdenv, fetchurl, buildPackages, diffutils, ed, lzip }:
 
 stdenv.mkDerivation rec {
   pname = "rcs";
@@ -9,14 +9,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Q93+EHJKi4XiRo9kA7YABzcYbwHmDgvWL95p2EIjTMU=";
   };
 
-  patches = [
-    # glibc 2.34 compat
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/rcs/raw/f8e07cd37f4abfb36e37d41852bb8f9e234d3fb1/f/rcs-5.10.0-SIGSTKSZ.patch";
-      sha256 = "sha256-mc6Uye9mdEsLBcOnf1m1TUb1BV0ncNU//iKBpLGBjho=";
-    })
-  ];
-
   ac_cv_path_ED = "${ed}/bin/ed";
   DIFF = "${diffutils}/bin/diff";
   DIFF3 = "${diffutils}/bin/diff3";
@@ -25,7 +17,7 @@ stdenv.mkDerivation rec {
     lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform)
       [ buildPackages.diffutils buildPackages.ed ];
 
-  NIX_CFLAGS_COMPILE = "-std=c99";
+  env.NIX_CFLAGS_COMPILE = "-std=c99";
 
   hardeningDisable = lib.optional stdenv.cc.isClang "format";
 

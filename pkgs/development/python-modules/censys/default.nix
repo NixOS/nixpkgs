@@ -1,12 +1,15 @@
 { lib
+, argcomplete
 , backoff
 , buildPythonPackage
 , fetchFromGitHub
 , importlib-metadata
 , parameterized
 , poetry-core
+, pytest-mock
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , requests
 , requests-mock
 , responses
@@ -15,41 +18,46 @@
 
 buildPythonPackage rec {
   pname = "censys";
-  version = "2.1.3";
+  version = "2.2.4";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "censys";
     repo = "censys-python";
-    rev = "v${version}";
-    sha256 = "sha256-Zv3ViOrdQby+7UQrHy6174W2qh1vx21R0yOA7ecr0lU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-gCq01lfAoKoS74C8gjj84mZpXDMtdNVaRLwhlEXwiPI=";
   };
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
+    argcomplete
     backoff
     requests
     rich
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     parameterized
+    pytest-mock
     pytestCheckHook
     requests-mock
     responses
   ];
 
+  pythonRelaxDeps = [
+    "backoff"
+    "requests"
+    "rich"
+  ];
+
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'backoff = "^1.11.1"' 'backoff = "*"' \
-      --replace 'requests = ">=2.26.0"' 'requests = "*"' \
-      --replace 'rich = "^10.16.2"' 'rich = "*"'
     substituteInPlace pytest.ini \
       --replace "--cov" ""
   '';
@@ -60,11 +68,14 @@ buildPythonPackage rec {
     mkdir -p $HOME
   '';
 
-  pythonImportsCheck = [ "censys" ];
+  pythonImportsCheck = [
+    "censys"
+  ];
 
   meta = with lib; {
     description = "Python API wrapper for the Censys Search Engine (censys.io)";
     homepage = "https://github.com/censys/censys-python";
+    changelog = "https://github.com/censys/censys-python/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

@@ -1,16 +1,15 @@
 { lib
 , fetchPypi
-, fetchpatch
 , python
 , buildPythonPackage
 , gfortran
 , hypothesis
 , pytest
+, typing-extensions
 , blas
 , lapack
 , writeTextFile
 , cython
-, setuptoolsBuildHook
 , pythonOlder
 }:
 
@@ -40,19 +39,14 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-
-  # Attention! v1.22.0 breaks scipy and by extension scikit-learn, so
-  # build both to verify they don't break.
-  # https://github.com/scipy/scipy/issues/15414
-  version = "1.21.5";
-
-  format = "pyproject.toml";
+  version = "1.24.2";
+  format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    sha256 = "sha256-alkovGJBJk3OXtUJ5m8zZ2/Jf0ZOepGe3GcvtVMiIe4=";
+    extension = "tar.gz";
+    hash = "sha256-ADqfUw6IDLLNF3y6GvciC5qkLe+cSvwqL8Pua+frKyI=";
   };
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
@@ -62,7 +56,7 @@ in buildPythonPackage rec {
     ./numpy-distutils-C++.patch
   ];
 
-  nativeBuildInputs = [ gfortran cython setuptoolsBuildHook ];
+  nativeBuildInputs = [ gfortran cython ];
   buildInputs = [ blas lapack ];
 
   # we default openblas to build with 64 threads
@@ -80,14 +74,15 @@ in buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     hypothesis
+    typing-extensions
   ];
 
   checkPhase = ''
     runHook preCheck
-    pushd dist
+    pushd "$out"
     ${python.interpreter} -c 'import numpy; numpy.test("fast", verbose=10)'
     popd
     runHook postCheck

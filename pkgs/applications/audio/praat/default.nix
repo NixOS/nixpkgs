@@ -2,18 +2,22 @@
 
 stdenv.mkDerivation rec {
   pname = "praat";
-  version = "6.2.10";
+  version = "6.3.10";
 
   src = fetchFromGitHub {
     owner = "praat";
     repo = "praat";
     rev = "v${version}";
-    sha256 = "sha256-IYbPMjKWDQQrF+JiqBQ2wsjY+Ms93tEdsG75CxipwaI=";
+    sha256 = "sha256-wnw8GKMukiraZgMMzd3S2NldC/cnRSILNo+D1Rqhr4k=";
   };
 
   configurePhase = ''
     cp makefiles/makefile.defs.linux.pulse makefile.defs
   '';
+
+  makeFlags = [
+    "AR=${stdenv.cc.targetPrefix}ar"
+  ];
 
   installPhase = ''
     install -Dt $out/bin praat

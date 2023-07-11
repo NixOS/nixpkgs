@@ -7,13 +7,14 @@
 , which
 , libvirt
 , vmnet
+, makeWrapper
 }:
 
 buildGoModule rec {
   pname = "minikube";
-  version = "1.25.2";
+  version = "1.30.1";
 
-  vendorSha256 = "sha256-8QqRIWry15/xwBxEOexMEq57ol8riy+kW8WrQqr53Q8=";
+  vendorHash = "sha256-616T47H+8FdXU37MDvAHRyM59JXurU45uz8c/TNxkkc=";
 
   doCheck = false;
 
@@ -21,10 +22,10 @@ buildGoModule rec {
     owner = "kubernetes";
     repo = "minikube";
     rev = "v${version}";
-    sha256 = "sha256-WIk4ibq7jcqao0Qiz3mz9yfHdxTUlvtPuEh4gApSDBg=";
+    sha256 = "sha256-dw+aFckp5Q9i6bNKPetw2WlslrpKAgEzXI+aGAwDurU=";
   };
 
-  nativeBuildInputs = [ installShellFiles pkg-config which ];
+  nativeBuildInputs = [ installShellFiles pkg-config which makeWrapper ];
 
   buildInputs = if stdenv.isDarwin then [ vmnet ] else if stdenv.isLinux then [ libvirt ] else null;
 
@@ -35,9 +36,8 @@ buildGoModule rec {
   installPhase = ''
     install out/minikube -Dt $out/bin
 
+    wrapProgram $out/bin/minikube --set MINIKUBE_WANTUPDATENOTIFICATION false
     export HOME=$PWD
-    export MINIKUBE_WANTUPDATENOTIFICATION=false
-    export MINIKUBE_WANTKUBECTLDOWNLOADMSG=false
 
     for shell in bash zsh fish; do
       $out/bin/minikube completion $shell > minikube.$shell
@@ -50,6 +50,5 @@ buildGoModule rec {
     description = "A tool that makes it easy to run Kubernetes locally";
     license = licenses.asl20;
     maintainers = with maintainers; [ ebzzry copumpkin vdemeester atkinschang Chili-Man ];
-    platforms = platforms.unix;
   };
 }

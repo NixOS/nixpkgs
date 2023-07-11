@@ -1,9 +1,12 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 , aiodns
 , aiohttp
 , flask
 , mock
-, msrest
 , pytest
 , pytest-asyncio
 , pytest-trio
@@ -11,18 +14,19 @@
 , requests
 , six
 , trio
-, typing-extensions
-}:
+, typing-extensions }:
 
 buildPythonPackage rec {
-  version = "1.23.1";
+  version = "1.26.3";
   pname = "azure-core";
-  disabled = isPy27;
+  disabled = pythonOlder "3.6";
+
+  __darwinAllowLocalNetworking = true;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-KKAd+68KaBLE4qgtFkLqMJVqlznyW8d8myO5H06mjw8=";
+    hash = "sha256-rL0NqpZ1zohiPaNcgNgZza+pFzHe5rJpXGTXyp2oLbQ=";
   };
 
   propagatedBuildInputs = [
@@ -31,12 +35,11 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiodns
     aiohttp
     flask
     mock
-    msrest
     pytest
     pytest-trio
     pytest-asyncio
@@ -62,7 +65,7 @@ buildPythonPackage rec {
   # disable 8 tests failing on some darwin machines with errors:
   # azure.core.polling.base_polling.BadStatus: Invalid return status 403 for 'GET' operation
   # azure.core.exceptions.HttpResponseError: Operation returned an invalid status 'Forbidden'
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     "location_polling_fail"
   ];
   disabledTestPaths = [
@@ -73,6 +76,13 @@ buildPythonPackage rec {
     "tests/test_streaming.py"
     # testserver tests require being in a very specific working directory to make it work
     "tests/testserver_tests/"
+    # requires missing pytest plugin
+    "tests/async_tests/test_rest_asyncio_transport.py"
+    # needs msrest, which cannot be included in nativeCheckInputs due to circular dependency new in msrest 0.7.1
+    # azure-core needs msrest which needs azure-core
+    "tests/test_polling.py"
+    "tests/async_tests/test_base_polling_async.py"
+    "tests/async_tests/test_polling_async.py"
   ];
 
   meta = with lib; {

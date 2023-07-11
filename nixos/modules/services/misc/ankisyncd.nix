@@ -9,57 +9,49 @@ let
 
   stateDir = "/var/lib/${name}";
 
-  authDbPath = "${stateDir}/auth.db";
+  toml = pkgs.formats.toml {};
 
-  sessionDbPath = "${stateDir}/session.db";
-
-  configFile = pkgs.writeText "ankisyncd.conf" (lib.generators.toINI {} {
-    sync_app = {
+  configFile = toml.generate "ankisyncd.conf" {
+    listen = {
       host = cfg.host;
       port = cfg.port;
-      data_root = stateDir;
-      auth_db_path = authDbPath;
-      session_db_path = sessionDbPath;
-
-      base_url = "/sync/";
-      base_media_url = "/msync/";
     };
-  });
+    paths.root_dir = stateDir;
+    # encryption.ssl_enable / cert_file / key_file
+  };
 in
   {
     options.services.ankisyncd = {
-      enable = mkEnableOption "ankisyncd";
+      enable = mkEnableOption (lib.mdDoc "ankisyncd");
 
       package = mkOption {
         type = types.package;
         default = pkgs.ankisyncd;
         defaultText = literalExpression "pkgs.ankisyncd";
-        description = "The package to use for the ankisyncd command.";
+        description = lib.mdDoc "The package to use for the ankisyncd command.";
       };
 
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = "ankisyncd host";
+        description = lib.mdDoc "ankisyncd host";
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 27701;
-        description = "ankisyncd port";
+        description = lib.mdDoc "ankisyncd port";
       };
 
       openFirewall = mkOption {
         default = false;
         type = types.bool;
-        description = "Whether to open the firewall for the specified port.";
+        description = lib.mdDoc "Whether to open the firewall for the specified port.";
       };
     };
 
     config = mkIf cfg.enable {
       networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
-
-      environment.etc."ankisyncd/ankisyncd.conf".source = configFile;
 
       systemd.services.ankisyncd = {
         description = "ankisyncd - Anki sync server";
@@ -71,7 +63,7 @@ in
           Type = "simple";
           DynamicUser = true;
           StateDirectory = name;
-          ExecStart = "${cfg.package}/bin/ankisyncd";
+          ExecStart = "${cfg.package}/bin/ankisyncd --config ${configFile}";
           Restart = "always";
         };
       };

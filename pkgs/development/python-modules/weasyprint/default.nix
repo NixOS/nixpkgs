@@ -1,41 +1,38 @@
-{ buildPythonPackage
-, fetchPypi
-, fetchpatch
-, pytestCheckHook
-, brotli
+{ lib
+, stdenv
+, buildPythonPackage
 , cairosvg
-, flit-core
-, fonttools
-, pydyf
-, pyphen
 , cffi
-, cssselect
-, lxml
-, html5lib
-, tinycss
-, zopfli
+, cssselect2
+, fetchPypi
+, flit-core
+, fontconfig
+, fonttools
+, ghostscript
 , glib
 , harfbuzz
+, html5lib
 , pango
-, fontconfig
-, lib
-, stdenv
-, ghostscript
-, isPy3k
+, pillow
+, pydyf
+, pyphen
+, pytestCheckHook
+, pythonOlder
 , substituteAll
+, tinycss2
 }:
 
 buildPythonPackage rec {
   pname = "weasyprint";
-  version = "54.3";
-  disabled = !isPy3k;
-
+  version = "59.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;
     pname = "weasyprint";
-    sha256 = "sha256-4E2gQGMFZsRMqiAgM/B/hYdl9TZwkEWoCXOfPQSOidY=";
+    hash = "sha256-Ijp2Y2s3ROqkq4oohfUM9Gz467GsuZtSdtAv7M9QdJI=";
   };
 
   patches = [
@@ -55,21 +52,17 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    brotli
-    cairosvg
     cffi
-    cssselect
+    cssselect2
     fonttools
     html5lib
-    lxml
-    flit-core
+    pillow
     pydyf
     pyphen
-    tinycss
-    zopfli
-  ];
+    tinycss2
+  ] ++ fonttools.optional-dependencies.woff;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     ghostscript
   ];
@@ -80,9 +73,16 @@ buildPythonPackage rec {
     # sensitive to sandbox environments
     "test_tab_size"
     "test_tabulation_character"
+    "test_linear_gradients_5"
+    "test_linear_gradients_12"
   ];
 
   FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
+
+  # Fontconfig error: Cannot load default config file: No such file: (null)
+  makeWrapperArgs = [
+    "--set FONTCONFIG_FILE ${FONTCONFIG_FILE}"
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -94,9 +94,13 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
+  pythonImportsCheck = [
+    "weasyprint"
+  ];
+
   meta = with lib; {
-    homepage = "https://weasyprint.org/";
     description = "Converts web documents to PDF";
+    homepage = "https://weasyprint.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ elohmeier ];
   };

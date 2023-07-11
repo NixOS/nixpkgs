@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, makeWrapper, python3, alsa-utils, timidity }:
 
-  stdenv.mkDerivation rec {
-  version = "20.12";
+stdenv.mkDerivation rec {
+  version = "21.09";
   pname = "mma";
 
   src = fetchurl {
     url = "https://www.mellowood.ca/mma/mma-bin-${version}.tar.gz";
-    sha256 = "18k0hwlqky5x4y461fxmw77gvz7z8jyrvxicrqphsgvwwinzy732";
+    sha256 = "sha256-5YzdaZ499AGiKAPUsgBCj3AQ9s0WlfgAbHhOQSOLLO8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -38,8 +38,7 @@
     cp util/mup2mma.py $out/bin/mup2mma
     cp util/pg2mma.py $out/bin/pg2mma
     cp util/synthsplit.py $out/bin/mma-synthsplit
-    cp -r {docs,egs,includes,lib,MMA,text} $out/share/mma
-    rmdir $out/share/mma/includes/aria
+    cp -r {docs,egs,includes,lib,MMA,text,plugins} $out/share/mma
 
     cp util/README.* $out/share/mma/docs
     mv $out/share/mma/docs/man/mma-libdoc.8 $out/share/man/man8
@@ -61,8 +60,9 @@
   '';
 
   meta = {
-    description = "Creates MIDI tracks for a soloist to perform over from a user supplied file containing chords";
-    homepage =  "https://www.mellowood.ca/mma/index.html";
+    description =
+      "Creates MIDI tracks for a soloist to perform over from a user supplied file containing chords";
+    homepage = "https://www.mellowood.ca/mma/index.html";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;

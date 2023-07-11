@@ -3,7 +3,9 @@
 , fetchFromGitHub
 , makeWrapper
 , makeDesktopItem
-, mkYarnPackage
+, fixup_yarn_lock
+, yarn
+, nodejs
 , fetchYarnDeps
 , electron
 , element-web
@@ -17,44 +19,60 @@
 }:
 
 let
-  pinData = lib.importJSON ./pin.json;
+  pinData = import ./pin.nix;
+  inherit (pinData.hashes) desktopSrcHash desktopYarnHash;
   executableName = "element-desktop";
-  electron_exec = if stdenv.isDarwin then "${electron}/Applications/Electron.app/Contents/MacOS/Electron" else "${electron}/bin/electron";
   keytar = callPackage ./keytar { inherit Security AppKit; };
   seshat = callPackage ./seshat { inherit CoreServices; };
 in
-mkYarnPackage rec {
+stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
   pname = "element-desktop";
-  inherit (pinData) version;
-  name = "${pname}-${version}";
+  name = "${finalAttrs.pname}-${finalAttrs.version}";
   src = fetchFromGitHub {
     owner = "vector-im";
     repo = "element-desktop";
-    rev = "v${version}";
-    sha256 = pinData.desktopSrcHash;
+    rev = "v${finalAttrs.version}";
+    sha256 = desktopSrcHash;
   };
 
-  packageJSON = ./element-desktop-package.json;
   offlineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
-    sha256 = pinData.desktopYarnHash;
+    yarnLock = finalAttrs.src + "/yarn.lock";
+    sha256 = desktopYarnHash;
   };
 
-  nativeBuildInputs = [ makeWrapper ] ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
+  nativeBuildInputs = [ yarn fixup_yarn_lock nodejs makeWrapper ]
+    ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
 
   inherit seshat;
 
+  configurePhase = ''
+    runHook preConfigure
+
+    export HOME=$(mktemp -d)
+    yarn config --offline set yarn-offline-mirror $offlineCache
+    fixup_yarn_lock yarn.lock
+    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
+    patchShebangs node_modules/
+
+    runHook postConfigure
+  '';
+
+  # Only affects unused scripts in $out/share/element/electron/scripts. Also
+  # breaks because there are some `node`-scripts with a `npx`-shebang and
+  # this shouldn't be in the closure just for unused scripts.
+  dontPatchShebangs = true;
+
   buildPhase = ''
     runHook preBuild
-    export HOME=$(mktemp -d)
-    pushd deps/element-desktop/
-    npx tsc
-    yarn run i18n
-    node ./scripts/copy-res.js
-    popd
+
+    yarn --offline run build:ts
+    yarn --offline run i18n
+    yarn --offline run build:res
+
     rm -rf node_modules/matrix-seshat node_modules/keytar
     ${lib.optionalString useKeytar "ln -s ${keytar} node_modules/keytar"}
     ln -s $seshat node_modules/matrix-seshat
+
     runHook postBuild
   '';
 
@@ -64,9 +82,9 @@ mkYarnPackage rec {
     # resources
     mkdir -p "$out/share/element"
     ln -s '${element-web}' "$out/share/element/webapp"
-    cp -r './deps/element-desktop' "$out/share/element/electron"
-    cp -r './deps/element-desktop/res/img' "$out/share/element"
-    rm "$out/share/element/electron/node_modules"
+    cp -r '.' "$out/share/element/electron"
+    cp -r './res/img' "$out/share/element"
+    rm -rf "$out/share/element/electron/node_modules"
     cp -r './node_modules' "$out/share/element/electron"
     cp $out/share/element/electron/lib/i18n/strings/en_EN.json $out/share/element/electron/lib/i18n/strings/en-us.json
     ln -s $out/share/element/electron/lib/i18n/strings/en{-us,}.json
@@ -79,22 +97,16 @@ mkYarnPackage rec {
 
     # desktop item
     mkdir -p "$out/share"
-    ln -s "${desktopItem}/share/applications" "$out/share/applications"
+    ln -s "${finalAttrs.desktopItem}/share/applications" "$out/share/applications"
 
     # executable wrapper
     # LD_PRELOAD workaround for sqlcipher not found: https://github.com/matrix-org/seshat/issues/102
-    makeWrapper '${electron_exec}' "$out/bin/${executableName}" \
+    makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
       --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher.so \
       --add-flags "$out/share/element/electron" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 
     runHook postInstall
-  '';
-
-  # Do not attempt generating a tarball for element-web again.
-  # note: `doDist = false;` does not work.
-  distPhase = ''
-    true
   '';
 
   # The desktop item properties should be kept in sync with data from upstream:
@@ -105,11 +117,15 @@ mkYarnPackage rec {
     icon = "element";
     desktopName = "Element";
     genericName = "Matrix Client";
-    comment = meta.description;
+    comment = finalAttrs.meta.description;
     categories = [ "Network" "InstantMessaging" "Chat" ];
     startupWMClass = "element";
     mimeTypes = [ "x-scheme-handler/element" ];
   };
+
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    cp build/icon.icns $out/Applications/Element.app/Contents/Resources/element.icns
+  '';
 
   passthru = {
     updateScript = ./update.sh;
@@ -129,9 +145,9 @@ mkYarnPackage rec {
   meta = with lib; {
     description = "A feature-rich client for Matrix.org";
     homepage = "https://element.io/";
-    changelog = "https://github.com/vector-im/element-desktop/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/vector-im/element-desktop/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = teams.matrix.members;
     inherit (electron.meta) platforms;
   };
-}
+})

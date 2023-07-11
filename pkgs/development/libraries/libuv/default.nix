@@ -1,15 +1,39 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, pkg-config, ApplicationServices, CoreServices }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, pkg-config
+, ApplicationServices
+, CoreServices
+, pkgsStatic
 
-stdenv.mkDerivation rec {
-  version = "1.44.1";
+# for passthru.tests
+, bind
+, cmake
+, knot-resolver
+, lispPackages
+, luajitPackages
+, mosquitto
+, neovim
+, nodejs
+, ocamlPackages
+, python3
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.45.0";
   pname = "libuv";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-12uveSEavRxQW4xVrB4Rkkj+eHZ71Qy8dRG+95ldz50=";
+    owner = "libuv";
+    repo = "libuv";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-qKw9QFR24Uw7pVA9isPH8Va+9/5DYuqXz6l6jWcXn+4=";
   };
+
+  outputs = [ "out" "dev" ];
 
   postPatch = let
     toDisable = [
@@ -19,8 +43,12 @@ stdenv.mkDerivation rec {
       "getaddrinfo_fail" "getaddrinfo_fail_sync"
       "threadpool_multiple_event_loops" # times out on slow machines
       "get_passwd" # passed on NixOS but failed on other Linuxes
-      "tcp_writealot" "udp_multicast_join" "udp_multicast_join6" # times out sometimes
+      "tcp_writealot" "udp_multicast_join" "udp_multicast_join6" "metrics_pool_events" # times out sometimes
       "fs_fstat" # https://github.com/libuv/libuv/issues/2235#issuecomment-1012086927
+
+      # Assertion failed in test/test-tcp-bind6-error.c on line 60: r == UV_EADDRINUSE
+      # Assertion failed in test/test-tcp-bind-error.c on line 99: r == UV_EADDRINUSE
+      "tcp_bind6_error_addrinuse" "tcp_bind_error_addrinuse_listen"
     ] ++ lib.optionals stdenv.isDarwin [
         # Sometimes: timeout (no output), failed uv_listen. Someone
         # should report these failures to libuv team. There tests should
@@ -48,7 +76,7 @@ stdenv.mkDerivation rec {
       "shutdown_close_pipe"
     ];
     tdRegexp = lib.concatStringsSep "\\|" toDisable;
-    in lib.optionalString doCheck ''
+    in lib.optionalString (finalAttrs.doCheck) ''
       sed '/${tdRegexp}/d' -i test/test-list.h
     '';
 
@@ -61,18 +89,33 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # separateDebugInfo breaks static build
+  # https://github.com/NixOS/nixpkgs/issues/219466
+  separateDebugInfo = !stdenv.hostPlatform.isStatic;
+
   doCheck = true;
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
+  passthru.tests = {
+    inherit bind cmake knot-resolver mosquitto neovim nodejs;
+    inherit (lispPackages) cl-libuv;
+    luajit-libluv = luajitPackages.libluv;
+    luajit-luv = luajitPackages.luv;
+    ocaml-luv = ocamlPackages.luv;
+    python-pyuv = python3.pkgs.pyuv;
+    python-uvloop = python3.pkgs.uvloop;
+    static = pkgsStatic.libuv;
+  };
+
   meta = with lib; {
     description = "A multi-platform support library with a focus on asynchronous I/O";
     homepage    = "https://libuv.org/";
-    changelog   = "https://github.com/libuv/libuv/blob/v${version}/ChangeLog";
+    changelog   = "https://github.com/libuv/libuv/blob/v${finalAttrs.version}/ChangeLog";
     maintainers = with maintainers; [ cstrahan ];
-    platforms   = with platforms; linux ++ darwin;
+    platforms   = platforms.all;
     license     = with licenses; [ mit isc bsd2 bsd3 cc-by-40 ];
   };
 
-}
+})

@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , rustPlatform
 , pkg-config
-, llvmPackages
 , openssl
 , protobuf
 , rdkafka
@@ -16,34 +15,50 @@
 , tzdata
 , cmake
 , perl
-  # kafka is optional but one of the most used features
-, enableKafka ? true
-  # TODO investigate adding "api" "api-client" "vrl-cli" and various "vendor-*"
+, git
+  # nix has a problem with the `?` in the feature list
+  # enabling kafka will produce a vector with no features at all
+, enableKafka ? false
+  # TODO investigate adding various "vendor-*"
   # "disk-buffer" is using leveldb TODO: investigate how useful
   # it would be, perhaps only for massive scale?
-, features ? ([ "sinks" "sources" "transforms" "vrl-cli" ]
+, features ? ([ "api" "api-client" "enrichment-tables" "sinks" "sources" "sources-dnstap" "transforms" "component-validation-runner" ]
     # the second feature flag is passed to the rdkafka dependency
     # building on linux fails without this feature flag (both x86_64 and AArch64)
-    ++ lib.optionals enableKafka [ "rdkafka/gssapi-vendored" ]
+    ++ lib.optionals enableKafka [ "rdkafka?/gssapi-vendored" ]
     ++ lib.optional stdenv.targetPlatform.isUnix "unix")
+, nixosTests
+, nix-update-script
 }:
 
 let
   pname = "vector";
-  version = "0.21.0";
+  version = "0.31.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
 
   src = fetchFromGitHub {
-    owner = "timberio";
+    owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ZhOtrv63ZhG3OEWLTk+VdZr6Y6f9KvyCJvAKWck7B7o=";
+    hash = "sha256-+ATOHx+LQLQV4nMdj1FRRvDTqGCTbX9kl290AbY9Vw0=";
   };
 
-  cargoSha256 = "sha256-VGB+ljojXGrQmcN0AT90hFk9h5nwjDTtzGpWmItw9x4=";
-  nativeBuildInputs = [ pkg-config cmake perl ];
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "aws-config-0.54.1" = "sha256-AVumLhybVbMnEah9/JqiQOQ4R0e2OsbB8WAJ422R6uk=";
+      "azure_core-0.5.0" = "sha256-fojO7dhntpymMjV58TtYb7N4UN6rOp30D54x09RDXfQ=";
+      "chrono-0.4.26" = "sha256-4aDDfLK9H0tEyKlZVMIIU4NjvF70spVYFrfM3/05e0k=";
+      "heim-0.1.0-rc.1" = "sha256-ODKEQ1udt7FlxI5fvoFMG7C2zmM45eeEYDUEaLTsdYo=";
+      "nix-0.26.2" = "sha256-uquYvRT56lhupkrESpxwKEimRFhmYvri10n3dj0f2yg=";
+      "ntapi-0.3.7" = "sha256-G6ZCsa3GWiI/FeGKiK9TWkmTxen7nwpXvm5FtjNtjWU=";
+      "tokio-util-0.7.4" = "sha256-rAzj44O+GOZhG+o6FVN5qCcG/NWxW8fUpScm+xsRjIs=";
+      "tracing-0.2.0" = "sha256-YAxeEofFA43PX2hafh3RY+C81a2v6n1fGzYz2FycC3M=";
+    };
+  };
+  nativeBuildInputs = [ pkg-config cmake perl git rustPlatform.bindgenHook ];
   buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
 
@@ -51,7 +66,6 @@ rustPlatform.buildRustPackage {
   PROTOC = "${protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
   RUSTONIG_SYSTEM_LIBONIG = true;
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   TZDIR = "${tzdata}/share/zoneinfo";
 
@@ -62,9 +76,8 @@ rustPlatform.buildRustPackage {
   buildFeatures = features;
 
   # TODO investigate compilation failure for tests
-  # dev dependency includes httpmock which depends on iashc which depends on curl-sys with http2 feature enabled
-  # compilation fails because of a missing http2 include
-  doCheck = !stdenv.isDarwin;
+  # there are about 100 tests failing (out of 1100) for version 0.22.0
+  doCheck = false;
 
   checkFlags = [
     # tries to make a network access
@@ -95,19 +108,19 @@ rustPlatform.buildRustPackage {
   postPatch = ''
     substituteInPlace ./src/dns.rs \
       --replace "#[tokio::test]" ""
-
-    ${lib.optionalString (!builtins.elem "transforms-geoip" features) ''
-        substituteInPlace ./Cargo.toml --replace '"transforms-geoip",' ""
-    ''}
   '';
 
-  passthru = { inherit features; };
+  passthru = {
+    inherit features;
+    tests = { inherit (nixosTests) vector; };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
-    description = "A high-performance logs, metrics, and events router";
-    homepage = "https://github.com/timberio/vector";
-    license = with licenses; [ asl20 ];
+    description = "A high-performance observability data pipeline";
+    homepage = "https://github.com/vectordotdev/vector";
+    license = licenses.mpl20;
     maintainers = with maintainers; [ thoughtpolice happysalada ];
-    platforms = with platforms; linux;
+    platforms = with platforms; all;
   };
 }

@@ -10,6 +10,7 @@ const path = require('path')
 const lockfile = require('./yarnpkg-lockfile.js')
 const { promisify } = require('util')
 const url = require('url')
+const { urlToName } = require('./common.js')
 
 const execFile = promisify(child_process.execFile)
 
@@ -19,25 +20,11 @@ const exec = async (...args) => {
 	return res
 }
 
-// This has to match the logic in pkgs/development/tools/yarn2nix-moretea/yarn2nix/lib/urlToName.js
-// so that fixup_yarn_lock produces the same paths
-const urlToName = url => {
-	const isCodeloadGitTarballUrl = url.startsWith('https://codeload.github.com/') && url.includes('/tar.gz/')
-
-	if (url.startsWith('git+') || isCodeloadGitTarballUrl) {
-		return path.basename(url)
-	} else {
-		return url
-			.replace(/https:\/\/(.)*(.com)\//g, '') // prevents having long directory names
-			.replace(/[@/%:-]/g, '_') // replace @ and : and - and % characters with underscore
-	}
-}
-
-const downloadFileHttps = (fileName, url, expectedHash) => {
+const downloadFileHttps = (fileName, url, expectedHash, hashType = 'sha1') => {
 	return new Promise((resolve, reject) => {
 		https.get(url, (res) => {
 			const file = fs.createWriteStream(fileName)
-			const hash = crypto.createHash('sha1')
+			const hash = crypto.createHash(hashType)
 			res.pipe(file)
 			res.pipe(hash).setEncoding('hex')
 			res.on('end', () => {
@@ -100,6 +87,10 @@ const downloadPkg = (pkg, verbose) => {
 	} else if (isGitUrl(url)) {
 		return downloadGit(fileName, url.replace(/^git\+/, ''), hash)
 	} else if (url.startsWith('https://')) {
+		if (typeof pkg.integrity === 'string' || pkg.integrity instanceof String) {
+			const [ type, checksum ] = pkg.integrity.split('-')
+			return downloadFileHttps(fileName, url, Buffer.from(checksum, 'base64').toString('hex'), type)
+		}
 		return downloadFileHttps(fileName, url, hash)
 	} else if (url.startsWith('file:')) {
 		console.warn(`ignoring unsupported file:path url "${url}"`)

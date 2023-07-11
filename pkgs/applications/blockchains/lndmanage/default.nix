@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "lndmanage";
-  version = "0.14.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "bitromortac";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-c36AbND01bUr0Klme4fU7GrY1oYcmoEREQI9cwsK7YM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-zEz1k98LIOWzqzZ+WNHBHY2hPwWE75bjP+quSdfI/8s=";
   };
 
   propagatedBuildInputs = with python3Packages; [

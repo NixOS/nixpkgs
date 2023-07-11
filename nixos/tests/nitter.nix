@@ -12,7 +12,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
   testScript = ''
     machine.wait_for_unit("nitter.service")
-    machine.wait_for_open_port("80")
+    machine.wait_for_open_port(80)
     machine.succeed("curl --fail http://localhost:80/")
   '';
 })

@@ -38,6 +38,7 @@ in stdenv.mkDerivation rec {
       in Java-SWT. It can open GuitarPro, PowerTab and TablEdit files.
     '';
     homepage = "http://www.tuxguitar.com.ar/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.lgpl2;
     maintainers = [ maintainers.ardumont ];
     platforms = platforms.linux;

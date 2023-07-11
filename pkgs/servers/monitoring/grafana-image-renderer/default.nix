@@ -1,31 +1,26 @@
-{ lib, mkYarnPackage, fetchFromGitHub, nodejs, runtimeShell
-, nodePackages, python3, vips, glib, pkg-config
-}:
+{ lib, mkYarnPackage, fetchFromGitHub, nodejs, runtimeShell }:
 
 # Notes for the upgrade:
 # * Download the tarball of the new version to use.
-# * Remove the `resolutions`-section from upstream `package.json`
-#   as this breaks with `yarn2nix`.
-# * Regenerate `yarn.lock` and `yarn2nix --no-patch`.
 # * Replace new `package.json`, `yarn.nix`, `yarn.lock` here.
 # * Update `version`+`hash` and rebuild.
 
 mkYarnPackage rec {
   pname = "grafana-image-renderer";
-  version = "3.4.0";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana-image-renderer";
     rev = "v${version}";
-    sha256 = "sha256-6yw+zp83T6VVa4A9KYX6rzMKG5GoyJ7M8Z+cEHE4uts=";
+    sha256 = "sha256-hYjl8jwRqcWdxDlUxUBTd3A6giJVWa0l+BZvfYInD0Y=";
   };
 
   buildPhase = ''
     runHook preBuild
 
     pushd deps/renderer
-    npm run build
+    yarn run build
     popd
 
     runHook postBuild
@@ -36,14 +31,6 @@ mkYarnPackage rec {
   packageJSON = ./package.json;
   yarnNix = ./yarn.nix;
   yarnLock = ./yarn.lock;
-
-  pkgConfig.sharp = {
-    nativeBuildInputs = [ nodePackages.node-gyp python3 pkg-config ];
-    buildInputs = [ glib vips ];
-    postInstall = ''
-      node-gyp rebuild
-    '';
-  };
 
   distPhase = ''
     runHook preDist

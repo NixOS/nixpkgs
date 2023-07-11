@@ -1,16 +1,17 @@
-{ lib, stdenv, fetchurl, dpkg, buildFHSUserEnv
+{ lib, stdenv, fetchurl, dpkg, buildFHSEnv
 , glibc, glib, openssl, tpm2-tss
 , gtk3, gnome, polkit, polkit_gnome
 }:
 
 let
   pname = "beyond-identity";
-  version = "2.49.0-0";
+  version = "2.60.0-0";
   libPath = lib.makeLibraryPath ([ glib glibc openssl tpm2-tss gtk3 gnome.gnome-keyring polkit polkit_gnome ]);
   meta = with lib; {
     description = "Passwordless MFA identities for workforces, customers, and developers";
     homepage = "https://www.beyondidentity.com";
     downloadPage = "https://app.byndid.com/downloads";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ klden ];
     platforms = [ "x86_64-linux" ];
@@ -21,7 +22,7 @@ let
 
     src = fetchurl {
       url = "https://packages.beyondidentity.com/public/linux-authenticator/deb/ubuntu/pool/focal/main/b/be/${pname}_${version}/${pname}_${version}_amd64.deb";
-      sha512 = "sha512-+9vwH1r5WW+MqyiwsAFInboaM7o2dc7zvRaKwHC/o2LOBugvUHmUzmZ6uSHilc9zQ5FcHUIIglhkASbFtsvPeA==";
+      sha512 = "sha512-JrHLf7KkJVbJLxx54OTvOSaIzY3+hjX+bpkeBHKX23YriCJssUUvEP6vlbI4r6gjMMFMhW92k0iikAgD1Tr4ug==";
     };
 
     nativeBuildInputs = [
@@ -69,7 +70,7 @@ let
     '';
   };
 # /usr/bin/pkcheck is hardcoded in binary - we need FHS
-in buildFHSUserEnv {
+in buildFHSEnv {
    inherit meta;
    name = pname;
 

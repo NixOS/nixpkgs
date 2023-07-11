@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "hd-idle";
-  version = "1.16";
+  version = "1.20";
 
   src = fetchFromGitHub {
     owner = "adelolmo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LZcMwF/BhHiWWXMcrzbk8GyvwXdA3B2olmbOBxQwV5g=";
+    sha256 = "sha256-7EXfI3E83ltpjq2M/qZX2P/bNtQQBWZRBCD7i5uit0I=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   nativeBuildInputs = [ installShellFiles ];
 

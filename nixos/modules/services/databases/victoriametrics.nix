@@ -2,36 +2,36 @@
 let cfg = config.services.victoriametrics; in
 {
   options.services.victoriametrics = with lib; {
-    enable = mkEnableOption "victoriametrics";
+    enable = mkEnableOption (lib.mdDoc "victoriametrics");
     package = mkOption {
       type = types.package;
       default = pkgs.victoriametrics;
       defaultText = literalExpression "pkgs.victoriametrics";
-      description = ''
+      description = lib.mdDoc ''
         The VictoriaMetrics distribution to use.
       '';
     };
     listenAddress = mkOption {
       default = ":8428";
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         The listen address for the http interface.
       '';
     };
     retentionPeriod = mkOption {
       type = types.int;
       default = 1;
-      description = ''
+      description = lib.mdDoc ''
         Retention period in months.
       '';
     };
     extraOptions = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = ''
-        Extra options to pass to VictoriaMetrics. See the README: <link
-        xlink:href="https://github.com/VictoriaMetrics/VictoriaMetrics/blob/master/README.md" />
-        or <command>victoriametrics -help</command> for more
+      description = lib.mdDoc ''
+        Extra options to pass to VictoriaMetrics. See the README:
+        <https://github.com/VictoriaMetrics/VictoriaMetrics/blob/master/README.md>
+        or {command}`victoriametrics -help` for more
         information.
       '';
     };

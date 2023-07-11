@@ -9,13 +9,13 @@ in
         enable = lib.mkOption {
           default = false;
           internal = true;
-          description = ''
+          description = lib.mdDoc ''
             Whether the OpenStack instance uses a ZFS root.
           '';
         };
 
         datasets = lib.mkOption {
-          description = ''
+          description = lib.mdDoc ''
             Datasets to create under the `tank` and `boot` zpools.
 
             **NOTE:** This option is used only at image creation time, and
@@ -28,14 +28,14 @@ in
           type = types.attrsOf (types.submodule {
             options = {
               mount = lib.mkOption {
-                description = "Where to mount this dataset.";
-                type = types.nullOr types.string;
+                description = lib.mdDoc "Where to mount this dataset.";
+                type = types.nullOr types.str;
                 default = null;
               };
 
               properties = lib.mkOption {
-                description = "Properties to set on this dataset.";
-                type = types.attrsOf types.string;
+                description = lib.mdDoc "Properties to set on this dataset.";
+                type = types.attrsOf types.str;
                 default = { };
               };
             };
@@ -47,7 +47,7 @@ in
         default = pkgs.stdenv.hostPlatform.isAarch64;
         defaultText = literalExpression "pkgs.stdenv.hostPlatform.isAarch64";
         internal = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether the instance is using EFI.
         '';
       };

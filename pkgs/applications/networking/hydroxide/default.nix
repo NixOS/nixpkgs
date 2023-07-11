@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "hydroxide";
-  version = "0.2.21";
+  version = "0.2.27";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-fF+pQnqAWBktc4NdQFTHeB/sEg5bPTxXtdL1x5JuXU8=";
+    sha256 = "sha256-APRa+wZhls7O2q3zVPEB9Kegd1YspcfC8PSJy6KFlR8=";
   };
 
-  vendorSha256 = "sha256-M5QlhF2Cj1jn5NNiKj1Roh9+sNCWxQEb4vbtsDfapWY=";
+  vendorHash = "sha256-OLsJc/AMtD03KA8SN5rsnaq57/cB7bMB/f7FfEjErEU=";
 
   doCheck = false;
 
@@ -22,6 +22,5 @@ buildGoModule rec {
     homepage = "https://github.com/emersion/hydroxide";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne ];
-    platforms = platforms.unix;
   };
 }

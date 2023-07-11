@@ -38,30 +38,34 @@ self: super: {
   rts = null;
   stm = null;
   template-haskell = null;
-  terminfo = null;
+  # GHC only builds terminfo if it is a native compiler
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
   unix = null;
-  xhtml = null;
+  # GHC only bundles the xhtml library if haddock is enabled, check if this is
+  # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
+  xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_2_2_1;
 
-  # cabal-install needs more recent versions of Cabal and base16-bytestring.
-  cabal-install = super.cabal-install.overrideScope (self: super: {
-    Cabal = self.Cabal_3_6_3_0;
-  });
+  # Additionally depends on OneTuple for GHC < 9.0
+  base-compat-batteries = addBuildDepend self.OneTuple super.base-compat-batteries;
 
   # Pick right versions for GHC-specific packages
-  ghc-api-compat = doDistribute self.ghc-api-compat_8_10_7;
+  ghc-api-compat = doDistribute (unmarkBroken self.ghc-api-compat_8_10_7);
 
-  # ghc versions which don‘t match the ghc-lib-parser-ex version need the
+  # ghc versions which don’t match the ghc-lib-parser-ex version need the
   # additional dependency to compile successfully.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser super.ghc-lib-parser-ex;
+
+  # Needs to use ghc-lib due to incompatible GHC
+  ghc-tags = doDistribute (addBuildDepend self.ghc-lib self.ghc-tags_1_5);
 
   # Jailbreak to fix the build.
   base-noprelude = doJailbreak super.base-noprelude;
   unliftio-core = doJailbreak super.unliftio-core;
 
-  # Jailbreaking because monoidal-containers hasn‘t bumped it's base dependency for 8.10.
+  # Jailbreaking because monoidal-containers hasn’t bumped it's base dependency for 8.10.
   monoidal-containers = doJailbreak super.monoidal-containers;
 
   # Jailbreak to fix the build.
@@ -80,32 +84,50 @@ self: super: {
   }) (doJailbreak super.language-haskell-extract);
 
   # hnix 0.9.0 does not provide an executable for ghc < 8.10, so define completions here for now.
-  hnix = generateOptparseApplicativeCompletion "hnix"
+  hnix = self.generateOptparseApplicativeCompletions [ "hnix" ]
     (overrideCabal (drv: {
       # executable is allowed for ghc >= 8.10 and needs repline
       executableHaskellDepends = drv.executableToolDepends or [] ++ [ self.repline ];
     }) super.hnix);
 
+  haskell-language-server = let
+    # These aren't included in hackage-packages.nix because hackage2nix is configured for GHC 9.2, under which these plugins aren't supported.
+    # See https://github.com/NixOS/nixpkgs/pull/205902 for why we use `self.<package>.scope`
+    additionalDeps = with self.haskell-language-server.scope; [
+      hls-brittany-plugin
+      hls-haddock-comments-plugin
+      (unmarkBroken hls-splice-plugin)
+      hls-tactics-plugin
+    ];
+  in addBuildDepends additionalDeps (super.haskell-language-server.overrideScope (lself: lsuper: {
+    Cabal = lself.Cabal_3_6_3_0;
+    aeson = lself.aeson_1_5_6_0;
+    lens-aeson = lself.lens-aeson_1_1_3;
+    lsp-types = doJailbreak lsuper.lsp-types; # Checks require aeson >= 2.0
+  }));
+
+  hls-tactics-plugin = unmarkBroken (addBuildDepends (with self.hls-tactics-plugin.scope; [
+    aeson extra fingertree generic-lens ghc-exactprint ghc-source-gen ghcide
+    hls-graph hls-plugin-api hls-refactor-plugin hyphenation lens lsp megaparsec
+    parser-combinators prettyprinter refinery retrie syb unagi-chan unordered-containers
+  ]) super.hls-tactics-plugin);
+
+  hls-brittany-plugin =  unmarkBroken (addBuildDepends (with self.hls-brittany-plugin.scope; [
+    brittany czipwith extra ghc-exactprint ghcide hls-plugin-api hls-test-utils lens lsp-types
+    ]) (super.hls-brittany-plugin.overrideScope (lself: lsuper: {
+    brittany = doJailbreak (unmarkBroken lself.brittany_0_13_1_2);
+    aeson = lself.aeson_1_5_6_0;
+    multistate = unmarkBroken (dontCheck lsuper.multistate);
+    lsp-types = doJailbreak lsuper.lsp-types; # Checks require aeson >= 2.0
+  })));
+
+  # This package is marked as unbuildable on GHC 9.2, so hackage2nix doesn't include any dependencies.
+  # See https://github.com/NixOS/nixpkgs/pull/205902 for why we use `self.<package>.scope`
+  hls-haddock-comments-plugin =  unmarkBroken (addBuildDepends (with self.hls-haddock-comments-plugin.scope; [
+    ghc-exactprint ghcide hls-plugin-api hls-refactor-plugin lsp-types unordered-containers
+  ]) super.hls-haddock-comments-plugin);
+
   mime-string = disableOptimization super.mime-string;
-
-  # Older compilers need the latest ghc-lib to build this package.
-  hls-hlint-plugin = addBuildDepend self.ghc-lib super.hls-hlint-plugin;
-
-  haskell-language-server = appendConfigureFlags [
-      "-f-fourmolu"
-      "-f-stylishhaskell"
-      "-f-brittany"
-      "-f-hlint"
-    ]
-  (super.haskell-language-server.override {
-    # Not buildable on 8.10
-    hls-fourmolu-plugin = null;
-    # https://github.com/haskell/haskell-language-server/issues/2728
-    hls-hlint-plugin = null;
-  });
-
-  # ormolu 0.3 requires Cabal == 3.4
-  ormolu = super.ormolu_0_2_0_0;
 
   # weeder 2.3.0 no longer supports GHC 8.10
   weeder = doDistribute (doJailbreak self.weeder_2_2_0);
@@ -114,6 +136,8 @@ self: super: {
   OneTuple = super.OneTuple.override {
     ghc-prim = self.hashable;
   };
+
+  hashable = addBuildDepend self.base-orphans super.hashable;
 
   # Doesn't build with 9.0, see https://github.com/yi-editor/yi/issues/1125
   yi-core = doDistribute (markUnbroken super.yi-core);
@@ -128,4 +152,32 @@ self: super: {
 
   # https://github.com/fpco/inline-c/issues/127 (recommend to upgrade to Nixpkgs GHC >=9.0)
   inline-c-cpp = (if isDarwin then dontCheck else x: x) super.inline-c-cpp;
+
+  # Depends on OneTuple for GHC < 9.0
+  universe-base = addBuildDepends [ self.OneTuple ] super.universe-base;
+
+  # Not possible to build in the main GHC 9.0 package set
+  # https://github.com/awakesecurity/spectacle/issues/49
+  spectacle = doDistribute (markUnbroken super.spectacle);
+
+  # doctest-parallel dependency requires newer Cabal
+  regex-tdfa = dontCheck super.regex-tdfa;
+
+  # Unnecessarily strict lower bound on base
+  # https://github.com/mrkkrp/megaparsec/pull/485#issuecomment-1250051823
+  megaparsec = doJailbreak super.megaparsec;
+
+  retrie = dontCheck self.retrie_1_1_0_0;
+
+  # Later versions only support GHC >= 9.2
+  ghc-exactprint = self.ghc-exactprint_0_6_4;
+
+  apply-refact = self.apply-refact_0_9_3_0;
+
+  hls-hlint-plugin = super.hls-hlint-plugin.override {
+    inherit (self) apply-refact;
+  };
+
+  # Needs OneTuple for ghc < 9.2
+  binary-orphans = addBuildDepends [ self.OneTuple ] super.binary-orphans;
 }

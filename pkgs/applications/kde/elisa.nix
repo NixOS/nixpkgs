@@ -1,9 +1,7 @@
 { mkDerivation
-, fetchFromGitHub
 , lib
 , extra-cmake-modules
 , kdoctools
-, qtbase
 , qtmultimedia
 , qtquickcontrols2
 , qtwebsockets
@@ -18,8 +16,10 @@
 , libvlc
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "elisa";
+
+  outputs = [ "out" "dev" ];
 
   buildInputs = [ libvlc ];
 
@@ -44,6 +44,5 @@ mkDerivation rec {
     description = "A simple media player for KDE";
     license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
-    broken = lib.versionOlder qtbase.version "5.15";
   };
 }

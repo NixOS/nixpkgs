@@ -11,20 +11,21 @@
 , gobject-introspection
 , gtksourceview4
 , gspell
+, libhandy
 , poppler_gi
-, webkitgtk
+, webkitgtk_4_1
 , librsvg
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "setzer";
-  version = "0.4.7";
+  version = "55";
 
   src = fetchFromGitHub {
     owner = "cvfosammmm";
     repo = "Setzer";
     rev = "v${version}";
-    hash = "sha256-IP56jOiiIK9EW4D5yEdLc49rUzcvegAX3Yyk2ERK/pE=";
+    hash = "sha256-Mcl9kWeo4w/wW8crR58Yyqoh26w8/SmNrjmHps6DmRA=";
   };
 
   format = "other";
@@ -37,21 +38,22 @@ python3.pkgs.buildPythonApplication rec {
     appstream-glib
     wrapGAppsHook
     desktop-file-utils
+    gobject-introspection
   ];
 
   buildInputs = [
-    gobject-introspection
     gtksourceview4
     gspell
+    libhandy
     poppler_gi
-    webkitgtk
+    webkitgtk_4_1
     librsvg
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
     pygobject3
     pyxdg
-    pdfminer
+    pdfminer-six
     pycairo
     pexpect
   ];

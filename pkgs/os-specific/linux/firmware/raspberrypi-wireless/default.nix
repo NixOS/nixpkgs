@@ -1,23 +1,23 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "raspberrypi-wireless-firmware";
-  version = "2021-11-02";
+  version = "unstable-2023-05-04";
 
   srcs = [
     (fetchFromGitHub {
       name = "bluez-firmware";
       owner = "RPi-Distro";
       repo = "bluez-firmware";
-      rev = "e7fd166981ab4bb9a36c2d1500205a078a35714d";
-      sha256 = "1dkg8mzn7n4afi50ibrda2s33nw2qj52jjjdv9w560q601gms47b";
+      rev = "9556b08ace2a1735127894642cc8ea6529c04c90";
+      hash = "sha256-gKGK0XzNrws5REkKg/JP6SZx3KsJduu53SfH3Dichkc=";
     })
     (fetchFromGitHub {
       name = "firmware-nonfree";
       owner = "RPi-Distro";
       repo = "firmware-nonfree";
-      rev = "54ffdd6e2ea6055d46656b78e148fe7def3ec9d8";
-      sha256 = "4WTrs/tUyOugufRrrh0qsEmhPclQD64ypYysxsnOyS8=";
+      rev = "2b465a10b04555b7f45b3acb85959c594922a3ce";
+      hash = "sha256-9UgB8f2AaxG7S5Px46jOP9wUeO1VXKB0uJiPWh32oDI=";
     })
   ];
 
@@ -32,19 +32,17 @@ stdenv.mkDerivation {
     mkdir -p "$out/lib/firmware/brcm"
 
     # Wifi firmware
-    shopt -s extglob
-    for filename in firmware-nonfree/brcm/brcmfmac434??{,s}-sdio.*; do
-      cp "$filename" "$out/lib/firmware/brcm"
-    done
+    cp -rv "$NIX_BUILD_TOP/firmware-nonfree/debian/config/brcm80211/." "$out/lib/firmware/"
 
     # Bluetooth firmware
-    cp bluez-firmware/broadcom/*.hcd "$out/lib/firmware/brcm"
+    cp -rv "$NIX_BUILD_TOP/bluez-firmware/broadcom/." "$out/lib/firmware/brcm"
+
+    # brcmfmac43455-stdio.bin is a symlink to the non-existent path: ../cypress/cyfmac43455-stdio.bin.
+    # See https://github.com/RPi-Distro/firmware-nonfree/issues/26
+    ln -s "./cyfmac43455-sdio-standard.bin" "$out/lib/firmware/cypress/cyfmac43455-sdio.bin"
+
     runHook postInstall
   '';
-
-  outputHashMode = "recursive";
-  outputHashAlgo = "sha256";
-  outputHash = "l+7VOq7CV5QA8/FWjMBGDcxq8Qe7NFf6E2Y42htZEgE=";
 
   meta = with lib; {
     description = "Firmware for builtin Wifi/Bluetooth devices in the Raspberry Pi 3+ and Zero W";

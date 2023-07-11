@@ -5,36 +5,30 @@
 , agate
 , sqlalchemy
 , crate
-, nose
+, pytestCheckHook
 , geojson
 }:
 
 buildPythonPackage rec {
   pname = "agate-sql";
-  version = "0.5.8";
+  version = "0.5.9";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "581e062ae878cc087d3d0948670d46b16589df0790bf814524b0587a359f2ada";
+    hash = "sha256-MLZCoypbZxFhq++ejsNjUvLniiTOhJBU7axpRti53cY=";
   };
 
   propagatedBuildInputs = [ agate sqlalchemy ];
 
-  # crate is broken in nixpkgs, with SQLAlchemy > 1.3
-  # Skip tests for now as they rely on it.
-  doCheck = false;
-
-  checkInputs = [ crate nose geojson ];
-
-  checkPhase = ''
-    nosetests
-  '';
+  nativeCheckInputs = [ crate geojson pytestCheckHook ];
 
   pythonImportsCheck = [ "agatesql" ];
 
   meta = with lib; {
+    # https://github.com/wireservice/agate-sql/commit/74af1badd85408909ea72cb6ca8c0b223d178c6f
+    broken = lib.versionAtLeast sqlalchemy.version "2.0";
     description = "Adds SQL read/write support to agate.";
     homepage = "https://github.com/wireservice/agate-sql";
     license = with licenses; [ mit ];

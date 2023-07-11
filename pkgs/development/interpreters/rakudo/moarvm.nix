@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , perl
 , CoreServices
 , ApplicationServices
@@ -8,11 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "moarvm";
-  version = "2022.03";
+  version = "2023.06";
 
-  src = fetchurl {
-    url = "https://moarvm.org/releases/MoarVM-${version}.tar.gz";
-    sha256 = "sha256-+3HNE5EkZEgrmbM/DAbp/XxRoVHG5jKpIgz5PFhV/a8=";
+  src = fetchFromGitHub {
+    owner = "moarvm";
+    repo = "moarvm";
+    rev = version;
+    hash = "sha256-dMh1KwKh89ZUqIUPHOH9DPgxLWq37kW3hTTwsFe1imM=";
+    fetchSubmodules = true;
   };
 
   postPatch = ''
@@ -35,7 +38,8 @@ stdenv.mkDerivation rec {
     description = "VM with adaptive optimization and JIT compilation, built for Rakudo";
     homepage = "https://moarvm.org";
     license = licenses.artistic2;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice vrthra sgo ];
+    mainProgram = "moar";
+    platforms = platforms.unix;
   };
 }

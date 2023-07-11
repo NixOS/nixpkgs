@@ -5,9 +5,9 @@
 , meson
 , ninja
 , gettext
-, gobject-introspection
 , python3
 , gstreamer
+, graphene
 , orc
 , pango
 , libtheora
@@ -19,37 +19,47 @@
 , libvisual
 , tremor # provides 'virbisidec'
 , libGL
+, gobject-introspection
 , enableX11 ? stdenv.isLinux
-, libXv
 , libXext
+, libXi
+, libXv
 , enableWayland ? stdenv.isLinux
 , wayland
 , wayland-protocols
 , enableAlsa ? stdenv.isLinux
 , alsa-lib
-# Enabling Cocoa seems to currently not work, giving compile
-# errors. Suspected is that a newer version than clang
-# is needed than 5.0 but it is not clear.
-, enableCocoa ? false
+# TODO: fix once x86_64-darwin sdk updated
+, enableCocoa ? (stdenv.isDarwin && stdenv.isAarch64)
 , Cocoa
 , OpenGL
 , enableGl ? (enableX11 || enableWayland || enableCocoa)
 , enableCdparanoia ? (!stdenv.isDarwin)
 , cdparanoia
 , glib
+, testers
+# Checks meson.is_cross_build(), so even canExecute isn't enough.
+, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform
+, hotdoc
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-base";
-  version = "1.20.0";
+  version = "1.22.4";
 
   outputs = [ "out" "dev" ];
 
-  src = fetchurl {
+  src = let
+    inherit (finalAttrs) pname version;
+  in fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-TLZvzPcwsQN+ZTOGLCEomQkSpttOW70U4O+RRFDrTHw=";
+    hash = "sha256-KSQk6C3qFwUoxCtFb2KolTK8q8BQjxkuNGcvuG9o5bg=";
   };
 
+  strictDeps = true;
+  depsBuildBuild = [
+    pkg-config
+  ];
   nativeBuildInputs = [
     meson
     ninja
@@ -58,13 +68,17 @@ stdenv.mkDerivation rec {
     gettext
     orc
     glib
+    gstreamer
     gobject-introspection
-
-    # docs
-    # TODO add hotdoc here
-  ] ++ lib.optional enableWayland wayland;
+  ] ++ lib.optionals enableDocumentation [
+    hotdoc
+  ] ++ lib.optionals enableWayland [
+    wayland
+  ];
 
   buildInputs = [
+    gobject-introspection
+    graphene
     orc
     libtheora
     libintl
@@ -73,18 +87,18 @@ stdenv.mkDerivation rec {
     libpng
     libjpeg
     tremor
+    pango
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     libGL
-  ] ++ lib.optional (!stdenv.isDarwin) [
     libvisual
   ] ++ lib.optionals stdenv.isDarwin [
-    pango
     OpenGL
   ] ++ lib.optionals enableAlsa [
     alsa-lib
   ] ++ lib.optionals enableX11 [
     libXext
+    libXi
     libXv
-    pango
   ] ++ lib.optionals enableWayland [
     wayland
     wayland-protocols
@@ -97,12 +111,10 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
-    "-Dgl-graphene=disabled" # not packaged in nixpkgs as of writing
     # See https://github.com/GStreamer/gst-plugins-base/blob/d64a4b7a69c3462851ff4dcfa97cc6f94cd64aef/meson_options.txt#L15 for a list of choices
     "-Dgl_winsys=${lib.concatStringsSep "," (lib.optional enableX11 "x11" ++ lib.optional enableWayland "wayland" ++ lib.optional enableCocoa "cocoa")}"
+    (lib.mesonEnable "doc" enableDocumentation)
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dintrospection=disabled"
     "-Dtests=disabled"
   ]
   ++ lib.optional (!enableX11) "-Dx11=disabled"
@@ -143,11 +155,19 @@ stdenv.mkDerivation rec {
     waylandEnabled = enableWayland;
   };
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     description = "Base GStreamer plug-ins and helper libraries";
     homepage = "https://gstreamer.freedesktop.org";
     license = licenses.lgpl2Plus;
+    pkgConfigModules = [
+      "gstreamer-audio-1.0"
+      "gstreamer-base-1.0"
+      "gstreamer-net-1.0"
+      "gstreamer-video-1.0"
+    ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = with maintainers; [ matthewbauer lilyinstarlight ];
   };
-}
+})

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "easy-thumbnails";
-  version = "2.8.1";
+  version = "2.8.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1a283fe8a3569c3feab4605e8279929d75c85c1151b2fd627f95b1863b5fc6c2";
+    hash = "sha256-fk6RJgn8m2Czof72VX7BXd+cT5RiZ6kuaSDf1N12XjU=";
   };
 
   propagatedBuildInputs = [
@@ -38,6 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Easy thumbnails for Django";
     homepage = "https://github.com/SmileyChris/easy-thumbnails";
+    changelog = "https://github.com/SmileyChris/easy-thumbnails/blob/${version}/CHANGES.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };

@@ -12,7 +12,7 @@ in
 {
   ###### interface
   options.services.kubernetes.flannel = {
-    enable = mkEnableOption "enable flannel networking";
+    enable = mkEnableOption (lib.mdDoc "flannel networking");
   };
 
   ###### implementation
@@ -26,7 +26,6 @@ in
     };
 
     services.kubernetes.kubelet = {
-      networkPlugin = mkDefault "cni";
       cni.config = mkDefault [{
         name = "mynet";
         type = "flannel";
@@ -54,7 +53,7 @@ in
       };
     };
 
-    # give flannel som kubernetes rbac permissions if applicable
+    # give flannel some kubernetes rbac permissions if applicable
     services.kubernetes.addonManager.bootstrapAddons = mkIf ((storageBackend == "kubernetes") && (elem "RBAC" top.apiserver.authorizationMode)) {
 
       flannel-cr = {

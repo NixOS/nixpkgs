@@ -88,7 +88,7 @@ in
       fontDirectories = [ freefont_ttf ];
     };
 
-    checkInputs = [
+    nativeCheckInputs = [
       pytest
     ];
 

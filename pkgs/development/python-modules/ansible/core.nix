@@ -1,15 +1,19 @@
 { lib
-, callPackage
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
+, pythonRelaxDepsHook
 , installShellFiles
+, ansible
 , cryptography
+, importlib-resources
 , jinja2
 , junit-xml
 , lxml
 , ncclient
 , packaging
 , paramiko
+, passlib
 , pexpect
 , psutil
 , pycrypto
@@ -21,19 +25,13 @@
 , xmltodict
 }:
 
-let
-  ansible-collections = callPackage ./collections.nix {
-    version = "5.5.0";
-    sha256 = "sha256-uKdtc3iJyb/Q5rDyJ23PjYNtpmcGejVXdvNQTXpm1Rg=";
-  };
-in
 buildPythonPackage rec {
   pname = "ansible-core";
-  version = "2.12.3";
+  version = "2.15.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ihNan3TJfKtndZKTdErTQ1D3GVI+i9m7kAjfTPlTryA=";
+    hash = "sha256-7SjrSUPkgABO3Juh6b7peaBlDLL5Nyzkor1XKDjGDSs=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
@@ -46,17 +44,20 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
-    # depend on ansible-collections instead of the other way around
-    ansible-collections
+    # depend on ansible instead of the other way around
+    ansible
     # from requirements.txt
     cryptography
     jinja2
     packaging
+    passlib
     pyyaml
-    resolvelib
+    resolvelib # This library is a PITA, since ansible requires a very old version of it
     # optional dependencies
     junit-xml
     lxml
@@ -68,7 +69,15 @@ buildPythonPackage rec {
     requests
     scp
     xmltodict
-  ] ++ lib.optional windowsSupport pywinrm;
+  ] ++ lib.optionals windowsSupport [
+    pywinrm
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-resources
+  ];
+
+  pythonRelaxDeps = lib.optionals (pythonOlder "3.10") [
+    "importlib-resources"
+  ];
 
   postInstall = ''
     installManPage docs/man/man1/*.1
@@ -77,14 +86,11 @@ buildPythonPackage rec {
   # internal import errors, missing dependencies
   doCheck = false;
 
-  passthru = {
-    collections = ansible-collections;
-  };
-
   meta = with lib; {
+    changelog = "https://github.com/ansible/ansible/blob/v${version}/changelogs/CHANGELOG-v${lib.versions.majorMinor version}.rst";
     description = "Radically simple IT automation";
     homepage = "https://www.ansible.com";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

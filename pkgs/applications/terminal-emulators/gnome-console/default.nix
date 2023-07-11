@@ -4,56 +4,47 @@
 , gettext
 , gnome
 , libgtop
-, gtk3
-, libhandy
+, gtk4
+, libadwaita
 , pcre2
-, vte
-, appstream-glib
+, vte-gtk4
 , desktop-file-utils
-, git
 , meson
 , ninja
 , pkg-config
-, python3
-, sassc
-, wrapGAppsHook
+, wrapGAppsHook4
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-console";
-  version = "42.beta";
+  version = "44.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-console/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "Lq/shyAhDcwB5HqpihvGx2+xwVU2Xax7/NerFwR36DQ=";
+    sha256 = "0cGv1eyNK9+Eo9sCmwSiQy7Me80kLCp0X+mYakKJiEQ=";
   };
 
-  buildInputs = [
-    gettext
-    libgtop
-    gnome.nautilus
-    gtk3
-    libhandy
-    pcre2
-    vte
-  ];
-
   nativeBuildInputs = [
-    appstream-glib
     desktop-file-utils
-    git
+    gettext
     meson
     ninja
     pkg-config
-    python3
-    sassc
-    wrapGAppsHook
+    wrapGAppsHook4
+  ];
+
+  buildInputs = [
+    libgtop
+    gtk4
+    libadwaita
+    pcre2
+    vte-gtk4
   ];
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gnome-console";
     };
   };
 
@@ -64,6 +55,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/console";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members ++ (with maintainers; [ zhaofengli ]);
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

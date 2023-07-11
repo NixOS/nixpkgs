@@ -10,35 +10,40 @@
 , pythonOlder
 , pyvex
 , pyxbe
+, setuptools
 , sortedcontainers
 }:
 
 let
   # The binaries are following the argr projects release cycle
-  version = "9.1.12332";
+  version = "9.2.58";
 
   # Binary files from https://github.com/angr/binaries (only used for testing and only here)
   binaries = fetchFromGitHub {
     owner = "angr";
     repo = "binaries";
-    rev = "v${version}";
-    sha256 = "1qlrxfj1n34xvwkac6mbcc7zmixxbp34fj7lkf0fvp7zcz1rpla1";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-03DyvPht4E4uysKqgyfu8hxu1qh+YzWsTI09E4ftiSs=";
   };
 
 in
 buildPythonPackage rec {
   pname = "cle";
   inherit version;
-  format = "setuptools";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-xcj6Skzzmw5g+0KsBMLNOhRyXQA7nbgnc9YyfJLteCM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-AtZnsrqd4/SXoqCIFGNSxBed9hehky8n/5Xfg5EREKg=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     cffi
@@ -50,7 +55,7 @@ buildPythonPackage rec {
     sortedcontainers
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
     pytestCheckHook
   ];
@@ -66,10 +71,11 @@ buildPythonPackage rec {
     "test_ppc_rel24_relocation"
     "test_ppc_addr16_ha_relocation"
     "test_ppc_addr16_lo_relocation"
-    # Binary not found, seems to be missing in the current binaries release
     "test_plt_full_relro"
     # Test fails
     "test_tls_pe_incorrect_tls_data_start"
+    # The required parts is not present on Nix
+    "test_remote_file_map"
   ];
 
   pythonImportsCheck = [

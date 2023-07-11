@@ -1,39 +1,58 @@
-{ lib, fetchFromGitHub, gobject-introspection, gtk3, gtksourceview3, webkitgtk, wrapGAppsHook, python3Packages }:
+{ lib
+, fetchFromGitHub
+, gobject-introspection
+, gtk3
+, gtksourceview4
+, webkitgtk
+, wrapGAppsHook
+, python3Packages
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "skytemple";
-  version = "1.3.2";
+  version = "1.4.7";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
-    rev = version;
-    sha256 = "1sx2rib0la3mifvh84ia3jnnq4qw9jxc13vxyidsdkp6x82nbvcg";
+    rev = "refs/tags/${version}";
+    hash = "sha256-NK0yLxs7/pVpl9LCz6ggYsaUDuEAj6edBEPC+4yCxNM=";
   };
 
   buildInputs = [
     gobject-introspection
     gtk3
-    gtksourceview3
+    gtksourceview4
     # webkitgkt is used for rendering interactive statistics graph which
     # can be seen by opening a ROM, entering Pokemon section, selecting
     # any Pokemon, and clicking Stats and Moves tab.
     webkitgtk
   ];
-  nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
+
+  nativeBuildInputs = [
+    gobject-introspection
+    wrapGAppsHook
+  ];
+
   propagatedBuildInputs = with python3Packages; [
+    cairosvg
     natsort
+    ndspy
     packaging
     pycairo
     pygal
+    psutil
+    gbulb
     pypresence
+    sentry-sdk
     setuptools
     skytemple-dtef
     skytemple-eventserver
     skytemple-files
     skytemple-icons
     skytemple-ssb-debugger
-  ];
+    tilequant
+  ] ++ skytemple-files.optional-dependencies.spritecollab;
 
   doCheck = false; # there are no tests
 

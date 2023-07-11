@@ -10,7 +10,7 @@ let
     text = "default:";
   };
 
-  computedConfigFile = "${if cfg.configFile == null then emptyConfigFile else cfg.configFile}";
+  computedConfigFile = if cfg.configFile == null then emptyConfigFile else cfg.configFile;
 in
 {
   port = 9221;
@@ -20,7 +20,7 @@ in
       default = pkgs.prometheus-pve-exporter;
       defaultText = literalExpression "pkgs.prometheus-pve-exporter";
       example = literalExpression "pkgs.prometheus-pve-exporter";
-      description = ''
+      description = lib.mdDoc ''
         The package to use for prometheus-pve-exporter
       '';
     };
@@ -29,7 +29,7 @@ in
       type = with types; nullOr path;
       default = null;
       example = "/etc/prometheus-pve-exporter/pve.env";
-      description = ''
+      description = lib.mdDoc ''
         Path to the service's environment file. This path can either be a computed path in /nix/store or a path in the local filesystem.
 
         The environment file should NOT be stored in /nix/store as it contains passwords and/or keys in plain text.
@@ -42,7 +42,7 @@ in
       type = with types; nullOr path;
       default = null;
       example = "/etc/prometheus-pve-exporter/pve.yml";
-      description = ''
+      description = lib.mdDoc ''
         Path to the service's config file. This path can either be a computed path in /nix/store or a path in the local filesystem.
 
         The config file should NOT be stored in /nix/store as it will contain passwords and/or keys in plain text.
@@ -57,42 +57,42 @@ in
       status = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Collect Node/VM/CT status
         '';
       };
       version = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Collect PVE version info
         '';
       };
       node = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Collect PVE node info
         '';
       };
       cluster = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Collect PVE cluster info
         '';
       };
       resources = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Collect PVE resources info
         '';
       };
       config = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Collect PVE onboot status
         '';
       };
@@ -100,6 +100,8 @@ in
   };
   serviceOpts = {
     serviceConfig = {
+      DynamicUser = cfg.environmentFile == null;
+      LoadCredential = "configFile:${computedConfigFile}";
       ExecStart = ''
         ${cfg.package}/bin/pve_exporter \
           --${if cfg.collectors.status == true then "" else "no-"}collector.status \
@@ -108,11 +110,11 @@ in
           --${if cfg.collectors.cluster == true then "" else "no-"}collector.cluster \
           --${if cfg.collectors.resources == true then "" else "no-"}collector.resources \
           --${if cfg.collectors.config == true then "" else "no-"}collector.config \
-          ${computedConfigFile} \
+          %d/configFile \
           ${toString cfg.port} ${cfg.listenAddress}
       '';
     } // optionalAttrs (cfg.environmentFile != null) {
-          EnvironmentFile = cfg.environmentFile;
+      EnvironmentFile = cfg.environmentFile;
     };
   };
 }

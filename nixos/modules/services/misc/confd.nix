@@ -17,52 +17,52 @@ let
 
 in {
   options.services.confd = {
-    enable = mkEnableOption "confd service";
+    enable = mkEnableOption (lib.mdDoc "confd service");
 
     backend = mkOption {
-      description = "Confd config storage backend to use.";
+      description = lib.mdDoc "Confd config storage backend to use.";
       default = "etcd";
       type = types.enum ["etcd" "consul" "redis" "zookeeper"];
     };
 
     interval = mkOption {
-      description = "Confd check interval.";
+      description = lib.mdDoc "Confd check interval.";
       default = 10;
       type = types.int;
     };
 
     nodes = mkOption {
-      description = "Confd list of nodes to connect to.";
+      description = lib.mdDoc "Confd list of nodes to connect to.";
       default = [ "http://127.0.0.1:2379" ];
       type = types.listOf types.str;
     };
 
     watch = mkOption {
-      description = "Confd, whether to watch etcd config for changes.";
+      description = lib.mdDoc "Confd, whether to watch etcd config for changes.";
       default = true;
       type = types.bool;
     };
 
     prefix = mkOption {
-      description = "The string to prefix to keys.";
+      description = lib.mdDoc "The string to prefix to keys.";
       default = "/";
       type = types.path;
     };
 
     logLevel = mkOption {
-      description = "Confd log level.";
+      description = lib.mdDoc "Confd log level.";
       default = "info";
       type = types.enum ["info" "debug"];
     };
 
     confDir = mkOption {
-      description = "The path to the confd configs.";
+      description = lib.mdDoc "The path to the confd configs.";
       default = "/etc/confd";
       type = types.path;
     };
 
     package = mkOption {
-      description = "Confd package to use.";
+      description = lib.mdDoc "Confd package to use.";
       default = pkgs.confd;
       defaultText = literalExpression "pkgs.confd";
       type = types.package;

@@ -1,5 +1,6 @@
 { pkgs, lib, lua }:
 let
+  inherit (lib.generators) toLua;
   requiredLuaModules = drvs: with lib; let
     modules =  filter hasLuaModule drvs;
   in unique ([lua] ++ modules ++ concatLists (catAttrs "requiredLuaModules" modules));
@@ -65,7 +66,7 @@ rec {
     so that luaRequireModules can be run later
   */
   toLuaModule = drv:
-    drv.overrideAttrs( oldAttrs: {
+    drv.overrideAttrs(oldAttrs: {
       # Use passthru in order to prevent rebuilds when possible.
       passthru = (oldAttrs.passthru or {}) // {
         luaModule = lua;
@@ -81,66 +82,57 @@ rec {
   };
   */
   generateLuarocksConfig = {
-    externalDeps
-
+      externalDeps
     # a list of lua derivations
     , requiredLuaRocks
     , extraVariables ? {}
     , rocksSubdir
     }: let
       rocksTrees = lib.imap0
-        (i: dep: "{ name = [[dep-${toString i}]], root = '${dep}', rocks_dir = '${dep}/${dep.rocksSubdir}' }")
+        (i: dep: { name = "dep-${toString i}"; root = "${dep}"; rocks_dir = "${dep}/${dep.rocksSubdir}"; })
         requiredLuaRocks;
 
       # Explicitly point luarocks to the relevant locations for multiple-output
       # derivations that are external dependencies, to work around an issue it has
       # (https://github.com/luarocks/luarocks/issues/766)
-      depVariables = lib.concatMap ({name, dep}: [
-        "${name}_INCDIR='${lib.getDev dep}/include';"
-        "${name}_LIBDIR='${lib.getLib dep}/lib';"
-        "${name}_BINDIR='${lib.getBin dep}/bin';"
-      ]) externalDeps';
+      depVariables = zipAttrsWithLast (lib.lists.map ({name, dep}: {
+        "${name}_INCDIR" = "${lib.getDev dep}/include";
+        "${name}_LIBDIR" = "${lib.getLib dep}/lib";
+        "${name}_BINDIR" = "${lib.getBin dep}/bin";
+      }) externalDeps');
+      zipAttrsWithLast = lib.attrsets.zipAttrsWith (name: lib.lists.last);
 
       # example externalDeps': [ { name = "CRYPTO"; dep = pkgs.openssl; } ]
       externalDeps' = lib.filter (dep: !lib.isDerivation dep) externalDeps;
 
       externalDepsDirs = map
-        (x: "'${builtins.toString x}'")
+        (x: builtins.toString x)
         (lib.filter (lib.isDerivation) externalDeps);
-
-      extraVariablesStr = lib.concatStringsSep "\n "
-        (lib.mapAttrsToList (k: v: "${k}='${v}';") extraVariables);
-  in ''
-    local_cache = ""
-    -- To prevent collisions when creating environments, we install the rock
-    -- files into per-package subdirectories
-    rocks_subdir = '${rocksSubdir}'
-    -- first tree is the default target where new rocks are installed,
-    -- any other trees in the list are treated as additional sources of installed rocks for matching dependencies.
-    rocks_trees = {
-      {name = "current", root = '${placeholder "out"}', rocks_dir = "current" },
-      ${lib.concatStringsSep "\n, " rocksTrees}
-    }
-  '' + lib.optionalString lua.pkgs.isLuaJIT ''
-    -- Luajit provides some additional functionality built-in; this exposes
-    -- that to luarock's dependency system
+  in toLua { asBindings = true; } ({
+    local_cache = "";
+    # To prevent collisions when creating environments, we install the rock
+    # files into per-package subdirectories
+    rocks_subdir = rocksSubdir;
+    # first tree is the default target where new rocks are installed,
+    # any other trees in the list are treated as additional sources of installed rocks for matching dependencies.
+    rocks_trees = (
+      [{name = "current"; root = "${placeholder "out"}"; rocks_dir = "current"; }] ++
+      rocksTrees
+    );
+  } // lib.optionalAttrs lua.pkgs.isLuaJIT {
+    # Luajit provides some additional functionality built-in; this exposes
+    # that to luarock's dependency system
     rocks_provided = {
-      jit='${lua.luaversion}-1';
-      ffi='${lua.luaversion}-1';
-      luaffi='${lua.luaversion}-1';
-      bit='${lua.luaversion}-1';
-    }
-  '' + ''
-    -- For single-output external dependencies
-    external_deps_dirs = {
-      ${lib.concatStringsSep "\n, " externalDepsDirs}
-    }
-    variables = {
-      -- Some needed machinery to handle multiple-output external dependencies,
-      -- as per https://github.com/luarocks/luarocks/issues/766
-      ${lib.optionalString (lib.length depVariables > 0) ''
-        ${lib.concatStringsSep "\n  " depVariables}''}
-      ${extraVariablesStr}
-    }
-  '';
+      jit = "${lua.luaversion}-1";
+      ffi = "${lua.luaversion}-1";
+      luaffi = "${lua.luaversion}-1";
+      bit = "${lua.luaversion}-1";
+    };
+  } // {
+    # For single-output external dependencies
+    external_deps_dirs = externalDepsDirs;
+    # Some needed machinery to handle multiple-output external dependencies,
+    # as per https://github.com/luarocks/luarocks/issues/766
+    variables = (depVariables // extraVariables);
+  });
 }

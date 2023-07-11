@@ -21,6 +21,12 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace ./run-ldconfig true
   '';
 
+  # this required for wipefreespace
+  postInstall = ''
+    mkdir -p $out/lib
+    cp ./libmisc/.libs/libmisc.a $out/lib/libreiser4misc.a.la
+  '';
+
   meta = with lib; {
     inherit version;
     homepage = "https://sourceforge.net/projects/reiser4/";

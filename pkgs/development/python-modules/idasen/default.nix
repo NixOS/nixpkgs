@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "idasen";
-  version = "0.8.3";
+  version = "0.9.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "newAM";
     repo = "idasen";
-    rev = "v${version}";
-    hash = "sha256-tjA7qgU3JYvwSdDH+aWrmKBX1Q9J5/UT7KjiTBxvKAE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-t8w4USDzyS0k5yk0XtQF8fVffzdf+udKSkdveMlseHk=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     voluptuous
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
   ];

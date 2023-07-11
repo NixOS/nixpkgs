@@ -1,7 +1,7 @@
 {fetchurl, lib, stdenv, dpkg, makeWrapper,
  alsa-lib, cups, curl, dbus, expat, fontconfig, freetype, glib, gst_all_1,
  harfbuzz, libcap, libGL, libGLU, libpulseaudio, libxkbcommon, libxml2, libxslt,
- nspr, nss, openssl, systemd, wayland, xorg, zlib, ...
+ nspr, nss, openssl_1_1, systemd, wayland, xorg, zlib, ...
 }:
 
 stdenv.mkDerivation {
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
       libxslt
       nspr
       nss
-      openssl
+      openssl_1_1
       stdenv.cc.cc
       systemd
       wayland
@@ -101,6 +101,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://www.viber.com";
     description = "An instant messaging and Voice over IP (VoIP) app";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ jagajaga ];

@@ -2,7 +2,7 @@
 , fetchPypi
 , buildPythonPackage
 , logutils
-, Mako
+, mako
 , webtest
 , pythonOlder
 , pytestCheckHook
@@ -16,24 +16,24 @@
 
 buildPythonPackage rec {
   pname = "pecan";
-  version = "1.4.1";
+  version = "1.4.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-LL0O7btXR8BM3xjEquTxxunZUPOvcK8lRLB09+16BIA=";
+    hash = "sha256-SbJV5wHD8UYWBfWw6PVPDCGSLXhF1BTCTdZAn+aV1VA=";
   };
 
   propagatedBuildInputs = [
     logutils
-    Mako
+    mako
     webtest
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     genshi
     gunicorn
@@ -44,6 +44,16 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "--pyargs pecan"
+    # tests fail with sqlalchemy 2.0
+  ] ++ lib.optionals (lib.versionAtLeast sqlalchemy.version "2.0") [
+    # The 'sqlalchemy.orm.mapper()' function is removed as of SQLAlchemy
+    # 2.0.  Use the 'sqlalchemy.orm.registry.map_imperatively()` method
+    # of the ``sqlalchemy.orm.registry`` class to perform classical
+    # mapping.
+    # https://github.com/pecan/pecan/issues/143
+    "--deselect=pecan/tests/test_jsonify.py::TestJsonifySQLAlchemyGenericEncoder::test_result_proxy"
+    "--deselect=pecan/tests/test_jsonify.py::TestJsonifySQLAlchemyGenericEncoder::test_row_proxy"
+    "--deselect=pecan/tests/test_jsonify.py::TestJsonifySQLAlchemyGenericEncoder::test_sa_object"
   ];
 
   pythonImportsCheck = [

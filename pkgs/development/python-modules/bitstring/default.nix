@@ -1,24 +1,30 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, python
+, pythonOlder
+, setuptools
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "bitstring";
-  version = "3.1.9";
+  version = "4.0.2";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "scott-griffiths";
     repo = pname;
     rev = "bitstring-${version}";
-    sha256 = "0y2kcq58psvl038r6dhahhlhp1wjgr5zsms45wyz1naq6ri8x9qa";
+    hash = "sha256-LghfDjf/Z1dEU0gjH1cqMb04ChnW+aGDjmN+RAhMWW8=";
   };
 
-  checkPhase = ''
-    cd test
-    ${python.interpreter} -m unittest discover
-  '';
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "bitstring" ];
 

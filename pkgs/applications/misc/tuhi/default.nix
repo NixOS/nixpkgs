@@ -14,7 +14,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "tuhi";
-  version = "0.5";
+  version = "0.6";
 
   format = "other";
 
@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
     owner = "tuhiproject";
     repo = "tuhi";
     rev = version;
-    sha256 = "17kggm9c423vj7irxx248fjc8sxvkp9w1mgawlx1snrii817p3db";
+    sha256 = "sha256-NwyG2KhOrAKRewgmU23OMO0+A9SjkQZsDL4SGnLVCvo=";
   };
 
   dontWrapGApps = true;
@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication rec {
     gtk3 gobject-introspection
     glib
   ];
-  checkInputs = with python3Packages; [ flake8 pytest ];
+  nativeCheckInputs = with python3Packages; [ flake8 pytest ];
   propagatedBuildInputs = with python3Packages; [
     svgwrite pyxdg pycairo pygobject3 setuptools-scm
   ];

@@ -1,14 +1,15 @@
 { mkDerivation, fetchurl, makeWrapper, lib, php }:
+
 let
   pname = "psalm";
-  version = "4.15.0";
+  version = "5.13.1";
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://github.com/vimeo/psalm/releases/download/v${version}/psalm.phar";
-    sha256 = "jvUNnA5OTmw3h1O1Ur7pUojgU5IRgwq2U/JF/ByO0EA=";
+    url = "https://github.com/vimeo/psalm/releases/download/${version}/psalm.phar";
+    sha256 = "sha256-kMNL44Ma0A3RBYxLUGl6kXvOppZ8FKt2ETb2ZaqsOsY=";
   };
 
   dontUnpack = true;
@@ -25,6 +26,7 @@ mkDerivation {
   '';
 
   meta = with lib; {
+    changelog = "https://github.com/vimeo/psalm/releases/tag/${version}";
     description = "A static analysis tool for finding errors in PHP applications";
     license = licenses.mit;
     homepage = "https://github.com/vimeo/psalm";

@@ -16,7 +16,6 @@ buildPecl {
   configureFlags = [ "--with-couchbase" ];
 
   buildInputs = [ libcouchbase zlib ];
-  internalDeps = lib.optionals (lib.versionOlder php.version "8.0") [ php.extensions.json ];
 
   patches = [
     (substituteAll {
@@ -26,6 +25,7 @@ buildPecl {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/couchbase/php-couchbase/releases/tag/v${version}";
     description = "Couchbase Server PHP extension";
     license = licenses.asl20;
     homepage = "https://docs.couchbase.com/php-sdk/current/project-docs/sdk-release-notes.html";

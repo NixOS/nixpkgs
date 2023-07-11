@@ -13,15 +13,15 @@
 
 buildPythonPackage rec {
   pname = "pyspnego";
-  version = "0.5.0";
+  version = "0.8.0";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jborean93";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-CvPvyP7Vi2Ib+ikgUQt8JkVt5fxzapG590TgAehXqHE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-3nFxUu2P8dGt80HRGYOliGHXLrtc83C96kJW27CgXV0=";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     ruamel-yaml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     glibcLocales
     pytest-mock
     pytestCheckHook

@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, docbook_xml_dtd_412, docbook_xsl, perl, w3m, xmlto, diffutils }:
+{ lib, stdenv, fetchFromGitHub, docbook_xml_dtd_412, docbook_xsl, perl, w3m-batch, xmlto, diffutils }:
 
 stdenv.mkDerivation rec {
   pname = "colordiff";
-  version = "1.0.20";
+  version = "1.0.21";
 
   src = fetchFromGitHub {
     owner = "daveewart";
     repo = "colordiff";
     rev = "v${version}";
-    sha256 = "sha256-+TtVnUX88LMd8zmhLsKTyR9JlgR7IkUB18PF3LRgPB0=";
+    sha256 = "sha256-TNOw6dqsT0dOIddRoGwEF85CaQF8ICMFUi+GiG5WWpk=";
   };
 
-  nativeBuildInputs = [ docbook_xml_dtd_412 docbook_xsl perl w3m xmlto ];
+  nativeBuildInputs = [ docbook_xml_dtd_412 docbook_xsl perl w3m-batch xmlto ];
 
   buildInputs = [ perl ];
 

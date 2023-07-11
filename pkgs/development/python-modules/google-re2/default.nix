@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "google-re2";
-  version = "0.2.20220401";
+  version = "1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-v3G+MvFV8gq9LJqj/zrtlTjRm0ZNxTh0UdQSPiwFHY4=";
+    hash = "sha256-IcitwpY2DeH/QmuqOMcS6tpiLChY0ZXrSH5BXZQZTpE=";
   };
 
   propagatedBuildInputs = [

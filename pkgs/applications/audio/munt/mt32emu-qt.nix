@@ -13,15 +13,18 @@
 , withJack ? stdenv.hostPlatform.isUnix, libjack2
 }:
 
+let
+  char2underscore = char: str: lib.replaceStrings [ char ] [ "_" ] str;
+in
 mkDerivation rec {
   pname = "mt32emu-qt";
-  version = "1.9.0";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "munt";
     repo = "munt";
-    rev = "mt32emu_qt_${lib.replaceChars [ "." ] [ "_" ] version}";
-    hash = "sha256-9vapBKpl1NC3mIDetuCb452IHV6c7c7NCzSyiBry5oo=";
+    rev = "${char2underscore "-" pname}_${char2underscore "." version}";
+    sha256 = "sha256-PqYPYnKPlnU3PByxksBscl4GqDRllQdmD6RWpy/Ura0=";
   };
 
   postPatch = ''
@@ -55,12 +58,12 @@ mkDerivation rec {
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
-    mv $out/bin/${meta.mainProgram}.app $out/Applications/
-    ln -s $out/{Applications/${meta.mainProgram}.app/Contents/MacOS,bin}/${meta.mainProgram}
+    mv $out/bin/${pname}.app $out/Applications/
+    ln -s $out/{Applications/${pname}.app/Contents/MacOS,bin}/${pname}
   '';
 
   meta = with lib; {
-    homepage = "http://munt.sourceforge.net/";
+    homepage = "https://munt.sourceforge.net/";
     description = "A synthesizer application built on Qt and libmt32emu";
     longDescription = ''
       mt32emu-qt is a synthesiser application that facilitates both realtime
@@ -70,6 +73,5 @@ mkDerivation rec {
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.all;
-    mainProgram = "mt32emu-qt";
   };
 }

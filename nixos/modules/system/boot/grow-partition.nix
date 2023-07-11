@@ -12,10 +12,15 @@ with lib;
   ];
 
   options = {
-    boot.growPartition = mkEnableOption "grow the root partition on boot";
+    boot.growPartition = mkEnableOption (lib.mdDoc "grow the root partition on boot");
   };
 
   config = mkIf config.boot.growPartition {
+
+    assertions = [{
+      assertion = !config.boot.initrd.systemd.enable;
+      message = "systemd stage 1 does not support 'boot.growPartition' yet.";
+    }];
 
     boot.initrd.extraUtilsCommands = ''
       copy_bin_and_libs ${pkgs.gawk}/bin/gawk

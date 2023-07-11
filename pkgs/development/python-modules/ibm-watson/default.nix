@@ -5,7 +5,6 @@
 , pytestCheckHook
 , python-dotenv
 , pytest-rerunfailures
-, tox
 , requests
 , python-dateutil
 , websocket-client
@@ -15,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "ibm-watson";
-  version = "6.0.0";
+  version = "7.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "watson-developer-cloud";
     repo = "python-sdk";
-    rev = "v${version}";
-    sha256 = "sha256-AvWcw1VV47v2yvaqukPSql7rA7wVwrvtCDsvYtPZXKs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-AerEd4TkK/A0KhSy+QWxRDD4pjobsx4oDxMr+wUCGt0=";
   };
 
   propagatedBuildInputs = [
@@ -34,12 +33,11 @@ buildPythonPackage rec {
     ibm-cloud-sdk-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     responses
     pytestCheckHook
     python-dotenv
     pytest-rerunfailures
-    tox
   ];
 
   postPatch = ''
@@ -55,6 +53,6 @@ buildPythonPackage rec {
     description = "Client library to use the IBM Watson Services";
     homepage = "https://github.com/watson-developer-cloud/python-sdk";
     license = licenses.asl20;
-    maintainers = with maintainers; [ globin lheckemann ];
+    maintainers = with maintainers; [ globin ];
   };
 }

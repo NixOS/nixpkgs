@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-web";
-  version = "6.1.0";
+  version = "7.1.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "c26635089276515b0488fcf014aab50a0446f54800c6e0e5583cc493ac8d738f";
+    hash = "sha256-WxbN5+MNwgRmuRH/vEmlcljH7ylYRyxNz2Ev8aAS8Vw=";
   };
 
   propagatedBuildInputs = [

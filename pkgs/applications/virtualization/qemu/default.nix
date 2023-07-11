@@ -1,9 +1,10 @@
-{ lib, stdenv, fetchurl, fetchpatch, python3, python3Packages, zlib, pkg-config, glib, buildPackages
-, perl, pixman, vde2, alsa-lib, texinfo, flex
+{ lib, stdenv, fetchurl, fetchpatch, python3Packages, zlib, pkg-config, glib, buildPackages
+, pixman, vde2, alsa-lib, texinfo, flex
 , bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, ninja, meson, sigtool
 , makeWrapper, runtimeShell, removeReferencesTo
-, attr, libcap, libcap_ng, socat
-, CoreServices, Cocoa, Hypervisor, rez, setfile
+, attr, libcap, libcap_ng, socat, libslirp
+, CoreServices, Cocoa, Hypervisor, rez, setfile, vmnet
+, guestAgentSupport ? with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows
 , numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
 , seccompSupport ? stdenv.isLinux, libseccomp
 , alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner
@@ -13,7 +14,7 @@
 , gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner, gtk3, gettext, vte, wrapGAppsHook
 , vncSupport ? !nixosTestRunner, libjpeg, libpng
 , smartcardSupport ? !nixosTestRunner, libcacard
-, spiceSupport ? !stdenv.isDarwin && !nixosTestRunner, spice, spice-protocol
+, spiceSupport ? true && !nixosTestRunner, spice, spice-protocol
 , ncursesSupport ? !nixosTestRunner, ncurses
 , usbredirSupport ? spiceSupport, usbredir
 , xenSupport ? false, xen
@@ -25,6 +26,9 @@
 , smbdSupport ? false, samba
 , tpmSupport ? true
 , uringSupport ? stdenv.isLinux, liburing
+, canokeySupport ? false, canokey-qemu
+, capstoneSupport ? true, capstone
+, enableDocs ? true
 , hostCpuOnly ? false
 , hostCpuTargets ? (if hostCpuOnly
                     then (lib.optional stdenv.isx86_64 "i386-softmmu"
@@ -35,30 +39,42 @@
 , qemu  # for passthru.tests
 }:
 
+let
+  hexagonSupport = hostCpuTargets == null || lib.elem "hexagon" hostCpuTargets;
+in
+
 stdenv.mkDerivation rec {
   pname = "qemu"
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests";
-  version = "6.2.0";
+  version = "8.0.2";
 
   src = fetchurl {
-    url= "https://download.qemu.org/qemu-${version}.tar.xz";
-    sha256 = "0iavlsy9hin8k38230j8lfmyipx3965zljls1dp34mmc8n75vqb8";
+    url = "https://download.qemu.org/qemu-${version}.tar.xz";
+    sha256 = "8GCr1DX75nlBJeLDmFaP/Dz6VABCWWkHqLGO3KNM9qU=";
   };
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ]
+    ++ lib.optionals hexagonSupport [ pkg-config ];
 
-  nativeBuildInputs = [ makeWrapper removeReferencesTo pkg-config flex bison meson ninja perl python3 python3Packages.sphinx python3Packages.sphinx_rtd_theme ]
+  nativeBuildInputs = [
+    makeWrapper removeReferencesTo
+    pkg-config flex bison meson ninja
+
+    # Don't change this to python3 and python3.pkgs.*, breaks cross-compilation
+    python3Packages.python python3Packages.sphinx python3Packages.sphinx-rtd-theme
+  ]
     ++ lib.optionals gtkSupport [ wrapGAppsHook ]
+    ++ lib.optionals hexagonSupport [ glib ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ];
 
-  buildInputs = [ zlib glib perl pixman
+  buildInputs = [ zlib glib pixman
     vde2 texinfo lzo snappy libtasn1
-    gnutls nettle curl
+    gnutls nettle curl libslirp
   ]
     ++ lib.optionals ncursesSupport [ ncurses ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices Cocoa Hypervisor rez setfile ]
+    ++ lib.optionals stdenv.isDarwin [ CoreServices Cocoa Hypervisor rez setfile vmnet ]
     ++ lib.optionals seccompSupport [ libseccomp ]
     ++ lib.optionals numaSupport [ numactl ]
     ++ lib.optionals alsaSupport [ alsa-lib ]
@@ -78,109 +94,51 @@ stdenv.mkDerivation rec {
     ++ lib.optionals virglSupport [ virglrenderer ]
     ++ lib.optionals libiscsiSupport [ libiscsi ]
     ++ lib.optionals smbdSupport [ samba ]
-    ++ lib.optionals uringSupport [ liburing ];
+    ++ lib.optionals uringSupport [ liburing ]
+    ++ lib.optionals canokeySupport [ canokey-qemu ]
+    ++ lib.optionals capstoneSupport [ capstone ];
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
 
-  outputs = [ "out" "ga" ];
+  outputs = [ "out" ] ++ lib.optional guestAgentSupport "ga";
   # On aarch64-linux we would shoot over the Hydra's 2G output limit.
   separateDebugInfo = !(stdenv.isAarch64 && stdenv.isLinux);
 
   patches = [
     ./fix-qemu-ga.patch
-    # MTP Devices were broken in QEMU 6.1.0, this patch fixes that.
-     (fetchpatch {
-       url = "https://gitlab.com/qemu-project/qemu/-/commit/9d30c78c7d3b994825cbe63fa277279ae3ef4248.patch";
-       sha256 = "sha256-AChB9HMEShrM+2UW2aOT9+MqlAm568sG3HxHK3nDC/M=";
-     })
-    # Cocoa clipboard support only works on macOS 10.14+
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/7e3e20d89129614f4a7b2451fe321cc6ccca3b76.diff";
-      sha256 = "09xz06g57wxbacic617pq9c0qb7nly42gif0raplldn5lw964xl2";
-      revert = true;
-    })
-    # 9p-darwin for 7.0 backported to 6.2.0
-    #
-    # Can generally be removed when updating derivation to 7.0. Nine of the
-    # patches can be drawn directly from QEMU upstream, but the second commit
-    # and the eleventh commit had to be modified when rebasing back to 6.2.0.
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/e0bd743bb2dd4985791d4de880446bdbb4e04fed.patch";
-      sha256 = "sha256-c6QYL3zig47fJwm6rqkqGp3E1PakVTaihvXDRebbBlQ=";
-    })
-    ./rename-9p-util.patch
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/f41db099c71151291c269bf48ad006de9cbd9ca6.patch";
-      sha256 = "sha256-70/rrhZw+02JJbJ3CoW8B1GbdM4Lwb2WkUdwstYAoIQ=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/6b3b279bd670c6a2fa23c9049820c814f0e2c846.patch";
-      sha256 = "sha256-7WqklSvLirEuxTXTIMQDQhWpXnwMseJ1RumT+faq/Y8=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/67a71e3b71a2834d028031a92e76eb9444e423c6.patch";
-      sha256 = "sha256-COFm/SwfJSoSl9YDpL6ceAE8CcE4mGhsGxw1HMuL++o=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/38d7fd68b0c8775b5253ab84367419621aa032e6.patch";
-      sha256 = "sha256-iwGIzq9FWW6zpbDg/IKrp5OZpK9cgQqTRWWq8WBIHRQ=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/57b3910bc3513ab515296692daafd1c546f3c115.patch";
-      sha256 = "sha256-ybl9+umZAcQKHYL7NkGJQC0W7bccTagA9KQiFaR2LYA=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/b5989326f558faedd2511f29459112cced2ca8f5.patch";
-      sha256 = "sha256-s+O9eCgj2Ev+INjL9LY9MJBdISIdZLslI3lue2DICGM=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/029ed1bd9defa33a80bb40cdcd003699299af8db.patch";
-      sha256 = "sha256-mGqcRWcEibDJdhTRrN7ZWrMuCfUWW8vWiFj7sb2/RYo=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/d3671fd972cd185a6923433aa4802f54d8b62112.patch";
-      sha256 = "sha256-GUh5o7mbFTm/dm6CqcGdoMlC+YrV8RlcEwu/mxrfTzo=";
-    })
-    # The next two commits are to make Linux v5.17 work on aarch64-darwin. These are included in QEMU v7.
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/ad99f64f1cfff7c5e7af0e697523d9b7e45423b6.patch";
-      sha256 = "sha256-e6WtfQIPEiXhWucd5ab7UIoccbWEAv3bwksn4hR85CY=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/7f6c295cdfeaa229c360cac9a36e4e595aa902ae.patch";
-      sha256 = "sha256-mORtgfU1CYQFKO5UrXgM9cJyZxeF2bz8iAoq0UlFQeY=";
-    })
-    ./allow-virtfs-on-darwin.patch
+
     # QEMU upstream does not demand compatibility to pre-10.13, so 9p-darwin
     # support on nix requires utimensat fallback. The patch adding this fallback
     # set was removed during the process of upstreaming this functionality, and
     # will still be needed in nix until the macOS SDK reaches 10.13+.
     ./provide-fallback-for-utimensat.patch
+    # Cocoa clipboard support only works on macOS 10.14+
+    ./revert-ui-cocoa-add-clipboard-support.patch
+    # Standard about panel requires AppKit and macOS 10.13+
+    (fetchpatch {
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/99eb313ddbbcf73c1adcdadceba1423b691c6d05.diff";
+      sha256 = "sha256-gTRf9XENAfbFB3asYCXnw4OV4Af6VE1W56K2xpYDhgM=";
+      revert = true;
+    })
+    # Workaround for upstream issue with nested virtualisation: https://gitlab.com/qemu-project/qemu/-/issues/1008
+    (fetchpatch {
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/3e4546d5bd38a1e98d4bd2de48631abf0398a3a2.diff";
+      sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
+      revert = true;
+    })
   ]
-    ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
+  ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 
   postPatch = ''
     # Otherwise tries to ensure /var/run exists.
-    sed -i "/install_subdir('run', install_dir: get_option('localstatedir'))/d" \
+    sed -i "/install_emptydir(get_option('localstatedir') \/ 'run')/d" \
         qga/meson.build
-
-    # glibc 2.33 compat fix: if `has_statx = true` is set, `tools/virtiofsd/passthrough_ll.c` will
-    # rely on `stx_mnt_id`[1] which is not part of glibc's `statx`-struct definition.
-    #
-    # `has_statx` will be set to `true` if a simple C program which uses a few `statx`
-    # consts & struct fields successfully compiles. It seems as this only builds on glibc-2.33
-    # since most likely[2] and because of that, the problematic code-path will be used.
-    #
-    # [1] https://github.com/torvalds/linux/commit/fa2fcf4f1df1559a0a4ee0f46915b496cc2ebf60#diff-64bab5a0a3fcb55e1a6ad77b1dfab89d2c9c71a770a07ecf44e6b82aae76a03a
-    # [2] https://sourceware.org/git/?p=glibc.git;a=blobdiff;f=io/bits/statx-generic.h;h=c34697e3c1fd79cddd60db294302e461ed8db6e2;hp=7a09e94be2abb92d2df612090c132e686a24d764;hb=88a2cf6c4bab6e94a65e9c0db8813709372e9180;hpb=c4e4b2e149705559d28b16a9b47ba2f6142d6a6c
-    substituteInPlace meson.build \
-      --replace 'has_statx = cc.links(statx_test)' 'has_statx = false'
   '';
 
   preConfigure = ''
     unset CPP # intereferes with dependency calculation
     # this script isn't marked as executable b/c it's indirectly used by meson. Needed to patch its shebang
-    chmod +x ./scripts/shaderinclude.pl
+    chmod +x ./scripts/shaderinclude.py
     patchShebangs .
     # avoid conflicts with libc++ include for <version>
     mv VERSION QEMU_VERSION
@@ -192,24 +150,22 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-strip" # We'll strip ourselves after separating debug info.
-    "--enable-docs"
+    (lib.enableFeature enableDocs "docs")
     "--enable-tools"
-    "--enable-guest-agent"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     # Always use our Meson, not the bundled version, which doesn't
     # have our patches and will be subtly broken because of that.
     "--meson=meson"
     "--cross-prefix=${stdenv.cc.targetPrefix}"
-    "--cpu=${stdenv.hostPlatform.uname.processor}"
+    (lib.enableFeature guestAgentSupport "guest-agent")
   ] ++ lib.optional numaSupport "--enable-numa"
     ++ lib.optional seccompSupport "--enable-seccomp"
     ++ lib.optional smartcardSupport "--enable-smartcard"
     ++ lib.optional spiceSupport "--enable-spice"
     ++ lib.optional usbredirSupport "--enable-usb-redir"
     ++ lib.optional (hostCpuTargets != null) "--target-list=${lib.concatStringsSep "," hostCpuTargets}"
-    ++ lib.optional stdenv.isDarwin "--enable-cocoa"
-    ++ lib.optional stdenv.isDarwin "--enable-hvf"
+    ++ lib.optionals stdenv.isDarwin [ "--enable-cocoa" "--enable-hvf" ]
     ++ lib.optional stdenv.isLinux "--enable-linux-aio"
     ++ lib.optional gtkSupport "--enable-gtk"
     ++ lib.optional xenSupport "--enable-xen"
@@ -220,7 +176,9 @@ stdenv.mkDerivation rec {
     ++ lib.optional tpmSupport "--enable-tpm"
     ++ lib.optional libiscsiSupport "--enable-libiscsi"
     ++ lib.optional smbdSupport "--smbd=${samba}/bin/smbd"
-    ++ lib.optional uringSupport "--enable-linux-io-uring";
+    ++ lib.optional uringSupport "--enable-linux-io-uring"
+    ++ lib.optional canokeySupport "--enable-canokey"
+    ++ lib.optional capstoneSupport "--enable-capstone";
 
   dontWrapGApps = true;
 
@@ -233,7 +191,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # the .desktop is both invalid and pointless
     rm -f $out/share/applications/qemu.desktop
-
+  '' + lib.optionalString guestAgentSupport ''
     # move qemu-ga (guest agent) to separate output
     mkdir -p $ga/bin
     mv $out/bin/qemu-ga $ga/bin/
@@ -249,7 +207,7 @@ stdenv.mkDerivation rec {
 
   # tests can still timeout on slower systems
   inherit doCheck;
-  checkInputs = [ socat ];
+  nativeCheckInputs = [ socat ];
   preCheck = ''
     # time limits are a little meagre for a build machine that's
     # potentially under load.
@@ -283,7 +241,6 @@ stdenv.mkDerivation rec {
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
   postInstall = ''
-    ln -s $out/libexec/virtiofsd $out/bin
     ln -s $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} $out/bin/qemu-kvm
   '';
 
@@ -304,6 +261,5 @@ stdenv.mkDerivation rec {
     mainProgram = "qemu-kvm";
     maintainers = with maintainers; [ eelco qyliss ];
     platforms = platforms.unix;
-    priority = 10; # Prefer virtiofsd from the virtiofsd package.
   };
 }

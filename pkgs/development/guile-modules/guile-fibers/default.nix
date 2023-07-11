@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "guile-fibers";
-  version = "1.0.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "wingo";
     repo = "fibers";
     rev = "v${version}";
-    hash = "sha256-kU/ty/XRNfv3ubIwH40wZmo8MXApeduHcH2KEGqoh+Q=";
+    hash = "sha256-jJKA5JEHsmqQ/IKb1aNmOtoVaGKNjcgTKyo5VCiJbXM=";
   };
 
   nativeBuildInputs = [

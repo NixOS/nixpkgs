@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, python2
+, python
 , makeWrapper
 , gawk
 , bash
@@ -9,7 +9,6 @@
 , procps
 , which
 , jre
-, coreutils
 , nixosTests
   # generation is the attribute version suffix such as 3_11 in pkgs.cassandra_3_11
 , generation
@@ -41,7 +40,7 @@ stdenv.mkDerivation rec {
     url = "mirror://apache/cassandra/${version}/apache-cassandra-${version}-bin.tar.gz";
   };
 
-  nativeBuildInputs = [ makeWrapper coreutils ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall
@@ -99,7 +98,7 @@ stdenv.mkDerivation rec {
       fi
     done
 
-    wrapProgram $out/bin/cqlsh --prefix PATH : ${python2}/bin
+    wrapProgram $out/bin/cqlsh --prefix PATH : ${python}/bin
 
     runHook postInstall
   '';

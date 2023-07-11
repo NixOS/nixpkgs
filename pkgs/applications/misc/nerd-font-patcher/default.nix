@@ -1,19 +1,13 @@
-{ python3Packages, lib, fetchFromGitHub }:
+{ python3Packages, lib, fetchzip }:
 
 python3Packages.buildPythonApplication rec {
   pname = "nerd-font-patcher";
-  version = "2.1.0";
+  version = "3.0.2";
 
-  # This uses a sparse checkout because the repo is >2GB without it
-  src = fetchFromGitHub {
-    owner = "ryanoasis";
-    repo = "nerd-fonts";
-    rev = "v${version}";
-    sparseCheckout = ''
-      font-patcher
-      /src/glyphs
-    '';
-    sha256 = "sha256-ePBlEVjzAJ7g6iAGIqPfgZ8bwtNILmyEVm0zD+xNN6k=";
+  src = fetchzip {
+    url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v${version}/FontPatcher.zip";
+    sha256 = "sha256-ZJpF/Q5lfcW3srb2NbJk+/QEuwaFjdzboa+rl9L7GGE=";
+    stripRoot = false;
   };
 
   propagatedBuildInputs = with python3Packages; [ fontforge ];
@@ -22,15 +16,19 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     sed -i font-patcher \
-      -e 's,__dir__ + "/src,"'$out'/share/${pname},'
+      -e 's,__dir__ + "/src,"'$out'/share/,'
+    sed -i font-patcher \
+      -e  's,/bin/scripts/name_parser,/../lib/name_parser,'
   '';
+  # Note: we cannot use $out for second substitution
 
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/${pname}
-    install -Dm755 font-patcher $out/bin/${pname}
-    cp -ra src/glyphs $out/share/${pname}
+    mkdir -p $out/bin $out/share $out/lib
+    install -Dm755 font-patcher $out/bin/nerd-font-patcher
+    cp -ra src/glyphs $out/share/
+    cp -ra bin/scripts/name_parser $out/lib/
   '';
 
   meta = with lib; {

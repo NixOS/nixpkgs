@@ -1,6 +1,7 @@
-{ lib, pkgs, erlang }:
+{ lib, __splicedPackages, erlang }:
 
 let
+  pkgs = __splicedPackages;
   inherit (lib) makeExtensible;
 
   lib' = pkgs.callPackage ./lib.nix { };
@@ -42,7 +43,17 @@ let
       elvis-erlang = callPackage ./elvis-erlang { };
 
       # BEAM-based languages.
-      elixir = elixir_1_13;
+      elixir = elixir_1_14;
+
+      elixir_1_15 = lib'.callElixir ../interpreters/elixir/1.15.nix {
+        inherit erlang;
+        debugInfo = true;
+      };
+
+      elixir_1_14 = lib'.callElixir ../interpreters/elixir/1.14.nix {
+        inherit erlang;
+        debugInfo = true;
+      };
 
       elixir_1_13 = lib'.callElixir ../interpreters/elixir/1.13.nix {
         inherit erlang;
@@ -64,18 +75,13 @@ let
         debugInfo = true;
       };
 
-      elixir_1_9 = lib'.callElixir ../interpreters/elixir/1.9.nix {
-        inherit erlang;
-        debugInfo = true;
-      };
-
       # Remove old versions of elixir, when the supports fades out:
       # https://hexdocs.pm/elixir/compatibility-and-deprecations.html
 
-      elixir_ls = callPackage ./elixir-ls { inherit elixir fetchMixDeps mixRelease; };
+      elixir-ls = callPackage ./elixir-ls { inherit elixir fetchMixDeps mixRelease; };
 
-      lfe = lfe_1_3;
-      lfe_1_3 = lib'.callLFE ../interpreters/lfe/1.3.nix { inherit erlang buildRebar3 buildHex; };
+      lfe = lfe_2_1;
+      lfe_2_1 = lib'.callLFE ../interpreters/lfe/2.1.nix { inherit erlang buildRebar3 buildHex; };
 
       # Non hex packages. Examples how to build Rebar/Mix packages with and
       # without helper functions buildRebar3 and buildMix.

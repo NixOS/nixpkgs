@@ -32,48 +32,72 @@ in
   # interface
 
   options.services.limesurvey = {
-    enable = mkEnableOption "Limesurvey web application.";
+    enable = mkEnableOption (lib.mdDoc "Limesurvey web application");
+
+    encryptionKey = mkOption {
+      type = types.str;
+      default = "E17687FC77CEE247F0E22BB3ECF27FDE8BEC310A892347EC13013ABA11AA7EB5";
+      description = lib.mdDoc ''
+        This is a 32-byte key used to encrypt variables in the database.
+        You _must_ change this from the default value.
+      '';
+    };
+
+    encryptionNonce = mkOption {
+      type = types.str;
+      default = "1ACC8555619929DB91310BE848025A427B0F364A884FFA77";
+      description = lib.mdDoc ''
+        This is a 24-byte nonce used to encrypt variables in the database.
+        You _must_ change this from the default value.
+      '';
+    };
 
     database = {
       type = mkOption {
         type = types.enum [ "mysql" "pgsql" "odbc" "mssql" ];
         example = "pgsql";
         default = "mysql";
-        description = "Database engine to use.";
+        description = lib.mdDoc "Database engine to use.";
+      };
+
+      dbEngine = mkOption {
+        type = types.enum [ "MyISAM" "InnoDB" ];
+        default = "InnoDB";
+        description = lib.mdDoc "Database storage engine to use.";
       };
 
       host = mkOption {
         type = types.str;
         default = "localhost";
-        description = "Database host address.";
+        description = lib.mdDoc "Database host address.";
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = if cfg.database.type == "pgsql" then 5442 else 3306;
         defaultText = literalExpression "3306";
-        description = "Database host port.";
+        description = lib.mdDoc "Database host port.";
       };
 
       name = mkOption {
         type = types.str;
         default = "limesurvey";
-        description = "Database name.";
+        description = lib.mdDoc "Database name.";
       };
 
       user = mkOption {
         type = types.str;
         default = "limesurvey";
-        description = "Database user.";
+        description = lib.mdDoc "Database user.";
       };
 
       passwordFile = mkOption {
         type = types.nullOr types.path;
         default = null;
         example = "/run/keys/limesurvey-dbpassword";
-        description = ''
+        description = lib.mdDoc ''
           A file containing the password corresponding to
-          <option>database.user</option>.
+          {option}`database.user`.
         '';
       };
 
@@ -85,14 +109,14 @@ in
           else null
         ;
         defaultText = literalExpression "/run/mysqld/mysqld.sock";
-        description = "Path to the unix socket file to use for authentication.";
+        description = lib.mdDoc "Path to the unix socket file to use for authentication.";
       };
 
       createLocally = mkOption {
         type = types.bool;
         default = cfg.database.type == "mysql";
         defaultText = literalExpression "true";
-        description = ''
+        description = lib.mdDoc ''
           Create the database and database user locally.
           This currently only applies if database type "mysql" is selected.
         '';
@@ -109,9 +133,9 @@ in
           enableACME = true;
         }
       '';
-      description = ''
-        Apache configuration can be done by adapting <literal>services.httpd.virtualHosts.&lt;name&gt;</literal>.
-        See <xref linkend="opt-services.httpd.virtualHosts"/> for further information.
+      description = lib.mdDoc ''
+        Apache configuration can be done by adapting `services.httpd.virtualHosts.<name>`.
+        See [](#opt-services.httpd.virtualHosts) for further information.
       '';
     };
 
@@ -125,8 +149,8 @@ in
         "pm.max_spare_servers" = 4;
         "pm.max_requests" = 500;
       };
-      description = ''
-        Options for the LimeSurvey PHP pool. See the documentation on <literal>php-fpm.conf</literal>
+      description = lib.mdDoc ''
+        Options for the LimeSurvey PHP pool. See the documentation on `php-fpm.conf`
         for details on configuration directives.
       '';
     };
@@ -134,9 +158,9 @@ in
     config = mkOption {
       type = configType;
       default = {};
-      description = ''
+      description = lib.mdDoc ''
         LimeSurvey configuration. Refer to
-        <link xlink:href="https://manual.limesurvey.org/Optional_settings"/>
+        <https://manual.limesurvey.org/Optional_settings>
         for details on supported values.
       '';
     };
@@ -180,6 +204,8 @@ in
       config = {
         tempdir = "${stateDir}/tmp";
         uploaddir = "${stateDir}/upload";
+        encryptionnonce = cfg.encryptionNonce;
+        encryptionsecretboxkey = cfg.encryptionKey;
         force_ssl = mkIf (cfg.virtualHost.addSSL || cfg.virtualHost.forceSSL || cfg.virtualHost.onlySSL) "on";
         config.defaultlang = "en";
       };
@@ -200,6 +226,8 @@ in
 
     services.phpfpm.pools.limesurvey = {
       inherit user group;
+      phpPackage = pkgs.php81;
+      phpEnv.DBENGINE = "${cfg.database.dbEngine}";
       phpEnv.LIMESURVEY_CONFIG = "${limesurveyConfig}";
       settings = {
         "listen.owner" = config.services.httpd.user;
@@ -256,11 +284,12 @@ in
       wantedBy = [ "multi-user.target" ];
       before = [ "phpfpm-limesurvey.service" ];
       after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
+      environment.DBENGINE = "${cfg.database.dbEngine}";
       environment.LIMESURVEY_CONFIG = limesurveyConfig;
       script = ''
         # update or install the database as required
-        ${pkgs.php}/bin/php ${pkg}/share/limesurvey/application/commands/console.php updatedb || \
-        ${pkgs.php}/bin/php ${pkg}/share/limesurvey/application/commands/console.php install admin password admin admin@example.com verbose
+        ${pkgs.php81}/bin/php ${pkg}/share/limesurvey/application/commands/console.php updatedb || \
+        ${pkgs.php81}/bin/php ${pkg}/share/limesurvey/application/commands/console.php install admin password admin admin@example.com verbose
       '';
       serviceConfig = {
         User = user;

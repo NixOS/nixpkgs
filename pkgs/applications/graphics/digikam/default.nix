@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook
+{ mkDerivation, config, lib, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook
 
 # For `digitaglinktree`
 , perl, sqlite
@@ -7,6 +7,7 @@
 , qtxmlpatterns
 , qtsvg
 , qtwebengine
+, qtnetworkauth
 
 , akonadi-contacts
 , kcalendarcore
@@ -24,7 +25,7 @@
 , boost
 , eigen
 , exiv2
-, ffmpeg
+, ffmpeg_4
 , flex
 , graphviz
 , imagemagick
@@ -43,6 +44,7 @@
 , pcre
 , threadweaver
 , x265
+, jasper
 
 # For panorama and focus stacking
 , enblend-enfuse
@@ -51,25 +53,36 @@
 
 , breeze-icons
 , oxygen
+
+, cudaSupport ? config.cudaSupport or false
+, cudaPackages ? {}
 }:
 
 mkDerivation rec {
   pname   = "digikam";
-  version = "7.4.0";
+  version = "8.0.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/digiKam-${version}.tar.xz";
-    sha256 = "sha256-0Iq2bacyu0SbwQEG7BHdne+ls1Yt7TdBsEHbuqcVUEo=";
+    hash = "sha256-ECxxK2IJ/irId8mx0BnaytrxFa35FVcNJoFgZtFR6Ec=";
   };
 
-  nativeBuildInputs = [ cmake doxygen extra-cmake-modules kdoctools wrapGAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    extra-cmake-modules
+    kdoctools
+    wrapGAppsHook
+  ] ++ lib.optionals cudaSupport (with cudaPackages; [
+    cuda_nvcc
+  ]);
 
   buildInputs = [
     bison
     boost
     eigen
     exiv2
-    ffmpeg
+    ffmpeg_4
     flex
     graphviz
     imagemagick
@@ -86,11 +99,13 @@ mkDerivation rec {
     opencv
     pcre
     x265
+    jasper
 
     qtbase
     qtxmlpatterns
     qtsvg
     qtwebengine
+    qtnetworkauth
 
     akonadi-contacts
     kcalendarcore
@@ -107,7 +122,9 @@ mkDerivation rec {
     marble
     oxygen
     threadweaver
-  ];
+  ] ++ lib.optionals cudaSupport (with cudaPackages; [
+    cuda_cudart
+  ]);
 
   cmakeFlags = [
     "-DENABLE_MYSQLSUPPORT=1"
@@ -115,6 +132,7 @@ mkDerivation rec {
     "-DENABLE_MEDIAPLAYER=1"
     "-DENABLE_QWEBENGINE=on"
     "-DENABLE_APPSTYLES=on"
+    "-DCMAKE_CXX_FLAGS=-I${libksane}/include/KF5" # fix `#include <ksane_version.h>`
   ];
 
   dontWrapGApps = true;

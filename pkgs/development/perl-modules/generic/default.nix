@@ -1,9 +1,13 @@
-{ lib, stdenv, perl, buildPerl, toPerlModule }:
+{ lib, stdenv, perl, toPerlModule }:
 
 { buildInputs ? []
 , nativeBuildInputs ? []
 , outputs ? [ "out" "devdoc" ]
 , src ? null
+
+# enabling or disabling does nothing for perl packages so set it explicitly
+# to false to not change hashes when enableParallelBuildingByDefault is enabled
+, enableParallelBuilding ? false
 
 , doCheck ? true
 , checkTarget ? "test"
@@ -20,41 +24,34 @@
 # https://metacpan.org/pod/release/XSAWYERX/perl-5.26.0/pod/perldelta.pod#Removal-of-the-current-directory-%28%22.%22%29-from-@INC
 , PERL_USE_UNSAFE_INC ? "1"
 
+, env ? {}
+
 , ...
 }@attrs:
 
-assert attrs?pname -> attrs?version;
-assert attrs?pname -> !(attrs?name);
-
-lib.warnIf (attrs ? name) "builtPerlPackage: `name' (\"${attrs.name}\") is deprecated, use `pname' and `version' instead"
+lib.throwIf (attrs ? name) "buildPerlPackage: `name` (\"${attrs.name}\") is deprecated, use `pname` and `version` instead"
 
 (let
   defaultMeta = {
-    homepage = "https://metacpan.org/release/${lib.getName attrs}"; # TODO: phase-out `attrs.name`
-    platforms = perl.meta.platforms;
+    homepage = "https://metacpan.org/dist/${attrs.pname}";
+    inherit (perl.meta) platforms;
   };
 
-  cleanedAttrs = builtins.removeAttrs attrs [
-    "meta" "builder" "version" "pname" "fullperl"
-    "buildInputs" "nativeBuildInputs" "buildInputs"
-    "PERL_AUTOINSTALL" "AUTOMATED_TESTING" "PERL_USE_UNSAFE_INC"
-    ];
-
-  package = stdenv.mkDerivation ({
-    pname = "perl${perl.version}-${lib.getName attrs}"; # TODO: phase-out `attrs.name`
-    version = lib.getVersion attrs;                     # TODO: phase-out `attrs.name`
+  package = stdenv.mkDerivation (attrs // {
+    name = "perl${perl.version}-${attrs.pname}-${attrs.version}";
 
     builder = ./builder.sh;
 
     buildInputs = buildInputs ++ [ perl ];
-    nativeBuildInputs = nativeBuildInputs ++ [ (perl.mini or perl) ];
+    nativeBuildInputs = nativeBuildInputs ++ (if stdenv.buildPlatform != stdenv.hostPlatform then [ perl.mini ] else [ perl ]);
 
-    fullperl = buildPerl;
-
-    inherit outputs src doCheck checkTarget;
-    inherit PERL_AUTOINSTALL AUTOMATED_TESTING PERL_USE_UNSAFE_INC;
+    inherit outputs src doCheck checkTarget enableParallelBuilding;
+    env = {
+      inherit PERL_AUTOINSTALL AUTOMATED_TESTING PERL_USE_UNSAFE_INC;
+      fullperl = perl.__spliced.buildHost or perl;
+    } // env;
 
     meta = defaultMeta // (attrs.meta or { });
-  } // cleanedAttrs);
+  });
 
 in toPerlModule package)

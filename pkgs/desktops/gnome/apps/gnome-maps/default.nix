@@ -1,51 +1,38 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , meson
 , ninja
 , gettext
 , python3
 , pkg-config
 , gnome
-, gtk3
+, glib
+, gtk4
 , gobject-introspection
 , gdk-pixbuf
-, librest
-, librsvg
+, librest_1_0
 , libgweather
 , geoclue2
-, wrapGAppsHook
-, folks
-, libchamplain
-, libsoup
+, wrapGAppsHook4
+, desktop-file-utils
+, libshumate
+, libsecret
+, libsoup_3
 , gsettings-desktop-schemas
-, webkitgtk
 , gjs
-, libgee
-, libhandy
-, geocode-glib
-, evolution-data-server
-, gnome-online-accounts
+, libadwaita
+, geocode-glib_2
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-maps";
-  version = "42.0";
+  version = "44.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-BUSG03dAc3BqdqmBQXl40VG+O3Ik1yN3W74xbvoked8=";
+    sha256 = "sha256-O+E7Ie66mp2jDmnfFtcYvrEw7b+9QG649AK/6hdBJgI=";
   };
-
-  patches = [
-    # Do not pin to GWeather 3.0, the used API did not change in 4.0.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-maps/-/commit/759d3087b70341b2c5f1af575ce44338d926690e.patch";
-      sha256 = "Qp9Hta00TLf2lOb9+g9vnPoK17mP3eHpCG2i1ewaw+w=";
-      revert = true;
-    })
-  ];
 
   doCheck = true;
 
@@ -54,36 +41,31 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
-    wrapGAppsHook
+    wrapGAppsHook4
+    gobject-introspection
+    # For post install script
+    desktop-file-utils
+    glib
+    gtk4
   ];
 
   buildInputs = [
-    evolution-data-server
-    folks
     gdk-pixbuf
+    glib
     geoclue2
-    geocode-glib
+    geocode-glib_2
     gjs
-    gnome-online-accounts
-    gnome.adwaita-icon-theme
-    gobject-introspection
     gsettings-desktop-schemas
-    gtk3
-    libchamplain
-    libgee
+    gtk4
+    libshumate
     libgweather
-    libhandy
-    librest
-    librsvg
-    libsoup
-    webkitgtk
+    libadwaita
+    librest_1_0
+    libsecret
+    libsoup_3
   ];
 
   postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
-    patchShebangs meson_post_install.py
-
     # The .service file isn't wrapped with the correct environment
     # so misses GIR files when started. By re-pointing from the gjs
     # entry point to the wrapped binary we get back to a wrapped
@@ -110,6 +92,6 @@ stdenv.mkDerivation rec {
     description = "A map application for GNOME 3";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

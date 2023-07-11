@@ -1,12 +1,12 @@
 { pname, version, pkgSha256 }:
-{ lib, stdenv, fetchurl, cmake, pkg-config, buildInputs, drvParams ? {} }:
+attrs@{ lib, stdenv, fetchurl, cmake, pkg-config, buildInputs, drvParams ? {}, ... }:
 stdenv.mkDerivation ( rec {
   inherit pname version buildInputs;
   src = fetchurl {
     url = "mirror://sourceforge/cdemu/${pname}-${version}.tar.xz";
     sha256 = pkgSha256;
   };
-  nativeBuildInputs = [ pkg-config cmake ];
+  nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [ pkg-config cmake ];
   setSourceRoot = ''
     mkdir build
     cd build

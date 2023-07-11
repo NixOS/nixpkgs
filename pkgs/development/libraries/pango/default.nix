@@ -17,24 +17,20 @@
 , glib
 , python3
 , x11Support? !stdenv.isDarwin, libXft
-, withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
-, gobject-introspection
-, withDocs ? (stdenv.buildPlatform == stdenv.hostPlatform)
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, buildPackages, gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
   pname = "pango";
-  version = "1.50.6";
+  version = "1.50.14";
 
-  outputs = [ "bin" "out" "dev" ]
-    ++ lib.optionals withDocs [ "devdoc" ];
+  outputs = [ "bin" "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "qZi882iBw6wgSV1AvOswT06qkXW9KWfIVlZDTL2v6Go=";
+    sha256 = "HWfyBb/DGMJ6Kc/ftoKFaN9WZ5XfDLUdIYnN5/LVgeg=";
   };
-
-  strictDeps = !withIntrospection;
 
   depsBuildBuild = [
     pkg-config
@@ -44,11 +40,10 @@ stdenv.mkDerivation rec {
     meson ninja
     glib # for glib-mkenum
     pkg-config
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-  ] ++ lib.optionals withDocs [
-    gi-docgen
     python3
+  ] ++ lib.optionals withIntrospection [
+    gi-docgen
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -71,10 +66,9 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=${lib.boolToString withDocs}"
-    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
-  ] ++ lib.optionals (!x11Support) [
-    "-Dxft=disabled" # only works with x11
+    (lib.mesonBool "gtk_doc" withIntrospection)
+    (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "xft" x11Support)
   ];
 
   # Fontconfig error: Cannot load default config file
@@ -82,9 +76,20 @@ stdenv.mkDerivation rec {
     fontDirectories = [ freefont_ttf ];
   };
 
+  # Run-time dependency gi-docgen found: NO (tried pkgconfig and cmake)
+  # it should be a build-time dep for build
+  # TODO: send upstream
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace "dependency('gi-docgen', ver" "dependency('gi-docgen', native:true, ver"
+
+    substituteInPlace docs/meson.build \
+      --replace "'gi-docgen', req" "'gi-docgen', native:true, req"
+  '';
+
   doCheck = false; # test-font: FAIL
 
-  postFixup = lib.optionalString withDocs ''
+  postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     moveToOutput "share/doc" "$devdoc"
   '';
@@ -93,6 +98,8 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
+      # 1.90 is alpha for API 2.
+      freeze = true;
     };
   };
 
@@ -111,6 +118,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
 
     maintainers = with maintainers; [ raskin ] ++ teams.gnome.members;
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }

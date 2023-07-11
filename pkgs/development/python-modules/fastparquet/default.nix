@@ -2,34 +2,72 @@
 , buildPythonPackage
 , fetchFromGitHub
 , python
-, numba
+, cython
+, setuptools
+, substituteAll
 , numpy
 , pandas
 , cramjam
 , fsspec
 , thrift
+, python-lzo
 , pytestCheckHook
+, pythonOlder
+, packaging
 }:
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "0.8.1";
+  version = "2023.4.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "05qb4nz87p9vnrdsyl25hdp5sj35lki64gjza5dahc89fwfdnsmd";
+    hash = "sha256-1hWiwXjTgflQlmy0Dk2phUa1cgYBvvH99tb0TdUmDRI=";
   };
+
+  nativeBuildInputs = [
+    cython
+    setuptools
+  ];
+
+  patches = [
+    (substituteAll {
+      src = ./version.patch;
+      inherit version;
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "'pytest-runner'," "" \
       --replace "oldest-supported-numpy" "numpy"
+
+    sed -i '/"git", "status"/d' setup.py
   '';
 
-  propagatedBuildInputs = [ cramjam fsspec numba numpy pandas thrift ];
-  checkInputs = [ pytestCheckHook ];
+  propagatedBuildInputs = [
+    cramjam
+    fsspec
+    numpy
+    pandas
+    thrift
+    packaging
+  ];
+
+  passthru.optional-dependencies = {
+    lzo = [
+      python-lzo
+    ];
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   # Workaround https://github.com/NixOS/nixpkgs/issues/123561
   preCheck = ''
@@ -43,7 +81,9 @@ buildPythonPackage rec {
     rm "$fastparquet_test"
   '';
 
-  pythonImportsCheck = [ "fastparquet" ];
+  pythonImportsCheck = [
+    "fastparquet"
+  ];
 
   meta = with lib; {
     description = "A python implementation of the parquet format";

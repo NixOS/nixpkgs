@@ -1,39 +1,39 @@
 {
-version = "2.7.0";
-linux_py_37_cpu = {
-  url = "https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow_cpu-2.7.0-cp37-cp37m-manylinux2010_x86_64.whl";
-  sha256 = "1irw4ri1fbxbj251cnjbr12gxsyj2k30asxjfxjpxhc9b0cchhx0";
-};
+version = "2.12.0";
 linux_py_38_cpu = {
-  url = "https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow_cpu-2.7.0-cp38-cp38-manylinux2010_x86_64.whl";
-  sha256 = "11a1rimr998lvvjdg03rqr8h2h7x6bbd4gyv74biwgaxmjczvjdj";
+  url = "https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow_cpu-2.12.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl";
+  sha256 = "1lqdb3n8dp2f1vignddfqfbbghidkbrq9g78fqkjir8g318zf1m4";
 };
 linux_py_39_cpu = {
-  url = "https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow_cpu-2.7.0-cp39-cp39-manylinux2010_x86_64.whl";
-  sha256 = "0x1zzmgq7hl2k98p8870h0yhaik39nc1ckvxirjx8simpj8ghsbp";
+  url = "https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow_cpu-2.12.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl";
+  sha256 = "1k595l4gpmar9rg4kim2i41fv25i8p018fdmgxcb5v6836d5ns2m";
 };
-linux_py_37_gpu = {
-  url = "https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-2.7.0-cp37-cp37m-manylinux2010_x86_64.whl";
-  sha256 = "1x5yyxzkly9gdyhcfq4x7w7sqqxh6cw5qnfwbvzj5349xwrm63wi";
+linux_py_310_cpu = {
+  url = "https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow_cpu-2.12.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl";
+  sha256 = "1mhq429j9v82jwyqk6dcaz0sh57n0kyf2bfjrjz13xjblssij6rn";
 };
 linux_py_38_gpu = {
-  url = "https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-2.7.0-cp38-cp38-manylinux2010_x86_64.whl";
-  sha256 = "0prxa8yc6lbq62vnh8cw6dhcrnkdjih62kbg6pbw4gmgcbf6v6fg";
+  url = "https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow-2.12.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl";
+  sha256 = "009wyvzdlzghb39mmrv36fvjrrrbllyadny9jzb7ixzry4r07193";
 };
 linux_py_39_gpu = {
-  url = "https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-2.7.0-cp39-cp39-manylinux2010_x86_64.whl";
-  sha256 = "0jjv8vm20d0airml68bxhassp4yg09rcz2a39aa511cz8mavj0l6";
+  url = "https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow-2.12.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl";
+  sha256 = "0l1cwsfw91vfgx8xqwz7cdphj1dy6ppfifm7f7f0n0i6rda6l382";
 };
-mac_py_37_cpu = {
-  url = "https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-2.7.0-cp37-cp37m-macosx_10_11_x86_64.whl";
-  sha256 = "1gr95ck0h4wzhdacjfhkzxdw4zglm85fc54swqhyzzv1f5n9vw8j";
+linux_py_310_gpu = {
+  url = "https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow-2.12.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl";
+  sha256 = "0dl3nvr4pk4zknx484qd2mqdkjkms6s4alqrxqkqv2hqa4l9sz9m";
 };
 mac_py_38_cpu = {
-  url = "https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-2.7.0-cp38-cp38-macosx_10_11_x86_64.whl";
-  sha256 = "1h3qlvlrwyvxynh5flvyqk7grbvyqc21ljqhlvds436hpn2kqrgb";
+  url = "https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-2.12.0-cp38-cp38-macosx_10_15_x86_64.whl";
+  sha256 = "0jkxd9ccbq2czn16w3his6k1hxx0nhkrb56bkrskwzss9is4w6d7";
 };
 mac_py_39_cpu = {
-  url = "https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-2.7.0-cp39-cp39-macosx_10_11_x86_64.whl";
-  sha256 = "0pyj1p2yik6ysdqn8n6cz1nqni0s9xx51ifmvdx4dl3hrzp86jz2";
+  url = "https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-2.12.0-cp39-cp39-macosx_10_15_x86_64.whl";
+  sha256 = "0n7rsrxlkn143y80579bm8wwsabg2a9x6sx1h7ksw3s2x4sjdz22";
+};
+mac_py_310_cpu = {
+  url = "https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-2.12.0-cp310-cp310-macosx_10_15_x86_64.whl";
+  sha256 = "18fj2jxl8b69jrzjkixhyyrml8qjwcid76y15ggzc5ksrkgw0jmy";
 };
 }

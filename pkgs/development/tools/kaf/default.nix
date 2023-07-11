@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kaf";
-  version = "0.1.44";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "birdayz";
     repo = "kaf";
     rev = "v${version}";
-    sha256 = "sha256-gKg/iESUXS6l3v5ovdvvrfpvaUzahPtqh0/DH5OpXoY=";
+    hash = "sha256-BH956k2FU855cKT+ftFOtRR2IjQ4sViiGy0tvrMWpEQ=";
   };
 
-  vendorSha256 = "sha256-5WzREsQdcp9lelKUEXw+nHeemHBDsKrvRcG9v+qln/E=";
+  vendorHash = "sha256-Y8jma4M+7ndJARfLmGCUmkIL+Pkey599dRO7M4iXU2Y=";
 
   # Many tests require a running Kafka instance
   doCheck = false;

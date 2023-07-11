@@ -36,8 +36,16 @@ in
             while ! exec 2> /dev/${qemu-common.qemuSerialDevice}; do sleep 0.1; done
             echo "connecting to host..." >&2
             stty -F /dev/hvc0 raw -echo # prevent nl -> cr/nl conversion
-            echo
-            PS1= exec /bin/sh
+            # The following line is essential since it signals to
+            # the test driver that the shell is ready.
+            # See: the connect method in the Machine class.
+            echo "Spawning backdoor root shell..."
+            # Passing the terminal device makes bash run non-interactively.
+            # Otherwise we get errors on the terminal because bash tries to
+            # setup things like job control.
+            # Note: calling bash explicitly here instead of sh makes sure that
+            # we can also run non-NixOS guests during tests.
+            PS1= exec /usr/bin/env bash --norc /dev/hvc0
           '';
         serviceConfig.KillSignal = "SIGHUP";
       };
@@ -65,33 +73,26 @@ in
       };
     };
 
-    boot.initrd.preDeviceCommands =
-      ''
-        echo 600 > /proc/sys/kernel/hung_task_timeout_secs
-      '';
+    boot.kernel.sysctl = {
+      "kernel.hung_task_timeout_secs" = 600;
+      # Panic on out-of-memory conditions rather than letting the
+      # OOM killer randomly get rid of processes, since this leads
+      # to failures that are hard to diagnose.
+      "vm.panic_on_oom" = lib.mkDefault 2;
+    };
 
-    boot.initrd.postDeviceCommands =
-      ''
-        # Using acpi_pm as a clock source causes the guest clock to
-        # slow down under high host load.  This is usually a bad
-        # thing, but for VM tests it should provide a bit more
-        # determinism (e.g. if the VM runs at lower speed, then
-        # timeouts in the VM should also be delayed).
-        echo acpi_pm > /sys/devices/system/clocksource/clocksource0/current_clocksource
-      '';
-
-    boot.postBootCommands =
-      ''
-        # Panic on out-of-memory conditions rather than letting the
-        # OOM killer randomly get rid of processes, since this leads
-        # to failures that are hard to diagnose.
-        echo 2 > /proc/sys/vm/panic_on_oom
-      '';
-
-    # Panic if an error occurs in stage 1 (rather than waiting for
-    # user intervention).
-    boot.kernelParams =
-      [ "console=${qemu-common.qemuSerialDevice}" "panic=1" "boot.panic_on_fail" ];
+    boot.kernelParams = [
+      "console=${qemu-common.qemuSerialDevice}"
+      # Panic if an error occurs in stage 1 (rather than waiting for
+      # user intervention).
+      "panic=1" "boot.panic_on_fail"
+      # Using acpi_pm as a clock source causes the guest clock to
+      # slow down under high host load.  This is usually a bad
+      # thing, but for VM tests it should provide a bit more
+      # determinism (e.g. if the VM runs at lower speed, then
+      # timeouts in the VM should also be delayed).
+      "clock=acpi_pm"
+    ];
 
     # `xwininfo' is used by the test driver to query open windows.
     environment.systemPackages = [ pkgs.xorg.xwininfo ];
@@ -103,16 +104,26 @@ in
         MaxLevelConsole=debug
       '';
 
+    boot.initrd.systemd.contents."/etc/systemd/journald.conf".text = ''
+      [Journal]
+      ForwardToConsole=yes
+      MaxLevelConsole=debug
+    '';
+
     systemd.extraConfig = ''
       # Don't clobber the console with duplicate systemd messages.
       ShowStatus=no
       # Allow very slow start
       DefaultTimeoutStartSec=300
+      DefaultDeviceTimeoutSec=300
     '';
     systemd.user.extraConfig = ''
       # Allow very slow start
       DefaultTimeoutStartSec=300
+      DefaultDeviceTimeoutSec=300
     '';
+
+    boot.initrd.systemd.extraConfig = config.systemd.extraConfig;
 
     boot.consoleLogLevel = 7;
 
@@ -136,6 +147,9 @@ in
     # Make sure we use the Guest Agent from the QEMU package for testing
     # to reduce the closure size required for the tests.
     services.qemuGuest.package = pkgs.qemu_test.ga;
+
+    # Squelch warning about unset system.stateVersion
+    system.stateVersion = lib.mkDefault lib.trivial.release;
   };
 
 }

@@ -1,10 +1,15 @@
 { lib, stdenv, fetchurl, fetchpatch, perl
-, ghostscript #for postscript and html output
-, psutils, netpbm #for html output
+, enableGhostscript ? false
+, ghostscript, gawk, libX11, libXaw, libXt, libXmu # for postscript and html output
+, enableHtml ? false, psutils, netpbm # for html output
+, enableIconv ? false, iconv
+, enableLibuchardet ? false, libuchardet # for detecting input file encoding in preconv(1)
 , buildPackages
 , autoreconfHook
 , pkg-config
 , texinfo
+, bison
+, bash
 }:
 
 stdenv.mkDerivation rec {
@@ -18,6 +23,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "doc" "info" "perl" ];
 
+  # Parallel build is failing for missing depends. Known upstream as:
+  #   https://savannah.gnu.org/bugs/?62084
+  #   fixed, planned release: 1.23.0
   enableParallelBuilding = false;
 
   patches = [
@@ -31,33 +39,48 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = lib.optionalString (psutils != null) ''
+  postPatch = ''
+    # BASH_PROG gets replaced with a path to the build bash which doesn't get automatically patched by patchShebangs
+    substituteInPlace contrib/gdiffmk/gdiffmk.sh \
+      --replace "@BASH_PROG@" "/bin/sh"
+  '' + lib.optionalString enableHtml ''
     substituteInPlace src/preproc/html/pre-html.cpp \
-      --replace "psselect" "${psutils}/bin/psselect"
-  '' + lib.optionalString (netpbm != null) ''
-    substituteInPlace src/preproc/html/pre-html.cpp \
+      --replace "psselect" "${psutils}/bin/psselect" \
       --replace "pnmcut" "${lib.getBin netpbm}/bin/pnmcut" \
       --replace "pnmcrop" "${lib.getBin netpbm}/bin/pnmcrop" \
       --replace "pnmtopng" "${lib.getBin netpbm}/bin/pnmtopng"
-    substituteInPlace tmac/www.tmac \
+    substituteInPlace tmac/www.tmac.in \
       --replace "pnmcrop" "${lib.getBin netpbm}/bin/pnmcrop" \
       --replace "pngtopnm" "${lib.getBin netpbm}/bin/pngtopnm" \
       --replace "@PNMTOPS_NOSETPAGE@" "${lib.getBin netpbm}/bin/pnmtops -nosetpage"
+    substituteInPlace contrib/groffer/roff2.pl \
+      --replace "'gs'" "'${lib.getBin ghostscript}/bin/gs'"
+    substituteInPlace contrib/pdfmark/pdfroff.sh \
+      --replace '$GROFF_GHOSTSCRIPT_INTERPRETER' "${lib.getBin ghostscript}/bin/gs" \
+      --replace '$GROFF_AWK_INTERPRETER' "${lib.getBin gawk}/bin/gawk"
   '';
 
-  buildInputs = [ ghostscript psutils netpbm perl ];
-  nativeBuildInputs = [ autoreconfHook pkg-config texinfo ];
+  strictDeps = true;
+  nativeBuildInputs = [ autoreconfHook pkg-config texinfo ]
+    # Required due to the patch that changes .ypp files.
+    ++ lib.optional (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "9") bison;
+  buildInputs = [ perl bash ]
+    ++ lib.optionals enableGhostscript [ ghostscript gawk libX11 libXaw libXt libXmu ]
+    ++ lib.optionals enableHtml [ psutils netpbm ]
+    ++ lib.optionals enableIconv [ iconv ]
+    ++ lib.optionals enableLibuchardet [ libuchardet ];
 
   # Builds running without a chroot environment may detect the presence
   # of /usr/X11 in the host system, leading to an impure build of the
   # package. To avoid this issue, X11 support is explicitly disabled.
-  # Note: If we ever want to *enable* X11 support, then we'll probably
-  # have to pass "--with-appresdir", too.
-  configureFlags = [
+  configureFlags = lib.optionals (!enableGhostscript) [
     "--without-x"
+  ] ++ [
     "ac_cv_path_PERL=${buildPackages.perl}/bin/perl"
-  ] ++ lib.optionals (ghostscript != null) [
-    "--with-gs=${ghostscript}/bin/gs"
+  ] ++ lib.optionals enableGhostscript [
+    "--with-gs=${lib.getBin ghostscript}/bin/gs"
+    "--with-awk=${lib.getBin gawk}/bin/gawk"
+    "--with-appresdir=${placeholder "out"}/lib/X11/app-defaults"
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "gl_cv_func_signbit=yes"
   ];

@@ -1,6 +1,6 @@
 --- a/onionshare/gui_common.py
 +++ b/onionshare/gui_common.py
-@@ -410,52 +410,12 @@ class GuiCommon:
+@@ -482,52 +482,12 @@ class GuiCommon:
          }
  
      def get_tor_paths(self):
@@ -29,12 +29,12 @@
 -
 -        if self.common.platform == "Windows":
 -            base_path = self.get_resource_path("tor")
--            tor_path = os.path.join(base_path, "Tor", "tor.exe")
--            obfs4proxy_file_path = os.path.join(base_path, "Tor", "obfs4proxy.exe")
--            snowflake_file_path = os.path.join(base_path, "Tor", "snowflake-client.exe")
--            meek_client_file_path = os.path.join(base_path, "Tor", "meek-client.exe")
--            tor_geo_ip_file_path = os.path.join(base_path, "Data", "Tor", "geoip")
--            tor_geo_ipv6_file_path = os.path.join(base_path, "Data", "Tor", "geoip6")
+-            tor_path = os.path.join(base_path, "tor.exe")
+-            obfs4proxy_file_path = os.path.join(base_path, "obfs4proxy.exe")
+-            snowflake_file_path = os.path.join(base_path, "snowflake-client.exe")
+-            meek_client_file_path = os.path.join(base_path, "meek-client.exe")
+-            tor_geo_ip_file_path = os.path.join(base_path, "geoip")
+-            tor_geo_ipv6_file_path = os.path.join(base_path, "geoip6")
 -        elif self.common.platform == "Darwin":
 -            base_path = self.get_resource_path("tor")
 -            tor_path = os.path.join(base_path, "tor")

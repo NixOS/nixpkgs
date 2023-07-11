@@ -63,6 +63,7 @@ rec {
     unset SDKROOT
 
     stripAllFlags=" " # the Darwin "strip" command doesn't know "-s"
+    stripDebugFlags="-S" # the Darwin "strip" command does something odd with "-p"
   '';
 
   bootstrapTools = derivation ({
@@ -75,7 +76,7 @@ rec {
     inherit (bootstrapFiles) mkdir bzip2 cpio tarball;
 
     __impureHostDeps = commonImpureHostDeps;
-  } // lib.optionalAttrs (config.contentAddressedByDefault or false) {
+  } // lib.optionalAttrs config.contentAddressedByDefault {
     __contentAddressed = true;
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
@@ -223,23 +224,15 @@ rec {
         '';
       };
 
-      pbzx = stdenv.mkDerivation {
-        name = "bootstrap-stage0-pbzx";
-        phases = [ "installPhase" ];
-        installPhase = ''
-          mkdir -p $out/bin
-          ln -s ${bootstrapTools}/bin/pbzx $out/bin
-        '';
-      };
+      pbzx = self.runCommandLocal "bootstrap-stage0-pbzx" { } ''
+        mkdir -p $out/bin
+        ln -s ${bootstrapTools}/bin/pbzx $out/bin
+      '';
 
-      cpio = stdenv.mkDerivation {
-        name = "bootstrap-stage0-cpio";
-        phases = [ "installPhase" ];
-        installPhase = ''
-          mkdir -p $out/bin
-          ln -s ${bootstrapFiles.cpio} $out/bin/cpio
-        '';
-      };
+      cpio = self.runCommandLocal "bootstrap-stage0-cpio" { } ''
+        mkdir -p $out/bin
+        ln -s ${bootstrapFiles.cpio} $out/bin/cpio
+      '';
 
       darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
         darwin-stubs = superDarwin.darwin-stubs.override { inherit (self) stdenvNoCC fetchurl; };
@@ -253,49 +246,28 @@ rec {
           '';
         };
 
-        sigtool = stdenv.mkDerivation {
-          name = "bootstrap-stage0-sigtool";
-          phases = [ "installPhase" ];
-          installPhase = ''
-            mkdir -p $out/bin
-            ln -s ${bootstrapTools}/bin/sigtool $out/bin
+        sigtool = self.runCommandLocal "bootstrap-stage0-sigtool" { } ''
+           mkdir -p $out/bin
+           ln -s ${bootstrapTools}/bin/sigtool  $out/bin
+           ln -s ${bootstrapTools}/bin/codesign $out/bin
+        '';
 
-            # Rewrite nuked references
-            sed -e "s|[^( ]*\bsigtool\b|$out/bin/sigtool|g" \
-              ${bootstrapTools}/bin/codesign > $out/bin/codesign
-            chmod a+x $out/bin/codesign
-          '';
-          # on next bootstrap tools update, use the following:
-          # installPhase = ''
-          #   mkdir -p $out/bin
-          #   ln -s ${bootstrapTools}/bin/sigtool  $out/bin
-          #   ln -s ${bootstrapTools}/bin/codesign $out/bin
-          # '';
+        print-reexports = self.runCommandLocal "bootstrap-stage0-print-reexports" { } ''
+          mkdir -p $out/bin
+          ln -s ${bootstrapTools}/bin/print-reexports $out/bin
+        '';
+
+        rewrite-tbd = self.runCommandLocal "bootstrap-stage0-rewrite-tbd" { } ''
+          mkdir -p $out/bin
+          ln -s ${bootstrapTools}/bin/rewrite-tbd $out/bin
+        '';
+
+        binutils-unwrapped = bootstrapTools // {
+          name = "bootstrap-stage0-binutils";
         };
 
-        print-reexports = stdenv.mkDerivation {
-          name = "bootstrap-stage0-print-reexports";
-          phases = [ "installPhase" ];
-          installPhase = ''
-            mkdir -p $out/bin
-            ln -s ${bootstrapTools}/bin/print-reexports $out/bin
-          '';
-        };
-
-        rewrite-tbd = stdenv.mkDerivation {
-          name = "bootstrap-stage0-rewrite-tbd";
-          phases = [ "installPhase" ];
-          installPhase = ''
-            mkdir -p $out/bin
-            ln -s ${bootstrapTools}/bin/rewrite-tbd $out/bin
-          '';
-        };
-
-        binutils-unwrapped = { name = "bootstrap-stage0-binutils"; outPath = bootstrapTools; };
-
-        cctools = {
+        cctools = bootstrapTools // {
           name = "bootstrap-stage0-cctools";
-          outPath = bootstrapTools;
           targetPrefix = "";
         };
 
@@ -359,7 +331,7 @@ rec {
 
         libcxx = stdenv.mkDerivation {
           name = "bootstrap-stage0-libcxx";
-          phases = [ "installPhase" "fixupPhase" ];
+          dontUnpack = true;
           installPhase = ''
             mkdir -p $out/lib $out/include
             ln -s ${bootstrapTools}/lib/libc++.dylib $out/lib/libc++.dylib
@@ -367,6 +339,7 @@ rec {
           '';
           passthru = {
             isLLVM = true;
+            cxxabi = self."${finalLlvmPackages}".libcxxabi;
           };
         };
 
@@ -376,6 +349,9 @@ rec {
             mkdir -p $out/lib
             ln -s ${bootstrapTools}/lib/libc++abi.dylib $out/lib/libc++abi.dylib
           '';
+          passthru = {
+            libName = "c++abi";
+          };
         };
 
         compiler-rt = stdenv.mkDerivation {
@@ -511,10 +487,11 @@ rec {
           nghttp2.lib
           coreutils
           gnugrep
-          pcre.out
+          gnugrep.pcre2.out
           gmp
           libiconv
           brotli.lib
+          file
         ] ++ lib.optional haveKRB5 libkrb5) ++
         (with pkgs."${finalLlvmPackages}"; [
           libcxx
@@ -586,10 +563,11 @@ rec {
           nghttp2.lib
           coreutils
           gnugrep
-          pcre.out
+          gnugrep.pcre2.out
           gmp
           libiconv
           brotli.lib
+          file
         ] ++ lib.optional haveKRB5 libkrb5) ++
         (with pkgs."${finalLlvmPackages}"; [
           libcxx
@@ -608,9 +586,10 @@ rec {
     let
       persistent = self: super: with prevStage; {
         inherit
-          gnumake gzip gnused bzip2 gawk ed xz patch bash python3
-          ncurses libffi zlib gmp pcre gnugrep cmake
+          gnumake gzip gnused bzip2 ed xz patch bash python3
+          ncurses libffi zlib gmp gnugrep cmake
           coreutils findutils diffutils patchutils ninja libxml2;
+        inherit (gnugrep) pcre2;
 
         # Hack to make sure we don't link ncurses in bootstrap tools. The proper
         # solution is to avoid passing -L/nix-store/...-bootstrap-tools/lib,
@@ -665,13 +644,14 @@ rec {
       persistent = self: super: with prevStage; {
         inherit
           gnumake gzip gnused bzip2 gawk ed xz patch bash
-          ncurses libffi zlib gmp pcre gnugrep
+          ncurses libffi zlib gmp gnugrep
           coreutils findutils diffutils patchutils pbzx;
+        inherit (gnugrep) pcre2;
 
         darwin = super.darwin.overrideScope (_: _: {
           inherit (darwin) dyld ICU Libsystem Csu libiconv rewrite-tbd;
         } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
-          inherit (darwin) binutils binutils-unwrapped cctools;
+          inherit (darwin) binutils binutils-unwrapped cctools-port;
         });
       } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
         inherit llvm;
@@ -703,14 +683,13 @@ rec {
       targetPlatform = localSystem;
 
       preHook = commonPreHook + ''
-        export NIX_COREFOUNDATION_RPATH=${pkgs.darwin.CF}/Library/Frameworks
         export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
       '';
 
       __stdenvImpureHostDeps = commonImpureHostDeps;
       __extraImpureHostDeps = commonImpureHostDeps;
 
-      initialPath = import ../common-path.nix { inherit pkgs; };
+      initialPath = import ../generic/common-path.nix { inherit pkgs; };
       shell = "${pkgs.bash}/bin/bash";
 
       cc = pkgs."${finalLlvmPackages}".libcxxClang;
@@ -725,6 +704,11 @@ rec {
         libc = pkgs.darwin.Libsystem;
         shellPackage = pkgs.bash;
         inherit bootstrapTools;
+      } // lib.optionalAttrs useAppleSDKLibs {
+        # This objc4 will be propagated to all builds using the final stdenv,
+        # and we shouldn't mix different builds, because they would be
+        # conflicting LLVM modules. Export it here so we can grab it later.
+        inherit (pkgs.darwin) objc4;
       };
 
       allowedRequisites = (with pkgs; [
@@ -751,9 +735,10 @@ rec {
         gawk
         gnugrep
         patch
-        pcre.out
+        gnugrep.pcre2.out
         gettext
         binutils.bintools
+        binutils.bintools.lib
         darwin.binutils
         darwin.binutils.bintools
         curl.out
@@ -766,6 +751,7 @@ rec {
         brotli.lib
         cc.expand-response-params
         libxml2.out
+        file
       ] ++ lib.optional haveKRB5 libkrb5
       ++ lib.optionals localSystem.isAarch64 [
         pkgs.updateAutotoolsGnuConfigScriptsHook

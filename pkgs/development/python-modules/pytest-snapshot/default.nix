@@ -5,18 +5,21 @@
 , pytest
 , setuptools-scm
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pytest-snapshot";
-  version = "0.8.1";
+  version = "0.9.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "joseph-roitman";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-ymB9h3Mc6GSMRsxIh6uuf111qLvIkNAnFsxR6O2SF7s=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-0PZu9wL29iEppLxxbl4D0E4WfOHe61KUUld003cRBRU=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -33,7 +36,7 @@ buildPythonPackage rec {
     packaging
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

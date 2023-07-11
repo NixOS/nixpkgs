@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libX11 }:
+{ lib, stdenv, fetchFromGitHub, cmake, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "maiko";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-Y+ngep/xHw6RCU8XVRYSWH6S+9hJ74z50pGpIqS2CjM=";
   };
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libX11 ];
+  buildInputs = [ xorg.libX11 ];
   installPhase = ''
     runHook preInstall
     find . -maxdepth 1 -executable -type f -exec install -Dt $out/bin '{}' \;
@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     homepage = "https://interlisp.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ ehmry ];
-    inherit (libX11.meta) platforms;
+    inherit (xorg.libX11.meta) platforms;
   };
 }

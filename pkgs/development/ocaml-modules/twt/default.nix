@@ -1,5 +1,8 @@
 { lib, stdenv, fetchFromGitHub, ocaml, findlib }:
 
+lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
+  "twt is not available for OCaml ${ocaml.version}"
+
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-twt";
   version = "0.94.0";
@@ -27,10 +30,11 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   meta = with lib; {
-    homepage = "http://people.csail.mit.edu/mikelin/ocaml+twt/";
     description = "“The Whitespace Thing” for OCaml";
+    homepage = "http://people.csail.mit.edu/mikelin/ocaml+twt/";
     license = licenses.mit;
     maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms or [ ];
+    mainProgram = "ocaml+twt";
+    inherit (ocaml.meta) platforms;
   };
 }

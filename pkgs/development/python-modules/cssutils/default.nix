@@ -6,9 +6,9 @@
 , fetchPypi
 , setuptools
 , setuptools-scm
-, toml
 , importlib-metadata
 , cssselect
+, jaraco-test
 , lxml
 , mock
 , pytestCheckHook
@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "cssutils";
-  version = "2.4.0";
+  version = "2.7.1";
 
   disabled = pythonOlder "3.7";
 
@@ -25,21 +25,21 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LZchCoOwo/4eRGn1/5pkILB4VyA1GIsbq3EDw6NtyJs=";
+    hash = "sha256-NA7P2YNdId+PmFAPDfzqCu5By04Z7Lws+U8KbTbXy2w=";
   };
 
   nativeBuildInputs = [
     setuptools
     setuptools-scm
-    toml
   ];
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cssselect
+    jaraco-test
     lxml
     mock
     pytestCheckHook

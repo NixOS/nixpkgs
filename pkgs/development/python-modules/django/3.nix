@@ -1,33 +1,40 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , substituteAll
-, geos
+, geos39
 , gdal
 , asgiref
 , pytz
 , sqlparse
+, tzdata
 , pythonOlder
 , withGdal ? false
 }:
 
 buildPythonPackage rec {
   pname = "django";
-  version = "3.2.13";
+  version = "3.2.19";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Django";
     inherit version;
-    sha256 = "sha256-bZNJegqb9roOCxopzM3EDvv8dilyVbEwmzqISmiOxLY=";
+    hash = "sha256-AxNluuloFNoZwQcGIYxE3/O2VMxN4gqYvS0pub3kafA=";
   };
 
-  patches = lib.optional withGdal
+  patches = [
+    (substituteAll {
+      src = ./django_3_set_zoneinfo_dir.patch;
+      zoneinfo = tzdata + "/share/zoneinfo";
+    })
+  ] ++ lib.optional withGdal
     (substituteAll {
       src = ./django_3_set_geos_gdal_lib.patch;
-      geos = geos;
-      gdal = gdal;
+      inherit geos39;
+      inherit gdal;
       extension = stdenv.hostPlatform.extensions.sharedLibrary;
     });
 
@@ -39,6 +46,8 @@ buildPythonPackage rec {
 
   # too complicated to setup
   doCheck = false;
+
+  pythonImportsCheck = [ "django" ];
 
   meta = with lib; {
     description = "A high-level Python Web framework";

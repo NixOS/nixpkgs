@@ -17,7 +17,7 @@ let auctex = stdenv.mkDerivation ( rec {
   buildInputs = [
     emacs
     ghostscript
-    texlive.combined.scheme-basic
+    (texlive.combine { inherit (texlive) scheme-basic hypdoc;  })
   ];
 
   preConfigure = ''

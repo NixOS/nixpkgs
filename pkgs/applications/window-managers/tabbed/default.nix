@@ -1,13 +1,13 @@
 { lib, stdenv, fetchgit, xorgproto, libX11, libXft, customConfig ? null, patches ? [ ] }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tabbed";
-  version = "unstable-2018-03-10";
+  version = "0.7";
 
   src = fetchgit {
     url = "https://git.suckless.org/tabbed";
-    rev = "b5f9ec647aae2d9a1d3bd586eb7523a4e0a329a3";
-    sha256 = "0frj2yjaf0mfjwgyfappksfir52mx2xxd3cdg5533m5d88vbmxss";
+    rev = finalAttrs.version;
+    hash = "sha256-Y1MgPwqMUoa2Rr4HmqjtPaQegUmQJWYkcbyFcJHAOBI=";
   };
 
   inherit patches;
@@ -29,4 +29,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ vrthra ];
     platforms = platforms.linux;
   };
-}
+})

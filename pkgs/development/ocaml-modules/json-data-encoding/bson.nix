@@ -3,7 +3,9 @@
 buildDunePackage {
   pname = "json-data-encoding-bson";
 
-  inherit (json-data-encoding) version src useDune2 doCheck;
+  inherit (json-data-encoding) version src doCheck;
+
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     json-data-encoding

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "cepa";
-  version = "1.8.3";
+  version = "1.8.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "HcbwsyTTei7SyidGSOzo/SyWodL0QPWMDKF6/Ute3no=";
+    hash = "sha256-P7xwGsP8ic1/abxYptDXNbAU+kC2Hiwu/Tge0g21ipY=";
   };
 
   postPatch = ''
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sed -i '/MOCK_VERSION/d' run_tests.py
   '';
 
-  checkInputs = [ mock ];
+  nativeCheckInputs = [ mock ];
 
   checkPhase = ''
     touch .gitignore

@@ -2,7 +2,6 @@
 , aiohttp
 , buildPythonPackage
 , fetchFromGitHub
-, freezegun
 , oauthlib
 , pytest-asyncio
 , pytest-mock
@@ -12,20 +11,21 @@
 , requests-oauthlib
 , requests-mock
 , setuptools-scm
+, time-machine
 }:
 
 buildPythonPackage rec {
   pname = "pyatmo";
-  version = "6.2.4";
-  format = "setuptools";
+  version = "7.5.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jabesq";
     repo = "pyatmo";
-    rev = "v${version}";
-    sha256 = "sha256-VXkQByaNA02fwBO2yuf7w1ZF/oJwd/h21de1EQlCu2U=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-GucatimZTg0Fggrz4bG1x6YSa3wE/uLGB4ufil/km3w=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -41,12 +41,12 @@ buildPythonPackage rec {
     requests-oauthlib
   ];
 
-  checkInputs = [
-    freezegun
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-mock
     pytestCheckHook
     requests-mock
+    time-machine
   ];
 
   postPatch = ''
@@ -62,6 +62,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Simple API to access Netatmo weather station data";
     homepage = "https://github.com/jabesq/pyatmo";
+    changelog = "https://github.com/jabesq/pyatmo/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ delroth ];
   };

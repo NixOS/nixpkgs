@@ -1,7 +1,7 @@
 { lib, buildDunePackage, fetchFromGitLab
-, camlzip, ocamlgraph, parmap, re, stdlib-shims
-, base64, bz2, ocaml_extlib, cudf
-, dpkg, git, ocaml, ounit, python39, python39Packages
+, ocamlgraph, parmap, re, stdlib-shims
+, base64, extlib, cudf
+, ocaml, ounit
 }:
 
 buildDunePackage rec {
@@ -15,8 +15,7 @@ buildDunePackage rec {
     sha256 = "sha256-K0fYSAWV48Rers/foDrEIqieyJ0PvpXkuYrFrZGBkkE=";
   };
 
-  minimalOCamlVersion = "4.03";
-  useDune2 = true;
+  minimalOCamlVersion = "4.07";
 
   buildInputs = [
     parmap
@@ -24,24 +23,17 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [
     base64
-    bz2
-    camlzip
     cudf
-    ocaml_extlib
+    extlib
     ocamlgraph
     re
     stdlib-shims
   ];
 
   checkInputs = [
-    dpkg                      # Replaces: conf-dpkg
-    git
     ounit
-    python39                  # Replaces: conf-python-3
-    python39Packages.pyyaml   # Replaces: conf-python3-yaml
   ];
-  doCheck = false; # Tests are failing.
-                   # To enable tests use: lib.versionAtLeast ocaml.version "4.04";
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = with lib; {
     description = "Dose library (part of Mancoosi tools)";

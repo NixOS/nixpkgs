@@ -15,10 +15,11 @@
 , gobject-introspection
 , argyllcms
 , meson
+, mesonEmulatorHook
 , ninja
 , vala
 , libgudev
-, wrapGAppsHook
+, wrapGAppsNoGuiHook
 , shared-mime-info
 , sane-backends
 , docbook_xsl
@@ -26,6 +27,7 @@
 , docbook_xml_dtd_412
 , gtk-doc
 , libxslt
+, enableDaemon ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -56,6 +58,7 @@ stdenv.mkDerivation rec {
     "-Dlibcolordcompat=true"
     "-Dsane=true"
     "-Dvapi=true"
+    "-Ddaemon=${lib.boolToString enableDaemon}"
     "-Ddaemon_user=colord"
   ];
 
@@ -72,7 +75,9 @@ stdenv.mkDerivation rec {
     pkg-config
     shared-mime-info
     vala
-    wrapGAppsHook
+    wrapGAppsNoGuiHook
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
@@ -83,10 +88,11 @@ stdenv.mkDerivation rec {
     gusb
     lcms2
     libgudev
-    polkit
     sane-backends
     sqlite
     systemd
+  ] ++ lib.optionals enableDaemon [
+    polkit
   ];
 
   postInstall = ''

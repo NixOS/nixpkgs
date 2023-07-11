@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "gehomesdk";
-  version = "0.4.24";
+  version = "0.5.13";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-20l3zNOvZVGucm1SFzmSjkj3iOXPQhp4T5sInTGO/aQ=";
+    hash = "sha256-gkHAIrsk6LKNjieTiSU0ZH6WI2+wJB68edNqJ7n86tY=";
   };
 
   propagatedBuildInputs = [
@@ -44,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python SDK for GE smart appliances";
     homepage = "https://github.com/simbaja/gehome";
+    changelog = "https://github.com/simbaja/gehome/blob/master/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

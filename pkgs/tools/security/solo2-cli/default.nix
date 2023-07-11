@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "solo2-cli";
-  version = "0.1.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "solokeys";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3GIK0boxGD4Xa5OskP1535zCQyhMQ/oXbgThRivJzww=";
+    sha256 = "sha256-7tpO5ir42mIKJXD0NJzEPXi/Xe6LdyEeBQWNfOdgX5I=";
   };
 
-  cargoSha256 = "sha256-MYxVegXUVeZ4AzDz+Si5TtTjUDEPTO0Nh008rgLtsLw=";
+  cargoHash = "sha256-X+IEeztSL312Yq9Loi3cNJuVfSGk/tRRBCsy0Juji7Y=";
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
 

@@ -18,6 +18,6 @@ rustPlatform.buildRustPackage rec {
     description = "A tool to identify potentially unused code";
     homepage = "https://unused.codes";
     license = licenses.mit;
-    maintainers = [ maintainers.lrworth ];
+    maintainers = [ ];
   };
 }

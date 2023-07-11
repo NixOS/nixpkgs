@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, gtk-doc, gobject-introspection, python2, gtk3, cairo, glib, gnome }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, gtk-doc, gobject-introspection, python3, gtk3, cairo, glib, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "goocanvas";
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "141fm7mbqib0011zmkv3g8vxcjwa7hypmq71ahdyhnj2sjvy4a67";
   };
 
-  nativeBuildInputs = [ pkg-config gettext gtk-doc python2 ];
-  buildInputs = [ gtk3 cairo glib gobject-introspection ];
+  nativeBuildInputs = [ pkg-config gettext gtk-doc python3 gobject-introspection ];
+  buildInputs = [ gtk3 cairo glib ];
 
   configureFlags = [
     "--disable-python"

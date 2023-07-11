@@ -1,7 +1,12 @@
 { lib, stdenv, fetchFromGitHub, openssl, pkgsCross, buildPackages
 
-# Warning: this blob runs on the main CPU (not the GPU) at privilege
-# level EL3, which is above both the kernel and the hypervisor.
+# Warning: this blob (hdcp.bin) runs on the main CPU (not the GPU) at
+# privilege level EL3, which is above both the kernel and the
+# hypervisor.
+#
+# This parameter applies only to platforms which are believed to use
+# hdcp.bin. On all other platforms, or if unfreeIncludeHDCPBlob=false,
+# hdcp.bin will be deleted before building.
 , unfreeIncludeHDCPBlob ? true
 }:
 
@@ -9,26 +14,35 @@ let
   buildArmTrustedFirmware = { filesToInstall
             , installDir ? "$out"
             , platform ? null
+            , platformCanUseHDCPBlob ? false  # set this to true if the platform is able to use hdcp.bin
             , extraMakeFlags ? []
             , extraMeta ? {}
-            , version ? "2.6"
             , ... } @ args:
-           stdenv.mkDerivation ({
+
+           # delete hdcp.bin if either: the platform is thought to
+           # not need it or unfreeIncludeHDCPBlob is false
+           let deleteHDCPBlobBeforeBuild = !platformCanUseHDCPBlob || !unfreeIncludeHDCPBlob; in
+
+           stdenv.mkDerivation (rec {
 
     pname = "arm-trusted-firmware${lib.optionalString (platform != null) "-${platform}"}";
-    inherit version;
+    version = "2.9.0";
 
     src = fetchFromGitHub {
       owner = "ARM-software";
       repo = "arm-trusted-firmware";
       rev = "v${version}";
-      sha256 = "sha256-qT9DdTvMcUrvRzgmVf2qmKB+Rb1WOB4p1rM+fsewGcg=";
+      hash = "sha256-F7RNYNLh0ORzl5PmzRX9wGK8dZgUQVLKQg1M9oNd0pk=";
     };
 
-    patches = lib.optionals (!unfreeIncludeHDCPBlob) [
+    patches = lib.optionals deleteHDCPBlobBeforeBuild [
       # this is a rebased version of https://gitlab.com/vicencb/kevinboot/-/blob/master/atf.patch
       ./remove-hdcp-blob.patch
     ];
+
+    postPatch = lib.optionalString deleteHDCPBlobBeforeBuild ''
+      rm plat/rockchip/rk3399/drivers/dp/hdcp.bin
+    '';
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -39,6 +53,10 @@ let
 
     makeFlags = [
       "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+      # binutils 2.39 regression
+      # `warning: /build/source/build/rk3399/release/bl31/bl31.elf has a LOAD segment with RWX permissions`
+      # See also: https://developer.trustedfirmware.org/T996
+      "LDFLAGS=-no-warn-rwx-segments"
     ] ++ (lib.optional (platform != null) "PLAT=${platform}")
       ++ extraMakeFlags;
 
@@ -60,7 +78,7 @@ let
     meta = with lib; {
       homepage = "https://github.com/ARM-software/arm-trusted-firmware";
       description = "A reference implementation of secure world software for ARMv8-A";
-      license = (if unfreeIncludeHDCPBlob then [ licenses.unfreeRedistributable ] else []) ++ [ licenses.bsd3 ];
+      license = [ licenses.bsd3 ] ++ lib.optionals (!deleteHDCPBlobBeforeBuild) [ licenses.unfreeRedistributable ];
       maintainers = with maintainers; [ lopsided98 ];
     } // extraMeta;
   } // builtins.removeAttrs args [ "extraMeta" ]);
@@ -71,12 +89,11 @@ in {
   armTrustedFirmwareTools = buildArmTrustedFirmware rec {
     extraMakeFlags = [
       "HOSTCC=${stdenv.cc.targetPrefix}gcc"
-      "fiptool" "certtool" "sptool"
+      "fiptool" "certtool"
     ];
     filesToInstall = [
       "tools/fiptool/fiptool"
       "tools/cert_create/cert_create"
-      "tools/sptool/sptool"
     ];
     postInstall = ''
       mkdir -p "$out/bin"
@@ -96,6 +113,12 @@ in {
     filesToInstall = ["build/${platform}/release/bl31.bin"];
   };
 
+  armTrustedFirmwareAllwinnerH6 = buildArmTrustedFirmware rec {
+    platform = "sun50i_h6";
+    extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = ["build/${platform}/release/bl31.bin"];
+  };
+
   armTrustedFirmwareQemu = buildArmTrustedFirmware rec {
     platform = "qemu";
     extraMeta.platforms = ["aarch64-linux"];
@@ -111,6 +134,7 @@ in {
     platform = "rk3328";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = [ "build/${platform}/release/bl31/bl31.elf"];
+    platformCanUseHDCPBlob = true;
   };
 
   armTrustedFirmwareRK3399 = buildArmTrustedFirmware rec {
@@ -118,6 +142,7 @@ in {
     platform = "rk3399";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = [ "build/${platform}/release/bl31/bl31.elf"];
+    platformCanUseHDCPBlob = true;
   };
 
   armTrustedFirmwareS905 = buildArmTrustedFirmware rec {

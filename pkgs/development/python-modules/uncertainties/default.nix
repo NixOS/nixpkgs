@@ -4,15 +4,15 @@
 
 buildPythonPackage rec {
   pname = "uncertainties";
-  version = "3.1.6";
+  version = "3.1.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0b9y0v73ih142bygi66dxqx17j2x4dfvl7xnhmafj9yjmymbakbw";
+    hash = "sha256-gBEeCDnyOcWyM8tHcgF7SDoLehVzpYG5Krd0ajXm+qs=";
   };
 
   propagatedBuildInputs = [ future ];
-  checkInputs = [ nose numpy ];
+  nativeCheckInputs = [ nose numpy ];
 
   checkPhase = ''
     nosetests -sv

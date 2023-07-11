@@ -14,7 +14,7 @@ in
   options.security.chromiumSuidSandbox.enable = mkOption {
     type = types.bool;
     default = false;
-    description = ''
+    description = lib.mdDoc ''
       Whether to install the Chromium SUID sandbox which is an executable that
       Chromium may use in order to achieve sandboxing.
 

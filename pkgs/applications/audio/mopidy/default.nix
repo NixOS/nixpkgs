@@ -7,6 +7,8 @@ lib.makeScope newScope (self: with self; {
 
   mopidy = callPackage ./mopidy.nix { };
 
+  mopidy-bandcamp = callPackage ./bandcamp.nix { };
+
   mopidy-iris = callPackage ./iris.nix { };
 
   mopidy-jellyfin = callPackage ./jellyfin.nix { };
@@ -25,6 +27,8 @@ lib.makeScope newScope (self: with self; {
 
   mopidy-musicbox-webclient = callPackage ./musicbox-webclient.nix { };
 
+  mopidy-notify = callPackage ./notify.nix { };
+
   mopidy-podcast = callPackage ./podcast.nix { };
 
   mopidy-scrobbler = callPackage ./scrobbler.nix { };
@@ -35,7 +39,7 @@ lib.makeScope newScope (self: with self; {
 
   mopidy-spotify = callPackage ./spotify.nix { };
 
-  mopidy-spotify-tunigo = callPackage ./spotify-tunigo.nix { };
+  mopidy-tidal = callPackage ./tidal.nix { };
 
   mopidy-tunein = callPackage ./tunein.nix { };
 

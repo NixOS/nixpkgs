@@ -1,19 +1,23 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-let
-  version = "20180721";
-in fetchFromGitHub {
-  name = "ia-writer-duospace-${version}";
+stdenvNoCC.mkDerivation {
+  pname = "ia-writer-duospace";
+  version = "unstable-2018-07-21";
 
-  owner = "iaolo";
-  repo = "iA-Fonts";
-  rev = "55edf60f544078ab1e14987bc67e9029a200e0eb";
-  sha256 = "0932lcxf861vb3hz52z1xj8r99ag9sdyqsnq9brv7gc4kp2l339c";
+  src = fetchFromGitHub {
+    owner = "iaolo";
+    repo = "iA-Fonts";
+    rev = "55edf60f544078ab1e14987bc67e9029a200e0eb";
+    hash = "sha256-/ifzOScILLuFkjFIgpy0ArCcelgealbpypKvZ46xApU=";
+  };
 
-  postFetch = ''
-    tar --strip-components=1 -xzvf $downloadedFile
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/opentype
     cp "iA Writer Duospace/OTF (Mac)/"*.otf $out/share/fonts/opentype/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -1,34 +1,44 @@
 { lib
+, boto3
 , buildPythonPackage
 , fetchFromGitHub
-, minio
-, python
+, unittestCheckHook
+, pythonOlder
 , redis
 }:
 
 buildPythonPackage rec {
   pname = "karton-core";
-  version = "4.4.0";
+  version = "5.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "karton";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-TwTq44l/Nx+FQ6tFZHat4SPGOmHSwYfg7ShbGnxpkVw=";
+    hash = "sha256-IhxMei6KkPsDnUkV4+zxSMI7rgZgOvbHQFqJAC1b5iw=";
   };
 
-  propagatedBuildInputs = [ minio redis ];
+  propagatedBuildInputs = [
+    boto3
+    redis
+  ];
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m unittest discover
-    runHook postCheck
-  '';
+  nativeCheckInputs = [
+    unittestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "karton.core"
+  ];
 
   meta = with lib; {
     description = "Distributed malware processing framework";
     homepage = "https://karton-core.readthedocs.io/";
-    maintainers = with maintainers; [ chivay ];
+    changelog = "https://github.com/CERT-Polska/karton/releases/tag/v${version}";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ chivay fab ];
   };
 }

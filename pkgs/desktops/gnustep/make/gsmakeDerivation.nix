@@ -1,7 +1,7 @@
 { lib, stdenv, make, makeWrapper, which }:
-{ buildInputs ? [], ...} @ args:
+{ nativeBuildInputs ? [], ...} @ args:
 stdenv.mkDerivation (args // {
-  buildInputs = [ makeWrapper make which ] ++ buildInputs;
+  nativeBuildInputs = [ makeWrapper make which ] ++ nativeBuildInputs;
 
   builder = ./builder.sh;
   setupHook = ./setup-hook.sh;
@@ -15,5 +15,5 @@ stdenv.mkDerivation (args // {
 
     maintainers = with lib.maintainers; [ ashalkhakov matthewbauer ];
     platforms = lib.platforms.linux;
-  } // (if builtins.hasAttr "meta" args then args.meta else {});
+  } // (lib.optionalAttrs (builtins.hasAttr "meta" args) args.meta);
 })

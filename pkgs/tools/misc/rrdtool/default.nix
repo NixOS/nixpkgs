@@ -1,5 +1,5 @@
 { fetchurl, lib, stdenv, gettext, perl, pkg-config, libxml2, pango, cairo, groff
-, tcl-8_5, darwin }:
+, tcl, darwin }:
 
 perl.pkgs.toPerlModule (stdenv.mkDerivation rec {
   pname = "rrdtool";
@@ -13,7 +13,7 @@ perl.pkgs.toPerlModule (stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ gettext perl libxml2 pango cairo groff ]
-    ++ lib.optionals stdenv.isDarwin [ tcl-8_5 darwin.apple_sdk.frameworks.ApplicationServices ];
+    ++ lib.optionals stdenv.isDarwin [ tcl darwin.apple_sdk.frameworks.ApplicationServices ];
 
   postInstall = ''
     # for munin and rrdtool support

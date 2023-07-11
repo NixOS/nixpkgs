@@ -56,40 +56,39 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable mlmmj";
+        description = lib.mdDoc "Enable mlmmj";
       };
 
       user = mkOption {
         type = types.str;
         default = "mlmmj";
-        description = "mailinglist local user";
+        description = lib.mdDoc "mailinglist local user";
       };
 
       group = mkOption {
         type = types.str;
         default = "mlmmj";
-        description = "mailinglist local group";
+        description = lib.mdDoc "mailinglist local group";
       };
 
       listDomain = mkOption {
         type = types.str;
         default = "localhost";
-        description = "Set the mailing list domain";
+        description = lib.mdDoc "Set the mailing list domain";
       };
 
       mailLists = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = "The collection of hosted maillists";
+        description = lib.mdDoc "The collection of hosted maillists";
       };
 
       maintInterval = mkOption {
         type = types.str;
         default = "20min";
-        description = ''
+        description = lib.mdDoc ''
           Time interval between mlmmj-maintd runs, see
-          <citerefentry><refentrytitle>systemd.time</refentrytitle>
-          <manvolnum>7</manvolnum></citerefentry> for format information.
+          {manpage}`systemd.time(7)` for format information.
         '';
       };
 

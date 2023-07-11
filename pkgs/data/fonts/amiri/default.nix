@@ -1,19 +1,23 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
-  version = "0.113";
+stdenvNoCC.mkDerivation rec {
+  pname = "amiri";
+  version = "1.000";
 
-in fetchzip rec {
-  name = "Amiri-${version}";
+  src = fetchzip {
+    url = "https://github.com/alif-type/amiri/releases/download/${version}/Amiri-${version}.zip";
+    hash = "sha256-WXxKLYIIKe01WWZrI1aLOv65wRgn7aqHl6Codf4foVw=";
+  };
 
-  url = "https://github.com/alif-type/amiri/releases/download/${version}/${name}.zip";
+  installPhase = ''
+    runHook preInstall
 
-  sha256 = "0v5xm4spyww8wy6j9kpb01ixrakw7wp6jng4xnh220iy6yqcxm7v";
+    mkdir -p $out/share/fonts/truetype
+    mv *.ttf $out/share/fonts/truetype/
+    mkdir -p $out/share/doc/${pname}-${version}
+    mv {*.html,*.txt,*.md} $out/share/doc/${pname}-${version}/
 
-  postFetch = ''
-    unzip $downloadedFile
-    install -m444 -Dt $out/share/fonts/truetype ${name}/*.ttf
-    install -m444 -Dt $out/share/doc/${name}    ${name}/{*.txt,*.pdf}
+    runHook postInstall
   '';
 
   meta = with lib; {

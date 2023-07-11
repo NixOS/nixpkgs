@@ -3,7 +3,6 @@
 , fetchzip
 , makeWrapper
 , jre
-, writeText
 , nixosTests
 , callPackage
 
@@ -13,14 +12,20 @@
 
 stdenv.mkDerivation rec {
   pname = "keycloak";
-  version = "17.0.1";
+  version = "21.1.2";
 
   src = fetchzip {
     url = "https://github.com/keycloak/keycloak/releases/download/${version}/keycloak-${version}.zip";
-    sha256 = "sha256-z1LfTUoK+v4oQxdyIQruFhl5O333zirSrkPoTFgVfmI=";
+    hash = "sha256-yux9LyGkdwQekNWKAx3Oara0D5Qca8g7fgPGeTiF2n4=";
   };
 
   nativeBuildInputs = [ makeWrapper jre ];
+
+  patches = [
+    # Make home.dir and config.dir configurable through the
+    # KC_HOME_DIR and KC_CONF_DIR environment variables.
+    ./config_vars.patch
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -28,18 +33,17 @@ stdenv.mkDerivation rec {
     install -m 0600 ${confFile} conf/keycloak.conf
   '' + ''
     install_plugin() {
-    if [ -d "$1" ]; then
-      find "$1" -type f \( -iname \*.ear -o -iname \*.jar \) -exec install -m 0500 "{}" "providers/" \;
-    else
-      install -m 0500 "$1" "providers/"
-    fi
+      if [ -d "$1" ]; then
+        find "$1" -type f \( -iname \*.ear -o -iname \*.jar \) -exec install -m 0500 "{}" "providers/" \;
+      else
+        install -m 0500 "$1" "providers/"
+      fi
     }
     ${lib.concatMapStringsSep "\n" (pl: "install_plugin ${lib.escapeShellArg pl}") plugins}
   '' + ''
-    export KC_HOME_DIR=$out
-    export KC_CONF_DIR=$out/conf
-
     patchShebangs bin/kc.sh
+    export KC_HOME_DIR=$(pwd)
+    export KC_CONF_DIR=$(pwd)/conf
     bin/kc.sh build
 
     runHook postBuild
@@ -57,9 +61,6 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    substituteInPlace $out/bin/kc.sh --replace '-Dkc.home.dir=$DIRNAME/../' '-Dkc.home.dir=$KC_HOME_DIR'
-    substituteInPlace $out/bin/kc.sh --replace '-Djboss.server.config.dir=$DIRNAME/../conf' '-Djboss.server.config.dir=$KC_CONF_DIR'
-
     for script in $(find $out/bin -type f -executable); do
       wrapProgram "$script" --set JAVA_HOME ${jre} --prefix PATH : ${jre}/bin
     done
@@ -74,6 +75,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.keycloak.org/";
     description = "Identity and access management for modern applications and services";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     platforms = jre.meta.platforms;
     maintainers = with maintainers; [ ngerstle talyz ];

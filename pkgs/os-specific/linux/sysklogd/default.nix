@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./systemd.patch ./union-wait.patch ./fix-includes-for-musl.patch ];
 
-  NIX_CFLAGS_COMPILE = "-DSYSV";
+  env.NIX_CFLAGS_COMPILE = "-DSYSV";
 
   installFlags = [ "BINDIR=$(out)/sbin" "MANDIR=$(out)/share/man" "INSTALL=install" ];
 

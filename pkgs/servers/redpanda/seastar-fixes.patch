@@ -1,0 +1,13 @@
+diff --git a/include/seastar/core/std-coroutine.hh b/include/seastar/core/std-coroutine.hh
+index ea364bee..57474529 100644
+--- a/include/seastar/core/std-coroutine.hh
++++ b/include/seastar/core/std-coroutine.hh
+@@ -87,7 +87,7 @@ class coroutine_handle<void> {
+ 
+     explicit operator bool() const noexcept { return _pointer; }
+ 
+-    static coroutine_handle from_address(void* ptr) noexcept {
++    static constexpr coroutine_handle from_address(void* ptr) noexcept {
+         coroutine_handle hndl;
+         hndl._pointer = ptr;
+         return hndl;

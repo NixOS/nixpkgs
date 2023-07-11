@@ -8,7 +8,7 @@
 , libxml2
 , python3
 , libnotify
-, wrapGAppsHook
+, wrapGAppsHook4
 , libmediaart
 , gobject-introspection
 , gnome-online-accounts
@@ -23,20 +23,20 @@
 , itstool
 , gnome
 , gst_all_1
-, libsoup
+, libsoup_3
 , libadwaita
 , gsettings-desktop-schemas
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-music";
-  version = "42.0";
+  version = "44.0";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "nWgZj5hSveD4NFhLlqgSiX0xDLcXKLak8Ji8spsZxdA=";
+    sha256 = "m9GqyVcuYkcgJKaVDYOubyhr4zzZx3fz1E+hbQOPHVE=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication rec {
     itstool
     pkg-config
     libxml2
-    wrapGAppsHook
+    wrapGAppsHook4
     desktop-file-utils
     appstream-glib
     gobject-introspection
@@ -60,12 +60,11 @@ python3.pkgs.buildPythonApplication rec {
     gnome-online-accounts
     gobject-introspection
     gdk-pixbuf
-    gnome.adwaita-icon-theme
     python3
     grilo
     grilo-plugins
     libnotify
-    libsoup
+    libsoup_3
     libadwaita
     gsettings-desktop-schemas
     tracker
@@ -75,6 +74,7 @@ python3.pkgs.buildPythonApplication rec {
     gst-plugins-good
     gst-plugins-bad
     gst-plugins-ugly
+    gst-libav
   ]);
 
   pythonPath = with python3.pkgs; [
@@ -107,6 +107,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Music player and management application for the GNOME desktop environment";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

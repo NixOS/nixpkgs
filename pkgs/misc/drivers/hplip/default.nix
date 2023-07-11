@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, substituteAll
-, pkg-config
+, pkg-config, autoreconfHook
 , cups, zlib, libjpeg, libusb1, python3Packages, sane-backends
 , dbus, file, ghostscript, usbutils
 , net-snmp, openssl, perl, nettools, avahi
@@ -14,16 +14,16 @@
 let
 
   pname = "hplip";
-  version = "3.21.12";
+  version = "3.23.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${pname}-${version}.tar.gz";
-    sha256 = "sha256-fvRSPvgbztcVFeHIhA72xoxgJjjBWebdmpJpHO7GT5w=";
+    sha256 = "sha256-5CYKmKKx2I0h6CVi3kGaohyVvJ4qzjWDNGqA/SF+B7Y=";
   };
 
   plugin = fetchurl {
     url = "https://developers.hp.com/sites/default/files/${pname}-${version}-plugin.run";
-    sha256 = "sha256-eyYNhuff8mM4IpRfn/fLBjQJ23JrTdsHBQ/EH7Ug0gw=";
+    sha256 = "sha256-AyZBiF1B42dGnJeoJLFSCGNK83c86ZAM2uFciuv2H4A=";
   };
 
   hplipState = substituteAll {
@@ -71,6 +71,7 @@ python3Packages.buildPythonApplication {
   nativeBuildInputs = [
     pkg-config
     removeReferencesTo
+    autoreconfHook
   ] ++ lib.optional withQt5 qt5.wrapQtAppsHook;
 
   pythonPath = with python3Packages; [
@@ -81,6 +82,7 @@ python3Packages.buildPythonApplication {
     usbutils
     sip_4
     dbus-python
+    distro
   ] ++ lib.optionals withQt5 [
     pyqt5
     pyqt5_sip
@@ -95,6 +97,15 @@ python3Packages.buildPythonApplication {
     # don't on NixOS).  Add the equivalent NixOS path, /var/lib/cups/path/share.
     # See: https://github.com/NixOS/nixpkgs/issues/21796
     ./hplip-3.20.11-nixos-cups-ppd-search-path.patch
+
+    # Remove all ImageProcessor functionality since that is closed source
+    (fetchurl {
+      url = "https://web.archive.org/web/20230226174550/https://sources.debian.org/data/main/h/hplip/3.22.10+dfsg0-1/debian/patches/0028-Remove-ImageProcessor-binary-installs.patch";
+      sha256 = "sha256:18njrq5wrf3fi4lnpd1jqmaqr7ph5d7jxm7f15b1wwrbxir1rmml";
+    })
+
+    # Revert changes that break compilation under -Werror=format-security
+    ./revert-snprintf-change.patch
   ];
 
   postPatch = ''
@@ -116,7 +127,12 @@ python3Packages.buildPythonApplication {
       -e s,/usr/bin/gs,${ghostscript}/bin/gs,g \
       -e s,/usr/share/cups/fonts,${ghostscript}/share/ghostscript/fonts,g \
       -e "s,ExecStart=/usr/bin/python /usr/bin/hp-config_usb_printer,ExecStart=$out/bin/hp-config_usb_printer,g" \
+      -e s,Exec=/usr/bin/hp-uiscan,Exec=hp-uiscan,g \
+      -e s,Icon=/usr/share/icons/Humanity/devices/48/printer.svg,Icon=printer,g \
+      -e s,Icon=@abs_datadir@/hplip/data/images/128x128/hp_logo.png,Icon=hp_logo,g \
       {} +
+
+    echo 'AUTOMAKE_OPTIONS = foreign' >> Makefile.am
   '';
 
   configureFlags = let out = placeholder "out"; in
@@ -162,12 +178,19 @@ python3Packages.buildPythonApplication {
   '';
 
   enableParallelBuilding = true;
+  enableParallelInstalling = false;
 
   #
   # Running `hp-diagnose_plugin -g` can be used to diagnose
   # issues with plugins.
   #
-  postInstall = lib.optionalString withPlugin ''
+  postInstall = ''
+    for resolution in 16x16 32x32 64x64 128x128 256x256; do
+      mkdir -p $out/share/icons/hicolor/$resolution/apps
+      ln -s $out/share/hplip/data/images/$resolution/hp_logo.png \
+        $out/share/icons/hicolor/$resolution/apps/hp_logo.png
+    done
+  '' + lib.optionalString withPlugin ''
     sh ${plugin} --noexec --keep
     cd plugin_tmp
 

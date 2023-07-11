@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
-    sha256 = "sha256-7NrOoc1gi8YzZaKvCnHnzAKPlMnMhqxjdyZGN5H/8TQ=";
+    hash = "sha256-7NrOoc1gi8YzZaKvCnHnzAKPlMnMhqxjdyZGN5H/8TQ=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     aiohttp
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-aiohttp
     pytest-asyncio

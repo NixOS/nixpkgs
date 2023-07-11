@@ -1,0 +1,15 @@
+diff '--color=auto' -Naur smpeg-r390.orig/acinclude/gtk-2.0.m4 smpeg-r390/acinclude/gtk-2.0.m4
+--- smpeg-r390.orig/acinclude/gtk-2.0.m4	1970-01-01 08:00:01.000000000 +0800
++++ smpeg-r390/acinclude/gtk-2.0.m4	2021-12-16 15:52:17.776001058 +0800
+@@ -24,10 +24,8 @@
+ 
+   no_gtk=""
+ 
+-  AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+-
+   if test x$PKG_CONFIG != xno ; then
+-    if pkg-config --atleast-pkgconfig-version 0.7 ; then
++    if $PKG_CONFIG --atleast-pkgconfig-version 0.7 ; then
+       :
+     else
+       echo "*** pkg-config too old; version 0.7 or better required."

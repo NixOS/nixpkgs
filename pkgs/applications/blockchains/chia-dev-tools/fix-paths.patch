@@ -1,0 +1,13 @@
+diff --git a/cdv/cmds/sim_utils.py b/cdv/cmds/sim_utils.py
+index e59ba8f..20912ff 100644
+--- a/cdv/cmds/sim_utils.py
++++ b/cdv/cmds/sim_utils.py
+@@ -67,7 +67,7 @@ async def start_async(root_path: Path, group: Any, restart: bool) -> None:
+ 
+     from chia.cmds.start_funcs import async_start
+ 
+-    sys.argv[0] = str(Path(sys.executable).parent / "chia")  # this gives the correct path to the chia executable
++    sys.argv[0] = "@chia@/bin/chia"  # this gives the correct path to the chia executable
+     if root_path.exists():
+         config = load_config(root_path, "config.yaml")
+         await async_start(root_path, config, group, restart)

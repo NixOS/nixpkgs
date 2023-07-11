@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sshpass";
-  version = "1.09";
+  version = "1.10";
 
   src = fetchurl {
     url = "mirror://sourceforge/sshpass/sshpass-${version}.tar.gz";
-    sha256 = "sha256-cXRuXgV//psAtErEBFO/RwkZMMupa76o3Ehxfe3En7c=";
+    sha256 = "sha256-rREGwgPLtWGFyjutjGzK/KO0BkaWGU2oefgcjXvf7to=";
   };
 
   meta = with lib; {

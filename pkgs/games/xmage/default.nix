@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name    = "xmage";
+  pname   = "xmage";
   version = "1.4.42V6";
 
   src = fetchurl {
@@ -32,6 +32,7 @@ EOS
 
   meta = with lib; {
     description = "Magic Another Game Engine";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer ];
     homepage = "http://xmage.de/";

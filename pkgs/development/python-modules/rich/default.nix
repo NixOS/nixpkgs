@@ -2,48 +2,63 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, CommonMark
-, dataclasses
+, markdown-it-py
 , poetry-core
 , pygments
 , typing-extensions
 , pytestCheckHook
+, setuptools
+
+# for passthru.tests
+, enrich
+, httpie
+, rich-rst
+, textual
 }:
 
 buildPythonPackage rec {
   pname = "rich";
-  version = "12.2.0";
+  version = "13.3.5";
   format = "pyproject";
-  disabled = pythonOlder "3.6";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "02zypmnc9sijlipki0riywh82piamd3hlrl5xbg2bxlldnlnwx1d";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-PnyO5u0gxfYKT6xr0k3H0lbLl9wKPl6oxR1mM9A0Hys=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
-    CommonMark
+    markdown-it-py
     pygments
-  ] ++ lib.optional (pythonOlder "3.7") [
-    dataclasses
-  ] ++ lib.optional (pythonOlder "3.9") [
+    setuptools
+  ] ++ lib.optionals (pythonOlder "3.9") [
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "rich" ];
+  pythonImportsCheck = [
+    "rich"
+  ];
+
+  passthru.tests = {
+    inherit enrich httpie rich-rst textual;
+  };
 
   meta = with lib; {
     description = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal";
     homepage = "https://github.com/Textualize/rich";
+    changelog = "https://github.com/Textualize/rich/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ris ];
+    maintainers = with maintainers; [ ris joelkoen ];
   };
 }

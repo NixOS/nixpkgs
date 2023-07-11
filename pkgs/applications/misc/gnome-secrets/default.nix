@@ -5,7 +5,6 @@
 , gettext
 , fetchFromGitLab
 , python3Packages
-, libpwquality
 , wrapGAppsHook4
 , gtk4
 , glib
@@ -17,16 +16,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-secrets";
-  version = "6.1";
+  version = "7.2";
   format = "other";
-  strictDeps = false; # https://github.com/NixOS/nixpkgs/issues/56943
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "secrets";
     rev = version;
-    sha256 = "sha256-TBGNiiR0GW8s/Efi4/Qqvwd87Ir0gCLGPfBmmqqSwQ8=";
+    hash = "sha256-CE0iuXYHBhu07mjfXCnAPZQUD1Wy95L+tvBT+uepbrk=";
   };
 
   nativeBuildInputs = [
@@ -52,13 +50,9 @@ python3Packages.buildPythonApplication rec {
     construct
     pykeepass
     pyotp
-  ] ++ [
-    libpwquality # using the python bindings
+    validators
+    zxcvbn
   ];
-
-  postPatch = ''
-    substituteInPlace meson_post_install.py --replace "gtk-update-icon-cache" "gtk4-update-icon-cache";
-  '';
 
   # Prevent double wrapping, let the Python wrapper use the args in preFixup.
   dontWrapGApps = true;
@@ -68,7 +62,6 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.hostPlatform.isStatic; # libpwquality doesn't provide bindings when static
     description = "Password manager for GNOME which makes use of the KeePass v.4 format";
     homepage = "https://gitlab.gnome.org/World/secrets";
     license = licenses.gpl3Only;
@@ -76,4 +69,3 @@ python3Packages.buildPythonApplication rec {
     maintainers = with maintainers; [ mvnetbiz ];
   };
 }
-

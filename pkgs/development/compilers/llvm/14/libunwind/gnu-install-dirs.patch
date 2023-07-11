@@ -1,65 +1,21 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index e3cc66dd2226..1299b596ce0d 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -8,6 +8,8 @@ endif()
- 
- cmake_minimum_required(VERSION 3.13.4)
- 
-+include(GNUInstallDirs)
-+
- set(LLVM_COMMON_CMAKE_UTILS "${CMAKE_CURRENT_SOURCE_DIR}/../cmake")
- 
- # Add path for custom modules
-@@ -139,25 +141,27 @@ set(CMAKE_MODULE_PATH
+@@ -147,7 +147,7 @@ set(LIBUNWIND_INSTALL_RUNTIME_DIR "${CMAKE_INSTALL_BINDIR}" CACHE PATH
  
  if(LLVM_ENABLE_PER_TARGET_RUNTIME_DIR AND NOT APPLE)
    set(LIBUNWIND_LIBRARY_DIR ${LLVM_LIBRARY_OUTPUT_INTDIR}/${LLVM_DEFAULT_TARGET_TRIPLE})
 -  set(LIBUNWIND_INSTALL_LIBRARY_DIR lib${LLVM_LIBDIR_SUFFIX}/${LLVM_DEFAULT_TARGET_TRIPLE} CACHE PATH
-+  set(LIBUNWIND_INSTALL_INCLUDE_DIR "${CMAKE_INSTALL_INCLUDEDIR}/${LLVM_DEFAULT_TARGET_TRIPLE}" CACHE PATH
-+      "Path where built libunwind headers should be installed.")
 +  set(LIBUNWIND_INSTALL_LIBRARY_DIR ${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}/${LLVM_DEFAULT_TARGET_TRIPLE} CACHE PATH
        "Path where built libunwind libraries should be installed.")
--  set(LIBUNWIND_INSTALL_RUNTIME_DIR bin CACHE PATH
-+  set(LIBUNWIND_INSTALL_RUNTIME_DIR "${CMAKE_INSTALL_BINDIR}" CACHE PATH
-       "Path where built libunwind runtime libraries should be installed.")
    if(LIBCXX_LIBDIR_SUBDIR)
      string(APPEND LIBUNWIND_LIBRARY_DIR /${LIBUNWIND_LIBDIR_SUBDIR})
-     string(APPEND LIBUNWIND_INSTALL_LIBRARY_DIR /${LIBUNWIND_LIBDIR_SUBDIR})
+@@ -159,7 +159,7 @@ else()
+   else()
+     set(LIBUNWIND_LIBRARY_DIR ${CMAKE_BINARY_DIR}/lib${LIBUNWIND_LIBDIR_SUFFIX})
    endif()
--elseif(LLVM_LIBRARY_OUTPUT_INTDIR)
--  set(LIBUNWIND_LIBRARY_DIR ${LLVM_LIBRARY_OUTPUT_INTDIR})
 -  set(LIBUNWIND_INSTALL_LIBRARY_DIR lib${LIBUNWIND_LIBDIR_SUFFIX} CACHE PATH
--      "Path where built libunwind libraries should be installed.")
--  set(LIBUNWIND_INSTALL_RUNTIME_DIR bin CACHE PATH
--      "Path where built libunwind runtime libraries should be installed.")
- else()
--  set(LIBUNWIND_LIBRARY_DIR ${CMAKE_BINARY_DIR}/lib${LIBUNWIND_LIBDIR_SUFFIX})
--  set(LIBUNWIND_INSTALL_LIBRARY_DIR lib${LIBUNWIND_LIBDIR_SUFFIX} CACHE PATH
-+  if(LLVM_LIBRARY_OUTPUT_INTDIR)
-+    set(LIBUNWIND_LIBRARY_DIR ${LLVM_LIBRARY_OUTPUT_INTDIR})
-+  else()
-+    set(LIBUNWIND_LIBRARY_DIR ${CMAKE_BINARY_DIR}/lib${LIBUNWIND_LIBDIR_SUFFIX})
-+  endif()
-+  set(LIBUNWIND_INSTALL_INCLUDE_DIR "${CMAKE_INSTALL_INCLUDEDIR}" CACHE PATH
-+      "Path where built libunwind headers should be installed.")
 +  set(LIBUNWIND_INSTALL_LIBRARY_DIR ${CMAKE_INSTALL_LIBDIR}${LIBUNWIND_LIBDIR_SUFFIX} CACHE PATH
        "Path where built libunwind libraries should be installed.")
--  set(LIBUNWIND_INSTALL_RUNTIME_DIR bin CACHE PATH
-+  set(LIBUNWIND_INSTALL_RUNTIME_DIR "${CMAKE_INSTALL_BINDIR}" CACHE PATH
-       "Path where built libunwind runtime libraries should be installed.")
  endif()
  
-diff --git a/include/CMakeLists.txt b/include/CMakeLists.txt
-index c3bb1dd0f69f..adf1766c44cb 100644
---- a/include/CMakeLists.txt
-+++ b/include/CMakeLists.txt
-@@ -14,7 +14,7 @@ if(LIBUNWIND_INSTALL_HEADERS)
-   foreach(file ${files})
-     get_filename_component(dir ${file} DIRECTORY)
-     install(FILES ${file}
--      DESTINATION "include/${dir}"
-+      DESTINATION "${LIBUNWIND_INSTALL_INCLUDE_DIR}/${dir}"
-       COMPONENT unwind-headers
-       PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
-     )

@@ -9,15 +9,16 @@
 
 buildPythonPackage rec {
   pname = "adb-enhanced";
-  version = "2.5.14";
+  version = "2.5.21";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.4";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ashishb";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-GaPOYBQEGI40MutjjY8exABqGge2p/buk9v+NcZ5oJs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-kisP2RXpQa5uc53M3wcqN+1xgE/MGa2dVYzHnr1dgX8=";
   };
 
   propagatedBuildInputs = [
@@ -40,6 +41,10 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Tool for Android testing and development";
     homepage = "https://github.com/ashishb/adb-enhanced";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode
+    ];
     license = licenses.asl20;
     maintainers = with maintainers; [ vtuan10 ];
     mainProgram = "adbe";

@@ -2,17 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "kitsas";
-  version = "3.1.1";
+  version = "4.0.5";
 
   src = fetchFromGitHub {
     owner = "artoh";
     repo = "kitupiikki";
     rev = "v${version}";
-    sha256 = "sha256-nmlGLrVsTQawYHNgaax9EiutL4xgFdOD34Q4/rnB/D0=";
+    hash = "sha256-ODl1yrtrCVhuBWbA1AvHl22d+JSdySG/Gi2hlpVW3jg=";
   };
 
-  # QList::swapItemsAt was introduced in Qt 5.13
-  patches = lib.optional (lib.versionOlder qtbase.version "5.13") ./qt-512.patch;
+  postPatch = ''
+    substituteInPlace kitsas/kitsas.pro \
+      --replace "LIBS += -L/usr/local/opt/poppler-qt5/lib -lpoppler-qt6" "LIBS += -lpoppler-qt5"
+  '';
 
   nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook ];
 
@@ -26,10 +28,10 @@ stdenv.mkDerivation rec {
 
   qmakeFlags = [ "../kitsas/kitsas.pro" ];
 
-  installPhase = if stdenv.isDarwin then ''
+  installPhase = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     mv kitsas.app $out/Applications
-  '' else ''
+  '' + lib.optionalString (!stdenv.isDarwin) ''
     install -Dm755 kitsas -t $out/bin
     install -Dm644 ../kitsas.svg -t $out/share/icons/hicolor/scalable/apps
     install -Dm644 ../kitsas.png -t $out/share/icons/hicolor/256x256/apps

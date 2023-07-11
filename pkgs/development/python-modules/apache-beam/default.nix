@@ -4,17 +4,20 @@
 , cython
 , dill
 , fastavro
+, fasteners
 , fetchFromGitHub
+, fetchpatch
 , freezegun
 , grpcio
 , grpcio-tools
 , hdfs
 , httplib2
+, hypothesis
 , lib
 , mock
 , mypy-protobuf
 , numpy
-, oauth2client
+, objsize
 , orjson
 , pandas
 , parameterized
@@ -25,39 +28,64 @@
 , pydot
 , pyhamcrest
 , pymongo
+, pytest-xdist
 , pytestCheckHook
 , python
-, pythonAtLeast
 , python-dateutil
+, pythonRelaxDepsHook
 , pytz
 , pyyaml
+, regex
 , requests
 , requests-mock
-, setuptools
+, scikit-learn
 , sqlalchemy
 , tenacity
+, testcontainers
 , typing-extensions
+, zstandard
 }:
 
 buildPythonPackage rec {
   pname = "apache-beam";
-  version = "2.37.0";
-  disabled = pythonAtLeast "3.10";
+  version = "2.45.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "beam";
-    rev = "v${version}";
-    sha256 = "sha256-FmfTxRLqXUHhhAZIxCRx2+phX0bmU5rIHaftBU4yBJY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-e+6Vt+SlOxi16udsdx7WFoDWYupuXhggpoEZPe4tPr0=";
   };
 
-  # See https://github.com/NixOS/nixpkgs/issues/156957.
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "dill>=0.3.1.1,<0.3.2" "dill" \
-      --replace "httplib2>=0.8,<0.20.0" "httplib2" \
-      --replace "pyarrow>=0.15.1,<7.0.0" "pyarrow"
-  '';
+  patches = [
+    (fetchpatch {
+      # https://github.com/apache/beam/pull/24143
+      name = "fix-for-dill-0.3.6.patch";
+      url = "https://github.com/apache/beam/commit/7e014435b816015d21cc07f3f6c80809f3d8023d.patch";
+      hash = "sha256-iUmnzrItTFM98w3mpadzrmtI3t0fucpSujAg/6qxCGk=";
+      stripLen = 2;
+    })
+  ];
+
+  pythonRelaxDeps = [
+    # See https://github.com/NixOS/nixpkgs/issues/156957
+    "dill"
+    "numpy"
+    "pymongo"
+
+    # See https://github.com/NixOS/nixpkgs/issues/193613
+    "protobuf"
+
+    # As of apache-beam v2.45.0, the requirement is httplib2>=0.8,<0.21.0, but
+    # the current (2023-02-08) nixpkgs's httplib2 version is 0.21.0. This can be
+    # removed once beam is upgraded since the current requirement on master is
+    # for httplib2>=0.8,<0.22.0.
+    "httplib2"
+
+    # As of apache-beam v2.45.0, the requirement is pyarrow<10.0.0,>=0.15.1, but
+    # the current (2023-02-22) nixpkgs's pyarrow version is 11.0.0.
+    "pyarrow"
+  ];
 
   sourceRoot = "source/sdks/python";
 
@@ -65,19 +93,20 @@ buildPythonPackage rec {
     cython
     grpcio-tools
     mypy-protobuf
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
     cloudpickle
     crcmod
-    cython
     dill
     fastavro
+    fasteners
     grpcio
     hdfs
     httplib2
     numpy
-    oauth2client
+    objsize
     orjson
     proto-plus
     protobuf
@@ -86,10 +115,13 @@ buildPythonPackage rec {
     pymongo
     python-dateutil
     pytz
+    regex
     requests
-    setuptools
     typing-extensions
+    zstandard
   ];
+
+  enableParallelBuilding = true;
 
   pythonImportsCheck = [
     "apache_beam"
@@ -97,16 +129,20 @@ buildPythonPackage rec {
 
   checkInputs = [
     freezegun
+    hypothesis
     mock
     pandas
     parameterized
     psycopg2
     pyhamcrest
     pytestCheckHook
+    pytest-xdist
     pyyaml
     requests-mock
+    scikit-learn
     sqlalchemy
     tenacity
+    testcontainers
   ];
 
   # Make sure we're running the tests for the actually installed
@@ -122,14 +158,23 @@ buildPythonPackage rec {
     #         container_init: Callable[[], Union[PostgresContainer, MySqlContainer]],
     #     E   NameError: name 'MySqlContainer' is not defined
     #
-    # Test relies on the testcontainers package, which is not currently (as of
-    # 2022-04-08) available in nixpkgs.
     "apache_beam/io/external/xlang_jdbcio_it_test.py"
 
     # These tests depend on the availability of specific servers backends.
     "apache_beam/runners/portability/flink_runner_test.py"
     "apache_beam/runners/portability/samza_runner_test.py"
     "apache_beam/runners/portability/spark_runner_test.py"
+
+    # Fails starting from dill 0.3.6 because it tries to pickle pytest globals:
+    # https://github.com/uqfoundation/dill/issues/482#issuecomment-1139017499.
+    "apache_beam/transforms/window_test.py"
+
+    # See https://github.com/apache/beam/issues/25390.
+    "apache_beam/coders/slow_coders_test.py"
+    "apache_beam/dataframe/pandas_doctests_test.py"
+    "apache_beam/typehints/typed_pipeline_test.py"
+    "apache_beam/coders/fast_coders_test.py"
+    "apache_beam/dataframe/schemas_test.py"
   ];
 
   disabledTests = [
@@ -140,6 +185,23 @@ buildPythonPackage rec {
     # different runners - I don't expect them to help debugging these
     # when running via our (= custom from their PoV) testing infra.
     "test_with_main_session"
+    # AssertionErrors
+    "test_unified_repr"
+    "testDictComprehension"
+    "testDictComprehensionSimple"
+    "testGenerator"
+    "testGeneratorComprehension"
+    "testListComprehension"
+    "testNoneReturn"
+    "testSet"
+    "testTupleListComprehension"
+    "test_newtype"
+    "test_pardo_type_inference"
+    "test_get_output_batch_type"
+    "test_pformat_namedtuple_with_unnamed_fields"
+    "test_row_coder_fail_early_bad_schema"
+    # See https://github.com/apache/beam/issues/26004.
+    "test_batch_encode_decode"
   ];
 
   meta = with lib; {

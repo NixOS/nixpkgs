@@ -1,44 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, flex, bison, systemd, openssl }:
+{ lib, stdenv, fetchFromGitHub, cmake, flex, bison, systemd, postgresql, openssl, libyaml }:
 
 stdenv.mkDerivation rec {
   pname = "fluent-bit";
-  version = "1.8.11";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-bit";
     rev = "v${version}";
-    sha256 = "sha256-DULXfkddBdCvTWkuWXjSTEujRZ3mVVzy//qeB3j0Vz8=";
+    hash = "sha256-PPpdGLzyivsLd6I7ER9llp6fdLgtWRwEkKzLko/ehro=";
   };
-
-  patches = lib.optionals stdenv.isDarwin [
-    # Fix compilations errors on darwin
-    (fetchpatch {
-      url = "https://github.com/calyptia/cmetrics/commit/4f0f7ae2eeec148a69156f9fcc05d64bf249d11e.patch";
-      sha256 = "sha256-M1+28mHxpMvcFkOoKxkMMo1VCQsG33ncFZkFalOq2FQ=";
-      stripLen = 1;
-      extraPrefix = "lib/cmetrics/";
-    })
-    (fetchpatch {
-      url = "https://github.com/calyptia/cmetrics/commit/a97999cb6d7299ef230d216b7a1c584b43c64de9.patch";
-      sha256 = "sha256-RuyPEeILc86n/klPIb334XpX0F71nskQ8s/ya0rE2zI=";
-      stripLen = 1;
-      extraPrefix = "lib/cmetrics/";
-    })
-
-    # Fix bundled luajit compilation args
-    ./fix-luajit-darwin.patch
-  ];
 
   nativeBuildInputs = [ cmake flex bison ];
 
-  buildInputs = [ openssl ]
+  buildInputs = [ openssl libyaml postgresql ]
     ++ lib.optionals stdenv.isLinux [ systemd ];
 
-  cmakeFlags = [ "-DFLB_METRICS=ON" "-DFLB_HTTP_SERVER=ON" ];
+  cmakeFlags = [ "-DFLB_METRICS=ON" "-DFLB_HTTP_SERVER=ON" "-DFLB_OUT_PGSQL=ON"  ];
 
   # _FORTIFY_SOURCE requires compiling with optimization (-O)
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-O";
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [ "-O" ]
+    # Workaround build failure on -fno-common toolchains:
+    #   ld: /monkey/mk_tls.h:81: multiple definition of `mk_tls_server_timeout';
+    #     flb_config.c.o:include/monkey/mk_tls.h:81: first defined here
+    # TODO: drop when upstream gets a fix for it:
+    #   https://github.com/fluent/fluent-bit/issues/5537
+    ++ lib.optionals stdenv.isDarwin [ "-fcommon" ]);
 
   outputs = [ "out" "dev" ];
 
@@ -50,8 +37,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Log forwarder and processor, part of Fluentd ecosystem";
     homepage = "https://fluentbit.io";
+    changelog = "https://github.com/fluent/fluent-bit/releases/tag/v${version}";
     maintainers = with maintainers; [ samrose fpletz ];
     license = licenses.asl20;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

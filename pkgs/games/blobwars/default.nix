@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config gettext ];
   buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_net SDL2_ttf zlib ];
-  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error" ];
 
   makeFlags = [ "PREFIX=$(out)" "RELEASE=1" ];
 

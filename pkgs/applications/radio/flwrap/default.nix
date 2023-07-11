@@ -7,12 +7,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.3.5";
+  version = "1.3.6";
   pname = "flwrap";
 
   src = fetchurl {
     url = "mirror://sourceforge/fldigi/${pname}-${version}.tar.gz";
-    sha256 = "0qqivqkkravcg7j45740xfky2q3k7czqpkj6y364qff424q2pppg";
+    sha256 = "sha256-g1V7bOcgVHpD+Ndn02Nj4I3rGItuQ2qLGlrZZshfGP8=";
   };
 
   buildInputs = [

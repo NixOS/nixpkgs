@@ -1,3 +1,4 @@
+if [ -e .attrs.sh ]; then source .attrs.sh; fi
 source $stdenv/setup
 
 
@@ -147,11 +148,6 @@ if test "$noSysDirs" = "1"; then
     fi
 fi
 
-if [ -n "${targetConfig-}" ]; then
-    # if stripping gcc, include target directory too
-    stripDebugList="${stripDebugList-lib lib32 lib64 libexec bin sbin} $targetConfig"
-fi
-
 eval "$oldOpts"
 
 providedPreConfigure="$preConfigure";
@@ -169,15 +165,6 @@ preConfigure() {
         # the target libgcc as target libraries.
         # See 'configure:5370'
         rm -Rf zlib
-    fi
-
-    if test -f "$NIX_CC/nix-support/orig-libc"; then
-        # Patch the configure script so it finds glibc headers.  It's
-        # important for example in order not to get libssp built,
-        # because its functionality is in glibc already.
-        sed -i \
-            -e "s,glibc_header_dir=/usr/include,glibc_header_dir=$libc_dev/include", \
-            gcc/configure
     fi
 
     if test -n "$crossMingw" -a -n "$crossStageStatic"; then
@@ -207,9 +194,14 @@ preInstall() {
     mkdir -p "$out/${targetConfig}/lib"
     mkdir -p "${!outputLib}/${targetConfig}/lib"
     # Make ‘lib64’ symlinks to ‘lib’.
-    if [ -n "$is64bit" -a -z "$enableMultilib" ]; then
+    if [ -n "$linkLib64toLib" ]; then
         ln -s lib "$out/${targetConfig}/lib64"
         ln -s lib "${!outputLib}/${targetConfig}/lib64"
+    fi
+    # Make ‘lib32’ symlinks to ‘lib’.
+    if [ -n "$linkLib32toLib" ]; then
+        ln -s lib "$out/${targetConfig}/lib32"
+        ln -s lib "${!outputLib}/${targetConfig}/lib32"
     fi
 }
 
@@ -248,25 +240,6 @@ postInstall() {
     # More dependencies with the previous gcc or some libs (gccbug stores the build command line)
     rm -rf $out/bin/gccbug
 
-    if [[ buildConfig == *"linux"* ]]; then
-        # Take out the bootstrap-tools from the rpath, as it's not needed at all having $out
-        for i in $(find "$out"/libexec/gcc/*/*/* -type f -a \! -name '*.la'); do
-            PREV_RPATH=`patchelf --print-rpath "$i"`
-            NEW_RPATH=`echo "$PREV_RPATH" | sed 's,:[^:]*bootstrap-tools/lib,,g'`
-            patchelf --set-rpath "$NEW_RPATH" "$i" && echo OK
-        done
-    fi
-
-    if [[ targetConfig == *"linux"* ]]; then
-        # For some reason, when building for linux on darwin, the libs retain
-        # RPATH to $out.
-        for i in "$lib"/"$targetConfig"/lib/{libtsan,libasan,libubsan}.so.*.*.*; do
-            PREV_RPATH=`patchelf --print-rpath "$i"`
-            NEW_RPATH=`echo "$PREV_RPATH" | sed "s,:${out}[^:]*,,g"`
-            patchelf --set-rpath "$NEW_RPATH" "$i" && echo OK
-        done
-    fi
-
     if type "install_name_tool"; then
         for i in "${!outputLib}"/lib/*.*.dylib "${!outputLib}"/lib/*.so.[0-9]; do
             install_name_tool -id "$i" "$i" || true
@@ -277,8 +250,19 @@ postInstall() {
         done
     fi
 
+    # Cross-compiler specific:
+    # --with-headers=$dir option triggers gcc to make a private copy
+    # of $dir headers and use it later as `-isysroot`. This prevents
+    # cc-wrapper from overriding libc headers with `-idirafter`.
+    # It should be safe to drop it and rely solely on the cc-wrapper.
+    local sysinc_dir=$out/${targetConfig+$targetConfig/}sys-include
+    if [ -d "$sysinc_dir" ]; then
+        chmod -R u+w "$out/${targetConfig+$targetConfig/}sys-include"
+        rm -rfv "$out/${targetConfig+$targetConfig/}sys-include"
+    fi
+
     # Get rid of some "fixed" header files
-    rm -rfv $out/lib/gcc/*/*/include-fixed/{root,linux}
+    rm -rfv $out/lib/gcc/*/*/include-fixed/{root,linux,sys/mount.h,bits/statx.h}
 
     # Replace hard links for i686-pc-linux-gnu-gcc etc. with symlinks.
     for i in $out/bin/*-gcc*; do

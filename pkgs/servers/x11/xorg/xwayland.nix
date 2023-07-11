@@ -42,12 +42,12 @@
 , defaultFontPath ? "" }:
 
 stdenv.mkDerivation rec {
-
   pname = "xwayland";
-  version = "22.1.1";
+  version = "23.1.2";
+
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/${pname}-${version}.tar.xz";
-    sha256 = "sha256-9dDgujfhm7h8YvYdpZcL0gSTnyEgYglkvtTMhJW6plc=";
+    sha256 = "sha256-vSXYSY7k13h0/aElEn4ts3/DMlMf68lmIx6gb66M938=";
   };
 
   depsBuildBuild = [
@@ -95,17 +95,20 @@ stdenv.mkDerivation rec {
     zlib
   ];
   mesonFlags = [
-    "-Dxwayland_eglstream=true"
-    "-Ddefault_font_path=${defaultFontPath}"
-    "-Dxkb_bin_dir=${xkbcomp}/bin"
-    "-Dxkb_dir=${xkeyboard_config}/etc/X11/xkb"
-    "-Dxkb_output_dir=${placeholder "out"}/share/X11/xkb/compiled"
+    (lib.mesonBool "xwayland_eglstream" true)
+    (lib.mesonBool "xcsecurity" true)
+    (lib.mesonOption "default_font_path" defaultFontPath)
+    (lib.mesonOption "xkb_bin_dir" "${xkbcomp}/bin")
+    (lib.mesonOption "xkb_dir" "${xkeyboard_config}/etc/X11/xkb")
+    (lib.mesonOption "xkb_output_dir" "${placeholder "out"}/share/X11/xkb/compiled")
+    (lib.mesonBool "libunwind" (libunwind != null))
   ];
 
   meta = with lib; {
     description = "An X server for interfacing X11 apps with the Wayland protocol";
     homepage = "https://wayland.freedesktop.org/xserver.html";
     license = licenses.mit;
+    mainProgram = "Xwayland";
     maintainers = with maintainers; [ emantor ];
     platforms = platforms.linux;
   };

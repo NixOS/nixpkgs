@@ -7,18 +7,18 @@
 
 buildPythonPackage rec {
   pname = "opensimplex";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "lmas";
     repo = pname;
     rev = "v${version}";
-    sha256 = "zljS0yu3cHF2Vz3rFkwLXiHnKjo970MDIrC/56FoHa4=";
+    sha256 = "C/MTKTHjxMsOgzuXvokw039Kv6N/PgBoOqKleWPLpw0=";
   };
 
   propagatedBuildInputs = [ numpy ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
   pytestFlagsArray = [ "tests/test_opensimplex.py" ];
   pythonImportsCheck = [ "opensimplex" ];
 

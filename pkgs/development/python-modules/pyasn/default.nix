@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, }:
+{ lib, buildPythonPackage, fetchPypi, fetchFromGitHub, python, }:
 
 buildPythonPackage rec {
   pname = "pyasn";
@@ -6,8 +6,20 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6UK1SRY2Pse4tw6urs0OtOQe8bz0ojl7KabXFfzN+SU=";
+    hash = "sha256-6UK1SRY2Pse4tw6urs0OtOQe8bz0ojl7KabXFfzN+SU=";
   };
+
+  datasrc = fetchFromGitHub {
+    owner = "hadiasghari";
+    repo = "pyasn";
+    rev = version;
+    hash = "sha256-R7Vi1Mn44Mg3HQLDk9O43MkXXwbLRr/jjVKSHJvgYj0";
+  };
+
+  postInstall = ''
+    install -dm755 $out/${python.sitePackages}/pyasn/data
+    cp $datasrc/data/* $out/${python.sitePackages}/pyasn/data
+  '';
 
   doCheck = false; # Tests require internet connection which wont work
 

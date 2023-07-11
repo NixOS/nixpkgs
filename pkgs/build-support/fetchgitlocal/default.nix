@@ -1,4 +1,7 @@
-{ runCommand, git }: src:
+{ runCommand, git, lib }:
+
+lib.makeOverridable (
+src:
 
 let
   srcStr = toString src;
@@ -38,3 +41,4 @@ let
     '';
 
 in nixPath
+)

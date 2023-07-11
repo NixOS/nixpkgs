@@ -1,24 +1,33 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, installShellFiles, python3, libxcb, AppKit, libiconv }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, python3
+, libxcb
+, AppKit
+, SystemConfiguration
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "kbs2";
-  version = "0.5.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "woodruffw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-GKjumkeo7aAYaECa6NoXCiXU2kqekBX3wCysRz8seW4=";
+    hash = "sha256-o8/ENAWzVqs7rokST6xnyu9Q/pKqq/UnKWOFRuIuGes=";
   };
 
-  cargoSha256 = "sha256-rJ110kd18V2VGj0AHix3/vI09FG2kJ+TTOYKIthIrjQ=";
+  cargoHash = "sha256-LcnvCWGVdBxhDgQDoGHXRppGeEpfjOv/F0dZMN2bOF8=";
 
   nativeBuildInputs = [ installShellFiles ]
     ++ lib.optionals stdenv.isLinux [ python3 ];
 
   buildInputs = [ ]
     ++ lib.optionals stdenv.isLinux [ libxcb ]
-    ++ lib.optionals stdenv.isDarwin [ AppKit libiconv ];
+    ++ lib.optionals stdenv.isDarwin [ SystemConfiguration AppKit ];
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -30,10 +39,10 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     mkdir -p $out/share/kbs2
     cp -r contrib/ $out/share/kbs2
-    for shell in bash fish zsh; do
-      $out/bin/kbs2 --completions $shell > kbs2.$shell
-      installShellCompletion kbs2.$shell
-    done
+    installShellCompletion --cmd kbs2 \
+      --bash <($out/bin/kbs2 --completions bash) \
+      --fish <($out/bin/kbs2 --completions fish) \
+      --zsh <($out/bin/kbs2 --completions zsh)
   '';
 
   meta = with lib; {

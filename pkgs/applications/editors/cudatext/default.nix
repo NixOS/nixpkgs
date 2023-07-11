@@ -31,20 +31,20 @@ let
     (name: spec:
       fetchFromGitHub {
         repo = name;
-        inherit (spec) owner rev sha256;
+        inherit (spec) owner rev hash;
       }
     )
     (lib.importJSON ./deps.json);
 in
 stdenv.mkDerivation rec {
   pname = "cudatext";
-  version = "1.161.0";
+  version = "1.196.0";
 
   src = fetchFromGitHub {
     owner = "Alexey-T";
     repo = "CudaText";
     rev = version;
-    sha256 = "sha256-FxeJpKc++fDHdYuYmjL6qY/rilA++ljcB/9U54+/+P0=";
+    hash = "sha256-O037+Pm/aq/9ZPMYpWlNPa9tEilatN8OJ3oBAuk4UTs=";
   };
 
   postPatch = ''
@@ -66,8 +66,12 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
 
   buildPhase = lib.concatStringsSep "\n" (lib.mapAttrsToList (name: dep: ''
-    cp -r --no-preserve=mode ${dep} ${name}
+    cp -r ${dep} ${name}
   '') deps) + ''
+    # See https://wiki.freepascal.org/CudaText#How_to_compile_CudaText
+    substituteInPlace ATSynEdit/atsynedit/atsynedit_package.lpk \
+      --replace GTK2_IME_CODE _GTK2_IME_CODE
+
     lazbuild --lazarusdir=${lazarus}/share/lazarus --pcp=./lazarus --ws=${widgetset} \
       bgrabitmap/bgrabitmap/bgrabitmappack.lpk \
       EncConv/encconv/encconv_package.lpk \
@@ -83,7 +87,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    install -Dm755 app/cudatext $out/bin/cudatext
+    install -Dm755 app/cudatext -t $out/bin
 
     install -dm755 $out/share/cudatext
     cp -r app/{data,py,settings_default} $out/share/cudatext

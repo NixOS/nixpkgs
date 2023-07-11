@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchurl, pkg-config, gtk2, libX11, libXtst, libXi, libxkbfile, xorgproto }:
+{ stdenv, lib, buildPythonPackage, fetchurl, pkg-config, gtk2, libX11, libXtst, libXi, libxkbfile, xorgproto }:
 
 let
   majorVersion = "0.63";
@@ -17,6 +17,7 @@ in buildPythonPackage rec {
   buildInputs = [ gtk2 libX11 libXtst libXi libxkbfile xorgproto ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Extension to emulate keypresses and to get the layout information from the X server";
     homepage = "https://launchpad.net/virtkey";
     license = licenses.gpl3;

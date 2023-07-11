@@ -1,15 +1,16 @@
 { stdenv
 , lib
-, buildFHSUserEnv
+, buildFHSEnvChroot
 , fetchurl
 , gsettings-desktop-schemas
 , makeDesktopItem
 , makeWrapper
+, opensc
 , writeTextDir
 , configText ? ""
 }:
 let
-  version = "2203";
+  version = "2303";
 
   sysArch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
@@ -18,7 +19,12 @@ let
 
   # For USB support, ensure that /var/run/vmware/<YOUR-UID>
   # exists and is owned by you. Then run vmware-usbarbitrator as root.
-  bins = [ "vmware-view" "vmware-usbarbitrator" ];
+  bins = [
+    "vmware-view"
+    "vmware-usbarbitrator"
+  ];
+
+  mainProgram = "vmware-view";
 
   # This forces the default GTK theme (Adwaita) because Horizon is prone to
   # UI usability issues when using non-default themes, such as Adwaita-dark.
@@ -30,11 +36,11 @@ let
   '';
 
   vmwareHorizonClientFiles = stdenv.mkDerivation {
-    name = "vmwareHorizonClientFiles";
+    pname = "vmware-horizon-files";
     inherit version;
     src = fetchurl {
-      url = "https://download3.vmware.com/software/CART23FQ1_LIN_2203_TARBALL/VMware-Horizon-Client-Linux-2203-8.5.0-19586897.tar.gz";
-      sha256 = "27429dddaeedfa8b701d7aa7868f60ad58efa42687d7f27e84375fda9f5cd137";
+      url = "https://download3.vmware.com/software/CART24FQ1_LIN_2303_TARBALL/VMware-Horizon-Client-Linux-2303-8.9.0-21435420.tar.gz";
+      sha256 = "a4dcc6afc0be7641e10e922ccbbab0a10adbf8f2a83e4b5372dfba095091fb78";
     };
     nativeBuildInputs = [ makeWrapper ];
     installPhase = ''
@@ -49,13 +55,18 @@ let
       rm "$out/lib/vmware/gcc/libstdc++.so.6"
 
       # This library causes the program to core-dump occasionally. Use ours instead.
-      rm $out/lib/vmware/view/crtbora/libcairo.*
+      rm -r $out/lib/vmware/view/crtbora
+
+      # This opensc library is required to support smartcard authentication during the
+      # initial connection to Horizon.
+      mkdir $out/lib/vmware/view/pkcs11
+      ln -s ${opensc}/lib/pkcs11/opensc-pkcs11.so $out/lib/vmware/view/pkcs11/libopenscpkcs11.so
 
       ${lib.concatMapStrings wrapBinCommands bins}
     '';
   };
 
-  vmwareFHSUserEnv = name: buildFHSUserEnv {
+  vmwareFHSUserEnv = name: buildFHSEnvChroot {
     inherit name;
 
     runScript = "${vmwareHorizonClientFiles}/bin/${name}_wrapper";
@@ -85,6 +96,7 @@ let
       pixman
       vmwareHorizonClientFiles
       xorg.libX11
+      xorg.libXau
       xorg.libXcursor
       xorg.libXext
       xorg.libXi
@@ -104,7 +116,7 @@ let
     name = "vmware-view";
     desktopName = "VMware Horizon Client";
     icon = "${vmwareHorizonClientFiles}/share/icons/vmware-view.png";
-    exec = "${vmwareFHSUserEnv "vmware-view"}/bin/vmware-view %u";
+    exec = "${vmwareFHSUserEnv mainProgram}/bin/${mainProgram} %u";
     mimeTypes = [ "x-scheme-handler/vmware-view" ];
   };
 
@@ -131,7 +143,7 @@ stdenv.mkDerivation {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    mainProgram = "vmware-view";
+    inherit mainProgram;
     description = "Allows you to connect to your VMware Horizon virtual desktop";
     homepage = "https://www.vmware.com/go/viewclients";
     license = licenses.unfree;

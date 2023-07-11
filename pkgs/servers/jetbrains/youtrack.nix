@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "youtrack";
-  version = "2021.4.35970";
+  version = "2022.3.65371";
 
   jar = fetchurl {
     url = "https://download.jetbrains.com/charisma/${pname}-${version}.jar";
-    sha256 = "sha256-HB515TS0XXEAiT463nVHP/naeoF7nmeB+6EK0NJ+5c0=";
+    sha256 = "sha256-NQKWmKEq5ljUXd64zY27Nj8TU+uLdA37chbFVdmwjNs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Issue tracking and project management tool for developers";
     maintainers = teams.serokell.members;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     # https://www.jetbrains.com/youtrack/buy/license.html
     license = licenses.unfree;
   };

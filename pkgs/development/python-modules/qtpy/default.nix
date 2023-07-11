@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "QtPy";
-  version = "2.0.1";
+  version = "2.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13zbhnl2rm30xafwrzfwdb4mjp7gk4s9h2xagbf83pnjzczhgzdd";
+    hash = "sha256-BgPJyDzMA1pHF6EpCL9rxssiUJgn6i7A6Uwtp8ntV8U=";
   };
 
   propagatedBuildInputs = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   ];
 
   doCheck = false; # ModuleNotFoundError: No module named 'PyQt5.QtConnectivity'
-  checkInputs = [
+  nativeCheckInputs = [
     pyside
     (pyqt5.override {
       withConnectivity = true;

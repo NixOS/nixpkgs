@@ -1,36 +1,60 @@
-{ lib, callPackage, buildPythonApplication, fetchFromGitHub
+{ lib
+, callPackage
+, buildPythonPackage
+, fetchFromGitHub
+, colorama
+, hatch-requirements-txt
+, hatch-nodejs-version
+, hatchling
 , jinja2
 , markdown
 , mkdocs
 , mkdocs-material-extensions
 , pygments
 , pymdown-extensions
+, pythonOlder
+, regex
+, requests
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "mkdocs-material";
-  version = "8.2.9";
+  version = "9.1.13";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "squidfunk";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-lrklTQWWsP1rjixqu5/S7XMN+K095NRGv3JkjRQ4brM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-S+cCNcQR8Y1UGj+4Nfy9Z10N/9PRq13fSeR2YFntxWI=";
   };
 
+  nativeBuildInputs = [
+    hatch-requirements-txt
+    hatch-nodejs-version
+    hatchling
+  ];
+
   propagatedBuildInputs = [
+    colorama
     jinja2
     markdown
     mkdocs
     mkdocs-material-extensions
     pygments
     pymdown-extensions
+    regex
+    requests
   ];
 
   # No tests for python
   doCheck = false;
 
-  pythonImportsCheck = [ "mkdocs" ];
+  pythonImportsCheck = [
+    "mkdocs"
+  ];
 
   meta = with lib; {
     description = "Material for mkdocs";

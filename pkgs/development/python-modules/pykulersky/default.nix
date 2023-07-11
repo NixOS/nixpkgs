@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pykulersky";
-  version = "0.5.3";
+  version = "0.5.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "emlove";
     repo = pname;
     rev = version;
-    sha256 = "sha256-l3obfs5zo5DqArsDml8EZ+/uzab35Jjsuzw6U1XFJ3k=";
+    hash = "sha256-coO+WBnv5HT14ym719qr3Plm1JuiaNdAvD1QVPj65oU=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     click
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-mock
     pytestCheckHook

@@ -1,4 +1,5 @@
-{ fetchFromGitHub
+{ stdenv
+, fetchFromGitHub
 , lib
 , gobject-introspection
 , meson
@@ -6,23 +7,39 @@
 , python3
 , gtk3
 , gdk-pixbuf
+, xapp
 , wrapGAppsHook
 , gettext
 , polkit
 , glib
+, gitUpdater
+, bubblewrap
 }:
 
-python3.pkgs.buildPythonApplication rec  {
+let
+  pythonEnv = python3.withPackages (pp: with pp; [
+    grpcio-tools
+    protobuf
+    pygobject3
+    setproctitle
+    pp.xapp
+    zeroconf
+    grpcio
+    setuptools
+    cryptography
+    pynacl
+    netifaces
+  ]);
+in
+stdenv.mkDerivation rec {
   pname = "warpinator";
-  version = "1.2.5";
-
-  format = "other";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-pTLM4CrkBLEZS9IdM9IBSGH0WPOj1rlAgvWLOUy6MxY=";
+    hash = "sha256-BKptTQbSBTQyc5V6WWdsPdC76sH0CFMXOyahfRmvQzc=";
   };
 
   nativeBuildInputs = [
@@ -38,20 +55,8 @@ python3.pkgs.buildPythonApplication rec  {
     glib
     gtk3
     gdk-pixbuf
-  ];
-
-  propagatedBuildInputs = with python3.pkgs; [
-    grpcio-tools
-    protobuf
-    pygobject3
-    setproctitle
+    pythonEnv
     xapp
-    zeroconf
-    grpcio
-    setuptools
-    cryptography
-    pynacl
-    netifaces
   ];
 
   mesonFlags = [
@@ -65,12 +70,18 @@ python3.pkgs.buildPythonApplication rec  {
     find . -type f -exec sed -i \
       -e s,/usr/libexec/warpinator,$out/libexec/warpinator,g \
       {} +
+
+    # We make bubblewrap mode always available since
+    # landlock mode is not supported in old kernels.
+    substituteInPlace src/warpinator-launch.py \
+      --replace '"/bin/python3"' '"${pythonEnv.interpreter}"' \
+      --replace "/bin/bwrap" "${bubblewrap}/bin/bwrap" \
+      --replace 'GLib.find_program_in_path("bwrap")' "True"
   '';
 
-  preFixup = ''
-    # these get loaded via import from bin, so don't need wrapping
-    chmod -x+X $out/libexec/warpinator/*.py
-  '';
+  passthru.updateScript = gitUpdater {
+    ignoredVersions = "^master.*";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/warpinator";

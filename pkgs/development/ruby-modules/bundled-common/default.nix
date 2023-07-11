@@ -20,7 +20,9 @@
 , meta ? {}
 , groups ? null
 , ignoreCollisions ? false
+, nativeBuildInputs ? []
 , buildInputs ? []
+, extraConfigPaths ? []
 , ...
 }@args:
 
@@ -54,9 +56,9 @@ let
   else
     let
       gem = gems.${pname};
-      version = gem.version;
+      suffix = gem.suffix;
     in
-      "${pname}-${version}";
+      "${pname}-${suffix}";
 
   pname' = if pname != null then
     pname
@@ -64,9 +66,8 @@ let
     name;
 
   copyIfBundledByPath = { bundledByPath ? false, ...}:
-  (if bundledByPath then
-      assert gemFiles.gemdir != null; "cp -a ${gemFiles.gemdir}/* $out/" #*/
-    else ""
+  (lib.optionalString bundledByPath (
+      assert gemFiles.gemdir != null; "cp -a ${gemFiles.gemdir}/* $out/") #*/
   );
 
   maybeCopyAll = pkgname: if pkgname == null then "" else
@@ -83,6 +84,8 @@ let
     ${maybeCopyAll mainGemName}
     cp ${gemFiles.gemfile} $out/Gemfile || ls -l $out/Gemfile
     cp ${gemFiles.lockfile} $out/Gemfile.lock || ls -l $out/Gemfile.lock
+
+    ${lib.concatMapStringsSep "\n" (path: "cp -r ${path} $out/") extraConfigPaths}
   '';
 
   buildGem = name: attrs: (
@@ -99,7 +102,7 @@ let
 
 
   basicEnvArgs = {
-    inherit buildInputs ignoreCollisions;
+    inherit nativeBuildInputs buildInputs ignoreCollisions;
 
     name = name';
 
@@ -115,6 +118,7 @@ let
 
     passthru = rec {
       inherit ruby bundler gems confFiles envPaths;
+      inherit (gems.${pname}) gemType;
 
       wrappedRuby = stdenv.mkDerivation {
         name = "wrapped-ruby-${pname'}";

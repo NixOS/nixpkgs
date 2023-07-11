@@ -2,7 +2,6 @@
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
-, mypy
 , pyjwt
 , pytestCheckHook
 , pythonOlder
@@ -13,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "globus-sdk";
-  version = "3.7.0";
+  version = "3.22.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -22,7 +21,7 @@ buildPythonPackage rec {
     owner = "globus";
     repo = "globus-sdk-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-Us3SCkrBPL3v9YCOQ7ceF3neCUZkJTrchYsvCRSX84Y=";
+    hash = "sha256-Dngt/vwFgRUS3pOaanlx+qOQfSzKr4/KVZ51pLXCMMA=";
   };
 
   propagatedBuildInputs = [
@@ -33,8 +32,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
-    mypy
+  nativeCheckInputs = [
     pytestCheckHook
     responses
   ];
@@ -56,6 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Interface to Globus REST APIs, including the Transfer API and the Globus Auth API";
     homepage =  "https://github.com/globus/globus-sdk-python";
+    changelog = "https://github.com/globus/globus-sdk-python/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ixxie ];
   };

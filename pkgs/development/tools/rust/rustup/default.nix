@@ -4,8 +4,9 @@
 , patchelf
 , fetchFromGitHub
 , rustPlatform
-, makeWrapper
+, makeBinaryWrapper
 , pkg-config
+, openssl
 , curl
 , zlib
 , Security
@@ -22,21 +23,23 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "rustup";
-  version = "1.24.3";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustup";
     rev = version;
-    sha256 = "sha256-JpOOFwlTgwwBCrXOGYskFTgS6RZ7mHQJGT0jnHavxvI=";
+    sha256 = "sha256-rdhG9MdjWyvoaMGdjgFyCfQaoV48QtAZE7buA5TkDKg=";
   };
 
-  cargoSha256 = "sha256-hAfGpKaWD94IxFFpnW9XwQp4P9clUX6mmekwodCK0Ag=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  nativeBuildInputs = [ makeBinaryWrapper pkg-config ];
 
   buildInputs = [
-    curl
+    (curl.override { inherit openssl; })
     zlib
   ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security libiconv xz ];
 
@@ -56,12 +59,22 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = !stdenv.isAarch64 && !stdenv.isDarwin;
 
+  # skip failing tests
+  checkFlags = [
+    # auto-self-update mode is set to 'disable' for nix rustup
+    "--skip=suite::cli_exact::check_updates_none"
+    "--skip=suite::cli_exact::check_updates_some"
+    "--skip=suite::cli_exact::check_updates_with_update"
+    # rustup-init is not used in nix rustup
+    "--skip=suite::cli_ui::rustup_init_ui_doc_text_tests"
+  ];
+
   postInstall = ''
     pushd $out/bin
     mv rustup-init rustup
     binlinks=(
       cargo rustc rustdoc rust-gdb rust-lldb rls rustfmt cargo-fmt
-      cargo-clippy clippy-driver cargo-miri
+      cargo-clippy clippy-driver cargo-miri rust-gdbgui rust-analyzer
     )
     for link in ''${binlinks[@]}; do
       ln -s rustup $link

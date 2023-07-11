@@ -1,10 +1,10 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, git, doxygen, graphviz
 , boost, miniupnpc, openssl, unbound, cppzmq
-, zeromq, pcsclite, readline, libsodium
+, pcsclite, readline, libsodium
 }:
 
 let
-  version = "0.14.1.0";
+  version = "0.14.2.2";
 in
 stdenv.mkDerivation {
   pname = "aeon";
@@ -15,14 +15,14 @@ stdenv.mkDerivation {
     repo = "aeon";
     rev = "v${version}-aeon";
     fetchSubmodules = true;
-    sha256 = "sha256-yej4w/2m9YXsMobqHwzA5GBbduhaeTVvmnHUJNWX87E=";
+    sha256 = "sha256-2MptLS12CUm9eUKm+V+yYpbLVwNyZeZ5HvAFyjEc4R4=";
   };
 
   nativeBuildInputs = [ cmake pkg-config git doxygen graphviz ];
 
   buildInputs = [
     boost miniupnpc openssl unbound
-    cppzmq zeromq pcsclite readline libsodium
+    cppzmq pcsclite readline libsodium
   ];
 
   cmakeFlags = [

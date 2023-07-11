@@ -5,16 +5,17 @@
 let
   swig = callPackage ./swig.nix { };
   bootForth = callPackage ./boot-forth.nix { };
+  lispDir = "${placeholder "out"}/share/emacs/site-lisp";
 in stdenv.mkDerivation rec {
 
   pname = "gforth";
-  version = "0.7.9_20220127";
+  version = "0.7.9_20230518";
 
   src = fetchFromGitHub {
     owner = "forthy42";
     repo = "gforth";
     rev = version;
-    sha256 = "sha256-3+ObHhsPvW44UFiN0GWOhwo7aiqhjwxNY8hw2Wv4MK0=";
+    hash = "sha256-rXtmmENBt9RMdLPq8GDyndh4+CYnCmz6NYpe3kH5OwU=";
   };
 
   nativeBuildInputs = [
@@ -26,17 +27,21 @@ in stdenv.mkDerivation rec {
 
   passthru = { inherit bootForth; };
 
-  configureFlags = lib.optional stdenv.isDarwin [ "--build=x86_64-apple-darwin" ];
+  configureFlags = [
+    "--with-lispdir=${lispDir}"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    "--build=x86_64-apple-darwin"
+  ];
 
-  postInstall = ''
-    mkdir -p $out/share/emacs/site-lisp
-    cp gforth.el $out/share/emacs/site-lisp/
+  preConfigure = ''
+    mkdir -p ${lispDir}
   '';
 
   meta = {
     description = "The Forth implementation of the GNU project";
     homepage = "https://github.com/forthy42/gforth";
     license = lib.licenses.gpl3;
+    broken = stdenv.isDarwin && stdenv.isAarch64; # segfault when running ./gforthmi
     platforms = lib.platforms.all;
   };
 }

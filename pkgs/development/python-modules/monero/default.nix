@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "monero";
-  version = "1.0.1";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "monero-ecosystem";
     repo = "monero-python";
     rev = "v${version}";
-    sha256 = "sha256-ZjAShIeGVVIKlwgSNPVSN7eaqhKu3wEpDP9wgBMOyZU=";
+    hash = "sha256-WIF3pFBOLgozYTrQHLzIRgSlT3dTZTe+7sF/dVjVdTo=";
   };
 
   postPatch = ''
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     varint
   ];
 
-  checkInputs = [ pytestCheckHook pytest-cov responses ];
+  nativeCheckInputs = [ pytestCheckHook pytest-cov responses ];
 
   meta = with lib; {
     description = "Comprehensive Python module for handling Monero";

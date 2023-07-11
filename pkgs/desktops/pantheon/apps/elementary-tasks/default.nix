@@ -1,9 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
-, appstream
-, desktop-file-utils
 , meson
 , ninja
 , pkg-config
@@ -14,10 +13,9 @@
 , evolution-data-server
 , granite
 , geoclue2
-, geocode-glib
+, geocode-glib_2
 , gtk3
-, libchamplain
-, libgdata
+, libchamplain_libsoup3
 , libgee
 , libhandy
 , libical
@@ -25,18 +23,25 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-tasks";
-  version = "6.2.0";
+  version = "6.3.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "tasks";
     rev = version;
-    sha256 = "sha256-eHaWXntLkk5G+cR5uFwWsIvbSPsbrvpglYBh91ta/M0=";
+    sha256 = "sha256-b8KUlfpZxRFDiBjgrV/4XicCcEw2fWaN78NaOq6jQBk=";
   };
 
+  patches = [
+    # Port to libsoup 3
+    # https://github.com/elementary/tasks/pull/345
+    (fetchpatch {
+      url = "https://github.com/elementary/tasks/commit/22e0d18693932e9eea3d2a22329f845575ce26e6.patch";
+      sha256 = "sha256-nLJlKf4L7G12ZnCo4wezyMRyeAf+Tf0OGHyT8I1ZuDA=";
+    })
+  ];
+
   nativeBuildInputs = [
-    appstream
-    desktop-file-utils
     meson
     ninja
     pkg-config
@@ -50,10 +55,9 @@ stdenv.mkDerivation rec {
     evolution-data-server
     granite
     geoclue2
-    geocode-glib
+    geocode-glib_2
     gtk3
-    libchamplain
-    libgdata
+    libchamplain_libsoup3
     libgee
     libhandy
     libical
@@ -65,9 +69,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

@@ -1,9 +1,11 @@
 { newScope, config, stdenv, fetchurl, makeWrapper
-, llvmPackages_14, ed, gnugrep, coreutils, xdg-utils
-, glib, gtk3, gnome, gsettings-desktop-schemas, gn, fetchgit
+, buildPackages
+, llvmPackages_16
+, ed, gnugrep, coreutils, xdg-utils
+, glib, gtk3, gtk4, gnome, gsettings-desktop-schemas, gn, fetchgit
 , libva, pipewire, wayland
 , gcc, nspr, nss, runCommand
-, lib
+, lib, libkrb5
 
 # package customization
 # Note: enable* flags should not require full rebuilds (i.e. only affect the wrapper)
@@ -17,7 +19,7 @@
 }:
 
 let
-  llvmPackages = llvmPackages_14;
+  llvmPackages = llvmPackages_16;
   stdenv = llvmPackages.stdenv;
 
   upstream-info = (lib.importJSON ./upstream-info.json).${channel};
@@ -46,7 +48,7 @@ let
       inherit channel chromiumVersionAtLeast versionRange;
       inherit proprietaryCodecs
               cupsSupport pulseSupport ungoogled;
-      gnChromium = gn.overrideAttrs (oldAttrs: {
+      gnChromium = buildPackages.gn.overrideAttrs (oldAttrs: {
         inherit (upstream-info.deps.gn) version;
         src = fetchgit {
           inherit (upstream-info.deps.gn) url rev sha256;
@@ -165,24 +167,27 @@ in stdenv.mkDerivation {
 
   buildInputs = [
     # needed for GSETTINGS_SCHEMAS_PATH
-    gsettings-desktop-schemas glib gtk3
+    gsettings-desktop-schemas glib gtk3 gtk4
 
     # needed for XDG_ICON_DIRS
     gnome.adwaita-icon-theme
+
+    # Needed for kerberos at runtime
+    libkrb5
   ];
 
   outputs = ["out" "sandbox"];
 
   buildCommand = let
     browserBinary = "${chromiumWV}/libexec/chromium/chromium";
-    libPath = lib.makeLibraryPath [ libva pipewire wayland gtk3 ];
+    libPath = lib.makeLibraryPath [ libva pipewire wayland gtk3 gtk4 libkrb5 ];
 
   in with lib; ''
     mkdir -p "$out/bin"
 
     makeWrapper "${browserBinary}" "$out/bin/chromium" \
-      --add-flags ${escapeShellArg commandLineArgs} \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags ${escapeShellArg commandLineArgs}
 
     ed -v -s "$out/bin/chromium" << EOF
     2i
@@ -193,6 +198,9 @@ in stdenv.mkDerivation {
     else
       export CHROME_DEVEL_SANDBOX="$sandbox/bin/${sandboxExecutableName}"
     fi
+
+    # Make generated desktop shortcuts have a valid executable name.
+    export CHROME_WRAPPER='chromium'
 
   '' + lib.optionalString (libPath != "") ''
     # To avoid loading .so files from cwd, LD_LIBRARY_PATH here must not
@@ -228,6 +236,5 @@ in stdenv.mkDerivation {
     inherit (chromium) upstream-info browser;
     mkDerivation = chromium.mkChromiumDerivation;
     inherit chromeSrc sandboxExecutableName;
-    updateScript = ./update.py;
   };
 }

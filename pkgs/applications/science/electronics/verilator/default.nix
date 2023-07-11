@@ -1,35 +1,38 @@
 { lib, stdenv, fetchFromGitHub
 , perl, flex, bison, python3, autoconf
+, which, cmake, help2man
+, makeWrapper, glibcLocales
 }:
 
 stdenv.mkDerivation rec {
   pname = "verilator";
-  version = "4.218";
+  version = "5.012";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-FukC60z7Y3bb3I/dgzqCh6kFP6DDBOGi0M8IIZ50P3g=";
+    hash = "sha256-Y6GkIgkauayJmGhOQg2kWjbcxYVIob6InMopv555Lb8=";
   };
 
   enableParallelBuilding = true;
   buildInputs = [ perl ];
-  nativeBuildInputs = [ flex bison python3 autoconf ];
+  nativeBuildInputs = [ makeWrapper flex bison python3 autoconf help2man ];
+  nativeCheckInputs = [ which ];
 
-  # these tests need some interpreter paths patched early on...
-  # see https://github.com/NixOS/nix/issues/1205
-  doCheck = false;
+  doCheck = stdenv.isLinux; # darwin tests are broken for now...
   checkTarget = "test";
 
-  preConfigure = ''
-    autoconf
-  '';
+  preConfigure = "autoconf";
 
   postPatch = ''
-    patchShebangs \
-      src/flexfix \
-      src/vlcovgen
+    patchShebangs bin/* src/{flexfix,vlcovgen} test_regress/{driver.pl,t/*.pl}
+  '';
+
+  postInstall = lib.optionalString stdenv.isLinux ''
+    for x in $(ls $out/bin/verilator*); do
+      wrapProgram "$x" --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
+    done
   '';
 
   meta = with lib; {

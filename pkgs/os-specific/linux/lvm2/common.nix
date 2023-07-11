@@ -1,21 +1,21 @@
-{ version, sha256 }:
+{ version, hash }:
 
 { lib, stdenv
-, fetchpatch
 , fetchurl
 , pkg-config
-, util-linux
 , coreutils
 , libuuid
 , libaio
 , substituteAll
 , enableCmdlib ? false
 , enableDmeventd ? false
-, udevSupport ? !stdenv.hostPlatform.isStatic, udev ? null
+, udevSupport ? !stdenv.hostPlatform.isStatic, udev
 , onlyLib ? stdenv.hostPlatform.isStatic
-, enableVDO ? false, vdo ? null
-, enableMdadm ? false, mdadm ? null
-, enableMultipath ? false, multipath-tools ? null
+  # Otherwise we have a infinity recursion during static compilation
+, enableUtilLinux ? !stdenv.hostPlatform.isStatic, util-linux
+, enableVDO ? false, vdo
+, enableMdadm ? false, mdadm
+, enableMultipath ? false, multipath-tools
 , nixosTests
 }:
 
@@ -27,8 +27,11 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchurl {
-    url = "https://mirrors.kernel.org/sourceware/lvm2/LVM2.${version}.tgz";
-    inherit sha256;
+    urls = [
+      "https://mirrors.kernel.org/sourceware/lvm2/LVM2.${version}.tgz"
+      "ftp://sourceware.org/pub/lvm2/LVM2.${version}.tgz"
+    ];
+    inherit hash;
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -48,10 +51,12 @@ stdenv.mkDerivation rec {
     "--with-default-locking-dir=/run/lock/lvm"
     "--with-default-run-dir=/run/lvm"
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+    "--with-systemd-run=/run/current-system/systemd/bin/systemd-run"
   ] ++ lib.optionals (!enableCmdlib) [
     "--bindir=${placeholder "bin"}/bin"
     "--sbindir=${placeholder "bin"}/bin"
     "--libdir=${placeholder "lib"}/lib"
+    "--with-libexecdir=${placeholder "lib"}/libexec"
   ] ++ lib.optional enableCmdlib "--enable-cmdlib"
   ++ lib.optionals enableDmeventd [
     "--enable-dmeventd"
@@ -63,28 +68,17 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals udevSupport [
     "--enable-udev_rules"
     "--enable-udev_sync"
+  ] ++ lib.optionals enableVDO [
+    "--enable-vdo"
   ] ++ lib.optionals stdenv.hostPlatform.isStatic [
     "--enable-static_link"
-  ] ++  lib.optionals enableVDO [
-    "--enable-vdo"
   ];
 
   preConfigure = ''
     sed -i /DEFAULT_SYS_DIR/d Makefile.in
     sed -i /DEFAULT_PROFILE_DIR/d conf/Makefile.in
-  '' + lib.optionalString (lib.versionOlder version "2.03.15") ''
-    substituteInPlace scripts/lvm2_activation_generator_systemd_red_hat.c \
-      --replace /usr/bin/udevadm /run/current-system/systemd/bin/udevadm
-    # https://github.com/lvmteam/lvm2/issues/36
-  '' + lib.optionalString (lib.versionOlder version "2.03.14") ''
-    substituteInPlace udev/69-dm-lvm-metad.rules.in \
-      --replace "(BINDIR)/systemd-run" /run/current-system/systemd/bin/systemd-run
-  '' + lib.optionalString (lib.versionAtLeast version "2.03.14") ''
-    substituteInPlace udev/69-dm-lvm.rules.in \
-      --replace "/usr/bin/systemd-run" /run/current-system/systemd/bin/systemd-run
-  '' + ''
+
     substituteInPlace make.tmpl.in --replace "@systemdsystemunitdir@" "$out/lib/systemd/system"
-  '' + lib.optionalString (lib.versionAtLeast version "2.03") ''
     substituteInPlace libdm/make.tmpl.in --replace "@systemdsystemunitdir@" "$out/lib/systemd/system"
 
     substituteInPlace scripts/blk_availability_systemd_red_hat.service.in \
@@ -102,27 +96,21 @@ stdenv.mkDerivation rec {
     in {
       src = ./fix-blkdeactivate.patch;
       inherit coreutils;
-      util_linux = util-linux;
+      util_linux = optionalTool enableUtilLinux util-linux;
       mdadm = optionalTool enableMdadm mdadm;
       multipath_tools = optionalTool enableMultipath multipath-tools;
       vdo = optionalTool enableVDO vdo;
     }))
-  ] ++ lib.optionals (lib.versionOlder version "2.03.15") [
-    # Musl fixes from Alpine.
+    # Musl fix from Alpine
     ./fix-stdio-usage.patch
-    (fetchpatch {
-      name = "mallinfo.patch";
-      url = "https://git.alpinelinux.org/aports/plain/main/lvm2/mallinfo.patch?h=3.7-stable&id=31bd4a8c2dc00ae79a821f6fe0ad2f23e1534f50";
-      sha256 = "0g6wlqi215i5s30bnbkn8w7axrs27y3bnygbpbnf64wwx7rxxlj0";
-    })
   ] ++ lib.optionals stdenv.hostPlatform.isStatic [
-    ./no-shared.diff
+    ./no-shared.patch
   ];
 
   doCheck = false; # requires root
 
   makeFlags = lib.optionals udevSupport [
-    "SYSTEMD_GENERATOR_DIR=$(out)/lib/systemd/system-generators"
+    "SYSTEMD_GENERATOR_DIR=${placeholder "out"}/lib/systemd/system-generators"
   ] ++ lib.optionals onlyLib [
     "libdm.device-mapper"
   ];
@@ -158,7 +146,10 @@ stdenv.mkDerivation rec {
     moveToOutput lib/libdevmapper.so $lib
   '';
 
-  passthru.tests.installer = nixosTests.installer.lvm;
+  passthru.tests = {
+    installer = nixosTests.installer.lvm;
+    lvm2 = nixosTests.lvm2;
+  };
 
   meta = with lib; {
     homepage = "http://sourceware.org/lvm2/";

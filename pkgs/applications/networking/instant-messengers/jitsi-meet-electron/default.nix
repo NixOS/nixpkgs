@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "jitsi-meet-electron";
-  version = "2022.1.1";
+  version = "2022.10.1";
 
   src = fetchurl {
     url = "https://github.com/jitsi/jitsi-meet-electron/releases/download/v${version}/jitsi-meet-x86_64.AppImage";
-    sha256 = "0x3fdqgjnsd570b7nszfx3h8l5c8x2kg32ig85n2a2g481c7xi6l";
+    sha256 = "sha256-98zuAsGT30paxszSO1XcMY8tsrMBeBLDFjK/JWhLC8s=";
     name = "${pname}-${version}.AppImage";
   };
 
@@ -46,7 +46,8 @@ stdenv.mkDerivation rec {
   postFixup = ''
     makeWrapper ${electron}/bin/electron $out/bin/${pname} \
       --add-flags $out/share/${pname}/resources/app.asar \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc xorg.libXtst pipewire ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc xorg.libXtst pipewire ]}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
   '';
 
   meta = with lib; {

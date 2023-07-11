@@ -3,7 +3,7 @@
 
 let
   pname = "pass-checkup";
-  version = "0.2.1";
+  version = "0.2.2";
 in stdenv.mkDerivation {
   inherit pname version;
 
@@ -11,7 +11,7 @@ in stdenv.mkDerivation {
     owner = "etu";
     repo = pname;
     rev = version;
-    sha256 = "18b6rx59r7g0hvqs2affvw0g0jyifyzhanwgz2q2b8nhjgqgnar2";
+    sha256 = "1p65yxr00k35g4bnagszp8i03pmhnrcmipgrdsawps2ba8faqp6r";
   };
 
   nativeBuildInputs = [ shellcheck ];

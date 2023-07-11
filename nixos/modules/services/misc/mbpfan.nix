@@ -1,75 +1,60 @@
 { config, lib, pkgs, ... }:
-
 with lib;
 
 let
   cfg = config.services.mbpfan;
-  verbose = if cfg.verbose then "v" else "";
+  verbose = optionalString cfg.verbose "v";
   settingsFormat = pkgs.formats.ini {};
   settingsFile = settingsFormat.generate "mbpfan.ini" cfg.settings;
 
 in {
   options.services.mbpfan = {
-    enable = mkEnableOption "mbpfan, fan controller daemon for Apple Macs and MacBooks";
+    enable = mkEnableOption (lib.mdDoc "mbpfan, fan controller daemon for Apple Macs and MacBooks");
 
     package = mkOption {
       type = types.package;
       default = pkgs.mbpfan;
       defaultText = literalExpression "pkgs.mbpfan";
-      description = ''
-        The package used for the mbpfan daemon.
-      '';
+      description = lib.mdDoc "The package used for the mbpfan daemon.";
     };
 
     verbose = mkOption {
       type = types.bool;
       default = false;
-      description = ''
-        If true, sets the log level to verbose.
-      '';
+      description = lib.mdDoc "If true, sets the log level to verbose.";
+    };
+
+    aggressive = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc "If true, favors higher default fan speeds.";
     };
 
     settings = mkOption {
       default = {};
-      description = "The INI configuration for Mbpfan.";
+      description = lib.mdDoc "INI configuration for Mbpfan.";
       type = types.submodule {
         freeformType = settingsFormat.type;
 
-        options.general.min_fan1_speed = mkOption {
-          type = types.nullOr types.int;
-          default = 2000;
-          description = ''
-            The minimum fan speed. Setting to null enables automatic detection.
-            Check minimum fan limits with "cat /sys/devices/platform/applesmc.768/fan*_min".
-          '';
-        };
-        options.general.max_fan1_speed = mkOption {
-          type = types.nullOr types.int;
-          default = 6199;
-          description = ''
-            The maximum fan speed. Setting to null enables automatic detection.
-            Check maximum fan limits with "cat /sys/devices/platform/applesmc.768/fan*_max".
-          '';
-        };
         options.general.low_temp = mkOption {
           type = types.int;
-          default = 55;
-          description = "Temperature below which fan speed will be at minimum. Try ranges 55-63.";
+          default = 63;
+          description = lib.mdDoc "If temperature is below this, fans will run at minimum speed.";
         };
         options.general.high_temp = mkOption {
           type = types.int;
-          default = 58;
-          description = "Fan will increase speed when higher than this temperature. Try ranges 58-66.";
+          default = 66;
+          description = lib.mdDoc "If temperature is above this, fan speed will gradually increase.";
         };
         options.general.max_temp = mkOption {
           type = types.int;
           default = 86;
-          description = "Fan will run at full speed above this temperature. Do not set it > 90.";
+          description = lib.mdDoc "If temperature is above this, fans will run at maximum speed.";
         };
         options.general.polling_interval = mkOption {
           type = types.int;
           default = 1;
-          description = "The polling interval.";
+          description = lib.mdDoc "The polling interval.";
         };
       };
     };
@@ -85,10 +70,16 @@ in {
   ];
 
   config = mkIf cfg.enable {
-    boot.kernelModules = [ "coretemp" "applesmc" ];
+    services.mbpfan.settings = mkIf cfg.aggressive {
+      general.min_fan1_speed = mkDefault 2000;
+      general.low_temp = mkDefault 55;
+      general.high_temp = mkDefault 58;
+      general.max_temp = mkDefault 70;
+    };
 
-    environment.etc."mbpfan.conf".source = settingsFile;
+    boot.kernelModules = [ "coretemp" "applesmc" ];
     environment.systemPackages = [ cfg.package ];
+    environment.etc."mbpfan.conf".source = settingsFile;
 
     systemd.services.mbpfan = {
       description = "A fan manager daemon for MacBook Pro";

@@ -1,8 +1,10 @@
 { buildGoModule
 , fetchFromGitHub
+, callPackage
 , lib
 , envoy
-, zip
+, mkYarnPackage
+, fetchYarnDeps
 , nixosTests
 , pomerium-cli
 }:
@@ -12,18 +14,47 @@ let
 in
 buildGoModule rec {
   pname = "pomerium";
-  version = "0.17.1";
+  version = "0.22.2";
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "pomerium";
     rev = "v${version}";
-    hash = "sha256:0b9mdzyfn7c6gwgslqk787yyrrcmdjf3282vx2zvhcr3psz0xqwx";
+    sha256 = "sha256-EcAzj2VLbBPu5afKZcf2fGBbw2kTOYGgSemD70msrqw=";
   };
 
-  vendorSha256 = "sha256:1cq4m5a7z64yg3v1c68d15ilw78il6p53vaqzxgn338zjggr3kig";
+  vendorSha256 = "sha256-xe8as7OY1+tTSqgpwk2Q1jcBnn89latJpMyx4KG7zg8=";
+
+  ui = mkYarnPackage {
+    inherit version;
+    src = "${src}/ui";
+
+    packageJSON = ./package.json;
+    offlineCache = fetchYarnDeps {
+      yarnLock = "${src}/ui/yarn.lock";
+      sha256 = lib.fileContents ./yarn-hash;
+    };
+
+    buildPhase = ''
+      runHook preBuild
+      yarn --offline build
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+      cp -R deps/pomerium/dist $out
+      runHook postInstall
+    '';
+
+    doDist = false;
+  };
+
   subPackages = [
     "cmd/pomerium"
   ];
+
+  # patch pomerium to allow use of external envoy
+  patches = [ ./external-envoy.diff ];
 
   ldflags = let
     # Set a variety of useful meta variables for stamping the build with.
@@ -34,7 +65,7 @@ buildGoModule rec {
         ProjectName = "pomerium";
         ProjectURL = "github.com/pomerium/pomerium";
       };
-      "github.com/pomerium/pomerium/internal/envoy" = {
+      "github.com/pomerium/pomerium/pkg/envoy" = {
         OverrideEnvoyPath = "${envoy}/bin/envoy";
       };
     };
@@ -54,8 +85,8 @@ buildGoModule rec {
     # Replace embedded envoy with nothing.
     # We set OverrideEnvoyPath above, so rawBinary should never get looked at
     # but we still need to set a checksum/version.
-    rm internal/envoy/files/files_{darwin,linux}*.go
-    cat <<EOF >internal/envoy/files/files_generic.go
+    rm pkg/envoy/files/files_{darwin,linux}*.go
+    cat <<EOF >pkg/envoy/files/files_external.go
     package files
 
     import _ "embed" // embed
@@ -68,17 +99,23 @@ buildGoModule rec {
     //go:embed envoy.version
     var rawVersion string
     EOF
-    sha256sum '${envoy}/bin/envoy' > internal/envoy/files/envoy.sha256
-    echo '${envoy.version}' > internal/envoy/files/envoy.version
+    sha256sum '${envoy}/bin/envoy' > pkg/envoy/files/envoy.sha256
+    echo '${envoy.version}' > pkg/envoy/files/envoy.version
+
+    # put the built UI files where they will be picked up as part of binary build
+    cp -r ${ui}/* ui/dist
   '';
 
   installPhase = ''
     install -Dm0755 $GOPATH/bin/pomerium $out/bin/pomerium
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) pomerium;
-    inherit pomerium-cli;
+  passthru = {
+    tests = {
+      inherit (nixosTests) pomerium;
+      inherit pomerium-cli;
+    };
+    updateScript = ./updater.sh;
   };
 
   meta = with lib; {

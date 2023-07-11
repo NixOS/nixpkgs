@@ -1,20 +1,32 @@
 { lib
 , buildPythonPackage
 , duckdb
-, mypy
+, google-cloud-storage
 , numpy
 , pandas
+, psutil
 , pybind11
 , setuptools-scm
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  pname = "duckdb";
-  inherit (duckdb) version src;
+  inherit (duckdb) pname version src patches;
   format = "setuptools";
 
-  sourceRoot = "source/tools/pythonpkg";
+  postPatch = ''
+    # we can't use sourceRoot otherwise patches don't apply, because the patches apply to the C++ library
+    cd tools/pythonpkg
+
+    # 1. let nix control build cores
+    # 2. unconstrain setuptools_scm version
+    substituteInPlace setup.py \
+      --replace "multiprocessing.cpu_count()" "$NIX_BUILD_CORES" \
+      --replace "setuptools_scm<7.0.0" "setuptools_scm"
+
+      # avoid dependency on mypy
+      rm tests/stubs/test_stubs.py
+  '';
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
@@ -28,10 +40,20 @@ buildPythonPackage rec {
     pandas
   ];
 
-  checkInputs = [
-    mypy
+  nativeCheckInputs = [
+    google-cloud-storage
+    psutil
     pytestCheckHook
   ];
+
+  disabledTests = [
+    # tries to make http request
+    "test_install_non_existent_extension"
+  ];
+
+  preCheck = ''
+    export HOME="$(mktemp -d)"
+  '';
 
   pythonImportsCheck = [
     "duckdb"
@@ -41,6 +63,6 @@ buildPythonPackage rec {
     description = "Python binding for DuckDB";
     homepage = "https://duckdb.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ costrouc cpcloud ];
   };
 }

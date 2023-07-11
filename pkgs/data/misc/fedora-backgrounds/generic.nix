@@ -31,6 +31,11 @@ stdenvNoCC.mkDerivation {
 
   installFlags = [
     "DESTDIR=$(out)"
+
+    # The Xfce background directory is assumed to be in installed in an
+    # FHS-compliant system. This is only effective for v36.0.0 and later
+    # versions where the following variable is used.
+    "WP_DIR_LN=$(DESTDIR)/share/backgrounds/$(WP_NAME)"
   ];
 
   meta = with lib; {

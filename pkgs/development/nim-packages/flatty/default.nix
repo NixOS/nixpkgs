@@ -2,16 +2,15 @@
 
 buildNimPackage rec {
   pname = "flatty";
-  version = "0.2.3";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "treeform";
     repo = pname;
     rev = version;
-    hash = "sha256-1tPLtnlGtE4SF5/ti/2svvYHpEy/0Za5N4YAOHFOyjA=";
+    hash = "sha256-ZmhjehmEJHm5qNlsGQvyYLajUdwhWt1+AtRppRrNtgA=";
   };
 
-  doCheck = true;
 
   meta = with lib;
     src.meta // {

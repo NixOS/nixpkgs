@@ -5,10 +5,16 @@
 stdenv.mkDerivation rec {
  pname = "ocsigen-toolkit";
  name = "ocaml${ocaml.version}-${pname}-${version}";
- version = "3.1.1";
+ version = "3.2.0";
 
  propagatedBuildInputs = [ calendar js_of_ocaml-ppx_deriving_json eliom ];
  nativeBuildInputs = [ ocaml findlib opaline eliom ];
+
+ # Remove widgets not compatible with jsoo 4.1.0
+ # https://github.com/ocsigen/ocsigen-toolkit/issues/221
+ preConfigure = ''
+   rm src/widgets/ot_{carousel,drawer,swipe,tongue}.eliom{,i}
+ '';
 
   strictDeps = true;
 
@@ -25,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "ocsigen";
     repo = pname;
     rev = version;
-    sha256 = "sha256:1fm0vvccmjib9yj5m2760vhzb4z3392swlprp51az53g3vk4q218";
+    sha256 = "sha256:13n0y8a80bl94la4lnp9dr2x7b8plhm17g9zgf0l6x42g3886pw7";
   };
 
   meta = {

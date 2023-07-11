@@ -1,55 +1,58 @@
 { lib
+, stdenv
 , python3
+, fetchPypi
 , openssl
   # Many Salt modules require various Python modules to be installed,
   # passing them in this array enables Salt to find them.
 , extraInputs ? []
 }:
 
-let
-  py = python3.override {
-    packageOverrides = self: super: {
-      # Incompatible with pyzmq 22
-      pyzmq = super.pyzmq.overridePythonAttrs (oldAttrs: rec {
-        version = "21.0.2";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "CYwTxhmJE8KgaQI1+nTS5JFhdV9mtmO+rsiWUVVMx5w=";
-        };
-      });
-   };
-  };
-in
-py.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "salt";
-  version = "3004.1";
+  version = "3006.1";
 
-  src = py.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fzRKJDJkik8HjapazMaNzf/hCVzqE+wh5QQTVg8Ewpg=";
+    hash = "sha256-lVh71hHepq/7aQjQ7CaGy37bhMFBRLSFF3bxJ6YOxbk=";
   };
 
-  propagatedBuildInputs = with py.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     distro
     jinja2
+    jmespath
+    looseversion
     markupsafe
     msgpack
+    packaging
     psutil
     pycryptodomex
     pyyaml
     pyzmq
     requests
-    tornado
   ] ++ extraInputs;
 
-  patches = [ ./fix-libcrypto-loading.patch ];
+  patches = [
+    ./fix-libcrypto-loading.patch
+  ];
 
   postPatch = ''
     substituteInPlace "salt/utils/rsax931.py" \
-      --subst-var-by "libcrypto" "${lib.getLib openssl}/lib/libcrypto.so"
+      --subst-var-by "libcrypto" "${lib.getLib openssl}/lib/libcrypto${stdenv.hostPlatform.extensions.sharedLibrary}"
     substituteInPlace requirements/base.txt \
       --replace contextvars ""
+
+    # Don't require optional dependencies on Darwin, let's use
+    # `extraInputs` like on any other platform
+    echo -n > "requirements/darwin.txt"
+
+    # Remove windows-only requirement
+    substituteInPlace "requirements/zeromq.txt" \
+      --replace 'pyzmq==25.0.2 ; sys_platform == "win32"' ""
   '';
+
+  # Don't use fixed dependencies on Darwin
+  USE_STATIC_REQUIREMENTS = "0";
 
   # The tests fail due to socket path length limits at the very least;
   # possibly there are more issues but I didn't leave the test suite running

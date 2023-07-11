@@ -18,14 +18,14 @@ buildPythonPackage rec {
     owner = "xolox";
     repo = "python-coloredlogs";
     rev = version;
-    sha256 = "sha256-C1Eo+XrrL3bwhT49KyOE6xjbAHJxn9Qy4s1RR5ERVtA=";
+    hash = "sha256-TodI2Wh8M0qMM2K5jzqlLmUKILa5+5qq4ByLttmAA7E=";
   };
 
   propagatedBuildInputs = [
     humanfriendly
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     mock
     util-linux

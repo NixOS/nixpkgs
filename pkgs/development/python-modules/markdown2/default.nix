@@ -1,24 +1,36 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python, pygments }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python
+, pygments
+}:
 
 buildPythonPackage rec {
   pname = "markdown2";
-  version = "2.4.1";
+  version = "2.4.8";
 
   # PyPI does not contain tests, so using GitHub instead.
   src = fetchFromGitHub {
     owner = "trentm";
     repo = "python-markdown2";
     rev = version;
-    sha256 = "0y7kh9jj8ys00qkfmmyqj63y21g7wn7yr715kj0j1nabs6xbp0y7";
+    hash = "sha256-0T3HcfjEApEEWtNZGZcta85dY9d/0mSyRBlrqBQEQwk=";
   };
 
-  checkInputs = [ pygments ];
+  nativeCheckInputs = [ pygments ];
 
   checkPhase = ''
-    ${python.interpreter} ./test/test.py
+    runHook preCheck
+
+    pushd test
+    ${python.interpreter} ./test.py -- -knownfailure
+    popd  # test
+
+    runHook postCheck
   '';
 
   meta = with lib; {
+    changelog = "https://github.com/trentm/python-markdown2/blob/${src.rev}/CHANGES.md";
     description = "A fast and complete Python implementation of Markdown";
     homepage =  "https://github.com/trentm/python-markdown2";
     license = licenses.mit;

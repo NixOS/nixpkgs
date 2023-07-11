@@ -24,7 +24,7 @@ with lib;
 
     services.gnome.gnome-user-share = {
 
-      enable = mkEnableOption "GNOME User Share, a user-level file sharing service for GNOME";
+      enable = mkEnableOption (lib.mdDoc "GNOME User Share, a user-level file sharing service for GNOME");
 
     };
 

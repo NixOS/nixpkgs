@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub
+{ lib, stdenv, mkDerivation, fetchFromGitHub, fetchpatch
 , pkg-config, autoreconfHook
 , openssl, db48, boost, zlib, miniupnpc
 , glib, protobuf, util-linux, qrencode
@@ -6,35 +6,48 @@
 , withGui ? true, libevent
 , qtbase, qttools
 , zeromq
+, fmt
 }:
 
-with lib;
-
 mkDerivation rec {
-  pname = "litecoin" + optionalString (!withGui) "d";
-  version = "0.18.1";
+  pname = "litecoin" + lib.optionalString (!withGui) "d";
+  version = "0.21.2.2";
 
   src = fetchFromGitHub {
     owner = "litecoin-project";
     repo = "litecoin";
     rev = "v${version}";
-    sha256 = "11753zhyx1kmrlljc6kbjwrcb06dfcrsqvmw3iaki9a132qk6l5c";
+    sha256 = "sha256-TuDc47TZOEQA5Lr4DQkEhnO/Szp9h71xPjaBL3jFWuM=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "boost1770.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/boost1770.patch?h=litecoin-qt&id=dc75ad854af123f375b5b683be64aa14573170d7";
+      hash = "sha256-PTkYQRA8n5a9yR2AvpzH5natsXT2W6Xjo0ONCPJx78k=";
+    })
+  ];
+
   nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ openssl db48 boost zlib zeromq
+  buildInputs = [ openssl db48 boost zlib zeromq fmt
                   miniupnpc glib protobuf util-linux libevent ]
-                  ++ optionals stdenv.isDarwin [ AppKit ]
-                  ++ optionals withGui [ qtbase qttools qrencode ];
+                  ++ lib.optionals stdenv.isDarwin [ AppKit ]
+                  ++ lib.optionals withGui [ qtbase qttools qrencode ];
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
-                   ++ optionals withGui [
+                   ++ lib.optionals withGui [
                       "--with-gui=qt5"
                       "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin" ];
 
   enableParallelBuilding = true;
 
-  meta = {
+  doCheck = true;
+  checkPhase = ''
+    ./src/test/test_litecoin
+  '';
+
+  meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "A lite version of Bitcoin using scrypt as a proof-of-work algorithm";
     longDescription= ''
       Litecoin is a peer-to-peer Internet currency that enables instant payments
@@ -48,7 +61,6 @@ mkDerivation rec {
     homepage = "https://litecoin.org/";
     platforms = platforms.unix;
     license = licenses.mit;
-    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ offline ];
   };
 }

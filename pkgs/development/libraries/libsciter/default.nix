@@ -3,14 +3,13 @@
 , cairo
 , libuuid
 , pango
-, gdk-pixbuf
 , gtk3
 , stdenv
 , fetchurl
 , autoPatchelfHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libsciter";
   version = "4.4.8.23-bis"; # Version specified in GitHub commit title
 
@@ -40,6 +39,7 @@ stdenv.mkDerivation rec {
     description = "Embeddable HTML/CSS/JavaScript engine for modern UI development";
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ leixb ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
   };
 }

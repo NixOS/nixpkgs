@@ -3,7 +3,6 @@
 , fetchPypi
 , celery
 , humanize
-, mock
 , pytz
 , tornado
 , prometheus-client
@@ -12,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "flower";
-  version = "1.0.0";
+  version = "2.0.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1gcczr04g7wx99h7pxxx1p9n50sbyi0zxrzy7f7m0sf5apxw85rf";
+    sha256 = "sha256-Vld4XXKKVJFCVsNP0FUf4tcVKqsIBi68ZFv4a5e4rsU=";
   };
 
   postPatch = ''
@@ -34,15 +33,10 @@ buildPythonPackage rec {
     tornado
   ];
 
-  checkInputs = [
-    mock
-    pytestCheckHook
-  ];
+  __darwinAllowLocalNetworking = true;
 
-  disabledTests = [
-    # AssertionError as the celery release can't be detected
-    "test_default"
-    "test_with_app"
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
@@ -50,7 +44,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Celery Flower";
+    description = "Real-time monitor and web admin for Celery distributed task queue";
     homepage = "https://github.com/mher/flower";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ arnoldfarkas ];

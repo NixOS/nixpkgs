@@ -1,42 +1,68 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytestCheckHook
-, isPy27
 , numpy
+, pytestCheckHook
+, pythonOlder
 , scipy
-, sparse
 }:
 
 buildPythonPackage rec {
   pname = "tensorly";
-  version = "0.7.0";
-  disabled = isPy27;
+  version = "0.8.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "VcX3pCczZQUYZaD7xrrkOcj0QPJt28cYTwpZm5D/X3c=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-hwpdExW/ESOavFkL3old1Efo5WC+PYmcgJp5/oLelaA=";
   };
 
-  # nose is not actually required for anything
-  # (including testing with the minimal dependencies)
-  postPatch = ''
-    substituteInPlace setup.py --replace ", 'nose'" ""
-  '';
+  propagatedBuildInputs = [
+    numpy
+    scipy
+  ];
 
-  propagatedBuildInputs = [ numpy scipy sparse ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  checkInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [ "tensorly" ];
+  pythonImportsCheck = [
+    "tensorly"
+    "tensorly.base"
+    "tensorly.cp_tensor"
+    "tensorly.tucker_tensor"
+    "tensorly.tt_tensor"
+    "tensorly.tt_matrix"
+    "tensorly.parafac2_tensor"
+    "tensorly.tenalg"
+    "tensorly.decomposition"
+    "tensorly.regression"
+    "tensorly.metrics"
+    "tensorly.random"
+    "tensorly.datasets"
+    "tensorly.plugins"
+    "tensorly.contrib"
+  ];
 
-  pythonImportsCheck = [ "tensorly" ];
+  pytestFlagsArray = [
+    "tensorly"
+  ];
+
+  disabledTests = [
+    # this can fail on hydra and other peoples machines, check with others before re-enabling
+    # AssertionError: Partial_SVD took too long, maybe full_matrices set wrongly
+    "test_svd_time"
+  ];
 
   meta = with lib; {
     description = "Tensor learning in Python";
     homepage = "https://tensorly.org/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.bcdarwin ];
+    maintainers = with maintainers; [ bcdarwin ];
   };
 }

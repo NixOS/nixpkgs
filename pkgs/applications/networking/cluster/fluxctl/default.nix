@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "fluxctl";
-  version = "1.25.0";
+  version = "1.25.4";
 
   src = fetchFromGitHub {
     owner = "weaveworks";
     repo = "flux";
     rev = version;
-    sha256 = "sha256-EFB8iAs7e4FigYnTvkh+dpZq6ymX7Qfy0cUDtUaPdmM=";
+    sha256 = "sha256-rKZ0fI9UN4oq6gfDMNR2+kCazlDexE1+UVzQ3xgkSA8=";
   };
 
-  vendorSha256 = "sha256-9RyTeGjp7mEpmWnQeK2uG1krO6+1sK6fsID6JVrejHw=";
+  vendorSha256 = "sha256-6Trk49Vo3oMjSaHRDm2v+elPDHwdn2D3Z6i4UYcx0IQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 

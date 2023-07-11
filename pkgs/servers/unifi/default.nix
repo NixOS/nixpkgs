@@ -35,9 +35,10 @@ let
     meta = with lib; {
       homepage = "http://www.ubnt.com/";
       description = "Controller for Ubiquiti UniFi access points";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.unfree;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ erictapen globin patryk27 pennae ];
+      maintainers = with maintainers; [ globin patryk27 ];
     };
   });
 
@@ -65,7 +66,7 @@ in rec {
   };
 
   unifi7 = generic {
-    version = "7.0.25";
-    sha256 = "sha256-DZi2xy6mS3hfqxX1ikiHKPlJ12eaoZVgyl9jKYt91hg=";
+    version = "7.4.156";
+    sha256 = "sha256-UJjzSC2qKi2ABwH5p0s/5fXfB3NVfYBb3wBfE/8NlK4=";
   };
 }

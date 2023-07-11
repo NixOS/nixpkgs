@@ -17,10 +17,16 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ fuse];
+  buildInputs = [ fuse ];
+
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: libupnp/upnp/.libs/libupnp.a(libupnp_la-gena_ctrlpt.o):libupnp/upnp/src/inc/upnpapi.h:163:
+  #     multiple definition of `pVirtualDirList'; libupnp/upnp/.libs/libupnp.a(libupnp_la-upnpapi.o):libupnp/upnp/src/inc/upnpapi.h:163: first defined here
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   meta = {
-    homepage = "http://djmount.sourceforge.net/";
+    homepage = "https://djmount.sourceforge.net/";
     description = "UPnP AV client, mounts as a Linux filesystem the media content of compatible UPnP AV devices";
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.jagajaga ];

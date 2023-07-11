@@ -11,21 +11,21 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "open-watcom-v2";
-  version = "unstable-2022-03-14";
-  name = "${pname}-unwrapped-${version}";
+  pname = "${passthru.prettyName}-unwrapped";
+  # nixpkgs-update: no auto update
+  version = "unstable-2023-05-17";
 
   src = fetchFromGitHub {
     owner = "open-watcom";
     repo = "open-watcom-v2";
-    rev = "22627ccc1bd3de70aff9ac056e0dc9ecf7f7b6ec";
-    sha256 = "khy/fhmQjTGKfx6iOUBt+ySwpEx0df/7meyNvBnJAPY=";
+    rev = "4053c858ac1f83a186704434bd16b6a6b8f4cf88";
+    sha256 = "sha256-o+cA5kqPow+ERCeWdA3UNKawF+EjuL87lPXUjFT/D1w=";
   };
 
   postPatch = ''
     patchShebangs *.sh
 
-    for dateSource in cmnvars.sh bld/wipfc/configure; do
+    for dateSource in bld/wipfc/configure; do
       substituteInPlace $dateSource \
         --replace '`date ' '`date -ud "@$SOURCE_DATE_EPOCH" '
     done
@@ -35,14 +35,17 @@ stdenv.mkDerivation rec {
       --replace '__TIME__' "\"$(date -ud "@$SOURCE_DATE_EPOCH" +'%T')\""
 
     substituteInPlace build/makeinit \
-      --replace '%__CYEAR__' '%OWCYEAR'
+      --replace '$+$(%__CYEAR__)$-' "$(date -ud "@$SOURCE_DATE_EPOCH" +'%Y')"
   '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace build/mif/local.mif \
       --replace '-static' ""
   '';
 
-  nativeBuildInputs = [ dosbox ]
-    ++ lib.optional withDocs ghostscript;
+  nativeBuildInputs = [
+    dosbox
+  ] ++ lib.optionals withDocs [
+    ghostscript
+  ];
 
   configurePhase = ''
     runHook preConfigure
@@ -82,8 +85,11 @@ stdenv.mkDerivation rec {
   # Stripping breaks many tools
   dontStrip = true;
 
-  passthru.updateScript = unstableGitUpdater {
-    url = "https://github.com/open-watcom/open-watcom-v2.git";
+  passthru = {
+    prettyName = "open-watcom-v2";
+    updateScript = unstableGitUpdater {
+      url = "https://github.com/open-watcom/open-watcom-v2.git";
+    };
   };
 
   meta = with lib; {
@@ -117,7 +123,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://open-watcom.github.io";
     license = licenses.watcom;
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "x86_64-windows" "i686-windows" ];
+    platforms = with platforms; windows ++ unix;
+    badPlatforms = platforms.riscv ++ [ "powerpc64-linux" "powerpc64le-linux" "mips64el-linux" ];
     maintainers = with maintainers; [ OPNA2608 ];
   };
 }

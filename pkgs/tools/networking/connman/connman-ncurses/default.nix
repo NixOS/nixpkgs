@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ dbus ncurses json_c connman ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   installPhase = ''
     mkdir -p "$out/bin"

@@ -15,6 +15,7 @@ let
   perl' = perl.withPackages (p: with p; [
     AuthenSASL
     ConvertASN1
+    IOSocketSSL
     perlldap
   ]);
 in

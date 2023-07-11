@@ -51,10 +51,10 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libpulsar";
-  version = "2.9.1";
+  version = "2.10.2";
 
   src = fetchurl {
-    hash = "sha512-NKHiL7D/Lmnn6ICpQyUmmQYQETz4nZPJU9/4LMRDUQ3Pck6qDh+t6CRk+b9UQ2Vb0jvPIGTjEsSp2nC7TJk3ug==";
+    hash = "sha256-IONnsSDbnX2qz+Xya0taHYSViTOiRI36AfcxmY3dNpo=";
     url = "mirror://apache/pulsar/pulsar-${version}/apache-pulsar-${version}-src.tar.gz";
   };
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     ++ defaultOptionals;
 
   # Needed for GCC on Linux
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=return-type" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=return-type" ];
 
   cmakeFlags = [
     "-DBUILD_TESTS=${enableCmakeFeature gtestSupport}"

@@ -10,15 +10,11 @@
 , gobject-introspection
 , grail
 , gtk3
-, libX11
-, libXext
-, libXi
-, libXtst
+, xorg
 , pango
 , xorgserver
 }:
 
-with lib;
 
 stdenv.mkDerivation rec {
   pname = "geis";
@@ -29,7 +25,7 @@ stdenv.mkDerivation rec {
     sha256 = "1svhbjibm448ybq6gnjjzj0ak42srhihssafj0w402aj71lgaq4a";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=misleading-indentation -Wno-error=pointer-compare";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=misleading-indentation -Wno-error=pointer-compare";
 
   hardeningDisable = [ "format" ];
 
@@ -38,7 +34,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook python3Packages.wrapPython];
   buildInputs = [ atk dbus evemu frame gdk-pixbuf gobject-introspection grail
-    gtk3 libX11 libXext libXi libXtst pango python3Packages.python xorgserver
+    gtk3 xorg.libX11 xorg.libXext xorg.libXi xorg.libXtst pango python3Packages.python xorgserver
   ];
 
   patchPhase = ''
@@ -51,7 +47,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--set PYTHONPATH "$program_PYTHONPATH")
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A library for input gesture recognition";
     homepage = "https://launchpad.net/geis";
     license = licenses.gpl2;

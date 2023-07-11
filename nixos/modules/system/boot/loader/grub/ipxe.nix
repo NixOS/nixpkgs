@@ -28,7 +28,7 @@ in
     { boot.loader.grub.ipxe = mkOption {
         type = types.attrsOf (types.either types.path types.str);
         description =
-          ''
+          lib.mdDoc ''
             Set of iPXE scripts available for
             booting from the GRUB boot menu.
           '';
@@ -46,11 +46,7 @@ in
 
   config = mkIf (builtins.length scripts != 0) {
 
-    boot.loader.grub.extraEntries =
-      if config.boot.loader.grub.version == 2 then
-        toString (map grubEntry scripts)
-      else
-        throw "iPXE is not supported with GRUB 1.";
+    boot.loader.grub.extraEntries = toString (map grubEntry scripts);
 
     boot.loader.grub.extraFiles =
       { "ipxe.lkrn" = "${pkgs.ipxe}/ipxe.lkrn"; }

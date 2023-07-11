@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -20,7 +21,8 @@ stdenv.mkDerivation rec {
   pname = "libportal" + lib.optionalString (variant != null) "-${variant}";
   version = "0.6";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ]
+    ++ lib.optional (variant != "qt5") "devdoc";
 
   src = fetchFromGitHub {
     owner = "flatpak";
@@ -28,6 +30,20 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-wDDE43UC6FBgPYLS+WWExeheURCH/3fCKu5oJg7GM+A=";
   };
+
+  # TODO: remove on 0.7
+  patches = [
+    # https://github.com/flatpak/libportal/pull/107
+    (fetchpatch {
+      name = "check-presence-of-sys-vfs-h.patch";
+      url = "https://github.com/flatpak/libportal/commit/e91a5d2ceb494ca0dd67295736e671b0142c7540.patch";
+      sha256 = "sha256-uFyhlU2fJgW4z0I31fABdc+pimLFYkqM4lggSIFs1tw=";
+    })
+  ];
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     meson
@@ -47,12 +63,14 @@ stdenv.mkDerivation rec {
     gtk4
   ] ++ lib.optionals (variant == "qt5") [
     libsForQt5.qtbase
+    libsForQt5.qtx11extras
   ];
 
   mesonFlags = [
     "-Dbackends=${lib.optionalString (variant != null) variant}"
     "-Dvapi=${if variant != "qt5" then "true" else "false"}"
     "-Dintrospection=${if variant != "qt5" then "true" else "false"}"
+    "-Ddocs=${if variant != "qt5" then "true" else "false"}" # requires introspection=true
   ];
 
   postFixup = ''
@@ -60,11 +78,14 @@ stdenv.mkDerivation rec {
     moveToOutput "share/doc" "$devdoc"
   '';
 
+  # we don't have any binaries
+  dontWrapQtApps = true;
+
   meta = with lib; {
     description = "Flatpak portal library";
     homepage = "https://github.com/flatpak/libportal";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

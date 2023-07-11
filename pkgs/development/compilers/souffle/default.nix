@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , bash-completion, perl, ncurses, zlib, sqlite, libffi
 , mcpp, cmake, bison, flex, doxygen, graphviz
 , makeWrapper
@@ -10,14 +10,20 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "souffle";
-  version = "2.2";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner  = "souffle-lang";
     repo   = "souffle";
     rev    = version;
-    sha256 = "sha256-whvC+DL9XbQLc4wf2kFxUKXSyJnGkYq0/0uLCLbliJU=";
+    sha256 = "sha256-5g2Ikbfm5nQrsgGntZZ/VbjqSDOj0AP/mnH1nW2b4co=";
   };
+
+  patches = [
+    ./threads.patch
+  ];
+
+  hardeningDisable = lib.optionals stdenv.isDarwin [ "strictoverflow" ];
 
   nativeBuildInputs = [ bison cmake flex mcpp doxygen graphviz makeWrapper perl ];
   buildInputs = [ bash-completion ncurses zlib sqlite libffi ];

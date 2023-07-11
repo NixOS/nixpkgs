@@ -1,4 +1,5 @@
 { lib
+, async-timeout
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
@@ -11,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "elkm1-lib";
-  version = "1.3.1";
+  version = "2.2.5";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "gwww";
     repo = "elkm1";
-    rev = version;
-    hash = "sha256-z6iiXMvBZs4JshQofQpPA7u89wu8owW1wi+JAYk/R9k=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-8Mzxaww6a+vi3i8H4W9jRgY+5mpTGaJbNBXPDPn8sl4=";
   };
 
   nativeBuildInputs = [
@@ -28,10 +29,11 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    async-timeout
     pyserial-asyncio
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
@@ -43,6 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for interacting with ElkM1 alarm/automation panel";
     homepage = "https://github.com/gwww/elkm1";
+    changelog = "https://github.com/gwww/elkm1/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

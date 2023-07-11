@@ -5,22 +5,24 @@
 , pkg-config
 , lxqt-build-tools
 , json-glib
+, libexif
 , libfm-qt
+, menu-cache
 , qtbase
 , qttools
 , qtx11extras
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
   pname = "lxqt-archiver";
-  version = "0.5.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-archiver";
     rev = version;
-    sha256 = "033lq7n34a5qk2zv8kr1633p5x2cjimv4w4n86w33xmcwya4yiji";
+    sha256 = "C38c/jCyRur7jQSgU2ByasCQnollHgy3/mUoNv61OCU=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +33,9 @@ mkDerivation rec {
 
   buildInputs = [
     json-glib
+    libexif
     libfm-qt
+    menu-cache
     qtbase
     qttools
     qtx11extras
@@ -39,13 +43,13 @@ mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-archiver/";
     description = "Archive tool for the LXQt desktop environment";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ jchw ];
+    maintainers = with maintainers; [ jchw ] ++ teams.lxqt.members;
   };
 }

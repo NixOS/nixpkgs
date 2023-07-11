@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools-scm
 , requests
 , tqdm
 , nose
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "habanero";
-  version = "1.2.0";
+  version = "1.2.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,16 +20,20 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sckott";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-jxaO8nCR5jhXCPjhjVLKaGeQp9JF3ECQ1+j3TOJKawg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-IQp85Cigs0in3X07a9d45nMC3X2tAkPzl5hFVhfr00o=";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     requests
     tqdm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     vcrpy
   ];

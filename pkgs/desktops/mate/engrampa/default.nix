@@ -1,12 +1,25 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, libxml2, gtk3, file, mate, hicolor-icon-theme, wrapGAppsHook, mateUpdateScript }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, itstool
+, libxml2
+, gtk3
+, file
+, mate
+, hicolor-icon-theme
+, wrapGAppsHook
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "engrampa";
-  version = "1.26.0";
+  version = "1.26.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1qsy0ynhj1v0kyn3g3yf62g31rwxmpglfh9xh0w5lc9j5k1b5kcp";
+    sha256 = "8CJBB6ek6epjCcnniqX6rIAsTPcqSawoOqnnrh6KbEo=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +45,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
     description = "Archive Manager for MATE";

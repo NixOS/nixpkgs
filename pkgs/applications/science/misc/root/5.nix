@@ -5,7 +5,7 @@
 , cmake
 , pcre
 , pkg-config
-, python2
+, python3
 , libX11
 , libXpm
 , libXft
@@ -14,9 +14,10 @@
 , libGL
 , zlib
 , libxml2
+, libxcrypt
 , lz4
 , xz
-, gsl_1
+, gsl
 , xxHash
 , Cocoa
 , OpenGL
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ pcre python2 zlib libxml2 lz4 xz gsl_1 xxHash ]
+  buildInputs = [ pcre python3 zlib libxml2 lz4 xz gsl xxHash libxcrypt ]
     ++ lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
     ++ lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL ]
   ;
@@ -57,6 +58,11 @@ stdenv.mkDerivation rec {
       name = "root5-gcc10-fix.patch";
       url = "https://github.com/root-project/root/commit/3c243b18768d3c3501faf3ca4e4acfc071021350.diff";
       sha256 = "1hjmgnp4zx6im8ps78673x0rrhmfyy1nffhgxjlfl1r2z8cq210z";
+    })
+    (fetchpatch {
+      name = "root5-python37-fix.patch";
+      url = "https://github.com/root-project/root/commit/c75458024082de0cc35b45505c652b8460a9e71b.patch";
+      sha256 = "sha256-A5zEjQE9OGPFp/L1HUs4NIdxQMRiwbwCRNWOLN2ENrM=";
     })
   ];
 
@@ -85,6 +91,11 @@ stdenv.mkDerivation rec {
 
     patchShebangs build/unix/
     ln -s ${lib.getDev stdenv.cc.libc}/include/AvailabilityMacros.h cint/cint/include/
+
+    # __malloc_hook is deprecated
+    substituteInPlace misc/memstat/src/TMemStatHook.cxx \
+      --replace "defined(R__GNU) && (defined(R__LINUX) || defined(__APPLE__))" \
+                "defined(R__GNU) && (defined(__APPLE__))"
   ''
   # Fix CINTSYSDIR for "build" version of rootcint
   # This is probably a bug that breaks out-of-source builds
@@ -99,6 +110,7 @@ stdenv.mkDerivation rec {
     "-Drpath=ON"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_CXX_FLAGS=-std=c++11"
     "-Dalien=OFF"
     "-Dbonjour=OFF"
     "-Dcastor=OFF"
@@ -137,6 +149,7 @@ stdenv.mkDerivation rec {
     homepage = "https://root.cern.ch/";
     description = "A data analysis framework";
     platforms = platforms.unix;
+    broken = !stdenv.isx86_64;
     maintainers = with maintainers; [ veprbl ];
     license = licenses.lgpl21;
   };

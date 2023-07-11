@@ -1,47 +1,77 @@
 { lib
+, argon2-cffi
 , buildPythonPackage
-, fetchFromGitHub
-, python
-, notebook
-, pythonOlder
-, jupyter_server
-, pytestCheckHook
+, fetchPypi
+, ipykernel
+, ipython_genutils
+, jinja2
+, jupyter-client
+, jupyter-core
+, jupyter-server
+, nbconvert
+, nbformat
+, nest-asyncio
+, notebook-shim
+, prometheus-client
+, pytest-jupyter
 , pytest-tornasync
+, pytestCheckHook
+, pythonOlder
+, pyzmq
+, send2trash
+, terminado
+, tornado
+, traitlets
 }:
 
 buildPythonPackage rec {
   pname = "nbclassic";
-  version = "0.3.5";
-  disabled = pythonOlder "3.6";
+  version = "0.5.2";
+  format = "setuptools";
 
-  # tests only on github
-  src = fetchFromGitHub {
-    owner = "jupyterlab";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1d0x7nwsaw5qjw4iaylc2sxlpiq3hlg9sy3i2nh7sn3wckwl76lc";
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-QPEbvMWeiVbD1e8TLeyOWoU+iT7Pgx55HVTaDYpQ150=";
   };
 
-  propagatedBuildInputs = [ jupyter_server notebook ];
+  propagatedBuildInputs = [
+    argon2-cffi
+    ipykernel
+    ipython_genutils
+    jinja2
+    jupyter-client
+    jupyter-core
+    jupyter-server
+    nbconvert
+    nbformat
+    nest-asyncio
+    notebook-shim
+    prometheus-client
+    pyzmq
+    send2trash
+    terminado
+    tornado
+    traitlets
+  ];
 
-  preCheck = ''
-    cd nbclassic
-    mv conftest.py tests
-    cd tests
-
-    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
-  '';
-  checkInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [
+    pytest-jupyter
     pytest-tornasync
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "nbclassic"
   ];
 
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "Jupyter lab environment notebook server extension.";
+    description = "Jupyter lab environment notebook server extension";
+    homepage = "https://github.com/jupyter/nbclassic";
     license = with licenses; [ bsd3 ];
-    homepage = "https://github.com/jupyterlab/nbclassic";
-    maintainers = [ maintainers.elohmeier ];
+    maintainers = with maintainers; [ elohmeier ];
   };
 }

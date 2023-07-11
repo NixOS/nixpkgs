@@ -1,57 +1,72 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 , click
 , cloudpickle
 , dask
+, fetchFromGitHub
+, jinja2
+, locket
 , msgpack
+, packaging
 , psutil
+, pythonOlder
+, pyyaml
+, setuptools
+, setuptools-scm
 , sortedcontainers
 , tblib
 , toolz
 , tornado
+, urllib3
+, versioneer
+, wheel
 , zict
-, pyyaml
-, mpi4py
-, bokeh
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2022.2.1";
-  format = "setuptools";
+  version = "2023.4.1";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
-  # get full repository need conftest.py to run tests
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-+2KnWvjvM7vhqoCmjAGjOpPBzVozLdAXq0SVW/fs9ls=";
+  src = fetchFromGitHub {
+    owner = "dask";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-KCgftu3i8N0WSelHiqWqa1vLN5gUtleftSUx1Zu4nZg=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    versioneer
+  ];
+
   propagatedBuildInputs = [
-    bokeh
     click
     cloudpickle
     dask
-    mpi4py
+    jinja2
+    locket
     msgpack
+    packaging
     psutil
     pyyaml
     sortedcontainers
     tblib
     toolz
     tornado
+    urllib3
     zict
   ];
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "dask == 2022.02.0" "dask"
-  '';
-
-  # when tested random tests would fail and not repeatably
+  # When tested random tests would fail and not repeatably
   doCheck = false;
 
   pythonImportsCheck = [
@@ -61,8 +76,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Distributed computation in Python";
     homepage = "https://distributed.readthedocs.io/";
+    changelog = "https://github.com/dask/distributed/blob/${version}/docs/source/changelog.rst";
     license = licenses.bsd3;
-    platforms = platforms.x86; # fails on aarch64
     maintainers = with maintainers; [ teh costrouc ];
   };
 }

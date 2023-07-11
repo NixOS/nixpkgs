@@ -4,6 +4,8 @@
 , updateScript ? null
 , binaryName ? "firefox"
 , application ? "browser"
+, applicationName ? "Mozilla Firefox"
+, branding ? null
 , src
 , unpackPhase ? null
 , extraPatches ? []
@@ -18,14 +20,17 @@
 
 
 { lib
+, pkgs
 , stdenv
 , fetchpatch
+, patchelf
 
 # build time
 , autoconf
 , cargo
-, gnused
+, dump_syms
 , makeWrapper
+, mimalloc
 , nodejs
 , perl
 , pkg-config
@@ -50,6 +55,7 @@
 , gnum4
 , gtk3
 , icu
+, icu72
 , libGL
 , libGLU
 , libevent
@@ -67,6 +73,7 @@
 , xorg
 , zip
 , zlib
+, pkgsBuildBuild
 
 # optionals
 
@@ -82,11 +89,13 @@
 , alsaSupport ? stdenv.isLinux, alsa-lib
 , ffmpegSupport ? true
 , gssSupport ? true, libkrb5
-, jemallocSupport ? true, jemalloc
-, ltoSupport ? (stdenv.isLinux && stdenv.is64bit), overrideCC, buildPackages
-, pgoSupport ? (stdenv.isLinux && stdenv.isx86_64 && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
+, jackSupport ? stdenv.isLinux, libjack2
+, jemallocSupport ? !stdenv.hostPlatform.isMusl, jemalloc
+, ltoSupport ? (stdenv.isLinux && stdenv.is64bit && !stdenv.hostPlatform.isRiscV), overrideCC, buildPackages
+, pgoSupport ? (stdenv.isLinux && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
 , pipewireSupport ? waylandSupport && webrtcSupport
 , pulseaudioSupport ? stdenv.isLinux, libpulseaudio
+, sndioSupport ? stdenv.isLinux, sndio
 , waylandSupport ? true, libxkbcommon, libdrm
 
 ## privacy-related options
@@ -96,9 +105,11 @@
 # WARNING: NEVER set any of the options below to `true` by default.
 # Set to `!privacySupport` or `false`.
 
+, crashreporterSupport ? !privacySupport && !stdenv.hostPlatform.isRiscV && !stdenv.hostPlatform.isMusl, curl
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
-, webrtcSupport ? !privacySupport
+, mlsAPISupport ? geolocationSupport
+, webrtcSupport ? !privacySupport && !stdenv.hostPlatform.isRiscV
 
 # digital rights managemewnt
 
@@ -108,11 +119,6 @@
 # Controlling the nagbar and widevine CDM at runtime is possible by setting
 # `browser.eme.ui.enabled` and `media.gmp-widevinecdm.enabled` accordingly
 , drmSupport ? true
-
-## other
-
-, crashreporterSupport ? false
-, safeBrowsingSupport ? false
 
 # As stated by Sylvestre Ledru (@sylvestre) on Nov 22, 2017 at
 # https://github.com/NixOS/nixpkgs/issues/31843#issuecomment-346372756 we
@@ -139,20 +145,25 @@ assert stdenv.cc.libc or null != null;
 assert pipewireSupport -> !waylandSupport || !webrtcSupport -> throw "${pname}: pipewireSupport requires both wayland and webrtc support.";
 
 let
-  flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
+  inherit (lib) enableFeature;
 
   # Target the LLVM version that rustc is built with for LTO.
   llvmPackages0 = rustc.llvmPackages;
+  llvmPackagesBuildBuild0 = pkgsBuildBuild.rustc.llvmPackages;
 
   # Force the use of lld and other llvm tools for LTO
   llvmPackages = llvmPackages0.override {
     bootBintoolsNoLibc = null;
     bootBintools = null;
   };
+  llvmPackagesBuildBuild = llvmPackagesBuildBuild0.override {
+    bootBintoolsNoLibc = null;
+    bootBintools = null;
+  };
 
   # LTO requires LLVM bintools including ld.lld and llvm-ar.
   buildStdenv = overrideCC llvmPackages.stdenv (llvmPackages.stdenv.cc.override {
-    inherit (llvmPackages) bintools;
+    bintools = if ltoSupport then buildPackages.rustc.llvmPackages.bintools else stdenv.cc.bintools;
   });
 
   # Compile the wasm32 sysroot to build the RLBox Sandbox
@@ -164,13 +175,46 @@ let
       ln -s $lib $out/lib/wasm32-wasi
     done
   '';
+
+  distributionIni = pkgs.writeText "distribution.ini" (lib.generators.toINI {} {
+    # Some light branding indicating this build uses our distro preferences
+    Global = {
+      id = "nixos";
+      version = "1.0";
+      about = "${applicationName} for NixOS";
+    };
+    Preferences = {
+      # These values are exposed through telemetry
+      "app.distributor" = "nixos";
+      "app.distributor.channel" = "nixpkgs";
+      "app.partner.nixos" = "nixos";
+    };
+  });
+
+  defaultPrefs = {
+    "geo.provider.network.url" = {
+      value = "https://location.services.mozilla.com/v1/geolocate?key=%MOZILLA_API_KEY%";
+      reason = "Use MLS by default for geolocation, since our Google API Keys are not working";
+    };
+  };
+
+  defaultPrefsFile = pkgs.writeText "nixos-default-prefs.js" (lib.concatStringsSep "\n" (lib.mapAttrsToList (key: value: ''
+    // ${value.reason}
+    pref("${key}", ${builtins.toJSON value.value});
+  '') defaultPrefs));
+
 in
 
-buildStdenv.mkDerivation ({
-  name = "${pname}-unwrapped-${version}";
+buildStdenv.mkDerivation {
+  pname = "${pname}-unwrapped";
   inherit version;
 
   inherit src unpackPhase meta;
+
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals crashreporterSupport [ "symbols" ];
 
   # Add another configure-build-profiling run before the final configure phase if we build with pgo
   preConfigurePhases = lib.optionals pgoSupport [
@@ -179,24 +223,41 @@ buildStdenv.mkDerivation ({
     "profilingPhase"
   ];
 
-  patches = [
+  patches = lib.optionals (lib.versionAtLeast version "112.0" && lib.versionOlder version "113.0") [
     (fetchpatch {
-      # RDD Sandbox paths for NixOS, remove with Firefox>=100
-      # https://hg.mozilla.org/integration/autoland/rev/5ac6a69a01f47ca050d90704a9791b8224d30f14
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1761692
-      name = "mozbz-1761692-rdd-sandbox-paths.patch";
-      url = "https://hg.mozilla.org/integration/autoland/raw-rev/5ac6a69a01f47ca050d90704a9791b8224d30f14";
-      hash = "sha256-+NGRUxXA7HGvPaAwvDveqRsdXof5nBIc+l4hdf7cC/Y=";
+      # Crash when desktop scaling does not divide window scale on Wayland
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1803016
+      name = "mozbz1803016.patch";
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/1068e0955cfb";
+      hash = "sha256-iPqmofsmgvlFNm+mqVPbdgMKmP68ANuzYu+PzfCpoNA=";
+    })
+  ] ++ lib.optionals (lib.versionOlder version "114.0") [
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1830040
+    # https://hg.mozilla.org/mozilla-central/rev/cddb250a28d8
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/community/firefox/avoid-redefinition.patch?id=2f620d205ed0f9072bbd7714b5ec1b7bf6911c12";
+      hash = "sha256-fLUYaJwhrC/wF24HkuWn2PHqz7LlAaIZ1HYjRDB2w9A=";
     })
   ]
-  ++ lib.optional (lib.versionAtLeast version "86") ./env_var_for_system_dir-ff86.patch
-  ++ lib.optional (lib.versionAtLeast version "90" && lib.versionOlder version "95") ./no-buildconfig-ffx90.patch
+  ++ lib.optionals (lib.versionOlder version "102.13") [
+    # cherry-pick bindgen change to fix build with clang 16
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/community/firefox-esr/bindgen.patch?id=4c4b0c01c808657fffc5b796c56108c57301b28f";
+      hash = "sha256-lTvgT358M4M2vedZ+A6xSKsBYhSN+McdmEeR9t75MLU=";
+    })
+    # cherry-pick mp4parse change fixing build with Rust 1.70+
+    # original change: https://github.com/mozilla/mp4parse-rust/commit/8b5b652d38e007e736bb442ccd5aa5ed699db100
+    # vendored to update checksums
+    ./mp4parse-rust-170.patch
+  ]
+  ++ lib.optional (lib.versionOlder version "111") ./env_var_for_system_dir-ff86.patch
+  ++ lib.optional (lib.versionAtLeast version "111") ./env_var_for_system_dir-ff111.patch
   ++ lib.optional (lib.versionAtLeast version "96") ./no-buildconfig-ffx96.patch
   ++ extraPatches;
 
   postPatch = ''
     rm -rf obj-x86_64-pc-linux-gnu
-    patchShebangs mach
+    patchShebangs mach build
   ''
   + extraPostPatch;
 
@@ -205,11 +266,15 @@ buildStdenv.mkDerivation ({
   # two patches.
   patchFlags = [ "-p1" "-l" ];
 
+  # if not explicitly set, wrong cc from buildStdenv would be used
+  HOST_CC = "${llvmPackagesBuildBuild.stdenv.cc}/bin/cc";
+  HOST_CXX = "${llvmPackagesBuildBuild.stdenv.cc}/bin/c++";
+
   nativeBuildInputs = [
     autoconf
     cargo
-    gnused
-    llvmPackages.llvm # llvm-objdump
+    gnum4
+    llvmPackagesBuildBuild.bintools
     makeWrapper
     nodejs
     perl
@@ -222,6 +287,7 @@ buildStdenv.mkDerivation ({
     which
     wrapGAppsHook
   ]
+  ++ lib.optionals crashreporterSupport [ dump_syms patchelf ]
   ++ lib.optionals pgoSupport [ xvfb-run ]
   ++ extraNativeBuildInputs;
 
@@ -244,47 +310,71 @@ buildStdenv.mkDerivation ({
     # Set consistent remoting name to ensure wmclass matches with desktop file
     export MOZ_APP_REMOTINGNAME="${binaryName}"
 
-    # Use our own python
-    export MACH_USE_SYSTEM_PYTHON=1
-
     # AS=as in the environment causes build failure
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1497286
     unset AS
 
-  '' + lib.optionalString (lib.versionAtLeast version "95.0") ''
+    # Use our own python
+    export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system
+
     # RBox WASM Sandboxing
     export WASM_CC=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}cc
     export WASM_CXX=${pkgsCross.wasi32.stdenv.cc}/bin/${pkgsCross.wasi32.stdenv.cc.targetPrefix}c++
- '' + lib.optionalString pgoSupport ''
-   if [ -e "$TMPDIR/merged.profdata" ]; then
-     echo "Configuring with profiling data"
-     for i in "''${!configureFlagsArray[@]}"; do
-       if [[ ''${configureFlagsArray[i]} = "--enable-profile-generate=cross" ]]; then
-         unset 'configureFlagsArray[i]'
-       fi
-     done
-     configureFlagsArray+=(
-       "--enable-profile-use=cross"
-       "--with-pgo-profile-path="$TMPDIR/merged.profdata""
-       "--with-pgo-jarlog="$TMPDIR/jarlog""
-     )
-   else
-     echo "Configuring to generate profiling data"
-     configureFlagsArray+=(
-       "--enable-profile-generate=cross"
-     )
-   fi
+  '' + lib.optionalString pgoSupport ''
+    if [ -e "$TMPDIR/merged.profdata" ]; then
+      echo "Configuring with profiling data"
+      for i in "''${!configureFlagsArray[@]}"; do
+        if [[ ''${configureFlagsArray[i]} = "--enable-profile-generate=cross" ]]; then
+          unset 'configureFlagsArray[i]'
+        fi
+      done
+      configureFlagsArray+=(
+        "--enable-profile-use=cross"
+        "--with-pgo-profile-path="$TMPDIR/merged.profdata""
+        "--with-pgo-jarlog="$TMPDIR/jarlog""
+      )
+      ${lib.optionalString stdenv.hostPlatform.isMusl ''
+        LDFLAGS="$OLD_LDFLAGS"
+        unset OLD_LDFLAGS
+      ''}
+    else
+      echo "Configuring to generate profiling data"
+      configureFlagsArray+=(
+        "--enable-profile-generate=cross"
+      )
+      ${lib.optionalString stdenv.hostPlatform.isMusl
+      # Set the rpath appropriately for the profiling run
+      # During the profiling run, loading libraries from $out would fail,
+      # since the profiling build has not been installed to $out
+      ''
+        OLD_LDFLAGS="$LDFLAGS"
+        LDFLAGS="-Wl,-rpath,$(pwd)/mozobj/dist/${binaryName}"
+      ''}
+    fi
   '' + lib.optionalString googleAPISupport ''
     # Google API key used by Chromium and Firefox.
     # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
-    # please get your own set of keys.
-    echo "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI" > $TMPDIR/ga
+    # please get your own set of keys at https://www.chromium.org/developers/how-tos/api-keys/.
+    echo "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI" > $TMPDIR/google-api-key
     # 60.5+ & 66+ did split the google API key arguments: https://bugzilla.mozilla.org/show_bug.cgi?id=1531176
-    configureFlagsArray+=("--with-google-location-service-api-keyfile=$TMPDIR/ga")
-    configureFlagsArray+=("--with-google-safebrowsing-api-keyfile=$TMPDIR/ga")
-  '' + lib.optionalString enableOfficialBranding ''
+    configureFlagsArray+=("--with-google-location-service-api-keyfile=$TMPDIR/google-api-key")
+    configureFlagsArray+=("--with-google-safebrowsing-api-keyfile=$TMPDIR/google-api-key")
+  '' + lib.optionalString mlsAPISupport ''
+    # Mozilla Location services API key
+    # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
+    # please get your own set of keys at https://location.services.mozilla.com/api.
+    echo "dfd7836c-d458-4917-98bb-421c82d3c8a0" > $TMPDIR/mls-api-key
+    configureFlagsArray+=("--with-mozilla-api-keyfile=$TMPDIR/mls-api-key")
+  '' + lib.optionalString (enableOfficialBranding && !stdenv.is32bit) ''
     export MOZILLA_OFFICIAL=1
+  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
+    # linking firefox hits the vm.max_map_count kernel limit with the default musl allocator
+    # TODO: Default vm.max_map_count has been increased, retest without this
+    export LD_PRELOAD=${mimalloc}/lib/libmimalloc.so
   '';
+
+  # firefox has a different definition of configurePlatforms from nixpkgs, see configureFlags
+  configurePlatforms = [ ];
 
   configureFlags = [
     "--disable-tests"
@@ -292,7 +382,8 @@ buildStdenv.mkDerivation ({
     "--enable-application=${application}"
     "--enable-default-toolkit=cairo-gtk3${lib.optionalString waylandSupport "-wayland"}"
     "--enable-system-pixman"
-    "--with-libclang-path=${llvmPackages.libclang.lib}/lib"
+    "--with-distribution-id=org.nixos"
+    "--with-libclang-path=${llvmPackagesBuildBuild.libclang.lib}/lib"
     "--with-system-ffi"
     "--with-system-icu"
     "--with-system-jpeg"
@@ -303,6 +394,10 @@ buildStdenv.mkDerivation ({
     "--with-system-png" # needs APNG support
     "--with-system-webp"
     "--with-system-zlib"
+    "--with-wasi-sysroot=${wasiSysRoot}"
+    # for firefox, host is buildPlatform, target is hostPlatform
+    "--host=${buildStdenv.buildPlatform.config}"
+    "--target=${buildStdenv.hostPlatform.config}"
   ]
   # LTO is done using clang and lld on Linux.
   ++ lib.optionals ltoSupport [
@@ -312,27 +407,28 @@ buildStdenv.mkDerivation ({
   # elf-hack is broken when using clang+lld:
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
   ++ lib.optional (ltoSupport && (buildStdenv.isAarch32 || buildStdenv.isi686 || buildStdenv.isx86_64)) "--disable-elf-hack"
-  ++ lib.optional (lib.versionAtLeast version "95") "--with-wasi-sysroot=${wasiSysRoot}"
-
-  ++ flag alsaSupport "alsa"
-  ++ flag pulseaudioSupport "pulseaudio"
-  ++ flag ffmpegSupport "ffmpeg"
-  ++ flag jemallocSupport "jemalloc"
-  ++ flag geolocationSupport "necko-wifi"
-  ++ flag gssSupport "negotiateauth"
-  ++ flag webrtcSupport "webrtc"
-  ++ flag crashreporterSupport "crashreporter"
   ++ lib.optional (!drmSupport) "--disable-eme"
-
-  ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
-                    else [ "--disable-debug" "--enable-optimize" ])
-  # --enable-release adds -ffunction-sections & LTO that require a big amount of
-  # RAM and the 32-bit memory space cannot handle that linking
-  ++ flag (!debugBuild && !stdenv.is32bit) "release"
-  ++ flag enableDebugSymbols "debug-symbols"
+  ++ [
+    (enableFeature alsaSupport "alsa")
+    (enableFeature crashreporterSupport "crashreporter")
+    (enableFeature ffmpegSupport "ffmpeg")
+    (enableFeature geolocationSupport "necko-wifi")
+    (enableFeature gssSupport "negotiateauth")
+    (enableFeature jackSupport "jack")
+    (enableFeature jemallocSupport "jemalloc")
+    (enableFeature pulseaudioSupport "pulseaudio")
+    (enableFeature sndioSupport "sndio")
+    (enableFeature webrtcSupport "webrtc")
+    (enableFeature debugBuild "debug")
+    (if debugBuild then "--enable-profiling" else "--enable-optimize")
+    # --enable-release adds -ffunction-sections & LTO that require a big amount
+    # of RAM, and the 32-bit memory space cannot handle that linking
+    (enableFeature (!debugBuild && !stdenv.is32bit) "release")
+    (enableFeature enableDebugSymbols "debug-symbols")
+  ]
   ++ lib.optionals enableDebugSymbols [ "--disable-strip" "--disable-install-strip" ]
-
   ++ lib.optional enableOfficialBranding "--enable-official-branding"
+  ++ lib.optional (branding != null) "--with-branding=${branding}"
   ++ extraConfigureFlags;
 
   buildInputs = [
@@ -343,9 +439,7 @@ buildStdenv.mkDerivation ({
     fontconfig
     freetype
     glib
-    gnum4
     gtk3
-    icu
     libffi
     libGL
     libGLU
@@ -373,9 +467,14 @@ buildStdenv.mkDerivation ({
     zip
     zlib
   ]
-  ++ [ (if (lib.versionAtLeast version "92") then nss_latest else nss_esr) ]
+  # icu73 changed how it follows symlinks which breaks in the firefox sandbox
+  # https://bugzilla.mozilla.org/show_bug.cgi?id=1839287
+  ++ [ (if (lib.versionAtLeast version "115") then icu else icu72) ]
+  ++ [ (if (lib.versionAtLeast version "103") then nss_latest else nss_esr) ]
   ++ lib.optional  alsaSupport alsa-lib
+  ++ lib.optional  jackSupport libjack2
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
+  ++ lib.optional  sndioSupport sndio
   ++ lib.optional  gssSupport libkrb5
   ++ lib.optionals waylandSupport [ libxkbcommon libdrm ]
   ++ lib.optional  jemallocSupport jemalloc
@@ -413,15 +512,32 @@ buildStdenv.mkDerivation ({
   makeFlags = extraMakeFlags;
   separateDebugInfo = enableDebugSymbols;
   enableParallelBuilding = true;
+  env = lib.optionalAttrs stdenv.hostPlatform.isMusl {
+    # Firefox relies on nonstandard behavior of the glibc dynamic linker. It re-uses
+    # previously loaded libraries even though they are not in the rpath of the newly loaded binary.
+    # On musl we have to explicity set the rpath to include these libraries.
+    LDFLAGS = "-Wl,-rpath,${placeholder "out"}/lib/${binaryName}";
+  };
 
   # tests were disabled in configureFlags
   doCheck = false;
 
-  preInstall = ''
+  # Generate build symbols once after the final build
+  # https://firefox-source-docs.mozilla.org/crash-reporting/uploading_symbol.html
+  preInstall = lib.optionalString crashreporterSupport ''
+    ./mach buildsymbols
+    mkdir -p $symbols/
+    cp mozobj/dist/*.crashreporter-symbols.zip $symbols/
+  '' + ''
     cd mozobj
   '';
 
-  postInstall = lib.optionalString buildStdenv.isLinux ''
+  postInstall = ''
+    # Install distribution customizations
+    install -Dvm644 ${distributionIni} $out/lib/${binaryName}/distribution/distribution.ini
+    install -Dvm644 ${defaultPrefsFile} $out/lib/${binaryName}/browser/defaults/preferences/nixos-default-prefs.js
+
+  '' + lib.optionalString buildStdenv.isLinux ''
     # Remove SDK cruft. FIXME: move to a separate output?
     rm -rf $out/share/idl $out/include $out/lib/${binaryName}-devel-*
 
@@ -429,40 +545,8 @@ buildStdenv.mkDerivation ({
     gappsWrapperArgs+=(--argv0 "$out/bin/.${binaryName}-wrapped")
   '';
 
-  # Workaround: The separateDebugInfo hook skips artifacts whose build ID's length is not 40.
-  # But we got 16-length build ID here. The function body is mainly copied from pkgs/build-support/setup-hooks/separate-debug-info.sh
-  # Remove it when https://github.com/NixOS/nixpkgs/pull/146275 is merged.
-  preFixup = lib.optionalString enableDebugSymbols ''
-    _separateDebugInfo() {
-        [ -e "$prefix" ] || return 0
-
-        local dst="''${debug:-$out}"
-        if [ "$prefix" = "$dst" ]; then return 0; fi
-
-        dst="$dst/lib/debug/.build-id"
-
-        # Find executables and dynamic libraries.
-        local i
-        while IFS= read -r -d $'\0' i; do
-            if ! isELF "$i"; then continue; fi
-
-            # Extract the Build ID. FIXME: there's probably a cleaner way.
-            local id="$($READELF -n "$i" | sed 's/.*Build ID: \([0-9a-f]*\).*/\1/; t; d')"
-            if [[ -z "$id" ]]; then
-                echo "could not find build ID of $i, skipping" >&2
-                continue
-            fi
-
-            # Extract the debug info.
-            header "separating debug info from $i (build ID $id)"
-            mkdir -p "$dst/''${id:0:2}"
-            $OBJCOPY --only-keep-debug "$i" "$dst/''${id:0:2}/''${id:2}.debug"
-            $STRIP --strip-debug "$i"
-
-            # Also a create a symlink <original-name>.debug.
-            ln -sfn ".build-id/''${id:0:2}/''${id:2}.debug" "$dst/../$(basename "$i")"
-        done < <(find "$prefix" -type f -print0)
-    }
+  postFixup = lib.optionalString crashreporterSupport ''
+    patchelf --add-rpath "${lib.makeLibraryPath [ curl ]}" $out/lib/${binaryName}/crashreporter
   '';
 
   doInstallCheck = true;
@@ -472,11 +556,14 @@ buildStdenv.mkDerivation ({
   '';
 
   passthru = {
+    inherit application extraPatches;
     inherit updateScript;
     inherit version;
     inherit alsaSupport;
     inherit binaryName;
+    inherit jackSupport;
     inherit pipewireSupport;
+    inherit sndioSupport;
     inherit nspr;
     inherit ffmpegSupport;
     inherit gssSupport;
@@ -501,4 +588,4 @@ buildStdenv.mkDerivation ({
   dontUpdateAutotoolsGnuConfigScripts = true;
 
   requiredSystemFeatures = [ "big-parallel" ];
-})
+}

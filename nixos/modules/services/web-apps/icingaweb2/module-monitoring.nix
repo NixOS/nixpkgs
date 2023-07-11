@@ -34,50 +34,50 @@ in {
     enable = mkOption {
       type = bool;
       default = true;
-      description = "Whether to enable the icingaweb2 monitoring module.";
+      description = lib.mdDoc "Whether to enable the icingaweb2 monitoring module.";
     };
 
     generalConfig = {
       mutable = mkOption {
         type = bool;
         default = false;
-        description = "Make config.ini of the monitoring module mutable (e.g. via the web interface).";
+        description = lib.mdDoc "Make config.ini of the monitoring module mutable (e.g. via the web interface).";
       };
 
       protectedVars = mkOption {
         type = listOf str;
         default = [ "*pw*" "*pass*" "community" ];
-        description = "List of string patterns for custom variables which should be excluded from user’s view.";
+        description = lib.mdDoc "List of string patterns for custom variables which should be excluded from user’s view.";
       };
     };
 
     mutableBackends = mkOption {
       type = bool;
       default = false;
-      description = "Make backends.ini of the monitoring module mutable (e.g. via the web interface).";
+      description = lib.mdDoc "Make backends.ini of the monitoring module mutable (e.g. via the web interface).";
     };
 
     backends = mkOption {
       default = { icinga = { resource = "icinga_ido"; }; };
-      description = "Monitoring backends to define";
+      description = lib.mdDoc "Monitoring backends to define";
       type = attrsOf (submodule ({ name, ... }: {
         options = {
           name = mkOption {
             visible = false;
             default = name;
             type = str;
-            description = "Name of this backend";
+            description = lib.mdDoc "Name of this backend";
           };
 
           resource = mkOption {
             type = str;
-            description = "Name of the IDO resource";
+            description = lib.mdDoc "Name of the IDO resource";
           };
 
           disabled = mkOption {
             type = bool;
             default = false;
-            description = "Disable this backend";
+            description = lib.mdDoc "Disable this backend";
           };
         };
       }));
@@ -86,62 +86,62 @@ in {
     mutableTransports = mkOption {
       type = bool;
       default = true;
-      description = "Make commandtransports.ini of the monitoring module mutable (e.g. via the web interface).";
+      description = lib.mdDoc "Make commandtransports.ini of the monitoring module mutable (e.g. via the web interface).";
     };
 
     transports = mkOption {
       default = {};
-      description = "Command transports to define";
+      description = lib.mdDoc "Command transports to define";
       type = attrsOf (submodule ({ name, ... }: {
         options = {
           name = mkOption {
             visible = false;
             default = name;
             type = str;
-            description = "Name of this transport";
+            description = lib.mdDoc "Name of this transport";
           };
 
           type = mkOption {
             type = enum [ "api" "local" "remote" ];
             default = "api";
-            description = "Type of  this transport";
+            description = lib.mdDoc "Type of  this transport";
           };
 
           instance = mkOption {
             type = nullOr str;
             default = null;
-            description = "Assign a icinga instance to this transport";
+            description = lib.mdDoc "Assign a icinga instance to this transport";
           };
 
           path = mkOption {
             type = str;
-            description = "Path to the socket for local or remote transports";
+            description = lib.mdDoc "Path to the socket for local or remote transports";
           };
 
           host = mkOption {
             type = str;
-            description = "Host for the api or remote transport";
+            description = lib.mdDoc "Host for the api or remote transport";
           };
 
           port = mkOption {
             type = nullOr str;
             default = null;
-            description = "Port to connect to for the api or remote transport";
+            description = lib.mdDoc "Port to connect to for the api or remote transport";
           };
 
           username = mkOption {
             type = str;
-            description = "Username for the api or remote transport";
+            description = lib.mdDoc "Username for the api or remote transport";
           };
 
           password = mkOption {
             type = str;
-            description = "Password for the api transport";
+            description = lib.mdDoc "Password for the api transport";
           };
 
           resource = mkOption {
             type = str;
-            description = "SSH identity resource for the remote transport";
+            description = lib.mdDoc "SSH identity resource for the remote transport";
           };
         };
       }));

@@ -3,11 +3,11 @@ let
   dovecotMajorMinor = lib.versions.majorMinor dovecot.version;
 in stdenv.mkDerivation rec {
   pname = "dovecot-pigeonhole";
-  version = "0.5.18";
+  version = "0.5.20";
 
   src = fetchurl {
     url = "https://pigeonhole.dovecot.org/releases/${dovecotMajorMinor}/dovecot-${dovecotMajorMinor}-pigeonhole-${version}.tar.gz";
-    hash = "sha256-ptgo+Nby3sulEFND7OXHplJFvZTkaorkQyptl1QxCKU=";
+    hash = "sha256-rjK9SHDqLBMorgm6IG6ewSEoBG1q/KUvu8nvf3VhfJg=";
   };
 
   buildInputs = [ dovecot openssl ];

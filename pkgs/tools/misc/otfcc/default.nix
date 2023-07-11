@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     ./move-makefiles.patch
   ];
 
-  buildFlags = lib.optional stdenv.isAarch64 [ "config=release_arm" ];
+  buildFlags = lib.optionals stdenv.isAarch64 [ "config=release_arm" ];
 
   installPhase = ''
     mkdir -p $out/bin

@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     "ARGON2_VERSION=${version}"
     "LIBRARY_REL=lib"
     "PKGCONFIG_REL=lib"
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "LIBRARIES=$(LIB_ST)"
   ];
 
   meta = with lib; {
@@ -43,6 +45,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.argon2.com/";
     license = with licenses; [ asl20 cc0 ];
     maintainers = with maintainers; [ taeer olynch ];
-    platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "argon2";
+    platforms = platforms.all;
   };
 }

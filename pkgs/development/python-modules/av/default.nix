@@ -6,6 +6,7 @@
 # build
 , cython
 , pkg-config
+, setuptools
 
 # runtime
 , ffmpeg
@@ -18,20 +19,22 @@
 
 buildPythonPackage rec {
   pname = "av";
-  version = "9.1.1";
+  version = "10.0.0";
   format = "pyproject";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mikeboers";
     repo = "PyAV";
     rev = "v${version}";
-    hash = "sha256-/6C5GE9zANPy0xaptu/+pIupOLDra/R7TJ41YLGszUs=";
+    hash = "sha256-XcHP8RwC2iwD64Jc7SS+t9OxjFTsz3FbrnjMgJnN7Ak=";
   };
 
   nativeBuildInputs = [
     cython
     pkg-config
+    setuptools
   ];
 
   buildInputs = [
@@ -43,7 +46,7 @@ buildPythonPackage rec {
     rm -r av
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     numpy
     pillow
     pytestCheckHook
@@ -98,6 +101,11 @@ buildPythonPackage rec {
     "--deselect=tests/test_subtitles.py::TestSubtitle::test_movtext"
     "--deselect=tests/test_subtitles.py::TestSubtitle::test_vobsub"
     "--deselect=tests/test_videoframe.py::TestVideoFrameImage::test_roundtrip"
+  ];
+
+  disabledTests = [
+    # urlopen fails during DNS resolution
+    "test_writing_to_custom_io"
   ];
 
   disabledTestPaths = [

@@ -20,7 +20,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: let
         port = 1081;
         listen = "127.0.0.1";
         protocol = "vmess";
-        settings.clients = [v2rayUser];
+        settings.clients = [ v2rayUser ];
       }
     ];
     outbounds = [
@@ -30,7 +30,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: let
         settings.vnext = [{
           address = "127.0.0.1";
           port = 1081;
-          users = [v2rayUser];
+          users = [ v2rayUser ];
         }];
       }
       {
@@ -47,6 +47,14 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: let
       {
         type = "field";
         inboundTag = "vmess_in";
+        outboundTag = "direct";
+      }
+
+      # Assert assets "geoip" and "geosite" are accessible.
+      {
+        type = "field";
+        ip = [ "geoip:private" ];
+        domain = [ "geosite:category-ads" ];
         outboundTag = "direct";
       }
     ];

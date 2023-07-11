@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python3, cmake
+{ lib, buildPythonPackage, fetchFromGitHub, python, cmake
 , libnest2d, sip_4, clipper }:
 
 buildPythonPackage rec {
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "Ultimaker";
     repo = "pynest2d";
     rev = version;
-    sha256 = "sha256-QQdTDhO4i9NVhegGTmdEQSNv3gooaZzTX/Rv86h3GEo=";
+    hash = "sha256-QQdTDhO4i9NVhegGTmdEQSNv3gooaZzTX/Rv86h3GEo=";
   };
 
   propagatedBuildInputs = [ libnest2d sip_4 clipper ];
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   CLIPPER_PATH = "${clipper.out}";
 
   postPatch = ''
-     sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python3.sitePackages}#' cmake/SIPMacros.cmake
+     sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python.sitePackages}#' cmake/SIPMacros.cmake
    '';
 
   meta = with lib; {

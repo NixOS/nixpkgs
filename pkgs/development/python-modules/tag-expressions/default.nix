@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "1c0a49c3c0357976822b03c43db8d4a1c5548e16fb07ac939c10bbd5183f529d";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Package to parse logical tag expressions";

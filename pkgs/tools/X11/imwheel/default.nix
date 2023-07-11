@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "http://imwheel.sourceforge.net/";
+    homepage = "https://imwheel.sourceforge.net/";
     description = "Mouse wheel configuration tool for XFree86/Xorg";
     maintainers = with maintainers; [ jhillyerd ];
     platforms = platforms.linux;

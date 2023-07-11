@@ -1,13 +1,22 @@
-diff --git a/src/borg/utils.rs b/src/borg/utils.rs
-index 4e30913..30d7d6f 100644
---- a/src/borg/utils.rs
-+++ b/src/borg/utils.rs
-@@ -223,7 +223,7 @@ impl BorgCall {
+diff --git a/src/borg/process.rs b/src/borg/process.rs
+index 63ea0ee..e3535e0 100644
+--- a/src/borg/process.rs
++++ b/src/borg/process.rs
+@@ -203,7 +203,7 @@ impl BorgCall {
      }
  
-     pub fn cmd(&self) -> Command {
--        let mut cmd = Command::new("borg");
-+        let mut cmd = Command::new("@borg@");
+     pub fn cmd(&self) -> Result<process::Command> {
+-        let mut cmd = process::Command::new("borg");
++        let mut cmd = process::Command::new("@borg@");
  
-         cmd.args(self.args())
-             .stderr(Stdio::piped())
+         cmd.envs([self.set_password()?]);
+ 
+@@ -221,7 +221,7 @@ impl BorgCall {
+     }
+ 
+     pub fn cmd_async(&self) -> Result<async_process::Command> {
+-        let mut cmd = async_process::Command::new("borg");
++        let mut cmd = async_process::Command::new("@borg@");
+ 
+         cmd.envs([self.set_password()?]);
+ 

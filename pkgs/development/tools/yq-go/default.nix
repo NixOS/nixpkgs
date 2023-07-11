@@ -2,24 +2,24 @@
 
 buildGoModule rec {
   pname = "yq-go";
-  version = "4.24.5";
+  version = "4.34.1";
 
   src = fetchFromGitHub {
     owner = "mikefarah";
     repo = "yq";
     rev = "v${version}";
-    sha256 = "sha256-3rO0BFx/hduERTQ3j90EWUtYTROD63RHwW/U4U+oAfw=";
+    hash = "sha256-rkf3yoTB7umGHvbVb7eg21a4AJTyYOuWf4jHs274SGc=";
   };
 
-  vendorSha256 = "sha256-R40zU0jOc/eIFVDsWG3+4o51iro7Sd7jwtyH/fpWVZs=";
+  vendorHash = "sha256-726kRRxFj7tqVguPDiHuPpHRN2+FDsqBtIJ4J8I/0Oc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-    for shell in bash fish zsh; do
-      $out/bin/yq shell-completion $shell > yq.$shell
-      installShellCompletion yq.$shell
-    done
+    installShellCompletion --cmd yq \
+      --bash <($out/bin/yq shell-completion bash) \
+      --fish <($out/bin/yq shell-completion fish) \
+      --zsh <($out/bin/yq shell-completion zsh)
   '';
 
   passthru.tests = {
@@ -32,8 +32,9 @@ buildGoModule rec {
   meta = with lib; {
     description = "Portable command-line YAML processor";
     homepage = "https://mikefarah.gitbook.io/yq/";
-    license = [ licenses.mit ];
-    maintainers = [ maintainers.lewo ];
+    changelog = "https://github.com/mikefarah/yq/raw/v${version}/release_notes.txt";
     mainProgram = "yq";
+    license = [ licenses.mit ];
+    maintainers = with maintainers; [ lewo SuperSandro2000 ];
   };
 }

@@ -41,7 +41,7 @@ git -C "$git_dir" fetch origin "$git_branch"
 # because there might still be commits coming
 # use the day of the latest commit we picked as version
 new_rev=$(git -C "$git_dir" log -n 1 --format='format:%H' --before="${today}T00:00:00Z" "origin/$git_branch")
-new_version="unstable-$(git -C "$git_dir" log -n 1 --format='format:%cs' "$new_rev")"
+new_version="unstable-$(TZ=UTC git -C "$git_dir" log -n 1 --date='format-local:%Y-%m-%d' --format='%cd' "$new_rev")"
 info "latest commit before $today: $new_rev"
 
 if [ "$new_rev" = "$old_rev" ]; then
@@ -60,7 +60,7 @@ info "Running scripts/fetch-player-dependencies.cr..."
 git -C "$git_dir" reset --hard "$new_rev"
 (cd "$git_dir" && crystal run scripts/fetch-player-dependencies.cr -- --minified)
 rm -f "$git_dir/assets/videojs/.gitignore"
-videojs_new_sha256=$(nix hash-path --type sha256 --base32 "$git_dir/assets/videojs")
+videojs_new_sha256=$(nix-hash --type sha256 --base32 "$git_dir/assets/videojs")
 json_set '.videojs.sha256' "$videojs_new_sha256"
 
 if git -C "$git_dir" diff-tree --quiet "${old_rev}..${new_rev}" -- 'shard.lock'; then

@@ -14,18 +14,18 @@
 , openssl
 , stdenv
 }:
-stdenv.mkDerivation rec {
+let
+  version = "2.0-1272";
+  urlVersion = builtins.replaceStrings [ "." "-" ] [ "00" "0" ] version;
+in
+stdenv.mkDerivation {
   pname = "roon-server";
-  version = "1.8-923";
+  inherit version;
 
-  src =
-    let
-      urlVersion = builtins.replaceStrings [ "." "-" ] [ "00" "00" ] version;
-    in
-    fetchurl {
-      url = "http://download.roonlabs.com/builds/RoonServer_linuxx64_${urlVersion}.tar.bz2";
-      hash = "sha256-txf8W7SoPb20S7KcQDfExPEn5dubu9JVEX89dWngYFU=";
-    };
+  src = fetchurl {
+    url = "https://download.roonlabs.com/updates/production/RoonServer_linuxx64_${urlVersion}.tar.bz2";
+    hash = "sha256-oLHdgOaGnu7hRm863ryf4r05nN8wQL7WKxN3ONG67J4=";
+  };
 
   dontConfigure = true;
   dontBuild = true;
@@ -91,6 +91,7 @@ stdenv.mkDerivation rec {
     description = "The music player for music lovers";
     changelog = "https://community.roonlabs.com/c/roon/software-release-notes/18";
     homepage = "https://roonlabs.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ lovesegfault steell ];
     platforms = [ "x86_64-linux" ];

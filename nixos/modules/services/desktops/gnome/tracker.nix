@@ -30,7 +30,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable Tracker services, a search engine,
           search tool and metadata storage system.
         '';
@@ -40,7 +40,7 @@ in
         type = types.listOf types.package;
         default = [ ];
         internal = true;
-        description = ''
+        description = lib.mdDoc ''
           List of packages containing tracker3 subcommands.
         '';
       };

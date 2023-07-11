@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pysigma-backend-splunk";
-  version = "0.3.2";
+  version = "1.0.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-backend-splunk";
-    rev = "v${version}";
-    hash = "sha256-wcAqXFou20V2ZPOXCsF1Nky008q2xkfuI0RbTsatC6k=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-SWD3Jw1wehWLvWkLA7rotweExYCrabq7men22D0zN5w=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     pysigma
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pysigma-pipeline-sysmon
     pytestCheckHook
   ];

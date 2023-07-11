@@ -33,11 +33,11 @@
 buildPythonPackage rec {
   pname = "bokeh";
   # update together with panel which is not straightforward
-  version = "2.4.2";
+  version = "2.4.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f0a4b53364ed3b7eb936c5cb1a4f4132369e394c7ae0a8ef420459410958033d";
+    hash = "sha256-7zOAEWGvN5Zlq3o0aE8iCYYeOu/VyAOiH7u5nZSHSwM=";
   };
 
   patches = [
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     "bokeh"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytest
     pillow

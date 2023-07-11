@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "jira";
-  version = "3.1.1";
-  format = "setuptools";
+  version = "3.5.2";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pycontribs";
     repo = pname;
-    rev = version;
-    hash = "sha256-1g7yNKRR7Ua2rjfiE1c94LKAQGVCX0gSeqTc2Pn7QhM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-9hzKN57OHi2be9C2mtHZU1KcpbcKxiiYDj9Vw7MxTK4=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     requests-toolbelt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     flaky
     pytestCheckHook
     requests-mock
@@ -62,6 +62,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to interact with the JIRA REST API";
     homepage = "https://github.com/pycontribs/jira";
+    changelog = "https://github.com/pycontribs/jira/releases/tag/${version}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ globin ];
   };

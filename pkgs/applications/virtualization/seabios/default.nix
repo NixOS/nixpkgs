@@ -3,12 +3,12 @@
 stdenv.mkDerivation rec {
 
   pname = "seabios";
-  version = "1.16.0";
+  version = "1.16.2";
 
   src = fetchgit {
     url = "https://git.seabios.org/seabios.git";
     rev = "rel-${version}";
-    sha256 = "0acal1rr7sya86wlhw2mgimabwhjnr0y1pl5zxwb79j8k1w1r8sh";
+    sha256 = "sha256-J2FuT+FXn9YoFLSfxDOxyKZvKrys59a6bP1eYvEXVNU=";
   };
 
   nativeBuildInputs = [ python3 ];
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.seabios.org";
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ tstrobel ];
+    maintainers = with maintainers; [ ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

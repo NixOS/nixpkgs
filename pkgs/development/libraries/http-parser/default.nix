@@ -11,9 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "1vda4dp75pjf5fcph73sy0ifm3xrssrmf927qd1x8g3q46z0cv6c";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
   patches = [
     ./build-shared.patch
+  ] ++ lib.optionals stdenv.isAarch32 [
     # https://github.com/nodejs/http-parser/pull/510
     (fetchpatch {
       url = "https://github.com/nodejs/http-parser/commit/4f15b7d510dc7c6361a26a7c6d2f7c3a17f8d878.patch";
@@ -24,6 +25,8 @@ stdenv.mkDerivation rec {
   buildFlags = [ "library" ];
   doCheck = true;
   checkTarget = "test";
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "An HTTP message parser written in C";

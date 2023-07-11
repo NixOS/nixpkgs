@@ -1,69 +1,94 @@
-{ cmake
-, pkg-config
-, alsa-lib
-, boost
+{ asio
+, cmake
 , curl
 , fetchFromGitHub
 , fetchpatch
 , ffmpeg
+, gnutls
 , lame
-, libev
-, libmicrohttpd
-, ncurses
-, pulseaudio
 , lib
+, libev
+, game-music-emu
+, libmicrohttpd
+, libopenmpt
+, mpg123
+, ncurses
+, pkg-config
+, portaudio
 , stdenv
 , taglib
-, systemdSupport ? stdenv.isLinux
+# Linux Dependencies
+, alsa-lib
+, pipewireSupport ? !stdenv.hostPlatform.isDarwin, pipewire
+, pulseaudio
+, sndioSupport ? true, sndio
 , systemd
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+# Darwin Dependencies
+, Cocoa
+, SystemConfiguration
+, coreaudioSupport ? stdenv.hostPlatform.isDarwin, CoreAudio
 }:
 
 stdenv.mkDerivation rec {
   pname = "musikcube";
-  version = "0.96.10";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "clangen";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Aa52pRGq99Pt++aEVZdmVNhhQuBajgfZp39L1AfKvho=";
+    hash = "sha512-ahKPmChHRVpOQcgt0fOYumlsMApeN4MWwywE9F0edeN0Xr3Vp830mWGzEBJvMvGI/lnU/1rd7tREaHfm1vCJaw==";
   };
 
-  patches = [
-    # Fix pending upstream inclusion for ncuurses-6.3 support:
-    #  https://github.com/clangen/musikcube/pull/474
-    (fetchpatch {
-      name = "ncurses-6.3.patch";
-      url = "https://github.com/clangen/musikcube/commit/1240720e27232fdb199a4da93ca6705864442026.patch";
-      sha256 = "0bhjgwnj6d24wb1m9xz1vi1k9xk27arba1absjbcimggn54pinid";
-    })
-  ];
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
+
   buildInputs = [
-    alsa-lib
-    boost
+    asio
     curl
     ffmpeg
+    gnutls
     lame
     libev
+    game-music-emu
     libmicrohttpd
+    libopenmpt
+    mpg123
     ncurses
-    pulseaudio
+    portaudio
     taglib
-  ] ++ lib.optional systemdSupport systemd;
+  ] ++ lib.optionals systemdSupport [
+    systemd
+  ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib pulseaudio
+  ] ++ lib.optionals stdenv.isDarwin [
+    Cocoa SystemConfiguration
+  ] ++ lib.optionals coreaudioSupport [
+    CoreAudio
+  ] ++ lib.optionals sndioSupport [
+    sndio
+  ] ++ lib.optionals pipewireSupport [
+    pipewire
+  ];
 
   cmakeFlags = [
     "-DDISABLE_STRIP=true"
   ];
 
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -add_rpath $out/share/${pname} $out/share/${pname}/${pname}
+    install_name_tool -add_rpath $out/share/${pname} $out/share/${pname}/${pname}d
+  '';
+
   meta = with lib; {
-    description = "A fully functional terminal-based music player, library, and streaming audio server";
+    description = "Terminal-based music player, library, and streaming audio server";
     homepage = "https://musikcube.com/";
-    maintainers = [ maintainers.aanderse ];
+    maintainers = with maintainers; [ aanderse srapenne afh ];
     license = licenses.bsd3;
     platforms = platforms.all;
   };

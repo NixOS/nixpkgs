@@ -1,26 +1,24 @@
-{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg, js_of_ocaml
-, jsooSupport ? true
+{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg
 }:
 
-stdenv.mkDerivation rec {
-  version = "0.8.6";
-  pname = "ocaml${ocaml.version}-ptime";
+lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
+  "ptime is not available for OCaml ${ocaml.version}"
 
-  minimalOCamlVersion = "4.03";
+stdenv.mkDerivation rec {
+  version = "1.0.0";
+  pname = "ocaml${ocaml.version}-ptime";
 
   src = fetchurl {
     url = "https://erratique.ch/software/ptime/releases/ptime-${version}.tbz";
-    sha256 = "sha256-gy/fUsfUHUZx1A/2sQMQIFMHl1V+QO3zHAsEnZT/lkI=";
+    sha256 = "sha256-RByDjAFiyDdR8G663/MxabuSHTTuwVn7urtw7Z3iEQs=";
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
-  buildInputs = [ topkg ] ++ lib.optional jsooSupport js_of_ocaml;
+  buildInputs = [ topkg ];
 
   strictDeps = true;
 
-  buildPhase = "${topkg.run} build --with-js_of_ocaml ${lib.boolToString jsooSupport}";
-
-  inherit (topkg) installPhase;
+  inherit (topkg) buildPhase installPhase;
 
   meta = {
     homepage = "https://erratique.ch/software/ptime";

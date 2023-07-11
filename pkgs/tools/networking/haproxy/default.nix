@@ -1,8 +1,8 @@
-{ useLua ? !stdenv.isDarwin
+{ useLua ? true
 , usePcre ? true
 , withPrometheusExporter ? true
 , stdenv, lib, fetchurl, nixosTests
-, openssl, zlib
+, openssl, zlib, libxcrypt
 , lua5_3 ? null, pcre ? null, systemd ? null
 }:
 
@@ -11,14 +11,14 @@ assert usePcre -> pcre != null;
 
 stdenv.mkDerivation rec {
   pname = "haproxy";
-  version = "2.5.5";
+  version = "2.8.1";
 
   src = fetchurl {
     url = "https://www.haproxy.org/download/${lib.versions.majorMinor version}/src/${pname}-${version}.tar.gz";
-    sha256 = "sha256-BjxIRc2y128pLvRNnAEXqFPY0Qrl2WFbQGsUpNdP5Lk=";
+    sha256 = "sha256-SFVS/NnV1fQarQRvEx/Ap+hJvvJaNJoEB1CvDG/FaAc=";
   };
 
-  buildInputs = [ openssl zlib ]
+  buildInputs = [ openssl zlib libxcrypt ]
     ++ lib.optional useLua lua5_3
     ++ lib.optional usePcre pcre
     ++ lib.optional stdenv.isLinux systemd;
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     homepage = "https://haproxy.org";
     changelog = "https://www.haproxy.org/download/${lib.versions.majorMinor version}/src/CHANGELOG";
     license = with licenses; [ gpl2Plus lgpl21Only ];
-    maintainers = with maintainers; [ fuzzy-id ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; linux ++ darwin;
   };
 }

@@ -1,7 +1,6 @@
 { lib
 , boost
 , fetchFromGitHub
-, fetchpatch
 , installShellFiles
 , mkDerivation
 , muparser
@@ -15,38 +14,42 @@
 
 mkDerivation rec {
   pname = "librecad";
-  version = "2.2.0-rc2";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "LibreCAD";
     repo = "LibreCAD";
     rev = version;
-    sha256 = "sha256-RNg7ioMriH4A7V65+4mh8NhsUHs/8IbTt38nVkYilCE=";
+    sha256 = "sha256-horKTegmvcMg4m5NbZ4nzy4J6Ac/6+E5OkiZl0v6TBc=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/LibreCAD/LibreCAD/pull/1465/commits/4edcbe72679f95cb60979c77a348c1522a20b0f4.patch";
-      sha256 = "sha256-P0G2O5sL7Ip860ByxFQ87TfV/lq06wCQnzPxADGqFPs=";
-      name = "CVE-2021-45342.patch";
-    })
+  buildInputs = [
+    boost
+    muparser
+    qtbase
+    qtsvg
+  ];
+
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+    qmake
+    qttools
+  ];
+
+  qmakeFlags = [
+    "MUPARSER_DIR=${muparser}"
+    "BOOST_DIR=${boost.dev}"
   ];
 
   postPatch = ''
     substituteInPlace scripts/postprocess-unix.sh \
       --replace /bin/sh ${runtimeShell}
 
-    substituteInPlace librecad/src/lib/engine/rs_system.cpp \
-      --replace /usr/share $out/share
-
     substituteInPlace librecad/src/main/qc_applicationwindow.cpp \
       --replace __DATE__ 0
   '';
 
-  qmakeFlags = [
-    "MUPARSER_DIR=${muparser}"
-    "BOOST_DIR=${boost.dev}"
-  ];
 
   installPhase = ''
     runHook preInstall
@@ -64,20 +67,6 @@ mkDerivation rec {
 
     runHook postInstall
   '';
-
-  buildInputs = [
-    boost
-    muparser
-    qtbase
-    qtsvg
-  ];
-
-  nativeBuildInputs = [
-    installShellFiles
-    pkg-config
-    qmake
-    qttools
-  ];
 
   meta = with lib; {
     description = "2D CAD package based on Qt";

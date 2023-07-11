@@ -10,11 +10,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "gprojector";
-  version = "3.0.3";
+  version = "3.1.0";
 
   src = fetchzip {
     url = "https://www.giss.nasa.gov/tools/gprojector/download/G.ProjectorJ-${version}.tgz";
-    sha256 = "sha256-60UT6z5aQ3Tk4EujEUp4ntB5GakFVhJzk5eytoIwf78=";
+    sha256 = "sha256-cMmjyitetXxQzfSBh5ry5tIsLWOnBaaYOD1eQg1IX+w=";
   };
 
   desktopItems = [ (makeDesktopItem {
@@ -44,6 +44,7 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     description = "G.Projector transforms an input map image into any of about 200 global and regional map projections";
     homepage = "https://www.giss.nasa.gov/tools/gprojector/";
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     maintainers = with lib.maintainers; [ alyaeanyx ];
     license = lib.licenses.unfree;
     inherit (jre.meta) platforms;

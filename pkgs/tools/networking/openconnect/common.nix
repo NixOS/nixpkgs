@@ -6,6 +6,7 @@
 , stdenv
 , pkg-config
 , gnutls
+, p11-kit
 , openssl
 , useOpenSSL ? false
 , gmp
@@ -14,6 +15,8 @@
 , zlib
 , vpnc-scripts
 , PCSC
+, useDefaultExternalBrowser ? stdenv.isLinux && stdenv.buildPlatform == stdenv.hostPlatform # xdg-utils doesn't cross-compile
+, xdg-utils
 , autoreconfHook
 }:
 
@@ -30,7 +33,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ gmp libxml2 stoken zlib (if useOpenSSL then openssl else gnutls) ]
-    ++ lib.optional stdenv.isDarwin PCSC;
+    ++ lib.optional stdenv.isDarwin PCSC
+    ++ lib.optional stdenv.isLinux p11-kit
+    ++ lib.optional useDefaultExternalBrowser xdg-utils;
   nativeBuildInputs = [ pkg-config autoreconfHook ];
 
   meta = with lib; {

@@ -1,4 +1,4 @@
-{ appimageTools, fetchurl, lib, gsettings-desktop-schemas, gtk3 }:
+{ appimageTools, fetchurl, lib }:
 
 let
   pname = "Sylk";
@@ -15,10 +15,9 @@ appimageTools.wrapType2 rec {
 
   profile = ''
     export LC_ALL=C.UTF-8
-    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
   '';
 
-  multiPkgs = null; # no 32bit needed
+  multiArch = false; # no 32bit needed
   extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
   extraInstallCommands = "mv $out/bin/{${name},${pname}}";
 

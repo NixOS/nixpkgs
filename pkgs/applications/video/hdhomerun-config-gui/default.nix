@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "hdhomerun-config-gui";
-  version = "20210224";
+  version = "20221205";
 
   src = fetchurl {
     url = "https://download.silicondust.com/hdhomerun/hdhomerun_config_gui_${version}.tgz";
@@ -16,7 +16,9 @@ stdenv.mkDerivation rec {
   makeFlags = [ "SUBDIRS=src" ];
 
   installPhase = ''
-    install -vDm 755 src/hdhomerun_config_gui $out/usr/bin/hdhomerun_config_gui
+    runHook preInstall
+    install -vDm 755 src/hdhomerun_config_gui $out/bin/hdhomerun_config_gui
+    runHook postInstall
   '';
 
   meta = with lib; {

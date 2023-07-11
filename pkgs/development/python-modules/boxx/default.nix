@@ -4,7 +4,7 @@
 , python
 , xvfb-run
 , matplotlib
-, scikitimage
+, scikit-image
 , numpy
 , pandas
 , imageio
@@ -12,22 +12,26 @@
 , fn
 , pyopengl
 , seaborn
-, pytorch
+, torch
+, pythonOlder
 , torchvision
 }:
 
 buildPythonPackage rec {
   pname = "boxx";
-  version = "0.9.11";
+  version = "0.10.9";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-xB/bCSIzT0JF5ZPWqSn3P8soBJnzDTfCyan+iOrfWzw=";
+    hash = "sha256-fWOGKDk7eJVlE9LMau3DZF8nFLUrmHpunAXdqLxHFHk=";
   };
 
   propagatedBuildInputs = [
     matplotlib
-    scikitimage
+    scikit-image
     numpy
     pandas
     imageio
@@ -37,11 +41,14 @@ buildPythonPackage rec {
     seaborn
   ];
 
-  pythonImportsCheck = [ "boxx" ];
-  checkInputs = [
+  nativeCheckInputs = [
     xvfb-run
-    pytorch
+    torch
     torchvision
+  ];
+
+  pythonImportsCheck = [
+    "boxx"
   ];
 
   checkPhase = ''
@@ -49,7 +56,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Tool-box for efficient build and debug in Python. Especially for Scientific Computing and Computer Vision.";
+    description = "Tool-box for efficient build and debug for Scientific Computing and Computer Vision";
     homepage = "https://github.com/DIYer22/boxx";
     license = licenses.mit;
     maintainers = with maintainers; [ lucasew ];

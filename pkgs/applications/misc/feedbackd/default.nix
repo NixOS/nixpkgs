@@ -1,7 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch2
 , docbook-xsl-nons
+, docutils
+, gi-docgen
 , gobject-introspection
 , gtk-doc
 , libxslt
@@ -22,15 +25,13 @@ let
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = "feedbackd-device-themes";
-    rev = "v0.0.20210909";
-    sha256 = "1d041wnq39sa0sl08xya4yp3n7j6aw560i38chl10vgpmwk9mmhr";
+    rev = "v0.1.0";
+    sha256 = "sha256-YK9fJ3awmhf1FAhdz95T/POivSO93jsNApm+u4OOZ80=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "feedbackd";
-  # Not an actual upstream project release,
-  # only a Debian package release that is tagged in the upstream repo
-  version = "0.0.0+git20211018";
+  version = "0.2.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -39,11 +40,18 @@ stdenv.mkDerivation rec {
     owner = "Librem5";
     repo = "feedbackd";
     rev = "v${version}";
-    hash = "sha256-jqKRHcxISK54xq/tQm6zV+J+U71eKh04OVTNHDDy65E=";
+    hash = "sha256-l5rfMx3ElW25A5WVqzfKBp57ebaNC9msqV7mvnwv10s=";
+    fetchSubmodules = true;
   };
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     docbook-xsl-nons
+    docutils # for rst2man
+    gi-docgen
     gobject-introspection
     gtk-doc
     libxslt
@@ -61,9 +69,12 @@ stdenv.mkDerivation rec {
     libgudev
   ];
 
-  mesonFlags = [ "-Dgtk_doc=true" "-Dman=true" ];
+  mesonFlags = [
+    "-Dgtk_doc=true"
+    "-Dman=true"
+  ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
   ];
 
@@ -73,6 +84,17 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/udev/rules.d
     sed "s|/usr/libexec/|$out/libexec/|" < $src/debian/feedbackd.udev > $out/lib/udev/rules.d/90-feedbackd.rules
     cp ${themes}/data/* $out/share/feedbackd/themes/
+  '';
+
+  postFixup = ''
+    # Move developer documentation to devdoc output.
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    if [[ -d "$out/share/doc" ]]; then
+        find -L "$out/share/doc" -type f -regex '.*\.devhelp2?' -print0 \
+          | while IFS= read -r -d ''' file; do
+            moveToOutput "$(dirname "''${file/"$out/"/}")" "$devdoc"
+        done
+    fi
   '';
 
   meta = with lib; {

@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, Mako
+, mako
 , python-dateutil
 , sqlalchemy
 , importlib-metadata
@@ -13,18 +13,18 @@
 
 buildPythonPackage rec {
   pname = "alembic";
-  version = "1.7.7";
+  version = "1.9.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-SWEkgXPq186KIe+z3jePE7g5jmYw+rDrJY3HSoryTFg=";
+    hash = "sha256-TTvTLs27e7+0ip/p5tb9aoMaG1nQPibikiECNzc+fbU=";
   };
 
   propagatedBuildInputs = [
-    Mako
+    mako
     python-dateutil
     sqlalchemy
   ] ++ lib.optionals (pythonOlder "3.9") [
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     "alembic"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
   ];

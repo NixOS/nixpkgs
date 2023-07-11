@@ -15,19 +15,20 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "nautilus-open-any-terminal";
-  version = "0.2.16";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "Stunkymonkey";
     repo = pname;
     rev = version;
-    sha256 = "sha256-g5B+tp131vmjShBCGrKR5ZQCjtJY823/kPacZ0S9E80=";
+    sha256 = "sha256-EAI60Mw+OTPfjOS6lkGMul7QvTR7NXyNfevWY2JP1yI=";
   };
 
   patches = [ ./hardcode-gsettings.patch ];
 
   nativeBuildInputs = [
     glib
+    gobject-introspection
     pkg-config
     wrapGAppsHook
   ];
@@ -37,7 +38,6 @@ python3.pkgs.buildPythonPackage rec {
     dconf
     gnome.nautilus
     gnome.nautilus-python
-    gobject-introspection
     gsettings-desktop-schemas
     gtk3
     python3.pkgs.pygobject3
@@ -51,8 +51,6 @@ python3.pkgs.buildPythonPackage rec {
   postInstall = ''
     glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
-
-  PKG_CONFIG_LIBNAUTILUS_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/lib/nautilus/extensions-3.0";
 
   meta = with lib; {
     description = "Extension for nautilus, which adds an context-entry for opening other terminal-emulators then `gnome-terminal`";

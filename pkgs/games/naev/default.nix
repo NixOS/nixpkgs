@@ -1,42 +1,83 @@
-{ lib, fetchurl, stdenv, SDL, openal, SDL_mixer, libxml2, pkg-config, libvorbis
-, libpng, libGLU, libGL, makeWrapper, zlib, freetype }:
+{ lib
+, SDL2
+, SDL2_image
+, enet
+, fetchFromGitHub
+, freetype
+, glpk
+, intltool
+, libpng
+, libunibreak
+, libvorbis
+, libwebp
+, libxml2
+, luajit
+, meson
+, ninja
+, openal
+, openblas
+, pcre2
+, physfs
+, pkg-config
+, python3
+, stdenv
+, suitesparse
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "naev";
-  version = "0.5.0";
-  name = "${pname}-${version}";
-in
-stdenv.mkDerivation {
-  inherit name;
+  version = "0.10.5";
 
-  srcData = fetchurl {
-    url = "mirror://sourceforge/naev/ndata-${version}";
-    sha256 = "0l05xxbbys3j5h6anvann2vylhp6hnxnzwpcaydaff8fpbbyi6r6";
+  src = fetchFromGitHub {
+    owner = "naev";
+    repo = "naev";
+    rev = "v${version}";
+    sha256 = "sha256-2jCGRZxa2N8J896YYPAN7it3uvNGYtoIH75HNqy0kEE=";
+    fetchSubmodules = true;
   };
 
-  src = fetchurl {
-    url = "mirror://sourceforge/naev/${name}.tar.bz2";
-    sha256 = "0gahi91lmpra0wvxsz49zwwb28q9w2v1s3y7r70252hq6v80kanb";
-  };
+  buildInputs = [
+    SDL2
+    SDL2_image
+    enet
+    freetype
+    glpk
+    libpng
+    libunibreak
+    libvorbis
+    libwebp
+    libxml2
+    luajit
+    openal
+    openblas
+    pcre2
+    physfs
+    suitesparse
+  ];
 
-  buildInputs = [ SDL SDL_mixer openal libxml2 libvorbis libpng libGLU libGL zlib freetype ];
+  nativeBuildInputs = [
+    (python3.withPackages (ps: with ps; [ pyyaml mutagen ]))
+    meson
+    ninja
+    pkg-config
+    intltool
+  ];
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
+  mesonFlags = [
+    "-Ddocs_c=disabled"
+    "-Ddocs_lua=disabled"
+    "-Dluajit=enabled"
+  ];
 
-  NIX_CFLAGS_COMPILE="-include ${zlib.dev}/include/zlib.h";
-
-  postInstall = ''
-    mkdir -p $out/share/naev
-    cp -v $srcData $out/share/naev/ndata
-    wrapProgram $out/bin/naev --add-flags $out/share/naev/ndata
+  postPatch = ''
+    patchShebangs --build dat/outfits/bioship/generate.py utils/build/*.py utils/*.py
   '';
 
   meta = {
     description = "2D action/rpg space game";
     homepage = "http://www.naev.org";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ ralismark ];
     platforms = lib.platforms.linux;
-    hydraPlatforms = [];
   };
 }

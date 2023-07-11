@@ -16,20 +16,20 @@ in
   options.openstackImage = {
     name = mkOption {
       type = types.str;
-      description = "The name of the generated derivation";
+      description = lib.mdDoc "The name of the generated derivation";
       default = "nixos-openstack-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}";
     };
 
     sizeMB = mkOption {
       type = types.int;
       default = 8192;
-      description = "The size in MB of the image";
+      description = lib.mdDoc "The size in MB of the image";
     };
 
     format = mkOption {
       type = types.enum [ "raw" "qcow2" ];
       default = "qcow2";
-      description = "The image format to output";
+      description = lib.mdDoc "The image format to output";
     };
   };
 
@@ -85,7 +85,7 @@ in
         ${pkgs.jq}/bin/jq -n \
           --arg system_label ${lib.escapeShellArg config.system.nixos.label} \
           --arg system ${lib.escapeShellArg pkgs.stdenv.hostPlatform.system} \
-          --arg root_logical_bytes "$(${pkgs.qemu}/bin/qemu-img info --output json "$rootDisk" | ${pkgs.jq}/bin/jq '."virtual-size"')" \
+          --arg root_logical_bytes "$(${pkgs.qemu_kvm}/bin/qemu-img info --output json "$rootDisk" | ${pkgs.jq}/bin/jq '."virtual-size"')" \
           --arg boot_mode "${imageBootMode}" \
           --arg root "$rootDisk" \
          '{}

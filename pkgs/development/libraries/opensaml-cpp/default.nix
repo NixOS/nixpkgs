@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-xmltooling=${xml-tooling-c}" ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.isDarwin) "-std=c++14";
+
   enableParallelBuilding = true;
 
   meta = with lib; {

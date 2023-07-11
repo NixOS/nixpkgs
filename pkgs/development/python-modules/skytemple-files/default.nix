@@ -1,16 +1,40 @@
-{ lib, buildPythonPackage, fetchFromGitHub, appdirs, dungeon-eos, explorerscript
-, ndspy, pillow, setuptools, skytemple-rust, tilequant, armips
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, appdirs
+, dungeon-eos
+, explorerscript
+, ndspy
+, pillow
+, setuptools
+, skytemple-rust
+, tilequant
+, pyyaml
+, pmdsky-debug-py
+, typing-extensions
+, pythonOlder
+, # optional dependancies for SpriteCollab
+  aiohttp
+, lru-dict
+, graphql-core
+, gql
+, armips
+  # tests
+, pytestCheckHook
+, parameterized
+, xmldiff
 }:
 
 buildPythonPackage rec {
   pname = "skytemple-files";
-  version = "1.3.3";
+  version = "1.4.7";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    sha256 = "01j6khn60mdmz32xkpqrzwdqibmpdpi2wvwzxgdnaim9sq0fdqws";
+    hash = "sha256-SLRZ9ThrH2UWqfr5BbjJKDM/SRkCfMNK70XZT4+Ks7w=";
     fetchSubmodules = true;
   };
 
@@ -21,9 +45,37 @@ buildPythonPackage rec {
 
   buildInputs = [ armips ];
 
-  propagatedBuildInputs = [ appdirs dungeon-eos explorerscript ndspy pillow setuptools skytemple-rust tilequant ];
+  propagatedBuildInputs = [
+    appdirs
+    dungeon-eos
+    explorerscript
+    ndspy
+    pillow
+    setuptools
+    skytemple-rust
+    tilequant
+    pyyaml
+    pmdsky-debug-py
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    typing-extensions
+  ];
 
-  doCheck = false; # requires Pokémon Mystery Dungeon ROM
+  passthru.optional-dependencies = {
+    spritecollab = [
+      aiohttp
+      gql
+      graphql-core
+      lru-dict
+    ] ++ gql.optional-dependencies.aiohttp;
+  };
+
+  checkInputs = [ pytestCheckHook parameterized xmldiff ] ++ passthru.optional-dependencies.spritecollab;
+  pytestFlagsArray = [ "test/" ];
+  disabledTestPaths = [
+    "test/skytemple_files_test/common/spritecollab/sc_online_test.py"
+    "test/skytemple_files_test/compression_container/atupx/atupx_test.py" # Particularly long test
+  ];
+
   pythonImportsCheck = [ "skytemple_files" ];
 
   meta = with lib; {
@@ -31,5 +83,6 @@ buildPythonPackage rec {
     description = "Python library to edit the ROM of Pokémon Mystery Dungeon Explorers of Sky";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ xfix marius851000 ];
+    broken = stdenv.isDarwin; # pyobjc is missing
   };
 }

@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sudo";
-  version = "1.9.10";
+  version = "1.9.13p3";
 
   src = fetchurl {
     url = "https://www.sudo.ws/dist/${pname}-${version}.tar.gz";
-    sha256 = "sha256-RKFGEJjnx7jmrFl0mcJPsuQ3SMDBOai0lE5X0TSaZPQ=";
+    hash = "sha256-kjNKEruT4MBWsJ9T4lXMt9b2fGNQ4oE82Vk87sp4Vgs=";
   };
 
   prePatch = ''
@@ -35,10 +35,10 @@ stdenv.mkDerivation rec {
     "--with-iologdir=/var/log/sudo-io"
     "--with-sendmail=${sendmailPath}"
     "--enable-tmpfiles.d=no"
-  ] ++ lib.optional withInsults [
+  ] ++ lib.optionals withInsults [
     "--with-insults"
     "--with-all-insults"
-  ] ++ lib.optional withSssd [
+  ] ++ lib.optionals withSssd [
     "--with-sssd"
     "--with-sssd-lib=${sssd}/lib"
   ];

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchpatch, python3Packages, makeWrapper, gettext, installShellFiles
 , re2Support ? true
-, rustSupport ? stdenv.hostPlatform.isLinux, rustPlatform
+, rustSupport ? stdenv.hostPlatform.isLinux, cargo, rustPlatform, rustc
 , fullBuild ? false
 , gitSupport ? fullBuild
 , guiSupport ? fullBuild, tk
@@ -21,11 +21,11 @@ let
 
   self = python3Packages.buildPythonApplication rec {
     pname = "mercurial${lib.optionalString fullBuild "-full"}";
-    version = "6.1.1";
+    version = "6.4.3";
 
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      sha256 = "sha256-V7ikYdDOE9muOBfYqL35Ay407fqsPbzLO2a4NdzpM4g=";
+      sha256 = "sha256-p3+2LTJZNKg6ALL8bbEJ9ExnuGdo/EBJA2b1E2QMf2Q=";
     };
 
     format = "other";
@@ -35,7 +35,7 @@ let
     cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
       inherit src;
       name = "mercurial-${version}";
-      sha256 = "sha256-HYH7+OD11kdZdxFrx1KVle1NesS3fAgwVXJpAeiXDTo=";
+      sha256 = "sha256-nm9RZZHtmPfeJ7StHZmfxcFqKeJHACQQeA/Evv3wYD8=";
       sourceRoot = "mercurial-${version}/rust";
     } else null;
     cargoRoot = if rustSupport then "rust" else null;
@@ -44,11 +44,11 @@ let
       ++ lib.optional gitSupport pygit2
       ++ lib.optional highlightSupport pygments;
     nativeBuildInputs = [ makeWrapper gettext installShellFiles ]
-      ++ lib.optionals rustSupport (with rustPlatform; [
-           cargoSetupHook
-           rust.cargo
-           rust.rustc
-         ]);
+      ++ lib.optionals rustSupport [
+           rustPlatform.cargoSetupHook
+           cargo
+           rustc
+         ];
     buildInputs = [ docutils ]
       ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
@@ -91,7 +91,7 @@ let
       homepage = "https://www.mercurial-scm.org";
       downloadPage = "https://www.mercurial-scm.org/release/";
       license = licenses.gpl2Plus;
-      maintainers = with maintainers; [ eelco lukegb pacien ];
+      maintainers = with maintainers; [ eelco lukegb pacien techknowlogick ];
       platforms = platforms.unix;
     };
   };
@@ -148,9 +148,15 @@ let
 
     # doesn't like the extra setlocale warnings emitted by our bash wrappers
     test-locale.t
+
+    # Python 3.10-3.12 deprecation warning: asyncore
+    # https://bz.mercurial-scm.org/show_bug.cgi?id=6727
+    test-patchbomb-tls.t
     EOF
 
     export HGTEST_REAL_HG="${mercurial}/bin/hg"
+    # include tests for native components
+    export HGMODULEPOLICY="rust+c"
     # extended timeout necessary for tests to pass on the busy CI workers
     export HGTESTFLAGS="--blacklist blacklists/nix --timeout 1800 -j$NIX_BUILD_CORES ${flags}"
     make check

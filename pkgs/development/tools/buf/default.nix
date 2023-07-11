@@ -3,36 +3,34 @@
 , fetchFromGitHub
 , protobuf
 , git
-, testVersion
+, testers
 , buf
 , installShellFiles
 }:
 
 buildGoModule rec {
   pname = "buf";
-  version = "1.3.0";
+  version = "1.23.1";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-rOT7HuvbJFRyBOmCNmx5Vic4zckYgS+1BB0PcpwD9OQ=";
+    hash = "sha256-6Zp4QuH0wJQCt8w2230Ugrds8tFmnCcICxgWJiqTBWc=";
   };
 
-  vendorSha256 = "sha256-qIWZYsl1hFV4Ts27WSyjQAQ+jWjtLLG+A+yS0Ms7hfI=";
+  vendorHash = "sha256-e4frrLrG6OxOUcr5iqY+QEokdy95glmc3Rw2HPWUPEI=";
 
   patches = [
     # Skip a test that requires networking to be available to work.
     ./skip_test_requiring_network.patch
-    # Skip TestWorkspaceGit which requires .git and commits.
-    ./skip_test_requiring_dotgit.patch
   ];
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [ "-s" "-w" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     git # Required for TestGitCloner
     protobuf # Required for buftesting.GetProtocFilePaths
   ];
@@ -40,21 +38,18 @@ buildGoModule rec {
   preCheck = ''
     # The tests need access to some of the built utilities
     export PATH="$PATH:$GOPATH/bin"
-    # To skip TestCloneBranchAndRefToBucket
-    export CI=true
   '';
+
+  # Allow tests that bind or connect to localhost on macOS.
+  __darwinAllowLocalNetworking = true;
 
   installPhase = ''
     runHook preInstall
 
     # Binaries
-    mkdir -p "$out/bin"
     # Only install required binaries, don't install testing binaries
-    for FILE in \
-      "buf" \
-      "protoc-gen-buf-breaking" \
-      "protoc-gen-buf-lint"; do
-      cp "$GOPATH/bin/$FILE" "$out/bin/"
+    for FILE in buf protoc-gen-buf-breaking protoc-gen-buf-lint; do
+      install -D -m 555 -t $out/bin $GOPATH/bin/$FILE
     done
 
     # Completions
@@ -70,13 +65,13 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  passthru.tests.version = testVersion { package = buf; };
+  passthru.tests.version = testers.testVersion { package = buf; };
 
   meta = with lib; {
     homepage = "https://buf.build";
     changelog = "https://github.com/bufbuild/buf/releases/tag/v${version}";
     description = "Create consistent Protobuf APIs that preserve compatibility and comply with design best-practices";
     license = licenses.asl20;
-    maintainers = with maintainers; [ raboof jk lrewega ];
+    maintainers = with maintainers; [ jk lrewega ];
   };
 }

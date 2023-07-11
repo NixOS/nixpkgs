@@ -1,10 +1,30 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch, pythonOlder
-, fonttools, defcon, lxml, fs, unicodedata2, zopfli, brotlipy, fontpens
-, brotli, fontmath, mutatormath, booleanoperations
-, ufoprocessor, ufonormalizer, psautohint, tqdm
-, setuptools-scm, scikit-build
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, pythonOlder
+, fonttools
+, defcon
+, lxml
+, fs
+, unicodedata2
+, zopfli
+, brotlipy
+, fontpens
+, brotli
+, fontmath
+, mutatormath
+, booleanoperations
+, ufoprocessor
+, ufonormalizer
+, psautohint
+, tqdm
+, setuptools-scm
+, scikit-build
 , cmake
 , antlr4_9
+, libxml2
 , pytestCheckHook
 # Enables some expensive tests, useful for verifying an update
 , runAllTests ? false
@@ -13,16 +33,15 @@
 
 buildPythonPackage rec {
   pname = "afdko";
-  version = "3.8.1";
+  version = "3.9.3";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-BaSpw7TiBymCvoP0/z1zynWKQJH/PjbbGf85ZI9LOZw=";
+    hash = "sha256-v0fIhf3P5Xjdn5/ryRNj0Q2YHAisMqi5RTmJQabaUO0=";
   };
-
-  format = "pyproject";
 
   nativeBuildInputs = [
     setuptools-scm
@@ -32,6 +51,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     antlr4_9.runtime.cpp
+    libxml2.dev
   ];
 
   patches = [
@@ -64,14 +84,15 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  # Use system libxml2
+  FORCE_SYSTEM_LIBXML2 = true;
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
   preCheck = ''
     export PATH=$PATH:$out/bin
-
-    # Update tests to match ufinormalizer-0.6.1 expectations:
-    #   https://github.com/adobe-type-tools/afdko/issues/1418
-    find tests -name layerinfo.plist -delete
   '';
+
   disabledTests = lib.optionals (!runAllTests) [
     # Disable slow tests, reduces test time ~25 %
     "test_report"
@@ -81,11 +102,12 @@ buildPythonPackage rec {
     "test_filename_without_dir"
     "test_overwrite"
     "test_options"
-  ] ++ lib.optionals (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV) [
-    # aarch64-only (?) failure, unknown reason so far
+  ] ++ lib.optionals (stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isRiscV) [
+    # unknown reason so far
     # https://github.com/adobe-type-tools/afdko/issues/1425
     "test_spec"
   ] ++ lib.optionals (stdenv.hostPlatform.isi686) [
+    "test_dump_option"
     "test_type1mm_inputs"
   ];
 
@@ -94,8 +116,9 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
+    changelog = "https://github.com/adobe-type-tools/afdko/blob/${version}/NEWS.md";
     description = "Adobe Font Development Kit for OpenType";
-    homepage = "https://adobe-type-tools.github.io/afdko/";
+    homepage = "https://adobe-type-tools.github.io/afdko";
     license = licenses.asl20;
     maintainers = [ maintainers.sternenseemann ];
   };

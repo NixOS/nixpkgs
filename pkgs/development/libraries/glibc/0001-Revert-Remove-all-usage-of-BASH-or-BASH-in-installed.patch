@@ -1,6 +1,6 @@
-From f81744bae4442345ff6f40d80fdb8adaba8b330f Mon Sep 17 00:00:00 2001
-From: Maximilian Bosch <maximilian@mbosch.me>
-Date: Fri, 27 Aug 2021 17:19:27 +0200
+From cdd0c4b168fe228de97778556cea5c0f936e0e79 Mon Sep 17 00:00:00 2001
+From: Bernardo Meurer <bernardo@meurer.org>
+Date: Fri, 22 Jul 2022 22:11:07 -0700
 Subject: [PATCH] Revert "Remove all usage of @BASH@ or ${BASH} in installed
  files, and hardcode /bin/bash instead"
 
@@ -8,6 +8,8 @@ We need the ability to override to use `/bin/sh` here to avoid having
 some bootstrap tools in a final build product.
 
 This reverts commit 5188a9d0265cc6f7235a8af1d31ab02e4a24853d.
+
+Co-authored-by: Maximilian Bosch <maximilian@mbosch.me>
 ---
  debug/Makefile     | 5 +++--
  debug/xtrace.sh    | 2 +-
@@ -20,10 +22,10 @@ This reverts commit 5188a9d0265cc6f7235a8af1d31ab02e4a24853d.
  8 files changed, 15 insertions(+), 10 deletions(-)
 
 diff --git a/debug/Makefile b/debug/Makefile
-index 6893111cbf..3f66666c6c 100644
+index 52f9a7852c..22e4ae5461 100644
 --- a/debug/Makefile
 +++ b/debug/Makefile
-@@ -216,7 +216,8 @@ $(objpfx)pcprofiledump: $(objpfx)pcprofiledump.o
+@@ -265,8 +265,9 @@ $(objpfx)pcprofiledump: $(objpfx)pcprofiledump.o
  
  $(objpfx)xtrace: xtrace.sh
  	rm -f $@.new
@@ -34,21 +36,22 @@ index 6893111cbf..3f66666c6c 100644
 +	    -e 's|@PKGVERSION@|$(PKGVERSION)|' \
  	    -e 's|@REPORT_BUGS_TO@|$(REPORT_BUGS_TO)|' $^ > $@.new \
  	&& rm -f $@ && mv $@.new $@ && chmod +x $@
+ 
 diff --git a/debug/xtrace.sh b/debug/xtrace.sh
-index 9697fbe0b4..279fe59ac6 100755
+index 3d1f2af43a..eb2ba7ad4a 100755
 --- a/debug/xtrace.sh
 +++ b/debug/xtrace.sh
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#! @BASH@
- # Copyright (C) 1999-2021 Free Software Foundation, Inc.
+ # Copyright (C) 1999-2023 Free Software Foundation, Inc.
  # This file is part of the GNU C Library.
- # Contributed by Ulrich Drepper <drepper@gnu.org>, 1999.
+ 
 diff --git a/elf/Makefile b/elf/Makefile
-index d05f410592..9264409fdd 100644
+index 0d19964d42..ee8ee1cd41 100644
 --- a/elf/Makefile
 +++ b/elf/Makefile
-@@ -144,7 +144,8 @@ $(objpfx)sotruss-lib.so: $(common-objpfx)libc.so $(objpfx)ld.so \
+@@ -250,7 +250,8 @@ $(objpfx)sotruss-lib.so: $(common-objpfx)libc.so $(objpfx)ld.so \
  	$(common-objpfx)libc_nonshared.a
  
  $(objpfx)sotruss: sotruss.sh $(common-objpfx)config.make
@@ -58,7 +61,7 @@ index d05f410592..9264409fdd 100644
  	    -e 's%@TEXTDOMAINDIR@%$(localedir)%g' \
  	    -e 's%@PREFIX@%$(prefix)%g' \
  	    -e 's|@PKGVERSION@|$(PKGVERSION)|g' \
-@@ -659,6 +660,7 @@ ldd-rewrite = -e 's%@RTLD@%$(rtlddir)/$(rtld-installed-name)%g' \
+@@ -1396,6 +1397,7 @@ ldd-rewrite = -e 's%@RTLD@%$(rtlddir)/$(rtld-installed-name)%g' \
  	      -e 's%@VERSION@%$(version)%g' \
  	      -e 's|@PKGVERSION@|$(PKGVERSION)|g' \
  	      -e 's|@REPORT_BUGS_TO@|$(REPORT_BUGS_TO)|g' \
@@ -67,30 +70,30 @@ index d05f410592..9264409fdd 100644
  
  ifeq ($(ldd-rewrite-script),no)
 diff --git a/elf/ldd.bash.in b/elf/ldd.bash.in
-index ba736464ac..57442bc3f2 100644
+index e45dec5894..e09428506e 100644
 --- a/elf/ldd.bash.in
 +++ b/elf/ldd.bash.in
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#! @BASH@
- # Copyright (C) 1996-2021 Free Software Foundation, Inc.
+ # Copyright (C) 1996-2023 Free Software Foundation, Inc.
  # This file is part of the GNU C Library.
  
 diff --git a/elf/sotruss.sh b/elf/sotruss.sh
-index 003cf4d825..fd4da80244 100755
+index 874a6bed3f..7cc154561e 100755
 --- a/elf/sotruss.sh
 +++ b/elf/sotruss.sh
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#! @BASH@
- # Copyright (C) 2011-2021 Free Software Foundation, Inc.
+ # Copyright (C) 2011-2023 Free Software Foundation, Inc.
  # This file is part of the GNU C Library.
  
 diff --git a/malloc/Makefile b/malloc/Makefile
-index 9b70831d38..90ecadff6c 100644
+index dfb51d344c..574b5e9579 100644
 --- a/malloc/Makefile
 +++ b/malloc/Makefile
-@@ -271,8 +271,9 @@ $(objpfx)mtrace: mtrace.pl
+@@ -306,8 +306,9 @@ $(objpfx)mtrace: mtrace.pl
  
  $(objpfx)memusage: memusage.sh
  	rm -f $@.new
@@ -103,21 +106,21 @@ index 9b70831d38..90ecadff6c 100644
  	&& rm -f $@ && mv $@.new $@ && chmod +x $@
  
 diff --git a/malloc/memusage.sh b/malloc/memusage.sh
-index 0645f09911..c1cd4e23b7 100755
+index b1f5848b74..329e36ef8a 100755
 --- a/malloc/memusage.sh
 +++ b/malloc/memusage.sh
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#! @BASH@
- # Copyright (C) 1999-2021 Free Software Foundation, Inc.
+ # Copyright (C) 1999-2023 Free Software Foundation, Inc.
  # This file is part of the GNU C Library.
- # Contributed by Ulrich Drepper <drepper@gnu.org>, 1999.
+ 
 diff --git a/timezone/Makefile b/timezone/Makefile
-index c624a189b3..395abfeebd 100644
+index 0306c0bca9..de9bbcc815 100644
 --- a/timezone/Makefile
 +++ b/timezone/Makefile
-@@ -123,7 +123,8 @@ $(testdata)/XT%: testdata/XT%
- 	cp $< $@
+@@ -132,7 +132,8 @@ $(testdata)/XT5: testdata/gen-XT5.sh
+ 	mv $@.tmp $@
  
  $(objpfx)tzselect: tzselect.ksh $(common-objpfx)config.make
 -	sed -e 's|TZDIR=[^}]*|TZDIR=$(zonedir)|' \
@@ -127,5 +130,5 @@ index c624a189b3..395abfeebd 100644
  	    -e '/PKGVERSION=/s|=.*|="$(PKGVERSION)"|' \
  	    -e '/REPORT_BUGS_TO=/s|=.*|="$(REPORT_BUGS_TO)"|' \
 -- 
-2.31.1
+2.38.4
 

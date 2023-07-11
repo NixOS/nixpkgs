@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jffi";
-  version = "1.3.9";
+  version = "1.3.11";
 
   src = fetchFromGitHub {
     owner = "jnr";
     repo = "jffi";
     rev = "jffi-${version}";
-    sha256 = "sha256-VjZYhMbad+AesANG06umRzqMWj+Ebzu59TYK7Tm/bFo=";
+    sha256 = "sha256-fZnZH2j/IXbfsJkJG8s2ArOrWwVE2kgvSREVaSVoDyo=";
   };
 
   nativeBuildInputs = [ jdk ant texinfo pkg-config ];
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Java Foreign Function Interface ";
     homepage = "https://github.com/jnr/jffi";
     platforms = platforms.unix;

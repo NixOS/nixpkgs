@@ -5,7 +5,7 @@
     gnu = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         When enabled, GNU software is chosen by default whenever a there is
         a choice between GNU and non-GNU software (e.g., GNU lsh
         vs. OpenSSH).
@@ -29,7 +29,6 @@
 
     # GNU GRUB, where available.
     boot.loader.grub.enable = !pkgs.stdenv.isAarch32;
-    boot.loader.grub.version = 2;
 
     # GNU lsh.
     services.openssh.enable = false;

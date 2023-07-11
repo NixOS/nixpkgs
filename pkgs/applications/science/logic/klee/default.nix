@@ -1,10 +1,10 @@
 { lib
+, stdenv
 , callPackage
 , fetchFromGitHub
-, fetchpatch
 , cmake
-, llvmPackages_9
-, clang_9
+, clang
+, llvm
 , python3
 , zlib
 , z3
@@ -41,33 +41,35 @@ let
 
   # The klee-uclibc derivation.
   kleeuClibc = callPackage ./klee-uclibc.nix {
-    inherit clang_9 llvmPackages_9 extraKleeuClibcConfig debugRuntime runtimeAsserts;
+    inherit stdenv clang llvm extraKleeuClibcConfig debugRuntime runtimeAsserts;
   };
-in
-clang_9.stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "klee";
-  version = "2.2";
+  version = "3.0";
+
   src = fetchFromGitHub {
     owner = "klee";
     repo = "klee";
     rev = "v${version}";
-    sha256 = "Ar3BKfADjJvvP0dI9+x/l3RDs8ncx4jmO7ol4MgOr4M=";
+    hash = "sha256-y5lWmtIcLAthQ0oHYQNd+ir75YaxHZR9Jgiz+ZUFQjY=";
   };
+
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
-    llvmPackages_9.llvm
-    z3 stp cryptominisat
-    gperftools sqlite
+    cryptominisat
+    gperftools
+    llvm
+    sqlite
+    stp
+    z3
   ];
-  nativeBuildInputs = [
-    cmake clang_9
-  ];
-  checkInputs = [
+  nativeCheckInputs = [
     gtest
 
     # Should appear BEFORE lit, since lit passes through python rather
     # than the python environment we make.
     kleePython
-    (lit.override { python3 = kleePython; })
+    (lit.override { python = kleePython; })
   ];
 
   cmakeFlags = let
@@ -75,8 +77,9 @@ clang_9.stdenv.mkDerivation rec {
   in [
     "-DCMAKE_BUILD_TYPE=${if debug then "Debug" else if !debug && includeDebugInfo then "RelWithDebInfo" else "MinSizeRel"}"
     "-DKLEE_RUNTIME_BUILD_TYPE=${if debugRuntime then "Debug" else "Release"}"
+    "-DLLVMCC=${clang}/bin/clang"
+    "-DLLVMCXX=${clang}/bin/clang++"
     "-DKLEE_ENABLE_TIMESTAMP=${onOff false}"
-    "-DENABLE_KLEE_UCLIBC=${onOff true}"
     "-DKLEE_UCLIBC_PATH=${kleeuClibc}"
     "-DENABLE_KLEE_ASSERTS=${onOff asserts}"
     "-DENABLE_POSIX_RUNTIME=${onOff true}"
@@ -88,40 +91,13 @@ clang_9.stdenv.mkDerivation rec {
   ];
 
   # Silence various warnings during the compilation of fortified bitcode.
-  NIX_CFLAGS_COMPILE = ["-Wno-macro-redefined"];
+  env.NIX_CFLAGS_COMPILE = toString ["-Wno-macro-redefined"];
 
   prePatch = ''
     patchShebangs .
   '';
 
-  patches = map fetchpatch [
-    /* This patch is currently necessary for the unit test suite to run correctly.
-     * See https://www.mail-archive.com/klee-dev@imperial.ac.uk/msg03136.html
-     * and https://github.com/klee/klee/pull/1458 for more information.
-     */
-    {
-      name = "fix-gtest";
-      sha256 = "F+/6videwJZz4sDF9lnV4B8lMx6W11KFJ0Q8t1qUDf4=";
-      url = "https://github.com/klee/klee/pull/1458.patch";
-    }
-
-    # This patch fixes test compile issues with glibc 2.33+.
-    {
-      name = "fix-glibc-2.33";
-      sha256 = "PzxqtFyLy9KF1eA9AAKg1tu+ggRdvu7leuvXifayIcc=";
-      url = "https://github.com/klee/klee/pull/1385.patch";
-    }
-
-    # /etc/mtab doesn't exist in the Nix build sandbox.
-    {
-      name = "fix-etc-mtab-in-tests";
-      sha256 = "2Yb/rJA791esNNqq8uAXV+MML4YXIjPKkHBOufvyRoQ=";
-      url = "https://github.com/klee/klee/pull/1471.patch";
-    }
-  ];
-
   doCheck = true;
-  checkTarget = "check";
 
   passthru = {
     # Let the user depend on `klee.uclibc` for klee-uclibc

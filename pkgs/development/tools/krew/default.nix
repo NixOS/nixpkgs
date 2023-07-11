@@ -20,6 +20,5 @@ buildGoModule rec {
     homepage = "https://github.com/kubernetes-sigs/krew";
     maintainers = with maintainers; [ vdemeester ];
     license = lib.licenses.asl20;
-    platforms = platforms.unix;
   };
 }

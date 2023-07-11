@@ -1,29 +1,62 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, cmake, libtool, pkg-config
-, zlib, openssl, libevent, ncurses, ruby, msgpack, libssh }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, cmake
+, libtool
+, pkg-config
+, zlib
+, openssl
+, libevent
+, ncurses
+, ruby
+, msgpack-c
+, libssh
+, nixosTests
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tmate-ssh-server";
-  version = "2.3.0";
+  version = "unstable-2023-06-02";
 
   src = fetchFromGitHub {
-    owner  = "tmate-io";
-    repo   = "tmate-ssh-server";
-    rev    = version;
-    sha256 = "1y77mv1k4c79glj84lzlp0s1lafr1jzf60mywr5vhy6sq47q8hwd";
+    owner = "tmate-io";
+    repo = "tmate-ssh-server";
+    rev = "d7334ee4c3c8036c27fb35c7a24df3a88a15676b";
+    sha256 = "sha256-V3p0vagt13YjQPdqpbSatx5DnIEXL4t/kfxETSFYye0=";
   };
+
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace 'msgpack >= 1.2.0' 'msgpack-c >= 1.2.0'
+  '';
+
+  nativeBuildInputs = [
+    autoreconfHook
+    cmake
+    pkg-config
+  ];
+
+  buildInputs = [
+    libtool
+    zlib
+    openssl
+    libevent
+    ncurses
+    ruby
+    msgpack-c
+    libssh
+  ];
 
   dontUseCmakeConfigure = true;
 
-  buildInputs = [ libtool zlib openssl libevent ncurses ruby msgpack libssh ];
-  nativeBuildInputs = [ autoreconfHook cmake pkg-config ];
+  passthru.tests.tmate-ssh-server = nixosTests.tmate-ssh-server;
 
   meta = with lib; {
-    homepage    = "https://tmate.io/";
+    homepage = "https://tmate.io/";
     description = "tmate SSH Server";
-    license     = licenses.mit;
-    platforms   = platforms.unix;
-    maintainers = with maintainers; [ ];
-    knownVulnerabilities = [ "CVE-2021-44513" "CVE-2021-44512" ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ ck3d ];
   };
 }
-

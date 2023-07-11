@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     qt5.qtsvg
   ];
 
-  installCheckInputs = [ bc ];
+  nativeInstallCheckInputs = [ bc ];
 
   postPatch = ''
     patchShebangs ./build ./configure ./run_tests ./bin/*
@@ -86,6 +86,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     homepage = "https://github.com/MRtrix3/mrtrix3";
     description = "Suite of tools for diffusion imaging";
     maintainers = with maintainers; [ bcdarwin ];

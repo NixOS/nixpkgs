@@ -14,7 +14,6 @@
 , gettext
 , libXrandr
 , libusb1
-, lzo
 , libpthreadstubs
 , libXext
 , libXxf86vm
@@ -30,10 +29,11 @@
 , alsa-lib
 , miniupnpc
 , enet
-, mbedtls
+, mbedtls_2
 , soundtouch
 , sfml
 , fmt
+, xz
 , vulkan-loader
 , libpulseaudio
 
@@ -48,13 +48,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dolphin-emu-primehack";
-  version = "1.0.5";
+  version = "1.0.6a";
 
   src = fetchFromGitHub {
     owner = "shiiion";
     repo = "dolphin";
     rev = version;
-    sha256 = "011qghswgh9l7k993lfn1hrwhgyrv9m33smgspsjq50jww6r27fl";
+    sha256 = "sha256-gc4+ofoLKR+cvm+SaWEnGaKrSjWMKq7pF6pEIi75Rtk=";
     fetchSubmodules = true;
   };
 
@@ -81,17 +81,17 @@ stdenv.mkDerivation rec {
     readline
     openal
     libXdmcp
-    lzo
     portaudio
     libusb1
     libpng
     hidapi
     miniupnpc
     enet
-    mbedtls
+    mbedtls_2
     soundtouch
     sfml
     fmt
+    xz
     qtbase
   ] ++ lib.optionals stdenv.isLinux [
     bluez
@@ -143,9 +143,7 @@ stdenv.mkDerivation rec {
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ MP2E ashkitten Madouura ];
-    # x86_32 is an unsupported platform.
-    # Enable generic build if you really want a JIT-less binary.
     broken = stdenv.isDarwin;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = platforms.unix;
   };
 }

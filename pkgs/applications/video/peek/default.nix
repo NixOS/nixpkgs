@@ -10,7 +10,6 @@
 , appstream-glib
 , pkg-config
 , txt2man
-, gzip
 , vala
 , wrapGAppsHook
 , gsettings-desktop-schemas
@@ -18,7 +17,7 @@
 , glib
 , cairo
 , keybinder3
-, ffmpeg
+, ffmpeg-full
 , python3
 , libxml2
 , gst_all_1
@@ -50,7 +49,6 @@ stdenv.mkDerivation rec {
     appstream-glib
     desktop-file-utils
     gettext
-    gzip
     meson
     ninja
     libxml2
@@ -77,13 +75,11 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ which ffmpeg gifski ]})
+    gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ which ffmpeg-full gifski ]})
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
 

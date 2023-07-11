@@ -4,16 +4,18 @@
 , pythonOlder
 , fetchPypi
 , watchdog
-, dataclasses
 , ephemeral-port-reserve
 , pytest-timeout
 , pytest-xprocess
 , pytestCheckHook
+, markupsafe
+# for passthru.tests
+, moto, sentry-sdk
 }:
 
 buildPythonPackage rec {
   pname = "werkzeug";
-  version = "2.1.0";
+  version = "2.2.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,17 +23,17 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Werkzeug";
     inherit version;
-    sha256 = "sha256-m1VGaj6Z4TsfBoamYRfTm9qFqZIWbgp5rt/PNYYyj3o=";
+    hash = "sha256-LhzMlBfU2jWLnebxdOOsCUOR6h1PvvLWZ4ZdgZ39Cv4=";
   };
 
-  propagatedBuildInputs = lib.optionals (!stdenv.isDarwin) [
+  propagatedBuildInputs = [
+    markupsafe
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     # watchdog requires macos-sdk 10.13+
     watchdog
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ephemeral-port-reserve
     pytest-timeout
     pytest-xprocess
@@ -53,6 +55,10 @@ buildPythonPackage rec {
     "-m 'not filterwarnings'"
   ];
 
+  passthru.tests = {
+    inherit moto sentry-sdk;
+  };
+
   meta = with lib; {
     homepage = "https://palletsprojects.com/p/werkzeug/";
     description = "The comprehensive WSGI web application library";
@@ -63,6 +69,6 @@ buildPythonPackage rec {
       utility libraries.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

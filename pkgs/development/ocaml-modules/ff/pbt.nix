@@ -1,14 +1,17 @@
-{ lib, fetchFromGitLab, buildDunePackage, zarith, ff-sig, alcotest }:
+{ lib, buildDunePackage, zarith, ff-sig, alcotest }:
 
 buildDunePackage {
   pname = "ff-pbt";
-  inherit (ff-sig) version src doCheck useDune2;
+  inherit (ff-sig) version src;
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   checkInputs = [
     alcotest
   ];
+
+  doCheck = true;
 
   propagatedBuildInputs = [
     zarith

@@ -31,7 +31,7 @@ buildPythonPackage rec {
     jinja2
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     networkx
     matplotlib
@@ -45,5 +45,6 @@ buildPythonPackage rec {
     homepage = "https://kepler-mapper.scikit-tda.org/";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
+    broken = true;
   };
 }

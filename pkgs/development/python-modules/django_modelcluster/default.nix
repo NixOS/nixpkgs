@@ -27,11 +27,11 @@ buildPythonPackage rec {
     pytz
   ];
 
-  passthru.extras-require.taggit = [
+  passthru.optional-dependencies.taggit = [
     django-taggit
   ];
 
-  checkInputs = passthru.extras-require.taggit;
+  nativeCheckInputs = passthru.optional-dependencies.taggit;
 
   checkPhase = ''
     runHook preCheck

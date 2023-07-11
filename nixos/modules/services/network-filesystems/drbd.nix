@@ -15,7 +15,7 @@ let cfg = config.services.drbd; in
     services.drbd.enable = mkOption {
       default = false;
       type = types.bool;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable support for DRBD, the Distributed Replicated
         Block Device.
       '';
@@ -24,8 +24,8 @@ let cfg = config.services.drbd; in
     services.drbd.config = mkOption {
       default = "";
       type = types.lines;
-      description = ''
-        Contents of the <filename>drbd.conf</filename> configuration file.
+      description = lib.mdDoc ''
+        Contents of the {file}`drbd.conf` configuration file.
       '';
     };
 

@@ -6,13 +6,13 @@
 , zlib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sbt";
-  version = "1.6.2";
+  version = "1.9.2";
 
   src = fetchurl {
-    url = "https://github.com/sbt/sbt/releases/download/v${version}/sbt-${version}.tgz";
-    sha256 = "sha256-Y3Y3tsTm+gSrYs02QGHjKxJICwkAHNIzA99is2+t1EA=";
+    url = "https://github.com/sbt/sbt/releases/download/v${finalAttrs.version}/sbt-${finalAttrs.version}.tgz";
+    hash = "sha256-XdQ69GFnoboN9jhZv65uNS++1SXnZiLY69yJFCIlMrI=";
   };
 
   postPatch = ''
@@ -21,7 +21,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ zlib ];
+  buildInputs = lib.optionals stdenv.isLinux [
+    stdenv.cc.cc # libstdc++.so.6
+    zlib
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -39,8 +42,12 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.scala-sbt.org/";
     license = licenses.bsd3;
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     description = "A build tool for Scala, Java and more";
     maintainers = with maintainers; [ nequissimus ];
     platforms = platforms.unix;
   };
-}
+})

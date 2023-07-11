@@ -1,23 +1,23 @@
 { lib
+, argcomplete
 , buildPythonPackage
 , fetchPypi
-, substituteAll
-, argcomplete
-, pyyaml
-, toml
-, xmltodict
 , jq
-, setuptools-scm
 , pytestCheckHook
+, pyyaml
+, setuptools-scm
+, substituteAll
+, tomlkit
+, xmltodict
 }:
 
 buildPythonPackage rec {
   pname = "yq";
-  version = "2.14.0";
+  version = "3.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-9L8rKZ0eXH69dM+yXR9dm2QBBjusB6LQmhVhRMHWROE=";
+    hash = "sha256-jbt6DJN92/w90XXmR49AlgwUDT6LHxoDFd52OE1mZQo=";
   };
 
   patches = [
@@ -32,13 +32,13 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    pyyaml
-    xmltodict
-    toml
     argcomplete
+    pyyaml
+    tomlkit
+    xmltodict
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
    pytestCheckHook
   ];
 

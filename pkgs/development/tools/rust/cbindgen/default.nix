@@ -1,21 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, python3Packages, Security }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, cmake
+, python3Packages
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-cbindgen";
-  version = "0.21.0";
+  version = "0.24.6";
 
   src = fetchFromGitHub {
-    owner = "eqrion";
+    owner = "mozilla";
     repo = "cbindgen";
     rev = "v${version}";
-    sha256 = "sha256-WvCGAjFxjaql/y35QfHyHvwbEL4pKtlc3JO2NecqQCM=";
+    hash = "sha256-RHh97hwWmjV6hw+fX+fOtixX/DGedTf9cx+PYPW6/wI=";
   };
 
-  cargoSha256 = "sha256-Kl2/u+ttPn1k7f3+XRCord4u+c4QZ80/Okb40XeyeIk=";
+  cargoSha256 = "sha256-7G/16arXYwt7Nrs1isWyrPubm8GMi8NsjLjWAD8x6aM=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
-  checkInputs = [
+  nativeCheckInputs = [
+    cmake
     python3Packages.cython
   ];
 
@@ -27,12 +35,17 @@ rustPlatform.buildRustPackage rec {
     "--skip lib_default_uses_debug_build"
     "--skip lib_explicit_debug_build"
     "--skip lib_explicit_release_build"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # WORKAROUND: test_body fails when using clang
+    # https://github.com/eqrion/cbindgen/issues/628
+    "--skip test_body"
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/mozilla/cbindgen/blob/v${version}/CHANGES";
     description = "A project for generating C bindings from Rust code";
-    homepage = "https://github.com/eqrion/cbindgen";
+    homepage = "https://github.com/mozilla/cbindgen";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ hexa ];
   };
 }

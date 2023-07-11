@@ -1,44 +1,59 @@
 { lib
+, stdenv
+, blis
 , buildPythonPackage
 , callPackage
-, fetchPypi
-, pythonOlder
-, pytest
-, blis
 , catalogue
 , cymem
+, fetchPypi
 , jinja2
 , jsonschema
+, langcodes
 , murmurhash
 , numpy
-, preshed
-, requests
-, setuptools
-, srsly
-, spacy-legacy
-, thinc
-, typer
-, wasabi
 , packaging
 , pathy
+, preshed
 , pydantic
+, pytest
 , python
-, tqdm
-, typing-extensions
+, pythonOlder
+, pythonRelaxDepsHook
+, requests
+, setuptools
+, spacy-legacy
 , spacy-loggers
-, langcodes
+, srsly
+, thinc
+, tqdm
+, typer
+, typing-extensions
+, wasabi
+, writeScript
+, nix
+, git
+, nix-update
 }:
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.2.4";
+  version = "3.5.4";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-PkxvKY1UBEWC2soRQrCC7jiDG7PXu5MdLuYB6Ljc5k8=";
+    hash = "sha256-mpwWfp3Ov++sx12sNKjnK+y+NI60W78GpsBSOuBaxCU=";
   };
+
+  pythonRelaxDeps = [
+    "typer"
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = [
     blis
@@ -46,6 +61,7 @@ buildPythonPackage rec {
     cymem
     jinja2
     jsonschema
+    langcodes
     murmurhash
     numpy
     packaging
@@ -54,37 +70,52 @@ buildPythonPackage rec {
     pydantic
     requests
     setuptools
-    srsly
     spacy-legacy
+    spacy-loggers
+    srsly
     thinc
     tqdm
     typer
     wasabi
-    spacy-loggers
-    langcodes
-  ] ++ lib.optional (pythonOlder "3.8") typing-extensions;
-
-  postPatch = ''
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ];  postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "pydantic>=1.7.4,!=1.8,!=1.8.1,<1.9.0" "pydantic~=1.2"
+      --replace "typer>=0.3.0,<0.5.0" "typer>=0.3.0"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 
   doCheck = false;
+
   checkPhase = ''
     ${python.interpreter} -m pytest spacy/tests --vectors --models --slow
   '';
 
-  pythonImportsCheck = [ "spacy" ];
+  pythonImportsCheck = [
+    "spacy"
+  ];
 
-  passthru.tests.annotation = callPackage ./annotation-test { };
+  passthru = {
+    updateScript = writeScript "update-spacy" ''
+    #!${stdenv.shell}
+    set -eou pipefail
+    PATH=${lib.makeBinPath [ nix git nix-update ]}
+
+    nix-update python3Packages.spacy
+
+    # update spacy models as well
+    echo | nix-shell maintainers/scripts/update.nix --argstr package python3Packages.spacy_models.en_core_web_sm
+    '';
+    tests.annotation = callPackage ./annotation-test { };
+  };
 
   meta = with lib; {
-    description = "Industrial-strength Natural Language Processing (NLP) with Python and Cython";
+    description = "Industrial-strength Natural Language Processing (NLP)";
     homepage = "https://github.com/explosion/spaCy";
+    changelog = "https://github.com/explosion/spaCy/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

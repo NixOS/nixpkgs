@@ -1,25 +1,30 @@
 { lib
-, aiohttp
+, boto3
 , buildPythonPackage
 , fetchFromGitHub
 , ftfy
 , mailchecker
+, openpyxl
+, orjson
 , phonenumbers
 , pytestCheckHook
 , python-dateutil
+, python-decouple
 , python-fsutil
-, pythonOlder
 , python-slugify
+, pythonOlder
+, pythonRelaxDepsHook
 , pyyaml
 , requests
 , six
 , toml
+, xlrd
 , xmltodict
 }:
 
 buildPythonPackage rec {
   pname = "python-benedict";
-  version = "0.25.0";
+  version = "0.31.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,26 +32,39 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
     repo = pname;
-    rev = version;
-    hash = "sha256-G7pTbxNcESMUiKpQxjiF0gwN5mBhmuwIDlzauN5JCB4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-fFxFpVKA6CdKwYRQCZb7iDrhLVmzaCr009Cv7CvMDyo=";
   };
 
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "boto3"
+  ];
+
   propagatedBuildInputs = [
+    boto3
+    ftfy
     mailchecker
+    openpyxl
     phonenumbers
     python-dateutil
     python-fsutil
     python-slugify
     pyyaml
-    ftfy
     requests
-    six
     toml
+    xlrd
     xmltodict
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    orjson
     pytestCheckHook
+    python-decouple
+    six
   ];
 
   disabledTests = [
@@ -57,6 +75,7 @@ buildPythonPackage rec {
     "test_from_plist_with_valid_url_valid_content"
     "test_from_query_string_with_valid_url_valid_content"
     "test_from_toml_with_valid_url_valid_content"
+    "test_from_xls_with_valid_url_valid_content"
     "test_from_xml_with_valid_url_valid_content"
     "test_from_yaml_with_valid_url_valid_content"
   ];
@@ -68,6 +87,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module with keylist/keypath support";
     homepage = "https://github.com/fabiocaccamo/python-benedict";
+    changelog = "https://github.com/fabiocaccamo/python-benedict/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

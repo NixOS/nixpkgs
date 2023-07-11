@@ -1,25 +1,25 @@
 #
 # Files came from this Hydra build:
 #
-#   https://hydra.nixos.org/build/172142499
+#   https://hydra.nixos.org/build/186237511
 #
-# Which used nixpkgs revision 49a83445c28c4ffb8a1a90a1f68e6150ea48893b
+# Which used nixpkgs revision ac43c444780a80e789fd14fe2114acd4a3b5cf9d
 # to instantiate:
 #
-#   /nix/store/gj272sd56gsj6qpyzh4njpfzwdhviliz-stdenv-bootstrap-tools-powerpc64le-unknown-linux-gnu.drv
+#   /nix/store/nhjbza9vlcyhp9zxfz6lwpc3m2ghrpzj-stdenv-bootstrap-tools-powerpc64le-unknown-linux-gnu.drv
 #
 # and then built:
 #
-#   /nix/store/n81pljbd8m0xgypm84krc2bnvqgjrfxx-stdenv-bootstrap-tools-powerpc64le-unknown-linux-gnu
+#   /nix/store/fklpm7fy6cp5wz55w0gd8wakyqvzapjx-stdenv-bootstrap-tools-powerpc64le-unknown-linux-gnu
 #
 {
   busybox = import <nix/fetchurl.nix> {
-    url = "http://tarballs.nixos.org/stdenv-linux/powerpc64le/49a83445c28c4ffb8a1a90a1f68e6150ea48893b/busybox";
-    sha256 = "sha256-UscnfGKOZAKLkPcRtwrbT5Uj8m3Kj9jhkKp9MUc1eCY=";
+    url = "http://tarballs.nixos.org/stdenv-linux/powerpc64le/ac43c444780a80e789fd14fe2114acd4a3b5cf9d/busybox";
+    sha256 = "sha256-jtPEAsht4AUAG4MLK8xocQSfveUR4ppU1lS4bGI1VN4=";
     executable = true;
   };
-  bootstrapTools =import <nix/fetchurl.nix> {
-    url = "http://tarballs.nixos.org/stdenv-linux/powerpc64le/49a83445c28c4ffb8a1a90a1f68e6150ea48893b/bootstrap-tools.tar.xz";
-    sha256 = "sha256-A20GKGn3rM8K2JcU0SApRp3+avUE+bIm1h632AitRzU=";
+  bootstrapTools = import <nix/fetchurl.nix> {
+    url = "http://tarballs.nixos.org/stdenv-linux/powerpc64le/ac43c444780a80e789fd14fe2114acd4a3b5cf9d/bootstrap-tools.tar.xz";
+    sha256 = "sha256-MpIDnpZUK3M17qlnuoxfnK0EgxRosm3TMW1WfPZ1+jU=";
   };
 }

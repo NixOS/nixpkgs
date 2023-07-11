@@ -1,32 +1,24 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , gfortran
 , cmake
 , shared ? true
 # Compile with ILP64 interface
 , blas64 ? false
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liblapack";
-  version = "3.10.0";
+  version = "3.11";
 
   src = fetchFromGitHub {
     owner = "Reference-LAPACK";
     repo = "lapack";
-    rev = "v${version}";
-    sha256 = "sha256-ewYUM+M7jDO5LLnB4joiKkqgXjEDmWbFZbgad8x98gc=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-AYD78u70y8cY19hmM/aDjQEzxO8u9lPWhCFxRe5cqXI=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2021-4048.patch";
-      url = "https://github.com/Reference-LAPACK/lapack/commit/0631b6beaed60ba118b0b027c0f8d35397bf5df0.patch";
-      sha256 = "1bqjw3f6ak9iz97y7ckn0rrfcgrzbn9prgfasl489qpxgzp2kjh8";
-    })
-  ];
 
   nativeBuildInputs = [ gfortran cmake ];
 
@@ -39,13 +31,17 @@ stdenv.mkDerivation rec {
     "-DCBLAS=ON"
     "-DBUILD_TESTING=ON"
   ] ++ lib.optional shared "-DBUILD_SHARED_LIBS=ON"
-    ++ lib.optional blas64 "-DBUILD_INDEX64=ON";
+    ++ lib.optional blas64 "-DBUILD_INDEX64=ON"
+    # Tries to run host platform binaries during the build
+    # Will likely be disabled by default in 3.12, see:
+    # https://github.com/Reference-LAPACK/lapack/issues/757
+    ++ lib.optional (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) "-DTEST_FORTRAN_COMPILER=OFF";
 
   passthru = { inherit blas64; };
 
   postInstall =  let
     canonicalExtension = if stdenv.hostPlatform.isLinux
-                       then "${stdenv.hostPlatform.extensions.sharedLibrary}.${lib.versions.major version}"
+                       then "${stdenv.hostPlatform.extensions.sharedLibrary}.${lib.versions.major finalAttrs.version}"
                        else stdenv.hostPlatform.extensions.sharedLibrary;
   in lib.optionalString blas64 ''
     ln -s $out/lib/liblapack64${canonicalExtension} $out/lib/liblapack${canonicalExtension}
@@ -70,15 +66,18 @@ stdenv.mkDerivation rec {
 
   checkPhase = ''
     runHook preCheck
-    ctest ${ctestArgs}
+    ctest ${finalAttrs.ctestArgs}
     runHook postCheck
   '';
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
     description = "Linear Algebra PACKage";
     homepage = "http://www.netlib.org/lapack/";
     maintainers = with maintainers; [ markuskowa ];
     license = licenses.bsd3;
+    pkgConfigModules = [ "lapack" ];
     platforms = platforms.all;
   };
-}
+})

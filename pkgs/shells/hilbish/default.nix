@@ -1,18 +1,20 @@
-{ lib, buildGoModule, fetchFromGitHub, readline }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "hilbish";
-  version = "1.0.4";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "Rosettea";
     repo = "Hilbish";
     rev = "v${version}";
-    sha256 = "sha256-JVAyE6iSfRres2YalQF3CWK5Jtn5HoW6p6RHVbwzoVQ=";
+    hash = "sha256-OEuriFnVDS0POXoPeUk4IcLtV3JAMLDM2apDxmjg5cQ=";
     fetchSubmodules = true;
   };
 
-  vendorSha256 = "sha256-Bmst1oJMuSXGvL8Syw6v2BqrbO5McHKkTufFs6iuxzs=";
+  subPackages = [ "." ];
+
+  vendorHash = "sha256-Kiy1JR3X++naY2XNLpnGujrNQt7qlL0zxv8E96cHmHo=";
 
   ldflags = [
     "-s"
@@ -24,13 +26,9 @@ buildGoModule rec {
     mkdir -p "$out/share/hilbish"
 
     cp .hilbishrc.lua $out/share/hilbish/
-    cp -r docs -t $out/share/hilbish
+    cp -r docs -t $out/share/hilbish/
     cp -r libs -t $out/share/hilbish/
-    cp -r prelude/ $out/share/hilbish/
-
-    # segfaults and it's already been generated upstream
-    # we copy the docs over with the above cp command
-    rm $out/bin/docgen
+    cp -r nature $out/share/hilbish/
   '';
 
   meta = with lib; {
@@ -39,6 +37,5 @@ buildGoModule rec {
     homepage = "https://github.com/Rosettea/Hilbish";
     maintainers = with maintainers; [ fortuneteller2k ];
     license = licenses.mit;
-    platforms = platforms.linux; # only officially supported on Linux
   };
 }

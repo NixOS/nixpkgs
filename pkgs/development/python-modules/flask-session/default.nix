@@ -6,12 +6,12 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ye1UMh+oxMoBMv/TNpWCdZ7aclL7SzvuSA5pDRukH0Y=";
+    hash = "sha256-ye1UMh+oxMoBMv/TNpWCdZ7aclL7SzvuSA5pDRukH0Y=";
   };
 
   propagatedBuildInputs = [ flask cachelib ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # The rest of the tests require database servers and optional db connector dependencies
   pytestFlagsArray = [ "-k" "'null_session or filesystem_session'" ];

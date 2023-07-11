@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "jupyterhub";
     repo = "systemdspawner";
     rev = "v${version}";
-    sha256 = "sha256-EUCA+CKCeYr+cLVrqTqe3Q32JkbqeALL6tfOnlVHk8Q=";
+    hash = "sha256-EUCA+CKCeYr+cLVrqTqe3Q32JkbqeALL6tfOnlVHk8Q=";
   };
 
   propagatedBuildInputs = [
@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "JupyterHub Spawner using systemd for resource isolation";
     homepage = "https://github.com/jupyterhub/systemdspawner";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc erictapen ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

@@ -1,34 +1,58 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, wheel
-, setuptools
-, setuptools-scm
+, hatch-vcs
+, hatchling
+, mypy-extensions
+, numpy
+, pydantic
 , pytestCheckHook
-, pytest-mypy-plugins
-, pytest-cov
-, pytest
-, mypy
+, pythonOlder
 , typing-extensions
-}: buildPythonPackage rec
-{
+, wrapt
+}:
+
+buildPythonPackage rec {
   pname = "psygnal";
-  version = "0.3.3";
+  version = "0.9.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
+
   src = fetchFromGitHub {
-    owner = "tlambert03";
+    owner = "pyapp-kit";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-BQmcA1gD2i4sxROH+a7gStcNK1mXYVerIZ2y6gn8vI8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-9rYG0XqwFJQojnvM5ygm1RVu9NbeFASns0llOGKaP+4=";
   };
-  buildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ typing-extensions ];
-  checkInputs = [ pytestCheckHook pytest-cov pytest-mypy-plugins ];
-  doCheck = false;  # mypy checks are failing
+
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
+  buildInputs = [
+    hatch-vcs
+    hatchling
+  ];
+
+  propagatedBuildInputs = [
+    mypy-extensions
+    typing-extensions
+  ];
+
+  nativeCheckInputs = [
+    numpy
+    pydantic
+    pytestCheckHook
+    wrapt
+  ];
+
+  pythonImportsCheck = [
+    "psygnal"
+  ];
+
   meta = with lib; {
-    description = "Pure python implementation of Qt Signals";
-    homepage = "https://github.com/tlambert03/psygnal";
+    description = "Implementation of Qt Signals";
+    homepage = "https://github.com/pyapp-kit/psygnal";
+    changelog = "https://github.com/pyapp-kit/psygnal/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ SomeoneSerge ];
   };

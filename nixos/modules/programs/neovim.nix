@@ -4,19 +4,27 @@ with lib;
 
 let
   cfg = config.programs.neovim;
-
-  runtime' = filter (f: f.enable) (attrValues cfg.runtime);
-
-  runtime = pkgs.linkFarm "neovim-runtime" (map (x: { name = x.target; path = x.source; }) runtime');
-
-in {
+in
+{
   options.programs.neovim = {
-    enable = mkEnableOption "Neovim";
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = lib.mdDoc ''
+        Whether to enable Neovim.
+
+        When enabled through this option, Neovim is wrapped to use a
+        configuration managed by this module. The configuration file in the
+        user's home directory at {file}`~/.config/nvim/init.vim` is no longer
+        loaded by default.
+      '';
+    };
 
     defaultEditor = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         When enabled, installs neovim and configures neovim to be the default editor
         using the EDITOR environment variable.
       '';
@@ -25,40 +33,40 @@ in {
     viAlias = mkOption {
       type = types.bool;
       default = false;
-      description = ''
-        Symlink <command>vi</command> to <command>nvim</command> binary.
+      description = lib.mdDoc ''
+        Symlink {command}`vi` to {command}`nvim` binary.
       '';
     };
 
     vimAlias = mkOption {
       type = types.bool;
       default = false;
-      description = ''
-        Symlink <command>vim</command> to <command>nvim</command> binary.
+      description = lib.mdDoc ''
+        Symlink {command}`vim` to {command}`nvim` binary.
       '';
     };
 
     withRuby = mkOption {
       type = types.bool;
       default = true;
-      description = "Enable Ruby provider.";
+      description = lib.mdDoc "Enable Ruby provider.";
     };
 
     withPython3 = mkOption {
       type = types.bool;
       default = true;
-      description = "Enable Python 3 provider.";
+      description = lib.mdDoc "Enable Python 3 provider.";
     };
 
     withNodeJs = mkOption {
       type = types.bool;
       default = false;
-      description = "Enable Node provider.";
+      description = lib.mdDoc "Enable Node provider.";
     };
 
     configure = mkOption {
       type = types.attrs;
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           customRC = '''
@@ -72,9 +80,9 @@ in {
           };
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Generate your init file from your list of plugins and custom commands.
-        Neovim will then be wrapped to load <command>nvim -u /nix/store/<replaceable>hash</replaceable>-vimrc</command>
+        Neovim will then be wrapped to load {command}`nvim -u /nix/store/«hash»-vimrc`
       '';
     };
 
@@ -82,41 +90,42 @@ in {
       type = types.package;
       default = pkgs.neovim-unwrapped;
       defaultText = literalExpression "pkgs.neovim-unwrapped";
-      description = "The package to use for the neovim binary.";
+      description = lib.mdDoc "The package to use for the neovim binary.";
     };
 
     finalPackage = mkOption {
       type = types.package;
       visible = false;
       readOnly = true;
-      description = "Resulting customized neovim package.";
+      description = lib.mdDoc "Resulting customized neovim package.";
     };
 
     runtime = mkOption {
-      default = {};
+      default = { };
       example = literalExpression ''
         { "ftplugin/c.vim".text = "setlocal omnifunc=v:lua.vim.lsp.omnifunc"; }
       '';
-      description = ''
-        Set of files that have to be linked in <filename>runtime</filename>.
+      description = lib.mdDoc ''
+        Set of files that have to be linked in {file}`runtime`.
       '';
 
       type = with types; attrsOf (submodule (
         { name, config, ... }:
-        { options = {
+        {
+          options = {
 
             enable = mkOption {
               type = types.bool;
               default = true;
-              description = ''
-                Whether this /etc file should be generated.  This
-                option allows specific /etc files to be disabled.
+              description = lib.mdDoc ''
+                Whether this runtime directory should be generated.  This
+                option allows specific runtime files to be disabled.
               '';
             };
 
             target = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Name of symlink.  Defaults to the attribute
                 name.
               '';
@@ -125,24 +134,20 @@ in {
             text = mkOption {
               default = null;
               type = types.nullOr types.lines;
-              description = "Text of the file.";
+              description = lib.mdDoc "Text of the file.";
             };
 
             source = mkOption {
-              type = types.path;
-              description = "Path of the source file.";
+              default = null;
+              type = types.nullOr types.path;
+              description = lib.mdDoc "Path of the source file.";
             };
 
           };
 
-          config = {
-            target = mkDefault name;
-            source = mkIf (config.text != null) (
-              let name' = "neovim-runtime" + baseNameOf name;
-              in mkDefault (pkgs.writeText name' config.text));
-          };
-
-        }));
+          config.target = mkDefault name;
+        }
+      ));
 
     };
   };
@@ -153,14 +158,19 @@ in {
     ];
     environment.variables.EDITOR = mkIf cfg.defaultEditor (mkOverride 900 "nvim");
 
-    programs.neovim.finalPackage = pkgs.wrapNeovim cfg.package {
-      inherit (cfg) viAlias vimAlias withPython3 withNodeJs withRuby;
-      configure = cfg.configure // {
+    environment.etc = listToAttrs (attrValues (mapAttrs
+      (name: value: {
+        name = "xdg/nvim/${name}";
+        value = removeAttrs
+          (value // {
+            target = "xdg/nvim/${value.target}";
+          })
+          (optionals (isNull value.source) [ "source" ]);
+      })
+      cfg.runtime));
 
-        customRC = (cfg.configure.customRC or "") + ''
-          set runtimepath^=${runtime}/etc
-        '';
-      };
+    programs.neovim.finalPackage = pkgs.wrapNeovim cfg.package {
+      inherit (cfg) viAlias vimAlias withPython3 withNodeJs withRuby configure;
     };
   };
 }

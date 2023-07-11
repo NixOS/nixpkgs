@@ -32,7 +32,7 @@ let
       env = python3.withPackages (pp: with pp; [
         sphinx
         recommonmark
-        sphinx_rtd_theme
+        sphinx-rtd-theme
       ]);
     in
     # Expose only the sphinx-build binary to avoid contaminating
@@ -45,7 +45,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libinput";
-  version = "1.20.0";
+  version = "1.23.0";
 
   outputs = [ "bin" "out" "dev" ];
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     owner = "libinput";
     repo = "libinput";
     rev = version;
-    sha256 = "Ey6ItBIrf1POACp2+6R0B4KxJq5V1HoO+y4j6hZSGAE=";
+    sha256 = "7Wxriy1fVsfAhcfhOhuvLehhmQYrQ2IgZTK53bt12HI=";
   };
 
   patches = [
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     udev
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     check
     valgrind
   ];
@@ -113,8 +113,8 @@ stdenv.mkDerivation rec {
       test/check-leftover-udev-rules.sh \
       test/helper-copy-and-exec-from-tmp.sh
 
-    # Don't create an empty /etc directory.
-    sed -i "/install_subdir('libinput', install_dir : dir_etc)/d" meson.build
+    # Don't create an empty directory under /etc.
+    sed -i "/install_emptydir(dir_etc \/ 'libinput')/d" meson.build
   '';
 
   passthru = {
@@ -122,7 +122,6 @@ stdenv.mkDerivation rec {
       libinput-module = nixosTests.libinput;
     };
     updateScript = gitUpdater {
-      inherit pname version;
       patchlevel-unstable = true;
     };
   };
@@ -133,5 +132,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ codyopel ] ++ teams.freedesktop.members;
+    changelog = "https://gitlab.freedesktop.org/libinput/libinput/-/releases/${version}";
   };
 }

@@ -31,7 +31,9 @@ buildPythonPackage rec {
     msgpack
   ];
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     pytestCheckHook
     requests-mock
     mock

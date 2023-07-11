@@ -5,11 +5,15 @@
 , fetchPypi
 , radare2
 , coreutils
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "r2pipe";
-  version = "1.6.5";
+  version = "1.8.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   postPatch = let
     r2lib = "${lib.getOutput "lib" radare2}/lib";
@@ -27,7 +31,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "512d2aca27c4515e55743852e0ab227190739d9595d2c4b6ae97b23d1a2bdd26";
+    hash = "sha256-T1w4QG0KBPBekETd+nMNbvPF2mgBZgQ/jhWcP9694mg=";
   };
 
   # Tiny sanity check to make sure r2pipe finds radare2 (since r2pipe doesn't

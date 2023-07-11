@@ -8,7 +8,7 @@ in
 {
   options = {
     programs.nbd = {
-      enable = mkEnableOption "Network Block Device (nbd) support";
+      enable = mkEnableOption (lib.mdDoc "Network Block Device (nbd) support");
     };
   };
 

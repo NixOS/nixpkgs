@@ -1,31 +1,30 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , aiohttp
 , python-dateutil
-, requests
 , typing-extensions
-, websockets
 }:
 
 buildPythonPackage rec {
   pname = "twitchapi";
-  version = "2.5.3";
+  version = "3.11.0";
+
+  disabled = pythonOlder "3.7";
 
   format = "setuptools";
 
   src = fetchPypi {
     pname = "twitchAPI";
     inherit version;
-    sha256 = "e7987dd8c3d1a3d25fe85ff0c0b0bad492f916c920f618dca8efd6baad3ac704";
+    hash = "sha256-TkQzF32nt89uBvC6aj/b5f2DQkOVDz7UyeUXRyVYumM=";
   };
 
   propagatedBuildInputs = [
     aiohttp
     python-dateutil
-    requests
     typing-extensions
-    websockets
   ];
 
   # upstream has no tests
@@ -40,6 +39,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/Teekeks/pyTwitchAPI/blob/v${version}/docs/changelog.rst";
     description = "Python implementation of the Twitch Helix API, its Webhook, PubSub and EventSub";
     homepage = "https://github.com/Teekeks/pyTwitchAPI";
     license = licenses.mit;

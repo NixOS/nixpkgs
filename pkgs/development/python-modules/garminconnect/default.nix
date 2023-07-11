@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "garminconnect";
-  version = "0.1.44";
+  version = "0.1.55";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cyberjunky";
     repo = "python-garminconnect";
-    rev = version;
-    hash = "sha256-CUjMbh3eGPwoHW+oOjaVyr0g/txWmzGuP1usq2WCwZg=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-YPLlrlV8UyoaNtE+LgX7jpZkR7jbSe/2WRR0v0cfACY=";
   };
 
   propagatedBuildInputs = [
@@ -35,6 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Garmin Connect Python API wrapper";
     homepage = "https://github.com/cyberjunky/python-garminconnect";
+    changelog = "https://github.com/cyberjunky/python-garminconnect/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

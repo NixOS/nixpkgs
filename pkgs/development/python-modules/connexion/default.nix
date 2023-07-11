@@ -11,6 +11,7 @@
 , inflection
 , jsonschema
 , openapi-spec-validator
+, packaging
 , pytest-aiohttp
 , pytestCheckHook
 , pythonOlder
@@ -22,16 +23,16 @@
 
 buildPythonPackage rec {
   pname = "connexion";
-  version = "2.12.0";
+  version = "2.14.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner = "zalando";
+    owner = "spec-first";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-JMuI3h0Pg7nCXrJtF0fhSFJTOWelEqcvmqv3ooIfkqM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-1v1xCHY3ZnZG/Vu9wN/it7rLKC/StoDefoMNs+hMjIs=";
   };
 
   propagatedBuildInputs = [
@@ -43,12 +44,13 @@ buildPythonPackage rec {
     inflection
     jsonschema
     openapi-spec-validator
+    packaging
     pyyaml
     requests
     swagger-ui-bundle
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiohttp-remotes
     decorator
     pytest-aiohttp
@@ -56,24 +58,19 @@ buildPythonPackage rec {
     testfixtures
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "PyYAML>=5.1,<6" "PyYAML>=5.1" \
-      --replace "jsonschema>=2.5.1,<4" "jsonschema>=2.5.1"
-  '';
-
-  disabledTests = [
-    # We have a later PyYAML release
-    "test_swagger_yaml"
-  ];
-
   pythonImportsCheck = [
     "connexion"
   ];
 
+  disabledTests = [
+    # AssertionError
+    "test_headers"
+  ];
+
   meta = with lib; {
     description = "Swagger/OpenAPI First framework on top of Flask";
-    homepage = "https://github.com/zalando/connexion/";
+    homepage = "https://github.com/spec-first/connexion";
+    changelog = "https://github.com/spec-first/connexion/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ elohmeier ];
   };

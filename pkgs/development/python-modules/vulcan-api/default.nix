@@ -3,7 +3,7 @@
 , aiodns
 , aiohttp
 , buildPythonPackage
-, cchardet
+, faust-cchardet
 , fetchFromGitHub
 , pyopenssl
 , pythonOlder
@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "vulcan-api";
-  version = "2.0.3";
+  version = "2.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -24,15 +24,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kapi2289";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "YLt9yufOBlWRyo+le7HcaFD/s7V5WpvhMUrHJqyC3pY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-5Tj611p4wYn7GjoCtCTRhUZkKyAJglHcci76ciVFWik=";
   };
 
   propagatedBuildInputs = [
     aenum
     aiodns
     aiohttp
-    cchardet
+    faust-cchardet
     pyopenssl
     pytz
     related
@@ -51,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for UONET+ e-register API";
     homepage = "https://vulcan-api.readthedocs.io/";
+    changelog = "https://github.com/kapi2289/vulcan-api/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

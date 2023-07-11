@@ -6,20 +6,21 @@
 , libtool
 , zlib
 , cunit
+, libxcrypt
 }:
 stdenv.mkDerivation rec {
   pname = "dcap";
-  version = "2.47.12";
+  version = "2.47.14";
 
   src = fetchFromGitHub {
     owner = "dCache";
     repo = "dcap";
     rev = version;
-    sha256 = "sha256-pNLEN1YLQGMJNuv8n6bec3qONbwNOYbYDDvkwuP5AR4=";
+    sha256 = "sha256-hn4nkFTIbSUUhvf9UfsEqVhphAdNWmATaCrv8jOuC0Y=";
   };
 
   nativeBuildInputs = [ autoconf automake libtool ];
-  buildInputs = [ zlib ];
+  buildInputs = [ zlib libxcrypt ];
 
   preConfigure = ''
     patchShebangs bootstrap.sh
@@ -28,11 +29,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [ cunit ];
+  nativeCheckInputs = [ cunit ];
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "dCache access protocol client library";
     homepage = "https://github.com/dCache/dcap";
     changelog = "https://github.com/dCache/dcap/blob/master/ChangeLog";

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cabextract";
-  version = "1.9.1";
+  version = "1.11";
 
   src = fetchurl {
     url = "https://www.cabextract.org.uk/cabextract-${version}.tar.gz";
-    sha256 = "19qwhl2r8ip95q4vxzxg2kp4p125hjmc9762sns1dwwf7ikm7hmg";
+    sha256 = "sha256-tVRtsRVeTHGP89SyeFc2BPMN1kw8W/1GV80Im4I6OsY=";
   };
 
   # Let's assume that fnmatch works for cross-compilation, otherwise it gives an error:

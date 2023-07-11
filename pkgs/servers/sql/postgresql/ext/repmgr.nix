@@ -1,25 +1,29 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
 , postgresql
 , openssl
 , zlib
 , readline
 , flex
+, curl
+, json_c
 }:
 
 stdenv.mkDerivation rec {
   pname = "repmgr";
-  version = "5.3.1";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
-    owner = "2ndQuadrant";
+    owner = "EnterpriseDB";
     repo = "repmgr";
     rev = "v${version}";
-    sha256 = "sha256-fHoXbFOF3xj/eNHgQIghF15vbDObnuwl2DAH+zRVGZQ=";
+    sha256 = "sha256-QUxLqCZIopvqDncpaA8bxm9MHvO6R6jPrcd8hF8lqQs=";
   };
 
   nativeBuildInputs = [ flex ];
 
-  buildInputs = [ postgresql openssl zlib readline ];
+  buildInputs = [ postgresql openssl zlib readline curl json_c ];
 
   installPhase = ''
     mkdir -p $out/{bin,lib,share/postgresql/extension}
@@ -38,3 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ zimbatm ];
   };
 }
+

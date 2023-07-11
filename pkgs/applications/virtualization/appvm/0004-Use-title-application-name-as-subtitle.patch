@@ -1,0 +1,12 @@
+diff --git a/src/virt-viewer-app.c b/src/virt-viewer-app.c
+index b977b7b..36bce34 100644
+--- a/src/virt-viewer-app.c
++++ b/src/virt-viewer-app.c
+@@ -976,6 +976,7 @@ virt_viewer_app_set_window_subtitle(VirtViewerApp *app,
+             *d = '%';
+         } else
+             subtitle = g_strdup_printf("%s (%s)", title, desc);
++	subtitle = g_strdup_printf("%s", title);
+         g_free(desc);
+     }
+ 

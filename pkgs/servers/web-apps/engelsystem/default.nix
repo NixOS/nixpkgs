@@ -2,15 +2,16 @@
 
 let
   phpExt = php.withExtensions
-    ({ enabled, all }: with all; [ json filter mysqlnd mysqli pdo pdo_mysql ]);
-in stdenv.mkDerivation rec {
+    ({ enabled, all }: with all; [ filter mysqlnd mysqli pdo pdo_mysql ]);
+in
+stdenv.mkDerivation rec {
   pname = "engelsystem";
-  version = "3.1.0";
+  version = "3.3.0";
 
   src = fetchzip {
     url =
-      "https://github.com/engelsystem/engelsystem/releases/download/v3.1.0/engelsystem-v3.1.0.zip";
-    sha256 = "01wra7li7n5kn1l6xkrmw4vlvvyqh089zs43qzn98hj0mw8gw7ai";
+      "https://github.com/engelsystem/engelsystem/releases/download/v3.3.0/engelsystem-v3.3.0.zip";
+    hash = "sha256-DS0klm26udXsiiFToeOJooA1WUR8gk0qf/UJL8E77ps=";
   };
 
   buildInputs = [ phpExt ];
@@ -20,7 +21,6 @@ in stdenv.mkDerivation rec {
 
     # prepare
     rm -r ./storage/
-    rm -r ./docker/
 
     ln -sf /etc/engelsystem/config.php ./config/config.php
     ln -sf /var/lib/engelsystem/storage/ ./storage
@@ -42,9 +42,11 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description =
       "Coordinate your volunteers in teams, assign them to work shifts or let them decide for themselves when and where they want to help with what";
-    license = licenses.gpl2;
     homepage = "https://engelsystem.de";
+    changelog = "https://github.com/engelsystem/engelsystem/releases/tag/v${version}";
+    license = licenses.gpl2;
     maintainers = with maintainers; [ kloenk ];
+    mainProgram = "migrate";
     platforms = platforms.all;
   };
 }

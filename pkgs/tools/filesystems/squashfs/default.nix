@@ -14,22 +14,26 @@
 
 stdenv.mkDerivation rec {
   pname = "squashfs";
-  version = "4.5.1";
+  version = "4.6.1";
 
   src = fetchFromGitHub {
     owner = "plougher";
     repo = "squashfs-tools";
     rev = version;
-    sha256 = "sha256-Y3ZPjeE9HN1F+NtGe6EchYziWrTPVQ4SuKaCvNbXMKI=";
+    hash = "sha256-C/awQpp1Q/0adx3YVNTq6ruEAzcjL5G7SkOCgpvAA50=";
   };
 
   patches = [
     # This patch adds an option to pad filesystems (increasing size) in
     # exchange for better chunking / binary diff calculation.
     ./4k-align.patch
-  ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
+  ];
 
-  buildInputs = [ zlib xz zstd lz4 lzo which help2man ];
+  strictDeps = true;
+  nativeBuildInputs = [ which ]
+    # when cross-compiling help2man cannot run the cross-compiled binary
+    ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ help2man ];
+  buildInputs = [ zlib xz zstd lz4 lzo ];
 
   preBuild = ''
     cd squashfs-tools
@@ -44,6 +48,7 @@ stdenv.mkDerivation rec {
     "XZ_SUPPORT=1"
     "ZSTD_SUPPORT=1"
     "LZ4_SUPPORT=1"
+    "LZMA_XZ_SUPPORT=1"
     "LZO_SUPPORT=1"
   ];
 
@@ -57,5 +62,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ruuda ];
+    mainProgram = "mksquashfs";
   };
 }

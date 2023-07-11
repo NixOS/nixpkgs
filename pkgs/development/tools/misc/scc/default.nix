@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "scc";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "boyter";
     repo = "scc";
     rev = "v${version}";
-    sha256 = "sha256-G5LYOtAUnu82cgDdtYzcfVx/WFg9/HvFQAlQtd6GaDE=";
+    sha256 = "sha256-QViB9lS/znrFb7GoV0RUf1SwS7veTKlmFozWKM1zc+Y=";
   };
 
   vendorSha256 = null;
@@ -21,6 +21,5 @@ buildGoModule rec {
     description = "A very fast accurate code counter with complexity calculations and COCOMO estimates written in pure Go";
     maintainers = with maintainers; [ sigma Br1ght0ne ];
     license = with licenses; [ unlicense /* or */ mit ];
-    platforms = platforms.unix;
   };
 }

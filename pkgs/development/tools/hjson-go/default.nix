@@ -1,23 +1,32 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "hjson-go";
-  version = "3.1.1";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "hjson";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-yU1VkxwQ12CjzITR9X6LLaOfiteN+807rfB/tWcRR1c=";
+    hash = "sha256-WR6wLa/Za5MgcH1enHG/74uq/7PdaY/OzvJdgMgDFIk=";
   };
 
-  goPackagePath = "github.com/hjson/hjson-go";
+  vendorSha256 = null;
 
-  meta = with lib;
-    src.meta // {
-      description = "Utility to convert JSON to and from HJSON";
-      maintainers = with maintainers; [ ehmry ];
-      mainProgram = "hjson-cli";
-      license = licenses.mit;
-    };
+  ldflags = [
+    "-s"
+    "-w"
+  ];
+
+  meta = with lib; {
+    description = "Utility to convert JSON to and from HJSON";
+    homepage = "https://hjson.github.io/";
+    changelog = "https://github.com/hjson/hjson-go/releases/tag/v${version}";
+    maintainers = with maintainers; [ ehmry ];
+    license = licenses.mit;
+    mainProgram = "hjson-cli";
+  };
 }

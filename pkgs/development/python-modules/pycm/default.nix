@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pycm";
-  version = "3.4";
+  version = "4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sepandhaghighi";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0agis9jh6kjf7k1vf1fiyf5h3lb9p0w9k710wwpsby292ydazr4f";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-GyH06G7bArFBTzV/Sx/KmoJvcoed0sswW7qGqsSULHo=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     seaborn
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -41,11 +41,8 @@ buildPythonPackage rec {
       --replace '=get_requires()' '=[]'
   '';
 
-  disabledTests = [
-    # Output formatting error
-    "pycm.pycm_compare.Compare"
-    "plot_test"
-  ];
+  # https://github.com/sepandhaghighi/pycm/issues/488
+  pytestFlagsArray = [ "Test" ];
 
   pythonImportsCheck = [
     "pycm"
@@ -53,7 +50,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Multiclass confusion matrix library";
-    homepage = "https://pycm.ir";
+    homepage = "https://pycm.io";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };

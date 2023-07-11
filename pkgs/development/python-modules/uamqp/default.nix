@@ -1,33 +1,58 @@
 { lib
 , stdenv
 , buildPythonPackage
+, fetchFromGitHub
+, cython
 , certifi
 , CFNetwork
 , cmake
 , CoreFoundation
-, enum34
-, fetchpatch
-, fetchPypi
-, isPy3k
+, libcxxabi
 , openssl
 , Security
-, six
+, pytestCheckHook
+, pytest-asyncio
 }:
 
 buildPythonPackage rec {
   pname = "uamqp";
-  version = "1.5.3";
+  version = "1.6.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-guhfOMvddC4E+oOmvpeG8GsXEfqLcSHVdtj3w8fF2Vs=";
+  src = fetchFromGitHub {
+    owner = "Azure";
+    repo = "azure-uamqp-python";
+    rev = "refs/tags/v.${version}";
+    hash = "sha256-OjZTroaBuUB/dakl5gAYigJkim9EFiCwUEBo7z35vhQ=";
   };
+
+  patches = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    ./darwin-azure-c-shared-utility-corefoundation.patch
+  ];
+
+  postPatch = lib.optionalString (stdenv.isDarwin && !stdenv.isx86_64) ''
+    # force darwin aarch64 to use openssl instead of applessl, removing
+    # some quirks upstream thinks they need to use openssl on macos
+    sed -i \
+      -e '/^use_openssl =/cuse_openssl = True' \
+      -e 's/\bazssl\b/ssl/' \
+      -e 's/\bazcrypto\b/crypto/' \
+      setup.py
+    sed -i \
+      -e '/#define EVP_PKEY_id/d' \
+      src/vendor/azure-uamqp-c/deps/azure-c-shared-utility/adapters/x509_openssl.c
+    sed -z -i \
+      -e 's/OpenSSL 3\nif(LINUX)/OpenSSL 3\nif(1)/' \
+      src/vendor/azure-uamqp-c/deps/azure-c-shared-utility/CMakeLists.txt
+  '';
 
   nativeBuildInputs = [
     cmake
+    cython
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
     CoreFoundation
     CFNetwork
     Security
@@ -35,16 +60,23 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     certifi
-    openssl
-    six
-  ] ++ lib.optionals (!isPy3k) [
-    enum34
+  ];
+
+  LDFLAGS = lib.optionals stdenv.isDarwin [
+    "-L${lib.getLib libcxxabi}/lib"
   ];
 
   dontUseCmakeConfigure = true;
 
-  # Project has no tests
-  doCheck = false;
+  preCheck = ''
+    # remove src module, so tests use the installed module instead
+    rm -r uamqp
+  '';
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   pythonImportsCheck = [
     "uamqp"

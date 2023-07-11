@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl, xercesc }:
+{ lib, gccStdenv, fetchurl, xercesc }:
 
+let
+  stdenv = gccStdenv;
+in
 stdenv.mkDerivation rec {
   pname = "libcutl";
   version = "1.10.0";
@@ -26,4 +29,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ xercesc ];
   enableParallelBuilding = true;
+
+  env.NIX_CFLAGS_COMPILE = toString [ "-std=c++14" ];
 }

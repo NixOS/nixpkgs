@@ -2,12 +2,13 @@
 , lib
 , python
 , fetchFromGitHub
+, fetchpatch
 , pyopenssl
 , webcolors
 , future
 , atomicwrites
 , attrs
-, Logbook
+, logbook
 , pygments
 , matrix-nio
 , aiohttp
@@ -18,7 +19,7 @@ let
   scriptPython = python.withPackages (ps: with ps; [
     aiohttp
     requests
-    python_magic
+    python-magic
   ]);
 
   version = "0.3.0";
@@ -33,23 +34,30 @@ in buildPythonPackage {
     hash = "sha256-o4kgneszVLENG167nWnk2FxM+PsMzi+PSyMUMIktZcc=";
   };
 
+  patches = fetchpatch {
+    url = "https://patch-diff.githubusercontent.com/raw/poljar/weechat-matrix/pull/309.patch";
+    sha256 = "sha256-Grdht+TOFvCYRpL7uhPivqL7YzLoNVF3iQNHgbv1Te0=";
+  };
+
   propagatedBuildInputs = [
     pyopenssl
     webcolors
     future
     atomicwrites
     attrs
-    Logbook
+    logbook
     pygments
     matrix-nio
     aiohttp
     requests
-  ];
+  ] ++ matrix-nio.optional-dependencies.e2e;
 
   passthru.scripts = [ "matrix.py" ];
 
   dontBuild = true;
   doCheck = false;
+
+  format = "other";
 
   installPhase = ''
     mkdir -p $out/share $out/bin

@@ -15,10 +15,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ bpp-core bpp-seq ];
 
-  preCheck = ''
-    export LD_LIBRARY_PATH=$(pwd)/src
-  '';
-
   postFixup = ''
     substituteInPlace $out/lib/cmake/${pname}/${pname}-targets.cmake  \
       --replace 'set(_IMPORT_PREFIX' '#set(_IMPORT_PREFIX'
@@ -27,6 +23,7 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.isDarwin;
 
   meta = bpp-core.meta // {
+    homepage = "https://github.com/BioPP/bpp-phyl";
     changelog = "https://github.com/BioPP/bpp-phyl/blob/master/ChangeLog";
   };
 }

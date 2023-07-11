@@ -5,28 +5,30 @@
 , qtsvg
 , qmake
 , leptonica
-, tesseract
+, tesseract4
 }:
 
 mkDerivation {
   pname = "qt-box-editor";
-  version = "unstable-2019-07-12";
+  version = "unstable-2019-07-14";
 
   src = fetchFromGitHub {
     owner = "zdenop";
     repo = "qt-box-editor";
-    rev = "75a68b466868ba41ba2886caa796057403fe1901";
-    sha256 = "0zwsyy7cnbhy5aazwlkhd9y8bnzlgy1gffqa46abajn4809b95k3";
+    rev = "cba2929dabc6c715acd1a282ba161fee914c87f6";
+    hash = "sha256-3dWnAu0CLO3atjbC1zJEnL3vzsIEecDDDhW3INMfCv4=";
   };
 
-  buildInputs = [ qtbase qtsvg leptonica tesseract ];
+  buildInputs = [ qtbase qtsvg leptonica tesseract4 ];
 
   nativeBuildInputs = [ qmake ];
 
-  # remove with next release
-  # https://github.com/zdenop/qt-box-editor/pull/78
+  # https://github.com/zdenop/qt-box-editor/issues/87
   postPatch = ''
-    printf "INSTALLS += target\ntarget.path = $out/bin" >>  qt-box-editor.pro
+    sed -i '/allheaders.h/a#include <leptonica/pix_internal.h>' src/TessTools.h
+
+    substituteInPlace qt-box-editor.pro \
+      --replace '-llept' '-lleptonica'
   '';
 
   meta = with lib; {

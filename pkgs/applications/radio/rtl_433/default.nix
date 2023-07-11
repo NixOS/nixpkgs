@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "21.12";
+  version = "22.11";
   pname = "rtl_433";
 
   src = fetchFromGitHub {
     owner = "merbanan";
     repo = "rtl_433";
     rev = version;
-    sha256 = "sha256-KoDKyI7KDdGSe79ZTuL9ObKnOJsqTN4wrMq+/cvQ/Xk=";
+    sha256 = "sha256-qDY+prdf8O/dqmAgLU6lpsNIvL1R5V2AwsB+4CpOqGM=";
   };
 
   nativeBuildInputs = [ pkg-config cmake ];
@@ -23,8 +23,7 @@ stdenv.mkDerivation rec {
     description = "Decode traffic from devices that broadcast on 433.9 MHz, 868 MHz, 315 MHz, 345 MHz and 915 MHz";
     homepage = "https://github.com/merbanan/rtl_433";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ earldouglas ];
+    maintainers = with maintainers; [ earldouglas markuskowa ];
     platforms = platforms.all;
   };
-
 }

@@ -33,29 +33,29 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = "Whether to enable the OpenAFS client.";
+        description = lib.mdDoc "Whether to enable the OpenAFS client.";
       };
 
       afsdb = mkOption {
         default = true;
         type = types.bool;
-        description = "Resolve cells via AFSDB DNS records.";
+        description = lib.mdDoc "Resolve cells via AFSDB DNS records.";
       };
 
       cellName = mkOption {
         default = "";
         type = types.str;
-        description = "Cell name.";
+        description = lib.mdDoc "Cell name.";
         example = "grand.central.org";
       };
 
       cellServDB = mkOption {
         default = [];
         type = with types; listOf (submodule { options = cellServDBConfig; });
-        description = ''
+        description = lib.mdDoc ''
           This cell's database server records, added to the global
           CellServDB. See CellServDB(5) man page for syntax. Ignored when
-          <literal>afsdb</literal> is set to <literal>true</literal>.
+          `afsdb` is set to `true`.
         '';
         example = [
           { ip = "1.2.3.4"; dnsname = "first.afsdb.server.dns.fqdn.org"; }
@@ -67,15 +67,15 @@ in
         blocks = mkOption {
           default = 100000;
           type = types.int;
-          description = "Cache size in 1KB blocks.";
+          description = lib.mdDoc "Cache size in 1KB blocks.";
         };
 
         chunksize = mkOption {
           default = 0;
           type = types.ints.between 0 30;
-          description = ''
+          description = lib.mdDoc ''
             Size of each cache chunk given in powers of
-            2. <literal>0</literal> resets the chunk size to its default
+            2. `0` resets the chunk size to its default
             values (13 (8 KB) for memcache, 18-20 (256 KB to 1 MB) for
             diskcache). Maximum value is 30. Important performance
             parameter. Set to higher values when dealing with large files.
@@ -85,13 +85,13 @@ in
         directory = mkOption {
           default = "/var/cache/openafs";
           type = types.str;
-          description = "Cache directory.";
+          description = lib.mdDoc "Cache directory.";
         };
 
         diskless = mkOption {
           default = false;
           type = types.bool;
-          description = ''
+          description = lib.mdDoc ''
             Use in-memory cache for diskless machines. Has no real
             performance benefit anymore.
           '';
@@ -101,13 +101,13 @@ in
       crypt = mkOption {
         default = true;
         type = types.bool;
-        description = "Whether to enable (weak) protocol encryption.";
+        description = lib.mdDoc "Whether to enable (weak) protocol encryption.";
       };
 
       daemons = mkOption {
         default = 2;
         type = types.int;
-        description = ''
+        description = lib.mdDoc ''
           Number of daemons to serve user requests. Numbers higher than 6
           usually do no increase performance. Default is sufficient for up
           to five concurrent users.
@@ -117,9 +117,9 @@ in
       fakestat = mkOption {
         default = false;
         type = types.bool;
-        description = ''
-          Return fake data on stat() calls. If <literal>true</literal>,
-          always do so. If <literal>false</literal>, only do so for
+        description = lib.mdDoc ''
+          Return fake data on stat() calls. If `true`,
+          always do so. If `false`, only do so for
           cross-cell mounts (as these are potentially expensive).
         '';
       };
@@ -127,9 +127,9 @@ in
       inumcalc = mkOption {
         default = "compat";
         type = types.strMatching "compat|md5";
-        description = ''
-          Inode calculation method. <literal>compat</literal> is
-          computationally less expensive, but <literal>md5</literal> greatly
+        description = lib.mdDoc ''
+          Inode calculation method. `compat` is
+          computationally less expensive, but `md5` greatly
           reduces the likelihood of inode collisions in larger scenarios
           involving multiple cells mounted into one AFS space.
         '';
@@ -138,9 +138,9 @@ in
       mountPoint = mkOption {
         default = "/afs";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Mountpoint of the AFS file tree, conventionally
-          <literal>/afs</literal>. When set to a different value, only
+          `/afs`. When set to a different value, only
           cross-cells that use the same value can be accessed.
         '';
       };
@@ -150,28 +150,28 @@ in
           default = config.boot.kernelPackages.openafs;
           defaultText = literalExpression "config.boot.kernelPackages.openafs";
           type = types.package;
-          description = "OpenAFS kernel module package. MUST match the userland package!";
+          description = lib.mdDoc "OpenAFS kernel module package. MUST match the userland package!";
         };
         programs = mkOption {
           default = getBin pkgs.openafs;
           defaultText = literalExpression "getBin pkgs.openafs";
           type = types.package;
-          description = "OpenAFS programs package. MUST match the kernel module package!";
+          description = lib.mdDoc "OpenAFS programs package. MUST match the kernel module package!";
         };
       };
 
       sparse = mkOption {
         default = true;
         type = types.bool;
-        description = "Minimal cell list in /afs.";
+        description = lib.mdDoc "Minimal cell list in /afs.";
       };
 
       startDisconnected = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Start up in disconnected mode.  You need to execute
-          <literal>fs disco online</literal> (as root) to switch to
+          `fs disco online` (as root) to switch to
           connected mode. Useful for roaming devices.
         '';
       };

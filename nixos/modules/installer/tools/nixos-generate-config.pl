@@ -84,6 +84,10 @@ sub debug {
 }
 
 
+# nixpkgs.system
+push @attrs, "nixpkgs.hostPlatform = lib.mkDefault \"@hostPlatformSystem@\";";
+
+
 my $cpuinfo = read_file "/proc/cpuinfo";
 
 
@@ -117,9 +121,6 @@ if (-e "/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors") {
 # Virtualization support?
 push @kernelModules, "kvm-intel" if hasCPUFeature "vmx";
 push @kernelModules, "kvm-amd" if hasCPUFeature "svm";
-
-push @attrs, "hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;" if cpuManufacturer "AuthenticAMD";
-push @attrs, "hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;" if cpuManufacturer "GenuineIntel";
 
 
 # Look at the PCI devices and add necessary modules.  Note that most
@@ -194,7 +195,7 @@ sub pciCheck {
     }
 
     # In case this is a virtio scsi device, we need to explicitly make this available.
-    if ($vendor eq "0x1af4" && $device eq "0x1004") {
+    if ($vendor eq "0x1af4" && ($device eq "0x1004" || $device eq "0x1048") ) {
         push @initrdAvailableKernelModules, "virtio_scsi";
     }
 
@@ -291,6 +292,12 @@ if ($virt eq "oracle") {
     push @attrs, "virtualisation.virtualbox.guest.enable = true;"
 }
 
+# Check if we're a Parallels guest. If so, enable the guest additions.
+# It is blocked by https://github.com/systemd/systemd/pull/23859
+if ($virt eq "parallels") {
+    push @attrs, "hardware.parallels.enable = true;";
+    push @attrs, "nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ \"prl-tools\" ];";
+}
 
 # Likewise for QEMU.
 if ($virt eq "qemu" || $virt eq "kvm" || $virt eq "bochs") {
@@ -309,11 +316,15 @@ if ($virt eq "systemd-nspawn") {
 }
 
 
-# Provide firmware for devices that are not detected by this script,
-# unless we're in a VM/container.
-push @imports, "(modulesPath + \"/installer/scan/not-detected.nix\")"
-    if $virt eq "none";
+# Check if we're on bare metal, not in a VM/container.
+if ($virt eq "none") {
+    # Provide firmware for devices that are not detected by this script.
+    push @imports, "(modulesPath + \"/installer/scan/not-detected.nix\")";
 
+    # Update the microcode.
+    push @attrs, "hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;" if cpuManufacturer "AuthenticAMD";
+    push @attrs, "hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;" if cpuManufacturer "GenuineIntel";
+}
 
 # For a device name like /dev/sda1, find a more stable path like
 # /dev/disk/by-uuid/X or /dev/disk/by-label/Y.
@@ -324,7 +335,7 @@ sub findStableDevPath {
 
     my $st = stat($dev) or return $dev;
 
-    foreach my $dev2 (glob("/dev/disk/by-uuid/*"), glob("/dev/mapper/*"), glob("/dev/disk/by-label/*")) {
+    foreach my $dev2 (glob("/dev/stratis/*/*"), glob("/dev/disk/by-uuid/*"), glob("/dev/mapper/*"), glob("/dev/disk/by-label/*")) {
         my $st2 = stat($dev2) or next;
         return $dev2 if $st->rdev == $st2->rdev;
     }
@@ -456,20 +467,37 @@ EOF
         }
     }
 
+    # is this a stratis fs?
+    my $stableDevPath = findStableDevPath $device;
+    my $stratisPool;
+    if ($stableDevPath =~ qr#/dev/stratis/(.*)/.*#) {
+        my $poolName = $1;
+        my ($header, @lines) = split "\n", qx/stratis pool list/;
+        my $uuidIndex = index $header, 'UUID';
+        my ($line) = grep /^$poolName /, @lines;
+        $stratisPool = substr $line, $uuidIndex - 32, 36;
+    }
+
     # Don't emit tmpfs entry for /tmp, because it most likely comes from the
-    # boot.tmpOnTmpfs option in configuration.nix (managed declaratively).
+    # boot.tmp.useTmpfs option in configuration.nix (managed declaratively).
     next if ($mountPoint eq "/tmp" && $fsType eq "tmpfs");
 
     # Emit the filesystem.
     $fileSystems .= <<EOF;
   fileSystems.\"$mountPoint\" =
-    { device = \"${\(findStableDevPath $device)}\";
+    { device = \"$stableDevPath\";
       fsType = \"$fsType\";
 EOF
 
     if (scalar @extraOptions > 0) {
         $fileSystems .= <<EOF;
       options = \[ ${\join " ", map { "\"" . $_ . "\"" } uniq(@extraOptions)} \];
+EOF
+    }
+
+    if ($stratisPool) {
+        $fileSystems .= <<EOF;
+      stratis.poolUuid = "$stratisPool";
 EOF
     }
 
@@ -499,21 +527,6 @@ EOF
                 }
             }
         }
-    }
-}
-
-# For lack of a better way to determine it, guess whether we should use a
-# bigger font for the console from the display mode on the first
-# framebuffer. A way based on the physical size/actual DPI reported by
-# the monitor would be nice, but I don't know how to do this without X :)
-my $fb_modes_file = "/sys/class/graphics/fb0/modes";
-if (-f $fb_modes_file && -r $fb_modes_file) {
-    my $modes = read_file($fb_modes_file);
-    $modes =~ m/([0-9]+)x([0-9]+)/;
-    my $console_width = $1, my $console_height = $2;
-    if ($console_width > 1920) {
-        push @attrs, "# high-resolution display";
-        push @attrs, 'hardware.video.hidpi.enable = lib.mkDefault true;';
     }
 }
 
@@ -581,17 +594,19 @@ ${\join "", (map { "  $_\n" } (uniq @attrs))}}
 EOF
 
 sub generateNetworkingDhcpConfig {
+    # FIXME disable networking.useDHCP by default when switching to networkd.
     my $config = <<EOF;
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
-  networking.useDHCP = lib.mkDefault false;
+  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
+  # (the default) this is the recommended approach. When using systemd-networkd it's
+  # still possible to use this option, but it's recommended to use it in conjunction
+  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
+  networking.useDHCP = lib.mkDefault true;
 EOF
 
     foreach my $path (glob "/sys/class/net/*") {
         my $dev = basename($path);
         if ($dev ne "lo") {
-            $config .= "  networking.interfaces.$dev.useDHCP = lib.mkDefault true;\n";
+            $config .= "  # networking.interfaces.$dev.useDHCP = lib.mkDefault true;\n";
         }
     }
 
@@ -653,7 +668,6 @@ EOF
             $bootLoaderConfig = <<EOF;
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
-  boot.loader.grub.version = 2;
   # boot.loader.grub.efiSupport = true;
   # boot.loader.grub.efiInstallAsRemovable = true;
   # boot.loader.efi.efiSysMountPoint = "/boot/efi";

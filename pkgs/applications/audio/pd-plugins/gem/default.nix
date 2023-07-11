@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , autoreconfHook
 , pkg-config
 , puredata

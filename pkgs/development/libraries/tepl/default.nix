@@ -1,6 +1,7 @@
 { lib, stdenv
 , fetchurl
 , meson
+, mesonEmulatorHook
 , ninja
 , amtk
 , gnome
@@ -9,24 +10,31 @@
 , gtksourceview4
 , icu
 , pkg-config
+, gtk-doc
+, docbook-xsl-nons
 }:
 
 stdenv.mkDerivation rec {
   pname = "tepl";
-  version = "6.00.0";
+  version = "6.4.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0qvs7s86gqyyrzi0r5fbrj8zczlgv8xhdjswgbgc1afwjnl9fqx8";
+    sha256 = "XlayBmnQzwX6HWS1jIw0LFkVgSLcUYEA0JPVnfm4cyE=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
     meson
     ninja
     gobject-introspection
     pkg-config
+    gtk-doc
+    docbook-xsl-nons
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
@@ -54,7 +62,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Projects/Tepl";
     description = "Text editor product line";
-    maintainers = teams.gnome.members ++ [ maintainers.manveru ];
+    maintainers = [ maintainers.manveru ];
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
   };

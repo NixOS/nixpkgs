@@ -14,8 +14,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ which ];
   buildInputs = [ SDL ];
 
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=maybe-uninitialized" ];
+
   preConfigure = ''
-    cat Makefile
     substituteInPlace data/azimuth.desktop \
       --replace Exec=azimuth "Exec=$out/bin/azimuth" \
       --replace "Version=%AZ_VERSION_NUMBER" "Version=${version}"

@@ -11,35 +11,42 @@
 , python3
 , runtimeShell
 , wrapGAppsHook
-, fehSupport ? false, feh
-, imagemagickSupport ? true, imagemagick
+, fehSupport ? false
+, feh
+, imagemagickSupport ? true
+, imagemagick
+, appindicatorSupport ? true
+, libayatana-appindicator
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "variety";
-  version = "0.8.5";
+  version = "0.8.10";
 
   src = fetchFromGitHub {
     owner = "varietywalls";
     repo = "variety";
-    rev = version;
-    sha256 = "sha256-6dLz4KXavXwnk5GizBH46d2EHMHPjRo0WnnUuVMtI1M=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Uln0uoaEZgV9FN3HEBTeFOD7d6RkAQLgQZw7bcgu26A=";
   };
 
   nativeBuildInputs = [
     intltool
     wrapGAppsHook
+    gobject-introspection
   ];
 
-  propagatedBuildInputs = [
-   gexiv2
-   gobject-introspection
-   gtk3
-   hicolor-icon-theme
-   libnotify
-   librsvg
+  buildInputs = [
+    gexiv2
+    gobject-introspection
+    gtk3
+    hicolor-icon-theme
+    libnotify
+    librsvg
   ]
-  ++ (with python3.pkgs; [
+  ++ lib.optional appindicatorSupport libayatana-appindicator;
+
+  propagatedBuildInputs = with python3.pkgs; [
     beautifulsoup4
     configobj
     dbus-python
@@ -51,24 +58,26 @@ python3.pkgs.buildPythonApplication rec {
     pygobject3
     requests
     setuptools
-  ])
+  ]
   ++ lib.optional fehSupport feh
   ++ lib.optional imagemagickSupport imagemagick;
 
   doCheck = false;
 
-  postInstall = ''
-    wrapProgram $out/bin/variety --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/
+  # Prevent double wrapping, let the Python wrapper use the args in preFixup.
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   prePatch = ''
     substituteInPlace variety_lib/varietyconfig.py \
       --replace "__variety_data_directory__ = \"../data\"" \
                 "__variety_data_directory__ = \"$out/share/variety\""
-    substituteInPlace data/scripts/set_wallpaper \
-      --replace /bin/bash ${runtimeShell}
-    substituteInPlace data/scripts/get_wallpaper \
-      --replace /bin/bash ${runtimeShell}
+    substituteInPlace variety/VarietyWindow.py \
+      --replace '[script,' '["${runtimeShell}", script,' \
+      --replace 'check_output(script)' 'check_output(["${runtimeShell}", script])'
   '';
 
   meta = with lib; {

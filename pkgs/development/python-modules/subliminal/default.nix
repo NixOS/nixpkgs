@@ -1,55 +1,95 @@
 { lib
-, fetchPypi
-, buildPythonPackage
-, guessit
+, appdirs
 , babelfish
-, enzyme
 , beautifulsoup4
-, requests
+, buildPythonPackage
+, chardet
 , click
 , dogpile-cache
-, stevedore
-, chardet
+, enzyme
+, fetchFromGitHub
+, guessit
 , pysrt
-, six
-, appdirs
-, rarfile
+, pytestCheckHook
+, pythonOlder
 , pytz
+, rarfile
+, requests
+, six
+, stevedore
 , sympy
 , vcrpy
-, pytest
-, pytest-flakes
-, pytest-cov
-, pytest-runner
 }:
 
 buildPythonPackage rec {
   pname = "subliminal";
   version = "2.1.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "12v2clnbic8320fjsvkg3xfxfa7x8inhjk61z00pzwx46g3rqhy6";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "Diaoul";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-P4gVxKKCGKS3MC4F3yTAaOSv36TtdoYfrf61tBHg8VY=";
   };
 
+  postPatch = ''
+    substituteInPlace pytest.ini \
+      --replace " --pep8 --flakes" ""
+  '';
+
   propagatedBuildInputs = [
-    guessit babelfish enzyme beautifulsoup4 requests
-    click dogpile-cache stevedore chardet pysrt six
-    appdirs rarfile pytz
+    appdirs
+    babelfish
+    beautifulsoup4
+    chardet
+    click
+    dogpile-cache
+    enzyme
+    guessit
+    pysrt
+    pytz
+    rarfile
+    requests
+    six
+    stevedore
   ];
 
-  checkInputs = [
-    sympy vcrpy pytest pytest-flakes
-    pytest-cov pytest-runner
+  nativeCheckInputs = [
+    sympy
+    vcrpy
+    pytestCheckHook
   ];
 
-  # https://github.com/Diaoul/subliminal/pull/963
-  doCheck = false;
-  pythonImportsCheck = [ "subliminal" ];
+  pythonImportsCheck = [
+    "subliminal"
+  ];
+
+  disabledTests = [
+    # Tests rewuire network access
+    "test_refine_video_metadata"
+    "test_scan"
+    "test_hash"
+    "test_provider_pool_list_subtitles"
+    "test_async_provider_pool_list_subtitles"
+    "test_list_subtitles"
+    "test_download_bad_subtitle"
+    # Not implemented
+    "test_save_subtitles"
+  ];
+
+  disabledTestPaths = [
+    # AttributeError: module 'rarfile' has no attribute 'custom_check'
+    "tests/test_legendastv.py"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/Diaoul/subliminal";
     description = "Python library to search and download subtitles";
+    homepage = "https://github.com/Diaoul/subliminal";
+    changelog = "https://github.com/Diaoul/subliminal/blob/${version}/HISTORY.rst";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

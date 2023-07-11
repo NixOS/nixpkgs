@@ -5,20 +5,24 @@
 
 buildGoModule rec {
   pname = "dalfox";
-  version = "2.7.1";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "hahwul";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-+Jr2pWV3iImKVnXH8mQXauHOh3uJChUe22U4JzIotD0=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-AG5CNqkxPQJQ+HN3JGUIgSYxgFigmUqVGn1yAHmo7Mo=";
   };
 
-  vendorSha256 = "sha256-4ot9qvTsUMxbcbu1y+5Tkvgo3t0MWA1EPSGqM0CM2DU=";
+  vendorSha256 = "sha256-OLT85GOcTnWmU+ZRem2+vY29nzvzXhnmIN2W+U6phPk=";
+
+  # Tests require network access
+  doCheck = false;
 
   meta = with lib; {
     description = "Tool for analysing parameter and XSS scanning";
     homepage = "https://github.com/hahwul/dalfox";
+    changelog = "https://github.com/hahwul/dalfox/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

@@ -1,25 +1,24 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libzen, zlib, fetchpatch }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libzen, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "21.09";
   pname = "libmediainfo";
+  version = "23.06";
+
   src = fetchurl {
     url = "https://mediaarea.net/download/source/libmediainfo/${version}/libmediainfo_${version}.tar.xz";
-    sha256 = "09pinxqw3z3hxrafn67clw1cb1z9aqfy6gkiavginfm0yr299gk9";
+    sha256 = "sha256-xrGuiyu89AM0BRizyU8q51yOsAaCv7vRiyJELkLcz80=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libzen zlib ];
+  buildInputs = [ zlib ];
+  propagatedBuildInputs = [ libzen ];
 
-  patches = [
-    # fixes pkgsMusl.libmediainfo build
-    (fetchpatch {
-      url = "https://git.alpinelinux.org/aports/plain/community/libmediainfo/fix-include-signal.patch?id=b8d666a3d33575c184308e1176f4de9e519af577";
-      sha256 = "sha256-b3HoIwy/hKSh8jUakwVJpnPmYw5KUwZXgLW7IPMY4/c=";
-    })
-  ];
+  sourceRoot = "MediaInfoLib/Project/GNU/Library";
 
-  postPatch = "cd Project/GNU/Library";
+  postPatch = lib.optionalString (stdenv.cc.targetPrefix != "") ''
+    substituteInPlace configure.ac \
+      --replace "pkg-config " "${stdenv.cc.targetPrefix}pkg-config "
+  '';
 
   configureFlags = [ "--enable-shared" ];
 
@@ -32,6 +31,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Shared library for mediainfo";
     homepage = "https://mediaarea.net/";
+    changelog = "https://mediaarea.net/MediaInfo/ChangeLog";
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = [ maintainers.devhell ];

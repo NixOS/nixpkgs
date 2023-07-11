@@ -6,7 +6,6 @@
 , pkg-config
 , which
 , libapparmor
-, apparmor-parser
 , libseccomp
 , libselinux
 , makeWrapper
@@ -16,16 +15,16 @@
 
 buildGoModule rec {
   pname = "runc";
-  version = "1.1.1";
+  version = "1.1.7";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
     rev = "v${version}";
-    sha256 = "sha256-6g2km+Y45INo2MTWMFFQFhfF8DAR5Su+YrJS8k3LYBY=";
+    hash = "sha256-reSC9j9ESjRigItBRytef78XBjmMGsqu0o9qcN2AstU=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
   outputs = [ "out" "man" ];
 
   nativeBuildInputs = [ go-md2man installShellFiles makeWrapper pkg-config which ];

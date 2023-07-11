@@ -1,14 +1,17 @@
 { stdenv
 , lib
 , gitUpdater
-, testVersion
+, testers
 , furnace
 , fetchFromGitHub
 , cmake
 , pkg-config
 , makeWrapper
+, fftw
 , fmt_8
 , libsndfile
+, libX11
+, rtmidi
 , SDL2
 , zlib
 , withJACK ? stdenv.hostPlatform.isUnix
@@ -19,19 +22,21 @@
 
 stdenv.mkDerivation rec {
   pname = "furnace";
-  version = "0.5.8";
+  version = "0.6pre5";
 
   src = fetchFromGitHub {
     owner = "tildearrow";
     repo = "furnace";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "103ymd3wa1sfsr6qg15vpcs53j350i7zidv3azlf7cynk6k28xim";
+    sha256 = "sha256-6KiG7nfQUdPW+EkBW3PPM141kOmolAgrrqhEGH/Azg4=";
   };
 
-  postPatch = ''
-    # rtmidi is not used yet
-    sed -i -e '/add_subdirectory(extern\/rtmidi/d' -e '/DEPENDENCIES_LIBRARIES rtmidi/d' CMakeLists.txt
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+    # To offer scaling detection on X11, furnace checks if libX11.so is available via dlopen and uses some of its functions
+    # But it's being linked against a versioned libX11.so.VERSION via SDL, so the unversioned one is not on the rpath
+    substituteInPlace src/gui/scaling.cpp \
+      --replace 'libX11.so' '${lib.getLib libX11}/lib/libX11.so'
   '';
 
   nativeBuildInputs = [
@@ -42,8 +47,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    fftw
     fmt_8
     libsndfile
+    rtmidi
     SDL2
     zlib
   ] ++ lib.optionals withJACK [
@@ -54,13 +61,21 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_GUI=${if withGUI then "ON" else "OFF"}"
+    "-DSYSTEM_FFTW=ON"
     "-DSYSTEM_FMT=ON"
     "-DSYSTEM_LIBSNDFILE=ON"
-    "-DSYSTEM_ZLIB=ON"
+    "-DSYSTEM_RTMIDI=ON"
     "-DSYSTEM_SDL2=ON"
+    "-DSYSTEM_ZLIB=ON"
     "-DWITH_JACK=${if withJACK then "ON" else "OFF"}"
     "-DWARNINGS_ARE_ERRORS=ON"
   ];
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+    # Needed with GCC 12 but breaks on darwin (with clang) or aarch64 (old gcc)
+    "-Wno-error=mismatched-new-delete"
+    "-Wno-error=use-after-free"
+  ]);
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Normal CMake install phase on Darwin only installs the binary, the user is expected to use CPack to build a
@@ -80,19 +95,17 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gitUpdater {
-      inherit pname version;
       rev-prefix = "v";
     };
-    tests.version = testVersion {
+    tests.version = testers.testVersion {
       package = furnace;
-      # The command always exits with code 1
-      command = "(furnace --version || [ $? -eq 1 ])";
     };
   };
 
   meta = with lib; {
     description = "Multi-system chiptune tracker compatible with DefleMask modules";
     homepage = "https://github.com/tildearrow/furnace";
+    changelog = "https://github.com/tildearrow/furnace/releases/tag/v${version}";
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.all;

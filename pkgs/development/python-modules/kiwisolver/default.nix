@@ -10,19 +10,17 @@
 
 buildPythonPackage rec {
   pname = "kiwisolver";
-  version = "1.4.2";
+  version = "1.4.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-f2BtkbiogWvkdlE6d/0wq+ZiJwOb1vi0BsNIywJH3Mk=";
+    hash = "sha256-1BmXUZ/LpKHkbrSi/jG8EvD/lXsrgbrCjbJHRPMz6VU=";
   };
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin [
-    "-I${lib.getDev libcxx}/include/c++/v1"
-  ];
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
   nativeBuildInputs = [
     setuptools-scm

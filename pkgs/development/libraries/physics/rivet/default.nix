@@ -2,21 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "rivet";
-  version = "3.1.5";
+  version = "3.1.8";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/rivet/Rivet-${version}.tar.bz2";
-    hash = "sha256-YhcXW3gab7z3EJd3qGePeplVEapV4a5WKIc151hQXZo=";
+    hash = "sha256-dbPz1BnKY4jR/S7A7afh+Q8yS5lszwWR9IpdLijczBM=";
   };
-
-  patches = [
-    # Fixes build
-    (fetchpatch {
-      name = "rivet-3.1.5-namespace-fix.patch";
-      url = "https://gitlab.com/hepcedar/rivet/-/commit/17a99b38b52e65a4a3fd6289124bd9dd874c30bf.diff";
-      sha256 = "sha256-OknqghpMMB5nRHeeRc2ddxybhnkVGRB1x8jfOjrkyms=";
-    })
-  ];
 
   latex = texlive.combine { inherit (texlive)
     scheme-basic
@@ -60,7 +51,8 @@ stdenv.mkDerivation rec {
       --replace '"less"' '"${less}/bin/less"'
     substituteInPlace bin/rivet-mkhtml \
       --replace '"make-plots"' \"$out/bin/make-plots\" \
-      --replace '"rivet-cmphistos"' \"$out/bin/rivet-cmphistos\"
+      --replace '"rivet-cmphistos"' \"$out/bin/rivet-cmphistos\" \
+      --replace 'ch_cmd = [sys.executable, os.path.join(os.path.dirname(__file__),' 'ch_cmd = [('
   '';
 
   configureFlags = [

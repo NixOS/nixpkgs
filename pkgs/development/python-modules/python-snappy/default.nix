@@ -4,7 +4,7 @@
 , isPyPy
 , snappy
 , cffi
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -14,18 +14,14 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-tqEHqwYgasxTWdTFYyvZsi1EhwKnmzFpsMYuD7gIuyo=";
+    hash = "sha256-tqEHqwYgasxTWdTFYyvZsi1EhwKnmzFpsMYuD7gIuyo=";
   };
 
   buildInputs = [ snappy ];
 
   propagatedBuildInputs = lib.optional isPyPy cffi;
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m unittest discover
-    runHook postCheck
-  '';
+  nativeCheckInputs = [ unittestCheckHook ];
 
   meta = with lib; {
     description = "Python library for the snappy compression library from Google";

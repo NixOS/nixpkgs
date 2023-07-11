@@ -1,28 +1,33 @@
 { lib
 , buildPythonPackage
+, colorful
 , fetchFromGitHub
+, git
+, httpx
+, lxml
+, packaging
 , poetry-core
 , pytestCheckHook
+, python-dateutil
 , pythonOlder
-, colorful
+, semver
+, rich
 , tomlkit
-, git
-, packaging
-, requests
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "pontos";
-  version = "22.4.0";
+  version = "23.7.6";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-W+l5QIpum1uTsx/mxZGkRoJAZaC1viURVYg4Kvjv32Y=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4fA/zzipv5CBPYkDtefATSmk3Q7b9Qjz4lJOy4y/wDM=";
   };
 
   nativeBuildInputs = [
@@ -31,28 +36,37 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     colorful
-    tomlkit
+    httpx
+    lxml
     packaging
-    requests
-  ];
+    python-dateutil
+    semver
+    rich
+    typing-extensions
+    tomlkit
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ] ++ httpx.optional-dependencies.http2;
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'packaging = "^20.3"' 'packaging = "*"'
-  '';
-
   disabledTests = [
+    "PrepareTestCase"
     # Signing fails
     "test_find_no_signing_key"
     "test_find_signing_key"
     "test_find_unreleased_information"
     # CLI test fails
     "test_missing_cmd"
+    "test_update_file_changed"
+    # Network access
+    "test_fail_sign_on_upload_fail"
+    "test_successfully_sign"
+    # calls git log, but our fetcher removes .git
+    "test_git_error"
   ];
 
   pythonImportsCheck = [
@@ -62,6 +76,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Collection of Python utilities, tools, classes and functions";
     homepage = "https://github.com/greenbone/pontos";
+    changelog = "https://github.com/greenbone/pontos/releases/tag/v${version}";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };

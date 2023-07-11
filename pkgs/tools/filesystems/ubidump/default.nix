@@ -4,6 +4,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pname = "ubidump";
   version = "unstable-2019-09-11";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "nlitsme";
@@ -12,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "1hiivlgni4r3nd5n2rzl5qzw6y2wpjpmyls5lybrc8imd6rmj3w2";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [ crcmod python-lzo ];
+  propagatedBuildInputs = with python3.pkgs; [ crcmod python-lzo setuptools ];
 
   dontBuild = true;
 

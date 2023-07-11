@@ -1,7 +1,6 @@
 { lib, mkDerivation, fetchFromGitHub
-, callPackage
+, libkiwix
 , pkg-config
-, makeWrapper
 , qmake
 , qtbase
 , qtwebengine
@@ -12,13 +11,13 @@
 
 mkDerivation rec {
   pname = "kiwix";
-  version = "2.0.5";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "${pname}-desktop";
     rev = version;
-    sha256 = "12v43bcg4g8fcp02y2srsfdvcb7dpl4pxb9z7a235006s0kfv8yn";
+    sha256 = "sha256-ghx4pW6IkWPzZXk0TtMGeQZIzm9HEN3mR4XQFJ1xHDo=";
   };
 
   nativeBuildInputs = [
@@ -27,11 +26,11 @@ mkDerivation rec {
   ];
 
   buildInputs = [
+    libkiwix
     qtbase
     qtwebengine
     qtsvg
     qtimageformats
-    (callPackage ./lib.nix {})
   ];
 
   qtWrapperArgs = [
@@ -41,7 +40,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "An offline reader for Web content";
     homepage = "https://kiwix.org";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ajs124 ];
   };

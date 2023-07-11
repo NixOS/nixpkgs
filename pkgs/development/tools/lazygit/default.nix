@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "lazygit";
-  version = "0.34";
+  version = "0.38.2";
 
   src = fetchFromGitHub {
     owner = "jesseduffield";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-AXbbgNP10r3BVRXg9R8Ssd8yORCcQwaGRuHV6yXz5i0=";
+    sha256 = "sha256-HxOM2M2EoeM0IHCrFQqLdP9Rai6DbC1uRG0CiQyqRdE=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
   subPackages = [ "." ];
 
   ldflags = [ "-X main.version=${version}" "-X main.buildSource=nix" ];
@@ -21,6 +21,6 @@ buildGoModule rec {
     homepage = "https://github.com/jesseduffield/lazygit";
     changelog = "https://github.com/jesseduffield/lazygit/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz equirosa Br1ght0ne ];
+    maintainers = with maintainers; [ equirosa Br1ght0ne ];
   };
 }

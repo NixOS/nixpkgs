@@ -1,23 +1,27 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools-scm
+, hatch-vcs
+, hatchling
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "hepunits";
-  version = "2.2.0";
+  version = "2.3.2";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6A5hb+8oF/PGbHXcDkHtJjYkiMzgX5Stz977jgXry1g=";
+    hash = "sha256-ijNm+l1ywWrxFm7Vec2qge3SZ2rLj2of59opDO/KOwg=";
   };
+
   nativeBuildInputs = [
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

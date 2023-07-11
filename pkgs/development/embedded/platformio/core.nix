@@ -3,46 +3,40 @@
 , fetchPypi
 , git
 , spdx-license-list-data
-, version, src
 }:
 
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      semantic-version = super.semantic-version.overridePythonAttrs (oldAttrs: rec {
-        version = "2.9.0";
-        src = fetchPypi {
-          pname = "semantic_version";
-          version = version;
-          sha256 = "1chjd8019wnwb5mnd4x4jw9f8nhzg0xnapsdznk0fpiyamrlixdb";
-        };
-      });
-
-      starlette = super.starlette.overridePythonAttrs (oldAttrs: rec {
-        version = "0.18.0";
-        src = fetchFromGitHub {
-          owner = "encode";
-          repo = "starlette";
-          rev = version;
-          sha256 = "1dpj33cggjjvpd3qdf6hv04z5ckcn9f5dfn98p5a8hx262kgsr9p";
-        };
-      });
-
-      uvicorn = super.uvicorn.overridePythonAttrs (oldAttrs: rec {
-        version = "0.17.0";
-        src = fetchFromGitHub {
-          owner = "encode";
-          repo = "uvicorn";
-          rev = version;
-          sha256 = "142x8skb1yfys6gndfaay2r240j56dkr006p49pw4y9i0v85kynp";
-        };
-      });
-    };
-  };
-in
-with python.pkgs; buildPythonApplication rec {
+with python3.pkgs; buildPythonApplication rec {
   pname = "platformio";
-  inherit version src;
+
+  version = "6.1.6";
+
+  # pypi tarballs don't contain tests - https://github.com/platformio/platformio-core/issues/1964
+  src = fetchFromGitHub {
+    owner = "platformio";
+    repo = "platformio-core";
+    rev = "v${version}";
+    sha256 = "sha256-BEeMfdmAWqFbQUu8YKKrookQVgmhfZBqXnzeb2gfhms=";
+  };
+
+  outputs = [ "out" "udev" ];
+
+  patches = [
+    ./fix-searchpath.patch
+    ./use-local-spdx-license-list.patch
+    ./missing-udev-rules-nixos.patch
+  ];
+
+  postPatch = ''
+    substitute platformio/package/manifest/schema.py platformio/package/manifest/schema.py \
+      --subst-var-by SPDX_LICENSE_LIST_DATA '${spdx-license-list-data.json}'
+
+    substituteInPlace setup.py \
+      --replace 'aiofiles==%s" % ("0.8.0" if PY36 else "22.1.*")' 'aiofiles"' \
+      --replace 'starlette==%s" % ("0.19.1" if PY36 else "0.23.*")' 'starlette"' \
+      --replace 'uvicorn==%s" % ("0.16.0" if PY36 else "0.20.*")' 'uvicorn"' \
+      --replace 'tabulate==%s" % ("0.8.10" if PY36 else "0.9.*")' 'tabulate>=0.8.10,<=0.9"' \
+      --replace 'wsproto==%s" % ("1.0.0" if PY36 else "1.2.*")' 'wsproto"'
+  '';
 
   propagatedBuildInputs = [
     aiofiles
@@ -66,15 +60,52 @@ with python.pkgs; buildPythonApplication rec {
     zeroconf
   ];
 
-  HOME = "/tmp";
+  preCheck = ''
+    export HOME=$(mktemp -d)
+    export PATH=$PATH:$out/bin
+  '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     jsondiff
     pytestCheckHook
-    tox
   ];
 
-  pytestFlagsArray = (map (e: "--deselect tests/${e}") [
+  # Install udev rules into a separate output so all of platformio-core is not a dependency if
+  # you want to use the udev rules on NixOS but not install platformio in your system packages.
+  postInstall = ''
+    mkdir -p $udev/lib/udev/rules.d
+    cp platformio/assets/system/99-platformio-udev.rules $udev/lib/udev/rules.d/99-platformio-udev.rules
+  '';
+
+  disabledTestPaths = [
+    "tests/commands/pkg/test_install.py"
+    "tests/commands/pkg/test_list.py"
+    "tests/commands/pkg/test_outdated.py"
+    "tests/commands/pkg/test_search.py"
+    "tests/commands/pkg/test_show.py"
+    "tests/commands/pkg/test_uninstall.py"
+    "tests/commands/pkg/test_update.py"
+    "tests/commands/test_boards.py"
+    "tests/commands/test_check.py"
+    "tests/commands/test_platform.py"
+    "tests/commands/test_run.py"
+    "tests/commands/test_test.py"
+    "tests/misc/test_maintenance.py"
+    # requires internet connection
+    "tests/misc/ino2cpp/test_ino2cpp.py"
+  ];
+
+  disabledTests = [
+    # requires internet connection
+    "test_api_cache"
+    "test_ping_internet_ips"
+  ];
+
+  pytestFlagsArray = [
+    "tests"
+  ] ++ (map (e: "--deselect tests/${e}") [
+    "commands/pkg/test_exec.py::test_pkg_specified"
+    "commands/pkg/test_exec.py::test_unrecognized_options"
     "commands/test_ci.py::test_ci_boards"
     "commands/test_ci.py::test_ci_build_dir"
     "commands/test_ci.py::test_ci_keep_build_dir"
@@ -84,6 +115,7 @@ with python.pkgs; buildPythonApplication rec {
     "commands/test_init.py::test_init_duplicated_boards"
     "commands/test_init.py::test_init_enable_auto_uploading"
     "commands/test_init.py::test_init_ide_atom"
+    "commands/test_init.py::test_init_ide_clion"
     "commands/test_init.py::test_init_ide_eclipse"
     "commands/test_init.py::test_init_ide_vscode"
     "commands/test_init.py::test_init_incorrect_board"
@@ -112,9 +144,6 @@ with python.pkgs; buildPythonApplication rec {
     "commands/test_lib_complex.py::test_lib_show"
     "commands/test_lib_complex.py::test_lib_stats"
     "commands/test_lib_complex.py::test_search"
-    "commands/test_test.py::test_local_env"
-    "commands/test_test.py::test_multiple_env_build"
-    "commands/test_test.py::test_setup_teardown_are_compilable"
     "package/test_manager.py::test_download"
     "package/test_manager.py::test_install_force"
     "package/test_manager.py::test_install_from_registry"
@@ -131,34 +160,13 @@ with python.pkgs; buildPythonApplication rec {
     "test_misc.py::test_ping_internet_ips"
     "test_misc.py::test_platformio_cli"
     "test_pkgmanifest.py::test_packages"
-  ]) ++ (map (e: "--ignore=tests/${e}") [
-    "commands/test_boards.py"
-    "commands/test_check.py"
-    "commands/test_platform.py"
-    "commands/test_update.py"
-    "test_maintenance.py"
-    "test_ino2cpp.py"
-  ]) ++ [
-    "tests"
-  ];
+  ]);
 
-  patches = [
-    ./fix-searchpath.patch
-    ./use-local-spdx-license-list.patch
-    ./missing-udev-rules-nixos.patch
-  ];
-
-  postPatch = ''
-    substitute platformio/package/manifest/schema.py platformio/package/manifest/schema.py \
-      --subst-var-by SPDX_LICENSE_LIST_DATA '${spdx-license-list-data.json}'
-
-    substituteInPlace setup.py \
-      --replace "wsproto==1.0.*" "wsproto" \
-      --replace "zeroconf==0.38.*" "zeroconf"
-  '';
+  passthru = {
+    python = python3;
+  };
 
   meta = with lib; {
-    broken = stdenv.isAarch64;
     description = "An open source ecosystem for IoT development";
     homepage = "https://platformio.org";
     license = licenses.asl20;

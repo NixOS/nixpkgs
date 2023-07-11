@@ -12,7 +12,7 @@ buildPythonPackage rec {
     owner = "rustedpy";
     repo = "result";
      rev = "v${version}";
-    sha256 = "sha256-bEf3OJg6ksDvzZE7ezA58Q2FObb5V7BG8vkKtX284Jg=";
+    hash = "sha256-bEf3OJg6ksDvzZE7ezA58Q2FObb5V7BG8vkKtX284Jg=";
   };
 
   postPatch = ''
@@ -25,7 +25,7 @@ buildPythonPackage rec {
       --replace '"--cov-report=xml",' ""
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "A simple Result type for Python 3 inspired by Rust, fully type annotated";
     homepage = "https://github.com/rustedpy/result";
     license = licenses.mit;
-    maintainers = [ maintainers.kvark ];
+    maintainers = [];
   };
 }

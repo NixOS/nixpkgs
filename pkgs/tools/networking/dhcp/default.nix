@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dhcp";
-  version = "4.4.3";
+  version = "4.4.3-P1";
 
   src = fetchurl {
     url = "https://ftp.isc.org/isc/dhcp/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Dj7GtMKgXsAUiHS82ZmmbQVRg3jXdCH2B/sLydATWBg=";
+    sha256 = "sha256-CsQWu1WZfKhjIXT9EHN/1hzbjbonUhYKM1d1vCHcc8c=";
   };
 
   patches =
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (openldap != null) [ "--with-ldap" "--with-ldapcrypto" ]
     ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "BUILD_CC=$(CC_FOR_BUILD)";
 
-  NIX_CFLAGS_COMPILE = builtins.toString [
+  env.NIX_CFLAGS_COMPILE = builtins.toString [
     "-Wno-error=pointer-compare"
     "-Wno-error=format-truncation"
     "-Wno-error=stringop-truncation"

@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "0vm96gxinhy48m3x9p1sfldyd03w3gk6iflb7n9kn06j1vqyswr6";
   };
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [ meson ninja pkg-config wayland-scanner scdoc makeWrapper ];
 
   buildInputs = [
@@ -24,6 +28,10 @@ stdenv.mkDerivation rec {
     mesa # for libEGL headers
     systemd libGL libX11
   ];
+
+  # https://github.com/cage-kiosk/cage/issues/231
+  # cage will segfault on start with `-m last` without this
+  CFLAGS = "-O0";
 
   mesonFlags = [ "-Dxwayland=${lib.boolToString (xwayland != null)}" ];
 

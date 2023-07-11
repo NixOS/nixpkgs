@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "awesomeversion";
-  version = "22.4.0";
+  version = "22.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -17,14 +17,14 @@ buildPythonPackage rec {
     owner = "ludeeus";
     repo = pname;
     rev = version;
-    sha256 = "sha256-bloBP5cKZtvu96HSQ4AmZ5+VeSXGkmN/m4fuyHLrBws=";
+    hash = "sha256-OQArggd7210OyFpZKm3kr3fFbakIDG7U3WBNImAAobw=";
   };
 
   nativeBuildInputs = [
     poetry-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

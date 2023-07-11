@@ -12,23 +12,20 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyOpenGL";
     inherit version;
-    sha256 = "sha256-jqbIdzkn7adAW//G9buTvoFWmnsFyMrFDNlOlp3OXic=";
+    hash = "sha256-jqbIdzkn7adAW//G9buTvoFWmnsFyMrFDNlOlp3OXic=";
   };
 
   propagatedBuildInputs = [ pillow ];
 
   patchPhase = let
-    ext = stdenv.hostPlatform.extensions.sharedLibrary; in ''
+    ext = stdenv.hostPlatform.extensions.sharedLibrary; in lib.optionalString (!stdenv.isDarwin) ''
     # Theses lines are patching the name of dynamic libraries
     # so pyopengl can find them at runtime.
     substituteInPlace OpenGL/platform/glx.py \
       --replace "'GL'" "'${pkgs.libGL}/lib/libGL${ext}'" \
       --replace "'GLU'" "'${pkgs.libGLU}/lib/libGLU${ext}'" \
       --replace "'glut'" "'${pkgs.freeglut}/lib/libglut${ext}'"
-    substituteInPlace OpenGL/platform/darwin.py \
-      --replace "'OpenGL'" "'${pkgs.libGL}/lib/libGL${ext}'" \
-      --replace "'GLUT'" "'${pkgs.freeglut}/lib/libglut${ext}'"
-
+  '' + ''
     # https://github.com/NixOS/nixpkgs/issues/76822
     # pyopengl introduced a new "robust" way of loading libraries in 3.1.4.
     # The later patch of the filepath does not work anymore because
@@ -47,7 +44,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = "http://pyopengl.sourceforge.net/";
+    homepage = "https://pyopengl.sourceforge.net/";
     description = "PyOpenGL, the Python OpenGL bindings";
     longDescription = ''
       PyOpenGL is the cross platform Python binding to OpenGL and

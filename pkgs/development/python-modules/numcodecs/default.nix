@@ -1,38 +1,48 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy27
+, setuptools
 , setuptools-scm
 , cython
+, entrypoints
 , numpy
 , msgpack
+, py-cpuinfo
 , pytestCheckHook
 , python
-, gcc8
 }:
 
 buildPythonPackage rec {
   pname = "numcodecs";
-  version = "0.9.1";
+  version = "0.11.0";
+  format ="pyproject";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "35adbcc746b95e3ac92e949a161811f5aa2602b9eb1ef241b5ea6f09bb220997";
+    hash = "sha256-bAWLMh3oShcpKZsOrk1lKy5I6hyn+d8NplyxNHDmNes=";
   };
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
     cython
-    gcc8
+    py-cpuinfo
   ];
 
   propagatedBuildInputs = [
+    entrypoints
     numpy
     msgpack
   ];
 
-  checkInputs = [
+  preBuild = if (stdenv.hostPlatform.isx86 && !stdenv.hostPlatform.avx2Support) then ''
+    export DISABLE_NUMCODECS_AVX2=
+  '' else null;
+
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -46,6 +56,10 @@ buildPythonPackage rec {
     "test_encode_decode"
     "test_legacy_codec_broken"
     "test_bytes"
+
+    # ValueError: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (3,) + inhomogeneous part.
+    # with numpy 1.24
+    "test_non_numpy_inputs"
   ];
 
   meta = with lib;{

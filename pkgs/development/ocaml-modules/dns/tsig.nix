@@ -3,7 +3,8 @@
 buildDunePackage {
   pname = "dns-tsig";
 
-  inherit (dns) version src useDune2 minimumOCamlVersion;
+  inherit (dns) version src;
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     mirage-crypto

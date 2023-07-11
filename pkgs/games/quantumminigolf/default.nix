@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   ];
 
   preBuild = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${SDL.dev}/include/SDL -I${SDL_ttf}/include/SDL"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${lib.getDev SDL}/include/SDL -I${SDL_ttf}/include/SDL"
 
     sed -re 's@"(gfx|fonts|tracks)/@"'"$out"'/share/quantumminigolf/\1/@g' -i *.cpp
   '';
@@ -34,5 +34,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
+    # never built on aarch64-linux since first introduction in nixpkgs
+    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }

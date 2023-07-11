@@ -2,6 +2,8 @@
 , attrs
 , beautifulsoup4
 , buildPythonPackage
+, click
+, datasets
 , dill
 , dm-tree
 , fetchFromGitHub
@@ -14,6 +16,7 @@
 , jinja2
 , langdetect
 , lib
+, lxml
 , matplotlib
 , mwparserfromhell
 , networkx
@@ -24,12 +27,13 @@
 , pillow
 , promise
 , protobuf
+, psutil
 , pycocotools
 , pydub
 , pytest-xdist
 , pytestCheckHook
 , requests
-, scikitimage
+, scikit-image
 , scipy
 , six
 , tensorflow
@@ -37,17 +41,18 @@
 , termcolor
 , tifffile
 , tqdm
+, zarr
 }:
 
 buildPythonPackage rec {
   pname = "tensorflow-datasets";
-  version = "4.5.2";
+  version = "4.8.2";
 
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "datasets";
-    rev = "v${version}";
-    sha256 = "sha256-OZpaY/6BMISq5IeDXyuyu5L/yG+DwlFliw4BsipPOLg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FYFk53WKNQTSrnGGiA6cn9LffbMJkZtjlGuOF52Og7c=";
   };
 
   patches = [
@@ -64,6 +69,7 @@ buildPythonPackage rec {
     numpy
     promise
     protobuf
+    psutil
     requests
     six
     tensorflow-metadata
@@ -75,15 +81,18 @@ buildPythonPackage rec {
     "tensorflow_datasets"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     apache-beam
     beautifulsoup4
+    click
+    datasets
     ffmpeg
     imagemagick
     jax
     jaxlib
     jinja2
     langdetect
+    lxml
     matplotlib
     mwparserfromhell
     networkx
@@ -95,10 +104,11 @@ buildPythonPackage rec {
     pydub
     pytest-xdist
     pytestCheckHook
-    scikitimage
+    scikit-image
     scipy
     tensorflow
     tifffile
+    zarr
   ];
 
   disabledTestPaths = [
@@ -107,28 +117,43 @@ buildPythonPackage rec {
     "tensorflow_datasets/core/dataset_info_test.py"
     "tensorflow_datasets/core/features/features_test.py"
     "tensorflow_datasets/core/github_api/github_path_test.py"
+    "tensorflow_datasets/core/registered_test.py"
     "tensorflow_datasets/core/utils/gcs_utils_test.py"
+    "tensorflow_datasets/import_without_tf_test.py"
     "tensorflow_datasets/scripts/cli/build_test.py"
 
     # Requires `pretty_midi` which is not packaged in `nixpkgs`.
-    "tensorflow_datasets/audio/groove_test.py"
+    "tensorflow_datasets/audio/groove.py"
+    "tensorflow_datasets/datasets/groove/groove_dataset_builder_test.py"
 
     # Requires `crepe` which is not packaged in `nixpkgs`.
-    "tensorflow_datasets/audio/nsynth_test.py"
+    "tensorflow_datasets/audio/nsynth.py"
+    "tensorflow_datasets/datasets/nsynth/nsynth_dataset_builder_test.py"
+
+    # Requires `conllu` which is not packaged in `nixpkgs`.
+    "tensorflow_datasets/core/dataset_builders/conll/conllu_dataset_builder_test.py"
+    "tensorflow_datasets/datasets/universal_dependencies/universal_dependencies_dataset_builder_test.py"
+    "tensorflow_datasets/datasets/xtreme_pos/xtreme_pos_dataset_builder_test.py"
 
     # Requires `gcld3` and `pretty_midi` which are not packaged in `nixpkgs`.
     "tensorflow_datasets/core/lazy_imports_lib_test.py"
 
     # Requires `tensorflow_io` which is not packaged in `nixpkgs`.
+    "tensorflow_datasets/core/features/audio_feature_test.py"
     "tensorflow_datasets/image/lsun_test.py"
 
     # Requires `envlogger` which is not packaged in `nixpkgs`.
+    "tensorflow_datasets/rlds/locomotion/locomotion_test.py"
     "tensorflow_datasets/rlds/robosuite_panda_pick_place_can/robosuite_panda_pick_place_can_test.py"
 
     # Fails with `TypeError: Constant constructor takes either 0 or 2 positional arguments`
     # deep in TF AutoGraph. Doesn't reproduce in Docker with Ubuntu 22.04 => might be related
     # to the differences in some of the dependencies?
     "tensorflow_datasets/rl_unplugged/rlu_atari/rlu_atari_test.py"
+
+    # Fails with `ValueError: setting an array element with a sequence`
+    "tensorflow_datasets/core/dataset_utils_test.py"
+    "tensorflow_datasets/core/features/sequence_feature_test.py"
 
     # Requires `tensorflow_docs` which is not packaged in `nixpkgs` and the test is for documentation anyway.
     "tensorflow_datasets/scripts/documentation/build_api_docs_test.py"

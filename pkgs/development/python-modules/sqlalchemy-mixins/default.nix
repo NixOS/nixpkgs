@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy-mixins";
-  version = "1.5.1";
+  version = "2.0.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "absent1706";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-HZiv7F0/UatgY3KlILgzywrK5NJE/tDe6B8/smeYwlM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-DOQlG86VJEV1Eqqo+KLwmRo2tNePq+Na05s1eDhBjcQ=";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     sqlalchemy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
     pytestCheckHook
   ];
@@ -39,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python mixins for SQLAlchemy ORM";
     homepage = "https://github.com/absent1706/sqlalchemy-mixins";
+    changelog = "https://github.com/absent1706/sqlalchemy-mixins/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

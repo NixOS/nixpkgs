@@ -18,9 +18,11 @@ mkDerivation rec {
   cmakeFlags = [ "-DWITH_MATLAB=false" ];
 
   preConfigure = ''
+    sed -e 's|#include( ''${PROJECT_SRC_DIR}/cmake/FindNETPBM.cmake )|include( ''${PROJECT_SOURCE_DIR}/cmake/FindNETPBM.cmake )|' -i CMakeLists.txt
+
     rm cmake/FindNETPBM.cmake
-    echo "SET(NETPBM_LIBRARY `find ${lib.getLib netpbm} -name "*.${stdenv.hostPlatform.extensions.sharedLibrary}*" -type f`)" >> cmake/FindNETPBM.cmake
-    echo "SET(NETPBM_LIBRARIES `find ${lib.getLib netpbm} -name "*.${stdenv.hostPlatform.extensions.sharedLibrary}*" -type f`)" >> cmake/FindNETPBM.cmake
+    echo "SET(NETPBM_LIBRARY `find ${lib.getLib netpbm} -name "*${stdenv.hostPlatform.extensions.sharedLibrary}*" -type f`)" >> cmake/FindNETPBM.cmake
+    echo "SET(NETPBM_LIBRARIES `find ${lib.getLib netpbm} -name "*${stdenv.hostPlatform.extensions.sharedLibrary}*" -type f`)" >> cmake/FindNETPBM.cmake
     echo "SET(NETPBM_INCLUDE_DIR ${lib.getDev netpbm}/include/netpbm)" >> cmake/FindNETPBM.cmake
     echo "INCLUDE(FindPackageHandleStandardArgs)" >> cmake/FindNETPBM.cmake
     echo "FIND_PACKAGE_HANDLE_STANDARD_ARGS(NETPBM DEFAULT_MSG NETPBM_LIBRARY NETPBM_INCLUDE_DIR)" >> cmake/FindNETPBM.cmake
@@ -36,10 +38,10 @@ mkDerivation rec {
     libGLU libGL freeglut
   ]) ++ lib.optional enableUnfree (opencv2.override { enableUnfree = true; });
 
-  patches = [ ./threads.patch ./pfstools.patch ./pfsalign.patch ];
+  patches = [ ./glut.patch ./threads.patch ./pfstools.patch ./pfsalign.patch ];
 
   meta = with lib; {
-    homepage = "http://pfstools.sourceforge.net/";
+    homepage = "https://pfstools.sourceforge.net/";
     description = "Toolkit for manipulation of HDR images";
     platforms = platforms.linux;
     license = licenses.lgpl2;

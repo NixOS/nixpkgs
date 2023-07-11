@@ -7,16 +7,16 @@
 
 buildPythonPackage rec {
   pname = "wheel";
-  version = "0.37.1";
+  version = "0.38.4";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = pname;
     rev = version;
-    sha256 = "sha256-JlTmUPY3yo/uROyd3nW1dJa23zbLhgQTwcmqZkPOrHs=";
+    hash = "sha256-yZLU0t/nz6kfnnoLL15bybOxN4+SJUaTJsCpGffl1QU=";
     name = "${pname}-${version}-source";
-    extraPostFetch = ''
+    postFetch = ''
       cd $out
       mv tests/testdata/unicode.dist/unicodedist/åäö_日本語.py \
         tests/testdata/unicode.dist/unicodedist/æɐø_日本價.py

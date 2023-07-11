@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, autoreconfHook
 , SDL
 , SDL_net
 , SDL_sound
@@ -22,6 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    autoreconfHook
     copyDesktopItems
     graphicsmagick
   ];

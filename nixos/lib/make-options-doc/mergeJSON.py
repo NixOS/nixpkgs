@@ -1,5 +1,6 @@
 import collections
 import json
+import os
 import sys
 from typing import Any, Dict, List
 
@@ -41,8 +42,13 @@ def unpivot(options: Dict[Key, Option]) -> Dict[str, JSON]:
         result[opt.name] = opt.value
     return result
 
-warningsAreErrors = sys.argv[1] == "--warnings-are-errors"
-optOffset = 1 if warningsAreErrors else 0
+warningsAreErrors = False
+optOffset = 0
+for arg in sys.argv[1:]:
+    if arg == "--warnings-are-errors":
+        optOffset += 1
+        warningsAreErrors = True
+
 options = pivot(json.load(open(sys.argv[1 + optOffset], 'r')))
 overrides = pivot(json.load(open(sys.argv[2 + optOffset], 'r')))
 
@@ -50,7 +56,7 @@ overrides = pivot(json.load(open(sys.argv[2 + optOffset], 'r')))
 for (k, v) in options.items():
     # The _module options are not declared in nixos/modules
     if v.value['loc'][0] != "_module":
-        v.value['declarations'] = list(map(lambda s: f'nixos/modules/{s}', v.value['declarations']))
+        v.value['declarations'] = list(map(lambda s: f'nixos/modules/{s}' if isinstance(s, str) else s, v.value['declarations']))
 
 # merge both descriptions
 for (k, v) in overrides.items():
@@ -72,6 +78,7 @@ severity = "error" if warningsAreErrors else "warning"
 
 # check that every option has a description
 hasWarnings = False
+hasErrors = False
 for (k, v) in options.items():
     if v.value.get('description', None) is None:
         hasWarnings = True
@@ -83,6 +90,8 @@ for (k, v) in options.items():
             f"\x1b[1;31m{severity}: option {v.name} has no type. Please specify a valid type, see " +
             "https://nixos.org/manual/nixos/stable/index.html#sec-option-types\x1b[0m", file=sys.stderr)
 
+if hasErrors:
+    sys.exit(1)
 if hasWarnings and warningsAreErrors:
     print(
         "\x1b[1;31m" +

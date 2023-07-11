@@ -1,14 +1,15 @@
 { lib
 , python3
+, fetchPypi
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "alerta";
-  version = "8.4.0";
+  version = "8.5.1";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "260ff3118e73396104129928217b0f317ac5afdff8221874d8986df22ecf5f34";
+    sha256 = "sha256-O13Ic2iHjNF/llp6vdaAiiWExcTBPsz46GAWY3oGDY8=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

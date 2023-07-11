@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       It is able to gather this information from Apple iPods or DAPs running the Rockbox replacement firmware.
     '';
 
-    homepage = "http://qtscrob.sourceforge.net";
+    homepage = "https://qtscrob.sourceforge.net";
     license = licenses.gpl2;
     maintainers = [ maintainers.vanzef ];
     platforms = platforms.linux;

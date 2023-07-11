@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "ipympl";
-  version = "0.9.0";
+  version = "0.9.3";
   format = "wheel";
 
   src = fetchPypi {
     inherit pname version format;
-    sha256 = "sha256-HpO3T/zRbimxd1+nUkbSmclj7nPsMYuSUK0VJItZQs4=";
+    hash = "sha256-0RPNVYkbr+myfvmbbdERqHvra7KuVQxAQpInIQO+gBM=";
   };
 
 

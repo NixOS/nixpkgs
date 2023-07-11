@@ -1,26 +1,45 @@
-{ lib, rustPlatform, fetchFromGitHub, cmake, stdenv }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, stdenv
+, darwin
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "lunatic";
-  version = "0.7.5";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "lunatic-solutions";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-HqDrGoyYzdx8OTanlRd95L1wAtFeew7Xs2rZ7nK2Zus=";
+    hash = "sha256-uMMssZaPDZn3bOtQIho+GvUCPmzRllv7eJ+SJuKaYtg=";
   };
 
-  cargoSha256 = "sha256-t3EwVYrKx7dvUcSp0B1iUAklg7WdQDld/T0O1HgHw54=";
+  cargoHash = "sha256-ALjlQsxmZVREyi3ZGMJMv/38kkMjYh+hTSr/0avYJVs=";
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
+
+  checkFlags = [
+    # requires simd support which is not always available on hydra
+    "--skip=state::tests::import_filter_signature_matches"
+  ];
 
   meta = with lib; {
     description = "An Erlang inspired runtime for WebAssembly";
     homepage = "https://lunatic.solutions";
-    changelog = "https://github.com/lunatic-solutions/lunatic/blob/v${version}/RELEASES.md";
+    changelog = "https://github.com/lunatic-solutions/lunatic/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ figsoda ];
-    broken = stdenv.isDarwin;
   };
 }

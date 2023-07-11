@@ -14,12 +14,13 @@ buildGoModule rec {
 
   doCheck = false; # TODO tests are failing
 
-  vendorSha256 = "1agn6i7cnsb5igvvbjzlaa5fgssr5h7h25y440q44bk16jxk6s74";
+  vendorSha256 = null; #vendorSha256 = "";
 
   meta = {
     homepage = "https://github.com/kubemq-io/kubemqctl";
     description = "Kubemqctl is a command line interface (CLI) for Kubemq Kubernetes Message Broker.";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ brianmcgee ];
+    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.go-modules --check
   };
 }

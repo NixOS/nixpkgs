@@ -16,7 +16,7 @@ version() {
 }
 
 src_url() {
-  nix-instantiate --eval --strict --expr " with import $root {}; let src = sourcehut.python.pkgs.$1.drvAttrs.src; in src.url or src.meta.homepage" | tr -d '"'
+  nix-instantiate --eval --strict --expr " with import $root {}; let src = sourcehut.python.pkgs.$1.drvAttrs.src; in src.meta.homepage" | tr -d '"'
 }
 
 get_latest_version() {
@@ -67,7 +67,7 @@ else
   # because the reported $oldHash to be changed
   # may not actually be in $default_nix
   # but in the file of one of its dependencies.
-  services=( "srht" "scmsrht" "buildsrht" "dispatchsrht" "gitsrht" "hgsrht" "hubsrht" "listssrht" "mansrht"
+  services=( "srht" "scmsrht" "buildsrht" "gitsrht" "hgsrht" "hubsrht" "listssrht" "mansrht"
              "metasrht" "pagessrht" "pastesrht" "todosrht" )
 fi
 

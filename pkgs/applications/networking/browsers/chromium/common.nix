@@ -7,7 +7,7 @@
 # Native build inputs:
 , ninja, pkg-config
 , python3, perl
-, gnutar, which
+, which
 , llvmPackages
 # postPatch:
 , pkgsBuildHost
@@ -34,9 +34,13 @@
 , libva
 , libdrm, wayland, libxkbcommon # Ozone
 , curl
+, libffi
 , libepoxy
+, libevdev
 # postPatch:
 , glibc # gconv + locale
+# postFixup:
+, vulkan-loader
 
 # Package customization:
 , cupsSupport ? true, cups ? null
@@ -45,16 +49,14 @@
 , ungoogled ? false, ungoogled-chromium
 # Optional dependencies:
 , libgcrypt ? null # cupsSupport
-, systemdSupport ? stdenv.isLinux
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 }:
 
 buildFun:
 
-with lib;
-
 let
-  python3WithPackages = python3.withPackages(ps: with ps; [
+  python3WithPackages = python3.pythonForBuild.withPackages(ps: with ps; [
     ply jinja2 setuptools
   ]);
   clangFormatPython3 = fetchurl {
@@ -75,16 +77,16 @@ let
     let
       # Serialize Nix types into GN types according to this document:
       # https://source.chromium.org/gn/gn/+/master:docs/language.md
-      mkGnString = value: "\"${escape ["\"" "$" "\\"] value}\"";
+      mkGnString = value: "\"${lib.escape ["\"" "$" "\\"] value}\"";
       sanitize = value:
         if value == true then "true"
         else if value == false then "false"
-        else if isList value then "[${concatMapStringsSep ", " sanitize value}]"
-        else if isInt value then toString value
-        else if isString value then mkGnString value
+        else if lib.isList value then "[${lib.concatMapStringsSep ", " sanitize value}]"
+        else if lib.isInt value then toString value
+        else if lib.isString value then mkGnString value
         else throw "Unsupported type for GN value `${value}'.";
       toFlag = key: value: "${key}=${sanitize value}";
-    in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
+    in attrs: lib.concatStringsSep " " (lib.attrValues (lib.mapAttrs toFlag attrs));
 
   # https://source.chromium.org/chromium/chromium/src/+/master:build/linux/unbundle/replace_gn_files.py
   gnSystemLibraries = [
@@ -126,8 +128,9 @@ let
     nativeBuildInputs = [
       ninja pkg-config
       python3WithPackages perl
-      gnutar which
+      which
       llvmPackages.bintools
+      bison gperf
     ];
 
     buildInputs = [
@@ -141,7 +144,7 @@ let
       nasm
       nspr nss
       util-linux alsa-lib
-      bison gperf libkrb5
+      libkrb5
       glib gtk3 dbus-glib
       libXScrnSaver libXcursor libXtst libxshmfence libGLU libGL
       mesa # required for libgbm
@@ -151,18 +154,38 @@ let
       libdrm wayland mesa.drivers libxkbcommon
       curl
       libepoxy
-    ] ++ optional systemdSupport systemd
-      ++ optionals cupsSupport [ libgcrypt cups ]
-      ++ optional pulseSupport libpulseaudio;
+      libffi
+      libevdev
+    ] ++ lib.optional systemdSupport systemd
+      ++ lib.optionals cupsSupport [ libgcrypt cups ]
+      ++ lib.optional pulseSupport libpulseaudio;
 
     patches = [
       # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed):
       ./patches/no-build-timestamps.patch
       # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags:
       ./patches/widevine-79.patch
+      # Required to fix the build with a more recent wayland-protocols version
+      # (we currently package 1.26 in Nixpkgs while Chromium bundles 1.21):
+      # Source: https://bugs.chromium.org/p/angleproject/issues/detail?id=7582#c1
+      ./patches/angle-wayland-include-protocol.patch
+      # We need to revert this patch to build M114+ with LLVM 16:
+      (githubPatch {
+        # Reland [clang] Disable autoupgrading debug info in ThinLTO builds
+        commit = "54969766fd2029c506befc46e9ce14d67c7ed02a";
+        sha256 = "sha256-Vryjg8kyn3cxWg3PmSwYRG6zrHOqYWBMSdEMGiaPg6M=";
+        revert = true;
+      })
     ];
 
     postPatch = ''
+      # Workaround/fix for https://bugs.chromium.org/p/chromium/issues/detail?id=1313361:
+      substituteInPlace BUILD.gn \
+        --replace '"//infra/orchestrator:orchestrator_all",' ""
+      # Disable build flags that require LLVM 15:
+      substituteInPlace build/config/compiler/BUILD.gn \
+        --replace '"-Xclang",' "" \
+        --replace '"-no-opaque-pointers",' ""
       # remove unused third-party
       for lib in ${toString gnSystemLibraries}; do
         if [ -d "third_party/$lib" ]; then
@@ -182,6 +205,7 @@ let
           --replace "/usr/bin/env -S make -f" "/usr/bin/make -f"
       fi
       chmod -x third_party/webgpu-cts/src/tools/run_deno
+      chmod -x third_party/dawn/third_party/webgpu-cts/tools/run_deno
 
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
       substituteInPlace sandbox/linux/suid/client/setuid_sandbox_host.cc \
@@ -225,10 +249,10 @@ let
       # Allow building against system libraries in official builds
       sed -i 's/OFFICIAL_BUILD/GOOGLE_CHROME_BUILD/' tools/generate_shim_headers/generate_shim_headers.py
 
-    '' + optionalString stdenv.isAarch64 ''
+    '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.isAarch64) ''
       substituteInPlace build/toolchain/linux/BUILD.gn \
         --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
-    '' + optionalString ungoogled ''
+    '' + lib.optionalString ungoogled ''
       ${ungoogler}/utils/prune_binaries.py . ${ungoogler}/pruning.list || echo "some errors"
       ${ungoogler}/utils/patches.py . ${ungoogler}/patches
       ${ungoogler}/utils/domain_substitution.py apply -r ${ungoogler}/domain_regex.list -f ${ungoogler}/domain_substitution.list -c ./ungoogled-domsubcache.tar.gz .
@@ -248,8 +272,6 @@ let
       host_toolchain = "//build/toolchain/linux/unbundle:default";
       # Don't build against a sysroot image downloaded from Cloud Storage:
       use_sysroot = false;
-      # The default value is hardcoded instead of using pkg-config:
-      system_wayland_scanner_path = "${wayland}/bin/wayland-scanner";
       # Because we use a different toolchain / compiler version:
       treat_warnings_as_errors = false;
       # We aren't compiling with Chrome's Clang (would enable Chrome-specific
@@ -279,18 +301,22 @@ let
       enable_widevine = true;
       # Provides the enable-webrtc-pipewire-capturer flag to support Wayland screen capture:
       rtc_use_pipewire = true;
-    } // optionalAttrs (chromiumVersionAtLeast "101") {
       # Disable PGO because the profile data requires a newer compiler version (LLVM 14 isn't sufficient):
       chrome_pgo_phase = 0;
-    } // optionalAttrs proprietaryCodecs {
+      clang_base_path = "${llvmPackages.stdenv.cc}";
+      use_qt = false;
+      # To fix the build as we don't provide libffi_pic.a
+      # (ld.lld: error: unable to find library -l:libffi_pic.a):
+      use_system_libffi = true;
+    } // lib.optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;
       enable_hangout_services_extension = true;
       ffmpeg_branding = "Chrome";
-    } // optionalAttrs pulseSupport {
+    } // lib.optionalAttrs pulseSupport {
       use_pulseaudio = true;
       link_pulseaudio = true;
-    } // optionalAttrs ungoogled (importTOML ./ungoogled-flags.toml)
+    } // lib.optionalAttrs ungoogled (lib.importTOML ./ungoogled-flags.toml)
     // (extraAttrs.gnFlags or {}));
 
     configurePhase = ''
@@ -298,8 +324,8 @@ let
 
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"
-      ${python3}/bin/python3 build/linux/unbundle/replace_gn_files.py --system-libraries ${toString gnSystemLibraries}
-      ${gnChromium}/bin/gn gen --args=${escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
+      ${python3.pythonForBuild}/bin/python3 build/linux/unbundle/replace_gn_files.py --system-libraries ${toString gnSystemLibraries}
+      ${gnChromium}/bin/gn gen --args=${lib.escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
 
       # Fail if `gn gen` contains a WARNING.
       grep -o WARNING gn-gen-outputs.txt && echo "Found gn WARNING, exiting nix build" && exit 1
@@ -310,11 +336,11 @@ let
     # Don't spam warnings about unknown warning options. This is useful because
     # our Clang is always older than Chromium's and the build logs have a size
     # of approx. 25 MB without this option (and this saves e.g. 66 %).
-    NIX_CFLAGS_COMPILE = "-Wno-unknown-warning-option";
+    env.NIX_CFLAGS_COMPILE = "-Wno-unknown-warning-option";
 
     buildPhase = let
       buildCommand = target: ''
-        ninja -C "${buildPath}" -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES "${target}"
+        TERM=dumb ninja -C "${buildPath}" -j$NIX_BUILD_CORES "${target}"
         (
           source chrome/installer/linux/common/installer.include
           PACKAGE=$packageName
@@ -324,13 +350,17 @@ let
       '';
       targets = extraAttrs.buildTargets or [];
       commands = map buildCommand targets;
-    in concatStringsSep "\n" commands;
+    in ''
+      runHook preBuild
+      ${lib.concatStringsSep "\n" commands}
+      runHook postBuild
+    '';
 
     postFixup = ''
-      # Make sure that libGLESv2 is found by dlopen (if using EGL).
+      # Make sure that libGLESv2 and libvulkan are found by dlopen.
       chromiumBinary="$libExecPath/$packageName"
       origRpath="$(patchelf --print-rpath "$chromiumBinary")"
-      patchelf --set-rpath "${libGL}/lib:$origRpath" "$chromiumBinary"
+      patchelf --set-rpath "${lib.makeLibraryPath [ libGL vulkan-loader ]}:$origRpath" "$chromiumBinary"
     '';
 
     passthru = {

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pcre }:
+{ lib, stdenv, fetchurl, autoreconfHook, pcre }:
 
 stdenv.mkDerivation rec {
   pname = "classads";
@@ -9,11 +9,16 @@ stdenv.mkDerivation rec {
     sha256 = "1czgj53gnfkq3ncwlsrwnr4y91wgz35sbicgkp4npfrajqizxqnd";
   };
 
+  nativeBuildInputs = [ autoreconfHook ];
+
   buildInputs = [ pcre ];
 
   configureFlags = [
     "--enable-namespace" "--enable-flexible-member"
   ];
+
+  # error: use of undeclared identifier 'finite'; did you mean 'isfinite'?
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) "-Dfinite=isfinite";
 
   meta = {
     homepage = "http://www.cs.wisc.edu/condor/classad/";

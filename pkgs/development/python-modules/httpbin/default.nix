@@ -11,6 +11,7 @@
 , raven
 , six
 , pytestCheckHook
+, werkzeug
 }:
 
 buildPythonPackage rec {
@@ -34,16 +35,17 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     brotlipy
+    decorator
     flask
     flask-limiter
-    markupsafe
-    decorator
     itsdangerous
+    markupsafe
     raven
     six
-  ];
+    werkzeug
+  ] ++ raven.optional-dependencies.flask;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

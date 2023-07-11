@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, libX11, libXinerama }:
+{ stdenv, lib, fetchFromGitHub, rustPlatform, libX11, libXinerama }:
 
 let
   rpathLibs = [ libXinerama libX11 ];
@@ -6,21 +6,21 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "leftwm";
-  version = "0.2.11";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "leftwm";
     repo = "leftwm";
     rev = version;
-    sha256 = "sha256-GLHmX628UUdIM+xYJhPtqFg4whQqaF8hFxg0Z5grPac=";
+    sha256 = "sha256-SjEp0gQHwq3Omhx/EPnyLeQJ50Ov0rHDxmYVWBwIDBs=";
   };
 
-  cargoSha256 = "sha256-4Pu3TDLmi0c2nyUj1lTRincgRqL40A/g0PkyJOen0is=";
+  cargoSha256 = "sha256-kdGqnfzO+Ev9QeZcZqISPTehEXZzCWT5S8p6JbTBreE=";
 
   buildInputs = rpathLibs;
 
   postInstall = ''
-    for p in $out/bin/leftwm*; do
+    for p in $out/bin/left*; do
       patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}" $p
     done
   '';
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/leftwm/leftwm";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mschneider ];
+    maintainers = with maintainers; [ yanganto ];
     changelog = "https://github.com/leftwm/leftwm/blob/${version}/CHANGELOG";
   };
 }

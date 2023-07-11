@@ -5,7 +5,7 @@
 , ninja
 , pkg-config
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsNoGuiHook
 , glib
 , coreutils
 , accountsservice
@@ -19,16 +19,16 @@
 
 stdenv.mkDerivation rec {
   pname = "malcontent";
-  version = "0.10.4";
+  version = "0.11.1";
 
   outputs = [ "bin" "out" "lib" "pam" "dev" "man" "installedTests" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "pwithnall";
-    repo = pname;
+    repo = "malcontent";
     rev = version;
-    sha256 = "sha256-s2wQLb3tCfO3p8yYG8Nc6pu+y2TLfrmo7Ug1LgDLEdw=";
+    hash = "sha256-NZwVCnQrEG2gecUjuWe1+cyWFR3OdYJCmj87V14Uwjw=";
   };
 
   patches = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gobject-introspection
-    wrapGAppsHook
+    wrapGAppsNoGuiHook
   ];
 
   buildInputs = [

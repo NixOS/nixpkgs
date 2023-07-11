@@ -1,13 +1,13 @@
-{ lib, stdenv, coreutils, curl, diffutils, gawk, gnugrep, gnused, openssl, makeWrapper, fetchFromGitHub, installShellFiles }:
+{ lib, stdenv, coreutils, curl, diffutils, gawk, gnugrep, gnused, hexdump, openssl, makeWrapper, fetchFromGitHub, installShellFiles }:
 stdenv.mkDerivation rec {
   pname = "dehydrated";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "lukas2511";
     repo = "dehydrated";
     rev = "v${version}";
-    sha256 = "09jhmkjvnj98zbf92qwdr5rr7pc6v63xzyk2fbi177r7szb2yg09";
+    sha256 = "sha256-K08eeruyT5vKzK3PzfCkubZiHbf9Yq7wzD1z69MeDtY=";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     cp -a dehydrated $out/bin
-    wrapProgram "$out/bin/dehydrated" --prefix PATH : "${lib.makeBinPath [ openssl coreutils gnused gnugrep diffutils curl gawk ]}"
-    '';
+    wrapProgram "$out/bin/dehydrated" --prefix PATH : "${lib.makeBinPath [ openssl coreutils gnused gnugrep diffutils curl gawk hexdump ]}"
+  '';
 
   meta = with lib; {
     inherit (src.meta) homepage;

@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, elk7Version, buildGoModule, libpcap, nixosTests, systemd }:
+{ lib, fetchFromGitHub, elk7Version, buildGoModule, libpcap, nixosTests, systemd, config }:
 
 let beat = package: extraArgs: buildGoModule (rec {
   pname = package;
@@ -8,17 +8,17 @@ let beat = package: extraArgs: buildGoModule (rec {
     owner = "elastic";
     repo = "beats";
     rev = "v${version}";
-    sha256 = "sha256-9Jl5Xo1iKdOY9ZE5JXKSL4ee+NdsN3KCY2dDYuxlzPI=";
+    hash = "sha256-Quq32/3NeGhrsy17GrIeBiB3LGQuMFTFl3lAyyU6GZM=";
   };
 
-  vendorSha256 = "sha256-fiqCccS2IAnTzfPfUqY0Wy9uRUuiYNtiVvpAFZJOPVI=";
+  vendorHash = "sha256-UJjwCRxY1rrymroBqC/SfCVM9vmnQOtLlS3OONih3kM=";
 
   subPackages = [ package ];
 
   meta = with lib; {
     homepage = "https://www.elastic.co/products/beats";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fadenb basvandijk ];
+    maintainers = with maintainers; [ fadenb basvandijk dfithian ];
     platforms = platforms.linux;
   };
 } // extraArgs);
@@ -36,10 +36,12 @@ rec {
   metricbeat7 = beat "metricbeat" {
     meta.description = "Lightweight shipper for metrics";
     passthru.tests =
-      assert metricbeat7.drvPath == nixosTests.elk.ELK-7.elkPackages.metricbeat.drvPath;
-      {
-        elk = nixosTests.elk.ELK-7;
-      };
+      lib.optionalAttrs config.allowUnfree (
+        assert metricbeat7.drvPath == nixosTests.elk.unfree.ELK-7.elkPackages.metricbeat.drvPath;
+        {
+          elk = nixosTests.elk.unfree.ELK-7;
+        }
+      );
   };
   packetbeat7 = beat "packetbeat" {
     buildInputs = [ libpcap ];

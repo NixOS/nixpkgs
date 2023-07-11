@@ -8,19 +8,24 @@
 
 buildPythonPackage rec {
   pname = "cachelib";
-  version = "0.6.0";
+  version = "0.10.2";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-1msDiNYxaETJfVBTaMuNJbSxhOpyRdHkb5CQ+1+ZbbQ=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-2V2FvZC8jM84fZEdK9ShzFrjO8goOQsN6cnJTHDDL9E=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-xprocess
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # requires set up local server
+    "tests/test_dynamodb_cache.py"
   ];
 
   pythonImportsCheck = [ "cachelib" ];

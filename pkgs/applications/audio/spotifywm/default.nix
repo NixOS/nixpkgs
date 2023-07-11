@@ -1,24 +1,32 @@
-{ lib, stdenv, fetchFromGitHub, spotify, xorg, runtimeShell }:
+{ lib, stdenv, fetchFromGitHub, spotify, xorg, makeWrapper }:
 stdenv.mkDerivation {
   pname = "spotifywm-unstable";
-  version = "2016-11-28";
+  version = "2022-10-26";
 
   src = fetchFromGitHub {
-    owner  = "dasJ";
-    repo   = "spotifywm";
-    rev    = "91dd5532ffb7a398d775abe94fe7781904ab406f";
-    sha256 = "01z088i83410bpx1vbp7c6cq01r431v55l7340x3izp53lnpp379";
+    owner = "dasJ";
+    repo = "spotifywm";
+    rev = "8624f539549973c124ed18753881045968881745";
+    sha256 = "sha256-AsXqcoqUXUFxTG+G+31lm45gjP6qGohEnUSUtKypew0=";
   };
+
+  nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [ xorg.libX11 ];
 
-  propagatedBuildInputs = [ spotify ];
-
   installPhase = ''
-    echo "#!${runtimeShell}" > spotifywm
-    echo "LD_PRELOAD="$out/lib/spotifywm.so" ${spotify}/bin/spotify \$*" >> spotifywm
-    install -Dm644 spotifywm.so $out/lib/spotifywm.so
-    install -Dm755 spotifywm $out/bin/spotifywm
+    runHook preInstall
+
+    mkdir -p $out/{bin,lib}
+    install -Dm644 spotifywm.so $out/lib/
+    ln -sf ${spotify}/bin/spotify $out/bin/spotify
+
+    # wrap spotify to use spotifywm.so
+    wrapProgram $out/bin/spotify --set LD_PRELOAD "$out/lib/spotifywm.so"
+    # backwards compatibility for people who are using the "spotifywm" binary
+    ln -sf $out/bin/spotify $out/bin/spotifywm
+
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -26,6 +34,6 @@ stdenv.mkDerivation {
     description = "Wrapper around Spotify that correctly sets class name before opening the window";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jqueiroz ];
+    maintainers = with maintainers; [ jqueiroz the-argus ];
   };
 }

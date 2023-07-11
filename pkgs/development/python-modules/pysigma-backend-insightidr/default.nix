@@ -5,11 +5,12 @@
 , pysigma
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "pysigma-backend-insightidr";
-  version = "0.1.5";
+  version = "0.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -18,18 +19,23 @@ buildPythonPackage rec {
     owner = "SigmaHQ";
     repo = "pySigma-backend-insightidr";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RjBRFNMIpjW/x5vShXUgi25oOmvRlD2zP6mNQJ7sG8M=";
+    hash = "sha256-0VBnbThEkGhpxkGNBop0rPYn0NujyrK+ei/2+2f3Wno=";
   };
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
     pysigma
   ];
 
-  checkInputs = [
+  pythonRelaxDeps = [
+    "pysigma"
+  ];
+
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

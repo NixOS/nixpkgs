@@ -24,11 +24,11 @@
 
 buildPythonPackage rec {
   pname = "keystoneauth1";
-  version = "4.5.0";
+  version = "5.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-SbNIiWakPusCAOpRG5l+ZAPCXVY6mExjMOgqDr/EVAw=";
+    hash = "sha256-2fdIStX8mwu7fsw8vzeVoXBpT72EglEzHlS6SLvuzHI=";
   };
 
   postPatch = ''
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     stevedore
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hacking
     oslo-config
     oslo-utils

@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "mill-local";
-  version = "0.1.1";
+  version = "0.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyMillLocal";
-    rev = version;
-    sha256 = "sha256-OKaR0hpNVBlaZrEmEmHxqRG1i03XP2Z4c7c35YIqe+I=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-kFBzasS7/5AM/ZW5z1ncZ9Xwuy/bh2LTVXPxNTLQnV0=";
   };
 
   propagatedBuildInputs = [
@@ -35,6 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to communicate locally with Mill heaters";
     homepage = "https://github.com/Danielhiversen/pyMillLocal";
+    changelog = "https://github.com/Danielhiversen/pyMillLocal/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

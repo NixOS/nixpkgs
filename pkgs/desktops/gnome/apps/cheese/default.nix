@@ -28,19 +28,18 @@
 , meson
 , ninja
 , dbus
-, python3
 , pipewire
 }:
 
 stdenv.mkDerivation rec {
   pname = "cheese";
-  version = "41.1";
+  version = "44.0.1";
 
   outputs = [ "out" "man" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/cheese/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "UilgyihzD/ZkOQcLBEGMngpLtVVg11v+CLIY2ixn5Uc=";
+    sha256 = "2SJAEnLN1BXCknA+UsazZEZqCyDuHbMgJRZEwoNgb9Q=";
   };
 
   nativeBuildInputs = [
@@ -55,7 +54,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     vala
     wrapGAppsHook
     glib # for glib-compile-schemas
@@ -79,11 +77,6 @@ stdenv.mkDerivation rec {
     librsvg
     pipewire # PipeWire provides a gstreamer plugin for using PipeWire for video
   ];
-
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
 
   preFixup = ''
     gappsWrapperArgs+=(

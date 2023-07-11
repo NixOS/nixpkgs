@@ -1,0 +1,33 @@
+From ad18742c699a08cd82f8926a31da9a19b2aef329 Mon Sep 17 00:00:00 2001
+From: rewine <lhongxu@outlook.com>
+Date: Wed, 5 Apr 2023 23:37:24 +0800
+Subject: [PATCH 1/4] fix-wrapped-name-for-verifyExe
+
+---
+ dock/process_info.go | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/dock/process_info.go b/dock/process_info.go
+index 83c61d58..e2970f3a 100644
+--- a/dock/process_info.go
++++ b/dock/process_info.go
+@@ -119,6 +119,16 @@ func verifyExe(exe, cwd, firstArg string) bool {
+ 		return false
+ 	}
+ 	logger.Debugf("firstArgPath: %q", firstArgPath)
++	if exe == firstArgPath {
++		return true
++	}
++	if strings.HasSuffix(exe, "-wrapped") {
++		exeBase := filepath.Base(exe)
++		if (len(exeBase) <= 9) {
++			return false
++		}
++		exe = exe[0:len(exe)-len(exeBase)] + exeBase[1:len(exeBase)-8]
++	}
+ 	return exe == firstArgPath
+ }
+ 
+-- 
+2.39.2
+

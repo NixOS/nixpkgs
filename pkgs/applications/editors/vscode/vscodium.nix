@@ -1,37 +1,35 @@
-{ lib, stdenv, callPackage, fetchurl, nixosTests }:
+{ lib, stdenv, callPackage, fetchurl, nixosTests, commandLineArgs ? "", useVSCodeRipgrep ? stdenv.isDarwin }:
 
 let
   inherit (stdenv.hostPlatform) system;
+  throwSystem = throw "Unsupported system: ${system}";
 
   plat = {
     x86_64-linux = "linux-x64";
     x86_64-darwin = "darwin-x64";
     aarch64-linux = "linux-arm64";
+    aarch64-darwin = "darwin-arm64";
     armv7l-linux = "linux-armhf";
-  }.${system};
+  }.${system} or throwSystem;
 
-  archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
+  archive_fmt = if stdenv.isDarwin then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "1i76ix318y6b2dcfnisg13bp5d7nzvcx7zcpl94mkrn974db30pn";
-    x86_64-darwin = "1qk1vykl838vwsffyjpazx7x9ajwxczpgz5vhch16iikfz2vh1vk";
-    aarch64-linux = "13jifiqn2v17d6vwacq6aib1lzyp2021kjdswkp7wpx6ck5lkm21";
-    armv7l-linux = "1zhriscsmfcsagsp2ds0fn316fybs5f2f2r3w5q29jwczgcnlam4";
-  }.${system};
+    x86_64-linux = "1qwgdvsqwkbfxf9xdxfxfmf10xcxgik4v6s5djggq130mqvrnv7x";
+    x86_64-darwin = "12cn369yi652fvk6lha5y6nglms2zqmvqsjwklj3dl0ms9329jzq";
+    aarch64-linux = "1fxmbz3qv027spgh6j075s00r69hff1m4fqvs9p2axb5m7ikdp16";
+    aarch64-darwin = "0g5ylxcn41x8ajl7lv3h2fkx52pkgmkw95malgh8h1y3rvg73a4n";
+    armv7l-linux = "0m1v24gg2dy79hgrz37gysgrazg8vkr1gkp52j6m6y76vi0l8249";
+  }.${system} or throwSystem;
 
-  sourceRoot = {
-    x86_64-linux = ".";
-    x86_64-darwin = "";
-    aarch64-linux = ".";
-    armv7l-linux = ".";
-  }.${system};
+  sourceRoot = if stdenv.isDarwin then "" else ".";
 in
   callPackage ./generic.nix rec {
-    inherit sourceRoot;
+    inherit sourceRoot commandLineArgs useVSCodeRipgrep;
 
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.66.2";
+    version = "1.79.2.23166";
     pname = "vscodium";
 
     executableName = "codium";
@@ -62,7 +60,9 @@ in
       homepage = "https://github.com/VSCodium/vscodium";
       downloadPage = "https://github.com/VSCodium/vscodium/releases";
       license = licenses.mit;
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       maintainers = with maintainers; [ synthetica turion bobby285271 ];
-      platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "armv7l-linux" ];
+      mainProgram = "codium";
+      platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" "armv7l-linux" ];
     };
   }

@@ -1,29 +1,30 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
 
 buildGoModule rec {
   pname = "circleci-cli";
-  version = "0.1.17110";
+  version = "0.1.27054";
 
   src = fetchFromGitHub {
     owner = "CircleCI-Public";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-zCX6LWIPiHDOnSBE+BeePjeQ1evTWhLY0Pqk7NmMMlc=";
+    sha256 = "sha256-t273BD2plrsBKQqYg1EHdPIXR3qs9coHhTc/k5297cw=";
   };
 
-  vendorSha256 = "sha256-7u2y1yBVpXf+D19tslD4s3B1KmABl4OWNzzLaBNL/2U=";
+  vendorHash = "sha256-IUDiKAwhJdDkp7qXPMcP6+QjEZvevBH0IFKFPAsHKio=";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   doCheck = false;
 
   ldflags = [ "-s" "-w" "-X github.com/CircleCI-Public/circleci-cli/version.Version=${version}" "-X github.com/CircleCI-Public/circleci-cli/version.Commit=${src.rev}" "-X github.com/CircleCI-Public/circleci-cli/version.packageManager=nix" ];
 
-  preBuild = ''
-    substituteInPlace data/data.go \
-      --replace 'packr.New("circleci-cli-box", "../_data")' 'packr.New("circleci-cli-box", "${placeholder "out"}/share/circleci-cli")'
-  '';
-
   postInstall = ''
-    install -Dm644 -t $out/share/circleci-cli _data/data.yml
+    mv $out/bin/circleci-cli $out/bin/circleci
+
+    installShellCompletion --cmd circleci \
+      --bash <(HOME=$TMPDIR $out/bin/circleci completion bash --skip-update-check) \
+      --zsh <(HOME=$TMPDIR $out/bin/circleci completion zsh --skip-update-check)
   '';
 
   meta = with lib; {
@@ -33,6 +34,7 @@ buildGoModule rec {
       run jobs as if they were running on the hosted CirleCI application.
     '';
     maintainers = with maintainers; [ synthetica ];
+    mainProgram = "circleci";
     license = licenses.mit;
     homepage = "https://circleci.com/";
   };

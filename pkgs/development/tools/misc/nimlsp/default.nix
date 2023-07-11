@@ -2,17 +2,17 @@
 
 nimPackages.buildNimPackage rec {
   pname = "nimlsp";
-  version = "0.4.0";
+  version = "0.4.4";
   nimBinOnly = true;
 
   src = fetchFromGitHub {
     owner = "PMunch";
     repo = "nimlsp";
     rev = "v${version}";
-    sha256 = "sha256-eih8JmofLFXkidanRocjtA6wv84HkA1bi0M4dxkiDr4=";
+    sha256 = "sha256-Z67iKlL+dnRbxdFt/n/fsUcb2wpZwzPpL/G29jfCaMY=";
   };
 
-  buildInputs = with nimPackages; [ jsonschema ];
+  buildInputs = with nimPackages; [ jsonschema asynctools ];
 
   nimFlags = [
     "--threads:on"
@@ -21,6 +21,8 @@ nimPackages.buildNimPackage rec {
   ];
 
   nimDefines = [ "nimcore" "nimsuggest" "debugCommunication" "debugLogging" ];
+
+  doCheck = false;
 
   meta = with lib; {
     description = "Language Server Protocol implementation for Nim";

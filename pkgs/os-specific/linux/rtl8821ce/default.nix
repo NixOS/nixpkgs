@@ -1,27 +1,20 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , kernel
 , bc
 }:
 
 stdenv.mkDerivation rec {
   pname = "rtl8821ce";
-  version = "${kernel.version}-unstable-2021-11-19";
+  version = "${kernel.version}-unstable-2023-05-04";
 
   src = fetchFromGitHub {
     owner = "tomaspinho";
     repo = "rtl8821ce";
-    rev = "ca204c60724d23ab10244f920d4e50759ed1affb";
-    sha256 = "18ma8a8h1l90dss0k6al7q6plwr57jc9g67p22g9917k1jfbhm97";
+    rev = "a478095a45d8aa957b45be4f9173c414efcacc6f";
+    hash = "sha256-xqVxylKhL7vbC7m5Av6ven5i7OBkS2RHxrKzLOVBlgE=";
   };
-
-  # Fixes the build on kernel >= 5.17. Can be removed once https://github.com/tomaspinho/rtl8821ce/pull/267 is merged
-  patches = [(fetchpatch {
-    url = "https://github.com/tomaspinho/rtl8821ce/commit/7b9e55df64b10fed785f22df9f36ed4a30b59d0e.patch";
-    sha256 = "sha256-mpAWOG1aXsklGuDbrRB9Vd36mgeCdctKQaWuuoqEEp0=";
-  })];
 
   hardeningDisable = [ "pic" ];
 
@@ -31,7 +24,6 @@ stdenv.mkDerivation rec {
   prePatch = ''
     substituteInPlace ./Makefile \
       --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
-      --replace '$(shell uname -r)' "${kernel.modDirVersion}" \
       --replace /sbin/depmod \# \
       --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
@@ -47,7 +39,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tomaspinho/rtl8821ce";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    broken = stdenv.isAarch64;
     maintainers = with maintainers; [ hhm ivar ];
+    broken = stdenv.isAarch64 || ((lib.versions.majorMinor kernel.version) == "5.4" && kernel.isHardened);
   };
 }

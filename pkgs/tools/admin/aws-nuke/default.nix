@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "aws-nuke";
-  version = "2.17.0";
+  version = "2.22.1";
 
   src = fetchFromGitHub {
     owner = "rebuy-de";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-e5EtIRIM0Gz2BXGaZx3jiO+MNdD1Eh9h7U+aZSBVFGc=";
+    sha256 = "sha256-cI6HoXclJDMDGBk2RdvzG7kNzfMu133mx+a83gQM5aA=";
   };
 
-  vendorSha256 = "sha256-tRFYZ0GBJDumvfOYMJDcYqTlTn5do3trZ1gXafuDVi4=";
+  vendorSha256 = "sha256-DkamoQxwJUhO3Q0dh3pig9j6ZiYhZXVPWltK1P8dzhc=";
 
   preBuild = ''
     if [ "x$outputHashAlgo" != "x" ]; then

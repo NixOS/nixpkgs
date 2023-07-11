@@ -1,32 +1,31 @@
 { lib
 , buildPythonPackage
+, callPackage
 , fetchFromGitHub
 , httpx
+, pythonOlder
 , sanic
 , websockets
-, callPackage
 }:
 
 buildPythonPackage rec {
   pname = "sanic-testing";
-  version = "0.8.2";
+  version = "22.12.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = "sanic-testing";
-    rev = "v${version}";
-    sha256 = "17fbb78gvic5s9nlcgwj817fq1f9j9d1d7z6n2ahhinmvyzl9gc8";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-pFTF2SQ9giRzPhG24FLqLPJRXaFdQ7Xi5EeltS7J3DI=";
   };
 
   outputs = [
     "out"
     "testsout"
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "httpx>=0.18,<0.22" "httpx"
-  '';
 
   propagatedBuildInputs = [
     httpx
@@ -39,8 +38,9 @@ buildPythonPackage rec {
     cp -R tests $testsout/tests
   '';
 
-  # check in passthru.tests.pytest to escape infinite recursion with sanic
+  # Check in passthru.tests.pytest to escape infinite recursion with sanic
   doCheck = false;
+
   doInstallCheck = false;
 
   passthru.tests = {
@@ -50,6 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Core testing clients for the Sanic web framework";
     homepage = "https://github.com/sanic-org/sanic-testing";
+    changelog = "https://github.com/sanic-org/sanic-testing/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ AluisioASG ];
   };

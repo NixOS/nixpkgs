@@ -6,6 +6,15 @@ let
 
   bootFs = filterAttrs (n: fs: (fs.fsType == "bcachefs") && (utils.fsNeededForBoot fs)) config.fileSystems;
 
+  mountCommand = pkgs.runCommand "mount.bcachefs" {} ''
+    mkdir -p $out/bin
+    cat > $out/bin/mount.bcachefs <<EOF
+    #!/bin/sh
+    exec "/bin/bcachefs" mount "\$@"
+    EOF
+    chmod +x $out/bin/mount.bcachefs
+  '';
+
   commonFunctions = ''
     prompt() {
         local name="$1"
@@ -16,7 +25,7 @@ let
         local path="$2"
         if bcachefs unlock -c $path > /dev/null 2> /dev/null; then    # test for encryption
             prompt $name
-            until bcachefs unlock $path 2> /dev/null; do              # repeat until sucessfully unlocked
+            until bcachefs unlock $path 2> /dev/null; do              # repeat until successfully unlocked
                 printf "unlocking failed!\n"
                 prompt $name
             done
@@ -42,7 +51,11 @@ in
 {
   config = mkIf (elem "bcachefs" config.boot.supportedFilesystems) (mkMerge [
     {
-      system.fsPackages = [ pkgs.bcachefs-tools ];
+      # We do not want to include bachefs in the fsPackages for systemd-initrd
+      # because we provide the unwrapped version of mount.bcachefs
+      # through the extraBin option, which will make it available for use.
+      system.fsPackages = lib.optional (!config.boot.initrd.systemd.enable) pkgs.bcachefs-tools;
+      environment.systemPackages = lib.optional (config.boot.initrd.systemd.enable) pkgs.bcachefs-tools;
 
       # use kernel package with bcachefs support until it's in mainline
       boot.kernelPackages = pkgs.linuxPackages_testing_bcachefs;
@@ -52,8 +65,14 @@ in
       # chacha20 and poly1305 are required only for decryption attempts
       boot.initrd.availableKernelModules = [ "bcachefs" "sha256" "chacha20" "poly1305" ];
 
-      boot.initrd.extraUtilsCommands = ''
+      boot.initrd.systemd.extraBin = {
+        "bcachefs" = "${pkgs.bcachefs-tools}/bin/bcachefs";
+        "mount.bcachefs" = "${mountCommand}/bin/mount.bcachefs";
+      };
+
+      boot.initrd.extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
         copy_bin_and_libs ${pkgs.bcachefs-tools}/bin/bcachefs
+        copy_bin_and_libs ${mountCommand}/bin/mount.bcachefs
       '';
       boot.initrd.extraUtilsCommandsTest = ''
         $out/bin/bcachefs version

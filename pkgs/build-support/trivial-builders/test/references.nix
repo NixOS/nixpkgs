@@ -1,4 +1,4 @@
-{ lib, nixosTest, pkgs, writeText, hello, figlet, stdenvNoCC }:
+{ lib, testers, pkgs, writeText, hello, figlet, stdenvNoCC }:
 
 # -------------------------------------------------------------------------- #
 #
@@ -22,7 +22,7 @@ let
       lib.attrValues (import file { inherit pkgs; })
     );
 in
-nixosTest {
+testers.nixosTest {
   name = "nixpkgs-trivial-builders";
   nodes.machine = { ... }: {
     virtualisation.writableStore = true;
@@ -45,10 +45,8 @@ nixosTest {
       """)
     '';
   meta = {
-    license = lib.licenses.mit; # nixpkgs license
     maintainers = with lib.maintainers; [
       roberth
     ];
-    description = "Run the Nixpkgs trivial builders tests";
   };
 }

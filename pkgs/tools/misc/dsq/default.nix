@@ -4,53 +4,51 @@
 , buildGoModule
 , runCommand
 , nix-update-script
+, fetchurl
+, testers
+, python3
+, curl
+, jq
+, p7zip
 , dsq
-, testVersion
-, diffutils
 }:
 
 buildGoModule rec {
   pname = "dsq";
-  version = "0.14.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "multiprocessio";
     repo = "dsq";
-    rev = version;
-    hash = "sha256-BhWcl0yMpTi/6+dFk6wX/rMkH1k9m9eVm40iNwZGrJM=";
+    rev = "v${version}";
+    hash = "sha256-FZBJe+2y4HV3Pgeap4yvD0a8M/j+6pAJEFpoQVVE1ec=";
   };
 
-  vendorSha256 = "sha256-mSF2oNdTKAg3iRejKkn24hSCJDM6iOkRMruic73ceX4=";
-
-  nativeBuildInputs = [ diffutils ];
+  vendorSha256 = "sha256-MbBR+OC1OGhZZGcZqc+Jzmabdc5ZfFEwzqP5YMrj6mY=";
 
   ldflags = [ "-X" "main.Version=${version}" ];
 
+  nativeCheckInputs = [ python3 curl jq p7zip ];
+
+  preCheck = ''
+    substituteInPlace scripts/test.py \
+      --replace 'dsq latest' 'dsq ${version}'
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+
+    7z e testdata/taxi.csv.7z
+    cp "$GOPATH/bin/dsq" .
+    python3 scripts/test.py
+
+    runHook postCheck
+  '';
+
   passthru = {
-    updateScript = nix-update-script { attrPath = pname; };
+    updateScript = nix-update-script { };
 
-    tests = {
-      version = testVersion { package = dsq; };
-
-      pretty-csv = runCommand "${pname}-test" { } ''
-        mkdir "$out"
-        cat <<EOF > "$out/input.csv"
-        first,second
-        1,a
-        2,b
-        EOF
-        cat <<EOF > "$out/expected.txt"
-        +-------+--------+
-        | first | second |
-        +-------+--------+
-        |     1 | a      |
-        |     2 | b      |
-        +-------+--------+
-        EOF
-        ${dsq}/bin/dsq --pretty "$out/input.csv" 'select first, second from {}' > "$out/actual.txt"
-        diff "$out/expected.txt" "$out/actual.txt"
-      '';
-    };
+    tests.version = testers.testVersion { package = dsq; };
   };
 
   meta = with lib; {
@@ -58,8 +56,5 @@ buildGoModule rec {
     homepage = "https://github.com/multiprocessio/dsq";
     license = licenses.asl20;
     maintainers = with maintainers; [ liff ];
-    # TODO: Remove once nixpkgs uses macOS SDK 10.14+ for x86_64-darwin
-    # Undefined symbols for architecture x86_64: "_SecTrustEvaluateWithError"
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

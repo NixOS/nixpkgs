@@ -61,7 +61,7 @@ let
   libs = pkgs: lib.makeLibraryPath [ xorg.libX11 libGL ];
 
   python = python3.withPackages(ps: with ps; [
-    wxPython_4_1
+    wxPython_4_2
     setuptools
     natsort
   ]);
@@ -142,6 +142,7 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "GUI for managing Windows programs under linux";
     homepage = "https://www.playonlinux.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3;
     maintainers = [ maintainers.pasqui23 ];
     platforms = [ "x86_64-linux" "i686-linux" ];

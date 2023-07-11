@@ -13,6 +13,7 @@
 , pytestCheckHook
 , pyvo
 , astropy-helpers
+, setuptools
 , isPy3k
 }:
 
@@ -23,7 +24,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-MHylVMtzSgypoi+G9e/+fkE6+ROuZeFXiXLYR7H+E+4=";
+    hash = "sha256-MHylVMtzSgypoi+G9e/+fkE6+ROuZeFXiXLYR7H+E+4=";
   };
 
   disabled = !isPy3k;
@@ -37,14 +38,14 @@ buildPythonPackage rec {
     pyvo
   ];
 
-  nativeBuildInputs = [ astropy-helpers ];
+  nativeBuildInputs = [ astropy-helpers setuptools ];
 
   # Disable automatic update of the astropy-helper module
   postPatch = ''
     substituteInPlace setup.cfg --replace "auto_use = True" "auto_use = False"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     matplotlib
     pillow
     pytest

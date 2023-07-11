@@ -8,25 +8,22 @@
 
 buildPythonApplication rec {
   pname = "sc-controller";
-  version = "0.4.8.6";
+  version = "0.4.8.11";
 
   src = fetchFromGitHub {
     owner  = "Ryochan7";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "1fgizgzm79zl9r2kkwvh1gf9lnxaix15283xxk6bz843inr8b88k";
+    sha256 = "xu9QqddJf0cXkhNPrOnE+L8CV5AfgcCyk9DSh+G94c0=";
   };
 
-  # see https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
+  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
 
-  nativeBuildInputs = [ wrapGAppsHook ];
-
-  buildInputs = [ gtk3 gobject-introspection libappindicator-gtk3 librsvg ];
+  buildInputs = [ gtk3 libappindicator-gtk3 librsvg ];
 
   propagatedBuildInputs = [ evdev pygobject3 pylibacl vdf ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace scc/paths.py --replace sys.prefix "'$out'"

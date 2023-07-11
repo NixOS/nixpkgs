@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyface";
-  version = "7.4.1";
+  version = "7.4.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-UtzzZ5yj5hCjynxLmQSpbGkWiASNtdflKvjlAZ5HrbY=";
+    hash = "sha256-0F+qxFOUvVWYWQahIM8AEv58rCxmNJYsBTC2pjUO2yI=";
   };
 
   propagatedBuildInputs = [
@@ -34,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Traits-capable windowing framework";
     homepage = "https://github.com/enthought/pyface";
+    changelog = "https://github.com/enthought/pyface/releases/tag/${version}";
     maintainers = with maintainers; [ knedlsepp ];
     license = licenses.bsdOriginal;
   };

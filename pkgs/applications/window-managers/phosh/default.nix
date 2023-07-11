@@ -1,18 +1,21 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, gitUpdater
 , meson
 , ninja
 , pkg-config
 , python3
 , wrapGAppsHook
+, libadwaita
 , libhandy
 , libxkbcommon
 , libgudev
 , callaudiod
 , pulseaudio
+, evince
 , glib
-, gtk3
+, gtk4
 , gnome
 , gnome-desktop
 , gcr
@@ -27,11 +30,13 @@
 , networkmanager
 , polkit
 , libsecret
+, evolution-data-server
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "phosh";
-  version = "0.16.0";
+  version = "0.27.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -40,10 +45,11 @@ stdenv.mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true; # including gvc and libcall-ui which are designated as subprojects
-    sha256 = "sha256-nxQYVWUXT1fNgOTRB3iWCLWYI/STk8vtguTbPPNTHdg=";
+    sha256 = "sha256-dnSYeXn3aPwvxeIjjk+PsnOVKyuGlxXMXGWDdrRrIM0=";
   };
 
   nativeBuildInputs = [
+    libadwaita
     meson
     ninja
     pkg-config
@@ -52,12 +58,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    evince
     phoc
     libhandy
     libsecret
     libxkbcommon
     libgudev
     callaudiod
+    evolution-data-server
     pulseaudio
     glib
     gcr
@@ -66,7 +74,7 @@ stdenv.mkDerivation rec {
     gnome.gnome-control-center
     gnome-desktop
     gnome.gnome-session
-    gtk3
+    gtk4
     pam
     systemd
     upower
@@ -74,7 +82,7 @@ stdenv.mkDerivation rec {
     feedbackd
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
     xvfb-run
   ];
@@ -82,18 +90,18 @@ stdenv.mkDerivation rec {
   # Temporarily disabled - Test is broken (SIGABRT)
   doCheck = false;
 
-  mesonFlags = [ "-Dsystemd=true" "-Dcompositor=${phoc}/bin/phoc" ];
-
-  postPatch = ''
-    chmod +x build-aux/post_install.py
-    patchShebangs build-aux/post_install.py
-  '';
+  mesonFlags = [
+    "-Dsystemd=true"
+    "-Dcompositor=${phoc}/bin/phoc"
+    # https://github.com/NixOS/nixpkgs/issues/36468
+    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
+  ];
 
   checkPhase = ''
     runHook preCheck
     export NO_AT_BRIDGE=1
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       meson test --print-errorlogs
     runHook postCheck
   '';
@@ -113,15 +121,22 @@ stdenv.mkDerivation rec {
 
   passthru = {
     providedSessions = [
-     "sm.puri.Phosh"
+      "sm.puri.Phosh"
     ];
+
+    tests.phosh = nixosTests.phosh;
+
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
   };
 
   meta = with lib; {
     description = "A pure Wayland shell prototype for GNOME on mobile devices";
     homepage = "https://gitlab.gnome.org/World/Phosh/phosh";
+    changelog = "https://gitlab.gnome.org/World/Phosh/phosh/-/blob/v${version}/debian/changelog";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jtojnar masipcat zhaofengli ];
+    maintainers = with maintainers; [ masipcat tomfitzhenry zhaofengli ];
     platforms = platforms.linux;
   };
 }

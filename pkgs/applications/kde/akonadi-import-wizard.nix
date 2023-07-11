@@ -9,7 +9,7 @@
 mkDerivation {
   pname = "akonadi-import-wizard";
   meta = {
-    license = with lib.licenses; [ gpl2Plus lgpl21Plus fdl12 ];
+    license = with lib.licenses; [ gpl2Plus lgpl21Plus fdl12Plus ];
     maintainers = kdepimTeam;
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

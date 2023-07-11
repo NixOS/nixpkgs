@@ -11,12 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "0niri5q9qyyyw5lmjpxk19pv3v4srjvmvyd5k6ks99mvqczjx9c0";
   };
 
+  nativeBuildInputs = [ gzip ];
+
   makeFlags = [
     "PREFIX=$(out)"
   ];
 
   preConfigure = ''
-    substituteInPlace Makefile --replace /bin/gzip ${gzip}/bin/gzip
+    substituteInPlace Makefile --replace /bin/gzip gzip
   '';
 
   postInstall = ''

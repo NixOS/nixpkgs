@@ -4,11 +4,11 @@
 }:
 mkDerivation rec {
   pname = "hpmyroom";
-  version = "12.1.1.0257";
+  version = "12.9.0.0601";
 
   src = fetchurl {
     url = "https://www.myroom.hpe.com/downloadfiles/${pname}-${version}.x86_64.rpm";
-    sha256 = "1xm41v324zq1x5awgb7fr238f7ml7vq6jrfh84358i5shgha1g2k";
+    sha256 = "sha256-1BC4EjCCLAuCIOV+jJn3pfKKW7UJI5tfC+wg0FUgB64=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +50,7 @@ mkDerivation rec {
   meta = {
     description = "Client for HPE's MyRoom web conferencing solution";
     maintainers = with lib.maintainers; [ johnazoidberg ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     homepage = "https://myroom.hpe.com";
     # TODO: A Darwin binary is available upstream

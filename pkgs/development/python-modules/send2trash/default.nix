@@ -1,7 +1,8 @@
 { lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, pytest
+, setuptools
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -12,17 +13,38 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hsoft";
     repo = "send2trash";
-    rev = version;
-    sha256 = "sha256-kDUEfyMTk8CXSxTEi7E6kl09ohnWHeaoif+EIaIJh9Q=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-kDUEfyMTk8CXSxTEi7E6kl09ohnWHeaoif+EIaIJh9Q=";
   };
 
+  postPatch = ''
+    # Confuses setuptools validation
+    # setuptools.extern.packaging.requirements.InvalidRequirement: One of the parsed requirements in `extras_require[win32]` looks like a valid environment marker: 'sys_platform == "win32"'
+    sed -i '/win32 =/d' setup.cfg
+
+    # setuptools.extern.packaging.requirements.InvalidRequirement: One of the parsed requirements in `extras_require[objc]` looks like a valid environment marker: 'sys_platform == "darwin"'
+    sed -i '/objc =/d' setup.cfg
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   doCheck = !stdenv.isDarwin;
-  checkPhase = "HOME=$TMPDIR pytest";
-  checkInputs = [ pytest ];
+
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Send file to trash natively under macOS, Windows and Linux";
     homepage = "https://github.com/hsoft/send2trash";
+    changelog = "https://github.com/arsenetar/send2trash/blob/${version}/CHANGES.rst";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

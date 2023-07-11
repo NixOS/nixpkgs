@@ -3,8 +3,9 @@
 , cryptography
 , defusedxml
 , fetchFromGitHub
+, fetchPypi
 , importlib-resources
-, mock
+, poetry-core
 , pyasn1
 , pymongo
 , pyopenssl
@@ -14,43 +15,55 @@
 , pytz
 , requests
 , responses
-, six
+, setuptools
 , substituteAll
 , xmlschema
 , xmlsec
 }:
 
-buildPythonPackage rec {
+let
+  pymongo3 = pymongo.overridePythonAttrs(old: rec {
+    version = "3.12.3";
+    src = fetchPypi {
+      pname = "pymongo";
+      inherit version;
+      hash = "sha256-ConK3ABipeU2ZN3gQ/bAlxcrjBxfAJRJAJUoL/mZWl8=";
+    };
+  });
+in buildPythonPackage rec {
   pname = "pysaml2";
-  version = "7.1.2";
-  format = "setuptools";
+  version = "7.4.1";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "IdentityPython";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nyQcQ1OO9PuuQROg+km2vIRF1sZ22MZhiHpmVXWl+is=";
+    hash = "sha256-QHAbm6u5oH3O7MEVFE+sW98raquv89KJ8gonk3Yyu/0=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     cryptography
-    python-dateutil
     defusedxml
     pyopenssl
+    python-dateutil
     pytz
     requests
-    six
+    setuptools
     xmlschema
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
   ];
 
-  checkInputs = [
-    mock
+  nativeCheckInputs = [
     pyasn1
-    pymongo
+    pymongo3
     pytestCheckHook
     responses
   ];

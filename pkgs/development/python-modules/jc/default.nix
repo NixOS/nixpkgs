@@ -10,19 +10,19 @@
 
 buildPythonPackage rec {
   pname = "jc";
-  version = "1.18.6";
+  version = "1.23.3";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kellyjonbrazil";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-yk6Rg9DwilG8OWmT7SF80eYRsRwDwJp+mx2Yv2Gg+ak=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-feD/8GLkewfVwtGRZs8YaWnb96bFICpcH6nkJmCmPgs=";
   };
 
   propagatedBuildInputs = [ ruamel-yaml xmltodict pygments ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "jc" ];
 
@@ -34,5 +34,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/kellyjonbrazil/jc";
     license = licenses.mit;
     maintainers = with maintainers; [ atemu ];
+    changelog = "https://github.com/kellyjonbrazil/jc/blob/v${version}/CHANGELOG";
   };
 }

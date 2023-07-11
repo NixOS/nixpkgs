@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Library for importing WordPerfect documents";
-    homepage = "http://libwpd.sourceforge.net";
+    homepage = "https://libwpd.sourceforge.net";
     license = with licenses; [ lgpl21 mpl20 ];
     platforms = platforms.unix;
   };

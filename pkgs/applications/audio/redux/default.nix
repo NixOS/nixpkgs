@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , libX11
+, libXext
 , alsa-lib
 , autoPatchelfHook
 , releasePath ? null
@@ -15,19 +16,24 @@
 
 stdenv.mkDerivation rec {
   pname = "redux";
-  version = "1.2.2";
+  version = "1.3.2";
 
   src = if releasePath != null then releasePath
     else fetchurl {
-      url = "https://files.renoise.com/demo/Renoise_Redux_${lib.replaceStrings ["."] ["_"] version}_Demo_Linux.tar.gz";
-      sha256 = "0zbwsg7nh9x3q29jv2kpqb3vwi0ksdwybhb4m2qr95rxrpx1kxhm";
+      url = "https://files.renoise.com/demo/Renoise_Redux_${lib.replaceStrings ["."] ["_"] version}_Demo_Linux_x86_64.tar.gz";
+      sha256 = "sha256-wafOeNvVIHc8pOHoNQcCwV8+OwnuevJo1EcRQKRX4YA=";
     };
 
   nativeBuildInputs = [
     autoPatchelfHook
   ];
 
-  buildInputs = [ libX11 alsa-lib stdenv.cc.cc.lib ];
+  buildInputs = [
+    libX11
+    libXext
+    alsa-lib
+    stdenv.cc.cc.lib
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -42,6 +48,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Sample-based instrument, with a powerful phrase sequencer";
     homepage = "https://www.renoise.com/products/redux";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ mihnea-s ];
     platforms = [ "x86_64-linux" ];

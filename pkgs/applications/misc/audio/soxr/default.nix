@@ -14,20 +14,13 @@ stdenv.mkDerivation rec {
     ./arm64-check.patch
   ];
 
-  outputs = [ "out" "doc" ]; # headers are just two and very small
-
-  preConfigure =
-    if stdenv.isDarwin then ''
-      export DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}"`pwd`/build/src
-    '' else ''
-      export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}"`pwd`/build/src
-    '';
+  outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
     description = "An audio resampling library";
-    homepage = "http://soxr.sourceforge.net";
+    homepage = "https://soxr.sourceforge.net";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ];

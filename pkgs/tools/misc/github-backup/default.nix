@@ -1,16 +1,18 @@
 { lib
 , python3
+, fetchPypi
 , git
 , git-lfs
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "github-backup";
-  version = "0.40.1";
+  version = "0.43.1";
+  format = "setuptools";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Qrj0+4WXlW0UgG2xV/P8e0QgUG3VurY4HIAiiUF3LW8=";
+    hash = "sha256-S0674oTUsXftXlbP8fbF09FIWnWwq/Mgbv960tg3FNg=";
   };
 
   makeWrapperArgs = [

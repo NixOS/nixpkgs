@@ -27,6 +27,7 @@
 , allowSubstitutes ? false
 , installManpages ? true
 , meta ? {}
+, nativeBuildInputs ? []
 , buildInputs ? []
 , postBuild ? ""
 , gemConfig ? null
@@ -34,14 +35,19 @@
 }@args:
 
 let
-  basicEnv = (callPackage ../bundled-common {}) args;
+  basicEnv = (callPackage ../bundled-common {
+    inherit ruby;
+  }) args;
 
   cmdArgs = removeAttrs args [ "pname" "postBuild" "gemConfig" "passthru" "gemset" "gemdir" ] // {
     inherit preferLocalBuild allowSubstitutes; # pass the defaults
 
-    buildInputs = buildInputs ++ lib.optional (scripts != []) makeWrapper;
+    nativeBuildInputs = nativeBuildInputs ++ lib.optionals (scripts != []) [ makeWrapper ];
 
-    meta = { platforms = ruby.meta.platforms; } // meta;
+    meta = {
+      mainProgram = pname;
+      inherit (ruby.meta) platforms;
+    } // meta;
     passthru = basicEnv.passthru // {
       inherit basicEnv;
       inherit (basicEnv) env;
@@ -62,7 +68,10 @@ in
     ${lib.optionalString installManpages ''
     for section in {1..9}; do
       mandir="$out/share/man/man$section"
-      find -L ${basicEnv}/${ruby.gemPath}/gems/${basicEnv.name} \( -wholename "*/man/*.$section" -o -wholename "*/man/man$section/*.$section" \) -print -execdir mkdir -p $mandir \; -execdir cp '{}' $mandir \;
+
+      # See: https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/ruby-modules/gem/default.nix#L184-L200
+      # See: https://github.com/rubygems/rubygems/blob/7a7b234721c375874b7e22b1c5b14925b943f04e/bundler/lib/bundler.rb#L285-L291
+      find -L ${basicEnv}/${ruby.gemPath}/${lib.optionalString (basicEnv.gemType == "git" || basicEnv.gemType == "url") "bundler/"}gems/${basicEnv.name} \( -wholename "*/man/*.$section" -o -wholename "*/man/man$section/*.$section" \) -print -execdir mkdir -p $mandir \; -execdir cp '{}' $mandir \;
     done
     ''}
   ''

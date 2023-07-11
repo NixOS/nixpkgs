@@ -8,25 +8,25 @@ let
 in {
   options = {
     services.roon-server = {
-      enable = mkEnableOption "Roon Server";
+      enable = mkEnableOption (lib.mdDoc "Roon Server");
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Open ports in the firewall for the server.
         '';
       };
       user = mkOption {
         type = types.str;
         default = "roon-server";
-        description = ''
+        description = lib.mdDoc ''
           User to run the Roon Server as.
         '';
       };
       group = mkOption {
         type = types.str;
         default = "roon-server";
-        description = ''
+        description = lib.mdDoc ''
           Group to run the Roon Server as.
         '';
       };
@@ -40,6 +40,7 @@ in {
       wantedBy = [ "multi-user.target" ];
 
       environment.ROON_DATAROOT = "/var/lib/${name}";
+      environment.ROON_ID_DIR = "/var/lib/${name}";
 
       serviceConfig = {
         ExecStart = "${pkgs.roon-server}/bin/RoonServer";
@@ -53,27 +54,33 @@ in {
     networking.firewall = mkIf cfg.openFirewall {
       allowedTCPPortRanges = [
         { from = 9100; to = 9200; }
-        { from = 9330; to = 9332; }
+        { from = 9330; to = 9339; }
+        { from = 30000; to = 30010; }
       ];
       allowedUDPPorts = [ 9003 ];
-      extraCommands = ''
+      extraCommands = optionalString (!config.networking.nftables.enable) ''
+        ## IGMP / Broadcast ##
         iptables -A INPUT -s 224.0.0.0/4 -j ACCEPT
         iptables -A INPUT -d 224.0.0.0/4 -j ACCEPT
         iptables -A INPUT -s 240.0.0.0/5 -j ACCEPT
         iptables -A INPUT -m pkttype --pkt-type multicast -j ACCEPT
         iptables -A INPUT -m pkttype --pkt-type broadcast -j ACCEPT
       '';
+      extraInputRules = optionalString config.networking.nftables.enable ''
+        ip saddr { 224.0.0.0/4, 240.0.0.0/5 } accept
+        ip daddr 224.0.0.0/4 accept
+        pkttype { multicast, broadcast } accept
+      '';
     };
 
 
     users.groups.${cfg.group} = {};
     users.users.${cfg.user} =
-      if cfg.user == "roon-server" then {
+      optionalAttrs (cfg.user == "roon-server") {
         isSystemUser = true;
         description = "Roon Server user";
         group = cfg.group;
         extraGroups = [ "audio" ];
-      }
-      else {};
+      };
   };
 }

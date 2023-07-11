@@ -1,8 +1,8 @@
 { lib
 , stdenv
 , buildPythonPackage
-, dataclasses
 , fetchFromGitHub
+, cargo
 , hypothesis
 , libiconv
 , pytestCheckHook
@@ -10,6 +10,7 @@
 , pythonOlder
 , pyyaml
 , rustPlatform
+, rustc
 , setuptools-rust
 , setuptools-scm
 , typing-extensions
@@ -18,23 +19,23 @@
 
 buildPythonPackage rec {
   pname = "libcst";
-  version = "0.4.1";
+  version = "0.4.9";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "instagram";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-soAlt1KBpCn5JxM1b2LZ3vOpBn9HPGdbm+BBYbyEkfE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ikddvKsvXMNHMfA9jUhvyiDXII0tTs/rE97IGI/azgA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "source/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256:1rz1c0dv3f1h2m5hwdisl3rbqnmifbva4f0c4vygk7rh1q27l515";
+    hash = "sha256-FWQGv3E5X+VEnTYD0uKN6W4USth8EQlEGbYgUAWZ5EQ=";
   };
 
   cargoRoot = "native";
@@ -51,20 +52,20 @@ buildPythonPackage rec {
     setuptools-rust
     setuptools-scm
     rustPlatform.cargoSetupHook
-  ] ++ (with rustPlatform; [ rust.cargo rust.rustc ]);
+    cargo
+    rustc
+  ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
   propagatedBuildInputs = [
-    hypothesis
     typing-extensions
     typing-inspect
     pyyaml
-  ] ++ lib.optional (pythonOlder "3.7") [
-    dataclasses
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    hypothesis
     pytestCheckHook
   ];
 
@@ -88,6 +89,6 @@ buildPythonPackage rec {
     description = "Concrete Syntax Tree (CST) parser and serializer library for Python";
     homepage = "https://github.com/Instagram/libcst";
     license = with licenses; [ mit asl20 psfl ];
-    maintainers = with maintainers; [ ruuda SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

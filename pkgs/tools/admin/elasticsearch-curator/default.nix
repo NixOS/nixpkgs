@@ -1,63 +1,80 @@
-{ lib, fetchFromGitHub, python }:
+{ lib
+, fetchFromGitHub
+, python3
+}:
 
-let
-py = python.override {
-  packageOverrides = self: super: {
-    click = super.click.overridePythonAttrs (oldAttrs: rec {
-      version = "6.7";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b";
-      };
-      doCheck = false;
-      postPatch = "";
-    });
-  };
-};
-in
-
-with py.pkgs;
-buildPythonApplication rec {
-  pname   = "elasticsearch-curator";
-  version = "5.8.1";
+python3.pkgs.buildPythonApplication rec {
+  pname = "elasticsearch-curator";
+  version = "8.0.4";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "curator";
-    rev = "v${version}";
-    sha256 = "1shr9jslirjnbvma3p19djsnamxl7f3m9c8zrlclk57zv8rnwpkr";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FPp2BpfYsmNwwevYQ6EH3N1q0TjyeEsBeDM9EUbLl+Q=";
   };
 
-  # The test hangs so we disable it.
-  doCheck = false;
+  pythonRelaxDeps = [
+    "click"
+    "ecs-logging"
+    "elasticsearch8"
+    "es_client"
+    "pyyaml"
+  ];
 
-  propagatedBuildInputs = [
-    click
+  nativeBuildInputs = with python3.pkgs; [
+    hatchling
+    pythonRelaxDepsHook
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
     certifi
-    requests-aws4auth
-    pyopenssl
-    voluptuous
+    click
+    ecs-logging
+    elasticsearch8
+    es-client
     pyyaml
-    elasticsearch
-    boto3
+    six
+    voluptuous
   ];
 
-  checkInputs = [
-    nosexcover
-    coverage
-    nose
+  nativeCheckInputs = with python3.pkgs; [
     mock
-    funcsigs
+    requests
+    pytestCheckHook
   ];
 
-  postPatch = ''
-    sed -i s/pyyaml==3.13/pyyaml/g setup.cfg setup.py
-    sed -i s/pyyaml==3.12/pyyaml/g setup.cfg setup.py
-    substituteInPlace setup.py \
-      --replace "urllib3>=1.24.2,<1.25" "urllib3"
-    substituteInPlace setup.cfg \
-      --replace "urllib3>=1.24.2,<1.25" "urllib3"
-  '';
+  disabledTestPaths = [
+    # Test requires running elasticsearch
+    "tests/integration/test_alias.py"
+    "tests/integration/test_allocation.py"
+    "tests/integration/test_cli.py"
+    "tests/integration/test_close.py"
+    "tests/integration/test_clusterrouting.py"
+    "tests/integration/test_count_pattern.py"
+    "tests/integration/test_create_index.py"
+    "tests/integration/test_datemath.py"
+    "tests/integration/test_delete_indices.py"
+    "tests/integration/test_delete_snapshots.py"
+    "tests/integration/test_delete_snapshots.py"
+    "tests/integration/test_es_repo_mgr.py"
+    "tests/integration/test_forcemerge.py"
+    "tests/integration/test_integrations.py"
+    "tests/integration/test_open.py"
+    "tests/integration/test_reindex.py"
+    "tests/integration/test_replicas.py"
+    "tests/integration/test_restore.py"
+    "tests/integration/test_rollover.py"
+    "tests/integration/test_shrink.py"
+    "tests/integration/test_snapshot.py"
+  ];
+
+  disabledTests = [
+    # Test require access network
+    "test_api_key_not_set"
+    "test_api_key_set"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/elastic/curator";
@@ -75,9 +92,7 @@ buildPythonApplication rec {
 
       * Perform various actions on the items which remain in the actionable list.
     '';
+    changelog = "https://github.com/elastic/curator/releases/tag/v${version}";
     maintainers = with maintainers; [ basvandijk ];
-
-    # https://github.com/elastic/curator/pull/1280
-    #broken = versionAtLeast click.version "7.0";
   };
 }

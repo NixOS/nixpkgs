@@ -1,6 +1,6 @@
 { akonadi-contacts
 , cmake
-, fetchgit
+, fetchFromGitLab
 , fetchsvn
 , gnupg
 , gpgme
@@ -29,12 +29,14 @@ let
   };
 in mkDerivation rec {
   pname = "trojita";
-  version = "unstable-2020-07-06";
+  version = "unstable-2022-08-22";
 
-  src = fetchgit {
-    url = "https://anongit.kde.org/trojita.git";
-    rev = "e973a5169f18ca862ceb8ad749c93cd621d86e14";
-    sha256 = "0r8nmlqwgsqkk0k8xh32fkwvv6iylj35xq2h8b7l3g03yc342kbn";
+  src = fetchFromGitLab {
+    domain = "invent.kde.org";
+    owner = "pim";
+    repo = "trojita";
+    rev = "91087933c5e7a03a8097c0ffe5f7289abcfc123b";
+    sha256 = "sha256-15G9YjT3qBKbeOKfb/IgXOO+DaJaTULP9NJn/MFYZS8=";
   };
 
   patches = (substituteAll {

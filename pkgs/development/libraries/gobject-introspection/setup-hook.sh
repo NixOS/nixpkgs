@@ -10,7 +10,7 @@ make_gobject_introspection_find_gir_files() {
     fi
 }
 
-addEnvHooks "$hostOffset" make_gobject_introspection_find_gir_files
+addEnvHooks "$targetOffset" make_gobject_introspection_find_gir_files
 
 giDiscoverSelf() {
     if [ -d "$prefix/lib/girepository-1.0" ]; then

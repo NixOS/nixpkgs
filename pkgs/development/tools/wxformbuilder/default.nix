@@ -1,35 +1,60 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, wxGTK31
-, meson
-, ninja
+, cmake
+, darwin
+, makeWrapper
+, shared-mime-info
+, boost
+, wxGTK32
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wxFormBuilder";
-  version = "unstable-2020-08-18";
+  version = "unstable-2023-04-21";
 
   src = fetchFromGitHub {
     owner = "wxFormBuilder";
     repo = "wxFormBuilder";
-    rev = "d053665cc33a79dd935b518b5e7aea6baf493c92";
-    sha256 = "sha256-hTO7Fyp5ZWpq2CfIYEXB85oOkNrqr6Njfh8h0t9B6wU=";
+    rev = "f026a8e1a7f68e794638f637e53845f8f04869ef";
     fetchSubmodules = true;
+    hash = "sha256-48J8osSBb5x9b8MYWZ5QGF6rWgwtcJ0PLLAYViDr50M=";
   };
 
+  postPatch = ''
+    substituteInPlace .git-properties \
+      --replace "\$Format:%h\$" "${builtins.substring 0 7 finalAttrs.src.rev}" \
+      --replace "\$Format:%(describe)\$" "${builtins.substring 0 7 finalAttrs.src.rev}"
+    sed -i '/fixup_bundle/d' cmake/macros.cmake
+  '';
+
   nativeBuildInputs = [
-    ninja
-    meson
+    cmake
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.sigtool
+    makeWrapper
+  ] ++ lib.optionals stdenv.isLinux [
+    shared-mime-info
   ];
 
   buildInputs = [
-    wxGTK31
+    boost
+    wxGTK32
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Cocoa
   ];
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    mv $out/wxFormBuilder.app $out/Applications
+    makeWrapper $out/{Applications/wxFormBuilder.app/Contents/MacOS,bin}/wxFormBuilder
+  '';
 
   meta = with lib; {
     description = "RAD tool for wxWidgets GUI design";
     homepage = "https://github.com/wxFormBuilder/wxFormBuilder";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ matthuszagh ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ matthuszagh wegank ];
+    platforms = platforms.unix;
   };
-}
+})

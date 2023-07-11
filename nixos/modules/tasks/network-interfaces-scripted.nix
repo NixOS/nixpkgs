@@ -85,12 +85,14 @@ let
         hasDefaultGatewaySet = (cfg.defaultGateway != null && cfg.defaultGateway.address != "")
                             || (cfg.enableIPv6 && cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "");
 
-        networkLocalCommands = {
+        needNetworkSetup = cfg.resolvconf.enable || cfg.defaultGateway != null || cfg.defaultGateway6 != null;
+
+        networkLocalCommands = lib.mkIf needNetworkSetup {
           after = [ "network-setup.service" ];
           bindsTo = [ "network-setup.service" ];
         };
 
-        networkSetup =
+        networkSetup = lib.mkIf needNetworkSetup
           { description = "Networking Setup";
 
             after = [ "network-pre.target" "systemd-udevd.service" "systemd-sysctl.service" ];
@@ -219,14 +221,15 @@ let
                     cidr = "${route.address}/${toString route.prefixLength}";
                     via = optionalString (route.via != null) ''via "${route.via}"'';
                     options = concatStrings (mapAttrsToList (name: val: "${name} ${val} ") route.options);
+                    type = toString route.type;
                   in
                   ''
                      echo "${cidr}" >> $state
                      echo -n "adding route ${cidr}... "
-                     if out=$(ip route add "${cidr}" ${options} ${via} dev "${i.name}" proto static 2>&1); then
+                     if out=$(ip route add ${type} "${cidr}" ${options} ${via} dev "${i.name}" proto static 2>&1); then
                        echo "done"
                      elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
-                       echo "'ip route add "${cidr}" ${options} ${via} dev "${i.name}"' failed: $out"
+                       echo "'ip route add ${type} "${cidr}" ${options} ${via} dev "${i.name}"' failed: $out"
                        exit 1
                      fi
                   ''
@@ -290,7 +293,7 @@ let
             script = ''
               # Remove Dead Interfaces
               echo "Removing old bridge ${n}..."
-              ip link show "${n}" >/dev/null 2>&1 && ip link del "${n}"
+              ip link show dev "${n}" >/dev/null 2>&1 && ip link del "${n}"
 
               echo "Adding bridge ${n}..."
               ip link add name "${n}" type bridge
@@ -393,7 +396,7 @@ let
             '';
             postStop = ''
               echo "Cleaning Open vSwitch ${n}"
-              echo "Shuting down internal ${n} interface"
+              echo "Shutting down internal ${n} interface"
               ip link set ${n} down || true
               echo "Deleting flows for ${n}"
               ovs-ofctl --protocols=${v.openFlowVersion} del-flows ${n} || true
@@ -456,7 +459,7 @@ let
             path = [ pkgs.iproute2 ];
             script = ''
               # Remove Dead Interfaces
-              ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+              ip link show dev "${n}" >/dev/null 2>&1 && ip link delete "${n}"
               ip link add link "${v.interface}" name "${n}" type macvlan \
                 ${optionalString (v.mode != null) "mode ${v.mode}"}
               ip link set "${n}" up
@@ -514,7 +517,7 @@ let
             path = [ pkgs.iproute2 ];
             script = ''
               # Remove Dead Interfaces
-              ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+              ip link show dev "${n}" >/dev/null 2>&1 && ip link delete "${n}"
               ip link add name "${n}" type sit \
                 ${optionalString (v.remote != null) "remote \"${v.remote}\""} \
                 ${optionalString (v.local != null) "local \"${v.local}\""} \
@@ -548,7 +551,7 @@ let
             path = [ pkgs.iproute2 ];
             script = ''
               # Remove Dead Interfaces
-              ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+              ip link show dev "${n}" >/dev/null 2>&1 && ip link delete "${n}"
               ip link add name "${n}" type ${v.type} \
                 ${optionalString (v.remote != null) "remote \"${v.remote}\""} \
                 ${optionalString (v.local != null) "local \"${v.local}\""} \
@@ -576,7 +579,7 @@ let
             path = [ pkgs.iproute2 ];
             script = ''
               # Remove Dead Interfaces
-              ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+              ip link show dev "${n}" >/dev/null 2>&1 && ip link delete "${n}"
               ip link add link "${v.interface}" name "${n}" type vlan id "${toString v.id}"
 
               # We try to bring up the logical VLAN interface. If the master

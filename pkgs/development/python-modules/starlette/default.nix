@@ -2,36 +2,41 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, aiofiles
+, hatchling
+
+# runtime
+, ApplicationServices
 , anyio
-, contextlib2
 , itsdangerous
 , jinja2
 , python-multipart
 , pyyaml
-, requests
-, aiosqlite
-, databases
+, httpx
+, typing-extensions
+
+# tests
 , pytestCheckHook
 , pythonOlder
 , trio
-, typing-extensions
-, ApplicationServices
 }:
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.19.0";
-  format = "setuptools";
+  version = "0.26.1";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-gjRTMzoQ8pqxjIusRwRXGs72VYo6xsp2DSUxmEr9KxU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-/zYqYmmCcOLU8Di9b4BzDLFtB5wYEEF1bYN6u2rb8Lg=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   postPatch = ''
     # remove coverage arguments to pytest
@@ -39,27 +44,27 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    aiofiles
     anyio
     itsdangerous
     jinja2
     python-multipart
     pyyaml
-    requests
-  ] ++ lib.optionals (pythonOlder "3.8") [
+    httpx
+  ] ++ lib.optionals (pythonOlder "3.10") [
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    contextlib2
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     ApplicationServices
   ];
 
-  checkInputs = [
-    aiosqlite
-    databases
+  nativeCheckInputs = [
     pytestCheckHook
     trio
     typing-extensions
+  ];
+
+  pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
+    "-W" "ignore::trio.TrioDeprecationWarning"
   ];
 
   disabledTests = [
@@ -73,6 +78,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/encode/starlette/releases/tag/${version}";
     homepage = "https://www.starlette.io/";
     description = "The little ASGI framework that shines";
     license = licenses.bsd3;

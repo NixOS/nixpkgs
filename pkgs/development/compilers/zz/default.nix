@@ -21,7 +21,12 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  cargoSha256 = "080rd8x4jsssnx4il80xcb81iw8pjcm70zckpa1hcijkw9104dgs";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "rsmt2-0.11.0" = "sha256-RwNsS0zge8uOXmgzTvDwp8AD70NspIZq0LgW/v3yrpA=";
+    };
+  };
 
   postPatch = ''
     # remove search path entry which would reference /build

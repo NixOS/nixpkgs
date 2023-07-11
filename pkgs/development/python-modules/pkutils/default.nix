@@ -3,12 +3,13 @@
 , fetchFromGitHub
 , nose
 , pythonOlder
+, pythonRelaxDepsHook
 , semver
 }:
 
 buildPythonPackage rec {
   pname = "pkutils";
-  version = "2.0.0";
+  version = "3.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -16,23 +17,25 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "reubano";
     repo = "pkutils";
-    rev = "v${version}";
-    sha256 = "sha256-jvRUjuxlcfmJOX50bnZR/pP2Axe1KDy9/KGXTL4yPxA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-AK+xX+LPz6IVLZedsqMUm7G28ue0s3pXgIzxS4EHHLE=";
   };
+
+  pythonRelaxDeps = [
+    "semver"
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = [
     semver
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
   ];
-
-  postPatch = ''
-    # Remove when https://github.com/reubano/pkutils/pull/4 merged
-    substituteInPlace requirements.txt \
-      --replace "semver>=2.2.1,<2.7.3" "semver"
-  '';
 
   checkPhase = ''
     runHook preCheck

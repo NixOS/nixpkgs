@@ -25,6 +25,5 @@ buildGoModule rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ timstott ];
     mainProgram = "lokalise2";
-    platforms = platforms.unix;
   };
 }

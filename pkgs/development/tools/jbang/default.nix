@@ -1,12 +1,12 @@
 { stdenv, lib, fetchzip, jdk, makeWrapper, coreutils, curl }:
 
 stdenv.mkDerivation rec {
-  version = "0.92.2";
+  version = "0.108.0";
   pname = "jbang";
 
   src = fetchzip {
     url = "https://github.com/jbangdev/jbang/releases/download/v${version}/${pname}-${version}.tar";
-    sha256 = "0gbdbjyyh2if3yfmwfd6d3yq8r25inhw7n44jbjw1pdqb6gk44z1";
+    sha256 = "sha256-RPWWCAys9hPjIOW8qhkLxXwtwSBRa6LpbM6B8uS5dFw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       jbang uses the java language to build scripts similar to groovy scripts. Dependencies are automatically
       downloaded and the java code runs.
     '';
-    homepage = "https://https://www.jbang.dev/";
+    homepage = "https://www.jbang.dev";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ moaxcp ];

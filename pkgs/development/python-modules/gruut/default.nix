@@ -1,15 +1,13 @@
 { lib
 , buildPythonPackage
 , callPackage
-, pythonOlder
 , fetchFromGitHub
-, Babel
+, babel
 , gruut-ipa
 , dateparser
 , jsonlines
 , num2words
 , python-crfsuite
-, dataclasses
 , python
 , networkx
 , glibcLocales
@@ -36,38 +34,36 @@ let
 in
 buildPythonPackage rec {
   pname = "gruut";
-  version = "2.2.3";
+  version = "2.3.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-B5fPUW4YaMzDDXxncfrWwxGdUizuaxnPImNMf1ZZJ/I=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-DD7gnvH9T2R6E19+exWE7Si+XEpfh0Iy5FYbycjgzgM=";
   };
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "dateparser~=1.0.0" "dateparser" \
       --replace "gruut_lang_en~=2.0.0" "gruut_lang_en" \
-      --replace "jsonlines~=1.2.0" "jsonlines"
+      --replace "jsonlines~=1.2.0" "jsonlines" \
+      --replace "networkx>=2.5.0,<3.0.0" "networkx"
   '';
 
   propagatedBuildInputs = [
-    Babel
+    babel
     gruut-ipa
     jsonlines
     num2words
     python-crfsuite
     dateparser
     networkx
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ] ++ (map (lang: callPackage ./language-pack.nix {
     inherit lang version format src;
   }) langPkgs);
 
-  checkInputs = [ glibcLocales pytestCheckHook ];
+  nativeCheckInputs = [ glibcLocales pytestCheckHook ];
 
   disabledTests = [
     # https://github.com/rhasspy/gruut/issues/25

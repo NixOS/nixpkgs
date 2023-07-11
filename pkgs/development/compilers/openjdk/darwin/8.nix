@@ -79,12 +79,18 @@ let
       EOF
     '';
 
+    # fixupPhase is moving the man to share/man which breaks it because it's a
+    # relative symlink.
+    postFixup = ''
+      ln -nsf ../zulu-${lib.versions.major version}.jdk/Contents/Home/man $out/share/man
+    '';
+
     passthru = {
       jre = jdk;
       home = jdk;
     };
 
-    meta = import ./meta.nix lib;
+    meta = import ./meta.nix lib version;
   };
 in
 jdk

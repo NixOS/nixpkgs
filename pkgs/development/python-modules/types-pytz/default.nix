@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "types-pytz";
-  version = "2021.3.6";
+  version = "2023.3.0.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-dFR/2Q2NirTx7t86NEp9GG2XSGlziV+BIhpxLh4s2ZM=";
+    hash = "sha256-7Nxw1UOq82FqfkhjFUOohPdCBfKEzv1mSd30TGqCCqw=";
   };
 
   # Modules doesn't have tests

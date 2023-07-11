@@ -6,19 +6,19 @@
 , requests
 , setuptools
 , pythonOlder
-, XlsxWriter
+, xlsxwriter
 }:
 
 buildPythonPackage rec {
   pname = "shodan";
-  version = "1.27.0";
+  version = "1.29.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-XkrnBuALYxZ6n/f34PM0QvxqxvC08mKci9Mswwf41VA=";
+    hash = "sha256-4q9iVOGdKo+k6Slzi+VR4l3Hqvw5RzLndufjD6RM4zk=";
   };
 
   propagatedBuildInputs = [
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     colorama
     requests
     setuptools
-    XlsxWriter
+    xlsxwriter
   ];
 
   # The tests require a shodan api key, so skip them.
@@ -39,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library and command-line utility for Shodan";
     homepage = "https://github.com/achillean/shodan-python";
+    changelog = "https://github.com/achillean/shodan-python/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ lihop ];
   };

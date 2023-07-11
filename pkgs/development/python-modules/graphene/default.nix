@@ -5,6 +5,7 @@
 , graphql-core
 , graphql-relay
 , promise
+, py
 , pytest-asyncio
 , pytest-benchmark
 , pytest-mock
@@ -17,16 +18,16 @@
 
 buildPythonPackage rec {
   pname = "graphene";
-  version = "3.0.0";
+  version = "3.2.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "graphql-python";
     repo = "graphene";
-    rev = "v${version}";
-    sha256 = "0qgp3nl6afyz6y27bw175hyqppx75pp1vqwl7nvlpwvgwyyc2mnl";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-kwF6oXp06w7r1PbPoJTCQ9teTExYMoqvIZDhtv5QNn8=";
   };
 
   propagatedBuildInputs = [
@@ -35,8 +36,9 @@ buildPythonPackage rec {
     graphql-relay
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     promise
+    py
     pytestCheckHook
     pytest-asyncio
     pytest-benchmark
@@ -49,15 +51,6 @@ buildPythonPackage rec {
     "--benchmark-disable"
   ];
 
-  disabledTests = [
-    # Expects different Exeception classes, but receives none of them
-    # https://github.com/graphql-python/graphene/issues/1346
-    "test_unexpected_error"
-  ] ++ lib.optionals (pythonAtLeast "3.10") [
-    "test_objecttype_as_container_extra_args"
-    "test_objecttype_as_container_invalid_kwargs"
-  ];
-
   pythonImportsCheck = [
     "graphene"
   ];
@@ -65,6 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "GraphQL Framework for Python";
     homepage = "https://github.com/graphql-python/graphene";
+    changelog = "https://github.com/graphql-python/graphene/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

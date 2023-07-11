@@ -6,15 +6,16 @@
 
 stdenv.mkDerivation rec {
   pname = "swaybg";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "swaybg";
     rev = "v${version}";
-    hash = "sha256-Lt/hn/K+CjcmU3Bs5wChiZq0VGNcraH4tSVYsmYnKjc=";
+    hash = "sha256-Qk5iGALlSVSzgBJzYzyLdLHhj/Zq1R4nFseACBmIBuA=";
   };
 
+  strictDeps = true;
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
   buildInputs = [ wayland wayland-protocols cairo gdk-pixbuf ];

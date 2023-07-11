@@ -1,23 +1,26 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, ansible
+, ansible-core
 , flaky
 , pytest-mock
 , pytestCheckHook
 , pyyaml
 , setuptools-scm
 , subprocess-tee
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "ansible-compat";
-  version = "2.0.2";
+  version = "4.1.2";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-xlGZXcMj7xRbq4V/7mVA/ryIH7cbf+r+gWPUnicxY6U=";
+    hash = "sha256-aWFi28EiPAtHQTamFmKz/kQRXUkN6NpgaxSc7lcrAe0=";
   };
 
   nativeBuildInputs = [
@@ -34,8 +37,8 @@ buildPythonPackage rec {
     export PATH=$PATH:$out/bin
   '';
 
-  checkInputs = [
-    ansible
+  nativeCheckInputs = [
+    ansible-core
     flaky
     pytest-mock
     pytestCheckHook
@@ -55,12 +58,15 @@ buildPythonPackage rec {
     "test_runtime"
   ];
 
-  pythonImportsCheck = [ "ansible_compat" ];
+  pythonImportsCheck = [
+    "ansible_compat"
+  ];
 
   meta = with lib; {
-    description = "A python package containing functions that help interacting with various versions of Ansible";
+    description = "Function collection that help interacting with various versions of Ansible";
     homepage = "https://github.com/ansible/ansible-compat";
+    changelog = "https://github.com/ansible/ansible-compat/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

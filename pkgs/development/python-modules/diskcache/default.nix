@@ -22,7 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-c/k8mx/T4RkseDobJ2gtcuom0A6Ewyw4aP2Bk9pxV+o=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-django
     pytest-xdist
     pytestCheckHook
@@ -43,6 +43,8 @@ buildPythonPackage rec {
     "test_incr_version"
     "test_get_or_set"
     "test_get_many"
+    # see https://github.com/grantjenks/python-diskcache/issues/260
+    "test_cache_write_unpicklable_object"
   ];
 
   pythonImportsCheck = [

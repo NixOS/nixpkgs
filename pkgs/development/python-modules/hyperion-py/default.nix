@@ -2,6 +2,7 @@
 , aiohttp
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pytestCheckHook
 , pythonOlder
 , pythonAtLeast
@@ -13,15 +14,23 @@
 buildPythonPackage rec {
   pname = "hyperion-py";
   version = "0.7.5";
-  disabled = pythonOlder "3.8" || pythonAtLeast "3.10";
+  disabled = pythonOlder "3.8";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dermotduffy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-arcnpCQsRuiWCrAz/t4TCjTe8DRDtRuzYp8k7nnjGDk=";
+    hash = "sha256-arcnpCQsRuiWCrAz/t4TCjTe8DRDtRuzYp8k7nnjGDk=";
   };
+
+  patches = [
+    (fetchpatch {
+      # python3.10 compat: Drop loop kwarg in asyncio.sleep call
+      url = "https://github.com/dermotduffy/hyperion-py/commit/f02af52fcce17888984c99bfc03935e372011394.patch";
+      hash = "sha256-4nfsQVxd77VV9INwNxTyFRDlAjwdTYqfSGuF487hFCs=";
+    })
+  ];
 
   nativeBuildInputs = [
     poetry-core
@@ -31,7 +40,7 @@ buildPythonPackage rec {
     aiohttp
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-aiohttp
     pytestCheckHook

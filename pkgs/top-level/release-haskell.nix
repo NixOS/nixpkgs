@@ -4,12 +4,12 @@
   https://hydra.nixos.org/jobset/nixpkgs/haskell-updates.
 
   To debug this expression you can use `hydra-eval-jobs` from
-  `pkgs.hydra-unstable` which prints the jobset description
+  `pkgs.hydra_unstable` which prints the jobset description
   to `stdout`:
 
   $ hydra-eval-jobs -I . pkgs/top-level/release-haskell.nix
 */
-{ supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ] }:
+{ supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ] }:
 
 let
 
@@ -39,12 +39,23 @@ let
       attrs:
         if lib.isDerivation attrs
         then [ attrs ]
-        else if lib.isAttrs attrs
-        then accumulateDerivations (lib.attrValues attrs)
-        else []
+        else lib.optionals (lib.isAttrs attrs) (accumulateDerivations (lib.attrValues attrs))
     ) jobList;
 
   # names of all subsets of `pkgs.haskell.packages`
+  #
+  # compilerNames looks like the following:
+  #
+  # ```
+  # {
+  #   ghc810 = "ghc810";
+  #   ghc8102Binary = "ghc8102Binary";
+  #   ghc8102BinaryMinimal = "ghc8102BinaryMinimal";
+  #   ghc8107 = "ghc8107";
+  #   ghc924 = "ghc924";
+  #   ...
+  # }
+  # ```
   compilerNames = lib.mapAttrs (name: _: name) pkgs.haskell.packages;
 
   # list of all compilers to test specific packages on
@@ -52,10 +63,32 @@ let
     ghc884
     ghc8107
     ghc902
-    ghc922
+    ghc924
+    ghc925
+    ghc926
+    ghc927
+    ghc928
+    ghc945
+    ghc962
   ];
 
   # packagePlatforms applied to `haskell.packages.*`
+  #
+  # This returns an attr set that looks like the following, where each Haskell
+  # package in the compiler attr set has its list of supported platforms as its
+  # value.
+  #
+  # ```
+  # {
+  #   ghc810 = {
+  #     conduit = [ ... ];
+  #     lens = [ "i686-cygwin" "x86_64-cygwin" ... "x86_64-windows" "i686-windows" ]
+  #     ...
+  #   };
+  #   ghc902 = { ... };
+  #   ...
+  # }
+  # ```
   compilerPlatforms = lib.mapAttrs
     (_: v: packagePlatforms v)
     pkgs.haskell.packages;
@@ -63,16 +96,86 @@ let
   # This function lets you specify specific packages
   # which are to be tested on a list of specific GHC
   # versions and returns a job set for all specified
-  # combinations. See `jobs` below for an example.
+  # combinations.
+  #
+  # You can call versionedCompilerJobs like the following:
+  #
+  # ```
+  # versionedCompilerJobs {
+  #   ghc-tags = ["ghc902" "ghc924"];
+  # }
+  # ```
+  #
+  # This would produce an output like the following:
+  #
+  # ```
+  # {
+  #   haskell.packages = {
+  #     ghc884 = {};
+  #     ghc810 = {};
+  #     ghc902 = {
+  #       ghc-tags = {
+  #         aarch64-darwin = <derivation...>;
+  #         aarch64-linux = <derivation...>;
+  #         ...
+  #       };
+  #     };
+  #     ghc924 = {
+  #       ghc-tags = { ... };
+  #     };
+  #     ...
+  #   };
+  # }
+  # ```
   versionedCompilerJobs = config: mapTestOn {
     haskell.packages =
-      (lib.mapAttrs (
-        ghc: jobs:
-        lib.filterAttrs (
-          jobName: platforms:
-          lib.elem ghc (config."${jobName}" or [])
-        ) jobs
-      ) compilerPlatforms);
+      let
+        # Mapping function that takes an attrset of jobs, and
+        # removes all jobs that are not specified in config.
+        #
+        # For example, imagine a call to onlyConfigJobs like:
+        #
+        # ```
+        # onlyConfigJobs
+        #   "ghc902"
+        #   {
+        #     conduit = [ ... ];
+        #     lens = [ "i686-cygwin" "x86_64-cygwin" ... "x86_64-windows" "i686-windows" ];
+        #   }
+        # ```
+        #
+        # onlyConfigJobs pulls out only those jobs that are specified in config.
+        #
+        # For instance, if config is `{ lens = [ "ghc902" ]; }`, then the above
+        # example call to onlyConfigJobs will return:
+        #
+        # ```
+        # { lens = [ "i686-cygwin" "x86_64-cygwin" ... "x86_64-windows" "i686-windows" ]; }
+        # ```
+        #
+        # If config is `{ lens = [ "ghc8107" ]; }`, then the above example call
+        # to onlyConfigJobs returns `{}`.
+        #
+        # onlyConfigJobs will also remove all platforms from a job that are not
+        # supported by the GHC it is compiled with.
+        onlyConfigJobs = ghc: jobs:
+          let
+            configFilteredJobset =
+              lib.filterAttrs
+                (jobName: platforms: lib.elem ghc (config."${jobName}" or []))
+                jobs;
+
+            # Remove platforms from each job that are not supported by GHC.
+            # This is important so that we don't build jobs for platforms
+            # where GHC can't be compiled.
+            jobsetWithGHCPlatforms =
+              lib.mapAttrs
+                (_: platforms: lib.intersectLists jobs.ghc platforms)
+                configFilteredJobset;
+          in
+          jobsetWithGHCPlatforms;
+      in
+      lib.mapAttrs onlyConfigJobs compilerPlatforms;
   };
 
   # hydra jobs for `pkgs` of which we import a subset of
@@ -129,11 +232,29 @@ let
   jobs = recursiveUpdateMany [
     (mapTestOn {
       haskellPackages = packagePlatforms pkgs.haskellPackages;
-      haskell.compiler = packagePlatforms pkgs.haskell.compiler;
+      haskell.compiler = packagePlatforms pkgs.haskell.compiler // (lib.genAttrs [
+        "ghcjs"
+        "ghcjs810"
+      ] (ghcjsName: {
+        # We can't build ghcjs itself, since it exceeds 3GB (Hydra's output limit) due
+        # to the size of its bundled libs. We can however save users a bit of compile
+        # time by building the bootstrap ghcjs on Hydra. For this reason, we overwrite
+        # the ghcjs attributes in haskell.compiler with a reference to the bootstrap
+        # ghcjs attribute in their bootstrap package set (exposed via passthru) which
+        # would otherwise be ignored by Hydra.
+        bootGhcjs = (packagePlatforms pkgs.haskell.compiler.${ghcjsName}.passthru).bootGhcjs;
+      }));
 
       tests.haskell = packagePlatforms pkgs.tests.haskell;
 
-      nixosTests.agda = (packagePlatforms pkgs.nixosTests).agda;
+      nixosTests = {
+        inherit (packagePlatforms pkgs.nixosTests)
+          agda
+          xmonad
+          xmonad-xdg-autostart
+        ;
+      };
+
       agdaPackages = packagePlatforms pkgs.agdaPackages;
 
       # top-level packages that depend on haskellPackages
@@ -159,6 +280,7 @@ let
         dhall-nix
         diagrams-builder
         elm2nix
+        emanote
         fffuu
         futhark
         ghcid
@@ -183,19 +305,19 @@ let
         hlint
         hpack
         # hyper-haskell  # depends on electron-10.4.7 which is marked as insecure
-        hyper-haskell-server-with-packages
+        # hyper-haskell-server-with-packages # hyper-haskell-server is broken
         icepeak
-        idris
         ihaskell
         jacinda
         jl
         koka
         krank
         lambdabot
+        lhs2tex
         madlang
         matterhorn
         mueval
-        neuron-notes
+        naproche
         niv
         nix-delegate
         nix-deploy
@@ -209,7 +331,6 @@ let
         nvfetcher
         ormolu
         pandoc
-        pakcs
         petrinizer
         place-cursor-at
         pinboard-notes-backup
@@ -227,7 +348,7 @@ let
         taffybar
         tamarin-prover
         taskell
-        termonad-with-packages
+        termonad
         tldr-hs
         tweet-hs
         update-nix-fetchgit
@@ -237,6 +358,7 @@ let
         vaultenv
         wstunnel
         xmobar
+        xmonadctl
         xmonad-with-packages
         yi
         zsh-git-prompt
@@ -266,6 +388,7 @@ let
 
           # Can't be built with musl, see meta.broken comment in the drv
           integer-simple.ghc884 = {};
+          integer-simple.ghc88 = {};
         };
 
       # Get some cache going for MUSL-enabled GHC.
@@ -280,6 +403,7 @@ let
 
             # musl only supports linux, not darwin.
             "x86_64-darwin"
+            "aarch64-darwin"
           ]
           {
             inherit (packagePlatforms pkgs.pkgsMusl.haskellPackages)
@@ -292,27 +416,58 @@ let
       # Test some statically linked packages to catch regressions
       # and get some cache going for static compilation with GHC.
       # Use integer-simple to avoid GMP linking problems (LGPL)
-      pkgsStatic.haskell.packages =
+      pkgsStatic =
         removePlatforms
           [
             "aarch64-linux" # times out on Hydra
-            "x86_64-darwin" # TODO: reenable when static libiconv works on darwin
+
+            # Static doesn't work on darwin
+            "x86_64-darwin"
+            "aarch64-darwin"
           ] {
-            integer-simple.ghc8107 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.integer-simple.ghc8107)
+            haskellPackages = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskellPackages)
                 hello
                 lens
                 random
                 QuickCheck
+                cabal2nix
+                terminfo # isn't bundled for cross
+                xhtml # isn't bundled for cross
               ;
             };
 
-            native-bignum.ghc902 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc902)
+            haskell.packages.native-bignum.ghc928 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc928)
                 hello
                 lens
                 random
                 QuickCheck
+                cabal2nix
+                terminfo # isn't bundled for cross
+                xhtml # isn't bundled for cross
+              ;
+            };
+          };
+
+      pkgsCross.ghcjs =
+        removePlatforms
+          [
+            # Hydra output size of 3GB is exceeded
+            "aarch64-linux"
+          ]
+          {
+            haskellPackages = {
+              inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskellPackages)
+                ghc
+                hello
+              ;
+            };
+
+            haskell.packages.ghcHEAD = {
+              inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghcHEAD)
+                ghc
+                hello
               ;
             };
           };
@@ -326,15 +481,37 @@ let
       # working as expected.
       cabal-install = released;
       Cabal_3_6_3_0 = released;
-      cabal2nix = released;
-      cabal2nix-unstable = released;
-      funcmp = released;
-      haskell-language-server = released;
-      hoogle = released;
-      hlint = released;
+      Cabal_3_8_1_0 = released;
+      Cabal-syntax_3_8_1_0 = released;
+      Cabal_3_10_1_0 = released;
+      Cabal-syntax_3_10_1_0 = released;
+      cabal2nix = lib.subtractLists [
+        compilerNames.ghc962
+      ] released;
+      cabal2nix-unstable = lib.subtractLists [
+        compilerNames.ghc962
+      ] released;
+      funcmp = lib.subtractLists [
+        compilerNames.ghc962
+      ] released;
+      haskell-language-server = lib.subtractLists [
+        # Support ceased as of 1.9.0.0
+        compilerNames.ghc884
+      ] released;
+      hoogle = lib.subtractLists [
+        compilerNames.ghc962
+      ] released;
+      hlint = lib.subtractLists [
+        compilerNames.ghc962
+      ] released;
+      hpack = lib.subtractLists [
+        compilerNames.ghc962
+      ] released;
       hsdns = released;
       jailbreak-cabal = released;
-      language-nix = released;
+      language-nix = lib.subtractLists [
+        compilerNames.ghc962
+      ] released;
       nix-paths = released;
       titlecase = released;
       ghc-api-compat = [
@@ -349,6 +526,26 @@ let
       ghc-lib = released;
       ghc-lib-parser = released;
       ghc-lib-parser-ex = released;
+      ghc-tags = [
+        compilerNames.ghc8107
+        compilerNames.ghc902
+        compilerNames.ghc924
+        compilerNames.ghc925
+        compilerNames.ghc926
+        compilerNames.ghc927
+        compilerNames.ghc928
+        compilerNames.ghc945
+      ];
+      weeder = [
+        compilerNames.ghc8107
+        compilerNames.ghc902
+        compilerNames.ghc924
+        compilerNames.ghc925
+        compilerNames.ghc926
+        compilerNames.ghc927
+        compilerNames.ghc928
+        compilerNames.ghc945
+      ];
     })
     {
       mergeable = pkgs.releaseTools.aggregate {
@@ -360,34 +557,43 @@ let
           '';
           maintainers = lib.teams.haskell.members;
         };
-        constituents = accumulateDerivations [
-          # haskell specific tests
-          jobs.tests.haskell
-          # important top-level packages
-          jobs.cabal-install
-          jobs.cabal2nix
-          jobs.cachix
-          jobs.darcs
-          jobs.haskell-language-server
-          jobs.hledger
-          jobs.hledger-ui
-          jobs.hpack
-          jobs.niv
-          jobs.pandoc
-          jobs.stack
-          jobs.stylish-haskell
-          # important haskell (library) packages
-          jobs.haskellPackages.cabal-plan
-          jobs.haskellPackages.distribution-nixpkgs
-          jobs.haskellPackages.hackage-db
-          jobs.haskellPackages.xmonad
-          jobs.haskellPackages.xmonad-contrib
-          # haskell packages maintained by @peti
-          # imported from the old hydra jobset
-          jobs.haskellPackages.hopenssl
-          jobs.haskellPackages.hsemail
-          jobs.haskellPackages.hsyslog
-        ];
+        constituents =
+          let
+            # Filter out all Darwin derivations.  We don't want flakey Darwin
+            # derivations and flakey Hydra Darwin builders to block the
+            # mergeable job from successfully building.
+            filterInLinux =
+              lib.filter (drv: drv.system == "x86_64-linux" || drv.system == "aarch64-linux");
+          in
+          filterInLinux
+            (accumulateDerivations [
+              # haskell specific tests
+              jobs.tests.haskell
+              # important top-level packages
+              jobs.cabal-install
+              jobs.cabal2nix
+              jobs.cachix
+              jobs.darcs
+              jobs.haskell-language-server
+              jobs.hledger
+              jobs.hledger-ui
+              jobs.hpack
+              jobs.niv
+              jobs.pandoc
+              jobs.stack
+              jobs.stylish-haskell
+              # important haskell (library) packages
+              jobs.haskellPackages.cabal-plan
+              jobs.haskellPackages.distribution-nixpkgs
+              jobs.haskellPackages.hackage-db
+              jobs.haskellPackages.xmonad
+              jobs.haskellPackages.xmonad-contrib
+              # haskell packages maintained by @peti
+              # imported from the old hydra jobset
+              jobs.haskellPackages.hopenssl
+              jobs.haskellPackages.hsemail
+              jobs.haskellPackages.hsyslog
+            ]);
       };
       maintained = pkgs.releaseTools.aggregate {
         name = "maintained-haskell-packages";
@@ -415,11 +621,19 @@ let
           jobs.pkgsMusl.haskell.compiler.ghc884
           jobs.pkgsMusl.haskell.compiler.ghc8107
           jobs.pkgsMusl.haskell.compiler.ghc902
-          jobs.pkgsMusl.haskell.compiler.ghc922
+          jobs.pkgsMusl.haskell.compiler.ghc924
+          jobs.pkgsMusl.haskell.compiler.ghc925
+          jobs.pkgsMusl.haskell.compiler.ghc926
+          jobs.pkgsMusl.haskell.compiler.ghc927
+          jobs.pkgsMusl.haskell.compiler.ghc928
           jobs.pkgsMusl.haskell.compiler.ghcHEAD
           jobs.pkgsMusl.haskell.compiler.integer-simple.ghc8107
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc902
-          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc922
+          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc924
+          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc925
+          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc926
+          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc927
+          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc928
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghcHEAD
         ];
       };
@@ -434,12 +648,8 @@ let
           ];
         };
         constituents = accumulateDerivations [
-          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8107.hello
-          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8107.lens
-          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8107.random
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc902.hello
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc902.lens
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc902.random
+          jobs.pkgsStatic.haskellPackages
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc928
         ];
       };
     }

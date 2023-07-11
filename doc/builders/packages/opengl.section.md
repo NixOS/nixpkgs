@@ -12,4 +12,4 @@ The NixOS desktop or other non-headless configurations are the primary target fo
 
 If you are using a non-NixOS GNU/Linux/X11 desktop with free software video drivers, consider launching OpenGL-dependent programs from Nixpkgs with Nixpkgs versions of `libglvnd` and `mesa.drivers` in `LD_LIBRARY_PATH`. For Mesa drivers, the Linux kernel version doesn't have to match nixpkgs.
 
-For proprietary video drivers you might have luck with also adding the corresponding video driver package.
+For proprietary video drivers, you might have luck with also adding the corresponding video driver package.

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "batik";
-  version = "1.14";
+  version = "1.16";
 
   src = fetchurl {
     url = "mirror://apache/xmlgraphics/batik/binaries/batik-bin-${version}.tar.gz";
-    sha256 = "sha256-D06qgb5wdS5AahnznDnAGISPCZY/CPqJdGQFRwUsRhg=";
+    sha256 = "sha256-Y4bJ6X46sKx1+fmNkOS2RU7gn7n0fKDnkOYMq0S8fYM=";
   };
 
   meta = with lib; {
@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
     homepage = "https://xmlgraphics.apache.org/batik";
     license = licenses.asl20;
     platforms = platforms.unix;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
   };
 
   installPhase = ''

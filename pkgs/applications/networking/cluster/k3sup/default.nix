@@ -2,24 +2,25 @@
 , buildGoModule
 , fetchFromGitHub
 , makeWrapper
+, installShellFiles
 , bash
 , openssh
 }:
 
 buildGoModule rec {
   pname = "k3sup";
-  version = "0.11.3";
+  version = "0.12.13";
 
   src = fetchFromGitHub {
     owner = "alexellis";
     repo = "k3sup";
     rev = version;
-    sha256 = "sha256-6WYUmC2uVHFGLsfkA2EUOWmmo1dSKJzI4MEdRnlLgYY=";
+    sha256 = "sha256-lnr2zMp6gpOM1DtUFIniDd38zR1qnXCmcftlt7dL6P4=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
 
-  vendorSha256 = "sha256-Pd+BgPWoxf1AhP0o5SgFSvy4LyUQB7peKWJk0BMy7ds=";
+  vendorHash = "sha256-97m8xz46lvTtZoxO2+pjWmZyZnB2atPuVzYgS9DV+gI=";
 
   postConfigure = ''
     substituteInPlace vendor/github.com/alexellis/go-execute/pkg/v1/exec.go \
@@ -37,6 +38,11 @@ buildGoModule rec {
   postInstall = ''
     wrapProgram "$out/bin/k3sup" \
       --prefix PATH : ${lib.makeBinPath [ openssh ]}
+
+    installShellCompletion --cmd k3sup \
+      --bash <($out/bin/k3sup completion bash) \
+      --zsh <($out/bin/k3sup completion zsh) \
+      --fish <($out/bin/k3sup completion fish)
   '';
 
   meta = with lib; {

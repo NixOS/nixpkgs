@@ -20,22 +20,22 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "displaylink";
-  version = "5.5.0-59.151";
+  version = "5.7.0-61.129";
 
   src = requireFile rec {
-    name = "displaylink-55.zip";
-    sha256 = "0pswmczzrqqq0s0ksp6rfnkm693ligq4nblki1v53jdh0y7d1gff";
+    name = "displaylink-570.zip";
+    sha256 = "807f1c203ac1e71c6f1f826493b9bb32e277f07cb2cf48537bf8cfdc68dd1515";
     message = ''
       In order to install the DisplayLink drivers, you must first
       comply with DisplayLink's EULA and download the binaries and
       sources from here:
 
-      https://www.synaptics.com/products/displaylink-graphics/downloads/ubuntu-5.5
+      https://www.synaptics.com/products/displaylink-graphics/downloads/ubuntu-5.7
 
       Once you have downloaded the file, please use the following
       commands and re-run the installation:
 
-      mv \$PWD/"DisplayLink USB Graphics Software for Ubuntu5.5-EXE.zip" \$PWD/${name}
+      mv \$PWD/"DisplayLink USB Graphics Software for Ubuntu5.7-EXE.zip" \$PWD/${name}
       nix-prefetch-url file://\$PWD/${name}
     '';
   };
@@ -67,12 +67,12 @@ stdenv.mkDerivation rec {
   dontStrip = true;
   dontPatchELF = true;
 
-
   meta = with lib; {
     description = "DisplayLink DL-5xxx, DL-41xx and DL-3x00 Driver for Linux";
-    maintainers = with maintainers; [ nshalman abbradar peterhoeg eyjhb ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
-    license = licenses.unfree;
     homepage = "https://www.displaylink.com/";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ abbradar ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
+    hydraPlatforms = [];
   };
 }

@@ -1,5 +1,7 @@
 { lib
+, stdenv
 , buildPythonPackage
+, pythonAtLeast
 , pythonOlder
 , fetchFromGitHub
 , fetchpatch
@@ -30,32 +32,27 @@
 
 buildPythonPackage rec {
   pname = "cirq-core";
-  version = "0.13.1";
+  version = "1.1.0";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  # Upstream package is broken on Python 3.11 https://github.com/quantumlib/Cirq/issues/6018
+  disabled = pythonOlder "3.7" || pythonAtLeast "3.11";
 
   src = fetchFromGitHub {
     owner = "quantumlib";
     repo = "cirq";
-    rev = "v${version}";
-    sha256 = "sha256-MVfJ8iEeW8gFvCNTqrWfYpNNYuDAufHgcjd7Nh3qp8U=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-5j4hbG95KRfRQTyyZgoNp/eHIcy0FphyEhbYnzyUMO4=";
   };
 
   sourceRoot = "source/${pname}";
 
   patches = [
-    # present in upstream master - remove after 0.13.1
+    # https://github.com/quantumlib/Cirq/pull/5991
     (fetchpatch {
-      name = "fix-test-tolerances.part-1.patch";
-      url = "https://github.com/quantumlib/Cirq/commit/eb1d9031e55d3c8801ea44abbb6a4132b2fc5126.patch";
-      sha256 = "0ka24v6dfxnap9p07ni32z9zccbmw0lbrp5mcknmpsl12hza98xm";
+      url = "https://build.opensuse.org/public/source/openSUSE:Factory/python-cirq/cirq-pr5991-np1.24.patch?rev=8";
       stripLen = 1;
-    })
-    (fetchpatch {
-      name = "fix-test-tolerances.part-2.patch";
-      url = "https://github.com/quantumlib/Cirq/commit/a28d601b2bcfc393336375c53e5915fd16455395.patch";
-      sha256 = "0k2dqsm4ydn6556d40kc8j04jgjn59z4wqqg1jn1r916a7yxw493";
-      stripLen = 1;
+      hash = "sha256-d2FpaxM1PsPWT9ZM9v2gVrnLCy9zmvkkyAVgo85eL3U=";
     })
   ];
 
@@ -63,7 +60,7 @@ buildPythonPackage rec {
     substituteInPlace requirements.txt \
       --replace "matplotlib~=3.0" "matplotlib" \
       --replace "networkx~=2.4" "networkx" \
-      --replace "numpy~=1.16" "numpy"
+      --replace "numpy>=1.16,<1.24" "numpy"
   '';
 
   propagatedBuildInputs = [
@@ -87,19 +84,26 @@ buildPythonPackage rec {
     quimb
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
     freezegun
   ];
 
-  pytestFlagsArray = lib.optionals (!withContribRequires) [
-    # requires external (unpackaged) libraries, so untested.
-    "--ignore=cirq/contrib/"
+  disabledTestPaths = lib.optionals (!withContribRequires) [
+    # Requires external (unpackaged) libraries, so untested
+    "cirq/contrib/"
+    # No need to test the version number
+    "cirq/_version_test.py"
   ];
+
   disabledTests = [
-    "test_metadata_search_path" # tries to import flynt, which isn't in Nixpkgs
-    "test_benchmark_2q_xeb_fidelities" # fails due pandas MultiIndex. Maybe issue with pandas version in nix?
+    # Tries to import flynt, which isn't in Nixpkgs
+    "test_metadata_search_path"
+    # Fails due pandas MultiIndex. Maybe issue with pandas version in nix?
+    "test_benchmark_2q_xeb_fidelities"
+    # https://github.com/quantumlib/Cirq/pull/5991
+    "test_json_and_repr_data"
   ];
 
   meta = with lib; {
@@ -108,5 +112,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/quantumlib/Cirq/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger fab ];
+    broken = (stdenv.isLinux && stdenv.isAarch64);
   };
 }

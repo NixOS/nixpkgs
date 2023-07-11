@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
+, pythonOlder
 , toml
 , pyyaml
 , packaging
@@ -10,12 +10,14 @@
 
 buildPythonPackage rec {
   pname = "dparse";
-  version = "0.5.1";
-  disabled = isPy27;
+  version = "0.6.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a1b5f169102e1c894f9a7d5ccf6f9402a836a5d24be80a986c7ce9eaed78f367";
+    hash = "sha256-J7uLS8rv7DmXaXuj9uBrJEcgC6JzwLCFw9ASoEVxtSg=";
   };
 
   propagatedBuildInputs = [
@@ -24,8 +26,12 @@ buildPythonPackage rec {
     packaging
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "dparse"
   ];
 
   disabledTests = [
@@ -36,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A parser for Python dependency files";
     homepage = "https://github.com/pyupio/dparse";
+    changelog = "https://github.com/pyupio/dparse/blob/${version}/HISTORY.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ thomasdesr ];
   };

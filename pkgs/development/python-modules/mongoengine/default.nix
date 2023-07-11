@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "mongoengine";
-  version = "0.24.0";
+  version = "0.26.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "MongoEngine";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-BQSB4SGlejARFreeTfqFMzCWvBc6Vvq9EOMLjhAihdI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-mPz9Nyoyke++e9vBWSKunc9VGHCP8pbmldgKty5HIMA=";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
     pillow
     coverage

@@ -1,53 +1,78 @@
 { stdenv
 , lib
+, fetchFromGitHub
 , fetchurl
-, python3
-, python3Packages
+, python310
 , nodePackages
 , wkhtmltopdf
-, callPackage
+, nixosTests
 }:
 
-with python3Packages;
-
 let
-  werkzeug = python3Packages.callPackage ../../../development/python-modules/werkzeug/1.nix {};
-in
+  python = python310.override {
+    packageOverrides = self: super: {
+      pypdf2 = super.pypdf2.overridePythonAttrs (old: rec {
+        version = "1.28.6";
+        format = "setuptools";
 
-buildPythonApplication rec {
+        src = fetchFromGitHub {
+          owner = "py-pdf";
+          repo = "pypdf";
+          rev = version;
+          fetchSubmodules = true;
+          hash = "sha256-WnRbsy/PJcotZqY9mJPLadrYqkXykOVifLIbDyNf4s4=";
+        };
+
+        nativeBuildInputs = [];
+
+        nativeCheckInputs = with self; [ pytestCheckHook pillow ];
+      });
+      flask = super.flask.overridePythonAttrs (old: rec {
+        version = "2.1.3";
+        src = old.src.override {
+          inherit version;
+          hash = "sha256-FZcuUBffBXXD1sCQuhaLbbkCWeYgrI1+qBOjlrrVtss=";
+        };
+      });
+      werkzeug = super.werkzeug.overridePythonAttrs (old: rec {
+        version = "2.1.2";
+        src = old.src.override {
+          inherit version;
+          hash = "sha256-HOCOgJPtZ9Y41jh5/Rujc1gX96gN42dNKT9ZhPJftuY=";
+        };
+      });
+    };
+  };
+
+  odoo_version = "15.0";
+  odoo_release = "20230317";
+in python.pkgs.buildPythonApplication rec {
   pname = "odoo";
+  version = "${odoo_version}.${odoo_release}";
 
-  major = "15";
-  minor = "0";
-  patch = "20220126";
-
-  version = "${major}.${minor}.${patch}";
+  format = "setuptools";
 
   # latest release is at https://github.com/odoo/docker/blob/master/15.0/Dockerfile
   src = fetchurl {
-    url = "https://nightly.odoo.com/${major}.${minor}/nightly/src/odoo_${version}.tar.gz";
+    url = "https://nightly.odoo.com/${odoo_version}/nightly/src/odoo_${version}.tar.gz";
     name = "${pname}-${version}";
-    hash = "sha256-mofV0mNCdyzJecp0XegZBR/5NzHjis9kbpsUA/KJbZg=";
+    hash = "sha256-nJEFPtZhq7DLLDCL9xt0RV75d/a45o6hBKsUlQAWh1U="; # odoo
   };
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-    mock
-  ];
-
-  buildInputs = [
-    wkhtmltopdf
-    nodePackages.rtlcss
-  ];
+  unpackPhase = ''
+    tar xfz $src
+    cd odoo*
+  '';
 
   # needs some investigation
   doCheck = false;
 
-  makeWrapperArgs = [ "--prefix" "PATH" ":" "${lib.makeBinPath [ wkhtmltopdf nodePackages.rtlcss ]}" ];
+  makeWrapperArgs = [
+    "--prefix" "PATH" ":" "${lib.makeBinPath [ wkhtmltopdf nodePackages.rtlcss ]}"
+  ];
 
-  propagatedBuildInputs = [
-    Babel
+  propagatedBuildInputs = with python.pkgs; [
+    babel
     chardet
     decorator
     docutils
@@ -55,7 +80,6 @@ buildPythonApplication rec {
     freezegun
     gevent
     greenlet
-    html2text
     idna
     jinja2
     libsass
@@ -74,25 +98,31 @@ buildPythonApplication rec {
     pypdf2
     pyserial
     python-dateutil
-    ldap
+    python-ldap
     python-stdnum
     pytz
     pyusb
     qrcode
     reportlab
     requests
+    setuptools
     vobject
     werkzeug
     xlrd
-    XlsxWriter
+    xlsxwriter
     xlwt
     zeep
   ];
 
-  unpackPhase = ''
-    tar xfz $src
-    cd odoo*
-  '';
+  # takes 5+ minutes and there are not files to strip
+  dontStrip = true;
+
+  passthru = {
+    updateScript = ./update.sh;
+    tests = {
+      inherit (nixosTests) odoo;
+    };
+  };
 
   meta = with lib; {
     description = "Open Source ERP and CRM";

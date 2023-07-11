@@ -3,19 +3,23 @@
 , fetchFromGitHub
 , cmake
 , doxygen
+, gbenchmark
 , graphviz
+, gtest
 }:
 
 stdenv.mkDerivation rec {
   pname = "ftxui";
-  version = "2.0.0";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "ArthurSonzogni";
-    repo = pname;
+    repo = "ftxui";
     rev = "v${version}";
-    sha256 = "sha256-BfNUk2DbBpKMBEu1tQWl85tgjB/4NAh86VVSS9zAjKo=";
+    sha256 = "sha256-qFgCLV7sgGxlL18sThqpl+vyXL68GXcbYqMG7mXhsB4=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
@@ -23,8 +27,18 @@ stdenv.mkDerivation rec {
     graphviz
   ];
 
-  # gtest and gbenchmark don't seem to generate any binaries
-  doCheck = false;
+  checkInputs = [
+    gtest
+    gbenchmark
+  ];
+
+  cmakeFlags = [
+    "-DFTXUI_BUILD_EXAMPLES=OFF"
+    "-DFTXUI_BUILD_DOCS=ON"
+    "-DFTXUI_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"
+  ];
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   meta = with lib; {
     homepage = "https://github.com/ArthurSonzogni/FTXUI";
@@ -32,6 +46,6 @@ stdenv.mkDerivation rec {
     description = "Functional Terminal User Interface library for C++";
     license = licenses.mit;
     maintainers = [ maintainers.ivar ];
-    platforms = platforms.unix;
+    platforms = platforms.all;
   };
 }

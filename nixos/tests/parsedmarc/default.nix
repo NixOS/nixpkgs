@@ -84,8 +84,6 @@ in
             };
           };
 
-          services.elasticsearch.package = pkgs.elasticsearch-oss;
-
           environment.systemPackages = [
             (sendEmail "dmarc@localhost")
             pkgs.jq
@@ -155,11 +153,8 @@ in
                   ssl = true;
                   user = "alice";
                   password = "${pkgs.writeText "imap-password" "foobar"}";
-                  watch = true;
                 };
               };
-
-              services.elasticsearch.package = pkgs.elasticsearch-oss;
 
               environment.systemPackages = [
                 pkgs.jq

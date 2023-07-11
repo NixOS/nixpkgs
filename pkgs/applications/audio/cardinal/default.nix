@@ -1,9 +1,11 @@
 {
   stdenv
 , fetchFromGitHub
-, fetchpatch
 , fetchurl
-, fetchzip
+, cmake
+, dbus
+, fftwFloat
+, file
 , freetype
 , jansson
 , lib
@@ -13,41 +15,45 @@
 , libXext
 , libXrandr
 , libarchive
+, libjack2
 , liblo
 , libsamplerate
-, mesa
+, libsndfile
+, makeWrapper
 , pkg-config
 , python3
 , speexdsp
+, libglvnd
 }:
 
 stdenv.mkDerivation rec {
   pname = "cardinal";
-  version = "22.02";
+  version = "23.02";
 
   src = fetchurl {
     url =
-      "https://github.com/DISTRHO/Cardinal/releases/download/${version}/cardinal-${version}.tar.xz";
-    sha256 = "sha256-IVlAROFGFffTEU00NCmv74w1DRb7dNMp20FeBVoDrdM=";
+      "https://github.com/DISTRHO/Cardinal/releases/download/${version}/cardinal-${version}+deps.tar.xz";
+    sha256 = "sha256-5vEWTkEXIMG/re7Ex+YKh+ETLDuc2nihTPpYSg5LdRo=";
   };
-
-  patches = [
-    # see https://github.com/DISTRHO/Cardinal/issues/151#issuecomment-1041886260
-    (fetchpatch {
-      url =
-        "https://github.com/DISTRHO/Cardinal/commit/13e9ef37c5dd35d77a54b1cb006767be7a72ac69.patch";
-      sha256 = "sha256-NYUYLbLeBX1WEzjPi0s/T1N+EXQKyi0ifbPxgBYDjRs=";
-    })
-  ];
 
   prePatch = ''
     patchShebangs ./dpf/utils/generate-ttl.sh
   '';
 
+  dontUseCmakeConfigure = true;
   enableParallelBuilding = true;
+  strictDeps = true;
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    file
+    pkg-config
+    makeWrapper
+    python3
+  ];
   buildInputs = [
+    dbus
+    fftwFloat
     freetype
     jansson
     libGL
@@ -55,22 +61,33 @@ stdenv.mkDerivation rec {
     libXcursor
     libXext
     libXrandr
-    libXrandr
     libarchive
     liblo
     libsamplerate
-    mesa
-    python3
+    libsndfile
     speexdsp
+    libglvnd
   ];
 
+  hardeningDisable = [ "format" ];
   makeFlags = [ "SYSDEPS=true" "PREFIX=$(out)" ];
+
+  postInstall = ''
+    wrapProgram $out/bin/Cardinal \
+    --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libjack2 ]}
+
+    # this doesn't work and is mainly just a test tool for the developers anyway.
+    rm -f $out/bin/CardinalNative
+  '';
 
   meta = {
     description = "Plugin wrapper around VCV Rack";
     homepage = "https://github.com/DISTRHO/cardinal";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.magnetophon ];
+    mainProgram = "Cardinal";
     platforms = lib.platforms.all;
+    # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin;
   };
 }

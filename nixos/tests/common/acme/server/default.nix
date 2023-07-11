@@ -18,10 +18,10 @@
 #
 #   example = { nodes, ... }: {
 #     networking.nameservers = [
-#       nodes.acme.config.networking.primaryIPAddress
+#       nodes.acme.networking.primaryIPAddress
 #     ];
 #     security.pki.certificateFiles = [
-#       nodes.acme.config.test-support.acme.caCert
+#       nodes.acme.test-support.acme.caCert
 #     ];
 #   };
 # }
@@ -36,7 +36,7 @@
 #   acme = { nodes, lib, ... }: {
 #     imports = [ ./common/acme/server ];
 #     networking.nameservers = lib.mkForce [
-#       nodes.myresolver.config.networking.primaryIPAddress
+#       nodes.myresolver.networking.primaryIPAddress
 #     ];
 #   };
 #
@@ -76,24 +76,24 @@ let
 in {
   imports = [ ../../resolver.nix ];
 
-  options.test-support.acme = with lib; {
-    caDomain = mkOption {
-      type = types.str;
+  options.test-support.acme = {
+    caDomain = lib.mkOption {
+      type = lib.types.str;
       readOnly = true;
       default = domain;
-      description = ''
-        A domain name to use with the <literal>nodes</literal> attribute to
+      description = lib.mdDoc ''
+        A domain name to use with the `nodes` attribute to
         identify the CA server.
       '';
     };
-    caCert = mkOption {
-      type = types.path;
+    caCert = lib.mkOption {
+      type = lib.types.path;
       readOnly = true;
       default = testCerts.ca.cert;
-      description = ''
-        A certificate file to use with the <literal>nodes</literal> attribute to
+      description = lib.mdDoc ''
+        A certificate file to use with the `nodes` attribute to
         inject the test CA certificate used in the ACME server into
-        <option>security.pki.certificateFiles</option>.
+        {option}`security.pki.certificateFiles`.
       '';
     };
   };

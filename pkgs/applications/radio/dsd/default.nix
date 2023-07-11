@@ -7,13 +7,13 @@ assert portaudioSupport -> portaudio != null;
 
 stdenv.mkDerivation rec {
   pname = "dsd";
-  version = "2018-07-01";
+  version = "2022-03-14";
 
   src = fetchFromGitHub {
     owner = "szechyjs";
     repo = "dsd";
-    rev = "f175834e45a1a190171dff4597165b27d6b0157b";
-    sha256 = "0w4r13sxvjwacdwxr326zr6p77a8p6ny0g6im574jliw5j3shlhr";
+    rev = "59423fa46be8b41ef0bd2f3d2b45590600be29f0";
+    sha256 = "128gvgkanvh4n5bjnzkfk419hf5fdbad94fb8d8lv67h94vfchyd";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -22,10 +22,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals portaudioSupport [ portaudio ];
 
   doCheck = true;
-  preCheck = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD
-    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD
-  '';
 
   meta = with lib; {
     description = "Digital Speech Decoder";

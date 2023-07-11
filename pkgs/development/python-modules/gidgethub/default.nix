@@ -2,43 +2,48 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, setuptools
-, pytest-runner
-, pytest
-, pytest-asyncio
-, twisted
-, treq
-, tornado
-, aiohttp
 , uritemplate
 , pyjwt
+, pytestCheckHook
+, aiohttp
+, httpx
+, importlib-resources
+, pytest-asyncio
+, pytest-tornasync
 }:
 
 buildPythonPackage rec {
   pname = "gidgethub";
-  version = "5.1.0";
+  version = "5.3.0";
+  format = "flit";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-kNGTb6mA2XBaljYvpOWaKFEks3NigsiPgmdIgSMKTiU=";
+    hash = "sha256-ns59N/vOuBm4BWDn7Vj5NuSKZdN+xfVtt5FFFWtCaiU=";
   };
 
-  nativeBuildInputs = [ setuptools pytest-runner ];
-  checkInputs = [ pytest pytest-asyncio twisted treq tornado aiohttp ];
   propagatedBuildInputs = [
     uritemplate
     pyjwt
+  ]
+  ++ pyjwt.optional-dependencies.crypto;
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    aiohttp
+    httpx
+    importlib-resources
+    pytest-asyncio
+    pytest-tornasync
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "extras_require=extras_require," "extras_require=None,"
-  '';
-
-  # requires network (reqests github.com)
-  doCheck = false;
+  disabledTests = [
+    # Require internet connection
+    "test__request"
+    "test_get"
+  ];
 
   meta = with lib; {
     description = "An async GitHub API library";

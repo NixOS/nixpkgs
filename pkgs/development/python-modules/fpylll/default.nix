@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , fetchFromGitHub
 , buildPythonPackage
 , pkgconfig
@@ -14,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "fpylll";
-  version = "0.5.6";
+  version = "0.5.9";
 
   src = fetchFromGitHub {
     owner = "fplll";
     repo = "fpylll";
     rev = version;
-    sha256 = "sha256-Bxcc0941+pl2Uzam48qe+PFlcBWsJ0rDYZxrxIYQpEA=";
+    hash = "sha256-T6l6hKzRDevlLyLu5H+bnEdl0OhsPer1coCDiftbPAk=";
   };
 
   buildInputs = [
@@ -40,7 +41,7 @@ buildPythonPackage rec {
     pkgconfig
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 

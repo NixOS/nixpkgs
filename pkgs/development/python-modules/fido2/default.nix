@@ -1,34 +1,31 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, poetry-core
 , six
 , cryptography
 , mock
 , pyfakefs
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "fido2";
-  version = "0.9.3";
+  version = "1.1.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b45e89a6109cfcb7f1bb513776aa2d6408e95c4822f83a253918b944083466ec";
+    hash = "sha256-XcSVyoxZwcM3ODtLjDFNRrktXG/GUOcZhMbX+VQHn8M=";
   };
+
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [ six cryptography ];
 
-  checkInputs = [ mock pyfakefs ];
+  nativeCheckInputs = [ unittestCheckHook mock pyfakefs ];
 
-  # Testing with `python setup.py test` doesn't work:
-  # https://github.com/Yubico/python-fido2/issues/108#issuecomment-763513576
-  checkPhase = ''
-    runHook preCheck
-
-    python -m unittest discover -v
-
-    runHook postCheck
-  '';
+  unittestFlagsArray = [ "-v" ];
 
   pythonImportsCheck = [ "fido2" ];
 

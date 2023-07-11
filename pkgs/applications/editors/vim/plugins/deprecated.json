@@ -1,4 +1,8 @@
 {
+    "TrueZen-nvim": {
+        "date": "2022-09-02",
+        "new": "true-zen-nvim"
+    },
     "compe-tmux": {
         "date": "2021-12-21",
         "new": "cmp-tmux"
@@ -6,6 +10,10 @@
     "gist-vim": {
         "date": "2020-03-27",
         "new": "vim-gist"
+    },
+    "lua-dev-nvim": {
+        "date": "2022-10-20",
+        "new": "neodev-nvim"
     },
     "nvim-bufferline-lua": {
         "date": "2021-08-22",

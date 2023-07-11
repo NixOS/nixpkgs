@@ -1,14 +1,14 @@
 { lib
-, stdenv
+, gcc11Stdenv
 , fetchFromGitHub
 , cmake
 , nasm
-, openssl
+, openssl_1_1
 , python3
 , extraCmakeFlags ? [ ]
 }:
 
-stdenv.mkDerivation rec {
+gcc11Stdenv.mkDerivation rec {
   pname = "ipp-crypto";
   version = "2021.3";
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     nasm
-    openssl
+    openssl_1_1
     python3
   ];
 }

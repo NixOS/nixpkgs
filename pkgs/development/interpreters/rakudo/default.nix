@@ -1,12 +1,15 @@
-{ stdenv, fetchurl, perl, icu, zlib, gmp, lib, nqp, removeReferencesTo }:
+{ stdenv, fetchFromGitHub, perl, icu, zlib, gmp, lib, nqp, removeReferencesTo }:
 
 stdenv.mkDerivation rec {
   pname = "rakudo";
-  version = "2022.03";
+  version = "2023.06";
 
-  src = fetchurl {
-    url = "https://rakudo.org/dl/rakudo/rakudo-${version}.tar.gz";
-    sha256 = "sha256-A+IVsAGoeXR2GNb8GOt/icC4EvXlQ6Q+1mwTQ56ooic=";
+  src = fetchFromGitHub {
+    owner = "rakudo";
+    repo = "rakudo";
+    rev = version;
+    hash = "sha256-t+zZEokjcDXp8uuHaOHp1R9LuS0Q3CSDOWhbSFXlNaU=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ removeReferencesTo ];

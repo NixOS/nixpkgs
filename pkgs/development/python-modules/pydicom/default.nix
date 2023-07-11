@@ -11,22 +11,22 @@
 
 let
   pname = "pydicom";
-  version = "2.2.2";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
-    owner = "${pname}";
-    repo = "${pname}";
-    rev = "v${version}";
-    sha256 = "sha256-p5hJAUsactv6UEvbVaF+zk4iapx98eYkC9Zo+lzFATA=";
+    owner = "pydicom";
+    repo = "pydicom";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-xt0aK908lLgNlpcI86OSxy96Z/PZnQh7+GXzJ0VMQGA=";
   };
 
   # Pydicom needs pydicom-data to run some tests. If these files aren't downloaded
   # before the package creation, it'll try to download during the checkPhase.
   test_data = fetchFromGitHub {
-    owner = "${pname}";
-    repo = "${pname}-data";
+    owner = "pydicom";
+    repo = "pydicom-data";
     rev = "bbb723879690bb77e077a6d57657930998e92bd5";
-    sha256 = "sha256-dCI1temvpNWiWJYVfQZKy/YJ4ad5B0e9hEKHJnEeqzk=";
+    hash = "sha256-dCI1temvpNWiWJYVfQZKy/YJ4ad5B0e9hEKHJnEeqzk=";
   };
 
 in
@@ -34,13 +34,15 @@ buildPythonPackage {
   inherit pname version src;
   disabled = pythonOlder "3.6";
 
+  format = "setuptools";
+
   propagatedBuildInputs = [
     numpy
     pillow
     setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -53,8 +55,8 @@ buildPythonPackage {
     ln -s ${test_data}/data_store/data $HOME/.pydicom/data
   '';
 
-  # This test try to remove a dicom inside $HOME/.pydicom/data/ and download it again.
   disabledTests = [
+    # tries to remove a dicom inside $HOME/.pydicom/data/ and download it again
     "test_fetch_data_files"
   ] ++ lib.optionals stdenv.isAarch64 [
     # https://github.com/pydicom/pydicom/issues/1386

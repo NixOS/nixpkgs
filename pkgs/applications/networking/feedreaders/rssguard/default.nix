@@ -1,18 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qtwebengine, qttools, wrapGAppsHook, wrapQtAppsHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, qtwebengine
+, qttools
+, wrapGAppsHook
+, wrapQtAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "rssguard";
-  version = "4.1.2";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "martinrotter";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-aG7Wkn2CHe7Dumskd0+DMja95lzvBWnFXACSqfU7Ow0=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-oUXg3BjGTJsDfA0H2RlCEyNtpld/+jzUl2n9TYiudcY=";
   };
 
   buildInputs =  [ qtwebengine qttools ];
-  nativeBuildInputs = [ qmake wrapGAppsHook wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake wrapGAppsHook wrapQtAppsHook ];
   qmakeFlags = [ "CONFIG+=release" ];
 
   meta = with lib; {
@@ -23,6 +31,7 @@ stdenv.mkDerivation rec {
       for ownCloud/Nextcloud.
     '';
     homepage = "https://github.com/martinrotter/rssguard";
+    changelog = "https://github.com/martinrotter/rssguard/releases/tag/${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jluttine ];

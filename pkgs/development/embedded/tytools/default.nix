@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tytools";
-  version = "0.9.7";
+  version = "0.9.8";
 
   src = fetchFromGitHub {
     owner = "Koromix";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-iF2XyWSBBCO23iY/ni+QlpgtOuWKN2JTMTz+9OLEadk=";
+    sha256 = "sha256-MKhh0ooDZI1Ks8vVuPRiHhpOqStetGaAhE2ulvBstxA=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];

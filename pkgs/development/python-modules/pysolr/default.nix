@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  checkInputs = [ mock ];
+  nativeCheckInputs = [ mock ];
 
   doCheck = false; # requires network access
 

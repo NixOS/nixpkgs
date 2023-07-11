@@ -1,23 +1,34 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pysnmp
+, async-timeout
+, pysnmplib
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "atenpdu";
-  version = "0.3.2";
+  version = "0.6.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-hlbrjx6WKVJYaxrMT4fiRXlxKRcQU4AIQUVgA8mbWa8=";
+    hash = "sha256-Of7tQJNqaLDgO8nie6rSd1saMbauXJBp8vWfXYAziEE=";
   };
 
-  propagatedBuildInputs = [ pysnmp ];
+  propagatedBuildInputs = [
+    async-timeout
+    pysnmplib
+  ];
 
   # Project has no test
   doCheck = false;
-  pythonImportsCheck = [ "atenpdu" ];
+
+  pythonImportsCheck = [
+    "atenpdu"
+  ];
 
   meta = with lib; {
     description = "Python interface to control ATEN PE PDUs";

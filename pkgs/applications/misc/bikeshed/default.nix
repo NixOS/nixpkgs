@@ -22,11 +22,11 @@
 
 buildPythonApplication rec {
   pname = "bikeshed";
-  version = "3.4.3";
+  version = "3.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-vJW4yNbKCZraJ5vx8FheNsBl+zObGoLFgAVqoU0p9QQ=";
+    sha256 = "sha256-3fVo+B71SsJs+XF4+FWH2nz0ouTnpC/02fXYr1C9Jrk=";
   };
 
   # Relax requirements from "==" to ">="
@@ -72,6 +72,6 @@ buildPythonApplication rec {
     '';
     homepage = "https://tabatkins.github.io/bikeshed/";
     license = licenses.cc0;
-    maintainers = [ maintainers.kvark ];
+    maintainers = [];
   };
 }

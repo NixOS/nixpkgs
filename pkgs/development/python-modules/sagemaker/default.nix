@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonRelaxDepsHook
 , attrs
 , boto3
 , google-pasta
@@ -17,15 +18,22 @@
 
 buildPythonPackage rec {
   pname = "sagemaker";
-  version = "2.82.0";
+  version = "2.135.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-cQe4b5XpmaC9ZTanI9LKNTLw1HycxqaDCOuLfw/vBRY=";
+    hash = "sha256-ypdcqEYLxHbfnq1ycq3hVLThhIIs3pq29Fv33Ly2hbE=";
   };
+
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  pythonRelaxDeps = [
+    # FIXME: Remove when >= 2.111.0
+    "attrs"
+    "protobuf"
+  ];
 
   propagatedBuildInputs = [
     attrs

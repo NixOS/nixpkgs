@@ -133,12 +133,6 @@ if [[ $(grep --count "$oldHash" "$nixFile") != 1 ]]; then
     die "Couldn't locate old source hash '$oldHash' (or it appeared more than once) in '$nixFile'!"
 fi
 
-oldUrl=$(nix-instantiate $systemArg --eval -E "with $importTree; builtins.elemAt ($attr.$sourceKey.drvAttrs.urls or [ $attr.$sourceKey.url ]) 0" | tr -d '"')
-
-if [[ -z "$oldUrl" ]]; then
-    die "Couldn't evaluate source url from '$attr.$sourceKey'!"
-fi
-
 oldVersion=$(nix-instantiate $systemArg --eval -E "with $importTree; $attr.${versionKey} or (builtins.parseDrvName $attr.name).version" | tr -d '"')
 
 if [[ -z "$oldVersion" ]]; then
@@ -162,7 +156,6 @@ fi
 
 # Escape regex metacharacter that are allowed in store path names
 oldVersionEscaped=$(echo "$oldVersion" | sed -re 's|[.+]|\\&|g')
-oldUrlEscaped=$(echo "$oldUrl" | sed -re 's|[${}.+]|\\&|g')
 
 if [[ $(grep --count --extended-regexp "^\s*(let\b)?\s*$versionKey\s*=\s*\"$oldVersionEscaped\"" "$nixFile") = 1 ]]; then
     pattern="/\b$versionKey\b\s*=/ s|\"$oldVersionEscaped\"|\"$newVersion\"|"
@@ -184,19 +177,19 @@ elif [[ "$oldHashAlgo" = "null" ]]; then
 fi
 
 case "$oldHashAlgo" in
-    # Lengths of hex-encoded hashes
-    sha256) hashLength=64 ;;
-    sha512) hashLength=128 ;;
+    # Choose a temporary hash for given algorithm.
+    # Not using all-zeroes hash, since that is sometimes
+    # used for clean-up when updating multi-source packages.
+    # Created by hashing “update-source-version” string.
+    sha256) tempHash=AzH1rZFqEH8sovZZfJykvsEmCedEZWigQFHWHl6/PdE= ;;
+    sha512) tempHash=KFj9Fvco4AuCgLJIGRnVzyssRf7VGP2oi5CkH6ADvj75ow3am3h8pxefOgQlO+i33Q/BBnG/ST/F7B/0BvWHxw== ;;
     *) die "Unhandled hash algorithm '$oldHashAlgo' in '$attr'!" ;;
 esac
-
-# Make a temporary all-zeroes hash of $hashLength characters
-tempHash=$(printf '%0*d' "$hashLength" 0)
 
 if [[ -n "$sri" ]]; then
     # SRI hashes only support base64
     # SRI hashes need to declare the hash type as part of the hash
-    tempHash="$(nix hash to-sri --type "$oldHashAlgo" "$tempHash" 2>/dev/null \
+    tempHash="$(nix --extra-experimental-features nix-command hash to-sri --type "$oldHashAlgo" "$tempHash" 2>/dev/null \
         || nix to-sri --type "$oldHashAlgo" "$tempHash" 2>/dev/null)" \
         || die "Failed to convert hash to SRI representation!"
 fi
@@ -206,30 +199,36 @@ oldHashEscaped=$(echo "$oldHash" | sed -re 's|[+]|\\&|g')
 tempHashEscaped=$(echo "$tempHash" | sed -re 's|[+]|\\&|g')
 
 # Replace new version
-sed -i.bak "$nixFile" -re "$pattern"
-if cmp -s "$nixFile" "$nixFile.bak"; then
+sed -i.cmp "$nixFile" -re "$pattern"
+if cmp -s "$nixFile" "$nixFile.cmp"; then
     die "Failed to replace version '$oldVersion' to '$newVersion' in '$attr'!"
 fi
 
 # Replace new URL
 if [[ -n "$newUrl" ]]; then
-    sed -i "$nixFile" -re "s|\"$oldUrlEscaped\"|\"$newUrl\"|"
+    oldUrl=$(nix-instantiate $systemArg --eval -E "with $importTree; builtins.elemAt ($attr.$sourceKey.drvAttrs.urls or [ $attr.$sourceKey.url ]) 0" | tr -d '"')
+    if [[ -z "$oldUrl" ]]; then
+        die "Couldn't evaluate source url from '$attr.$sourceKey'!"
+    fi
 
-    if cmp -s "$nixFile" "$nixFile.bak"; then
+    # Escape regex metacharacter that are allowed in store path names
+    oldUrlEscaped=$(echo "$oldUrl" | sed -re 's|[${}.+]|\\&|g')
+
+    sed -i.cmp "$nixFile" -re "s|\"$oldUrlEscaped\"|\"$newUrl\"|"
+    if cmp -s "$nixFile" "$nixFile.cmp"; then
         die "Failed to replace source URL '$oldUrl' to '$newUrl' in '$attr'!"
     fi
 fi
 
-sed -i "$nixFile" -re "s|\"$oldHashEscaped\"|\"$tempHash\"|"
-if cmp -s "$nixFile" "$nixFile.bak"; then
+sed -i.cmp "$nixFile" -re "s|\"$oldHashEscaped\"|\"$tempHash\"|"
+if cmp -s "$nixFile" "$nixFile.cmp"; then
     die "Failed to replace source hash of '$attr' to a temporary hash!"
 fi
 
 # Replace new revision, if given
 if [[ -n "$newRevision" ]]; then
-    sed -i "$nixFile" -re "s|\"$oldRevision\"|\"$newRevision\"|"
-
-    if cmp -s "$nixFile" "$nixFile.bak"; then
+    sed -i.cmp "$nixFile" -re "s|\"$oldRevision\"|\"$newRevision\"|"
+    if cmp -s "$nixFile" "$nixFile.cmp"; then
         die "Failed to replace source revision '$oldRevision' to '$newRevision' in '$attr'!"
     fi
 fi
@@ -238,11 +237,15 @@ fi
 if [[ -z "$newHash" ]]; then
     nix-build $systemArg --no-out-link -A "$attr.$sourceKey" 2>"$attr.fetchlog" >/dev/null || true
     # FIXME: use nix-build --hash here once https://github.com/NixOS/nix/issues/1172 is fixed
-    newHash=$(sed '1,/hash mismatch in fixed-output derivation/d' "$attr.fetchlog" | grep --perl-regexp --only-matching 'got: +.+[:-]\K.+')
+    newHash=$(
+        sed '1,/hash mismatch in fixed-output derivation/d' "$attr.fetchlog" \
+        | grep --perl-regexp --only-matching 'got: +.+[:-]\K.+' \
+        || true # handled below
+    )
 
-    if [[ -n "$sri" ]]; then
+    if [[ -n "$newHash" && -n "$sri" ]]; then
         # nix-build preserves the hashing scheme so we can just convert the result to SRI using the old type
-        newHash="$(nix hash to-sri --type "$oldHashAlgo" "$newHash" 2>/dev/null \
+        newHash="$(nix --extra-experimental-features nix-command hash to-sri --type "$oldHashAlgo" "$newHash" 2>/dev/null \
             || nix to-sri --type "$oldHashAlgo" "$newHash" 2>/dev/null)" \
             || die "Failed to convert hash to SRI representation!"
     fi
@@ -254,16 +257,15 @@ if [[ -z "$newHash" ]]; then
 fi
 
 if [[ -z "${ignoreSameHash}" && "$oldVersion" != "$newVersion" && "$oldHash" = "$newHash" ]]; then
-    mv "$nixFile.bak" "$nixFile"
     die "Both the old and new source hashes of '$attr.$sourceKey' were equivalent. Please fix the package's source URL to be dependent on '\${version}'!"
 fi
 
-sed -i "$nixFile" -re "s|\"$tempHashEscaped\"|\"$newHash\"|"
-if cmp -s "$nixFile" "$nixFile.bak"; then
+sed -i.cmp "$nixFile" -re "s|\"$tempHashEscaped\"|\"$newHash\"|"
+if cmp -s "$nixFile" "$nixFile.cmp"; then
     die "Failed to replace temporary source hash of '$attr' to the final source hash!"
 fi
 
-rm -f "$nixFile.bak"
+rm -f "$nixFile.cmp"
 rm -f "$attr.fetchlog"
 
 if [ -n "$printChanges" ]; then

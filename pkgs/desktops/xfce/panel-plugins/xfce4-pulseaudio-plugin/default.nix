@@ -1,8 +1,6 @@
 { lib
 , mkXfceDerivation
 , automakeAddFlags
-, dbus-glib
-, dbus
 , exo
 , gtk3
 , libpulseaudio
@@ -18,14 +16,12 @@
 mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-pulseaudio-plugin";
-  version = "0.4.3";
-  sha256 = "sha256-+E1pyDP140xUbYPZXhdiEjdU0t8Un+IjV7Ek+hAX3OU=";
+  version = "0.4.7";
+  sha256 = "sha256-9fumaX4M6NTXHM1gGa4wB/Uq+CZIUnvm9kC+pJNbWXU=";
 
   nativeBuildInputs = [
     automakeAddFlags
   ];
-
-  NIX_CFLAGS_COMPILE = "-I${dbus-glib.dev}/include/dbus-1.0 -I${dbus.dev}/include/dbus-1.0";
 
   postPatch = ''
     substituteInPlace configure.ac.in --replace gio-2.0 gio-unix-2.0

@@ -11,9 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ];
 
-  NIX_CFLAGS_COMPILE = [
-    "-std=c++11"
-  ];
+  CXXFLAGS = "-std=c++11";
 
   enableParallelBuilding = true;
 
@@ -30,7 +28,7 @@ stdenv.mkDerivation rec {
       respect to a specified configuration. Dead code removal is an
       application of this sort.
     '';
-    homepage = "http://coan2.sourceforge.net/";
+    homepage = "https://coan2.sourceforge.net/";
     license = licenses.bsd3;
     platforms = platforms.all;
   };

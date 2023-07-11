@@ -6,8 +6,10 @@
 , fetchFromGitHub
 , html2text
 , lxml
+, markdown
 , pytestCheckHook
 , python-dateutil
+, pythonOlder
 , pytz
 , requests
 , simplejson
@@ -16,15 +18,22 @@
 
 buildPythonPackage rec {
   pname = "faraday-plugins";
-  version = "1.6.2";
+  version = "1.12.1";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday_plugins";
-    rev = "v${version}";
-    sha256 = "sha256-1YROdQvwfV5Wp7vsNYCy2X6yR6mplunchD0U4xGUNBc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-sDHqBGRJQuAj2zB7hcIy3u5iNCxBHO1ub0eHxfgd7kI=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "version=version," "version='${version}',"
+  '';
 
   propagatedBuildInputs = [
     beautifulsoup4
@@ -32,6 +41,7 @@ buildPythonPackage rec {
     colorama
     html2text
     lxml
+    markdown
     python-dateutil
     pytz
     requests
@@ -39,7 +49,7 @@ buildPythonPackage rec {
     tabulate
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -52,6 +62,9 @@ buildPythonPackage rec {
     # Fail because of missing faraday
     "test_detect_report"
     "test_process_report_summary"
+    # JSON parsing issue
+    "test_process_report_ignore_info"
+    "test_process_report_tags"
   ];
 
   pythonImportsCheck = [
@@ -61,6 +74,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Security tools report parsers for Faraday";
     homepage = "https://github.com/infobyte/faraday_plugins";
+    changelog = "https://github.com/infobyte/faraday_plugins/releases/tag/${version}";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
   };

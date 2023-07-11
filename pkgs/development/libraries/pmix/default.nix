@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pmix";
-  version = "3.2.3";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     repo = "openpmix";
     owner = "openpmix";
     rev = "v${version}";
-    sha256 = "sha256-w3j4zgEAn6RxIHAvy0B3MPFTV46ocCvc0Z36tN1T+rc=";
+    sha256 = "sha256-79zTZm549VRsqeziCuBT6l4jTJ6D/gZaMAvgHZm7jn4=";
   };
 
   postPatch = ''

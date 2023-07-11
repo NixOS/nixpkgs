@@ -9,7 +9,7 @@ let
     , nixosTests
     , tests
     , fetchurl
-    , makeWrapper
+    , makeBinaryWrapper
     , symlinkJoin
     , writeText
     , autoconf
@@ -27,9 +27,13 @@ let
     , system-sendmail
     , valgrind
     , xcbuild
+    , writeShellScript
+    , common-updater-scripts
+    , curl
+    , jq
 
     , version
-    , sha256
+    , hash
     , extraPatches ? [ ]
     , packageOverrides ? (final: prev: { })
     , phpAttrsOverrides ? (attrs: { })
@@ -43,12 +47,12 @@ let
     , phpdbgSupport ? true
 
       # Misc flags
-    , apxs2Support ? !stdenv.isDarwin
+    , apxs2Support ? false
     , argon2Support ? true
     , cgotoSupport ? false
     , embedSupport ? false
     , ipv6Support ? true
-    , systemdSupport ? stdenv.isLinux
+    , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
     , valgrindSupport ? !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
     , ztsSupport ? apxs2Support
     }@args:
@@ -91,7 +95,7 @@ let
               [ ]
               allExtensionFunctions;
 
-          getExtName = ext: lib.removePrefix "php-" (builtins.parseDrvName ext.name).name;
+          getExtName = ext: ext.extensionName;
 
           # Recursively get a list of all internal dependencies
           # for a list of extensions.
@@ -137,7 +141,7 @@ let
           phpWithExtensions = symlinkJoin {
             name = "php-with-extensions-${version}";
             inherit (php) version;
-            nativeBuildInputs = [ makeWrapper ];
+            nativeBuildInputs = [ makeBinaryWrapper ];
             passthru = php.passthru // {
               buildEnv = mkBuildEnv allArgs allExtensionFunctions;
               withExtensions = mkWithExtensions allArgs allExtensionFunctions;
@@ -166,15 +170,19 @@ let
               ln -s ${extraInit} $out/lib/php.ini
 
               if test -e $out/bin/php; then
-                wrapProgram $out/bin/php --set PHP_INI_SCAN_DIR $out/lib
+                wrapProgram $out/bin/php --set-default PHP_INI_SCAN_DIR $out/lib
               fi
 
               if test -e $out/bin/php-fpm; then
-                wrapProgram $out/bin/php-fpm --set PHP_INI_SCAN_DIR $out/lib
+                wrapProgram $out/bin/php-fpm --set-default PHP_INI_SCAN_DIR $out/lib
               fi
 
               if test -e $out/bin/phpdbg; then
-                wrapProgram $out/bin/phpdbg --set PHP_INI_SCAN_DIR $out/lib
+                wrapProgram $out/bin/phpdbg --set-default PHP_INI_SCAN_DIR $out/lib
+              fi
+
+              if test -e $out/bin/php-cgi; then
+                wrapProgram $out/bin/php-cgi --set-default PHP_INI_SCAN_DIR $out/lib
               fi
             '';
           };
@@ -202,7 +210,7 @@ let
             [ pcre2 ]
 
             # Enable sapis
-            ++ lib.optional pearSupport [ libxml2.dev ]
+            ++ lib.optionals pearSupport [ libxml2.dev ]
 
             # Misc deps
             ++ lib.optional apxs2Support apacheHttpd
@@ -219,19 +227,14 @@ let
             [ "--disable-all" ]
 
             # PCRE
-            ++ lib.optionals (lib.versionAtLeast version "7.4") [ "--with-external-pcre=${pcre2.dev}" ]
-            ++ [ "PCRE_LIBDIR=${pcre2}" ]
+            ++ [ "--with-external-pcre=${pcre2.dev}" ]
 
 
             # Enable sapis
             ++ lib.optional (!cgiSupport) "--disable-cgi"
             ++ lib.optional (!cliSupport) "--disable-cli"
             ++ lib.optional fpmSupport "--enable-fpm"
-            ++ lib.optional pearSupport [ "--with-pear" "--enable-xml" "--with-libxml" ]
-            ++ lib.optionals (pearSupport && (lib.versionOlder version "7.4")) [
-              "--enable-libxml"
-              "--with-libxml-dir=${libxml2.dev}"
-            ]
+            ++ lib.optionals pearSupport [ "--with-pear" "--enable-xml" "--with-libxml" ]
             ++ lib.optional pharSupport "--enable-phar"
             ++ lib.optional (!phpdbgSupport) "--disable-phpdbg"
 
@@ -244,8 +247,7 @@ let
             ++ lib.optional (!ipv6Support) "--disable-ipv6"
             ++ lib.optional systemdSupport "--with-fpm-systemd"
             ++ lib.optional valgrindSupport "--with-valgrind=${valgrind.dev}"
-            ++ lib.optional (ztsSupport && (lib.versionOlder version "8.0")) "--enable-maintainer-zts"
-            ++ lib.optional (ztsSupport && (lib.versionAtLeast version "8.0")) "--enable-zts"
+            ++ lib.optional ztsSupport "--enable-zts"
 
 
             # Sendmail
@@ -266,14 +268,7 @@ let
               done
 
               export EXTENSION_DIR=$out/lib/php/extensions
-            ''
-            # PKG_CONFIG need not be a relative path
-            + lib.optionalString (!lib.versionAtLeast version "7.4") ''
-              for i in $(find . -type f -name "*.m4"); do
-                substituteInPlace $i \
-                  --replace 'test -x "$PKG_CONFIG"' 'type -P "$PKG_CONFIG" >/dev/null'
-              done
-            '' + ''
+
               ./buildconf --copy --force
 
               if test -f $src/genfiles; then
@@ -298,7 +293,7 @@ let
 
           src = fetchurl {
             url = "https://www.php.net/distributions/php-${version}.tar.bz2";
-            inherit sha256;
+            inherit hash;
           };
 
           patches = [ ./fix-paths-php7.patch ] ++ extraPatches;
@@ -308,6 +303,19 @@ let
           outputs = [ "out" "dev" ];
 
           passthru = {
+            updateScript =
+              let
+                script = writeShellScript "php${lib.versions.major version}${lib.versions.minor version}-update-script" ''
+                  set -o errexit
+                  PATH=${lib.makeBinPath [ common-updater-scripts curl jq ]}
+                  new_version=$(curl --silent "https://www.php.net/releases/active" | jq --raw-output '."${lib.versions.major version}"."${lib.versions.majorMinor version}".version')
+                  update-source-version "$UPDATE_NIX_ATTR_PATH.unwrapped" "$new_version" "--file=$1"
+                '';
+              in [
+                script
+                # Passed as an argument so that update.nix can ensure it does not become a store path.
+                (./. + "/${lib.versions.majorMinor version}.nix")
+              ];
             buildEnv = mkBuildEnv { } [ ];
             withExtensions = mkWithExtensions { } [ ];
             overrideAttrs =
@@ -324,6 +332,7 @@ let
             description = "An HTML-embedded scripting language";
             homepage = "https://www.php.net/";
             license = licenses.php301;
+            mainProgram = "php";
             maintainers = teams.php.members;
             platforms = platforms.all;
             outputsToInstall = [ "out" "dev" ];

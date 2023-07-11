@@ -21,13 +21,13 @@
 
 gnuradio.pkgs.mkDerivation rec {
   pname = "gnss-sdr";
-  version = "0.0.16";
+  version = "0.0.17";
 
   src = fetchFromGitHub {
     owner = "gnss-sdr";
     repo = "gnss-sdr";
     rev = "v${version}";
-    sha256 = "sha256-ODe4k6PDGtDX11FrbggEbN3tc4UtATaItUIpCKl4JjM=";
+    sha256 = "sha256-0aAjkrVAswoRL/KANBSZ5Jq4Y9VwOHZKUKLpXDdKtk8=";
   };
 
   patches = [
@@ -35,21 +35,16 @@ gnuradio.pkgs.mkDerivation rec {
     # cpu_features which is bundled in the source. NOTE: Perhaps this patch
     # should be sent upstream.
     ./fix_libcpu_features_install_path.patch
-    # Fixes a compilation issue, should be removed on next release.
-    (fetchpatch {
-      url = "https://github.com/gnss-sdr/gnss-sdr/commit/8a42967c854e575f2dd9ee7ca81a2522eebb864b.patch";
-      sha256 = "sha256-W8BwC08QVtW0LUj5Q+j28aYG+713s+vQIzsWyrNUs1Q=";
-    })
   ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
     gnuradio.unwrapped.python
-    gnuradio.unwrapped.python.pkgs.Mako
+    gnuradio.unwrapped.python.pkgs.mako
     gnuradio.unwrapped.python.pkgs.six
   ];
-  checkInputs = [
+  nativeCheckInputs = [
     gtest
   ];
 
@@ -65,13 +60,10 @@ gnuradio.pkgs.mkDerivation rec {
     pugixml
     protobuf
     gnuradio.unwrapped.boost
+    gnuradio.unwrapped.logLib
   ] ++ lib.optionals (gnuradio.hasFeature "gr-uhd") [
     gnuradio.unwrapped.uhd
-  ] ++ (if (lib.versionAtLeast gnuradio.unwrapped.versionAttr.major "3.10") then [
-    gnuradio.unwrapped.spdlog
-  ] else [
-    gnuradio.unwrapped.log4cpp
-  ]) ++ lib.optionals (enableRawUdp) [
+  ] ++ lib.optionals (enableRawUdp) [
     libpcap
   ] ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
     thrift

@@ -1,6 +1,12 @@
 { supportedSystems, nixpkgs, pkgs, nix }:
 
-pkgs.runCommand "nixpkgs-release-checks" { src = nixpkgs; buildInputs = [nix]; } ''
+pkgs.runCommand "nixpkgs-release-checks"
+  {
+    src = nixpkgs;
+    buildInputs = [ nix ];
+    requiredSystemFeatures = [ "big-parallel" ]; # 1 thread but ~10G RAM; see #227945
+  }
+  ''
     set -o pipefail
 
     export NIX_STORE_DIR=$TMPDIR/store
@@ -19,12 +25,20 @@ pkgs.runCommand "nixpkgs-release-checks" { src = nixpkgs; buildInputs = [nix]; }
         exit 1
     fi
 
+    # Make sure that no paths collide on case-preserving or case-insensitive filesysytems.
+    conflictingPaths=$(find $src | awk '{ print $1 " " tolower($1) }' | sort -k2 | uniq -D -f 1 | cut -d ' ' -f 1)
+    if [[ -n $conflictingPaths ]]; then
+        echo "Files in nixpkgs must not vary only by case"
+        echo "The offending paths: $conflictingPaths"
+        exit 1
+    fi
+
     src2=$TMPDIR/foo
     cp -rd $src $src2
 
     # Check that all-packages.nix evaluates on a number of platforms without any warnings.
     for platform in ${pkgs.lib.concatStringsSep " " supportedSystems}; do
-        header "checking Nixpkgs on $platform"
+        echo "checking Nixpkgs on $platform"
 
         # To get a call trace; see https://nixos.org/manual/nixpkgs/stable/#function-library-lib.trivial.warn
         # Relies on impure eval

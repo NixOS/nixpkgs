@@ -1,32 +1,10 @@
 { lib
-, buildPythonPackage
+, python3
 , fetchPypi
-, pythonOlder
-
-# dependencies
-, defusedxml
-, django
-, django-gravatar2
-, django-haystack
-, django-mailman3
-, django-paintstore
-, django-q
-, django_compressor
-, django-extensions
-, djangorestframework
-, flufl_lock
-, mistune_2_0
-, networkx
-, psycopg2
-, python-dateutil
-, robot-detection
-
-# tests
-, beautifulsoup4
-, elasticsearch
-, mock
-, whoosh
+, fetchpatch
 }:
+
+with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "HyperKitty";
@@ -39,6 +17,21 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "sha256-gmkiK8pIHfubbbxNdm/D6L2o722FptxYgINYdIUOn4Y=";
   };
+
+  patches = [
+    # FIXME: backport Python 3.10 support fix, remove for next release
+    (fetchpatch {
+      url = "https://gitlab.com/mailman/hyperkitty/-/commit/551a44a76e46931fc5c1bcb341235d8f579820be.patch";
+      sha256 = "sha256-5XCrvyrDEqH3JryPMoOXSlVVDLQ+PdYBqwGYxkExdvk=";
+      includes = [ "hyperkitty/*" ];
+    })
+
+    # Fix for Python >=3.9.13
+    (fetchpatch {
+      url = "https://gitlab.com/mailman/hyperkitty/-/commit/3efe7507944dbdbfcfa4c182d332528712476b28.patch";
+      sha256 = "sha256-yXuhTbmfDiYEXEsnz+zp+xLHRqI4GtkOhGHN+37W0iQ=";
+    })
+  ];
 
   postPatch = ''
     # isort is a development dependency
@@ -54,11 +47,11 @@ buildPythonPackage rec {
     django-haystack
     django-mailman3
     django-q
-    django_compressor
+    django-compressor
     django-extensions
     djangorestframework
     flufl_lock
-    mistune_2_0
+    mistune
     networkx
     psycopg2
     python-dateutil
@@ -69,12 +62,12 @@ buildPythonPackage rec {
   # listed as dependencies in setup.py.  To use these, they should be
   # dependencies of the Django Python environment, but not of
   # HyperKitty so they're not included for people who don't need them.
-  checkInputs = [
+  nativeCheckInputs = [
     beautifulsoup4
     elasticsearch
     mock
     whoosh
-  ];
+  ] ++ beautifulsoup4.optional-dependencies.lxml;
 
   checkPhase = ''
     cd $NIX_BUILD_TOP/$sourceRoot

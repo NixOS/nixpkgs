@@ -32,7 +32,7 @@ buildPythonPackage rec {
     packaging
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
   ];
 
@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "Symbol hash for ELF files";
     homepage = "https://github.com/trendmicro/telfhash";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitLab
+, gitUpdater
 , appstream-glib
 , desktop-file-utils
 , fwupd
@@ -19,14 +20,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-firmware";
-  version = "42.1";
+  version = "43.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "gnome-firmware";
     rev = version;
-    sha256 = "9QZ98EElENWsME/jXoj9YJl2e+ipyLm0g4grQUwmnuE=";
+    sha256 = "oplypNSj028cVBn+eJxNm5pJltp7Cw5Oto/L39pI0vA=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +53,10 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dconsolekit=false"
   ];
+
+  passthru.updateScript = gitUpdater {
+    ignoredVersions = "(alpha|beta|rc).*";
+  };
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/gnome-firmware";

@@ -12,7 +12,16 @@ done
 # Remove unsupported flags.
 for flag in @hardening_unsupported_flags@; do
   unset -v "hardeningEnableMap[$flag]"
+  # fortify being unsupported implies fortify3 is unsupported
+  if [[ "$flag" = 'fortify' ]] ; then
+    unset -v "hardeningEnableMap['fortify3']"
+  fi
 done
+
+# make fortify and fortify3 mutually exclusive
+if [[ -n "${hardeningEnableMap[fortify3]-}" ]]; then
+  unset -v "hardeningEnableMap['fortify']"
+fi
 
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
   declare -a allHardeningFlags=(fortify stackprotector pie pic strictoverflow format)
@@ -36,9 +45,23 @@ fi
 
 for flag in "${!hardeningEnableMap[@]}"; do
   case $flag in
-    fortify)
-      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling fortify >&2; fi
-      hardeningCFlags+=('-O2' '-D_FORTIFY_SOURCE=2')
+    fortify | fortify3)
+      # Use -U_FORTIFY_SOURCE to avoid warnings on toolchains that explicitly
+      # set -D_FORTIFY_SOURCE=0 (like 'clang -fsanitize=address').
+      hardeningCFlags+=('-O2' '-U_FORTIFY_SOURCE')
+      case $flag in
+        fortify)
+          if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling fortify >&2; fi
+          hardeningCFlags+=('-D_FORTIFY_SOURCE=2')
+        ;;
+        fortify3)
+          if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling fortify3 >&2; fi
+          hardeningCFlags+=('-D_FORTIFY_SOURCE=3')
+        ;;
+        *)
+          # Ignore unsupported.
+          ;;
+      esac
       ;;
     stackprotector)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling stackprotector >&2; fi

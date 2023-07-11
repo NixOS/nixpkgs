@@ -1,23 +1,25 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchFromGitea
 , giflib
 , imlib2
 , libXft
 , libexif
 , libwebp
+, libinotify-kqueue
 , conf ? null
 }:
 
 stdenv.mkDerivation rec {
   pname = "nsxiv";
-  version = "29";
+  version = "31";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "nsxiv";
-    repo = pname;
+    repo = "nsxiv";
     rev = "v${version}";
-    hash = "sha256-JUF2cF6QeAXk6G76uMu3reaMgxp2RcqHDbamkNufwqE=";
+    hash = "sha256-X1ZMr5OADs9GIe/kp/kEqKMMHZMymd58m9+f0SPzn7s=";
   };
 
   buildInputs = [
@@ -26,18 +28,22 @@ stdenv.mkDerivation rec {
     libXft
     libexif
     libwebp
-  ];
+  ] ++ lib.optional stdenv.isDarwin libinotify-kqueue;
 
   preBuild = lib.optionalString (conf!=null) ''
     cp ${(builtins.toFile "config.def.h" conf)} config.def.h
   '';
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-linotify";
+
+  makeFlags = [ "CC:=$(CC)" ];
+
+  installFlags = [ "PREFIX=$(out)" ];
+
+  installTargets = [ "install-all" ];
 
   meta = with lib; {
-    homepage = "https://nsxiv.github.io/nsxiv/";
+    homepage = "https://nsxiv.codeberg.page/";
     description = "New Suckless X Image Viewer";
     longDescription = ''
       nsxiv is a fork of now unmaintained sxiv with the purpose of being a
@@ -54,8 +60,8 @@ stdenv.mkDerivation rec {
       - Display image name/path in X title
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres sikmir ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    changelog = "https://codeberg.org/nsxiv/nsxiv/src/tag/${src.rev}/etc/CHANGELOG.md";
   };
 }

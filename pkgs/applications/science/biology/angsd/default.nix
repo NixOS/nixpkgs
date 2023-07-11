@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "angsd";
-  version = "0.937";
+  version = "0.940";
 
   src = fetchFromGitHub {
     owner = "ANGSD";
     repo = "angsd";
-    sha256 = "1020gh066dprqhfi90ywqzqqnq7awn49wrkkjnizmmab52v00kxs";
-    rev = "${version}";
+    sha256 = "sha256-Ppxgy54pAnqJUzNX5c12NHjKTQyEEcPSpCEEVOyZ/LA=";
+    rev = version;
   };
 
   buildInputs = [ htslib zlib bzip2 xz curl openssl ];

@@ -1,16 +1,18 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, nix-update-script
+, gitUpdater
 , meson
 , ninja
 , vala
 , pkg-config
 , pantheon
 , python3
+, curl
 , gettext
 , glib
 , gtk3
+, json-glib
 , libwnck
 , libgee
 , libgtop
@@ -25,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "monitor";
-  version = "0.13.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "stsdc";
     repo = "monitor";
     rev = version;
-    sha256 = "sha256-qwx60cp3Q6PL1iwRP+M9Rtmxcis0EByi8fk13H4cXfc=";
+    sha256 = "sha256-ZTsb1xcJ7eeCEPebZW0anmG1SUPAzZakw4WzJql9VTQ=";
     fetchSubmodules = true;
   };
 
@@ -46,8 +48,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    curl
     glib
     gtk3
+    json-glib
     pantheon.granite
     pantheon.wingpanel
     libgee
@@ -72,11 +76,16 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
+
+    # Alternatively, using pkg-config here should just work.
+    substituteInPlace meson.build --replace \
+      "meson.get_compiler('c').find_library('libcurl', dirs: vapidir)" \
+      "meson.get_compiler('c').find_library('libcurl', dirs: '${curl.out}/lib')"
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
+    updateScript = gitUpdater {
+      ignoredVersions = "ci.*";
     };
   };
 

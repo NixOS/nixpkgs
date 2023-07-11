@@ -3,27 +3,27 @@
 , fetchFromGitHub
 , stdenv
 , Security
-, testVersion
+, testers
 , igrep
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "igrep";
-  version = "0.2.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "konradsz";
     repo = "igrep";
     rev = "v${version}";
-    sha256 = "sha256-CH0wf9EhNnfi93W/4IJf6bPqU4pgw6Q9965Wjln9pso=";
+    sha256 = "sha256-g6DY3+HwBNQ+jxByXyTJK5CjAaC48FpmsDf1qGGO/Lk=";
   };
 
-  cargoSha256 = "sha256-VnZuRLBt/Q+D89+jKm0rak+ID5oNbvN1k8or3pYzfIM=";
+  cargoHash = "sha256-7cSUIwWyWPxFDuRWplidbI93zbBV84T7e4Q//Uwj6N4=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   passthru.tests = {
-    version = testVersion { package = igrep; command = "ig --version"; };
+    version = testers.testVersion { package = igrep; command = "ig --version"; };
   };
 
   meta = with lib; {

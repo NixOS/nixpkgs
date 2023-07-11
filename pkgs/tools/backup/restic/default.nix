@@ -3,13 +3,13 @@
 
 buildGoModule rec {
   pname = "restic";
-  version = "0.13.0";
+  version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "restic";
     repo = "restic";
     rev = "v${version}";
-    sha256 = "sha256-pbCN262gyS5BSUTN9QU+x2Nnrc8mmCSQH6Inng4OS8c=";
+    hash = "sha256-YJBHk/B8+q5f0k5i5hpucsJK4T/cRu9Jv7+O6vlT64Q=";
   };
 
   patches = [
@@ -17,7 +17,7 @@ buildGoModule rec {
     ./0001-Skip-testing-restore-with-permission-failure.patch
   ];
 
-  vendorSha256 = "sha256-DWfCjGXjZnZa2mXPmXQmvGDtXb0H1wJqCgVsDjdVy9U=";
+  vendorHash = "sha256-GWFaCfiE8Ph2uBTBI0E47pH+EJsMsMr1NDuaIGvyXRM=";
 
   subPackages = [ "cmd/restic" ];
 
@@ -34,17 +34,19 @@ buildGoModule rec {
   '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     $out/bin/restic generate \
       --bash-completion restic.bash \
+      --fish-completion restic.fish \
       --zsh-completion restic.zsh \
       --man .
-    installShellCompletion restic.{bash,zsh}
+    installShellCompletion restic.{bash,fish,zsh}
     installManPage *.1
   '';
 
   meta = with lib; {
     homepage = "https://restic.net";
+    changelog = "https://github.com/restic/restic/blob/${src.rev}/CHANGELOG.md";
     description = "A backup program that is fast, efficient and secure";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsd2;
-    maintainers = [ maintainers.mbrgm ];
+    maintainers = [ maintainers.mbrgm maintainers.dotlambda ];
   };
 }

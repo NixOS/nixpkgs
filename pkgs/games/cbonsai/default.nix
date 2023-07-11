@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
   installFlags = [ "PREFIX=$(out)" ];
 
-  passthru.updateScript = nix-update-script { attrPath = pname; };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Grow bonsai trees in your terminal";

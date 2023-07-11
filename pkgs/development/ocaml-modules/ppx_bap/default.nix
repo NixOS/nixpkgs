@@ -15,9 +15,9 @@
 buildDunePackage rec {
   pname = "ppx_bap";
   version = "0.14";
-  useDune2 = true;
+  duneVersion = "3";
 
-  minimumOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.07";
 
   src = fetchFromGitHub {
     owner = "BinaryAnalysisPlatform";
@@ -44,8 +44,9 @@ buildDunePackage rec {
 
   meta = {
     description = "The set of ppx rewriters for BAP";
-    license = lib.licenses.mit;
     inherit (src.meta) homepage;
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
+    mainProgram = "ppx-bap";
   };
 }

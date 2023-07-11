@@ -12,15 +12,16 @@
 , openssl
 , withZstd ? false
 , zstd
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libzip";
-  version = "1.8.0";
+  version = "1.9.2";
 
   src = fetchurl {
-    url = "https://libzip.org/download/${pname}-${version}.tar.gz";
-    sha256 = "17l3ygrnbszm3b99dxmw94wcaqpbljzg54h4c0y8ss8aij35bvih";
+    url = "https://libzip.org/download/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-/Wp/dF3j1pz1YD7cnLM9KJDwGY5BUlXQmHoM8Q2CTG8=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -32,16 +33,23 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withOpenssl [ openssl ]
     ++ lib.optionals withZstd [ zstd ];
 
+  # Don't build the regression tests because they don't build with
+  # pkgsStatic and are not executed anyway.
+  cmakeFlags = [ "-DBUILD_REGRESS=0" ];
+
   preCheck = ''
     # regress/runtest is a generated file
     patchShebangs regress
   '';
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     homepage = "https://libzip.org/";
     description = "A C library for reading, creating and modifying zip archives";
     license = licenses.bsd3;
+    pkgConfigModules = [ "libzip" ];
     platforms = platforms.unix;
     changelog = "https://github.com/nih-at/libzip/blob/v${version}/NEWS.md";
   };
-}
+})

@@ -1,5 +1,4 @@
 { lib, stdenv, fetchFromGitHub, cmake, ninja
-, fetchpatch
 , secureBuild ? false
 }:
 
@@ -8,23 +7,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname   = "mimalloc";
-  version = "2.0.5";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner  = "microsoft";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "sha256-q3W/w1Ofqt6EbKF/Jf9wcC+7jAxh59B3cOGxudWQXlA=";
+    sha256 = "sha256-kYhfufffM4r+ZVgcjnulqFlf1756pirlPysGZnUBzt8=";
   };
-  patches = [
-    (fetchpatch {
-      name = "older-macos-fixes.patch";
-      url = "https://github.com/microsoft/mimalloc/commit/40e0507a5959ee218f308d33aec212c3ebeef3bb.patch";
-      sha256 = "15qx2a3axhhwbfzxdis98b8j14y9cfgca0i484aj2pjpqnm0pb8c";
-    })
-  ];
 
-  doCheck = true;
+  doCheck = !stdenv.hostPlatform.isStatic;
   preCheck = let
     ldLibraryPathEnv = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
   in ''
@@ -32,7 +24,11 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ninja ];
-  cmakeFlags = [ "-DMI_INSTALL_TOPLEVEL=ON" ] ++ lib.optional secureBuild [ "-DMI_SECURE=ON" ];
+  cmakeFlags = [ "-DMI_INSTALL_TOPLEVEL=ON" ]
+    ++ lib.optionals secureBuild [ "-DMI_SECURE=ON" ]
+    ++ lib.optionals stdenv.hostPlatform.isStatic [ "-DMI_BUILD_SHARED=OFF" ]
+    ++ lib.optionals (!doCheck) [ "-DMI_BUILD_TESTS=OFF" ]
+  ;
 
   postInstall = let
     rel = lib.versions.majorMinor version;

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, substituteAll
 , meson
 , ninja
 , gettext
@@ -13,15 +14,17 @@
 , enableZbar ? false
 , faacSupport ? false
 , faac
+, opencvSupport ? false
+, opencv4
 , faad2
 , ldacbt
 , libass
 , libkate
 , lrdf
 , ladspaH
+, lcms2
 , libnice
 , webrtc-audio-processing
-, webrtc-audio-processing_1
 , lilv
 , lv2
 , serd
@@ -37,7 +40,6 @@
 , bluez
 , chromaprint
 , curl
-, directfb
 , fdk_aac
 , flite
 , gsm
@@ -54,8 +56,7 @@
 , libusb1
 , neon
 , openal
-, opencv4
-, openexr
+, openexr_3
 , openh264
 , libopenmpt
 , pango
@@ -77,33 +78,53 @@
 , mjpegtools
 , libGLU
 , libGL
+, addOpenGLRunpath
+, gtk3
 , libintl
-, libgme
+, game-music-emu
 , openssl
 , x265
 , libxml2
 , srt
 , vo-aacenc
+, libfreeaptx
+, zxing-cpp
+, usrsctp
 , VideoToolbox
 , AudioToolbox
 , AVFoundation
+, Cocoa
 , CoreMedia
 , CoreVideo
 , Foundation
 , MediaToolbox
 , enableGplPlugins ? true
+, bluezSupport ? stdenv.isLinux
+# Causes every application using GstDeviceMonitor to send mDNS queries every 2 seconds
+, microdnsSupport ? false
+# Checks meson.is_cross_build(), so even canExecute isn't enough.
+, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
+, guiSupport ? true, directfb
 }:
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
-  version = "1.20.0";
+  version = "1.22.4";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-AVuNTZo5Xr9ETUCHaGeiA03TMEs61IvDoN0MHucdwR0=";
+    hash = "sha256-6q9TIkVl6qvVBco5xtV2lxm0V5XPUyzhzrYOGy6+maw=";
   };
+
+  patches = [
+    # Add fallback paths for nvidia userspace libraries
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit (addOpenGLRunpath) driverLink;
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -114,17 +135,18 @@ stdenv.mkDerivation rec {
     gettext
     gstreamer # for gst-tester-1.0
     gobject-introspection
+  ] ++ lib.optionals enableDocumentation [
+    hotdoc
   ] ++ lib.optionals stdenv.isLinux [
     wayland # for wayland-scanner
   ];
 
   buildInputs = [
+    gobject-introspection
     gst-plugins-base
     orc
-    # gobject-introspection has to be in both nativeBuildInputs and
-    # buildInputs. The build tries to link against libgirepository-1.0.so
-    gobject-introspection
     json-glib
+    lcms2
     ldacbt
     libass
     libkate
@@ -132,7 +154,6 @@ stdenv.mkDerivation rec {
     #webrtc-audio-processing_1 # required by isac
     libbs2b
     libmodplug
-    libmicrodns
     openjpeg
     libopenmpt
     libopus
@@ -145,13 +166,13 @@ stdenv.mkDerivation rec {
     libde265
     libdvdnav
     libdvdread
+    libnice
     qrencode
     libsndfile
     libusb1
     neon
     openal
-    opencv4
-    openexr
+    openexr_3
     openh264
     rtmpdump
     pango
@@ -162,14 +183,17 @@ stdenv.mkDerivation rec {
     libwebp
     xvidcore
     gnutls
-    libGL
-    libGLU
-    libgme
+    game-music-emu
     openssl
     libxml2
     libintl
     srt
     vo-aacenc
+    libfreeaptx
+    zxing-cpp
+    usrsctp
+  ] ++ lib.optionals opencvSupport [
+    opencv4
   ] ++ lib.optionals enableZbar [
     zbar
   ] ++ lib.optionals faacSupport [
@@ -179,8 +203,11 @@ stdenv.mkDerivation rec {
     mjpegtools
     faad2
     x265
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals bluezSupport [
     bluez
+  ] ++ lib.optionals microdnsSupport [
+    libmicrodns
+  ] ++ lib.optionals stdenv.isLinux [
     libva # vaapi requires libva -> libdrm -> libpciaccess, which is Linux-only in nixpkgs
     wayland
     wayland-protocols
@@ -192,11 +219,9 @@ stdenv.mkDerivation rec {
     mjpegtools
 
     chromaprint
-    directfb
     flite
     libdrm
     libgudev
-    libnice
     sbc
     spandsp
 
@@ -210,6 +235,13 @@ stdenv.mkDerivation rec {
     serd
     sord
     sratom
+
+    libGL
+    libGLU
+  ] ++ lib.optionals guiSupport [
+    gtk3
+  ] ++ lib.optionals (stdenv.isLinux && guiSupport) [
+    directfb
   ] ++ lib.optionals stdenv.isDarwin [
     # For unknown reasons the order is important, e.g. if
     # VideoToolbox is last, we get:
@@ -217,6 +249,7 @@ stdenv.mkDerivation rec {
     VideoToolbox
     AudioToolbox
     AVFoundation
+    Cocoa
     CoreMedia
     CoreVideo
     Foundation
@@ -225,10 +258,11 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
     "-Dglib-asserts=disabled" # asserts should be disabled on stable releases
 
+    "-Damfcodec=disabled" # Windows-only
     "-Davtp=disabled"
+    "-Ddirectshow=disabled" # Windows-only
     "-Ddts=disabled" # required `libdca` library not packaged in nixpkgs as of writing, and marked as "BIG FAT WARNING: libdca is still in early development"
     "-Dzbar=${if enableZbar then "enabled" else "disabled"}"
     "-Dfaac=${if faacSupport then "enabled" else "disabled"}"
@@ -248,7 +282,6 @@ stdenv.mkDerivation rec {
     "-Dmusepack=disabled"
     "-Dopenni2=disabled" # not packaged in nixpkgs as of writing
     "-Dopensles=disabled" # not packaged in nixpkgs as of writing
-    "-Dsctp=disabled" # required `usrsctp` library not packaged in nixpkgs as of writing
     "-Dsvthevcenc=disabled" # required `SvtHevcEnc` library not packaged in nixpkgs as of writing
     "-Dteletext=disabled" # required `zvbi` library not packaged in nixpkgs as of writing
     "-Dtinyalsa=disabled" # not packaged in nixpkgs as of writing
@@ -257,19 +290,24 @@ stdenv.mkDerivation rec {
     "-Dwasapi=disabled" # not packaged in nixpkgs as of writing / no Windows support
     "-Dwasapi2=disabled" # not packaged in nixpkgs as of writing / no Windows support
     "-Dwpe=disabled" # required `wpe-webkit` library not packaged in nixpkgs as of writing
-    "-Dzxing=disabled" # required `zxing-cpp` library not packaged in nixpkgs as of writing
     "-Disac=disabled" # depends on `webrtc-audio-coding-1` not compatible with 0.3
     "-Dgs=disabled" # depends on `google-cloud-cpp`
     "-Donnx=disabled" # depends on `libonnxruntime` not packaged in nixpkgs as of writing
-    "-Dopenaptx=disabled" # depends on older version of `libopenaptx` due to licensing conflict https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/merge_requests/2235
+    "-Dopenaptx=enabled" # since gstreamer-1.20.1 `libfreeaptx` is supported for circumventing the dubious license conflict with `libopenaptx`
+    "-Dopencv=${if opencvSupport then "enabled" else "disabled"}" # Reduces rebuild size when `config.cudaSupport = true`
+    "-Dmicrodns=${if microdnsSupport then "enabled" else "disabled"}"
+    "-Dbluez=${if bluezSupport then "enabled" else "disabled"}"
+    (lib.mesonEnable "doc" enableDocumentation)
   ]
   ++ lib.optionals (!stdenv.isLinux) [
+    "-Ddoc=disabled" # needs gstcuda to be enabled which is Linux-only
+    "-Dnvcodec=disabled" # Linux-only
     "-Dva=disabled" # see comment on `libva` in `buildInputs`
+  ] ++ lib.optionals (!stdenv.isLinux || !guiSupport) [
+    "-Ddirectfb=disabled"
   ]
   ++ lib.optionals stdenv.isDarwin [
-    "-Dbluez=disabled"
     "-Dchromaprint=disabled"
-    "-Ddirectfb=disabled"
     "-Dflite=disabled"
     "-Dkms=disabled" # renders to libdrm output
     "-Dlv2=disabled"
@@ -280,18 +318,18 @@ stdenv.mkDerivation rec {
     "-Duvch264=disabled" # requires gudev
     "-Dv4l2codecs=disabled" # requires gudev
     "-Dladspa=disabled" # requires lrdf
-    "-Dwebrtc=disabled" # requires libnice, which as of writing doesn't work on Darwin in nixpkgs
     "-Dwildmidi=disabled" # see dependencies above
+  ] ++ lib.optionals (!stdenv.isLinux || !stdenv.isx86_64) [
+    "-Dqsv=disabled" # Linux (and Windows) x86 only
   ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
     "-Dgl=disabled"
   ] ++ lib.optionals (!gst-plugins-base.waylandEnabled) [
+    "-Dgtk3=disabled" # Wayland-based GTK sink
     "-Dwayland=disabled"
   ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
     # `applemedia/videotexturecache.h` requires `gst/gl/gl.h`,
     # but its meson build system does not declare the dependency.
     "-Dapplemedia=disabled"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dintrospection=disabled"
   ] ++ (if enableGplPlugins then [
     "-Dgpl=enabled"
   ] else [
@@ -329,6 +367,6 @@ stdenv.mkDerivation rec {
     '';
     license = if enableGplPlugins then licenses.gpl2Plus else licenses.lgpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = with maintainers; [ matthewbauer lilyinstarlight ];
   };
 }

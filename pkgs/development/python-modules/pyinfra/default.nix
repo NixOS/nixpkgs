@@ -1,30 +1,33 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, pythonOlder
-, gevent
 , click
 , colorama
 , configparser
 , distro
+, fetchFromGitHub
+, gevent
 , jinja2
 , paramiko
+, pytestCheckHook
 , python-dateutil
+, pythonOlder
 , pywinrm
+, pyyaml
 , setuptools
-, six
 }:
 
 buildPythonPackage rec {
   pname = "pyinfra";
-  version = "2.0";
+  version = "2.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-rzVirU697wGehCIc/WwE6Rg9AaYYELXfoe10GMRFHgw=";
+  src = fetchFromGitHub {
+    owner = "Fizzadar";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-drfxNpdhqSxCeB0SbwyKOd3DDA7bFkmDmFQJS3JwOlA=";
   };
 
   propagatedBuildInputs = [
@@ -37,14 +40,21 @@ buildPythonPackage rec {
     paramiko
     python-dateutil
     pywinrm
+    pyyaml
     setuptools
-    six
   ];
 
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "pyinfra"
+  ];
+
+  disabledTests = [
+    # Test requires SSH binary
+    "test_load_ssh_config"
   ];
 
   meta = with lib; {
@@ -53,7 +63,9 @@ buildPythonPackage rec {
       pyinfra automates/provisions/manages/deploys infrastructure. It can be used for
       ad-hoc command execution, service deployment, configuration management and more.
     '';
-    homepage = "https://github.com/Fizzadar/pyinfra";
+    homepage = "https://pyinfra.com";
+    downloadPage = "https://pyinfra.com/Fizzadar/pyinfra/releases";
+    changelog = "https://github.com/Fizzadar/pyinfra/blob/v${version}/CHANGELOG.md";
     maintainers = with maintainers; [ totoroot ];
     license = licenses.mit;
   };

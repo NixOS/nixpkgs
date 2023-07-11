@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-tgMpI+BenXXsF6WvmphCnEbSg5rfr4BgTVLg+qzXoy8=";
+    hash = "sha256-tgMpI+BenXXsF6WvmphCnEbSg5rfr4BgTVLg+qzXoy8=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     description = "Asyncio extension package for pyserial";
     homepage = "https://github.com/pyserial/pyserial-asyncio";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ etu ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

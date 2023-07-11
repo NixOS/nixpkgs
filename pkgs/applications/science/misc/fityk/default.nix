@@ -1,22 +1,43 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, wxGTK30, boost, lua, zlib, bzip2
-, xylib, readline, gnuplot, swig3 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, wxGTK32
+, boost
+, lua
+, zlib
+, bzip2
+, xylib
+, readline
+, gnuplot
+, swig3
+}:
 
 stdenv.mkDerivation rec {
   pname = "fityk";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "wojdyr";
     repo = "fityk";
     rev = "v${version}";
-    sha256 = "0kmrjjjwrh6xgw590awcd52b86kksmv6rfgih75zvpiavr1ygwsi";
+    sha256 = "sha256-m2RaZMYT6JGwa3sOUVsBIzCdZetTbiygaInQWoJ4m1o=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ wxGTK30 boost lua zlib bzip2 xylib readline
-    gnuplot swig3 ];
+  buildInputs = [
+    wxGTK32
+    boost
+    lua
+    zlib
+    bzip2
+    xylib
+    readline
+    gnuplot
+    swig3
+  ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-std=c++11"
   ];
 

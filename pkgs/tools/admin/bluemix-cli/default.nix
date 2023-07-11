@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     description  = "Administration CLI for IBM BlueMix";
     homepage     = "https://console.bluemix.net/docs/cli/index.html";
     downloadPage = "https://console.bluemix.net/docs/cli/reference/bluemix_cli/download_cli.html#download_install";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license      = licenses.unfree;
     maintainers  = [ maintainers.tazjin maintainers.jensbin ];
     platforms    = [ "x86_64-linux" "i686-linux" ];

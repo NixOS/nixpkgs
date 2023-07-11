@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "l3prSdaGhOvXmZfCPbsZJNocO7y20zJjLQpajRTJOqE=";
   };
 
+  postConfigure = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Docs/makefile.am \
+      --replace 'man1_MANS = robodoc.1 robohdrs.1' 'man1_MANS ='
+  '';
+
   nativeBuildInputs = [ autoreconfHook ];
 
   hardeningDisable = [ "format" ];

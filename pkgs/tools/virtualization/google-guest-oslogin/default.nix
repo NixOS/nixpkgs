@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "google-guest-oslogin";
-  version = "20220205.00";
+  version = "20230502.00";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "guest-oslogin";
     rev = version;
-    sha256 = "sha256-CVJAWda8bn5MPO8ACLtosVvZzuxPbOj377WaysZdhDU=";
+    sha256 = "sha256-66e0d6nE3880xsdI67O71TyZKQi3sGHkx7fLo3xVI7Q=";
   };
 
   postPatch = ''
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ curl.dev pam json_c ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${json_c.dev}/include/json-c" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${json_c.dev}/include/json-c" ];
 
   makeFlags = [
     "VERSION=${version}"

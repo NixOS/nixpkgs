@@ -1,42 +1,46 @@
-{ mkDerivation
+{ stdenv
 , cmake
 , fetchurl
 , gettext
 , gst_all_1
 , lib
 , ninja
+, wrapQtAppsHook
 , qmlbox2d
 , qtbase
+, qtcharts
 , qtdeclarative
 , qtgraphicaleffects
 , qtmultimedia
-, qtquickcontrols
+, qtquickcontrols2
 , qtsensors
 , qttools
 , qtxmlpatterns
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "gcompris";
-  version = "2.3";
+  version = "3.3";
 
   src = fetchurl {
     url = "https://download.kde.org/stable/gcompris/qt/src/gcompris-qt-${version}.tar.xz";
-    sha256 = "sha256-UgWLp5IVqbeFFCO/PRFJ/X1sPm7nSkagVcgEp5SdzGI=";
+    hash = "sha256-8hqiq1wYw4irbOXCrwcJqTMuLISzSmSqPuw2Rn8XzQA=";
   };
 
   cmakeFlags = [
     "-DQML_BOX2D_LIBRARY=${qmlbox2d}/${qtbase.qtQmlPrefix}/Box2D.2.1"
   ];
 
-  nativeBuildInputs = [ cmake gettext ninja qttools ];
+  nativeBuildInputs = [ cmake gettext ninja qttools wrapQtAppsHook ];
 
   buildInputs = [
     qmlbox2d
+    qtbase
+    qtcharts
     qtdeclarative
     qtgraphicaleffects
     qtmultimedia
-    qtquickcontrols
+    qtquickcontrols2
     qtsensors
     qtxmlpatterns
   ] ++ (with gst_all_1; [

@@ -1,11 +1,12 @@
-{ lib, python38, fetchFromGitHub }:
+{ lib, python38, fetchPypi, fetchFromGitHub }:
 let
   python = python38.override {
     self = python;
     packageOverrides = self: super: {
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
         version = "1.3.24";
-        src = oldAttrs.src.override {
+        src = fetchPypi {
+          inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-67t3fL+TEjWbiXv4G6ANrg9ctp+6KhgmXcwYpvXvdRk=";
         };
@@ -18,13 +19,13 @@ let
 in
 with python.pkgs; buildPythonApplication rec {
   pname = "grab-site";
-  version = "2.2.2";
+  version = "2.2.7";
 
   src = fetchFromGitHub {
     rev = version;
     owner = "ArchiveTeam";
     repo = "grab-site";
-    sha256 = "0af53g703kqpxa6bn72mb2l5l0qrjknq5wqwl4wryyscdp4xabx4";
+    sha256 = "sha256-tf8GyFjya3+TVc2VjlY6ztfjCJgof6tg4an18pz+Ig8=";
   };
 
   postPatch = ''
@@ -40,7 +41,7 @@ with python.pkgs; buildPythonApplication rec {
     autobahn
     fb-re2
     websockets
-    cchardet
+    faust-cchardet
   ];
 
   checkPhase = ''

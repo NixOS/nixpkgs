@@ -14,8 +14,8 @@ let
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   sha256 = {
-    "x86_64-linux" = "1yj6ybc99nqpzv2wjmvi7khfb5viwlb2rbjdpvgr4pmlzmiv7n2k";
-    "i686-linux" = "09ddcqxw1jhl8v461ngdgj2l4infn2xiwvaqxi6qp3swci627vmz";
+    "x86_64-linux" = "1rcidar97nnpjb163x9snnnhw1z1ld4asgbd5dxpzdh8hikh66ll";
+    "i686-linux" = "1jll4i0j9kh78kl10s596xxs60gy7cnlafgpk89861yihj0i73a5";
   }."${system}" or throwSystem;
 
   arch = {
@@ -27,7 +27,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "etcher";
-  version = "1.7.3";
+  version = "1.7.9";
 
   src = fetchurl {
     url = "https://github.com/balena-io/etcher/releases/download/v${version}/balena-etcher-electron_${version}_${arch}.deb";
@@ -79,5 +79,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = [ maintainers.shou ];
     platforms = [ "i686-linux" "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

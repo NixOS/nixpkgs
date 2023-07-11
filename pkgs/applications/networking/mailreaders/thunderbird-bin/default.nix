@@ -42,7 +42,7 @@
 , pango
 , pipewire
 , pciutils
-, libheimdal
+, heimdal
 , libpulseaudio
 , systemd
 , writeScript
@@ -56,10 +56,11 @@
 , runtimeShell
 , mesa # thunderbird wants gbm for drm+dmabuf
 , systemLocale ? config.i18n.defaultLocale or "en_US"
+, generated
 }:
 
 let
-  inherit (import ./release_sources.nix) version sources;
+  inherit (generated) version sources;
 
   mozillaPlatforms = {
     i686-linux = "linux-i686";
@@ -136,7 +137,7 @@ stdenv.mkDerivation {
       pango
       pipewire
       pciutils
-      libheimdal
+      heimdal
       libpulseaudio
       systemd
       ffmpeg
@@ -172,7 +173,8 @@ stdenv.mkDerivation {
 
       for executable in \
         thunderbird thunderbird-bin plugin-container \
-        updater crashreporter webapprt-stub
+        updater crashreporter webapprt-stub \
+        glxtest vaapitest
       do
         if [ -e "$out/usr/lib/thunderbird-bin-${version}/$executable" ]; then
           patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
@@ -195,7 +197,7 @@ stdenv.mkDerivation {
     '';
 
   passthru.updateScript = import ./../../browsers/firefox-bin/update.nix {
-    inherit writeScript xidel coreutils gnused gnugrep curl gnupg runtimeShell;
+    inherit lib writeScript xidel coreutils gnused gnugrep curl gnupg runtimeShell;
     pname = "thunderbird-bin";
     baseName = "thunderbird";
     channel = "release";
@@ -203,9 +205,15 @@ stdenv.mkDerivation {
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
   };
 
+  passthru = {
+    binaryName = "thunderbird";
+  };
+
   meta = with lib; {
+    changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
     description = "Mozilla Thunderbird, a full-featured email client (binary package)";
     homepage = "http://www.mozilla.org/thunderbird/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mpl20;
     maintainers = with lib.maintainers; [ lovesegfault ];
     platforms = builtins.attrNames mozillaPlatforms;

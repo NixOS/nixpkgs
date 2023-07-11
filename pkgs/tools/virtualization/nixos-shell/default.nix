@@ -1,21 +1,21 @@
-{ lib, stdenv, nix, fetchFromGitHub, makeWrapper }:
+{ lib, stdenv, nix, jq, fetchFromGitHub, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "nixos-shell";
-  version = "0.2.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nixos-shell";
     rev = version;
-    sha256 = "sha256-a3NJJv7MscAXhIdr07gEAQDYX0Qgb6ax5E8zSdCIgE8=";
+    sha256 = "sha256-5hHkokfSY3Z4VqjNm/j564l9Bgynw5H5McX0hTruGoI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
     wrapProgram $out/bin/nixos-shell \
-      --prefix PATH : ${lib.makeBinPath [ nix ]}
+      --prefix PATH : ${lib.makeBinPath [ nix jq ]}
   '';
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];

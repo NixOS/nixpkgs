@@ -14,17 +14,17 @@
 let
 
   pname = "mattermost-desktop";
-  version = "5.0.3";
+  version = "5.3.1";
 
   srcs = {
     "x86_64-linux" = {
       url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-x64.tar.gz";
-      hash = "sha256-KLSWJpNSMGmfugbkFIJLDnxcZtrtBZOGjLlR+kAoMTA=";
+      hash = "sha256-rw+SYCFmN2W4t5iIWEpV9VHxcvwTLOckMV58WRa5dZE=";
     };
 
-    "i686-linux" = {
-      url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-ia32.tar.gz";
-      hash = "sha256-4ofjOsfGbgO1PSqQpigNp90JsvlGP1kGexVAR/h3/88=";
+    "aarch64-linux" = {
+      url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-arm64.tar.gz";
+      hash = "sha256-FEIldkb3FbUfVAYRkjs7oPRJDHdsIGDW5iaC2Qz1dpc=";
     };
   };
 
@@ -84,8 +84,9 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Mattermost Desktop client";
     homepage = "https://about.mattermost.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = [ maintainers.joko ];
   };
 }

@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchurl, pkg-config, libxml2, ncurses, libsigcxx, libpar2
-, gnutls, libgcrypt, zlib, openssl, nixosTests }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, gnutls
+, libgcrypt
+, libpar2
+, libsigcxx
+, libxml2
+, ncurses
+, openssl
+, zlib
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
   pname = "nzbget";
@@ -7,13 +20,31 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/nzbget/nzbget/releases/download/v${version}/nzbget-${version}-src.tar.gz";
-    sha256 = "sha256-To/BvrgNwq8tajajOjP0Te3d1EhgAsZE9MR5MEMHICU=";
+    hash = "sha256-To/BvrgNwq8tajajOjP0Te3d1EhgAsZE9MR5MEMHICU=";
   };
+
+  patches = [
+    # openssl 3 compatibility
+    # https://github.com/nzbget/nzbget/pull/793
+    (fetchpatch {
+      name = "daemon-connect-dont-use-fips-mode-set-with-openssl-3.patch";
+      url = "https://github.com/nzbget/nzbget/commit/f76e8555504e3af4cf8dd4a8c8e374b3ca025099.patch";
+      hash = "sha256-39lvnhBK4126TYsRbJOUxsV9s9Hjuviw7CH/wWn/VkM=";
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libxml2 ncurses libsigcxx libpar2 gnutls
-                  libgcrypt zlib openssl ];
+  buildInputs = [
+    gnutls
+    libgcrypt
+    libpar2
+    libsigcxx
+    libxml2
+    ncurses
+    openssl
+    zlib
+  ];
 
   enableParallelBuilding = true;
 

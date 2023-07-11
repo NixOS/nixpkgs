@@ -1,17 +1,17 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalPackages: {
   pname = "pipeworld";
-  version = "0.pre+date=2021-12-03";
+  version = "unstable-2023-02-05";
 
   src = fetchFromGitHub {
     owner = "letoram";
-    repo = pname;
-    rev = "c653414670cafb0c73a57492aa3d9510460b16a9";
-    hash = "sha256-XuAsuTC+P6yoNlDnsT2fiWoqKW+1JKc9NF+Vn/ta0pk=";
+    repo = "pipeworld";
+    rev = "58b2e9fe15ef0baa4b04c27079bfa386ec62b28e";
+    hash = "sha256-PbKejghMkLZdeQJD9fObw9xhGH24IX72X7pyjapTXJM=";
   };
 
   dontConfigure = true;
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.all;
   };
-}
+})

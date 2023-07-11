@@ -2,16 +2,26 @@
 
 buildGoModule rec {
   pname = "scaleway-cli";
-  version = "2.5.1";
+  version = "2.17.0";
 
   src = fetchFromGitHub {
     owner = "scaleway";
     repo = "scaleway-cli";
     rev = "v${version}";
-    sha256 = "sha256-a8imZN3APQEb9ntQOzOKGBEiPKmb5ZYC9ZKnOuLiElc=";
+    sha256 = "sha256-bTpJ3/78GdqiQZOMyYmaX4d66MSIVbUt5mf4ckU3XtA=";
   };
 
-  vendorSha256 = "sha256-aaYS0WqNa8997kdV38blUsYovtUHHtEUXCTG9vwv2ko=";
+  vendorHash = "sha256-5V4RxKFVx3Z+TLD9yPqdWXbJvMOau/yHCjy59mSFm90=";
+
+  ldflags = [
+    "-w"
+    "-extldflags"
+    "-static"
+    "-X main.Version=${version}"
+    "-X main.GitCommit=ref/tags/${version}"
+    "-X main.GitBranch=HEAD"
+    "-X main.BuildDate=unknown"
+  ];
 
   # some tests require network access to scaleway's API, failing when sandboxed
   doCheck = false;
@@ -20,6 +30,6 @@ buildGoModule rec {
     description = "Interact with Scaleway API from the command line";
     homepage = "https://github.com/scaleway/scaleway-cli";
     license = licenses.mit;
-    maintainers = with maintainers; [ nickhu ];
+    maintainers = with maintainers; [ nickhu techknowlogick ];
   };
 }

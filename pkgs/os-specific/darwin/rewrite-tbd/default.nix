@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, libyaml }:
+{ stdenv, lib, fetchFromGitHub, libyaml }:
 
 stdenv.mkDerivation {
   pname = "rewrite-tbd";
@@ -11,8 +11,16 @@ stdenv.mkDerivation {
     sha256 = "08sk91zwj6n9x2ymwid2k7y0rwv5b7p6h1b25ipx1dv0i43p6v1a";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  # Nix takes care of these paths. Avoiding the use of `pkg-config` prevents an infinite recursion.
+  postPatch = ''
+    substituteInPlace Makefile.boot \
+      --replace '$(shell pkg-config --cflags yaml-0.1)' "" \
+      --replace '$(shell pkg-config --libs yaml-0.1)' "-lyaml"
+  '';
+
   buildInputs = [ libyaml ];
+
+  makeFlags = [ "-f" "Makefile.boot" "PREFIX=${placeholder "out"}"];
 
   meta = with lib; {
     homepage = "https://github.com/thefloweringash/rewrite-tbd/";

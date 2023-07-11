@@ -7,17 +7,18 @@
 , maxima
 , wxGTK
 , gnome
+, glib
 }:
 
 stdenv.mkDerivation rec {
   pname = "wxmaxima";
-  version = "22.03.0";
+  version = "23.02.1";
 
   src = fetchFromGitHub {
     owner = "wxMaxima-developers";
     repo = "wxmaxima";
     rev = "Version-${version}";
-    sha256 = "sha256-ynLx1HPfDjLbyFziWFbjpCeUBaA3hAFRFm5/1GeFKRE=";
+    sha256 = "sha256-Lrj/oJNmKlCkNbnCGY2TewCospwajKdWgmKkreHzEIU=";
   };
 
   buildInputs = [
@@ -25,12 +26,18 @@ stdenv.mkDerivation rec {
     maxima
     # So it won't embed svg files into headers.
     gnome.adwaita-icon-theme
+    # So it won't crash under Sway.
+    glib
   ];
 
   nativeBuildInputs = [
     wrapGAppsHook
     cmake
     gettext
+  ];
+
+  cmakeFlags = [
+    "-DwxWidgets_LIBRARIES=${wxGTK}/lib"
   ];
 
   preConfigure = ''

@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "lxc";
     repo = "pylxd";
     rev = version;
-    sha256 = "sha256-eDRCJYjmBndMnSNuS6HD/2p/KhzqJq2qPAzMk7kC5UM=";
+    hash = "sha256-eDRCJYjmBndMnSNuS6HD/2p/KhzqJq2qPAzMk7kC5UM=";
   };
 
   propagatedBuildInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     ws4py
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ddt
     mock-services
     pytestCheckHook
@@ -49,6 +49,6 @@ buildPythonPackage rec {
     description = "A Python library for interacting with the LXD REST API";
     homepage = "https://pylxd.readthedocs.io/en/latest/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [ ];
   };
 }

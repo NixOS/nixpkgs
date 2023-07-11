@@ -37,7 +37,7 @@ buildPythonPackage rec {
     vobject
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 

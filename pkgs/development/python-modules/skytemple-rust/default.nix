@@ -1,24 +1,38 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, libiconv, rustPlatform, setuptools-rust }:
+{ lib
+, stdenv
+, buildPythonPackage
+, cargo
+, fetchFromGitHub
+, libiconv
+, Foundation
+, rustPlatform
+, rustc
+, setuptools-rust
+, range-typed-integers
+}:
 
 buildPythonPackage rec {
   pname = "skytemple-rust";
-  version = "unstable-2021-08-11";
+  version = "1.4.0.post0";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
-    rev = "e306e5edc096cb3fef25585d9ca5a2817543f1cd";
-    sha256 = "0ja231gsy9i1z6jsaywawz93rnyjhldngi5i787nhnf88zrwx9ml";
+    rev = version;
+    hash = "sha256-aw57B15sDbMcdNPD8MW+O7AdqSSqjlOcuXNSm10GdPM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "0gjvfblyv72m0nqv90m7qvbdnazsh5ind1pxwqz83vm4zjh9a873";
+    hash = "sha256-SvHrMr5k4afVdU5nvg+bcoHVmzHYyoOYqv7nOSVxRCE=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
-  nativeBuildInputs = [ setuptools-rust ] ++ (with rustPlatform; [ cargoSetupHook rust.cargo rust.rustc ]);
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Foundation ];
+  nativeBuildInputs = [ setuptools-rust rustPlatform.cargoSetupHook cargo rustc ];
+  propagatedBuildInputs = [ range-typed-integers ];
+
+  GETTEXT_SYSTEM = true;
 
   doCheck = false; # there are no tests
   pythonImportsCheck = [ "skytemple_rust" ];

@@ -4,19 +4,20 @@
 , cmake
 , libsecret
 , qtkeychain
+, qttools
 , restic
 }:
 
 mkDerivation rec {
   pname = "restique";
-  version = "unstable-2021-05-03";
+  version = "unstable-2022-11-29";
 
   src = fetchFromGitea {
     domain = "git.srcbox.net";
     owner = "stefan";
     repo = "restique";
-    rev = "f83ea63c2e2f2a41e845f54c7fe2c391a528a121";
-    sha256 = "0j1qihv7hd90xkfm4ksv74q6m7cq781fbdnc3l4spcd7h2p8lh0z";
+    rev = "906b0b1726c26988c910baea9665f540c37c99c4";
+    hash = "sha256-EYoADtYX+gm8T3/3gxTtdFOFGJf2rXryiTu8NIO0Ez4=";
   };
 
   nativeBuildInputs = [
@@ -26,6 +27,7 @@ mkDerivation rec {
   buildInputs = [
     libsecret
     qtkeychain
+    qttools
   ];
 
   qtWrapperArgs = [

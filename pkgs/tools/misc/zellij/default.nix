@@ -10,21 +10,21 @@
 , Foundation
 , mandown
 , zellij
-, testVersion
+, testers
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "zellij";
-  version = "0.27.0";
+  version = "0.37.2";
 
   src = fetchFromGitHub {
     owner = "zellij-org";
     repo = "zellij";
     rev = "v${version}";
-    sha256 = "sha256-iQ+Z1A/wiui2IHuK35e6T/44TYaf6+KbaDl5GfVF2vo=";
+    sha256 = "sha256-YceH3qW0B+h7UvI84PIlfwJXWi4jyxSXIYDsZFrpc1c=";
   };
 
-  cargoSha256 = "sha256-DMHIvqClBpBplvqqXM2dUOumO+Ean4yAHWDplJ9PaUM=";
+  cargoSha256 = "sha256-uD8z8oQ/z2zk5/MSohgcg5N5984hJhKyPz8dQQUnWL8=";
 
   nativeBuildInputs = [
     mandown
@@ -54,13 +54,13 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/zellij setup --generate-completion zsh)
   '';
 
-  passthru.tests.version = testVersion { package = zellij; };
+  passthru.tests.version = testers.testVersion { package = zellij; };
 
   meta = with lib; {
     description = "A terminal workspace with batteries included";
     homepage = "https://zellij.dev/";
-    changelog = "https://github.com/zellij-org/zellij/blob/v${version}/Changelog.md";
+    changelog = "https://github.com/zellij-org/zellij/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ therealansh _0x4A6F abbe ];
+    maintainers = with maintainers; [ therealansh _0x4A6F abbe thehedgeh0g ];
   };
 }

@@ -10,7 +10,7 @@ buildPythonPackage rec {
     sha256 = "b60839393f3b84a0f3746f6cdca56c1ad7426aa738b70d6c61375857823181de";
   };
 
-  checkInputs = [ nose packaging ];
+  nativeCheckInputs = [ nose packaging ];
   propagatedBuildInputs = [ flask six ];
 
   # Exclude test_acl_uncaught_exception_500 test case because is not compatible

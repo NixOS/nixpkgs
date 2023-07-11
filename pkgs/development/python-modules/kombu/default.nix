@@ -1,12 +1,15 @@
 { lib
 , amqp
+, azure-identity
 , azure-servicebus
+, backports-zoneinfo
 , buildPythonPackage
 , cached-property
 , case
 , fetchPypi
+, hypothesis
 , importlib-metadata
-, Pyro4
+, pyro4
 , pytestCheckHook
 , pythonOlder
 , pytz
@@ -15,28 +18,37 @@
 
 buildPythonPackage rec {
   pname = "kombu";
-  version = "5.2.4";
+  version = "5.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-N87j7nJflOqLsXPqq3wXYCA+pTu+uuImMoYA+dJ5lhA=";
+    hash = "sha256-0ITsH5b3p8N7qegWgjvbwI8Px92zpb5VWAXmkhAil9g=";
   };
+
+  postPatch = ''
+    substituteInPlace requirements/test.txt \
+      --replace "pytz>dev" "pytz"
+  '';
 
   propagatedBuildInputs = [
     amqp
     vine
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    backports-zoneinfo
   ] ++ lib.optionals (pythonOlder "3.8") [
     cached-property
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    azure-identity
     azure-servicebus
     case
-    Pyro4
+    hypothesis
+    pyro4
     pytestCheckHook
     pytz
   ];

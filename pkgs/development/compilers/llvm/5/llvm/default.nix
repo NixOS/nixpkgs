@@ -5,6 +5,7 @@
 , cmake
 , python3
 , libffi
+, enableGoldPlugin ? libbfd.hasPluginAPI
 , libbfd
 , libxml2
 , ncurses
@@ -81,6 +82,8 @@ stdenv.mkDerivation (rec {
       sha256 = "0zjfjgavqzi2ypqwqnlvy6flyvdz8hi1anwv0ybwnm2zqixg7za3";
       stripLen = 1;
     })
+
+    ../../llvm-7-musl.patch
   ] ++ lib.optional enablePolly ./gnu-install-dirs-polly.patch;
 
   postPatch = optionalString stdenv.isDarwin ''
@@ -125,6 +128,13 @@ stdenv.mkDerivation (rec {
     done
   '';
 
+  preConfigure = ''
+    # Workaround for configure flags that need to have spaces
+    cmakeFlagsArray+=(
+      -DLLVM_LIT_ARGS='-svj''${NIX_BUILD_CORES} --no-progress-bar'
+    )
+  '';
+
   # hacky fix: created binaries need to be run before installation
   preBuild = ''
     mkdir -p $out/
@@ -161,10 +171,9 @@ stdenv.mkDerivation (rec {
     "-DSPHINX_OUTPUT_MAN=ON"
     "-DSPHINX_OUTPUT_HTML=OFF"
     "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-  ]
-  ++ lib.optional (!isDarwin)
+  ] ++ lib.optionals (enableGoldPlugin) [
     "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
-  ++ lib.optionals (isDarwin) [
+  ] ++ lib.optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
@@ -221,12 +230,6 @@ stdenv.mkDerivation (rec {
     ${lib.concatMapStringsSep "\n" (v: ''
       ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${v}.dylib
     '') versionSuffixes}
-  ''
-  + optionalString enableSharedLibraries ''
-    mkdir -p $dev/lib
-    mv $lib/lib/*.a $dev/lib
-    sed -i -E "s|$lib/lib/(.*)\.a|$dev/lib/\1\.a|" \
-      "$dev/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake"
   ''
   + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     cp NATIVE/bin/llvm-config $dev/bin/llvm-config-native

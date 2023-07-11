@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , substituteAll
 , meson
 , pkg-config
@@ -9,8 +8,10 @@
 , wayland-scanner
 , expat
 , libxml2
-, withLibraries ? stdenv.isLinux
+, withLibraries ? stdenv.isLinux || stdenv.isDarwin
+, withTests ? stdenv.isLinux
 , libffi
+, epoll-shim
 , withDocumentation ? withLibraries && stdenv.hostPlatform == stdenv.buildPlatform
 , graphviz-nox
 , doxygen
@@ -25,23 +26,23 @@
 # Documentation is only built when building libraries.
 assert withDocumentation -> withLibraries;
 
+# Tests are only built when building libraries.
+assert withTests -> withLibraries;
+
 let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
 in
 stdenv.mkDerivation rec {
   pname = "wayland";
-  version = "1.20.0";
+  version = "1.22.0";
 
   src = fetchurl {
-    url = "https://wayland.freedesktop.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "09c7rpbwavjg4y16mrfa57gk5ix6rnzpvlnv1wp7fnbh9hak985q";
+    url = "https://gitlab.freedesktop.org/wayland/wayland/-/releases/${version}/downloads/${pname}-${version}.tar.xz";
+    hash = "sha256-FUCvHqaYpHHC2OnSiDMsfg/TYMjx0Sk267fny8JCWEI=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./0001-add-placeholder-for-nm.patch;
-      nm = "${stdenv.cc.targetPrefix}nm";
-    })
+    ./darwin.patch
   ];
 
   postPatch = lib.optionalString withDocumentation ''
@@ -56,8 +57,9 @@ stdenv.mkDerivation rec {
   separateDebugInfo = true;
 
   mesonFlags = [
-    "-Dlibraries=${lib.boolToString withLibraries}"
     "-Ddocumentation=${lib.boolToString withDocumentation}"
+    "-Dlibraries=${lib.boolToString withLibraries}"
+    "-Dtests=${lib.boolToString withTests}"
   ];
 
   depsBuildBuild = [
@@ -85,6 +87,8 @@ stdenv.mkDerivation rec {
     libxml2
   ] ++ lib.optionals withLibraries [
     libffi
+  ] ++ lib.optionals (withLibraries && !stdenv.hostPlatform.isLinux) [
+    epoll-shim
   ] ++ lib.optionals withDocumentation [
     docbook_xsl
     docbook_xml_dtd_45
@@ -103,6 +107,8 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
+  passthru = { inherit withLibraries; };
+
   meta = with lib; {
     description = "Core Wayland window system code and protocol";
     longDescription = ''
@@ -115,11 +121,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://wayland.freedesktop.org/";
     license = licenses.mit; # Expat version
-    platforms = if withLibraries then platforms.linux else platforms.unix;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ primeos codyopel qyliss ];
-    # big sur doesn't support gcc stdenv and wayland doesn't build with clang
-    broken = stdenv.isDarwin;
   };
-
-  passthru.version = version;
 }

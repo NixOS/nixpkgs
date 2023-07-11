@@ -2,34 +2,35 @@
 , appdirs
 , buildPythonPackage
 , fetchFromGitHub
-, platformdirs
+, hatch-vcs
+, hatchling
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
-, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "platformdirs";
-  version = "2.5.1";
-  format = "setuptools";
+  version = "3.5.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "sha256-z6WIwTWLlc/chNRxt3dqqa/IxYj1BBTcQ6OcfliHrvA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-/qi22jiF+P7XcG/D+dxoOrHk89amdBoGewrTqZZOsoM=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
-    setuptools-scm
+    hatchling
+    hatch-vcs
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     appdirs
     pytest-mock
     pytestCheckHook
@@ -40,8 +41,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Python module for determining appropriate platform-specific directories";
+    description = "Module for determining appropriate platform-specific directories";
     homepage = "https://platformdirs.readthedocs.io/";
+    changelog = "https://github.com/platformdirs/platformdirs/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

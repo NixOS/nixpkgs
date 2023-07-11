@@ -13,11 +13,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "SunVox";
-  version = "2.0e";
+  version = "2.1c";
 
   src = fetchurl {
     url = "https://www.warmplace.ru/soft/sunvox/sunvox-${version}.zip";
-    sha256 = "sha256-v4dQnRr7pusOAHX8ytDChKixYxEIjg30vOTD6uA/S0o=";
+    sha256 = "sha256-yPVcbtlAVbO9uMsFlfZ51T408hA1VPJAI+R+Jdjcyjw=";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Small, fast and powerful modular synthesizer with pattern-based sequencer";
     license = licenses.unfreeRedistributable;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     homepage = "http://www.warmplace.ru/soft/sunvox/";
     maintainers = with maintainers; [ puffnfresh ];
     platforms = [ "i686-linux" "x86_64-linux" ];

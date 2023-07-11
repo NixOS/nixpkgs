@@ -6,24 +6,31 @@
 , pkg-config
 , gstreamer
 , gst-plugins-base
+, gst-plugins-bad
+, gst-rtsp-server
 , python3
 , gobject-introspection
 , json-glib
+# Checks meson.is_cross_build(), so even canExecute isn't enough.
+, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
 stdenv.mkDerivation rec {
   pname = "gst-devtools";
-  version = "1.20.0";
+  version = "1.22.4";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-afyHVuydk+XFJYyZCIQ08gPpH9vFryjR8sWD/YGbeh0=";
+    hash = "sha256-TFIFPOjB33L9gXIen1PeOxRu3PLeKPYHvnBbzkz5CdE=";
   };
 
   outputs = [
     "out"
     "dev"
-    # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs
+  ];
+
+  depsBuildBuild = [
+    pkg-config
   ];
 
   nativeBuildInputs = [
@@ -31,26 +38,26 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gobject-introspection
-
-    # documentation
-    # TODO add hotdoc here
+  ] ++ lib.optionals enableDocumentation [
+    hotdoc
   ];
 
   buildInputs = [
     cairo
     python3
     json-glib
+    gobject-introspection
   ];
 
   propagatedBuildInputs = [
     gstreamer
     gst-plugins-base
+    gst-plugins-bad
+    gst-rtsp-server
   ];
 
   mesonFlags = [
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dintrospection=disabled"
+    (lib.mesonEnable "doc" enableDocumentation)
   ];
 
   meta = with lib; {
@@ -58,5 +65,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gstreamer.freedesktop.org";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
+    maintainers = with maintainers; [ lilyinstarlight ];
   };
 }

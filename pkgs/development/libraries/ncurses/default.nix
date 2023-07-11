@@ -8,21 +8,16 @@
 , withCxx ? !stdenv.hostPlatform.useAndroidPrebuilt
 , mouseSupport ? false, gpm
 , unicodeSupport ? true
+, testers
 }:
 
-stdenv.mkDerivation rec {
-  # Note the revision needs to be adjusted.
-  version = "6.3";
+stdenv.mkDerivation (finalAttrs: {
+  version = "6.4";
   pname = "ncurses" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
-  # We cannot use fetchFromGitHub (which calls fetchzip)
-  # because we need to be able to use fetchurlBoot.
-  src = let
-    # Note the version needs to be adjusted.
-    rev = "v${version}";
-  in fetchurl {
-    url = "https://github.com/mirror/ncurses/archive/${rev}.tar.gz";
-    sha256 = "1mawdjhzl2na2j0dylwc37f5w95rhgyvlwnfhww5rz2r7fgkvayv";
+  src = fetchurl {
+    url = "https://invisible-island.net/archives/ncurses/ncurses-${finalAttrs.version}.tar.gz";
+    hash = "sha256-aTEoPZrIfFBz8wtikMTHXyFjK7T8NgOsgQCBK+0kgVk=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -43,11 +38,22 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isWindows [
       "--enable-sp-funcs"
       "--enable-term-driver"
-    ];
+  ] ++ lib.optionals (stdenv.hostPlatform.isUnix && stdenv.hostPlatform.isStatic) [
+      # For static binaries, the point is to have a standalone binary with
+      # minimum dependencies. So here we make sure that binaries using this
+      # package won't depend on a terminfo database located in the Nix store.
+      "--with-terminfo-dirs=${lib.concatStringsSep ":" [
+        "/etc/terminfo" # Debian, Fedora, Gentoo
+        "/lib/terminfo" # Debian
+        "/usr/share/terminfo" # upstream default, probably all FHS-based distros
+        "/run/current-system/sw/share/terminfo" # NixOS
+      ]}"
+  ];
 
   # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:
   CFLAGS = lib.optionalString stdenv.isSunOS "-D_XOPEN_SOURCE_EXTENDED";
 
+  strictDeps = true;
   depsBuildBuild = [
     buildPackages.stdenv.cc
   ];
@@ -165,11 +171,20 @@ stdenv.mkDerivation rec {
       ANSI/POSIX-conforming UNIX. It has even been ported to OS/2 Warp!
     '';
     license = licenses.mit;
+    pkgConfigModules = let
+      base = [
+        "form"
+        "menu"
+        "ncurses"
+        "panel"
+      ] ++ lib.optional withCxx "ncurses++";
+    in base ++ lib.optionals unicodeSupport (map (p: p + "w") base);
     platforms = platforms.all;
   };
 
   passthru = {
     ldflags = "-lncurses";
     inherit unicodeSupport abiVersion;
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
-}
+})

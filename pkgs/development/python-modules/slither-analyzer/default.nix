@@ -1,11 +1,12 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
-, makeWrapper
-, pythonOlder
 , crytic-compile
+, fetchFromGitHub
+, makeWrapper
+, packaging
 , prettytable
+, pythonOlder
 , setuptools
 , solc
 , withSolc ? false
@@ -13,12 +14,16 @@
 
 buildPythonPackage rec {
   pname = "slither-analyzer";
-  version = "0.8.2";
-  disabled = pythonOlder "3.6";
+  version = "0.9.2";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-77045eB7KvHBb0j61qz4zJTtEprg4/aH6MrPlQY1wiM=";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "crytic";
+    repo = "slither";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Co3BFdLmSIMqlZVEPJHYH/Cf7oKYSZ+Ktbnd5RZGmfE=";
   };
 
   nativeBuildInputs = [
@@ -27,6 +32,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     crytic-compile
+    packaging
     prettytable
     setuptools
   ];
@@ -47,6 +53,7 @@ buildPythonPackage rec {
       contract details, and provides an API to easily write custom analyses.
     '';
     homepage = "https://github.com/trailofbits/slither";
+    changelog = "https://github.com/crytic/slither/releases/tag/${version}";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ arturcygan fab ];
   };

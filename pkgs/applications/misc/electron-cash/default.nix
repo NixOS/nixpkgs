@@ -1,15 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages, qtbase, fetchpatch, wrapQtAppsHook
+{ lib, stdenv, fetchFromGitHub, python3Packages, wrapQtAppsHook
 , secp256k1 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "electron-cash";
-  version = "4.2.7";
+  version = "4.2.10";
 
   src = fetchFromGitHub {
     owner = "Electron-Cash";
     repo = "Electron-Cash";
-    rev = version;
-    sha256 = "sha256-m8a3x5fPSrnrCH30MToT3aKtX35nFUbeerR7ubWgOOI=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-m13wJlNBG3BxOdKUyd3qmIhFBM7263FzMKr5lfD1tys=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication rec {
     cython
     trezor
     keepkey
-    btchip
+    btchip-python
     hidapi
     pyopenssl
     pyscard
@@ -55,7 +55,7 @@ python3Packages.buildPythonApplication rec {
       --replace "(share_dir" "(\"share\""
   '';
 
-  checkInputs = with python3Packages; [ pytest ];
+  nativeCheckInputs = with python3Packages; [ pytest ];
 
   checkPhase = ''
     unset HOME

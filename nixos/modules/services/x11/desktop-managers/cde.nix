@@ -7,7 +7,7 @@ let
   cfg = xcfg.desktopManager.cde;
 in {
   options.services.xserver.desktopManager.cde = {
-    enable = mkEnableOption "Common Desktop Environment";
+    enable = mkEnableOption (lib.mdDoc "Common Desktop Environment");
 
     extraPackages = mkOption {
       type = with types; listOf package;
@@ -19,7 +19,7 @@ in {
           xclock bitmap xlsfonts xfd xrefresh xload xwininfo xdpyinfo xwd xwud
         ]
       '';
-      description = ''
+      description = lib.mdDoc ''
         Extra packages to be installed system wide.
       '';
     };
@@ -36,7 +36,7 @@ in {
         name = "cmsd";
         protocol = "udp";
         user = "root";
-        server = "${pkgs.cdesktopenv}/opt/dt/bin/rpc.cmsd";
+        server = "${pkgs.cdesktopenv}/bin/rpc.cmsd";
         extraConfig = ''
           type  = RPC UNLISTED
           rpc_number  = 100068
@@ -64,7 +64,7 @@ in {
     services.xserver.desktopManager.session = [
     { name = "CDE";
       start = ''
-        exec ${pkgs.cdesktopenv}/opt/dt/bin/Xsession
+        exec ${pkgs.cdesktopenv}/bin/Xsession
       '';
     }];
   };

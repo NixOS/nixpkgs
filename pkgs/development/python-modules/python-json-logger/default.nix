@@ -1,27 +1,24 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
-, nose
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  version = "2.0.2";
   pname = "python-json-logger";
-  disabled = isPy27;
+  version = "2.0.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "202a4f29901a4b8002a6d1b958407eeb2dd1d83c18b18b816f5b64476dde9096";
+    hash = "sha256-I+fsAtNCN8WqHimgcBk6Tqh1g7tOf4/QbT3oJkxLLhw=";
   };
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
+    description = "Json Formatter for the standard python logger";
     homepage = "https://github.com/madzak/python-json-logger";
-    description = "A python library adding a json log formatter";
     license = licenses.bsdOriginal;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
-
 }

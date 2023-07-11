@@ -2,15 +2,15 @@
 
 buildDunePackage rec {
   pname = "json-data-encoding";
-  version = "0.10";
+  version = "0.12.1";
   minimalOCamlVersion = "4.10";
+  duneVersion = "3";
   src = fetchFromGitLab {
     owner = "nomadic-labs";
     repo = "json-data-encoding";
-    rev = "${version}";
-    sha256 = "0m0xx382wr44wz7gxf7mpfjx2w287pvqhg2lfvzmclfq3y5iy6mx";
+    rev = version;
+    hash = "sha256-ticulOKiFNQIZNFOQE9UQOw/wqRfygQwLVIc4kkmwg4=";
   };
-  useDune2 = true;
 
   propagatedBuildInputs = [
     uri

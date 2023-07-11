@@ -8,31 +8,46 @@
 
 buildPythonPackage rec {
   pname = "asteval";
-  version = "0.9.26";
-  disabled = pythonOlder "3.6";
+  version = "0.9.30";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "newville";
     repo = pname;
-    rev = version;
-    sha256 = "0l2iv51yclqn52w3yvyz3brpbca076ivv70h4gd6bkhwjbax1i2b";
+    rev = "refs/tags/${version}";
+    hash = "sha256-vKPMA8yiTNQPYehDVo6mleOv82ZNxHgi8P/HIOZb9/o=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace " --cov=asteval --cov-report xml" ""
+  '';
 
   nativeBuildInputs = [
     setuptools-scm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "asteval" ];
+  pythonImportsCheck = [
+    "asteval"
+  ];
+
+  disabledTests = [
+    # AssertionError: 'ImportError' != None
+    "test_set_default_nodehandler"
+  ];
 
   meta = with lib; {
     description = "AST evaluator of Python expression using ast module";
     homepage = "https://github.com/newville/asteval";
+    changelog = "https://github.com/newville/asteval/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

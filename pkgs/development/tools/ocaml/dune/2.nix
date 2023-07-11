@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ ocaml findlib ];
   strictDeps = true;
 
-  buildFlags = "release";
+  buildFlags = [ "release" ];
 
   dontAddPrefix = true;
   dontAddStaticConfigureFlags = true;

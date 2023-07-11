@@ -20,7 +20,8 @@ buildDunePackage rec {
     sha256 = "sha256:0krj5w4y05bcfx7hk9blmap8avl31gp7yi01lpqzs6ync23mvm0x";
   };
 
-  buildInputs = [ fmt lwt_ppx menhir ocf_ppx ppx_blob xtmpl_ppx ];
+  nativeBuildInputs = [ menhir ];
+  buildInputs = [ fmt lwt_ppx ocf_ppx ppx_blob xtmpl_ppx ];
   propagatedBuildInputs = [
     dune-build-info
     dune-site

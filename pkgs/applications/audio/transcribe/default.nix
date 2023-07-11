@@ -2,6 +2,8 @@
 , fetchzip
 , lib
 , wrapGAppsHook
+, xdg-utils
+, which
 , alsa-lib
 , atk
 , cairo
@@ -20,18 +22,22 @@
 
 stdenv.mkDerivation rec {
   pname = "transcribe";
-  version = "9.10";
+  version = "9.21";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchzip
         {
-          url = "https://www.seventhstring.com/xscribe/downlo/xscsetup-9.10.0.tar.gz";
-          sha256 = "sha256-6+P2qdjyvCzwrXYgw2yeG+hu8W5t6E0RCZx6Znkvj3g=";
+          url = "https://www.seventhstring.com/xscribe/downlo/xscsetup-9.21.0.tar.gz";
+          sha256 = "sha256-M0hOJOsTTRxPef8rTO+/KpiP4lr8mtplS9KITaFOFPA=";
         }
     else throw "Platform not supported";
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [
+    which
+    xdg-utils
+    wrapGAppsHook
+  ];
 
   buildInputs = with gst_all_1; [
     gst-plugins-base
@@ -65,8 +71,13 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/libexec $out/share/doc
     cp transcribe $out/libexec
     cp xschelp.htb readme_gtk.html $out/share/doc
-    cp -r gtkicons $out/share/icons
     ln -s $out/share/doc/xschelp.htb $out/libexec
+    # The script normally installs to the home dir
+    sed -i -E 's!BIN_DST=.*!BIN_DST=$out!' install-linux.sh
+    sed -i -e 's!Exec=''${BIN_DST}/transcribe/transcribe!Exec=transcribe!' install-linux.sh
+    sed -i -e 's!''${BIN_DST}/transcribe!''${BIN_DST}/libexec!' install-linux.sh
+    rm -f xschelp.htb readme_gtk.html *.so
+    XDG_DATA_HOME=$out/share bash install-linux.sh -i
     patchelf \
       --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
       $out/libexec/transcribe
@@ -95,7 +106,9 @@ stdenv.mkDerivation rec {
       conventional music players.
     '';
     homepage = "https://www.seventhstring.com/xscribe/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
+    maintainers = with maintainers; [ iwanb ];
     platforms = platforms.linux;
   };
 }

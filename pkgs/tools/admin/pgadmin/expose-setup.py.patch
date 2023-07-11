@@ -1,9 +1,3 @@
-From 391433d020da52fba28ad08beb2cc85ffd852044 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?Maciej=20Kr=C3=BCger?= <mkg20001@gmail.com>
-Date: Wed, 23 Feb 2022 14:40:11 +0100
-Subject: [PATCH] Expose setup.py as pgadmin4-setup
-
----
  pkg/pip/setup_pip.py |  5 ++++-
  web/setup.py         | 14 ++++++++------
  2 files changed, 12 insertions(+), 7 deletions(-)
@@ -25,41 +19,42 @@ index 5592d1b04..131eaa1ed 100644
  
  )
 diff --git a/web/setup.py b/web/setup.py
-index 5f4257e86..df970f049 100644
+index 2204ffb..d5fda9f 100644
 --- a/web/setup.py
 +++ b/web/setup.py
-@@ -32,6 +32,10 @@ from pgadmin import create_app
- from pgadmin.utils import clear_database_servers, dump_database_servers,\
-     load_database_servers
- 
-+# Configuration settings
-+import config
-+from pgadmin.model import SCHEMA_VERSION
-+from pgadmin.setup import db_upgrade, create_app_data_directory
- 
- def dump_servers(args):
-     """Dump the server groups and servers.
-@@ -139,12 +143,7 @@ def clear_servers():
+@@ -14,7 +14,6 @@ import argparse
+ import os
+ import sys
+ import builtins
+-import config
+
+ # Grab the SERVER_MODE if it's been set by the runtime
+ if 'SERVER_MODE' in globals():
+@@ -91,6 +90,9 @@ def load_servers(args):
+ def setup_db(app):
+     """Setup the configuration database."""
+
++    # here we need an additional import, since the call to setup_db changed
++    # https://redmine.postgresql.org/projects/pgadmin4/repository/2/revisions/3a69d50458f57d19948b867aec55c55d635a36e5/diff/web/setup.py
++    import config
+     create_app_data_directory(config)
+
+     print("pgAdmin 4 - Application Initialisation")
+@@ -139,8 +141,9 @@ def clear_servers():
          clear_database_servers(load_user, True)
- 
- 
+
+
 -if __name__ == '__main__':
--    # Configuration settings
--    import config
--    from pgadmin.model import SCHEMA_VERSION
--    from pgadmin.setup import db_upgrade, create_app_data_directory
--
 +def main():
+     # Configuration settings
++    import config
      parser = argparse.ArgumentParser(description='Setup the pgAdmin config DB')
- 
+
      exp_group = parser.add_argument_group('Dump server config')
-@@ -194,3 +193,6 @@ if __name__ == '__main__':
-             print(str(e))
+@@ -191,3 +194,6 @@ if __name__ == '__main__':
      else:
-         setup_db()
+         app = create_app()
+         setup_db(app)
 +
 +if __name__ == '__main__':
 +    main()
--- 
-2.35.1
-

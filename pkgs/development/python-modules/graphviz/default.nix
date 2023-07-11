@@ -16,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "graphviz";
-  version = "0.19.1";
+  version = "0.20.1";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   # patch does not apply to PyPI tarball due to different line endings
   src = fetchFromGitHub {
     owner = "xflr6";
     repo = "graphviz";
     rev = version;
-    sha256 = "sha256-pE1lsx/r/BjvW5W2niDx/UeRXxx4kvCyHzAUAG3bdGc=";
+    hash = "sha256-plhWG9mE9DoTMg7mWCvFLAgtBx01LAgJ0gQ/mqBU3yc=";
   };
 
   patches = [
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     fontDirectories = [ freefont_ttf ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytest
     pytest-mock
@@ -65,6 +65,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Simple Python interface for Graphviz";
     homepage = "https://github.com/xflr6/graphviz";
+    changelog = "https://github.com/xflr6/graphviz/blob/${src.rev}/CHANGES.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

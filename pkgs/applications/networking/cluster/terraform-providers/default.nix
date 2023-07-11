@@ -1,8 +1,11 @@
 { lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
+, fetchFromGitLab
 , callPackage
 , config
+, writeShellScript
 
 , cdrtools # libvirt
 }:
@@ -14,25 +17,38 @@ let
     ({ owner
      , repo
      , rev
-     , version
-     , sha256
-     , vendorSha256 ? throw "vendorSha256 missing: please use `buildGoModule`" /* added 2022/01 */
+     , spdx ? "UNSET"
+     , version ? lib.removePrefix "v" rev
+     , hash
+     , vendorHash
      , deleteVendor ? false
      , proxyVendor ? false
-     , # Looks like "registry.terraform.io/vancluever/acme"
-       provider-source-address
+     , mkProviderFetcher ? fetchFromGitHub
+     , mkProviderGoModule ? buildGoModule
+       # "https://registry.terraform.io/providers/vancluever/acme"
+     , homepage ? ""
+       # "registry.terraform.io/vancluever/acme"
+     , provider-source-address ? lib.replaceStrings [ "https://registry" ".io/providers" ] [ "registry" ".io" ] homepage
+     , ...
      }@attrs:
-      buildGoModule {
+      assert lib.stringLength provider-source-address > 0;
+      mkProviderGoModule {
         pname = repo;
-        inherit vendorSha256 version deleteVendor proxyVendor;
+        inherit vendorHash version deleteVendor proxyVendor;
         subPackages = [ "." ];
         doCheck = false;
         # https://github.com/hashicorp/terraform-provider-scaffolding/blob/a8ac8375a7082befe55b71c8cbb048493dd220c2/.goreleaser.yml
         # goreleaser (used for builds distributed via terraform registry) requires that CGO is disabled
         CGO_ENABLED = 0;
         ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${rev}" ];
-        src = fetchFromGitHub {
-          inherit owner repo rev sha256;
+        src = mkProviderFetcher {
+          name = "source-${rev}";
+          inherit owner repo rev hash;
+        };
+
+        meta = {
+          inherit homepage;
+          license = lib.getLicenseFromSpdxId spdx;
         };
 
         # Move the provider to libexec
@@ -44,7 +60,13 @@ let
         '';
 
         # Keep the attributes around for later consumption
-        passthru = attrs;
+        passthru = attrs // {
+          inherit provider-source-address;
+          updateScript = writeShellScript "update" ''
+            provider="$(basename ${provider-source-address})"
+            ./pkgs/applications/networking/cluster/terraform-providers/update-provider "$provider"
+          '';
+        };
       });
 
   list = lib.importJSON ./providers.json;
@@ -55,54 +77,23 @@ let
   # These are the providers that don't fall in line with the default model
   special-providers =
     {
-      # Packages that don't fit the default model
-
-      # mkisofs needed to create ISOs holding cloud-init data,
-      # and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
+      # github api seems to be broken, doesn't just fail to recognize the license, it's ignored entirely.
+      checkly = automated-providers.checkly.override { spdx = "MIT"; };
+      gitlab = automated-providers.gitlab.override { mkProviderFetcher = fetchFromGitLab; owner = "gitlab-org"; };
+      # actions update always fails but can't reproduce the failure.
+      heroku = automated-providers.heroku.override { spdx = "MPL-2.0"; };
+      # mkisofs needed to create ISOs holding cloud-init data and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
       libvirt = automated-providers.libvirt.overrideAttrs (_: { propagatedBuildInputs = [ cdrtools ]; });
     };
 
   # Put all the providers we not longer support in this list.
   removed-providers =
     let
-      archived = date: throw "the provider has been archived by upstream on ${date}";
-      removed = date: throw "removed from nixpkgs on ${date}";
+      archived = name: date: throw "the ${name} terraform provider has been archived by upstream on ${date}";
+      removed = name: date: throw "the ${name} terraform provider removed from nixpkgs on ${date}";
     in
     lib.optionalAttrs config.allowAliases {
-      arukas = archived "2022/01";
-      chef = archived "2022/01";
-      cherryservers = archived "2022/01";
-      clc = archived "2022/01";
-      cloudstack = removed "2022/01";
-      cobbler = archived "2022/01";
-      cohesity = archived "2022/01";
-      dyn = archived "2022/01";
-      genymotion = archived "2022/01";
-      hedvig = archived "2022/01";
-      ignition = archived "2022/01";
-      incapsula = archived "2022/01";
-      influxdb = archived "2022/01";
-      jdcloud = archived "2022/01";
-      kubernetes-alpha = throw "This has been merged as beta into the kubernetes provider. See https://www.hashicorp.com/blog/beta-support-for-crds-in-the-terraform-provider-for-kubernetes for details";
-      librato = archived "2022/01";
-      logentries = archived "2022/01";
-      metalcloud = archived "2022/01";
-      mysql = archived "2022/01";
-      nixos = archived "2022/01";
-      oneandone = archived "2022/01";
-      packet = archived "2022/01";
-      profitbricks = archived "2022/01";
-      pureport = archived "2022/01";
-      rancher = archived "2022/01";
-      rightscale = archived "2022/01";
-      runscope = archived "2022/01";
-      segment = removed "2022/01";
-      softlayer = archived "2022/01";
-      telefonicaopencloud = archived "2022/01";
-      teleport = removed "2022/01";
-      terraform = archived "2022/01";
-      ultradns = archived "2022/01";
-      vthunder = throw "provider was renamed to thunder on 2022/01";
+      ksyun = removed "ksyun" "2023/04";
     };
 
   # excluding aliases, used by terraform-full

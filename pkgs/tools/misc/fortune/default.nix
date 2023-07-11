@@ -1,23 +1,23 @@
-{ lib, stdenv, fetchurl, cmake, recode, perl }:
+{ lib, stdenv, fetchurl, cmake, recode, perl, rinutils, withOffensive ? false }:
 
 stdenv.mkDerivation rec {
   pname = "fortune-mod";
-  version = "3.12.0";
+  version = "3.20.0";
 
   # We use fetchurl instead of fetchFromGitHub because the release pack has some
   # special files.
   src = fetchurl {
     url = "https://github.com/shlomif/fortune-mod/releases/download/${pname}-${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-fVrtfLmZiVDTSeuoOltX/vunGSizSw+ZhQhBn9t0C3E=";
+    sha256 = "sha256-MQG+lfuJxISNSD5ykw2o0D9pJXN6I9eIA9a1XEL+IJQ=";
   };
 
-  nativeBuildInputs = [ cmake perl ];
+  nativeBuildInputs = [ cmake perl rinutils ];
 
   buildInputs = [ recode ];
 
   cmakeFlags = [
     "-DLOCALDIR=${placeholder "out"}/share/fortunes"
-  ];
+  ] ++ lib.optional (!withOffensive) "-DNO_OFFENSIVE=true";
 
   patches = [ (builtins.toFile "not-a-game.patch" ''
     diff --git a/CMakeLists.txt b/CMakeLists.txt
@@ -35,6 +35,10 @@ stdenv.mkDerivation rec {
      my_exe(
     --
   '') ];
+
+  postFixup = lib.optionalString (!withOffensive) ''
+    rm -f $out/share/fortunes/men-women*
+  '';
 
   meta = with lib; {
     mainProgram = "fortune";

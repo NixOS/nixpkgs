@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xprintidle";
-  version = "0.2.4";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "g0hl1n";
     repo = "xprintidle";
     rev = version;
-    sha256 = "sha256-CgjHTvwQKR/TPQyEWKxN5j97Sh2iec0BQPhC96sfyoI=";
+    sha256 = "sha256-bafDUZoSFsJ3g6mtLCRechGizfrWg2qW2vnlfIzj7mQ=";
   };
 
   nativeBuildInputs = [

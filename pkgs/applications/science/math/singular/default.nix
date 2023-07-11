@@ -4,6 +4,7 @@
 , buildPackages
 , sharutils
 , file
+, getconf
 , flint
 , ntl
 , cddlib
@@ -17,13 +18,13 @@
 # want it to match the upstream format because sage depends on it.
 , texinfo4
 , texlive
-, enableDocs ? true
+, enableDocs ? !stdenv.isDarwin
 , enableGfanlib ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "singular";
-  version = "4.3.0";
+  version = "4.3.2p2";
 
   # since the tarball does not contain tests, we fetch from GitHub.
   src = fetchFromGitHub {
@@ -32,9 +33,8 @@ stdenv.mkDerivation rec {
 
     # if a release is tagged (which sometimes does not happen), it will
     # be in the format below.
-    # rev = "Release-${lib.replaceStrings ["."] ["-"] version}";
-    rev = "d895b0f1f543c61eb03adddad20f08655a419d4e";
-    sha256 = "sha256-c5Qr6VUuPKjfw8fowjJJz3oGAyUwo/K0WeMvU5djzVA=";
+    rev = "Release-${lib.replaceStrings ["."] ["-"] version}";
+    sha256 = "sha256-dtZmN8xUCZ9eSgmtBxqfJeWsM4W5Baq7xWXuNAxNLjA=";
 
     # the repository's .gitattributes file contains the lines "/Tst/
     # export-ignore" and "/doc/ export-ignore" so some directories are
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     latex2html
     texinfo4
     texlive.combined.scheme-small
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ getconf ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   preAutoreconf = ''
@@ -165,7 +165,7 @@ stdenv.mkDerivation rec {
     # https://www.singular.uni-kl.de:8002/trac/ticket/837
     platforms = subtractLists platforms.i686 platforms.unix;
     license = licenses.gpl3; # Or GPLv2 at your option - but not GPLv4
-    homepage = "http://www.singular.uni-kl.de";
+    homepage = "https://www.singular.uni-kl.de";
     downloadPage = "http://www.mathematik.uni-kl.de/ftp/pub/Math/Singular/SOURCES/";
     mainProgram = "Singular";
   };

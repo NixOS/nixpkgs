@@ -1,26 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, memstreamHook, Carbon, Cocoa, SkyLight }:
+{ lib, stdenv, fetchFromGitHub, Carbon, Cocoa, CoreWLAN, DisplayServices, SkyLight }:
 
 let
   inherit (stdenv.hostPlatform) system;
   target = {
-    "aarch64-darwin" = "arm";
+    "aarch64-darwin" = "arm64";
     "x86_64-darwin" = "x86";
   }.${system} or (throw "Unsupported system: ${system}");
 in
 
 stdenv.mkDerivation rec {
   pname = "sketchybar";
-  version = "2.5.0";
+  version = "2.15.1";
 
   src = fetchFromGitHub {
     owner = "FelixKratz";
     repo = "SketchyBar";
     rev = "v${version}";
-    sha256 = "sha256-ucTyJhRhSVyE4E/x6PtFz7nHRUg6cKKVOrRpPs39iO8=";
+    hash = "sha256-0jCVDaFc7ZvA8apeHRoQvPhAlaGlBHzqUkS9or88PcM=";
   };
 
-  buildInputs = [ Carbon Cocoa SkyLight ]
-    ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memstreamHook ];
+  buildInputs = [ Carbon Cocoa CoreWLAN DisplayServices SkyLight ];
 
   makeFlags = [
     target
@@ -28,7 +27,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp ./bin/sketchybar_${target} $out/bin/sketchybar
+    cp ./bin/sketchybar $out/bin/sketchybar
   '';
 
   meta = with lib; {

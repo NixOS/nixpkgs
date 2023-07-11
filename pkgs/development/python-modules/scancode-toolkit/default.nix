@@ -8,16 +8,18 @@
 , click
 , colorama
 , commoncode
+, container-inspector
 , debian-inspector
-, dparse
+, dparse2
 , extractcode
 , extractcode-7z
 , extractcode-libarchive
 , fasteners
 , fetchPypi
+, fetchpatch
 , fingerprints
 , ftfy
-, gemfileparser
+, gemfileparser2
 , html5lib
 , importlib-metadata
 , intbitset
@@ -32,7 +34,8 @@
 , packaging
 , parameter-expansion-patched
 , pefile
-, pkginfo
+, pip-requirements-parser
+, pkginfo2
 , pluggy
 , plugincode
 , publicsuffix2
@@ -58,13 +61,13 @@
 
 buildPythonPackage rec {
   pname = "scancode-toolkit";
-  version = "30.1.0";
+  version = "31.2.6";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-UYQf+cBi2FmyZxIbQJo7vLjPuoePIMC8FugvoG1Ebj0=";
+    hash = "sha256-VvhgXZpV58DHeY5+7nPbrbTTVuHkawFw5akbm4hPnBY=";
   };
 
   dontConfigure = true;
@@ -78,16 +81,18 @@ buildPythonPackage rec {
     click
     colorama
     commoncode
+    container-inspector
     debian-inspector
-    dparse
+    dparse2
     extractcode
     extractcode-7z
     extractcode-libarchive
     fasteners
     fingerprints
     ftfy
-    gemfileparser
+    gemfileparser2
     html5lib
+    importlib-metadata
     intbitset
     jaraco_functools
     javaproperties
@@ -100,7 +105,8 @@ buildPythonPackage rec {
     packaging
     parameter-expansion-patched
     pefile
-    pkginfo
+    pip-requirements-parser
+    pkginfo2
     pluggy
     plugincode
     publicsuffix2
@@ -118,15 +124,23 @@ buildPythonPackage rec {
     typecode-libmagic
     urlpy
     xmltodict
-    zipp
   ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-metadata
+    zipp
   ] ++ lib.optionals (pythonOlder "3.7") [
     typing
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "${pname}-allow-stable-spdx-tools.patch";
+      url = "https://github.com/nexB/scancode-toolkit/commit/d89ab6584d3df6b7eb1d1394559e9d967d6db6ae.patch";
+      includes = [ "src/*" ];
+      hash = "sha256-AU3vJlOxmCy3yvkupVaAVxAKxJI3ymXEk+A5DWSkfOM=";
+    })
   ];
 
   postPatch = ''
@@ -134,7 +148,9 @@ buildPythonPackage rec {
       --replace "pdfminer.six >= 20200101" "pdfminer.six" \
       --replace "pluggy >= 0.12.0, < 1.0" "pluggy" \
       --replace "pygmars >= 0.7.0" "pygmars" \
-      --replace "license_expression >= 21.6.14" "license_expression"
+      --replace "license_expression >= 21.6.14" "license_expression" \
+      --replace "intbitset >= 2.3.0,  < 3.0" "intbitset" \
+      --replace "spdx_tools == 0.7.0a3" "spdx_tools"
   '';
 
   # Importing scancode needs a writeable home, and preCheck happens in between
@@ -153,7 +169,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Tool to scan code for license, copyright, package and their documented dependencies and other interesting facts";
     homepage = "https://github.com/nexB/scancode-toolkit";
+    changelog = "https://github.com/nexB/scancode-toolkit/blob/v${version}/CHANGELOG.rst";
     license = with licenses; [ asl20 cc-by-40 ];
-    maintainers = teams.determinatesystems.members;
+    maintainers = with maintainers; [ ];
   };
 }

@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ liblockfile ];
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=format-overflow"
+  ];
+
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin $out/man/man1
@@ -20,6 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    broken = stdenv.isDarwin;
     description = "Programs for locking and unlocking files and mailboxes";
     homepage = "http://packages.debian.org/sid/lockfile-progs";
     license = lib.licenses.gpl2Only;

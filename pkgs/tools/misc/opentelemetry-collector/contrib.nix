@@ -2,27 +2,45 @@
 , fetchFromGitHub
 , lib
 , stdenv
+, systemdMinimal
+, withSystemd ? false
 }:
 
 buildGoModule rec {
   pname = "opentelemetry-collector-contrib";
-  version = "0.47.0";
+  version = "0.78.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector-contrib";
     rev = "v${version}";
-    sha256 = "sha256-IbpQd01uU6/Ihli+gVDjTB8T8cj//XHoZYcDjXD635Q=";
+    sha256 = "sha256-5oTXPQU1aT8Xm1bTjbnauBUqzBqBH+yBzC1tmLHA0v0=";
   };
   # proxy vendor to avoid hash missmatches between linux and macOS
   proxyVendor = true;
-  vendorSha256 = "sha256-1svBCXfutjXfXfVqVHUTAt9T1ON/qbiS+VCt5kP/YIc=";
+  vendorHash = "sha256-ABaRedZXPr2q2AmslVNIJUvONZa4tv7OkxBLR9GuBRE=";
 
-  subPackages = [ "cmd/otelcontribcol" ];
+  # there is a nested go.mod
+  sourceRoot = "source/cmd/otelcontribcol";
 
-  # CGO_ENABLED=0 required for mac - "error: 'TARGET_OS_MAC' is not defined, evaluates to 0"
-  # https://github.com/shirou/gopsutil/issues/976
-  CGO_ENABLED = if stdenv.isLinux then 1 else 0;
+  # upstream strongly recommends disabling CGO
+  # additionally dependencies have had issues when GCO was enabled that weren't caught upstream
+  # https://github.com/open-telemetry/opentelemetry-collector/blob/main/CONTRIBUTING.md#using-cgo
+  CGO_ENABLED = 0;
+
+  # journalctl is required in-$PATH for the journald receiver tests.
+  nativeCheckInputs = lib.optionals stdenv.isLinux [ systemdMinimal ];
+
+  # We don't inject the package into propagatedBuildInputs unless
+  # asked to avoid hard-requiring a large package. For the journald
+  # receiver to work, journalctl will need to be available in-$PATH,
+  # so expose this as an option for those who want more control over
+  # it instead of trusting the global $PATH.
+  propagatedBuildInputs = lib.optionals withSystemd [ systemdMinimal ];
+
+  # This test fails on darwin for mysterious reasons.
+  checkFlags = lib.optionals stdenv.isDarwin
+    [ "-skip" "TestDefaultExtensions/memory_ballast" ];
 
   ldflags = [
     "-s"
@@ -31,8 +49,6 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/open-telemetry/opentelemetry-collector-contrib";
-    changelog = "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/v${version}/CHANGELOG.md";
     description = "OpenTelemetry Collector superset with additional community collectors";
     longDescription = ''
       The OpenTelemetry Collector offers a vendor-agnostic implementation on how
@@ -44,7 +60,10 @@ buildGoModule rec {
       components that are only useful to a relatively small number of users and
       is multiple times larger as a result.
     '';
+    homepage = "https://github.com/open-telemetry/opentelemetry-collector-contrib";
+    changelog = "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ uri-canva jk ];
+    mainProgram = "otelcontribcol";
   };
 }

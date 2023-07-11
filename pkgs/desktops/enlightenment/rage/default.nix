@@ -7,6 +7,7 @@
 , efl
 , gst_all_1
 , wrapGAppsHook
+, directoryListingUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -34,11 +35,13 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-libav
   ];
 
+  passthru.updateScript = directoryListingUpdater { };
+
   meta = with lib; {
     description = "Video and audio player along the lines of mplayer";
     homepage = "https://enlightenment.org/";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ matejc ftrvxmtrx romildo ];
+    maintainers = with maintainers; [ matejc ftrvxmtrx ] ++ teams.enlightenment.members;
   };
 }

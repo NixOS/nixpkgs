@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "numpy-stl";
-  version = "2.16.3";
+  version = "3.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "95890627001efb2cb8d17418730cdc1bdd64b8dbb9862b01a8e0359d79fe863e";
+    hash = "sha256-3U2ho3nSYy8WhRi+jc2c3dftxsMjgJT9jSFHazWGoLw=";
   };
 
   propagatedBuildInputs = [
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     python-utils
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

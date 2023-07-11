@@ -1,24 +1,27 @@
-{ lib, stdenv
+{ lib
+, python3
 , python3Packages
 , fetchFromGitHub
 , systemd
 , xrandr
-, installShellFiles }:
+, installShellFiles
+, desktop-file-utils }:
 
-stdenv.mkDerivation rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "autorandr";
-  version = "1.12.1";
+  version = "1.13.3";
+  format = "other";
 
-  buildInputs = [ python3Packages.python ];
+  nativeBuildInputs = [ installShellFiles desktop-file-utils ];
+  propagatedBuildInputs = [ python3Packages.packaging ];
 
-  nativeBuildInputs = [ installShellFiles ];
-
-  # no wrapper, as autorandr --batch does os.environ.clear()
   buildPhase = ''
     substituteInPlace autorandr.py \
       --replace 'os.popen("xrandr' 'os.popen("${xrandr}/bin/xrandr' \
       --replace '["xrandr"]' '["${xrandr}/bin/xrandr"]'
   '';
+
+  patches = [ ./0001-don-t-use-sys.executable.patch ];
 
   outputs = [ "out" "man" ];
 
@@ -56,8 +59,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "phillipberndt";
     repo = "autorandr";
-    rev = version;
-    sha256 = "sha256-7SNnbgV6PeseBD6wdilEIOfOL2KVDpnlkSn9SBgRhhM=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-3zWYOOVYpj+s7VKagnbI55MNshM5WtbCFD6q9tRCzes=";
   };
 
   meta = with lib; {

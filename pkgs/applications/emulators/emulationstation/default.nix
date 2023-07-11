@@ -20,6 +20,10 @@ stdenv.mkDerivation {
     })
   ];
 
+  postPatch = ''
+    sed -i "7i #include <stack>" es-app/src/views/gamelist/ISimpleGameListView.h
+  '';
+
   nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ alsa-lib boost curl eigen freeimage freetype libarchive libGLU libGL SDL2 ];
 

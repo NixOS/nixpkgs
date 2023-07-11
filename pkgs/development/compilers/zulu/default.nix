@@ -22,15 +22,17 @@
 }:
 
 let
-  version = "11.52.13";
-  openjdk = "11.0.13";
+  version = "11.62.17";
+  openjdk = "11.0.18";
 
-  sha256_linux = "77a126669b26b3a89e0117b0f28cddfcd24fcd7699b2c1d35f921487148b9a9f";
-  sha256_darwin = "a96f9f859350f977319ebb5c2a999c182ab6b99b24c60e19d97c54367868a63e";
+  sha256_x64_linux = "sha256-b65oEbDzrrsUw+WaX94USBz/QS74yiMiGZPxqzMmmqs=";
+  sha256_x64_darwin = "sha256-nRRWTWiog8bRblmmPIPE5YibA34St3ZrJpZN91qEDUg=";
+  sha256_aarch64_darwin = "sha256-TBTrBxOfGo6MV+Md49P3sDfqVG1e+NraqfVbw9WTppk=";
 
   platform = if stdenv.isDarwin then "macosx" else "linux";
-  hash = if stdenv.isDarwin then sha256_darwin else sha256_linux;
+  hash = if stdenv.isAarch64 && stdenv.isDarwin then sha256_aarch64_darwin else if stdenv.isDarwin then sha256_x64_darwin else sha256_x64_linux;
   extension = if stdenv.isDarwin then "zip" else "tar.gz";
+  architecture = if stdenv.isAarch64 then "aarch64" else "x64";
 
   runtimeDependencies = [
     cups
@@ -45,7 +47,7 @@ in stdenv.mkDerivation {
   pname = "zulu";
 
   src = fetchurl {
-    url = "https://cdn.azul.com/zulu/bin/zulu${version}-ca-jdk${openjdk}-${platform}_x64.${extension}";
+    url = "https://cdn.azul.com/zulu/bin/zulu${version}-ca-jdk${openjdk}-${platform}_${architecture}.${extension}";
     sha256 = hash;
   };
 
@@ -109,14 +111,15 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://www.azul.com/products/zulu/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode binaryNativeCode ];
     license = licenses.gpl2;
     description = "Certified builds of OpenJDK";
     longDescription = ''
       Certified builds of OpenJDK that can be deployed across multiple
       operating systems, containers, hypervisors and Cloud platforms.
     '';
-    maintainers = with maintainers; [ fpletz ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    maintainers = with maintainers; [ ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "java";
   };
 }

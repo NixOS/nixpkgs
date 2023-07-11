@@ -2,14 +2,14 @@
 , notmuch, openssl, pkg-config, sqlite, xapian, zlib
 }:
 stdenv.mkDerivation rec {
-  version = "5";
+  version = "7";
   pname = "muchsync";
   passthru = {
     inherit version;
   };
   src = fetchurl {
     url = "http://www.muchsync.org/src/${pname}-${version}.tar.gz";
-    sha256 = "1k2m44pj5i6vfhp9icdqs42chsp208llanc666p3d9nww8ngq2lb";
+    hash = "sha256-+D4vb80O9IE0df3cjTkoVoZlTaX0FWWh6ams14Gjvqw=";
   };
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ notmuch openssl sqlite xapian zlib ];

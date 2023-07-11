@@ -8,16 +8,16 @@ in
     services.xserver.desktopManager.runXdgAutostartIfNone = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to run XDG autostart files for sessions without a desktop manager
         (with only a window manager), these sessions usually don't handle XDG
         autostart files by default.
 
-        Some services like <option>i18n.inputMethod</option> and
-        <option>service.earlyoom</option> use XDG autostart files to start.
-        If this option is not set to <literal>true</literal> and you are using
+        Some services like {option}`i18n.inputMethod` and
+        {option}`service.earlyoom` use XDG autostart files to start.
+        If this option is not set to `true` and you are using
         a window manager without a desktop manager, you need to manually start
-        them or running <package>dex</package> somewhere.
+        them or running `dex` somewhere.
       '';
     };
   };

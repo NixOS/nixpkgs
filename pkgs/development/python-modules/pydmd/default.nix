@@ -8,11 +8,12 @@
 , pytestCheckHook
 , pythonOlder
 , scipy
+, ezyrb
 }:
 
 buildPythonPackage rec {
   pname = "pydmd";
-  version = "0.4";
+  version = "0.4.0.post2302";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mathLab";
     repo = "PyDMD";
-    rev = "v${version}";
-    sha256 = "1qwa3dyrrm20x0pzr7rklcw7433fd822n4m8bbbdd7z83xh6xm8g";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-EYVmaxwOxje3KVrNbvsjwRqQBD7Rje/JK+qB1F7EqA0=";
   };
 
   propagatedBuildInputs = [
@@ -29,9 +30,10 @@ buildPythonPackage rec {
     matplotlib
     numpy
     scipy
+    ezyrb
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -48,6 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python Dynamic Mode Decomposition";
     homepage = "https://mathlab.github.io/PyDMD/";
+    changelog = "https://github.com/mathLab/PyDMD/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ yl3dy ];
     broken = stdenv.hostPlatform.isAarch64;

@@ -17,7 +17,7 @@
 , nose
 , nose-timer
 , mock
-, python_magic
+, python-magic
 , codecov
 , coverage
 , qt5
@@ -62,7 +62,7 @@ buildPythonPackage rec {
     pyperclip
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     codecov
     coverage
     mock
@@ -70,7 +70,7 @@ buildPythonPackage rec {
     nose-timer
     pyperclip
     pyqt5
-    python_magic
+    python-magic
   ];
   inherit doCheck;
 

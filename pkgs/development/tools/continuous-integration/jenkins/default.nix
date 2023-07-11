@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "jenkins";
-  version = "2.332.2";
+  version = "2.401.1";
 
   src = fetchurl {
-    url = "http://get.jenkins.io/war-stable/${version}/jenkins.war";
-    sha256 = "0z0igaq29nsxbkdzqfgrh10206a7ndsvz79bj8078hq8hqvl3an7";
+    url = "https://get.jenkins.io/war-stable/${version}/jenkins.war";
+    hash = "sha256-YAtz6r95eFLjmRlUG4T3aG/2Abl8d7ROsAhD65HH3Ww=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -51,11 +51,10 @@ stdenv.mkDerivation rec {
 
       version="$(jq -r .version <<<$core_json)"
       sha256="$(jq -r .sha256 <<<$core_json)"
-      hash="$(nix-hash --type sha256 --to-base32 "$sha256")"
-      url="$(jq -r .url <<<$core_json)"
+      hash="$(nix hash to-sri --type sha256 "$sha256")"
 
       if [ ! "$oldVersion" = "$version" ]; then
-        update-source-version jenkins "$version" "$hash" "$url"
+        update-source-version jenkins "$version" "$hash"
         nixpkgs="$(git rev-parse --show-toplevel)"
         default_nix="$nixpkgs/pkgs/development/tools/continuous-integration/jenkins/default.nix"
         nixfmt "$default_nix"
@@ -68,8 +67,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An extendable open source continuous integration server";
     homepage = "https://jenkins-ci.org";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
+    maintainers = with maintainers; [ coconnor earldouglas nequissimus ajs124 ];
+    changelog = "https://www.jenkins.io/changelog-stable/#v${version}";
+    mainProgram = "jenkins-cli";
     platforms = platforms.all;
-    maintainers = with maintainers; [ coconnor fpletz earldouglas nequissimus ];
   };
 }

@@ -1,7 +1,8 @@
 { lib
 , buildPythonPackage
-, fetchpatch
+, pythonOlder
 , fetchPypi
+, fetchpatch
 , pytest
 , pytest-asyncio
 , pytestCheckHook
@@ -10,44 +11,43 @@
 
 buildPythonPackage rec {
   pname = "pytest-mock";
-  version = "3.7.0";
+  version = "3.10.0";
+
+  disabled = pythonOlder "3.7";
+
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-URK9ksyfGG7pbhqS78hJaepJSTnDrq05xQ9CHEzGlTQ=";
+    hash = "sha256-+72whe98JSoyb9jNysCqOxMz2IEfExvcxwEALhvn7U8=";
   };
 
   patches = [
     (fetchpatch {
-      # pytest7 compatbilitya
-      url = "https://github.com/pytest-dev/pytest-mock/commit/0577f1ad051fb8d0da94ea22dcb02346d74064b2.patch";
-      hash = "sha256-eim4v7U8Mjigr462bXI0pKH/M0ANBzSRc0lT4RpbZ0w=";
+      # Remove unnecessary py.code import
+      url = "https://github.com/pytest-dev/pytest-mock/pull/328/commits/e2016928db1147a2a46de6ee9fa878ca0e9d8fc8.patch";
+      hash = "sha256-5Gpzi7h7Io1CMykmBCZR/upM8E9isc3jEItYgwjEOWA=";
     })
   ];
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  buildInputs = [
     pytest
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # output of pytest has changed
-    "test_used_with_"
-    "test_plain_stopall"
   ];
 
   pythonImportsCheck = [ "pytest_mock" ];
 
   meta = with lib; {
-    description = "Thin-wrapper around the mock package for easier use with pytest";
+    description = "Thin wrapper around the mock package for easier use with pytest";
     homepage = "https://github.com/pytest-dev/pytest-mock";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/pytest-dev/pytest-mock/blob/v${version}/CHANGELOG.rst";
+    license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };
 }

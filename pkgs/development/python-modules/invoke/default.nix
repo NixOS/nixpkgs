@@ -2,22 +2,20 @@
 , bash
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
+, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "invoke";
-  version = "1.7.0";
+  version = "2.0.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4zLkneQEY/IBYxX1HfQjE4VXcr6GQ1aGFWvBj0W1zGw=";
+    hash = "sha256-erXdnNdreH1WCnixqYENJSNnq1lZhcUGEnAr4h1nHdc=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -e 's|/bin/bash|${bash}/bin/bash|g' -i invoke/config.py
   '';
 
@@ -27,6 +25,13 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "invoke"
   ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    mkdir -p $out/share/{bash-completion/completions,fish/vendor_completions.d,zsh/site-functions}
+    $out/bin/inv --print-completion-script=zsh >$out/share/zsh/site-functions/_inv
+    $out/bin/inv --print-completion-script=bash >$out/share/bash-completion/completions/inv.bash
+    $out/bin/inv --print-completion-script=fish >$out/share/fish/vendor_completions.d/inv.fish
+  '';
 
   meta = with lib; {
     description = "Pythonic task execution";

@@ -25,9 +25,13 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace src/git.rs \
         --replace 'std::process::Command::new("git")' \
         'std::process::Command::new("${git}/bin/git")'
+    substituteInPlace tests/lib.rs \
+        --replace 'std::process::Command::new("git")' \
+        'std::process::Command::new("${git}/bin/git")'
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = ''
       A build system that uses ptrace to handle dependencies automatically
     '';

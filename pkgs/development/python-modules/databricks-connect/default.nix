@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "databricks-connect";
-  version = "9.1.13";
+  version = "11.3.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-TpE15UOwbuAvp+ffC9JUnR8yQb0DWvBMkSieMhQGjao=";
+    hash = "sha256-kAUBA9V1st5UxXihrXQjyk+1ahsum/VEcNfDK1he/Pc=";
   };
 
   sourceRoot = ".";
@@ -41,6 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Client for connecting to remote Databricks clusters";
     homepage = "https://pypi.org/project/databricks-connect";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.databricks;
     maintainers = with maintainers; [ kfollesdal ];
   };

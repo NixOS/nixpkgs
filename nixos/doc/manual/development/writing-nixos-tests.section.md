@@ -1,9 +1,9 @@
 # Writing Tests {#sec-writing-nixos-tests}
 
-A NixOS test is a Nix expression that has the following structure:
+A NixOS test is a module that has the following structure:
 
 ```nix
-import ./make-test-python.nix {
+{
 
   # One or more machines:
   nodes =
@@ -21,10 +21,13 @@ import ./make-test-python.nix {
 }
 ```
 
-The attribute `testScript` is a bit of Python code that executes the
+We refer to the whole test above as a test module, whereas the values
+in [`nodes.<name>`](#test-opt-nodes) are NixOS modules themselves.
+
+The option [`testScript`](#test-opt-testScript) is a piece of Python code that executes the
 test (described below). During the test, it will start one or more
 virtual machines, the configuration of which is described by
-the attribute `nodes`.
+the option [`nodes`](#test-opt-nodes).
 
 An example of a single-node test is
 [`login.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/login.nix).
@@ -34,7 +37,54 @@ when switching between consoles, and so on. An interesting multi-node test is
 [`nfs/simple.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/nfs/simple.nix).
 It uses two client nodes to test correct locking across server crashes.
 
-There are a few special NixOS configuration options for test VMs:
+## Calling a test {#sec-calling-nixos-tests}
+
+Tests are invoked differently depending on whether the test is part of NixOS or lives in a different project.
+
+### Testing within NixOS {#sec-call-nixos-test-in-nixos}
+
+Tests that are part of NixOS are added to [`nixos/tests/all-tests.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/all-tests.nix).
+
+```nix
+  hostname = runTest ./hostname.nix;
+```
+
+Overrides can be added by defining an anonymous module in `all-tests.nix`.
+
+```nix
+  hostname = runTest {
+    imports = [ ./hostname.nix ];
+    defaults.networking.firewall.enable = false;
+  };
+```
+
+You can run a test with attribute name `hostname` in `nixos/tests/all-tests.nix` by invoking:
+
+```shell
+cd /my/git/clone/of/nixpkgs
+nix-build -A nixosTests.hostname
+```
+
+### Testing outside the NixOS project {#sec-call-nixos-test-outside-nixos}
+
+Outside the `nixpkgs` repository, you can instantiate the test by first importing the NixOS library,
+
+```nix
+let nixos-lib = import (nixpkgs + "/nixos/lib") { };
+in
+
+nixos-lib.runTest {
+  imports = [ ./test.nix ];
+  hostPkgs = pkgs;  # the Nixpkgs package set used outside the VMs
+  defaults.services.foo.package = mypkg;
+}
+```
+
+`runTest` returns a derivation that runs the test.
+
+## Configuring the nodes {#sec-nixos-test-nodes}
+
+There are a few special NixOS options for test VMs:
 
 `virtualisation.memorySize`
 
@@ -80,6 +130,11 @@ starting them in parallel:
 start_all()
 ```
 
+If the hostname of a node contains characters that can't be used in a
+Python variable name, those characters will be replaced with
+underscores in the variable name, so `nodes.machine-a` will be exposed
+to Python as `machine_a`.
+
 ## Machine objects {#ssec-machine-objects}
 
 The following methods are available on machine objects:
@@ -115,22 +170,22 @@ The following methods are available on machine objects:
 `get_screen_text_variants`
 
 :   Return a list of different interpretations of what is currently
-    visible on the machine\'s screen using optical character
+    visible on the machine's screen using optical character
     recognition. The number and order of the interpretations is not
     specified and is subject to change, but if no exception is raised at
     least one will be returned.
 
     ::: {.note}
-    This requires passing `enableOCR` to the test attribute set.
+    This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
     :::
 
 `get_screen_text`
 
 :   Return a textual representation of what is currently visible on the
-    machine\'s screen using optical character recognition.
+    machine's screen using optical character recognition.
 
     ::: {.note}
-    This requires passing `enableOCR` to the test attribute set.
+    This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
     :::
 
 `send_monitor_command`
@@ -159,34 +214,42 @@ The following methods are available on machine objects:
 `execute`
 
 :   Execute a shell command, returning a list `(status, stdout)`.
+
+    Commands are run with `set -euo pipefail` set:
+
+    -   If several commands are separated by `;` and one fails, the
+        command as a whole will fail.
+
+    -   For pipelines, the last non-zero exit status will be returned
+        (if there is one; otherwise zero will be returned).
+
+    -   Dereferencing unset variables fails the command.
+
+    -   It will wait for stdout to be closed.
+
     If the command detaches, it must close stdout, as `execute` will wait
     for this to consume all output reliably. This can be achieved by
     redirecting stdout to stderr `>&2`, to `/dev/console`, `/dev/null` or
     a file. Examples of detaching commands are `sleep 365d &`, where the
     shell forks a new process that can write to stdout and `xclip -i`, where
     the `xclip` command itself forks without closing stdout.
+
     Takes an optional parameter `check_return` that defaults to `True`.
     Setting this parameter to `False` will not check for the return code
     and return -1 instead. This can be used for commands that shut down
     the VM and would therefore break the pipe that would be used for
     retrieving the return code.
 
+    A timeout for the command can be specified (in seconds) using the optional
+    `timeout` parameter, e.g., `execute(cmd, timeout=10)` or
+    `execute(cmd, timeout=None)`. The default is 900 seconds.
+
 `succeed`
 
 :   Execute a shell command, raising an exception if the exit status is
-    not zero, otherwise returning the standard output. Commands are run
-    with `set -euo pipefail` set:
-
-    -   If several commands are separated by `;` and one fails, the
-        command as a whole will fail.
-
-    -   For pipelines, the last non-zero exit status will be returned
-        (if there is one, zero will be returned otherwise).
-
-    -   Dereferencing unset variables fail the command.
-
-    -   It will wait for stdout to be closed. See `execute` for the
-        implications.
+    not zero, otherwise returning the standard output. Similar to `execute`,
+    except that the timeout is `None` by default. See `execute` for details on
+    command execution.
 
 `fail`
 
@@ -196,10 +259,13 @@ The following methods are available on machine objects:
 `wait_until_succeeds`
 
 :   Repeat a shell command with 1-second intervals until it succeeds.
+    Has a default timeout of 900 seconds which can be modified, e.g.
+    `wait_until_succeeds(cmd, timeout=10)`. See `execute` for details on
+    command execution.
 
 `wait_until_fails`
 
-:   Repeat a shell command with 1-second intervals until it fails.
+:   Like `wait_until_succeeds`, but repeating the command until it fails.
 
 `wait_for_unit`
 
@@ -212,12 +278,13 @@ The following methods are available on machine objects:
 
 `wait_for_open_port`
 
-:   Wait until a process is listening on the given TCP port (on
-    `localhost`, at least).
+:   Wait until a process is listening on the given TCP port and IP address
+    (default `localhost`).
 
 `wait_for_closed_port`
 
-:   Wait until nobody is listening on the given TCP port.
+:   Wait until nobody is listening on the given TCP port and IP address
+    (default `localhost`).
 
 `wait_for_x`
 
@@ -230,14 +297,14 @@ The following methods are available on machine objects:
     `get_screen_text` and `get_screen_text_variants`).
 
     ::: {.note}
-    This requires passing `enableOCR` to the test attribute set.
+    This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
     :::
 
 `wait_for_console_text`
 
 :   Wait until the supplied regular expressions match a line of the
     serial console output. This method is useful when OCR is not
-    possibile or accurate enough.
+    possible or accurate enough.
 
 `wait_for_window`
 
@@ -289,11 +356,11 @@ machine.wait_for_unit("xautolock.service", "x-session-user")
 This applies to `systemctl`, `get_unit_info`, `wait_for_unit`,
 `start_job` and `stop_job`.
 
-For faster dev cycles it\'s also possible to disable the code-linters
-(this shouldn\'t be commited though):
+For faster dev cycles it's also possible to disable the code-linters
+(this shouldn't be committed though):
 
 ```nix
-import ./make-test-python.nix {
+{
   skipLint = true;
   nodes.machine =
     { config, pkgs, ... }:
@@ -309,7 +376,7 @@ import ./make-test-python.nix {
 
 This will produce a Nix warning at evaluation time. To fully disable the
 linter, wrap the test script in comment directives to disable the Black
-linter directly (again, don\'t commit this within the Nixpkgs
+linter directly (again, don't commit this within the Nixpkgs
 repository):
 
 ```nix
@@ -321,9 +388,22 @@ repository):
     '';
 ```
 
+Similarly, the type checking of test scripts can be disabled in the following
+way:
+
+```nix
+{
+  skipTypeCheck = true;
+  nodes.machine =
+    { config, pkgs, ... }:
+    { configuration…
+    };
+}
+```
+
 ## Failing tests early {#ssec-failing-tests-early}
 
-To fail tests early when certain invariables are no longer met (instead of waiting for the build to time out), the decorator `polling_condition` is provided. For example, if we are testing a program `foo` that should not quit after being started, we might write the following:
+To fail tests early when certain invariants are no longer met (instead of waiting for the build to time out), the decorator `polling_condition` is provided. For example, if we are testing a program `foo` that should not quit after being started, we might write the following:
 
 ```py
 @polling_condition
@@ -338,34 +418,65 @@ with foo_running:
     ...  # Put `foo` through its paces
 ```
 
-
 `polling_condition` takes the following (optional) arguments:
 
 `seconds_interval`
 
-:
-    specifies how often the condition should be polled:
+:   specifies how often the condition should be polled:
 
-    ```py
-    @polling_condition(seconds_interval=10)
-    def foo_running():
-        machine.succeed("pgrep -x foo")
-    ```
+```py
+@polling_condition(seconds_interval=10)
+def foo_running():
+    machine.succeed("pgrep -x foo")
+```
 
 `description`
 
-:
-    is used in the log when the condition is checked. If this is not provided, the description is pulled from the docstring of the function. These two are therefore equivalent:
+:   is used in the log when the condition is checked. If this is not provided, the description is pulled from the docstring of the function. These two are therefore equivalent:
 
-    ```py
-    @polling_condition
-    def foo_running():
-        "check that foo is running"
-        machine.succeed("pgrep -x foo")
-    ```
+```py
+@polling_condition
+def foo_running():
+    "check that foo is running"
+    machine.succeed("pgrep -x foo")
+```
 
-    ```py
-    @polling_condition(description="check that foo is running")
-    def foo_running():
-        machine.succeed("pgrep -x foo")
-    ```
+```py
+@polling_condition(description="check that foo is running")
+def foo_running():
+    machine.succeed("pgrep -x foo")
+```
+
+## Adding Python packages to the test script {#ssec-python-packages-in-test-script}
+
+When additional Python libraries are required in the test script, they can be
+added using the parameter `extraPythonPackages`. For example, you could add
+`numpy` like this:
+
+```nix
+{
+  extraPythonPackages = p: [ p.numpy ];
+
+  nodes = { };
+
+  # Type checking on extra packages doesn't work yet
+  skipTypeCheck = true;
+
+  testScript = ''
+    import numpy as np
+    assert str(np.zeros(4) == "array([0., 0., 0., 0.])")
+  '';
+}
+```
+
+In that case, `numpy` is chosen from the generic `python3Packages`.
+
+## Test Options Reference {#sec-test-options-reference}
+
+The following options can be used when writing tests.
+
+```{=include=} options
+id-prefix: test-opt-
+list-id: test-options-list
+source: @NIXOS_TEST_OPTIONS_JSON@
+```

@@ -60,6 +60,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "Desktop chat client for Slack and Discord";
     homepage = "https://cancel.fm/ripcord/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     # See: https://cancel.fm/ripcord/shareware-redistribution/
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ infinisil ];

@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, docker }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, docker }:
 
 buildGoModule rec {
   pname = "fn";
-  version = "0.6.17";
+  version = "0.6.26";
 
   src = fetchFromGitHub {
     owner = "fnproject";
     repo = "cli";
     rev = version;
-    sha256 = "sha256-u/YISLlZFYlAUejSlaH7POA2WwKURPN8phFU86/caXU=";
+    hash = "sha256-Tj64/8uYEy4qZISjmtpOGTMzgSkBB516/Dej6/biYRY=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   subPackages = ["."];
 

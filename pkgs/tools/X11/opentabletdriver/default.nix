@@ -2,7 +2,6 @@
 , buildDotnetModule
 , fetchFromGitHub
 , fetchurl
-, dotnetCorePackages
 , gtk3
 , libX11
 , libXrandr
@@ -19,22 +18,19 @@
 
 buildDotnetModule rec {
   pname = "OpenTabletDriver";
-  version = "0.6.0.3";
+  version = "0.6.2.0";
 
   src = fetchFromGitHub {
     owner = "OpenTabletDriver";
     repo = "OpenTabletDriver";
     rev = "v${version}";
-    sha256 = "sha256-/Tow25ycQEK8HN1IaB12ZXCXEsuKItD+aYLF/IX8Eos=";
+    sha256 = "sha256-D1/DGvSBgG8wZMmyJ7QAHDcsMjC1YgSpxmSYzs6ntJg=";
   };
 
   debPkg = fetchurl {
     url = "https://github.com/OpenTabletDriver/OpenTabletDriver/releases/download/v${version}/OpenTabletDriver.deb";
     sha256 = "sha256-LJqH3+JckPF7S/1uBE2X81jxWg0MF9ff92Ei8WPEA2w=";
   };
-
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
   dotnetInstallFlags = [ "--framework=net6.0" ];
 
@@ -58,6 +54,8 @@ buildDotnetModule rec {
     libnotify
     udev
   ];
+
+  buildInputs = runtimeDeps;
 
   doCheck = true;
   testProjectFile = "OpenTabletDriver.Tests/OpenTabletDriver.Tests.csproj";
@@ -116,7 +114,7 @@ buildDotnetModule rec {
     homepage = "https://github.com/OpenTabletDriver/OpenTabletDriver";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ thiagokokada ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "otd";
   };
 }

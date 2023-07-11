@@ -1,7 +1,9 @@
-{ lib
+{ stdenv
+, lib
 , appdirs
 , buildPythonPackage
 , cachelib
+, colorama
 , cssselect
 , fetchFromGitHub
 , keep
@@ -9,32 +11,39 @@
 , pygments
 , pyquery
 , requests
+, rich
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "howdoi";
-  version = "2.0.19";
+  version = "2.0.20";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "gleitz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0hl7cpxm4llsgw6390bpjgkzrprrpb0vxx2flgly7wiy9zl1rc5q";
+    hash = "sha256-u0k+h7Sp2t/JUnfPqRzDpEA+vNXB7CpyZ/SRvk+B9t0=";
   };
 
   propagatedBuildInputs = [
     appdirs
     cachelib
+    colorama
     cssselect
     keep
     lxml
     pygments
     pyquery
     requests
+    rich
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -43,9 +52,7 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    # AssertionError: "The...
-    "test_get_text_with_one_link"
-    "test_get_text_without_links"
+    "test_colorize"
   ];
 
   pythonImportsCheck = [
@@ -53,8 +60,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
+    changelog = "https://github.com/gleitz/howdoi/blob/v${version}/CHANGES.txt";
     description = "Instant coding answers via the command line";
-    homepage = "https://pypi.python.org/pypi/howdoi";
+    homepage = "https://github.com/gleitz/howdoi";
     license = licenses.mit;
     maintainers = with maintainers; [ costrouc ];
   };

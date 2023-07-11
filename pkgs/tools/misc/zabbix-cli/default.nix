@@ -5,21 +5,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "zabbix-cli";
-  version = "2.2.1";
+  version = "2.3.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "usit-gd";
     repo = "zabbix-cli";
-    rev = version;
-    sha256 = "0wzmrn8p09ksqhhgawr179c4az7p2liqr0l4q2dra62bxliawyqz";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-i4dviSdrHNAn4mSWMn5DOBg4j8BXCfwKVYsDaBd/g6o=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
     requests
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
 

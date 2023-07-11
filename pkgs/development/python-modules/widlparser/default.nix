@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "plinss";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-T17fDWYd1naza/ao7kXWGcRIl2fzL1/Z9SaJiutZzqk=";
+    hash = "sha256-T17fDWYd1naza/ao7kXWGcRIl2fzL1/Z9SaJiutZzqk=";
   };
 
   postPatch = ''
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Stand-alone WebIDL Parser in Python";
     homepage = "https://github.com/plinss/widlparser";
     license = licenses.mit;
-    maintainers = [ maintainers.kvark ];
+    maintainers = [];
   };
 }

@@ -2,21 +2,21 @@
 
 buildPythonPackage rec {
   pname = "ansi2html";
-  version = "1.7.0";
+  version = "1.8.0";
   format = "pyproject";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-aTFr6MaKyRxVgtOXwokOacmTzHzaUgYqx+Rfy2YNjtw=";
+    hash = "sha256-OLgqKYSCofomE/D5yb6z23Ko+DLurFjrLke/Ms039tU=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ six setuptools ];
 
   preCheck = "export PATH=$PATH:$out/bin";
-  checkInputs = [ mock pytestCheckHook ];
+  nativeCheckInputs = [ mock pytestCheckHook ];
 
   pythonImportsCheck = [ "ansi2html" ];
 

@@ -40,10 +40,10 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   maintainers = lib.teams.pantheon.members;
 
-  mutter = pkgs.gnome.mutter338;
+  mutter = pkgs.gnome.mutter43;
 
-  # Using 3.38 to match Mutter used in Pantheon
-  gnome-settings-daemon = pkgs.gnome.gnome-settings-daemon338;
+  # Using 43 to match Mutter used in Pantheon
+  gnome-settings-daemon = pkgs.gnome.gnome-settings-daemon43;
 
   elementary-gsettings-schemas = callPackage ./desktop/elementary-gsettings-schemas { };
 
@@ -66,6 +66,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   elementary-files = callPackage ./apps/elementary-files { };
 
   elementary-feedback = callPackage ./apps/elementary-feedback { };
+
+  elementary-iconbrowser = callPackage ./apps/elementary-iconbrowser { };
 
   elementary-mail = callPackage ./apps/elementary-mail { };
 
@@ -107,10 +109,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gala = callPackage ./desktop/gala { };
 
-  gnome-bluetooth-contract = callPackage ./desktop/gnome-bluetooth-contract {
-    inherit (gnome) gnome-bluetooth_1_0;
-  };
-
   wingpanel = callPackage ./desktop/wingpanel { };
 
   wingpanel-with-indicators = callPackage ./desktop/wingpanel/wrapper.nix {
@@ -120,6 +118,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   #### LIBRARIES
 
   granite = callPackage ./granite { };
+
+  granite7 = callPackage ./granite/7 { };
 
   #### SERVICES
 
@@ -243,6 +243,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   extra-elementary-contracts = throw "extra-elementary-contracts has been removed as all contracts have been upstreamed."; # added 2021-12-01
 
   file-roller = pkgs.gnome.file-roller; # added 2022-03-12
+
+  gnome-bluetooth-contract = throw "pantheon.gnome-bluetooth-contract has been removed, abandoned by upstream."; # added 2022-06-30
 
   notes-up = throw "The ‘pantheon.notes-up’ alias was removed on 2022-02-02, please use ‘pkgs.notes-up’ directly."; # added 2021-12-18
 

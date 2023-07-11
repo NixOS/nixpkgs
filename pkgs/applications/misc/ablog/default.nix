@@ -1,16 +1,17 @@
 { lib
 , python3
+, fetchPypi
 }:
 
 with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "ablog";
-  version = "0.10.23";
+  version = "0.10.33.post1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-fqqB17dNzcDZmFw3nj85T5zvMzY6SN/JxbB3IASOas8=";
+    sha256 = "sha256-+vrVQ4sItCXrSCzNXyKk6/6oDBOyfyD7iNWzmcbE/BQ=";
   };
 
   propagatedBuildInputs = [
@@ -21,7 +22,7 @@ buildPythonApplication rec {
     python-dateutil
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -8,11 +8,11 @@ assert odbcSupport -> unixODBC != null;
 
 stdenv.mkDerivation rec {
   pname = "freetds";
-  version = "1.3.9";
+  version = "1.3.18";
 
   src = fetchurl {
     url    = "https://www.freetds.org/files/stable/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-qByKmGp6LwuUWZ69eheF1yAX3qbXlqf0S2rGge53wuc=";
+    sha256 = "sha256-HYVh1XxxmRoo9GgTQ3hcI6aj61TVvNI4l9B+OCX/LVY=";
   };
 
   buildInputs = [

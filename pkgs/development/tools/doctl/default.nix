@@ -1,10 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ stdenv, lib, buildGoModule, fetchFromGitHub, installShellFiles, buildPackages }:
 
 buildGoModule rec {
   pname = "doctl";
-  version = "1.71.1";
+  version = "1.96.1";
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   postInstall = ''
     export HOME=$(mktemp -d) # attempts to write to /homeless-shelter
     for shell in bash fish zsh; do
-      $out/bin/doctl completion $shell > doctl.$shell
+      ${stdenv.hostPlatform.emulator buildPackages} $out/bin/doctl completion $shell > doctl.$shell
       installShellCompletion doctl.$shell
     done
   '';
@@ -31,7 +31,7 @@ buildGoModule rec {
     owner = "digitalocean";
     repo = "doctl";
     rev = "v${version}";
-    sha256 = "sha256-Y6YabrpM1WcNGp5ksvq3SBuAS6KEUVzEfxsPmBDS+Io=";
+    sha256 = "sha256-COkD0YFij07mHpkeJSnZXLaB9olZGBN/HpFb06ag4Rs=";
   };
 
   meta = with lib; {

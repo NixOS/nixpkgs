@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , perl
 , pkg-config
 , curl
@@ -8,6 +9,7 @@
 , autoreconfHook
 , autoconf-archive
 , nlohmann_json
+, Security
 }:
 
 stdenv.mkDerivation {
@@ -15,6 +17,8 @@ stdenv.mkDerivation {
   inherit (nix) version src;
 
   postUnpack = "sourceRoot=$sourceRoot/perl";
+
+  buildInputs = lib.optional (stdenv.isDarwin) Security;
 
   # This is not cross-compile safe, don't have time to fix right now
   # but noting for future travellers.
@@ -36,6 +40,4 @@ stdenv.mkDerivation {
   ];
 
   preConfigure = "export NIX_STATE_DIR=$TMPDIR";
-
-  preBuild = "unset NIX_INDENT_MAKE";
 }

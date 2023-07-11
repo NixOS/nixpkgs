@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "exiv2";
-  version = "0.27.5";
+  version = "0.27.7";
 
   outputs = [ "out" "lib" "dev" "doc" "man" "static" ];
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "exiv2";
     repo  = "exiv2";
     rev = "v${version}";
-    sha256 = "sha256-5kdzw/YzpYldfHjUSPOzu3gW2TPgxt8Oxs0LZDFphgA=";
+    sha256 = "sha256-xytVGrLDS22n2/yydFTT6CsDESmhO9mFbPGX4yk+b6g=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     libxml2.bin
     python3
     which
@@ -62,14 +62,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  # Test setup found by inspecting ${src}/.travis/run.sh; problems without cmake.
-  checkTarget = "tests";
-
   preCheck = ''
     patchShebangs ../test/
     mkdir ../test/tmp
 
-    ${lib.optionalString (stdenv.isAarch64 || stdenv.isAarch32) ''
+    ${lib.optionalString stdenv.hostPlatform.isAarch ''
       # Fix tests on arm
       # https://github.com/Exiv2/exiv2/issues/933
       rm -f ../tests/bugfixes/github/test_CVE_2018_12265.py
@@ -83,10 +80,14 @@ stdenv.mkDerivation rec {
       rm -f ../tests/bugfixes/redmine/test_issue_662.py
       rm -f ../tests/bugfixes/github/test_issue_1046.py
 
+      rm ../tests/bugfixes/redmine/test_issue_683.py
+
       # disable tests that requires loopback networking
       substituteInPlace  ../tests/bash_tests/testcases.py \
         --replace "def io_test(self):" "def io_disabled(self):"
      ''}
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    export LC_ALL=C
   '';
 
   # With CMake we have to enable samples or there won't be
@@ -116,10 +117,10 @@ stdenv.mkDerivation rec {
   disallowedReferences = [ stdenv.cc.cc ];
 
   meta = with lib; {
-    homepage = "https://www.exiv2.org/";
+    homepage = "https://exiv2.org";
     description = "A library and command-line utility to manage image metadata";
     platforms = platforms.all;
     license = licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with maintainers; [ wegank ];
   };
 }

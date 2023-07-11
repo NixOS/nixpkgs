@@ -3,28 +3,41 @@
 , fetchPypi
 , google-api-core
 , grpc-google-iam-v1
-, libcst
 , mock
 , proto-plus
-, pytestCheckHook
+, protobuf
 , pytest-asyncio
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-tasks";
-  version = "2.8.1";
+  version = "2.13.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-VfRDZRgwq1pOwjzmq6mdbVqcT6wQdD6qOMivQn4Ua10=";
+    hash = "sha256-VXYUs5PQ+bH97d/vOAxag4CAn8ROMvPZewF05e/k7PM=";
   };
 
-  propagatedBuildInputs = [ google-api-core grpc-google-iam-v1 libcst proto-plus ];
+  propagatedBuildInputs = [
+    google-api-core
+    grpc-google-iam-v1
+    proto-plus
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [ mock pytestCheckHook pytest-asyncio ];
+  nativeCheckInputs = [
+    mock
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   disabledTests = [
-    # requires credentials
+    # Test requires credentials
     "test_list_queues"
   ];
 
@@ -38,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Cloud Tasks API API client library";
     homepage = "https://github.com/googleapis/python-tasks";
+    changelog = "https://github.com/googleapis/python-tasks/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

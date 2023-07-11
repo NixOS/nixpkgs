@@ -4,6 +4,7 @@
 , authlib
 , requests
 , nose
+, pyjwt
 , pythonOlder
 , pytz
 , responses
@@ -12,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "simple-salesforce";
-  version = "1.11.6";
+  version = "1.12.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,17 +21,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-/uaFEQnilcelHKjbmrnyLm5Mzj2V8P4oEH+cgJn+KvI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-nYL2kSDS6DSrBzAKbg7Wj6boSZ52+T/yX+NYnYQ9rQo=";
   };
 
   propagatedBuildInputs = [
     authlib
+    pyjwt
     requests
     zeep
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
     pytz
     responses
@@ -42,9 +44,14 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+  pythonImportsCheck = [
+    "simple_salesforce"
+  ];
+
   meta = with lib; {
     description = "A very simple Salesforce.com REST API client for Python";
     homepage = "https://github.com/simple-salesforce/simple-salesforce";
+    changelog = "https://github.com/simple-salesforce/simple-salesforce/blob/v${version}/CHANGES";
     license = licenses.asl20;
     maintainers = with maintainers; [ costrouc ];
   };

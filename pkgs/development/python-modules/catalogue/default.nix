@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "catalogue";
-  version = "2.0.7";
+  version = "2.0.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-U10zrnnr0hyimFUdhdoYaui44d82sPsCRtp3QWPsLWs=";
+    hash = "sha256-syXHdlkgi/tq8bDZOxoapBEuG7KaTFztgWdYpyLw44g=";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
@@ -25,13 +25,8 @@ buildPythonPackage rec {
     zipp
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
-  ];
-
-  disabledTests = lib.optionals (pythonAtLeast "3.10") [
-    # https://github.com/explosion/catalogue/issues/27
-    "test_entry_points"
   ];
 
   pythonImportsCheck = [
@@ -43,6 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/explosion/catalogue";
     changelog = "https://github.com/explosion/catalogue/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ onny ];
   };
 }

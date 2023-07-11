@@ -2,6 +2,7 @@
 , bzip2, zlib, lz4, inotify-tools, pam, libcap, coreutils
 , clucene_core_2, icu, openldap, libsodium, libstemmer, cyrus_sasl
 , nixosTests
+, fetchpatch
 # Auth modules
 , withMySQL ? false, libmysqlclient
 , withPgSQL ? false, postgresql
@@ -11,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "dovecot";
-  version = "2.3.18";
+  version = "2.3.20";
 
   nativeBuildInputs = [ perl pkg-config ];
   buildInputs =
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dovecot.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
-    hash = "sha256-Buc/ZoxsCTxFve7rfCA5irjcSTFyNPS1eBrF4sxdbDM=";
+    hash = "sha256-yqgy65aBSKvfNe6dD1NLd5+nMsDOSpE9mrjDRpshhVI=";
   };
 
   enableParallelBuilding = true;
@@ -40,6 +41,9 @@ stdenv.mkDerivation rec {
     sed -i -s -E 's!\bcat\b!${coreutils}/bin/cat!g' src/lib-smtp/test-bin/*.sh
 
     patchShebangs src/config/settings-get.pl
+
+    # DES-encrypted passwords are not supported by NixPkgs anymore
+    sed '/test_password_scheme("CRYPT"/d' -i src/auth/test-libpassword.c
   '' + lib.optionalString stdenv.isLinux ''
     export systemdsystemunitdir=$out/etc/systemd/system
   '';
@@ -57,6 +61,11 @@ stdenv.mkDerivation rec {
     # so we can symlink plugins from several packages there.
     # The symlinking needs to be done in NixOS.
     ./2.3.x-module_dir.patch
+    # fix openssl 3.0 compatibility
+    (fetchpatch {
+      url = "https://salsa.debian.org/debian/dovecot/-/raw/debian/1%252.3.19.1+dfsg1-2/debian/patches/Support-openssl-3.0.patch";
+      hash = "sha256-PbBB1jIY3jIC8Js1NY93zkV0gISGUq7Nc67Ul5tN7sw=";
+    })
   ];
 
   configureFlags = [

@@ -17,29 +17,29 @@ in
 
     services.disnix = {
 
-      enable = mkEnableOption "Disnix";
+      enable = mkEnableOption (lib.mdDoc "Disnix");
 
       enableMultiUser = mkOption {
         type = types.bool;
         default = true;
-        description = "Whether to support multi-user mode by enabling the Disnix D-Bus service";
+        description = lib.mdDoc "Whether to support multi-user mode by enabling the Disnix D-Bus service";
       };
 
-      useWebServiceInterface = mkEnableOption "the DisnixWebService interface running on Apache Tomcat";
+      useWebServiceInterface = mkEnableOption (lib.mdDoc "the DisnixWebService interface running on Apache Tomcat");
 
       package = mkOption {
         type = types.path;
-        description = "The Disnix package";
+        description = lib.mdDoc "The Disnix package";
         default = pkgs.disnix;
         defaultText = literalExpression "pkgs.disnix";
       };
 
-      enableProfilePath = mkEnableOption "exposing the Disnix profiles in the system's PATH";
+      enableProfilePath = mkEnableOption (lib.mdDoc "exposing the Disnix profiles in the system's PATH");
 
       profiles = mkOption {
         type = types.listOf types.str;
         default = [ "default" ];
-        description = "Names of the Disnix profiles to expose in the system's PATH";
+        description = lib.mdDoc "Names of the Disnix profiles to expose in the system's PATH";
       };
     };
 
@@ -87,8 +87,8 @@ in
         environment = {
           HOME = "/root";
         }
-        // (if config.environment.variables ? DYSNOMIA_CONTAINERS_PATH then { inherit (config.environment.variables) DYSNOMIA_CONTAINERS_PATH; } else {})
-        // (if config.environment.variables ? DYSNOMIA_MODULES_PATH then { inherit (config.environment.variables) DYSNOMIA_MODULES_PATH; } else {});
+        // (optionalAttrs (config.environment.variables ? DYSNOMIA_CONTAINERS_PATH) { inherit (config.environment.variables) DYSNOMIA_CONTAINERS_PATH; })
+        // (optionalAttrs (config.environment.variables ? DYSNOMIA_MODULES_PATH) { inherit (config.environment.variables) DYSNOMIA_MODULES_PATH; });
 
         serviceConfig.ExecStart = "${cfg.package}/bin/disnix-service";
       };

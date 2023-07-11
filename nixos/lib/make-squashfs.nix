@@ -10,6 +10,7 @@
 
 stdenv.mkDerivation {
   name = "squashfs.img";
+  __structuredAttrs = true;
 
   nativeBuildInputs = [ squashfsTools ];
 

@@ -19,7 +19,14 @@ in
 {
   options = {
     services.miniflux = {
-      enable = mkEnableOption "miniflux and creates a local postgres database for it";
+      enable = mkEnableOption (lib.mdDoc "miniflux and creates a local postgres database for it");
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.miniflux;
+        defaultText = literalExpression "pkgs.miniflux";
+        description = lib.mdDoc "Miniflux package to use.";
+      };
 
       config = mkOption {
         type = types.attrsOf types.str;
@@ -29,9 +36,9 @@ in
             LISTEN_ADDR = "localhost:8080";
           }
         '';
-        description = ''
+        description = lib.mdDoc ''
           Configuration for Miniflux, refer to
-          <link xlink:href="https://miniflux.app/docs/configuration.html"/>
+          <https://miniflux.app/docs/configuration.html>
           for documentation on the supported values.
 
           Correct configuration for the database is already provided.
@@ -41,7 +48,7 @@ in
 
       adminCredentialsFile = mkOption  {
         type = types.path;
-        description = ''
+        description = lib.mdDoc ''
           File containing the ADMIN_USERNAME and
           ADMIN_PASSWORD (length >= 6) in the format of
           an EnvironmentFile=, as described by systemd.exec(5).
@@ -89,7 +96,7 @@ in
       after = [ "network.target" "postgresql.service" "miniflux-dbsetup.service" ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.miniflux}/bin/miniflux";
+        ExecStart = "${cfg.package}/bin/miniflux";
         User = dbUser;
         DynamicUser = true;
         RuntimeDirectory = "miniflux";
@@ -116,12 +123,12 @@ in
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        SystemCallFilter = [ "@system-service" "~@privileged" ];
         UMask = "0077";
       };
 
       environment = cfg.config;
     };
-    environment.systemPackages = [ pkgs.miniflux ];
+    environment.systemPackages = [ cfg.package ];
   };
 }

@@ -9,13 +9,13 @@ in
 {
   options.services.irkerd = {
     enable = mkOption {
-      description = "Whether to enable irker, an IRC notification daemon.";
+      description = lib.mdDoc "Whether to enable irker, an IRC notification daemon.";
       default = false;
       type = types.bool;
     };
 
     openPorts = mkOption {
-      description = "Open ports in the firewall for irkerd";
+      description = lib.mdDoc "Open ports in the firewall for irkerd";
       default = false;
       type = types.bool;
     };
@@ -24,7 +24,7 @@ in
       default = "localhost";
       example = "0.0.0.0";
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Specifies the bind address on which the irker daemon listens.
         The default is localhost.
 
@@ -36,7 +36,7 @@ in
     nick = mkOption {
       default = "irker";
       type = types.str;
-      description = "Nick to use for irker";
+      description = lib.mdDoc "Nick to use for irker";
     };
   };
 

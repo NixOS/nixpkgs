@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3, fetchpatch }:
+{ lib, fetchFromGitHub, python3 }:
 
 
 let
@@ -12,11 +12,17 @@ let
         version = "1.0.18";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "09h1153wgr5x2ny7ds0w2m81n3bb9j8hjb8sjfnrg506r01clkyx";
+          hash = "sha256-3U/KAsgGlJetkxotCZFMaw0bUBUc6Ha8Fb3kx0cJASY=";
         };
       });
       # Use click 7
-      click = self.callPackage ../../../development/python2-modules/click/default.nix { };
+      click = super.click.overridePythonAttrs (old: rec {
+        version = "7.1.2";
+        src = old.src.override {
+          inherit version;
+          hash = "sha256-0rUlXHxjSbwb0eWeCM0SrLvWPOZJ8liHVXg6qU37axo=";
+        };
+      });
     };
   };
 in
@@ -31,7 +37,7 @@ buildPythonApplication rec {
     owner = "donnemartin";
     repo = pname;
     rev = "811a5804c09406465b2b02eab638c08bf5c4fa7f";
-    sha256 = "1g3dfsyk4727d9jh9w6j5r51ag07851cls7v7a7hmdvdixpvbzp6";
+    hash = "sha256-5v61b49ttwqPOvtoykJBBzwVSi7S8ARlakccMr12bbw=";
   };
 
   propagatedBuildInputs = [
@@ -46,11 +52,9 @@ buildPythonApplication rec {
   # will fail without pre-seeded config files
   doCheck = false;
 
-  checkInputs = [ mock ];
+  nativeCheckInputs = [ unittestCheckHook mock ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s tests -v
-  '';
+  unittestFlagsArray = [ "-s" "tests" "-v" ];
 
   meta = with lib; {
     homepage = "https://github.com/donnemartin/haxor-news";

@@ -8,19 +8,19 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.25";
+  version = "2.29";
   pname = "links2";
 
   src = fetchurl {
     url = "${meta.homepage}/download/links-${version}.tar.bz2";
-    sha256 = "sha256-LdeFCGmOgnnvTwmjoqIelZUEARNALabFU5dEFPtJ3Sw=";
+    sha256 = "sha256-IqqWwLOOGm+PftnXpBZ6R/w3JGCXdZ72BZ7Pj56teZg=";
   };
 
   buildInputs = with lib;
     [ libev librsvg libpng libjpeg libtiff openssl xz bzip2 zlib ]
     ++ optionals stdenv.isLinux [ gpm ]
     ++ optionals enableX11 [ libX11 libXau libXt ]
-    ++ optional enableDirectFB [ directfb ];
+    ++ optionals enableDirectFB [ directfb ];
 
   nativeBuildInputs = [ pkg-config bzip2 ];
 

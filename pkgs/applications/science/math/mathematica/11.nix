@@ -1,14 +1,26 @@
-{ lib, stdenv
-, coreutils
+{ lib
 , patchelf
 , requireFile
-, callPackage
+, stdenv
+# arguments from default.nix
+, lang
+, meta
+, name
+, src
+, version
+# dependencies
 , alsa-lib
+, coreutils
+, cudaPackages
 , dbus
 , fontconfig
 , freetype
 , gcc
 , glib
+, libGL
+, libGLU
+, libuuid
+, libxml2
 , ncurses
 , opencv2
 , openssl
@@ -16,23 +28,12 @@
 , xkeyboard_config
 , xorg
 , zlib
-, libxml2
-, libuuid
-, lang ? "en"
-, libGL
-, libGLU
+# options
+, cudaSupport
 }:
 
-let
-  l10n =
-    import ./l10ns.nix {
-      lib = lib;
-      inherit requireFile lang;
-      majorVersion = "11";
-    };
-in
 stdenv.mkDerivation rec {
-  inherit (l10n) version name src;
+  inherit meta name src version;
 
   buildInputs = [
     coreutils
@@ -74,7 +75,8 @@ stdenv.mkDerivation rec {
     + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
       (":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs);
 
-  phases = "unpackPhase installPhase fixupPhase";
+  dontConfigure = true;
+  dontBuild = true;
 
   unpackPhase = ''
     echo "=== Extracting makeself archive ==="
@@ -141,10 +143,4 @@ stdenv.mkDerivation rec {
 
   # we did this in prefixup already
   dontPatchELF = true;
-
-  meta = {
-    description = "Wolfram Mathematica computational software system";
-    homepage = "http://www.wolfram.com/mathematica/";
-    license = lib.licenses.unfree;
-  };
 }

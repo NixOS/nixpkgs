@@ -8,22 +8,22 @@
 
 buildPythonPackage rec {
   pname = "wakeonlan";
-  version = "2.1.0";
+  version = "3.0.0";
   disabled = pythonOlder "3.6";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "remcohaszing";
     repo = "pywakeonlan";
-    rev = version;
-    sha256 = "sha256-5ri4bXc0EMNntzmcUZYpRIfaXoex4s5M6psf/9ta17Y=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-7BDE7TmTT8rSaG0rEn5QwH+izGWA2PeQzxpGiv7+3fo=";
   };
 
   nativeBuildInputs = [
     poetry-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

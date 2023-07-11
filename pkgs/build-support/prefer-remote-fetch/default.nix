@@ -11,9 +11,9 @@
 # $ echo 'self: super: super.prefer-remote-fetch self super' > ~/.config/nixpkgs/overlays/prefer-remote-fetch.nix
 #
 self: super: {
-  fetchurl = args: super.fetchurl (args // { preferLocalBuild = false; });
-  fetchgit = args: super.fetchgit (args // { preferLocalBuild = false; });
-  fetchhg = args: super.fetchhg (args // { preferLocalBuild = false; });
-  fetchsvn = args: super.fetchsvn (args // { preferLocalBuild = false; });
-  fetchipfs = args: super.fetchipfs (args // { preferLocalBuild = false; });
+  fetchurl = args: super.fetchurl ({ preferLocalBuild = false; } // args);
+  fetchgit = args: super.fetchgit ({ preferLocalBuild = false; } // args);
+  fetchhg = args: super.fetchhg ({ preferLocalBuild = false; } // args);
+  fetchsvn = args: super.fetchsvn ({ preferLocalBuild = false; } // args);
+  fetchipfs = args: super.fetchipfs ({ preferLocalBuild = false; } // args);
 }

@@ -11,6 +11,7 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "11r2mmy6bg3b6pf6qc0ml3idh333cj8yz754hrvd1sc4ipfkkqh7";
   };
 
+  strictDeps = true;
   dontConfigure = true;
   dontBuild = true;
 

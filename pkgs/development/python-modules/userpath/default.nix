@@ -1,29 +1,43 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, hatchling
 , click
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "userpath";
-  version = "1.7.0";
+  version = "1.8.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256="sha256-3NZsX6mxo8EjYvMJu7W8eZK6yK+G0XtOaxpLFmoRxD8=";
+    hash = "sha256-BCM9L8/lz/kRweT7cYl1VkDhUk/4ekuCq51rh1/uV4c=";
   };
 
-  propagatedBuildInputs = [ click ];
+  nativeBuildInputs = [
+    hatchling
+  ];
 
-  # test suite is difficult to emulate in sandbox due to shell manipulation
+  propagatedBuildInputs = [
+    click
+  ];
+
+  # Test suite is difficult to emulate in sandbox due to shell manipulation
   doCheck = false;
 
-  pythonImportsCheck = [ "click" "userpath" ];
+  pythonImportsCheck = [
+    "userpath"
+  ];
 
   meta = with lib; {
     description = "Cross-platform tool for adding locations to the user PATH";
     homepage = "https://github.com/ofek/userpath";
-    license = [ licenses.asl20 licenses.mit ];
+    changelog = "https://github.com/ofek/userpath/releases/tag/v${version}";
+    license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ yshym ];
   };
 }

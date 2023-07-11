@@ -1,39 +1,40 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, cmake
 , libxml2
 , libpeas
 , glib
 , gtk3
 , gtksourceview4
 , gspell
-, xapps
+, xapp
 , pkg-config
+, python3
 , meson
 , ninja
 , wrapGAppsHook
 , intltool
-, itstool }:
+, itstool
+}:
 
 stdenv.mkDerivation rec {
   pname = "xed-editor";
-  version = "3.2.2";
+  version = "3.4.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xed";
     rev = version;
-    sha256 = "sha256-PW7y3+Sa9FH5r5xvziysvxM08RJCPvnLs3wsm5IqToQ=";
+    sha256 = "sha256-nc8YS1PcmtM37TJpGl691SlxJliyI2gSGJtNzkWbk9A=";
   };
 
   nativeBuildInputs = [
     meson
-    cmake
     pkg-config
     intltool
     itstool
     ninja
+    python3
     wrapGAppsHook
   ];
 
@@ -44,12 +45,8 @@ stdenv.mkDerivation rec {
     gtksourceview4
     libpeas
     gspell
-    xapps
+    xapp
   ];
-
-  postInstall = ''
-    glib-compile-schemas $out/share/glib-2.0/schemas
-  '';
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -66,6 +63,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxmint/xed";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tu-maurice ];
+    maintainers = with maintainers; [ tu-maurice bobby285271 ];
   };
 }

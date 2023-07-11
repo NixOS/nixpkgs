@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "oslo-i18n";
-  version = "5.1.0";
+  version = "6.0.0";
 
   src = fetchPypi {
     pname = "oslo.i18n";
     inherit version;
-    sha256 = "6bf111a6357d5449640852de4640eae4159b5562bbba4c90febb0034abc095d0";
+    hash = "sha256-7RBoa3X3xgeCUXemaRVfTiWc459hQ6N19jWbvKpKNc0=";
   };
 
   postPatch = ''
@@ -25,14 +25,21 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pbr ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     oslotest
     stestr
     testscenarios
   ];
 
   checkPhase = ''
-    stestr run
+    runHook preCheck
+
+    stestr run -e <(echo "
+    # test counts warnings which no longer matches in python 3.11
+    oslo_i18n.tests.test_message.MessageTestCase.test_translate_message_bad_translation
+    ")
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "oslo_i18n" ];

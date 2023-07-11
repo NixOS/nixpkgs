@@ -4,7 +4,6 @@
 , pillow
 , poetry-core
 , pytest-benchmark
-, pytest-mypy
 , pytestCheckHook
 , pythonOlder
 }:
@@ -28,16 +27,13 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pillow
     pytest-benchmark
-    pytest-mypy
     pytestCheckHook
   ];
 
   pytestFlagsArray = [
-    # Incompatible types in assignment
-    #"--mypy"
     "--benchmark-disable"
   ];
 
@@ -49,6 +45,6 @@ buildPythonPackage rec {
     description = "Pixel-level image comparison library";
     homepage = "https://github.com/whtsky/pixelmatch-py";
     license = licenses.isc;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [ ];
   };
 }

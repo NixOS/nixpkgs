@@ -1,26 +1,35 @@
-{ stdenvNoCC, lib, fetchFromGitHub }:
+{ stdenvNoCC, lib, fetchFromGitHub, makeWrapper, wget }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "distrobox";
-  version = "1.2.14";
+  version = "1.5.0.2";
 
   src = fetchFromGitHub {
     owner = "89luca89";
     repo = pname;
     rev = version;
-    sha256 = "sha256-gHKyuIL4K/SLBJw8xNuPdNifDcHI91AFTiHaiv38gus=";
+    sha256 = "sha256-ss8049D6n1V/gDzEMjywDnoke5s2we9j3mO8yta72UA=";
   };
 
   dontConfigure = true;
   dontBuild = true;
 
+  nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    ./install -p $out/bin
+    # https://github.com/89luca89/distrobox/issues/408
+    substituteInPlace ./distrobox-generate-entry \
+      --replace 'icon_default="''${HOME}/.local' "icon_default=\"$out"
+    ./install -P $out
 
     runHook postInstall
+  '';
+
+  # https://github.com/89luca89/distrobox/issues/407
+  postFixup = ''
+    wrapProgram "$out/bin/distrobox-generate-entry" \
+      --prefix PATH ":" ${lib.makeBinPath [ wget ]}
   '';
 
   meta = with lib; {
@@ -32,7 +41,7 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "https://distrobox.privatedns.org/";
     license = licenses.gpl3Only;
-    platforms = platforms.all;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ atila ];
   };
 }

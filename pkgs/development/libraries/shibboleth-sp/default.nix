@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     "--with-fastcgi"
   ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.isDarwin) "-std=c++14";
+
   enableParallelBuilding = true;
 
   meta = with lib; {

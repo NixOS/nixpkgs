@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "python-openstackclient";
-  version = "5.8.0";
+  version = "6.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-M0hS34iXuV8FgewS7ih96MepKJogihjwqLOHdwGf2YY=";
+    hash = "sha256-fFOr4bc7RT9Z2ntzZ5w7dZtI5RuLBUhktf3qLqgnJ9Y=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     installManPage doc/build/man/openstack.1
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     ddt
     stestr
     requests-mock

@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pycognito";
-  version = "2022.02.1";
+  version = "2022.12.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "pvizeli";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-0PqeZ8yy2MzvIi1xQNosR7V2Ma3tMT0Q/v4OIv7f1Kg=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-WepDna9f3Z3dBxWdE6G7nbl3yPK5vMG+7X1rxbZwdjE=";
   };
 
   propagatedBuildInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     mock
     moto

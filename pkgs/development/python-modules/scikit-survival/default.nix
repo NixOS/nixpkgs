@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , cython
@@ -16,11 +17,12 @@
 
 buildPythonPackage rec {
   pname = "scikit-survival";
-  version = "0.17.1";
+  version = "0.20.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Sx+reZKBbahjkVgo8hC8EP5vMsRhnprwGjKumQqH83k=";
+    hash = "sha256-24+8Sociq6u3KnoGSdV5Od5t/OT1uPkv19i3p5ezLjw=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +43,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sksurv" ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Hack needed to make pytest + cython work
   # https://github.com/NixOS/nixpkgs/pull/82410#issuecomment-827186298
@@ -64,6 +66,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Survival analysis built on top of scikit-learn";
     homepage = "https://github.com/sebp/scikit-survival";
     license = licenses.gpl3Only;

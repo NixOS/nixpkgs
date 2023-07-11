@@ -3,7 +3,7 @@
 {
   options = {
     services.sysprof = {
-      enable = lib.mkEnableOption "sysprof profiling daemon";
+      enable = lib.mkEnableOption (lib.mdDoc "sysprof profiling daemon");
     };
   };
 

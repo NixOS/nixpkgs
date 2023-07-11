@@ -14,46 +14,59 @@
 , libXcursor
 , bullet
 , openal
+, tinyxml
+, tinyxml-2
 }:
 
+let
+  stuntrally_ogre = ogre.overrideAttrs (old: {
+    cmakeFlags = old.cmakeFlags ++ [
+      "-DOGRE_NODELESS_POSITIONING=ON"
+      "-DOGRE_RESOURCEMANAGER_STRICT=0"
+    ];
+  });
+  stuntrally_mygui = mygui.override {
+    withOgre = true;
+    inherit ogre;
+  };
+in
+
 stdenv.mkDerivation rec {
-  pname = "stunt-rally";
-  version = "2.6.1";
+  pname = "stuntrally";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "stuntrally";
     repo = "stuntrally";
     rev = version;
-    hash = "sha256-1+Cc9I6TTa3b++/7Z2V+vAXcmFb2+wX7TnXEH6CRDWU=";
+    hash = "sha256-0Eh9ilIHSh/Uz8TuPnXxLQfy7KF7qqNXUgBXQUCz9ys=";
   };
   tracks = fetchFromGitHub {
     owner = "stuntrally";
     repo = "tracks";
     rev = version;
-    hash = "sha256-FbZc87j/9cp4LxNaEO2wNTvwk1Aq/IWcKD3rTGkzqj0=";
+    hash = "sha256-fglm1FetFGHM/qGTtpxDb8+k2iAREn5DQR5GPujuLms=";
   };
 
-  # include/OGRE/OgreException.h:265:126: error: invalid conversion from
-  # 'int' to 'Ogre::Exception::ExceptionCodes' [-fpermissive]
-  NIX_CFLAGS_COMPILE = "-fpermissive";
-
   preConfigure = ''
-    ln -s ${tracks} data/tracks
+    rmdir data/tracks
+    ln -s ${tracks}/ data/tracks
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config makeWrapper ];
   buildInputs = [
     boost
-    ogre
-    mygui
+    stuntrally_ogre
+    stuntrally_mygui
     ois
     SDL2
     libvorbis
-    makeWrapper
     enet
     libXcursor
     bullet
     openal
+    tinyxml
+    tinyxml-2
   ];
 
   meta = with lib; {

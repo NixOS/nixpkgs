@@ -10,32 +10,26 @@
 , lttng-ust
 , numactl
 , dotnetCorePackages
+, libglvnd
+, xorg
+, udev
 }:
 
 buildDotnetModule rec {
   pname = "osu-lazer";
-  version = "2022.409.0";
+  version = "2023.621.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     rev = version;
-    sha256 = "sha256-qG9797SA0iMq9IF5SzQLgnhoUd2FKSAVXUPem1LQc1M=";
+    sha256 = "sha256-ejptMzhRQcYEFa5c9XurYxaFZOUgTuAfe7qlGYhNX08=";
   };
 
   projectFile = "osu.Desktop/osu.Desktop.csproj";
   nugetDeps = ./deps.nix;
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
-
   nativeBuildInputs = [ copyDesktopItems ];
-
-  preConfigure = ''
-    dotnetFlags+=(
-      --runtime linux-x64
-    )
-  '';
 
   runtimeDeps = [
     ffmpeg
@@ -43,6 +37,18 @@ buildDotnetModule rec {
     SDL2
     lttng-ust
     numactl
+
+    # needed to avoid:
+    # Failed to create SDL window. SDL Error: Could not initialize OpenGL / GLES library
+    libglvnd
+
+    # needed for the window to actually appear
+    xorg.libXi
+
+    # needed to avoid in runtime.log:
+    # [verbose]: SDL error log [debug]: Failed loading udev_device_get_action: /nix/store/*-osu-lazer-*/lib/osu-lazer/runtimes/linux-x64/native/libSDL2.so: undefined symbol: _udev_device_get_action
+    # [verbose]: SDL error log [debug]: Failed loading libudev.so.1: libudev.so.1: cannot open shared object file: No such file or directory
+    udev
   ];
 
   executables = [ "osu!" ];
@@ -71,14 +77,14 @@ buildDotnetModule rec {
   })];
 
   meta = with lib; {
-    description = "Rhythm is just a *click* away";
+    description = "Rhythm is just a *click* away (no score submission or multiplayer, see osu-lazer-bin)";
     homepage = "https://osu.ppy.sh";
     license = with licenses; [
       mit
       cc-by-nc-40
       unfreeRedistributable # osu-framework contains libbass.so in repository
     ];
-    maintainers = with maintainers; [ oxalica ];
+    maintainers = with maintainers; [ oxalica thiagokokada ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "osu!";
   };

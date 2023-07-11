@@ -1,16 +1,19 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "striprtf";
-  version = "0.0.20";
+  version = "0.0.25";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-8eMeMrazl1o9XcIyWICDg6ycRMtFMfgTUNz51w9hAmc=";
+    hash = "sha256-5soxa3sCeBeYeNsxr4Y96ztTVdeSHgSH/6z8WWUvGQI=";
   };
 
   pythonImportsCheck = [
@@ -18,6 +21,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/joshy/striprtf/blob/v${version}/CHANGELOG.md";
     homepage = "https://github.com/joshy/striprtf";
     description = "A simple library to convert rtf to text";
     maintainers = with maintainers; [ aanderse ];

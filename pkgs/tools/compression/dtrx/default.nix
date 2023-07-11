@@ -21,13 +21,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "dtrx";
-  version = "8.2.2";
+  version = "8.5.1";
 
   src = fetchFromGitHub {
     owner = "dtrx-py";
     repo = "dtrx";
-    rev = version;
-    sha256 = "sha256-thtBVGgKRYHOAFuxDvuFxcIHoyYAI58AiNCx4vuVXGs=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-KOHafmvl17IABlcBuE7isHVCIYRbA68Dna6rgiiWlkQ=";
   };
 
   postInstall =
@@ -41,12 +41,12 @@ python3Packages.buildPythonApplication rec {
       wrapProgram "$out/bin/dtrx" --prefix PATH : "${archivers}"
     '';
 
-  buildInputs = [ python3Packages.twine ];
+  nativeBuildInputs = [ python3Packages.invoke ];
 
   meta = with lib; {
     description = "Do The Right Extraction: A tool for taking the hassle out of extracting archives";
     homepage = "https://github.com/dtrx-py/dtrx";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.spwhitt ];
+    maintainers = [ ];
   };
 }

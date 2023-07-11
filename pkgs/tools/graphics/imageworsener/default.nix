@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "imageworsener";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchurl {
     url = "https://entropymine.com/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "1dhjhlfrdng50dxxd306adzm54ir62pz99h4v0yi6rg56nxv5q5s";
+    sha256 = "sha256-p/u2XFreZ9nrwy5SxYmIpPmGuswAjJAh/ja1mEZtXI0=";
   };
 
   postPatch = ''

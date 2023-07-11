@@ -14,24 +14,25 @@
 
 buildDunePackage rec {
   pname = "ppx_cstubs";
-  version = "0.6.1.2";
+  version = "0.7.0";
 
   minimalOCamlVersion = "4.08";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "fdopen";
     repo = "ppx_cstubs";
     rev = version;
-    sha256 = "15cjb9ygnvp2kv85rrb7ncz7yalifyl7wd2hp2cl8r1qrpgi1d0w";
+    hash = "sha256-qMmwRWCIfNyhCQYPKLiufnb57sTR3P+WInOqtPDywFs=";
   };
 
-  nativeBuildInputs = [ cppo findlib ];
+  nativeBuildInputs = [ cppo ];
 
   buildInputs = [
     bigarray-compat
     containers
+    findlib
     integers
     num
     ppxlib
@@ -41,8 +42,6 @@ buildDunePackage rec {
   propagatedBuildInputs = [
     ctypes
   ];
-
-  strictDeps = true;
 
   meta = with lib; {
     homepage = "https://github.com/fdopen/ppx_cstubs";

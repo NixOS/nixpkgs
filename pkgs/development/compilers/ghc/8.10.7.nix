@@ -12,16 +12,18 @@
   libffi ? null
 
 , useLLVM ? !(stdenv.targetPlatform.isx86
-              || stdenv.targetPlatform.isPowerPC
+              || stdenv.targetPlatform.isPower
               || stdenv.targetPlatform.isSparc)
-, # LLVM is conceptually a run-time-only depedendency, but for
+, # LLVM is conceptually a run-time-only dependency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
   buildTargetLlvmPackages, llvmPackages
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? !(lib.meta.availableOn stdenv.hostPlatform gmp), gmp
+  enableIntegerSimple ? !(lib.meta.availableOn stdenv.hostPlatform gmp
+                          && lib.meta.availableOn stdenv.targetPlatform gmp)
+, gmp
 
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
@@ -96,6 +98,9 @@ let
   # build the haddock program (removing the `enableHaddockProgram` option).
   ''
     HADDOCK_DOCS = ${if enableHaddockProgram then "YES" else "NO"}
+    # Build haddocks for boot packages with hyperlinking
+    EXTRA_HADDOCK_OPTS += --hyperlinked-source --quickjump
+
     DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
     INTEGER_LIBRARY = ${if enableIntegerSimple then "integer-simple" else "integer-gmp"}
   '' + lib.optionalString (targetPlatform != hostPlatform) ''
@@ -183,6 +188,14 @@ stdenv.mkDerivation (rec {
   outputs = [ "out" "doc" ];
 
   patches = [
+    # Fix docs build with sphinx >= 6.0
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/22766
+    (fetchpatch {
+      name = "ghc-docs-sphinx-6.0.patch";
+      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/10e94a556b4f90769b7fd718b9790d58ae566600.patch";
+      sha256 = "0kmhfamr16w8gch0lgln2912r8aryjky1hfcda3jkcwa5cdzgjdv";
+    })
+
     # See upstream patch at
     # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/4885. Since we build
     # from source distributions, the auto-generated configure script needs to be
@@ -190,6 +203,14 @@ stdenv.mkDerivation (rec {
     # upstream patch. Don't forget to check backport status of the upstream patch
     # when adding new GHC releases in nixpkgs.
     ./respect-ar-path.patch
+
+    # fix hyperlinked haddock sources: https://github.com/haskell/haddock/pull/1482
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/haskell/haddock/pull/1482.patch";
+      sha256 = "sha256-8w8QUCsODaTvknCDGgTfFNZa8ZmvIKaKS+2ZJZ9foYk=";
+      extraPrefix = "utils/haddock/";
+      stripLen = 1;
+    })
 
     # cabal passes incorrect --host= when cross-compiling
     # https://github.com/haskell/cabal/issues/5887
@@ -212,15 +233,14 @@ stdenv.mkDerivation (rec {
       url = "https://gitlab.haskell.org/ghc/ghc/-/commit/97d0b0a367e4c6a52a17c3299439ac7de129da24.patch";
       sha256 = "0r4zjj0bv1x1m2dgxp3adsf2xkr94fjnyj1igsivd9ilbs5ja0b5";
     })
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-
+  ] ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
     # Prevent the paths module from emitting symbols that we don't use
     # when building with separate outputs.
     #
     # These cause problems as they're not eliminated by GHC's dead code
     # elimination on aarch64-darwin. (see
     # https://github.com/NixOS/nixpkgs/issues/140774 for details).
-    ./cabal-paths.patch
+    ./Cabal-3.2-3.4-paths-fix-cycle-aarch64-darwin.patch
   ];
 
   postPatch = "patchShebangs .";
@@ -234,7 +254,7 @@ stdenv.mkDerivation (rec {
     # GHC is a bit confused on its cross terminology, as these would normally be
     # the *host* tools.
     export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
-    export CXX="${targetCC}/bin/${targetCC.targetPrefix}cxx"
+    export CXX="${targetCC}/bin/${targetCC.targetPrefix}c++"
     # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
     export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${lib.optionalString useLdGold ".gold"}"
     export AS="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}as"

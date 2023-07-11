@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qalculate-gtk";
-  version = "4.1.1";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "qalculate-gtk";
     rev = "v${version}";
-    sha256 = "sha256-itYNKcdWYMoqlvZ7CYJ6WMv7rS/y1SVdt3O7ahkjPOk=";
+    sha256 = "sha256-Fbi+vZEyXhUZQjWUX01IXd6G1cthfiuztdbisNQ/VZU=";
   };
 
   hardeningDisable = [ "format" ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "The ultimate desktop calculator";
     homepage = "http://qalculate.github.io";
-    maintainers = with maintainers; [ gebner doronbehar ];
+    maintainers = with maintainers; [ gebner doronbehar alyaeanyx ];
     license = licenses.gpl2Plus;
     platforms = platforms.all;
   };

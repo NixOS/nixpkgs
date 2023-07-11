@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
+    "-DCMAKE_CXX_FLAGS=-std=c++11"
     "-DBLAS_FOUND:BOOL=TRUE"
     "-DBLAS_LIBRARIES:STRING=${blas}/lib/libblas.so"
     "-DLAPACK_FOUND:BOOL=TRUE"
@@ -38,14 +39,12 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   checkPhase = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/itpp
-    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD/itpp
     ./gtests/itpp_gtests
   '';
 
   meta = with lib; {
     description = "IT++ is a C++ library of mathematical, signal processing and communication classes and functions";
-    homepage = "http://itpp.sourceforge.net/";
+    homepage = "https://itpp.sourceforge.net/";
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ andrew-d ];

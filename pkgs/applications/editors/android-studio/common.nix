@@ -2,10 +2,11 @@
 
 { alsa-lib
 , bash
-, buildFHSUserEnv
+, buildFHSEnv
 , cacert
 , coreutils
 , dbus
+, e2fsprogs
 , expat
 , fetchurl
 , findutils
@@ -37,7 +38,7 @@
 , makeWrapper
 , ncurses5
 , nspr
-, nss
+, nss_latest
 , pciutils
 , pkgsi686Linux
 , ps
@@ -52,6 +53,7 @@
 , xkeyboard_config
 , zlib
 , makeDesktopItem
+, tiling_wm # if we are using a tiling wm, need to set _JAVA_AWT_WM_NONREPARENTING in wrapper
 }:
 
 let
@@ -77,9 +79,10 @@ let
     installPhase = ''
       cp -r . $out
       wrapProgram $out/bin/studio.sh \
-        --set-default JAVA_HOME "$out/jre" \
+        --set-default JAVA_HOME "$out/jbr" \
         --set ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
         --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
+        ${lib.optionalString tiling_wm "--set _JAVA_AWT_WM_NONREPARENTING 1"} \
         --set FONTCONFIG_FILE ${fontsConf} \
         --prefix PATH : "${lib.makeBinPath [
 
@@ -115,6 +118,9 @@ let
           libXrender
           libXtst
 
+          # No crash, but attempted to load at startup
+          e2fsprogs
+
           # Gradle wants libstdc++.so.6
           stdenv.cc.cc.lib
           # mksdcard wants 32 bit libstdc++.so.6
@@ -140,7 +146,7 @@ let
           libXfixes
           libGL
           nspr
-          nss
+          nss_latest
           systemd
 
           # For GTKLookAndFeel
@@ -172,7 +178,7 @@ let
   # Android Studio downloads prebuilt binaries as part of the SDK. These tools
   # (e.g. `mksdcard`) have `/lib/ld-linux.so.2` set as the interpreter. An FHS
   # environment is used as a work around for that.
-  fhsEnv = buildFHSUserEnv {
+  fhsEnv = buildFHSEnv {
     name = "${drvName}-fhs-env";
     multiPkgs = pkgs: [
       ncurses5
@@ -190,7 +196,7 @@ in runCommand
   {
     startScript = ''
       #!${bash}/bin/bash
-      ${fhsEnv}/bin/${drvName}-fhs-env ${androidStudio}/bin/studio.sh
+      ${fhsEnv}/bin/${drvName}-fhs-env ${androidStudio}/bin/studio.sh "$@"
     '';
     preferLocalBuild = true;
     allowSubstitutes = false;
@@ -216,11 +222,12 @@ in runCommand
       # source-code itself).
       platforms = [ "x86_64-linux" ];
       maintainers = with maintainers; rec {
-        stable = [ fabianhjr ];
-        beta = [ fabianhjr ];
-        canary = [ fabianhjr ];
+        stable = [ alapshin ];
+        beta = [ alapshin ];
+        canary = [ alapshin ];
         dev = canary;
       }."${channel}";
+      mainProgram = pname;
     };
   }
   ''

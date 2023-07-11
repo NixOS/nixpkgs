@@ -2,9 +2,8 @@
 
 let
   # NOTE: raspberrypifw & raspberryPiWirelessFirmware should be updated with this
-  modDirVersion = "5.10.92";
-  tag = "1.20220118";
-  rev = "650082a559a570d6c9d2739ecc62843d6f951059";
+  modDirVersion = "6.1.21";
+  tag = "1.20230405";
 in
 lib.overrideDerivation (buildLinux (args // {
   version = "${modDirVersion}-${tag}";
@@ -13,8 +12,8 @@ lib.overrideDerivation (buildLinux (args // {
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "linux";
-    inherit rev;
-    sha256 = "sha256-OSDx9dzqm8JnLUvdiv1aKqhRz80uWqfjXLd7m6ycXME=";
+    rev = tag;
+    hash = "sha256-ILwecHZ1BN6GhZAUB6/UwiN/rZ8gHndKON6DUhidtxI=";
   };
 
   defconfig = {
@@ -28,24 +27,11 @@ lib.overrideDerivation (buildLinux (args // {
     efiBootStub = false;
   } // (args.features or {});
 
-  extraConfig = ''
-    # ../drivers/gpu/drm/ast/ast_mode.c:851:18: error: initialization of 'void (*)(struct drm_crtc *, struct drm_atomic_state *)' from incompatible pointer type 'void (*)(struct drm_crtc *, struct drm_crtc_state *)' [-Werror=incompatible-pointer-types]
-    #   851 |  .atomic_flush = ast_crtc_helper_atomic_flush,
-    #       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # ../drivers/gpu/drm/ast/ast_mode.c:851:18: note: (near initialization for 'ast_crtc_helper_funcs.atomic_flush')
-    DRM_AST n
-    # ../drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function 'amdgpu_dm_atomic_commit_tail':
-    # ../drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:7757:4: error: implicit declaration of function 'is_hdr_metadata_different' [-Werror=implicit-function-declaration]
-    #  7757 |    is_hdr_metadata_different(old_con_state, new_con_state);
-    #       |    ^~~~~~~~~~~~~~~~~~~~~~~~~
-    DRM_AMDGPU n
-  '';
-
   extraMeta = if (rpiVersion < 3) then {
-    platforms = with lib.platforms; [ arm ];
+    platforms = with lib.platforms; arm;
     hydraPlatforms = [];
   } else {
-    platforms = with lib.platforms; [ arm aarch64 ];
+    platforms = with lib.platforms; arm ++ aarch64;
     hydraPlatforms = [ "aarch64-linux" ];
   };
 } // (args.argsOverride or {}))) (oldAttrs: {

@@ -1,10 +1,8 @@
 import ./make-test-python.nix ({ lib, ... }:
 
-with lib;
-
 {
   name = "radarr";
-  meta.maintainers = with maintainers; [ etu ];
+  meta.maintainers = with lib.maintainers; [ etu ];
 
   nodes.machine =
     { pkgs, ... }:
@@ -12,7 +10,7 @@ with lib;
 
   testScript = ''
     machine.wait_for_unit("radarr.service")
-    machine.wait_for_open_port("7878")
+    machine.wait_for_open_port(7878)
     machine.succeed("curl --fail http://localhost:7878/")
   '';
 })

@@ -8,29 +8,26 @@ let
 
 in
 {
+  imports = [
+    (mkRemovedOptionModule [ "programs" "_1password-gui" "gid" ] ''
+      A preallocated GID will be used instead.
+    '')
+  ];
+
   options = {
     programs._1password-gui = {
-      enable = mkEnableOption "the 1Password GUI application";
-
-      gid = mkOption {
-        type = types.addCheck types.int (x: x >= 1000);
-        example = literalExpression "5000";
-        description = ''
-          The gid to assign to the onepassword group, which is needed for browser integration.
-          It must be 1000 or greater.
-        '';
-      };
+      enable = mkEnableOption (lib.mdDoc "the 1Password GUI application");
 
       polkitPolicyOwners = mkOption {
         type = types.listOf types.str;
         default = [ ];
         example = literalExpression ''["user1" "user2" "user3"]'';
-        description = ''
+        description = lib.mdDoc ''
           A list of users who should be able to integrate 1Password with polkit-based authentication mechanisms.
         '';
       };
 
-      package = mkPackageOption pkgs "1Password GUI" {
+      package = mkPackageOptionMD pkgs "1Password GUI" {
         default = [ "_1password-gui" ];
       };
     };
@@ -44,7 +41,7 @@ in
     in
     mkIf cfg.enable {
       environment.systemPackages = [ package ];
-      users.groups.onepassword.gid = cfg.gid;
+      users.groups.onepassword.gid = config.ids.gids.onepassword;
 
       security.wrappers = {
         "1Password-BrowserSupport" = {

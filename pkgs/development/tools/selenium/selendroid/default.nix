@@ -1,6 +1,5 @@
 { lib, stdenv, fetchurl, makeWrapper, jdk, selenium-server-standalone }:
 
-with lib;
 let
     pname = "selendroid-standalone";
     pluginName = "selendroid-grid-plugin-${version}";
@@ -39,11 +38,12 @@ stdenv.mkDerivation {
       --add-flags "-capabilityMatcher io.selendroid.grid.SelendroidCapabilityMatcher"
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://selendroid.io/";
     description = "Test automation for native or hybrid Android apps and the mobile web";
     maintainers = with maintainers; [ offline ];
     platforms = platforms.all;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
   };
 }

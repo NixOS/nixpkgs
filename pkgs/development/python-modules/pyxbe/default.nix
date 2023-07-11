@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pyxbe";
-  version = "0.0.4";
+  version = "1.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,18 +15,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mborgerson";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-mHUmSSy/ygteJhRX6AbgZJ+c5MZMZcgNRoTOfxhV+XQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-sm8/Lcsk3aL8/MB0cVrKNb8MoQPxGCGpHkEPWv+mPdo=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
   # Update location for run with pytest
   preCheck = ''
     substituteInPlace tests/test_load.py \
-      --replace "'xbefiles'" "'tests/xbefiles'"
+      --replace '"xbefiles"' '"tests/xbefiles"'
   '';
 
   pythonImportsCheck = [

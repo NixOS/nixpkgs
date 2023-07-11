@@ -1,15 +1,18 @@
 { lib, fetchFromGitHub
 , version
 , suffix ? ""
-, sha256 ? null
-, src ? fetchFromGitHub { owner = "NixOS"; repo = "nix"; rev = version; inherit sha256; }
+, hash ? null
+, src ? fetchFromGitHub { owner = "NixOS"; repo = "nix"; rev = version; inherit hash; }
 , patches ? [ ]
 }:
-assert (sha256 == null) -> (src != null);
+assert (hash == null) -> (src != null);
 let
   atLeast24 = lib.versionAtLeast version "2.4pre";
   atLeast25 = lib.versionAtLeast version "2.5pre";
   atLeast27 = lib.versionAtLeast version "2.7pre";
+  atLeast210 = lib.versionAtLeast version "2.10pre";
+  atLeast213 = lib.versionAtLeast version "2.13pre";
+  atLeast214 = lib.versionAtLeast version "2.14pre";
 in
 { stdenv
 , autoconf-archive
@@ -36,10 +39,12 @@ in
 , libsodium
 , lowdown
 , mdbook
+, mdbook-linkcheck
 , nlohmann_json
 , openssl
 , perl
 , pkg-config
+, rapidcheck
 , Security
 , sqlite
 , util-linuxMinimal
@@ -53,6 +58,9 @@ in
 , confDir
 , stateDir
 , storeDir
+
+  # passthru tests
+, pkgsi686Linux
 }: let
 self = stdenv.mkDerivation {
   pname = "nix";
@@ -79,6 +87,8 @@ self = stdenv.mkDerivation {
   ] ++ lib.optionals (atLeast24 && enableDocumentation) [
     (lib.getBin lowdown)
     mdbook
+  ] ++ lib.optionals (atLeast213 && enableDocumentation) [
+    mdbook-linkcheck
   ] ++ lib.optionals stdenv.isLinux [
     util-linuxMinimal
   ];
@@ -101,6 +111,8 @@ self = stdenv.mkDerivation {
     lowdown
   ] ++ lib.optionals (atLeast24 && stdenv.isx86_64) [
     libcpuid
+  ] ++ lib.optionals atLeast214 [
+    rapidcheck
   ] ++ lib.optionals withLibseccomp [
     libseccomp
   ] ++ lib.optionals withAWS [
@@ -109,7 +121,7 @@ self = stdenv.mkDerivation {
 
   propagatedBuildInputs = [
     boehmgc
-  ] ++ lib.optional (atLeast27) [
+  ] ++ lib.optionals (atLeast27) [
     nlohmann_json
   ];
 
@@ -159,16 +171,26 @@ self = stdenv.mkDerivation {
   ] ++ lib.optionals (!atLeast24) [
     # option was removed in 2.4
     "--disable-init-state"
+  ] ++ lib.optionals atLeast214 [
+    "CXXFLAGS=-I${lib.getDev rapidcheck}/extras/gtest/include"
   ] ++ lib.optionals stdenv.isLinux [
     "--with-sandbox-shell=${busybox-sandbox-shell}/bin/busybox"
+  ] ++ lib.optionals (atLeast210 && stdenv.isLinux && stdenv.hostPlatform.isStatic) [
+    "--enable-embedded-sandbox-shell"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform ? nix && stdenv.hostPlatform.nix ? system) [
     "--with-system=${stdenv.hostPlatform.nix.system}"
   ] ++ lib.optionals (!withLibseccomp) [
     # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
     "--disable-seccomp-sandboxing"
+  ] ++ lib.optionals (atLeast210 && stdenv.cc.isGNU && !enableStatic) [
+    "--enable-lto"
   ];
 
   makeFlags = [
+    # gcc runs multi-threaded LTO using make and does not yet detect the new fifo:/path style
+    # of make jobserver. until gcc adds support for this we have to instruct make to use this
+    # old style or LTO builds will run their linking on only one thread, which takes forever.
+    "--jobserver-style=pipe"
     "profiledir=$(out)/etc/profile.d"
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "PRECOMPILE_HEADERS=0"
     ++ lib.optional (stdenv.hostPlatform.isDarwin) "PRECOMPILE_HEADERS=1";
@@ -176,6 +198,7 @@ self = stdenv.mkDerivation {
   installFlags = [ "sysconfdir=$(out)/etc" ];
 
   doInstallCheck = true;
+  installCheckTarget = if atLeast210 then "installcheck" else null;
 
   # socket path becomes too long otherwise
   preInstallCheck = lib.optionalString stdenv.isDarwin ''
@@ -189,6 +212,16 @@ self = stdenv.mkDerivation {
   separateDebugInfo = stdenv.isLinux && (atLeast24 -> !enableStatic);
 
   enableParallelBuilding = true;
+
+  passthru = {
+    inherit aws-sdk-cpp boehmgc;
+
+    perl-bindings = perl.pkgs.toPerlModule (callPackage ./nix-perl.nix { nix = self; inherit Security; });
+
+    tests = {
+      nixi686 = pkgsi686Linux.nixVersions.${"nix_${lib.versions.major version}_${lib.versions.minor version}"};
+    };
+  };
 
   meta = with lib; {
     description = "Powerful package manager that makes package management reliable and reproducible";
@@ -204,12 +237,6 @@ self = stdenv.mkDerivation {
     maintainers = with maintainers; [ eelco lovesegfault artturin ];
     platforms = platforms.unix;
     outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
-  };
-
-  passthru = {
-    inherit aws-sdk-cpp boehmgc;
-
-    perl-bindings = perl.pkgs.toPerlModule (callPackage ./nix-perl.nix { nix = self; });
   };
 };
 in self

@@ -1,42 +1,123 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
+, cargo
 , configobj
-, patiencediff
-, six
-, fastimport
+, cython
 , dulwich
+, fastbencode
+, fastimport
+, libiconv
+, merge3
+, patiencediff
+, pyyaml
+, urllib3
+, breezy
 , launchpadlib
 , testtools
+, pythonOlder
+, installShellFiles
+, rustPlatform
+, rustc
+, setuptools-gettext
+, setuptools-rust
+, testers
 }:
 
 buildPythonPackage rec {
   pname = "breezy";
-  version = "3.2.1";
+  version = "3.3.3";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-4LJo6xoooq8EUoDDfQIa4y1/8XX0ybmfM6rX2wsp2Fw=";
+    hash = "sha256-WrXmxp63uja5lfPIPjPnvh1d/KwrkoOIjh4MYeRwMOc=";
   };
 
-  propagatedBuildInputs = [ configobj patiencediff six fastimport dulwich launchpadlib ];
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+  };
 
-  checkInputs = [ testtools ];
-
-  # There is a conflict with their `lazy_import` and plugin tests
-  doCheck = false;
-
-  # symlink for bazaar compatibility
-  postInstall = ''
-    ln -s "$out/bin/brz" "$out/bin/bzr"
+  postPatch = ''
+    ln -s ${./Cargo.lock} Cargo.lock
   '';
 
-  pythonImportsCheck = [ "breezy" ];
+  nativeBuildInputs = [
+    cython
+    installShellFiles
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+    setuptools-gettext
+    setuptools-rust
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+
+  propagatedBuildInputs = [
+    configobj
+    dulwich
+    fastbencode
+    merge3
+    patiencediff
+    pyyaml
+    urllib3
+  ] ++ passthru.optional-dependencies.launchpad
+    ++ passthru.optional-dependencies.fastimport;
+
+  nativeCheckInputs = [
+    testtools
+  ];
+
+  # multiple failures on sandbox
+  doCheck = false;
+
+  checkPhase = ''
+    runHook preCheck
+
+    HOME=$TMPDIR $out/bin/brz --no-plugins selftest
+
+    runHook postCheck
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/brz --prefix PYTHONPATH : "$PYTHONPATH"
+
+    # symlink for bazaar compatibility
+    ln -s "$out/bin/brz" "$out/bin/bzr"
+
+    installShellCompletion --cmd brz --bash contrib/bash/brz
+  '';
+
+  pythonImportsCheck = [
+    "breezy"
+    "breezy.bzr.rio"
+  ];
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = breezy;
+      command = "HOME=$TMPDIR brz --version";
+    };
+    optional-dependencies = {
+      launchpad = [
+        launchpadlib
+      ];
+      fastimport = [
+        fastimport
+      ];
+    };
+  };
 
   meta = with lib; {
     description = "Friendly distributed version control system";
     homepage = "https://www.breezy-vcs.org/";
-    license = licenses.gpl2;
+    changelog = "https://github.com/breezy-team/breezy/blob/brz-${version}/doc/en/release-notes/brz-${versions.majorMinor version}.txt";
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.marsam ];
+    mainProgram = "brz";
   };
 }

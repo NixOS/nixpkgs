@@ -50,14 +50,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "busybox";
-  version = "1.35.0";
+  version = "1.36.1";
 
   # Note to whoever is updating busybox: please verify that:
   # nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test
   # still builds after the update.
   src = fetchurl {
     url = "https://busybox.net/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-+u6yRMNaNIozT0pZ5EYm7ocPsHtohNaMEK6LwZ+DppQ=";
+    sha256 = "sha256-uMwkyVdNgJ5yecO+NJeVxdXOtv3xnKcJ+AzeUOR94xQ=";
   };
 
   hardeningDisable = [ "format" "pie" ]

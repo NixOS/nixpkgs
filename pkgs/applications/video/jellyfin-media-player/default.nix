@@ -22,27 +22,24 @@
 , qtwebchannel
 , qtwebengine
 , qtx11extras
+, jellyfin-web
+, withDbus ? stdenv.isLinux, dbus
 }:
 
 mkDerivation rec {
   pname = "jellyfin-media-player";
-  version = "1.6.1";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-media-player";
     rev = "v${version}";
-    sha256 = "sha256-iqwOv95JFxQ1j/9B+oBFAp7mD1/1g2EJYvvUKbrDQes=";
-  };
-
-  jmpDist = fetchzip {
-    url = "https://github.com/iwalton3/jellyfin-web-jmp/releases/download/jwc-10.7.3/dist.zip";
-    sha256 = "sha256-P7WEYbVvpaVLwMgqC2e8QtMOaJclg0bX78J1fdGzcCU=";
+    sha256 = "sha256-97/9UYXOsg8v7QoRqo5rh0UGhjjS85K9OvUwtlG249c=";
   };
 
   patches = [
-    # the webclient-files are not copied in the regular build script. Copy them just like the linux build
-    ./fix-osx-resources.patch
+    # fix the location of the jellyfin-web path
+    ./fix-web-path.patch
     # disable update notifications since the end user can't simply download the release artifacts to update
     ./disable-update-notifications.patch
   ];
@@ -78,12 +75,13 @@ mkDerivation rec {
     "-DCMAKE_BUILD_TYPE=Release"
     "-DQTROOT=${qtbase}"
     "-GNinja"
+  ] ++ lib.optionals (!withDbus) [
+    "-DLINUX_X11POWER=ON"
   ];
 
-  preBuild = ''
-    # copy the webclient-files to the expected "dist" directory
-    mkdir -p dist
-    cp -a ${jmpDist}/* dist
+  preConfigure = ''
+    # link the jellyfin-web files to be copied by cmake (see fix-web-path.patch)
+    ln -s ${jellyfin-web}/share/jellyfin-web .
   '';
 
   postInstall = lib.optionalString stdenv.isDarwin ''
@@ -101,7 +99,7 @@ mkDerivation rec {
     homepage = "https://github.com/jellyfin/jellyfin-media-player";
     description = "Jellyfin Desktop Client based on Plex Media Player";
     license = with licenses; [ gpl2Only mit ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "aarch64-linux" "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ jojosch kranzes ];
     mainProgram = "jellyfinmediaplayer";
   };

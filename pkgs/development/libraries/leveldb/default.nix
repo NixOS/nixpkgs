@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "leveldb";
-    rev = "${version}";
+    rev = version;
     sha256 = "sha256-RL+dfSFZZzWvUobSqiPbuC4nDiGzjIIukbVJZRacHbI=";
   };
 
@@ -36,7 +36,6 @@ stdenv.mkDerivation rec {
   # NOTE: disabling tests due to gtest issue
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DLEVELDB_BUILD_TESTS=OFF"
     "-DLEVELDB_BUILD_BENCHMARKS=OFF"
   ];

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "freac";
-  version = "1.1.6";
+  version = "1.1.7";
 
   src = fetchFromGitHub {
     owner = "enzo1982";
     repo = "freac";
     rev = "v${version}";
-    sha256 = "sha256-PDFc/RhxIe6M3lfVHE1QmJnu5Sy+q/yrXrXPV/8X51o=";
+    sha256 = "sha256-bHoRxxhSM7ipRkiBG7hEa1Iw8Z3tOHQ/atngC/3X1a4=";
   };
 
   buildInputs = [

@@ -3,6 +3,7 @@
 , fetchurl
 , autoPatchelfHook
 , wrapGAppsHook
+, makeWrapper
 , gnome
 , libsecret
 , git
@@ -15,20 +16,21 @@
 , cups
 , mesa
 , systemd
+, openssl
 }:
 
 stdenv.mkDerivation rec {
   pname = "github-desktop";
-  version = "2.9.12";
+  version = "3.2.1";
 
   src = fetchurl {
     url = "https://github.com/shiftkey/desktop/releases/download/release-${version}-linux1/GitHubDesktop-linux-${version}-linux1.deb";
-    sha256 = "sha256-tr1u6q7sHI1Otor53d1F7J0f9eV9tKtLZx8+40I16y8=";
+    hash = "sha256-OdvebRvOTyadgNjzrv6CGDPkljfpo4RVvVAc+X9hjSo=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
-    wrapGAppsHook
+    (wrapGAppsHook.override { inherit makeWrapper; })
   ];
 
   buildInputs = [
@@ -44,6 +46,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     cups
     mesa
+    openssl
   ];
 
   unpackPhase = ''
@@ -59,6 +62,12 @@ stdenv.mkDerivation rec {
     ln -sf $out/opt/${pname} $out/bin/${pname}
   '';
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}"
+    )
+  '';
+
   runtimeDependencies = [
     (lib.getLib systemd)
   ];
@@ -66,6 +75,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "GUI for managing Git and GitHub.";
     homepage = "https://desktop.github.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     maintainers = with maintainers; [ dan4ik605743 ];
     platforms = platforms.linux;

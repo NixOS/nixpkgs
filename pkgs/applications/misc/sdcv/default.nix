@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sdcv";
-  version = "0.5.3";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "Dushistov";
     repo = "sdcv";
     rev = "v${version}";
-    sha256 = "144qpl9b8r2php0zhi9b7vg6flpvdgjy6yfaipydwwhxi4wy9600";
+    sha256 = "sha256-EyvljVXhOsdxIYOGTzD+T16nvW7/RNx3DuQ2OdhjXJ4=";
   };
 
   hardeningDisable = [ "format" ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     mkdir locale
   '';
 
-  NIX_CFLAGS_COMPILE = "-D__GNU_LIBRARY__";
+  env.NIX_CFLAGS_COMPILE = "-D__GNU_LIBRARY__";
 
   meta = with lib; {
     homepage = "https://dushistov.github.io/sdcv/";

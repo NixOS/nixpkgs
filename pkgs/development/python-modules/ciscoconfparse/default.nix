@@ -1,25 +1,34 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, passlib
+, deprecat
 , dnspython
+, fetchFromGitHub
 , loguru
-, toml
+, passlib
+, poetry-core
 , pytestCheckHook
+, pythonOlder
+, pythonRelaxDepsHook
+, toml
 }:
 
 buildPythonPackage rec {
   pname = "ciscoconfparse";
-  version = "1.6.36";
+  version = "1.7.24";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mpenning";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-nIuuqAxz8eHEQRuH8nfYVQ+vGMmcDcARJLizoI5Mty8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-vL/CQdYcOP356EyRToviWylP1EBtxmeov6qkhfQNZ2Y=";
   };
+
+  pythonRelaxDeps = [
+    "loguru"
+  ];
 
   postPatch = ''
     patchShebangs tests
@@ -27,16 +36,18 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
     passlib
+    deprecat
     dnspython
     loguru
     toml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -45,17 +56,22 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # Tests require network access
     "test_dns_lookup"
     "test_reverse_dns_lookup"
+    # Path issues with configuration files
+    "testParse_valid_filepath"
   ];
 
-  pythonImportsCheck = [ "ciscoconfparse" ];
+  pythonImportsCheck = [
+    "ciscoconfparse"
+  ];
 
   meta = with lib; {
-    description =
-      "Parse, Audit, Query, Build, and Modify Cisco IOS-style configurations";
+    description = "Module to parse, audit, query, build, and modify Cisco IOS-style configurations";
     homepage = "https://github.com/mpenning/ciscoconfparse";
+    changelog = "https://github.com/mpenning/ciscoconfparse/blob/${version}/CHANGES.md";
     license = licenses.gpl3Only;
-    maintainers = [ maintainers.astro ];
+    maintainers = with maintainers; [ astro ];
   };
 }

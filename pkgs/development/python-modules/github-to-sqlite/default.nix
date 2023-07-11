@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "dogsheep";
     repo = pname;
     rev = version;
-    sha256 = "sha256-4wkwtcChcR7XH421wa3dGdIPhwgeaTFk247zIRX98xo=";
+    hash = "sha256-4wkwtcChcR7XH421wa3dGdIPhwgeaTFk247zIRX98xo=";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     requests-mock
   ];

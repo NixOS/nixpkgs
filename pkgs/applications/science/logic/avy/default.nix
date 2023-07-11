@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib boost.out boost.dev ];
-  NIX_CFLAGS_COMPILE = toString ([ "-Wno-narrowing" ]
+  env.NIX_CFLAGS_COMPILE = toString ([ "-Wno-narrowing" ]
     # Squelch endless stream of warnings on same few things
     ++ lib.optionals stdenv.cc.isClang [
       "-Wno-empty-body"
@@ -43,8 +43,5 @@ stdenv.mkDerivation rec {
     license     = lib.licenses.mit;
     maintainers = with lib.maintainers; [ thoughtpolice ];
     platforms   = lib.platforms.linux;
-    # See pkgs/applications/science/logic/glucose/default.nix
-    # (The error is different due to glucose-fenv.patch, but the same)
-    badPlatforms = [ "aarch64-linux" ];
   };
 }

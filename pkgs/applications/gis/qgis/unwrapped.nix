@@ -7,7 +7,6 @@
 , bison
 , proj
 , geos
-, xlibsWrapper
 , sqlite
 , gsl
 , qwt
@@ -29,15 +28,18 @@
 , qtkeychain
 , qt3d
 , qscintilla
+, qtlocation
 , qtserialport
 , qtxmlpatterns
 , withGrass ? true
 , grass
-, withWebKit ? true
+, withWebKit ? false
 , qtwebkit
 , pdal
 , zstd
 , makeWrapper
+, wrapGAppsHook
+, substituteAll
 }:
 
 let
@@ -64,19 +66,21 @@ let
     urllib3
     pygments
     pyqt5
-    sip_4
+    pyqt-builder
+    sip
+    setuptools
     owslib
     six
   ];
 in mkDerivation rec {
-  version = "3.24.1";
+  version = "3.28.3";
   pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "sha256-3dAwFR7L6NNDkDqNg9MzOJOGh1CDEJfckwo72dQECDg=";
+    hash = "sha256-nXauZSC78BX1fcx0SXniwQpRmdSLfoqZ5jlbXeHgRGI=";
   };
 
   passthru = {
@@ -88,7 +92,6 @@ in mkDerivation rec {
     openssl
     proj
     geos
-    xlibsWrapper
     sqlite
     gsl
     qwt
@@ -107,6 +110,7 @@ in mkDerivation rec {
     qca-qt5
     qtkeychain
     qscintilla
+    qtlocation
     qtserialport
     qtxmlpatterns
     qt3d
@@ -116,38 +120,43 @@ in mkDerivation rec {
     ++ lib.optional withWebKit qtwebkit
     ++ pythonBuildInputs;
 
-  nativeBuildInputs = [ makeWrapper cmake flex bison ninja ];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook cmake flex bison ninja ];
 
-  # Force this pyqt_sip_dir variable to point to the sip dir in PyQt5
-  #
-  # TODO: Correct PyQt5 to provide the expected directory and fix
-  # build to use PYQT5_SIP_DIR consistently.
-  postPatch = ''
-    substituteInPlace cmake/FindPyQt5.py \
-      --replace 'sip_dir = cfg.default_sip_dir' 'sip_dir = "${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}/PyQt5/bindings"'
-  '';
+  patches = [
+    (substituteAll {
+      src = ./set-pyqt-package-dirs.patch;
+      pyQt5PackageDir = "${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}";
+      qsciPackageDir = "${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}";
+    })
+  ];
 
   cmakeFlags = [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DWITH_3D=True"
     "-DWITH_PDAL=TRUE"
-    "-DPYQT5_SIP_DIR=${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}/PyQt5/bindings"
-    "-DQSCI_SIP_DIR=${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}/PyQt5/bindings"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
-    ++ lib.optional withGrass "-DGRASS_PREFIX7=${grass}/grass78";
+    ++ lib.optional withGrass (let
+        gmajor = lib.versions.major grass.version;
+        gminor = lib.versions.minor grass.version;
+      in "-DGRASS_PREFIX${gmajor}=${grass}/grass${gmajor}${gminor}"
+    );
+
+  dontWrapGApps = true; # wrapper params passed below
 
   postFixup = lib.optionalString withGrass ''
     # grass has to be availble on the command line even though we baked in
-    # the path at build time using GRASS_PREFIX
+    # the path at build time using GRASS_PREFIX.
+    # using wrapGAppsHook also prevents file dialogs from crashing the program
+    # on non-NixOS
     wrapProgram $out/bin/qgis \
+      "''${gappsWrapperArgs[@]}" \
       --prefix PATH : ${lib.makeBinPath [ grass ]}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A Free and Open Source Geographic Information System";
     homepage = "https://www.qgis.org";
-    license = lib.licenses.gpl2Plus;
-    platforms = with lib.platforms; linux;
-    maintainers = with lib.maintainers; [ lsix sikmir erictapen willcohen ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; teams.geospatial.members ++ [ lsix ];
+    platforms = with platforms; linux;
   };
 }

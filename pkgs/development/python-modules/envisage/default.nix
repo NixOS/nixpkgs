@@ -2,6 +2,7 @@
 , apptools
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , ipython
 , pytestCheckHook
 , pythonAtLeast
@@ -12,15 +13,24 @@
 
 buildPythonPackage rec {
   pname = "envisage";
-  version = "6.0.1";
+  version = "6.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8864c29aa344f7ac26eeb94788798f2d0cc791dcf95c632da8d79ebc580e114c";
+    hash = "sha256-AATsUNcYLB4vtyvuooAMDZx8p5fayijb6yJoUKTCW40=";
   };
+
+  patches = [
+    # TODO: remove on next release
+    (fetchpatch {
+      name = "fix-mistake-in-menu-group-specification.patch";
+      url = "https://github.com/enthought/envisage/commit/f23ea3864a5f6ffca665d47dec755992e062029b.patch";
+      hash = "sha256-l4CWB4jRkSmoTDoV8CtP2w87Io2cLINKfOSaSPy7cXE=";
+    })
+  ];
 
   # for the optional dependency ipykernel, only versions < 6 are
   # supported, so it's not included in the tests, and not propagated
@@ -34,7 +44,7 @@ buildPythonPackage rec {
     export HOME=$PWD/HOME
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     ipython
     pytestCheckHook
   ];

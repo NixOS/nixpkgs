@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, fftw, hamlib, libpulseaudio, libGL, libX11, liquid-dsp,
-  pkg-config, soapysdr-with-plugins, wxGTK31-gtk3, enableDigitalLab ? false }:
+  pkg-config, soapysdr-with-plugins, wxGTK32, enableDigitalLab ? false,
+  Cocoa, WebKit }:
 
 stdenv.mkDerivation rec {
   pname = "cubicsdr";
@@ -14,7 +15,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ fftw hamlib libpulseaudio libGL libX11 liquid-dsp soapysdr-with-plugins wxGTK31-gtk3 ];
+  buildInputs = [ fftw hamlib liquid-dsp soapysdr-with-plugins wxGTK32 ]
+    ++ lib.optionals stdenv.isLinux [ libpulseaudio libGL libX11 ]
+    ++ lib.optionals stdenv.isDarwin [ Cocoa WebKit ];
 
   cmakeFlags = [ "-DUSE_HAMLIB=ON" ]
     ++ lib.optional enableDigitalLab "-DENABLE_DIGITAL_LAB=ON";
@@ -24,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "Software Defined Radio application";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ lasandell ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

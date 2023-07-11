@@ -1,41 +1,44 @@
-{ fetchFromGitHub, lib, which, ocamlPackages }:
+{ fetchFromGitHub, fetchpatch, lib, which, ocamlPackages }:
 
 let
   pname = "alt-ergo";
-  version = "2.4.1";
+  version = "2.4.3";
+
+  configureScript = "ocaml unix.cma configure.ml";
 
   src = fetchFromGitHub {
     owner = "OCamlPro";
     repo = pname;
-    rev = version;
-    sha256 = "0hglj1p0753w2isds01h90knraxa42d2jghr35dpwf9g8a1sm9d3";
+    rev = "refs/tags/${version}";
+    hash = "sha256-2XARGr8rLiPMOM0rBBoRv5tZvKYtkLkJctGqLYkMe7Q=";
   };
-
-  useDune2 = true;
 in
 
 let alt-ergo-lib = ocamlPackages.buildDunePackage rec {
   pname = "alt-ergo-lib";
-  inherit version src useDune2;
-  configureFlags = pname;
+  inherit version src configureScript;
+  configureFlags = [ pname ];
   nativeBuildInputs = [ which ];
   buildInputs = with ocamlPackages; [ dune-configurator ];
-  propagatedBuildInputs = with ocamlPackages; [ num ocplib-simplex stdlib-shims zarith ];
+  propagatedBuildInputs = with ocamlPackages; [ dune-build-info num ocplib-simplex seq stdlib-shims zarith ];
+  preBuild = ''
+    substituteInPlace src/lib/util/version.ml --replace 'version="dev"' 'version="${version}"'
+  '';
 }; in
 
 let alt-ergo-parsers = ocamlPackages.buildDunePackage rec {
   pname = "alt-ergo-parsers";
-  inherit version src useDune2;
-  configureFlags = pname;
+  inherit version src configureScript;
+  configureFlags = [ pname ];
   nativeBuildInputs = [ which ocamlPackages.menhir ];
   propagatedBuildInputs = [ alt-ergo-lib ] ++ (with ocamlPackages; [ camlzip psmt2-frontend ]);
 }; in
 
 ocamlPackages.buildDunePackage {
 
-  inherit pname version src useDune2;
+  inherit pname version src configureScript;
 
-  configureFlags = pname;
+  configureFlags = [ pname ];
 
   nativeBuildInputs = [ which ocamlPackages.menhir ];
   buildInputs = [ alt-ergo-parsers ocamlPackages.cmdliner ];

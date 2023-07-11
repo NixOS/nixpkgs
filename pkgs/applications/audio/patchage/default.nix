@@ -15,16 +15,17 @@
 
 stdenv.mkDerivation rec {
   pname = "patchage";
-  version = "1.0.4";
+  version = "1.0.6";
 
   src = fetchFromGitLab {
     owner = "drobilla";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-feQXACsn2i2pJXs0EA9tIbtpl9Lxx5K4G7eG5VWuDV0=";
+    hash = "sha256-LzN6RyF/VT4LUVeR0904BnLuNMFZjFTDu9oDIKYG2Yo=";
     fetchSubmodules = true;
   };
 
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     alsa-lib
     boost
@@ -33,7 +34,6 @@ stdenv.mkDerivation rec {
     glibmm
     gtkmm2
     libjack2
-    pkg-config
     python3
     wafHook
   ];

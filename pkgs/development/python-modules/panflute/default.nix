@@ -3,18 +3,19 @@
 , click
 , pyyaml
 , buildPythonPackage
-, isPy3k
+, pythonOlder
 }:
 
 buildPythonPackage rec{
-  version = "2.1.3";
   pname = "panflute";
+  version = "2.3.0";
+  format = "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "y5QkT+dmiTuy8XLruCfsPe12G4//qE5MhLZ4ufip/5U=";
+    hash = "sha256-zv2d/EjM2XMqU9tXYQcB0igG2jl6ipflzI3AcLVYZco=";
   };
 
   propagatedBuildInputs = [
@@ -22,9 +23,14 @@ buildPythonPackage rec{
     pyyaml
   ];
 
+  pythonImportsCheck = [
+    "panflute"
+  ];
+
   meta = with lib; {
-    description = "A Pythonic alternative to John MacFarlane's pandocfilters, with extra helper functions";
+    description = "Pythonic alternative to John MacFarlane's pandocfilters, with extra helper functions";
     homepage = "http://scorreia.com/software/panflute";
+    changelog = "https://github.com/sergiocorreia/panflute/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ synthetica ];
   };

@@ -1,17 +1,40 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, autoreconfHook, cmake, wrapQtAppsHook, pkg-config, qmake
-, curl, grantlee, libgit2, libusb-compat-0_1, libssh2, libxml2, libxslt, libzip, zlib
-, qtbase, qtconnectivity, qtlocation, qtsvg, qttools, qtwebkit, libXcomposite
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, writeShellScriptBin
+, cmake
+, wrapQtAppsHook
+, pkg-config
+, qmake
+, curl
+, grantlee
+, hidapi
+, libgit2
+, libssh2
+, libusb1
+, libxml2
+, libxslt
+, libzip
+, zlib
+, qtbase
+, qtconnectivity
+, qtlocation
+, qtsvg
+, qttools
+, qtwebengine
+, libXcomposite
 , bluez
 }:
 
 let
-  version = "5.0.2";
+  version = "5.0.10";
 
   subsurfaceSrc = (fetchFromGitHub {
     owner = "Subsurface";
     repo = "subsurface";
     rev = "v${version}";
-    sha256 = "1yay06m8p9qp2ghrg8dxavdq55y09apcgdnb7rihgs3hq86k539n";
+    hash = "sha256-KzUBhFGvocaS1VrVT2stvKrj3uVxYka+dyYZUfkIoNs=";
     fetchSubmodules = true;
   });
 
@@ -21,16 +44,16 @@ let
 
     src = subsurfaceSrc;
 
-    prePatch = "cd libdivecomputer";
+    sourceRoot = "source/libdivecomputer";
 
-    nativeBuildInputs = [ autoreconfHook ];
+    nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-    buildInputs = [ zlib ];
+    buildInputs = [ zlib libusb1 bluez hidapi ];
 
     enableParallelBuilding = true;
 
     meta = with lib; {
-      homepage = "http://www.libdivecomputer.org";
+      homepage = "https://www.libdivecomputer.org";
       description = "A cross-platform and open source library for communication with dive computers from various manufacturers";
       maintainers = with maintainers; [ mguentner ];
       license = licenses.lgpl21;
@@ -40,14 +63,13 @@ let
 
   googlemaps = stdenv.mkDerivation rec {
     pname = "googlemaps";
-
-    version = "2021-03-19";
+    version = "0.0.0.2";
 
     src = fetchFromGitHub {
       owner = "vladest";
       repo = "googlemaps";
-      rev = "8f7def10c203fd3faa5ef96c5010a7294dca0759";
-      sha256 = "1irz398g45hk6xizwzd07qcx1ln8f7l6bhjh15f56yc20waqpx1x";
+      rev = "v.${version}";
+      hash = "sha256-PfSLFQeCeVNcCVDCZehxyNLQGT6gff5jNxMW8lAaP8c=";
     };
 
     nativeBuildInputs = [ qmake ];
@@ -74,17 +96,37 @@ let
     };
   };
 
-in stdenv.mkDerivation {
+  get-version = writeShellScriptBin "get-version" ''
+    echo -n ${version}
+  '';
+
+in
+stdenv.mkDerivation {
   pname = "subsurface";
   inherit version;
 
   src = subsurfaceSrc;
 
+  postPatch = ''
+    install -m555 -t scripts ${lib.getExe get-version}
+  '';
+
   buildInputs = [
-    libdc googlemaps
-    curl grantlee libgit2 libssh2 libusb-compat-0_1 libxml2 libxslt libzip
-    qtbase qtconnectivity qtsvg qttools qtwebkit
     bluez
+    curl
+    googlemaps
+    grantlee
+    libdc
+    libgit2
+    libssh2
+    libxml2
+    libxslt
+    libzip
+    qtbase
+    qtconnectivity
+    qtsvg
+    qttools
+    qtwebengine
   ];
 
   nativeBuildInputs = [ cmake wrapQtAppsHook pkg-config ];

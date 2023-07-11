@@ -18,16 +18,15 @@
 , wayland-scanner
 , pkg-config
 , utf8proc
-, allowPgo ? true
+, allowPgo ? !stdenv.hostPlatform.isMusl
 , python3  # for PGO
 # for clang stdenv check
 , foot
 , llvmPackages
-, llvmPackages_latest
 }:
 
 let
-  version = "1.11.0";
+  version = "1.14.0";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -99,7 +98,7 @@ stdenv.mkDerivation rec {
     owner = "dnkl";
     repo = pname;
     rev = version;
-    sha256 = "1d9bk8lhmw5lc8k0mw80g0vbwgxyh3gw5c7ppy3sir07s9y0y0fn";
+    sha256 = "1187805pxygyl547w75i4cl37kaw8y8ng11r5qqldv6fm74k31mk";
   };
 
   depsBuildBuild = [
@@ -153,6 +152,8 @@ stdenv.mkDerivation rec {
     "-Ddefault-terminfo=foot"
     # Tell foot to set TERMINFO and where to install the terminfo files
     "-Dcustom-terminfo-install-location=${terminfoDir}"
+    # Install systemd user units for foot-server
+    "-Dsystemd-units-dir=${placeholder "out"}/lib/systemd/user"
   ];
 
   # build and run binary generating PGO profiles,
@@ -163,6 +164,7 @@ stdenv.mkDerivation rec {
     # make sure there is _some_ profiling data on all binaries
     ./footclient --version
     ./foot --version
+    ./utils/xtgettcap
     ./tests/test-config
     # generate pgo data of wayland independent code
     ./pgo ${stimuliFile} ${stimuliFile} ${stimuliFile}
@@ -182,10 +184,6 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     clang-default-compilation = foot.override {
       inherit (llvmPackages) stdenv;
-    };
-
-    clang-latest-compilation = foot.override {
-      inherit (llvmPackages_latest) stdenv;
     };
 
     noPgo = foot.override {

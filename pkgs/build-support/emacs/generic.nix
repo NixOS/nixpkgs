@@ -2,32 +2,25 @@
 
 { lib, stdenv, emacs, texinfo, writeText, gcc, ... }:
 
-with lib;
-
 { pname
 , version ? null
-
 , buildInputs ? []
 , packageRequires ? []
-
 , meta ? {}
-
 , ...
 }@args:
 
 let
-
   defaultMeta = {
     broken = false;
     platforms = emacs.meta.platforms;
-  } // optionalAttrs ((args.src.meta.homepage or "") != "") {
+  } // lib.optionalAttrs ((args.src.meta.homepage or "") != "") {
     homepage = args.src.meta.homepage;
   };
-
 in
 
 stdenv.mkDerivation ({
-  name = "emacs-${pname}${optionalString (version != null) "-${version}"}";
+  name = "emacs-${pname}${lib.optionalString (version != null) "-${version}"}";
 
   unpackCmd = ''
     case "$curSrc" in
@@ -68,7 +61,7 @@ stdenv.mkDerivation ({
   meta = defaultMeta // meta;
 }
 
-// lib.optionalAttrs (emacs.nativeComp or false) {
+// lib.optionalAttrs (emacs.withNativeCompilation or false) {
 
   LIBRARY_PATH = "${lib.getLib stdenv.cc.libc}/lib";
 
@@ -85,11 +78,9 @@ stdenv.mkDerivation ({
     addEmacsVars "$out"
 
     find $out/share/emacs -type f -name '*.el' -print0 \
-      | xargs -0 -n 1 -I {} -P $NIX_BUILD_CORES sh -c \
+      | xargs -0 -I {} -n 1 -P $NIX_BUILD_CORES sh -c \
           "emacs --batch --eval '(setq large-file-warning-threshold nil)' -f batch-native-compile {} || true"
   '';
 }
 
-// removeAttrs args [ "buildInputs" "packageRequires"
-                      "meta"
-                    ])
+// removeAttrs args [ "buildInputs" "packageRequires" "meta" ])

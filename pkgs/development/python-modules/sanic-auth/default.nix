@@ -20,9 +20,14 @@ buildPythonPackage rec {
     sanic
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     sanic-testing
+  ];
+
+  disabledTests = [
+    # incompatible with sanic>=22.3.0
+    "test_login_required"
   ];
 
   postPatch = ''

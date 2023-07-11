@@ -7,21 +7,20 @@
 , ronn
 , openssl
 , stdenv
-, libiconv
-, Security
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "httplz";
-  version = "1.12.4";
+  version = "1.12.6";
 
   src = fetchCrate {
     inherit version;
     pname = "https";
-    sha256 = "sha256-4+iIFLtPVs4PHOzfXfretCuZ0iBcqMVNnYFjEVhvBjk=";
+    sha256 = "sha256-qkhou4Rmv31zwyL8aM7U0YUZwOb3KQMHdOQsOrRI1TA=";
   };
 
-  cargoSha256 = "sha256-VOzMf9hOrAEGwtW9h8CnG/Df2KgEVhNqqdL762Gs2dE=";
+  cargoSha256 = "sha256-BuNCKtK9ePV0d9o/DlW098Y4DWTIl0YKyryXMv09Woc=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -31,8 +30,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-    Security
+    darwin.apple_sdk.frameworks.Security
   ];
 
   cargoBuildFlags = [ "--bin" "httplz" ];

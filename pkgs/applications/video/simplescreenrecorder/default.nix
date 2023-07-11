@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, alsa-lib, ffmpeg, libjack2, libX11, libXext, libXinerama, qtx11extras
+{ lib, stdenv, mkDerivation, fetchFromGitHub, alsa-lib, ffmpeg_4, libjack2, libX11, libXext, libXinerama, qtx11extras
 , libXfixes, libGLU, libGL, pkg-config, libpulseaudio, libv4l, qtbase, qttools, cmake, ninja
 }:
 
@@ -13,7 +13,10 @@ mkDerivation rec {
     sha256 = "0mrx8wprs8bi42fwwvk6rh634ic9jnn0gkfpd6q9pcawnnbz3vq8";
   };
 
-  cmakeFlags = [ "-DWITH_QT5=TRUE" ];
+  cmakeFlags = [
+    "-DWITH_QT5=TRUE"
+    "-DWITH_GLINJECT=${if stdenv.hostPlatform.isx86 then "TRUE" else "FALSE"}"
+  ];
 
   patches = [ ./fix-paths.patch ];
 
@@ -27,7 +30,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config cmake ninja ];
   buildInputs = [
-    alsa-lib ffmpeg libjack2 libX11 libXext libXfixes libXinerama libGLU libGL
+    alsa-lib ffmpeg_4 libjack2 libX11 libXext libXfixes libXinerama libGLU libGL
     libpulseaudio libv4l qtbase qttools qtx11extras
   ];
 
@@ -35,7 +38,7 @@ mkDerivation rec {
     description = "A screen recorder for Linux";
     homepage = "https://www.maartenbaert.be/simplescreenrecorder";
     license = licenses.gpl3Plus;
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];
   };
 }

@@ -18,7 +18,7 @@
 , nixosTests
   #
   # By default unbound will not be built with systemd support. Unbound is a very
-  # commmon dependency. The transitive dependency closure of systemd also
+  # common dependency. The transitive dependency closure of systemd also
   # contains unbound.
   # Since most (all?) (lib)unbound users outside of the unbound daemon usage do
   # not need the systemd integration it is likely best to just default to no
@@ -37,28 +37,35 @@
 # Avoid .lib depending on lib.getLib openssl
 # The build gets a little hacky, so in some cases we disable this approach.
 , withSlimLib ? stdenv.isLinux && !stdenv.hostPlatform.isMusl && !withDNSTAP
+# enable support for python plugins in unbound: note this is distinct from pyunbound
+# see https://unbound.docs.nlnetlabs.nl/en/latest/developer/python-modules.html
 , withPythonModule ? false
 , libnghttp2
+
+# for passthru.tests
+, gnutls
 }:
 
 stdenv.mkDerivation rec {
   pname = "unbound";
-  version = "1.14.0";
+  version = "1.17.1";
 
   src = fetchurl {
     url = "https://nlnetlabs.nl/downloads/unbound/unbound-${version}.tar.gz";
-    sha256 = "sha256-bvkcvwLVKZ6rOTKMCFc5Pee0iFov5yM93+PBJP9aicg=";
+    hash = "sha256-7kCFzszhJYTmAPPYFKKPqCLfqs7B+UyEv9Z/ilVxpfQ=";
   };
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
 
-  nativeBuildInputs = [ makeWrapper ]
+  nativeBuildInputs = [ makeWrapper pkg-config ]
     ++ lib.optionals withPythonModule [ swig ];
 
   buildInputs = [ openssl nettle expat libevent ]
-    ++ lib.optionals withSystemd [ pkg-config systemd ]
+    ++ lib.optionals withSystemd [ systemd ]
     ++ lib.optionals withDoH [ libnghttp2 ]
     ++ lib.optionals withPythonModule [ python ];
+
+  enableParallelBuilding = true;
 
   configureFlags = [
     "--with-ssl=${openssl.dev}"
@@ -70,7 +77,7 @@ stdenv.mkDerivation rec {
     "--with-rootkey-file=${dns-root-data}/root.key"
     "--enable-pie"
     "--enable-relro-now"
-  ] ++ lib.optional stdenv.hostPlatform.isStatic [
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
     "--disable-flto"
   ] ++ lib.optionals withSystemd [
     "--enable-systemd"
@@ -103,7 +110,7 @@ stdenv.mkDerivation rec {
     sed -E '/CONFCMDLINE/ s;${storeDir}/[a-z0-9]{32}-;${storeDir}/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-;g' -i config.h
   '';
 
-  checkInputs = [ bison ];
+  nativeCheckInputs = [ bison ];
 
   doCheck = true;
 
@@ -142,13 +149,16 @@ stdenv.mkDerivation rec {
     (pkg: lib.optionalString (pkg ? dev) " --replace '-L${pkg.dev}/lib' '-L${pkg.out}/lib' --replace '-R${pkg.dev}/lib' '-R${pkg.out}/lib'")
     (builtins.filter (p: p != null) buildInputs);
 
-  passthru.tests = nixosTests.unbound;
+  passthru.tests = {
+    inherit gnutls;
+    nixos-test = nixosTests.unbound;
+  };
 
   meta = with lib; {
     description = "Validating, recursive, and caching DNS resolver";
     license = licenses.bsd3;
     homepage = "https://www.unbound.net";
-    maintainers = with maintainers; [ fpletz globin ];
+    maintainers = with maintainers; [ ajs124 ];
     platforms = platforms.unix;
   };
 }

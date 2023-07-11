@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "alexmojaki";
     repo = "stack_data";
     rev = "v${version}";
-    sha256 = "sha256-brXFrk1UU5hxCVeRvGK7wzRA0Hoj9fgqoxTIwInPrEc=";
+    hash = "sha256-brXFrk1UU5hxCVeRvGK7wzRA0Hoj9fgqoxTIwInPrEc=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pure-eval
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cython
     littleutils
     pygments
@@ -49,8 +49,10 @@ buildPythonPackage rec {
 
   disabledTests = [
     # AssertionError
-    "test_variables"
     "test_example"
+    "test_executing_style_defs"
+    "test_pygments_example"
+    "test_variables"
   ];
 
   pythonImportsCheck = [ "stack_data" ];

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "ledger-udev-rules";
-  version = "unstable-2019-05-30";
+  version = "unstable-2021-09-10";
 
   src = fetchFromGitHub {
     owner = "LedgerHQ";
     repo = "udev-rules";
-    rev = "765b7fdf57b20fd9326cedf48ee52e905024ab4f";
-    sha256 = "10a42al020zpkx918y6b1l9az45vk3921b2l1mx87w3m0ad9qvif";
+    rev = "2776324af6df36c2af4d2e8e92a1c98c281117c9";
+    sha256 = "sha256-yTYI81PXMc32lMfI5uhD14nP20zAI7ZF33V1LRDWg2Y=";
   };
 
   dontBuild = true;

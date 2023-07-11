@@ -11,7 +11,8 @@
 
 buildDunePackage {
   pname = "resto-cohttp-server";
-  inherit (resto) src version meta useDune2 doCheck;
+  inherit (resto) src version meta doCheck;
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     resto

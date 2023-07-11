@@ -2,16 +2,24 @@
 , callPackage
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "attrs";
-  version = "21.4.0";
+  version = "22.2.0";
+  disabled = pythonOlder "3.6";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YmuoI0IR25joad92IwoTfExAoS1yRFxF1fW3FvB24v0=";
+    hash = "sha256-ySJ7/C8BmTwD9o2zfR0VyWkBiDI8BnxkHxo1ylgYX5k=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   outputs = [
     "out"
@@ -21,7 +29,7 @@ buildPythonPackage rec {
   postInstall = ''
     # Install tests as the tests output.
     mkdir $testout
-    cp -R tests $testout/tests
+    cp -R conftest.py tests $testout
   '';
 
   pythonImportsCheck = [
@@ -38,7 +46,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python attributes without boilerplate";
-    homepage = "https://github.com/hynek/attrs";
+    homepage = "https://github.com/python-attrs/attrs";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

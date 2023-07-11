@@ -2,11 +2,11 @@
 buildKodiAddon rec {
   pname = "inputstreamhelper";
   namespace = "script.module.inputstreamhelper";
-  version = "0.5.8+matrix.1";
+  version = "0.6.1+matrix.1";
 
   src = fetchzip {
-    url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
-    sha256 = "xdsUzmz8ji9JcYLEUFWwvXq0Oig5i08VPQD93K8R9hk=";
+    url = "https://mirrors.kodi.tv/addons/nexus/${namespace}/${namespace}-${version}.zip";
+    sha256 = "sha256-v5fRikswmP+KVbxYibD0NbCK8leUnFbya5EtF1FmS0I=";
   };
 
   passthru = {

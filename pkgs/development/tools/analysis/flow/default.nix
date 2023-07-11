@@ -2,14 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "flow";
-  version = "0.175.1";
+  version = "0.211.1";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "flow";
     rev = "v${version}";
-    sha256 = "sha256-40Kc/Qg0ppTQLU2ySbKXZyhap3hH4BiIMhJeNDU6mKA=";
+    sha256 = "sha256-edfNDy6LvlHlNloDTSmHCaHZFdBpBkUQG757gweqquk=";
   };
+
+  postPatch = ''
+    substituteInPlace src/services/inference/check_cache.ml --replace 'Core_kernel' 'Core'
+  '';
 
   makeFlags = [ "FLOW_RELEASE=1" ];
 
@@ -18,13 +22,17 @@ stdenv.mkDerivation rec {
     install -Dm644 resources/shell/bash-completion $out/share/bash-completion/completions/flow
   '';
 
-  buildInputs = (with ocamlPackages; [ ocaml findlib ocamlbuild ocaml-migrate-parsetree-2 dtoa core_kernel sedlex_2 ocaml_lwt lwt_log lwt_ppx ppx_deriving ppx_gen_rec visitors wtf8 ])
-    ++ lib.optionals stdenv.isDarwin [ CoreServices ];
+  strictDeps = true;
+
+  nativeBuildInputs = with ocamlPackages; [ ocaml dune_3 findlib ocamlbuild ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ]
+    ++ (with ocamlPackages; [ core_kernel dtoa fileutils lwt_log lwt_ppx ocaml_lwt ppx_deriving ppx_gen_rec ppx_let sedlex visitors wtf8 ] ++ lib.optionals stdenv.isLinux [ inotify ]);
 
   meta = with lib; {
     description = "A static type checker for JavaScript";
     homepage = "https://flow.org/";
-    changelog = "https://github.com/facebook/flow/raw/v${version}/Changelog.md";
+    changelog = "https://github.com/facebook/flow/blob/v${version}/Changelog.md";
     license = licenses.mit;
     platforms = ocamlPackages.ocaml.meta.platforms;
     maintainers = with maintainers; [ marsam puffnfresh ];

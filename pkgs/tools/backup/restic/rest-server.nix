@@ -1,27 +1,22 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
 
 buildGoModule rec {
   pname = "restic-rest-server";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "restic";
     repo = "rest-server";
     rev = "v${version}";
-    hash = "sha256-ninPODztNzvB2js9cuNAuExQLK/OGOu80ZNW0BPrdds=";
+    hash = "sha256-FnT7AG9na/KdWimUqhcF1QndGdT+Nc8ao5zlSeN/fJ0=";
   };
 
-  vendorSha256 = "sha256-8x5qYvIX/C5BaewrTNVbIIadL+7XegbRUZiEDWmJM+c=";
-
-  preCheck = ''
-    substituteInPlace cmd/rest-server/main_test.go \
-      --replace "/tmp/restic" "/build/restic"
-  '';
+  vendorHash = "sha256-Q0XazJmfmAwR2wXD/RXO6nPiNyWFubBYL3kNFKBRMzc=";
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    changelog = "https://github.com/restic/rest-server/blob/${src.rev}/CHANGELOG.md";
     description = "A high performance HTTP server that implements restic's REST backend API";
-    platforms = platforms.unix;
+    homepage = "https://github.com/restic/rest-server";
     license = licenses.bsd2;
     maintainers = with maintainers; [ dotlambda ];
   };

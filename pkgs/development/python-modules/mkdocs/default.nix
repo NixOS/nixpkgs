@@ -4,7 +4,11 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-  # runtime deps
+
+# buildtime
+, hatchling
+
+# runtime deps
 , click
 , ghp-import
 , importlib-metadata
@@ -15,23 +19,34 @@
 , pyyaml
 , pyyaml-env-tag
 , watchdog
-  # testing deps
-, Babel
+
+# testing deps
+, babel
 , mock
-, pytestCheckHook
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs";
-  version = "1.3.0";
+  version = "1.4.2";
+  format = "pyproject";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "sha256-S4xkr3jS5GvkMu8JnEGfqhmkxy3FtZZb7Rbuniltudg=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-/NxiKbCd2acYcNe5ww3voM9SGVE2IDqknngqApkDbNs=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "Markdown >=3.2.1, <3.4" "Markdown"
+  '';
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     click
@@ -46,21 +61,13 @@ buildPythonPackage rec {
     packaging
   ];
 
-  checkInputs = [
-    Babel
+  nativeCheckInputs = [
+    unittestCheckHook
+    babel
     mock
   ];
 
-
-  checkPhase = ''
-    set -euo pipefail
-
-    runHook preCheck
-
-    python -m unittest discover -v -p '*tests.py' mkdocs --top-level-directory .
-
-    runHook postCheck
-  '';
+  unittestFlagsArray = [ "-v" "-p" "'*tests.py'" "mkdocs" ];
 
   pythonImportsCheck = [ "mkdocs" ];
 

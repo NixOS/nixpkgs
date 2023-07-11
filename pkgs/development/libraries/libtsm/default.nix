@@ -15,6 +15,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
+  # https://github.com/Aetf/libtsm/issues/20
+  postPatch = ''
+    substituteInPlace etc/libtsm.pc.in \
+      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+  '';
+
   meta = with lib; {
     description = "Terminal-emulator State Machine";
     homepage = "http://www.freedesktop.org/wiki/Software/kmscon/libtsm/";

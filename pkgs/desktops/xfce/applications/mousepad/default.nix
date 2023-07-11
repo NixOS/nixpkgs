@@ -1,16 +1,30 @@
-{ lib, mkXfceDerivation, gobject-introspection, gtk3, gtksourceview4, gspell }:
+{ lib
+, mkXfceDerivation
+, gobject-introspection
+, glib
+, gtk3
+, gtksourceview4
+, gspell
+, polkit
+}:
 
 mkXfceDerivation {
   category = "apps";
   pname = "mousepad";
-  version = "0.5.9";
+  version = "0.6.1";
   odd-unstable = false;
 
-  sha256 = "sha256-xuSv2H1+/NNUAm+D8f+f5fPVR97iJ5vIDzPa3S0HLM0=";
+  sha256 = "sha256-MLdexhIsQa4XuVaLgtQ2aVJ00+pwkhAP3qMj0XXPqh0=";
 
   nativeBuildInputs = [ gobject-introspection ];
 
-  buildInputs = [ gtk3 gtksourceview4 gspell ];
+  buildInputs = [
+    glib
+    gtk3
+    gtksourceview4
+    gspell
+    polkit # optional polkit support
+  ];
 
   # Use the GSettings keyfile backend rather than DConf
   configureFlags = [ "--enable-keyfile-settings" ];

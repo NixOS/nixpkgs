@@ -1,26 +1,29 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
 , openssl
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lychee";
-  version = "0.9.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "lycheeverse";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XjG4u0z3u89Wg2lrcD3T0OqNMgLxmKO1e1zYlGd3dqQ=";
+    sha256 = "sha256-fOD28O6ycRIniQz841PGJzEFGtYord/y44mdqyAmNDg=";
   };
 
-  cargoSha256 = "sha256-aXxhKH0dB6VpXfoWJwXBjsxGFcK071MZfCoi4z9uHdc=";
+  cargoHash = "sha256-r089P2VOeIIW0FjkO4oqVXbrxDND4loagVfVMm5EtaE=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ Security ];
 
   # Disabled because they currently fail
   doCheck = false;
@@ -30,6 +33,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/lycheeverse/lychee";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ tuxinaut ];
-    platforms = platforms.linux;
   };
 }

@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   pname = "atinout";
   version = "0.9.2-alpha";
 
-  NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.cc.isClang) "-Werror=implicit-fallthrough=0";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.cc.isClang) "-Werror=implicit-fallthrough=0";
   LANG = if stdenv.isDarwin then "en_US.UTF-8" else "C.UTF-8";
   nativeBuildInputs = [ ronn mount ];
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://atinout.sourceforge.net";
+    homepage = "https://atinout.sourceforge.net";
     description = "Tool for talking to modems";
     platforms = platforms.unix;
     license = licenses.gpl3;

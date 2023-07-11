@@ -4,7 +4,10 @@
 , monorepoSrc
 , runCommand
 , cmake
+, ninja
 , llvm
+, targetLlvm
+, lit
 , clang-unwrapped
 , perl
 , pkg-config
@@ -24,17 +27,31 @@ stdenv.mkDerivation rec {
   sourceRoot = "${src.name}/${pname}";
 
   patches = [
-    ./gnu-install-dirs.patch
     ./fix-find-tool.patch
+    ./gnu-install-dirs.patch
+    ./run-lit-directly.patch
   ];
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ cmake perl pkg-config clang-unwrapped ];
-  buildInputs = [ llvm ];
+  nativeBuildInputs = [ cmake ninja perl pkg-config lit ];
+  buildInputs = [
+    (if stdenv.buildPlatform == stdenv.hostPlatform then llvm else targetLlvm)
+  ];
+
+  # Unsup:Pass:XFail:Fail
+  # 26:267:16:8
+  doCheck = false;
+  checkTarget = "check-openmp";
+
+  preCheck = ''
+    patchShebangs ../tools/archer/tests/deflake.bash
+  '';
 
   cmakeFlags = [
-    "-DLIBOMPTARGET_BUILD_AMDGCN_BCLIB=OFF" # Building the AMDGCN device RTL currently fails
+    "-DCLANG_TOOL=${clang-unwrapped}/bin/clang"
+    "-DOPT_TOOL=${llvm}/bin/opt"
+    "-DLINK_TOOL=${llvm}/bin/llvm-link"
   ];
 
   meta = llvm_meta // {

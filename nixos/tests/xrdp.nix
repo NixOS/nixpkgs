@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "xrdp";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ volth ];
+    maintainers = [ ];
   };
 
   nodes = {

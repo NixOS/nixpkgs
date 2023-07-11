@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "hikari";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchzip {
     url = "https://hikari.acmelabs.space/releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-At4b6mkArKe6knNWouLdZ9v8XhfHaUW+aB+CHyEBg8o=";
+    sha256 = "sha256-5Ug0U3ESC5F/gj7bahnLYkeY/weSCj0QASwdFuWwdMI=";
   };
 
   nativeBuildInputs = [ pkg-config bmake ];

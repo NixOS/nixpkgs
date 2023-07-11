@@ -1,8 +1,9 @@
+if [ -e .attrs.sh ]; then source .attrs.sh; fi
 source $stdenv/setup
 
 unpackManually() {
     skip=$(sed 's/^skip=//; t; d' $src)
-    tail -n +$skip $src | xz -d | tar xvf -
+    tail -n +$skip $src | bsdtar xvf -
     sourceRoot=.
 }
 
@@ -119,7 +120,17 @@ installPhase() {
             fi
         fi
 
+        # Install libraries needed by Proton to support DLSS
+        if [ -e nvngx.dll ] && [ -e _nvngx.dll ]; then
+            install -Dm644 -t $i/lib/nvidia/wine/ nvngx.dll _nvngx.dll
+        fi
     done
+
+
+    # OptiX tries loading `$ORIGIN/nvoptix.bin` first
+    if [ -e nvoptix.bin ]; then
+        install -Dm444 -t $out/lib/ nvoptix.bin
+    fi
 
     if [ -n "$bin" ]; then
         # Install the X drivers.
@@ -145,6 +156,11 @@ installPhase() {
             cp nvidia-application-profiles-*-rc $bin/share/nvidia/nvidia-application-profiles-rc
             cp nvidia-application-profiles-*-key-documentation $bin/share/nvidia/nvidia-application-profiles-key-documentation
         fi
+    fi
+
+    if [ -n "$firmware" ]; then
+        # Install the GSP firmware
+        install -Dm644 -t $firmware/lib/firmware/nvidia/$version firmware/gsp*.bin
     fi
 
     # All libs except GUI-only are installed now, so fixup them.

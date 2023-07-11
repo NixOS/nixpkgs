@@ -1,21 +1,29 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, CoreServices, Foundation, installShellFiles, libiconv }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, Cocoa, AppKit, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "watchexec";
-  version = "1.17.1";
+  version = "1.22.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "cli-v${version}";
-    sha256 = "13yqghdhakkwp607j84a1vbqgnqqn77a5mh27cr24352ik2vkrkq";
+    rev = "v${version}";
+    sha256 = "sha256-dO1vIzjsBrrMQ0H3Yv4X5rYPlCrWSlPbFmyooaODPeo=";
   };
 
-  cargoSha256 = "0grzfzxw705zs5qb2h7k0yws45m20ihhh4mnpmk3wargbxpn6gsh";
+  cargoHash = "sha256-6bLY9m6g7hSlYI3KrLS3fN4ATRkkbtq3Wf5xqS1G30s=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices Foundation libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Cocoa AppKit ];
+
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework AppKit";
+
+  checkFlags = [ "--skip=help" "--skip=help_short" ];
+
+  postPatch = ''
+    rm .cargo/config
+  '';
 
   postInstall = ''
     installManPage doc/watchexec.1

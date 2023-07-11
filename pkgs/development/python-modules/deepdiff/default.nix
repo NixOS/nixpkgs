@@ -3,55 +3,66 @@
 , fetchFromGitHub
 , click
 , ordered-set
+, orjson
 , clevercsv
 , jsonpickle
 , numpy
 , pytestCheckHook
+, python-dateutil
 , pyyaml
+, toml
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "deepdiff";
-  version = "5.7.0";
+  version = "6.3.0";
   format = "setuptools";
 
-  # pypi source does not contain all fixtures required for tests
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "seperman";
     repo = "deepdiff";
-    # 5.7.0 release not tagged https://github.com/seperman/deepdiff/issues/300
-    rev = "f2ffdb83b2993f4f0bb7e854620f0acd0bf6339e";
-    hash = "sha256-0UBx7sH2iMrLVl5FtHNTwoecLHi8GbInn75G3FSg4gk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-txZ1X1J8DwueDRpLP3OuRA+S9hc5G3YCmEG+AS6ZAkI=";
   };
 
   postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "ordered-set==4.0.2" "ordered-set"
     substituteInPlace tests/test_command.py \
       --replace '/tmp/' "$TMPDIR/"
   '';
 
   propagatedBuildInputs = [
-    click
     ordered-set
+    orjson
   ];
+
+  passthru.optional-dependencies = {
+    cli = [
+      clevercsv
+      click
+      pyyaml
+      toml
+    ];
+  };
+
+  nativeCheckInputs = [
+    jsonpickle
+    numpy
+    pytestCheckHook
+    python-dateutil
+  ] ++ passthru.optional-dependencies.cli;
 
   pythonImportsCheck = [
     "deepdiff"
   ];
 
-  checkInputs = [
-    clevercsv
-    jsonpickle
-    numpy
-    pytestCheckHook
-    pyyaml
-  ];
-
   meta = with lib; {
     description = "Deep Difference and Search of any Python object/data";
     homepage = "https://github.com/seperman/deepdiff";
+    changelog = "https://github.com/seperman/deepdiff/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = with maintainers; [ mic92 ];
   };
 }

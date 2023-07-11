@@ -1,15 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, libjpeg_turbo, perl, perlPackages }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, perl, perlPackages, libjpeg_original }:
 
 stdenv.mkDerivation rec {
   pname = "jpegrescan";
-  date = "2016-06-01";
-  name = "${pname}-${date}";
+  version = "unstable-2019-03-27";
+
+  dontBuild = true;
+  dontConfigure = true;
 
   src = fetchFromGitHub {
     owner = "kud";
     repo = pname;
-    rev = "e5e39cd972b48ccfb2cba4da6855c511385c05f9";
-    sha256 = "0jbx1vzkzif6yjx1fnsm7fjsmq166sh7mn22lf01ll7s245nmpdp";
+    rev = "3a7de06feabeb3c3235c3decbe2557893c1abe51";
+    sha256 = "0cnl46z28lkqc5x27b8rpghvagahivrqcfvhzcsv9w1qs8qbd6dm";
   };
 
   patchPhase = ''
@@ -23,24 +25,23 @@ stdenv.mkDerivation rec {
     mv jpegrescan $out/bin
     chmod +x $out/bin/jpegrescan
 
-    wrapProgram $out/bin/jpegrescan --prefix PERL5LIB : $PERL5LIB
+    wrapProgram $out/bin/jpegrescan \
+      --prefix PATH : "${libjpeg_original}/bin:" \
+      --prefix PERL5LIB : $PERL5LIB
   '';
 
   propagatedBuildInputs = [ perlPackages.FileSlurp ];
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [
-    perl libjpeg_turbo
-  ];
+  buildInputs = [ perl ];
 
   meta = with lib; {
-    description = "losslessly shrink any JPEG file";
+    description = "Losslessly shrink any JPEG file";
     homepage = "https://github.com/kud/jpegrescan";
     license = licenses.publicDomain;
-    maintainers = [ maintainers.ramkromberg ];
+    maintainers = with maintainers; [ ramkromberg ];
     platforms = platforms.all;
+    mainProgram = "jpegrescan";
   };
 }

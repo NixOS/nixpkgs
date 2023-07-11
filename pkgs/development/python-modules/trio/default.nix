@@ -2,9 +2,9 @@
 , attrs
 , sortedcontainers
 , async_generator
+, exceptiongroup
 , idna
 , outcome
-, contextvars
 , pytestCheckHook
 , pyopenssl
 , trustme
@@ -18,12 +18,13 @@
 
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.20.0";
-  disabled = pythonOlder "3.6";
+  version = "0.22.0";
+  format = "setuptools";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ZwpS0xFdDoeeGsg4pOuZmvMvhYFj46cE/kg53ipnYHA=";
+    hash = "sha256-zmjxxUAKR7E3xaTecsfJAb1OeiT73r/ptB3oxsBOqs8=";
   };
 
   propagatedBuildInputs = [
@@ -33,12 +34,14 @@ buildPythonPackage rec {
     idna
     outcome
     sniffio
-  ] ++ lib.optionals (pythonOlder "3.7") [ contextvars ];
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    exceptiongroup
+  ];
 
   # tests are failing on Darwin
   doCheck = !stdenv.isDarwin;
 
-  checkInputs = [
+  nativeCheckInputs = [
     astor
     jedi
     pyopenssl

@@ -32,8 +32,10 @@ stdenv.mkDerivation rec {
       Microsoft Excel spreadsheet using a simple, easy-to-use interface.
     '';
     homepage = "https://tabula.technology/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
     maintainers = [ maintainers.dpaetzel ];
     platforms = platforms.all;
+    broken = true; # on 2022-11-23 this package builds, but produces an executable that fails immediately
   };
 }

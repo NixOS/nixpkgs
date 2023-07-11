@@ -14,8 +14,6 @@ buildDunePackage rec {
     sha256 = "1apk61fc1y1g7x3m3c91fnskvxp6i0vk5nxwvipj56k7x2pzilgb";
   };
 
-  strictDeps = true;
-
   buildInputs = [ stdlib-shims ];
   propagatedBuildInputs = [ seq ];
 
@@ -25,6 +23,6 @@ buildDunePackage rec {
     homepage = "https://www.lri.fr/~filliatr/software.en.html";
     description = "Maps over integers implemented as Patricia trees";
     license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [ volth ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

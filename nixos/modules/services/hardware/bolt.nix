@@ -12,7 +12,7 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable Bolt, a userspace daemon to enable
           security levels for Thunderbolt 3 on GNU/Linux.
 

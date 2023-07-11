@@ -1,5 +1,8 @@
 { lib
+, aiohttp
+, aioresponses
 , buildPythonPackage
+, callee
 , fetchPypi
 , mock
 , pyjwt
@@ -10,28 +13,31 @@
 
 buildPythonPackage rec {
   pname = "auth0-python";
-  version = "3.22.0";
+  version = "4.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-05yJbF6eXz+vJx+plY5gqzRRYL2SjDnF7gSfX6WIS4E=";
+    hash = "sha256-enSG8rO0gMpSaf6otdx94xncyxc6Uv570VKVVQkit1g=";
   };
 
   propagatedBuildInputs = [
     requests
     pyjwt
-  ];
+  ] ++ pyjwt.optional-dependencies.crypto;
 
-  checkInputs = [
+  nativeCheckInputs = [
+    aiohttp
+    aioresponses
+    callee
     mock
     pytestCheckHook
   ];
 
   disabledTests = [
-    # tries to ping websites (e.g. google.com)
+    # Tries to ping websites (e.g. google.com)
     "can_timeout"
     "test_options_are_created_by_default"
     "test_options_are_used_and_override"
@@ -44,6 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Auth0 Python SDK";
     homepage = "https://github.com/auth0/auth0-python";
+    changelog = "https://github.com/auth0/auth0-python/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ costrouc ];
   };

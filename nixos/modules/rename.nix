@@ -1,7 +1,10 @@
 { lib, pkgs, ... }:
 
-with lib;
-
+let
+  inherit (lib)
+    mkAliasOptionModuleMD
+    mkRemovedOptionModule;
+in
 {
   imports = [
     /*
@@ -14,7 +17,7 @@ with lib;
 
     # This alias module can't be where _module.check is defined because it would
     # be added to submodules as well there
-    (mkAliasOptionModule [ "environment" "checkConfigurationOptions" ] [ "_module" "check" ])
+    (mkAliasOptionModuleMD [ "environment" "checkConfigurationOptions" ] [ "_module" "check" ])
 
     # Completely removed modules
     (mkRemovedOptionModule [ "environment" "blcr" "enable" ] "The BLCR module has been removed")
@@ -30,8 +33,13 @@ with lib;
       udev rules from libu2f-host to the system. Udev gained native support
       to handle FIDO security tokens, so this isn't necessary anymore.
     '')
+    (mkRemovedOptionModule [ "hardware" "xow" ] ''
+      The xow package was removed from nixpkgs. Upstream has deprecated
+      the project and users are urged to switch to xone.
+    '')
     (mkRemovedOptionModule [ "networking" "vpnc" ] "Use environment.etc.\"vpnc/service.conf\" instead.")
     (mkRemovedOptionModule [ "networking" "wicd" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "programs" "gnome-documents" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "programs" "tilp2" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "programs" "way-cooler" ] ("way-cooler is abandoned by its author: " +
       "https://way-cooler.org/blog/2020/01/09/way-cooler-post-mortem.html"))
@@ -39,19 +47,23 @@ with lib;
         The hidepid module was removed, since the underlying machinery
         is broken when using cgroups-v2.
     '')
+    (mkRemovedOptionModule [ "services" "baget" "enable" ] "The baget module was removed due to the upstream package being unmaintained.")
     (mkRemovedOptionModule [ "services" "beegfs" ] "The BeeGFS module has been removed")
     (mkRemovedOptionModule [ "services" "beegfsEnable" ] "The BeeGFS module has been removed")
     (mkRemovedOptionModule [ "services" "cgmanager" "enable"] "cgmanager was deprecated by lxc and therefore removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "chronos" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "couchpotato" ] "The corresponding package was removed from nixpkgs.")
-    (mkRemovedOptionModule [ "services" "deepin" ] "The corresponding packages were removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "dd-agent" ] "dd-agent was removed from nixpkgs in favor of the newer datadog-agent.")
+    (mkRemovedOptionModule [ "services" "ddclient" ] "ddclient has been removed on the request of the upstream maintainer because it is unmaintained and has bugs. Please switch to a different software like `inadyn` or `knsupdate`.") # Added 2023-07-04
     (mkRemovedOptionModule [ "services" "dnscrypt-proxy" ] "Use services.dnscrypt-proxy2 instead")
+    (mkRemovedOptionModule [ "services" "exhibitor" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "firefox" "syncserver" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "flashpolicyd" ] "The flashpolicyd module has been removed. Adobe Flash Player is deprecated.")
     (mkRemovedOptionModule [ "services" "fourStore" ] "The fourStore module has been removed")
     (mkRemovedOptionModule [ "services" "fourStoreEndpoint" ] "The fourStoreEndpoint module has been removed")
     (mkRemovedOptionModule [ "services" "fprot" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "frab" ] "The frab module has been removed")
+    (mkRemovedOptionModule [ "services" "ihatemoney" ] "The ihatemoney module has been removed for lack of downstream maintainer")
     (mkRemovedOptionModule [ "services" "kippo" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "mailpile" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "marathon" ] "The corresponding package was removed from nixpkgs.")
@@ -68,6 +80,7 @@ with lib;
       prey-bash-client is deprecated upstream
     '')
     (mkRemovedOptionModule [ "services" "quagga" ] "the corresponding package has been removed from nixpkgs")
+    (mkRemovedOptionModule [ "services" "railcar" ] "the corresponding package has been removed from nixpkgs")
     (mkRemovedOptionModule [ "services" "seeks" ] "")
     (mkRemovedOptionModule [ "services" "ssmtp" ] ''
       The ssmtp package and the corresponding module have been removed due to
@@ -97,6 +110,11 @@ with lib;
     (mkRemovedOptionModule [ "services" "gogoclient" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "virtuoso" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "openfire" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "riak" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "cryptpad" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "rtsp-simple-server" ] "Package has been completely rebranded by upstream as mediamtx, and thus the service and the package were renamed in NixOS as well.")
+
+    (mkRemovedOptionModule [ "i18n" "inputMethod" "fcitx" ] "The fcitx module has been removed. Please use fcitx5 instead")
 
     # Do NOT add any option renames here, see top of the file
   ];

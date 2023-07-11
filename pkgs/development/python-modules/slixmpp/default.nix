@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "slixmpp";
-  version = "1.8.2";
+  version = "1.8.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-U7lD2iVy2gS5Ktop4PVKg+cUbIg4MJt+m6tH5aOb1Y4=";
+    hash = "sha256-QG8fS6t+dXPdVZpEECfT3jPRe7o1S88g3caq+6JyKGs=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     pyasn1-modules
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -54,6 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for XMPP";
     homepage = "https://slixmpp.readthedocs.io/";
+    changelog = "https://lab.louiz.org/poezio/slixmpp/-/tags/slix-${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

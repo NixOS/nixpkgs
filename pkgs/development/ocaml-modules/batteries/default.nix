@@ -1,27 +1,28 @@
-{ stdenv, lib, fetchFromGitHub, ocaml, findlib, ocamlbuild, qtest, qcheck, num, ounit
+{ stdenv, lib, fetchFromGitHub, ocaml, findlib, ocamlbuild, qtest, qcheck, num, camlp-streams
 , doCheck ? lib.versionAtLeast ocaml.version "4.08" && !stdenv.isAarch64
 }:
 
-if !lib.versionAtLeast ocaml.version "4.02"
+if lib.versionOlder ocaml.version "4.02"
 then throw "batteries is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-batteries";
-  version = "3.4.0";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "ocaml-batteries-team";
     repo = "batteries-included";
     rev = "v${version}";
-    sha256 = "sha256:1cd7475n1mxhq482aidmhh27mq5p2vmb8d9fkb1mlza9pz5z66yq";
+    hash = "sha256-D/0h0/70V8jmzHIUR6i2sT2Jz9/+tfR2dQgp4Bxtimc=";
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild ];
-  checkInputs = [ qtest ounit qcheck ];
-  propagatedBuildInputs = [ num ];
+  nativeCheckInputs = [ qtest ];
+  checkInputs = [ qcheck ];
+  propagatedBuildInputs = [ camlp-streams num ];
 
-  strictDeps = !doCheck;
+  strictDeps = true;
 
   inherit doCheck;
   checkTarget = "test";
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   meta = {
-    homepage = "http://batteries.forge.ocamlcore.org/";
+    homepage = "https://ocaml-batteries-team.github.io/batteries-included/hdoc2/";
     description = "OCaml Batteries Included";
     longDescription = ''
       A community-driven effort to standardize on an consistent, documented,

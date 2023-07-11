@@ -4,14 +4,13 @@
 , cmake
 , python3
 , validatePkgConfig
-, fetchpatch
 , secureMemory ? false
 , enableStatic ? stdenv.hostPlatform.isStatic
 }:
 
 stdenv.mkDerivation rec {
   pname = "jsoncpp";
-  version = "1.9.4";
+  version = "1.9.5";
 
   outputs = ["out" "dev"];
 
@@ -19,16 +18,8 @@ stdenv.mkDerivation rec {
     owner = "open-source-parsers";
     repo = "jsoncpp";
     rev = version;
-    sha256 = "0qnx5y6c90fphl9mj9d20j2dfgy6s5yr5l0xnzid0vh71zrp6jwv";
+    sha256 = "sha256-OyfJD19g8cT9wOD0hyJyEw4TbaxZ9eY04396U/7R+hs=";
   };
-
-  patches = [
-    # Fix for https://github.com/open-source-parsers/jsoncpp/issues/1235.
-    (fetchpatch {
-      url = "https://github.com/open-source-parsers/jsoncpp/commit/ac2870298ed5b5a96a688d9df07461b31f83e906.patch";
-      sha256 = "02wswhiwypmf1jn3rj9q1fw164kljiv4l8h0q6wyijzr77hq4wsg";
-    })
-  ];
 
   /* During darwin bootstrap, we have a cp that doesn't understand the
    * --reflink=auto flag, which is used in the default unpackPhase for dirs
@@ -41,14 +32,6 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString secureMemory ''
     sed -i 's/#define JSONCPP_USING_SECURE_MEMORY 0/#define JSONCPP_USING_SECURE_MEMORY 1/' include/json/version.h
-  '';
-
-  # Hack to be able to run the test, broken because we use
-  # CMAKE_SKIP_BUILD_RPATH to avoid cmake resetting rpath on install
-  preBuild = if stdenv.isDarwin then ''
-    export DYLD_LIBRARY_PATH="$PWD/lib''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
-  '' else ''
-    export LD_LIBRARY_PATH="$PWD/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
   '';
 
   nativeBuildInputs = [ cmake python3 validatePkgConfig ];

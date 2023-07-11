@@ -4,7 +4,6 @@
 , cython
 , git
 , pkgconfig
-, pytest-runner
 , setuptools-scm
 , future
 , numpy
@@ -31,11 +30,15 @@ buildPythonPackage rec {
     leaveDotGit = true;
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace '"pytest-runner",' ""
+  '';
+
   nativeBuildInputs = [
     cython
     git
     pkgconfig
-    pytest-runner
     setuptools-scm
   ];
 
@@ -51,7 +54,7 @@ buildPythonPackage rec {
   '';
 
   # few backends enabled, but still some tests
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     mock
     zipp

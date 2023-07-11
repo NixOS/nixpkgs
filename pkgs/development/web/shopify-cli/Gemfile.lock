@@ -2,30 +2,30 @@ GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.2)
-    bugsnag (6.24.2)
+    bugsnag (6.25.1)
       concurrent-ruby (~> 1.0)
-    concurrent-ruby (1.1.9)
+    concurrent-ruby (1.1.10)
     ffi (1.15.5)
-    liquid (5.2.0)
+    liquid (5.4.0)
     listen (3.7.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    mini_portile2 (2.8.0)
-    nokogiri (1.13.3)
+    mini_portile2 (2.8.1)
+    nokogiri (1.14.0)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
-    parser (3.1.1.0)
+    parser (3.2.0.0)
       ast (~> 2.4.1)
-    racc (1.6.0)
-    rb-fsevent (0.11.1)
+    racc (1.6.2)
+    rb-fsevent (0.11.2)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    shopify-cli (2.14.0)
+    shopify-cli (2.34.0)
       bugsnag (~> 6.22)
       listen (~> 3.7.0)
-      theme-check (~> 1.10.1)
-    theme-check (1.10.2)
-      liquid (>= 5.1.0)
+      theme-check (~> 1.14.0)
+    theme-check (1.14.0)
+      liquid (>= 5.4.0)
       nokogiri (>= 1.12)
       parser (~> 3)
 
@@ -36,4 +36,4 @@ DEPENDENCIES
   shopify-cli
 
 BUNDLED WITH
-   2.2.33
+   2.4.3

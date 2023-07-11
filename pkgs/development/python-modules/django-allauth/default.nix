@@ -6,11 +6,12 @@
 , pythonOlder
 , requests
 , requests-oauthlib
+, pyjwt
 }:
 
 buildPythonPackage rec {
   pname = "django-allauth";
-  version = "0.47.0";
+  version = "0.54.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,18 +20,29 @@ buildPythonPackage rec {
     owner = "pennersr";
     repo = pname;
     rev = version;
-    hash = "sha256-wKrsute6TCl331UrxNEBf/zTtGnyGHsOZQwdiicbg2o=";
+    hash = "sha256-0yJsHJhYeiCHQg/QzFD/metb97rcUJ+LYlsl7fGYmuM=";
   };
 
+  postPatch = ''
+    chmod +x manage.py
+    patchShebangs manage.py
+  '';
+
   propagatedBuildInputs = [
-    requests
-    requests-oauthlib
     django
     python3-openid
-  ];
+    pyjwt
+    requests
+    requests-oauthlib
+  ]
+  ++ pyjwt.optional-dependencies.crypto;
 
-  # Tests requires a Django instance
-  doCheck = false;
+  checkPhase = ''
+    # test is out of date
+    rm allauth/socialaccount/providers/cern/tests.py
+
+    ./manage.py test
+  '';
 
   pythonImportsCheck = [
     "allauth"
@@ -40,6 +52,6 @@ buildPythonPackage rec {
     description = "Integrated set of Django applications addressing authentication, registration, account management as well as 3rd party (social) account authentication";
     homepage = "https://www.intenct.nl/projects/django-allauth";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ derdennisop ];
   };
 }

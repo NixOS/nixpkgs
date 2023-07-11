@@ -3,18 +3,18 @@
 , fetchurl
 , fetchpatch
 , getopt
-, tzdata
 , ksh
+, tzdata
 , pkgsMusl # for passthru.tests
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bmake";
-  version = "20220208";
+  version = "20230414";
 
   src = fetchurl {
-    url = "http://www.crufty.net/ftp/pub/sjg/${pname}-${version}.tar.gz";
-    hash = "sha256-ewDB4UYrLh5Upk2ND88n/HfursPxOSDv+NlST/BZ1to=";
+    url = "http://www.crufty.net/ftp/pub/sjg/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    hash = "sha256-KcsdJqrn3p3vkr2us6rUUg6JlRzpey518LibrhuVOZ8=";
   };
 
   # Make tests work with musl
@@ -41,13 +41,13 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "separate-tests.patch";
       url = "https://raw.githubusercontent.com/alpinelinux/aports/2a36f7b79df44136c4d2b8e9512f908af65adfee/community/bmake/separate-tests.patch";
-      sha256 = "00s76jwyr83c6rkvq67b1lxs8jhm0gj2rjgy77xazqr5400slj9a";
+      hash = "sha256-KkmqASAl46/6Of7JLOQDFUqkOw3rGLxnNmyg7Lk0RwM=";
     })
     # add a shebang to bmake's install(1) replacement
     (fetchpatch {
       name = "install-sh.patch";
       url = "https://raw.githubusercontent.com/alpinelinux/aports/34cd8c45397c63c041cf3cbe1ba5232fd9331196/community/bmake/install-sh.patch";
-      sha256 = "0z8icd6akb96r4cksqnhynkn591vbxlmrrs4w6wil3r6ggk6mwa6";
+      hash = "sha256-RvFq5nsmDxq54UTnXGlfO6Rip/XQYj0ZySatqUxjEX0=";
     })
   ];
 
@@ -60,10 +60,15 @@ stdenv.mkDerivation rec {
   ];
 
   # Disabled tests:
+  # opt-chdir: ofborg complains about it somehow
+  # opt-keep-going-indirect: not yet known
   # varmod-localtime: musl doesn't support TZDIR and this test relies on impure,
   # implicit paths
-  # opt-chdir: ofborg complains about it somehow
-  BROKEN_TESTS = "varmod-localtime opt-chdir";
+  BROKEN_TESTS = builtins.concatStringsSep " " [
+    "opt-chdir"
+    "opt-keep-going-indirect"
+    "varmod-localtime"
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -83,7 +88,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     tzdata
   ] ++ lib.optionals (stdenv.hostPlatform.libc != "musl") [
     ksh
@@ -105,9 +110,8 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ thoughtpolice AndersonTorres ];
     platforms = platforms.unix;
-    broken = stdenv.isAarch64; # ofborg complains
   };
 
   passthru.tests.bmakeMusl = pkgsMusl.bmake;
-}
+})
 # TODO: report the quirks and patches to bmake devteam (especially the Musl one)

@@ -24,7 +24,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ boto3 cachecontrol iso3166 python-dateutil requests polyline uritemplate ];
-  checkInputs = [ pytestCheckHook responses ];
+  nativeCheckInputs = [ pytestCheckHook responses ];
 
   meta = with lib; {
     homepage = "https://github.com/mapbox/mapbox-sdk-py";
@@ -32,5 +32,8 @@ buildPythonPackage rec {
     description = "Mapbox SDK for Python";
     longDescription = "Low-level client API for Mapbox web services.";
     maintainers = with maintainers; [ ersin ];
+    # ImportError: cannot import name 'Mapping' from 'collections'
+    # and archived upstreamed
+    broken = true;
   };
 }

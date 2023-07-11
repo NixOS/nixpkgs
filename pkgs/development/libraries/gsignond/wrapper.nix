@@ -5,7 +5,7 @@ symlinkJoin {
 
   paths = [ gsignond ] ++ plugins;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
     wrapProgram $out/bin/gsignond \

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , aws-c-cal
 , aws-c-common
@@ -6,18 +7,19 @@
 , aws-c-http
 , aws-c-io
 , cmake
+, nix
 , s2n-tls
 }:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-mqtt";
-  version = "0.7.10";
+  version = "0.8.8";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-mqtt";
     rev = "v${version}";
-    sha256 = "sha256-efkRr36FbLyS9tgE/ZF3tcmhQ4f5C5ySTlgzThbqv2I=";
+    sha256 = "sha256-bt5Qjw+CqgTfi/Ibhc4AwmJxr22Q6m3ygpmeMhvQTT0=";
   };
 
   nativeBuildInputs = [
@@ -34,9 +36,12 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
     "-DBUILD_SHARED_LIBS=ON"
   ];
+
+  passthru.tests = {
+    inherit nix;
+  };
 
   meta = with lib; {
     description = "C99 implementation of the MQTT 3.1.1 specification";

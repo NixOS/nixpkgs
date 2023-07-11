@@ -28,13 +28,13 @@
 }:
 mkDerivation rec {
   pname = "megasync";
-  version = "4.6.3.0";
+  version = "4.9.0.0";
 
   src = fetchFromGitHub {
     owner = "meganz";
     repo = "MEGAsync";
     rev = "v${version}_Linux";
-    sha256 = "1j86vr8n2a17my61vkmx83cay1ibllzjprl5bfwaby5ibh4zclz4";
+    sha256 = "sha256-s0E8kJ4PJmhaxVcWPCyCk/KbcX4V3IESdZhSosPlZuM=";
     fetchSubmodules = true;
   };
 

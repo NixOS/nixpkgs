@@ -5,6 +5,7 @@
 , buildPythonPackage
 , defusedxml
 , fetchFromGitHub
+, pytest-aiohttp
 , pytest-asyncio
 , pytestCheckHook
 , python-didl-lite
@@ -14,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "async-upnp-client";
-  version = "0.27.0";
+  version = "0.34.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "StevenLooman";
     repo = "async_upnp_client";
-    rev = version;
-    sha256 = "sha256-QElc4J2BxOFI+L9D/SVMiYeRVOmwrNTW65LgdBG0TbU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-nowtQbgYkXOHQcbjlPDzhJORzSla1gmUoW9qrW0QujE=";
   };
 
   propagatedBuildInputs = [
@@ -34,8 +35,9 @@ buildPythonPackage rec {
     voluptuous
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+    pytest-aiohttp
     pytest-asyncio
   ];
 
@@ -61,6 +63,11 @@ buildPythonPackage rec {
     "test_deferred_callback_url"
   ];
 
+  disabledTestPaths = [
+    # Tries to bind to multicast socket and fails to find proper interface
+    "tests/test_ssdp_listener.py"
+  ];
+
   pythonImportsCheck = [
     "async_upnp_client"
   ];
@@ -68,6 +75,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Asyncio UPnP Client library for Python";
     homepage = "https://github.com/StevenLooman/async_upnp_client";
+    changelog = "https://github.com/StevenLooman/async_upnp_client/blob/${version}/CHANGES.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ hexa ];
   };

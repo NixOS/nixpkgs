@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Jailbreak for iPhone 5s though iPhone X, iOS 12.0 and up";
     homepage = "https://checkra.in/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ onny ];
     platforms = platforms.linux;

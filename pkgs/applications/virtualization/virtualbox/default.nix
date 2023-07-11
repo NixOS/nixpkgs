@@ -1,8 +1,9 @@
 { config, stdenv, fetchurl, lib, acpica-tools, dev86, pam, libxslt, libxml2, wrapQtAppsHook
-, libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL, libcap, libGL
+, libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL2, libcap, libGL, libGLU
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
 , qttools, qtsvg, qtwayland, pkg-config, which, docbook_xsl, docbook_xml_dtd_43
 , alsa-lib, curl, libvpx, nettools, dbus, substituteAll, gsoap, zlib
+, yasm, glslang
 # If open-watcom-bin is not passed, VirtualBox will fall back to use
 # the shipped alternative sources (assembly).
 , open-watcom-bin
@@ -23,19 +24,19 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  version = "6.1.30";
+  version = "7.0.8";
 in stdenv.mkDerivation {
   pname = "virtualbox";
   inherit version;
 
   src = fetchurl {
-    url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "3c60a29375549ffc148aaebe859be91b27c19d6fa2deefde1373c4f6da8f18ef";
+    url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}a.tar.bz2";
+    sha256 = "7de37359518d467b7f888235175cd388f66e9f16bd9359dd6265fbc95933c1e6";
   };
 
   outputs = [ "out" "modsrc" ];
 
-  nativeBuildInputs = [ pkg-config which docbook_xsl docbook_xml_dtd_43 ]
+  nativeBuildInputs = [ pkg-config which docbook_xsl docbook_xml_dtd_43 yasm glslang ]
     ++ optional (!headless) wrapQtAppsHook;
 
   # Wrap manually because we wrap just a small number of executables.
@@ -44,12 +45,12 @@ in stdenv.mkDerivation {
   buildInputs = [
     acpica-tools dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
     libcap glib lvm2 alsa-lib curl libvpx pam makeself perl
-    libXmu libpng libopus python3 ]
+    libXmu libXrandr libpng libopus python3 ]
     ++ optional javaBindings jdk
     ++ optional pythonBindings python3 # Python is needed even when not building bindings
     ++ optional pulseSupport libpulseaudio
-    ++ optionals headless [ libXrandr libGL ]
-    ++ optionals (!headless) [ qtbase qtx11extras libXinerama SDL ]
+    ++ optionals headless [ libGL ]
+    ++ optionals (!headless) [ qtbase qtx11extras libXinerama SDL2 libGLU ]
     ++ optionals enableWebService [ gsoap zlib ];
 
   hardeningDisable = [ "format" "fortify" "pic" "stackprotector" ];
@@ -62,8 +63,8 @@ in stdenv.mkDerivation {
         ${optionalString (!headless) ''
         -e 's@TOOLQT5BIN=.*@TOOLQT5BIN="${getDev qtbase}/bin"@' \
         ''} -i configure
-    ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2
-    ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux-x86-64.so.2
+    ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2
+    ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2
 
     grep 'libpulse\.so\.0'      src include -rI --files-with-match | xargs sed -i -e '
       ${optionalString pulseSupport
@@ -81,6 +82,8 @@ in stdenv.mkDerivation {
 
   patches =
      optional enableHardening ./hardened.patch
+     # Since VirtualBox 7.0.8, VBoxSDL requires SDL2, but the build framework uses SDL1
+  ++ optional (!headless) ./fix-sdl.patch
   ++ [ ./extra_symbols.patch ]
      # When hardening is enabled, we cannot use wrapQtApp to ensure that VirtualBoxVM sees
      # the correct environment variables needed for Qt to work, specifically QT_PLUGIN_PATH.
@@ -94,7 +97,7 @@ in stdenv.mkDerivation {
       qtPluginPath = "${qtbase.bin}/${qtbase.qtPluginPrefix}:${qtsvg.bin}/${qtbase.qtPluginPrefix}:${qtwayland.bin}/${qtbase.qtPluginPrefix}";
     })
   ++ [
-    ./qtx11extras.patch
+    ./qt-dependency-paths.patch
     # https://github.com/NixOS/nixpkgs/issues/123851
     ./fix-audio-driver-loading.patch
   ];
@@ -130,14 +133,17 @@ in stdenv.mkDerivation {
     VBOX_JAVA_HOME                 := ${jdk}
     ''}
     ${optionalString (!headless) ''
+    VBOX_WITH_VBOXSDL              := 1
     PATH_QT5_X11_EXTRAS_LIB        := ${getLib qtx11extras}/lib
     PATH_QT5_X11_EXTRAS_INC        := ${getDev qtx11extras}/include
-    TOOL_QT5_LRC                   := ${getDev qttools}/bin/lrelease
+    PATH_QT5_TOOLS_LIB             := ${getLib qttools}/lib
+    PATH_QT5_TOOLS_INC             := ${getDev qttools}/include
     ''}
     ${optionalString enableWebService ''
     # fix gsoap missing zlib include and produce errors with --as-needed
     VBOX_GSOAP_CXX_LIBS := gsoapssl++ z
     ''}
+    TOOL_QT5_LRC                   := ${getDev qttools}/bin/lrelease
     LOCAL_CONFIG
 
     ./configure \
@@ -174,7 +180,7 @@ in stdenv.mkDerivation {
       -name src -o -exec cp -avt "$libexec" {} +
 
     mkdir -p $out/bin
-    for file in ${optionalString (!headless) "VirtualBox VBoxSDL rdesktop-vrdp"} ${optionalString enableWebService "vboxwebsrv"} VBoxManage VBoxBalloonCtrl VBoxHeadless; do
+    for file in ${optionalString (!headless) "VirtualBox VBoxSDL"} ${optionalString enableWebService "vboxwebsrv"} VBoxManage VBoxBalloonCtrl VBoxHeadless; do
         echo "Linking $file to /bin"
         test -x "$libexec/$file"
         ln -s "$libexec/$file" $out/bin/$file
@@ -225,6 +231,10 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "PC emulator";
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryNativeCode
+    ];
     license = licenses.gpl2;
     homepage = "https://www.virtualbox.org/";
     maintainers = with maintainers; [ sander ];

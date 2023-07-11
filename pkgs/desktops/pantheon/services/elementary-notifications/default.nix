@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, nix-update-script
 , meson
 , ninja
 , pkg-config
@@ -17,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-notifications";
-  version = "6.0.1";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "notifications";
     rev = version;
-    sha256 = "sha256-AEcZVQPAQLa202/Yvq0GihY8BfMEH46iXeQ5u3QvuXg=";
+    sha256 = "sha256-i7fSKnP4W12cfax5IXm/Zgy5vP5z7S43S80gvzWpFCE=";
   };
 
   nativeBuildInputs = [
@@ -49,6 +50,10 @@ stdenv.mkDerivation rec {
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "GTK notification server for Pantheon";

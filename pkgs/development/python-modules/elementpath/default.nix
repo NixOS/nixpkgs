@@ -6,16 +6,16 @@
 
 buildPythonPackage rec {
   pname = "elementpath";
-  version = "2.5.0";
+  version = "4.1.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sissaschool";
     repo = "elementpath";
-    rev = "v${version}";
-    sha256 = "sha256-I2Vg0rpCFH1Z+N+JgtDv2se6lXsggzOsJn3Fj252aTQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-cU22JdrCTvg8cF1LK9dYfOTztp3qoXV9VK6aMpbKFHc=";
   };
 
   # avoid circular dependency with xmlschema which directly depends on this
@@ -28,6 +28,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "XPath 1.0/2.0 parsers and selectors for ElementTree and lxml";
     homepage = "https://github.com/sissaschool/elementpath";
+    changelog = "https://github.com/sissaschool/elementpath/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
   };

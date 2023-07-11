@@ -60,8 +60,8 @@ stdenv.mkDerivation  {
       # SPICE needs vioserial
       # TODO: Link windows version in win-spice (here) to version used in win-virtio.
       #       That way it would never matter whether vioserial is installed from win-virtio or win-spice.
-      copy_vioserial = arch: "mkdir -p $out/${arch}/vioserial; cp ${win-virtio}/${arch}/vioserial/* $out/${arch}/vioserial/. \n";
-      copy = arch: version: (copy_qxl arch version) + (copy_usbdk arch) + (copy_vdagent arch) + (copy_vioserial arch);
+      copy_vioserial = arch: version: "mkdir -p $out/${arch}/vioserial; cp ${win-virtio}/vioserial/${version}/${arch}/* $out/${arch}/vioserial/. \n";
+      copy = arch: version: (copy_qxl arch version) + (copy_usbdk arch) + (copy_vdagent arch) + (copy_vioserial arch version);
     in ''
       runHook preInstall
       ${(copy "amd64" "w10") + (copy "x86" "w10")}
@@ -72,7 +72,8 @@ stdenv.mkDerivation  {
     description = "Windows SPICE Drivers";
     homepage = "https://www.spice-space.org/";
     license = [ licenses.asl20 ]; # See https://github.com/vrozenfe/qxl-dod
-    maintainers = [ maintainers.tstrobel ];
+    maintainers = [ ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.linux;
   };
 }

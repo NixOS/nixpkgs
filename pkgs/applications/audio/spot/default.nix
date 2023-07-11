@@ -7,7 +7,9 @@
 , gettext
 , python3
 , desktop-file-utils
+, cargo
 , rustPlatform
+, rustc
 , pkg-config
 , glib
 , libadwaita
@@ -16,24 +18,24 @@
 , openssl
 , alsa-lib
 , libpulseaudio
-, wrapGAppsHook
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
   pname = "spot";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "xou816";
     repo = "spot";
     rev = version;
-    hash = "sha256-uZzylK9imEazwC/ogsDO8ZBvByE5/SNSV+mIlp7Z9Ww=";
+    hash = "sha256-K6wGWhAUUGsbE4O+z0TmJcJyGarvHgZteY527jfAa90=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-v5xdlsI6OlEpCYOTFePTyI8BkIrAwT6FR2JwiRTGgOA=";
+    hash = "sha256-eM2XLumn4dr2YtyUzBZJADlqdexc1iOaNJUudMlfSUc=";
   };
 
   nativeBuildInputs = [
@@ -45,10 +47,10 @@ stdenv.mkDerivation rec {
     gtk4 # for gtk-update-icon-cache
     glib # for glib-compile-schemas
     desktop-file-utils
-    rustPlatform.rust.cargo
+    cargo
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.rustc
-    wrapGAppsHook
+    rustc
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -67,18 +69,19 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x build-aux/cargo.sh
     patchShebangs build-aux/cargo.sh build-aux/meson/postinstall.py
+    substituteInPlace build-aux/meson/postinstall.py \
+      --replace gtk-update-icon-cache gtk4-update-icon-cache
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
     description = "Native Spotify client for the GNOME desktop";
     homepage = "https://github.com/xou816/spot";
     license = licenses.mit;
-    maintainers = with maintainers; [ jtojnar tomfitzhenry ];
+    maintainers = with maintainers; [ tomfitzhenry ];
+    platforms = platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # Download patches from debian project
 # Usage $0 debian-patches.txt debian-patches.nix

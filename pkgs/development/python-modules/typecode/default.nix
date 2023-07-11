@@ -3,23 +3,26 @@
 , buildPythonPackage
 , setuptools-scm
 , attrs
-, pdfminer
+, pdfminer-six
 , commoncode
 , plugincode
 , binaryornot
 , typecode-libmagic
 , pytestCheckHook
 , pytest-xdist
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "typecode";
-  version = "21.6.1";
+  version = "30.0.1";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d3a82859df5607c900972e08e1bca31e3fe2daed37afd1b8231cad2ef613d8d6";
+    hash = "sha256-Glc5QiTVr//euymeNTxGN+FVaOEa6cUxHGyGo9bQrJc=";
   };
 
   dontConfigure = true;
@@ -30,14 +33,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     attrs
-    pdfminer
+    pdfminer-six
     commoncode
     plugincode
     binaryornot
     typecode-libmagic
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
   ];
@@ -46,6 +49,7 @@ buildPythonPackage rec {
     "TestFileTypesDataDriven"
     # AssertionError: assert 'application/x-bytecode.python'...
     "test_compiled_python_1"
+    "test_package_json"
   ];
 
   pythonImportsCheck = [
@@ -55,7 +59,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Comprehensive filetype and mimetype detection using libmagic and Pygments";
     homepage = "https://github.com/nexB/typecode";
+    changelog = "https://github.com/nexB/typecode/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = with maintainers; [ ];
   };
 }

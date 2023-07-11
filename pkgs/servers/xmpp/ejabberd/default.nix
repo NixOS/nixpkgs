@@ -1,36 +1,23 @@
 { stdenv, writeScriptBin, makeWrapper, lib, fetchurl, git, cacert, libpng, libjpeg, libwebp
 , erlang, openssl, expat, libyaml, bash, gnused, gnugrep, coreutils, util-linux, procps, gd
-, flock
+, flock, autoreconfHook
+, nixosTests
 , withMysql ? false
 , withPgsql ? false
 , withSqlite ? false, sqlite
 , withPam ? false, pam
 , withZlib ? true, zlib
-, withIconv ? true
 , withTools ? false
 , withRedis ? false
 }:
 
 let
-  fakegit = writeScriptBin "git" ''
-    #! ${stdenv.shell} -e
-    if [ "$1" = "describe" ]; then
-      [ -r .rev ] && cat .rev || true
-    fi
-  '';
-
   ctlpath = lib.makeBinPath [ bash gnused gnugrep coreutils util-linux procps ];
-
 in stdenv.mkDerivation rec {
-  version = "21.04";
   pname = "ejabberd";
+  version = "23.01";
 
-  src = fetchurl {
-    url = "https://www.process-one.net/downloads/downloads-action.php?file=/${version}/${pname}-${version}.tgz";
-    sha256 = "09s8mj0dkvp9mxazsqxqqmnl5n2xyi8avx0rzgvqrbl3byanzfzr";
-  };
-
-  nativeBuildInputs = [ fakegit makeWrapper ];
+  nativeBuildInputs = [ makeWrapper autoreconfHook ];
 
   buildInputs = [ erlang openssl expat libyaml gd ]
     ++ lib.optional withSqlite sqlite
@@ -38,15 +25,25 @@ in stdenv.mkDerivation rec {
     ++ lib.optional withZlib zlib
   ;
 
+  src = fetchurl {
+    url = "https://www.process-one.net/downloads/downloads-action.php?file=/${version}/ejabberd-${version}.tar.gz";
+    sha256 = "sha256-K4P+A2u/Hbina4b3GP8T3wmPoQxiv88GuB4KZOb2+cA=";
+  };
+
+  passthru.tests = {
+    inherit (nixosTests) ejabberd;
+  };
+
   deps = stdenv.mkDerivation {
     pname = "ejabberd-deps";
-    inherit version;
 
-    inherit src;
+    inherit src version;
 
     configureFlags = [ "--enable-all" "--with-sqlite3=${sqlite.dev}" ];
 
-    nativeBuildInputs = [ git erlang openssl expat libyaml sqlite pam zlib ];
+    nativeBuildInputs = [
+      git erlang openssl expat libyaml sqlite pam zlib autoreconfHook
+    ];
 
     GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
@@ -66,25 +63,29 @@ in stdenv.mkDerivation rec {
       cp -r deps $out
     '';
 
-    outputHashMode = "recursive";
+    dontPatchELF = true;
+    dontStrip = true;
+    # avoid /nix/store references in the source
+    dontPatchShebangs = true;
+
     outputHashAlgo = "sha256";
-    outputHash = "1mvixgb46ss35abjwz3lw38c69bii1xyj557a92bvrxc1gc6gx31";
+    outputHashMode = "recursive";
+    outputHash = "sha256-Lj4YSPOiiJQ6uN4cAR+1s/eVSfoIsuvWR7gGkVYrOfc=";
   };
 
-  configureFlags =
-    [ (lib.enableFeature withMysql "mysql")
-      (lib.enableFeature withPgsql "pgsql")
-      (lib.enableFeature withSqlite "sqlite")
-      (lib.enableFeature withPam "pam")
-      (lib.enableFeature withZlib "zlib")
-      (lib.enableFeature withIconv "iconv")
-      (lib.enableFeature withTools "tools")
-      (lib.enableFeature withRedis "redis")
-    ] ++ lib.optional withSqlite "--with-sqlite3=${sqlite.dev}";
+  configureFlags = [
+    (lib.enableFeature withMysql "mysql")
+    (lib.enableFeature withPgsql "pgsql")
+    (lib.enableFeature withSqlite "sqlite")
+    (lib.enableFeature withPam "pam")
+    (lib.enableFeature withZlib "zlib")
+    (lib.enableFeature withTools "tools")
+    (lib.enableFeature withRedis "redis")
+  ] ++ lib.optional withSqlite "--with-sqlite3=${sqlite.dev}";
 
   enableParallelBuilding = true;
 
-  preBuild = ''
+  postPatch = ''
     cp -r $deps deps
     chmod -R +w deps
     patchShebangs .

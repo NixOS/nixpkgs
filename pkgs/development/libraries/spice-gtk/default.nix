@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , acl
 , cyrus_sasl
@@ -16,10 +17,11 @@
 , libdrm
 , libjpeg_turbo
 , libopus
-, libsoup
+, libsoup_3
 , libusb1
 , lz4
 , meson
+, mesonEmulatorHook
 , ninja
 , openssl
 , perl
@@ -32,12 +34,13 @@
 , usbredir
 , vala
 , wayland-protocols
+, wayland-scanner
 , zlib
-, withPolkit ? true
+, withPolkit ? stdenv.isLinux
 }:
 
 # If this package is built with polkit support (withPolkit=true),
-# usb redirection reqires spice-client-glib-usb-acl-helper to run setuid root.
+# usb redirection requires spice-client-glib-usb-acl-helper to run setuid root.
 # The helper confirms via polkit that the user has an active session,
 # then adds a device acl entry for that user.
 # Example NixOS config to create a setuid wrapper for the helper:
@@ -59,14 +62,83 @@
 
 stdenv.mkDerivation rec {
   pname = "spice-gtk";
-  version = "0.40";
+  version = "0.42";
 
   outputs = [ "out" "dev" "devdoc" "man" ];
 
   src = fetchurl {
     url = "https://www.spice-space.org/download/gtk/${pname}-${version}.tar.xz";
-    sha256 = "sha256-I/X/f6gLdWR85zzaXq+LMi80Mtu7f286g5Y0YYrbztM=";
+    sha256 = "sha256-k4ARfxgRrR+qGBLLZgJHm2KQ1KDYzEQtREJ/f2wOelg=";
   };
+
+  depsBuildBuild = [
+    pkg-config
+  ];
+
+  nativeBuildInputs = [
+    docbook_xsl
+    gettext
+    gobject-introspection
+    gtk-doc
+    meson
+    ninja
+    perl
+    pkg-config
+    python3
+    python3.pkgs.pyparsing
+    python3.pkgs.six
+    vala
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ] ++ lib.optionals stdenv.isLinux [
+    wayland-scanner
+  ];
+
+  propagatedBuildInputs = [
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+  ];
+
+  buildInputs = [
+    cyrus_sasl
+    libepoxy
+    gtk3
+    json-glib
+    libcacard
+    libjpeg_turbo
+    libopus
+    libsoup_3
+    libusb1
+    lz4
+    openssl
+    phodav
+    pixman
+    spice-protocol
+    usbredir
+    vala
+    zlib
+  ] ++ lib.optionals withPolkit [
+    polkit
+    acl
+  ] ++ lib.optionals stdenv.isLinux [
+    libcap_ng
+    libdrm
+    wayland-protocols
+  ];
+
+  PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
+
+  mesonFlags = [
+    "-Dusb-acl-helper-dir=${placeholder "out"}/bin"
+    "-Dusb-ids-path=${hwdata}/share/hwdata/usb.ids"
+  ] ++ lib.optionals (!withPolkit) [
+    "-Dpolkit=disabled"
+  ] ++ lib.optionals (!stdenv.isLinux) [
+    "-Dlibcap-ng=disabled"
+    "-Degl=disabled"
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+    "-Dcoroutine=gthread" # Fixes "Function missing:makecontext"
+  ];
 
   postPatch = ''
     # get rid of absolute path to helper in store so we can use a setuid wrapper
@@ -76,57 +148,9 @@ stdenv.mkDerivation rec {
     substituteInPlace src/meson.build \
       --replace "meson.add_install_script('../build-aux/setcap-or-suid'," \
       "# meson.add_install_script('../build-aux/setcap-or-suid',"
+
+    patchShebangs subprojects/keycodemapdb/tools/keymap-gen
   '';
-
-  nativeBuildInputs = [
-    docbook_xsl
-    gettext
-    gobject-introspection
-    gtk-doc
-    libsoup
-    meson
-    ninja
-    perl
-    pkg-config
-    python3
-    python3.pkgs.pyparsing
-    python3.pkgs.six
-    vala
-  ];
-
-  propagatedBuildInputs = [
-    gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
-  ];
-
-  buildInputs = [
-    cyrus_sasl
-    libepoxy
-    gtk3
-    json-glib
-    libcacard
-    libcap_ng
-    libdrm
-    libjpeg_turbo
-    libopus
-    libusb1
-    lz4
-    openssl
-    phodav
-    pixman
-    spice-protocol
-    usbredir
-    wayland-protocols
-    zlib
-  ] ++ lib.optionals withPolkit [ polkit acl ] ;
-
-  PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
-
-  mesonFlags = [
-    "-Dusb-acl-helper-dir=${placeholder "out"}/bin"
-    "-Dusb-ids-path=${hwdata}/share/hwdata/usb.ids"
-  ] ++ lib.optionals (!withPolkit) [
-    "-Dpolkit=disabled"
-  ];
 
   meta = with lib; {
     description = "GTK 3 SPICE widget";
@@ -140,6 +164,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.spice-space.org/";
     license = licenses.lgpl21;
     maintainers = [ maintainers.xeji ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

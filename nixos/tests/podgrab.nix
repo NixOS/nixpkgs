@@ -22,11 +22,11 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     start_all()
 
     default.wait_for_unit("podgrab")
-    default.wait_for_open_port("${toString defaultPort}")
+    default.wait_for_open_port(${toString defaultPort})
     default.succeed("curl --fail http://localhost:${toString defaultPort}")
 
     customized.wait_for_unit("podgrab")
-    customized.wait_for_open_port("${toString customPort}")
+    customized.wait_for_open_port(${toString customPort})
     customized.succeed("curl --fail http://localhost:${toString customPort}")
   '';
 

@@ -1,51 +1,36 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , pkg-config
 , meson
 , ninja
 , python3
 , vala
-, desktop-file-utils
 , gtk3
 , libxml2
 , libhandy
-, webkitgtk
+, webkitgtk_4_1
 , folks
-, libgdata
-, sqlite
+, glib-networking
 , granite
 , evolution-data-server
-, appstream
 , wrapGAppsHook
 , libgee
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-mail";
-  version = "6.4.0";
+  version = "7.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "mail";
     rev = version;
-    sha256 = "sha256-ooqVNMgeAqGlFcfachPPfhSiKTEEcNGv5oWdM7VLWOc=";
+    sha256 = "sha256-dvDlvn8KvFmiP/NClRtHNEs5gPTUjlzgTYmgIaCfoLw=";
   };
 
-  patches = [
-    # Fix build with vala 0.56
-    # https://github.com/elementary/mail/pull/765
-    (fetchpatch {
-      url = "https://github.com/elementary/mail/commit/c3aa61d226f49147d7685cc00013469ff4df369a.patch";
-      sha256 = "sha256-OxNBGIC1hrEaFSufQ59Wb0AMfdzqPt6diL4g3hbL/Ig=";
-    })
-  ];
-
   nativeBuildInputs = [
-    appstream
-    desktop-file-utils
     libxml2
     meson
     ninja
@@ -58,13 +43,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     evolution-data-server
     folks
+    glib-networking
     granite
     gtk3
-    libgdata
     libgee
     libhandy
-    sqlite
-    webkitgtk
+    webkitgtk_4_1
   ];
 
   postPatch = ''
@@ -73,9 +57,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

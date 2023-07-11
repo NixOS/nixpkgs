@@ -48,6 +48,7 @@ in stdenv.mkDerivation rec {
     description = "GRaphs for Object-Oriented VErification";
     homepage = "http://groove.cs.utwente.nl/";
     license = licenses.asl20;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     platforms = platforms.all;
     maintainers = with maintainers; [ jfrankenau ];
   };

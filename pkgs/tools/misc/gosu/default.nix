@@ -1,24 +1,29 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, testers, gosu }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "gosu";
-  version = "unstable-2017-05-09";
-
-  goPackagePath = "github.com/tianon/gosu";
+  version = "1.16";
 
   src = fetchFromGitHub {
     owner = "tianon";
     repo = "gosu";
-    rev = "e87cf95808a7b16208515c49012aa3410bc5bba8";
-    sha256 = "sha256-Ff0FXJg3z8akof+/St1JJu1OO1kS5gMtxSRnCLpj4eI=";
+    rev = version;
+    hash = "sha256-UfrhrwsnDT7pfizQtQzqv/1FTMBTrk3qmtiR7ffwwhc=";
   };
 
-  goDeps = ./deps.nix;
+  vendorHash = "sha256-3HIAPI1bbfwE2/cUsQnp2Vz2uvlvSFDUrp2xuGNr8Gk=";
 
-  meta = {
-    description= "Tool that avoids TTY and signal-forwarding behavior of sudo and su";
+  ldflags = [ "-d" "-s" "-w" ];
+
+  passthru.tests.version = testers.testVersion {
+    package = gosu;
+  };
+
+  meta = with lib; {
+    description = "Tool that avoids TTY and signal-forwarding behavior of sudo and su";
     homepage = "https://github.com/tianon/gosu";
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ aaronjheng ];
+    platforms = platforms.linux;
   };
 }

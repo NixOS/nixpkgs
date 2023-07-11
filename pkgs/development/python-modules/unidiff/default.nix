@@ -1,13 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi, unittestCheckHook }:
 
 buildPythonPackage rec {
   pname = "unidiff";
-  version = "0.7.3";
+  version = "0.7.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1fLlOpoA2zIkqMNjSbU4Dg4i0a7GxpSxT7lIPuk8YgU=";
+    sha256 = "2e5f0162052248946b9f0970a40e9e124236bf86c82b70821143a6fc1dea2574";
   };
+
+  nativeCheckInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "-s" "tests" ];
 
   pythonImportsCheck = [ "unidiff" ];
 

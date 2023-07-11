@@ -17,12 +17,10 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DCPP-NETLIB_BUILD_SHARED_LIBS=ON"
+    # fatal error: 'boost/asio/stream_socket_service.hpp' file not found
+    "-DCPP-NETLIB_BUILD_EXAMPLES=OFF"
+    "-DCPP-NETLIB_BUILD_TESTS=OFF"
   ];
-
-  # The test driver binary lacks an RPath to the library's libs
-  preCheck = ''
-    export LD_LIBRARY_PATH=$PWD/libs/network/src
-  '';
 
   # Most tests make network GET requests to various websites
   doCheck = false;

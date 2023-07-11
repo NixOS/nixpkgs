@@ -1,8 +1,11 @@
-{ stdenv, lib, edk2, util-linux, nasm, acpica-tools
+{ stdenv, nixosTests, lib, edk2, util-linux, nasm, acpica-tools, llvmPackages
 , csmSupport ? false, seabios ? null
 , secureBoot ? false
 , httpSupport ? false
 , tpmSupport ? false
+, tlsSupport ? false
+, debug ? false
+, sourceDebug ? debug
 }:
 
 assert csmSupport -> seabios != null;
@@ -13,35 +16,54 @@ let
     "OvmfPkg/OvmfPkgIa32.dsc"
   else if stdenv.isx86_64 then
     "OvmfPkg/OvmfPkgX64.dsc"
-  else if stdenv.isAarch64 then
+  else if stdenv.hostPlatform.isAarch then
     "ArmVirtPkg/ArmVirtQemu.dsc"
   else
     throw "Unsupported architecture";
 
   version = lib.getVersion edk2;
+
+  suffixes = {
+    i686 = "FV/OVMF";
+    x86_64 = "FV/OVMF";
+    aarch64 = "FV/AAVMF";
+  };
+
 in
 
-edk2.mkDerivation projectDscPath {
+edk2.mkDerivation projectDscPath (finalAttrs: {
   pname = "OVMF";
   inherit version;
 
   outputs = [ "out" "fd" ];
 
-  buildInputs = [ util-linux nasm acpica-tools ];
+  nativeBuildInputs = [ util-linux nasm acpica-tools ]
+    ++ lib.optionals stdenv.cc.isClang [ llvmPackages.bintools llvmPackages.llvm ];
+  strictDeps = true;
 
   hardeningDisable = [ "format" "stackprotector" "pic" "fortify" ];
 
   buildFlags =
-    lib.optionals secureBoot [ "-D SECURE_BOOT_ENABLE=TRUE" ]
+    # IPv6 has no reason to be disabled.
+    [ "-D NETWORK_IP6_ENABLE=TRUE" ]
+    ++ lib.optionals debug [ "-D DEBUG_ON_SERIAL_PORT=TRUE" ]
+    ++ lib.optionals sourceDebug [ "-D SOURCE_DEBUG_ENABLE=TRUE" ]
+    ++ lib.optionals secureBoot [ "-D SECURE_BOOT_ENABLE=TRUE" ]
     ++ lib.optionals csmSupport [ "-D CSM_ENABLE" "-D FD_SIZE_2MB" ]
     ++ lib.optionals httpSupport [ "-D NETWORK_HTTP_ENABLE=TRUE" "-D NETWORK_HTTP_BOOT_ENABLE=TRUE" ]
+    ++ lib.optionals tlsSupport [ "-D NETWORK_TLS_ENABLE=TRUE" ]
     ++ lib.optionals tpmSupport [ "-D TPM_ENABLE" "-D TPM2_ENABLE" "-D TPM2_CONFIG_ENABLE"];
+
+  buildConfig = if debug then "DEBUG" else "RELEASE";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Qunused-arguments";
+
+  env.PYTHON_COMMAND = "python3";
 
   postPatch = lib.optionalString csmSupport ''
     cp ${seabios}/Csm16.bin OvmfPkg/Csm/Csm16/Csm16.bin
   '';
 
-  postFixup = if stdenv.isAarch64 then ''
+  postFixup = if stdenv.hostPlatform.isAarch then ''
     mkdir -vp $fd/FV
     mkdir -vp $fd/AAVMF
     mv -v $out/FV/QEMU_{EFI,VARS}.fd $fd/FV
@@ -61,10 +83,23 @@ edk2.mkDerivation projectDscPath {
 
   dontPatchELF = true;
 
+  passthru =
+  let
+    cpuName = stdenv.hostPlatform.parsed.cpu.name;
+    suffix = suffixes."${cpuName}" or (throw "Host cpu name `${cpuName}` is not supported in this OVMF derivation!");
+    prefix = "${finalAttrs.finalPackage.fd}/${suffix}";
+  in {
+    firmware  = "${prefix}_CODE.fd";
+    variables = "${prefix}_VARS.fd";
+    # This will test the EFI firmware for the host platform as part of the NixOS Tests setup.
+    tests.basic-systemd-boot = nixosTests.systemd-boot.basic;
+  };
+
   meta = {
     description = "Sample UEFI firmware for QEMU and KVM";
     homepage = "https://github.com/tianocore/tianocore.github.io/wiki/OVMF";
     license = lib.licenses.bsd2;
-    platforms = ["x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin"];
+    inherit (edk2.meta) platforms;
+    maintainers = [ lib.maintainers.raitobezarius ];
   };
-}
+})

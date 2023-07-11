@@ -12,6 +12,7 @@
 , dconf
 , dpkg
 , fontconfig
+, gcc-unwrapped
 , gdk-pixbuf
 , glib
 , glibc
@@ -66,6 +67,7 @@ let
   runtimeLibs = lib.makeLibraryPath [
     curl
     glibc
+    gcc-unwrapped.lib
     libudev0-shim
     pulseaudio
   ];
@@ -73,11 +75,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "onlyoffice-desktopeditors";
-  version = "6.3.1";
+  version = "7.2.0";
   minor = null;
   src = fetchurl {
     url = "https://github.com/ONLYOFFICE/DesktopEditors/releases/download/v${version}/onlyoffice-desktopeditors_amd64.deb";
-    sha256 = "sha256-WCjCljA7yB7Zm/I4rDZnfgaUQpDUKwbUvL7hkIG8cVM=";
+    sha256 = "sha256-O9gC/b5/eZ1YImuXpEZOJhI1rzCNuFrm5IqablnYo9Y=";
   };
 
   nativeBuildInputs = [
@@ -109,6 +111,7 @@ stdenv.mkDerivation rec {
     qt5.qtbase
     qt5.qtdeclarative
     qt5.qtsvg
+    qt5.qtwayland
     xorg.libX11
     xorg.libxcb
     xorg.libXcomposite
@@ -142,6 +145,13 @@ stdenv.mkDerivation rec {
     mv usr/share/* $out/share/
     mv opt/onlyoffice/desktopeditors $out/share
 
+    for f in $out/share/desktopeditors/asc-de-*.png; do
+      size=$(basename "$f" ".png" | cut -d"-" -f3)
+      res="''${size}x''${size}"
+      mkdir -pv "$out/share/icons/hicolor/$res/apps"
+      ln -s "$f" "$out/share/icons/hicolor/$res/apps/onlyoffice-desktopeditors.png"
+    done;
+
     substituteInPlace $out/bin/onlyoffice-desktopeditors \
       --replace "/opt/onlyoffice/" "$out/share/"
 
@@ -171,6 +181,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://github.com/ONLYOFFICE/DesktopEditors/releases";
     changelog = "https://github.com/ONLYOFFICE/DesktopEditors/blob/master/CHANGELOG.md";
     platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ nh2 gtrunsec ];
   };

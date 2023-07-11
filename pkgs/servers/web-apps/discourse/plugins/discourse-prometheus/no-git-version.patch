@@ -2,7 +2,7 @@ diff --git a/lib/internal_metric/global.rb b/lib/internal_metric/global.rb
 index 682571b..7bdd431 100644
 --- a/lib/internal_metric/global.rb
 +++ b/lib/internal_metric/global.rb
-@@ -30,30 +30,7 @@ module DiscoursePrometheus::InternalMetric
+@@ -30,28 +30,7 @@ module DiscoursePrometheus::InternalMetric
        @active_app_reqs = 0
        @queued_app_reqs = 0
        @fault_logged = {}
@@ -10,7 +10,7 @@ index 682571b..7bdd431 100644
 -      begin
 -        @@version = nil
 -
--        out, error, status = Open3.capture3('git rev-parse HEAD')
+-        out, error, status = Open3.capture3("git rev-parse HEAD")
 -
 -        if status.success?
 -          @@version ||= out.chomp
@@ -26,9 +26,7 @@ index 682571b..7bdd431 100644
 -
 -        @@retries ||= 10
 -        @@retries -= 1
--        if @@retries < 0
--          @@version = -1
--        end
+-        @@version = -1 if @@retries < 0
 -      end
 +      @@version = -1
      end
