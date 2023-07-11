@@ -7969,6 +7969,8 @@ self: super: with self; {
 
   pytest-mockito = callPackage ../development/python-modules/pytest-mockito { };
 
+  pytest-pudb = callPackage ../development/python-modules/pytest-pudb { };
+
   python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
 
   python-creole = callPackage ../development/python-modules/python-creole { };
@@ -9198,6 +9200,8 @@ self: super: with self; {
   pynrrd = callPackage ../development/python-modules/pynrrd { };
 
   pynvim = callPackage ../development/python-modules/pynvim { };
+
+  pynvim-pp = callPackage ../development/python-modules/pynvim-pp { };
 
   pynvml = callPackage ../development/python-modules/pynvml { };
 
@@ -11942,6 +11946,8 @@ self: super: with self; {
   statsd = callPackage ../development/python-modules/statsd { };
 
   statsmodels = callPackage ../development/python-modules/statsmodels { };
+
+  std2 = callPackage ../development/python-modules/std2 { };
 
   stdiomask = callPackage ../development/python-modules/stdiomask { };
 
