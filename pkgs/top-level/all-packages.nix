@@ -1867,6 +1867,10 @@ with pkgs;
 
   vopono = callPackage ../tools/networking/vopono { };
 
+  vrc-get = callPackage ../tools/misc/vrc-get {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   winbox = callPackage ../tools/admin/winbox {
     wine = wineWowPackages.staging;
   };
@@ -23231,7 +23235,8 @@ with pkgs;
   in pkgs.buildEnv { # slightly hacky
     name = "libxml2+py-${res.libxml2.version}";
     paths = with libxml2; [ dev bin py ];
-    inherit (libxml2) passthru;
+    # Avoid update.nix conflicts with libxml2.
+    passthru = builtins.removeAttrs libxml2.passthru [ "updateScript" ];
     # the hook to find catalogs is hidden by buildEnv
     postBuild = ''
       mkdir "$out/nix-support"

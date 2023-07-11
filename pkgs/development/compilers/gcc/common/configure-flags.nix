@@ -244,11 +244,6 @@ let
     ++ lib.optionals (langD) [
       "--with-target-system-zlib=yes"
     ]
-    # Clang 11 performs an optimization on x86_64 that is sensitive to the presence of debug info.
-    # This causes GCC to fail to bootstrap due to object file differences between stages 2 and 3.
-    ++ lib.optionals (targetPlatform.isDarwin && targetPlatform.isx86_64) [
-      "--with-as=${targetPackages.darwin.cctools-port}/bin/${targetPrefix}as"
-    ]
   ;
 
 in configureFlags
