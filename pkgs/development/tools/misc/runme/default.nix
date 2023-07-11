@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "runme";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "stateful";
     repo = "runme";
     rev = "v${version}";
-    hash = "sha256-pfx4X9FgC08nQ74j9MJRBKIZnvO3plHN4cmaU4kFOoI=";
+    hash = "sha256-X2zHSqhtVtJZt28/O9i+EDwyRf+qJs2JTtCUveSWUVM=";
   };
 
   vendorHash = "sha256-BJhda5mE5f4kvi8CLjgMJYjdUS3vsUSwmHhTW/AVKCI=";

@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
@@ -54,6 +55,8 @@ buildPythonPackage rec {
     # Tests want to use playwright executable
     "test_no_cookies"
     "test_fake_cookie"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_slack_config"
   ];
 
   meta = with lib; {
