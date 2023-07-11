@@ -26,7 +26,6 @@
 , expecttest
 , hypothesis
 , pytestCheckHook
-#, apex
 }:
 let
   pname = "fairseq";
