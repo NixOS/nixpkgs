@@ -509,6 +509,8 @@ mapAliases ({
   finger_bsd = bsd-finger;
   fingerd_bsd = bsd-fingerd;
   firefox-esr-68 = throw "Firefox 68 ESR was removed because it reached end of life with its final release 68.12esr on 2020-08-25";
+  firefox-esr-102 = throw "Firefox 102 ESR was removed, because it reaches end of life after 2023-08-29. "; # added 2023-07-31
+  firefox-esr-102-unwrapped = firefox-esr-102;
   firefox-esr-wayland = firefox-esr; # Added 2022-11-15
   firefox-esr-wrapper = throw "'firefox-esr-wrapper' has been renamed to/replaced by 'firefox-esr'"; # Converted to throw 2022-02-22
   firefox-wayland = firefox; # Added 2022-11-15
