@@ -556,48 +556,45 @@ let
                   )
                   subtree
               ) options);
+
+      # The root of any module definition must be an attrset.
+      checkedConfigs =
+        assert
+          lib.all
+            (c:
+              isAttrs c.config || throw ''
+                You're trying to define a value of type `${builtins.typeOf c.config}'
+                rather than an attribute set for the option
+                `${builtins.concatStringsSep "." prefix}'!
+
+                This usually happens if `${builtins.concatStringsSep "." prefix}' has option
+                definitions inside that are not matched. Please check how to properly define
+                this option by e.g. referring to `man 5 configuration.nix'!
+              ''
+            )
+            configs;
+        configs;
+
       # an attrset 'name' => list of submodules that define ‘name’.
       pushedDownDefinitionsByName =
         zipAttrsWith (n: concatLists)
           (map (module: let subtree = module.config; in
-              if !(builtins.isAttrs subtree) then
-                throw ''
-                  You're trying to define a value of type `${builtins.typeOf subtree}'
-                  rather than an attribute set for the option
-                  `${builtins.concatStringsSep "." prefix}'!
-
-                  This usually happens if `${builtins.concatStringsSep "." prefix}' has option
-                  definitions inside that are not matched. Please check how to properly define
-                  this option by e.g. referring to `man 5 configuration.nix'!
-                ''
-              else
                 mapAttrs
                   (n: value:
                     map (config: { inherit (module) file; inherit config; }) (pushDownProperties value)
                   )
                   subtree
-              ) configs);
+              ) checkedConfigs);
       # extract the definitions for each loc
       rawDefinitionsByName =
         zipAttrsWith (n: concatLists)
           (map (module: let subtree = module.config; in
-              if !(builtins.isAttrs subtree) then
-                throw ''
-                  You're trying to define a value of type `${builtins.typeOf subtree}'
-                  rather than an attribute set for the option
-                  `${builtins.concatStringsSep "." prefix}'!
-
-                  This usually happens if `${builtins.concatStringsSep "." prefix}' has option
-                  definitions inside that are not matched. Please check how to properly define
-                  this option by e.g. referring to `man 5 configuration.nix'!
-                ''
-              else
                 mapAttrs
                   (n: value:
                     [{ inherit (module) file; inherit value; }]
                   )
                 subtree
-              ) configs);
+              ) checkedConfigs);
 
       # Convert an option tree decl to a submodule option decl
       optionTreeToOption = decl:
