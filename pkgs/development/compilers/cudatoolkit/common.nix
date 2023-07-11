@@ -132,7 +132,7 @@ backendStdenv.mkDerivation rec {
     ucx
     xorg.libxshmfence
     xorg.libxkbfile
-  ] ++ (lib.optionals (lib.versionAtLeast version "12.1") (map lib.getLib ([
+  ] ++ (lib.optionals (lib.versionAtLeast version "12") (map lib.getLib ([
     # Used by `/target-linux-x64/CollectX/clx` and `/target-linux-x64/CollectX/libclx_api.so` for:
     # - `libcurl.so.4`
     curlMinimal
