@@ -85,6 +85,14 @@ in {
           considered failed and systemd will attempt to restart it.
         '';
       };
+
+      ui = {
+        enable = lib.mkEnableOption (lib.mdDoc ''
+          Enables the (experimental) LXD UI.
+        '');
+
+        package = mkPackageOption pkgs.lxd "ui" { };
+      };
     };
   };
 
@@ -142,6 +150,10 @@ in {
 
       path = [ pkgs.util-linux ]
         ++ optional cfg.zfsSupport config.boot.zfs.package;
+
+      environment = mkIf (cfg.ui.enable) {
+        "LXD_UI" = cfg.ui.package;
+      };
 
       serviceConfig = {
         ExecStart = "@${cfg.package}/bin/lxd lxd --group lxd";

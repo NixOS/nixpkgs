@@ -204,16 +204,13 @@ lib.makeScope pkgs.newScope (self: with self; {
   # or php.withExtensions to extend the functionality of the PHP
   # interpreter.
   # The extensions attributes is composed of three sections:
-  # 1. The contrib conditional extensions, which are only available on specific versions or system
+  # 1. The contrib conditional extensions, which are only available on specific PHP versions
   # 2. The contrib extensions available
   # 3. The core extensions
   extensions =
   # Contrib conditional extensions
    lib.optionalAttrs (!(lib.versionAtLeast php.version "8.3")) {
     blackfire = callPackage ../development/tools/misc/blackfire/php-probe.nix { inherit php; };
-  } // lib.optionalAttrs (!stdenv.isDarwin) {
-    # Only available on Linux: https://www.php.net/manual/en/inotify.requirements.php
-    inotify = callPackage ../development/php-packages/inotify { };
   } //
   # Contrib extensions
   {
@@ -225,7 +222,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     couchbase = callPackage ../development/php-packages/couchbase { };
 
-    datadog_trace = callPackage ../development/php-packages/datadog_trace { };
+    datadog_trace = callPackage ../development/php-packages/datadog_trace {
+      inherit (pkgs) darwin;
+    };
 
     ds = callPackage ../development/php-packages/ds { };
 
@@ -239,13 +238,17 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     imagick = callPackage ../development/php-packages/imagick { };
 
+    inotify = callPackage ../development/php-packages/inotify { };
+
     mailparse = callPackage ../development/php-packages/mailparse { };
 
     maxminddb = callPackage ../development/php-packages/maxminddb { };
 
     memcached = callPackage ../development/php-packages/memcached { };
 
-    mongodb = callPackage ../development/php-packages/mongodb { };
+    mongodb = callPackage ../development/php-packages/mongodb {
+      inherit (pkgs) darwin;
+    };
 
     msgpack = callPackage ../development/php-packages/msgpack { };
 
@@ -289,7 +292,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     smbclient = callPackage ../development/php-packages/smbclient { };
 
-    snuffleupagus = callPackage ../development/php-packages/snuffleupagus { };
+    snuffleupagus = callPackage ../development/php-packages/snuffleupagus {
+      inherit (pkgs) darwin;
+    };
 
     sqlsrv = callPackage ../development/php-packages/sqlsrv { };
 

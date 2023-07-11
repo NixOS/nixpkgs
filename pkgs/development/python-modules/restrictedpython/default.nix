@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "restrictedpython";
-  version = "6.0";
+  version = "6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "RestrictedPython";
     inherit version;
-    hash = "sha256-QFzwvZ7sLxmxMmtfSCKO/lbWWQtOkYJrjMOyzUAKlq0=";
+    hash = "sha256-fljqFcySoLkW4MjKKV6LLG1A/uTRLhorUGPYbvwnmpw=";
   };
 
   nativeCheckInputs = [

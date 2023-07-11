@@ -35,13 +35,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-control-center";
-  version = "5.8.1";
+  version = "5.8.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-tRLUdwEptLNngVq+qOPilGQipVXNeDlzohgu3VlVciI=";
+    hash = "sha256-7AXm4ZTpI/4Xa2lwDmEvomNdwmgVoXSKqojpFZMuoVQ=";
   };
 
   buildInputs = [

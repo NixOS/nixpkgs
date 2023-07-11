@@ -21,13 +21,6 @@ lib:
   # run `grep github.com/kubernetes-sigs/cri-tools go.mod | head -n1 | awk '{print $4}'` in the k3s repo at the tag
   criCtlVersion,
   updateScript ? null,
-  # multicallContainerd is a temporary variable for migrating k3s versions
-  # forward, and can be removed once all callers set it.
-  # It is here so we can update 1.26 and 1.27 independently, but they'll both migrate to this.
-  # This variable controls whether we build with containerd as a separate
-  # binary, or as a k3s multicall. Upstream k3s changed this in 1.27.2 and
-  # 1.26.5. See https://github.com/k3s-io/k3s/issues/7419 for more context
-  multicallContainerd ? false,
 }:
 
 # builder.nix contains a "builder" expression that, given k3s version and hash
@@ -193,13 +186,14 @@ let
     subPackages = [ "cmd/server" ];
     ldflags = versionldflags;
 
-    tags = [ "libsqlite3" "linux" ] ++ lib.optional multicallContainerd "ctrd";
+    tags = [ "ctrd" "libsqlite3" "linux" ];
 
     # create the multicall symlinks for k3s
     postInstall = ''
       mv $out/bin/server $out/bin/k3s
       pushd $out
       # taken verbatim from https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/build#L105-L113
+      ln -s k3s ./bin/containerd
       ln -s k3s ./bin/crictl
       ln -s k3s ./bin/ctr
       ln -s k3s ./bin/k3s-agent
@@ -210,11 +204,6 @@ let
       ln -s k3s ./bin/k3s-server
       ln -s k3s ./bin/k3s-token
       ln -s k3s ./bin/kubectl
-    '' + lib.optionalString multicallContainerd ''
-      # for the multicall binary, also do containerd per
-      # https://github.com/k3s-io/k3s/blob/v1.27.2%2Bk3s1/scripts/build#L136-L146
-      ln -s k3s ./bin/containerd
-    '' + ''
       popd
     '';
 
@@ -222,7 +211,7 @@ let
       description = "The various binaries that get packaged into the final k3s binary";
     };
   };
-  # For the multicall binary, only used for the shim
+  # Only used for the shim since
   # https://github.com/k3s-io/k3s/blob/v1.27.2%2Bk3s1/scripts/build#L153
   k3sContainerd = buildGoModule {
     pname = "k3s-containerd";
@@ -235,7 +224,7 @@ let
     };
     vendorSha256 = null;
     buildInputs = [ btrfs-progs ];
-    subPackages = [ "cmd/containerd-shim-runc-v2" ] ++ lib.optional (!multicallContainerd) "cmd/containerd";
+    subPackages = [ "cmd/containerd-shim-runc-v2" ];
     ldflags = versionldflags;
   };
 in
@@ -243,7 +232,7 @@ buildGoModule rec {
   pname = "k3s";
   version = k3sVersion;
 
-  tags = [ "libsqlite3" "linux" ] ++ lib.optional multicallContainerd "ctrd";
+  tags = [ "libsqlite3" "linux" "ctrd" ];
   src = k3sRepo;
   vendorSha256 = k3sVendorSha256;
 
@@ -312,7 +301,6 @@ buildGoModule rec {
     rsync -a --no-perms ${k3sServer}/bin/ ./bin/
     ln -vsf ${k3sCNIPlugins}/bin/cni ./bin/cni
     ln -vsf ${k3sContainerd}/bin/containerd-shim-runc-v2 ./bin
-    ${lib.optionalString (!multicallContainerd) "ln -vsf ${k3sContainerd}/bin/containerd ./bin/"}
     rsync -a --no-perms --chmod u=rwX ${k3sRoot}/etc/ ./etc/
     mkdir -p ./build/static/charts
 

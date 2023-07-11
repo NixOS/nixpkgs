@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rqbit";
-  version = "2.1.5";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "ikatson";
     repo = "rqbit";
     rev = "v${version}";
-    sha256 = "sha256-AzlYeHPCDri/FxAh5R5AES+OAfzhwqB8/ewRwDU1nnU=";
+    hash = "sha256-RF/3eICbqYXSuOWTvRBImiLPWIh4Oip37S5gqoSmDzE=";
   };
 
-  cargoSha256 = "sha256-CqEnQNbwiB6+zM8gWhplvFPblKp+mPMAtnHP8JZiKv4=";
+  cargoHash = "sha256-wawlqnPYCLEkR9XpTQRZqG+wsqN/Nd5Q1IXpE6ikmY4=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
 

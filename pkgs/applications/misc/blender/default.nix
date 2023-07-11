@@ -28,11 +28,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "3.5.1";
+  version = "3.6.0";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    hash = "sha256-vXQox+bLpakAIWJpwyER3/qrrxvbVHLyMZZeYVF0qAk=";
+    hash = "sha256-SzdWyzdGhsaesv1VX5ZUfUnLHvRvW8buJTlOVxz6yOk=";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
@@ -80,8 +80,6 @@ stdenv.mkDerivation rec {
   pythonPath = with python310Packages; [ numpy requests ];
 
   postPatch = ''
-    # allow usage of dynamically linked embree
-    rm build_files/cmake/Modules/FindEmbree.cmake
   '' +
     (if stdenv.isDarwin then ''
       : > build_files/cmake/platform/platform_apple_xcode.cmake

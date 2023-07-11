@@ -2561,6 +2561,12 @@
       }
     ];
   };
+  CaitlinDavitt = {
+    email = "CaitlinDavitt@gmail.com";
+    github = "CaitlinDavitt";
+    githubId = 48105979;
+    name = "Caitlin Davitt";
+  };
   calavera = {
     email = "david.calavera@gmail.com";
     github = "calavera";
@@ -3262,6 +3268,12 @@
     github = "collares";
     githubId = 244239;
     name = "Mauricio Collares";
+  };
+  coloquinte = {
+    email = "gabriel.gouvine_nix@m4x.org";
+    github = "coloquinte";
+    githubId = 4102525;
+    name = "Gabriel Gouvine";
   };
   commandodev = {
     email = "ben@perurbis.com";
@@ -4603,6 +4615,12 @@
     github = "edwtjo";
     githubId = 54799;
     name = "Edward Tjörnhammar";
+  };
+  ee2500 = {
+    email = "earthengine@skiff.com";
+    github = "ee2500";
+    githubId = 134107129;
+    name = "EarthEngine";
   };
   eelco = {
     email = "edolstra+nixpkgs@gmail.com";
@@ -11414,6 +11432,16 @@
     githubId = 22817873;
     name = "Ember Keske";
   };
+  n3oney = {
+    name = "Michał Minarowski";
+    email = "nixpkgs@neoney.dev";
+    github = "n3oney";
+    githubId = 30625554;
+    matrix = "@neoney:matrix.org";
+    keys = [{
+      fingerprint = "9E6A 25F2 C1F2 9D76 ED00  1932 1261 173A 01E1 0298";
+    }];
+  };
   nadrieril = {
     email = "nadrieril@gmail.com";
     github = "Nadrieril";
@@ -11989,9 +12017,10 @@
   };
   NotAShelf = {
     name = "NotAShelf";
-    email = "itsashelf@gmail.com";
+    email = "raf@notashelf.dev";
     github = "NotAShelf";
     githubId = 62766066;
+    matrix = "@raf:notashelf.dev";
   };
   notbandali = {
     name = "Amin Bandali";
@@ -14985,6 +15014,12 @@
     email = "sam@samhofi.us";
     github = "kf5grd";
     githubId = 18297490;
+  };
+  shortcord = {
+    name = "Short Cord";
+    email = "short@shortcord.com";
+    github = "shortcord";
+    githubId = 3823744;
   };
   shou = {
     email = "x+g@shou.io";

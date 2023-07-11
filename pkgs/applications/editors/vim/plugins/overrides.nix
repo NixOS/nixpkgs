@@ -149,6 +149,17 @@ self: super: {
     };
   };
 
+  chadtree = super.chadtree.overrideAttrs {
+    passthru.python3Dependencies = ps: with ps; [
+      pynvim-pp
+      pyyaml
+      std2
+    ];
+
+    # We need some patches so it stops complaining about not being in a venv
+    patches = [ ./patches/chadtree/emulate-venv.patch ];
+  };
+
   ChatGPT-nvim = super.ChatGPT-nvim.overrideAttrs {
     dependencies = with self; [ nui-nvim plenary-nvim telescope-nvim ];
   };
@@ -202,7 +213,7 @@ self: super: {
   };
 
   cmp-fish = super.cmp-fish.overrideAttrs {
-    dependencies = with self; [ nvim-cmp fish ];
+    dependencies = with self; [ nvim-cmp ];
   };
 
   cmp-fuzzy-buffer = super.cmp-fuzzy-buffer.overrideAttrs {
@@ -214,7 +225,7 @@ self: super: {
   };
 
   cmp-git = super.cmp-git.overrideAttrs {
-    dependencies = with self; [ nvim-cmp curl git ];
+    dependencies = with self; [ nvim-cmp ];
   };
 
   cmp-greek = super.cmp-greek.overrideAttrs {
@@ -230,7 +241,7 @@ self: super: {
   };
 
   cmp-npm = super.cmp-npm.overrideAttrs {
-    dependencies = with self; [ nvim-cmp nodejs plenary-nvim ];
+    dependencies = with self; [ nvim-cmp plenary-nvim ];
   };
 
   cmp-nvim-lsp-signature-help = super.cmp-nvim-lsp-signature-help.overrideAttrs {
@@ -242,11 +253,11 @@ self: super: {
   };
 
   cmp-pandoc-nvim = super.cmp-pandoc-nvim.overrideAttrs {
-    dependencies = with self; [ nvim-cmp pandoc plenary-nvim ];
+    dependencies = with self; [ nvim-cmp plenary-nvim ];
   };
 
   cmp-rg = super.cmp-rg.overrideAttrs {
-    dependencies = with self; [ nvim-cmp ripgrep ];
+    dependencies = with self; [ nvim-cmp ];
   };
 
   cmp-snippy = super.cmp-snippy.overrideAttrs {
@@ -335,45 +346,9 @@ self: super: {
 
   coq_nvim = super.coq_nvim.overrideAttrs {
     passthru.python3Dependencies = ps: with ps; [
-      pynvim
+      pynvim-pp
       pyyaml
-      (buildPythonPackage {
-        pname = "pynvim_pp";
-        version = "unstable-2023-05-17";
-        format = "pyproject";
-        propagatedBuildInputs = [ setuptools pynvim ];
-        src = fetchFromGitHub {
-          owner = "ms-jpq";
-          repo = "pynvim_pp";
-          rev = "91d91ec0cb173ce19d8c93c7999f5038cf08c046";
-          fetchSubmodules = false;
-          hash = "sha256-wycN9U3f3o0onmx60Z4Ws4DbBxsNwHjLTCB9UgjssLI=";
-        };
-        meta = with lib; {
-          homepage = "https://github.com/ms-jpq/pynvim_pp";
-          license = licenses.gpl3Plus;
-          maintainers = with maintainers; [ GaetanLepage ];
-        };
-      })
-      (buildPythonPackage {
-        pname = "std2";
-        version = "unstable-2023-05-17";
-        format = "pyproject";
-        propagatedBuildInputs = [ setuptools ];
-        src = fetchFromGitHub {
-          owner = "ms-jpq";
-          repo = "std2";
-          rev = "d6a7a719ef902e243b7bbd162defed762a27416f";
-          fetchSubmodules = false;
-          hash = "sha256-dtQaeB4Xkz+wcF0UkM+SajekSkVVPdoJs9n1hHQLR1k=";
-        };
-        doCheck = true;
-        meta = with lib; {
-          homepage = "https://github.com/ms-jpq/std2";
-          license = licenses.gpl3Plus;
-          maintainers = with maintainers; [ GaetanLepage ];
-        };
-      })
+      std2
     ];
 
     # We need some patches so it stops complaining about not being in a venv

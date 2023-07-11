@@ -582,6 +582,7 @@ let
           "VLAN"
           "IPVLAN"
           "MACVLAN"
+          "MACVTAP"
           "VXLAN"
           "Tunnel"
           "MACsec"
@@ -2500,6 +2501,15 @@ let
       type = types.listOf types.str;
       description = lib.mdDoc ''
         A list of macvlan interfaces to be added to the network section of the
+        unit.  See {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
+    macvtap = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = lib.mdDoc ''
+        A list of macvtap interfaces to be added to the network section of the
         unit.  See {manpage}`systemd.network(5)` for details.
       '';
     };
