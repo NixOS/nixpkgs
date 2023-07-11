@@ -1,6 +1,8 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, testers
+, sish
 }:
 
 buildGoModule rec {
@@ -23,6 +25,12 @@ buildGoModule rec {
     "-X=github.com/antoniomika/sish/cmd.Date=1970-01-01"
     "-X=github.com/antoniomika/sish/cmd.Version=${version}"
   ];
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = sish;
+    };
+  };
 
   meta = with lib; {
     description = "HTTP(S)/WS(S)/TCP Tunnels to localhost";
