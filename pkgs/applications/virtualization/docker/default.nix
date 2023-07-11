@@ -182,7 +182,7 @@ rec {
     nativeBuildInputs = [
       makeWrapper pkg-config go-md2man go libtool installShellFiles
     ];
-    buildInputs = plugins;
+    buildInputs = [ glibc glibc.static ] ++ plugins;
 
     patches = lib.optionals (lib.versionOlder version "23.0.5") [
       (fetchpatch {
@@ -218,7 +218,7 @@ rec {
       cd -
     '';
 
-    outputs = ["out" "man"];
+    outputs = ["out"] ++ lib.optional (lib.versionOlder version "23") "man";
 
     installPhase = ''
       cd ./go/src/${goPackagePath}
@@ -240,13 +240,13 @@ rec {
       installShellCompletion --bash ./contrib/completion/bash/docker
       installShellCompletion --fish ./contrib/completion/fish/docker.fish
       installShellCompletion --zsh  ./contrib/completion/zsh/_docker
-    '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform && lib.versionOlder version "23") ''
       # Generate man pages from cobra commands
       echo "Generate man pages from cobra"
       mkdir -p ./man/man1
       go build -o ./gen-manpages github.com/docker/cli/man
       ./gen-manpages --root . --target ./man/man1
-    '' + ''
+    '' + lib.optionalString (lib.versionOlder version "23") ''
       # Generate legacy pages from markdown
       echo "Generate legacy manpages"
       ./man/md2man-all.sh -q
