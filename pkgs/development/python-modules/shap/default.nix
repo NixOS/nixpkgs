@@ -1,39 +1,43 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, writeText
 , fetchpatch
-, isPy27
 , pytestCheckHook
-, pytest-mpl
-, numpy
-, scipy
-, scikit-learn
-, pandas
-, transformers
-, opencv4
-, lightgbm
+, pythonOlder
+, writeText
 , catboost
-, pyspark
-, sentencepiece
-, tqdm
-, slicer
-, numba
-, matplotlib
-, nose
-, lime
 , cloudpickle
 , ipython
+, lightgbm
+, lime
+, matplotlib
+, nose
+, numba
+, numpy
+, opencv4
+, pandas
+, pyspark
+, pytest-mpl
+, scikit-learn
+, scipy
+, sentencepiece
+, setuptools
+, slicer
+, tqdm
+, transformers
+, xgboost
 }:
 
 buildPythonPackage rec {
   pname = "shap";
   version = "0.42.0";
-  disabled = isPy27;
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "slundberg";
-    repo = pname;
+    repo = "shap";
     rev = "refs/tags/v${version}";
     hash = "sha256-VGlswr9ywHk4oKSmmAzEC7+E0V2XEFlg19zXVktUdhc=";
   };
@@ -46,15 +50,19 @@ buildPythonPackage rec {
     })
   ];
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
-    numpy
-    scipy
-    scikit-learn
-    pandas
-    tqdm
-    slicer
-    numba
     cloudpickle
+    numba
+    numpy
+    pandas
+    scikit-learn
+    scipy
+    slicer
+    tqdm
   ];
 
   passthru.optional-dependencies = {
@@ -97,26 +105,28 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-mpl
+    ipython
     matplotlib
     nose
-    ipython
+    pytest-mpl
+    pytestCheckHook
     # optional dependencies, which only serve to enable more tests:
-    opencv4
-    #pytorch # we already skip all its tests due to slowness, adding it does nothing
-    transformers
-    #xgboost # numerically unstable? xgboost tests randomly fails pending on nixpkgs revision
-    lightgbm
     catboost
+    lightgbm
+    opencv4
     pyspark
     sentencepiece
+    #torch # we already skip all its tests due to slowness, adding it does nothing
+    transformers
+    xgboost
   ];
+
   disabledTestPaths = [
     # The resulting plots look sane, but does not match pixel-perfectly with the baseline.
     # Likely due to a matplotlib version mismatch, different backend, or due to missing fonts.
     "tests/plots/test_summary.py" # FIXME: enable
   ];
+
   disabledTests = [
     # The same reason as above test_summary.py
     "test_simple_bar_with_cohorts_dict"
@@ -143,6 +153,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/slundberg/shap/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ evax ];
-    platforms = platforms.unix;
   };
 }
