@@ -6623,12 +6623,12 @@ final: prev:
 
   nvim-coverage = buildVimPluginFrom2Nix {
     pname = "nvim-coverage";
-    version = "2023-07-09";
+    version = "2023-05-26";
     src = fetchFromGitHub {
       owner = "andythigpen";
       repo = "nvim-coverage";
-      rev = "55f2ed78a2f6b5a93faed18ff2bc1bd707ef336c";
-      sha256 = "1dnjfnm31xc9wg6qlj4nk4fn642jzdqjzqm61qymiy8fi2zc66bm";
+      rev = "8fcc71e01e93f305e334b59f902e545a70d0050f";
+      sha256 = "0d62vpbf03pbq4rs4yxywnn7j9wb90bahv1cx2wm5w4q6jgdgpk3";
     };
     meta.homepage = "https://github.com/andythigpen/nvim-coverage/";
   };
