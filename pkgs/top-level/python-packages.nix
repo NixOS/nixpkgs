@@ -11763,6 +11763,8 @@ self: super: with self; {
 
   sphinxcontrib-confluencebuilder = callPackage ../development/python-modules/sphinxcontrib-confluencebuilder { };
 
+  sphinxcontrib-details-directive = callPackage ../development/python-modules/sphinxcontrib-details-directive  { };
+
   sphinxcontrib-devhelp = callPackage ../development/python-modules/sphinxcontrib-devhelp { };
 
   sphinxcontrib-excel-table = callPackage ../development/python-modules/sphinxcontrib-excel-table { };
