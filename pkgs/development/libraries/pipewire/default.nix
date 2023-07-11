@@ -66,6 +66,7 @@
 , mysofaSupport ? true
 , libmysofa
 , tinycompress
+, ffadoSupport ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
 , ffado
 }:
 
@@ -127,7 +128,6 @@ let
     buildInputs = [
       alsa-lib
       dbus
-      ffado
       glib
       libjack2
       libusb1
@@ -151,7 +151,8 @@ let
     ++ lib.optional raopSupport openssl
     ++ lib.optional rocSupport roc-toolkit
     ++ lib.optionals x11Support [ libcanberra xorg.libX11 xorg.libXfixes ]
-    ++ lib.optional mysofaSupport libmysofa;
+    ++ lib.optional mysofaSupport libmysofa
+    ++ lib.optional ffadoSupport ffado;
 
     # Valgrind binary is required for running one optional test.
     nativeCheckInputs = lib.optional withValgrind valgrind;
@@ -165,6 +166,7 @@ let
       "-Dlibjack-path=${placeholder "jack"}/lib"
       "-Dlibv4l2-path=${placeholder "out"}/lib"
       "-Dlibcamera=${mesonEnableFeature libcameraSupport}"
+      "-Dlibffado=${mesonEnableFeature ffadoSupport}"
       "-Droc=${mesonEnableFeature rocSupport}"
       "-Dlibpulse=${mesonEnableFeature pulseTunnelSupport}"
       "-Davahi=${mesonEnableFeature zeroconfSupport}"
