@@ -11,7 +11,7 @@
 , python3
 , desktop-file-utils
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook4
 , python3Packages
 }:
 
@@ -37,25 +37,28 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     gobject-introspection
     gtk4
-    wrapGAppsHook
+    wrapGAppsHook4
+    (python3.withPackages (pp: [ pp.pygobject3 ]))
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    pycairo
-    pygobject3
-    lxml
-    gst-python
-    liblarch
-    caldav
+  propagatedBuildInputs = [ #with python3Packages; [
+    #pycairo
+    #pygobject3
+    #lxml
+    #gst-python
+    #liblarch
+    #caldav
 
     gtk4
     libadwaita
     gobject-introspection
+    (python3.withPackages (pp: [ pp.pygobject3 ]))
 
   ];
 
   buildInputs = [
     gobject-introspection
+    (python3.withPackages (pp: [ pp.pygobject3 ]))
   ];
 
   pythonPath = with python3Packages; [
@@ -65,7 +68,7 @@ stdenv.mkDerivation rec {
 
   #strictDeps = true;
 
-  dontWrapGApps = true;
+  #dontWrapGApps = true;
 
   #postFixup = ''
   #  makeWrapper ${python3.interpreter} $out/bin/flashcards \
