@@ -75,6 +75,10 @@ self: super: {
   base-compat = doDistribute self.base-compat_0_13_0;
   base-compat-batteries = doDistribute self.base-compat-batteries_0_13_0;
 
+  # Too strict upper bound on template-haskell
+  # https://github.com/mokus0/th-extras/pull/21
+  th-extras = doJailbreak super.th-extras;
+
   ghc-lib = doDistribute self.ghc-lib_9_6_2_20230523;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_6_2_20230523;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_6_0_0;

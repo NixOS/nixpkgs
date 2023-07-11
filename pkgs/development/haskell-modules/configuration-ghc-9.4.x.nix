@@ -141,6 +141,9 @@ in {
   # 2022-10-06: https://gitlab.haskell.org/ghc/ghc/-/issues/22260
   ghc-check = dontHaddock super.ghc-check;
 
+  # Too strict upper bound on template-haskell
+  # https://github.com/mokus0/th-extras/issues/18
+  th-extras = doJailbreak super.th-extras;
 
   # requires newer versions to work with GHC 9.4
   swagger2 = dontCheck super.swagger2;
