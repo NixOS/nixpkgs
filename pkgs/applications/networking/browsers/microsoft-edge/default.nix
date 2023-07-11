@@ -13,8 +13,8 @@
   };
   dev = import ./browser.nix {
     channel = "dev";
-    version = "115.0.1851.0";
+    version = "116.0.1938.10";
     revision = "1";
-    sha256 = "sha256-PmfMe+B/JtvPhBGhQBUgoWjhKokTwCdG9y+GYl0VCMk=";
+    sha256 = "sha256-3505da2e65fc02d2c458f924cc003dd177e615f970ba5c55447b4827e9f10a4e";
   };
 }
