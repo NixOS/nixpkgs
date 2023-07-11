@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildLinux, ... } @ args:
+{ lib, stdenv, fetchFromGitHub, buildLinux, ... } @ args:
 
 let
   # comments with variant added for update script
@@ -105,6 +105,7 @@ let
       maintainers = with lib.maintainers; [ thiagokokada ];
       description = "Built using the best configuration and kernel sources for desktop, multimedia, and gaming workloads." +
         lib.optionalString isLqx " (Same as linux_zen, but less aggressive release schedule and additional extra config)";
+      broken = stdenv.isAarch64;
     };
 
   } // (args.argsOverride or { }));
