@@ -9199,6 +9199,8 @@ self: super: with self; {
 
   pynvim = callPackage ../development/python-modules/pynvim { };
 
+  pynvim-pp = callPackage ../development/python-modules/pynvim-pp { };
+
   pynvml = callPackage ../development/python-modules/pynvml { };
 
   pynzb = callPackage ../development/python-modules/pynzb { };
@@ -11942,6 +11944,8 @@ self: super: with self; {
   statsd = callPackage ../development/python-modules/statsd { };
 
   statsmodels = callPackage ../development/python-modules/statsmodels { };
+
+  std2 = callPackage ../development/python-modules/std2 { };
 
   stdiomask = callPackage ../development/python-modules/stdiomask { };
 
