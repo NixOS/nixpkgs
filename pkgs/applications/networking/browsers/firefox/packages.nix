@@ -113,11 +113,11 @@
 
   firefox-esr-115 = buildMozillaMach rec {
     pname = "firefox-esr-115";
-    version = "115.0esr";
+    version = "115.0.2esr";
     applicationName = "Mozilla Firefox ESR";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "377ab48989ec17b64bd06fed8dd80dde50c06dd4120a6ca1c2fe90a20c85d1c0ef6143a73daeb0271fb20a04b0fb53d837e116b56c63718d517b07ed4243a3e9";
+      sha512 = "f145d0e0e63032367af4198d4ca046589689b5852cb2451efbdcabeae37dfeda88dd0a2c317120ae5785228a6d7df21aa2d18c18ed7bf4b180823af37326a458";
     };
 
     meta = {
