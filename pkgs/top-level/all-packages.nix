@@ -16150,6 +16150,8 @@ with pkgs;
 
   openocd = callPackage ../development/embedded/openocd { };
 
+  openocd-rp2040 = callPackage ../development/embedded/openocd-rp2040 { };
+
   oprofile = callPackage ../development/tools/profiling/oprofile {
     libiberty_static = libiberty.override { staticBuild = true; };
   };
