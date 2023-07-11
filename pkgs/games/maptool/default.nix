@@ -12,11 +12,11 @@
 }:
 let
   pname = "maptool";
-  version = "1.13.1";
+  version = "1.13.2";
   repoBase = "https://github.com/RPTools/${pname}";
   src = fetchurl {
     url = "${repoBase}/releases/download/${version}/MapTool-${version}.jar";
-    hash = "sha256-EHisFvLaqi8VqIdygf0nxohKLL3c/yE5Y6jAcT0B2q0=";
+    hash = "sha256-14ULI1OAk0V4DqiL5IF7DK6pw0NRfmU+omrFP72PblA=";
   };
 
   icon = fetchurl {
