@@ -4,7 +4,6 @@
 , SDL2_ttf
 , alsa-lib
 , fetchFromGitHub
-, fetchpatch2
 , glibmm
 , gtk3
 , libGL
@@ -20,22 +19,14 @@
 
 stdenv.mkDerivation rec {
   pname = "linthesia";
-  version = "0.8.0";
+  version = "unstable-2023-05-23";
 
   src = fetchFromGitHub {
     owner = "linthesia";
     repo = "linthesia";
-    rev = version;
-    sha256 = "sha256-bdW0RlV14ttnK8NizfNfXmZ7zlJOqZCpVvt8vT2Pjys=";
+    rev = "1f2701241f8865c2f5c14a97b81ae64884cf0396";
+    sha256 = "sha256-3uPcpDUGtAGW9q/u8Cn+0bNqikII1Y/a0PKARW/5nao=";
   };
-
-  patches = [
-    # fix: text looks garbled with SDL2_ttf 2.0.18
-    (fetchpatch2 {
-      url = "https://github.com/linthesia/linthesia/commit/bd647270b3bdf79a9af6ac1e2203c9e860d16c58.patch";
-      hash = "sha256-hNal0eVfikRSpW+MOfpKvnWXrEJgIXHPAtNPB9SvHVU=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs meson_post_install.py
