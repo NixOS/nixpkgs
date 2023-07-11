@@ -6165,6 +6165,8 @@ with pkgs;
 
   moosefs = callPackage ../tools/filesystems/moosefs { };
 
+  mountain-duck = callPackage ../tools/filesystems/mountain-duck { };
+
   mozlz4a = callPackage ../tools/compression/mozlz4a { };
 
   msr-tools = callPackage ../os-specific/linux/msr-tools { };
