@@ -33,6 +33,15 @@ in
         Make sure that this file is readable by the exporter user.
       '';
     };
+    tokenFile = mkOption {
+      type = types.path;
+      example = "/path/to/token-file";
+      default = "";
+      description = lib.mdDoc ''
+        File containing the token for connecting to Nextcloud.
+        Make sure that this file is readable by the exporter user.
+      '';
+    };
     timeout = mkOption {
       type = types.str;
       default = "5s";
@@ -47,12 +56,14 @@ in
       ExecStart = ''
         ${pkgs.prometheus-nextcloud-exporter}/bin/nextcloud-exporter \
           --addr ${cfg.listenAddress}:${toString cfg.port} \
-          --username ${cfg.username} \
           --timeout ${cfg.timeout} \
           --server ${cfg.url} \
-          --password ${escapeShellArg "@${cfg.passwordFile}"} \
-          ${concatStringsSep " \\\n  " cfg.extraFlags}
-      '';
+          ${if cfg.tokenFile == "" then ''
+            --username ${cfg.username} \
+            --password ${escapeShellArg "@${cfg.passwordFile}"} \
+         '' else ''
+            --auth-token ${escapeShellArg "@${cfg.tokenFile}"} \
+         ''} ${concatStringsSep " \\\n  " cfg.extraFlags}'';
     };
   };
 }
