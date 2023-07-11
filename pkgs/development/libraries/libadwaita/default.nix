@@ -16,6 +16,7 @@
 , xvfb-run
 , AppKit
 , Foundation
+, appstream
 }:
 
 stdenv.mkDerivation rec {
