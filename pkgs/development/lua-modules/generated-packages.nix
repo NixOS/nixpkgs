@@ -2533,14 +2533,14 @@ buildLuarocksPackage {
 mpack = callPackage({ buildLuarocksPackage, fetchurl }:
 buildLuarocksPackage {
   pname = "mpack";
-  version = "1.0.9-0";
+  version = "1.0.10-0";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/mpack-1.0.9-0.rockspec";
-    sha256 = "1v10kmw3qw559bbm142z40ib26bwvcyi64qjrk0vf8v6n1mx8wcn";
+    url    = "mirror://luarocks/mpack-1.0.10-0.rockspec";
+    sha256 = "sha256-TjeIKGE3/7O+lxGqpz3j6f421zMRtFtZIY5ZRpaPISs=";
   }).outPath;
   src = fetchurl {
-    url    = "https://github.com/libmpack/libmpack-lua/releases/download/1.0.9/libmpack-lua-1.0.9.tar.gz";
-    sha256 = "17lyjmnbychacwahqgs128nb00xky777g7zw5wf20vrzkiq7xl0g";
+    url    = "https://github.com/libmpack/libmpack-lua/releases/download/1.0.10/libmpack-lua-1.0.10.tar.gz";
+    sha256 = "sha256-GOICRzyaJV8dImGwGYdFIqTxxrb5ifgNqT1zNZM+gRk=";
   };
 
 
