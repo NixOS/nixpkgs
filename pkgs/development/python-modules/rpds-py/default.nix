@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "rpds-py";
-  version = "0.8.8";
+  version = "0.8.10";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -18,13 +18,13 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "rpds_py";
     inherit version;
-    hash = "sha256-MAuFeXQLBuJGI4tzDmNvMUp9jcR1vhhoZQ9dPdwpoNg=";
+    hash = "sha256-E+ZDzorVAqAmM5c2L7iHWUtJz4S/UY1gOMFvI18rzqQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-jg9oos4wqewIHe31c3DixIp6fssk742kqt4taWyOq4U=";
+    hash = "sha256-D4pbEipVn1r5rrX+wDXi97nDZJyBlkdqhmbJSgQGTLU=";
   };
 
   nativeBuildInputs = [
