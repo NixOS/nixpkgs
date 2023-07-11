@@ -342,6 +342,7 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
                         Libc = "Libc/10.13.6.nix";
                         libdispatch = "libdispatch/10.13.6.nix";
                         libplatform = "libplatform/10.13.6.nix";
+                        Libsystem = "Libsystem/10.13.6.nix";
                         xnu = "xnu/10.13.6.nix";
                       }."${namePath}"
                       or namePath;
