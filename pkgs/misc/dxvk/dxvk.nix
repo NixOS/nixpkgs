@@ -5,12 +5,13 @@
 , meson
 , ninja
 , windows
-, dxvkVersion
+, dxvkVersion ? "default"
 , spirv-headers
 , vulkan-headers
 , SDL2
 , glfw
 , pkgsBuildHost
+, gitUpdater
 , sdl2Support ? true
 , glfwSupport ? false
 }:
@@ -43,7 +44,7 @@ let
         ./darwin-thread-primitives.patch
       ];
     };
-    "2.1" = rec {
+    "default" = rec {
       version = "2.1";
       src = fetchFromGitHub {
         owner = "doitsujin";
@@ -59,7 +60,7 @@ let
   isWindows = stdenv.targetPlatform.uname.system == "Windows";
   isCross = stdenv.hostPlatform != stdenv.targetPlatform;
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs:  {
   pname = "dxvk";
   inherit (srcs.${dxvkVersion}) version src patches;
 
@@ -95,6 +96,12 @@ stdenv.mkDerivation {
 
   doCheck = isDxvk2 && !isCross;
 
+  passthru = lib.optionalAttrs (lib.versionAtLeast finalAttrs.version "2.0") {
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
+  };
+
   meta = {
     description = "A Vulkan-based translation layer for Direct3D 9/10/11";
     homepage = "https://github.com/doitsujin/dxvk";
@@ -103,4 +110,4 @@ stdenv.mkDerivation {
     license = lib.licenses.zlib;
     platforms = lib.platforms.windows ++ lib.optionals isDxvk2 lib.platforms.linux;
   };
-}
+})
