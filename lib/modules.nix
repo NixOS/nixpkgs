@@ -540,7 +540,7 @@ let
   mergeModules' = prefix: options: configs:
     let
       # an attrset 'name' => list of submodules that declare ‘name’.
-      declsByName = (modules:
+      declsByName =
         zipAttrsWith (n: concatLists)
           (map (module: let subtree = module.options; in
               if !(builtins.isAttrs subtree) then
@@ -555,9 +555,9 @@ let
                         [{ inherit (module) _file; options = option; }]
                       ) module)
                   subtree
-              ) modules))  options;
+              ) options);
       # an attrset 'name' => list of submodules that define ‘name’.
-      defnsByName = (modules:
+      defnsByName =
         zipAttrsWith (n: concatLists)
           (map (module: let subtree = module.config; in
               if !(builtins.isAttrs subtree) then
@@ -576,9 +576,9 @@ let
                         map (config: { inherit (module) file; inherit config; }) (pushDownProperties value)
                       ) module)
                   subtree
-              ) modules)) configs;
+              ) configs);
       # extract the definitions for each loc
-      defnsByName' = (modules:
+      defnsByName' =
         zipAttrsWith (n: concatLists)
           (map (module: let subtree = module.config; in
               if !(builtins.isAttrs subtree) then
@@ -597,7 +597,7 @@ let
                         [{ inherit (module) file; inherit value; }]
                       ) module)
                 subtree
-              ) modules))  configs;
+              ) configs);
 
       # Convert an option tree decl to a submodule option decl
       optionTreeToOption = decl:
