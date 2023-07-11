@@ -49,8 +49,8 @@ let
 
   src = fetchFromSavannah {
     repo = "grub";
-    rev = "6425c12cd77ad51ad24be84c092aefacf0875089";
-    hash = "sha256-PSCa993Reph6w9+leE4a/9E6vIALdOqU3FZEPwasFyk=";
+    rev = "grub-2.12-rc1";
+    hash = "sha256-DrNFzi2o7ZUfL3bMdG63xivZIjcTgv8RODJz7hLJ3WY=";
   };
 
   # HACK: the translations are stored on a different server,
@@ -77,7 +77,7 @@ assert !(efiSupport && xenSupport);
 
 stdenv.mkDerivation rec {
   pname = "grub";
-  version = "unstable-2023-07-03";
+  version = "2.12-rc1";
   inherit src;
 
   patches = [
