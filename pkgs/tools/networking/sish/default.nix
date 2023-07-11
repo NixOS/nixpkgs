@@ -16,6 +16,14 @@ buildGoModule rec {
 
   vendorHash = "sha256-RnvkEUvL/bQTTTlg0RF0xjjvVniltequNKRD3z0H3O8=";
 
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=github.com/antoniomika/sish/cmd.Commit=${src.rev}"
+    "-X=github.com/antoniomika/sish/cmd.Date=1970-01-01"
+    "-X=github.com/antoniomika/sish/cmd.Version=${version}"
+  ];
+
   meta = with lib; {
     description = "HTTP(S)/WS(S)/TCP Tunnels to localhost";
     homepage = "https://github.com/antoniomika/sish";
