@@ -540,7 +540,7 @@ let
   mergeModules' = prefix: options: configs:
     let
       # an attrset 'name' => list of submodules that declare ‘name’.
-      declsByName = (f: modules:
+      declsByName = (modules:
         zipAttrsWith (n: concatLists)
           (map (module: let subtree = module.options; in
               if !(builtins.isAttrs subtree) then
@@ -550,12 +550,14 @@ let
                   Did you mean to define this outside of `options'?
                 ''
               else
-                mapAttrs (n: f module) subtree
-              ) modules)) (module: option:
-          [{ inherit (module) _file; options = option; }]
-        ) options;
+                mapAttrs
+                  (n: (module: option:
+                        [{ inherit (module) _file; options = option; }]
+                      ) module)
+                  subtree
+              ) modules))  options;
       # an attrset 'name' => list of submodules that define ‘name’.
-      defnsByName = (f: modules:
+      defnsByName = (modules:
         zipAttrsWith (n: concatLists)
           (map (module: let subtree = module.config; in
               if !(builtins.isAttrs subtree) then
@@ -569,12 +571,14 @@ let
                   this option by e.g. referring to `man 5 configuration.nix'!
                 ''
               else
-                mapAttrs (n: f module) subtree
-              ) modules)) (module: value:
-          map (config: { inherit (module) file; inherit config; }) (pushDownProperties value)
-        ) configs;
+                mapAttrs
+                  (n: (module: value:
+                        map (config: { inherit (module) file; inherit config; }) (pushDownProperties value)
+                      ) module)
+                  subtree
+              ) modules)) configs;
       # extract the definitions for each loc
-      defnsByName' = (f: modules:
+      defnsByName' = (modules:
         zipAttrsWith (n: concatLists)
           (map (module: let subtree = module.config; in
               if !(builtins.isAttrs subtree) then
@@ -588,10 +592,12 @@ let
                   this option by e.g. referring to `man 5 configuration.nix'!
                 ''
               else
-                mapAttrs (n: f module) subtree
-              ) modules)) (module: value:
-          [{ inherit (module) file; inherit value; }]
-        ) configs;
+                mapAttrs
+                  (n: (module: value:
+                        [{ inherit (module) file; inherit value; }]
+                      ) module)
+                subtree
+              ) modules))  configs;
 
       # Convert an option tree decl to a submodule option decl
       optionTreeToOption = decl:
