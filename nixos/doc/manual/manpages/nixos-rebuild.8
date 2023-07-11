@@ -10,7 +10,7 @@
 .Sh SYNOPSIS
 .Nm
 .Bro
-.Cm switch | boot | test | build | dry-build | dry-activate | edit | build-vm | build-vm-with-bootloader
+.Cm switch | boot | test | build | dry-build | dry-activate | edit | list | build-vm | build-vm-with-bootloader
 .Brc
 .br
 .Op Fl -upgrade | -upgrade-all
@@ -142,6 +142,12 @@ The list of changes is not guaranteed to be complete.
 Opens
 .Pa configuration.nix
 in the default editor.
+.
+.It Cm list
+Lists all currently existing system generations. Logic is similar to that of:
+.Bd -literal -offset indent
+# nix-env --list-generations --profile /nix/var/nix/profiles/system
+.Ed
 .
 .It Cm build-vm
 Build a script that starts a NixOS virtual machine with the desired
