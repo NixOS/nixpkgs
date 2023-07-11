@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ast-grep";
-  version = "0.6.6";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "ast-grep";
     repo = "ast-grep";
     rev = version;
-    hash = "sha256-iU7UtyF5isyc4G3vYu7f1bU7U38HsgkzNF+LctE08ds=";
+    hash = "sha256-BsB1L/nClJIlSLWaS6UBdj8/0sNZCwfzUdbLNyQKJms=";
   };
 
-  cargoHash = "sha256-30cYsRj10uFUlxhr7kgOy3I0m9qtq6kVNednX7OSQUk=";
+  cargoHash = "sha256-DEnK1+iPIp0dpkVOME0h1LoAm0etKDCU8TfmPb+A0uM=";
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''
