@@ -28,6 +28,6 @@ buildGoModule rec {
     homepage = "https://github.com/kubeflow/kfctl";
     license = licenses.asl20;
     maintainers = with maintainers; [ mvnetbiz ];
-    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.go-modules --check
+    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.goModules --check
   };
 }
