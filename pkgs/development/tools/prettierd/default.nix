@@ -41,6 +41,7 @@ mkYarnPackage rec {
   doDist = false;
 
   meta = with lib; {
+    mainProgram = "prettierd";
     description = "Prettier, as a daemon, for improved formatting speed";
     homepage = "https://github.com/fsouza/prettierd";
     license = licenses.isc;
