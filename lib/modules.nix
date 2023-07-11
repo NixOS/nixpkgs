@@ -541,8 +541,10 @@ let
     let
       # an attrset 'name' => list of submodules that declare ‘name’.
       declsByName =
-        zipAttrsWith (n: concatLists)
-          (map (module: let subtree = module.options; in
+        zipAttrsWith
+          (n: concatLists)
+          (map
+            (module: let subtree = module.options; in
               if !(builtins.isAttrs subtree) then
                 throw ''
                   An option declaration for `${builtins.concatStringsSep "." prefix}' has type
@@ -555,7 +557,8 @@ let
                     [{ inherit (module) _file; options = option; }]
                   )
                   subtree
-              ) options);
+              )
+            options);
 
       # The root of any module definition must be an attrset.
       checkedConfigs =
@@ -577,24 +580,30 @@ let
 
       # an attrset 'name' => list of submodules that define ‘name’.
       pushedDownDefinitionsByName =
-        zipAttrsWith (n: concatLists)
-          (map (module:
-                mapAttrs
-                  (n: value:
-                    map (config: { inherit (module) file; inherit config; }) (pushDownProperties value)
-                  )
-                  module.config
-              ) checkedConfigs);
+        zipAttrsWith
+          (n: concatLists)
+          (map
+            (module:
+              mapAttrs
+                (n: value:
+                  map (config: { inherit (module) file; inherit config; }) (pushDownProperties value)
+                )
+              module.config
+            )
+            checkedConfigs);
       # extract the definitions for each loc
       rawDefinitionsByName =
-        zipAttrsWith (n: concatLists)
-          (map (module:
-                mapAttrs
-                  (n: value:
-                    [{ inherit (module) file; inherit value; }]
-                  )
-                  module.config
-              ) checkedConfigs);
+        zipAttrsWith
+          (n: concatLists)
+          (map
+            (module:
+              mapAttrs
+                (n: value:
+                  [{ inherit (module) file; inherit value; }]
+                )
+                module.config
+            )
+            checkedConfigs);
 
       # Convert an option tree decl to a submodule option decl
       optionTreeToOption = decl:
