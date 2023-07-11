@@ -5009,8 +5009,6 @@ with pkgs;
 
   facedetect = callPackage ../tools/graphics/facedetect { };
 
-  findimagedupes = callPackage ../tools/graphics/findimagedupes { };
-
   facter = callPackage ../tools/system/facter { };
 
   faketty = callPackage ../tools/misc/faketty { };
@@ -20434,6 +20432,8 @@ with pkgs;
 
   collada-dom = callPackage ../development/libraries/collada-dom { };
 
+  coloquinte = callPackage ../development/libraries/science/electronics/coloquinte { };
+
   cog = callPackage ../development/web/cog { };
 
   cosmocc = callPackage ../development/tools/cosmocc { };
@@ -26156,6 +26156,8 @@ with pkgs;
   mullvad-vpn = callPackage ../applications/networking/mullvad-vpn { };
 
   mullvad-browser = callPackage ../applications/networking/browsers/mullvad-browser { };
+
+  mullvad-closest = with python3Packages; toPythonApplication mullvad-closest;
 
   mycorrhiza = callPackage ../servers/mycorrhiza { };
 
@@ -33870,6 +33872,8 @@ with pkgs;
   vgmtools = callPackage ../tools/audio/vgmtools { };
 
   vieb = callPackage ../applications/networking/browsers/vieb { };
+
+  vital = callPackage ../applications/audio/vital { };
 
   vivaldi = callPackage ../applications/networking/browsers/vivaldi { };
 

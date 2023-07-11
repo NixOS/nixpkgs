@@ -6626,6 +6626,8 @@ self: super: with self; {
 
   mullvad-api = callPackage ../development/python-modules/mullvad-api { };
 
+  mullvad-closest = callPackage ../development/python-modules/mullvad-closest { };
+
   mulpyplexer = callPackage ../development/python-modules/mulpyplexer { };
 
   multidict = callPackage ../development/python-modules/multidict { };
@@ -7671,6 +7673,8 @@ self: super: with self; {
   pexpect = callPackage ../development/python-modules/pexpect { };
 
   pfzy = callPackage ../development/python-modules/pfzy { };
+
+  ping3 = callPackage ../development/python-modules/ping3 { };
 
   pg8000 = callPackage ../development/python-modules/pg8000 { };
 
