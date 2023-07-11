@@ -14,6 +14,7 @@
 , gitUpdater
 , sdl2Support ? true
 , glfwSupport ? false
+, enableMoltenVKCompat ? false
 }:
 
 # SDL2 and GLFW support are mutually exclusive.
@@ -35,7 +36,7 @@ let
         hash = "sha256-T93ZylxzJGprrP+j6axZwl2d3hJowMCUOKNjIyNzkmE=";
       };
       # These patches are required when using DXVK with Wine on Darwin.
-      patches = lib.optionals stdenv.buildPlatform.isDarwin [
+      patches = lib.optionals enableMoltenVKCompat [
         # Patch DXVK to work with MoltenVK even though it doesn’t support some required features.
         # Some games work poorly (particularly Unreal Engine 4 games), but others work pretty well.
         ./darwin-dxvk-compat.patch
