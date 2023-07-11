@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  doCheck = true;
+  doCheck = !valgrind.meta.broken;
 
   checkFlags = [
     "test"
