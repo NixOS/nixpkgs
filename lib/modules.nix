@@ -565,8 +565,11 @@ let
         assert
           lib.all
             (c:
+              # TODO: I have my doubts that this error would occur when option definitions are not matched.
+              #       The implementation of this check used to be tied to a superficially similar check for
+              #       options, so maybe that's why this is here.
               isAttrs c.config || throw ''
-                You're trying to define a value of type `${builtins.typeOf c.config}'
+                In module `${c.file}', you're trying to define a value of type `${builtins.typeOf c.config}'
                 rather than an attribute set for the option
                 `${builtins.concatStringsSep "." prefix}'!
 
