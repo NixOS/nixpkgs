@@ -13,11 +13,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
-  version = "1.7.14";
+  version = "1.7.15";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-rABJfdrV+D2v6yHpAbzj/0MSGc9bo49pwXEC45Mmmlk=";
+    sha256 = "sha256-esTvcybCPTayA9LCSukNc9ba8eGCTyjB883eZYy91II=";
   };
 
   nativeCheckInputs = with python3Packages; [ flexmock pytestCheckHook pytest-cov ];
@@ -34,6 +34,7 @@ python3Packages.buildPythonApplication rec {
     borgbackup
     colorama
     jsonschema
+    packaging
     ruamel-yaml
     requests
     setuptools
