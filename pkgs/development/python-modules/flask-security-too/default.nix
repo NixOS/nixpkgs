@@ -7,7 +7,7 @@
 , itsdangerous
 , flask_principal
 , passlib
-, email_validator
+, email-validator
 , flask_wtf
 , flask_login
 , pytestCheckHook
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     flask_login
     flask_principal
     flask_wtf
-    email_validator
+    email-validator
     itsdangerous
     passlib
     blinker
