@@ -1,13 +1,17 @@
 { lib
+, stdenv
 , openvpn
 , fetchpatch
 , fetchurl
 , iproute2
+, libnl
 , autoreconfHook
+, pkg-config
 }:
 
 openvpn.overrideAttrs (oldAttrs:
   let
+    inherit (lib) optional;
     fetchMullvadPatch = { commit, sha256 }: fetchpatch {
       url = "https://github.com/mullvad/openvpn/commit/${commit}.patch";
       inherit sha256;
@@ -24,13 +28,15 @@ openvpn.overrideAttrs (oldAttrs:
 
     nativeBuildInputs = oldAttrs.nativeBuildInputs or [ ] ++ [
       autoreconfHook
+      pkg-config
     ];
 
-    buildInputs = oldAttrs.buildInputs or [ ] ++ [
-       iproute2
-    ];
+    buildInputs = oldAttrs.buildInputs or [ ]
+       ++ optional stdenv.isLinux [ libnl.dev ];
 
-    configureFlags = oldAttrs.configureFlags  or [ ] ++ [
+    configureFlags = [
+      # Assignement instead of appending to make sure to use exactly the flags required by mullvad
+
       # Flags are based on https://github.com/mullvad/mullvadvpn-app-binaries/blob/main/Makefile#L17
       "--enable-static"
       "--disable-shared"
@@ -46,10 +52,11 @@ openvpn.overrideAttrs (oldAttrs:
       "--disable-lzo"
       "--disable-lz4"
       "--enable-comp-stub"
-
-      # TODO: Use '--enable-dco --disable-iproute2' on Linux, see https://github.com/mullvad/mullvadvpn-app-binaries/blob/main/Makefile#L35
-      "--enable-iproute2"
-      "IPROUTE=${iproute2}/sbin/ip"
+    ]
+    ++ optional stdenv.isLinux [
+      # Flags are based on https://github.com/mullvad/mullvadvpn-app-binaries/blob/main/Makefile#L35
+      "--enable-dco" # requires libnl
+      "--disable-iproute2"
     ];
 
     patches = oldAttrs.patches or [ ] ++ [
