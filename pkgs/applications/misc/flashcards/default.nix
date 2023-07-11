@@ -10,6 +10,8 @@
 , blueprint-compiler
 , python3
 , desktop-file-utils
+, gobject-introspection
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
@@ -31,15 +33,18 @@ stdenv.mkDerivation rec {
     blueprint-compiler
     python3
     desktop-file-utils
+    wrapGAppsHook4
+    gobject-introspection
   ];
 
   propagatedBuildInputs = [
     gtk4
     libadwaita
+    gobject-introspection
   ];
 
   meta = with lib; {
-    description = "Memorize anything";
+    description = "Simple and clean flashcard memorizing app";
     homepage = "https://github.com/fkinoshita/FlashCards";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ onny ];
