@@ -48,7 +48,7 @@ while [ "$#" -gt 0 ]; do
       --help)
         showSyntax
         ;;
-      switch|boot|test|build|edit|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader)
+      switch|boot|test|build|edit|list|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader)
         if [ "$i" = dry-run ]; then i=dry-build; fi
         # exactly one action mandatory, bail out if multiple are given
         if [ -n "$action" ]; then showSyntax; fi
@@ -301,6 +301,44 @@ nixFlakeBuild() {
     fi
 }
 
+# This implementation is loosely based on that of nix-env --list-generations
+listGenerations() {
+    local profileDir="${profile%/*}"
+    local profileName="${profile##*/}"
+
+    # Find all generations and put their paths into an array
+    readarray -d '' generations < <(find "$profileDir" -maxdepth 1 -regextype \
+        posix-extended -regex  "/.*${profileName}-[[:digit:]]*-link" -print0)
+
+    declare -A generationMap
+
+    for genPath in "${generations[@]}"; do
+        # Extract the generation number from its path
+        local genName=${genPath##*/}
+        genName=${genName#$profileName-}
+        genName=${genName%-link}
+
+        # Map generation paths to their respective numbers
+        generationMap[$genName]+="$genPath"
+    done
+
+    # Current generation to check equality against
+    currentGeneration="$(realpath /run/current-system)"
+    # Sort associative array keys
+    readarray -d '' sortedKeys < <(printf '%s\0' "${!generationMap[@]}" | sort -z)
+    for k in "${sortedKeys[@]}"; do
+        v="${generationMap[$k]}"
+        testedGeneration="$(realpath "$v")"
+
+        accessTime="$(stat --format '%W' "$v")"
+        if [[ $currentGeneration = $testedGeneration ]]; then
+            printf "%4d   %(%Y-%m-%d %T)T   (current)\n" $k $accessTime
+        else
+            printf "%4d   %(%Y-%m-%d %T)T\n" $k $accessTime
+        fi
+    done
+}
+
 
 if [ -z "$action" ]; then showSyntax; fi
 
@@ -312,6 +350,11 @@ if [ -z "$action" ]; then showSyntax; fi
 canRun=
 if [[ "$action" = switch || "$action" = boot || "$action" = test ]]; then
     canRun=1
+fi
+
+if [[ "$action" = list ]]; then
+    listGenerations
+    exit 1
 fi
 
 
