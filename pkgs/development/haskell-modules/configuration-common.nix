@@ -205,6 +205,10 @@ self: super: {
   # 2023-06-28: Test error: https://hydra.nixos.org/build/225565149
   orbits = dontCheck super.orbits;
 
+  # Allow aeson == 2.1.*
+  # https://github.com/hdgarrood/aeson-better-errors/issues/23
+  aeson-better-errors = doJailbreak super.aeson-better-errors;
+
   # 2023-06-28: Test error: https://hydra.nixos.org/build/225559546
   monad-bayes = dontCheck super.monad-bayes;
 
@@ -221,7 +225,7 @@ self: super: {
 
   # Allow text-2.0.*
   # https://github.com/jgm/cmark-hs/pull/15
-  cmark = doJailbreak super.cmark;
+  cmark = assert super.cmark.version == "0.6"; doJailbreak super.cmark;
 
   # fix tests failure for base≥4.15 (https://github.com/kim/leveldb-haskell/pull/41)
   leveldb-haskell = appendPatch (fetchpatch {
