@@ -71,7 +71,7 @@ in rec {
     yarnFlags ? [ ],
     ignoreScripts ? true,
     nodejs ? inputs.nodejs,
-    yarn ? inputs.yarn.override { nodejs = nodejs; },
+    yarn ? inputs.yarn.override { inherit nodejs; },
     pkgConfig ? {},
     preBuild ? "",
     postBuild ? "",
@@ -88,7 +88,7 @@ in rec {
           (key: pkgConfig.${key}.buildInputs or [])
           (builtins.attrNames pkgConfig);
 
-      postInstall = (builtins.map (key:
+      postInstall = builtins.map (key:
         if (pkgConfig.${key} ? postInstall) then
           ''
             for f in $(find -L -path '*/node_modules/${key}' -type d); do
@@ -97,7 +97,7 @@ in rec {
           ''
         else
           ""
-      ) (builtins.attrNames pkgConfig));
+      ) (builtins.attrNames pkgConfig);
 
       # build-time JSON generation to avoid IFD
       # see https://nixos.wiki/wiki/Import_From_Derivation
@@ -180,7 +180,7 @@ in rec {
     packageJSON ? src + "/package.json",
     yarnLock ? src + "/yarn.lock",
     nodejs ? inputs.nodejs,
-    yarn ? inputs.yarn.override { nodejs = nodejs; },
+    yarn ? inputs.yarn.override { inherit nodejs; },
     packageOverrides ? {},
     ...
   }@attrs:
@@ -254,7 +254,7 @@ in rec {
     yarnNix ? mkYarnNix { inherit yarnLock; },
     offlineCache ? importOfflineCache yarnNix,
     nodejs ? inputs.nodejs,
-    yarn ? inputs.yarn.override { nodejs = nodejs; },
+    yarn ? inputs.yarn.override { inherit nodejs; },
     yarnFlags ? [ ],
     yarnPreBuild ? "",
     yarnPostBuild ? "",
@@ -403,7 +403,7 @@ in rec {
 
         mkFilter = { dirsToInclude, filesToInclude, root }: path: type:
           let
-            inherit (pkgs.lib) any flip elem hasSuffix hasPrefix elemAt splitString;
+            inherit (lib) elem elemAt splitString;
 
             subpath = elemAt (splitString "${toString root}/" path) 1;
             spdir = elemAt (splitString "/" subpath) 0;
