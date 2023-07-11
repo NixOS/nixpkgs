@@ -2633,11 +2633,13 @@ with pkgs;
 
   ### APPLICATIONS/EMULATORS/YUZU
 
-  yuzu-mainline = qt6Packages.callPackage ../applications/emulators/yuzu {
+  yuzu-mainline = import ../applications/emulators/yuzu {
+    inherit qt6Packages fetchFromGitHub fetchgit fetchurl fetchzip runCommand gnutar;
     branch = "mainline";
   };
 
-  yuzu-early-access = qt6Packages.callPackage ../applications/emulators/yuzu {
+  yuzu-early-access = import ../applications/emulators/yuzu {
+    inherit qt6Packages fetchFromGitHub fetchgit fetchurl fetchzip runCommand gnutar;
     branch = "early-access";
   };
 
