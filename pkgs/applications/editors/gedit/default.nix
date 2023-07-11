@@ -87,7 +87,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gedit";
-      attrPath = "gnome.gedit";
     };
   };
 
