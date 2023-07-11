@@ -45,12 +45,12 @@ let
       ];
     };
     "default" = rec {
-      version = "2.1";
+      version = "2.2";
       src = fetchFromGitHub {
         owner = "doitsujin";
         repo = "dxvk";
         rev = "v${version}";
-        hash = "sha256-A4KR11brfQbR56dGt371MRwMN/H6HFAU8TlFC97/bRs=";
+        hash = "sha256-GKRd66DvcA+7p3/wDqAUi02ZLRSVZ/fvJM0PQDEKVMA=";
         fetchSubmodules = true; # Needed for the DirectX headers and libdisplay-info
       };
       patches = [ ];
