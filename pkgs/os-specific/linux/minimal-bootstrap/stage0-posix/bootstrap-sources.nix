@@ -7,6 +7,7 @@ rec {
   version = "unstable-2023-05-02";
   rev = "3189b5f325b7ef8b88e3edec7c1cde4fce73c76c";
   outputHashAlgo = "sha256";
+  outputHash = "sha256-FpMp7z+B3cR3LkQ+PooH/b1/NlxH8NHVJNWifaPWt4U=";
 
   # This 256 byte seed is the only pre-compiled binary in the bootstrap chain.
   hex0-seed = import <nix/fetchurl.nix> {
@@ -74,8 +75,7 @@ rec {
     inherit name;
     system = builtins.currentSystem;
     outputHashMode = "recursive";
-    inherit outputHashAlgo;
-    outputHash = "sha256-FpMp7z+B3cR3LkQ+PooH/b1/NlxH8NHVJNWifaPWt4U=";
+    inherit outputHashAlgo outputHash;
 
     # This builder always fails, but fortunately Nix will print the
     # "builder", which is really the error message that we want the
@@ -85,13 +85,21 @@ rec {
       #
       # Neither your store nor your substituters seems to have:
       #
-      #  /nix/store/________________________________-${name}
+      #  ${builtins.placeholder "out"}
       #
       # You can create this path from an already-bootstrapped nixpkgs
       # using the following command:
       #
       #   nix-build '<nixpkgs>' -A make-minimal-bootstrap-sources
       #
+      # Or, if you prefer, you can create this file using only `git`,
+      # `nix`, and `xz`.  For the commands needed in order to do this,
+      # see `make-bootstrap-sources.nix`.  Once you have the manual
+      # result, do:
+      #
+      #   nix-store --add-fixed --recursive ${outputHashAlgo} ./${name}
+      #
+      # to add it to your store.
     '';
   };
 }

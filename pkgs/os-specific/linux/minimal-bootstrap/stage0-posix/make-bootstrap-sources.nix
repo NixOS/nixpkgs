@@ -14,11 +14,16 @@
 { lib
 , fetchFromGitHub
 }:
+
+let
+  expected = import ./bootstrap-sources.nix { };
+in
+
 fetchFromGitHub {
-  inherit (import ./bootstrap-sources.nix { }) name rev;
+  inherit (expected) name rev;
   owner = "oriansj";
   repo = "stage0-posix";
-  sha256 = "sha256-FpMp7z+B3cR3LkQ+PooH/b1/NlxH8NHVJNWifaPWt4U=";
+  sha256 = expected.outputHash;
   fetchSubmodules = true;
   postFetch = ''
     # Seed binaries will be fetched separately
