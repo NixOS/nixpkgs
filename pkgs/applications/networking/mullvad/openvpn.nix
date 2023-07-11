@@ -22,9 +22,12 @@ openvpn.overrideAttrs (oldAttrs:
       sha256 = "sha256-6+yTMmPJhQ72984SXi8iIUvmCxy7jM/xiJJkP+CDro8=";
     };
 
-    buildInputs = oldAttrs.buildInputs or [ ] ++ [
+    nativeBuildInputs = oldAttrs.nativeBuildInputs or [ ] ++ [
       autoreconfHook
-      iproute2
+    ];
+
+    buildInputs = oldAttrs.buildInputs or [ ] ++ [
+       iproute2
     ];
 
     configureFlags = oldAttrs.configureFlags  or [ ] ++ [
