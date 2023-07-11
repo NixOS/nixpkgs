@@ -74,6 +74,7 @@ let
             "email" = "someone@nixos.org";
             "phone" = "+31 71 452 5670";
             "country" = "nl";
+            "street" = "Kroonstraat 50";
             "state" = "Province of Utrecht";
             "city" = "Utrecht";
             "product" = "DaVinci Resolve";
