@@ -10,17 +10,18 @@
 , pamixer          # pamixer
 , pulseaudio       # pactl
 , libdbusmenu-gtk3 # tray
+, playerctl        # playerctl
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "nwg-panel";
-  version = "0.7.17";
+  version = "0.9.10";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-panel";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-HGbPBHf5PIjbuMSd/2fFSCLQ/7s1Xbys+KoGXctQOvM=";
+    sha256 = "sha256-awjXgZGlNAmr4MmXIfMHliYqLQrVRu7loJc7At03xLc=";
   };
 
   # No tests
@@ -30,7 +31,7 @@ python3Packages.buildPythonApplication rec {
   strictDeps = false;
   dontWrapGApps = true;
 
-  buildInputs = [ atk gdk-pixbuf gtk-layer-shell pango ];
+  buildInputs = [ atk gdk-pixbuf gtk-layer-shell pango playerctl ];
   nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
   propagatedBuildInputs = (with python3Packages;
     [ i3ipc netifaces psutil pybluez pygobject3 requests dasbus setuptools ])
