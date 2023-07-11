@@ -7143,8 +7143,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "dstein64";
       repo = "nvim-scrollview";
-      rev = "7bf66cec682f111eb05cfba0f2646f40c1f6b2c5";
-      sha256 = "0nxk1a3vxxc8ha52hi1d1bmyh8v0j8f63bqzpddagw5vdgf86lhn";
+      rev = "1c559f44cbde8a3637a48b6b5f44e201aff4e1cf";
+      sha256 = "1nybh0n5g2sz0n4j974i173zv5byqly5k26km88kygxa3dzlmqx8";
     };
     meta.homepage = "https://github.com/dstein64/nvim-scrollview/";
   };
