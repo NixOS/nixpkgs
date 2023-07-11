@@ -27,6 +27,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Piturnah/gex";
     changelog = "https://github.com/Piturnah/gex/releases/tag/${src.rev}";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ azd325 Br1ght0ne evanrichter ];
+    maintainers = with maintainers; [ azd325 evanrichter ];
   };
 }
