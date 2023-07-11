@@ -1,21 +1,28 @@
-{ lib, buildPythonPackage, fetchPypi, six, pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, setuptools
+}:
 
 buildPythonPackage rec {
   pname = "allpairspy";
   version = "2.5.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-9p0xo7Vu7hGdHsYGPpxzLdRPu6NS73OMsi2WmfxACf4=";
   };
 
-  propagatedBuildInputs = [ six ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    setuptools
+  ];
 
-  nativeCheckInputs = [ pytest ];
-
-  checkPhase = ''
-    py.test
-  '';
+  pythonImportsCheck = [
+    "allpairspy"
+  ];
 
   meta = with lib; {
     description = "Pairwise test combinations generator";
