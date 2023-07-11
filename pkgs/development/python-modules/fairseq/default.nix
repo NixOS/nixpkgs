@@ -34,7 +34,6 @@ in
 buildPythonPackage rec {
   inherit version pname;
 
-  # Pypi source package doesn't contain tests
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = pname;
