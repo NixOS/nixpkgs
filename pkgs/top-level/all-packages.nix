@@ -8089,6 +8089,8 @@ with pkgs;
 
   genimage = callPackage ../tools/filesystems/genimage { };
 
+  geniveev = callPackage ../development/tools/geniveev { };
+
   genmap = callPackage ../applications/science/biology/genmap { };
 
   geonkick = callPackage ../applications/audio/geonkick { };
