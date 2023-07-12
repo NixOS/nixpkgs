@@ -6,7 +6,7 @@
 , pcre
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "ucg";
   version = "unstable-2022-09-03";
 
@@ -57,5 +57,5 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     broken = stdenv.isAarch64 || stdenv.isDarwin;
   };
-})
+}
 # TODO: report upstream
