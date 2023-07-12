@@ -159,6 +159,18 @@ self: super: {
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
 
+  base-compat = overrideCabal (drv: {
+    version = assert drv.version == "0.12.2"; "0.12.3";
+    sha256 = "13dcrwihqn57js1ylj9vbw2snx90kfwikanvs1bj77zm22grj9nv";
+    editedCabalFile = null; revision = null;
+  }) super.base-compat;
+
+  base-compat-batteries = overrideCabal (drv: {
+    inherit (self.base-compat) version;
+    sha256 = "1bsz3bi1mnp60p90n5av76knscgssqvphc9f2jy1nhyr6ap7jxi0";
+    editedCabalFile = null; revision = null;
+  }) super.base-compat-batteries;
+
   vector = overrideCabal (old: {
     # Too strict bounds on doctest which isn't used, but is part of the configuration
     jailbreak = true;
