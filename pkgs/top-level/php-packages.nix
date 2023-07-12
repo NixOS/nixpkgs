@@ -292,7 +292,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     smbclient = callPackage ../development/php-packages/smbclient { };
 
-    snuffleupagus = callPackage ../development/php-packages/snuffleupagus { };
+    snuffleupagus = callPackage ../development/php-packages/snuffleupagus {
+      inherit (pkgs) darwin;
+    };
 
     sqlsrv = callPackage ../development/php-packages/sqlsrv { };
 
