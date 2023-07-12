@@ -5738,6 +5738,12 @@
     githubId = 5918766;
     name = "Franz Thoma";
   };
+  fogti = {
+    name = "Alain Fogtia Zscheile";
+    email = "fogti+devel@ytrizja.de";
+    github = "fogti";
+    githubId = 1618343;
+  };
   foo-dogsquared = {
     email = "foo.dogsquared@gmail.com";
     github = "foo-dogsquared";
@@ -19230,15 +19236,6 @@
     github = "zraexy";
     githubId = 8100652;
     name = "David Mell";
-  };
-  zseri = {
-    name = "zseri";
-    email = "zseri.devel@ytrizja.de";
-    github = "fogti";
-    githubId = 1618343;
-    keys = [{
-      fingerprint = "7AFB C595 0D3A 77BD B00F  947B 229E 63AE 5644 A96D";
-    }];
   };
   ztzg = {
     email = "dd@crosstwine.com";
