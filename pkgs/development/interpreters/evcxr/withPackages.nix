@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , lib
 , runCommand
+, writeTextFile
 
 , python3
 
@@ -28,23 +29,17 @@ let
     echo "]" >> $out
   '';
 
-  cargoToml = packageNames: runCommand "Cargo.toml" { buildInputs = [cargo]; } ''
-    # Generate Cargo.toml
-    cat <<EOT >> Cargo.toml
-    [package]
-    name = "rust_environment"
-    version = "0.1.0"
-    edition = "2018"
+  cargoToml = packageNames: writeTextFile {
+    name = "Cargo.toml";
+    text = ''
+      [package]
+      name = "rust_environment"
+      version = "0.1.0"
+      edition = "2018"
 
-    [dependencies]
-    EOT
-
-    for name in ${toString packageNames}; do
-      echo "$name = \"*\"" >> Cargo.toml
-    done
-
-    cp Cargo.toml $out
-  '';
+      [dependencies]
+    '' + lib.concatStringsSep "\n" (map (name: ''${name} = "*"'') packageNames);
+  };
 
   cargoNix = packageNames: runCommand "Cargo-nix" { buildInputs = [cargo]; } ''
     cp "${cargoToml packageNames}" Cargo.toml
