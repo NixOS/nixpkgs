@@ -2001,6 +2001,8 @@ self: super: with self; {
 
   cmdline = callPackage ../development/python-modules/cmdline { };
 
+  cmdstanpy = callPackage ../development/python-modules/cmdstanpy { };
+
   cmigemo = callPackage ../development/python-modules/cmigemo {
     inherit (pkgs) cmigemo;
   };
