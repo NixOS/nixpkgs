@@ -1215,6 +1215,8 @@ self: super: with self; {
 
   banal = callPackage ../development/python-modules/banal { };
 
+  bandcamp-api = callPackage ../development/python-modules/bandcamp-api { };
+
   bandit = callPackage ../development/python-modules/bandit { };
 
   bangla = callPackage ../development/python-modules/bangla { };
