@@ -42,10 +42,7 @@ let
     xserverEnabled = config.services.xserver.enable;
   };
 
-  nixos-option =
-    if lib.versionAtLeast (lib.getVersion config.nix.package) "2.4pre"
-    then null
-    else pkgs.nixos-option;
+  inherit (pkgs) nixos-option;
 
   nixos-version = makeProg {
     name = "nixos-version";
@@ -232,9 +229,10 @@ in
         nixos-install
         nixos-rebuild
         nixos-generate-config
+        nixos-option
         nixos-version
         nixos-enter
-      ] ++ lib.optional (nixos-option != null) nixos-option;
+      ];
 
     documentation.man.man-db.skipPackages = [ nixos-version ];
 

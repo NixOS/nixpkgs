@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "desync";
-  version = "0.9.4";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "folbricht";
     repo = "desync";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kwYRspzfTBl9FtPrpd55VBYiCzaG7M83EM5nbqdBG/Q=";
+    hash = "sha256-FeZhLY0fUUNNqa6qZZnh2z06+NgcAI6gY8LRR4xI5sM=";
   };
 
   vendorHash = "sha256-1RuqlDU809mtGn0gOFH/AW6HJo1cQqt8spiLp3/FpcI=";

@@ -39,6 +39,8 @@ buildPythonPackage rec {
     requests
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     pytest-httpbin
     pytest-mock

@@ -2561,6 +2561,12 @@
       }
     ];
   };
+  CaitlinDavitt = {
+    email = "CaitlinDavitt@gmail.com";
+    github = "CaitlinDavitt";
+    githubId = 48105979;
+    name = "Caitlin Davitt";
+  };
   calavera = {
     email = "david.calavera@gmail.com";
     github = "calavera";
@@ -15008,6 +15014,12 @@
     email = "sam@samhofi.us";
     github = "kf5grd";
     githubId = 18297490;
+  };
+  shortcord = {
+    name = "Short Cord";
+    email = "short@shortcord.com";
+    github = "shortcord";
+    githubId = 3823744;
   };
   shou = {
     email = "x+g@shou.io";

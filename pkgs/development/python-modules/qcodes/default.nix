@@ -100,6 +100,8 @@ buildPythonPackage rec {
     ];
   };
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     pytestCheckHook
     deepdiff

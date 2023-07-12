@@ -256,6 +256,20 @@ in {
       description = "Correlate proton density to the response time of your app and the ion temperature to your exception rate.";
     };
   };
+  splunk = glPlugin rec {
+    name = "graylog-splunk-${version}";
+    pluginName = "graylog-plugin-splunk";
+    version = "0.5.0-rc.1";
+    src = fetchurl {
+      url = "https://github.com/graylog-labs/graylog-plugin-splunk/releases/download/0.5.0-rc.1/graylog-plugin-splunk-0.5.0-rc.1.jar";
+      sha256 = "sha256-EwF/Dc8GmMJBTxH9xGZizUIMTGSPedT4bprorN6X9Os=";
+    };
+    meta = {
+      homepage = "https://github.com/graylog-labs/graylog-plugin-splunk";
+      description = "Graylog output plugin that forwards one or more streams of data to Splunk via TCP.";
+      license = lib.licenses.gpl3Only;
+    };
+  };
   twiliosms = glPlugin rec {
     name = "graylog-twiliosms-${version}";
     pluginName = "graylog-plugin-twiliosms";

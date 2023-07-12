@@ -1295,7 +1295,7 @@ with pkgs;
     makeWrapper = makeBinaryWrapper;
   };
 
-  wrapGAppsHook4 = wrapGAppsHook.override { gtk3 = gtk4; };
+  wrapGAppsHook4 = wrapGAppsHook.override { gtk3 = __splicedPackages.gtk4; };
 
   wrapGAppsNoGuiHook = wrapGAppsHook.override { isGraphical = false; };
 
@@ -1866,6 +1866,10 @@ with pkgs;
   voms = callPackage ../tools/networking/voms { };
 
   vopono = callPackage ../tools/networking/vopono { };
+
+  vrc-get = callPackage ../tools/misc/vrc-get {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   winbox = callPackage ../tools/admin/winbox {
     wine = wineWowPackages.staging;
@@ -5711,6 +5715,8 @@ with pkgs;
 
   mpd-mpris = callPackage ../tools/audio/mpd-mpris { };
 
+  mpd-notification = callPackage ../tools/audio/mpd-notification { };
+
   mpd-sima = python3Packages.callPackage ../tools/audio/mpd-sima { };
 
   mpris-scrobbler = callPackage ../tools/audio/mpris-scrobbler { };
@@ -6158,6 +6164,8 @@ with pkgs;
   mongodb-tools = callPackage ../tools/misc/mongodb-tools { };
 
   moosefs = callPackage ../tools/filesystems/moosefs { };
+
+  mountain-duck = callPackage ../tools/filesystems/mountain-duck { };
 
   mozlz4a = callPackage ../tools/compression/mozlz4a { };
 
@@ -19250,12 +19258,7 @@ with pkgs;
 
   modd = callPackage ../development/tools/modd { };
 
-  mold = callPackage ../development/tools/mold {
-    # C++20 is required, aarch64-linux has gcc 9 by default
-    stdenv = if stdenv.isLinux && stdenv.isAarch64
-      then llvmPackages_12.libcxxStdenv
-      else llvmPackages.stdenv;
-  };
+  mold = callPackage ../development/tools/mold { };
 
   moon = callPackage ../development/tools/build-managers/moon/default.nix { };
 
@@ -23231,7 +23234,8 @@ with pkgs;
   in pkgs.buildEnv { # slightly hacky
     name = "libxml2+py-${res.libxml2.version}";
     paths = with libxml2; [ dev bin py ];
-    inherit (libxml2) passthru;
+    # Avoid update.nix conflicts with libxml2.
+    passthru = builtins.removeAttrs libxml2.passthru [ "updateScript" ];
     # the hook to find catalogs is hidden by buildEnv
     postBuild = ''
       mkdir "$out/nix-support"
@@ -36405,12 +36409,10 @@ with pkgs;
 
   elements  = libsForQt5.callPackage ../applications/blockchains/elements {
     withGui = true;
-    boost = boost175;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
   elementsd = callPackage ../applications/blockchains/elements {
     withGui = false;
-    boost = boost175;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
   elementsd-simplicity = elementsd.overrideAttrs {
@@ -39549,7 +39551,7 @@ with pkgs;
 
   dxvk = callPackage ../misc/dxvk { };
   dxvk_1 = callPackage ../misc/dxvk/dxvk.nix { dxvkVersion = "1.10"; };
-  dxvk_2 = callPackage ../misc/dxvk/dxvk.nix { dxvkVersion = "2.1"; };
+  dxvk_2 = callPackage ../misc/dxvk/dxvk.nix { };
 
   ec2stepshell = callPackage ../tools/security/ec2stepshell { };
 
@@ -39984,7 +39986,7 @@ with pkgs;
 
   nix-melt = callPackage ../tools/nix/nix-melt { };
 
-  nixos-option = callPackage ../tools/nix/nixos-option { nix = nixVersions.nix_2_3; };
+  nixos-option = callPackage ../tools/nix/nixos-option { };
 
   nix-pin = callPackage ../tools/package-management/nix-pin { };
 

@@ -445,22 +445,22 @@
     "vendorHash": "sha256-XgGNz+yP+spRA2+qFxwiZFcBRv2GQWhiYY9zoC8rZPc="
   },
   "google": {
-    "hash": "sha256-ZOouPBEymdpVaDe1zBwbbeffZ/48lpfLmll6kl1TnJM=",
+    "hash": "sha256-2c50Ul57IeI7NzH0qYRIw8aKoB/5edCEsurc7JcojgQ=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/google",
     "owner": "hashicorp",
     "proxyVendor": true,
     "repo": "terraform-provider-google",
-    "rev": "v4.72.1",
+    "rev": "v4.73.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-X+7UZM0iZzG7LvaK6nKXF3taKIiJfhWRmY1q1Uz9M4A="
   },
   "google-beta": {
-    "hash": "sha256-wXBSAsRY1RajMu5npceI9N/c+c2lwEWyqsGP7xgfVA0=",
+    "hash": "sha256-2fiwPrmd/PHFNksfpo/TQQsuFz7RttAea5C8LJTrMAg=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/google-beta",
     "owner": "hashicorp",
     "proxyVendor": true,
     "repo": "terraform-provider-google-beta",
-    "rev": "v4.72.1",
+    "rev": "v4.73.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-X+7UZM0iZzG7LvaK6nKXF3taKIiJfhWRmY1q1Uz9M4A="
   },
@@ -574,13 +574,13 @@
     "vendorHash": null
   },
   "ibm": {
-    "hash": "sha256-uJf3SB86kTOSKGhS1Psg5to439xfzPqJkrCmoy1gozs=",
+    "hash": "sha256-XSB0bwkFiNdeVje/pCnNDDjbiroJBckSNqEFlDuctdM=",
     "homepage": "https://registry.terraform.io/providers/IBM-Cloud/ibm",
     "owner": "IBM-Cloud",
     "repo": "terraform-provider-ibm",
-    "rev": "v1.54.0",
+    "rev": "v1.55.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-pdjCemr2kg+5E677rgeGtphp+YMmIdvuyv9AjmPBygE="
+    "vendorHash": "sha256-+HYfQoJWyZizoe/g5cycmSjaStRwbRuYfXRYVOgRqCM="
   },
   "icinga2": {
     "hash": "sha256-Y/Oq0aTzP+oSKPhHiHY9Leal4HJJm7TNDpcdqkUsCmk=",
@@ -1106,11 +1106,11 @@
     "vendorHash": "sha256-GNSKSlaFBj2P+z40U+0uwPSOuQBy+9vOVFfPe8p0A24="
   },
   "tencentcloud": {
-    "hash": "sha256-BflyXfxfth9wjPCd8aW9maemjjHTzuL8KvxQsvRUKLw=",
+    "hash": "sha256-+DseNvTLRai7qitiFNPYDub5MJhTrXDDGg4ni7McH7Y=",
     "homepage": "https://registry.terraform.io/providers/tencentcloudstack/tencentcloud",
     "owner": "tencentcloudstack",
     "repo": "terraform-provider-tencentcloud",
-    "rev": "v1.81.12",
+    "rev": "v1.81.13",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
