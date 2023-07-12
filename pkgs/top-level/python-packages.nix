@@ -2175,6 +2175,8 @@ self: super: with self; {
 
   coreapi = callPackage ../development/python-modules/coreapi { };
 
+  coredis = callPackage ../development/python-modules/coredis { };
+
   coreschema = callPackage ../development/python-modules/coreschema { };
 
   cornice = callPackage ../development/python-modules/cornice { };
