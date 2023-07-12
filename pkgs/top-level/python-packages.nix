@@ -1533,6 +1533,8 @@ self: super: with self; {
 
   brotli = callPackage ../development/python-modules/brotli { };
 
+  brotli-asgi = callPackage ../development/python-modules/brotli-asgi { };
+
   brotlicffi = callPackage ../development/python-modules/brotlicffi {
     inherit (pkgs) brotli;
   };
