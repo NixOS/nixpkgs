@@ -66,6 +66,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # https://github.com/root-project/root/issues/13216
+  hardeningDisable = [ "fortify3" ];
+
   preConfigure = ''
     # binutils 2.37 fixes
     fixupList=(
