@@ -1,4 +1,4 @@
-{ stdenv, lib, git, openssl, makeWrapper, buildPythonApplication, pytestCheckHook, ps
+{ stdenv, lib, git, openssl, buildPythonApplication, pytestCheckHook, ps
 , fetchPypi, fetchFromGitLab, sudo }:
 
 buildPythonApplication rec {

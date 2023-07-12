@@ -13,7 +13,6 @@
 , luajit
 , libosmium
 , protozero
-, rapidjson
 , testers
 }:
 

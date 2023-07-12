@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, perl, perlPackages, makeWrapper, }:
+{ lib, fetchFromGitHub, perl, perlPackages }:
 
 perlPackages.buildPerlPackage rec {
   pname = "cope";

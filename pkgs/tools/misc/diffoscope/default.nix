@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , abootimg
-, acl
 , apksigcopier
 , apksigner
 , apktool
