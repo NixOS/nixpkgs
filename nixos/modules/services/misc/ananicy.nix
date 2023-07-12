@@ -5,9 +5,9 @@ with lib;
 let
   cfg = config.services.ananicy;
   configFile = pkgs.writeText "ananicy.conf" (generators.toKeyValue { } cfg.settings);
-  extraRules = pkgs.writeText "extraRules" cfg.extraRules;
-  extraTypes = pkgs.writeText "extraTypes" cfg.extraTypes;
-  extraCgroups = pkgs.writeText "extraCgroups" cfg.extraCgroups;
+  extraRules = pkgs.writeText "extraRules" (concatMapStringsSep "\n" (l: builtins.toJSON l) cfg.extraRules);
+  extraTypes = pkgs.writeText "extraTypes" (concatMapStringsSep "\n" (l: builtins.toJSON l) cfg.extraTypes);
+  extraCgroups = pkgs.writeText "extraCgroups" (concatMapStringsSep "\n" (l: builtins.toJSON l) cfg.extraCgroups);
   servicename = if ((lib.getName cfg.package) == (lib.getName pkgs.ananicy-cpp)) then "ananicy-cpp" else "ananicy";
 in
 {
@@ -47,46 +47,40 @@ in
       };
 
       extraRules = mkOption {
-        type = types.str;
-        default = "";
+        type = with types; listOf attrs;
+        default = [ ];
         description = lib.mdDoc ''
-          Extra rules in json format on separate lines. See:
+          Rules to write in 'nixRules.rules'. See:
           <https://github.com/Nefelim4ag/Ananicy#configuration>
           <https://gitlab.com/ananicy-cpp/ananicy-cpp/#global-configuration>
         '';
-        example = literalExpression ''
-          '''
-            { "name": "eog", "type": "Image-Viewer" }
-            { "name": "fdupes", "type": "BG_CPUIO" }
-          '''
-        '';
+        example = [
+          { name = "eog"; type = "Image-Viewer"; }
+          { name = "fdupes"; type = "BG_CPUIO"; }
+        ];
       };
       extraTypes = mkOption {
-        type = types.str;
-        default = "";
+        type = with types; listOf attrs;
+        default = [ ];
         description = lib.mdDoc ''
-          Extra types in json format on separate lines. See:
+          Types to write in 'nixTypes.types'. See:
           <https://gitlab.com/ananicy-cpp/ananicy-cpp/#types>
         '';
-        example = literalExpression ''
-          '''
-            {"type": "my_type", "nice": 19, "other_parameter": "value"}
-            {"type": "compiler", "nice": 19, "sched": "batch", "ioclass": "idle"}
-          '''
-        '';
+        example = [
+          { type = "my_type"; nice = 19; other_parameter = "value"; }
+          { type = "compiler"; nice = 19; sched = "batch"; ioclass = "idle"; }
+        ];
       };
       extraCgroups = mkOption {
-        type = types.str;
-        default = "";
+        type = with types; listOf attrs;
+        default = [ ];
         description = lib.mdDoc ''
-          Extra cgroups in json format on separate lines. See:
+          Cgroups to write in 'nixCgroups.cgroups'. See:
           <https://gitlab.com/ananicy-cpp/ananicy-cpp/#cgroups>
         '';
-        example = literalExpression ''
-          '''
-            {"cgroup": "cpu80", "CPUQuota": 80}
-          '''
-        '';
+        example = [
+          { cgroup = "cpu80"; CPUQuota = 80; }
+        ];
       };
     };
   };
@@ -106,9 +100,9 @@ in
         # configured through .setings
         rm -f $out/ananicy.conf
         cp ${configFile} $out/ananicy.conf
-        ${optionalString (cfg.extraRules != "") "cp ${extraRules} $out/nixRules.rules"}
-        ${optionalString (cfg.extraTypes != "") "cp ${extraTypes} $out/nixTypes.types"}
-        ${optionalString (cfg.extraCgroups != "") "cp ${extraCgroups} $out/nixCgroups.cgroups"}
+        ${optionalString (cfg.extraRules != [ ]) "cp ${extraRules} $out/nixRules.rules"}
+        ${optionalString (cfg.extraTypes != [ ]) "cp ${extraTypes} $out/nixTypes.types"}
+        ${optionalString (cfg.extraCgroups != [ ]) "cp ${extraCgroups} $out/nixCgroups.cgroups"}
       '';
     };
 
