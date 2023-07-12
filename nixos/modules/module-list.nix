@@ -646,6 +646,7 @@
   ./services/misc/greenclip.nix
   ./services/misc/headphones.nix
   ./services/misc/heisenbridge.nix
+  ./services/misc/homepage-dashboard.nix
   ./services/misc/ihaskell.nix
   ./services/misc/input-remapper.nix
   ./services/misc/irkerd.nix
