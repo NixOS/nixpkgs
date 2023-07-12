@@ -15144,6 +15144,7 @@ with pkgs;
     llvmPackages = llvmPackages_15;
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   })
+    crystal_1_9
     crystal_1_8
     crystal;
 
