@@ -49,8 +49,8 @@ assert (lib.assertMsg (hidpiXWayland -> enableXWayland) ''
       domain = "gitlab.freedesktop.org";
       owner = "wlroots";
       repo = "wlroots";
-      rev = "6830bfc17fd94709e2cdd4da0af989f102a26e59";
-      hash = "sha256-GGEjkQO9m7YLYIXIXM76HWdhjg4Ye+oafOtyaFAYKI4=";
+      rev = "7e7633abf09b362d0bad9e3fc650fd692369291d";
+      hash = "sha256-KovjVFwcuoUO0eu/UiWrnD3+m/K+SHSAVIz4xF9K1XA=";
     };
 
     pname =
