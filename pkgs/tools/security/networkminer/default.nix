@@ -3,7 +3,6 @@
 , fetchurl
 , unzip
 , dos2unix
-, makeWrapper
 , msbuild
 , mono
 }:
