@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake }:
+{ stdenv, lib, fetchFromGitHub, cmake, with_opencl ? false,  ocl-icd, opencl-headers }:
 
 # This was originally called mkl-dnn, then it was renamed to dnnl, and it has
 # just recently been renamed again to oneDNN. See here for details:
@@ -20,6 +20,13 @@ stdenv.mkDerivation rec {
 
   # Tests fail on some Hydra builders, because they do not support SSE4.2.
   doCheck = false;
+
+  OPENCLROOT = if with_opencl then ocl-icd else "";
+  cmakeFlags = if with_opencl then [
+    "-DDNNL_GPU_RUNTIME=OCL"
+    "-DCMAKE_PREFIX_PATH=${opencl-headers}"
+    "-DONEDNN_BUILD_GRAPH=OFF"
+  ] else [];
 
   # Fixup bad cmake paths
   postInstall = ''
