@@ -30145,6 +30145,8 @@ with pkgs;
 
   appvm = callPackage ../applications/virtualization/appvm { };
 
+  anilibria-winmaclinux = libsForQt5.callPackage ../applications/video/anilibria-winmaclinux { };
+
   yggdrasil = callPackage ../tools/networking/yggdrasil { };
 
   masterpdfeditor = libsForQt5.callPackage ../applications/misc/masterpdfeditor { };
