@@ -24406,8 +24406,6 @@ with pkgs;
 
   SDL2_ttf = callPackage ../development/libraries/SDL2_ttf { };
 
-  SDL2_ttf_2_0_15 = callPackage ../development/libraries/SDL2_ttf/2.0.15.nix { };
-
   sdrplay = callPackage ../applications/radio/sdrplay { };
 
   sdrpp = callPackage ../applications/radio/sdrpp {
