@@ -45,10 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "\''${CMAKE_INSTALL_DATADIR}/gtk-doc/html/\''${PROJECT_NAME}" "\''${CMAKE_INSTALL_DOCDIR}"
     substituteInPlace demo/CMakeLists.txt \
       --replace 'RUNTIME DESTINATION bin' 'RUNTIME DESTINATION ''${CMAKE_INSTALL_BINDIR}'
-  '' + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-    # Built for hostPlatform, executed during build
-    substituteInPlace src/CMakeLists.txt \
-      --replace 'COMMAND mkdb' 'COMMAND ${stdenv.hostPlatform.emulator buildPackages} mkdb'
   '';
 
   strictDeps = true;
@@ -87,6 +83,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DWANT_TESTS=${lib.boolToString finalAttrs.doCheck}"
     # Keeps finding & using glib-compile-resources from buildInputs otherwise
     "-DCMAKE_PROGRAM_PATH=${lib.makeBinPath [ buildPackages.glib.dev ]}"
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    # only for cross without native execute support because the canExecute "emulator" call has a format that I can't get CMake to accept
+    "-DCMAKE_CROSSCOMPILING_EMULATOR=${stdenv.hostPlatform.emulator buildPackages}"
   ];
 
   preInstall = lib.optionalString withDocumentation ''
