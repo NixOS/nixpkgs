@@ -46,12 +46,18 @@ in
 evcxr.overrideAttrs (oldAttrs: {
   passthru = (oldAttrs.passthru or {}) // {
     withPackages = packageNames:
-      runCommand "evcxr" { buildInputs = [makeWrapper]; } ''
+      runCommand "evcxr" {
+        buildInputs = [makeWrapper];
+
+        makeWrapperArgs = [
+          "--set" "EVCXR_CONFIG_DIR" "${withPackages.evcxrConfigDir packageNames}"
+          "--set" "CARGO_HOME" "${cargoHome packageNames}"
+          "--prefix" "PATH" ":" "${lib.makeBinPath [rustc cargo]}"
+        ];
+      } ''
         mkdir -p $out/bin
-        makeWrapper ${evcxr}/bin/evcxr $out/bin/evcxr \
-          --set EVCXR_CONFIG_DIR ${withPackages.evcxrConfigDir packageNames} \
-          --set CARGO_HOME ${cargoHome packageNames} \
-          --prefix PATH : ${lib.makeBinPath [rustc cargo]}
+        makeWrapper ${evcxr}/bin/evcxr $out/bin/evcxr $makeWrapperArgs
+        makeWrapper ${evcxr}/bin/evcxr_jupyter $out/bin/evcxr_jupyter $makeWrapperArgs
       '';
-    };
+  };
 })
