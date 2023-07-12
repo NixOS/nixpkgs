@@ -1,17 +1,22 @@
 {fetchurl, lib, stdenv, dpkg, makeWrapper,
- alsa-lib, cups, curl, dbus, expat, fontconfig, freetype, glib, gst_all_1,
- harfbuzz, libcap, libGL, libGLU, libpulseaudio, libxkbcommon, libxml2, libxslt,
- nspr, nss, openssl_1_1, systemd, wayland, xorg, zlib, ...
+ alsa-lib, brotli, cups, curl, dbus, expat,
+ fontconfig, freetype, glib, gst_all_1,
+ harfbuzz, krb5, libcap, libGL, libGLU,
+ libpulseaudio, libxkbcommon, libxml2,
+ libxslt, libopus, libwebp, lcms, nspr, nss,
+ snappy, openssl_1_1, systemd, wayland, xorg,
+ zlib, zstd, ...
 }:
 
 stdenv.mkDerivation {
   pname = "viber";
-  version = "16.1.0.37";
+  version = "20.3.0.1";
 
   src = fetchurl {
     # Official link: https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb
-    url = "https://web.archive.org/web/20211119123858/https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
-    sha256 = "sha256-hOz+EQc2OOlLTPa2kOefPJMUyWvSvrgqgPgBKjWE3p8=";
+    # To update this URL use the WaybackMachine extension for your browser
+    url = "https://web.archive.org/web/20230711214652/https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
+    sha256 = "sha256-YDh6YZCBa6aS2SlzZjOxNtPwGkcfcT5bu8/SssaZCA4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -21,6 +26,7 @@ stdenv.mkDerivation {
 
   libPath = lib.makeLibraryPath [
       alsa-lib
+      brotli
       cups
       curl
       dbus
@@ -30,13 +36,19 @@ stdenv.mkDerivation {
       glib
       gst_all_1.gst-plugins-base
       gst_all_1.gstreamer
+      gst_all_1.gst-plugins-bad
       harfbuzz
+      krb5
       libcap
       libGLU libGL
       libpulseaudio
       libxkbcommon
       libxml2
       libxslt
+      libopus
+      libwebp
+      lcms
+      snappy
       nspr
       nss
       openssl_1_1
@@ -44,6 +56,7 @@ stdenv.mkDerivation {
       systemd
       wayland
       zlib
+      zstd
 
       xorg.libICE
       xorg.libSM
@@ -59,12 +72,13 @@ stdenv.mkDerivation {
       xorg.libXrender
       xorg.libXScrnSaver
       xorg.libXtst
+      xorg.libxshmfence
+      xorg.libxkbfile
       xorg.xcbutilimage
       xorg.xcbutilkeysyms
       xorg.xcbutilrenderutil
       xorg.xcbutilwm
-  ]
-  ;
+  ];
 
   installPhase = ''
     dpkg-deb -x $src $out
