@@ -262,4 +262,6 @@ in {
     users.groups.peering-manager = {};
     users.groups."${config.services.redis.servers.peering-manager.user}".members = [ "peering-manager" ];
   };
+
+  meta.maintainers = with lib.maintainers; [ yuka ];
 }
