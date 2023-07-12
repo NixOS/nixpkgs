@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, fuse }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, fuse, gitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "9pfs";
@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ fuse ];
   enableParallelBuilding = true;
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     homepage = "https://github.com/ftrvxmtrx/9pfs";
