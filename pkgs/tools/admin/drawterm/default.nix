@@ -15,7 +15,7 @@
 , config
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "drawterm";
   version = "unstable-2023-06-27";
 
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     sha256 = "ebqw1jqeRC0FWeUIO/HaEovuwzU6+B48TjZbVJXByvA=";
   };
 
+  enableParallelBuilding = true;
+  strictDeps = true;
   nativeBuildInputs = [ installShellFiles ] ++ {
     linux = [ pkg-config wayland-scanner ];
     unix = [ makeWrapper ];
@@ -47,11 +49,10 @@ stdenv.mkDerivation rec {
       mv drawterm drawterm.bin
       install -Dm755 -t $out/bin/ drawterm.bin
       makeWrapper ${pulseaudio}/bin/padsp $out/bin/drawterm --add-flags $out/bin/drawterm.bin
-     '';
-  }."${config}" or (throw "unsupported CONF")  + ''
-      installManPage drawterm.1
+    '';
+  }."${config}" or (throw "unsupported CONF") + ''
+    installManPage drawterm.1
   '';
-
 
   meta = with lib; {
     description = "Connect to Plan 9 CPU servers from other operating systems.";
