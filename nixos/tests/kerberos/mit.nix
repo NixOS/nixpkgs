@@ -9,14 +9,16 @@ import ../make-test-python.nix ({pkgs, ...}: {
     };
     krb5 = {
       enable = true;
-      kerberos = pkgs.krb5;
-      libdefaults = {
-        default_realm = "FOO.BAR";
-      };
-      realms = {
-        "FOO.BAR" = {
-          admin_server = "machine";
-          kdc = "machine";
+      package = pkgs.krb5;
+      settings = {
+        libdefaults = {
+          default_realm = "FOO.BAR";
+        };
+        realms = {
+          "FOO.BAR" = {
+            admin_server = "machine";
+            kdc = "machine";
+          };
         };
       };
     };
