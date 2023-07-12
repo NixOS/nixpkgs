@@ -7827,6 +7827,8 @@ self: super: with self; {
 
   prodict = callPackage ../development/python-modules/prodict { };
 
+  prophet = callPackage ../development/python-modules/prophet { };
+
   propka = callPackage ../development/python-modules/propka { };
 
   proxy_tools = callPackage ../development/python-modules/proxy_tools { };
