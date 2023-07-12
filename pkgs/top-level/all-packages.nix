@@ -24406,8 +24406,6 @@ with pkgs;
 
   SDL2_ttf = callPackage ../development/libraries/SDL2_ttf { };
 
-  SDL2_ttf_2_0_15 = callPackage ../development/libraries/SDL2_ttf/2.0.15.nix { };
-
   sdrplay = callPackage ../applications/radio/sdrplay { };
 
   sdrpp = callPackage ../applications/radio/sdrpp {
@@ -27168,7 +27166,7 @@ with pkgs;
   coconutbattery = callPackage ../os-specific/darwin/coconutbattery { };
 
   conky = callPackage ../os-specific/linux/conky ({
-    lua = lua5_3_compat;
+    lua = lua5_4;
     inherit (linuxPackages.nvidia_x11.settings) libXNVCtrl;
   } // config.conky or {});
 
