@@ -6017,6 +6017,12 @@
     githubId = 127353;
     name = "Geoffrey Huntley";
   };
+  gigglesquid = {
+    email = "jack.connors@protonmail.com";
+    github = "gigglesquid";
+    githubId = 3685154;
+    name = "Jack connors";
+  };
   gila = {
     email = "jeffry.molanus@gmail.com";
     github = "gila";
