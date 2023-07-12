@@ -494,7 +494,7 @@ rec {
     fi
     diskImage="$1"
     if ! test -e "$diskImage"; then
-      ${qemu}/bin/qemu-img create -b ${image}/disk-image.qcow2 -f qcow2 "$diskImage"
+      ${qemu}/bin/qemu-img create -b ${image}/disk-image.qcow2 -f qcow2 -F qcow2 "$diskImage"
     fi
     export TMPDIR=$(mktemp -d)
     export out=/dummy
