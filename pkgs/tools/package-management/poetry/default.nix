@@ -31,6 +31,7 @@ let
           rev = version;
           hash = "sha256-Gc22Y2T4uO39jiOqEUFeOfnVCbknuDjmzFPZgk2eY74=";
         };
+        patches = [ ];
         nativeCheckInputs = old.nativeCheckInputs ++ [
           self.tomli-w
         ];

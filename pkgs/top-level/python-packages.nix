@@ -3521,6 +3521,8 @@ self: super: with self; {
 
   fairscale = callPackage ../development/python-modules/fairscale { };
 
+  fairseq = callPackage ../development/python-modules/fairseq { };
+
   faiss = toPythonModule (pkgs.faiss.override {
     pythonSupport = true;
     pythonPackages = self;

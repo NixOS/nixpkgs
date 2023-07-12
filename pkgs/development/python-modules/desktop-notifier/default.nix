@@ -5,13 +5,12 @@
 , stdenv
 , packaging
 , setuptools
-, importlib-resources
 , dbus-next
 }:
 
 buildPythonPackage rec {
   pname = "desktop-notifier";
-  version = "3.5.4";
+  version = "3.5.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +19,7 @@ buildPythonPackage rec {
     owner = "SamSchott";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-rMbXGkI6nVgMPzD/vSbAjfouFb4sQkoBFrLxe7vlcDg=";
+    hash = "sha256-txUWRCWLQ6jWrdEJ/D5+CsflNad5Onr/wLycENri1z8=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +28,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     packaging
-    importlib-resources
   ] ++ lib.optionals stdenv.isLinux [
     dbus-next
   ];

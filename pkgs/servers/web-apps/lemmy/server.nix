@@ -12,7 +12,7 @@
 }:
 let
   pinData = lib.importJSON ./pin.json;
-  version = pinData.version;
+  version = pinData.serverVersion;
 in
 rustPlatform.buildRustPackage rec {
   inherit version;
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
   PROTOC_INCLUDE = "${protobuf}/include";
   nativeBuildInputs = [ protobuf rustfmt ];
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = ./update.py;
   passthru.tests.lemmy-server = nixosTests.lemmy;
 
   meta = with lib; {
