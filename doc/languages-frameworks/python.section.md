@@ -1192,6 +1192,8 @@ following are specific to `buildPythonPackage`:
   `--install-option`. E.g., `pipInstallFlags=["--install-option='--cpp_implementation'"]`.
 * `pipBuildFlags ? []`: A list of strings. Arguments to be passed to `pip
   wheel`.
+* `pypaBuildFlags ? []`: A list of strings. Arguments to be passed to `python
+  -m build --wheel`.
 * `pythonPath ? []`: List of packages to be added into `$PYTHONPATH`. Packages
   in `pythonPath` are not propagated (contrary to `propagatedBuildInputs`).
 * `preShellHook`: Hook to execute commands before `shellHook`.
@@ -1488,6 +1490,10 @@ are used in `buildPythonPackage`.
 - `flitBuildHook` to build a wheel using `flit`.
 - `pipBuildHook` to build a wheel using `pip` and PEP 517. Note a build system
   (e.g. `setuptools` or `flit`) should still be added as `nativeBuildInput`.
+- `pypaBuildHook` to build a wheel using
+  [`pypa/build`](https://pypa-build.readthedocs.io/en/latest/index.html) and
+  PEP 517/518. Note a build system (e.g. `setuptools` or `flit`) should still
+  be added as `nativeBuildInput`.
 - `pipInstallHook` to install wheels.
 - `pytestCheckHook` to run tests with `pytest`. See [example usage](#using-pytestcheckhook).
 - `pythonCatchConflictsHook` to check whether a Python package is not already existing.
