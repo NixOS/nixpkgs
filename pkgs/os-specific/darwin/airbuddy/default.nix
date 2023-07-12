@@ -6,12 +6,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "airbuddy";
-  version = "2.6.3";
+  version = "2.7";
 
   src = fetchurl {
     name = "AirBuddy.dmg";
     url = "https://download.airbuddy.app/WebDownload/AirBuddy_v${finalAttrs.version}.dmg";
-    hash = "sha256-q/Mbkm90ptIkdTLV2KDT9CM2Hsxnkway5Fw0F6d7Tqc=";
+    hash = "sha256-i/pxRG5o03jh9D46F9s8cSpf8A1aQEb+u3JiPjDlubA=";
   };
 
   dontPatch = true;
@@ -20,6 +20,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontFixup = true;
 
   nativeBuildInputs = [ undmg ];
+
+  # AirBuddy.dmg is not HFS formatted, default unpackPhase fails
+  # https://discourse.nixos.org/t/help-with-error-only-hfs-file-systems-are-supported-on-ventura
+  unpackCmd = ''
+    mnt=$(mktemp -d)
+
+    /usr/bin/hdiutil attach -nobrowse -readonly $src -mountpoint $mnt
+
+    shopt -s extglob
+    DEST="$PWD"
+    (cd "$mnt"; cp -a !(Applications) "$DEST/")
+  '';
 
   sourceRoot = "AirBuddy.app";
 

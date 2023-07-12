@@ -5715,6 +5715,8 @@ with pkgs;
 
   mpd-mpris = callPackage ../tools/audio/mpd-mpris { };
 
+  mpd-notification = callPackage ../tools/audio/mpd-notification { };
+
   mpd-sima = python3Packages.callPackage ../tools/audio/mpd-sima { };
 
   mpris-scrobbler = callPackage ../tools/audio/mpris-scrobbler { };
@@ -6162,6 +6164,8 @@ with pkgs;
   mongodb-tools = callPackage ../tools/misc/mongodb-tools { };
 
   moosefs = callPackage ../tools/filesystems/moosefs { };
+
+  mountain-duck = callPackage ../tools/filesystems/mountain-duck { };
 
   mozlz4a = callPackage ../tools/compression/mozlz4a { };
 
@@ -19254,12 +19258,7 @@ with pkgs;
 
   modd = callPackage ../development/tools/modd { };
 
-  mold = callPackage ../development/tools/mold {
-    # C++20 is required, aarch64-linux has gcc 9 by default
-    stdenv = if stdenv.isLinux && stdenv.isAarch64
-      then llvmPackages_12.libcxxStdenv
-      else llvmPackages.stdenv;
-  };
+  mold = callPackage ../development/tools/mold { };
 
   moon = callPackage ../development/tools/build-managers/moon/default.nix { };
 
@@ -36410,12 +36409,10 @@ with pkgs;
 
   elements  = libsForQt5.callPackage ../applications/blockchains/elements {
     withGui = true;
-    boost = boost175;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
   elementsd = callPackage ../applications/blockchains/elements {
     withGui = false;
-    boost = boost175;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
   elementsd-simplicity = elementsd.overrideAttrs {
@@ -39554,7 +39551,7 @@ with pkgs;
 
   dxvk = callPackage ../misc/dxvk { };
   dxvk_1 = callPackage ../misc/dxvk/dxvk.nix { dxvkVersion = "1.10"; };
-  dxvk_2 = callPackage ../misc/dxvk/dxvk.nix { dxvkVersion = "2.1"; };
+  dxvk_2 = callPackage ../misc/dxvk/dxvk.nix { };
 
   ec2stepshell = callPackage ../tools/security/ec2stepshell { };
 
@@ -39989,7 +39986,7 @@ with pkgs;
 
   nix-melt = callPackage ../tools/nix/nix-melt { };
 
-  nixos-option = callPackage ../tools/nix/nixos-option { nix = nixVersions.nix_2_3; };
+  nixos-option = callPackage ../tools/nix/nixos-option { };
 
   nix-pin = callPackage ../tools/package-management/nix-pin { };
 
