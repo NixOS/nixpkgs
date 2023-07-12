@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , fetchFromGitHub
 , buildGoModule
 , git
@@ -11,25 +12,58 @@
 , openssl
 , extra-cmake-modules
 , fontconfig
-, go
 , testers
 , turbo
+, nix-update-script
+, go
+, zlib
+, libiconv
+, Security
+, IOKit
+, CoreServices
+, CoreFoundation
 }:
 let
-  version = "1.8.8";
+  version = "1.10.7";
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "turbo";
     rev = "v${version}";
-    sha256 = "sha256-Qn1qAdhzQrkdMbZs9zqZA0k7UTig39ljJ3DQn49pJf8=";
+    sha256 = "sha256-AkrwaaXUiFPZqOO1mX/1XBOZRFRtCdgI7glzdv8ZOfU=";
   };
 
-  go-turbo = buildGoModule rec {
+  ffi = rustPlatform.buildRustPackage {
+    pname = "turbo-ffi";
+    inherit src version;
+    cargoBuildFlags = [ "--package" "turborepo-ffi" ];
+
+    cargoHash = "sha256-j+r1irE0OGMfr9TAYhTOsFjBNzxjmF5/e7EebtshuG8=";
+
+    RUSTC_BOOTSTRAP = 1;
+    nativeBuildInputs = [
+      pkg-config
+      extra-cmake-modules
+      protobuf
+    ];
+    buildInputs = [
+      openssl
+      fontconfig
+    ];
+
+    doCheck = false;
+
+    postInstall = ''
+      cp target/release-tmp/libturborepo_ffi.a $out/lib
+    '';
+  };
+
+
+  go-turbo = buildGoModule {
     inherit src version;
     pname = "go-turbo";
     modRoot = "cli";
 
-    vendorSha256 = "sha256-/C5zUQk8bJPBu1L9RYJh74haGkB+37fWldeg/2U8X9I=";
+    vendorSha256 = "sha256-8quDuT8VwT3B56jykkbX8ov+DNFZwxPf31+NLdfX1p0=";
 
     nativeBuildInputs = [
       git
@@ -39,8 +73,22 @@ let
       protoc-gen-go-grpc
     ];
 
+    buildInputs = [zlib ] ++ lib.optionals stdenv.isDarwin [
+      Security
+      libiconv
+    ];
+
+    ldFlags = [
+      "-s -w"
+      "-X main.version=${version}"
+      "-X main.commit=${src.rev}"
+      "-X main.date=1970-01-01-00:00:01"
+      "-X main.builtBy=goreleaser"
+    ];
+
     preBuild = ''
       make compile-protos
+      cp ${ffi}/lib/libturborepo_ffi.a ./internal/ffi/libturborepo_ffi_${go.GOOS}_${go.GOARCH}.a
     '';
 
     preCheck = ''
@@ -53,11 +101,35 @@ let
       git config --global init.defaultBranch main
       git init
       popd
+
+      # package_deps_hash_test.go:492: hash of child-dir/libA/pkgignorethisdir/file, got 67aed78ea231bdee3de45b6d47d8f32a0a792f6d want go-turbo>     package_deps_hash_test.go:499: found extra hashes in map[.gitignore:3237694bc3312ded18386964 a855074af7b066af some-dir/another-one:7e59c6a6ea9098c6d3beb00e753e2c54ea502311 some-dir/excluded-file:7e59 c6a6ea9098c6d3beb00e753e2c54ea502311 some-dir/other-file:7e59c6a6ea9098c6d3beb00e753e2c54ea502311 some-fil e:7e59c6a6ea9098c6d3beb00e753e2c54ea502311]
+      rm ./internal/hashing/package_deps_hash_test.go
+      rm ./internal/hashing/package_deps_hash_go_test.go
+      #  Error:          Not equal:
+      # expected: env.DetailedMap{All:env.EnvironmentVariableMap(nil), BySource:env.BySource{Explicit:env.EnvironmentVariableMap{}, Matching:env.EnvironmentVariableMap{}}}
+      #  actual  : env.DetailedMap{All:env.EnvironmentVariableMap{}, BySource:env.BySource{Explicit:env.EnvironmentVariableMap{}, Matching:env.EnvironmentVariableMap{}}}
+      rm ./internal/run/global_hash_test.go
+    '' + lib.optionalString stdenv.isLinux ''
+      #  filewatcher_test.go:122: got event {/build/TestFileWatching1921149570/001/test-1689172679812 1}
+      # filewatcher_test.go:122: got event {/build/TestFileWatching1921149570/001/parent/test-1689172679812 1}
+      # filewatcher_test.go:122: got event {/build/TestFileWatching1921149570/001/parent/child/test-1689172679812 1}
+      # filewatcher_test.go:122: got event {/build/TestFileWatching1921149570/001/parent/sibling/test-1689172679812 1}
+      # filewatcher_test.go:127: got event {/build/TestFileWatching1921149570/001/parent/child/foo 1}
+      # filewatcher_test.go:137: got event {/build/TestFileWatching1921149570/001/parent/sibling/deep 1}
+      # filewatcher_test.go:141: got event {/build/TestFileWatching1921149570/001/parent/sibling/deep/path 1}
+      # filewatcher_test.go:146: got event {/build/TestFileWatching1921149570/001/parent/sibling/deep 1}
+      # filewatcher_test.go:146: Timed out waiting for filesystem event at /build/TestFileWatching1921149570/001/test-1689172679812
+      # filewatcher_test.go:146: Timed out waiting for filesystem event at /build/TestFileWatching1921149570/001/parent/test-1689172679812
+      # filewatcher_test.go:146: Timed out waiting for filesystem event at /build/TestFileWatching1921149570/001/parent/child/test-1689172679812
+      # filewatcher_test.go:146: Timed out waiting for filesystem event at /build/TestFileWatching1921149570/001/parent/sibling/test-1689172679812
+      # filewatcher_test.go:146: got event {/build/TestFileWatching1921149570/001/parent/sibling/deep/path/test-1689172679812 1}
+      # filewatcher_test.go:146: got event {/build/TestFileWatching1921149570/001/parent/sibling/deep/test-1689172679812 1}
+      rm ./internal/filewatcher/filewatcher_test.go
     '';
 
   };
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "turbo";
   inherit src version;
   cargoBuildFlags = [
@@ -66,12 +138,8 @@ rustPlatform.buildRustPackage rec {
   ];
   RELEASE_TURBO_CLI = "true";
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "update-informer-0.6.0" = "sha256-uMp6PE4ccNGflbYz5WbLBKDtTlXNjOPA3vAnIMSdMEs=";
-    };
-  };
+  cargoHash = "sha256-GCo1PRB4JkHSXz7nBiKhJsC1xhMTlA136gGpUblPpVk=";
+
   RUSTC_BOOTSTRAP = 1;
   nativeBuildInputs = [
     pkg-config
@@ -81,6 +149,10 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
     fontconfig
+  ] ++ lib.optionals stdenv.isDarwin [
+      IOKit
+      CoreServices
+      CoreFoundation
   ];
 
   postInstall = ''
@@ -90,7 +162,12 @@ rustPlatform.buildRustPackage rec {
   # Browser tests time out with chromium and google-chrome
   doCheck = false;
 
-  passthru.tests.version = testers.testVersion { package = turbo; };
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex" "^\d+\.\d+\.\d+$" ];
+    };
+    tests.version = testers.testVersion { package = turbo; };
+  };
 
   meta = with lib; {
     description = "High-performance build system for JavaScript and TypeScript codebases";
