@@ -28914,6 +28914,8 @@ with pkgs;
 
   khmeros = callPackage ../data/fonts/khmeros { };
 
+  klassy = libsForQt5.callPackage ../data/themes/klassy { };
+
   knewave = callPackage ../data/fonts/knewave { };
 
   kochi-substitute = callPackage ../data/fonts/kochi-substitute { };
