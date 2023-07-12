@@ -3,10 +3,8 @@
 from urllib.request import Request, urlopen
 import dataclasses
 import subprocess
-import hashlib
 import os.path
 import semver
-import base64
 from typing import (
     Optional,
     Dict,
@@ -48,9 +46,9 @@ class Pin:
 
 
 def github_get(path: str) -> Dict:
-    """Send a GET request to Gituhb, optionally adding GITHUB_TOKEN auth header"""
+    """Send a GET request to GitHub, optionally adding GITHUB_TOKEN auth header"""
     url = f"https://api.github.com/{path.lstrip('/')}"
-    print(f"Retreiving {url}")
+    print(f"Retrieving {url}")
 
     req = Request(url)
 
@@ -65,16 +63,8 @@ def get_latest_release(owner: str, repo: str) -> str:
     return github_get(f"/repos/{owner}/{repo}/releases/latest")["tag_name"]
 
 
-def sha256_url(url: str) -> str:
-    sha256 = hashlib.sha256()
-    with urlopen(url) as resp:
-        while data := resp.read(1024):
-            sha256.update(data)
-    return "sha256-" + base64.urlsafe_b64encode(sha256.digest()).decode()
-
-
 def prefetch_github(owner: str, repo: str, rev: str) -> str:
-    """Prefetch github rev and return sha256 hash"""
+    """Prefetch GitHub rev and return SRI hash"""
     print(f"Prefetching {owner}/{repo}({rev})")
 
     proc = subprocess.run(
@@ -87,10 +77,10 @@ def prefetch_github(owner: str, repo: str, rev: str) -> str:
 
 
 def get_latest_tag(owner: str, repo: str, prerelease: bool = False) -> str:
-    """Get the latest tag from a Github Repo"""
+    """Get the latest tag from a GitHub Repo"""
     tags: List[str] = []
 
-    # As the Github API doesn't have any notion of "latest" for tags we need to
+    # As the GitHub API doesn't have any notion of "latest" for tags we need to
     # collect all of them and sort so we can figure out the latest one.
     i = 0
     while i <= 100:  # Prevent infinite looping
