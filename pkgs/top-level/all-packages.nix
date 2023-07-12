@@ -20153,7 +20153,11 @@ with pkgs;
 
   arrayfire = darwin.apple_sdk_11_0.callPackage ../development/libraries/arrayfire { };
 
-  arrow-cpp = callPackage ../development/libraries/arrow-cpp { };
+  arrow-cpp = callPackage ../development/libraries/arrow-cpp {
+    # arrow-cpp requires Boost 1.81 or newer when building with clang 15+.
+    boost = if stdenv.cc.isClang && lib.versionAtLeast (lib.getVersion stdenv.cc) "15"
+      then boost18x else boost;
+  };
 
   arrow-glib = callPackage ../development/libraries/arrow-glib { };
 
