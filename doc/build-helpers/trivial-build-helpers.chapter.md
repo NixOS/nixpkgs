@@ -226,12 +226,6 @@ Write a text file to the Nix store.
 
   Default: `""`
 
-`checkPhase` (String, _optional_)
-
-: Commands to run after generating the file.
-
-  Default: `""`
-
 `meta` (Attribute set, _optional_)
 
 : Additional metadata for the derivation.
@@ -262,6 +256,10 @@ Write a text file to the Nix store.
 
 : Extra arguments to pass to the underlying call to `stdenv.mkDerivation`.
 
+  Pass `preInstall`/`postInstall` to run commands before/after generating the file, or `installCheckPhase` to test the generated file.
+
+  `doInstallCheck` defaults to `true`. Disable the test commands by setting it to `false`.
+
   Default: `{}`
 
 The resulting store path will include some variation of the name, and it will be a file unless `destination` is used, in which case it will be a directory.
@@ -281,9 +279,11 @@ writeTextFile {
   '';
   executable = true;
   destination = "/some/subpath/my-cool-script";
-  checkPhase = ''
-    ${pkgs.shellcheck}/bin/shellcheck $out/some/subpath/my-cool-script
-  '';
+  derivationArgs = {
+    installCheckPhase = ''
+      ${pkgs.shellcheck}/bin/shellcheck $out/some/subpath/my-cool-script
+    '';
+  };
   meta = {
     license = pkgs.lib.licenses.cc0;
   };

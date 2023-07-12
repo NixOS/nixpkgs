@@ -41,7 +41,10 @@ lib.recurseIntoAttrs {
     name = "weird-names";
     destination = "/etc/${veryWeirdName}";
     text = ''passed!'';
-    checkPhase = ''
+    derivationArgs.postInstall = ''
+      echo -n '!!' >> "$target"
+    '';
+    derivationArgs.installCheckPhase = ''
       # intentionally hardcode everything here, to make sure
       # Nix does not mess with file paths
 
@@ -56,7 +59,7 @@ lib.recurseIntoAttrs {
       fi
 
       content=$(<"$fullPath")
-      expected="passed!"
+      expected="passed!!!"
 
       if [ "$content" = "$expected" ]; then
         echo "[PASS] Contents match!"
