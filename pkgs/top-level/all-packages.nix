@@ -589,6 +589,8 @@ with pkgs;
 
   faq = callPackage ../development/tools/faq { };
 
+  femtolisp = callPackage ../development/interpreters/femtolisp { };
+
   figma-agent = callPackage ../applications/graphics/figma-agent { };
 
   figma-linux = callPackage ../applications/graphics/figma-linux { };
