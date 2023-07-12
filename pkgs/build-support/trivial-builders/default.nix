@@ -89,18 +89,29 @@ rec {
     , text
     , executable ? false
     , destination ? ""
-    , checkPhase ? ""
+    , preInstall ? ""
+    , postInstall ? ""
+    , installCheckPhase ?
+      lib.optionalString (checkPhase != "") (
+        lib.warn
+          "writeTextFile: checkPhase is deprecated in favour of installCheckPhase, at ${
+            (pos: "${pos.file}:${toString pos.line}") (builtins.unsafeGetAttrPos "checkPhase" args)
+          }"
+          checkPhase
+      )
     , meta ? { }
     , allowSubstitutes ? false
     , preferLocalBuild ? true
     , derivationArgs ? { }
-    }:
+      # Deprecated arguments
+    , checkPhase ? ""    # Use installCheckPhase instead.
+    }@args:
     let
       matches = builtins.match "/bin/([^/]+)" destination;
     in
     runCommand name
       ({
-        inherit text executable checkPhase allowSubstitutes preferLocalBuild;
+        inherit text executable postInstall installCheckPhase allowSubstitutes preferLocalBuild;
         passAsFile = [ "text" ]
           ++ derivationArgs.passAsFile or [ ];
         meta = lib.optionalAttrs (executable && matches != null)
@@ -110,6 +121,9 @@ rec {
       } // removeAttrs derivationArgs [ "passAsFile" "meta" ])
       ''
         target=$out${lib.escapeShellArg destination}
+
+        runHook preInstall
+
         mkdir -p "$(dirname "$target")"
 
         if [ -e "$textPath" ]; then
@@ -122,7 +136,9 @@ rec {
           chmod +x "$target"
         fi
 
-        eval "$checkPhase"
+        runHook postInstall
+
+        eval "$installCheckPhase"
       '';
 
   # See doc/build-helpers/trivial-build-helpers.chapter.md
@@ -159,7 +175,7 @@ rec {
         #!${runtimeShell}
         ${text}
       '';
-      checkPhase = ''
+      installCheckPhase = ''
         ${stdenv.shellDryRun} "$target"
       '';
     };
@@ -175,7 +191,7 @@ rec {
         #!${runtimeShell}
         ${text}
       '';
-      checkPhase = ''
+      installCheckPhase = ''
         ${stdenv.shellDryRun} "$target"
       '';
       meta.mainProgram = name;
@@ -217,14 +233,29 @@ rec {
        */
       meta ? { },
       /*
-         The `checkPhase` to run. Defaults to `shellcheck` on supported
+         The `postInstall` phase, allowing programmatic modification of the
+         target text file.
+
+         The script path will be given as `$target` in `postInstall`.
+
+         Type: String
+      */
+      postInstall ? "",
+      /*
+         The `installCheckPhase` to run. Defaults to `shellcheck` on supported
          platforms and `bash -n`.
 
-         The script path will be given as `$target` in the `checkPhase`.
+         The script path will be given as `$target` in the `installCheckPhase`.
 
          Type: String
        */
-      checkPhase ? null,
+      installCheckPhase ? lib.optionalString (checkPhase != null) (
+        lib.warn
+          "writeShellApplication: checkPhase is deprecated in favour of installCheckPhase, at ${builtins.unsafeGetAttrPos "checkPhase" args
+            (pos: "${pos.file}:${toString pos.line}") (builtins.unsafeGetAttrPos "checkPhase" args)
+          }"
+          checkPhase
+      ),
       /*
          Checks to exclude when running `shellcheck`, e.g. `[ "SC2016" ]`.
 
@@ -251,9 +282,12 @@ rec {
          Type: AttrSet
        */
       derivationArgs ? { },
-    }:
-    writeTextFile {
-      inherit name meta derivationArgs;
+      /* Deprecated, use installCheckPhase instead
+      */
+      checkPhase ? null
+    }@args:
+    (writeTextFile {
+      inherit name meta postInstall derivationArgs;
       executable = true;
       destination = "/bin/${name}";
       allowSubstitutes = true;
@@ -277,7 +311,7 @@ rec {
         ${text}
       '';
 
-      checkPhase =
+      installCheckPhase =
         # GHC (=> shellcheck) isn't supported on some platforms (such as risc-v)
         # but we still want to use writeShellApplication on those platforms
         let
@@ -289,14 +323,32 @@ rec {
             ${lib.getExe shellcheck-minimal} ${excludeOption} "$target"
           '';
         in
-        if checkPhase == null then ''
-          runHook preCheck
+        if installCheckPhase == null then ''
+          runHook preInstallCheck
           ${stdenv.shellDryRun} "$target"
           ${shellcheckCommand}
-          runHook postCheck
+          runHook postInstallCheck
         ''
-        else checkPhase;
-    };
+        else installCheckPhase;
+    }).overrideAttrs (finalAttrs: previousAttrs: {
+      preCheck = "";
+      postCheck = "";
+      # Redirect preCheck/postCheck specification preInstallCheck/postInstallCheck
+      # and issue a warning.
+      # TODO: Convert to throw after 24.05 branch-off.
+      preInstallCheck = lib.optionalString (finalAttrs.preCheck != "")
+        (lib.warn
+          "writeShellApplication: Expect preInstallCheck instead of preCheck, at ${
+            (pos: "${pos.file}:${toString pos.line}") (builtins.unsafeGetAttrPos "preCheck" finalAttrs)
+          }"
+          finalAttrs.preCheck);
+      postInstallCheck = lib.optionalString (finalAttrs.postCheck != "")
+        (lib.warn
+          "writeShellApplication: Expect postInstallCheck instead of postCheck, at ${
+            (pos: "${pos.file}:${toString pos.line}") (builtins.unsafeGetAttrPos "postCheck" finalAttrs)
+          }"
+          finalAttrs.postCheck);
+    });
 
   # Create a C binary
   # TODO: add to writers? pkgs/build-support/writers

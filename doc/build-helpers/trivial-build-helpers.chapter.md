@@ -224,9 +224,17 @@ Write a text file to the Nix store.
 
   Default: `""`
 
-`checkPhase` (String, _optional_)
+`preInstall` (String, _optional_)
+
+: Commands to run before generating the file.
+
+`postInstall` (String, _optional_)
 
 : Commands to run after generating the file.
+
+`installCheckPhase` (String, _optional_)
+
+: Commands to test the installed files.
 
   Default: `""`
 
