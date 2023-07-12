@@ -86,5 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ siraben AndersonTorres ];
     mainProgram = "tpl";
     platforms = lib.platforms.all;
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 })
