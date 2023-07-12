@@ -1,36 +1,22 @@
 { lib, python3, fetchPypi }:
 
 let
-  python = python3.override {
-    self = python;
-    packageOverrides = self: super: {
-      tornado = super.tornado_4;
-    };
-  };
-
-  inherit (python.pkgs) buildPythonApplication iowait psutil pyzmq tornado mock six;
+  inherit (python3.pkgs) buildPythonApplication psutil pyzmq tornado;
 in
 
 buildPythonApplication rec {
   pname = "circus";
-  version = "0.16.1";
+  version = "0.18.0";
+  format = "flit";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0paccmqwgard2l0z7swcc3nwc418l9b4mfaddb4s31bpnqg02z6x";
+    hash = "sha256-GTzoIk4GjO1mckz0gxBvtmdLUaV1g6waDn7Xp+6Mcas=";
   };
-
-  postPatch = ''
-    # relax version restrictions to fix build
-    substituteInPlace setup.py \
-      --replace "pyzmq>=13.1.0,<17.0" "pyzmq>13.1.0"
-  '';
-
-  nativeCheckInputs = [ mock ];
 
   doCheck = false; # weird error
 
-  propagatedBuildInputs = [ iowait psutil pyzmq tornado six ];
+  propagatedBuildInputs = [ psutil pyzmq tornado ];
 
   meta = with lib; {
     description = "A process and socket manager";
