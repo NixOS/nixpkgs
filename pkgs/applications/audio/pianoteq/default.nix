@@ -2,7 +2,7 @@
 let
   versionForFile = v: builtins.replaceStrings ["."] [""] v;
 
-  mkPianoteq = { name, src, version, archdir ? if (stdenv.hostPlatform.system == "aarch64-linux") then "arm-64bit" else "x86-64bit", ... }:
+  mkPianoteq = { name, mainProgram, src, version, archdir ? if (stdenv.hostPlatform.system == "aarch64-linux") then "arm-64bit" else "x86-64bit", ... }:
     stdenv.mkDerivation rec {
       inherit src version;
 
@@ -47,12 +47,13 @@ let
         homepage = "https://www.modartt.com/pianoteq";
         description = "Software synthesizer that features real-time MIDI-control of digital physically modeled pianos and related instruments";
         license = licenses.unfree;
+        inherit mainProgram;
         platforms = [ "x86_64-linux" "aarch64-linux" ];
         maintainers = [ maintainers.mausch ];
       };
     };
 
-  fetchWithCurlScript = { name, sha256, script, impureEnvVars ? [] }:
+  fetchWithCurlScript = { name, hash, script, impureEnvVars ? [] }:
     stdenv.mkDerivation {
       inherit name;
       builder = writeShellScript "builder.sh" ''
@@ -81,7 +82,7 @@ let
       '';
       nativeBuildInputs = [ curl ];
       outputHashAlgo = "sha256";
-      outputHash = sha256;
+      outputHash = hash;
 
       impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ impureEnvVars ++ [
         # This variable allows the user to pass additional options to curl
@@ -89,9 +90,9 @@ let
       ];
     };
 
-  fetchPianoteqTrial = { name, sha256 }:
+  fetchPianoteqTrial = { name, hash }:
     fetchWithCurlScript {
-      inherit name sha256;
+      inherit name hash;
       script = ''
         html=$(
           "''${curl[@]}" --silent --request GET \
@@ -122,9 +123,9 @@ let
       '';
     };
 
-  fetchPianoteqWithLogin = { name, sha256 }:
+  fetchPianoteqWithLogin = { name, hash }:
     fetchWithCurlScript {
-      inherit name sha256;
+      inherit name hash;
 
       impureEnvVars = [ "NIX_MODARTT_USERNAME" "NIX_MODARTT_PASSWORD" ];
 
@@ -168,35 +169,48 @@ in {
   # TODO currently can't install more than one because `lame` clashes
   stage-trial = mkPianoteq rec {
     name = "stage-trial";
-    version = "8.0.8";
+    mainProgram = "Pianoteq 8 STAGE";
+    version = "8.1.1";
     src = fetchPianoteqTrial {
       name = "pianoteq_stage_linux_trial_v${versionForFile version}.7z";
-      sha256 = "sha256-dp0bTzzh4aQ2KQ3z9zk+3meKQY4YRYQ86rccHd3+hAQ=";
+      hash = "sha256-jMGv95WiD7UHAuSzKgauLhlsNvO/RWVrHd2Yf3kiUTo=";
     };
   };
   standard-trial = mkPianoteq rec {
     name = "standard-trial";
-    version = "8.0.8";
+    mainProgram = "Pianoteq 8";
+    version = "8.1.1";
     src = fetchPianoteqTrial {
       name = "pianoteq_linux_trial_v${versionForFile version}.7z";
-      sha256 = "sha256-LSrnrjkEhsX9TirUUFs9tNqH2A3cTt3I7YTfcTT6EP8=";
+      hash = "sha256-pL4tJMV8OTVLT4fwABcImWO+iaVe9gCdDN3rbkL+noc=";
     };
   };
   stage-6 = mkPianoteq rec {
     name = "stage-6";
+    mainProgram = "Pianoteq 6 STAGE";
     version = "6.7.3";
     archdir = if (stdenv.hostPlatform.system == "aarch64-linux") then throw "Pianoteq stage-6 is not supported on aarch64-linux" else "amd64";
     src = fetchPianoteqWithLogin {
       name = "pianoteq_stage_linux_v${versionForFile version}.7z";
-      sha256 = "0jy0hkdynhwv0zhrqkby0hdphgmcc09wxmy74rhg9afm1pzl91jy";
+      hash = "0jy0hkdynhwv0zhrqkby0hdphgmcc09wxmy74rhg9afm1pzl91jy";
     };
   };
   stage-7 = mkPianoteq rec {
     name = "stage-7";
+    mainProgram = "Pianoteq 7 STAGE";
     version = "7.3.0";
     src = fetchPianoteqWithLogin {
       name = "pianoteq_stage_linux_v${versionForFile version}.7z";
-      sha256 = "05w7sv9v38r6ljz9xai816w5z2qqwx88hcfjm241fvgbs54125hx";
+      hash = "05w7sv9v38r6ljz9xai816w5z2qqwx88hcfjm241fvgbs54125hx";
+    };
+  };
+  standard-8 = mkPianoteq rec {
+    name = "pro-8";
+    mainProgram = "Pianoteq 8";
+    version = "8.1.1";
+    src = fetchPianoteqWithLogin {
+      name = "pianoteq_linux_v${versionForFile version}.7z";
+      hash = "sha256-vWvo+ctJ0yN6XeJZZVhA3Ul9eWJWAh7Qo54w0TpOiVw=";
     };
   };
   # TODO other paid binaries, I don't own that so I don't know their hash.
