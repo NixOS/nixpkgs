@@ -107,6 +107,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/stenzek/duckstation";
     description = "Fast PlayStation 1 emulator for x86-64/AArch32/AArch64";
     license = licenses.gpl3Only;
+    mainProgram = "duckstation-qt";
     maintainers = with maintainers; [ guibou AndersonTorres ];
     platforms = platforms.linux;
   };
