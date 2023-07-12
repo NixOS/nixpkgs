@@ -12,11 +12,12 @@
 
 stdenv.mkDerivation rec {
   name = "holochain-launcher";
-  version = "0.9.4";
+  version = "0.11.0";
+  prerelease = "beta-2";
 
   src = fetchurl {
-    url = "https://github.com/holochain/launcher/releases/download/v${version}/holochain-launcher_${version}_amd64.deb";
-    sha256 = "sha256-qTzm4pwhYbEN96a/Dz/JcJcZ2OobyQJRNC2yH4CbhzQ=";
+    url = "https://github.com/holochain/launcher/releases/download/v${version}/holochain-launcher-${prerelease}_${version}_amd64.deb";
+    sha256 = "sha256-yxovSsPyIzFONa1ACeLkZqDCElDI3uTm81YOYW0/FXE=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mv usr $out
+    mv $out/bin/holochain-launcher-${prerelease} $out/bin/holochain-launcher
   '';
 
   preFixup = ''
