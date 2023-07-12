@@ -16,12 +16,12 @@
 , turbo
 }:
 let
-  version = "1.8.3";
+  version = "1.8.8";
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "turbo";
     rev = "v${version}";
-    sha256 = "sha256-aqe9ze6xZ5RUJJGT19nABhorrL9+ctSTS+ov97hG30o=";
+    sha256 = "sha256-Qn1qAdhzQrkdMbZs9zqZA0k7UTig39ljJ3DQn49pJf8=";
   };
 
   go-turbo = buildGoModule rec {
@@ -29,7 +29,7 @@ let
     pname = "go-turbo";
     modRoot = "cli";
 
-    vendorSha256 = "sha256-lqumN+xqJXEPI+nVnWSNfAyvQQ6fS9ao8uhwA1EbWWM=";
+    vendorSha256 = "sha256-/C5zUQk8bJPBu1L9RYJh74haGkB+37fWldeg/2U8X9I=";
 
     nativeBuildInputs = [
       git
@@ -76,6 +76,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config
     extra-cmake-modules
+    protobuf
   ];
   buildInputs = [
     openssl
