@@ -25467,7 +25467,7 @@ with pkgs;
     theme-spring = callPackage ../servers/icingaweb2/theme-spring { };
   };
 
-  irrd = callPackage ../servers/irrd { };
+  irrd = callPackage ../servers/misc/irrd { };
 
   inspircd = callPackage ../servers/irc/inspircd { };
 
