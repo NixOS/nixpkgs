@@ -10,6 +10,7 @@
 , stdenvNoCC
 , bintools ? null, libc ? null, coreutils ? null, shell ? stdenvNoCC.shell, gnugrep ? null
 , netbsd ? null, netbsdCross ? null
+, serenity ? null, serenityCross ? null
 , sharedLibraryLoader ?
   if libc == null then
     null
@@ -18,6 +19,13 @@
       netbsd.ld_elf_so
     else if libc != targetPackages.netbsdCross.headers then
       targetPackages.netbsdCross.ld_elf_so
+    else
+      null
+  else if stdenvNoCC.targetPlatform.isSerenity then
+    if !(targetPackages ? serenityCross) then
+      serenity.DynamicLoader
+    else if libc != targetPackages.serenityCross.serenity-headers then
+      targetPackages.serenityCross.DynamicLoader
     else
       null
   else
@@ -91,6 +99,7 @@ let
     else if targetPlatform.isLoongArch64              then "${sharedLibraryLoader}/lib/ld-linux-loongarch*.so.1"
     else if targetPlatform.isDarwin                   then "/usr/lib/dyld"
     else if targetPlatform.isFreeBSD                  then "/libexec/ld-elf.so.1"
+    else if targetPlatform.isSerenity                 then "${sharedLibraryLoader}/lib/Loader.so"
     else if lib.hasSuffix "pc-gnu" targetPlatform.config then "ld.so.1"
     else "";
 

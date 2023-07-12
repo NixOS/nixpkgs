@@ -297,6 +297,7 @@ rec {
     ghcjs    = { execFormat = unknown; families = { }; };
     genode   = { execFormat = elf;     families = { }; };
     mmixware = { execFormat = unknown; families = { }; };
+    serenity = { execFormat = elf;     families = { }; };
   } // { # aliases
     # 'darwin' is the kernel for all of them. We choose macOS by default.
     darwin = kernels.macos;
@@ -425,7 +426,7 @@ rec {
       }
       # cpu-vendor-os
       else if elemAt l 1 == "apple" ||
-              elem (elemAt l 2) [ "wasi" "redox" "mmixware" "ghcjs" "mingw32" ] ||
+              elem (elemAt l 2) [ "wasi" "redox" "mmixware" "ghcjs" "mingw32" "serenity" ] ||
               hasPrefix "freebsd" (elemAt l 2) ||
               hasPrefix "netbsd" (elemAt l 2) ||
               hasPrefix "genode" (elemAt l 2)
@@ -458,10 +459,10 @@ rec {
     parsed = {
       cpu = getCpu args.cpu;
       vendor =
-        /**/ if args ? vendor    then getVendor args.vendor
-        else if isDarwin  parsed then vendors.apple
-        else if isWindows parsed then vendors.pc
-        else                     vendors.unknown;
+        /**/ if args ? vendor                         then getVendor args.vendor
+        else if isDarwin  parsed                      then vendors.apple
+        else if isWindows parsed || isSerenity parsed then vendors.pc
+        else                                          vendors.unknown;
       kernel = if hasPrefix "darwin" args.kernel      then getKernel "darwin"
                else if hasPrefix "netbsd" args.kernel then getKernel "netbsd"
                else                                   getKernel args.kernel;

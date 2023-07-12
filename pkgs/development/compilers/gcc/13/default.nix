@@ -77,6 +77,8 @@ let majorVersion = "13";
         sha256 = "sha256-sMgA7nwE2ULa54t5g6VE6eJQYa69XvQrefi9U9f2t4g=";
       })
       ++ optional langD ../libphobos.patch
+      # Adds support for Serenity
+      ++ optionals targetPlatform.isSerenity (import ./../serenity-patches.nix { inherit fetchurl; })
 
       # backport fixes to build gccgo with musl libc
       ++ optionals (langGo && stdenv.hostPlatform.isMusl) [

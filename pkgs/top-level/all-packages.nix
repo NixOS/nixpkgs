@@ -15249,6 +15249,7 @@ with pkgs;
   inherit (let
       num =
         if (with stdenv.targetPlatform; isVc4 || libc == "relibc") then 6
+        else if stdenv.targetPlatform.isSerenity then 13
         else 12;
       numS = toString num;
     in {
@@ -15362,7 +15363,7 @@ with pkgs;
 
         # just for stage static
         crossStageStatic = true;
-        langCC = false;
+        langCC = stdenv.targetPlatform.isSerenity;
         libcCross = libcCross1;
         targetPackages.stdenv.cc.bintools = binutilsNoLibc;
         enableShared = false;
@@ -21121,6 +21122,7 @@ with pkgs;
     inherit (stdenv.targetPlatform) libc;
   in     if libc == "msvcrt" then targetPackages.windows.mingw_w64_headers or windows.mingw_w64_headers
     else if libc == "nblibc" then targetPackages.netbsdCross.headers or netbsdCross.headers
+    else if libc == "serenity" then targetPackages.serenityCross.serenity-headers or serenityCross.serenity-headers
     else if libc == "libSystem" && stdenv.targetPlatform.isAarch64 then targetPackages.darwin.LibsystemCross or darwin.LibsystemCross
     else null;
 
@@ -21140,6 +21142,7 @@ with pkgs;
     else if name == "newlib-nano" then targetPackages.newlib-nanoCross or newlib-nanoCross
     else if name == "musl" then targetPackages.muslCross or muslCross
     else if name == "msvcrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
+    else if name == "serenity" then targetPackages.serenityCross.LibC or serenityCross.LibC
     else if name == "libSystem" then
       if stdenv.targetPlatform.useiOSPrebuilt
       then targetPackages.darwin.iosSdkPkgs.libraries or darwin.iosSdkPkgs.libraries
@@ -41095,6 +41098,11 @@ with pkgs;
   newlib-nanoCross = callPackage ../development/misc/newlib {
     nanoizeNewlib = true;
     stdenv = crossLibcStdenv;
+  };
+
+  serenity = callPackage ../os-specific/serenity { };
+  serenityCross = callPackage ../os-specific/serenity {
+    stdenv = gccCrossLibcStdenv;
   };
 
   omnisharp-roslyn = callPackage ../development/tools/omnisharp-roslyn { };

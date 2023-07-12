@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     "bash_cv_dev_stdin=present"
     "bash_cv_dev_fd=standard"
     "bash_cv_termcap_lib=libncurses"
-  ] ++ lib.optionals (stdenv.hostPlatform.libc == "musl") [
+  ] ++ lib.optionals (stdenv.hostPlatform.libc == "musl" || stdenv.hostPlatform.isSerenity) [
     "--without-bash-malloc"
     "--disable-nls"
   ];

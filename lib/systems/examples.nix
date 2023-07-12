@@ -335,6 +335,17 @@ rec {
     useLLVM = true;
   };
 
+  #
+  # Serenity
+  #
+  x86_64-serenity = {
+    config = "x86_64-pc-serenity";
+  };
+
+  aarch64-serenity = {
+    config = "aarch64-pc-serenity";
+  };
+
   # Ghcjs
   ghcjs = {
     # This triple is special to GHC/Cabal/GHCJS and not recognized by autotools

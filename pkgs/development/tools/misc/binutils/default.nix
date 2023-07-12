@@ -98,6 +98,11 @@ stdenv.mkDerivation (finalAttrs: {
   # Patch from arch-community
   # https://github.com/archlinux/svntogit-community/blob/c8d53dd1734df7ab15931f7fad0c9acb8386904c/trunk/avr-size.patch
   ++ lib.optional targetPlatform.isAvr ./avr-size.patch
+  # Adds support for SerenityOS target
+  ++ lib.optional targetPlatform.isSerenity (fetchurl {
+    url = "https://github.com/SerenityOS/serenity/raw/02fe3feb710f97820bd3ee9e39ff3d05bb3f97fe/Toolchain/Patches/binutils/0001-Add-support-for-SerenityOS.patch";
+    sha256 = "0980ryk9rn2zh7hwkkrnkc9nypkqa334spb9y0zd7jfq1cs2g761";
+  })
   ++ lib.optional stdenv.targetPlatform.isWindows ./windres-locate-gcc.patch
   ++ lib.optional stdenv.targetPlatform.isMips64n64
      # this patch is from debian:
