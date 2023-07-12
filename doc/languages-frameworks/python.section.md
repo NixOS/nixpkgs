@@ -1185,8 +1185,7 @@ following are specific to `buildPythonPackage`:
   variables which will be available when the binary is run. For example,
   `makeWrapperArgs = ["--set FOO BAR" "--set BAZ QUX"]`.
 * `namePrefix`: Prepends text to `${name}` parameter. In case of libraries, this
-  defaults to `"python3.8-"` for Python 3.8, etc., and in case of applications
-  to `""`.
+  defaults to `"python3.8-"` for Python 3.8, etc., and in case of applications to `""`.
 * `pipInstallFlags ? []`: A list of strings. Arguments to be passed to `pip
   install`. To pass options to `python setup.py install`, use
   `--install-option`. E.g., `pipInstallFlags=["--install-option='--cpp_implementation'"]`.
@@ -1243,6 +1242,27 @@ with import <nixpkgs> {};
 
 in python.withPackages(ps: [ ps.blaze ])).env
 ```
+
+The next example shows a non trivial overriding of the `blas` implementation to
+be used through out all of the Python package set:
+
+```nix
+python3MyBlas = pkgs.python3.override {
+  packageOverrides = self: super: {
+    # We need toPythonModule for the package set to evaluate this
+    blas = super.toPythonModule(super.pkgs.blas.override {
+      blasProvider = super.pkgs.mkl;
+    });
+    lapack = super.toPythonModule(super.pkgs.lapack.override {
+      lapackProvider = super.pkgs.mkl;
+    });
+  };
+};
+```
+
+This is particularly useful for numpy and scipy users who want to gain speed with other blas implementations.
+Note that using simply `scipy = super.scipy.override { blas = super.pkgs.mkl; };` will likely result in
+compilation issues, because scipy dependencies need to use the same blas implementation as well.
 
 #### Optional extra dependencies {#python-optional-dependencies}
 
