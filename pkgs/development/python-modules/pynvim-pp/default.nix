@@ -7,15 +7,15 @@
 
 buildPythonPackage {
   pname = "pynvim-pp";
-  version = "unstable-2023-07-05";
+  version = "unstable-2023-07-09";
 
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "ms-jpq";
     repo = "pynvim_pp";
-    rev = "e9ac3171c7edcc0be020d63840d6af4222b69540";
-    hash = "sha256-H1sCwU2wl9HO92LNkvkCb1iLbZrTNMmYA/8qy9uCgyU=";
+    rev = "93aa25bf3ee039c4eb85f402d6adf6977033013b";
+    hash = "sha256-gZvIiFpP+eMLD8/xodY7ywWxhWXtethXviVRedW/bgo=";
   };
 
   nativeBuildInputs = [ setuptools ];
