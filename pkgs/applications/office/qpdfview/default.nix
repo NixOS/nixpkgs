@@ -30,7 +30,15 @@ mkDerivation rec {
   buildInputs = [
     qtbase
     qtsvg
-    poppler
+    # Until qpdfview builds with latest poppler
+    (poppler.overrideAttrs
+      (old: {
+        version = "23.02.0";
+        src = fetchurl {
+          url = "https://poppler.freedesktop.org/poppler-23.02.0.tar.xz";
+          hash = "sha256-MxXdonD+KzXPH0HSdZSMOWUvqGO5DeB2b2spPZpVj8k=";
+        };
+      }))
     djvulibre
     libspectre
     cups
