@@ -15112,7 +15112,7 @@ with pkgs;
 
   comby = callPackage ../development/tools/comby { };
 
-  inherit (coqPackages_8_16) compcert;
+  inherit (coqPackages) compcert;
 
   computecpp-unwrapped = callPackage ../development/compilers/computecpp { };
   computecpp = wrapCCWith rec {
