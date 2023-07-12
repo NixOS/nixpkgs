@@ -15999,6 +15999,8 @@ self: super: with self; {
 
   wtforms = callPackage ../development/python-modules/wtforms { };
 
+  wtforms-bootstrap5 = callPackage ../development/python-modules/wtforms-bootstrap5 { };
+
   wtf-peewee = callPackage ../development/python-modules/wtf-peewee { };
 
   wurlitzer = callPackage ../development/python-modules/wurlitzer { };
