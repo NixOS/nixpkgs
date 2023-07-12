@@ -1859,6 +1859,8 @@ self: super: with self; {
 
   circuitbreaker = callPackage ../development/python-modules/circuitbreaker { };
 
+  circus = callPackage ../development/python-modules/circus { };
+
   cirq = callPackage ../development/python-modules/cirq { };
 
   cirq-aqt = callPackage ../development/python-modules/cirq-aqt { };

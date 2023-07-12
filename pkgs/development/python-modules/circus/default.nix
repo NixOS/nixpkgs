@@ -1,10 +1,6 @@
-{ lib, python3, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi, psutil, pyzmq, tornado }:
 
-let
-  inherit (python3.pkgs) buildPythonApplication psutil pyzmq tornado;
-in
-
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "circus";
   version = "0.18.0";
   format = "flit";
