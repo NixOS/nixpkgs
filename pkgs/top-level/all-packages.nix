@@ -36471,6 +36471,10 @@ with pkgs;
 
   go-exploitdb = callPackage ../tools/security/go-exploitdb { };
 
+  gridcoin-research = libsForQt5.callPackage ../applications/blockchains/gridcoin-research {
+    boost = boost179;
+  };
+
   groestlcoin  = libsForQt5.callPackage ../applications/blockchains/groestlcoin {
     stdenv = darwin.apple_sdk_11_0.stdenv;
     withGui = true;
