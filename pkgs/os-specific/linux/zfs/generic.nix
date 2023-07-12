@@ -60,6 +60,13 @@ stdenv'.mkDerivation {
       url = "https://github.com/openzfs/zfs/commit/1f19826c9ac85835cbde61a7439d9d1fefe43a4a.patch";
       sha256 = "XEaK227ubfOwlB2s851UvZ6xp/QOtYUWYsKTkEHzmo0=";
     })
+    # Detailed rationale: https://github.com/openzfs/zfs/pull/15143
+    # This fixes a macro redefinition induced by a macro collision between bcachefs and ZFS codebases.
+    (fetchpatch {
+      name = "bcachefs-compat.patch";
+      url = "https://github.com/openzfs/zfs/pull/15143/commits/97bc0476dcb23db731d639e1eecdd6abe00a3291.patch";
+      hash = "sha256-UXm6d3UjOoCSEHWXMKeKzRxRO4GI9Sa4/+wtYJaBbfE=";
+    })
   ] ++ extraPatches;
 
   postPatch = optionalString buildKernel ''
