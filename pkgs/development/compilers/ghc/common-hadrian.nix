@@ -209,7 +209,7 @@ let
   # GHC doesn't seem to have {LLC,OPT}_HOST
   toolsForTarget = [
     (if targetPlatform.isGhcjs
-     then pkgsBuildTarget.emscripten
+     then pkgsBuildTarget.emscriptenCC
      else pkgsBuildTarget.targetPackages.stdenv.cc)
   ] ++ lib.optional useLLVM buildTargetLlvmPackages.llvm;
 
@@ -332,13 +332,6 @@ stdenv.mkDerivation ({
           --replace '*-android*|*-gnueabi*)' \
                     '*-android*|*-gnueabi*|*-musleabi*)'
       done
-  ''
-  # Need to make writable EM_CACHE for emscripten
-  # https://gitlab.haskell.org/ghc/ghc/-/wikis/javascript-backend#configure-fails-with-sub-word-sized-atomic-operations-not-available
-  + lib.optionalString targetPlatform.isGhcjs ''
-    export EM_CACHE="$(mktemp -d emcache.XXXXXXXXXX)"
-    cp -Lr ${targetCC /* == emscripten */}/share/emscripten/cache/* "$EM_CACHE/"
-    chmod u+rwX -R "$EM_CACHE"
   ''
   # Create bash array hadrianFlagsArray for use in buildPhase. Do it in
   # preConfigure, so overrideAttrs can be used to modify it effectively.

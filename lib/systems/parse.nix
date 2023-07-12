@@ -292,6 +292,7 @@ rec {
     openbsd  = { execFormat = elf;     families = { inherit bsd; }; };
     solaris  = { execFormat = elf;     families = { }; };
     wasi     = { execFormat = wasm;    families = { }; };
+    emscripten = { execFormat = wasm;    families = { }; };
     redox    = { execFormat = elf;     families = { }; };
     windows  = { execFormat = pe;      families = { }; };
     ghcjs    = { execFormat = unknown; families = { }; };
@@ -425,7 +426,7 @@ rec {
       }
       # cpu-vendor-os
       else if elemAt l 1 == "apple" ||
-              elem (elemAt l 2) [ "wasi" "redox" "mmixware" "ghcjs" "mingw32" ] ||
+              elem (elemAt l 2) [ "wasi" "emscripten" "redox" "mmixware" "ghcjs" "mingw32" ] ||
               hasPrefix "freebsd" (elemAt l 2) ||
               hasPrefix "netbsd" (elemAt l 2) ||
               hasPrefix "genode" (elemAt l 2)

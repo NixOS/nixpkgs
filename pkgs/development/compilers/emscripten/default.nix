@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, python3, nodejs, closurecompiler
+{ lib, stdenv, fetchFromGitHub, python3, nodejs, closurecompiler, python3Packages
 , jre, binaryen
 , llvmPackages
 , symlinkJoin, makeWrapper, substituteAll
 , buildNpmPackage
-, emscripten
-}:
+, emscriptenCache
+}: let
 
-stdenv.mkDerivation rec {
+executables = "em++ em-config emar emcc emcmake emconfigure emmake emranlib emrun emscons emsize";
+
+in stdenv.mkDerivation rec {
   pname = "emscripten";
   version = "3.1.42";
 
@@ -38,6 +40,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ nodejs python3 ];
+  depsBuildBuild = [ closurecompiler jre ];
 
   patches = [
     (substituteAll {
@@ -51,30 +54,33 @@ stdenv.mkDerivation rec {
 
     patchShebangs .
 
-    # fixes cmake support
-    sed -i -e "s/print \('emcc (Emscript.*\)/sys.stderr.write(\1); sys.stderr.flush()/g" emcc.py
-
-    # disables cache in user home, use installation directory instead
-    sed -i '/^def/!s/root_is_writable()/True/' tools/config.py
-    sed -i "/^def check_sanity/a\\  return" tools/shared.py
-
-    echo "EMSCRIPTEN_ROOT = '$out/share/emscripten'" > .emscripten
-    echo "LLVM_ROOT = '${llvmEnv}/bin'" >> .emscripten
+    echo "LLVM_ROOT = '${llvmEnv}/bin'" > .emscripten
     echo "NODE_JS = '${nodejs}/bin/node'" >> .emscripten
     echo "JS_ENGINES = [NODE_JS]" >> .emscripten
-    echo "CLOSURE_COMPILER = ['${closurecompiler}/bin/closure-compiler']" >> .emscripten
-    echo "JAVA = '${jre}/bin/java'" >> .emscripten
-    # to make the test(s) below work
-    # echo "SPIDERMONKEY_ENGINE = []" >> .emscripten
+    echo "CLOSURE_COMPILER = ['$closurecompiler/bin/closure-compiler']" >> .emscripten
+    echo "JAVA = '$jre/bin/java'" >> .emscripten
     echo "BINARYEN_ROOT = '${binaryen}'" >> .emscripten
 
-    # make emconfigure/emcmake use the correct (wrapped) binaries
-    sed -i "s|^EMCC =.*|EMCC='$out/bin/emcc'|" tools/shared.py
-    sed -i "s|^EMXX =.*|EMXX='$out/bin/em++'|" tools/shared.py
-    sed -i "s|^EMAR =.*|EMAR='$out/bin/emar'|" tools/shared.py
-    sed -i "s|^EMRANLIB =.*|EMRANLIB='$out/bin/emranlib'|" tools/shared.py
+    for b in ${executables}; do
+       sed -i $b -e"1a\
+       export NODE_PATH=${nodeModules};\
+       export PYTHON=${python3}/bin/python;\
+       export PYTHONPATH='${python3Packages.makePythonPath [ python3Packages.requests ]}';\
+  '' + lib.optionalString (emscriptenCache != null) ''
+       export EM_CACHE=${emscriptenCache}/share/emscripten/cache;\
+       export EM_FROZEN_CACHE=1;\
+  '' + ''
+      "
+    done
 
     runHook postBuild
+  '';
+
+  doCheck = emscriptenCache != null;
+  checkPhase = ''
+    runHook preCheck
+    python test/runner.py test_hello_world
+    runHook postCheck
   '';
 
   installPhase = ''
@@ -85,52 +91,25 @@ stdenv.mkDerivation rec {
     cp -r . $appdir
     chmod -R +w $appdir
 
+    echo "EMSCRIPTEN_ROOT = '$appdir'" >> $appdir/.emscripten
+
     mkdir -p $out/bin
-    for b in em++ em-config emar embuilder.py emcc emcmake emconfigure emmake emranlib emrun emscons emsize; do
-      makeWrapper $appdir/$b $out/bin/$b \
-        --set NODE_PATH ${nodeModules} \
-        --set EM_EXCLUSIVE_CACHE_ACCESS 1 \
-        --set PYTHON ${python3}/bin/python
+    for b in ${executables}; do
+      makeWrapper $appdir/$b $out/bin/$b
     done
-
-    # precompile libc (etc.) in all variants:
-    pushd $TMPDIR
-    echo 'int __main_argc_argv( int a, int b ) { return 42; }' >test.c
-    for LTO in -flto ""; do
-      for BIND in "" "--bind"; do
-        # starting with emscripten 3.1.32+,
-        # if pthreads and relocatable are both used,
-        # _emscripten_thread_exit_joinable must be exported
-        # (see https://github.com/emscripten-core/emscripten/pull/18376)
-        # TODO: get library cache to build with both enabled and function exported
-        $out/bin/emcc $LTO $BIND test.c
-        $out/bin/emcc $LTO $BIND -s RELOCATABLE test.c
-        $out/bin/emcc $LTO $BIND -s USE_PTHREADS test.c
-      done
-    done
-    popd
-
-    export PYTHON=${python3}/bin/python
-    export NODE_PATH=${nodeModules}
-    pushd $appdir
-    python test/runner.py test_hello_world
-    popd
+    makeWrapper $appdir/embuilder.py $out/bin/embuilder.py \
+      --set NODE_PATH ${nodeModules} \
+      --set PYTHON ${python3}/bin/python \
+      --set PYTHONPATH '${python3Packages.makePythonPath [ python3Packages.requests ]}'
 
     runHook postInstall
   '';
-
-  passthru = {
-    # HACK: Make emscripten look more like a cc-wrapper to GHC
-    # when building the javascript backend.
-    targetPrefix = "em";
-    bintools = emscripten;
-  };
 
   meta = with lib; {
     homepage = "https://github.com/emscripten-core/emscripten";
     description = "An LLVM-to-JavaScript Compiler";
     platforms = platforms.all;
-    maintainers = with maintainers; [ qknight matthewbauer raitobezarius ];
+    maintainers = with maintainers; [ qknight matthewbauer raitobezarius atnnn ];
     license = licenses.ncsa;
   };
 }

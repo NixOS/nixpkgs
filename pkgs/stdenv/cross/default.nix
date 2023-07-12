@@ -42,7 +42,12 @@ in lib.init bootStages ++ [
       else lib.id;
   in {
     inherit config;
-    overlays = overlays ++ crossOverlays;
+    overlays =
+      lib.optionals crossSystem.isEmscripten [
+        (import ../emscripten/overlay.nix)
+      ]
+      ++ overlays
+      ++ crossOverlays;
     selfBuild = false;
     stdenv = adaptStdenv (buildPackages.stdenv.override (old: rec {
       buildPlatform = localSystem;
@@ -69,6 +74,8 @@ in lib.init bootStages ++ [
              # `tryEval` wouldn't catch, wrecking accessing previous stages
              # when there is a C compiler and everything should be fine.
              then throw "no C compiler provided for this platform"
+           else if crossSystem.isEmscripten
+             then buildPackages.emscriptenCC
            else if crossSystem.isDarwin
              then buildPackages.llvmPackages.libcxxClang
            else if crossSystem.useLLVM or false
@@ -83,8 +90,9 @@ in lib.init bootStages ++ [
              (let f = p: !p.isx86 || builtins.elem p.libc [ "musl" "wasilibc" "relibc" ] || p.isiOS || p.isGenode;
                in f hostPlatform && !(f buildPlatform) )
              buildPackages.updateAutotoolsGnuConfigScriptsHook
-        ;
+        ++ lib.optional (hostPlatform.isEmscripten)
+          buildPackages.emscriptenCMakeSetupHook
+      ;
     }));
   })
-
 ]

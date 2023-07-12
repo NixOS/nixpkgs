@@ -68,7 +68,7 @@ rec {
 
     isBSD          = { kernel = { families = { inherit (kernelFamilies) bsd; }; }; };
     isDarwin       = { kernel = { families = { inherit (kernelFamilies) darwin; }; }; };
-    isUnix         = [ isBSD isDarwin isLinux isSunOS isCygwin isRedox ];
+    isUnix         = [ isBSD isDarwin isLinux isSunOS isCygwin isRedox isEmscripten ];
 
     isMacOS        = { kernel = kernels.macos; };
     isiOS          = { kernel = kernels.ios; };
@@ -81,6 +81,7 @@ rec {
     isCygwin       = { kernel = kernels.windows; abi = abis.cygnus; };
     isMinGW        = { kernel = kernels.windows; abi = abis.gnu; };
     isWasi         = { kernel = kernels.wasi; };
+    isEmscripten   = { kernel = kernels.emscripten; };
     isRedox        = { kernel = kernels.redox; };
     isGhcjs        = { kernel = kernels.ghcjs; };
     isGenode       = { kernel = kernels.genode; };

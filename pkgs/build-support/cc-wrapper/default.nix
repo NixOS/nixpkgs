@@ -14,7 +14,10 @@
 , propagateDoc ? cc != null && cc ? man
 , extraTools ? [], extraPackages ? [], extraBuildCommands ? ""
 , nixSupport ? {}
-, isGNU ? false, isClang ? cc.isClang or false, isCcache ? cc.isCcache or false, gnugrep ? null
+, isGNU ? false
+, isClang ? cc.isClang or false
+, isCcache ? cc.isCcache or false
+, gnugrep ? null
 , buildPackages ? {}
 , libcxx ? null
 

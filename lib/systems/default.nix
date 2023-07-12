@@ -60,6 +60,7 @@ rec {
         /**/ if final.isDarwin              then "libSystem"
         else if final.isMinGW               then "msvcrt"
         else if final.isWasi                then "wasilibc"
+        else if final.isEmscripten          then "emscripten"
         else if final.isRedox               then "relibc"
         else if final.isMusl                then "musl"
         else if final.isUClibc              then "uclibc"
@@ -80,6 +81,7 @@ rec {
       # now.
       linker =
         /**/ if final.useLLVM or false      then "lld"
+        else if final.isEmscripten          then "emscripten"
         else if final.isDarwin              then "cctools"
         # "bfd" and "gold" both come from GNU binutils. The existence of Gold
         # is why we use the more obscure "bfd" and not "binutils" for this
@@ -117,6 +119,7 @@ rec {
           wasi = "Wasi";
           redox = "Redox";
           genode = "Genode";
+          emscripten = "Emscripten";
         }.${final.parsed.kernel.name} or null;
 
          # uname -m
@@ -132,7 +135,7 @@ rec {
          # uname -r
          release = null;
       };
-      isStatic = final.isWasm || final.isRedox;
+      isStatic = final.isWasm || final.isRedox || final.isEmscripten;
 
       # Just a guess, based on `system`
       inherit
