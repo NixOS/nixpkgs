@@ -1244,6 +1244,29 @@ with import <nixpkgs> {};
 in python.withPackages(ps: [ ps.blaze ])).env
 ```
 
+The next example shows a non trivial overriding of the `blas` implementation to
+be used through out all of the Python package set:
+
+```nix
+python3MyBlas = pkgs.python3.override {
+  packageOverrides = self: super: {
+    # We need toPythonModule for the package set to evaluate this
+    blas = super.toPythonModule(super.pkgs.blas.override {
+      blasProvider = super.pkgs.mkl;
+    });
+    lapack = super.toPythonModule(super.pkgs.lapack.override {
+      lapackProvider = super.pkgs.mkl;
+    });
+  };
+};
+```
+
+This is particularly useful for numpy and scipy users who want to gain speed
+with other blas implementations. Note that using simply `scipy =
+super.scipy.override { blas = super.pkgs.mkl; };` will likely result in
+compilation issues, because scipy dependencies need to use the same blas
+implementation as well.
+
 #### Optional extra dependencies {#python-optional-dependencies}
 
 Some packages define optional dependencies for additional features. With
