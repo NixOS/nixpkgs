@@ -6,7 +6,7 @@
 rustPlatform.buildRustPackage {
   pname = "nls";
 
-  inherit (nickel) src version nativeBuildInputs;
+  inherit (nickel) src version nativeBuildInputs buildInputs;
 
   cargoHash = "sha256-UGfc5cr6vl10aCVihOEEZktF8MzT56C9/wSvSQhCiVs=";
 

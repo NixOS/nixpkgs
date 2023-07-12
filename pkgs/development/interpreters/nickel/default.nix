@@ -1,7 +1,10 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
 , python3
+, libiconv
+, darwin
 , nix-update-script
 }:
 
@@ -22,6 +25,12 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     python3
+  ] ++ lib.optionals stdenv.isDarwin [
+    libiconv
+  ];
+
+  buildInputs = [ ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
   ];
 
   passthru.updateScript = nix-update-script { };
