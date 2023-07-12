@@ -23,6 +23,14 @@ $ nix-shell
 
 If the build succeeds, the manual will be in `./result/share/doc/nixpkgs/manual.html`.
 
+## devmode {#sec-contributing-devmode}
+
+The shell in the manual source directory makes available a command, `devmode`.
+It is a daemon, that:
+1. watches the manual's source for changes and when they occur — rebuilds
+2. HTTP serves the manual, injecting a script that triggers reload on changes
+3. opens the manual in the default browser
+
 ## Syntax {#sec-contributing-markup}
 
 As per [RFC 0072](https://github.com/NixOS/rfcs/pull/72), all new documentation content should be written in [CommonMark](https://commonmark.org/) Markdown dialect.
