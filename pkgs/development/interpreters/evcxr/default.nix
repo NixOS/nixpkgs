@@ -21,13 +21,12 @@ let
   };
 
   cargoHome = packageNames: runCommand "cargo-home" {} ''
-    mkdir -p $out/index_base
-    ln -s ${withPackages.cratesIndex} $out/index_base/index
-
     mkdir -p $out
-
     cp "${withPackages.cargoNix packageNames}"/Cargo.toml $out
     cp "${withPackages.cargoNix packageNames}"/Cargo.lock $out
+
+    mkdir -p $out/src
+    touch $out/src/lib.rs
 
     cat <<EOT >> $out/config.toml
     [source.crates-io]
@@ -54,6 +53,10 @@ evcxr.overrideAttrs (oldAttrs: {
           "--set" "CARGO_HOME" "${cargoHome packageNames}"
           "--prefix" "PATH" ":" "${lib.makeBinPath [rustc cargo]}"
         ];
+
+        passthru = {
+          cargoHome = cargoHome packageNames;
+        };
       } ''
         mkdir -p $out/bin
         makeWrapper ${evcxr}/bin/evcxr $out/bin/evcxr $makeWrapperArgs
