@@ -5439,6 +5439,8 @@ self: super: with self; {
 
   jupyter-lsp = callPackage ../development/python-modules/jupyter-lsp { };
 
+  jupyter-nbextensions-configurator = callPackage ../development/python-modules/jupyter-nbextensions-configurator { };
+
   jupyter-server = callPackage ../development/python-modules/jupyter-server { };
 
   jupyter-server-fileid = callPackage ../development/python-modules/jupyter-server-fileid { };
