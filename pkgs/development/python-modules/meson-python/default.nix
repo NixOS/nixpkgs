@@ -39,6 +39,9 @@ buildPythonPackage rec {
   ] ++ lib.optionals (pythonOlder "3.10") [
     typing-extensions
   ];
+  setupHooks = [
+    ./add-build-flags.sh
+  ];
 
   # Ugly work-around. Drop ninja dependency.
   # We already have ninja, but it comes without METADATA.
