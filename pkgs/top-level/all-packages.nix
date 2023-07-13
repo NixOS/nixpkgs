@@ -21969,6 +21969,10 @@ with pkgs;
 
   libavif = callPackage ../development/libraries/libavif { };
 
+  libayatana-common = callPackage ../development/libraries/libayatana-common {
+    inherit (lomiri) cmake-extras;
+  };
+
   libb2 = callPackage ../development/libraries/libb2 { };
 
   libbacktrace = callPackage ../development/libraries/libbacktrace { };
