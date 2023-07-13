@@ -5431,6 +5431,8 @@ self: super: with self; {
 
   jupyter-contrib-core = callPackage ../development/python-modules/jupyter-contrib-core { };
 
+  jupyter-contrib-nbextensions = callPackage ../development/python-modules/jupyter-contrib-nbextensions { };
+
   jupyter_console = callPackage ../development/python-modules/jupyter_console { };
 
   jupyter-core = callPackage ../development/python-modules/jupyter-core { };
