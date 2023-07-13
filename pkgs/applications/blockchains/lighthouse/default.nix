@@ -14,6 +14,7 @@
 , rustPlatform
 , Security
 , sqlite
+, rust-jemalloc-sys
 , stdenv
 , SystemConfiguration
 , testers
@@ -70,6 +71,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     sqlite
+    rust-jemalloc-sys
   ] ++ lib.optionals stdenv.isDarwin [
     CoreFoundation
     Security

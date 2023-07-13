@@ -11,6 +11,7 @@
 , sqlite
 , pam
 , bashInteractive
+, rust-jemalloc-sys
 }:
 
 let
@@ -59,6 +60,7 @@ rustPlatform.buildRustPackage rec {
     openssl
     sqlite
     pam
+    rust-jemalloc-sys
   ];
 
   # The UI needs to be in place before the tests are run.
