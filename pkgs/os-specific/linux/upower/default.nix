@@ -25,7 +25,7 @@
 , withDocs ? (stdenv.buildPlatform == stdenv.hostPlatform)
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "upower";
   version = "1.90.0";
 
@@ -36,14 +36,15 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "upower";
     repo = "upower";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+C/4dDg6WTLpBgkpNyxjthSdqYdaTLC8vG6jG1LNJ7w=";
   };
 
-  # Remove when this is fixed upstream:
-  # https://gitlab.freedesktop.org/upower/upower/-/issues/214
-  patches = lib.optional (stdenv.hostPlatform.system == "i686-linux")
-    ./i686-test-remove-battery-check.patch;
+  patches = lib.optionals (stdenv.hostPlatform.system == "i686-linux") [
+    # Remove when this is fixed upstream:
+    # https://gitlab.freedesktop.org/upower/upower/-/issues/214
+    ./i686-test-remove-battery-check.patch
+  ];
 
   strictDeps = true;
 
@@ -130,31 +131,33 @@ stdenv.mkDerivation rec {
     # Move stuff from DESTDIR to proper location.
     # We use rsync to merge the directories.
     for dir in etc var; do
-        rsync --archive "${DESTDIR}/$dir" "$out"
-        rm --recursive "${DESTDIR}/$dir"
+        rsync --archive "$DESTDIR/$dir" "$out"
+        rm --recursive "$DESTDIR/$dir"
     done
     for o in out dev; do
-        rsync --archive "${DESTDIR}/''${!o}" "$(dirname "''${!o}")"
-        rm --recursive "${DESTDIR}/''${!o}"
+        rsync --archive "$DESTDIR/''${!o}" "$(dirname "''${!o}")"
+        rm --recursive "$DESTDIR/''${!o}"
     done
     # Ensure the DESTDIR is removed.
-    rmdir "${DESTDIR}/nix/store" "${DESTDIR}/nix" "${DESTDIR}"
+    rmdir "$DESTDIR/nix/store" "$DESTDIR/nix" "$DESTDIR"
   '';
 
-  # HACK: We want to install configuration files to $out/etc
-  # but upower should read them from /etc on a NixOS system.
-  # With autotools, it was possible to override Make variables
-  # at install time but Meson does not support this
-  # so we need to convince it to install all files to a temporary
-  # location using DESTDIR and then move it to proper one in postInstall.
-  DESTDIR = "${placeholder "out"}/dest";
+  env = {
+    # HACK: We want to install configuration files to $out/etc
+    # but upower should read them from /etc on a NixOS system.
+    # With autotools, it was possible to override Make variables
+    # at install time but Meson does not support this
+    # so we need to convince it to install all files to a temporary
+    # location using DESTDIR and then move it to proper one in postInstall.
+    DESTDIR = "${placeholder "out"}/dest";
+  };
 
   meta = with lib; {
     homepage = "https://upower.freedesktop.org/";
-    changelog = "https://gitlab.freedesktop.org/upower/upower/-/blob/v${version}/NEWS";
+    changelog = "https://gitlab.freedesktop.org/upower/upower/-/blob/v${finalAttrs.version}/NEWS";
     description = "A D-Bus service for power management";
     maintainers = teams.freedesktop.members;
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
   };
-}
+})
