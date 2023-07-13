@@ -18068,6 +18068,8 @@ with pkgs;
 
   nls = callPackage ../development/tools/language-servers/nls { };
 
+  openscad-lsp = callPackage ../development/tools/language-servers/openscad-lsp { };
+
   pylyzer = callPackage ../development/tools/language-servers/pylyzer { };
 
   rnix-lsp = callPackage ../development/tools/language-servers/rnix-lsp { };
