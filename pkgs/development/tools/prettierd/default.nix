@@ -45,7 +45,7 @@ mkYarnPackage rec {
     homepage = "https://github.com/fsouza/prettierd";
     license = licenses.isc;
     changelog = "https://github.com/fsouza/prettierd/blob/${src.rev}/CHANGELOG.md";
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ NotAShelf n3oney ];
   };
 }
