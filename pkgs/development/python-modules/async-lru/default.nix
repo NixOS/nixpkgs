@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "async-lru";
-  version = "2.0.2";
+  version = "2.0.3";
 
   disabled = pythonOlder "3.8";
 
@@ -18,11 +18,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "async-lru";
-    rev = "v${version}";
-    hash = "sha256-kcvtF/p1L5OVXJSRxRQ0NMFtV29tAysZs8cnTHqOBOo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-5NlcufnCqcB8k8nscFJGwlpEbDJG5KAEwWBat5dvI84=";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [
     typing-extensions
   ];
 

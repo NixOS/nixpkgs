@@ -214,26 +214,81 @@ The last checkbox is fits [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blo
 - Hydra builds for master and staging should not be used as testing platform, it’s a build farm for changes that have been already tested.
 - When changing the bootloader installation process, extra care must be taken. Grub installations cannot be rolled back, hence changes may break people’s installations forever. For any non-trivial change to the bootloader please file a PR asking for review, especially from \@edolstra.
 
-::: {.figure #fig-staging-workflow}
-# Staging workflow
-<!-- generated from ./staging-workflow.dot using: dot -Tsvg staging-workflow.dot > staging-workflow.svg -->
-![Staging workflow](./staging-workflow.svg)
-:::
+### Branches {#submitting-changes-branches}
 
-[This GitHub Action](https://github.com/NixOS/nixpkgs/blob/master/.github/workflows/periodic-merge-6h.yml) brings changes from `master` to `staging-next` and from `staging-next` to `staging` every 6 hours; these are the blue arrows in the diagram above.  The purple arrows in the diagram above are done manually and much less frequently.  You can get an idea of how often these merges occur by looking at the git history.
+The `nixpkgs` repository has three major branches:
+- `master`
+- `staging`
+- `staging-next`
+
+The most important distinction between them is that `staging`
+(colored red in the diagram below) can receive commits which cause
+a mass-rebuild (for example, anything that changes the `drvPath` of
+`stdenv`).  The other two branches `staging-next` and `master`
+(colored green in the diagram below) can *not* receive commits which
+cause a mass-rebuild.
+
+Arcs between the branches show possible merges into these branches,
+either from other branches or from independently submitted PRs.  The
+colors of these edges likewise show whether or not they could
+trigger a mass rebuild (red) or must not trigger a mass rebuild
+(green).
+
+Hydra runs automatic builds for the green branches.
+
+Notice that the automatic merges are all green arrows.  This is by
+design.  Any merge which might cause a mass rebuild on a branch
+which has automatic builds (`staging-next`, `master`) will be a
+manual merge to make sure it is good use of compute power.
+
+Nixpkgs has two branches so that there is one branch (`staging`)
+which accepts mass-rebuilding commits, and one fast-rebuilding
+branch which accepts independent PRs (`master`).  The `staging-next`
+branch allows the Hydra operators to batch groups of commits to
+`staging` to be built.  By keeping the `staging-next` branch
+separate from `staging`, this batching does not block
+developers from merging changes into `staging`.
+
+```{.graphviz caption="Staging workflow"}
+digraph {
+    master [color="green" fontcolor=green]
+    "staging-next" [color="green" fontcolor=green]
+    staging [color="red" fontcolor=red]
+
+    "small changes" [fontcolor=green shape=none]
+    "small changes" -> master [color=green]
+
+    "mass-rebuilds and other large changes" [fontcolor=red shape=none]
+    "mass-rebuilds and other large changes" -> staging [color=red]
+
+    "critical security fixes" [fontcolor=green shape=none]
+    "critical security fixes" -> master [color=green]
+
+    "staging fixes which do not cause staging to mass-rebuild" [fontcolor=green shape=none]
+    "staging fixes which do not cause staging to mass-rebuild" -> "staging-next" [color=green]
+
+    "staging-next" -> master [color="red"] [label="manual merge"] [fontcolor="red"]
+    "staging" -> "staging-next" [color="red"] [label="manual merge"] [fontcolor="red"]
+
+    master -> "staging-next" [color="green"] [label="automatic merge (GitHub Action)"] [fontcolor="green"]
+    "staging-next" -> staging [color="green"] [label="automatic merge (GitHub Action)"] [fontcolor="green"]
+}
+```
+
+[This GitHub Action](https://github.com/NixOS/nixpkgs/blob/master/.github/workflows/periodic-merge-6h.yml) brings changes from `master` to `staging-next` and from `staging-next` to `staging` every 6 hours; these are the green arrows in the diagram above.  The red arrows in the diagram above are done manually and much less frequently.  You can get an idea of how often these merges occur by looking at the git history.
 
 
-### Master branch {#submitting-changes-master-branch}
+#### Master branch {#submitting-changes-master-branch}
 
 The `master` branch is the main development branch. It should only see non-breaking commits that do not cause mass rebuilds.
 
-### Staging branch {#submitting-changes-staging-branch}
+#### Staging branch {#submitting-changes-staging-branch}
 
 The `staging` branch is a development branch where mass-rebuilds go. Mass rebuilds are commits that cause rebuilds for many packages, like more than 500 (or perhaps, if it's 'light' packages, 1000). It should only see non-breaking mass-rebuild commits. That means it is not to be used for testing, and changes must have been well tested already. If the branch is already in a broken state, please refrain from adding extra new breakages.
 
 During the process of a releasing a new NixOS version, this branch or the release-critical packages can be restricted to non-breaking changes.
 
-### Staging-next branch {#submitting-changes-staging-next-branch}
+#### Staging-next branch {#submitting-changes-staging-next-branch}
 
 The `staging-next` branch is for stabilizing mass-rebuilds submitted to the `staging` branch prior to merging them into `master`. Mass-rebuilds must go via the `staging` branch. It must only see non-breaking commits that are fixing issues blocking it from being merged into the `master` branch.
 
@@ -241,7 +296,7 @@ If the branch is already in a broken state, please refrain from adding extra new
 
 During the process of a releasing a new NixOS version, this branch or the release-critical packages can be restricted to non-breaking changes.
 
-### Stable release branches {#submitting-changes-stable-release-branches}
+#### Stable release branches {#submitting-changes-stable-release-branches}
 
 The same staging workflow applies to stable release branches, but the main branch is called `release-*` instead of `master`.
 
