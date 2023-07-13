@@ -856,6 +856,8 @@ with pkgs;
 
   edwin = callPackage ../data/fonts/edwin { };
 
+  edwood = callPackage ../applications/editors/edwood { };
+
   etBook = callPackage ../data/fonts/et-book { };
 
   fntsample = callPackage ../tools/misc/fntsample { };
