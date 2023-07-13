@@ -12,6 +12,9 @@ stdenv.mkDerivation {
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "prefix=$(out)" ];
 
+  # causes redefinition of _FORTIFY_SOURCE
+  hardeningDisable = [ "fortify3" ];
+
   postInstall = ''
     mkdir -p $out/share/man/man1
     cp man/mmc.1 $out/share/man/man1/
