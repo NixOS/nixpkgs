@@ -90,7 +90,9 @@ in
         {
           bind = "127.0.0.1";
           tls_enabled = true;
-          pictrs_url = with config.services.pict-rs; "http://${address}:${toString port}";
+          pictrs = {
+            url = with config.services.pict-rs; "http://${address}:${toString port}";
+          };
           actor_name_max_length = 20;
 
           rate_limit.message = 180;
@@ -253,6 +255,7 @@ in
           LEMMY_UI_LEMMY_INTERNAL_HOST = "127.0.0.1:${toString cfg.settings.port}";
           LEMMY_UI_LEMMY_EXTERNAL_HOST = cfg.settings.hostname;
           LEMMY_UI_HTTPS = "false";
+          NODE_ENV = "production";
         };
 
         documentation = [
