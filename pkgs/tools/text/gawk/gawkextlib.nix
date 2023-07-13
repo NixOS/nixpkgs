@@ -1,7 +1,7 @@
-{ lib, stdenv, recurseIntoAttrs, fetchgit, writeText, pkg-config, autoreconfHook
+{ lib, stdenv, recurseIntoAttrs, fetchgit, pkg-config, autoreconfHook
 , autoconf, automake, libiconv, libtool, texinfo, gettext, gawk, rapidjson, gd
-, shapelib, libharu, lmdb, gmp, glibcLocales, mpfr, more, postgresql, hiredis
-, expat, tre, makeWrapper }:
+, libharu, lmdb, gmp, glibcLocales, mpfr, more, postgresql, hiredis
+, expat, tre }:
 
 let
   buildExtension = lib.makeOverridable

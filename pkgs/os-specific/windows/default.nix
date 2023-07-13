@@ -20,7 +20,7 @@ lib.makeScope newScope (self: with self; {
   crossThreadsStdenv = overrideCC crossLibcStdenv
     (if stdenv.hostPlatform.useLLVM or false
      then buildPackages.llvmPackages_8.clangNoLibcxx
-     else buildPackages.gccCrossStageStatic.override (old: {
+     else buildPackages.gccWithoutTargetLibc.override (old: {
        bintools = old.bintools.override {
          libc = libcCross;
        };

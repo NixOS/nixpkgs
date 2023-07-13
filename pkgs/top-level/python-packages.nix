@@ -1215,6 +1215,8 @@ self: super: with self; {
 
   banal = callPackage ../development/python-modules/banal { };
 
+  bandcamp-api = callPackage ../development/python-modules/bandcamp-api { };
+
   bandit = callPackage ../development/python-modules/bandit { };
 
   bangla = callPackage ../development/python-modules/bangla { };
@@ -3520,6 +3522,8 @@ self: super: with self; {
   factory_boy = callPackage ../development/python-modules/factory_boy { };
 
   fairscale = callPackage ../development/python-modules/fairscale { };
+
+  fairseq = callPackage ../development/python-modules/fairseq { };
 
   faiss = toPythonModule (pkgs.faiss.override {
     pythonSupport = true;

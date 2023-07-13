@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, zlib, e2fsprogs, bash, bzip2 }:
+{ lib, stdenv, fetchurl, openssl, zlib, e2fsprogs, bzip2 }:
 
 let
   zshCompletion = fetchurl {

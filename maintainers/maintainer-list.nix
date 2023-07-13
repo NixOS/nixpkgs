@@ -2851,6 +2851,13 @@
     githubId = 6608071;
     name = "Charles Huyghues-Despointes";
   };
+  chayleaf = {
+    email = "chayleaf-nix@pavluk.org";
+    github = "chayleaf";
+    githubId = 9590981;
+    matrix = "@chayleaf:matrix.pavluk.org";
+    name = "Anna Pavlyuk";
+  };
   chekoopa = {
     email = "chekoopa@mail.ru";
     github = "chekoopa";
@@ -17255,7 +17262,7 @@
     githubId = 7953163;
     name = "Vika Shleina";
     keys = [{
-      fingerprint = "B3C0 DA1A C18B 82E8 CA8B  B1D1 4F62 CD07 CE64 796A";
+      fingerprint = "5814 50EB 6E17 E715 7C63  E7F1 9879 8C3C 4D68 8D6D";
     }];
   };
   vincentbernat = {
