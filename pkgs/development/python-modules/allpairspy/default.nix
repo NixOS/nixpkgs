@@ -17,9 +17,12 @@ buildPythonPackage rec {
     hash = "sha256-0wzoQDHB7Tt80ZTlKrNxFutztsgUuin5D2eb80c4PBI=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   nativeCheckInputs = [
     pytestCheckHook
-    setuptools
   ];
 
   pythonImportsCheck = [
