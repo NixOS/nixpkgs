@@ -2909,6 +2909,12 @@
     githubId = 14790226;
     name = "Hubert Jasudowicz";
   };
+  c-h-johnson = {
+    name = "Charles Johnson";
+    email = "charles@charlesjohnson.name";
+    github = "c-h-johnson";
+    githubId = 138403247;
+  };
   chkno = {
     email = "scottworley@scottworley.com";
     github = "chkno";
