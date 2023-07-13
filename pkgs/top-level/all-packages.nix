@@ -16256,6 +16256,8 @@ with pkgs;
 
   kind2 = darwin.apple_sdk_11_0.callPackage ../development/compilers/kind2 { };
 
+  kingstvis = callPackage ../applications/science/electronics/kingstvis { };
+
   knightos-genkfs = callPackage ../development/tools/knightos/genkfs { };
 
   regenkfs = callPackage ../development/tools/knightos/regenkfs { };
