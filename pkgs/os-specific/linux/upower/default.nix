@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitLab
 , fetchpatch
+, makeWrapper
 , pkg-config
 , rsync
 , libxslt
@@ -23,13 +24,14 @@
 , useIMobileDevice ? true
 , libimobiledevice
 , withDocs ? (stdenv.buildPlatform == stdenv.hostPlatform)
+, nixosTests
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "upower";
   version = "1.90.2";
 
-  outputs = [ "out" "dev" ]
+  outputs = [ "out" "dev" "installedTests" ]
     ++ lib.optionals withDocs [ "devdoc" ];
 
   src = fetchFromGitLab {
@@ -44,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Remove when this is fixed upstream:
     # https://gitlab.freedesktop.org/upower/upower/-/issues/214
     ./i686-test-remove-battery-check.patch
+  ] ++ [
+    ./installed-tests-path.patch
   ];
 
   strictDeps = true;
@@ -61,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     gobject-introspection
     libxslt
+    makeWrapper
     pkg-config
     rsync
   ];
@@ -72,6 +77,14 @@ stdenv.mkDerivation (finalAttrs: {
     systemd
     # Duplicate from nativeCheckInputs until https://github.com/NixOS/nixpkgs/issues/161570 is solved
     umockdev
+
+    # For installed tests.
+    (python3.withPackages (pp: [
+      pp.dbus-python
+      pp.python-dbusmock
+      pp.pygobject3
+      pp.packaging
+    ]))
   ] ++ lib.optionals useIMobileDevice [
     libimobiledevice
   ];
@@ -99,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dudevhwdbdir=${placeholder "out"}/lib/udev/hwdb.d"
     "-Dintrospection=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "auto" else "disabled"}"
     "-Dgtk-doc=${lib.boolToString withDocs}"
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
   ];
 
   doCheck = true;
@@ -106,6 +120,9 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs src/linux/integration-test.py
     patchShebangs src/linux/unittest_inspector.py
+
+    substituteInPlace src/linux/integration-test.py \
+      --replace "/usr/share/dbus-1" "$out/share/dbus-1"
   '';
 
   preCheck = ''
@@ -127,6 +144,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
+  postCheck = ''
+    # Undo patchShebangs from postPatch so that it can be replaced with runtime shebang
+    # unittest_inspector.py intentionally not reverted because it would trigger
+    # meson rebuild during install and it is not used at runtime anyway.
+    sed -Ei 's~#!.+/bin/python3~#!/usr/bin/python3~' \
+      ../src/linux/integration-test.py
+  '';
+
   postInstall = ''
     # Move stuff from DESTDIR to proper location.
     # We use rsync to merge the directories.
@@ -134,12 +159,23 @@ stdenv.mkDerivation (finalAttrs: {
         rsync --archive "$DESTDIR/$dir" "$out"
         rm --recursive "$DESTDIR/$dir"
     done
-    for o in out dev; do
+    for o in out dev installedTests; do
         rsync --archive "$DESTDIR/''${!o}" "$(dirname "''${!o}")"
         rm --recursive "$DESTDIR/''${!o}"
     done
     # Ensure the DESTDIR is removed.
     rmdir "$DESTDIR/nix/store" "$DESTDIR/nix" "$DESTDIR"
+  '';
+
+  postFixup = ''
+    wrapProgram "$installedTests/libexec/upower/integration-test.py" \
+      --prefix GI_TYPELIB_PATH : "${lib.makeSearchPath "lib/girepository-1.0" [
+        "$out"
+        umockdev.out
+      ]}" \
+      --prefix PATH : "${lib.makeBinPath [
+        umockdev
+      ]}"
   '';
 
   env = {
@@ -150,6 +186,12 @@ stdenv.mkDerivation (finalAttrs: {
     # so we need to convince it to install all files to a temporary
     # location using DESTDIR and then move it to proper one in postInstall.
     DESTDIR = "${placeholder "out"}/dest";
+  };
+
+  passthru = {
+    tests = {
+      installedTests = nixosTests.installed-tests.upower;
+    };
   };
 
   meta = with lib; {
