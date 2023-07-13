@@ -334,7 +334,7 @@ Examples:
     support_phase=$(jq -r '."support-phase"' <<< "$content")
 
     result=$(mktemp)
-    trap 'rm -f $result' TERM INT EXIT
+    trap "rm -f $result" TERM INT EXIT
 
     echo "{ buildAspNetCore, buildNetRuntime, buildNetSdk }:
 
