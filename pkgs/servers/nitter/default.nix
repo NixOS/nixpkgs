@@ -7,13 +7,13 @@
 
 nimPackages.buildNimPackage rec {
   pname = "nitter";
-  version = "unstable-2023-04-21";
+  version = "unstable-2023-07-10";
 
   src = fetchFromGitHub {
     owner = "zedeus";
     repo = "nitter";
-    rev = "2254a0728c587ebcec51ff08da0bf145606a629e";
-    hash = "sha256-d4KYBCcYbfvEtOqa1umcXmYsBRvhLgpHVoCUfY0XdXI=";
+    rev = "0bc3c153d9b38a3c02f321fb64a375fef6b97e8e";
+    hash = "sha256-msx14FZl2uRZvZjTlF7c3Va742HhiU6R2jdh4neIEV4=";
   };
 
   patches = [
