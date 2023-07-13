@@ -18,14 +18,14 @@
 
 buildDunePackage rec {
   pname = "eio";
-  version = "0.10";
+  version = "0.11";
 
   minimalOCamlVersion = "5.0";
   duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/ocaml-multicore/${pname}/releases/download/v${version}/${pname}-${version}.tbz";
-    sha256 = "OQ94FFB7gTPWwl46Z6dC1zHHymYlKyh7H7DjrU0Q7sw=";
+    sha256 = "DDN0IHRWJjFneIb0/koC+Wcs7JQpf/hcLthU21uqcao=";
   };
 
   propagatedBuildInputs = [
