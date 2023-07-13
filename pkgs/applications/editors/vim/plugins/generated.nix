@@ -1373,6 +1373,18 @@ final: prev:
     meta.homepage = "https://github.com/winston0410/cmd-parser.nvim/";
   };
 
+  cmp-beancount = buildVimPluginFrom2Nix {
+    pname = "cmp-beancount";
+    version = "2022-11-27";
+    src = fetchFromGitHub {
+      owner = "crispgm";
+      repo = "cmp-beancount";
+      rev = "da154ea94d598e6649d6ad01efa0a8611eff460d";
+      sha256 = "14y2h8g5ddcf2rqwgrrsk8m3j4wmk26vdlqzx439n893dzmzd2yg";
+    };
+    meta.homepage = "https://github.com/crispgm/cmp-beancount/";
+  };
+
   cmp-buffer = buildVimPluginFrom2Nix {
     pname = "cmp-buffer";
     version = "2022-08-10";
