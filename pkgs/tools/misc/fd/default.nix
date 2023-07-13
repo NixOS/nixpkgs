@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles, testers, fd }:
+{ lib, rustPlatform, fetchFromGitHub, installShellFiles, rust-jemalloc-sys, testers, fd }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fd";
@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-AstE8KGICgPhqRKlJecrE9iPUUWaOvca6ocWf85IzNo=";
 
   nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = [ rust-jemalloc-sys ];
 
   # skip flaky test
   checkFlags = [
