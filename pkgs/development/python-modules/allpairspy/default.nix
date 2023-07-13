@@ -29,6 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/thombashi/allpairspy";
     changelog = "https://github.com/thombashi/allpairspy/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }
