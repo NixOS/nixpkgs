@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "govulncheck";
-  version = "0.2.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "vuln";
     rev = "v${version}";
-    sha256 = "sha256-0lb1GwOcEpchT3TkdSve335bjYbVsuVzq1SvCDwtX/Q=";
+    sha256 = "sha256-cewQ03dK/k3mXevE09M01Yox/3ZWP6IrG0H4QsZMzy8=";
   };
 
   vendorSha256 = "sha256-r9XshbgVA5rppJF46SFYPad344ZHMLWTHTnL6vbIFH8=";
