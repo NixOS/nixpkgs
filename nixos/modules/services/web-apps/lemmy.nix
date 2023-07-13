@@ -90,7 +90,9 @@ in
         {
           bind = "127.0.0.1";
           tls_enabled = true;
-          pictrs_url = with config.services.pict-rs; "http://${address}:${toString port}";
+          pictrs = {
+            url = with config.services.pict-rs; "http://${address}:${toString port}";
+          };
           actor_name_max_length = 20;
 
           rate_limit.message = 180;
