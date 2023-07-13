@@ -9,12 +9,12 @@
 , openal
 }:
 
-stdenv.mkDerivation rec {
-  pname = "famistudio";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "famistudio-bin";
   version = "4.1.3";
 
   src = fetchzip {
-    url = "https://github.com/BleuBleu/FamiStudio/releases/download/${version}/FamiStudio${lib.strings.concatStrings (lib.splitVersion version)}-LinuxAMD64.zip";
+    url = "https://github.com/BleuBleu/FamiStudio/releases/download/${finalAttrs.version}/FamiStudio${lib.replaceStrings ["."] [""] finalAttrs.version}-LinuxAMD64.zip";
     stripRoot = false;
     hash = "sha256-eAdv0oObczbs8QLGYbxCrdFk/gN5DOCJ1dp/tg8JWIc=";
   };
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,lib/famistudio}
     mv * $out/lib/famistudio
 
-    makeWrapper ${lib.getExe dotnet-runtime} $out/bin/famistudio \
+    makeWrapper ${lib.getExe dotnet-runtime} $out/bin/FamiStudio \
       --add-flags $out/lib/famistudio/FamiStudio.dll \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libglvnd ]} \
       --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
@@ -56,16 +56,15 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://famistudio.org/";
-    description = "NES Music Editor";
+    description = "NES Music Editor (binary distribution)";
     longDescription = ''
       FamiStudio is very simple music editor for the Nintendo Entertainment System
       or Famicom. It is targeted at both chiptune artists and NES homebrewers.
     '';
     license = licenses.mit;
-    # Maybe possible to build from source but I'm not too familiar with C# packaging
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "famistudio";
+    mainProgram = "FamiStudio";
   };
-}
+})
