@@ -2,7 +2,7 @@
 #!nix-shell -I nixpkgs=../../../../. -i bash -p curl jq nix gnused
 # shellcheck shell=bash
 
-set -euo pipefail
+set -Eeuo pipefail
 
 release () {
   local content="$1"
@@ -332,6 +332,10 @@ Examples:
 
     channel_version=$(jq -r '."channel-version"' <<< "$content")
     support_phase=$(jq -r '."support-phase"' <<< "$content")
+
+    result=$(mktemp)
+    trap 'rm -f $result' TERM INT EXIT
+
     echo "{ buildAspNetCore, buildNetRuntime, buildNetSdk }:
 
 # v$channel_version ($support_phase)
@@ -354,7 +358,9 @@ $(aspnetcore_packages "${aspnetcore_version}")
 $(sdk_packages "${runtime_version}")
     ];
   };
-}" > "./versions/${sem_version}.nix"
+}" > "${result}"
+
+    cp "${result}" "./versions/${sem_version}.nix"
     echo "Generated ./versions/${sem_version}.nix"
   done
 }
