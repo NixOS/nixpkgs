@@ -92,6 +92,9 @@ buildPythonPackage rec {
     "tests/test_cookies.py"
   ];
 
+  # cherrypy does not support Python 3.11
+  doCheck = pythonOlder "3.11";
+
   meta = {
     changelog = "https://github.com/jaraco/jaraco.net/blob/${src.rev}/CHANGES.rst";
     description = "Networking tools by jaraco";
