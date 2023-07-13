@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libquotient";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "quotient-im";
     repo = "libQuotient";
     rev = version;
-    hash = "sha256-Lq404O2VjZ8vlXOW+rhsvWDvZsNd3APNbv6AadQCjhk=";
+    hash = "sha256-ecTHiWbsNDIUz+Sadh2pVbDRZFzdMkZXBYSjy1JqZrk=";
   };
 
   buildInputs = [ olm openssl qtbase qtmultimedia qtkeychain ];
