@@ -54,7 +54,7 @@
     };
   };
 
-  firefox-devedition = buildMozillaMach rec {
+  firefox-devedition = (buildMozillaMach rec {
     pname = "firefox-devedition";
     version = "116.0b3";
     applicationName = "Mozilla Firefox Developer Edition";
@@ -81,7 +81,9 @@
       versionSuffix = "b[0-9]*";
       baseUrl = "https://archive.mozilla.org/pub/devedition/releases/";
     };
-  };
+  }).overrideAttrs (prev: {
+    env.MOZ_REQUIRE_SIGNING = "";
+  });
 
   firefox-esr-102 = buildMozillaMach rec {
     pname = "firefox-esr-102";
