@@ -19,7 +19,7 @@ buildPythonPackage rec {
   version = "2.0.3";
   format = "setuptools";
 
-  disable = pythonOlder "3.7";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "alkaline-ml";

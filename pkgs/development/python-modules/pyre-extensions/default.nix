@@ -14,7 +14,7 @@ buildPythonPackage {
   inherit pname version;
   format = "setuptools";
 
-  disable = pythonOlder "3.7";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

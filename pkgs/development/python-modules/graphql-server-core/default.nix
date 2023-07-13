@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "graphql-server-core";
   version = "2.0.0";
-  disable = pythonOlder "3.6";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "graphql-python";

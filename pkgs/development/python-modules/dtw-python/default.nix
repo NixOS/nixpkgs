@@ -16,7 +16,7 @@ buildPythonPackage rec {
   version = "1.3.0";
   format = "pyproject";
 
-  disable = pythonOlder "3.6";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "DynamicTimeWarping";
