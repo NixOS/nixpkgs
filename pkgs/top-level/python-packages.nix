@@ -11699,6 +11699,8 @@ self: super: with self; {
 
   spectral-cube = callPackage ../development/python-modules/spectral-cube { };
 
+  speechbrain = callPackage ../development/python-modules/speechbrain { };
+
   speedtest-cli = callPackage ../development/python-modules/speedtest-cli { };
 
   speg = callPackage ../development/python-modules/speg { };
