@@ -1,4 +1,4 @@
-{ stdenv, lib, makeWrapper, fetchFromGitLab, openjade, gnumake, perl, flex
+{ stdenv, lib, makeWrapper, fetchFromGitLab, perl, flex
 , gnused, coreutils, which, opensp, groff, texlive, texinfo, withLatex ? false
 }:
 

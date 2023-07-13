@@ -10,19 +10,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.0.277";
+  version = "0.0.278";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-oFSMsiy9airi/SwOxA3YO02polvFl8ZZUHkD71c5unA=";
+    hash = "sha256-CM5oV9q9XYhaUV173VoFZl6dDALan4Lkl5PrvZN81c4=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "libcst-0.1.0" = "sha256-jG9jYJP4reACkFLrQBWOYH6nbKniNyFVItD0cTZ+nW0=";
+      "libcst-0.1.0" = "sha256-FgQE8ofRXQs/zHh7AKscXu0deN3IG+Nk/h+a09Co5R8=";
       "ruff_text_size-0.0.0" = "sha256-N4IzMeU8vqkfPBbC3o2bqkecCUcbgmX35QVdsTCtFfc=";
       "unicode_names2-0.6.0" = "sha256-eWg9+ISm/vztB0KIdjhq5il2ZnwGJQCleCYfznCI3Wg=";
     };

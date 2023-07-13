@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , bison
 , boost182
@@ -19,24 +18,14 @@
 
 stdenv.mkDerivation rec {
   pname = "nixd";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nixd";
     rev = version;
-    hash = "sha256-zeBVh9gPMR+1ETx0ujl+TUSoeHHR4fkQfxyOpCDKP9M=";
+    hash = "sha256-3PI/Bzs5WPIKevbRPz6TQ5yo7QpY4HeALrqbUY/zUgY=";
   };
-
-  patches = [
-    # Fix build on Darwin. Remove with next release.
-    # https://github.com/nix-community/nixd/pull/172
-    (fetchpatch {
-      url = "https://github.com/nix-community/nixd/commit/3dbe1eb6bde1949b510e19a2d1863a2f4d2329a6.patch";
-      hash = "sha256-130L+85bZIBmNfHqH3PdmQCBuxLnCs3IyAAoW15RQSk=";
-      includes = [ "lib/lspserver/src/Logger.cpp" "lib/nixd/src/ServerController.cpp" ];
-    })
-  ];
 
   mesonBuildType = "release";
 

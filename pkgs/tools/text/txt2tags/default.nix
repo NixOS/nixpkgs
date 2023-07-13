@@ -1,7 +1,6 @@
 { lib
 , python3
 , fetchFromGitHub
-, fetchpatch
 }:
 
 python3.pkgs.buildPythonApplication rec {

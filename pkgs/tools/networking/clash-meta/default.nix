@@ -10,11 +10,7 @@ buildGoModule rec {
     owner = "MetaCubeX";
     repo = "Clash.Meta";
     rev = "v${version}";
-    # macOS has a case-insensitive filesystem, so these two can be the same file
-    postFetch = ''
-      rm -f $out/.github/workflows/{Delete,delete}.yml
-    '';
-    hash = "sha256-trufMtk3t9jA6hc9CenHsd3k41nrCyJYyOuHzzWv+Jw=";
+    hash = "sha256-QXNMplVy4cDRbUUDwidto7jxgjStX5PmCLdAIW7Edn8=";
   };
 
   vendorHash = "sha256-lMeJ3z/iTHIbJI5kTzkQjNPMv5tGMJK/+PM36BUlpjE=";
