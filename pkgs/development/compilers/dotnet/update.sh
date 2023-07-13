@@ -64,6 +64,11 @@ generate_package_list() {
         local url hash
         url="${nuget_url}${pkg,,}/${version,,}/${pkg,,}.${version,,}.nupkg"
         hash="$(nix-prefetch-url "$url")"
+        if [[ -z "$hash" ]]; then
+            echo "Failed to fetch hash for $url" >&2
+            exit 1
+        fi
+
         echo "      (fetchNuGet { pname = \"${pkg}\"; version = \"${version}\"; sha256 = \"${hash}\"; })"
     done
 }
