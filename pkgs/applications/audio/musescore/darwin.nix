@@ -1,9 +1,9 @@
 { stdenv, lib, fetchurl, undmg }:
 
 let
-  versionComponents = [ "4" "0" "1" ];
+  versionComponents = [ "4" "1" "0" ];
   appName = "MuseScore ${builtins.head versionComponents}";
-  ref = "230121751";
+  ref = "231921401";
 in
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url =  "https://github.com/musescore/MuseScore/releases/download/v${version}/MuseScore-${version}.${ref}.dmg";
-    hash = "sha256-tkIEV+tCS0SYh2TlC70/zEBUEOSg//EaSKDGA7kH/vo=";
+    hash = "sha256-uyhGWcKSELz7WiWxZPoEJ+L5VvnHZFaU6aQtwhmmhHk=";
   };
 
   buildInputs = [ undmg ];

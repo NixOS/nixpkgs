@@ -8,27 +8,21 @@
 
 mkDerivation rec {
   pname = "musescore";
-  version = "4.0.2";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     rev = "v${version}";
-    sha256 = "sha256-3NSHUdTyAC/WOhkB6yBrqtV3LV4Hl1m3poB3ojtJMfs=";
+    sha256 = "sha256-CqW1f0VsF2lW79L3FY2ev+6FoHLbYOJ9LWHeBlWegeU=";
   };
-  patches = [
-    # See https://github.com/musescore/MuseScore/issues/15571
-    (fetchpatch {
-      url = "https://github.com/musescore/MuseScore/commit/365be5dfb7296ebee4677cb74b67c1721bc2cf7b.patch";
-      hash = "sha256-tJ2M21i3geO9OsjUQKNatSXTkJ5U9qMT4RLNdJnyoKw=";
-    })
-  ];
 
   cmakeFlags = [
-    "-DMUSESCORE_BUILD_CONFIG=release"
-    # Disable the _usage_ of the `/bin/crashpad_handler` utility. See:
-    # https://github.com/musescore/MuseScore/pull/15577
-    "-DBUILD_CRASHPAD_CLIENT=OFF"
+    "-DMUSESCORE_BUILD_MODE=release"
+    # Disable the build and usage of the `/bin/crashpad_handler` utility - it's
+    # not useful on NixOS, see:
+    # https://github.com/musescore/MuseScore/issues/15571
+    "-DMUE_BUILD_CRASHPAD_CLIENT=OFF"
     # Use our freetype
     "-DUSE_SYSTEM_FREETYPE=ON"
   ];
