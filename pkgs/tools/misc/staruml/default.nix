@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl
-, dpkg, patchelf, wrapGAppsHook
+, dpkg, wrapGAppsHook
 , hicolor-icon-theme
 , gtk3, glib, systemd
 , xorg, nss, nspr

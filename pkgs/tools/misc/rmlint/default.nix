@@ -1,7 +1,6 @@
 { lib, stdenv
 , cairo
 , fetchFromGitHub
-, gettext
 , glib
 , gobject-introspection
 , gtksourceview3

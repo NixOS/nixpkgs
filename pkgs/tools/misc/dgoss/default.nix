@@ -1,7 +1,6 @@
 { lib
 , fetchFromGitHub
 , resholve
-, substituteAll
 , bash
 , coreutils
 , goss

@@ -5,7 +5,6 @@
 , makeWrapper
 , jre
 , fetchzip
-, bash
 }:
 let
   desktopItem = makeDesktopItem {

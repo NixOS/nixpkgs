@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , fetchFromSourcehut
 , rustPlatform
 , installShellFiles
