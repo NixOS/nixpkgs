@@ -7,7 +7,7 @@
 , softhsm
 , opensc
 , yubihsm-shell
-, writeScriptBin }:
+}:
 
 buildGoModule rec {
   pname = "step-kms-plugin";
