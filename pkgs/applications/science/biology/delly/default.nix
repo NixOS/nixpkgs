@@ -1,19 +1,37 @@
-{ lib, stdenv, fetchFromGitHub, htslib, zlib, bzip2, xz, ncurses, boost, runCommand, delly }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, boost
+, bzip2
+, htslib
+, xz
+, zlib
+, delly
+, runCommand
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "delly";
   version = "1.1.6";
 
   src = fetchFromGitHub {
-      owner = "dellytools";
-      repo = pname;
-      rev = "v${version}";
-      sha256 = "sha256-/I//7MhsC/CcBeIJblzbjXp/yOSBm83KWJsrYpl6UJk=";
+    owner = "dellytools";
+    repo = "delly";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-/I//7MhsC/CcBeIJblzbjXp/yOSBm83KWJsrYpl6UJk=";
   };
 
-  buildInputs = [ zlib htslib bzip2 xz ncurses boost ];
+  buildInputs = [
+    boost
+    bzip2
+    htslib
+    xz
+    zlib
+  ];
 
-  EBROOTHTSLIB = htslib;
+  makeFlags = [
+    "EBROOTHTSLIB=${htslib}"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -24,7 +42,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    simple = runCommand "${pname}-test" { } ''
+    simple = runCommand "${finalAttrs.pname}-test" { } ''
       mkdir $out
       ${lib.getExe delly} call -g ${delly.src}/example/ref.fa ${delly.src}/example/sr.bam > $out/sr.vcf
       ${lib.getExe delly} lr -g ${delly.src}/example/ref.fa ${delly.src}/example/lr.bam > $out/lr.vcf
@@ -46,4 +64,4 @@ stdenv.mkDerivation rec {
       genomic rearrangements throughout the genome.
     '';
   };
-}
+})
