@@ -55,5 +55,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/ipcalc/ipcalc";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.unix;
   };
 }
