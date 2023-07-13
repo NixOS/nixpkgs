@@ -10,15 +10,17 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "probe-rs-cli";
-  version = "0.18.0";
+  pname = "probe-rs";
+  version = "0.19.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-5p3SxroztyJnBN/lzFagbpmAAIQmR9iwWHDMxuighDA=";
+    hash = "sha256-SPfCZil56UMr1Gy9pPZyngT0sHMQJrcE4KcjLvTD4js=";
   };
 
-  cargoHash = "sha256-0osWLXrpz6/CnCK1mfwnwqk+OsZLxO2JxbgRnqMhLeE=";
+  cargoHash = "sha256-QEOlsKnCMpm4L2Y1Byqntxjgg3zQFYCGkkwFRqmqx0I=";
+
+  cargoBuildFlags = [ "--features=cli" ];
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
 
