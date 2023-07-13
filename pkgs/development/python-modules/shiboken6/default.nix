@@ -9,7 +9,10 @@
 , libxcrypt
 }:
 
-llvmPackages.stdenv.mkDerivation rec {
+let
+  stdenv' = if stdenv.cc.isClang then stdenv else llvmPackages.stdenv;
+in
+stdenv'.mkDerivation rec {
   pname = "shiboken6";
   version = "6.5.0";
 
