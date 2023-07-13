@@ -39,5 +39,6 @@ mkDerivation rec {
     license     = licenses.isc;
     maintainers = with maintainers; [ peterhoeg ];
     inherit (neovim.meta) platforms;
+    mainProgram = "nvim-qt";
   };
 }
