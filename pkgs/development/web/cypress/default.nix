@@ -22,7 +22,7 @@ let
     };
     aarch64-linux = {
       platform = "linux-arm64";
-      checksum = "sha256-UxceWQ/eIGPFXNFIPSzBe431qqp54GwDbs9p7cqLosA=";
+      checksum = "sha256-aW3cUZqAdiOLzOC9BQM/bTkDVyw24Dx9nBSXgbiKe4c=";
     };
   };
   inherit (stdenv.hostPlatform) system;
