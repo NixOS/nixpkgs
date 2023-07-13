@@ -4859,6 +4859,8 @@ self: super: with self; {
 
   hyperopt = callPackage ../development/python-modules/hyperopt { };
 
+  hyperpyyaml = callPackage ../development/python-modules/hyperpyyaml { };
+
   hypothesis-auto = callPackage ../development/python-modules/hypothesis-auto { };
 
   hypothesis = callPackage ../development/python-modules/hypothesis { };
