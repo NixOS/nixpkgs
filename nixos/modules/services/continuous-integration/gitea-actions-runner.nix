@@ -31,6 +31,8 @@ let
 
   cfg = config.services.gitea-actions-runner;
 
+  settingsFormat = pkgs.formats.yaml { };
+
   # Check whether any runner instance label requires a container runtime
   # Empty label strings result in the upstream defined defaultLabels, which require docker
   # https://gitea.com/gitea/act_runner/src/tag/v0.1.5/internal/app/cmd/register.go#L93-L98
@@ -119,6 +121,18 @@ in
               that follows the filesystem hierarchy standard.
             '';
           };
+          settings = mkOption {
+            description = lib.mdDoc ''
+              Configuration for `act_runner daemon`.
+              See https://gitea.com/gitea/act_runner/src/branch/main/internal/pkg/config/config.example.yaml for an example configuration
+            '';
+
+            type = types.submodule {
+              freeformType = settingsFormat.type;
+            };
+
+            default = { };
+          };
 
           hostPackages = mkOption {
             type = listOf package;
@@ -169,6 +183,7 @@ in
         wantsHost = hasHostScheme instance;
         wantsDocker = wantsContainerRuntime && config.virtualisation.docker.enable;
         wantsPodman = wantsContainerRuntime && config.virtualisation.podman.enable;
+        configFile = settingsFormat.generate "config.yaml" instance.settings;
       in
         nameValuePair "gitea-runner-${escapeSystemdPath name}" {
           inherit (instance) enable;
@@ -222,7 +237,7 @@ in
               fi
 
             '';
-            ExecStart = "${cfg.package}/bin/act_runner daemon";
+            ExecStart = "${cfg.package}/bin/act_runner daemon --config ${configFile}";
             SupplementaryGroups = optionals (wantsDocker) [
               "docker"
             ] ++ optionals (wantsPodman) [
