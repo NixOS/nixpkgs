@@ -3,7 +3,7 @@
 , buildDunePackage
 , eio
 , eio_posix
-, uring
+, eio_linux
 }:
 
 buildDunePackage {
@@ -18,6 +18,6 @@ buildDunePackage {
   propagatedBuildInputs = [
     eio_posix
   ] ++ lib.optionals stdenv.isLinux [
-    uring
+    eio_linux
   ];
 }
