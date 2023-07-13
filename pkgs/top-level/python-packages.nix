@@ -13475,6 +13475,8 @@ self: super: with self; {
     inherit (pkgs) graphviz;
   };
 
+  xformers = callPackage ../development/python-modules/xformers { };
+
   xgboost = callPackage ../development/python-modules/xgboost {
     inherit (pkgs) xgboost;
   };
