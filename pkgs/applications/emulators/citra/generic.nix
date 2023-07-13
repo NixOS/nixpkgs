@@ -8,7 +8,7 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, boost17x
+, boost179
 , pkg-config
 , libusb1
 , zstd
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableQt [ wrapQtAppsHook ];
 
   buildInputs = [
-    boost17x
+    boost179
     libusb1
   ] ++ lib.optionals enableQt [ qtbase qtmultimedia ]
     ++ lib.optional enableSdl2 SDL2
