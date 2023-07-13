@@ -32,7 +32,7 @@ let
     nodes.machine = {
       services.keyd = {
         enable = true;
-        inherit settings;
+        keyboards.default = { inherit settings; };
       };
     };
 
