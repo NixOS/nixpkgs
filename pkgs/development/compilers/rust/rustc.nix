@@ -75,6 +75,7 @@ in stdenv.mkDerivation rec {
     "--release-channel=stable"
     "--set=build.rustc=${rustc}/bin/rustc"
     "--set=build.cargo=${cargo}/bin/cargo"
+    "--tools=rustc"
     "--enable-rpath"
     "--enable-vendor"
     "--build=${rust.toRustTargetSpec stdenv.buildPlatform}"
@@ -148,10 +149,6 @@ in stdenv.mkDerivation rec {
     patchShebangs src/etc
 
     ${optionalString (!withBundledLLVM) "rm -rf src/llvm"}
-
-    # Fix the configure script to not require curl as we won't use it
-    sed -i configure \
-      -e '/probe_need CFG_CURL curl/d'
 
     # Useful debugging parameter
     # export VERBOSE=1
