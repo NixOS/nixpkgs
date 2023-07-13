@@ -8102,6 +8102,12 @@
     email = "j.loos@posteo.net";
     githubId = 57965027;
   };
+  josephst = {
+    name = "Joseph Stahl";
+    email = "hello@josephstahl.com";
+    github = "josephst";
+    githubId = 1269177;
+  };
   joshniemela = {
     name = "Joshua Niemelä";
     email = "josh@jniemela.dk";
