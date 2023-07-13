@@ -6,13 +6,21 @@
 #
 # -------------------------------------------------------------------------- #
 #
-#  This file can be run independently (quick):
+# Execute this build script directly (quick):
 #
-#      $ pkgs/build-support/trivial-builders/references-test.sh
+# * Classic
+#   $ NIX_PATH="nixpkgs=$PWD" nix-shell -p tests.trivial-builders.references.testScriptBin --run references-test
 #
-#  or in the build sandbox with a ~20s VM overhead
+# * Flake-based
+#   $ nix run .#tests.trivial-builders.references.testScriptBin
 #
-#      $ nix-build -A tests.trivial-builders.references
+# or in the build sandbox with a ~20s VM overhead:
+#
+# * Classic
+#   $ nix-build --no-out-link -A tests.trivial-builders.references
+#
+# * Flake-based
+#   $ nix build -L --no-link .#tests.trivial-builders.references
 #
 # -------------------------------------------------------------------------- #
 
@@ -25,44 +33,29 @@ set -euo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")"  # nixpkgs root
 
-if [[ -z ${SAMPLE:-} ]]; then
-  echo "Running the script directly is currently not supported."
-  echo "If you need to iterate, remove the raw path, which is not returned by nix-build."
-  exit 1
-#   # shellcheck disable=SC2206 # deliberately unquoted
-#   sample=( $(nix-build --no-out-link sample.nix) )
-#   # shellcheck disable=SC2206 # deliberately unquoted
-#   directRefs=( $(nix-build --no-out-link invoke-writeDirectReferencesToFile.nix) )
-#   # shellcheck disable=SC2206 # deliberately unquoted
-#   references=( $(nix-build --no-out-link invoke-writeReferencesToFile.nix) )
-#   echo "sample: ${#sample[@]}"
-#   echo "direct: ${#directRefs[@]}"
-#   echo "indirect: ${#references[@]}"
-else
   # Injected by Nix (to avoid evaluating in a derivation)
   # turn them into arrays
   # shellcheck disable=SC2206 # deliberately unquoted
-  sample=( $SAMPLE )
+  declare -A samples=( @SAMPLES@ )
   # shellcheck disable=SC2206 # deliberately unquoted
-  directRefs=( $DIRECT_REFS )
+  declare -A directRefs=( @DIRECT_REFS@ )
   # shellcheck disable=SC2206 # deliberately unquoted
-  references=( $REFERENCES )
-fi
+  declare -A references=( @REFERENCES@ )
 
 echo >&2 Testing direct references...
-for i in "${!sample[@]}"; do
-  echo >&2 Checking "#$i" "${sample[$i]}" "${directRefs[$i]}"
+for i in "${!samples[@]}"; do
+  echo >&2 Checking "$i" "${samples[$i]}" "${directRefs[$i]}"
   diff -U3 \
     <(sort <"${directRefs[$i]}") \
-    <(nix-store -q --references "${sample[$i]}" | sort)
+    <(nix-store -q --references "${samples[$i]}" | sort)
 done
 
 echo >&2 Testing closure...
-for i in "${!sample[@]}"; do
-  echo >&2 Checking "#$i" "${sample[$i]}" "${references[$i]}"
+for i in "${!samples[@]}"; do
+  echo >&2 Checking "$i" "${samples[$i]}" "${references[$i]}"
   diff -U3 \
     <(sort <"${references[$i]}") \
-    <(nix-store -q --requisites "${sample[$i]}" | sort)
+    <(nix-store -q --requisites "${samples[$i]}" | sort)
 done
 
 echo 'OK!'
