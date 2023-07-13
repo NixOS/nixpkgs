@@ -10,14 +10,14 @@
 let
   packaging = buildPythonPackage rec {
     pname = "packaging";
-    version = "23.0";
+    version = "23.1";
     format = "pyproject";
 
     disabled = pythonOlder "3.7";
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-tq0pf4kH3g+i/hzL0m/a84f19Hxydf7fjM6J+ZRGz5c=";
+      hash = "sha256-o5KYDSts/6ZEQxiYvlSwBFFRMZ0efsNPDP7Uh2fdM08=";
     };
 
     nativeBuildInputs = [
