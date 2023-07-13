@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, htslib, zlib, bzip2, xz, ncurses, boost }:
+{ lib, stdenv, fetchFromGitHub, htslib, zlib, bzip2, xz, ncurses, boost, runCommand, delly }:
 
 stdenv.mkDerivation rec {
   pname = "delly";
@@ -23,11 +23,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.tests = {
+    simple = runCommand "${pname}-test" { } ''
+      mkdir $out
+      ${lib.getExe delly} call -g ${delly.src}/example/ref.fa ${delly.src}/example/sr.bam > $out/sr.vcf
+      ${lib.getExe delly} lr -g ${delly.src}/example/ref.fa ${delly.src}/example/lr.bam > $out/lr.vcf
+      ${lib.getExe delly} cnv -g ${delly.src}/example/ref.fa -m ${delly.src}/example/map.fa.gz ${delly.src}/example/sr.bam > cnv.vcf
+    '';
+  };
+
   meta = with lib; {
     description = "Structural variant caller for mapped DNA sequenced data";
     license = licenses.bsd3;
     maintainers = with maintainers; [ scalavision ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     longDescription = ''
       Delly is an integrated structural variant (SV) prediction method
       that can discover, genotype and visualize deletions, tandem duplications,
