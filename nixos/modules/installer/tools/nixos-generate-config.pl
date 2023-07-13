@@ -381,6 +381,7 @@ sub in {
 
 my $fileSystems;
 my %fsByDev;
+my $useSwraid = 0;
 foreach my $fs (read_file("/proc/self/mountinfo")) {
     chomp $fs;
     my @fields = split / /, $fs;
@@ -510,8 +511,8 @@ EOF
     # boot.initrd.luks.devices entry.
     if (-e $device) {
         my $deviceName = basename(abs_path($device));
-        if (-e "/sys/class/block/$deviceName"
-            && read_file("/sys/class/block/$deviceName/dm/uuid",  err_mode => 'quiet') =~ /^CRYPT-LUKS/)
+        my $dmUuid = read_file("/sys/class/block/$deviceName/dm/uuid",  err_mode => 'quiet');
+        if ($dmUuid =~ /^CRYPT-LUKS/)
         {
             my @slaves = glob("/sys/class/block/$deviceName/slaves/*");
             if (scalar @slaves == 1) {
@@ -527,7 +528,13 @@ EOF
                 }
             }
         }
+        if (-e "/sys/class/block/$deviceName/md/uuid") {
+            $useSwraid = 1;
+        }
     }
+}
+if ($useSwraid) {
+    push @attrs, "boot.swraid.enable = true;\n\n";
 }
 
 
