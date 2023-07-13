@@ -3584,6 +3584,8 @@ with pkgs;
 
   dcap = callPackage ../tools/networking/dcap { };
 
+  dark-mode-notify = callPackage ../os-specific/darwin/dark-mode-notify { };
+
   deltachat-cursed = callPackage ../applications/networking/instant-messengers/deltachat-cursed { };
 
   delayarchitect = callPackage ../applications/audio/delayarchitect { };
