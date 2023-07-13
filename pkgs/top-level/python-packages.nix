@@ -5429,6 +5429,8 @@ self: super: with self; {
 
   jupyter-client = callPackage ../development/python-modules/jupyter-client { };
 
+  jupyter-contrib-core = callPackage ../development/python-modules/jupyter-contrib-core { };
+
   jupyter_console = callPackage ../development/python-modules/jupyter_console { };
 
   jupyter-core = callPackage ../development/python-modules/jupyter-core { };
