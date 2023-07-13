@@ -16073,6 +16073,8 @@ with pkgs;
 
   knightos-genkfs = callPackage ../development/tools/knightos/genkfs { };
 
+  kingstvis = callPackage ../applications/science/electronics/kingstvis { };
+
   regenkfs = callPackage ../development/tools/knightos/regenkfs { };
 
   knightos-kcc = callPackage ../development/tools/knightos/kcc { };
