@@ -52,8 +52,6 @@ in
       ./system_rplugin_manifest.patch
     ];
 
-    dontFixCmake = true;
-
     inherit lua;
 
     buildInputs = [

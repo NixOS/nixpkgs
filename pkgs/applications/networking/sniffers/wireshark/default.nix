@@ -151,8 +151,6 @@ stdenv.mkDerivation {
       cp ../wsutil/wmem/*.h $dev/include/wsutil/wmem/
     '');
 
-  dontFixCmake = true;
-
   # Prevent double-wrapping, inject wrapper args manually instead.
   dontWrapGApps = true;
   preFixup = ''

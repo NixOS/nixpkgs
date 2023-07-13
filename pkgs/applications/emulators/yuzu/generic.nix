@@ -107,10 +107,6 @@ in stdenv.mkDerivation {
     zstd
   ];
 
-  # This changes `ir/opt` to `ir/var/empty` in `externals/dynarmic/src/dynarmic/CMakeLists.txt`
-  # making the build fail, as that path does not exist
-  dontFixCmake = true;
-
   cmakeFlags = [
     # actually has a noticeable performance impact
     "-DYUZU_ENABLE_LTO=ON"
