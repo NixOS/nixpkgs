@@ -31560,6 +31560,8 @@ with pkgs;
 
   molsketch = libsForQt5.callPackage ../applications/editors/molsketch { };
 
+  multiviewer-for-f1 = callPackage ../applications/video/multiviewer-for-f1 { };
+
   muzika = callPackage ../applications/audio/muzika { };
 
   pattypan = callPackage ../applications/misc/pattypan {
