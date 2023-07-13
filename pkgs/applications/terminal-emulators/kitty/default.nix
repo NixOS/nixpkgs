@@ -43,7 +43,7 @@ buildPythonApplication rec {
     pname = "kitty-go-modules";
     inherit src version;
     vendorHash = "sha256-jk2EcYVuhV/UQfHAIfpnn8ZIZnwjA/o8YRXmpoC85Vc=";
-  }).go-modules;
+  }).goModules;
 
   buildInputs = [
     harfbuzz
@@ -229,7 +229,6 @@ buildPythonApplication rec {
   '';
 
   passthru = {
-    go-modules = goModules; # allow for updateScript to handle vendorHash
     tests.test = nixosTests.terminal-emulators.kitty;
     updateScript = nix-update-script {};
   };
