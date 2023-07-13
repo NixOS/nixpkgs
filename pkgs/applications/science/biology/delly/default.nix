@@ -4,6 +4,7 @@
 , boost
 , bzip2
 , htslib
+, llvmPackages
 , xz
 , zlib
 , delly
@@ -27,10 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
     htslib
     xz
     zlib
-  ];
+  ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp;
 
   makeFlags = [
     "EBROOTHTSLIB=${htslib}"
+    "PARALLEL=1"
   ];
 
   installPhase = ''
