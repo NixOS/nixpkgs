@@ -35,26 +35,26 @@
     "goland": {
       "update-channel": "GoLand RELEASE",
       "url-template": "https://download.jetbrains.com/go/goland-{version}.tar.gz",
-      "version": "2023.1.3",
-      "sha256": "f456024e1b5de405ada9bd570483ffca1126edec9c81bfa02b077f81434b5719",
-      "url": "https://download.jetbrains.com/go/goland-2023.1.3.tar.gz",
-      "build_number": "231.9161.41"
+      "version": "2023.1.4",
+      "sha256": "ac8bd42b6dee2aedcfd05656b7f74969e6775f41c9d6614d3cc4946fbc8c346f",
+      "url": "https://download.jetbrains.com/go/goland-2023.1.4.tar.gz",
+      "build_number": "231.9225.16"
     },
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIC-{version}.tar.gz",
-      "version": "2023.1.3",
-      "sha256": "336ec81b78645349e0b476047e2d1993ed3f1c571f8961565a3e47fe5c9c02bf",
-      "url": "https://download.jetbrains.com/idea/ideaIC-2023.1.3.tar.gz",
-      "build_number": "231.9161.38"
+      "version": "2023.1.4",
+      "sha256": "9ea98c03b29903f7bde41f6a3c039621fff5d04015f37f9f21e04966d557ea90",
+      "url": "https://download.jetbrains.com/idea/ideaIC-2023.1.4.tar.gz",
+      "build_number": "231.9225.16"
     },
     "idea-ultimate": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIU-{version}.tar.gz",
-      "version": "2023.1.3",
-      "sha256": "a58954ed6732eb799502e14b250ead8b21e00c3f064e196ada34dcd6a3a3f399",
-      "url": "https://download.jetbrains.com/idea/ideaIU-2023.1.3.tar.gz",
-      "build_number": "231.9161.38"
+      "version": "2023.1.4",
+      "sha256": "b5b15e1bbc7d953715a2b3f5eb25b9bb26baa99bdbee2d11acc91339c725f73a",
+      "url": "https://download.jetbrains.com/idea/ideaIU-2023.1.4.tar.gz",
+      "build_number": "231.9225.16"
     },
     "mps": {
       "update-channel": "MPS RELEASE",
@@ -150,26 +150,26 @@
     "goland": {
       "update-channel": "GoLand RELEASE",
       "url-template": "https://download.jetbrains.com/go/goland-{version}.dmg",
-      "version": "2023.1.3",
-      "sha256": "6f7173843e157f24001b837f4d50827bf55b629df4d82f9b95c08ec29dc2ff3b",
-      "url": "https://download.jetbrains.com/go/goland-2023.1.3.dmg",
-      "build_number": "231.9161.41"
+      "version": "2023.1.4",
+      "sha256": "ec4d8724ef0b3c1d597801d23622ea5625b65c260d43d9e670c2fc63f448ea45",
+      "url": "https://download.jetbrains.com/go/goland-2023.1.4.dmg",
+      "build_number": "231.9225.16"
     },
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIC-{version}.dmg",
-      "version": "2023.1.3",
-      "sha256": "a7a71c941df436b8b5e78b679f1810cb9395663a788a114c1bbaeb99054e0ccf",
-      "url": "https://download.jetbrains.com/idea/ideaIC-2023.1.3.dmg",
-      "build_number": "231.9161.38"
+      "version": "2023.1.4",
+      "sha256": "07dcc09078efea0a6c7d009ec79878d69534f2ca973f546ed469abbc4fec5088",
+      "url": "https://download.jetbrains.com/idea/ideaIC-2023.1.4.dmg",
+      "build_number": "231.9225.16"
     },
     "idea-ultimate": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIU-{version}.dmg",
-      "version": "2023.1.3",
-      "sha256": "d460609c97d970a9cbbe753067bb7d829ef2d124a6494ae1e4aa3b4ec44191f6",
-      "url": "https://download.jetbrains.com/idea/ideaIU-2023.1.3.dmg",
-      "build_number": "231.9161.38"
+      "version": "2023.1.4",
+      "sha256": "d039c8789724962fa264d55d47ac2e5efc2779fd082dcb6615ae15b2ca66ce91",
+      "url": "https://download.jetbrains.com/idea/ideaIU-2023.1.4.dmg",
+      "build_number": "231.9225.16"
     },
     "mps": {
       "update-channel": "MPS RELEASE",
@@ -265,26 +265,26 @@
     "goland": {
       "update-channel": "GoLand RELEASE",
       "url-template": "https://download.jetbrains.com/go/goland-{version}-aarch64.dmg",
-      "version": "2023.1.3",
-      "sha256": "d0b923a44305ef3ce113cabd2a19e1f2bfd0adec0cdc0571765851206aad5160",
-      "url": "https://download.jetbrains.com/go/goland-2023.1.3-aarch64.dmg",
-      "build_number": "231.9161.41"
+      "version": "2023.1.4",
+      "sha256": "5b60eac7a22f6e37345efe9dbbd65e9176a6f1ec899f92bcecbcabb8f96b2ae4",
+      "url": "https://download.jetbrains.com/go/goland-2023.1.4-aarch64.dmg",
+      "build_number": "231.9225.16"
     },
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIC-{version}-aarch64.dmg",
-      "version": "2023.1.3",
-      "sha256": "c815f1f1af1e4c781b4cb8fda629e83b40e12b6f18485a2bf3a5cfce8a9a78dc",
-      "url": "https://download.jetbrains.com/idea/ideaIC-2023.1.3-aarch64.dmg",
-      "build_number": "231.9161.38"
+      "version": "2023.1.4",
+      "sha256": "806d6edf7e4cf5636938522c4f64887ed9657b7628311573148d630bbd677228",
+      "url": "https://download.jetbrains.com/idea/ideaIC-2023.1.4-aarch64.dmg",
+      "build_number": "231.9225.16"
     },
     "idea-ultimate": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIU-{version}-aarch64.dmg",
-      "version": "2023.1.3",
-      "sha256": "7b9d9d69378d6fb256bede3e6feac39a0f3b0600c25f5a891c6ade73f7273b72",
-      "url": "https://download.jetbrains.com/idea/ideaIU-2023.1.3-aarch64.dmg",
-      "build_number": "231.9161.38"
+      "version": "2023.1.4",
+      "sha256": "a03b9357a0d54936df1631f75d11d2647bc89ca5c5baaa4af07a58ab729924cc",
+      "url": "https://download.jetbrains.com/idea/ideaIU-2023.1.4-aarch64.dmg",
+      "build_number": "231.9225.16"
     },
     "mps": {
       "update-channel": "MPS RELEASE",

@@ -1581,6 +1581,22 @@ let
         };
       };
 
+      gleam.gleam = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "gleam";
+          publisher = "gleam";
+          version = "2.3.0";
+          sha256 = "sha256-dhRS8fLKY0plRwnrAUWT4g/LfH6IpODTNhT79g4Nm+0=";
+        };
+        meta = {
+          description = "Support for the Gleam programming language";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Gleam.gleam";
+          homepage = "https://github.com/gleam-lang/vscode-gleam#readme";
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.msfjarvis ];
+        };
+      };
+
       golang.go = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "Go";

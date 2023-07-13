@@ -13604,7 +13604,9 @@ with pkgs;
 
   tuptime = callPackage ../tools/system/tuptime { };
 
-  turbo = callPackage ../tools/misc/turbo { };
+  turbo = callPackage ../tools/misc/turbo {
+    inherit (darwin.apple_sdk_11_0.frameworks) Security IOKit CoreServices CoreFoundation;
+  };
 
   turses = callPackage ../applications/networking/instant-messengers/turses { };
 
@@ -15162,6 +15164,7 @@ with pkgs;
     llvmPackages = llvmPackages_15;
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   })
+    crystal_1_9
     crystal_1_8
     crystal;
 
@@ -26004,8 +26007,6 @@ with pkgs;
     theme-snow = callPackage ../servers/icingaweb2/theme-snow { };
     theme-spring = callPackage ../servers/icingaweb2/theme-spring { };
   };
-
-  irrd = callPackage ../servers/irrd { };
 
   inspircd = callPackage ../servers/irc/inspircd { };
 
