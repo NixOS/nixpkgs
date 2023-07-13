@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ installShellFiles qt5.wrapQtAppsHook python3.pkgs.setuptools ];
 
-  propagatedBuildInputs = with python3.pkgs; [ pyqt5 py3exiv2 qt5.qtsvg ];
+  propagatedBuildInputs = with python3.pkgs; [ pyqt5 py3exiv2 qt5.qtsvg ] ++ (with pkgs; [ qt5.qtwayland ]);
 
   postInstall = ''
     install -Dm644 misc/vimiv.desktop $out/share/applications/vimiv.desktop
