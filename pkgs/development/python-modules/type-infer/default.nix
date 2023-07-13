@@ -27,7 +27,7 @@ buildPythonPackage rec {
   version = "0.0.15";
   format = "pyproject";
 
-  disable = pythonOlder "3.8";
+  disabled = pythonOlder "3.8";
 
   # using PyPI because the repo does not have tags or release branches
   src = fetchPypi {

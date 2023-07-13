@@ -75,7 +75,7 @@ rec {
         inherit (tor) geoip;
       })
     ];
-    disable = !isPy3k;
+    disabled = !isPy3k;
     propagatedBuildInputs = [
       colorama
       flask
@@ -127,7 +127,7 @@ rec {
       ./fix-qrcode-gui.patch
     ];
 
-    disable = !isPy3k;
+    disabled = !isPy3k;
     propagatedBuildInputs = [
       onionshare
       pyqt5

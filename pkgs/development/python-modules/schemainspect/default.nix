@@ -18,7 +18,7 @@ buildPythonPackage rec {
   pname = "schemainspect";
   version = "3.1.1663587362";
   format = "pyproject";
-  disable = pythonOlder "3.7";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "djrobstep";
