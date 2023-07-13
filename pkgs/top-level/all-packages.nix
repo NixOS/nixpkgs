@@ -6120,6 +6120,7 @@ with pkgs;
   rsyslog = callPackage ../tools/system/rsyslog {
     withHadoop = false; # Currently Broken
     withKsi = false; # Currently Broken
+    libmongo-client = null; # Sources are not available
   };
 
   rsyslog-light = rsyslog.override {
