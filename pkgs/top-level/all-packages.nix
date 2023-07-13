@@ -30297,6 +30297,8 @@ with pkgs;
 
   boops = callPackage ../applications/audio/boops { };
 
+  cgif = callPackage ../tools/graphics/cgif { };
+
   ChowCentaur  = callPackage ../applications/audio/ChowCentaur { };
 
   ChowKick  = callPackage ../applications/audio/ChowKick { };
