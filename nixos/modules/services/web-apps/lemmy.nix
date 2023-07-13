@@ -253,6 +253,7 @@ in
           LEMMY_UI_LEMMY_INTERNAL_HOST = "127.0.0.1:${toString cfg.settings.port}";
           LEMMY_UI_LEMMY_EXTERNAL_HOST = cfg.settings.hostname;
           LEMMY_UI_HTTPS = "false";
+          NODE_ENV = "production";
         };
 
         documentation = [
