@@ -2,22 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "kssd";
-  version = "1.1";
+  version = "2.21";
 
   src = fetchFromGitHub {
     owner = "yhg926";
     repo = "public_kssd";
     rev = "v${version}";
-    sha256 = "sha256-8jzYqo9LXF66pQ1EIusm+gba2VbTYpJz2K3NVlA3QxY=";
+    hash = "sha256-D/s1jL2oKE0rSdRMVljskYFsw5UPOv1L95Of+K+e17w=";
   };
 
   patches = [
-    # Pull upstream patch for -fno-common toolchain support:
-    #   https://github.com/yhg926/public_kssd/pull/9
+    # https://github.com/yhg926/public_kssd/pull/11
     (fetchpatch {
-      name = "fno-common.patch";
-      url = "https://github.com/yhg926/public_kssd/commit/cdd1e8aae256146f5913a3b4c723b638d53bdf27.patch";
-      sha256 = "sha256-HhaTRqPfKR+ouh0PwEH6u22pbuqbX2OypRzw8BXm0W4=";
+      name = "allocate-enough-memory.patch";
+      url = "https://github.com/yhg926/public_kssd/commit/b1e66bbcc04687bc3201301cd742a0b26a87cb5d.patch";
+      hash = "sha256-yFyJetpsGKeu+H6Oxrmn5ea4ESVtblb3YJDja4JEAEM=";
     })
   ];
 
