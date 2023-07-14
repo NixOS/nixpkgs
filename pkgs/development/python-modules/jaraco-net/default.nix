@@ -15,7 +15,7 @@
 , jaraco_logging
 , jaraco-email
 , jaraco-functools
-, jaraco_collections
+, jaraco-collections
 , path
 , python-dateutil
 , pathvalidate
@@ -62,7 +62,7 @@ buildPythonPackage rec {
     jaraco_logging
     jaraco-email
     jaraco-functools
-    jaraco_collections
+    jaraco-collections
     path
     python-dateutil
     pathvalidate

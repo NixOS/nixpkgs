@@ -7,7 +7,7 @@
 , setuptools
 , setuptools-scm
 , jaraco-text
-, jaraco_collections
+, jaraco-collections
 , keyring
 , pytestCheckHook
 }:
@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     jaraco-text
-    jaraco_collections
+    jaraco-collections
     keyring
   ];
 

@@ -156,6 +156,7 @@ mapAliases ({
   influxgraph = throw "influxgraph has been removed because it is no longer maintained"; # added 2022-07-10
   itanium_demangler = itanium-demangler; # added 2022-10-17
   jaraco_classes = jaraco-classes; # added 2023-07-14
+  jaraco_collections = jaraco-collections; # added 2023-07-14
   jaraco_functools = jaraco-functools; # added 2023-07-14
   jaraco_text = jaraco-text; # added 2023-07-14
   JayDeBeApi = jaydebeapi; # added 2023-02-19

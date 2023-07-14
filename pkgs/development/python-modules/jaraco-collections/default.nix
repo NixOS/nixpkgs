@@ -8,12 +8,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "jaraco.collections";
+  pname = "jaraco-collections";
   version = "4.3.0";
   format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "jaraco.collections";
+    inherit version;
     hash = "sha256-dP/CP8z+5N4KLr9VajNnW2o8AD1jNZR9MSKgvIgiyOQ=";
   };
 

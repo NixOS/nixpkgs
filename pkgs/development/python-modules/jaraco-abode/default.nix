@@ -6,7 +6,7 @@
 , fetchPypi
 , importlib-resources
 , jaraco-classes
-, jaraco_collections
+, jaraco-collections
 , jaraco_itertools
 , jaraco-context
 , jaraco-net
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     colorlog
     keyring
     requests-toolbelt
-    jaraco_collections
+    jaraco-collections
     jaraco-context
     jaraco-classes
     jaraco-net

@@ -5207,7 +5207,7 @@ self: super: with self; {
 
   jaraco-classes = callPackage ../development/python-modules/jaraco-classes { };
 
-  jaraco_collections = callPackage ../development/python-modules/jaraco_collections { };
+  jaraco-collections = callPackage ../development/python-modules/jaraco-collections { };
 
   jaraco-email = callPackage ../development/python-modules/jaraco-email { };
 

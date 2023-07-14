@@ -8,7 +8,7 @@
 , jaraco-functools
 , jaraco-context
 , more-itertools
-, jaraco_collections
+, jaraco-collections
 , pytestCheckHook
 }:
 
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     jaraco-functools
     jaraco-context
     more-itertools
-    jaraco_collections
+    jaraco-collections
   ];
 
   nativeCheckInputs = [
