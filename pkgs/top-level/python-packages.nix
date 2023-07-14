@@ -5215,7 +5215,7 @@ self: super: with self; {
 
   jaraco-functools = callPackage ../development/python-modules/jaraco-functools { };
 
-  jaraco_itertools = callPackage ../development/python-modules/jaraco_itertools { };
+  jaraco-itertools = callPackage ../development/python-modules/jaraco-itertools { };
 
   jaraco_logging = callPackage ../development/python-modules/jaraco_logging { };
 

@@ -3,12 +3,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "jaraco.itertools";
+  pname = "jaraco-itertools";
   version = "6.2.1";
   format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "jaraco.itertools";
+    inherit version;
     hash = "sha256-YJjts3xrgCPzeU1CWIoTv3WyygK0D/l5XIRry+DBtGw=";
   };
 

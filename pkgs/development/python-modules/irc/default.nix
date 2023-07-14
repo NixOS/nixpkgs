@@ -7,7 +7,7 @@
 , jaraco-text
 , jaraco_stream
 , pytz
-, jaraco_itertools
+, jaraco-itertools
 , setuptools-scm
 , jaraco-collections
 , importlib-metadata
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     jaraco-text
     jaraco_stream
     pytz
-    jaraco_itertools
+    jaraco-itertools
     jaraco-collections
   ];
 

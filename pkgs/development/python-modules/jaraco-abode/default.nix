@@ -7,7 +7,7 @@
 , importlib-resources
 , jaraco-classes
 , jaraco-collections
-, jaraco_itertools
+, jaraco-itertools
 , jaraco-context
 , jaraco-net
 , keyring
@@ -63,7 +63,7 @@ buildPythonPackage rec {
     importlib-resources
     bx-py-utils
     platformdirs
-    jaraco_itertools
+    jaraco-itertools
   ];
 
   nativeCheckInputs = [
