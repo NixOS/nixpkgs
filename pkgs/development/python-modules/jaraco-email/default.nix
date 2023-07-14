@@ -6,7 +6,7 @@
 , fetchpatch
 , setuptools
 , setuptools-scm
-, jaraco_text
+, jaraco-text
 , jaraco_collections
 , keyring
 , pytestCheckHook
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   propagatedBuildInputs = [
-    jaraco_text
+    jaraco-text
     jaraco_collections
     keyring
   ];

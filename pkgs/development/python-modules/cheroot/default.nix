@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , jaraco-functools
-, jaraco_text
+, jaraco-text
 , more-itertools
 , portend
 , pypytools
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    jaraco_text
+    jaraco-text
     portend
     pypytools
     pytest-mock

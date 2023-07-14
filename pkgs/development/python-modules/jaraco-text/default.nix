@@ -13,14 +13,15 @@
 }:
 
 buildPythonPackage rec {
-  pname = "jaraco.text";
+  pname = "jaraco-text";
   version = "3.11.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "jaraco.text";
+    inherit version;
     hash = "sha256-Mzpd8hSPcTlxhgfN81L+HZUWKXGnKZw4Dcwk2rAWiYA=";
   };
 

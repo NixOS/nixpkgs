@@ -4,7 +4,7 @@
 , setuptools
 , setuptools-scm
 , jaraco-classes
-, jaraco_text
+, jaraco-text
 }:
 
 buildPythonPackage rec {
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     jaraco-classes
-    jaraco_text
+    jaraco-text
   ];
 
   pythonNamespaces = [ "jaraco" ];

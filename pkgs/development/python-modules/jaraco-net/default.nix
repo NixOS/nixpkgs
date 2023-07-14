@@ -11,7 +11,7 @@
 , keyring
 , requests
 , feedparser
-, jaraco_text
+, jaraco-text
 , jaraco_logging
 , jaraco-email
 , jaraco-functools
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     keyring
     requests
     feedparser
-    jaraco_text
+    jaraco-text
     jaraco_logging
     jaraco-email
     jaraco-functools

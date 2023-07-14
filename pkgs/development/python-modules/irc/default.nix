@@ -1,6 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, six, jaraco_logging, jaraco_text, jaraco_stream, pytz, jaraco_itertools
-, setuptools-scm, jaraco_collections, importlib-metadata
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, six
+, jaraco_logging
+, jaraco-text
+, jaraco_stream
+, pytz
+, jaraco_itertools
+, setuptools-scm
+, jaraco_collections
+, importlib-metadata
 }:
 
 buildPythonPackage rec {
@@ -21,7 +31,7 @@ buildPythonPackage rec {
     six
     importlib-metadata
     jaraco_logging
-    jaraco_text
+    jaraco-text
     jaraco_stream
     pytz
     jaraco_itertools
