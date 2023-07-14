@@ -207,7 +207,7 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "refs/tags/v${version}";
-      hash = "sha256-q59cUW6613byHk4LGl+sefO5czLSWxOrSyLbJ1pkNEY=";
+      hash = "sha256-Rq5pAVmxlWBVnph20fkAwbfy+iuBNlfFy14poDPd5h0=";
     };
 
     # On update, it can be useful to steal the changes from gentoo
