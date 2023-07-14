@@ -786,6 +786,10 @@ with pkgs;
 
   protoc-gen-validate = callPackage ../development/tools/protoc-gen-validate { };
 
+  protofetch = callPackage ../development/tools/protofetch {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   protolint = callPackage ../development/tools/protolint { };
 
   ptags = callPackage ../development/tools/misc/ptags { };
