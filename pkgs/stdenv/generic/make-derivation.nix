@@ -111,6 +111,8 @@ let
 , configureFlags ? []
 , cmakeFlags ? []
 , mesonFlags ? []
+, mesonExtraCrossProperties ? []
+, mesonExtraCrossBinaries ? []
 , # Target is not included by default because most programs don't care.
   # Including it then would cause needless mass rebuilds.
   #
@@ -393,6 +395,7 @@ else let
           crossFile = builtins.toFile "cross-file.conf" ''
             [properties]
             needs_exe_wrapper = ${lib.boolToString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)}
+            ${lib.concatStringsSep "\n" mesonExtraCrossProperties}
 
             [host_machine]
             system = '${stdenv.targetPlatform.parsed.kernel.name}'
@@ -402,6 +405,7 @@ else let
 
             [binaries]
             llvm-config = 'llvm-config-native'
+            ${lib.concatStringsSep "\n" mesonExtraCrossBinaries}
           '';
           crossFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--cross-file=${crossFile}" ];
         in crossFlags ++ mesonFlags;
