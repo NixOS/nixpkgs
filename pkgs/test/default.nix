@@ -187,6 +187,8 @@ in
 
   texlive = recurseIntoAttrs (callPackage ./texlive { });
 
+  problems = recurseIntoAttrs (callPackage ./problems { });
+
   cuda = callPackage ./cuda { };
 
   trivial-builders = callPackage ../build-support/trivial-builders/test/default.nix { };

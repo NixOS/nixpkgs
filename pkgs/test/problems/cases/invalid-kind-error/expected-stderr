@@ -1,0 +1,6 @@
+(stack trace truncated; use '--show-trace' to show the full, detailed trace)
+
+error: Package ‘a-0’ in /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-default.nix:11 has an invalid meta attrset:
+  - key 'meta.problems.invalid.kind' has invalid value; expected enum<removal,deprecated>, got
+    "invalid"
+, refusing to evaluate.

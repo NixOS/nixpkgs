@@ -17,6 +17,7 @@ let
     isBool
     concatStringsSep
     isFloat
+    elem
     ;
   isTypeDef = t: isAttrs t && t ? name && isString t.name && t ? verify && isFunction t.verify;
 
@@ -94,5 +95,13 @@ lib.fix (self: {
     {
       name = "union<${concatStringsSep "," (map (t: t.name) types)}>";
       verify = v: any (func: func v) funcs;
+    };
+
+  enum =
+    values:
+    assert isList values && all isString values;
+    {
+      name = "enum<${concatStringsSep "," values}>";
+      verify = v: isString v && elem v values;
     };
 })
