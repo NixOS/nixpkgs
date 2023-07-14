@@ -4264,8 +4264,6 @@ broken-packages:
   - proquint #  failure  in job https://hydra.nixos.org/build/215308028 at 2023-04-11
   - prosidy
   - prosper
-  - proteaaudio
-  - proteaaudio-sdl
   - protocol
   - protocol-buffers
   - protocol-buffers-fork
