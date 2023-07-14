@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "jaeles";
-  version = "0.17";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "jaeles-project";
     repo = pname;
     rev = "beta-v${version}";
-    hash = "sha256-IGB+TYMOOO7fvRfDe9y+JSXuDSMDVJK+N4hS+kezG48=";
+    hash = "sha256-IGvIjO1nCilg2sPyScGTH5Zmv0rORlGwRv3NRxQk+aM=";
   };
 
-  vendorSha256 = "sha256-R2cP5zNuGUs0/KeaGhbQm1m5gVBVhpcFrS/jsph3EBk=";
+  vendorHash = "sha256-/Ow2qdcFduZ2ZyUUfCqpZxSh9yy3+tI/2N9Wl1fKXVI=";
 
   # Tests want to download signatures
   doCheck = false;
