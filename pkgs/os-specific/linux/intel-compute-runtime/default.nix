@@ -35,6 +35,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "drivers" ];
 
+  # causes redefinition of _FORTIFY_SOURCE
+  hardeningDisable = [ "fortify3" ];
+
   postInstall = ''
     # Avoid clash with intel-ocl
     mv $out/etc/OpenCL/vendors/intel.icd $out/etc/OpenCL/vendors/intel-neo.icd
