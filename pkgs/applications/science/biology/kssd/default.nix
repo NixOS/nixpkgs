@@ -1,13 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, zlib, automake, autoconf, libtool }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, zlib
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kssd";
   version = "2.21";
 
   src = fetchFromGitHub {
     owner = "yhg926";
     repo = "public_kssd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-D/s1jL2oKE0rSdRMVljskYFsw5UPOv1L95Of+K+e17w=";
   };
 
@@ -20,11 +25,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoconf automake ];
-  buildInputs = [ zlib libtool ];
+  buildInputs = [ zlib ];
 
   installPhase = ''
-      install -vD kssd $out/bin/kssd
+    runHook preInstall
+
+    install -vD kssd $out/bin/kssd
+
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -33,5 +41,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/yhg926/public_kssd";
     maintainers = with maintainers; [ unode ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "kssd";
   };
-}
+})
