@@ -719,6 +719,8 @@ let
     nativeLibs = [
       pkgs.webkitgtk_6_0
     ];
+    # Requires old webkitgtk_5_0 which was replaced by webkitgtk_6_0
+    meta.broken = true;
   };
 
   cl-avro = build-asdf-system {
