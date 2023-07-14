@@ -1113,6 +1113,9 @@ self: super: {
     preCheck = ''export PATH="$PWD/dist/build/alex:$PATH"'';
   }) super.alex;
 
+  # 2023-07-14: Restrictive upper bounds: https://github.com/luke-clifton/shh/issues/76
+  shh = doJailbreak super.shh;
+
   # This package refers to the wrong library (itself in fact!)
   vulkan = super.vulkan.override { vulkan = pkgs.vulkan-loader; };
 
