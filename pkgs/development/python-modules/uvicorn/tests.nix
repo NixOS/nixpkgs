@@ -12,10 +12,9 @@
 , wsproto
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "uvicorn-tests";
   inherit (uvicorn) version;
-
   format = "other";
 
   src = uvicorn.testsout;
