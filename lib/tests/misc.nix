@@ -820,6 +820,25 @@ runTests {
       expected = builtins.toJSON val;
   };
 
+  testToTOMLSimple =
+    let val = {
+      section = {
+        foo = "string\n\"";
+        "\"ba r\"" = [ true 4.2 ];
+        deep.nested = { };
+      };
+      list = [ { one = 1; } { two = 2; } ];
+      drv = { outPath = "/store/path"; };
+    };
+    in {
+      expr = generators.toTOML {} val;
+      expected = ''
+        "drv"="/store/path"
+        "list"=[{"one"=1},{"two"=2}]
+        "section"={"\"ba r\""=[true,4.2],"deep"={"nested"={}},"foo"="string\n\""}
+      '';
+  };
+
   /* right now only invocation check */
   testToYAMLSimple =
     let val = {
