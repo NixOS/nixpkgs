@@ -36486,13 +36486,11 @@ with pkgs;
 
   groestlcoin  = libsForQt5.callPackage ../applications/blockchains/groestlcoin {
     stdenv = darwin.apple_sdk_11_0.stdenv;
-    boost = boost179;
     withGui = true;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
   groestlcoind = callPackage ../applications/blockchains/groestlcoin {
-    boost = boost179;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
