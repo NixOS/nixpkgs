@@ -4303,6 +4303,12 @@
     githubId = 10998835;
     name = "Doron Behar";
   };
+  dotemup = {
+    email = "dotemup.designs+nixpkgs@gmail.com";
+    github = "dotemup";
+    githubId = 11077277;
+    name = "Dote";
+  };
   dotlambda = {
     email = "rschuetz17@gmail.com";
     matrix = "@robert:funklause.de";
