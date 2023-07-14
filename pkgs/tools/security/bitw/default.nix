@@ -8,8 +8,6 @@ buildGoModule rec {
   # Requires connection to bitwarden.com.
   doCheck = false;
 
-  patches = [ ./hacks.patch ];
-
   src = fetchFromGitHub {
     owner = "mvdan";
     repo = "bitw";
