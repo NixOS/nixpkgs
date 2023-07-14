@@ -5,7 +5,7 @@
 , six
 , jaraco-logging
 , jaraco-text
-, jaraco_stream
+, jaraco-stream
 , pytz
 , jaraco-itertools
 , setuptools-scm
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     importlib-metadata
     jaraco-logging
     jaraco-text
-    jaraco_stream
+    jaraco-stream
     pytz
     jaraco-itertools
     jaraco-collections
