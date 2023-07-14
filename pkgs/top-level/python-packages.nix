@@ -2465,6 +2465,8 @@ self: super: with self; {
 
   dbfread = callPackage ../development/python-modules/dbfread { };
 
+  dbt-bigquery = callPackage ../development/python-modules/dbt-bigquery { };
+
   dbt-core = callPackage ../development/python-modules/dbt-core { };
 
   dbt-extractor = callPackage ../development/python-modules/dbt-extractor { };
