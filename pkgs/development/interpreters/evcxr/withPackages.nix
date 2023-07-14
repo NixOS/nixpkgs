@@ -54,7 +54,7 @@ let
 
     # Set up HOME with cargo config
     mkdir -p home/.cargo
-    export HOME=$(pwd)/home
+    export HOME="$(pwd)/home"
     cat <<EOT >> home/.cargo/config
     [source.crates-io]
     local-registry = "$(pwd)/index_base"
@@ -89,7 +89,7 @@ let
 
 in
 
-rec {
+{
   inherit cratesIndex;
 
   inherit allPackageNames;
