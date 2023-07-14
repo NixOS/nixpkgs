@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, kernel, writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, runtimeShell
+{ stdenv, lib, fetchFromGitHub, fetchpatch, kernel, writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, runtimeShell
 }:
 
 stdenv.mkDerivation rec {
@@ -12,6 +12,14 @@ stdenv.mkDerivation rec {
     sha256 = "1rjb0njckczc2mj05cagvj0lkyvmyk6bw7wkiinv81lw8m90g77g";
     name = "tp-smapi-${version}";
   };
+
+  patches = [
+    # fix build for linux 6.4+
+    (fetchpatch {
+      url = "https://github.com/linux-thinkpad/tp_smapi/commit/0c3398b1acf2a2cabd9cee91dc3fe3d35805fa8b.patch";
+      hash = "sha256-J/WvijrpHGwFOZMMxnHdNin5eh8vViTcNb4nwsCqsLs=";
+    })
+  ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
