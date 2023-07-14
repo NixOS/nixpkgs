@@ -26319,6 +26319,11 @@ with pkgs;
     ffmpeg = ffmpeg_4;
   };
 
+  pict-rs_0_3 = callPackage ../servers/web-apps/pict-rs/0.3.nix {
+    inherit (darwin.apple_sdk.frameworks) Security;
+    ffmpeg = ffmpeg_4;
+  };
+
   popa3d = callPackage ../servers/mail/popa3d { };
 
   postfix = callPackage ../servers/mail/postfix { };
