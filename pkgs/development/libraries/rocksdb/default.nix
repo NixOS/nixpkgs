@@ -12,7 +12,6 @@
 , windows
 , enableJemalloc ? false
 , jemalloc
-, enableLite ? false
 , enableShared ? !stdenv.hostPlatform.isStatic
 , sse42Support ? stdenv.hostPlatform.sse4_2Support
 }:
@@ -68,7 +67,6 @@ stdenv.mkDerivation rec {
     "-DUSE_RTTI=1"
     "-DROCKSDB_INSTALL_ON_WINDOWS=YES" # harmless elsewhere
     (lib.optional sse42Support "-DFORCE_SSE42=1")
-    (lib.optional enableLite "-DROCKSDB_LITE=1")
     "-DFAIL_ON_WARNINGS=${if stdenv.hostPlatform.isMinGW then "NO" else "YES"}"
   ] ++ lib.optional (!enableShared) "-DROCKSDB_BUILD_SHARED=0";
 

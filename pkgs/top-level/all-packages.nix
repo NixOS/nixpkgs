@@ -24340,8 +24340,6 @@ with pkgs;
 
   rocksdb = callPackage ../development/libraries/rocksdb { };
 
-  rocksdb_lite = rocksdb.override { enableLite = true; };
-
   rocksdb_6_23 = rocksdb.overrideAttrs rec {
     pname = "rocksdb";
     version = "6.23.3";
