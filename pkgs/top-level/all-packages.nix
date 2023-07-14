@@ -39912,6 +39912,11 @@ with pkgs;
 
   libjack2 = jack2.override { prefix = "lib"; };
 
+  jack-example-tools = callPackage ../misc/jackaudio/example-tools.nix {
+    jack = jack2;  # includes libjackserver
+    libopus = libopus.override { withCustomModes = true; };
+  };
+
   jack-autoconnect = libsForQt5.callPackage ../applications/audio/jack-autoconnect { };
   jack_autoconnect = jack-autoconnect;
 
