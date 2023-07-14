@@ -290,6 +290,8 @@ with pkgs;
 
   apko = callPackage ../development/tools/apko { };
 
+  melange = callPackage ../development/tools/melange { };
+
   appthreat-depscan = callPackage ../development/tools/appthreat-depscan { };
 
   activate-linux = callPackage ../applications/misc/activate-linux { };
@@ -5374,6 +5376,8 @@ with pkgs;
 
   home-manager = callPackage ../tools/package-management/home-manager { };
 
+  homepage-dashboard = callPackage ../servers/homepage-dashboard { };
+
   hostsblock = callPackage ../tools/misc/hostsblock { };
 
   hottext = callPackage ../tools/text/hottext { };
@@ -5427,6 +5431,8 @@ with pkgs;
   interactsh = callPackage ../tools/misc/interactsh { };
 
   interlock = callPackage ../servers/interlock { };
+
+  invoice = callPackage ../tools/misc/invoice { };
 
   invoiceplane = callPackage ../servers/web-apps/invoiceplane { };
 
@@ -5507,6 +5513,8 @@ with pkgs;
   klog = qt5.callPackage ../applications/radio/klog { };
 
   komga = callPackage ../servers/komga { };
+
+  komorebi = callPackage ../applications/graphics/komorebi { };
 
   krapslog = callPackage ../tools/misc/krapslog { };
 
@@ -13568,6 +13576,8 @@ with pkgs;
   tun2socks = callPackage ../tools/networking/tun2socks { };
 
   tuntox = callPackage ../tools/networking/tuntox { };
+
+  tunwg = callPackage ../tools/networking/tunwg { };
 
   omapd = callPackage ../tools/security/omapd { };
 

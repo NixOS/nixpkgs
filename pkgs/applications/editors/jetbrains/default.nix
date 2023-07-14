@@ -77,8 +77,6 @@ let
             --replace-needed libcrypto.so.10 libcrypto.so
 
           autoPatchelf $PWD/bin
-          wrapProgram $out/bin/clion \
-            --set CL_JDK "${jdk}"
         )
       '';
     });

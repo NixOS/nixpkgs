@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''
     cp -r ${libremidi.src}/* $sourceRoot/deps/libremidi
+    chmod -R +w $sourceRoot/deps/libremidi
   '';
 
   postInstall = ''

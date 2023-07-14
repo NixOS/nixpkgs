@@ -5630,6 +5630,12 @@
     githubId = 609279;
     name = "Isaac Shapira";
   };
+  freyacodes = {
+    email = "freya@arbjerg.dev";
+    github = "freyacodes";
+    githubId = 2582617;
+    name = "Freya Arbjerg";
+  };
   fricklerhandwerk = {
     email = "valentin@fricklerhandwerk.de";
     github = "fricklerhandwerk";
@@ -13015,6 +13021,12 @@
     github = "piperswe";
     githubId = 1830959;
     name = "Piper McCorkle";
+  };
+  piturnah = {
+    email = "peterhebden6@gmail.com";
+    github = "piturnah";
+    githubId = 20472367;
+    name = "Peter Hebden";
   };
   pjbarnoy = {
     email = "pjbarnoy@gmail.com";
