@@ -612,6 +612,21 @@ rec {
     # Input list
     list: sublist count (length list) list;
 
+  /* Whether the first list is a prefix of the second list.
+
+  Type: hasPrefix :: [a] -> [a] -> bool
+
+  Example:
+    hasPrefix [ 1 2 ] [ 1 2 3 4 ]
+    => true
+    hasPrefix [ 0 1 ] [ 1 2 3 4 ]
+    => false
+  */
+  hasPrefix =
+    list1:
+    list2:
+    take (length list1) list2 == list1;
+
   /* Return a list consisting of at most `count` elements of `list`,
      starting at index `start`.
 

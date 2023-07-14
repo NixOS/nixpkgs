@@ -480,6 +480,27 @@ runTests {
     ([ 1 2 3 ] == (take 4 [  1 2 3 ]))
   ];
 
+  testListHasPrefixExample1 = {
+    expr = lists.hasPrefix [ 1 2 ] [ 1 2 3 4 ];
+    expected = true;
+  };
+  testListHasPrefixExample2 = {
+    expr = lists.hasPrefix [ 0 1 ] [ 1 2 3 4 ];
+    expected = false;
+  };
+  testListHasPrefixLazy = {
+    expr = lists.hasPrefix [ 1 ] [ 1 (abort "lib.lists.hasPrefix is not lazy") ];
+    expected = true;
+  };
+  testListHasPrefixEmptyPrefix = {
+    expr = lists.hasPrefix [ ] [ 1 2 ];
+    expected = true;
+  };
+  testListHasPrefixEmptyList = {
+    expr = lists.hasPrefix [ 1 2 ] [ ];
+    expected = false;
+  };
+
   testFoldAttrs = {
     expr = foldAttrs (n: a: [n] ++ a) [] [
     { a = 2; b = 7; }
