@@ -36557,9 +36557,7 @@ with pkgs;
 
   stellar-core = callPackage ../applications/blockchains/stellar-core { };
 
-  sumokoin = callPackage ../applications/blockchains/sumokoin {
-    boost = boost179;
-  };
+  sumokoin = callPackage ../applications/blockchains/sumokoin { };
 
   solana-cli = callPackage ../applications/blockchains/solana { };
 
