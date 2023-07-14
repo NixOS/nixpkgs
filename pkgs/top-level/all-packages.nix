@@ -13176,6 +13176,8 @@ with pkgs;
 
   tandoor-recipes = callPackage ../applications/misc/tandoor-recipes { };
 
+  tango = callPackage ../applications/misc/tango { };
+
   tangram = callPackage ../applications/networking/instant-messengers/tangram { };
 
   t1utils = callPackage ../tools/misc/t1utils { };
