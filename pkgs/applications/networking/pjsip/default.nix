@@ -2,7 +2,6 @@
 , testers
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , openssl
 , libsamplerate
 , swig
@@ -16,27 +15,17 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "pjsip";
-  version = "2.13";
+  version = "2.13.1";
 
   src = fetchFromGitHub {
     owner = finalAttrs.pname;
     repo = "pjproject";
-    rev = finalAttrs.version;
-    sha256 = "sha256-yzszmm3uIyXtYFgZtUP3iswLx4u/8UbFt80Ln25ToFE=";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-R1iKIkWyNCRV2PjQgTqKmJYUgHAZrREanD60Jz6MY1Y=";
   };
 
   patches = [
     ./fix-aarch64.patch
-    (fetchpatch {
-      name = "CVE-2022-23537.patch";
-      url = "https://github.com/pjsip/pjproject/commit/d8440f4d711a654b511f50f79c0445b26f9dd1e1.patch";
-      sha256 = "sha256-7ueQCHIiJ7MLaWtR4+GmBc/oKaP+jmEajVnEYqiwLRA=";
-    })
-    (fetchpatch {
-      name = "CVE-2022-23547.patch";
-      url = "https://github.com/pjsip/pjproject/commit/bc4812d31a67d5e2f973fbfaf950d6118226cf36.patch";
-      sha256 = "sha256-bpc8e8VAQpfyl5PX96G++6fzkFpw3Or1PJKNPKl7N5k=";
-    })
   ];
 
   nativeBuildInputs =
