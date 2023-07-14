@@ -7,6 +7,7 @@
 #  * Set up a vaultwarden server
 #  * Have Firefox use the web vault to create an account, log in, and save a password to the valut
 #  * Have the bw cli log in and read that password from the vault
+#  * Test bitw against the vaultwarden instance
 #
 # Note that Firefox must be on the same machine as the server for WebCrypto APIs to be available (or HTTPS must be configured)
 #
@@ -21,6 +22,12 @@ let
 
   userEmail = "meow@example.com";
   userPassword = "also_super_secret_ZJWpBKZi668QGt"; # Must be complex to avoid interstitial warning on the signup page
+
+  bitwConfig = pkgs.writeText "bitw-config" ''
+    email=${userEmail}
+    apiUrl=http://server/api
+    identityUrl=http://server/identity
+  '';
 
   storedPassword = "seeeecret";
 
@@ -156,7 +163,9 @@ let
 
       client = { pkgs, ... }:
         {
-          environment.systemPackages = [ pkgs.bitwarden-cli ];
+          imports = [ ./common/user-account.nix ];
+          environment.systemPackages = [ pkgs.bitwarden-cli pkgs.bitw pkgs.libsecret ];
+          services.dbus.packages = [ pkgs.bitw ];
         };
     };
 
@@ -189,6 +198,12 @@ let
               f"bw --nointeraction --raw --session {key} list items | ${pkgs.jq}/bin/jq -r .[].login.password"
           )
           assert password.strip() == "${storedPassword}"
+
+      with subtest("get the password from the freedesktop secrets api"):
+          client.succeed("sudo -iu alice mkdir -p /home/alice/.config/bitw")
+          client.succeed("sudo -iu alice cp ${bitwConfig} /home/alice/.config/bitw/config")
+          client.succeed("sudo -iu alice env PASSWORD=${userPassword} bitw login")
+          # todo: start a proper session for alice, in which bitw will ideally be started through dbus activation when `secret-tool` is used.
     '';
   };
 in
