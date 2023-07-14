@@ -6,7 +6,7 @@
 , pytestCheckHook
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pytest-asyncio-tests";
   inherit (pytest-asyncio) version;
 
