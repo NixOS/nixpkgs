@@ -1898,6 +1898,8 @@ with pkgs;
 
   shell-genie = callPackage  ../applications/misc/shell-genie { };
 
+  sloth = callPackage ../tools/misc/sloth { };
+
   snagboot = python3.pkgs.callPackage  ../applications/misc/snagboot { };
 
   simple-dlna-browser = callPackage ../tools/networking/simple-dlna-browser { };
