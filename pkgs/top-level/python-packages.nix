@@ -11313,6 +11313,8 @@ self: super: with self; {
 
   serialio = callPackage ../development/python-modules/serialio { };
 
+  serializable = callPackage ../development/python-modules/serializable { };
+
   serpent = callPackage ../development/python-modules/serpent { };
 
   serpy = callPackage ../development/python-modules/serpy { };
