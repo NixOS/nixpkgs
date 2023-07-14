@@ -7772,6 +7772,8 @@ self: super: with self; {
 
   pyproject-hooks = callPackage ../development/python-modules/pyproject-hooks { };
 
+  pyrodigal = callPackage ../development/python-modules/pyrodigal { };
+
   pypsrp = callPackage ../development/python-modules/pypsrp { };
 
   phpserialize = callPackage ../development/python-modules/phpserialize { };
