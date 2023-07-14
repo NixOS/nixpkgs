@@ -7361,6 +7361,11 @@
     github = "jali-clarke";
     githubId = 17733984;
   };
+  james-atkins = {
+    name = "James Atkins";
+    github = "james-atkins";
+    githubId = 9221409;
+  };
   jamiemagee = {
     email = "jamie.magee@gmail.com";
     github = "JamieMagee";
