@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch2, pkg-config, python3Packages, makeWrapper
-, libsamplerate, libsndfile, readline, eigen, celt
+, libsamplerate, eigen, celt
 , wafHook
 , gitUpdater
 # Darwin Dependencies
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkg-config python makeWrapper wafHook ];
-  buildInputs = [ libsamplerate libsndfile readline eigen celt
+  buildInputs = [ libsamplerate eigen celt
     optDbus optPythonDBus optLibffado optAlsaLib optLibopus
   ] ++ lib.optionals stdenv.isDarwin [
     aften AudioUnit CoreAudio Accelerate libobjc
@@ -56,9 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  postPatch = ''
-    patchShebangs --build svnversion_regenerate.sh
-  '';
+  dontAddWafCrossFlags = true;
 
   wafConfigureFlags = [
     "--classic"
