@@ -5,7 +5,7 @@
 , fetchFromGitHub
 , fetchPypi
 , importlib-resources
-, jaraco_classes
+, jaraco-classes
 , jaraco_collections
 , jaraco_itertools
 , jaraco-context
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     requests-toolbelt
     jaraco_collections
     jaraco-context
-    jaraco_classes
+    jaraco-classes
     jaraco-net
     more-itertools
     importlib-resources

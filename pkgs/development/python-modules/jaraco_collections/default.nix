@@ -3,7 +3,7 @@
 , fetchPypi
 , setuptools
 , setuptools-scm
-, jaraco_classes
+, jaraco-classes
 , jaraco_text
 }:
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   propagatedBuildInputs = [
-    jaraco_classes
+    jaraco-classes
     jaraco_text
   ];
 
