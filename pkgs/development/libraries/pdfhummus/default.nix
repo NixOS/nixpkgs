@@ -3,17 +3,22 @@
 , fetchFromGitHub
 , cmake
 , qtbase
+, zlib
+, freetype
+, libjpeg
+, libtiff
+, libpng
 }:
 
 stdenv.mkDerivation rec {
   pname = "pdfhummus";
-  version = "4.5.6";
+  version = "4.5.8";
 
   src = fetchFromGitHub {
     owner = "galkahana";
     repo = "PDF-Writer";
     rev = "v${version}";
-    hash = "sha256-F195hyUia6o+7PKPqNANf/Ixr8OYpj1HMaB0dqxyMBI=";
+    hash = "sha256-aL/icjoP0SQIWXiR0pCrSevkQYDdzPfZGx4xjmPr0AU=";
   };
 
   nativeBuildInputs = [
@@ -24,7 +29,21 @@ stdenv.mkDerivation rec {
     qtbase
   ];
 
+  propagatedBuildInputs = [
+    zlib
+    freetype
+    libjpeg
+    libtiff
+    libpng
+  ];
+
   dontWrapQtApps = true;
+
+  cmakeFlags = [
+    "-DUSE_BUNDLED=OFF"
+    # Use bundled LibAesgm
+    "-DUSE_UNBUNDLED_FALLBACK_BUNDLED=ON"
+  ];
 
   meta = with lib; {
     description = "A Fast and Free C++ Library for Creating, Parsing an Manipulating PDF Files and Streams";
