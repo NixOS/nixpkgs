@@ -1,7 +1,6 @@
-{ stdenv
-, lib
-, fetchFromGitHub
+{ lib
 , buildDotnetModule
+, fetchFromGitHub
 }:
 
 buildDotnetModule rec {

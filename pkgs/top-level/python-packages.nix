@@ -1731,6 +1731,8 @@ self: super: with self; {
 
   cexprtk = callPackage ../development/python-modules/cexprtk { };
 
+  coffea = callPackage ../development/python-modules/coffea { };
+
   cohere = callPackage ../development/python-modules/cohere { };
 
   coincurve = callPackage ../development/python-modules/coincurve {
@@ -1742,6 +1744,8 @@ self: super: with self; {
   connection-pool = callPackage ../development/python-modules/connection-pool { };
 
   connio = callPackage ../development/python-modules/connio { };
+
+  correctionlib = callPackage ../development/python-modules/correctionlib { };
 
   coqpit = callPackage ../development/python-modules/coqpit { };
 
@@ -2374,6 +2378,8 @@ self: super: with self; {
   dask-gateway-server = callPackage ../development/python-modules/dask-gateway-server { };
 
   dask-glm = callPackage ../development/python-modules/dask-glm { };
+
+  dask-histogram = callPackage ../development/python-modules/dask-histogram { };
 
   dask-image = callPackage ../development/python-modules/dask-image { };
 

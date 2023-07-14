@@ -2,38 +2,62 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, cookiecutter
+# propagated build inputs
 , filelock
 , huggingface-hub
-, importlib-metadata
+, numpy
+, protobuf
+, packaging
+, pyyaml
 , regex
 , requests
-, numpy
-, packaging
-, tensorflow
-, sagemaker
-, ftfy
-, protobuf
-, scikit-learn
-, pillow
-, pyyaml
-, torch
 , tokenizers
+, safetensors
 , tqdm
+# optional dependencies
+, scikit-learn
+, tensorflow
+, torch
+, accelerate
+, faiss
+, datasets
+, jax
+, jaxlib
+, flax
+, optax
+, ftfy
+, onnxruntime
+, cookiecutter
+, sagemaker
+, fairscale
+, optuna
+, ray
+, pydantic
+, uvicorn
+, fastapi
+, starlette
+, librosa
+, phonemizer
+, torchaudio
+, pillow
+, timm
+, torchvision
+, av
+, sentencepiece
 }:
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.28.1";
+  version = "4.30.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-FmiuWfoFZjZf1/GbE6PmSkeshWWh+6nDj2u2PMSeDk0=";
+    hash = "sha256-S1jQsBObKGZY9tlbcNcgchwUs/eeaohYxOtbN1cPa2Q=";
   };
 
   propagatedBuildInputs = [
@@ -46,12 +70,21 @@ buildPythonPackage rec {
     regex
     requests
     tokenizers
+    safetensors
     tqdm
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
   ];
 
-  passthru.optional-dependencies = {
+  passthru.optional-dependencies =
+  let
+    audio = [
+      librosa
+      # pyctcdecode
+      phonemizer
+      # kenlm
+    ];
+    vision = [ pillow ];
+  in
+    {
     ja = [
       # fugashi
       # ipadic
@@ -65,12 +98,27 @@ buildPythonPackage rec {
       tensorflow
       # onnxconverter-common
       # tf2onnx
+      # tensorflow-text
+      # keras-nlp
     ];
     torch = [
       torch
+      accelerate
     ];
+    retrieval = [ faiss datasets ];
+    flax = [ jax jaxlib flax optax ];
     tokenizers = [
       tokenizers
+    ];
+    ftfy = [ ftfy ];
+    onnxruntime = [
+      onnxruntime
+      # onnxruntime-tools
+    ];
+    onnx = [
+      # onnxconverter-common
+      # tf2onnx
+      onnxruntime
     ];
     modelcreation = [
       cookiecutter
@@ -78,14 +126,35 @@ buildPythonPackage rec {
     sagemaker = [
       sagemaker
     ];
-    ftfy = [ ftfy ];
-    onnx = [
-      # onnxconverter-common
-      # tf2onnx
+    deepspeed = [
+      # deepspeed
+      accelerate
     ];
-    vision = [
-      pillow
+    fairscale = [ fairscale ];
+    optuna = [ optuna ];
+    ray = [ ray ] ++ ray.optional-dependencies.tune-deps;
+    # sigopt = [ sigopt ];
+    # integrations = ray ++ optuna ++ sigopt;
+    serving = [
+      pydantic
+      uvicorn
+      fastapi
+      starlette
     ];
+    audio = audio;
+    speech = [ torchaudio ] ++ audio;
+    torch-speech = [ torchaudio ] ++ audio;
+    tf-speech = audio;
+    flax-speech = audio;
+    timm = [ timm ];
+    torch-vision = [ torchvision ] ++ vision;
+    # natten = [ natten ];
+    # codecarbon = [ codecarbon ];
+    video = [
+      # decord
+      av
+    ];
+    sentencepiece = [ sentencepiece protobuf ];
   };
 
 
@@ -102,6 +171,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/huggingface/transformers/releases/tag/v${version}";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ pashashocky ];
+    maintainers = with maintainers; [ pashashocky happysalada ];
   };
 }
