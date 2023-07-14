@@ -1,6 +1,6 @@
 { stdenv, lib, pkgs, fetchurl, buildEnv
 , coreutils, findutils, gnugrep, gnused, getopt, git, tree, gnupg, openssl
-, which, openssh, procps, qrencode, makeWrapper, pass, symlinkJoin
+, which, openssh, procps, qrencode, makeWrapper, pass
 
 , xclip ? null, xdotool ? null, dmenu ? null
 , x11Support ? !stdenv.isDarwin , dmenuSupport ? (x11Support || waylandSupport)

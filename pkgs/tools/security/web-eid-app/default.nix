@@ -5,7 +5,6 @@
 , gtest
 , pcsclite
 , pkg-config
-, qmake
 , qttranslations
 }:
 

@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, fetchzip }:
+{ lib, buildGoModule, fetchFromGitHub, fetchzip }:
 
 buildGoModule rec {
   pname = "mutagen";
