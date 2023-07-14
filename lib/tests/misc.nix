@@ -488,6 +488,39 @@ runTests {
     expected = { a = [ 2 3 ]; b = [7]; c = [8];};
   };
 
+  testListCommonPrefixExample1 = {
+    expr = lists.commonPrefix [ 1 2 3 4 5 6 ] [ 1 2 4 8 ];
+    expected = [ 1 2 ];
+  };
+  testListCommonPrefixExample2 = {
+    expr = lists.commonPrefix [ 1 2 3 ] [ 1 2 3 4 5 ];
+    expected = [ 1 2 3 ];
+  };
+  testListCommonPrefixExample3 = {
+    expr = lists.commonPrefix [ 1 2 3 ] [ 4 5 6 ];
+    expected = [ ];
+  };
+  testListCommonPrefixEmpty = {
+    expr = lists.commonPrefix [ ] [ 1 2 3 ];
+    expected = [ ];
+  };
+  testListCommonPrefixSame = {
+    expr = lists.commonPrefix [ 1 2 3 ] [ 1 2 3 ];
+    expected = [ 1 2 3 ];
+  };
+  testListCommonPrefixLazy = {
+    expr = lists.commonPrefix [ 1 ] [ 1 (abort "lib.lists.commonPrefix shouldn't evaluate this")];
+    expected = [ 1 ];
+  };
+  # This would stack overflow if `commonPrefix` were implemented using recursion
+  testListCommonPrefixLong =
+    let
+      longList = genList (n: n) 100000;
+    in {
+      expr = lists.commonPrefix longList longList;
+      expected = longList;
+    };
+
   testSort = {
     expr = sort builtins.lessThan [ 40 2 30 42 ];
     expected = [2 30 40 42];
