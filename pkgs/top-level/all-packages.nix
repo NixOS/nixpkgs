@@ -290,6 +290,8 @@ with pkgs;
 
   apko = callPackage ../development/tools/apko { };
 
+  melange = callPackage ../development/tools/melange { };
+
   appthreat-depscan = callPackage ../development/tools/appthreat-depscan { };
 
   activate-linux = callPackage ../applications/misc/activate-linux { };
