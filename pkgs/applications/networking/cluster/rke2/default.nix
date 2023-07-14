@@ -13,9 +13,21 @@ buildGoModule rec {
 
   vendorHash = "sha256-7Za8PQr22kvZBvoYRVbI4bXUvGWkfILQC+kAmw9ZCro=";
 
-  subPackages = [ "." ];
+  postPatch = ''
+    # Patch the build scripts so they work in the Nix build environment.
+    patchShebangs ./scripts
 
-  ldflags = [ "-s" "-w" "-X github.com/k3s-io/k3s/pkg/version.Version=v${version}" ];
+    # Disable the static build as it breaks.
+    sed -e 's/STATIC_FLAGS=.*/STATIC_FLAGS=/g' -i scripts/build-binary
+  '';
+
+  buildPhase = ''
+    DRONE_TAG="v${version}" ./scripts/build-binary
+  '';
+
+  installPhase = ''
+    install -D ./bin/rke2 $out/bin/rke2
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/rancher/rke2";
