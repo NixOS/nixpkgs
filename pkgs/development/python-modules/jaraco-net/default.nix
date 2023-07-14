@@ -12,7 +12,7 @@
 , requests
 , feedparser
 , jaraco-text
-, jaraco_logging
+, jaraco-logging
 , jaraco-email
 , jaraco-functools
 , jaraco-collections
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     requests
     feedparser
     jaraco-text
-    jaraco_logging
+    jaraco-logging
     jaraco-email
     jaraco-functools
     jaraco-collections

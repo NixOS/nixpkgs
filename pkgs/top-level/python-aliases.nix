@@ -159,6 +159,7 @@ mapAliases ({
   jaraco_collections = jaraco-collections; # added 2023-07-14
   jaraco_functools = jaraco-functools; # added 2023-07-14
   jaraco_itertools = jaraco-itertools; # added 2023-07-14
+  jaraco_logging = jaraco-logging; # added 2023-07-14
   jaraco_text = jaraco-text; # added 2023-07-14
   JayDeBeApi = jaydebeapi; # added 2023-02-19
   jinja2_time = jinja2-time; # added 2022-11-07

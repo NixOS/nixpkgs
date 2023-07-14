@@ -3,7 +3,7 @@
 , fetchPypi
 , isPy3k
 , six
-, jaraco_logging
+, jaraco-logging
 , jaraco-text
 , jaraco_stream
 , pytz
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     six
     importlib-metadata
-    jaraco_logging
+    jaraco-logging
     jaraco-text
     jaraco_stream
     pytz
