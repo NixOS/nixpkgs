@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "tfupdate";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "minamijoyo";
     repo = "tfupdate";
     rev = "v${version}";
-    sha256 = "sha256-A75WxcwXooMfQGlm2PxA0SNdr1hSrPiRGgzDzNjKx9Y=";
+    sha256 = "sha256-ii37Au/2jjGdQjc2LnBPkyNNBMbD5XPPo7i3krF33W0=";
   };
 
   vendorHash = "sha256-gtAenM1URr2wFfe2/zCIyNvG7echjIxSxG1hX2vq16g=";
