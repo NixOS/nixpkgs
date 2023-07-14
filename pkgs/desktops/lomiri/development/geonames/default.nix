@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitLab
+, fetchpatch
 , gitUpdater
 , testers
 , buildPackages
@@ -38,13 +39,18 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
+  patches = [
+    # Improves install locations of demo & docs
+    # Remove when https://gitlab.com/ubports/development/core/geonames/-/merge_requests/3 merged & in release
+    (fetchpatch {
+      name = "0001-geonames-Use-GNUInstallDirs-more.patch";
+      url = "https://gitlab.com/OPNA2608/geonames/-/commit/e64a391fc213b2629da1c8bbf975fd62a2973c51.patch";
+      hash = "sha256-HPYDtIy1WUrZLPzvKh4aezrT/LniZkNX+PeQ9YB85RY=";
+    })
+  ];
+
   postPatch = ''
     patchShebangs src/generate-locales.sh tests/setup-test-env.sh
-
-    substituteInPlace doc/reference/CMakeLists.txt \
-      --replace "\''${CMAKE_INSTALL_DATADIR}/gtk-doc/html/\''${PROJECT_NAME}" "\''${CMAKE_INSTALL_DOCDIR}"
-    substituteInPlace demo/CMakeLists.txt \
-      --replace 'RUNTIME DESTINATION bin' 'RUNTIME DESTINATION ''${CMAKE_INSTALL_BINDIR}'
   '';
 
   strictDeps = true;
