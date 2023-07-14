@@ -19,34 +19,37 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    jdk
     makeWrapper
   ];
 
-  buildInputs = [
-    jdk
-  ];
-
-  runtimeInputs = [
-    survex
-  ];
-
   buildPhase = ''
+    runHook preBuild
+
     javac -d . src/*.java
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/java
     cp -r symbols Tunnel tutorials $out/java
+    # `SURVEX_EXECUTABLE_DIR` must include trailing slash
     makeWrapper ${jre}/bin/java $out/bin/tunnelx \
       --add-flags "-cp $out/java Tunnel.MainBox" \
-      --set SURVEX_EXECUTABLE_DIR ${survex}/bin/ \
+      --set SURVEX_EXECUTABLE_DIR ${lib.getBin survex}/bin/ \
       --set TUNNEL_USER_DIR $out/java/
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "A program for drawing cave surveys in 2D";
     homepage = "https://github.com/CaveSurveying/tunnelx/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ goatchurchprime ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ goatchurchprime ];
+    platforms = lib.platforms.linux;
   };
 })
