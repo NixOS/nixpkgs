@@ -1,66 +1,67 @@
 { callPackage
+, fetchFromGitHub
 , lib
 , makeWrapper
-, runCommand
-
-, CoreServices
-, Security
+, pkg-config
+, stdenv
 
 , cargo
 , rustPlatform
-, rustc
+
+, gcc
+, cmake
+, libiconv
+
+, CoreServices
+, Security
 }:
 
-let
-  evcxr = callPackage ./evcxr.nix {
-    inherit CoreServices Security;
+rustPlatform.buildRustPackage rec {
+  pname = "evcxr";
+  version = "0.15.0";
+
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "evcxr";
+    rev = "v${version}";
+    hash = "sha256-s8zM1vxEeJYcRek1rqUmrBfvB2zCAF3iLG8UVA7WABI=";
   };
 
-  withPackages = callPackage ./withPackages.nix {
-    inherit cargo rustPlatform;
-  };
+  cargoHash = "sha256-wMo5Fq6aMiE6kg8mZoz1T3KPwKSdJcej83MB+/GRM5w=";
 
-  cargoHome = packageNames: runCommand "cargo-home" {} ''
-    mkdir -p $out
-    cp "${withPackages.cargoNix packageNames}"/Cargo.toml $out
-    cp "${withPackages.cargoNix packageNames}"/Cargo.lock $out
+  RUST_SRC_PATH = "${rustPlatform.rustLibSrc}";
 
-    mkdir -p $out/src
-    touch $out/src/lib.rs
+  nativeBuildInputs = [ pkg-config makeWrapper cmake ];
+  buildInputs = lib.optionals stdenv.isDarwin
+    [ libiconv CoreServices Security ];
 
-    cat <<EOT >> $out/config.toml
-    [source.crates-io]
-    replace-with = "vendored-sources"
+  checkFlags = [
+    # test broken with rust 1.69:
+    # * https://github.com/evcxr/evcxr/issues/294
+    # * https://github.com/NixOS/nixpkgs/issues/229524
+    "--skip=check_for_errors"
+  ];
 
-    [source.vendored-sources]
-    directory = "${withPackages.vendorDependencies packageNames}"
-
-    [net]
-    offline = true
-    EOT
+  postInstall = let
+    wrap = exe: ''
+      wrapProgram $out/bin/${exe} \
+        --prefix PATH : ${lib.makeBinPath [ cargo gcc ]} \
+        --set-default RUST_SRC_PATH "$RUST_SRC_PATH"
+    '';
+  in ''
+    ${wrap "evcxr"}
+    ${wrap "evcxr_jupyter"}
+    rm $out/bin/testing_runtime
   '';
 
-in
-
-evcxr.overrideAttrs (oldAttrs: {
-  passthru = (oldAttrs.passthru or {}) // {
-    withPackages = packageNames:
-      runCommand "evcxr" {
-        buildInputs = [makeWrapper];
-
-        makeWrapperArgs = [
-          "--set" "EVCXR_CONFIG_DIR" "${withPackages.evcxrConfigDir packageNames}"
-          "--set" "CARGO_HOME" "${cargoHome packageNames}"
-          "--prefix" "PATH" ":" "${lib.makeBinPath [rustc cargo]}"
-        ];
-
-        passthru = {
-          cargoHome = cargoHome packageNames;
-        };
-      } ''
-        mkdir -p $out/bin
-        makeWrapper ${evcxr}/bin/evcxr $out/bin/evcxr $makeWrapperArgs
-        makeWrapper ${evcxr}/bin/evcxr_jupyter $out/bin/evcxr_jupyter $makeWrapperArgs
-      '';
+  passthru = {
+    withPackages = callPackage ./withPackages.nix {};
   };
-})
+
+  meta = with lib; {
+    description = "An evaluation context for Rust";
+    homepage = "https://github.com/google/evcxr";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ protoben ma27 ];
+  };
+}

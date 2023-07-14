@@ -1,13 +1,16 @@
 { callPackage
 , fetchFromGitHub
 , lib
+, makeWrapper
 , runCommand
 , writeTextFile
 
 , python3
 
 , cargo
+, evcxr
 , rustPlatform
+, rustc
 }:
 
 let
@@ -89,16 +92,44 @@ let
 
 in
 
-{
-  inherit cratesIndex;
+packageNames:
 
-  inherit allPackageNames;
+let
+  cargoHome = runCommand "cargo-home" {} ''
+    mkdir -p $out
+    cp "${cargoNix packageNames}"/Cargo.toml $out
+    cp "${cargoNix packageNames}"/Cargo.lock $out
 
-  inherit cargoToml;
+    mkdir -p $out/src
+    touch $out/src/lib.rs
 
-  inherit cargoNix;
+    cat <<EOT >> $out/config.toml
+    [source.crates-io]
+    replace-with = "vendored-sources"
 
-  inherit vendorDependencies;
+    [source.vendored-sources]
+    directory = "${vendorDependencies packageNames}"
 
-  inherit evcxrConfigDir;
-}
+    [net]
+    offline = true
+    EOT
+  '';
+in
+
+runCommand "evcxr" {
+  buildInputs = [makeWrapper];
+
+  makeWrapperArgs = [
+    "--set" "EVCXR_CONFIG_DIR" "${evcxrConfigDir packageNames}"
+    "--set" "CARGO_HOME" "${cargoHome}"
+    "--prefix" "PATH" ":" "${lib.makeBinPath [rustc cargo]}"
+  ];
+
+  passthru = {
+    inherit cargoHome;
+  };
+} ''
+  mkdir -p $out/bin
+  makeWrapper ${evcxr}/bin/evcxr $out/bin/evcxr $makeWrapperArgs
+  makeWrapper ${evcxr}/bin/evcxr_jupyter $out/bin/evcxr_jupyter $makeWrapperArgs
+''
