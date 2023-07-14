@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     owner = "Rikorose";
     repo = "DeepFilterNet";
     rev = "v${version}";
-    hash = "sha256-+RngJjMtHQC91ctIgHALHss7qSB9pBYLNehKaTOwNTA=";
+    hash = "sha256-i/q/i/Mhy+h+n41A0gFiwobehl+3Owc3hWfe0tIoLzA=";
   };
 
   cargoLock = {
