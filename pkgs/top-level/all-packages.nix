@@ -36387,7 +36387,6 @@ with pkgs;
   };
 
   bitcoind-knots = callPackage ../applications/blockchains/bitcoin-knots {
-    boost = boost179;
     withGui = false;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
