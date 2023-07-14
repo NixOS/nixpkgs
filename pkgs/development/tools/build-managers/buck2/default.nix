@@ -1,5 +1,6 @@
 { fetchurl, lib, stdenv, zstd
 , autoPatchelfHook, gcc-unwrapped
+, testers, buck2 # for passthru.tests
 }:
 
 let
@@ -65,15 +66,31 @@ stdenv.mkDerivation {
   doInstallCheck = true;
   installCheckPhase = "$out/bin/buck2 --version";
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+    tests = testers.testVersion {
+      package = buck2;
+
+      # NOTE (aseipp): the buck2 --version command doesn't actually print out
+      # the given version tagged in the release, but a hash, but not the git
+      # hash; the entire version logic is bizarrely specific to buck2, and needs
+      # to be reworked the open source build to behave like expected. in the
+      # mean time, it *does* always print out 'buck2 <hash>...' so we can just
+      # match on "buck2"
+      version = "buck2";
+    };
+  };
+
   meta = with lib; {
     description = "Fast, hermetic, multi-language build system";
     homepage = "https://buck2.build";
+    changelog = "https://github.com/facebook/buck2/releases/tag/${buck2-version}";
     license = with licenses; [ asl20 /* or */ mit ];
+    mainProgram = "buck2";
+    maintainers = with maintainers; [ thoughtpolice ];
     platforms = [
       "x86_64-linux" "aarch64-linux"
       "x86_64-darwin" "aarch64-darwin"
     ];
-    maintainers = with maintainers; [ thoughtpolice ];
   };
 }
