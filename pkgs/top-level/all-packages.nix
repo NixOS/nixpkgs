@@ -5428,6 +5428,8 @@ with pkgs;
 
   interlock = callPackage ../servers/interlock { };
 
+  invoice = callPackage ../tools/misc/invoice { };
+
   invoiceplane = callPackage ../servers/web-apps/invoiceplane { };
 
   iotas = callPackage ../applications/office/iotas { };
