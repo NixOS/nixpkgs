@@ -2,7 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, jaraco_functools
+, jaraco-functools
 , jaraco_text
 , more-itertools
 , portend
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    jaraco_functools
+    jaraco-functools
     more-itertools
     six
   ];

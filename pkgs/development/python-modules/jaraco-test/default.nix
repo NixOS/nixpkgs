@@ -5,7 +5,7 @@
 , setuptools
 , setuptools-scm
 , toml
-, jaraco_functools
+, jaraco-functools
 , jaraco-context
 , more-itertools
 , jaraco_collections
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     toml
-    jaraco_functools
+    jaraco-functools
     jaraco-context
     more-itertools
     jaraco_collections

@@ -4,7 +4,7 @@
 , pythonOlder
 , autocommand
 , importlib-resources
-, jaraco_functools
+, jaraco-functools
 , jaraco-context
 , inflect
 , pathlib2
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     autocommand
     jaraco-context
-    jaraco_functools
+    jaraco-functools
     inflect
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources

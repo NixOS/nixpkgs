@@ -6,12 +6,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "jaraco.functools";
+  pname = "jaraco-functools";
   version = "3.6.0";
   format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "jaraco.functools";
+    inherit version;
     hash = "sha256-Lho74Rq67O5fWrjdWJY4voMEzEy5E2H+Xmg/S22ft6M=";
   };
 

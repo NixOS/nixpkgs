@@ -5213,7 +5213,7 @@ self: super: with self; {
 
   jaraco-context = callPackage ../development/python-modules/jaraco-context { };
 
-  jaraco_functools = callPackage ../development/python-modules/jaraco_functools { };
+  jaraco-functools = callPackage ../development/python-modules/jaraco-functools { };
 
   jaraco_itertools = callPackage ../development/python-modules/jaraco_itertools { };
 
