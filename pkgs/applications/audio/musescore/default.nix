@@ -1,8 +1,9 @@
-{ mkDerivation
+{ stdenv
 , lib
 , fetchFromGitHub
 , fetchpatch
 , cmake
+, wrapQtAppsHook
 , pkg-config
 , ninja
 , alsa-lib
@@ -30,7 +31,7 @@
 , nixosTests
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "musescore";
   version = "4.1.0";
 
@@ -60,6 +61,7 @@ mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    wrapQtAppsHook
     cmake
     pkg-config
     ninja
