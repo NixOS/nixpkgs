@@ -7,6 +7,7 @@
 , fetchPypi
 , filelock
 , idna
+, keyring
 , oscrypto
 , pycryptodomex
 , pyjwt
@@ -52,6 +53,10 @@ buildPythonPackage rec {
     setuptools
     typing-extensions
   ];
+
+  passthru.optional-dependencies = {
+    secure-local-storage = [ keyring ];
+  };
 
   # Tests require encrypted secrets, see
   # https://github.com/snowflakedb/snowflake-connector-python/tree/master/.github/workflows/parameters
