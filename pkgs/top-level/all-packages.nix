@@ -556,6 +556,8 @@ with pkgs;
 
   protoc-gen-rust = callPackage ../development/tools/protoc-gen-rust { };
 
+  protoc-gen-tonic = callPackage ../development/tools/protoc-gen-tonic { };
+
   protoc-gen-twirp = callPackage ../development/tools/protoc-gen-twirp { };
 
   protoc-gen-twirp_php = callPackage ../development/tools/protoc-gen-twirp_php { };
