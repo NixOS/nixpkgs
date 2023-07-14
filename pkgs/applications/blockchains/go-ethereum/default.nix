@@ -57,6 +57,6 @@ in buildGoModule rec {
     homepage = "https://geth.ethereum.org/";
     description = "Official golang implementation of the Ethereum protocol";
     license = with licenses; [ lgpl3Plus gpl3Plus ];
-    maintainers = with maintainers; [ adisbladis RaghavSood ];
+    maintainers = with maintainers; [ RaghavSood ];
   };
 }
