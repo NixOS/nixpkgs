@@ -552,6 +552,8 @@ with pkgs;
 
   protoc-gen-prost-crate = callPackage ../development/tools/protoc-gen-prost-crate { };
 
+  protoc-gen-prost-serde = callPackage ../development/tools/protoc-gen-prost-serde { };
+
   protoc-gen-rust = callPackage ../development/tools/protoc-gen-rust { };
 
   protoc-gen-twirp = callPackage ../development/tools/protoc-gen-twirp { };
