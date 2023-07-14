@@ -501,6 +501,23 @@ runTests {
     expected = false;
   };
 
+  testListRemovePrefixExample1 = {
+    expr = lists.removePrefix [ 1 2 ] [ 1 2 3 4 ];
+    expected = [ 3 4 ];
+  };
+  testListRemovePrefixExample2 = {
+    expr = (builtins.tryEval (lists.removePrefix [ 0 1 ] [ 1 2 3 4 ])).success;
+    expected = false;
+  };
+  testListRemovePrefixEmptyPrefix = {
+    expr = lists.removePrefix [ ] [ 1 2 ];
+    expected = [ 1 2 ];
+  };
+  testListRemovePrefixEmptyList = {
+    expr = (builtins.tryEval (lists.removePrefix [ 1 2 ] [ ])).success;
+    expected = false;
+  };
+
   testFoldAttrs = {
     expr = foldAttrs (n: a: [n] ++ a) [] [
     { a = 2; b = 7; }
