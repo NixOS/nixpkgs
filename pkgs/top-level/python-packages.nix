@@ -6462,6 +6462,8 @@ self: super: with self; {
 
   minikerberos = callPackage ../development/python-modules/minikerberos { };
 
+  minimal-snowplow-tracker = callPackage ../development/python-modules/minimal-snowplow-tracker { };
+
   minimock = callPackage ../development/python-modules/minimock { };
 
   mininet-python = (toPythonModule (pkgs.mininet.override {
