@@ -5510,6 +5510,8 @@ with pkgs;
 
   komga = callPackage ../servers/komga { };
 
+  komorebi = callPackage ../applications/graphics/komorebi { };
+
   krapslog = callPackage ../tools/misc/krapslog { };
 
   krelay = callPackage ../applications/networking/cluster/krelay { };
