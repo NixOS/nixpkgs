@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_ZCHUNK_COMPRESSION=true"
     "-DWITH_SYSTEM_ZCHUNK=true"
   ] ++ lib.optionals withRpm [
+    "-DENABLE_COMPS=true"
     "-DENABLE_PUBKEY=true"
     "-DENABLE_RPMDB=true"
     "-DENABLE_RPMDB_BYRPMHEADER=true"
@@ -42,4 +43,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ copumpkin ];
   };
 }
-
