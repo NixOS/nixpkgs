@@ -4,13 +4,20 @@
 { lib, config, hostPlatform }:
 
 let
+  inherit (import ./problems.nix { inherit lib; })
+    problemKindsManual
+    problemKindsUnique'
+  ;
+  generateProblems =
+    (import ./problems.nix { inherit lib; }).generateProblems
+      { inherit hasNoMaintainers;}
+      config.problems;
+
   # If we're in hydra, we can dispense with the more verbose error
   # messages and make problems easier to spot.
   inHydra = config.inHydra or false;
-  # Allow the user to opt-into additional warnings, e.g.
-  # import <nixpkgs> { config = { showDerivationWarnings = [ "maintainerless" ]; }; }
-  showWarnings = config.showDerivationWarnings;
 
+  # Do not use this in new code, use `lib.getName` instead
   getName = attrs: attrs.name or ("${attrs.pname or "«name-missing»"}-${attrs.version or "«version-missing»"}");
 
   allowUnfree = config.allowUnfree
@@ -52,8 +59,7 @@ let
     hasLicense attrs &&
     isUnfree (lib.lists.toList attrs.meta.license);
 
-  hasNoMaintainers = attrs:
-    attrs ? meta.maintainers && (lib.length attrs.meta.maintainers) == 0;
+  hasNoMaintainers = pkg: lib.length (pkg.meta.maintainers or []) == 0;
 
   isMarkedBroken = attrs: attrs.meta.broken or false;
 
@@ -86,7 +92,6 @@ let
     !(isMarkedInsecure attrs) ||
     allowInsecurePredicate attrs ||
     builtins.getEnv "NIXPKGS_ALLOW_INSECURE" == "1";
-
 
   isNonSource = sourceTypes: lib.lists.any (t: !t.isSource) sourceTypes;
 
@@ -124,22 +129,26 @@ let
     unsupported = remediate_allowlist "UnsupportedSystem" (x: "");
     blocklisted = x: "";
     insecure = remediate_insecure;
+    problem = remediate_problem;
     broken-outputs = remediateOutputsToInstall;
     unknown-meta = x: "";
     maintainerless = x: "";
   };
+
   remediation_env_var = allow_attr: {
     Unfree = "NIXPKGS_ALLOW_UNFREE";
     Broken = "NIXPKGS_ALLOW_BROKEN";
     UnsupportedSystem = "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM";
     NonSource = "NIXPKGS_ALLOW_NONSOURCE";
   }.${allow_attr};
+
   remediation_phrase = allow_attr: {
     Unfree = "unfree packages";
     Broken = "broken packages";
     UnsupportedSystem = "packages that are unsupported for this system";
     NonSource = "packages not built from source";
   }.${allow_attr};
+
   remediate_predicate = predicateConfigAttr: attrs:
     ''
 
@@ -150,8 +159,8 @@ let
         }
     '';
 
-    # flakeNote will be printed in the remediation messages below.
-    flakeNote = "
+  # flakeNote will be printed in the remediation messages below.
+  flakeNote = "
  Note: For `nix shell`, `nix build`, `nix develop` or any other Nix 2.4+
  (Flake) command, `--impure` must be passed in order to read this
  environment variable.
@@ -209,6 +218,59 @@ let
 
       '';
 
+  remediate_problem = pkg: let
+    pkgName = lib.getName pkg;
+
+    fullMessage = problem: (if problem.kind != problem.name then problem.kind + ": " else "") + problem.name + ": " + problem.message;
+    urlMessage = problem: let
+      urls = problem.urls or [];
+    in
+      lib.concatMapStrings (url: "\n  - " + url) urls;
+
+    printProblem = problem: "- " + fullMessage problem + urlMessage problem;
+
+    problems = generateProblems pkg;
+
+    ignorePattern = indentation: lib.pipe problems [
+      (lib.filter ({handler, ...}: handler == "error"))
+      (builtins.map ({name, ...}: ''"${pkgName}"."${name}" = "warn";''))
+      (lib.concatStringsSep ("\n" + indentation))
+    ];
+  in ''
+
+
+    Package problems:
+
+    ${lib.pipe problems [
+      (lib.filter ({handler, ...}: handler == "error"))
+      (builtins.map printProblem)
+      (lib.concatStringsSep "\n")
+    ]}
+
+    You can use it anyway by ignoring its problems, using one of the
+    following methods:
+
+    a) For `nixos-rebuild` you can add "warn" or "ignore" entries to
+      `nixpkgs.config.problems.handlers` inside configuration.nix,
+      like this:
+
+        {
+          nixpkgs.config.problems.handlers = {
+            ${ignorePattern "        "}
+          };
+        }
+
+    b) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
+      "warn" or "ignore" to `problems.handlers` in
+      ~/.config/nixpkgs/config.nix, like this:
+
+        {
+          problems.handlers = {
+            ${ignorePattern "        "}
+          };
+        }
+  '';
+
   remediateOutputsToInstall = attrs: let
       expectedOutputs = attrs.meta.outputsToInstall or [];
       actualOutputs = attrs.outputs or [ "out" ];
@@ -237,14 +299,16 @@ let
         else throw;
     in handler msg;
 
-  handleEvalWarning = { meta, attrs }: { reason , errormsg ? "" }:
+  handleEvalWarning = { meta, attrs }: { reason, errormsg ? "" }:
     let
-      remediationMsg = (builtins.getAttr reason remediation) attrs;
-      msg = if inHydra then "Warning while evaluating ${getName attrs}: «${reason}»: ${errormsg}"
-        else "Package ${getName attrs} in ${pos_str meta} ${errormsg}, continuing anyway."
-             + (lib.optionalString (remediationMsg != "") "\n${remediationMsg}");
-      isEnabled = lib.findFirst (x: x == reason) null showWarnings;
-    in if isEnabled != null then builtins.trace msg true else true;
+      msg =
+        if inHydra then
+          "Warning while evaluating ${getName attrs}: «${reason}»: ${errormsg}"
+        else
+          "Package ${getName attrs} in ${pos_str meta} ${errormsg}, continuing anyway."
+      ;
+    in
+    builtins.trace msg true;
 
   # Deep type-checking. Note that calling `type.check` is not enough: see `lib.mkOptionType`'s documentation.
   # We don't include this in lib for now because this function is flawed: it accepts things like `mkIf true 42`.
@@ -256,6 +320,7 @@ let
   in eval.success;
 
   # TODO make this into a proper module and use the generic option documentation generation?
+  # Also, this would allow specifying default values instead of having to drag null checks across the entire file
   metaTypes = with lib.types; rec {
     # These keys are documented
     description = str;
@@ -278,6 +343,8 @@ let
     unfree = bool;
     unsupported = bool;
     insecure = bool;
+    # This is checked in more detail further down
+    problems = attrsOf (attrsOf anything);
     # TODO: refactor once something like Profpatsch's types-simple will land
     # This is currently dead code due to https://github.com/NixOS/nix/issues/2532
     tests = attrsOf (mkOptionType {
@@ -312,17 +379,84 @@ let
     badPlatforms = platforms;
   };
 
-  checkMetaAttr = k: v:
-    if metaTypes?${k} then
-      if typeCheck metaTypes.${k} v then
+  # Type of a meta.problems.* value
+  problemTypes = with lib.types; {
+    # Only allow some problem kinds to be used here in `meta`
+    kind = enum problemKindsManual;
+    message = str;
+    urls = listOf str;
+  };
+
+  # Check that a value matches a specific type. Returns an error message, or null if the check passed
+  checkMetaAttr = namespace: types: key: val:
+    if types ? ${key} then
+      if typeCheck types.${key} val then
         null
       else
-        "key 'meta.${k}' has invalid value; expected ${metaTypes.${k}.description}, got\n    ${
-          lib.generators.toPretty { indent = "    "; } v
+        "key '${namespace}.${key}' has invalid value; expected ${types.${key}.description}, got\n    ${
+          lib.generators.toPretty { indent = "    "; } val
         }"
     else
-      "key 'meta.${k}' is unrecognized; expected one of: \n  [${lib.concatMapStringsSep ", " (x: "'${x}'") (lib.attrNames metaTypes)}]";
-  checkMeta = meta: lib.optionals config.checkMeta (lib.remove null (lib.mapAttrsToList checkMetaAttr meta));
+      "key '${namespace}.${key}' is unrecognized; expected one of: \n  [${lib.concatMapStringsSep ", " (x: "'${x}'") (lib.attrNames types)}]"
+  ;
+
+  checkMeta =
+    meta:
+    # Basic attribute checks
+    lib.optionals config.checkMeta (
+      lib.remove null (
+        lib.mapAttrsToList (checkMetaAttr "meta" metaTypes) meta
+      )
+    )
+
+    # Extended checks for problems, as they do not fit the module system
+    ++ lib.optionals (meta ? problems) (
+
+      # Check problem kinds are correct
+      lib.pipe meta.problems [
+        (lib.mapAttrs (name: problem: { kind = name; } // problem))
+        (lib.mapAttrsToList (
+          name: problem:
+          lib.mapAttrsToList (checkMetaAttr "meta.problems.${name}" problemTypes) problem
+        ))
+        (lib.concatLists)
+        (lib.remove null)
+      ]
+
+      # Check that problem has a message (required field)
+      ++ lib.pipe meta.problems [
+        (lib.mapAttrsToList (
+          name: problem:
+          if problem ? message then
+            null
+          else
+            "key 'meta.problems.${name}.message' is missing"
+        ))
+        (lib.remove null)
+      ]
+
+      # Check that some problem kinds are unqiue
+      ++ lib.pipe meta.problems [
+        (lib.mapAttrs (name: problem: { kind = name; } // problem))
+        # Count the number of instances of each problem kind,
+        # returns an attrset mapping kind -> count
+        (lib.foldlAttrs
+          (count: name: problem:
+            count // { ${problem.kind} = (count.${problem.kind} or []) ++ [ name ]; }
+          )
+          {}
+        )
+        # We only care about those that must be unique
+        (builtins.intersectAttrs problemKindsUnique')
+        (lib.filterAttrs (_: names: builtins.length names > 1))
+        (lib.mapAttrsToList (
+          kind: names:
+          "keys [ ${
+            lib.concatMapStringsSep " " (name: "'meta.problems.${name}'") names
+          } ] all have the same problem kind, which is not allowed for kind '${kind}'"
+        ))
+      ]
+    );
 
   checkOutputsToInstall = attrs: let
       expectedOutputs = attrs.meta.outputsToInstall or [];
@@ -354,8 +488,12 @@ let
       unsupported = hasUnsupportedPlatform attrs;
       insecure = isMarkedInsecure attrs;
     } // (
+    # Check meta attribute types first, to make sure it is always called even when there are other issues
+    # Note that this is not a full type check and functions below still need to by careful about their inputs!
+    let res = checkMeta (attrs.meta or {}); in if res != [] then
+      { valid = "no"; reason = "unknown-meta"; errormsg = "has malformed metadata:${lib.concatMapStrings (x: "\n\t - " + x) res}"; }
     # --- Put checks that cannot be ignored here ---
-    if checkOutputsToInstall attrs then
+    else if checkOutputsToInstall attrs then
       { valid = "no"; reason = "broken-outputs"; errormsg = "has invalid meta.outputsToInstall"; }
 
     # --- Put checks that can be ignored here ---
@@ -365,6 +503,8 @@ let
       { valid = "no"; reason = "blocklisted"; errormsg = "has a blocklisted license (‘${showLicense attrs.meta.license}’)"; }
     else if hasDeniedNonSourceProvenance attrs then
       { valid = "no"; reason = "non-source"; errormsg = "contains elements not built from source (‘${showSourceType attrs.meta.sourceProvenance}’)"; }
+
+    # --- Put checks that can be ignored here ---
     else if !allowBroken && attrs.meta.broken or false then
       { valid = "no"; reason = "broken"; errormsg = "is marked as broken"; }
     else if !allowUnsupportedSystem && hasUnsupportedPlatform attrs then
@@ -382,11 +522,31 @@ let
          }
     else if !(hasAllowedInsecure attrs) then
       { valid = "no"; reason = "insecure"; errormsg = "is marked as insecure"; }
-
-    # --- warnings ---
-    # Please also update the type in /pkgs/top-level/config.nix alongside this.
-    else if hasNoMaintainers attrs then
-      { valid = "warn"; reason = "maintainerless"; errormsg = "has no maintainers"; }
+    # --- RFC 127 problems ---
+    # Please also update the type in pkgs/top-level/config.nix alongside this.
+    else
+    let
+      problems = (generateProblems attrs);
+      hasUnignoredProblems = lib.any ({handler, ...}: handler != "ignore") problems;
+      hasErrorProblems = lib.any ({handler, ...}: handler == "error") problems;
+    in
+    if hasUnignoredProblems then
+      {
+        valid = if hasErrorProblems then "no" else "warn";
+        reason = "problem";
+        errormsg =
+          if hasErrorProblems then
+            "has some problem that must be acknowledged"
+          else
+            "has the following problems: [ ${
+              lib.pipe problems [
+                (builtins.map (lib.getAttr "name"))
+                (builtins.map (x: ''"${x}"''))
+                (lib.concatStringsSep " ")
+              ]
+            } ]"
+        ;
+      }
     # -----
     else { valid = "yes"; });
 
