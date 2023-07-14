@@ -109,5 +109,6 @@ symlinkJoin rec {
 
   meta = metaCommon // {
     mainProgram = "temporal";
+    platforms = lib.unique (lib.concatMap (drv: drv.meta.platforms) paths);
   };
 }
