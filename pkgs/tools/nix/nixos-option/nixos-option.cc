@@ -119,7 +119,7 @@ Out::Out(Out & o, const std::string & start, const std::string & end, LinePolicy
 
 Value evaluateValue(Context & ctx, Value & v)
 {
-    ctx.state.forceValue(v, v.attrs->pos);
+    ctx.state.forceValue(v, [&]() { return v.determinePos(nix::noPos); });
     if (ctx.autoArgs.empty()) {
         return v;
     }
