@@ -548,6 +548,8 @@ with pkgs;
 
   protoc-gen-connect-go = callPackage ../development/tools/protoc-gen-connect-go { };
 
+  protoc-gen-prost = callPackage ../development/tools/protoc-gen-prost { };
+
   protoc-gen-rust = callPackage ../development/tools/protoc-gen-rust { };
 
   protoc-gen-twirp = callPackage ../development/tools/protoc-gen-twirp { };
