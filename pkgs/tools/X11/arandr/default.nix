@@ -34,10 +34,10 @@ buildPythonApplication rec {
   nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
   propagatedBuildInputs = [ xrandr pygobject3 ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://christian.amsuess.com/tools/arandr/";
     description = "A simple visual front end for XRandR";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.domenkozar ];
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ domenkozar ];
   };
 }
