@@ -2473,6 +2473,8 @@ self: super: with self; {
 
   dbt-postgres = callPackage ../development/python-modules/dbt-postgres { };
 
+  dbt-redshift = callPackage ../development/python-modules/dbt-redshift { };
+
   dbus-client-gen = callPackage ../development/python-modules/dbus-client-gen { };
 
   dbus-deviation = callPackage ../development/python-modules/dbus-deviation { };
