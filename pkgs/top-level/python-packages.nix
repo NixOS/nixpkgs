@@ -2469,6 +2469,8 @@ self: super: with self; {
 
   dbt-extractor = callPackage ../development/python-modules/dbt-extractor { };
 
+  dbt-postgres = callPackage ../development/python-modules/dbt-postgres { };
+
   dbus-client-gen = callPackage ../development/python-modules/dbus-client-gen { };
 
   dbus-deviation = callPackage ../development/python-modules/dbus-deviation { };
