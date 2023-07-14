@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.43";
 
   src = fetchFromGitHub {
-    owner = "evgeni";
+    owner = "linux-thinkpad";
     repo = "tp_smapi";
     rev = "tp-smapi/${version}";
     sha256 = "1rjb0njckczc2mj05cagvj0lkyvmyk6bw7wkiinv81lw8m90g77g";
