@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , makeBinaryWrapper
 , substituteAll
-, bash
 , age
 , getopt
 , git ? null

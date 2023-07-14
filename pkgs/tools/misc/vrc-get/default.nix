@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "vrc-get";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "anatawa12";
     repo = pname;
     rev = "v${version}";
-    sha256 = "16r3b2w4xfw1lwxp8ib23f76i4zgl8hk7q2g82yw6hxjimq69sy2";
+    sha256 = "03p3y6q6md2m6fj9v01419cy1wa13dhasd2izs7j9gl9jh69w9xm";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   # Make openssl-sys use pkg-config.
   OPENSSL_NO_VENDOR = 1;
 
-  cargoSha256 = "1f76y7hzh4pk7gj0w5gqb65w8qvkfx1bxx9z3w9vdqdkz39439rf";
+  cargoSha256 = "03lv72gw39q7hibg2rzibvc1y0az30691jdf2fwn1m5ng0r7lqvp";
 
   meta = with lib; {
     description = "Command line client of VRChat Package Manager, the main feature of VRChat Creator Companion (VCC)";

@@ -2909,6 +2909,12 @@
     githubId = 14790226;
     name = "Hubert Jasudowicz";
   };
+  c-h-johnson = {
+    name = "Charles Johnson";
+    email = "charles@charlesjohnson.name";
+    github = "c-h-johnson";
+    githubId = 138403247;
+  };
   chkno = {
     email = "scottworley@scottworley.com";
     github = "chkno";
@@ -6074,6 +6080,12 @@
     githubId = 25820499;
     name = "Roman Kretschmer";
   };
+  goatchurchprime = {
+    email = "julian@goatchurch.org.uk";
+    github = "goatchurchprime";
+    githubId = 677254;
+    name = "Julian Todd";
+  };
   gobidev = {
     email = "adrian.groh@t-online.de";
     github = "Gobidev";
@@ -7349,6 +7361,11 @@
     github = "jali-clarke";
     githubId = 17733984;
   };
+  james-atkins = {
+    name = "James Atkins";
+    github = "james-atkins";
+    githubId = 9221409;
+  };
   jamiemagee = {
     email = "jamie.magee@gmail.com";
     github = "JamieMagee";
@@ -8089,6 +8106,12 @@
     name = "joscha Loos";
     email = "j.loos@posteo.net";
     githubId = 57965027;
+  };
+  josephst = {
+    name = "Joseph Stahl";
+    email = "hello@josephstahl.com";
+    github = "josephst";
+    githubId = 1269177;
   };
   joshniemela = {
     name = "Joshua Niemelä";
@@ -12051,6 +12074,12 @@
     githubId = 2946283;
     name = "Brian Cohen";
   };
+  nova-madeline = {
+    matrix = "@nova:tchncs.de";
+    github = "nova-r";
+    githubId = 126072875;
+    name = "nova madeline";
+  };
   novenary = {
     email = "streetwalkermc@gmail.com";
     github = "9ary";
@@ -12388,6 +12417,12 @@
     github = "orbitz";
     githubId = 75299;
     name = "Malcolm Matalka";
+  };
+  orichter = {
+    email = "richter-oliver@gmx.net";
+    github = "RichterOliver";
+    githubId = 135209509;
+    name = "Oliver Richter";
   };
   orivej = {
     email = "orivej@gmx.fr";
@@ -16374,6 +16409,12 @@
     email = "nix@henning-thielemann.de";
     github = "thielema";
     githubId = 898989;
+  };
+  thillux = {
+    name = "Markus Theil";
+    email = "theil.markus@gmail.com";
+    github = "thillux";
+    githubId = 2171995;
   };
   thilobillerbeck = {
     name = "Thilo Billerbeck";
