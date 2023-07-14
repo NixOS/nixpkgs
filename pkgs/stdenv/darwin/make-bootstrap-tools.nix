@@ -26,7 +26,7 @@ in rec {
     singleBinary = false;
   });
 
-  cctools_ = darwin.cctools;
+  cctools_ = darwin.cctools-port;
 
   # Avoid debugging larger changes for now.
   bzip2_ = bzip2.override (args: { linkStatic = true; });
