@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , pythonRelaxDepsHook
@@ -68,5 +69,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/Suor/django-cacheops/blob/${version}/CHANGELOG";
     license = licenses.bsd3;
     maintainers = with maintainers; [ onny ];
+    # Times out for unknown reasons
+    broken = stdenv.isDarwin;
   };
 }
