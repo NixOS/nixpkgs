@@ -141,60 +141,6 @@ let
     };
   };
 
-  cl-tar-file = build-asdf-system {
-    pname = "cl-tar-file";
-    version = "v0.2.1";
-    src = pkgs.fetchzip {
-      url = let
-        rev = "0c10bc82f14702c97a26dc25ce075b5d3a2347d1";
-      in "https://gitlab.common-lisp.net/cl-tar/cl-tar-file/-/archive/${rev}/cl-tar-file-${rev}.tar.gz";
-      sha256 = "0i8j05fkgdqy4c4pqj0c68sh4s3klpx9kc5wp73qwzrl3xqd2svy";
-    };
-    lispLibs = with super; [
-      alexandria
-      babel
-      trivial-gray-streams
-      _40ants-doc
-      salza2
-      chipz
-      flexi-streams
-      parachute
-    ];
-    systems = [ "tar-file" "tar-file/test" ];
-  };
-
-  cl-tar = build-asdf-system {
-    pname = "cl-tar";
-    version = "v0.2.1";
-    src = pkgs.fetchzip {
-      url = let
-        rev = "7c6e07a10c93d9e311f087b5f6328cddd481669a";
-      in "https://gitlab.common-lisp.net/cl-tar/cl-tar/-/archive/${rev}/cl-tar-${rev}.tar.gz";
-      sha256 = "0wp23cs3i6a89dibifiz6559la5nk58d1n17xvbxq4nrl8cqsllf";
-    };
-    lispLibs = with super; [
-      alexandria
-      babel
-      local-time
-      split-sequence
-      _40ants-doc
-      parachute
-      osicat
-    ] ++ [ self.cl-tar-file ];
-    systems = [
-      "tar"
-      "tar/common-extract"
-      "tar/simple-extract"
-      "tar/extract"
-      "tar/create"
-      "tar/docs"
-      "tar/test"
-      "tar/create-test"
-      "tar/extract-test"
-      "tar/simple-extract-test"
-    ];
-  };
-
   lessp = build-asdf-system {
     pname = "lessp";
     version = "0.2-f8a9e4664";
