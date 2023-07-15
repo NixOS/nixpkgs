@@ -11,7 +11,6 @@
 , newScope
 , lib
 , fetchurl
-, gcc10Stdenv
 }:
 
 # When adding a kernel:
@@ -252,18 +251,9 @@ in {
 
     linux_hardened = hardenedKernelFor packageAliases.linux_default.kernel { };
 
-    linux_4_14_hardened = hardenedKernelFor kernels.linux_4_14 {
-      stdenv = gcc10Stdenv;
-      buildPackages = buildPackages // { stdenv = buildPackages.gcc10Stdenv; };
-    };
-    linux_4_19_hardened = hardenedKernelFor kernels.linux_4_19 {
-      stdenv = gcc10Stdenv;
-      buildPackages = buildPackages // { stdenv = buildPackages.gcc10Stdenv; };
-    };
-    linux_5_4_hardened = hardenedKernelFor kernels.linux_5_4 {
-      stdenv = gcc10Stdenv;
-      buildPackages = buildPackages // { stdenv = buildPackages.gcc10Stdenv; };
-    };
+    linux_4_14_hardened = hardenedKernelFor kernels.linux_4_14 { };
+    linux_4_19_hardened = hardenedKernelFor kernels.linux_4_19 { };
+    linux_5_4_hardened = hardenedKernelFor kernels.linux_5_4 { };
     linux_5_10_hardened = hardenedKernelFor kernels.linux_5_10 { };
     linux_5_15_hardened = hardenedKernelFor kernels.linux_5_15 { };
     linux_6_1_hardened = hardenedKernelFor kernels.linux_6_1 { };

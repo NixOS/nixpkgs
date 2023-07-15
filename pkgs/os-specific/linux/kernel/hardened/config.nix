@@ -60,15 +60,15 @@ assert (versionAtLeast version "4.9");
   # Reboot devices immediately if kernel experiences an Oops.
   PANIC_TIMEOUT = freeform "-1";
 
-  GCC_PLUGINS = yes; # Enable gcc plugin options
+  GCC_PLUGINS = whenAtLeast "5.10" yes; # Enable gcc plugin options
   # Gather additional entropy at boot time for systems that may not have appropriate entropy sources.
-  GCC_PLUGIN_LATENT_ENTROPY = yes;
+  GCC_PLUGIN_LATENT_ENTROPY = whenAtLeast "5.10" yes;
 
   GCC_PLUGIN_STRUCTLEAK = option yes; # A port of the PaX structleak plugin
   GCC_PLUGIN_STRUCTLEAK_BYREF_ALL = option yes; # Also cover structs passed by address
-  GCC_PLUGIN_STACKLEAK = whenAtLeast "4.20" yes; # A port of the PaX stackleak plugin
-  GCC_PLUGIN_RANDSTRUCT = whenOlder "5.19" yes; # A port of the PaX randstruct plugin
-  GCC_PLUGIN_RANDSTRUCT_PERFORMANCE = whenOlder "5.19" yes;
+  GCC_PLUGIN_STACKLEAK = whenAtLeast "5.10" yes; # A port of the PaX stackleak plugin
+  GCC_PLUGIN_RANDSTRUCT = whenBetween "5.10" "5.19" yes; # A port of the PaX randstruct plugin
+  GCC_PLUGIN_RANDSTRUCT_PERFORMANCE = whenBetween "5.10" "5.19" yes;
 
   # Same as GCC_PLUGIN_RANDSTRUCT*, but has been renamed to `RANDSTRUCT*` in 5.19.
   RANDSTRUCT = whenAtLeast "5.19" yes;
