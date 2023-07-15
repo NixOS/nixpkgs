@@ -61,5 +61,6 @@ python39.pkgs.buildPythonApplication {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ mausch ];
+    broken = true;  # TypeError: MenuItem(): argument 2 has unexpected type 'int'
   };
 }
