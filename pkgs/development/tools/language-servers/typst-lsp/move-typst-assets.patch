@@ -1,0 +1,40 @@
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -1873,7 +1873,7 @@ checksum = "6af6ae20167a9ece4bcb41af5b80f8a1f1df981f6391189ce00fd257af04126a"
+ [[package]]
+ name = "typst"
+ version = "0.5.0"
+-source = "git+https://github.com/typst/typst.git?tag=v0.5.0#3a8b9cce471934031ba57c5972d194ac1d7d2a6c"
++source = "git+https://github.com/typst/typst.git?rev=30bb33aafced4f1bf4a00803550f0e1e42672ded#30bb33aafced4f1bf4a00803550f0e1e42672ded"
+ dependencies = [
+  "bitflags 2.3.1",
+  "bytemuck",
+@@ -1915,7 +1915,7 @@ dependencies = [
+ [[package]]
+ name = "typst-library"
+ version = "0.5.0"
+-source = "git+https://github.com/typst/typst.git?tag=v0.5.0#3a8b9cce471934031ba57c5972d194ac1d7d2a6c"
++source = "git+https://github.com/typst/typst.git?rev=30bb33aafced4f1bf4a00803550f0e1e42672ded#30bb33aafced4f1bf4a00803550f0e1e42672ded"
+ dependencies = [
+  "az",
+  "chinese-number",
+@@ -1983,7 +1983,7 @@ dependencies = [
+ [[package]]
+ name = "typst-macros"
+ version = "0.5.0"
+-source = "git+https://github.com/typst/typst.git?tag=v0.5.0#3a8b9cce471934031ba57c5972d194ac1d7d2a6c"
++source = "git+https://github.com/typst/typst.git?rev=30bb33aafced4f1bf4a00803550f0e1e42672ded#30bb33aafced4f1bf4a00803550f0e1e42672ded"
+ dependencies = [
+  "heck",
+  "proc-macro2",
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -32,6 +32,6 @@ tokio = { version = "1.26.0", features = [
+     "io-std",
+ ] }
+ tower-lsp = "0.19.0"
+-typst = { git = "https://github.com/typst/typst.git", tag = "v0.5.0" }
+-typst-library = { git = "https://github.com/typst/typst.git", tag = "v0.5.0" }
++typst = { git = "https://github.com/typst/typst.git", rev = "30bb33aafced4f1bf4a00803550f0e1e42672ded" }
++typst-library = { git = "https://github.com/typst/typst.git", rev = "30bb33aafced4f1bf4a00803550f0e1e42672ded" }
+ walkdir = "2.3"

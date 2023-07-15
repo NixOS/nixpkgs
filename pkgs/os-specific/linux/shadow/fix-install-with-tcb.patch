@@ -1,0 +1,28 @@
+diff --git a/src/Makefile.am b/src/Makefile.am
+index a1a2e4e..fa17f9d 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -74,10 +74,6 @@ suidubins += newgidmap newuidmap
+ endif
+ endif
+ 
+-if WITH_TCB
+-shadowsgidubins = passwd
+-endif
+-
+ LDADD          = $(INTLLIBS) \
+ 		 $(top_builddir)/libmisc/libmisc.la \
+ 		 $(top_builddir)/lib/libshadow.la \
+@@ -146,12 +142,6 @@ install-am: all-am
+ 	set -e; for i in $(suidusbins); do \
+ 		chmod $(suidperms) $(DESTDIR)$(usbindir)/$$i; \
+ 	done
+-if WITH_TCB
+-	set -e; for i in $(shadowsgidubins); do \
+-		chown root:shadow $(DESTDIR)$(ubindir)/$$i; \
+-		chmod $(sgidperms) $(DESTDIR)$(ubindir)/$$i; \
+-	done
+-endif
+ if ENABLE_SUBIDS
+ if FCAPS
+ 	setcap cap_setuid+ep $(DESTDIR)$(ubindir)/newuidmap

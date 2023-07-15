@@ -1,0 +1,40 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 8464bf70..659e66c0 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -2702,7 +2702,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "ripasso"
+-version = "0.6.3"
++version = "0.6.4"
+ dependencies = [
+  "anyhow",
+  "base64 0.21.0",
+@@ -2730,7 +2730,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "ripasso-cursive"
+-version = "0.6.3"
++version = "0.6.4"
+ dependencies = [
+  "chrono",
+  "cli-clipboard",
+@@ -2753,7 +2753,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "ripasso-gtk"
+-version = "0.6.3"
++version = "0.6.4"
+ dependencies = [
+  "clipboard",
+  "gdk",
+@@ -2765,7 +2765,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "ripasso-qt"
+-version = "0.6.3"
++version = "0.6.4"
+ dependencies = [
+  "clipboard",
+  "qml",

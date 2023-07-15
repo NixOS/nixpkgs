@@ -1,0 +1,273 @@
+#!/usr/bin/env bash
+set -e
+
+scriptName=update-source-version # do not use the .wrapped name
+
+die() {
+    echo "$scriptName: error: $1" >&2
+    exit 1
+}
+
+usage() {
+    echo "Usage: $scriptName <attr> <version> [<new-source-hash>] [<new-source-url>]"
+    echo "                              [--version-key=<version-key>] [--source-key=<source-key>]"
+    echo "                              [--system=<system>] [--file=<file-to-update>] [--rev=<revision>]"
+    echo "                              [--ignore-same-hash] [--print-changes]"
+}
+
+args=()
+
+for arg in "$@"; do
+    case $arg in
+        --system=*)
+            system="${arg#*=}"
+            systemArg="--system ${arg#*=}"
+        ;;
+        --version-key=*)
+            versionKey="${arg#*=}"
+        ;;
+        --source-key=*)
+            sourceKey="${arg#*=}"
+        ;;
+        --file=*)
+            nixFile="${arg#*=}"
+            if [[ ! -f "$nixFile" ]]; then
+                die "Could not find provided file $nixFile"
+            fi
+        ;;
+        --rev=*)
+            newRevision="${arg#*=}"
+        ;;
+        --ignore-same-hash)
+            ignoreSameHash="true"
+        ;;
+        --print-changes)
+            printChanges="true"
+        ;;
+        --help)
+            usage
+            exit 0
+        ;;
+        --*)
+            echo "$scriptName: Unknown argument: $arg"
+            usage
+            exit 1
+        ;;
+        *)
+            args["${#args[*]}"]=$arg
+        ;;
+    esac
+done
+
+attr=${args[0]}
+newVersion=${args[1]}
+newHash=${args[2]}
+newUrl=${args[3]}
+
+# Third-party repositories might not accept arguments in their default.nix.
+importTree="(let tree = import ./.; in if builtins.isFunction tree then tree {} else tree)"
+
+if (( "${#args[*]}" < 2 )); then
+    echo "$scriptName: Too few arguments"
+    usage
+    exit 1
+fi
+
+if (( "${#args[*]}" > 4 )); then
+    echo "$scriptName: Too many arguments"
+    usage
+    exit 1
+fi
+
+if [[ -z "$versionKey" ]]; then
+    versionKey=version
+fi
+
+if [[ -z "$sourceKey" ]]; then
+    sourceKey=src
+fi
+
+# Allow finding packages among flake outputs in repos using flake-compat.
+pname=$(nix-instantiate $systemArg --eval --strict -A "$attr.name" || echo)
+if [[ -z "$pname" ]]; then
+    if [[ -z "$system" ]]; then
+        system=$(nix-instantiate --eval -E 'builtins.currentSystem' | tr -d '"')
+    fi
+
+    pname=$(nix-instantiate $systemArg --eval --strict -A "packages.$system.$attr.name" || echo)
+    if [[ -n "$pname" ]]; then
+        attr="packages.$system.$attr"
+    else
+        pname=$(nix-instantiate $systemArg --eval --strict -A "legacyPackages.$system.$attr.name" || echo)
+        if [[ -n "$pname" ]]; then
+            attr="legacyPackages.$system.$attr"
+        else
+            die "Could not find attribute '$attr'!"
+        fi
+    fi
+fi
+
+if [[ -z "$nixFile" ]]; then
+    nixFile=$(nix-instantiate $systemArg --eval --strict -A "$attr.meta.position" | sed -re 's/^"(.*):[0-9]+"$/\1/')
+    if [[ ! -f "$nixFile" ]]; then
+        die "Couldn't evaluate '$attr.meta.position' to locate the .nix file!"
+    fi
+
+    # flake-compat will return paths in the Nix store, we need to correct for that.
+    possiblyOutPath=$(nix-instantiate $systemArg --eval -E "with $importTree; outPath" 2>/dev/null | tr -d '"')
+    if [[ -n "$possiblyOutPath" ]]; then
+        outPathEscaped=$(echo "$possiblyOutPath" | sed 's#[$^*\\.[|]#\\&#g')
+        pwdEscaped=$(echo "$PWD" | sed 's#[$^*\\.[|]#\\&#g')
+        nixFile=$(echo "$nixFile" | sed "s|^$outPathEscaped|$pwdEscaped|")
+    fi
+fi
+
+oldHashAlgo=$(nix-instantiate $systemArg --eval --strict -A "$attr.$sourceKey.drvAttrs.outputHashAlgo" | tr -d '"')
+oldHash=$(nix-instantiate $systemArg --eval --strict -A "$attr.$sourceKey.drvAttrs.outputHash" | tr -d '"')
+
+if [[ -z "$oldHashAlgo" || -z "$oldHash" ]]; then
+    die "Couldn't evaluate old source hash from '$attr.$sourceKey'!"
+fi
+
+if [[ $(grep --count "$oldHash" "$nixFile") != 1 ]]; then
+    die "Couldn't locate old source hash '$oldHash' (or it appeared more than once) in '$nixFile'!"
+fi
+
+oldVersion=$(nix-instantiate $systemArg --eval -E "with $importTree; $attr.${versionKey} or (builtins.parseDrvName $attr.name).version" | tr -d '"')
+
+if [[ -z "$oldVersion" ]]; then
+    die "Couldn't find out the old version of '$attr'!"
+fi
+
+if [[ "$oldVersion" = "$newVersion" ]]; then
+    echo "$scriptName: New version same as old version, nothing to do." >&2
+    if [ -n "$printChanges" ]; then
+        printf '[]\n'
+    fi
+    exit 0
+fi
+
+if [[ -n "$newRevision" ]]; then
+    oldRevision=$(nix-instantiate $systemArg --eval -E "with $importTree; $attr.$sourceKey.rev" | tr -d '"')
+    if [[ -z "$oldRevision" ]]; then
+        die "Couldn't evaluate source revision from '$attr.$sourceKey'!"
+    fi
+fi
+
+# Escape regex metacharacter that are allowed in store path names
+oldVersionEscaped=$(echo "$oldVersion" | sed -re 's|[.+]|\\&|g')
+
+if [[ $(grep --count --extended-regexp "^\s*(let\b)?\s*$versionKey\s*=\s*\"$oldVersionEscaped\"" "$nixFile") = 1 ]]; then
+    pattern="/\b$versionKey\b\s*=/ s|\"$oldVersionEscaped\"|\"$newVersion\"|"
+elif [[ $(grep --count --extended-regexp "^\s*(let\b)?\s*name\s*=\s*\"[^\"]+-$oldVersionEscaped\"" "$nixFile") = 1 ]]; then
+    pattern="/\bname\b\s*=/ s|-$oldVersionEscaped\"|-$newVersion\"|"
+else
+    die "Couldn't figure out where out where to patch in new version in '$attr'!"
+fi
+
+if [[ "$oldHash" =~ ^(sha256|sha512)[:-] ]]; then
+    # Handle the possible SRI-style hash attribute (in the form ${type}${separator}${hash})
+    # True SRI uses dash as a separator and only supports base64, whereas Nix’s SRI-style format uses a colon and supports all the same encodings like regular hashes (16/32/64).
+    # To keep this program reasonably simple, we will upgrade Nix’s format to SRI.
+    oldHashAlgo="${BASH_REMATCH[1]}"
+    sri=true
+elif [[ "$oldHashAlgo" = "null" ]]; then
+    # Some fetcher functions support SRI-style `hash` attribute in addition to legacy type-specific attributes. When `hash` is used `outputHashAlgo` is null so let’s complain when SRI-style hash value was not detected.
+    die "Unable to figure out hashing scheme from '$oldHash' in '$attr'!"
+fi
+
+case "$oldHashAlgo" in
+    # Choose a temporary hash for given algorithm.
+    # Not using all-zeroes hash, since that is sometimes
+    # used for clean-up when updating multi-source packages.
+    # Created by hashing “update-source-version” string.
+    sha256) tempHash=AzH1rZFqEH8sovZZfJykvsEmCedEZWigQFHWHl6/PdE= ;;
+    sha512) tempHash=KFj9Fvco4AuCgLJIGRnVzyssRf7VGP2oi5CkH6ADvj75ow3am3h8pxefOgQlO+i33Q/BBnG/ST/F7B/0BvWHxw== ;;
+    *) die "Unhandled hash algorithm '$oldHashAlgo' in '$attr'!" ;;
+esac
+
+if [[ -n "$sri" ]]; then
+    # SRI hashes only support base64
+    # SRI hashes need to declare the hash type as part of the hash
+    tempHash="$(nix --extra-experimental-features nix-command hash to-sri --type "$oldHashAlgo" "$tempHash" 2>/dev/null \
+        || nix to-sri --type "$oldHashAlgo" "$tempHash" 2>/dev/null)" \
+        || die "Failed to convert hash to SRI representation!"
+fi
+
+# Escape regex metacharacter that are allowed in hashes (+)
+oldHashEscaped=$(echo "$oldHash" | sed -re 's|[+]|\\&|g')
+tempHashEscaped=$(echo "$tempHash" | sed -re 's|[+]|\\&|g')
+
+# Replace new version
+sed -i.cmp "$nixFile" -re "$pattern"
+if cmp -s "$nixFile" "$nixFile.cmp"; then
+    die "Failed to replace version '$oldVersion' to '$newVersion' in '$attr'!"
+fi
+
+# Replace new URL
+if [[ -n "$newUrl" ]]; then
+    oldUrl=$(nix-instantiate $systemArg --eval -E "with $importTree; builtins.elemAt ($attr.$sourceKey.drvAttrs.urls or [ $attr.$sourceKey.url ]) 0" | tr -d '"')
+    if [[ -z "$oldUrl" ]]; then
+        die "Couldn't evaluate source url from '$attr.$sourceKey'!"
+    fi
+
+    # Escape regex metacharacter that are allowed in store path names
+    oldUrlEscaped=$(echo "$oldUrl" | sed -re 's|[${}.+]|\\&|g')
+
+    sed -i.cmp "$nixFile" -re "s|\"$oldUrlEscaped\"|\"$newUrl\"|"
+    if cmp -s "$nixFile" "$nixFile.cmp"; then
+        die "Failed to replace source URL '$oldUrl' to '$newUrl' in '$attr'!"
+    fi
+fi
+
+sed -i.cmp "$nixFile" -re "s|\"$oldHashEscaped\"|\"$tempHash\"|"
+if cmp -s "$nixFile" "$nixFile.cmp"; then
+    die "Failed to replace source hash of '$attr' to a temporary hash!"
+fi
+
+# Replace new revision, if given
+if [[ -n "$newRevision" ]]; then
+    sed -i.cmp "$nixFile" -re "s|\"$oldRevision\"|\"$newRevision\"|"
+    if cmp -s "$nixFile" "$nixFile.cmp"; then
+        die "Failed to replace source revision '$oldRevision' to '$newRevision' in '$attr'!"
+    fi
+fi
+
+# If new hash not given on the command line, recalculate it ourselves.
+if [[ -z "$newHash" ]]; then
+    nix-build $systemArg --no-out-link -A "$attr.$sourceKey" 2>"$attr.fetchlog" >/dev/null || true
+    # FIXME: use nix-build --hash here once https://github.com/NixOS/nix/issues/1172 is fixed
+    newHash=$(
+        sed '1,/hash mismatch in fixed-output derivation/d' "$attr.fetchlog" \
+        | grep --perl-regexp --only-matching 'got: +.+[:-]\K.+' \
+        || true # handled below
+    )
+
+    if [[ -n "$newHash" && -n "$sri" ]]; then
+        # nix-build preserves the hashing scheme so we can just convert the result to SRI using the old type
+        newHash="$(nix --extra-experimental-features nix-command hash to-sri --type "$oldHashAlgo" "$newHash" 2>/dev/null \
+            || nix to-sri --type "$oldHashAlgo" "$newHash" 2>/dev/null)" \
+            || die "Failed to convert hash to SRI representation!"
+    fi
+fi
+
+if [[ -z "$newHash" ]]; then
+    cat "$attr.fetchlog" >&2
+    die "Couldn't figure out new hash of '$attr.$sourceKey'!"
+fi
+
+if [[ -z "${ignoreSameHash}" && "$oldVersion" != "$newVersion" && "$oldHash" = "$newHash" ]]; then
+    die "Both the old and new source hashes of '$attr.$sourceKey' were equivalent. Please fix the package's source URL to be dependent on '\${version}'!"
+fi
+
+sed -i.cmp "$nixFile" -re "s|\"$tempHashEscaped\"|\"$newHash\"|"
+if cmp -s "$nixFile" "$nixFile.cmp"; then
+    die "Failed to replace temporary source hash of '$attr' to the final source hash!"
+fi
+
+rm -f "$nixFile.cmp"
+rm -f "$attr.fetchlog"
+
+if [ -n "$printChanges" ]; then
+    printf '[{"attrPath":"%s","oldVersion":"%s","newVersion":"%s","files":["%s"]}]\n' "$attr" "$oldVersion" "$newVersion" "$nixFile"
+fi

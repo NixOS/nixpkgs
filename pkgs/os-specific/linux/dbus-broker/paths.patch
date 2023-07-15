@@ -1,0 +1,27 @@
+diff --git a/src/launch/launcher.c b/src/launch/launcher.c
+index 5bf5cf5..06ce7f4 100644
+--- a/src/launch/launcher.c
++++ b/src/launch/launcher.c
+@@ -924,9 +924,7 @@ static int launcher_load_standard_session_services(Launcher *launcher, NSSCache
+ 
+ static int launcher_load_standard_system_services(Launcher *launcher, NSSCache *nss_cache) {
+         static const char *default_data_dirs[] = {
+-                "/usr/local/share",
+-                "/usr/share",
+-                "/lib",
++                "/run/current-system/sw/share",
+                 NULL,
+         };
+         const char *suffix = "dbus-1/system-services";
+@@ -1012,9 +1010,9 @@ static int launcher_parse_config(Launcher *launcher, ConfigRoot **rootp, NSSCach
+         if (launcher->configfile)
+                 configfile = launcher->configfile;
+         else if (launcher->user_scope)
+-                configfile = "/usr/share/dbus-1/session.conf";
++                configfile = "/etc/dbus-1/session.conf";
+         else
+-                configfile = "/usr/share/dbus-1/system.conf";
++                configfile = "/etc/dbus-1/system.conf";
+ 
+         config_parser_init(&parser);
+ 
