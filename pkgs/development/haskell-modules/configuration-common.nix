@@ -2488,7 +2488,8 @@ self: super: {
       sed -i 's/import "jsaddle-dom" GHCJS.DOM.Document/import "ghcjs-dom-jsaddle" GHCJS.DOM.Document/' src/GHCJS/DOM/Document.hs
     '' + (old.postPatch or "");
     })
-    super.ghcjs-dom;
+    # 2023-07-15: Restrictive upper bounds on text
+    (doJailbreak super.ghcjs-dom);
 
   # Too strict bounds on chell: https://github.com/fpco/haskell-filesystem/issues/24
   system-fileio = doJailbreak super.system-fileio;
