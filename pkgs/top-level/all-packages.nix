@@ -29804,6 +29804,8 @@ with pkgs;
 
   sampradaya = callPackage ../data/fonts/sampradaya { };
 
+  sarabun-font = callPackage ../data/fonts/sarabun { };
+
   sarasa-gothic = callPackage ../data/fonts/sarasa-gothic { };
 
   savepagenow = callPackage ../tools/misc/savepagenow { };
