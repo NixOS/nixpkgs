@@ -11,6 +11,7 @@
 , libwebpmuxSupport ? true # Build libwebpmux
 , libwebpdemuxSupport ? true # Build libwebpdemux
 , libwebpdecoderSupport ? true # Build libwebpdecoder
+, fetchpatch
 
 # for passthru.tests
 , freeimage
@@ -35,6 +36,16 @@ stdenv.mkDerivation rec {
     rev    = "v${version}";
     hash   = "sha256-Q94avvKjPdwdGt5ADo30cf2V4T7MCTubDHJxTtbG4xQ=";
   };
+
+  patches = [
+    # Avoid unnecessary and disruptive change on stable nixpkgs.
+    (fetchpatch {
+      name = "revert-pkgconfig-changes.patch";
+      url = "https://github.com/webmproject/libwebp/commit/31c28db53c6fa3be7026212fdd1526280e3f0f52.patch";
+      revert = true;
+      hash = "sha256-yy/T0IZolk5JLbVRevtLWErOSVQIZqNRg/a6J6JHDHg=";
+    })
+  ];
 
   configureFlags = [
     (lib.enableFeature threadingSupport "threading")
