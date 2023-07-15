@@ -167,7 +167,7 @@ def make_ui_pin(pin: Pin, package_json: str, attr: str) -> None:
 
 if __name__ == "__main__":
     # Get server version
-    server_version = get_latest_release(OWNER, SERVER_REPO)
+    server_version = get_latest_tag(OWNER, SERVER_REPO)
 
     # Get UI version (not always the same as lemmy-server)
     ui_version = get_latest_tag(OWNER, UI_REPO)
