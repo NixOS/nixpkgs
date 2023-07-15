@@ -160,9 +160,14 @@ let
       ${if stdenv.buildPlatform.isGnu then ''
         ar -cqs $libv8/lib/libv8.a @files
       '' else ''
-        cat files | while read -r file; do
-          ar -cqS $libv8/lib/libv8.a $file
-        done
+        # llvm-ar supports response files, so take advantage of it if it’s available.
+        if [ "$(basename $(readlink -f $(command -v ar)))" = "llvm-ar" ]; then
+          ar -cqs $libv8/lib/libv8.a @files
+        else
+          cat files | while read -r file; do
+            ar -cqS $libv8/lib/libv8.a $file
+          done
+        fi
       ''}
       popd
 
