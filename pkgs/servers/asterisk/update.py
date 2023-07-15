@@ -7,14 +7,14 @@ import re, requests, json
 import os, sys
 from pathlib import Path
 
-URL = "https://downloads.asterisk.org/pub/telephony/asterisk"
+URL = "https://downloads.asterisk.org/pub/telephony/asterisk/"
 
 page = requests.get(URL)
-changelog = re.compile("^ChangeLog-\d+\.\d+\.\d+$")
+changelog = re.compile("^ChangeLog-\d+\.\d+\.\d+\.md$")
 changelogs = [a.get_text() for a in BeautifulSoup(page.text, 'html.parser').find_all('a') if changelog.match(a.get_text())]
 major_versions = {}
 for changelog in changelogs:
-    v = version.parse(changelog.removeprefix("ChangeLog-"))
+    v = version.parse(changelog.removeprefix("ChangeLog-").removesuffix(".md"))
     major_versions.setdefault(v.major, []).append(v)
 
 out = {}
