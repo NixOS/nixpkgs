@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "fastly-exporter";
-  version = "7.6.0";
+  version = "7.6.1";
 
   src = fetchFromGitHub {
     owner = "peterbourgon";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-55yqt1F/jBoWHhq/Q9qOiCxg9naGrCFxGyfLseg9R/w=";
+    sha256 = "sha256-JUbjWAJ70iq0RCr6U2thbtZ3nmCic9wGtSf2ArRy4uA=";
   };
 
   vendorHash = "sha256-lEaMhJL/sKNOXx0W+QHMG4QUUE6Pc4AqulhgyCMQQNY=";
