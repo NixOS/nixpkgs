@@ -255,7 +255,7 @@ let
 
     lispLibs = [
       self.cl-containers
-      self.nclasses_0_5_0
+      self.nclasses
       super.alexandria
       super.calispel
       super.closer-mop
@@ -268,7 +268,7 @@ let
 
   };
 
-  nasdf-unstable = build-asdf-system {
+  nasdf = build-asdf-system {
     pname = "nasdf";
     version = "20230524-git";
     src = pkgs.fetchFromGitHub {
@@ -279,7 +279,7 @@ let
     };
   };
 
-  njson_1_0_0 = build-asdf-system {
+  njson = build-asdf-system {
     pname = "njson";
     version = "1.0.0";
     src = pkgs.fetchFromGitHub {
@@ -288,11 +288,11 @@ let
       rev = "1.0.0";
       sha256 = "sha256-zeOxkoi5cPl1sw1oEOaMsKhhs3Pb8EzzKTjvuDNj/Ko=";
     };
-    lispLibs = [ self.nasdf-unstable super.cl-json ];
+    lispLibs = [ self.nasdf super.cl-json ];
     systems = [ "njson" "njson/cl-json" ];
   };
 
-  nsymbols_0_3_1 = build-asdf-system {
+  nsymbols = build-asdf-system {
     pname = "nsymbols";
     version = "0.3.1";
     src = pkgs.fetchFromGitHub {
@@ -306,7 +306,7 @@ let
 
   };
 
-  nclasses_0_5_0 = build-asdf-system {
+  nclasses = build-asdf-system {
     pname = "nclasses";
     version = "0.5.0";
     src = pkgs.fetchFromGitHub {
@@ -315,10 +315,10 @@ let
       rev = "0.5.0";
       sha256 = "sha256-UcavZ0fCA2hkVU/CqUZfyCqJ8gXKPpXTCP0WLUIF1Ss=";
     };
-    lispLibs = [ self.nasdf-unstable super.moptilities ];
+    lispLibs = [ self.nasdf super.moptilities ];
   };
 
-  nfiles_1_1_2 = build-asdf-system {
+  nfiles = build-asdf-system {
     pname = "nfiles";
     version = "1.1.2";
     src = pkgs.fetchFromGitHub {
@@ -328,9 +328,9 @@ let
       sha256 = "sha256-YsVcCFrJIFL9Z4wQNAv6chiz6wB/eB8v/EUMXPLs3fw=";
     };
     lispLibs = [
-      self.nasdf-unstable
-      self.nclasses_0_5_0
       self.quri_7_0
+      self.nasdf
+      self.nclasses
       super.alexandria
       super.iolib
       super.serapeum
@@ -372,8 +372,8 @@ let
       alexandria
       cl-custom-hash-table
       local-time
-      nasdf-unstable
-      nclasses_0_5_0
+      nasdf
+      nclasses
       trivial-package-local-nicknames
     ];
   };
@@ -383,16 +383,6 @@ let
     version = "3.3.0";
 
     lispLibs = (with super; [
-      self.nasdf-unstable
-      self.prompter
-      self.cl-colors2_0_5_4
-      self.njson_1_0_0
-      self.nsymbols_0_3_1
-      self.nclasses_0_5_0
-      self.nfiles_1_1_2
-      self.quri_7_0
-      self.cl-webkit2_3_5_8
-      self.swank
       alexandria
       bordeaux-threads
       calispel
@@ -444,6 +434,16 @@ let
       history-tree
       nhooks
       nkeymaps
+      quri_7_0
+      nasdf
+      prompter
+      cl-colors2_0_5_4
+      njson
+      nsymbols
+      nclasses
+      nfiles
+      cl-webkit2_3_5_8
+      swank
     ]);
 
     src = pkgs.fetchFromGitHub {
