@@ -218,15 +218,15 @@ let
     };
   };
 
-  cl-webkit2_3_5_8 = build-asdf-system {
+  cl-webkit2_3_5_9 = build-asdf-system {
     inherit (super.cl-webkit2) pname systems nativeLibs lispLibs;
-    version = "3.5.8";
+    version = "3.5.9";
 
     src = pkgs.fetchFromGitHub {
       owner = "joachifm";
       repo = "cl-webkit";
-      rev = "3.5.8";
-      sha256 = "sha256-wZ/zRRJlTiOIny4BsU+wsFtxtS5YKx3WalwpCVQPFSY=";
+      rev = "3.5.9";
+      sha256 = "sha256-YJo5ahL6+HLeJrxFBuZZjuK3OfA6DnAu82vvXMsNBgI=";
     };
   };
 
@@ -308,12 +308,12 @@ let
 
   nfiles = build-asdf-system {
     pname = "nfiles";
-    version = "1.1.2";
+    version = "20230705-git";
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nfiles";
-      rev = "1.1.2";
-      sha256 = "sha256-YsVcCFrJIFL9Z4wQNAv6chiz6wB/eB8v/EUMXPLs3fw=";
+      rev = "3626e8d512a84efc12479ceb3969d194511757f7";
+      sha256 = "sha256-MoJdbTOVfw2rJk4cf/rEnR55BxdXkoqqu9Txd/R9OYQ=";
     };
     lispLibs = [
       self.nasdf
@@ -368,7 +368,7 @@ let
 
   nyxt-gtk = build-asdf-system {
     pname = "nyxt";
-    version = "3.3.0";
+    version = "3.4.0";
 
     lispLibs = (with super; [
       alexandria
@@ -429,7 +429,7 @@ let
       nsymbols
       nclasses
       nfiles
-      cl-webkit2_3_5_8
+      cl-webkit2_3_5_9
       swank
       cl-containers
     ]);
@@ -437,8 +437,8 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nyxt";
-      rev = "3.3.0";
-      sha256 = "sha256-hSu+XGb87yzZPbJgcUhU81VGhNdMiN6GKspGQJU+SxY=";
+      rev = "3.4.0";
+      sha256 = "sha256-o+GAMHKi+9q+EGY6SEZrxKCEO4IxdOiB4oPpJPGYO0w=";
     };
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
