@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       supposed to exit from.
     '';
     homepage = "https://github.com/openwrt/openwrt/tree/main/package/kernel/trelay";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.aprl ];
     platforms = platforms.linux;
   };
