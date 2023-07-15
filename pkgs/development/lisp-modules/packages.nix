@@ -207,18 +207,6 @@ let
     lispLibs = super.mathkit.lispLibs ++ [ super.sb-cga ];
   };
 
-  quri_7_0 = build-asdf-system {
-    inherit (super.quri) pname systems lispLibs;
-    version = "0.7.0";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "fukamachi";
-      repo = "quri";
-      rev = "0.7.0";
-      sha256 = "sha256-/9p67rfbkdrx5nn4kXEUAM9MzV7NYUsRcKsrP/e2MlA=";
-    };
-  };
-
   cl-colors2_0_5_4 = build-asdf-system {
     inherit (super.cl-colors2) pname systems lispLibs;
     version = "0.5.4";
@@ -328,9 +316,9 @@ let
       sha256 = "sha256-YsVcCFrJIFL9Z4wQNAv6chiz6wB/eB8v/EUMXPLs3fw=";
     };
     lispLibs = [
-      self.quri_7_0
       self.nasdf
       self.nclasses
+      super.quri
       super.alexandria
       super.iolib
       super.serapeum
@@ -396,7 +384,6 @@ let
       cl-qrencode
       cl-tld
       closer-mop
-      cl-containers
       dissect
       moptilities
       dexador
@@ -430,11 +417,11 @@ let
       cluffer
       cl-cffi-gtk
       cl-gobject-introspection
+      quri
     ]) ++ (with self; [
       history-tree
       nhooks
       nkeymaps
-      quri_7_0
       nasdf
       prompter
       cl-colors2_0_5_4
@@ -444,6 +431,7 @@ let
       nfiles
       cl-webkit2_3_5_8
       swank
+      cl-containers
     ]);
 
     src = pkgs.fetchFromGitHub {
