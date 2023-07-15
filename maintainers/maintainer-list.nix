@@ -1231,6 +1231,12 @@
     githubId = 914687;
     name = "Alexis Praga";
   };
+  aprl = {
+    email = "aprl@acab.dev";
+    github = "cutestnekoaqua";
+    githubId = 30842467;
+    name = "April John";
+  };
   ar1a = {
     email = "aria@ar1as.space";
     github = "ar1a";
