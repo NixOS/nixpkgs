@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "pyrainbird";
-  version = "2.1.0";
+  version = "3.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "allenporter";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-JTZtRh7Ecsq0DUpGt5AxAVnN79i/nppsEjoHWcpTOsM=";
+    hash = "sha256-G/mmM2lEQWJV+7uZHKECj1jnhTYbcOw9yCi4/9nRDuk=";
   };
 
   postPatch = ''
