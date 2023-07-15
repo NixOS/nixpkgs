@@ -23,8 +23,6 @@
 , qtquickcontrols2
 , qtscript
 , qtsvg
-, qttools
-, qtwebengine
 , qtxmlpatterns
 , qtnetworkauth
 , qtx11extras
@@ -85,8 +83,6 @@ stdenv.mkDerivation rec {
     qtquickcontrols2
     qtscript
     qtsvg
-    qttools
-    qtwebengine
     qtxmlpatterns
     qtnetworkauth
     qtx11extras
