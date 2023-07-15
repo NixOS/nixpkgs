@@ -187,6 +187,9 @@ in {
   haskell-gi-base = __CabalEagerPkgConfigWorkaround super.haskell-gi-base;
   svgcairo = __CabalEagerPkgConfigWorkaround super.svgcairo;
   gtk3 = __CabalEagerPkgConfigWorkaround super.gtk3;
+  webkit2gtk3-javascriptcore = __CabalEagerPkgConfigWorkaround super.webkit2gtk3-javascriptcore;
+  gi-javascriptcore = __CabalEagerPkgConfigWorkaround super.gi-javascriptcore;
+  gi-soup = __CabalEagerPkgConfigWorkaround super.gi-soup;
   gio = __CabalEagerPkgConfigWorkaround super.gio;
   gtk = __CabalEagerPkgConfigWorkaround super.gtk;
 
