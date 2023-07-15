@@ -11110,7 +11110,9 @@ with pkgs;
 
   openobex = callPackage ../tools/bluetooth/openobex { };
 
-  openresolv = callPackage ../tools/networking/openresolv { };
+  openresolv = callPackage ../tools/networking/openresolv {
+    sed = gnused;
+  };
 
   openrgb = libsForQt5.callPackage ../applications/misc/openrgb { };
 
