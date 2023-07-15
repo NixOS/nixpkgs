@@ -385,6 +385,12 @@ stdenv.mkDerivation ({
     "--enable-dwarf-unwind"
     "--with-libdw-includes=${lib.getDev elfutils}/include"
     "--with-libdw-libraries=${lib.getLib elfutils}/lib"
+  ] ++ lib.optionals targetPlatform.isDarwin [
+    # Darwin uses llvm-ar. GHC will try to use `-L` with `ar` when it is `llvm-ar`
+    # but it doesn’t currently work because Cabal never uses `-L` on Darwin. See:
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/23188
+    # https://github.com/haskell/cabal/issues/8882
+    "fp_cv_prog_ar_supports_dash_l=no"
   ];
 
   # Make sure we never relax`$PATH` and hooks support for compatibility.

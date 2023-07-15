@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , autoreconfHook
+, bison
 , onigurumaSupport ? true
 , oniguruma
 }:
@@ -38,7 +39,16 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = lib.optionals onigurumaSupport [ oniguruma ];
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook bison ];
+
+  # Darwin requires _REENTRANT be defined to use functions like `lgamma_r`.
+  # Otherwise, configure will detect that they’re in libm, but the build will fail
+  # with clang 16+ due to calls to undeclared functions.
+  # This is fixed upstream and can be removed once jq is updated (to 1.7 or an unstable release).
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin (toString [
+    "-D_REENTRANT=1"
+    "-D_DARWIN_C_SOURCE=1"
+  ]);
 
   configureFlags = [
     "--bindir=\${bin}/bin"

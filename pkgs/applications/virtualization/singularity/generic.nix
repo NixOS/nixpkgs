@@ -149,6 +149,9 @@ in
   ++ extraConfigureFlags
   ;
 
+  # causes redefinition of _FORTIFY_SOURCE
+  hardeningDisable = [ "fortify3" ];
+
   # Packages to prefix to the Apptainer/Singularity container runtime default PATH
   # Use overrideAttrs to override
   defaultPathInputs = [

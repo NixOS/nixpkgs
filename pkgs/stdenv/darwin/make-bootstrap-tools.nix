@@ -151,7 +151,7 @@ in rec {
 
       # Strip executables even further
       for i in $out/bin/*; do
-        if [[ ! -L $i ]]; then
+        if [[ ! -L $i ]] && isMachO "$i"; then
           chmod +w $i
           ${stdenv.cc.targetPrefix}strip $i || true
         fi
@@ -164,7 +164,7 @@ in rec {
       done
 
       for i in $out/bin/*; do
-        if [[ ! -L "$i" ]]; then
+        if [[ ! -L "$i" ]] && isMachO "$i"; then
           ${stdenv.cc.targetPrefix}install_name_tool -add_rpath '@executable_path/../lib' $i
         fi
       done

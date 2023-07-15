@@ -176,7 +176,8 @@ lib.pipe (stdenv.mkDerivation ({
 
   libc_dev = stdenv.cc.libc_dev;
 
-  hardeningDisable = [ "format" "pie" ];
+  hardeningDisable = [ "format" "pie" ]
+    ++ optional langAda "fortify3";
 
   postPatch = ''
     configureScripts=$(find . -name configure)

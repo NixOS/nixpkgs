@@ -99,8 +99,13 @@ buildPythonApplication rec {
     ./disable-test_ssh_bootstrap_with_different_launchers.patch
   ];
 
-  # Causes build failure due to warning
-  hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
+  hardeningDisable = [
+    # causes redefinition of _FORTIFY_SOURCE
+    "fortify3"
+  ] ++ lib.optionals stdenv.cc.isClang [
+    # Causes build failure due to warning
+    "strictoverflow"
+  ];
 
   CGO_ENABLED = 0;
   GOFLAGS = "-trimpath";
