@@ -7186,9 +7186,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  doggo = callPackage ../tools/networking/doggo {
-    buildGoModule = buildGo119Module; # build fails with 1.20
-  };
+  doggo = callPackage ../tools/networking/doggo { };
 
   dool = callPackage ../tools/system/dool { };
 
