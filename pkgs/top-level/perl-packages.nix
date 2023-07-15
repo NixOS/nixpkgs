@@ -10799,6 +10799,19 @@ let
     };
   };
 
+  HashSafeKeys = buildPerlPackage {
+    pname = "Hash-SafeKeys";
+    version = "0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MO/MOB/Hash-SafeKeys-0.04.tar.gz";
+      hash = "sha256-pSStO/naZ3wfi+bhWXG3ZXVAj3RJI9onZHro8dPDfMw=";
+    };
+    meta = {
+      description = "Get hash contents without resetting each iterator";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   HashSharedMem = buildPerlModule {
     pname = "Hash-SharedMem";
     version = "0.005";
