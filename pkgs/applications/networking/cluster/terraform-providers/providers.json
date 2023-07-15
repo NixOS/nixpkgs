@@ -155,29 +155,29 @@
     "vendorHash": null
   },
   "bigip": {
-    "hash": "sha256-oKYBeJsFhxLCFLsVc7p0TFGIVYj2xKPC3+EfNedHuu4=",
+    "hash": "sha256-lC6EesN0y8TxW8jXatteY44/X8cHgRs72i8KfvN2JEM=",
     "homepage": "https://registry.terraform.io/providers/F5Networks/bigip",
     "owner": "F5Networks",
     "repo": "terraform-provider-bigip",
-    "rev": "v1.18.0",
+    "rev": "v1.18.1",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
   "bitbucket": {
-    "hash": "sha256-Sby7Dvu4UWzdbQWa/GLMkDzlK7foaFApy4yLNBOJgck=",
+    "hash": "sha256-En53+Lj7cQxzkKgXDPWNptVbg0wMAc5WRmsilBOlgEM=",
     "homepage": "https://registry.terraform.io/providers/DrFaust92/bitbucket",
     "owner": "DrFaust92",
     "repo": "terraform-provider-bitbucket",
-    "rev": "v2.34.0",
+    "rev": "v2.35.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-AcUw5i3st7VfAnpy/6nTYfTv3rOAN2jm4rUmEKcSrXM="
+    "vendorHash": "sha256-xaa/NAJfKlSM4P9o4xNsJhL5ZyUGNYMC9/WbCqMKiLM="
   },
   "brightbox": {
-    "hash": "sha256-Q1P9qpJO+hhYeVxCd61dvYGmWlSNF7pJHRP5EdTGgWU=",
+    "hash": "sha256-pwFbCP+qDL/4IUfbPRCkddkbsEEeAu7Wp12/mDL0ABA=",
     "homepage": "https://registry.terraform.io/providers/brightbox/brightbox",
     "owner": "brightbox",
     "repo": "terraform-provider-brightbox",
-    "rev": "v3.4.2",
+    "rev": "v3.4.3",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-/dOiXO2aPkuZaFiwv/6AXJdIADgx8T7eOwvJfBBoqg8="
   },
@@ -227,13 +227,13 @@
     "vendorHash": "sha256-hxD+0OrCdyYn/9nvz5fd/54YiaZyZMOfsIa7lqZhCHE="
   },
   "cloudfoundry": {
-    "hash": "sha256-SFA0rG80BWaJHwvAWEugdVd3nR+YGflyYONOuoS++P8=",
+    "hash": "sha256-hoX2KNUzC7G+bFxReTN/6IG8/P4rczHAYn2QQ2iOioc=",
     "homepage": "https://registry.terraform.io/providers/cloudfoundry-community/cloudfoundry",
     "owner": "cloudfoundry-community",
     "repo": "terraform-provider-cloudfoundry",
-    "rev": "v0.50.8",
+    "rev": "v0.51.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-QVfzSmB/2neQcw+OJbX71Z06oFw4Gc3YQ1RpchAOY7Q="
+    "vendorHash": "sha256-FR0HnLLVv8H5jC3gRv8jk2VLsavlHNQny+UqZ00InTY="
   },
   "cloudinit": {
     "hash": "sha256-fdtUKD8XC1Y72IzrsCfTZYVYZwLqY3gV2sajiw4Krzw=",
@@ -427,11 +427,11 @@
     "vendorHash": "sha256-uWTY8cFztXFrQQ7GW6/R+x9M6vHmsb934ldq+oeW5vk="
   },
   "github": {
-    "hash": "sha256-MgyeUcNZVLUKjy6ZaUXbFkZd/gokywLE4eTDXshCJUc=",
+    "hash": "sha256-xPxrHOuvOT8VO0D7M1TI39i0B1GIQ4Z2F1UckGsU/1A=",
     "homepage": "https://registry.terraform.io/providers/integrations/github",
     "owner": "integrations",
     "repo": "terraform-provider-github",
-    "rev": "v5.30.1",
+    "rev": "v5.31.0",
     "spdx": "MIT",
     "vendorHash": null
   },
@@ -474,13 +474,13 @@
     "vendorHash": "sha256-fqVBnAivVekV+4tpkl+E6eNA3wi8mhLevJRCs3W7L2g="
   },
   "grafana": {
-    "hash": "sha256-oPAW2RZeHGFWre41cocu8Cblcrv1fgdkpZ2MP+eH6O0=",
+    "hash": "sha256-I0qfG916mbYYwjKmlUmCD2iG0CuJxTFOFdVS6VyEfHM=",
     "homepage": "https://registry.terraform.io/providers/grafana/grafana",
     "owner": "grafana",
     "repo": "terraform-provider-grafana",
-    "rev": "v2.0.0",
+    "rev": "v2.1.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-XRIGTzxdtqi7uFmTLtxXJiMhPzYJXE4DY8cPVa5R+5o="
+    "vendorHash": "sha256-gY15FJb1svy2AxXs6ZOmZX5o3oXIokzf5hXlFlx1cXU="
   },
   "gridscale": {
     "hash": "sha256-u0NX1hoawEVbmj2Id6qvb8GYgH/u3cbgWZ/b+2nBYNM=",
@@ -547,11 +547,11 @@
     "vendorHash": "sha256-hxT9mpKifb63wlCUeUzgVo4UB2TnYZy9lXF4fmGYpc4="
   },
   "huaweicloud": {
-    "hash": "sha256-aGivt0XfePNvac+YDS85CfsCiu4NXoah/M+sMfsnWi4=",
+    "hash": "sha256-/KVQU0n91mltVE8UHDb6fpGn3CBPY1ubEP02DVg7eIY=",
     "homepage": "https://registry.terraform.io/providers/huaweicloud/huaweicloud",
     "owner": "huaweicloud",
     "repo": "terraform-provider-huaweicloud",
-    "rev": "v1.51.0",
+    "rev": "v1.52.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -908,13 +908,13 @@
     "vendorHash": "sha256-sV6JPKzpA1+uoUBmdWpUSk70cl9ofQqr7USbK+4RVDs="
   },
   "postgresql": {
-    "hash": "sha256-VQu0NrBbBx951V+H10Q1/pmYjtwg2vuFW25mNXZ3NoI=",
+    "hash": "sha256-8ihu/qnPknrHeZjZ0MNcUL3qjH/gvEsOnZKDI93Hdh4=",
     "homepage": "https://registry.terraform.io/providers/cyrilgdn/postgresql",
     "owner": "cyrilgdn",
     "repo": "terraform-provider-postgresql",
-    "rev": "v1.19.0",
+    "rev": "v1.20.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-JsKxNS2JlYIfTsiV/2WVB51i2OuZI1PNZDrxOuloaX0="
+    "vendorHash": "sha256-zsjx61qUV7nB26ghpl3T2AcXVMHblUQ0JNQ0xUnO+6Y="
   },
   "powerdns": {
     "hash": "sha256-NtJs2oNJbjUYNFsbrfo2RYhqOlKA15GJt9gi1HuTIw0=",

@@ -2095,11 +2095,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xeyes = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libxcb, libXext, libXi, libXmu, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
     pname = "xeyes";
-    version = "1.2.0";
+    version = "1.3.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xeyes-1.2.0.tar.bz2";
-      sha256 = "1nxn443pfhddmwl59wplpjkslhlyfk307qx18nrimvvb2hipx8gq";
+      url = "mirror://xorg/individual/app/xeyes-1.3.0.tar.xz";
+      sha256 = "08rhfp5xlmdbyxkvxhgjxdn6vwzrbrjyd7jkk8b7wi1kpw0ccl09";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
