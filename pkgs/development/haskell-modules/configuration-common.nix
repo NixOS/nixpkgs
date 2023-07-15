@@ -1506,6 +1506,8 @@ self: super: {
   reflex-dom-core = overrideCabal (old: {
     postPatch = old.postPatch or "" + ''
       sed -i 's/template-haskell.*2.17/template-haskell/' reflex-dom-core.cabal
+      sed -i 's/semialign.*1.3/semialign/' reflex-dom-core.cabal
+      sed -i 's/these.*0.9/these/' reflex-dom-core.cabal
     '';
     })
     ((appendPatches [
