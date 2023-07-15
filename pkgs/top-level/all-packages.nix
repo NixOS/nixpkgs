@@ -25429,6 +25429,8 @@ with pkgs;
   };
   zig = zig_0_10;
 
+  zigHook = callPackage ../development/compilers/zig/hook.nix { };
+
   zimlib = callPackage ../development/libraries/zimlib { };
 
   zita-convolver = callPackage ../development/libraries/audio/zita-convolver { };
