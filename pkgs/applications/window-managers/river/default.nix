@@ -15,12 +15,15 @@
 , wlroots_0_16
 , xwayland
 , zigHook
+, withManpages ? true
 , xwaylandSupport ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "river";
   version = "0.2.4";
+
+  outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
   src = fetchFromGitHub {
     owner = "riverwm";
@@ -32,11 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    scdoc
     wayland
     xwayland
     zigHook
-  ];
+  ]
+  ++ lib.optional withManpages scdoc;
 
   buildInputs = [
     libGL
@@ -51,10 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontConfigure = true;
 
-  zigBuildFlags = [
-    "-Dman-pages"
-  ]
-  ++ lib.optional xwaylandSupport "-Dxwayland";
+  zigBuildFlags = lib.optional withManpages "-Dman-pages"
+                  ++ lib.optional xwaylandSupport "-Dxwayland";
 
   postInstall = ''
     install contrib/river.desktop -Dt $out/share/wayland-sessions
