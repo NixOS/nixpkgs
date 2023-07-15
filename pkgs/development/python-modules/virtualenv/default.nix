@@ -11,24 +11,24 @@
 , hatch-vcs
 , hatchling
 , importlib-metadata
-, importlib-resources
 , platformdirs
 , pytest-freezegun
 , pytest-mock
 , pytest-timeout
 , pytestCheckHook
+, time-machine
 }:
 
 buildPythonPackage rec {
   pname = "virtualenv";
-  version = "20.19.0";
+  version = "20.24.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-N6ZAuoLtQLImWZxSLUEeS+XtszmgwN4DDA3HtkbWFZA=";
+    hash = "sha256-4qfO+dqIDWk7kz23ZUNndU8U4gZQ3GDo7nOFVx+Fk6M=";
   };
 
   nativeBuildInputs = [
@@ -40,8 +40,6 @@ buildPythonPackage rec {
     distlib
     filelock
     platformdirs
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    importlib-resources
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
@@ -57,6 +55,7 @@ buildPythonPackage rec {
     pytest-mock
     pytest-timeout
     pytestCheckHook
+    time-machine
   ];
 
   preCheck = ''
