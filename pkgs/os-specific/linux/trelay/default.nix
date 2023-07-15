@@ -1,15 +1,15 @@
 { stdenv, lib, fetchFromGitHub, kernel, kmod }:
 let
-    v = "22.03.5";
+  version = "22.03.5";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "trelay";
-  version = "${v}-${kernel.version}";
+  version = "${version}-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "openwrt";
     repo = "openwrt";
-    rev = "v${v}";
+    rev = "v${version}";
     hash = "sha256-Q0EdFPlOQl4XUtifAupNPor/QRthtijo7Xgo7rikW84=";
   };
 
