@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "python-crontab";
-  version = "2.7.1";
+  version = "3.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-shr0ZHx7u4SP7y8CBhbGsCidy5+UtPmRpVMQ/5vsV0k=";
+    hash = "sha256-eft0ZQOd39T7k9By1u4NRcGsi/FZfwaG6hT9Q2Hbo3k=";
   };
 
   propagatedBuildInputs = [

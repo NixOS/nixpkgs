@@ -34,8 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     wrapQtApp "$out/bin/fs-uae-launcher" \
-      --set PYTHONPATH "$PYTHONPATH" \
-      --prefix PATH : ${lib.makeBinPath [ fsuae ]}
+      --set PYTHONPATH "$PYTHONPATH"
+
+    # fs-uae-launcher search side by side for fs-uae
+    # see $src/fsgs/plugins/pluginexecutablefinder.py#find_executable
+    ln -s ${fsuae}/bin/fs-uae $out/bin
   '';
 
   meta = {

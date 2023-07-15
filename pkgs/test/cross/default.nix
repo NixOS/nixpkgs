@@ -110,4 +110,14 @@ let
 in {
   gcc = (lib.mapAttrs (_: mapMultiPlatformTest (system: system // {useLLVM = false;})) tests);
   llvm = (lib.mapAttrs (_: mapMultiPlatformTest (system: system // {useLLVM = true;})) tests);
+
+  # see https://github.com/NixOS/nixpkgs/issues/213453
+  # this is a good test of a lot of tricky glibc/libgcc corner cases
+  mbuffer = let
+    mbuffer = pkgs.pkgsCross.aarch64-multiplatform.mbuffer;
+    emulator = with lib.systems; (elaborate examples.aarch64-multiplatform).emulator pkgs;
+  in
+    pkgs.runCommand "test-mbuffer" {} ''
+      echo hello | ${emulator} ${mbuffer}/bin/mbuffer
+    '';
 }

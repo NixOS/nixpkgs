@@ -71,6 +71,8 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
     }
 
     rm -rf jbr
+    # When using the IDE as a remote backend using gateway, it expects the jbr directory to contain the jdk
+    ln -s ${jdk.home} jbr
 
     interpreter=$(echo ${stdenv.cc.libc}/lib/ld-linux*.so.2)
     if [[ "${stdenv.hostPlatform.system}" == "x86_64-linux" && -e bin/fsnotifier64 ]]; then
