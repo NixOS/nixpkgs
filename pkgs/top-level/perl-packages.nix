@@ -7304,6 +7304,20 @@ let
     };
   };
 
+  DevelOverrideGlobalRequire = buildPerlPackage {
+    pname = "Devel-OverrideGlobalRequire";
+    version = "0.001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Devel-OverrideGlobalRequire-0.001.tar.gz";
+      hash = "sha256-B5GJLeOuKSr0qU44LyHbHuiCEIdQMYUebqgsNBB4Xvk=";
+    };
+    meta = {
+      homepage = "https://metacpan.org/release/Devel-OverrideGlobalRequire";
+      description = "Override CORE::GLOBAL::require safely";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   DevelPartialDump = buildPerlPackage {
     pname = "Devel-PartialDump";
     version = "0.20";
