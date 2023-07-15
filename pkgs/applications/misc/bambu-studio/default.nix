@@ -51,13 +51,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bambu-studio";
-  version = "01.06.02.04";
+  version = "01.07.00.65";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
     rev = "v${version}";
-    hash = "sha256-k2/0ukIVjGhUUKhaJCldTRsQcHwX/mL2ROVaiTkv/eg=";
+    hash = "sha256-IYkfKumi9gy1pQ5FnOzbbozTbjd1HY/xu19hrv8Bs6s=";
   };
 
   nativeBuildInputs = [
@@ -105,15 +105,6 @@ stdenv.mkDerivation rec {
   patches = [
     # Fix for webkitgtk linking
     ./0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
-
-    # Fix null pointer deref with wxTranslations::Get()
-    #
-    # https://github.com/bambulab/BambuStudio/pull/1906
-    (fetchpatch {
-      name = "Initialize-locale-before-wxTranslations-Get.patch";
-      url = "https://github.com/zhaofengli/BambuStudio/commit/04728a14433ebd3b36032210c1ef806c63101166.patch";
-      hash = "sha256-9rk/qaDMqqN9aaK0E1ElKz1qUkznOEBlgeMSE48wQh8=";
-    })
   ];
 
   doCheck = true;
