@@ -19271,6 +19271,8 @@ with pkgs;
 
   mastodon-archive = callPackage ../tools/backup/mastodon-archive { };
 
+  math-preview = callPackage ../tools/text/math-review { };
+
   maven = maven3;
   maven3 = callPackage ../development/tools/build-managers/apache-maven { };
 
