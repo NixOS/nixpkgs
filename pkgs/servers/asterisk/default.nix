@@ -28,7 +28,7 @@
 , libtool
 , automake
 , fetchpatch
-, python39
+, python3
 , writeScript
 , withOpus ? true
 , ldapSupport ? false
@@ -193,7 +193,7 @@ let
       })
     (lib.importJSON ./versions.json);
 
-  updateScript_python = python39.withPackages (p: with p; [ packaging beautifulsoup4 requests ]);
+  updateScript_python = python3.withPackages (p: with p; [ packaging beautifulsoup4 requests ]);
   updateScript = writeScript "asterisk-update" ''
     #!/usr/bin/env bash
     exec ${updateScript_python}/bin/python ${toString ./update.py}
