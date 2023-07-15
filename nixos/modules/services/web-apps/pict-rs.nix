@@ -1,7 +1,8 @@
-{ lib, pkgs, config, ... }:
+{ lib, pkgs, config, options, ... }:
 
 let
   cfg = config.services.pict-rs;
+  opt = options.services.pict-rs;
   inherit (lib) maintainers mkOption types;
 
   is03 = lib.versionOlder cfg.package.version "0.4.0";
@@ -99,6 +100,13 @@ in
         DynamicUser = true;
         StateDirectory = "pict-rs";
         ExecStart = if is03 then "${lib.getBin cfg.package}/bin/pict-rs" else "${lib.getBin cfg.package}/bin/pict-rs run";
+      };
+      unitConfig = {
+        RequiresMountsFor = [ ]
+          ++ lib.optional (cfg.dataDir != opt.dataDir.default) cfg.dataDir
+          ++ lib.optional (cfg.repoPath != null) cfg.repoPath
+          ++ lib.optional (cfg.storePath != null) cfg.storePath
+        ;
       };
     };
   };
