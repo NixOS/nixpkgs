@@ -6656,6 +6656,8 @@ self: super: with self; {
 
   musicbrainzngs = callPackage ../development/python-modules/musicbrainzngs { };
 
+  music-tag = callPackage ../development/python-modules/music-tag { };
+
   mutag = callPackage ../development/python-modules/mutag { };
 
   mutagen = callPackage ../development/python-modules/mutagen { };
