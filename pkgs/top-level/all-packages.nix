@@ -10961,6 +10961,8 @@ with pkgs;
 
   openfortivpn = callPackage ../tools/networking/openfortivpn { };
 
+  openfortivpn-webview = qt6Packages.callPackage ../tools/networking/openfortivpn-webview { };
+
   opensnitch = callPackage ../tools/networking/opensnitch/daemon.nix {
     # Build currently fails on Go > 1.18
     # See https://github.com/evilsocket/opensnitch/issues/851
