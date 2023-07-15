@@ -9336,13 +9336,13 @@ with pkgs;
 
   kent = callPackage ../applications/science/biology/kent { };
 
-  keybase = callPackage ../tools/security/keybase {
+  keybase = darwin.apple_sdk_11_0.callPackage ../tools/security/keybase {
     # Reasoning for the inherited apple_sdk.frameworks:
     # 1. specific compiler errors about: AVFoundation, AudioToolbox, MediaToolbox
     # 2. the rest are added from here: https://github.com/keybase/client/blob/68bb8c893c5214040d86ea36f2f86fbb7fac8d39/go/chat/attachments/preview_darwin.go#L7
     #      #cgo LDFLAGS: -framework AVFoundation -framework CoreFoundation -framework ImageIO -framework CoreMedia  -framework Foundation -framework CoreGraphics -lobjc
     #    with the exception of CoreFoundation, due to the warning in https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/darwin/apple-sdk/frameworks.nix#L25
-    inherit (darwin.apple_sdk.frameworks) AVFoundation AudioToolbox ImageIO CoreMedia Foundation CoreGraphics MediaToolbox;
+    inherit (darwin.apple_sdk_11_0.frameworks) AVFoundation AudioToolbox ImageIO CoreMedia Foundation CoreGraphics MediaToolbox;
   };
 
   kbfs = callPackage ../tools/security/keybase/kbfs.nix { };
