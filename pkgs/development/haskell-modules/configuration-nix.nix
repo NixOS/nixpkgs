@@ -323,18 +323,12 @@ self: super: builtins.intersectAttrs super {
   gio = lib.pipe super.gio
     [ (disableHardening ["fortify"])
       (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools)
-      (addPkgconfigDepends (with pkgs; [ glib pcre2 pcre ]
-                                       ++ lib.optionals pkgs.stdenv.isLinux [ util-linux libselinux libsepol ]))
     ];
   glib = disableHardening ["fortify"] (addPkgconfigDepend pkgs.glib (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools super.glib));
   gtk3 = disableHardening ["fortify"] (super.gtk3.override { inherit (pkgs) gtk3; });
   gtk = lib.pipe super.gtk (
     [ (disableHardening ["fortify"])
       (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools)
-      (addPkgconfigDepends (with pkgs; [ gtk2 pcre2 pcre fribidi
-                                         libthai libdatrie xorg.libXdmcp libdeflate
-                                        ]
-                                       ++ lib.optionals pkgs.stdenv.isLinux [ util-linux libselinux libsepol ]))
     ] ++
     ( if pkgs.stdenv.isDarwin then [(appendConfigureFlag "-fhave-quartz-gtk")] else [] )
   );
