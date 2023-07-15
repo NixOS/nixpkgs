@@ -2,7 +2,7 @@
 , subversion, glibcLocales, sshSupport ? true, openssh ? null
 }:
 
-{ url, rev ? "HEAD", md5 ? "", sha256 ? ""
+{ url, rev ? "HEAD", md5 ? "", sha256 ? "", hash ? ""
 , ignoreExternals ? false, ignoreKeywords ? false, name ? null
 , preferLocalBuild ? true
 }:
@@ -34,6 +34,8 @@ in
 
 if md5 != "" then
   throw "fetchsvn does not support md5 anymore, please use sha256"
+else if hash != "" && sha256 != "" then
+  throw "Only one of sha256 or hash can be set"
 else
 stdenvNoCC.mkDerivation {
   name = name_;
@@ -43,9 +45,14 @@ stdenvNoCC.mkDerivation {
 
   SVN_SSH = if sshSupport then "${buildPackages.openssh}/bin/ssh" else null;
 
-  outputHashAlgo = "sha256";
+  outputHashAlgo = if hash != "" then null else "sha256";
   outputHashMode = "recursive";
-  outputHash = sha256;
+  outputHash = if hash != "" then
+    hash
+  else if sha256 != "" then
+    sha256
+  else
+    lib.fakeSha256;
 
   inherit url rev ignoreExternals ignoreKeywords;
 
