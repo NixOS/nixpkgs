@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "restic-rest-server";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "restic";
     repo = "rest-server";
     rev = "v${version}";
-    hash = "sha256-FnT7AG9na/KdWimUqhcF1QndGdT+Nc8ao5zlSeN/fJ0=";
+    hash = "sha256-0zmUI7LUKVXUdPsNxY7RQxbsAraY0GrTMAS3kORIU6I=";
   };
 
-  vendorHash = "sha256-Q0XazJmfmAwR2wXD/RXO6nPiNyWFubBYL3kNFKBRMzc=";
+  vendorHash = "sha256-tD5ffIYULMBqu99l1xCL0RnLB9zNpwNPs1qVFqezUc8=";
 
   meta = with lib; {
     changelog = "https://github.com/restic/rest-server/blob/${src.rev}/CHANGELOG.md";
