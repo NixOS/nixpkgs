@@ -29,5 +29,6 @@ tetex-tex-live.section.md
 unzip.section.md
 validatePkgConfig.section.md
 waf.section.md
+zig.section.md
 xcbuild.section.md
 ```
