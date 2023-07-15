@@ -5,7 +5,6 @@
 , boto3
 , buildPythonPackage
 , codecov
-, databases
 , fetchFromGitHub
 , flake8
 , flask-sockets
@@ -44,7 +43,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     codecov
-    databases
     flake8
     flask-sockets
     moto
