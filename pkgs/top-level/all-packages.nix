@@ -40196,6 +40196,8 @@ with pkgs;
 
   protocol = callPackage ../applications/networking/protocol { };
 
+  pwru = callPackage ../tools/networking/pwru { };
+
   pykms = callPackage ../tools/networking/pykms { };
 
   pyupgrade = with python3Packages; toPythonApplication pyupgrade;
