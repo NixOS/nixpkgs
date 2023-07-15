@@ -609,6 +609,8 @@ stdenv.mkDerivation {
 
 
   env = {
+    inherit isClang;
+
     # for substitution in utils.bash
     expandResponseParams = "${expand-response-params}/bin/expand-response-params";
     shell = getBin shell + shell.shellPath or "";
