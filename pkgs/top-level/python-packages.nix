@@ -6367,6 +6367,8 @@ self: super: with self; {
 
   mf2py = callPackage ../development/python-modules/mf2py { };
 
+  mhcflurry = callPackage ../development/python-modules/mhcflurry { };
+
   mhcgnomes = callPackage ../development/python-modules/mhcgnomes { };
 
   micawber = callPackage ../development/python-modules/micawber { };
