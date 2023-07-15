@@ -1148,6 +1148,7 @@ with pkgs;
 
   makePkgconfigItem = callPackage ../build-support/make-pkgconfigitem { };
 
+  extractDarwinApp = callPackage ../build-support/extract-darwin-app { };
   makeDarwinBundle = callPackage ../build-support/make-darwin-bundle { };
 
   makeAutostartItem = callPackage ../build-support/make-startupitem { };
@@ -30359,6 +30360,8 @@ with pkgs;
   ChowPhaser  = callPackage ../applications/audio/ChowPhaser { };
 
   CHOWTapeModel = callPackage ../applications/audio/CHOWTapeModel { };
+
+  chromium-bin = callPackage ../applications/networking/browsers/chromium-bin {};
 
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or {});
 
