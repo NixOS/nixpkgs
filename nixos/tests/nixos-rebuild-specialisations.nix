@@ -14,22 +14,11 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         connect-timeout = 1;
       };
 
-      system.extraDependencies = with pkgs; [
-        curl
-        desktop-file-utils
-        docbook5
-        docbook_xsl_ns
-        grub2
-        kmod.dev
-        libarchive
-        libarchive.dev
-        libxml2.bin
-        libxslt.bin
-        python3Minimal
-        shared-mime-info
-        stdenv
-        sudo
-        xorg.lndir
+      system.includeBuildDependencies = true;
+
+      system.extraDependencies = [
+        # Not part of the initial build apparently?
+        pkgs.grub2
       ];
 
       virtualisation = {

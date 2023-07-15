@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, callPackage
 , patchelf
 , unzip
 , poco
@@ -58,6 +59,11 @@ stdenv.mkDerivation rec {
     cp -R api $out/include/CraftOS-PC
     cp -R ${craftos2-rom}/* $out/share/craftos
   '';
+
+  passthru.tests = {
+    eval-hello-world = callPackage ./test-eval-hello-world { };
+    eval-periphemu = callPackage ./test-eval-periphemu { };
+  };
 
   meta = with lib; {
     description = "An implementation of the CraftOS-PC API written in C++ using SDL";

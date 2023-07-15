@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "aiooss2";
-  version = "0.2.5";
+  version = "0.2.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "karajan1001";
     repo = "aiooss2";
     rev = "refs/tags/${version}";
-    hash = "sha256-NYr8i5OAYRaRnDkNmnw1IWXnSp7HAovNaSV79xcwyHo=";
+    hash = "sha256-VVfDH9QWF9gBhd2pOjKH5+VdNSvl1q0iauAbo88wNaM=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

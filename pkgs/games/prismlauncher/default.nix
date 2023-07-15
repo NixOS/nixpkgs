@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+, cmark
 , ninja
 , jdk17
 , zlib
@@ -24,13 +25,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "prismlauncher-unwrapped";
-  version = "6.3";
+  version = "7.1";
 
   src = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "PrismLauncher";
     rev = version;
-    sha256 = "sha256-7tptHKWkbdxTn6VIPxXE1K3opKRiUW2zv9r6J05dcS8=";
+    sha256 = "sha256-ri4oaeJKmvjJapUASPX10nl4JcLPjA3SgTp2EyaEPWg=";
   };
 
   nativeBuildInputs = [ extra-cmake-modules cmake jdk17 ninja ];
@@ -40,12 +41,13 @@ stdenv.mkDerivation rec {
     quazip
     ghc_filesystem
     tomlplusplus
+    cmark
   ] ++ lib.optional gamemodeSupport gamemode;
 
   hardeningEnable = [ "pie" ];
 
   cmakeFlags = lib.optionals (msaClientID != null) [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ]
-    ++ lib.optionals (lib.versionAtLeast qtbase.version "6") [ "-DLauncher_QT_VERSION_MAJOR=6" ];
+    ++ lib.optionals (lib.versionOlder qtbase.version "6") [ "-DLauncher_QT_VERSION_MAJOR=5" ];
 
   postUnpack = ''
     rm -rf source/libraries/libnbtplusplus
@@ -65,6 +67,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     changelog = "https://github.com/PrismLauncher/PrismLauncher/releases/tag/${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ minion3665 Scrumplex ];
+    maintainers = with maintainers; [ minion3665 Scrumplex getchoo ];
   };
 }

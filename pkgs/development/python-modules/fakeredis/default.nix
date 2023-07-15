@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "2.12.1";
+  version = "2.16.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "dsoftwareinc";
     repo = "fakeredis-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WF3dITWCrTQDORfaGWPpJBQFkPrUN6faHohjvBuOW7I=";
+    hash = "sha256-gJcgATH9ASbD4Uq/uZpTwmqCJ8UXOS/4t8Uq89V61GA=";
   };
 
   nativeBuildInputs = [

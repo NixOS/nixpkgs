@@ -24,7 +24,6 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/tnpitsecurity/ligolo-ng";
     description = "A tunneling/pivoting tool that uses a TUN interface";
-    platforms = platforms.unix;
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ elohmeier ];
   };

@@ -86,12 +86,12 @@ in {
 
   nim-unwrapped = stdenv.mkDerivation rec {
     pname = "nim-unwrapped";
-    version = "1.6.12";
+    version = "1.6.14";
     strictDeps = true;
 
     src = fetchurl {
       url = "https://nim-lang.org/download/nim-${version}.tar.xz";
-      hash = "sha256-rO8LCrdzYE1Nc5S2hRntt0+zD0aRIpSyi8J+DHtLTcI=";
+      hash = "sha256-0HDS8oriQA33/kpJ7OufRc1TmQaxB0gYVqCveo+oLck=";
     };
 
     buildInputs = [ boehmgc openssl pcre readline sqlite ]
@@ -103,6 +103,9 @@ in {
 
       ./nixbuild.patch
       # Load libraries at runtime by absolute path
+
+      ./extra-mangling.patch
+      # Mangle store paths of modules to prevent runtime dependence.
     ] ++ lib.optional (!stdenv.hostPlatform.isWindows) ./toLocation.patch;
 
     configurePhase = ''

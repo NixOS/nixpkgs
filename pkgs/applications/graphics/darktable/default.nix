@@ -58,12 +58,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.2.1";
+  version = "4.4.1";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    sha256 = "603a39c6074291a601f7feb16ebb453fd0c5b02a6f5d3c7ab6db612eadc97bac";
+    sha256 = "e043d38d2e8adb67af7690b12b535a40e8ec7bea05cfa8684db8b21a626e0f0d";
   };
 
   nativeBuildInputs = [ cmake ninja llvm_13 pkg-config intltool perl desktop-file-utils wrapGAppsHook ];
@@ -147,6 +147,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.darktable.org";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ goibhniu flosse mrVanDalo paperdigits ];
+    maintainers = with maintainers; [ goibhniu flosse mrVanDalo paperdigits freyacodes ];
   };
 }

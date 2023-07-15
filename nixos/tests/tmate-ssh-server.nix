@@ -24,6 +24,7 @@ in
         services.tmate-ssh-server = {
           enable = true;
           port = 2223;
+          openFirewall = true;
         };
       };
       client = { ... }: {

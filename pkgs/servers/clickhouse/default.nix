@@ -1,12 +1,15 @@
 { lib
-, stdenv
+, llvmPackages
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , ninja
 , python3
 , perl
 , yasm
 , nixosTests
+, darwin
+, findutils
 
 # currently for BLAKE3 hash function
 , rustSupport ? true
@@ -17,24 +20,39 @@
 , rustPlatform
 }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (llvmPackages) stdenv;
+  mkDerivation = (
+    if stdenv.isDarwin
+    then darwin.apple_sdk_11_0.llvmPackages_15.stdenv
+    else llvmPackages.stdenv).mkDerivation;
+in mkDerivation rec {
   pname = "clickhouse";
-  version = "23.3.2.37";
+  version = "23.3.5.9";
 
   src = fetchFromGitHub rec {
     owner = "ClickHouse";
     repo = "ClickHouse";
     rev = "v${version}-lts";
     fetchSubmodules = true;
-    hash = "sha256-G/5KZ4vd9w5g0yB6bzyM8VX3l32Di+a6Ll87NK3GOrg=";
     name = "clickhouse-${rev}.tar.gz";
+    hash = "sha256-soF0L69oi95r0zgzPL0DfDhhXfRKekN5u/4+/mt8QwM=";
     postFetch = ''
-      # compress to not exceed the 4GB output limit
+      # delete files that make the source too big
+      rm -rf $out/contrib/llvm-project/llvm/test
+      rm -rf $out/contrib/llvm-project/clang/test
+      rm -rf $out/contrib/croaring/benchmarks
+
+      # fix case insensitivity on macos https://github.com/NixOS/nixpkgs/issues/39308
+      rm -rf $out/contrib/sysroot/linux-*
+      rm -rf $out/contrib/liburing/man
+
+      # compress to not exceed the 2GB output limit
       # try to make a deterministic tarball
       tar -I 'gzip -n' \
         --sort=name \
         --mtime=1970-01-01 \
-        --owner=root --group=root \
+        --owner=0 --group=0 \
         --numeric-owner --mode=go=rX,u+rw,a-s \
         --transform='s@^@source/@S' \
         -cf temp  -C "$out" .
@@ -51,6 +69,10 @@ stdenv.mkDerivation rec {
     perl
   ] ++ lib.optionals stdenv.isx86_64 [
     yasm
+  ] ++ lib.optionals stdenv.isDarwin [
+    llvmPackages.bintools
+    findutils
+    darwin.bootstrap_cmds
   ] ++ lib.optionals rustSupport [
     rustc
     cargo
@@ -110,6 +132,9 @@ stdenv.mkDerivation rec {
       --replace 'git rev-parse --show-toplevel' '$src'
     substituteInPlace utils/check-style/check-style \
       --replace 'git rev-parse --show-toplevel' '$src'
+  '' + lib.optionalString stdenv.isDarwin ''
+    sed -i 's|gfind|find|' cmake/tools.cmake
+    sed -i 's|ggrep|grep|' cmake/tools.cmake
   '' + lib.optionalString rustSupport ''
 
     pushd contrib/corrosion/generator
@@ -129,10 +154,12 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DENABLE_TESTS=OFF"
-    "-DENABLE_CCACHE=0"
+    "-DCOMPILER_CACHE=disabled"
     "-DENABLE_EMBEDDED_COMPILER=ON"
-    "-DWERROR=OFF"
   ];
+
+  # https://github.com/ClickHouse/ClickHouse/issues/49988
+  hardeningDisable = [ "fortify" ];
 
   postInstall = ''
     rm -rf $out/share/clickhouse-test
@@ -157,7 +184,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ orivej ];
 
     # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
-    platforms = lib.filter (x: (lib.systems.elaborate x).is64bit) platforms.linux;
+    platforms = lib.filter (x: (lib.systems.elaborate x).is64bit) (platforms.linux ++ platforms.darwin);
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 }

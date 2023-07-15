@@ -31,8 +31,10 @@ use Cwd qw(abs_path);
 ## no critic(ValuesAndExpressions::ProhibitNoisyQuotes, ValuesAndExpressions::ProhibitMagicNumbers, ValuesAndExpressions::ProhibitEmptyQuotes, ValuesAndExpressions::ProhibitInterpolationOfLiterals)
 ## no critic(RegularExpressions::ProhibitEscapedMetacharacters)
 
-# System closure path to switch to
+# Location of activation scripts
 my $out = "@out@";
+# System closure path to switch to
+my $toplevel = "@toplevel@";
 # Path to the directory containing systemd tools of the old system
 my $cur_systemd = abs_path("/run/current-system/sw/bin");
 # Path to the systemd store path of the new system
@@ -96,7 +98,7 @@ if ($action eq "switch" || $action eq "boot") {
     chomp(my $install_boot_loader = <<'EOFBOOTLOADER');
 @installBootLoader@
 EOFBOOTLOADER
-    system("$install_boot_loader $out") == 0 or exit 1;
+    system("$install_boot_loader $toplevel") == 0 or exit 1;
 }
 
 # Just in case the new configuration hangs the system, do a sync now.
@@ -110,7 +112,7 @@ if ($action eq "boot") {
 
 # Check if we can activate the new configuration.
 my $cur_init_interface_version = read_file("/run/current-system/init-interface-version", err_mode => "quiet") // "";
-my $new_init_interface_version = read_file("$out/init-interface-version");
+my $new_init_interface_version = read_file("$toplevel/init-interface-version");
 
 if ($new_init_interface_version ne $cur_init_interface_version) {
     print STDERR <<'EOF';
@@ -477,7 +479,7 @@ sub handle_modified_unit { ## no critic(Subroutines::ProhibitManyArgs, Subroutin
                             $units_to_stop->{$socket} = 1;
                             # Only restart sockets that actually
                             # exist in new configuration:
-                            if (-e "$out/etc/systemd/system/$socket") {
+                            if (-e "$toplevel/etc/systemd/system/$socket") {
                                 $units_to_start->{$socket} = 1;
                                 if ($units_to_start eq $units_to_restart) {
                                     record_unit($restart_list_file, $socket);
@@ -539,13 +541,13 @@ while (my ($unit, $state) = each(%{$active_cur})) {
     my $base_unit = $unit;
 
     my $cur_unit_file = "/etc/systemd/system/$base_unit";
-    my $new_unit_file = "$out/etc/systemd/system/$base_unit";
+    my $new_unit_file = "$toplevel/etc/systemd/system/$base_unit";
 
     # Detect template instances.
     if (!-e $cur_unit_file && !-e $new_unit_file && $unit =~ /^(.*)@[^\.]*\.(.*)$/msx) {
       $base_unit = "$1\@.$2";
       $cur_unit_file = "/etc/systemd/system/$base_unit";
-      $new_unit_file = "$out/etc/systemd/system/$base_unit";
+      $new_unit_file = "$toplevel/etc/systemd/system/$base_unit";
     }
 
     my $base_name = $base_unit;
@@ -626,7 +628,7 @@ sub path_to_unit_name {
 # we generated units for all mounts; then we could unify this with the
 # unit checking code above.
 my ($cur_fss, $cur_swaps) = parse_fstab("/etc/fstab");
-my ($new_fss, $new_swaps) = parse_fstab("$out/etc/fstab");
+my ($new_fss, $new_swaps) = parse_fstab("$toplevel/etc/fstab");
 foreach my $mount_point (keys(%{$cur_fss})) {
     my $cur = $cur_fss->{$mount_point};
     my $new = $new_fss->{$mount_point};
@@ -655,7 +657,7 @@ foreach my $device (keys(%{$cur_swaps})) {
         # "systemctl stop" here because systemd has lots of alias
         # units that prevent a stop from actually calling
         # "swapoff".
-        if ($action ne "dry-activate") {
+        if ($action eq "dry-activate") {
             print STDERR "would stop swap device: $device\n";
         } else {
             print STDERR "stopping swap device: $device\n";
@@ -670,7 +672,7 @@ foreach my $device (keys(%{$cur_swaps})) {
 my $cur_pid1_path = abs_path("/proc/1/exe") // "/unknown";
 my $cur_systemd_system_config = abs_path("/etc/systemd/system.conf") // "/unknown";
 my $new_pid1_path = abs_path("$new_systemd/lib/systemd/systemd") or die;
-my $new_systemd_system_config = abs_path("$out/etc/systemd/system.conf") // "/unknown";
+my $new_systemd_system_config = abs_path("$toplevel/etc/systemd/system.conf") // "/unknown";
 
 my $restart_systemd = $cur_pid1_path ne $new_pid1_path;
 if ($cur_systemd_system_config ne $new_systemd_system_config) {
@@ -709,12 +711,12 @@ if ($action eq "dry-activate") {
     foreach (split(/\n/msx, read_file($dry_restart_by_activation_file, err_mode => "quiet") // "")) {
         my $unit = $_;
         my $base_unit = $unit;
-        my $new_unit_file = "$out/etc/systemd/system/$base_unit";
+        my $new_unit_file = "$toplevel/etc/systemd/system/$base_unit";
 
         # Detect template instances.
         if (!-e $new_unit_file && $unit =~ /^(.*)@[^\.]*\.(.*)$/msx) {
           $base_unit = "$1\@.$2";
-          $new_unit_file = "$out/etc/systemd/system/$base_unit";
+          $new_unit_file = "$toplevel/etc/systemd/system/$base_unit";
         }
 
         my $base_name = $base_unit;
@@ -757,7 +759,7 @@ if ($action eq "dry-activate") {
 }
 
 
-syslog(LOG_NOTICE, "switching to system configuration $out");
+syslog(LOG_NOTICE, "switching to system configuration $toplevel");
 
 if (scalar(keys(%units_to_stop)) > 0) {
     if (scalar(@units_to_stop_filtered)) {
@@ -781,12 +783,12 @@ system("$out/activate", "$out") == 0 or $res = 2;
 foreach (split(/\n/msx, read_file($restart_by_activation_file, err_mode => "quiet") // "")) {
     my $unit = $_;
     my $base_unit = $unit;
-    my $new_unit_file = "$out/etc/systemd/system/$base_unit";
+    my $new_unit_file = "$toplevel/etc/systemd/system/$base_unit";
 
     # Detect template instances.
     if (!-e $new_unit_file && $unit =~ /^(.*)@[^\.]*\.(.*)$/msx) {
       $base_unit = "$1\@.$2";
-      $new_unit_file = "$out/etc/systemd/system/$base_unit";
+      $new_unit_file = "$toplevel/etc/systemd/system/$base_unit";
     }
 
     my $base_name = $base_unit;
@@ -857,7 +859,7 @@ if (scalar(keys(%units_to_reload)) > 0) {
     for my $unit (keys(%units_to_reload)) {
         if (!unit_is_active($unit)) {
             # Figure out if we need to start the unit
-            my %unit_info = parse_unit("$out/etc/systemd/system/$unit");
+            my %unit_info = parse_unit("$toplevel/etc/systemd/system/$unit");
             if (!(parse_systemd_bool(\%unit_info, "Unit", "RefuseManualStart", 0) || parse_systemd_bool(\%unit_info, "Unit", "X-OnlyManualStart", 0))) {
                 $units_to_start{$unit} = 1;
                 record_unit($start_list_file, $unit);
@@ -940,9 +942,9 @@ if (scalar(@failed) > 0) {
 }
 
 if ($res == 0) {
-    syslog(LOG_NOTICE, "finished switching to system configuration $out");
+    syslog(LOG_NOTICE, "finished switching to system configuration $toplevel");
 } else {
-    syslog(LOG_ERR, "switching to system configuration $out failed (status $res)");
+    syslog(LOG_ERR, "switching to system configuration $toplevel failed (status $res)");
 }
 
 exit($res);

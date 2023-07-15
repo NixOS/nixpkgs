@@ -45,6 +45,5 @@ buildGoModule rec {
     changelog = "https://github.com/prometheus/alertmanager/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley fpletz globin Frostman ];
-    platforms = platforms.unix;
   };
 }

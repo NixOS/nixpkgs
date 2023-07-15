@@ -1,21 +1,21 @@
 { lib
-, flutter37
+, flutter
 , fetchFromGitHub
 }:
 
-flutter37.buildFlutterApplication {
+flutter.buildFlutterApplication {
   pname = "firmware-updater";
-  version = "unstable-2023-04-30";
+  version = "unstable-2023-06-20";
 
   pubspecLockFile = ./pubspec.lock;
   depsListFile = ./deps.json;
-  vendorHash = "sha256-cdMO+tr6kYiN5xKXa+uTMAcFf2C75F3wVPrn21G4QPQ=";
+  vendorHash = "sha256-+4Lu6yHH/Yhl58bxhsLanP5hyhXSg9LpCuG1ohAlM5g=";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "firmware-updater";
-    rev = "6e7dbdb64e344633ea62874b54ff3990bd3b8440";
-    sha256 = "sha256-s5mwtr5MSPqLMN+k851+pFIFFPa0N1hqz97ys050tFA=";
+    rev = "49ebcad241ed4964f1547c8da408bef13a8b4c69";
+    sha256 = "sha256-1BGcpcIJV0jqrj3nA7FJg36lMqpl281NGOgWppDUFCI=";
     fetchSubmodules = true;
   };
 

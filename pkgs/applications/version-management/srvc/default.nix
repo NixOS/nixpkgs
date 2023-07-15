@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "srvc";
-  version = "0.18.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "insilica";
     repo = "rs-srvc";
     rev = "v${version}";
-    hash = "sha256-/NLqQcuJML0Yxu08dGma6WjTmuEsf5GbsgjX90f2K5U=";
+    hash = "sha256-pnlbMU/uoP9ZK8kzTRYTMY9+X9VIKJHwW2qMXXD8Udg=";
   };
 
-  cargoHash = "sha256-OlzMKiibWLmba2MhcUWzvgBDMyTqTBqaXYI2a0Uw7Jw=";
+  cargoHash = "sha256-+m8WJMn1aq3FBDO5c/ZwbcK2G+UE5pSwHTgOl2s6pDw=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices

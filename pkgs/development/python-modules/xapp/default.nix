@@ -10,6 +10,7 @@
 , gobject-introspection
 , xapp
 , polkit
+, gitUpdater
 }:
 
 buildPythonPackage rec {
@@ -52,6 +53,10 @@ buildPythonPackage rec {
 
   doCheck = false;
   pythonImportsCheck = [ "xapp" ];
+
+  passthru.updateScript = gitUpdater {
+    ignoredVersions = "^master.*";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/python-xapp";

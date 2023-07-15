@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , future-typing
 , inflection
-, mypy
 , orjson
 , pandas
 , pendulum
@@ -45,7 +44,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    mypy
     pydantic
     sqlalchemy
     pandas

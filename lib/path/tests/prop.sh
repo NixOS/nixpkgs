@@ -71,7 +71,7 @@ fi
 
 # Precalculate all normalisations with a single Nix call. Calling Nix for each
 # string individually would take way too long
-nix-instantiate --eval --strict --json \
+nix-instantiate --eval --strict --json --show-trace \
     --argstr libpath "$TEST_LIB" \
     --argstr dir "$tmp/strings" \
     "$SCRIPT_DIR"/prop.nix \

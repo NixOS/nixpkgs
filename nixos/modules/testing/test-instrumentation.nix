@@ -115,10 +115,12 @@ in
       ShowStatus=no
       # Allow very slow start
       DefaultTimeoutStartSec=300
+      DefaultDeviceTimeoutSec=300
     '';
     systemd.user.extraConfig = ''
       # Allow very slow start
       DefaultTimeoutStartSec=300
+      DefaultDeviceTimeoutSec=300
     '';
 
     boot.initrd.systemd.extraConfig = config.systemd.extraConfig;

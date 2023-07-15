@@ -2,7 +2,6 @@
 , buildDotnetModule
 , fetchFromGitHub
 , fetchurl
-, dotnetCorePackages
 , gtk3
 , libX11
 , libXrandr
@@ -19,13 +18,13 @@
 
 buildDotnetModule rec {
   pname = "OpenTabletDriver";
-  version = "0.6.0.4";
+  version = "0.6.2.0";
 
   src = fetchFromGitHub {
     owner = "OpenTabletDriver";
     repo = "OpenTabletDriver";
     rev = "v${version}";
-    sha256 = "sha256-VvxW8Ck+XC4nXSUyDhcbGoeSr5uSAZ66jtZNoADuVR8=";
+    sha256 = "sha256-D1/DGvSBgG8wZMmyJ7QAHDcsMjC1YgSpxmSYzs6ntJg=";
   };
 
   debPkg = fetchurl {

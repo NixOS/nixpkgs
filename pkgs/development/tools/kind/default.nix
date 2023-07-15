@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "kind";
-  version = "0.19.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     rev    = "v${version}";
     owner  = "kubernetes-sigs";
     repo   = "kind";
-    sha256 = "sha256-JMOfnpoDFP7UWT5FvrZeEkFUYxvGYFpnbkIiJoSfAFk=";
+    sha256 = "sha256-5yDoxrsnmz8N0Y35juItLtyclTz+pSb75B1P716XPxU=";
   };
 
   patches = [
@@ -39,6 +39,5 @@ buildGoModule rec {
     homepage    = "https://github.com/kubernetes-sigs/kind";
     maintainers = with maintainers; [ offline rawkode ];
     license     = licenses.asl20;
-    platforms   = platforms.unix;
   };
 }

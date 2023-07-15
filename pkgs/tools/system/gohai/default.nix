@@ -22,8 +22,6 @@ buildGoModule rec {
     homepage = "https://github.com/DataDog/gohai";
     license = licenses.mit;
     maintainers = with maintainers; [ tazjin ];
-    platforms = platforms.unix;
-
     longDescription = ''
       Gohai is a tool which collects an inventory of system
       information. It is used by the Datadog agent to provide detailed

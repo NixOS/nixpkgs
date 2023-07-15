@@ -20,20 +20,20 @@
       sourceVersion = {
         major = "3";
         minor = "10";
-        patch = "11";
+        patch = "12";
         suffix = "";
       };
-      hash = "sha256-PDvDBIMDchyQSgPrgya2Mekh8RzDvimIRWpC8RXa8Ew=";
+      hash = "sha256-r7dL8ZEw56R9EDEsj154TyTgUnmB6raOIFRs+4ZYMLg=";
     };
 
     python311 = {
       sourceVersion = {
         major = "3";
         minor = "11";
-        patch = "3";
+        patch = "4";
         suffix = "";
       };
-      hash = "sha256-il25nJYafs8nx1lWGJyWAslodR8R2+riuQDb/xwIW14=";
+      hash = "sha256-Lw5AnfKrV6qfxMvd+5dq9E5OVb9vYZ7ua8XCKXJkp/Y=";
     };
   };
 
@@ -96,9 +96,9 @@ in {
       major = "3";
       minor = "12";
       patch = "0";
-      suffix = "b2";
+      suffix = "b3";
     };
-    hash = "sha256-jfxC3abk0GR8+Kb3zZAHBN6p/YZkAqKCgpvS5uJxuBg=";
+    hash = "sha256-kWDGBl6YhbN8LleGXQuyf8flSqqcGGx2HaMNK928ye4=";
     inherit (darwin) configd;
     inherit passthruFun;
   };

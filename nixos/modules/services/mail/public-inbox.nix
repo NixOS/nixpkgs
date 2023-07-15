@@ -89,7 +89,7 @@ let
       PrivateNetwork = mkDefault (!needNetwork);
       ProcSubset = "pid";
       ProtectClock = true;
-      ProtectHome = mkDefault true;
+      ProtectHome = "tmpfs";
       ProtectHostname = true;
       ProtectKernelLogs = true;
       ProtectProc = "invisible";
@@ -177,8 +177,7 @@ in
           description = lib.mdDoc "The email addresses of the public-inbox.";
         };
         options.url = mkOption {
-          type = with types; nullOr str;
-          default = null;
+          type = types.nonEmptyStr;
           example = "https://example.org/lists/example-discuss";
           description = lib.mdDoc "URL where this inbox can be accessed over HTTP.";
         };
@@ -461,6 +460,8 @@ in
           after = [ "public-inbox-init.service" "public-inbox-watch.service" ];
           requires = [ "public-inbox-init.service" ];
           serviceConfig = {
+            BindPathsReadOnly =
+              map (c: c.dir) (lib.attrValues cfg.settings.coderepo);
             ExecStart = escapeShellArgs (
               [ "${cfg.package}/bin/public-inbox-httpd" ] ++
               cfg.http.args ++
@@ -564,16 +565,7 @@ in
                 ${pkgs.git}/bin/git config core.sharedRepository 0640
               fi
             '') cfg.inboxes
-            ) + ''
-            shopt -s nullglob
-            for inbox in ${stateDir}/inboxes/*/; do
-              # This should be idempotent, but only do it for new
-              # inboxes anyway because it's only needed once, and could
-              # be slow for large pre-existing inboxes.
-              ls -1 "$inbox" | grep -q '^xap' ||
-              ${cfg.package}/bin/public-inbox-index "$inbox"
-            done
-          '';
+            );
           serviceConfig = {
             Type = "oneshot";
             RemainAfterExit = true;

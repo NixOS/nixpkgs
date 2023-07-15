@@ -221,9 +221,8 @@ let
   };
 
   qlpkgs =
-    if builtins.pathExists ./imported.nix
-    then import ./imported.nix { inherit (pkgs) runCommand fetchzip; pkgs = builtQlpkgs; }
-    else {};
+    lib.optionalAttrs (builtins.pathExists ./imported.nix)
+      (import ./imported.nix { inherit (pkgs) runCommand fetchzip; pkgs = builtQlpkgs; });
 
   builtQlpkgs = mapAttrs (n: v: build v) qlpkgs;
 

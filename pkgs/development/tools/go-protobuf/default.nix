@@ -18,6 +18,5 @@ buildGoModule rec {
     description = " Go bindings for protocol buffer";
     maintainers = with maintainers; [ lewo ];
     license     = licenses.bsd3;
-    platforms   = platforms.unix;
   };
 }

@@ -9,12 +9,12 @@
 
 stdenv.mkDerivation rec {
   pname = "realvnc-vnc-viewer";
-  version = "7.5.0";
+  version = "7.5.1";
 
   src = {
     "x86_64-linux" = fetchurl {
       url = "https://downloads.realvnc.com/download/file/viewer.files/VNC-Viewer-${version}-Linux-x64.rpm";
-      sha256 = "sha256-XemifIWeoi3Qdjv8HfEjtTYJvfi0eCXeQUXVld6aR9A=";
+      sha256 = "sha256-Ull9iNi8NxB12YwEThWE0P9k1xOV2LZnebuRrVH/zwI=";
     };
   }.${stdenv.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 

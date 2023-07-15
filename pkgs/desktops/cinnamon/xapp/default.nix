@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation rec {
   pname = "xapp";
-  version = "2.4.3";
+  version = "2.6.1";
 
   outputs = [ "out" "dev" ];
 
@@ -30,8 +30,12 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-j04vy/uVWY08Xdxqfo2MMUAlqsUMJTsAt67+XjkdhFg=";
+    hash = "sha256-ZxIPiDLcMHEmlnrImctI2ZfH3AIOjB4m/RPGipJ7koM=";
   };
+
+  # Recommended by upstream, which enables the build of xapp-debug.
+  # https://github.com/linuxmint/xapp/issues/169#issuecomment-1574962071
+  mesonBuildType = "debugoptimized";
 
   nativeBuildInputs = [
     meson
@@ -70,11 +74,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     chmod +x schemas/meson_install_schemas.py # patchShebangs requires executable file
-
-    patchShebangs \
-      libxapp/g-codegen.py \
-      meson-scripts/g-codegen.py \
-      schemas/meson_install_schemas.py
+    patchShebangs schemas/meson_install_schemas.py
 
     # Patch pastebin & inxi location
     sed "s|/usr/bin/pastebin|$out/bin/pastebin|" -i scripts/upload-system-info

@@ -24,9 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C++ port of the Java Topology Suite (JTS)";
     homepage = "https://trac.osgeo.org/geos";
     license = licenses.lgpl21Only;
+    maintainers = teams.geospatial.members;
     pkgConfigModules = [ "geos" ];
-    maintainers = with lib.maintainers; [
-      willcohen
-    ];
   };
 })

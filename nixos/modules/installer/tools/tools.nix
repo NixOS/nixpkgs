@@ -35,17 +35,14 @@ let
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
     perl = "${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl";
-    system = pkgs.stdenv.hostPlatform.system;
+    hostPlatformSystem = pkgs.stdenv.hostPlatform.system;
     detectvirt = "${config.systemd.package}/bin/systemd-detect-virt";
     btrfs = "${pkgs.btrfs-progs}/bin/btrfs";
     inherit (config.system.nixos-generate-config) configuration desktopConfiguration;
     xserverEnabled = config.services.xserver.enable;
   };
 
-  nixos-option =
-    if lib.versionAtLeast (lib.getVersion config.nix.package) "2.4pre"
-    then null
-    else pkgs.nixos-option;
+  inherit (pkgs) nixos-option;
 
   nixos-version = makeProg {
     name = "nixos-version";
@@ -232,9 +229,10 @@ in
         nixos-install
         nixos-rebuild
         nixos-generate-config
+        nixos-option
         nixos-version
         nixos-enter
-      ] ++ lib.optional (nixos-option != null) nixos-option;
+      ];
 
     documentation.man.man-db.skipPackages = [ nixos-version ];
 

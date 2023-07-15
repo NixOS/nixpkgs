@@ -9,8 +9,8 @@
 , profiledCompiler ? false
 , langJit ? false
 , staticCompiler ? false
-, enableShared ? !stdenv.targetPlatform.isStatic
-, enableLTO ? !stdenv.hostPlatform.isStatic
+, enableShared ? stdenv.targetPlatform.hasSharedLibraries
+, enableLTO ? stdenv.hostPlatform.hasSharedLibraries
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man)
 , gmp, mpfr, libmpc, gettext, which, patchelf, binutils
@@ -22,11 +22,12 @@
 , name ? "gcc"
 , libcCross ? null
 , threadsCross ? null # for MinGW
-, crossStageStatic ? false
+, withoutTargetLibc ? false
 , gnused ? null
 , cloog ? null # unused; just for compat with gcc4, as we override the parameter on some places
 , buildPackages
 , libxcrypt
+, callPackage
 }:
 
 # Make sure we get GNU sed.
@@ -53,13 +54,8 @@ let majorVersion = "10";
 
     patches = [
       # Fix https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80431
-      (fetchurl {
-        name = "fix-bug-80431.patch";
-        url = "https://gcc.gnu.org/git/?p=gcc.git;a=patch;h=de31f5445b12fd9ab9969dc536d821fe6f0edad0";
-        sha256 = "0sd52c898msqg7m316zp0ryyj7l326cjcn2y19dcxqp15r74qj0g";
-      })
+      ../fix-bug-80431.patch
       ../11/fix-struct-redefinition-on-glibc-2.36.patch
-      ../install-info-files-serially.patch
     ] ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       ++ optional (noSysDirs && hostPlatform.isRiscV) ../no-sys-dirs-riscv.patch
@@ -73,7 +69,7 @@ let majorVersion = "10";
       ++ optional (targetPlatform.libc == "musl" && targetPlatform.isPower) ../ppc-musl.patch
 
       # Obtain latest patch with ../update-mcfgthread-patches.sh
-      ++ optional (!crossStageStatic && targetPlatform.isMinGW && threadsCross.model == "mcf") ./Added-mcf-thread-model-support-from-mcfgthread.patch
+      ++ optional (!withoutTargetLibc && targetPlatform.isMinGW && threadsCross.model == "mcf") ./Added-mcf-thread-model-support-from-mcfgthread.patch
 
       ++ optional (buildPlatform.system == "aarch64-darwin" && targetPlatform != buildPlatform) (fetchpatch {
         url = "https://raw.githubusercontent.com/richard-vd/musl-cross-make/5e9e87f06fc3220e102c29d3413fbbffa456fcd6/patches/gcc-${version}/0008-darwin-aarch64-self-host-driver.patch";
@@ -82,7 +78,7 @@ let majorVersion = "10";
 
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
-    stageNameAddon = if crossStageStatic then "stage-static" else "stage-final";
+    stageNameAddon = if withoutTargetLibc then "stage-static" else "stage-final";
     crossNameAddon = optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-${stageNameAddon}-";
 
     callFile = lib.callPackageWith {
@@ -103,7 +99,7 @@ let majorVersion = "10";
         binutils
         buildPackages
         cloog
-        crossStageStatic
+        withoutTargetLibc
         enableLTO
         enableMultilib
         enablePlugin
@@ -148,7 +144,7 @@ let majorVersion = "10";
 
 in
 
-stdenv.mkDerivation ({
+lib.pipe (stdenv.mkDerivation ({
   pname = "${crossNameAddon}${name}";
   inherit version;
 
@@ -218,7 +214,10 @@ stdenv.mkDerivation ({
             )
           '';
 
-  inherit noSysDirs staticCompiler crossStageStatic
+  # kludge to prevent a mass-rebuild; will be removed in a PR sent to staging
+  crossStageStatic = withoutTargetLibc;
+
+  inherit noSysDirs staticCompiler
     libcCross crossMingw;
 
   inherit (callFile ../common/dependencies.nix { })
@@ -241,6 +240,9 @@ stdenv.mkDerivation ({
   buildFlags = optional
     (targetPlatform == hostPlatform && hostPlatform == buildPlatform)
     (if profiledCompiler then "profiledbootstrap" else "bootstrap");
+
+  # https://gcc.gnu.org/PR109898
+  enableParallelInstalling = false;
 
   inherit (callFile ../common/strip-attributes.nix { })
     stripDebugList
@@ -293,10 +295,8 @@ stdenv.mkDerivation ({
 
 }
 
-// optionalAttrs (targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt" && crossStageStatic) {
-  makeFlags = [ "all-gcc" "all-target-libgcc" ];
-  installTargets = "install-gcc install-target-libgcc";
-}
-
 // optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
-)
+))
+[
+  (callPackage ../common/libgcc.nix   { inherit version langC langCC langJit targetPlatform hostPlatform withoutTargetLibc enableShared; })
+]

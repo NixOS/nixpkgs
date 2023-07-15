@@ -1,15 +1,16 @@
-{ fetchurl, lib, stdenv
+{ fetchurl, lib, stdenv, makeWrapper
 , pkg-config, gnupg
-, xapian, gmime3, talloc, zlib
+, xapian, gmime3, sfsexp, talloc, zlib
 , doxygen, perl, texinfo
 , notmuch
 , pythonPackages
 , emacs
 , ruby
 , testers
-, which, dtach, openssl, bash, gdb, man
+, which, dtach, openssl, bash, gdb, man, git
 , withEmacs ? true
 , withRuby ? true
+, withSfsexp ? true # also installs notmuch-git, which requires sexp-support
 }:
 
 stdenv.mkDerivation rec {
@@ -28,14 +29,16 @@ stdenv.mkDerivation rec {
     texinfo                   # (optional) documentation -> doc/INSTALL
     pythonPackages.cffi
   ] ++ lib.optional withEmacs emacs
-    ++ lib.optional withRuby ruby;
+    ++ lib.optional withRuby ruby
+    ++ lib.optional withSfsexp makeWrapper;
 
   buildInputs = [
     gnupg                     # undefined dependencies
     xapian gmime3 talloc zlib  # dependencies described in INSTALL
     perl
     pythonPackages.python
-  ] ++ lib.optional withRuby ruby;
+  ] ++ lib.optional withRuby ruby
+    ++ lib.optional withSfsexp sfsexp;
 
   postPatch = ''
     patchShebangs configure test/
@@ -75,6 +78,12 @@ stdenv.mkDerivation rec {
     ++ lib.optional withEmacs "emacs"
     ++ lib.optional withRuby "ruby";
 
+  # if notmuch is built with s-expression support, the testsuite (T-850.sh) only
+  # passes if notmuch-git can be executed, so we need to patch its shebang.
+  postBuild = lib.optionalString withSfsexp ''
+    patchShebangs notmuch-git
+  '';
+
   preCheck = let
     test-database = fetchurl {
       url = "https://notmuchmail.org/releases/test-databases/database-v1.tar.xz";
@@ -94,7 +103,10 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [
     which dtach openssl bash
     gdb man emacs
-  ];
+  ]
+  # for the test T-850.sh for notmuch-git, which is skipped when notmuch is
+  # built without sexp-support
+  ++ lib.optional withSfsexp git;
 
   installTargets = [ "install" "install-man" "install-info" ];
 
@@ -106,6 +118,12 @@ stdenv.mkDerivation rec {
       SHELL=$SHELL \
       $makeFlags "''${makeFlagsArray[@]}" \
       $installFlags "''${installFlagsArray[@]}"
+  ''
+  # notmuch-git (https://notmuchmail.org/doc/latest/man1/notmuch-git.html) does not work without
+  # sexp-support, so there is no point in installing if we're building without it.
+  + lib.optionalString withSfsexp ''
+    cp notmuch-git $out/bin/notmuch-git
+    wrapProgram $out/bin/notmuch-git --prefix PATH : $out/bin:${lib.getBin git}/bin
   '';
 
   passthru = {

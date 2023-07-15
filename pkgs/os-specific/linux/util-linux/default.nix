@@ -38,9 +38,24 @@ stdenv.mkDerivation rec {
       url = "https://github.com/util-linux/util-linux/commit/1bd85b64632280d6bf0e86b4ff29da8b19321c5f.diff";
       hash = "sha256-dgu4de5ul/si7Vzwe8lr9NvsdI1CWfDQKuqvARaY6sE=";
     })
+
+    # FIXME: backport bcache detection fixes, remove in next release
+    (fetchpatch {
+      url = "https://github.com/util-linux/util-linux/commit/158639a2a4c6e646fd4fa0acb5f4743e65daa415.diff";
+      hash = "sha256-9F1OQFxKuI383u6MVy/UM15B6B+tkZFRwuDbgoZrWME=";
+    })
+    (fetchpatch {
+      url = "https://github.com/util-linux/util-linux/commit/00a19fb8cdfeeae30a6688ac6b490e80371b2257.diff";
+      hash = "sha256-w1S6IKSoL6JhVew9t6EemNRc/nrJQ5oMqFekcx0kno8=";
+    })
   ];
 
-  outputs = [ "bin" "dev" "out" "lib" "man" ];
+  # We separate some of the utilities into their own outputs. This
+  # allows putting together smaller systems depending on only part of
+  # the greater util-linux toolset.
+  # Compatibility is maintained by symlinking the binaries from the
+  # smaller outputs in the bin output.
+  outputs = [ "bin" "dev" "out" "lib" "man" "mount" "login" "swap" ];
   separateDebugInfo = true;
 
   postPatch = ''
@@ -96,6 +111,20 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
+    moveToOutput bin/mount "$mount"
+    moveToOutput bin/umount "$mount"
+    ln -svf "$mount/bin/"* $bin/bin/
+
+    moveToOutput sbin/nologin "$login"
+    moveToOutput sbin/sulogin "$login"
+    prefix=$login _moveSbin
+    ln -svf "$login/bin/"* $bin/bin/
+
+    moveToOutput sbin/swapon "$swap"
+    moveToOutput sbin/swapoff "$swap"
+    prefix=$swap _moveSbin
+    ln -svf "$swap/bin/"* $bin/bin/
+
     installShellCompletion --bash bash-completion/*
   '';
 

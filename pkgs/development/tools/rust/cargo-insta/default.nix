@@ -5,18 +5,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-insta";
-  version = "1.29.0";
+  version = "1.31.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "insta";
     rev = "refs/tags/${version}";
-    hash = "sha256-3fN7otTIAdn7Bs96IaboxY0DG381AjCV/KsDzv8xng8=";
+    hash = "sha256-hQaVUBw8X60DW1Ox4GzO+OCWMHmVYuCkjH5x/sMULiE=";
   };
 
   sourceRoot = "source/cargo-insta";
 
-  cargoHash = "sha256-zxf70F3x8eydQuUrrdoQljvmmTzS6ytxVlbHOCepxFg=";
+  cargoHash = "sha256-q6Ups4SDGjT5Zc9ujhRpRdh3uWq99lizgA7gpPVSl+A=";
 
   meta = with lib; {
     description = "A Cargo subcommand for snapshot testing";

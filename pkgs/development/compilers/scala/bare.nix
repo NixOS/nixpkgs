@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, makeWrapper, jre, ncurses }:
 
 stdenv.mkDerivation rec {
-  version = "3.2.2";
+  version = "3.3.0";
   pname = "scala-bare";
 
   src = fetchurl {
     url = "https://github.com/lampepfl/dotty/releases/download/${version}/scala3-${version}.tar.gz";
-    hash = "sha256-t8Xt70LozePoDXE3IHejWOTWCEYcOZytRDKz/QxgmZg=";
+    hash = "sha256-Bk7lCKjjucaYQxAsg2qomJQUgCK/N688JqlGTfoQFHU=";
   };
 
   propagatedBuildInputs = [ jre ncurses.dev ] ;

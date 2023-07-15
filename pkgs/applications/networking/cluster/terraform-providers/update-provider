@@ -107,6 +107,7 @@ if [[ ${provider} =~ ^[^/]+/[^/]+$ ]]; then
   # create empty stings so nix-prefetch works
   update_attr hash ""
   update_attr vendorHash ""
+  update_attr spdx ""
 fi
 
 homepage="$(read_attr homepage)"
@@ -136,8 +137,11 @@ repo="$(echo "${provider_source_url}" | cut -d '/' -f 5)"
 update_attr repo "${repo}"
 
 if [[ ${spdx} == 1 ]]; then
-  spdx="$(curl -L -s ${GITHUB_TOKEN:+-u ":${GITHUB_TOKEN}"} "https://api.github.com/repos/${org}/${repo}/license" | jq -r '.license.spdx_id')"
-  update_attr spdx "${spdx}"
+  old_spdx="$(read_attr spdx)"
+  if [[ ${old_spdx} != null ]]; then
+    spdx="$(curl -L -s ${GITHUB_TOKEN:+-u ":${GITHUB_TOKEN}"} "https://api.github.com/repos/${org}/${repo}/license" | jq -r '.license.spdx_id')"
+    update_attr spdx "${spdx}"
+  fi
 fi
 
 echo_provider "calculating hash"

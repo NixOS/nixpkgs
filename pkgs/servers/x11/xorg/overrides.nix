@@ -1,7 +1,7 @@
 { abiCompat ? null,
   callPackage,
   lib, stdenv, makeWrapper, fetchurl, fetchpatch, fetchFromGitLab, buildPackages,
-  automake, autoconf, libiconv, libtool, intltool,
+  automake, autoconf, libiconv, libtool, intltool, gettext, python3, perl,
   freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm, netbsd,
   ncompress,
@@ -164,7 +164,6 @@ self: super:
   });
 
   xdm = super.xdm.overrideAttrs (attrs: {
-    patches = (attrs.patches or []) ++ [ ./xdm-fix-header-inclusion.patch ];
     buildInputs = attrs.buildInputs ++ [ libxcrypt ];
     configureFlags = attrs.configureFlags or [] ++ [
       "ac_cv_path_RAWCPP=${stdenv.cc.targetPrefix}cpp"
@@ -420,7 +419,11 @@ self: super:
     };
   });
 
-  xf86inputkeyboard = brokenOnDarwin super.xf86inputkeyboard; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputkeyboard.x86_64-darwin
+  xf86inputkeyboard = super.xf86inputkeyboard.overrideAttrs (attrs: {
+    meta = attrs.meta // {
+      platforms = lib.platforms.freebsd ++ lib.platforms.netbsd ++ lib.platforms.openbsd;
+    };
+  });
 
   xf86inputlibinput = super.xf86inputlibinput.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
@@ -539,10 +542,20 @@ self: super:
   });
 
   xkeyboardconfig = super.xkeyboardconfig.overrideAttrs (attrs: {
-    prePatch = "patchShebangs rules/merge.py";
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ intltool libxslt ];
-    configureFlags = [ "--with-xkb-rules-symlink=xorg" ];
-
+    prePatch = ''
+      patchShebangs rules/merge.py rules/compat/map-variants.py rules/xml2lst.pl
+    '';
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [
+      meson
+      ninja
+      python3
+      perl
+      libxslt # xsltproc
+      gettext # msgfmt
+    ];
+    mesonFlags = [
+      (lib.mesonBool "xorg-rules-symlinks" true)
+    ];
     # 1: compatibility for X11/xkb location
     # 2: I think pkg-config/ is supposed to be in /lib/
     postInstall = ''
@@ -856,14 +869,6 @@ self: super:
       "--with-launchdaemons-dir=\${out}/LaunchDaemons"
       "--with-launchagents-dir=\${out}/LaunchAgents"
     ];
-    patches = [
-      # don't unset DBUS_SESSION_BUS_ADDRESS in startx
-      (fetchpatch {
-        name = "dont-unset-DBUS_SESSION_BUS_ADDRESS.patch";
-        url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/40f3ac0a31336d871c76065270d3f10e922d06f3/trunk/fs46369.patch";
-        sha256 = "18kb88i3s9nbq2jxl7l2hyj6p56c993hivk8mzxg811iqbbawkp7";
-      })
-    ];
     postPatch = ''
       # Avoid replacement of word-looking cpp's builtin macros in Nix's cross-compiled paths
       substituteInPlace Makefile.in --replace "PROGCPPDEFS =" "PROGCPPDEFS = -Dlinux=linux -Dunix=unix"
@@ -932,13 +937,6 @@ self: super:
   });
 
   xorgcffiles = super.xorgcffiles.overrideAttrs (attrs: {
-    patches = [
-      (fetchpatch {
-        name = "add-aarch64-darwin-support.patch";
-        url = "https://gitlab.freedesktop.org/xorg/util/cf/-/commit/8d88c559b177e832b581c8ac0aa383b6cf79e0d0.patch";
-        sha256 = "sha256-wCijdmlUtVgOh9Rp/LJrg1ObYm4OPTke5Xwu0xC0ap4=";
-      })
-    ];
     postInstall = lib.optionalString stdenv.isDarwin ''
       substituteInPlace $out/lib/X11/config/darwin.cf --replace "/usr/bin/" ""
     '';

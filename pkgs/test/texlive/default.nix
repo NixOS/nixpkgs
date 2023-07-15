@@ -1,4 +1,4 @@
-{ lib, runCommand, fetchurl, file, texlive, writeShellScript }:
+{ lib, stdenv, runCommand, fetchurl, file, texlive, writeShellScript, writeText }:
 
 {
 
@@ -210,4 +210,115 @@
     mkdir "$out"
   '';
 
+  # check that all binaries run successfully, in the following sense:
+  # (1) run --version, -v, --help, -h successfully; or
+  # (2) run --help, -h, or no argument with error code but show help text; or
+  # (3) run successfully on a test.tex or similar file
+  # we ignore the binaries that cannot be tested as above, and are either
+  # compiled binaries or trivial shell wrappers
+  binaries = let
+      # TODO known broken binaries
+      broken = [ "albatross" "arara" "bbl2bib" "bib2gls" "bibdoiadd" "bibmradd" "bibzbladd" "citeproc" "convbkmk"
+        "convertgls2bib" "ctan-o-mat" "ctanify" "ctanupload" "dtxgen" "ebong" "epspdftk" "exceltex" "gsx" "htcontext"
+        "installfont-tl" "kanji-fontmap-creator" "ketcindy" "latex-git-log" "latex2nemeth" "ltxfileinfo" "match_parens"
+        "pdfannotextractor" "purifyeps" "pythontex" "svn-multi" "texexec" "texosquery" "texosquery-jre5"
+        "texosquery-jre8" "texplate" "tlcockpit" "tlmgr" "tlshell" "ulqda" "xhlatex" ];
+      # (1) binaries requiring -v
+      shortVersion = [ "devnag" "diadia" "pmxchords" "ptex2pdf" "simpdftex" "ttf2afm" ];
+      # (1) binaries requiring --help or -h
+      help = [ "arlatex" "bundledoc" "cachepic" "checklistings" "dvipos" "extractres" "fig4latex" "fragmaster"
+        "kpsewhere" "mendex" "pn2pdf" "psbook" "psnup" "psresize" "simpdftex" "tex2xindy" "texluac" "texluajitc"
+        "urlbst" "yplan" ];
+      shortHelp = [ "adhocfilelist" "authorindex" "biburl2doi" "disdvi" "dvibook" "dviconcat" "getmapdl" "latex2man"
+        "lprsetup.sh" "pygmentex" ];
+      # (2) binaries that return non-zero exit code even if correctly asked for help
+      ignoreExitCode = [ "authorindex" "dvibook" "dviconcat" "dvipos" "extractres" "fig4latex" "fragmaster" "latex2man"
+        "lprsetup.sh" "pdf2dsc" "psbook" "psnup" "psresize" "tex2xindy" "texluac" "texluajitc" ];
+      # (2) binaries that print help on no argument, returning non-zero exit code
+      noArg = [ "a2ping" "bg5+latex" "bg5+pdflatex" "bg5latex" "bg5pdflatex" "cef5latex" "cef5pdflatex" "ceflatex"
+        "cefpdflatex" "cefslatex" "cefspdflatex" "chkdvifont" "dvi2fax" "dvipdf" "dvired" "dviselect"
+        "dvitodvi" "eps2eps" "epsffit" "findhyph" "gbklatex" "gbkpdflatex" "komkindex" "kpsepath" "listbib"
+        "listings-ext" "mag" "mathspic" "mf2pt1" "mk4ht" "mkt1font" "mkgrkindex" "musixflx" "pdf2ps" "pdftosrc"
+        "pdfxup" "pedigree" "pfb2pfa" "pfbtopfa" "pk2bm" "pphs" "prepmx" "ps2pk" "ps2pdf*" "ps2ps*" "psselect" "pstops"
+        "rubibtex" "rubikrotation" "sjislatex" "sjispdflatex" "srcredact" "t4ht" "tex4ht" "texdiff" "texdirflatten"
+        "texplate" "tie" "ttf2kotexfont" "ttfdump" "vlna" "vpl2ovp" "vpl2vpl" "yplan" ];
+      # (3) binary requiring a .tex file
+      tex = [ "de-macro" "e2pall" "makeindex" "pslatex" "rumakeindex" "tpic2pdftex" "wordcount" ];
+      # tricky binaries or scripts that are obviously working but are hard to test
+      # (e.g. because they expect user input no matter the arguments)
+      # (printafm comes from ghostscript, not texlive)
+      ignored = [ "dt2dv" "dv2dt" "dvi2tty" "dvidvi" "dvispc" "fontinst" "ht" "htlatex" "htmex" "httex" "httexi"
+        "htxelatex" "htxetex" "otp2ocp" "outocp" "pmxab" "printafm" ];
+      testTex = writeText "test.tex" ''
+        \documentclass{article}
+        \begin{document}
+          A simple test file.
+        \end{document}
+      '';
+    in
+    runCommand "texlive-test-binaries" { inherit testTex; }
+      ''
+        mkdir -p "$out"
+        export HOME="$(mktemp -d)"
+        declare -i binCount=0 ignoredCount=0 brokenCount=0 failedCount=0
+        cp "$testTex" test.tex
+
+        testBin () {
+          if [[ -z "$ignoreExitCode" ]] ; then
+            "$bin" $args >"$out/$base.log" 2>&1
+            return $?
+          else
+            "$bin" $args >"$out/$base.log" 2>&1
+            ret=$?
+            if ! grep -Ei '(Example:|Options:|Syntax:|Usage:|improper command|SYNOPSIS)' "$out/$base.log" >/dev/null ; then
+              echo "did not find usage info when running '$base''${args:+ $args}'"
+              return $ret
+            fi
+          fi
+        }
+
+        for bin in ${texlive.combined.scheme-full}/bin/* ; do
+          base="''${bin##*/}"
+          args=
+          ignoreExitCode=
+          binCount=$((binCount + 1))
+          case "$base" in
+            ${lib.concatStringsSep "|" ignored})
+              ignoredCount=$((ignoredCount + 1))
+              continue ;;
+            ${lib.concatStringsSep "|" broken})
+              brokenCount=$((brokenCount + 1))
+              continue ;;
+            ${lib.concatStringsSep "|" help})
+              args=--help ;;
+            ${lib.concatStringsSep "|" shortHelp})
+              args=-h ;;
+            ${lib.concatStringsSep "|" noArg})
+              ;;
+            ${lib.concatStringsSep "|" tex})
+              args=test.tex ;;
+            ${lib.concatStringsSep "|" shortVersion})
+              args=-v ;;
+            pdf2dsc)
+              args='--help --help --help' ;;
+            typeoutfileinfo)
+              args=/dev/null ;;
+            *)
+              args=--version ;;
+          esac
+
+          case "$base" in
+            ${lib.concatStringsSep "|" (ignoreExitCode ++ noArg)})
+              ignoreExitCode=1 ;;
+          esac
+
+          if testBin ; then : ; else # preserve exit code
+            echo "failed '$base''${args:+ $args}' (exit code: $?)"
+            failedCount=$((failedCount + 1))
+          fi
+        done
+
+        echo "tested $binCount binCount: $ignoredCount ignored, $brokenCount broken, $failedCount failed"
+        [[ $failedCount = 0 ]]
+      '';
 }

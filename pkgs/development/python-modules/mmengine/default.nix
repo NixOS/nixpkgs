@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "mmengine";
-  version = "0.7.3";
+  version = "0.7.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "open-mmlab";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ook85XWosxbvshsQxZEoAWI/Ugl2uSO8zoNJ5EuuW1E=";
+    hash = "sha256-eridbYHagwAyXX3/JggfvC0vuy6nBAIISRy1ARrQ7Kk=";
   };
 
   # tests are disabled due to sandbox env.

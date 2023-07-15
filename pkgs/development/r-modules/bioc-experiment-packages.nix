@@ -122,7 +122,7 @@ in with self; {
   MIGSAdata = derive2 { name="MIGSAdata"; version="1.24.0"; sha256="1s7fyf8n86a3znacjjs0zf22amw4rlgnvw2idld0np0yz81ggzs2"; depends=[]; };
   MMAPPR2data = derive2 { name="MMAPPR2data"; version="1.14.0"; sha256="06hij0aylifyfj6pa0kbbaz06y9rdamrs76mvh6h38yzsnm9mgp7"; depends=[Rsamtools]; };
   MMDiffBamSubset = derive2 { name="MMDiffBamSubset"; version="1.36.0"; sha256="0p4l0brczasfpfmc3mx3662g8dni644q19lp4jcmdcjy5mkv4f4r"; depends=[]; };
-  MOFAdata = derive2 { name="MOFAdata"; version="1.16.0"; sha256="09c2qr11sj2m90ygqnzc7z2sa5rs79fsyjqn9njfyq6gq63wbq12"; depends=[]; };
+  MOFAdata = derive2 { name="MOFAdata"; version="1.16.1"; sha256="195j9d3m0rja8r986rn8437ajvmwx060ic2427iqvghfpr6jjvhw"; depends=[]; };
   MSMB = derive2 { name="MSMB"; version="1.18.0"; sha256="0ghkba9jph3sbc677a7x7wxhvrjh0whnq6dvix6ql5d377mxx5sq"; depends=[tibble]; };
   MUGAExampleData = derive2 { name="MUGAExampleData"; version="1.20.0"; sha256="14mii5v2s9ml5vazy55nf9b5qqb22ibbayapiwc9j0qqyvi8xdc4"; depends=[]; };
   MerfishData = derive2 { name="MerfishData"; version="1.2.0"; sha256="0097riwwxi41hm2xdglbakfb9wf7p9p7mikfg48hd7axgj2hykma"; depends=[AnnotationHub BumpyMatrix EBImage ExperimentHub S4Vectors SingleCellExperiment SpatialExperiment SummarizedExperiment]; };
@@ -274,7 +274,7 @@ in with self; {
   curatedMetagenomicData = derive2 { name="curatedMetagenomicData"; version="3.8.0"; sha256="19ibfp3b2z8z8mw0blrjrk2dplp7vckwvy6i1jfxfx3rwlia9c62"; depends=[AnnotationHub dplyr ExperimentHub magrittr mia purrr rlang S4Vectors stringr SummarizedExperiment tibble tidyr tidyselect TreeSummarizedExperiment]; };
   curatedOvarianData = derive2 { name="curatedOvarianData"; version="1.38.0"; sha256="0jgpp588n9ajda2l8652b20qpqv9w26jsdih6nk8ridvqzjpzbg0"; depends=[affy BiocGenerics]; };
   curatedTBData = derive2 { name="curatedTBData"; version="1.6.0"; sha256="017ii5x449wiv5lpbj6pjnb4aryik0a4fakxk0j5hllflvyq7yvf"; depends=[AnnotationHub ExperimentHub MultiAssayExperiment rlang]; };
-  curatedTCGAData = derive2 { name="curatedTCGAData"; version="1.22.1"; sha256="1rhdyp31qjaidgwxw8rs8i7czxikhnq2icgikcp2msbdqbjy2grr"; depends=[AnnotationHub ExperimentHub HDF5Array MultiAssayExperiment S4Vectors SummarizedExperiment]; };
+  curatedTCGAData = derive2 { name="curatedTCGAData"; version="1.22.2"; sha256="0v6n0xc0vpq30k2s6vrga3063ssqp9i5zjif475i1jhlba798g9x"; depends=[AnnotationHub ExperimentHub HDF5Array MultiAssayExperiment S4Vectors SummarizedExperiment]; };
   davidTiling = derive2 { name="davidTiling"; version="1.40.0"; sha256="0afbmfr4dh7jn7dyg5lk88p8465mli9h4lxk1zcj7xbrx7fy3bbj"; depends=[Biobase GO_db tilingArray]; };
   depmap = derive2 { name="depmap"; version="1.14.0"; sha256="06c3s8b60n6dzapli0aywn8h885771930c3vyckd3vlylzbga2ym"; depends=[AnnotationHub dplyr ExperimentHub]; };
   derfinderData = derive2 { name="derfinderData"; version="2.18.0"; sha256="0i9s8yp2bzjs2rl10x4qkji7pp3mmayah1gsnakpgvhzrjhnxv5i"; depends=[]; };
@@ -397,7 +397,7 @@ in with self; {
   seqc = derive2 { name="seqc"; version="1.34.0"; sha256="0dfg8br36avrk1wryxygq1crpfafy3y2k64mxak6333lpl6ghrfc"; depends=[Biobase]; };
   serumStimulation = derive2 { name="serumStimulation"; version="1.36.0"; sha256="1a5r0qb2mxznc5y324jb6v7n72bwz055h4qabf0y662aqsfbrwh8"; depends=[]; };
   sesameData = derive2 { name="sesameData"; version="1.18.0"; sha256="1fvxs5n6bj2j0k3vgnaiksshkaxw7fmx6k22rjd3fsqg3cz60fm6"; depends=[AnnotationHub ExperimentHub GenomeInfoDb GenomicRanges IRanges readr S4Vectors stringr]; };
-  seventyGeneData = derive2 { name="seventyGeneData"; version="1.36.0"; sha256="1bfz4jsh53w3fha354yk7405i8rv4gx1f9p9zskrlrn76m7mbfgy"; depends=[]; };
+  seventyGeneData = derive2 { name="seventyGeneData"; version="1.36.1"; sha256="1dfg6qh6m869ylixvpaq2cb0d5wigncdayacj4gmj3xs3zxgf3zs"; depends=[]; };
   shinyMethylData = derive2 { name="shinyMethylData"; version="1.20.0"; sha256="03apywnbp4j3dhaba1ardw7wmr75py2lbjm9gfmn624fcvvs5zsm"; depends=[]; };
   signatureSearchData = derive2 { name="signatureSearchData"; version="1.14.0"; sha256="1bs3vqj67ppwl9rdkkzh2a65cj0lmss22m2gmahdj5903sdm8fbd"; depends=[affy Biobase dplyr ExperimentHub limma magrittr R_utils rhdf5]; };
   simpIntLists = derive2 { name="simpIntLists"; version="1.36.0"; sha256="1jma1gnpm8v345li6k4brjr29x5x06f33x50s6ashx28lwzf0hwg"; depends=[]; };

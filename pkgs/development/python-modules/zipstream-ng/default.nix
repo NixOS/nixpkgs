@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "zipstream-ng";
-  version = "1.5.0";
+  version = "1.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "pR0Ps";
     repo = "zipstream-ng";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4pS2t5IEIUHGJRaO6f9r8xnvXWA6p1EsDQ/jpD8CMLI=";
+    hash = "sha256-mY0dbHho/K1nTmhlv8i8KPa4HW7epBhfEksX3E2df2M=";
   };
 
   pythonImportsCheck = [

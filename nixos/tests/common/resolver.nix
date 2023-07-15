@@ -63,7 +63,7 @@
             matched = builtins.match "[ \t]+(${reHost})(.*)" str;
             continue = lib.singleton (lib.head matched)
                     ++ matchAliases (lib.last matched);
-          in if matched == null then [] else continue;
+          in lib.optional (matched != null) continue;
 
           matchLine = str: let
             result = builtins.match "[ \t]*(${reIp})[ \t]+(${reHost})(.*)" str;

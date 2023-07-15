@@ -10,6 +10,7 @@
 , texinfo
 , ncurses
 , pcre
+, pkg-config
 , buildPackages }:
 
 let
@@ -32,7 +33,7 @@ stdenv.mkDerivation {
   ];
 
   strictDeps = true;
-  nativeBuildInputs = [ autoreconfHook perl groff texinfo pcre]
+  nativeBuildInputs = [ autoreconfHook perl groff texinfo pkg-config ]
                       ++ lib.optionals stdenv.isLinux [ util-linux yodl ];
 
   buildInputs = [ ncurses pcre ];
@@ -44,6 +45,7 @@ stdenv.mkDerivation {
     "--enable-pcre"
     "--enable-zshenv=${placeholder "out"}/etc/zshenv"
     "--disable-site-fndir"
+    "--enable-function-subdirs"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform && !stdenv.hostPlatform.isStatic) [
     # Also see: https://github.com/buildroot/buildroot/commit/2f32e668aa880c2d4a2cce6c789b7ca7ed6221ba
     "zsh_cv_shared_environ=yes"
@@ -55,6 +57,16 @@ stdenv.mkDerivation {
     "zsh_cv_sys_dynamic_strip_exe=yes"
     "zsh_cv_sys_dynamic_strip_lib=yes"
   ];
+
+  postPatch = ''
+    substituteInPlace Src/Modules/pcre.mdd \
+      --replace 'pcre-config' 'true'
+  '';
+
+  preConfigure = ''
+    # use pkg-config instead of pcre-config
+    configureFlagsArray+=("PCRECONF=''${PKG_CONFIG} libpcre")
+  '';
 
   # the zsh/zpty module is not available on hydra
   # so skip groups Y Z
@@ -100,6 +112,10 @@ EOF
     mv $out/share/zsh/htmldoc $out/share/doc/zsh-$version
   '';
   # XXX: patch zsh to take zwc if newer _or equal_
+
+  postFixup = ''
+    HOST_PATH=$out/bin:$HOST_PATH patchShebangs --host $out/share/zsh/*/functions
+  '';
 
   meta = {
     description = "The Z shell";

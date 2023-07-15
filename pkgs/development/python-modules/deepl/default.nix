@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "deepl";
-  version = "1.14.0";
+  version = "1.15.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jUHxyx+b1OICJHAs8lh5NVtl+MExyEYM/yfs2qz6fv4=";
+    hash = "sha256-BRFC4R5d1gxHyEJI41Fi0Az8GqmDG7mQ6Fx/o23OGcE=";
   };
 
   nativeBuildInputs = [

@@ -70,7 +70,7 @@ A list of the maintainers of this Nix expression. Maintainers are defined in [`n
 
 ### `mainProgram` {#var-meta-mainProgram}
 
-The name of the main binary for the package. This effects the binary `nix run` executes and falls back to the name of the package. Example: `"rg"`
+The name of the main binary for the package. This affects the binary `nix run` executes and falls back to the name of the package. Example: `"rg"`
 
 ### `priority` {#var-meta-priority}
 
@@ -128,7 +128,7 @@ Prefer `passthru.tests` for tests that are introduced in nixpkgs because:
 * we can run `passthru.tests` independently
 * `installCheckPhase` adds overhead to each build
 
-For more on how to write and run package tests, see <xref linkend="sec-package-tests"/>.
+For more on how to write and run package tests, see [](#sec-package-tests).
 
 #### NixOS tests {#var-meta-tests-nixos}
 

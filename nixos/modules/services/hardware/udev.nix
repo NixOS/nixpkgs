@@ -72,7 +72,7 @@ let
           --replace \"/sbin/blkid \"${pkgs.util-linux}/sbin/blkid \
           --replace \"/bin/mount \"${pkgs.util-linux}/bin/mount \
           --replace /usr/bin/readlink ${pkgs.coreutils}/bin/readlink \
-          --replace /usr/bin/basename ${pkgs.coreutils}/bin/basename
+          --replace /usr/bin/basename ${pkgs.coreutils}/bin/basename 2>/dev/null
       ${optionalString (initrdBin != null) ''
         substituteInPlace $i --replace '/run/current-system/systemd' "${removeSuffix "/bin" initrdBin}"
       ''}
@@ -296,7 +296,6 @@ in
       packages = mkOption {
         type = types.listOf types.path;
         default = [];
-        visible = false;
         description = lib.mdDoc ''
           *This will only be used when systemd is used in stage 1.*
 
@@ -311,7 +310,6 @@ in
       binPackages = mkOption {
         type = types.listOf types.path;
         default = [];
-        visible = false;
         description = lib.mdDoc ''
           *This will only be used when systemd is used in stage 1.*
 

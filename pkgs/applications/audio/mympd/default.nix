@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mympd";
-  version = "10.3.2";
+  version = "10.3.3";
 
   src = fetchFromGitHub {
     owner = "jcorporation";
     repo = "myMPD";
     rev = "v${version}";
-    sha256 = "sha256-VnV0jZp2ymsZkVIDBYXHhJTR10CZ74wutue1GTGQtxI=";
+    sha256 = "sha256-LqIaRFAXB3XMidC1Dypax/ucayot/IJPAvPwzHQeH9k=";
   };
 
   nativeBuildInputs = [
@@ -51,8 +51,12 @@ stdenv.mkDerivation rec {
     # similarly here
     "-DCMAKE_INSTALL_LOCALSTATEDIR=/var/lib/mympd"
   ];
-  # See https://github.com/jcorporation/myMPD/issues/315
-  hardeningDisable = [ "strictoverflow" ];
+  hardeningDisable = [
+    # See https://github.com/jcorporation/myMPD/issues/315
+    "strictoverflow"
+    # causes redefinition of _FORTIFY_SOURCE
+    "fortify3"
+  ];
 
   meta = {
     homepage = "https://jcorporation.github.io/myMPD";

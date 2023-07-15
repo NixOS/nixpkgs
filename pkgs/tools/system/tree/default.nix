@@ -2,7 +2,7 @@
 
 let
   # These settings are found in the Makefile, but there seems to be no
-  # way to select one ore the other setting other than editing the file
+  # way to select one or the other setting other than editing the file
   # manually, so we have to duplicate the know how here.
   systemFlags = lib.optionalString stdenv.isDarwin ''
     CFLAGS="-O2 -Wall -fomit-frame-pointer -no-cpp-precomp"
@@ -18,13 +18,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "tree";
-  version = "2.0.4";
+  version = "2.1.1";
 
   src = fetchFromGitLab {
     owner = "OldManProgrammer";
     repo = "unix-tree";
     rev = version;
-    sha256 = "sha256-2voXL31JHh09yBBLuHhYyZsUapiPVF/cgRmTU6wSXk4=";
+    sha256 = "sha256-aPz1ROUeAKDmMjEtAaL2AguF54/CbIYWpL4Qovv2ftQ=";
   };
 
   preConfigure = ''

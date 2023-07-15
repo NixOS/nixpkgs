@@ -32,5 +32,6 @@ buildGoModule rec {
     homepage = "https://github.com/symfony-cli/symfony-cli";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ drupol ];
+    mainProgram = "symfony";
   };
 }

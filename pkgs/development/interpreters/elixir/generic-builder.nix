@@ -16,6 +16,7 @@
 , sha256 ? null
 , rev ? "v${version}"
 , src ? fetchFromGitHub { inherit rev sha256; owner = "elixir-lang"; repo = "elixir"; }
+, escriptPath ? "lib/elixir/generate_app.escript"
 } @ args:
 
 let
@@ -38,7 +39,7 @@ stdenv.mkDerivation ({
   buildFlags = optional debugInfo "ERL_COMPILER_OPTIONS=debug_info";
 
   preBuild = ''
-    patchShebangs lib/elixir/generate_app.escript || true
+    patchShebangs ${escriptPath} || true
 
     substituteInPlace Makefile \
       --replace "/usr/local" $out

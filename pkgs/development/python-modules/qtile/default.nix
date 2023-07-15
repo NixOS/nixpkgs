@@ -8,7 +8,6 @@
 , libinput
 , libxkbcommon
 , mpd2
-, mypy
 , pango
 , pkg-config
 , psutil
@@ -80,11 +79,6 @@ buildPythonPackage rec {
     wayland
     wlroots
     libxkbcommon
-  ];
-
-  # for `qtile check`, needs `stubtest` and `mypy` commands
-  makeWrapperArgs = [
-    "--suffix PATH : ${lib.makeBinPath [ mypy ]}"
   ];
 
   doCheck = false; # Requires X server #TODO this can be worked out with the existing NixOS testing infrastructure.

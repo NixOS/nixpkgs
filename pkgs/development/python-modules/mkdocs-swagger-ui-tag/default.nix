@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-swagger-ui-tag";
-  version = "0.6.1";
+  version = "0.6.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FBrAZ9MhPGPwJhVXslu5mvVIJ7gPDiCK/3EuPAq6RNw=";
+    hash = "sha256-H/eqrwlZntEYoKkJZKiRV+KyzkrDKRirMDDSciFNIGo=";
   };
 
   propagatedBuildInputs = [

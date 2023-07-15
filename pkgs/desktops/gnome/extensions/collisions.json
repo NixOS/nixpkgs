@@ -265,6 +265,10 @@
       "workspace-indicator@gnome-shell-extensions.gcampax.github.com",
       "horizontal-workspace-indicator@tty2.io"
     ],
+    "lock-keys": [
+      "lockkeys@vaina.lt",
+      "lockkeys@fawtytoo"
+    ],
     "persian-calendar": [
       "PersianCalendar@oxygenws.com",
       "persian-calendar@iamrezamousavi.gmail.com"
@@ -326,6 +330,10 @@
     "panel-date-format": [
       "panel-date-format@keiii.github.com",
       "panel-date-format@atareao.es"
+    ],
+    "battery-time": [
+      "batime@martin.zurowietz.de",
+      "batterytime@typeof.pw"
     ]
   }
 }

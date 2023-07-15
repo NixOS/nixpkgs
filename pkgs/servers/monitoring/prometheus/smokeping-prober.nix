@@ -33,6 +33,5 @@ buildGoModule rec {
     homepage = "https://github.com/SuperQ/smokeping_prober";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];
-    platforms = platforms.unix;
   };
 }

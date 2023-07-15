@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, makeWrapper, jre, nix-update-script }:
 
 stdenv.mkDerivation rec {
-  version = "0.1.4";
+  version = "0.1.5";
   pname = "open-pdf-sign";
 
   src = fetchurl {
     url = "https://github.com/open-pdf-sign/open-pdf-sign/releases/download/v${version}/open-pdf-sign.jar";
-    sha256 = "sha256-tGpjVgG8UcOC0ZFhQ201HvPUyoWso58uM52Vsdwb2lM=";
+    sha256 = "sha256-WYGi2tMs+/yckFblkP7dmC7iadtk1DjpMCkUEv7d/4g=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

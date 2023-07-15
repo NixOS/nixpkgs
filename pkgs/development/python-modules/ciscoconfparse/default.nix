@@ -1,13 +1,14 @@
 { lib
 , buildPythonPackage
-, dnspython
 , deprecat
+, dnspython
 , fetchFromGitHub
 , loguru
 , passlib
 , poetry-core
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , toml
 }:
 
@@ -25,12 +26,17 @@ buildPythonPackage rec {
     hash = "sha256-vL/CQdYcOP356EyRToviWylP1EBtxmeov6qkhfQNZ2Y=";
   };
 
+  pythonRelaxDeps = [
+    "loguru"
+  ];
+
   postPatch = ''
     patchShebangs tests
   '';
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

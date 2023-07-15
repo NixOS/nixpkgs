@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "qalculate-qt";
-  version = "4.6.1";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "qalculate-qt";
     rev = "v${version}";
-    hash = "sha256-9DT1U0iKj5C/Tc9MggEr/RwHhVr4GSOJQVhTiLFk9NY=";
+    hash = "sha256-fMchJgxuOO2e7cOHLako26c9gsWvQY2MTRVD3JWGSAU=";
   };
 
-  nativeBuildInputs = [ qmake intltool pkg-config wrapQtAppsHook ];
-  buildInputs = [ libqalculate qtbase qttools qtsvg ]
+  nativeBuildInputs = [ qmake intltool pkg-config qttools wrapQtAppsHook ];
+  buildInputs = [ libqalculate qtbase qtsvg ]
     ++ lib.optionals stdenv.isLinux [ qtwayland ];
 
   postPatch = ''

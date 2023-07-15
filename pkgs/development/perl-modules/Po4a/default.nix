@@ -45,7 +45,9 @@ buildPerlPackage rec {
   # https://github.com/void-linux/void-packages/pull/34029#issuecomment-973267880
   # Alpine packagers have not worried about running the tests until now:
   # https://git.alpinelinux.org/aports/tree/main/po4a/APKBUILD#n11
-  doCheck = !stdenv.hostPlatform.isMusl;
+  #
+  # Disabling tests on Darwin until https://github.com/NixOS/nixpkgs/issues/236560 is resolved.
+  doCheck = (!stdenv.hostPlatform.isMusl) && (!stdenv.hostPlatform.isDarwin);
 
   checkPhase = ''
     export SGML_CATALOG_FILES=${docbook_sgml_dtd_41}/sgml/dtd/docbook-4.1/docbook.cat

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "oracledb";
-  version = "1.3.0";
+  version = "1.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8QWkcFkWoo0z4pGPo2NAl/6DVSv16oGvw6emhSjJ4vM=";
+    hash = "sha256-uzw5HBZ7V3jdsVp1OKKzbbXJuIpQyGxheByp/zArtkM=";
   };
 
   nativeBuildInputs = [

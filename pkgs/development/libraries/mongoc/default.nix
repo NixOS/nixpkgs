@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mongoc";
-  version = "1.23.4";
+  version = "1.24.1";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-c-driver";
     rev = "refs/tags/${version}";
-    hash = "sha256-jYEEWbm00V3zhzxH8jBkrj/+OC6CGjbh5qofNYmsdTk=";
+    hash = "sha256-IVy2PxFM//AKffYfeLyCNjattnFZmqeg6WNTqXI/yMY=";
   };
 
   postPatch = ''
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     cyrus_sasl
     snappy
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk_11_0.frameworks.Security
   ];
 
   cmakeFlags = [
@@ -56,7 +56,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin && stdenv.isx86_64;
     description = "The official C client library for MongoDB";
     homepage = "http://mongoc.org";
     license = licenses.asl20;

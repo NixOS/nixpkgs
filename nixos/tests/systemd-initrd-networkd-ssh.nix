@@ -17,6 +17,7 @@ import ./make-test-python.nix ({ lib, ... }: {
 
       specialisation.encrypted-root.configuration = {
         virtualisation.rootDevice = "/dev/mapper/root";
+        virtualisation.fileSystems."/".autoFormat = true;
         boot.initrd.luks.devices = lib.mkVMOverride {
           root.device = "/dev/vdb";
         };

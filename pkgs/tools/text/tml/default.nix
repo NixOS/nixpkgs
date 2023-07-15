@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "tml";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "liamg";
     repo = "tml";
     rev = "v${version}";
-    hash = "sha256-92GumJGdbqxhcIj1gdkiamUA4peDG/Ar6GEimj/E7lg=";
+    hash = "sha256-y9iv6s+ShKLxd+SOBQxwvPwuEL1kepJL6ukA4aoV9Z8=";
   };
 
-  vendorHash = "sha256-YsEmxhyDMuvq48vdHFvgsIqbqDZbg8beS0nL7lsaFJ0=";
+  vendorHash = "sha256-CHZS1SpPko8u3tZAYbf+Di882W55X9Q/zd4SmFCRgKM=";
 
   ldflags = [ "-s" "-w" ];
 

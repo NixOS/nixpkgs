@@ -41,13 +41,13 @@
 
 buildPythonPackage rec {
   pname = "wxPython";
-  version = "4.2.0";
+  version = "4.2.1";
   format = "other";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZjzrxFCdfl0RNRiGX+J093+VQ0xdV7w4btWNZc7thsc=";
+    hash = "sha256-5I3iEaZga/By7D+neHcda3RsALf0uXDrWHKN31bRPVw=";
   };
 
   patches = [
@@ -127,6 +127,7 @@ buildPythonPackage rec {
 
 
   meta = with lib; {
+    changelog = "https://github.com/wxWidgets/Phoenix/blob/wxPython-${version}/CHANGES.rst";
     description = "Cross platform GUI toolkit for Python, Phoenix version";
     homepage = "http://wxpython.org/";
     license = licenses.wxWindows;

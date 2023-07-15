@@ -41,7 +41,6 @@ let
   };
 
   arch = archs.${stdenv.system} or (throw "system ${stdenv.system} not supported");
-  isAarch64Darwin = stdenv.system == "aarch64-darwin";
 
   nativeCheckInputs = [ git gmp openssl readline libxml2 libyaml libffi ];
 
@@ -80,7 +79,7 @@ let
     , extraBuildInputs ? [ ]
     , buildFlags ? [ "all" "docs" "release=1"]
     }:
-    lib.fix (compiler: stdenv.mkDerivation (finalAttrs: {
+    stdenv.mkDerivation (finalAttrs: {
       pname = "crystal";
       inherit buildFlags doCheck version;
 
@@ -235,7 +234,7 @@ let
 
       passthru.buildBinary = binary;
       passthru.buildCrystalPackage = callPackage ./build-package.nix {
-        crystal = compiler;
+        crystal = finalAttrs.finalPackage;
       };
 
       meta = with lib; {
@@ -243,9 +242,9 @@ let
         description = "A compiled language with Ruby like syntax and type inference";
         homepage = "https://crystal-lang.org/";
         license = licenses.asl20;
-        maintainers = with maintainers; [ david50407 manveru peterhoeg ];
+        maintainers = with maintainers; [ david50407 manveru peterhoeg donovanglover ];
       };
-    }))
+    })
   );
 
 in
@@ -274,10 +273,16 @@ rec {
   };
 
   crystal_1_8 = generic {
-    version = "1.8.1";
-    sha256 = "sha256-t+1vM1m62UftCvfa90Dg6nqt6Zseh/GP/Gc1VfOa4+c=";
+    version = "1.8.2";
+    sha256 = "sha256-YAORdipzpC9CrFgZUFlFfjzlJQ6ZeA2ekVu8IfPOxR8=";
     binary = binaryCrystal_1_2;
   };
 
-  crystal = crystal_1_8;
+  crystal_1_9 = generic {
+    version = "1.9.0";
+    sha256 = "sha256-FFpAL1U8WtfwDCLaUP+axSnJlGaKp/jzBs54rit9T2A=";
+    binary = binaryCrystal_1_2;
+  };
+
+  crystal = crystal_1_9;
 }

@@ -310,8 +310,7 @@ in
     };
 
     # `gettext` comes with obsolete config.sub/config.guess that don't recognize LoongArch64.
-    extraNativeBuildInputs =
-      lib.optional (localSystem.isLoongArch64) prevStage.updateAutotoolsGnuConfigScriptsHook;
+    extraNativeBuildInputs = [ prevStage.updateAutotoolsGnuConfigScriptsHook ];
   })
 
   # First rebuild of gcc; this is linked against all sorts of junk
@@ -391,8 +390,7 @@ in
       };
 
       # `gettext` comes with obsolete config.sub/config.guess that don't recognize LoongArch64.
-      extraNativeBuildInputs =
-        lib.optional (localSystem.isLoongArch64) prevStage.updateAutotoolsGnuConfigScriptsHook;
+      extraNativeBuildInputs = [ prevStage.updateAutotoolsGnuConfigScriptsHook ];
     })
 
   # 2nd stdenv that contains our own rebuilt binutils and is used for
@@ -477,8 +475,7 @@ in
 
     # `gettext` comes with obsolete config.sub/config.guess that don't recognize LoongArch64.
     # `libtool` comes with obsolete config.sub/config.guess that don't recognize Risc-V.
-    extraNativeBuildInputs =
-      lib.optional (localSystem.isLoongArch64 || localSystem.isRiscV) prevStage.updateAutotoolsGnuConfigScriptsHook;
+    extraNativeBuildInputs = [ prevStage.updateAutotoolsGnuConfigScriptsHook ];
   })
 
 
@@ -516,10 +513,11 @@ in
         passthru = a.passthru // { inherit (self) gmp mpfr libmpc isl; };
       });
     };
-    extraNativeBuildInputs = [ prevStage.patchelf ] ++
+    extraNativeBuildInputs = [
+      prevStage.patchelf
       # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
-      lib.optional (!localSystem.isx86 || localSystem.libc == "musl")
-                   prevStage.updateAutotoolsGnuConfigScriptsHook;
+      prevStage.updateAutotoolsGnuConfigScriptsHook
+    ];
   })
 
 
@@ -572,10 +570,11 @@ in
         shell = self.bash + "/bin/bash";
       };
     };
-    extraNativeBuildInputs = [ prevStage.patchelf prevStage.xz ] ++
+    extraNativeBuildInputs = [
+      prevStage.patchelf prevStage.xz
       # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
-      lib.optional (!localSystem.isx86 || localSystem.libc == "musl")
-                   prevStage.updateAutotoolsGnuConfigScriptsHook;
+      prevStage.updateAutotoolsGnuConfigScriptsHook
+    ];
   })
 
   # Construct the final stdenv.  It uses the Glibc and GCC, and adds
@@ -610,10 +609,11 @@ in
       initialPath =
         ((import ../generic/common-path.nix) {pkgs = prevStage;});
 
-      extraNativeBuildInputs = [ prevStage.patchelf ] ++
+      extraNativeBuildInputs = [
+        prevStage.patchelf
         # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
-        lib.optional (!localSystem.isx86 || localSystem.libc == "musl")
-        prevStage.updateAutotoolsGnuConfigScriptsHook;
+        prevStage.updateAutotoolsGnuConfigScriptsHook
+      ];
 
       cc = prevStage.gcc;
 
@@ -645,8 +645,7 @@ in
         ++  [ linuxHeaders # propagated from .dev
             binutils gcc gcc.cc gcc.cc.lib gcc.expand-response-params gcc.cc.libgcc glibc.passthru.libgcc
           ]
-        ++ lib.optionals (!localSystem.isx86 || localSystem.libc == "musl")
-            [ prevStage.updateAutotoolsGnuConfigScriptsHook prevStage.gnu-config ]
+        ++ [ prevStage.updateAutotoolsGnuConfigScriptsHook prevStage.gnu-config ]
         ++ (with gcc-unwrapped.passthru; [
           gmp libmpc mpfr isl
         ])

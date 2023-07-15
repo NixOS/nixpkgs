@@ -1,6 +1,7 @@
 { lib
 , asn1crypto
 , buildPythonPackage
+, cryptography
 , dnspython
 , dsinternals
 , fetchFromGitHub
@@ -10,12 +11,14 @@
 , pycryptodome
 , pyopenssl
 , pythonOlder
+, requests
 , requests_ntlm
+, unicrypto
 }:
 
 buildPythonPackage rec {
   pname = "certipy-ad";
-  version = "4.4.0";
+  version = "4.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +27,7 @@ buildPythonPackage rec {
     owner = "ly4k";
     repo = "Certipy";
     rev = "refs/tags/${version}";
-    hash = "sha256-llLGr9IpuXQYIN2WaOkvfE2dAZb3PMVlNmketUpuyDI=";
+    hash = "sha256-OxSTg9yFzyiAnRUcSTG5EzFk5ForzEVt/tUyi+cz9XI=";
   };
 
   postPatch = ''
@@ -35,14 +38,17 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     asn1crypto
+    cryptography
     dnspython
     dsinternals
     impacket
-    pyopenssl
     ldap3
     pyasn1
     pycryptodome
+    pyopenssl
+    requests
     requests_ntlm
+    unicrypto
   ];
 
   # Project has no tests

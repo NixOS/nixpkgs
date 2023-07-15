@@ -8,17 +8,18 @@
 , zlib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zig";
   version = "0.10.1";
-  outputs = [ "out" "doc" ];
 
   src = fetchFromGitHub {
     owner = "ziglang";
-    repo = pname;
-    rev = version;
+    repo = "zig";
+    rev = finalAttrs.version;
     hash = "sha256-69QIkkKzApOGfrBdgtmxFMDytRkSh+0YiaJQPbXsBeo=";
   };
+
+  outputs = [ "out" "doc" ];
 
   nativeBuildInputs = [
     cmake
@@ -41,14 +42,11 @@ stdenv.mkDerivation rec {
     ./zig_14559.patch
   ];
 
-  preBuild = ''
-    export HOME=$TMPDIR;
-  '';
-
+  # Zig's build looks at /usr/bin/env to find dynamic linking info. This doesn't
+  # work in Nix's sandbox. Use env from our coreutils instead.
   postPatch = ''
-    # Zig's build looks at /usr/bin/env to find dynamic linking info. This
-    # doesn't work in Nix' sandbox. Use env from our coreutils instead.
-    substituteInPlace lib/std/zig/system/NativeTargetInfo.zig --replace "/usr/bin/env" "${coreutils}/bin/env"
+    substituteInPlace lib/std/zig/system/NativeTargetInfo.zig \
+      --replace "/usr/bin/env" "${coreutils}/bin/env"
   '';
 
   cmakeFlags = [
@@ -62,27 +60,34 @@ stdenv.mkDerivation rec {
     "-DZIG_TARGET_MCPU=baseline"
   ];
 
+  env.ZIG_GLOBAL_CACHE_DIR = "$TMPDIR/zig-cache";
+
   postBuild = ''
     ./zig2 build-exe ../doc/docgen.zig
     ./docgen ./zig2 ../doc/langref.html.in ./langref.html
   '';
 
-  doCheck = true;
-
   postInstall = ''
-    install -Dm644 -t $doc/share/doc/$pname-$version/html ./langref.html
+    install -Dm644 -t $doc/share/doc/zig-${finalAttrs.version}/html ./langref.html
   '';
+
+  doInstallCheck = true;
 
   installCheckPhase = ''
-    $out/bin/zig test --cache-dir "$TMPDIR" -I $src/test $src/test/behavior.zig
+    runHook preInstallCheck
+
+    $out/bin/zig test --cache-dir "$TMPDIR/cache-dir" -I $src/test $src/test/behavior.zig
+
+    runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ziglang.org/";
     description =
       "General-purpose programming language and toolchain for maintaining robust, optimal, and reusable software";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aiotter andrewrk AndersonTorres ];
-    platforms = platforms.unix;
+    changelog = "https://ziglang.org/download/${finalAttrs.version}/release-notes.html";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aiotter andrewrk AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "therion";
-  version = "6.1.7";
+  version = "6.1.8";
 
   src = fetchFromGitHub {
     owner = "therion";
     repo = "therion";
     rev = "v${version}";
-    hash = "sha256-q+p1akGfzBeZejeYiJ8lrSbEIMTsX5YuIG/u35oh0JI=";
+    hash = "sha256-bmp0IZ4uAqDpe2e8UeIDUdFaaocx4OBIYuhnaHirqGc=";
   };
 
   nativeBuildInputs = [

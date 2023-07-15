@@ -8,6 +8,7 @@
 , meson
 , ninja
 , python3
+, getent
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     python3
+    getent
   ];
 
   preConfigure = ''

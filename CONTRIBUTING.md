@@ -61,14 +61,26 @@ Pull requests should not be squash merged in order to keep complete commit messa
 This means that, when addressing review comments in order to keep the pull request in an always mergeable status, you will sometimes need to rewrite your branch's history and then force-push it with `git push --force-with-lease`.
 Useful git commands that can help a lot with this are `git commit --patch --amend` and `git rebase --interactive`. For more details consult the git man pages or online resources like [git-rebase.io](https://git-rebase.io/) or [The Pro Git Book](https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History).
 
+## Testing changes
+
+To run the main types of tests locally:
+
+- Run package-internal tests with `nix-build --attr pkgs.PACKAGE.passthru.tests`
+- Run [NixOS tests](https://nixos.org/manual/nixos/unstable/#sec-nixos-tests) with `nix-build --attr nixosTest.NAME`, where `NAME` is the name of the test listed in `nixos/tests/all-tests.nix`
+- Run [global package tests](https://nixos.org/manual/nixpkgs/unstable/#sec-package-tests) with `nix-build --attr tests.PACKAGE`, where `PACKAGE` is the name of the test listed in `pkgs/test/default.nix`
+- See `lib/tests/NAME.nix` for instructions on running specific library tests
+
 ## Rebasing between branches (i.e. from master to staging)
 
 From time to time, changes between branches must be rebased, for example, if the
 number of new rebuilds they would cause is too large for the target branch. When
 rebasing, care must be taken to include only the intended changes, otherwise
-many CODEOWNERS will be inadvertently requested for review.  To achieve this,
+many CODEOWNERS will be inadvertently requested for review. To achieve this,
 rebasing should not be performed directly on the target branch, but on the merge
-base between the current and target branch.
+base between the current and target branch. As an additional precautionary measure,
+you should temporarily mark the PR as draft for the duration of the operation.
+This reduces the probability of mass-pinging people. (OfBorg might still
+request a couple of persons for reviews though.)
 
 In the following example, we assume that the current branch, called `feature`,
 is based on `master`, and we rebase it onto the merge base between
@@ -102,6 +114,36 @@ git status
 git push origin feature --force-with-lease
 ```
 
+### Something went wrong and a lot of people were pinged
+
+It happens. Remember to be kind, especially to new contributors.
+There is no way back, so the pull request should be closed and locked
+(if possible). The changes should be re-submitted in a new PR, in which the people
+originally involved in the conversation need to manually be pinged again.
+No further discussion should happen on the original PR, as a lot of people
+are now subscribed to it.
+
+The following message (or a version thereof) might be left when closing to
+describe the situation, since closing and locking without any explanation
+is kind of rude:
+
+```markdown
+It looks like you accidentally mass-pinged a bunch of people, which are now subscribed
+and getting notifications for everything in this pull request. Unfortunately, they
+cannot be automatically unsubscribed from the issue (removing review request does not
+unsubscribe), therefore development cannot continue in this pull request anymore.
+
+Please open a new pull request with your changes, link back to this one and ping the
+people actually involved in here over there.
+
+In order to avoid this in the future, there are instructions for how to properly
+rebase between branches in our [contribution guidelines](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#rebasing-between-branches-ie-from-master-to-staging).
+Setting your pull request to draft prior to rebasing is strongly recommended.
+In draft status, you can preview the list of people that are about to be requested
+for review, which allows you to sidestep this issue.
+This is not a bulletproof method though, as OfBorg still does review requests even on draft PRs.
+```
+
 ## Backporting changes
 
 Follow these steps to backport a change into a release branch in compliance with the [commit policy](https://nixos.org/nixpkgs/manual/#submitting-changes-stable-release-branches).
@@ -127,19 +169,6 @@ Anything that does not cause user or downstream dependency regressions can be ba
 - Version updates which include new functionality (but no breaking changes)
 - Services which require a client to be up-to-date regardless. (E.g. `spotify`, `steam`, or `discord`)
 - Security critical applications (E.g. `firefox`)
-
-## Generating 23.11 Release Notes
-<!--
-note: title unchanged even though we don't need regeneration because extant
-PRs will link here. definitely change the title for 23.11 though.
--->
-
-Documentation in nixpkgs is transitioning to a markdown-centric workflow. In the past release notes required a translation step to convert from markdown to a compatible docbook document, but this is no longer necessary.
-
-Steps for updating 23.11 Release notes:
-
-1. Edit `nixos/doc/manual/release-notes/rl-2311.section.md` with the desired changes
-2. Commit changes to `rl-2311.section.md`.
 
 ## Reviewing contributions
 

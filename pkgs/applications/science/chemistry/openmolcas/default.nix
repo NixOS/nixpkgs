@@ -15,14 +15,14 @@ let
 
 in stdenv.mkDerivation {
   pname = "openmolcas";
-  version = "23.02";
+  version = "23.06";
 
   src = fetchFromGitLab {
     owner = "Molcas";
     repo = "OpenMolcas";
     # The tag keeps moving, fix a hash instead
-    rev = "03265f62cd98b985712b063aea88313f984a8857"; # 2023-02-11
-    sha256 = "sha256-Kj2RDJq8PEvKclLrSYIOdl6g6lcRsTNZCjwxGOs3joY=";
+    rev = "1cda3772686cbf99a4af695929a12d563c795ca2"; # 2023-06-12
+    sha256 = "sha256-DLRQsRy2jt8V8q2sKmv2hLuKCuMihp/+zcMY/3sg1Fk=";
   };
 
   patches = [

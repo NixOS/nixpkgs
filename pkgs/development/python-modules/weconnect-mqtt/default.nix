@@ -23,6 +23,8 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "weconnect[Images]~=" "weconnect>="
     substituteInPlace weconnect_mqtt/__version.py \
       --replace "develop" "${version}"
     substituteInPlace pytest.ini \

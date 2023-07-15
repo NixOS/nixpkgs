@@ -9,6 +9,24 @@ rec {
   examples = import ./examples.nix { inherit lib; };
   architectures = import ./architectures.nix { inherit lib; };
 
+  /*
+    Elaborated systems contain functions, which means that they don't satisfy
+    `==` for a lack of reflexivity.
+
+    They might *appear* to satisfy `==` reflexivity when the same exact value is
+    compared to itself, because object identity is used as an "optimization";
+    compare the value with a reconstruction of itself, e.g. with `f == a: f a`,
+    or perhaps calling `elaborate` twice, and one will see reflexivity fail as described.
+
+    Hence a custom equality test.
+
+    Note that this does not canonicalize the systems, so you'll want to make sure
+    both arguments have been `elaborate`-d.
+  */
+  equals =
+    let removeFunctions = a: lib.filterAttrs (_: v: !builtins.isFunction v) a;
+    in a: b: removeFunctions a == removeFunctions b;
+
   /* List of all Nix system doubles the nixpkgs flake will expose the package set
      for. All systems listed here must be supported by nixpkgs as `localSystem`.
 
@@ -68,7 +86,7 @@ rec {
         # choice.
         else                                     "bfd";
       extensions = rec {
-        sharedLibrary =
+        sharedLibrary = assert final.hasSharedLibraries;
           /**/ if final.isDarwin  then ".dylib"
           else if final.isWindows then ".dll"
           else                         ".so";
@@ -114,6 +132,25 @@ rec {
          # uname -r
          release = null;
       };
+
+      # It is important that hasSharedLibraries==false when the platform has no
+      # dynamic library loader.  Various tools (including the gcc build system)
+      # have knowledge of which platforms are incapable of dynamic linking, and
+      # will still build on/for those platforms with --enable-shared, but simply
+      # omit any `.so` build products such as libgcc_s.so.  When that happens,
+      # it causes hard-to-troubleshoot build failures.
+      hasSharedLibraries = with final;
+        (isAndroid || isGnu || isMusl                                  # Linux (allows multiple libcs)
+         || isDarwin || isSunOS || isOpenBSD || isFreeBSD || isNetBSD  # BSDs
+         || isCygwin || isMinGW                                        # Windows
+        ) && !isStatic;
+
+      # The difference between `isStatic` and `hasSharedLibraries` is mainly the
+      # addition of the `staticMarker` (see make-derivation.nix).  Some
+      # platforms, like embedded machines without a libc (e.g. arm-none-eabi)
+      # don't support dynamic linking, but don't get the `staticMarker`.
+      # `pkgsStatic` sets `isStatic=true`, so `pkgsStatic.hostPlatform` always
+      # has the `staticMarker`.
       isStatic = final.isWasm || final.isRedox;
 
       # Just a guess, based on `system`
@@ -193,8 +230,7 @@ rec {
             };
             wine = (pkgs.winePackagesFor "wine${toString final.parsed.cpu.bits}").minimal;
           in
-          if final.parsed.kernel.name == pkgs.stdenv.hostPlatform.parsed.kernel.name &&
-            pkgs.stdenv.hostPlatform.canExecute final
+          if pkgs.stdenv.hostPlatform.canExecute final
           then "${pkgs.runtimeShell} -c '\"$@\"' --"
           else if final.isWindows
           then "${wine}/bin/wine${lib.optionalString (final.parsed.cpu.bits == 64) "64"}"

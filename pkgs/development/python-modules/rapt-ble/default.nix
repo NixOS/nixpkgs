@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "rapt-ble";
-  version = "0.1.1";
+  version = "0.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "sairon";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-BLpe4AxxvFeOfcBSPtLwPIJZnNIBEdd6JpuQb9upO34=";
+    hash = "sha256-ozZwVgTV/xYl1nXLiybcPs6DQKocNdbxTEYDfYyQuvY=";
   };
 
   postPatch = ''

@@ -2,6 +2,8 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
   name = "luks";
 
   nodes.machine = { pkgs, ... }: {
+    imports = [ ./common/auto-format-root-device.nix ];
+
     # Use systemd-boot
     virtualisation = {
       emptyDiskImages = [ 512 512 ];

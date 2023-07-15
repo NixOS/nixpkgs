@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, installShellFiles
 }:
 
 buildGoModule rec {
@@ -19,6 +20,15 @@ buildGoModule rec {
   ldflags = [
     "-s" "-w" "-X github.com/tomwright/dasel/v2/internal.Version=${version}"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd dasel \
+      --bash <($out/bin/dasel completion bash) \
+      --fish <($out/bin/dasel completion fish) \
+      --zsh <($out/bin/dasel completion zsh)
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -42,7 +52,6 @@ buildGoModule rec {
     homepage = "https://github.com/TomWright/dasel";
     changelog = "https://github.com/TomWright/dasel/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ _0x4A6F ];
   };
 }

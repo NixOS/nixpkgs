@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "statsmodels";
-  version = "0.13.5";
+  version = "0.14.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WTUmrK4cD9oOpsSEOfZ8OUMJTFQv52n4uQ/p5sbMSHE=";
+    hash = "sha256-aHXH1onpZtlI8V64FqtWFvSShwaxgM9HD9WQerb2R6Q=";
   };
 
   nativeBuildInputs = [

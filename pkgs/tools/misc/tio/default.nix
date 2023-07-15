@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tio";
-  version = "2.5";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "tio";
     repo = "tio";
     rev = "v${version}";
-    hash = "sha256-7mVLfzguQ7eNIFTJMLJyoM+/pveGO88j2JUEOqvnqvk=";
+    hash = "sha256-cYCkf9seaWcjrW0aDz+5FexfnTtiO3KQ1aX4OgG62Ug=";
   };
 
   strictDeps = true;

@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "solax";
-  version = "0.3.1";
+  version = "0.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kseU6JK00GTPyqdWku2ceT5/mChMVVPgEEib3BmjI/g=";
+    hash = "sha256-7UDTG8rw9XJd5LPqcAe2XyE7DQa96dBj9YOcgW+/aFc=";
   };
 
   nativeBuildInputs = [

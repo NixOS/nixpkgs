@@ -135,7 +135,7 @@ let
     checkMeta = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to check that the `meta` attribute of derivations are correct during evaluation time.
       '';
     };

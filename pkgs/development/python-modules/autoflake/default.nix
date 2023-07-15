@@ -4,8 +4,9 @@
 , hatchling
 , pyflakes
 , pytestCheckHook
+, pythonOlder
+, tomli
 }:
-
 buildPythonPackage rec {
   pname = "autoflake";
   version = "2.0.1";
@@ -22,7 +23,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pyflakes
-  ];
+  ]
+  ++ lib.optional (pythonOlder "3.11") tomli;
 
   nativeCheckInputs = [
     pytestCheckHook

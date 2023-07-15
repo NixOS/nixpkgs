@@ -17,7 +17,7 @@ let
       # If the new path is a prefix to some existing path, we need to filter it out
       filteredPaths = lib.filter (p: !lib.hasPrefix (builtins.toString newPath) (builtins.toString p)) merged;
       # If a prefix of the new path is already in the list, do not add it
-      filteredNew = if hasPrefixInList filteredPaths newPath then [] else [ newPath ];
+      filteredNew = lib.optional (!hasPrefixInList filteredPaths newPath) newPath;
     in filteredPaths ++ filteredNew) [];
 
   defaultServiceConfig = {
@@ -320,6 +320,7 @@ in
         ProtectHome = false;
         RestrictAddressFamilies = [ "AF_UNIX" ];
         TemporaryFileSystem = "/:ro";
+        Restart = "on-failure";
       };
       environment.RUST_LOG = "info";
     };

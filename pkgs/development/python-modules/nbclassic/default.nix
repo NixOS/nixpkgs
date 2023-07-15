@@ -70,7 +70,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Jupyter lab environment notebook server extension";
-    homepage = "https://github.com/jupyterlab/nbclassic";
+    homepage = "https://github.com/jupyter/nbclassic";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ elohmeier ];
   };

@@ -1,10 +1,13 @@
-{ lib, version, buildPlatform, hostPlatform, targetPlatform
+{ lib
+, stdenv
+, version, buildPlatform, hostPlatform, targetPlatform
 , gnat-bootstrap ? null
 , langAda ? false
 , langJava ? false
 , langJit ? false
 , langGo
-, crossStageStatic
+, withoutTargetLibc
+, enableShared
 , enableMultilib
 }:
 
@@ -69,7 +72,7 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 # This fix would not be necessary if ANY of the above were false:
 #  - If Nix used native headers for each different MacOS version, aligned_alloc
 #    would be in the headers on Catalina.
-#  - If Nix used the same libary binaries for each MacOS version, aligned_alloc
+#  - If Nix used the same library binaries for each MacOS version, aligned_alloc
 #    would not be in the library binaries.
 #  - If Catalina did not include aligned_alloc, this wouldn't be a problem.
 #  - If the configure scripts looked for header presence as well as
@@ -105,9 +108,20 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 # gcc->clang "cross"-compilation manages to evade it: there
 # hostPlatform != targetPlatform, hostPlatform.config == targetPlatform.config.
 # We explicitly inhibit libc headers use in this case as well.
-+ lib.optionalString (targetPlatform != hostPlatform && crossStageStatic) ''
++ lib.optionalString (targetPlatform != hostPlatform && withoutTargetLibc) ''
   export inhibit_libc=true
 ''
+
+# Trick to build a gcc that is capable of emitting shared libraries *without* having the
+# targetPlatform libc available beforehand.  Taken from:
+#   https://web.archive.org/web/20170222224855/http://frank.harvard.edu/~coldwell/toolchain/
+#   https://web.archive.org/web/20170224235700/http://frank.harvard.edu/~coldwell/toolchain/t-linux.diff
++ lib.optionalString (targetPlatform != hostPlatform && withoutTargetLibc && enableShared)
+  (lib.optionalString (!stdenv.targetPlatform.isPower) ''
+    echo 'libgcc.a: crti.o crtn.o' >> libgcc/Makefile.in
+  '' + ''
+    echo 'SHLIB_LC=' >> libgcc/Makefile.in
+  '')
 
 + lib.optionalString (!enableMultilib && hostPlatform.is64bit && !hostPlatform.isMips64n32) ''
   export linkLib64toLib=1

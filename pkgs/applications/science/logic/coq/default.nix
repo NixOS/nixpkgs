@@ -54,6 +54,7 @@ let
    "8.16.0".sha256   = "sha256-3V6kL9j2rn5FHBxq1mtmWWTZS9X5cAyvtUsS6DaM+is=";
    "8.16.1".sha256   = "sha256-n7830+zfZeyYHEOGdUo57bH6bb2/SZs8zv8xJhV+iAc=";
    "8.17.0".sha256   = "sha256-TGwm7S6+vkeZ8cidvp8pkiAd9tk008jvvPvYgfEOXhM=";
+   "8.17.1".sha256   = "sha256-x+RwkbxMg9aR0L3WSCtpIz8jwA5cJA4tXAtHMZb20y4=";
   };
   releaseRev = v: "V${v}";
   fetched = import ../../../../build-support/coq/meta-fetch/default.nix
@@ -79,7 +80,7 @@ let
       { case = range "8.5" "8.6";   out = ocamlPackages_4_05; }
     ] ocamlPackages_4_14;
   ocamlNativeBuildInputs = with ocamlPackages; [ ocaml findlib ]
-    ++ optional (coqAtLeast "8.14") dune_2;
+    ++ optional (coqAtLeast "8.14") dune_3;
   ocamlPropagatedBuildInputs = [ ]
     ++ optional (!coqAtLeast "8.10") ocamlPackages.camlp5
     ++ optional (!coqAtLeast "8.13") ocamlPackages.num

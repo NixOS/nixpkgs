@@ -13,19 +13,20 @@
 , wrapQtAppsHook
 , botan2
 , pkg-config
+, nixosTests
 }:
 
 let
   pname = "qownnotes";
   appname = "QOwnNotes";
-  version = "23.6.0";
+  version = "23.7.2";
 in
 stdenv.mkDerivation {
   inherit pname appname version;
 
   src = fetchurl {
-    url = "https://download.tuxfamily.org/${pname}/src/${pname}-${version}.tar.xz";
-    hash = "sha256-g8sWnc0b+DciEu6ZtQsPTUUfcudWKCNSQc6K67tLsYg=";
+    url = "https://github.com/pbek/QOwnNotes/releases/download/v${version}/qownnotes-${version}.tar.xz";
+    hash = "sha256-DjVLfP6tUMUFJHZyBIMivqbjiqgQecW78YbLobOnXnM=";
   };
 
   nativeBuildInputs = [
@@ -59,6 +60,9 @@ stdenv.mkDerivation {
     mv $out/bin/${appname}.app $out/Applications
     makeWrapper $out/Applications/${appname}.app/Contents/MacOS/${appname} $out/bin/${pname}
   '';
+
+  # Tests QOwnNotes using the NixOS module by launching xterm:
+  passthru.tests.basic-nixos-module-functionality = nixosTests.qownnotes;
 
   meta = with lib; {
     description = "Plain-text file notepad and todo-list manager with markdown support and Nextcloud/ownCloud integration";

@@ -17,7 +17,7 @@ showSyntax() {
 
 # Parse the command line.
 origArgs=("$@")
-copyClosureFlags=()
+copyFlags=()
 extraBuildFlags=()
 lockFlags=()
 flakeFlags=(--extra-experimental-features 'nix-command flakes')
@@ -74,10 +74,10 @@ while [ "$#" -gt 0 ]; do
         upgrade=1
         upgrade_all=1
         ;;
-      --use-substitutes|-s)
-        copyClosureFlags+=("$i")
+      --use-substitutes|--substitute-on-destination|-s)
+        copyFlags+=("-s")
         ;;
-      -I|--max-jobs|-j|--cores|--builders)
+      -I|--max-jobs|-j|--cores|--builders|--log-format)
         j="$1"; shift 1
         extraBuildFlags+=("$i" "$j")
         ;;
@@ -192,12 +192,12 @@ copyToTarget() {
     if ! [ "$targetHost" = "$buildHost" ]; then
         if [ -z "$targetHost" ]; then
             logVerbose "Running nix-copy-closure with these NIX_SSHOPTS: $SSHOPTS"
-            NIX_SSHOPTS=$SSHOPTS runCmd nix-copy-closure "${copyClosureFlags[@]}" --from "$buildHost" "$1"
+            NIX_SSHOPTS=$SSHOPTS runCmd nix-copy-closure "${copyFlags[@]}" --from "$buildHost" "$1"
         elif [ -z "$buildHost" ]; then
             logVerbose "Running nix-copy-closure with these NIX_SSHOPTS: $SSHOPTS"
-            NIX_SSHOPTS=$SSHOPTS runCmd nix-copy-closure "${copyClosureFlags[@]}" --to "$targetHost" "$1"
+            NIX_SSHOPTS=$SSHOPTS runCmd nix-copy-closure "${copyFlags[@]}" --to "$targetHost" "$1"
         else
-            buildHostCmd nix-copy-closure "${copyClosureFlags[@]}" --to "$targetHost" "$1"
+            buildHostCmd nix-copy-closure "${copyFlags[@]}" --to "$targetHost" "$1"
         fi
     fi
 }
@@ -292,7 +292,7 @@ nixFlakeBuild() {
         drv="$(runCmd nix "${flakeFlags[@]}" eval --raw "${attr}.drvPath" "${evalArgs[@]}" "${extraBuildFlags[@]}")"
         if [ -a "$drv" ]; then
             logVerbose "Running nix with these NIX_SSHOPTS: $SSHOPTS"
-            NIX_SSHOPTS=$SSHOPTS runCmd nix "${flakeFlags[@]}" copy --derivation --to "ssh://$buildHost" "$drv"
+            NIX_SSHOPTS=$SSHOPTS runCmd nix "${flakeFlags[@]}" copy "${copyFlags[@]}" --derivation --to "ssh://$buildHost" "$drv"
             buildHostCmd nix-store -r "$drv" "${buildArgs[@]}"
         else
             log "nix eval failed"
@@ -480,7 +480,7 @@ if [[ -n $buildNix && -z $flake ]]; then
     if [ -a "$nixDrv" ]; then
         nix-store -r "$nixDrv"'!'"out" --add-root "$tmpDir/nix" --indirect >/dev/null
         if [ -n "$buildHost" ]; then
-            nix-copy-closure "${copyClosureFlags[@]}" --to "$buildHost" "$nixDrv"
+            nix-copy-closure "${copyFlags[@]}" --to "$buildHost" "$nixDrv"
             # The nix build produces multiple outputs, we add them all to the remote path
             for p in $(buildHostCmd nix-store -r "$(readlink "$nixDrv")" "${buildArgs[@]}"); do
                 remoteNix="$remoteNix${remoteNix:+:}$p/bin"

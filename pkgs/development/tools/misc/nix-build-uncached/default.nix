@@ -22,6 +22,5 @@ buildGoModule rec {
     license = licenses.mit;
     homepage = "https://github.com/Mic92/nix-build-uncached";
     maintainers = [ maintainers.mic92 ];
-    platforms = platforms.unix;
   };
 }

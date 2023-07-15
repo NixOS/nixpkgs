@@ -77,13 +77,12 @@ stdenv.mkDerivation rec {
   postPatch = lib.optionalString (!stable) ''
     substituteInPlace cmake/KiCadVersion.cmake \
       --replace "unknown" "${builtins.substring 0 10 src.rev}"
+
+    substituteInPlace cmake/CreateGitVersionHeader.cmake \
+      --replace "0000000000000000000000000000000000000000" "${src.rev}"
   '';
 
   makeFlags = optionals (debug) [ "CFLAGS+=-Og" "CFLAGS+=-ggdb" ];
-
-  # some ngspice tests attempt to write to $HOME/.cache/
-  XDG_CACHE_HOME = "$TMP";
-  # failing tests still attempt to create $HOME though
 
   cmakeFlags = [
     "-DKICAD_USE_EGL=ON"
@@ -165,9 +164,23 @@ stdenv.mkDerivation rec {
   ++ optional (withNgspice) libngspice
   ++ optional (debug) valgrind;
 
+  # some ngspice tests attempt to write to $HOME/.cache/
+  # this could be and was resolved with XDG_CACHE_HOME = "$TMP";
+  # but failing tests still attempt to create $HOME
+  # and the newer CLI tests seem to also use $HOME...
+  HOME = "$TMP";
+
   # debug builds fail all but the python test
   doInstallCheck = !(debug);
   installCheckTarget = "test";
+
+  pythonForTests = python.withPackages(ps: with ps; [
+    numpy
+    pytest
+    cairosvg
+    pytest-image-diff
+  ]);
+  nativeInstallCheckInputs = optional (!stable) pythonForTests;
 
   dontStrip = debug;
 

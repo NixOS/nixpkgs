@@ -23,8 +23,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    # "hypothesis" indirectly depends on chardet to build its documentation.
-    (hypothesis.override { enableDocumentation = false; })
+    hypothesis
     pytestCheckHook
   ];
 

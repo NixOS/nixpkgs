@@ -512,9 +512,10 @@ when building the bindings and are therefore added as `buildInputs`.
 
 ```nix
 { lib
-, pkgs
 , buildPythonPackage
 , fetchPypi
+, libxml2
+, libxslt
 }:
 
 buildPythonPackage rec {
@@ -528,8 +529,8 @@ buildPythonPackage rec {
   };
 
   buildInputs = [
-    pkgs.libxml2
-    pkgs.libxslt
+    libxml2
+    libxslt
   ];
 
   meta = with lib; {
@@ -554,11 +555,13 @@ therefore we have to set `LDFLAGS` and `CFLAGS`.
 
 ```nix
 { lib
-, pkgs
 , buildPythonPackage
 , fetchPypi
 
 # dependencies
+, fftw
+, fftwFloat
+, fftwLongDouble
 , numpy
 , scipy
 }:
@@ -574,9 +577,9 @@ buildPythonPackage rec {
   };
 
   buildInputs = [
-    pkgs.fftw
-    pkgs.fftwFloat
-    pkgs.fftwLongDouble
+    fftw
+    fftwFloat
+    fftwLongDouble
   ];
 
   propagatedBuildInputs = [
@@ -585,8 +588,8 @@ buildPythonPackage rec {
   ];
 
   preConfigure = ''
-    export LDFLAGS="-L${pkgs.fftw.dev}/lib -L${pkgs.fftwFloat.out}/lib -L${pkgs.fftwLongDouble.out}/lib"
-    export CFLAGS="-I${pkgs.fftw.dev}/include -I${pkgs.fftwFloat.dev}/include -I${pkgs.fftwLongDouble.dev}/include"
+    export LDFLAGS="-L${fftw.dev}/lib -L${fftwFloat.out}/lib -L${fftwLongDouble.out}/lib"
+    export CFLAGS="-I${fftw.dev}/include -I${fftwFloat.dev}/include -I${fftwLongDouble.dev}/include"
   '';
 
   # Tests cannot import pyfftw. pyfftw works fine though.
@@ -995,7 +998,7 @@ and in this case the `python3` interpreter is automatically used.
 ### Interpreters {#interpreters}
 
 Versions 2.7, 3.8, 3.9, 3.10 and 3.11 of the CPython interpreter are available
-as respectively `python27`, python38`, `python39`, `python310` and `python311`.
+as respectively `python27`, `python38`, `python39`, `python310` and `python311`.
 The aliases `python2` and `python3` correspond to respectively `python27` and
 `python310`. The attribute `python` maps to `python2`. The PyPy interpreters
 compatible with Python 2.7 and 3 are available as `pypy27` and `pypy3`, with

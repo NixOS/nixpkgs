@@ -30,6 +30,7 @@
     ] ++ lib.optionals stdenv.hostPlatform.isx86 [
       "iris" # new Intel, could work on non-x86 with PCIe cards, but doesn't build as of 22.3.4
       "crocus" # Intel legacy, x86 only
+      "i915" # Intel extra legacy, x86 only
     ]
   else [ "auto" ]
 , vulkanDrivers ?
@@ -85,8 +86,8 @@
 */
 
 let
-  version = "23.1.1";
-  hash = "sha256-omeQMe1bc7KcTwQqxk2W+DsM/khYYX3jLi78GWxlOkA=";
+  version = "23.1.3";
+  hash = "sha256-L21zgbwQ+9LWJjrRAieFuLURBGwakEFi+PfaGO6ortk=";
 
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
@@ -210,6 +211,8 @@ self = stdenv.mkDerivation {
     # Rusticl, new OpenCL frontend
     "-Dgallium-rusticl=true" "-Drust_std=2021"
     "-Dclang-libdir=${llvmPackages.clang-unwrapped.lib}/lib"
+  ]  ++ lib.optionals (!withValgrind) [
+    "-Dvalgrind=disabled"
   ] ++ lib.optional enablePatentEncumberedCodecs
     "-Dvideo-codecs=h264dec,h264enc,h265dec,h265enc,vc1dec"
   ++ lib.optional (vulkanLayers != []) "-D vulkan-layers=${builtins.concatStringsSep "," vulkanLayers}";

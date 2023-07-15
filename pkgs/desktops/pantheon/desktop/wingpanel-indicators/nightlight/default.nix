@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-nightlight";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-oZUPveNlm9p8gKeDGopfhu1rBbydLaQSlkPs6+WHrUo=";
+    sha256 = "sha256-2ez7sDCA3cnSNaT3Oe0Mm2MbtSxmkRF/hCklThtHuq0=";
   };
 
   nativeBuildInputs = [

@@ -1,6 +1,7 @@
 { lib
 , python3
 , fetchFromGitHub
+, fetchPypi
 }:
 
 let
@@ -9,37 +10,56 @@ let
       poetry = self.callPackage ./unwrapped.nix { };
 
       # version overrides required by poetry and its plugins
-      platformdirs = super.platformdirs.overridePythonAttrs (old: rec {
-        version = "2.6.2";
+      cachecontrol = super.cachecontrol.overridePythonAttrs (old: rec {
+        version = "0.12.14";
+        format = "setuptools";
         src = fetchFromGitHub {
-          owner = "platformdirs";
-          repo = "platformdirs";
-          rev = "refs/tags/${version}";
-          hash = "sha256-yGpDAwn8Kt6vF2K2zbAs8+fowhYQmvsm/87WJofuhME=";
+          owner = "ionrock";
+          repo = "cachecontrol";
+          rev = "v${version}";
+          hash = "sha256-BuBaKP7OAYoT+SPVhtE6l9U/KmN21OKTL6poV5a6+0c=";
         };
-        SETUPTOOLS_SCM_PRETEND_VERSION = version;
+        nativeCheckInputs = old.nativeCheckInputs ++ [
+          self.lockfile
+        ];
       });
       poetry-core = super.poetry-core.overridePythonAttrs (old: rec {
-        version = "1.5.2";
+        version = "1.6.1";
         src = fetchFromGitHub {
           owner = "python-poetry";
           repo = "poetry-core";
           rev = version;
-          hash = "sha256-GpZ0vMByHTu5kl7KrrFFK2aZMmkNO7xOEc8NI2H9k34=";
+          hash = "sha256-Gc22Y2T4uO39jiOqEUFeOfnVCbknuDjmzFPZgk2eY74=";
         };
+        patches = [ ];
+        nativeCheckInputs = old.nativeCheckInputs ++ [
+          self.tomli-w
+        ];
       });
-    };
+      virtualenv = super.virtualenv.overridePythonAttrs (old: rec {
+        version = "20.23.1";
+        src = fetchPypi {
+          inherit (old) pname;
+          inherit version;
+          hash = "sha256-j/GaOMECHHQhSO3E+By0PX+MaBbS7eKrcq9bhMdJreE=";
+        };
+        nativeCheckInputs = old.nativeCheckInputs ++ [
+          self.time-machine
+        ];
+      });
+    } // (plugins self);
   };
 
-  plugins = with python.pkgs; {
+  plugins = ps: with ps; {
     poetry-audit-plugin = callPackage ./plugins/poetry-audit-plugin.nix { };
+    poetry-plugin-export = callPackage ./plugins/poetry-plugin-export.nix { };
     poetry-plugin-up = callPackage ./plugins/poetry-plugin-up.nix { };
   };
 
   # selector is a function mapping pythonPackages to a list of plugins
   # e.g. poetry.withPlugins (ps: with ps; [ poetry-plugin-up ])
   withPlugins = selector: let
-    selected = selector plugins;
+    selected = selector (plugins python.pkgs);
   in python.pkgs.toPythonApplication (python.pkgs.poetry.overridePythonAttrs (old: {
     propagatedBuildInputs = old.propagatedBuildInputs ++ selected;
 
@@ -52,8 +72,9 @@ let
       rm $out/nix-support/propagated-build-inputs
     '';
 
-    passthru = rec {
-      inherit plugins withPlugins python;
+    passthru = {
+      plugins = plugins python.pkgs;
+      inherit withPlugins python;
     };
   }));
 in withPlugins (ps: [ ])

@@ -51,14 +51,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ventoy";
-  version = "1.0.91";
+  version = "1.0.93";
 
-  src = let
-    inherit (finalAttrs) version;
-  in fetchurl {
-    url = "https://github.com/ventoy/Ventoy/releases/download/v${version}/ventoy-${version}-linux.tar.gz";
-    hash = "sha256-9vsFdOxsW1Cs06gVPvQusju2+wp4PpBwbHZUugwb3co=";
-  };
+  src =
+    let
+      inherit (finalAttrs) version;
+    in
+    fetchurl {
+      url = "https://github.com/ventoy/Ventoy/releases/download/v${version}/ventoy-${version}-linux.tar.gz";
+      hash = "sha256-oz5IVq0QsPX90N4EBold2QQ8/CY4XF+KcQ41L+TR4iI=";
+    };
 
   patches = [
     ./000-nixos-sanitization.patch
@@ -112,7 +114,8 @@ stdenv.mkDerivation (finalAttrs: {
       terminal = false;
       categories = [ "Utility" ];
       startupNotify = true;
-    })];
+    })
+  ];
 
   dontConfigure = true;
   dontBuild = true;

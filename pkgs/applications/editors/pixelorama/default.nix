@@ -7,15 +7,15 @@ let
       else "Linux/X11 32-bit"
     else if stdenv.isDarwin then "Mac OSX"
     else throw "unsupported platform";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "pixelorama";
-  version = "0.10.3";
+  version = "0.11";
 
   src = fetchFromGitHub {
     owner = "Orama-Interactive";
     repo = "Pixelorama";
-    rev = "v${version}";
-    sha256 = "sha256-RFE7K8NMl0COzFEhUqWhhYd5MGBsCDJf0T5daPu/4DI=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-r4iQJBxXzIbQ7n19Ah6szuIfALmuKlHKcvKsxEzOttk=";
   };
 
   nativeBuildInputs = [
@@ -56,4 +56,4 @@ in stdenv.mkDerivation rec {
     platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ felschr ];
   };
-}
+})

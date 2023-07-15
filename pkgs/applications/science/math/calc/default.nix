@@ -4,7 +4,7 @@
 , makeWrapper
 , ncurses
 , readline
-, util-linux
+, unixtools
 , enableReadline ? true
 }:
 
@@ -28,12 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
+    unixtools.col
   ];
 
-  buildInputs = [
-    util-linux
-  ]
-  ++ lib.optionals enableReadline [
+  buildInputs = lib.optionals enableReadline [
     ncurses
     readline
   ];

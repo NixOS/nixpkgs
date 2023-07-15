@@ -207,11 +207,11 @@ in {
     package = mkOption {
       type = types.package;
       description = lib.mdDoc "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud25" "nextcloud26" ];
+      relatedPackages = [ "nextcloud25" "nextcloud26" "nextcloud27" ];
     };
     phpPackage = mkOption {
       type = types.package;
-      relatedPackages = [ "php80" "php81" ];
+      relatedPackages = [ "php81" "php82" ];
       defaultText = "pkgs.php";
       description = lib.mdDoc ''
         PHP package to use for Nextcloud.
@@ -381,7 +381,8 @@ in {
         type = types.str;
         description = lib.mdDoc ''
           The full path to a file that contains the admin's password. Must be
-          readable by user `nextcloud`.
+          readable by user `nextcloud`. The password is set only in the initial
+          setup of nextcloud by the systemd `nextcloud-setup.service`.
         '';
       };
 
@@ -688,7 +689,7 @@ in {
 
   config = mkIf cfg.enable (mkMerge [
     { warnings = let
-        latest = 26;
+        latest = 27;
         upgradeWarning = major: nixos:
           ''
             A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
@@ -707,10 +708,9 @@ in {
           Using config.services.nextcloud.poolConfig is deprecated and will become unsupported in a future release.
           Please migrate your configuration to config.services.nextcloud.poolSettings.
         '')
-        ++ (optional (versionOlder cfg.package.version "23") (upgradeWarning 22 "22.05"))
-        ++ (optional (versionOlder cfg.package.version "24") (upgradeWarning 23 "22.05"))
         ++ (optional (versionOlder cfg.package.version "25") (upgradeWarning 24 "22.11"))
         ++ (optional (versionOlder cfg.package.version "26") (upgradeWarning 25 "23.05"))
+        ++ (optional (versionOlder cfg.package.version "27") (upgradeWarning 26 "23.11"))
         ++ (optional cfg.enableBrokenCiphersForSSE ''
           You're using PHP's openssl extension built against OpenSSL 1.1 for Nextcloud.
           This is only necessary if you're using Nextcloud's server-side encryption.
@@ -743,7 +743,8 @@ in {
             ''
           else if versionOlder stateVersion "22.11" then nextcloud24
           else if versionOlder stateVersion "23.05" then nextcloud25
-          else nextcloud26
+          else if versionOlder stateVersion "23.11" then nextcloud26
+          else nextcloud27
         );
 
       services.nextcloud.phpPackage =
@@ -1064,10 +1065,8 @@ in {
       services.nextcloud = lib.mkIf cfg.configureRedis {
         caching.redis = true;
         extraOptions = {
-          memcache = {
-            distributed = ''\OC\Memcache\Redis'';
-            locking = ''\OC\Memcache\Redis'';
-          };
+          "memcache.distributed" = ''\OC\Memcache\Redis'';
+          "memcache.locking" = ''\OC\Memcache\Redis'';
           redis = {
             host = config.services.redis.servers.nextcloud.unixSocket;
             port = 0;

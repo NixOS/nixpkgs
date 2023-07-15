@@ -5,13 +5,13 @@
 
 rustPlatform.buildRustPackage {
   pname = "egglog";
-  version = "unstable-2023-05-22";
+  version = "unstable-2023-07-11";
 
   src = fetchFromGitHub {
     owner = "egraphs-good";
     repo = "egglog";
-    rev = "5242b50051c339d55009860d4dff80125fdcedfd";
-    hash = "sha256-N04CfITLEr4D4s6bUi0eRQdAVy6Ztq3Ml0365of7i0U=";
+    rev = "14a6fc6060c09541728ae460e0a92909fabf508f";
+    hash = "sha256-1osdjd86xZHUAwvPBNxWYlkX6tKt+jI05AEVYr77YSQ=";
   };
 
   cargoLock = {
@@ -27,6 +27,5 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/egraphs-good/egglog";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
-    mainProgram = "egg-smol";
   };
 }

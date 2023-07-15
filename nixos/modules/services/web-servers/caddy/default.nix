@@ -14,7 +14,7 @@ let
     in
       ''
         ${hostOpts.hostName} ${concatStringsSep " " hostOpts.serverAliases} {
-          bind ${concatStringsSep " " hostOpts.listenAddresses}
+          ${optionalString (hostOpts.listenAddresses != [ ]) "bind ${concatStringsSep " " hostOpts.listenAddresses}"}
           ${optionalString (hostOpts.useACMEHost != null) "tls ${sslCertDir}/cert.pem ${sslCertDir}/key.pem"}
           log {
             ${hostOpts.logFormat}
@@ -40,6 +40,10 @@ let
       '';
     in
       "${if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform then Caddyfile-formatted else Caddyfile}/Caddyfile";
+
+  etcConfigFile = "caddy/caddy_config";
+
+  configPath = "/etc/${etcConfigFile}";
 
   acmeHosts = unique (catAttrs "useACMEHost" acmeVHosts);
 
@@ -155,11 +159,16 @@ in
       description = lib.mdDoc ''
         Override the configuration file used by Caddy. By default,
         NixOS generates one automatically.
+
+        The configuration file is exposed at {file}`${configPath}`.
       '';
     };
 
     adapter = mkOption {
-      default = null;
+      default = if (builtins.baseNameOf cfg.configFile) == "Caddyfile" then "caddyfile" else null;
+      defaultText = literalExpression ''
+        if (builtins.baseNameOf cfg.configFile) == "Caddyfile" then "caddyfile" else null
+      '';
       example = literalExpression "nginx";
       type = with types; nullOr str;
       description = lib.mdDoc ''
@@ -245,15 +254,23 @@ in
     };
 
     acmeCA = mkOption {
-      default = "https://acme-v02.api.letsencrypt.org/directory";
-      example = "https://acme-staging-v02.api.letsencrypt.org/directory";
+      default = null;
+      example = "https://acme-v02.api.letsencrypt.org/directory";
       type = with types; nullOr str;
       description = lib.mdDoc ''
-        The URL to the ACME CA's directory. It is strongly recommended to set
-        this to Let's Encrypt's staging endpoint for testing or development.
+        ::: {.note}
+        Sets the [`acme_ca` option](https://caddyserver.com/docs/caddyfile/options#acme-ca)
+        in the global options block of the resulting Caddyfile.
+        :::
 
-        Set it to `null` if you want to write a more
-        fine-grained configuration manually.
+        The URL to the ACME CA's directory. It is strongly recommended to set
+        this to `https://acme-staging-v02.api.letsencrypt.org/directory` for
+        Let's Encrypt's [staging endpoint](https://letsencrypt.org/docs/staging-environment/)
+        while testing or in development.
+
+        Value `null` should be prefered for production setups,
+        as it omits the `acme_ca` option to enable
+        [automatic issuer fallback](https://caddyserver.com/docs/automatic-https#issuer-fallback).
       '';
     };
 
@@ -267,6 +284,21 @@ in
       '';
     };
 
+    enableReload = mkOption {
+      default = true;
+      type = types.bool;
+      description = lib.mdDoc ''
+        Reload Caddy instead of restarting it when configuration file changes.
+
+        Note that enabling this option requires the [admin API](https://caddyserver.com/docs/caddyfile/options#admin)
+        to not be turned off.
+
+        If you enable this option, consider setting [`grace_period`](https://caddyserver.com/docs/caddyfile/options#grace-period)
+        to a non-infinite value in {option}`services.caddy.globalConfig`
+        to prevent Caddy waiting for active connections to finish,
+        which could delay the reload essentially indefinitely.
+      '';
+    };
   };
 
   # implementation
@@ -303,13 +335,16 @@ in
       wantedBy = [ "multi-user.target" ];
       startLimitIntervalSec = 14400;
       startLimitBurst = 10;
+      reloadTriggers = optional cfg.enableReload cfg.configFile;
 
-      serviceConfig = {
+      serviceConfig = let
+        runOptions = ''--config ${configPath} ${optionalString (cfg.adapter != null) "--adapter ${cfg.adapter}"}'';
+      in {
         # https://www.freedesktop.org/software/systemd/man/systemd.service.html#ExecStart=
         # If the empty string is assigned to this option, the list of commands to start is reset, prior assignments of this option will have no effect.
-        ExecStart = [ "" ''${cfg.package}/bin/caddy run --config ${cfg.configFile} ${optionalString (cfg.adapter != null) "--adapter ${cfg.adapter}"} ${optionalString cfg.resume "--resume"}'' ];
-        ExecReload = [ "" ''${cfg.package}/bin/caddy reload --config ${cfg.configFile} ${optionalString (cfg.adapter != null) "--adapter ${cfg.adapter}"} --force'' ];
-        ExecStartPre = ''${cfg.package}/bin/caddy validate --config ${cfg.configFile} ${optionalString (cfg.adapter != null) "--adapter ${cfg.adapter}"}'';
+        ExecStart = [ "" ''${cfg.package}/bin/caddy run ${runOptions} ${optionalString cfg.resume "--resume"}'' ];
+        # Validating the configuration before applying it ensures we’ll get a proper error that will be reported when switching to the configuration
+        ExecReload = [ "" ''${cfg.package}/bin/caddy reload ${runOptions} --force'' ];
         User = cfg.user;
         Group = cfg.group;
         ReadWriteDirectories = cfg.dataDir;
@@ -345,5 +380,6 @@ in
       in
         listToAttrs certCfg;
 
+    environment.etc.${etcConfigFile}.source = cfg.configFile;
   };
 }

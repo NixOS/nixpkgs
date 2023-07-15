@@ -24,8 +24,9 @@ pkgs.runCommand "lib-path-tests" {
   export TEST_LIB=$PWD/lib
 
   echo "Running unit tests lib/path/tests/unit.nix"
-  nix-instantiate --eval lib/path/tests/unit.nix \
-    --argstr libpath "$TEST_LIB"
+  nix-instantiate --eval --show-trace \
+    --argstr libpath "$TEST_LIB" \
+    lib/path/tests/unit.nix
 
   echo "Running property tests lib/path/tests/prop.sh"
   bash lib/path/tests/prop.sh ${toString seed}

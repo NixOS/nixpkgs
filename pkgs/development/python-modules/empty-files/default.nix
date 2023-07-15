@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "empty-files";
-  version = "0.0.3";
+  version = "0.0.4";
 
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "EmptyFiles.Python";
-    rev = "v${version}";
-    hash = "sha256-K4rlVO1X1AWxYI3EqLsyQ5/Ist/jlwFrmOM4aMojtKU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-sXatMH2QEGxzDGszAoFXUoPzB00rYaQIasz93vsfyz8=";
   };
 
   propagatedBuildInputs = [

@@ -45,24 +45,39 @@ in Nixpkgs matches the one that generated from `texlive.tlpdb.xz`.
 
 ### Build packages locally and generate fix hashes
 
-To save disk space and prevent unnecessary rebuilds, texlive packages are built
-as fixed-output derivations whose hashes are contained in `fixedHashes.nix`.
+To prevent unnecessary rebuilds, texlive packages are built as fixed-output
+derivations whose hashes are contained in `fixed-hashes.nix`.
 
-Updating the list of fixed hashes requires a local build of *all* packages,
-which is a resource-intensive process:
-
+Updating the list of fixed hashes requires a local build of all new packages,
+which is a resource-intensive process. First build the hashes for the new
+packages. Consider tweaking the `-j` option to maximise core usage.
 
 ```bash
-# move fixedHashes away, otherwise build will fail on updated packages
-mv fixedHashes.nix fixedHashes-old.nix
-# start with empty fixedHashes
-echo '{}' > fixedHashes.nix
-
-nix-build ../../../../.. -Q --no-out-link -A texlive.scheme-full.pkgs | ./fixHashes.awk > ./fixedHashes-new.nix
-
-mv fixedHashes-new.nix fixedHashes.nix
+nix-build generate-fixed-hashes.nix -A newHashes -j 8
 ```
+
+Then build the Nix expression containing all the hashes, old and new. This step
+cannot be parallelized because it relies on 'import from derivation'.
+
+```bash
+nix-build generate-fixed-hashes.nix -A fixedHashesNix
+```
+
+Finally, copy the result to `fixed-hashes.nix`.
+
+**Warning.** The expression `fixedHashesNix` reuses the *previous* fixed hashes
+when possible. This is based on two assumptions: that `.tar.xz` archives with
+the same names remain identical in time (which is the intended behaviour of
+CTAN and the various mirrors) and that the build recipe continues to produce
+the same output. Should those assumptions not hold, remove the previous fixed
+hashes for the relevant package, or for all packages.
 
 ### Commit changes
 
-Commit the updated `tlpdb.nix` and `fixedHashes.nix` to the repository.
+Commit the updated `tlpdb.nix` and `fixed-hashes.nix` to the repository with
+a message like
+
+> texlive: 2022-final -> 2023.20230401
+
+Please make sure to follow the [CONTRIBUTING](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md)
+guidelines.

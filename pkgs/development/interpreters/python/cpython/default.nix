@@ -109,7 +109,7 @@ let
     pythonOnBuildForHost = override pkgsBuildHost.${pythonAttr};
     pythonOnBuildForTarget = override pkgsBuildTarget.${pythonAttr};
     pythonOnHostForHost = override pkgsHostHost.${pythonAttr};
-    pythonOnTargetForTarget = if lib.hasAttr pythonAttr pkgsTargetTarget then (override pkgsTargetTarget.${pythonAttr}) else {};
+    pythonOnTargetForTarget = lib.optionalAttrs (lib.hasAttr pythonAttr pkgsTargetTarget) (override pkgsTargetTarget.${pythonAttr});
   };
 
   version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";
@@ -377,6 +377,9 @@ in with passthru; stdenv.mkDerivation {
   '' + optionalString stdenv.isDarwin ''
     # Override the auto-detection in setup.py, which assumes a universal build
     export PYTHON_DECIMAL_WITH_MACHINE=${if stdenv.isAarch64 then "uint128" else "x64"}
+  '' + optionalString (stdenv.isDarwin && x11Support && pythonAtLeast "3.11") ''
+    export TCLTK_LIBS="-L${tcl}/lib -L${tk}/lib -l${tcl.libPrefix} -l${tk.libPrefix}"
+    export TCLTK_CFLAGS="-I${tcl}/include -I${tk}/include"
   '' + optionalString (isPy3k && pythonOlder "3.7") ''
     # Determinism: The interpreter is patched to write null timestamps when compiling Python files
     #   so Python doesn't try to update the bytecode when seeing frozen timestamps in Nix's store.

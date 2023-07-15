@@ -102,6 +102,10 @@ let
       mv share/teams $out/opt/
       mv share $out/share
 
+      mkdir -p $out/share/icons/hicolor/512x512/apps
+      mv $out/share/pixmaps/teams.png $out/share/icons/hicolor/512x512/apps
+      rmdir $out/share/pixmaps
+
       substituteInPlace $out/share/applications/teams.desktop \
         --replace /usr/bin/ ""
 

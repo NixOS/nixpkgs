@@ -37,6 +37,10 @@ rec {
     config = "armv6l-unknown-linux-gnueabihf";
   } // platforms.raspberrypi;
 
+  bluefield2 = {
+    config = "aarch64-unknown-linux-gnu";
+  } // platforms.bluefield2;
+
   remarkable1 = {
     config = "armv7l-unknown-linux-gnueabihf";
   } // platforms.zero-gravitas;
@@ -126,6 +130,16 @@ rec {
 
   riscv32-embedded = {
     config = "riscv32-none-elf";
+    libc = "newlib";
+  };
+
+  mips64-embedded = {
+    config = "mips64-none-elf";
+    libc = "newlib";
+  };
+
+  mips-embedded = {
+    config = "mips-none-elf";
     libc = "newlib";
   };
 

@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, SDL2, eigen, libepoxy, fftw, gtest, pkg-config }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, SDL2
+, fftw
+, gtest
+, darwin
+, eigen
+, libepoxy
+}:
 
 stdenv.mkDerivation rec {
   pname = "movit";
@@ -13,10 +23,27 @@ stdenv.mkDerivation rec {
 
   GTEST_DIR = "${gtest.src}/googletest";
 
-  propagatedBuildInputs = [ eigen libepoxy ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ SDL2 fftw gtest ];
+  buildInputs = [
+    SDL2
+    fftw
+    gtest
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.OpenGL
+    darwin.libobjc
+  ];
+
+  propagatedBuildInputs = [
+    eigen
+    libepoxy
+  ];
+
+  env = lib.optionalAttrs stdenv.isDarwin {
+    NIX_LDFLAGS = "-framework OpenGL";
+  };
 
   enableParallelBuilding = true;
 
@@ -25,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage = "https://movit.sesse.net";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

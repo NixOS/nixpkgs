@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, fetchpatch
-, autoreconfHook, bison, glm, flex
+, autoreconfHook, bison, glm, flex, wrapQtAppsHook, cmake
 , freeglut, ghostscriptX, imagemagick, fftw
 , boehmgc, libGLU, libGL, mesa, ncurses, readline, gsl, libsigsegv
-, python3Packages
+, python3, qtbase, qtsvg, boost
 , zlib, perl, curl
 , texLive, texinfo
 , darwin
@@ -25,17 +25,17 @@ stdenv.mkDerivation rec {
     flex
     bison
     texinfo
+    wrapQtAppsHook
+    cmake
   ];
 
   buildInputs = [
     ghostscriptX imagemagick fftw
     boehmgc ncurses readline gsl libsigsegv
-    zlib perl curl
+    zlib perl curl qtbase qtsvg boost
     texLive
-  ] ++ (with python3Packages; [
-    python
-    pyqt5
-  ]);
+    (python3.withPackages (ps: with ps; [ cson numpy pyqt5 ]))
+  ];
 
   propagatedBuildInputs = [
     glm
@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     OpenGL GLUT Cocoa
   ]);
+
+  dontWrapQtApps = true;
 
   preConfigure = ''
     HOME=$TMP
@@ -57,6 +59,9 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-I${boehmgc.dev}/include/gc";
 
   postInstall = ''
+    rm "$out"/bin/xasy
+    makeQtWrapper "$out"/share/asymptote/GUI/xasy.py "$out"/bin/xasy --prefix PATH : "$out"/bin
+
     mv $out/share/info/asymptote/*.info $out/share/info/
     sed -i -e 's|(asymptote/asymptote)|(asymptote)|' $out/share/info/asymptote.info
     rmdir $out/share/info/asymptote
@@ -65,6 +70,8 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/texmf
     install -Dt $out/share/emacs/site-lisp/${pname} $out/share/asymptote/*.el
   '';
+
+  dontUseCmakeConfigure = true;
 
   enableParallelBuilding = true;
   # Missing install depends:

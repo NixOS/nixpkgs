@@ -5,7 +5,7 @@
 , doxygen
 , graphviz
 , makeWrapper
-, boost17x
+, boost179
 , SDL2
 , python3
 , freetype
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    (boost17x.override { enablePython = true; python = python3; })
+    (boost179.override { enablePython = true; python = python3; })
     (python3.withPackages (p: with p; [ pycodestyle ]))
     SDL2
     freetype

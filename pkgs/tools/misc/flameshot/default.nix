@@ -6,6 +6,7 @@
 , qttools
 , qtsvg
 , nix-update-script
+, fetchpatch
 }:
 
 mkDerivation rec {
@@ -18,6 +19,15 @@ mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-omyMN8d+g1uYsEw41KmpJCwOmVWLokEfbW19vIvG79w=";
   };
+
+  patches = [
+    # https://github.com/flameshot-org/flameshot/pull/3166
+    (fetchpatch {
+      name = "10-fix-wayland.patch";
+      url = "https://github.com/flameshot-org/flameshot/commit/5fea9144501f7024344d6f29c480b000b2dcd5a6.patch";
+      sha256 = "sha256-SnjVbFMDKD070vR4vGYrwLw6scZAFaQA4b+MbI+0W9E=";
+    })
+  ];
 
   passthru = {
     updateScript = nix-update-script { };

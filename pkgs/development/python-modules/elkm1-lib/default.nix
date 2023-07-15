@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "elkm1-lib";
-  version = "2.2.3";
+  version = "2.2.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "gwww";
     repo = "elkm1";
     rev = "refs/tags/${version}";
-    hash = "sha256-d676gLABChQn67E4q4koxwBRmurBWuFxSo/u+W5F8CI=";
+    hash = "sha256-8Mzxaww6a+vi3i8H4W9jRgY+5mpTGaJbNBXPDPn8sl4=";
   };
 
   nativeBuildInputs = [

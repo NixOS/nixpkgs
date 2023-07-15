@@ -492,6 +492,16 @@ let
         };
       };
     };
+    "laravel/socialite" = {
+      targetDir = "";
+      src = composerEnv.buildZipPackage {
+        name = "laravel-socialite-a14a177f2cc71d8add71e2b19e00800e83bdda09";
+        src = fetchurl {
+          url = "https://api.github.com/repos/laravel/socialite/zipball/a14a177f2cc71d8add71e2b19e00800e83bdda09";
+          sha256 = "1fxlywrr2pansda2p9k475i20il2b5sz93w9b0kr7lihf242rz1z";
+        };
+      };
+    };
     "laravel/tinker" = {
       targetDir = "";
       src = composerEnv.buildZipPackage {
@@ -619,6 +629,16 @@ let
         src = fetchurl {
           url = "https://api.github.com/repos/thephpleague/mime-type-detection/zipball/ff6248ea87a9f116e78edd6002e39e5128a0d4dd";
           sha256 = "1a63nvqd6cz3vck3y8vjswn6c3cfwh13p0cn0ci5pqdf0bgjvvfz";
+        };
+      };
+    };
+    "league/oauth1-client" = {
+      targetDir = "";
+      src = composerEnv.buildZipPackage {
+        name = "league-oauth1-client-d6365b901b5c287dd41f143033315e2f777e1167";
+        src = fetchurl {
+          url = "https://api.github.com/repos/thephpleague/oauth1-client/zipball/d6365b901b5c287dd41f143033315e2f777e1167";
+          sha256 = "0hkh8l7884g8ssja1biwfb59x0jj951lwk6kmiacjqvyvzs07qmx";
         };
       };
     };

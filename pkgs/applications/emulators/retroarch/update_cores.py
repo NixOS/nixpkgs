@@ -12,6 +12,7 @@ SCRIPT_PATH = Path(__file__).absolute().parent
 HASHES_PATH = SCRIPT_PATH / "hashes.json"
 GET_REPO_THREADS = int(os.environ.get("GET_REPO_THREADS", 8))
 CORES = {
+    "2048": {"repo": "libretro-2048"},
     "atari800": {"repo": "libretro-atari800"},
     "beetle-gba": {"repo": "beetle-gba-libretro"},
     "beetle-lynx": {"repo": "beetle-lynx-libretro"},
@@ -42,6 +43,7 @@ CORES = {
     "flycast": {"repo": "flycast"},
     "fmsx": {"repo": "fmsx-libretro"},
     "freeintv": {"repo": "freeintv"},
+    "fuse": {"repo": "fuse-libretro"},
     "gambatte": {"repo": "gambatte-libretro"},
     "genesis-plus-gx": {"repo": "Genesis-Plus-GX"},
     "gpsp": {"repo": "gpsp"},

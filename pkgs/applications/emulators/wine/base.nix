@@ -1,4 +1,4 @@
-{ stdenv, lib, pkgArches, callPackage, makeSetupHook,
+{ stdenv, lib, pkgArches, makeSetupHook,
   pname, version, src, mingwGccs, monos, geckos, platforms,
   bison, flex, fontforge, makeWrapper, pkg-config,
   nixosTests,
@@ -84,8 +84,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
   ++ lib.optional sdlSupport             pkgs.SDL2
   ++ lib.optional usbSupport             pkgs.libusb1
   ++ lib.optionals gstreamerSupport      (with pkgs.gst_all_1;
-    [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-ugly gst-libav
-    (gst-plugins-bad.override { enableZbar = false; }) ])
+    [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-ugly gst-libav gst-plugins-bad ])
   ++ lib.optionals gtkSupport    [ pkgs.gtk3 pkgs.glib ]
   ++ lib.optionals openclSupport [ pkgs.opencl-headers pkgs.ocl-icd ]
   ++ lib.optionals tlsSupport    [ pkgs.openssl pkgs.gnutls ]

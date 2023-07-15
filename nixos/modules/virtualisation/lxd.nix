@@ -85,6 +85,14 @@ in {
           considered failed and systemd will attempt to restart it.
         '';
       };
+
+      ui = {
+        enable = lib.mkEnableOption (lib.mdDoc ''
+          Enables the (experimental) LXD UI.
+        '');
+
+        package = mkPackageOption pkgs.lxd "ui" { };
+      };
     };
   };
 
@@ -143,6 +151,10 @@ in {
       path = [ pkgs.util-linux ]
         ++ optional cfg.zfsSupport config.boot.zfs.package;
 
+      environment = mkIf (cfg.ui.enable) {
+        "LXD_UI" = cfg.ui.package;
+      };
+
       serviceConfig = {
         ExecStart = "@${cfg.package}/bin/lxd lxd --group lxd";
         ExecStartPost = "${cfg.package}/bin/lxd waitready --timeout=${cfg.startTimeout}";
@@ -177,7 +189,7 @@ in {
       "fs.inotify.max_queued_events" = 1048576;
       "fs.inotify.max_user_instances" = 1048576;
       "fs.inotify.max_user_watches" = 1048576;
-      "vm.max_map_count" = 262144;
+      "vm.max_map_count" = 262144; # TODO: Default vm.max_map_count has been increased system-wide
       "kernel.dmesg_restrict" = 1;
       "net.ipv4.neigh.default.gc_thresh3" = 8192;
       "net.ipv6.neigh.default.gc_thresh3" = 8192;

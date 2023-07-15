@@ -25,7 +25,7 @@ gem 'responders', '~> 3.0'
 
 gem 'sprockets', '~> 3.7.0'
 
-gem 'view_component', '~> 2.82.0'
+gem 'view_component', '~> 3.2.0'
 
 # Supported DBs
 gem 'pg', '~> 1.5.3'
@@ -46,9 +46,9 @@ gem 'devise', '~> 4.8.1'
 gem 'devise-pbkdf2-encryptable', '~> 0.0.0', path: 'vendor/gems/devise-pbkdf2-encryptable'
 gem 'bcrypt', '~> 3.1', '>= 3.1.14'
 gem 'doorkeeper', '~> 5.6', '>= 5.6.6'
-gem 'doorkeeper-openid_connect', '~> 1.8', '>= 1.8.6'
+gem 'doorkeeper-openid_connect', '~> 1.8', '>= 1.8.7'
 gem 'rexml', '~> 3.2.5'
-gem 'ruby-saml', '~> 1.13.0'
+gem 'ruby-saml', '~> 1.15.0'
 gem 'omniauth', '~> 2.1.0'
 gem 'omniauth-auth0', '~> 3.1'
 gem 'omniauth-azure-activedirectory-v2', '~> 2.0'
@@ -61,6 +61,7 @@ gem 'omniauth-gitlab', '~> 4.0.0', path: 'vendor/gems/omniauth-gitlab' # See ven
 gem 'omniauth-google-oauth2', '~> 1.1'
 gem 'omniauth-oauth2-generic', '~> 0.2.2'
 gem 'omniauth-saml', '~> 2.1.0'
+gem 'omniauth-shibboleth-redux', '~> 2.0'
 gem 'omniauth-twitter', '~> 1.4'
 gem 'omniauth_crowd', '~> 2.4.0', path: 'vendor/gems/omniauth_crowd' # See vendor/gems/omniauth_crowd/README.md
 gem 'omniauth_openid_connect', '~> 0.6.1'
@@ -105,13 +106,13 @@ gem 'gpgme', '~> 2.0.22'
 # GitLab fork with several improvements to original library. For full list of changes
 # see https://github.com/intridea/omniauth-ldap/compare/master...gitlabhq:master
 gem 'gitlab_omniauth-ldap', '~> 2.2.0', require: 'omniauth-ldap'
-gem 'net-ldap', '~> 0.17.1'
+gem 'net-ldap', '~> 0.18.0'
 
 # API
-gem 'grape', '~> 1.5.2'
+gem 'grape', '~> 1.7.0'
 gem 'grape-entity', '~> 0.10.0'
 gem 'rack-cors', '~> 1.1.1', require: 'rack/cors'
-gem 'grape-swagger', '~>1.5.0', group: [:development, :test]
+gem 'grape-swagger', '~> 1.6.1', group: [:development, :test]
 gem 'grape-swagger-entity', '~> 0.5.1', group: [:development, :test]
 
 # GraphQL API
@@ -172,9 +173,9 @@ gem 'seed-fu', '~> 2.3.7'
 gem 'elasticsearch-model', '~> 7.2'
 gem 'elasticsearch-rails', '~> 7.2', require: 'elasticsearch/rails/instrumentation'
 gem 'elasticsearch-api',   '7.13.3'
-gem 'aws-sdk-core', '~> 3.172.0'
+gem 'aws-sdk-core', '~> 3.175.0'
 gem 'aws-sdk-cloudformation', '~> 1'
-gem 'aws-sdk-s3', '~> 1.122.0'
+gem 'aws-sdk-s3', '~> 1.126.0'
 gem 'faraday_middleware-aws-sigv4', '~>0.3.0'
 gem 'typhoeus', '~> 1.4.0' # Used with Elasticsearch to support http keep-alive connections
 
@@ -182,7 +183,7 @@ gem 'typhoeus', '~> 1.4.0' # Used with Elasticsearch to support http keep-alive 
 gem 'html-pipeline', '~> 2.14.3'
 gem 'deckar01-task_list', '2.3.2'
 gem 'gitlab-markup', '~> 1.9.0', require: 'github/markup'
-gem 'commonmarker', '~> 0.23.6'
+gem 'commonmarker', '~> 0.23.9'
 gem 'kramdown', '~> 2.3.1'
 gem 'RedCloth', '~> 4.3.2'
 gem 'rdoc', '~> 6.3.2'
@@ -193,9 +194,9 @@ gem 'asciidoctor', '~> 2.0.18'
 gem 'asciidoctor-include-ext', '~> 0.4.0', require: false
 gem 'asciidoctor-plantuml', '~> 0.0.16'
 gem 'asciidoctor-kroki', '~> 0.8.0', require: false
-gem 'rouge', '~> 4.1.0'
+gem 'rouge', '~> 4.1.2'
 gem 'truncato', '~> 0.7.12'
-gem 'nokogiri', '~> 1.14.3'
+gem 'nokogiri', '~> 1.15', '>= 1.15.2'
 
 # Calendar rendering
 gem 'icalendar'
@@ -210,8 +211,7 @@ gem 'rack', '~> 2.2.7'
 gem 'rack-timeout', '~> 0.6.3', require: 'rack/timeout/base'
 
 group :puma do
-  gem 'puma', '~> 5.6.5', require: false
-  gem 'puma_worker_killer', '~> 0.3.1', require: false
+  gem 'puma', '~> 6.3', require: false
   gem 'sd_notify', '~> 0.1.0', require: false
 end
 
@@ -288,10 +288,10 @@ gem 'circuitbox', '2.0.0'
 
 # Sanitize user input
 gem 'sanitize', '~> 6.0'
-gem 'babosa', '~> 1.0.4'
+gem 'babosa', '~> 2.0'
 
 # Sanitizes SVG input
-gem 'loofah', '~> 2.21.0'
+gem 'loofah', '~> 2.21.3'
 
 # Working with license
 # Detects the open source license the repository includes
@@ -323,7 +323,7 @@ gem 'gon', '~> 6.4.0'
 gem 'request_store', '~> 1.5.1'
 gem 'base32', '~> 0.3.0'
 
-gem 'gitlab-license', '~> 2.2.1'
+gem 'gitlab-license', '~> 2.3'
 
 # Protect against bruteforcing
 gem 'rack-attack', '~> 6.6.1'
@@ -336,11 +336,11 @@ gem 'sentry-sidekiq', '~> 5.8.0'
 
 # PostgreSQL query parsing
 #
-gem 'pg_query', '~> 2.2', '>= 2.2.1'
+gem 'pg_query', '~> 4.2.1'
 
 gem 'premailer-rails', '~> 1.10.3'
 
-gem 'gitlab-labkit', '~> 0.32.0'
+gem 'gitlab-labkit', '~> 0.33.0'
 gem 'thrift', '>= 0.16.0'
 
 # I18n
@@ -363,12 +363,12 @@ gem 'snowplow-tracker', '~> 0.8.0'
 
 # Metrics
 gem 'webrick', '~> 1.8.1', require: false
-gem 'prometheus-client-mmap', '~> 0.23', require: 'prometheus/client'
+gem 'prometheus-client-mmap', '~> 0.25', require: 'prometheus/client'
 
 gem 'warning', '~> 1.3.0'
 
 group :development do
-  gem 'lefthook', '~> 1.3.13', require: false
+  gem 'lefthook', '~> 1.4.2', require: false
   gem 'rubocop'
   gem 'solargraph', '~> 0.47.2', require: false
 
@@ -376,7 +376,7 @@ group :development do
   gem 'lookbook', '~> 2.0', '>= 2.0.1'
 
   # Better errors handler
-  gem 'better_errors', '~> 2.10.0'
+  gem 'better_errors', '~> 2.10.1'
 
   gem 'sprite-factory', '~> 1.7'
 
@@ -386,6 +386,7 @@ end
 group :development, :test do
   gem 'deprecation_toolkit', '~> 1.5.1', require: false
   gem 'bullet', '~> 7.0.2'
+  gem 'parser', '~> 3.2', '>= 3.2.2.3'
   gem 'pry-byebug'
   gem 'pry-rails', '~> 0.3.9'
   gem 'pry-shell', '~> 0.6.1'
@@ -453,7 +454,7 @@ group :test do
   gem 'rspec-benchmark', '~> 0.6.0'
   gem 'rspec-parameterized', '~> 1.0', require: false
 
-  gem 'capybara', '~> 3.39'
+  gem 'capybara', '~> 3.39', '>= 3.39.1'
   gem 'capybara-screenshot', '~> 1.0.26'
   # 4.9.1 drops Ruby 2.7 support. We can upgrade further after we drop Ruby 2.7 support.
   gem 'selenium-webdriver', '= 4.9.0'
@@ -472,6 +473,8 @@ group :test do
 
   # Moved in `test` because https://gitlab.com/gitlab-org/gitlab/-/issues/217527
   gem 'derailed_benchmarks', require: false
+
+  gem 'gitlab_quality-test_tooling', '~> 0.8.1', require: false
 end
 
 gem 'octokit', '~> 4.15'
@@ -506,14 +509,14 @@ gem 'ssh_data', '~> 1.3'
 gem 'spamcheck', '~> 1.3.0'
 
 # Gitaly GRPC protocol definitions
-gem 'gitaly', '~> 15.9.0-rc3'
+gem 'gitaly', '~> 16.1.0-rc2'
 
 # KAS GRPC protocol definitions
 gem 'kas-grpc', '~> 0.1.0'
 
 gem 'grpc', '~> 1.42.0'
 
-gem 'google-protobuf', '~> 3.22', '>= 3.22.3'
+gem 'google-protobuf', '~> 3.23', '>= 3.23.3'
 
 gem 'toml-rb', '~> 2.2.0'
 
@@ -587,7 +590,7 @@ gem 'cvss-suite', '~> 3.0.1', require: 'cvss_suite'
 gem 'arr-pm', '~> 0.0.12'
 
 # Remote Development
-gem 'devfile', '~> 0.0.17.pre.alpha1'
+gem 'devfile', '~> 0.0.19.pre.alpha1'
 
 # Apple plist parsing
 gem 'CFPropertyList', '~> 3.0.0'
@@ -599,5 +602,8 @@ gem 'telesignenterprise', '~> 2.2'
 # BufferedIO patch
 # Updating this version will require updating scripts/allowed_warnings.txt
 gem 'net-protocol', '~> 0.1.3'
+# Lock this until we make DNS rebinding work with the updated net-http:
+# https://gitlab.com/gitlab-org/gitlab/-/issues/413528
+gem 'net-http', '= 0.1.1'
 
 gem 'duo_api', '~> 1.3'

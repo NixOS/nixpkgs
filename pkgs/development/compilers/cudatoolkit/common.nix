@@ -9,6 +9,7 @@ args@
 , autoAddOpenGLRunpathHook
 , addOpenGLRunpath
 , alsa-lib
+, curlMinimal
 , expat
 , fetchurl
 , fontconfig
@@ -16,6 +17,7 @@ args@
 , gdk-pixbuf
 , glib
 , glibc
+, gst_all_1
 , gtk2
 , lib
 , libxkbcommon
@@ -40,6 +42,7 @@ args@
 , libsForQt5
 , libtiff
 , qt6Packages
+, qt6
 , rdma-core
 , ucx
 , rsync
@@ -129,7 +132,23 @@ backendStdenv.mkDerivation rec {
     ucx
     xorg.libxshmfence
     xorg.libxkbfile
-  ];
+  ] ++ (lib.optionals (lib.versionAtLeast version "12.1") (map lib.getLib ([
+    # Used by `/target-linux-x64/CollectX/clx` and `/target-linux-x64/CollectX/libclx_api.so` for:
+    # - `libcurl.so.4`
+    curlMinimal
+
+    # Used by `/host-linux-x64/Scripts/WebRTCContainer/setup/neko/server/bin/neko`
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+  ]) ++ (with qt6; [
+    qtmultimedia
+    qttools
+    qtpositioning
+    qtscxml
+    qtsvg
+    qtwebchannel
+    qtwebengine
+  ])));
 
   # Prepended to runpaths by autoPatchelf.
   # The order inherited from older rpath preFixup code
@@ -239,6 +258,10 @@ backendStdenv.mkDerivation rec {
     ${lib.optionalString (lib.versionOlder version "10.1") ''
     # let's remove the 32-bit libraries, they confuse the lib64->lib mover
     rm -rf $out/lib
+    ''}
+
+    ${lib.optionalString (lib.versionAtLeast version "12.0") ''
+    rm $out/host-linux-x64/libQt6*
     ''}
 
     # Remove some cruft.

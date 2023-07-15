@@ -31,21 +31,24 @@ lib.checkListOfEnum "${pname}: theme variants" [ "default" "blue" "purple" "pink
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2022-10-21";
+  version = "2023-06-13";
 
   srcs = [
     (fetchFromGitHub {
       owner = "vinceliuice";
       repo = pname;
       rev = version;
-      sha256 = "sha256-0OqQXyv/fcbKTzvQUVIbUw5Y27hU1bzwx/0DelMEZIs=";
+      hash = "sha256-0jb/VQ6Z0BGaEka57BWM0pBweP08cr4jfPRdEN/BJ1M=";
     })
   ]
   ++
   lib.optional wallpapers
-    (fetchurl {
-      url = "https://github.com/vinceliuice/Mojave-gtk-theme/raw/11741a99d96953daf9c27e44c94ae50a7247c0ed/macOS_Mojave_Wallpapers.tar.xz";
-      sha256 = "18zzkwm1kqzsdaj8swf0xby1n65gxnyslpw4lnxcx1rphip0rwf7";
+    (fetchFromGitHub {
+      owner = "vinceliuice";
+      repo = pname;
+      rev = "0c4ae6ddff7e3fab4959469461c4d4042deb1b2f";
+      hash = "sha256-7LSZSsRt6zTVPLWzuBgwRC1q1MHp5pN/pMl3x2wR8Ow=";
+      name = "wallpapers";
     })
   ;
 
@@ -97,6 +100,12 @@ stdenvNoCC.mkDerivation rec {
         --replace /usr/bin/inkscape ${inkscape}/bin/inkscape \
         --replace /usr/bin/optipng ${optipng}/bin/optipng
     done
+
+    ${lib.optionalString wallpapers ''
+      for f in ../wallpapers/Mojave{,-timed}.xml; do
+        substituteInPlace $f --replace /usr $out
+      done
+    ''}
   '';
 
   installPhase = ''
@@ -111,7 +120,11 @@ stdenvNoCC.mkDerivation rec {
       --dest $out/share/themes
 
     ${lib.optionalString wallpapers ''
-      install -D -t $out/share/wallpapers ../"macOS Mojave Wallpapers"/*
+      mkdir -p $out/share/backgrounds/Mojave
+      mkdir -p $out/share/gnome-background-properties
+      cp -a ../wallpapers/Mojave*.jpeg $out/share/backgrounds/Mojave/
+      cp -a ../wallpapers/Mojave-timed.xml $out/share/backgrounds/Mojave/
+      cp -a ../wallpapers/Mojave.xml $out/share/gnome-background-properties/
     ''}
 
     # Replace duplicate files with soft links to the first file in each

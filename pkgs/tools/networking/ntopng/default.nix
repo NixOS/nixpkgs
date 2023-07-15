@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
     owner = "ntop";
     repo = "ntopng";
     rev = "refs/tags/${version}";
-    hash = "sha256-iGqrS0AneKYwGMEpbKy9if8bnaEu6aEV+QaH+JrF9xs=";
+    hash = "sha256-pIm0C1+4JLVDdXxSaQtd6ON8R2l6KG8ZXuDDuRd6dQI=";
+    fetchSubmodules = true;
   };
 
   preConfigure = ''

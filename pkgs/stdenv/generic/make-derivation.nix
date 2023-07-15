@@ -41,7 +41,7 @@ let
               else x;
         in
           makeDerivationExtensible
-            (self: let super = rattrs self; in super // f self super);
+            (self: let super = rattrs self; in super // (if builtins.isFunction f0 || f0?__functor then f self super else f0));
 
       finalPackage =
         mkDerivationSimple overrideAttrs args;
@@ -62,7 +62,7 @@ let
                 f0 self super
               else x;
         in
-          makeDerivationExtensible (self: attrs // f self attrs))
+          makeDerivationExtensible (self: attrs // (if builtins.isFunction f0 || f0?__functor then f self attrs else f0)))
       attrs;
 
   mkDerivationSimple = overrideAttrs:
@@ -195,16 +195,13 @@ let
   # Musl-based platforms will keep "pie", other platforms will not.
   # If you change this, make sure to update section `{#sec-hardening-in-nixpkgs}`
   # in the nixpkgs manual to inform users about the defaults.
-  defaultHardeningFlags = let
-    # not ready for this by default
-    supportedHardeningFlags' = lib.remove "fortify3" supportedHardeningFlags;
-  in if stdenv.hostPlatform.isMusl &&
+  defaultHardeningFlags = if stdenv.hostPlatform.isMusl &&
       # Except when:
       #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
       #    - static armv7l, where compilation fails.
       !(stdenv.hostPlatform.isAarch && stdenv.hostPlatform.isStatic)
-    then supportedHardeningFlags'
-    else lib.remove "pie" supportedHardeningFlags';
+    then supportedHardeningFlags
+    else lib.remove "pie" supportedHardeningFlags;
   enabledHardeningOptions =
     if builtins.elem "all" hardeningDisable'
     then []
@@ -214,7 +211,7 @@ let
 
   checkDependencyList = checkDependencyList' [];
   checkDependencyList' = positions: name: deps: lib.flip lib.imap1 deps (index: dep:
-    if lib.isDerivation dep || dep == null || builtins.typeOf dep == "string" || builtins.typeOf dep == "path" then dep
+    if lib.isDerivation dep || dep == null || builtins.isString dep || builtins.isPath dep then dep
     else if lib.isList dep then checkDependencyList' ([index] ++ positions) name dep
     else throw "Dependency is not of a valid type: ${lib.concatMapStrings (ix: "element ${toString ix} of ") ([index] ++ positions)}${name} for ${attrs.name or attrs.pname}");
 in if builtins.length erroneousHardeningFlags != 0
@@ -359,57 +356,31 @@ else let
 
       # This parameter is sometimes a string, sometimes null, and sometimes a list, yuck
       configureFlags = let inherit (lib) optional elem; in
-        (/**/ if lib.isString configureFlags then lib.warn "String 'configureFlags' is deprecated and will be removed in release 23.05. Please use a list of strings. Derivation name: ${derivationArg.name}, file: ${pos.file or "unknown file"}" [configureFlags]
-         else if configureFlags == null      then lib.warn "Null 'configureFlags' is deprecated and will be removed in release 23.05. Please use a empty list instead '[]'. Derivation name: ${derivationArg.name}, file: ${pos.file or "unknown file"}" []
-         else                                     configureFlags)
+        configureFlags
         ++ optional (elem "build"  configurePlatforms) "--build=${stdenv.buildPlatform.config}"
         ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
         ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
 
       cmakeFlags =
-        let
-          explicitFlags =
-            if lib.isString cmakeFlags then lib.warn
-                "String 'cmakeFlags' is deprecated and will be removed in release 23.05. Please use a list of strings. Derivation name: ${derivationArg.name}, file: ${pos.file or "unknown file"}"
-                [cmakeFlags]
-            else if cmakeFlags == null then
-              lib.warn
-                "Null 'cmakeFlags' is deprecated and will be removed in release 23.05. Please use a empty list instead '[]'. Derivation name: ${derivationArg.name}, file: ${pos.file or "unknown file"}"
-                []
-            else
-              cmakeFlags;
-
-          crossFlags = [
-            "-DCMAKE_SYSTEM_NAME=${lib.findFirst lib.isString "Generic" (lib.optional (!stdenv.hostPlatform.isRedox) stdenv.hostPlatform.uname.system)}"
-          ] ++ lib.optionals (stdenv.hostPlatform.uname.processor != null) [
-            "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
-          ] ++ lib.optionals (stdenv.hostPlatform.uname.release != null) [
-            "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.uname.release}"
-          ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-            "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
-          ] ++ lib.optionals (stdenv.buildPlatform.uname.system != null) [
-            "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"
-          ] ++ lib.optionals (stdenv.buildPlatform.uname.processor != null) [
-            "-DCMAKE_HOST_SYSTEM_PROCESSOR=${stdenv.buildPlatform.uname.processor}"
-          ] ++ lib.optionals (stdenv.buildPlatform.uname.release != null) [
-            "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}"
-          ];
-        in
-          explicitFlags ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) crossFlags;
+        cmakeFlags
+        ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) ([
+          "-DCMAKE_SYSTEM_NAME=${lib.findFirst lib.isString "Generic" (lib.optional (!stdenv.hostPlatform.isRedox) stdenv.hostPlatform.uname.system)}"
+        ] ++ lib.optionals (stdenv.hostPlatform.uname.processor != null) [
+          "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
+        ] ++ lib.optionals (stdenv.hostPlatform.uname.release != null) [
+          "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.uname.release}"
+        ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+          "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
+        ] ++ lib.optionals (stdenv.buildPlatform.uname.system != null) [
+          "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"
+        ] ++ lib.optionals (stdenv.buildPlatform.uname.processor != null) [
+          "-DCMAKE_HOST_SYSTEM_PROCESSOR=${stdenv.buildPlatform.uname.processor}"
+        ] ++ lib.optionals (stdenv.buildPlatform.uname.release != null) [
+          "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}"
+        ]);
 
       mesonFlags =
         let
-          explicitFlags =
-            if lib.isString mesonFlags then lib.warn
-                "String 'mesonFlags' is deprecated and will be removed in release 23.05. Please use a list of strings. Derivation name: ${derivationArg.name}, file: ${pos.file or "unknown file"}"
-                [mesonFlags]
-            else if mesonFlags == null then
-              lib.warn
-                "Null 'mesonFlags' is deprecated and will be removed in release 23.05. Please use a empty list instead '[]'. Derivation name: ${derivationArg.name}, file: ${pos.file or "unknown file"}"
-                []
-            else
-              mesonFlags;
-
           # See https://mesonbuild.com/Reference-tables.html#cpu-families
           cpuFamily = platform: with platform;
             /**/ if isAarch32 then "arm"
@@ -430,7 +401,7 @@ else let
             llvm-config = 'llvm-config-native'
           '';
           crossFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--cross-file=${crossFile}" ];
-        in crossFlags ++ explicitFlags;
+        in crossFlags ++ mesonFlags;
 
       inherit patches;
 

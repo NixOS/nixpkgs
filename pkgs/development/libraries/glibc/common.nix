@@ -161,14 +161,22 @@ stdenv.mkDerivation ({
     ++ lib.optional withGd "--with-gd"
     ++ lib.optional (!withLibcrypt) "--disable-crypt";
 
-  makeFlags = [
+  makeFlags = (args.makeFlags or []) ++ [
     "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
   ];
+
+  postInstall = (args.postInstall or "") + ''
+    moveToOutput bin/getent $getent
+  '';
 
   installFlags = [ "sysconfdir=$(out)/etc" ];
 
   # out as the first output is an exception exclusive to glibc
-  outputs = [ "out" "bin" "dev" "static" ];
+
+  # getent is its own output, not kept in bin, since many things
+  # depend on getent but not on the locale generation tools in the bin
+  # output. This saves a couple of megabytes of closure size in many cases.
+  outputs = [ "out" "bin" "dev" "static" "getent" ];
 
   strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -188,7 +196,7 @@ stdenv.mkDerivation ({
   passthru = { inherit version; minorRelease = version; };
 }
 
-// (removeAttrs args [ "withLinuxHeaders" "withGd" ]) //
+// (removeAttrs args [ "withLinuxHeaders" "withGd" "postInstall" "makeFlags" ]) //
 
 {
   src = fetchurl {

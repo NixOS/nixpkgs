@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    installShellCompletion etc/nb-completion.{bash,zsh}
+    installShellCompletion --cmd nb etc/nb-completion.{bash,zsh,fish}
   '';
 
   meta = with lib; {

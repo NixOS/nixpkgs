@@ -1,6 +1,5 @@
 { stdenv
 , fetchFromGitHub
-, fetchpatch
 , meson
 , pkg-config
 , ninja
@@ -9,8 +8,11 @@
 , vulkan-loader
 , vulkan-headers
 , wayland
+, wayland-scanner
 , wayland-protocols
 , libxkbcommon
+, glm
+, gbenchmark
 , libcap
 , SDL2
 , pipewire
@@ -31,13 +33,13 @@
 }:
 let
   pname = "gamescope";
-  version = "3.11.52-beta6";
+  version = "3.12.0-beta9";
 
   vkroots = fetchFromGitHub {
     owner = "Joshua-Ashton";
     repo = "vkroots";
     rev = "26757103dde8133bab432d172b8841df6bb48155";
-    sha256 = "sha256-eet+FMRO2aBQJcCPOKNKGuQv5oDIrgdVPRO00c5gkL0=";
+    hash = "sha256-eet+FMRO2aBQJcCPOKNKGuQv5oDIrgdVPRO00c5gkL0=";
   };
 in
 stdenv.mkDerivation {
@@ -47,42 +49,25 @@ stdenv.mkDerivation {
     owner = "ValveSoftware";
     repo = "gamescope";
     rev = "refs/tags/${version}";
-    hash = "sha256-2gn6VQfmwwl86mmnRh+J1uxSIpA5x/Papq578seJ3n8=";
+    hash = "sha256-nPFHMRp3uq2CIxY3EdaoTltqyb5z0kFwXw5U9ajbrfo=";
   };
 
   patches = [
     ./use-pkgconfig.patch
+  ];
 
-    # https://github.com/Plagman/gamescope/pull/811
-    (fetchpatch {
-      name = "fix-openvr-dependency-name.patch";
-      url = "https://github.com/Plagman/gamescope/commit/557e56badec7d4c56263d3463ca9cdb195e368d7.patch";
-      sha256 = "sha256-9Y1tJ24EsdtZEOCEA30+FJBrdzXX+Nj3nTb5kgcPfBE=";
-    })
-    # https://github.com/Plagman/gamescope/pull/813
-    (fetchpatch {
-      name = "fix-openvr-include.patch";
-      url = "https://github.com/Plagman/gamescope/commit/1331b9f81ea4b3ae692a832ed85a464c3fd4c5e9.patch";
-      sha256 = "sha256-wDtFpM/nMcqSbIpR7K5Tyf0845r3l4kQHfwll1VL4Mc=";
-    })
-    # https://github.com/Plagman/gamescope/pull/812
-    (fetchpatch {
-      name = "bump-libdisplay-info-maximum-version.patch";
-      url = "https://github.com/Plagman/gamescope/commit/b430c5b9a05951755051fd4e41ce20496705fbbc.patch";
-      sha256 = "sha256-YHtwudMUHiE8i3ZbiC9gkSjrlS0/7ydjmJsY1a8ZI2E=";
-    })
-    # https://github.com/Plagman/gamescope/pull/824
-    (fetchpatch {
-      name = "update-libdisplay-info-pkgconfig-filename.patch";
-      url = "https://github.com/Plagman/gamescope/commit/5a672f09aa07c7c5d674789f3c685c8173e7a2cf.patch";
-      sha256 = "sha256-7NX54WIsJDvZT3C58N2FQasV9PJyKkJrLGYS1r4f+kc=";
-    })
+  strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
   ];
 
   nativeBuildInputs = [
     meson
     pkg-config
     ninja
+    wayland-scanner
+    glslang
     makeBinaryWrapper
   ];
 
@@ -100,7 +85,6 @@ stdenv.mkDerivation {
     libliftoff
     vulkan-loader
     vulkan-headers
-    glslang
     SDL2
     wayland
     wayland-protocols
@@ -109,6 +93,8 @@ stdenv.mkDerivation {
     seatd
     libinput
     libxkbcommon
+    glm
+    gbenchmark
     udev
     pixman
     pipewire

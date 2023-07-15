@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "bytecode";
-  version = "0.14.1";
+  version = "0.14.2";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "vstinner";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-vSuGjNTQw7prFxmVyiq7s8cnl+VGbRArC2sp7GVP0XA=";
+    hash = "sha256-HBXtpUl8Lcx3yCVnk9kVU0+AUVdgy1HQBV4rHEndiek=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

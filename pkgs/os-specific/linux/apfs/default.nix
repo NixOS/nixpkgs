@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     "INSTALL_MOD_PATH=$(out)"
   ];
 
-  passthru.tests.test = nixosTests.apfs;
+  passthru.tests.apfs = nixosTests.apfs;
 
   meta = with lib; {
     description = "APFS module for linux";
@@ -44,7 +44,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/linux-apfs/linux-apfs-rw";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    broken = kernel.kernelOlder "4.9";
     maintainers = with maintainers; [ Luflosi ];
   };
 }

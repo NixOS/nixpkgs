@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "langchainplus-sdk";
-  version = "0.0.6";
+  version = "0.0.20";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "langchainplus_sdk";
-    hash = "sha256-yRGpj9LQK6pI90K31wD9alXxHJpUXuXWawiCWUDJoy4=";
+    hash = "sha256-PTAOLjKQ9ozJ2ELAWflFjeumDndsnnkDCWiMrRv7shk=";
   };
 
   nativeBuildInputs = [

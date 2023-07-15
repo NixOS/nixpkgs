@@ -97,7 +97,9 @@
   # See doc/builders/testers.chapter.md or
   # https://nixos.org/manual/nixpkgs/unstable/#tester-runNixOSTest
   runNixOSTest =
-    let nixos = import ../../../nixos/lib {};
+    let nixos = import ../../../nixos/lib {
+      inherit lib;
+    };
     in testModule:
         nixos.runTest {
           _file = "pkgs.runNixOSTest implementation";

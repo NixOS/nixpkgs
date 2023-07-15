@@ -9,7 +9,6 @@
 , libGL
 , libGLU
 , libjpeg
-, xorg
 , ncurses
 , libpng, libtool, mpfr, openssl, pango, poppler
 , readline, sqlite
@@ -25,7 +24,7 @@ let
     fontDirectories = [ freefont_ttf ];
   };
 
-  libPath = lib.makeLibraryPath [
+  libPath = lib.makeLibraryPath ([
     cairo
     fontconfig
     glib
@@ -33,8 +32,6 @@ let
     gtk3
     gsettings-desktop-schemas
     libedit
-    libGL
-    libGLU
     libjpeg
     libpng
     mpfr
@@ -44,7 +41,10 @@ let
     poppler
     readline
     sqlite
-  ];
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    libGL
+    libGLU
+  ]);
 
 in
 

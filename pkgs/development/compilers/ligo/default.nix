@@ -15,14 +15,17 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "ligo";
-  version = "0.66.0";
+  version = "0.69.0";
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
     rev = version;
-    sha256 = "sha256-BFeNnpMT+WKqTvjVg+H2qHl5EUMcbe7xmJohbpD99gY=";
+    sha256 = "sha256-Swt4uihsAtHVMkc0DxATwB8FvgxwtSJTN3E5cBtyXf8=";
     fetchSubmodules = true;
   };
+
+  # https://gitlab.com/ligolang/ligo/-/merge_requests/2706.diff
+  patches = [ ./2706.diff ];
 
   postPatch = ''
     substituteInPlace "vendors/tezos-ligo/src/lib_hacl/hacl.ml" \
@@ -103,8 +106,6 @@ ocamlPackages.buildDunePackage rec {
     # vendored tezos' deps
     aches
     aches-lwt
-    tezos-plonk
-    tezos-bls12-381-polynomial
     ctypes
     ctypes_stubs_js
     class_group_vdf
@@ -116,7 +117,7 @@ ocamlPackages.buildDunePackage rec {
     bls12-381
     bls12-381-signature
     ptime
-    mtime
+    mtime_1
     lwt_log
     secp256k1-internal
     resto
@@ -128,6 +129,8 @@ ocamlPackages.buildDunePackage rec {
     pure-splitmix
     zarith_stubs_js
     simple-diff
+    seqes
+    stdint
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];

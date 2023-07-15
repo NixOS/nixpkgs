@@ -211,7 +211,7 @@ rec {
   # nixos/doc/manual/development/option-types.xml!
   types = rec {
 
-    raw = mkOptionType rec {
+    raw = mkOptionType {
       name = "raw";
       description = "raw value";
       descriptionClass = "noun";
@@ -461,6 +461,7 @@ rec {
     # - strings with context, e.g. "${pkgs.foo}" or (toString pkgs.foo)
     # - hardcoded store path literals (/nix/store/hash-foo) or strings without context
     #   ("/nix/store/hash-foo"). These get a context added to them using builtins.storePath.
+    # If you don't need a *top-level* store path, consider using pathInStore instead.
     package = mkOptionType {
       name = "package";
       descriptionClass = "noun";
@@ -488,6 +489,14 @@ rec {
       name = "path";
       descriptionClass = "noun";
       check = x: isStringLike x && builtins.substring 0 1 (toString x) == "/";
+      merge = mergeEqualOption;
+    };
+
+    pathInStore = mkOptionType {
+      name = "pathInStore";
+      description = "path in the Nix store";
+      descriptionClass = "noun";
+      check = x: isStringLike x && builtins.match "${builtins.storeDir}/[^.].*" (toString x) != null;
       merge = mergeEqualOption;
     };
 

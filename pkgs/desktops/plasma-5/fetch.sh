@@ -1,1 +1,1 @@
-WGET_ARGS=( https://download.kde.org/stable/plasma/5.27.5/ -A '*.tar.xz' )
+WGET_ARGS=( https://download.kde.org/stable/plasma/5.27.6/ -A '*.tar.xz' )

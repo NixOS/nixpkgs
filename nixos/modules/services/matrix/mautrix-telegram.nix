@@ -80,6 +80,9 @@ in {
               "example.com" = "full";
               "@admin:example.com" = "admin";
             };
+            telegram = {
+              connection.use_ipv6 = true;
+            };
           }
         '';
         description = lib.mdDoc ''

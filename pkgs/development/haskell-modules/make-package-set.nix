@@ -283,6 +283,7 @@ in package-set { inherit pkgs lib callPackage; } self // {
     # ghcWithPackages :: (HaskellPkgSet -> [ HaskellPkg ]) -> Derivation
     ghcWithPackages = buildHaskellPackages.callPackage ./with-packages-wrapper.nix {
       haskellPackages = self;
+      inherit (self) hoogleWithPackages;
     };
 
 

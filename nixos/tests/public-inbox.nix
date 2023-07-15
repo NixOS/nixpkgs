@@ -223,5 +223,8 @@ in
     # require to use --all
     machine.succeed("curl -L https://machine.${domain}/inbox/repo1/repo1@root-1/raw | sudo -u public-inbox public-inbox-learn rm --all")
     machine.fail("curl -L https://machine.${domain}/inbox/repo1/repo1@root-1/T/#u | grep 'This is a testing mail.'")
+
+    # Compact the database
+    machine.succeed("sudo -u public-inbox public-inbox-compact --all")
   '';
 })

@@ -192,6 +192,8 @@ self: super: builtins.intersectAttrs super {
   # Link the proper version.
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
 
+  threadscope = enableSeparateBinOutput super.threadscope;
+
   # Use the default version of mysql to build this package (which is actually mariadb).
   # test phase requires networking
   mysql = dontCheck super.mysql;
@@ -214,6 +216,55 @@ self: super: builtins.intersectAttrs super {
     '';
   }) super.nvvm;
 
+  # hledger* overrides
+  inherit (
+    let
+      # Copy hledger man pages from the source tarball into the proper place.
+      # It always contains the relevant man page(s) at the top level. For
+      # hledger it additionally has all the other man pages in embeddedfiles/
+      # which we ignore.
+      installHledgerManPages = overrideCabal (drv: {
+        buildTools = drv.buildTools or [] ++ [
+          pkgs.buildPackages.installShellFiles
+        ];
+        postInstall = ''
+          for i in $(seq 1 9); do
+            installManPage *.$i
+          done
+
+          install -v -Dm644 *.info* -t "$out/share/info/"
+        '';
+      });
+
+      hledgerWebTestFix = overrideCabal (drv: {
+        preCheck = ''
+          ${drv.preCheck or ""}
+          export HOME="$(mktemp -d)"
+        '';
+      });
+    in
+    {
+      hledger = installHledgerManPages super.hledger;
+      hledger-web = installHledgerManPages (hledgerWebTestFix super.hledger-web);
+      hledger-ui = installHledgerManPages super.hledger-ui;
+
+      hledger_1_30_1 = installHledgerManPages
+        (doDistribute (super.hledger_1_30_1.override {
+          hledger-lib = self.hledger-lib_1_30;
+        }));
+      hledger-web_1_30 = installHledgerManPages (hledgerWebTestFix
+        (doDistribute (super.hledger-web_1_30.override {
+          hledger = self.hledger_1_30_1;
+          hledger-lib = self.hledger-lib_1_30;
+        })));
+    }
+  ) hledger
+    hledger-web
+    hledger-ui
+    hledger_1_30_1
+    hledger-web_1_30
+    ;
+
   cufft = overrideCabal (drv: {
     preConfigure = ''
       export CUDA_PATH=${pkgs.cudatoolkit}
@@ -232,6 +283,13 @@ self: super: builtins.intersectAttrs super {
   sfml-audio = appendConfigureFlag "--extra-include-dirs=${pkgs.openal}/include/AL" super.sfml-audio;
 
   # avoid compiling twice by providing executable as a separate output (with small closure size)
+  cabal-fmt = enableSeparateBinOutput super.cabal-fmt;
+  hindent = enableSeparateBinOutput super.hindent;
+  releaser  = enableSeparateBinOutput super.releaser;
+  eventlog2html = enableSeparateBinOutput super.eventlog2html;
+  ghc-debug-brick  = enableSeparateBinOutput super.ghc-debug-brick;
+  nixfmt  = enableSeparateBinOutput super.nixfmt;
+  calligraphy = enableSeparateBinOutput super.calligraphy;
   niv = enableSeparateBinOutput (self.generateOptparseApplicativeCompletions [ "niv" ] super.niv);
   ghcid = enableSeparateBinOutput super.ghcid;
   ormolu = self.generateOptparseApplicativeCompletions [ "ormolu" ] (enableSeparateBinOutput super.ormolu);
@@ -264,18 +322,18 @@ self: super: builtins.intersectAttrs super {
   gio = lib.pipe super.gio
     [ (disableHardening ["fortify"])
       (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools)
-      (addPkgconfigDepends (with pkgs; [ glib pcre2 util-linux pcre ]
-                                       ++ (if pkgs.stdenv.isLinux then [libselinux libsepol] else [])))
+      (addPkgconfigDepends (with pkgs; [ glib pcre2 pcre ]
+                                       ++ lib.optionals pkgs.stdenv.isLinux [ util-linux libselinux libsepol ]))
     ];
   glib = disableHardening ["fortify"] (addPkgconfigDepend pkgs.glib (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools super.glib));
   gtk3 = disableHardening ["fortify"] (super.gtk3.override { inherit (pkgs) gtk3; });
   gtk = lib.pipe super.gtk (
     [ (disableHardening ["fortify"])
       (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools)
-      (addPkgconfigDepends (with pkgs; [ gtk2 pcre2 util-linux pcre fribidi
+      (addPkgconfigDepends (with pkgs; [ gtk2 pcre2 pcre fribidi
                                          libthai libdatrie xorg.libXdmcp libdeflate
                                         ]
-                                       ++ (if pkgs.stdenv.isLinux then [libselinux libsepol] else [])))
+                                       ++ lib.optionals pkgs.stdenv.isLinux [ util-linux libselinux libsepol ]))
     ] ++
     ( if pkgs.stdenv.isDarwin then [(appendConfigureFlag "-fhave-quartz-gtk")] else [] )
   );
@@ -290,11 +348,14 @@ self: super: builtins.intersectAttrs super {
     src = assert super.nix-serve-ng.version == "1.0.0";
       # Workaround missing files in sdist
       # https://github.com/aristanetworks/nix-serve-ng/issues/10
+      #
+      # Workaround for libstore incompatibility with Nix 2.13
+      # https://github.com/aristanetworks/nix-serve-ng/issues/22
       pkgs.fetchFromGitHub {
         repo = "nix-serve-ng";
         owner = "aristanetworks";
-        rev = "433f70f4daae156b84853f5aaa11987aa5ce7277";
-        sha256 = "0mqp67z5mi8rsjahdh395n7ppf0b65k8rd3pvnl281g02rbr69y2";
+        rev = "dabf46d65d8e3be80fa2eacd229eb3e621add4bd";
+        hash = "sha256-SoJJ3rMtDMfUzBSzuGMY538HDIj/s8bPf8CjIkpqY2w=";
       };
   } (addPkgconfigDepend pkgs.boost.dev super.nix-serve-ng);
 
@@ -897,9 +958,6 @@ self: super: builtins.intersectAttrs super {
   # Pass the correct libarchive into the package.
   streamly-archive = super.streamly-archive.override { archive = pkgs.libarchive; };
 
-  # Pass the correct lmdb into the package.
-  streamly-lmdb = super.streamly-lmdb.override { lmdb = pkgs.lmdb; };
-
   hlint = overrideCabal (drv: {
     postInstall = ''
       install -Dm644 data/hlint.1 -t "$out/share/man/man1"
@@ -967,7 +1025,8 @@ self: super: builtins.intersectAttrs super {
         wrapProgram "$out/bin/nvfetcher" --prefix 'PATH' ':' "${
           pkgs.lib.makeBinPath [
             pkgs.nvchecker
-            pkgs.nix-prefetch
+            pkgs.nix # nix-prefetch-url
+            pkgs.nix-prefetch-git
             pkgs.nix-prefetch-docker
           ]
         }"
@@ -985,29 +1044,29 @@ self: super: builtins.intersectAttrs super {
   domaindriven-core = dontCheck super.domaindriven-core;
 
   cachix-api = overrideCabal (drv: {
-    version = "1.5";
+    version = "1.6";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      rev = "v1.5";
-      sha256 = "sha256-bt8FFtDSJpBckx3dIjW5Xdvj8aVCm78R3VTpjK5F3Ac=";
+      rev = "v1.6";
+      sha256 = "sha256-54ujAZYNigAn1oJAfupUtZHa0WRQbCQGLEfLmkw8iFc=";
     };
     postUnpack = "sourceRoot=$sourceRoot/cachix-api";
     postPatch = ''
-      sed -i 's/1.4.2/1.5/' cachix-api.cabal
+      sed -i 's/1.5/1.6/' cachix-api.cabal
     '';
   }) super.cachix-api;
   cachix = overrideCabal (drv: {
-    version = "1.5";
+    version = "1.6";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      rev = "v1.5";
-      sha256 = "sha256-bt8FFtDSJpBckx3dIjW5Xdvj8aVCm78R3VTpjK5F3Ac=";
+      rev = "v1.6";
+      sha256 = "sha256-54ujAZYNigAn1oJAfupUtZHa0WRQbCQGLEfLmkw8iFc=";
     };
     postUnpack = "sourceRoot=$sourceRoot/cachix";
     postPatch = ''
-      sed -i 's/1.4.2/1.5/' cachix.cabal
+      sed -i 's/1.5/1.6/' cachix.cabal
     '';
   }) (lib.pipe
         (super.cachix.override {
@@ -1018,8 +1077,7 @@ self: super: builtins.intersectAttrs super {
         [
          (addBuildTool self.hercules-ci-cnix-store.nixPackage)
          (addBuildTool pkgs.pkg-config)
-         (addBuildDepend self.inline-c-cpp)
-         (addBuildDepend self.hercules-ci-cnix-store)
+         (addBuildDepend self.ascii-progress)
         ]
   );
 
@@ -1031,7 +1089,7 @@ self: super: builtins.intersectAttrs super {
 
   # the testsuite fails because of not finding tsc without some help
   aeson-typescript = overrideCabal (drv: {
-    testToolDepends = drv.testToolDepends or [] ++ [ pkgs.nodePackages.typescript ];
+    testToolDepends = drv.testToolDepends or [] ++ [ pkgs.typescript ];
     # the testsuite assumes that tsc is in the PATH if it thinks it's in
     # CI, otherwise trying to install it.
     #
@@ -1237,4 +1295,9 @@ self: super: builtins.intersectAttrs super {
   # Disable checks to break dependency loop with SCalendar
   scalendar = dontCheck super.scalendar;
 
+  halide-haskell = super.halide-haskell.override { Halide = pkgs.halide; };
+  # Sydtest has a brittle test suite that will only work with the exact
+
+  # versions that it ships with.
+  sydtest = dontCheck super.sydtest;
 }

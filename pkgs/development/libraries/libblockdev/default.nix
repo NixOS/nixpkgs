@@ -1,28 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, autoreconfHook, pkg-config, gtk-doc
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gtk-doc
 , docbook_xml_dtd_43, python3, gobject-introspection, glib, udev, kmod, parted
-, cryptsetup, lvm2, dmraid, util-linux, libbytesize, libndctl, nss, volume_key
+, cryptsetup, lvm2, util-linux, libbytesize, libndctl, nss, volume_key
 , libxslt, docbook_xsl, gptfdisk, libyaml, autoconf-archive
-, thin-provisioning-tools, makeWrapper
+, thin-provisioning-tools, makeWrapper, e2fsprogs, libnvme, keyutils
 }:
 stdenv.mkDerivation rec {
   pname = "libblockdev";
-  version = "2.28";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "libblockdev";
     rev = "${version}-1";
-    sha256 = "sha256-6MrM3psLqMcpf4haaEHg3FwrhUDz5h/DeY1w96T0UlE=";
+    sha256 = "sha256-WnHcRKRxfdSRmOW2K/vn1WQ4iPm0uS0Td0cWXaeo5hk=";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
-
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      sgdisk = "${gptfdisk}/bin/sgdisk";
-    })
-  ];
 
   postPatch = ''
     patchShebangs scripts
@@ -34,8 +27,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    glib udev kmod parted gptfdisk cryptsetup lvm2 dmraid util-linux libbytesize
-    libndctl nss volume_key libyaml
+    e2fsprogs glib udev keyutils kmod parted gptfdisk cryptsetup lvm2 util-linux libbytesize
+    libndctl libnvme nss volume_key libyaml
   ];
 
   postInstall = ''

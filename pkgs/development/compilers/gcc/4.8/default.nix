@@ -8,8 +8,8 @@
 , profiledCompiler ? false
 , langJit ? false
 , staticCompiler ? false
-, enableShared ? !stdenv.targetPlatform.isStatic
-, enableLTO ? !stdenv.hostPlatform.isStatic
+, enableShared ? stdenv.targetPlatform.hasSharedLibraries
+, enableLTO ? stdenv.hostPlatform.hasSharedLibraries
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man); required for Java
 , gmp, mpfr, libmpc, gettext, which, patchelf, binutils
@@ -26,9 +26,10 @@
 , name ? "gcc"
 , libcCross ? null
 , threadsCross ? null # for MinGW
-, crossStageStatic ? false
+, withoutTargetLibc ? false
 , gnused ? null
 , buildPackages
+, callPackage
 }:
 
 assert langJava     -> zip != null && unzip != null
@@ -74,7 +75,6 @@ let majorVersion = "4";
         ../struct-ucontext-4.8.patch
         ../sigsegv-not-declared.patch
         ../res_state-not-declared.patch
-        ../install-info-files-serially.patch
         # gcc-11 compatibility
         (fetchpatch {
           name = "gcc4-char-reload.patch";
@@ -109,7 +109,7 @@ let majorVersion = "4";
 
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
-    stageNameAddon = if crossStageStatic then "stage-static" else "stage-final";
+    stageNameAddon = if withoutTargetLibc then "stage-static" else "stage-final";
     crossNameAddon = optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-${stageNameAddon}-";
 
     callFile = lib.callPackageWith {
@@ -135,7 +135,7 @@ let majorVersion = "4";
         boehmgc
         buildPackages
         cloog
-        crossStageStatic
+        withoutTargetLibc
         enableLTO
         enableMultilib
         enablePlugin
@@ -193,7 +193,7 @@ in
 # We need all these X libraries when building AWT with GTK.
 assert x11Support -> (filter (x: x == null) ([ gtk2 libart_lgpl ] ++ xlibs)) == [];
 
-stdenv.mkDerivation ({
+lib.pipe (stdenv.mkDerivation ({
   pname = "${crossNameAddon}${name}";
   inherit version;
 
@@ -232,7 +232,10 @@ stdenv.mkDerivation ({
         ''
     else null;
 
-  inherit noSysDirs staticCompiler langJava crossStageStatic
+  # kludge to prevent a mass-rebuild; will be removed in a PR sent to staging
+  crossStageStatic = withoutTargetLibc;
+
+  inherit noSysDirs staticCompiler langJava
     libcCross crossMingw;
 
   inherit (callFile ../common/dependencies.nix { })
@@ -256,6 +259,9 @@ stdenv.mkDerivation ({
     stripDebugList
     stripDebugListTarget
     preFixup;
+
+  # https://gcc.gnu.org/PR109898
+  enableParallelInstalling = false;
 
   doCheck = false; # requires a lot of tools, causes a dependency cycle for stdenv
 
@@ -317,10 +323,8 @@ stdenv.mkDerivation ({
   };
 }
 
-// optionalAttrs (targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt" && crossStageStatic) {
-  makeFlags = [ "all-gcc" "all-target-libgcc" ];
-  installTargets = "install-gcc install-target-libgcc";
-}
-
 // optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
-)
+))
+[
+  (callPackage ../common/libgcc.nix   { inherit version langC langCC langJit targetPlatform hostPlatform withoutTargetLibc enableShared; })
+]

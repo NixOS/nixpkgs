@@ -5,13 +5,13 @@ let
 in
 buildFishPlugin rec {
   pname = "fzf.fish";
-  version = "9.7";
+  version = "9.8";
 
   src = fetchFromGitHub {
     owner = "PatrickF1";
     repo = "fzf.fish";
     rev = "v${version}";
-    sha256 = "sha256-haNSqXJzLL3JGvD4JrASVmhLJz6i9lna6/EdojXdFOo=";
+    sha256 = "sha256-xWaMd5POCDeeFTsGtHbIvsPelIp+GZPC1X1CseCo3BA=";
   };
 
   nativeCheckInputs = [ fzf fd unixtools.script procps ];

@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ueberzugpp";
-  version = "2.8.6";
+  version = "2.8.8";
 
   src = fetchFromGitHub {
     owner = "jstkdng";
     repo = "ueberzugpp";
     rev = "v${version}";
-    hash = "sha256-FNDFNPNiTLAB90dRpVX3XmbzB5pkkJmnhENmsPRldVE=";
+    hash = "sha256-HvcH8ysH43i87so758m6QD+AuNfTiOdo5knI+3PBO8U=";
   };
 
   # error: no member named 'ranges' in namespace 'std'
@@ -94,10 +94,6 @@ stdenv.mkDerivation rec {
   # error: aligned deallocation function of type 'void (void *, std::align_val_t) noexcept' is only available on macOS 10.14 or newer
   preBuild = lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11.0") ''
     export MACOSX_DEPLOYMENT_TARGET=10.14
-  '';
-
-  postInstall = ''
-    ln -s $out/bin/ueberzug $out/bin/ueberzugpp
   '';
 
   meta = with lib; {

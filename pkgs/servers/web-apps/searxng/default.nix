@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "searxng";
-  version = "unstable-2023-05-19";
+  version = "unstable-2023-06-26";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "d867bf17e6d2f9a7c83c9a1ffafda5184a24c0e3";
-    sha256 = "sha256-W7/8/3FzwErPkRlfuyqajova6LRKarANPtc6L/z20CI=";
+    rev = "da7c30291dcf53cc5b3d98f9aada5615cd1593a9";
+    sha256 = "sha256-kbNw/YgcBZNkmn2nmsnEnc9Y8MJg3zGFdW1x9GIo+dM=";
   };
 
   postPatch = ''
@@ -33,6 +33,7 @@ python3.pkgs.buildPythonApplication rec {
     jinja2
     lxml
     pygments
+    pytomlpp
     pyyaml
     redis
     uvloop
@@ -50,6 +51,9 @@ python3.pkgs.buildPythonApplication rec {
     # Create a symlink for easier access to static data
     mkdir -p $out/share
     ln -s ../${python3.sitePackages}/searx/static $out/share/
+
+    # copy config schema for the limiter
+    cp searx/botdetection/limiter.toml $out/${python3.sitePackages}/searx/botdetection/limiter.toml
   '';
 
   meta = with lib; {

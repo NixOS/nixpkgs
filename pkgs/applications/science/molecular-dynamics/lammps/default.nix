@@ -6,11 +6,12 @@
 , fftw
 , blas
 , lapack
-, withMPI ? false
-, mpi
 , cmake
+, pkg-config
 # Available list of packages can be found near here:
-# https://github.com/lammps/lammps/blob/develop/cmake/CMakeLists.txt#L222
+#
+# - https://github.com/lammps/lammps/blob/develop/cmake/CMakeLists.txt#L222
+# - https://docs.lammps.org/Build_extras.html
 , packages ? {
   ASPHERE = true;
   BODY = true;
@@ -35,6 +36,10 @@
   SRD = true;
   REAXFF = true;
 }
+# Extra cmakeFlags to add as "-D${attr}=${value}"
+, extraCmakeFlags ? {}
+# Extra `buildInputs` - meant for packages that require more inputs
+, extraBuildInputs ? []
 }:
 
 stdenv.mkDerivation rec {
@@ -53,14 +58,22 @@ stdenv.mkDerivation rec {
   '';
   nativeBuildInputs = [
     cmake
+    pkg-config
   ];
 
   passthru = {
-    inherit mpi;
+    # Remove these at some point - perhaps after release 23.11. See discussion at:
+    # https://github.com/NixOS/nixpkgs/pull/238771#discussion_r1235459961
+    mpi = throw "`lammps-mpi.passthru.mpi` was removed in favor of `extraBuildInputs`";
     inherit packages;
+    inherit extraCmakeFlags;
+    inherit extraBuildInputs;
   };
   cmakeFlags = [
-  ] ++ (builtins.map (p: "-DPKG_${p}=ON") (builtins.attrNames (lib.filterAttrs (n: v: v) packages)));
+  ]
+  ++ (builtins.map (p: "-DPKG_${p}=ON") (builtins.attrNames (lib.filterAttrs (n: v: v) packages)))
+  ++ (lib.mapAttrsToList (n: v: "-D${n}=${v}") extraCmakeFlags)
+  ;
 
   buildInputs = [
     fftw
@@ -68,9 +81,8 @@ stdenv.mkDerivation rec {
     blas
     lapack
     gzip
-  ] ++ lib.optionals withMPI [
-    mpi
-  ];
+  ] ++ extraBuildInputs
+  ;
 
   # For backwards compatibility
   postInstall = ''

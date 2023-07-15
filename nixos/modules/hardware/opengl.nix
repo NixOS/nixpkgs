@@ -87,13 +87,13 @@ in
       extraPackages = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = literalExpression "with pkgs; [ intel-media-driver intel-ocl vaapiIntel ]";
+        example = literalExpression "with pkgs; [ intel-media-driver intel-ocl intel-vaapi-driver ]";
         description = lib.mdDoc ''
           Additional packages to add to OpenGL drivers.
           This can be used to add OpenCL drivers, VA-API/VDPAU drivers etc.
 
           ::: {.note}
-          intel-media-driver supports hardware Broadwell (2014) or newer. Older hardware should use the mostly unmaintained vaapiIntel driver.
+          intel-media-driver supports hardware Broadwell (2014) or newer. Older hardware should use the mostly unmaintained intel-vaapi-driver driver.
           :::
         '';
       };
@@ -101,13 +101,13 @@ in
       extraPackages32 = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = literalExpression "with pkgs.pkgsi686Linux; [ intel-media-driver vaapiIntel ]";
+        example = literalExpression "with pkgs.pkgsi686Linux; [ intel-media-driver intel-vaapi-driver ]";
         description = lib.mdDoc ''
           Additional packages to add to 32-bit OpenGL drivers on 64-bit systems.
           Used when {option}`driSupport32Bit` is set. This can be used to add OpenCL drivers, VA-API/VDPAU drivers etc.
 
           ::: {.note}
-          intel-media-driver supports hardware Broadwell (2014) or newer. Older hardware should use the mostly unmaintained vaapiIntel driver.
+          intel-media-driver supports hardware Broadwell (2014) or newer. Older hardware should use the mostly unmaintained intel-vaapi-driver driver.
           :::
         '';
       };

@@ -38,9 +38,6 @@ let
       export PAGER=cat
       cacheDir=$TEST_ROOT/binary-cache
 
-      mkdir -p $NIX_CONF_DIR
-      echo "experimental-features = nix-command" >> $NIX_CONF_DIR/nix.conf
-
       nix-store --init
 
       cp -r ${../.} lib
@@ -52,6 +49,9 @@ let
 
       echo "Running lib/tests/sources.sh"
       TEST_LIB=$PWD/lib bash lib/tests/sources.sh
+
+      echo "Running lib/tests/systems.nix"
+      [[ $(nix-instantiate --eval --strict lib/tests/systems.nix | tee /dev/stderr) == '[ ]' ]];
 
       mkdir $out
       echo success > $out/${nix.version}

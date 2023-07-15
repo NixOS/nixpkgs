@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+  patches = [
+    ./libclc-gnu-install-dirs.patch
+  ];
+
   # cmake expects all required binaries to be in the same place, so it will not be able to find clang without the patch
   postPatch = ''
     substituteInPlace CMakeLists.txt \
@@ -35,9 +39,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ninja python3 ];
   buildInputs = [ llvm_14 ];
   strictDeps = true;
-  cmakeFlags = [
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-  ];
 
   postInstall = ''
     install -Dt $dev/bin prepare_builtins

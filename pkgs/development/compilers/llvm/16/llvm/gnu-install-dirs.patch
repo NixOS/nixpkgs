@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 45399dc0537e..5d946e9e6583 100644
+index 7e25e0407db2..72f031a82b75 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -942,7 +942,7 @@ if (NOT TENSORFLOW_AOT_PATH STREQUAL "")
+@@ -995,7 +995,7 @@ if (NOT TENSORFLOW_AOT_PATH STREQUAL "")
    add_subdirectory(${TENSORFLOW_AOT_PATH}/xla_aot_runtime_src
      ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/tf_runtime)
    install(TARGETS tf_xla_runtime EXPORT LLVMExports
@@ -12,10 +12,10 @@ index 45399dc0537e..5d946e9e6583 100644
    # Once we add more modules, we should handle this more automatically.
    if (DEFINED LLVM_OVERRIDE_MODEL_HEADER_INLINERSIZEMODEL)
 diff --git a/cmake/modules/AddLLVM.cmake b/cmake/modules/AddLLVM.cmake
-index 057431208322..56f0dcb258da 100644
+index 93e6d67551de..8d367457af5a 100644
 --- a/cmake/modules/AddLLVM.cmake
 +++ b/cmake/modules/AddLLVM.cmake
-@@ -844,8 +844,8 @@ macro(add_llvm_library name)
+@@ -874,8 +874,8 @@ macro(add_llvm_library name)
        get_target_export_arg(${name} LLVM export_to_llvmexports ${umbrella})
        install(TARGETS ${name}
                ${export_to_llvmexports}
@@ -26,7 +26,7 @@ index 057431208322..56f0dcb258da 100644
                RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT ${name})
  
        if (NOT LLVM_ENABLE_IDE)
-@@ -2007,7 +2007,7 @@ function(llvm_install_library_symlink name dest type)
+@@ -2043,7 +2043,7 @@ function(llvm_install_library_symlink name dest type)
    set(full_name ${CMAKE_${type}_LIBRARY_PREFIX}${name}${CMAKE_${type}_LIBRARY_SUFFIX})
    set(full_dest ${CMAKE_${type}_LIBRARY_PREFIX}${dest}${CMAKE_${type}_LIBRARY_SUFFIX})
  
@@ -35,7 +35,7 @@ index 057431208322..56f0dcb258da 100644
    if(WIN32 AND "${type}" STREQUAL "SHARED")
      set(output_dir "${CMAKE_INSTALL_BINDIR}")
    endif()
-@@ -2271,15 +2271,15 @@ function(llvm_setup_rpath name)
+@@ -2312,16 +2312,37 @@ function(llvm_setup_rpath name)
  
    if (APPLE)
      set(_install_name_dir INSTALL_NAME_DIR "@rpath")
@@ -49,7 +49,30 @@ index 057431208322..56f0dcb258da 100644
 -    set(_install_rpath "${LLVM_LIBRARY_OUTPUT_INTDIR}" "${CMAKE_INSTALL_PREFIX}/lib${LLVM_LIBDIR_SUFFIX}" ${extra_libdir})
 +    set(_install_rpath "${LLVM_LIBRARY_OUTPUT_INTDIR}" "${CMAKE_INSTALL_FULL_LIBDIR}${LLVM_LIBDIR_SUFFIX}" ${extra_libdir})
    elseif(UNIX)
--    set(_install_rpath "\$ORIGIN/../lib${LLVM_LIBDIR_SUFFIX}" ${extra_libdir})
+-    set(_build_rpath "\$ORIGIN/../lib${LLVM_LIBDIR_SUFFIX}" ${extra_libdir})
+-    set(_install_rpath "\$ORIGIN/../lib${LLVM_LIBDIR_SUFFIX}")
++    # Note that we add `extra_libdir` (aka `LLVM_LIBRARY_DIR` in our case) back
++    # to `_install_rpath` here.
++    #
++    # In nixpkgs we do not build and install LLVM alongside rdeps of LLVM (i.e.
++    # clang); instead LLVM is its own package and thus lands at its own nix
++    # store path. This makes it so that the default relative rpath (`../lib/`)
++    # does not point at the LLVM shared objects.
++    #
++    # More discussion here:
++    #   - https://github.com/NixOS/nixpkgs/pull/235624#discussion_r1220150329
++    #   - https://reviews.llvm.org/D146918 (16.0.5+)
++    #
++    # Note that we leave `extra_libdir` in `_build_rpath`: without FHS there is
++    # no potential that this will result in us pulling in the "wrong" LLVM.
++    # Adding this to the build rpath means we aren't forced to use
++    # `installCheckPhase` instead of `checkPhase` (i.e. binaries in the build
++    # dir, pre-install, will have the right rpath for LLVM).
++    #
++    # As noted in the differential above, an alternative solution is to have
++    # all rdeps of nixpkgs' LLVM (that use the AddLLVM.cmake machinery) set
++    # `CMAKE_INSTALL_RPATH`.
++    set(_build_rpath "\$ORIGIN/../${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}" ${extra_libdir})
 +    set(_install_rpath "\$ORIGIN/../${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}" ${extra_libdir})
      if(${CMAKE_SYSTEM_NAME} MATCHES "(FreeBSD|DragonFly)")
        set_property(TARGET ${name} APPEND_STRING PROPERTY
@@ -71,10 +94,10 @@ index 891c9e6d618c..8d963f3b0069 100644
    list(APPEND ocaml_flags "-ldopt" "-Wl,-rpath,${ocaml_rpath}")
  
 diff --git a/cmake/modules/CMakeLists.txt b/cmake/modules/CMakeLists.txt
-index d4b0ab959148..26ed981fd09f 100644
+index d99af79aa38e..21e794224b99 100644
 --- a/cmake/modules/CMakeLists.txt
 +++ b/cmake/modules/CMakeLists.txt
-@@ -128,7 +128,7 @@ set(LLVM_CONFIG_INCLUDE_DIRS
+@@ -127,7 +127,7 @@ set(LLVM_CONFIG_INCLUDE_DIRS
    )
  list(REMOVE_DUPLICATES LLVM_CONFIG_INCLUDE_DIRS)
  
@@ -84,7 +107,7 @@ index d4b0ab959148..26ed981fd09f 100644
    "${LLVM_CONFIG_LIBRARY_DIR}"
    # FIXME: Should there be other entries here?
 diff --git a/docs/CMake.rst b/docs/CMake.rst
-index 879b7b231d4c..9c31d14e8950 100644
+index 7926de258ec8..5ae01adc3905 100644
 --- a/docs/CMake.rst
 +++ b/docs/CMake.rst
 @@ -250,7 +250,7 @@ description is in `LLVM-related variables`_ below.
@@ -120,10 +143,10 @@ index 370005cd8d7d..7e790bc52111 100644
  #define LLVM_INSTALL_PACKAGE_DIR "@LLVM_INSTALL_PACKAGE_DIR@"
  #define LLVM_TARGETS_BUILT "@LLVM_TARGETS_BUILT@"
 diff --git a/tools/llvm-config/llvm-config.cpp b/tools/llvm-config/llvm-config.cpp
-index 2c6c55f89d38..f6d2068a0827 100644
+index b1d795a0a349..de6cb1514f05 100644
 --- a/tools/llvm-config/llvm-config.cpp
 +++ b/tools/llvm-config/llvm-config.cpp
-@@ -369,7 +369,11 @@ int main(int argc, char **argv) {
+@@ -366,7 +366,11 @@ int main(int argc, char **argv) {
        sys::fs::make_absolute(ActivePrefix, Path);
        ActiveBinDir = std::string(Path.str());
      }

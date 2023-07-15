@@ -24,9 +24,7 @@
 , release ? true
   # Additional crate2nix configuration if it exists.
 , crateConfig
-  ? if builtins.pathExists ./crate-config.nix
-    then pkgs.callPackage ./crate-config.nix {}
-    else {}
+  ? lib.optionalAttrs (builtins.pathExists ./crate-config.nix) (pkgs.callPackage ./crate-config.nix {})
 }:
 
 rec {

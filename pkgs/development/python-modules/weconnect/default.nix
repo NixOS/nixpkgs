@@ -47,6 +47,8 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "setup_requires=SETUP_REQUIRED," "setup_requires=[]," \
       --replace "tests_require=TEST_REQUIRED," "tests_require=[],"
+    substituteInPlace requirements.txt \
+      --replace "requests~=2.29.0" "requests"
     substituteInPlace image_extra_requirements.txt \
       --replace "pillow~=" "pillow>=" \
       --replace "ascii_magic~=" "ascii_magic>="

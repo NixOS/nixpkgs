@@ -11,11 +11,11 @@
 }:
 
 let
-  version = "4.4.0";
+  version = "4.4.5";
 
   libsecp256k1_name =
-    if stdenv.isLinux then "libsecp256k1.so.0"
-    else if stdenv.isDarwin then "libsecp256k1.0.dylib"
+    if stdenv.isLinux then "libsecp256k1.so.{v}"
+    else if stdenv.isDarwin then "libsecp256k1.{v}.dylib"
     else "libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   libzbar_name =
@@ -28,7 +28,7 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "sha256-lXMz0U7zgtCApBCGZcpOHvLcyOeGG0yJE/gr7Gv+yBQ=";
+    sha256 = "sha256-R5jFxqaKnqQ+WNp4l0u34wMFxlbIsQ+9qDQxiQEu6kM=";
 
     postFetch = ''
       mv $out ./all
@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "sha256-SHV+fCDhfgIh7s8L7eDbKj8bkHSVm7J2PPQ4CQpp6cI=";
+    sha256 = "sha256-rTQcnEfHaFrLvPnI1IZl9uk2D0NFLn0PSaGsI9KyLr4=";
   };
 
   postUnpack = ''

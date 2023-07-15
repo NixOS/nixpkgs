@@ -12,7 +12,7 @@
 }:
 let
   pinData = lib.importJSON ./pin.json;
-  version = pinData.version;
+  version = pinData.serverVersion;
 in
 rustPlatform.buildRustPackage rec {
   inherit version;
@@ -25,6 +25,10 @@ rustPlatform.buildRustPackage rec {
     sha256 = pinData.serverSha256;
     fetchSubmodules = true;
   };
+
+  preConfigure = ''
+    echo 'pub const VERSION: &str = "${version}";' > crates/utils/src/version.rs
+  '';
 
   cargoSha256 = pinData.serverCargoSha256;
 
@@ -42,14 +46,14 @@ rustPlatform.buildRustPackage rec {
   PROTOC_INCLUDE = "${protobuf}/include";
   nativeBuildInputs = [ protobuf rustfmt ];
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = ./update.py;
   passthru.tests.lemmy-server = nixosTests.lemmy;
 
   meta = with lib; {
     description = "🐀 Building a federated alternative to reddit in rust";
     homepage = "https://join-lemmy.org/";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ happysalada billewanick ];
+    maintainers = with maintainers; [ happysalada billewanick adisbladis ];
     mainProgram = "lemmy_server";
   };
 }

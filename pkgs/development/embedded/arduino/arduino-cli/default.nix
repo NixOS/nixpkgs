@@ -4,13 +4,13 @@ let
 
   pkg = buildGoModule rec {
     pname = "arduino-cli";
-    version = "0.32.2";
+    version = "0.33.0";
 
     src = fetchFromGitHub {
       owner = "arduino";
       repo = pname;
       rev = version;
-      hash = "sha256-Em8L2ZYS1rgW46/MP5hs/EBWGcb5GP3EDEzWi072F/I=";
+      hash = "sha256-iwVxaNkz4AgLXPRjzD3vNJ7k+whWvpQUl66nSmRFW+U=";
     };
 
     nativeBuildInputs = [
@@ -23,7 +23,7 @@ let
 
     subPackages = [ "." ];
 
-    vendorSha256 = "sha256-+5Cj6wdX25fK+Y9czTwRRqCdY+0iarvii9nD3QMDh+c=";
+    vendorHash = "sha256-efZnuxXbC31u7FciULGYvpaWiCm9boQRLUpxW9evyJQ=";
 
     postPatch = let
       skipTests = [

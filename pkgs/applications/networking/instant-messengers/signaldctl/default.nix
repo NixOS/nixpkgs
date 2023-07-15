@@ -36,6 +36,5 @@ buildGoModule rec {
     homepage = "https://signald.org/signaldctl/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ colinsane ];
-    platforms = platforms.unix;
   };
 }

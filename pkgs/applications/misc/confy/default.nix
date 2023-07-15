@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "confy";
-  version = "0.6.4";
+  version = "0.6.5";
 
   src = fetchurl {
     url = "https://git.sr.ht/~fabrixxm/confy/archive/${version}.tar.gz";
-    sha256 = "0v74pdyihj7r9gb3k2rkvbphan27ajlvycscd8xzrnsv74lcmbpm";
+    sha256 = "sha256-zfuwOZBSGQzJUc36M6C5wSHarLbPFqayQVFo+WbVo7k=";
   };
 
   nativeBuildInputs = [

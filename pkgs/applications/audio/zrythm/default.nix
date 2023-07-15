@@ -85,7 +85,8 @@ let
       hash = "sha256-yfVzZV8G4AUDM8+yS9finzobpOb1PUEPgBWFhEY4nFQ=";
     };
   });
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "zrythm";
   version = "1.0.0-beta.4.9.1";
 
@@ -171,6 +172,8 @@ in stdenv.mkDerivation rec {
 
   # Zrythm uses meson to build, but requires cmake for dependency detection.
   dontUseCmakeConfigure = true;
+
+  dontWrapQtApps = true;
 
   mesonFlags = [
     "-Db_lto=false"

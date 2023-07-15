@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, ncurses, pkg-config, cmake }:
+{ lib, stdenv, fetchFromGitHub, ncurses, pkg-config, cmake }:
 
 stdenv.mkDerivation rec {
   version = "7.0.0";

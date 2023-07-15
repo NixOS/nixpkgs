@@ -125,6 +125,8 @@ stdenv.mkDerivation rec {
     "-DGOOGLE_CLOUD_CPP_ENABLE=${lib.concatStringsSep ";" apis}"
   ];
 
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = with lib; {
     license = with licenses; [ asl20 ];
     homepage = "https://github.com/googleapis/google-cloud-cpp";

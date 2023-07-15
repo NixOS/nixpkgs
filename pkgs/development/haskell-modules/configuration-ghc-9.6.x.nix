@@ -76,6 +76,14 @@ self: super: {
   turtle = doDistribute self.turtle_1_6_1;
   aeson = doDistribute self.aeson_2_1_2_1;
   memory = doDistribute self.memory_0_18_0;
+  semigroupoids = doDistribute self.semigroupoids_6_0_0_1;
+  bifunctors = doDistribute self.bifunctors_5_6_1;
+  cabal-plan = doDistribute self.cabal-plan_0_7_3_0;
+  base-compat = doDistribute self.base-compat_0_13_0;
+  base-compat-batteries = doDistribute self.base-compat-batteries_0_13_0;
+  semialign = doDistribute self.semialign_1_3;
+  assoc = doDistribute self.assoc_1_1;
+  strict = doDistribute self.strict_0_5;
 
   ghc-lib = doDistribute self.ghc-lib_9_6_2_20230523;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_6_2_20230523;
@@ -110,15 +118,6 @@ self: super: {
   #
   # Too strict bounds, waiting on Hackage release in nixpkgs
   #
-
-  # base >= 4.18 is allowed in those newer versions
-  boring = assert !(self ? boring_0_2_1); doJailbreak super.boring;
-  these = assert !(self ? assoc_1_2); doJailbreak super.these;
-
-  # XXX: We probably should be using semigroupoids 6.0.1 which is intended for 9.6
-  semigroupoids = doJailbreak super.semigroupoids;
-  # XXX: 1.3 supports 9.6 properly, but is intended for bifunctors >= 5.6
-  semialign = doJailbreak super.semialign;
 
   #
   # Compilation failure workarounds
@@ -183,9 +182,12 @@ self: super: {
   hiedb = dontCheck super.hiedb;
   retrie = dontCheck (super.retrie);
 
+  # break infinite recursion with foldable1-classes-compat's test suite, which depends on 'these'.
+  these = doDistribute (super.these_1_2.override { foldable1-classes-compat = dontCheck super.foldable1-classes-compat; });
+
   ghc-exactprint = unmarkBroken (addBuildDepends (with self.ghc-exactprint.scope; [
    HUnit Diff data-default extra fail free ghc-paths ordered-containers silently syb
-  ]) super.ghc-exactprint_1_7_0_0);
+  ]) super.ghc-exactprint_1_7_0_1);
 
   inherit (pkgs.lib.mapAttrs (_: doJailbreak ) super)
     hls-cabal-plugin
@@ -200,5 +202,31 @@ self: super: {
     tree-diff
     implicit-hie-cradle
     focus
-    hie-compat;
+    hie-compat
+    xmonad-contrib              # mtl >=1 && <2.3
+    dbus       # template-haskell >=2.18 && <2.20, transformers <0.6, unix <2.8
+  ;
+
+  # Apply workaround for Cabal 3.8 bug https://github.com/haskell/cabal/issues/8455
+  # by making `pkg-config --static` happy. Note: Cabal 3.9 is also affected, so
+  # the GHC 9.6 configuration may need similar overrides eventually.
+  X11-xft = __CabalEagerPkgConfigWorkaround super.X11-xft;
+  # Jailbreaks for https://github.com/gtk2hs/gtk2hs/issues/323#issuecomment-1416723309
+  glib = __CabalEagerPkgConfigWorkaround (doJailbreak super.glib);
+  cairo = __CabalEagerPkgConfigWorkaround (doJailbreak super.cairo);
+  pango = __CabalEagerPkgConfigWorkaround (doJailbreak super.pango);
+
+  # Pending text-2.0 support https://github.com/gtk2hs/gtk2hs/issues/327
+  gtk = doJailbreak super.gtk;
+
+  # Doctest comments have bogus imports.
+  bsb-http-chunked = dontCheck super.bsb-http-chunked;
+
+  # Fix ghc-9.6.x build errors.
+  libmpd = appendPatch
+    (pkgs.fetchpatch { url = "https://github.com/vimus/libmpd-haskell/pull/138.patch";
+                       sha256 = "sha256-CvvylXyRmoCoRJP2MzRwL0SBbrEzDGqAjXS+4LsLutQ=";
+                     })
+    super.libmpd;
+
 }

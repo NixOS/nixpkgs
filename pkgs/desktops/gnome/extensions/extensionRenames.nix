@@ -6,9 +6,8 @@
 # - Make a separate section for each GNOME version. Collisions will come back eventually
 #   as the extensions are updated.
 {
-  # ############################################################################
-  # These are conflicts for older extensions (i.e. they don't support the latest GNOME version).
-  # Make sure to move them up once they are updated
+
+  # ####### GNOME 44 #######
 
   "apps-menu@gnome-shell-extensions.gcampax.github.com" = "applications-menu";
   "Applications_Menu@rmy.pobox.com" = "frippery-applications-menu";
@@ -28,7 +27,17 @@
   "panel-date-format@keiii.github.com" = "panel-date-format";
   "panel-date-format@atareao.es" = "panel-date-format-2";
 
+  "batime@martin.zurowietz.de" = "battery-time";
+  "batterytime@typeof.pw" = "battery-time-2";
+
+  # ############################################################################
+  # These are conflicts for older extensions (i.e. they don't support the latest GNOME version).
+  # Make sure to move them up once they are updated
+
   # ####### GNOME 43 #######
+
+  "lockkeys@vaina.lt" = "lock-keys";
+  "lockkeys@fawtytoo" = "lock-keys-2";
 
   # DEPRECATED: Use "Caffeine" instead
   "KeepAwake@jepfa.de" = "keep-awake";
@@ -36,9 +45,6 @@
 
   "noannoyance@sindex.com" = "noannoyance";
   "noannoyance@daase.net" = "noannoyance-2";
-
-  "batime@martin.zurowietz.de" = "battery-time";
-  "batterytime@typeof.pw" = "battery-time-2";
 
   "volume_scroller@trflynn89.pm.me" = "volume-scroller";
   "volume_scroller@francislavoie.github.io" = "volume-scroller-2";
@@ -48,9 +54,6 @@
   "floating-panel-usedbymyself@wpism" = null;
 
   # ####### GNOME 42 #######
-
-  "lockkeys@vaina.lt" = "lock-keys";
-  "lockkeys@fawtytoo" = "lock-keys-2";
 
   "wireguard-indicator@gregos.me" = "wireguard-indicator-2";
   "wireguard-indicator@atareao.es" = "wireguard-indicator";

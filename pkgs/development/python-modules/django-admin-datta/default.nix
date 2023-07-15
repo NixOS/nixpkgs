@@ -2,9 +2,6 @@
 , buildPythonPackage
 , django
 , fetchPypi
-, pytest
-, pytest-django
-, python
 , pythonOlder
 }:
 
@@ -24,14 +21,13 @@ buildPythonPackage rec {
     django
   ];
 
-  #tests fails without django test
+
+  # no tests
   doCheck = false;
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m django test --settings=tests.settings
-    runHook postCheck
-  '';
+  pythonImportCheck = [
+    "admin-datta"
+  ];
 
   meta = with lib; {
     description = "Modern template for Django that covers Admin Section";

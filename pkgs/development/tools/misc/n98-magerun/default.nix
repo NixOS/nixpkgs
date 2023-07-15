@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, unzip, lib, php80 }:
+{ stdenv, fetchFromGitHub, makeWrapper, unzip, lib, php81 }:
 
 let
   pname = "n98-magerun";
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     runHook preInstall
     mkdir -p $out/bin
     install -D $src/n98-magerun $out/libexec/n98-magerun/n98-magerun-${version}.phar
-    makeWrapper ${php80}/bin/php $out/bin/n98-magerun \
+    makeWrapper ${php81}/bin/php $out/bin/n98-magerun \
       --add-flags "$out/libexec/n98-magerun/n98-magerun-${version}.phar" \
       --prefix PATH : ${lib.makeBinPath [ unzip ]}
     runHook postInstall
@@ -34,5 +34,6 @@ stdenv.mkDerivation {
     homepage = "https://magerun.net/";
     changelog = "https://magerun.net/category/magerun/";
     maintainers = teams.php.members;
+    broken = true; # Not compatible with PHP 8.1, see https://github.com/netz98/n98-magerun/issues/1275
   };
 }

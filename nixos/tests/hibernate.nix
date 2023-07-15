@@ -50,6 +50,7 @@ in makeTest {
       imports = [
         ../modules/profiles/installation-device.nix
         ../modules/profiles/base.nix
+        ./common/auto-format-root-device.nix
       ];
 
       nix.settings = {

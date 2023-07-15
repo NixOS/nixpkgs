@@ -56,6 +56,5 @@ buildGoModule rec {
     license = licenses.asl20;
     homepage = "https://github.com/linuxkit/linuxkit";
     maintainers = with maintainers; [ nicknovitski ];
-    platforms = platforms.unix;
   };
 }

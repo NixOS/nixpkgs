@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
-, mypy
 , typing-extensions
 }:
 
@@ -21,18 +20,26 @@ buildPythonPackage rec {
     hash = "sha256-yW+pmAryBp6bvjolN91ACDkk5zxvKfu4nRLQSy71kqs=";
   };
 
+  postPatch = ''
+    rm tests/conftest.py
+  '';
+
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
     typing-extensions
   ];
 
   nativeCheckInputs = [
-    mypy
     pytestCheckHook
   ];
 
   disabledTests = [
     # Version mismatch
     "testMypyImmu"
+  ];
+
+  disabledTestPaths = [
+    # avoid dependency on mypy
+    "tests/test_mypy.py"
   ];
 
   pythonImportsCheck = [

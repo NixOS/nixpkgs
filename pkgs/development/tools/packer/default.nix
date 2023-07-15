@@ -34,6 +34,5 @@ buildGoModule rec {
     license     = licenses.mpl20;
     maintainers = with maintainers; [ cstrahan zimbatm ma27 techknowlogick ];
     changelog   = "https://github.com/hashicorp/packer/blob/v${version}/CHANGELOG.md";
-    platforms   = platforms.unix;
   };
 }

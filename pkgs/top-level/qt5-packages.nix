@@ -154,7 +154,9 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   maui-core = libsForQt5.callPackage ../development/libraries/maui-core { };
 
-  mlt = callPackage ../development/libraries/mlt/qt-5.nix { };
+  mlt = pkgs.mlt.override {
+    enableQt = true;
+  };
 
   phonon = callPackage ../development/libraries/phonon { };
 

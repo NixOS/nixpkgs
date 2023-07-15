@@ -141,9 +141,6 @@ let
         sphinxHook = null;
         sphinx-better-theme = null;
       }).overridePythonAttrs dropDocOutput;
-      hypothesis = super.hypothesis.override {
-        enableDocumentation = false;
-      };
       pyjwt = (super.pyjwt.override {
         sphinxHook = null;
         sphinx-rtd-theme = null;

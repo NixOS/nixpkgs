@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, callPackage
 , semgrep-core
 , buildPythonApplication
 , pythonPackages
@@ -11,12 +10,20 @@
 }:
 
 let
-  common = callPackage ./common.nix { };
+  common = import ./common.nix { inherit lib; };
 in
 buildPythonApplication rec {
   pname = "semgrep";
-  inherit (common) src version;
+  inherit (common) version;
+  src = fetchFromGitHub {
+    owner = "returntocorp";
+    repo = "semgrep";
+    rev = "v${version}";
+    hash = common.srcHash;
+  };
 
+  # prepare a subset of the submodules as we only need a handful
+  # and there are many many submodules total
   postPatch = (lib.concatStringsSep "\n" (lib.mapAttrsToList
     (
       path: submodule: ''
@@ -27,7 +34,7 @@ buildPythonApplication rec {
         ln -s ${submodule}/ ${path}
       ''
     )
-    common.submodules)) + ''
+    passthru.submodulesSubset)) + ''
     cd cli
   '';
 
@@ -97,10 +104,12 @@ buildPythonApplication rec {
 
   passthru = {
     inherit common;
+    submodulesSubset = lib.mapAttrs (k: args: fetchFromGitHub args) common.submodules;
     updateScript = ./update.sh;
   };
 
   meta = common.meta // {
     description = common.meta.description + " - cli";
+    inherit (semgrep-core.meta) platforms;
   };
 }

@@ -1,11 +1,11 @@
 { lib, fetchpatch, fetchzip, yarn2nix-moretea, nodejs_18, jq, dos2unix }:
 
 yarn2nix-moretea.mkYarnPackage {
-  version = "1.1.5";
+  version = "1.1.6";
 
   src = fetchzip {
-    url = "https://registry.npmjs.org/meshcentral/-/meshcentral-1.1.5.tgz";
-    sha256 = "1djdqfcmfk35q7hfbdn4rnh4di2lk1gk7icfasjmihrgpnsxrrir";
+    url = "https://registry.npmjs.org/meshcentral/-/meshcentral-1.1.6.tgz";
+    sha256 = "03f2jyjrxmmr28949m3niwb437akyp6kg6h1m2jkaxfg5yj4hs4v";
   };
 
   patches = [ ./fix-js-include-paths.patch ];

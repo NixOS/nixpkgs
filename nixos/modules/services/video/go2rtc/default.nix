@@ -103,6 +103,10 @@ in
       serviceConfig = {
         DynamicUser = true;
         User = "go2rtc";
+        SupplementaryGroups = [
+          # for v4l2 devices
+          "video"
+        ];
         StateDirectory = "go2rtc";
         ExecStart = "${cfg.package}/bin/go2rtc -config ${configFile}";
       };

@@ -3,7 +3,6 @@
 , buildPythonPackage
 , cargo
 , fetchFromGitHub
-, fetchpatch
 , h5py
 , numpy
 , pythonOlder
@@ -17,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "safetensors";
-  version = "0.3.0";
+  version = "0.3.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,21 +25,11 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Qpb5lTw1WEME9tWEGfxC8l8dK9mGMH2rz+O+xGCrUxw";
+    hash = "sha256-RoIBD+zBKVzXE8OpI8GR371YPxceR4P8B9T1/AHc9vA=";
   };
 
-  patches = [
-    # remove after next release
-    (fetchpatch {
-      name = "commit-cargo-lockfile";
-      relative = "bindings/python";
-      url = "https://github.com/huggingface/safetensors/commit/a7061b4235b59312010b2dd6f9597381428ee9a2.patch";
-      hash = "sha256-iH4vQOL2LU93kd0dSS8/JJxKGb+kDstqnExjYSSwi78";
-    })
-  ];
-
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src patches;
+    inherit src;
     sourceRoot = "source/bindings/python";
     hash = "sha256-tC0XawmKWNGCaByHQfJEfmHM3m/qgTuIpcRaEFJC6dM";
   };

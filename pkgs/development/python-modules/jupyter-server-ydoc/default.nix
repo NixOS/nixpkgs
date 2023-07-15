@@ -3,6 +3,7 @@
 , pythonOlder
 , fetchFromGitHub
 , hatchling
+, pythonRelaxDepsHook
 , jupyter-server-fileid
 , jupyter-ydoc
 , ypy-websocket
@@ -31,6 +32,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     hatchling
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "ypy-websocket"
   ];
 
   propagatedBuildInputs = [

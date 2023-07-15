@@ -323,6 +323,30 @@ in
           Defaults to 0, which waits forever.
         '';
       };
+
+      removeLinuxDRM = lib.mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Linux 6.2 dropped some kernel symbols required on aarch64 required by zfs.
+          Enabling this option will bring them back to allow this kernel version.
+          Note that in some jurisdictions this may be illegal as it might be considered
+          removing copyright protection from the code.
+          See https://www.ifross.org/?q=en/artikel/ongoing-dispute-over-value-exportsymbolgpl-function for further information.
+
+          If configure your kernel package with `zfs.latestCompatibleLinuxPackages`, you will need to also pass removeLinuxDRM to that package like this:
+
+          ```
+          { pkgs, ... }: {
+            boot.kernelPackages = (pkgs.zfs.override {
+              removeLinuxDRM = pkgs.hostPlatform.isAarch64;
+            }).latestCompatibleLinuxPackages;
+
+            boot.zfs.removeLinuxDRM = true;
+          }
+          ```
+        '';
+      };
     };
 
     services.zfs.autoSnapshot = {
@@ -523,6 +547,15 @@ in
           assertion = cfgZfs.allowHibernation -> !cfgZfs.forceImportRoot && !cfgZfs.forceImportAll;
           message = "boot.zfs.allowHibernation while force importing is enabled will cause data corruption";
         }
+        {
+          assertion = !(elem "" allPools);
+          message = ''
+            Automatic pool detection found an empty pool name, which can't be used.
+            Hint: for `fileSystems` entries with `fsType = zfs`, the `device` attribute
+            should be a zfs dataset name, like `device = "pool/data/set"`.
+            This error can be triggered by using an absolute path, such as `"/dev/disk/..."`.
+          '';
+        }
       ];
 
       boot = {
@@ -532,11 +565,13 @@ in
         # https://github.com/NixOS/nixpkgs/issues/106093
         kernelParams = lib.optionals (!config.boot.zfs.allowHibernation) [ "nohibernate" ];
 
-        extraModulePackages = [
-          (if config.boot.zfs.enableUnstable then
+        extraModulePackages = let
+          kernelPkg = if config.boot.zfs.enableUnstable then
             config.boot.kernelPackages.zfsUnstable
            else
-            config.boot.kernelPackages.zfs)
+            config.boot.kernelPackages.zfs;
+        in [
+          (kernelPkg.override { inherit (cfgZfs) removeLinuxDRM; })
         ];
       };
 
@@ -653,6 +688,21 @@ in
 
       services.udev.packages = [ cfgZfs.package ]; # to hook zvol naming, etc.
       systemd.packages = [ cfgZfs.package ];
+
+      # Export kernel_neon_* symbols again.
+      # This change is necessary until ZFS figures out a solution
+      # with upstream or in their build system to fill the gap for
+      # this symbol.
+      # In the meantime, we restore what was once a working piece of code
+      # in the kernel.
+      boot.kernelPatches = lib.optional (cfgZfs.removeLinuxDRM && pkgs.stdenv.hostPlatform.system == "aarch64-linux") {
+        name = "export-neon-symbols-as-gpl";
+        patch = pkgs.fetchpatch {
+          url = "https://github.com/torvalds/linux/commit/aaeca98456431a8d9382ecf48ac4843e252c07b3.patch";
+          hash = "sha256-L2g4G1tlWPIi/QRckMuHDcdWBcKpObSWSRTvbHRIwIk=";
+          revert = true;
+        };
+      };
 
       systemd.services = let
         createImportService' = pool: createImportService {

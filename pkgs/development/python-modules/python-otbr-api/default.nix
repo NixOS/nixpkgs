@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "python-otbr-api";
-  version = "2.1.0";
+  version = "2.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-LM09hQ5ELWLCymk8oxHcqTngs4mXg59uY2OrSpizQXo=";
+    hash = "sha256-jozMYrmXHSykv5npboyySuVDs1Lamlee15ZPYI4zmO4=";
   };
 
   nativeBuildInputs = [

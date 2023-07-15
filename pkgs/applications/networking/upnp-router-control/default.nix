@@ -1,33 +1,39 @@
 { lib
 , stdenv
-, fetchurl
+, fetchzip
+, desktop-file-utils
 , intltool
+, meson
+, ninja
 , pkg-config
 , wrapGAppsHook
-, gssdp
+, gssdp_1_6
 , gtk3
-, gupnp
+, gupnp_1_6
 }:
 
 stdenv.mkDerivation rec {
   pname = "upnp-router-control";
-  version = "0.3.1";
+  version = "0.3.2";
 
-  src = fetchurl {
-    url = "https://launchpad.net/upnp-router-control/trunk/${version}/+download/upnp-router-control-${version}.tar.gz";
-    hash = "sha256-bYbw4Z5hDlFTSGk5XE2gnnXRPYMl4IzV+kzlwfR98yg=";
+  src = fetchzip {
+    url = "https://launchpad.net/upnp-router-control/trunk/${version}/+download/upnp-router-control-${version}.tar.xz";
+    hash = "sha256-724xcIYNufmSgrHwmIk3awEAVlta9huNa0o6Z0hdBwQ=";
   };
 
   nativeBuildInputs = [
+    desktop-file-utils
     intltool
+    meson
+    ninja
     pkg-config
     wrapGAppsHook
   ];
 
   buildInputs = [
-    gssdp
+    gssdp_1_6
     gtk3
-    gupnp
+    gupnp_1_6
   ];
 
   meta = with lib; {

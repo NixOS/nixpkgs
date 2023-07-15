@@ -10,5 +10,5 @@ export NEXTCLOUD_VERSIONS=$(nix-instantiate --eval -E 'import ./nc-versions.nix 
 
 APPS=`cat nextcloud-apps.json | jq -r '.[]' | sed -z 's/\n/,/g;s/,$/\n/'`
 
-nc4nix -a $APPS
+nc4nix -apps $APPS
 rm *.log

@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
   nodes.machine = {
     imports = [ ./common/x11.nix ];
-    environment.systemPackages = [ pkgs.gnome.gedit ];
+    environment.systemPackages = [ pkgs.gedit ];
     fonts = {
       enableDefaultFonts = false;
       fonts = with pkgs;[

@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mu";
-  version = "1.10.3";
+  version = "1.10.5";
 
   src = fetchFromGitHub {
     owner = "djcb";
     repo = "mu";
     rev = "v${version}";
-    hash = "sha256-AqIPdKdNKLnAHIlqgs8zzm7j+iwNvDFWslvp8RjQPnI=";
+    hash = "sha256-ha3ckyRNzWF52unY6Pw2M6qeUdC68SGHFvzJ8Jbk2fY=";
   };
 
   postPatch = ''
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   # AOT native-comp, mostly copied from pkgs/build-support/emacs/generic.nix
-  postInstall = lib.optionalString (emacs.nativeComp or false) ''
+  postInstall = lib.optionalString (emacs.withNativeCompilation or false) ''
     mkdir -p $out/share/emacs/native-lisp
     export EMACSLOADPATH=$out/share/emacs/site-lisp/mu4e:
     export EMACSNATIVELOADPATH=$out/share/emacs/native-lisp:

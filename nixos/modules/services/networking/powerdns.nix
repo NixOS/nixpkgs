@@ -38,6 +38,8 @@ in {
 
   config = mkIf cfg.enable {
 
+    environment.etc.pdns.source = finalConfigDir;
+
     systemd.packages = [ pkgs.pdns ];
 
     systemd.services.pdns = {

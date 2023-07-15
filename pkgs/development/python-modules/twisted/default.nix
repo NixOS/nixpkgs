@@ -159,8 +159,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     git
     glibcLocales
-    # "hypothesis" indirectly depends on twisted to build its documentation.
-    (hypothesis.override { enableDocumentation = false; })
+    hypothesis
     pyhamcrest
   ]
   ++ passthru.optional-dependencies.conch

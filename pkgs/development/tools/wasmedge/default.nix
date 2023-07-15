@@ -1,6 +1,6 @@
 { lib
 , fetchFromGitHub
-, llvmPackages
+, llvmPackages_12
 , boost
 , cmake
 , spdlog
@@ -11,17 +11,18 @@
 }:
 
 let
+  llvmPackages = llvmPackages_12;
   stdenv = llvmPackages.stdenv;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "wasmedge";
-  version = "0.12.1";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "WasmEdge";
     repo = "WasmEdge";
     rev = finalAttrs.version;
-    sha256 = "sha256-pBaa90jvR4tLgVOBZEJOEUY2+VnBmdSN5kkJMB8wdUA=";
+    sha256 = "sha256-NbjjfK6qMKl6PRNSOmAYKB2prPEo9WCZuVWN1hLdGbU=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ asl20 ];
     description = "A lightweight, high-performance, and extensible WebAssembly runtime for cloud native, edge, and decentralized applications";
     maintainers = with maintainers; [ dit7ya ];
-    # error: no member named 'utimensat' in the global namespace
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    platforms = platforms.all;
   };
 })

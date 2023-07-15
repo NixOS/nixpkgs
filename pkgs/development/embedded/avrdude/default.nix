@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
     "-DBUILD_DOC=ON"
   ];
 
+  # dvips output references texlive in comments, resulting in a huge closure
+  postInstall = lib.optionalString docSupport ''
+    rm $out/share/doc/${pname}/*.ps
+  '';
+
   meta = with lib; {
     description = "Command-line tool for programming Atmel AVR microcontrollers";
     longDescription = ''

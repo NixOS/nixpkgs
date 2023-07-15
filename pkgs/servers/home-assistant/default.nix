@@ -231,15 +231,6 @@ let
         doCheck = false;
       });
 
-      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.12";
-        src = fetchPypi {
-          pname = "SQLAlchemy";
-          inherit version;
-          hash = "sha256-vd/FvR3uXbD93J2rJvgAwoPzJD5ygbvxByAP7TASX5w=";
-        };
-      });
-
       # Pinned due to API changes in 0.3.0
       tailscale = super.tailscale.overridePythonAttrs (oldAttrs: rec {
         version = "0.2.0";
@@ -296,7 +287,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.6.0";
+  hassVersion = "2023.7.2";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -312,7 +303,7 @@ in python.pkgs.buildPythonApplication rec {
   # Primary source is the pypi sdist, because it contains translations
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dEszA95EIwGMR2Ztpe7P8weh4FbqGJBkso7nCvTkPDc=";
+    hash = "sha256-fESzpOOEGFOJJ0ldI/VaVN0kH/zbCCq25s8vNnCUOFs=";
   };
 
   # Secondary source is git for tests
@@ -320,7 +311,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-0rhjh/mIevRdisWvTSx9QQjHdY7nMVpuGyTr9sChipk=";
+    hash = "sha256-HW+XO84enAA3BH4nppkXvAERT74y5m5jvz0uHWkkS6k=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -357,7 +348,7 @@ in python.pkgs.buildPythonApplication rec {
       "PyJWT"
       "pyOpenSSL"
       "requests"
-      "typing-extensions"
+      "typing_extensions"
       "voluptuous-serialize"
       "yarl"
     ];

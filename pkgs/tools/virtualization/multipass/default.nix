@@ -25,43 +25,51 @@
 
 let
   pname = "multipass";
-  version = "1.11.1";
+  version = "1.12.1";
+
+  # This is done here because a CMakeLists.txt from one of it's submodules tries
+  # to modify a file, so we grab the source for the submodule here, copy it into
+  # the source of the Multipass project which allows the modification to happen.
+  grpc_src = fetchFromGitHub {
+    owner = "CanonicalLtd";
+    repo = "grpc";
+    rev = "ba8e7f72a57b9e0b25783a4d3cea58c79379f194";
+    hash = "sha256-DS1UNLCUdbipn5w4p2aVa8LgHHhdJiAfzfEdIXNO69o=";
+    fetchSubmodules = true;
+  };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation
+{
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "multipass";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-AIZs+NRAn/r9EjTx9InDZzS4ycni4MZQXmC0A5rpaJk=";
+    hash = "sha256-8wRho/ECWxiE6rNqjBzaqFaIdhXzOzFuCcQ4zzfSmb4=";
     fetchSubmodules = true;
   };
 
-  preConfigure = ''
+  patches = [
+    ./lxd_socket_path.patch
+    ./cmake_no_fetch.patch
+  ];
+
+  postPatch = ''
+    # Make sure the version is reported correctly in the compiled binary.
     substituteInPlace ./CMakeLists.txt \
       --replace "determine_version(MULTIPASS_VERSION)" "" \
       --replace 'set(MULTIPASS_VERSION ''${MULTIPASS_VERSION})' 'set(MULTIPASS_VERSION "v${version}")'
 
+    # Patch the patch of the OVMF binaries to use paths from the nix store.
     substituteInPlace ./src/platform/backends/qemu/linux/qemu_platform_detail_linux.cpp \
       --replace "OVMF.fd" "${OVMF.fd}/FV/OVMF.fd" \
       --replace "QEMU_EFI.fd" "${OVMF.fd}/FV/QEMU_EFI.fd"
-  '';
 
-  postPatch = ''
-    # Patch all of the places where Multipass expects the LXD socket to be provided by a snap
-    substituteInPlace ./src/network/network_access_manager.cpp \
-      --replace "/var/snap/lxd/common/lxd/unix.socket" "/var/lib/lxd/unix.socket"
+    # Copy the grpc submodule we fetched into the source code.
+    cp -r --no-preserve=mode ${grpc_src} 3rd-party/grpc
 
-    substituteInPlace ./src/platform/backends/lxd/lxd_virtual_machine.cpp \
-      --replace "/var/snap/lxd/common/lxd/unix.socket" "/var/lib/lxd/unix.socket"
-
-    substituteInPlace ./src/platform/backends/lxd/lxd_request.h \
-      --replace "/var/snap/lxd/common/lxd/unix.socket" "/var/lib/lxd/unix.socket"
-
-    substituteInPlace ./tests/CMakeLists.txt \
-      --replace "FetchContent_MakeAvailable(googletest)" ""
-
+    # Configure CMake to use gtest from the nix store since we disabled fetching from the internet.
     cat >> tests/CMakeLists.txt <<'EOF'
       add_library(gtest INTERFACE)
       target_include_directories(gtest INTERFACE ${gtest.dev}/include)

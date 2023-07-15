@@ -76,14 +76,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "4.8.3";
+  version = "4.8.4";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-fvg9SFHRHeJVogYQ+vyVqGyLGnOjM5Osi3H0SNGe9fY=";
+    hash = "sha256-DRVFngQ4geJx2/7pT1VJzkcBZnVGgDvcGGUr9r38gSU=";
   };
 
   patches = [
@@ -93,15 +93,6 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://salsa.debian.org/debian/telegram-desktop/-/raw/09b363ed5a4fcd8ecc3282b9bfede5fbb83f97ef/debian/patches/Disable-register-custom-scheme.patch";
       hash = "sha256-B8X5lnSpwwdp1HlvyXJWQPybEN+plOwimdV5gW6aY2Y=";
-    })
-    # Bring custom xdg-activation implementation back
-    # Fixes https://github.com/telegramdesktop/tdesktop/issues/2635: TG desktop doen't open links
-    # https://github.com/desktop-app/lib_base/pull/180
-    (fetchpatch {
-      url = "https://github.com/desktop-app/lib_base/commit/6041498fbafcd0a22df88b7973d9e8f9bdf16958.patch";
-      extraPrefix = "Telegram/lib_base/";
-      stripLen = 1;
-      hash = "sha256-9IV1T/tjN2VA7wcpbt2GRpOMC76yOzRlGWuIAa8HTX0=";
     })
   ];
 
@@ -114,8 +105,6 @@ stdenv.mkDerivation rec {
       --replace '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
     substituteInPlace Telegram/lib_webview/webview/platform/linux/webview_linux_webkitgtk_library.cpp \
       --replace '"libwebkitgtk-6.0.so.4"' '"${webkitgtk_6_0}/lib/libwebkitgtk-6.0.so.4"'
-    substituteInPlace cmake/external/glib/CMakeLists.txt \
-      --replace 'add_subdirectory(cppgir)' 'add_subdirectory(cppgir EXCLUDE_FROM_ALL)'
   '';
 
   # We want to run wrapProgram manually (with additional parameters)

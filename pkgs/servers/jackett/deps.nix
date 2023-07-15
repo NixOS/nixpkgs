@@ -175,7 +175,7 @@
   (fetchNuGet { pname = "Newtonsoft.Json"; version = "10.0.1"; sha256 = "15ncqic3p2rzs8q8ppi0irl2miq75kilw4lh8yfgjq96id0ds3hv"; })
   (fetchNuGet { pname = "Newtonsoft.Json"; version = "11.0.2"; sha256 = "1784xi44f4k8v1fr696hsccmwpy94bz7kixxqlri98zhcxn406b2"; })
   (fetchNuGet { pname = "Newtonsoft.Json"; version = "13.0.1"; sha256 = "0fijg0w6iwap8gvzyjnndds0q4b8anwxxvik7y8vgq97dram4srb"; })
-  (fetchNuGet { pname = "Newtonsoft.Json"; version = "13.0.2"; sha256 = "1p9splg1min274dpz7xdfgzrwkyfd3xlkygwpr1xgjvvyjvs6b0i"; })
+  (fetchNuGet { pname = "Newtonsoft.Json"; version = "13.0.3"; sha256 = "0xrwysmrn4midrjal8g2hr1bbg38iyisl0svamb11arqws4w2bw7"; })
   (fetchNuGet { pname = "Newtonsoft.Json"; version = "9.0.1"; sha256 = "0mcy0i7pnfpqm4pcaiyzzji4g0c8i3a5gjz28rrr28110np8304r"; })
   (fetchNuGet { pname = "Newtonsoft.Json.Bson"; version = "1.0.1"; sha256 = "1r1hvj5gjl466bya2bfl5aaj8rbwyf5x1msg710wf3k2llbci1xa"; })
   (fetchNuGet { pname = "Newtonsoft.Json.Bson"; version = "1.0.2"; sha256 = "0c27bhy9x3c2n26inq32kmp6drpm71n6mqnmcr19wrlcaihglj35"; })

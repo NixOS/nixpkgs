@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl
 , darwin
-, abseil-cpp_202111
+, abseil-cpp
 , meson
 , ninja
 }:
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "1.0";
 
   src = fetchurl {
-    url = "https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/archive/v1.0/webrtc-audio-processing-v${version}.tar.gz";
+    url = "https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/archive/v${version}/webrtc-audio-processing-v${version}.tar.gz";
     sha256 = "sha256-dqRy1OfOG9TX2cgCD8cowU44zVanns/nPYZrilPfuiU=";
   };
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    abseil-cpp_202111
+    abseil-cpp
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices ]);
 
   patchPhase = ''

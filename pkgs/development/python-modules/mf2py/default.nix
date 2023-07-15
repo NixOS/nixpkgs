@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "mf2py";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "microformats";
     repo = "mf2py";
-    rev = version;
-    hash = "sha256-9pAD/eCmc/l7LGmKixDhZy3hhj1jCmcyo9wbqgtz/wI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Ya8DND1Dqbygbf1hjIGMlPwyc/MYIWIj+KnWB6Bqu1k=";
   };
 
   propagatedBuildInputs = [

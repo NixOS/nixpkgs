@@ -3,13 +3,13 @@
 
 buildDunePackage rec {
   pname = "memtrace";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "janestreet";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-y/Xz04CMFfRIzrDzGot16zEQsBMNc4J5s/q0VERcj04=";
+    hash = "sha256-dWkTrN8ZgNUz7BW7Aut8mfx8o4n8f6UZaDv/7rbbwNs=";
   };
 
   minimalOCamlVersion = "4.11";

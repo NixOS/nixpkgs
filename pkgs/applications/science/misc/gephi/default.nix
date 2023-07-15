@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, jdk11, maven, javaPackages }:
+{ lib, fetchFromGitHub, jdk11, maven, javaPackages }:
 
 let
+  mavenJdk11 = maven.override {
+    jdk = jdk11;
+  };
+in
+mavenJdk11.buildMavenPackage rec {
+  pname = "gephi";
   version = "0.10.1";
 
   src = fetchFromGitHub {
@@ -10,35 +16,9 @@ let
     hash = "sha256-ZNSEaiD32zFfF2ISKa1CmcT9Nq6r5i2rNHooQAcVbn4=";
   };
 
-  # perform fake build to make a fixed-output derivation out of the files downloaded from maven central (120MB)
-  deps = stdenv.mkDerivation {
-    name = "gephi-${version}-deps";
-    inherit src;
-    buildInputs = [ jdk11 maven ];
-    buildPhase = ''
-      while mvn package -Dmaven.repo.local=$out/.m2 -Dmaven.wagon.rto=5000; [ $? = 1 ]; do
-        echo "timeout, restart maven to continue downloading"
-      done
-    '';
-    # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
-    installPhase = ''find $out/.m2 -type f -regex '.+\(\.lastUpdated\|resolver-status\.properties\|_remote\.repositories\)' -delete'';
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-OdW4M5nGEkYkmHpRLM4cBQtk4SJII2uqM8TXb6y4eXk=";
-  };
-in
-stdenv.mkDerivation {
-  pname = "gephi";
-  inherit version;
+  mvnHash = "sha256-/2/Yb26Ry0NHQQ3j0LXnjwC0wQqJiztvTgWixyMJqvg=";
 
-  inherit src;
-
-  buildInputs = [ jdk11 maven ];
-
-  buildPhase = ''
-    # 'maven.repo.local' must be writable so copy it out of nix store
-    mvn package --offline -Dmaven.repo.local=$(cp -dpR ${deps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2
-  '';
+  nativeBuildInputs = [ jdk11 mavenJdk11 ];
 
   installPhase = ''
     cp -r modules/application/target/gephi $out

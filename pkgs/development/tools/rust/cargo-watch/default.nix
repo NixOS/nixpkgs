@@ -1,4 +1,13 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, Cocoa, CoreServices, Foundation, rust, libiconv }:
+{ stdenv
+, lib
+, rustPlatform
+, fetchFromGitHub
+, Cocoa
+, CoreServices
+, Foundation
+, rust
+, libiconv
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-watch";
@@ -23,7 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A Cargo subcommand for watching over Cargo project's source";
-    homepage = "https://github.com/passcod/cargo-watch";
+    homepage = "https://github.com/watchexec/cargo-watch";
     license = licenses.cc0;
     maintainers = with maintainers; [ xrelkd ivan ];
   };

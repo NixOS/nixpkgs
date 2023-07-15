@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "harmonia";
-  version = "0.6.4";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = pname;
     rev = "refs/tags/${pname}-v${version}";
-    hash = "sha256-JH0tdUCadvovAJclpx7Fn1oD+POFpBFHdullRTcFaVQ=";
+    hash = "sha256-3tf2lFMrZowRL3v4bkkhyPdULKUZ5w7zJLXlWyMJg3k=";
   };
 
-  cargoHash = "sha256-Wa+7Vo5VWmx47Uf6YtlzHReoWY44SxdOnscSFu74OSM=";
+  cargoHash = "sha256-g/f0+sj3XBjDFfSCLNlyqFehODsmf87hwbmobo6Tehg=";
 
   nativeBuildInputs = [
     pkg-config nix

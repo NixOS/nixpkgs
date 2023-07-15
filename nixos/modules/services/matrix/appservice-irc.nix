@@ -187,7 +187,7 @@ in {
           sed -i "s/^as_token:.*$/$as_token/g" ${registrationFile}
         fi
         # Allow synapse access to the registration
-        if ${getBin pkgs.glibc}/bin/getent group matrix-synapse > /dev/null; then
+        if ${pkgs.getent}/bin/getent group matrix-synapse > /dev/null; then
           chgrp matrix-synapse ${registrationFile}
           chmod g+r ${registrationFile}
         fi

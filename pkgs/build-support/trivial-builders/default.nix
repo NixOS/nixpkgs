@@ -87,6 +87,10 @@ rec {
       inherit buildCommand name;
       passAsFile = [ "buildCommand" ]
         ++ (derivationArgs.passAsFile or []);
+      pos = let args = builtins.attrNames derivationArgs; in
+        if builtins.length args > 0
+        then builtins.unsafeGetAttrPos (builtins.head args) derivationArgs
+        else null;
     }
     // (lib.optionalAttrs runLocal {
           preferLocalBuild = true;
@@ -620,6 +624,10 @@ rec {
     script:
     runCommand name
       (substitutions // {
+        # TODO(@Artturin:) substitutions should be inside the env attrset
+        # but users are likely passing non-substitution arguments through substitutions
+        # turn off __structuredAttrs to unbreak substituteAll
+        __structuredAttrs = false;
         inherit meta;
         inherit depsTargetTargetPropagated;
         propagatedBuildInputs =

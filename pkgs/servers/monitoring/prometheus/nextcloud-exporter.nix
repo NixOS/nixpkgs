@@ -21,6 +21,5 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ willibutz ];
     mainProgram = "nextcloud-exporter";
-    platforms = platforms.unix;
   };
 }

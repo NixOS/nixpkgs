@@ -66,7 +66,7 @@
 , xkeyboard_config
 , enableProprietaryCodecs ? true
   # darwin
-, clang_14
+, llvmPackages_14
 , bootstrap_cmds
 , cctools
 , xcbuild
@@ -113,7 +113,7 @@ qtModule {
     gn
     nodejs
   ] ++ lib.optionals stdenv.isDarwin [
-    clang_14
+    llvmPackages_14.clang
     bootstrap_cmds
     cctools
     xcbuild
@@ -309,7 +309,6 @@ qtModule {
   meta = with lib; {
     description = "A web engine based on the Chromium web browser";
     platforms = platforms.unix;
-    broken = stdenv.isDarwin && stdenv.isx86_64;
     # This build takes a long time; particularly on slow architectures
     # 1 hour on 32x3.6GHz -> maybe 12 hours on 4x2.4GHz
     timeout = 24 * 3600;

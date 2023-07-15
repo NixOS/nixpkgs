@@ -47,6 +47,9 @@ let
   };
 
   extraPytestFlagsArray = {
+    conversation = [
+      "--deselect tests/components/conversation/test_init.py::test_get_agent_list"
+    ];
     dnsip = [
       # Tries to resolve DNS entries
       "--deselect tests/components/dnsip/test_config_flow.py::test_options_flow"
@@ -63,9 +66,18 @@ let
       # aioserial mock produces wrong state
       "--deselect tests/components/modem_callerid/test_init.py::test_setup_entry"
     ];
+    sonos = [
+      # KeyError: 'sonos_media_player'
+      "--deselect tests/components/sonos/test_init.py::test_async_poll_manual_hosts_warnings"
+      "--deselect tests/components/sonos/test_init.py::test_async_poll_manual_hosts_3"
+    ];
     unifiprotect = [
       # "TypeError: object Mock can't be used in 'await' expression
       "--deselect tests/components/unifiprotect/test_repairs.py::test_ea_warning_fix"
+    ];
+    zha = [
+      "--deselect tests/components/zha/test_config_flow.py::test_formation_strategy_restore_manual_backup_non_ezsp"
+      "--deselect tests/components/zha/test_config_flow.py::test_formation_strategy_restore_automatic_backup_non_ezsp"
     ];
   };
 in lib.listToAttrs (map (component: lib.nameValuePair component (

@@ -6,9 +6,9 @@
 rustPlatform.buildRustPackage {
   pname = "nls";
 
-  inherit (nickel) src version;
+  inherit (nickel) src version nativeBuildInputs;
 
-  cargoHash = "sha256-tahSuSc16oUUjeBBAnTDAiSaLr0zMKgN/XvypXqvvxw=";
+  cargoHash = "sha256-UGfc5cr6vl10aCVihOEEZktF8MzT56C9/wSvSQhCiVs=";
 
   cargoBuildFlags = [ "-p nickel-lang-lsp" ];
 

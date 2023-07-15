@@ -21,7 +21,6 @@ let
     isBool
     isFunction
     isList
-    isPath
     isString
     length
     mapAttrs
@@ -134,11 +133,6 @@ let
             ${if prefix == []
               then null  # unset => visible
               else "internal"} = true;
-            # TODO: hidden during the markdown transition to not expose downstream
-            # users of the docs infra to markdown if they're not ready for it.
-            # we don't make this visible conditionally because it can impact
-            # performance (https://github.com/NixOS/nixpkgs/pull/208407#issuecomment-1368246192)
-            visible = false;
             # TODO: Change the type of this option to a submodule with a
             # freeformType, so that individual arguments can be documented
             # separately
@@ -545,59 +539,74 @@ let
 
   mergeModules' = prefix: options: configs:
     let
-     /* byName is like foldAttrs, but will look for attributes to merge in the
-        specified attribute name.
-
-        byName "foo" (module: value: ["module.hidden=${module.hidden},value=${value}"])
-        [
-          {
-            hidden="baz";
-            foo={qux="bar"; gla="flop";};
-          }
-          {
-            hidden="fli";
-            foo={qux="gne"; gli="flip";};
-          }
-        ]
-        ===>
-        {
-          gla = [ "module.hidden=baz,value=flop" ];
-          gli = [ "module.hidden=fli,value=flip" ];
-          qux = [ "module.hidden=baz,value=bar" "module.hidden=fli,value=gne" ];
-        }
-      */
-      byName = attr: f: modules:
-        zipAttrsWith (n: concatLists)
-          (map (module: let subtree = module.${attr}; in
+      # an attrset 'name' => list of submodules that declare ‘name’.
+      declsByName =
+        zipAttrsWith
+          (n: concatLists)
+          (map
+            (module: let subtree = module.options; in
               if !(builtins.isAttrs subtree) then
-                throw (if attr == "config" then ''
-                  You're trying to define a value of type `${builtins.typeOf subtree}'
-                  rather than an attribute set for the option
-                  `${builtins.concatStringsSep "." prefix}'!
-
-                  This usually happens if `${builtins.concatStringsSep "." prefix}' has option
-                  definitions inside that are not matched. Please check how to properly define
-                  this option by e.g. referring to `man 5 configuration.nix'!
-                '' else ''
+                throw ''
                   An option declaration for `${builtins.concatStringsSep "." prefix}' has type
                   `${builtins.typeOf subtree}' rather than an attribute set.
                   Did you mean to define this outside of `options'?
-                '')
+                ''
               else
-                mapAttrs (n: f module) subtree
-              ) modules);
-      # an attrset 'name' => list of submodules that declare ‘name’.
-      declsByName = byName "options" (module: option:
-          [{ inherit (module) _file; options = option; }]
-        ) options;
+                mapAttrs
+                  (n: option:
+                    [{ inherit (module) _file; options = option; }]
+                  )
+                  subtree
+              )
+            options);
+
+      # The root of any module definition must be an attrset.
+      checkedConfigs =
+        assert
+          lib.all
+            (c:
+              # TODO: I have my doubts that this error would occur when option definitions are not matched.
+              #       The implementation of this check used to be tied to a superficially similar check for
+              #       options, so maybe that's why this is here.
+              isAttrs c.config || throw ''
+                In module `${c.file}', you're trying to define a value of type `${builtins.typeOf c.config}'
+                rather than an attribute set for the option
+                `${builtins.concatStringsSep "." prefix}'!
+
+                This usually happens if `${builtins.concatStringsSep "." prefix}' has option
+                definitions inside that are not matched. Please check how to properly define
+                this option by e.g. referring to `man 5 configuration.nix'!
+              ''
+            )
+            configs;
+        configs;
+
       # an attrset 'name' => list of submodules that define ‘name’.
-      defnsByName = byName "config" (module: value:
-          map (config: { inherit (module) file; inherit config; }) (pushDownProperties value)
-        ) configs;
+      pushedDownDefinitionsByName =
+        zipAttrsWith
+          (n: concatLists)
+          (map
+            (module:
+              mapAttrs
+                (n: value:
+                  map (config: { inherit (module) file; inherit config; }) (pushDownProperties value)
+                )
+              module.config
+            )
+            checkedConfigs);
       # extract the definitions for each loc
-      defnsByName' = byName "config" (module: value:
-          [{ inherit (module) file; inherit value; }]
-        ) configs;
+      rawDefinitionsByName =
+        zipAttrsWith
+          (n: concatLists)
+          (map
+            (module:
+              mapAttrs
+                (n: value:
+                  [{ inherit (module) file; inherit value; }]
+                )
+                module.config
+            )
+            checkedConfigs);
 
       # Convert an option tree decl to a submodule option decl
       optionTreeToOption = decl:
@@ -619,8 +628,8 @@ let
         # We're descending into attribute ‘name’.
         let
           loc = prefix ++ [name];
-          defns = defnsByName.${name} or [];
-          defns' = defnsByName'.${name} or [];
+          defns = pushedDownDefinitionsByName.${name} or [];
+          defns' = rawDefinitionsByName.${name} or [];
           optionDecls = filter (m: isOption m.options) decls;
         in
           if length optionDecls == length decls then
@@ -663,7 +672,7 @@ let
         # Propagate all unmatched definitions from nested option sets
         mapAttrs (n: v: v.unmatchedDefns) resultsByName
         # Plus the definitions for the current prefix that don't have a matching option
-        // removeAttrs defnsByName' (attrNames matchedOptions);
+        // removeAttrs rawDefinitionsByName (attrNames matchedOptions);
     in {
       inherit matchedOptions;
 
@@ -910,6 +919,40 @@ let
     else opt // { type = opt.type.substSubModules opt.options; options = []; };
 
 
+  /*
+    Merge an option's definitions in a way that preserves the priority of the
+    individual attributes in the option value.
+
+    This does not account for all option semantics, such as readOnly.
+
+    Type:
+      option -> attrsOf { highestPrio, value }
+  */
+  mergeAttrDefinitionsWithPrio = opt:
+        let
+            defsByAttr =
+              lib.zipAttrs (
+                lib.concatLists (
+                  lib.concatMap
+                    ({ value, ... }@def:
+                      map
+                        (lib.mapAttrsToList (k: value: { ${k} = def // { inherit value; }; }))
+                        (pushDownProperties value)
+                    )
+                    opt.definitionsWithLocations
+                )
+              );
+        in
+          assert opt.type.name == "attrsOf" || opt.type.name == "lazyAttrsOf";
+          lib.mapAttrs
+                (k: v:
+                  let merging = lib.mergeDefinitions (opt.loc ++ [k]) opt.type.nestedTypes.elemType v;
+                  in {
+                    value = merging.mergedValue;
+                    inherit (merging.defsFinal') highestPrio;
+                  })
+                defsByAttr;
+
   /* Properties. */
 
   mkIf = condition: content:
@@ -1146,14 +1189,11 @@ let
     use = id;
   };
 
-  /* Transitional version of mkAliasOptionModule that uses MD docs. */
-  mkAliasOptionModuleMD = from: to: doRename {
-    inherit from to;
-    visible = true;
-    warn = false;
-    use = id;
-    markdown = true;
-  };
+  /* Transitional version of mkAliasOptionModule that uses MD docs.
+
+     This function is no longer necessary and merely an alias of `mkAliasOptionModule`.
+  */
+  mkAliasOptionModuleMD = mkAliasOptionModule;
 
   /* mkDerivedConfig : Option a -> (a -> Definition b) -> Definition b
 
@@ -1175,7 +1215,7 @@ let
       (opt.highestPrio or defaultOverridePriority)
       (f opt.value);
 
-  doRename = { from, to, visible, warn, use, withPriority ? true, markdown ? false }:
+  doRename = { from, to, visible, warn, use, withPriority ? true }:
     { config, options, ... }:
     let
       fromOpt = getAttrFromPath from options;
@@ -1186,9 +1226,7 @@ let
     {
       options = setAttrByPath from (mkOption {
         inherit visible;
-        description = if markdown
-          then lib.mdDoc "Alias of {option}`${showOption to}`."
-          else "Alias of <option>${showOption to}</option>.";
+        description = "Alias of {option}`${showOption to}`.";
         apply = x: use (toOf config);
       } // optionalAttrs (toType != null) {
         type = toType;
@@ -1256,6 +1294,7 @@ private //
     importJSON
     importTOML
     mergeDefinitions
+    mergeAttrDefinitionsWithPrio
     mergeOptionDecls  # should be private?
     mkAfter
     mkAliasAndWrapDefinitions

@@ -56,6 +56,8 @@ buildPythonPackage rec {
     "poetry_dynamic_versioning"
   ];
 
+  setupHook = ./setup-hook.sh;
+
   meta = with lib; {
     description = "Plugin for Poetry to enable dynamic versioning based on VCS tags";
     homepage = "https://github.com/mtkennerly/poetry-dynamic-versioning";

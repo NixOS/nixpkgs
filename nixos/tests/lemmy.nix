@@ -22,13 +22,21 @@ in
           # Without setup, the /feeds/* and /nodeinfo/* API endpoints won't return 200
           setup = {
             admin_username = "mightyiam";
-            admin_password = "ThisIsWhatIUseEverywhereTryIt";
             site_name = "Lemmy FTW";
             admin_email = "mightyiam@example.com";
           };
         };
+        secretFile = /etc/lemmy-config.hjson;
         caddy.enable = true;
       };
+
+      environment.etc."lemmy-config.hjson".text = ''
+        {
+          "setup": {
+            "admin_password": "ThisIsWhatIUseEverywhereTryIt"
+          }
+        }
+      '';
 
       networking.firewall.allowedTCPPorts = [ 80 ];
 
@@ -40,8 +48,14 @@ in
   testScript = ''
     server = ${lemmyNodeName}
 
-    with subtest("the backend starts and responds"):
+    with subtest("the merged config is secure"):
         server.wait_for_unit("lemmy.service")
+        config_permissions = server.succeed("stat --format %A /run/lemmy/config.hjson").rstrip()
+        assert config_permissions == "-rw-------", f"merged config permissions {config_permissions} are insecure"
+        directory_permissions = server.succeed("stat --format %A /run/lemmy").rstrip()
+        assert directory_permissions[5] == directory_permissions[8] == "-", "merged config can be replaced"
+
+    with subtest("the backend starts and responds"):
         server.wait_for_open_port(${toString backendPort})
         server.succeed("curl --fail localhost:${toString backendPort}/api/v3/site")
 

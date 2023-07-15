@@ -1,30 +1,43 @@
 { lib
-, fetchPypi
 , buildPythonPackage
-, pytest-runner
+, fetchPypi
 , numpy
+, pythonOlder
 , pyyaml
 }:
 
 buildPythonPackage rec {
   pname = "pysrim";
   version = "0.5.10";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ada088f73f7e1a3bf085206e81e0f83ed89c1d0b23a789ecd0ba0a250724aee8";
+    hash = "sha256-raCI9z9+GjvwhSBugeD4PticHQsjp4ns0LoKJQckrug=";
   };
 
-  buildInputs = [ pytest-runner ];
-  propagatedBuildInputs = [ numpy pyyaml ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'pytest-runner', " ""
+  '';
+
+  propagatedBuildInputs = [
+    numpy
+    pyyaml
+  ];
 
   # Tests require git lfs download of repository
   doCheck = false;
 
-  meta = {
+  # pythonImportsCheck does not work
+  # TypeError: load() missing 1 required positional argument: 'Loader'
+
+  meta = with lib; {
     description = "Srim Automation of Tasks via Python";
     homepage = "https://gitlab.com/costrouc/pysrim";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ costrouc ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ costrouc ];
   };
 }

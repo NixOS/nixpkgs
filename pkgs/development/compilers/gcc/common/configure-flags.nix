@@ -1,7 +1,7 @@
 { lib, stdenv
 , targetPackages
 
-, crossStageStatic, libcCross
+, withoutTargetLibc, libcCross
 , threadsCross
 , version
 
@@ -59,14 +59,14 @@ let
       "--with-as=${if targetPackages.stdenv.cc.bintools.isLLVM then binutils else targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-as"
       "--with-ld=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-ld"
     ]
-    ++ (if crossStageStatic then [
+    ++ (if withoutTargetLibc then [
       "--disable-libssp"
       "--disable-nls"
       "--without-headers"
       "--disable-threads"
       "--disable-libgomp"
       "--disable-libquadmath"
-      "--disable-shared"
+      (lib.enableFeature enableShared "shared")
       "--disable-libatomic" # requires libc
       "--disable-decimal-float" # requires libc
       "--disable-libmpx" # requires libc
@@ -112,7 +112,7 @@ let
       "--with-mpfr-lib=${mpfr.out}/lib"
       "--with-mpc=${libmpc}"
     ]
-    ++ lib.optionals (!crossStageStatic) [
+    ++ lib.optionals (!withoutTargetLibc) [
       (if libcCross == null
        then "--with-native-system-header-dir=${lib.getDev stdenv.cc.libc}/include"
        else "--with-native-system-header-dir=${lib.getDev libcCross}${libcCross.incdir or "/include"}")

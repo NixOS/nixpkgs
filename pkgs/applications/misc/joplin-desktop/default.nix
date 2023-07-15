@@ -2,7 +2,7 @@
 
 let
   pname = "joplin-desktop";
-  version = "2.10.19";
+  version = "2.11.11";
   name = "${pname}-${version}";
 
   inherit (stdenv.hostPlatform) system;
@@ -16,8 +16,8 @@ let
   src = fetchurl {
     url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}.${suffix}";
     sha256 = {
-      x86_64-linux = "sha256-+QvaEB+4eA3grnqbLfFMEtNyizlvovtV/BvTa9gSZGU=";
-      x86_64-darwin = "sha256-BK951HLf+L1x9TDlqW11mNnnrnHfZ4qbKk25OIVXnuM=";
+      x86_64-linux = "sha256-r64+y+LfMrJnUdabVdak5+LQB50YLOuMXftlZ4s3C/w=";
+      x86_64-darwin = "sha256-/dvaYHa7PT6FA63kmtjrErJZI9O+hIlKvHnf5RnfeZg=";
     }.${system} or throwSystem;
   };
 
@@ -47,7 +47,7 @@ let
       export LC_ALL=C.UTF-8
     '';
 
-    multiPkgs = null; # no 32bit needed
+    multiArch = false; # no 32bit needed
     extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
     extraInstallCommands = ''
       mv $out/bin/{${name},${pname}}

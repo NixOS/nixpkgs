@@ -1,7 +1,7 @@
 { lib, buildGoModule, fetchFromGitLab, fetchurl, bash }:
 
 let
-  version = "16.0.1";
+  version = "16.1.0";
 in
 buildGoModule rec {
   inherit version;
@@ -17,13 +17,13 @@ buildGoModule rec {
   # For patchShebangs
   buildInputs = [ bash ];
 
-  vendorHash = "sha256-2z9mB/Dd5sLB2OgwfxUJ5Jfk6cWPc7TfS4WLaUeYDUg=";
+  vendorHash = "sha256-tlTmKq1a5hX8G0+7RC1QbWA7YVnoBS5R9QqXljJ4bVg=";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     rev = "v${version}";
-    sha256 = "sha256-IGMZKrGtDyXj6SIiuoM7NE5MHfRUeVHI4YUNGVNIXw0=";
+    sha256 = "sha256-1obA2f/YtOBkgYLJqcHQWbaCezEw7lUXs4OxFiONCm8=";
   };
 
   patches = [
@@ -49,6 +49,12 @@ buildGoModule rec {
     rm executors/docker/services_test.go
   '';
 
+  excludedPackages = [
+    # CI helper script for pushing images to Docker and ECR registries
+    # https://gitlab.com/gitlab-org/gitlab-runner/-/merge_requests/4139
+    "./scripts/sync-docker-images"
+  ];
+
   postInstall = ''
     install packaging/root/usr/share/gitlab-runner/clear-docker-cache $out/bin
   '';
@@ -63,6 +69,6 @@ buildGoModule rec {
     license = licenses.mit;
     homepage = "https://about.gitlab.com/gitlab-ci/";
     platforms = platforms.unix ++ platforms.darwin;
-    maintainers = with maintainers; [ bachp zimbatm globin yayayayaka ];
+    maintainers = with maintainers; [ bachp zimbatm globin ] ++ teams.gitlab.members;
   };
 }

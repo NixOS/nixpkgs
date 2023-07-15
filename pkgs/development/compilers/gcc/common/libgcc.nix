@@ -1,16 +1,51 @@
 { lib
 , stdenv
+, version
 , langC
 , langCC
 , langJit
+, enableShared
+, targetPlatform
+, hostPlatform
+, withoutTargetLibc
 }:
 
-let
+assert !stdenv.targetPlatform.hasSharedLibraries -> !enableShared;
+
+drv: lib.pipe drv
+
+([
+
+  (pkg: pkg.overrideAttrs (previousAttrs:
+    lib.optionalAttrs (
+      targetPlatform != hostPlatform &&
+      (enableShared || targetPlatform.libc == "msvcrt") &&
+      withoutTargetLibc
+    ) {
+      makeFlags = [ "all-gcc" "all-target-libgcc" ];
+      installTargets = "install-gcc install-target-libgcc";
+    }))
+
+] ++
+
+# nixpkgs did not add the "libgcc" output until gcc11.  In theory
+# the following condition can be changed to `true`, but that has not
+# been tested.
+lib.optional (lib.versionAtLeast version "11.0")
+
+(let
+  targetPlatformSlash =
+    if hostPlatform.config == targetPlatform.config
+    then ""
+    else "${targetPlatform.config}/";
+
   enableLibGccOutput =
-    (with stdenv; targetPlatform == hostPlatform) &&
+    (!stdenv.targetPlatform.isWindows || (with stdenv; targetPlatform == hostPlatform)) &&
     !langJit &&
     !stdenv.hostPlatform.isDarwin &&
-    !stdenv.hostPlatform.isStatic;
+    enableShared
+    ;
+
 in
 (pkg: pkg.overrideAttrs (previousAttrs: lib.optionalAttrs ((!langC) || langJit || enableLibGccOutput) {
   outputs = previousAttrs.outputs ++ lib.optionals enableLibGccOutput [ "libgcc" ];
@@ -22,6 +57,10 @@ in
     # (i.e. libgccjit, gnat, etc) to avoid potential confusion
     lib.optionalString (!langC) ''
       rm -f $out/lib/libgcc_s.so*
+    ''
+    + lib.optionalString (hostPlatform.config != targetPlatform.config) ''
+      mkdir -p $lib/lib/
+      ln -s ${targetPlatformSlash}lib $lib/lib
     ''
 
     # TODO(amjoseph): remove the `libgcc_s.so` symlinks below and replace them
@@ -35,10 +74,10 @@ in
     + lib.optionalString enableLibGccOutput (''
       # move libgcc from lib to its own output (libgcc)
       mkdir -p $libgcc/lib
-      mv    $lib/lib/libgcc_s.so      $libgcc/lib/
-      mv    $lib/lib/libgcc_s.so.1    $libgcc/lib/
-      ln -s $libgcc/lib/libgcc_s.so   $lib/lib/
-      ln -s $libgcc/lib/libgcc_s.so.1 $lib/lib/
+      mv    $lib/${targetPlatformSlash}lib/libgcc_s.so      $libgcc/lib/
+      mv    $lib/${targetPlatformSlash}lib/libgcc_s.so.1    $libgcc/lib/
+      ln -s $libgcc/lib/libgcc_s.so   $lib/${targetPlatformSlash}lib/
+      ln -s $libgcc/lib/libgcc_s.so.1 $lib/${targetPlatformSlash}lib/
     ''
     #
     # Nixpkgs ordinarily turns dynamic linking into pseudo-static linking:
@@ -97,4 +136,5 @@ in
     + ''
       patchelf --set-rpath "" $libgcc/lib/libgcc_s.so.1
     '');
-}))
+}))))
+

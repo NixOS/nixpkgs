@@ -1,4 +1,5 @@
-import ../make-test-python.nix ({ pkgs, ...}: let
+args@{ nextcloudVersion ? 27, ... }:
+(import ../make-test-python.nix ({ pkgs, ...}: let
   username = "custom_admin_username";
   # This will be used both for redis and postgresql
   pass = "hunter2";
@@ -9,7 +10,7 @@ import ../make-test-python.nix ({ pkgs, ...}: let
 in {
   name = "nextcloud-with-declarative-redis";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ eqyiel ];
+    maintainers = [ eqyiel ma27 ];
   };
 
   nodes = {
@@ -22,6 +23,7 @@ in {
       services.nextcloud = {
         enable = true;
         hostName = "nextcloud";
+        package = pkgs.${"nextcloud" + (toString nextcloudVersion)};
         caching = {
           apcu = false;
           redis = true;
@@ -40,20 +42,18 @@ in {
         secretFile = "/etc/nextcloud-secrets.json";
 
         extraOptions.redis = {
-          host = "/run/redis/redis.sock";
-          port = 0;
           dbindex = 0;
           timeout = 1.5;
           # password handled via secretfile below
         };
-        extraOptions.memcache = {
-          local = "\OC\Memcache\Redis";
-          locking = "\OC\Memcache\Redis";
-        };
+        configureRedis = true;
       };
 
-      services.redis.servers."nextcloud".enable = true;
-      services.redis.servers."nextcloud".port = 6379;
+      services.redis.servers."nextcloud" = {
+        enable = true;
+        port = 6379;
+        requirePass = "secret";
+      };
 
       systemd.services.nextcloud-setup= {
         requires = ["postgresql.service"];
@@ -74,7 +74,7 @@ in {
 
       # This file is meant to contain secret options which should
       # not go into the nix store. Here it is just used to set the
-      # databyse type to postgres.
+      # redis password.
       environment.etc."nextcloud-secrets.json".text = ''
         {
           "redis": {
@@ -117,6 +117,6 @@ in {
     )
 
     # redis cache should not be empty
-    nextcloud.fail("redis-cli KEYS * | grep -q 'empty array'")
+    nextcloud.fail('test "[]" = "$(redis-cli --json KEYS "*")"')
   '';
-})
+})) args

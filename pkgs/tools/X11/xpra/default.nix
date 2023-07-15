@@ -46,8 +46,6 @@ let
       ./0002-Constant-DPI.patch
       # https://github.com/Xpra-org/xpra/issues/349
       ./0003-fix-pointer-limits.patch
-      # patch provided by Xpra upstream
-      ./0005-support-for-30-bit-depth-in-dummy-driver.patch
     ];
   });
 
@@ -69,11 +67,11 @@ let
   '';
 in buildPythonApplication rec {
   pname = "xpra";
-  version = "4.4.5";
+  version = "4.4.6";
 
   src = fetchurl {
     url = "https://xpra.org/src/${pname}-${version}.tar.xz";
-    hash = "sha256-o2vDPzZWgpEFe0yzNjwtuLPHO0GfWbSscKjvIfTi6Ro=";
+    hash = "sha256-BWf3nypfSrYCzpJ0OfBkecoHGbG1lEgu5jLZhfkIejQ=";
   };
 
   patches = [

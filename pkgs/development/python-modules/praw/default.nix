@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "praw";
-  version = "7.7.0";
+  version = "7.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "praw-dev";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-reJW1M1yDSQ1SvZJeOc0jwHj6ydl1AmMl5VZqRHxXZA=";
+    hash = "sha256-L7wTHD/ypXVc8GMfl9u16VNb9caLJoXpaMEIzaVVUgo=";
   };
 
   propagatedBuildInputs = [

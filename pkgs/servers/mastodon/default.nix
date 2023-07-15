@@ -52,6 +52,8 @@ stdenv.mkDerivation rec {
     NODE_ENV = "production";
 
     buildPhase = ''
+      runHook preBuild
+
       export HOME=$PWD
       # This option is needed for openssl-3 compatibility
       # Otherwise we encounter this upstream issue: https://github.com/mastodon/mastodon/issues/17924
@@ -79,13 +81,19 @@ stdenv.mkDerivation rec {
       brotli --best --keep ~/public/packs/report.html
       find ~/public/assets -type f -regextype posix-extended -iregex '.*\.(css|js|json|html)' \
         -exec brotli --best --keep {} ';'
+
+      runHook postBuild
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/public
       cp -r node_modules $out/node_modules
       cp -r public/assets $out/public
       cp -r public/packs $out/public
+
+      runHook postInstall
     '';
   };
 
@@ -93,6 +101,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ mastodonGems nodejs-slim ];
 
   buildPhase = ''
+    runHook preBuild
+
     ln -s $mastodonModules/node_modules node_modules
     ln -s $mastodonModules/public/assets public/assets
     ln -s $mastodonModules/public/packs public/packs
@@ -125,6 +135,8 @@ stdenv.mkDerivation rec {
     rm -rf log
     ln -s /var/log/mastodon log
     ln -s /tmp tmp
+
+    runHook postBuild
   '';
 
   installPhase = let
@@ -133,9 +145,13 @@ stdenv.mkDerivation rec {
       ${nodejs-slim}/bin/node ./streaming
     '';
   in ''
+    runHook preInstall
+
     mkdir -p $out
     cp -r * $out/
     ln -s ${run-streaming} $out/run-streaming.sh
+
+    runHook postInstall
   '';
 
   passthru = {

@@ -216,6 +216,20 @@ in {
       description = "Can notify Slack or Mattermost channels about triggered alerts in Graylog (Alarm Callback)";
     };
   };
+  smseagle = glPlugin rec {
+    name = "graylog-smseagle-${version}";
+    pluginName = "graylog-plugin-smseagle";
+    version = "1.0.1";
+    src = fetchurl {
+      url = "https://bitbucket.org/proximus/smseagle-graylog/raw/b99cfc349aafc7c94d4c2503f7c3c0bde67684d1/jar/graylog-plugin-smseagle-1.0.1.jar";
+      sha256 = "sha256-rvvftzPskXRGs1Z9dvd/wFbQoIoNtEQIFxMIpSuuvf0=";
+    };
+    meta = {
+      homepage = "https://bitbucket.org/proximus/smseagle-graylog/";
+      description = "Alert/notification callback plugin for integrating the SMSEagle into Graylog.";
+      license = lib.licenses.gpl3Only;
+    };
+  };
   snmp = glPlugin rec {
     name = "graylog-snmp-${version}";
     pluginName = "graylog-plugin-snmp";
@@ -240,6 +254,20 @@ in {
     meta = {
       homepage = "https://github.com/graylog-labs/graylog-plugin-spaceweather";
       description = "Correlate proton density to the response time of your app and the ion temperature to your exception rate.";
+    };
+  };
+  splunk = glPlugin rec {
+    name = "graylog-splunk-${version}";
+    pluginName = "graylog-plugin-splunk";
+    version = "0.5.0-rc.1";
+    src = fetchurl {
+      url = "https://github.com/graylog-labs/graylog-plugin-splunk/releases/download/0.5.0-rc.1/graylog-plugin-splunk-0.5.0-rc.1.jar";
+      sha256 = "sha256-EwF/Dc8GmMJBTxH9xGZizUIMTGSPedT4bprorN6X9Os=";
+    };
+    meta = {
+      homepage = "https://github.com/graylog-labs/graylog-plugin-splunk";
+      description = "Graylog output plugin that forwards one or more streams of data to Splunk via TCP.";
+      license = lib.licenses.gpl3Only;
     };
   };
   twiliosms = glPlugin rec {
