@@ -1,5 +1,5 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , fetchFromGitHub
 , cc65
 , python3
@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "x16-rom";
-  version = "41";
+  version = "43";
 
   src = fetchFromGitHub {
-    owner = "commanderx16";
+    owner = "X16Community";
     repo = "x16-rom";
     rev = "r${finalAttrs.version}";
-    hash = "sha256-kowdyUVi3hliqkL8VQo5dS3Dpxd4LQi5+5brkdnv0lE=";
+    hash = "sha256-LkGHfralxlishG1oyBojDnLMJ3c3KYp5YwJSZ2SIrbM=";
   };
 
   nativeBuildInputs = [
@@ -22,10 +22,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    patchShebangs scripts/
+    patchShebangs findsymbols scripts/
+    substituteInPlace Makefile \
+    --replace '/bin/echo' 'echo'
   '';
 
   dontConfigure = true;
+
+  makeFlags = [ "PRERELEASE_VERSION=${finalAttrs.version}" ];
 
   installPhase = ''
     runHook preInstall
@@ -36,18 +40,18 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    homepage = "https://www.commanderx16.com/forum/index.php?/home/";
-    description = "ROM file for CommanderX16 8-bit computer";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ AndersonTorres ];
-    inherit (cc65.meta) platforms;
-    broken = with stdenv; isDarwin && isAarch64;
+  passthru = {
+    # upstream project recommends emulator and rom to be synchronized; passing
+    # through the version is useful to ensure this
+    inherit (finalAttrs) version;
   };
 
-  passthru = {
-    # upstream project recommends emulator and rom to be synchronized;
-    # passing through the version is useful to ensure this
-    inherit (finalAttrs) version;
+  meta = {
+    homepage = "https://github.com/X16Community/x16-rom";
+    description = "ROM file for CommanderX16 8-bit computer";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    inherit (cc65.meta) platforms;
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 })
