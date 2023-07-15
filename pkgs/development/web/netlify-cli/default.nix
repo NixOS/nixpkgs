@@ -1,6 +1,6 @@
 { lib, buildNpmPackage, callPackage, esbuild_netlify, fetchFromGitHub, python3 }:
 
-buildNpmPackage rec {
+let
   pname = "netlify-cli";
   version = "15.9.0";
 
@@ -11,8 +11,28 @@ buildNpmPackage rec {
     hash = "sha256-cfQGzsZipp0HDPqVuW8QjGo23CckmOhD79r34GaY8eY=";
   };
 
+  site = buildNpmPackage {
+    pname = "${pname}-site";
+    inherit version src;
+    npmDepsHash = "sha256-H1FwmdL8Ba3QcAMg+AjERJwdzfFXMPTqC9zc394ujEw=";
+    postPatch = ''
+      cd site
+    '';
+    env.NODE_OPTIONS = "--openssl-legacy-provider";
+    npmBuildScript = "build:site";
+    installPhase = ''
+      runHook preInstall
+      cp -r . $out
+      runHook postInstall
+    '';
+  };
+in buildNpmPackage rec {
+  inherit pname version src;
+
   postPatch = ''
     substituteInPlace package.json --replace 'is-ci ||' 'true ||'
+    rm -rf site
+    ln -s ${site} site
   '';
 
   npmDepsHash = "sha256-cs37SFom2fR9yuGNmyZ5QATiE2P/WiBNyqF+54VdGDQ=";
