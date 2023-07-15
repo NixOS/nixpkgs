@@ -600,6 +600,7 @@
   ./services/matrix/dendrite.nix
   ./services/matrix/mautrix-facebook.nix
   ./services/matrix/mautrix-telegram.nix
+  ./services/matrix/mautrix-whatsapp.nix
   ./services/matrix/mjolnir.nix
   ./services/matrix/mx-puppet-discord.nix
   ./services/matrix/pantalaimon.nix
@@ -1479,5 +1480,5 @@
   ./virtualisation/waydroid.nix
   ./virtualisation/xe-guest-utilities.nix
   ./virtualisation/xen-dom0.nix
-  { documentation.nixos.extraModules = [ ./virtualisation/qemu-vm.nix ]; }
+  {documentation.nixos.extraModules = [./virtualisation/qemu-vm.nix];}
 ]
