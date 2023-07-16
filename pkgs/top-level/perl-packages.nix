@@ -20229,6 +20229,21 @@ with self; {
     };
   };
 
+  ProcDaemon = buildPerlPackage {
+    pname = "Proc-Daemon";
+    version = "0.23";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AK/AKREAL/Proc-Daemon-0.23.tar.gz";
+      sha256 = "34c0b85b7948b431cbabc97cee580835e515ccf43badbd8339eb109474089b69";
+    };
+    buildInputs = [ ProcProcessTable ];
+    meta = {
+      homepage = "https://github.com/akreal/Proc-Daemon";
+      description = "Run Perl program(s) as a daemon process";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ProcProcessTable = buildPerlPackage {
     pname = "Proc-ProcessTable";
     version = "0.59";
