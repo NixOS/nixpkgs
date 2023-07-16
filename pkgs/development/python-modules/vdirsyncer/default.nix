@@ -72,9 +72,10 @@ buildPythonPackage rec {
   passthru.tests.version = testers.testVersion { package = vdirsyncer; };
 
   meta = with lib; {
-    homepage = "https://github.com/pimutils/vdirsyncer";
     description = "Synchronize calendars and contacts";
-    license = licenses.mit;
+    homepage = "https://github.com/pimutils/vdirsyncer";
+    changelog = "https://github.com/pimutils/vdirsyncer/blob/v${version}/CHANGELOG.rst";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ loewenheim ];
   };
 }
