@@ -10,14 +10,13 @@ let cross = if crossSystem != null
     custom-bootstrap = if bootstrapFiles != null
       then { stdenvStages = args:
               let args' = args // { bootstrapFiles = bootstrapFiles; };
-              in (import "${pkgspath}/pkgs/stdenv/darwin" args').stagesDarwin;
+              in (import "${pkgspath}/pkgs/stdenv/darwin" args');
            }
       else {};
 in with import pkgspath ({ inherit localSystem; } // cross // custom-bootstrap);
 
 let
   llvmPackages = llvmPackages_11;
-  storePrefixLen = builtins.stringLength builtins.storeDir;
 in rec {
   coreutils_ = coreutils.override (args: {
     # We want coreutils without ACL support.
@@ -207,8 +206,6 @@ in rec {
     '';
   };
 
-  bootstrapLlvmVersion = llvmPackages.llvm.version;
-
   bootstrapFiles = {
     tools = "${build}/pack";
   };
@@ -313,13 +310,16 @@ in rec {
   };
 
   # The ultimate test: bootstrap a whole stdenv from the tools specified above and get a package set out of it
+  # TODO: uncomment once https://github.com/NixOS/nixpkgs/issues/222717 is resolved
+  /*
   test-pkgs = import test-pkgspath {
     # if the bootstrap tools are for another platform, we should be testing
     # that platform.
     localSystem = if crossSystem != null then crossSystem else localSystem;
 
     stdenvStages = args: let
-        args' = args // { inherit bootstrapLlvmVersion bootstrapFiles; };
-      in (import (test-pkgspath + "/pkgs/stdenv/darwin") args').stagesDarwin;
+        args' = args // { inherit bootstrapFiles; };
+      in (import (test-pkgspath + "/pkgs/stdenv/darwin") args');
   };
+  */
 }
