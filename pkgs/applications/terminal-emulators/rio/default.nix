@@ -43,16 +43,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "rio";
-  version = "0.0.8";
+  version = "0.0.9";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
     rev = "v${version}";
-    hash = "sha256-NonIMGBASbkbc5JsHKwfaZ9dGQt1f8+hFh/FFyIlIZs=";
+    hash = "sha256-faK0KShbMUuvFbR2m9oCeWSwwrSxyXNWreODtHFyp5U=";
   };
 
-  cargoHash = "sha256-4IJJtLa25aZkFwkMYpnYyRQLeqoBwncgCjorF6Gx6pk=";
+  cargoHash = "sha256-54uyqk6fW3pHCK7JC5T7c8C/0Hcq0K/PBn71tNwnA0g=";
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -70,6 +70,11 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = [
     (lib.optionalString withX11 "x11")
     (lib.optionalString withWayland "wayland")
+  ];
+
+  checkFlags = [
+    # Fail to run in sandbox environment.
+    "--skip=screen::context::test"
   ];
 
   postInstall = ''
