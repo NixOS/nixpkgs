@@ -141,60 +141,6 @@ let
     };
   };
 
-  cl-tar-file = build-asdf-system {
-    pname = "cl-tar-file";
-    version = "v0.2.1";
-    src = pkgs.fetchzip {
-      url = let
-        rev = "0c10bc82f14702c97a26dc25ce075b5d3a2347d1";
-      in "https://gitlab.common-lisp.net/cl-tar/cl-tar-file/-/archive/${rev}/cl-tar-file-${rev}.tar.gz";
-      sha256 = "0i8j05fkgdqy4c4pqj0c68sh4s3klpx9kc5wp73qwzrl3xqd2svy";
-    };
-    lispLibs = with super; [
-      alexandria
-      babel
-      trivial-gray-streams
-      _40ants-doc
-      salza2
-      chipz
-      flexi-streams
-      parachute
-    ];
-    systems = [ "tar-file" "tar-file/test" ];
-  };
-
-  cl-tar = build-asdf-system {
-    pname = "cl-tar";
-    version = "v0.2.1";
-    src = pkgs.fetchzip {
-      url = let
-        rev = "7c6e07a10c93d9e311f087b5f6328cddd481669a";
-      in "https://gitlab.common-lisp.net/cl-tar/cl-tar/-/archive/${rev}/cl-tar-${rev}.tar.gz";
-      sha256 = "0wp23cs3i6a89dibifiz6559la5nk58d1n17xvbxq4nrl8cqsllf";
-    };
-    lispLibs = with super; [
-      alexandria
-      babel
-      local-time
-      split-sequence
-      _40ants-doc
-      parachute
-      osicat
-    ] ++ [ self.cl-tar-file ];
-    systems = [
-      "tar"
-      "tar/common-extract"
-      "tar/simple-extract"
-      "tar/extract"
-      "tar/create"
-      "tar/docs"
-      "tar/test"
-      "tar/create-test"
-      "tar/extract-test"
-      "tar/simple-extract-test"
-    ];
-  };
-
   lessp = build-asdf-system {
     pname = "lessp";
     version = "0.2-f8a9e4664";
@@ -323,7 +269,7 @@ let
   };
 
   nasdf-unstable = build-asdf-system {
-    inherit (super.nasdf) pname systems;
+    pname = "nasdf";
     version = "20230524-git";
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
@@ -334,7 +280,7 @@ let
   };
 
   njson_1_0_0 = build-asdf-system {
-    inherit (super.njson) pname;
+    pname = "njson";
     version = "1.0.0";
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
@@ -347,7 +293,7 @@ let
   };
 
   nsymbols_0_3_1 = build-asdf-system {
-    inherit (super.nsymbols) pname;
+    pname = "nsymbols";
     version = "0.3.1";
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
@@ -361,7 +307,7 @@ let
   };
 
   nclasses_0_5_0 = build-asdf-system {
-    inherit (super.nclasses) pname systems;
+    pname = "nclasses";
     version = "0.5.0";
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
@@ -373,7 +319,7 @@ let
   };
 
   nfiles_1_1_2 = build-asdf-system {
-    inherit (super.nfiles) pname systems;
+    pname = "nfiles";
     version = "1.1.2";
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
@@ -394,11 +340,49 @@ let
     ];
   };
 
+  nhooks = build-asdf-system {
+    pname = "nhooks";
+    version = "20230214-git";
+    src = pkgs.fetchzip {
+      url = "http://beta.quicklisp.org/archive/nhooks/2023-02-14/nhooks-20230214-git.tgz";
+      sha256 = "0rapn9v942yd2snlskvlr1g22hmyhlsrclahxjsgn4pbvqc5gwyw";
+    };
+    lispLibs = with self; [ bordeaux-threads closer-mop serapeum ];
+  };
+
+  nkeymaps = build-asdf-system {
+    pname = "nkeymaps";
+    version = "20230214-git";
+    src = pkgs.fetchzip {
+      url = "http://beta.quicklisp.org/archive/nhooks/2023-02-14/nkeymaps-20230214-git.tgz";
+      sha256 = "197vxqby87vnpgcwchs3dqihk1gimp2cx9cc201pkdzvnbrixji6";
+    };
+    lispLibs = with self; [ alexandria fset trivial-package-local-nicknames ];
+  };
+
+
+  history-tree = build-asdf-system {
+    pname = "history-tree";
+    version = "20230214-git";
+    src = pkgs.fetchzip {
+      url = "http://beta.quicklisp.org/archive/history-tree/2023-02-14/history-tree-20230214-git.tgz";
+      sha256 = "12kvnc8vcvg7nmgl5iqgbr4pj0vgb8f8avk9l5czz7f2hj91ysdp";
+    };
+    lispLibs = with self; [
+      alexandria
+      cl-custom-hash-table
+      local-time
+      nasdf-unstable
+      nclasses_0_5_0
+      trivial-package-local-nicknames
+    ];
+  };
+
   nyxt-gtk = build-asdf-system {
-    inherit (super.nyxt) pname;
+    pname = "nyxt";
     version = "3.3.0";
 
-    lispLibs = with super; [
+    lispLibs = (with super; [
       self.nasdf-unstable
       self.prompter
       self.cl-colors2_0_5_4
@@ -428,7 +412,6 @@ let
       dexador
       enchant
       flexi-streams
-      history-tree
       idna
       iolib
       lass
@@ -437,8 +420,6 @@ let
       log4cl
       montezuma
       ndebug
-      nhooks
-      nkeymaps
       osicat
       parenscript
       py-configparser
@@ -459,7 +440,11 @@ let
       cluffer
       cl-cffi-gtk
       cl-gobject-introspection
-    ];
+    ]) ++ (with self; [
+      history-tree
+      nhooks
+      nkeymaps
+    ]);
 
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
@@ -484,13 +469,15 @@ let
     '';
 
     buildScript = pkgs.writeText "build-nyxt.lisp" ''
-      (load "${super.nyxt.asdfFasl}/asdf.${super.nyxt.faslExt}")
+      (load "${super.alexandria.asdfFasl}/asdf.${super.alexandria.faslExt}")
       ;; There's a weird error while copy/pasting in Nyxt that manifests with sb-ext:save-lisp-and-die, so we use asdf:make instead
       (asdf:make :nyxt/gi-gtk-application)
     '';
 
     # TODO(kasper): use wrapGAppsHook
-    installPhase = super.nyxt.installPhase + ''
+    installPhase = ''
+      mkdir -pv $out
+      cp -r * $out
       rm -v $out/nyxt
       mkdir -p $out/bin
       cp -v nyxt $out/bin
@@ -732,6 +719,8 @@ let
     nativeLibs = [
       pkgs.webkitgtk_6_0
     ];
+    # Requires old webkitgtk_5_0 which was replaced by webkitgtk_6_0
+    meta.broken = true;
   };
 
   cl-avro = build-asdf-system {

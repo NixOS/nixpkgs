@@ -44,6 +44,9 @@ stdenv.mkDerivation rec {
     "-DUSE_PCSC=1"
   ];
 
+  # causes possible redefinition of _FORTIFY_SOURCE?
+  hardeningDisable = [ "fortify3" ];
+
   meta = with lib; {
     description = ''
       Provides library functionality for FIDO 2.0, including communication with a device over USB.

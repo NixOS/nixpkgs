@@ -51,6 +51,9 @@ stdenv.mkDerivation rec {
     "-Wno-error=array-bounds"
   ];
 
+  # error: writing 1 byte into a region of size 0
+  hardeningDisable = [ "fortify3" ];
+
   installPhase = ''
     runHook preInstall
 

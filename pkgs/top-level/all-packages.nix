@@ -682,7 +682,15 @@ with pkgs;
 
   protoc-gen-connect-go = callPackage ../development/tools/protoc-gen-connect-go { };
 
+  protoc-gen-prost = callPackage ../development/tools/protoc-gen-prost { };
+
+  protoc-gen-prost-crate = callPackage ../development/tools/protoc-gen-prost-crate { };
+
+  protoc-gen-prost-serde = callPackage ../development/tools/protoc-gen-prost-serde { };
+
   protoc-gen-rust = callPackage ../development/tools/protoc-gen-rust { };
+
+  protoc-gen-tonic = callPackage ../development/tools/protoc-gen-tonic { };
 
   protoc-gen-twirp = callPackage ../development/tools/protoc-gen-twirp { };
 
@@ -7186,9 +7194,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  doggo = callPackage ../tools/networking/doggo {
-    buildGoModule = buildGo119Module; # build fails with 1.20
-  };
+  doggo = callPackage ../tools/networking/doggo { };
 
   dool = callPackage ../tools/system/dool { };
 
@@ -9338,13 +9344,13 @@ with pkgs;
 
   kent = callPackage ../applications/science/biology/kent { };
 
-  keybase = callPackage ../tools/security/keybase {
+  keybase = darwin.apple_sdk_11_0.callPackage ../tools/security/keybase {
     # Reasoning for the inherited apple_sdk.frameworks:
     # 1. specific compiler errors about: AVFoundation, AudioToolbox, MediaToolbox
     # 2. the rest are added from here: https://github.com/keybase/client/blob/68bb8c893c5214040d86ea36f2f86fbb7fac8d39/go/chat/attachments/preview_darwin.go#L7
     #      #cgo LDFLAGS: -framework AVFoundation -framework CoreFoundation -framework ImageIO -framework CoreMedia  -framework Foundation -framework CoreGraphics -lobjc
     #    with the exception of CoreFoundation, due to the warning in https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/darwin/apple-sdk/frameworks.nix#L25
-    inherit (darwin.apple_sdk.frameworks) AVFoundation AudioToolbox ImageIO CoreMedia Foundation CoreGraphics MediaToolbox;
+    inherit (darwin.apple_sdk_11_0.frameworks) AVFoundation AudioToolbox ImageIO CoreMedia Foundation CoreGraphics MediaToolbox;
   };
 
   kbfs = callPackage ../tools/security/keybase/kbfs.nix { };
@@ -13780,6 +13786,8 @@ with pkgs;
 
   urlview = callPackage ../applications/misc/urlview { };
 
+  url-parser = callPackage ../tools/misc/url-parser { };
+
   urn-timer = callPackage ../tools/misc/urn-timer { };
 
   ursadb = callPackage ../servers/ursadb { };
@@ -15418,7 +15426,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross_pre_gcc_13 else { };
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor "4.8" else { };
 
     isl = if !stdenv.isDarwin then isl_0_14 else null;
     cloog = if !stdenv.isDarwin then cloog else null;
@@ -15432,7 +15440,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross_pre_gcc_13 else { };
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor "4.9" else { };
 
     isl = if !stdenv.isDarwin then isl_0_11 else null;
 
@@ -15449,7 +15457,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross_pre_gcc_13 else { };
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor "6" else { };
 
     # gcc 10 is too strict to cross compile gcc <= 8
     stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then gcc7Stdenv else stdenv;
@@ -15468,7 +15476,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross_pre_gcc_13 else { };
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor "7" else { };
 
     # gcc 10 is too strict to cross compile gcc <= 8
     stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then gcc7Stdenv else stdenv;
@@ -15483,7 +15491,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross_pre_gcc_13 else { };
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor "8" else { };
 
     # gcc 10 is too strict to cross compile gcc <= 8
     stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then gcc7Stdenv else stdenv;
@@ -15498,7 +15506,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross_pre_gcc_13 else { };
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor "9" else { };
 
     isl = if !stdenv.isDarwin then isl_0_20 else null;
   }));
@@ -15510,7 +15518,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross_pre_gcc_13 else { };
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor "10" else { };
 
     isl = if !stdenv.isDarwin then isl_0_20 else null;
   }));
@@ -15522,7 +15530,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross_pre_gcc_13 else { };
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor "11" else { };
 
     isl = if !stdenv.isDarwin then isl_0_20 else null;
   }));
@@ -15534,7 +15542,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross_pre_gcc_13 else { };
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor "12" else { };
 
     isl = if !stdenv.isDarwin then isl_0_20 else null;
   }));
@@ -15546,7 +15554,7 @@ with pkgs;
     profiledCompiler = false;
 
     libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else { };
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCrossFor "13" else { };
 
     isl = if !stdenv.isDarwin then isl_0_20 else null;
   }));
@@ -17154,10 +17162,7 @@ with pkgs;
       # want the C++ library to be explicitly chosen by the caller, and null by
       # default.
       libcxx ? null
-    , extraPackages ? lib.optional (cc.isGNU or false && stdenv.targetPlatform.isMinGW)
-                                    (if lib.versionAtLeast cc.version "13"
-                                     then threadsCross.package
-                                     else threadsCross_pre_gcc_13.package)
+    , extraPackages ? lib.optional (cc.isGNU or false && stdenv.targetPlatform.isMinGW) ((threadsCrossFor cc.version).package)
     , nixSupport ? {}
     , ...
     } @ extraArgs:
@@ -21189,20 +21194,17 @@ with pkgs;
 
   libcCross = assert stdenv.targetPlatform != stdenv.buildPlatform; libcCrossChooser stdenv.targetPlatform.libc;
 
-  threadsCross_pre_gcc_13 = if stdenv.targetPlatform.isMinGW && !(stdenv.targetPlatform.useLLVM or false)
+  threadsCross = threadsCrossFor null;
+  threadsCrossFor = cc_version:
+    if stdenv.targetPlatform.isMinGW && !(stdenv.targetPlatform.useLLVM or false)
     then {
       # other possible values: win32 or posix
       model = "mcf";
       # For win32 or posix set this to null
-      package = targetPackages.windows.mcfgthreads_pre_gcc_13 or windows.mcfgthreads_pre_gcc_13;
-    } else { };
-
-  threadsCross = if stdenv.targetPlatform.isMinGW && !(stdenv.targetPlatform.useLLVM or false)
-    then {
-      # other possible values: win32 or posix
-      model = "mcf";
-      # For win32 or posix set this to null
-      package = targetPackages.windows.mcfgthreads or windows.mcfgthreads;
+      package =
+        if cc_version == null || lib.versionAtLeast cc_version "13"
+        then targetPackages.windows.mcfgthreads or windows.mcfgthreads
+        else targetPackages.windows.mcfgthreads_pre_gcc_13 or windows.mcfgthreads_pre_gcc_13;
     } else { };
 
   wasilibc = callPackage ../development/libraries/wasilibc {
@@ -24000,9 +24002,11 @@ with pkgs;
 
   pcre2 = callPackage ../development/libraries/pcre2 { };
 
-  pdal = callPackage ../development/libraries/pdal { } ;
+  pdal = callPackage ../development/libraries/pdal { };
 
-  pdf2xml = callPackage ../development/libraries/pdf2xml {} ;
+  pdf2xml = callPackage ../development/libraries/pdf2xml { };
+
+  pdfhummus = libsForQt5.callPackage ../development/libraries/pdfhummus { };
 
   pe-parse = callPackage ../development/libraries/pe-parse { };
 
@@ -24340,7 +24344,16 @@ with pkgs;
 
   rocksdb = callPackage ../development/libraries/rocksdb { };
 
-  rocksdb_lite = rocksdb.override { enableLite = true; };
+  rocksdb_7_10 = rocksdb.overrideAttrs rec {
+    pname = "rocksdb";
+    version = "7.10.2";
+    src = fetchFromGitHub {
+      owner = "facebook";
+      repo = pname;
+      rev = "v${version}";
+     sha256 = "sha256-U2ReSrJwjAXUdRmwixC0DQXht/h/6rV8SOf5e2NozIs=";
+   };
+  };
 
   rocksdb_6_23 = rocksdb.overrideAttrs rec {
     pname = "rocksdb";
@@ -25382,6 +25395,8 @@ with pkgs;
 
   ### DEVELOPMENT / LIBRARIES / JAVASCRIPT
 
+  nodehun = callPackage ../development/tools/nodehun { };
+
   yuicompressor = callPackage ../development/tools/yuicompressor { };
 
   ### DEVELOPMENT / BOWER MODULES (JAVASCRIPT)
@@ -26331,6 +26346,11 @@ with pkgs;
   petidomo = callPackage ../servers/mail/petidomo { };
 
   pict-rs = callPackage ../servers/web-apps/pict-rs {
+    inherit (darwin.apple_sdk.frameworks) Security;
+    ffmpeg = ffmpeg_4;
+  };
+
+  pict-rs_0_3 = callPackage ../servers/web-apps/pict-rs/0.3.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
     ffmpeg = ffmpeg_4;
   };
@@ -28537,6 +28557,8 @@ with pkgs;
   ananicy = callPackage ../misc/ananicy { };
 
   ananicy-cpp = callPackage ../misc/ananicy-cpp { };
+
+  ananicy-rules-cachyos = callPackage ../misc/ananicy-rules-cachyos { };
 
   andagii = callPackage ../data/fonts/andagii { };
 
@@ -32815,6 +32837,7 @@ with pkgs;
   libvmi = callPackage ../development/libraries/libvmi { };
 
   libutp = callPackage ../applications/networking/p2p/libutp { };
+  libutp_3_4 = callPackage ../applications/networking/p2p/libutp/3.4.nix { };
 
   lifelines = callPackage ../applications/misc/lifelines { };
 
@@ -34172,7 +34195,7 @@ with pkgs;
 
   pistol = callPackage ../tools/misc/pistol { };
 
-  piston-cli = callPackage ../tools/misc/piston-cli { python3Packages = python39Packages; };
+  piston-cli = callPackage ../tools/misc/piston-cli { };
 
   pizarra = callPackage ../applications/graphics/pizarra { };
 
@@ -35338,6 +35361,18 @@ with pkgs;
   };
   transmission-gtk = transmission.override { enableGTK3 = true; };
   transmission-qt = transmission.override { enableQt = true; };
+
+  transmission_4 = callPackage ../applications/networking/p2p/transmission/4.nix {
+    fmt = fmt_9;
+    libutp = libutp_3_4;
+  };
+  libtransmission_4 = transmission_4.override {
+    installLib = true;
+    enableDaemon = false;
+    enableCli = false;
+  };
+  transmission_4-gtk = transmission_4.override { enableGTK3 = true; };
+  transmission_4-qt = transmission_4.override { enableQt = true; };
 
   transmission-remote-gtk = callPackage ../applications/networking/p2p/transmission-remote-gtk { };
 
@@ -39250,7 +39285,7 @@ with pkgs;
   convertall = qt5.callPackage ../applications/science/misc/convertall { };
 
   cytoscape = callPackage ../applications/science/misc/cytoscape {
-    jre = openjdk11;
+    jre = openjdk17;
   };
 
   faiss = callPackage ../development/libraries/science/math/faiss {

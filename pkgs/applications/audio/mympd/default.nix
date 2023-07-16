@@ -51,8 +51,12 @@ stdenv.mkDerivation rec {
     # similarly here
     "-DCMAKE_INSTALL_LOCALSTATEDIR=/var/lib/mympd"
   ];
-  # See https://github.com/jcorporation/myMPD/issues/315
-  hardeningDisable = [ "strictoverflow" ];
+  hardeningDisable = [
+    # See https://github.com/jcorporation/myMPD/issues/315
+    "strictoverflow"
+    # causes redefinition of _FORTIFY_SOURCE
+    "fortify3"
+  ];
 
   meta = {
     homepage = "https://jcorporation.github.io/myMPD";

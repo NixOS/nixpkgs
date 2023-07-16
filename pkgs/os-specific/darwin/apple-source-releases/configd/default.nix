@@ -13,6 +13,7 @@ appleDerivation' stdenv {
     NIX_CFLAGS_COMPILE = toString [
       "-ISystemConfiguration.framework/Headers"
       "-I${xnu}/Library/Frameworks/System.framework/Versions/B/PrivateHeaders"
+      "-D_DNS_SD_LIBDISPATCH" # Needed for DNSServiceSetDispatchQueue to be available
     ];
   };
 

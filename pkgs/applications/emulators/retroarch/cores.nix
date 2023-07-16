@@ -722,6 +722,10 @@ in
       # remove ccache
       substituteInPlace CMakeLists.txt --replace "ccache" ""
     '';
+
+    # causes redefinition of _FORTIFY_SOURCE
+    hardeningDisable = [ "fortify3" ];
+
     postBuild = "cd /build/source/build/pcsx2";
     meta = {
       description = "Port of PCSX2 to libretro";

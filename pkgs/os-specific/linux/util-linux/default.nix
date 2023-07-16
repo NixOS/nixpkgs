@@ -50,7 +50,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "bin" "dev" "out" "lib" "man" ];
+  # We separate some of the utilities into their own outputs. This
+  # allows putting together smaller systems depending on only part of
+  # the greater util-linux toolset.
+  # Compatibility is maintained by symlinking the binaries from the
+  # smaller outputs in the bin output.
+  outputs = [ "bin" "dev" "out" "lib" "man" "mount" "login" "swap" ];
   separateDebugInfo = true;
 
   postPatch = ''
@@ -106,6 +111,20 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
+    moveToOutput bin/mount "$mount"
+    moveToOutput bin/umount "$mount"
+    ln -svf "$mount/bin/"* $bin/bin/
+
+    moveToOutput sbin/nologin "$login"
+    moveToOutput sbin/sulogin "$login"
+    prefix=$login _moveSbin
+    ln -svf "$login/bin/"* $bin/bin/
+
+    moveToOutput sbin/swapon "$swap"
+    moveToOutput sbin/swapoff "$swap"
+    prefix=$swap _moveSbin
+    ln -svf "$swap/bin/"* $bin/bin/
+
     installShellCompletion --bash bash-completion/*
   '';
 
