@@ -36179,6 +36179,8 @@ with pkgs;
 
   xzgv = callPackage ../applications/graphics/xzgv { };
 
+  yaac = callPackage ../applications/radio/yaac { };
+
   yabar = callPackage ../applications/window-managers/yabar { };
 
   yabar-unstable = callPackage ../applications/window-managers/yabar/unstable.nix { };
