@@ -17,6 +17,7 @@
 # optional dependencies
 , scikit-learn
 , tensorflow
+, onnxconverter-common
 , torch
 , accelerate
 , faiss
@@ -27,6 +28,7 @@
 , optax
 , ftfy
 , onnxruntime
+, onnxruntime-tools
 , cookiecutter
 , sagemaker
 , fairscale
@@ -96,7 +98,7 @@ buildPythonPackage rec {
     ];
     tf = [
       tensorflow
-      # onnxconverter-common
+      onnxconverter-common
       # tf2onnx
       # tensorflow-text
       # keras-nlp
@@ -113,10 +115,10 @@ buildPythonPackage rec {
     ftfy = [ ftfy ];
     onnxruntime = [
       onnxruntime
-      # onnxruntime-tools
+      onnxruntime-tools
     ];
     onnx = [
-      # onnxconverter-common
+      onnxconverter-common
       # tf2onnx
       onnxruntime
     ];
