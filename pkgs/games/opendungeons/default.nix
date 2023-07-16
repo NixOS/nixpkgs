@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, ogre, cegui, boost, sfml, openal, cmake, ois, pkg-config }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "opendungeons";
-  version = "unstable-2023-01-09";
+  version = "unstable-2021-11-06";
 
   src = fetchFromGitHub {
     owner = "OpenDungeons";
     repo = "OpenDungeons";
     rev = "c180ed1864eab5fbe847d1dd5c5c936c4e45444e";
-    hash = "sha256-w9h36WOpWsZxrwD9Hsk9L1+UIXCSKs9TgYFS5O98x3U=";
+    sha256 = "0xf7gkpy8ll1h59wyaljf0hr8prg7p4ixz80mxqwcnm9cglpgn63";
   };
 
   patches = [
