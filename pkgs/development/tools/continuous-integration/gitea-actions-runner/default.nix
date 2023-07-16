@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitea
 , buildGoModule
+, testers
+, gitea-actions-runner
 }:
 
 buildGoModule rec {
@@ -22,6 +24,11 @@ buildGoModule rec {
     "-w"
     "-X gitea.com/gitea/act_runner/internal/pkg/ver.version=v${version}"
   ];
+
+  passthru.tests.version = testers.testVersion {
+    package = gitea-actions-runner;
+    version = "v${version}";
+  };
 
   meta = with lib; {
     mainProgram = "act_runner";
