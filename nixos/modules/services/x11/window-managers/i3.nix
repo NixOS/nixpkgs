@@ -4,6 +4,10 @@ with lib;
 
 let
   cfg = config.services.xserver.windowManager.i3;
+  updateSessionEnvironmentScript = ''
+    systemctl --user import-environment PATH DISPLAY XAUTHORITY DESKTOP_SESSION XDG_CONFIG_DIRS XDG_DATA_DIRS XDG_RUNTIME_DIR XDG_SESSION_ID DBUS_SESSION_BUS_ADDRESS || true
+    dbus-update-activation-environment --systemd --all || true
+  '';
 in
 
 {
@@ -16,6 +20,15 @@ in
       description = lib.mdDoc ''
         Path to the i3 configuration file.
         If left at the default value, $HOME/.i3/config will be used.
+      '';
+    };
+
+    updateSessionEnvironment = mkOption {
+      default = true;
+      type = types.bool;
+      description = lib.mdDoc ''
+        Whether to run dbus-update-activation-environment and systemctl import-environment before session start.
+        Required for xdg portals to function properly.
       '';
     };
 
@@ -57,6 +70,8 @@ in
       name  = "i3";
       start = ''
         ${cfg.extraSessionCommands}
+
+        ${lib.optionalString cfg.updateSessionEnvironment updateSessionEnvironmentScript}
 
         ${cfg.package}/bin/i3 ${optionalString (cfg.configFile != null)
           "-c /etc/i3/config"
