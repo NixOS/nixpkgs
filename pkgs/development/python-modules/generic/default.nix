@@ -32,6 +32,7 @@ buildPythonPackage rec {
     description = "Generic programming (Multiple dispatch) library for Python";
     maintainers = with maintainers; [ wolfangaukang ];
     homepage = "https://github.com/gaphor/generic";
-    license = licenses.bsdOriginal;
+    changelog = "https://github.com/gaphor/generic/releases/tag/${version}";
+    license = licenses.bsd3;
   };
 }
