@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "vdirsyncer";
-  version = "0.19.1";
+  version = "0.19.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qnbHclqlpxH2N0vFzYO+eKrmjHSCljWp7Qc81MCfA64=";
+    hash = "sha256-/QWM7quCk0WaBGbNmw5Ks7OUYsbgiaDwrDfDB0INgro=";
   };
 
   postPatch = ''
