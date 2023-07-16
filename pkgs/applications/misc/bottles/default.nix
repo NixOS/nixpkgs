@@ -103,7 +103,7 @@ python3Packages.buildPythonApplication rec {
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    description = "An easy-to-use wineprefix manager";
+    description = "An easy-to-use wineprefix manager without fhsenv-wrapper";
     homepage = "https://usebottles.com/";
     downloadPage = "https://github.com/bottlesdevs/Bottles/releases";
     license = licenses.gpl3Only;
