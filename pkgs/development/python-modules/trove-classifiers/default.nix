@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, calver
 , pytestCheckHook
 , pythonOlder
 }:
@@ -18,15 +17,16 @@ buildPythonPackage rec {
     hash = "sha256-/VoVRig76UH0dUChNb3q6PsmE4CmogTZwYAS8qGwzq4=";
   };
 
-  nativeBuildInputs = [
-    calver
+  # prevent infinite recursion
+  patches = [
+    ./build-without-calver.patch
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  postPatch = ''
+    sed -i 's/VERSION/${version}/g' setup.py
+  '';
 
-  pythonImportsCheck = [ "trove_classifiers" ];
+  doCheck = false;
 
   meta = {
     description = "Canonical source for classifiers on PyPI";

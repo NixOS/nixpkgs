@@ -1,0 +1,30 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 05374a2..1e0fdcc 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,5 +1,5 @@
+ [build-system]
+-requires = ["setuptools", "calver"]
++requires = ["setuptools"]
+ build-backend = "setuptools.build_meta"
+
+ [tool.mypy]
+diff --git a/setup.py b/setup.py
+index 826eac7..ade0ce8 100644
+--- a/setup.py
++++ b/setup.py
+@@ -12,6 +12,7 @@ with open(path.join(here, "README.md"), encoding="utf-8") as f:
+ setup(
+     name="trove-classifiers",
+     description="Canonical source for classifiers on PyPI (pypi.org).",
++    version="VERSION",
+     long_description=long_description,
+     long_description_content_type="text/markdown",
+     url="https://github.com/pypa/trove-classifiers",
+@@ -28,6 +29,4 @@ setup(
+     package_dir={"": "src"},
+     packages=find_packages(where="src"),
+     package_data={"": ["py.typed"]},
+-    use_calver=True,
+-    setup_requires=["calver"],
+ )
