@@ -495,6 +495,8 @@ with pkgs;
 
   compdb = callPackage ../tools/misc/compdb { };
 
+  conserve = callPackage ../tools/backup/conserve { };
+
   conserver = callPackage ../tools/misc/conserver { };
 
   containerlab = callPackage ../tools/networking/containerlab { };
