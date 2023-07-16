@@ -5156,6 +5156,8 @@ with pkgs;
   # TeX Live; see https://nixos.org/nixpkgs/manual/#sec-language-texlive
   texlive = recurseIntoAttrs (callPackage ../tools/typesetting/tex/texlive { });
 
+  filen-desktop = callPackage ../applications/misc/filen-desktop { };
+
   fop = callPackage ../tools/typesetting/fop {
     jdk = openjdk8;
   };
