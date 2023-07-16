@@ -39681,6 +39681,8 @@ with pkgs;
     gst-plugins-good = gst_all_1.gst-plugins-good.override { gtkSupport = true; };
   };
 
+  gamja = callPackage ../applications/misc/gamja { };
+
   gammu = callPackage ../applications/misc/gammu { };
 
   ghostscript = callPackage ../misc/ghostscript { };
