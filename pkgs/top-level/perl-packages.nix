@@ -3541,6 +3541,22 @@ with self; {
     };
   };
 
+  ClassRefresh = buildPerlPackage {
+    pname = "Class-Refresh";
+    version = "0.07";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DO/DOY/Class-Refresh-0.07.tar.gz";
+      hash = "sha256-47ADU1XLs1oq7j8iNojVeJRqenxXCs05iyjN2x/UvrM=";
+    };
+    buildInputs = [ TestFatal TestRequires ];
+    propagatedBuildInputs = [ ClassLoad ClassUnload DevelOverrideGlobalRequire TryTiny ];
+    meta = {
+      homepage = "http://metacpan.org/release/Class-Refresh";
+      description = "Refresh your classes during runtime";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ClassReturnValue = buildPerlPackage {
     pname = "Class-ReturnValue";
     version = "0.55";
@@ -19750,6 +19766,20 @@ with self; {
     meta = {
       description = "A PerlIO layer that adds read & write timeout to a handle";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  PerlLanguageServer = buildPerlPackage {
+    pname = "Perl-LanguageServer";
+    version = "2.5.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GR/GRICHTER/Perl-LanguageServer-2.5.0.tar.gz";
+      hash = "sha256-LQYcIkepqAT1JMkSuIN6mxivz6AZkpShcRsVD1oTmQQ=";
+    };
+    propagatedBuildInputs = [ AnyEvent AnyEventAIO ClassRefresh CompilerLexer Coro DataDump HashSafeKeys IOAIO JSON Moose PadWalker ];
+    meta = {
+      description = "Language Server and Debug Protocol Adapter for Perl";
+      license = lib.licenses.artistic2;
     };
   };
 
