@@ -193,7 +193,7 @@ source: ../config-options.json
 
 ## Calling Nixpkgs from the Module System {#sec-invoke-nixpkgs-by-module}
 
-For [module system](#module-system) application authors, Nixpkgs provides a reusable module for the purpose of invoking Nixpkgs. Most users should not have to be aware of this. The documentation for its options is meant to be re-exposed in the application's documentation and is therefore not repeated here.
+For [module system](#module-system) application authors, Nixpkgs provides a reusable module for the purpose of configuring Nixpkgs. Other users should not have to be aware of this. Therefore, the documentation of its options is not rendered here. Module system authors should re-expose it in their own documentation.
 
 Applications can import the implementation file [`"${nixpkgs}/pkgs/top-level/module/module.nix"`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/module/module.nix).
 
