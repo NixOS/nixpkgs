@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
 , rustPlatform
-, gitUpdater
+, nix-update-script
 
 , autoPatchelfHook
 , pkg-config
@@ -68,9 +68,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   passthru = {
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-      ignoredVersions = ".(rc|beta).*";
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex" "v([0-9.]+)" ];
     };
   };
 
