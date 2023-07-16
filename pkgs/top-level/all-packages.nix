@@ -6749,6 +6749,8 @@ with pkgs;
 
   bluetooth_battery = python3Packages.callPackage ../applications/misc/bluetooth_battery { };
 
+  boa = callPackage ../development/web/boa { };
+
   bombardier = callPackage ../tools/networking/bombardier { };
 
   caeml = callPackage ../applications/networking/mailreaders/caeml { };
