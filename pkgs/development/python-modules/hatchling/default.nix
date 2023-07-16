@@ -5,10 +5,10 @@
 
 # runtime
 , editables
-, importlib-metadata # < 3.8
 , packaging
 , pathspec
 , pluggy
+, trove-classifiers
 , tomli
 
 # tests
@@ -20,7 +20,7 @@
 
 let
   pname = "hatchling";
-  version = "1.13.0";
+  version = "1.18.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -28,7 +28,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+NJ1osxyBzUoa3wuK8NdoFdh5tNpXC+kFlUDlfEMU8c=";
+    hash = "sha256-UOmcMRDOCvw/e9ut/xxxwXdY5HZzHCdgeUDPpmhkico=";
   };
 
   # listed in backend/src/hatchling/ouroboros.py
@@ -37,8 +37,7 @@ buildPythonPackage {
     packaging
     pathspec
     pluggy
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
+    trove-classifiers
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
   ];
