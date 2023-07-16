@@ -207,18 +207,6 @@ let
     lispLibs = super.mathkit.lispLibs ++ [ super.sb-cga ];
   };
 
-  quri_7_0 = build-asdf-system {
-    inherit (super.quri) pname systems lispLibs;
-    version = "0.7.0";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "fukamachi";
-      repo = "quri";
-      rev = "0.7.0";
-      sha256 = "sha256-/9p67rfbkdrx5nn4kXEUAM9MzV7NYUsRcKsrP/e2MlA=";
-    };
-  };
-
   cl-colors2_0_5_4 = build-asdf-system {
     inherit (super.cl-colors2) pname systems lispLibs;
     version = "0.5.4";
@@ -230,15 +218,15 @@ let
     };
   };
 
-  cl-webkit2_3_5_8 = build-asdf-system {
+  cl-webkit2_3_5_9 = build-asdf-system {
     inherit (super.cl-webkit2) pname systems nativeLibs lispLibs;
-    version = "3.5.8";
+    version = "3.5.9";
 
     src = pkgs.fetchFromGitHub {
       owner = "joachifm";
       repo = "cl-webkit";
-      rev = "3.5.8";
-      sha256 = "sha256-wZ/zRRJlTiOIny4BsU+wsFtxtS5YKx3WalwpCVQPFSY=";
+      rev = "3.5.9";
+      sha256 = "sha256-YJo5ahL6+HLeJrxFBuZZjuK3OfA6DnAu82vvXMsNBgI=";
     };
   };
 
@@ -255,7 +243,7 @@ let
 
     lispLibs = [
       self.cl-containers
-      self.nclasses_0_5_0
+      self.nclasses
       super.alexandria
       super.calispel
       super.closer-mop
@@ -268,7 +256,7 @@ let
 
   };
 
-  nasdf-unstable = build-asdf-system {
+  nasdf = build-asdf-system {
     pname = "nasdf";
     version = "20230524-git";
     src = pkgs.fetchFromGitHub {
@@ -279,7 +267,7 @@ let
     };
   };
 
-  njson_1_0_0 = build-asdf-system {
+  njson = build-asdf-system {
     pname = "njson";
     version = "1.0.0";
     src = pkgs.fetchFromGitHub {
@@ -288,11 +276,11 @@ let
       rev = "1.0.0";
       sha256 = "sha256-zeOxkoi5cPl1sw1oEOaMsKhhs3Pb8EzzKTjvuDNj/Ko=";
     };
-    lispLibs = [ self.nasdf-unstable super.cl-json ];
+    lispLibs = [ self.nasdf super.cl-json ];
     systems = [ "njson" "njson/cl-json" ];
   };
 
-  nsymbols_0_3_1 = build-asdf-system {
+  nsymbols = build-asdf-system {
     pname = "nsymbols";
     version = "0.3.1";
     src = pkgs.fetchFromGitHub {
@@ -306,7 +294,7 @@ let
 
   };
 
-  nclasses_0_5_0 = build-asdf-system {
+  nclasses = build-asdf-system {
     pname = "nclasses";
     version = "0.5.0";
     src = pkgs.fetchFromGitHub {
@@ -315,22 +303,22 @@ let
       rev = "0.5.0";
       sha256 = "sha256-UcavZ0fCA2hkVU/CqUZfyCqJ8gXKPpXTCP0WLUIF1Ss=";
     };
-    lispLibs = [ self.nasdf-unstable super.moptilities ];
+    lispLibs = [ self.nasdf super.moptilities ];
   };
 
-  nfiles_1_1_2 = build-asdf-system {
+  nfiles = build-asdf-system {
     pname = "nfiles";
-    version = "1.1.2";
+    version = "20230705-git";
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nfiles";
-      rev = "1.1.2";
-      sha256 = "sha256-YsVcCFrJIFL9Z4wQNAv6chiz6wB/eB8v/EUMXPLs3fw=";
+      rev = "3626e8d512a84efc12479ceb3969d194511757f7";
+      sha256 = "sha256-MoJdbTOVfw2rJk4cf/rEnR55BxdXkoqqu9Txd/R9OYQ=";
     };
     lispLibs = [
-      self.nasdf-unstable
-      self.nclasses_0_5_0
-      self.quri_7_0
+      self.nasdf
+      self.nclasses
+      super.quri
       super.alexandria
       super.iolib
       super.serapeum
@@ -372,27 +360,17 @@ let
       alexandria
       cl-custom-hash-table
       local-time
-      nasdf-unstable
-      nclasses_0_5_0
+      nasdf
+      nclasses
       trivial-package-local-nicknames
     ];
   };
 
   nyxt-gtk = build-asdf-system {
     pname = "nyxt";
-    version = "3.3.0";
+    version = "3.4.0";
 
     lispLibs = (with super; [
-      self.nasdf-unstable
-      self.prompter
-      self.cl-colors2_0_5_4
-      self.njson_1_0_0
-      self.nsymbols_0_3_1
-      self.nclasses_0_5_0
-      self.nfiles_1_1_2
-      self.quri_7_0
-      self.cl-webkit2_3_5_8
-      self.swank
       alexandria
       bordeaux-threads
       calispel
@@ -406,7 +384,6 @@ let
       cl-qrencode
       cl-tld
       closer-mop
-      cl-containers
       dissect
       moptilities
       dexador
@@ -440,17 +417,28 @@ let
       cluffer
       cl-cffi-gtk
       cl-gobject-introspection
+      quri
     ]) ++ (with self; [
       history-tree
       nhooks
       nkeymaps
+      nasdf
+      prompter
+      cl-colors2_0_5_4
+      njson
+      nsymbols
+      nclasses
+      nfiles
+      cl-webkit2_3_5_9
+      swank
+      cl-containers
     ]);
 
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nyxt";
-      rev = "3.3.0";
-      sha256 = "sha256-hSu+XGb87yzZPbJgcUhU81VGhNdMiN6GKspGQJU+SxY=";
+      rev = "3.4.0";
+      sha256 = "sha256-o+GAMHKi+9q+EGY6SEZrxKCEO4IxdOiB4oPpJPGYO0w=";
     };
 
     nativeBuildInputs = [ pkgs.makeWrapper ];

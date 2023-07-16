@@ -350,6 +350,8 @@ with pkgs;
 
   blst = callPackage ../development/libraries/blst { };
 
+  bloodhound-py = callPackage ../tools/security/bloodhound-py { };
+
   bodyclose = callPackage ../development/tools/bodyclose { };
 
   bootstrap-studio = callPackage ../development/web/bootstrap-studio { };
@@ -495,6 +497,8 @@ with pkgs;
 
   compdb = callPackage ../tools/misc/compdb { };
 
+  conserve = callPackage ../tools/backup/conserve { };
+
   conserver = callPackage ../tools/misc/conserver { };
 
   containerlab = callPackage ../tools/networking/containerlab { };
@@ -552,6 +556,8 @@ with pkgs;
   deadnix = callPackage ../development/tools/deadnix { };
 
   dec-decode = callPackage ../development/tools/dec-decode { };
+
+  dnf5 = callPackage ../tools/package-management/dnf5 { };
 
   dsq = callPackage ../tools/misc/dsq { };
 
@@ -6748,6 +6754,8 @@ with pkgs;
   biosdevname = callPackage ../tools/networking/biosdevname { };
 
   bluetooth_battery = python3Packages.callPackage ../applications/misc/bluetooth_battery { };
+
+  boa = callPackage ../development/web/boa { };
 
   bombardier = callPackage ../tools/networking/bombardier { };
 
@@ -13685,7 +13693,7 @@ with pkgs;
 
   typst = callPackage ../tools/typesetting/typst { };
 
-  typst-fmt = callPackage ../tools/typesetting/typst-fmt { };
+  typstfmt = callPackage ../tools/typesetting/typstfmt { };
 
   typst-live = callPackage ../tools/typesetting/typst-live { };
 

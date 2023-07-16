@@ -1,19 +1,17 @@
 { lib
-, stdenv
 , python3Packages
 , fetchFromGitHub
-, makeWrapper
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "nvitop";
-  version = "1.0.0";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "XuehaiPan";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-GcwPFPE9opGMvdeIUg0Pj6qkk0qPU8MNnFTq9qIxFFs=";
+    hash = "sha256-+Yq/UHjrR2nT+TLXEDbNP2yMy4+LZGgbMrDLmWcrxqg=";
   };
 
   propagatedBuildInputs = with python3Packages; [

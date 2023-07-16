@@ -4871,6 +4871,8 @@ self: super: with self; {
 
   hyperopt = callPackage ../development/python-modules/hyperopt { };
 
+  hyperpyyaml = callPackage ../development/python-modules/hyperpyyaml { };
+
   hypothesis-auto = callPackage ../development/python-modules/hypothesis-auto { };
 
   hypothesis = callPackage ../development/python-modules/hypothesis { };
@@ -9342,6 +9344,8 @@ self: super: with self; {
 
   pyphotonfile = callPackage ../development/python-modules/pyphotonfile { };
 
+  pypika = callPackage ../development/python-modules/pypika { };
+
   pypillowfight = callPackage ../development/python-modules/pypillowfight { };
 
   pypinyin = callPackage ../development/python-modules/pypinyin { };
@@ -11722,6 +11726,8 @@ self: super: with self; {
   speaklater3 = callPackage ../development/python-modules/speaklater3 { };
 
   spectral-cube = callPackage ../development/python-modules/spectral-cube { };
+
+  speechbrain = callPackage ../development/python-modules/speechbrain { };
 
   speedtest-cli = callPackage ../development/python-modules/speedtest-cli { };
 
