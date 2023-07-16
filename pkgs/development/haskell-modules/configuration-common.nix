@@ -250,6 +250,9 @@ self: super: {
   # store. Testing is done upstream.
   arion-compose = dontCheck super.arion-compose;
 
+  # 2023-07-17: Outdated base bound https://github.com/srid/lvar/issues/5
+  lvar = doJailbreak super.lvar;
+
   # This used to be a core package provided by GHC, but then the compiler
   # dropped it. We define the name here to make sure that old packages which
   # depend on this library still evaluate (even though they won't compile
