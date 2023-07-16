@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy-continuum";
-  version = "1.3.14";
+  version = "1.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "SQLAlchemy-Continuum";
     inherit version;
-    hash = "sha256-1+k/lx6R8tW9gM3M2kqaVEwpmx8cMhDXeqCjyd8O2hM=";
+    hash = "sha256-Rk+aWxBjUrXuRPE5MSyzWMWS0l7qrjU3wOrHLC+vteU=";
   };
 
   propagatedBuildInputs = [
