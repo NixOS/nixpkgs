@@ -55,63 +55,20 @@ in {
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
   xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_2_2_1;
 
-  # Tests fail because of typechecking changes
-  conduit = dontCheck super.conduit;
-
   # consequences of doctest breakage follow:
 
   ghc-source-gen = checkAgainAfter super.ghc-source-gen "0.4.3.0" "fails to build" (markBroken super.ghc-source-gen);
 
-  haskell-src-meta = doJailbreak super.haskell-src-meta;
-
-  # Tests fail in GHC 9.2
-  extra = dontCheck super.extra;
-
   # Jailbreaks & Version Updates
 
-  assoc = doJailbreak super.assoc;
-  async = doJailbreak super.async;
-  base64-bytestring = doJailbreak super.base64-bytestring;
-  binary-instances = doJailbreak super.binary-instances;
-  ChasingBottoms = doJailbreak super.ChasingBottoms;
-  constraints = doJailbreak super.constraints;
-  cpphs = overrideCabal (drv: { postPatch = "sed -i -e 's,time >=1.5 && <1.11,time >=1.5 \\&\\& <1.12,' cpphs.cabal";}) super.cpphs;
-  data-fix = doJailbreak super.data-fix;
-  dec = doJailbreak super.dec;
-  ed25519 = doJailbreak super.ed25519;
-  ghc-byteorder = doJailbreak super.ghc-byteorder;
-  hackage-security = doJailbreak super.hackage-security;
   hashable-time = doJailbreak super.hashable-time;
-  HTTP = overrideCabal (drv: { postPatch = "sed -i -e 's,! Socket,!Socket,' Network/TCP.hs"; }) (doJailbreak super.HTTP);
-  integer-logarithms = overrideCabal (drv: { postPatch = "sed -i -e 's, <1.1, <1.3,' integer-logarithms.cabal"; }) (doJailbreak super.integer-logarithms);
-  lifted-async = doJailbreak super.lifted-async;
-  lukko = doJailbreak super.lukko;
-  lzma-conduit = doJailbreak super.lzma-conduit;
-  parallel = doJailbreak super.parallel;
-  path = doJailbreak super.path;
-  polyparse = overrideCabal (drv: { postPatch = "sed -i -e 's, <0.11, <0.12,' polyparse.cabal"; }) (doJailbreak super.polyparse);
-  regex-posix = doJailbreak super.regex-posix;
-  singleton-bool = doJailbreak super.singleton-bool;
   libmpd = doJailbreak super.libmpd;
-  generics-sop = doJailbreak super.generics-sop;
-  microlens-th = doJailbreak super.microlens-th;
   # generically needs base-orphans for 9.4 only
   base-orphans = dontCheck (doDistribute super.base-orphans);
-  generically = addBuildDepend self.base-orphans super.generically;
 
   # the dontHaddock is due to a GHC panic. might be this bug, not sure.
   # https://gitlab.haskell.org/ghc/ghc/-/issues/21619
   hedgehog = dontHaddock super.hedgehog;
-
-  # https://github.com/dreixel/syb/issues/38
-  syb = dontCheck super.syb;
-
-  splitmix = doJailbreak super.splitmix;
-  time-compat = doJailbreak super.time-compat;
-  tomland = doJailbreak super.tomland;
-  type-equality = doJailbreak super.type-equality;
-  unordered-containers = doJailbreak super.unordered-containers;
-  vector-binary-instances = doJailbreak super.vector-binary-instances;
 
   hpack = overrideCabal (drv: {
     # Cabal 3.6 seems to preserve comments when reading, which makes this test fail
@@ -133,8 +90,6 @@ in {
   # https://github.com/sjakobi/bsb-http-chunked/issues/38
   bsb-http-chunked = dontCheck super.bsb-http-chunked;
 
-  some = doJailbreak super.some;
-
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
   hiedb = dontCheck super.hiedb;
 
@@ -146,7 +101,6 @@ in {
   th-extras = doJailbreak super.th-extras;
 
   # requires newer versions to work with GHC 9.4
-  swagger2 = dontCheck super.swagger2;
   servant = doJailbreak super.servant;
   servant-server = doJailbreak super.servant-server;
   servant-auth = doJailbreak super.servant-auth;
@@ -155,7 +109,7 @@ in {
   servant-client-core = doJailbreak super.servant-client-core;
   servant-client = doJailbreak super.servant-client;
   # https://github.com/kowainik/relude/issues/436
-  relude = dontCheck (doJailbreak super.relude);
+  relude = dontCheck super.relude;
 
   fourmolu = overrideCabal (drv: {
     libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
