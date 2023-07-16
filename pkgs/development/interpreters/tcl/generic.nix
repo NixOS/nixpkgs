@@ -1,4 +1,5 @@
 { lib, stdenv, callPackage, makeSetupHook
+, tzdata
 
 # Version specific stuff
 , release, version, src
@@ -14,6 +15,14 @@ let
       outputs = [ "out" "man" ];
 
       setOutputFlags = false;
+
+      postPatch = ''
+        substituteInPlace library/clock.tcl \
+          --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo" \
+          --replace "/usr/share/lib/zoneinfo" "" \
+          --replace "/usr/lib/zoneinfo" "" \
+          --replace "/usr/local/etc/zoneinfo" ""
+      '';
 
       preConfigure = ''
         cd unix
