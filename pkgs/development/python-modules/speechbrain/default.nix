@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "speechbrain";
   version = "0.5.14";
-  format = "pyproject";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
