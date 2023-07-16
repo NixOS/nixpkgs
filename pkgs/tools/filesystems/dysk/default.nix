@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dysk";
-  version = "2.6.1";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "dysk";
     rev = "v${version}";
-    hash = "sha256-rSnj38U4Rt5Wh+3A610tTeT2Q1BVGvpMa7rpDf4YzTI=";
+    hash = "sha256-5KUTb2mSYQdkT3K5BrBCQqq45q0MzFYG1UmE+5eBnuc=";
   };
 
-  cargoHash = "sha256-or1vLbtA2tPnGJ3tYWrmaXmPCIutojBlIWMLRNpxpY4=";
+  cargoHash = "sha256-YmA1Qx3oKHXlXs3FWoLMRAnFdIQaFdLJaNwj/FxIS5Q=";
 
   meta = with lib; {
     description = "Get information on your mounted disks";
