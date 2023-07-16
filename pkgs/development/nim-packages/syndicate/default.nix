@@ -1,16 +1,16 @@
-{ lib, buildNimPackage, fetchFromGitea, nimSHA2, preserves }:
+{ lib, buildNimPackage, fetchFromGitea, hashlib, preserves }:
 
 buildNimPackage rec {
   pname = "syndicate";
-  version = "20221102";
+  version = "20230530";
   src = fetchFromGitea {
     domain = "git.syndicate-lang.org";
     owner = "ehmry";
     repo = "${pname}-nim";
     rev = version;
-    hash = "sha256-yTPbEsBcpEPXfmhykbWzWdnJ2ExEJxdii1L+mqx8VGQ=";
+    hash = "sha256-lUHoMSQwUlz9EDMvpFL9GlrwbwMvZDILSmuakONwe50=";
   };
-  propagatedBuildInputs = [ nimSHA2 preserves ];
+  propagatedBuildInputs = [ hashlib preserves ];
   meta = src.meta // {
     description = "Nim implementation of the Syndicated Actor model";
     license = lib.licenses.unlicense;
