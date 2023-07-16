@@ -4,7 +4,7 @@
 , rustPlatform
 , makeWrapper
 , protobuf
-, Security
+, darwin
 , imagemagick
 , ffmpeg
 , exiftool
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   PROTOC_INCLUDE = "${protobuf}/include";
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks ];
 
   postInstall = ''
     wrapProgram "$out/bin/pict-rs" \
