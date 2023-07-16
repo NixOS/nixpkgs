@@ -1,8 +1,33 @@
-{ lib, stdenv, curl, jq, htmlq, xorg, alsa-lib, freetype, p7zip, autoPatchelfHook, writeShellScript, zlib, libjack2, makeWrapper }:
+{ lib
+, stdenv
+, curl
+, jq
+, htmlq
+, xorg
+, alsa-lib
+, freetype
+, p7zip
+, autoPatchelfHook
+, writeShellScript
+, zlib
+, libjack2
+, makeWrapper
+, copyDesktopItems
+, makeDesktopItem
+, librsvg
+}:
 let
-  versionForFile = v: builtins.replaceStrings ["."] [""] v;
+  versionForFile = v: builtins.replaceStrings [ "." ] [ "" ] v;
 
-  mkPianoteq = { name, mainProgram, src, version, archdir ? if (stdenv.hostPlatform.system == "aarch64-linux") then "arm-64bit" else "x86-64bit", ... }:
+  mkPianoteq =
+    { name
+    , mainProgram
+    , startupWMClass
+    , src
+    , version
+    , archdir ? if (stdenv.hostPlatform.system == "aarch64-linux") then "arm-64bit" else "x86-64bit"
+    , ...
+    }:
     stdenv.mkDerivation rec {
       inherit src version;
 
@@ -14,18 +39,34 @@ let
 
       nativeBuildInputs = [
         autoPatchelfHook
+        copyDesktopItems
         makeWrapper
+        librsvg
       ];
 
       buildInputs = [
         stdenv.cc.cc.lib
-        xorg.libX11      # libX11.so.6
-        xorg.libXext     # libXext.so.6
-        alsa-lib          # libasound.so.2
-        freetype         # libfreetype.so.6
+        xorg.libX11 # libX11.so.6
+        xorg.libXext # libXext.so.6
+        alsa-lib # libasound.so.2
+        freetype # libfreetype.so.6
+      ];
+
+      desktopItems = [
+        (makeDesktopItem {
+          name = pname;
+          exec = ''"${mainProgram}"'';
+          desktopName = mainProgram;
+          icon = "pianoteq";
+          comment = meta.description;
+          categories = [ "AudioVideo" "Audio"  "Recorder" ];
+          startupNotify = false;
+          inherit startupWMClass;
+        })
       ];
 
       installPhase = ''
+        runHook preInstall
         mkdir -p $out/bin
         mv -t $out/bin Pianoteq*/${archdir}/*
         for f in $out/bin/Pianoteq*; do
@@ -41,6 +82,18 @@ let
             }
           fi
         done
+        install -Dm644 ${./pianoteq.svg} $out/share/icons/hicolor/scalable/apps/pianoteq.svg
+        for size in 16 22 32 48 64 128 256; do
+          dir=$out/share/icons/hicolor/"$size"x"$size"/apps
+          mkdir -p $dir
+          rsvg-convert \
+            --keep-aspect-ratio \
+            --width $size \
+            --height $size \
+            --output $dir/pianoteq.png \
+            ${./pianoteq.svg}
+        done
+        runHook postInstall
       '';
 
       meta = with lib; {
@@ -49,11 +102,11 @@ let
         license = licenses.unfree;
         inherit mainProgram;
         platforms = [ "x86_64-linux" "aarch64-linux" ];
-        maintainers = [ maintainers.mausch ];
+        maintainers = with maintainers; [ mausch ners ];
       };
     };
 
-  fetchWithCurlScript = { name, hash, script, impureEnvVars ? [] }:
+  fetchWithCurlScript = { name, hash, script, impureEnvVars ? [ ] }:
     stdenv.mkDerivation {
       inherit name;
       builder = writeShellScript "builder.sh" ''
@@ -165,11 +218,13 @@ let
       '';
     };
 
-in {
+in
+{
   # TODO currently can't install more than one because `lame` clashes
   stage-trial = mkPianoteq rec {
     name = "stage-trial";
     mainProgram = "Pianoteq 8 STAGE";
+    startupWMClass = "Pianoteq STAGE Trial";
     version = "8.1.1";
     src = fetchPianoteqTrial {
       name = "pianoteq_stage_linux_trial_v${versionForFile version}.7z";
@@ -179,6 +234,7 @@ in {
   standard-trial = mkPianoteq rec {
     name = "standard-trial";
     mainProgram = "Pianoteq 8";
+    startupWMClass = "Pianoteq Trial";
     version = "8.1.1";
     src = fetchPianoteqTrial {
       name = "pianoteq_linux_trial_v${versionForFile version}.7z";
@@ -188,6 +244,7 @@ in {
   stage-6 = mkPianoteq rec {
     name = "stage-6";
     mainProgram = "Pianoteq 6 STAGE";
+    startupWMClass = "Pianoteq STAGE";
     version = "6.7.3";
     archdir = if (stdenv.hostPlatform.system == "aarch64-linux") then throw "Pianoteq stage-6 is not supported on aarch64-linux" else "amd64";
     src = fetchPianoteqWithLogin {
@@ -198,6 +255,7 @@ in {
   stage-7 = mkPianoteq rec {
     name = "stage-7";
     mainProgram = "Pianoteq 7 STAGE";
+    startupWMClass = "Pianoteq STAGE";
     version = "7.3.0";
     src = fetchPianoteqWithLogin {
       name = "pianoteq_stage_linux_v${versionForFile version}.7z";
@@ -205,8 +263,9 @@ in {
     };
   };
   standard-8 = mkPianoteq rec {
-    name = "pro-8";
+    name = "standard-8";
     mainProgram = "Pianoteq 8";
+    startupWMClass = "Pianoteq";
     version = "8.1.1";
     src = fetchPianoteqWithLogin {
       name = "pianoteq_linux_v${versionForFile version}.7z";
