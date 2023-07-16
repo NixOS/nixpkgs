@@ -9111,6 +9111,8 @@ self: super: with self; {
 
   pymatgen = callPackage ../development/python-modules/pymatgen { };
 
+  pymatting = callPackage ../development/python-modules/pymatting { };
+
   pymaven-patch = callPackage ../development/python-modules/pymaven-patch { };
 
   pymavlink = callPackage ../development/python-modules/pymavlink { };
