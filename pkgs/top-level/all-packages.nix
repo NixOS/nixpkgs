@@ -350,6 +350,8 @@ with pkgs;
 
   blst = callPackage ../development/libraries/blst { };
 
+  bloodhound-py = callPackage ../tools/security/bloodhound-py { };
+
   bodyclose = callPackage ../development/tools/bodyclose { };
 
   bootstrap-studio = callPackage ../development/web/bootstrap-studio { };
