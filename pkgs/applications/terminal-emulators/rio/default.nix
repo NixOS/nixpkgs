@@ -4,6 +4,7 @@
 , nix-update-script
 
 , autoPatchelfHook
+, ncurses
 , pkg-config
 
 , gcc-unwrapped
@@ -54,6 +55,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
+    ncurses
     pkg-config
   ];
 
@@ -61,11 +63,20 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = rlinkLibs;
 
+  outputs = [ "out" "terminfo" ];
+
   buildNoDefaultFeatures = true;
   buildFeatures = [
     (lib.optionalString withX11 "x11")
     (lib.optionalString withWayland "wayland")
   ];
+
+  postInstall = ''
+    install -dm 755 "$terminfo/share/terminfo/r/"
+    tic -xe rio,rio-direct -o "$terminfo/share/terminfo" misc/rio.terminfo
+    mkdir -p $out/nix-support
+    echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+  '';
 
   passthru = {
     updateScript = nix-update-script {
