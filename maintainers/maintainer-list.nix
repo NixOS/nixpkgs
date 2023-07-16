@@ -15215,6 +15215,12 @@
     githubId = 74881555;
     name = "Fofanov Sergey";
   };
+  sitaaax = {
+    email = "johannes@kle1n.com";
+    github = "SitAAAx";
+    githubId = 74413170;
+    name = "Johannes Klein";
+  };
   sivteck = {
     email = "sivaram1992@gmail.com";
     github = "sivteck";
