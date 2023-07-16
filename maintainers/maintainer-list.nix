@@ -10047,6 +10047,11 @@
     githubId = 2914269;
     name = "Malo Bourgon";
   };
+  malt3 = {
+    github = "malt3";
+    githubId = 1780588;
+    name = "Malte Poll";
+  };
   malte-v = {
     email = "nixpkgs@mal.tc";
     github = "malte-v";
