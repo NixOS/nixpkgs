@@ -3885,6 +3885,22 @@ with self; {
     };
   };
 
+  CompilerLexer = buildPerlModule {
+    pname = "Compiler-Lexer";
+    version = "0.23";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GO/GOCCY/Compiler-Lexer-0.23.tar.gz";
+      hash = "sha256-YDHOSv67+k9JKidJSb57gjIxTpECOCjEOOR5gf8Kmds=";
+    };
+    nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
+    buildInputs = [ ModuleBuildXSUtil ];
+    meta = {
+      homepage = "https://github.com/goccy/p5-Compiler-Lexer";
+      description = "Lexical Analyzer for Perl5";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CompressBzip2 = buildPerlPackage {
     pname = "Compress-Bzip2";
     version = "2.28";
