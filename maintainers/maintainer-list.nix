@@ -5190,6 +5190,12 @@
       fingerprint = "FC1D 3E4F CBCA 80DF E870  6397 C811 6E3A 0C1C A76A";
     }];
   };
+  exploitoverload = {
+    email = "nix@exploitoverload.com";
+    github = "exploitoverload";
+    githubId = 99678549;
+    name = "Asier Armenteros";
+  };
   extends = {
     email = "sharosari@gmail.com";
     github = "ImExtends";
@@ -10046,6 +10052,11 @@
     github = "malob";
     githubId = 2914269;
     name = "Malo Bourgon";
+  };
+  malt3 = {
+    github = "malt3";
+    githubId = 1780588;
+    name = "Malte Poll";
   };
   malte-v = {
     email = "nixpkgs@mal.tc";
