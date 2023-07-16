@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , rustPlatform
+, nixosTests
 , nix-update-script
 
 , autoPatchelfHook
@@ -82,6 +83,8 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script {
       extraArgs = [ "--version-regex" "v([0-9.]+)" ];
     };
+
+    tests.test = nixosTests.terminal-emulators.rio;
   };
 
   meta = {
