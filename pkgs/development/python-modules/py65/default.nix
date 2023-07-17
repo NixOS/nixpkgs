@@ -24,7 +24,7 @@ buildPythonPackage rec {
           --replace "test_argv_combination_rom_mpu" "dont_test_argv_combination_rom_mpu"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://py65.readthedocs.io/";
     description = "Emulate 6502-based microcomputer systems in Python";
     longDescription = ''
@@ -33,7 +33,7 @@ buildPythonPackage rec {
       debugger. Py65Mon provides a command line with many convenient commands
       for interacting with the simulated 6502-based system.
     '';
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ AndersonTorres tomasajt ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ AndersonTorres tomasajt ];
   };
 }
