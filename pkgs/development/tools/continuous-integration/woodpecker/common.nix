@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub }:
 let
-  version = "0.15.8";
-  srcSha256 = "sha256-7CTRx7I47VEKfPvkWhmpyHV3hkeLyHymFMrkyYQ1wl8=";
+  version = "0.15.11";
+  srcSha256 = "sha256-iDcEkaR1ZvH7Q68sxbwOiP1WKbkiDhCOtkuipbjXHKM=";
   yarnSha256 = "sha256-PY0BIBbjyi2DG+n5x/IPc0AwrFSwII4huMDU+FeZ/Sc=";
 in
 {
