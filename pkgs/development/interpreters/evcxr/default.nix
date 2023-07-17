@@ -1,5 +1,20 @@
-{ cargo, fetchFromGitHub, makeWrapper, pkg-config, rustPlatform, lib, stdenv
-, gcc, cmake, libiconv, CoreServices, Security }:
+{ callPackage
+, fetchFromGitHub
+, lib
+, makeWrapper
+, pkg-config
+, stdenv
+
+, cargo
+, rustPlatform
+
+, gcc
+, cmake
+, libiconv
+
+, CoreServices
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "evcxr";
@@ -9,10 +24,10 @@ rustPlatform.buildRustPackage rec {
     owner = "google";
     repo = "evcxr";
     rev = "v${version}";
-    sha256 = "sha256-s8zM1vxEeJYcRek1rqUmrBfvB2zCAF3iLG8UVA7WABI=";
+    hash = "sha256-s8zM1vxEeJYcRek1rqUmrBfvB2zCAF3iLG8UVA7WABI=";
   };
 
-  cargoSha256 = "sha256-wMo5Fq6aMiE6kg8mZoz1T3KPwKSdJcej83MB+/GRM5w=";
+  cargoHash = "sha256-wMo5Fq6aMiE6kg8mZoz1T3KPwKSdJcej83MB+/GRM5w=";
 
   RUST_SRC_PATH = "${rustPlatform.rustLibSrc}";
 
@@ -38,6 +53,10 @@ rustPlatform.buildRustPackage rec {
     ${wrap "evcxr_jupyter"}
     rm $out/bin/testing_runtime
   '';
+
+  passthru = {
+    withPackages = callPackage ./withPackages.nix {};
+  };
 
   meta = with lib; {
     description = "An evaluation context for Rust";
