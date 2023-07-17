@@ -680,7 +680,14 @@ in {
     }) (filterAttrs (_: u: u.packages != []) cfg.users);
 
     environment.profiles = [
-      "$HOME/.nix-profile"
+      (
+        if
+          config.nix.settings ? use-xdg-base-directories && config.nix.settings.use-xdg-base-directories
+        then
+          "\${XDG_STATE_HOME:-$HOME/.local/state}/nix/profile"
+        else
+        "$HOME/.nix-profile"
+      )
       "/etc/profiles/per-user/$USER"
     ];
 
