@@ -18,6 +18,7 @@
 , scikit-learn
 , tensorflow
 , onnxconverter-common
+, tf2onnx
 , torch
 , accelerate
 , faiss
@@ -99,7 +100,7 @@ buildPythonPackage rec {
     tf = [
       tensorflow
       onnxconverter-common
-      # tf2onnx
+      tf2onnx
       # tensorflow-text
       # keras-nlp
     ];
@@ -119,7 +120,7 @@ buildPythonPackage rec {
     ];
     onnx = [
       onnxconverter-common
-      # tf2onnx
+      tf2onnx
       onnxruntime
     ];
     modelcreation = [
