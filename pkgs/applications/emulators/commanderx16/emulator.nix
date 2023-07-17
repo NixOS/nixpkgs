@@ -1,23 +1,32 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , fetchFromGitHub
 , SDL2
+, zlib
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "x16-emulator";
-  version = "41";
+  version = "43";
 
   src = fetchFromGitHub {
-    owner = "commanderx16";
+    owner = "X16Community";
     repo = "x16-emulator";
     rev = "r${finalAttrs.version}";
-    hash = "sha256-pnWqtSXQzUfQ8ADIXL9r2YjuBwHDQ2NAffAEFCN5Qzw=";
+    hash = "sha256-cZB7MRYlchD3zcBSWBIzyBiGHJobJvozkVT/7ftFkNg=";
   };
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace '/bin/echo' 'echo'
+  '';
 
   dontConfigure = true;
 
-  buildInputs = [ SDL2 ];
+  buildInputs = [
+    SDL2
+    zlib
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -28,19 +37,20 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    homepage = "https://www.commanderx16.com/forum/index.php?/home/";
-    description = "The official emulator of CommanderX16 8-bit computer";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ AndersonTorres ];
-    mainProgram = "x16emu";
-    inherit (SDL2.meta) platforms;
-    broken = with stdenv; isDarwin && isAarch64;
+  passthru = {
+    # upstream project recommends emulator and rom to be synchronized; passing
+    # through the version is useful to ensure this
+    inherit (finalAttrs) version;
   };
 
-  passthru = {
-    # upstream project recommends emulator and rom to be synchronized;
-    # passing through the version is useful to ensure this
-    inherit (finalAttrs) version;
+  meta = {
+    homepage = "https://cx16forum.com/";
+    description = "The official emulator of CommanderX16 8-bit computer";
+    changelog = "https://github.com/X16Community/x16-emulator/blob/r${finalAttrs.version}/RELEASES.md";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    mainProgram = "x16emu";
+    inherit (SDL2.meta) platforms;
+    broken = stdenv.isAarch64; # ofborg fails to compile it
   };
 })

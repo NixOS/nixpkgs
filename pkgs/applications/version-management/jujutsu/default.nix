@@ -1,52 +1,92 @@
-{ lib
-, rustPlatform
+{ stdenv
+, lib
 , fetchFromGitHub
-, pkg-config
-, openssl
-, stdenv
-, dbus
-, sqlite
+, rustPlatform
 , Security
 , SystemConfiguration
+, pkg-config
 , libiconv
+, openssl
+, gzip
+, libssh2
+, libgit2
+, zstd
+, fetchpatch
+, installShellFiles
+, nix-update-script
 , testers
 , jujutsu
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "jujutsu";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "martinvonz";
     repo = "jj";
     rev = "v${version}";
-    sha256 = "sha256-FczlSBlLhLIamLiY4cGVAoHx0/sxx+tykICzedFbbx8=";
+    sha256 = "sha256-kbJWkCnb77VRKemA8WejaChaQYCxNiVMbqW5PCrDoE8=";
   };
 
-  cargoHash = "sha256-PydDgXp47KUSLvAQgfO+09lrzTnBjzGd+zA5f/jZfRc=";
+  cargoHash = "sha256-qbCOVcKpNGWGonRAwPsr3o3yd+7qUTy3IVmC3Ifn4xE=";
 
-  # Needed to get openssl-sys to use pkg-config.
-  OPENSSL_NO_VENDOR = 1;
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
+    # enable 'packaging' feature, which enables extra features such as support
+    # for watchman
+    "packaging"
+  ];
+
+  patches = [
+    # this patch (hopefully!) fixes a very, very rare test failure that can
+    # occasionally be cajoled out of Nix and GitHub CI builds. go ahead and
+    # apply it to be safe.
+    (fetchpatch {
+      url = "https://github.com/martinvonz/jj/commit/8e7e32710d29010423f3992bb920aaf2a0fa04ec.patch";
+      hash = "sha256-ySieobB1P/DpWOurcCb4BXoHk9IqrjzMfzdc3O5cTXk=";
+    })
+  ];
+
+  cargoBuildFlags = [ "--bin" "jj" ]; # don't install the fake editors
+  useNextest = true; # nextest is the upstream integration framework
+  ZSTD_SYS_USE_PKG_CONFIG = "1";    # disable vendored zlib
+  LIBSSH2_SYS_USE_PKG_CONFIG = "1"; # disable vendored libssh2
 
   nativeBuildInputs = [
+    gzip
+    installShellFiles
     pkg-config
   ];
 
   buildInputs = [
     openssl
-    dbus
-    sqlite
+    zstd
+    libgit2
+    libssh2
   ] ++ lib.optionals stdenv.isDarwin [
     Security
     SystemConfiguration
     libiconv
   ];
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = jujutsu;
-      command = "jj --version";
+  postInstall = ''
+    $out/bin/jj util mangen > ./jj.1
+    installManPage ./jj.1
+
+    installShellCompletion --cmd jj \
+      --bash <($out/bin/jj util completion --bash) \
+      --fish <($out/bin/jj util completion --fish) \
+      --zsh <($out/bin/jj util completion --zsh)
+  '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      version = testers.testVersion {
+        package = jujutsu;
+        command = "jj --version";
+      };
     };
   };
 
@@ -55,7 +95,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/martinvonz/jj";
     changelog = "https://github.com/martinvonz/jj/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ _0x4A6F ];
+    maintainers = with maintainers; [ _0x4A6F thoughtpolice ];
     mainProgram = "jj";
   };
 }

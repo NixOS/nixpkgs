@@ -25,14 +25,14 @@
 
 stdenv.mkDerivation rec {
   pname = "foxotron";
-  version = "2023-02-23";
+  version = "2023-07-16";
 
   src = fetchFromGitHub {
     owner = "Gargaj";
     repo = "Foxotron";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-sPIXLZdtVK3phfMsZrU8o9qisOC5RKvHH19ECXMV0t0=";
+    sha256 = "sha256-s1eWZMVitVSP7nJJ5wXvnV8uI6yto7LmvlvocOwVAxw=";
   };
 
   postPatch = ''
