@@ -9874,6 +9874,8 @@ with pkgs;
 
   node2nix = nodePackages.node2nix;
 
+  notesnook = callPackage ../applications/misc/notesnook { };
+
   openipmi = callPackage ../tools/system/openipmi { };
 
   ox = callPackage ../applications/editors/ox { };
