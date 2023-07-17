@@ -4244,6 +4244,18 @@ final: prev:
     meta.homepage = "https://github.com/edwinb/idris2-vim/";
   };
 
+  image-nvim = buildVimPluginFrom2Nix {
+    pname = "image.nvim";
+    version = "2023-07-17";
+    src = fetchFromGitHub {
+      owner = "3rd";
+      repo = "image.nvim";
+      rev = "24c312191ca6bc04e45610a7bcb984d3bf208820";
+      sha256 = "1fy024nd01wryrasibc4b8divcfzx3a7xxfzx968l4a4l1q3l6vc";
+    };
+    meta.homepage = "https://github.com/3rd/image.nvim/";
+  };
+
   impatient-nvim = buildVimPluginFrom2Nix {
     pname = "impatient.nvim";
     version = "2023-05-05";
