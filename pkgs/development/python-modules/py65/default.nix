@@ -1,14 +1,28 @@
-{ lib, fetchPypi, buildPythonApplication }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+}:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "py65";
   version = "1.1.0";
-  format = "wheel";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version format;
-    sha256 = "Q7rjiHJ/Ew985vut/8fVAf/wWYW5aBPSvNPm8A6g1zg=";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "mnaberez";
+    repo = "py65";
+    rev = "refs/tags/${version}";
+    hash = "sha256-WLs3TAZovuphWZIvMvM3CZnqg1aZfMF4Yrqw46k+bLA=";
   };
+
+  postPatch = ''
+    substituteInPlace py65/tests/test_monitor.py \
+          --replace "test_argv_rom" "dont_test_argv_rom" \
+          --replace "test_argv_combination_rom_mpu" "dont_test_argv_combination_rom_mpu"
+  '';
 
   meta = with lib; {
     homepage = "https://py65.readthedocs.io/";
@@ -20,6 +34,6 @@ buildPythonApplication rec {
       for interacting with the simulated 6502-based system.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres tomasajt ];
   };
 }
