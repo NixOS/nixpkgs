@@ -29,14 +29,14 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.29.0";
+  version = "0.29.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FTitj43RFCNvSWInXHALyIljfcBBkaq/XI1ZA1k0glk=";
+    hash = "sha256-C7Km98N/ER+IJ964V+BFkVF8N7uRmraPIpHn8yJtb/Q=";
   };
 
   goModules = (buildGoModule {
