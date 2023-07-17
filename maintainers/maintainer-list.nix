@@ -15718,6 +15718,12 @@
     githubId = 16734772;
     name = "Sumner Evans";
   };
+  sund3RRR = {
+    email = "evenquantity@gmail.com";
+    github = "sund3RRR";
+    githubId = 73298492;
+    name = "Mikhail Kiselev";
+  };
   suominen = {
     email = "kimmo@suominen.com";
     github = "suominen";
