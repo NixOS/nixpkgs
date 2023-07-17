@@ -1175,6 +1175,8 @@ mapAliases ({
   nodejs-10_x = nodejs_10; # Added 2022-11-06
   nodejs_12 = throw "nodejs-12_x has been removed. Use a newer version instead."; # Added 2022-07-04
   nodejs-12_x = nodejs_12; # Added 2022-11-06
+  nodejs_14 = throw "nodejs_14 has been removed. Use a newer version instead."; # Added 2023-07-17
+  nodejs-slim_14 = throw "nodejs-slim_14 has been removed. Use a newer version instead."; # Added 2023-07-17
   nodejs-14_x = nodejs_14; # Added 2022-11-06
   nodejs-slim-14_x = nodejs-slim_14; # Added 2022-11-06
   nodejs-16_x = nodejs_16; # Added 2022-11-06
