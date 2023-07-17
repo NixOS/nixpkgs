@@ -88,6 +88,11 @@ stdenv.mkDerivation rec {
     qtx11extras
   ];
 
+  postInstall = ''
+    # Remove unneeded bundled libraries and headers
+    rm -r $out/{include,lib}
+  '';
+
   passthru.tests = nixosTests.musescore;
 
   meta = with lib; {
