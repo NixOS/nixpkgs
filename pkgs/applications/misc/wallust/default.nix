@@ -4,18 +4,18 @@ let
   repoUrl = "https://codeberg.org/explosion-mental/wallust";
 in rustPlatform.buildRustPackage rec {
   pname = "wallust";
-  version = "2.4.1";
+  version = "2.5.0";
 
   src = fetchgit {
     url = "${repoUrl}.git";
     rev = version;
-    sha256 = "sha256-7zSUyj8Zzk8rsDe7ukPaV02HH7VQ+yjh+wM5TZzJxSA=";
+    sha256 = "sha256-np03F4XxGFjWfxCKUUIm7Xlp1y9yjzkeb7F2I7dYttA=";
   };
 
-  cargoSha256 = "sha256-toqt5vqEsflhqFargEcCXrb6ab748mn6k6/RH5d/3RA=";
+  cargoSha256 = "sha256-yq51LQB53VKjMoNM3f/JzifEHSA69Jso2QYRsaplQfk=";
 
   meta = with lib; {
-    description = "A better pywall";
+    description = "A better pywal";
     homepage = repoUrl;
     license = licenses.mit;
     maintainers = with maintainers; [onemoresuza];
