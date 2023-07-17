@@ -1,6 +1,7 @@
-{ buildGoModule
+{ lib
+, stdenv
+, buildGoModule
 , fetchFromGitHub
-, lib, stdenv
 }:
 
 buildGoModule rec {
@@ -10,13 +11,13 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "RedTeamPentesting";
     repo = "monsoon";
-    rev = "v${version}";
-    sha256 = "sha256-7cfy8dYhiReFVz10wui3qqxlXOX7wheREkvSnj2KyOw=";
+    rev = "refs/tagsv${version}";
+    hash = "sha256-7cfy8dYhiReFVz10wui3qqxlXOX7wheREkvSnj2KyOw=";
   };
 
   vendorHash = "sha256-SZDX61iPwT/mfxJ+n2nlvzgEvUu6h3wVkmeqZtxQ9KE=";
 
-  # tests fails on darwin
+  # Tests fails on darwin
   doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
@@ -26,6 +27,7 @@ buildGoModule rec {
       requests, filter the responses and display them in real-time.
     '';
     homepage = "https://github.com/RedTeamPentesting/monsoon";
+    changelog = "https://github.com/RedTeamPentesting/monsoon/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
