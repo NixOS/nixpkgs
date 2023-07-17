@@ -4694,6 +4694,8 @@ self: super: with self; {
     inherit (pkgs) udev libusb1;
   };
 
+  hid-parser = callPackage ../development/python-modules/hid-parser { };
+
   hieroglyph = callPackage ../development/python-modules/hieroglyph { };
 
   hijri-converter = callPackage ../development/python-modules/hijri-converter { };

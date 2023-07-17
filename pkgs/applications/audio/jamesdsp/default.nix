@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, mkDerivation
 , fetchFromGitHub
 , pipewire
 , pulseaudio
@@ -20,18 +19,16 @@
 
 assert lib.asserts.assertMsg (usePipewire != usePulseaudio) "You need to enable one and only one of pulseaudio or pipewire support";
 
-let
-  pluginPath = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good ]);
-in
-  mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "jamesdsp";
-  version = "2.5.1";
+  version = "2.6.0";
+
   src = fetchFromGitHub rec {
     owner = "Audio4Linux";
     repo = "JDSP4Linux";
     fetchSubmodules = true;
     rev = version;
-    hash = "sha256-osbRiUa/CKq4l3pV2MZYKcECEfa1ee3SAQ8RsiimbA4=";
+    hash = "sha256-pogBpmGlqQnkXMdp5HbMYISjwMJalSPvEV9MDHj8aec=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +51,9 @@ in
     gst_all_1.gstreamer
   ];
 
-  qtWrapperArgs = lib.optionals usePulseaudio [ "--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : ${pluginPath}" ];
+  preFixup = lib.optionals usePulseaudio ''
+    qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
+  '';
 
   qmakeFlags = lib.optionals usePulseaudio [ "CONFIG+=USE_PULSEAUDIO" ];
 
