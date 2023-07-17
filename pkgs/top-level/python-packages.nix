@@ -7764,6 +7764,8 @@ self: super: with self; {
 
   picos = callPackage ../development/python-modules/picos { };
 
+  picosvg = callPackage ../development/python-modules/picosvg { };
+
   piccolo-theme = callPackage ../development/python-modules/piccolo-theme { };
 
   pid = callPackage ../development/python-modules/pid { };
