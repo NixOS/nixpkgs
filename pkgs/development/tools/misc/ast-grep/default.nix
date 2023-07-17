@@ -6,26 +6,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ast-grep";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "ast-grep";
     repo = "ast-grep";
     rev = version;
-    hash = "sha256-6gKskJbKo1mVVRzojfGuGTsGCV/r+8hw7r1v4ufSa+A=";
+    hash = "sha256-gAzO5ganbwxarqHGVhAl9PtiHEr89puoPJK+iXtrvyU=";
   };
 
-  cargoHash = "sha256-5Xj/V9XKd5neNZh9LaFrQ48Us42+e2f5UhMNA1RaQSE=";
+  cargoHash = "sha256-SvGxDXC1nN6LitWHGcVieHJpEEuY1omqAvjaJmHPauE=";
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''
     rm .cargo/config.toml
   '';
 
-  checkFlags = lib.optionals (stdenv.isx86_64 && stdenv.isDarwin) [
-    # fails on emulated x86_64-darwin
-    # mach-o file, but is an incompatible architecture (have 'arm64', need 'x86_64')
-    "--skip=test::test_load_parser"
+  checkFlags = [
+    # disable flaky test
+    "--skip=test::test_load_parser_mac"
   ];
 
   meta = with lib; {
