@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bpftune";
-  version = "unstable-2023-07-11";
+  version = "unstable-2023-07-14";
 
   src = fetchFromGitHub {
     owner = "oracle-samples";
     repo = "bpftune";
-    rev = "f2eb8e9c020261cc8c58b312841dec32d287a0cc";
-    hash = "sha256-M5Zl4TzifQ3TkmCEBgKtv/kwichUY0PXQaQQThkTn2Q=";
+    rev = "66620152bf8c37ab592e9273fe87e567126801c2";
+    hash = "sha256-U0O+F1DBF1xiaUKklwpZORBwF1T9wHM0SPQKUNaxKZk=";
   };
 
   postPatch = ''
@@ -61,6 +61,8 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     inherit (nixosTests) bpftune;
   };
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "BPF-based auto-tuning of Linux system parameters";
