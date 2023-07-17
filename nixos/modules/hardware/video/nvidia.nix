@@ -31,6 +31,12 @@ in {
         the NVIDIA docs, on Chapter 22. PCI-Express Runtime D3 (RTD3) Power Management.
       '');
 
+      dynamicBoost.enable = lib.mkEnableOption (lib.mdDoc ''
+        dynamic Boost balances power between the CPU and the GPU for improved
+        performance on supported laptops using the nvidia-powerd daemon. For more
+        information, see the NVIDIA docs, on Chapter 23. Dynamic Boost on Linux.
+      '');
+
       modesetting.enable = lib.mkEnableOption (lib.mdDoc ''
         kernel modesetting when using the NVIDIA proprietary driver.
 
@@ -238,6 +244,11 @@ in {
           assertion = cfg.open -> (cfg.package ? open && cfg.package ? firmware);
           message = "This version of NVIDIA driver does not provide a corresponding opensource kernel driver";
         }
+
+        {
+          assertion = cfg.dynamicBoost.enable -> lib.versionAtLeast nvidia_x11.version "510.39.01";
+          message = "NVIDIA's Dynamic Boost feature only exists on versions >= 510.39.01";
+        }
       ];
 
       # If Optimus/PRIME is enabled, we:
@@ -394,9 +405,25 @@ in {
               };
             };
           })
+          (lib.mkIf cfg.dynamicBoost.enable {
+            "nvidia-powerd" = {
+              description = "nvidia-powerd service";
+              path = [
+                pkgs.util-linux # nvidia-powerd wants lscpu
+              ];
+              wantedBy = ["multi-user.target"];
+              serviceConfig = {
+                Type = "dbus";
+                BusName = "nvidia.powerd.server";
+                ExecStart = "${nvidia_x11.bin}/bin/nvidia-powerd";
+              };
+            };
+          })
         ];
 
       services.acpid.enable = true;
+
+      services.dbus.packages = lib.optional cfg.dynamicBoost.enable nvidia_x11.bin;
 
       hardware.firmware = lib.optional cfg.open nvidia_x11.firmware;
 
