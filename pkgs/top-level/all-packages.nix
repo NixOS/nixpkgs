@@ -9727,6 +9727,8 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
+  nanoemoji = python3Packages.callPackage ../tools/misc/nanoemoji { };
+
   nagelfar = callPackage ../development/tools/nagelfar { };
 
   nats-top = callPackage ../tools/system/nats-top { };
