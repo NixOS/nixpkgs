@@ -9,22 +9,23 @@
 , Security
 , SystemConfiguration
 , libiconv
+, nix-update-script
 , testers
 , jujutsu
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "jujutsu";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "martinvonz";
     repo = "jj";
     rev = "v${version}";
-    sha256 = "sha256-FczlSBlLhLIamLiY4cGVAoHx0/sxx+tykICzedFbbx8=";
+    sha256 = "sha256-kbJWkCnb77VRKemA8WejaChaQYCxNiVMbqW5PCrDoE8=";
   };
 
-  cargoHash = "sha256-PydDgXp47KUSLvAQgfO+09lrzTnBjzGd+zA5f/jZfRc=";
+  cargoHash = "sha256-qbCOVcKpNGWGonRAwPsr3o3yd+7qUTy3IVmC3Ifn4xE=";
 
   # Needed to get openssl-sys to use pkg-config.
   OPENSSL_NO_VENDOR = 1;
@@ -43,10 +44,13 @@ rustPlatform.buildRustPackage rec {
     libiconv
   ];
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = jujutsu;
-      command = "jj --version";
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      version = testers.testVersion {
+        package = jujutsu;
+        command = "jj --version";
+      };
     };
   };
 
