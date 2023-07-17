@@ -1231,6 +1231,12 @@
     githubId = 914687;
     name = "Alexis Praga";
   };
+  aprl = {
+    email = "aprl@acab.dev";
+    github = "cutestnekoaqua";
+    githubId = 30842467;
+    name = "April John";
+  };
   ar1a = {
     email = "aria@ar1as.space";
     github = "ar1a";
@@ -14869,6 +14875,16 @@
     githubId = 4805746;
     name = "Sebastian Jordan";
   };
+  septem9er = {
+  name = "Septem9er";
+  email = "develop@septem9er.de";
+  matrix = "@septem9er:fairydust.space";
+  github = "septem9er";
+  githubId = 33379902;
+  keys = [{
+    fingerprint = "C408 07F9 8677 3D98 EFF3 0980 355A 9AFB FD8E AD33";
+  }];
+};
   seqizz = {
     email = "seqizz@gmail.com";
     github = "seqizz";
