@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch
 , nixosTests, postgresql, postgresqlTestHook }:
 
 buildGoModule rec {
@@ -11,6 +11,14 @@ buildGoModule rec {
     rev = "v${version}";
     hash = "sha256-2DqEfTXD3W6MxfBb6aHaKH+zpxLc2tHaGuWGQuncySo=";
   };
+
+  patches = [
+    # Fix SQLite db lockup
+    (fetchpatch {
+      url = "https://github.com/matrix-org/dendrite/commit/c08c7405dbe9d88c1364f6f1f2466db5045506cc.patch";
+      hash = "sha256-gTF9jK5Ihfe1v49gPCK68BLeiUZa2Syo+7D9r62iEXQ=";
+    })
+  ];
 
   vendorHash = "sha256-dc0zpKh7J+fi2b5GD/0BQ120UXbBvJLUF74RmYMSOMw=";
 

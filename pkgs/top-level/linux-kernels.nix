@@ -505,6 +505,8 @@ in {
 
     turbostat = callPackage ../os-specific/linux/turbostat { };
 
+    trelay = callPackage ../os-specific/linux/trelay { };
+
     usbip = callPackage ../os-specific/linux/usbip { };
 
     v86d = callPackage ../os-specific/linux/v86d { };
