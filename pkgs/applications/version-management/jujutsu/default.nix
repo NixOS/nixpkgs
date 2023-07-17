@@ -95,7 +95,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/martinvonz/jj";
     changelog = "https://github.com/martinvonz/jj/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ _0x4A6F ];
+    maintainers = with maintainers; [ _0x4A6F thoughtpolice ];
     mainProgram = "jj";
   };
 }
