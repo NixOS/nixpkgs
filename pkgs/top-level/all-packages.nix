@@ -11776,7 +11776,9 @@ with pkgs;
 
   prettyping = callPackage ../tools/networking/prettyping { };
 
-  pritunl-client = callPackage ../tools/networking/pritunl-client { };
+  pritunl-client = callPackage ../tools/networking/pritunl-client {
+    electron = electron_24;
+  };
 
   pritunl-ssh = callPackage ../tools/networking/pritunl-ssh { };
 
