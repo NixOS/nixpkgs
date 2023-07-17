@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, installShellFiles
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,6 +16,15 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-YmA1Qx3oKHXlXs3FWoLMRAnFdIQaFdLJaNwj/FxIS5Q=";
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  postInstall = ''
+    installManPage $releaseDir/build/*/out/dysk.1
+    installShellCompletion $releaseDir/build/*/out/{dysk.bash,dysk.fish,_dysk}
+  '';
 
   meta = with lib; {
     description = "Get information on your mounted disks";
