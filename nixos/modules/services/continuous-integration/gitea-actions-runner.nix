@@ -211,7 +211,7 @@ in
             User = "gitea-runner";
             StateDirectory = "gitea-runner";
             WorkingDirectory = "-/var/lib/gitea-runner/${name}";
-            ExecStartPre = pkgs.writeShellScript "gitea-register-runner-${name}" ''
+            ExecStartPre = [(pkgs.writeShellScript "gitea-register-runner-${name}" ''
               export INSTANCE_DIR="$STATE_DIRECTORY/${name}"
               mkdir -vp "$INSTANCE_DIR"
               cd "$INSTANCE_DIR"
@@ -236,7 +236,7 @@ in
                 echo "$LABELS_WANTED" > "$LABELS_FILE"
               fi
 
-            '';
+            '')];
             ExecStart = "${cfg.package}/bin/act_runner daemon --config ${configFile}";
             SupplementaryGroups = optionals (wantsDocker) [
               "docker"
