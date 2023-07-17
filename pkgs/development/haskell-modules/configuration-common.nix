@@ -2461,8 +2461,8 @@ self: super: {
     Cabal-syntax = self.Cabal-syntax_3_10_1_0;
   });
 
-  # Tests require ghc-9.2.
-  ema = dontCheck super.ema;
+  # 2023-07-18: https://github.com/srid/ema/issues/156
+  ema = doJailbreak super.ema;
 
   glirc = doJailbreak (super.glirc.override {
     vty = self.vty_5_35_1;
