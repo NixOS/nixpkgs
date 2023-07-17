@@ -1801,6 +1801,8 @@ with pkgs;
 
   sorted-grep = callPackage ../tools/text/sorted-grep { };
 
+  smb3-foundry = callPackage ../applications/misc/smb3-foundry { };
+
   smbmap = callPackage ../tools/security/smbmap { };
 
   smbscan = callPackage ../tools/security/smbscan { };
