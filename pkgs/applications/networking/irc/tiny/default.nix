@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tiny";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "osa1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "177d1x4z0mh0p7c5ldq70cn1j3pac50d8cil2ni50hl49c3x6yy1";
+    sha256 = "0m4kpbcfj034ki5n4f1f15gjf173c62c4nig3smmn9k03x18prm0";
   };
 
   cargoSha256 = "05q3f1wp48mwkz8n0102rwb6jzrgpx3dlbxzf3zcw8r1mblgzim1";
