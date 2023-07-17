@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildNpmPackage, python3, nodejs, nixosTests }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, buildNpmPackage, python3, nodejs, nixosTests }:
 
 buildNpmPackage rec {
   pname = "uptime-kuma";
@@ -11,12 +11,17 @@ buildNpmPackage rec {
     sha256 = "sha256-hNtD8R8nDwO+uJ5WD8TxaCyYD7ESvBPmcv7iT7NAu6s=";
   };
 
-  npmDepsHash = "sha256-yPUVLtqfowSuvrzp4Edcsussaxao5Ti1/sLsd9lmiSM=";
+  npmDepsHash = "sha256-GEYu04yZkLNwFG4sYujqIRU4ZCTXm4OYAydXEy4lEiA=";
 
   patches = [
     # Fixes the permissions of the database being not set correctly
     # See https://github.com/louislam/uptime-kuma/pull/2119
     ./fix-database-permissions.patch
+    (fetchpatch {
+      name = "CVE-2023-36821-CVE-2023-36822.patch";
+      url = "https://github.com/louislam/uptime-kuma/commit/a0736e04b2838aae198c2110db244eab6f87757b.patch";
+      hash = "sha256-uTgxc1U/ILdSzZda8XQZlxRT5vY2qVkj1J1WcOali/0=";
+    })
   ];
 
   nativeBuildInputs = [ python3 ];
