@@ -279,8 +279,8 @@ rec {
   };
 
   crystal_1_9 = generic {
-    version = "1.9.0";
-    sha256 = "sha256-FFpAL1U8WtfwDCLaUP+axSnJlGaKp/jzBs54rit9T2A=";
+    version = "1.9.2";
+    sha256 = "sha256-M1oUFs7/8ljszga3StzLOLM1aA4fSfVPQlsbuDHGd84=";
     binary = binaryCrystal_1_2;
   };
 
