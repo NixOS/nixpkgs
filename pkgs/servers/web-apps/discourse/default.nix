@@ -284,6 +284,7 @@ let
       popd &>/dev/null
 
       redis-server >/dev/null &
+      REDIS_PID=$!
 
       initdb -A trust $NIX_BUILD_TOP/postgres >/dev/null
       postgres -D $NIX_BUILD_TOP/postgres -k $NIX_BUILD_TOP >/dev/null &
@@ -309,6 +310,8 @@ let
 
       bundle exec rake db:migrate >/dev/null
       chmod -R +w tmp
+
+      kill $REDIS_PID
     '';
 
     buildPhase = ''
