@@ -13,7 +13,7 @@
 # All files in that directory are copied to the root of the FS.
 , populateImageCommands ? ""
 , volumeLabel
-, uuid ? "44444444-4444-4444-8888-888888888888"
+, uuid ? "01189998-8199-9119-7253-495443726f77"
 , e2fsprogs
 , libfaketime
 , perl
