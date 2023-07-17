@@ -1,6 +1,7 @@
 { stdenv
 , lib
-, fetchgit
+, fetchFrom9Front
+, unstableGitUpdater
 , installShellFiles
 , makeWrapper
 , xorg
@@ -19,10 +20,11 @@ stdenv.mkDerivation {
   pname = "drawterm";
   version = "unstable-2023-06-27";
 
-  src = fetchgit {
-    url = "git://git.9front.org/plan9front/drawterm";
+  src = fetchFrom9Front {
+    owner = "plan9front";
+    repo = "drawterm";
     rev = "36debf46ac184a22c6936345d22e4cfad995948c";
-    sha256 = "ebqw1jqeRC0FWeUIO/HaEovuwzU6+B48TjZbVJXByvA=";
+    hash = "sha256-ebqw1jqeRC0FWeUIO/HaEovuwzU6+B48TjZbVJXByvA=";
   };
 
   enableParallelBuilding = true;
@@ -53,6 +55,8 @@ stdenv.mkDerivation {
   }."${config}" or (throw "unsupported CONF") + ''
     installManPage drawterm.1
   '';
+
+  passthru.updateScript = unstableGitUpdater { shallowClone = false; };
 
   meta = with lib; {
     description = "Connect to Plan 9 CPU servers from other operating systems.";
