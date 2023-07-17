@@ -68,6 +68,11 @@ let
     nixpkgs.buildPlatform = "foo-linux"; # do in pkgs instead!
   };
 
+  noLegacy = evalMinimalConfig {
+    imports = [ ./no-legacy.nix ];
+    nixpkgs.hostPlatform = "aarch64-linux";
+  };
+
   throws = x: ! (builtins.tryEval x).success;
 
 in
@@ -123,6 +128,12 @@ lib.recurseIntoAttrs {
     assert !readOnly.options.nixpkgs?system;
     assert !readOnly.options.nixpkgs?localSystem;
     assert !readOnly.options.nixpkgs?crossSystem;
+
+    assert noLegacy._module.args.pkgs.stdenv.hostPlatform.system == "aarch64-linux";
+    assert noLegacy._module.args.pkgs.stdenv.buildPlatform.system == "aarch64-linux";
+    assert lib.systems.equals noLegacy._module.args.pkgs.stdenv.hostPlatform withHost._module.args.pkgs.stdenv.hostPlatform;
+    assert lib.systems.equals noLegacy._module.args.pkgs.stdenv.buildPlatform withHost._module.args.pkgs.stdenv.buildPlatform;
+    assert noLegacy._module.args.pkgs.hello == withHost._module.args.pkgs.hello;
 
     pkgs.emptyFile;
 }

@@ -35,18 +35,14 @@ let
     };
   };
 
-  nixos-lib = import ../../lib { };
+  nixos-lib = import ../../lib { featureFlags = {
+    # We use a minimal module list to evaluate the docs of the extra modules.
+    # This is significantly faster than loading all the modules, and we can pull
+    # this off because we don't require any dependencies to be loaded.
+    minimalModules = { }; };
+  };
 
-  testOptionsDoc = let
-      eval = nixos-lib.evalTest {
-        # Avoid evaluating a NixOS config prototype.
-        config.node.type = lib.types.deferredModule;
-        options._module.args = lib.mkOption { internal = true; };
-      };
-    in buildPackages.nixosOptionsDoc {
-      inherit (eval) options;
-      inherit revision;
-      transformOptions = opt: opt // {
+  cleanupLocations = opt: opt // {
         # Clean up declaration sites to not refer to the NixOS source tree.
         declarations =
           map
@@ -58,10 +54,49 @@ let
               else decl)
             opt.declarations;
       };
+
+  testOptionsDoc = let
+      eval = nixos-lib.evalTest {
+        # Avoid evaluating a NixOS config prototype.
+        config.node.type = lib.types.deferredModule;
+        options._module.args = lib.mkOption { internal = true; };
+      };
+    in buildPackages.nixosOptionsDoc {
+      inherit (eval) options;
+      inherit revision;
+      transformOptions = cleanupLocations;
       documentType = "none";
       variablelistId = "test-options-list";
       optionIdPrefix = "test-opt-";
     };
+
+  optionalDocs = lib.mapAttrs (name: module:
+    let
+      # This is quite simple for now, but may need stubs for more complex modules.
+      eval = nixos-lib.evalModules {
+        modules = [
+          module
+          { options._module.args = lib.mkOption { internal = true; }; }
+        ];
+      };
+    in
+      buildPackages.nixosOptionsDoc {
+        inherit (eval) options;
+        inherit revision;
+        transformOptions = cleanupLocations;
+        # These are for direct to docbook generation, which we don't use here.
+        documentType = throw "documentType not set";
+        variablelistId = throw "variablelistId not set";
+        optionIdPrefix = throw "optionIdPrefix not set";
+      }
+  ) {
+    # NOTE: These don't have to be paths. If a module needs dependencies to be loaded
+    #       for doc rendering, do something like
+    #           newModule = { imports = [ ../../modules/new.nix ../../modules/dep.nix ]; }
+    #       or import it transitively.
+    readOnlyPkgs = ../../modules/misc/nixpkgs/read-only.nix;
+    noLegacyPkgs = ../../modules/misc/nixpkgs/no-legacy.nix;
+  };
 
   prepareManualFromMD = ''
     cp -r --no-preserve=all $inputs/* .
@@ -76,6 +111,14 @@ let
       --replace \
         '@NIXOS_OPTIONS_JSON@' \
         ${optionsDoc.optionsJSON}/share/doc/nixos/options.json
+    substituteInPlace ./nixos-optional-modules.md \
+      --replace \
+        '@OPTIONS_JSON_noLegacyPkgs@' \
+        ${optionalDocs.noLegacyPkgs.optionsJSON}/share/doc/nixos/options.json \
+      --replace \
+        '@OPTIONS_JSON_readOnlyPkgs@' \
+        ${optionalDocs.readOnlyPkgs.optionsJSON}/share/doc/nixos/options.json \
+        ;
     substituteInPlace ./development/writing-nixos-tests.section.md \
       --replace \
         '@NIXOS_TEST_OPTIONS_JSON@' \

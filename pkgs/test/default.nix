@@ -101,4 +101,10 @@ with pkgs;
   };
 
   pkgs-lib = recurseIntoAttrs (import ../pkgs-lib/tests { inherit pkgs; });
+
+  top-level = recurseIntoAttrs {
+    module = recurseIntoAttrs (
+      (callPackage ../top-level/module/tests.nix { }).tests
+    );
+  };
 }

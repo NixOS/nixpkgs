@@ -12,6 +12,20 @@
       lib = import ./lib;
 
       forAllSystems = lib.genAttrs lib.systems.flakeExposed;
+
+      pkgsMemoizer = { pkgs, inputsSet, ... }:
+        let system = lib.systems.toLosslessStringMaybe inputsSet.hostPlatform.value.system;
+        in
+        if lib.attrNames inputsSet == [ "hostPlatform" ] && system != null
+        then
+          # As only hostPlatform matters in this invocation, we can save
+          # memory by sharing the Nixpkgs invocation.
+          # `pkgs` is never evaluated.
+          self.legacyPackages.${system}
+        else
+          # We let the module invoke Nixpkgs as usual.
+          pkgs;
+
     in
     {
       lib = lib.extend (final: prev: {
@@ -58,18 +72,28 @@
       nixosModules = {
         notDetected = ./nixos/modules/installer/scan/not-detected.nix;
 
-        /*
-          Make the `nixpkgs.*` configuration read-only. Guarantees that `pkgs`
-          is the way you initialize it.
-
-          Example:
-
-              {
-                imports = [ nixpkgs.nixosModules.readOnlyPkgs ];
-                nixpkgs.pkgs = nixpkgs.legacyPackages.x86_64-linux;
-              }
-        */
+        # See nixos/doc/manual/nixos-optional-modules.md
+        # TODO: online manual link
         readOnlyPkgs = ./nixos/modules/misc/nixpkgs/read-only.nix;
+
+        # See nixos/doc/manual/nixos-optional-modules.md
+        # TODO: online manual link
+        noLegacyPkgs = {
+          imports = [ ./nixos/modules/misc/nixpkgs/no-legacy.nix ];
+          nixpkgs._memoize = pkgsMemoizer;
+        };
+      };
+
+      modules = {
+        /* Modules that are not specific to any application of the module system. */
+        generic = {
+          nixpkgs = {
+            imports = [
+              ./pkgs/top-level/module/module.nix
+            ];
+            config._memoize = pkgsMemoizer;
+          };
+        };
       };
     };
 }
