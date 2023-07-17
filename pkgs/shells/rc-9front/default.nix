@@ -1,6 +1,7 @@
 { lib
 , stdenv
-, fetchgit
+, fetchFrom9Front
+, unstableGitUpdater
 , byacc
 , installShellFiles
 }:
@@ -9,8 +10,10 @@ stdenv.mkDerivation {
   pname = "rc-9front";
   version = "unstable-2022-11-01";
 
-  src = fetchgit {
-    url = "git://shithub.us/cinap_lenrek/rc";
+  src = fetchFrom9Front {
+    domain = "shithub.us";
+    owner = "cinap_lenrek";
+    repo = "rc";
     rev = "69041639483e16392e3013491fcb382efd2b9374";
     hash = "sha256-xc+EfC4bc9ZA97jCQ6CGCzeLGf+Hx3/syl090/x4ew4=";
   };
@@ -31,7 +34,10 @@ stdenv.mkDerivation {
     install -m644 rcmain.unix $out/lib/rcmain
   '';
 
-  passthru.shellPath = "/bin/rc";
+  passthru = {
+    shellPath = "/bin/rc";
+    updateScript = unstableGitUpdater { shallowClone = false; };
+  };
 
   meta = with lib; {
     description = "The 9front shell";
