@@ -4,13 +4,13 @@
 
 let
   sources = {
-    "@types/node-20.2.5" = {
+    "@types/node-20.4.2" = {
       name = "_at_types_slash_node";
       packageName = "@types/node";
-      version = "20.2.5";
+      version = "20.4.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@types/node/-/node-20.2.5.tgz";
-        sha512 = "JJulVEQXmiY9Px5axXHeYGLSjhkZEnD+MDPDGbCbIAbMslkKwmygtZFy1X6s/075Yo94sf8GuSlFfPzysQrWZQ==";
+        url = "https://registry.npmjs.org/@types/node/-/node-20.4.2.tgz";
+        sha512 = "Dd0BYtWgnWJKwO1jkmTrzofjK2QXXcai0dmtzvIBhcA+RsG5h8R3xlyta0kGOZRNfL9GuRtb1knmPEhQrePCEw==";
       };
     };
     "fsevents-2.3.2" = {
@@ -43,7 +43,7 @@ in
       sha512 = "zPLef6w9P6T/iT6XDYG3mvGOqOyb6eHaV9XtkunYs0+OzxBtrPAAaHotc0X+PJ00WPPnLfFBTl7mf45Mn8DBmw==";
     };
     dependencies = [
-      sources."@types/node-20.2.5"
+      sources."@types/node-20.4.2"
       sources."fsevents-2.3.2"
       sources."playwright-core-1.34.3"
     ];
