@@ -2,27 +2,28 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cloud-hypervisor";
-  version = "32.0";
+  version = "33.0";
 
   src = fetchFromGitHub {
     owner = "cloud-hypervisor";
     repo = pname;
     rev = "v${version}";
-    sha256 = "aSBzbxL9TOYVQUZBgHI8GHELfx9avRDHh/MWmN+/nY0=";
+    sha256 = "sha256-ODhiK0lAN5G9FLBjIdvDl9ya5JKwg8Sv06iDkt44vWc=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "acpi_tables-0.1.0" = "sha256-aT0p85QDGjBEnbABedm0q7JPpiNjhupoIzBWifQ0RaQ=";
+      "acpi_tables-0.1.0" = "sha256-OdtnF2fV6oun3NeCkXdaGU3U7ViBcgFKqHKdyZsRsPA=";
       "kvm-bindings-0.6.0" = "sha256-wGdAuPwsgRIqx9dh0m+hC9A/Akz9qg9BM+p06Fi5ACM=";
       "kvm-ioctls-0.13.0" = "sha256-jHnFGwBWnAa2lRu4a5eRNy1Y26NX5MV8alJ86VR++QE=";
       "micro_http-0.1.0" = "sha256-w2witqKXE60P01oQleujmHSnzMKxynUGKWyq5GEh1Ew=";
-      "mshv-bindings-0.1.1" = "sha256-Pg7UPhW6UOahCQu1jU27lenrsmLT/VdceDqL6lOdmFU=";
-      "versionize_derive-0.1.4" = "sha256-BPl294UqjVl8tThuvylXUFjFNjJx8OSfBGJLg8jIkWw=";
-      "vfio-bindings-0.4.0" = "sha256-lKdoo/bmnZTRV7RRWugwHDFFCB6FKxpzxDEEMVqSbwA=";
-      "vfio_user-0.1.0" = "sha256-JYNiONQNNpLu57Pjdn2BlWOdmSf3c4/XJg/RsVxH3uk=";
-      "vm-fdt-0.2.0" = "sha256-gVKGiE3ZSe+z3oOHR3zqVdc7XMHzkp4kO4p/WfK0VI8=";
+      "mshv-bindings-0.1.1" = "sha256-hmOTu/e1WFk6rc+oXxBja+gFlDqnAIXzyWdiUd+Al1E=";
+      "versionize_derive-0.1.4" = "sha256-oGuREJ5+FDs8ihmv99WmjIPpL2oPdOr4REk6+7cV/7o=";
+      "vfio-bindings-0.4.0" = "sha256-8zdpLD9e1TAwG+m6ifS7/Fh39fAs5VxtnS5gUj/eKmY=";
+      "vfio_user-0.1.0" = "sha256-b/gL6vPMW44O44lBIjqS+hgqVUUskBmttGk5UKIMgZk=";
+      "vm-fdt-0.2.0" = "sha256-lKW4ZUraHomSDyxgNlD5qTaBTZqM0Fwhhh/08yhrjyE=";
+      "vhost-0.7.0" = "sha256-KdVROh44UzZJqtzxfM6gwAokzY6El8iDPfw2nnkmhiQ=";
     };
   };
 
