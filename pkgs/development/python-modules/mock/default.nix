@@ -26,8 +26,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Mock objects for Python";
+    description = "Rolling backport of unittest.mock for all Pythons";
     homepage = "https://github.com/testing-cabal/mock";
+    changelog = "https://github.com/testing-cabal/mock/blob/${version}/CHANGELOG.rst";
     license = licenses.bsd2;
+    maintainers = [ ];
   };
 }
