@@ -171,7 +171,7 @@ in
             };
 
             ensureClauses = mkOption {
-              description = lib.mdDoc ''
+              description = ''
                 An attrset of clauses to grant to the user. Under the hood this uses the
                 [ALTER USER syntax](https://www.postgresql.org/docs/current/sql-alteruser.html) for each attrName where
                 the attrValue is true in the attrSet:
@@ -185,18 +185,18 @@ in
                 }
               '';
               default = {};
-              defaultText = lib.literalMD ''
+              defaultText = ''
                 If not set then the user created will have the default permissions assigned by postgres
               '';
               type = types.submodule {
                 options = let
-                  defaultText = lib.literalMD ''
+                  defaultText = ''
                     `null`: do not set. For newly created roles, use PostgreSQL's default. For existing roles, do not touch this clause.
                   '';
                 in {
                   superuser = mkOption {
                     type = types.nullOr types.bool;
-                    description = lib.mdDoc ''
+                    description = ''
                       Grants the user, created by the ensureUser attr, superuser permissions. From the postgres docs:
 
                       A database superuser bypasses all permission checks,
@@ -213,7 +213,7 @@ in
                   };
                   createrole = mkOption {
                     type = types.nullOr types.bool;
-                    description = lib.mdDoc ''
+                    description = ''
                       Grants the user, created by the ensureUser attr, createrole permissions. From the postgres docs:
 
                       A role must be explicitly given permission to create more
@@ -232,7 +232,7 @@ in
                   };
                   createdb = mkOption {
                     type = types.nullOr types.bool;
-                    description = lib.mdDoc ''
+                    description = ''
                       Grants the user, created by the ensureUser attr, createdb permissions. From the postgres docs:
 
                       A role must be explicitly given permission to create
@@ -247,7 +247,7 @@ in
                   };
                   "inherit" = mkOption {
                     type = types.nullOr types.bool;
-                    description = lib.mdDoc ''
+                    description = ''
                       Grants the user created inherit permissions. From the postgres docs:
 
                       A role is given permission to inherit the privileges of
@@ -262,7 +262,7 @@ in
                   };
                   login = mkOption {
                     type = types.nullOr types.bool;
-                    description = lib.mdDoc ''
+                    description = ''
                       Grants the user, created by the ensureUser attr, login permissions. From the postgres docs:
 
                       Only roles that have the LOGIN attribute can be used as
@@ -284,7 +284,7 @@ in
                   };
                   replication = mkOption {
                     type = types.nullOr types.bool;
-                    description = lib.mdDoc ''
+                    description = ''
                       Grants the user, created by the ensureUser attr, replication permissions. From the postgres docs:
 
                       A role must explicitly be given permission to initiate
@@ -300,7 +300,7 @@ in
                   };
                   bypassrls = mkOption {
                     type = types.nullOr types.bool;
-                    description = lib.mdDoc ''
+                    description = ''
                       Grants the user, created by the ensureUser attr, replication permissions. From the postgres docs:
 
                       A role must be explicitly given permission to bypass
