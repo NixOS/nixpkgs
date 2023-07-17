@@ -10651,6 +10651,12 @@
     github = "Mephistophiles";
     githubId = 4850908;
   };
+  merspieler = {
+    email = "merspieler@airmail.cc";
+    name = "merspieler";
+    github = "merspieler";
+    githubId = 29063255;
+  };
   mfossen = {
     email = "msfossen@gmail.com";
     github = "mfossen";
