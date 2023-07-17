@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , buildGoModule
 , testers
 , seaweedfs
@@ -7,16 +8,26 @@
 
 buildGoModule rec {
   pname = "seaweedfs";
-  version = "3.53";
+  version = "3.54";
 
   src = fetchFromGitHub {
     owner = "seaweedfs";
     repo = "seaweedfs";
     rev = version;
-    hash = "sha256-VfKzptMxT2ra1uVzbL52EWjEGHTxmnh5xZGiQpRivTU=";
+    hash = "sha256-2E2ANJIKWhUUxxSqk5+QROeoKnp1Akl5Bp+i8pPTkuQ=";
   };
 
-  vendorHash = "sha256-kL6huukrM4YeU7uvj7abXOEAvRhm1Nfp4JODW4BTy0A=";
+  patches = [
+    # Fix build on aarch64-darwin
+    # (remove again when v3.55 is released)
+    # https://github.com/seaweedfs/seaweedfs/pull/4679
+    (fetchpatch {
+      url = "https://github.com/seaweedfs/seaweedfs/commit/1bfc9581e0bc04f394187a0d39f319ad65df5aca.patch";
+      hash = "sha256-znQFtm8BYAjuvXa+vibawBb+uhnjOL9/o0sXNoXwLk8=";
+    })
+  ];
+
+  vendorHash = "sha256-VK7BmApGq+X1oNjcwCSYHcEvVjL87t8fgJXLNQSfy3I=";
 
   subPackages = [ "weed" ];
 
