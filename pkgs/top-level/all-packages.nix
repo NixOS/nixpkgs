@@ -18885,6 +18885,8 @@ with pkgs;
 
   fastgron = callPackage ../development/tools/fastgron { };
 
+  fatcat = callPackage ../development/tools/fatcat { };
+
   findbugs = callPackage ../development/tools/analysis/findbugs { };
 
   findnewest = callPackage ../development/tools/misc/findnewest { };
