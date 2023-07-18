@@ -47,6 +47,6 @@ buildPythonPackage rec {
     description = "An async ORM";
     homepage = "https://github.com/encode/orm";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }
