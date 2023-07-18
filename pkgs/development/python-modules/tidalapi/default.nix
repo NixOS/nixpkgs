@@ -1,7 +1,7 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchPypi
+, pythonRelaxDepsHook
 , python-dateutil
 , poetry-core
 , requests
@@ -19,6 +19,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "requests"
   ];
 
   propagatedBuildInputs = [
