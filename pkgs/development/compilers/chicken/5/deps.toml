@@ -107,9 +107,9 @@ version = "0.6"
 [apropos]
 dependencies = ["srfi-1", "utf8", "string-utils", "symbol-utils", "check-errors"]
 license = "bsd"
-sha256 = "0graywcx94xvn9m4lk86f3qipsvnvr3vww6mqr37kd0ykj2rwrb7"
+sha256 = "1xnqfnbnac4pzm4j3mphq09p18q962dxg11cfyxqk8k6v8qrv5nh"
 synopsis = "CHICKEN apropos"
-version = "3.7.0"
+version = "3.7.2"
 
 [arcadedb]
 dependencies = ["uri-common", "medea"]
@@ -303,9 +303,9 @@ version = "2.0.4"
 [bloom-filter]
 dependencies = ["iset", "message-digest-primitive", "message-digest-type", "message-digest-utils", "check-errors"]
 license = "bsd"
-sha256 = "1ncxjfyv1hqbrls79pii7q4wxn0s8xkrp32khl3v0fq8mswbknzj"
+sha256 = "1ljak0xscrywyl1sbv8yx9qkw1r2m94gyw3ag73p3z8m618valy3"
 synopsis = "Bloom Filter"
-version = "2.3.1"
+version = "2.3.4"
 
 [blosc]
 dependencies = ["srfi-13", "compile-file"]
@@ -552,6 +552,13 @@ sha256 = "1047v7mk836mf4g6ba5a90lmgqql1ss1ap9kgk0mhzrffznjipgn"
 synopsis = "Download files (such as web comic images) by recursing on XPath"
 version = "1.21"
 
+[commands]
+dependencies = []
+license = "bsd"
+sha256 = "13y49vrkd9rs98s9fk10g8w056xb9nnqxwn1372sayw64789i3ib"
+synopsis = "Helpers for programs that dispatch commands"
+version = "1.0.0"
+
 [comparse]
 dependencies = ["lazy-seq", "trie", "matchable", "srfi-1", "srfi-13", "srfi-14", "srfi-69"]
 license = "bsd"
@@ -576,9 +583,9 @@ version = "1.0"
 [condition-utils]
 dependencies = ["srfi-1", "srfi-69", "check-errors"]
 license = "bsd"
-sha256 = "1srb3lgnfvlpwn31w72jcg5wlghlgpp0khgwlk8cqy9ll5piqwqk"
+sha256 = "11mkmbyciyrqyakp1gyfvmbfayglhzx2x6j6zyp9kj31vhi2y4hd"
 synopsis = "SRFI 12 Condition Utilities"
-version = "2.2.2"
+version = "2.2.3"
 
 [continuations]
 dependencies = []
@@ -789,6 +796,13 @@ license = "bsd"
 sha256 = "166qm2vx5gj7bc57s1bnnbp55zhv19hnimmivhhdhsnq32wi3511"
 synopsis = "EDN data reader/writer."
 version = "1.0"
+
+[edward]
+dependencies = ["r7rs", "srfi-1", "srfi-14", "srfi-37", "matchable", "posix-regex"]
+license = "gplv3"
+sha256 = "0gfvjgg6c6hl2xmh63067xkh0sd2vmczwisirgglcm2inz4hjll3"
+synopsis = "An extensible implementation of the ed text editor as defined in POSIX.1-2008"
+version = "1.0.1"
 
 [egg-tarballs]
 dependencies = ["simple-sha1", "srfi-1", "srfi-13"]
@@ -1381,9 +1395,9 @@ version = "0.3"
 [ipfs]
 dependencies = ["http-client", "intarweb", "medea", "srfi-1", "srfi-13", "srfi-189", "srfi-197", "uri-common"]
 license = "unlicense"
-sha256 = "0kxir3f0f2w03wrsgdfn81hdmyzcrz6yglaqm369xrra2cpd4akb"
+sha256 = "1cxjbl5kl4xk42a4p8j3av6ip0gqvp5yxahsccvm0snc98n3ngqg"
 synopsis = "IPFS HTTP API for Scheme"
-version = "0.0.11"
+version = "0.0.12"
 
 [irc]
 dependencies = ["matchable", "regex", "srfi-1"]
@@ -1437,9 +1451,9 @@ version = "7.0"
 [json-rpc]
 dependencies = ["r7rs", "srfi-1", "srfi-18", "srfi-69", "srfi-180"]
 license = "mit"
-sha256 = "0gh9w6mm6d3y2325m8cci743g1mh7q7bx3d4ygp47pj6mwjgihlz"
+sha256 = "18qnp9ryp3s0i8363ny5c2v16csqq416smnzd3pls103zn47p44v"
 synopsis = "A JSON RPC library for R7RS scheme."
-version = "0.3.0"
+version = "0.4.0"
 
 [json-utils]
 dependencies = ["utf8", "srfi-1", "srfi-69", "vector-lib", "miscmacros", "moremacros"]
@@ -1514,9 +1528,9 @@ version = "1.2"
 [levenshtein]
 dependencies = ["srfi-1", "srfi-13", "srfi-63", "srfi-69", "vector-lib", "utf8", "miscmacros", "record-variants", "check-errors"]
 license = "bsd"
-sha256 = "1k32dfkn2m48icdgykm44a8c6y86qrim563y37c73rkxdzyjm9dy"
+sha256 = "1v8g5ghilraz2lx0fif3yb1rlg3n51zvvik2l12ycqh0wj0pz59l"
 synopsis = "Levenshtein edit distance"
-version = "2.2.5"
+version = "2.2.8"
 
 [lexgen]
 dependencies = ["srfi-1", "utf8", "srfi-127"]
@@ -1577,9 +1591,9 @@ version = "3.4"
 [lmdb]
 dependencies = ["srfi-1"]
 license = "openldap"
-sha256 = "012gv5wblhaikd1r62dmjjqvyzxysbrs605hiw2xcfk1mx5ji7cz"
+sha256 = "1ymy7ji9q7zvy8708f4zzavxkvajmq8l8m1z6v6873qkxgv6jkw8"
 synopsis = "Bindings to LMDB"
-version = "1.0.5"
+version = "1.0.6"
 
 [locale]
 dependencies = ["srfi-1", "utf8", "check-errors"]
@@ -1612,9 +1626,9 @@ version = "3"
 [lsp-server]
 dependencies = ["apropos", "chicken-doc", "json-rpc", "nrepl", "r7rs", "srfi-1", "srfi-130", "srfi-133", "srfi-18", "srfi-69", "uri-generic", "utf8"]
 license = "mit"
-sha256 = "1jqdmzjdixmza3h3m363bdm1kmwpr2di14ig5a9rh4aw33zaax5v"
+sha256 = "0wbigf0s37377hjfxspwydhvnds165mhp2qa14iskvsw5zbp8g80"
 synopsis = "LSP Server for CHICKEN."
-version = "0.3.0"
+version = "0.4.1"
 
 [macaw]
 dependencies = []
@@ -1836,9 +1850,9 @@ version = "5.0"
 [monocypher]
 dependencies = []
 license = "bsd-2-clause"
-sha256 = "15lpm5bmqn4b8mh5wws66jay5flwj9y185zdjxj5qc23i5q3cwh0"
+sha256 = "09q33a6b8v306j93kd67wk5gisca7sij0p98i7pd10xnimllc5hh"
 synopsis = "Monocypher cryptographic library"
-version = "4.0.1-0"
+version = "4.0.1"
 
 [moremacros]
 dependencies = ["srfi-69", "miscmacros", "check-errors"]
@@ -2221,9 +2235,9 @@ version = "0.1.1"
 [r7rs]
 dependencies = ["matchable", "srfi-1", "srfi-13"]
 license = "bsd"
-sha256 = "1lxby5hj8bwqdwys5324fvrj6q9j4dp10mlvla3qjfc9scppxj79"
+sha256 = "1rwx52mjsylvbkmpg0z7jbawaf87dsxdgwgq8z5nh8k5nb03b6v5"
 synopsis = "R7RS compatibility"
-version = "1.0.8"
+version = "1.0.9"
 
 [rabbit]
 dependencies = ["srfi-1"]
@@ -2316,6 +2330,13 @@ sha256 = "18d0f37a13nsknay6vw27xvr1k0s4p4ss2dc29fhx89hsv5ycjsq"
 synopsis = "RIPE Message Digest"
 version = "2.1.2"
 
+[rlimit]
+dependencies = ["srfi-13"]
+license = "bsd"
+sha256 = "0jmz98253k3q9a6kyyby6jm722w3s74c5y3km7ih9ybjjmcdkyzv"
+synopsis = "Setting resource limits"
+version = "1.0.1"
+
 [rocksdb]
 dependencies = []
 license = "bsd"
@@ -2343,6 +2364,13 @@ license = "bsd"
 sha256 = "1vngrvh2b7rv5n5zvksfg27zikpc7d8xb8n1kd0pyfr7hna00wf9"
 synopsis = "Serialization of arbitrary data."
 version = "0.9.12"
+
+[s9fes-char-graphics]
+dependencies = ["srfi-1", "utf8", "format"]
+license = "public-domain"
+sha256 = "1h12l59860cyv8xwvvpf96dnlqwd25mrq2qapj9nyxv0vbkcs4p6"
+synopsis = "Scheme 9 from Empty Space Char Graphics"
+version = "1.3.3"
 
 [salmonella-diff]
 dependencies = ["salmonella", "salmonella-html-report", "srfi-1", "srfi-13", "sxml-transforms"]
@@ -3040,9 +3068,9 @@ version = "1.0.3"
 [srfi-19]
 dependencies = ["srfi-1", "utf8", "srfi-18", "srfi-29", "srfi-69", "miscmacros", "locale", "record-variants", "check-errors"]
 license = "bsd"
-sha256 = "02348j6zdp1nyh0f8jw1j848qlm0dv7p7q6rw7jdfzqi4bq5myva"
+sha256 = "14nyv6m67k2angmhg028rd50mq77qi1zfr5f0praiyy07k2pmcpz"
 synopsis = "Time Data Types and Procedures"
-version = "4.7.2"
+version = "4.7.3"
 
 [srfi-193]
 dependencies = []
@@ -3761,9 +3789,9 @@ version = "3.6.3"
 [uuid-lib]
 dependencies = ["record-variants"]
 license = "bsd"
-sha256 = "1788c9wilnwa21r27g9cfwjypbzgmv6rs5i93yrywg2fry9v45nd"
+sha256 = "0da71k0f3j1l9wjnfk9gqs9gw3v1192xhxbxv2gfmah3fvxf203p"
 synopsis = "OSF DCE 1.1 UUID"
-version = "0.0.9"
+version = "0.0.10"
 
 [uuid]
 dependencies = []
