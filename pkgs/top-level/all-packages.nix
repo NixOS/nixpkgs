@@ -33443,12 +33443,7 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
-  # TODO: we should probably merge these 2
-  musescore =
-    if stdenv.isDarwin then
-      callPackage ../applications/audio/musescore/darwin.nix { }
-    else
-      libsForQt5.callPackage ../applications/audio/musescore { };
+  musescore = libsForQt5.callPackage ../applications/audio/musescore { };
 
   music-player = callPackage ../applications/audio/music-player { };
 
