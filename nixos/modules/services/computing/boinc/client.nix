@@ -31,6 +31,7 @@ in
         type = types.package;
         default = pkgs.boinc;
         defaultText = literalExpression "pkgs.boinc";
+        example = literalExpression "pkgs.boinc-headless";
         description = lib.mdDoc ''
           Which BOINC package to use.
         '';
