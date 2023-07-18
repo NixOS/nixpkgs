@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, python, zlib, libuv, util-linux, http-parser, runtimeShellPackage
+{ lib, stdenv, fetchurl, openssl, python, zlib, libuv, util-linux, http-parser, bash
 , pkg-config, which, buildPackages
 # for `.pkgs` attribute
 , callPackage
@@ -50,13 +50,17 @@ let
       inherit sha256;
     };
 
+    strictDeps = true;
+
     CC_host = "cc";
     CXX_host = "c++";
     depsBuildBuild = [ buildPackages.stdenv.cc openssl libuv zlib icu ];
 
+    # NB: technically, we do not need bash in build inputs since all scripts are
+    # wrappers over the corresponding JS scripts. There are some packages though
+    # that use bash wrappers, e.g. polaris-web.
     buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
-      ++ lib.optional isCross runtimeShellPackage # for patchShebangs
-      ++ [ zlib libuv openssl http-parser icu ];
+      ++ [ zlib libuv openssl http-parser icu bash ];
 
     nativeBuildInputs = [ which pkg-config python ]
       ++ lib.optionals stdenv.isDarwin [ xcbuild ];
