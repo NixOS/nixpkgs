@@ -21,6 +21,6 @@ buildPythonPackage rec {
     description = "Object-oriented filesystem paths";
     homepage = "https://pathlib.readthedocs.org/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ costrouc ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

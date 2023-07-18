@@ -77,6 +77,6 @@ buildPythonPackage rec {
     homepage = "https://jupyterlab-server.readthedocs.io/";
     changelog = "https://github.com/jupyterlab/jupyterlab_server/blob/v${version}/CHANGELOG.md";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

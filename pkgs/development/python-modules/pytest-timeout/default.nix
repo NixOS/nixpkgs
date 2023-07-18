@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pytest-dev/pytest-timeout/";
     changelog = "https://github.com/pytest-dev/pytest-timeout/#changelog";
     license = licenses.mit;
-    maintainers = with maintainers; [ makefu costrouc ];
+    maintainers = with maintainers; [ makefu ];
   };
 }

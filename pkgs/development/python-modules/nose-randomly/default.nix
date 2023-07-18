@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Nose plugin to randomly order tests and control random.seed";
     homepage = "https://github.com/adamchainz/nose-randomly";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }
