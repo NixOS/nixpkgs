@@ -4,10 +4,11 @@
 set -euo pipefail
 
 VERSION=$(curl -s https://api.github.com/repos/facebook/buck2/releases \
-  | jq -r '. |
-           sort_by(.created_at) | .[] |
-           select ((.prerelease == true) and (.name != "latest")) |
-           .name')
+  | jq -r 'sort_by(.created_at) | reverse |
+           (map
+             (select ((.prerelease == true) and (.name != "latest"))) |
+             first
+           ) | .name')
 echo "Latest buck2 prerelease: $VERSION"
 
 ARCHS=(
