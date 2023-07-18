@@ -1,20 +1,30 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchPypi
+, pythonRelaxDepsHook
 , python-dateutil
+, poetry-core
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "tidalapi";
-  version = "0.7.1";
-  format = "setuptools";
+  version = "0.7.2";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ttOjw6VXR36QL/GUQXjpPWrE617Bmdt0piUsA4O5W/g=";
+    hash = "sha256-CyyvzhuDB9XgroeP+WPTJIufT3VU9fD6Pg2Q1prB0Mo=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "requests"
+  ];
 
   propagatedBuildInputs = [
     requests
