@@ -1,7 +1,11 @@
 { lib
 , clang
 , fetchFromGitHub
+, symlinkJoin
 , buildGoModule
+, makeWrapper
+, v2ray-geoip
+, v2ray-domain-list-community
 }:
 buildGoModule rec {
   pname = "dae";
@@ -19,7 +23,7 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  nativeBuildInputs = [ clang ];
+  nativeBuildInputs = [ clang makeWrapper ];
 
   ldflags = [
     "-s"
@@ -36,6 +40,19 @@ buildGoModule rec {
 
   # network required
   doCheck = false;
+
+  assetsDrv = symlinkJoin {
+    name = "dae-assets";
+    paths = [ v2ray-geoip v2ray-domain-list-community ];
+  };
+
+  postInstall = ''
+    install -Dm444 install/dae.service $out/lib/systemd/system/dae.service
+    wrapProgram $out/bin/dae \
+      --suffix DAE_LOCATION_ASSET : $assetsDrv/share/v2ray
+    substituteInPlace $out/lib/systemd/system/dae.service \
+      --replace /usr/bin/dae $out/bin/dae
+  '';
 
   meta = with lib; {
     description = "A Linux high-performance transparent proxy solution based on eBPF";
