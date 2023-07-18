@@ -6,10 +6,8 @@ pkgs.runCommand "gpg-keyring" { nativeBuildInputs = [ pkgs.gnupg ]; } ''
   cat > foo <<EOF
     %echo Generating a basic OpenPGP key
     %no-protection
-    Key-Type: DSA
-    Key-Length: 1024
-    Subkey-Type: ELG-E
-    Subkey-Length: 1024
+    Key-Type: EdDSA
+    Key-Curve: ed25519
     Name-Real: Bob Foobar
     Name-Email: bob@foo.bar
     Expire-Date: 0
