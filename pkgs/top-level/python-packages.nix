@@ -1169,7 +1169,7 @@ self: super: with self; {
 
   pad4pi = callPackage ../development/python-modules/pad4pi { };
 
-  paddle_bfloat = callPackage ../development/python-modules/paddle_bfloat { };
+  paddle-bfloat = callPackage ../development/python-modules/paddle-bfloat { };
 
   paddle2onnx = callPackage ../development/python-modules/paddle2onnx { };
 
