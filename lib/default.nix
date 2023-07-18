@@ -68,10 +68,10 @@ let
       lessThan listToAttrs pathExists readFile replaceStrings seq
       stringLength sub substring tail trace;
     inherit (self.trivial) id const pipe concat or and bitAnd bitOr bitXor
-      bitNot boolToString mergeAttrs flip mapNullable inNixShell isFloat min max
-      importJSON importTOML warn warnIf warnIfNot throwIf throwIfNot checkListOfEnum
-      info showWarnings nixpkgsVersion version isInOldestRelease
-      mod compare splitByAndCompare
+      bitNot boolToString mergeAttrs flip orElse mapNullable inNixShell isFloat
+      min max importJSON importTOML warn warnIf warnIfNot throwIf throwIfNot
+      checkListOfEnum info showWarnings nixpkgsVersion version
+      isInOldestRelease mod compare splitByAndCompare
       functionArgs setFunctionArgs isFunction toFunction
       toHexString toBaseDigits inPureEvalMode;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions

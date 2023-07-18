@@ -146,6 +146,16 @@ runTests {
     expected = { x = false; };
   };
 
+  testOrElseNull = {
+    expr = orElse 1 null;
+    expected = 1;
+  };
+
+  testOrElseValue = {
+    expr = orElse 1 2;
+    expected = 2;
+  };
+
   testMapNullableNull = {
     expr = mapNullable (x: x + 1) null;
     expected = null;

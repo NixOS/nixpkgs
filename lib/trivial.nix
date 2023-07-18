@@ -137,6 +137,23 @@ rec {
   */
   flip = f: a: b: f b a;
 
+  /* Returns the value if present, otherwise return the provided
+     default.
+
+    Type: orElse :: a -> b -> either a b
+
+    Example:
+      orElse 1 null
+      => 1
+      orElse 1 2
+      => 2
+  */
+  orElse =
+    # Argument to return if `b` is null
+    a:
+    # Argument to return if it is not null
+    b: if b == null then a else b;
+
   /* Apply function if the supplied argument is non-null.
 
      Example:
