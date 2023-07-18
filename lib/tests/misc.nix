@@ -609,6 +609,31 @@ runTests {
     };
   };
 
+
+  testMergeAttrsListExample1 = {
+    expr = attrsets.mergeAttrsList [ { a = 0; b = 1; } { c = 2; d = 3; } ];
+    expected = { a = 0; b = 1; c = 2; d = 3; };
+  };
+  testMergeAttrsListExample2 = {
+    expr = attrsets.mergeAttrsList [ { a = 0; } { a = 1; } ];
+    expected = { a = 1; };
+  };
+  testMergeAttrsListExampleMany =
+    let
+      list = genList (n:
+        listToAttrs (genList (m:
+          let
+            # Integer divide n by two to create duplicate attributes
+            str = "halfn${toString (n / 2)}m${toString m}";
+          in
+          nameValuePair str str
+        ) 100)
+      ) 100;
+    in {
+      expr = attrsets.mergeAttrsList list;
+      expected = foldl' mergeAttrs { } list;
+    };
+
   # code from the example
   testRecursiveUpdateUntil = {
     expr = recursiveUpdateUntil (path: l: r: path == ["foo"]) {
