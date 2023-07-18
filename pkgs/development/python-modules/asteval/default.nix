@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "asteval";
-  version = "0.9.30";
+  version = "0.9.31";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "newville";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-vKPMA8yiTNQPYehDVo6mleOv82ZNxHgi8P/HIOZb9/o=";
+    hash = "sha256-XIRDm/loZOOPQ7UO/XAo86TzhtHHRrnWFU7MNI4f1vM=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
