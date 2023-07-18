@@ -11709,6 +11709,8 @@ self: super: with self; {
 
   spacy-loggers = callPackage ../development/python-modules/spacy-loggers { };
 
+  spacy-lookups-data = callPackage ../development/python-modules/spacy/lookups-data.nix { };
+
   spacy_models = callPackage ../development/python-modules/spacy/models.nix {
       inherit (pkgs) jq;
   };
