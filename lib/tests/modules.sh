@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
-#
+
 # This script is used to test that the module system is working as expected.
+# Executing it runs tests for `lib.modules`, `lib.options` and `lib.types`.
 # By default it test the version of nixpkgs which is defined in the NIX_PATH.
+#
+# Run:
+# [nixpkgs]$ lib/tests/modules.sh
+# or:
+# [nixpkgs]$ nix-build lib/tests/release.nix
 
 set -o errexit -o noclobber -o nounset -o pipefail
 shopt -s failglob inherit_errexit
