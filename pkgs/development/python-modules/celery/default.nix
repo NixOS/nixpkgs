@@ -11,6 +11,7 @@
 , click-repl
 , dnspython
 , fetchPypi
+, fetchpatch
 , kombu
 , moto
 , pymongo
@@ -37,6 +38,15 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-Hqul7hTYyMC+2PYGPl4Q2r288jUDqGHPDhC3Ih2Zyw0=";
   };
+
+  patches = [
+    # Include required datafiles
+    # See https://github.com/celery/celery/pull/8379
+    (fetchpatch {
+      url = "https://github.com/celery/celery/commit/f8add5c7813f1e11cb56d21294aea491071c9bf4.patch";
+      hash = "sha256-YYAT1XMZ2Dm/pSjEBnoDOJ3XmkcgWAanjJIAj9cqzw8=";
+    })
+  ];
 
   propagatedBuildInputs = [
     billiard
