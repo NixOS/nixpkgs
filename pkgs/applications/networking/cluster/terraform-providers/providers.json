@@ -455,12 +455,12 @@
     "vendorHash": "sha256-X+7UZM0iZzG7LvaK6nKXF3taKIiJfhWRmY1q1Uz9M4A="
   },
   "google-beta": {
-    "hash": "sha256-GYX0tmNut04NbpqbfXCy/5Rabn3leWf1VH+yGHTsCek=",
+    "hash": "sha256-GE7Y07w9wQ7HHGSxoWV23skAEU444cSTHLD+g1XS/Ow=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/google-beta",
     "owner": "hashicorp",
     "proxyVendor": true,
     "repo": "terraform-provider-google-beta",
-    "rev": "v4.73.1",
+    "rev": "v4.73.2",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-X+7UZM0iZzG7LvaK6nKXF3taKIiJfhWRmY1q1Uz9M4A="
   },
