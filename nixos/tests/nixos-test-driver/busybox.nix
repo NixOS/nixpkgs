@@ -1,5 +1,5 @@
 {
-  name = "Test for NixOS/nixpkgs#241938";
+  name = "Test that basic tests work when busybox is installed";
 
   nodes = {
     machine = ({ pkgs, ... }: {
