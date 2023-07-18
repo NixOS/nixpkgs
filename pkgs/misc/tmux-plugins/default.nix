@@ -611,12 +611,12 @@ in rec {
   tmux-fzf = mkTmuxPlugin {
     pluginName = "tmux-fzf";
     rtpFilePath = "main.tmux";
-    version = "unstable-2022-08-02";
+    version = "unstable-2023-07-06";
     src = fetchFromGitHub {
       owner = "sainnhe";
       repo = "tmux-fzf";
-      rev = "3e261309ad367c3fe56c0ef14af00078684b1035";
-      sha256 = "13wlcq3f7944v74lcnfbmabcy2c0ca83ya21s3qn3j0lw3wqj6vj";
+      rev = "51081a2688579228d860b3cb410f4437e857fc6e";
+      sha256 = "sha256-qElRHAbnZ+qRasvkfo+lKNahRHklvLOH0BmbQ1oyN6A=";
     };
     postInstall = ''
       find $target -type f -print0 | xargs -0 sed -i -e 's|fzf |${pkgs.fzf}/bin/fzf |g'
