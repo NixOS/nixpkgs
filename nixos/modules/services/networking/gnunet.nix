@@ -21,6 +21,7 @@ in
             };
           };
         };
+        description = "Freeform settings for the system gnunet daemon";
       };
     };
   };
