@@ -6,41 +6,6 @@ let
 
   cfg = config.boot.initrd.network;
 
-  dhcpInterfaces = lib.attrNames (lib.filterAttrs (iface: v: v.useDHCP == true) (config.networking.interfaces or {}));
-  doDhcp = config.networking.useDHCP || dhcpInterfaces != [];
-  dhcpIfShellExpr = if config.networking.useDHCP
-                      then "$(ls /sys/class/net/ | grep -v ^lo$)"
-                      else lib.concatMapStringsSep " " lib.escapeShellArg dhcpInterfaces;
-
-  udhcpcScript = pkgs.writeScript "udhcp-script"
-    ''
-      #! /bin/sh
-      if [ "$1" = bound ]; then
-        ip address add "$ip/$mask" dev "$interface"
-        if [ -n "$mtu" ]; then
-          ip link set mtu "$mtu" dev "$interface"
-        fi
-        if [ -n "$staticroutes" ]; then
-          echo "$staticroutes" \
-            | sed -r "s@(\S+) (\S+)@ ip route add \"\1\" via \"\2\" dev \"$interface\" ; @g" \
-            | sed -r "s@ via \"0\.0\.0\.0\"@@g" \
-            | /bin/sh
-        fi
-        if [ -n "$router" ]; then
-          ip route add "$router" dev "$interface" # just in case if "$router" is not within "$ip/$mask" (e.g. Hetzner Cloud)
-          ip route add default via "$router" dev "$interface"
-        fi
-        if [ -n "$dns" ]; then
-          rm -f /etc/resolv.conf
-          for server in $dns; do
-            echo "nameserver $server" >> /etc/resolv.conf
-          done
-        fi
-      fi
-    '';
-
-  udhcpcArgs = toString cfg.udhcpc.extraArgs;
-
 in
 
 {
@@ -79,16 +44,6 @@ in
       '';
     };
 
-    boot.initrd.network.udhcpc.extraArgs = mkOption {
-      default = [];
-      type = types.listOf types.str;
-      description = lib.mdDoc ''
-        Additional command-line arguments passed verbatim to udhcpc if
-        {option}`boot.initrd.network.enable` and {option}`networking.useDHCP`
-        are enabled.
-      '';
-    };
-
     boot.initrd.network.postCommands = mkOption {
       default = "";
       type = types.lines;
@@ -105,39 +60,9 @@ in
 
     boot.initrd.kernelModules = [ "af_packet" ];
 
-    boot.initrd.extraUtilsCommands = ''
-      copy_bin_and_libs ${pkgs.klibc}/lib/klibc/bin.static/ipconfig
-    '';
+    boot.kernelParams = mkIf config.networking.useDHCP [ "ip=dhcp" ];
 
-    boot.initrd.preLVMCommands = mkBefore (
-      # Search for interface definitions in command line.
-      ''
-        ifaces=""
-        for o in $(cat /proc/cmdline); do
-          case $o in
-            ip=*)
-              ipconfig $o && ifaces="$ifaces $(echo $o | cut -d: -f6)"
-              ;;
-          esac
-        done
-      ''
-
-      # Otherwise, use DHCP.
-      + optionalString doDhcp ''
-        # Bring up all interfaces.
-        for iface in ${dhcpIfShellExpr}; do
-          echo "bringing up network interface $iface..."
-          ip link set "$iface" up && ifaces="$ifaces $iface"
-        done
-
-        # Acquire DHCP leases.
-        for iface in ${dhcpIfShellExpr}; do
-          echo "acquiring IP address via DHCP on $iface..."
-          udhcpc --quit --now -i $iface -O staticroutes --script ${udhcpcScript} ${udhcpcArgs}
-        done
-      ''
-
-      + cfg.postCommands);
+    boot.initrd.preLVMCommands = mkBefore cfg.postCommands;
 
     boot.initrd.postMountCommands = mkIf cfg.flushBeforeStage2 ''
       for iface in $ifaces; do
