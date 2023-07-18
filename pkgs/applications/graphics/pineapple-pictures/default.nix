@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , qtsvg
+, qtwayland
 , qttools
 , exiv2
 , wrapQtAppsHook
@@ -27,6 +28,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     qtsvg
+    qtwayland
     exiv2
   ];
 

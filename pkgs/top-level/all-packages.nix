@@ -509,6 +509,8 @@ with pkgs;
 
   crc = callPackage ../applications/networking/cluster/crc { };
 
+  confetty = callPackage ../applications/misc/confetty { };
+
   confy = callPackage ../applications/misc/confy { };
 
   coordgenlibs  = callPackage ../development/libraries/coordgenlibs { };
@@ -35419,6 +35421,8 @@ with pkgs;
   terminal-typeracer = callPackage ../applications/misc/terminal-typeracer {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  typer = callPackage ../applications/misc/typer { };
 
   ueberzug = with python3Packages; toPythonApplication ueberzug;
 

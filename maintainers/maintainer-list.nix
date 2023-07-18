@@ -18414,6 +18414,13 @@
     githubId = 1108325;
     name = "Théo Zimmermann";
   };
+  zmitchell = {
+    name = "Zach Mitchell";
+    email = "zmitchell@fastmail.com";
+    matrix = "@zmitchell:matrix.org";
+    github = "zmitchell";
+    githubId = 10246891;
+  };
   zoedsoupe = {
     github = "zoedsoupe";
     githubId = 44469426;
