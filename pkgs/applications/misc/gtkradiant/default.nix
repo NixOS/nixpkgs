@@ -61,6 +61,81 @@ let
     rev = 144;
     sha256 = "sha256-JfmDIUoDY7dYdMgwwUMgcwNhWxuxsdkv1taw8DXhPY4=";
   };
+  darkPlacesPack = fetchsvn {
+    url = "svn://svn.icculus.org/gtkradiant-gamepacks/DarkPlacesPack/trunk";
+    rev = 57;
+    sha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+  };
+  doom3Pack = fetchsvn {
+    url = "svn://svn.icculus.org/gtkradiant-gamepacks/Doom3Pack/trunk";
+    rev = 56;
+    sha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+  };
+  halfLifePack = fetchsvn {
+    url = "svn://svn.icculus.org/gtkradiant-gamepacks/HalfLifePack/trunk";
+    rev = 1;
+    sha256 = "sha256-CrbN3iOG89j71y4ZJ4gNZEA5CYxphLLGbZwv6Tbjui0=";
+  };
+  her2Pack = fetchsvn {
+    url = "svn://svn.icculus.org/gtkradiant-gamepacks/Her2Pack/trunk";
+    rev = 55;
+    sha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+  };
+  jk2Pack = fetchsvn {
+    url = "svn://svn.icculus.org/gtkradiant-gamepacks/JK2Pack/trunk";
+    rev = 77;
+    sha256 = "sha256-3g/p9OC0j2va9CXXtsQf0lP6VJ1WyI5k2W9xNRwYjS8=";
+  };
+  nexuizPack = fetchsvn {
+    url = "svn://svn.icculus.org/gtkradiant-gamepacks/NexuizPack/trunk";
+    rev = 49;
+    sha256 = "sha256-nAV7rZKDgAxlEmu2RfBFNsHv9Xgas1IlDgioligvY+c=";
+  };
+  preyPack = fetchsvn {
+    url = "svn://svn.icculus.org/gtkradiant-gamepacks/PreyPack/trunk";
+    rev = 19;
+    sha256 = "sha256-wbKEnSaFO40HxhMsbYKy76MxXDvY9O1lTcr3M7fXxW0=";
+  };
+  q2wPack = fetchsvn {
+    url = "svn://svn.icculus.org/gtkradiant-gamepacks/Q2WPack/trunk";
+    rev = 126;
+    sha256 = "sha256-Q6IyL2qUr+6ktP34oYkFqN5MeFxCXOkcjrPg5J95ftg=";
+  };
+  q4Pack = fetchsvn {
+    url = "svn://svn.icculus.org/gtkradiant-gamepacks/Q4Pack/trunk";
+    rev = 54;
+    sha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+  };
+  ravenPack = fetchsvn {
+    url = "svn://svn.icculus.org/gtkradiant-gamepacks/RavenPack/trunk";
+    rev = 1;
+    sha256 = "sha256-bYRjCkdaznaO7+WDB6cgL3szTB+MXwt3IKH3L2rGjLs=";
+  };
+  reactionPack = fetchsvn {
+    url = "svn://svn.icculus.org/gtkradiant-gamepacks/ReactionPack/trunk";
+    rev = 69;
+    sha256 = "sha256-aXSM0ubyhgamLBzfNZ6RzRSdzKwfHWLt/6OS/i9mMVo=";
+  };
+  sof2Pack = fetchsvn {
+    url = "svn://svn.icculus.org/gtkradiant-gamepacks/Sof2Pack/trunk";
+    rev = 1;
+    sha256 = "sha256-EnGhYghXe6hU5vvdF+Z9geTiHDukBEr1+CQgunxxGic=";
+  };
+  tremulousPack = fetchsvn {
+    url = "svn://svn.icculus.org/gtkradiant-gamepacks/TremulousPack/trunk";
+    rev = 46;
+    sha256 = "sha256-NU+ynpqydFxdZSkh7Szm6DTqyMYVS+PU70Mp98ZjdOs=";
+  };
+  ufoaiPack = fetchsvn {
+    url = "svn://svn.icculus.org/gtkradiant-gamepacks/UFOAIPack/trunk";
+    rev = 69;
+    sha256 = "sha256-nAd7fFZJJ82rDPVlTiZkkTGXi5tw7BSKk+akFBXSWvY=";
+  };
+  warsowPack = fetchsvn {
+    url = "svn://svn.icculus.org/gtkradiant-gamepacks/WarsowPack/trunk";
+    rev = 53;
+    sha256 = "sha256-IQ12fEKnq0cJxef+ddvTXcwM8lQ8nlUoMJy81XJ7ANY=";
+  };
   packs = runCommand "gtkradiant-packs" {} ''
     mkdir -p $out
     ln -s ${q3Pack} $out/Q3Pack
@@ -74,6 +149,21 @@ let
     ln -s ${wolfPack} $out/WolfPack
     ln -s ${unvanquishedPack} $out/UnvanquishedPack
     ln -s ${q1Pack} $out/Q1Pack
+    ln -s ${darkPlacesPack} $out/DarkPlacesPack
+    ln -s ${doom3Pack} $out/Doom3Pack
+    ln -s ${halfLifePack} $out/HalfLifePack
+    ln -s ${her2Pack} $out/Her2Pack
+    ln -s ${jk2Pack} $out/JK2Pack
+    ln -s ${nexuizPack} $out/NexuizPack
+    ln -s ${preyPack} $out/PreyPack
+    ln -s ${q2wPack} $out/Q2WPack
+    ln -s ${q4Pack} $out/Q4Pack
+    ln -s ${ravenPack} $out/RavenPack
+    ln -s ${reactionPack} $out/ReactionPack
+    ln -s ${sof2Pack} $out/Sof2Pack
+    ln -s ${tremulousPack} $out/TermulousPack
+    ln -s ${ufoaiPack} $out/UFOAIPack
+    ln -s ${warsowPack} $out/WarsowPack
   '';
 
 in
@@ -136,6 +226,12 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/{bin,lib}
     cp -ar install $out/lib/gtkradiant
+    for pack in ${packs}/* ; do
+      name=$(basename "$pack")
+      if ! [ -e $out/lib/gtkradiant/installs/$name ]; then
+        ln -s $pack $out/lib/gtkradiant/installs/$name
+      fi
+    done
 
     cat >$out/bin/gtkradiant <<EOF
     #!${runtimeShell} -e
