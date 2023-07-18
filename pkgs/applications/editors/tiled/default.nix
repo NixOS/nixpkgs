@@ -9,13 +9,14 @@
 , qtdeclarative
 , qttools
 , qtsvg
+, qtwayland
 , zlib
 , zstd
 , libGL
 }:
 
 let
-  qtEnv = env "tiled-qt-env" [ qtbase qtdeclarative qtsvg qttools ];
+  qtEnv = env "tiled-qt-env" [ qtbase qtdeclarative qtsvg qttools qtwayland ];
 in
 
 stdenv.mkDerivation rec {
