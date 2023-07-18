@@ -164,7 +164,7 @@ in {
       '';
       type = types.package;
     };
-    
+
     enableTraceAgent = mkOption {
       description = lib.mdDoc ''
         Whether to enable the trace agent.
