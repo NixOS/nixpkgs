@@ -9,6 +9,7 @@
 , mock
 , requests
 , requests-toolbelt
+, setuptools
 }:
 
 let
@@ -38,6 +39,7 @@ buildPythonPackage rec {
     requests
     requests-toolbelt
     pyjwt
+    setuptools
   ];
 
   nativeCheckInputs = [
