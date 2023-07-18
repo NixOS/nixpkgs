@@ -182,6 +182,7 @@ mapAliases ({
   jupyter_client = jupyter-client; # added 2021-10-15
   jupyter_core = jupyter-core; # added 2023-01-05
   jupyter_server = jupyter-server; # added 2023-01-05
+  jupyter-server-ydoc = jupyter-collaboration; # added 2023-07-18
   Kajiki = kajiki; # added 2023-02-19
   Keras = keras; # added 2021-11-25
   larynx-train = piper-train; # added 2023-06-09
