@@ -143,6 +143,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/slundberg/shap";
     changelog = "https://github.com/slundberg/shap/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ evax ];
+    maintainers = with maintainers; [ evax natsukium ];
   };
 }
