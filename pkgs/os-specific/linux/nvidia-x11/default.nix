@@ -81,23 +81,18 @@ rec {
 
   # Last one supporting Kepler architecture
   legacy_470 = generic {
-    version = "470.182.03";
-    sha256_64bit = "sha256-PbwUCPxIuGXT3azvxF9KP8E7kLg6Yo7lRrAIKrLD/Hk=";
-    sha256_aarch64 = "sha256-FEoWikgQjZKkHvAHgtkxnDhB41GdYplZTttEUBit4QQ=";
-    settingsSha256 = "sha256-TRKQ4brLnCbBZt1smGSIHTfwW+wEFPWWPEwDxjVXN7s=";
-    persistencedSha256 = "sha256-fSJMx49z9trdNxx0iPI45oG57smvvhaqVNxsRnfXKCI=";
+    version = "470.199.02";
+    sha256_64bit = "sha256-/fggDt8RzjLDW0JiGjr4aV4RGnfEKL8MTTQ4tCjXaP0=";
+    sha256_aarch64 = "sha256-UmF7LszdrO2d+bOaoQYrTVKXUwDqzMy1UDBW5SPuZy4=";
+    settingsSha256 = "sha256-FkKPE4QV5IiVizGYUNUYoEXRpEhojt/cbH/I8iCn3hw=";
+    persistencedSha256 = "sha256-JP71wt3uCNOgheLNlQbW3DqVFQNTC5vj4y4COWKQzAs=";
 
     patchFlags = [ "-p1" "-d" "kernel" ];
     patches = [
-      # source: https://gist.github.com/joanbm/d10e9cbbbb8e245b6e7e27b2db338faf
+      # source: https://gist.github.com/joanbm/dfe8dc59af1c83e2530a1376b77be8ba
       (fetchpatch {
-        url = "https://gist.github.com/joanbm/d10e9cbbbb8e245b6e7e27b2db338faf/raw/f5d5238bdbaa16cd4008658a0f82b9dd84f1b38f/nvidia-470xx-fix-linux-6.3.patch";
-        hash = "sha256-mR+vXDHgVhWC0JeLgGlbNVCH8XTs7XnhEJS6BV75tI8=";
-      })
-      # source: https://gist.github.com/joanbm/77f0650d45747b9a4dc8e330ade2bf5c
-      (fetchpatch {
-        url = "https://gist.github.com/joanbm/77f0650d45747b9a4dc8e330ade2bf5c/raw/688b612624945926676de28059fe749203b4b549/nvidia-470xx-fix-linux-6.4.patch";
-        hash = "sha256-OyRmezyzqAi7mSJHDjsWQVocSsgJPTW5DvHDFVNX7Dk=";
+        url = "https://gist.github.com/joanbm/dfe8dc59af1c83e2530a1376b77be8ba/raw/37ff2b5ccf99f295ff958c9a44ca4ed4f42503b4/nvidia-470xx-fix-linux-6.5.patch";
+        hash = "sha256-s5r7nwuMva0BLy2qJBVKqNtnUN9am5+PptnVwNdzdbk=";
       })
     ];
   };
