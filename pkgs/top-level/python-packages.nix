@@ -6149,6 +6149,8 @@ self: super: with self; {
 
   magicgui = callPackage ../development/python-modules/magicgui { };
 
+  magic-filter = callPackage ../development/python-modules/magic-filter { };
+
   magic-wormhole = callPackage ../development/python-modules/magic-wormhole { };
 
   magic-wormhole-mailbox-server = callPackage ../development/python-modules/magic-wormhole-mailbox-server { };
