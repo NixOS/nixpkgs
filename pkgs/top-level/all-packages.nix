@@ -35418,6 +35418,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  typer = callPackage ../applications/misc/typer { };
+
   ueberzug = with python3Packages; toPythonApplication ueberzug;
 
   ueberzugpp = darwin.apple_sdk_11_0.callPackage ../tools/graphics/ueberzugpp { };
