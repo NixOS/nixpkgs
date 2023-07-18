@@ -80,23 +80,14 @@ in
 stdenv.mkDerivation rec {
   pname = "gtkradiant";
 
-  version = "unstable-2022-07-31";
+  version = "unstable-2023-04-24";
 
   src = fetchFromGitHub {
     owner = "TTimo";
     repo = "GtkRadiant";
-    rev = "5b498bfa01bde6c2c9eb60fb94cf04666e52d22d";
-    sha256 = "sha256-407faeQnhxqbWgOUunQKj2JhHeqIzPPgrhz2K5O4CaM=";
+    rev = "ddbaf03d723a633d53fa442c2f802f7ad164dd6c";
+    sha256 = "sha256-qI+KGx73AbM5PLFR2JDXKDbiqmU0gS/43rhjRKm/Gms=";
   };
-
-  # patch paths so that .game settings are put into the user's home instead of the read-only /nix/store
-  postPatch = ''
-    substituteInPlace radiant/preferences.cpp \
-      --replace 'gameFilePath += "games/";' 'gameFilePath = g_get_home_dir(); gameFilePath += "/.cache/radiant/games/";printf("gameFilePath: %s\\n", gameFilePath);' \
-      --replace 'radCreateDirectory( gameFilePath );' 'if (g_mkdir_with_parents( gameFilePath, 0777 ) == -1) {radCreateDirectory( gameFilePath );};' \
-      --replace 'strGamesPath = g_strAppPath.GetBuffer();' 'strGamesPath = g_get_home_dir();' \
-      --replace 'strGamesPath += "games";' 'strGamesPath += "/.cache/radiant/games";'
-  '';
 
   nativeBuildInputs =
     let
@@ -113,7 +104,7 @@ stdenv.mkDerivation rec {
           test -e $(readlink $3)
         elif [ "$1" = update ]; then
           # verify existence
-          test -e $(readlink $3)
+          test -e $(readlink $2)
         else
           echo "$@"
           exit 1
@@ -146,7 +137,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,lib}
     cp -ar install $out/lib/gtkradiant
 
-    ln -s ../lib/gtkradiant/radiant.bin $out/bin/gtkradiant
+    cat >$out/bin/gtkradiant <<EOF
+    #!${runtimeShell} -e
+    export XDG_DATA_HOME="\''${XDG_DATA_HOME:-\$HOME/.local/share}"
+    exec "$out/lib/gtkradiant/radiant.bin" "\$@"
+    EOF
+    chmod +x $out/bin/gtkradiant
     ln -s ../lib/gtkradiant/{q3map2,q3map2_urt,q3data} $out/bin/
 
     mkdir -p $out/share/pixmaps
