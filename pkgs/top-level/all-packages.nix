@@ -27490,6 +27490,8 @@ with pkgs;
 
   wesher = callPackage ../servers/wesher { };
 
+  whisparr = callPackage ../servers/whisparr { };
+
   wishlist = callPackage ../servers/wishlist { };
 
   wsdd = callPackage ../servers/wsdd { };
