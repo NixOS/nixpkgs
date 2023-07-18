@@ -12,9 +12,9 @@ VERSION=$(curl -s https://api.github.com/repos/facebook/buck2/releases \
 echo "Latest buck2 prerelease: $VERSION"
 
 ARCHS=(
-    "x86_64-linux:x86_64-unknown-linux-gnu"
+    "x86_64-linux:x86_64-unknown-linux-musl"
     "x86_64-darwin:x86_64-apple-darwin"
-    "aarch64-linux:aarch64-unknown-linux-gnu"
+    "aarch64-linux:aarch64-unknown-linux-musl"
     "aarch64-darwin:aarch64-apple-darwin"
 )
 
