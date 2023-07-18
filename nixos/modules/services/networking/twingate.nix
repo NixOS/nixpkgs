@@ -1,24 +1,28 @@
 { config, lib, pkgs, ... }:
 
+with lib;
+
 let
   cfg = config.services.twingate;
-in
-{
+
+in {
+
   options.services.twingate = {
-    enable = lib.mkEnableOption (lib.mdDoc "Twingate Client daemon");
-    package = lib.mkPackageOptionMD pkgs "twingate" { };
+    enable = mkEnableOption (lib.mdDoc "Twingate Client daemon");
   };
 
-  config = lib.mkIf cfg.enable {
-    systemd.packages = [ cfg.package ];
-    systemd.services.twingate = {
-      preStart = "cp -r -n ${cfg.package}/etc/twingate/. /etc/twingate/";
-      wantedBy = [ "multi-user.target" ];
-    };
+  config = mkIf cfg.enable {
 
-    networking.firewall.checkReversePath = lib.mkDefault "loose";
-    services.resolved.enable = !(config.networking.networkmanager.enable);
+    networking.firewall.checkReversePath = lib.mkDefault false;
+    services.resolved.enable = true;
 
-    environment.systemPackages = [ cfg.package ]; # For the CLI.
+    environment.systemPackages = [ pkgs.twingate ]; # for the CLI
+    systemd.packages = [ pkgs.twingate ];
+
+    systemd.services.twingate.preStart = ''
+      cp -r -n ${pkgs.twingate}/etc/twingate/. /etc/twingate/
+    '';
+
+    systemd.services.twingate.wantedBy = [ "multi-user.target" ];
   };
 }
