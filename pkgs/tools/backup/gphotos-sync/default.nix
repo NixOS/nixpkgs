@@ -21,7 +21,11 @@ python3.pkgs.buildPythonApplication rec {
     ./skip-network-tests.patch
   ];
 
-  nativeBuildInputs = [ python3.pkgs.pythonRelaxDepsHook ];
+  nativeBuildInputs = with python3.pkgs; [
+    pythonRelaxDepsHook
+    setuptools-scm
+  ];
+
   pythonRelaxDeps = [
     "psutil"
     "exif"
@@ -47,7 +51,6 @@ python3.pkgs.buildPythonApplication rec {
   nativeCheckInputs = with python3.pkgs; [
     mock
     pytestCheckHook
-    setuptools-scm
   ];
 
   preCheck = ''
