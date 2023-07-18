@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , ansible-core
@@ -55,6 +56,17 @@ buildPythonPackage rec {
     # [Errno -3] Temporary failure in name resolution
     "test_connection_failure_v2"
     "test_connection_failure_extra_inventory_v2"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # These tests fail in the Darwin sandbox
+    "test_ansible_facts"
+    "test_func"
+    "test_param_override_with_marker"
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.isDarwin [
+    # These tests fail in the Darwin sandbox
+    "tests/test_adhoc.py"
+    "tests/test_adhoc_result.py"
   ];
 
   pythonImportsCheck = [
