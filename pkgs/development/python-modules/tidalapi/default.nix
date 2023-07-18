@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "tidalapi";
-  version = "0.7.0";
+  version = "0.7.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LdlTBkCOb7tXiupsNJ5lbk38syKXeADvi2IdGpW/dk8=";
+    hash = "sha256-ttOjw6VXR36QL/GUQXjpPWrE617Bmdt0piUsA4O5W/g=";
   };
 
   propagatedBuildInputs = [
