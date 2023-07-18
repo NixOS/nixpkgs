@@ -517,6 +517,8 @@ with pkgs;
 
   copilot-cli = callPackage ../tools/admin/copilot-cli { };
 
+  cp210x-program = callPackage ../tools/misc/cp210x-program { };
+
   cp437 = callPackage ../tools/misc/cp437 { };
 
   cpm-cmake = callPackage ../development/tools/cpm-cmake { };
