@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, makeSetupHook
+{ lib, stdenv, callPackage, makeSetupHook, runCommand
 , tzdata
 
 # Version specific stuff
@@ -8,7 +8,7 @@
 
 let
   baseInterp =
-    stdenv.mkDerivation {
+    stdenv.mkDerivation rec {
       pname = "tcl";
       inherit version src;
 
@@ -64,6 +64,12 @@ let
           name = "tcl-package-hook";
           propagatedBuildInputs = [ buildPackages.makeWrapper ];
         } ./tcl-package-hook.sh) {};
+        # verify that Tcl's clock library can access tzdata
+        tests.tzdata = runCommand "${pname}-test-tzdata" {} ''
+          ${baseInterp}/bin/tclsh <(echo "set t [clock scan {2004-10-30 05:00:00} \
+                                        -format {%Y-%m-%d %H:%M:%S} \
+                                        -timezone :America/New_York]") > $out
+        '';
       };
     };
 
