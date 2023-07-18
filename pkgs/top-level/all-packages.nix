@@ -34554,6 +34554,9 @@ with pkgs;
   };
 
   rofi-pass = callPackage ../tools/security/pass/rofi-pass.nix { };
+  rofi-pass-wayland = callPackage ../tools/security/pass/rofi-pass.nix {
+    backend = "wayland";
+  };
 
   rofi-menugen = callPackage ../applications/misc/rofi-menugen { };
 
