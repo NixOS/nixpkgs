@@ -10545,6 +10545,8 @@ self: super: with self; {
 
   qstylizer = callPackage ../development/python-modules/qstylizer { };
 
+  qt-material = callPackage ../development/python-modules/qt-material { };
+
   qt5reactor = callPackage ../development/python-modules/qt5reactor { };
 
   qtawesome = callPackage ../development/python-modules/qtawesome { };
