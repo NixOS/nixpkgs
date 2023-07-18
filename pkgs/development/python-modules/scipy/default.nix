@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , fetchpatch
 , fetchurl
-, buildPackages
 , writeText
 , python
 , pythonOlder
@@ -69,6 +68,7 @@ in buildPythonPackage {
     hash = srcHash;
     fetchSubmodules = true;
   };
+
   patches = [
     # Helps with cross compilation, see https://github.com/scipy/scipy/pull/18167
     (fetchpatch {
@@ -79,6 +79,11 @@ in buildPythonPackage {
       ];
     })
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "pybind11>=2.10.4,<2.11.0" "pybind11>=2.10.4,<2.12.0"
+  '';
 
   nativeBuildInputs = [ pypaBuildHook pipInstallHook cython gfortran meson-python pythran pkg-config wheel ];
 
