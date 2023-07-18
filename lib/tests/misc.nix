@@ -146,6 +146,16 @@ runTests {
     expected = { x = false; };
   };
 
+  testMapNullableNull = {
+    expr = mapNullable (x: x + 1) null;
+    expected = null;
+  };
+
+  testMapNullableValue = {
+    expr = mapNullable (x: x + 1) 22;
+    expected = 23;
+  };
+
 # STRINGS
 
   testConcatMapStrings = {
