@@ -24353,6 +24353,8 @@ with pkgs;
 
   restinio = callPackage ../development/libraries/restinio { };
 
+  restish = callPackage ../tools/networking/restish { };
+
   rhino = callPackage ../development/libraries/java/rhino {
     javac = jdk8;
     jvm = jre8;
