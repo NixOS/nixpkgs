@@ -20292,6 +20292,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
 
+  botan3 = callPackage ../development/libraries/botan/3.0.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+  };
+
   box2d = callPackage ../development/libraries/box2d { };
 
   boxfort = callPackage ../development/libraries/boxfort { };
