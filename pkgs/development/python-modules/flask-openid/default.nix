@@ -9,7 +9,6 @@
 buildPythonPackage rec {
   pname = "flask-openid";
   version = "1.3.0";
-  disabled = !isPy3k;
 
   src = fetchPypi {
     pname = "Flask-OpenID";
