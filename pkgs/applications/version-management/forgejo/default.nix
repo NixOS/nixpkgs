@@ -88,7 +88,7 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ bash git gzip openssh ]}
   '';
 
-  # $data is not available in go-modules.drv and preBuild isn't needed
+  # $data is not available in goModules.drv and preBuild isn't needed
   overrideModAttrs = (_: {
     postPatch = null;
     preBuild = null;

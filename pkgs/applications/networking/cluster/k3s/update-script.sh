@@ -114,7 +114,7 @@ cat >versions.nix <<EOF
 EOF
 
 set +e
-K3S_VENDOR_SHA256=$(nix-prefetch -I nixpkgs=${NIXPKGS_ROOT} "{ sha256 }: (import ${NIXPKGS_ROOT}. {}).k3s_1_${MINOR_VERSION}.go-modules.overrideAttrs (_: { vendorSha256 = sha256; })")
+K3S_VENDOR_SHA256=$(nix-prefetch -I nixpkgs=${NIXPKGS_ROOT} "{ sha256 }: (import ${NIXPKGS_ROOT}. {}).k3s_1_${MINOR_VERSION}.goModules.overrideAttrs (_: { vendorSha256 = sha256; })")
 set -e
 
 if [ -n "${K3S_VENDOR_SHA256:-}" ]; then

@@ -192,6 +192,7 @@ stdenv.mkDerivation rec {
     libfreeaptx
     zxing-cpp
     usrsctp
+    wildmidi
   ] ++ lib.optionals opencvSupport [
     opencv4
   ] ++ lib.optionals enableZbar [
@@ -212,9 +213,6 @@ stdenv.mkDerivation rec {
     wayland
     wayland-protocols
   ] ++ lib.optionals (!stdenv.isDarwin) [
-    # wildmidi requires apple's OpenAL
-    # TODO: package apple's OpenAL, fix wildmidi, include on Darwin
-    wildmidi
     # TODO: mjpegtools uint64_t is not compatible with guint64 on Darwin
     mjpegtools
 
@@ -318,7 +316,6 @@ stdenv.mkDerivation rec {
     "-Duvch264=disabled" # requires gudev
     "-Dv4l2codecs=disabled" # requires gudev
     "-Dladspa=disabled" # requires lrdf
-    "-Dwildmidi=disabled" # see dependencies above
   ] ++ lib.optionals (!stdenv.isLinux || !stdenv.isx86_64) [
     "-Dqsv=disabled" # Linux (and Windows) x86 only
   ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
