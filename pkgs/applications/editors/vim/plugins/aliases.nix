@@ -47,6 +47,7 @@ mapAliases (with prev; {
   solarized           = vim-colors-solarized;
   colors-solarized    = vim-colors-solarized;
   caw                 = caw-vim;
+  chad                = chadtree;
   colorsamplerpack    = Colour-Sampler-Pack;
   Colour_Sampler_Pack = Colour-Sampler-Pack;
   command_T           = command-t; # backwards compat, added 2014-10-18

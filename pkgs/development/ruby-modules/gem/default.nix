@@ -75,6 +75,14 @@ let
     else
       throw "buildRubyGem: don't know how to build a gem of type \"${type}\""
   );
+
+  # See: https://github.com/rubygems/rubygems/blob/7a7b234721c375874b7e22b1c5b14925b943f04e/bundler/lib/bundler/source/git.rb#L103
+  suffix =
+    if type == "git" then
+      builtins.substring 0 12 attrs.source.rev
+    else
+      version;
+
   documentFlag =
     if document == []
     then "-N"
@@ -86,6 +94,7 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
   inherit ruby;
   inherit dontBuild;
   inherit dontStrip;
+  inherit suffix;
   gemType = type;
 
   nativeBuildInputs = [
@@ -100,7 +109,7 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
     ++ buildInputs;
 
   #name = builtins.trace (attrs.name or "no attr.name" ) "${namePrefix}${gemName}-${version}";
-  name = attrs.name or "${namePrefix}${gemName}-${version}";
+  name = attrs.name or "${namePrefix}${gemName}-${suffix}";
 
   inherit src;
 

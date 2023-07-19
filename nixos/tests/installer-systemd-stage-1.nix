@@ -28,7 +28,7 @@
     simpleUefiGrubSpecialisation
     simpleUefiSystemdBoot
     stratisRoot
-    # swraid
+    swraid
     zfsroot
     ;
 

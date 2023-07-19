@@ -33,6 +33,8 @@ buildPythonPackage rec {
   buildInputs = [ mock ];
   propagatedBuildInputs = [ pbr pyyaml setuptools six multi_key_dict requests ];
 
+  __darwinAllowLocalNetworking = true;
+
    nativeCheckInputs = [ stestr testscenarios requests-mock ];
    checkPhase = ''
      # Skip tests that fail due to setuptools>=66.0.0 rejecting PEP 440

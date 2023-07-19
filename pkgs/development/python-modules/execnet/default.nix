@@ -27,13 +27,14 @@ buildPythonPackage rec {
     })
   ];
 
-  # remove vbox tests
   postPatch = ''
-    rm -v testing/test_termination.py
-    rm -v testing/test_channel.py
-    rm -v testing/test_xspec.py
-    rm -v testing/test_gateway.py
-    ${lib.optionalString isPyPy "rm -v testing/test_multi.py"}
+    # remove vbox tests
+    rm testing/test_termination.py
+    rm testing/test_channel.py
+    rm testing/test_xspec.py
+    rm testing/test_gateway.py
+  '' + lib.optionalString isPyPy ''
+    rm testing/test_multi.py
   '';
 
   nativeBuildInputs = [
@@ -44,8 +45,11 @@ buildPythonPackage rec {
     apipkg
   ];
 
+  # sometimes crashes with: OSError: [Errno 9] Bad file descriptor
+  doCheck = !isPyPy;
+
   nativeCheckInputs = [
-    py
+    py # no longer required with 1.10.0
     pytestCheckHook
   ];
 
@@ -62,5 +66,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
-
 }

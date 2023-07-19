@@ -28,7 +28,7 @@ let
 in appimageTools.wrapType2 rec {
   inherit name src;
 
-  multiPkgs = null; # no p32bit needed
+  multiArch = false; # no p32bit needed
   extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
 
   extraInstallCommands = ''

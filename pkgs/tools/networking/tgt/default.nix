@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
     "-Wno-error=maybe-uninitialized"
   ];
 
+  hardeningDisable = lib.optionals stdenv.isAarch64 [
+    # error: 'read' writing 1 byte into a region of size 0 overflows the destination
+    "fortify3"
+  ];
+
   installFlags = [
     "sysconfdir=${placeholder "out"}/etc"
   ];

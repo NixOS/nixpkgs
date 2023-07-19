@@ -1,13 +1,13 @@
 { lib, fetchurl, makeWrapper, runCommand, callPackage }:
 
 let
-  version = "1.3.6";
+  version = "1.3.7";
 
   programs = callPackage ./programs.nix { };
 
   webapp = fetchurl {
     url = "https://github.com/root-gg/plik/releases/download/${version}/plik-${version}-linux-amd64.tar.gz";
-    sha256 = "sha256-UGzevhZDfQBoFgPZQIs5Ftgz1cUHGfY/IRSEWQHFVSQ=";
+    hash = "sha256-Uj3I/ohgMr/Ud5xAZiBjsIW8bSdUeXXv9NYKLu8Aym8=";
   };
 
 in

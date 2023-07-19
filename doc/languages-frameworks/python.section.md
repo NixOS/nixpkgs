@@ -512,9 +512,10 @@ when building the bindings and are therefore added as `buildInputs`.
 
 ```nix
 { lib
-, pkgs
 , buildPythonPackage
 , fetchPypi
+, libxml2
+, libxslt
 }:
 
 buildPythonPackage rec {
@@ -528,8 +529,8 @@ buildPythonPackage rec {
   };
 
   buildInputs = [
-    pkgs.libxml2
-    pkgs.libxslt
+    libxml2
+    libxslt
   ];
 
   meta = with lib; {
@@ -554,11 +555,13 @@ therefore we have to set `LDFLAGS` and `CFLAGS`.
 
 ```nix
 { lib
-, pkgs
 , buildPythonPackage
 , fetchPypi
 
 # dependencies
+, fftw
+, fftwFloat
+, fftwLongDouble
 , numpy
 , scipy
 }:
@@ -574,9 +577,9 @@ buildPythonPackage rec {
   };
 
   buildInputs = [
-    pkgs.fftw
-    pkgs.fftwFloat
-    pkgs.fftwLongDouble
+    fftw
+    fftwFloat
+    fftwLongDouble
   ];
 
   propagatedBuildInputs = [
@@ -585,8 +588,8 @@ buildPythonPackage rec {
   ];
 
   preConfigure = ''
-    export LDFLAGS="-L${pkgs.fftw.dev}/lib -L${pkgs.fftwFloat.out}/lib -L${pkgs.fftwLongDouble.out}/lib"
-    export CFLAGS="-I${pkgs.fftw.dev}/include -I${pkgs.fftwFloat.dev}/include -I${pkgs.fftwLongDouble.dev}/include"
+    export LDFLAGS="-L${fftw.dev}/lib -L${fftwFloat.out}/lib -L${fftwLongDouble.out}/lib"
+    export CFLAGS="-I${fftw.dev}/include -I${fftwFloat.dev}/include -I${fftwLongDouble.dev}/include"
   '';
 
   # Tests cannot import pyfftw. pyfftw works fine though.

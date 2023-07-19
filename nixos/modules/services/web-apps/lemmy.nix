@@ -77,6 +77,11 @@ in
       };
     };
 
+    secretFile = mkOption {
+      type = with types; nullOr path;
+      default = null;
+      description = lib.mdDoc "Path to a secret JSON configuration file which is merged at runtime with the one generated from {option}`services.lemmy.settings`.";
+    };
   };
 
   config =
@@ -85,7 +90,9 @@ in
         {
           bind = "127.0.0.1";
           tls_enabled = true;
-          pictrs_url = with config.services.pict-rs; "http://${address}:${toString port}";
+          pictrs = {
+            url = with config.services.pict-rs; "http://${address}:${toString port}";
+          };
           actor_name_max_length = 20;
 
           rate_limit.message = 180;
@@ -197,11 +204,14 @@ in
         }
       ];
 
-      systemd.services.lemmy = {
+      systemd.services.lemmy = let
+        configFile = settingsFormat.generate "config.hjson" cfg.settings;
+        mergedConfig = "/run/lemmy/config.hjson";
+      in {
         description = "Lemmy server";
 
         environment = {
-          LEMMY_CONFIG_LOCATION = "${settingsFormat.generate "config.hjson" cfg.settings}";
+          LEMMY_CONFIG_LOCATION = if cfg.secretFile == null then configFile else mergedConfig;
           LEMMY_DATABASE_URL = if cfg.database.uri != null then cfg.database.uri else (mkIf (cfg.database.createLocally) "postgres:///lemmy?host=/run/postgresql&user=lemmy");
         };
 
@@ -216,10 +226,24 @@ in
 
         requires = lib.optionals cfg.database.createLocally [ "postgresql.service" ];
 
+        path = mkIf (cfg.secretFile != null) [ pkgs.jq ];
+
+        # merge the two configs and prevent others from reading the result
+        # if somehow $CREDENTIALS_DIRECTORY is not set we fail
+        preStart = mkIf (cfg.secretFile != null) ''
+          set -u
+          umask 177
+          jq --slurp '.[0] * .[1]' ${lib.escapeShellArg configFile} "$CREDENTIALS_DIRECTORY/secretFile" > ${lib.escapeShellArg mergedConfig}
+        '';
+
         serviceConfig = {
           DynamicUser = true;
           RuntimeDirectory = "lemmy";
           ExecStart = "${cfg.server.package}/bin/lemmy_server";
+          LoadCredential = mkIf (cfg.secretFile != null) "secretFile:${toString cfg.secretFile}";
+          PrivateTmp = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
         };
       };
 
@@ -228,9 +252,10 @@ in
 
         environment = {
           LEMMY_UI_HOST = "127.0.0.1:${toString cfg.ui.port}";
-          LEMMY_INTERNAL_HOST = "127.0.0.1:${toString cfg.settings.port}";
-          LEMMY_EXTERNAL_HOST = cfg.settings.hostname;
-          LEMMY_HTTPS = "false";
+          LEMMY_UI_LEMMY_INTERNAL_HOST = "127.0.0.1:${toString cfg.settings.port}";
+          LEMMY_UI_LEMMY_EXTERNAL_HOST = cfg.settings.hostname;
+          LEMMY_UI_HTTPS = "false";
+          NODE_ENV = "production";
         };
 
         documentation = [

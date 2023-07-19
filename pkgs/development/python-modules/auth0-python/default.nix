@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "auth0-python";
-  version = "4.2.0";
+  version = "4.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DyFRCQGjyv75YVBPN+1xWjKQtPUv29xblYu2TehkkVo=";
+    hash = "sha256-enSG8rO0gMpSaf6otdx94xncyxc6Uv570VKVVQkit1g=";
   };
 
   propagatedBuildInputs = [
@@ -52,6 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/auth0/auth0-python";
     changelog = "https://github.com/auth0/auth0-python/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

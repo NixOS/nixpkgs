@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Python wrapper around isl, an integer set library";
     homepage = "https://github.com/inducer/islpy";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

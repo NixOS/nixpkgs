@@ -40,8 +40,7 @@ let
   mathcomp_ = package: let
       classical-deps = [ mathcomp.algebra mathcomp-finmap ];
       analysis-deps = [ mathcomp.field mathcomp-bigenough ];
-      intra-deps = if package == "single" then []
-        else map mathcomp_ (head (splitList (lib.pred.equal package) packages));
+      intra-deps = lib.optionals (package != "single") (map mathcomp_ (head (splitList (lib.pred.equal package) packages)));
       pkgpath = if package == "single" then "."
         else if package == "analysis" then "theories" else "${package}";
       pname = if package == "single" then "mathcomp-analysis-single"

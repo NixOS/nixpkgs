@@ -2,6 +2,7 @@
 , lib
 , pkg-config
 , fetchFromGitLab
+, fetchpatch
 , gitUpdater
 , ffmpeg_5
 
@@ -24,7 +25,7 @@
 , libpulseaudio
 , libupnp
 , yaml-cpp
-, msgpack-cxx
+, msgpack
 , openssl
 , restinio
 , secp256k1
@@ -106,7 +107,13 @@ stdenv.mkDerivation rec {
     inherit src version meta;
     sourceRoot = "source/daemon";
 
-    patches = [ ./0001-fix-annotations-in-bin-dbus-cx.ring.Ring.CallManager.patch ];
+    patches = [
+      ./0001-fix-annotations-in-bin-dbus-cx.ring.Ring.CallManager.patch
+      (fetchpatch {
+        url = "https://git.jami.net/savoirfairelinux/jami-daemon/-/commit/315b5fbf546712f22a7b03ca750257bc92263a91.patch";
+        hash = "sha256-GNUhFWvYpihAVe1gkVkZARpQmN+Cgv97hRQ4VFiEoKI=";
+      })
+    ];
 
     nativeBuildInputs = [
       autoreconfHook
@@ -132,7 +139,7 @@ stdenv.mkDerivation rec {
       libpulseaudio
       libupnp
       yaml-cpp
-      msgpack-cxx
+      msgpack
       opendht-jami
       openssl
       pjsip-jami

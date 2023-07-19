@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  version = "3.1.41";
+  version = "3.1.42";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    sha256 = "sha256-yQZrAQfNZZd65a14AFObrLrBzePBDnK0J87oTEB1Dcw=";
+    hash = "sha256-elp/LPd9SAuVZy42Wkgb6pCbPi2GnETTfyRJqU92S0E=";
     rev = version;
   };
 

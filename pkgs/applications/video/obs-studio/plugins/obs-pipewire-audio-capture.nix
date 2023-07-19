@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dimtpap";
     repo = pname;
-    rev = "${version}";
+    rev = version;
     sha256 = "sha256-gcOH8gJuP03MxhJbgl941yTtm2XIHmqHWVwkRCVATkQ=";
   };
 

@@ -2,13 +2,13 @@
 
 buildFishPlugin rec {
   pname = "sdkman-for-fish";
-  version = "1.4.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "reitzig";
     repo = "sdkman-for-fish";
     rev = "v${version}";
-    hash = "sha256-bfWQ2al0Xy8bnJt5euziHz/+qhyri4qWy47VDoPwQcg=";
+    hash = "sha256-cgDTunWFxFm48GmNv21o47xrXyo+sS6a3CzwHlv0Ezo=";
   };
 
   meta = with lib; {

@@ -78,6 +78,6 @@ buildPythonPackage rec {
     homepage = "https://distributed.readthedocs.io/";
     changelog = "https://github.com/dask/distributed/blob/${version}/docs/source/changelog.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ teh costrouc ];
+    maintainers = with maintainers; [ teh ];
   };
 }

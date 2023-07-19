@@ -4,27 +4,29 @@
 , pkg-config
 , openssl
 , stdenv
-, CoreServices
-, Security
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "zine";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-81aCSIsgi7R4KmH1wvDYJJ1WX1vpT1n20XXSs+pHT54=";
+    hash = "sha256-pUoMMgZQ+oDs9Yhc1rQuy9cUWiR800DlIe8wxQjnIis=";
   };
 
-  cargoHash = "sha256-QRxh67WKRUukKGbKQHwWYdDSazN+2g/kf2A3BgePOUM=";
+  cargoHash = "sha256-dXq8O0jVpr0xxvLTrsLJbiyyOMXXtEz7OMINqDEfG4U=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.CoreServices
+  ];
 
   meta = with lib; {
     description = "A simple and opinionated tool to build your own magazine";

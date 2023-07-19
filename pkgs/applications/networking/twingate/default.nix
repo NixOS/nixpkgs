@@ -8,6 +8,7 @@
 , udev
 , cryptsetup
 , stdenv
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -40,6 +41,8 @@ stdenv.mkDerivation rec {
     mv usr/lib $out/lib
     mv usr/share $out/share
   '';
+
+  passthru.tests = { inherit (nixosTests) twingate; };
 
   meta = with lib; {
     description = "Twingate Client";

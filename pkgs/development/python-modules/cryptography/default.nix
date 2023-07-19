@@ -52,14 +52,14 @@ buildPythonPackage rec {
 
   cargoRoot = "src/rust";
 
-  nativeBuildInputs = lib.optionals (!isPyPy) [
-    cffi
-    pkg-config
-  ] ++ [
+  nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     setuptools-rust
     cargo
     rustc
+    pkg-config
+  ] ++ lib.optionals (!isPyPy) [
+    cffi
   ];
 
   buildInputs = [ openssl ]

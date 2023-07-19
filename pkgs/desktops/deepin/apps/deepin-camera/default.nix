@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-camera";
-  version = "1.4.11";
+  version = "1.4.13";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-GQQFwlJNfdsi0GvDRMIorUnlbXrgbYl9H9aBedOm+ZQ=";
+    sha256 = "sha256-h4oCxtj9GwaZqioZ4vFx2Cq8a1w7lYQvOhDAd7x9gMU=";
   };
 
   # QLibrary and dlopen work with LD_LIBRARY_PATH

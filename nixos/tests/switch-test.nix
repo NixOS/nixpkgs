@@ -70,6 +70,19 @@ in {
           };
         };
 
+        simpleServiceSeparateActivationScript.configuration = {
+          system.activatable = false;
+          systemd.services.test = {
+            wantedBy = [ "multi-user.target" ];
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+              ExecStart = "${pkgs.coreutils}/bin/true";
+              ExecReload = "${pkgs.coreutils}/bin/true";
+            };
+          };
+        };
+
         simpleServiceDifferentDescription.configuration = {
           imports = [ simpleService.configuration ];
           systemd.services.test.description = "Test unit";
@@ -482,9 +495,9 @@ in {
   };
 
   testScript = { nodes, ... }: let
-    originalSystem = nodes.machine.config.system.build.toplevel;
-    otherSystem = nodes.other.config.system.build.toplevel;
-    machine = nodes.machine.config.system.build.toplevel;
+    originalSystem = nodes.machine.system.build.toplevel;
+    otherSystem = nodes.other.system.build.toplevel;
+    machine = nodes.machine.system.build.toplevel;
 
     # Ensures failures pass through using pipefail, otherwise failing to
     # switch-to-configuration is hidden by the success of `tee`.
@@ -497,11 +510,15 @@ in {
   in /* python */ ''
     def switch_to_specialisation(system, name, action="test", fail=False):
         if name == "":
-            stc = f"{system}/bin/switch-to-configuration"
+            switcher = f"{system}/bin/switch-to-configuration"
         else:
-            stc = f"{system}/specialisation/{name}/bin/switch-to-configuration"
-        out = machine.fail(f"{stc} {action} 2>&1") if fail \
-            else machine.succeed(f"{stc} {action} 2>&1")
+            switcher = f"{system}/specialisation/{name}/bin/switch-to-configuration"
+        return run_switch(switcher, action, fail)
+
+    # like above but stc = switcher
+    def run_switch(switcher, action="test", fail=False):
+        out = machine.fail(f"{switcher} {action} 2>&1") if fail \
+            else machine.succeed(f"{switcher} {action} 2>&1")
         assert_lacks(out, "switch-to-configuration line")  # Perl warnings
         return out
 
@@ -638,6 +655,22 @@ in {
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
         assert_contains(out, "would start the following units: test.service\n")
+
+        out = switch_to_specialisation("${machine}", "", action="test")
+
+        # Ensure the service can be started when the activation script isn't in toplevel
+        # This is a lot like "Start a simple service", except activation-only deps could be gc-ed
+        out = run_switch("${nodes.machine.specialisation.simpleServiceSeparateActivationScript.configuration.system.build.separateActivationScript}/bin/switch-to-configuration");
+        assert_lacks(out, "installing dummy bootloader")  # test does not install a bootloader
+        assert_lacks(out, "stopping the following units:")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_contains(out, "reloading the following units: dbus.service\n")  # huh
+        assert_lacks(out, "\nrestarting the following units:")
+        assert_lacks(out, "\nstarting the following units:")
+        assert_contains(out, "the following new units were started: test.service\n")
+        machine.succeed("! test -e /run/current-system/activate")
+        machine.succeed("! test -e /run/current-system/dry-activate")
+        machine.succeed("! test -e /run/current-system/bin/switch-to-configuration")
 
         # Ensure \ works in unit names
         out = switch_to_specialisation("${machine}", "unitWithBackslash")

@@ -46,8 +46,6 @@ let
       ./0002-Constant-DPI.patch
       # https://github.com/Xpra-org/xpra/issues/349
       ./0003-fix-pointer-limits.patch
-      # patch provided by Xpra upstream
-      ./0005-support-for-30-bit-depth-in-dummy-driver.patch
     ];
   });
 

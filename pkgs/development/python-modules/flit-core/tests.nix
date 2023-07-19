@@ -5,7 +5,7 @@
 , testpath
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "flit-core";
   inherit (flit-core) version;
 

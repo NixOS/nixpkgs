@@ -172,7 +172,7 @@ in {
   ghc-exactprint = overrideCabal (drv: {
     libraryHaskellDepends = with self; [ HUnit data-default fail filemanip free ghc-paths ordered-containers silently syb Diff ];
   })
-    self.ghc-exactprint_1_6_1_1;
+    self.ghc-exactprint_1_6_1_3;
 
   # needed to build servant
   http-api-data = super.http-api-data_0_5_1;

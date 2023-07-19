@@ -86,8 +86,7 @@ let
     SupplementaryGroups = optional enableRedis redisServer.user;
     SystemCallArchitectures = "native";
     SystemCallFilter = [ "@system-service" "~@privileged @setuid @keyring" ];
-    # Does not work well with the temporary root
-    #UMask = "0066";
+    UMask = "0066";
   };
 in
 {

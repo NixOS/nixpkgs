@@ -17,14 +17,14 @@
 
 stdenv.mkDerivation rec {
   # Don't forget to update go.d.plugin.nix as well
-  version = "1.40.0";
+  version = "1.40.1";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "sha256-phPfbmzOVOLBCD29tg5DAak+Q2548iqiE1ZXbEkBhzc=";
+    sha256 = "sha256-4bYCsEeB0kEYtVFVXymFv7ELUo9RXoKbPjOlDKav8Rg=";
     fetchSubmodules = true;
   };
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   # to bootstrap tools:
   #   https://github.com/NixOS/nixpkgs/pull/175719
   # We pick zlib.dev as a simple canary package with pkg-config input.
-  disallowedReferences = if withDebug then [] else [ zlib.dev ];
+  disallowedReferences = lib.optional (!withDebug) zlib.dev;
 
   donStrip = withDebug;
   env.NIX_CFLAGS_COMPILE = lib.optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";

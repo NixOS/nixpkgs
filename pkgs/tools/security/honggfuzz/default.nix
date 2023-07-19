@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, callPackage
 , makeWrapper
 , clang
 , llvm

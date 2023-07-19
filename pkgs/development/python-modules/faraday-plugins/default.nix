@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "faraday-plugins";
-  version = "1.12.0";
+  version = "1.12.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "infobyte";
     repo = "faraday_plugins";
     rev = "refs/tags/${version}";
-    hash = "sha256-dtSGNLQUG4Co+p/sPBgKxMhB7drZAMxUas+eH6g/cS8=";
+    hash = "sha256-sDHqBGRJQuAj2zB7hcIy3u5iNCxBHO1ub0eHxfgd7kI=";
   };
 
   postPatch = ''

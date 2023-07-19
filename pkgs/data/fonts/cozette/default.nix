@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "cozette";
-  version = "1.19.2";
+  version = "1.20.1";
 
   src = fetchzip {
-    url = "https://github.com/slavfox/Cozette/releases/download/v.${version}/CozetteFonts.zip";
-    hash = "sha256-+TnKUgrAafR5irS9XeXWfb1a2PfUKOXf8CAmqJbf6y4=";
+    url = "https://github.com/slavfox/Cozette/releases/download/v.${version}/CozetteFonts-v-${builtins.replaceStrings ["."] ["-"] version}.zip";
+    hash = "sha256-5JODQhwKJRRBypAuVFulv9FiaVNchVi/TPb4HYQgvzk=";
   };
 
   installPhase = ''
@@ -23,6 +23,7 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "A bitmap programming font optimized for coziness";
     homepage = "https://github.com/slavfox/cozette";
+    changelog = "https://github.com/slavfox/Cozette/blob/v.${version}/CHANGELOG.md";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ brettlyons marsam ];

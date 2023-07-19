@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-image-viewer";
-  version = "5.9.11";
+  version = "5.9.13";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-IkjAW4bqQLEWF2tgccYCVnQgcEp9DJoXrEx2HDC25gs=";
+    sha256 = "sha256-T/hbygnbao5rbw0gHH0ULHOz/2j70ktyzYGWXPDCJoQ=";
   };
 
   patches = [

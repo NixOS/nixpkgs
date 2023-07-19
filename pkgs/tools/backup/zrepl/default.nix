@@ -4,7 +4,6 @@
 , makeWrapper
 , nixosTests
 , openssh
-, fetchpatch
 }:
 buildGoModule rec {
   pname = "zrepl";

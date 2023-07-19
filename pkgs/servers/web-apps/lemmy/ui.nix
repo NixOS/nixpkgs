@@ -33,7 +33,7 @@ let
   };
 
   name = "lemmy-ui";
-  version = pinData.version;
+  version = pinData.uiVersion;
 
   src = fetchFromGitHub {
     owner = "LemmyNet";
@@ -77,14 +77,14 @@ mkYarnPackage {
 
   distPhase = "true";
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = ./update.py;
   passthru.tests.lemmy-ui = nixosTests.lemmy;
 
   meta = with lib; {
     description = "Building a federated alternative to reddit in rust";
     homepage = "https://join-lemmy.org/";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ happysalada billewanick ];
+    maintainers = with maintainers; [ happysalada billewanick adisbladis ];
     inherit (nodejs.meta) platforms;
   };
 }

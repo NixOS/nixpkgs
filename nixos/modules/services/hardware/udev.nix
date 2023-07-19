@@ -296,7 +296,6 @@ in
       packages = mkOption {
         type = types.listOf types.path;
         default = [];
-        visible = false;
         description = lib.mdDoc ''
           *This will only be used when systemd is used in stage 1.*
 
@@ -311,7 +310,6 @@ in
       binPackages = mkOption {
         type = types.listOf types.path;
         default = [];
-        visible = false;
         description = lib.mdDoc ''
           *This will only be used when systemd is used in stage 1.*
 

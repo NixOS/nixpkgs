@@ -2,13 +2,13 @@
 
 let
   pname = "anytype";
-  version = "0.31.0";
+  version = "0.33.0";
   name = "Anytype-${version}";
   nameExecutable = pname;
   src = fetchurl {
-    url = "https://at9412003.fra1.digitaloceanspaces.com/Anytype-${version}.AppImage";
+    url = "https://anytype-release.fra1.cdn.digitaloceanspaces.com/Anytype-${version}.AppImage";
     name = "Anytype-${version}.AppImage";
-    sha256 = "sha256-s8al0R9G478A+PymQcdcdRpw6tpKkG+WIZsXZYEvf/o=";
+    sha256 = "sha256-lkocuPlUYGFWWEMaz7Q/SWMFIGa2w+jNQ0u5EzcSz7M=";
   };
   appimageContents = appimageTools.extractType2 { inherit name src; };
 in
@@ -20,11 +20,11 @@ appimageTools.wrapType2 {
 
   extraInstallCommands = ''
     mv $out/bin/${name} $out/bin/${pname}
-    install -m 444 -D ${appimageContents}/anytype2.desktop -t $out/share/applications
-    substituteInPlace $out/share/applications/anytype2.desktop \
+    install -m 444 -D ${appimageContents}/anytype.desktop -t $out/share/applications
+    substituteInPlace $out/share/applications/anytype.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'
-    install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/0x0/apps/anytype2.png \
-      $out/share/icons/hicolor/512x512/apps/anytype2.png
+    install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/0x0/apps/anytype.png \
+      $out/share/icons/hicolor/512x512/apps/anytype.png
   '';
 
   meta = with lib; {

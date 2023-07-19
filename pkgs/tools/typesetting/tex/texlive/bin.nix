@@ -214,6 +214,16 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
       excludes = [  "build.sh" ];
       stripLen = 1;
     })
+    # Fixes texluajitc crashes on aarch64, backport of the upstream fix
+    # https://github.com/LuaJIT/LuaJIT/commit/e9af1abec542e6f9851ff2368e7f196b6382a44c
+    # to the version vendored by texlive (2.1.0-beta3)
+    (fetchpatch {
+      name = "luajit-fix-aarch64-linux.patch";
+      url = "https://raw.githubusercontent.com/void-linux/void-packages/master/srcpkgs/LuaJIT/patches/e9af1abec542e6f9851ff2368e7f196b6382a44c.patch";
+      hash = "sha256-ysSZmfpfCFMukfHmIqwofAZux1e2kEq/37lfqp7HoWo=";
+      stripLen = 1;
+      extraPrefix = "libs/luajit/LuaJIT-src/";
+    })
   ];
 
   hardeningDisable = [ "format" ];

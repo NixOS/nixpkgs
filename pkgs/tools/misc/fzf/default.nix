@@ -5,6 +5,7 @@
 , writeShellScriptBin
 , runtimeShell
 , installShellFiles
+, bc
 , ncurses
 , perl
 , glibcLocales
@@ -60,6 +61,9 @@ buildGoModule rec {
     # Include first args to make sure we're patching the right thing
     substituteInPlace shell/key-bindings.bash \
       --replace " perl -n " " ${ourPerl}/bin/perl -n "
+    # fzf-tmux depends on bc
+   substituteInPlace bin/fzf-tmux \
+     --replace "bc" "${bc}/bin/bc"
   '';
 
   postInstall = ''

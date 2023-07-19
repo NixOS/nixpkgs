@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "twilio";
-  version = "8.3.0";
+  version = "8.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "twilio";
     repo = "twilio-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-PtTdc4EdvrHSXDDYN0TtDwEO/mubifCr2U4AE67OJIc=";
+    hash = "sha256-tU4nyjo1DC7F2UvaV6Hn/Nqxbm8OR1E1qtUGMVgZ8U8=";
   };
 
   propagatedBuildInputs = [

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "objgraph";
-  version = "3.5.0";
+  version = "3.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.5" || isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-R1LKW8wOBRLkG4zE0ngKwv07PqvQO36VClWUwGID38Q=";
+    hash = "sha256-NpVnw3tPL5KBYLb27e3L6o/H6SmDGHf9EFbHipAMF9M=";
   };
 
   patches = [

@@ -1,4 +1,5 @@
-{ lib, rustPlatform, fetchgit, pkg-config, protobuf, python3, wayland-scanner
+{ lib, rustPlatform, fetchgit, fetchpatch
+, pkg-config, protobuf, python3, wayland-scanner
 , libcap, libdrm, libepoxy, minijail, virglrenderer, wayland, wayland-protocols
 }:
 
@@ -12,6 +13,15 @@ rustPlatform.buildRustPackage rec {
     sha256 = "PdP+Jx2oIAy+gxHjJDU5YlAlSYFtoX7ey3r5ELD9QPM=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Backport fix for non-Glibc.
+    (fetchpatch {
+      url = "https://chromium.googlesource.com/chromiumos/platform/crosvm/+/8afa6096aa0417ccc5de0213a241dd7ebd25ac0a%5E%21/?format=TEXT";
+      decode = "base64 -d";
+      hash = "sha256-oRwGprs/P2ZG8BM9CMzyEyM8fjuyFINQw4rjTq9rKXA=";
+    })
+  ];
 
   separateDebugInfo = true;
 

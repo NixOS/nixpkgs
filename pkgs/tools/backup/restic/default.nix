@@ -34,9 +34,10 @@ buildGoModule rec {
   '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     $out/bin/restic generate \
       --bash-completion restic.bash \
+      --fish-completion restic.fish \
       --zsh-completion restic.zsh \
       --man .
-    installShellCompletion restic.{bash,zsh}
+    installShellCompletion restic.{bash,fish,zsh}
     installManPage *.1
   '';
 

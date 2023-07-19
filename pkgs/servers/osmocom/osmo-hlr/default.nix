@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-hlr";
-    rev = "${version}";
+    rev = version;
     hash = "sha256-lFIYoDaJbVcC0A0TukRO9KDTVx31WqPPz/Z3wACJBp0=";
   };
 

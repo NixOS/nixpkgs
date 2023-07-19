@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rlwrap";
-  version = "0.46";
+  version = "0.46.1";
 
   src = fetchFromGitHub {
     owner = "hanslub42";
     repo = "rlwrap";
-    rev = "v${version}";
-    sha256 = "sha256-NlpVg1AimJn3VAbUl2GK1kaLkqU1Djw7/2Uc21AY0Jo=";
+    rev = version;
+    sha256 = "sha256-yKJXfdxfaCsmPtI0KmTzfFKY+evUuytomVrLsSCYDGo=";
   };
 
   postPatch = ''
@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/hanslub42/rlwrap";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ srapenne ];
+    maintainers = with maintainers; [ srapenne jlesquembre ];
   };
 }

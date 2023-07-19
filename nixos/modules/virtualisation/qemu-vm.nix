@@ -166,6 +166,16 @@ let
       # Create a directory for exchanging data with the VM.
       mkdir -p "$TMPDIR/xchg"
 
+      ${lib.optionalString cfg.useHostCerts
+      ''
+        mkdir -p "$TMPDIR/certs"
+        if [ -e "$NIX_SSL_CERT_FILE" ]; then
+          cp -L "$NIX_SSL_CERT_FILE" "$TMPDIR"/certs/ca-certificates.crt
+        else
+          echo \$NIX_SSL_CERT_FILE should point to a valid file if virtualisation.useHostCerts is enabled.
+        fi
+      ''}
+
       ${lib.optionalString cfg.useEFIBoot
       ''
         # Expose EFI variables, it's useful even when we are not using a bootloader (!).
@@ -877,7 +887,6 @@ in
           '';
       };
 
-
     virtualisation.bios =
       mkOption {
         type = types.nullOr types.package;
@@ -887,6 +896,17 @@ in
             An alternate BIOS (such as `qboot`) with which to start the VM.
             Should contain a file named `bios.bin`.
             If `null`, QEMU's builtin SeaBIOS will be used.
+          '';
+      };
+
+    virtualisation.useHostCerts =
+      mkOption {
+        type = types.bool;
+        default = false;
+        description =
+          lib.mdDoc ''
+            If enabled, when `NIX_SSL_CERT_FILE` is set on the host,
+            pass the CA certificates from the host to the VM.
           '';
       };
 
@@ -1024,7 +1044,13 @@ in
         source = ''"''${SHARED_DIR:-$TMPDIR/xchg}"'';
         target = "/tmp/shared";
       };
+      certs = mkIf cfg.useHostCerts {
+        source = ''"$TMPDIR"/certs'';
+        target = "/etc/ssl/certs";
+      };
     };
+
+    security.pki.installCACerts = mkIf cfg.useHostCerts false;
 
     virtualisation.qemu.networkingOptions =
       let

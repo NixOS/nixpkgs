@@ -20,5 +20,4 @@ hash="$(nix-prefetch ./.)"
 sed -i -Ee "s/hash = \"sha256-[A-Za-z0-9=]{44}\"/hash = \"${hash}\"/" default.nix
 
 
-nugetDeps="$(realpath ./deps.nix)"
-$(nix-build ../../../.. -A git-credential-manager.fetch-deps --no-out-link) "$nugetDeps"
+$(nix-build ../../../.. -A git-credential-manager.fetch-deps --no-out-link)

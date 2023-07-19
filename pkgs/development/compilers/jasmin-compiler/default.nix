@@ -11,6 +11,12 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "jasmin-compiler-v${version}/compiler";
 
+  # Released tarball contains extraneous `dune` files
+  # See https://github.com/jasmin-lang/jasmin/pull/495
+  preBuild = ''
+    rm -rf tests
+  '';
+
   nativeBuildInputs = with ocamlPackages; [ ocaml findlib dune_3 menhir camlidl cmdliner ];
 
   buildInputs = [
@@ -18,21 +24,23 @@ stdenv.mkDerivation rec {
     ppl
   ] ++ (with ocamlPackages; [
     apron
+    yojson
+  ]);
+
+  propagatedBuildInputs = with ocamlPackages; [
     batteries
     menhirLib
-    yojson
     zarith
-  ]);
+  ];
+
+  outputs = [ "bin" "lib" "out" ];
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin
-    for p in jasminc jazz2tex
-    do
-      cp _build/default/entry/$p.exe $out/bin/$p
-    done
-    mkdir -p $out/lib/jasmin/easycrypt
-    cp ../eclib/*.ec $out/lib/jasmin/easycrypt
+    dune build @install
+    dune install --prefix=$bin --libdir=$out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib
+    mkdir -p $lib/lib/jasmin/easycrypt
+    cp ../eclib/*.ec $lib/lib/jasmin/easycrypt
     runHook postInstall
   '';
 

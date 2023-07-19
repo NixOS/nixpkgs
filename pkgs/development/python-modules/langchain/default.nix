@@ -17,6 +17,7 @@
 , bash
   # optional dependencies
 , anthropic
+, clarifai
 , cohere
 , openai
 , nlpcloud
@@ -35,6 +36,7 @@
 , faiss
 , spacy
 , nltk
+, wikipedia
 , beautifulsoup4
 , tiktoken
 , jinja2
@@ -44,6 +46,7 @@
 , google-api-python-client
 , pypdf
 , networkx
+, pgvector
 , psycopg2
 , boto3
 , pyowm
@@ -77,7 +80,7 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.0.216";
+  version = "0.0.229";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -86,7 +89,7 @@ buildPythonPackage rec {
     owner = "hwchase17";
     repo = "langchain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-g01EMquASxXl9drLhKtTwG9+gSa17aBq0c8UXcErCjI=";
+    hash = "sha256-9hPF+0bEcFGH2oop3e513kBp6UeUEBlPXD+2pZ4dCi0=";
   };
 
   postPatch = ''
@@ -123,6 +126,7 @@ buildPythonPackage rec {
   passthru.optional-dependencies = {
     llms = [
       anthropic
+      clarifai
       cohere
       openai
       nlpcloud
@@ -139,6 +143,9 @@ buildPythonPackage rec {
     ];
     text_helpers = [
       chardet
+    ];
+    clarifai = [
+      clarifai
     ];
     cohere = [
       cohere
@@ -157,6 +164,7 @@ buildPythonPackage rec {
     ];
     all = [
       anthropic
+      clarifai
       cohere
       openai
       nlpcloud
@@ -171,7 +179,7 @@ buildPythonPackage rec {
       transformers
       spacy
       nltk
-      # wikipedia
+      wikipedia
       beautifulsoup4
       tiktoken
       torch
@@ -189,7 +197,7 @@ buildPythonPackage rec {
       # nomic
       # aleph-alpha-client
       # deeplake
-      # pgvector
+      pgvector
       psycopg2
       boto3
       pyowm
@@ -222,10 +230,6 @@ buildPythonPackage rec {
       langchainplus-sdk
     ];
   };
-
-  pythonRelaxDeps = [
-    "langchainplus-sdk"
-  ];
 
   nativeCheckInputs = [
     pytestCheckHook

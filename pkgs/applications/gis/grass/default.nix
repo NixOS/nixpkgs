@@ -1,10 +1,38 @@
-{ lib, stdenv, fetchFromGitHub, flex, bison, pkg-config, zlib, libtiff, libpng, fftw
-, cairo, readline, ffmpeg, makeWrapper, wxGTK32, libiconv, libxml2, netcdf, blas
-, proj, gdal, geos, sqlite, postgresql, libmysqlclient, python3Packages, proj-datumgrid
-, zstd, pdal, wrapGAppsHook
+{ lib
+, stdenv
+, callPackage
+, fetchFromGitHub
+, makeWrapper
+, wrapGAppsHook
+
+, bison
+, blas
+, cairo
+, ffmpeg
+, fftw
+, flex
+, gdal
+, geos
+, libiconv
+, libmysqlclient
+, libpng
+, libtiff
+, libxml2
+, netcdf
+, pdal
+, pkg-config
+, postgresql
+, proj
+, proj-datumgrid
+, python3Packages
+, readline
+, sqlite
+, wxGTK32
+, zlib
+, zstd
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "grass";
   version = "8.3.0";
 
@@ -16,22 +44,39 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkg-config bison flex makeWrapper wrapGAppsHook
+    makeWrapper
+    wrapGAppsHook
+
+    bison
+    flex
     gdal # for `gdal-config`
     geos # for `geos-config`
-    netcdf # for `nc-config`
     libmysqlclient # for `mysql_config`
+    netcdf # for `nc-config`
+    pkg-config
   ] ++ (with python3Packages; [ python-dateutil numpy wxPython_4_2 ]);
 
   buildInputs = [
-    cairo zlib proj libtiff libpng libxml2 fftw sqlite
-    readline ffmpeg postgresql blas wxGTK32
-    proj-datumgrid zstd
+    blas
+    cairo
+    ffmpeg
+    fftw
     gdal
     geos
-    netcdf
     libmysqlclient
+    libpng
+    libtiff
+    libxml2
+    netcdf
     pdal
+    postgresql
+    proj
+    proj-datumgrid
+    readline
+    sqlite
+    wxGTK32
+    zlib
+    zstd
   ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   strictDeps = true;
@@ -46,24 +91,24 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-proj-share=${proj}/share/proj"
-    "--with-proj-includes=${proj.dev}/include"
-    "--with-proj-libs=${proj}/lib"
-    "--without-opengl"
-    "--with-readline"
-    "--with-wxwidgets"
-    "--with-netcdf"
+    "--with-blas"
+    "--with-fftw"
     "--with-geos"
-    "--with-postgres"
-    "--with-postgres-libs=${postgresql.lib}/lib/"
-    # it complains about missing libmysqld but doesn't really seem to need it
+    # It complains about missing libmysqld but doesn't really seem to need it
     "--with-mysql"
     "--with-mysql-includes=${lib.getDev libmysqlclient}/include/mysql"
     "--with-mysql-libs=${libmysqlclient}/lib/mysql"
-    "--with-blas"
-    "--with-zstd"
-    "--with-fftw"
+    "--with-netcdf"
+    "--with-postgres"
+    "--with-postgres-libs=${postgresql.lib}/lib/"
+    "--with-proj-includes=${proj.dev}/include"
+    "--with-proj-libs=${proj}/lib"
+    "--with-proj-share=${proj}/share/proj"
     "--with-pthread"
+    "--with-readline"
+    "--with-wxwidgets"
+    "--with-zstd"
+    "--without-opengl"
   ] ++ lib.optionals stdenv.isLinux [
     "--with-pdal"
   ] ++ lib.optionals stdenv.isDarwin [
@@ -96,11 +141,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.tests = {
+    grass = callPackage ./tests.nix { grass = finalAttrs.finalPackage; };
+  };
+
   meta = with lib; {
-    homepage = "https://grass.osgeo.org/";
     description = "GIS software suite used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization";
+    homepage = "https://grass.osgeo.org/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; teams.geospatial.members ++ [ mpickering ];
     platforms = platforms.all;
   };
-}
+})

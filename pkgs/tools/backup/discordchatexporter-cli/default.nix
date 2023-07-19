@@ -1,7 +1,6 @@
 { lib
 , buildDotnetModule
 , fetchFromGitHub
-, dotnetCorePackages
 , testers
 , discordchatexporter-cli
 }:

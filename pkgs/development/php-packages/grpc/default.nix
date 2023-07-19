@@ -1,20 +1,23 @@
-{ buildPecl, zlib, lib }:
+{ buildPecl
+, zlib
+, lib
+}:
 
 buildPecl {
   pname = "grpc";
+  version = "1.56.0";
 
-  version = "1.50.0";
-  sha256 = "sha256-Lgvrw1HZywfvHTaF88T5dtKXu/lGR5xeS+TsqqNQCSc=";
+  sha256 = "sha256-uzxYMUzExMBDtwv3FipOuuUHg0v1wqAUtn69jXAQnf4=";
 
   doCheck = true;
   checkTarget = "test";
 
   nativeBuildInputs = [ zlib ];
 
-  meta = with lib; {
+  meta = {
     description = "A high performance, open source, general RPC framework that puts mobile and HTTP/2 first.";
-    license = licenses.asl20;
     homepage = "https://github.com/grpc/grpc/tree/master/src/php/ext/grpc";
-    maintainers = teams.php.members;
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.php.members;
   };
 }

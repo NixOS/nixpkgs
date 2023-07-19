@@ -69,7 +69,7 @@ in
       #dialout = 27; # unused
       polkituser = 28;
       #utmp = 29; # unused
-      # ddclient = 30; # converted to DynamicUser = true
+      # ddclient = 30; # software removed
       davfs2 = 31;
       disnix = 33;
       osgi = 34;
@@ -394,7 +394,7 @@ in
       dialout = 27;
       #polkituser = 28; # currently unused, polkitd doesn't need a group
       utmp = 29;
-      # ddclient = 30; # converted to DynamicUser = true
+      # ddclient = 30; # software removed
       davfs2 = 31;
       disnix = 33;
       osgi = 34;

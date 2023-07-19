@@ -7,7 +7,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "tenox7";
     repo = pname;
-    rev = "${version}";
+    rev = version;
     sha256 = "sha256-g1zn/CBpLv0oNhp32njeNhhli8aTCECgh92+zn5v+4U=";
   };
 

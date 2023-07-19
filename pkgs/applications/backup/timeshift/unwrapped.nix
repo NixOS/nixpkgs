@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "timeshift";
-  version = "23.06.2";
+  version = "23.07.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "timeshift";
     rev = version;
-    sha256 = "epj0oaV+4lebRxcj6MQ2+lJ3juv9JZ+2UPLRc6UisX4=";
+    sha256 = "RnArZTzvH+mdT7zAHTRem8+Z8CFjWVvd3p/HwZC/v+U=";
   };
 
   patches = [
@@ -31,17 +31,12 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace ./files/meson.build \
-      --replace "/etc/timeshift" "$out/etc/timeshift"
     while IFS="" read -r -d $'\0' FILE; do
       substituteInPlace "$FILE" \
         --replace "/sbin/blkid" "${util-linux}/bin/blkid"
     done < <(find ./src -mindepth 1 -name "*.vala" -type f -print0)
     substituteInPlace ./src/Utility/IconManager.vala \
       --replace "/usr/share" "$out/share"
-    substituteInPlace ./src/Core/Main.vala \
-      --replace "/etc/timeshift/default.json" "$out/etc/timeshift/default.json" \
-      --replace "file_copy(app_conf_path_default, app_conf_path);" "if (!dir_exists(file_parent(app_conf_path))){dir_create(file_parent(app_conf_path));};file_copy(app_conf_path_default, app_conf_path);"
   '';
 
   nativeBuildInputs = [

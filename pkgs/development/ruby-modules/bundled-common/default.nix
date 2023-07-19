@@ -56,9 +56,9 @@ let
   else
     let
       gem = gems.${pname};
-      version = gem.version;
+      suffix = gem.suffix;
     in
-      "${pname}-${version}";
+      "${pname}-${suffix}";
 
   pname' = if pname != null then
     pname
@@ -118,6 +118,7 @@ let
 
     passthru = rec {
       inherit ruby bundler gems confFiles envPaths;
+      inherit (gems.${pname}) gemType;
 
       wrappedRuby = stdenv.mkDerivation {
         name = "wrapped-ruby-${pname'}";

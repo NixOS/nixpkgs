@@ -7,7 +7,6 @@ let
   cfg = config.services.nexus;
 
 in
-
 {
   options = {
     services.nexus = {
@@ -18,6 +17,16 @@ in
         default = pkgs.nexus;
         defaultText = literalExpression "pkgs.nexus";
         description = lib.mdDoc "Package which runs Nexus3";
+      };
+
+      jdkPackage = mkOption {
+        type = types.package;
+        default = pkgs.openjdk8;
+        defaultText = literalExample "pkgs.openjdk8";
+        example = literalExample "pkgs.openjdk8";
+        description = ''
+          The JDK package to use.
+        '';
       };
 
       user = mkOption {
@@ -110,7 +119,7 @@ in
       createHome = true;
     };
 
-    users.groups.${cfg.group} = {};
+    users.groups.${cfg.group} = { };
 
     systemd.services.nexus = {
       description = "Sonatype Nexus3";
@@ -123,6 +132,7 @@ in
         NEXUS_USER = cfg.user;
         NEXUS_HOME = cfg.home;
 
+        INSTALL4J_JAVA_HOME = "${cfg.jdkPackage}";
         VM_OPTS_FILE = pkgs.writeText "nexus.vmoptions" cfg.jvmOpts;
       };
 

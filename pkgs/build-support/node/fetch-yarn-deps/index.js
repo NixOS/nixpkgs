@@ -78,12 +78,21 @@ const isGitUrl = pattern => {
 }
 
 const downloadPkg = (pkg, verbose) => {
+	const [ name, spec ] = pkg.key.split('@', 2);
+	if (spec.startsWith('file:')) {
+		console.info(`ignoring relative file:path dependency "${spec}"`)
+		return
+	}
+
 	const [ url, hash ] = pkg.resolved.split('#')
 	if (verbose) console.log('downloading ' + url)
 	const fileName = urlToName(url)
 	if (url.startsWith('https://codeload.github.com/') && url.includes('/tar.gz/')) {
 		const s = url.split('/')
-		downloadGit(fileName, `https://github.com/${s[3]}/${s[4]}.git`, s[6])
+		return downloadGit(fileName, `https://github.com/${s[3]}/${s[4]}.git`, s[s.length-1])
+	} else if (url.startsWith('https://github.com/') && url.endsWith('.tar.gz')) {
+		const s = url.split('/')
+		return downloadGit(fileName, `https://github.com/${s[3]}/${s[4]}.git`, s[s.length-1].replace(/.tar.gz$/, ''))
 	} else if (isGitUrl(url)) {
 		return downloadGit(fileName, url.replace(/^git\+/, ''), hash)
 	} else if (url.startsWith('https://')) {

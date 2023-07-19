@@ -1,3 +1,28 @@
+lib:
+{
+  # git tag
+  k3sVersion,
+  # commit hash
+  k3sCommit,
+  k3sRepoSha256 ? lib.fakeHash,
+  k3sVendorSha256 ? lib.fakeHash,
+  # taken from ./scripts/version.sh VERSION_ROOT https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L47
+  k3sRootVersion,
+  k3sRootSha256 ? lib.fakeHash,
+  # Based on the traefik charts here: https://github.com/k3s-io/k3s/blob/d71ab6317e22dd34673faa307a412a37a16767f6/scripts/download#L29-L32
+  # see also https://github.com/k3s-io/k3s/blob/d71ab6317e22dd34673faa307a412a37a16767f6/manifests/traefik.yaml#L8
+  chartVersions,
+  # taken from ./scripts/version.sh VERSION_CNIPLUGINS https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L45
+  k3sCNIVersion,
+  k3sCNISha256 ? lib.fakeHash,
+  # taken from ./scripts/version.sh VERSION_CONTAINERD
+  containerdVersion,
+  containerdSha256 ? lib.fakeHash,
+  # run `grep github.com/kubernetes-sigs/cri-tools go.mod | head -n1 | awk '{print $4}'` in the k3s repo at the tag
+  criCtlVersion,
+  updateScript ? null,
+}:
+
 # builder.nix contains a "builder" expression that, given k3s version and hash
 # variables, creates a package for that version.
 # Due to variance in k3s's build process, this builder only works for k3s 1.26+
@@ -32,30 +57,6 @@
 , pkgsBuildBuild
 }:
 
-{
-  # git tag
-  k3sVersion,
-  # commit hash
-  k3sCommit,
-  k3sRepoSha256 ? lib.fakeHash,
-  k3sVendorSha256 ? lib.fakeHash,
-  # taken from ./scripts/version.sh VERSION_ROOT https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L47
-  k3sRootVersion,
-  k3sRootSha256 ? lib.fakeHash,
-  # Based on the traefik charts here: https://github.com/k3s-io/k3s/blob/d71ab6317e22dd34673faa307a412a37a16767f6/scripts/download#L29-L32
-  # see also https://github.com/k3s-io/k3s/blob/d71ab6317e22dd34673faa307a412a37a16767f6/manifests/traefik.yaml#L8
-  chartVersions,
-  # taken from ./scripts/version.sh VERSION_CNIPLUGINS https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L45
-  k3sCNIVersion,
-  k3sCNISha256 ? lib.fakeHash,
-  # taken from ./scripts/version.sh VERSION_CONTAINERD
-  containerdVersion,
-  containerdSha256 ? lib.fakeHash,
-  # run `grep github.com/kubernetes-sigs/cri-tools go.mod | head -n1 | awk '{print $4}'` in the k3s repo at the tag
-  criCtlVersion,
-  updateScript ? null,
-}:
-
 # k3s is a kinda weird derivation. One of the main points of k3s is the
 # simplicity of it being one binary that can perform several tasks.
 # However, when you have a good package manager (like nix), that doesn't
@@ -83,6 +84,10 @@ let
     homepage = "https://k3s.io";
     maintainers = with maintainers; [ euank mic92 yajo ];
     platforms = platforms.linux;
+
+    # resolves collisions with other installations of kubectl, crictl, ctr
+    # prefer non-k3s versions
+    priority = 5;
   };
 
   # https://github.com/k3s-io/k3s/blob/5fb370e53e0014dc96183b8ecb2c25a61e891e76/scripts/build#L19-L40
@@ -185,21 +190,24 @@ let
     subPackages = [ "cmd/server" ];
     ldflags = versionldflags;
 
-    tags = [ "libsqlite3" "linux" ];
+    tags = [ "ctrd" "libsqlite3" "linux" ];
 
     # create the multicall symlinks for k3s
     postInstall = ''
       mv $out/bin/server $out/bin/k3s
       pushd $out
       # taken verbatim from https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/build#L105-L113
-      ln -s k3s ./bin/k3s-agent
-      ln -s k3s ./bin/k3s-server
-      ln -s k3s ./bin/k3s-etcd-snapshot
-      ln -s k3s ./bin/k3s-secrets-encrypt
-      ln -s k3s ./bin/k3s-certificate
-      ln -s k3s ./bin/kubectl
+      ln -s k3s ./bin/containerd
       ln -s k3s ./bin/crictl
       ln -s k3s ./bin/ctr
+      ln -s k3s ./bin/k3s-agent
+      ln -s k3s ./bin/k3s-certificate
+      ln -s k3s ./bin/k3s-completion
+      ln -s k3s ./bin/k3s-etcd-snapshot
+      ln -s k3s ./bin/k3s-secrets-encrypt
+      ln -s k3s ./bin/k3s-server
+      ln -s k3s ./bin/k3s-token
+      ln -s k3s ./bin/kubectl
       popd
     '';
 
@@ -207,6 +215,8 @@ let
       description = "The various binaries that get packaged into the final k3s binary";
     };
   };
+  # Only used for the shim since
+  # https://github.com/k3s-io/k3s/blob/v1.27.2%2Bk3s1/scripts/build#L153
   k3sContainerd = buildGoModule {
     pname = "k3s-containerd";
     version = containerdVersion;
@@ -218,7 +228,7 @@ let
     };
     vendorSha256 = null;
     buildInputs = [ btrfs-progs ];
-    subPackages = [ "cmd/containerd" "cmd/containerd-shim-runc-v2" ];
+    subPackages = [ "cmd/containerd-shim-runc-v2" ];
     ldflags = versionldflags;
   };
 in
@@ -226,6 +236,7 @@ buildGoModule rec {
   pname = "k3s";
   version = k3sVersion;
 
+  tags = [ "libsqlite3" "linux" "ctrd" ];
   src = k3sRepo;
   vendorSha256 = k3sVendorSha256;
 
@@ -262,6 +273,7 @@ buildGoModule rec {
     ethtool
     util-linux # kubelet wants 'nsenter' from util-linux: https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-705994388
     conntrack-tools
+    runc
   ];
 
   buildInputs = k3sRuntimeDeps;
@@ -278,7 +290,6 @@ buildGoModule rec {
     k3sCNIPlugins
     k3sContainerd
     k3sServer
-    runc
   ];
 
   # We override most of buildPhase due to peculiarities in k3s's build.
@@ -292,9 +303,8 @@ buildGoModule rec {
     # copy needed 'go generate' inputs into place
     mkdir -p ./bin/aux
     rsync -a --no-perms ${k3sServer}/bin/ ./bin/
-    ln -vsf ${runc}/bin/runc ./bin/runc
     ln -vsf ${k3sCNIPlugins}/bin/cni ./bin/cni
-    ln -vsf ${k3sContainerd}/bin/* ./bin/
+    ln -vsf ${k3sContainerd}/bin/containerd-shim-runc-v2 ./bin
     rsync -a --no-perms --chmod u=rwX ${k3sRoot}/etc/ ./etc/
     mkdir -p ./build/static/charts
 
@@ -319,6 +329,9 @@ buildGoModule rec {
     wrapProgram $out/bin/k3s \
       --prefix PATH : ${lib.makeBinPath k3sRuntimeDeps} \
       --prefix PATH : "$out/bin"
+    ln -s $out/bin/k3s $out/bin/kubectl
+    ln -s $out/bin/k3s $out/bin/crictl
+    ln -s $out/bin/k3s $out/bin/ctr
   '';
 
   doInstallCheck = true;

@@ -55,11 +55,11 @@
 
 stdenv.mkDerivation rec {
   pname = "SDL2";
-  version = "2.28.0";
+  version = "2.28.1";
 
   src = fetchurl {
     url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
-    sha256 = "sha256-0hWuRUHmnWKJU3EUls17DouNXI2BHVsPmP3H/RQimYo=";
+    sha256 = "sha256-SXfOulwAVNvmwvEUZBrO1DzjvytB6mS2o3LWuhKcsV0=";
   };
   dontDisableStatic = if withStatic then 1 else 0;
   outputs = [ "out" "dev" ];

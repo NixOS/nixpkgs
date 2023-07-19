@@ -63,6 +63,9 @@ let
       optionIdPrefix = "test-opt-";
     };
 
+  testDriverMachineDocstrings = pkgs.callPackage
+    ../../../nixos/lib/test-driver/nixos-test-driver-docstrings.nix {};
+
   prepareManualFromMD = ''
     cp -r --no-preserve=all $inputs/* .
 
@@ -80,6 +83,8 @@ let
       --replace \
         '@NIXOS_TEST_OPTIONS_JSON@' \
         ${testOptionsDoc.optionsJSON}/share/doc/nixos/options.json
+    sed -e '/@PYTHON_MACHINE_METHODS@/ {' -e 'r ${testDriverMachineDocstrings}/machine-methods.md' -e 'd' -e '}' \
+      -i ./development/writing-nixos-tests.section.md
   '';
 
 in rec {

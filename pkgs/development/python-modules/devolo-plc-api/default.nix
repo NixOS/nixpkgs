@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "devolo-plc-api";
-  version = "1.3.1";
+  version = "1.3.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "2Fake";
     repo = "devolo_plc_api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wJyBCQ9rk+UwjWhMIeqsIbMR8cXA9Xu+lmubJoOauEg=";
+    hash = "sha256-viOyxgFydPrTPFz6JsjJT6IiUIeoIwd+bcrAJfomDI8=";
   };
 
   postPatch = ''

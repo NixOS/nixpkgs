@@ -5,11 +5,13 @@
 , dataDir ? "/var/lib/snipe-it"
 , mariadb
 , nixosTests
+, php
+, phpPackages
 }:
 
 let
   package = (import ./composition.nix {
-    inherit pkgs;
+    inherit pkgs php phpPackages;
     inherit (stdenv.hostPlatform) system;
     noDev = true; # Disable development dependencies
   }).overrideAttrs (attrs : {
@@ -44,6 +46,7 @@ in package.override rec {
   };
 
   passthru.tests = nixosTests.snipe-it;
+  passthru.phpPackage = php;
 
   meta = with lib; {
     description = "A free open source IT asset/license management system";

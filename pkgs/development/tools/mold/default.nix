@@ -33,6 +33,10 @@ stdenv.mkDerivation rec {
     mimalloc
   ];
 
+  patches = [
+    ./fix-debug-strip.patch # fix --debug-strip; https://github.com/rui314/mold/pull/1038
+  ];
+
   postPatch = ''
     sed -i CMakeLists.txt -e '/.*set(DEST\ .*/d'
   '';

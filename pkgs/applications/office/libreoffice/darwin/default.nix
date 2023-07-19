@@ -9,21 +9,21 @@
 let
   appName = "LibreOffice.app";
   scriptName = "soffice";
-  version = "7.4.3";
+  version = "7.4.7";
 
   dist = {
     aarch64-darwin = rec {
       arch = "aarch64";
       archSuffix = arch;
       url = "https://download.documentfoundation.org/libreoffice/stable/${version}/mac/${arch}/LibreOffice_${version}_MacOS_${archSuffix}.dmg";
-      sha256 = "cf95f9ecd4451d27e8304cea3ba116675267bdf75f08fbb60e0d8917f86edc04";
+      sha256 = "d02513c6a58f35cb0da6880f76be3f4b3a620daaa9ce5c244d6efc40ed26a273";
     };
 
     x86_64-darwin = rec {
       arch = "x86_64";
       archSuffix = "x86-64";
       url = "https://download.documentfoundation.org/libreoffice/stable/${version}/mac/${arch}/LibreOffice_${version}_MacOS_${archSuffix}.dmg";
-      sha256 = "fe569ba23bb74eb3e86974537dd80e504debe5fd8526a00edbad6be4da18986a";
+      sha256 = "c8ae0cbaa043b30718a4ac0ca93369e887fe6a46bb3618cea054bffaafd8b8e2";
     };
   };
 in

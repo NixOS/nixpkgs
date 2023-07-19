@@ -2,26 +2,38 @@
 
 buildGoModule rec {
   pname = "rke2";
-  version = "1.27.2+rke2r1";
+  version = "1.27.3+rke2r1";
 
   src = fetchFromGitHub {
     owner = "rancher";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-jzm2tYwsomLifAfmb0w1+/FpCgtOk+O8DRmy1OgzfmE=";
+    hash = "sha256-M/3F97iNeXdMMhs0eoPODeBC6Jp+yo/PwlPiG28SfYU=";
   };
 
-  vendorHash = "sha256-VVc1IgeR+LWEexTyIXtCcF6TtdDzsgP4U4kqArIKdU4=";
+  vendorHash = "sha256-7Za8PQr22kvZBvoYRVbI4bXUvGWkfILQC+kAmw9ZCro=";
 
-  subPackages = [ "." ];
+  postPatch = ''
+    # Patch the build scripts so they work in the Nix build environment.
+    patchShebangs ./scripts
 
-  ldflags = [ "-s" "-w" "-X github.com/k3s-io/k3s/pkg/version.Version=v${version}" ];
+    # Disable the static build as it breaks.
+    sed -e 's/STATIC_FLAGS=.*/STATIC_FLAGS=/g' -i scripts/build-binary
+  '';
+
+  buildPhase = ''
+    DRONE_TAG="v${version}" ./scripts/build-binary
+  '';
+
+  installPhase = ''
+    install -D ./bin/rke2 $out/bin/rke2
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/rancher/rke2";
     description = "RKE2, also known as RKE Government, is Rancher's next-generation Kubernetes distribution.";
     changelog = "https://github.com/rancher/rke2/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ zygot ];
+    maintainers = with maintainers; [ zimbatm zygot ];
   };
 }

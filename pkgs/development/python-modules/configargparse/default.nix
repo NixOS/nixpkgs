@@ -4,33 +4,43 @@
 , mock
 , pytestCheckHook
 , pyyaml
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "configargparse";
-  version = "1.5.3";
-
+  version = "1.5.5";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bw2";
     repo = "ConfigArgParse";
-    rev = "v${version}";
-    sha256 = "1dsai4bilkp2biy9swfdx2z0k4akw4lpvx12flmk00r80hzgbglz";
+    rev = "refs/tags/${version}";
+    hash = "sha256-nhsbgyoIsYyrW20j4X4RosMJU/B+j7Z5YbebmZCLW4I=";
+  };
+
+  passthru.optional-dependencies = {
+    yaml = [
+      pyyaml
+    ];
   };
 
   nativeCheckInputs = [
-    mock
     pytestCheckHook
-    pyyaml
-  ];
+    mock
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [ "configargparse" ];
+  pythonImportsCheck = [
+    "configargparse"
+  ];
 
   meta = with lib; {
     description = "A drop-in replacement for argparse";
     homepage = "https://github.com/bw2/ConfigArgParse";
+    changelog = "https://github.com/bw2/ConfigArgParse/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = [ maintainers.willibutz ];
+    maintainers = with maintainers; [ willibutz ];
   };
 }

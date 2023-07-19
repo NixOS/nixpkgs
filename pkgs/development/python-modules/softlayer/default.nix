@@ -49,6 +49,8 @@ buildPythonPackage rec {
     urllib3
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     mock
     pytestCheckHook

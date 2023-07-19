@@ -16,11 +16,10 @@
 , stdenv
 , fetchFromGitea
 , buildNpmPackage
-, writeShellApplication
 }:
 
 let
-  frontend = buildNpmPackage rec {
+  frontend = buildNpmPackage {
     pname = "forgejo-frontend";
     inherit (forgejo) src version;
 
@@ -39,17 +38,17 @@ let
 in
 buildGoModule rec {
   pname = "forgejo";
-  version = "1.19.3-0";
+  version = "1.19.4-0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "forgejo";
     repo = "forgejo";
     rev = "v${version}";
-    hash = "sha256-0T26EsU5lJ+Rxy/jSDn8nTk5IdHO8oK3LvN7tPArPgs=";
+    hash = "sha256-pTcnST8A4gADPBkNago9uwRFEmTx8vNONL/Emer4xLI=";
   };
 
-  vendorHash = "sha256-bnLcHmwOh/fw6ecgsndX2BmVf11hJWllE+f2J8YSzec=";
+  vendorHash = "sha256-LKxhNbSIRaP4EGWX6mE26G9CWfoFTrPRjrL4ShpRHWo=";
 
   subPackages = [ "." ];
 
@@ -111,12 +110,12 @@ buildGoModule rec {
     tests = nixosTests.forgejo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "A self-hosted lightweight software forge";
     homepage = "https://forgejo.org";
-    changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ emilylange urandom ];
+    changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/${src.rev}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emilylange urandom bendlas ];
     broken = stdenv.isDarwin;
     mainProgram = "gitea";
   };

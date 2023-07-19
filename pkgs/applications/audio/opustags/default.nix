@@ -3,22 +3,25 @@
 
 stdenv.mkDerivation rec {
   pname = "opustags";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "fmang";
     repo = "opustags";
     rev = version;
-    sha256 = "sha256-qxtTJ4Hl2ccL+rhONeoOfV6ZyJaWaVDPMsXYJkXCWkY=";
+    sha256 = "sha256-cRDyE6/nv8g0OWxZ/AqfwVrk3cSIycvbjvQm9CyQK7g=";
   };
+
+
+  nativeBuildInputs = [ cmake pkg-config ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   buildInputs = [ libogg ];
 
-  nativeBuildInputs = [ cmake pkg-config ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
-
   doCheck = true;
 
-  nativeCheckInputs = [ ffmpeg glibcLocales perl ] ++ (with perlPackages; [ ListMoreUtils ]);
+  nativeCheckInputs = [ ffmpeg glibcLocales perl ]
+    ++ (with perlPackages; [ ListMoreUtils TestDeep ]);
 
   checkPhase = ''
     export LANG="en_US.UTF-8"

@@ -8,13 +8,16 @@
 , nix-update-script
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: let
+  inherit (finalAttrs) pname version src appimageContents;
+
+in {
   pname = "logseq";
-  version = "0.9.9";
+  version = "0.9.10";
 
   src = fetchurl {
     url = "https://github.com/logseq/logseq/releases/download/${version}/logseq-linux-x64-${version}.AppImage";
-    hash = "sha256-DwxRhC8HKJnu1F9mfU3+UdpTjtKLhxs4LJY9A0cZvBo=";
+    hash = "sha256-en8ws0qdMY5j1o8oTkKcIHHQV+kCuQZzQbdFU97qAQE=";
     name = "${pname}-${version}.AppImage";
   };
 
@@ -69,4 +72,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

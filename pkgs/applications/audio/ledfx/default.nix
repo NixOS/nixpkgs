@@ -15,7 +15,6 @@ python3.pkgs.buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace '"openrgb-python~=0.2.10",' "" \
       --replace "'rpi-ws281x>=4.3.0; platform_system == \"Linux\"'," "" \
       --replace '"sentry-sdk==1.14.0",' "" \
       --replace "~=" ">="
@@ -31,7 +30,7 @@ python3.pkgs.buildPythonPackage rec {
     icmplib
     multidict
     numpy
-    # openrgb-python # not packaged
+    openrgb-python
     paho-mqtt
     pillow
     psutil

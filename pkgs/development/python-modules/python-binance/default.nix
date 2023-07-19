@@ -3,6 +3,8 @@
 , buildPythonPackage
 , dateparser
 , fetchFromGitHub
+, fetchpatch
+, pycryptodome
 , pytestCheckHook
 , pythonOlder
 , requests
@@ -26,10 +28,19 @@ buildPythonPackage rec {
     hash = "sha256-e88INUEkjOSVOD0KSs9LmstuQ7dQZdJk8K6VqFEusww=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "fix-unable-to-determine-version-error.patch";
+      url = "https://github.com/sammchardy/python-binance/commit/1b9dd4853cafccf6cdacc13bb64a18632a79a6f1.patch";
+      hash = "sha256-6KRHm2cZRcdD6qMdRAwlea4qLZ1/1YFzZAQ7Ph4XMCs=";
+    })
+  ];
+
   propagatedBuildInputs = [
     aiohttp
     dateparser
     requests
+    pycryptodome
     six
     ujson
     websockets

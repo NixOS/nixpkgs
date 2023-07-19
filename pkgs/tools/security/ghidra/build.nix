@@ -1,6 +1,4 @@
 { stdenv
-, fetchzip
-, fetchurl
 , fetchFromGitHub
 , lib
 , gradle_7
@@ -9,11 +7,9 @@
 , openjdk17
 , unzip
 , makeDesktopItem
-, autoPatchelfHook
 , icoutils
 , xcbuild
 , protobuf
-, libredirect
 }:
 
 let
@@ -116,7 +112,7 @@ HERE
     outputHash = "sha256-HveS3f8XHpJqefc4djYmnYfd01H2OBFK5PLNOsHAqlc=";
   };
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   inherit pname version src;
 
   nativeBuildInputs = [

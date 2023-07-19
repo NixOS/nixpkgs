@@ -4,13 +4,13 @@
 
 buildGoModule rec {
   pname = "orbiton";
-  version = "2.62.3";
+  version = "2.62.6";
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "orbiton";
     rev = "v${version}";
-    hash = "sha256-/zIAF3LqOeIN91o33vntkBtQnESJhEDBljGPbMZvelc=";
+    hash = "sha256-wSefvbpqxEbzgReOBPcot+VeXazwK/NPzh+wmmYhrls=";
   };
 
   vendorHash = null;

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kondo";
-  version = "0.6";
+  version = "0.7";
 
   src = fetchFromGitHub {
     owner = "tbillington";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-f0eRM4U2FwMGjmQKb3tjX2TRv1hN//FkoA2h6WmFOQk=";
+    sha256 = "sha256-m00zRNnryty96+pmZ2/ZFk61vy7b0yiWpomWzAHUAMk=";
   };
 
-  cargoHash = "sha256-DouQN9Lo/CoqZZD3HuO1+Xzvc2yL5l157TeAi+bmfrE=";
+  cargoHash = "sha256-hG4bvcGYNwdNX9Wsdw30i3a3Ttxud+quNZpolgVKXQE=";
 
   meta = with lib; {
     description = "Save disk space by cleaning unneeded files from software projects";

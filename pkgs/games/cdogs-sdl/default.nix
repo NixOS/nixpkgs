@@ -50,6 +50,9 @@ stdenv.mkDerivation rec {
     protobuf
   ];
 
+  # inlining failed in call to 'tinydir_open': --param max-inline-insns-single limit reached
+  hardeningDisable = [ "fortify3" ];
+
   meta = with lib; {
     homepage = "https://cxong.github.io/cdogs-sdl";
     description = "Open source classic overhead run-and-gun game";

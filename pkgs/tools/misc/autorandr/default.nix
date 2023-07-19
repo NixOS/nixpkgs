@@ -1,19 +1,26 @@
 { lib
 , python3
-, python3Packages
 , fetchFromGitHub
 , systemd
 , xrandr
 , installShellFiles
-, desktop-file-utils }:
+, desktop-file-utils
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "autorandr";
-  version = "1.13.3";
+  version = "1.14";
   format = "other";
 
+  src = fetchFromGitHub {
+    owner = "phillipberndt";
+    repo = "autorandr";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Ru3nQF0DB98rKSew6QtxAZQEB/9nVlIelNX3M7bNYHk=";
+  };
+
   nativeBuildInputs = [ installShellFiles desktop-file-utils ];
-  propagatedBuildInputs = [ python3Packages.packaging ];
+  propagatedBuildInputs = with python3.pkgs; [ packaging ];
 
   buildPhase = ''
     substituteInPlace autorandr.py \
@@ -55,13 +62,6 @@ python3.pkgs.buildPythonApplication rec {
 
     runHook postInstall
   '';
-
-  src = fetchFromGitHub {
-    owner = "phillipberndt";
-    repo = "autorandr";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-3zWYOOVYpj+s7VKagnbI55MNshM5WtbCFD6q9tRCzes=";
-  };
 
   meta = with lib; {
     homepage = "https://github.com/phillipberndt/autorandr/";

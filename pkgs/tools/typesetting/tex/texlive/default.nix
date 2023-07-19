@@ -34,40 +34,30 @@ let
   tl = let
     orig = removeAttrs tlpdb [ "00texlive.config" ];
 
-    overridden = orig // {
+    overridden = lib.recursiveUpdate orig {
       # overrides of texlive.tlpdb
 
       # only *.po for tlmgr
-      texlive-msg-translations = builtins.removeAttrs orig.texlive-msg-translations [ "hasTlpkg" ];
+      texlive-msg-translations.hasTlpkg = false;
 
-      xdvi = orig.xdvi // { # it seems to need it to transform fonts
-        deps = (orig.xdvi.deps or []) ++  [ "metafont" ];
-      };
+      # it seems to need it to transform fonts
+      xdvi.deps = (orig.xdvi.deps or []) ++  [ "metafont" ];
 
-      arabi-add = orig.arabi-add // {
-        # tlpdb lists license as "unknown", but the README says lppl13: http://mirrors.ctan.org/language/arabic/arabi-add/README
-        license = [  "lppl13c" ];
-      };
+      # tlpdb lists license as "unknown", but the README says lppl13: http://mirrors.ctan.org/language/arabic/arabi-add/README
+      arabi-add.license = [  "lppl13c" ];
 
       # TODO: remove this when updating to texlive-2023, npp-for-context is no longer in texlive
-      npp-for-context = orig.npp-for-context // {
-        # tlpdb lists license as "noinfo", but it's gpl3: https://github.com/luigiScarso/context-npp
-        license = [  "gpl3Only" ];
-      };
+      # tlpdb lists license as "noinfo", but it's gpl3: https://github.com/luigiScarso/context-npp
+      npp-for-context.license = [  "gpl3Only" ];
 
       # remove dependency-heavy packages from the basic collections
-      collection-basic = orig.collection-basic // {
-        deps = lib.filter (n: n != "metafont" && n != "xdvi") orig.collection-basic.deps;
-      };
-      # add them elsewhere so that collections cover all packages
-      collection-metapost = orig.collection-metapost // {
-        deps = orig.collection-metapost.deps ++ [ "metafont" ];
-      };
-      collection-plaingeneric = orig.collection-plaingeneric // {
-        deps = orig.collection-plaingeneric.deps ++ [ "xdvi" ];
-      };
+      collection-basic.deps = lib.subtractLists [ "metafont" "xdvi" ] orig.collection-basic.deps;
 
-      texdoc = orig.texdoc // {
+      # add them elsewhere so that collections cover all packages
+      collection-metapost.deps = orig.collection-metapost.deps ++ [ "metafont" ];
+      collection-plaingeneric.deps = orig.collection-plaingeneric.deps ++ [ "xdvi" ];
+
+      texdoc = {
         extraRevision = ".tlpdb${toString tlpdbVersion.revision}";
         extraVersion = "-tlpdb-${toString tlpdbVersion.revision}";
 

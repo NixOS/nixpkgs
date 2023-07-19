@@ -1,9 +1,12 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
+, pythonRelaxDepsHook
 , installShellFiles
 , ansible
 , cryptography
+, importlib-resources
 , jinja2
 , junit-xml
 , lxml
@@ -41,6 +44,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -64,7 +69,15 @@ buildPythonPackage rec {
     requests
     scp
     xmltodict
-  ] ++ lib.optional windowsSupport pywinrm;
+  ] ++ lib.optionals windowsSupport [
+    pywinrm
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-resources
+  ];
+
+  pythonRelaxDeps = lib.optionals (pythonOlder "3.10") [
+    "importlib-resources"
+  ];
 
   postInstall = ''
     installManPage docs/man/man1/*.1

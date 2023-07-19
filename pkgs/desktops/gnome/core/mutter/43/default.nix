@@ -51,13 +51,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "43.6";
+  version = "43.7";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    sha256 = "F1oiDSFv8Z8YLWeqc89eUaJVIL6bruaCAA4QRECkciU=";
+    sha256 = "NBrLmwNUyytflewz32aZtKAHaNydIi1rYAtW4kKGlmc=";
   };
 
   patches = [

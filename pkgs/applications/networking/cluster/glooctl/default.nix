@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "glooctl";
-  version = "1.14.9";
+  version = "1.14.12";
 
   src = fetchFromGitHub {
     owner = "solo-io";
     repo = "gloo";
     rev = "v${version}";
-    hash = "sha256-PJvr62slTW3IoauLtRH88BDMpf3qGOWADjj4L4wQBLo=";
+    hash = "sha256-0ZrR3y3bTXLCOgN+c96lEfNnT+GKXeEBHifM9jfWTBI=";
   };
 
   subPackages = [ "projects/gloo/cli/cmd" ];

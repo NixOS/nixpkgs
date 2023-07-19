@@ -18,12 +18,12 @@
 
 stdenv.mkDerivation rec {
   pname = "visualboyadvance-m";
-  version = "2.1.5";
+  version = "2.1.6";
   src = fetchFromGitHub {
     owner = "visualboyadvance-m";
     repo = "visualboyadvance-m";
     rev = "v${version}";
-    sha256 = "1sc3gdn7dqkipjsvlzchgd98mia9ic11169dw8v341vr9ppb1b6m";
+    sha256 = "1fph8phbswq6d9lgw1y1767wdp316w5hn5bws6h2dj75gvsqf221";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -41,13 +41,6 @@ stdenv.mkDerivation rec {
     zlib
     wxGTK32
     gtk3
-  ];
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/visualboyadvance-m/visualboyadvance-m/commit/1d7e8ae4edc53a3380dfea88329b8b8337db1c52.patch";
-      sha256 = "sha256-SV1waz2JSKiM6itwkqwlE3aOZCcOl8iyBr06tyYlefo=";
-    })
   ];
 
   cmakeFlags = [

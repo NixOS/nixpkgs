@@ -862,15 +862,22 @@ with self; {
 
   AppMusicChordPro = buildPerlPackage {
     pname = "App-Music-ChordPro";
-    version = "0.977";
+    version = "6.010";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JV/JV/App-Music-ChordPro-0.977.tar.gz";
-      hash = "sha256-EPOVabK2KSct2zQIUxdb0E3YTHEHLOqzcSW2xga58T0=";
+      url = "mirror://cpan/authors/id/J/JV/JV/App-Music-ChordPro-6.010.tar.gz";
+      hash = "sha256-SqTkbR2bWIMcU5gSRf2WW6s1ckHtJVPkxj/bBO9X4kM=";
     };
     buildInputs = [ PodParser ];
-    propagatedBuildInputs = [ AppPackager FileLoadLines IOString ImageInfo PDFAPI2 StringInterpolateNamed TextLayout ]
+    propagatedBuildInputs = [ AppPackager FileLoadLines FileHomeDir IOString ImageInfo PDFAPI2 StringInterpolateNamed TextLayout ]
       ++ lib.optionals (!stdenv.isDarwin) [ Wx ];
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+
+    # Delete tests that fail when version env var is set, see
+    # https://github.com/ChordPro/chordpro/issues/293
+    patchPhase = ''
+      rm t/320_subst.t t/321_subst.t t/322_subst.t
+    '';
+
     postInstall = lib.optionalString stdenv.isDarwin ''
       shortenPerlShebang $out/bin/chordpro
       rm $out/bin/wxchordpro # Wx not supported on darwin
@@ -3534,6 +3541,22 @@ with self; {
     };
   };
 
+  ClassRefresh = buildPerlPackage {
+    pname = "Class-Refresh";
+    version = "0.07";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DO/DOY/Class-Refresh-0.07.tar.gz";
+      hash = "sha256-47ADU1XLs1oq7j8iNojVeJRqenxXCs05iyjN2x/UvrM=";
+    };
+    buildInputs = [ TestFatal TestRequires ];
+    propagatedBuildInputs = [ ClassLoad ClassUnload DevelOverrideGlobalRequire TryTiny ];
+    meta = {
+      homepage = "http://metacpan.org/release/Class-Refresh";
+      description = "Refresh your classes during runtime";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ClassReturnValue = buildPerlPackage {
     pname = "Class-ReturnValue";
     version = "0.55";
@@ -3874,6 +3897,22 @@ with self; {
     };
     meta = {
       description = "Implements some sane defaults for Perl programs";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  CompilerLexer = buildPerlModule {
+    pname = "Compiler-Lexer";
+    version = "0.23";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GO/GOCCY/Compiler-Lexer-0.23.tar.gz";
+      hash = "sha256-YDHOSv67+k9JKidJSb57gjIxTpECOCjEOOR5gf8Kmds=";
+    };
+    nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
+    buildInputs = [ ModuleBuildXSUtil ];
+    meta = {
+      homepage = "https://github.com/goccy/p5-Compiler-Lexer";
+      description = "Lexical Analyzer for Perl5";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -7394,6 +7433,20 @@ with self; {
     };
   };
 
+  DevelOverrideGlobalRequire = buildPerlPackage {
+    pname = "Devel-OverrideGlobalRequire";
+    version = "0.001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Devel-OverrideGlobalRequire-0.001.tar.gz";
+      hash = "sha256-B5GJLeOuKSr0qU44LyHbHuiCEIdQMYUebqgsNBB4Xvk=";
+    };
+    meta = {
+      homepage = "https://metacpan.org/release/Devel-OverrideGlobalRequire";
+      description = "Override CORE::GLOBAL::require safely";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   DevelPartialDump = buildPerlPackage {
     pname = "Devel-PartialDump";
     version = "0.20";
@@ -8572,6 +8625,22 @@ with self; {
     };
   };
 
+  EvalSafe = buildPerlPackage rec {
+    pname = "Eval-Safe";
+    version = "0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MATHIAS/Eval-Safe/Eval-Safe-${version}.tar.gz";
+      hash = "sha256-VaUsIz4troYRP58Zs09hftz8hBb5vs5nEme9GBGxIRE=";
+    };
+    outputs = [ "out" ];
+    meta = with lib; {
+      description = "Simplified safe evaluation of Perl code";
+      homepage = "https://github.com/mkende/perl-eval-safe";
+      license = licenses.mit;
+      maintainers = with maintainers; [ figsoda ];
+    };
+  };
+
   ExcelWriterXLSX = buildPerlPackage {
     pname = "Excel-Writer-XLSX";
     version = "1.09";
@@ -9459,10 +9528,10 @@ with self; {
 
   FileLoadLines = buildPerlPackage {
     pname = "File-LoadLines";
-    version = "1.01";
+    version = "1.021";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JV/JV/File-LoadLines-1.01.tar.gz";
-      hash = "sha256-boxuaqSffLmY+r+5ZqSZK7DGLxzT49chNaMRVoNGWdE=";
+      url = "mirror://cpan/authors/id/J/JV/JV/File-LoadLines-1.021.tar.gz";
+      hash = "sha256-mOQS98aSYRNPNLh4W926sxVrj0UlU9u1tWytaDuG//A=";
     };
     buildInputs = [ TestException ];
     meta = {
@@ -9870,17 +9939,18 @@ with self; {
     };
   };
 
-  FinanceQuote = buildPerlPackage {
+  FinanceQuote = buildPerlPackage rec {
     pname = "Finance-Quote";
-    version = "1.56";
+    version = "1.57";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BP/BPSCHUCK/Finance-Quote-1.56.tar.gz";
-      hash = "sha256-ER1vBY5kZLdIXAGPidDhiR/OC5aNnG+6G/JU1hLHpKs=";
+      url = "mirror://cpan/authors/id/B/BP/BPSCHUCK/Finance-Quote-${version}.tar.gz";
+      hash = "sha256-dm7dUw+RRp+MGiU6nVs4jX167PTMiihFL0SHASOTQs4=";
     };
     buildInputs = [ DateManip DateRange DateSimple DateTime DateTimeFormatISO8601 StringUtil TestKwalitee TestPerlCritic TestPod TestPodCoverage ];
-    propagatedBuildInputs = [ DateTimeFormatStrptime Encode HTMLTableExtract HTMLTokeParserSimple HTMLTree HTMLTreeBuilderXPath HTTPCookies JSON IOCompress LWPProtocolHttps Readonly StringUtil SpreadsheetXLSX TextTemplate TryTiny WebScraper XMLLibXML libwwwperl ];
+    propagatedBuildInputs = [ DateManip DateTimeFormatStrptime Encode HTMLTableExtract HTMLTokeParserSimple HTMLTree HTMLTreeBuilderXPath HTTPCookies JSON IOCompress IOString LWPProtocolHttps Readonly StringUtil SpreadsheetXLSX TextTemplate TryTiny WebScraper XMLLibXML libwwwperl ];
     meta = {
       homepage = "https://finance-quote.sourceforge.net/";
+      changelog = "https://github.com/finance-quote/finance-quote/releases/tag/v${version}";
       description = "Get stock and mutual fund quotes from various exchanges";
       license = with lib.licenses; [ gpl2Plus ];
       maintainers = with lib.maintainers; [ nevivurn ];
@@ -10916,6 +10986,19 @@ with self; {
     meta = {
       description = "Store multiple values per key";
       homepage = "https://github.com/miyagawa/Hash-MultiValue";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  HashSafeKeys = buildPerlPackage {
+    pname = "Hash-SafeKeys";
+    version = "0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MO/MOB/Hash-SafeKeys-0.04.tar.gz";
+      hash = "sha256-pSStO/naZ3wfi+bhWXG3ZXVAj3RJI9onZHro8dPDfMw=";
+    };
+    meta = {
+      description = "Get hash contents without resetting each iterator";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -12932,6 +13015,32 @@ with self; {
     meta = {
       description = "Delayed creation of objects";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  LatexIndent = buildPerlPackage rec {
+    pname = "latexindent.pl";
+    version = "3.21";
+
+    src = fetchFromGitHub {
+      owner = "cmhughes";
+      repo = pname;
+      rev = "V${version}";
+      hash = "sha256-STXHOzsshyN7rc2VtJxxt6La4UPGpRYlMO8TX1Jd7pM=";
+    };
+
+    outputs = [ "out" ];
+
+    propagatedBuildInputs = [ FileHomeDir YAMLTiny ];
+
+    preBuild = ''
+      patchShebangs ./latexindent.pl
+    '';
+
+    meta = {
+      description = "Perl script to add indentation to LaTeX files";
+      homepage = "https://github.com/cmhughes/latexindent.pl";
+      license = lib.licenses.gpl3Plus;
     };
   };
 
@@ -17369,6 +17478,22 @@ with self; {
     };
   };
 
+  MsgPackRaw = buildPerlPackage rec {
+    pname = "MsgPack-Raw";
+    version = "0.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JA/JACQUESG/MsgPack-Raw-${version}.tar.gz";
+      hash = "sha256-hVnitkzZjZmrxmbt8qTIckyVNGEmFq8R9OsLvQ1CLaw=";
+    };
+    checkInputs = [ TestPod TestPodCoverage ];
+    meta = with lib; {
+      description = "Perl bindings to the msgpack C library";
+      homepage = "https://github.com/jacquesg/p5-MsgPack-Raw";
+      license = with licenses; [ gpl1Plus /* or */ artistic1 ];
+      maintainers = with maintainers; [ figsoda ];
+    };
+  };
+
   MusicBrainzDiscID = buildPerlPackage {
     pname = "MusicBrainz-DiscID";
     version = "0.06";
@@ -17462,6 +17587,37 @@ with self; {
       description = "Keep imports and functions out of your namespace";
       homepage = "https://search.cpan.org/dist/namespace-clean";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  NeovimExt = buildPerlPackage rec {
+    pname = "Neovim-Ext";
+    version = "0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JA/JACQUESG/Neovim-Ext-${version}.tar.gz";
+      hash = "sha256-bSzrMGLJZzfbpVbLIEYxMPxABocbJbfE9mzTgZ1FBLg=";
+    };
+    propagatedBuildInputs = [
+      ClassAccessor
+      EvalSafe
+      IOAsync
+      MsgPackRaw
+    ];
+    checkInputs = [
+      ArchiveZip
+      FileSlurper
+      FileWhich
+      ProcBackground
+      TestPod
+      TestPodCoverage
+    ];
+    # TODO: fix tests
+    doCheck = false;
+    meta = with lib; {
+      description = "Perl bindings for Neovim";
+      homepage = "https://github.com/jacquesg/p5-Neovim-Ext";
+      license = with licenses; [ gpl1Plus /* or */ artistic1 ];
+      maintainers = with maintainers; [ figsoda ];
     };
   };
 
@@ -19295,10 +19451,10 @@ with self; {
 
   PDFAPI2 = buildPerlPackage {
     pname = "PDF-API2";
-    version = "2.042";
+    version = "2.044";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SS/SSIMMS/PDF-API2-2.042.tar.gz";
-      hash = "sha256-q5kpQVAGAdwxoaL65s3hD3VTGogKKjEAyZ1VYKzVPF0=";
+      url = "mirror://cpan/authors/id/S/SS/SSIMMS/PDF-API2-2.044.tar.gz";
+      hash = "sha256-stFVeeQnI9jX+bct6G0NNc3jTx63cTRWuirTX7PL6n4=";
     };
     buildInputs = [ TestException TestMemoryCycle ];
     propagatedBuildInputs = [ FontTTF ];
@@ -19613,6 +19769,20 @@ with self; {
     };
   };
 
+  PerlLanguageServer = buildPerlPackage {
+    pname = "Perl-LanguageServer";
+    version = "2.5.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GR/GRICHTER/Perl-LanguageServer-2.5.0.tar.gz";
+      hash = "sha256-LQYcIkepqAT1JMkSuIN6mxivz6AZkpShcRsVD1oTmQQ=";
+    };
+    propagatedBuildInputs = [ AnyEvent AnyEventAIO ClassRefresh CompilerLexer Coro DataDump HashSafeKeys IOAIO JSON Moose PadWalker ];
+    meta = {
+      description = "Language Server and Debug Protocol Adapter for Perl";
+      license = lib.licenses.artistic2;
+    };
+  };
+
   perlldap = buildPerlPackage {
     pname = "perl-ldap";
     version = "0.68";
@@ -19909,10 +20079,10 @@ with self; {
 
   PLS = buildPerlPackage {
     pname = "PLS";
-    version = "0.897";
+    version = "0.905";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MR/MREISNER/PLS-0.897.tar.gz";
-      hash = "sha256-3dzDrSbSgjQJ9l2NPKfCc4o4FwPiiSG1Vm8d2aJV6Ag=";
+      url = "mirror://cpan/authors/id/M/MR/MREISNER/PLS-0.905.tar.gz";
+      hash = "sha256-RVW1J5nBZBXDy/5eMB6gLKDrvDQhTH/lLx19ykUwLik=";
     };
     propagatedBuildInputs = [ Future IOAsync PPI PPR PathTiny PerlCritic PerlTidy PodMarkdown URI ];
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
@@ -22184,10 +22354,10 @@ with self; {
 
   StringInterpolateNamed = buildPerlPackage {
     pname = "String-Interpolate-Named";
-    version = "1.00";
+    version = "1.03";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JV/JV/String-Interpolate-Named-1.00.tar.gz";
-      hash = "sha256-cnKZ+mkli2BHcOBZ7E2pBr/ecYYf3R4+ieMGdzccWoA=";
+      url = "mirror://cpan/authors/id/J/JV/JV/String-Interpolate-Named-1.03.tar.gz";
+      hash = "sha256-on13VgcnX2jtkqQT85SsAJLn3hzZPWJHnUf7pwF6Jtw=";
     };
     meta = {
       description = "Interpolated named arguments in string";
@@ -25454,12 +25624,12 @@ with self; {
 
   TextLayout = buildPerlPackage {
     pname = "Text-Layout";
-    version = "0.019";
+    version = "0.031";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JV/JV/Text-Layout-0.019.tar.gz";
-      hash = "sha256-oEPyqJ4ROynFI6nvpx+oOY7XXt1IIZOQGzjQjdSkEI4=";
+      url = "mirror://cpan/authors/id/J/JV/JV/Text-Layout-0.031.tar.gz";
+      hash = "sha256-EQ4ObbzKIFhKcckNpxBYAdRrXXYd+QmsTfYQbDM3B34=";
     };
-    buildInputs = [ PDFAPI2 ];
+    buildInputs = [ IOString PDFAPI2 ];
     meta = {
       description = "Pango style markup formatting";
       license = with lib.licenses; [ artistic1 gpl1Plus ];

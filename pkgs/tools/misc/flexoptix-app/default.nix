@@ -28,7 +28,7 @@ in appimageTools.wrapAppImage {
   inherit pname version;
   src = appimageContents;
 
-  multiPkgs = null; # no 32bit needed
+  multiArch = false; # no 32bit needed
   extraPkgs = { pkgs, ... }@args: [
     pkgs.hidapi
   ] ++ appimageTools.defaultFhsEnvArgs.multiPkgs args;

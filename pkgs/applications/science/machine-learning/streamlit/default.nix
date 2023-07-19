@@ -17,6 +17,7 @@
 , rich
 , semver
 , setuptools
+, tenacity
 , toml
 , tornado
 , tzlocal
@@ -26,12 +27,12 @@
 
 buildPythonApplication rec {
   pname = "streamlit";
-  version = "1.21.0";
-  format = "wheel"; # source currently requires pipenv
+  version = "1.24.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version format;
-    hash = "sha256-BYYlmJUqkSbhZlLKpbyI7u6nsnc68lLi2szxyEzqrvQ=";
+    hash = "sha256-NSX6zpTHh5JzPFbWOja0iEUVDjume7UKGa20xZdagiU=";
   };
 
   propagatedBuildInputs = [
@@ -51,11 +52,19 @@ buildPythonApplication rec {
     rich
     semver
     setuptools
+    tenacity
     toml
     tornado
     tzlocal
     validators
     watchdog
+  ];
+
+  # pypi package does not include the tests, but cannot be built with fetchFromGitHub
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "streamlit"
   ];
 
   postInstall = ''
@@ -64,6 +73,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://streamlit.io/";
+    changelog = "https://github.com/streamlit/streamlit/releases/tag/${version}";
     description = "The fastest way to build custom ML tools";
     maintainers = with maintainers; [ yrashk ];
     license = licenses.asl20;

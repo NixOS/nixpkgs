@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rsonpath";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "v0ldek";
     repo = "rsonpath";
     rev = "v${version}";
-    hash = "sha256-J/KdnPvGZb1Y1IgcjtU2ZxzurjoUjo3oKVnxGeNwHHc=";
+    hash = "sha256-1fopV2qWbWoCH5cT3s6vLxNTv5LgBm8bug0MJ9p7NmU=";
   };
 
-  cargoHash = "sha256-npnTXnRz2ktTc5c7p8vINdFwGJcbsRQ21D6lmtddl7Y=";
+  cargoHash = "sha256-4IFhUIP5MWNYoHoVi9tjRRzQrsdduiCnmVde5gctdsY=";
 
   buildNoDefaultFeatures = true;
   buildFeatures = [
@@ -24,6 +24,9 @@ rustPlatform.buildRustPackage rec {
   ] ++ lib.optionals withSimd [
     "simd"
   ];
+
+  cargoBuildFlags = [ "-p=rsonpath" ];
+  cargoTestFlags = cargoBuildFlags;
 
   meta = with lib; {
     description = "Blazing fast Rust JSONPath query engine";

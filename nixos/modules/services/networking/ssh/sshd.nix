@@ -279,10 +279,12 @@ in
       settings = mkOption {
         description = lib.mdDoc "Configuration for `sshd_config(5)`.";
         default = { };
-        example = literalExpression ''{
-          UseDns = true;
-          PasswordAuthentication = false;
-        }'';
+        example = literalExpression ''
+          {
+            UseDns = true;
+            PasswordAuthentication = false;
+          }
+        '';
         type = types.submodule ({name, ...}: {
           freeformType = settingsFormat.type;
           options = {
