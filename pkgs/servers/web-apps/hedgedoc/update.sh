@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=../../../../ -i bash -p nix wget prefetch-yarn-deps nix-prefetch-github jq
+#!nix-shell -I nixpkgs=../../../../ -i bash -p nix wget prefetch-yarn-deps jq
 set -euo pipefail
 cd "$(dirname "$0")"
 

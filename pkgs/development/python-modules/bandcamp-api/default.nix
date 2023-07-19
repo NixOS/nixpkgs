@@ -10,20 +10,15 @@
 
 buildPythonPackage rec {
   pname = "bandcamp-api";
-  version = "0.1.15";
+  version = "0.2.2";
 
   format = "setuptools";
 
   src = fetchPypi {
     pname = "bandcamp_api";
     inherit version;
-    hash = "sha256-4pnUiAsOLX1BBQjOhUkjSyHnGyQ3rx3JAFFYgEMLpG4=";
+    hash = "sha256-v/iACVcBFC/3x4v7Q/1p+aHGhfw3AQ43eU3sKz5BskI=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace bs4 beautifulsoup4
-  '';
 
   propagatedBuildInputs = [
     beautifulsoup4
