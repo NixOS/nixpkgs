@@ -67,7 +67,7 @@ rec {
             "--disable-shared" # brrr...
           ];
       }));
-    } // lib.optionalAttrs (stdenv0.hostPlatform.libc == "libc") {
+    } // lib.optionalAttrs (stdenv0.hostPlatform.libc == "glibc") {
       extraBuildInputs = (old.extraBuildInputs or []) ++ [
         pkgs.glibc.static
       ];
