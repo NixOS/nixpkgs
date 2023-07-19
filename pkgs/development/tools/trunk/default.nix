@@ -3,13 +3,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "trunk";
-  version = "0.17.1";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner = "thedodd";
     repo = "trunk";
     rev = "v${version}";
-    sha256 = "sha256-z6/CogY7X3u4BvvP8gRjBeKw0Cci9d6TKZYrKLwoTqs=";
+    sha256 = "sha256-A6h8TmYK5WOcmANk/uM9QO1h767BWASWTwLthtKqrEk=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   # requires network
   checkFlags = [ "--skip=tools::tests::download_and_install_binaries" ];
 
-  cargoHash = "sha256-7j4SNBMNtu4vFkZic4I6Wjlt+oHQ1o8gOxweIq8t7ro=";
+  cargoHash = "sha256-+jz0J1qFK2fZ4OX089pgNtT2vfiOTf39qQjeXmLoFNs=";
 
   meta = with lib; {
     homepage = "https://github.com/thedodd/trunk";
