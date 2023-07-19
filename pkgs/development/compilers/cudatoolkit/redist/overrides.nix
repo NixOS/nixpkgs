@@ -27,6 +27,11 @@ in
       inherit (prev.backendStdenv) cc;
     in
     {
+      # Required by cmake's enable_language(CUDA) to build a test program
+      # When implementing cross-compilation support: this is
+      # final.pkgs.targetPackages.cudaPackages.cuda_cudart
+      env.cudartRoot = "${prev.lib.getDev final.cuda_cudart}";
+
       # Point NVCC at a compatible compiler
 
       # Desiredata: whenever a package (e.g. magma) adds cuda_nvcc to

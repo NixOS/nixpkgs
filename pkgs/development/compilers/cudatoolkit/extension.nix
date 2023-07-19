@@ -59,9 +59,6 @@ final: prev: let
           # Required in addition to ccRoot as otherwise bin/gcc is looked up
           # when building CMakeCUDACompilerId.cu
           substitutions.ccFullPath = "${backendStdenv.cc}/bin/${backendStdenv.cc.targetPrefix}c++";
-
-          # Required by cmake's enable_language(CUDA) to build a test program
-          substitutions.cudartRoot = prev.lib.getDev (final.cuda_cudart or final.cudatoolkit);
         }
         ./hooks/setup-cuda-hook.sh)
     { });
