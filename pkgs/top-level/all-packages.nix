@@ -2644,18 +2644,23 @@ with pkgs;
       (builtins.attrValues libretro);
   };
 
-  wrapRetroArch = { retroarch }:
+  wrapRetroArch = { retroarch, settings ? {} }:
     callPackage ../applications/emulators/retroarch/wrapper.nix
-      { inherit retroarch; };
+      { inherit retroarch settings; };
 
   retroarch = wrapRetroArch {
     retroarch = retroarchBare.override {
       withAssets = true;
       withCoreInfo = true;
     };
+    settings = {
+      joypad_autoconfig_dir = "${retroarch-joypad-autoconfig}/share/libretro/autoconfig";
+    };
   };
 
   retroarch-assets = callPackage ../applications/emulators/retroarch/retroarch-assets.nix { };
+
+  retroarch-joypad-autoconfig = callPackage ../applications/emulators/retroarch/retroarch-joypad-autoconfig.nix { };
 
   libretranslate = with python3.pkgs; toPythonApplication libretranslate;
 
