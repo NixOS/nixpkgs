@@ -72,6 +72,12 @@ in buildPythonPackage rec {
       url = "https://github.com/numpy/numpy/commit/afcedf4b63f4a94187e6995c2adea0da3bb18e83.patch";
       hash = "sha256-cxBoimX5a9wC2qUIGAo5o/M2E9+eV63bV2/wLmfDYKg=";
     })
+  ]
+  ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    # Disable `numpy/core/tests/test_umath.py::TestComplexFunctions::test_loss_of_precision[complex256]`
+    # on x86_64-darwin because it fails under Rosetta 2 due to issues with trig functions and
+    # 80-bit long double complex numbers.
+    ./disable-failing-long-double-test-Rosetta-2.patch
   ];
 
   postPatch = ''
