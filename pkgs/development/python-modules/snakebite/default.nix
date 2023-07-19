@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Pure Python HDFS client";
     homepage = "https://github.com/spotify/snakebite";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

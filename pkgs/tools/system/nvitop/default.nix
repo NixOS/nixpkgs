@@ -14,6 +14,10 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-+Yq/UHjrR2nT+TLXEDbNP2yMy4+LZGgbMrDLmWcrxqg=";
   };
 
+  pythonRelaxDeps = [ "nvidia-ml-py" ];
+
+  nativeBuildInputs = with python3Packages; [ pythonRelaxDepsHook ];
+
   propagatedBuildInputs = with python3Packages; [
     cachetools
     psutil

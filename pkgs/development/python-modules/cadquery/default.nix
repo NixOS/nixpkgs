@@ -98,6 +98,6 @@ in
       description = "Parametric scripting language for creating and traversing CAD models";
       homepage = "https://github.com/CadQuery/cadquery";
       license = licenses.asl20;
-      maintainers = with maintainers; [ costrouc marcus7070 ];
+      maintainers = with maintainers; [ marcus7070 ];
     };
   }
