@@ -579,28 +579,6 @@ self: super:
         ${optionalString (symbolsFile  != null) "cp '${symbolsFile}'  'symbols/${name}'"}
         ${optionalString (typesFile    != null) "cp '${typesFile}'    'types/${name}'"}
 
-        # patch makefiles
-        for type in compat geometry keycodes symbols types; do
-          if ! test -f "$type/${name}"; then
-            continue
-          fi
-          test "$type" = geometry && type_name=geom || type_name=$type
-          ${ed}/bin/ed -v $type/Makefile.am <<EOF
-        /''${type_name}_DATA =
-        a
-        ${name} \\
-        .
-        w
-        EOF
-          ${ed}/bin/ed -v $type/Makefile.in <<EOF
-        /''${type_name}_DATA =
-        a
-        ${name} \\
-        .
-        w
-        EOF
-        done
-
         # add model description
         ${ed}/bin/ed -v rules/base.xml <<EOF
         /<\/modelList>
