@@ -4,7 +4,7 @@
     owner = "mastodon";
     repo = "mastodon";
     rev = "v4.1.4";
-    sha256 = "8ULBO8IdwBzC5dgX3netTHbbRrODX4CropWZWtqWHZw=";
+    hash = "sha256-8ULBO8IdwBzC5dgX3netTHbbRrODX4CropWZWtqWHZw=";
   };
 in applyPatches {
   inherit src;
