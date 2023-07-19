@@ -7206,6 +7206,8 @@ with pkgs;
 
   doggo = callPackage ../tools/networking/doggo { };
 
+  dq = callPackage ../tools/networking/dq { };
+
   dool = callPackage ../tools/system/dool { };
 
   dosfstools = callPackage ../tools/filesystems/dosfstools { };
