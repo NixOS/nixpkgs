@@ -18,6 +18,7 @@ runCommand "netlify-cli-test" {
 } ''
   mkdir home
   export HOME=$PWD/home
+  export BROWSER=none
 
   # Create a simple site
   echo '<h1>hi</h1>' >index.html
