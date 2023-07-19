@@ -357,6 +357,7 @@ in python.pkgs.buildPythonApplication rec {
       "pip"
       "PyJWT"
       "pyOpenSSL"
+      "PyYAML"
       "requests"
       "typing_extensions"
       "voluptuous-serialize"
