@@ -21,10 +21,7 @@ buildGoModule rec {
   version = "5.15";
 
   src = fetchurl {
-    urls = [
-      "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz"
-      "https://github.com/lxc/lxd/releases/download/lxd-${version}/lxd-${version}.tar.gz"
-    ];
+    url = "https://github.com/canonical/lxd/releases/download/lxd-${version}/lxd-${version}.tar.gz";
     hash = "sha256-ez/875yu0XYu5ORf4ak6RN1jWGxuGk0n9023zJkoluM=";
   };
 
@@ -52,7 +49,7 @@ buildGoModule rec {
   tags = [ "libsqlite3" ];
 
   preBuild = ''
-    # required for go-dqlite. See: https://github.com/lxc/lxd/pull/8939
+    # required for go-dqlite. See: https://github.com/canonical/lxd/pull/8939
     export CGO_LDFLAGS_ALLOW="(-Wl,-wrap,pthread_create)|(-Wl,-z,now)"
   '';
 
@@ -78,14 +75,14 @@ buildGoModule rec {
   passthru.tests.lxd-ui = nixosTests.lxd-ui;
   passthru.ui = callPackage ./ui.nix { };
   passthru.updateScript = gitUpdater {
-    url = "https://github.com/lxc/lxd.git";
+    url = "https://github.com/canonical/lxd.git";
     rev-prefix = "lxd-";
   };
 
   meta = with lib; {
     description = "Daemon based on liblxc offering a REST API to manage containers";
-    homepage = "https://linuxcontainers.org/lxd/";
-    changelog = "https://github.com/lxc/lxd/releases/tag/lxd-${version}";
+    homepage = "https://ubuntu.com/lxd";
+    changelog = "https://github.com/canonical/lxd/releases/tag/lxd-${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ marsam adamcstephens ];
     platforms = platforms.linux;
