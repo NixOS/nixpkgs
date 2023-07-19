@@ -1,5 +1,7 @@
 { lib
+, stdenv
 , fetchPypi
+, fetchpatch
 , python
 , buildPythonPackage
 , gfortran
@@ -54,6 +56,14 @@ in buildPythonPackage rec {
     # Patching of numpy.distutils is needed to prevent it from undoing the
     # patch to distutils.
     ./numpy-distutils-C++.patch
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    # f2py.f90mod_rules generates code with invalid function pointer conversions, which are
+    # clang 16 makes an error by default.
+    (fetchpatch {
+      url = "https://github.com/numpy/numpy/commit/609fee4324f3521d81a3454f5fcc33abb0d3761e.patch";
+      hash = "sha256-6Dbmf/RWvQJPTIjvchVaywHGcKCsgap/0wAp5WswuCo=";
+    })
   ];
 
   postPatch = ''
@@ -66,6 +76,9 @@ in buildPythonPackage rec {
 
   nativeBuildInputs = [ gfortran cython ];
   buildInputs = [ blas lapack ];
+
+  # Causes `error: argument unused during compilation: '-fno-strict-overflow'` due to `-Werror`.
+  hardeningDisable = lib.optionals stdenv.cc.isClang [ "strictoverflow" ];
 
   # we default openblas to build with 64 threads
   # if a machine has more than 64 threads, it will segfault
