@@ -5456,7 +5456,6 @@ broken-packages:
   - tokyocabinet-haskell
   - tokyotyrant-haskell
   - toml
-  - toml-parser
   - tonalude
   - tonaparser
   - toodles
