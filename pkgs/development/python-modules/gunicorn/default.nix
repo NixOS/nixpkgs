@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "gunicorn";
-  version = "21.1.0";
+  version = "21.2.0";
   format = "setuptools";
   disabled = pythonOlder "3.5";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "benoitc";
     repo = "gunicorn";
     rev = version;
-    hash = "sha256-4NrpGpg1kJy54KT3Ao24ZtcCasYjLtkMbHDdBDYbR44=";
+    hash = "sha256-xP7NNKtz3KNrhcAc00ovLZRx2h6ZqHbwiFOpCiuwf98=";
   };
 
   postPatch = ''
