@@ -6,11 +6,11 @@ in
 
   openssh = common rec {
     pname = "openssh";
-    version = "9.3p1";
+    version = "9.3p2";
 
     src = fetchurl {
       url = "mirror://openbsd/OpenSSH/portable/openssh-${version}.tar.gz";
-      hash = "sha256-6bq6dwGnalHz2Fpiw4OjydzZf6kAuFm8fbEUwYaK+Kg=";
+      hash = "sha256-IA6+FH9ss/EB/QzfngJEKvfdyimN/9n0VoeOfMrGdug=";
     };
 
     extraPatches = [ ./ssh-keysign-8.5.patch ];
@@ -19,12 +19,12 @@ in
 
   openssh_hpn = common rec {
     pname = "openssh-with-hpn";
-    version = "9.3p1";
+    version = "9.3p2";
     extraDesc = " with high performance networking patches";
 
     src = fetchurl {
       url = "mirror://openbsd/OpenSSH/portable/openssh-${version}.tar.gz";
-      hash = "sha256-6bq6dwGnalHz2Fpiw4OjydzZf6kAuFm8fbEUwYaK+Kg=";
+      hash = "sha256-IA6+FH9ss/EB/QzfngJEKvfdyimN/9n0VoeOfMrGdug=";
     };
 
     extraPatches = let url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/700625bcd86b74cf3fb9536aeea250d7f8cd1fd5/security/openssh-portable/files/extra-patch-hpn"; in
