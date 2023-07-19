@@ -16,7 +16,13 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
-  patches = lib.optionals stdenv.hostPlatform.isMusl [
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/esnet/iperf/commit/0ef151550d96cc4460f98832df84b4a1e87c65e9.patch";
+      name = "CVE-2023-38403.patch";
+      hash = "sha256-Yaup8rlljyuBK6n71YtHhFd1+WnjxfmEQpoXJulhQTs=";
+    })
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
       url = "https://git.alpinelinux.org/aports/plain/main/iperf3/remove-pg-flags.patch?id=7f979fc51ae31d5c695d8481ba84a4afc5080efb";
       name = "remove-pg-flags.patch";
