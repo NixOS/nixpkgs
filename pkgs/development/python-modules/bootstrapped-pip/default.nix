@@ -56,7 +56,8 @@ stdenv.mkDerivation rec {
     echo "Building pip wheel..."
     pushd pip
     rm pyproject.toml
-    ${python.pythonForBuild.interpreter} -m pip install --no-build-isolation --no-index --prefix=$out  --ignore-installed --no-dependencies --no-cache .
+    ${python.pythonForBuild.interpreter} -m pip wheel --wheel-dir dist --no-build-isolation --no-index --no-dependencies --no-cache .
+    ${python.pythonForBuild.interpreter} -m pip install pip --find-links dist --no-build-isolation --no-index --prefix=$out --ignore-installed --no-dependencies --no-cache
     popd
   '';
 
