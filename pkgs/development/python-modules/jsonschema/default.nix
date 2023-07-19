@@ -8,10 +8,10 @@
 , importlib-resources
 , jsonschema-specifications
 , pkgutil-resolve-name
+, pytestCheckHook
 , pythonOlder
 , referencing
 , rpds-py
-, twisted
 
 # optionals
 , fqdn
@@ -81,13 +81,8 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    twisted
+    pytestCheckHook
   ];
-
-  checkPhase = ''
-    export JSON_SCHEMA_TEST_SUITE=json
-    trial jsonschema
-  '';
 
   pythonImportsCheck = [
     "jsonschema"
