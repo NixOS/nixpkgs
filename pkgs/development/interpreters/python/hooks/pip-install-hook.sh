@@ -9,8 +9,13 @@ pipInstallPhase() {
 
     mkdir -p "$out/@pythonSitePackages@"
     export PYTHONPATH="$out/@pythonSitePackages@:$PYTHONPATH"
+    local _wheelPname="${wheelPname-$pname}"
 
-    @pythonInterpreter@ -m pip install $pname --find-links dist --no-index --no-warn-script-location --prefix="$out" --no-cache $pipInstallFlags
+    if ! @pythonInterpreter@ -m pip install "${_wheelPname}" --find-links dist --no-index --no-warn-script-location --prefix="$out" --no-cache $pipInstallFlags; then
+        echo "Pip install failed, probably because no wheel was found. Change pname or add wheelPname."
+        echo "Current value: $_wheelPname. Available wheels: $(ls dist)"
+        exit 1
+    fi
 
     runHook postInstall
     echo "Finished executing pipInstallPhase"
