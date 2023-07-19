@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Cryptographic algorithms library";
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [ raskin thillux ];
     platforms = platforms.unix;
     license = licenses.bsd2;
     inherit badPlatforms;
