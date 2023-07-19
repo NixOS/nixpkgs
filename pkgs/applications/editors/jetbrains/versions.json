@@ -92,10 +92,10 @@
     "rider": {
       "update-channel": "Rider RELEASE",
       "url-template": "https://download.jetbrains.com/rider/JetBrains.Rider-{version}.tar.gz",
-      "version": "2023.1.3",
-      "sha256": "192be48828cb7515e8158cec8aa6ba4d320d3b65ebd09a921e85085143e9bd56",
-      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2023.1.3.tar.gz",
-      "build_number": "231.9161.46"
+      "version": "2023.1.4",
+      "sha256": "0ff1916d0db4f081629e118da5418353e14d57bf2c0ec983db931d989becc683",
+      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2023.1.4.tar.gz",
+      "build_number": "231.9225.23"
     },
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
@@ -207,10 +207,10 @@
     "rider": {
       "update-channel": "Rider RELEASE",
       "url-template": "https://download.jetbrains.com/rider/JetBrains.Rider-{version}.dmg",
-      "version": "2023.1.3",
-      "sha256": "f7727c5f1b38352ca6ce7ad5ee410152b733bb72b98416d54b7b3e627fd6f2a9",
-      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2023.1.3.dmg",
-      "build_number": "231.9161.46"
+      "version": "2023.1.4",
+      "sha256": "5f1fc9acebd587902908e310a97ff4e0fb12e6d840584618ffff6102d756d703",
+      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2023.1.4.dmg",
+      "build_number": "231.9225.23"
     },
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
@@ -322,10 +322,10 @@
     "rider": {
       "update-channel": "Rider RELEASE",
       "url-template": "https://download.jetbrains.com/rider/JetBrains.Rider-{version}-aarch64.dmg",
-      "version": "2023.1.3",
-      "sha256": "d8477d115836913063996abc43ecc531cf08b10f3fb8fc21f58d385743895337",
-      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2023.1.3-aarch64.dmg",
-      "build_number": "231.9161.46"
+      "version": "2023.1.4",
+      "sha256": "3995b3566fb64938931d6308891cc63d1a7743076d27cab4ebee1ed028d8f9a5",
+      "url": "https://download.jetbrains.com/rider/JetBrains.Rider-2023.1.4-aarch64.dmg",
+      "build_number": "231.9225.23"
     },
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
