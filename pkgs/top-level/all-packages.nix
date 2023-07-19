@@ -35235,6 +35235,8 @@ with pkgs;
 
   tickrs = callPackage ../applications/misc/tickrs { };
 
+  tijolo = callPackage ../applications/editors/tijolo { };
+
   tilemaker = callPackage ../applications/misc/tilemaker { };
 
   timbreid = callPackage ../applications/audio/pd-plugins/timbreid {
