@@ -32705,6 +32705,8 @@ with pkgs;
 
   kubelogin-oidc = callPackage ../applications/networking/cluster/kubelogin-oidc { };
 
+  kubevpn = callPackage ../applications/networking/cluster/kubevpn { };
+
   k8sgpt = callPackage ../applications/networking/cluster/k8sgpt { };
 
   k9s = callPackage ../applications/networking/cluster/k9s { };
