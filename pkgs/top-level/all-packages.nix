@@ -517,6 +517,8 @@ with pkgs;
 
   copilot-cli = callPackage ../tools/admin/copilot-cli { };
 
+  cp210x-program = callPackage ../tools/misc/cp210x-program { };
+
   cp437 = callPackage ../tools/misc/cp437 { };
 
   cpm-cmake = callPackage ../development/tools/cpm-cmake { };
@@ -8166,6 +8168,8 @@ with pkgs;
   ghostunnel = callPackage ../tools/networking/ghostunnel { };
 
   ghz = callPackage ../tools/networking/ghz { };
+
+  gi-crystal = callPackage ../development/tools/gi-crystal { };
 
   gibberish-detector = with python3Packages; toPythonApplication gibberish-detector;
 
@@ -16980,6 +16984,8 @@ with pkgs;
 
   ravedude = callPackage ../development/tools/rust/ravedude { };
 
+  ra-multiplex = callPackage ../development/tools/rust/ra-multiplex {};
+
   rhack = callPackage ../development/tools/rust/rhack { };
   roogle = callPackage ../development/tools/rust/roogle { };
   rustfmt = rustPackages.rustfmt;
@@ -18880,6 +18886,8 @@ with pkgs;
   fastddsgen = callPackage ../development/tools/fastddsgen { };
 
   fastgron = callPackage ../development/tools/fastgron { };
+
+  fatcat = callPackage ../development/tools/fatcat { };
 
   findbugs = callPackage ../development/tools/analysis/findbugs { };
 
@@ -30192,8 +30200,11 @@ with pkgs;
   bitwig-studio4 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio4.nix {
     libjpeg = libjpeg.override { enableJpeg8 = true; };
   };
+  bitwig-studio5 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio5.nix {
+    libjpeg = libjpeg.override { enableJpeg8 = true; };
+  };
 
-  bitwig-studio = bitwig-studio4;
+  bitwig-studio = bitwig-studio5;
 
   bgpdump = callPackage ../tools/networking/bgpdump { };
 
