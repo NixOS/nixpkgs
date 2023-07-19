@@ -5581,6 +5581,8 @@ self: super: with self; {
 
   keyboard = callPackage ../development/python-modules/keyboard { };
 
+  keyframed = callPackage ../development/python-modules/keyframed { };
+
   keyring = callPackage ../development/python-modules/keyring { };
 
   keyrings-cryptfile = callPackage ../development/python-modules/keyrings-cryptfile { };
