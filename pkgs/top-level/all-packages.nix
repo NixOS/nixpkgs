@@ -16984,6 +16984,9 @@ with pkgs;
 
   opensmalltalk-vm = callPackage ../development/compilers/opensmalltalk-vm { };
 
+  opensycl = darwin.apple_sdk_11_0.callPackage ../development/compilers/opensycl { };
+  opensyclWithRocm = opensycl.override { rocmSupport = true; };
+
   ravedude = callPackage ../development/tools/rust/ravedude { };
 
   ra-multiplex = callPackage ../development/tools/rust/ra-multiplex {};

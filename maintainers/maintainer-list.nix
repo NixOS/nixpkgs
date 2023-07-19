@@ -18076,6 +18076,12 @@
     githubId = 73759599;
     name = "Yaya";
   };
+  yboettcher = {
+    name = "Yannik Böttcher";
+    github = "yboettcher";
+    githubId = 39460066;
+    email = "yannikboettcher@outlook.de";
+  };
   ydlr = {
     name = "ydlr";
     email = "ydlr@ydlr.io";
