@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , hatchling
-, pydantic
 , pytest-examples
 , pytestCheckHook
 , pythonOlder
@@ -32,13 +31,19 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pydantic
+    # pydantic - circular
     pytest-examples
     pytestCheckHook
   ];
 
   pythonImportsCheck = [
     "dirty_equals"
+  ];
+
+  disabledTestPaths = [
+    # require pydantic
+    "tests/test_other.py"
+    "tests/test_docs.py"
   ];
 
   meta = with lib; {

@@ -1,0 +1,17 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 2a967063..e51388d5 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -153,12 +153,6 @@ filterwarnings = [
+     # Work around https://github.com/pytest-dev/pytest/issues/10977 for Python 3.12
+     'ignore:(ast\.Str|ast\.NameConstant|ast\.Num|Attribute s) is deprecated and will be removed.*:DeprecationWarning:',
+ ]
+-addopts = [
+-    '--benchmark-columns', 'min,mean,stddev,outliers,rounds,iterations',
+-    '--benchmark-group-by', 'group',
+-    '--benchmark-warmup', 'on',
+-    '--benchmark-disable',  # this is enable by `make benchmark` when you actually want to run benchmarks
+-]
+ 
+ # configuring https://github.com/pydantic/hooky
+ [tool.hooky]
