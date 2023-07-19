@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
     cairo
     fribidi
     gnutls
+    pango # duplicated with propagatedBuildInputs to support gtkVersion == null
     pcre2
     zlib
     icu
@@ -80,7 +81,6 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = lib.optionals (gtkVersion != null) [
     (assert (gtkVersion == "3" || gtkVersion == "4");
     if gtkVersion == "3" then gtk3 else gtk4)
-  ] ++ [
     glib
     pango
   ];
