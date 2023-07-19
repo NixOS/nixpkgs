@@ -2432,6 +2432,8 @@ self: super: {
 
   # The shipped Setup.hs file is broken.
   csv = overrideCabal (drv: { preCompileBuildDriver = "rm Setup.hs"; }) super.csv;
+  # Build-type is simple, but ships a broken Setup.hs
+  digits = overrideCabal (drv: { preCompileBuildDriver = "rm Setup.lhs"; }) super.digits;
 
   cabal-fmt = doJailbreak (super.cabal-fmt.override {
     # Needs newer Cabal-syntax version.

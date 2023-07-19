@@ -1172,7 +1172,6 @@ broken-packages:
   - digest-pure
   - DigitalOcean
   - digitalocean-kzs
-  - digits
   - digraph
   - dijkstra-simple
   - DimensionalHash
