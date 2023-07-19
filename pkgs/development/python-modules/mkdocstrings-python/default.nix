@@ -37,11 +37,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'license = "ISC"' 'license = {text = "ISC"}' \
-  '';
-
   pythonImportsCheck = [
     "mkdocstrings_handlers"
   ];
