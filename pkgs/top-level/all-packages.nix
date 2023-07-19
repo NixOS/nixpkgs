@@ -481,6 +481,8 @@ with pkgs;
 
   colemak-dh = callPackage ../data/misc/colemak-dh { };
 
+  collision = callPackage ../applications/misc/collision { };
+
   colmena = callPackage ../tools/admin/colmena { };
 
   colorz = callPackage ../tools/misc/colorz { };
