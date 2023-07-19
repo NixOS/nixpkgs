@@ -7,9 +7,8 @@
 }:
 
 let
-  pythonPath = with python3.pkgs; makePythonPath [
+  venv = python3.withPackages (p: with p; [
     capstone
-    future
     psutil
     pwntools
     pycparser
@@ -17,7 +16,11 @@ let
     pygments
     unicorn
     rpyc
-  ];
+    tabulate
+    requests
+    types-requests
+    typing-extensions
+  ]);
   binPath = lib.makeBinPath ([
     python3.pkgs.pwntools   # ref: https://github.com/pwndbg/pwndbg/blob/2022.12.19/pwndbg/wrappers/checksec.py#L8
   ] ++ lib.optionals stdenv.isLinux [
@@ -27,14 +30,14 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "pwndbg";
-  version = "2022.12.19";
+  version = "2023.07.17";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "pwndbg";
     repo = "pwndbg";
     rev = version;
-    sha256 = "sha256-pyY2bMasd6GaJZZjLF48SvkKUBw3XfVa0g3Q0LiEi4k=";
+    sha256 = "sha256-HElzkHv94tEVq1mUeNo75Ja7yMaup2CIh96nWivkkjg=";
     fetchSubmodules = true;
   };
 
@@ -44,10 +47,15 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/share/pwndbg
     cp -r *.py pwndbg gdb-pt-dump $out/share/pwndbg
     chmod +x $out/share/pwndbg/gdbinit.py
+    ln -s ${venv} $out/share/pwndbg/.venv
+
+    # TODO: remove after capstone>=5 in nixpkgs
+    sed -i 's@CS_ARCH_RISCV@99999@g' $out/share/pwndbg/pwndbg/disasm/__init__.py
+
     makeWrapper ${gdb}/bin/gdb $out/bin/pwndbg \
       --add-flags "-q -x $out/share/pwndbg/gdbinit.py" \
       --prefix PATH : ${binPath} \
-      --set NIX_PYTHONPATH ${pythonPath}
+      --set-default LC_CTYPE "C.UTF-8"
   '';
 
   meta = with lib; {
