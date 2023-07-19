@@ -19665,8 +19665,9 @@ with pkgs;
 
   rufo = callPackage ../development/tools/rufo { };
 
-  rye = callPackage ../development/tools/rye {
-    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
+  rye = darwin.apple_sdk_11_0.callPackage ../development/tools/rye {
+    inherit (darwin.apple_sdk_11_0) Libsystem;
+    inherit (darwin.apple_sdk_11_0.frameworks) SystemConfiguration;
   };
 
   samurai = callPackage ../development/tools/build-managers/samurai { };
