@@ -70,62 +70,16 @@ let
 
     passthru = {
       inherit filename;
-      browsers = {
-        x86_64-linux = browsers-linux { };
-        aarch64-linux = browsers-linux { };
-        x86_64-darwin = browsers-mac;
-        aarch64-darwin = browsers-mac;
-      }.${system} or throwSystem;
-      browsers-chromium = browsers-linux {};
+      # browsers = {
+      #   x86_64-linux = browsers-linux { };
+      #   aarch64-linux = browsers-linux { };
+      #   x86_64-darwin = browsers-mac;
+      #   aarch64-darwin = browsers-mac;
+      # }.${system} or throwSystem;
+      # browsers-chromium = browsers-linux {};
     };
   });
 
-  browsers-mac = stdenv.mkDerivation {
-    pname = "playwright-browsers";
-    inherit (driver) version;
 
-    dontUnpack = true;
-
-    installPhase = ''
-      runHook preInstall
-
-      export PLAYWRIGHT_BROWSERS_PATH=$out
-      ${driver}/bin/playwright install
-      rm -r $out/.links
-
-      runHook postInstall
-    '';
-
-    meta.platforms = lib.platforms.darwin;
-  };
-
-  browsers-linux = { withChromium ? true }: let
-    fontconfig = makeFontsConf {
-      fontDirectories = [];
-    };
-  in
-    runCommand ("playwright-browsers"
-    + lib.optionalString withChromium "-chromium")
-  {
-    nativeBuildInputs = [
-      makeWrapper
-      jq
-    ];
-  } (''
-    BROWSERS_JSON=${driver}/package/browsers.json
-  '' + lib.optionalString withChromium ''
-    CHROMIUM_REVISION=$(jq -r '.browsers[] | select(.name == "chromium").revision' $BROWSERS_JSON)
-    mkdir -p $out/chromium-$CHROMIUM_REVISION/chrome-linux
-
-    # See here for the Chrome options:
-    # https://github.com/NixOS/nixpkgs/issues/136207#issuecomment-908637738
-    makeWrapper ${chromium}/bin/chromium $out/chromium-$CHROMIUM_REVISION/chrome-linux/chrome \
-      --set SSL_CERT_FILE /etc/ssl/certs/ca-bundle.crt \
-      --set FONTCONFIG_FILE ${fontconfig}
-  '' + ''
-    FFMPEG_REVISION=$(jq -r '.browsers[] | select(.name == "ffmpeg").revision' $BROWSERS_JSON)
-    mkdir -p $out/ffmpeg-$FFMPEG_REVISION
-    ln -s ${ffmpeg}/bin/ffmpeg $out/ffmpeg-$FFMPEG_REVISION/ffmpeg-linux
-  '');
 in
   driver

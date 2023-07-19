@@ -2,14 +2,12 @@
 , fetchFromGitHub
 , buildPythonPackage
 , playwright
-, playwright-driver
+, playwright-browsers
 , pytest
 , pytest-base-url
-, pytestCheckHook
 , python-slugify
 , pythonOlder
 , setuptools-scm
-, django
 }:
 
 buildPythonPackage rec {
@@ -47,7 +45,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   preCheck = ''
-    export PLAYWRIGHT_BROWSERS_PATH=${playwright-driver.browsers}
+    export PLAYWRIGHT_BROWSERS_PATH=${playwright-browsers}
   '';
 
   pythonImportsCheck = [
