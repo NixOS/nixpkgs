@@ -969,7 +969,6 @@ broken-packages:
   - css
   - css-easings
   - css-selectors
-  - css-syntax
   - C-structs
   - csv-nptools
   - csv-sip
