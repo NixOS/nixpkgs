@@ -10839,6 +10839,12 @@
       fingerprint = "FEF0 AE2D 5449 3482 5F06  40AA 186A 1EDA C5C6 3F83";
     }];
   };
+  mig4ng = {
+    email = "mig4ng@gmail.com";
+    github = "mig4ng";
+    githubId = 5817039;
+    name = "Miguel Carneiro";
+  };
   mightyiam = {
     email = "mightyiampresence@gmail.com";
     github = "mightyiam";
