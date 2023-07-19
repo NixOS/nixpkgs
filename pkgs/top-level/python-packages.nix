@@ -7913,6 +7913,8 @@ self: super: with self; {
 
   py-nextbusnext = callPackage ../development/python-modules/py-nextbusnext { };
 
+  py65 = callPackage ../development/python-modules/py65 { };
+
   pyaehw4a1 = callPackage ../development/python-modules/pyaehw4a1 { };
 
   pyatag = callPackage ../development/python-modules/pyatag { };
