@@ -9888,6 +9888,8 @@ with pkgs;
 
   notesnook = callPackage ../applications/misc/notesnook { };
 
+  oddjob = callPackage ../os-specific/linux/oddjob { };
+
   openipmi = callPackage ../tools/system/openipmi { };
 
   ox = callPackage ../applications/editors/ox { };
