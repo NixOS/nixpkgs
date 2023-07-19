@@ -63,7 +63,12 @@ in rec {
 
   assertMacAddress = name: group: attr:
     optional (attr ? ${name} && ! isMacAddress attr.${name})
-      "Systemd ${group} field `${name}' must be a valid mac address.";
+      "Systemd ${group} field `${name}' must be a valid MAC address.";
+
+  assertNetdevMacAddress = name: group: attr:
+    optional (attr ? ${name} && (! isMacAddress attr.${name} || attr.${name} != "none"))
+      "Systemd ${group} field `${name}` must be a valid MAC address or the special value `none`.";
+
 
   isPort = i: i >= 0 && i <= 65535;
 
