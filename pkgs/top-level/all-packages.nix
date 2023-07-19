@@ -37757,6 +37757,8 @@ with pkgs;
 
   stepmania = callPackage ../games/stepmania { };
 
+  stone-kingdoms = callPackage ../games/stone-kingdoms { };
+
   streamlit = python3Packages.callPackage ../applications/science/machine-learning/streamlit { };
 
   stt = callPackage ../tools/audio/stt { };
