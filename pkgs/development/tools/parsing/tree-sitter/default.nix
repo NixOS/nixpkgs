@@ -166,6 +166,6 @@ rustPlatform.buildRustPackage {
       * Dependency-free so that the runtime library (which is written in pure C) can be embedded in any application
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ oxalica Profpatsch ];
+    maintainers = with maintainers; [ Profpatsch ];
   };
 }
