@@ -2,15 +2,16 @@
 
 let
   pname = "chrysalis";
-  version = "0.12.0";
+  version = "0.13.2";
 in appimageTools.wrapAppImage rec {
+  inherit pname version;
   name = "${pname}-${version}-binary";
 
   src = appimageTools.extract {
     inherit name;
     src = fetchurl {
-      url = "https://github.com/keyboardio/${pname}/releases/download/v${version}/${pname}-${version}.AppImage";
-      sha256 = "sha256-sQoEO1UII4Gbp7UbHCCyejsd94lkBbi93TH325EamFc=";
+      url = "https://github.com/keyboardio/${pname}/releases/download/v${version}/${pname}-${version}-x64.AppImage";
+      hash = "sha256-PW0cvH+8iCCuId3NJTiJjD3QdXm3+mn/TJhofTWATCg=";
     };
   };
 
@@ -36,7 +37,7 @@ in appimageTools.wrapAppImage rec {
     description = "A graphical configurator for Kaleidoscope-powered keyboards";
     homepage = "https://github.com/keyboardio/Chrysalis";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ aw ];
+    maintainers = with maintainers; [ aw eclairevoyant ];
     platforms = [ "x86_64-linux" ];
   };
 }
