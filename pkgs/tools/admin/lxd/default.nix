@@ -32,7 +32,7 @@ buildGoModule rec {
       --replace "/usr/share/misc/usb.ids" "${hwdata}/share/hwdata/usb.ids"
   '';
 
-  excludedPackages = [ "test" "lxd/db/generate" ];
+  excludedPackages = [ "test" "lxd/db/generate" "lxd-agent" "lxd-migrate" ];
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
   buildInputs = [
@@ -51,6 +51,11 @@ buildGoModule rec {
   preBuild = ''
     # required for go-dqlite. See: https://github.com/canonical/lxd/pull/8939
     export CGO_LDFLAGS_ALLOW="(-Wl,-wrap,pthread_create)|(-Wl,-z,now)"
+  '';
+
+  # build static binaries: https://github.com/canonical/lxd/blob/6fd175c45e65cd475d198db69d6528e489733e19/Makefile#L43-L51
+  postBuild = ''
+    make lxd-agent lxd-migrate
   '';
 
   preCheck =
