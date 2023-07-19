@@ -36389,6 +36389,8 @@ with pkgs;
     withGui = false;
   };
 
+  aperture = callPackage ../applications/blockchains/aperture { };
+
   balanceofsatoshis = nodePackages.balanceofsatoshis;
 
   bitcoin  = libsForQt5.callPackage ../applications/blockchains/bitcoin {
