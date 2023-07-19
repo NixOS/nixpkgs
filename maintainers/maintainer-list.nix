@@ -1697,6 +1697,13 @@
       fingerprint = "2688 0377 C31D 9E81 9BDF  83A8 C8C6 BDDB 3847 F72B";
     }];
   };
+  azazak123 = {
+    email = "azazaka2002@gmail.com";
+    matrix = "@ne_dvoeshnik:matrix.org";
+    name = "Volodymyr Antonov";
+    github = "azazak123";
+    githubId = 50211158;
+  };
   azd325 = {
     email = "tim.kleinschmidt@gmail.com";
     github = "Azd325";
@@ -17037,6 +17044,12 @@
     githubId = 1733846;
     matrix = "@ty:tjll.net";
     name = "Tyler Langlois";
+  };
+  tymscar = {
+    email = "oscar@tymscar.com";
+    github = "tymscar";
+    githubId = 3742502;
+    name = "Oscar Molnar";
   };
   typetetris = {
     email = "ericwolf42@mail.com";

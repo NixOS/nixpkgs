@@ -23,7 +23,7 @@ mkYarnPackage rec {
     owner = "Fallenbagel";
     repo = "jellyseerr";
     rev = "v${version}";
-    sha256 = pin.srcSha256;
+    hash = pin.srcHash;
   };
 
   packageJSON = ./package.json;

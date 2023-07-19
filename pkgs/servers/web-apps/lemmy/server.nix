@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     owner = "LemmyNet";
     repo = "lemmy";
     rev = version;
-    sha256 = pinData.serverSha256;
+    hash = pinData.serverHash;
     fetchSubmodules = true;
   };
 
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     echo 'pub const VERSION: &str = "${version}";' > crates/utils/src/version.rs
   '';
 
-  cargoSha256 = pinData.serverCargoSha256;
+  cargoHash = pinData.serverCargoHash;
 
   buildInputs = [ postgresql ]
     ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
