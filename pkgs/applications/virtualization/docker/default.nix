@@ -105,6 +105,11 @@ rec {
           url = "https://github.com/moby/moby/pull/43136.patch";
           hash = "sha256-1WZfpVnnqFwLMYqaHLploOodls0gHF8OCp7MrM26iX8=";
         })
+        (fetchpatch {
+          name = "fix-issue-with-go-1.20.6.patch";
+          url = "https://github.com/moby/moby/pull/45972.patch";
+          hash = "sha256-zxFh/bI6+INOYSg6QFs0S9rdl9Z21KUIZFmzpNVjpSA=";
+        })
       ];
 
       postPatch = ''
