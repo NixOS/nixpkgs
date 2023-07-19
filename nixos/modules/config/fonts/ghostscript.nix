@@ -26,7 +26,7 @@ with lib;
 
   config = mkIf config.fonts.enableGhostscriptFonts {
 
-    fonts.fonts = [ "${pkgs.ghostscript}/share/ghostscript/fonts" ];
+    fonts.packages = [ "${pkgs.ghostscript}/share/ghostscript/fonts" ];
 
   };
 
