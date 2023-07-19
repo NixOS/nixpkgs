@@ -57,15 +57,15 @@ self: super: {
           # not solvable short of recompiling GHC. Instead of adding
           # allowInconsistentDependencies for all reverse dependencies of hspec-core,
           # just upgrade to an hspec version without the offending dependency.
-          hspec-core = cself.hspec-core_2_11_1;
-          hspec-discover = cself.hspec-discover_2_11_1;
-          hspec = cself.hspec_2_11_1;
+          hspec-core = cself.hspec-core_2_11_3;
+          hspec-discover = cself.hspec-discover_2_11_3;
+          hspec = cself.hspec_2_11_3;
 
           # hspec-discover and hspec-core depend on hspec-meta for testing which
           # we need to avoid since it depends on ghc as well. Since hspec*_2_11*
           # are overridden to take the versioned attributes as inputs, we need
           # to make sure to override the versioned attribute with this fix.
-          hspec-discover_2_11_1 = dontCheck csuper.hspec-discover_2_11_1;
+          hspec-discover_2_11_3 = dontCheck csuper.hspec-discover_2_11_3;
 
           # Prevent dependency on doctest which causes an inconsistent dependency
           # due to depending on ghc which depends on directory etc.
@@ -159,18 +159,6 @@ self: super: {
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
 
-  base-compat = overrideCabal (drv: {
-    version = assert drv.version == "0.12.2"; "0.12.3";
-    sha256 = "13dcrwihqn57js1ylj9vbw2snx90kfwikanvs1bj77zm22grj9nv";
-    editedCabalFile = null; revision = null;
-  }) super.base-compat;
-
-  base-compat-batteries = overrideCabal (drv: {
-    inherit (self.base-compat) version;
-    sha256 = "1bsz3bi1mnp60p90n5av76knscgssqvphc9f2jy1nhyr6ap7jxi0";
-    editedCabalFile = null; revision = null;
-  }) super.base-compat-batteries;
-
   vector = overrideCabal (old: {
     # Too strict bounds on doctest which isn't used, but is part of the configuration
     jailbreak = true;
@@ -234,10 +222,6 @@ self: super: {
 
   # There are numerical tests on random data, that may fail occasionally
   lapack = dontCheck super.lapack;
-
-  # Allow text-2.0.*
-  # https://github.com/jgm/cmark-hs/pull/15
-  cmark = assert super.cmark.version == "0.6"; doJailbreak super.cmark;
 
   # fix tests failure for base≥4.15 (https://github.com/kim/leveldb-haskell/pull/41)
   leveldb-haskell = appendPatch (fetchpatch {
@@ -313,7 +297,7 @@ self: super: {
     })
     # Overriding the version pandoc dependency uses as the latest release has version bounds
     # defined as >= 3.1  && < 3.2, can be removed once pandoc gets bumped by Stackage.
-  ] (super.patat.override { pandoc = self.pandoc_3_1_4; });
+  ] (super.patat.override { pandoc = self.pandoc_3_1_5; });
 
   # The latest release on hackage has an upper bound on containers which
   # breaks the build, though it works with the version of containers present
@@ -1737,15 +1721,15 @@ self: super: {
   servant-openapi3 = dontCheck super.servant-openapi3;
 
   # Give latest hspec correct dependency versions without overrideScope
-  hspec_2_11_1 = doDistribute (super.hspec_2_11_1.override {
-    hspec-discover = self.hspec-discover_2_11_1;
-    hspec-core = self.hspec-core_2_11_1;
+  hspec_2_11_3 = doDistribute (super.hspec_2_11_3.override {
+    hspec-discover = self.hspec-discover_2_11_3;
+    hspec-core = self.hspec-core_2_11_3;
   });
-  hspec-discover_2_11_1 = doDistribute super.hspec-discover_2_11_1;
-  # Need to disable tests to prevent an infinite recursion if hspec-core_2_11_1
+  hspec-discover_2_11_3 = doDistribute super.hspec-discover_2_11_3;
+  # Need to disable tests to prevent an infinite recursion if hspec-core_2_11_3
   # is overlayed to hspec-core.
-  hspec-core_2_11_1 = doDistribute (dontCheck (super.hspec-core_2_11_1.override {
-    hspec-expectations = self.hspec-expectations_0_8_3;
+  hspec-core_2_11_3 = doDistribute (dontCheck (super.hspec-core_2_11_3.override {
+    hspec-expectations = self.hspec-expectations_0_8_4;
   }));
 
   # Point hspec 2.7.10 to correct dependencies
@@ -1912,7 +1896,7 @@ self: super: {
   inherit (let
     pandoc-cli-overlay = self: super: {
       # pandoc-cli requires pandoc >= 3.1
-      pandoc = self.pandoc_3_1_4;
+      pandoc = self.pandoc_3_1_5;
 
       # pandoc depends on crypton-connection, which requires tls >= 1.7
       tls = self.tls_1_7_0;
@@ -1920,22 +1904,14 @@ self: super: {
       # pandoc depends on http-client-tls, which only starts depending
       # on crypton-connection in http-client-tls-0.3.6.2.
       http-client-tls = self.http-client-tls_0_3_6_2;
-
-      # pandoc requires recent versions of skylighting
-      skylighting = self.skylighting_0_13_3;
-      skylighting-core = self.skylighting-core_0_13_3;
     };
   in {
     pandoc-cli = super.pandoc-cli.overrideScope pandoc-cli-overlay;
-    pandoc_3_1_4 = doDistribute (super.pandoc_3_1_4.overrideScope pandoc-cli-overlay);
-    skylighting_0_13_3 = doDistribute (super.skylighting_0_13_3.overrideScope pandoc-cli-overlay);
-    skylighting-core_0_13_3 = doDistribute (super.skylighting-core_0_13_3.overrideScope pandoc-cli-overlay);
+    pandoc_3_1_5 = doDistribute (super.pandoc_3_1_5.overrideScope pandoc-cli-overlay);
     pandoc-lua-engine = super.pandoc-lua-engine.overrideScope pandoc-cli-overlay;
   })
     pandoc-cli
-    pandoc_3_1_4
-    skylighting_0_13_3
-    skylighting-core_0_13_3
+    pandoc_3_1_5
     pandoc-lua-engine
     ;
 
@@ -2580,11 +2556,6 @@ self: super: {
     testTarget = "tests";
   }) super.conduit-aeson;
 
-  # Tests have a dependency on a certain version of the inspection-testing
-  # library.  This is fixed in the next point release, so this override is
-  # likely safe to remove when the assertion starts failing.
-  optics = assert super.optics.version == "0.4.2"; dontCheck super.optics;
-
   # Upper bounds are too strict:
   # https://github.com/velveteer/hermes/pull/22
   hermes-json = doJailbreak super.hermes-json;
@@ -2774,7 +2745,7 @@ self: super: {
 
   # Tests fail due to the newly-build fourmolu not being in PATH
   # https://github.com/fourmolu/fourmolu/issues/231
-  fourmolu_0_13_0_0 = dontCheck (super.fourmolu_0_13_0_0.overrideScope (lself: lsuper: {
+  fourmolu_0_13_1_0 = dontCheck (super.fourmolu_0_13_1_0.overrideScope (lself: lsuper: {
     Cabal-syntax = lself.Cabal-syntax_3_10_1_0;
     ghc-lib-parser = lself.ghc-lib-parser_9_6_2_20230523;
     parsec = lself.parsec_3_1_16_1;
