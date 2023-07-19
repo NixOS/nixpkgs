@@ -4,10 +4,11 @@
 , sourceExtension ? "tar.xz"
 , extraConfigureFlags ? ""
 , extraPatches ? [ ]
+, badPlatforms ? [ ]
 , postPatch ? null
 , knownVulnerabilities ? [ ]
-, CoreServices
-, Security
+, CoreServices ? null
+, Security ? null
 , ...
 }:
 
@@ -57,6 +58,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;
     license = licenses.bsd2;
+    inherit badPlatforms;
     inherit knownVulnerabilities;
   };
   passthru.updateInfo.downloadPage = "http://files.randombit.net/botan/";
