@@ -17038,6 +17038,12 @@
     matrix = "@ty:tjll.net";
     name = "Tyler Langlois";
   };
+  tymscar = {
+    email = "oscar@tymscar.com";
+    github = "tymscar";
+    githubId = 3742502;
+    name = "Oscar Molnar";
+  };
   typetetris = {
     email = "ericwolf42@mail.com";
     github = "typetetris";
