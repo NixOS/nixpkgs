@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pytestCheckHook
 , pythonOlder
 , writeText
@@ -30,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "shap";
-  version = "0.42.0";
+  version = "0.42.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -39,16 +38,8 @@ buildPythonPackage rec {
     owner = "slundberg";
     repo = "shap";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VGlswr9ywHk4oKSmmAzEC7+E0V2XEFlg19zXVktUdhc=";
+    hash = "sha256-Ezq6WS6QnoM5uEfo2DgDAEo1HkQ1KjmfgIyVWh3RM94=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-circular-import-error.patch";
-      url = "https://github.com/slundberg/shap/commit/ce118526b19b4a206cf8b496c2cd2b215ef7a91b.patch";
-      hash = "sha256-n2yFjFgc2VSFKb4ZJx775HblULWfnQSEnqjfPa8AOt0=";
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools
@@ -152,6 +143,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/slundberg/shap";
     changelog = "https://github.com/slundberg/shap/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ evax ];
+    maintainers = with maintainers; [ evax natsukium ];
   };
 }
