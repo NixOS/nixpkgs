@@ -9,7 +9,7 @@ let
 
   # If desktop manager `d' isn't capable of setting a background and
   # the xserver is enabled, `feh' or `xsetroot' are used as a fallback.
-  needBGCond = d: ! (d ? bgSupport && d.bgSupport) && xcfg.enable;
+  needBGCond = d: ! (d ? bgSupport && d.bgSupport) && xcfg.enable && cfg.wallpaper.enable;
 
 in
 
@@ -29,6 +29,8 @@ in
     services.xserver.desktopManager = {
 
       wallpaper = {
+        enable = mkEnableOption "services.xserver.desktopManager.wallpaper";
+
         mode = mkOption {
           type = types.enum [ "center" "fill" "max" "scale" "tile" ];
           default = "scale";
