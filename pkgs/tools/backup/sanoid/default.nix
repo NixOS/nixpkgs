@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     description = "A policy-driven snapshot management tool for ZFS filesystems";
     homepage = "https://github.com/jimsalterjrs/sanoid";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lopsided98 ];
+    maintainers = with maintainers; [ lopsided98 Frostman ];
     platforms = platforms.all;
   };
 }
