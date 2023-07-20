@@ -65,7 +65,7 @@ stripDirs() {
         striperr="$(mktemp 'striperr.XXXXXX')"
         # Do not strip lib/debug. This is a directory used by setup-hooks/separate-debug-info.sh.
         find $paths -type f -a '!' -path "$prefix/lib/debug/*" -print0 |
-            xargs -r -0 -n1 -P "$NIX_BUILD_CORES" $cmd $stripFlags 2>"$striperr" || exit_code=$?
+            xargs -r -0 -n1 -P "$NIX_BUILD_CORES" -- $cmd $stripFlags 2>"$striperr" || exit_code=$?
         # xargs exits with status code 123 if some but not all of the
         # processes fail. We don't care if some of the files couldn't
         # be stripped, so ignore specifically this code.
