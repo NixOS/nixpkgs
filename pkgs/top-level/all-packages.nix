@@ -14305,6 +14305,8 @@ with pkgs;
 
   xprintidle-ng = callPackage ../tools/X11/xprintidle-ng { };
 
+  xssstate = callPackage ../tools/X11/xssstate { };
+
   xscast = callPackage ../applications/video/xscast { };
 
   xsettingsd = callPackage ../tools/X11/xsettingsd { };
