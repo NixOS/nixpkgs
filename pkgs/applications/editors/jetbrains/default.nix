@@ -97,20 +97,20 @@ let
       };
     });
 
-    buildDataSpell = { pname, version, src, license, description, wmClass, buildNumber, ... }:
-      (mkJetBrainsProduct {
-        inherit pname version src wmClass jdk buildNumber;
-        product = "DataSpell";
-        meta = with lib; {
-          homepage = "https://www.jetbrains.com/dataspell/";
-          inherit description license platforms;
-          longDescription = ''
-            DataSpell is a new IDE from JetBrains built for Data Scientists.
-            Mainly it integrates Jupyter notebooks in the IntelliJ platform.
-          '';
-          maintainers = with maintainers; [ leona ];
-        };
-      });
+  buildDataSpell = { pname, version, src, license, description, wmClass, buildNumber, ... }:
+    (mkJetBrainsProduct {
+      inherit pname version src wmClass jdk buildNumber;
+      product = "DataSpell";
+      meta = with lib; {
+        homepage = "https://www.jetbrains.com/dataspell/";
+        inherit description license platforms;
+        longDescription = ''
+          DataSpell is a new IDE from JetBrains built for Data Scientists.
+          Mainly it integrates Jupyter notebooks in the IntelliJ platform.
+        '';
+        maintainers = with maintainers; [ leona ];
+      };
+    });
 
   buildGateway = { pname, version, src, license, description, wmClass, buildNumber, product, ... }:
     (mkJetBrainsProduct {
