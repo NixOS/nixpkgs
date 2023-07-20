@@ -3,6 +3,10 @@
 , buildDartApplication
 , buf
 , protoc-gen-dart
+, testers
+, dart-sass
+, runCommand
+, writeText
 }:
 
 let
@@ -46,5 +50,32 @@ buildDartApplication rec {
     mainProgram = "sass";
     license = licenses.mit;
     maintainers = with maintainers; [ lelgenio ];
+  };
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = dart-sass;
+      command = "dart-sass --version";
+    };
+
+    simple = testers.testEqualContents {
+      assertion = "dart-sass compiles a basic scss file";
+      expected = writeText "expected" ''
+        body h1{color:#123}
+      '';
+      actual = runCommand "actual" {
+        nativeBuildInputs = [ dart-sass ];
+        base = writeText "base" ''
+          body {
+            $color: #123;
+            h1 {
+              color: $color;
+            }
+          }
+        '';
+      } ''
+        dart-sass --style=compressed $base > $out
+      '';
+    };
   };
 }
