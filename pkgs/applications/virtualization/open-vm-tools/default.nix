@@ -145,6 +145,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ joamaki ];
+    maintainers = with maintainers; [ joamaki kjeremy ];
   };
 }
