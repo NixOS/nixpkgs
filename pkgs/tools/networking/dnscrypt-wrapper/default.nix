@@ -13,6 +13,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # causes `dnscrypt-wrapper --gen-provider-keypair` to crash
+  hardeningDisable = [ "fortify3" ];
+
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ libsodium libevent ];
 
