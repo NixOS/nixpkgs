@@ -102,7 +102,7 @@ let
 
       copy_bin_and_libs () {
         [ -f "$out/bin/$(basename $1)" ] && rm "$out/bin/$(basename $1)"
-        cp -pdvH $1 $out/bin
+        cp -pdv $1 $out/bin
       }
 
       # Copy BusyBox.
