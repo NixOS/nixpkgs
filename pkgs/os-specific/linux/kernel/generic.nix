@@ -1,3 +1,12 @@
+let
+  # Map of images representations to legacy Makefile targets.
+  defaultMapImageToTargets = {
+    "uImage" = "uinstall";
+    "zImage" = "zinstall";
+    "Image.gz" = "zinstall";
+    "vmlinux" = "install";
+  };
+in
 { buildPackages
 , callPackage
 , perl
@@ -57,6 +66,11 @@
 # easy overrides to stdenv.hostPlatform.linux-kernel members
 , autoModules ? stdenv.hostPlatform.linux-kernel.autoModules or true
 , preferBuiltin ? stdenv.hostPlatform.linux-kernel.preferBuiltin or false
+, kernelTarget ? null
+# FIXME: this should go whenever we can rely on KBUILD_IMAGE to install
+# our kernel targets, MIPS is probably the only recent kernel in-tree
+# which does not support that yet.
+, installTargets ? [ ]
 , kernelArch ? stdenv.hostPlatform.linuxArch
 , kernelTests ? []
 , nixosTests
