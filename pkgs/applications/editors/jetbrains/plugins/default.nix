@@ -117,7 +117,9 @@ rec {
           do
             ln -s "$plugin" -t $out/${meta.mainProgram}/plugins/
           done
-          sed "s|${ide.outPath}|$out|" -i $out/bin/${meta.mainProgram}
+          sed "s|${ide.outPath}|$out|" \
+            -i $(realpath $out/bin/${meta.mainProgram}) \
+            -i $(realpath $out/bin/${meta.mainProgram}-remote-dev-server)
           autoPatchelf $out/${meta.mainProgram}/bin
         '' + (extraBuildPhase."${ide.meta.mainProgram}" or "");
     };
