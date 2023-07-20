@@ -2,13 +2,12 @@
 #! nix-shell -i python3 -p python3Packages.packaging python3Packages.debian
 
 import base64
-import gzip
 import textwrap
 from urllib import request
 
+from collections import OrderedDict
 from debian.deb822 import Packages
 from debian.debian_support import Version
-
 
 def packages():
     packages_url = 'https://packages.microsoft.com/repos/edge/dists/stable/main/binary-amd64/Packages'
@@ -17,7 +16,7 @@ def packages():
 
 
 def latest_packages(packages: bytes):
-    latest_packages: dict[str, Packages] = {}
+    latest_packages: OrderedDict[str, Packages] = {}
     for package in Packages.iter_paragraphs(packages, use_apt_pkg=False):
         name: str = package['Package']
         if not name.startswith('microsoft-edge-'):
