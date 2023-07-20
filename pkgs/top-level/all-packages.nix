@@ -19408,6 +19408,12 @@ with pkgs;
 
   parse-cli-bin = callPackage ../development/tools/parse-cli-bin { };
 
+  patchDylib = makeSetupHook {
+    name = "patch-dylib";
+    propagatedBuildInputs = [ ripgrep gnused ];
+    meta.platforms = lib.platforms.darwin;
+  } ../build-support/setup-hooks/patch-dylib.sh;
+
   patchelf = if with stdenv.buildPlatform; isAarch64 && isMusl then
     patchelf_0_13
   else
