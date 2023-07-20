@@ -2,7 +2,7 @@
 , buildPythonPackage
 , cython
 , devtools
-, email_validator
+, email-validator
 , fetchFromGitHub
 , pytest-mock
 , pytestCheckHook
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     devtools
-    email_validator
+    email-validator
     python-dotenv
     typing-extensions
   ];
