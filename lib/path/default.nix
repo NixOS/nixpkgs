@@ -319,6 +319,9 @@ in /* No rec! Add dependencies on this file at the top. */ {
 
   /* Whether a value is a valid subpath string.
 
+  A subpath string points to a specific file or directory within an absolute base directory.
+  It is a stricter form of a relative path that excludes `..` components, since those could escape the base directory.
+
   - The value is a string
 
   - The string is not empty
