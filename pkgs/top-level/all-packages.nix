@@ -5732,6 +5732,8 @@ with pkgs;
 
   marlin-calc = callPackage ../tools/misc/marlin-calc { };
 
+  marp-cli = callPackage ../tools/typesetting/marp { };
+
   masscan = callPackage ../tools/security/masscan { };
 
   massren = callPackage ../tools/misc/massren { };
