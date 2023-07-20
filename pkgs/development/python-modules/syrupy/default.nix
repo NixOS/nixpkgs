@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "syrupy";
-  version = "4.0.2";
+  version = "4.0.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.8.1";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "tophat";
     repo = "syrupy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-luYYh6L7UxW8wkp1zxR0EOmyTj0mIZ6Miy6HcVHebo4=";
+    hash = "sha256-YEcItP5hmEOwoKurDhLnpDe1+fI5cAXXCv6UvizFejI=";
   };
 
   nativeBuildInputs = [
