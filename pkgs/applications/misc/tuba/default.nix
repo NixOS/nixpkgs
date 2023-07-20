@@ -19,6 +19,7 @@
 , libsoup_3
 , libsecret
 , libwebp
+, libspelling
 , gst_all_1
 , nix-update-script
 }:
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
     libadwaita
     libsecret
     libwebp
+    libspelling
   ] ++ (with gst_all_1; [
     gstreamer
     gst-libav
