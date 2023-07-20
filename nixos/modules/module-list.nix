@@ -764,6 +764,7 @@
   ./services/monitoring/nagios.nix
   ./services/monitoring/netdata.nix
   ./services/monitoring/opentelemetry-collector.nix
+  ./services/monitoring/osquery.nix
   ./services/monitoring/parsedmarc.nix
   ./services/monitoring/prometheus/alertmanager-irc-relay.nix
   ./services/monitoring/prometheus/alertmanager.nix
