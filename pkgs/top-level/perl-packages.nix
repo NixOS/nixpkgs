@@ -20234,7 +20234,7 @@ with self; {
     version = "0.23";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AK/AKREAL/Proc-Daemon-0.23.tar.gz";
-      sha256 = "34c0b85b7948b431cbabc97cee580835e515ccf43badbd8339eb109474089b69";
+      hash = "sha256-NMC4W3lItDHLq8l87lgINeUVzPQ7rb2DOesQlHQIm2k=";
     };
     buildInputs = [ ProcProcessTable ];
     meta = {
