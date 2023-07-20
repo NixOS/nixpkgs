@@ -40,6 +40,6 @@ perlPackages.buildPerlPackage rec {
     homepage = "https://ddclient.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ majiir ];
   };
 }
