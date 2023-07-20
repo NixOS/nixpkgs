@@ -17,14 +17,14 @@
 
 stdenv.mkDerivation rec {
   # Don't forget to update go.d.plugin.nix as well
-  version = "1.40.1";
+  version = "1.41.0";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "sha256-4bYCsEeB0kEYtVFVXymFv7ELUo9RXoKbPjOlDKav8Rg=";
+    sha256 = "sha256-MZQ1ZTghH4bN7kCMqbyQlAGSgE70sYJxjiamTTH/6ds=";
     fetchSubmodules = true;
   };
 
@@ -49,11 +49,6 @@ stdenv.mkDerivation rec {
     # required to prevent plugins from relying on /etc
     # and /var
     ./no-files-in-etc-and-var.patch
-    # The current IPC location is unsafe as it writes
-    # a fixed path in /tmp, which is world-writable.
-    # Therefore we put it into `/run/netdata`, which is owned
-    # by netdata only.
-    ./ipc-socket-in-run.patch
 
     # Avoid build-only inputs in closure leaked by configure command:
     #   https://github.com/NixOS/nixpkgs/issues/175693#issuecomment-1143344162
