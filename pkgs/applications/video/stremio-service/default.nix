@@ -1,22 +1,23 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, pkg-config, openssl, gtk3 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "stremio-service";
-  version = "0.1.6";
+  version = "6e987ff";
 
   src = fetchFromGitHub {
     owner = "Stremio";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1hqps7l5qrjh9f914r5i6kmcz6f1yb951nv4lby0cjnp5l253kps";
+    rev = "6e987ff193696cca4b0ce78b93e3ca43477a7c37";
+    sha256 = "sha256-G3FQhsKmyyOLsNLfzwkFB/xJTwPQGnzVC6KbrXCDtjw=";
   };
-
-  cargoSha256 = "03wf9r2csi6jpa7v5sw5lpxkrk4wfzwmzx7k3991q3bdjzcwnnwp";
-
+  cargoBuildFlags = "--features=offline-build";
+  cargoSha256 = "sha256-NX43rF71wq/mFJJrxImUfpbnqRA9/kGb12yAjhHseYo=";
+  buildInputs = [ gtk3 openssl ];
+  nativeBuildInputs = [ pkg-config ];
   meta = with lib; {
     description = "A companion app for Stremio Web";
     homepage = "https://github.com/Stremio/stremio-service";
-    license = licenses.unlicense;
+    license = licenses.gpl2;
     maintainers = [ ];
   };
 }
