@@ -17928,6 +17928,12 @@
     github = "sinanmohd";
     githubId = 69694713;
   };
+  sinavir = {
+    name = "Maurice Debray";
+    email = "nixpkgs@sinavir.fr";
+    github = "sinavir";
+    githubId = 36380103;
+  };
   sioodmy = {
     name = "Antoni Sokołowski";
     github = "sioodmy";
