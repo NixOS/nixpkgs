@@ -6,6 +6,7 @@
 , application ? "browser"
 , applicationName ? "Mozilla Firefox"
 , branding ? null
+, requireSigning ? true
 , src
 , unpackPhase ? null
 , extraPatches ? []
@@ -367,6 +368,8 @@ buildStdenv.mkDerivation {
     configureFlagsArray+=("--with-mozilla-api-keyfile=$TMPDIR/mls-api-key")
   '' + lib.optionalString (enableOfficialBranding && !stdenv.is32bit) ''
     export MOZILLA_OFFICIAL=1
+  '' + lib.optionalString (!requireSigning) ''
+    export MOZ_REQUIRE_SIGNING=
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     # linking firefox hits the vm.max_map_count kernel limit with the default musl allocator
     # TODO: Default vm.max_map_count has been increased, retest without this
