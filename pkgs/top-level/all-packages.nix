@@ -1789,6 +1789,8 @@ with pkgs;
 
   openbugs = pkgsi686Linux.callPackage ../applications/science/machine-learning/openbugs { };
 
+  osquery = callPackage ../tools/system/osquery { };
+
   paperview = callPackage ../tools/X11/paperview { };
 
   pferd = callPackage ../tools/misc/pferd { };
@@ -10786,6 +10788,7 @@ with pkgs;
     nomad_1_3
     nomad_1_4
     nomad_1_5
+    nomad_1_6
     ;
 
   nomad-autoscaler = callPackage ../applications/networking/cluster/nomad-autoscaler { };
@@ -11947,9 +11950,7 @@ with pkgs;
 
   revolt-desktop = callPackage ../applications/networking/instant-messengers/revolt-desktop { };
 
-  rbw = callPackage ../tools/security/rbw {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  rbw = callPackage ../tools/security/rbw { };
 
   remarshal = with python3Packages; toPythonApplication remarshal;
 
@@ -15843,9 +15844,10 @@ with pkgs;
   gcc-arm-embedded-12 = callPackage ../development/compilers/gcc-arm-embedded/12 { };
   gcc-arm-embedded = gcc-arm-embedded-12;
 
-  # Has to match the default gcc so that there are no linking errors when
-  # using C/C++ libraries in D packages
-  gdc = wrapCC (gcc.cc.override {
+  # It would be better to match the default gcc so that there are no linking errors
+  # when using C/C++ libraries in D packages, but right now versions >= 12 are broken.
+  gdc = gdc11;
+  gdc11 = wrapCC (gcc11.cc.override {
     name = "gdc";
     langCC = false;
     langC = false;
@@ -32706,6 +32708,8 @@ with pkgs;
   kubelogin = callPackage ../applications/networking/cluster/kubelogin { };
 
   kubelogin-oidc = callPackage ../applications/networking/cluster/kubelogin-oidc { };
+
+  kubevpn = callPackage ../applications/networking/cluster/kubevpn { };
 
   k8sgpt = callPackage ../applications/networking/cluster/k8sgpt { };
 
