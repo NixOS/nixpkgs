@@ -1,6 +1,8 @@
 # Setup hook to use for pip projects
 echo "Sourcing pip-build-hook"
 
+declare -a pipInstallFlags
+
 pipBuildPhase() {
     echo "Executing pipBuildPhase"
     runHook preBuild
@@ -25,7 +27,7 @@ pipShellHook() {
       export PYTHONPATH="$tmp_path/@pythonSitePackages@:$PYTHONPATH"
       mkdir -p "$tmp_path/@pythonSitePackages@"
       @pythonInterpreter@ -m pip install -e . --prefix "$tmp_path" \
-         --no-build-isolation >&2
+         --no-build-isolation $pipInstallFlags >&2
     fi
 
     runHook postShellHook

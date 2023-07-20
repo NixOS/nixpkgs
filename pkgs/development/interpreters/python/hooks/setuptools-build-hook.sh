@@ -1,6 +1,8 @@
 # Setup hook for setuptools.
 echo "Sourcing setuptools-build-hook"
 
+declare -a pipInstallFlags
+
 setuptoolsBuildPhase() {
     echo "Executing setuptoolsBuildPhase"
     local args
@@ -33,7 +35,7 @@ setuptoolsShellHook() {
         export PYTHONPATH="$tmp_path/@pythonSitePackages@:$PYTHONPATH"
         mkdir -p "$tmp_path/@pythonSitePackages@"
         eval "@pythonInterpreter@ -m pip install -e . --prefix $tmp_path \
-          --no-build-isolation >&2"
+          --no-build-isolation $pipInstallFlags >&2"
 
         # Process pth file installed in tmp path. This allows one to
         # actually import the editable installation. Note site.addsitedir
