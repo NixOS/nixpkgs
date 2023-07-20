@@ -1,9 +1,12 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
 , pythonOlder
+, fetchFromGitHub
+, substituteAll
+, llhttp
 # build_requires
+, cython
 , setuptools
 # install_requires
 , attrs
@@ -31,18 +34,37 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-CfIyktKRNQJeGej/Twpo3weP5O4BO8oBBbLoA5id6S0=";
+  src = fetchFromGitHub {
+    owner = "aio-libs";
+    repo = "aiohttp";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-lCeB7uSXkcCCBv1UiwL4AmXpYNJCt4F7a3OKP88ALZU=";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./unvendor-llhttp.patch;
+      llhttpDev = lib.getDev llhttp;
+      llhttpLib = lib.getLib llhttp;
+    })
+  ];
 
   postPatch = ''
     sed -i '/--cov/d' setup.cfg
+
+    rm -r vendor
+    patchShebangs tools
+    touch .git  # tools/gen.py uses .git to find the project root
   '';
 
   nativeBuildInputs = [
+    cython
     setuptools
   ];
+
+  preBuild = ''
+    make cythonize
+  '';
 
   propagatedBuildInputs = [
     attrs
@@ -100,6 +122,7 @@ buildPythonPackage rec {
   # aiohttp in current folder shadows installed version
   preCheck = ''
     rm -r aiohttp
+    touch tests/data.unknown_mime_type # has to be modified after 1 Jan 1990
   '' + lib.optionalString stdenv.isDarwin ''
     # Work around "OSError: AF_UNIX path too long"
     export TMPDIR="/tmp"
