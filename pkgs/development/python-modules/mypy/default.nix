@@ -31,16 +31,16 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "1.3.0";
+  version = "1.4.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "mypy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dfKuIyzgZo5hAZHighpXH78dHJ1PMbyCakyxF34CnMQ=";
+    hash = "sha256-2PeE/L9J6J0IuUpHZasemM8xxefNJrdzYnutgJjevWQ=";
   };
 
   nativeBuildInputs = [
