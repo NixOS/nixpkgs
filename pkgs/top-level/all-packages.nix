@@ -12964,6 +12964,8 @@ with pkgs;
 
   stremio = qt5.callPackage ../applications/video/stremio { };
 
+  stremio-service = qt5.callPackage ../applications/video/stremio-service { };
+
   sunwait = callPackage ../applications/misc/sunwait { };
 
   sunpaper = callPackage ../tools/X11/sunpaper { };
