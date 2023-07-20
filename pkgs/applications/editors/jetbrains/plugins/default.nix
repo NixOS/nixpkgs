@@ -68,6 +68,8 @@ rec {
   # Only use if you know what youre doing
   raw = { inherit files byId byName; };
 
+  tests = callPackage ./tests.nix {};
+
   addPlugins = ide: unprocessedPlugins:
     let
 
