@@ -244,6 +244,33 @@
       },
       "name": "csv-editor"
     },
+    "12062": {
+      "compatible": [
+        "clion",
+        "datagrip",
+        "goland",
+        "idea-community",
+        "idea-ultimate",
+        "mps",
+        "phpstorm",
+        "pycharm-community",
+        "pycharm-professional",
+        "rider",
+        "ruby-mine",
+        "webstorm"
+      ],
+      "builds": {
+        "223.8836.1185": "https://plugins.jetbrains.com/files/12062/256327/keymap-vscode-223.7571.113.zip",
+        "231.9011.35": "https://plugins.jetbrains.com/files/12062/307834/keymap-vscode-231.8109.91.zip",
+        "231.9225.12": "https://plugins.jetbrains.com/files/12062/307834/keymap-vscode-231.8109.91.zip",
+        "231.9225.15": "https://plugins.jetbrains.com/files/12062/307834/keymap-vscode-231.8109.91.zip",
+        "231.9225.16": "https://plugins.jetbrains.com/files/12062/307834/keymap-vscode-231.8109.91.zip",
+        "231.9225.18": "https://plugins.jetbrains.com/files/12062/307834/keymap-vscode-231.8109.91.zip",
+        "231.9225.21": "https://plugins.jetbrains.com/files/12062/307834/keymap-vscode-231.8109.91.zip",
+        "231.9225.23": "https://plugins.jetbrains.com/files/12062/307834/keymap-vscode-231.8109.91.zip"
+      },
+      "name": "vscode-keymap"
+    },
     "12559": {
       "compatible": [
         "clion",
@@ -383,6 +410,8 @@
   "files": {
     "https://plugins.jetbrains.com/files/10037/358810/CSVEditor-3.2.1-231.zip": "sha256-JC/NOICLHf1gc4wTarDPw7lYfGHOkCOlG194yt18xOA=",
     "https://plugins.jetbrains.com/files/10037/358812/CSVEditor-3.2.1-223.zip": "sha256-l8xq7XXQheZYcP+kdnLXAO7FhfPJYwIh+ZffbttBI9s=",
+    "https://plugins.jetbrains.com/files/12062/256327/keymap-vscode-223.7571.113.zip": "sha256-MlWTPLA6517inAtiOdJDUeUMyHczXzeUIe4dfASLzsM=",
+    "https://plugins.jetbrains.com/files/12062/307834/keymap-vscode-231.8109.91.zip": "sha256-OqK3HmcksgNlrADv7Ld91VCW+uzTOVWtcXcRC60IKfw=",
     "https://plugins.jetbrains.com/files/12559/257029/keymap-eclipse-223.7571.125.zip": "sha256-0hMn8Qt+xJjB9HnYz7OMw8xmI0FxDFy+lYfXHURhTKY=",
     "https://plugins.jetbrains.com/files/12559/307825/keymap-eclipse-231.8109.91.zip": "sha256-8jUsRK4evNMzjuWQIjIMrvQ0sIXPoY1C/buu1nod5X8=",
     "https://plugins.jetbrains.com/files/13017/257030/keymap-visualStudio-223.7571.125.zip": "sha256-YiJALivO1a+I4bCtZEv68PZ21Vydk5UW6gAgErj28DQ=",
