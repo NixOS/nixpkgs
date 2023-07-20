@@ -23,7 +23,7 @@
 
 let
   pname = "pulsar";
-  version = "1.104.0";
+  version = "1.107.1";
 
   sourcesPath = {
     x86_64-linux.tarname = "Linux.${pname}-${version}.tar.gz";
