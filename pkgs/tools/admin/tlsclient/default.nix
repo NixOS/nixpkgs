@@ -6,14 +6,14 @@
 , installShellFiles
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tlsclient";
   version = "1.5";
 
   src = fetchFromSourcehut {
     owner = "~moody";
     repo = "tlsclient";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-9LKx9x5Kx7Mo4EL/b89Mdsdu8NqVYxohn98XnF+IWXs=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     mainProgram = "tlsclient";
     platforms = platforms.all;
   };
-}
+})
