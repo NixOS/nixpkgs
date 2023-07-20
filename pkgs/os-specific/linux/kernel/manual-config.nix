@@ -30,6 +30,16 @@ in lib.makeOverridable ({
   src,
   # a list of { name=..., patch=..., extraConfig=...} patches
   kernelPatches ? [],
+  # KBUILD_IMAGE
+  kernelTarget ? null,
+  # a list of install targets, e.g. :
+  # - uinstall for uImage, U-Boot wrapped image
+  # - zinstall for zImage, self-extracting images
+  # - install, the generic binary image
+  # those targets are legacy and are present
+  # only for compatibility with old kernels or MIPS for now.
+  # prefer KBUILD_IMAGE instead.
+  installTargets ? [],
   # The kernel .config file
   configfile,
   # Manually specified nixexpr representing the config
@@ -296,12 +306,7 @@ stdenv.mkDerivation ({
   '';
 
   # Some image types need special install targets (e.g. uImage is installed with make uinstall)
-  installTargets = [
-    (kernelConf.installTarget or (
-      /**/ if target == "uImage" then "uinstall"
-      else if target == "zImage" || target == "Image.gz" then "zinstall"
-      else "install"))
-  ];
+  installTargets = if installTargets == [ ] then [ "install" ] else installTargets;
 
   postInstall = optionalString isModular ''
     if [ -z "''${dontStrip-}" ]; then
