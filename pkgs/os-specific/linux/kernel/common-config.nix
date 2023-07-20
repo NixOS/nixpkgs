@@ -170,6 +170,7 @@ let
       NET                = yes;
       IP_ADVANCED_ROUTER = yes;
       IP_PNP             = no;
+      IP_ROUTE_MULTIPATH = yes;
       IP_VS_PROTO_TCP    = yes;
       IP_VS_PROTO_UDP    = yes;
       IP_VS_PROTO_ESP    = yes;
