@@ -13,7 +13,7 @@ compatible are available as well. For example, there can be a
 To use one or more CUDA packages in an expression, give the expression a `cudaPackages` parameter, and in case CUDA is optional
 ```nix
 { config
-, cudaSupport ? config.cudaSupport or false
+, cudaSupport ? config.cudaSupport
 , cudaPackages ? { }
 , ...
 }:
