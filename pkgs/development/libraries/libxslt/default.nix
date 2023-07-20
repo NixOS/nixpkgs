@@ -1,60 +1,47 @@
-{ lib
-, stdenv
-, fetchurl
+{ lib, stdenv, fetchurl, fetchpatch
 , pkg-config
-, autoreconfHook
-, libxml2
-, findXMLCatalogs
-, gettext
-, python
-, ncurses
-, libgcrypt
+, libxml2, findXMLCatalogs, gettext, python, libgcrypt
 , cryptoSupport ? false
 , pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
-, gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "libxslt";
-  version = "1.1.35";
+  version = "1.1.34";
+
+  src = fetchurl {
+    url = "http://xmlsoft.org/sources/${pname}-${version}.tar.gz";
+    sha256 = "0zrzz6kjdyavspzik6fbkpvfpbd25r2qg6py5nnjaabrsr3bvccq";
+  };
+
+  patches = [
+    (fetchpatch {
+      # Fixes use-after-free in xsltApplyTemplates
+      name = "CVE-2021-30560.patch";
+      url = "https://gitlab.gnome.org/GNOME/libxslt/-/commit/50f9c9cd3b7dfe9b3c8c795247752d1fdcadcac8.patch";
+      sha256 = "sha256-XJD9SBo8xzztQQ6g13h4IzID7HV7u3xWSQdb2rVCJBQ=";
+    })
+  ];
 
   outputs = [ "bin" "dev" "out" "man" "doc" ] ++ lib.optional pythonSupport "py";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "gkfzPpqHLGrIWapFAYvExNALl+L+rJ7rwQyTzh803Xk=";
-  };
-
   nativeBuildInputs = [
     pkg-config
-    autoreconfHook
   ];
 
-  buildInputs = [
-    libxml2.dev
-  ] ++ lib.optional stdenv.isDarwin [
-    gettext
-  ] ++ lib.optionals pythonSupport [
-    libxml2.py
-    python
-    ncurses
-  ] ++ lib.optionals cryptoSupport [
-    libgcrypt
-  ];
+  buildInputs = [ libxml2.dev ]
+    ++ lib.optional stdenv.isDarwin gettext
+    ++ lib.optionals pythonSupport [ libxml2.py python ]
+    ++ lib.optionals cryptoSupport [ libgcrypt ];
 
-  propagatedBuildInputs = [
-    findXMLCatalogs
-  ];
+  propagatedBuildInputs = [ findXMLCatalogs ];
 
   configureFlags = [
     "--without-debug"
     "--without-mem-debug"
     "--without-debugger"
-  ] ++ lib.optionals pythonSupport [
-    "--with-python=${python}"
-  ] ++ lib.optionals (!cryptoSupport) [
-    "--without-crypto"
-  ];
+  ] ++ lib.optional pythonSupport "--with-python=${python}"
+    ++ lib.optional (!cryptoSupport) "--without-crypto";
 
   postFixup = ''
     moveToOutput bin/xslt-config "$dev"
@@ -68,11 +55,6 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit pythonSupport;
-
-    updateScript = gnome.updateScript {
-      packageName = pname;
-      versionPolicy = "none";
-    };
   };
 
   meta = with lib; {
@@ -80,7 +62,7 @@ stdenv.mkDerivation rec {
     description = "A C library and tools to do XSL transformations";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ eelco jtojnar ];
-    broken = pythonSupport && !libxml2.pythonSupport; # see #73102 for why this is not an assert
+    maintainers = [ maintainers.eelco ];
+    broken = !(pythonSupport -> libxml2.pythonSupport); # see #73102 for why this is not an assert
   };
 }
