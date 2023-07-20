@@ -6564,21 +6564,6 @@ let
     buildInputs = [ DBDSQLite TestFatal TestRoo ];
   };
 
-  DevelCamelcadedb = buildPerlPackage {
-    pname = "Devel-Camelcadedb";
-    version = "2021.2";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HU/HURRICUP/Devel-Camelcadedb-v2021.2.tar.gz";
-      sha256 = "88a1d9e95d398ffe4d4114861e21c36f7c22315b3d03e7f764ccbce018ab3e47";
-    };
-    propagatedBuildInputs = [ HashStoredIterator JSONXS PadWalker ];
-    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
-    meta = {
-      description = "Perl side of the Perl debugger for IntelliJ IDEA and other JetBrains IDEs";
-      license = lib.licenses.mit;
-    };
-  };
-
   DevelCycle = buildPerlPackage {
     pname = "Devel-Cycle";
     version = "1.12";
@@ -9956,21 +9941,6 @@ let
       description = "Efficient shared mutable hash";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.HashSharedMem.x86_64-darwin
-    };
-  };
-
-  HashStoredIterator = buildPerlModule {
-    pname = "Hash-StoredIterator";
-    version = "0.008";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MS/MSCHWERN/Hash-StoredIterator-0.008.tar.gz";
-      sha256 = "b9cbc4dcd8233e8d1d7f1481ddb79a4a5f9db7180cb3ef02b4bcbee05e65ea0c";
-    };
-    buildInputs = [ Test2Suite ];
-    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
-    meta = {
-      description = "Functions for accessing a hashes internal iterator";
-      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -16730,11 +16700,12 @@ let
 
   NetSSLeay = buildPerlPackage {
     pname = "Net-SSLeay";
-    version = "1.92";
+    version = "1.88";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CH/CHRISN/Net-SSLeay-1.92.tar.gz";
-      sha256 = "sha256-R8LyswDy5xYtcdaZ9jPdajWwYloAy9qMUKwBFEqTlqk=";
+      url = "mirror://cpan/authors/id/C/CH/CHRISN/Net-SSLeay-1.88.tar.gz";
+      sha256 = "1pfgh4h3szcpvqlcimc60pjbk9zwls99x5863sva0wc47i4dl010";
     };
+    patches = [ ../development/perl-modules/net-ssleay-1.88-macos-monterey.patch ];
     buildInputs = [ pkgs.openssl pkgs.zlib ];
     doCheck = false; # Test performs network access.
     preConfigure = ''
@@ -17611,8 +17582,8 @@ let
     pname = "PDF-API2";
     version = "2.042";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SS/SSIMMS/PDF-API2-2.042.tar.gz";
-      sha256 = "0p9wsnn60mcxr4032ahai0d56x8gw76ydym2l4qxq086a10jk6db";
+      url = "mirror://cpan/authors/id/S/SS/SSIMMS/PDF-API2-2.038.tar.gz";
+      sha256 = "dEfEdJsCp4T1JdPH7OmdNLChBHXbZQlvYxZ0jdL5vQk=";
     };
     buildInputs = [ TestException TestMemoryCycle ];
     propagatedBuildInputs = [ FontTTF ];
@@ -20782,12 +20753,12 @@ let
 
   SysVirt = buildPerlModule rec {
     pname = "Sys-Virt";
-    version = "8.1.0";
+    version = "7.10.0";
     src = fetchFromGitLab {
       owner = "libvirt";
       repo = "libvirt-perl";
-      rev = "v${version}";
-      sha256 = "sha256-9cjH4hIIxB+Pv9+ck6xg8KmfM8jtVFKVQNGLYr2AnAM=";
+      rev = "v7.10.0";
+      sha256 = "sha256-cXuzg4bBwCftdZhz3e50L+4fO0RWX5Tl8zDOoydECd4=";
     };
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [ pkgs.libvirt CPANChanges TestPod TestPodCoverage XMLXPath ];
@@ -24891,14 +24862,14 @@ let
 
   XMLLibXML = buildPerlPackage {
     pname = "XML-LibXML";
-    version = "2.0207";
+    version = "2.0206";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/XML-LibXML-2.0207.tar.gz";
-      sha256 = "sha256-kDQ2yYWYdb71WTJDquhc7TKa0PtLV7v0WXXjJUfFDBU=";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/XML-LibXML-2.0206.tar.gz";
+      sha256 = "068nhmld1031grgi4qm7k5niwxlbn6qd08zf6g1gj4c7qfas62q1";
     };
     SKIP_SAX_INSTALL = 1;
     buildInputs = [ AlienBuild AlienLibxml2 ]
-      ++ lib.optionals stdenv.isDarwin (with pkgs; [ libiconv zlib ]);
+      ++ lib.optional stdenv.isDarwin pkgs.libiconv;
     propagatedBuildInputs = [ XMLSAX ];
   };
 
