@@ -39,7 +39,7 @@ let
       };
     };
   };
-in buildPythonPackage rec {
+in buildPythonPackage (rec {
   pname = "numpy";
   version = "1.24.2";
   format = "setuptools";
@@ -91,9 +91,6 @@ in buildPythonPackage rec {
   nativeBuildInputs = [ gfortran cython ];
   buildInputs = [ blas lapack ];
 
-  # Causes `error: argument unused during compilation: '-fno-strict-overflow'` due to `-Werror`.
-  hardeningDisable = lib.optionals stdenv.cc.isClang [ "strictoverflow" ];
-
   # we default openblas to build with 64 threads
   # if a machine has more than 64 threads, it will segfault
   # see https://github.com/xianyi/OpenBLAS/issues/2993
@@ -140,4 +137,7 @@ in buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };
-}
+} // lib.optionalAttrs stdenv.cc.isClang {
+  # Causes `error: argument unused during compilation: '-fno-strict-overflow'` due to `-Werror`.
+  hardeningDisable = [ "strictoverflow" ];
+})
