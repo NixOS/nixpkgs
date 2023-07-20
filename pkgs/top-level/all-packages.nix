@@ -40124,6 +40124,10 @@ with pkgs;
 
   alejandra = callPackage ../tools/nix/alejandra { };
 
+  nixci = callPackage ../tools/nix/nixci {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   nixfmt = haskellPackages.nixfmt.bin;
 
   nixpkgs-fmt = callPackage ../tools/nix/nixpkgs-fmt { };
