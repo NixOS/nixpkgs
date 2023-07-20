@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "scs";
-  version = "3.0.0";
+  version = "3.2.3";
 
   src = fetchFromGitHub {
     owner = "bodono";
     repo = "scs-python";
     rev = version;
-    hash = "sha256-7OgqCo21S0FDev8xv6/8iGFXg8naVi93zd8v1f9iaWw=";
+    hash = "sha256-/5yGvZy3luGQkbYcsb/6TZLYou91lpA3UKONviMVpuM=";
     fetchSubmodules = true;
   };
 
