@@ -5620,6 +5620,12 @@
     githubId = 84968;
     name = "Florian Paul Schmidt";
   };
+  fptje = {
+    email = "fpeijnenburg@gmail.com";
+    github = "FPtje";
+    githubId = 1202014;
+    name = "Falco Peijnenburg";
+  };
   fragamus = {
     email = "innovative.engineer@gmail.com";
     github = "fragamus";
