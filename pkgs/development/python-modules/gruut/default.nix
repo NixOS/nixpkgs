@@ -3,7 +3,7 @@
 , callPackage
 , pythonOlder
 , fetchFromGitHub
-, Babel
+, babel
 , gruut-ipa
 , dateparser
 , jsonlines
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    Babel
+    babel
     gruut-ipa
     jsonlines
     num2words

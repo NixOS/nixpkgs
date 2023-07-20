@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = with python3.pkgs; [ setuptools-scm ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    Babel
+    babel
     beancount
     cheroot
     click
