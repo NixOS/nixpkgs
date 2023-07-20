@@ -570,6 +570,7 @@ with lib.maintainers; {
       ralith
       dandellion
       sumnerevans
+      nickcao
     ];
     scope = "Maintain the ecosystem around Matrix, a decentralized messenger.";
     shortName = "Matrix";
