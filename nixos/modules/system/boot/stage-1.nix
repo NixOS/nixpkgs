@@ -91,7 +91,7 @@ let
   # we just copy what we need from Glibc and use patchelf to make it
   # work.
   extraUtils = pkgs.runCommand "extra-utils"
-    { nativeBuildInputs = [pkgs.buildPackages.nukeReferences];
+    { nativeBuildInputs = with pkgs.buildPackages; [ nukeReferences bintools ];
       allowedReferences = [ "out" ]; # prevent accidents like glibc being included in the initrd
     }
     ''
