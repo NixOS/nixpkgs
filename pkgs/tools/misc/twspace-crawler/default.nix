@@ -2,16 +2,16 @@
 
 buildNpmPackage rec {
   pname = "twspace-crawler";
-  version = "1.12.3";
+  version = "1.12.4";
 
   src = fetchFromGitHub {
     owner = "HitomaruKonpaku";
     repo = "twspace-crawler";
-    rev = "d78caf0da5eb9c493e3d4d8b4ca47d434f4764bb"; # version not tagged
-    hash = "sha256-ONgPGlLRi0z2V1hB15w75GUt2Asc3hrRjuEjNSZc7Bc=";
+    rev = "339972a785a4074880a66be4ca4063e6b47ddfaa"; # version not tagged
+    hash = "sha256-YJXvBKvZ/Z1mRf6MW3JFqlK77+N+JM3OZZNSJyaaic4=";
   };
 
-  npmDepsHash = "sha256-Gq1OWJlIIIOHoP0TMscaPXaVpmfexax2EjdTCDPmeQQ=";
+  npmDepsHash = "sha256-eVh+1pBAxB+tgS6b8Bd3gtxUK887djbZVVC4wM/5zZk=";
 
   meta = with lib; {
     description = "Script to monitor & download Twitter Spaces 24/7";
