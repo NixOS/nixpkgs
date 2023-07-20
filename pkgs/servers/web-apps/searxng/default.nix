@@ -18,9 +18,22 @@ python3.pkgs.buildPythonApplication rec {
     sed -i 's/==.*$//' requirements.txt
   '';
 
-  preBuild = ''
-    export SEARX_DEBUG="true";
-  '';
+  preBuild =
+    let
+      versionString = lib.concatStringsSep "." (builtins.tail (lib.splitString "-" version));
+      commitAbbrev = builtins.substring 0 8 src.rev;
+    in
+    ''
+      export SEARX_DEBUG="true";
+
+      cat > searx/version_frozen.py <<EOF
+      VERSION_STRING="${versionString}+${commitAbbrev}"
+      VERSION_TAG="${versionString}+${commitAbbrev}"
+      DOCKER_TAG="${versionString}-${commitAbbrev}"
+      GIT_URL="https://github.com/searxng/searxng"
+      GIT_BRANCH="master"
+      EOF
+    '';
 
   propagatedBuildInputs = with python3.pkgs; [
     babel
