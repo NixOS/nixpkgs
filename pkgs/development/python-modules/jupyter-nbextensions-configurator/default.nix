@@ -8,6 +8,9 @@
 , notebook
 , pyyaml
 , tornado
+, nose
+, pytestCheckHook
+, selenium
 }:
 
 buildPythonPackage rec {
@@ -37,6 +40,19 @@ buildPythonPackage rec {
     notebook
     pyyaml
     tornado
+  ];
+
+  nativeCheckInputs = [
+    nose
+    pytestCheckHook
+    selenium
+  ];
+
+  # Those tests fails upstream
+  disabledTestPaths = [
+    "tests/test_application.py"
+    "tests/test_jupyterhub.py"
+    "tests/test_nbextensions_configurator.py"
   ];
 
   pythonImportsCheck = [ "jupyter_nbextensions_configurator" ];
