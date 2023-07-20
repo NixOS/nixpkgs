@@ -101,9 +101,6 @@ rec {
           pluginCmdsLines = map (plugin: "ln -s ${plugin} \"$out\"/${meta.mainProgram}/plugins/${baseNameOf plugin}") plugins;
           pluginCmds = builtins.concatStringsSep "\n" pluginCmdsLines;
           extraBuildPhase = rec {
-            clion = ''
-              sed "s|${ide}|$out|" -i $out/bin/.clion-wrapped
-            '';
             goland = ''
               sed "s|${ide}|$out|" -i $out/bin/.goland-wrapped
             '';
