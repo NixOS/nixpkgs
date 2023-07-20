@@ -28,9 +28,11 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    graphviz
-  ];
+  passthru.optional-dependencies = {
+    ipython = [
+      graphviz
+    ];
+  };
 
   pythonImportsCheck = [
     "objgraph"
