@@ -5451,6 +5451,8 @@ with pkgs;
 
   icdiff = callPackage ../tools/text/icdiff { };
 
+  ictree = callPackage ../tools/misc/ictree { };
+
   inchi = callPackage ../development/libraries/inchi { };
 
   icon-slicer = callPackage ../tools/X11/icon-slicer { };
