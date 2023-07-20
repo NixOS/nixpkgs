@@ -59,6 +59,16 @@
       "agpl"
     ]
   },
+  "files_texteditor": {
+    "sha256": "1irvxz29fj9ccplgizwkchc885fqvqsmk9rj4gfwgpa8bgkya1y6",
+    "url": "https://github.com/nextcloud-releases/files_texteditor/releases/download/v2.15.1/files_texteditor-v2.15.1.tar.gz",
+    "version": "2.15.1",
+    "description": "This application enables Nextcloud users to open, save and edit text files in the web browser. If enabled, an entry called \"Text file\" in the \"New\" button menu at the top of the web browser appears. When clicked, a new text file opens in the browser and the file can be saved into the current Nextcloud directory. Further, when a text file is clicked in the web browser, it will be opened and editable. If the privileges allow, a user can also edit shared files and save these changes back into the web browser.\nMore information is available in the text editor documentation.",
+    "homepage": "https://github.com/nextcloud/files_texteditor",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "forms": {
     "sha256": "0jfnidmx93k0z923m3p3bi8qv46j875cpnc60hlpxvcl35zbb2rl",
     "url": "https://github.com/nextcloud-releases/forms/releases/download/v3.3.0/forms-v3.3.0.tar.gz",
@@ -95,6 +105,26 @@
     "version": "3.2.1",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!",
     "homepage": "https://github.com/nextcloud/mail#readme",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "maps": {
+    "sha256": "12dg1bklv2jhmj5dnz4ram6zvgf8kipfz77g1lcn77fyhzqw6y1z",
+    "url": "https://github.com/nextcloud/maps/releases/download/v1.1.0/maps-1.1.0.tar.gz",
+    "version": "1.1.0",
+    "description": "**The whole world fits inside your cloud!**\n\n- **🗺 Beautiful map:** Using [OpenStreetMap](https://www.openstreetmap.org) and [Leaflet](https://leafletjs.com), you can choose between standard map, satellite, topographical, dark mode or even watercolor! 🎨\n- **⭐ Favorites:** Save your favorite places, privately! Sync with [GNOME Maps](https://github.com/nextcloud/maps/issues/30) and mobile apps is planned.\n- **🧭 Routing:** Possible using either [OSRM](http://project-osrm.org), [GraphHopper](https://www.graphhopper.com) or [Mapbox](https://www.mapbox.com).\n- **🖼 Photos on the map:** No more boring slideshows, just show directly where you were!\n- **🙋 Contacts on the map:** See where your friends live and plan your next visit.\n- **📱 Devices:** Lost your phone? Check the map!\n- **〰 Tracks:** Load GPS tracks or past trips. Recording with [PhoneTrack](https://f-droid.org/en/packages/net.eneiluj.nextcloud.phonetrack/) or [OwnTracks](https://owntracks.org) is planned.",
+    "homepage": "https://github.com/nextcloud/maps",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "memories": {
+    "sha256": "0v72hfn57zrvbfgd970qkm7c4lkm436k32vhxz4d1hkg83wjqsrl",
+    "url": "https://github.com/pulsejet/memories/releases/download/v5.2.1/memories.tar.gz",
+    "version": "5.2.1",
+    "description": "# Memories: Photo Management for Nextcloud\n\nMemories is a *batteries-included* photo management solution for Nextcloud with advanced features including:\n\n- **📸 Timeline**: Sort photos and videos by date taken, parsed from Exif data.\n- **⏪ Rewind**: Jump to any time in the past instantly and relive your memories.\n- **🤖 AI Tagging**: Group photos by people and objects, powered by [recognize](https://github.com/nextcloud/recognize) and [facerecognition](https://github.com/matiasdelellis/facerecognition).\n- **🖼️ Albums**: Create albums to group photos and videos together. Then share these albums with others.\n- **🫱🏻‍🫲🏻 External Sharing**: Share photos and videos with people outside of your Nextcloud instance.\n- **📱 Mobile Support**: Work from any device, of any shape and size through the web app.\n- **✏️ Edit Metadata**: Edit dates and other metadata on photos quickly and in bulk.\n- **📦 Archive**: Store photos you don't want to see in your timeline in a separate folder.\n- **📹 Video Transcoding**: Transcode videos and use HLS for maximal performance.\n- **🗺️ Map**: View your photos on a map, tagged with accurate reverse geocoding.\n- **📦 Migration**: Migrate easily from Nextcloud Photos and Google Takeout.\n- **⚡️ Performance**: Do all this very fast.\n\n## 🚀 Installation\n\n1. Install the app from the Nextcloud app store (try a demo [here](https://demo.memories.gallery/apps/memories/)).\n1. Perform the recommended [configuration steps](https://memories.gallery/config/).\n1. Run `php occ memories:index` to generate metadata indices for existing photos.\n1. Open the 📷 Memories app in Nextcloud and set the directory containing your photos.",
+    "homepage": "https://memories.gallery",
     "licenses": [
       "agpl"
     ]
@@ -167,10 +197,20 @@
       "agpl"
     ]
   },
+  "registration": {
+    "sha256": "0x1x5mk83qh5lffcs7h0gjjihzsphc6iqmbch1ni76h9pw4zxrw1",
+    "url": "https://github.com/nextcloud-releases/registration/releases/download/v2.2.0/registration-v2.2.0.tar.gz",
+    "version": "2.2.0",
+    "description": "User registration\n\nThis app allows users to register a new account.\n\n# Features\n\n- Add users to a given group\n- Allow-list with email domains (including wildcard) to register with\n- Administrator will be notified via email for new user creation or require approval\n- Supports Nextcloud's Client Login Flow v1 and v2 - allowing registration in the mobile Apps and Desktop clients\n\n# Web form registration flow\n\n1. User enters their email address\n2. Verification link is sent to the email address\n3. User clicks on the verification link\n4. User is lead to a form where they can choose their username and password\n5. New account is created and is logged in automatically",
+    "homepage": "https://github.com/nextcloud/registration",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "spreed": {
-    "sha256": "1s0p1048qygp47dhjgm2nf97qvr865c7p4rymvic0anyff8l014g",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v17.0.0/spreed-v17.0.0.tar.gz",
-    "version": "17.0.0",
+    "sha256": "07bf6vmz957m2myazkvw63q40lisi14kyb42w4gpg3860ihr16sc",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v17.0.2/spreed-v17.0.2.tar.gz",
+    "version": "17.0.2",
     "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat integration!** Nextcloud Talk comes with a simple text chat. Allowing you to share files from your Nextcloud and mentioning other participants.\n* 👥 **Private, group, public and password protected calls!** Just invite somebody, a whole group or send a public link to invite to a call.\n* 💻 **Screen sharing!** Share your screen with participants of your call. You just need to use Firefox version 66 (or newer), latest Edge or Chrome 72 (or newer, also possible using Chrome 49 with this [Chrome extension](https://chrome.google.com/webstore/detail/screensharing-for-nextclo/kepnpjhambipllfmgmbapncekcmabkol)).\n* 🚀 **Integration with other Nextcloud apps** like Files, Contacts and Deck. More to come.\n\nAnd in the works for the [coming versions](https://github.com/nextcloud/spreed/milestones/):\n* ✋ [Federated calls](https://github.com/nextcloud/spreed/issues/21), to call people on other Nextclouds",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [
