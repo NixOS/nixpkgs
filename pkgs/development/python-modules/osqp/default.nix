@@ -26,6 +26,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     sed -i 's/sp.random/np.random/g' src/osqp/tests/*.py
+    sed -i 's/np.int)/int)/g' src/osqp/*.py
   '';
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
