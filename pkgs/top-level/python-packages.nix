@@ -2367,6 +2367,8 @@ self: super: with self; {
 
   daphne = callPackage ../development/python-modules/daphne { };
 
+  daqp = callPackage ../development/python-modules/daqp { };
+
   dasbus = callPackage ../development/python-modules/dasbus { };
 
   dash = callPackage ../development/python-modules/dash { };
