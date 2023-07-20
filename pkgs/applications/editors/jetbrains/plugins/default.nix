@@ -100,11 +100,6 @@ rec {
         let
           pluginCmdsLines = map (plugin: "ln -s ${plugin} \"$out\"/${meta.mainProgram}/plugins/${baseNameOf plugin}") plugins;
           pluginCmds = builtins.concatStringsSep "\n" pluginCmdsLines;
-          extraBuildPhase = rec {
-            goland = ''
-              sed "s|${ide}|$out|" -i $out/bin/.goland-wrapped
-            '';
-          };
         in
         ''
           cp -r ${ide} $out
@@ -118,6 +113,6 @@ rec {
             -i $(realpath $out/bin/${meta.mainProgram}) \
             -i $(realpath $out/bin/${meta.mainProgram}-remote-dev-server)
           autoPatchelf $out/${meta.mainProgram}/bin
-        '' + (extraBuildPhase."${ide.meta.mainProgram}" or "");
+        '';
     };
 }
