@@ -171,7 +171,7 @@ let
           "batadv"
         ])
         (assertByteFormat "MTUBytes")
-        (assertMacAddress "MACAddress")
+        (assertNetdevMacAddress "MACAddress")
       ];
 
       sectionVLAN = checkUnitConfig "VLAN" [
@@ -223,6 +223,7 @@ let
           "PortRange"
           "FlowLabel"
           "IPDoNotFragment"
+          "Independent"
         ])
         (assertInt "VNI")
         (assertRange "VNI" 1 16777215)
@@ -242,6 +243,7 @@ let
         (assertInt "FlowLabel")
         (assertRange "FlowLabel" 0 1048575)
         (assertValueOneOf "IPDoNotFragment" (boolValues + ["inherit"]))
+        (assertValueOneOf "Independent" boolValues)
       ];
 
       sectionTunnel = checkUnitConfig "Tunnel" [
