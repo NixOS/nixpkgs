@@ -27,14 +27,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "blackbox";
-  version = "0.13.2";
+  version = "0.14.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "raggesilver";
     repo = "blackbox";
     rev = "v${version}";
-    hash = "sha256-qz1805HLG/Yexilw0YCkTzed1wqonUtJ+QrbMyhKHh8=";
+    hash = "sha256-ebwh9WTooJuvYFIygDBn9lYC7+lx9P1HskvKU8EX9jw=";
   };
 
   postPatch = ''
@@ -63,6 +63,8 @@ stdenv.mkDerivation rec {
     librsvg
     libgee
   ];
+
+  mesonFlags = [ "-Dblackbox_is_flatpak=false" ];
 
   meta = with lib; {
     description = "Beautiful GTK 4 terminal";
