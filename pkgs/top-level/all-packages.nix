@@ -583,6 +583,8 @@ with pkgs;
 
   each = callPackage ../tools/text/each { };
 
+  ebusd = callPackage ../servers/ebusd { };
+
   eclipse-mat = callPackage ../development/tools/eclipse-mat { };
 
   edgedb = callPackage ../tools/networking/edgedb {
