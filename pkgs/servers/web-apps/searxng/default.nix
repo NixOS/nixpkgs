@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "searxng";
-  version = "unstable-2023-06-26";
+  version = "unstable-2023-07-19";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "da7c30291dcf53cc5b3d98f9aada5615cd1593a9";
-    sha256 = "sha256-kbNw/YgcBZNkmn2nmsnEnc9Y8MJg3zGFdW1x9GIo+dM=";
+    rev = "a446dea1bb492eac417de9a900fae7cdf94aeec0";
+    sha256 = "sha256-iZDaKCkDlp3O3IixWdXVykNRIxas+irG0dWAOU4wycI=";
   };
 
   postPatch = ''
