@@ -13442,6 +13442,12 @@
     githubId = 4633847;
     name = "Ben Hamlin";
   };
+  ProxyVT = {
+    email = "tikit.us@outlook.com";
+    github = "ProxyVT";
+    githubId = 86965169;
+    name = "Vladislav Tiknyus";
+  };
   prrlvr = {
     email = "po@prrlvr.fr";
     github = "prrlvr";
