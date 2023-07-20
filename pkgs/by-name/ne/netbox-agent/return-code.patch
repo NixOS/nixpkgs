@@ -1,0 +1,22 @@
+From 76b2d253ce94c11d77deeaf36c5b6947ef3cd94a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Gr=C3=A9goire=20Compagnon?= <obeone@obeone.org>
+Date: Mon, 21 Aug 2023 20:40:10 +0200
+Subject: [PATCH] Return 0 if everything ok as excepted in a shell
+
+---
+ netbox_agent/cli.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/netbox_agent/cli.py b/netbox_agent/cli.py
+index e112469a..74cd8f9a 100644
+--- a/netbox_agent/cli.py
++++ b/netbox_agent/cli.py
+@@ -47,7 +47,7 @@ def run(config):
+ 
+ 
+ def main():
+-    return run(config)
++    return 0 if run(config) else 1
+ 
+ 
+ if __name__ == '__main__':
