@@ -1,10 +1,13 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, substituteAll
+, llhttp
 , fetchpatch
 , pythonOlder
 # build_requires
+, cython
 , setuptools
 # install_requires
 , attrs
@@ -37,12 +40,18 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-uVUuxSzBR9vxlErHrJivdgLlHqLc0HbtGUyjwNHH0Lw=";
+  src = fetchFromGitHub {
+    owner = "aio-libs";
+    repo = "aiohttp";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-rsI26JtlGFjSc2jZqfUiIwtT8AwSd+5tICK+VTxuSGg=";
   };
 
   patches = [
+    (substituteAll {
+      src = ./unvendor-llhttp.patch;
+      inherit llhttp;
+    })
     (fetchpatch {
       # https://github.com/aio-libs/aiohttp/pull/7260
       # Merged upstream, should likely be dropped post-3.8.5
@@ -53,11 +62,20 @@ buildPythonPackage rec {
 
   postPatch = ''
     sed -i '/--cov/d' setup.cfg
+
+    rm -r vendor
+    patchShebangs tools
+    touch .git  # tools/gen.py uses .git to find the project root
   '';
 
   nativeBuildInputs = [
+    cython
     setuptools
   ];
+
+  preBuild = ''
+    make cythonize
+  '';
 
   propagatedBuildInputs = [
     attrs
@@ -118,6 +136,7 @@ buildPythonPackage rec {
   # Probably because we run `python -m pytest` instead of `pytest` in the hook.
   preCheck = ''
     cd tests
+    touch data.unknown_mime_type  # has to be modified after 1 Jan 1990
   '' + lib.optionalString stdenv.isDarwin ''
     # Work around "OSError: AF_UNIX path too long"
     export TMPDIR="/tmp"
