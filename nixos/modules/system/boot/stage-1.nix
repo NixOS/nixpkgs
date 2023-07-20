@@ -102,7 +102,7 @@ let
 
       copy_bin_and_libs () {
         [ -f "$out/bin/$(basename $1)" ] && rm "$out/bin/$(basename $1)"
-        cp -pdvH $1 $out/bin
+        cp -pdv $1 $out/bin
       }
 
       # Copy BusyBox.
@@ -122,7 +122,7 @@ let
         # code, using default options and effectively ignore security relevant
         # ZFS properties such as `setuid=off` and `exec=off` (unless manually
         # duplicated in `fileSystems.*.options`, defeating "zfsutil"'s purpose).
-        copy_bin_and_libs ${pkgs.util-linux}/bin/mount
+        copy_bin_and_libs ${pkgs.util-linux.mount}/bin/mount
         copy_bin_and_libs ${pkgs.zfs}/bin/mount.zfs
       ''}
 
