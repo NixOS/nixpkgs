@@ -3,7 +3,7 @@
 , libX11
 , cairo
 , config
-, enableCuda ? config.cudaSupport or false
+, enableCuda ? config.cudaSupport
 , cudaPackages
 }:
 

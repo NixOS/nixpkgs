@@ -7,7 +7,7 @@
 , gmp
 , mpfr
 , config
-, enableCuda ? config.cudaSupport or false
+, enableCuda ? config.cudaSupport
 , cudatoolkit
 }:
 

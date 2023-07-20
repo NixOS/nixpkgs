@@ -27,7 +27,7 @@
 , scipy
 , stdenv
   # Options:
-, cudaSupport ? config.cudaSupport or false
+, cudaSupport ? config.cudaSupport
 , cudaPackages ? {}
 }:
 

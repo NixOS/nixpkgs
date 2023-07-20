@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, doxygen, numactl
 , rdma-core, libbfd, libiberty, perl, zlib, symlinkJoin, pkg-config
 , config
-, enableCuda ? config.cudaSupport or false
+, enableCuda ? config.cudaSupport
 , cudatoolkit
 , enableRocm ? false
 , rocm-core, rocm-runtime, rocm-device-libs, hip

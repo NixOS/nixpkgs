@@ -18,7 +18,7 @@
 # it would also make the default tensorflow package unfree. See
 # https://groups.google.com/a/tensorflow.org/forum/#!topic/developers/iRCt5m4qUz0
 , config
-, cudaSupport ? config.cudaSupport or false
+, cudaSupport ? config.cudaSupport
 , cudaPackages ? { }
 , cudaCapabilities ? cudaPackages.cudaFlags.cudaCapabilities
 , mklSupport ? false, mkl

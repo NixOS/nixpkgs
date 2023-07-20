@@ -31,7 +31,7 @@
 , vulkan-loader
 , libappindicator
 , config
-, cudaSupport ? config.cudaSupport or false
+, cudaSupport ? config.cudaSupport
 , cudaPackages ? {}
 }:
 let

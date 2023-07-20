@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, gfortran, blas, lapack
 , config
-, enableCuda ? config.cudaSupport or false, cudatoolkit
+, enableCuda ? config.cudaSupport, cudatoolkit
 }:
 
 let

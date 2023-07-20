@@ -2,7 +2,7 @@
 , singlePrec ? true
 , config
 , enableMpi ? false
-, enableCuda ? config.cudaSupport or false
+, enableCuda ? config.cudaSupport
 , cpuAcceleration ? null
 }:
 

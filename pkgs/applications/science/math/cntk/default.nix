@@ -3,7 +3,7 @@
 , openblas, blas, lapack, opencv3, libzip, boost, protobuf, mpi
 , onebitSGDSupport ? false
 , config
-, cudaSupport ? config.cudaSupport or false, cudaPackages ? {}, addOpenGLRunpath, cudatoolkit, nvidia_x11
+, cudaSupport ? config.cudaSupport, cudaPackages ? { }, addOpenGLRunpath, cudatoolkit, nvidia_x11
 , cudnnSupport ? cudaSupport
 }:
 

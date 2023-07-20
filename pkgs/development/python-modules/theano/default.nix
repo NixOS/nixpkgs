@@ -12,7 +12,7 @@
 , six
 , libgpuarray
 , config
-, cudaSupport ? config.cudaSupport or false, cudaPackages ? {}
+, cudaSupport ? config.cudaSupport, cudaPackages ? { }
 , cudnnSupport ? cudaSupport
 }:
 

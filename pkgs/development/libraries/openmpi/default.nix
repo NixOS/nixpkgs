@@ -3,7 +3,7 @@
 , libpsm2, libfabric, pmix, ucx
 , config
 # Enable CUDA support
-, cudaSupport ? config.cudaSupport or false, cudatoolkit
+, cudaSupport ? config.cudaSupport, cudatoolkit
 
 # Enable the Sun Grid Engine bindings
 , enableSGE ? false

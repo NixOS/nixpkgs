@@ -8,7 +8,7 @@
 # Enable NIVIA GPU support
 # Note, that this needs to be built on a system with a GPU
 # present for the tests to succeed.
-, enableCuda ? config.cudaSupport or false
+, enableCuda ? config.cudaSupport
 # type of GPU architecture
 , nvidiaArch ? "sm_60"
 , cudatoolkit

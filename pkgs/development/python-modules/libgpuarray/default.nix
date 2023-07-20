@@ -10,7 +10,7 @@
 , nose
 , mako
 , config
-, cudaSupport ? config.cudaSupport or false
+, cudaSupport ? config.cudaSupport
 , cudaPackages ? { }
 , openclSupport ? true, ocl-icd, clblas
 }:

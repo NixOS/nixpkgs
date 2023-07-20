@@ -22,7 +22,7 @@
 , tensorflow-estimator-bin
 , tensorboard
 , config
-, cudaSupport ? config.cudaSupport or false
+, cudaSupport ? config.cudaSupport
 , cudaPackages ? {}
 , zlib
 , python

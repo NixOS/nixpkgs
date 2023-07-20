@@ -20,7 +20,7 @@
 , doxygen
 , buildDocs ? false
 , config
-, cudaSupport ? config.cudaSupport or false
+, cudaSupport ? config.cudaSupport
 , cudatoolkit
 , darwin
 }:
