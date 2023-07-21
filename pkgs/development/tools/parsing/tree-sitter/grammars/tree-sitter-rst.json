@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/stsewd/tree-sitter-rst",
-  "rev": "25e6328872ac3a764ba8b926aea12719741103f1",
-  "date": "2022-08-26T17:09:42-05:00",
-  "path": "/nix/store/y831a05hzw8dsajijwkahgwwcf4ima8l-tree-sitter-rst",
-  "sha256": "0f53jmpjh2kcl9srwwwb7a5k24729ig96m87qjj99myqfnzahw43",
+  "rev": "a41a933524a54de1ba3ac4f5336b6eeb46deac15",
+  "date": "2023-06-17T23:27:56-05:00",
+  "path": "/nix/store/n96jkzb0a7v8s6620wpgf83cbphjz5jn-tree-sitter-rst",
+  "sha256": "1pdf98cq11qdl15kx4cak22fxwiy1vwcifdik7hsj5zizkv5gr5h",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
