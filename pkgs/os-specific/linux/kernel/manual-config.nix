@@ -337,7 +337,8 @@ stdenv.mkDerivation ({
         cp -HR $buildRoot/$f $dev/lib/modules/${modDirVersion}/build/$f
       fi
     done
-    ln -s $dev/lib/modules/${modDirVersion}/build/vmlinux $dev
+    mkdir $debug/
+    ln -s $dev/lib/modules/${modDirVersion}/build/vmlinux $debug
 
     # !!! No documentation on how much of the source tree must be kept
     # If/when kernel builds fail due to missing files, you can add
@@ -429,5 +430,5 @@ stdenv.mkDerivation ({
 } // optionalAttrs (pos != null) {
   inherit pos;
 } // optionalAttrs isModular {
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "debug" ];
 }))
