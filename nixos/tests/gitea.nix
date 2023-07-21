@@ -121,14 +121,10 @@ let
       client2.succeed(f"GIT_SSH_COMMAND='{GIT_SSH_COMMAND}' git clone {REPO}")
       client2.succeed('test "$(cat repo/testfile | xargs echo -n)" = "hello world"')
 
-      server.succeed(
+      server.wait_until_succeeds(
           'test "$(curl http://localhost:3000/api/v1/repos/test/repo/commits '
           + '-H "Accept: application/json" | jq length)" = "1"'
       )
-
-      client1.shutdown()
-      client2.shutdown()
-      server.shutdown()
     '';
   });
 in

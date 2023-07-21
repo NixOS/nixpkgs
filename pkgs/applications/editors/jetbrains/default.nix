@@ -97,20 +97,20 @@ let
       };
     });
 
-    buildDataSpell = { pname, version, src, license, description, wmClass, buildNumber, ... }:
-      (mkJetBrainsProduct {
-        inherit pname version src wmClass jdk buildNumber;
-        product = "DataSpell";
-        meta = with lib; {
-          homepage = "https://www.jetbrains.com/dataspell/";
-          inherit description license platforms;
-          longDescription = ''
-            DataSpell is a new IDE from JetBrains built for Data Scientists.
-            Mainly it integrates Jupyter notebooks in the IntelliJ platform.
-          '';
-          maintainers = with maintainers; [ leona ];
-        };
-      });
+  buildDataSpell = { pname, version, src, license, description, wmClass, buildNumber, ... }:
+    (mkJetBrainsProduct {
+      inherit pname version src wmClass jdk buildNumber;
+      product = "DataSpell";
+      meta = with lib; {
+        homepage = "https://www.jetbrains.com/dataspell/";
+        inherit description license platforms;
+        longDescription = ''
+          DataSpell is a new IDE from JetBrains built for Data Scientists.
+          Mainly it integrates Jupyter notebooks in the IntelliJ platform.
+        '';
+        maintainers = with maintainers; [ leona ];
+      };
+    });
 
   buildGateway = { pname, version, src, license, description, wmClass, buildNumber, product, ... }:
     (mkJetBrainsProduct {
@@ -132,6 +132,10 @@ let
     (mkJetBrainsProduct {
       inherit pname version src wmClass jdk buildNumber;
       product = "Goland";
+      extraWrapperArgs = [
+        # fortify source breaks build since delve compiles with -O0
+        ''--prefix CGO_CPPFLAGS " " "-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0"''
+      ];
       meta = with lib; {
         homepage = "https://www.jetbrains.com/go/";
         inherit description license platforms;
@@ -148,9 +152,6 @@ let
         interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
         patchelf --set-interpreter $interp $out/goland/plugins/go-plugin/lib/dlv/linux/dlv
         chmod +x $out/goland/plugins/go-plugin/lib/dlv/linux/dlv
-        # fortify source breaks build since delve compiles with -O0
-        wrapProgram $out/bin/goland \
-          --prefix CGO_CPPFLAGS " " "-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0"
       '';
     });
 

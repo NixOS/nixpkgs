@@ -15,6 +15,7 @@
 , qtsvg
 , qttools
 , qtwebengine
+, qtwayland
 , qtshadertools
 , wrapQtAppsHook
 , yaml-cpp
@@ -28,11 +29,11 @@
 
 stdenv.mkDerivation rec {
   pname = "qtcreator";
-  version = "10.0.2";
+  version = "11.0.0";
 
   src = fetchurl {
     url = "https://download.qt.io/official_releases/${pname}/${lib.versions.majorMinor version}/${version}/qt-creator-opensource-src-${version}.tar.xz";
-    hash = "sha256-2n/F59wagMccCeJFt9JxHrAbpXXi+ZEQ0Ep855mSbU4=";
+    hash = "sha256-2/RPVfsDg00nC+3v9pWsT8Aq862oRfW575graxWaFDA=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +51,7 @@ stdenv.mkDerivation rec {
     qtsvg
     qtquick3d
     qtwebengine
+    qtwayland
     qtserialport
     qtshadertools
     qt5compat
