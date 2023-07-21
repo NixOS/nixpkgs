@@ -1,26 +1,33 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptoolsLegacyNamespaceHook
 , sphinxcontrib-serializinghtml
-, six
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-websupport";
   version = "1.2.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4edf0223a0685a7c485ae5a156b6f529ba1ee481a1417817935b20bde1956232";
+    hash = "sha256-Tt8CI6BoWnxIWuWhVrb1Kboe5IGhQXgXk1sgveGVYjI=";
   };
 
-  propagatedBuildInputs = [ six sphinxcontrib-serializinghtml ];
+  nativeBuildInputs = [
+    setuptoolsLegacyNamespaceHook
+  ];
+
+  propagatedBuildInputs = [
+    sphinxcontrib-serializinghtml
+  ];
 
   doCheck = false;
 
   meta = {
     description = "Sphinx API for Web Apps";
-    homepage = "http://sphinx-doc.org/";
+    homepage = "https://github.com/sphinx-doc/sphinxcontrib-websupport";
     license = lib.licenses.bsd2;
   };
 }
