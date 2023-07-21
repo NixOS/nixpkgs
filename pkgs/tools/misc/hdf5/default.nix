@@ -75,7 +75,14 @@ stdenv.mkDerivation rec {
     ++ optional javaSupport "--enable-java"
     ++ optional usev110Api "--with-default-api-version=v110"
     # hdf5 hl (High Level) library is not considered stable with thread safety and should be disabled.
-    ++ optionals threadsafe [ "--enable-threadsafe" "--disable-hl" ];
+    ++ optionals threadsafe [ "--enable-threadsafe" "--disable-hl" ]
+    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "hdf5_cv_ldouble_to_long_special=no" # disabled except for IBM Power6 Linux
+      "hdf5_cv_long_to_ldouble_special=no" # disabled except for IBM Power6 Linux
+      "hdf5_cv_ldouble_to_llong_accurate=yes" # enabled except for Mac OS 10.4, SGI IRIX64 6.5 and Powerpc Linux using XL compilers
+      "hdf5_cv_llong_to_ldouble_correct=yes" # enabled except Mac OS 10.4 and Powerpc Linux using XL compilers
+      "hdf5_cv_disable_some_ldouble_conv=no" # disabled except for IBM ppc64le
+    ];
 
   patches = [
     # Avoid non-determinism in autoconf build system:
