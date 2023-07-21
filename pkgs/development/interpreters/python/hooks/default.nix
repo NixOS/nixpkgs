@@ -184,6 +184,11 @@ in {
         };
       } ./setuptools-rust-hook.sh) {};
 
+  setuptoolsLegacyNamespaceHook = callPackage ({ makePythonHook }:
+    makePythonHook {
+      name = "setuptools-legacy-namespace-hook";
+    } ./setuptools-legacy-namespace-hook.sh) {};
+
   unittestCheckHook = callPackage ({ makePythonHook }:
     makePythonHook {
       name = "unittest-check-hook";
