@@ -1,16 +1,22 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptoolsLegacyNamespaceHook
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-devhelp";
   version = "1.0.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ff7f1afa7b9642e7060379360a67e9c41e8f3121f2ce9164266f61b9f4b338e4";
+    hash = "sha256-/38a+nuWQucGA3k2CmfpxB6PMSHyzpFkJm9hufSzOOQ=";
   };
+
+  nativeBuildInputs = [
+    setuptoolsLegacyNamespaceHook
+  ];
 
   # Check is disabled due to circular dependency of sphinx
   doCheck = false;
