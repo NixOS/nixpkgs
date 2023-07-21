@@ -77,9 +77,20 @@ rec {
 
   nomad_1_5 = generic {
     buildGoModule = buildGo120Module;
-    version = "1.5.6";
-    sha256 = "sha256-eFzGaTJ9BcK5F10lkTKB3sNaGZsmZ0BbPZI6kT5ZUpo=";
-    vendorSha256 = "sha256-tOUQr44wUhhCccvj4dCI7fvLMrKaEX7xY7035Q3wU3M=";
+    version = "1.5.7";
+    sha256 = "sha256-IafIC1YVbJFQjC04S2rqjDgB83uSFpMajgsKxfFc/H8=";
+    vendorSha256 = "sha256-y3WiQuoQn6SdwTgtPWuB6EBtsJC+YleQPzownZQNkno=";
+    passthru.tests.nomad = nixosTests.nomad;
+    preCheck = ''
+      export PATH="$PATH:/build/go/bin"
+    '';
+  };
+
+  nomad_1_6 = generic {
+    buildGoModule = buildGo120Module;
+    version = "1.6.0";
+    sha256 = "sha256-979SlqBu2/kUdPB4BplhOcEq0J2sjKmFkEiLOzOAUPM=";
+    vendorSha256 = "sha256-Y3O7ADzZPlLWFbXSYBcI6b5MAhMD0UnkhQxO9VJMpOY=";
     passthru.tests.nomad = nixosTests.nomad;
     preCheck = ''
       export PATH="$PATH:/build/go/bin"

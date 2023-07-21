@@ -1789,6 +1789,8 @@ with pkgs;
 
   openbugs = pkgsi686Linux.callPackage ../applications/science/machine-learning/openbugs { };
 
+  osquery = callPackage ../tools/system/osquery { };
+
   paperview = callPackage ../tools/X11/paperview { };
 
   pferd = callPackage ../tools/misc/pferd { };
@@ -2066,6 +2068,8 @@ with pkgs;
   git-appraise = callPackage ../applications/version-management/git-appraise { };
 
   git-archive-all = python3.pkgs.callPackage ../applications/version-management/git-archive-all { };
+
+  git-backdate = callPackage ../applications/version-management/git-backdate { };
 
   git-backup = callPackage ../applications/version-management/git-backup {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -4810,6 +4814,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  diesel-cli-ext = callPackage ../development/tools/diesel-cli-ext { };
+
   refinery-cli = callPackage ../development/tools/refinery-cli { };
 
   digitemp = callPackage ../tools/misc/digitemp { };
@@ -5448,6 +5454,8 @@ with pkgs;
   hyx = callPackage ../tools/text/hyx { };
 
   icdiff = callPackage ../tools/text/icdiff { };
+
+  ictree = callPackage ../tools/misc/ictree { };
 
   inchi = callPackage ../development/libraries/inchi { };
 
@@ -10786,6 +10794,7 @@ with pkgs;
     nomad_1_3
     nomad_1_4
     nomad_1_5
+    nomad_1_6
     ;
 
   nomad-autoscaler = callPackage ../applications/networking/cluster/nomad-autoscaler { };
@@ -11947,9 +11956,7 @@ with pkgs;
 
   revolt-desktop = callPackage ../applications/networking/instant-messengers/revolt-desktop { };
 
-  rbw = callPackage ../tools/security/rbw {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  rbw = callPackage ../tools/security/rbw { };
 
   remarshal = with python3Packages; toPythonApplication remarshal;
 
@@ -15843,9 +15850,10 @@ with pkgs;
   gcc-arm-embedded-12 = callPackage ../development/compilers/gcc-arm-embedded/12 { };
   gcc-arm-embedded = gcc-arm-embedded-12;
 
-  # Has to match the default gcc so that there are no linking errors when
-  # using C/C++ libraries in D packages
-  gdc = wrapCC (gcc.cc.override {
+  # It would be better to match the default gcc so that there are no linking errors
+  # when using C/C++ libraries in D packages, but right now versions >= 12 are broken.
+  gdc = gdc11;
+  gdc11 = wrapCC (gcc11.cc.override {
     name = "gdc";
     langCC = false;
     langC = false;
@@ -22428,6 +22436,8 @@ with pkgs;
   libsoundio = callPackage ../development/libraries/libsoundio {
     inherit (darwin.apple_sdk.frameworks) AudioUnit;
   };
+
+  libspelling = callPackage ../development/libraries/libspelling { };
 
   libsystemtap = callPackage ../development/libraries/libsystemtap { };
 
@@ -32705,6 +32715,8 @@ with pkgs;
 
   kubelogin-oidc = callPackage ../applications/networking/cluster/kubelogin-oidc { };
 
+  kubevpn = callPackage ../applications/networking/cluster/kubevpn { };
+
   k8sgpt = callPackage ../applications/networking/cluster/k8sgpt { };
 
   k9s = callPackage ../applications/networking/cluster/k9s { };
@@ -34320,6 +34332,8 @@ with pkgs;
   pure-maps = libsForQt5.callPackage ../applications/misc/pure-maps { };
 
   pwdsafety = callPackage ../tools/security/pwdsafety { };
+
+  pyload-ng = callPackage ../applications/networking/pyload-ng {};
 
   pyrosimple = callPackage ../applications/networking/p2p/pyrosimple { };
 
@@ -36408,6 +36422,8 @@ with pkgs;
   alfis-nogui = alfis.override {
     withGui = false;
   };
+
+  aperture = callPackage ../applications/blockchains/aperture { };
 
   balanceofsatoshis = nodePackages.balanceofsatoshis;
 
