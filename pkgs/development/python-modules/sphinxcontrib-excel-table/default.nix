@@ -1,20 +1,28 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, sphinx
+, docutils
+, jinja2
 , openpyxl
+, sphinx
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-excel-table";
   version = "1.0.8";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256:1q79byn3k3ribvwqafbpixwabjhymk46ns8ym0hxcn8vhf5nljzd";
+    hash = "sha256-7Utqi4MbWdYhqB5pa8isHsqleI93OYX5XjGPOaxf6eA=";
   };
 
-  propagatedBuildInputs = [ sphinx openpyxl ];
+  propagatedBuildInputs = [
+    docutils
+    jinja2
+    openpyxl
+    sphinx
+  ];
 
   pythonImportsCheck = [ "sphinxcontrib.excel_table" ];
 
