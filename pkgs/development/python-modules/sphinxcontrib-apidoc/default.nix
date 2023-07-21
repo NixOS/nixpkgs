@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptoolsLegacyNamespaceHook
 , pbr
 }:
 
@@ -17,6 +18,10 @@ buildPythonPackage rec {
     # break infite recursion, remove pytest 4 requirement
     rm test-requirements.txt requirements.txt
   '';
+
+  nativeBuildInputs = [
+    setuptoolsLegacyNamespaceHook
+  ];
 
   propagatedBuildInputs = [
     pbr
