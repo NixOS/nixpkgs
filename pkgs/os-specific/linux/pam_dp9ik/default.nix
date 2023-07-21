@@ -14,10 +14,9 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pam ];
 
-  makeFlags = [ "pam_p9.so" ];
-  installPhase = ''
-    install -Dm755 -t $out/lib/security/ pam_p9.so
-  '';
+  buildFlags = [ "pam_p9.so" ];
+  installFlags = [ "PREFIX=$(out)" ];
+  installTargets = "pam.install";
 
   meta = with lib; {
     description = "dp9ik pam module";
