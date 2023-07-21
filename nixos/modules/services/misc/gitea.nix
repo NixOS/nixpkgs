@@ -585,7 +585,7 @@ in
         Restart = "always";
         # Runtime directory and mode
         RuntimeDirectory = "gitea";
-        RuntimeDirectoryMode = "0750";
+        RuntimeDirectoryMode = "0755";
         # Proc filesystem
         ProcSubset = "pid";
         ProtectProc = "invisible";

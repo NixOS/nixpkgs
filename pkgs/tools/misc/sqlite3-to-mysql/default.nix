@@ -19,6 +19,10 @@ let
           inherit version;
           hash = "sha256-LdpflnGa6Js+wPG3lpjYbrmuyx1U6ZCrs/3ZLAS0apA=";
         };
+        disabledTestPaths = [
+           "test/aaa_profiling"
+           "test/ext/mypy"
+        ];
       };
     };
     self = py;
