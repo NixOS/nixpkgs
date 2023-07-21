@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptoolsLegacyNamespaceHook
 , sphinx
 , pdf2svg
 , texLive
@@ -20,6 +21,10 @@ buildPythonPackage rec {
       --replace "config.latex_engine" "'${texLive}/bin/pdflatex'" \
       --replace "system(['pdf2svg'" "system(['${pdf2svg}/bin/pdf2svg'"
   '';
+
+  nativeBuildInputs = [
+    setuptoolsLegacyNamespaceHook
+  ];
 
   propagatedBuildInputs = [ sphinx ];
 
