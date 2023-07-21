@@ -1,18 +1,22 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
+, setuptoolsLegacyNamespaceHook
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-jsmath";
   version = "1.0.1";
-  disabled = isPy27;
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a9925e4a4587247ed2191a22df5f6970656cb8ca2bd6284309578f2153e0c4b8";
+    hash = "sha256-qZJeSkWHJH7SGRoi319pcGVsuMor1ihDCVePIVPgxLg=";
   };
+
+  nativeBuildInputs = [
+    setuptoolsLegacyNamespaceHook
+  ];
 
   # Check is disabled due to circular dependency of sphinx
   doCheck = false;
