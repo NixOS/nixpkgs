@@ -1,3 +1,4 @@
+from datetime import datetime
 from urllib.parse import quote
 import json
 import subprocess as sub
@@ -15,6 +16,15 @@ mode: str = sys.argv[1]
 jsonArg: dict = json.loads(sys.argv[2])
 
 Args = Iterator[str]
+
+
+# Latest release from neovim https://api.github.com/repos/tree-sitter/tree-sitter-bash/releases/latest
+# TODO: Unhardcode this? Pass it in from nix?
+MIN_TIMESTAMP = "2023-05-29T11:24:38Z"
+
+
+def parse_timestamp(ts: str) -> datetime:
+    return datetime.strptime(ts, "%Y-%m-%dT%H:%M:%SZ")
 
 
 def log(msg: str) -> None:
@@ -87,7 +97,7 @@ def run_cmd(args: Args) -> bytes:
 Dir = str
 
 
-def fetchRepo() -> None:
+def fetchRepo(min_timestamp: str | None = None) -> None:
     """fetch the given repo and write its nix-prefetch output to the corresponding grammar json file"""
     match jsonArg:
         case {
@@ -104,7 +114,9 @@ def fetchRepo() -> None:
                 )
             )
             release: str
-            match curl_result(out):
+
+            res = curl_result(out)
+            match res:
                 case "not found":
                     if "branch" in jsonArg:
                         branch = jsonArg.get("branch")
@@ -115,6 +127,11 @@ def fetchRepo() -> None:
                         release = "HEAD"
                 case {"tag_name": tag_name}:
                     release = tag_name
+
+                    # Check whether the latest release is too old
+                    if min_timestamp and parse_timestamp(res["created_at"]) < parse_timestamp(min_timestamp):
+                        log(f"latest release of {orga}/{repo} is too old ({res['created_at'}), using HEAD")
+                        release = "HEAD"
                 case _:
                     sys.exit(f"git result for {orga}/{repo} did not have a `tag_name` field")
 
@@ -213,7 +230,7 @@ def fetchAndCheckTreeSitterRepos() -> None:
 
 match mode:
     case "fetch-repo":
-        fetchRepo()
+        fetchRepo(MIN_TIMESTAMP)
     case "fetch-and-check-tree-sitter-repos":
         fetchAndCheckTreeSitterRepos()
     case "print-all-grammars-nix-file":
