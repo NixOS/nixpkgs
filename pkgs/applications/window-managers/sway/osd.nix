@@ -4,21 +4,24 @@
 , pkg-config
 , wrapGAppsHook
 , gtk-layer-shell
+, libevdev
+, libinput
 , libpulseaudio
+, udev
 }:
 
 rustPlatform.buildRustPackage {
   pname = "swayosd";
-  version = "unstable-2023-05-09";
+  version = "unstable-2023-07-18";
 
   src = fetchFromGitHub {
     owner = "ErikReider";
     repo = "SwayOSD";
-    rev = "5c2176ae6a01a18fdc2b0f5d5f593737b5765914";
-    hash = "sha256-rh42J6LWgNPOWYLaIwocU1JtQnA5P1jocN3ywVOfYoc=";
+    rev = "b14c83889c7860c174276d05dec6554169a681d9";
+    hash = "sha256-MJuTwEI599Y7q+0u0DMxRYaXsZfpksc2csgnK9Ghp/E=";
   };
 
-  cargoHash = "sha256-ZcgrUcRQTcEYhw2mpJDuYDz3I/u/2Q+O60ajXYRMeow=";
+  cargoHash = "sha256-pExpzQwuHREhgkj+eZ8drBVsh/B3WiQBBh906O6ymFw=";
 
   nativeBuildInputs = [
     wrapGAppsHook
@@ -27,7 +30,10 @@ rustPlatform.buildRustPackage {
 
   buildInputs = [
     gtk-layer-shell
+    libevdev
+    libinput
     libpulseaudio
+    udev
   ];
 
   meta = with lib; {
