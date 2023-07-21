@@ -4,7 +4,9 @@
 , alsa-lib
 , cmake
 , ffmpeg
+, fribidi
 , game-music-emu
+, libXdmcp
 , libXv
 , libass
 , libcddb
@@ -12,6 +14,7 @@
 , libpulseaudio
 , libsidplayfp
 , libva
+, libxcb
 , pkg-config
 , qtbase
 , qttools
@@ -42,7 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     alsa-lib
     ffmpeg
+    fribidi
     game-music-emu
+    libXdmcp
     libXv
     libass
     libcddb
@@ -50,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     libsidplayfp
     libva
+    libxcb
     qtbase
     qttools
     taglib
