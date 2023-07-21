@@ -309,8 +309,8 @@ let
           "/var/lib/acme/.lego/${cert}/${certDir}:/tmp/certificates"
         ];
 
-        # Only try loading the credentialsFile if the dns challenge is enabled
-        EnvironmentFile = mkIf useDns data.credentialsFile;
+        # Only try loading the environmentFile if the dns challenge is enabled
+        EnvironmentFile = mkIf useDns data.environmentFile;
 
         Environment = mkIf useDns
           (mapAttrsToList (k: v: ''"${k}=%d/${k}"'') data.credentialFiles);
@@ -449,6 +449,10 @@ let
       defaultText = if isDefaults then default else literalExpression "config.security.acme.defaults.${name}";
     };
   in {
+    imports = [
+      (mkRenamedOptionModule [ "credentialsFile" ] [ "environmentFile" ])
+    ];
+
     options = {
       validMinDays = mkOption {
         type = types.int;
@@ -560,9 +564,9 @@ let
         '';
       };
 
-      credentialsFile = mkOption {
+      environmentFile = mkOption {
         type = types.nullOr types.path;
-        inherit (defaultAndText "credentialsFile" null) default defaultText;
+        inherit (defaultAndText "environmentFile" null) default defaultText;
         description = lib.mdDoc ''
           Path to an EnvironmentFile for the cert's service containing any required and
           optional environment variables for your selected dnsProvider.
