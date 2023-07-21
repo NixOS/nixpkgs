@@ -51,6 +51,9 @@ stripDirs() {
     local stripFlags="$4"
     local pathsNew=
 
+    [ -z "$cmd" ] && echo "stripDirs: Strip command is empty" 1>&2 && exit 1
+    [ -z "$ranlibCmd" ] && echo "stripDirs: Ranlib command is empty" 1>&2 && exit 1
+
     local p
     for p in ${paths}; do
         if [ -e "$prefix/$p" ]; then
