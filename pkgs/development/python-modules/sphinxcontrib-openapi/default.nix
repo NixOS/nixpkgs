@@ -3,8 +3,8 @@
 , deepmerge
 , fetchPypi
 , fetchpatch
-, isPy27
 , setuptools-scm
+, setuptoolsLegacyNamespaceHook
 , jsonschema
 , picobox
 , pyyaml
@@ -15,14 +15,18 @@
 buildPythonPackage rec {
   pname = "sphinxcontrib-openapi";
   version = "0.8.1";
-  disabled = isPy27;
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-BPz4fCWTRRYqUEzj3+4PcTifUHw3l3mNxTHHdImVtOs=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools-scm
+    setuptoolsLegacyNamespaceHook
+  ];
+
   propagatedBuildInputs = [
     deepmerge
     jsonschema
