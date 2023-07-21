@@ -48,10 +48,15 @@ in stdenv.mkDerivation {
 
   meta = with lib;{
     description = "ODBC Driver for Microsoft(R) SQL Server(R) 17";
+    hydraPlatforms = [];
+    license = licenses.unfree;
+    maintainers = with maintainers; [
+      michaelCTS
+    ];
     platforms = [
       "aarch64-darwin"
       "x86_64-darwin"
     ];
-    license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }
