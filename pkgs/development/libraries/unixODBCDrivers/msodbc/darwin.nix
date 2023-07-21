@@ -1,10 +1,10 @@
 {
   darwin,
   fetchurl,
+  gnused,
   lib,
   libcxx,
   patchDylib,
-  ripgrep,
   stdenv,
   unixODBC,
 }:
@@ -25,13 +25,17 @@ in stdenv.mkDerivation {
   pname = "msodbc17";
   version = "17.10.4.1";
   src = fetchurl spec;
-  buildInputs = [ unixODBC ];
-  nativeBuildInputs = [ patchDylib ];
+  nativeBuildInputs = [ gnused patchDylib];
   installPhase = ''
     mkdir $out
     cp -r . $out
-    # TODO: Move it to /etc
-    rm $out/odbcinst.ini
+
+    # Setup odbcinst.ini for the driver to be found by unixODBC
+    # The file will have to be copied into a folder
+    #  and pointed to, which is possible with the env var ODBCSYSINI
+    # We can't put it into /etc/ as it would override other drivers
+    sed -i -e "s|Driver=.*|Driver=$(ls -1 $out/lib/*.dylib)|" \
+        $out/odbcinst.ini
   '';
   fixupPhase = ''
     runHook preFixup
