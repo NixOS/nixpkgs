@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptoolsLegacyNamespaceHook
 , unittestCheckHook
 , mock
 , sphinx-testing
@@ -11,11 +12,16 @@
 buildPythonPackage rec {
   pname = "sphinxcontrib-blockdiag";
   version = "3.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "aa49bf924516f5de8a479994c7be81e077df5599c9da2a082003d5b388e1d450";
+    hash = "sha256-qkm/kkUW9d6KR5mUx76B4HffVZnJ2ioIIAPVs4jh1FA=";
   };
+
+  nativeBuildInputs = [
+    setuptoolsLegacyNamespaceHook
+  ];
 
   buildInputs = [ mock sphinx-testing ];
   propagatedBuildInputs = [ sphinx blockdiag ];
@@ -33,5 +39,4 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ ];
     license = licenses.bsd2;
   };
-
 }
