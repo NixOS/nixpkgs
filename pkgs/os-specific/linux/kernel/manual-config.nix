@@ -98,13 +98,15 @@ let
   isModular = config.isYes "MODULES";
 
   kernelConf = stdenv.hostPlatform.linux-kernel;
-  target = kernelConf.target or "vmlinux";
-
   buildDTBs = kernelConf.DTB or false;
 in
 
 assert lib.versionOlder version "5.8" -> libelf != null;
 assert lib.versionAtLeast version "5.8" -> elfutils != null;
+
+# An kernel image target must be explicit as we cannot learn it
+# from the defaults in the different Makefile.
+assert kernelTarget != null || installTargets != [];
 
 stdenv.mkDerivation ({
   pname = "linux";
@@ -230,6 +232,7 @@ stdenv.mkDerivation ({
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ] ++ (kernelConf.makeFlags or [])
+    ++ lib.optional (kernelTarget != null) "KBUILD_IMAGE=${kernelTarget}"
     ++ extraMakeFlags;
 
   karch = stdenv.hostPlatform.linuxArch;
