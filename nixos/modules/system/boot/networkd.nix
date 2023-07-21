@@ -902,6 +902,9 @@ let
           "RelayTarget"
           "RelayAgentCircuitId"
           "RelayAgentRemoteId"
+          "BootServerAddress"
+          "BootServerName"
+          "BootFilename"
         ])
         (assertInt "PoolOffset")
         (assertMinimum "PoolOffset" 0)
