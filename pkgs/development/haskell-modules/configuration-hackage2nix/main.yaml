@@ -417,6 +417,8 @@ package-maintainers:
     - irc-client
     - chatter
     - envy
+  tbidne:
+    - rest-rewrite
   terlar:
     - nix-diff
   turion:

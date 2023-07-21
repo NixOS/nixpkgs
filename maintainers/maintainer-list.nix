@@ -16258,6 +16258,12 @@
     githubId = 863327;
     name = "Tyler Benster";
   };
+  tbidne = {
+    email = "tbidne@protonmail.com";
+    github = "tbidne";
+    githubId = 2856188;
+    name = "Thomas Bidne";
+  };
   tboerger = {
     email = "thomas@webhippie.de";
     matrix = "@tboerger:matrix.org";
