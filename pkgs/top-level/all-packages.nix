@@ -37220,6 +37220,8 @@ with pkgs;
 
   gambatte = callPackage ../games/gambatte { };
 
+  gambit-chess = callPackage ../games/gambit { };
+
   garden-of-coloured-lights = callPackage ../games/garden-of-coloured-lights { allegro = allegro4; };
 
   gargoyle = callPackage ../games/gargoyle {
