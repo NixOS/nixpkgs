@@ -6,12 +6,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "5.5.1";
+  version = "6.0.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-srT+jWQ22+e87HjeLUu3gBVjiFYUNbYaGWMVbp/F+9A=";
+    hash = "sha256-BeP+YOBtTz1D//LDBMha+07yVXdgBHfM4v4aVNHzwAw=";
   };
 
   nativeCheckInputs = with python3Packages; [
@@ -20,6 +20,7 @@ python3Packages.buildPythonApplication rec {
     requests-mock
     freezegun
     pytest-asyncio
+    pytest-trio
   ];
 
   nativeBuildInputs = with python3Packages; [
@@ -27,15 +28,18 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = (with python3Packages; [
+    certifi
     isodate
     lxml
     pycountry
     pycryptodome
     pysocks
     requests
-    websocket-client
+    trio
+    trio-websocket
+    typing-extensions
     urllib3
-    certifi
+    websocket-client
   ]) ++ [
     ffmpeg
   ];
