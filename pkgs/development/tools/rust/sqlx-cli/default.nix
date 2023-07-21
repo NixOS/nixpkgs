@@ -2,14 +2,15 @@
 , lib
 , rustPlatform
 , fetchFromGitHub
+, installShellFiles
 , pkg-config
 , openssl
-, SystemConfiguration
-, CoreFoundation
-, Security
 , libiconv
 , testers
 , sqlx-cli
+, CoreFoundation
+, Security
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,9 +29,26 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
   cargoBuildFlags = [ "-p sqlx-cli" ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ SystemConfiguration CoreFoundation Security libiconv ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+
+  buildInputs =
+    lib.optionals stdenv.isLinux [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [
+      CoreFoundation
+      Security
+      SystemConfiguration
+      libiconv
+    ];
+
+  postInstall = ''
+    for shell in bash fish zsh; do
+      $out/bin/sqlx completions $shell > sqlx.$shell
+      installShellCompletion sqlx.$shell
+    done
+  '';
 
   passthru.tests.version = testers.testVersion {
     package = sqlx-cli;
