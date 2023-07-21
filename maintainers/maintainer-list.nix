@@ -10294,6 +10294,12 @@
     githubId = 24759037;
     name = "Mathias Sven";
   };
+  mathletedev = {
+    email = "nealwang.sh@protonmail.com";
+    github = "mathletedev";
+    githubId = 63214683;
+    name = "Neal Wang";
+  };
   mathnerd314 = {
     email = "mathnerd314.gph+hs@gmail.com";
     github = "Mathnerd314";
