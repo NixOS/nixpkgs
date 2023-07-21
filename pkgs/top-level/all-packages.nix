@@ -33090,6 +33090,8 @@ with pkgs;
     electron = electron_9;
   };
 
+  markscribe = callPackage ../tools/text/markscribe { };
+
   magnetico = callPackage ../applications/networking/p2p/magnetico { };
 
   mastodon-bot = nodePackages.mastodon-bot;
