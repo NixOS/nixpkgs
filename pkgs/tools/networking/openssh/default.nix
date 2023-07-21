@@ -19,32 +19,33 @@ in
 
   openssh_hpn = common rec {
     pname = "openssh-with-hpn";
-    version = "9.2p1";
+    version = "9.3p1";
     extraDesc = " with high performance networking patches";
 
     src = fetchurl {
       url = "mirror://openbsd/OpenSSH/portable/openssh-${version}.tar.gz";
-      hash = "sha256-P2bb8WVftF9Q4cVtpiqwEhjCKIB7ITONY068351xz0Y=";
+      hash = "sha256-6bq6dwGnalHz2Fpiw4OjydzZf6kAuFm8fbEUwYaK+Kg=";
     };
 
-    extraPatches = [
+    extraPatches = let url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/700625bcd86b74cf3fb9536aeea250d7f8cd1fd5/security/openssh-portable/files/extra-patch-hpn"; in
+    [
       ./ssh-keysign-8.5.patch
 
       # HPN Patch from FreeBSD ports
       (fetchpatch {
         name = "ssh-hpn-wo-channels.patch";
-        url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/10491773d88012fe81d9c039cbbba647bde9ebc9/security/openssh-portable/files/extra-patch-hpn";
+        inherit url;
         stripLen = 1;
         excludes = [ "channels.c" ];
-        sha256 = "sha256-kSj0oE7gNHfIciy0/ErhdfrbmfjQmd8hduyiRXFnVZA=";
+        hash = "sha256-hYB3i0ifNOgGLYwElMJFcT+ktczLKciq3qw1tTHZHcc=";
       })
 
       (fetchpatch {
         name = "ssh-hpn-channels.patch";
-        url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/10491773d88012fe81d9c039cbbba647bde9ebc9/security/openssh-portable/files/extra-patch-hpn";
+        inherit url;
         extraPrefix = "";
         includes = [ "channels.c" ];
-        sha256 = "sha256-pDLUbjv5XIyByEbiRAXC3WMUPKmn15af1stVmcvr7fE=";
+        hash = "sha256-pDLUbjv5XIyByEbiRAXC3WMUPKmn15af1stVmcvr7fE=";
       })
     ];
 
@@ -53,7 +54,6 @@ in
     extraConfigureFlags = [ "--with-hpn" ];
     extraMeta = {
       maintainers = with lib.maintainers; [ abbe ];
-      knownVulnerabilities = [ "CVE-2023-28531" ];
     };
   };
 
