@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptoolsLegacyNamespaceHook
 , sphinx
 , plantuml
 , pythonOlder
@@ -17,6 +18,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-j95THZLRz8KBf+Nkez8tB+dmgsSoSInASlPoMffFRDI=";
   };
+
+  nativeBuildInputs = [
+    setuptoolsLegacyNamespaceHook
+  ];
 
   propagatedBuildInputs = [
     sphinx
