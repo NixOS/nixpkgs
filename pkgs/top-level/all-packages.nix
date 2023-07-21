@@ -30964,6 +30964,8 @@ with pkgs;
 
   expenses = callPackage ../applications/misc/expenses { };
 
+  flashcards = callPackage ../applications/misc/flashcards { };
+
   flowtime = callPackage ../applications/misc/flowtime { };
 
   fnott = callPackage ../applications/misc/fnott { };

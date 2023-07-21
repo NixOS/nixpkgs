@@ -16,11 +16,12 @@
 , xvfb-run
 , AppKit
 , Foundation
+, appstream
 }:
 
 stdenv.mkDerivation rec {
   pname = "libadwaita";
-  version = "1.3.3";
+  version = "unstable-2023-06-13";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -29,8 +30,8 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "libadwaita";
-    rev = version;
-    hash = "sha256-YIxGwl+/F7xkGjoi07GViSHAfCTE1RpEBhHfrlD0X/4=";
+    rev = "751dc404880ba71cc140f503bb23f8bca84e26eb";
+    hash = "sha256-7x8EPZZ34DAM0AmtrL6IfnMPPxx3KVLUbDneTHF+THo=";
   };
 
   depsBuildBuild = [
@@ -45,6 +46,7 @@ stdenv.mkDerivation rec {
     sassc
     vala
     gobject-introspection
+    appstream
   ];
 
   mesonFlags = [

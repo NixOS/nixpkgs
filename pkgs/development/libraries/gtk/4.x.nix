@@ -64,7 +64,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gtk4";
-  version = "4.10.4";
+  version = "4.11.3";
 
   outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
@@ -76,13 +76,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    sha256 = "dyVABILgaF4oJl4ibGKEf05zz8qem0FqxYOCB/U3eiQ=";
+    hash = "sha256-IrmyGhOyBdT0MLnXOg0hbxMwR89jiiVj/Nkpeks56wA=";
   };
-
-  patches = [
-    # https://github.com/NixOS/nixpkgs/pull/218143#issuecomment-1501059486
-    ./patches/4.0-fix-darwin-build.patch
-  ];
 
   depsBuildBuild = [
     pkg-config
@@ -192,6 +187,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     files=(
       build-aux/meson/gen-demo-header.py
+      build-aux/meson/gen-visibility-macros.py
       demos/gtk-demo/geninclude.py
       gdk/broadway/gen-c-array.py
       gdk/gen-gdk-gresources-xml.py
