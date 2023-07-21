@@ -98,10 +98,12 @@ with lib;
     qemuExtraConf = mkOption {
       type = with types; attrsOf (oneOf [ str int ]);
       default = {};
-      example = literalExpression ''{
-        cpu = "host";
-        onboot = 1;
-      }'';
+      example = literalExpression ''
+        {
+          cpu = "host";
+          onboot = 1;
+        }
+      '';
       description = lib.mdDoc ''
         Additional options appended to qemu-server.conf
       '';

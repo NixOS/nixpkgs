@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "level-zero";
-  version = "1.12.0";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "level-zero";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9XfvU01nVcY2NpCqjUyPEJ+F/+A4YjjE0ktMQyEkr3Q=";
+    hash = "sha256-qV2OM41+DkuT3lDCTHOyNkHixD/HITfCiItBQX6Ewio=";
   };
 
   nativeBuildInputs = [ cmake addOpenGLRunpath ];

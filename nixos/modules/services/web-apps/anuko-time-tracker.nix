@@ -42,13 +42,15 @@ let
       mkdir -p $out
       cp -r * $out/
 
+      # Link config file
       ln -s ${configFile} $out/WEB-INF/config.php
 
       # Link writable templates_c directory
       rm -rf $out/WEB-INF/templates_c
       ln -s ${cfg.dataDir}/templates_c $out/WEB-INF/templates_c
 
-      # ln -fs ${cfg.dataDir}/templates_c $out/WEB-INF/templates_c
+      # Remove unsafe dbinstall.php
+      rm -f $out/dbinstall.php
     '';
   };
 in
@@ -105,6 +107,41 @@ in
       '';
     };
 
+    hostname = lib.mkOption {
+      type = lib.types.str;
+      default =
+        if config.networking.domain != null
+        then config.networking.fqdn
+        else config.networking.hostName;
+      defaultText = lib.literalExpression "config.networking.fqdn";
+      example = "anuko.example.com";
+      description = lib.mdDoc ''
+        The hostname to serve Anuko Time Tracker on.
+      '';
+    };
+
+    nginx = lib.mkOption {
+      type = lib.types.submodule (
+        lib.recursiveUpdate
+          (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {}
+      );
+      default = {};
+      example = lib.literalExpression ''
+        {
+          serverAliases = [
+            "anuko.''${config.networking.domain}"
+          ];
+
+          # To enable encryption and let let's encrypt take care of certificate
+          forceSSL = true;
+          enableACME = true;
+        }
+      '';
+      description = lib.mdDoc ''
+        With this option, you can customize the Nginx virtualHost settings.
+      '';
+    };
+
     dataDir = lib.mkOption {
       type = lib.types.str;
       default = "/var/lib/anuko-time-tracker";
@@ -116,15 +153,6 @@ in
       type = lib.types.str;
       default = "anuko_time_tracker";
       description = lib.mdDoc "User under which Anuko Time Tracker runs.";
-    };
-
-    virtualHost = lib.mkOption {
-      type = lib.types.nullOr lib.types.str;
-      default = "localhost";
-      description = lib.mdDoc ''
-        Name of the nginx virtualhost to use and setup. If null, do not setup
-        any virtualhost.
-      '';
     };
 
     settings = {
@@ -286,20 +314,26 @@ in
       };
     };
 
-    services.nginx = lib.mkIf (cfg.virtualHost != null) {
-      enable = true;
-      virtualHosts = {
-        "${cfg.virtualHost}" = {
+    services.nginx = {
+      enable = lib.mkDefault true;
+      recommendedTlsSettings = true;
+      recommendedOptimisation = true;
+      recommendedGzipSettings = true;
+      virtualHosts."${cfg.hostname}" = lib.mkMerge [
+        cfg.nginx
+        {
           root = lib.mkForce "${package}";
-          locations."/".index = "index.php";
-          locations."~ [^/]\\.php(/|$)" = {
-            extraConfig = ''
-              fastcgi_split_path_info ^(.+?\.php)(/.*)$;
-              fastcgi_pass unix:${config.services.phpfpm.pools.anuko-time-tracker.socket};
-            '';
+          locations = {
+            "/".index = "index.php";
+            "~ [^/]\\.php(/|$)" = {
+              extraConfig = ''
+                fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+                fastcgi_pass unix:${config.services.phpfpm.pools.anuko-time-tracker.socket};
+              '';
+            };
           };
-        };
-      };
+        }
+      ];
     };
 
     services.mysql = lib.mkIf cfg.database.createLocally {

@@ -39,17 +39,31 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "4.1.1";
   pname = "shairport-sync";
+  version = "4.2";
 
   src = fetchFromGitHub {
-    rev = version;
     repo = "shairport-sync";
     owner = "mikebrady";
-    hash = "sha256-EKt5mH9GmzeR4zdPDFOt26T9STpG1khVrY4DFIv5Maw=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ru2iaXSgS+w2ktqGLGC9SiYztkmmOQVzHaeLwMqvMzk=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    # For glib we want the `dev` output for the same library we are
+    # also linking against, since pkgsHostTarget.glib.dev exposes
+    # some extra tools that are built for build->host execution.
+    # To achieve this, we coerce the output to a string to prevent
+    # mkDerivation's splicing logic from kicking in.
+    "${glib.dev}"
+  ];
+
+  makeFlags = [
+    # Workaround for https://github.com/mikebrady/shairport-sync/issues/1705
+    "AR=${stdenv.cc.bintools.targetPrefix}ar"
+  ];
 
   buildInputs = [
     openssl
@@ -99,6 +113,8 @@ stdenv.mkDerivation rec {
   ++ optional enableMpris "--with-mpris-interface"
   ++ optional enableLibdaemon "--with-libdaemon"
   ++ optional enableAirplay2 "--with-airplay-2";
+
+  strictDeps = true;
 
   meta = with lib; {
     homepage = "https://github.com/mikebrady/shairport-sync";

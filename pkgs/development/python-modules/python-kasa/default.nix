@@ -1,10 +1,12 @@
 { lib
+, anyio
 , asyncclick
 , buildPythonPackage
 , fetchFromGitHub
-, importlib-metadata
-, pydantic
+, kasa-crypt
+, orjson
 , poetry-core
+, pydantic
 , pytest-asyncio
 , pytest-mock
 , pytestCheckHook
@@ -14,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "python-kasa";
-  version = "0.5.1";
+  version = "0.5.2";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-vp2r842f9A2lEFLhUcHyGZavAWT4Ke9mH+FAlGucdqo=";
+    hash = "sha256-+ezs8mj3TRmeIhKPxyov9BPdNkhj0ri4FgoZdW7O8tA=";
   };
 
   nativeBuildInputs = [
@@ -31,8 +33,8 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    anyio
     asyncclick
-    importlib-metadata
     pydantic
   ];
 
@@ -42,6 +44,13 @@ buildPythonPackage rec {
     pytestCheckHook
     voluptuous
   ];
+
+  passthru.optional-dependencies = {
+    speedup = [
+      kasa-crypt
+      orjson
+    ];
+  };
 
   pytestFlagsArray = [
     "--asyncio-mode=auto"

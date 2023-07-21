@@ -3,16 +3,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "evcxr";
-  version = "0.14.2";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "evcxr";
     rev = "v${version}";
-    sha256 = "sha256-gREAtCh4jerqxhwNslXIXRMLkoj0RlhbIwQXbb8LVws=";
+    sha256 = "sha256-IQM/uKDxt18rVOd6MOKhQZC26vjxVe+3Yn479ITFDFs=";
   };
 
-  cargoSha256 = "sha256-xuxWOVSUJVQvSDA5xhFBjdO/ODLA4fzEnzG9p0DRF2Q=";
+  cargoHash = "sha256-6kyxAHxphZjwfHo7OHrATSKFzrpXIRHVTjynDawlWew=";
 
   RUST_SRC_PATH = "${rustPlatform.rustLibSrc}";
 
@@ -25,10 +25,6 @@ rustPlatform.buildRustPackage rec {
     # * https://github.com/evcxr/evcxr/issues/294
     # * https://github.com/NixOS/nixpkgs/issues/229524
     "--skip=check_for_errors"
-
-    # test broken with rust 1.70
-    # * https://github.com/evcxr/evcxr/issues/295
-    "--skip=partially_inferred_variable_type"
   ];
 
   postInstall = let

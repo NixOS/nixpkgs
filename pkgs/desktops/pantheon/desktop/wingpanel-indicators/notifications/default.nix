@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-notifications";
-  version = "6.0.7";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-MIuyVGI4jSLGQMQUmj/2PIvcRHSJyPO5Pnd1f8JIuXc=";
+    sha256 = "sha256-HEkuNJgG0WEOKO6upwQgXg4huA7dNyz73U1nyOjQiTs=";
   };
 
   nativeBuildInputs = [

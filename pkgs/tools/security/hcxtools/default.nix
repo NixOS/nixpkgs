@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hcxtools";
-  version = "6.3.0";
+  version = "6.3.1";
 
   src = fetchFromGitHub {
     owner = "ZerBea";
     repo = pname;
     rev = version;
-    sha256 = "sha256-p1G+Kxh0OfTRDTSBl2NxhRrQYsehGuCxmGU87CBjyW0=";
+    sha256 = "sha256-EDTxzstQwQy7MSkdi1nQis8qEm8ZPblkeOkM8B48IRE=";
   };
 
   nativeBuildInputs = [ pkg-config ];

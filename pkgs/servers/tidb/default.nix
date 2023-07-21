@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "tidb";
-  version = "7.1.0";
+  version = "7.2.0";
 
   src = fetchFromGitHub {
     owner = "pingcap";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-KiF76SD2YbZ4GFXiuCLODIb1guOTYJ7MHCFTVQKytyY=";
+    sha256 = "sha256-7iz82H3H22GCLvy8VD+t1BkEEoNQ0+6ZLBOUwWTlNfI=";
   };
 
-  vendorHash = "sha256-yfsOIQGqHk6kX2usQwkSHGcaOkJnF8ZFfM58Owpjvec=";
+  vendorHash = "sha256-9vgxdX8CPUbyJZNSkwTZK02ORIXACjad/yPef8zB7FU=";
 
   ldflags = [
     "-s"

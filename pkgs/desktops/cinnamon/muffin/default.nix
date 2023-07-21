@@ -35,7 +35,7 @@
 
 stdenv.mkDerivation rec {
   pname = "muffin";
-  version = "5.8.0";
+  version = "5.8.1";
 
   outputs = [ "out" "dev" "man" ];
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-2pF6mKSSW4S0mfb4iBfZKBIVXKzrVyPeftcVrWSWzhc=";
+    hash = "sha256-9YE+pHXJb21CcAflL9swNyhQY3ZCkLlZbnmUwTNdyfA=";
   };
 
   patches = [

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "base16-schemes";
-  version = "unstable-2022-12-16";
+  version = "unstable-2023-05-02";
 
   src = fetchFromGitHub {
     owner = "tinted-theming";
     repo = "base16-schemes";
-    rev = "cf6bc892a24af19e11383adedc6ce7901f133ea7";
-    sha256 = "sha256-U9pfie3qABp5sTr3M9ga/jX8C807FeiXlmEZnC4ZM58=";
+    rev = "9a4002f78dd1094c123169da243680b2fda3fe69";
+    sha256 = "sha256-AngNF++RZQB0l4M8pRgcv66pAcIPY+cCwmUOd+RBJKA=";
   };
 
   installPhase = ''

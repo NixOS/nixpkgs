@@ -44,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "1.4.2";
+  version = "1.5.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-AiRQFZA5+M1niTzj1RO2lx0QFOMmSzpQo1gzauyTblg=";
+    hash = "sha256-1zqfGzSI5RDACSNcz0tLA4VKMFwE5uD/YqOkgpzg2nQ=";
   };
 
   nativeBuildInputs = [
@@ -123,6 +123,7 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
+    "test_installer_with_pypi_repository"
     # touches network
     "git"
     "solver"

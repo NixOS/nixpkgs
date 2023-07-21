@@ -140,13 +140,6 @@ in
       '';
     };
 
-    defaultChannel = mkOption {
-      internal = true;
-      type = types.str;
-      default = "https://nixos.org/channels/nixos-unstable";
-      description = lib.mdDoc "Default NixOS channel to which the root user is subscribed.";
-    };
-
     configurationRevision = mkOption {
       type = types.nullOr types.str;
       default = null;

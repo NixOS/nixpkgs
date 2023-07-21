@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opensbi";
-  version = "1.2";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "riscv-software-src";
     repo = "opensbi";
     rev = "v${version}";
-    sha256 = "sha256-Zcl+SE2nySMycV/ozsl4AvGipRsMblA5mt3oVZ81Z44=";
+    hash = "sha256-JNkPvmKYd5xbGB2lsZKWrpI6rBIckWbkLYu98bw7+QY=";
   };
 
   postPatch = ''

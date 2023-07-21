@@ -78,6 +78,6 @@ buildPythonPackage rec {
     description = "Resolving Swagger/OpenAPI 2.0 and 3.0.0 Parser";
     homepage = "https://github.com/RonnyPfannschmidt/prance";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "keylight-controller-mschneider82";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "mschneider82";
     repo = "keylight-control";
     rev = "v${version}";
-    sha256 = "sha256-UZfbGihCgFBQE1oExuzCexoNgpVGwNoA9orjZ9fh4gA=";
+    hash = "sha256-xC/JRM8vyqAsxPpf37P3pZv6i73s+CLQt6Sh4nMxwzM=";
   };
 
-  vendorSha256 = "sha256-nFttVJbEAAGsrAglMphuw0wJ2Kf8sWB4HrpVqfHO76o=";
+  vendorHash = "sha256-nFttVJbEAAGsrAglMphuw0wJ2Kf8sWB4HrpVqfHO76o=";
 
   nativeBuildInputs = [
     pkg-config

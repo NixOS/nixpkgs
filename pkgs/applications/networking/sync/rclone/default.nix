@@ -1,20 +1,21 @@
 { lib, stdenv, buildGoModule, fetchFromGitHub, buildPackages, installShellFiles
 , makeWrapper
 , enableCmount ? true, fuse, macfuse-stubs
+, librclone
 }:
 
 buildGoModule rec {
   pname = "rclone";
-  version = "1.62.2";
+  version = "1.63.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nG3XW6OGzfbvkBmlmeOCnVRFun3EWIVLLvMXGhOAi+4=";
+    hash = "sha256-H//Y7BFBr3VXAoKZZgjSgU4aA+Af7tvFozhpoj14ba0=";
   };
 
-  vendorSha256 = "sha256-UA6PlhKxJ9wpg3mbiJ4Mqc4npwEBa93qi6WrQR8JQSk=";
+  vendorHash = "sha256-AXgyyI6ZbTepC/TGkHQvHiwpQOjzwG5ung71nKE5d1Y=";
 
   subPackages = [ "." ];
 
@@ -49,11 +50,15 @@ buildGoModule rec {
         --prefix LD_LIBRARY_PATH : "${fuse}/lib"
     '';
 
+  passthru.tests = {
+    inherit librclone;
+  };
+
   meta = with lib; {
     description = "Command line program to sync files and directories to and from major cloud storage";
     homepage = "https://rclone.org";
     changelog = "https://github.com/rclone/rclone/blob/v${version}/docs/content/changelog.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ danielfullmer marsam SuperSandro2000 ];
+    maintainers = with maintainers; [ marsam SuperSandro2000 ];
   };
 }

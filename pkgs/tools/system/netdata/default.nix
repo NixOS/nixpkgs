@@ -17,14 +17,14 @@
 
 stdenv.mkDerivation rec {
   # Don't forget to update go.d.plugin.nix as well
-  version = "1.40.0";
+  version = "1.41.0";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "sha256-phPfbmzOVOLBCD29tg5DAak+Q2548iqiE1ZXbEkBhzc=";
+    sha256 = "sha256-MZQ1ZTghH4bN7kCMqbyQlAGSgE70sYJxjiamTTH/6ds=";
     fetchSubmodules = true;
   };
 
@@ -49,11 +49,6 @@ stdenv.mkDerivation rec {
     # required to prevent plugins from relying on /etc
     # and /var
     ./no-files-in-etc-and-var.patch
-    # The current IPC location is unsafe as it writes
-    # a fixed path in /tmp, which is world-writable.
-    # Therefore we put it into `/run/netdata`, which is owned
-    # by netdata only.
-    ./ipc-socket-in-run.patch
 
     # Avoid build-only inputs in closure leaked by configure command:
     #   https://github.com/NixOS/nixpkgs/issues/175693#issuecomment-1143344162
@@ -65,7 +60,7 @@ stdenv.mkDerivation rec {
   # to bootstrap tools:
   #   https://github.com/NixOS/nixpkgs/pull/175719
   # We pick zlib.dev as a simple canary package with pkg-config input.
-  disallowedReferences = if withDebug then [] else [ zlib.dev ];
+  disallowedReferences = lib.optional (!withDebug) zlib.dev;
 
   donStrip = withDebug;
   env.NIX_CFLAGS_COMPILE = lib.optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";

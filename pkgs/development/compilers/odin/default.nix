@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
 , llvmPackages_13
-, makeWrapper
+, makeBinaryWrapper
 , libiconv
 , MacOSX-SDK
 , which
@@ -12,17 +12,17 @@ let
   inherit (llvmPackages) stdenv;
 in stdenv.mkDerivation rec {
   pname = "odin";
-  version = "dev-2023-05";
+  version = "dev-2023-07";
 
   src = fetchFromGitHub {
     owner = "odin-lang";
     repo = "Odin";
     rev = version;
-    sha256 = "sha256-qEewo2h4dpivJ7D4RxxBZbtrsiMJ7AgqJcucmanbgxY=";
+    hash = "sha256-ksCK1Qmjbg5ZgFoq0I4cjrWaCxd+UW7f1NLcSjCPMwE=";
   };
 
   nativeBuildInputs = [
-    makeWrapper which
+    makeBinaryWrapper which
   ];
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
@@ -47,6 +47,8 @@ in stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp odin $out/bin/odin
 
@@ -62,6 +64,8 @@ in stdenv.mkDerivation rec {
         lld
       ])} \
       --set-default ODIN_ROOT $out/share
+
+    runHook postInstall
   '';
 
   meta = with lib; {

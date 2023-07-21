@@ -242,7 +242,7 @@ let
         description = "A compiled language with Ruby like syntax and type inference";
         homepage = "https://crystal-lang.org/";
         license = licenses.asl20;
-        maintainers = with maintainers; [ david50407 manveru peterhoeg ];
+        maintainers = with maintainers; [ david50407 manveru peterhoeg donovanglover ];
       };
     })
   );
@@ -278,5 +278,11 @@ rec {
     binary = binaryCrystal_1_2;
   };
 
-  crystal = crystal_1_8;
+  crystal_1_9 = generic {
+    version = "1.9.0";
+    sha256 = "sha256-FFpAL1U8WtfwDCLaUP+axSnJlGaKp/jzBs54rit9T2A=";
+    binary = binaryCrystal_1_2;
+  };
+
+  crystal = crystal_1_9;
 }

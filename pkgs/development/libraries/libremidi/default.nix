@@ -9,15 +9,15 @@
 , stdenv
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libremidi";
-  version = "unstable-2023-05-05";
+  version = "3.0";
 
   src = fetchFromGitHub {
     owner = "jcelerier";
     repo = "libremidi";
-    rev = "cd2e52d59c8ecc97d751619072c4f4271fa82455";
-    hash = "sha256-CydoCprxqDl5FXjtgT+AckaRTqQAlCDwwrnPDK17A6o=";
+    rev = "v${version}";
+    hash = "sha256-aO83a0DmzwjYXDlPIsn136EkDF0406HadTXPoGuVF6I=";
   };
 
   nativeBuildInputs = [ cmake ];

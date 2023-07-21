@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, meson, pkg-config, ninja, wayland-scanner
 , libdrm
-, minimal ? false, libva-minimal
+, minimal ? false
 , libX11, libXext, libXfixes, wayland, libffi, libGL
 , mesa
 # for passthru.tests
@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ pkg-config ];
 
-  nativeBuildInputs = [ meson pkg-config ninja wayland-scanner ];
+  nativeBuildInputs = [ meson pkg-config ninja ]
+    ++ lib.optional (!minimal) wayland-scanner;
 
   buildInputs = [ libdrm ]
-    ++ lib.optionals (!minimal) [ libva-minimal libX11 libXext libXfixes wayland libffi libGL ];
-  # TODO: share libs between minimal and !minimal - perhaps just symlink them
+    ++ lib.optionals (!minimal) [ libX11 libXext libXfixes wayland libffi libGL ];
 
   mesonFlags = [
     # Add FHS and Debian paths for non-NixOS applications

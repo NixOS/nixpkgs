@@ -1,4 +1,5 @@
 { lib
+, aiohttp-retry
 , buildPythonPackage
 , fetchFromGitHub
 , freezegun
@@ -21,16 +22,16 @@
 
 buildPythonPackage rec {
   pname = "pyrainbird";
-  version = "2.0.1";
+  version = "3.0.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-ssm/nFciUeWexgsKUpF4qZHz/grG8OYJV7roBAjMsac=";
+    hash = "sha256-G/mmM2lEQWJV+7uZHKECj1jnhTYbcOw9yCi4/9nRDuk=";
   };
 
   postPatch = ''
@@ -42,6 +43,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+    aiohttp-retry
     ical
     pycryptodome
     pydantic
@@ -49,6 +51,8 @@ buildPythonPackage rec {
     pyyaml
     requests
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     freezegun

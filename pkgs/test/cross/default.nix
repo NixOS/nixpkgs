@@ -107,7 +107,44 @@ let
     '';
   };
 
+  # see https://github.com/NixOS/nixpkgs/issues/213453
+  # this is a good test of a lot of tricky glibc/libgcc corner cases
+  mbuffer = let
+    mbuffer = pkgs.pkgsCross.aarch64-multiplatform.mbuffer;
+    emulator = with lib.systems; (elaborate examples.aarch64-multiplatform).emulator pkgs;
+  in
+    pkgs.runCommand "test-mbuffer" {} ''
+      echo hello | ${emulator} ${mbuffer}/bin/mbuffer
+    '';
+
+  # This is meant to be a carefully curated list of builds/packages
+  # that tend to break when refactoring our cross-compilation
+  # infrastructure.
+  #
+  # It should strike a balance between being small enough to fit in
+  # a single eval (i.e. not so large that hydra-eval-jobs is needed)
+  # so we can ask @ofborg to check it, yet should have good examples
+  # of things that often break.  So, no buckshot `mapTestOnCross`
+  # calls here.
+  sanity = [
+    #pkgs.mbuffer              # https://github.com/NixOS/nixpkgs/issues/213453
+    #pkgs.pkgsCross.gnu64.bash # https://github.com/NixOS/nixpkgs/issues/243164
+    pkgs.gcc_multi.cc
+    pkgs.pkgsMusl.stdenv
+    pkgs.pkgsLLVM.stdenv
+    pkgs.pkgsStatic.bash
+    pkgs.pkgsCross.arm-embedded.stdenv
+    pkgs.pkgsCross.m68k.stdenv
+    pkgs.pkgsCross.aarch64-multiplatform.pkgsBuildTarget.gcc
+    pkgs.pkgsCross.powernv.pkgsBuildTarget.gcc
+    pkgs.pkgsCross.mips64el-linux-gnuabi64.stdenv
+    pkgs.pkgsCross.mips64el-linux-gnuabin32.stdenv
+    pkgs.pkgsCross.mingwW64.stdenv
+  ];
+
 in {
   gcc = (lib.mapAttrs (_: mapMultiPlatformTest (system: system // {useLLVM = false;})) tests);
   llvm = (lib.mapAttrs (_: mapMultiPlatformTest (system: system // {useLLVM = true;})) tests);
+
+  inherit mbuffer sanity;
 }

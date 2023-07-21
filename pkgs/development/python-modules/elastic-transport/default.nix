@@ -60,6 +60,13 @@ buildPythonPackage rec {
     "test_default_headers"
     "test_head"
     "tls"
+    "test_simple_request"
+    "test_node"
+    "test_debug_logging"
+    "test_debug_logging_uncompressed_body"
+    "test_debug_logging_no_body"
+    "test_httpbin"
+    "test_sniffed_nodes_added_to_pool"
   ];
 
   meta = with lib; {

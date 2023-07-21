@@ -46,6 +46,7 @@
 , google-api-python-client
 , pypdf
 , networkx
+, pgvector
 , psycopg2
 , boto3
 , pyowm
@@ -79,7 +80,7 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.0.218";
+  version = "0.0.229";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -88,7 +89,7 @@ buildPythonPackage rec {
     owner = "hwchase17";
     repo = "langchain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8ru3Rp1bRLVivfXAFNfZYfV3DgHuHNEuCrKoqL1O0zo=";
+    hash = "sha256-9hPF+0bEcFGH2oop3e513kBp6UeUEBlPXD+2pZ4dCi0=";
   };
 
   postPatch = ''
@@ -196,7 +197,7 @@ buildPythonPackage rec {
       # nomic
       # aleph-alpha-client
       # deeplake
-      # pgvector
+      pgvector
       psycopg2
       boto3
       pyowm
@@ -229,10 +230,6 @@ buildPythonPackage rec {
       langchainplus-sdk
     ];
   };
-
-  pythonRelaxDeps = [
-    "langchainplus-sdk"
-  ];
 
   nativeCheckInputs = [
     pytestCheckHook

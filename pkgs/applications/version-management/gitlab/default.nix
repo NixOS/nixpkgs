@@ -211,7 +211,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "http://www.gitlab.com/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ globin krav talyz yayayayaka yuka ];
+    maintainers = teams.gitlab.members;
   } // (if gitlabEnterprise then
     {
       license = licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE

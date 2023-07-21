@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libmediainfo";
-  version = "23.04";
+  version = "23.06";
 
   src = fetchurl {
     url = "https://mediaarea.net/download/source/libmediainfo/${version}/libmediainfo_${version}.tar.xz";
-    sha256 = "sha256-NlDt6jJv5U0/Y0YUdkSZUI++7ErphAAvCGrfHQwHGSY=";
+    sha256 = "sha256-xrGuiyu89AM0BRizyU8q51yOsAaCv7vRiyJELkLcz80=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Shared library for mediainfo";
     homepage = "https://mediaarea.net/";
+    changelog = "https://mediaarea.net/MediaInfo/ChangeLog";
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = [ maintainers.devhell ];

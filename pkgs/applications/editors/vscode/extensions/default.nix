@@ -326,8 +326,8 @@ let
         mktplcRef = {
           name = "astro-vscode";
           publisher = "astro-build";
-          version = "1.0.6";
-          sha256 = "sha256-/gpZtOO8MA/MJ1o9eG4qmPqhWRZ5E+elA9Rr/kpOprI=";
+          version = "2.1.1";
+          sha256 = "sha256-UVZOpkOHbLiwA4VfTgXxuIU8EtJLnqRa5zUVha6xQJY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/astro-build.astro-vscode/changelog";
@@ -372,13 +372,13 @@ let
         mktplcRef = {
           name = "Millet";
           publisher = "azdavis";
-          version = "0.3.5";
-          sha256 = "sha256-lQ7EMs6nsTEgP9BESMpyoZG7QVOe7DXzfg/iZr1+DCQ=";
+          version = "0.12.5";
+          sha256 = "sha256-gJIxCdoxWGThalY+qJ930UtRLFkvr34LfaSioAZH9TQ=";
         };
         nativeBuildInputs = [ jq moreutils ];
         postInstall = ''
           cd "$out/$installPrefix"
-          jq '.contributes.configuration.properties."millet.server.path".default = "${millet}/bin/lang-srv"' package.json | sponge package.json
+          jq '.contributes.configuration.properties."millet.server.path".default = "${millet}/bin/millet-ls"' package.json | sponge package.json
         '';
         meta = {
           description = "Standard ML support for VS Code";
@@ -477,8 +477,8 @@ let
         mktplcRef = {
           name = "calva";
           publisher = "betterthantomorrow";
-          version = "2.0.205";
-          sha256 = "sha256-umnG1uLB42fUNKjANaKcABjVmqbdOQakd/6TPsEpF9c";
+          version = "2.0.374";
+          sha256 = "sha256-VwdHOkduSSIrcOvrcVf7K8DSp3N1u9fvbaCVDCxp+bk=";
         };
         nativeBuildInputs = [ jq moreutils ];
         postInstall = ''
@@ -930,8 +930,8 @@ let
         mktplcRef = {
           name = "composer-php-vscode";
           publisher = "devsense";
-          version = "1.34.13295";
-          sha256 = "sha256-1gmw9GKG6ak/TIDq8aI63KmiHhup9EsCS583Oc6jQ0I=";
+          version = "1.36.13428";
+          sha256 = "sha256-dzRuD0XBWU+xUtr86eN8zbZ6bVIq1BP0/EqgQG4JbvY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DEVSENSE.composer-php-vscode/changelog";
@@ -948,25 +948,25 @@ let
           sources = {
             "x86_64-linux" = {
               arch = "linux-x64";
-              sha256 = "sha256-L56vG9U2fqtaZIXQ5xepwLibOs/WyHQj/t2EIY7ZXvM=";
+              sha256 = "sha256-x4Vsr/79vZuNPGQqwOVdIMi2Ba9DfnKM1AjxCZbzJms=";
             };
             "x86_64-darwin" = {
               arch = "darwin-x64";
-              sha256 = "0rx2dkaz0qpmck1k4hg0jpksixhwcrq0sndimx0f44jcnc7aby21";
+              sha256 = "0c9jcjavkjiv92cd4wrvgcv70igghi5ha96hg7h63cgmxg7b87gk";
             };
             "aarch64-linux" = {
               arch = "linux-arm64";
-              sha256 = "13swwh1br6ry64hlq1yjbrbq71vyg44h0pb907zdjabwim27y88x";
+              sha256 = "0b3w3ssxymf9p1h4amnqimbsjf1wpxsi55b05wgqwh2w2zfxd91l";
             };
             "aarch64-darwin" = {
               arch = "darwin-arm64";
-              sha256 = "0fsisxc3vcyqk634xbk2rdcw2g8ablv3n46y6bz20i0npa4clhpa";
+              sha256 = "0mdqa9w1p6cmli6976v4wi0sw9r4p5prkj7lzfd1877wk11c9c73";
             };
           };
         in {
           name = "phptools-vscode";
           publisher = "devsense";
-          version = "1.34.13295";
+          version = "1.36.13428";
         } // sources.${stdenv.system};
 
         nativeBuildInputs = [
@@ -997,8 +997,8 @@ let
         mktplcRef = {
           name = "profiler-php-vscode";
           publisher = "devsense";
-          version = "1.34.13295";
-          sha256 = "sha256-ZGklnPnSaHCGCRukVHie5ShvX94rXp2z3e/5PP2dq7I=";
+          version = "1.36.13428";
+          sha256 = "sha256-/CT83LdQkEvsWrQX30bgnklgGKduYC0LqZ8gaexqu60=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DEVSENSE.profiler-php-vscode/changelog";
@@ -1175,8 +1175,8 @@ let
         mktplcRef = {
           name = "elixir-ls";
           publisher = "JakeBecker";
-          version = "0.15.1";
-          sha256 = "sha256-u7Vrj55u5BVZ9AAjarKV9veq2kTgEqeQvhV1j+HSIxU=";
+          version = "0.15.2";
+          sha256 = "sha256-Zu/AcV0KY3QV0hyZsGrQdbc/Qc0pKNHVkHZVJ3PL0ps=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/JakeBecker.elixir-ls/changelog";
@@ -1238,8 +1238,8 @@ let
         mktplcRef = {
           name = "prettier-vscode";
           publisher = "esbenp";
-          version = "9.16.0";
-          sha256 = "sha256-MF+mPhX4Q6wi7FxfaWG6fNJHY6EsTWOX+9UmN0iIZGU=";
+          version = "9.19.0";
+          sha256 = "sha256-ymIlBzCcssj+J8hHOokVWUpxKTEkzkhNr80uCblhkFs=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/esbenp.prettier-vscode/changelog";
@@ -1578,6 +1578,22 @@ let
           homepage = "https://gitlab.com/gitlab-org/gitlab-vscode-extension#readme";
           license = lib.licenses.mit;
           maintainers = [ ];
+        };
+      };
+
+      gleam.gleam = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "gleam";
+          publisher = "gleam";
+          version = "2.3.0";
+          sha256 = "sha256-dhRS8fLKY0plRwnrAUWT4g/LfH6IpODTNhT79g4Nm+0=";
+        };
+        meta = {
+          description = "Support for the Gleam programming language";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Gleam.gleam";
+          homepage = "https://github.com/gleam-lang/vscode-gleam#readme";
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.msfjarvis ];
         };
       };
 
@@ -1923,11 +1939,16 @@ let
         mktplcRef = {
           name = "magit";
           publisher = "kahole";
-          version = "0.6.40";
-          sha256 = "sha256-AwkjfKBlAl6hTRN1nE6UuUuDXMJUXXDK2+3YzUp9drc=";
+          version = "0.6.43";
+          sha256 = "sha256-DPLlQ2IliyvzW8JvgVlGKNd2JjD/RbclNXU3gEFVhOE=";
         };
         meta = {
+          changelog = "https://marketplace.visualstudio.com/items/kahole.magit/changelog";
+          description = "Magit for VSCode";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=kahole.magit";
+          homepage = "https://github.com/kahole/edamagit";
           license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.azd325 ];
         };
       };
 
@@ -2170,6 +2191,47 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      mgt19937.typst-preview = buildVscodeMarketplaceExtension {
+        mktplcRef =
+        let
+          sources = {
+            "x86_64-linux" = {
+              arch = "linux-x64";
+              sha256 = "sha256-O8sFv23tlhJS6N8LRKkHcTJTupZejCLDRdVVCdDlWbA=";
+            };
+            "x86_64-darwin" = {
+              arch = "darwin-x64";
+              sha256 = "1npzjch67agswh3nm14dbbsx777daq2rdw1yny10jf3858z2qynr";
+            };
+            "aarch64-linux" = {
+              arch = "linux-arm64";
+              sha256 = "1vv1jfgnyjbmshh4w6rf496d9dpdsk3f0049ii4d9vi23igk4xpk";
+            };
+            "aarch64-darwin" = {
+              arch = "darwin-arm64";
+              sha256 = "0dfchzqm61kddq20zvp1pcpk1625b9wgj32ymc08piq06pbadk29";
+            };
+          };
+        in
+        {
+          name = "typst-preview";
+          publisher = "mgt19937";
+          version = "0.6.1";
+        } // sources.${stdenv.system};
+
+        nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+
+        buildInputs = lib.optionals stdenv.isLinux [ stdenv.cc.cc.lib ];
+
+        meta = {
+          description = "Typst Preview is an extension for previewing your Typst files in vscode instantly";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=mgt19937.typst-preview";
+          homepage = "https://github.com/Enter-tainer/typst-preview-vscode";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.drupol ];
         };
       };
 

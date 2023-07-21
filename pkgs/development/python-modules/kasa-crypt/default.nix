@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "kasa-crypt";
-  version = "0.2.0";
+  version = "0.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "kasa-crypt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-w/LA3BqxUcu1+nwq55g+v/QMhz8/uCTz2aRDYIdGPtk=";
+    hash = "sha256-VAm/jHeG/LfLpouHc3mSX8Kr8u/keHY552dLzoGaPrQ=";
   };
 
   postPatch = ''

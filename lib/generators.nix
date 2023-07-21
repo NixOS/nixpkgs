@@ -168,7 +168,7 @@ rec {
     mkKeyValue    ? mkKeyValueDefault {} "=",
     # allow lists as values for duplicate keys
     listsAsDuplicateKeys ? false
-  }: { globalSection, sections }:
+  }: { globalSection, sections ? {} }:
     ( if globalSection == {}
       then ""
       else (toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; } globalSection)

@@ -25,20 +25,20 @@
 
 stdenv.mkDerivation rec {
   pname = "rnote";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "flxzt";
     repo = "rnote";
     rev = "v${version}";
-    hash = "sha256-PkC2w14xM+5ai/RuF0rCUpUCxX3hFNB+fq2RkebPKGQ=";
+    hash = "sha256-QcgmL6lLi/3QXnlcEsVyTqNUfjSm+R+nhRzRvw8M9Qc=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "ink-stroke-modeler-rs-0.1.0" = "sha256-1abfrPehOGc/ye/iFIwYPd6HJX6P8OP2vGBSJfeo+c8=";
-      "librsvg-2.56.0" = "sha256-4poP7xsoylmnKaUWuJ0tnlgEMpw9iJrM3dvt4IaFi7w=";
+      "librsvg-2.56.2" = "sha256-uCHKDC4nc7J0k9qsmzF6etkWOoNq51Dddd9uQw5DOT0=";
       "piet-0.6.2" = "sha256-If0qiZkgXeLvsrECItV9/HmhTk1H52xmVO7cUsD9dcU=";
     };
   };

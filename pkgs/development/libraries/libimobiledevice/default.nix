@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
-, gnutls
+, openssl
 , libgcrypt
 , libplist
 , libtasn1
@@ -15,20 +15,16 @@
 
 stdenv.mkDerivation rec {
   pname = "libimobiledevice";
-  version = "1.3.0+date=2022-05-22";
+  version = "1.3.0+date=2023-04-30";
 
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
-    rev = "12394bc7be588be83c352d7441102072a89dd193";
-    hash = "sha256-2K4gZrFnE4hlGlthcKB4n210bTK3+6NY4TYVIoghXJM=";
+    rev = "860ffb707af3af94467d2ece4ad258dda957c6cd";
+    hash = "sha256-mIsB+EaGJlGMOpz3OLrs0nAmhOY1BwMs83saFBaejwc=";
   };
-
-  postPatch = ''
-    echo '${version}' > .tarball-version
-  '';
 
   nativeBuildInputs = [
     autoreconfHook
@@ -36,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    gnutls
+    openssl
     libgcrypt
     libplist
     libtasn1
@@ -47,7 +43,11 @@ stdenv.mkDerivation rec {
     CoreFoundation
   ];
 
-  configureFlags = [ "--with-gnutls" "--without-cython" ];
+  preAutoreconf = ''
+    export RELEASE_VERSION=${version}
+  '';
+
+  configureFlags = [ "--without-cython" ];
 
   meta = with lib; {
     homepage = "https://github.com/libimobiledevice/libimobiledevice";

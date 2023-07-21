@@ -127,7 +127,6 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
-        kernelPatches.CVE-2023-32233
       ];
     };
 
@@ -204,16 +203,8 @@ in {
 
     linux_testing_bcachefs = callPackage ../os-specific/linux/kernel/linux-testing-bcachefs.nix {
       # Pinned on the last version which Kent's commits can be cleany rebased up.
-      kernel = buildLinux rec {
-        version = "6.1.3";
-        modDirVersion = lib.versions.pad 3 version;
-        extraMeta.branch = lib.versions.majorMinor version;
-        src = fetchurl {
-          url = "mirror://kernel/linux/kernel/v6.x/linux-${version}.tar.xz";
-          hash = "sha256-bcia56dRPkM8WXxzRu1/9L/RFepDo7XiemvbOMVYAxc=";
-        };
-      };
-      kernelPatches = linux_6_1.kernelPatches;
+      kernel = linux_6_4;
+      kernelPatches = linux_6_4.kernelPatches;
    };
 
     linux_hardkernel_4_14 = callPackage ../os-specific/linux/kernel/linux-hardkernel-4.14.nix {
@@ -275,6 +266,8 @@ in {
     linux_5_10_hardened = hardenedKernelFor kernels.linux_5_10 { };
     linux_5_15_hardened = hardenedKernelFor kernels.linux_5_15 { };
     linux_6_1_hardened = hardenedKernelFor kernels.linux_6_1 { };
+    linux_6_3_hardened = hardenedKernelFor kernels.linux_6_3 { };
+    linux_6_4_hardened = hardenedKernelFor kernels.linux_6_4 { };
 
   } // lib.optionalAttrs config.allowAliases {
     linux_4_9 = throw "linux 4.9 was removed because it will reach its end of life within 22.11";
@@ -436,8 +429,6 @@ in {
 
     rtl8189fs = callPackage ../os-specific/linux/rtl8189fs { };
 
-    rtl8723bs = callPackage ../os-specific/linux/rtl8723bs { };
-
     rtl8723ds = callPackage ../os-specific/linux/rtl8723ds { };
 
     rtl8812au = callPackage ../os-specific/linux/rtl8812au { };
@@ -513,6 +504,8 @@ in {
 
     turbostat = callPackage ../os-specific/linux/turbostat { };
 
+    trelay = callPackage ../os-specific/linux/trelay { };
+
     usbip = callPackage ../os-specific/linux/usbip { };
 
     v86d = callPackage ../os-specific/linux/v86d { };
@@ -569,6 +562,7 @@ in {
   } // lib.optionalAttrs config.allowAliases {
     ati_drivers_x11 = throw "ati drivers are no longer supported by any kernel >=4.1"; # added 2021-05-18;
     sch_cake = throw "sch_cake was added in mainline kernel version 4.19"; # Added 2023-06-14
+    rtl8723bs = throw "rtl8723bs was added in mainline kernel version 4.12"; # Added 2023-06-14
     xmm7360-pci = throw "Support for the XMM7360 WWAN card was added to the iosm kmod in mainline kernel version 5.18";
   });
 
@@ -621,6 +615,8 @@ in {
     linux_5_10_hardened = recurseIntoAttrs (packagesFor kernels.linux_5_10_hardened);
     linux_5_15_hardened = recurseIntoAttrs (packagesFor kernels.linux_5_15_hardened);
     linux_6_1_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_1_hardened);
+    linux_6_3_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_3_hardened);
+    linux_6_4_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_4_hardened);
 
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);

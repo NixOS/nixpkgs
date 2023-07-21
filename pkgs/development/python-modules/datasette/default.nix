@@ -102,6 +102,6 @@ buildPythonPackage rec {
     description = "Multi-tool for exploring and publishing data";
     homepage = "https://datasette.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

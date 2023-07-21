@@ -1,4 +1,4 @@
-{ lib, bash, buildGoModule, fetchFromGitHub, getent, coreutils, nix-update-script, stdenv }:
+{ lib, buildGoModule, fetchFromGitHub, getent, coreutils, nix-update-script, stdenv }:
 
 buildGoModule rec {
   pname = "otel-cli";

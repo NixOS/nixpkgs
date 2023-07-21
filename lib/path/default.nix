@@ -20,6 +20,7 @@ let
     concatMap
     foldl'
     take
+    drop
     ;
 
   inherit (lib.strings)
@@ -217,6 +218,58 @@ in /* No rec! Add dependencies on this file at the top. */ {
               second argument: "${toString path2}" with root "${toString path2Deconstructed.root}"'';
         take (length path1Deconstructed.components) path2Deconstructed.components == path1Deconstructed.components;
 
+  /*
+  Remove the first path as a component-wise prefix from the second path.
+  The result is a normalised subpath string, see `lib.path.subpath.normalise`.
+
+  Laws:
+
+  - Inverts `append` for normalised subpaths:
+
+        removePrefix p (append p s) == subpath.normalise s
+
+  Type:
+    removePrefix :: Path -> Path -> String
+
+  Example:
+    removePrefix /foo /foo/bar/baz
+    => "./bar/baz"
+    removePrefix /foo /foo
+    => "./."
+    removePrefix /foo/bar /foo
+    => <error>
+    removePrefix /. /foo
+    => "./foo"
+  */
+  removePrefix =
+    path1:
+    assert assertMsg
+      (isPath path1)
+      "lib.path.removePrefix: First argument is of type ${typeOf path1}, but a path was expected.";
+    let
+      path1Deconstructed = deconstructPath path1;
+      path1Length = length path1Deconstructed.components;
+    in
+      path2:
+      assert assertMsg
+        (isPath path2)
+        "lib.path.removePrefix: Second argument is of type ${typeOf path2}, but a path was expected.";
+      let
+        path2Deconstructed = deconstructPath path2;
+        success = take path1Length path2Deconstructed.components == path1Deconstructed.components;
+        components =
+          if success then
+            drop path1Length path2Deconstructed.components
+          else
+            throw ''
+              lib.path.removePrefix: The first path argument "${toString path1}" is not a component-wise prefix of the second path argument "${toString path2}".'';
+      in
+        assert assertMsg
+        (path1Deconstructed.root == path2Deconstructed.root) ''
+          lib.path.removePrefix: Filesystem roots must be the same for both paths, but paths with different roots were given:
+              first argument: "${toString path1}" with root "${toString path1Deconstructed.root}"
+              second argument: "${toString path2}" with root "${toString path2Deconstructed.root}"'';
+        joinRelPath components;
 
   /* Whether a value is a valid subpath string.
 

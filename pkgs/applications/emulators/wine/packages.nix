@@ -42,4 +42,15 @@ in with src; {
     platforms = [ "x86_64-linux" ];
     mainProgram = "wine64";
   };
+  wineWow64 = callPackage ./base.nix {
+    pname = "wine-wow64";
+    inherit src version supportFlags patches moltenvk;
+    pkgArches = [ pkgs ];
+    mingwGccs = with pkgsCross; [ mingw32.buildPackages.gcc mingwW64.buildPackages.gcc ];
+    geckos = [ gecko64 ];
+    monos =  [ mono ];
+    configureFlags = [ "--enable-archs=x86_64,i386" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    mainProgram = "wine";
+  };
 }

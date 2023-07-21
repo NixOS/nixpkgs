@@ -14,16 +14,16 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     boot.loader.efi.canTouchEfiVariables = true;
 
     environment.systemPackages = with pkgs; [ mdadm e2fsprogs ]; # for mdadm and mkfs.ext4
+    boot.swraid = {
+      enable = true;
+      mdadmConf = ''
+        ARRAY /dev/md0 devices=/dev/vdb,/dev/vdc
+      '';
+    };
     boot.initrd = {
       systemd = {
         enable = true;
         emergencyAccess = true;
-      };
-      services.swraid = {
-        enable = true;
-        mdadmConf = ''
-          ARRAY /dev/md0 devices=/dev/vdb,/dev/vdc
-        '';
       };
       kernelModules = [ "raid0" ];
     };

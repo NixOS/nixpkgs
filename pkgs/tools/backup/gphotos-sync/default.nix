@@ -1,7 +1,5 @@
 { lib
-, pkgs
 , fetchFromGitHub
-, fetchpatch
 , python3
 , ffmpeg
 }:

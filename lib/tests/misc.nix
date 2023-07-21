@@ -1,6 +1,18 @@
-# to run these tests:
-# nix-instantiate --eval --strict nixpkgs/lib/tests/misc.nix
-# if the resulting list is empty, all tests passed
+/*
+Nix evaluation tests for various lib functions.
+
+Since these tests are implemented with Nix evaluation, error checking is limited to what `builtins.tryEval` can detect, which is `throw`'s and `abort`'s, without error messages.
+If you need to test error messages or more complex evaluations, see ./modules.sh, ./sources.sh or ./filesystem.sh as examples.
+
+To run these tests:
+
+  [nixpkgs]$ nix-instantiate --eval --strict lib/tests/misc.nix
+
+If the resulting list is empty, all tests passed.
+Alternatively, to run all `lib` tests:
+
+  [nixpkgs]$ nix-build lib/tests/release.nix
+*/
 with import ../default.nix;
 
 let
@@ -608,6 +620,31 @@ runTests {
       trivialAcc = 121;
     };
   };
+
+
+  testMergeAttrsListExample1 = {
+    expr = attrsets.mergeAttrsList [ { a = 0; b = 1; } { c = 2; d = 3; } ];
+    expected = { a = 0; b = 1; c = 2; d = 3; };
+  };
+  testMergeAttrsListExample2 = {
+    expr = attrsets.mergeAttrsList [ { a = 0; } { a = 1; } ];
+    expected = { a = 1; };
+  };
+  testMergeAttrsListExampleMany =
+    let
+      list = genList (n:
+        listToAttrs (genList (m:
+          let
+            # Integer divide n by two to create duplicate attributes
+            str = "halfn${toString (n / 2)}m${toString m}";
+          in
+          nameValuePair str str
+        ) 100)
+      ) 100;
+    in {
+      expr = attrsets.mergeAttrsList list;
+      expected = foldl' mergeAttrs { } list;
+    };
 
   # code from the example
   testRecursiveUpdateUntil = {

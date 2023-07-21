@@ -109,9 +109,9 @@ class GitLabRepo:
                 "GITALY_SERVER_VERSION",
                 "GITLAB_PAGES_VERSION",
                 "GITLAB_SHELL_VERSION",
+                "GITLAB_ELASTICSEARCH_INDEXER_VERSION",
             ]
         }
-
         passthru["GITLAB_WORKHORSE_VERSION"] = version
 
         return dict(
@@ -297,6 +297,14 @@ def update_gitlab_container_registry(rev: str, commit: bool):
         )
 
 
+@cli.command('update-gitlab-elasticsearch-indexer')
+def update_gitlab_elasticsearch_indexer():
+    """Update gitlab-elasticsearch-indexer"""
+    data = _get_data_json()
+    gitlab_elasticsearch_indexer_version = data['passthru']['GITLAB_ELASTICSEARCH_INDEXER_VERSION']
+    _call_nix_update('gitlab-elasticsearch-indexer', gitlab_elasticsearch_indexer_version)
+
+
 @cli.command("update-all")
 @click.option("--rev", default="latest", help="The rev to use (vX.Y.Z-ee), or 'latest'")
 @click.option(
@@ -317,6 +325,7 @@ def update_all(ctx, rev: str, commit: bool):
     ctx.invoke(update_gitlab_pages)
     ctx.invoke(update_gitlab_shell)
     ctx.invoke(update_gitlab_workhorse)
+    ctx.invoke(update_gitlab_elasticsearch_indexer)
     if commit:
         commit_gitlab(
             old_data_json["version"], new_data_json["version"], new_data_json["rev"]
@@ -342,6 +351,7 @@ def commit_gitlab(old_version: str, new_version: str, new_rev: str) -> None:
             "gitlab-pages",
             "gitlab-shell",
             "gitlab-workhorse",
+            "gitlab-elasticsearch-indexer",
         ],
         cwd=GITLAB_DIR,
     )

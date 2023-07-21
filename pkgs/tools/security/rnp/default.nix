@@ -10,7 +10,7 @@
 , json_c
 , pkg-config
 , python3
-, sexp
+, sexpp
 , zlib
 }:
 
@@ -25,9 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-4fB7Sl9+ATrJTRnhbNG5BoW3XLxR7IP167RK96+gxj0=";
   };
 
-  buildInputs = [ zlib bzip2 json_c botan2 sexp ];
+  buildInputs = [ zlib bzip2 json_c botan2 sexpp ];
 
-  patches = [ ./unbundle-sexp.patch ];
+  patches = [
+    ./unbundle-sexpp.patch
+    ./sexp_sexpp_rename.patch
+  ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"

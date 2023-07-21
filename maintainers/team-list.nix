@@ -307,6 +307,18 @@ with lib.maintainers; {
     shortName = "Geospatial";
   };
 
+  gitlab = {
+    members = [
+      globin
+      krav
+      talyz
+      yayayayaka
+      yuka
+    ];
+    scope = "Maintain gitlab packages.";
+    shortName = "gitlab";
+  };
+
   golang = {
     members = [
       kalbasit
@@ -477,6 +489,15 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
+  lomiri = {
+    members = [
+      OPNA2608
+    ];
+    scope = "Maintain Lomiri desktop environment and related packages.";
+    shortName = "Lomiri";
+    enableFeatureFreezePing = true;
+  };
+
   lumiguide = {
     # Verify additions by approval of an already existing member of the team.
     members = [
@@ -549,6 +570,7 @@ with lib.maintainers; {
       ralith
       dandellion
       sumnerevans
+      nickcao
     ];
     scope = "Maintain the ecosystem around Matrix, a decentralized messenger.";
     shortName = "Matrix";
@@ -585,7 +607,6 @@ with lib.maintainers; {
 
   nix = {
     members = [
-      Profpatsch
       eelco
       grahamc
       pierron
@@ -632,7 +653,6 @@ with lib.maintainers; {
 
   openstack = {
     members = [
-      emilytrau
       SuperSandro2000
     ];
     scope = "Maintain the ecosystem around OpenStack";

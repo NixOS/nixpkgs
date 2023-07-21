@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "islpy";
-  version = "2023.1";
+  version = "2023.1.2";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-QLkpCBF95OBOzPrBXmlzyhFMfq1bs2+S/8Z5n4oMekg=";
+    sha256 = "sha256-NsNI1N9ZuNYWr1i3dl7hSaTP3jdsTYsIpoF98vrZG9Y=";
   };
 
   postConfigure = ''
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Python wrapper around isl, an integer set library";
     homepage = "https://github.com/inducer/islpy";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

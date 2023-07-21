@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, glib, readline
-, bison, flex, pkg-config, autoreconfHook, libxslt, makeWrapper
+, bison, flex, pkg-config, autoreconfHook
 , txt2man, which
 }:
 

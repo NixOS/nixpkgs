@@ -10,6 +10,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       ./common/user-account.nix
     ];
 
+    virtualisation.memorySize = 2048;
+
     services.xserver.enable = true;
 
     services.xserver.displayManager = {

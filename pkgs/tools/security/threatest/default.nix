@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "threatest";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-xluKQXFa06ng9bs+sBkoFLeyYtQAcej4VFLMeTST6zA=";
+    hash = "sha256-FDcCAKexFpqViSQngfOhkjTr0czHIRtZL3v2psfTuYI=";
   };
 
   proxyVendor = true;

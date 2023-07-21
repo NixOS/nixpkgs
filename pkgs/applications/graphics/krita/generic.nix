@@ -3,7 +3,7 @@
 , kguiaddons, ki18n, kitemmodels, kitemviews, kwindowsystem
 , kio, kcrash, breeze-icons
 , boost, libraw, fftw, eigen, exiv2, libheif, lcms2, gsl, openexr, giflib, libjxl
-, openjpeg, opencolorio_1, xsimd, poppler, curl, ilmbase, libmypaint, libwebp
+, openjpeg, opencolorio, xsimd, poppler, curl, ilmbase, libmypaint, libwebp
 , qtmultimedia, qtx11extras, quazip
 , python3Packages
 , version
@@ -27,7 +27,7 @@ mkDerivation rec {
     karchive kconfig kwidgetsaddons kcompletion kcoreaddons kguiaddons
     ki18n kitemmodels kitemviews kwindowsystem kio kcrash breeze-icons
     boost libraw fftw eigen exiv2 lcms2 gsl openexr libheif giflib libjxl
-    openjpeg opencolorio_1 poppler curl ilmbase libmypaint libwebp
+    openjpeg opencolorio poppler curl ilmbase libmypaint libwebp
     qtmultimedia qtx11extras quazip
     python3Packages.pyqt5
     xsimd

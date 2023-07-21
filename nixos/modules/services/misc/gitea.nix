@@ -439,6 +439,8 @@ in
       lfs = mkIf cfg.lfs.enable {
         PATH = cfg.lfs.contentDir;
       };
+
+      packages.CHUNKED_UPLOAD_PATH = "${cfg.stateDir}/tmp/package-upload";
     };
 
     services.postgresql = optionalAttrs (usePostgresql && cfg.database.createDatabase) {
@@ -467,10 +469,8 @@ in
     systemd.tmpfiles.rules = [
       "d '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
-      "Z '${cfg.dump.backupDir}' - ${cfg.user} ${cfg.group} - -"
       "d '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
-      "Z '${cfg.repositoryRoot}' - ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.customDir}' 0750 ${cfg.user} ${cfg.group} - -"
@@ -484,7 +484,6 @@ in
       "z '${cfg.customDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.stateDir}/data' 0750 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
-      "Z '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
 
       # If we have a folder or symlink with gitea locales, remove it
       # And symlink the current gitea locales in place
@@ -493,13 +492,12 @@ in
     ] ++ lib.optionals cfg.lfs.enable [
       "d '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
-      "Z '${cfg.lfs.contentDir}' - ${cfg.user} ${cfg.group} - -"
     ];
 
     systemd.services.gitea = {
       description = "gitea";
       after = [ "network.target" ] ++ optional usePostgresql "postgresql.service" ++ optional useMysql "mysql.service";
-      requires = optional usePostgresql "postgresql.service" ++ optional useMysql "mysql.service";
+      requires = optional (cfg.database.createDatabase && usePostgresql) "postgresql.service" ++ optional (cfg.database.createDatabase && useMysql) "mysql.service";
       wantedBy = [ "multi-user.target" ];
       path = [ cfg.package pkgs.git pkgs.gnupg ];
 
@@ -579,7 +577,7 @@ in
       '';
 
       serviceConfig = {
-        Type = "simple";
+        Type = "notify";
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.stateDir;
@@ -587,7 +585,10 @@ in
         Restart = "always";
         # Runtime directory and mode
         RuntimeDirectory = "gitea";
-        RuntimeDirectoryMode = "0755";
+        RuntimeDirectoryMode = "0750";
+        # Proc filesystem
+        ProcSubset = "pid";
+        ProtectProc = "invisible";
         # Access write directories
         ReadWritePaths = [ cfg.customDir cfg.dump.backupDir cfg.repositoryRoot cfg.stateDir cfg.lfs.contentDir ];
         UMask = "0027";
@@ -607,15 +608,17 @@ in
         ProtectKernelModules = true;
         ProtectKernelLogs = true;
         ProtectControlGroups = true;
-        RestrictAddressFamilies = [ "AF_UNIX AF_INET AF_INET6" ];
+        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        RestrictNamespaces = true;
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
+        RemoveIPC = true;
         PrivateMounts = true;
         # System Call Filtering
         SystemCallArchitectures = "native";
-        SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @module @mount @obsolete @raw-io @reboot @setuid @swap";
+        SystemCallFilter = [ "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @setuid" "setrlimit" ];
       };
 
       environment = {

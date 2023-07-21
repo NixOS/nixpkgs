@@ -24,13 +24,13 @@
 assert withBlueshark -> stdenv.hostPlatform.isLinux;
 stdenv.mkDerivation rec {
   pname = "proxmark3-rrg";
-  version = "4.16191";
+  version = "4.16717";
 
   src = fetchFromGitHub {
     owner = "RfidResearchGroup";
     repo = "proxmark3";
     rev = "v${version}";
-    sha256 = "sha256-l0aDp0s9ekUUHqkzGfVoSIf/4/GN2uiVGL/+QtKRCOs=";
+    sha256 = "sha256-rkfVgT+9fqlWvUXzLH28Nzd8HldJnU+IZz8conY8Mis=";
   };
 
   patches = [
@@ -78,8 +78,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Client for proxmark3, powerful general purpose RFID tool";
-    homepage = "https://rfidresearchgroup.com/";
-    license = licenses.gpl2Plus;
+    homepage = "https://github.com/RfidResearchGroup/proxmark3";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ nyanotech emilytrau ];
     platforms = platforms.unix;
   };

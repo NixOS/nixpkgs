@@ -464,10 +464,8 @@ The commit object contains the following values:
 
 If the returned array contains exactly one object (e.g. `[{}]`), all values are optional and will be determined automatically.
 
-```{=docbook}
-<example>
-<title>Standard output of an update script using commit feature</title>
-```
+::: {.example #var-passthru-updateScript-example-commit}
+# Standard output of an update script using commit feature
 
 ```json
 [
@@ -481,10 +479,7 @@ If the returned array contains exactly one object (e.g. `[{}]`), all values are 
   }
 ]
 ```
-
-```{=docbook}
-</example>
-```
+:::
 
 ### Recursive attributes in `mkDerivation` {#mkderivation-recursive-attributes}
 

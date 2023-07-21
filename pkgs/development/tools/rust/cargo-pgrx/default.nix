@@ -2,17 +2,17 @@
 
 let
   pname = "cargo-pgrx";
-  version = "0.9.6";
+  version = "0.9.8";
 in
 rustPlatform.buildRustPackage rec {
   inherit version pname;
 
   src = fetchCrate {
     inherit version pname;
-    hash = "sha256-YTDgPvfsTdHGs4iBPR5Mzk1Q5d+MGpQmXzp6QHAPfmc=";
+    hash = "sha256-Sk9fz84EheP+Ohq2e2E1q7dKDPE2Y4QSsHGlNvNb/g0=";
   };
 
-  cargoHash = "sha256-XdpNOXGprJRZvgm573X8NqePPfYexA/hM5Uzoo7W93c=";
+  cargoHash = "sha256-MSANrOjpcyKuoxyomCspxjYwzlT7BLJE3CseczOfOJY=";
 
   nativeBuildInputs = [ pkg-config ];
 

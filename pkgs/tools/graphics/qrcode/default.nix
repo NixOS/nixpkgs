@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "qrcode";
-  version = "unstable-2016-08-04";
+  version = "unstable-2022-01-10";
 
   src = fetchFromGitHub {
     owner = "qsantos";
     repo = "qrcode";
-    rev = "ad0fdb4aafd0d56b903f110f697abaeb27deee73";
-    sha256 = "0v81745nx5gny2g05946k8j553j18a29ikmlyh6c3syq6c15k8cf";
+    rev = "f4475866bbf963ad118db936060f606eedc224d5";
+    hash = "sha256-IbWYSAc0PvSWcxKaPUXDldGDCK/lPZjptepYtLppPmA=";
   };
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
@@ -23,6 +23,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A small QR-code tool";
+    homepage = "https://github.com/qsantos/qrcode";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ raskin ];
     platforms = with platforms; unix;

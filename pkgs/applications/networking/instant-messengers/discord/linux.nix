@@ -119,7 +119,7 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/${binaryName}/discord.png $out/share/pixmaps/${pname}.png
     ln -s $out/opt/${binaryName}/discord.png $out/share/icons/hicolor/256x256/apps/${pname}.png
 
-    ln -s "${desktopItem}/share/applications" $out/share/
+    ln -s "$desktopItem/share/applications" $out/share/
 
     runHook postInstall
   '';

@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, fetchpatch
 , fetchFromGitHub
 , nix-update-script
 , rustPlatform

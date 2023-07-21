@@ -14,7 +14,7 @@ npmBuildHook() {
         exit 1
     fi
 
-    if ! npm run "$npmBuildScript" $npmBuildFlags "${npmBuildFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}"; then
+    if ! npm run ${npmWorkspace+--workspace=$npmWorkspace} "$npmBuildScript" $npmBuildFlags "${npmBuildFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}"; then
         echo
         echo 'ERROR: `npm build` failed'
         echo

@@ -32,17 +32,18 @@
 , wrapGAppsHook4
 , zam-plugins
 , zita-convolver
+, soundtouch
 }:
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "7.0.4";
+  version = "7.0.5";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     rev = "v${version}";
-    hash = "sha256-JaqwzCWVnvFzzGHnmzYwe3occ9iw7s9xCH54eVKEuOs=";
+    hash = "sha256-Z/0O8dVZ3J901OdOc1wF1XibNE/33b8oSqY6RKPDfzg=";
   };
 
   nativeBuildInputs = [
@@ -73,6 +74,7 @@ stdenv.mkDerivation rec {
     pipewire
     rnnoise
     rubberband
+    soundtouch
     speexdsp
     tbb
     zita-convolver

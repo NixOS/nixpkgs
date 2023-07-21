@@ -22,7 +22,7 @@
 , libtiff
 , fftw
 , lcms2
-, libpng
+, libspng
 , libimagequant
 , imagemagick
 , pango
@@ -35,6 +35,7 @@
 , libjxl
 , openslide
 , libheif
+, cgif
 }:
 
 stdenv.mkDerivation rec {
@@ -79,7 +80,7 @@ stdenv.mkDerivation rec {
     libtiff
     fftw
     lcms2
-    libpng
+    libspng
     libimagequant
     imagemagick
     pango
@@ -92,6 +93,7 @@ stdenv.mkDerivation rec {
     libjxl
     openslide
     libheif
+    cgif
   ] ++ lib.optionals stdenv.isDarwin [ ApplicationServices Foundation ];
 
   # Required by .pc file
@@ -100,13 +102,12 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dcgif=disabled"
-    "-Dspng=disabled"
     "-Dpdfium=disabled"
     "-Dnifti=disabled"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    "-Dgtk_doc=true"
-  ];
+  ]
+  ++ lib.optional (!stdenv.isDarwin) "-Dgtk_doc=true"
+  ++ lib.optional (imagemagick == null) "-Dmagick=disabled"
+  ;
 
   meta = with lib; {
     changelog = "https://github.com/libvips/libvips/blob/${src.rev}/ChangeLog";

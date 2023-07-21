@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , autoreconfHook
 , check
 , flex
@@ -12,17 +11,18 @@
 , libffi
 , llvm
 , zlib
+, zstd
 }:
 
 stdenv.mkDerivation rec {
   pname = "nvc";
-  version = "1.9.2";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "nickg";
-    repo = pname;
+    repo = "nvc";
     rev = "r${version}";
-    hash = "sha256-xB2COtYgbg00rrOWTbcBocRnqF5682jUG2eS7I71Ln4=";
+    hash = "sha256-WwO46x6McV18ebGFjXQ8fvqRh6ih1Wt5JTbfTxVWTi0=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     libffi
     llvm
     zlib
+    zstd
   ] ++ lib.optionals stdenv.isLinux [
     elfutils
   ] ++ lib.optionals (!stdenv.isLinux) [

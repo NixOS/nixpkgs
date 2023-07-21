@@ -1,4 +1,5 @@
 { lib
+, config
 , aws-sdk-cpp
 , boehmgc
 , callPackage
@@ -118,7 +119,7 @@ let
     hash = "sha256-YrmFkVpwPreiig1/BsP+DInpTdQrPmS7bEY0WUGpw+c=";
   };
 
-in lib.makeExtensible (self: {
+in lib.makeExtensible (self: ({
   nix_2_3 = (common rec {
     version = "2.3.16";
     src = fetchurl {
@@ -129,18 +130,6 @@ in lib.makeExtensible (self: {
       patch-monitorfdhup
     ];
   }).override { boehmgc = boehmgc-nix_2_3; };
-
-  nix_2_4 = throw "nixVersions.nix_2_4 has been removed";
-
-  nix_2_5 = throw "nixVersions.nix_2_5 has been removed";
-
-  nix_2_6 = throw "nixVersions.nix_2_6 has been removed";
-
-  nix_2_7 = throw "nixVersions.nix_2_7 has been removed";
-
-  nix_2_8 = throw "nixVersions.nix_2_8 has been removed";
-
-  nix_2_9 = throw "nixVersions.nix_2_9 has been removed";
 
   nix_2_10 = common {
     version = "2.10.3";
@@ -217,4 +206,16 @@ in lib.makeExtensible (self: {
   stable = self.nix_2_15;
 
   unstable = self.nix_2_16;
-})
+} // lib.optionalAttrs config.allowAliases {
+  nix_2_4 = throw "nixVersions.nix_2_4 has been removed";
+
+  nix_2_5 = throw "nixVersions.nix_2_5 has been removed";
+
+  nix_2_6 = throw "nixVersions.nix_2_6 has been removed";
+
+  nix_2_7 = throw "nixVersions.nix_2_7 has been removed";
+
+  nix_2_8 = throw "nixVersions.nix_2_8 has been removed";
+
+  nix_2_9 = throw "nixVersions.nix_2_9 has been removed";
+}))

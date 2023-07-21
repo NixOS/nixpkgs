@@ -39,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/kiorky/croniter";
     changelog = "https://github.com/kiorky/croniter/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -16,6 +16,10 @@
   ./config/malloc.nix
   ./config/mysql.nix
   ./config/networking.nix
+  ./config/nix.nix
+  ./config/nix-channel.nix
+  ./config/nix-flakes.nix
+  ./config/nix-remote-build.nix
   ./config/no-x-libs.nix
   ./config/nsswitch.nix
   ./config/power-management.nix
@@ -156,6 +160,7 @@
   ./programs/darling.nix
   ./programs/dconf.nix
   ./programs/digitalbitbox/default.nix
+  ./programs/direnv.nix
   ./programs/dmrconfig.nix
   ./programs/droidcam.nix
   ./programs/environment.nix
@@ -217,6 +222,7 @@
   ./programs/noisetorch.nix
   ./programs/npm.nix
   ./programs/oblogout.nix
+  ./programs/oddjobd.nix
   ./programs/openvpn3.nix
   ./programs/pantheon-tweaks.nix
   ./programs/partition-manager.nix
@@ -477,6 +483,7 @@
   ./services/games/deliantra-server.nix
   ./services/games/factorio.nix
   ./services/games/freeciv.nix
+  ./services/games/mchprs.nix
   ./services/games/minecraft-server.nix
   ./services/games/minetest-server.nix
   ./services/games/openarena.nix
@@ -530,6 +537,7 @@
   ./services/hardware/usbrelayd.nix
   ./services/hardware/vdr.nix
   ./services/hardware/keyd.nix
+  ./services/home-automation/ebusd.nix
   ./services/home-automation/esphome.nix
   ./services/home-automation/evcc.nix
   ./services/home-automation/home-assistant.nix
@@ -593,6 +601,7 @@
   ./services/matrix/mjolnir.nix
   ./services/matrix/mx-puppet-discord.nix
   ./services/matrix/pantalaimon.nix
+  ./services/matrix/matrix-sliding-sync.nix
   ./services/matrix/synapse.nix
   ./services/misc/airsonic.nix
   ./services/misc/ananicy.nix
@@ -603,6 +612,7 @@
   ./services/misc/autorandr.nix
   ./services/misc/autosuspend.nix
   ./services/misc/bazarr.nix
+  ./services/misc/bcg.nix
   ./services/misc/beanstalkd.nix
   ./services/misc/bees.nix
   ./services/misc/bepasty.nix
@@ -641,6 +651,7 @@
   ./services/misc/greenclip.nix
   ./services/misc/headphones.nix
   ./services/misc/heisenbridge.nix
+  ./services/misc/homepage-dashboard.nix
   ./services/misc/ihaskell.nix
   ./services/misc/input-remapper.nix
   ./services/misc/irkerd.nix
@@ -659,9 +670,9 @@
   ./services/misc/mediatomb.nix
   ./services/misc/metabase.nix
   ./services/misc/moonraker.nix
+  ./services/misc/mqtt2influxdb.nix
   ./services/misc/n8n.nix
   ./services/misc/nitter.nix
-  ./services/misc/nix-daemon.nix
   ./services/misc/nix-gc.nix
   ./services/misc/nix-optimise.nix
   ./services/misc/nix-ssh-serve.nix
@@ -756,6 +767,7 @@
   ./services/monitoring/nagios.nix
   ./services/monitoring/netdata.nix
   ./services/monitoring/opentelemetry-collector.nix
+  ./services/monitoring/osquery.nix
   ./services/monitoring/parsedmarc.nix
   ./services/monitoring/prometheus/alertmanager-irc-relay.nix
   ./services/monitoring/prometheus/alertmanager.nix
@@ -849,7 +861,6 @@
   ./services/networking/create_ap.nix
   ./services/networking/croc.nix
   ./services/networking/dante.nix
-  ./services/networking/ddclient.nix
   ./services/networking/dhcpcd.nix
   ./services/networking/dhcpd.nix
   ./services/networking/dnscache.nix
@@ -1055,6 +1066,7 @@
   ./services/networking/tox-node.nix
   ./services/networking/toxvpn.nix
   ./services/networking/trickster.nix
+  ./services/networking/trust-dns.nix
   ./services/networking/tvheadend.nix
   ./services/networking/twingate.nix
   ./services/networking/ucarp.nix
@@ -1105,6 +1117,7 @@
   ./services/security/clamav.nix
   ./services/security/endlessh-go.nix
   ./services/security/endlessh.nix
+  ./services/security/esdm.nix
   ./services/security/fail2ban.nix
   ./services/security/fprintd.nix
   ./services/security/haka.nix
@@ -1136,6 +1149,7 @@
   ./services/security/vaultwarden/default.nix
   ./services/security/yubikey-agent.nix
   ./services/system/automatic-timezoned.nix
+  ./services/system/bpftune.nix
   ./services/system/cachix-agent/default.nix
   ./services/system/cachix-watch-store.nix
   ./services/system/cloud-init.nix
@@ -1143,6 +1157,7 @@
   ./services/system/earlyoom.nix
   ./services/system/kerberos/default.nix
   ./services/system/localtimed.nix
+  ./services/system/nix-daemon.nix
   ./services/system/nscd.nix
   ./services/system/saslauthd.nix
   ./services/system/self-deploy.nix
@@ -1248,6 +1263,7 @@
   ./services/web-apps/rss-bridge.nix
   ./services/web-apps/selfoss.nix
   ./services/web-apps/shiori.nix
+  ./services/web-apps/slskd.nix
   ./services/web-apps/snipe-it.nix
   ./services/web-apps/sogo.nix
   ./services/web-apps/trilium.nix
@@ -1283,6 +1299,7 @@
   ./services/web-servers/pomerium.nix
   ./services/web-servers/rustus.nix
   ./services/web-servers/stargazer.nix
+  ./services/web-servers/static-web-server.nix
   ./services/web-servers/tomcat.nix
   ./services/web-servers/traefik.nix
   ./services/web-servers/trafficserver/default.nix
@@ -1336,6 +1353,7 @@
   ./services/x11/xbanish.nix
   ./services/x11/xfs.nix
   ./services/x11/xserver.nix
+  ./system/activation/activatable-system.nix
   ./system/activation/activation-script.nix
   ./system/activation/specialisation.nix
   ./system/activation/bootspec.nix
@@ -1405,6 +1423,7 @@
   ./tasks/filesystems/nfs.nix
   ./tasks/filesystems/ntfs.nix
   ./tasks/filesystems/reiserfs.nix
+  ./tasks/filesystems/squashfs.nix
   ./tasks/filesystems/unionfs-fuse.nix
   ./tasks/filesystems/vboxsf.nix
   ./tasks/filesystems/vfat.nix

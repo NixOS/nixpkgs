@@ -15,6 +15,7 @@
 , gnulib
 , gnum4
 , gobject-introspection
+, imagemagick
 , installShellFiles
 , lib
 , libevent
@@ -475,6 +476,25 @@ with prev;
     buildInputs = [
       libyaml
     ];
+  });
+
+  magick = prev.magick.overrideAttrs (oa: {
+    buildInputs = oa.buildInputs ++ [
+      imagemagick
+    ];
+
+    # Fix MagickWand not being found in the pkg-config search path
+    patches = [
+      ./magick.patch
+    ];
+
+    postPatch = ''
+      substituteInPlace magick/wand/lib.lua \
+        --replace @nix_wand@ ${imagemagick}/lib/libMagickWand-7.Q16HDRI.so
+    '';
+
+    # Requires ffi
+    meta.broken = !isLuaJIT;
   });
 
   mpack = prev.mpack.overrideAttrs (drv: {

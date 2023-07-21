@@ -65,6 +65,10 @@ buildPythonPackage rec {
     requests-toolbelt
   ];
 
+  preCheck = ''
+    export CI=true
+  '';
+
   pytestFlagsArray = [
     "-W"
     "ignore::DeprecationWarning"

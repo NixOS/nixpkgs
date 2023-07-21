@@ -21,7 +21,7 @@ in
 appimageTools.wrapType2 rec {
   inherit name src;
 
-  multiPkgs = null; # no 32bit needed
+  multiArch = false; # no 32bit needed
   extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ [ texlive pandoc ];
   extraInstallCommands = ''
     mv $out/bin/{${name},${pname}}

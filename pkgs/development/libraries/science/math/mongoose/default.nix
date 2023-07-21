@@ -1,17 +1,16 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , blas
 }:
 
 let
-  suitesparseVersion = "7.0.1";
+  suitesparseVersion = "7.1.0";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mongoose";
-  version = "3.0.4";
+  version = "3.0.5";
 
   outputs = [ "bin" "out" "dev" ];
 
@@ -19,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "DrTimothyAldenDavis";
     repo = "SuiteSparse";
     rev = "v${suitesparseVersion}";
-    hash = "sha256-EIreweeOx44YDxlnxnJ7l31Ie1jSx6y87VAyEX+4NsQ=";
+    hash = "sha256-UizybioU1J01PLBpu+PfnSzWScGTvMuJN5j9PjuZRwE=";
   };
 
   nativeBuildInputs = [

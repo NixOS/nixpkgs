@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
-#
+
 # This script is used to test that the module system is working as expected.
+# Executing it runs tests for `lib.modules`, `lib.options` and `lib.types`.
 # By default it test the version of nixpkgs which is defined in the NIX_PATH.
+#
+# Run:
+# [nixpkgs]$ lib/tests/modules.sh
+# or:
+# [nixpkgs]$ nix-build lib/tests/release.nix
 
 set -o errexit -o noclobber -o nounset -o pipefail
 shopt -s failglob inherit_errexit
@@ -64,9 +70,9 @@ checkConfigOutput '^"one two"$' config.result ./shorthand-meta.nix
 checkConfigOutput '^true$' config.result ./test-mergeAttrDefinitionsWithPrio.nix
 
 # types.pathInStore
-checkConfigOutput '".*/store/5lz9p8xhf89kb1c1kk6jxrzskaiygnlh-bash-5.2-p15.drv"' config.pathInStore.ok1 ./types.nix
-checkConfigOutput '".*/store/xfb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15"' config.pathInStore.ok2 ./types.nix
-checkConfigOutput '".*/store/xfb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15/bin/bash"' config.pathInStore.ok3 ./types.nix
+checkConfigOutput '".*/store/0lz9p8xhf89kb1c1kk6jxrzskaiygnlh-bash-5.2-p15.drv"' config.pathInStore.ok1 ./types.nix
+checkConfigOutput '".*/store/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15"' config.pathInStore.ok2 ./types.nix
+checkConfigOutput '".*/store/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15/bin/bash"' config.pathInStore.ok3 ./types.nix
 checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ""' config.pathInStore.bad1 ./types.nix
 checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ".*/store"' config.pathInStore.bad2 ./types.nix
 checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ".*/store/"' config.pathInStore.bad3 ./types.nix
@@ -207,7 +213,7 @@ checkConfigOutput '^"foo"$' config.submodule.foo ./declare-submoduleWith-special
 ## shorthandOnlyDefines config behaves as expected
 checkConfigOutput '^true$' config.submodule.config ./declare-submoduleWith-shorthand.nix ./define-submoduleWith-shorthand.nix
 checkConfigError 'is not of type `boolean' config.submodule.config ./declare-submoduleWith-shorthand.nix ./define-submoduleWith-noshorthand.nix
-checkConfigError "You're trying to define a value of type \`bool'\n\s*rather than an attribute set for the option" config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-shorthand.nix
+checkConfigError "In module ..*define-submoduleWith-shorthand.nix., you're trying to define a value of type \`bool'\n\s*rather than an attribute set for the option" config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-shorthand.nix
 checkConfigOutput '^true$' config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-noshorthand.nix
 
 ## submoduleWith should merge all modules in one swoop

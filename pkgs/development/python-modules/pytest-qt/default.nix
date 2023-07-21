@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "pytest support for PyQt and PySide applications";
     homepage = "https://github.com/pytest-dev/pytest-qt";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

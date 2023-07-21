@@ -16,9 +16,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs build
-    # TODO: workaround for https://github.com/oilshell/oil/issues/1467
-    #       check for removability on updates :)
-    substituteInPlace configure --replace "echo '#define HAVE_READLINE 1'" "echo '#define HAVE_READLINE 1' && return 0"
   '';
 
   preInstall = ''

@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   env = {
     RUSTFLAGS = "-C strip=symbols";
-    ROME_VERSION = "${version}";
+    ROME_VERSION = version;
   };
 
   buildInputs =

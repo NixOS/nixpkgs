@@ -5,8 +5,8 @@
 
 let
   # Compare with https://github.com/draios/sysdig/blob/dev/cmake/modules/falcosecurity-libs.cmake
-  libsRev = "0.11.0";
-  libsSha256 = "sha256-QvRTz3yMS6i+qdiSG51wvho9D7w/dMQhY72OYd3qOgU=";
+  libsRev = "0.11.3";
+  libsSha256 = "sha256-ph4ErNfgVv2aesZawCj+7kdqcYAnRgeNHfSrDMgm6Lo=";
 
   # Compare with https://github.com/falcosecurity/libs/blob/master/cmake/modules/valijson.cmake#L17
   valijson = fetchFromGitHub {
@@ -27,22 +27,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sysdig";
-  version = "0.31.5";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "draios";
     repo = "sysdig";
     rev = version;
-    sha256 = "sha256-RuoPqVulATtn7jSga/8fECs7weNfjt/YFh7iHmfCKjw=";
+    sha256 = "sha256-R14uQdcZ2BnlgWjqvRQP8MDaKMk4Kfw17qTKYYlBg7o=";
   };
-
-  # to fix the build against the latest kernel
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/draios/sysdig/compare/35ded9aab87801281e22898242e24e0bc63873b2...954e6fc6238f21d4870a491395d68a7dd3062aa9.patch";
-      sha256 = "sha256-gnLURnv8FW5LvqjbreCf9DPGdBcn7rfizGeznFqJ+Fk=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake perl installShellFiles pkg-config ];
   buildInputs = [

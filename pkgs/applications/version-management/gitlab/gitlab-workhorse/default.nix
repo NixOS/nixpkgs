@@ -5,7 +5,7 @@ in
 buildGoModule rec {
   pname = "gitlab-workhorse";
 
-  version = "16.1.0";
+  version = "16.1.2";
 
   src = fetchFromGitLab {
     owner = data.owner;
@@ -24,7 +24,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "http://www.gitlab.com/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ globin talyz yayayayaka ];
+    maintainers = teams.gitlab.members;
     license = licenses.mit;
   };
 }
