@@ -7,19 +7,16 @@
 , cloudpickle
 , cookiecutter
 , diff-match-patch
-, flake8
 , intervaltree
 , jedi
 , jellyfish
 , keyring
 , matplotlib
-, mccabe
 , nbconvert
 , numpy
 , numpydoc
 , psutil
 , pygments
-, pylint
 , pylint-venv
 , pyls-spyder
 , pyopengl
@@ -28,7 +25,6 @@
 , python-lsp-server
 , pyxdg
 , pyzmq
-, pycodestyle
 , qdarkstyle
 , qstylizer
 , qtawesome
@@ -41,6 +37,7 @@
 , textdistance
 , three-merge
 , watchdog
+, yapf
 }:
 
 buildPythonPackage rec {
@@ -99,6 +96,7 @@ buildPythonPackage rec {
     textdistance
     three-merge
     watchdog
+    yapf
   ] ++ python-lsp-server.optional-dependencies.all;
 
   # There is no test for spyder
