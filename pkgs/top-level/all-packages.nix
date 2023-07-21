@@ -34767,6 +34767,8 @@ with pkgs;
 
   slrn = callPackage ../applications/networking/newsreaders/slrn { };
 
+  smartcrop = callPackage ../tools/graphics/smartcrop { };
+
   sniffnet = callPackage ../applications/networking/sniffnet { };
 
   sniproxy = callPackage ../applications/networking/sniproxy { };
