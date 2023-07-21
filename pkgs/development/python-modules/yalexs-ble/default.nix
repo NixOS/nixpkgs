@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "yalexs-ble";
-  version = "2.2.0";
+  version = "2.2.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ei/+QfDjuzbKFZ8Nl+KnCJB6xu7xZh0m6LnzHUEg790=";
+    hash = "sha256-yZHEEn9+/wbiKs6NYyExP3nagvap/zdOmzhWAG7i+vA=";
   };
 
   nativeBuildInputs = [
