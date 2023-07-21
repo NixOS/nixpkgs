@@ -2,7 +2,7 @@
 
 # build-tools
 , bootPkgs
-, autoconf, automake, coreutils, fetchpatch, fetchurl, perl, python3, m4, sphinx
+, autoreconfHook, autoconf, automake, coreutils, fetchpatch, fetchurl, perl, python3, m4, sphinx
 , xattr, autoSignDarwinBinariesHook
 , bash
 
@@ -223,6 +223,12 @@ stdenv.mkDerivation (rec {
       stripLen = 3;
       extraPrefix = "libraries/Cabal/Cabal/";
     })
+
+    # We need to be able to set AR_STAGE0 and LD_STAGE0 when cross-compiling
+    (fetchpatch {
+      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/8f7dd5710b80906ea7a3e15b7bb56a883a49fed8.patch";
+      hash = "sha256-C636Nq2U8YOG/av7XQmG3L1rU0bmC9/7m7Hty5pm5+s=";
+    })
   ] ++ lib.optionals stdenv.isDarwin [
     # Make Block.h compile with c++ compilers. Remove with the next release
     (fetchpatch {
@@ -334,7 +340,7 @@ stdenv.mkDerivation (rec {
   dontAddExtraLibs = true;
 
   nativeBuildInputs = [
-    perl autoconf automake m4 python3
+    perl autoreconfHook autoconf automake m4 python3
     ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     autoSignDarwinBinariesHook
