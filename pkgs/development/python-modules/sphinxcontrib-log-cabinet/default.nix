@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, sphinx }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptoolsLegacyNamespaceHook
+, sphinx
+}:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-log-cabinet";
@@ -9,8 +14,12 @@ buildPythonPackage rec {
     owner = "davidism";
     repo = "sphinxcontrib-log-cabinet";
     rev = "refs/tags/${version}";
-    sha256 = "03cxspgqsap9q74sqkdx6r6b4gs4hq6dpvx4j58hm50yfhs06wn1";
+    hash = "sha256-wXIDNHQelApRkaTv2wyGRD+yTDa9TazJwekqjd/VnQ0=";
   };
+
+  nativeBuildInputs = [
+    setuptoolsLegacyNamespaceHook
+  ];
 
   propagatedBuildInputs = [ sphinx ];
 
