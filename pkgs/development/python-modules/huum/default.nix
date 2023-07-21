@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
-, pydantic
+, pydantic_1
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    pydantic
+    pydantic_1
   ];
 
   nativeCheckInputs = [

@@ -9,7 +9,7 @@
 , backoff
 , cachetools
 , pycountry
-, pydantic
+, pydantic_1
 , yarl
 , pytest-asyncio
 , pytestCheckHook
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     backoff
     cachetools
     pycountry
-    pydantic
+    pydantic_1
     yarl
   ];
 

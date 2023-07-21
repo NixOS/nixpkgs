@@ -4,7 +4,7 @@
 , click
 , fetchFromGitHub
 , incremental
-, pydantic
+, pydantic_1
 , pythonOlder
 , typer
 }:
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     click
-    pydantic
+    pydantic_1
     typer
   ];
 

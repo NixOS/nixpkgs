@@ -5,7 +5,7 @@
 , colorama
 , more-itertools
 , packaging
-, pydantic
+, pydantic_1
 , requests
 , pygobject3
 , gobject-introspection
@@ -33,7 +33,7 @@ buildPythonApplication rec {
     colorama
     more-itertools
     packaging
-    pydantic
+    pydantic_1
     requests
     pygobject3
   ];

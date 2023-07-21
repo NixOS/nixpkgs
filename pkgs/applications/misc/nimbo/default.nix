@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     requests
     click
     pyyaml
-    pydantic
+    pydantic_1
   ];
 
   # nimbo tests require an AWS instance

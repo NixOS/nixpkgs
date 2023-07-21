@@ -6,7 +6,7 @@
 , importlib-metadata
 , mock
 , poetry-core
-, pydantic
+, pydantic_1
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     docutils
     importlib-metadata
-    pydantic
+    pydantic_1
     types-docutils
     typing-extensions
   ];

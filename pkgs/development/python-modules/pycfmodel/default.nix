@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , httpx
-, pydantic
+, pydantic_1
 , pytestCheckHook
 , pythonOlder
 }:
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    pydantic
+    pydantic_1
   ];
 
   nativeCheckInputs = [

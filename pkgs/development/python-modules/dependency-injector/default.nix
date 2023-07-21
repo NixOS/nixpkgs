@@ -7,7 +7,7 @@
 , httpx
 , mypy-boto3-s3
 , numpy
-, pydantic
+, pydantic_1
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -39,7 +39,7 @@ buildPythonPackage rec {
       aiohttp
     ];
     pydantic = [
-      pydantic
+      pydantic_1
     ];
     flask = [
       flask

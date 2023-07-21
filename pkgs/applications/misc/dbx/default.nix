@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     jinja2
     mlflow
     pathspec
-    pydantic
+    pydantic_1
     pyyaml
     requests
     retry

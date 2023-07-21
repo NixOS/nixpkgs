@@ -11,7 +11,7 @@
 , pillow
 , poetry-core
 , py
-, pydantic
+, pydantic_1
 , pyjwt
 , pytest-aiohttp
 , pytest-asyncio
@@ -63,7 +63,7 @@ buildPythonPackage rec {
     orjson
     packaging
     pillow
-    pydantic
+    pydantic_1
     pyjwt
     pytz
     typer

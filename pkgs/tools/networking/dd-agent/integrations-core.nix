@@ -75,7 +75,7 @@ let
       jellyfish
       prometheus-client
       protobuf
-      pydantic
+      pydantic_1
       python-dateutil
       pyyaml
       requests

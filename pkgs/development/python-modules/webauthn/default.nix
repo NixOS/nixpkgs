@@ -4,7 +4,7 @@
 , asn1crypto
 , cbor2
 , pythonOlder
-, pydantic
+, pydantic_1
 , pyopenssl
 , pytestCheckHook
 }:
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     asn1crypto
     cbor2
-    pydantic
+    pydantic_1
     pyopenssl
   ];
 

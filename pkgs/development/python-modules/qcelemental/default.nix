@@ -5,7 +5,7 @@
 , networkx
 , numpy
 , pint
-, pydantic
+, pydantic_1
 , pytestCheckHook
 , pythonOlder
 }:
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     networkx
     numpy
     pint
-    pydantic
+    pydantic_1
   ];
 
   nativeCheckInputs = [

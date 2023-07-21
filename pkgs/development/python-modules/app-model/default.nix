@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , in-n-out
 , psygnal
-, pydantic
+, pydantic_1
 , pytestCheckHook
 , pythonOlder
 , typing-extensions
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     psygnal
-    pydantic
+    pydantic_1
     in-n-out
     typing-extensions
   ];

@@ -17,7 +17,7 @@
 , numpydoc
 , pint
 , psutil
-, pydantic
+, pydantic_1
 , pyopengl
 , pillow
 , pythonOlder
@@ -81,7 +81,7 @@ mkDerivationWith buildPythonPackage rec {
     pint
     pillow
     psutil
-    pydantic
+    pydantic_1
     pyopengl
     pyyaml
     scikit-image

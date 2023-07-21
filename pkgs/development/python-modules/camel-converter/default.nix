@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
-, pydantic
+, pydantic_1
 , pytestCheckHook
 , pythonOlder
 }:
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   passthru.optional-dependencies = {
     pydantic = [
-      pydantic
+      pydantic_1
     ];
   };
 

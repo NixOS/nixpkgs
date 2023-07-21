@@ -6,7 +6,7 @@
 , arrow
 , requests-oauthlib
 , typing-extensions
-, pydantic
+, pydantic_1
 , responses
 , pytestCheckHook
 }:
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     arrow
     requests-oauthlib
     typing-extensions
-    pydantic
+    pydantic_1
   ];
 
   nativeCheckInputs = [

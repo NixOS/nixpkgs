@@ -26,7 +26,7 @@ in python3.pkgs.buildPythonApplication {
 
   propagatedBuildInputs = [
     python3.pkgs.hatchling
-    python3.pkgs.pydantic
+    python3.pkgs.pydantic_1
     python3.pkgs.rich
     python3.pkgs.shodan
     python3.pkgs.python-dotenv

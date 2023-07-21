@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     service-identity
     twisted
     yappi
-    pydantic
+    pydantic_1
     anyio
   ]);
 

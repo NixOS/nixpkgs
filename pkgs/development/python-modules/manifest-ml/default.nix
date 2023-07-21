@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , pythonOlder
 , numpy
-, pydantic
+, pydantic_1
 , redis
 , requests
 , aiohttp
@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy
-    pydantic
+    pydantic_1
     redis
     requests
     aiohttp

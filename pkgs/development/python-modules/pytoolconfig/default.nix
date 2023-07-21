@@ -17,7 +17,7 @@
 , packaging
 
 # optionals
-, pydantic
+, pydantic_1
 , platformdirs
 , sphinx
 , tabulate
@@ -70,7 +70,7 @@ buildPythonPackage rec {
 
   passthru.optional-dependencies = {
     validation = [
-      pydantic
+      pydantic_1
     ];
     global = [
       platformdirs

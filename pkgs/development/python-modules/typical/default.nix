@@ -8,7 +8,7 @@
 , pandas
 , pendulum
 , poetry-core
-, pydantic
+, pydantic_1
 , pytestCheckHook
 , pythonOlder
 , sqlalchemy
@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pydantic
+    pydantic_1
     sqlalchemy
     pandas
   ];

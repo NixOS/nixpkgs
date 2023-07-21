@@ -4,7 +4,7 @@
 , asynctest
 , buildPythonPackage
 , fetchFromGitHub
-, pydantic
+, pydantic_1
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aenum
     aiohttp
-    pydantic
+    pydantic_1
     requests
   ];
 

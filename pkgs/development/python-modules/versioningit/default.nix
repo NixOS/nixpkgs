@@ -8,7 +8,7 @@
 , tomli
 , pytestCheckHook
 , build
-, pydantic
+, pydantic_1
 , pytest-mock
 , git
 , mercurial
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     build
-    pydantic
+    pydantic_1
     pytest-mock
     git
     mercurial

@@ -7,7 +7,7 @@
 , tzdata
 , py
 , pyparsing
-, pydantic
+, pydantic_1
 , pytest-asyncio
 , pytest-benchmark
 , pytest-golden
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     emoji
     python-dateutil
     tzdata
-    pydantic
+    pydantic_1
     pyparsing
   ];
 

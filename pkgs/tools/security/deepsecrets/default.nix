@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     dotwiz
     mmh3
     ordered-set
-    pydantic
+    pydantic_1
     pygments
     pyyaml
     regex

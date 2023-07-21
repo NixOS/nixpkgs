@@ -8,7 +8,7 @@
 , numpy
 , pytestCheckHook
 , poetry-core
-, pydantic
+, pydantic_1
 , pythonOlder
 , typing-extensions
 , urllib3
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     grpcio
     typing-extensions
     grpcio-tools
-    pydantic
+    pydantic_1
     urllib3
     h2
   ];

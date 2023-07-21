@@ -3034,7 +3034,7 @@ lib.composeManyExtensions [
 
       flake8-mutable = super.flake8-mutable.overridePythonAttrs
         (old: { buildInputs = old.buildInputs or [ ] ++ [ self.pytest-runner ]; });
-      pydantic = super.pydantic.overridePythonAttrs
+      pydantic = super.pydantic_1.overridePythonAttrs
         (old: { buildInputs = old.buildInputs or [ ] ++ [ pkgs.libxcrypt ]; });
 
       y-py = super.y-py.override {

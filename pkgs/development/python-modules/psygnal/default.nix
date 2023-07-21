@@ -5,7 +5,7 @@
 , hatchling
 , mypy-extensions
 , numpy
-, pydantic
+, pydantic_1
 , pytestCheckHook
 , pythonOlder
 , typing-extensions
@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     numpy
-    pydantic
+    pydantic_1
     pytestCheckHook
     wrapt
   ];

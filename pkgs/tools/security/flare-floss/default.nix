@@ -49,7 +49,7 @@ py.pkgs.buildPythonPackage rec {
   propagatedBuildInputs = with py.pkgs; [
     halo
     networkx
-    pydantic
+    pydantic_1
     tabulate
     tqdm
     viv-utils

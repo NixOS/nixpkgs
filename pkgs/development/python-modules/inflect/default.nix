@@ -3,7 +3,7 @@
 , fetchPypi
 , isPy27
 , setuptools-scm
-, pydantic
+, pydantic_1
 , pytestCheckHook
 }:
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ pydantic ];
+  propagatedBuildInputs = [ pydantic_1 ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pydantic
+, pydantic_1
 , pytestCheckHook
 , pythonOlder
 , srsly
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    pydantic
+    pydantic_1
     srsly
   ];
 

@@ -6,7 +6,7 @@
 , jsonschema
 , mock
 , parameterized
-, pydantic
+, pydantic_1
 , pytest-env
 , pytest-rerunfailures
 , pytest-xdist
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     boto3
     jsonschema
-    pydantic
+    pydantic_1
     typing-extensions
   ];
 

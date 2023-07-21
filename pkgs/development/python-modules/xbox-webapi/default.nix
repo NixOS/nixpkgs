@@ -6,7 +6,7 @@
 , appdirs
 , ecdsa
 , ms-cv
-, pydantic
+, pydantic_1
 , aresponses
 , pytest-asyncio
 , pytestCheckHook
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     appdirs
     ecdsa
     ms-cv
-    pydantic
+    pydantic_1
   ];
 
   nativeCheckInputs = [

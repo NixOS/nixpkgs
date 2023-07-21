@@ -58,7 +58,7 @@ python3.pkgs.buildPythonApplication rec {
     numpy
     openai
     pillow
-    pydantic
+    pydantic_1
     pyqt6
     pyyaml
     rich

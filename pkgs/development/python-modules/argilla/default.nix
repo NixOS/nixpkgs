@@ -7,7 +7,7 @@
 , rich
 , backoff
 , packaging
-, pydantic
+, pydantic_1
 , typer
 , tqdm
 , wrapt
@@ -144,7 +144,7 @@ buildPythonPackage {
     deprecated
     packaging
     pandas
-    pydantic
+    pydantic_1
     wrapt
     numpy
     tqdm

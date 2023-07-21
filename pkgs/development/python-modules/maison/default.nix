@@ -3,7 +3,7 @@
 , click
 , fetchFromGitHub
 , poetry-core
-, pydantic
+, pydantic_1
 , pytestCheckHook
 , pythonOlder
 , toml
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     click
-    pydantic
+    pydantic_1
     toml
   ];
 

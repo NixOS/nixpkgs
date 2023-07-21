@@ -1,7 +1,7 @@
 { lib
 , aiohttp
 , aioresponses
-, pydantic
+, pydantic_1
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    pydantic
+    pydantic_1
   ];
 
   nativeCheckInputs = [

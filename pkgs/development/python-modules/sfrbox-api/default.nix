@@ -5,7 +5,7 @@
 , fetchFromGitHub
 , httpx
 , poetry-core
-, pydantic
+, pydantic_1
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     click
     defusedxml
     httpx
-    pydantic
+    pydantic_1
   ];
 
   nativeCheckInputs = [

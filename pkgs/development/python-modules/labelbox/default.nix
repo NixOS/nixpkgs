@@ -13,7 +13,7 @@
   # , opencv-python
 , packaging
 , pillow
-, pydantic
+, pydantic_1
   # , pygeotile
 , pyproj
 , pytest-cases
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     backoff
     google-api-core
     ndjson
-    pydantic
+    pydantic_1
     requests
     tqdm
   ];

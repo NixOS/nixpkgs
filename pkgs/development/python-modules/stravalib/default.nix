@@ -7,7 +7,7 @@
 , requests
 , units
 , pint
-, pydantic
+, pydantic_1
 , pytz
 , six
 }:
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     requests
     units
     pint
-    pydantic
+    pydantic_1
     pytz
     setuptools
     six

@@ -6,7 +6,7 @@
 , httpx
 , iso8601
 , poetry-core
-, pydantic
+, pydantic_1
 , pyjwt
 , pytest-asyncio
 , pytestCheckHook
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     attrs
     httpx
     iso8601
-    pydantic
+    pydantic_1
     pyjwt
     python-dateutil
     retrying

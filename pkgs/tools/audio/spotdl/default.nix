@@ -50,7 +50,7 @@ in python.pkgs.buildPythonApplication rec {
     rapidfuzz
     python-slugify
     uvicorn
-    pydantic
+    pydantic_1
     fastapi
     platformdirs
     pykakasi

@@ -17,7 +17,7 @@
 , numpy
 , plac
 , preshed
-, pydantic
+, pydantic_1
 , pytestCheckHook
 , python
 , pythonOlder
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     numpy
     plac
     preshed
-    pydantic
+    pydantic_1
     srsly
     tqdm
     wasabi

@@ -6,7 +6,7 @@
 , magicgui
 , napari # reverse dependency, for tests
 , psygnal
-, pydantic
+, pydantic_1
 , pythonOlder
 , pytomlpp
 , pyyaml
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     appdirs
     build
     magicgui
-    pydantic
+    pydantic_1
     pytomlpp
     pyyaml
     rich

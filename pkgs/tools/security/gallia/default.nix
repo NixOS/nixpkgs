@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     can
     construct
     msgspec
-    pydantic
+    pydantic_1
     pygit2
     tabulate
     tomli

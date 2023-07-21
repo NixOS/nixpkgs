@@ -8689,6 +8689,8 @@ self: super: with self; {
 
   pydantic = callPackage ../development/python-modules/pydantic { };
 
+  pydantic_1 = callPackage ../development/python-modules/pydantic_1 { };
+
   pydantic-core = callPackage ../development/python-modules/pydantic-core { };
 
   pydantic-scim = callPackage ../development/python-modules/pydantic-scim { };

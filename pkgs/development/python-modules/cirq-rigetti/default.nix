@@ -9,7 +9,7 @@
 , idna
 , httpx
 , iso8601
-, pydantic
+, pydantic_1
 , pyjwt
 , pyquil
 , python-dateutil
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     httpx
     idna
     iso8601
-    pydantic
+    pydantic_1
     pyjwt
     pyquil
     python-dateutil

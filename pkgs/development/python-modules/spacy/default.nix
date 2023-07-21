@@ -14,7 +14,7 @@
 , packaging
 , pathy
 , preshed
-, pydantic
+, pydantic_1
 , pytest
 , python
 , pythonOlder
@@ -67,7 +67,7 @@ buildPythonPackage rec {
     packaging
     pathy
     preshed
-    pydantic
+    pydantic_1
     requests
     setuptools
     spacy-legacy

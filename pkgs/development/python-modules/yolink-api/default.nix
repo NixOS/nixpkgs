@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , asyncio-mqtt
-, pydantic
+, pydantic_1
 , pythonOlder
 , setuptools
 , tenacity
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     asyncio-mqtt
-    pydantic
+    pydantic_1
     tenacity
   ];
 

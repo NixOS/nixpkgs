@@ -4,7 +4,7 @@
 , setuptools-scm
 , pythonRelaxDepsHook
 , requests
-, pydantic
+, pydantic_1
 , aiohttp
 , inflection
 , fluent-logger
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     requests
-    pydantic
+    pydantic_1
     aiohttp
     inflection
     fluent-logger

@@ -7,7 +7,7 @@
 , setuptools
 , setuptools-scm
 , pybind11
-, pydantic
+, pydantic_1
 , pytestCheckHook
 , rich
 , scipy
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    pydantic
+    pydantic_1
     rich
   ];
 

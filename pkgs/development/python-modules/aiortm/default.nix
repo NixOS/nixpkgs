@@ -4,7 +4,7 @@
 , buildPythonPackage
 , click
 , fetchFromGitHub
-, pydantic
+, pydantic_1
 , poetry-core
 , pytestCheckHook
 , pythonOlder
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     click
-    pydantic
+    pydantic_1
     yarl
   ];
 

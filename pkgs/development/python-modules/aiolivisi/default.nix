@@ -2,7 +2,7 @@
 , aiohttp
 , buildPythonPackage
 , fetchPypi
-, pydantic
+, pydantic_1
 , pytestCheckHook
 , pythonOlder
 , websockets
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    pydantic
+    pydantic_1
     websockets
   ];
 

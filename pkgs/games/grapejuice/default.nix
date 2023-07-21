@@ -51,7 +51,7 @@ python3Packages.buildPythonApplication rec  {
     requests
     unidecode
     click
-    pydantic
+    pydantic_1
   ];
 
   dontWrapGApps = true;

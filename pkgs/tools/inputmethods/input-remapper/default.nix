@@ -11,7 +11,7 @@
 , pygobject3
 , setuptools
 , evdev
-, pydantic
+, pydantic_1
 , pydbus
 , psutil
 , fetchFromGitHub
@@ -112,7 +112,7 @@ in
     pygobject3
     evdev
     pkgconfig
-    pydantic
+    pydantic_1
     pydbus
     gtksourceview4
   ];

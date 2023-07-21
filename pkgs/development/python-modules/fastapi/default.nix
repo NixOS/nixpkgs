@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pydantic
+, pydantic_1
 , starlette
 , pytestCheckHook
 , pytest-asyncio
@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     starlette
-    pydantic
+    pydantic_1
   ];
 
   nativeCheckInputs = [
@@ -63,7 +63,7 @@ buildPythonPackage rec {
     trio
   ]
   ++ passlib.optional-dependencies.bcrypt
-  ++ pydantic.optional-dependencies.email;
+  ++ pydantic_1.optional-dependencies.email;
 
   pytestFlagsArray = [
     # ignoring deprecation warnings to avoid test failure from

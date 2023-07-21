@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , poetry-core
-, pydantic
+, pydantic_1
 , pythonOlder
 , requests
 , tenacity
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    pydantic
+    pydantic_1
     requests
     tenacity
   ];

@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , freezegun
 , ical
-, pydantic
+, pydantic_1
 , pytest-aiohttp
 , pytest-asyncio
 , pytestCheckHook
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     ical
-    pydantic
+    pydantic_1
   ];
 
   nativeCheckInputs = [

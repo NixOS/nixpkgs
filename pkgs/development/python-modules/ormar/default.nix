@@ -15,7 +15,7 @@
 , orjson
 , poetry-core
 , psycopg2
-, pydantic
+, pydantic_1
 , pymysql
 , pytest-asyncio
 , pytestCheckHook
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     databases
     psycopg2
-    pydantic
+    pydantic_1
     sqlalchemy
     psycopg2
   ] ++ lib.optionals (pythonOlder "3.8") [

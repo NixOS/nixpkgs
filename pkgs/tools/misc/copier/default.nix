@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     packaging
     pathspec
     plumbum
-    pydantic
+    pydantic_1
     pygments
     pyyaml
     pyyaml-include

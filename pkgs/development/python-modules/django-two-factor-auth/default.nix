@@ -6,7 +6,7 @@
 , django-phonenumber-field
 , fetchFromGitHub
 , phonenumbers
-, pydantic
+, pydantic_1
 , pythonOlder
 , pythonRelaxDepsHook
 , qrcode
@@ -54,7 +54,7 @@ buildPythonPackage rec {
       twilio
     ];
     webauthn = [
-      pydantic
+      pydantic_1
       webauthn
     ];
     # yubikey = [

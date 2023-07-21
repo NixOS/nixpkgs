@@ -49,7 +49,7 @@
 , pathspec
 , pendulum
 , psutil
-, pydantic
+, pydantic_1
 , pygments
 , pyjwt
 , python-daemon
@@ -189,7 +189,7 @@ buildPythonPackage rec {
     pathspec
     pendulum
     psutil
-    pydantic
+    pydantic_1
     pygments
     pyjwt
     python-daemon

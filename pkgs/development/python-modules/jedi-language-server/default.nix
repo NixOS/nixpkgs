@@ -6,7 +6,7 @@
 , lsprotocol
 , poetry-core
 , pygls
-, pydantic
+, pydantic_1
 , pyhamcrest
 , pytestCheckHook
 , python-jsonrpc-server
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     docstring-to-markdown
     jedi
     lsprotocol
-    pydantic
+    pydantic_1
     pygls
   ];
 

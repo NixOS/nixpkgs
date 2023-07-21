@@ -18,7 +18,7 @@
 , opentelemetry-api
 , opentelemetry-sdk
 , poetry-core
-, pydantic
+, pydantic_1
 , pygments
 , pyinstrument
 , pytest-aiohttp
@@ -117,7 +117,7 @@ buildPythonPackage rec {
       opentelemetry-sdk
     ];
     pydantic = [
-      pydantic
+      pydantic_1
     ];
     sanic = [
       sanic

@@ -5,7 +5,7 @@
 , fetchFromGitHub
 , packaging
 , poetry-core
-, pydantic
+, pydantic_1
 , pytest-asyncio
 , pytest-mock
 , pytestCheckHook
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     packaging
-    pydantic
+    pydantic_1
     yarl
   ];
 

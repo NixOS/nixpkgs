@@ -135,7 +135,7 @@ python.pkgs.buildPythonApplication rec {
     peewee
     peewee-migrate
     psutil
-    pydantic
+    pydantic_1
     pyyaml
     requests
     scipy

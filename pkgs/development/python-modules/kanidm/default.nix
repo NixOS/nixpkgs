@@ -9,7 +9,7 @@
 
 # propagates
 , aiohttp
-, pydantic
+, pydantic_1
 , toml
 
 # tests
@@ -39,7 +39,7 @@ buildPythonPackage {
 
   propagatedBuildInputs = [
     aiohttp
-    pydantic
+    pydantic_1
     toml
   ];
 

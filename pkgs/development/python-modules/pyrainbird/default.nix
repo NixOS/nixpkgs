@@ -6,7 +6,7 @@
 , ical
 , parameterized
 , pycryptodome
-, pydantic
+, pydantic_1
 , pytest-aiohttp
 , pytest-asyncio
 , pytest-golden
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     aiohttp-retry
     ical
     pycryptodome
-    pydantic
+    pydantic_1
     python-dateutil
     pyyaml
     requests

@@ -4,7 +4,7 @@
 , msgpack
 , numpy
 , pandas
-, pydantic
+, pydantic_1
 , pymongo
 , pytestCheckHook
 , pythonOlder
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     numpy
     pandas
-    pydantic
+    pydantic_1
     pymongo
     pytestCheckHook
   ];

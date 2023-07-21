@@ -4,7 +4,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
-, pydantic
+, pydantic_1
 , pytest-aiohttp
 , pytest-asyncio
 , pytestCheckHook
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    pydantic
+    pydantic_1
   ];
 
   nativeCheckInputs = [

@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , loguru
-, pydantic
+, pydantic_1
 , poetry-core
 , pythonOlder
 , requests
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     aiohttp
     requests
     loguru
-    pydantic
+    pydantic_1
   ];
 
   postPatch = ''

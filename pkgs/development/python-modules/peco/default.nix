@@ -2,7 +2,7 @@
 , aiohttp
 , buildPythonPackage
 , fetchPypi
-, pydantic
+, pydantic_1
 , pythonOlder
 , setuptools
 }:
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    pydantic
+    pydantic_1
   ];
 
   # Module has no tests

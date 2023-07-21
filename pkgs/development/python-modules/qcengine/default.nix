@@ -3,7 +3,7 @@
 , fetchPypi
 , psutil
 , py-cpuinfo
-, pydantic
+, pydantic_1
 , pytestCheckHook
 , pythonOlder
 , pyyaml
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     psutil
     py-cpuinfo
-    pydantic
+    pydantic_1
     pyyaml
     qcelemental
   ];

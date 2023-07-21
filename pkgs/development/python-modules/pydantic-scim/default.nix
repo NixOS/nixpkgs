@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pydantic
+, pydantic_1
 , setuptools-scm
 }:
 
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    pydantic
-  ] ++ pydantic.optional-dependencies.email;
+    pydantic_1
+  ] ++ pydantic_1.optional-dependencies.email;
 
   pythonImportsCheck = [
     "pydanticscim"

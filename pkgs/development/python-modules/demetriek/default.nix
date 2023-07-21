@@ -3,7 +3,7 @@
 , awesomeversion
 , backoff
 , buildPythonPackage
-, pydantic
+, pydantic_1
 , fetchFromGitHub
 , poetry-core
 , yarl
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     aiohttp
     awesomeversion
     backoff
-    pydantic
+    pydantic_1
     yarl
   ];
 

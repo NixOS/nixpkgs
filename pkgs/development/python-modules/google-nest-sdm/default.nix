@@ -6,7 +6,7 @@
 , google-auth
 , google-auth-oauthlib
 , google-cloud-pubsub
-, pydantic
+, pydantic_1
 , pytest-aiohttp
 , pytest-asyncio
 , pytestCheckHook
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     google-auth
     google-auth-oauthlib
     google-cloud-pubsub
-    pydantic
+    pydantic_1
     requests-oauthlib
   ];
 

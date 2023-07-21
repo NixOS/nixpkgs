@@ -6,7 +6,7 @@
 , kasa-crypt
 , orjson
 , poetry-core
-, pydantic
+, pydantic_1
 , pytest-asyncio
 , pytest-mock
 , pytestCheckHook
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     anyio
     asyncclick
-    pydantic
+    pydantic_1
   ];
 
   nativeCheckInputs = [

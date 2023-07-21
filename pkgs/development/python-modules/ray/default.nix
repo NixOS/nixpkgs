@@ -35,7 +35,7 @@
 , protobuf3_20
 , psutil
 , pyarrow
-, pydantic
+, pydantic_1
 , python
 , pythonAtLeast
 , pythonOlder
@@ -145,7 +145,7 @@ buildPythonPackage rec {
     prometheus-client
     protobuf3_20
     psutil
-    pydantic
+    pydantic_1
     pyyaml
     requests
     setproctitle

@@ -28,7 +28,7 @@
 , promise
 , protobuf
 , psutil
-, pydantic
+, pydantic_1
 , pyfakefs
 , pytest-mock
 , pytest-xdist
@@ -111,7 +111,7 @@ buildPythonPackage rec {
     nbformat
     pandas
     parameterized
-    pydantic
+    pydantic_1
     pyfakefs
     pytest-mock
     pytest-xdist

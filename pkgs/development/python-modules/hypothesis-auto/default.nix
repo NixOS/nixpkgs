@@ -4,7 +4,7 @@
 , fetchpatch
 , hypothesis
 , poetry-core
-, pydantic
+, pydantic_1
 , pytest
 , pythonOlder
 }:
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    pydantic
+    pydantic_1
     hypothesis
     pytest
   ];

@@ -5,7 +5,7 @@
 , fetchFromGitHub
 , importlib-metadata
 , poetry-core
-, pydantic
+, pydantic_1
 , pytestCheckHook
 , pythonOlder
 , pythonRelaxDepsHook
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     rstcheck-core
     types-docutils
     typing-extensions
-    pydantic
+    pydantic_1
     typer
   ] ++ lib.optionals (pythonOlder "3.8") [
     typing-extensions

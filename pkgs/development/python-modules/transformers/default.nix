@@ -35,7 +35,7 @@
 , fairscale
 , optuna
 , ray
-, pydantic
+, pydantic_1
 , uvicorn
 , fastapi
 , starlette
@@ -139,7 +139,7 @@ buildPythonPackage rec {
     # sigopt = [ sigopt ];
     # integrations = ray ++ optuna ++ sigopt;
     serving = [
-      pydantic
+      pydantic_1
       uvicorn
       fastapi
       starlette

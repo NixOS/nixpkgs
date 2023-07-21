@@ -10,7 +10,7 @@
 , httpx
 , jinja2
 , poetry-core
-, pydantic
+, pydantic_1
 , pytest-asyncio
 , pytestCheckHook
 , python-multipart
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     fastapi
     httpx
     jinja2
-    pydantic
+    pydantic_1
     python-multipart
   ];
 
