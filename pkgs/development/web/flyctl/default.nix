@@ -25,6 +25,8 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  patches = [ ./disable-auto-update.patch ];
+
   preBuild = ''
     go generate ./...
   '';
@@ -43,8 +45,6 @@ buildGoModule rec {
       --fish <($out/bin/flyctl completion fish) \
       --zsh <($out/bin/flyctl completion zsh)
     ln -s $out/bin/flyctl $out/bin/fly
-    # If autoupdate is true, we get into an autoupdate loop
-    $out/bin/flyctl settings autoupdate disable
   '';
 
   passthru.tests.version = testers.testVersion {
