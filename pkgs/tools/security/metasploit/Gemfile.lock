@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: ba44d1810c38a63f46b3c1fb9290de4a384b802d
-  ref: refs/tags/6.3.25
+  revision: dd1f90dd6fd267d8430d8e0299ebcfe6a85327cf
+  ref: refs/tags/6.3.26
   specs:
-    metasploit-framework (6.3.25)
+    metasploit-framework (6.3.26)
       actionpack (~> 7.0)
       activerecord (~> 7.0)
       activesupport (~> 7.0)
@@ -131,22 +131,22 @@ GEM
     arel-helpers (2.14.0)
       activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.2.0)
-    aws-partitions (1.785.0)
+    aws-partitions (1.790.0)
     aws-sdk-core (3.178.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.5)
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-ec2 (1.389.0)
+    aws-sdk-ec2 (1.392.0)
       aws-sdk-core (~> 3, >= 3.177.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-iam (1.85.0)
+    aws-sdk-iam (1.86.0)
       aws-sdk-core (~> 3, >= 3.177.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-kms (1.71.0)
       aws-sdk-core (~> 3, >= 3.177.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.129.0)
+    aws-sdk-s3 (1.131.0)
       aws-sdk-core (~> 3, >= 3.177.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.6)
@@ -212,7 +212,7 @@ GEM
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     io-console (0.6.0)
-    irb (1.7.3)
+    irb (1.7.4)
       reline (>= 0.3.6)
     jmespath (1.6.2)
     jsobfu (0.4.2)
@@ -258,7 +258,7 @@ GEM
       webrick
     metasploit_payloads-mettle (1.0.20)
     method_source (1.0.0)
-    mini_portile2 (2.8.2)
+    mini_portile2 (2.8.4)
     minitest (5.18.1)
     mqtt (0.6.0)
     msgpack (1.6.1)
