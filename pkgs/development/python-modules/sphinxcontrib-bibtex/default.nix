@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, setuptoolsLegacyNamespaceHook
 , oset
 , pybtex
 , pybtex-docutils
@@ -11,6 +12,7 @@
 buildPythonPackage rec {
   pname = "sphinxcontrib-bibtex";
   version = "2.5.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
@@ -18,6 +20,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-cbQuXbDi4oTyQ4dTJr+ZNqqadjKCJ311BIgm/vWwDqo=";
   };
+
+  nativeBuildInputs = [
+    setuptoolsLegacyNamespaceHook
+  ];
 
   propagatedBuildInputs = [
     oset
