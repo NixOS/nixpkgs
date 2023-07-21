@@ -147,7 +147,7 @@ foreach my $g (@{$spec->{groups}}) {
     if (defined $existing) {
         $g->{gid} = $existing->{gid} if !defined $g->{gid};
         if ($g->{gid} != $existing->{gid}) {
-            dry_print("warning: not applying", "warning: would not apply", "GID change of group ‘$name’ ($existing->{gid} -> $g->{gid})");
+            dry_print("warning: not applying", "warning: would not apply", "GID change of group ‘$name’ ($existing->{gid} -> $g->{gid}) in /etc/group");
             $g->{gid} = $existing->{gid};
         }
         $g->{password} = $existing->{password}; # do we want this?
@@ -209,7 +209,7 @@ foreach my $u (@{$spec->{users}}) {
     if (defined $existing) {
         $u->{uid} = $existing->{uid} if !defined $u->{uid};
         if ($u->{uid} != $existing->{uid}) {
-            dry_print("warning: not applying", "warning: would not apply", "UID change of user ‘$name’ ($existing->{uid} -> $u->{uid})");
+            dry_print("warning: not applying", "warning: would not apply", "UID change of user ‘$name’ ($existing->{uid} -> $u->{uid}) in /etc/passwd");
             $u->{uid} = $existing->{uid};
         }
     } else {

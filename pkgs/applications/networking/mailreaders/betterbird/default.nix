@@ -6,10 +6,12 @@
 , git
 , libdbusmenu-gtk3
 , runtimeShell
-, thunderbird-unwrapped
+, thunderbirdPackages
 }:
 
 let
+  thunderbird-unwrapped = thunderbirdPackages.thunderbird-102;
+
   version = "102.12.0";
   majVer = lib.versions.major version;
 
