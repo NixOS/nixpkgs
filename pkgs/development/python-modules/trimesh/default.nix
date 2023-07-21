@@ -2,18 +2,21 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
+, pythonOlder
 , numpy
 , lxml
 }:
 
 buildPythonPackage rec {
   pname = "trimesh";
-  version = "3.22.4";
+  version = "3.22.5";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DFOtanrrc3Jufuu5ybbbc0xJX29CVp2tFOP93QFoJeM=";
+    hash = "sha256-Lk30HShbVSBeiclfxJUkd7W2HfvLsZiUdYqebLI7otw=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -33,6 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for loading and using triangular meshes";
     homepage = "https://trimsh.org/";
+    changelog = "https://github.com/mikedh/trimesh/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ gebner ];
   };
