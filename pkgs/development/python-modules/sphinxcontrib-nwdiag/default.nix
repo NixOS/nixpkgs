@@ -4,6 +4,7 @@
 , fetchPypi
 , nwdiag
 , pythonOlder
+, setuptoolsLegacyNamespaceHook
 , sphinx
 }:
 
@@ -18,6 +19,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-bula1DutRv6NwfZRhciZfLHRZmXu42p+qvbeExN/+Fk=";
   };
+
+  nativeBuildInputs = [
+    setuptoolsLegacyNamespaceHook
+  ];
 
   propagatedBuildInputs = [
     blockdiag
