@@ -4814,6 +4814,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  diesel-cli-ext = callPackage ../development/tools/diesel-cli-ext { };
+
   refinery-cli = callPackage ../development/tools/refinery-cli { };
 
   digitemp = callPackage ../tools/misc/digitemp { };
@@ -22435,6 +22437,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AudioUnit;
   };
 
+  libspelling = callPackage ../development/libraries/libspelling { };
+
   libsystemtap = callPackage ../development/libraries/libsystemtap { };
 
   libgtop = callPackage ../development/libraries/libgtop { };
@@ -36421,6 +36425,8 @@ with pkgs;
   alfis-nogui = alfis.override {
     withGui = false;
   };
+
+  aperture = callPackage ../applications/blockchains/aperture { };
 
   balanceofsatoshis = nodePackages.balanceofsatoshis;
 

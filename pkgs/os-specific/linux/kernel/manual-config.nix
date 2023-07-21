@@ -232,7 +232,10 @@ stdenv.mkDerivation ({
     # replicated here to apply to older versions.
     # Makes __FILE__ relative to the build directory.
     "KCPPFLAGS=-fmacro-prefix-map=$(sourceRoot)/="
-  ] ++ extraMakeFlags;
+    kernelConf.target
+  ] ++ optional isModular "modules"
+    ++ optional buildDTBs "dtbs"
+    ++ extraMakeFlags;
 
   installFlags = [
     "INSTALL_PATH=$(out)"
