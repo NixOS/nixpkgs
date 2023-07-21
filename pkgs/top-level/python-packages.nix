@@ -4203,6 +4203,8 @@ self: super: with self; {
 
   git-sweep = callPackage ../development/python-modules/git-sweep { };
 
+  git-url-parse = callPackage ../development/python-modules/git-url-parse { };
+
   gitdb = callPackage ../development/python-modules/gitdb { };
 
   github-to-sqlite = callPackage ../development/python-modules/github-to-sqlite { };
