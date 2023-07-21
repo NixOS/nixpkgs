@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptoolsLegacyNamespaceHook
 , sphinx
 , sphinxcontrib-tikz
 }:
@@ -14,6 +15,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-+M+K8WzQqxQUGgAgGPK+isf3gKK7HOrdI6nNW/V8Wv0=";
   };
+
+  nativeBuildInputs = [
+    setuptoolsLegacyNamespaceHook
+  ];
 
   propagatedBuildInputs = [ sphinx sphinxcontrib-tikz ];
 
