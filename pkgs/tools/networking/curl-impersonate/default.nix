@@ -20,6 +20,7 @@
 , unzip
 , go
 , p11-kit
+, nixosTests
 }:
 
 let
@@ -179,5 +180,7 @@ symlinkJoin rec {
     updateScript = ./update.sh;
 
     inherit (passthru.curl-impersonate-ff) src;
+
+    tests = { inherit (nixosTests) curl-impersonate; };
   };
 }
