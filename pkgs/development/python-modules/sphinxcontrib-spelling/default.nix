@@ -5,7 +5,7 @@
 , importlib-metadata
 , sphinx
 , pyenchant
-, pbr
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pbr
+    setuptools
   ];
 
   propagatedBuildInputs = [
