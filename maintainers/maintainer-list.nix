@@ -14228,6 +14228,12 @@
     githubId = 1069318;
     name = "Robin Lambertz";
   };
+  robwalt = {
+    email = "robwalter96@gmail.com";
+    github = "robwalt";
+    githubId = 26892280;
+    name = "Robert Walter";
+  };
   roconnor = {
     email = "roconnor@theorem.ca";
     github = "roconnor";
