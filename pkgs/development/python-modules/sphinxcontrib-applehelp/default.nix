@@ -1,18 +1,22 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-applehelp";
-  version = "1.0.2";
-  disabled = isPy27;
+  version = "1.0.4";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a072735ec80e7675e3f432fcae8610ecf509c5f1869d17e2eecff44389cdbc58";
+    hash = "sha256-go+GeUW745gXwhChq/0bxIlci3P8qt5W1FNXo0igfX4=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   # Check is disabled due to circular dependency of sphinx
   doCheck = false;
