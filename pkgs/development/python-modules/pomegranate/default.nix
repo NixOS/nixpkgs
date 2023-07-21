@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "pomegranate";
-  version = "1.0.0";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "jmschrei";
-    rev = "v${version}";
-    hash = "sha256-EnxKlRRfsOIDLAhYOq7bUSbI/NvPoSyYCZ9D5VCXFGQ=";
+    rev = "f8ed453337fae6b44eddcbfe0d1031d33d8bea76";
+    hash = "sha256-OdXLP/GpBqY28q3tcIfJRQ+nI82BfBwjLfCm1hIjw8U=";
   };
 
   propagatedBuildInputs = [
@@ -39,14 +39,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # These tests seem to be broken as of 1.0.0
+  # These tests seem to be broken as of 1.0.1
   disabledTests = [
     "sample"
-    "test_learn_structure_chow_liu"
-    "test_learn_structure_exact"
-    "test_categorical_chow_liu"
     "test_categorical_exact"
-    "test_categorical_learn_structure"
   ];
 
   pythonImportsCheck = [
