@@ -9,6 +9,7 @@
 , perl
 , pkg-config
 , texinfo
+, buildPackages
 
 # runtime
 , c-ares
@@ -28,7 +29,12 @@
 # tests
 , nettools
 , nixosTests
+
+# options
+, snmpSupport ? true
 }:
+
+assert snmpSupport -> stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
 stdenv.mkDerivation rec {
   pname = "frr";
@@ -57,7 +63,6 @@ stdenv.mkDerivation rec {
     libelf
     libunwind
     libyang
-    net-snmp
     openssl
     pam
     pcre2
@@ -66,21 +71,34 @@ stdenv.mkDerivation rec {
     rtrlib
   ] ++ lib.optionals stdenv.isLinux [
     libcap
+  ] ++ lib.optionals snmpSupport [
+    net-snmp
   ];
 
+  # otherwise in cross-compilation: "configure: error: no working python version found"
+  depsBuildBuild = [
+    buildPackages.python3
+  ];
+
+  # cross-compiling: clippy is compiled with the build host toolchain, split it out to ease
+  # navigation in dependency hell
+  clippy-helper = buildPackages.callPackage ./clippy-helper.nix { frr_version = version; frr_source=src; };
+
   configureFlags = [
+    "--disable-silent-rules"
     "--disable-exampledir"
     "--enable-configfile-mask=0640"
     "--enable-group=frr"
     "--enable-logfile-mask=0640"
     "--enable-multipath=64"
-    "--enable-snmp"
+    (lib.strings.enableFeature snmpSupport "snmp")
     "--enable-user=frr"
     "--enable-vty-group=frrvty"
     "--localstatedir=/run/frr"
     "--sbindir=$(out)/libexec/frr"
     "--sysconfdir=/etc/frr"
     "--enable-rpki"
+    "--with-clippy=${clippy-helper}/bin/clippy"
   ];
 
   postPatch = ''
