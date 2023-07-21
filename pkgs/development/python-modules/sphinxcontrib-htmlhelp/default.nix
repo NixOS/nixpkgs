@@ -1,18 +1,22 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-htmlhelp";
-  version = "2.0.0";
-  disabled = isPy27;
+  version = "2.0.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f5f8bb2d0d629f398bf47d0d69c07bc13b65f75a81ad9e2f71a63d4b7a2f6db2";
+    hash = "sha256-DL3TAoFTMAWEIrmKETGVySSYJdaB4Y8R6LH3ii8R7/8=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   # Check is disabled due to circular dependency of sphinx
   doCheck = false;
