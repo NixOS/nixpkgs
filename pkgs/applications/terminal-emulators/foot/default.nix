@@ -26,7 +26,7 @@
 }:
 
 let
-  version = "1.15.0";
+  version = "1.15.1";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -96,9 +96,9 @@ stdenv.mkDerivation rec {
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
-    repo = pname;
+    repo = "foot";
     rev = version;
-    hash = "sha256-ji0e5E2yy0wYbzw38nuQRoRcd83FsJh6E5TabtUP1g8=";
+    hash = "sha256-YCwmPSn+XtF7HkMOFJft7j/2vr+8UE59yu/iGZ1dT8A=";
   };
 
   depsBuildBuild = [
