@@ -18,7 +18,7 @@
   dnsConfig = nodes: {
     dnsProvider = "exec";
     dnsPropagationCheck = false;
-    credentialsFile = pkgs.writeText "wildcard.env" ''
+    environmentFile = pkgs.writeText "wildcard.env" ''
       EXEC_PATH=${dnsScript nodes}
       EXEC_POLLING_INTERVAL=1
       EXEC_PROPAGATION_TIMEOUT=1
