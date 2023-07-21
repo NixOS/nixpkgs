@@ -3298,6 +3298,8 @@ self: super: with self; {
 
   emailthreads = callPackage ../development/python-modules/emailthreads { };
 
+  email-reply-parser = callPackage ../development/python-modules/email-reply-parser { };
+
   email-validator = callPackage ../development/python-modules/email-validator { };
 
   embedding-reader = callPackage ../development/python-modules/embedding-reader { };
