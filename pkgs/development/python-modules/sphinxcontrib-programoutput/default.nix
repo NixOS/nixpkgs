@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptoolsLegacyNamespaceHook
 , sphinx
 , sphinxcontrib-serializinghtml
 }:
@@ -13,6 +14,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-MA7puMrug1XSXMdLTRx+/RLmCNKtFl4xQdMeb7wVK38=";
   };
+
+  nativeBuildInputs = [
+    setuptoolsLegacyNamespaceHook
+  ];
 
   buildInputs = [
     sphinx
