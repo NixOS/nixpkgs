@@ -4281,6 +4281,8 @@ self: super: with self; {
 
   google-cloud-appengine-logging = callPackage ../development/python-modules/google-cloud-appengine-logging { };
 
+  google-cloud-artifact-registry = callPackage ../development/python-modules/google-cloud-artifact-registry { };
+
   google-cloud-asset = callPackage ../development/python-modules/google-cloud-asset { };
 
   google-cloud-audit-log = callPackage ../development/python-modules/google-cloud-audit-log { };
