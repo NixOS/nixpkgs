@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptoolsLegacyNamespaceHook
 , sphinx
 , actdiag
 , blockdiag
@@ -18,6 +19,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-PFXUVP/Due/nwg8q2vAiGZuCVhLTLyAL6KSXqofg+B8=";
   };
+
+  nativeBuildInputs = [
+    setuptoolsLegacyNamespaceHook
+  ];
 
   propagatedBuildInputs = [
     actdiag
