@@ -1,23 +1,31 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, sphinx, pbr }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptoolsLegacyNamespaceHook
+, sphinx
+, pbr
+}:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-fulltoc";
   version = "1.2.0";
-
-  # pkgutil namespaces are broken in nixpkgs (because they can't scan multiple
-  # directories). But python2 is EOL, so not supporting it, should be ok.
-  disabled = pythonOlder "3";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1nbwflv9szyh37yr075xhck8b4gg2c7g3sa38mfi7wv7qhpxcif8";
+    hash = "sha256-yEXWL8Rn8xNdRUPp8Q4T75GFJoO9HJD9GdB/nTZ1fNk=";
   };
 
-  nativeBuildInputs = [ pbr ];
+  nativeBuildInputs = [
+    pbr
+    setuptoolsLegacyNamespaceHook
+  ];
+
   propagatedBuildInputs = [ sphinx ];
 
   # There are no unit tests
   doCheck = false;
+
   # Ensure package importing works
   pythonImportsCheck = [ "sphinxcontrib.fulltoc" ];
 
