@@ -12,12 +12,12 @@ buildPythonPackage rec {
   version = "2.5.25";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-kqeqo0qWE9O9Q57Ef/0zTSGR04ubYibFFs6FzP9UQys=";
   };
 
