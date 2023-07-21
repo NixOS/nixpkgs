@@ -8,6 +8,7 @@
 , udev
 , cryptsetup
 , stdenv
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://binaries.twingate.com/client/linux/DEB/x86_64/${version}/twingate-amd64.deb";
-    sha256 = "acf623192ae348d49d8cc6513f419dedaf65442f88d3aa0ebd964450427ab399";
+    hash = "sha256-rPYjGSrjSNSdjMZRP0Gd7a9lRC+I06oOvZZEUEJ6s5k=";
   };
 
   buildInputs = [ dbus curl libnl udev cryptsetup ];
@@ -41,11 +42,13 @@ stdenv.mkDerivation rec {
     mv usr/share $out/share
   '';
 
+  passthru.tests = { inherit (nixosTests) twingate; };
+
   meta = with lib; {
     description = "Twingate Client";
     homepage = "https://twingate.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ tonyshkurenko ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }
