@@ -14415,6 +14415,8 @@ with pkgs;
 
   wdisplays = callPackage ../tools/graphics/wdisplays { };
 
+  weaviate = callPackage ../servers/search/weaviate { };
+
   webalizer = callPackage ../tools/networking/webalizer { };
 
   wget = callPackage ../tools/networking/wget { };
