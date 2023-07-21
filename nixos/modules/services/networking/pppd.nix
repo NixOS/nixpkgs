@@ -49,6 +49,17 @@ in
                 description = lib.mdDoc "Whether the PPP session is automatically started at boot time.";
               };
 
+              waitUntilReady = mkOption {
+                type = types.bool;
+                default = false;
+                example = true;
+                description = lib.mdDoc ''
+                  Whether to wait until a link is established before
+                  considering the systemd unit to be ready. This can be used
+                  to provide better startup ordering between services.
+                '';
+              };
+
               config = mkOption {
                 type = types.lines;
                 default = "";
@@ -65,7 +76,10 @@ in
 
     mkEtc = peerCfg: {
       name = "ppp/peers/${peerCfg.name}";
-      value.text = peerCfg.config;
+      value.text = ''
+        ${peerCfg.config}
+        ${lib.optionalString peerCfg.waitUntilReady "up_sdnotify"}
+      '';
     };
 
     mkSystemd = peerCfg: {
@@ -94,6 +108,7 @@ in
           ExecStart = "${getBin cfg.package}/sbin/pppd call ${peerCfg.name} nodetach nolog";
           Restart = "always";
           RestartSec = 5;
+          Type = if peerCfg.waitUntilReady then "notify" else "simple";
 
           AmbientCapabilities = capabilities;
           CapabilityBoundingSet = capabilities;
