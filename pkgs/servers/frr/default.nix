@@ -213,7 +213,7 @@ stdenv.mkDerivation rec {
       private clouds.
     '';
     license = with licenses; [ gpl2Plus lgpl21Plus ];
-    maintainers = with maintainers; [ woffs ];
+    maintainers = with maintainers; [ woffs thillux ];
     platforms = platforms.unix;
   };
 
