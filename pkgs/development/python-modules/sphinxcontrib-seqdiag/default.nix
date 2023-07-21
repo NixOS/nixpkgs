@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, setuptoolsLegacyNamespaceHook
 , seqdiag
 , sphinx
 }:
@@ -18,6 +19,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-QH5IeXZz9x2Ujp/6BHFsrB2ZqeyPYW3jdk1C0DNBZXQ=";
   };
+
+  nativeBuildInputs = [
+    setuptoolsLegacyNamespaceHook
+  ];
 
   propagatedBuildInputs = [
     blockdiag
