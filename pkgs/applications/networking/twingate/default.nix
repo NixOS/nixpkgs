@@ -20,10 +20,18 @@ stdenv.mkDerivation rec {
     sha256 = "b308c422af8a33ecd58e21a10a72c353351a189df67006e38d1ec029a93d5678";
   };
 
-  buildInputs = [ dbus curl libnl udev cryptsetup ];
-  nativeBuildInputs = [ dpkg autoPatchelfHook ];
+  buildInputs = [
+    dbus
+    curl
+    libnl
+    udev
+    cryptsetup
+  ];
 
-  unpackCmd = "mkdir root ; dpkg-deb -x $curSrc root";
+  nativeBuildInputs = [
+    dpkg
+    autoPatchelfHook
+  ];
 
   postPatch = ''
     while read file; do
