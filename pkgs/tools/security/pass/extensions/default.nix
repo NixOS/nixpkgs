@@ -9,6 +9,7 @@ with pkgs;
   pass-checkup = callPackage ./checkup.nix {};
   pass-import = callPackage ./import.nix {};
   pass-otp = callPackage ./otp.nix {};
+  pass-sxatm = callPackage ./sxatm.nix {};
   pass-tomb = callPackage ./tomb.nix {};
   pass-update = callPackage ./update.nix {};
   pass-genphrase = callPackage ./genphrase.nix {};
