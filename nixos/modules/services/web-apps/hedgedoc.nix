@@ -273,7 +273,46 @@ in
           "CMD_CONFIG_FILE=/run/${name}/config.json"
           "NODE_ENV=production"
         ];
+
+        # Hardening
+        AmbientCapabilities = "";
+        CapabilityBoundingSet = "";
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
         PrivateTmp = true;
+        PrivateUsers = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          # Required for connecting to database sockets,
+          # and listening to unix socket at `cfg.settings.path`
+          "AF_UNIX"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SocketBindAllow = lib.mkIf (cfg.settings.path == null) cfg.settings.port;
+        SocketBindDeny = "any";
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged @obsolete"
+          "@pkey"
+        ];
+        UMask = "0007";
       };
     };
   };
