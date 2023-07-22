@@ -4281,6 +4281,8 @@ self: super: with self; {
 
   google-cloud-appengine-logging = callPackage ../development/python-modules/google-cloud-appengine-logging { };
 
+  google-cloud-artifact-registry = callPackage ../development/python-modules/google-cloud-artifact-registry { };
+
   google-cloud-asset = callPackage ../development/python-modules/google-cloud-asset { };
 
   google-cloud-audit-log = callPackage ../development/python-modules/google-cloud-audit-log { };
@@ -11589,6 +11591,8 @@ self: super: with self; {
 
   skytemple-ssb-debugger = callPackage ../development/python-modules/skytemple-ssb-debugger { };
 
+  slack-bolt = callPackage ../development/python-modules/slack-bolt { };
+
   slack-sdk = callPackage ../development/python-modules/slack-sdk { };
 
   slackclient = callPackage ../development/python-modules/slackclient { };
@@ -13054,6 +13058,8 @@ self: super: with self; {
   unrardll = callPackage ../development/python-modules/unrardll { };
 
   unrpa = callPackage ../development/python-modules/unrpa { };
+
+  unstructured-inference = callPackage ../development/python-modules/unstructured-inference { };
 
   untangle = callPackage ../development/python-modules/untangle { };
 

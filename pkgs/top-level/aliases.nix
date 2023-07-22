@@ -492,6 +492,7 @@ mapAliases ({
 
   facette = throw "facette has been removed"; # Added 2020-01-06
   faustStk = faustPhysicalModeling; # Added 2023-05-16
+  faust1 = throw "faust1 has been removed, use faust2 instead"; # Added 2022-12-03
   fast-neural-doodle = throw "fast-neural-doodle has been removed, as the upstream project has been abandoned"; # Added 2020-03-28
   fastnlo = fastnlo_toolkit; # Added 2021-04-24
   fbreader = throw "fbreader has been removed, as the upstream project has been archived"; # Added 2022-05-26

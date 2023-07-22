@@ -439,6 +439,8 @@ in
       lfs = mkIf cfg.lfs.enable {
         PATH = cfg.lfs.contentDir;
       };
+
+      packages.CHUNKED_UPLOAD_PATH = "${cfg.stateDir}/tmp/package-upload";
     };
 
     services.postgresql = optionalAttrs (usePostgresql && cfg.database.createDatabase) {
@@ -575,7 +577,7 @@ in
       '';
 
       serviceConfig = {
-        Type = "simple";
+        Type = "notify";
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.stateDir;
@@ -583,7 +585,7 @@ in
         Restart = "always";
         # Runtime directory and mode
         RuntimeDirectory = "gitea";
-        RuntimeDirectoryMode = "0750";
+        RuntimeDirectoryMode = "0755";
         # Proc filesystem
         ProcSubset = "pid";
         ProtectProc = "invisible";

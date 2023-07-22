@@ -5331,6 +5331,12 @@
     githubId = 4246921;
     name = "Florian Beeres";
   };
+  fd = {
+    email = "simon.menke@gmail.com";
+    github = "fd";
+    githubId = 591;
+    name = "Simon Menke";
+  };
   fdns = {
     email = "fdns02@gmail.com";
     github = "fdns";
@@ -6041,6 +6047,9 @@
     github = "gigglesquid";
     githubId = 3685154;
     name = "Jack connors";
+    keys = [{
+      fingerprint = "21DF 8034 B212 EDFF 9F19  9C19 F65B 7583 7ABF D019";
+    }];
   };
   gila = {
     email = "jeffry.molanus@gmail.com";
@@ -14221,6 +14230,12 @@
     github = "roblabla";
     githubId = 1069318;
     name = "Robin Lambertz";
+  };
+  robwalt = {
+    email = "robwalter96@gmail.com";
+    github = "robwalt";
+    githubId = 26892280;
+    name = "Robert Walter";
   };
   roconnor = {
     email = "roconnor@theorem.ca";

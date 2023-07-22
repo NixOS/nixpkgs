@@ -475,6 +475,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  codeberg-cli = callPackage ../applications/version-management/codeberg-cli {
+    inherit (darwin.apple_sdk.frameworks) Security CoreServices;
+  };
+
   conftest = callPackage ../development/tools/conftest { };
 
   coldsnap = callPackage ../tools/admin/coldsnap {
@@ -582,6 +586,8 @@ with pkgs;
   ea = callPackage ../tools/misc/ea { };
 
   each = callPackage ../tools/text/each { };
+
+  ebusd = callPackage ../servers/ebusd { };
 
   eclipse-mat = callPackage ../development/tools/eclipse-mat { };
 
@@ -14408,6 +14414,8 @@ with pkgs;
   wdiff = callPackage ../tools/text/wdiff { };
 
   wdisplays = callPackage ../tools/graphics/wdisplays { };
+
+  weaviate = callPackage ../servers/search/weaviate { };
 
   webalizer = callPackage ../tools/networking/webalizer { };
 
@@ -39664,8 +39672,6 @@ with pkgs;
   glee = callPackage ../tools/graphics/glee { };
 
   faust = res.faust2;
-
-  faust1 = callPackage ../applications/audio/faust/faust1.nix { };
 
   faust2 = callPackage ../applications/audio/faust/faust2.nix { };
 

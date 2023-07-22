@@ -2,7 +2,7 @@
 , subversion, glibcLocales, sshSupport ? true, openssh ? null
 }:
 
-{ url, rev ? "HEAD", md5 ? "", sha256 ? "", hash ? ""
+{ url, rev ? "HEAD", sha256 ? "", hash ? ""
 , ignoreExternals ? false, ignoreKeywords ? false, name ? null
 , preferLocalBuild ? true
 }:
@@ -32,9 +32,7 @@ let
   name_ = if name == null then "${repoName}-r${toString rev}" else name;
 in
 
-if md5 != "" then
-  throw "fetchsvn does not support md5 anymore, please use sha256"
-else if hash != "" && sha256 != "" then
+if hash != "" && sha256 != "" then
   throw "Only one of sha256 or hash can be set"
 else
 stdenvNoCC.mkDerivation {
