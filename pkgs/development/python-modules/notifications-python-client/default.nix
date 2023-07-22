@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "notifications-python-client";
-  version = "8.0.0";
+  version = "8.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "alphagov";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-feATZS7PG9IKY6ooPztA49WykQ/Bt67frSe3PpbiCLc=";
+    hash = "sha256-ZDqUJljCZnGmm0TRclv23I+I9egFdF25P0wIYAQkOVI=";
   };
 
   propagatedBuildInputs = [
@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'pytest-runner'" ""
+      --replace "pytest-runner" ""
   '';
 
   pythonImportsCheck = [
