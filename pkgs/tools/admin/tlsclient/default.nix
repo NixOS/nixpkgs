@@ -4,6 +4,7 @@
 , pkg-config
 , openssl
 , installShellFiles
+, gitUpdater
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,6 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 -t $out/bin tlsclient
     installManPage tlsclient.1
   '';
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     description = "tlsclient command line utility";
