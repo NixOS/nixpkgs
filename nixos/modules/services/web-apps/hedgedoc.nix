@@ -17,6 +17,8 @@ let
   settingsFormat = pkgs.formats.json { };
 in
 {
+  meta.maintainers = with lib.maintainers; [ SuperSandro2000 h7x4 ];
+
   imports = [
     (lib.mkRenamedOptionModule [ "services" "codimd" ] [ "services" "hedgedoc" ])
     (lib.mkRenamedOptionModule [ "services" "hedgedoc" "configuration" ] [ "services" "hedgedoc" "settings" ])
