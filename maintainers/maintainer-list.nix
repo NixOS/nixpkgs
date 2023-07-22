@@ -2778,6 +2778,13 @@
     githubId = 64804;
     name = "Dennis Gosnell";
   };
+  cdmistman = {
+    name = "Colton Donnelly";
+    email = "colton@donn.io";
+    matrix = "@donnellycolton:matrix.org";
+    github = "cdmistman";
+    githubId = 23486351;
+  };
   ceedubs = {
     email = "ceedubs@gmail.com";
     github = "ceedubs";
