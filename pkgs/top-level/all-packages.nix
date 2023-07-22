@@ -1776,6 +1776,8 @@ with pkgs;
 
   mbidled = callPackage ../tools/networking/mbidled { };
 
+  mcumgr = callPackage ../tools/admin/mcumgr { };
+
   metapixel = callPackage ../tools/graphics/metapixel { };
 
   memos = callPackage ../servers/memos { };
