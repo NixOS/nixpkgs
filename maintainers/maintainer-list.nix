@@ -10179,6 +10179,13 @@
     githubId = 105451387;
     name = "Maria";
   };
+  marie = {
+    email = "tabmeier12+nix@gmail.com";
+    github = "nycodeghg";
+    githubId = 37078297;
+    matrix = "@marie:marie.cologne";
+    name = "Marie Ramlow";
+  };
   marijanp = {
     name = "Marijan Petričević";
     email = "marijan.petricevic94@gmail.com";
