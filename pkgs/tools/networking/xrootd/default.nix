@@ -24,6 +24,9 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
+
+  __structuredAttrs = true;
+
   pname = "xrootd";
   version = "5.5.5";
 
