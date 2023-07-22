@@ -349,6 +349,8 @@ in {
 
     evdi = callPackage ../os-specific/linux/evdi { };
 
+    fanout = callPackage ../os-specific/linux/fanout { };
+
     fwts-efi-runtime = callPackage ../os-specific/linux/fwts/module.nix { };
 
     gcadapter-oc-kmod = callPackage ../os-specific/linux/gcadapter-oc-kmod { };

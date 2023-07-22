@@ -10,14 +10,14 @@ in {
   nodes.machine = {
     services.syncthing = {
       enable = true;
-      devices.${testName} = {
+      settings.devices.testDevice = {
         id = testId;
       };
-      folders.testFolder = {
+      settings.folders.testFolder = {
         path = "/tmp/test";
-        devices = [ testName ];
+        devices = [ "testDevice" ];
       };
-      extraOptions.gui.user = "guiUser";
+      settings.gui.user = "guiUser";
     };
   };
 
