@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -17,7 +17,7 @@ in
 {
   options = {
 
-    boot.loader.generationsDir = {
+    boot.loader.generationsDir = utils.mkBootLoaderOption {
 
       enable = mkOption {
         default = false;
@@ -53,10 +53,10 @@ in
 
 
   config = mkIf config.boot.loader.generationsDir.enable {
-
-    system.build.installBootLoader = generationsDirBuilder;
-    system.boot.loader.id = "generationsDir";
+    boot.loader.generationsDir = {
+      installHook = generationsDirBuilder;
+      id = "generationsDir";
+    };
     system.boot.loader.kernelFile = pkgs.stdenv.hostPlatform.linux-kernel.target;
-
   };
 }

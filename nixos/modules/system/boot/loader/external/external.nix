@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, utils, ... }:
 
 with lib;
 
@@ -11,8 +11,13 @@ in
     doc = ./external.md;
   };
 
-  options.boot.loader.external = {
-    enable = mkEnableOption (lib.mdDoc "using an external tool to install your bootloader");
+  options.boot.loader.external = utils.mkBootLoaderOption {
+    enable = mkEnableOption (lib.mdDoc "use an external tool to install your bootloader");
+
+    id = mkOption {
+      type = types.str;
+      description = lib.mdDoc "Identifier of this external bootloader for metadata";
+    };
 
     installHook = mkOption {
       type = with types; path;
@@ -25,12 +30,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    boot.loader = {
-      grub.enable = mkDefault false;
-      systemd-boot.enable = mkDefault false;
-      supportsInitrdSecrets = mkDefault false;
-    };
-
-    system.build.installBootLoader = cfg.installHook;
+    boot.loader.external.supportsInitrdSecrets = mkDefault false;
   };
 }

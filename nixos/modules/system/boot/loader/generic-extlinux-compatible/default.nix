@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -7,7 +7,7 @@ let
   dtCfg = config.hardware.deviceTree;
   cfg = blCfg.generic-extlinux-compatible;
 
-  timeoutStr = if blCfg.timeout == null then "-1" else toString blCfg.timeout;
+  timeoutStr = if blCfg.defaults.timeout == null then "-1" else toString blCfg.defaults.timeout;
 
   # The builder used to write during system activation
   builder = import ./extlinux-conf-builder.nix { inherit pkgs; };
@@ -16,7 +16,7 @@ let
 in
 {
   options = {
-    boot.loader.generic-extlinux-compatible = {
+    boot.loader.generic-extlinux-compatible = utils.mkBootLoaderOption {
       enable = mkOption {
         default = false;
         type = types.bool;
@@ -74,8 +74,10 @@ in
       + lib.optionalString (!cfg.useGenerationDeviceTree) " -r";
   in
     mkIf cfg.enable {
-      system.build.installBootLoader = "${builder} ${builderArgs} -c";
-      system.boot.loader.id = "generic-extlinux-compatible";
+      boot.loader.generic-extlinux-compatible = {
+        id = "generic-extlinux-compatible";
+        installHook = "${builder} ${builderArgs} -c";
+      };
 
       boot.loader.generic-extlinux-compatible.populateCmd = "${populateBuilder} ${builderArgs}";
     };

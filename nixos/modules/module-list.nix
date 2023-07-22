@@ -1465,6 +1465,7 @@
   ./system/boot/initrd-ssh.nix
   ./system/boot/kernel.nix
   ./system/boot/kexec.nix
+  ./system/boot/loader/bootloaders.nix
   ./system/boot/loader/efi.nix
   ./system/boot/loader/generations-dir/generations-dir.nix
   ./system/boot/loader/generic-extlinux-compatible

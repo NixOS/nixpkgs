@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -20,8 +20,7 @@ in
 
   options = {
 
-    boot.loader.initScript = {
-
+    boot.loader.initScript = utils.mkBootLoaderOption {
       enable = mkOption {
         default = false;
         type = types.bool;
@@ -44,9 +43,10 @@ in
   ###### implementation
 
   config = mkIf config.boot.loader.initScript.enable {
-
-    system.build.installBootLoader = initScriptBuilder;
-
+    boot.loader.initScript = {
+      id = "init-script";
+      installHook = initScriptBuilder;
+    };
   };
 
 }

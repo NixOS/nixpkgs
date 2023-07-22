@@ -3,7 +3,7 @@
 # the modules necessary to mount the root file system, then calls the
 # init in the root file system to start the second boot stage.
 
-{ config, lib, utils, pkgs, ... }:
+{ config, options, lib, utils, pkgs, ... }:
 
 with lib;
 
@@ -16,6 +16,9 @@ let
   modulesTree = config.system.modulesTree.override { name = kernel-name + "-modules"; };
   firmware = config.hardware.firmware;
 
+  enabledBootloaders = builtins.attrValues (filterAttrs (utils.enabledBootloader options.boot.loader) config.boot.loader);
+  # It's all or nothing, either everyone supports it, either no one.
+  supportsInitrdSecrets = builtins.all (bl: bl.supportsInitrdSecrets) enabledBootloaders;
 
   # Determine the set of modules that we need to mount the root FS.
   modulesClosure = pkgs.makeModulesClosure {
@@ -157,7 +160,7 @@ let
       # Copy secrets if needed.
       #
       # TODO: move out to a separate script; see #85000.
-      ${optionalString (!config.boot.loader.supportsInitrdSecrets)
+      ${optionalString (!supportsInitrdSecrets)
           (concatStringsSep "\n" (mapAttrsToList (dest: source:
              let source' = if source == null then dest else source; in
                ''
@@ -652,18 +655,6 @@ in
         '';
     };
 
-    boot.loader.supportsInitrdSecrets = mkOption
-      { internal = true;
-        default = false;
-        type = types.bool;
-        description =
-          lib.mdDoc ''
-            Whether the bootloader setup runs append-initrd-secrets.
-            If not, any needed secrets must be copied into the initrd
-            and thus added to the store.
-          '';
-      };
-
     fileSystems = mkOption {
       type = with lib.types; attrsOf (submodule {
         options.neededForBoot = mkOption {
@@ -694,7 +685,7 @@ in
           + " Old \"x:y\" style is no longer supported.";
       }
       # TODO: remove when #85000 is fixed
-      { assertion = !config.boot.loader.supportsInitrdSecrets ->
+      { assertion = !supportsInitrdSecrets ->
           all (source:
             builtins.isPath source ||
             (builtins.isString source && hasPrefix builtins.storeDir source))
