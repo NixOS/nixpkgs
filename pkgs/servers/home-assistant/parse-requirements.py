@@ -40,7 +40,6 @@ PKG_SET = "home-assistant.python.pkgs"
 # following can be used to choose the correct one
 PKG_PREFERENCES = {
     "fiblary3": "fiblary3-fork",  # https://github.com/home-assistant/core/issues/66466
-    "ha-av": "av",
     "HAP-python": "hap-python",
     "tensorflow": "tensorflow",
     "yt-dlp": "yt-dlp",
