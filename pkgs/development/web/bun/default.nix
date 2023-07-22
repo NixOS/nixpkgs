@@ -1,6 +1,5 @@
 { lib
 , stdenvNoCC
-, callPackage
 , fetchurl
 , autoPatchelfHook
 , unzip
@@ -64,7 +63,7 @@ stdenvNoCC.mkDerivation rec {
   };
   meta = with lib; {
     homepage = "https://bun.sh";
-    changelog = "https://github.com/Jarred-Sumner/bun/releases/tag/bun-v${version}";
+    changelog = "https://bun.sh/blog/bun-v${version}";
     description = "Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     longDescription = ''
