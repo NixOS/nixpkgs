@@ -28158,6 +28158,8 @@ with pkgs;
 
   perf-tools = callPackage ../os-specific/linux/perf-tools { };
 
+  pgrok = callPackage ../tools/networking/pgrok { };
+
   picoprobe-udev-rules = callPackage ../os-specific/linux/picoprobe-udev-rules { };
 
   pipes = callPackage ../misc/screensavers/pipes { };
