@@ -1,4 +1,4 @@
-{ stdenv, runCommand, ruby, lib, rsync
+{ stdenv, buildPackages, runCommand, ruby, lib, rsync
 , defaultGemConfig, buildRubyGem, buildEnv
 , makeBinaryWrapper
 , bundler

@@ -1,4 +1,4 @@
-{ ruby, lib, callPackage, defaultGemConfig, buildEnv, runCommand
+{ stdenv, buildPackages, ruby, lib, callPackage, defaultGemConfig, buildEnv, runCommand
 , bundler, rsync
 }@defs:
 
@@ -51,7 +51,7 @@ in
         pathsToLink = [ "/lib" ];
 
         postBuild = genStubsScript {
-          inherit lib ruby bundler groups;
+          inherit stdenv buildPackages lib ruby bundler groups;
           confFiles = basicEnv.confFiles;
           binPaths = [ basicEnv.gems.${pname} ];
         } + lib.optionalString (postBuild != null) postBuild;
