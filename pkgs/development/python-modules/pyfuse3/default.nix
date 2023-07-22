@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pyfuse3";
-  version = "3.2.2";
+  version = "3.2.3";
 
   disabled = pythonOlder "3.5";
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "libfuse";
     repo = "pyfuse3";
     rev = "refs/tags/${version}";
-    hash = "sha256-Y9Haz3MMhTXkvYFOGNWJnoGNnvoK6wiQ+s3AwJhBD8Q=";
+    hash = "sha256-2YrVapCojcFRaljqNeWPMWz3hEgSutKPy2u8FXp0fME=";
   };
 
   postPatch = ''
