@@ -594,7 +594,7 @@ rec {
           nativeBuildInputs = [ jshon pigz jq moreutils ];
           # Image name must be lowercase
           imageName = lib.toLower name;
-          imageTag = if tag == null then "" else tag;
+          imageTag = lib.optionalString (tag != null) tag;
           inherit fromImage baseJson;
           layerClosure = writeReferencesToFile layer;
           passthru.buildArgs = args;

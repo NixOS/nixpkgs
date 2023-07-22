@@ -8,6 +8,7 @@
 , opentelemetry-test-utils
 , setuptools
 , pytestCheckHook
+, pythonRelaxDepsHook
 }:
 
 let
@@ -28,12 +29,17 @@ let
 
     nativeBuildInputs = [
       hatchling
+      pythonRelaxDepsHook
     ];
 
     propagatedBuildInputs = [
       deprecated
       importlib-metadata
       setuptools
+    ];
+
+    pythonRelaxDeps = [
+      "importlib-metadata"
     ];
 
     nativeCheckInputs = [
