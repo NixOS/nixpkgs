@@ -14,7 +14,7 @@ with writers;
 let
   expectSuccess = test:
     runCommand "run-${test.name}" {} ''
-      if test "$(${test})" != "success"; then
+      if [[ "$(${test})" != success ]]; then
         echo 'test ${test.name} failed'
         exit 1
       fi
@@ -24,8 +24,21 @@ let
 
   expectSuccessBin = test:
     runCommand "run-${test.name}" {} ''
-      if test "$(${lib.getExe test})" != "success"; then
+      if [[ "$(${lib.getExe test})" != success ]]; then
         echo 'test ${test.name} failed'
+        exit 1
+      fi
+
+      touch $out
+    '';
+
+  expectDataEqual = { file, expected }:
+    let
+      expectedFile = writeText "${file.name}-expected" expected;
+    in
+    runCommand "run-${file.name}" {} ''
+      if ! diff -u ${file} ${expectedFile}; then
+        echo 'test ${file.name} failed'
         exit 1
       fi
 
@@ -234,5 +247,26 @@ lib.recurseIntoAttrs {
         18871 -> putStrLn $ id "success"
         _ -> print "fail"
     ''));
+  };
+
+  data = {
+    json = expectDataEqual {
+      file = writeJSON "data.json" { hello = "world"; };
+      expected = ''
+        {
+          "hello": "world"
+        }
+      '';
+    };
+
+    toml = expectDataEqual {
+      file = writeTOML "data.toml" { hello = "world"; };
+      expected = "hello = 'world'\n";
+    };
+
+    yaml = expectDataEqual {
+      file = writeYAML "data.yaml" { hello = "world"; };
+      expected = "hello: world\n";
+    };
   };
 }
