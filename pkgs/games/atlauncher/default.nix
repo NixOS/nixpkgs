@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   desktopItems = [
     (makeDesktopItem {
       name = finalAttrs.pname;
-      exec = finalAttrs.pname;
+      exec = "${finalAttrs.pname} --no-launcher-update true";
       icon = fetchurl {
         url = "https://avatars.githubusercontent.com/u/7068667";
         hash = "sha256-YmEkxf4rZxN3jhiib0UtdUDDcn9lw7IMbiEucBL7b9o=";
