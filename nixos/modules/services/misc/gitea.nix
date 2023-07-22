@@ -577,7 +577,7 @@ in
       '';
 
       serviceConfig = {
-        Type = "notify";
+        Type = "simple";
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.stateDir;
