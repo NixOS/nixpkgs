@@ -15,7 +15,7 @@
 , miopengemm
 , composable_kernel
 , half
-, boost
+, boost179
 , sqlite
 , bzip2
 , nlohmann_json
@@ -86,7 +86,7 @@ in stdenv.mkDerivation (finalAttrs: {
     miopengemm
     composable_kernel
     half
-    boost
+    boost179
     sqlite
     bzip2
     nlohmann_json

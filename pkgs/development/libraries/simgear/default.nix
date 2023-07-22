@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, plib, freeglut, xorgproto, libX11, libXext, libXi
-, libICE, libSM, libXt, libXmu, libGLU, libGL, boost, zlib, libjpeg, freealut
+, libICE, libSM, libXt, libXmu, libGLU, libGL, boost179, zlib, libjpeg, freealut
 , openscenegraph, openal, expat, cmake, apr, xz
 , curl
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ plib freeglut xorgproto libX11 libXext libXi
-                  libICE libSM libXt libXmu libGLU libGL boost zlib libjpeg freealut
+                  libICE libSM libXt libXmu libGLU libGL boost179 zlib libjpeg freealut
                   openscenegraph openal expat apr curl xz ];
 
   meta = with lib; {

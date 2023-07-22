@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, ogre, cegui, boost, sfml, openal, cmake, ois, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, ogre, cegui, boost179, sfml, openal, cmake, ois, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "opendungeons";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ ogre cegui boost sfml openal ois ];
+  buildInputs = [ ogre cegui boost179 sfml openal ois ];
 
   meta = with lib; {
     description = "An open source, real time strategy game sharing game elements with the Dungeon Keeper series and Evil Genius";
