@@ -33,7 +33,7 @@ rec {
 
      **Warning**: This attribute is considered experimental and is subject to change.
   */
-  flakeExposed = import ./flake-systems.nix { };
+  flakeExposed = import ./flake-systems.nix { inherit lib; };
 
   # Elaborate a `localSystem` or `crossSystem` so that it contains everything
   # necessary.
