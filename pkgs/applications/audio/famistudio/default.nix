@@ -3,19 +3,20 @@
 , fetchzip
 , autoPatchelfHook
 , dotnet-runtime
-, libGL
+, ffmpeg
+, libglvnd
 , makeWrapper
 , openal
 }:
 
 stdenv.mkDerivation rec {
   pname = "famistudio";
-  version = "4.1.0";
+  version = "4.1.1";
 
   src = fetchzip {
     url = "https://github.com/BleuBleu/FamiStudio/releases/download/${version}/FamiStudio${lib.strings.concatStrings (lib.splitVersion version)}-LinuxAMD64.zip";
     stripRoot = false;
-    hash = "sha256-NLlOmoaYg7cExYFpzo/JnlhKm/AIBOJl4LrhYgqCI6c=";
+    hash = "sha256-fRNjboCfymBhr7Eg5ENnO1fchX0oTdeaJJ0SC3BKTVI=";
   };
 
   strictDeps = true;
@@ -27,7 +28,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     dotnet-runtime
-    libGL
+    ffmpeg
+    libglvnd
     openal
   ];
 
@@ -42,7 +44,8 @@ stdenv.mkDerivation rec {
 
     makeWrapper ${lib.getExe dotnet-runtime} $out/bin/famistudio \
       --add-flags $out/lib/famistudio/FamiStudio.dll \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libglvnd ]} \
+      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
 
     # Bundled openal lib freezes the application
     rm $out/lib/famistudio/libopenal32.so
