@@ -2924,6 +2924,8 @@ with pkgs;
 
   x3270 = callPackage ../applications/terminal-emulators/x3270 { };
 
+  xdg-terminal-exec = callPackage ../applications/terminal-emulators/xdg-terminal-exec { };
+
   xterm = callPackage ../applications/terminal-emulators/xterm { };
 
   xtermcontrol = callPackage ../applications/terminal-emulators/xtermcontrol { };
