@@ -13746,6 +13746,8 @@ with pkgs;
 
   tydra = callPackage ../tools/misc/tydra { };
 
+  typesense = callPackage ../servers/search/typesense { };
+
   typos = callPackage ../development/tools/typos { };
 
   typst = callPackage ../tools/typesetting/typst { };
@@ -26437,10 +26439,7 @@ with pkgs;
 
   petidomo = callPackage ../servers/mail/petidomo { };
 
-  pict-rs = callPackage ../servers/web-apps/pict-rs {
-    inherit (darwin.apple_sdk.frameworks) Security;
-    ffmpeg = ffmpeg_4;
-  };
+  pict-rs = callPackage ../servers/web-apps/pict-rs { };
 
   pict-rs_0_3 = callPackage ../servers/web-apps/pict-rs/0.3.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -37240,6 +37239,8 @@ with pkgs;
   galaxis = callPackage ../games/galaxis { };
 
   gambatte = callPackage ../games/gambatte { };
+
+  gambit-chess = callPackage ../games/gambit { };
 
   garden-of-coloured-lights = callPackage ../games/garden-of-coloured-lights { allegro = allegro4; };
 
