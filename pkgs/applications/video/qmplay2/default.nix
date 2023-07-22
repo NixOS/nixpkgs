@@ -4,7 +4,9 @@
 , alsa-lib
 , cmake
 , ffmpeg
+, fribidi
 , game-music-emu
+, libXdmcp
 , libXv
 , libass
 , libcddb
@@ -12,6 +14,7 @@
 , libpulseaudio
 , libsidplayfp
 , libva
+, libxcb
 , pkg-config
 , qtbase
 , qttools
@@ -23,14 +26,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qmplay2";
-  version = "23.02.05";
+  version = "23.06.17";
 
   src = fetchFromGitHub {
     owner = "zaps166";
     repo = "QMPlay2";
     rev = finalAttrs.version;
-    sha256 = "sha256-ZDpUgD9qTvjopGFVrwTBSEmrXn+4aKq2zeqoTnXwmI8=";
     fetchSubmodules = true;
+    hash = "sha256-f4lIXB0eTyteCJdWFP0XnsnxGWc32CV+HlqpaCjmgOE=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     alsa-lib
     ffmpeg
+    fribidi
     game-music-emu
+    libXdmcp
     libXv
     libass
     libcddb
@@ -50,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     libsidplayfp
     libva
+    libxcb
     qtbase
     qttools
     taglib

@@ -1,7 +1,10 @@
 { lib
 , stdenv
 , appdirs
+, azure-containerregistry
 , azure-core
+, azure-identity
+, azure-storage-blob
 , bokeh
 , boto3
 , buildPythonPackage
@@ -11,6 +14,7 @@
 , flask
 , git
 , gitpython
+, google-cloud-artifact-registry
 , google-cloud-compute
 , google-cloud-storage
 , hypothesis
@@ -51,7 +55,7 @@
 
 buildPythonPackage rec {
   pname = "wandb";
-  version = "0.15.3";
+  version = "0.15.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -60,7 +64,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-i1Lo6xbkCgRTJwRjk2bXkZ5a/JRUCzFzmEuPQlPvZf4=";
+    hash = "sha256-etS1NkkskA5Lg/38QIdzCVWgqZpjpT2LwaWF1k7WVXs=";
   };
 
   patches = [
@@ -94,10 +98,14 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    azure-containerregistry
     azure-core
+    azure-identity
+    azure-storage-blob
     bokeh
     boto3
     flask
+    google-cloud-artifact-registry
     google-cloud-compute
     google-cloud-storage
     hypothesis
@@ -213,17 +221,17 @@ buildPythonPackage rec {
     "tests/pytest_tests/system_tests/test_sweep/test_wandb_agent.py"
     "tests/pytest_tests/system_tests/test_sweep/test_wandb_sweep.py"
     "tests/pytest_tests/system_tests/test_system_metrics/test_open_metrics.py"
-    "tests/pytest_tests/system_tests/tests_launch/test_github_reference.py"
-    "tests/pytest_tests/system_tests/tests_launch/test_job.py"
-    "tests/pytest_tests/system_tests/tests_launch/test_launch_add.py"
-    "tests/pytest_tests/system_tests/tests_launch/test_launch_cli.py"
-    "tests/pytest_tests/system_tests/tests_launch/test_launch_kubernetes.py"
-    "tests/pytest_tests/system_tests/tests_launch/test_launch_local_container.py"
-    "tests/pytest_tests/system_tests/tests_launch/test_launch_run.py"
-    "tests/pytest_tests/system_tests/tests_launch/test_launch_sweep_cli.py"
-    "tests/pytest_tests/system_tests/tests_launch/test_launch_sweep.py"
-    "tests/pytest_tests/system_tests/tests_launch/test_launch.py"
-    "tests/pytest_tests/system_tests/tests_launch/test_wandb_reference.py"
+    "tests/pytest_tests/system_tests/test_launch/test_github_reference.py"
+    "tests/pytest_tests/system_tests/test_launch/test_job.py"
+    "tests/pytest_tests/system_tests/test_launch/test_launch_add.py"
+    "tests/pytest_tests/system_tests/test_launch/test_launch_cli.py"
+    "tests/pytest_tests/system_tests/test_launch/test_launch_kubernetes.py"
+    "tests/pytest_tests/system_tests/test_launch/test_launch_local_container.py"
+    "tests/pytest_tests/system_tests/test_launch/test_launch_run.py"
+    "tests/pytest_tests/system_tests/test_launch/test_launch_sweep_cli.py"
+    "tests/pytest_tests/system_tests/test_launch/test_launch_sweep.py"
+    "tests/pytest_tests/system_tests/test_launch/test_launch.py"
+    "tests/pytest_tests/system_tests/test_launch/test_wandb_reference.py"
 
     # Tries to access /homeless-shelter
     "tests/pytest_tests/unit_tests/test_tables.py"
