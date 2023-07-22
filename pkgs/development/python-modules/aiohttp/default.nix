@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , pythonOlder
 # build_requires
 , setuptools
@@ -32,29 +31,18 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.8.4";
+  version = "3.8.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vy4akWLB5EG/gFof0WbiSdV0ygTgOzT5fikodp6Rq1w=";
+    hash = "sha256-uVUuxSzBR9vxlErHrJivdgLlHqLc0HbtGUyjwNHH0Lw=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://github.com/aio-libs/aiohttp/pull/7178
-      url = "https://github.com/aio-libs/aiohttp/commit/5718879cdb6a98bf48810a994b78bc02abaf3e07.patch";
-      hash = "sha256-4UynkTZOzWzusQ2+MPZszhFA8I/PJNLeT/hHF/fASy8=";
-    })
-  ];
 
   postPatch = ''
     sed -i '/--cov/d' setup.cfg
-
-    substituteInPlace setup.cfg \
-      --replace "charset-normalizer >=2.0, < 3.0" "charset-normalizer >=2.0, < 4.0"
   '';
 
   nativeBuildInputs = [
