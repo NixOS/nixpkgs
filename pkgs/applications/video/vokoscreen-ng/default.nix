@@ -22,13 +22,13 @@
 
 mkDerivation rec {
   pname = "vokoscreen-ng";
-  version = "3.6.0";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "vkohaupt";
     repo = "vokoscreenNG";
     rev = version;
-    sha256 = "sha256-Du/Dq7AUH5CeEKYr0kxcqguAyRVI5Ame41nU3FGvG+U=";
+    sha256 = "sha256-epz/KoXo84zzCD1dzclRWgeQSqrgwEtaIGvrTPuN9hw=";
   };
 
   qmakeFlags = [ "src/vokoscreenNG.pro" ];
