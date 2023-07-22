@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "atlauncher";
-  version = "3.4.28.1";
+  version = "3.4.29.1";
 
   src = fetchurl {
     url = "https://github.com/ATLauncher/ATLauncher/releases/download/v${finalAttrs.version}/ATLauncher-${finalAttrs.version}.jar";
