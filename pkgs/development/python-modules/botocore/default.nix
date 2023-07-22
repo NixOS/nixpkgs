@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "botocore";
   version = "1.31.9"; # N.B: if you change this, change boto3 and awscli to a matching version
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
