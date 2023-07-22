@@ -104,12 +104,12 @@ in
       LoadCredential = "configFile:${computedConfigFile}";
       ExecStart = ''
         ${cfg.package}/bin/pve_exporter \
-          --${if cfg.collectors.status == true then "" else "no-"}collector.status \
-          --${if cfg.collectors.version == true then "" else "no-"}collector.version \
-          --${if cfg.collectors.node == true then "" else "no-"}collector.node \
-          --${if cfg.collectors.cluster == true then "" else "no-"}collector.cluster \
-          --${if cfg.collectors.resources == true then "" else "no-"}collector.resources \
-          --${if cfg.collectors.config == true then "" else "no-"}collector.config \
+          --${optionalString (!cfg.collectors.status) "no-"}collector.status \
+          --${optionalString (!cfg.collectors.version) "no-"}collector.version \
+          --${optionalString (!cfg.collectors.node) "no-"}collector.node \
+          --${optionalString (!cfg.collectors.cluster) "no-"}collector.cluster \
+          --${optionalString (!cfg.collectors.resources) "no-"}collector.resources \
+          --${optionalString (!cfg.collectors.config) "no-"}collector.config \
           %d/configFile \
           ${toString cfg.port} ${cfg.listenAddress}
       '';

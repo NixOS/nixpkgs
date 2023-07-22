@@ -395,7 +395,7 @@ in
   dontWrapQtApps = true;
 
   configureFlags = [
-    (if withHelp then "" else "--without-help")
+    (lib.optionalString (!withHelp) "--without-help")
     "--with-boost=${getDev boost}"
     "--with-boost-libdir=${getLib boost}/lib"
     "--with-beanshell-jar=${bsh}"
