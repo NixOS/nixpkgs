@@ -3,7 +3,7 @@
 , bundlerUpdateScript
 }:
 
-bundlerApp rec {
+bundlerApp {
   pname = "pru";
   gemdir = ./.;
   exes = [ "pru" ];
@@ -16,9 +16,9 @@ bundlerApp rec {
       higher-level replacement of typical text processing tools (like sed, awk,
       grep etc.).
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 
-  passthru.updateScript = bundlerUpdateScript pname;
+  passthru.updateScript = bundlerUpdateScript "pru";
 }
