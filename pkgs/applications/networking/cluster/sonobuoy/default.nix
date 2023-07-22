@@ -5,7 +5,7 @@ let rev = "bd5465d6b2b2b92b517f4c6074008d22338ff509";
 in
 buildGoModule rec {
   pname = "sonobuoy";
-  version = "0.56.14"; # Do not forget to update `rev` above
+  version = "0.56.17"; # Do not forget to update `rev` above
 
   ldflags =
     let t = "github.com/vmware-tanzu/sonobuoy";
@@ -20,10 +20,10 @@ buildGoModule rec {
     owner = "vmware-tanzu";
     repo = "sonobuoy";
     rev = "v${version}";
-    sha256 = "sha256-YiVCdAdwdK9PcQ6VQQNAjLQq2X54vJmZfbHRjV2d8VQ=";
+    sha256 = "sha256-m+kUd5q53X9hlr97SAPzkuOQQDoaJzLQPSIqwAzSCHk=";
   };
 
-  vendorSha256 = "sha256-Fqxkyl9AKZ7H4QSp2V/yztpeXHt57+LjpzzGtOPndX0=";
+  vendorHash = "sha256-f/Qv+j58oisaOs4HJQh7rIslds6Ic2w3DJB+nHdIgFo=";
 
   subPackages = [ "." ];
 
