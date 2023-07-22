@@ -1,20 +1,23 @@
 { lib, pkgs }:
 
-lib.makeScope pkgs.newScope (self: with self; {
+lib.makeScope pkgs.newScope (self:
+  let
+    inherit (self) callPackage;
+  in {
   # ui can be: gtk2, gtk3, sixel, framebuffer. Note that console display (sixel)
   # requires a terminal that supports `sixel` capabilities, such as mlterm
   # or xterm -ti 340
   ui = "gtk3";
-  uilib =
-    if ui == "gtk2" ||
-       ui == "gtk3" ||
-       ui == "framebuffer" then ui
-    else if ui == "sixel" then "framebuffer"
-    else null; # Never will happen
-  SDL =
-    if ui == "sixel" then pkgs.SDL_sixel
-    else if ui == "framebuffer" then pkgs.SDL
-    else null;
+  uilib = {
+    "framebuffer" = "framebuffer";
+    "gtk2" = "gtk2";
+    "gtk3" = "gtk3";
+    "sixel" = "framebuffer";
+  }.${self.ui} or null; # Null will never happen
+  SDL = {
+    "sixel" = pkgs.SDL_sixel;
+    "framebuffer" = pkgs.SDL;
+  }.${self.ui} or null;
 
   browser = callPackage ./browser.nix { };
 
