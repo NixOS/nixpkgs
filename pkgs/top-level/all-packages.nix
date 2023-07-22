@@ -6242,6 +6242,8 @@ with pkgs;
 
   mountain-duck = callPackage ../tools/filesystems/mountain-duck { };
 
+  mox = callPackage ../servers/mail/mox { };
+
   mozlz4a = callPackage ../tools/compression/mozlz4a { };
 
   msr-tools = callPackage ../os-specific/linux/msr-tools { };
