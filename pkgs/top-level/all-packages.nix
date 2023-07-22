@@ -24578,7 +24578,8 @@ with pkgs;
 
   inherit (callPackages ../development/libraries/openssl { })
     openssl_1_1
-    openssl_3;
+    openssl_3
+    openssl_3_1;
 
   opensubdiv = callPackage ../development/libraries/opensubdiv { };
 
