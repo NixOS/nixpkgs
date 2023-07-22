@@ -28,11 +28,6 @@ with py.pkgs; buildPythonApplication rec {
     hash = "sha256-+2+7eoe9cNBe9IjfAkAH6vXZ071k59keqFwo9M6tl9s=";
   };
 
-  postPatch = ''
-    substituteInPlace requirements/bootstrap.txt \
-      --replace "pip>=22.0.0,<23.0.0" "pip>=22.0.0,<24.0.0"
-  '';
-
   nativeBuildInputs = [
     flit-core
   ];
@@ -73,8 +68,6 @@ with py.pkgs; buildPythonApplication rec {
 
     rm $out/bin/aws.cmd
   '';
-
-  doCheck = true;
 
   preCheck = ''
     export PATH=$PATH:$out/bin
