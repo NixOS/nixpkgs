@@ -10742,6 +10742,8 @@ self: super: with self; {
 
   ratelimiter = callPackage ../development/python-modules/ratelimiter { };
 
+  rauth = callPackage ../development/python-modules/rauth { };
+
   raven = callPackage ../development/python-modules/raven { };
 
   rawkit = callPackage ../development/python-modules/rawkit { };
