@@ -46,11 +46,11 @@
     "vendorHash": "sha256-xZ0pS7XxfYGbG2kEw5FAjABDQZmektaI7OhToiFMXKk="
   },
   "alicloud": {
-    "hash": "sha256-F69Otml1zH5TtD6dRPIXc2pOq2aM8NEsTsnmJDQEdxk=",
+    "hash": "sha256-w5cdAqGF9E9yDdLnMmrrZfWcp2qcfCz9NqylRUAzKOI=",
     "homepage": "https://registry.terraform.io/providers/aliyun/alicloud",
     "owner": "aliyun",
     "repo": "terraform-provider-alicloud",
-    "rev": "v1.207.2",
+    "rev": "v1.208.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
