@@ -665,7 +665,10 @@ in
         echo -n "$configurationName" > $out/configuration-name
       '';
 
-      system.build.installBootLoader =
+      system.build.grub = grub;
+      boot.loader.builders.grub = {
+        id = "grub";
+        script =
         let
           install-grub-pl = pkgs.substituteAll {
             src = ./install-grub.pl;
@@ -686,11 +689,7 @@ in
         ${perl}/bin/perl ${install-grub-pl} ${grubConfig args} $@
       '') + cfg.extraInstallCommands);
 
-      system.build.grub = grub;
-
-      # Common attribute for boot loaders so only one of them can be
-      # set at once.
-      system.boot.loader.id = "grub";
+      };
 
       environment.systemPackages = optional (grub != null) grub;
 

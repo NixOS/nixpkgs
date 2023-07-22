@@ -82,6 +82,14 @@ in {
       description = lib.mdDoc "Whether to enable the systemd-boot (formerly gummiboot) EFI boot manager";
     };
 
+    finalBuilder = mkOption {
+      internal = true;
+      type = types.package;
+      description = lib.mdDoc ''
+        The final builder script to install this bootloader.
+        '';
+    };
+
     editor = mkOption {
       default = true;
 
@@ -302,11 +310,12 @@ in {
       })
     ];
 
+    boot.loader.builders.systemd-boot = {
+      id = "systemd-boot";
+      script = finalSystemdBootBuilder;
+    };
+
     system = {
-      build.installBootLoader = finalSystemdBootBuilder;
-
-      boot.loader.id = "systemd-boot";
-
       requiredKernelConfig = with config.lib.kernelConfig; [
         (isYes "EFI_STUB")
       ];
