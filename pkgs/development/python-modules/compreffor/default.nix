@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "compreffor";
-  version = "0.5.3";
+  version = "0.5.4";
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fUEpbU+wqh72lt/ZJdKvMifUAwYivpmzx9QQfcb4cTo=";
+    hash = "sha256-MGulQEUGPrQ30T3VYzwRRlvzvWkFqNzqsNzAjtjX9xU=";
   };
 
   nativeBuildInputs = [

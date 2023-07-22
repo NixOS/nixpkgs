@@ -201,6 +201,7 @@ in stdenv.mkDerivation (finalAttrs: {
     cp ../TOOLS/umpv $out/bin
     cp $out/share/applications/mpv.desktop $out/share/applications/umpv.desktop
     sed -i '/Icon=/ ! s/mpv/umpv/g; s/^Exec=.*/Exec=umpv %U/' $out/share/applications/umpv.desktop
+    printf "NoDisplay=true\n" >> $out/share/applications/umpv.desktop
   '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     cp -r mpv.app $out/Applications
