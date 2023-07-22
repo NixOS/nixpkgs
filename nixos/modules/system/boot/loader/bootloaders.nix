@@ -14,6 +14,17 @@ in
   };
 
   options = {
+    boot.enable = mkOption {
+      type = types.bool;
+      default = true;
+      internal = true;
+      description = lib.mdDoc ''
+        A NixOS system usually needs a boot mechanism.
+
+        In contexts of direct boot, be it via QEMU or containers, this is not required.
+        This option is present for an escape hatch for advanced users.
+      '';
+    };
     boot.loaderId = mkOption {
       type = types.str;
       default = foldEnabledBootloaders (builder: previousId: "${previousId}.${builder.id}") "";
@@ -26,14 +37,24 @@ in
     };
   };
 
-  config = {
+  config = mkIf config.boot.enable {
     assertions = [
       {
         assertion = builtins.length (builtins.attrValues enabledBootloaders) > 0;
-        message = ''A NixOS system require a bootloader setup to be built.
-          Consider enabling the direct bootloader if you are booted via external means, e.g. QEMU, containers.
-          Or, use one of the standard available bootloader.
-          '';
+        message = ''
+          A NixOS system requires an explicit boot method.
+
+          If you are on a UEFI-based system, consider enabling `boot.loader.systemd-boot`.
+          If you are on a BIOS-based system, consider enabling `boot.loader.grub`.
+
+          If you are on an embedded system, you can look if you support extlinux configuration files
+          and enable `boot.loader.generic-extlinux-compatible`. This is often provided by Das U-Boot.
+
+          Otherwise, you may need a custom bootloader.
+
+          If you are on a system that does not require boot assistance, i.e. you are direct booted via external means,
+          consider using `boot.loader.enable` which will turn off this error.
+        '';
       }
     ];
 

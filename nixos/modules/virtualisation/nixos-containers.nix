@@ -493,6 +493,7 @@ in
                                     else { inherit (host.config.nixpkgs) localSystem; }
                           ;
                           boot.isContainer = true;
+                          boot.enable = false;
                           networking.hostName = mkDefault name;
                           networking.useDHCP = false;
                           assertions = [

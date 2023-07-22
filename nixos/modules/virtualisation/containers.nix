@@ -112,6 +112,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # Containers does not require booting mechanisms.
+    boot.enable = false;
 
     virtualisation.containers.containersConf.cniPlugins = [ pkgs.cni-plugins ];
 
