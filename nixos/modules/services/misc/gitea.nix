@@ -577,7 +577,7 @@ in
       '';
 
       serviceConfig = {
-        Type = "notify";
+        Type = if (lib.versionAtLeast (lib.versions.majorMinor cfg.package.version) "1.20") then "notify" else "simple";
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.stateDir;
