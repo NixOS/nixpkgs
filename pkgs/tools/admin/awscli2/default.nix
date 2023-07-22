@@ -18,20 +18,15 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.12.7"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.13.3"; # N.B: if you change this, check if overrides are still up-to-date
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    hash = "sha256-XVJ+qiM+iQZjFJNgybb2AzvYJTKlWOLR+4Pm03QrpGo=";
+    hash = "sha256-+2+7eoe9cNBe9IjfAkAH6vXZ071k59keqFwo9M6tl9s=";
   };
-
-  postPatch = ''
-    substituteInPlace requirements/bootstrap.txt \
-      --replace "pip>=22.0.0,<23.0.0" "pip>=22.0.0,<24.0.0"
-  '';
 
   nativeBuildInputs = [
     flit-core
@@ -73,8 +68,6 @@ with py.pkgs; buildPythonApplication rec {
 
     rm $out/bin/aws.cmd
   '';
-
-  doCheck = true;
 
   preCheck = ''
     export PATH=$PATH:$out/bin
