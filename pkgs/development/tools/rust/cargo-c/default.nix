@@ -8,6 +8,7 @@
 , CoreFoundation
 , libiconv
 , Security
+, rav1e
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -39,6 +40,10 @@ rustPlatform.buildRustPackage rec {
 
     runHook postInstallCheck
   '';
+
+  passthru.tests = {
+    inherit rav1e;
+  };
 
   meta = with lib; {
     description = "A cargo subcommand to build and install C-ABI compatible dynamic and static libraries";
