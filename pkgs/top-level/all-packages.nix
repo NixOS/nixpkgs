@@ -20182,6 +20182,8 @@ with pkgs;
 
   xeus = callPackage ../development/libraries/xeus { };
 
+  xeus-zmq = callPackage ../development/libraries/xeus-zmq { };
+
   xmlindent = callPackage ../development/web/xmlindent { };
 
   xpwn = callPackage ../development/mobile/xpwn { };
