@@ -72,7 +72,6 @@ assert !enableIntegerSimple -> gmp != null;
 assert (stdenv.targetPlatform != stdenv.hostPlatform) -> !enableHaddockProgram;
 
 let
-  libffi_name = if stdenv.isDarwin && stdenv.isAarch64 then "libffi" else "libffi_3_3";
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
   inherit (bootPkgs) ghc;
@@ -190,6 +189,36 @@ let
     (lib.optionalString stdenv.hostPlatform.isMusl "-musl")
     (lib.optionalString enableIntegerSimple "-integer-simple")
   ];
+
+  libffi_name = if stdenv.isDarwin && stdenv.isAarch64 then "libffi" else "libffi_3_3";
+
+  # These libraries are library dependencies of the standard libraries bundled
+  # by GHC (core libs) users will link their compiled artifacts again. Thus,
+  # they should be taken from targetPackages.
+  #
+  # We need to use pkgsHostTarget if we are cross compiling a native GHC compiler,
+  # though (when native compiling GHC, pkgsHostTarget == targetPackages):
+  #
+  # 1. targetPackages would be empty(-ish) in this situation since we can't
+  #    execute cross compiled compilers in order to obtain the libraries
+  #    that would be in targetPackages.
+  # 2. pkgsHostTarget is fine to use since hostPlatform == targetPlatform in this
+  #    situation.
+  # 3. The core libs used by the final GHC (stage 2) for user artifacts are also
+  #    used to build stage 2 GHC itself, i.e. the core libs are both host and
+  #    target.
+  targetLibs =
+    let
+      basePackageSet =
+        if hostPlatform != targetPlatform
+        then targetPackages
+        else pkgsHostTarget;
+    in
+      {
+        inherit (basePackageSet) gmp;
+        # dynamic inherits are not possible in Nix
+        libffi = basePackageSet.${libffi_name};
+      };
 
 in
 
@@ -348,11 +377,11 @@ stdenv.mkDerivation (rec {
     "--datadir=$doc/share/doc/ghc"
   ] ++ lib.optionals (args.${libffi_name} != null) [
     "--with-system-libffi"
-    "--with-ffi-includes=${targetPackages.${libffi_name}.dev}/include"
-    "--with-ffi-libraries=${targetPackages.${libffi_name}.out}/lib"
+    "--with-ffi-includes=${targetLibs.libffi.dev}/include"
+    "--with-ffi-libraries=${targetLibs.libffi.out}/lib"
   ] ++ lib.optionals (targetPlatform == hostPlatform && !enableIntegerSimple) [
-    "--with-gmp-includes=${targetPackages.gmp.dev}/include"
-    "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
+    "--with-gmp-includes=${targetLibs.gmp.dev}/include"
+    "--with-gmp-libraries=${targetLibs.gmp.out}/lib"
   ] ++ lib.optionals (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
     "--with-iconv-includes=${libiconv}/include"
     "--with-iconv-libraries=${libiconv}/lib"
