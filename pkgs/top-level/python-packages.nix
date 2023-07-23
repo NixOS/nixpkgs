@@ -12596,6 +12596,8 @@ self: super: with self; {
 
   unidecode = callPackage ../development/python-modules/unidecode { };
 
+  unidic = callPackage ../development/python-modules/unidic { };
+
   unidic-lite = callPackage ../development/python-modules/unidic-lite { };
 
   unidiff = callPackage ../development/python-modules/unidiff { };
