@@ -3866,6 +3866,8 @@ self: super: with self; {
 
   ftputil = callPackage ../development/python-modules/ftputil { };
 
+  fugashi = callPackage ../development/python-modules/fugashi { };
+
   func-timeout = callPackage ../development/python-modules/func-timeout { };
 
   funcparserlib = callPackage ../development/python-modules/funcparserlib { };
