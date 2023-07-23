@@ -564,7 +564,8 @@ stdenv.mkDerivation ({
       guibou
     ] ++ lib.teams.haskell.members;
     timeout = 24 * 3600;
-    inherit (ghc.meta) license platforms;
+    platforms = lib.platforms.all;
+    inherit (ghc.meta) license;
     # https://github.com/NixOS/nixpkgs/issues/208959
     broken =
       (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.8")
