@@ -1042,10 +1042,12 @@ in
     # FIXME: make a sense of this mess wrt to multiple ESP present in the system, probably use boot.efiSysMountpoint?
     boot.loader.grub.device = mkVMOverride (if cfg.useEFIBoot then "nodev" else cfg.bootLoaderDevice);
     boot.loader.grub.gfxmodeBios = with cfg.resolution; "${toString x}x${toString y}";
+    # This will turn on a stub boot loader
+    # which will turn off the initrd secrets feature
+    # as it cannot work in the absence of a bootloader.
+    boot.loader.directBoot.enable = cfg.directBoot.enable;
 
     boot.initrd.kernelModules = optionals (cfg.useNixStoreImage && !cfg.writableStore) [ "erofs" ];
-
-    boot.loader.supportsInitrdSecrets = mkIf (!cfg.useBootLoader) (mkVMOverride false);
 
     boot.initrd.postMountCommands = lib.mkIf (!config.boot.initrd.systemd.enable)
       ''
