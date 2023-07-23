@@ -19,7 +19,8 @@
       "methods": [
         "PURGE",
         "PUSH",
-        "DELETE"
+        "DELETE",
+        "TRACE"
       ]
     },
     {
@@ -29,7 +30,8 @@
       "methods": [
         "PURGE",
         "PUSH",
-        "DELETE"
+        "DELETE",
+        "TRACE"
       ]
     }
   ]
