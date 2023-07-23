@@ -20,6 +20,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "A Kubernetes controller and tool for one-way encrypted Secrets";
     homepage = "https://github.com/bitnami-labs/sealed-secrets";
+    changelog = "https://github.com/bitnami-labs/sealed-secrets/blob/v${version}/RELEASE-NOTES.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ groodt ];
   };
