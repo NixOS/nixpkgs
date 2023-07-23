@@ -20,6 +20,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     boto3
+  ] ++ lib.optionals (pythonOlder "3.9") [
     typing-extensions
   ];
 
