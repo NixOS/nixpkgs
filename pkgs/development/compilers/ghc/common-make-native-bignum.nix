@@ -83,6 +83,9 @@ assert !enableNativeBignum -> gmp != null;
 # see note [HADDOCK_DOCS].
 assert (stdenv.buildPlatform != stdenv.hostPlatform || stdenv.targetPlatform != stdenv.hostPlatform) -> !enableHaddockProgram;
 
+# GHC does not support building when all 3 platforms are different.
+assert stdenv.buildPlatform == stdenv.hostPlatform || stdenv.hostPlatform == stdenv.targetPlatform;
+
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
