@@ -12429,6 +12429,8 @@ with pkgs;
 
   rsstail = callPackage ../applications/networking/feedreaders/rsstail { };
 
+  rtz = callPackage ../tools/misc/rtz { };
+
   rubber = callPackage ../tools/typesetting/rubber { };
 
   rubocop = rubyPackages.rubocop;
