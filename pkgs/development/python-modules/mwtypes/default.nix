@@ -2,8 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , jsonable
-, pytestCheckHook
 , nose
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -17,9 +17,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ jsonable ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  checkInputs = [ nose ];
+  nativeCheckInputs = [
+    nose
+    pytestCheckHook
+  ];
 
   disabledTests = [
     "test_normalize_path_bad_extension"
