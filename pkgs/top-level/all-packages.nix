@@ -33105,8 +33105,6 @@ with pkgs;
 
   marathonctl = callPackage ../tools/virtualization/marathonctl { };
 
-  markdown-pp = callPackage ../tools/text/markdown-pp { };
-
   mark = callPackage ../tools/text/mark { };
 
   markets = callPackage ../applications/misc/markets { };
