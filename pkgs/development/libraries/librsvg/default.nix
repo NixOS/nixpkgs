@@ -145,6 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Merge gdkpixbuf and librsvg loaders
     cat ${lib.getLib gdk-pixbuf}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache $GDK_PIXBUF/loaders.cache > $GDK_PIXBUF/loaders.cache.tmp
     mv $GDK_PIXBUF/loaders.cache.tmp $GDK_PIXBUF/loaders.cache
+    '' + lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform) ''
 
     mkdir -p "$out/share/bash-completion/completions/"
     $out/bin/rsvg-convert --completion bash > "$out/share/bash-completion/completions/rsvg-convert"
