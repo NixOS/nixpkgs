@@ -379,9 +379,12 @@ stdenv.mkDerivation (rec {
       'MinBootGhcVersion="8.10"'
   '';
 
+  # Although it is usually correct to pass --host, we don't do that here because
+  # GHC's usage of build, host, and target is non-standard.
+  # See https://gitlab.haskell.org/ghc/ghc/-/wikis/building/cross-compiling
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ]
-    ++ lib.optional (targetPlatform != hostPlatform) "target";
+  configurePlatforms = [ "build" ]
+    ++ lib.optional (buildPlatform != hostPlatform || targetPlatform != hostPlatform) "target";
 
   # `--with` flags for libraries needed for RTS linker
   configureFlags = [
