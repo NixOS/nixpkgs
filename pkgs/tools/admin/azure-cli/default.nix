@@ -270,7 +270,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     homepage = "https://github.com/Azure/azure-cli";
     description = "Next generation multi-platform command line experience for Azure";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = with maintainers; [ akechishiro jonringer ];
   };
 })
 
