@@ -35518,6 +35518,8 @@ with pkgs;
 
   typer = callPackage ../applications/misc/typer { };
 
+  typioca = callPackage ../applications/misc/typioca { };
+
   ueberzug = with python3Packages; toPythonApplication ueberzug;
 
   ueberzugpp = darwin.apple_sdk_11_0.callPackage ../tools/graphics/ueberzugpp {
