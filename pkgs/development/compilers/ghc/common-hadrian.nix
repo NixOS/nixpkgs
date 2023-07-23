@@ -66,8 +66,14 @@
   enableShared ? with stdenv.targetPlatform; !isWindows && !useiOSPrebuilt && !isStatic && !isGhcjs
 
 , # Whether to build terminfo.
+  # FIXME(@sternenseemann): This actually doesn't influence what hadrian does,
+  # just what buildInputs etc. looks like. It would be best if we could actually
+  # tell it what to do like it was possible with make.
   enableTerminfo ? !(stdenv.targetPlatform.isWindows
-                     || stdenv.targetPlatform.isGhcjs)
+                     || stdenv.targetPlatform.isGhcjs
+                     # terminfo can't be built for cross
+                     || (stdenv.buildPlatform != stdenv.hostPlatform)
+                     || (stdenv.hostPlatform != stdenv.targetPlatform))
 
 , # Libdw.c only supports x86_64, i686 and s390x as of 2022-08-04
   enableDwarf ? (stdenv.targetPlatform.isx86 ||
@@ -439,7 +445,6 @@ stdenv.mkDerivation ({
   # `--with` flags for libraries needed for RTS linker
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
-    "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
   ] ++ lib.optionals (libffi != null && !targetPlatform.isGhcjs) [
     "--with-system-libffi"
     "--with-ffi-includes=${targetPackages.libffi.dev}/include"
@@ -493,6 +498,8 @@ stdenv.mkDerivation ({
   # Used by the STAGE0 compiler to build stage1
   depsBuildBuild = [
     buildCC
+    # stage0 builds terminfo unconditionally, so we always need ncurses
+    ncurses
   ];
 
   buildInputs = [ perl bash ] ++ (libDeps hostPlatform);
