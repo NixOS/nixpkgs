@@ -39811,6 +39811,8 @@ with pkgs;
 
   aaphoto = callPackage ../tools/graphics/aaphoto { };
 
+  aapt = callPackage ../development/tools/aapt { };
+
   flam3 = callPackage ../tools/graphics/flam3 { };
 
   glee = callPackage ../tools/graphics/glee { };
