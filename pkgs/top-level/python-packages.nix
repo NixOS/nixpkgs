@@ -2465,6 +2465,18 @@ self: super: with self; {
 
   dbfread = callPackage ../development/python-modules/dbfread { };
 
+  dbt-bigquery = callPackage ../development/python-modules/dbt-bigquery { };
+
+  dbt-core = callPackage ../development/python-modules/dbt-core { };
+
+  dbt-extractor = callPackage ../development/python-modules/dbt-extractor { };
+
+  dbt-postgres = callPackage ../development/python-modules/dbt-postgres { };
+
+  dbt-redshift = callPackage ../development/python-modules/dbt-redshift { };
+
+  dbt-snowflake = callPackage ../development/python-modules/dbt-snowflake { };
+
   dbus-client-gen = callPackage ../development/python-modules/dbus-client-gen { };
 
   dbus-deviation = callPackage ../development/python-modules/dbus-deviation { };
@@ -4754,6 +4766,8 @@ self: super: with self; {
 
   holidays = callPackage ../development/python-modules/holidays { };
 
+  hologram = callPackage ../development/python-modules/hologram { };
+
   holoviews = callPackage ../development/python-modules/holoviews { };
 
   home-assistant-bluetooth = callPackage ../development/python-modules/home-assistant-bluetooth { };
@@ -6461,6 +6475,8 @@ self: super: with self; {
   minikanren = callPackage ../development/python-modules/minikanren { };
 
   minikerberos = callPackage ../development/python-modules/minikerberos { };
+
+  minimal-snowplow-tracker = callPackage ../development/python-modules/minimal-snowplow-tracker { };
 
   minimock = callPackage ../development/python-modules/minimock { };
 

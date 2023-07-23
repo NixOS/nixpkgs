@@ -18758,6 +18758,8 @@ with pkgs;
 
   cwltool = callPackage ../applications/science/misc/cwltool { };
 
+  dbt = with python3Packages; toPythonApplication dbt-core;
+
   dprint = callPackage ../development/tools/dprint {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
