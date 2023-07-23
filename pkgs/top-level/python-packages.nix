@@ -13100,6 +13100,8 @@ self: super: with self; {
 
   unrpa = callPackage ../development/python-modules/unrpa { };
 
+  unstructured = callPackage ../development/python-modules/unstructured { };
+
   unstructured-inference = callPackage ../development/python-modules/unstructured-inference { };
 
   untangle = callPackage ../development/python-modules/untangle { };
