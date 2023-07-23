@@ -1,21 +1,14 @@
 { lib, stdenv
 , rustPlatform
 , fetchCrate
-, fetchFromGitHub
 , libiconv
 , openssl
 , pkg-config
 , Security
+, devour-flake
 }:
 
-let
-  devour-flake = fetchFromGitHub {
-    owner = "srid";
-    repo = "devour-flake";
-    rev = "v2";
-    sha256 = "sha256-CZedJtbZlWAbv/b/aYgOEFd9vcTBn/oJNI3p29UitLk=";
-  };
-in rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "nixci";
   version = "0.1.3";
 
@@ -33,7 +26,7 @@ in rustPlatform.buildRustPackage rec {
 
   # The rust program expects an environment (at build time) that points to the
   # devour-flake executable.
-  DEVOUR_FLAKE = lib.getExe (callPackage devour-flake { });
+  DEVOUR_FLAKE = lib.getExe devour-flake;
 
   meta = with lib; {
     description = "Define and build CI for Nix projects anywhere";

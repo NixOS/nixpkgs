@@ -565,6 +565,8 @@ with pkgs;
 
   dec-decode = callPackage ../development/tools/dec-decode { };
 
+  devour-flake = callPackage ../tools/nix/devour-flake { };
+
   dnf5 = callPackage ../tools/package-management/dnf5 { };
 
   dsq = callPackage ../tools/misc/dsq { };
