@@ -90,7 +90,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optional interactive readline;
 
-  enableParallelBuilding = true;
+  # parallel building on darwin can result in
+  # libintl.h not being put in place early enough
+  enableParallelBuilding = !stdenv.isDarwin;
 
   makeFlags = lib.optionals stdenv.hostPlatform.isCygwin [
     "LOCAL_LDFLAGS=-Wl,--export-all,--out-implib,libbash.dll.a"
