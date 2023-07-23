@@ -18,7 +18,6 @@
 , dtc
 , e2fsprogs
 , enableBloat ? true
-, enableUnfree ? false
 , enjarify
 , fetchurl
 , file
@@ -174,6 +173,7 @@ python3.pkgs.buildPythonApplication rec {
       abootimg
       apksigcopier
       apksigner
+      apktool
       cbfstool
       colord
       enjarify
@@ -214,8 +214,6 @@ python3.pkgs.buildPythonApplication rec {
     ++ lib.optionals stdenv.isLinux [ oggvideotools ]
     # This doesn't work on aarch64-darwin
     ++ lib.optionals (stdenv.hostPlatform != "aarch64-darwin") [ gnumeric ]
-    # apktool depend on build-tools which requires Android SDK acceptance, therefore, the whole thing is unfree
-    ++ lib.optionals enableUnfree [ apktool ]
   ));
 
   nativeCheckInputs = with python3.pkgs; [
