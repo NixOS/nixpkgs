@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "lazygit";
-  version = "0.38.2";
+  version = "0.39.3";
 
   src = fetchFromGitHub {
     owner = "jesseduffield";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-HxOM2M2EoeM0IHCrFQqLdP9Rai6DbC1uRG0CiQyqRdE=";
+    sha256 = "sha256-VIWNuCHO41Wf6KM6Fz6BGzl/nS/SFprZpJUz7ZxaoJc=";
   };
 
   vendorHash = null;
