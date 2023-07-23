@@ -27553,6 +27553,8 @@ with pkgs;
 
   intel-ocl = callPackage ../os-specific/linux/intel-ocl { };
 
+  intel-oneapi-compiler = callPackage ../os-specific/linux/intel-oneapi-compiler { };
+
   level-zero = callPackage ../development/libraries/level-zero { };
 
   iomelt = callPackage ../os-specific/linux/iomelt { };
