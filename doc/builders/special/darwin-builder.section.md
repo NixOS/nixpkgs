@@ -4,7 +4,7 @@
 
 This requires macOS version 12.4 or later.
 
-The builder runs on host port 31022 by default.
+The builder runs on host port `31022` by default.
 You can change it by overriding `virtualisation.darwin-builder.hostPort`.
 See the [example](#sec-darwin-builder-example-flake).
 
@@ -21,15 +21,16 @@ To launch the builder, run the following flake:
 $ nix run nixpkgs#darwin.linux-builder
 ```
 
-That will prompt you to enter your `sudo` password:
+The script will first prompt you to enter your host `sudo` password:
 
 ```
 + sudo --reset-timestamp /nix/store/…-install-credentials.sh ./keys
 Password:
 ```
 
-… so that it can install a private key used to `ssh` into the build server.
-After that the script will launch the virtual machine and automatically log you
+… to install a private key used to `ssh` into the build server.
+
+After that, the virtual machine will be launched and you will be automatically logged
 in as the `builder` user:
 
 ```
@@ -45,19 +46,7 @@ nixos login: builder (automatic login)
 
 > Note: When you need to stop the VM, run `shutdown now` as the `builder` user.
 
-To delegate builds to the remote builder, add the following options to your
-`nix.conf` file:
-
-```
-# - Replace ${ARCH} with either aarch64 or x86_64 to match your host machine
-# - Replace ${MAX_JOBS} with the maximum number of builds (pick 4 if you're not sure)
-builders = ssh-ng://builder@linux-builder ${ARCH}-linux /etc/nix/builder_ed25519 ${MAX_JOBS} - - - c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUpCV2N4Yi9CbGFxdDFhdU90RStGOFFVV3JVb3RpQzVxQkorVXVFV2RWQ2Igcm9vdEBuaXhvcwo=
-
-# Not strictly necessary, but this will reduce your disk utilization
-builders-use-substitutes = true
-```
-
-To allow Nix to connect to a builder not running on port 22, you will also need to create a new file at `/etc/ssh/ssh_config.d/100-linux-builder.conf`:
+Because the builder is not running by default on port 22, you will also need to create a new file at `/etc/ssh/ssh_config.d/100-linux-builder.conf`:
 
 ```
 Host linux-builder
@@ -70,6 +59,50 @@ Host linux-builder
 
 ```ShellSession
 $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
+```
+
+Your host user should belong to the group `nixbld`:
+
+```ShellSession
+$ sudo dseditgroup -o edit -a $(whoami) -t user nixbld
+```
+
+To test that the builder is working run (you'll have to run it as sudo):
+
+```ShellSession
+$ sudo nix store ping --store ssh-ng://builder@linux-builder
+```
+
+## Delegating builds to the remote builder {#delegating-builds}
+
+To delegate builds to the remote builder, add the following options to your
+`nix.conf` file:
+
+```conf
+# - Replace ${ARCH} with either aarch64 or x86_64 to match your host machine
+# - Replace ${MAX_JOBS} with the maximum number of builds (pick 4 if you're not sure)
+builders = ssh-ng://builder@linux-builder ${ARCH}-linux /etc/nix/builder_ed25519 ${MAX_JOBS} - - - c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUpCV2N4Yi9CbGFxdDFhdU90RStGOFFVV3JVb3RpQzVxQkorVXVFV2RWQ2Igcm9vdEBuaXhvcwo=
+
+# Not strictly necessary, but this will reduce your disk utilization
+builders-use-substitutes = true
+```
+
+… and you are ready to use it.
+
+In order to build a flake with the builder, you can
+use something like:
+
+
+
+```ShellSession
+$ nix build --system x86_64-linux --max-jobs 0 .#YOUR_PACKAGE --json
+```
+
+… we attach the `--json` flag in order to retrieve the output.
+Which can be used to copy the result from the builder to your host's nix store.
+
+```ShellSession
+nix copy --from ssh-ng://builder@linux-builder OUTPUT
 ```
 
 ## Example flake usage {#sec-darwin-builder-example-flake}
