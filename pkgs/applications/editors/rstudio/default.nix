@@ -148,6 +148,8 @@ in
 
       substituteInPlace src/cpp/session/include/session/SessionConstants.hpp \
         --replace '@pandoc@' ${pandoc}/bin/pandoc
+
+      sed '1i#include <set>' -i src/cpp/core/include/core/Thread.hpp
     '';
 
     hunspellDictionaries = with lib; filter isDerivation (unique (attrValues hunspellDicts));
