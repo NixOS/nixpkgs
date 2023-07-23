@@ -12,6 +12,7 @@
 , stdenv
 , pkgsBuildTarget
 , pkgsHostTarget
+, buildPackages
 , targetPackages
 , fetchpatch
 
@@ -265,6 +266,7 @@ let
      else pkgsBuildTarget.targetPackages.stdenv.cc)
   ] ++ lib.optional useLLVM buildTargetLlvmPackages.llvm;
 
+  buildCC = buildPackages.stdenv.cc;
   targetCC = builtins.head toolsForTarget;
 
   # Sometimes we have to dispatch between the bintools wrapper and the unwrapped
@@ -327,6 +329,10 @@ stdenv.mkDerivation ({
     for env in $(env | grep '^TARGET_' | sed -E 's|\+?=.*||'); do
       export "''${env#TARGET_}=''${!env}"
     done
+    # No need for absolute paths since these tools only need to work during the build
+    export CC_STAGE0="$CC_FOR_BUILD"
+    export LD_STAGE0="$LD_FOR_BUILD"
+    export AR_STAGE0="$AR_FOR_BUILD"
     # GHC is a bit confused on its cross terminology, as these would normally be
     # the *host* tools.
     export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
@@ -465,6 +471,10 @@ stdenv.mkDerivation ({
 
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
+  # Used by the STAGE0 compiler to build stage1
+  depsBuildBuild = [
+    buildCC
+  ];
 
   buildInputs = [ perl bash ] ++ (libDeps hostPlatform);
 

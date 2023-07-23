@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgsBuildTarget, pkgsHostTarget, targetPackages
+{ lib, stdenv, pkgsBuildTarget, pkgsHostTarget, buildPackages, targetPackages
 
 # build-tools
 , bootPkgs
@@ -129,6 +129,7 @@ let
     pkgsBuildTarget.targetPackages.stdenv.cc
   ] ++ lib.optional useLLVM buildTargetLlvmPackages.llvm;
 
+  buildCC = buildPackages.stdenv.cc;
   targetCC = builtins.head toolsForTarget;
 
   # Sometimes we have to dispatch between the bintools wrapper and the unwrapped
@@ -275,6 +276,10 @@ stdenv.mkDerivation (rec {
     # LLVM backend on Darwin needs clang: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
     export CLANG="${buildTargetLlvmPackages.clang}/bin/${buildTargetLlvmPackages.clang.targetPrefix}clang"
   '' + ''
+    # No need for absolute paths since these tools only need to work during the build
+    export CC_STAGE0="$CC_FOR_BUILD"
+    export LD_STAGE0="$LD_FOR_BUILD"
+    export AR_STAGE0="$AR_FOR_BUILD"
 
     echo -n "${buildMK}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
@@ -348,6 +353,10 @@ stdenv.mkDerivation (rec {
     sphinx
   ];
 
+  # Used by the STAGE0 compiler to build stage1
+  depsBuildBuild = [
+    buildCC
+  ];
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
 
