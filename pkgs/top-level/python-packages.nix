@@ -4515,6 +4515,8 @@ self: super: with self; {
 
   grpcio = callPackage ../development/python-modules/grpcio { };
 
+  grpcio-channelz = callPackage ../development/python-modules/grpcio-channelz { };
+
   grpcio-gcp = callPackage ../development/python-modules/grpcio-gcp { };
 
   grpcio-status = callPackage ../development/python-modules/grpcio-status { };
