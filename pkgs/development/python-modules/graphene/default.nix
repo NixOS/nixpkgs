@@ -60,6 +60,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/graphql-python/graphene";
     changelog = "https://github.com/graphql-python/graphene/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

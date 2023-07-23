@@ -37,6 +37,6 @@ import ./generic.nix (rec {
       processing and graphics capabilities.
     '';
     license = licenses.hpnd;
-    maintainers = with maintainers; [ goibhniu prikhi SuperSandro2000 ];
+    maintainers = with maintainers; [ goibhniu prikhi ];
   };
 } // args )

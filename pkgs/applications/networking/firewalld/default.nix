@@ -99,6 +99,6 @@ stdenv.mkDerivation rec {
     description = "Firewall daemon with D-Bus interface";
     homepage = "https://github.com/firewalld/firewalld";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

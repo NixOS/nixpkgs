@@ -34,6 +34,6 @@ buildGoModule rec {
     description = "Docker CLI plugin to define and run multi-container applications with Docker";
     homepage = "https://github.com/docker/compose";
     license = licenses.asl20;
-    maintainers = with maintainers; [ babariviere SuperSandro2000 ];
+    maintainers = with maintainers; [ babariviere ];
   };
 }
