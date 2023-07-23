@@ -260,6 +260,8 @@ with pkgs;
 
   alterx = callPackage ../tools/security/alterx { };
 
+  asciicam = callPackage ../applications/video/asciicam { };
+
   asitop = pkgs.python3Packages.callPackage ../os-specific/darwin/asitop { };
 
   asn = callPackage ../applications/networking/asn { };
