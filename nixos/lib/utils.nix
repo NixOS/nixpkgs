@@ -236,5 +236,14 @@ rec {
   };
 
   /* Build a bootloader set of options */
-  mkLoaderOption = import ./make-loader-options.nix { inherit lib; };
+  mkBootLoaderOption = import ./make-bootloader-options.nix { inherit lib; };
+
+  /* This will detect if a bootloader is enabled
+   * without triggering deprecation notices     */
+  enabledBootloader = bootLoaderConfig: name: value:
+  let
+    option = bootLoaderConfig.${name}.enable or null;
+    acceptableBootloader = if option == null then false else option.definitions != [];
+  in
+  acceptableBootloader && value.enable;
 }
