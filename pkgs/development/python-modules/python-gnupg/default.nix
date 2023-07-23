@@ -42,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "API for the GNU Privacy Guard (GnuPG)";
     homepage = "https://github.com/vsajip/python-gnupg";
+    changelog = "https://github.com/vsajip/python-gnupg/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ copumpkin ];
   };
