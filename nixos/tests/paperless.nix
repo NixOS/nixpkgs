@@ -7,6 +7,11 @@ import ./make-test-python.nix ({ lib, ... }: {
     services.paperless = {
       enable = true;
       passwordFile = builtins.toFile "password" "admin";
+
+      backup.enable = true;
+      backup.postScript = ''
+          echo "Hello World"
+      '';
     };
   };
 
@@ -52,5 +57,19 @@ import ./make-test-python.nix ({ lib, ... }: {
 
         metadata = json.loads(machine.succeed("curl -u admin:admin -fs localhost:28981/api/documents/2/metadata/"))
         assert "original_checksum" in metadata
+
+    # Check backup config looks good
+    with subtest("Backup config is good"):
+        machine.succeed("systemctl start paperless-backup")
+        machine.wait_until_fails("systemctl status paperless-backup")
+        output = machine.succeed("journalctl -u paperless-backup.service")
+        assert "Hello World" in output
+        machine.succeed("ls -lah /var/lib/paperless/backup/manifest.json")
+        timers = machine.succeed("systemctl list-timers paperless-backup")
+        assert "paperless-backup.timer paperless-backup.service" in timers
+        assert "1 timers listed." in timers
+
+        
+        
   '';
 })

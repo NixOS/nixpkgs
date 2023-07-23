@@ -28,7 +28,9 @@ let
 
   manage =
     let
-      setupEnv = lib.concatStringsSep "\n" (mapAttrsToList (name: val: "export ${name}=\"${val}\"") env);
+      # Using ' here helps with variables like PAPERLESS_CONSUMER_IGNORE_PATTERN
+      # that are encoded JSON and _also_ need to be passed to SystemD ...
+      setupEnv = lib.concatStringsSep "\n" (mapAttrsToList (name: val: "export ${name}='${val}'") env);
     in
     pkgs.writeShellScript "manage" ''
       ${setupEnv}
@@ -180,6 +182,12 @@ in
 
         See [the documentation](https://paperless-ngx.readthedocs.io/en/latest/configuration.html)
         for available options.
+
+        Note that some settings (like PAPERLESS_CONSUMER_IGNORE_PATTERN) are
+        expected to be JSON. Use `builtins.toJSON` to ensure proper quoting:
+
+          extraConfig.PAPERLESS_CONSUMER_IGNORE_PATTERN = builtins.toJSON [".DS_STORE/*" "desktop.ini"];
+
       '';
       example = {
         PAPERLESS_OCR_LANGUAGE = "deu+eng";
@@ -199,9 +207,41 @@ in
       defaultText = literalExpression "pkgs.paperless-ngx";
       description = lib.mdDoc "The Paperless package to use.";
     };
+
+    backup = {
+
+      enable = mkEnableOption (lib.mdDoc "Paperless backups");
+
+      directory = mkOption {
+        type = types.str;
+        default = cfg.dataDir + "/backup";
+        description = lib.mdDoc "Directory to store backups.";
+      };
+
+      calendar = mkOption {
+        type = types.str;
+        default = "01:30:00";
+        description = lib.mdDoc ''
+          Configured when to run the backup service systemd unit (DayOfWeek Year-Month-Day Hour:Minute:Second).
+        '';
+      };
+
+      options = mkOption {
+         type = types.str;
+         default = "-c -d";
+         description = lib.mdDoc "Options to pass to the document exporter.";
+      };
+
+      postScript = mkOption {
+         type = types.lines;
+         default = "";
+         description = lib.mdDoc "Script to run after backup";
+      };
+    };
+
   };
 
-  config = mkIf cfg.enable {
+  config = mkMerge [(mkIf cfg.enable {
     services.redis.servers.paperless.enable = mkIf enableRedis true;
 
     systemd.tmpfiles.rules = [
@@ -378,5 +418,33 @@ in
         gid = config.ids.gids.paperless;
       };
     };
-  };
+  }) (mkIf (cfg.enable && cfg.backup.enable) {
+
+    systemd.tmpfiles.rules = [
+      "d '${cfg.backup.directory}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
+    ];
+
+    systemd.timers.paperless-backup = {
+      description = "paperless backup timer";
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = cfg.backup.calendar;
+        AccuracySec = "5m";
+      };
+    };
+
+    systemd.services.paperless-backup = {
+      description = "paperless backup service";
+      serviceConfig.User = cfg.user;
+      script = ''
+      set -e
+      cd ${cfg.dataDir}
+      echo "Exporting documents ..."
+      ./paperless-manage document_exporter ${cfg.backup.directory}  --no-progress-bar --no-color ${cfg.backup.options}
+      echo "Running post script ..."
+      ${cfg.backup.postScript}
+      '';
+    };
+  })];
+
 }
