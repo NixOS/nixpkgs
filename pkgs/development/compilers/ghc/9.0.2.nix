@@ -162,6 +162,10 @@ let
     (lib.optionalString enableNativeBignum "-native-bignum")
   ];
 
+  targetLibffi = if hostPlatform != targetPlatform
+    then targetPackages.libffi
+    else pkgsHostTarget.libffi;
+
 in
 
 # C compiler, bintools and LLVM are used at build time, but will also leak into
@@ -298,8 +302,8 @@ stdenv.mkDerivation (rec {
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
   ] ++ lib.optionals (libffi != null) [
     "--with-system-libffi"
-    "--with-ffi-includes=${targetPackages.libffi.dev}/include"
-    "--with-ffi-libraries=${targetPackages.libffi.out}/lib"
+    "--with-ffi-includes=${targetLibffi.dev}/include"
+    "--with-ffi-libraries=${targetLibffi.out}/lib"
   ] ++ lib.optionals (targetPlatform == hostPlatform && !enableNativeBignum) [
     "--with-gmp-includes=${targetPackages.gmp.dev}/include"
     "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
