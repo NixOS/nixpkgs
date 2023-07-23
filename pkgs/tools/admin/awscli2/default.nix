@@ -28,6 +28,11 @@ with py.pkgs; buildPythonApplication rec {
     hash = "sha256-+2+7eoe9cNBe9IjfAkAH6vXZ071k59keqFwo9M6tl9s=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'cryptography>=3.3.2,<40.0.2' 'cryptography>=3.3.2'
+  '';
+
   nativeBuildInputs = [
     flit-core
   ];
