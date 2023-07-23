@@ -3,7 +3,7 @@
 , url ? "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz"
 }:
 
-{ lib, stdenv, pkgsBuildTarget, pkgsHostTarget, targetPackages
+{ lib, stdenv, pkgsBuildTarget, pkgsHostTarget, buildPackages, targetPackages
 
 # build-tools
 , bootPkgs
@@ -134,6 +134,7 @@ let
     pkgsBuildTarget.targetPackages.stdenv.cc
   ] ++ lib.optional useLLVM buildTargetLlvmPackages.llvm;
 
+  buildCC = buildPackages.stdenv.cc;
   targetCC = builtins.head toolsForTarget;
 
   # toolPath calculates the absolute path to the name tool associated with a
@@ -305,6 +306,11 @@ stdenv.mkDerivation (rec {
     export CLANG="${buildTargetLlvmPackages.clang}/bin/${buildTargetLlvmPackages.clang.targetPrefix}clang"
   ''
   + ''
+    # No need for absolute paths since these tools only need to work during the build
+    export CC_STAGE0="$CC_FOR_BUILD"
+    export LD_STAGE0="$LD_FOR_BUILD"
+    export AR_STAGE0="$AR_FOR_BUILD"
+
     echo -n "${buildMK}" > mk/build.mk
   ''
   + lib.optionalString (lib.versionOlder version "9.2" || lib.versionAtLeast version "9.4") ''
@@ -393,6 +399,10 @@ stdenv.mkDerivation (rec {
     xattr
   ];
 
+  # Used by the STAGE0 compiler to build stage1
+  depsBuildBuild = [
+    buildCC
+  ];
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
 
