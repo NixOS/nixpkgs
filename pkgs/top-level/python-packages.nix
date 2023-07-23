@@ -6494,6 +6494,7 @@ self: super: with self; {
   mkdocs-exclude = callPackage ../development/python-modules/mkdocs-exclude { };
   mkdocs-jupyter = callPackage ../development/python-modules/mkdocs-jupyter { };
   mkdocs-gitlab = callPackage ../development/python-modules/mkdocs-gitlab-plugin { };
+  mkdocs-linkcheck = callPackage ../development/python-modules/mkdocs-linkcheck { };
   mkdocs-macros = callPackage ../development/python-modules/mkdocs-macros { };
   mkdocs-material = callPackage ../development/python-modules/mkdocs-material { };
   mkdocs-material-extensions = callPackage ../development/python-modules/mkdocs-material/mkdocs-material-extensions.nix { };
