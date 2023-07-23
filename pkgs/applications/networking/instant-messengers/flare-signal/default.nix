@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     description = "An unofficial Signal GTK client";
     homepage = "https://gitlab.com/Schmiddiii/flare";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ dotlambda tomfitzhenry ];
+    maintainers = with lib.maintainers; [ dotlambda ];
     platforms = lib.platforms.linux;
   };
 }
