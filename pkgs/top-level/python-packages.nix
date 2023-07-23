@@ -1879,6 +1879,8 @@ self: super: with self; {
 
   circuitbreaker = callPackage ../development/python-modules/circuitbreaker { };
 
+  circus = callPackage ../development/python-modules/circus { };
+
   cirq = callPackage ../development/python-modules/cirq { };
 
   cirq-aqt = callPackage ../development/python-modules/cirq-aqt { };
@@ -6494,6 +6496,7 @@ self: super: with self; {
   mkdocs-exclude = callPackage ../development/python-modules/mkdocs-exclude { };
   mkdocs-jupyter = callPackage ../development/python-modules/mkdocs-jupyter { };
   mkdocs-gitlab = callPackage ../development/python-modules/mkdocs-gitlab-plugin { };
+  mkdocs-linkcheck = callPackage ../development/python-modules/mkdocs-linkcheck { };
   mkdocs-macros = callPackage ../development/python-modules/mkdocs-macros { };
   mkdocs-material = callPackage ../development/python-modules/mkdocs-material { };
   mkdocs-material-extensions = callPackage ../development/python-modules/mkdocs-material/mkdocs-material-extensions.nix { };
