@@ -191,6 +191,28 @@ let
     (lib.optionalString enableNativeBignum "-native-bignum")
   ];
 
+  # These libraries are library dependencies of the standard libraries bundled
+  # by GHC (core libs) users will link their compiled artifacts again. Thus,
+  # they should be taken from targetPackages.
+  #
+  # We need to use pkgsHostTarget if we are cross compiling a native GHC compiler,
+  # though (when native compiling GHC, pkgsHostTarget == targetPackages):
+  #
+  # 1. targetPackages would be empty(-ish) in this situation since we can't
+  #    execute cross compiled compilers in order to obtain the libraries
+  #    that would be in targetPackages.
+  # 2. pkgsHostTarget is fine to use since hostPlatform == targetPlatform in this
+  #    situation.
+  # 3. The core libs used by the final GHC (stage 2) for user artifacts are also
+  #    used to build stage 2 GHC itself, i.e. the core libs are both host and
+  #    target.
+  targetLibs = {
+    inherit
+      (if hostPlatform != targetPlatform then targetPackages else pkgsHostTarget)
+      gmp
+      libffi;
+  };
+
 in
 
 # C compiler, bintools and LLVM are used at build time, but will also leak into
@@ -366,11 +388,11 @@ stdenv.mkDerivation (rec {
     "--datadir=$doc/share/doc/ghc"
   ] ++ lib.optionals (libffi != null) [
     "--with-system-libffi"
-    "--with-ffi-includes=${targetPackages.libffi.dev}/include"
-    "--with-ffi-libraries=${targetPackages.libffi.out}/lib"
+    "--with-ffi-includes=${targetLibs.libffi.dev}/include"
+    "--with-ffi-libraries=${targetLibs.libffi.out}/lib"
   ] ++ lib.optionals (targetPlatform == hostPlatform && !enableNativeBignum) [
-    "--with-gmp-includes=${targetPackages.gmp.dev}/include"
-    "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
+    "--with-gmp-includes=${targetLibs.gmp.dev}/include"
+    "--with-gmp-libraries=${targetLibs.gmp.out}/lib"
   ] ++ lib.optionals (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
     "--with-iconv-includes=${libiconv}/include"
     "--with-iconv-libraries=${libiconv}/lib"
