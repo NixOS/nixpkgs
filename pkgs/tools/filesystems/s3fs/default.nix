@@ -24,7 +24,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Mount an S3 bucket as filesystem through FUSE";
-    license = licenses.gpl2;
-    platforms = platforms.linux ++ platforms.darwin;
+    homepage = "https://github.com/s3fs-fuse/s3fs-fuse";
+    changelog = "https://github.com/s3fs-fuse/s3fs-fuse/raw/v${version}/ChangeLog";
+    maintainers = [ ];
+    license = licenses.gpl2Only;
+    platforms = platforms.unix;
   };
 }
