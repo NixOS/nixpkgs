@@ -54,6 +54,7 @@ let
 
       echo -n "systemd ${toString config.systemd.package.interfaceVersion}" > $out/init-interface-version
       echo -n "$nixosLabel" > $out/nixos-version
+      ln -s "${config.system.nixosVersionJson}" $out/nixos-version.json
       echo -n "${config.boot.kernelPackages.stdenv.hostPlatform.system}" > $out/system
 
       ${config.system.systemBuilderCommands}
@@ -159,6 +160,33 @@ in
       };
     };
 
+    system.nixosVersionJsonData = lib.mkOption {
+      type = (pkgs.formats.json {}).type;
+      internal = true;
+      default = {
+        nixosVersion = config.system.nixos.version;
+      } // optionalAttrs (config.system.nixos.codeName != null) {
+        nixosCodeName = config.system.nixos.codeName;
+      } // optionalAttrs (config.system.nixos.revision != null) {
+        nixpkgsRevision = config.system.nixos.revision;
+      } // optionalAttrs (config.system.configurationRevision != null) {
+        configurationRevision = config.system.configurationRevision;
+      };
+      description = lib.mdDoc ''
+        The data to be included in the top-level nixos-version.json file
+        that can be used by nixos-version and other external tools.
+      '';
+    };
+
+    system.nixosVersionJson = lib.mkOption {
+      type = lib.types.package;
+      internal = true;
+      default = (pkgs.formats.json {}).generate "nixos-version.json" config.system.nixosVersionJsonData;
+      description = lib.mdDoc ''
+        The derivation that generates the top-level nixos-version.json file
+        that can be used by nixos-version and other external tools.
+      '';
+    };
 
     system.copySystemConfiguration = mkOption {
       type = types.bool;
