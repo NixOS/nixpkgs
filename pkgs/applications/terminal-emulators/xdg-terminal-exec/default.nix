@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, bash }:
 stdenv.mkDerivation rec {
   pname = "xdg-terminal-exec";
-  version = "0.1.0";
+  version = "unstable-2023-05-12";
 
   src = fetchFromGitHub {
     owner = "Vladimir-csp";
