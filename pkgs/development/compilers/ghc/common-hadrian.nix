@@ -229,6 +229,12 @@
 , # Whether to disable the large address space allocator
   # necessary fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
   disableLargeAddressSpace ? stdenv.targetPlatform.isiOS
+
+, # Whether to build an unregisterised version of GHC.
+  # GHC will normally auto-detect whether it can do a registered build, but this
+  # option will force it to do an unregistered build when set to true.
+  # See https://gitlab.haskell.org/ghc/ghc/-/wikis/building/unregisterised
+  enableUnregisterised ? false
 }:
 
 assert !enableNativeBignum -> gmp != null;
@@ -500,6 +506,8 @@ stdenv.mkDerivation ({
     # https://gitlab.haskell.org/ghc/ghc/-/issues/23188
     # https://github.com/haskell/cabal/issues/8882
     "fp_cv_prog_ar_supports_dash_l=no"
+  ] ++ lib.optionals enableUnregisterised [
+    "--enable-unregisterised"
   ];
 
   # Make sure we never relax`$PATH` and hooks support for compatibility.
