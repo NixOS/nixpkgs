@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://salsa.debian.org/apt-team/apt";
     description = "Command-line package management tools used on Debian-based systems";
+    changelog = "https://salsa.debian.org/apt-team/apt/-/raw/${version}/debian/changelog";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];
