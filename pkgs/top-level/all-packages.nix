@@ -618,6 +618,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  enochecker-test = with python3Packages; callPackage ../development/tools/enochecker-test { };
+
   enumer = callPackage ../tools/misc/enumer { };
 
   evans = callPackage ../development/tools/evans { };

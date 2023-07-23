@@ -3350,6 +3350,8 @@ self: super: with self; {
 
   enocean = callPackage ../development/python-modules/enocean { };
 
+  enochecker-core = callPackage ../development/python-modules/enochecker-core { };
+
   enrich = callPackage ../development/python-modules/enrich { };
 
   entrance = callPackage ../development/python-modules/entrance {
