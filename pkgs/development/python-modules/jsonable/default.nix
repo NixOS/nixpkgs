@@ -1,8 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytestCheckHook
 , nose
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -16,9 +16,10 @@ buildPythonPackage rec {
     hash = "sha256-3FIzG2djSZOPDdoYeKqs3obQjgHrFtyp0sdBwZakkHA=";
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  checkInputs = [ nose ];
+  nativeCheckInputs = [
+    nose
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "jsonable" ];
 

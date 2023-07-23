@@ -581,6 +581,12 @@
     githubId = 1318982;
     name = "Anders Claesson";
   };
+  akechishiro = {
+    email = "akechishiro-aur+nixpkgs@lahfa.xyz";
+    github = "AkechiShiro";
+    githubId = 14914796;
+    name = "Samy Lahfa";
+  };
   a-kenji = {
     email = "aks.kenji@protonmail.com";
     github = "a-kenji";
@@ -1504,6 +1510,13 @@
     keys = [{
       fingerprint = "DD52 6BC7 767D BA28 16C0 95E5 6840 89CE 67EB B691";
     }];
+  };
+  atalii = {
+    email = "taliauster@gmail.com";
+    github = "atalii";
+    githubId = 120901234;
+    name = "tali auster";
+    matrix = "@atalii:matrix.org";
   };
   ataraxiasjel = {
     email = "nix@ataraxiadev.com";
@@ -18461,12 +18474,6 @@
     email = "zfnmxt@zfnmxt.com";
     github = "zfnmxt";
     githubId = 37446532;
-  };
-  zgrannan = {
-    email = "zgrannan@gmail.com";
-    github = "zgrannan";
-    githubId = 1141948;
-    name = "Zack Grannan";
   };
   zhaofengli = {
     email = "hello@zhaofeng.li";

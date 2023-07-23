@@ -234,6 +234,8 @@ with pkgs;
 
   align = callPackage ../tools/text/align { };
 
+  alire = callPackage ../development/tools/build-managers/alire { };
+
   althttpd = callPackage ../servers/althttpd { };
 
   amqpcat = callPackage ../development/tools/amqpcat { };
@@ -3022,6 +3024,8 @@ with pkgs;
   apfs-fuse = callPackage ../tools/filesystems/apfs-fuse { };
 
   apfsprogs = callPackage ../tools/filesystems/apfsprogs { };
+
+  api-linter = callPackage ../development/tools/api-linter { };
 
   apk-tools = callPackage ../tools/package-management/apk-tools {
     lua = lua5_3;
@@ -7013,7 +7017,8 @@ with pkgs;
 
   curlWithGnuTls = curl.override { gnutlsSupport = true; opensslSupport = false; };
 
-  curl-impersonate-bin = callPackage ../tools/networking/curl-impersonate { };
+  curl-impersonate = darwin.apple_sdk_11_0.callPackage ../tools/networking/curl-impersonate { };
+  inherit (curl-impersonate) curl-impersonate-ff curl-impersonate-chrome;
 
   curlie = callPackage ../tools/networking/curlie { };
 
@@ -18173,6 +18178,7 @@ with pkgs;
 
   lua-language-server = darwin.apple_sdk_11_0.callPackage ../development/tools/language-servers/lua-language-server {
     inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation Foundation;
+    inherit (darwin) ditto;
   };
 
   metals = callPackage ../development/tools/language-servers/metals { };
@@ -23836,6 +23842,7 @@ with pkgs;
   nv-codec-headers = callPackage ../development/libraries/nv-codec-headers { };
   nv-codec-headers-10 = callPackage ../development/libraries/nv-codec-headers/10_x.nix { };
   nv-codec-headers-11 = callPackage ../development/libraries/nv-codec-headers/11_x.nix { };
+  nv-codec-headers-12 = callPackage ../development/libraries/nv-codec-headers/12_x.nix { };
 
   mkNvidiaContainerPkg = { name, containerRuntimePath, configTemplate, additionalPaths ? [] }:
     let
@@ -30134,7 +30141,9 @@ with pkgs;
 
   cutecapture = callPackage ../applications/video/cutecapture { };
 
-  milkytracker = callPackage ../applications/audio/milkytracker { };
+  milkytracker = callPackage ../applications/audio/milkytracker {
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreAudio Foundation;
+  };
 
   ptcollab = libsForQt5.callPackage ../applications/audio/ptcollab { };
 
@@ -33104,8 +33113,6 @@ with pkgs;
   mapmap = libsForQt5.callPackage ../applications/video/mapmap { };
 
   marathonctl = callPackage ../tools/virtualization/marathonctl { };
-
-  markdown-pp = callPackage ../tools/text/markdown-pp { };
 
   mark = callPackage ../tools/text/mark { };
 
@@ -40970,9 +40977,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
   };
 
-  spdlog = callPackage ../development/libraries/spdlog {
-    fmt = fmt_9;
-  };
+  spdlog = callPackage ../development/libraries/spdlog { };
 
   dart = callPackage ../development/compilers/dart { };
 
