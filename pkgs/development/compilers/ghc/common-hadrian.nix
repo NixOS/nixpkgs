@@ -274,6 +274,7 @@ let
 
   buildCC = buildPackages.stdenv.cc;
   targetCC = builtins.head toolsForTarget;
+  installCC = pkgsHostTarget.targetPackages.stdenv.cc;
 
   # toolPath calculates the absolute path to the name tool associated with a
   # given `stdenv.cc` derivation, i.e. it picks the correct derivation to take
@@ -346,6 +347,9 @@ let
       gmp
       libffi;
   };
+
+  # Our Cabal compiler name
+  haskellCompilerName = "ghc-${version}";
 
 in
 
@@ -510,6 +514,8 @@ stdenv.mkDerivation ({
     autoconf automake m4
     # Python is used in a few scripts invoked by hadrian to generate e.g. rts headers.
     python3
+    # Tool used to update GHC's settings file in postInstall
+    bootPkgs.ghc-settings-edit
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     autoSignDarwinBinariesHook
   ] ++ lib.optionals enableDocs [
@@ -593,18 +599,27 @@ stdenv.mkDerivation ({
     # leave bindist directory
     popd
 
+    settingsFile="$out/lib/${targetPrefix}${haskellCompilerName}/lib/settings"
+
+    # Make the installed GHC use the host->target tools.
+    ghc-settings-edit "$settingsFile" \
+      "C compiler command" "${toolPath "cc" installCC}" \
+      "Haskell CPP command" "${toolPath "cc" installCC}" \
+      "C++ compiler command" "${toolPath "c++" installCC}" \
+      "ld command" "${toolPath "ld${lib.optionalString useLdGold ".gold"}" installCC}" \
+      "Merge objects command" "${toolPath "ld${lib.optionalString useLdGold ".gold"}" installCC}" \
+      "ar command" "${toolPath "ar" installCC}" \
+      "ranlib command" "${toolPath "ranlib" installCC}"
+
     # Install the bash completion file.
     install -Dm 644 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
   '';
 
   passthru = {
-    inherit bootPkgs targetPrefix;
+    inherit bootPkgs targetPrefix haskellCompilerName;
 
     inherit llvmPackages;
     inherit enableShared;
-
-    # Our Cabal compiler name
-    haskellCompilerName = "ghc-${version}";
 
     # Expose hadrian used for bootstrapping, for debugging purposes
     inherit hadrian;
