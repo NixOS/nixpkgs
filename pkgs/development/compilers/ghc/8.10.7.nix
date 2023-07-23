@@ -58,7 +58,7 @@
 
 , enableHaddockProgram ?
     # Disabled for cross; see note [HADDOCK_DOCS].
-    (stdenv.targetPlatform == stdenv.hostPlatform)
+    (stdenv.buildPlatform == stdenv.hostPlatform && stdenv.targetPlatform == stdenv.hostPlatform)
 
 , # Whether to disable the large address space allocator
   # necessary fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
@@ -69,7 +69,7 @@ assert !enableIntegerSimple -> gmp != null;
 
 # Cross cannot currently build the `haddock` program for silly reasons,
 # see note [HADDOCK_DOCS].
-assert (stdenv.targetPlatform != stdenv.hostPlatform) -> !enableHaddockProgram;
+assert (stdenv.buildPlatform != stdenv.hostPlatform || stdenv.targetPlatform != stdenv.hostPlatform) -> !enableHaddockProgram;
 
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
