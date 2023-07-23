@@ -418,6 +418,7 @@
   ./services/databases/neo4j.nix
   ./services/databases/openldap.nix
   ./services/databases/opentsdb.nix
+  ./services/databases/pgbouncer.nix
   ./services/databases/pgmanage.nix
   ./services/databases/postgresql.nix
   ./services/databases/redis.nix
@@ -1109,6 +1110,7 @@
   ./services/search/meilisearch.nix
   ./services/search/opensearch.nix
   ./services/search/qdrant.nix
+  ./services/search/typesense.nix
   ./services/security/aesmd.nix
   ./services/security/authelia.nix
   ./services/security/certmgr.nix

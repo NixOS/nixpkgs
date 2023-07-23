@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, kernel, bc, nukeReferences }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rtl8821au";
-  version = "${kernel.version}-unstable-2023-03-22";
+  version = "${kernel.version}-unstable-2023-07-20";
 
   src = fetchFromGitHub {
     owner = "morrownr";
     repo = "8821au-20210708";
-    rev = "a133274b0532c17318e8790b771566f4a6b12b7c";
-    hash = "sha256-xn2cmbtqQhLM9qLCEvVhCuoCa7y8LM4sevPqv3a6pBw=";
+    rev = "072413261b6966b0c666898e69d7d41fb281094f";
+    hash = "sha256-yC9knXR+bZwQ4S22zG188b3p3iTzUAFbvSqOFdne7po=";
   };
 
   nativeBuildInputs = [ bc nukeReferences ] ++ kernel.moduleBuildDependencies;

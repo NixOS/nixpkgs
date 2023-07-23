@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
     homepage = "http://hexfiend.com/";
     changelog = "https://hexfiend.github.io/HexFiend/ReleaseNotes.html";
     license = licenses.bsd2;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ eliandoran ];
-    platforms = [ "x86_64-darwin" ];
+    platforms = platforms.darwin;
   };
 }

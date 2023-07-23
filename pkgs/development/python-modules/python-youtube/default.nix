@@ -11,19 +11,17 @@
 }:
 buildPythonPackage rec {
   pname = "python-youtube";
-  version = "0.9.0";
+  version = "0.9.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "sns-sdks";
     repo = "python-youtube";
     rev = "v${version}";
-    hash = "sha256-uimipYgf8nfYd1J/K6CStbzIkQiRSosu7/yOfgXYCks=";
+    hash = "sha256-PbPdvUv7I9NKW6w4OJbiUoRNVJ1SoXychSXBH/y5nzY=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "poetry.masonry.api" "poetry.core.masonry.api"
     substituteInPlace pytest.ini \
       --replace "--cov=pyyoutube" "" \
       --replace "--cov-report xml" ""
@@ -45,24 +43,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     responses
-  ];
-
-  disabledTests = [
-    # On both tests, upstream compares a string to an integer
-
-    /*
-      python3.10-python-youtube> >       self.assertEqual(m.viewCount, "160361638")
-      python3.10-python-youtube> E       AssertionError: 160361638 != '160361638'
-      python3.10-python-youtube> tests/models/test_channel.py:62: AssertionError
-    */
-    "testChannelStatistics"
-
-    /*
-      python3.10-python-youtube> >       self.assertEqual(m.viewCount, "8087")
-      python3.10-python-youtube> E       AssertionError: 8087 != '8087'
-      python3.10-python-youtube> tests/models/test_videos.py:76: AssertionError
-    */
-    "testVideoStatistics"
   ];
 
   meta = with lib; {

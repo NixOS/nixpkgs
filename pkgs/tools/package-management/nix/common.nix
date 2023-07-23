@@ -132,6 +132,10 @@ self = stdenv.mkDerivation {
     (lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic")
   ];
 
+  postPatch = ''
+    patchShebangs --build tests
+  '';
+
   preConfigure =
     # Copy libboost_context so we don't get all of Boost in our closure.
     # https://github.com/NixOS/nixpkgs/issues/45462

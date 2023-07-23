@@ -4255,6 +4255,8 @@ self: super: with self; {
 
   goalzero = callPackage ../development/python-modules/goalzero { };
 
+  gocardless-pro = callPackage ../development/python-modules/gocardless-pro { };
+
   goobook = callPackage ../development/python-modules/goobook { };
 
   goocalendar = callPackage ../development/python-modules/goocalendar { };
@@ -10739,6 +10741,8 @@ self: super: with self; {
   ratelimit = callPackage ../development/python-modules/ratelimit { };
 
   ratelimiter = callPackage ../development/python-modules/ratelimiter { };
+
+  rauth = callPackage ../development/python-modules/rauth { };
 
   raven = callPackage ../development/python-modules/raven { };
 

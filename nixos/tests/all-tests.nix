@@ -599,6 +599,7 @@ in {
   peertube = handleTestOn ["x86_64-linux"] ./web-apps/peertube.nix {};
   peroxide = handleTest ./peroxide.nix {};
   pgadmin4 = handleTest ./pgadmin4.nix {};
+  pgbouncer = handleTest ./pgbouncer.nix {};
   pgjwt = handleTest ./pgjwt.nix {};
   pgmanage = handleTest ./pgmanage.nix {};
   phosh = handleTest ./phosh.nix {};
@@ -807,6 +808,7 @@ in {
   turbovnc-headless-server = handleTest ./turbovnc-headless-server.nix {};
   tuxguitar = handleTest ./tuxguitar.nix {};
   twingate = runTest ./twingate.nix;
+  typesense = handleTest ./typesense.nix {};
   ucarp = handleTest ./ucarp.nix {};
   udisks2 = handleTest ./udisks2.nix {};
   ulogd = handleTest ./ulogd.nix {};

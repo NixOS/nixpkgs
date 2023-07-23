@@ -158,8 +158,7 @@ stdenv.mkDerivation ({
 
   installPhase = ''
     ${if target == "android" then ''
-      ${if release then ""
-      else ''
+      ${lib.optionalString (!release) ''
         cp "$(ls build/android/bin/*.apk | grep -v '\-unsigned.apk')" $out
       ''}
 

@@ -66,7 +66,7 @@ in rec {
       handleSlashPrefix = l:
         let
           split = (match "^(/?)(.*)" l);
-          findSlash = l: if (match ".+/.+" l) != null then "" else l;
+          findSlash = l: lib.optionalString ((match ".+/.+" l) == null) l;
           hasSlash = mapAroundCharclass findSlash l != l;
         in
           (if (elemAt split 0) == "/" || hasSlash

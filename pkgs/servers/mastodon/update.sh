@@ -76,7 +76,7 @@ function cleanup {
 trap cleanup EXIT
 
 echo "Fetching source code $REVISION"
-JSON=$(nix-prefetch-github "$OWNER" "$REPO" --rev "$REVISION"  2> $WORK_DIR/nix-prefetch-git.out)
+JSON=$(nix-prefetch-github "$OWNER" "$REPO" --rev "$REVISION" 2> $WORK_DIR/nix-prefetch-git.out)
 HASH=$(echo "$JSON" | jq -r .hash)
 
 echo "Creating version.nix"

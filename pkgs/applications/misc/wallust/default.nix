@@ -1,24 +1,27 @@
-{lib, fetchgit, rustPlatform}:
-
+{ lib
+, fetchgit
+, rustPlatform
+}:
 let
   repoUrl = "https://codeberg.org/explosion-mental/wallust";
-in rustPlatform.buildRustPackage rec {
+in
+rustPlatform.buildRustPackage rec {
   pname = "wallust";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchgit {
     url = "${repoUrl}.git";
     rev = version;
-    sha256 = "sha256-np03F4XxGFjWfxCKUUIm7Xlp1y9yjzkeb7F2I7dYttA=";
+    hash = "sha256-v72ddWKK2TMHKeBihYjMoJvKXiPe/yqJtdh8VQzjmVU=";
   };
 
-  cargoSha256 = "sha256-yq51LQB53VKjMoNM3f/JzifEHSA69Jso2QYRsaplQfk=";
+  cargoSha256 = "sha256-jDs4KeVN3P+4/T1cW4KDxoY79jE3GXiwzxLrR2HybWw=";
 
   meta = with lib; {
     description = "A better pywal";
     homepage = repoUrl;
     license = licenses.mit;
-    maintainers = with maintainers; [onemoresuza];
+    maintainers = with maintainers; [ onemoresuza ];
     downloadPage = "${repoUrl}/releases/tag/${version}";
     platforms = platforms.unix;
     mainProgram = "wallust";
