@@ -39,7 +39,10 @@
   enableShared ? !stdenv.targetPlatform.isWindows && !stdenv.targetPlatform.useiOSPrebuilt
 
 , # Whether to build terminfo.
-  enableTerminfo ? !stdenv.targetPlatform.isWindows
+  enableTerminfo ? !(stdenv.targetPlatform.isWindows
+                     # terminfo can't be built for cross
+                     || (stdenv.buildPlatform != stdenv.hostPlatform)
+                     || (stdenv.hostPlatform != stdenv.targetPlatform))
 
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
@@ -86,6 +89,8 @@ let
     endif
     BUILD_SPHINX_HTML = ${if enableDocs then "YES" else "NO"}
     BUILD_SPHINX_PDF = NO
+
+    WITH_TERMINFO = ${if enableTerminfo then "YES" else "NO"}
   '' +
   # Note [HADDOCK_DOCS]:
   # Unfortunately currently `HADDOCK_DOCS` controls both whether the `haddock`
@@ -341,7 +346,6 @@ stdenv.mkDerivation (rec {
   # `--with` flags for libraries needed for RTS linker
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
-    "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
   ] ++ lib.optionals (args.${libffi_name} != null) [
     "--with-system-libffi"
     "--with-ffi-includes=${targetPackages.${libffi_name}.dev}/include"
@@ -380,6 +384,8 @@ stdenv.mkDerivation (rec {
   # Used by the STAGE0 compiler to build stage1
   depsBuildBuild = [
     buildCC
+    # stage0 builds terminfo unconditionally, so we always need ncurses
+    ncurses
   ];
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
