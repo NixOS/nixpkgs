@@ -141,18 +141,19 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Not generated when cross compiling.
-  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
-    # Merge gdkpixbuf and librsvg loaders
-    cat ${lib.getLib gdk-pixbuf}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache $GDK_PIXBUF/loaders.cache > $GDK_PIXBUF/loaders.cache.tmp
-    mv $GDK_PIXBUF/loaders.cache.tmp $GDK_PIXBUF/loaders.cache
+  postInstall = let emulator = stdenv.hostPlatform.emulator buildPackages; in
+    lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+      # Merge gdkpixbuf and librsvg loaders
+      cat ${lib.getLib gdk-pixbuf}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache $GDK_PIXBUF/loaders.cache > $GDK_PIXBUF/loaders.cache.tmp
+      mv $GDK_PIXBUF/loaders.cache.tmp $GDK_PIXBUF/loaders.cache
 
-    mkdir -p "$out/share/bash-completion/completions/"
-    $out/bin/rsvg-convert --completion bash > "$out/share/bash-completion/completions/rsvg-convert"
-    mkdir -p "$out/share/zsh/site-functions/"
-    $out/bin/rsvg-convert --completion zsh > "$out/share/zsh/site-functions/_rsvg-convert"
-    mkdir -p "$out/share/fish/vendor_completions.d/"
-    $out/bin/rsvg-convert --completion fish > "$out/share/fish/vendor_completions.d/rsvg-convert.fish"
-  '';
+      mkdir -p "$out/share/bash-completion/completions/"
+      ${emulator} $out/bin/rsvg-convert --completion bash > "$out/share/bash-completion/completions/rsvg-convert"
+      mkdir -p "$out/share/zsh/site-functions/"
+      ${emulator} $out/bin/rsvg-convert --completion zsh > "$out/share/zsh/site-functions/_rsvg-convert"
+      mkdir -p "$out/share/fish/vendor_completions.d/"
+      ${emulator} $out/bin/rsvg-convert --completion fish > "$out/share/fish/vendor_completions.d/rsvg-convert.fish"
+    '';
 
   postFixup = lib.optionalString withIntrospection ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
