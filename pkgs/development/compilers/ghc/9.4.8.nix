@@ -1,6 +1,6 @@
 # DO NOT port this expression to hadrian. It is not possible to build a GHC
 # cross compiler with 9.4.* and hadrian.
-{ lib, stdenv, pkgsBuildTarget, pkgsHostTarget, targetPackages
+{ lib, stdenv, pkgsBuildTarget, pkgsHostTarget, buildPackages, targetPackages
 
 # build-tools
 , bootPkgs
@@ -131,6 +131,7 @@ let
     pkgsBuildTarget.targetPackages.stdenv.cc
   ] ++ lib.optional useLLVM buildTargetLlvmPackages.llvm;
 
+  buildCC = buildPackages.stdenv.cc;
   targetCC = builtins.head toolsForTarget;
 
   # Sometimes we have to dispatch between the bintools wrapper and the unwrapped
@@ -212,6 +213,9 @@ stdenv.mkDerivation (rec {
   # GHC needs the locale configured during the Haddock phase.
   LANG = "en_US.UTF-8";
 
+  # GHC is unable to build a cross-compiler without this set.
+  "NIX_CC_WRAPPER_TARGET_HOST_${buildCC.suffixSalt}" = 1;
+
   # GHC is a bit confused on its cross terminology.
   # TODO(@sternenseemann): investigate coreutils dependencies and pass absolute paths
   preConfigure = ''
@@ -240,6 +244,9 @@ stdenv.mkDerivation (rec {
     # LLVM backend on Darwin needs clang: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
     export CLANG="${buildTargetLlvmPackages.clang}/bin/${buildTargetLlvmPackages.clang.targetPrefix}clang"
   '' + ''
+    export CC_STAGE0="${buildCC}/bin/${buildCC.targetPrefix}cc"
+    export LD_STAGE0="${buildCC.bintools}/bin/${buildCC.bintools.targetPrefix}ld"
+    export AR_STAGE0="${buildCC.bintools.bintools}/bin/${buildCC.bintools.targetPrefix}ar"
 
     echo -n "${buildMK}" > mk/build.mk
 
