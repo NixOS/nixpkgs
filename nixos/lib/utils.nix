@@ -234,4 +234,7 @@ rec {
       units = import ./systemd-network-units.nix { inherit lib systemdUtils; };
     };
   };
+
+  /* Build a bootloader set of options */
+  mkLoaderOption = import ./make-loader-options.nix { inherit lib; };
 }
