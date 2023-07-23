@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bmake";
-  version = "20230414";
+  version = "20230711";
 
   src = fetchurl {
     url = "http://www.crufty.net/ftp/pub/sjg/bmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-KcsdJqrn3p3vkr2us6rUUg6JlRzpey518LibrhuVOZ8=";
+    hash = "sha256-CoFULAPxoObCe/UBXY+7xSY04RkIOOx9p2RYR9kzL+8=";
   };
 
   patches = [
@@ -25,17 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Always enable ksh test since it checks in a impure location /bin/ksh
     ./unconditional-ksh-test.patch
     # decouple tests from build phase
-    (fetchpatch {
-      name = "separate-tests.patch";
-      url = "https://raw.githubusercontent.com/alpinelinux/aports/2a36f7b79df44136c4d2b8e9512f908af65adfee/community/bmake/separate-tests.patch";
-      hash = "sha256-KkmqASAl46/6Of7JLOQDFUqkOw3rGLxnNmyg7Lk0RwM=";
-    })
-    # add a shebang to bmake's install(1) replacement
-    (fetchpatch {
-      name = "install-sh.patch";
-      url = "https://raw.githubusercontent.com/alpinelinux/aports/34cd8c45397c63c041cf3cbe1ba5232fd9331196/community/bmake/install-sh.patch";
-      hash = "sha256-RvFq5nsmDxq54UTnXGlfO6Rip/XQYj0ZySatqUxjEX0=";
-    })
+    ./dont-test-while-installing.diff
   ];
 
   # Make tests work with musl
